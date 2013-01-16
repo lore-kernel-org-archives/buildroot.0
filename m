@@ -1,81 +1,57 @@
-From: gilles.talis at gmail.com <gilles.talis@gmail.com>
-Date: Wed, 16 Jan 2013 14:14:32 -0800
-Subject: [Buildroot] [PATCH 1/1] webp: new package
-In-Reply-To: <y>
-References: <y>
-Message-ID: <1358374472-11291-1-git-send-email-gilles.talis@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Jan 2013 23:43:51 +0100
+Subject: [Buildroot] [PATCH 0/2] Add support for Alix2d3 board from PC
+In-Reply-To: <90ABB7C23E864360A0612B7183D96248@blueridge.com>
+References: <90ABB7C23E864360A0612B7183D96248@blueridge.com>
+Message-ID: <20130116234351.03dc493c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gilles Talis <gilles.talis@gmail.com>
+Dear Mukesh Sharma,
 
-WebP is a new image format that provides lossless
-and lossy compression for images on the web
+On Wed, 16 Jan 2013 15:24:23 -0500, Mukesh Sharma wrote:
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/Config.in      |    1 +
- package/webp/Config.in |    7 +++++++
- package/webp/webp.mk   |   22 ++++++++++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
- create mode 100644 package/webp/Config.in
- create mode 100644 package/webp/webp.mk
+> I am reading this thread and also I am new to buildroot. I wanted to
+> know how board support was finally decided to be implemented in
+> Buildroot - specifically with respect to Alix2d3 board. As I don't
+> see any Alix board related directories in the repository.
 
-diff --git a/package/Config.in b/package/Config.in
-index ba03b3c..1e8c4da 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -433,6 +433,7 @@ source "package/pango/Config.in"
- source "package/pixman/Config.in"
- source "package/tiff/Config.in"
- source "package/webkit/Config.in"
-+source "package/webp/Config.in"
- source "package/zxing/Config.in"
- endmenu
- 
-diff --git a/package/webp/Config.in b/package/webp/Config.in
-new file mode 100644
-index 0000000..a2acdff
---- /dev/null
-+++ b/package/webp/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_WEBP
-+	bool "webp"
-+	help
-+	  WebP is a new image format that provides lossless and
-+	  lossy compression for images on the web
-+
-+	  https://developers.google.com/speed/webp/
-diff --git a/package/webp/webp.mk b/package/webp/webp.mk
-new file mode 100644
-index 0000000..3dcb13c
---- /dev/null
-+++ b/package/webp/webp.mk
-@@ -0,0 +1,22 @@
-+#####################################################################
-+#
-+# webp
-+#
-+#####################################################################
-+
-+WEBP_VERSION = 0.2.1
-+WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
-+WEBP_SITE = https://webp.googlecode.com/files
-+WEBP_LICENSE = BSD-3c
-+WEBP_LICENSE_FILES = COPYING
-+WEBP_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+WEBP_DEPENDENCIES += libpng
-+WEBP_CONF_ENV += ac_cv_path_LIBPNG_CONFIG=$(STAGING_DIR)/usr/bin/libpng-config
-+endif
-+
-+WEBP_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
-+WEBP_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
-+
-+$(eval $(autotools-package))
+The topic of board support has quite significantly evolved since July
+2010, date of the e-mails you are referring to. The patches you refer
+to stored files in target/device/, which has been removed since then,
+it created board-specific Config.in options, something we have
+deprecated since then, and worse it added an entirely new rootfs
+skeleton for the board, something we really don't want to do.
+
+So, if you have an Alix2d3 board and you want to resurrect those
+patches to make them suitable for inclusion in mainline Buildroot
+(which would be really great), then, you need to:
+
+ * Generate a kernel configuration file that works for the platform,
+   generate a minimal defconfig for it (make savedefconfig in the
+   kernel), and copy it in board/pcengines/alix2d3/linux-x.y.config.
+
+ * Take the specificities of the rootfs skeleton proposed by Darius at
+   the system (apparently, he mentioned that the only differences were
+   the Grub configuration files), put them in board/pcengines/alix2d3/,
+   and create a short post-build script that copy those files into the
+   root filesystem at the right location.
+
+ * Produce a minimal (make savedefconfig) Buildroot configuration that
+   builds a working Busybox-only system for this board.
+
+Do not hesitate to get back to us if you need help to do this. As soon
+as you have a working Buildroot system, we can fairly easily guide you
+through the steps to makes the appropriate patches for Buildroot.
+
+Best regards,
+
+Thomas
 -- 
-1.7.4.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
