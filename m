@@ -1,28 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 Jan 2013 13:33:12 +0100
-Subject: [Buildroot] [PATCH 2/2] proxychains-ng: copy proxychains.conf
-	to target dir
-In-Reply-To: <50F69CC9.1050605@petroprogram.com> ("Stefan =?utf-8?Q?Fr?=
- =?utf-8?Q?=C3=B6berg=22's?= message
- of "Wed, 16 Jan 2013 14:27:53 +0200")
-References: <1358337261-13260-1-git-send-email-stefan.froberg@petroprogram.com>
- <87ip6xmia1.fsf@dell.be.48ers.dk> <50F69CC9.1050605@petroprogram.com>
-Message-ID: <87a9s9mho7.fsf@dell.be.48ers.dk>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Wed, 16 Jan 2013 14:51:57 +0200
+Subject: [Buildroot] RTLD_DEEPBIND and uClibc
+Message-ID: <50F6A26D.4030607@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
+Hello everyone
 
-Hi,
+Yesterday evening I managed to compile cairo-dock-core and
+cairo-dock-plugins
+version 3.1.2 for buildroot 2012.08.
 
- Stefan> Okay.
- Stefan> I use nano editor for doing my coding stuff because it's fast &
- Stefan> simple.  How can I force it to automatically wrap in 80 chars ?
+It's a nice, lightweight (made with C), Mac OSX feeling application dock.
 
-Sorry, I don't use nano so I don't know.
+The problem is that cairo-dock-core has the following line in it's code:
 
--- 
-Bye, Peter Korsgaard
+pCairoDockModule->handle = dlopen (pCairoDockModule->cSoFilePath,
+RTLD_LAZY | RTLD_LOCAL | RTLD_DEEPBIND);
+
+And uClibc does not have RTLD_DEEPBIND. Removing it will allow
+cairo-dock to compile but the result is
+that cairo-dock plugins won't work.
+
+Is there any workaround to this RTLD_DEEPBIND stuff ?
+
+Regards
+Stefan
