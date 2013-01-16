@@ -1,25 +1,36 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Tue, 15 Jan 2013 15:22:28 -0800
-Subject: [Buildroot] [git commit] openvpn: fix init script name
-In-Reply-To: <20130115204907.6290399699@busybox.osuosl.org>
-References: <20130115204907.6290399699@busybox.osuosl.org>
-Message-ID: <CAJJ6jxukk2pGwL9Y3US7W0u488jKk52EgB4LJcnF4uUtQN66Lg@mail.gmail.com>
+From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
+Date: Wed, 16 Jan 2013 06:10:15 +0200
+Subject: [Buildroot] [PATCH] proxychains-ng: copy proxychains.conf to target
+	dir
+Message-ID: <1358309415-12945-1-git-send-email-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 15, 2013 at 12:34 PM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=41fb3df4bd370b869fea3d0b38d01f596f86f721
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Our default (busybox) rc.S implementation requires init scripts to be
-> named S??*, so rename the openvpn one to S60openvpn (E.G. after network).
->
+proxychains installation does not copy proxychains.conf to 
+$(TARGET_DIR)/etc anymore so we have to do it manually now.
 
-What you are proposing would work, but we already have S60nfs in
-init.d. why not call your new start script S61? No big deal o does
-come after n, just asking.
+Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+---
+ package/proxychains-ng/proxychains-ng.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-Regards, Steve
+diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
+index 9cf24bf..70d35b6 100644
+--- a/package/proxychains-ng/proxychains-ng.mk
++++ b/package/proxychains-ng/proxychains-ng.mk
+@@ -7,4 +7,10 @@ PROXYCHAINS_NG_VERSION = 4.4
+ PROXYCHAINS_NG_SOURCE = proxychains-$(PROXYCHAINS_NG_VERSION).tar.bz2
+ PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
+ 
++define PROXYCHAINS_NG_POST_INSTALL_TARGET
++	$(INSTALL) -m 755 $(@D)/src/proxychains.conf $(TARGET_DIR)/etc
++endef
++
++PROXYCHAINS_NG_POST_INSTALL_TARGET_HOOKS += PROXYCHAINS_NG_POST_INSTALL_TARGET
++
+ $(eval $(autotools-package))
+-- 
+1.7.7.6
