@@ -1,34 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 16 Jan 2013 21:10:14 +0100
-Subject: [Buildroot] [PATCH 4/5] docs/manual: no longer mention the
-	package/customize thing
-In-Reply-To: <1358363393-29977-5-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1358363393-29977-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1358363393-29977-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <201301162110.14881.yann.morin.1998@free.fr>
+From: Mukesh Sharma <msharma@blueridgenetworks.com>
+Date: Wed, 16 Jan 2013 15:24:23 -0500
+Subject: [Buildroot] [PATCH 0/2] Add support for Alix2d3 board from PC
+Message-ID: <90ABB7C23E864360A0612B7183D96248@blueridge.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On Wednesday 16 January 2013 Thomas Petazzoni wrote:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  docs/manual/customize-rootfs.txt |    6 ------
->  1 file changed, 6 deletions(-)
+ 
 
-Ditto. This should be folded with the previous cset.
+I am reading this thread and also I am new to buildroot. I wanted to know
+how board support was finally decided to be implemented in Buildroot -
+specifically with respect to Alix2d3 board. As I don't see any Alix board
+related directories in the repository.
 
-Regards,
-Yann E. MORIN.
+ 
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks
+
+ 
+
+Mukesh Sharma
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130116/2f14972d/attachment.html>
