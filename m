@@ -1,36 +1,43 @@
-From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Wed, 16 Jan 2013 06:10:15 +0200
-Subject: [Buildroot] [PATCH] proxychains-ng: copy proxychains.conf to target
-	dir
-Message-ID: <1358309415-12945-1-git-send-email-stefan.froberg@petroprogram.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 16 Jan 2013 07:29:03 +0100
+Subject: [Buildroot] [PATCH] proxychains-ng: copy proxychains.conf to
+	target dir
+In-Reply-To: <1358309415-12945-1-git-send-email-stefan.froberg@petroprogram.com>
+ ("Stefan =?utf-8?Q?Fr=C3=B6berg=22's?= message of "Wed, 16 Jan 2013
+ 06:10:15 +0200")
+References: <1358309415-12945-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <87r4llmyj4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-proxychains installation does not copy proxychains.conf to 
-$(TARGET_DIR)/etc anymore so we have to do it manually now.
+>>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
 
-Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
----
- package/proxychains-ng/proxychains-ng.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ Stefan> proxychains installation does not copy proxychains.conf to 
+ Stefan> $(TARGET_DIR)/etc anymore so we have to do it manually now.
 
-diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
-index 9cf24bf..70d35b6 100644
---- a/package/proxychains-ng/proxychains-ng.mk
-+++ b/package/proxychains-ng/proxychains-ng.mk
-@@ -7,4 +7,10 @@ PROXYCHAINS_NG_VERSION = 4.4
- PROXYCHAINS_NG_SOURCE = proxychains-$(PROXYCHAINS_NG_VERSION).tar.bz2
- PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
+ Stefan> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+ Stefan> ---
+ Stefan>  package/proxychains-ng/proxychains-ng.mk |    6 ++++++
+ Stefan>  1 files changed, 6 insertions(+), 0 deletions(-)
+
+ Stefan> diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
+ Stefan> index 9cf24bf..70d35b6 100644
+ Stefan> --- a/package/proxychains-ng/proxychains-ng.mk
+ Stefan> +++ b/package/proxychains-ng/proxychains-ng.mk
+ Stefan> @@ -7,4 +7,10 @@ PROXYCHAINS_NG_VERSION = 4.4
+ Stefan>  PROXYCHAINS_NG_SOURCE = proxychains-$(PROXYCHAINS_NG_VERSION).tar.bz2
+ Stefan>  PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
  
-+define PROXYCHAINS_NG_POST_INSTALL_TARGET
-+	$(INSTALL) -m 755 $(@D)/src/proxychains.conf $(TARGET_DIR)/etc
-+endef
-+
-+PROXYCHAINS_NG_POST_INSTALL_TARGET_HOOKS += PROXYCHAINS_NG_POST_INSTALL_TARGET
-+
- $(eval $(autotools-package))
+ Stefan> +define PROXYCHAINS_NG_POST_INSTALL_TARGET
+ Stefan> +	$(INSTALL) -m 755 $(@D)/src/proxychains.conf $(TARGET_DIR)/etc
+
+Does the configuration file really need to be executable?
+
+/etc is almost guaranteed to exist, but for consistency please use
+install -D . $(TARGET_DIR)/etc/proxychains.conf
+
 -- 
-1.7.7.6
+Bye, Peter Korsgaard
