@@ -1,34 +1,28 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Wed, 16 Jan 2013 14:27:53 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 16 Jan 2013 13:33:12 +0100
 Subject: [Buildroot] [PATCH 2/2] proxychains-ng: copy proxychains.conf
 	to target dir
-In-Reply-To: <87ip6xmia1.fsf@dell.be.48ers.dk>
+In-Reply-To: <50F69CC9.1050605@petroprogram.com> ("Stefan =?utf-8?Q?Fr?=
+ =?utf-8?Q?=C3=B6berg=22's?= message
+ of "Wed, 16 Jan 2013 14:27:53 +0200")
 References: <1358337261-13260-1-git-send-email-stefan.froberg@petroprogram.com>
- <87ip6xmia1.fsf@dell.be.48ers.dk>
-Message-ID: <50F69CC9.1050605@petroprogram.com>
+ <87ip6xmia1.fsf@dell.be.48ers.dk> <50F69CC9.1050605@petroprogram.com>
+Message-ID: <87a9s9mho7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-16.1.2013 14:20, Peter Korsgaard kirjoitti:
->>>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
-> Committed, thanks.
->
-> 2 nitpicks: It's a bit confusing to number a single patch as 2/2 - v2 of
-> a patch is normally called PATCHv2 or similar.
+>>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
 
-Ok, sorry about that too.
+Hi,
 
-> Secondly, we try to keep lines below 80 chars, so I've wrapped the
-> install line.
->
+ Stefan> Okay.
+ Stefan> I use nano editor for doing my coding stuff because it's fast &
+ Stefan> simple.  How can I force it to automatically wrap in 80 chars ?
 
-Okay.
-I use nano editor for doing my coding stuff because it's fast & simple.
-How can I force it to automatically wrap in 80 chars ?
+Sorry, I don't use nano so I don't know.
 
-Thanks!
-
-Stefan
+-- 
+Bye, Peter Korsgaard
