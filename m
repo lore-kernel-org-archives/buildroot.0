@@ -1,68 +1,81 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 16 Jan 2013 23:06:02 +0100
-Subject: [Buildroot] [PATCH 1/5] Add a post-image script mechanism
-In-Reply-To: <20130116224159.774f3f70@skate>
-References: <1358363393-29977-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <201301162103.43793.yann.morin.1998@free.fr> <20130116224159.774f3f70@skate>
-Message-ID: <201301162306.02062.yann.morin.1998@free.fr>
+From: gilles.talis at gmail.com <gilles.talis@gmail.com>
+Date: Wed, 16 Jan 2013 14:14:32 -0800
+Subject: [Buildroot] [PATCH 1/1] webp: new package
+In-Reply-To: <y>
+References: <y>
+Message-ID: <1358374472-11291-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: Gilles Talis <gilles.talis@gmail.com>
 
-On Wednesday 16 January 2013 Thomas Petazzoni wrote:
-> On Wed, 16 Jan 2013 21:03:43 +0100, Yann E. MORIN wrote:
-> > No need to pass $(BINARIES_DIR) as it now is in the environment.
-> I'd prefer to pass $(BINARIES_DIR) as argument, in order to keep a
-> symmetry with what we do for the post-build script.
-> 
-> > Would it make sense to run this under fakeroot?
-> Why?
+WebP is a new image format that provides lossless
+and lossy compression for images on the web
 
-For example, I need to create multiple partitions for my device, so I
-need one file system image per partition:
-  - vfat on /boot
-  - squashfs on /
-  - ext2 on /home
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ package/Config.in      |    1 +
+ package/webp/Config.in |    7 +++++++
+ package/webp/webp.mk   |   22 ++++++++++++++++++++++
+ 3 files changed, 30 insertions(+), 0 deletions(-)
+ create mode 100644 package/webp/Config.in
+ create mode 100644 package/webp/webp.mk
 
-So I would :
-  - configure Buildroot to build only a tarball
-  - configure Buildroot to run my post-image script
-  - extract the tarball
-  - generate each file system images
-
-But the untar would loose the device nodes and the files UIDs and GIDs,
-forcing me do run fakeroot inside the script, saving/loading the fakeroot
-DB, for every commands in my script.
-
-Having Buildroot do the fakeroot would ensure this consistency.
-
-> > Also, I wonder if we could instead call these scripts for each image
-> > we generate, so it will already be run under fakeroot.
-> 
-> No, I don't think it's a good idea. For example, in my use-case, it was
-> used to create a firmware image that bundles multiple images generated
-> by Buildroot. So getting called on a per-image basis doesn't make sense.
-
-OK, so it makes sense to run the scripts only once at the end. Agreed.
-
-[--SNIP--]
-> I really don't see the point of putting more complexity into this.
-> Let's have something nicely symmetric between the post-build script
-> feature and the post-image script feature.
-
-Right, agreed.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index ba03b3c..1e8c4da 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -433,6 +433,7 @@ source "package/pango/Config.in"
+ source "package/pixman/Config.in"
+ source "package/tiff/Config.in"
+ source "package/webkit/Config.in"
++source "package/webp/Config.in"
+ source "package/zxing/Config.in"
+ endmenu
+ 
+diff --git a/package/webp/Config.in b/package/webp/Config.in
+new file mode 100644
+index 0000000..a2acdff
+--- /dev/null
++++ b/package/webp/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_WEBP
++	bool "webp"
++	help
++	  WebP is a new image format that provides lossless and
++	  lossy compression for images on the web
++
++	  https://developers.google.com/speed/webp/
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+new file mode 100644
+index 0000000..3dcb13c
+--- /dev/null
++++ b/package/webp/webp.mk
+@@ -0,0 +1,22 @@
++#####################################################################
++#
++# webp
++#
++#####################################################################
++
++WEBP_VERSION = 0.2.1
++WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
++WEBP_SITE = https://webp.googlecode.com/files
++WEBP_LICENSE = BSD-3c
++WEBP_LICENSE_FILES = COPYING
++WEBP_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++WEBP_DEPENDENCIES += libpng
++WEBP_CONF_ENV += ac_cv_path_LIBPNG_CONFIG=$(STAGING_DIR)/usr/bin/libpng-config
++endif
++
++WEBP_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
++WEBP_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.4.1
