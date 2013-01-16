@@ -1,43 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jan 2013 20:09:49 +0100
-Subject: [Buildroot] [PATCH 2/5] docs/manual: mention the new post-image
-	mechanism
+Date: Wed, 16 Jan 2013 20:09:50 +0100
+Subject: [Buildroot] [PATCH 3/5] package/customize: remove
 In-Reply-To: <1358363393-29977-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1358363393-29977-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1358363393-29977-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1358363393-29977-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This mechanism of root filesystem customization has been deprecated
+since a long time, so let's remove it now.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/customize-rootfs.txt |   15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ package/Config.in              |    1 -
+ package/customize/Config.in    |    7 -------
+ package/customize/customize.mk |   32 --------------------------------
+ 3 files changed, 40 deletions(-)
+ delete mode 100644 package/customize/Config.in
+ delete mode 100644 package/customize/customize.mk
+ delete mode 100644 package/customize/source/.empty
 
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 6399699..66e38dc 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -50,3 +50,18 @@ there are a few ways to customize the resulting target filesystem.
-   target root filesystem in +package/customize/source+, and then
-   enable this special package in the configuration system. _This
-   method is marked as deprecated_.
-+
-+Note also that if want to perform some specific actions *after* all
-+filesystem images have been created (for example to automatically
-+extract your root filesystem tarball in a location exported by your
-+NFS server, or to create a special firmware image that bundles your
-+root filesystem and kernel image, or any other custom action), you can
-+specify a list of scripts in the +BR2_ROOTFS_POST_IMAGE_SCRIPT+
-+configuration option. Each of those scripts will be called, with the
-+path to the +images+ output directory as first and unique argument,
-+and will be executed with the main Buildroot source directory as the
-+current directory. Also, just like for the _post-build scripts_
-+mentionned above, you also have access to the following environment
-+variables from your _post-image scripts_: +BUILDROOT_CONFIG+,
-++HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+, +BINARIES_DIR+ and
-++BASE_DIR+.
+diff --git a/package/Config.in b/package/Config.in
+index ba03b3c..5c78784 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1,7 +1,6 @@
+ menu "Package Selection for the target"
+ 
+ source "package/busybox/Config.in"
+-source "package/customize/Config.in"
+ 
+ # Audio and video applications
+ source "package/multimedia/Config.in"
+diff --git a/package/customize/Config.in b/package/customize/Config.in
+deleted file mode 100644
+index 8f8aaa2..0000000
+--- a/package/customize/Config.in
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_CUSTOMIZE
+-	bool "customize"
+-	depends on BR2_DEPRECATED
+-	help
+-	  Add custom stuff to your buildroot.
+-
+-	  (edit package/customize/customize.mk)
+diff --git a/package/customize/customize.mk b/package/customize/customize.mk
+deleted file mode 100644
+index d2b8518..0000000
+--- a/package/customize/customize.mk
++++ /dev/null
+@@ -1,32 +0,0 @@
+-#############################################################
+-#
+-# Any custom stuff you feel like doing....
+-#
+-#############################################################
+-CUST_DIR:=package/customize/source
+-
+-$(BUILD_DIR)/.customize:
+-	rm -f $(BUILD_DIR)/series
+-	(cd $(CUST_DIR); \
+-	 /bin/ls -d * > $(BUILD_DIR)/series || \
+-	 touch $(BUILD_DIR)/series )
+-	for f in `cat $(BUILD_DIR)/series`; do \
+-		cp -af $(CUST_DIR)/$$f $(TARGET_DIR); \
+-	done
+-	rm -f $(BUILD_DIR)/series
+-	touch $@
+-
+-customize: $(BUILD_DIR)/.customize
+-
+-customize-clean:
+-	rm -f $(BUILD_DIR)/.customize
+-
+-.PHONY: customize
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_CUSTOMIZE),y)
+-TARGETS+=customize
+-endif
+diff --git a/package/customize/source/.empty b/package/customize/source/.empty
+deleted file mode 100644
+index e69de29..0000000
 -- 
 1.7.9.5
