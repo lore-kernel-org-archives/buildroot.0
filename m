@@ -1,41 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jan 2013 14:55:10 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 16 Jan 2013 15:11:45 +0100
 Subject: [Buildroot] [PATCH] iftop: new package
-In-Reply-To: <1358351378-10876-2-git-send-email-bogdan@nimblex.net>
+In-Reply-To: <20130116145510.66bdf069@skate> (Thomas Petazzoni's message of
+ "Wed, 16 Jan 2013 14:55:10 +0100")
 References: <1358351378-10876-1-git-send-email-bogdan@nimblex.net>
  <1358351378-10876-2-git-send-email-bogdan@nimblex.net>
-Message-ID: <20130116145510.66bdf069@skate>
+ <20130116145510.66bdf069@skate>
+Message-ID: <87622xmd3y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bogdan Radulescu,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, 16 Jan 2013 15:49:38 +0000, Bogdan Radulescu wrote:
+ Thomas> Dear Bogdan Radulescu,
+ Thomas> On Wed, 16 Jan 2013 15:49:38 +0000, Bogdan Radulescu wrote:
 
-> +	select BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
+ >> +	select BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
 
-No, selecting toolchain options is not correct, and in this particular
-case, it would only work for the internal toolchain backend (breaking
-the external backend and Crosstool-NG backend).
+ Thomas> No, selecting toolchain options is not correct, and in this particular
+ Thomas> case, it would only work for the internal toolchain backend (breaking
+ Thomas> the external backend and Crosstool-NG backend).
 
-See package/squid/Config.in for an example.
+ Thomas> See package/squid/Config.in for an example.
 
-Basically, you must do something like:
+ Thomas> Basically, you must do something like:
 
-config BR2_PACKAGE_FOO
-	depends on BR2_INET_IPV6
+ Thomas> config BR2_PACKAGE_FOO
+ Thomas> 	depends on BR2_INET_IPV6
 
-comment "foo requires IPv6 support in toolchain"
-	depends on !BR2_INET_IPV6
+ Thomas> comment "foo requires IPv6 support in toolchain"
+ Thomas> 	depends on !BR2_INET_IPV6
 
-Best regards,
+Indeed. Also don't forget to sign off on your patch (git commit -s).
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
