@@ -1,32 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 16 Jan 2013 13:24:39 +0100
-Subject: [Buildroot] [PATCH 2/2] proxychains-ng: copy proxychains.conf
-	to target dir
-In-Reply-To: <87ip6xmia1.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Wed, 16 Jan 2013 13:20:06 +0100")
-References: <1358337261-13260-1-git-send-email-stefan.froberg@petroprogram.com>
- <87ip6xmia1.fsf@dell.be.48ers.dk>
-Message-ID: <87ehhlmi2g.fsf@dell.be.48ers.dk>
+Date: Wed, 16 Jan 2013 13:24:54 +0100
+Subject: [Buildroot] [git commit] proxychains-ng: copy proxychains.conf to
+	target dir
+Message-ID: <20130116122450.C20679A1AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=10e058b0ee7fd8135fef35bcf24ae985707078c2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
- Peter> Committed, thanks.
+proxychains installation does not copy proxychains.conf to
+$(TARGET_DIR)/etc anymore so we have to do it manually now.
 
- Peter> 2 nitpicks: It's a bit confusing to number a single patch as 2/2 - v2 of
- Peter> a patch is normally called PATCHv2 or similar.
+Signed-off-by: Stefan Fr??berg <stefan.froberg@petroprogram.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/proxychains-ng/proxychains-ng.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
- Peter> Secondly, we try to keep lines below 80 chars, so I've wrapped the
- Peter> install line.
-
-Ups, got sent too soon - You also sent this patch as a change relative
-to the previous patch, but I haven't applied your earlier patch so you
-should send it relative to trunk instead.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
+index 9cf24bf..c38a7db 100644
+--- a/package/proxychains-ng/proxychains-ng.mk
++++ b/package/proxychains-ng/proxychains-ng.mk
+@@ -7,4 +7,11 @@ PROXYCHAINS_NG_VERSION = 4.4
+ PROXYCHAINS_NG_SOURCE = proxychains-$(PROXYCHAINS_NG_VERSION).tar.bz2
+ PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
+ 
++define PROXYCHAINS_NG_POST_INSTALL_TARGET
++	$(INSTALL) -m 644 -D $(@D)/src/proxychains.conf \
++		$(TARGET_DIR)/etc/proxychains.conf
++endef
++
++PROXYCHAINS_NG_POST_INSTALL_TARGET_HOOKS += PROXYCHAINS_NG_POST_INSTALL_TARGET
++
+ $(eval $(autotools-package))
