@@ -1,52 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 16 Jan 2013 09:48:44 +0100
-Subject: [Buildroot] [git commit] httping: also pass configuration
-	(SSL/TFO/DEBUG) doing make install
-Message-ID: <20130116085039.5040F9A21B@busybox.osuosl.org>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Wed, 16 Jan 2013 10:24:08 +0100
+Subject: [Buildroot] [PATCH] vsftpd: install sample config file to /etc
+Message-ID: <1358328248-15016-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7d93f102e181b23359f0763ffa7f2b467ca98ec8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+vsftpd comes with a sample config file that can serve as a starting
+point for customization and enables a basic functionality. Since
+this config refers to a directory "/usr/share/empty" this is also
+created.
 
-Fixes http://autobuild.buildroot.net/results/144e146ad3223748c4f06f884aeff93e8c0c2de3
-
-When SSL is enabled (which it is by default) an extra source file is built,
-so ensure the same configuration is used at 'make install' time as during
-the build step.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
 ---
- package/httping/httping.mk |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
+ package/vsftpd/vsftpd.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/httping/httping.mk b/package/httping/httping.mk
-index 3ec1dae..4c4d755 100644
---- a/package/httping/httping.mk
-+++ b/package/httping/httping.mk
-@@ -10,16 +10,17 @@ HTTPING_SITE = http://www.vanheusden.com/httping
- HTTPING_LICENSE = GPLv2
- HTTPING_LICENSE_FILES = license.txt
- HTTPING_DEPENDENCIES = $(if $(BR2_PACKAGE_OPENSSL),openssl)
-+HTTPING_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) \
-+	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
-+	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no) \
-+	DEBUG=no
- 
- define HTTPING_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
--		TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no) \
--		DEBUG=no -C $(@D)
-+	$(MAKE) $(HTTPING_MAKE_OPT) -C $(@D)
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index ca711bb..f694b87 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -37,6 +37,10 @@ define VSFTPD_INSTALL_TARGET_CMDS
+ 	test -f $(TARGET_DIR)/etc/init.d/S70vsftpd || \
+ 		$(INSTALL) -D -m 755 package/vsftpd/vsftpd-init \
+ 			$(TARGET_DIR)/etc/init.d/S70vsftpd
++	test -f $(TARGET_DIR)/etc/vsftpd.conf || \
++		$(INSTALL) -D -m 644 $(@D)/vsftpd.conf \
++			$(TARGET_DIR)/etc/vsftpd.conf
++	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/empty
  endef
  
- define HTTPING_INSTALL_TARGET_CMDS
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
-+	$(MAKE) $(HTTPING_MAKE_OPT) DESTDIR=$(TARGET_DIR) -C $(@D) install
- endef
- 
- define HTTPING_CLEAN_CMDS
+ define VSFTPD_UNINSTALL_TARGET_CMDS
+-- 
+1.7.0.4
