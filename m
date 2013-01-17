@@ -1,39 +1,49 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Fri, 18 Jan 2013 09:14:25 +0100
-Subject: [Buildroot] New kernel source mode [Proposal]
-In-Reply-To: <EE5E77B503DE9A478B63A89AAD2585EDB66A39@vpane.excalyptech.com>
-References: <EE5E77B503DE9A478B63A89AAD2585EDB66A2F@vpane.excalyptech.com>
- <50F50A74.8000501@relinux.de>
- <EE5E77B503DE9A478B63A89AAD2585EDB66A39@vpane.excalyptech.com>
-Message-ID: <50F90461.3020206@relinux.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 17 Jan 2013 10:03:03 +0100
+Subject: [Buildroot] Currently packaging Qt5
+In-Reply-To: <20130114141045.039ec839@skate>
+References: <20130114105802.1199d10e@skate>
+ <50F3EDF8.6010203@lucaceresoli.net> <20130114124521.1671c93e@skate>
+ <741030A2814B43C7A9DC318DDB3B4397@JohanW7> <20130114141045.039ec839@skate>
+Message-ID: <50F7BE47.6080702@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 18.01.2013 02:10, schrieb Przemyslaw Wrzos:
-> Hi Stephen,
+On 14/01/13 14:10, Thomas Petazzoni wrote:
+> Dear Sagaert Johan,
 >
-> Just an update to the patch I sent in yesterday. Between trying to get
-> both the generic and non-generic versions working I seem to have
-> introduced a bug at some point into my proposed patch for the linux
-> kernel. I'm including an updated version for you to look at (just a
-> missing line that caused the download step to try to download a
-> nonsensical non-existent file).
-Hello Przemyslaw,
-
-I think I don't have the time to try it out before next week.
-
-Regards
-
-Stephan
+> On Mon, 14 Jan 2013 13:48:12 +0100, Sagaert Johan wrote:
 >
-> One other thing I should note about the patch which I didn't elaborate
-> on yesterday. After digging around in the linux source code there
-> doesn't seem to be a way to perform the buildroot_defconfig make step in
-> an out of tree build so I had to settle for simply copying the
-> configuration file across.
+>> Just a hint :
+>>
+>> https://github.com/nezticle/RaspberryPi-BuildRoot has the QT5 integrated
+>> with the squask toolchain in buildroot.
+>> Maintained by Andy Nichols [nezticle at gmail.com]
 >
-> Cheers,
-> Przemyslaw Wrzos
+> Yes, that's what I'm using as an inspiration, even though I'm making
+> things a bit more configurable (provide more options for graphical
+> backends, etc.).
+>
+> I'm still wondering why so many people are doing Buildroot forks
+> without contributing back the valuable work they are doing.
+
+  Maybe we should schedule some effort to discuss that on these projects' 
+mailing lists.
+
+  It seems BTW that those projects are typically also forking, without 
+merging updates in buildroot itself. Shame.
+
+  Regards,
+  Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
