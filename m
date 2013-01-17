@@ -1,14 +1,33 @@
 From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
-Date: Thu, 17 Jan 2013 17:25:35 +1100
+Date: Thu, 17 Jan 2013 17:27:21 +1100
 Subject: [Buildroot] New kernel source mode [Proposal]
 References: <EE5E77B503DE9A478B63A89AAD2585EDB66A2F@vpane.excalyptech.com>
  <50F50A74.8000501@relinux.de>
-Message-ID: <EE5E77B503DE9A478B63A89AAD2585EDB66A32@vpane.excalyptech.com>
+ <EE5E77B503DE9A478B63A89AAD2585EDB66A32@vpane.excalyptech.com>
+Message-ID: <EE5E77B503DE9A478B63A89AAD2585EDB66A33@vpane.excalyptech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+And of course I forgot to include the patch. Here it is.
+
+ 
+
+Cheers,
+
+Przemyslaw
+
+ 
+
+From: Przemyslaw Wrzos 
+Sent: Thursday, 17 January 2013 17:26
+To: 'Stephan Hoffmann'
+Cc: buildroot at busybox.net
+Subject: RE: [Buildroot] New kernel source mode [Proposal]
+
+ 
 
 Here's the patch I mentioned that will allow Linux to be built out of
 tree, from an existing source directory.
@@ -74,7 +93,6 @@ do you mean the kernel's out of tree build feature?
 
 
 
-
 RATIONALE:  In my project, changes to the kernel are frequent enough
 that it is ideal to be able to update the kernel source tree and then
 build directly from it.
@@ -86,8 +104,6 @@ Override" feature?
 But the advantages of your proposal would be saving some time on each
 build and some hard disk space. Especially when using huge kernel git
 archives.
-
-
 
  
 
@@ -111,12 +127,9 @@ Kind regards
 
 Stephan
 
-
-
  
 
 Thanks for your feedback.
-
 
 
 
@@ -131,4 +144,11 @@ http://lists.busybox.net/mailman/listinfo/buildroot
 
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130117/0d384e28/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130117/8c7ea3e8/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux-dir-source.patch
+Type: application/octet-stream
+Size: 3914 bytes
+Desc: linux-dir-source.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130117/8c7ea3e8/attachment-0001.obj>
