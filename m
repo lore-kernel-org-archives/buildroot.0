@@ -1,50 +1,115 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Thu, 17 Jan 2013 20:48:38 +0200
-Subject: [Buildroot] RTLD_DEEPBIND and uClibc
-In-Reply-To: <CA+wH295dD1eRwkfBXorP78zxcjy4jKPuLOK87bjqoR79R9OY=w@mail.gmail.com>
-References: <50F6A26D.4030607@petroprogram.com>
- <20130117000037.39ccc628@skate> <50F74776.60503@petroprogram.com>
- <20130117093159.2d46ecfd@skate> <50F8019C.4000003@petroprogram.com>
- <CA+wH296eA55hCFSpuuX8TVDhxt7EpnVmAT0p5ciV39x_qZnW-Q@mail.gmail.com>
- <50F82C1B.2040709@petroprogram.com>
- <CA+wH295dD1eRwkfBXorP78zxcjy4jKPuLOK87bjqoR79R9OY=w@mail.gmail.com>
-Message-ID: <50F84786.7030900@petroprogram.com>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Thu, 17 Jan 2013 12:02:52 -0800
+Subject: [Buildroot] [PATCH] dockstar bsp
+In-Reply-To: <20130117172427.190cdb5b@skate>
+References: <1356821139-9103-1-git-send-email-stevecalfee@gmail.com>
+ <20130117172427.190cdb5b@skate>
+Message-ID: <CAJJ6jxu20X877BvUdU7OH1Lm63RQ=6-zT70_Dew2vAX+6s5upw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-17.1.2013 19:09, Alex Bradbury kirjoitti:
-> On 17 January 2013 16:51, Stefan Fr?berg
-> <stefan.froberg@petroprogram.com> wrote:
->> Is it true that musl supports (at least most) of the glibc ABI ?
->> (my biggest worry so far when using uClibc is that I encounter an
->> application that is provided as glibc-only
->> binary and no source code provided.)
-> Yes, this is one of the goals. There was a big discussion on the musl
-> mailing list <http://dir.gmane.org/gmane.linux.lib.musl.general> in
-> December. One of the aims is glibc ABI compatibility, with
-> applications like Opera being discussed on the list. Development is
-> *very* active and Rich Felker (lead dev) seems to respond very quickly
-> to issues or bug reports.
+On Thu, Jan 17, 2013 at 8:24 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Steve Calfee,
 >
-> In fact, I've fallen behind following the musl mailing list the last
-> couple of months but see a recent posts that indicate there has been
-> good glibc ABI progress
-> <http://article.gmane.org/gmane.linux.lib.musl.general/2549>. Of
-> course many of the proprietary apps are likely to use C++, and the C++
-> ABI is...fiddly.
+> On Sat, 29 Dec 2012 14:45:39 -0800, Steve Calfee wrote:
+>> Simple bsp for the Seagate Dockstar.
+>>
+>> Builds and runs using buildroot 2012.11
+>>
+>> Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
+>> ---
+>>  board/sheevaplug/Config.in                         |   13 +
+>>  board/sheevaplug/Makefile.in                       |    4 +
+>>  board/sheevaplug/seagatedockstar/Makefile.in       |    5 +
 >
->> What about it's configuration ? Does it have nice kconf style  "make
->> menuconfig" like uClibc or what ?
-> I don't *think* so, but could be wrong. Still, it aims to be
-> substantially lighterweight than glibc, while hopefully providing more
-> performant implementations of functions than either glibc or uclibc.
+> No, we really don't want per-board configuration options or Makefiles.
+> A board is just a particular configuration of Buildroot.
 >
-> Alex
+> Moreover your Makefile.in files still reference some old files in
+> target/device/ that no longer exist.
+>
+>>  board/sheevaplug/seagatedockstar/README            |   62 +++++
+>
+> The README file should not be a story of how the thing was written, but
+> simply how to use this configuration on this particular hardware (how
+> to flash the images, etc.).
+>
+>>  .../dockstar_dev_external_toolchain_defconfig      |   24 ++
+>>  .../dockstar_internal_toolchain_defconfig          |   21 ++
+>>  .../dockstar_toolchain_only_defconfig              |   16 ++
+>
+> Those configurations are useless as they are not visible through "make
+> help" or "make <foobar>_defconfig". And anyway, we only want one
+> configuration per board.
+>
+>>  .../seagatedockstar/linux-3.2plus.config           |  294 ++++++++++++++++++++
+>>  board/sheevaplug/seagatedockstar/patchrootfs.sh    |   14 +
+>>  .../seagatedockstar/skeleton/etc/inittab           |   46 +++
+>>  .../sheevaplug/seagatedockstar/skeleton/etc/shadow |   12 +
+>
+> Why is it needed to override the default inittab and shadow?
+>
+>>  configs/dockstart_defconfig                        |   21 ++
+>
+>> --- /dev/null
+>> +++ b/configs/dockstart_defconfig
+>> @@ -0,0 +1,21 @@
+>> +BR2_arm=y
+>> +BR2_arm926t=y
+>
+> Ok for those two ones.
+>
+>> +BR2_JLEVEL=4
+>> +BR2_PACKAGE_GDB=y
+>> +BR2_ENABLE_LOCALE_PURGE=y
+>> +BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+>> +BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+>> +BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+>> +BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+>> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>> +BR2_TARGET_GENERIC_HOSTNAME="dockstar"
+>> +BR2_TARGET_GENERIC_ISSUE="Welcome to Dockstar and Buildroot"
+>> +BR2_ROOTFS_POST_BUILD_SCRIPT="$(TOPDIR)/board/sheevaplug/seagatedockstar/patchrootfs.sh"
+>
+> I don't think any of these is needed.
+>
+>> +BR2_TARGET_ROOTFS_UBIFS=y
+>> +BR2_TARGET_ROOTFS_UBIFS_RT_ZLIB=y
+>> +BR2_TARGET_ROOTFS_UBI=y
+>> +BR2_TARGET_ROOTFS_TAR_GZIP=y
+>> +BR2_LINUX_KERNEL=y
+>> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(topdir)board/sheevaplug/seagatedockstar/linux-3.2plus.config"
+>> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+>
+> Ok. Is installation of the kernel image inside the target filesystem
+> really needed? How does this board boots?
+>
+> To summarize, a board configuration in Buildroot is just:
+>
+>  * A minimal defconfig in configs/<blabla>_defconfig, that selects the
+>    proper architecture, proper bootloader, filesystem image format and
+>    kernel version/configuration. No toolchain options, no packages, etc.
+>
+>  * Possibly in board/<manufacturer>/<boardname>/, a kernel
+>    configuration file, a README file, and other files that have to be
+>    added in the root filesystem to make the board work.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
-Thanks Alex!
-I will keep watching that list.
+Hi Thomas,
 
-Stefan
+Thank you for your review. I will simplify and try again.
+
+Regards, Steve
