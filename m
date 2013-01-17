@@ -1,79 +1,33 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Thu, 17 Jan 2013 15:22:35 +0000
-Subject: [Buildroot] [PATCH 1/6] pkg-infra: log current message
-In-Reply-To: <7d5b13e61ca5941293be6d1402c87ca990510e1b.1358379198.git.yann.morin.1998@free.fr>
-References: <cover.1358379198.git.yann.morin.1998@free.fr>
- <7d5b13e61ca5941293be6d1402c87ca990510e1b.1358379198.git.yann.morin.1998@free.fr>
-Message-ID: <CAG2jQ8hQ-2-Dr1LeLTPyof1kkWAgr2QesfWZpSk_4_Yp-z=sdA@mail.gmail.com>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Thu, 17 Jan 2013 17:35:43 +0200
+Subject: [Buildroot] Problem using Linux kernel archive from Gitorious
+In-Reply-To: <20130117160133.61661524@skate>
+References: <CAJkQPOkYXUAWsJw_1dxsObUbx9bboSsF4+yBz6jKEKKXXhxZfg@mail.gmail.com>
+ <20130117160133.61661524@skate>
+Message-ID: <50F81A4F.6000705@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16 January 2013 23:41, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> In order to help the auto-builders (our own, or in-house ones),
-> just log the current message in a file that contains:
->     Package: $($(PKG)_NAME)
->     Version: $($(PKG)_VERSION)
->     Action : Last '>>>' message displayed
+17.1.2013 17:01, Thomas Petazzoni kirjoitti:
+> The problem here is that since the filename doesn't end with .tar.gz,
+> Buildroot doesn't know which extraction method to apply, and therefore
+> doesn't apply any, which leads Buildroot to try to execute your tarball.
 >
-> For example:
->     Package: host-fakeroot
->     Version: 1.18.2
->     Action : Configuring
->
-> If there is no package, then the package name and version are
-> empty, eg.:
->     Package:
->     Version:
->     Action : Generating root filesystem image rootfs.tar
->
-> Also, all messages are logged to a file, one per line, with the
-> date each message was generated at, as the number of seconds
-> elapsed since Epoch.
->
-> This will hopefully help autobuilders extract the real reason for
-> a failure, and take appropriate action (eg. bug-mail the last
-> git-author of a package...)
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/pkg-utils.mk |    9 ++++++++-
->  1 files changed, 8 insertions(+), 1 deletions(-)
->
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 835c588..477be57 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -64,7 +64,14 @@ INFLATE.xz   = $(XZCAT)
->  INFLATE.tar  = cat
->
->  # MESSAGE Macro -- display a message in bold type
-> -MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
-> +define MESSAGE
-> +       echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)";   \
-> +       echo "$$(date '+%s'): $($(PKG)_NAME) $($(PKG)_VERSION) $(1)"                 \
-> +            >>$(BUILD_DIR)/actions.log;                                             \
-> +       printf "Package: %s\nVersion: %s\nAction : %s\n"                             \
-> +              "$($(PKG)_NAME)" "$($(PKG)_VERSION)" $(1)                             \
-> +              >$(BUILD_DIR)/last-action
-> +endef
->  TERM_BOLD  := $(shell tput smso)
->  TERM_RESET := $(shell tput rmso)
->
-> --
-> 1.7.2.5
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Hum, I am not sure how to handle that. Should we try to extract simply
+> with tar something that does not have an extension?
 
-Looks good to me
+if you use tar with -a switch it is smart enough to extract it
+correctly. Even if wrong extension or no extension at all.
+For example:
 
-Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
+mv bison-2.5.tar.gz bison-2.5.tar.xyz
+tar -xaSvf bison-2.5.tar.xyz
 
--- 
-Regards,
-Markos
+mv bison-2.5.tar.gz bison-2.5
+tar -xaSvf bison-2.5
+
+Regards
+Stefan
