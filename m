@@ -1,39 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 17 Jan 2013 14:43:20 +0100
-Subject: [Buildroot] [git commit] libsigc: bump to version 2.2.11
-Message-ID: <20130117134636.3726397081@busybox.osuosl.org>
+Date: Thu, 17 Jan 2013 14:42:55 +0100
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.2.x stable version
+Message-ID: <20130117134635.26A229A27E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=13a81fa2caf32b4fa1a5452f308eed14e127a8f5
+commit: http://git.buildroot.net/buildroot/commit/?id=476dd1597a7350253ee4b74aeaf3dd00909d9286
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libsigc/libsigc.mk |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libsigc/libsigc.mk b/package/libsigc/libsigc.mk
-index 10f5803..3f58686 100644
---- a/package/libsigc/libsigc.mk
-+++ b/package/libsigc/libsigc.mk
-@@ -3,10 +3,13 @@
- # libsigc++
- #
- #############################################################
--LIBSIGC_VERSION = 2.2.10
--LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.bz2
-+
-+LIBSIGC_VERSION = 2.2.11
-+LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.xz
- LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.2
- LIBSIGC_INSTALL_STAGING = YES
-+LIBSIGC_LICENSE = LGPLv2.1+
-+LIBSIGC_LICENSE_FILES = COPYING
- 
- define LIBSIGC_INSTALL_TARGET_FIXUP
- 	rm -rf $(TARGET_DIR)/usr/share/devhelp/books/libsigc++*
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index cdaab3b..14e83b4 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -60,7 +60,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.58"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.36"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.37"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+ 	default "3.4.25"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
