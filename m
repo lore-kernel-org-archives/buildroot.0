@@ -1,32 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 17 Jan 2013 23:03:01 +0100
-Subject: [Buildroot] RTLD_DEEPBIND and uClibc
-In-Reply-To: <CA+wH296eA55hCFSpuuX8TVDhxt7EpnVmAT0p5ciV39x_qZnW-Q@mail.gmail.com>
- (Alex Bradbury's message of "Thu, 17 Jan 2013 16:18:25 +0000")
-References: <50F6A26D.4030607@petroprogram.com>
- <20130117000037.39ccc628@skate> <50F74776.60503@petroprogram.com>
- <20130117093159.2d46ecfd@skate> <50F8019C.4000003@petroprogram.com>
- <CA+wH296eA55hCFSpuuX8TVDhxt7EpnVmAT0p5ciV39x_qZnW-Q@mail.gmail.com>
-Message-ID: <87622vlb6y.fsf@dell.be.48ers.dk>
+From: John Stile <john@stilen.com>
+Date: Thu, 17 Jan 2013 14:09:33 -0800
+Subject: [Buildroot] designing a firmware update mechanism
+Message-ID: <1358460573.32266.63.camel@genx>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alex" == Alex Bradbury <asb@asbradbury.org> writes:
+I use buildroot for an embedded project, which has an atmel arm
+processor, at91BootStrap on NOR to call uboot (and the reset of the
+system) on NAND.
 
- Alex> On 17 January 2013 13:50, Stefan Fr?berg
- Alex> <stefan.froberg@petroprogram.com> wrote:
- >> And if even *that* is not enought then I could consider maybe switching
- >> to musl ... maybe ...
+I am trying to devise a brick-safe strategy to update the systems once
+created, but I'm making this up as I go for a lack of better ideas.
 
- Alex> I've been following musl for a while - it really might be worth giving
- Alex> a go. They're aiming to be more lightweight than Glibc, while more
- Alex> functional than uclibc. Plus some musl patches for buildroot and
- Alex> crosstool-ng would be kind of awesome ;)
+So far I am trying to split NAND in redundant halves (each with a copy
+of uboot + uboot-env + kernel + roofs), and modify at91bootstrap to
+choose which uboot to load, based on something inside the uboot-env
+areas.
 
-I would certainly be open for patches adding musl support in buildroot.
+Will I need to compile 2 versions of uboot, differing only in where to
+look for the uboot-env, or is there another way?  If so, is there a way
+to do this within buildroot, or does uboot need to become an external
+project from my buildroot setup?
 
--- 
-Bye, Peter Korsgaard
+Could anyone share a firmware update strategy for a project that uses
+buildroot, at91bootstrap, and uboot, or is that outside the scope of
+this list?
+
+I have not found any built-in mechanisms to handle updates.
