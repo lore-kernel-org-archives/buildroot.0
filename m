@@ -1,34 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jan 2013 13:54:18 +0100
-Subject: [Buildroot] [PATCH v0] Add support for automated building of
- Opkg repository
-In-Reply-To: <1423867.kLX9PqGxu5@sagittae>
-References: <1358268430-2431-1-git-send-email-jezz@sysmic.org>
- <1423867.kLX9PqGxu5@sagittae>
-Message-ID: <20130117135418.2a4760e9@skate>
+From: Willy Lambert <lambert.willy@gmail.com>
+Date: Thu, 17 Jan 2013 14:05:46 +0100
+Subject: [Buildroot] Udev generates too many tty dev nodes
+In-Reply-To: <20130117135505.56db811a@skate>
+References: <CAKvQZ_2FEFO7BNqkzXTCeH5+scxg6ZhuW+Ruy99Q8xxivjhx_w@mail.gmail.com>
+ <20130117135505.56db811a@skate>
+Message-ID: <CAKvQZ_085YC_LpJhD5Oxq6KOg9mnRY1O6KSRw75+++6+Fh_+SA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+2013/1/17 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Willy Lambert,
+>
+> On Thu, 17 Jan 2013 01:48:41 +0100, Willy Lambert wrote:
+>
+>> I'm trying to put my /dev folder into order, and I recently switched
+>> from static config to udev. All device are correctly set up exept tty*
+>> that are umerously present (something like 64 nodes).
+>>
+>> _ Does anyone know if it is normal that so many files are generated ?
+>> (or said differently should I wonder about my buildroot outputs)
+>> _ Is there any mean to change that ?
+>> _ Is this only and udev problem or is it linked to buildroot
+>> integration ?
+>
+> Is it really an issue? I mean, device nodes really don't consume that
+> much memory or anything, so, who cares?
+>
 
-On Thu, 17 Jan 2013 11:23:17 +0100, J?r?me Pouiller wrote:
+I do ^^. The bad argument is that I hate having mess on my device,
+especially when typing "ls /dev". The good one is that if something
+behave strangly I like to tackle the root cause. It's not an
+industrial projet, it's a personnal one on which I can take the time I
+want to look at everything I like :D. And in this case I do *not* have
+a need for 64 ttys and I did *not* (at least consciently) ask for
+having them. So somehting, somewhere is doing thing on my back, and I
+want to know what.
 
-> I am surprised to have any reply to this patch proposal. Patches have
-> been correctly sent? (I didn't receive them but I am sure it come
-> from my local mailer daemon since they appear on gmame). Or I am just
-> too impatient?
+udev is supposed to show only what's available or in use. It's sure
+that some of those devices are not meeting this criterias.
 
-Patches have been received. I intend to give a reply to them, but I
-need a bit of time to do so. I'll get back with my comments soon.
+But I agree, it's all but an issue.
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
