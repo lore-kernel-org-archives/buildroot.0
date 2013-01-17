@@ -1,31 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jan 2013 13:55:05 +0100
-Subject: [Buildroot] Udev generates too many tty dev nodes
-In-Reply-To: <CAKvQZ_2FEFO7BNqkzXTCeH5+scxg6ZhuW+Ruy99Q8xxivjhx_w@mail.gmail.com>
-References: <CAKvQZ_2FEFO7BNqkzXTCeH5+scxg6ZhuW+Ruy99Q8xxivjhx_w@mail.gmail.com>
-Message-ID: <20130117135505.56db811a@skate>
+Date: Thu, 17 Jan 2013 13:54:18 +0100
+Subject: [Buildroot] [PATCH v0] Add support for automated building of
+ Opkg repository
+In-Reply-To: <1423867.kLX9PqGxu5@sagittae>
+References: <1358268430-2431-1-git-send-email-jezz@sysmic.org>
+ <1423867.kLX9PqGxu5@sagittae>
+Message-ID: <20130117135418.2a4760e9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Willy Lambert,
+Dear J?r?me Pouiller,
 
-On Thu, 17 Jan 2013 01:48:41 +0100, Willy Lambert wrote:
+On Thu, 17 Jan 2013 11:23:17 +0100, J?r?me Pouiller wrote:
 
-> I'm trying to put my /dev folder into order, and I recently switched
-> from static config to udev. All device are correctly set up exept tty*
-> that are umerously present (something like 64 nodes).
-> 
-> _ Does anyone know if it is normal that so many files are generated ?
-> (or said differently should I wonder about my buildroot outputs)
-> _ Is there any mean to change that ?
-> _ Is this only and udev problem or is it linked to buildroot
-> integration ?
+> I am surprised to have any reply to this patch proposal. Patches have
+> been correctly sent? (I didn't receive them but I am sure it come
+> from my local mailer daemon since they appear on gmame). Or I am just
+> too impatient?
 
-Is it really an issue? I mean, device nodes really don't consume that
-much memory or anything, so, who cares?
+Patches have been received. I intend to give a reply to them, but I
+need a bit of time to do so. I'll get back with my comments soon.
+
+Best regards,
 
 Thomas
 -- 
