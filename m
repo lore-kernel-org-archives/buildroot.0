@@ -1,33 +1,60 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Thu, 17 Jan 2013 17:35:43 +0200
-Subject: [Buildroot] Problem using Linux kernel archive from Gitorious
-In-Reply-To: <20130117160133.61661524@skate>
-References: <CAJkQPOkYXUAWsJw_1dxsObUbx9bboSsF4+yBz6jKEKKXXhxZfg@mail.gmail.com>
- <20130117160133.61661524@skate>
-Message-ID: <50F81A4F.6000705@petroprogram.com>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Thu, 17 Jan 2013 17:06:39 +0100
+Subject: [Buildroot] xapp_init: bad substitution of mcookie path in
+	startx
+In-Reply-To: <871uf5obh3.fsf@dell.be.48ers.dk>
+References: <50BDEE24.6010601@wanadoo.fr> <871uf5obh3.fsf@dell.be.48ers.dk>
+Message-ID: <50F8218F.4070701@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-17.1.2013 17:01, Thomas Petazzoni kirjoitti:
-> The problem here is that since the filename doesn't end with .tar.gz,
-> Buildroot doesn't know which extraction method to apply, and therefore
-> doesn't apply any, which leads Buildroot to try to execute your tarball.
+Hi,
+
+Sorry for the long delay
+
+The  bug is reproducible with latest release,
+and I finally found out why.
+
+The issue is that in xapp_xinit, 'configure' checks for 'mcookie', and 
+the first time, founds it ... on the host side, ie the 
+"/usr/bin/mcookie" of Ubuntu for instance. This is the path that is 
+substituted in startx.
+
+When rebuilding the xapp_xinit package, "mcookie" has been built by 
+buildroot, in the xorg_server package. Thus "configure" finds it in our 
+build directory, ie output/host/usr/bin/mcookie, which is not a target path.
+
+A quick fix (not meaning it is the cleanest way) is simply to add
+
+XAPP_XINIT_CONF_OPT += MCOOKIE=/usr/bin/mcookie
+
+in xapp_xinit.mk
+
+Thierry
+
+
+Le 04/12/2012 20:37, Peter Korsgaard a ?crit :
+>>>>>> "Thierry" == Thierry Bultel <thierry.bultel@wanadoo.fr> writes:
 >
-> Hum, I am not sure how to handle that. Should we try to extract simply
-> with tar something that does not have an extension?
-
-if you use tar with -a switch it is smart enough to extract it
-correctly. Even if wrong extension or no extension at all.
-For example:
-
-mv bison-2.5.tar.gz bison-2.5.tar.xyz
-tar -xaSvf bison-2.5.tar.xyz
-
-mv bison-2.5.tar.gz bison-2.5
-tar -xaSvf bison-2.5
-
-Regards
-Stefan
+>   Thierry> Hi,
+>   Thierry> The generated "startx" has the host path for mcookie:
+>
+>
+>
+>   Thierry> ----------
+>   Thierry>    esac
+>
+>   Thierry>     authdisplay=${display:-:0}
+>
+>
+>   Thierry> mcookie=`/nous/BASYSTEMES/Buildroot/output.imx6neon/host/usr/bin/mcookie`
+>
+> What buildroot version are you using? It seems to be correct here with
+> current git:
+>
+> grep bin/mcookie output/target/usr/bin/startx
+>      mcookie=`/usr/bin/mcookie`
+>
