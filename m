@@ -1,57 +1,73 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 17 Jan 2013 14:43:31 +0100
-Subject: [Buildroot] [git commit] vim: bump to version 7.3-762
-Message-ID: <20130117134636.A7BB69A281@busybox.osuosl.org>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Thu, 17 Jan 2013 15:50:20 +0200
+Subject: [Buildroot] RTLD_DEEPBIND and uClibc
+In-Reply-To: <20130117093159.2d46ecfd@skate>
+References: <50F6A26D.4030607@petroprogram.com>
+ <20130117000037.39ccc628@skate> <50F74776.60503@petroprogram.com>
+ <20130117093159.2d46ecfd@skate>
+Message-ID: <50F8019C.4000003@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e59117fe938990f82944f5ec0464330389b0ff0d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/vim/Config.in |    1 +
- package/vim/vim.mk    |    6 ++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+17.1.2013 10:31, Thomas Petazzoni kirjoitti:
+> Dear Stefan Fr?berg,
+>
+> On Thu, 17 Jan 2013 02:36:06 +0200, Stefan Fr?berg wrote:
+>
+>> Well, it's not *that* big.
+> It's not that big, but compared it to the size difference between
+> uClibc and glibc, and you'll see that switching to glibc is reasonable.
+>
+> My perception is that uClibc is very relevant for non-MMU systems or
+> small systems (having limited quantity of flash/RAM), and on those
+> systems, we are not going to run a full-blown X.org stack with a window
+> manager and so on.
+>
+> Whenever you start having X.org on a system and a window manager, most
+> likely you have hundreds of megabytes of flash, and therefore, the size
+> difference between uClibc and glibc (probably somewhere between 1 and
+> 1.5 MB) isn't that much of a problem anymore.
 
-diff --git a/package/vim/Config.in b/package/vim/Config.in
-index 0da158f..891715e 100644
---- a/package/vim/Config.in
-+++ b/package/vim/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_VIM
- 	bool "vim"
-+	depends on BR2_USE_MMU # uses fork()
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  VIM Text editor
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 7fed822..fa5f8ae 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,10 +4,10 @@
- #
- #############################################################
- 
--# hg 21219ffc9790 = 7.3 release + patchlevel 487
- VIM_SITE = https://vim.googlecode.com/hg
- VIM_SITE_METHOD = hg
--VIM_VERSION = 21219ffc9790
-+# 7.3 release patchlevel 762
-+VIM_VERSION = 699f8d8f096d
- VIM_DEPENDENCIES = ncurses
- VIM_SUBDIR = src
- VIM_CONF_ENV = vim_cv_toupper_broken=no \
-@@ -21,6 +21,8 @@ VIM_CONF_ENV = vim_cv_toupper_broken=no \
- 		ac_cv_small_wchar_t=no
- # GUI/X11 headers leak from the host so forcibly disable them
- VIM_CONF_OPT = --with-tlib=ncurses --enable-gui=no --without-x
-+VIM_LICENSE = Charityware
-+VIM_LICENSE_FILES = README.txt
- 
- define VIM_INSTALL_TARGET_CMDS
- 	cd $(@D)/src; \
+Eh... I think it's more than 1 - 1.5 MB :-)
+
+
+http://www.etalabs.net/compare_libcs.html
+
+In that comparison it's eglibc (the smaller brother of glibc) vs. other,
+more lighter c-libraries.
+And even then it's 1.5 MB or more vs uClibc's 336 KB with .a files and 2
+MB or more vs. 520 KB.
+
+Even tought in my case, Im targeting to running my system with low-end,
+ancient PC desktop's (2000 or earlier),
+so it's not really exactly comparable with todays embedded systems, it's
+still a huge saving of space when
+you start thinking about all the lib's and binaries that go to normal
+desktop system.
+
+In a related note, my *full* Live-CD system is now uncompressed to 520
+MB (194 MB, if using squashfs xz-compressed image with loopdevice),
+and the absolute minimum runtime RAM requirement for starting it
+(Xorg,fluxbox, firefox,  etc...) is
+now about 120 MB (bigger part of that goes to tmp files and other stuff
+that are automatically created in initramfs from which it runs directly).
+
+I don't think I could have done that with glibc or eglibc ...
+
+And I haven't even started using GCC 4.7.2 Linktime optimizations yet.
+which I expect to cut about 10 - 20 KB per binary away
+and finally UPX compression of selected few binaries and libs.
+
+And if even *that* is not enought then I could consider maybe switching
+to musl ... maybe ...
+
+So all in all, Im very happy with buildroot and uClibc and not going to
+turn back to glibc and bloat
+
+Regards
+Stefan
