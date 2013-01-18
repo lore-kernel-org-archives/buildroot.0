@@ -1,68 +1,70 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 18 Jan 2013 13:12:21 +0100
-Subject: [Buildroot] [PATCH] Use the libpng-config from staging instead
-	of the one from the host.
-In-Reply-To: <1358473419-13477-1-git-send-email-jc@eclis.ch> (Jean-Christian
- de Rivaz's message of "Fri, 18 Jan 2013 02:43:39 +0100")
-References: <1358473419-13477-1-git-send-email-jc@eclis.ch>
-Message-ID: <87mww6itay.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 18 Jan 2013 12:44:14 +0100
+Subject: [Buildroot] [git commit] uboot-tools: bump to version 2013.01
+Message-ID: <20130118121227.CFD199A27C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "JC" == Jean-Christian de Rivaz <jc@eclis.ch> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ef49a1f62762f47cea4459d03a3c49c3e55b8992
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../uboot-tools-drop-configh-from-tools.patch      |   31 --------------------
+ package/uboot-tools/uboot-tools.mk                 |    2 +-
+ 2 files changed, 1 insertions(+), 32 deletions(-)
 
- JC> The gd package configure call 'libpng-config' to get the compiler
- JC> flags required to use the libpng. The configure correctly allow to
- JC> specify the path of the staging libpng-config by using the
- JC> ac_cv_path_LIBPNG_CONFIG but the configure.ac call simply
- JC> 'libpng-config' instead of the specified one. The configure.ac is now
- JC> modified to call the specified libpng_config.
-
- JC> In buildroot gd.mk, specify the staging libpng-config and to a empty
- JC> string the libpng12-config to prevent to use the -lpng12 flag or the
- JC> host setting.
-
- JC> Signed-off-by: Jean-Christian de Rivaz <jc@eclis.ch>
- JC> ---
- JC>  package/gd/gd-libpng-config.patch |   22 ++++++++++++++++++++++
- JC>  package/gd/gd.mk                  |    2 ++
- JC>  2 files changed, 24 insertions(+), 0 deletions(-)
- JC>  create mode 100644 package/gd/gd-libpng-config.patch
-
- JC> diff --git a/package/gd/gd-libpng-config.patch b/package/gd/gd-libpng-config.patch
- JC> new file mode 100644
- JC> index 0000000..655da78
- JC> --- /dev/null
-
-Please add a git-style header to this patch explaining what it does and
-your signed-off-by.
-
- JC> +++ b/package/gd/gd-libpng-config.patch
- JC> @@ -0,0 +1,22 @@
- JC> +diff -ruN a/configure.ac b/configure.ac
- JC> +--- a/configure.ac	2013-01-18 02:00:59.000000000 +0100
- JC> ++++ b/configure.ac	2013-01-18 02:01:44.000000000 +0100
- JC> +@@ -353,14 +353,14 @@
- JC> +   AC_PATH_PROG([LIBPNG12_CONFIG], [libpng12-config])
- JC> +   AC_PATH_PROG([LIBPNG_CONFIG], [libpng-config])
- JC> +   if test -n "$LIBPNG12_CONFIG"; then
- JC> +-    libpng_CPPFLAGS=`libpng12-config --cflags`
- JC> ++    libpng_CPPFLAGS=`$LIBPNG12_CONFIG --cflags`
- JC> +     # should be --ldopts, but it's currently broken
- JC> +-    libpng_LDFLAGS=`libpng12-config --ldflags`
- JC> ++    libpng_LDFLAGS=`$LIBPNG12_CONFIG --ldflags`
- JC> +     libpng_LDFLAGS=`echo " $libpng_LDFLAGS" | sed 's/ -l[[^ ]][[^ ]]*//g'`
- JC> +   elif test -n "$LIBPNG_CONFIG"; then
- JC> +-    libpng_CPPFLAGS=`libpng-config --cflags`
- JC> ++    libpng_CPPFLAGS=`$LIBPNG_CONFIG --cflags`
- JC> +     # should be --ldopts, but it's currently broken
- JC> +-    libpng_LDFLAGS=`libpng-config --ldflags`
- JC> ++    libpng_LDFLAGS=`$LIBPNG_CONFIG --ldflags`
- JC> +     libpng_LDFLAGS=`echo " $libpng_LDFLAGS" | sed 's/ -l[[^ ]][[^ ]]*//g'
--- 
-Bye, Peter Korsgaard
+diff --git a/package/uboot-tools/uboot-tools-drop-configh-from-tools.patch b/package/uboot-tools/uboot-tools-drop-configh-from-tools.patch
+deleted file mode 100644
+index 2b3a0e5..0000000
+--- a/package/uboot-tools/uboot-tools-drop-configh-from-tools.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 39857718f4df9b40a7acf38b73140fd86c628ef0 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Mon, 30 Apr 2012 09:07:38 -0300
+-Subject: [PATCH] fw_env: allow it to build without a config
+-
+-We need to build u-boot tools without a board configuration for the
+-target packages.
+-fw_env just uses config.h to define the default environment of the
+-created image, so it really isn't mandatory.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- tools/env/fw_env.c |    2 --
+- 1 files changed, 0 insertions(+), 2 deletions(-)
+-
+-diff --git a/tools/env/fw_env.c b/tools/env/fw_env.c
+-index e292d2b..2bb061a 100644
+---- a/tools/env/fw_env.c
+-+++ b/tools/env/fw_env.c
+-@@ -45,8 +45,6 @@
+- 
+- #include "fw_env.h"
+- 
+--#include <config.h>
+--
+- #define WHITESPACE(c) ((c == '\t') || (c == ' '))
+- 
+- #define min(x, y) ({				\
+--- 
+-1.7.3.4
+-
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 5957a3d..3470b60 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -3,7 +3,7 @@
+ # uboot-tools
+ #
+ #############################################################
+-UBOOT_TOOLS_VERSION = 2012.10
++UBOOT_TOOLS_VERSION = 2013.01
+ UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPLv2+
