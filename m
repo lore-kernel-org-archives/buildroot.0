@@ -1,11 +1,11 @@
 From: Markos Chandras <markos.chandras@gmail.com>
-Date: Fri, 18 Jan 2013 16:12:47 +0000
-Subject: [Buildroot] [PATCH 6/6] toolchain/uClibc: sprinkle with some
- calls to MESSAGE
-In-Reply-To: <48c069d16567a23036274780ce1b5f68f044f550.1358379198.git.yann.morin.1998@free.fr>
+Date: Fri, 18 Jan 2013 16:13:12 +0000
+Subject: [Buildroot] [PATCH 4/6] toolchain/gcc: sprinkle with some calls
+ to MESSAGE
+In-Reply-To: <5f7b311395a44a98654df57f145bffc9ce90a6c9.1358379198.git.yann.morin.1998@free.fr>
 References: <cover.1358379198.git.yann.morin.1998@free.fr>
- <48c069d16567a23036274780ce1b5f68f044f550.1358379198.git.yann.morin.1998@free.fr>
-Message-ID: <CAG2jQ8hVJSCYBAo5ygedNZ_Bj47HkLMbUCqTjCLxWtXPff=TgA@mail.gmail.com>
+ <5f7b311395a44a98654df57f145bffc9ce90a6c9.1358379198.git.yann.morin.1998@free.fr>
+Message-ID: <CAG2jQ8g25_Wq_4L_w3z08U0qKuV+XJ_aWRxeJVG4oquP=MHmFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,107 +18,130 @@ On 16 January 2013 23:41, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  toolchain/uClibc/uclibc.mk |   12 ++++++++++++
->  1 files changed, 12 insertions(+), 0 deletions(-)
+>  toolchain/gcc/gcc-uclibc-4.x.mk |   15 +++++++++++++++
+>  1 files changed, 15 insertions(+), 0 deletions(-)
 >
-> diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-> index 055267c..b45e85c 100644
-> --- a/toolchain/uClibc/uclibc.mk
-> +++ b/toolchain/uClibc/uclibc.mk
-> @@ -66,6 +66,7 @@ $(DL_DIR)/$(UCLIBC_SOURCE):
+> diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+> index b0d741b..09d5dc1 100644
+> --- a/toolchain/gcc/gcc-uclibc-4.x.mk
+> +++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+> @@ -247,6 +247,7 @@ $(DL_DIR)/$(GCC_SOURCE):
 >
->  uclibc-unpacked: $(UCLIBC_DIR)/.unpacked
->  $(UCLIBC_DIR)/.unpacked: $(DL_DIR)/$(UCLIBC_SOURCE)
-> +       $(Q)$(call MESSAGE,"Extracting uClibc")
+>  gcc-unpacked: $(GCC_DIR)/.patched
+>  $(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
+> +       $(Q)$(call MESSAGE,"Extracting gcc")
 >         mkdir -p $(TOOLCHAIN_DIR)
->         rm -rf $(UCLIBC_DIR)
->         $(UCLIBC_CAT) $(DL_DIR)/$(UCLIBC_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
-> @@ -73,6 +74,7 @@ $(UCLIBC_DIR)/.unpacked: $(DL_DIR)/$(UCLIBC_SOURCE)
+>         rm -rf $(GCC_DIR)
+>         $(GCC_CAT) $(DL_DIR)/$(GCC_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
+> @@ -259,6 +260,7 @@ endif
 >
->  uclibc-patched: $(UCLIBC_DIR)/.patched
->  $(UCLIBC_DIR)/.patched: $(UCLIBC_DIR)/.unpacked
-> +       $(Q)$(call MESSAGE,"Patching uClibc")
->  ifneq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
->         support/scripts/apply-patches.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) \
->                 uClibc-$(UCLIBC_VERSION)-\*.patch \
-> @@ -86,6 +88,7 @@ endif
+>  gcc-patched: $(GCC_DIR)/.patched
+>  $(GCC_DIR)/.patched: $(GCC_DIR)/.unpacked
+> +       $(Q)$(call MESSAGE,"Patching gcc")
+>         # Apply any files named gcc-*.patch from the source directory to gcc
+>  ifneq ($(wildcard $(GCC_PATCH_DIR)),)
+>         support/scripts/apply-patches.sh $(GCC_DIR) $(GCC_PATCH_DIR) \*.patch
+> @@ -279,6 +281,7 @@ endif
+>  GCC_BUILD_DIR1:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-initial
 >
->  # Some targets may wish to provide their own UCLIBC_CONFIG_FILE...
->  $(UCLIBC_DIR)/.oldconfig: $(UCLIBC_DIR)/.patched $(UCLIBC_CONFIG_FILE)
-> +       $(Q)$(call MESSAGE,"Pre-configuring uClibc")
->         cp -f $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.oldconfig
->         $(SED) 's,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="$(TARGET_CROSS)",g' \
->                 -e 's,# TARGET_$(UCLIBC_TARGET_ARCH) is not set,TARGET_$(UCLIBC_TARGET_ARCH)=y,g' \
-> @@ -370,6 +373,7 @@ endif
->  endif
->
->  $(UCLIBC_DIR)/.config: $(UCLIBC_DIR)/.oldconfig
-> +       $(Q)$(call MESSAGE,"Configuring uClibc")
->         cp -f $(UCLIBC_DIR)/.oldconfig $(UCLIBC_DIR)/.config
->         mkdir -p $(TOOLCHAIN_DIR)/uClibc_dev/usr/include
->         mkdir -p $(TOOLCHAIN_DIR)/uClibc_dev/usr/lib
-> @@ -393,6 +397,7 @@ $(UCLIBC_DIR)/.config: | host-ccache
->  endif
->
->  $(UCLIBC_DIR)/.configured: $(LINUX_HEADERS_DIR)/.configured $(UCLIBC_DIR)/.config
-> +       $(Q)$(call MESSAGE,"Installing uClibc headers")
->         $(MAKE1) -C $(UCLIBC_DIR) \
->                 ARCH="$(UCLIBC_TARGET_ARCH)" \
->                 PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
-> @@ -415,6 +420,7 @@ $(UCLIBC_DIR)/.configured: $(LINUX_HEADERS_DIR)/.configured $(UCLIBC_DIR)/.confi
+>  $(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
+> +       $(Q)$(call MESSAGE,"Configuring gcc pass-1")
+>         mkdir -p $(GCC_BUILD_DIR1)
+>         (cd $(GCC_BUILD_DIR1); rm -rf config.cache; \
+>                 $(HOST_CONFIGURE_OPTS) \
+> @@ -314,6 +317,7 @@ $(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
 >         touch $@
 >
->  $(UCLIBC_DIR)/lib/libc.a: $(UCLIBC_DIR)/.configured $(gcc_intermediate) $(LIBFLOAT_TARGET)
-> +       $(Q)$(call MESSAGE,"Building uClibc")
->         $(MAKE1) -C $(UCLIBC_DIR) \
->                 ARCH="$(UCLIBC_TARGET_ARCH)" \
->                 PREFIX= \
-> @@ -440,6 +446,7 @@ uclibc-menuconfig: dirs $(UCLIBC_DIR)/.config
+>  $(GCC_BUILD_DIR1)/.compiled: $(GCC_BUILD_DIR1)/.configured
+> +       $(Q)$(call MESSAGE,"Building gcc pass-1")
+>  ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+>         $(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
+>  else
+> @@ -323,6 +327,7 @@ endif
 >
+>  gcc_initial=$(GCC_BUILD_DIR1)/.installed
+>  $(gcc_initial) $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc: $(GCC_BUILD_DIR1)/.compiled
+> +       $(Q)$(call MESSAGE,"Installing gcc pass-1")
+>         PATH=$(TARGET_PATH) $(MAKE) -C $(GCC_BUILD_DIR1) install-gcc
+>         touch $(gcc_initial)
 >
->  $(STAGING_DIR)/usr/lib/libc.a: $(UCLIBC_DIR)/lib/libc.a
-> +       $(Q)$(call MESSAGE,"Installing uClibc to staging dir")
->         $(MAKE1) -C $(UCLIBC_DIR) \
->                 ARCH="$(UCLIBC_TARGET_ARCH)" \
->                 PREFIX=$(STAGING_DIR) \
-> @@ -470,6 +477,7 @@ $(STAGING_DIR)/usr/lib/libc.a: $(UCLIBC_DIR)/lib/libc.a
+> @@ -346,6 +351,7 @@ GCC_BUILD_DIR2:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-intermediate
+>  # the step or libgcc will not build...
 >
->  ifneq ($(TARGET_DIR),)
->  $(TARGET_DIR)/lib/libc.so.0: $(STAGING_DIR)/usr/lib/libc.a
-> +       $(Q)$(call MESSAGE,"Installing uClibc runtime to target dir")
->         $(MAKE1) -C $(UCLIBC_DIR) \
->                 ARCH="$(UCLIBC_TARGET_ARCH)" \
->                 PREFIX=$(TARGET_DIR) \
-> @@ -481,6 +489,7 @@ $(TARGET_DIR)/lib/libc.so.0: $(STAGING_DIR)/usr/lib/libc.a
->         touch -c $@
+>  $(GCC_BUILD_DIR2)/.configured: $(GCC_DIR)/.patched
+> +       $(Q)$(call MESSAGE,"Configuring gcc pass-2")
+>         mkdir -p $(GCC_BUILD_DIR2)
+>         (cd $(GCC_BUILD_DIR2); rm -rf config.cache; \
+>                 $(HOST_CONFIGURE_OPTS) \
+> @@ -380,6 +386,7 @@ $(GCC_BUILD_DIR2)/.configured: $(GCC_DIR)/.patched
+>         touch $@
 >
->  $(TARGET_DIR)/usr/bin/ldd: $(cross_compiler)
-> +       $(Q)$(call MESSAGE,"Installing uClibc utils to target dir")
->         $(MAKE1) -C $(UCLIBC_DIR) CC=$(TARGET_CROSS)gcc \
->                 CPP=$(TARGET_CROSS)cpp LD=$(TARGET_CROSS)ld \
->                 ARCH="$(UCLIBC_TARGET_ARCH)" \
-> @@ -525,11 +534,13 @@ uclibc-target-utils: $(TARGET_DIR)/usr/bin/ldd
->  uclibc-target-utils-source: $(DL_DIR)/$(UCLIBC_SOURCE)
+>  $(GCC_BUILD_DIR2)/.compiled: $(GCC_BUILD_DIR2)/.configured
+> +       $(Q)$(call MESSAGE,"Building gcc pass-2")
+>         # gcc >= 4.3.0 have to also build all-target-libgcc
+>  ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+>         $(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) all-gcc all-target-libgcc
+> @@ -390,6 +397,7 @@ endif
 >
->  $(UCLIBC_DIR)/test/unistd/errno:
-> +       $(Q)$(call MESSAGE,"Building uClibc test suite")
->         $(MAKE) -C $(UCLIBC_DIR)/test \
->         ARCH_CFLAGS=-I$(STAGING_DIR)/usr/include \
->         UCLIBC_ONLY=1 TEST_INSTALLED_UCLIBC=1 compile
+>  gcc_intermediate=$(GCC_BUILD_DIR2)/.installed
+>  $(gcc_intermediate): $(GCC_BUILD_DIR2)/.compiled
+> +       $(Q)$(call MESSAGE,"Installing gcc pass-2")
+>         # gcc >= 4.3.0 have to also install install-target-libgcc
+>  ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+>         PATH=$(TARGET_PATH) $(MAKE) -C $(GCC_BUILD_DIR2) install-gcc install-target-libgcc
+> @@ -421,6 +429,7 @@ gcc_intermediate-dirclean:
 >
->  $(TARGET_DIR)/root/uClibc/test/unistd/errno: $(UCLIBC_DIR)/test/unistd/errno
-> +       $(Q)$(call MESSAGE,"Installing uClibc test suite to target dir")
->         mkdir -p $(TARGET_DIR)/root/uClibc
->         cp -rdpf $(UCLIBC_DIR)/test $(TARGET_DIR)/root/uClibc
->         $(INSTALL) $(UCLIBC_DIR)/Rules.mak $(TARGET_DIR)/root/uClibc
-> @@ -554,6 +565,7 @@ uclibc-test-dirclean:
->  #############################################################
+>  GCC_BUILD_DIR3:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-final
+>  $(GCC_BUILD_DIR3)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
+> +       $(Q)$(call MESSAGE,"Configuring gcc final")
+>         mkdir -p $(GCC_BUILD_DIR3)
+>         # Important! Required for limits.h to be fixed.
+>         ln -snf ../include/ $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sys-include
+> @@ -457,10 +466,12 @@ $(GCC_BUILD_DIR3)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
+>         touch $@
 >
->  $(TARGET_DIR)/usr/lib/libc.a: $(STAGING_DIR)/usr/lib/libc.a
-> +       $(Q)$(call MESSAGE,"Installing uClibc development files to target dir")
->         $(MAKE1) -C $(UCLIBC_DIR) \
->                 ARCH="$(UCLIBC_TARGET_ARCH)" \
->                 PREFIX=$(TARGET_DIR) \
+>  $(GCC_BUILD_DIR3)/.compiled: $(GCC_BUILD_DIR3)/.configured
+> +       $(Q)$(call MESSAGE,"Building gcc final")
+>         $(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR3) all
+>         touch $@
+>
+>  $(GCC_BUILD_DIR3)/.installed: $(GCC_BUILD_DIR3)/.compiled
+> +       $(Q)$(call MESSAGE,"Installing gcc final")
+>         PATH=$(TARGET_PATH) $(MAKE) \
+>                 -C $(GCC_BUILD_DIR3) install
+>         if [ -d "$(STAGING_DIR)/lib64" ]; then \
+> @@ -492,6 +503,7 @@ endif
+>         touch $@
+>
+>  $(STAMP_DIR)/gcc_libs_target_installed: $(GCC_BUILD_DIR3)/.installed
+> +       $(Q)$(call MESSAGE,"Installing gcc final libraries to staging")
+>  ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
+>         # These go in /lib, so...
+>         rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
+> @@ -548,6 +560,7 @@ $(GCC_BUILD_DIR4)/.prepared: $(STAMP_DIR)/gcc_libs_target_installed
+>         touch $@
+>
+>  $(GCC_BUILD_DIR4)/.configured: $(GCC_BUILD_DIR4)/.prepared
+> +       $(Q)$(call MESSAGE,"Configuring gcc on target")
+>         (cd $(GCC_BUILD_DIR4); rm -rf config.cache; \
+>                 $(TARGET_CONFIGURE_OPTS) \
+>                 $(TARGET_CONFIGURE_ARGS) \
+> @@ -586,6 +599,7 @@ $(GCC_BUILD_DIR4)/.configured: $(GCC_BUILD_DIR4)/.prepared
+>         touch $@
+>
+>  $(GCC_BUILD_DIR4)/.compiled: $(GCC_BUILD_DIR4)/.configured
+> +       $(Q)$(call MESSAGE,"Building gcc on target")
+>         PATH=$(TARGET_PATH) \
+>         $(MAKE) -C $(GCC_BUILD_DIR4) all
+>         touch $@
+> @@ -598,6 +612,7 @@ GCC_INCLUDE_DIR:=include-fixed
+>  endif
+>
+>  $(TARGET_DIR)/usr/bin/gcc: $(GCC_BUILD_DIR4)/.compiled
+> +       $(Q)$(call MESSAGE,"Installing gcc on target")
+>         PATH=$(TARGET_PATH) DESTDIR=$(TARGET_DIR) \
+>                 $(MAKE1) -C $(GCC_BUILD_DIR4) install
+>         # Remove broken specs file (cross compile flag is set).
 > --
 > 1.7.2.5
 >
