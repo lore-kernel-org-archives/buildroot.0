@@ -1,86 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 18 Jan 2013 16:51:52 +0100
-Subject: [Buildroot] [PATCH v2] pkg-infra: add <pkg>_CONFIG_FIXUP to fix
- *-config files
-In-Reply-To: <50F946E5.20903@petroprogram.com>
-References: <1357847559-31530-1-git-send-email-stefan.froberg@petroprogram.com>
- <1357847559-31530-2-git-send-email-stefan.froberg@petroprogram.com>
- <50F08535.509@mind.be> <50F0BE8A.8000502@petroprogram.com>
- <50F7B710.2000703@mind.be> <50F946E5.20903@petroprogram.com>
-Message-ID: <50F96F98.3010704@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 18 Jan 2013 12:54:05 -0300
+Subject: [Buildroot] [PATCH 1/2] hostapd: bump to version 2.0
+Message-ID: <1358524446-9033-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/01/13 13:58, Stefan Fr?berg wrote:
-> Hi Arnout!
->
-> 17.1.2013 10:32, Arnout Vandecappelle kirjoitti:
-[snip]
->>   A generic solution could be the following: put a script in
->> $(HOST_DIR)/usr/bin (or some other directory) that hands the known
->> arguments to pkg-config and redirects the rest back to the original
->> *-config script. This makes patching of the *-config script
->> unnecessary in most cases.
->>
->
-> Sounds good but what about that<pkg>_CONFIG_FIXUP variable that was
-> started from Gustavo suggestion (originally from divine-config: fixup
-> thread) ?
->
-> http://lists.busybox.net/pipermail/buildroot/2013-January/064656.html
->
-> Was it now totally waste of time ?  :-(
+802.11ac support isn't enabled on purpose since it's broken on some
+architectures.
 
-  Not at all. First of all, it got the discussion going which may 
-eventually lead to an acceptable solution. Second, the generic solution 
-is probably not implementable in the short term. Your patch certainly is, 
-because it only refactors already-existing fixups into common infrastructure.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/hostapd/hostapd.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-  I therefore think that your patch should be committed. Will there still 
-be a v3 or is this it?
-
-
->>   Something to discuss (again) at the BR developer days?
->>
->>
->>> I noticed that some *-config files have just prefix (and maybe
->>> exec_prefix) but not any includedir or libdir defined inside them
->>> and just give -I/usr/include for --cflags and -L/usr/lib for --libs
->>
->>   Even worse! Which one does that?
->>
->
-> Well, at least:
->
-> giblib-config    --cflags    gives -I/usr/include
-> neon-config    --cflags    gives -I/usr/include
->
-> But Im using older 2012.08 buildroot so maybe they are fixed now?
-
-  D'oh, I did a quick check in my allpkgconfig:
-
-for i in staging/usr/bin/*-config; \
-   do $i --cflags | grep -e '-I/usr' && echo " --- $i"; \
-done
-
-  24 of the 41 *-config scripts give the wrong cflags (26/40 for --libs) 
-(roughly 10 scripts need some other argument than --libs/--cflags).
-
-  So I'd say that your patch is sorely needed :-)
-
-
-
-  Regards,
-  Arnout
-
-[snip]
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index b18881a..e00ad5a 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-HOSTAPD_VERSION = 1.1
++HOSTAPD_VERSION = 2.0
+ HOSTAPD_SITE = http://hostap.epitest.fi/releases
+ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+@@ -21,6 +21,7 @@ endif
+ 
+ define HOSTAPD_LIBNL_CONFIG
+ 	echo 'CONFIG_LIBNL32=y' >>$(HOSTAPD_CONFIG)
++	$(SED) 's/\(#\)\(CONFIG_VLAN_NETLINK.*\)/\2/' $(HOSTAPD_CONFIG)
+ endef
+ 
+ define HOSTAPD_LIBTOMMATH_CONFIG
+@@ -52,6 +53,7 @@ define HOSTAPD_EAP_CONFIG
+ 	$(SED) 's/\(#\)\(CONFIG_EAP_SIM.*\)/\2/' $(HOSTAPD_CONFIG)
+ 	$(SED) 's/\(#\)\(CONFIG_EAP_TNC.*\)/\2/' $(HOSTAPD_CONFIG)
+ 	$(SED) 's/\(#\)\(CONFIG_RADIUS_SERVER.*\)/\2/' $(HOSTAPD_CONFIG)
++	$(SED) 's/\(#\)\(CONFIG_TLSV1.*\)/\2/' $(HOSTAPD_CONFIG)
+ endef
+ ifneq ($(BR2_INET_IPV6),y)
+ define HOSTAPD_RADIUS_IPV6_CONFIG
+@@ -75,8 +77,10 @@ endif
+ define HOSTAPD_CONFIGURE_CMDS
+ 	cp $(@D)/hostapd/defconfig $(HOSTAPD_CONFIG)
+ # Misc
++	$(SED) 's/\(#\)\(CONFIG_HS20.*\)/\2/' $(HOSTAPD_CONFIG)
+ 	$(SED) 's/\(#\)\(CONFIG_IEEE80211N.*\)/\2/' $(HOSTAPD_CONFIG)
+ 	$(SED) 's/\(#\)\(CONFIG_IEEE80211R.*\)/\2/' $(HOSTAPD_CONFIG)
++	$(SED) 's/\(#\)\(CONFIG_IEEE80211W.*\)/\2/' $(HOSTAPD_CONFIG)
+ 	$(SED) 's/\(#\)\(CONFIG_INTERWORKING.*\)/\2/' $(HOSTAPD_CONFIG)
+ 	$(SED) 's/\(#\)\(CONFIG_FULL_DYNAMIC_VLAN.*\)/\2/' $(HOSTAPD_CONFIG)
+ 	$(HOSTAPD_LIBTOMMATH_CONFIG)
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.12.4
