@@ -1,51 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 18 Jan 2013 12:54:06 -0300
-Subject: [Buildroot] [PATCH 2/2] wpa_supplicant: bump to version 2.0
-In-Reply-To: <1358524446-9033-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1358524446-9033-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1358524446-9033-2-git-send-email-gustavo@zacarias.com.ar>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Fri, 18 Jan 2013 17:11:55 +0100
+Subject: [Buildroot] [PATCH] Add support for plain URL in $(PKG)_PATCH
+	variable
+In-Reply-To: <20130118163104.441c2bfb@skate>
+References: <20130118163104.441c2bfb@skate>
+Message-ID: <1358525515-7295-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/wpa_supplicant/wpa_supplicant.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Until now, $(PKG)_PATCH allow only to download patches from same URL than tarball.
+This patch allow to detect when plain URL are used in $(PKG)_PATCH and correctly
+handle them.
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 02ca125..762ceaf 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--WPA_SUPPLICANT_VERSION = 1.1
-+WPA_SUPPLICANT_VERSION = 2.0
- WPA_SUPPLICANT_SITE = http://hostap.epitest.fi/releases
- WPA_SUPPLICANT_LICENSE = GPLv2/BSD-3c
- WPA_SUPPLICANT_LICENSE_FILES = README
-@@ -37,6 +37,7 @@ define WPA_SUPPLICANT_EAP_CONFIG
- 	$(SED) 's/\(#\)\(CONFIG_EAP_SAKE.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_EAP_SIM.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_EAP_TNC.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_TLSV1.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
- endef
- else
- define WPA_SUPPLICANT_EAP_CONFIG
-@@ -117,8 +118,10 @@ endif
- 
- define WPA_SUPPLICANT_CONFIGURE_CMDS
- 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_HS20.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_IEEE80211N.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_IEEE80211R.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_IEEE80211W.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_INTERWORKING.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_DELAYED_MIC.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
- 	$(SED) 's/\(CONFIG_DRIVER_ATMEL\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/pkg-generic.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b0eca0a..37f3a29 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -40,7 +40,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
+ 	fi
+ endif
+ 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE)/$($(PKG)_SOURCE)))
+-	$(foreach p,$($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE)/$(p))$(sep))
++	$(foreach p,$($(PKG)_PATCH),$(call DOWNLOAD,$(if $(findstring ://,$(p)),$(p),$($(PKG)_SITE)/$(p)))$(sep))
+ 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ ifeq ($(DL_MODE),DOWNLOAD)
+ 	$(Q)mkdir -p $(@D)
+@@ -85,7 +85,7 @@ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
+ 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+-	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(p)$(sep))
++	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(notdir $(p))$(sep))
+ 	$(Q)( \
+ 	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
+ 	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
 -- 
-1.7.12.4
+1.7.9.5
