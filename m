@@ -1,35 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 18 Jan 2013 23:22:32 +0100
-Subject: [Buildroot] [git commit] gd: explictly disable freetype support
-	when not available
-Message-ID: <20130118222226.D6BCB9A30B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Jan 2013 00:00:53 +0100
+Subject: [Buildroot] root.fs tar fails on 2012.11 and 2013.x from today
+In-Reply-To: <CAG6aBkUKBBWJPAmQaP_scR4-7o=uLuu69vdp0nANVuoDhRnQCg@mail.gmail.com>
+References: <CAG6aBkUKBBWJPAmQaP_scR4-7o=uLuu69vdp0nANVuoDhRnQCg@mail.gmail.com>
+Message-ID: <20130119000053.3f7eebc1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e81e2770aff61d07306d0448bd434d613ed9afef
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Nigel Sollars,
 
-Otherwise it will try to run freetype-config from the host to check
-for availability.
+On Fri, 18 Jan 2013 16:03:43 -0500, Nigel Sollars wrote:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gd/gd.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+> Something odd for sure, I took a look on the interwebs and made sure all
+> was well with my selections.
+> 
+> Basically whats happening is it seems that target/generic/device_table.txt
+> is not getting created the build / final then errors with a No such file or
+> directory.
 
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index de1f5d1..1f9b1d6 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -23,6 +23,8 @@ endif
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
- GD_DEPENDENCIES += freetype
- GD_CONF_ENV += ac_cv_path_FREETYPE_CONFIG=$(STAGING_DIR)/usr/bin/freetype-config
-+else
-+GD_CONF_OPT += --without-freetype
- endif
- 
- ifeq ($(BR2_PACKAGE_JPEG),y)
+This file has changed location, it is now in system/device_table.txt.
+It might be that your configuration file still references the file in
+its old location. Could you check this?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
