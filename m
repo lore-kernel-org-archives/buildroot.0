@@ -1,60 +1,51 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 18 Jan 2013 12:54:05 -0300
-Subject: [Buildroot] [PATCH 1/2] hostapd: bump to version 2.0
-Message-ID: <1358524446-9033-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 18 Jan 2013 12:54:06 -0300
+Subject: [Buildroot] [PATCH 2/2] wpa_supplicant: bump to version 2.0
+In-Reply-To: <1358524446-9033-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1358524446-9033-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1358524446-9033-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-802.11ac support isn't enabled on purpose since it's broken on some
-architectures.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/hostapd/hostapd.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/wpa_supplicant/wpa_supplicant.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index b18881a..e00ad5a 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 02ca125..762ceaf 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--HOSTAPD_VERSION = 1.1
-+HOSTAPD_VERSION = 2.0
- HOSTAPD_SITE = http://hostap.epitest.fi/releases
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
-@@ -21,6 +21,7 @@ endif
- 
- define HOSTAPD_LIBNL_CONFIG
- 	echo 'CONFIG_LIBNL32=y' >>$(HOSTAPD_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_VLAN_NETLINK.*\)/\2/' $(HOSTAPD_CONFIG)
+-WPA_SUPPLICANT_VERSION = 1.1
++WPA_SUPPLICANT_VERSION = 2.0
+ WPA_SUPPLICANT_SITE = http://hostap.epitest.fi/releases
+ WPA_SUPPLICANT_LICENSE = GPLv2/BSD-3c
+ WPA_SUPPLICANT_LICENSE_FILES = README
+@@ -37,6 +37,7 @@ define WPA_SUPPLICANT_EAP_CONFIG
+ 	$(SED) 's/\(#\)\(CONFIG_EAP_SAKE.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+ 	$(SED) 's/\(#\)\(CONFIG_EAP_SIM.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+ 	$(SED) 's/\(#\)\(CONFIG_EAP_TNC.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
++	$(SED) 's/\(#\)\(CONFIG_TLSV1.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
  endef
+ else
+ define WPA_SUPPLICANT_EAP_CONFIG
+@@ -117,8 +118,10 @@ endif
  
- define HOSTAPD_LIBTOMMATH_CONFIG
-@@ -52,6 +53,7 @@ define HOSTAPD_EAP_CONFIG
- 	$(SED) 's/\(#\)\(CONFIG_EAP_SIM.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_EAP_TNC.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_RADIUS_SERVER.*\)/\2/' $(HOSTAPD_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_TLSV1.*\)/\2/' $(HOSTAPD_CONFIG)
- endef
- ifneq ($(BR2_INET_IPV6),y)
- define HOSTAPD_RADIUS_IPV6_CONFIG
-@@ -75,8 +77,10 @@ endif
- define HOSTAPD_CONFIGURE_CMDS
- 	cp $(@D)/hostapd/defconfig $(HOSTAPD_CONFIG)
- # Misc
-+	$(SED) 's/\(#\)\(CONFIG_HS20.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_IEEE80211N.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_IEEE80211R.*\)/\2/' $(HOSTAPD_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_IEEE80211W.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_INTERWORKING.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_FULL_DYNAMIC_VLAN.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(HOSTAPD_LIBTOMMATH_CONFIG)
+ define WPA_SUPPLICANT_CONFIGURE_CMDS
+ 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
++	$(SED) 's/\(#\)\(CONFIG_HS20.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+ 	$(SED) 's/\(#\)\(CONFIG_IEEE80211N.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+ 	$(SED) 's/\(#\)\(CONFIG_IEEE80211R.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
++	$(SED) 's/\(#\)\(CONFIG_IEEE80211W.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+ 	$(SED) 's/\(#\)\(CONFIG_INTERWORKING.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+ 	$(SED) 's/\(#\)\(CONFIG_DELAYED_MIC.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+ 	$(SED) 's/\(CONFIG_DRIVER_ATMEL\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
 -- 
 1.7.12.4
