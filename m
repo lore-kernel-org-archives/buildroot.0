@@ -1,108 +1,81 @@
-From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Fri, 18 Jan 2013 23:08:47 +0100
-Subject: [Buildroot] [PATCH v3 5/5] udisks: new package
-In-Reply-To: <1358546927-25707-1-git-send-email-marek.belisko@open-nandra.com>
-References: <1358546927-25707-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <1358546927-25707-6-git-send-email-marek.belisko@open-nandra.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 18 Jan 2013 23:21:47 +0100
+Subject: [Buildroot] [PATCH] Use the libpng-config from staging instead
+	of the one from the host.
+In-Reply-To: <1358473419-13477-1-git-send-email-jc@eclis.ch> (Jean-Christian
+ de Rivaz's message of "Fri, 18 Jan 2013 02:43:39 +0100")
+References: <1358473419-13477-1-git-send-email-jc@eclis.ch>
+Message-ID: <87mww6gmis.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
----
- package/Config.in        |    1 +
- package/udisks/Config.in |   32 ++++++++++++++++++++++++++++++++
- package/udisks/udisks.mk |   28 ++++++++++++++++++++++++++++
- 3 files changed, 61 insertions(+)
- create mode 100644 package/udisks/Config.in
- create mode 100644 package/udisks/udisks.mk
+>>>>> "JC" == Jean-Christian de Rivaz <jc@eclis.ch> writes:
 
-diff --git a/package/Config.in b/package/Config.in
-index 7201d1d..d3e3c44 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -271,6 +271,7 @@ source "package/sysstat/Config.in"
- source "package/ti-utils/Config.in"
- source "package/uboot-tools/Config.in"
- source "package/udev/Config.in"
-+source "package/udisks/Config.in"
- source "package/usb_modeswitch/Config.in"
- source "package/usb_modeswitch_data/Config.in"
- source "package/usbmount/Config.in"
-diff --git a/package/udisks/Config.in b/package/udisks/Config.in
-new file mode 100644
-index 0000000..1637199
---- /dev/null
-+++ b/package/udisks/Config.in
-@@ -0,0 +1,32 @@
-+config BR2_PACKAGE_UDISKS
-+	bool "udisks"
-+	depends on BR2_PACKAGE_UDEV
-+	depends on BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_SG3_UTILS
-+	select BR2_PACKAGE_UDEV_ALL_EXTRAS
-+	select BR2_PACKAGE_DBUS_GLIB
-+	select BR2_PACKAGE_POLKIT
-+	select BR2_PACKAGE_PARTED
-+	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_LIBATASMART
-+	help
-+	  The udisks project provides
-+
-+	   o A storage daemon that implements well-defined D-Bus
-+	     interfaces that can be used to query and manipulate
-+	     storage devices.
-+
-+	   o a command-line tool, udisks(1), that can be used to query
-+	     and use the daemon
-+
-+	  http://www.freedesktop.org/wiki/Software/udisks
-+
-+config BR2_PACKAGE_UDISKS_LVM2
-+	bool "lvm2 support"
-+	depends on BR2_PACKAGE_UDISKS
-+	default n
-+	help
-+	  With LVM2 support.
-+
-+comment "udisks requires udev and dbus to be enabled"
-+	depends on !BR2_PACKAGE_UDEV || !BR2_PACKAGE_DBUS
-diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
-new file mode 100644
-index 0000000..19f9da4
---- /dev/null
-+++ b/package/udisks/udisks.mk
-@@ -0,0 +1,28 @@
-+#############################################################
-+#
-+# udisks
-+#
-+#############################################################
-+UDISKS_VERSION = 1.0.4
-+UDISKS_SITE    = http://hal.freedesktop.org/releases/
-+UDISKS_LICENCE = GPLv2+
-+UDISKS_LICENCE_FILES = COPYING
-+
-+UDISKS_DEPENDENCIES = 	\
-+	sg3_utils	\
-+	host-pkgconf	\
-+	udev		\
-+	dbus		\
-+	dbus-glib	\
-+	polkit		\
-+	parted		\
-+	lvm2		\
-+	libatasmart
-+
-+UDISKS_CONF_OPT = --disable-remote-access --disable-gtk-doc
-+
-+ifeq ($(BR2_PACKAGE_UDISKS_LVM2),y)
-+UDISKS_CONF_OPT += --enable-lvm2
-+endif
-+
-+$(eval $(autotools-package))
+ JC> The gd package configure call 'libpng-config' to get the compiler
+ JC> flags required to use the libpng. The configure correctly allow to
+ JC> specify the path of the staging libpng-config by using the
+ JC> ac_cv_path_LIBPNG_CONFIG but the configure.ac call simply
+ JC> 'libpng-config' instead of the specified one. The configure.ac is now
+ JC> modified to call the specified libpng_config.
+
+ JC> In buildroot gd.mk, specify the staging libpng-config and to a empty
+ JC> string the libpng12-config to prevent to use the -lpng12 flag or the
+ JC> host setting.
+
+ JC> Signed-off-by: Jean-Christian de Rivaz <jc@eclis.ch>
+ JC> ---
+ JC>  package/gd/gd-libpng-config.patch |   22 ++++++++++++++++++++++
+ JC>  package/gd/gd.mk                  |    2 ++
+ JC>  2 files changed, 24 insertions(+), 0 deletions(-)
+ JC>  create mode 100644 package/gd/gd-libpng-config.patch
+
+ JC> diff --git a/package/gd/gd-libpng-config.patch b/package/gd/gd-libpng-config.patch
+ JC> new file mode 100644
+ JC> index 0000000..655da78
+ JC> --- /dev/null
+ JC> +++ b/package/gd/gd-libpng-config.patch
+ JC> @@ -0,0 +1,22 @@
+ JC> +diff -ruN a/configure.ac b/configure.ac
+ JC> +--- a/configure.ac	2013-01-18 02:00:59.000000000 +0100
+ JC> ++++ b/configure.ac	2013-01-18 02:01:44.000000000 +0100
+ JC> +@@ -353,14 +353,14 @@
+ JC> +   AC_PATH_PROG([LIBPNG12_CONFIG], [libpng12-config])
+ JC> +   AC_PATH_PROG([LIBPNG_CONFIG], [libpng-config])
+ JC> +   if test -n "$LIBPNG12_CONFIG"; then
+ JC> +-    libpng_CPPFLAGS=`libpng12-config --cflags`
+ JC> ++    libpng_CPPFLAGS=`$LIBPNG12_CONFIG --cflags`
+ JC> +     # should be --ldopts, but it's currently broken
+ JC> +-    libpng_LDFLAGS=`libpng12-config --ldflags`
+ JC> ++    libpng_LDFLAGS=`$LIBPNG12_CONFIG --ldflags`
+ JC> +     libpng_LDFLAGS=`echo " $libpng_LDFLAGS" | sed 's/ -l[[^ ]][[^ ]]*//g'`
+ JC> +   elif test -n "$LIBPNG_CONFIG"; then
+ JC> +-    libpng_CPPFLAGS=`libpng-config --cflags`
+ JC> ++    libpng_CPPFLAGS=`$LIBPNG_CONFIG --cflags`
+ JC> +     # should be --ldopts, but it's currently broken
+ JC> +-    libpng_LDFLAGS=`libpng-config --ldflags`
+ JC> ++    libpng_LDFLAGS=`$LIBPNG_CONFIG --ldflags`
+ JC> +     libpng_LDFLAGS=`echo " $libpng_LDFLAGS" | sed 's/ -l[[^ ]][[^ ]]*//g'`
+ JC> +   elif test -d "$withval"; then
+ JC> +     libpng_CPPFLAGS="-I$withval/include"
+ JC> diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+ JC> index 972d8dd..96abf9e 100644
+ JC> --- a/package/gd/gd.mk
+ JC> +++ b/package/gd/gd.mk
+ JC> @@ -33,6 +33,8 @@ endif
+ JC>  ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ JC>  GD_DEPENDENCIES += libpng
+ JC>  GD_CONF_OPT += --with-png
+ JC> +GD_CONF_ENV += ac_cv_path_LIBPNG12_CONFIG=""
+ JC> +GD_CONF_ENV += ac_cv_path_LIBPNG_CONFIG=$(STAGING_DIR)/usr/bin/libpng-config
+ JC>  endif
+
+We should also explictly pass --without-png when not enabled so it
+doesn't try to use host libpng-config then.
+
+Committed with that fixed, thanks.
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
