@@ -1,46 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Jan 2013 18:05:34 +0100
-Subject: [Buildroot] [PATCH 2/3] python3: Port python2 patches to reduce
- the interpreter size
-In-Reply-To: <1358517974-30956-2-git-send-email-maxime.ripard@free-electrons.com>
-References: <1358517974-30956-1-git-send-email-maxime.ripard@free-electrons.com>
- <1358517974-30956-2-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <50FAD25E.4010608@mind.be>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Sat, 19 Jan 2013 18:10:12 +0100
+Subject: [Buildroot] post-build script is called before rootfs tweaking
+Message-ID: <50FAD374.9010306@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/01/13 15:06, Maxime Ripard wrote:
-> Some of the python2 patches were left behind when doing the python3
-> package. This was because the python build system can now autodetect
-> what packages can be built in the system.
->
-> However, some of these patches are actually useful to reduce drastically
-> the size of the interpreter.
->
-> This patch ports the relevant patches to the python3 package, and adds a
-> new patch to remove the idle3 IDE as well from the interpreter.
->
-> Fixes #5696
->
-> Signed-off-by: Maxime Ripard<maxime.ripard@free-electrons.com>
-> ---
->   package/python3/Config.in                          |   11 ++
->   .../python3-3.3-012-disable-extensions.patch       |   98 +++++++++++++++++
+Hello,
 
-  You should remove the -3.3- from the patch names. I know they're there 
-in the old package, but this is a good opportunity to get rid of that legacy.
+buildroot's documentation says:
+> In the Buildroot configuration, you can specify the path to a
+> *post-build script*, that gets called /after/ Buildroot builds all the
+> selected software, but /before/ the rootfs packages are assembled.
+I understand this the way that the post-build script is called as the
+last action before package assembly.
 
-  BTW, do these patches have a chance of getting upstreamed?
+In fact the post-build script is called before some modifications take
+place:
+> >>>   Executing post-build script
+> >>>   Completed post-build script
+> mkdir -p /home/stephan/buildroot/output/target/etc
+> echo "armstonea8" > /home/stephan/buildroot/output/target/etc/hostname
+> /bin/sed -i -e '$a \127.0.1.1\tarmstonea8' \
+>                 -e '/^127.0.1.1/d'
+> /home/stephan/buildroot/output/target/etc/hosts
+> mkdir -p /home/stephan/buildroot/output/target/etc
+> echo "Welcome to armStoneA8" >
+> /home/stephan/buildroot/output/target/etc/issue
+> /bin/sed -i -e '/# GENERIC_SERIAL$/s~^.*#~ttySAC0::respawn:/sbin/getty
+> -L ttySAC0 38400 vt100 #~' \
+>                 /home/stephan/buildroot/output/target/etc/inittab
+> /bin/sed -i -e '/^[^#].*# REMOUNT_ROOTFS_RW$/s~^~#~'
+> /home/stephan/buildroot/output/target/etc/inittab
+> rm -f /home/stephan/buildroot/output/build/locales.nopurge
+> for i in C en_US de fr; do echo $i >>
+> /home/stephan/buildroot/output/build/locales.nopurge; done
+> for dir in ; \
+>         do \
+>                 for lang in $(cd $dir; ls .|grep -v man); \
+>                 do \
+>                         grep -qx $lang
+> /home/stephan/buildroot/output/build/locales.nopurge || rm -rf
+> $dir/$lang; \
+>                 done; \
+>         done
+Is this a bug or a feature? I'd prefer having the script called after
+the target directory is completely set up.
 
-  Regards,
-  Arnout
+Kind regards
+
+Stephan
+
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
