@@ -1,56 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jan 2013 11:40:54 +0100
-Subject: [Buildroot] [PATCH v2 2/2] cairo: add missing dependency on
-	xlib_libXext
-In-Reply-To: <1358592054-2428-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1358592054-2428-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1358592054-2428-2-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 19 Jan 2013 08:04:43 -0300
+Subject: [Buildroot] [PATCH] uboot-tools: fix build failure for the target
+Message-ID: <1358593483-26071-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The X.org backend of Cairo now requires xlib_libXext. See
-http://permalink.gmane.org/gmane.comp.lib.cairo/23385.
-
+The patch to drop config.h is still required, it just needed a tweak.
 Fixes:
+http://autobuild.buildroot.net/results/3653c0e3ec460c710524468987d5192337cf210e/
 
- http://autobuild.buildroot.org/results/795404665ec74a7ac929fdf8caf1397c9c54d80d/build-end.log
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Changes since v1:
- * Added a select on XLIB_LIBXEXT, as requested by Peter.
----
- package/cairo/Config.in |    1 +
- package/cairo/cairo.mk  |    2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ .../uboot-tools-drop-configh-from-tools.patch      | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/uboot-tools/uboot-tools-drop-configh-from-tools.patch
 
-diff --git a/package/cairo/Config.in b/package/cairo/Config.in
-index 89bd315..9a177a7 100644
---- a/package/cairo/Config.in
-+++ b/package/cairo/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
- 	help
- 	  Cairo is a 2D graphics library with support for multiple
- 	  output devices. Currently supported output targets include
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index ab0615c..83c82c0 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -51,7 +51,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
- 	CAIRO_CONF_OPT += --enable-xlib --enable-xcb --with-x
--	CAIRO_DEPENDENCIES += xlib_libX11
-+	CAIRO_DEPENDENCIES += xlib_libX11 xlib_libXext
- else
- 	CAIRO_CONF_OPT += --disable-xlib --disable-xcb --without-x
- endif
+diff --git a/package/uboot-tools/uboot-tools-drop-configh-from-tools.patch b/package/uboot-tools/uboot-tools-drop-configh-from-tools.patch
+new file mode 100644
+index 0000000..21995ec
+--- /dev/null
++++ b/package/uboot-tools/uboot-tools-drop-configh-from-tools.patch
+@@ -0,0 +1,37 @@
++We need to build u-boot tools without a board configuration for the target.
++fw_env just uses config.h to define the default environment of the created
++image, so it really isn't mandatory.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura u-boot-2013.01.orig/tools/env/fw_env.h u-boot-2013.01/tools/env/fw_env.h
++--- u-boot-2013.01.orig/tools/env/fw_env.h	2013-01-19 07:50:53.879241660 -0300
+++++ u-boot-2013.01/tools/env/fw_env.h	2013-01-19 07:58:11.897903403 -0300
++@@ -21,15 +21,6 @@
++  * MA 02111-1307 USA
++  */
++ 
++-/* Pull in the current config to define the default environment */
++-#ifndef __ASSEMBLY__
++-#define __ASSEMBLY__ /* get only #defines from config.h */
++-#include <config.h>
++-#undef	__ASSEMBLY__
++-#else
++-#include <config.h>
++-#endif
++-
++ /*
++  * To build the utility with the static configuration
++  * comment out the next line.
++diff -Nura u-boot-2013.01.orig/tools/env/Makefile u-boot-2013.01/tools/env/Makefile
++--- u-boot-2013.01.orig/tools/env/Makefile	2013-01-19 07:50:53.879241660 -0300
+++++ u-boot-2013.01/tools/env/Makefile	2013-01-19 07:59:34.926486346 -0300
++@@ -26,7 +26,7 @@
++ HOSTSRCS := $(SRCTREE)/lib/crc32.c  fw_env.c  fw_env_main.c
++ HOSTSRCS += $(SRCTREE)/lib/ctype.c $(SRCTREE)/lib/linux_string.c
++ HOSTSRCS += $(SRCTREE)/common/env_attr.c $(SRCTREE)/common/env_flags.c
++-HEADERS	:= fw_env.h $(OBJTREE)/include/config.h
+++HEADERS	:= fw_env.h
++ 
++ # Compile for a hosted environment on the target
++ HOSTCPPFLAGS  = -idirafter $(SRCTREE)/include \
 -- 
-1.7.9.5
+1.7.12.4
