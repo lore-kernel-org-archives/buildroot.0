@@ -1,90 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Jan 2013 17:32:15 +0100
-Subject: [Buildroot] Target rebuilding
-In-Reply-To: <4486164.oLnzyGq5cK@sagittae>
-References: <4486164.oLnzyGq5cK@sagittae>
-Message-ID: <50FACA8F.1040503@mind.be>
+Date: Sat, 19 Jan 2013 17:36:58 +0100
+Subject: [Buildroot] QUILT helper
+In-Reply-To: <50F92F70.2070808@syscom-instruments.com>
+References: <50F92F70.2070808@syscom-instruments.com>
+Message-ID: <50FACBAA.7020602@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/01/13 12:04, J?r?me Pouiller wrote:
-> Hello all,
+On 18/01/13 12:18, Viallard Anthony wrote:
+> Hi,
 >
-> It is handy to do tests directly in target/. But after some time, it is
-> necessary to make a new fresh target/ directory. The current procedure to do
-> this is:
+> It will be nice having a quilt helper like openwrt has.
 >
-> * remove build/.root (or remove target/ if you want to throw all your work)
-> * remove build/*/.stamp_target_installed
-> * depending of you toolchain:
->    # remove stamps/ext-toolchain-installed (external)
->    # remove stamps/ct-ng-toolchain-installed (ctng)
->    # remove target/lib/libc.so.0 (buildroot)
-> * launch make
+>   QUILT=1 make ofono
 >
-> I think this process lacks of consistency. Idealy, this process should be:
->    rm -r target (depending if want to throw all your work)
->    rm build/*/.stamp_target_installed
->    make
-
-  I agree that it lacks consistency, and I'm in favour of improving the 
-consistency of stamp files.
-
+> Et voil?, with this command, builroot use quilt to apply patches. So, if
+> you need to edit a patch, you just go in the build dir, use quilt pop,
+> quilt refresh, quilt push -a and use a new command to update the eddited
+> patch :
 >
-> I suggest following changes:
+>   make ofono-refresh
 >
->   1. Move build/.root to stamps/. Since it is hidden, many user forget this
-> file exist.
+> I known christmas was few days ago but if you include this idea, I will
+> be happy like when santa claus gave me a SEGA master system.
 
-  ACK.
+  I've been thinking about a feature to make it easier to create patches, 
+but I was thinking in terms of git rather than quilt.
 
->
->   2. All stamps files are in subdirectories of build/. I suggest to move
-> stamps/ to build/stamps/
+  None of the core buildroot developers uses quilt AFAIK, so don't expect 
+your wish to be granted out of nowhere. But I for one am definitely open 
+to consider patches that make it easier to create package patches!
 
-  I'm not convinced that that improves the consistency. If build/.root 
-moves to stamps, than all directories in build/ are build directories. 
-That sounds like a good idea to me.
-
-
->   3. Buildroot toolchain should create a stamp files to be uniform with other
-> toolchains. In add, target/lib/libc.so.0 never exists when PREFER_STATIC_LIB
-> is enable.
-
-  ACK
-
-  Note that the buildroot toolchain is on the way out (though it will 
-probably take 3 more years before it's really gone), so don't put too 
-much effort into improving it.
-
-
->   4. To be consistent stamps/*-toolchain-installed may be renamed
-> stamps/.stamp_target_installed or stamps/.stamp_toolchain_target_installed or
-> toolchain/.stamp_target_installed. We may add a README file to explain what is
-> purpose of this apparently empty directory.
-
-  I don't agree with this one. build/*/.stamp_* is stuff that is created 
-by the package infrastructure. The toolchain stuff is not in the package 
-infrastructure. So I wouldn't let it use the same pattern for stamp files.
-
-
->    5. stamps/ext-toolchain-installed currently copy libc in staging/ and in
-> target/. It may be splited in two rules: stamps/ext-toolchain-target-installed
-> and stamps/ext-toolchain-staging-installed.
-
-  It could be split, but what is the advantage of that?
-
-
-> What do you think about it?
-
-  Let's see some patches! :-)
+  If you do contribute this feature, don't forget to include sufficient 
+documentation in the manual so someone who has no experience with quilt 
+can get going right away.
 
   Regards,
   Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
