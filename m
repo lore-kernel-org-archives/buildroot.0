@@ -1,41 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jan 2013 14:42:50 +0100
-Subject: [Buildroot] xapp_init: bad substitution of mcookie path in
- startx
-In-Reply-To: <50FA9F5E.4020005@mind.be>
-References: <50BDEE24.6010601@wanadoo.fr> <871uf5obh3.fsf@dell.be.48ers.dk>
- <50F8218F.4070701@wanadoo.fr> <50FA9F5E.4020005@mind.be>
-Message-ID: <20130119144250.2d73d60d@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 19 Jan 2013 14:51:19 +0100
+Subject: [Buildroot] [PATCH 1/1] httping: new package
+In-Reply-To: <87ehhnudd9.fsf@dell.be.48ers.dk>
+References: <1358036972-10406-1-git-send-email-gilles.talis@gmail.com>
+ <20130113120500.0ad7be3a@skate>
+ <CAKcgs2xk-=iG-3Ezmc1upEPBjhSGcmgg9WSwn=1E3+OKDT05fg@mail.gmail.com>
+ <CAKcgs2wLk-cOK7qUDJ23TidHSyESJF-vCoL+JezDSL2q0H1c0w@mail.gmail.com>
+ <87ehhnudd9.fsf@dell.be.48ers.dk>
+Message-ID: <50FAA4D7.10006@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+On 14/01/13 14:02, Peter Korsgaard wrote:
+>>>>>> "Gilles" == Gilles Talis<gilles.talis@gmail.com>  writes:
+>
+>   Gilles>  I forgot to copy mailing list.
+>   Gilles>  Sorry about that and thanks for your help.
+>   Gilles>  Gilles.
+>
+>   Gilles>  2013/1/13 Gilles Talis<gilles.talis@gmail.com>
+>
+>   Gilles>      Dear Thomas,
+>
+>   Gilles>      I thought I knew Makefiles better than that. Well, I was wrong :-).
+>   Gilles>      The reason why TARGET_CONFIGURE_OPTS does not work in this case is because
+>   Gilles>      it overrides the original Makefile's CFLAGS variable (that should be kept
+>   Gilles>      in order for target to compile). Apart from adding "override" in the
+>   Gilles>      package Makefile, I actually do not see how to use TARGET_CONFIGURE_OPTS
+>   Gilles>      and still keep Makefile CFLAGS. Any hint?
+>   Gilles>      This will surely help me for future patches/projects.
+>
+> That's indeed how it is normally done.
+>
+> override CFLAGS += ..
 
-On Sat, 19 Jan 2013 14:27:58 +0100, Arnout Vandecappelle wrote:
+  No.
 
->   That's a perfectly clean solution - on condition that mcookie is indeed 
-> installed on the target. I guess the option should therefore be in an
-> 
-> ifeq ($(BR2_PACKAGE_UTIL_LINUX),y)
-> XAPP_XINIT_CONF_OPT += MCOOKIE=/usr/bin/mcookie
-> endif
-> 
->   Care to make a patch?
+  Normally CFLAGS should be assigned to either as
 
-We also have a mcookie package in package/x11r7/mcookie/. I guess the
-purpose was to avoid building the entire util-linux stuff just to get
-mcookie. Maybe we need to decide whether we want to use one mcookie
-solution (the standalone package) or the other (mcookie built as part
-of util-linux), and stick to it. No?
+CFLAGS +=
 
-Best regards,
+  or
 
-Thomas
+CFLAGS ?=
+
+  and the user-settable CFLAGS are passed in the environment.
+
+
+  I think most Makefiles follow that convention.
+
+
+  Patch follows.
+
+  Regards,
+  Arnout
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
