@@ -1,54 +1,32 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Jan 2013 14:27:58 +0100
-Subject: [Buildroot] xapp_init: bad substitution of mcookie path in
-	startx
-In-Reply-To: <50F8218F.4070701@wanadoo.fr>
-References: <50BDEE24.6010601@wanadoo.fr> <871uf5obh3.fsf@dell.be.48ers.dk>
- <50F8218F.4070701@wanadoo.fr>
-Message-ID: <50FA9F5E.4020005@mind.be>
+Date: Sat, 19 Jan 2013 14:32:37 +0100
+Subject: [Buildroot] [PATCH] dockstar bsp
+In-Reply-To: <20130117172427.190cdb5b@skate>
+References: <1356821139-9103-1-git-send-email-stevecalfee@gmail.com>
+ <20130117172427.190cdb5b@skate>
+Message-ID: <50FAA075.80401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/01/13 17:06, Thierry Bultel wrote:
-> Hi,
->
-> Sorry for the long delay
->
-> The  bug is reproducible with latest release,
-> and I finally found out why.
->
-> The issue is that in xapp_xinit, 'configure' checks for 'mcookie', and
-> the first time, founds it ... on the host side, ie the "/usr/bin/mcookie"
-> of Ubuntu for instance. This is the path that is substituted in startx.
->
-> When rebuilding the xapp_xinit package, "mcookie" has been built by
-> buildroot, in the xorg_server package. Thus "configure" finds it in our
-> build directory, ie output/host/usr/bin/mcookie, which is not a target path.
->
-> A quick fix (not meaning it is the cleanest way) is simply to add
->
-> XAPP_XINIT_CONF_OPT += MCOOKIE=/usr/bin/mcookie
->
-> in xapp_xinit.mk
+On 17/01/13 17:24, Thomas Petazzoni wrote:
+> On Sat, 29 Dec 2012 14:45:39 -0800, Steve Calfee wrote:
+[snip]
 
-  That's a perfectly clean solution - on condition that mcookie is indeed 
-installed on the target. I guess the option should therefore be in an
+>> >    board/sheevaplug/seagatedockstar/README            |   62 +++++
+> The README file should not be a story of how the thing was written, but
+> simply how to use this configuration on this particular hardware (how
+> to flash the images, etc.).
 
-ifeq ($(BR2_PACKAGE_UTIL_LINUX),y)
-XAPP_XINIT_CONF_OPT += MCOOKIE=/usr/bin/mcookie
-endif
-
-  Care to make a patch?
+  The story of how the thing was written can be part of the commit 
+message, however. Although 62 lines of commit message is probably too 
+much as well.
 
   Regards,
   Arnout
 
->
-> Thierry
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
