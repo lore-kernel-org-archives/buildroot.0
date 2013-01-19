@@ -1,67 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 19 Jan 2013 19:23:45 +0100
-Subject: [Buildroot] [git commit] uboot-tools: fix build failure for the
-	target
-Message-ID: <20130119182410.E2EFA8EC6B@busybox.osuosl.org>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Sat, 19 Jan 2013 19:28:30 +0100
+Subject: [Buildroot] post-build script is called before rootfs tweaking
+In-Reply-To: <871udhghmr.fsf@dell.be.48ers.dk>
+References: <50FAD374.9010306@relinux.de> <871udhghmr.fsf@dell.be.48ers.dk>
+Message-ID: <50FAE5CE.5020004@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7bf847b5373b7833c5a83ed6c9afc57bc0afe13b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am 19.01.2013 19:19, schrieb Peter Korsgaard:
+>>>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
+>  Stephan> Hello,
+>  Stephan> buildroot's documentation says:
+>  >> In the Buildroot configuration, you can specify the path to a
+>  >> *post-build script*, that gets called /after/ Buildroot builds all the
+>  >> selected software, but /before/ the rootfs packages are assembled.
+>  Stephan> I understand this the way that the post-build script is called as the
+>  Stephan> last action before package assembly.
+>
+>  Stephan> Is this a bug or a feature? I'd prefer having the script
+>  Stephan> called after the target directory is completely set up.
+>
+> I would call it a bug. I recently fixed up a similar issue with the
+> passwd handling happening after the post-build script.
+>
+> Care to send a patch to fix it?
+I can try, but at the moment I am too busy. Maybe somewhere next week.
 
-The patch to drop config.h is still required, it just needed a tweak.
-Fixes:
-http://autobuild.buildroot.net/results/3653c0e3ec460c710524468987d5192337cf210e/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../uboot-tools-drop-configh-from-tools.patch      |   37 ++++++++++++++++++++
- 1 files changed, 37 insertions(+), 0 deletions(-)
-
-diff --git a/package/uboot-tools/uboot-tools-drop-configh-from-tools.patch b/package/uboot-tools/uboot-tools-drop-configh-from-tools.patch
-new file mode 100644
-index 0000000..21995ec
---- /dev/null
-+++ b/package/uboot-tools/uboot-tools-drop-configh-from-tools.patch
-@@ -0,0 +1,37 @@
-+We need to build u-boot tools without a board configuration for the target.
-+fw_env just uses config.h to define the default environment of the created
-+image, so it really isn't mandatory.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura u-boot-2013.01.orig/tools/env/fw_env.h u-boot-2013.01/tools/env/fw_env.h
-+--- u-boot-2013.01.orig/tools/env/fw_env.h	2013-01-19 07:50:53.879241660 -0300
-++++ u-boot-2013.01/tools/env/fw_env.h	2013-01-19 07:58:11.897903403 -0300
-+@@ -21,15 +21,6 @@
-+  * MA 02111-1307 USA
-+  */
-+ 
-+-/* Pull in the current config to define the default environment */
-+-#ifndef __ASSEMBLY__
-+-#define __ASSEMBLY__ /* get only #defines from config.h */
-+-#include <config.h>
-+-#undef	__ASSEMBLY__
-+-#else
-+-#include <config.h>
-+-#endif
-+-
-+ /*
-+  * To build the utility with the static configuration
-+  * comment out the next line.
-+diff -Nura u-boot-2013.01.orig/tools/env/Makefile u-boot-2013.01/tools/env/Makefile
-+--- u-boot-2013.01.orig/tools/env/Makefile	2013-01-19 07:50:53.879241660 -0300
-++++ u-boot-2013.01/tools/env/Makefile	2013-01-19 07:59:34.926486346 -0300
-+@@ -26,7 +26,7 @@
-+ HOSTSRCS := $(SRCTREE)/lib/crc32.c  fw_env.c  fw_env_main.c
-+ HOSTSRCS += $(SRCTREE)/lib/ctype.c $(SRCTREE)/lib/linux_string.c
-+ HOSTSRCS += $(SRCTREE)/common/env_attr.c $(SRCTREE)/common/env_flags.c
-+-HEADERS	:= fw_env.h $(OBJTREE)/include/config.h
-++HEADERS	:= fw_env.h
-+ 
-+ # Compile for a hosted environment on the target
-+ HOSTCPPFLAGS  = -idirafter $(SRCTREE)/include \
+-- 
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
