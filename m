@@ -1,33 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 19 Jan 2013 19:19:40 +0100
-Subject: [Buildroot] post-build script is called before rootfs tweaking
-In-Reply-To: <50FAD374.9010306@relinux.de> (Stephan Hoffmann's message of
- "Sat, 19 Jan 2013 18:10:12 +0100")
-References: <50FAD374.9010306@relinux.de>
-Message-ID: <871udhghmr.fsf@dell.be.48ers.dk>
+Date: Sat, 19 Jan 2013 19:23:18 +0100
+Subject: [Buildroot] [PATCH v2 1/2] cairo: bump version to 1.12.10
+In-Reply-To: <1358592054-2428-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 19 Jan 2013 11:40:53 +0100")
+References: <1358592054-2428-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87wqv9f2w9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Stephan> Hello,
- Stephan> buildroot's documentation says:
- >> In the Buildroot configuration, you can specify the path to a
- >> *post-build script*, that gets called /after/ Buildroot builds all the
- >> selected software, but /before/ the rootfs packages are assembled.
- Stephan> I understand this the way that the post-build script is called as the
- Stephan> last action before package assembly.
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- Stephan> Is this a bug or a feature? I'd prefer having the script
- Stephan> called after the target directory is completely set up.
-
-I would call it a bug. I recently fixed up a similar issue with the
-passwd handling happening after the post-build script.
-
-Care to send a patch to fix it?
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
