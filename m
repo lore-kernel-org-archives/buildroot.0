@@ -1,48 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Jan 2013 14:20:22 +0100
-Subject: [Buildroot] Problem using Linux kernel archive from Gitorious
-In-Reply-To: <CAJkQPOkYXUAWsJw_1dxsObUbx9bboSsF4+yBz6jKEKKXXhxZfg@mail.gmail.com>
-References: <CAJkQPOkYXUAWsJw_1dxsObUbx9bboSsF4+yBz6jKEKKXXhxZfg@mail.gmail.com>
-Message-ID: <50FA9D96.60802@mind.be>
+Date: Sat, 19 Jan 2013 14:27:58 +0100
+Subject: [Buildroot] xapp_init: bad substitution of mcookie path in
+	startx
+In-Reply-To: <50F8218F.4070701@wanadoo.fr>
+References: <50BDEE24.6010601@wanadoo.fr> <871uf5obh3.fsf@dell.be.48ers.dk>
+ <50F8218F.4070701@wanadoo.fr>
+Message-ID: <50FA9F5E.4020005@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/01/13 15:47, Aras Vaichas wrote:
-> Hello,
-> 
-> I am configuring Buildroot to use an OMAP-L138/DaVinci CPU. I'd like
-> to use the Linux kernel version from
-> http://gitorious.org/linux-davinci/linux-davinci/trees/v3.7-davinci1
-> which is a specific tag in the git repository.
-> 
-> In Buildroot I set:
-> BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION=http://gitorious.org/linux-davinci/linux-davinci/archive-tarball/v3.7-davinci1
+On 17/01/13 17:06, Thierry Bultel wrote:
+> Hi,
+>
+> Sorry for the long delay
+>
+> The  bug is reproducible with latest release,
+> and I finally found out why.
+>
+> The issue is that in xapp_xinit, 'configure' checks for 'mcookie', and
+> the first time, founds it ... on the host side, ie the "/usr/bin/mcookie"
+> of Ubuntu for instance. This is the path that is substituted in startx.
+>
+> When rebuilding the xapp_xinit package, "mcookie" has been built by
+> buildroot, in the xorg_server package. Thus "configure" finds it in our
+> build directory, ie output/host/usr/bin/mcookie, which is not a target path.
+>
+> A quick fix (not meaning it is the cleanest way) is simply to add
+>
+> XAPP_XINIT_CONF_OPT += MCOOKIE=/usr/bin/mcookie
+>
+> in xapp_xinit.mk
 
- It's a bit of a hack, but use this URL:
+  That's a perfectly clean solution - on condition that mcookie is indeed 
+installed on the target. I guess the option should therefore be in an
 
-http://gitorious.org/linux-davinci/linux-davinci/archive-tarball/v3.7-davinci1?dummyname=/linux-v3.7-davinci.tar.gz
+ifeq ($(BR2_PACKAGE_UTIL_LINUX),y)
+XAPP_XINIT_CONF_OPT += MCOOKIE=/usr/bin/mcookie
+endif
 
- The CGI script that is behind that URL will ignore any unknown variables
-behind the ? and the download method of buildroot will consider the thing
-behind the last / as the filename. So this URL will be split into
+  Care to make a patch?
 
-LINUX_SITE = http://gitorious.org/linux-davinci/linux-davinci/archive-tarball/v3.7-davinci1?dummyname=
-LINUX_SOURCE = linux-v3.7-davinci.tar.gz
+  Regards,
+  Arnout
 
- So this gives you a nicely named file in the download directory.
+>
+> Thierry
+[snip]
 
-
- Note that the gitorious archive URLs have an important disadvantage:
-if the archive is not already in the cache, than the site will respond
-with a '202 Accepted'.  I think wget treats this as a success, so
-buildroot will try to untar that placeholder file.
-
- Regards,
- Arnout
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
