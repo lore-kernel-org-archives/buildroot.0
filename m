@@ -1,48 +1,33 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 19 Jan 2013 12:03:44 +0100
-Subject: [Buildroot] [pull request] Pull request for branch for-master/lttng
-Message-ID: <cover.1358593210.git.s.martin49@gmail.com>
+Date: Sat, 19 Jan 2013 12:03:45 +0100
+Subject: [Buildroot] [PATCH 1/4] liburcu: bump to version 0.7.6
+In-Reply-To: <cover.1358593210.git.s.martin49@gmail.com>
+References: <cover.1358593210.git.s.martin49@gmail.com>
+Message-ID: <5fcd6455c4b2248db95cd3b0670afad3dcf918db.1358593210.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-Here is version bump for LTTng and related packages.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/liburcu/liburcu.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The following changes since commit e81e2770aff61d07306d0448bd434d613ed9afef:
-
-  gd: explictly disable freetype support when not available (2013-01-18 23:22:32 +0100)
-
-are available in the git repository at:
-
-  git at github.com:tSed/buildroot.git for-master/lttng
-
-for you to fetch changes up to 0660c79ae34b8e93da0f9835fd0b4d575e285701:
-
-  lttng-babeltrace: bump to version 1.0.2 (2013-01-19 11:57:15 +0100)
-
-----------------------------------------------------------------
-Samuel Martin (4):
-      liburcu: bump to version 0.7.6
-      lttng-tools: bump to version 2.1.1
-      lttng-libust: bump to version 2.1.1
-      lttng-babeltrace: bump to version 1.0.2
-
- package/liburcu/liburcu.mk                         |  2 +-
- package/lttng-babeltrace/lttng-babeltrace.mk       |  2 +-
- package/lttng-libust/lttng-libust.mk               |  2 +-
- ...ng-tools-Support-new-lttng-ust-error-code.patch | 82 ----------------------
- .../lttng-tools-no-sync-file-range-in-uclibc.patch | 51 --------------
- package/lttng-tools/lttng-tools.mk                 |  2 +-
- 6 files changed, 4 insertions(+), 137 deletions(-)
- delete mode 100644 package/lttng-tools/lttng-tools-Support-new-lttng-ust-error-code.patch
- delete mode 100644 package/lttng-tools/lttng-tools-no-sync-file-range-in-uclibc.patch
-
-Yours,
-
---
-
-Samuel
+diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+index 0bfba37..b4a4424 100644
+--- a/package/liburcu/liburcu.mk
++++ b/package/liburcu/liburcu.mk
+@@ -3,7 +3,7 @@
+ # liburc: userspace RCU (read-copy-update) library
+ #
+ #############################################################
+-LIBURCU_VERSION = 0.7.5
++LIBURCU_VERSION = 0.7.6
+ LIBURCU_SITE    = http://lttng.org/files/urcu/
+ LIBURCU_SOURCE  = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+ 
+-- 
+1.8.1.1
