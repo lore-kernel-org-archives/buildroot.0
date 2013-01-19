@@ -1,39 +1,92 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Jan 2013 11:21:24 +0100
-Subject: [Buildroot] [git commit] openvpn: fix init script name
-In-Reply-To: <87mww9mu8k.fsf@dell.be.48ers.dk>
-References: <20130115204907.6290399699@busybox.osuosl.org>
- <CAJJ6jxukk2pGwL9Y3US7W0u488jKk52EgB4LJcnF4uUtQN66Lg@mail.gmail.com>
- <87mww9mu8k.fsf@dell.be.48ers.dk>
-Message-ID: <50FA73A4.4080304@mind.be>
+Date: Sat, 19 Jan 2013 11:54:37 +0100
+Subject: [Buildroot] [Feature Request] script to run after build
+	completion
+In-Reply-To: <50F6DE49.4000600@relinux.de>
+References: <50F6DE49.4000600@relinux.de>
+Message-ID: <50FA7B6D.9040504@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/01/13 09:01, Peter Korsgaard wrote:
-> You could argue that we should make the order somewhere between 45
-> (networkmanager/connman) and 50 (network servers) so you could make the
-> network servers listen on the vpn interface.
+On 16/01/13 18:07, Stephan Hoffmann wrote:
+> Hello all,
+>
+> I am picking up a feature request from 2011, because I am currently in a
+> situation where I could use the proposed feature.
+>
+> Alper Y?ld?r?m wrote on 8 Jun 2011 22:40
+>> Hello,
+>>
+>> A feature i want to see in buildroot is to have a post build script to
+>> run after image creation process, in other words just before "make"
+>> returns to console. This way i can put my post build commands inside
+>> this script. It will definitely ease my buildroot usage.
+>>
+>> Some examples to put in this script are:
+>>
+>> - Printing some king of a "build completed" message,
+>> - Printing build time,
+>> - Nfs directory creation from rootfs.tar file,
+>> - Copying necessary images to some other locations,
+> - any other kind of project/board specific post processing
+>> - Playing some sound when build is completed.
+>>
+>> Also, it will be nice to pass a build failed/completed parameter to
+>> this script, so different actions could be taken, (i.e. different
+>> sounds could be played)
+> I would rather think of a hook that only gets called after successful
+> image completion.
 
-  It sounds logical that VPN is started before the network servers.
+  I think this very much falls into the category of featuritis.
 
-  OTOH most servers listen on all interfaces anyway so it shouldn't make 
-a difference.
+  In many situations, you'll want a script around 'make' to automate 
+things beyond what buildroot does. As long as this script only does 
+things _before_ and _after_ the 'make' invocation, there is no need for a 
+change in buildroot infrastructure. And these top-level scripts are so 
+different from project to project that it doesn't make sense to include 
+them in buildroot either.
 
-  And anyway, the openvpn --daemon will exit immediately, long before the 
-new tun/tap interface actually appears. So it makes no sense to consider 
-anything to depend on openvpn.
+  For example, here's a script that will automatically take a defconfig 
+and copy the images to the target:
 
-  On Debian, openvpn depends on network, nfs-client and syslog, and is 
-started before X. Cups and samba are started after openvpn, but ftpd, 
-apache and exim4 are started before.
+#! /bin/sh
+# Wrapper around make
 
-  Bottom line: keep it as it is, since it doesn't make a big difference.
+# We allow running from a foreign directory
+topdir="$(dirname $0)"
+[ "$topdir" = . ] && output="output/" || outdir="O=$PWD"
+MAKE="make -C $topdir $outdir"
+
+if [ ! -e .config ]; then
+   $MAKE project_defconfig
+fi
+
+echo $MAKE "$@"
+$MAKE "$@" || exit $?
+
+imgfiles="${output}images/bzImage ${output}images/rootfs.cpio.bz2"
+
+# Terminate if image files were not generated
+for f in $imgfiles; do
+    [ -r "$f" ] || exit 1
+done
+
+if [ "$TARGET_IP" ]; then
+   scp $imgfiles root@$TARGET_IP:/mnt/boot
+   ssh root@$TARGET_IP /sbin/reboot
+fi
+
+
+  There is really no need to change buildroot to support this kind of thing.
 
   Regards,
   Arnout
+
+
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
