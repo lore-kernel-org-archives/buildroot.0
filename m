@@ -1,50 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Jan 2013 17:36:58 +0100
-Subject: [Buildroot] QUILT helper
-In-Reply-To: <50F92F70.2070808@syscom-instruments.com>
-References: <50F92F70.2070808@syscom-instruments.com>
-Message-ID: <50FACBAA.7020602@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 19 Jan 2013 17:36:47 +0100
+Subject: [Buildroot] [PATCH 2/3] python3: Port python2 patches to reduce
+ the interpreter size
+In-Reply-To: <CAHXCMMLxr2ttXFzRfJECxRdJitBbAjM4mXyt2SpzTJV5RMQLwA@mail.gmail.com>
+References: <1358517974-30956-1-git-send-email-maxime.ripard@free-electrons.com>
+ <1358517974-30956-2-git-send-email-maxime.ripard@free-electrons.com>
+ <CAHXCMMLxr2ttXFzRfJECxRdJitBbAjM4mXyt2SpzTJV5RMQLwA@mail.gmail.com>
+Message-ID: <CAHXCMMKWLuEPvv0XC_WHxE+xu0QuJZQgY1Rq3RTX3=Ki5jWxfA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/01/13 12:18, Viallard Anthony wrote:
-> Hi,
->
-> It will be nice having a quilt helper like openwrt has.
->
->   QUILT=1 make ofono
->
-> Et voil?, with this command, builroot use quilt to apply patches. So, if
-> you need to edit a patch, you just go in the build dir, use quilt pop,
-> quilt refresh, quilt push -a and use a new command to update the eddited
-> patch :
->
->   make ofono-refresh
->
-> I known christmas was few days ago but if you include this idea, I will
-> be happy like when santa claus gave me a SEGA master system.
+Hi Maxime, all,
 
-  I've been thinking about a feature to make it easier to create patches, 
-but I was thinking in terms of git rather than quilt.
+2013/1/19 Samuel Martin <s.martin49@gmail.com>:
+[...]
+>
+> BTW, here is a build log: http://code.bulix.org/8rjnsp-82865, in which
+> the _decimal module fails to be built.
+>
+> See near the end of the log, it seems the build script of python3 for
+> the target does some mix up between the host and the target build
+> config of the package :-/
 
-  None of the core buildroot developers uses quilt AFAIK, so don't expect 
-your wish to be granted out of nowhere. But I for one am definitely open 
-to consider patches that make it easier to create package patches!
+After some investigation, here is a patch fixing the build of the
+_decimal module:
+http://code.bulix.org/p4cp5i-82866
 
-  If you do contribute this feature, don't forget to include sufficient 
-documentation in the manual so someone who has no experience with quilt 
-can get going right away.
+However, source for host-python3 are still used...
 
-  Regards,
-  Arnout
+Regards,
+
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Samuel
