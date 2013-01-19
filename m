@@ -1,51 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Jan 2013 14:39:51 +0100
-Subject: [Buildroot] [PATCH 1/1] httping: new package
-In-Reply-To: <20130112120713.59a71794@skate>
-References: <y> <1357948846-3710-1-git-send-email-gilles.talis@gmail.com>
- <20130112120713.59a71794@skate>
-Message-ID: <50FAA227.6080509@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Jan 2013 14:42:50 +0100
+Subject: [Buildroot] xapp_init: bad substitution of mcookie path in
+ startx
+In-Reply-To: <50FA9F5E.4020005@mind.be>
+References: <50BDEE24.6010601@wanadoo.fr> <871uf5obh3.fsf@dell.be.48ers.dk>
+ <50F8218F.4070701@wanadoo.fr> <50FA9F5E.4020005@mind.be>
+Message-ID: <20130119144250.2d73d60d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/01/13 12:07, Thomas Petazzoni wrote:
->> >  +config BR2_PACKAGE_HTTPING_OPENSSL
->> >  +	bool "OpenSSL support"
->> >  +	default y
->> >  +	select BR2_PACKAGE_OPENSSL
-> Here there is a point that is rather unclear in Buildroot:
->
->   *) Should each package offer a configuration sub-option to enable
->      features that depend on other packages (like you did on OpenSSL)
->
->   *) Or should a package automatically enable features if it finds that
->      the dependencies are available? This is generally what we do for
->      packages having an optional dependency on OpenSSL.
->
-> This is to be discussed with other Buildroot developers. Probably we
-> need to clarify what the rule is, and then document it.
+Dear Arnout Vandecappelle,
 
-  +1 on the "needs to be documented".
+On Sat, 19 Jan 2013 14:27:58 +0100, Arnout Vandecappelle wrote:
 
-  But for me the rule is fairly clear: if it doesn't significantly 
-increase binary size, then it should be selected automatically if available.
+>   That's a perfectly clean solution - on condition that mcookie is indeed 
+> installed on the target. I guess the option should therefore be in an
+> 
+> ifeq ($(BR2_PACKAGE_UTIL_LINUX),y)
+> XAPP_XINIT_CONF_OPT += MCOOKIE=/usr/bin/mcookie
+> endif
+> 
+>   Care to make a patch?
 
-  It would be good to add to the package's help text that "SSL support is 
-available if the openssl package (in the Libraries -> Crypto menu) is 
-selected."
+We also have a mcookie package in package/x11r7/mcookie/. I guess the
+purpose was to avoid building the entire util-linux stuff just to get
+mcookie. Maybe we need to decide whether we want to use one mcookie
+solution (the standalone package) or the other (mcookie built as part
+of util-linux), and stick to it. No?
 
+Best regards,
 
-  Regards,
-  Arnout
-
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
