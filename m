@@ -1,28 +1,42 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Jan 2013 14:32:37 +0100
-Subject: [Buildroot] [PATCH] dockstar bsp
-In-Reply-To: <20130117172427.190cdb5b@skate>
-References: <1356821139-9103-1-git-send-email-stevecalfee@gmail.com>
- <20130117172427.190cdb5b@skate>
-Message-ID: <50FAA075.80401@mind.be>
+Date: Sat, 19 Jan 2013 14:39:51 +0100
+Subject: [Buildroot] [PATCH 1/1] httping: new package
+In-Reply-To: <20130112120713.59a71794@skate>
+References: <y> <1357948846-3710-1-git-send-email-gilles.talis@gmail.com>
+ <20130112120713.59a71794@skate>
+Message-ID: <50FAA227.6080509@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/01/13 17:24, Thomas Petazzoni wrote:
-> On Sat, 29 Dec 2012 14:45:39 -0800, Steve Calfee wrote:
-[snip]
+On 12/01/13 12:07, Thomas Petazzoni wrote:
+>> >  +config BR2_PACKAGE_HTTPING_OPENSSL
+>> >  +	bool "OpenSSL support"
+>> >  +	default y
+>> >  +	select BR2_PACKAGE_OPENSSL
+> Here there is a point that is rather unclear in Buildroot:
+>
+>   *) Should each package offer a configuration sub-option to enable
+>      features that depend on other packages (like you did on OpenSSL)
+>
+>   *) Or should a package automatically enable features if it finds that
+>      the dependencies are available? This is generally what we do for
+>      packages having an optional dependency on OpenSSL.
+>
+> This is to be discussed with other Buildroot developers. Probably we
+> need to clarify what the rule is, and then document it.
 
->> >    board/sheevaplug/seagatedockstar/README            |   62 +++++
-> The README file should not be a story of how the thing was written, but
-> simply how to use this configuration on this particular hardware (how
-> to flash the images, etc.).
+  +1 on the "needs to be documented".
 
-  The story of how the thing was written can be part of the commit 
-message, however. Although 62 lines of commit message is probably too 
-much as well.
+  But for me the rule is fairly clear: if it doesn't significantly 
+increase binary size, then it should be selected automatically if available.
+
+  It would be good to add to the package's help text that "SSL support is 
+available if the openssl package (in the Libraries -> Crypto menu) is 
+selected."
+
 
   Regards,
   Arnout
