@@ -1,65 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 19 Jan 2013 08:04:43 -0300
-Subject: [Buildroot] [PATCH] uboot-tools: fix build failure for the target
-Message-ID: <1358593483-26071-1-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 19 Jan 2013 12:03:44 +0100
+Subject: [Buildroot] [pull request] Pull request for branch for-master/lttng
+Message-ID: <cover.1358593210.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch to drop config.h is still required, it just needed a tweak.
-Fixes:
-http://autobuild.buildroot.net/results/3653c0e3ec460c710524468987d5192337cf210e/
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../uboot-tools-drop-configh-from-tools.patch      | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/uboot-tools/uboot-tools-drop-configh-from-tools.patch
+Here is version bump for LTTng and related packages.
 
-diff --git a/package/uboot-tools/uboot-tools-drop-configh-from-tools.patch b/package/uboot-tools/uboot-tools-drop-configh-from-tools.patch
-new file mode 100644
-index 0000000..21995ec
---- /dev/null
-+++ b/package/uboot-tools/uboot-tools-drop-configh-from-tools.patch
-@@ -0,0 +1,37 @@
-+We need to build u-boot tools without a board configuration for the target.
-+fw_env just uses config.h to define the default environment of the created
-+image, so it really isn't mandatory.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura u-boot-2013.01.orig/tools/env/fw_env.h u-boot-2013.01/tools/env/fw_env.h
-+--- u-boot-2013.01.orig/tools/env/fw_env.h	2013-01-19 07:50:53.879241660 -0300
-++++ u-boot-2013.01/tools/env/fw_env.h	2013-01-19 07:58:11.897903403 -0300
-+@@ -21,15 +21,6 @@
-+  * MA 02111-1307 USA
-+  */
-+ 
-+-/* Pull in the current config to define the default environment */
-+-#ifndef __ASSEMBLY__
-+-#define __ASSEMBLY__ /* get only #defines from config.h */
-+-#include <config.h>
-+-#undef	__ASSEMBLY__
-+-#else
-+-#include <config.h>
-+-#endif
-+-
-+ /*
-+  * To build the utility with the static configuration
-+  * comment out the next line.
-+diff -Nura u-boot-2013.01.orig/tools/env/Makefile u-boot-2013.01/tools/env/Makefile
-+--- u-boot-2013.01.orig/tools/env/Makefile	2013-01-19 07:50:53.879241660 -0300
-++++ u-boot-2013.01/tools/env/Makefile	2013-01-19 07:59:34.926486346 -0300
-+@@ -26,7 +26,7 @@
-+ HOSTSRCS := $(SRCTREE)/lib/crc32.c  fw_env.c  fw_env_main.c
-+ HOSTSRCS += $(SRCTREE)/lib/ctype.c $(SRCTREE)/lib/linux_string.c
-+ HOSTSRCS += $(SRCTREE)/common/env_attr.c $(SRCTREE)/common/env_flags.c
-+-HEADERS	:= fw_env.h $(OBJTREE)/include/config.h
-++HEADERS	:= fw_env.h
-+ 
-+ # Compile for a hosted environment on the target
-+ HOSTCPPFLAGS  = -idirafter $(SRCTREE)/include \
--- 
-1.7.12.4
+The following changes since commit e81e2770aff61d07306d0448bd434d613ed9afef:
+
+  gd: explictly disable freetype support when not available (2013-01-18 23:22:32 +0100)
+
+are available in the git repository at:
+
+  git at github.com:tSed/buildroot.git for-master/lttng
+
+for you to fetch changes up to 0660c79ae34b8e93da0f9835fd0b4d575e285701:
+
+  lttng-babeltrace: bump to version 1.0.2 (2013-01-19 11:57:15 +0100)
+
+----------------------------------------------------------------
+Samuel Martin (4):
+      liburcu: bump to version 0.7.6
+      lttng-tools: bump to version 2.1.1
+      lttng-libust: bump to version 2.1.1
+      lttng-babeltrace: bump to version 1.0.2
+
+ package/liburcu/liburcu.mk                         |  2 +-
+ package/lttng-babeltrace/lttng-babeltrace.mk       |  2 +-
+ package/lttng-libust/lttng-libust.mk               |  2 +-
+ ...ng-tools-Support-new-lttng-ust-error-code.patch | 82 ----------------------
+ .../lttng-tools-no-sync-file-range-in-uclibc.patch | 51 --------------
+ package/lttng-tools/lttng-tools.mk                 |  2 +-
+ 6 files changed, 4 insertions(+), 137 deletions(-)
+ delete mode 100644 package/lttng-tools/lttng-tools-Support-new-lttng-ust-error-code.patch
+ delete mode 100644 package/lttng-tools/lttng-tools-no-sync-file-range-in-uclibc.patch
+
+Yours,
+
+--
+
+Samuel
