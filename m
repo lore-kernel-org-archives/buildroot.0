@@ -1,19 +1,30 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Jan 2013 17:13:13 +0100
+Date: Sat, 19 Jan 2013 17:16:44 +0100
 Subject: [Buildroot] New kernel source mode [Proposal]
-In-Reply-To: <570d0031-f552-4545-9ddc-2cec752943c8@zimbra2.corp.accelance.fr>
-References: <570d0031-f552-4545-9ddc-2cec752943c8@zimbra2.corp.accelance.fr>
-Message-ID: <50FAC619.30203@mind.be>
+In-Reply-To: <EE5E77B503DE9A478B63A89AAD2585EDB66A2F@vpane.excalyptech.com>
+References: <EE5E77B503DE9A478B63A89AAD2585EDB66A2F@vpane.excalyptech.com>
+Message-ID: <50FAC6EC.8030807@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/01/13 10:27, Jeremy Rosen wrote:
-> well, I just checked on my main debian system and apparently host is a standard DNS lookup utility...
+On 15/01/13 02:12, Przemyslaw Wrzos wrote:
+> Hi,
+>
+> I?d like to get some feedback on a feature I?d like to contribute to the
+> buildroot project. I?m not quite sure what the process is so I thought
+> I?d start on the mailing list.
+>
+> PROPOSAL:  Allow a directory (containing the source tree) to be used as
+> the source for the kernel build. The source isn?t copied to the output
+> directory but instead the kernel?s outputmakfile wrapper facility is used.
+>
 
-  Yes, buildroot has it too: it's part of the 'bind' package.
+  A patch with similar functionality was posted in August by Sonic Zhang:
+
+http://patchwork.ozlabs.org/patch/177618/
 
   Regards,
   Arnout
