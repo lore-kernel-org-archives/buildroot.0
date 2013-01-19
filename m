@@ -1,33 +1,39 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 19 Jan 2013 12:03:47 +0100
-Subject: [Buildroot] [PATCH 3/4] lttng-libust: bump to version 2.1.1
-In-Reply-To: <cover.1358593210.git.s.martin49@gmail.com>
-References: <cover.1358593210.git.s.martin49@gmail.com>
-Message-ID: <26be851b0e776f7f6f969962d9b571498b30c127.1358593210.git.s.martin49@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 19 Jan 2013 09:06:25 -0300
+Subject: [Buildroot] [PATCH] gettext: fix static build failure
+Message-ID: <1358597185-7602-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+When static libraries are preferred we don't build dynamic libraries so
+it fails on the install phase. So don't try to do it for those cases.
+Fixes:
+http://autobuild.buildroot.net/results/651537ae1909b039e0cfc5c104ee87f93a9e5792/
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/lttng-libust/lttng-libust.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gettext/gettext.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index e1f51b1..e143118 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- LTTNG_LIBUST_SITE    = http://lttng.org/files/lttng-ust/
--LTTNG_LIBUST_VERSION = 2.1.0
-+LTTNG_LIBUST_VERSION = 2.1.1
- LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
- 
- LTTNG_LIBUST_INSTALL_STAGING = YES
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index 953077d..204af10 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -35,9 +35,12 @@ endif
+ # When the gettext tools are not enabled in the configuration, we only
+ # install libintl to the target.
+ ifeq ($(BR2_PACKAGE_GETTEXT_TOOLS),)
++# When static libs are preferred the .so files aren't created
++ifeq ($(BR2_PREFER_STATIC_LIB),)
+ define GETTEXT_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libintl*.so* $(TARGET_DIR)/usr/lib/
+ endef
++endif
+ # Ditch the tools since they're off and pull other dependencies
+ define GETTEXT_DISABLE_TOOLS
+ 	$(SED) 's/runtime gettext-tools/runtime/' $(@D)/Makefile.in
 -- 
-1.8.1.1
+1.7.12.4
