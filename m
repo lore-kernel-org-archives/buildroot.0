@@ -1,38 +1,46 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 19 Jan 2013 17:36:47 +0100
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 19 Jan 2013 18:05:34 +0100
 Subject: [Buildroot] [PATCH 2/3] python3: Port python2 patches to reduce
  the interpreter size
-In-Reply-To: <CAHXCMMLxr2ttXFzRfJECxRdJitBbAjM4mXyt2SpzTJV5RMQLwA@mail.gmail.com>
+In-Reply-To: <1358517974-30956-2-git-send-email-maxime.ripard@free-electrons.com>
 References: <1358517974-30956-1-git-send-email-maxime.ripard@free-electrons.com>
  <1358517974-30956-2-git-send-email-maxime.ripard@free-electrons.com>
- <CAHXCMMLxr2ttXFzRfJECxRdJitBbAjM4mXyt2SpzTJV5RMQLwA@mail.gmail.com>
-Message-ID: <CAHXCMMKWLuEPvv0XC_WHxE+xu0QuJZQgY1Rq3RTX3=Ki5jWxfA@mail.gmail.com>
+Message-ID: <50FAD25E.4010608@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime, all,
-
-2013/1/19 Samuel Martin <s.martin49@gmail.com>:
-[...]
+On 18/01/13 15:06, Maxime Ripard wrote:
+> Some of the python2 patches were left behind when doing the python3
+> package. This was because the python build system can now autodetect
+> what packages can be built in the system.
 >
-> BTW, here is a build log: http://code.bulix.org/8rjnsp-82865, in which
-> the _decimal module fails to be built.
+> However, some of these patches are actually useful to reduce drastically
+> the size of the interpreter.
 >
-> See near the end of the log, it seems the build script of python3 for
-> the target does some mix up between the host and the target build
-> config of the package :-/
+> This patch ports the relevant patches to the python3 package, and adds a
+> new patch to remove the idle3 IDE as well from the interpreter.
+>
+> Fixes #5696
+>
+> Signed-off-by: Maxime Ripard<maxime.ripard@free-electrons.com>
+> ---
+>   package/python3/Config.in                          |   11 ++
+>   .../python3-3.3-012-disable-extensions.patch       |   98 +++++++++++++++++
 
-After some investigation, here is a patch fixing the build of the
-_decimal module:
-http://code.bulix.org/p4cp5i-82866
+  You should remove the -3.3- from the patch names. I know they're there 
+in the old package, but this is a good opportunity to get rid of that legacy.
 
-However, source for host-python3 are still used...
+  BTW, do these patches have a chance of getting upstreamed?
 
-Regards,
-
-
+  Regards,
+  Arnout
 -- 
-Samuel
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
