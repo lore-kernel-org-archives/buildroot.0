@@ -1,27 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 Jan 2013 21:47:37 +0100
-Subject: [Buildroot] [PATCH] ncdu: new package
-In-Reply-To: <87ehhfd1my.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sun, 20 Jan 2013 21:45:41 +0100")
-References: <1358347774-11998-1-git-send-email-bogdan@nimblex.net>
- <1358347774-11998-2-git-send-email-bogdan@nimblex.net>
- <87ehhfd1my.fsf@dell.be.48ers.dk>
-Message-ID: <87a9s3d1jq.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 20 Jan 2013 21:50:30 +0100
+Subject: [Buildroot] [PATCH] iftop: new package
+In-Reply-To: <20130116145510.66bdf069@skate> (Thomas Petazzoni's message of
+ "Wed, 16 Jan 2013 14:55:10 +0100")
+References: <1358351378-10876-1-git-send-email-bogdan@nimblex.net>
+ <1358351378-10876-2-git-send-email-bogdan@nimblex.net>
+ <20130116145510.66bdf069@skate>
+Message-ID: <87622rd1ex.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Bogdan> +NCDU_VERSION = 1.9
+Hi,
 
- Peter> We normally have an empty line before the _VERSION line. Other
- Peter> than that it looks good - Committed, thanks.
+ Thomas> No, selecting toolchain options is not correct, and in this particular
+ Thomas> case, it would only work for the internal toolchain backend (breaking
+ Thomas> the external backend and Crosstool-NG backend).
 
-Ups, too fast. You forgot your signed-off-by so I cannot commit
-it. Please resend with it (git commit -s).
+ Thomas> See package/squid/Config.in for an example.
+
+ Thomas> Basically, you must do something like:
+
+ Thomas> config BR2_PACKAGE_FOO
+ Thomas> 	depends on BR2_INET_IPV6
+
+ Thomas> comment "foo requires IPv6 support in toolchain"
+ Thomas> 	depends on !BR2_INET_IPV6
+
+Bogdan, care to resend with the issues pointed out by me and Thomas
+fixed?
 
 -- 
 Bye, Peter Korsgaard
