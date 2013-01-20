@@ -1,25 +1,22 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Jan 2013 18:27:06 +0100
-Subject: [Buildroot] [PATCH v2] pkg-infra: add <pkg>_CONFIG_FIXUP to fix
- *-config files
-In-Reply-To: <50FC0131.8000405@petroprogram.com>
-References: <1357847559-31530-1-git-send-email-stefan.froberg@petroprogram.com>
- <1357847559-31530-2-git-send-email-stefan.froberg@petroprogram.com>
- <50FBD6BA.1010700@mind.be>
- <CAHXCMMKsibOa7nXEzF8gjt17AUWzO_Him=ZZDDd5HynsAn3+GQ@mail.gmail.com>
- <50FC0131.8000405@petroprogram.com>
-Message-ID: <50FC28EA.4080303@mind.be>
+Date: Sun, 20 Jan 2013 18:38:21 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch
+	yem-instrument-build
+In-Reply-To: <201301201738.32066.yann.morin.1998@free.fr>
+References: <cover.1358697765.git.yann.morin.1998@free.fr>
+ <201301201738.32066.yann.morin.1998@free.fr>
+Message-ID: <50FC2B8D.5080701@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/20/13 15:37, Stefan Fr?berg wrote:
-> But that further fine tuning of what is the best sed magic to use
->   I leave for your guys to decide
+On 01/20/13 17:38, Yann E. MORIN wrote:
+> [git-am choked on the patch because of some missing "newline at end
+> of file", hence I applied it manually, and forgot to change authorship]
 
-  Anything that works is OK.
+  Funny, must be a bug in git-apply.
 
   Regards,
   Arnout
