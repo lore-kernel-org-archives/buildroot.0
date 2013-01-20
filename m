@@ -1,27 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 20 Jan 2013 09:55:30 +0100
-Subject: [Buildroot] [PATCH] gettext: fix static build failure
-In-Reply-To: <1358597185-7602-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 19 Jan 2013 09:06:25 -0300")
-References: <1358597185-7602-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wqv8dyil.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 20 Jan 2013 09:54:25 +0100
+Subject: [Buildroot] [git commit] gettext: fix static build failure
+Message-ID: <20130120085537.AA39D9A469@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ad0279f0ee51e97bf7dbb70fdd6f14f789f344a8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> When static libraries are preferred we don't build dynamic libraries so
- Gustavo> it fails on the install phase. So don't try to do it for those cases.
- Gustavo> Fixes:
- Gustavo> http://autobuild.buildroot.net/results/651537ae1909b039e0cfc5c104ee87f93a9e5792/
+When static libraries are preferred we don't build dynamic libraries so
+it fails on the install phase. So don't try to do it for those cases.
+Fixes:
+http://autobuild.buildroot.net/results/651537ae1909b039e0cfc5c104ee87f93a9e5792/
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/gettext/gettext.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-We arguably should install the .a file to the target then, but as
-target-gcc is going away ..
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index 953077d..204af10 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -35,9 +35,12 @@ endif
+ # When the gettext tools are not enabled in the configuration, we only
+ # install libintl to the target.
+ ifeq ($(BR2_PACKAGE_GETTEXT_TOOLS),)
++# When static libs are preferred the .so files aren't created
++ifeq ($(BR2_PREFER_STATIC_LIB),)
+ define GETTEXT_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libintl*.so* $(TARGET_DIR)/usr/lib/
+ endef
++endif
+ # Ditch the tools since they're off and pull other dependencies
+ define GETTEXT_DISABLE_TOOLS
+ 	$(SED) 's/runtime gettext-tools/runtime/' $(@D)/Makefile.in
