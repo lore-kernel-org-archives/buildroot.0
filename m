@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Jan 2013 15:01:01 +0100
-Subject: [Buildroot] [PATCH 4/6] toolchain/gcc: sprinkle with some calls
- to MESSAGE
-In-Reply-To: <5f7b311395a44a98654df57f145bffc9ce90a6c9.1358379198.git.yann.morin.1998@free.fr>
+Date: Sun, 20 Jan 2013 15:02:51 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	yem-instrument-build
+In-Reply-To: <cover.1358379198.git.yann.morin.1998@free.fr>
 References: <cover.1358379198.git.yann.morin.1998@free.fr>
- <5f7b311395a44a98654df57f145bffc9ce90a6c9.1358379198.git.yann.morin.1998@free.fr>
-Message-ID: <50FBF89D.9010705@mind.be>
+Message-ID: <50FBF90B.8030505@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +12,17 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 01/17/13 00:41, Yann E. MORIN wrote:
-> Thus, the failing step can be easily extracted by autobuilders,
-> to ease with post-mortem analysis.
->
-> Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
+> Although I've tested it with external and internal toolchain backends (not
+> crosstool-NG for now), and although it does work, I expect some polishing
+> to be required. For example, the date is not displayed for the file system
+> images steps (I suspect it's due to second expansion being needed for
+> images, which is not for packages).
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
->   toolchain/gcc/gcc-uclibc-4.x.mk |   15 +++++++++++++++
->   1 files changed, 15 insertions(+), 0 deletions(-)
->
-[snip]
->   $(STAMP_DIR)/gcc_libs_target_installed: $(GCC_BUILD_DIR3)/.installed
-> +	$(Q)$(call MESSAGE,"Installing gcc final libraries to staging")
-
-  Target and staging, actually.
-
+  I consider that a bug in fs/common.mk. Patch follows to make things 
+more consistent with pkg-generic.
 
   Regards,
   Arnout
-
->   ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
->   	# These go in /lib, so...
->   	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
-[snip]
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
