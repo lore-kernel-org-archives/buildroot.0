@@ -1,79 +1,94 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 Jan 2013 23:07:52 +0100
-Subject: [Buildroot] [git commit] polkit: new package
-Message-ID: <20130120221146.94C249A440@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Jan 2013 00:52:09 +0100
+Subject: [Buildroot] [RFC v1] Prototype implementation of per-package out of
+	tree build
+Message-ID: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff3c47ee04daa6f97e9911659fdea0636d65327f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-[Peter: Config.in comment tweak]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in        |    1 +
- package/polkit/Config.in |   11 +++++++++++
- package/polkit/polkit.mk |   21 +++++++++++++++++++++
- 3 files changed, 33 insertions(+), 0 deletions(-)
+(Sorry for the previous posting that only had the first two patches. I
+was in the train in the middle of the mountains, and the 3G connection
+was interrupted for a too long time.)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3fe5c79..167a526 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -779,6 +779,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/module-init-tools/Config.in"
- endif
- source "package/monit/Config.in"
-+source "package/polkit/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/procps/Config.in"
- source "package/psmisc/Config.in"
-diff --git a/package/polkit/Config.in b/package/polkit/Config.in
-new file mode 100644
-index 0000000..da5f985
---- /dev/null
-+++ b/package/polkit/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_POLKIT
-+	bool "polkit"
-+	depends on BR2_USE_WCHAR # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_EXPAT
-+	help
-+	  PolicyKit is a toolkit for defining and handling
-+	  authorizations.  It is used for allowing unprivileged
-+	  processes to speak to privileged processes.
-+
-+	  http://www.freedesktop.org/wiki/Software/polkit
-diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-new file mode 100644
-index 0000000..3eb0422
---- /dev/null
-+++ b/package/polkit/polkit.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# polkit
-+#
-+#############################################################
-+
-+POLKIT_VERSION = 0.103
-+POLKIT_SITE = http://www.freedesktop.org/software/polkit/releases/
-+POLKIT_LICENSE = GPLv2
-+POLKIT_LICENSE_FILES = COPYING
-+
-+POLKIT_INSTALL_STAGING = YES
-+
-+POLKIT_DEPENDENCIES = libglib2 host-intltool expat
-+
-+# We could also support --with-authfw=pam
-+POLKIT_CONF_OPT = \
-+	--with-authfw=shadow \
-+	--with-os-type=unknown
-+
-+$(eval $(autotools-package))
+There has recently been some interest in improving the support for
+overriden packages by doing out of tree build of all packages. Since I
+had the beginning of a prototype working, I cleaned it up, made
+numerous fixes to make it work apparently properly, and share it with
+the community.
+
+The following patches should be considered as a prototype, I haven't
+tested all packages (of course), and there are quite certainly some
+corner case issues that haven't been solved. However, I think it's a
+good time to get more testing in order to find, and solve those
+issues.
+
+It should also not be considered yet that we want this feature in
+Buildroot. It is again only a prototype, which aims at solving the
+remaining problems, and see if we think it is a good idea to have this
+in Buildroot or not.
+
+For those who want to test, the 'out-of-tree' branch is available at:
+
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git
+
+Here is a quick summary of what this patch set does:
+
+ * The tarballs are now extracted in $(O)/src/<pkg>-<version>
+
+ * Each tarball is extracted and patched only once, even if there is
+   both a target build and a host build. Once a package has been
+   extracted and patched, its source code is changed to not have write
+   permissions, in order to catch misbehaving packages in terms of out
+   of tree build.
+
+ * The builds continue to be done in $(O)/build/<pkg>-<version> for
+   target packages and $(O)/build/host-<pkg>-<version> for host
+   packages.
+
+ * A <pkg>_SUPPORTS_OUT_OF_TREE variable defines whether the package
+   supports out of tree build or not. By default, it's set to NO, in
+   which case the package source code is rsynced from its source
+   directory to the build directory at the beginning of the configure
+   step. It is set to YES by both the autotools and cmake package
+   infrastructures (which have been modified to do out of tree build),
+   and by some packages that use the generic infrastructure but
+   nonetheless support out of tree build.
+
+ * The override source directory mechanism is updated to take
+   advantage of this out of tree support. Now, if you override a
+   package that supports out of tree build, the source code is no
+   longer rsynced to the build directory. This makes the override
+   source directory mechanism a lot more usable for big packages such
+   as the Linux kernel.
+
+Amongst the known remaining issues to solve are:
+
+ * The semantic of the 'make <pkg>-dirclean' command. Should it remove
+   the build directory and the source directory? Only the build
+   directory? If it removes both (which the proposed prototype
+   currently does), it is strange because you remove one build variant
+   (host or target) and the source directory, but the other build
+   variant (target or host) remains.
+
+ * I am not sure on how we want to handle <pkg>-reconfigure and
+   <pkg>-rebuild. I guess we want to tell the user to do his changes
+   in the package source directory, output/src/<pkg>-<version>. But
+   all files in this source directory are marked read-only, so it's
+   not very practical.
+
+   In addition to this, for packages that don't support out of tree
+   build, we do a rsync at the beginning of the configure step. So if
+   the user does "make <pkg>-reconfigure", then the source code gets
+   rsynced again from the source directory to the build directory, but
+   not if the user does "make <pkg>-rebuild".
+
+Comments, ideas, suggestions are welcome.
+
+Best regards,
+
+Thomas
