@@ -1,37 +1,57 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 20 Jan 2013 11:22:02 -0300
-Subject: [Buildroot] [PATCH RFC] Fix avr32 build using internal toolchain
-In-Reply-To: <CAHt8ZCOMQR8NjrsQzcWqRz3hd2EUc+X_0osKOfn-8c=1wY59_Q@mail.gmail.com>
-References: <1358460970-2081-1-git-send-email-spdawson@gmail.com>
- <20130119113852.6d35aa94@skate>
- <CAHt8ZCOH9FgqzkB2KHJSSBc3k76-07iYNfsQ_rjzQCzOFGLEAg@mail.gmail.com>
- <50FBE8EC.6060602@zacarias.com.ar>
- <CAHt8ZCOMQR8NjrsQzcWqRz3hd2EUc+X_0osKOfn-8c=1wY59_Q@mail.gmail.com>
-Message-ID: <50FBFD8A.1030606@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 20 Jan 2013 15:22:27 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	yem-instrument-build
+In-Reply-To: <20130120151016.32c95e00@skate>
+References: <cover.1358379198.git.yann.morin.1998@free.fr>
+ <20130120151016.32c95e00@skate>
+Message-ID: <201301201522.27762.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/20/2013 10:22 AM, Simon Dawson wrote:
+Thomas, All,
 
->> Testing and fixing is an issue on the toolchain side when there's no
->> upgrade path possible.
+On Sunday 20 January 2013 Thomas Petazzoni wrote:
+> On Thu, 17 Jan 2013 00:41:34 +0100, Yann E. MORIN wrote:
+> > Yann E. MORIN (6):
+> >       pkg-infra: log current message
+> >       toolchain/external: sprinkle with some calls to MESSAGE
+> >       toolchain/crosstool-ng: sprinkle with some calls to MESSAGE
+> >       toolchain/gcc: sprinkle with some calls to MESSAGE
+> >       toolchain/kernel-headers: sprinkle with some calls to MESSAGE
+> >       toolchain/uClibc: sprinkle with some calls to MESSAGE
 > 
-> I don't quite follow your meaning here, I'm afraid.
+> I think the "pkg-infra: log current message" needs a bit more
+> discussion (I'm generally OK with it, just needs more time to think
+> about it).
 
-Some of the breakage is toolchain-related and we can't upgrade it.
-Most of the time it's gcc IIRC.
-Like the internal compiler errors for external toolchains, other than
-blacklisting/disabling packages there's not much to do.
+Yes, this one I expected some talk about.
 
->> Maybe we can keep it and start marking broken packages as !BR2_avr32 ?
->> That may be a rough ride though with all the dependencies.
-> 
-> I think that's pretty much where we are right now, isn't it?
+Hooking into MESSAGE to instrument the build does not seem like the
+panacea. It was just a quick-and-easy way to try and have the auto-
+builders get a bit more info about a failure, so that more advanced
+actions could be made (eg. bug-mail the last author of a package).
 
-I don't recall if that's what was agreed on the meetings (particularly
-since i never went to one).
-But at some point it won't be a workable compromise i'm afraid.
-Regards.
+> However, the 5 followup patches that add appropriate MESSAGE
+> calls in various locations of the code look good to me, and they can be
+> committed now in order to reduce the burden of maintaining those
+> patches from Yann's side.
+
+I will apply Arnout's eye-candy changes, and will re-submit those patches.
+
+I'll also revert the orderiung of the patches: the new calls to MESSAGE
+do not depend on patch 1/5.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
