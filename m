@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Jan 2013 14:49:30 +0100
-Subject: [Buildroot] [PATCH 1/6] pkg-infra: log current message
-In-Reply-To: <7d5b13e61ca5941293be6d1402c87ca990510e1b.1358379198.git.yann.morin.1998@free.fr>
+Date: Sun, 20 Jan 2013 14:51:13 +0100
+Subject: [Buildroot] [PATCH 2/6] toolchain/external: sprinkle with some
+ calls to MESSAGE
+In-Reply-To: <c714fe0f25817a1aa184fc049210ec38a36ecc65.1358379198.git.yann.morin.1998@free.fr>
 References: <cover.1358379198.git.yann.morin.1998@free.fr>
- <7d5b13e61ca5941293be6d1402c87ca990510e1b.1358379198.git.yann.morin.1998@free.fr>
-Message-ID: <50FBF5EA.5010303@mind.be>
+ <c714fe0f25817a1aa184fc049210ec38a36ecc65.1358379198.git.yann.morin.1998@free.fr>
+Message-ID: <50FBF651.4070401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,75 +13,72 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 01/17/13 00:41, Yann E. MORIN wrote:
-> In order to help the auto-builders (our own, or in-house ones),
-> just log the current message in a file that contains:
->      Package: $($(PKG)_NAME)
->      Version: $($(PKG)_VERSION)
->      Action : Last '>>>' message displayed
+> Thus, the failing step can be easily extracted by autobuilders,
+> to ease with post-mortem analysis.
 >
-> For example:
->      Package: host-fakeroot
->      Version: 1.18.2
->      Action : Configuring
+> Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+> ---
+>   toolchain/toolchain-external/ext-tool.mk |    8 +++++---
+>   1 files changed, 5 insertions(+), 3 deletions(-)
 >
-> If there is no package, then the package name and version are
-> empty, eg.:
->      Package:
->      Version:
->      Action : Generating root filesystem image rootfs.tar
+> diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+> index 649e3a3..04f9882 100644
+> --- a/toolchain/toolchain-external/ext-tool.mk
+> +++ b/toolchain/toolchain-external/ext-tool.mk
+> @@ -325,7 +325,7 @@ endif
+>   # matches the configuration provided in Buildroot: ABI, C++ support,
+>   # type of C library and all C library features.
+>   $(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
+> -	@echo "Checking external toolchain settings"
+> +	@$(call MESSAGE,"Checking external toolchain settings")
+>   	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
+>   	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
+>   	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
+> @@ -414,7 +414,7 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
+>   	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+>   	mkdir -p $(TARGET_DIR)/lib ; \
+>   	if test -z "$(BR2_PREFER_STATIC_LIB)" ; then \
+> -		echo "Copy external toolchain libraries to target..." ; \
+> +		$(call MESSAGE,"Copy external toolchain libraries to target...") ; \
 
-  I'm a bit concerned because this is another blocker for top-level 
-parallel build (the contents of last-action will be incorrect).
+  You could fix this one to "Copying".
 
-  Also:
+>   		for libs in $(LIB_EXTERNAL_LIBS); do \
+>   			$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$${SUPPORT_LIB_DIR},$${ARCH_LIB_DIR},$$libs,/lib); \
+>   		done ; \
+> @@ -422,12 +422,13 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
+>   			$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$${SUPPORT_LIB_DIR},$${ARCH_LIB_DIR},$$libs,/usr/lib); \
+>   		done ; \
+>   	fi ; \
+> -	echo "Copy external toolchain sysroot to staging..." ; \
+> +	$(call MESSAGE,"Copy external toolchain sysroot to staging...") ; \
 
-> Also, all messages are logged to a file, one per line, with the
-> date each message was generated at, as the number of seconds
-> elapsed since Epoch.
-
-  I think this one should be sufficient for the autobuilder. It's exactly 
-what is displayed now. You could make it more structured and easily 
-parseable with an extra colon:
-
-echo "$$(date '+%s'): $($(PKG)_NAME) $($(PKG)_VERSION): $(1)"
-
-
-  Note that this one is not an issue for parallel builds, because it will 
-be done in a single write() call.
+  And this one.
 
 
   Regards,
   Arnout
 
-> This will hopefully help autobuilders extract the real reason for
-> a failure, and take appropriate action (eg. bug-mail the last
-> git-author of a package...)
->
-> Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
-> ---
->   package/pkg-utils.mk |    9 ++++++++-
->   1 files changed, 8 insertions(+), 1 deletions(-)
->
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 835c588..477be57 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -64,7 +64,14 @@ INFLATE.xz   = $(XZCAT)
->   INFLATE.tar  = cat
->
->   # MESSAGE Macro -- display a message in bold type
-> -MESSAGE     = echo "$(TERM_BOLD)>>>  $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
-> +define MESSAGE
-> +	echo "$(TERM_BOLD)>>>  $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)";   \
-> +	echo "$$(date '+%s'): $($(PKG)_NAME) $($(PKG)_VERSION) $(1)"                 \
-> +	>>$(BUILD_DIR)/actions.log;                                             \
-> +	printf "Package: %s\nVersion: %s\nAction : %s\n"                             \
-> +	       "$($(PKG)_NAME)" "$($(PKG)_VERSION)" $(1)                             \
-> +	>$(BUILD_DIR)/last-action
-> +endef
->   TERM_BOLD  := $(shell tput smso)
->   TERM_RESET := $(shell tput rmso)
->
+>   	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR}) ; \
+>   	if [ -L $${ARCH_SYSROOT_DIR}/lib64 ] ; then \
+>   		$(call create_lib64_symlinks) ; \
+>   	fi ; \
+>   	if test x"$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" == x"y"; then \
+> +		$(call MESSAGE,"Copying gdbserver") ; \
+>   		gdbserver_found=0 ; \
+>   		for d in $${ARCH_SYSROOT_DIR} $${ARCH_SYSROOT_DIR}/../debug-root/ ; do \
+>   			if test -f $${d}/usr/bin/gdbserver ; then \
+> @@ -446,6 +447,7 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
+>   # Build toolchain wrapper for preprocessor, C and C++ compiler, and setup
+>   # symlinks for everything else
+>   $(HOST_DIR)/usr/bin/ext-toolchain-wrapper: $(STAMP_DIR)/ext-toolchain-installed
+> +	$(Q)$(call MESSAGE,"Building ext-toolchain wrapper")
+>   	mkdir -p $(HOST_DIR)/usr/bin; cd $(HOST_DIR)/usr/bin; \
+>   	for i in $(TOOLCHAIN_EXTERNAL_CROSS)*; do \
+>   		base=$${i##*/}; \
 
 
 -- 
