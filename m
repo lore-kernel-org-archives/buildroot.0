@@ -1,30 +1,24 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Jan 2013 18:38:21 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch
-	yem-instrument-build
-In-Reply-To: <201301201738.32066.yann.morin.1998@free.fr>
-References: <cover.1358697765.git.yann.morin.1998@free.fr>
- <201301201738.32066.yann.morin.1998@free.fr>
-Message-ID: <50FC2B8D.5080701@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 20 Jan 2013 19:33:42 +0100
+Subject: [Buildroot] [PATCH] wireless_tools: don't call ldconfig
+In-Reply-To: <1358700724-9418-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 20 Jan 2013 17:52:04 +0100")
+References: <1358700724-9418-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87obgjembd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/20/13 17:38, Yann E. MORIN wrote:
-> [git-am choked on the patch because of some missing "newline at end
-> of file", hence I applied it manually, and forgot to change authorship]
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-  Funny, must be a bug in git-apply.
+ Thomas> The wireless_tools installation process calls ldconfig to update the
+ Thomas> ld.so cache, but in a cross-compilation situation, it doesn't make
+ Thomas> sense, and simply takes time for nothing. To avoid this, we pass
+ Thomas> LDCONFIG=/bin/true during the wireless_tools installation steps.
 
-  Regards,
-  Arnout
+Committed, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
