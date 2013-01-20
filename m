@@ -1,15 +1,15 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 Jan 2013 22:05:50 +0100
-Subject: [Buildroot] [git commit] toolchain/external: sprinkle with some
-	calls to MESSAGE
-Message-ID: <20130120211455.D375A9A306@busybox.osuosl.org>
+Date: Sun, 20 Jan 2013 22:12:47 +0100
+Subject: [Buildroot] [git commit] toolchain/kernel-headers: sprinkle with
+	some calls to MESSAGE
+Message-ID: <20130120211457.268729A450@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2934d1bb2d700ecc3bc605b0d4518beeb53a3228
+commit: http://git.buildroot.net/buildroot/commit/?id=f4a6aafa8cd7ef16da0b2ed016af8b9d95a78362
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Thus, the failing step can be easily extracted by autobuilders,
@@ -17,53 +17,45 @@ to ease with post-mortem analysis.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/ext-tool.mk |    8 +++++---
- 1 files changed, 5 insertions(+), 3 deletions(-)
+ toolchain/kernel-headers/kernel-headers.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 649e3a3..b0ca3cd 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -325,7 +325,7 @@ endif
- # matches the configuration provided in Buildroot: ABI, C++ support,
- # type of C library and all C library features.
- $(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
--	@echo "Checking external toolchain settings"
-+	@$(call MESSAGE,"Checking external toolchain settings")
- 	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
- 	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
- 	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
-@@ -414,7 +414,7 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
- 	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
- 	mkdir -p $(TARGET_DIR)/lib ; \
- 	if test -z "$(BR2_PREFER_STATIC_LIB)" ; then \
--		echo "Copy external toolchain libraries to target..." ; \
-+		$(call MESSAGE,"Copying external toolchain libraries to target...") ; \
- 		for libs in $(LIB_EXTERNAL_LIBS); do \
- 			$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$${SUPPORT_LIB_DIR},$${ARCH_LIB_DIR},$$libs,/lib); \
- 		done ; \
-@@ -422,12 +422,13 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
- 			$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$${SUPPORT_LIB_DIR},$${ARCH_LIB_DIR},$$libs,/usr/lib); \
- 		done ; \
- 	fi ; \
--	echo "Copy external toolchain sysroot to staging..." ; \
-+	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
- 	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR}) ; \
- 	if [ -L $${ARCH_SYSROOT_DIR}/lib64 ] ; then \
- 		$(call create_lib64_symlinks) ; \
- 	fi ; \
- 	if test x"$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" == x"y"; then \
-+		$(call MESSAGE,"Copying gdbserver") ; \
- 		gdbserver_found=0 ; \
- 		for d in $${ARCH_SYSROOT_DIR} $${ARCH_SYSROOT_DIR}/../debug-root/ ; do \
- 			if test -f $${d}/usr/bin/gdbserver ; then \
-@@ -446,6 +447,7 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
- # Build toolchain wrapper for preprocessor, C and C++ compiler, and setup
- # symlinks for everything else
- $(HOST_DIR)/usr/bin/ext-toolchain-wrapper: $(STAMP_DIR)/ext-toolchain-installed
-+	$(Q)$(call MESSAGE,"Building ext-toolchain wrapper")
- 	mkdir -p $(HOST_DIR)/usr/bin; cd $(HOST_DIR)/usr/bin; \
- 	for i in $(TOOLCHAIN_EXTERNAL_CROSS)*; do \
- 		base=$${i##*/}; \
+diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
+index 568c192..76602d8 100644
+--- a/toolchain/kernel-headers/kernel-headers.mk
++++ b/toolchain/kernel-headers/kernel-headers.mk
+@@ -48,6 +48,7 @@ endif
+ LINUX_HEADERS_DEPENDS:=
+ 
+ $(LINUX_HEADERS_UNPACK_DIR)/.unpacked: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
++	$(Q)$(call MESSAGE,"Extracting kernel headers")
+ 	rm -rf $(LINUX_HEADERS_DIR)
+ 	$(INSTALL) -d $(@D)
+ 	$(LINUX_HEADERS_CAT) $(DL_DIR)/$(LINUX_HEADERS_SOURCE) | \
+@@ -55,6 +56,7 @@ $(LINUX_HEADERS_UNPACK_DIR)/.unpacked: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
+ 	touch $@
+ 
+ $(LINUX_HEADERS_UNPACK_DIR)/.patched: $(LINUX_HEADERS_UNPACK_DIR)/.unpacked $(LINUX_HEADERS_DEPENDS)
++	$(Q)$(call MESSAGE,"Patching kernel headers")
+ 	support/scripts/apply-patches.sh $(LINUX_HEADERS_UNPACK_DIR) toolchain/kernel-headers \
+ 		linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
+ ifneq ($(KERNEL_HEADERS_PATCH_DIR),)
+@@ -64,6 +66,7 @@ endif
+ 	touch $@
+ 
+ $(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
++	$(Q)$(call MESSAGE,"Installing kernel headers")
+ 	(cd $(LINUX_HEADERS_UNPACK_DIR); \
+ 	 $(MAKE) ARCH=$(KERNEL_ARCH) \
+ 		HOSTCC="$(HOSTCC)" HOSTCFLAGS="$(HOSTCFLAGS)" \
+@@ -76,6 +79,7 @@ $(DL_DIR)/$(LINUX_HEADERS_SOURCE):
+ ifeq ($(BR2_KERNEL_HEADERS_SNAP),y)
+ 	$(error No local $@ found, cannot continue. Are you sure you wanted to enable BR2_KERNEL_HEADERS_SNAP?)
+ endif
++	$(call MESSAGE,"Downloading kernel headers")
+ 	$(call DOWNLOAD,$(LINUX_HEADERS_SITE)/$(LINUX_HEADERS_SOURCE))
+ 
+ kernel-headers: $(LINUX_HEADERS_DIR)/.configured
