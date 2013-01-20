@@ -1,44 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Jan 2013 17:52:04 +0100
-Subject: [Buildroot] [PATCH] wireless_tools: don't call ldconfig
-Message-ID: <1358700724-9418-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 20 Jan 2013 18:27:06 +0100
+Subject: [Buildroot] [PATCH v2] pkg-infra: add <pkg>_CONFIG_FIXUP to fix
+ *-config files
+In-Reply-To: <50FC0131.8000405@petroprogram.com>
+References: <1357847559-31530-1-git-send-email-stefan.froberg@petroprogram.com>
+ <1357847559-31530-2-git-send-email-stefan.froberg@petroprogram.com>
+ <50FBD6BA.1010700@mind.be>
+ <CAHXCMMKsibOa7nXEzF8gjt17AUWzO_Him=ZZDDd5HynsAn3+GQ@mail.gmail.com>
+ <50FC0131.8000405@petroprogram.com>
+Message-ID: <50FC28EA.4080303@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The wireless_tools installation process calls ldconfig to update the
-ld.so cache, but in a cross-compilation situation, it doesn't make
-sense, and simply takes time for nothing. To avoid this, we pass
-LDCONFIG=/bin/true during the wireless_tools installation steps.
+On 01/20/13 15:37, Stefan Fr?berg wrote:
+> But that further fine tuning of what is the best sed magic to use
+>   I leave for your guys to decide
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/wireless_tools/wireless_tools.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+  Anything that works is OK.
 
-diff --git a/package/wireless_tools/wireless_tools.mk b/package/wireless_tools/wireless_tools.mk
-index f355689..4dd4084 100644
---- a/package/wireless_tools/wireless_tools.mk
-+++ b/package/wireless_tools/wireless_tools.mk
-@@ -20,7 +20,7 @@ ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_LIB),y)
- 	WIRELESS_TOOLS_INSTALL_TARGETS += install-dynamic
- 
- define WIRELESS_TOOLS_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) PREFIX="$(STAGING_DIR)" install-dynamic
-+	$(MAKE) -C $(@D) PREFIX="$(STAGING_DIR)" LDCONFIG=/bin/true install-dynamic
- 	$(MAKE) -C $(@D) PREFIX="$(STAGING_DIR)/usr" install-hdr
- endef
- 
-@@ -36,7 +36,7 @@ define WIRELESS_TOOLS_CLEAN_CMDS
- endef
- 
- define WIRELESS_TOOLS_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" $(WIRELESS_TOOLS_INSTALL_TARGETS)
-+	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" LDCONFIG=/bin/true $(WIRELESS_TOOLS_INSTALL_TARGETS)
- 	$(MAKE) -C $(@D) INSTALL_MAN="$(TARGET_DIR)/usr/share/man" install-man
- endef
- 
+  Regards,
+  Arnout
+
 -- 
-1.7.9.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
