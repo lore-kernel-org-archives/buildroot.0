@@ -1,46 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 Jan 2013 19:33:22 +0100
-Subject: [Buildroot] [git commit] wireless_tools: don't call ldconfig
-Message-ID: <20130120202429.57BF29A4C9@busybox.osuosl.org>
+Date: Sun, 20 Jan 2013 20:38:00 +0100
+Subject: [Buildroot] [git commit] cmake: add license informations
+Message-ID: <20130120202430.5A1E37FDE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=81b21b2d036ff64c7e3edab945bb7643a796da95
+commit: http://git.buildroot.net/buildroot/commit/?id=63bd72508bdd6be18a91c0864323a6d8df94be10
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The wireless_tools installation process calls ldconfig to update the
-ld.so cache, but in a cross-compilation situation, it doesn't make
-sense, and simply takes time for nothing. To avoid this, we pass
-LDCONFIG=/bin/true during the wireless_tools installation steps.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/wireless_tools/wireless_tools.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/cmake/cmake.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/wireless_tools/wireless_tools.mk b/package/wireless_tools/wireless_tools.mk
-index f355689..4dd4084 100644
---- a/package/wireless_tools/wireless_tools.mk
-+++ b/package/wireless_tools/wireless_tools.mk
-@@ -20,7 +20,7 @@ ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_LIB),y)
- 	WIRELESS_TOOLS_INSTALL_TARGETS += install-dynamic
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index e2bc31f..6836172 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -1,5 +1,13 @@
++#############################################################
++#
++# cmake
++#
++#############################################################
++
+ CMAKE_VERSION = 2.8.9
+ CMAKE_SITE = http://www.cmake.org/files/v2.8/
++CMAKE_LICENSE = BSD-3c
++CMAKE_LICENSE_FILES = Copyright.txt
  
- define WIRELESS_TOOLS_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) PREFIX="$(STAGING_DIR)" install-dynamic
-+	$(MAKE) -C $(@D) PREFIX="$(STAGING_DIR)" LDCONFIG=/bin/true install-dynamic
- 	$(MAKE) -C $(@D) PREFIX="$(STAGING_DIR)/usr" install-hdr
- endef
- 
-@@ -36,7 +36,7 @@ define WIRELESS_TOOLS_CLEAN_CMDS
- endef
- 
- define WIRELESS_TOOLS_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" $(WIRELESS_TOOLS_INSTALL_TARGETS)
-+	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" LDCONFIG=/bin/true $(WIRELESS_TOOLS_INSTALL_TARGETS)
- 	$(MAKE) -C $(@D) INSTALL_MAN="$(TARGET_DIR)/usr/share/man" install-man
- endef
- 
+ define HOST_CMAKE_CONFIGURE_CMDS
+  (cd $(@D); \
