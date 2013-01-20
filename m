@@ -1,32 +1,73 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 Jan 2013 20:42:54 +0100
-Subject: [Buildroot] [git commit] pkgconf: add license informations
-Message-ID: <20130120202431.2F8C082750@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Jan 2013 21:25:25 +0100
+Subject: [Buildroot] [RFC v1 01/14] Add a new "src" directory in the output
+	directory
+In-Reply-To: <1358713538-4364-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1358713538-4364-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1358713538-4364-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bcd02088b300c99b262be26a53f493ad0c82903b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This new directory will be used to extract the source directory of the
+different packages, as part of the out of tree support.
+
+Note that we need to explicitly re-add write permissions on the
+contents of this directory, because write permissions are removed from
+the source code of packages in order to ensure that the packages are
+not incorrectly modifying their source directory during an out of tree
+build. We also re-add write permissions to the build directory since
+some packages copy files from their source directory to the build
+directory, causing rm to fail due to lack of permissions.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pkgconf/pkgconf.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ Makefile |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-index 36a5bb8..4b00ad3 100644
---- a/package/pkgconf/pkgconf.mk
-+++ b/package/pkgconf/pkgconf.mk
-@@ -7,6 +7,8 @@
- PKGCONF_VERSION = 0.8.9
- PKGCONF_SITE = http://tortois.es/~nenolod/distfiles
- PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.bz2
-+PKGCONF_LICENSE = pkgconf license
-+PKGCONF_LICENSE_FILES = COPYING
+diff --git a/Makefile b/Makefile
+index 6f8ed0e..15ce4e4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -260,6 +260,7 @@ GENERATE_LOCALE=$(call qstrip,$(BR2_GENERATE_LOCALE))
+ STAMP_DIR:=$(BASE_DIR)/stamps
  
- PKG_CONFIG_HOST_BINARY = $(HOST_DIR)/usr/bin/pkg-config
+ BINARIES_DIR:=$(BASE_DIR)/images
++SRC_DIR:=$(BASE_DIR)/src
+ TARGET_DIR:=$(BASE_DIR)/target
+ TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
+ TARGET_SKELETON=$(TOPDIR)/system/skeleton
+@@ -383,7 +384,7 @@ TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
+ $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
  
+ dirs: $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+-	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
++	$(HOST_DIR) $(BINARIES_DIR) $(SRC_DIR) $(STAMP_DIR)
+ 
+ $(BASE_TARGETS): dirs $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+ 
+@@ -409,7 +410,7 @@ world: toolchain $(TARGETS_ALL)
+ # dependencies anywhere else
+ #
+ #############################################################
+-$(TOOLCHAIN_DIR) $(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR):
++$(TOOLCHAIN_DIR) $(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(SRC_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR):
+ 	@mkdir -p $@
+ 
+ $(STAGING_DIR):
+@@ -704,9 +705,10 @@ ifeq ($(NEED_WRAPPER),y)
+ endif
+ 
+ clean:
++	-chmod u+w -R $(SRC_DIR)/* $(BUILD_DIR)/*
+ 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+ 		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(BASE_DIR)/staging \
+-		$(LEGAL_INFO_DIR)
++		$(LEGAL_INFO_DIR) $(SRC_DIR)
+ 
+ distclean: clean
+ ifeq ($(DL_DIR),$(TOPDIR)/dl)
+-- 
+1.7.9.5
