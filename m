@@ -1,37 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 20 Jan 2013 21:22:36 +0100
-Subject: [Buildroot] [PATCH 1/2] xapp_xinit: only makes sense if there
-	is an X server
-In-Reply-To: <1358677875-29889-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sun, 20 Jan 2013 11:31:14 +0100")
-References: <1358677875-29889-1-git-send-email-arnout@mind.be>
-Message-ID: <87vcard2pf.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 20 Jan 2013 20:33:05 +0100
+Subject: [Buildroot] [git commit] axel: add license informations
+Message-ID: <20130120202429.927B47FDE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a5ea6e6ac182586d75754c3fdfaf8a7ea7fab8ef
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Arnout> ---
- Arnout>  package/x11r7/xapp_xinit/Config.in |    2 ++
- Arnout>  1 file changed, 2 insertions(+)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/axel/axel.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- Arnout> diff --git a/package/x11r7/xapp_xinit/Config.in b/package/x11r7/xapp_xinit/Config.in
- Arnout> index 9ac2817..30981c3 100644
- Arnout> --- a/package/x11r7/xapp_xinit/Config.in
- Arnout> +++ b/package/x11r7/xapp_xinit/Config.in
- Arnout> @@ -1,5 +1,7 @@
- Arnout>  config BR2_PACKAGE_XAPP_XINIT
- Arnout>  	bool "xinit"
- Arnout> +	# Runtime dependency: can't start an X server unless there is one
- Arnout> +	depends on BR2_PACKAGE_XSERVER_XORG_SERVER
-
-XAPP_XDM selects XINIT, so I also added the dependency here and
-committed both patches, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index 0ed8ad2..f823b4a 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -6,6 +6,8 @@
+ AXEL_VERSION = 2.4
+ AXEL_SOURCE = axel-$(AXEL_VERSION).tar.gz
+ AXEL_SITE = https://alioth.debian.org/frs/download.php/3015
++AXEL_LICENSE = GPLv2+
++AXEL_LICENSE_FILES = COPYING
+ 
+ AXEL_LDFLAGS = -lpthread
+ 
