@@ -1,121 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Jan 2013 12:36:26 +0100
-Subject: [Buildroot] [PATCH v2] pkg-infra: add <pkg>_CONFIG_FIXUP to fix
- *-config files
-In-Reply-To: <1357847559-31530-2-git-send-email-stefan.froberg@petroprogram.com>
-References: <1357847559-31530-1-git-send-email-stefan.froberg@petroprogram.com>
- <1357847559-31530-2-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <50FBD6BA.1010700@mind.be>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Sun, 20 Jan 2013 14:14:00 +0200
+Subject: [Buildroot] Gstreamer 0.10 vs. Gstreamer 1.0,
+ gst-ffmpeg vs. gst-libav, ffmpeg vs. libav confusion
+In-Reply-To: <50FAF2EF.2050707@mind.be>
+References: <50FA0C40.30907@petroprogram.com> <50FAF2EF.2050707@mind.be>
+Message-ID: <50FBDF88.9010004@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/10/13 20:52, Stefan Fr?berg wrote:
-> This patch will add<pkg>_CONFIG_FIXUP variable to buildroot infra.
-> It's purpose is to inform buildroot that the package in question
-> contains some $(STAGING_DIR)/usr/bin/*-config files and that we
-> want to automatically fix prefixes of such files.
+19.1.2013 21:24, Arnout Vandecappelle kirjoitti:
+> On 19/01/13 04:00, Stefan Fr?berg wrote:
+[snip]
+>> But what about 1.0 ?
+>> Maybe gstreamer 1.0.x  package for buildroot should be called
+>> gstreamer-1.0 or something similar
+>> and also in it's Config.in file BR2_PACKAGE_GSTREAMER1.0 ???
+>> And it's own plugins named similary with just -1.0 suffix ?
+>> With the exception of gst-libav, which is renamed gst-ffmpeg for
+>> gstreamer 1.0
 >
-> It is often the case that many packages call these
-> files during their configuration step to determine 3rd party
-> library package locations and any flags needed to link against them.
+>  Yes, for GStreamer 1.0 there should be separate packages. For one
+> thing, the new plugin libraries don't have the same set of plugins.
 >
-> For example:
-> Some package might try to check the existense and linking flags
-> of NSPR package by calling $(STAGING_DIR)/usr/bin/nspr-config --prefix.
-> Without this fix, NSPR would return /usr/ as it's prefix which is
-> wrong when cross-compiling.
-> Correct would be $(STAGING_DIR)/usr.
+>  They should be called something like BR2_PACKAGE_GSTREAMER_10 (no
+> dots allowed in config symbols). Which is of course mightily
+> confusing, since the old thing is called gstreamer-0.10...
 >
-> All packages that have<pkg>_INSTALL_STAGING = YES defined and
-> also install some config file(s) into $(STAGING_DIR)/usr/bin must
-> hereafter also define<pkg>_CONFIG_FIXUP with the corresponding
-> filename(s).
+>  Note that Bogdan Radulescu posted a patch series to bump the
+> GStreamer packages to 1.0. I thought he was going to resubmit with new
+> packages instead of bumps, but that hasn't appeared on the list yet.
 >
-> For example:
+
+Oh. That's good.
+
+
+>>
+>>
+>> And is it worth adding libav as an separate package to buildroot at all
+>> or just use the internal version provided by gst-libav plugin
+>> when compiling ?
 >
-> DIVINE_CONFIG_FIXUP = divine-config
+> If it's just gst-libav, I don't think it's worth introducing libav as
+> a package. But if some other package starts to use libav instead of
+> ffmpeg, it will be necessary.
 >
-> or for multiple files:
 >
-> IMAGEMAGICK_CONFIG_FIXUP = Magick-config Wand-config
->
-> Signed-off-by: Stefan Fr?berg<stefan.froberg@petroprogram.com>
-> ---
->   package/pkg-generic.mk |    6 ++++++
->   1 files changed, 6 insertions(+), 0 deletions(-)
->
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index a570ad7..9f6ea7b 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -121,6 +121,12 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
->   	@$(call MESSAGE,"Installing to staging directory")
->   	$($(PKG)_INSTALL_STAGING_CMDS)
->   	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
-> +	$(Q)if test -n "$($(PKG)_CONFIG_FIXUP)" ; then \
-> +		$(call MESSAGE,"Fixing package configuration files") ;\
-> +		$(SED) "s,^prefix=.*,prefix=$(STAGING_DIR)/usr,g" \
-> +			-e "s,^exec_prefix=.*,exec_prefix=$(STAGING_DIR)/usr,g" \
 
-  Given that some *-config hard-code something like -L/usr/lib, I would add:
+Yes. AFAIK, for now, it's just this gst-libav that needs it.
+I did a quick compile test of that gst-libav, using internal libav, and
+it compiled nicely.
 
-  -e "s,-I/usr/,-I$(STAGING_DIR)/usr/" \
-  -e "s,-L/usr/,-L$(STAGING_DIR)/usr/" \
+And what I have read more and more about those differences of ffmpeg vs.
+libav, it now seems that
+current, newest version of ffmpeg is now much more secure and feature
+rich than it was at the time of fork.
+
+They just kicked out new major release, ffmpeg 1.1.
 
 
-  Of course, for each package that actually uses this infrastructure, it 
-has to be checked if it does the right thing. If it doesn't then the 
-infra can still be fixed. Therefore, this patch gets my
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-and I hope to see some patches that use it! For volunteers that want to 
-contribute fixes, here's a list of *-configs that currently don't do the 
-right thing:
-
-imagemagick
-divine
-gd
-gsl
-libdnet
-giblib
-libart
-libcdaudio
-libesmtp
-libftdi
-libusb
-libvncserver
-log4c
-neon
-libnspr
-libpcap
-taglib
-
-
-  Oh, and one of them (libnspr) doesn't have exec_prefix at the beginning 
-of the line, so the expression should be:
-
-  -e "s,^ *exec_prefix=.*,exec_prefix=$(STAGING_DIR)/usr,"
-
-
-  Regards,
-  Arnout
-
-
-> +			$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_FIXUP)) ;\
-> +	fi
->   	$(Q)touch $@
->
->   # Install to images dir
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Stefan
