@@ -1,62 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 Jan 2013 22:28:23 +0100
-Subject: [Buildroot] [git commit] hostapd: bump to version 2.0
-Message-ID: <20130120212853.F265E9A40B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 20 Jan 2013 22:41:10 +0100
+Subject: [Buildroot] [PATCH v3 1/5] sg3_utils: new package
+In-Reply-To: <1358546927-25707-2-git-send-email-marek.belisko@open-nandra.com>
+ (Marek Belisko's message of "Fri, 18 Jan 2013 23:08:43 +0100")
+References: <1358546927-25707-1-git-send-email-marek.belisko@open-nandra.com>
+ <1358546927-25707-2-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <87k3r7bki1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ae5f324678458d27073d1c4e544c7c1d3383b4bd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Marek" == Marek Belisko <marek.belisko@open-nandra.com> writes:
 
-802.11ac support isn't enabled on purpose since it's broken on some
-architectures.
+ Marek> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Marek> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+ Marek> ---
+ Marek> +++ b/package/sg3_utils/Config.in
+ Marek> @@ -0,0 +1,16 @@
+ Marek> +config BR2_PACKAGE_SG3_UTILS
+ Marek> +	bool "sgutils"
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/hostapd/hostapd.mk |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+It imho makes more sense to call it sg3-utils, as that's what upstream
+and E.G. Debian calls it, so I renamed the user visible name.
 
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index b18881a..e00ad5a 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--HOSTAPD_VERSION = 1.1
-+HOSTAPD_VERSION = 2.0
- HOSTAPD_SITE = http://hostap.epitest.fi/releases
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
-@@ -21,6 +21,7 @@ endif
- 
- define HOSTAPD_LIBNL_CONFIG
- 	echo 'CONFIG_LIBNL32=y' >>$(HOSTAPD_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_VLAN_NETLINK.*\)/\2/' $(HOSTAPD_CONFIG)
- endef
- 
- define HOSTAPD_LIBTOMMATH_CONFIG
-@@ -52,6 +53,7 @@ define HOSTAPD_EAP_CONFIG
- 	$(SED) 's/\(#\)\(CONFIG_EAP_SIM.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_EAP_TNC.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_RADIUS_SERVER.*\)/\2/' $(HOSTAPD_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_TLSV1.*\)/\2/' $(HOSTAPD_CONFIG)
- endef
- ifneq ($(BR2_INET_IPV6),y)
- define HOSTAPD_RADIUS_IPV6_CONFIG
-@@ -75,8 +77,10 @@ endif
- define HOSTAPD_CONFIGURE_CMDS
- 	cp $(@D)/hostapd/defconfig $(HOSTAPD_CONFIG)
- # Misc
-+	$(SED) 's/\(#\)\(CONFIG_HS20.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_IEEE80211N.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_IEEE80211R.*\)/\2/' $(HOSTAPD_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_IEEE80211W.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_INTERWORKING.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(SED) 's/\(#\)\(CONFIG_FULL_DYNAMIC_VLAN.*\)/\2/' $(HOSTAPD_CONFIG)
- 	$(HOSTAPD_LIBTOMMATH_CONFIG)
+ Marek> +++ b/package/sg3_utils/sg3_utils.mk
+ Marek> @@ -0,0 +1,39 @@
+ Marek> +#############################################################
+ Marek> +#
+ Marek> +# sg3_utils
+ Marek> +#
+ Marek> +#############################################################
+ Marek> +SG3_UTILS_VERSION = 1.34
+ Marek> +SG3_UTILS_SITE    = http://sg.danny.cz/sg/p/
+ Marek> +SG3_UTILS_LICENSE = BSD-3c
+ Marek> +# utils progs are GPLv2+ licenced
+ Marek> +ifneq ($(BR2_PACKAGE_SG3_UTILS_PROGS),)
+
+I prefer positive logic, so I inverted this check.
+
+Committed with those modifications, thanks.
+
+-- 
+Bye, Peter Korsgaard
