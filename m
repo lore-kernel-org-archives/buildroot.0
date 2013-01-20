@@ -1,27 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 20 Jan 2013 09:53:25 +0100
-Subject: [Buildroot] xapp_init: bad substitution of mcookie path in
-	startx
-In-Reply-To: <50FAC272.7040909@mind.be> (Arnout Vandecappelle's message of
- "Sat, 19 Jan 2013 16:57:38 +0100")
-References: <50BDEE24.6010601@wanadoo.fr> <871uf5obh3.fsf@dell.be.48ers.dk>
- <50F8218F.4070701@wanadoo.fr> <50FA9F5E.4020005@mind.be>
- <20130119144250.2d73d60d@skate> <50FAC272.7040909@mind.be>
-Message-ID: <871udgfd6i.fsf@dell.be.48ers.dk>
+Date: Sun, 20 Jan 2013 09:55:30 +0100
+Subject: [Buildroot] [PATCH] gettext: fix static build failure
+In-Reply-To: <1358597185-7602-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 19 Jan 2013 09:06:25 -0300")
+References: <1358597185-7602-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wqv8dyil.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Arnout>  BTW, shouldn't xapp_xinit depend on XORG_SERVER? xinit tries
- Arnout> to start an X server... If xapp_xinit depens on XORG_SERVER
- Arnout> then the condition I proposed is no longer necessary, because
- Arnout> MCOOKIE will be selected.
+ Gustavo> When static libraries are preferred we don't build dynamic libraries so
+ Gustavo> it fails on the install phase. So don't try to do it for those cases.
+ Gustavo> Fixes:
+ Gustavo> http://autobuild.buildroot.net/results/651537ae1909b039e0cfc5c104ee87f93a9e5792/
 
-That indeed seems sensible. Care to send a patch?
+Committed, thanks.
+
+We arguably should install the .a file to the target then, but as
+target-gcc is going away ..
 
 -- 
 Bye, Peter Korsgaard
