@@ -1,35 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Jan 2013 00:52:23 +0100
-Subject: [Buildroot] [RFC v1 14/14] makedevs: support out of tree build
+Date: Mon, 21 Jan 2013 00:52:22 +0100
+Subject: [Buildroot] [RFC v1 13/14] cmake: support out of tree build
 In-Reply-To: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1358725943-31485-15-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1358725943-31485-14-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nothing needs to be done, the source is already directly taken from
-package/makedevs/, so it just works.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/makedevs/makedevs.mk |    2 ++
- 1 file changed, 2 insertions(+)
+ package/cmake/cmake.mk |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/makedevs/makedevs.mk b/package/makedevs/makedevs.mk
-index 5e984c6..1e28ff7 100644
---- a/package/makedevs/makedevs.mk
-+++ b/package/makedevs/makedevs.mk
-@@ -8,6 +8,8 @@
- MAKEDEVS_SOURCE =
- HOST_MAKEDEVS_SOURCE =
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index e2bc31f..ff586bf 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -1,11 +1,13 @@
+ CMAKE_VERSION = 2.8.9
+ CMAKE_SITE = http://www.cmake.org/files/v2.8/
  
-+MAKEDEVS_SUPPORTS_OUT_OF_TREE = YES
++CMAKE_SUPPORTS_OUT_OF_TREE = YES
 +
- define MAKEDEVS_BUILD_CMDS
- 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
- 		package/makedevs/makedevs.c -o $(@D)/makedevs
+ define HOST_CMAKE_CONFIGURE_CMDS
+  (cd $(@D); \
+ 	LDFLAGS="$(HOST_LDFLAGS)" \
+ 	CFLAGS="$(HOST_CFLAGS)" \
+-	./bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(PARALLEL_JOBS) \
++	$(CMAKE_SRCDIR)/bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(PARALLEL_JOBS) \
+  )
+ endef
+ 
 -- 
 1.7.9.5
