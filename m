@@ -1,29 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 20 Jan 2013 20:38:12 +0000 (UTC)
-Subject: [Buildroot] [Bug 5690] python3 does not obey to
-	BR2_PACKAGE_PYTHON3_PYC_ONLY=y
-In-Reply-To: <bug-5690-163@https.bugs.busybox.net/>
-References: <bug-5690-163@https.bugs.busybox.net/>
-Message-ID: <20130120203812.187B29A4DD@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 20 Jan 2013 21:26:22 +0100
+Subject: [Buildroot] [git commit] liburcu: bump to version 0.7.6
+Message-ID: <20130120203918.E81769A4E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5690
+commit: http://git.buildroot.net/buildroot/commit/?id=0a714acf56e470257daa0c9fab9cc61a65eba8bf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/liburcu/liburcu.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2013-01-20 20:38:33 UTC ---
-Fixed by Maxime in git (6ffab129)
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+index 0bfba37..b4a4424 100644
+--- a/package/liburcu/liburcu.mk
++++ b/package/liburcu/liburcu.mk
+@@ -3,7 +3,7 @@
+ # liburc: userspace RCU (read-copy-update) library
+ #
+ #############################################################
+-LIBURCU_VERSION = 0.7.5
++LIBURCU_VERSION = 0.7.6
+ LIBURCU_SITE    = http://lttng.org/files/urcu/
+ LIBURCU_SOURCE  = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+ 
