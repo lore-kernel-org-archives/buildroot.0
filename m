@@ -1,165 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Jan 2013 00:52:11 +0100
-Subject: [Buildroot] [RFC v1 02/14] package infrastructure: move subdir
-	support to autotools
+Date: Mon, 21 Jan 2013 00:52:18 +0100
+Subject: [Buildroot] [RFC v1 09/14] barebox: support out of tree build
 In-Reply-To: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1358725943-31485-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1358725943-31485-10-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The <pkg>_SUBDIR variable was currently somewhat handled at the
-generic package infrastructure level, with the $(PKG)_SRCDIR variable
-taking into account this SUBDIR. But in fact, this <pkg>_SUBDIR
-variable only makes sense in the context of the autotools
-infrastructure, to indicate that the configure script is not located
-at the root of the source tree, but instead in a sub-directory. In the
-case of generic packages, the package .mk file already has enough
-freedom to handle bizarre situations where the Makefile or other parts
-of the build system may not be located at the root of the package
-source tree.
-
-In order to simplify the introduction of out of tree support, we
-therefore move the SUBDIR support as an autotools infrastructure
-specific feature.
+For Barebox, a minor patch is needed to make out-of-tree build
+possible when the source directory is read-only. This patch can
+probably be merged upstream.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-autotools.mk |   30 ++++++++++++++++++++----------
- package/pkg-generic.mk   |   11 +----------
- 2 files changed, 21 insertions(+), 20 deletions(-)
+ ...-build-when-source-directory-is-read-only.patch |   42 ++++++++++++++++++++
+ boot/barebox/barebox.mk                            |    7 ++--
+ 2 files changed, 46 insertions(+), 3 deletions(-)
+ create mode 100644 boot/barebox/barebox-genenv-fix-build-when-source-directory-is-read-only.patch
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 890506b..843239d 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -70,6 +70,16 @@ ifndef $(2)_MAKE
-  endif
- endif
- 
-+ifndef $(2)_SUBDIR
-+ ifdef $(3)_SUBDIR
-+  $(2)_SUBDIR = $$($(3)_SUBDIR)
-+ else
-+  $(2)_SUBDIR ?=
-+ endif
-+endif
+diff --git a/boot/barebox/barebox-genenv-fix-build-when-source-directory-is-read-only.patch b/boot/barebox/barebox-genenv-fix-build-when-source-directory-is-read-only.patch
+new file mode 100644
+index 0000000..29cb496
+--- /dev/null
++++ b/boot/barebox/barebox-genenv-fix-build-when-source-directory-is-read-only.patch
+@@ -0,0 +1,42 @@
++From e4bc9ba958c2aba5b2830724457f3a70f014cfc5 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 20 Jan 2013 17:25:55 +0100
++Subject: [PATCH] genenv: fix build when source directory is read-only
 +
-+$(2)_SRCSUBDIR = $$($(2)_SRCDIR)/$($(2)_SUBDIR)
++When doing an out-of-tree build where the source directory of Barebox
++is read-only (i.e all files have no write permission), the build of
++Barebox halts in scripts/genenv, because it removes files for which it
++doesn't have write permissions. Those files are being removed from the
++temporary directory .barebox_default_env/ once the environnement is
++generated. However, since the files have been copied from the source
++directory, they carry the permissions without write access. This leads
++a regular rm to wait interactively for the user to confirm the
++suppression, even those removal is possible since we have write access
++to the containing directory.
 +
- $(2)_CONF_ENV			?=
- $(2)_CONF_OPT			?=
- $(2)_MAKE_ENV			?=
-@@ -93,7 +103,7 @@ ifeq ($(5),target)
++To solve this, we explicitly re-add write permissions on the copied
++files and directories into this temporary directory.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ scripts/genenv |    4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/scripts/genenv b/scripts/genenv
++index 374db6d..3d79c63 100755
++--- a/scripts/genenv
+++++ b/scripts/genenv
++@@ -24,6 +24,10 @@ for i in $*; do
++ done
++ )
++ 
+++# Ensure we have write permissions, in case the source directory is
+++# read-only.
+++chmod +w -R $tempdir
+++
++ find $tempdir -name '.svn' -o -name '*~' | xargs --no-run-if-empty rm -r
++ 
++ $objtree/scripts/bareboxenv -s $tempdir $target
++-- 
++1.7.9.5
++
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 143338e..97acac5 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -23,6 +23,7 @@ endif
+ BAREBOX_DEPENDENCIES = host-lzop
+ BAREBOX_LICENSE = GPLv2 with exceptions
+ BAREBOX_LICENSE_FILES = COPYING
++BAREBOX_SUPPORTS_OUT_OF_TREE = YES
  
- # Configure package for target
- define $(2)_CONFIGURE_CMDS
--	(cd $$($$(PKG)_SRCDIR) && rm -rf config.cache && \
-+	(cd $$($$(PKG)_SRCSUBDIR) && rm -rf config.cache && \
- 	$$(TARGET_CONFIGURE_OPTS) \
- 	$$(TARGET_CONFIGURE_ARGS) \
- 	$$($$(PKG)_CONF_ENV) \
-@@ -120,7 +130,7 @@ else
- # because it often relies on host tools which may or may not be
- # installed.
- define $(2)_CONFIGURE_CMDS
--	(cd $$($$(PKG)_SRCDIR) && rm -rf config.cache; \
-+	(cd $$($$(PKG)_SRCSUBDIR) && rm -rf config.cache; \
- 	        $$(HOST_CONFIGURE_OPTS) \
- 		CFLAGS="$$(HOST_CFLAGS)" \
- 		LDFLAGS="$$(HOST_LDFLAGS)" \
-@@ -216,11 +226,11 @@ endif
- ifndef $(2)_BUILD_CMDS
- ifeq ($(5),target)
- define $(2)_BUILD_CMDS
--	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCSUBDIR)
- endef
- else
- define $(2)_BUILD_CMDS
--	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
-+	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCSUBDIR)
- endef
- endif
- endif
-@@ -231,7 +241,7 @@ endif
- #
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
--	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -C $$($$(PKG)_SRCDIR) install
-+	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -C $$($$(PKG)_SRCSUBDIR) install
- endef
- endif
+ ifneq ($(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
+ define BAREBOX_APPLY_CUSTOM_PATCHES
+@@ -50,14 +51,14 @@ BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) $(TARGET_CROS
  
-@@ -241,7 +251,7 @@ endif
- #
- ifndef $(2)_INSTALL_STAGING_CMDS
- define $(2)_INSTALL_STAGING_CMDS
--	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCSUBDIR)
- 	for i in $$$$(find $(STAGING_DIR)/usr/lib* -name "*.la"); do \
- 		cp -f $$$$i $$$$i~; \
- 		$$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
-@@ -255,7 +265,7 @@ endif
- #
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
--	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_SRCSUBDIR)
- endef
+ 
+ ifeq ($(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
+-BAREBOX_SOURCE_CONFIG = $(@D)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
++BAREBOX_SOURCE_CONFIG = $(BAREBOX_SRCDIR)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
+ else ifeq ($(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
+ BAREBOX_SOURCE_CONFIG = $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
  endif
  
-@@ -265,7 +275,7 @@ endif
- #
- ifndef $(2)_CLEAN_CMDS
- define $(2)_CLEAN_CMDS
--	-$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)  $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_SRCDIR)
-+	-$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)  $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_SRCSUBDIR)
+ define BAREBOX_CONFIGURE_CMDS
+-	cp $(BAREBOX_SOURCE_CONFIG) $(@D)/arch/$(BAREBOX_ARCH)/configs/buildroot_defconfig
+-	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
++	cp $(BAREBOX_SOURCE_CONFIG) $(@D)/.config
++	yes '' | $(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(BAREBOX_SRCDIR) O=$(@D) oldconfig
  endef
- endif
  
-@@ -275,7 +285,7 @@ endif
- #
- ifndef $(2)_UNINSTALL_STAGING_CMDS
- define $(2)_UNINSTALL_STAGING_CMDS
--	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_STAGING_OPT) -C $$($$(PKG)_SRCSUBDIR)
- endef
- endif
- 
-@@ -288,7 +298,7 @@ endif
- #
- ifndef $(2)_UNINSTALL_TARGET_CMDS
- define $(2)_UNINSTALL_TARGET_CMDS
--	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -k $$($$(PKG)_UNINSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -k $$($$(PKG)_UNINSTALL_TARGET_OPT) -C $$($$(PKG)_SRCSUBDIR)
- endef
- endif
- 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 59de0f0..eeaa4fe 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -218,16 +218,7 @@ endif
- $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
- $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
- $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
--
--ifndef $(2)_SUBDIR
-- ifdef $(3)_SUBDIR
--  $(2)_SUBDIR = $$($(3)_SUBDIR)
-- else
--  $(2)_SUBDIR ?=
-- endif
--endif
--
--$(2)_SRCDIR		       = $$($(2)_DIR)/$$($(2)_SUBDIR)
-+$(2)_SRCDIR		       = $$($(2)_DIR)
- $(2)_BUILDDIR		       ?= $$($(2)_SRCDIR)
- 
- ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+ ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
 -- 
 1.7.9.5
