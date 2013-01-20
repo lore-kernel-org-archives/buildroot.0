@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Jan 2013 20:22:31 +0100
-Subject: [Buildroot] [PATCH 2/8] cdrkit: add license informations
+Date: Sun, 20 Jan 2013 20:22:32 +0100
+Subject: [Buildroot] [PATCH 3/8] cmake: add license informations
 In-Reply-To: <1358709757-1929-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1358709757-1929-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1358709757-1929-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1358709757-1929-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cdrkit/cdrkit.mk |    2 ++
- 1 file changed, 2 insertions(+)
+ package/cmake/cmake.mk |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
-index ce89bc7..bade956 100644
---- a/package/cdrkit/cdrkit.mk
-+++ b/package/cdrkit/cdrkit.mk
-@@ -7,6 +7,8 @@
- CDRKIT_VERSION = 1.1.11
- CDRKIT_SITE = http://www.cdrkit.org/releases
- CDRKIT_DEPENDENCIES = libcap bzip2 zlib
-+CDRKIT_LICENSE = GPLv2
-+CDRKIT_LICENSE_FILES = COPYING
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index e2bc31f..6836172 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -1,5 +1,13 @@
++#############################################################
++#
++# cmake
++#
++#############################################################
++
+ CMAKE_VERSION = 2.8.9
+ CMAKE_SITE = http://www.cmake.org/files/v2.8/
++CMAKE_LICENSE = BSD-3c
++CMAKE_LICENSE_FILES = Copyright.txt
  
- ifeq ($(BR2_ENDIAN),"BIG")
- CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=1
+ define HOST_CMAKE_CONFIGURE_CMDS
+  (cd $(@D); \
 -- 
 1.7.9.5
