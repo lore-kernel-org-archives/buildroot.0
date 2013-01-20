@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Jan 2013 17:03:47 +0100
-Subject: [Buildroot] [PATCH 3/7] toolchain/gcc: sprinkle with some calls to
-	MESSAGE
+Date: Sun, 20 Jan 2013 17:03:48 +0100
+Subject: [Buildroot] [PATCH 4/7] toolchain/kernel-headers: sprinkle with
+	some calls to MESSAGE
 In-Reply-To: <cover.1358697765.git.yann.morin.1998@free.fr>
 References: <cover.1358697765.git.yann.morin.1998@free.fr>
-Message-ID: <54e28f694168901413bcbd52a443aaad66025084.1358697765.git.yann.morin.1998@free.fr>
+Message-ID: <42f592a517693674648e8320a1b3262679615253.1358697765.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,134 +17,44 @@ to ease with post-mortem analysis.
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- toolchain/gcc/gcc-uclibc-4.x.mk |   16 ++++++++++++++++
- 1 files changed, 16 insertions(+), 0 deletions(-)
+ toolchain/kernel-headers/kernel-headers.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index b0d741b..bdc38cd 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -243,10 +243,12 @@ endif
+diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
+index 568c192..76602d8 100644
+--- a/toolchain/kernel-headers/kernel-headers.mk
++++ b/toolchain/kernel-headers/kernel-headers.mk
+@@ -48,6 +48,7 @@ endif
+ LINUX_HEADERS_DEPENDS:=
  
- $(DL_DIR)/$(GCC_SOURCE):
- 	mkdir -p $(DL_DIR)
-+	$(call MESSAGE,"Downloading gcc")
- 	$(call DOWNLOAD,$(GCC_SITE)/$(GCC_SOURCE))
- 
- gcc-unpacked: $(GCC_DIR)/.patched
- $(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
-+	$(Q)$(call MESSAGE,"Extracting gcc")
- 	mkdir -p $(TOOLCHAIN_DIR)
- 	rm -rf $(GCC_DIR)
- 	$(GCC_CAT) $(DL_DIR)/$(GCC_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
-@@ -259,6 +261,7 @@ endif
- 
- gcc-patched: $(GCC_DIR)/.patched
- $(GCC_DIR)/.patched: $(GCC_DIR)/.unpacked
-+	$(Q)$(call MESSAGE,"Patching gcc")
- 	# Apply any files named gcc-*.patch from the source directory to gcc
- ifneq ($(wildcard $(GCC_PATCH_DIR)),)
- 	support/scripts/apply-patches.sh $(GCC_DIR) $(GCC_PATCH_DIR) \*.patch
-@@ -279,6 +282,7 @@ endif
- GCC_BUILD_DIR1:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-initial
- 
- $(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
-+	$(Q)$(call MESSAGE,"Configuring gcc pass-1")
- 	mkdir -p $(GCC_BUILD_DIR1)
- 	(cd $(GCC_BUILD_DIR1); rm -rf config.cache; \
- 		$(HOST_CONFIGURE_OPTS) \
-@@ -314,6 +318,7 @@ $(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
+ $(LINUX_HEADERS_UNPACK_DIR)/.unpacked: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
++	$(Q)$(call MESSAGE,"Extracting kernel headers")
+ 	rm -rf $(LINUX_HEADERS_DIR)
+ 	$(INSTALL) -d $(@D)
+ 	$(LINUX_HEADERS_CAT) $(DL_DIR)/$(LINUX_HEADERS_SOURCE) | \
+@@ -55,6 +56,7 @@ $(LINUX_HEADERS_UNPACK_DIR)/.unpacked: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
  	touch $@
  
- $(GCC_BUILD_DIR1)/.compiled: $(GCC_BUILD_DIR1)/.configured
-+	$(Q)$(call MESSAGE,"Building gcc pass-1")
- ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
- 	$(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
- else
-@@ -323,6 +328,7 @@ endif
- 
- gcc_initial=$(GCC_BUILD_DIR1)/.installed
- $(gcc_initial) $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc: $(GCC_BUILD_DIR1)/.compiled
-+	$(Q)$(call MESSAGE,"Installing gcc pass-1")
- 	PATH=$(TARGET_PATH) $(MAKE) -C $(GCC_BUILD_DIR1) install-gcc
- 	touch $(gcc_initial)
- 
-@@ -346,6 +352,7 @@ GCC_BUILD_DIR2:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-intermediate
- # the step or libgcc will not build...
- 
- $(GCC_BUILD_DIR2)/.configured: $(GCC_DIR)/.patched
-+	$(Q)$(call MESSAGE,"Configuring gcc pass-2")
- 	mkdir -p $(GCC_BUILD_DIR2)
- 	(cd $(GCC_BUILD_DIR2); rm -rf config.cache; \
- 		$(HOST_CONFIGURE_OPTS) \
-@@ -380,6 +387,7 @@ $(GCC_BUILD_DIR2)/.configured: $(GCC_DIR)/.patched
+ $(LINUX_HEADERS_UNPACK_DIR)/.patched: $(LINUX_HEADERS_UNPACK_DIR)/.unpacked $(LINUX_HEADERS_DEPENDS)
++	$(Q)$(call MESSAGE,"Patching kernel headers")
+ 	support/scripts/apply-patches.sh $(LINUX_HEADERS_UNPACK_DIR) toolchain/kernel-headers \
+ 		linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
+ ifneq ($(KERNEL_HEADERS_PATCH_DIR),)
+@@ -64,6 +66,7 @@ endif
  	touch $@
  
- $(GCC_BUILD_DIR2)/.compiled: $(GCC_BUILD_DIR2)/.configured
-+	$(Q)$(call MESSAGE,"Building gcc pass-2")
- 	# gcc >= 4.3.0 have to also build all-target-libgcc
- ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
- 	$(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) all-gcc all-target-libgcc
-@@ -390,6 +398,7 @@ endif
- 
- gcc_intermediate=$(GCC_BUILD_DIR2)/.installed
- $(gcc_intermediate): $(GCC_BUILD_DIR2)/.compiled
-+	$(Q)$(call MESSAGE,"Installing gcc pass-2")
- 	# gcc >= 4.3.0 have to also install install-target-libgcc
- ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
- 	PATH=$(TARGET_PATH) $(MAKE) -C $(GCC_BUILD_DIR2) install-gcc install-target-libgcc
-@@ -421,6 +430,7 @@ gcc_intermediate-dirclean:
- 
- GCC_BUILD_DIR3:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-final
- $(GCC_BUILD_DIR3)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
-+	$(Q)$(call MESSAGE,"Configuring gcc final")
- 	mkdir -p $(GCC_BUILD_DIR3)
- 	# Important! Required for limits.h to be fixed.
- 	ln -snf ../include/ $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sys-include
-@@ -457,10 +467,12 @@ $(GCC_BUILD_DIR3)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
- 	touch $@
- 
- $(GCC_BUILD_DIR3)/.compiled: $(GCC_BUILD_DIR3)/.configured
-+	$(Q)$(call MESSAGE,"Building gcc final")
- 	$(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR3) all
- 	touch $@
- 
- $(GCC_BUILD_DIR3)/.installed: $(GCC_BUILD_DIR3)/.compiled
-+	$(Q)$(call MESSAGE,"Installing gcc final")
- 	PATH=$(TARGET_PATH) $(MAKE) \
- 		-C $(GCC_BUILD_DIR3) install
- 	if [ -d "$(STAGING_DIR)/lib64" ]; then \
-@@ -492,6 +504,7 @@ endif
- 	touch $@
- 
- $(STAMP_DIR)/gcc_libs_target_installed: $(GCC_BUILD_DIR3)/.installed
-+	$(Q)$(call MESSAGE,"Installing gcc final libraries to staging and target")
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	# These go in /lib, so...
- 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
-@@ -548,6 +561,7 @@ $(GCC_BUILD_DIR4)/.prepared: $(STAMP_DIR)/gcc_libs_target_installed
- 	touch $@
- 
- $(GCC_BUILD_DIR4)/.configured: $(GCC_BUILD_DIR4)/.prepared
-+	$(Q)$(call MESSAGE,"Configuring gcc on target")
- 	(cd $(GCC_BUILD_DIR4); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-@@ -586,6 +600,7 @@ $(GCC_BUILD_DIR4)/.configured: $(GCC_BUILD_DIR4)/.prepared
- 	touch $@
- 
- $(GCC_BUILD_DIR4)/.compiled: $(GCC_BUILD_DIR4)/.configured
-+	$(Q)$(call MESSAGE,"Building gcc on target")
- 	PATH=$(TARGET_PATH) \
- 	$(MAKE) -C $(GCC_BUILD_DIR4) all
- 	touch $@
-@@ -598,6 +613,7 @@ GCC_INCLUDE_DIR:=include-fixed
+ $(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
++	$(Q)$(call MESSAGE,"Installing kernel headers")
+ 	(cd $(LINUX_HEADERS_UNPACK_DIR); \
+ 	 $(MAKE) ARCH=$(KERNEL_ARCH) \
+ 		HOSTCC="$(HOSTCC)" HOSTCFLAGS="$(HOSTCFLAGS)" \
+@@ -76,6 +79,7 @@ $(DL_DIR)/$(LINUX_HEADERS_SOURCE):
+ ifeq ($(BR2_KERNEL_HEADERS_SNAP),y)
+ 	$(error No local $@ found, cannot continue. Are you sure you wanted to enable BR2_KERNEL_HEADERS_SNAP?)
  endif
++	$(call MESSAGE,"Downloading kernel headers")
+ 	$(call DOWNLOAD,$(LINUX_HEADERS_SITE)/$(LINUX_HEADERS_SOURCE))
  
- $(TARGET_DIR)/usr/bin/gcc: $(GCC_BUILD_DIR4)/.compiled
-+	$(Q)$(call MESSAGE,"Installing gcc on target")
- 	PATH=$(TARGET_PATH) DESTDIR=$(TARGET_DIR) \
- 		$(MAKE1) -C $(GCC_BUILD_DIR4) install
- 	# Remove broken specs file (cross compile flag is set).
+ kernel-headers: $(LINUX_HEADERS_DIR)/.configured
 -- 
 1.7.2.5
