@@ -1,46 +1,103 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 20 Jan 2013 22:41:10 +0100
-Subject: [Buildroot] [PATCH v3 1/5] sg3_utils: new package
-In-Reply-To: <1358546927-25707-2-git-send-email-marek.belisko@open-nandra.com>
- (Marek Belisko's message of "Fri, 18 Jan 2013 23:08:43 +0100")
-References: <1358546927-25707-1-git-send-email-marek.belisko@open-nandra.com>
- <1358546927-25707-2-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <87k3r7bki1.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 20 Jan 2013 22:38:53 +0100
+Subject: [Buildroot] [git commit] sg3_utils: new package
+Message-ID: <20130120214100.203669A55B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marek" == Marek Belisko <marek.belisko@open-nandra.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c81a67056e793b5147f39711a34186b2db3f9313
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Marek> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Marek> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
- Marek> ---
- Marek> +++ b/package/sg3_utils/Config.in
- Marek> @@ -0,0 +1,16 @@
- Marek> +config BR2_PACKAGE_SG3_UTILS
- Marek> +	bool "sgutils"
+[Peter: rename to sg3-utils, invert package license logic]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in              |    1 +
+ package/sg3_utils/Config.in    |   16 ++++++++++++++++
+ package/sg3_utils/sg3_utils.mk |   40 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 57 insertions(+), 0 deletions(-)
 
-It imho makes more sense to call it sg3-utils, as that's what upstream
-and E.G. Debian calls it, so I renamed the user visible name.
-
- Marek> +++ b/package/sg3_utils/sg3_utils.mk
- Marek> @@ -0,0 +1,39 @@
- Marek> +#############################################################
- Marek> +#
- Marek> +# sg3_utils
- Marek> +#
- Marek> +#############################################################
- Marek> +SG3_UTILS_VERSION = 1.34
- Marek> +SG3_UTILS_SITE    = http://sg.danny.cz/sg/p/
- Marek> +SG3_UTILS_LICENSE = BSD-3c
- Marek> +# utils progs are GPLv2+ licenced
- Marek> +ifneq ($(BR2_PACKAGE_SG3_UTILS_PROGS),)
-
-I prefer positive logic, so I inverted this check.
-
-Committed with those modifications, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index ba03b3c..3fe5c79 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -267,6 +267,7 @@ source "package/rpi-userland/Config.in"
+ source "package/sane-backends/Config.in"
+ source "package/sdparm/Config.in"
+ source "package/setserial/Config.in"
++source "package/sg3_utils/Config.in"
+ source "package/smartmontools/Config.in"
+ source "package/snowball-hdmiservice/Config.in"
+ source "package/sredird/Config.in"
+diff --git a/package/sg3_utils/Config.in b/package/sg3_utils/Config.in
+new file mode 100644
+index 0000000..3262eae
+--- /dev/null
++++ b/package/sg3_utils/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_SG3_UTILS
++	bool "sg3-utils"
++	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Low level utilities for devices that use a SCSI command set.
++	  This option install only libsgutils2 library not programs.
++
++	  http://sg.danny.cz/sg/sg3_utils.html
++
++config BR2_PACKAGE_SG3_UTILS_PROGS
++	bool "install programs"
++	depends on BR2_PACKAGE_SG3_UTILS
++
++comment "sg3-utils requires a toolchain with LARGEFILE and threads support"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
+new file mode 100644
+index 0000000..9015b2a
+--- /dev/null
++++ b/package/sg3_utils/sg3_utils.mk
+@@ -0,0 +1,40 @@
++#############################################################
++#
++# sg3_utils
++#
++#############################################################
++
++SG3_UTILS_VERSION = 1.34
++SG3_UTILS_SITE    = http://sg.danny.cz/sg/p/
++SG3_UTILS_LICENSE = BSD-3c
++# utils progs are GPLv2+ licenced
++ifeq ($(BR2_PACKAGE_SG3_UTILS_PROGS),y)
++SG3_UTILS_LICENSE += GPLv2+
++endif
++SG3_UTILS_LICENSE_FILES = COPYING BSD_LICENSE
++
++# install the libsgutils2 library
++SG3_UTILS_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_SG3_UTILS_PROGS),)
++define SG3_UTILS_REMOVE_PROGS
++	for prog in \
++		dd decode_sense emc_trespass format get_config \
++		get_lba_status ident inq logs luns map26 \
++		map sgm_dd modes opcodes sgp_dd persist prevent \
++		raw rbuf rdac read readcap read_block_limits \
++		read_buffer read_long reassign referrals \
++		requests reset rmsn rtpg safte sanitize \
++		sat_identify sat_phy_event sat_set_features scan \
++		senddiag ses start stpg sync test_rwbuf turs \
++		unmap verify vpd write_buffer write_long \
++		write_same wr_mode ; do \
++		$(RM) $(TARGET_DIR)/usr/bin/sg_$${prog} ; \
++	done
++	$(RM) $(TARGET_DIR)/usr/bin/sginfo
++endef
++
++SG3_UTILS_POST_INSTALL_TARGET_HOOKS += SG3_UTILS_REMOVE_PROGS
++endif
++
++$(eval $(autotools-package))
