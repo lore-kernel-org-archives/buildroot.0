@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Jan 2013 17:38:32 +0100
+Date: Sun, 20 Jan 2013 17:44:26 +0100
 Subject: [Buildroot] [pull request v2] Pull request for branch
 	yem-instrument-build
-In-Reply-To: <cover.1358697765.git.yann.morin.1998@free.fr>
+In-Reply-To: <201301201738.32066.yann.morin.1998@free.fr>
 References: <cover.1358697765.git.yann.morin.1998@free.fr>
-Message-ID: <201301201738.32066.yann.morin.1998@free.fr>
+ <201301201738.32066.yann.morin.1998@free.fr>
+Message-ID: <201301201744.26780.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +15,28 @@ To: buildroot@busybox.net
 All,
 
 On Sunday 20 January 2013 Yann E. MORIN wrote:
-> This series adds some intrumentation to the pkg-infra so that it is easier
-> for the autobuilders to extract meaningfull information about the reason
-> of failures.
-[--SNIP--]
-> Yann E. MORIN (7):
->       toolchain/external: sprinkle with some calls to MESSAGE
->       toolchain/crosstool-ng: sprinkle with some calls to MESSAGE
->       toolchain/gcc: sprinkle with some calls to MESSAGE
->       toolchain/kernel-headers: sprinkle with some calls to MESSAGE
->       toolchain/uClibc: sprinkle with some calls to MESSAGE
->       fs/common.mk: delay evaluation of variables.
->       pkg-infra: log current message
+> On Sunday 20 January 2013 Yann E. MORIN wrote:
+> > This series adds some intrumentation to the pkg-infra so that it is easier
+> > for the autobuilders to extract meaningfull information about the reason
+> > of failures.
+> [--SNIP--]
+> > Yann E. MORIN (7):
+> >       toolchain/external: sprinkle with some calls to MESSAGE
+> >       toolchain/crosstool-ng: sprinkle with some calls to MESSAGE
+> >       toolchain/gcc: sprinkle with some calls to MESSAGE
+> >       toolchain/kernel-headers: sprinkle with some calls to MESSAGE
+> >       toolchain/uClibc: sprinkle with some calls to MESSAGE
+> >       fs/common.mk: delay evaluation of variables.
+> >       pkg-infra: log current message
+> 
+> Arg! Arnout's authorship was lost when I added his patch to my tree... :-(
+> Let me fix that...
 
-Arg! Arnout's authorship was lost when I added his patch to my tree... :-(
-Let me fix that...
+OK, the branch on gitorious has been fixed, now. Not re-sending the series,
+though. Please pull form gitorious to ensure Arnout's authorship is
+retained.
 
-[git-am choked on the patch because of some missing "newline at end
-of file", hence I applied it manually, and forgot to change authorship]
+My apologies for the hiccup. :-(
 
 Regards,
 Yann E. MORIN.
