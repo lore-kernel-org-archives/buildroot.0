@@ -1,73 +1,143 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Jan 2013 00:52:10 +0100
-Subject: [Buildroot] [RFC v1 01/14] Add a new "src" directory in the output
-	directory
+Date: Mon, 21 Jan 2013 00:52:13 +0100
+Subject: [Buildroot] [RFC v1 04/14] autotools infrastructure: support out of
+	tree build
 In-Reply-To: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1358725943-31485-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1358725943-31485-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new directory will be used to extract the source directory of the
-different packages, as part of the out of tree support.
-
-Note that we need to explicitly re-add write permissions on the
-contents of this directory, because write permissions are removed from
-the source code of packages in order to ensure that the packages are
-not incorrectly modifying their source directory during an out of tree
-build. We also re-add write permissions to the build directory since
-some packages copy files from their source directory to the build
-directory, causing rm to fail due to lack of permissions.
+All autotools packages are supposed to support out of tree build, so
+we mark this at the package infrastructure level, and adjust the
+infrastructure to execute the configure script from the build
+directory.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/pkg-autotools.mk |   27 +++++++++++++--------------
+ 1 file changed, 13 insertions(+), 14 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 6f8ed0e..15ce4e4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -260,6 +260,7 @@ GENERATE_LOCALE=$(call qstrip,$(BR2_GENERATE_LOCALE))
- STAMP_DIR:=$(BASE_DIR)/stamps
- 
- BINARIES_DIR:=$(BASE_DIR)/images
-+SRC_DIR:=$(BASE_DIR)/src
- TARGET_DIR:=$(BASE_DIR)/target
- TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
- TARGET_SKELETON=$(TOPDIR)/system/skeleton
-@@ -383,7 +384,7 @@ TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
- $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
- 
- dirs: $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
--	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
-+	$(HOST_DIR) $(BINARIES_DIR) $(SRC_DIR) $(STAMP_DIR)
- 
- $(BASE_TARGETS): dirs $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
- 
-@@ -409,7 +410,7 @@ world: toolchain $(TARGETS_ALL)
- # dependencies anywhere else
- #
- #############################################################
--$(TOOLCHAIN_DIR) $(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR):
-+$(TOOLCHAIN_DIR) $(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(SRC_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR):
- 	@mkdir -p $@
- 
- $(STAGING_DIR):
-@@ -704,9 +705,10 @@ ifeq ($(NEED_WRAPPER),y)
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 843239d..bd87253 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -78,8 +78,6 @@ ifndef $(2)_SUBDIR
+  endif
  endif
  
- clean:
-+	-chmod u+w -R $(SRC_DIR)/* $(BUILD_DIR)/*
- 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
- 		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(BASE_DIR)/staging \
--		$(LEGAL_INFO_DIR)
-+		$(LEGAL_INFO_DIR) $(SRC_DIR)
+-$(2)_SRCSUBDIR = $$($(2)_SRCDIR)/$($(2)_SUBDIR)
+-
+ $(2)_CONF_ENV			?=
+ $(2)_CONF_OPT			?=
+ $(2)_MAKE_ENV			?=
+@@ -91,6 +89,7 @@ $(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install
+ $(2)_CLEAN_OPT			?= clean
+ $(2)_UNINSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) uninstall
+ $(2)_UNINSTALL_TARGET_OPT	?= DESTDIR=$$(TARGET_DIR)  uninstall
++$(2)_SUPPORTS_OUT_OF_TREE        = YES
  
- distclean: clean
- ifeq ($(DL_DIR),$(TOPDIR)/dl)
+ 
+ #
+@@ -103,11 +102,11 @@ ifeq ($(5),target)
+ 
+ # Configure package for target
+ define $(2)_CONFIGURE_CMDS
+-	(cd $$($$(PKG)_SRCSUBDIR) && rm -rf config.cache && \
++	(cd $$($$(PKG)_BUILDDIR) && rm -rf config.cache && \
+ 	$$(TARGET_CONFIGURE_OPTS) \
+ 	$$(TARGET_CONFIGURE_ARGS) \
+ 	$$($$(PKG)_CONF_ENV) \
+-	./configure \
++	$$($$(PKG)_SRCDIR)/$$($$(PKG)_SUBDIR)/configure \
+ 		--target=$$(GNU_TARGET_NAME) \
+ 		--host=$$(GNU_TARGET_NAME) \
+ 		--build=$$(GNU_HOST_NAME) \
+@@ -130,12 +129,12 @@ else
+ # because it often relies on host tools which may or may not be
+ # installed.
+ define $(2)_CONFIGURE_CMDS
+-	(cd $$($$(PKG)_SRCSUBDIR) && rm -rf config.cache; \
++	(cd $$($$(PKG)_BUILDDIR) && rm -rf config.cache; \
+ 	        $$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$$(HOST_CFLAGS)" \
+ 		LDFLAGS="$$(HOST_LDFLAGS)" \
+                 $$($$(PKG)_CONF_ENV) \
+-		./configure \
++		$$($$(PKG)_SRCDIR)/$$($$(PKG)_SUBDIR)/configure \
+ 		--prefix="$$(HOST_DIR)/usr" \
+ 		--sysconfdir="$$(HOST_DIR)/etc" \
+ 		--enable-shared --disable-static \
+@@ -226,11 +225,11 @@ endif
+ ifndef $(2)_BUILD_CMDS
+ ifeq ($(5),target)
+ define $(2)_BUILD_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCSUBDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_BUILDDIR)
+ endef
+ else
+ define $(2)_BUILD_CMDS
+-	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCSUBDIR)
++	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_BUILDDIR)
+ endef
+ endif
+ endif
+@@ -241,7 +240,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+-	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -C $$($$(PKG)_SRCSUBDIR) install
++	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -C $$($$(PKG)_BUILDDIR) install
+ endef
+ endif
+ 
+@@ -251,7 +250,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCSUBDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_BUILDDIR)
+ 	for i in $$$$(find $(STAGING_DIR)/usr/lib* -name "*.la"); do \
+ 		cp -f $$$$i $$$$i~; \
+ 		$$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
+@@ -265,7 +264,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_SRCSUBDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_BUILDDIR)
+ endef
+ endif
+ 
+@@ -275,7 +274,7 @@ endif
+ #
+ ifndef $(2)_CLEAN_CMDS
+ define $(2)_CLEAN_CMDS
+-	-$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)  $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_SRCSUBDIR)
++	-$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)  $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_BUILDDIR)
+ endef
+ endif
+ 
+@@ -285,7 +284,7 @@ endif
+ #
+ ifndef $(2)_UNINSTALL_STAGING_CMDS
+ define $(2)_UNINSTALL_STAGING_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_STAGING_OPT) -C $$($$(PKG)_SRCSUBDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_STAGING_OPT) -C $$($$(PKG)_BUILDDIR)
+ endef
+ endif
+ 
+@@ -298,7 +297,7 @@ endif
+ #
+ ifndef $(2)_UNINSTALL_TARGET_CMDS
+ define $(2)_UNINSTALL_TARGET_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -k $$($$(PKG)_UNINSTALL_TARGET_OPT) -C $$($$(PKG)_SRCSUBDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -k $$($$(PKG)_UNINSTALL_TARGET_OPT) -C $$($$(PKG)_BUILDDIR)
+ endef
+ endif
+ 
 -- 
 1.7.9.5
