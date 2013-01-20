@@ -1,87 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Jan 2013 17:03:44 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch
-	yem-instrument-build
-Message-ID: <cover.1358697765.git.yann.morin.1998@free.fr>
+Date: Sun, 20 Jan 2013 17:03:45 +0100
+Subject: [Buildroot] [PATCH 1/7] toolchain/external: sprinkle with some
+	calls to MESSAGE
+In-Reply-To: <cover.1358697765.git.yann.morin.1998@free.fr>
+References: <cover.1358697765.git.yann.morin.1998@free.fr>
+Message-ID: <6ad3efd8ed136f1884ac84bdcbbefeec911fd7c5.1358697765.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Thus, the failing step can be easily extracted by autobuilders,
+to ease with post-mortem analysis.
 
-This series adds some intrumentation to the pkg-infra so that it is easier
-for the autobuilders to extract meaningfull information about the reason
-of failures.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ toolchain/toolchain-external/ext-tool.mk |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
 
-It does so by:
-  - logging all messages displayed with calls to MESSAGE to a time-stamped
-    log file
-  - log the last such mesage to a file
-  - add calls to MESSAGE in the non-package steps of the external toolchain
-    backend
-  - add calls to MESSAGE in the non-package steps of the crosstool-NG
-    toolchain backend
-  - add calls to MESSAGE in the non-package steps of the internal toolchain
-    backend (gcc, kernel headers, and uClibc)
-
-Although I've tested it with external and internal toolchain backends (not
-crosstool-NG for now), and although it does work, I expect some polishing
-to be required. 
-
-So, take this series as a kind of RFC, rather than a final series.
-
-
-Changes v1 -> v2:
-  - invert the patches ordering for easier upstreaming (Thomas)
-  - include Arnout's fixes against the filesystem infra (Arnout)
-    (with a few fixes for "no newline at end of file" by me)
-  - eye-candy fixes in displayed messages (Arnout)
-
-
-The following changes since commit ad0279f0ee51e97bf7dbb70fdd6f14f789f344a8:
-
-  gettext: fix static build failure (2013-01-20 09:54:25 +0100)
-
-are available in the git repository at:
-  git://gitorious.org/buildroot/buildroot.git yem-instrument-build
-
-Yann E. MORIN (7):
-      toolchain/external: sprinkle with some calls to MESSAGE
-      toolchain/crosstool-ng: sprinkle with some calls to MESSAGE
-      toolchain/gcc: sprinkle with some calls to MESSAGE
-      toolchain/kernel-headers: sprinkle with some calls to MESSAGE
-      toolchain/uClibc: sprinkle with some calls to MESSAGE
-      fs/common.mk: delay evaluation of variables.
-      pkg-infra: log current message
-
- fs/cloop/cloop.mk                                |    4 +-
- fs/common.mk                                     |   44 +++++++++++-----------
- fs/cpio/cpio.mk                                  |    2 +-
- fs/cramfs/cramfs.mk                              |    2 +-
- fs/ext2/ext2.mk                                  |    2 +-
- fs/jffs2/jffs2.mk                                |    8 ++--
- fs/romfs/romfs.mk                                |    4 +-
- fs/squashfs/squashfs.mk                          |    4 +-
- fs/tar/tar.mk                                    |    2 +-
- fs/ubifs/ubi.mk                                  |    4 +-
- fs/ubifs/ubifs.mk                                |    4 +-
- package/pkg-utils.mk                             |    9 ++++-
- toolchain/gcc/gcc-uclibc-4.x.mk                  |   16 ++++++++
- toolchain/kernel-headers/kernel-headers.mk       |    4 ++
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    5 +-
- toolchain/toolchain-external/ext-tool.mk         |    8 ++-
- toolchain/uClibc/uclibc.mk                       |   13 ++++++
- 17 files changed, 88 insertions(+), 47 deletions(-)
-
-Regards,
-Yann E. MORIN
-
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 649e3a3..b0ca3cd 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -325,7 +325,7 @@ endif
+ # matches the configuration provided in Buildroot: ABI, C++ support,
+ # type of C library and all C library features.
+ $(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
+-	@echo "Checking external toolchain settings"
++	@$(call MESSAGE,"Checking external toolchain settings")
+ 	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
+ 	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
+ 	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
+@@ -414,7 +414,7 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
+ 	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+ 	mkdir -p $(TARGET_DIR)/lib ; \
+ 	if test -z "$(BR2_PREFER_STATIC_LIB)" ; then \
+-		echo "Copy external toolchain libraries to target..." ; \
++		$(call MESSAGE,"Copying external toolchain libraries to target...") ; \
+ 		for libs in $(LIB_EXTERNAL_LIBS); do \
+ 			$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$${SUPPORT_LIB_DIR},$${ARCH_LIB_DIR},$$libs,/lib); \
+ 		done ; \
+@@ -422,12 +422,13 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
+ 			$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$${SUPPORT_LIB_DIR},$${ARCH_LIB_DIR},$$libs,/usr/lib); \
+ 		done ; \
+ 	fi ; \
+-	echo "Copy external toolchain sysroot to staging..." ; \
++	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
+ 	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR}) ; \
+ 	if [ -L $${ARCH_SYSROOT_DIR}/lib64 ] ; then \
+ 		$(call create_lib64_symlinks) ; \
+ 	fi ; \
+ 	if test x"$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" == x"y"; then \
++		$(call MESSAGE,"Copying gdbserver") ; \
+ 		gdbserver_found=0 ; \
+ 		for d in $${ARCH_SYSROOT_DIR} $${ARCH_SYSROOT_DIR}/../debug-root/ ; do \
+ 			if test -f $${d}/usr/bin/gdbserver ; then \
+@@ -446,6 +447,7 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
+ # Build toolchain wrapper for preprocessor, C and C++ compiler, and setup
+ # symlinks for everything else
+ $(HOST_DIR)/usr/bin/ext-toolchain-wrapper: $(STAMP_DIR)/ext-toolchain-installed
++	$(Q)$(call MESSAGE,"Building ext-toolchain wrapper")
+ 	mkdir -p $(HOST_DIR)/usr/bin; cd $(HOST_DIR)/usr/bin; \
+ 	for i in $(TOOLCHAIN_EXTERNAL_CROSS)*; do \
+ 		base=$${i##*/}; \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.2.5
