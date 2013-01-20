@@ -1,50 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Jan 2013 17:44:26 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch
-	yem-instrument-build
-In-Reply-To: <201301201738.32066.yann.morin.1998@free.fr>
-References: <cover.1358697765.git.yann.morin.1998@free.fr>
- <201301201738.32066.yann.morin.1998@free.fr>
-Message-ID: <201301201744.26780.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Jan 2013 17:52:04 +0100
+Subject: [Buildroot] [PATCH] wireless_tools: don't call ldconfig
+Message-ID: <1358700724-9418-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+The wireless_tools installation process calls ldconfig to update the
+ld.so cache, but in a cross-compilation situation, it doesn't make
+sense, and simply takes time for nothing. To avoid this, we pass
+LDCONFIG=/bin/true during the wireless_tools installation steps.
 
-On Sunday 20 January 2013 Yann E. MORIN wrote:
-> On Sunday 20 January 2013 Yann E. MORIN wrote:
-> > This series adds some intrumentation to the pkg-infra so that it is easier
-> > for the autobuilders to extract meaningfull information about the reason
-> > of failures.
-> [--SNIP--]
-> > Yann E. MORIN (7):
-> >       toolchain/external: sprinkle with some calls to MESSAGE
-> >       toolchain/crosstool-ng: sprinkle with some calls to MESSAGE
-> >       toolchain/gcc: sprinkle with some calls to MESSAGE
-> >       toolchain/kernel-headers: sprinkle with some calls to MESSAGE
-> >       toolchain/uClibc: sprinkle with some calls to MESSAGE
-> >       fs/common.mk: delay evaluation of variables.
-> >       pkg-infra: log current message
-> 
-> Arg! Arnout's authorship was lost when I added his patch to my tree... :-(
-> Let me fix that...
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wireless_tools/wireless_tools.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-OK, the branch on gitorious has been fixed, now. Not re-sending the series,
-though. Please pull form gitorious to ensure Arnout's authorship is
-retained.
-
-My apologies for the hiccup. :-(
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/wireless_tools/wireless_tools.mk b/package/wireless_tools/wireless_tools.mk
+index f355689..4dd4084 100644
+--- a/package/wireless_tools/wireless_tools.mk
++++ b/package/wireless_tools/wireless_tools.mk
+@@ -20,7 +20,7 @@ ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_LIB),y)
+ 	WIRELESS_TOOLS_INSTALL_TARGETS += install-dynamic
+ 
+ define WIRELESS_TOOLS_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) PREFIX="$(STAGING_DIR)" install-dynamic
++	$(MAKE) -C $(@D) PREFIX="$(STAGING_DIR)" LDCONFIG=/bin/true install-dynamic
+ 	$(MAKE) -C $(@D) PREFIX="$(STAGING_DIR)/usr" install-hdr
+ endef
+ 
+@@ -36,7 +36,7 @@ define WIRELESS_TOOLS_CLEAN_CMDS
+ endef
+ 
+ define WIRELESS_TOOLS_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" $(WIRELESS_TOOLS_INSTALL_TARGETS)
++	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" LDCONFIG=/bin/true $(WIRELESS_TOOLS_INSTALL_TARGETS)
+ 	$(MAKE) -C $(@D) INSTALL_MAN="$(TARGET_DIR)/usr/share/man" install-man
+ endef
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.9.5
