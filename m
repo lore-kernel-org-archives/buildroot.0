@@ -1,46 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 Jan 2013 21:20:24 +0100
-Subject: [Buildroot] [git commit] xapp_xinit/xdm: only makes sense if there
-	is an X server
-Message-ID: <20130120202433.1DBAC82750@busybox.osuosl.org>
+Date: Sun, 20 Jan 2013 20:42:54 +0100
+Subject: [Buildroot] [git commit] pkgconf: add license informations
+Message-ID: <20130120202431.2F8C082750@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a111ffd21473c4862c1ce3404c103ac3a46372d
+commit: http://git.buildroot.net/buildroot/commit/?id=bcd02088b300c99b262be26a53f493ad0c82903b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: also add dependency for xdm (which selects xinit)]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/xapp_xdm/Config.in   |    2 ++
- package/x11r7/xapp_xinit/Config.in |    2 ++
- 2 files changed, 4 insertions(+), 0 deletions(-)
+ package/pkgconf/pkgconf.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xapp_xdm/Config.in b/package/x11r7/xapp_xdm/Config.in
-index b1c50d5..c962993 100644
---- a/package/x11r7/xapp_xdm/Config.in
-+++ b/package/x11r7/xapp_xdm/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_XAPP_XDM
- 	bool "xdm"
-+	# Runtime dependency: can't start an X server unless there is one
-+	depends on BR2_PACKAGE_XSERVER_XORG_SERVER
- 	select BR2_PACKAGE_XAPP_XINIT
- 	select BR2_PACKAGE_XAPP_SESSREG
- 	select BR2_PACKAGE_XAPP_XRDB
-diff --git a/package/x11r7/xapp_xinit/Config.in b/package/x11r7/xapp_xinit/Config.in
-index 9ac2817..30981c3 100644
---- a/package/x11r7/xapp_xinit/Config.in
-+++ b/package/x11r7/xapp_xinit/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_XAPP_XINIT
- 	bool "xinit"
-+	# Runtime dependency: can't start an X server unless there is one
-+	depends on BR2_PACKAGE_XSERVER_XORG_SERVER
- 	select BR2_PACKAGE_XAPP_XAUTH
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	help
+diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+index 36a5bb8..4b00ad3 100644
+--- a/package/pkgconf/pkgconf.mk
++++ b/package/pkgconf/pkgconf.mk
+@@ -7,6 +7,8 @@
+ PKGCONF_VERSION = 0.8.9
+ PKGCONF_SITE = http://tortois.es/~nenolod/distfiles
+ PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.bz2
++PKGCONF_LICENSE = pkgconf license
++PKGCONF_LICENSE_FILES = COPYING
+ 
+ PKG_CONFIG_HOST_BINARY = $(HOST_DIR)/usr/bin/pkg-config
+ 
