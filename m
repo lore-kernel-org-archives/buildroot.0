@@ -1,149 +1,48 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 20 Jan 2013 13:35:07 +0100
-Subject: [Buildroot] [PATCH v2] pkg-infra: add <pkg>_CONFIG_FIXUP to fix
- *-config files
-In-Reply-To: <50FBD6BA.1010700@mind.be>
-References: <1357847559-31530-1-git-send-email-stefan.froberg@petroprogram.com>
- <1357847559-31530-2-git-send-email-stefan.froberg@petroprogram.com>
- <50FBD6BA.1010700@mind.be>
-Message-ID: <CAHXCMMKsibOa7nXEzF8gjt17AUWzO_Him=ZZDDd5HynsAn3+GQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 20 Jan 2013 09:54:04 -0300
+Subject: [Buildroot] [PATCH RFC] Fix avr32 build using internal toolchain
+In-Reply-To: <CAHt8ZCOH9FgqzkB2KHJSSBc3k76-07iYNfsQ_rjzQCzOFGLEAg@mail.gmail.com>
+References: <1358460970-2081-1-git-send-email-spdawson@gmail.com>
+ <20130119113852.6d35aa94@skate>
+ <CAHt8ZCOH9FgqzkB2KHJSSBc3k76-07iYNfsQ_rjzQCzOFGLEAg@mail.gmail.com>
+Message-ID: <50FBE8EC.6060602@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+On 01/20/2013 08:01 AM, Simon Dawson wrote:
 
-2013/1/20 Arnout Vandecappelle <arnout@mind.be>:
-> On 01/10/13 20:52, Stefan Fr?berg wrote:
->>
->> This patch will add<pkg>_CONFIG_FIXUP variable to buildroot infra.
->> It's purpose is to inform buildroot that the package in question
->> contains some $(STAGING_DIR)/usr/bin/*-config files and that we
->> want to automatically fix prefixes of such files.
->>
->> It is often the case that many packages call these
->> files during their configuration step to determine 3rd party
->> library package locations and any flags needed to link against them.
->>
->> For example:
->> Some package might try to check the existense and linking flags
->> of NSPR package by calling $(STAGING_DIR)/usr/bin/nspr-config --prefix.
->> Without this fix, NSPR would return /usr/ as it's prefix which is
->> wrong when cross-compiling.
->> Correct would be $(STAGING_DIR)/usr.
->>
->> All packages that have<pkg>_INSTALL_STAGING = YES defined and
->> also install some config file(s) into $(STAGING_DIR)/usr/bin must
->> hereafter also define<pkg>_CONFIG_FIXUP with the corresponding
->> filename(s).
->>
->> For example:
->>
->> DIVINE_CONFIG_FIXUP = divine-config
->>
->> or for multiple files:
->>
->> IMAGEMAGICK_CONFIG_FIXUP = Magick-config Wand-config
->>
->> Signed-off-by: Stefan Fr?berg<stefan.froberg@petroprogram.com>
->> ---
->>   package/pkg-generic.mk |    6 ++++++
->>   1 files changed, 6 insertions(+), 0 deletions(-)
->>
->> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->> index a570ad7..9f6ea7b 100644
->> --- a/package/pkg-generic.mk
->> +++ b/package/pkg-generic.mk
->> @@ -121,6 +121,12 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
->>         @$(call MESSAGE,"Installing to staging directory")
->>         $($(PKG)_INSTALL_STAGING_CMDS)
->>         $(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call
->> $(hook))$(sep))
->> +       $(Q)if test -n "$($(PKG)_CONFIG_FIXUP)" ; then \
->> +               $(call MESSAGE,"Fixing package configuration files") ;\
->> +               $(SED) "s,^prefix=.*,prefix=$(STAGING_DIR)/usr,g" \
->> +                       -e "s,^exec_prefix=.*,exec_prefix=$(STAGING_DIR)/usr,g" \
-Could also be:
-$(SED) "s,^\(exec_\)\?prefix=.*,\1prefix=$(STAGING_DIR)/usr,g" \
+> Yes, I understand that the avr32 toolchain is in a bit of a mess. I'm
+> using host gcc version 4.6 without problems; from memory, I think it's
+> 4.7 that doesn't work --- I might have misremembered 'though...
 
->
->
->  Given that some *-config hard-code something like -L/usr/lib, I would add:
->
->  -e "s,-I/usr/,-I$(STAGING_DIR)/usr/" \
->  -e "s,-L/usr/,-L$(STAGING_DIR)/usr/" \
-What about this?
--e "s,-I/usr/,-I\${prefix}/usr/" \
--e "s,-L/usr/,-L\${exec_prefix}/usr/" \
+With gentoo's 4.6.3 it fails for me in the same way as described at
+Atmel's site http://www.atmel.no/buildroot/buildroot-issues.html
+(Error: invalid register list)
 
->
->
->  Of course, for each package that actually uses this infrastructure, it has
-> to be checked if it does the right thing. If it doesn't then the infra can
-> still be fixed. Therefore, this patch gets my
->
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
-> and I hope to see some patches that use it! For volunteers that want to
-> contribute fixes, here's a list of *-configs that currently don't do the
-> right thing:
->
-> imagemagick
-> divine
-> gd
-> gsl
-> libdnet
-> giblib
-> libart
-> libcdaudio
-> libesmtp
-> libftdi
-> libusb
-> libvncserver
-> log4c
-> neon
-> libnspr
-> libpcap
-> taglib
->
-And a number of others already do some per-package fix:
-package/cups/cups.mk
-package/directfb/directfb.mk
-package/divine/divine.mk
-package/freetype/freetype.mk
-package/gd/gd.mk
-package/giblib/giblib.mk
-package/icu/icu.mk
-package/imlib2/imlib2.mk
-package/libcurl/libcurl.mk
-package/libdvdnav/libdvdnav.mk
-package/libdvdread/libdvdread.mk
-package/libgcrypt/libgcrypt.mk
-package/libmcrypt/libmcrypt.mk
-package/libnspr/libnspr.mk
-package/libpng/libpng.mk
-package/libusb-compat/libusb-compat.mk
-package/libxml2/libxml2.mk
-package/libxslt/libxslt.mk
-package/ncurses/ncurses.mk
-package/neon/neon.mk
-package/netsnmp/netsnmp.mk
-package/pcre/pcre.mk
-package/php/php.mk
-package/sdl/sdl.mk
+> Yes, I think we discussed this briefly at the Buildroot Developer Days
+> in Barcelona. My understanding is that avr32 is regarded
+> semi-officially as an end-of-life architecture. Atmel technical
+> support are, for the time being, still dealing with support queries
+> for avr32.
 
-Time to unify (and document) all this stuff! ;-)
+Do you know if the UC3 microcontrollers are in the same boat?
+If they aren't there may still be some hope for the toolchain (at least
+binutils/gcc, not much for uclibc/linux).
 
->
->  Oh, and one of them (libnspr) doesn't have exec_prefix at the beginning of
-> the line, so the expression should be:
->
->  -e "s,^ *exec_prefix=.*,exec_prefix=$(STAGING_DIR)/usr,"
-Or just fix the nspr-config.in file to match "^exec_prefix=.*" ?
+> From my own perspective, I'd rather keep the avr32 support in
+> Buildroot for now. I don't know how many other people are using the
+> architecture --- not that many, I suspect. Would that be a major
+> problem?
 
-Regards,
-
--- 
-Samuel
+Testing and fixing is an issue on the toolchain side when there's no
+upgrade path possible.
+I wouldn't like to stick to old and potentially vulnerable versions of
+packages (example: gnutls) because the toolchain is too old to handle
+it, it's problematic.
+And dragging arch-specific patches isn't fun either.
+Maybe we can keep it and start marking broken packages as !BR2_avr32 ?
+That may be a rough ride though with all the dependencies.
+Regards.
