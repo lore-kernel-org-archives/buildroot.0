@@ -1,55 +1,67 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 Jan 2013 21:37:40 +0100
-Subject: [Buildroot] [git commit] python3: Handle properly the pyc and py
-	files on the target
-Message-ID: <20130120203920.1265F9A500@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 20 Jan 2013 21:45:41 +0100
+Subject: [Buildroot] [PATCH] ncdu: new package
+In-Reply-To: <1358347774-11998-2-git-send-email-bogdan@nimblex.net> (Bogdan
+ Radulescu's message of "Wed, 16 Jan 2013 14:49:34 +0000")
+References: <1358347774-11998-1-git-send-email-bogdan@nimblex.net>
+ <1358347774-11998-2-git-send-email-bogdan@nimblex.net>
+Message-ID: <87ehhfd1my.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6ffab129a3ebc76caf7ae40caf1f6b0185f3e114
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bogdan" == Bogdan Radulescu <bogdan@nimblex.net> writes:
 
-Fixes #5690
+ Bogdan> ---
+ Bogdan>  package/Config.in      |  1 +
+ Bogdan>  package/ncdu/Config.in |  7 +++++++
+ Bogdan>  package/ncdu/ncdu.mk   | 14 ++++++++++++++
+ Bogdan>  3 files changed, 22 insertions(+)
+ Bogdan>  create mode 100644 package/ncdu/Config.in
+ Bogdan>  create mode 100644 package/ncdu/ncdu.mk
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/python3/python3.mk |   22 ++++++++++++++++++++++
- 1 files changed, 22 insertions(+), 0 deletions(-)
+ Bogdan> diff --git a/package/Config.in b/package/Config.in
+ Bogdan> index c59f342..e981ac2 100644
+ Bogdan> --- a/package/Config.in
+ Bogdan> +++ b/package/Config.in
+ Bogdan> @@ -778,6 +778,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ Bogdan>  source "package/module-init-tools/Config.in"
+ Bogdan>  endif
+ Bogdan>  source "package/monit/Config.in"
+ Bogdan> +source "package/ncdu/Config.in"
+ Bogdan>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ Bogdan>  source "package/procps/Config.in"
+ Bogdan>  source "package/psmisc/Config.in"
+ Bogdan> diff --git a/package/ncdu/Config.in b/package/ncdu/Config.in
+ Bogdan> new file mode 100644
+ Bogdan> index 0000000..dac7444
+ Bogdan> --- /dev/null
+ Bogdan> +++ b/package/ncdu/Config.in
+ Bogdan> @@ -0,0 +1,7 @@
+ Bogdan> +config BR2_PACKAGE_NCDU
+ Bogdan> +	bool "ncdu"
+ Bogdan> +	select BR2_PACKAGE_NCURSES
+ Bogdan> +	help
+ Bogdan> +	  ncdu is a disk usage analyzer with an ncurses interface
+ Bogdan> +
+ Bogdan> +	  http://dev.yorhel.nl/ncdu
+ Bogdan> diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+ Bogdan> new file mode 100644
+ Bogdan> index 0000000..5c28178
+ Bogdan> --- /dev/null
+ Bogdan> +++ b/package/ncdu/ncdu.mk
+ Bogdan> @@ -0,0 +1,14 @@
+ Bogdan> +#############################################################
+ Bogdan> +#
+ Bogdan> +# ncdu
+ Bogdan> +#
+ Bogdan> +#############################################################
+ Bogdan> +NCDU_VERSION = 1.9
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 0d54162..e7c0983 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -155,5 +155,27 @@ endef
- ifneq ($(BR2_PACKAGE_PYTHON),y)
- PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
- endif
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
-+define PYTHON3_REMOVE_MODULES_FILES
-+	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
-+		 -name __pycache__` ; do \
-+		rm -rf $$i ; \
-+	done
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
-+define PYTHON3_REMOVE_MODULES_FILES
-+	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
-+		 -name *.py` ; do \
-+		rm -f $$i ; \
-+	done
-+endef
-+endif
-+
-+PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_MODULES_FILES
-+
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+We normally have an empty line before the _VERSION line. Other than that
+it looks good - Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
