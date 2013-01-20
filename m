@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Jan 2013 20:22:35 +0100
-Subject: [Buildroot] [PATCH 6/8] libogg: add license informations
+Date: Sun, 20 Jan 2013 20:22:37 +0100
+Subject: [Buildroot] [PATCH 8/8] speex: add license informations
 In-Reply-To: <1358709757-1929-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1358709757-1929-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1358709757-1929-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1358709757-1929-8-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libogg/libogg.mk |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/speex/speex.mk |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libogg/libogg.mk b/package/libogg/libogg.mk
-index 519ba9d..606c004 100644
---- a/package/libogg/libogg.mk
-+++ b/package/libogg/libogg.mk
-@@ -5,8 +5,10 @@
+diff --git a/package/speex/speex.mk b/package/speex/speex.mk
+index 917de34..2fe179c 100644
+--- a/package/speex/speex.mk
++++ b/package/speex/speex.mk
+@@ -5,6 +5,9 @@
  #############################################################
- LIBOGG_VERSION = 1.3.0
- LIBOGG_SITE = http://downloads.xiph.org/releases/ogg
--LIBOGG_INSTALL_STAGING = YES
-+LIBOGG_LICENSE = BSD-3c
-+LIBOGG_LICENSE_FILES = COPYING
- 
-+LIBOGG_INSTALL_STAGING = YES
- LIBOGG_DEPENDENCIES = host-pkgconf
- 
- $(eval $(autotools-package))
+ SPEEX_VERSION = 1.2rc1
+ SPEEX_SITE = http://downloads.us.xiph.org/releases/speex
++SPEEX_LICENSE = BSD-3c
++SPEEX_LICENSE_FILES = COPYING
++
+ SPEEX_INSTALL_STAGING = YES
+ SPEEX_DEPENDENCIES = libogg
+ SPEEX_CONF_OPT = --with-ogg-libraries=$(STAGING_DIR)/usr/lib \
 -- 
 1.7.9.5
