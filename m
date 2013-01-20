@@ -1,42 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 20 Jan 2013 22:17:50 +0100
-Subject: [Buildroot] [PATCH] vsftpd: install sample config file to /etc
-In-Reply-To: <1358328248-15016-1-git-send-email-sho@relinux.de> (Stephan
- Hoffmann's message of "Wed, 16 Jan 2013 10:24:08 +0100")
-References: <1358328248-15016-1-git-send-email-sho@relinux.de>
-Message-ID: <87sj5vblkx.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 20 Jan 2013 22:17:07 +0100
+Subject: [Buildroot] [git commit] vsftpd: install sample config file to /etc
+Message-ID: <20130120211813.1556F9A46A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a3ea5e8d3d5faaad209a55ef9e17cc7b5761b2fc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Stephan> vsftpd comes with a sample config file that can serve as a starting
- Stephan> point for customization and enables a basic functionality. Since
- Stephan> this config refers to a directory "/usr/share/empty" this is also
- Stephan> created.
+vsftpd comes with a sample config file that can serve as a starting
+point for customization and enables a basic functionality.
 
- Stephan> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
- Stephan> ---
- Stephan>  package/vsftpd/vsftpd.mk |    4 ++++
- Stephan>  1 files changed, 4 insertions(+), 0 deletions(-)
+[Peter: drop /usr/share/empty creation]
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/vsftpd/vsftpd.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
- Stephan> diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
- Stephan> index ca711bb..f694b87 100644
- Stephan> --- a/package/vsftpd/vsftpd.mk
- Stephan> +++ b/package/vsftpd/vsftpd.mk
- Stephan> @@ -37,6 +37,10 @@ define VSFTPD_INSTALL_TARGET_CMDS
- Stephan>  	test -f $(TARGET_DIR)/etc/init.d/S70vsftpd || \
- Stephan>  		$(INSTALL) -D -m 755 package/vsftpd/vsftpd-init \
- Stephan>  			$(TARGET_DIR)/etc/init.d/S70vsftpd
- Stephan> +	test -f $(TARGET_DIR)/etc/vsftpd.conf || \
- Stephan> +		$(INSTALL) -D -m 644 $(@D)/vsftpd.conf \
- Stephan> +			$(TARGET_DIR)/etc/vsftpd.conf
- Stephan> +	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/empty
-
-Committed minus the /usr/share/empty creation, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index 8d261c8..a075e82 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -44,6 +44,9 @@ define VSFTPD_INSTALL_TARGET_CMDS
+ 	test -f $(TARGET_DIR)/etc/init.d/S70vsftpd || \
+ 		$(INSTALL) -D -m 755 package/vsftpd/vsftpd-init \
+ 			$(TARGET_DIR)/etc/init.d/S70vsftpd
++	test -f $(TARGET_DIR)/etc/vsftpd.conf || \
++		$(INSTALL) -D -m 644 $(@D)/vsftpd.conf \
++			$(TARGET_DIR)/etc/vsftpd.conf
+ endef
+ 
+ define VSFTPD_UNINSTALL_TARGET_CMDS
