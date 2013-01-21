@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Jan 2013 18:29:47 -0300
-Subject: [Buildroot] [PATCH 07/10] haserl: add license information
+Date: Mon, 21 Jan 2013 18:29:48 -0300
+Subject: [Buildroot] [PATCH 08/10] libao: add license information
 In-Reply-To: <1358803790-30245-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1358803790-30245-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1358803790-30245-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1358803790-30245-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/haserl/haserl.mk | 2 ++
+ package/libao/libao.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/haserl/haserl.mk b/package/haserl/haserl.mk
-index 589b3e7..7627917 100644
---- a/package/haserl/haserl.mk
-+++ b/package/haserl/haserl.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/libao/libao.mk b/package/libao/libao.mk
+index aee85a9..9e7ef05 100644
+--- a/package/libao/libao.mk
++++ b/package/libao/libao.mk
+@@ -8,6 +8,8 @@ LIBAO_VERSION = 1.1.0
+ LIBAO_SITE = http://downloads.xiph.org/releases/ao
+ LIBAO_DEPENDENCIES = host-pkgconf
+ LIBAO_INSTALL_STAGING = YES
++LIBAO_LICENSE = GPLv2
++LIBAO_LICENSE_FILES = COPYING
+ LIBAO_CONF_OPT = --disable-esd --disable-wmm --disable-arts \
+ 			--disable-nas --disable-pulse
  
- HASERL_VERSION = $(call qstrip,$(BR2_PACKAGE_HASERL_VERSION))
- HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl-devel/$(HASERL_VERSION)
-+HASERL_LICENSE = GPLv2
-+HASERL_LICENSE_FILES = COPYING
- 
- ifeq ($(BR2_PACKAGE_HASERL_WITH_LUA),y)
- 	HASERL_CONF_OPT += --with-lua=$(STAGING_DIR) \
 -- 
 1.7.12.4
