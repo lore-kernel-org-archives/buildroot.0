@@ -1,54 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Jan 2013 18:43:39 +0100
-Subject: [Buildroot] buildroot gcc for target build fail
-In-Reply-To: <CAG6aBkWm1gHehkXDcscL1Jn+nHwM-u7uG_9dEwS6hSmQgwLCaA@mail.gmail.com>
-References: <CAG6aBkWm1gHehkXDcscL1Jn+nHwM-u7uG_9dEwS6hSmQgwLCaA@mail.gmail.com>
-Message-ID: <20130121184339.7061aa15@skate>
+Date: Mon, 21 Jan 2013 18:46:18 +0100
+Subject: [Buildroot] Build error : *** Recursive variable
+ `DIRECTFB_INPUT' references itself
+In-Reply-To: <87bocjasy9.fsf@dell.be.48ers.dk>
+References: <C0BEF04D1B814409ACBF0C6A053DE12A@JohanW7>
+ <87bocjasy9.fsf@dell.be.48ers.dk>
+Message-ID: <20130121184618.33904a75@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nigel Sollars,
+Dear Peter Korsgaard,
 
-On Mon, 21 Jan 2013 08:19:22 -0500, Nigel Sollars wrote:
+On Mon, 21 Jan 2013 08:36:14 +0100, Peter Korsgaard wrote:
 
-> After trying to build a more upto date buildroot I seemed to
-> encounter this issue
+>  Sagaert> I think it has something to do with this commit : Buildroot]
+>  Sagaert> [PATCH 1/2] packages: remove all := signs
 > 
-> --
-> 
-> checking whether to use setjmp/longjmp exceptions... unknown
-> configure: error: unable to detect exception model
-> make[2]: *** [configure-target-libgcc] Error 1
-> make[2]: Leaving directory
-> `/usr/local/buildroot-src/source/buildroot-2013.01/output/build/gcc-4.7.2-target'
+> Indeed. I'll fix it up now.
 
-Unfortunately, we have decided to deprecate the support for building a
-toolchain for the target. We believe that in the context of Buildroot,
-this is not necessary, and nobody was working on it to fix the problems.
-
-The reasons we believe it is not necessary are:
-
- * Buildroot is generally used to build relatively small/simple
-   systems, on which we generally don't do development on the target.
-   If your system is so big and huge that you need to do development on
-   the target, maybe a binary distributions like Debian or Ubuntu is
-   more appropriate?
-
- * Buildroot is at its core a cross-compilation tool. So if you want to
-   build libraries or applications for the target, what we recommend is
-   to use the cross-compiler that Buildroot creates. It is very easy to
-   create new packages in Buildroot, or even to build your own
-   application outside of Buildroot, using the Buildroot cross-compiler.
-
-In any case, I'm interested in understanding better your use case. The
-support for building gcc on the target has been marked deprecated, but
-not removed, for the very reason that we wanted to get feedback from
-users of this feature, and see what are the use cases for it.
-
-Thanks a lot,
+Thanks for digging into this, and fixing (again) the breakage I
+introduced.
 
 Thomas
 -- 
