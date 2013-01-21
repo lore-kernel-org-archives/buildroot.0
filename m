@@ -1,74 +1,62 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 Jan 2013 23:16:30 +0100
-Subject: [Buildroot] [git commit] libatasmart: new package.
-Message-ID: <20130121075019.3DC939A556@busybox.osuosl.org>
+Date: Mon, 21 Jan 2013 08:48:08 +0100
+Subject: [Buildroot] [git commit] directfb: fixup input/gfx drivers handling
+	after 0e4d25ff0fc5
+Message-ID: <20130121075019.729E99A556@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c7a81abc5421b95ea24efd1d74614ee032c014a4
+commit: http://git.buildroot.net/buildroot/commit/?id=d4f2f892885a3e57a21312547328cf3f297f8024
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+The input/gfx drivers handling got broken by the ':=' -> '=' conversion,
+as we redefine the variables in terms of themselves, causing recursion.
+
+Fix it by directly assigning the result to DIRECTFB_CONF_OPT instead.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                  |    1 +
- package/libatasmart/Config.in      |   11 +++++++++++
- package/libatasmart/libatasmart.mk |   18 ++++++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
+ package/directfb/directfb.mk |   14 ++++++--------
+ 1 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 167a526..f3aa1c7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -245,6 +245,7 @@ source "package/iostat/Config.in"
- source "package/irda-utils/Config.in"
- source "package/kbd/Config.in"
- source "package/lcdproc/Config.in"
-+source "package/libatasmart/Config.in"
- source "package/lm-sensors/Config.in"
- source "package/lshw/Config.in"
- source "package/lsuio/Config.in"
-diff --git a/package/libatasmart/Config.in b/package/libatasmart/Config.in
-new file mode 100644
-index 0000000..a3e44f8
---- /dev/null
-+++ b/package/libatasmart/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBATASMART
-+	bool "libatasmart"
-+	depends on BR2_PACKAGE_UDEV # libudev is configure dependency
-+	help
-+	  The libatasmart package is a disk reporting library.
-+	  It only supports a subset of the ATA S.M.A.R.T. functionality.
-+
-+	  http://www.linuxfromscratch.org/blfs/view/svn/general/libatasmart.html
-+
-+comment "libatasmart requires udev to be enabled"
-+	depends on !BR2_PACKAGE_UDEV
-diff --git a/package/libatasmart/libatasmart.mk b/package/libatasmart/libatasmart.mk
-new file mode 100644
-index 0000000..5dbdcc4
---- /dev/null
-+++ b/package/libatasmart/libatasmart.mk
-@@ -0,0 +1,18 @@
-+#############################################################
-+#
-+# libatasmart
-+#
-+#############################################################
-+LIBATASMART_VERSION = 0.19
-+LIBATASMART_SOURCE = libatasmart-$(LIBATASMART_VERSION).tar.xz
-+LIBATASMART_SITE    = http://0pointer.de/public
-+LIBATASMART_LICENSE = LGPLv2.1
-+LIBATASMART_LICENSE_FILE = LGPL
-+LIBATASMART_INSTALL_STAGING = YES
-+
-+# package doesn't include configure script
-+LIBATASMART_AUTORECONF = YES
-+
-+LIBATASMART_DEPENDENCIES = udev
-+
-+$(eval $(autotools-package))
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 05a6c50..0df866f 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -63,13 +63,12 @@ DIRECTFB_GFX = \
+ 	$(if $(BR2_PACKAGE_DIRECTFB_EP9X),ep9x)
+ 
+ ifeq ($(strip $(DIRECTFB_GFX)),)
+-DIRECTFB_GFX = none
++DIRECTFB_CONF_OPT += --with-gfxdrivers=none
+ else
+-DIRECTFB_GFX = $(subst $(space),$(comma),$(strip $(DIRECTFB_GFX)))
++DIRECTFB_CONF_OPT += \
++	--with-gfxdrivers=$(subst $(space),$(comma),$(strip $(DIRECTFB_GFX)))
+ endif
+ 
+-DIRECTFB_CONF_OPT += --with-gfxdrivers=$(DIRECTFB_GFX)
+-
+ DIRECTFB_INPUT = \
+ 	$(if $(BR2_PACKAGE_DIRECTFB_LINUXINPUT),linuxinput) \
+ 	$(if $(BR2_PACKAGE_DIRECTFB_KEYBOARD),keyboard) \
+@@ -82,13 +81,12 @@ DIRECTFB_DEPENDENCIES += tslib
+ endif
+ 
+ ifeq ($(strip $(DIRECTFB_INPUT)),)
+-DIRECTFB_INPUT = none
++DIRECTFB_CONF_OPT += --with-inputdrivers=none
+ else
+-DIRECTFB_INPUT = $(subst $(space),$(comma),$(strip $(DIRECTFB_INPUT)))
++DIRECTFB_CONF_OPT += \
++	--with-inputdrivers=$(subst $(space),$(comma),$(strip $(DIRECTFB_INPUT)))
+ endif
+ 
+-DIRECTFB_CONF_OPT += --with-inputdrivers=$(DIRECTFB_INPUT)
+-
+ ifeq ($(BR2_PACKAGE_DIRECTFB_GIF),y)
+ DIRECTFB_CONF_OPT += --enable-gif
+ else
