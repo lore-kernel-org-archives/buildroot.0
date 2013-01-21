@@ -1,36 +1,62 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 21 Jan 2013 14:26:37 +0100
-Subject: [Buildroot] [git commit] busybox: add ntp patch for 1.20.2
-Message-ID: <20130121132644.0B82E9A668@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Mon, 21 Jan 2013 14:47:22 +0100
+Subject: [Buildroot] [RFC v1 01/14] Add a new "src" directory in the
+	output directory
+In-Reply-To: <1358725943-31485-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1358725943-31485-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <4120429.ljLJ1sjWCA@sagittae>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7ac4d3987408e5b96bc01ce4e728a6ced383257
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../busybox-1.20.2/busybox-1.20.2-ntpd.patch       |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
+(I repost my remarks there in order to keep all discussion in same thread)
 
-diff --git a/package/busybox/busybox-1.20.2/busybox-1.20.2-ntpd.patch b/package/busybox/busybox-1.20.2/busybox-1.20.2-ntpd.patch
-new file mode 100644
-index 0000000..17fc0b1
---- /dev/null
-+++ b/package/busybox/busybox-1.20.2/busybox-1.20.2-ntpd.patch
-@@ -0,0 +1,11 @@
-+--- busybox-1.20.2/networking/ntpd.c
-++++ busybox-1.20.2-ntpd/networking/ntpd.c
-+@@ -1840,7 +1840,7 @@ recv_and_process_client_pkt(void /*int f
-+ 
-+ 	/* Build a reply packet */
-+ 	memset(&msg, 0, sizeof(msg));
-+-	msg.m_status = G.stratum < MAXSTRAT ? G.ntp_status : LI_ALARM;
-++	msg.m_status = G.stratum < MAXSTRAT ? (G.ntp_status & LI_MASK) : LI_ALARM;
-+ 	msg.m_status |= (query_status & VERSION_MASK);
-+ 	msg.m_status |= ((query_status & MODE_MASK) == MODE_CLIENT) ?
-+ 			 MODE_SERVER : MODE_SYM_PAS;
+On Monday 21 January 2013 00:52:10 Thomas Petazzoni wrote:
+> This new directory will be used to extract the source directory of the
+> different packages, as part of the out of tree support.
+> 
+> Note that we need to explicitly re-add write permissions on the
+> contents of this directory, because write permissions are removed from
+> the source code of packages in order to ensure that the packages are
+> not incorrectly modifying their source directory during an out of tree
+> build. We also re-add write permissions to the build directory since
+> some packages copy files from their source directory to the build
+> directory, causing rm to fail due to lack of permissions.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  Makefile |    8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 6f8ed0e..15ce4e4 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -260,6 +260,7 @@ GENERATE_LOCALE=$(call qstrip,$(BR2_GENERATE_LOCALE))
+>  STAMP_DIR:=$(BASE_DIR)/stamps
+> 
+>  BINARIES_DIR:=$(BASE_DIR)/images
+> +SRC_DIR:=$(BASE_DIR)/src
+IMHO, $(SRC_DIR) should be in $(TOPDIR) to be shared between different 
+configurations. In add $(SRC_DIR) have to customizable in case I would like to 
+clearly separate two projects.
+
+I think, my workspace would look like this:
+  br/srcs-projet1
+  br/srcs-projet2
+  br/output-project1-configA
+  br/output-project1-configB
+  br/output-project2-configA
+  br/output-project2-configB
+
+Finally SRC_DIR should be handled like DL_DIR.
+
+[...]
+
+-- 
+J?r?me Pouiller
