@@ -1,40 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 21 Jan 2013 23:54:18 +0100
-Subject: [Buildroot] [PATCH 10/10] lame: add license information
-In-Reply-To: <1358803790-30245-10-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 21 Jan 2013 18:29:50 -0300")
-References: <1358803790-30245-1-git-send-email-gustavo@zacarias.com.ar>
- <1358803790-30245-10-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ehhe6tb9.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 21 Jan 2013 23:40:14 +0100
+Subject: [Buildroot] [git commit] xz: add license information
+Message-ID: <20130121225446.E4D029A6BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9c078e9222c30c59ebd650ef1bcff81edaeca14c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/multimedia/lame/lame.mk | 2 ++
- Gustavo>  1 file changed, 2 insertions(+)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/xz/xz.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
- Gustavo> diff --git a/package/multimedia/lame/lame.mk b/package/multimedia/lame/lame.mk
- Gustavo> index a251f02..4f6b8fd 100644
- Gustavo> --- a/package/multimedia/lame/lame.mk
- Gustavo> +++ b/package/multimedia/lame/lame.mk
- Gustavo> @@ -12,6 +12,8 @@ LAME_DEPENDENCIES = host-pkgconf
- Gustavo>  LAME_INSTALL_STAGING = YES
- Gustavo>  LAME_CONF_ENV = GTK_CONFIG=/bin/false
- Gustavo>  LAME_CONF_OPT = --enable-dynamic-frontends
- Gustavo> +LAME_LICENSE = LGPLv2
-
-It is LGPLv2+:
-
-grep -rls 'later version' *|wc -l
-124
-
-Committed with that change, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index e00c91b..8ff3c83 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -3,11 +3,14 @@
+ # xz-utils
+ #
+ #############################################################
++
+ XZ_VERSION = 5.0.4
+ XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
+ XZ_SITE = http://tukaani.org/xz/
+ XZ_INSTALL_STAGING = YES
+ XZ_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
++XZ_LICENSE = GPLv2+ GPLv3+ LGPLv2.1+
++XZ_LICENSE_FILES = COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
