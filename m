@@ -1,37 +1,22 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 21 Jan 2013 23:39:55 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 21 Jan 2013 19:42:06 -0300
 Subject: [Buildroot] [PATCH] busybox: add 1.21.x series
-In-Reply-To: <1358806463-14501-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 21 Jan 2013 19:14:23 -0300")
+In-Reply-To: <87libm88jo.fsf@dell.be.48ers.dk>
 References: <1358806463-14501-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87libm88jo.fsf@dell.be.48ers.dk>
+ <87libm88jo.fsf@dell.be.48ers.dk>
+Message-ID: <50FDC43E.5020903@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+On 01/21/2013 07:39 PM, Peter Korsgaard wrote:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Ahh come on, don't like my syslog-to-kmsg feature? ;)
 
-Committed, thanks.
-
- Gustavo> +# System Logging Utilities
- Gustavo> +#
- Gustavo> +CONFIG_SYSLOGD=y
- Gustavo> +CONFIG_FEATURE_ROTATE_LOGFILE=y
- Gustavo> +CONFIG_FEATURE_REMOTE_LOG=y
- Gustavo> +# CONFIG_FEATURE_SYSLOGD_DUP is not set
- Gustavo> +# CONFIG_FEATURE_SYSLOGD_CFG is not set
- Gustavo> +CONFIG_FEATURE_SYSLOGD_READ_BUFFER_SIZE=256
- Gustavo> +# CONFIG_FEATURE_IPC_SYSLOG is not set
- Gustavo> +CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=0
- Gustavo> +# CONFIG_LOGREAD is not set
- Gustavo> +# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
- Gustavo> +# CONFIG_FEATURE_KMSG_SYSLOG is not set
-
-Ahh come on, don't like my syslog-to-kmsg feature? ;)
-
--- 
-Bye, Peter Korsgaard
+Hahaha :)
+Kernel 3.5+ doesn't sound friendly with some of the same configurations
+like qemu-sh4-r2d (blame Qemu for lack of FIFO support that kernels
+newer than 3.2.x use).
+Regards.
