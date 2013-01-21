@@ -1,82 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Jan 2013 16:54:55 -0300
-Subject: [Buildroot] [PATCH 2/2] exfat-utils: new package
-In-Reply-To: <1358798095-27281-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1358798095-27281-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1358798095-27281-2-git-send-email-gustavo@zacarias.com.ar>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon, 21 Jan 2013 20:45:33 +0000
+Subject: [Buildroot] [PATCH] neardal: bump version to 0.8
+Message-ID: <1358801133-31458-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in                  |  1 +
- package/exfat-utils/Config.in      | 11 +++++++++++
- package/exfat-utils/exfat-utils.mk | 24 ++++++++++++++++++++++++
- 3 files changed, 36 insertions(+)
- create mode 100644 package/exfat-utils/Config.in
- create mode 100644 package/exfat-utils/exfat-utils.mk
+From: Simon Dawson <spdawson@gmail.com>
 
-diff --git a/package/Config.in b/package/Config.in
-index a6495c3..42628b6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -189,6 +189,7 @@ source "package/curlftpfs/Config.in"
- source "package/dosfstools/Config.in"
- source "package/e2fsprogs/Config.in"
- source "package/exfat/Config.in"
-+source "package/exfat-utils/Config.in"
- source "package/flashbench/Config.in"
- source "package/genext2fs/Config.in"
- source "package/genromfs/Config.in"
-diff --git a/package/exfat-utils/Config.in b/package/exfat-utils/Config.in
-new file mode 100644
-index 0000000..1fc68be
---- /dev/null
-+++ b/package/exfat-utils/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_EXFAT_UTILS
-+	bool "exfat-utils"
-+	depends on BR2_LARGEFILE
-+	depends on BR2_USE_WCHAR
-+	help
-+	  exFAT filesystem utilities.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/neardal/neardal.mk |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/neardal/neardal.mk b/package/neardal/neardal.mk
+index 66b729d..9625f0e 100644
+--- a/package/neardal/neardal.mk
++++ b/package/neardal/neardal.mk
+@@ -3,7 +3,8 @@
+ # neardal
+ #
+ #############################################################
+-NEARDAL_VERSION = 0.7
 +
-+	  http://code.google.com/p/exfat/
-+
-+comment "exfat-utils requires a toolchain with LARGEFILE and WCHAR support"
-+	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR
-diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
-new file mode 100644
-index 0000000..8c297ee
---- /dev/null
-+++ b/package/exfat-utils/exfat-utils.mk
-@@ -0,0 +1,24 @@
-+#############################################################
-+#
-+# exfat-utils
-+#
-+#############################################################
-+
-+EXFAT_UTILS_VERSION = 1.0.0
-+EXFAT_UTILS_SITE = http://exfat.googlecode.com/files
-+EXFAT_UTILS_DEPENDENCIES = host-scons
-+EXFAT_UTILS_LICENSE = GPLv3
-+EXFAT_UTILS_LICENSE_FILES = COPYING
-+
-+define EXFAT_UTILS_BUILD_CMDS
-+	(cd $(@D); \
-+		$(TARGET_CONFIGURE_OPTS) $(SCONS))
-+endef
-+
-+define EXFAT_UTILS_INSTALL_TARGET_CMDS
-+	(cd $(@D); \
-+		$(TARGET_CONFIGURE_OPTS) $(SCONS) \
-+		DESTDIR=$(TARGET_DIR)/usr/bin install)
-+endef
-+
-+$(eval $(generic-package))
++NEARDAL_VERSION = 0.8
+ NEARDAL_SITE = http://github.com/connectivity/neardal/tarball/$(NEARDAL_VERSION)
+ NEARDAL_SOURCE = connectivity-neardal-$(NEARDAL_VERSION).tar.gz
+ NEARDAL_INSTALL_STAGING = YES
 -- 
-1.7.12.4
+1.7.10.4
