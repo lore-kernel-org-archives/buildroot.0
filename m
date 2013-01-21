@@ -1,38 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Jan 2013 00:52:22 +0100
-Subject: [Buildroot] [RFC v1 13/14] cmake: support out of tree build
-In-Reply-To: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1358725943-31485-14-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
+Date: Mon, 21 Jan 2013 11:23:45 +1100
+Subject: [Buildroot] New kernel source mode [Proposal]
+References: <EE5E77B503DE9A478B63A89AAD2585EDB66A2F@vpane.excalyptech.com>
+ <50F50A74.8000501@relinux.de>
+ <EE5E77B503DE9A478B63A89AAD2585EDB66A39@vpane.excalyptech.com>
+ <50F90461.3020206@relinux.de>
+Message-ID: <EE5E77B503DE9A478B63A89AAD2585EDB66A3A@vpane.excalyptech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cmake/cmake.mk |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> -----Original Message-----
+> From: Stephan Hoffmann [mailto:sho at relinux.de]
+> Sent: Friday, 18 January 2013 19:14
+> To: Przemyslaw Wrzos
+> Cc: buildroot at busybox.net
+> Subject: Re: [Buildroot] New kernel source mode [Proposal]
+> 
+> Am 18.01.2013 02:10, schrieb Przemyslaw Wrzos:
+> > Hi Stephen,
+> >
+> > Just an update to the patch I sent in yesterday. Between trying to
+get
+> > both the generic and non-generic versions working I seem to have
+> > introduced a bug at some point into my proposed patch for the linux
+> > kernel. I'm including an updated version for you to look at (just a
+> > missing line that caused the download step to try to download a
+> > nonsensical non-existent file).
+> Hello Przemyslaw,
+> 
+> I think I don't have the time to try it out before next week.
+> 
+> Regards
+> 
+> Stephan
+> >
+> > One other thing I should note about the patch which I didn't
+> elaborate
+> > on yesterday. After digging around in the linux source code there
+> > doesn't seem to be a way to perform the buildroot_defconfig make
+> step
+> > in an out of tree build so I had to settle for simply copying the
+> > configuration file across.
+> >
+> > Cheers,
+> > Przemyslaw Wrzos
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index e2bc31f..ff586bf 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -1,11 +1,13 @@
- CMAKE_VERSION = 2.8.9
- CMAKE_SITE = http://www.cmake.org/files/v2.8/
- 
-+CMAKE_SUPPORTS_OUT_OF_TREE = YES
-+
- define HOST_CMAKE_CONFIGURE_CMDS
-  (cd $(@D); \
- 	LDFLAGS="$(HOST_LDFLAGS)" \
- 	CFLAGS="$(HOST_CFLAGS)" \
--	./bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(PARALLEL_JOBS) \
-+	$(CMAKE_SRCDIR)/bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(PARALLEL_JOBS) \
-  )
- endef
- 
--- 
-1.7.9.5
+No worries, let me know if you have any dramas once you look at it.
+
+Cheers,
+Przemyslaw Wrzos
