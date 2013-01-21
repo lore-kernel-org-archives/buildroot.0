@@ -1,63 +1,79 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 21 Jan 2013 22:59:04 +0100
-Subject: [Buildroot] [PATCH] iftop: new package
-In-Reply-To: <1358800841-20820-1-git-send-email-bogdan@nimblex.net> (Bogdan
- Radulescu's message of "Mon, 21 Jan 2013 20:40:41 +0000")
-References: <20130121184853.0174d33d@skate>
- <1358800841-20820-1-git-send-email-bogdan@nimblex.net>
-Message-ID: <87txqa8afr.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 21 Jan 2013 22:59:31 +0100
+Subject: [Buildroot] [git commit] iftop: new package
+Message-ID: <20130121220054.124E8818C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bogdan" == Bogdan Radulescu <bogdan@nimblex.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=30a198196a40ce469cc53f1e261a27acd35b8968
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Bogdan> Added the iftop package which is really usefull to see quickly
- Bogdan> what uses the bandwidth on your machine.
+Added the iftop package which is really useful to see quickly
+what uses the bandwidth on your machine.
 
- Bogdan> Signed-off-by: Bogdan Radulescu <bogdan@nimblex.net>
- Bogdan> ---
- Bogdan>  package/Config.in       |  1 +
- Bogdan>  package/iftop/Config.in | 15 +++++++++++++++
- Bogdan>  package/iftop/iftop.mk  | 15 +++++++++++++++
- Bogdan>  3 files changed, 31 insertions(+)
- Bogdan>  create mode 100644 package/iftop/Config.in
- Bogdan>  create mode 100644 package/iftop/iftop.mk
+[Peter: move to 'Networking applications', fix license]
+Signed-off-by: Bogdan Radulescu <bogdan@nimblex.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in       |    1 +
+ package/iftop/Config.in |   15 +++++++++++++++
+ package/iftop/iftop.mk  |   15 +++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
 
- Bogdan> diff --git a/package/Config.in b/package/Config.in
- Bogdan> index ba03b3c..9e2dd8b 100644
- Bogdan> --- a/package/Config.in
- Bogdan> +++ b/package/Config.in
- Bogdan> @@ -772,6 +772,7 @@ endif
- Bogdan>  source "package/bwm-ng/Config.in"
- Bogdan>  source "package/cpuload/Config.in"
- Bogdan>  source "package/htop/Config.in"
- Bogdan> +source "package/iftop/Config.in"
-
-I find it more sensible to have it under Networking applications
-together with E.G. iperf, so I've moved it.
-
- Bogdan> +++ b/package/iftop/iftop.mk
- Bogdan> @@ -0,0 +1,15 @@
- Bogdan> +#############################################################
- Bogdan> +#
- Bogdan> +# iftop
- Bogdan> +#
- Bogdan> +#############################################################
- Bogdan> +
- Bogdan> +IFTOP_VERSION = 1.0pre2
- Bogdan> +IFTOP_SITE = http://www.ex-parrot.com/pdw/iftop/download/
- Bogdan> +
- Bogdan> +IFTOP_DEPENDENCIES = ncurses libpcap
- Bogdan> +
- Bogdan> +IFTOP_LICENSE = GPL
- Bogdan> +IFTOP_LICENSE_FILES = COPYING
-
-License is GPLv2+
-
-Committed with these changes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index 2bb3d29..39e2ec7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -637,6 +637,7 @@ source "package/httping/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/ifplugd/Config.in"
+ endif
++source "package/iftop/Config.in"
+ source "package/igh-ethercat/Config.in"
+ source "package/inadyn/Config.in"
+ source "package/iperf/Config.in"
+diff --git a/package/iftop/Config.in b/package/iftop/Config.in
+new file mode 100644
+index 0000000..99ea973
+--- /dev/null
++++ b/package/iftop/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_IFTOP
++	bool "iftop"
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_LIBPCAP
++	depends on BR2_INET_IPV6
++	help
++	  iftop does for network usage what top(1) does for CPU usage.
++	  It listens to network traffic on a named interface and displays
++	  a table of current bandwidth usage by pairs of hosts. Handy for
++	  answering the question "why is our ADSL link so slow?".
++
++	  http://www.ex-parrot.com/pdw/iftop/
++
++comment "iftop requires IPv6 support in toolchain"
++	depends on !BR2_INET_IPV6
+diff --git a/package/iftop/iftop.mk b/package/iftop/iftop.mk
+new file mode 100644
+index 0000000..f6f2af2
+--- /dev/null
++++ b/package/iftop/iftop.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# iftop
++#
++#############################################################
++
++IFTOP_VERSION = 1.0pre2
++IFTOP_SITE = http://www.ex-parrot.com/pdw/iftop/download/
++
++IFTOP_DEPENDENCIES = ncurses libpcap
++
++IFTOP_LICENSE = GPLv2+
++IFTOP_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
