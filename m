@@ -1,22 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Jan 2013 19:58:22 -0300
-Subject: [Buildroot] [PATCH 03/10] audiofile: add license information
-In-Reply-To: <87622q6t5y.fsf@dell.be.48ers.dk>
-References: <1358803790-30245-1-git-send-email-gustavo@zacarias.com.ar>
- <1358803790-30245-3-git-send-email-gustavo@zacarias.com.ar>
- <878v7m888s.fsf@dell.be.48ers.dk> <50FDC5BC.8060609@zacarias.com.ar>
- <87622q6t5y.fsf@dell.be.48ers.dk>
-Message-ID: <50FDC80E.8060703@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 21 Jan 2013 23:58:37 +0100
+Subject: [Buildroot] [PATCH] vsftpd: add empty directory /usr/share/empty
+In-Reply-To: <1358792489-13488-1-git-send-email-sho@relinux.de> (Stephan
+ Hoffmann's message of "Mon, 21 Jan 2013 19:21:29 +0100")
+References: <1358792489-13488-1-git-send-email-sho@relinux.de>
+Message-ID: <871ude6t42.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/21/2013 07:57 PM, Peter Korsgaard wrote:
+>>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
 
-> Yes, but they are both 'or later'.
+ Stephan> Vsftpd needs an empty directory where it can chroot.
+ Stephan> If /usr/share/empty isn't present it refuses to work in the default
+ Stephan> configuration.
 
-Ah ok, i thought you were nuking GPL.
-I hate it when upstream doesn't update their license files...
-Regards.
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
