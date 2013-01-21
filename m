@@ -1,62 +1,70 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 21 Jan 2013 14:47:22 +0100
-Subject: [Buildroot] [RFC v1 01/14] Add a new "src" directory in the
-	output directory
-In-Reply-To: <1358725943-31485-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1358725943-31485-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <4120429.ljLJ1sjWCA@sagittae>
+From: Bogdan Radulescu <bogdan@nimblex.net>
+Date: Mon, 21 Jan 2013 18:47:18 +0000
+Subject: [Buildroot] [PATCH] ncdu: new package
+In-Reply-To: <87a9s3d1jq.fsf@dell.be.48ers.dk>
+References: <87a9s3d1jq.fsf@dell.be.48ers.dk>
+Message-ID: <1358794038-11280-1-git-send-email-bogdan@nimblex.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
 
-(I repost my remarks there in order to keep all discussion in same thread)
+Signed-off-by: Bogdan Radulescu <bogdan@nimblex.net>
+---
+ package/Config.in      |  1 +
+ package/ncdu/Config.in |  7 +++++++
+ package/ncdu/ncdu.mk   | 14 ++++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/ncdu/Config.in
+ create mode 100644 package/ncdu/ncdu.mk
 
-On Monday 21 January 2013 00:52:10 Thomas Petazzoni wrote:
-> This new directory will be used to extract the source directory of the
-> different packages, as part of the out of tree support.
-> 
-> Note that we need to explicitly re-add write permissions on the
-> contents of this directory, because write permissions are removed from
-> the source code of packages in order to ensure that the packages are
-> not incorrectly modifying their source directory during an out of tree
-> build. We also re-add write permissions to the build directory since
-> some packages copy files from their source directory to the build
-> directory, causing rm to fail due to lack of permissions.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  Makefile |    8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 6f8ed0e..15ce4e4 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -260,6 +260,7 @@ GENERATE_LOCALE=$(call qstrip,$(BR2_GENERATE_LOCALE))
->  STAMP_DIR:=$(BASE_DIR)/stamps
-> 
->  BINARIES_DIR:=$(BASE_DIR)/images
-> +SRC_DIR:=$(BASE_DIR)/src
-IMHO, $(SRC_DIR) should be in $(TOPDIR) to be shared between different 
-configurations. In add $(SRC_DIR) have to customizable in case I would like to 
-clearly separate two projects.
-
-I think, my workspace would look like this:
-  br/srcs-projet1
-  br/srcs-projet2
-  br/output-project1-configA
-  br/output-project1-configB
-  br/output-project2-configA
-  br/output-project2-configB
-
-Finally SRC_DIR should be handled like DL_DIR.
-
-[...]
-
+diff --git a/package/Config.in b/package/Config.in
+index c59f342..e981ac2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -778,6 +778,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/module-init-tools/Config.in"
+ endif
+ source "package/monit/Config.in"
++source "package/ncdu/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/procps/Config.in"
+ source "package/psmisc/Config.in"
+diff --git a/package/ncdu/Config.in b/package/ncdu/Config.in
+new file mode 100644
+index 0000000..dac7444
+--- /dev/null
++++ b/package/ncdu/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_NCDU
++	bool "ncdu"
++	select BR2_PACKAGE_NCURSES
++	help
++	  ncdu is a disk usage analyzer with an ncurses interface
++
++	  http://dev.yorhel.nl/ncdu
+diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+new file mode 100644
+index 0000000..5c28178
+--- /dev/null
++++ b/package/ncdu/ncdu.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# ncdu
++#
++#############################################################
++
++NCDU_VERSION = 1.9
++NCDU_SITE = http://dev.yorhel.nl/download/
++
++NCDU_DEPENDENCIES = ncurses
++
++NCDU_LICENSE = MIT
++NCDU_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
-J?r?me Pouiller
+1.7.12.1
