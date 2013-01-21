@@ -1,32 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 21 Jan 2013 09:18:04 +0100
-Subject: [Buildroot] [git commit] directfb: drop unneeded AUTORECONF
-Message-ID: <20130121082023.9DE178047D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 21 Jan 2013 09:26:37 +0100
+Subject: [Buildroot] [PATCH 3/4] lttng-libust: bump to version 2.1.1
+In-Reply-To: <26be851b0e776f7f6f969962d9b571498b30c127.1358593210.git.s.martin49@gmail.com>
+ (Samuel Martin's message of "Sat, 19 Jan 2013 12:03:47 +0100")
+References: <cover.1358593210.git.s.martin49@gmail.com>
+ <cover.1358593210.git.s.martin49@gmail.com>
+ <26be851b0e776f7f6f969962d9b571498b30c127.1358593210.git.s.martin49@gmail.com>
+Message-ID: <877gn7aqma.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c60b67320f31cbc77727ceb7273311611a2a9b89
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-Hasn't been needed since d1defbf39 (bump to version 1.4.11).
+ Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ Samuel> ---
+ Samuel>  package/lttng-libust/lttng-libust.mk | 2 +-
+ Samuel>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/directfb/directfb.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ Samuel> diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+ Samuel> index e1f51b1..e143118 100644
+ Samuel> --- a/package/lttng-libust/lttng-libust.mk
+ Samuel> +++ b/package/lttng-libust/lttng-libust.mk
+ Samuel> @@ -4,7 +4,7 @@
+ Samuel>  #
+ Samuel>  #############################################################
+ Samuel>  LTTNG_LIBUST_SITE    = http://lttng.org/files/lttng-ust/
+ Samuel> -LTTNG_LIBUST_VERSION = 2.1.0
+ Samuel> +LTTNG_LIBUST_VERSION = 2.1.1
 
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 0df866f..6d5b1ce 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -9,7 +9,6 @@ DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSI
- DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
- DIRECTFB_LICENSE = LGPLv2.1+
- DIRECTFB_LICENSE_FILES = COPYING
--DIRECTFB_AUTORECONF = YES
- DIRECTFB_INSTALL_STAGING = YES
- DIRECTFB_CONF_OPT = \
- 	--localstatedir=/var \
+The autobuilders are not happy. Did you perhaps forget to drop
+lttng-libust-dont-build-cxx-tests-when-not-available.patch?
+
+-- 
+Bye, Peter Korsgaard
