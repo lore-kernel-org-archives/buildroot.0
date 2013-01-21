@@ -1,33 +1,28 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 21 Jan 2013 20:45:33 +0000
-Subject: [Buildroot] [PATCH] neardal: bump version to 0.8
-Message-ID: <1358801133-31458-1-git-send-email-spdawson@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 21 Jan 2013 22:09:32 +0100
+Subject: [Buildroot] [PATCH] ncdu: new package
+In-Reply-To: <1358794038-11280-1-git-send-email-bogdan@nimblex.net> (Bogdan
+ Radulescu's message of "Mon, 21 Jan 2013 18:47:18 +0000")
+References: <87a9s3d1jq.fsf@dell.be.48ers.dk>
+ <1358794038-11280-1-git-send-email-bogdan@nimblex.net>
+Message-ID: <87y5fm8cqb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+>>>>> "Bogdan" == Bogdan Radulescu <bogdan@nimblex.net> writes:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/neardal/neardal.mk |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Bogdan> Signed-off-by: Bogdan Radulescu <bogdan@nimblex.net>
 
-diff --git a/package/neardal/neardal.mk b/package/neardal/neardal.mk
-index 66b729d..9625f0e 100644
---- a/package/neardal/neardal.mk
-+++ b/package/neardal/neardal.mk
-@@ -3,7 +3,8 @@
- # neardal
- #
- #############################################################
--NEARDAL_VERSION = 0.7
-+
-+NEARDAL_VERSION = 0.8
- NEARDAL_SITE = http://github.com/connectivity/neardal/tarball/$(NEARDAL_VERSION)
- NEARDAL_SOURCE = connectivity-neardal-$(NEARDAL_VERSION).tar.gz
- NEARDAL_INSTALL_STAGING = YES
+Committed, thanks.
+
+It no longer applied to git because of the polkit package and it wasn't
+based on any commits in mainline, so git am couldn't figure it out
+itself.
+
+Please create patches relative to current git in the future.
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
