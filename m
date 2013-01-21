@@ -1,31 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Jan 2013 00:10:34 +0100
-Subject: [Buildroot] [PATCH] busybox: add 1.21.x series
-In-Reply-To: <50FDC8E2.6070100@zacarias.com.ar> (Gustavo Zacarias's message of
- "Mon, 21 Jan 2013 20:01:54 -0300")
-References: <1358806463-14501-1-git-send-email-gustavo@zacarias.com.ar>
- <87libm88jo.fsf@dell.be.48ers.dk> <50FDC43E.5020903@zacarias.com.ar>
- <87a9s26t8f.fsf@dell.be.48ers.dk> <50FDC8E2.6070100@zacarias.com.ar>
-Message-ID: <87wqv65dzp.fsf@dell.be.48ers.dk>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Tue, 22 Jan 2013 01:38:25 +0200
+Subject: [Buildroot] [PATCH 3/3] initramfs: add support for LZO and XZ
+ compression methods
+In-Reply-To: <1358808943-17063-3-git-send-email-gustavo@zacarias.com.ar>
+References: <1358808943-17063-1-git-send-email-gustavo@zacarias.com.ar>
+ <1358808943-17063-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <50FDD171.60804@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Hi Gustavo
 
- Gustavo> On 01/21/2013 07:56 PM, Peter Korsgaard wrote:
- >> 3.5+ support is only needed to be able to store the full syslog facility
- >> in the kernel log. It still works (with level only) on earlier kernels.
+22.1.2013 0:55, Gustavo Zacarias kirjoitti:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  fs/common.mk      |  8 +++++++-
+>  fs/cpio/Config.in | 18 ++++++++++++++----
+>  2 files changed, 21 insertions(+), 5 deletions(-)
+>
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 8b5b2f2..0c171fc 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -39,7 +39,7 @@ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE)) \
+>  define ROOTFS_TARGET_INTERNAL
+>  
+>  # extra deps
+> -ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma)
+> +ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma) $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZO),host-lzop) $$(if $$(BR2_TARGET_ROOTFS_$(2)_XZ),host-xz)
+>  
+>  $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+>  	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+> @@ -70,6 +70,12 @@ endif
+>  ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZMA),y)
+>  	$$(LZMA) -9 -c $$@ > $$@.lzma
+>  endif
+> +ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZO),y)
+> +	$$(LZOP) -9 -c $$@ > $$@.lzo
+> +endif
+> +ifeq ($$(BR2_TARGET_ROOTFS_$(2)_XZ),y)
+> +	$$(XZ) -9 -c $$@ > $$@.xz
+> +endif
 
- Gustavo> Ahhh my quick reading of it just got the 3.5+ part.
- Gustavo> I'm not a fan of mixing up userland & kernel logs but then again logread
- Gustavo> with the circular buffer doesn't give much choice about it anyway.
- Gustavo> Should i change that and resubmit or would you?
+You will probably need --check=crc32 with that xz-compression.
+I have had difficulties booting linux 3.3.1 kernel (don't know about
+later versions)
+with xz-compressed initramfs without that option.
 
-No, it was just a joke. I don't think there's any particular reason to
-enable logread/log-to-kmsg in the default configs.
-
--- 
-Bye, Peter Korsgaard
+Regards
+Stefan
