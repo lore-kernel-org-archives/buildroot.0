@@ -1,56 +1,35 @@
-From: Aras Vaichas <aras.vaichas@gmail.com>
-Date: Mon, 21 Jan 2013 11:30:24 +0000
-Subject: [Buildroot] Problem using Linux kernel archive from Gitorious
-In-Reply-To: <50FA9D96.60802@mind.be>
-References: <CAJkQPOkYXUAWsJw_1dxsObUbx9bboSsF4+yBz6jKEKKXXhxZfg@mail.gmail.com>
- <50FA9D96.60802@mind.be>
-Message-ID: <CAJkQPOnp5gk+GZc6BewOCqtv4EnktvNe=DXbdJv-fgh8Lsdvyg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 21 Jan 2013 08:51:26 -0300
+Subject: [Buildroot] [PATCH] busybox: add ntp patch for 1.20.2
+Message-ID: <1358769086-4410-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19 January 2013 13:20, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 17/01/13 15:47, Aras Vaichas wrote:
->> Hello,
->>
->> I am configuring Buildroot to use an OMAP-L138/DaVinci CPU. I'd like
->> to use the Linux kernel version from
->> http://gitorious.org/linux-davinci/linux-davinci/trees/v3.7-davinci1
->> which is a specific tag in the git repository.
->>
->> In Buildroot I set:
->> BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
->> BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION=http://gitorious.org/linux-davinci/linux-davinci/archive-tarball/v3.7-davinci1
->
->  It's a bit of a hack, but use this URL:
->
-> http://gitorious.org/linux-davinci/linux-davinci/archive-tarball/v3.7-davinci1?dummyname=/linux-v3.7-davinci.tar.gz
->  The CGI script that is behind that URL will ignore any unknown variables
-> behind the ? and the download method of buildroot will consider the thing
-> behind the last / as the filename. So this URL will be split into
->
-> LINUX_SITE = http://gitorious.org/linux-davinci/linux-davinci/archive-tarball/v3.7-davinci1?dummyname=
-> LINUX_SOURCE = linux-v3.7-davinci.tar.gz
->
->  So this gives you a nicely named file in the download directory.
->
->
->  Note that the gitorious archive URLs have an important disadvantage:
-> if the archive is not already in the cache, than the site will respond
-> with a '202 Accepted'.  I think wget treats this as a success, so
-> buildroot will try to untar that placeholder file.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/busybox/busybox-1.20.2/busybox-1.20.2-ntpd.patch | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+ create mode 100644 package/busybox/busybox-1.20.2/busybox-1.20.2-ntpd.patch
 
-Thank you. Yes, I did notice the delay the first time I tried to
-download the tarball. I figured this would be a problem.
-
-I'm currently configuring Buildroot for a company, so I want (need) to
-provide links that will always work. I think what I will do is create
-a davinci patch against a particular version of Linux and tell the
-company to store the patch in their own source repository. That
-guarantees that they can always get the file and re-recreate the same
-same kernel - assuming kernel.org always has a copy of the original
-kernel source for a particular version. :)
-
-Aras
+diff --git a/package/busybox/busybox-1.20.2/busybox-1.20.2-ntpd.patch b/package/busybox/busybox-1.20.2/busybox-1.20.2-ntpd.patch
+new file mode 100644
+index 0000000..17fc0b1
+--- /dev/null
++++ b/package/busybox/busybox-1.20.2/busybox-1.20.2-ntpd.patch
+@@ -0,0 +1,11 @@
++--- busybox-1.20.2/networking/ntpd.c
+++++ busybox-1.20.2-ntpd/networking/ntpd.c
++@@ -1840,7 +1840,7 @@ recv_and_process_client_pkt(void /*int f
++ 
++ 	/* Build a reply packet */
++ 	memset(&msg, 0, sizeof(msg));
++-	msg.m_status = G.stratum < MAXSTRAT ? G.ntp_status : LI_ALARM;
+++	msg.m_status = G.stratum < MAXSTRAT ? (G.ntp_status & LI_MASK) : LI_ALARM;
++ 	msg.m_status |= (query_status & VERSION_MASK);
++ 	msg.m_status |= ((query_status & MODE_MASK) == MODE_CLIENT) ?
++ 			 MODE_SERVER : MODE_SYM_PAS;
+-- 
+1.7.12.4
