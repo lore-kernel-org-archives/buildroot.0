@@ -1,80 +1,130 @@
-From: Bogdan Radulescu <bogdan@nimblex.net>
-Date: Mon, 21 Jan 2013 20:40:41 +0000
-Subject: [Buildroot] [PATCH] iftop: new package
-In-Reply-To: <20130121184853.0174d33d@skate>
-References: <20130121184853.0174d33d@skate>
-Message-ID: <1358800841-20820-1-git-send-email-bogdan@nimblex.net>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Mon, 21 Jan 2013 19:51:49 +0100
+Subject: [Buildroot] [RFC v1] Prototype implementation of per-package
+ out oftree build
+In-Reply-To: <20130121182606.59bec339@skate>
+References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <EE5E77B503DE9A478B63A89AAD2585EDB66A3B@vpane.excalyptech.com>
+ <20130121182606.59bec339@skate>
+Message-ID: <50FD8E45.5050800@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added the iftop package which is really usefull to see quickly
-what uses the bandwidth on your machine.
+Am 21.01.2013 18:26, schrieb Thomas Petazzoni:
+> Dear Przemyslaw Wrzos,
+>
+> On Mon, 21 Jan 2013 15:24:32 +1100, Przemyslaw Wrzos wrote:
+>
+>> This looks fairly similar to what I was proposing so I'm personally
+>> all for it. Here are a few of my thoughts about it:
+> Yes, indeed it looks similar, but I had already started working on this
+> prototype some time ago, and I had the feeling that it was already a
+> bit more complete (support in the autotools and cmake infrastructure
+> for out of tree build, etc.).
+>
+>> * There's one more feature which I think would complete the Linux
+>> out-of-tree build support for me, and that is the ability to specify
+>> the <PKG>_OVERRIDE_SRCDIR value via the configuration. I've attached
+>> a patch for how this might look.
+> In general, I am not really favorable. You want it for Linux, but then
+> the next guy will want it for Qt, the other guy for X.org server, the
+> other guy for OpenSSH, etc. And then we have gazillions of
+> configuration options to customize the source directory... while we
+> have the much more generic OVERRIDE_SRCDIR mechanism. I really would
+> like to avoid the profusion of such configuration options.
+>
+> That said, for packages like Linux, U-Boot or Barebox, we already give
+> the possibility of building from a custom Git tree or a custom tarball
+> location, so we could decide that those packages are "special", and we
+> could therefore add the "custom source directory location" option to
+> them.
+>
+> But I really want to put a limit to the type of packages on which we
+> add such options, because I don't want to see this being added more or
+> less randomly to each and every package in Buildroot.
+Once upon a time I thought of such a feature, but I don't think it can
+be done in a good way. And since we have the OVERRIDE, I do not see any
+need for it. Maybe even some of the special handlings for Linux, U-Boot
+and Barebox could be deprecated, but I did not think about this in detail.
 
-Signed-off-by: Bogdan Radulescu <bogdan@nimblex.net>
----
- package/Config.in       |  1 +
- package/iftop/Config.in | 15 +++++++++++++++
- package/iftop/iftop.mk  | 15 +++++++++++++++
- 3 files changed, 31 insertions(+)
- create mode 100644 package/iftop/Config.in
- create mode 100644 package/iftop/iftop.mk
+Maybe it's worth thinking about extending the OVERRIDE mechanism to
+override SOURCE and SITE, too.
+>
+>> * I like the idea making the source tree read-only to keep the build
+>> honest but I think this removes one of the major benefits of having a
+>> source tree in the first place, that is being able to modify and play
+>> around with it. This leads to the <pkg>-rebuild not making sense as
+>> you point out. I think it might be best to simply not enforce this
+>> restriction (even if it means some packages could abuse that).
+> Indeed, as I pointed in my introduction e-mail, having the source
+> directory read-only has some drawbacks. However, since the source
+> directory is shared between the host build and target build of a given
+> package, ensuring that the configuration/build steps of the package do
+> not mess with the source code is quite important. Otherwise, we could
+> see cases of pollution of the host build into the target build or vice
+> versa.
+>
+>> * Do we need a source directory when a package doesn't support
+>> out-of-tree building? The downside is additional disk space though
+>> that might not be that serious of a concern and it might just come
+>> down to a choice of aesthetics I suppose.
+> The idea with this out-of-tree support is to make the "overriden
+> packages" more "normal". So if you add another special case for
+> packages that don't support out of tree build, the entire goal is a bit
+> lost.
+>
+> For example, will you tell users that if they want to do a quick
+> and dirty modification of a package source code, they should go in
+> $(O)/src/foo-1.0 if foo supports out of tree build or
+> $(O)/build/foo-1.0 if foo doesn't? Seems really not logical.
+>
+> In general, I have the feeling that the biggest packages use a
+> reasonable build system, and therefore are capable of doing out of tree
+> build.
+>
+>> * As far as <pkg>-dirclean goes, I would say remove both build and
+>> source directories. If we only remove the build directory it will in
+>> effect not be all that different to <pkg>-clean. The only other real
+>> option would be to have a separate source directory for each target
+>> variant.
+> The problem is that if you have a package that gets build for the host
+> and the target, you have:
+>
+> 	output/src/foo-1.0
+> 	output/build/foo-1.0
+> 	output/build/host-foo-1.0
+>
+> Then, you do:
+>
+> 	make foo-dirclean
+>
+> So, output/src/foo-1.0 and output/build/foo-1.0 are removed, but
+> output/build/host-foo-1.0 remains. So we have the build directory for a
+> given package but no longer the corresponding source directory. Doesn't
+> seem to be really nice. No?
+To me it would seem most natural if output/build/host-foo-1.0 would be
+removed, too.
 
-diff --git a/package/Config.in b/package/Config.in
-index ba03b3c..9e2dd8b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -772,6 +772,7 @@ endif
- source "package/bwm-ng/Config.in"
- source "package/cpuload/Config.in"
- source "package/htop/Config.in"
-+source "package/iftop/Config.in"
- source "package/keyutils/Config.in"
- source "package/kmod/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/iftop/Config.in b/package/iftop/Config.in
-new file mode 100644
-index 0000000..99ea973
---- /dev/null
-+++ b/package/iftop/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_IFTOP
-+	bool "iftop"
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_LIBPCAP
-+	depends on BR2_INET_IPV6
-+	help
-+	  iftop does for network usage what top(1) does for CPU usage.
-+	  It listens to network traffic on a named interface and displays
-+	  a table of current bandwidth usage by pairs of hosts. Handy for
-+	  answering the question "why is our ADSL link so slow?".
-+
-+	  http://www.ex-parrot.com/pdw/iftop/
-+
-+comment "iftop requires IPv6 support in toolchain"
-+	depends on !BR2_INET_IPV6
-diff --git a/package/iftop/iftop.mk b/package/iftop/iftop.mk
-new file mode 100644
-index 0000000..48c9480
---- /dev/null
-+++ b/package/iftop/iftop.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# iftop
-+#
-+#############################################################
-+
-+IFTOP_VERSION = 1.0pre2
-+IFTOP_SITE = http://www.ex-parrot.com/pdw/iftop/download/
-+
-+IFTOP_DEPENDENCIES = ncurses libpcap
-+
-+IFTOP_LICENSE = GPL
-+IFTOP_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+Similar issues might occur with foo-reconfigure and friends. If they
+share one source they would both have to be updated in such a case.
+
+Regards
+
+Stephan
+>
+> Thanks a lot for your very interesting feedback on this, good to see
+> that the discussion is starting!
+>
+> Thanks,
+>
+> Thomas
+
+
 -- 
-1.7.12.1
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
