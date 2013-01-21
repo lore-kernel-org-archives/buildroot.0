@@ -1,23 +1,79 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 21 Jan 2013 10:49:06 +0100
-Subject: [Buildroot] [PATCH 1/2] lttng-tools: fix version bumping to
-	2.1.1"
-In-Reply-To: <1358759114-11148-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Mon, 21 Jan 2013 10:05:13 +0100")
-References: <1358759114-11148-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <87vcaqamst.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 21 Jan 2013 10:48:54 +0100
+Subject: [Buildroot] [git commit] lttng-tools: fix version bumping to 2.1.1"
+Message-ID: <20130121094858.AA1A89A630@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=45210100468e9d7f80335c9d181997384ea5fa62
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Samuel> * re-introduce lttng-tools-no-sync-file-range-in-uclibc.patch
- Samuel>   (merged upstream just after the 2.1.1 release)
+* re-introduce lttng-tools-no-sync-file-range-in-uclibc.patch
+  (merged upstream just after the 2.1.1 release)
 
-Committed both, thanks.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../lttng-tools-no-sync-file-range-in-uclibc.patch |   51 ++++++++++++++++++++
+ 1 files changed, 51 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lttng-tools/lttng-tools-no-sync-file-range-in-uclibc.patch b/package/lttng-tools/lttng-tools-no-sync-file-range-in-uclibc.patch
+new file mode 100644
+index 0000000..fcaaa3e
+--- /dev/null
++++ b/package/lttng-tools/lttng-tools-no-sync-file-range-in-uclibc.patch
+@@ -0,0 +1,51 @@
++Make sync_file_range() usage optional
++
++Under uClibc, sync_file_range() is not available under all
++architectures, so we fall back to fdatasync() in this case.
++
++Inspired by the patch done by Thomas Petazzoni for the
++2.0-pre25 version.
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ configure.ac              |    2 +-
++ src/common/compat/fcntl.h |    5 +++++
++ 2 files changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 5808c79..065b9cf 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -150,7 +150,7 @@ AS_IF([test "x$lttng_ust_support" = "xyes"], [
++ 	)
++ ])
++ AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [test "x$lttng_ust_ctl_found" = xyes])
++-AC_CHECK_FUNCS([sched_getcpu sysconf])
+++AC_CHECK_FUNCS([sched_getcpu sysconf sync_file_range])
++ 
++ # check for dlopen
++ AC_CHECK_LIB([dl], [dlopen],
++@@ -394,4 +394,3 @@ AS_IF([test "x$consumerd_only" = "xno"],[
++ ])
++ 
++ AS_ECHO()
++-
++diff --git a/src/common/compat/compat-fcntl.c b/src/common/compat/compat-fcntl.c
++index 5a1c757..7ff63a3 100644
++--- a/src/common/compat/compat-fcntl.c
+++++ b/src/common/compat/compat-fcntl.c
++@@ -23,7 +23,11 @@
++ int compat_sync_file_range(int fd, off64_t offset, off64_t nbytes,
++ 		unsigned int flags)
++ {
+++#ifdef HAVE_SYNC_FILE_RANGE
++ 	return sync_file_range(fd, offset, nbytes, flags);
+++#else
+++	return fdatasync(fd);
+++#endif
++ }
++ 
++ #endif /* __linux__ */
++-- 
++1.8.0.3
++
