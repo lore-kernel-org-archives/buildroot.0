@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 21 Jan 2013 23:47:39 +0100
-Subject: [Buildroot] [PATCH 04/10] flex: add license information
-In-Reply-To: <1358803790-30245-4-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 21 Jan 2013 18:29:44 -0300")
+Date: Mon, 21 Jan 2013 23:48:19 +0100
+Subject: [Buildroot] [PATCH 05/10] gzip: add license information
+In-Reply-To: <1358803790-30245-5-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 21 Jan 2013 18:29:45 -0300")
 References: <1358803790-30245-1-git-send-email-gustavo@zacarias.com.ar>
- <1358803790-30245-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874nia886s.fsf@dell.be.48ers.dk>
+ <1358803790-30245-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zk026tl8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
