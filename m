@@ -1,38 +1,69 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Jan 2013 10:48:31 +0100
-Subject: [Buildroot] [PATCH 1/1] webp: new package
-In-Reply-To: <CAKcgs2wHrHVgTQYxjwRE4dY7OmjCR6iM_c2mZYFky-J1GUZLdA@mail.gmail.com>
- (Gilles Talis's message of "Mon, 21 Jan 2013 15:45:39 -0800")
-References: <1358374472-11291-1-git-send-email-gilles.talis@gmail.com>
- <871udfd158.fsf@dell.be.48ers.dk>
- <CAKcgs2wHrHVgTQYxjwRE4dY7OmjCR6iM_c2mZYFky-J1GUZLdA@mail.gmail.com>
-Message-ID: <87d2wx5z0w.fsf@dell.be.48ers.dk>
+From: Patrick Gerber <kpa_info@yahoo.fr>
+Date: Tue, 22 Jan 2013 11:09:32 +0100
+Subject: [Buildroot] [PATCH v4 1/2] Yavta: new package
+Message-ID: <1358849373-20243-1-git-send-email-kpa_info@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
+---
+ package/multimedia/Config.in       |    1 +
+ package/multimedia/yavta/Config.in |    6 ++++++
+ package/multimedia/yavta/yavta.mk  |   20 ++++++++++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/multimedia/yavta/Config.in
+ create mode 100644 package/multimedia/yavta/yavta.mk
 
-Hi,
-
- >> ?gilles> +WEBP_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
- >> ?gilles> +WEBP_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
- >> 
- >> Same here. You don't depend on host-pkgconf, so it presumably doesn't
- >> use that to figure out availability of jpeg/tiff.
-
- Gilles> Same here. I can force the paths to JPEG and TIFF include and
- Gilles> lib to always point to staging dir. Was my first intention, but
- Gilles> it seemed to work out fine without doing that. Do you think it
- Gilles> would be preferrable to force these paths?
-
-I'm concerned it will fail if you build for the same architecture as
-your host (E.G. for a PC), haven't enabled png/tiff/jpeg in buildroot
-but DO have the development libraries installed on the host.
-
-I'll give it a test later today.
-
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index e50eda9..5b2d1ad 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -25,4 +25,5 @@ source "package/multimedia/pulseaudio/Config.in"
+ source "package/multimedia/tidsp-binaries/Config.in"
+ source "package/multimedia/vorbis-tools/Config.in"
+ source "package/multimedia/wavpack/Config.in"
++source "package/multimedia/yavta/Config.in"
+ endmenu
+diff --git a/package/multimedia/yavta/Config.in b/package/multimedia/yavta/Config.in
+new file mode 100644
+index 0000000..6a42a94
+--- /dev/null
++++ b/package/multimedia/yavta/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_YAVTA
++	bool "yavta"
++	help
++	  Yet Another V4L2 Test Application
++
++	  http://git.ideasonboard.org/yavta.git
+diff --git a/package/multimedia/yavta/yavta.mk b/package/multimedia/yavta/yavta.mk
+new file mode 100644
+index 0000000..0778217
+--- /dev/null
++++ b/package/multimedia/yavta/yavta.mk
+@@ -0,0 +1,20 @@
++#############################################################
++#
++# yavta
++#
++#############################################################
++
++YAVTA_VERSION = 82ff2efdb9787737b9f21b6f4759f077c827b238
++YAVTA_SITE = git://git.ideasonboard.org/yavta.git
++YAVTA_LICENSE = GPLv2
++YAVTA_LICENSE_FILES = COPYING.GPL
++
++define YAVTA_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define YAVTA_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/yavta $(TARGET_DIR)/usr/bin/yavta
++endef
++
++$(eval $(generic-package)) 
 -- 
-Bye, Peter Korsgaard
+1.7.9.5
