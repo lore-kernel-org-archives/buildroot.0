@@ -1,27 +1,30 @@
-From: bifferos <bifferos@yahoo.co.uk>
-Date: Tue, 22 Jan 2013 13:24:21 +0000 (GMT)
-Subject: [Buildroot] ISO image generation not working, 2012.11.1
-In-Reply-To: <1358854016.82958.YahooMailNeo@web172106.mail.ir2.yahoo.com>
-References: <1358854016.82958.YahooMailNeo@web172106.mail.ir2.yahoo.com>
-Message-ID: <1358861061.94407.YahooMailNeo@web172102.mail.ir2.yahoo.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 22 Jan 2013 10:35:46 -0300
+Subject: [Buildroot] [PATCH 1/8] dosfstools: add license information
+Message-ID: <1358861753-5990-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dosfstools/dosfstools.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
------ Original Message -----
-> PS:? 2011.11 was working fine.
-
-I tested this with some other versions.? 
-
-2012.05 - Working
-2012.08 - Working
-
-So I guess this was broken between 2012.08 and 2012.11.1.? 2012.11 doesn't 
-build at all for me, so I couldn't test that.
-
-regards,
-Biff.
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index 507f485..4f89364 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -6,6 +6,8 @@
+ 
+ DOSFSTOOLS_VERSION = 3.0.12
+ DOSFSTOOLS_SITE = http://fossies.org/linux/misc/
++DOSFSTOOLS_LICENSE = GPLv3+
++DOSFSTOOLS_LICENSE_FILES = COPYING
+ MKDOSFS_BINARY = mkdosfs
+ DOSFSCK_BINARY = dosfsck
+ DOSFSLABEL_BINARY = dosfslabel
+-- 
+1.7.12.4
