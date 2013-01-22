@@ -1,71 +1,49 @@
-From: Patrick Gerber <kpa_info@yahoo.fr>
-Date: Tue, 22 Jan 2013 11:09:33 +0100
-Subject: [Buildroot] [PATCH v4 2/2] Media-ctl: new package
-In-Reply-To: <1358849373-20243-1-git-send-email-kpa_info@yahoo.fr>
-References: <1358849373-20243-1-git-send-email-kpa_info@yahoo.fr>
-Message-ID: <1358849373-20243-2-git-send-email-kpa_info@yahoo.fr>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Tue, 22 Jan 2013 11:15:11 +0100
+Subject: [Buildroot] [RFC v1 01/14] Add a new "src" directory in the
+	output directory
+In-Reply-To: <20130121181640.5ea23edd@skate>
+References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <4120429.ljLJ1sjWCA@sagittae> <20130121181640.5ea23edd@skate>
+Message-ID: <1436311.zC6hLLIaar@sagittae>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
----
- package/Config.in              |    1 +
- package/media-ctl/Config.in    |    7 +++++++
- package/media-ctl/media-ctl.mk |   17 +++++++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 package/media-ctl/Config.in
- create mode 100644 package/media-ctl/media-ctl.mk
+On Monday 21 January 2013 18:16:40 Thomas Petazzoni wrote:
+> Dear J?r?me Pouiller,
+> 
+> On Mon, 21 Jan 2013 14:47:22 +0100, J?r?me Pouiller wrote:
+> > IMHO, $(SRC_DIR) should be in $(TOPDIR) to be shared between
+> > different configurations. In add $(SRC_DIR) have to customizable in
+> > case I would like to clearly separate two projects.
+> 
+> I have indeed thought about making the source code shareable across
+> rebuilds and across projects, but since we apply patches to the source
+> code, it seems a bit complicated to do in a reliable way.
+Hmm... If source is not shared across builds, what is advantage of build out 
+of sources? 
 
-diff --git a/package/Config.in b/package/Config.in
-index 39e2ec7..7856ff2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -251,6 +251,7 @@ source "package/lshw/Config.in"
- source "package/lsuio/Config.in"
- source "package/lvm2/Config.in"
- source "package/mdadm/Config.in"
-+source "package/media-ctl/Config.in"
- source "package/memtester/Config.in"
- source "package/minicom/Config.in"
- source "package/nanocom/Config.in"
-diff --git a/package/media-ctl/Config.in b/package/media-ctl/Config.in
-new file mode 100644
-index 0000000..832089f
---- /dev/null
-+++ b/package/media-ctl/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_MEDIA_CTL
-+	bool "media-ctl"
-+	help
-+	  Media controller control application
-+	  Usefull mostly with ARM OMAP processors to configure and control the image subsystem
-+
-+	  http://git.ideasonboard.org/media-ctl.git
-diff --git a/package/media-ctl/media-ctl.mk b/package/media-ctl/media-ctl.mk
-new file mode 100644
-index 0000000..065751e
---- /dev/null
-+++ b/package/media-ctl/media-ctl.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# media-ctl
-+#
-+#############################################################
-+
-+MEDIA_CTL_VERSION = ac40b79f002a2315f909548614ccd2d408da25b7
-+MEDIA_CTL_SITE = git://git.ideasonboard.org/media-ctl.git
-+MEDIA_CTL_INSTALL_STAGING = YES
-+MEDIA_CTL_LICENSE = LGPLv2.1+
-+MEDIA_CTL_LICENSE_FILES = COPYING.LIB
-+
-+MEDIA_CTL_AUTORECONF = YES
-+MEDIA_CTL_CONF_OPT = --with-kernel-headers=$(STAGING_DIR)/usr/include
-+MEDIA_CTL_DEPENDENCIES = host-pkgconf
-+
-+$(eval $(autotools-package))
+I see two advantages:
+  - No duplication of source between host and target. But finaly, only a few 
+(and small) package are concerned. Shall we care about this?
+  - To make build of a package outside of Buildroot easier. In this case, did 
+you consider to build in a subdirectory of source? It does not allow to share 
+source between host and target but may be sufficient and may solve a bunch of 
+questions.
+
+> What happens when you bump your Buildroot version and the patches for a
+> given package change? You would have to manually clean up the source
+> directories. Not sure we want to do that, at least for now, but the
+> opinion of others would be interesting here.
+Currently, when you bump your version of Buildroot, you have to clean all. 
+Buildroot may provide a rule to also cleaning source directory. 
+
+
+
+Regards,
+
 -- 
-1.7.9.5
+J?r?me Pouiller
