@@ -1,129 +1,233 @@
 From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Tue, 22 Jan 2013 20:17:55 +0200
-Subject: [Buildroot] [PATCH 3/3] initramfs: add support for LZO and XZ
- compression methods
-In-Reply-To: <20130122180554.6c540102@skate>
-References: <1358808943-17063-1-git-send-email-gustavo@zacarias.com.ar>
- <1358808943-17063-3-git-send-email-gustavo@zacarias.com.ar>
- <20130122180554.6c540102@skate>
-Message-ID: <50FED7D3.3060600@petroprogram.com>
+Date: Tue, 22 Jan 2013 21:39:04 +0200
+Subject: [Buildroot] Squashfs boot
+In-Reply-To: <CAN_xxrXZWmhECAH1JfgvHk+U_wksdZ0ZyxpcaSea8KsEYy04mw@mail.gmail.com>
+References: <CAN_xxrWTp21-a-jD7x11yJa6ghM=C=ON2h_bx_is1iFhEkE0bQ@mail.gmail.com>
+ <CAN_xxrUK+_=8ETwqCG=Q-5BhDbNCVR-yr9d_2uCbnJrqcg2eow@mail.gmail.com>
+ <50FE8914.30909@petroprogram.com>
+ <CAN_xxrVD=Tq=ekME-jdHKRzyUwXk0PMocQX9mrxxcgjZQ8SYqA@mail.gmail.com>
+ <50FED12F.4050209@petroprogram.com>
+ <CAN_xxrXZWmhECAH1JfgvHk+U_wksdZ0ZyxpcaSea8KsEYy04mw@mail.gmail.com>
+Message-ID: <50FEEAD8.7020801@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-22.1.2013 19:05, Thomas Petazzoni kirjoitti:
-> Dear Gustavo Zacarias,
->
-> On Mon, 21 Jan 2013 19:55:43 -0300, Gustavo Zacarias wrote:
->
->> +config BR2_TARGET_ROOTFS_CPIO_LZO
->> +	bool "lzo"
->> +	help
->> +	  Do compress the cpio filesystem with lzo.
->> +
->> +config BR2_TARGET_ROOTFS_CPIO_XZ
->> +	bool "xz"
->> +	help
->> +	  Do compress the cpio filesystem with xz.
-> I don't remember exactly, but isn't the kernel build process itself
-> capable of compressing the initramfs already? I remember we had some
-> discussion about this a while ago, but I don't remember the outcome of
-> these. Arnout was leading this discussion, IIRC.
+22.1.2013 21:30, Stephen Turner kirjoitti:
+> Dont go out of your way to do this but if you do decide to play with
+> it i would love to hear back about your experiences.  I suppose my
+> concern now is more less that when the buildroot script makes a system
+> such as the bzImage+cpio you expect it to boot and in that case it
+> does. So why wouldn't the generated bzImage+squashfs boot?  my
+> assumption was that i didn't have the correct grub4dos menu.lst
+> entries to properly access it but scouring the Internet turned up next
+> to nothing except for modifying your fstab to boot partially
+> compressed systems.  As it turns out i was able to compress /usr and
+> then cpio the remaining system. i now have a 5mb kernel 2mb cpio
+> initrd and a 41mb squashfs usr directory which im fairly certain can
+> be smaller with the right commands. Im working on getting the system
+> to mount the /usr squash system at boot which i have verified there is
+> enough of the system available in the initrd to mount it manually so
+> im sure it should be able to be done automatically.
+>  
+> I do appreciate your help. If you have any pointers to the myserious
+> buildroot output images not being bootable i would love to hear about
+> it but in the mean time you helped me resolve the issue of shrinking
+> my system!
 
-If it's embedded initramfs then yes, kernel can handle it all itself
-just nicely.
-without needing to compress inside initramfs.
-(images kernel.png and kernel2.png)
+My pleasure. Glad that I could help. :-)
 
-But if outside cpio-archive (aka initramfs) then no. It has to be done
-by hand.
-And like I said to Gustavo it's bad to do double compression.
+Oh, and before I forgot:
 
+When generating that squashfs /usr be sure to use latest version of
+mksquashfs (4.2),
+at least kernel version of 2.6.38 (that was the version when they added
+xz-compression support for squashfs) and give
+-comp xz switch when compressing your usr.
 
-Here's are the different combinations:
+Something like this:
 
-1 ) compressed initramfs  inside  compressed kernel = bad (waste of time
-decompressing twice, and also waste of package file header size overhead)
-2 ) compressed initramfs inside uncompressed kernel = better (no time
-waste but still space waste)
-3 ) uncompressed initramfs inside compressed kernel = best solution for
-embedded initramfs (no time waste & time space waste)
-
-4 ) uncompressed outside initramfs and uncompressed kernel (waste of
-space and even according to some benchmarks, waste of time)
-5 ) compressed outside initramfs and compressed kernel (no wasted time
-and no wasted space)
-
-So option 3 is best for embedded initramfs and option 5 for otherwise
-for those who want more flexibility with their enivronment.
-For example I could have this:
-
-   
--------------------------------------------------------------------------------------------------------------------------------------------------
-   |  embedded, uncompressed initramfs insize xz-compressed kernel, with
-just busybox and minimal stuff |
-  
---------------------------------------------------------------------------------------------------------------------------------------------------
-                                                              |
-  
----------------------------------------------------------------------------------------------------------------------------------
-   | compressed outside initramfs with ncurses & directfb application,
-like links web-browser    |
-  
----------------------------------------------------------------------------------------------------------------------------------
-                                                              |
- 
-----------------------------------------------------------------------------------------------------------------------------------
-  | still another compressed initramfs with Xorg, firefox and all the
-heavy stuff                             |
- 
-----------------------------------------------------------------------------------------------------------------------------------
-
-All stackable one top over another (at least grub legacy allows giving
-several initramfs).
-
-And in Grub conf I could have boot entries like:
-- Minimal system (just busybox and it's apps)
-- Light system (ncurses, directfb and other non-Xorg "graphical" apps)
-- Full system  (full Xorg stuff and apps)
-
-Without outside initramfs option I would have to stick kernel (and it's
-modules) to each of those initramfs files which would be a waste of space.
-Now I have only one kernel (with or without initramfs) and 2 outside
-initramfs which I can mix and match like lego blocks.
+mksquashfs usr/ usr.sqfs -comp xz
 
 Stefan
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-> Best regards,
+>  
+> Thanks,
+> Stephen
 >
-> Thomas
+> On Tue, Jan 22, 2013 at 12:49 PM, Stefan Fr?berg
+> <stefan.froberg@petroprogram.com
+> <mailto:stefan.froberg@petroprogram.com>> wrote:
+>
+>     It's true that you can use squashfs to compress whole system but
+>     even in that case you have to
+>     make your own init script that will take care of all the magic of
+>     mounting.
+>     And because squashfs is read-only filesystem then it get's more
+>     trickier because you have to take care
+>     of yourself of all those /tmp and /var/log etc.. directories that
+>     need to store temporarily stuff.
+>
+>     When you mount that squashfs-file with /dev/loop0 it does use very
+>     little ram.
+>     Like I said only if some files are accessed from it then kernle
+>     might use little ram for caching it so that they are accessed
+>     much faster next time.
+>
+>     So there is no need to separately load it into ram. It's just is
+>     there, mounted throught /dev/loop0
+>     (which is always there, provided that you did not remove loopback
+>     device support from kernel conf)
+>
+>     Actually this is quite interesting because I have newer tried to
+>     do that whole root squashfs myself before
+>     (always just compressed part of the filesystem).
+>
+>     I could try that and report later back if it's worth it.
+>
+>     Stefan
+>
+>
+>     22.1.2013 16:35, Stephen Turner kirjoitti:
+>>     well actually, i just did a standard buildroot with squashfs so
+>>     everything except the kernel bzImage is in the squashfs.  I
+>>     suppose i missunderstood how it worked as i thought having
+>>     support in the kernel allowed the reading of this file and if
+>>     thats so i didnt expect to need a initrd especially since none
+>>     was generated by the buildroot scripts.  I was looking for a
+>>     solution that worked like that, where i could load it to ram or
+>>     read it from a disk saving ram but in essence compress everything
+>>     except perhaps the kernel. I dont suppose there is an option like
+>>     that is there?
+>>
+>>     On Tue, Jan 22, 2013 at 7:41 AM, Stefan Fr?berg
+>>     <stefan.froberg@petroprogram.com
+>>     <mailto:stefan.froberg@petroprogram.com>> wrote:
+>>
+>>         Hi Stephen
+>>         22.1.2013 3:25, Stephen Turner kirjoitti:
+>>>
+>>>         Sorry if my previous email went through. Im having some
+>>>         difficulty booting a squashfs with grub4dos on usb and grub2
+>>>         from hd. In short im using bzImage for a kernel and trying
+>>>         to both boot the squashfs in ram and imaged to a usb drive.
+>>>         I havent found much info on how to use the squashfs from
+>>>         busybox and what i did find wasnt very helpful. Could
+>>>         someone point me to a how to for booting a busybox squash?
+>>>         Do i need to make my own initrd Image or edit some files
+>>>         such as fstab?
+>>>         I appreciate any and all input.
+>>>
+>>>         Thanks
+>>>         Stephen
+>>>
+>>>
+>>
+>>         What I usually have is squashfs (xz-compressed) image of the
+>>         whole /usr (because that's usually the largest).
+>>
+>>         And everything else is in xz-compressed initramfs. Kernel
+>>         extract and loads the initramfs file(s) that you have
+>>         specified in grub to  automatically to ram. squashfs image
+>>         does not need to loaded to ram but mounted to
+>>         loopback devise /dev/loop0. However, when files are accessed
+>>         in that image it's contents can be also cached to ram.
+>>
+>>         The basic idea is that everything that is absolutely needed
+>>         for booting and running, the very minimal core of the
+>>         system, is located in that initramfs.
+>>
+>>         Now, in the /etc/inittab file there is usually a line like
+>>         null::sysinit:/bin/mount -a
+>>
+>>         That will instruct that all stuff in /etc/fstab should be
+>>         mounted.
+>>
+>>         My /etc/fstab look like this
+>>         # /etc/fstab: static file system information.
+>>         #
+>>         # <file system>         <mount pt>    <type>       
+>>         <options>        <dump>     <pass>
+>>         /modules.sqfs        /lib/modules    squashfs   
+>>         defaults,auto,loop,noatime    0    0
+>>         /firmware.sqfs      /lib/firmware    squashfs   
+>>         defaults,auto,loop,noatime    0    0
+>>         /dev/cdrom            /mnt/cdrom    iso9660       
+>>         defaults,noatime    0    0
+>>         /mnt/cdrom/usr.sqfs        /mnt/ro        squashfs   
+>>         defaults,auto,loop,noatime    0    0
+>>         proc                /proc               proc        
+>>         defaults          0    0
+>>         devpts                /dev/pts           devpts      
+>>         defaults,gid=5,mode=620    0    0
+>>         tmpfs                   /dev/shm           tmpfs      
+>>         mode=0777             0          0
+>>         tmpfs                   /tmp               tmpfs       
+>>         defaults              0          0
+>>         sysfs                /sys               sysfs       
+>>         defaults          0    0
+>>
+>>         What that does, is:
+>>
+>>         1 ) mount ./modules.sqfs (xz-compressed squashfs containing
+>>         kernel modules) to /lib/modules
+>>         2 ) mount ./firmware.sqfs (xz-compressed squashfs containing
+>>         firmware stuff) to /lib/firmware
+>>         3 ) mount Live-CD (the system itself that is running) to
+>>         /mnt/cdrom. The reason for this is
+>>         that storing usr.sqfs (xz-compressed squasfhs containing
+>>         /usr) to initramfs is waste of memory
+>>         while it can be stored into the root (outside of initramfs)
+>>         of live-cd. Just like I have done with kernel.
+>>         4 ) Mount /mnt/cdrom/usr.sqfs to /mnt/ro.
+>>         The reason for this is that later, in  /etc/init.d/rcS
+>>         im going to use unionfs to compine read-writeable /mnt/rw
+>>         (just empty directory without nothing mounted in)
+>>          and read-only /mnt/ro (the xz-compressed squashfs image from
+>>         Live-CD root that just got mounted) to compined
+>>         read-write directory in /usr
+>>
+>>         It's all little compilacted but space and memory saving and
+>>         stuff can be written to /usr if need to (for example Xorg
+>>         needs at least one location inside/usr to be writable for
+>>         fonts if I remember correctly)
+>>
+>>         If you don't need writable /usr then you can just mount your
+>>         usr-squashfs directly to /usr.
+>>         If you don't need /usr at all but just want to squashfs your
+>>         /  then maybe it's doable but you still have to mount
+>>         few places as read-write for tmp files and other stuff.
+>>
+>>         Like:
+>>         mount -t tmpfs tmpfs /tmp
+>>
+>>         And maybe
+>>         mount -t tmpfs tmpfs /var/log
+>>
+>>         Ofcourse those can be also added to /etc/fstab
+>>
+>>         What exatcly you have inside that squashfs ? Just busybox and
+>>         nothing else ?
+>>         In that case it's really not worth all the squashfs setup.
+>>
+>>         Regards
+>>         Stefan
+>>
+>>
+>>
+>>
+>>>
+>>>         _______________________________________________
+>>>         buildroot mailing list
+>>>         buildroot at busybox.net <mailto:buildroot@busybox.net>
+>>>         http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>>
+>
+>
 
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: kernel.png
-Type: image/png
-Size: 24654 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130122/3fb45fea/attachment-0002.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: kernel2.png
-Type: image/png
-Size: 24921 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130122/3fb45fea/attachment-0003.png>
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130122/bd3e765d/attachment.html>
