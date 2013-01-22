@@ -1,46 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 22 Jan 2013 20:44:32 +0100
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 4,
-	7}.x stable versions
-Message-ID: <20130122194502.F07C49A749@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Jan 2013 21:20:19 +0100
+Subject: [Buildroot] Squashfs boot
+In-Reply-To: <50FED12F.4050209@petroprogram.com> ("Stefan =?utf-8?Q?Fr?=
+ =?utf-8?Q?=C3=B6berg=22's?= message
+ of "Tue, 22 Jan 2013 19:49:35 +0200")
+References: <CAN_xxrWTp21-a-jD7x11yJa6ghM=C=ON2h_bx_is1iFhEkE0bQ@mail.gmail.com>
+ <CAN_xxrUK+_=8ETwqCG=Q-5BhDbNCVR-yr9d_2uCbnJrqcg2eow@mail.gmail.com>
+ <50FE8914.30909@petroprogram.com>
+ <CAN_xxrVD=Tq=ekME-jdHKRzyUwXk0PMocQX9mrxxcgjZQ8SYqA@mail.gmail.com>
+ <50FED12F.4050209@petroprogram.com>
+Message-ID: <87d2wx3r7g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6e044a3a5bb624eb44e3935d0a08d28b44c1b234
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in                 |    6 +++---
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Stefan> It's true that you can use squashfs to compress whole system
+ Stefan> but even in that case you have to make your own init script
+ Stefan> that will take care of all the magic of mounting.  And because
+ Stefan> squashfs is read-only filesystem then it get's more trickier
+ Stefan> because you have to take care of yourself of all those /tmp and
+ Stefan> /var/log etc.. directories that need to store temporarily
+ Stefan> stuff.
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index d12a824..a966220 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -58,13 +58,13 @@ config BR2_DEFAULT_KERNEL_VERSION
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.0.59"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.60"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.37"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.26"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.27"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
--	default "3.7.3"		if BR2_KERNEL_HEADERS_3_7
-+	default "3.7.4"		if BR2_KERNEL_HEADERS_3_7
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.59-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.60-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.59-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.60-headers_install-fix-__packed-in-exported-kernel-head.patch
+Read only rootfs (with /tmp and /var/log in tmpfs) should work out of
+the box with buildroot, and I've using it for several projects.
+
+-- 
+Bye, Peter Korsgaard
