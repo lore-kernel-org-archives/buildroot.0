@@ -1,72 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 22 Jan 2013 23:00:38 +0100
-Subject: [Buildroot] [git commit] Media-ctl: new package
-Message-ID: <20130122220137.82DF09A742@busybox.osuosl.org>
+From: Will Bickford <WBickford@efji.com>
+Date: Tue, 22 Jan 2013 21:54:21 +0000
+Subject: [Buildroot] Question about Buildroot-Based External Toolchains with
+	2012.11.1
+Message-ID: <9A206D81F45CAE4EB5A38D7E602F5AEA0B772447@TRANSXCH01.transcrypt.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d76a37d1d2e38d59127b5da53a20c48e177a9f7c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I'm confused by problems I'm seeing when deploying a pre-computed toolchain using Buildroot 2012.11.1 for both the target and the toolchain. Previously I've used the external toolchain feature from Buildroot 2010.05 without any problems.
 
-[Peter: fix help text]
-Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in              |    1 +
- package/media-ctl/Config.in    |    9 +++++++++
- package/media-ctl/media-ctl.mk |   17 +++++++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
+Related discussion:
+http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/45427
 
-diff --git a/package/Config.in b/package/Config.in
-index c4e5ad5..ebd9817 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -252,6 +252,7 @@ source "package/lshw/Config.in"
- source "package/lsuio/Config.in"
- source "package/lvm2/Config.in"
- source "package/mdadm/Config.in"
-+source "package/media-ctl/Config.in"
- source "package/memtester/Config.in"
- source "package/minicom/Config.in"
- source "package/nanocom/Config.in"
-diff --git a/package/media-ctl/Config.in b/package/media-ctl/Config.in
-new file mode 100644
-index 0000000..8d1beda
---- /dev/null
-+++ b/package/media-ctl/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_MEDIA_CTL
-+	bool "media-ctl"
-+	help
-+	  Media controller control application
-+
-+	  Useful mostly with ARM OMAP processors to configure and
-+	  control the image subsystem
-+
-+	  http://git.ideasonboard.org/media-ctl.git
-diff --git a/package/media-ctl/media-ctl.mk b/package/media-ctl/media-ctl.mk
-new file mode 100644
-index 0000000..065751e
---- /dev/null
-+++ b/package/media-ctl/media-ctl.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# media-ctl
-+#
-+#############################################################
-+
-+MEDIA_CTL_VERSION = ac40b79f002a2315f909548614ccd2d408da25b7
-+MEDIA_CTL_SITE = git://git.ideasonboard.org/media-ctl.git
-+MEDIA_CTL_INSTALL_STAGING = YES
-+MEDIA_CTL_LICENSE = LGPLv2.1+
-+MEDIA_CTL_LICENSE_FILES = COPYING.LIB
-+
-+MEDIA_CTL_AUTORECONF = YES
-+MEDIA_CTL_CONF_OPT = --with-kernel-headers=$(STAGING_DIR)/usr/include
-+MEDIA_CTL_DEPENDENCIES = host-pkgconf
-+
-+$(eval $(autotools-package))
+It is unclear to me how I'm supposed to strip the usr/ directory from the toolchain archive. The naive approach (mentioned in the discussion linked above) results in a broken toolchain. Is there a documented way to resolve this problem?
+
+Documentation:
+http://buildroot.uclibc.org/downloads/manual/manual.html#external-toolchain
+
+Best Regards,
+
+William Bickford
+EF Johnson Technologies, Inc.
+O  402.474.4800
+E   wbickford at efji.com
+www.efjohnson.com
+This e-mail transmission, and any documents, files or previous e-mail messages attached to it, may contain confidential information. If you are not the intended recipient, or a person responsible for delivering it to the intended recipient, you are hereby notified that any disclosure, distribution, review, copy or use of any of the information contained in or attached to this message is STRICTLY PROHIBITED. If you have received this transmission in error, please immediately notify us by reply e-mail, and destroy the original transmission and its attachments without reading them or saving them to disk. Thank you.
