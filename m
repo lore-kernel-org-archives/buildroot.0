@@ -1,31 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 22 Jan 2013 08:43:50 +0100
-Subject: [Buildroot] [git commit] can-utils: needs mmu support
-Message-ID: <20130122074540.047249A71F@busybox.osuosl.org>
+Date: Tue, 22 Jan 2013 08:44:52 +0100
+Subject: [Buildroot] [git commit] audiofile: fix license
+Message-ID: <20130122074540.3134D9A723@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e6b9c577176c792c41db4d65e916d5c4f16cbb5
+commit: http://git.buildroot.net/buildroot/commit/?id=045603fd65e73b4bcbec49e5d6e3eb052514cd18
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.org/results/2a06aecd58bb465f5e3c2610d34162b48c9ebba4/
+Somehow this didn't get committed in 1eb9845ad6 (add license information)
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/can-utils/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/audiofile/audiofile.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/can-utils/Config.in b/package/can-utils/Config.in
-index 79c1459..d5d4297 100644
---- a/package/can-utils/Config.in
-+++ b/package/can-utils/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_CAN_UTILS
- 	bool "can-utils"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  SocketCAN is a set of open source CAN drivers and a
- 	  networking stack.
+diff --git a/package/audiofile/audiofile.mk b/package/audiofile/audiofile.mk
+index 504a81a..9886c4d 100644
+--- a/package/audiofile/audiofile.mk
++++ b/package/audiofile/audiofile.mk
+@@ -8,7 +8,7 @@ AUDIOFILE_VERSION = 0.3.4
+ AUDIOFILE_SITE = http://audiofile.68k.org
+ AUDIOFILE_INSTALL_STAGING = YES
+ AUDIOFILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-AUDIOFILE_LICENSE = GPLv2 LGPLv2
++AUDIOFILE_LICENSE = GPLv2+ LGPLv2+
+ AUDIOFILE_LICENSE_FILES = COPYING COPYING.GPL
+ 
+ # Useless and needs alsa-lib
