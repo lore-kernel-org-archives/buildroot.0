@@ -1,29 +1,111 @@
-From: Will Bickford <WBickford@efji.com>
-Date: Tue, 22 Jan 2013 21:54:21 +0000
-Subject: [Buildroot] Question about Buildroot-Based External Toolchains with
-	2012.11.1
-Message-ID: <9A206D81F45CAE4EB5A38D7E602F5AEA0B772447@TRANSXCH01.transcrypt.local>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 22 Jan 2013 23:54:24 +0100
+Subject: [Buildroot] [PATCH] pkg-infra: add documentation for
+ <pkg>_CONFIG_FIXUP variable
+In-Reply-To: <1358773906-30653-1-git-send-email-stefan.froberg@petroprogram.com>
+References: <1358773906-30653-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <CAHXCMML5m19SwE=E4cOUKWWtMk0qYWjdUV49Vx_yuN895tawmw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm confused by problems I'm seeing when deploying a pre-computed toolchain using Buildroot 2012.11.1 for both the target and the toolchain. Previously I've used the external toolchain feature from Buildroot 2010.05 without any problems.
+Hi Stefan,
 
-Related discussion:
-http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/45427
+Thanks for your work.
+My comments inlined.
 
-It is unclear to me how I'm supposed to strip the usr/ directory from the toolchain archive. The naive approach (mentioned in the discussion linked above) results in a broken toolchain. Is there a documented way to resolve this problem?
+2013/1/21 Stefan Fr?berg <stefan.froberg@petroprogram.com>:
+> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+> ---
+>  docs/manual/adding-packages-generic.txt |   96 ++++++++++++++++++++++--------
+>  1 files changed, 70 insertions(+), 26 deletions(-)
+>
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index 7b8561a..3b61031 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+[...]
+> +34: define LIBFOO_PERMISSIONS
+> +35:    /bin/foo  f  4755  0  0  -  -  -  -  -
+> +36: endef
+> +37:
+>  37: $(eval $(generic-package))
+s/37/38/
 
-Documentation:
-http://buildroot.uclibc.org/downloads/manual/manual.html#external-toolchain
+>  --------------------------------
+>
+> @@ -69,7 +70,45 @@ install header files and other development files in the staging space.
+>  This will ensure that the commands listed in the
+>  +LIBFOO_INSTALL_STAGING_CMDS+ variable will be executed.
+>
+> -On line 12, we specify the list of dependencies this package relies
+> +On line 12, we specify that there is some fixing to be done to some
+> +of the 'libfoo-config' files that were installed during
+> ++LIBFOO_INSTALL_STAGING_CMDS+ phase.
+> +These *-config files are executable shell script files that are
+> +located in '$(STAGING_DIR)/usr/bin' directory and are executed
+> +by other 3rd party packages to find out the location and the linking
+> +flags of this particular package.
+> +
+> +The problem is that all these *-config files by default give wrong,
+s/,$//
 
-Best Regards,
+> +host system linking flags that are unsuitable for cross-compiling.
+> +
+> +For example:   '-I/usr/include' vs. '-I$(STAGING_DIR)/usr/include'
+> +or:            '-L/usr/lib' vs. '-L$(STAGING_DIR)/usr/lib'
+s/vs./instead of/
+imho, it's more obvious than "vs.", but i am not a native English speaker, so...
 
-William Bickford
-EF Johnson Technologies, Inc.
-O  402.474.4800
-E   wbickford at efji.com
-www.efjohnson.com
-This e-mail transmission, and any documents, files or previous e-mail messages attached to it, may contain confidential information. If you are not the intended recipient, or a person responsible for delivering it to the intended recipient, you are hereby notified that any disclosure, distribution, review, copy or use of any of the information contained in or attached to this message is STRICTLY PROHIBITED. If you have received this transmission in error, please immediately notify us by reply e-mail, and destroy the original transmission and its attachments without reading them or saving them to disk. Thank you.
+> +
+> +So some sed magic is done to these scripts to make them give correct
+> +flags.
+> +The argument to be given to +LIBFOO_CONFIG_FIXUP+ is the file name(s)
+> +of the shell script(s) needing fixing. All these names are relative to
+> +'$(STAGING_DIR)/usr/bin' and if needed multiple names can be given.
+> +
+> +Example 1:
+> +
+> +Package divine installs shell script '$(STAGING_DIR)/usr/bin/divine-config'.
+> +
+> +So it's fixup would be:
+> +
+> +DIVINE_CONFIG = divine-config
+> +
+> +Example 2:
+> +
+> +Package imagemagick installs the following scripts:
+> +'$(STAGING_DIR)/usr/bin/{Magick,Magick++,MagickCore,MagickWand,Wand}-config'
+> +
+> +So it's fixup would be:
+> +
+> +IMAGEMAGICK_CONFIG_FIXUP = Magick-config Magick++-config \
+> +                          MagickCore-config MagickWand-config Wand-config
+I really like this digression, it makes clearer how to use the
+*_CONFIG_FIXUP variable.
+
+> +
+> +On line 13, we specify the list of dependencies this package relies
+>  on. These dependencies are listed in terms of lower-case package names,
+>  which can be packages for the target (without the +host-+
+>  prefix) or packages for the host (with the +host-+) prefix).
+> @@ -240,6 +279,11 @@ information is (assuming the package name is +libfoo+) :
+>    variables are executed to install the package into the staging
+>    directory.
+>
+> +* +LIBFOO_CONFIG_FIXUP+ lists the names of the files in
+> +  '$(STAGING_DIR)/usr/bin' that need some special fixing to make them
+> +  cross-compiling friendly. Multiple file names separated by space can be
+> +  given and all are relative to '$(STAGING_DIR)/usr/bin'.
+> +
+>  * +LIBFOO_INSTALL_TARGET+ can be set to +YES+ (default) or +NO+. If
+>    set to +YES+, then the commands in the +LIBFOO_INSTALL_TARGET_CMDS+
+>    variables are executed to install the package into the target
+
+
+Regards,
+
+-- 
+Samuel
