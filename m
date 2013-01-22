@@ -1,49 +1,45 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Tue, 22 Jan 2013 11:15:11 +0100
-Subject: [Buildroot] [RFC v1 01/14] Add a new "src" directory in the
-	output directory
-In-Reply-To: <20130121181640.5ea23edd@skate>
-References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <4120429.ljLJ1sjWCA@sagittae> <20130121181640.5ea23edd@skate>
-Message-ID: <1436311.zC6hLLIaar@sagittae>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 22 Jan 2013 07:46:02 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
+	7}.x stable versions
+Message-ID: <1358851563-3813-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 21 January 2013 18:16:40 Thomas Petazzoni wrote:
-> Dear J?r?me Pouiller,
-> 
-> On Mon, 21 Jan 2013 14:47:22 +0100, J?r?me Pouiller wrote:
-> > IMHO, $(SRC_DIR) should be in $(TOPDIR) to be shared between
-> > different configurations. In add $(SRC_DIR) have to customizable in
-> > case I would like to clearly separate two projects.
-> 
-> I have indeed thought about making the source code shareable across
-> rebuilds and across projects, but since we apply patches to the source
-> code, it seems a bit complicated to do in a reliable way.
-Hmm... If source is not shared across builds, what is advantage of build out 
-of sources? 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                                  | 6 +++---
+ ...0.60-headers_install-fix-__packed-in-exported-kernel-head.patch} | 0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.59-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.60-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-I see two advantages:
-  - No duplication of source between host and target. But finaly, only a few 
-(and small) package are concerned. Shall we care about this?
-  - To make build of a package outside of Buildroot easier. In this case, did 
-you consider to build in a subdirectory of source? It does not allow to share 
-source between host and target but may be sufficient and may solve a bunch of 
-questions.
-
-> What happens when you bump your Buildroot version and the patches for a
-> given package change? You would have to manually clean up the source
-> directories. Not sure we want to do that, at least for now, but the
-> opinion of others would be interesting here.
-Currently, when you bump your version of Buildroot, you have to clean all. 
-Buildroot may provide a rule to also cleaning source directory. 
-
-
-
-Regards,
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index d12a824..a966220 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -58,13 +58,13 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.59"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.60"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.37"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.26"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.27"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+-	default "3.7.3"		if BR2_KERNEL_HEADERS_3_7
++	default "3.7.4"		if BR2_KERNEL_HEADERS_3_7
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.59-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.60-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.59-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.60-headers_install-fix-__packed-in-exported-kernel-head.patch
 -- 
-J?r?me Pouiller
+1.7.12.4
