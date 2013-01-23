@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Jan 2013 16:45:36 +0100
-Subject: [Buildroot] [RFC v1 01/14] Add a new "src" directory in the
- output directory
-In-Reply-To: <2395397.i0MApMWjWq@sagittae>
-References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1436311.zC6hLLIaar@sagittae> <20130122174902.3f2eca8b@skate>
- <2395397.i0MApMWjWq@sagittae>
-Message-ID: <20130123164536.58d9e607@skate>
+Date: Wed, 23 Jan 2013 16:53:05 +0100
+Subject: [Buildroot] [PATCH] pkg-infra: add documentation for
+ <pkg>_CONFIG_FIXUP variable
+In-Reply-To: <50FFE359.9070004@petroprogram.com>
+References: <1358773906-30653-1-git-send-email-stefan.froberg@petroprogram.com>
+ <CAHXCMML5m19SwE=E4cOUKWWtMk0qYWjdUV49Vx_yuN895tawmw@mail.gmail.com>
+ <50FFE359.9070004@petroprogram.com>
+Message-ID: <20130123165305.6a659da1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Dear Stefan Fr?berg,
 
-On Tue, 22 Jan 2013 18:12:49 +0100, J?r?me Pouiller wrote:
+On Wed, 23 Jan 2013 15:19:21 +0200, Stefan Fr?berg wrote:
 
-> > This last point is the main reason. For now, the
-> > LINUX_OVERRIDE_SRCDIR mechanism is barely usable because it does a
-> > complete rsync of the Linux source tree, which is very annoying.
-> > So, switching all packages to out of tree build sounds like an
-> > interesting solution.
-> And what about building in a subdirectory of source directory ? 
+> >> +The problem is that all these *-config files by default give
+> >> wrong,
+> > s/,$//
+> 
+> No $ ? Ok.
 
-I am not sure why you think it would solve any problem, but it is
-anyway not possible for packages for which <pkg>_OVERRIDE_SRCDIR is
-used: we certainly do *not* want to build in a subdirectory of the
-source directory.
+No, he meant "no comma at the end of line". $ is the sign in a regexp
+that matches the end of the line. So s/,$// means: replace the comma at
+the end of the line by nothing.
 
 Best regards,
 
