@@ -1,58 +1,46 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Wed, 23 Jan 2013 18:05:54 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Jan 2013 17:18:48 +0100
 Subject: [Buildroot] Squashfs boot
-In-Reply-To: <20130123165719.2d62382c@skate>
+In-Reply-To: <51000A62.9090309@petroprogram.com>
 References: <CAN_xxrWTp21-a-jD7x11yJa6ghM=C=ON2h_bx_is1iFhEkE0bQ@mail.gmail.com>
  <CAN_xxrUK+_=8ETwqCG=Q-5BhDbNCVR-yr9d_2uCbnJrqcg2eow@mail.gmail.com>
  <50FE8914.30909@petroprogram.com>
  <CAN_xxrVD=Tq=ekME-jdHKRzyUwXk0PMocQX9mrxxcgjZQ8SYqA@mail.gmail.com>
  <50FED12F.4050209@petroprogram.com> <20130123165719.2d62382c@skate>
-Message-ID: <51000A62.9090309@petroprogram.com>
+ <51000A62.9090309@petroprogram.com>
+Message-ID: <20130123171848.370ef451@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-23.1.2013 17:57, Thomas Petazzoni kirjoitti:
-> Dear Stefan Fr?berg,
->
-> On Tue, 22 Jan 2013 19:49:35 +0200, Stefan Fr?berg wrote:
->> It's true that you can use squashfs to compress whole system but even
->> in that case you have to
->> make your own init script that will take care of all the magic of
->> mounting. And because squashfs is read-only filesystem then it get's
->> more trickier because you have to take care
->> of yourself of all those /tmp and /var/log etc.. directories that need
->> to store temporarily stuff.
-> Huh? Mounting a squashfs filesystem as the root filesystem is very
-> easy. Just use root=/dev/<whereyourrootfsis> and that's it.
->
-> Buildroot already mounts a tmpfs in /tmp and has several symlinks
-> from /var/<something> to /tmp.
->
-> So, with the basic default Buildroot configuration, there is absolutely
-> nothing complicated in having the entire root filesystem read-only
-> inside SquashFS. On several projects, I've generated a system with
-> Buildroot where the entire filesystem is read-only mounted. No problem
-> at all.
->
-> I think your solution is much more complex than just having the entire
-> root filesystem read-only.
->
-> Best regards,
->
-> Thomas
+Dear Stefan Fr?berg,
 
-No.
-What I meant was, that if he is going to make it *without* buildroot
-(that is, if he can't get buildroot generated squashfs root to boot).
-*Then* he has to make his own init stuff to mount those /tmp and /var/log.
+On Wed, 23 Jan 2013 18:05:54 +0200, Stefan Fr?berg wrote:
 
-And my own solution is overly complex because I want the ability to
-write to squashfs, even if just temporarily.
-That's why I use initramfs + squashfs + unionfs
+> No.
+> What I meant was, that if he is going to make it *without* buildroot
+> (that is, if he can't get buildroot generated squashfs root to boot).
+> *Then* he has to make his own init stuff to mount those /tmp
+> and /var/log.
 
+Ok. But then if Buildroot has a bug, let's fix the bug instead of
+trying to work-around it, no?
 
-Regards
-Stefan
+> And my own solution is overly complex because I want the ability to
+> write to squashfs, even if just temporarily.
+> That's why I use initramfs + squashfs + unionfs
+
+Indeed. You could still boot the root filesystem from squashfs, and
+then mount a tmpfs and do the unionfs thing. There's no real need to
+split usr/ in a squashfs in order to achieve this, I think.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
