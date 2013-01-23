@@ -1,45 +1,52 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 23 Jan 2013 09:26:36 +0100
+Date: Wed, 23 Jan 2013 09:27:34 +0100
 Subject: [Buildroot] [PATCH 2/3] python3: Port python2 patches to reduce
  the interpreter size
-In-Reply-To: <CAHXCMMKWLuEPvv0XC_WHxE+xu0QuJZQgY1Rq3RTX3=Ki5jWxfA@mail.gmail.com>
+In-Reply-To: <50FAD25E.4010608@mind.be>
 References: <1358517974-30956-1-git-send-email-maxime.ripard@free-electrons.com>
  <1358517974-30956-2-git-send-email-maxime.ripard@free-electrons.com>
- <CAHXCMMLxr2ttXFzRfJECxRdJitBbAjM4mXyt2SpzTJV5RMQLwA@mail.gmail.com>
- <CAHXCMMKWLuEPvv0XC_WHxE+xu0QuJZQgY1Rq3RTX3=Ki5jWxfA@mail.gmail.com>
-Message-ID: <50FF9EBC.1030404@free-electrons.com>
+ <50FAD25E.4010608@mind.be>
+Message-ID: <50FF9EF6.2020603@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/01/2013 17:36, Samuel Martin wrote:
-> Hi Maxime, all,
-> 
-> 2013/1/19 Samuel Martin <s.martin49@gmail.com>:
-> [...]
->>
->> BTW, here is a build log: http://code.bulix.org/8rjnsp-82865, in which
->> the _decimal module fails to be built.
->>
->> See near the end of the log, it seems the build script of python3 for
->> the target does some mix up between the host and the target build
->> config of the package :-/
-> 
-> After some investigation, here is a patch fixing the build of the
-> _decimal module:
-> http://code.bulix.org/p4cp5i-82866
-> 
-> However, source for host-python3 are still used...
+Hi Arnout,
 
-Maybe this can come as a separate patch, since it's not really related
-to this bug that was reported?
+On 19/01/2013 18:05, Arnout Vandecappelle wrote:
+> On 18/01/13 15:06, Maxime Ripard wrote:
+>> Some of the python2 patches were left behind when doing the python3
+>> package. This was because the python build system can now autodetect
+>> what packages can be built in the system.
+>>
+>> However, some of these patches are actually useful to reduce drastically
+>> the size of the interpreter.
+>>
+>> This patch ports the relevant patches to the python3 package, and adds a
+>> new patch to remove the idle3 IDE as well from the interpreter.
+>>
+>> Fixes #5696
+>>
+>> Signed-off-by: Maxime Ripard<maxime.ripard@free-electrons.com>
+>> ---
+>>   package/python3/Config.in                          |   11 ++
+>>   .../python3-3.3-012-disable-extensions.patch       |   98
+>> +++++++++++++++++
+> 
+>  You should remove the -3.3- from the patch names. I know they're there
+> in the old package, but this is a good opportunity to get rid of that
+> legacy.
 
-Thanks,
+Right. Will do.
+
+>  BTW, do these patches have a chance of getting upstreamed?
+
+I don't think so, since most of them breaks (on purpose) the python
+standard modules...
+
 Maxime
-
-
 -- 
 Maxime Ripard, Free Electrons
 Kernel, drivers, real-time and embedded Linux
