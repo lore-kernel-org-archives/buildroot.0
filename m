@@ -1,84 +1,314 @@
-From: Willy Lambert <lambert.willy@gmail.com>
-Date: Wed, 23 Jan 2013 18:08:04 +0100
-Subject: [Buildroot] Boost integration
-In-Reply-To: <87ham73n37.fsf@dell.be.48ers.dk>
-References: <CAKvQZ_1g6_KHpdyYQ6H-pk6T5gx-qsW6SvaF7XBb2JJCSf7cLg@mail.gmail.com>
- <201301222220.14854.yann.morin.1998@free.fr>
- <CAKvQZ_0f+7B8N5Fp0O6tDUxYYeuUd+wD-92-ec-hvR8KzfjDoA@mail.gmail.com>
- <CAKvQZ_2XrayYK1DuVAUCDQkoeOHqv6iB2QT0b-pKy_y7AXv2bA@mail.gmail.com>
- <87libk2s6i.fsf@dell.be.48ers.dk>
- <CAKvQZ_2aGiOzea_GmPjW3x+chDSRTicmFB3+MDh8fsCgROZ8oA@mail.gmail.com>
- <87ham73n37.fsf@dell.be.48ers.dk>
-Message-ID: <CAKvQZ_1fD8ujBzcAhReQLwgwfkLZFyB0KXM-VB+_q6-=d1j-HA@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 23 Jan 2013 21:27:03 +0100
+Subject: [Buildroot] [PATCH 1/1] Documentation update : add tips to
+ build manual,
+ add information about buildroot toolchain not being relocable and put some
+ hints to use it,
+ move the Beyond Buildroot section before FAQs and add content
+In-Reply-To: <CAKvQZ_3BSLWFbiRc3L6uYnVwt1QQNq5Q6Y0DR5nAKrGP_XLoHQ@mail.gmail.com>
+References: <CAKvQZ_3BSLWFbiRc3L6uYnVwt1QQNq5Q6Y0DR5nAKrGP_XLoHQ@mail.gmail.com>
+Message-ID: <CAHXCMM+TWtohzWeaQ9VZyNtKirqFU_ttmuXFrHRQZ9KfCQ_HGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/1/23 Peter Korsgaard <jacmet@uclibc.org>:
->>>>>> "Willy" == Willy Lambert <lambert.willy@gmail.com> writes:
->
-> Hi,
->
->  >> It's just a backup in case upstream is down/disappears.
->
->  Willy> Ok, then the current link to boost sourceforge seems broken, does
->  Willy> anyone else has the same problem ?
->
-> Why? It works here:
->
-> make boost-source
->>>> boost 1.52.0 Downloading
-> --2013-01-23 16:59:21--  http://downloads.sourceforge.net/project/boost/boost/1.52.0/boost_1_52_0.tar.bz2
-> Resolving downloads.sourceforge.net (downloads.sourceforge.net)... 216.34.181.59
-> Connecting to downloads.sourceforge.net (downloads.sourceforge.net)|216.34.181.59|:80... connected.
-> HTTP request sent, awaiting response... 302 Found
-> Location: http://switch.dl.sourceforge.net/project/boost/boost/1.52.0/boost_1_52_0.tar.bz2 [following]
-> --2013-01-23 16:59:21--  http://switch.dl.sourceforge.net/project/boost/boost/1.52.0/boost_1_52_0.tar.bz2
-> Resolving switch.dl.sourceforge.net (switch.dl.sourceforge.net)... 130.59.138.21, 2001:620:0:1b::21
-> Connecting to switch.dl.sourceforge.net (switch.dl.sourceforge.net)|130.59.138.21|:80... connected.
-> HTTP request sent, awaiting response... 200 OK
-> Length: 54421709 (52M) [application/x-bzip2]
-> Saving to: `/var/lib/downloads/boost_1_52_0.tar.bz2.tmp'
->
-> Doesn't that work for you?
+Hi Willy,
 
-It is working here, don't know what happened yesterday at home.
+First, few comments to make easier the review/integration process:
+- try to make one commit per feature (from the subject, I would have
+split it in 3 or 4 commits);
+- the commit message should be formated like this:
+  Summary of the commit (+- 80 character)
 
->
->  Willy> I can propose you a patch to be abble to select different version a
->  Willy> boost in config menus. But I'm not sure that the current mk can handle
->  Willy> other versions.
->
-> We normally don't support multiple versions of a package (except for a
-> few minor exceptions) as that very soon becomes a support headache. Why
-> would you want more than 1 version?
+  As much details you want to add to explain your work...
 
-Because I need boost for another framework, that is not supporting
-latest boost versions for now. And mainlining lastest boost support
-there is not an option (it is at best a parrallel work to do on my
-side, but I can't be on all fires ^^). And even if it compiles, I
-don't want to play with versionning incompatibilities beetwen boost
-and my framework. I need the 1.42.0 version.
-
-The idea is not necessarily to maintain all boost versions, but if the
-same script can handle several one, it's a pity to just propose the
-last one.
-Said differently, I have written the part that allow to choose a
-version on the model of config files that choose kernels. If you are
-interested in them I'll send you a patch. If you think you are Ok with
-editing the boost.mk by hand I'll keep my patch locally.
+ in as many paragraph you want.
+  After the
 
 
->
->  Willy> I personnaly put Boost in Packages->Librairies->Boost. It is currently
->  Willy> in a "Other" menu.Don't you think it would be a better place ?
->
-> What would Libraries->Boost contain? Just the single boost package?
 
-yes, but boost is a family of librairies. But anyway I don't really
-care about that.
-
+2013/1/23 Willy Lambert <lambert.willy@gmail.com>:
+> Here is some documentation modification as promised a month ago. I
+> send this email by hand, I hode it'll be ok, be sure I did my best to
+> try my git initiation ^ ^.
+>
+> Please carrefully review this as I'm quite new with buildroot and
+> english is not my native language.
+>
+>
+> Signed-off-by: A.R.D. <contact@team-ard.com>
+> ---
+>  docs/manual/beyond-buildroot.txt    |   83 ++++++++++++++++++++++++++++++-----
+>  docs/manual/customize-toolchain.txt |   45 ++++++++++++++++---
+>  docs/manual/make-tips.txt           |   12 +++++
+>  docs/manual/manual.txt              |    4 +-
+>  4 files changed, 125 insertions(+), 19 deletions(-)
+>
+> diff --git a/docs/manual/beyond-buildroot.txt b/docs/manual/beyond-buildroot.txt
+> index a87b584..d9bdd32 100644
+> --- a/docs/manual/beyond-buildroot.txt
+> +++ b/docs/manual/beyond-buildroot.txt
+> @@ -3,17 +3,77 @@
+>  Beyond Buildroot
+>  ================
+>
+> -Boot the generated images
+> --------------------------
+> +After having run Buildroot, you will have a brand new filesystem for
+> your target exported in buildroot/output/images. The content of this
+> folder depends of the option you choosed during buildroot
+> configuration in the "Filesystem images" section.
+>
+> -NFS boot
+> -~~~~~~~~
+> +So what's next ? You will probably want to :
+>
+> -To achieve NFS-boot, enable _tar root filesystem_ in the _Filesystem
+> -images_ menu.
+> +* generate a virtual disk to dump to real system or to use in
+> virtualisation systems (http://wiki.qemu.org/Main_Page[Qemu],
+> https://www.virtualbox.org/[VirtualBox],...)
+> +
+> +* test your kernel and your rootfs in virtualisation systems
+> +
+> +* install your rootfs on the target to test it
+> +
+> +This stuff is really depending on each project and hardware, so we
+> cannot describe every solution here, and this is where Buildroot's
+> work ends. The following section aims at guiding new user on what to
+> do next to avoid staying in the dark. It is *not* an exact guide on
+> how to precisely do what is described. Please take the time to have a
+> look to refered projets to get those details.
+> +
+> +Generate a bootable raw disk file
+> +---------------------------------
+> +
+> +If you plan to use virtual machines, or to copy a binary bootable
+> image to your target, you will need to create a "virtual disk". To
+> create a bootable raw disk file you will need to :
+> +
+> +* create an empty file with "dd"
+> +
+> +* partition the file as a disk with "fdisk"
+> +
+> +* set the MBR
+> +
+> +* create virtual devices in /dev pointing to your virtual disk
+> partitions (as you will have with /dev/sda, /dev/sda1, /dev/sda2,...)
+> with http://robert.penz.name/73/kpartx-a-tool-for-mounting-partitions-within-an-image-file/[kpartx]
+> +
+> +* mount one (or several) partition of your virtual disk with "mount"
+> +
+> +* extract your rootfs, boot folder,home directory, ... into them.
+> +
+> +Network boot
+> +-------------
+> +
+> +Some device doesn't have external memory and need to be booted to be
+> able to install the rootfs. A nice way of doing this is to boot from
+> the network. If your device allows you to do that you will be able to
+> :
+> +
+> +* test the in-progress-rootfs without installing it on your system
+> (it prevents ruining flash memories)
+> +
+> +* create a second buildroot project with a minimalist installer that
+> will install your production rootfs on the target.
+> +
+> +
+> +Network bootloaders (PXE,iPXE)
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +To fully boot on the network you need a network bootloader. This is
+> optionnal and you could use your classic bootloader to mount a NFS
+> rootfs.
+> +
+> +http://download.intel.com/design/archives/wfm/downloads/pxespec.pdf[PXE]
+> is a specification that has been implemented at least by
+> http://www.syslinux.org/wiki/index.php/PXELINUX[PXELINUX] and
+> http://ipxe.org/[iPXE].
+> +
+> +The main idea is to have a DHCP server that provide a link to a
+> generic boot ROM that is accessible from a simple FTP server (TFTP).
+> Then your target boots with it and come back to the TFTP server to get
+> the specific stuff (for instance it's boot menu).
+> +
+> +Here is some hints on how to setup this :
+> +http://www.digitalpeer.com/id/linuxnfs
+> +
+> +
+> +NFS rootfs mount on "/"
+> +~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +The idea is to mount "/" with a network shared folder from a
+> http://tldp.org/HOWTO/NFS-HOWTO/index.html[NFS] server (in general
+> your dev host). To enable the NFS-boot, you shall activate the _tar
+> root filesystem_ option in the _Filesystem images_ menu.
+> +
+> +Your embedded kernel need at least the following option :
+> +
+> +* NFS filesystem support (CONFIG_NFS_FS).
+> +
+> +* Root file system on NFS (CONFIG_ROOT_NFS).
+> +
+> +* Ethernet (CONFIG_NET_ETHERNET).
+> +
+> +* The ethernet driver for the embedded network card.
+> +
+> +* IP: kernel level autoconfiguration (CONFIG_IP_PNP,
+> CONFIG_IP_PNP_BOOTTP, CONFIG_IP_PNP_DHCP).
+>
+>  After a complete build, just run the following commands to setup the
+> -NFS-root directory:
+> +NFS-root directory of the server :
+>
+>  -------------------
+>  sudo tar -xavf /path/to/output_dir/rootfs.tar -C /path/to/nfs_root_dir
+> @@ -21,10 +81,13 @@ sudo tar -xavf /path/to/output_dir/rootfs.tar -C
+> /path/to/nfs_root_dir
+>
+>  Remember to add this path to +/etc/exports+.
+>
+> -Then, you can execute a NFS-boot from your target.
+> +Then, you can execute a NFS-boot from your target. Here is a
+> documentation hints :
+> +
+> +
+> +
+>
+> -Chroot
+> -------
+> +Chroot into generated image
+> +---------------------------
+>
+>  If you want to chroot in a generated image, then there are few thing
+>  you should be aware of:
+> diff --git a/docs/manual/customize-toolchain.txt
+> b/docs/manual/customize-toolchain.txt
+> index 2b24412..1f146ad 100644
+> --- a/docs/manual/customize-toolchain.txt
+> +++ b/docs/manual/customize-toolchain.txt
+> @@ -16,6 +16,18 @@ generate it.
+>  It also requires to set the Buildroot settings according to the toolchain ones
+>  (see xref:external-toolchain[]).
+>
+> +Using the Crosstool-NG backend
+> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +The http://crosstool-ng.org[crosstool-NG] toolchain backend enables a rather
+> +limited set of settings under the Buildroot +Toolchain+ menu:
+> +
+> +* The http://crosstool-ng.org[crosstool-NG] configuration file
+> +
+> +* Gdb and some toolchain options
+> +
+> +Then, the toolchain can be fine-tuned by invoking +make ctng-menuconfig+.
+> +
+>  Using the internal Buildroot toolchain backend
+>  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>
+> @@ -33,14 +45,33 @@ However, it allows to tune major settings, such as:
+>  These settings are available after selecting the +Buildroot toolchain+ type in
+>  the menu +Toolchain+.
+>
+> -Using the Crosstool-NG backend
+> -^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>
+> -The http://crosstool-ng.org[crosstool-NG] toolchain backend enables a rather
+> -limited set of settings under the Buildroot +Toolchain+ menu:
+> +The common use case is to have a buildroot setup where you disable
+> everything from the following menus:
+>
+> -* The http://crosstool-ng.org[crosstool-NG] configuration file
+> +* System configuration
+>
+> -* Gdb and some toolchain options
+> +* Package Selection for the target
+> +
+> +* Filesystem images
+> +
+> +* Bootloaders
+> +
+> +* Kernel
+> +
+> +And build this out of sources with :
+> +---------------------------------------
+> + $ make menuconfig O=/path/to/somewhere
+> +---------------------------------------
+> +
+> +Then configure your working configuration with :
+> +
+> +* Toolchain type (External toolchain)
+> +
+> +* Toolchain (Custom toolchain)
+> +
+> +* Toolchain origin (Pre-installed toolchain)
+> +
+> +* (/path/to/somewhere/host/usr) Toolchain path
+> +
+> +Note that builroot toolchains are *not* relocable, so if you plan to
+> share it with other machines, you will *have to* install it in the
+> same position ("/path/to/somewhere")
+>
+> -Then, the toolchain can be fine-tuned by invoking +make ctng-menuconfig+.
+> diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+> index 8cd77c0..80574bd 100644
+> --- a/docs/manual/make-tips.txt
+> +++ b/docs/manual/make-tips.txt
+> @@ -53,6 +53,18 @@ and target trees, the images and the toolchain):
+>   $ make clean
+>  --------------------
+>
+> +
+> +The present manual sources are in the buildroot/docs/manual folder.
+> You may compile them with :
+> +
+> +---------------------------------
+> + $ make manual-clean
+> + $ make manual
+> +---------------------------------
+> +
+> +The output documentation is provided in the
+> buildroot/output/docs/manual folder.
+> +
+> +*Note* : asciidoc is required to build it. There is a known issue
+> that you can't build it under Dedian Squeeze.
+> +
+>  To delete all build products as well as the configuration:
+>
+>  --------------------
+> diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+> index c34e0ca..2f49674 100644
+> --- a/docs/manual/manual.txt
+> +++ b/docs/manual/manual.txt
+> @@ -17,6 +17,8 @@ include::starting-up.txt[]
+>
+>  include::working-with.txt[]
+>
+> +include::beyond-buildroot.txt[]
+> +
+>  include::faq-troubleshooting.txt[]
+>
+>  include::going-further.txt[]
+> @@ -25,8 +27,6 @@ include::developer-guide.txt[]
+>
+>  include::legal-notice.txt[]
+>
+> -include::beyond-buildroot.txt[]
+> -
+>  include::get-involved.txt[]
+>
+>  include::contribute.txt[]
 > --
-> Bye, Peter Korsgaard
+> 1.7.9.5
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+-- 
+Samuel
