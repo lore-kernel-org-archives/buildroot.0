@@ -1,46 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Jan 2013 16:57:19 +0100
-Subject: [Buildroot] Squashfs boot
-In-Reply-To: <50FED12F.4050209@petroprogram.com>
-References: <CAN_xxrWTp21-a-jD7x11yJa6ghM=C=ON2h_bx_is1iFhEkE0bQ@mail.gmail.com>
- <CAN_xxrUK+_=8ETwqCG=Q-5BhDbNCVR-yr9d_2uCbnJrqcg2eow@mail.gmail.com>
- <50FE8914.30909@petroprogram.com>
- <CAN_xxrVD=Tq=ekME-jdHKRzyUwXk0PMocQX9mrxxcgjZQ8SYqA@mail.gmail.com>
- <50FED12F.4050209@petroprogram.com>
-Message-ID: <20130123165719.2d62382c@skate>
+Date: Wed, 23 Jan 2013 17:00:17 +0100
+Subject: [Buildroot] ISO image generation not working, 2012.11.1
+In-Reply-To: <1358861061.94407.YahooMailNeo@web172102.mail.ir2.yahoo.com>
+References: <1358854016.82958.YahooMailNeo@web172106.mail.ir2.yahoo.com>
+ <1358861061.94407.YahooMailNeo@web172102.mail.ir2.yahoo.com>
+Message-ID: <20130123170017.5a40bb53@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stefan Fr?berg,
+Dear bifferos,
 
-On Tue, 22 Jan 2013 19:49:35 +0200, Stefan Fr?berg wrote:
-> It's true that you can use squashfs to compress whole system but even
-> in that case you have to
-> make your own init script that will take care of all the magic of
-> mounting. And because squashfs is read-only filesystem then it get's
-> more trickier because you have to take care
-> of yourself of all those /tmp and /var/log etc.. directories that need
-> to store temporarily stuff.
+On Tue, 22 Jan 2013 13:24:21 +0000 (GMT), bifferos wrote:
 
-Huh? Mounting a squashfs filesystem as the root filesystem is very
-easy. Just use root=/dev/<whereyourrootfsis> and that's it.
+> ----- Original Message -----
+> > PS:? 2011.11 was working fine.
+> 
+> I tested this with some other versions.? 
+> 
+> 2012.05 - Working
+> 2012.08 - Working
+> 
+> So I guess this was broken between 2012.08 and 2012.11.1.? 2012.11
+> doesn't build at all for me, so I couldn't test that.
 
-Buildroot already mounts a tmpfs in /tmp and has several symlinks
-from /var/<something> to /tmp.
+Can you post your .config and the exact steps to reproduce and boot the
+system you generate?
 
-So, with the basic default Buildroot configuration, there is absolutely
-nothing complicated in having the entire root filesystem read-only
-inside SquashFS. On several projects, I've generated a system with
-Buildroot where the entire filesystem is read-only mounted. No problem
-at all.
-
-I think your solution is much more complex than just having the entire
-root filesystem read-only.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
