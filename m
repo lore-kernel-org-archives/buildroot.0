@@ -1,58 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Jan 2013 07:39:04 +0100
-Subject: [Buildroot] [PATCH] vsftpd: install sample config file to /etc
-In-Reply-To: <50FD856D.3020002@relinux.de>
-References: <1358328248-15016-1-git-send-email-sho@relinux.de>
- <50FA748B.903@mind.be> <50FD856D.3020002@relinux.de>
-Message-ID: <5100D708.8010008@mind.be>
+Date: Wed, 23 Jan 2013 18:38:07 +0100
+Subject: [Buildroot] [git commit] polkit: new package
+In-Reply-To: <20130120221146.94C249A440@busybox.osuosl.org>
+References: <20130120221146.94C249A440@busybox.osuosl.org>
+Message-ID: <51001FFF.3080400@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/21/13 19:14, Stephan Hoffmann wrote:
-> Am 19.01.2013 11:25, schrieb Arnout Vandecappelle:
->> On 16/01/13 10:24, Stephan Hoffmann wrote:
->>> vsftpd comes with a sample config file that can serve as a starting
->>> point for customization and enables a basic functionality. Since
->>> this config refers to a directory "/usr/share/empty" this is also
->>> created.
->>
->>   I think the point of /usr/share/empty is that it's a directory that
->> doesn't exist, so vsftpd will not allow any up/download unless you
->> change the configuration file.
- >
-> Arnout, Peter,
+On 01/20/13 23:07, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=ff3c47ee04daa6f97e9911659fdea0636d65327f
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 >
-> I checked this. Obviously, vsftpd uses this directory to chroot there.
-> If it isn't present it refuses to work:
->> 500 OOPS: vsftpd: not found: directory given in
->> 'secure_chroot_dir':/usr/share/empty
- >
-> At least I admit that my commit message was misleading. So I'll send a
-> patch to add this;-)
->
->>   I think it's a bad idea to default giving access to some random
->> location - even if it is read-only non-anonymous access to an empty
->> directory.
- >
-> That is not the case. Default configuration allows anonymous login, but
-> shows empty directory without write access.
+> [Peter: Config.in comment tweak]
+> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Marek Belisko<marek.belisko@open-nandra.com>
+> Signed-off-by: Peter Korsgaard<jacmet@sunsite.dk>
+[snip]
+> diff --git a/package/polkit/Config.in b/package/polkit/Config.in
+> new file mode 100644
+> index 0000000..da5f985
+> --- /dev/null
+> +++ b/package/polkit/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_POLKIT
+> +	bool "polkit"
+> +	depends on BR2_USE_WCHAR # libglib2
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_EXPAT
+> +	help
+> +	  PolicyKit is a toolkit for defining and handling
+> +	  authorizations.  It is used for allowing unprivileged
+> +	  processes to speak to privileged processes.
+> +
+> +	  http://www.freedesktop.org/wiki/Software/polkit
 
-  I still think it's better to make vsftpd fail to start than to give 
-anonymous read-only access to some random empty directory. That way you 
-at least notice that something is wrong.
-
-  That said, it's no big deal. It's just a pity that if you provide a 
-real vsftpd.conf in the post-build script, you'll still get this useless 
-/usr/share/empty.
+  The comment when !BR2_USE_WCHAR is missing, no?
 
   Regards,
   Arnout
-
-
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
