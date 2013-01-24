@@ -1,35 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 24 Jan 2013 09:13:44 -0300
-Subject: [Buildroot] [PATCH 3/3] initramfs: add support for LZO and XZ
- compression methods
-In-Reply-To: <5101244C.7080307@petroprogram.com>
-References: <1358808943-17063-1-git-send-email-gustavo@zacarias.com.ar>
- <1358808943-17063-3-git-send-email-gustavo@zacarias.com.ar>
- <20130122180554.6c540102@skate> <50FED7D3.3060600@petroprogram.com>
- <51011175.9010106@zacarias.com.ar> <5101244C.7080307@petroprogram.com>
-Message-ID: <51012578.5010308@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 24 Jan 2013 13:44:43 +0100
+Subject: [Buildroot] root.fs tar fails on 2012.11 and 2013.x from today
+In-Reply-To: <5100D7E5.1060707@mind.be> (Arnout Vandecappelle's message of
+ "Thu, 24 Jan 2013 07:42:45 +0100")
+References: <CAG6aBkUKBBWJPAmQaP_scR4-7o=uLuu69vdp0nANVuoDhRnQCg@mail.gmail.com>
+ <20130119000053.3f7eebc1@skate>
+ <CAG6aBkX8i42SpZAeQ2oPBZOMdT+V125Nadr_OFMoVzNJCda+9Q@mail.gmail.com>
+ <20130121181139.09c586ce@skate>
+ <CAG6aBkXiBagJnL+CC-7CoVdrN+-rzf-89KpwZraPtt0XNWc4sg@mail.gmail.com>
+ <20130121185143.7b62db61@skate> <5100D7E5.1060707@mind.be>
+Message-ID: <87txq621j8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/24/2013 09:08 AM, Stefan Fr?berg wrote:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-> I think users should be allowed to do every possible combination they
-> want to.
-> But also give them big fat warning in cases when their choices might
-> drop performance
-> so that they are perfectly aware of consequences of the choices they
-> made in config.
-> So yeah, double (de)compression is option too but with big fat warning
-> added that might
-> affect your system speed.
-> 
-> User is the King.
+Hi,
 
-At this point my patchset (v2) does nothing to address the issue, so
-it's safe to commit.
-I was leaving that functionality for a separate one afterwards if the
-consensus is "go for it".
-Regards.
+ Arnout>  Would it be possible to add legacy config or .mk options that
+ Arnout> solve the migrated devtables and skeleton issue? Because this
+ Arnout> problem will not have gone away with the 2013.02 release,
+ Arnout> people will still be upgrading from 2012.08 or earlier.
+
+I don't think it can be solved nicely in kconfig, but we could fix it up
+automatically with sed on the .config.
+
+-- 
+Bye, Peter Korsgaard
