@@ -1,23 +1,54 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Jan 2013 19:56:31 +0100
-Subject: [Buildroot] [PATCH] gdb: Add support for gdb 7.5.1 and make it
- the default.
-In-Reply-To: <CAFbHwiQ2bqy9HMrWHLan-M3Oy1mFBd2QOkQMoVU=NiAKkd4cQw@mail.gmail.com>
-References: <CAFbHwiQ2bqy9HMrWHLan-M3Oy1mFBd2QOkQMoVU=NiAKkd4cQw@mail.gmail.com>
-Message-ID: <510183DF.2060004@mind.be>
+Date: Thu, 24 Jan 2013 20:19:18 +0100
+Subject: [Buildroot] [RFC v1 01/14] Add a new "src" directory in the
+ output directory
+In-Reply-To: <1663985.KsIK240cT1@sagittae>
+References: <1358713538-4364-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1358713538-4364-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1663985.KsIK240cT1@sagittae>
+Message-ID: <51018936.8000706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/24/13 12:33, Will Newton wrote:
->   	prompt "GDB debugger Version"
->   	default BR2_GDB_VERSION_6_6 if BR2_bfin
->   	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
+On 01/21/13 06:38, J?r?me Pouiller wrote:
+>> >  +SRC_DIR:=$(BASE_DIR)/src
+> IMHO, $(SRC_DIR) should be in $(TOPDIR) to be shared between different
+> configurations. In add $(SRC_DIR) have to customizable in case I would like to
+> clearly separate two projects.
+>
+> I think, my workspace would look like this:
+>    br/srcs-projet1
+>    br/srcs-projet2
+>    br/output-project1-configA
+>    br/output-project1-configB
+>    br/output-project2-configA
+>    br/output-project2-configB
+>
+> Finally SRC_DIR should be handled like DL_DIR.
 
-  Not related but I see it now: does gdb 7.* actually work for avr32? If 
-so, why do we keep this old version around?
+  I agree that that would be a good idea.
+
+  However, what if the patches are different for two configurations? They 
+can be different because:
+
+- there is a configuration option for custom patches, like 
+BR2_LINUX_KERNEL_PATCH
+
+- there are patches applied depending on configuration options, like 
+BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
+
+- there are manual modifications applied depending on some configuration 
+option, like BZIP2_NOLARGEFILE_FIX_MAKEFILE
+
+- override.mk appends to the FOO_PATCH variable
+
+- BR2_EXTRA_PACKAGE_PATCH_DIRS (not committed yet, 
+http://patchwork.ozlabs.org/patch/204216/ )
+
+  So in practice, I'm afraid it's not feasible.
 
   Regards,
   Arnout
