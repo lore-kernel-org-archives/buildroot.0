@@ -1,38 +1,49 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Jan 2013 08:09:45 +0100
-Subject: [Buildroot] [PATCH 3/3] initramfs: add support for LZO and XZ
- compression methods
-In-Reply-To: <1358808943-17063-3-git-send-email-gustavo@zacarias.com.ar>
-References: <1358808943-17063-1-git-send-email-gustavo@zacarias.com.ar>
- <1358808943-17063-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <5100DE39.70308@mind.be>
+Date: Thu, 24 Jan 2013 07:44:56 +0100
+Subject: [Buildroot] root.fs tar fails on 2012.11 and 2013.x from today
+In-Reply-To: <87k3r69vdi.fsf@dell.be.48ers.dk>
+References: <CAG6aBkUKBBWJPAmQaP_scR4-7o=uLuu69vdp0nANVuoDhRnQCg@mail.gmail.com>
+ <20130119000053.3f7eebc1@skate>
+ <CAG6aBkX8i42SpZAeQ2oPBZOMdT+V125Nadr_OFMoVzNJCda+9Q@mail.gmail.com>
+ <20130121181139.09c586ce@skate>
+ <CAG6aBkXiBagJnL+CC-7CoVdrN+-rzf-89KpwZraPtt0XNWc4sg@mail.gmail.com>
+ <20130121185143.7b62db61@skate> <87k3r69vdi.fsf@dell.be.48ers.dk>
+Message-ID: <5100D868.7070609@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/21/13 23:55, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias<gustavo@zacarias.com.ar>
-> ---
->   fs/common.mk      |  8 +++++++-
->   fs/cpio/Config.in | 18 ++++++++++++++----
->   2 files changed, 21 insertions(+), 5 deletions(-)
+On 01/21/13 20:41, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni<thomas.petazzoni@free-electrons.com>  writes:
 >
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 8b5b2f2..0c171fc 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -39,7 +39,7 @@ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE)) \
->   define ROOTFS_TARGET_INTERNAL
+>   Thomas>  Dear Nigel Sollars,
+>   Thomas>  On Mon, 21 Jan 2013 12:26:41 -0500, Nigel Sollars wrote:
 >
->   # extra deps
-> -ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma)
-> +ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma) $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZO),host-lzop) $$(if $$(BR2_TARGET_ROOTFS_$(2)_XZ),host-xz)
+>   >>  Oh I see what your saying, basically the rule is dont use an older
+>   >>  config.  I am guess that manually changing the config to the new
+>   >>  location in this instance, would be good enough for now..
+>
+>   Thomas>  No, the rule is more "we should not break existing configurations". But
+>   Thomas>  sometimes we do, unfortunately. And in many cases, I am the one
+>   Thomas>  responsible for those changes that create incompatibility with existing
+>   Thomas>  configurations.
+>
+>   Thomas>  Arnout recently added a "legacy" mechanism that should, in the
+>   Thomas>  future, help in making such changes less painful.
+>
+> Indeed. It's not perfect, but we do try. I can also recommend to use the
+> 'make savedefconfig' feature to create a minimalistic defconfig file
+> rather than the full explicit .config, as you will then automatically
+> pick up the new defaults for stuff you haven't changed anyway.
 
-  Gustavo,
+  Unfortunately, the defconfig forgets about options that you want 
+explicitly at their default value but for which the default has changed. 
+BR2_KERNEL_HEADERS_xxx comes to mind.
 
-  If you were to submit a v4, could you split this very long line?
+  But there's absolutely no way to solve that, except by rewriting Kconfig...
+
 
   Regards,
   Arnout
