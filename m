@@ -1,46 +1,46 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Thu, 24 Jan 2013 11:34:29 +0100
-Subject: [Buildroot] [RFC v1 01/14] Add a new "src" directory in the
-	output directory
-In-Reply-To: <20130123164536.58d9e607@skate>
-References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <2395397.i0MApMWjWq@sagittae> <20130123164536.58d9e607@skate>
-Message-ID: <3919453.Rx41mcZzrx@sagittae>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 24 Jan 2013 07:48:21 -0300
+Subject: [Buildroot] [PATCH 3/3] initramfs: add support for LZO and XZ
+ compression methods
+In-Reply-To: <50FED7D3.3060600@petroprogram.com>
+References: <1358808943-17063-1-git-send-email-gustavo@zacarias.com.ar>
+ <1358808943-17063-3-git-send-email-gustavo@zacarias.com.ar>
+ <20130122180554.6c540102@skate> <50FED7D3.3060600@petroprogram.com>
+Message-ID: <51011175.9010106@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-
-On Wednesday 23 January 2013 16:45:36 Thomas Petazzoni wrote:
-> Dear J?r?me Pouiller,
+On 01/22/2013 03:17 PM, Stefan Fr?berg wrote:
+>> I don't remember exactly, but isn't the kernel build process itself
+>> capable of compressing the initramfs already? I remember we had some
+>> discussion about this a while ago, but I don't remember the outcome of
+>> these. Arnout was leading this discussion, IIRC.
 > 
-> On Tue, 22 Jan 2013 18:12:49 +0100, J?r?me Pouiller wrote:
-> > > This last point is the main reason. For now, the
-> > > LINUX_OVERRIDE_SRCDIR mechanism is barely usable because it does a
-> > > complete rsync of the Linux source tree, which is very annoying.
-> > > So, switching all packages to out of tree build sounds like an
-> > > interesting solution.
-> > 
-> > And what about building in a subdirectory of source directory ?
+> If it's embedded initramfs then yes, kernel can handle it all itself
+> just nicely.
+> without needing to compress inside initramfs.
+> (images kernel.png and kernel2.png)
 > 
-> I am not sure why you think it would solve any problem, but it is
-> anyway not possible for packages for which <pkg>_OVERRIDE_SRCDIR is
-> used: we certainly do *not* want to build in a subdirectory of the
-> source directory.
-Mainly because packages not compiling out-of-source won't need to be rsynced 
-between SRCDIR ans BUILDDIR.
+> But if outside cpio-archive (aka initramfs) then no. It has to be done
+> by hand.
+> And like I said to Gustavo it's bad to do double compression.
 
-Next it may solve questions about of dirclean behaviour.
-
-Finally because I like idea that a directory contains all files related to a 
-package.
-
-Sure, overrided packages have be to handled differently. 
-
-But it is only an idea, not sure it is a good idea :-) .
-
--- 
-J?r?me Pouiller
+Well, it's not always bad to do double compression.
+On some systems where touching the bootloader isn't an option with say,
+uboot, if uboot doesn't understand the newer compression method you're
+most likely stuck with gzip or none for the uImage.
+So doing xz for the initramfs in that case would be a space saver - even
+if you're doing double (de)compression.
+Granted, you'll pay it dearly in cpu time.
+I started looking at this because someone in #elinux started asking
+about making the tinyest possible kernel+initramfs for x86 for pxeboot
+with some packages and i saw we were lacking options to go for the best.
+Also noticed we weren't doing anything about the compressed cpio archive
+so the resulting combined kernel was roughly always the same size.
+For some unknown reason he wanted everything to fit in a 1.8 MB file -
+maybe some PXE limitation, i don't know.
+Question is, should we care about those uses cases or not?
+Regards.
