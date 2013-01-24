@@ -1,58 +1,83 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Jan 2013 07:32:52 +0100
-Subject: [Buildroot] Problem using Linux kernel archive from Gitorious
-In-Reply-To: <CAJkQPOnp5gk+GZc6BewOCqtv4EnktvNe=DXbdJv-fgh8Lsdvyg@mail.gmail.com>
-References: <CAJkQPOkYXUAWsJw_1dxsObUbx9bboSsF4+yBz6jKEKKXXhxZfg@mail.gmail.com>
- <50FA9D96.60802@mind.be>
- <CAJkQPOnp5gk+GZc6BewOCqtv4EnktvNe=DXbdJv-fgh8Lsdvyg@mail.gmail.com>
-Message-ID: <5100D594.7000000@mind.be>
+Date: Thu, 24 Jan 2013 07:26:38 +0100
+Subject: [Buildroot] [Feature Request] script to run after build
+	completion
+In-Reply-To: <4145444.6F8bMSMLXM@sagittae>
+References: <50F6DE49.4000600@relinux.de> <50FA7B6D.9040504@mind.be>
+ <4145444.6F8bMSMLXM@sagittae>
+Message-ID: <5100D41E.4030105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/21/13 12:30, Aras Vaichas wrote:
-> On 19 January 2013 13:20, Arnout Vandecappelle<arnout@mind.be>  wrote:
->> On 17/01/13 15:47, Aras Vaichas wrote:
->>> Hello,
->>>
->>> I am configuring Buildroot to use an OMAP-L138/DaVinci CPU. I'd like
->>> to use the Linux kernel version from
->>> http://gitorious.org/linux-davinci/linux-davinci/trees/v3.7-davinci1
->>> which is a specific tag in the git repository.
->>>
->>> In Buildroot I set:
->>> BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
->>> BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION=http://gitorious.org/linux-davinci/linux-davinci/archive-tarball/v3.7-davinci1
+On 01/21/13 06:27, J?r?me Pouiller wrote:
+> Hello Arnout,
+>
+> On Saturday 19 January 2013 11:54:37 Arnout Vandecappelle wrote:
 [snip]
->>   Note that the gitorious archive URLs have an important disadvantage:
->> if the archive is not already in the cache, than the site will respond
->> with a '202 Accepted'.  I think wget treats this as a success, so
->> buildroot will try to untar that placeholder file.
->
-> Thank you. Yes, I did notice the delay the first time I tried to
-> download the tarball. I figured this would be a problem.
->
-> I'm currently configuring Buildroot for a company, so I want (need) to
-> provide links that will always work.
+>>    For example, here's a script that will automatically take a defconfig
+>> and copy the images to the target:
+>>
+>> #! /bin/sh
+>> # Wrapper around make
+>>
+>> # We allow running from a foreign directory
+>> topdir="$(dirname $0)"
+>> [ "$topdir" = . ]&&  output="output/" || outdir="O=$PWD"
+>> MAKE="make -C $topdir $outdir"
+>>
+>> if [ ! -e .config ]; then
+>>     $MAKE project_defconfig
+>> fi
+>>
+>> echo $MAKE "$@"
+>> $MAKE "$@" || exit $?
+>>
+>> imgfiles="${output}images/bzImage ${output}images/rootfs.cpio.bz2"
+>>
+>> # Terminate if image files were not generated
+>> for f in $imgfiles; do
+>>      [ -r "$f" ] || exit 1
+>> done
+>>
+>> if [ "$TARGET_IP" ]; then
+>>     scp $imgfiles root@$TARGET_IP:/mnt/boot
+>>     ssh root@$TARGET_IP /sbin/reboot
+>> fi
+>>
+>>
+>>    There is really no need to change buildroot to support this kind of thing.
+ >
+> This script is not trivial in comparison to post-build.sh. Buildroot should
+> deliver a template of it...
+
+  Eh? First of all, the proposed change would not be enough to support a 
+script like the above, because the first part (automatically setting O= 
+and automatically running a defconfig) is missing. So the only thing that 
+could be done by the post-build script is everything starting from the 
+line "imgfiles=..." That leaves just two lines of script that become 
+redundant with the post-build infrastructure:
+
+echo $MAKE "$@"
+$MAKE "$@" || exit $?
 
 
-  You can of course use the git download method instead of the tarball. 
-Since you're downloading a tag, a shallow clone should work, so the 
-overhead compared to a tarball is limited.
 
-> I think what I will do is create
-> a davinci patch against a particular version of Linux and tell the
-> company to store the patch in their own source repository. That
-> guarantees that they can always get the file and re-recreate the same
-> same kernel - assuming kernel.org always has a copy of the original
-> kernel source for a particular version. :)
+> In add, user can continue to run make without running this script (especially
+> since this script does not appear in output/ directory).
 
-  To make things reproducible, it is anyway advisable to set up a 
-BR2_PRIMARY_SITE where the tarballs are kept. It's a bit of a pain to 
-maintain such a primary site, but it does solve a lot of potential issues 
-(e.g. the kernel.org website going down :-).
+  If you tell the user to use that script to do the build, he won't even 
+know about 'make'.
+
+> IMHO, external script is not right answer and feature asked by Stephan make
+> sense.
+
+  It does make sense. I just think that other, much more useful things 
+have been rejected in the past (e.g. the rsync filesystem, the split 
+Config.in that allows extra packages to be added)
+
 
   Regards,
   Arnout
