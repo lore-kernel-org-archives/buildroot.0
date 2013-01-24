@@ -1,36 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 24 Jan 2013 09:26:25 +0100
-Subject: [Buildroot] [git commit] polkit: new package
-In-Reply-To: <51001FFF.3080400@mind.be> (Arnout Vandecappelle's message of
- "Wed, 23 Jan 2013 18:38:07 +0100")
-References: <20130120221146.94C249A440@busybox.osuosl.org>
- <51001FFF.3080400@mind.be>
-Message-ID: <87d2wv2dhq.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Jan 2013 09:26:52 +0100
+Subject: [Buildroot] [git commit] polkit: show comment when wchar isn't
+	enabled
+Message-ID: <20130124082701.4BAB89A4A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6271f9099749744545eda66a31eb5c80e6278e52
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+As pointed out by Arnout.
 
- >> +config BR2_PACKAGE_POLKIT
- >> +	bool "polkit"
- >> +	depends on BR2_USE_WCHAR # libglib2
- >> +	select BR2_PACKAGE_LIBGLIB2
- >> +	select BR2_PACKAGE_EXPAT
- >> +	help
- >> +	  PolicyKit is a toolkit for defining and handling
- >> +	  authorizations.  It is used for allowing unprivileged
- >> +	  processes to speak to privileged processes.
- >> +
- >> +	  http://www.freedesktop.org/wiki/Software/polkit
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/polkit/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
- Arnout>  The comment when !BR2_USE_WCHAR is missing, no?
-
-Indeed, will fix - Thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/polkit/Config.in b/package/polkit/Config.in
+index da5f985..b47022a 100644
+--- a/package/polkit/Config.in
++++ b/package/polkit/Config.in
+@@ -9,3 +9,6 @@ config BR2_PACKAGE_POLKIT
+ 	  processes to speak to privileged processes.
+ 
+ 	  http://www.freedesktop.org/wiki/Software/polkit
++
++comment "polkit requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
