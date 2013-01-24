@@ -1,54 +1,26 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Jan 2013 07:44:56 +0100
-Subject: [Buildroot] root.fs tar fails on 2012.11 and 2013.x from today
-In-Reply-To: <87k3r69vdi.fsf@dell.be.48ers.dk>
-References: <CAG6aBkUKBBWJPAmQaP_scR4-7o=uLuu69vdp0nANVuoDhRnQCg@mail.gmail.com>
- <20130119000053.3f7eebc1@skate>
- <CAG6aBkX8i42SpZAeQ2oPBZOMdT+V125Nadr_OFMoVzNJCda+9Q@mail.gmail.com>
- <20130121181139.09c586ce@skate>
- <CAG6aBkXiBagJnL+CC-7CoVdrN+-rzf-89KpwZraPtt0XNWc4sg@mail.gmail.com>
- <20130121185143.7b62db61@skate> <87k3r69vdi.fsf@dell.be.48ers.dk>
-Message-ID: <5100D868.7070609@mind.be>
+Date: Thu, 24 Jan 2013 08:11:08 +0100
+Subject: [Buildroot] [PATCH 3/3] initramfs: add support for LZO and XZ
+ compression methods
+In-Reply-To: <50FED7D3.3060600@petroprogram.com>
+References: <1358808943-17063-1-git-send-email-gustavo@zacarias.com.ar>
+ <1358808943-17063-3-git-send-email-gustavo@zacarias.com.ar>
+ <20130122180554.6c540102@skate> <50FED7D3.3060600@petroprogram.com>
+Message-ID: <5100DE8C.3040203@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/21/13 20:41, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni<thomas.petazzoni@free-electrons.com>  writes:
->
->   Thomas>  Dear Nigel Sollars,
->   Thomas>  On Mon, 21 Jan 2013 12:26:41 -0500, Nigel Sollars wrote:
->
->   >>  Oh I see what your saying, basically the rule is dont use an older
->   >>  config.  I am guess that manually changing the config to the new
->   >>  location in this instance, would be good enough for now..
->
->   Thomas>  No, the rule is more "we should not break existing configurations". But
->   Thomas>  sometimes we do, unfortunately. And in many cases, I am the one
->   Thomas>  responsible for those changes that create incompatibility with existing
->   Thomas>  configurations.
->
->   Thomas>  Arnout recently added a "legacy" mechanism that should, in the
->   Thomas>  future, help in making such changes less painful.
->
-> Indeed. It's not perfect, but we do try. I can also recommend to use the
-> 'make savedefconfig' feature to create a minimalistic defconfig file
-> rather than the full explicit .config, as you will then automatically
-> pick up the new defaults for stuff you haven't changed anyway.
+On 01/22/13 19:17, Stefan Fr?berg wrote:
+[snip]
+> Here's are the different combinations:
 
-  Unfortunately, the defconfig forgets about options that you want 
-explicitly at their default value but for which the default has changed. 
-BR2_KERNEL_HEADERS_xxx comes to mind.
-
-  But there's absolutely no way to solve that, except by rewriting Kconfig...
-
+  Excellent explanation! How about adding this to the documentation?
 
   Regards,
   Arnout
-
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
