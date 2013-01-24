@@ -1,60 +1,36 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Thu, 24 Jan 2013 11:33:53 +0000
-Subject: [Buildroot] [PATCH] gdb: Add support for gdb 7.5.1 and make it the
-	default.
-Message-ID: <CAFbHwiQ2bqy9HMrWHLan-M3Oy1mFBd2QOkQMoVU=NiAKkd4cQw@mail.gmail.com>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Thu, 24 Jan 2013 13:55:35 +0200
+Subject: [Buildroot] [PATCH 3/3] initramfs: add support for LZO and XZ
+ compression methods
+In-Reply-To: <5100DE8C.3040203@mind.be>
+References: <1358808943-17063-1-git-send-email-gustavo@zacarias.com.ar>
+ <1358808943-17063-3-git-send-email-gustavo@zacarias.com.ar>
+ <20130122180554.6c540102@skate> <50FED7D3.3060600@petroprogram.com>
+ <5100DE8C.3040203@mind.be>
+Message-ID: <51012137.5060600@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Will Newton <will.newton@imgtec.com>
----
- toolchain/gdb/Config.in |    9 ++++++++-
- 1 files changed, 8 insertions(+), 1 deletions(-)
+24.1.2013 9:11, Arnout Vandecappelle kirjoitti:
+> On 01/22/13 19:17, Stefan Fr?berg wrote:
+> [snip]
+>> Here's are the different combinations:
+>
+>  Excellent explanation! How about adding this to the documentation?
+>
+>  Regards,
+>  Arnout
 
-I'm imagine a few of those older version could be safely removed but I am not
-sure which versions people are using. Aside from avr32 and bfin is anyone
-using a non-7.4 version?
+Well, uh...ok.
+But before that I have to finish that <pkg>_CONFIG_FIXUP thing first.
+I think ill just make one final, v3 version, of it with fixed doc and
+your sed changes
+as one single combined patch.
+And then Im going to test it one final time before resubmit.
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index 6a8e48e..53dcb93 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -45,7 +45,7 @@ choice
- 	prompt "GDB debugger Version"
- 	default BR2_GDB_VERSION_6_6 if BR2_bfin
- 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
--	default BR2_GDB_VERSION_7_4
-+	default BR2_GDB_VERSION_7_5
- 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_GDB_SERVER || BR2_PACKAGE_GDB_HOST
- 	help
- 	  Select the version of gdb you wish to use.
-@@ -95,6 +95,12 @@ choice
- 		depends on BR2_TOOLCHAIN_HAS_THREADS_DEBUG_IF_NEEDED
- 		select BR2_PTHREAD_DEBUG if (BR2_TOOLCHAIN_BUILDROOT && !BR2_PTHREADS_NONE)
 
-+	config BR2_GDB_VERSION_7_5
-+		bool "gdb 7.5.x"
-+		depends on !BR2_bfin
-+		depends on BR2_TOOLCHAIN_HAS_THREADS_DEBUG_IF_NEEDED
-+		select BR2_PTHREAD_DEBUG if (BR2_TOOLCHAIN_BUILDROOT && !BR2_PTHREADS_NONE)
-+
- endchoice
-
- comment "gdb support needs pthread debug support in toolchain"
-@@ -110,3 +116,4 @@ config BR2_GDB_VERSION
- 	default "7.2a"     if BR2_GDB_VERSION_7_2
- 	default "7.3.1"    if BR2_GDB_VERSION_7_3
- 	default "7.4.1"    if BR2_GDB_VERSION_7_4
-+	default "7.5.1"    if BR2_GDB_VERSION_7_5
--- 
-1.7.1
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-gdb-Add-support-for-gdb-7.5.1-and-make-it-the-defaul.patch
-Type: application/octet-stream
-Size: 1558 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130124/ad467cac/attachment.obj>
+Regards
+Stefan
