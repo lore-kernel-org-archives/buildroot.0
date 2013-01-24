@@ -1,15 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 Jan 2013 13:44:43 +0100
-Subject: [Buildroot] root.fs tar fails on 2012.11 and 2013.x from today
-In-Reply-To: <5100D7E5.1060707@mind.be> (Arnout Vandecappelle's message of
- "Thu, 24 Jan 2013 07:42:45 +0100")
-References: <CAG6aBkUKBBWJPAmQaP_scR4-7o=uLuu69vdp0nANVuoDhRnQCg@mail.gmail.com>
- <20130119000053.3f7eebc1@skate>
- <CAG6aBkX8i42SpZAeQ2oPBZOMdT+V125Nadr_OFMoVzNJCda+9Q@mail.gmail.com>
- <20130121181139.09c586ce@skate>
- <CAG6aBkXiBagJnL+CC-7CoVdrN+-rzf-89KpwZraPtt0XNWc4sg@mail.gmail.com>
- <20130121185143.7b62db61@skate> <5100D7E5.1060707@mind.be>
-Message-ID: <87txq621j8.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Jan 2013 14:10:37 +0100
+Subject: [Buildroot] Problem using Linux kernel archive from Gitorious
+In-Reply-To: <5100D594.7000000@mind.be> (Arnout Vandecappelle's message of
+ "Thu, 24 Jan 2013 07:32:52 +0100")
+References: <CAJkQPOkYXUAWsJw_1dxsObUbx9bboSsF4+yBz6jKEKKXXhxZfg@mail.gmail.com>
+ <50FA9D96.60802@mind.be>
+ <CAJkQPOnp5gk+GZc6BewOCqtv4EnktvNe=DXbdJv-fgh8Lsdvyg@mail.gmail.com>
+ <5100D594.7000000@mind.be>
+Message-ID: <87mwvy20c2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,13 +18,25 @@ To: buildroot@busybox.net
 
 Hi,
 
- Arnout>  Would it be possible to add legacy config or .mk options that
- Arnout> solve the migrated devtables and skeleton issue? Because this
- Arnout> problem will not have gone away with the 2013.02 release,
- Arnout> people will still be upgrading from 2012.08 or earlier.
+ >> I think what I will do is create
+ >> a davinci patch against a particular version of Linux and tell the
+ >> company to store the patch in their own source repository. That
+ >> guarantees that they can always get the file and re-recreate the same
+ >> same kernel - assuming kernel.org always has a copy of the original
+ >> kernel source for a particular version. :)
 
-I don't think it can be solved nicely in kconfig, but we could fix it up
-automatically with sed on the .config.
+ Arnout>  To make things reproducible, it is anyway advisable to set up a
+ Arnout> BR2_PRIMARY_SITE where the tarballs are kept. It's a bit of a pain to
+ Arnout> maintain such a primary site, but it does solve a lot of potential
+ Arnout> issues (e.g. the kernel.org website going down :-).
+
+Pain to maintain? You can just add a cronjob doing:
+
+make <blah>_defconfig
+make BUILDROOT_DL_DIR=/path/to/primary/mirror source
+
+That's basically how I maintain sources.buildroot.net (I use
+allyesconfig instead)
 
 -- 
 Bye, Peter Korsgaard
