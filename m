@@ -1,96 +1,30 @@
-From: Stephen Turner <artic.knight31337@gmail.com>
-Date: Thu, 24 Jan 2013 14:29:16 -0500
-Subject: [Buildroot] Squashfs boot
-In-Reply-To: <51017295.7020803@mind.be>
-References: <CAN_xxrWTp21-a-jD7x11yJa6ghM=C=ON2h_bx_is1iFhEkE0bQ@mail.gmail.com>
- <CAN_xxrUK+_=8ETwqCG=Q-5BhDbNCVR-yr9d_2uCbnJrqcg2eow@mail.gmail.com>
- <50FE8914.30909@petroprogram.com> <51017295.7020803@mind.be>
-Message-ID: <CAN_xxrUMYm_q7JvdJhCHWtcjzAVBxHkV3GHvZL4-ueur8ODvLA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 24 Jan 2013 21:09:05 +0100
+Subject: [Buildroot] [PATCH] gdb: Add support for gdb 7.5.1 and make it
+	the default.
+In-Reply-To: <510183DF.2060004@mind.be> (Arnout Vandecappelle's message of
+ "Thu, 24 Jan 2013 19:56:31 +0100")
+References: <CAFbHwiQ2bqy9HMrWHLan-M3Oy1mFBd2QOkQMoVU=NiAKkd4cQw@mail.gmail.com>
+ <510183DF.2060004@mind.be>
+Message-ID: <87ehha1gym.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I shouldnt need unionfs as im just loading a basic thinclient and having it
-in a ro image would be best to prevent accidental or intentional tampering
-when a simple reboot will fix. The rw items can use a temp ramdisk. Only
-issue i was running into was figuring out how to read a squashfs at boot
-with no initrd or basically  busybox squash output which is only bzImage
-and rootfs.squashfs. i have managed to move usr to squash and use the rest
-of the os as initrd but if thats what needs to be done then shouldnt the
-busybox build script handle that?
-On Jan 24, 2013 1:50 PM, "Arnout Vandecappelle" <arnout@mind.be> wrote:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-> On 01/22/13 13:41, Stefan Fr?berg wrote:
-> [snip]
->
->> My /etc/fstab look like this
->> # /etc/fstab: static file system information.
->> #
->> # <file system> <mount pt> <type> <options> <dump> <pass>
->> /modules.sqfs        /lib/modules    squashfs
->>  defaults,auto,loop,noatime    0    0
->> /firmware.sqfs      /lib/firmware    squashfs
->>  defaults,auto,loop,noatime    0    0
->> /dev/cdrom            /mnt/cdrom    iso9660      defaults,noatime    0
->>  0
->> /mnt/cdrom/usr.sqfs        /mnt/ro        squashfs
->>  defaults,auto,loop,noatime    0    0
->>
->
->  Now this is a real use case for being able to split the rootfs into
-> several parts.
->
->  However, as Thomas mentioned, it's simpler to just use a complete
-> squashfs rootfs and put the unionfs on top of that. How? Somewhere early in
-> your init.d you put something like the following (a script I swiped from
-> the internet, don't remember where from; I haven't actually tested it
-> myself):
->
-> #!/bin/sh
->
-> CHROOT_PATH="/tmp/unionfs"
-> UNION_OPT="-o allow_other,use_ino,suid,dev,**nonempty,chroot=$CHROOT_PATH,
-> **max_files=32768"
->
-> #mount -t proc proc /proc
-> #mount -t tmpfs tmpfs /tmp
->
-> mkdir -p $CHROOT_PATH/root
-> mkdir -p $CHROOT_PATH/rw
-> mkdir -p /tmp/union
->
-> # Mount the filesystems
-> mount --bind / $CHROOT_PATH/root
-> # $CHROOT_PATH/rw is already on a tmpfs so doesn't need to be mounted
->
-> modprobe fuse
-> $CHROOT_PATH/root/usr/bin/**unionfs $UNION_OPT /rw=RW:/root=RO /tmp/union
->
-> #mount -t proc proc /tmp/union/proc
->
-> cd /tmp/union
-> mkdir oldroot
-> pivot_root . oldroot
-> cd /
->
-> # Move existing mounts, if any
-> #umount /proc
-> mount --move /oldroot/proc /proc
-> mount --move /oldroot/dev /dev
-> mount --move /oldroot/sys /sys
-> mount --move /oldroot/tmp /tmp
-> rmdir /tmp/union
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130124/d62f19de/attachment.html>
+ Arnout> On 01/24/13 12:33, Will Newton wrote:
+ >> prompt "GDB debugger Version"
+ >> default BR2_GDB_VERSION_6_6 if BR2_bfin
+ >> default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
+
+ Arnout>  Not related but I see it now: does gdb 7.* actually work for avr32?
+ Arnout> If so, why do we keep this old version around?
+
+I believe it doesn't, but I've never tried. All the 7.x versions
+shouldn't be selectable for avr32 (unless I'm wrong and they do work).
+
+-- 
+Bye, Peter Korsgaard
