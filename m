@@ -1,37 +1,66 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Jan 2013 07:52:30 +0100
-Subject: [Buildroot] [PATCH 03/10] audiofile: add license information
-In-Reply-To: <50FDC80E.8060703@zacarias.com.ar>
-References: <1358803790-30245-1-git-send-email-gustavo@zacarias.com.ar>
- <1358803790-30245-3-git-send-email-gustavo@zacarias.com.ar>
- <878v7m888s.fsf@dell.be.48ers.dk> <50FDC5BC.8060609@zacarias.com.ar>
- <87622q6t5y.fsf@dell.be.48ers.dk> <50FDC80E.8060703@zacarias.com.ar>
-Message-ID: <5100DA2E.4050504@mind.be>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Thu, 24 Jan 2013 08:55:26 +0100
+Subject: [Buildroot] Boost integration
+In-Reply-To: <CAKvQZ_1fD8ujBzcAhReQLwgwfkLZFyB0KXM-VB+_q6-=d1j-HA@mail.gmail.com>
+References: <CAKvQZ_1g6_KHpdyYQ6H-pk6T5gx-qsW6SvaF7XBb2JJCSf7cLg@mail.gmail.com>
+ <201301222220.14854.yann.morin.1998@free.fr>
+ <CAKvQZ_0f+7B8N5Fp0O6tDUxYYeuUd+wD-92-ec-hvR8KzfjDoA@mail.gmail.com>
+ <CAKvQZ_2XrayYK1DuVAUCDQkoeOHqv6iB2QT0b-pKy_y7AXv2bA@mail.gmail.com>
+ <87libk2s6i.fsf@dell.be.48ers.dk>
+ <CAKvQZ_2aGiOzea_GmPjW3x+chDSRTicmFB3+MDh8fsCgROZ8oA@mail.gmail.com>
+ <87ham73n37.fsf@dell.be.48ers.dk>
+ <CAKvQZ_1fD8ujBzcAhReQLwgwfkLZFyB0KXM-VB+_q6-=d1j-HA@mail.gmail.com>
+Message-ID: <5100E8EE.4030309@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/21/13 23:58, Gustavo Zacarias wrote:
-> On 01/21/2013 07:57 PM, Peter Korsgaard wrote:
+Am 23.01.2013 18:08, schrieb Willy Lambert:
+> 2013/1/23 Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>>> "Willy" == Willy Lambert <lambert.willy@gmail.com> writes:
+snip
+>>>>>>>  Willy> I can propose you a patch to be abble to select different version a
+>>>>>>>  Willy> boost in config menus. But I'm not sure that the current mk can handle
+>>>>>>>  Willy> other versions.
+>>>>>>>
+>>>>>>> We normally don't support multiple versions of a package (except for a
+>>>>>>> few minor exceptions) as that very soon becomes a support headache. Why
+>>>>>>> would you want more than 1 version?
+> Because I need boost for another framework, that is not supporting
+> latest boost versions for now. And mainlining lastest boost support
+> there is not an option (it is at best a parrallel work to do on my
+> side, but I can't be on all fires ^^). And even if it compiles, I
+> don't want to play with versionning incompatibilities beetwen boost
+> and my framework. I need the 1.42.0 version.
+Hi,
+
+isn't this a perfect use case for the source override feature?
+
+Regards
+
+Stephan
 >
->> Yes, but they are both 'or later'.
+> The idea is not necessarily to maintain all boost versions, but if the
+> same script can handle several one, it's a pity to just propose the
+> last one.
+> Said differently, I have written the part that allow to choose a
+> version on the model of config files that choose kernels. If you are
+> interested in them I'll send you a patch. If you think you are Ok with
+> editing the boost.mk by hand I'll keep my patch locally.
 >
-> Ah ok, i thought you were nuking GPL.
-> I hate it when upstream doesn't update their license files...
-
-  The COPYING files provided by FSF don't include the "or later" 
-terminology; it has to be put either in some README or in the source 
-files themselves. The instructions in the COPYING file mention that.
-
-  Regards,
-  Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+>>  Willy> I personnaly put Boost in Packages->Librairies->Boost. It is currently
+>>  Willy> in a "Other" menu.Don't you think it would be a better place ?
+>>
+>> What would Libraries->Boost contain? Just the single boost package?
+> yes, but boost is a family of librairies. But anyway I don't really
+> care about that.
+>
+>> --
+>> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
