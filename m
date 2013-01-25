@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 25 Jan 2013 09:50:37 -0300
-Subject: [Buildroot] [PATCH 1/4] e2fsprogs: bump to version 1.42.7
-Message-ID: <1359118240-2397-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 25 Jan 2013 09:50:38 -0300
+Subject: [Buildroot] [PATCH 2/4] ntfs-3g: bump to version 2013.1.13
+In-Reply-To: <1359118240-2397-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1359118240-2397-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1359118240-2397-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +12,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/e2fsprogs/e2fsprogs.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ntfs-3g/ntfs-3g.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 5b3b7d0..edc3e8e 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
+index cefb73a..e9a91a4 100644
+--- a/package/ntfs-3g/ntfs-3g.mk
++++ b/package/ntfs-3g/ntfs-3g.mk
+@@ -4,12 +4,14 @@
  #
  #############################################################
  
--E2FSPROGS_VERSION = 1.42.6
-+E2FSPROGS_VERSION = 1.42.7
- E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
- E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
+-NTFS_3G_VERSION = 2012.1.15
++NTFS_3G_VERSION = 2013.1.13
+ NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
+ NTFS_3G_SITE = http://tuxera.com/opensource
+ NTFS_3G_CONF_OPT = --disable-ldconfig
+ NTFS_3G_INSTALL_STAGING = YES
+ NTFS_3G_DEPENDENCIES = host-pkgconf
++NTFS_3G_LICENSE = GPLv2+ LGPLv2+
++NTSF_3G_LICENSE_FILES = COPYING COPYING.LIB
+ 
+ ifeq ($(BR2_PACKAGE_LIBFUSE),y)
+ 	NTFS_3G_CONF_OPT += --with-fuse=external
 -- 
 1.7.12.4
