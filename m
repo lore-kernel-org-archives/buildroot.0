@@ -1,41 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 28 Jan 2013 08:14:50 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump 3.7.x stable version
-In-Reply-To: <1359371690-3703-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1359371690-3703-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1359371690-3703-2-git-send-email-gustavo@zacarias.com.ar>
+From: Eric =?UTF-8?B?QsOpbmFyZA==?= <eric@eukrea.com>
+Date: Fri, 25 Jan 2013 11:13:23 +0100
+Subject: [Buildroot] Mono Project
+In-Reply-To: <af7d339a8b6d435fc1cdc8c07f4dca9f-EhVcX19AQQBeR1svUFVGClxYaABWV0NeXy5NBUFdUF5aVlAWXFYZAFZQVF9WSUcDVg==-webmailer2@server05.webmailer.hosteurope.de>
+References: <af7d339a8b6d435fc1cdc8c07f4dca9f-EhVcX19AQQBeR1svUFVGClxYaABWV0NeXy5NBUFdUF5aVlAWXFYZAFZQVF9WSUcDVg==-webmailer2@server05.webmailer.hosteurope.de>
+Message-ID: <20130125111323.558e60ad@e6520eb>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Rainer,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 175a999..78b7b0c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_3_7
--	bool "3.7.4"
-+	bool "3.7.5"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.7.4" if BR2_LINUX_KERNEL_3_7
-+	default "3.7.5" if BR2_LINUX_KERNEL_3_7
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
--- 
-1.7.12.4
+Le Fri, 25 Jan 2013 08:16:59 +0100,
+"Rainer Berns at beka-elektronik.de" <berns@beka-elektronik.de> a ?crit :
+>  has anyone done some work/ tests with Mono and Buildroot in the past or 
+>  is
+>  currently working on it ?
+>  I want to do some tests with a Beaglebone board.
+> 
+you can base your work (and get some patches fixing cross compilation
+problems) on the recipes in :
+http://git.yoctoproject.org/cgit/cgit.cgi/meta-mono/tree/
+
+Eric
