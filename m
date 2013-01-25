@@ -1,46 +1,37 @@
-From: Patrick <kpa_info@yahoo.fr>
-Date: Fri, 25 Jan 2013 10:03:06 +0100
-Subject: [Buildroot] menuconfig error with python packages
-In-Reply-To: <51024537.2010204@yahoo.fr>
-References: <51024537.2010204@yahoo.fr>
-Message-ID: <51024A4A.6070909@yahoo.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 25 Jan 2013 11:06:13 +0100
+Subject: [Buildroot] [PATCH 3/3] sdl_gfx: bump to version 2.0.24
+In-Reply-To: <CAKcgs2wYN1OiQX7e5hRwontZQCSybwG-vJvTQwcSL_BV2V1F9Q@mail.gmail.com>
+ (Gilles Talis's message of "Thu, 24 Jan 2013 18:59:12 -0800")
+References: <1358453318-751-1-git-send-email-gilles.talis@gmail.com>
+ <1358453318-751-3-git-send-email-gilles.talis@gmail.com>
+ <87d2x0g818.fsf@dell.be.48ers.dk>
+ <CAKcgs2wYN1OiQX7e5hRwontZQCSybwG-vJvTQwcSL_BV2V1F9Q@mail.gmail.com>
+Message-ID: <87ehh9h90q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/25/2013 09:41 AM, Patrick wrote:
-> Dear all,
->
-> I have detected what it seems a strange behaviour with python in the
-> menuconfig. When activating python3 (BR2_PACKAGE_PYTHON3) the submenu
-> "external python modules" is not visible.
-> When activating dstat (BR2_PACKAGE_DSTAT) from "Debugging, profiling and
-> benchmarking" the "external python modules" submenu become visible.
->
-> Is this really the expected behaviour ? I don't think so
->
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
-I think the patch below fix the problem. The "external python modules" 
-submenu is now available when activating python3. Fow now only the 
-python-bottle package is available I have to check if others python 
-packages work also with python 3.
+ Gilles> finally found some time to look into this.
 
-Any comments ?
+ Gilles> The issue comes from the fact that even though aclocal.m4 and
+ Gilles> configure.in are identical across 2.0.23 and 2.0.24,
+ Gilles> ?configure.in timestamp has changed, making it newer than
+ Gilles> aclocal.m4. This leads "make" to try and re-generate
+ Gilles> aclocal.m4.  I am not expert enough in aclocal and m4 to fix
+ Gilles> the missing variables issue.  The only quick & dirty workaround
+ Gilles> I have found is to change configure.in file timestamp to what
+ Gilles> it was in 2.0.23 (touch -t .....).
 
-Patrick
+ Gilles> Would it be an acceptable patch to bump sdl_gfx to 2.0.24?
 
-diff --git a/package/Config.in b/package/Config.in
-index 10adf5d..1d477f7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -309,7 +309,7 @@ source "package/microperl/Config.in"
-  source "package/php/Config.in"
-  source "package/python/Config.in"
-  source "package/python3/Config.in"
--if BR2_PACKAGE_PYTHON
-+if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-  menu "external python modules"
-  source "package/python-bottle/Config.in"
-  source "package/python-dpkt/Config.in"
+Is there any strong reason to go for 2.0.24 over 23? Perhaps you could
+bring it up with sdl_gfx and get them to do a 2.0.25 release with
+aclocal.m4 regenerated?
+
+-- 
+Bye, Peter Korsgaard
