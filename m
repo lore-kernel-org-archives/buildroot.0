@@ -1,31 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 26 Jan 2013 10:45:08 +0100
-Subject: [Buildroot] can I build two copies of uboot in buildroot?
-In-Reply-To: <1359148418.7974.65.camel@genx> (John Stile's message of "Fri, 25
- Jan 2013 13:13:38 -0800")
-References: <1359148418.7974.65.camel@genx>
-Message-ID: <87wqv0ffbv.fsf@dell.be.48ers.dk>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Sat, 26 Jan 2013 18:57:28 +0100
+Subject: [Buildroot] rebuilding a project on older commits
+Message-ID: <51041908.1030803@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "John" == John Stile <john@stilen.com> writes:
+Hello,
 
- John> I have hacked at91bootstrap to select and boot one of two copies of
- John> uboot+env on a NAND flash, but I had to compile the second uboot my
- John> self, since the environment address is set at compile time, and
- John> buildroot only builds one copy of uboot.
+is there a simple way to rebuild a project without the whole
+crosscompiler part?
 
-Yes, you can (currently) only build a single u-boot in buildroot.
+I have to search in my project why now the current output of Buildroot
+isn't startable via nfs. So I want to go back and try out which commit
+breaks the build, like I can do similar with git bisect in other Git
+repos. Probably the busybox here is miss configured in the between time
+because the current kernel config, which has also some little changes
+works with an older rootfs.tar.
 
- John> How might I hack uboot to build two different copies of uboot?  I'm just
- John> changing the address location of the uboot environment, and saving the
- John> image as a different name.
+The current kernel with an actual rootfs ended up with
+> [   10.890000] Looking up port of RPC 100003/3 on 192.168.136.4
+> [   10.910000] Looking up port of RPC 100005/3 on 192.168.136.4
+> [   10.920000] VFS: Mounted root (nfs filesystem) on device 0:12.
+> [   10.930000] Freeing init memory: 104K
+> [   10.940000] Kernel panic - not syncing: No init found.  Try passing init= option to kernel. See Linux Documentation/init.txt for guidance.
 
-Why not just use redundant u-boot environment and let both u-boots use
-both? That way both environments are in sync and you gain redundancy.
+But after make <myproject>defconfig the complete crosscompiler is
+rebuilded which I don't want to do because I don't have change something
+on it. How to handle that?
 
--- 
-Bye, Peter Korsgaard
+Thanks and regards
+Carsten
