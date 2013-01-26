@@ -1,53 +1,78 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 26 Jan 2013 23:03:21 +0100
-Subject: [Buildroot] [RFC v1 05/14] autotools infrastructure: do the
- autoreconf as a post patch step
-In-Reply-To: <1358725943-31485-6-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1358725943-31485-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <510452A9.4050805@mind.be>
+Date: Sat, 26 Jan 2013 23:38:12 +0100
+Subject: [Buildroot] Squashfs boot
+In-Reply-To: <5102FF4E.1060405@petroprogram.com>
+References: <CAN_xxrWTp21-a-jD7x11yJa6ghM=C=ON2h_bx_is1iFhEkE0bQ@mail.gmail.com>
+ <CAN_xxrUK+_=8ETwqCG=Q-5BhDbNCVR-yr9d_2uCbnJrqcg2eow@mail.gmail.com>
+ <50FE8914.30909@petroprogram.com> <51017295.7020803@mind.be>
+ <CAN_xxrUMYm_q7JvdJhCHWtcjzAVBxHkV3GHvZL4-ueur8ODvLA@mail.gmail.com>
+ <5101B872.1090705@petroprogram.com>
+ <CAN_xxrXsvvupyo61cqZhCR4JyLwtCsm1NRAh9JCy_uVHRqGO4A@mail.gmail.com>
+ <5102FF4E.1060405@petroprogram.com>
+Message-ID: <51045AD4.1000100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/21/13 00:52, Thomas Petazzoni wrote:
-> Doing the autoreconf step as a pre-configure hook doesn't work
-> properly, because the source directory is read-only during the
-> configure step. And in fact, the autoreconf process modifies the
-> source code, so it is quite logical to do it as part of the patching
-> process rather than the configuration process.
+On 01/25/13 22:55, Stefan Fr?berg wrote:
+> Hello Stephen
+>
+> I made a quick conversion of my LiveCD initramfs stuff to squashfs image
+> file and then played little bit with it and kernel image
+> with the help of qemu. (took less time than starting all
+> reconfiguring/combiling from buildroot)
+>
+> The good news is that yes, it should be doable to do boot directly from
+> squashfs root image.
+>
+> For example I did this to start it (ramdisk_size is in kilobytes):
+>
+> qemu-system-i386 -kernel bzImage -initrd rootfs.sqfs -append
+> "ramdisk_size=131072"
+>
+> It first tries to unpack rootfs as initramfs and then it notices that
+> it's not initramfs but traditional,
+> older version of initrd file. (please see root.png).
+>
+> After that it should print RAMDISK: squashfs filesystem found and start
+> automatically loading it to ram.
+> (please see root2.png)
+>
+> After that it continues normally and starts the normal init process.
+>
+> And now the bad news:
+>
+> - Takes a lot of memory. This is old style initrd stuff (time when 2.4
+> kernel was still hot and new).
 
-  It was in fact moved from POST_PATCH to PRE_CONFIGURE in commit 
-89d1ad91fe4b1b65f0e902f94aba99a6cefbf631, and the PRE_CONFIGURE_HOOKS 
-were added specifically for this purpose. Unfortunately, the commit gives 
-no explanation as to why it was needed.
+  Yes, using squashfs as initrd is probably not what you want: it will 
+load the entire squashfs into memory (albeit compressed), and then copy 
+it (and decompress) when you access it.
+
+  The typical way to use squashfs is as a partition of your disk. So if 
+you'd boot from a USB stick, you'd make two partitions: an ext2 for grub 
+and the kernel, and a second one for the squashfs. To install it, just do 
+"cat output/images/rootfs.sqfs > /dev/sdb2" (assuming your USB key is 
+/dev/sdb and squashfs is the second partition). When booting, you append 
+the following the kernel command line: "root=/dev/sda2 rootwait" 
+(assuming there's no hard disk or anything so the USB key will end up as 
+/dev/sda).
+
+
+> - Squashfs is read-only so if you use mdev or udev then expect little
+> troubles (please see root3.png).
+>
+> However maybe buildroot init already takes care of those ????
+
+  Copy fs/cpio/init to output/target/init and all will be well.
 
 
   Regards,
   Arnout
 
->
-> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
-> ---
->   package/pkg-autotools.mk |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-> index bd87253..ec394fd 100644
-> --- a/package/pkg-autotools.mk
-> +++ b/package/pkg-autotools.mk
-> @@ -214,7 +214,7 @@ $(2)_DEPENDENCIES ?= $(filter-out host-automake host-autoconf host-libtool $(1),
->
->
->   ifeq ($$($(2)_AUTORECONF),YES)
-> -$(2)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
-> +$(2)_POST_PATCH_HOOKS += AUTORECONF_HOOK
->   $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
->   endif
->
-
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
