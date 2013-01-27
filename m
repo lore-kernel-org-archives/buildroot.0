@@ -1,107 +1,67 @@
-From: Daniel N <daniel@sigpwr.com>
-Date: Sun, 27 Jan 2013 14:52:49 -0800
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 28 Jan 2013 00:15:25 +0100
 Subject: [Buildroot] [PATCH] Fix PYC-only installation for Python3
-In-Reply-To: <5105AD6F.4070105@mind.be>
+In-Reply-To: <CADS0akgsXxFp_hnH9=7t6-KFTFdoXOMqtc8UycdfsDDRVFGW2A@mail.gmail.com>
 References: <1359313382-2257-1-git-send-email-daniel@sigpwr.com>
  <5105AD6F.4070105@mind.be>
-Message-ID: <CADS0akgsXxFp_hnH9=7t6-KFTFdoXOMqtc8UycdfsDDRVFGW2A@mail.gmail.com>
+ <CADS0akgsXxFp_hnH9=7t6-KFTFdoXOMqtc8UycdfsDDRVFGW2A@mail.gmail.com>
+Message-ID: <5105B50D.1020509@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+On 27/01/13 23:52, Daniel N wrote:
+> Arnout,
+>
+> Not quite. The commit you reference _does_ remove .py files on PYC_ONLY
+> installations, but the logic in python3 will not look for a .pyc file in
+> the __pycache__ directory if the parent .py file is not present. Thus, in
+> its current incarnation, the PYC_ONLY option breaks python3 at runtime.
+>
+> python3 does fall back to looking for a .pyc file in the directory that
+> it expects the .py to be in.
+>
+> http://www.python.org/dev/peps/pep-3147/#flow-chart
 
-Not quite. The commit you reference _does_ remove .py files on PYC_ONLY
-installations, but the logic in python3 will not look for a .pyc file in
-the __pycache__ directory if the parent .py file is not present. Thus, in
-its current incarnation, the PYC_ONLY option breaks python3 at runtime.
-
-python3 does fall back to looking for a .pyc file in the directory that it
-expects the .py to be in.
-
-http://www.python.org/dev/peps/pep-3147/#flow-chart
-
-Daniel
+  Okay, in that case your patch looks good.
 
 
-On Sun, Jan 27, 2013 at 2:42 PM, Arnout Vandecappelle <arnout@mind.be>wrote:
+  Regards,
+  Arnout
 
-> On 27/01/13 20:03, Daniel Nelson wrote:
-> > All,
-> >
-> > This is my first buildroot/open source submission. I'd appreciate some
-> feedback.
-> >
-> > Python3 changes the behavior of .pyc caching, breaking the PYC-only
-> option in buildroot. The details are inhttp://
-> www.python.org/dev/peps/pep-3147
-> >
-> > I've added a configure flag to Python3, and corresponding logic in
-> buildroot.
+  PS Please avoid top-posting.
+
 >
->  Hasn't this been fixed in git 6ffab129 ?
->
->  Regards,
->  Arnout
->
-> commit 6ffab129a3ebc76caf7ae40caf1f6b0185f3e114
-> Author: Maxime Ripard <maxime.ripard@free-electrons.com>
-> Date:   Fri Jan 18 04:06:14 2013 +0000
->
->     python3: Handle properly the pyc and py files on the target
->
->     Fixes #5690
->
->     Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
->     Acked-by: Samuel Martin <s.martin49@gmail.com>
->     Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
->
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index 0d54162..e7c0983 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -155,5 +155,27 @@ endef
->  ifneq ($(BR2_PACKAGE_PYTHON),y)
->  PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
->  endif
-> +
-> +ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
-> +define PYTHON3_REMOVE_MODULES_FILES
-> +       for i in `find
-> $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
-> +                -name __pycache__` ; do \
-> +               rm -rf $$i ; \
-> +       done
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
-> +define PYTHON3_REMOVE_MODULES_FILES
-> +       for i in `find
-> $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
-> +                -name *.py` ; do \
-> +               rm -f $$i ; \
-> +       done
-> +endef
-> +endif
-> +
-> +PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_MODULES_FILES
-> +
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
+> Daniel
 >
 >
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> On Sun, Jan 27, 2013 at 2:42 PM, Arnout Vandecappelle <arnout@mind.be
+> <mailto:arnout@mind.be>> wrote:
 >
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130127/0ee59202/attachment.html>
+>     On 27/01/13 20:03, Daniel Nelson wrote:
+>      > All,
+>      >
+>      > This is my first buildroot/open source submission. I'd appreciate
+>     some feedback.
+>      >
+>      > Python3 changes the behavior of .pyc caching, breaking the
+>     PYC-only option in buildroot. The details are
+>     inhttp://www.python.org/dev/peps/pep-3147
+>     <http://www.python.org/dev/peps/pep-3147>
+>      >
+>      > I've added a configure flag to Python3, and corresponding logic in
+>     buildroot.
+>
+>       Hasn't this been fixed in git 6ffab129 ?
+[snip]
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
