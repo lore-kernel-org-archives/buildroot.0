@@ -1,174 +1,60 @@
-From: Daniel Nelson <daniel@sigpwr.com>
-Date: Sun, 27 Jan 2013 11:03:02 -0800
-Subject: [Buildroot] [PATCH] Fix PYC-only installation for Python3
-Message-ID: <1359313382-2257-1-git-send-email-daniel@sigpwr.com>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Sun, 27 Jan 2013 21:41:05 +0200
+Subject: [Buildroot] Buildroot Developers Meeting after FOSDEM 2013
+In-Reply-To: <201301271709.49546.yann.morin.1998@free.fr>
+References: <20121228212925.3c5074c6@skate>
+ <201301271709.49546.yann.morin.1998@free.fr>
+Message-ID: <510582D1.9040306@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+27.1.2013 18:09, Yann E. MORIN kirjoitti:
+> Thomas, All,
+>
+> On Friday 28 December 2012 Thomas Petazzoni wrote:
+>> As was announced after the previous Developers Meeting, the next one
+>> will take place on February 4th and 5th 2013 in Brussels, right after
+>> the FOSDEM conference (http://www.fosdem.org).
+>>
+>> I've set up a Wiki page to coordinate the organization of this meeting,
+>> see http://elinux.org/Buildroot:DeveloperDaysFOSDEM2013.
 
-This is my first buildroot/open source submission. I'd appreciate some feedback.
+Oh, goody. <pkg>_CONFIG_FIXUP is on the list :-)
+Submitting, final v3 tomorrow, I promise.... just get sidetracked by
+other things
 
-Python3 changes the behavior of .pyc caching, breaking the PYC-only option in buildroot. The details are in http://www.python.org/dev/peps/pep-3147
+> I've started adding a few topics to be discused during the meeting, by
+> adding the latest topics that have flown on the mailing list in the past
+> few weeks. I've undoubtfully missed some of them!
+>
+> Please review, and add to this list.
+>
+> Looking forward to this moment! :-)
+>
+> Regards,
+> Yann E. MORIN.
+>
 
-I've added a configure flag to Python3, and corresponding logic in buildroot.
+I think the current state of generating initramfs could be added to that
+topic list too.
 
-Thoughts?
+I did some quick testing of buildroot (2012.08)  kernel with embedded
+initramfs size vs. also buildroot kernel but with hand made initramfs
+inside it (both from the same sources of course)
+and the results were 57 MB vs. 37 MB (xz-compressed kernel with no
+compression for built-in initramfs).
 
-Thanks,
+Exactly same software stuff in both but different sizes because
+different configuration knobs in linux .config-files and different
+compression methods used.
 
-Daniel Nelson
+So optimal initramfs generation (with right linux .config settings and
+maybe with Gustavo's initramfs patches) with benchmark maybe
+(size of output, ram taking to load/decompress and speed taking to
+decompress) would be cool topic. :-)
 
----
- ...ython3-3.3-012-support-pre-pep3147-stdlib.patch | 121 +++++++++++++++++++++
- package/python3/python3.mk                         |   4 +
- 2 files changed, 125 insertions(+)
- create mode 100644 package/python3/python3-3.3-012-support-pre-pep3147-stdlib.patch
-
-diff --git a/package/python3/python3-3.3-012-support-pre-pep3147-stdlib.patch b/package/python3/python3-3.3-012-support-pre-pep3147-stdlib.patch
-new file mode 100644
-index 0000000..fadd5e1
---- /dev/null
-+++ b/package/python3/python3-3.3-012-support-pre-pep3147-stdlib.patch
-@@ -0,0 +1,121 @@
-+--- python3-3.3.0/configure.ac	2013-01-26 19:12:56.446601796 -0800
-++++ python3-3.3.0-new/configure.ac	2013-01-26 19:11:31.632687123 -0800
-+@@ -1827,6 +1828,28 @@
-+     LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -compatibility_version $(VERSION) -current_version $(VERSION)';;
-+ esac
-+ 
-++STDLIB_CACHE_FLAGS=
-++STDLIB_CACHE_TYPE=pep3147
-++AC_MSG_CHECKING(for --with-stdlib-cache)
-++AC_ARG_WITH(stdlib-cache,
-++    AS_HELP_STRING([--with-stdlib-cache=type], [select type of stdlib cache ("pep3147", or "old")]),
-++[
-++	AC_MSG_RESULT($withval)
-++    STDLIB_CACHE_TYPE=$withval
-++],
-++[
-++ 	AC_MSG_RESULT(${STDLIB_CACHE_TYPE})
-++])
-++case $STDLIB_CACHE_TYPE in
-++    pep3147)
-++        STDLIB_CACHE_FLAGS="" 
-++        ;;
-++    old)
-++        STDLIB_CACHE_FLAGS="-b"
-++        ;;
-++esac
-++AC_SUBST(STDLIB_CACHE_FLAGS)
-++
-+ AC_MSG_CHECKING(for --enable-framework)
-+ if test "$enable_framework"
-+ then
-+--- python3-3.3.0/configure	2012-09-29 01:00:50.000000000 -0700
-++++ python3-3.3.0-new/configure	2013-01-26 19:11:38.562839350 -0800
-+@@ -633,6 +653,7 @@
-+ LDCXXSHARED
-+ LDSHARED
-+ SO
-++STDLIB_CACHE_FLAGS
-+ LIBTOOL_CRUFT
-+ OTHER_LIBTOOL_OPT
-+ UNIVERSAL_ARCH_FLAGS
-+@@ -765,6 +787,7 @@
-+ enable_shared
-+ enable_profiling
-+ with_pydebug
-++with_stdlib_cache
-+ with_libs
-+ with_system_expat
-+ with_system_ffi
-+@@ -1437,6 +1458,8 @@
-+                           compiler
-+   --with-suffix=.exe      set executable suffix
-+   --with-pydebug          build with Py_DEBUG defined
-++  --with-stdlib-cache=type
-++                          select type of stdlib cache ("pep3147", or "old")
-+   --with-libs='lib1 ...'  link against additional libs
-+   --with-system-expat     build pyexpat module using an installed expat
-+                           library
-+@@ -8246,6 +8290,35 @@
-+     LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -compatibility_version $(VERSION) -current_version $(VERSION)';;
-+ esac
-+ 
-++STDLIB_CACHE_FLAGS=
-++STDLIB_CACHE_TYPE=pep3147
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for --with-stdlib-cache" >&5
-++$as_echo_n "checking for --with-stdlib-cache... " >&6; }
-++
-++# Check whether --with-stdlib-cache was given.
-++if test "${with_stdlib_cache+set}" = set; then :
-++  withval=$with_stdlib_cache;
-++	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $withval" >&5
-++$as_echo "$withval" >&6; }
-++    STDLIB_CACHE_TYPE=$withval
-++
-++else
-++
-++ 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${STDLIB_CACHE_TYPE}" >&5
-++$as_echo "${STDLIB_CACHE_TYPE}" >&6; }
-++
-++fi
-++
-++case $STDLIB_CACHE_TYPE in
-++    pep3147)
-++        STDLIB_CACHE_FLAGS=""
-++        ;;
-++    old)
-++        STDLIB_CACHE_FLAGS="-b"
-++        ;;
-++esac
-++
-++
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --enable-framework" >&5
-+ $as_echo_n "checking for --enable-framework... " >&6; }
-+ if test "$enable_framework"
-+--- python3-3.3.0/Makefile.pre.in	2013-01-26 19:12:56.438601609 -0800
-++++ python3-3.3.0-new/Makefile.pre.in	2013-01-26 19:10:22.466167415 -0800
-+@@ -143,6 +143,9 @@
-+ # Options to enable prebinding (for fast startup prior to Mac OS X 10.3)
-+ OTHER_LIBTOOL_OPT=@OTHER_LIBTOOL_OPT@
-+ 
-++# Option to enable old-style precompiled stdlib
-++STDLIB_CACHE_FLAGS=@STDLIB_CACHE_FLAGS@
-++
-+ # Environment to run shared python without installed libraries
-+ RUNSHARED=       @RUNSHARED@
-+ 
-+@@ -1079,12 +1082,12 @@
-+ 	fi
-+ 	-PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
-+ 		$(PYTHON_FOR_BUILD) -Wi $(DESTDIR)$(LIBDEST)/compileall.py \
-+-		-d $(LIBDEST) -f \
-++		-d $(LIBDEST) -f $(STDLIB_CACHE_FLAGS) \
-+ 		-x 'bad_coding|badsyntax|site-packages|lib2to3/tests/data' \
-+ 		$(DESTDIR)$(LIBDEST)
-+ 	-PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
-+ 		$(PYTHON_FOR_BUILD) -Wi $(DESTDIR)$(LIBDEST)/compileall.py \
-+-		-d $(LIBDEST)/site-packages -f \
-++		-d $(LIBDEST)/site-packages -f $(STDLIB_CACHE_FLAGS) \
-+ 		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
-+ 	-PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
-+ 		$(PYTHON_FOR_BUILD) -m lib2to3.pgen2.driver $(DESTDIR)$(LIBDEST)/lib2to3/Grammar.txt
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index e7c0983..51fed51 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -70,6 +70,10 @@ else
- PYTHON3_CONF_OPT += --with-expat=none
- endif
- 
-+ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
-+PYTHON3_CONF_OPT += --with-stdlib-cache=old
-+endif
-+
- ifeq ($(BR2_PACKAGE_PYTHON3_SQLITE),y)
- PYTHON3_DEPENDENCIES += sqlite
- endif
--- 
-1.8.1
+Regards
+Stefan
