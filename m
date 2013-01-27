@@ -1,34 +1,79 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 27 Jan 2013 23:37:05 +0100
-Subject: [Buildroot] decreasing size of compile log
-In-Reply-To: <CALo-6+jaZx+NE3bbU3E9M8jxuQw9CEOjX+i-qt2=Hn0s2p6Hnw@mail.gmail.com>
- (Charles Krinke's message of "Sun, 27 Jan 2013 13:49:17 -0800")
-References: <CALo-6+jBObEiK5reN1qno0bD-ufDK3jX2drKbcwzKLXt=A9reQ@mail.gmail.com>
- <87a9rubboh.fsf@dell.be.48ers.dk>
- <CALo-6+jaZx+NE3bbU3E9M8jxuQw9CEOjX+i-qt2=Hn0s2p6Hnw@mail.gmail.com>
-Message-ID: <87y5fe9rse.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 27 Jan 2013 23:42:55 +0100
+Subject: [Buildroot] [PATCH] Fix PYC-only installation for Python3
+In-Reply-To: <1359313382-2257-1-git-send-email-daniel@sigpwr.com>
+References: <1359313382-2257-1-git-send-email-daniel@sigpwr.com>
+Message-ID: <5105AD6F.4070105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Charles" == Charles Krinke <charles.krinke@gmail.com> writes:
+On 27/01/13 20:03, Daniel Nelson wrote:
+> All,
+> 
+> This is my first buildroot/open source submission. I'd appreciate some feedback.
+> 
+> Python3 changes the behavior of .pyc caching, breaking the PYC-only option in buildroot. The details are inhttp://www.python.org/dev/peps/pep-3147
+> 
+> I've added a configure flag to Python3, and corresponding logic in buildroot.
 
- Charles> The key issue seems to be the web page that tracks builds for every
- Charles> checkin. The 50000 lines of log takes "almost forever" to load on most
- Charles> browsers and "forever" on the browsers that get indigestion and crash
- Charles> loading the page.
+ Hasn't this been fixed in git 6ffab129 ?
 
- Charles> So, ... at this point in the project, I am only interested in build
- Charles> failures which only occur when a checkin from someone goes "awry".
+ Regards,
+ Arnout
 
- Charles> The "-s" argument, is this an argument to make? As in, "make -s"
+commit 6ffab129a3ebc76caf7ae40caf1f6b0185f3e114
+Author: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date:   Fri Jan 18 04:06:14 2013 +0000
 
-Yes. From man make:
+    python3: Handle properly the pyc and py files on the target
+    
+    Fixes #5690
+    
+    Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+    Acked-by: Samuel Martin <s.martin49@gmail.com>
+    Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
-      -s, --silent, --quiet
-            Silent operation; do not print the commands as they are executed.
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 0d54162..e7c0983 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -155,5 +155,27 @@ endef
+ ifneq ($(BR2_PACKAGE_PYTHON),y)
+ PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
+ endif
++
++ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
++define PYTHON3_REMOVE_MODULES_FILES
++       for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
++                -name __pycache__` ; do \
++               rm -rf $$i ; \
++       done
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
++define PYTHON3_REMOVE_MODULES_FILES
++       for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
++                -name *.py` ; do \
++               rm -f $$i ; \
++       done
++endef
++endif
++
++PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_MODULES_FILES
++
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
