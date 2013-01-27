@@ -1,53 +1,50 @@
-From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Sun, 27 Jan 2013 10:11:46 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 27 Jan 2013 11:33:09 +0100
 Subject: [Buildroot] rebuilding a project on older commits
-In-Reply-To: <20130127093035.5537b93f@skate>
+In-Reply-To: <5104EF52.3010608@googlemail.com>
 References: <51041908.1030803@googlemail.com> <20130127093035.5537b93f@skate>
-Message-ID: <5104EF52.3010608@googlemail.com>
+ <5104EF52.3010608@googlemail.com>
+Message-ID: <20130127113309.4623b949@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Dear Carsten Schoenert,
 
-Am 27.01.2013 09:30, schrieb Thomas Petazzoni:
-> The easiest way is to use an external toolchain. This way, your
-> toolchain is never rebuilt, but directly used pre-compiled.
+On Sun, 27 Jan 2013 10:11:46 +0100, Carsten Schoenert wrote:
 
-Yes, this is the solution. Right now I build the toolchain with ct-ng
-inside buildroot.
-Is it possible to move this existing toolchain outside buildroot or
-should I rebuild from scratch?
+> Yes, this is the solution. Right now I build the toolchain with ct-ng
+> inside buildroot.
+> Is it possible to move this existing toolchain outside buildroot or
+> should I rebuild from scratch?
 
-> Does Busybox has the init applet enabled? Is /sbin/init a symbolic link
-> to /bin/busybox? Are the shared library loader and the C library both
-> available in /lib in your root filesystem?
+You should build it once with Crosstool-NG outside of Buildroot,
+install it somewhere, and tell Buildroot to use it as an external
+toolchain.
 
-For the first two points I can answer with yes, but your tip with the
-/lib folder is the right one. This folder is empty, and this also in the
-output/target directory so it must be empty in the rootfs.tar too.
+> For the first two points I can answer with yes, but your tip with the
+> /lib folder is the right one. This folder is empty, and this also in
+> the output/target directory so it must be empty in the rootfs.tar too.
+> 
+> So the libraries in the /lib folder are missing there must be
+> something wrong with the config of the ct-ng? Any suggestions where I
+> have to look to?
 
-So the libraries in the /lib folder are missing there must be something
-wrong with the config of the ct-ng? Any suggestions where I have to look to?
+That sounds really odd. Maybe we have a bug in the ct-ng backend, and
+it doesn't copy the libraries? I would have to do a test build, but I'm
+on the battery in the train for now, so I can't do heavy builds for now.
 
+If someone could do a quick test build of a minimal system that uses
+the ct-ng backend, and verify that $(O)/target/lib contains the right
+libraries, that would be nice.
 
-PS: I'm on a business trip shortly so I can't answer quickly.
+Best regards,
 
+Thomas
 -- 
-Regards
-Carsten
-
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: cst_hdx_2.6.34.13_defconfig
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130127/bd1eeef1/attachment-0003.ksh>
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: busybox-1.20.2.config
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130127/bd1eeef1/attachment-0004.ksh>
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: ct_ng_config
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130127/bd1eeef1/attachment-0005.ksh>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
