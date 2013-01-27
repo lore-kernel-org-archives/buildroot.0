@@ -1,5 +1,5 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Sun, 27 Jan 2013 01:04:22 +0200
+From: Stephen Turner <artic.knight31337@gmail.com>
+Date: Sun, 27 Jan 2013 02:13:17 -0500
 Subject: [Buildroot] Squashfs boot
 In-Reply-To: <51045AD4.1000100@mind.be>
 References: <CAN_xxrWTp21-a-jD7x11yJa6ghM=C=ON2h_bx_is1iFhEkE0bQ@mail.gmail.com>
@@ -9,15 +9,22 @@ References: <CAN_xxrWTp21-a-jD7x11yJa6ghM=C=ON2h_bx_is1iFhEkE0bQ@mail.gmail.com>
  <5101B872.1090705@petroprogram.com>
  <CAN_xxrXsvvupyo61cqZhCR4JyLwtCsm1NRAh9JCy_uVHRqGO4A@mail.gmail.com>
  <5102FF4E.1060405@petroprogram.com> <51045AD4.1000100@mind.be>
-Message-ID: <510460F6.1020507@petroprogram.com>
+Message-ID: <CAN_xxrVSNJBJ00X6NodPRoBzz=dGy_NTAGy7JFpKd56O5s3RVQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-27.1.2013 0:38, Arnout Vandecappelle kirjoitti:
+Thats what i was hoping to not have to do but i appreciate you sharing that
+very much. I will try it that way and see if i like it. Everyone has been
+very helpful thanks for all your input.
+
+Stephen
+On Jan 26, 2013 5:38 PM, "Arnout Vandecappelle" <arnout@mind.be> wrote:
+
 > On 01/25/13 22:55, Stefan Fr?berg wrote:
+>
 >> Hello Stephen
 >>
 >> I made a quick conversion of my LiveCD initramfs stuff to squashfs image
@@ -47,26 +54,43 @@ To: buildroot@busybox.net
 >>
 >> - Takes a lot of memory. This is old style initrd stuff (time when 2.4
 >> kernel was still hot and new).
+>>
 >
->  Yes, using squashfs as initrd is probably not what you want: it will
-> load the entire squashfs into memory (albeit compressed), and then
-> copy it (and decompress) when you access it.
+>  Yes, using squashfs as initrd is probably not what you want: it will load
+> the entire squashfs into memory (albeit compressed), and then copy it (and
+> decompress) when you access it.
 >
 >  The typical way to use squashfs is as a partition of your disk. So if
-> you'd boot from a USB stick, you'd make two partitions: an ext2 for
-> grub and the kernel, and a second one for the squashfs. To install it,
-> just do "cat output/images/rootfs.sqfs > /dev/sdb2" (assuming your USB
-> key is /dev/sdb and squashfs is the second partition). When booting,
-> you append the following the kernel command line: "root=/dev/sda2
-> rootwait" (assuming there's no hard disk or anything so the USB key
-> will end up as /dev/sda).
+> you'd boot from a USB stick, you'd make two partitions: an ext2 for grub
+> and the kernel, and a second one for the squashfs. To install it, just do
+> "cat output/images/rootfs.sqfs > /dev/sdb2" (assuming your USB key is
+> /dev/sdb and squashfs is the second partition). When booting, you append
+> the following the kernel command line: "root=/dev/sda2 rootwait" (assuming
+> there's no hard disk or anything so the USB key will end up as /dev/sda).
 >
-
-But I understanded that he didn't want to use partition to boot but
-directly from squashfs image.
-At least that's how I understanded this part in his message:  "It would
-be ideal to run the systems from a file instead of dd a image to an area"
-
-
-Regards
-Stefan
+>
+>  - Squashfs is read-only so if you use mdev or udev then expect little
+>> troubles (please see root3.png).
+>>
+>> However maybe buildroot init already takes care of those ????
+>>
+>
+>  Copy fs/cpio/init to output/target/init and all will be well.
+>
+>
+>  Regards,
+>  Arnout
+>
+> [snip]
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130127/38c93c85/attachment-0001.html>
