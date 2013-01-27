@@ -1,57 +1,58 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Sun, 27 Jan 2013 13:49:17 -0800
-Subject: [Buildroot] decreasing size of compile log
-In-Reply-To: <87a9rubboh.fsf@dell.be.48ers.dk>
-References: <CALo-6+jBObEiK5reN1qno0bD-ufDK3jX2drKbcwzKLXt=A9reQ@mail.gmail.com>
- <87a9rubboh.fsf@dell.be.48ers.dk>
-Message-ID: <CALo-6+jaZx+NE3bbU3E9M8jxuQw9CEOjX+i-qt2=Hn0s2p6Hnw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 27 Jan 2013 23:18:39 +0100
+Subject: [Buildroot] [RFC v1 05/14] autotools infrastructure: do the
+ autoreconf as a post patch step
+In-Reply-To: <20130127172748.29a8d6cf@skate>
+References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1358725943-31485-6-git-send-email-thomas.petazzoni@free-electrons.com>
+ <510452A9.4050805@mind.be> <20130127172748.29a8d6cf@skate>
+Message-ID: <5105A7BF.4080701@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The key issue seems to be the web page that tracks builds for every
-checkin. The 50000 lines of log takes "almost forever" to load on most
-browsers and "forever" on the browsers that get indigestion and crash
-loading the page.
+On 27/01/13 17:27, Thomas Petazzoni wrote:
+> One reason that might explain this is the lack of ordering guarantees
+> on post patch hooks. For example, if you have a post patch hook that
+> applies Debian patches, and a post patch hook to do the autoreconf, you
+> quite certainly want the Debian patches hook to be executed before the
+> autoreconf hook. But I have absolutely no idea if this is the problem
+> that we were trying to fix here.
 
-So, ... at this point in the project, I am only interested in build
-failures which only occur when a checkin from someone goes "awry".
-
-The "-s" argument, is this an argument to make? As in, "make -s"
-
-Charles
-
-On Sun, Jan 27, 2013 at 12:42 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Charles" == Charles Krinke <charles.krinke@gmail.com> writes:
->
->  Charles> Gentlemen:
->  Charles> I have a nearly finished AM3517 project with buildroot. Thank you all
->  Charles> for getting me to this point.
->
->  Charles> I have an issue where the compile log runs 50000 lines. That
->  Charles> is, "make clean && make" produces output from all the packages
->  Charles> being compiled.
->
->  Charles> Is there a way to add a string to selected buildroot/package
->  Charles> directories to tell selected packages to either not print
->  Charles> their compiled output, send it do /dev/null or minimize the
->  Charles> printed output during compile so as to focus on the one or two
->  Charles> packages where there are issues to be solved?
->
-> You can compile with make -s (silent) option to make buildroot less
-> verbose (but it is still quite verbose).
->
-> Is the amount of output any real problem, or is it just cosmetical?
-> Normally if there's any build problems you only really want to look at
-> the last few lines (which is also why the autobuilder web page provides
-> a link to the last ~100 lines).
->
-> --
-> Bye, Peter Korsgaard
+  That sounds like a likely explanation...
 
 
+> That said, I still believe that the autoreconf thing belongs to the
+> patch step. It is really a modification of the source code itself, and
+> it is common to both the target build and host build.
 
+  I completely agree.
+
+
+> So maybe the
+> autotools infrastructure needs a special hook in the generic
+> infrastructure (rather than a normal post patch hook), to ensure that
+> the autoreconf step gets executed after all post patch hooks?
+
+  Or maybe (just thinking out loud here) there could be the possibility 
+for the package infrastructure to add additional steps in the dependency 
+chain. Something like
+
+ifeq ($$($(2)_AUTORECONF),YES)
+$(2)_TARGET_AUTORECONFIGURE = $$($(3)_SRCDIR)/.stamp_autoreconfigured
+$(1)-autoreconfigure: $(1)-patch $$($(2)_TARGET_AUTORECONFIGURE)
+$(1)-configure: $(1)-autoreconfigure
+endif
+
+
+  Regards,
+  Arnout
 -- 
-Charles Krinke
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
