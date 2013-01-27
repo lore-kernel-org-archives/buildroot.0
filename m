@@ -1,50 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Jan 2013 09:30:35 +0100
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Sun, 27 Jan 2013 10:11:46 +0100
 Subject: [Buildroot] rebuilding a project on older commits
-In-Reply-To: <51041908.1030803@googlemail.com>
-References: <51041908.1030803@googlemail.com>
-Message-ID: <20130127093035.5537b93f@skate>
+In-Reply-To: <20130127093035.5537b93f@skate>
+References: <51041908.1030803@googlemail.com> <20130127093035.5537b93f@skate>
+Message-ID: <5104EF52.3010608@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Carsten Schoenert,
+Hello Thomas,
 
-On Sat, 26 Jan 2013 18:57:28 +0100, Carsten Schoenert wrote:
+Am 27.01.2013 09:30, schrieb Thomas Petazzoni:
+> The easiest way is to use an external toolchain. This way, your
+> toolchain is never rebuilt, but directly used pre-compiled.
 
-> is there a simple way to rebuild a project without the whole
-> crosscompiler part?
+Yes, this is the solution. Right now I build the toolchain with ct-ng
+inside buildroot.
+Is it possible to move this existing toolchain outside buildroot or
+should I rebuild from scratch?
 
-The easiest way is to use an external toolchain. This way, your
-toolchain is never rebuilt, but directly used pre-compiled.
+> Does Busybox has the init applet enabled? Is /sbin/init a symbolic link
+> to /bin/busybox? Are the shared library loader and the C library both
+> available in /lib in your root filesystem?
 
-> I have to search in my project why now the current output of Buildroot
-> isn't startable via nfs. So I want to go back and try out which commit
-> breaks the build, like I can do similar with git bisect in other Git
-> repos. Probably the busybox here is miss configured in the between
-> time because the current kernel config, which has also some little
-> changes works with an older rootfs.tar.
-> 
-> The current kernel with an actual rootfs ended up with
-> > [   10.890000] Looking up port of RPC 100003/3 on 192.168.136.4
-> > [   10.910000] Looking up port of RPC 100005/3 on 192.168.136.4
-> > [   10.920000] VFS: Mounted root (nfs filesystem) on device 0:12.
-> > [   10.930000] Freeing init memory: 104K
-> > [   10.940000] Kernel panic - not syncing: No init found.  Try
-> > passing init= option to kernel. See Linux Documentation/init.txt
-> > for guidance.
+For the first two points I can answer with yes, but your tip with the
+/lib folder is the right one. This folder is empty, and this also in the
+output/target directory so it must be empty in the rootfs.tar too.
 
-Does Busybox has the init applet enabled? Is /sbin/init a symbolic link
-to /bin/busybox? Are the shared library loader and the C library both
-available in /lib in your root filesystem?
+So the libraries in the /lib folder are missing there must be something
+wrong with the config of the ct-ng? Any suggestions where I have to look to?
 
-Best regards,
 
-Thomas
+PS: I'm on a business trip shortly so I can't answer quickly.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards
+Carsten
+
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: cst_hdx_2.6.34.13_defconfig
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130127/bd1eeef1/attachment-0003.ksh>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: busybox-1.20.2.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130127/bd1eeef1/attachment-0004.ksh>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: ct_ng_config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130127/bd1eeef1/attachment-0005.ksh>
