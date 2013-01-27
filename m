@@ -1,40 +1,104 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 Jan 2013 17:09:49 +0100
-Subject: [Buildroot] Buildroot Developers Meeting after FOSDEM 2013
-In-Reply-To: <20121228212925.3c5074c6@skate>
-References: <20121228212925.3c5074c6@skate>
-Message-ID: <201301271709.49546.yann.morin.1998@free.fr>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Sun, 27 Jan 2013 17:11:11 +0100
+Subject: [Buildroot] [PATCH 1/2] Busybox: save a copy of the config file
+In-Reply-To: <510550FA.10502@relinux.de>
+References: <510550FA.10502@relinux.de>
+Message-ID: <1359303072-1947-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+"make busybox-xconfig" stores the changes made in the build
+directory. Calling "make clean && make" later discards and
+replaces them with the default values. This is not what a
+user expects.
 
-On Friday 28 December 2012 Thomas Petazzoni wrote:
-> As was announced after the previous Developers Meeting, the next one
-> will take place on February 4th and 5th 2013 in Brussels, right after
-> the FOSDEM conference (http://www.fosdem.org).
-> 
-> I've set up a Wiki page to coordinate the organization of this meeting,
-> see http://elinux.org/Buildroot:DeveloperDaysFOSDEM2013.
+This patch saves a copy of the modified config file as
+$(TOPDIR)/busybox-config and retrieves it from there after
+"make clean". $(TOPDIR)/busybox-config is removed when a new
+defconfig is made.
 
-I've started adding a few topics to be discused during the meeting, by
-adding the latest topics that have flown on the mailing list in the past
-few weeks. I've undoubtfully missed some of them!
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+---
+ Makefile                   |    2 ++
+ package/busybox/busybox.mk |   20 ++++++++++++++++++--
+ 2 files changed, 20 insertions(+), 2 deletions(-)
 
-Please review, and add to this list.
-
-Looking forward to this moment! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/Makefile b/Makefile
+index 6f8ed0e..95ed683 100644
+--- a/Makefile
++++ b/Makefile
+@@ -673,10 +673,12 @@ silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 
+ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
++	rm -f $(TOPDIR)/busybox-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(BR2_DEFCONFIG),=$(BR2_DEFCONFIG)) $(CONFIG_CONFIG_IN)
+ 
+ %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
++	rm -f $(TOPDIR)/busybox-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
+ 
+ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 9154c08..b81a4f5 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -33,6 +33,9 @@ BUSYBOX_CFLAGS_busybox += -ltirpc
+ endif
+ 
+ BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
++# Place to save configuration when "make clean" is issued
++BUSYBOX_CONFIG_SAVE = $(TOPDIR)/busybox-config
++
+ # Allows the build system to tweak CFLAGS
+ BUSYBOX_MAKE_ENV = \
+ 	$(TARGET_MAKE_ENV) \
+@@ -47,8 +50,9 @@ BUSYBOX_MAKE_OPTS = \
+ 	CONFIG_PREFIX="$(TARGET_DIR)" \
+ 	SKIP_STRIP=y
+ 
++# Name the local variable different from environment to be able to distinguish later
+ ifndef BUSYBOX_CONFIG_FILE
+-	BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
++	LOCAL_BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
+ endif
+ 
+ define BUSYBOX_PERMISSIONS
+@@ -126,9 +130,19 @@ define BUSYBOX_NETKITTELNET
+ endef
+ endif
+ 
++ifndef BUSYBOX_CONFIG_FILE
++# Keep a local copy of the config file to preserve changes over "make clean"
++define BUSYBOX_COPY_CONFIG
++	test ! -f $(BUSYBOX_CONFIG_SAVE) && \
++		cp -f $(LOCAL_BUSYBOX_CONFIG_FILE) $(BUSYBOX_CONFIG_SAVE); \
++	cp -f $(BUSYBOX_CONFIG_SAVE) $(BUSYBOX_BUILD_CONFIG)
++endef
++else
++# When the environmant variable is present we always want to use this config file
+ define BUSYBOX_COPY_CONFIG
+ 	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
+ endef
++endif
+ 
+ # Disable shadow passwords support if unsupported by the C library
+ ifeq ($(BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS),)
+@@ -220,8 +234,10 @@ $(eval $(generic-package))
+ busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
+ 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) \
+ 		$(subst busybox-,,$@)
++	cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_SAVE)
+ 	rm -f $(BUSYBOX_DIR)/.stamp_built
+ 	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
+ 
+ busybox-update-config:
+-	cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
++	cp -f $(BUSYBOX_BUILD_CONFIG) $(LOCAL_BUSYBOX_CONFIG_FILE)
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.0.4
