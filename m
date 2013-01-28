@@ -1,51 +1,85 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 28 Jan 2013 23:15:49 +0100
-Subject: [Buildroot] [PATCHv2] barebox: Allow to build an environment
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 28 Jan 2013 23:15:53 +0100
+Subject: [Buildroot] [git commit] barebox: Allow to build an environment
 	image
-In-Reply-To: <1359403834-1052-1-git-send-email-maxime.ripard@free-electrons.com>
- (Maxime Ripard's message of "Mon, 28 Jan 2013 21:10:34 +0100")
-References: <1359403834-1052-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <87obg9dkdm.fsf@dell.be.48ers.dk>
+Message-ID: <20130128221548.B30EA9A7FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=18b04970a2c0bf9db72d7c052d1fe4252d94267b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Maxime> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
- Maxime> ---
- Maxime>  boot/barebox/Config.in  |   19 +++++++++++++++++++
- Maxime>  boot/barebox/barebox.mk |   14 ++++++++++++++
- Maxime>  2 files changed, 33 insertions(+)
+[Peter: Tweaked help text]
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ boot/barebox/Config.in  |   19 +++++++++++++++++++
+ boot/barebox/barebox.mk |   14 ++++++++++++++
+ 2 files changed, 33 insertions(+), 0 deletions(-)
 
-Committed with some minor help text changes (see below) - Thanks.
-
- Maxime> +config BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH
- Maxime> +	string "Environment path"
- Maxime> +	depends on BR2_TARGET_BAREBOX_CUSTOM_ENV
- Maxime> +	help
- Maxime> +	  Path to the folder containing the custom barebox
-
-We normally call them directories in Buildroot.
-
- Maxime> +	  environment. Depending on your setup, it will probably be
-
-+ based on
-
- Maxime> +	  either the content of the defaultenv or defaultenv-2 folders
-
-s/folders/directories/
-
- Maxime> +	  in the barebox source code plus the additions needed. The
- Maxime> +	  output will be an image at the barebox devfs format, stored
-
-s/at the/in the/
-
- Maxime> +	  in the images directory, with the same name than the folder
-
-s/folder/directory name/
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index b9e03b3..1ffe596 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -99,4 +99,23 @@ config BR2_TARGET_BAREBOX_BAREBOXENV
+ 	help
+ 	  Install bareboxenv tool in target.
+ 
++config BR2_TARGET_BAREBOX_CUSTOM_ENV
++	bool "Generate an environment image"
++	help
++	  Generate a custom environment image. This environment will
++	  contain the variables and scripts to be used at boot by
++	  barebox.
++
++config BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH
++	string "Environment path"
++	depends on BR2_TARGET_BAREBOX_CUSTOM_ENV
++	help
++	  Path to the directory containing the custom barebox
++	  environment. Depending on your setup, it will probably be
++	  based on either the content of the defaultenv or
++	  defaultenv-2 directories in the barebox source code, plus
++	  the additions needed. The output will be an image in the
++	  barebox devfs format, stored in the images directory, with
++	  the same name as the directory name given here.
++
+ endif
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 143338e..5ec47f6 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -67,9 +67,22 @@ define BAREBOX_BUILD_BAREBOXENV_CMDS
+ endef
+ endif
+ 
++ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_ENV),y)
++BAREBOX_ENV_NAME = $(notdir $(call qstrip, $(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)))
++define BAREBOX_BUILD_CUSTOM_ENV
++	$(@D)/scripts/bareboxenv -s \
++		$(call qstrip, $(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)) \
++		$(@D)/$(BAREBOX_ENV_NAME)
++endef
++define BAREBOX_INSTALL_CUSTOM_ENV
++	cp $(@D)/$(BAREBOX_ENV_NAME) $(BINARIES_DIR)
++endef
++endif
++
+ define BAREBOX_BUILD_CMDS
+ 	$(BAREBOX_BUILD_BAREBOXENV_CMDS)
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D)
++	$(BAREBOX_BUILD_CUSTOM_ENV)
+ endef
+ 
+ define BAREBOX_INSTALL_IMAGES_CMDS
+@@ -78,6 +91,7 @@ define BAREBOX_INSTALL_IMAGES_CMDS
+ 	else \
+ 		cp $(@D)/barebox.bin $(BINARIES_DIR);\
+ 	fi
++	$(BAREBOX_INSTALL_CUSTOM_ENV)
+ endef
+ 
+ ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
