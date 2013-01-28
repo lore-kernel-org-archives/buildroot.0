@@ -1,32 +1,22 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 28 Jan 2013 16:35:11 +0100
-Subject: [Buildroot] [PATCH] qwt: fix project's URL
-Message-ID: <1359387311-5694-1-git-send-email-yegorslists@googlemail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 28 Jan 2013 16:41:45 +0100
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
+	7}.x stable versions
+In-Reply-To: <1359371690-3703-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 28 Jan 2013 08:14:49 -0300")
+References: <1359371690-3703-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87libd9ux2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/qwt/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/qwt/Config.in b/package/qwt/Config.in
-index d72b30e..3dc6f22 100644
---- a/package/qwt/Config.in
-+++ b/package/qwt/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_QWT
- 	  Qwt is a graphics extension to the Qt GUI application
- 	  framework. It provides a 2D plotting widget and more.
- 
--	  http://http://sourceforge.net/projects/qwt
-+	  http://qwt.sourceforge.net/
- 
- if BR2_PACKAGE_QWT
- 
+Committed both, thanks.
+
 -- 
-1.7.7
+Bye, Peter Korsgaard
