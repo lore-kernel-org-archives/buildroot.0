@@ -1,25 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 28 Jan 2013 21:53:15 +0100
-Subject: [Buildroot] [PATCH v2] Add support for the Calao-systems
-	USB-A9260
-In-Reply-To: <1359391711-17630-1-git-send-email-gregory.hermant@calao-systems.com>
- (Gregory Hermant's message of "Mon, 28 Jan 2013 17:48:31 +0100")
-References: <1359391711-17630-1-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <87622hf2ro.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 28 Jan 2013 21:27:03 +0100
+Subject: [Buildroot] [git commit] collectd: bump to version 5.1.2
+Message-ID: <20130128205917.814CF9A85E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gregory" == Gregory Hermant <gregory.hermant@calao-systems.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ae20051b93871525295074659d879bdc61ad6340
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gregory> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/collectd/collectd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
-The at91bootstrap patch isn't really nice, but as there's no real
-upstream I guess we cannot do much about that.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index f6aeb0d..a50be9c 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-COLLECTD_VERSION = 5.1.1
++COLLECTD_VERSION = 5.1.2
+ COLLECTD_SITE = http://collectd.org/files
+ COLLECTD_MAKE_OPT = LDFLAGS="$(TARGET_LDFLAGS) -lm"
+ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
