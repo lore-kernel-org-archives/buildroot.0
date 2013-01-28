@@ -1,114 +1,51 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 28 Jan 2013 22:03:57 +0100
-Subject: [Buildroot] [git commit] python3: Fix pyc-only related runtime
-	exceptions
-Message-ID: <20130128210439.6E96F9A85F@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 28 Jan 2013 23:15:49 +0100
+Subject: [Buildroot] [PATCHv2] barebox: Allow to build an environment
+	image
+In-Reply-To: <1359403834-1052-1-git-send-email-maxime.ripard@free-electrons.com>
+ (Maxime Ripard's message of "Mon, 28 Jan 2013 21:10:34 +0100")
+References: <1359403834-1052-1-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <87obg9dkdm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b340425e8af3f6f8e1489eb3550f35ee28b59b9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
-Python3 changes the pyc lookup strategy, ignoring the
-__pycache__ directory if the .py file is missing. Change
-install location to enable use of .pyc without their parent .py
+ Maxime> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+ Maxime> ---
+ Maxime>  boot/barebox/Config.in  |   19 +++++++++++++++++++
+ Maxime>  boot/barebox/barebox.mk |   14 ++++++++++++++
+ Maxime>  2 files changed, 33 insertions(+)
 
-See http://www.python.org/dev/peps/pep-3147
+Committed with some minor help text changes (see below) - Thanks.
 
-[Peter: add patch header]
-Signed-off-by: Daniel Nelson <daniel@sigpwr.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (untested)
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../python3/python3-3.3-012-old-stdlib-cache.patch |   63 ++++++++++++++++++++
- package/python3/python3.mk                         |    4 +
- 2 files changed, 67 insertions(+), 0 deletions(-)
+ Maxime> +config BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH
+ Maxime> +	string "Environment path"
+ Maxime> +	depends on BR2_TARGET_BAREBOX_CUSTOM_ENV
+ Maxime> +	help
+ Maxime> +	  Path to the folder containing the custom barebox
 
-diff --git a/package/python3/python3-3.3-012-old-stdlib-cache.patch b/package/python3/python3-3.3-012-old-stdlib-cache.patch
-new file mode 100644
-index 0000000..5a2cf8b
---- /dev/null
-+++ b/package/python3/python3-3.3-012-old-stdlib-cache.patch
-@@ -0,0 +1,63 @@
-+python3: Fix pyc-only related runtime exceptions
-+
-+Python3 changes the pyc lookup strategy, ignoring the
-+__pycache__ directory if the .py file is missing. Change
-+install location to enable use of .pyc without their parent .py
-+
-+See http://www.python.org/dev/peps/pep-3147
-+
-+Signed-off-by: Daniel Nelson <daniel@sigpwr.com>
-+
-+--- python3-3.3.0/configure.ac	2013-01-27 16:35:52.429067797 -0800
-++++ python3-3.3.0/configure.ac	2013-01-27 16:43:43.528601443 -0800
-+@@ -1827,6 +1827,23 @@
-+     LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -compatibility_version $(VERSION) -current_version $(VERSION)';;
-+ esac
-+ 
-++STDLIB_CACHE_FLAGS=
-++AC_MSG_CHECKING(for --enable-old-stdlib-cache)
-++AC_ARG_ENABLE(old-stdlib-cache,
-++    AS_HELP_STRING([--enable-old-stdlib-cache], [enable pre-pep3147 stdlib cache]),
-++[
-++    if test "$enableval" = "yes"
-++    then
-++        STDLIB_CACHE_FLAGS="-b"
-++    else
-++        STDLIB_CACHE_FLAGS="" 
-++    fi
-++],
-++[
-++    STDLIB_CACHE_FLAGS="" 
-++])
-++AC_SUBST(STDLIB_CACHE_FLAGS)
-++
-+ AC_MSG_CHECKING(for --enable-framework)
-+ if test "$enable_framework"
-+ then
-+--- python3-3.3.0/Makefile.pre.in	2013-01-27 16:35:52.422067642 -0800
-++++ python3-3.3.0/Makefile.pre.in	2013-01-27 16:37:03.710650439 -0800
-+@@ -143,6 +143,9 @@
-+ # Options to enable prebinding (for fast startup prior to Mac OS X 10.3)
-+ OTHER_LIBTOOL_OPT=@OTHER_LIBTOOL_OPT@
-+ 
-++# Option to enable old-style precompiled stdlib
-++STDLIB_CACHE_FLAGS=@STDLIB_CACHE_FLAGS@
-++
-+ # Environment to run shared python without installed libraries
-+ RUNSHARED=       @RUNSHARED@
-+ 
-+@@ -1079,12 +1082,12 @@
-+ 	fi
-+ 	-PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
-+ 		$(PYTHON_FOR_BUILD) -Wi $(DESTDIR)$(LIBDEST)/compileall.py \
-+-		-d $(LIBDEST) -f \
-++		-d $(LIBDEST) -f $(STDLIB_CACHE_FLAGS) \
-+ 		-x 'bad_coding|badsyntax|site-packages|lib2to3/tests/data' \
-+ 		$(DESTDIR)$(LIBDEST)
-+ 	-PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
-+ 		$(PYTHON_FOR_BUILD) -Wi $(DESTDIR)$(LIBDEST)/compileall.py \
-+-		-d $(LIBDEST)/site-packages -f \
-++		-d $(LIBDEST)/site-packages -f $(STDLIB_CACHE_FLAGS) \
-+ 		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
-+ 	-PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
-+ 		$(PYTHON_FOR_BUILD) -m lib2to3.pgen2.driver $(DESTDIR)$(LIBDEST)/lib2to3/Grammar.txt
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index e7c0983..7551a7b 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -70,6 +70,10 @@ else
- PYTHON3_CONF_OPT += --with-expat=none
- endif
- 
-+ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
-+PYTHON3_CONF_OPT += --enable-old-stdlib-cache
-+endif
-+
- ifeq ($(BR2_PACKAGE_PYTHON3_SQLITE),y)
- PYTHON3_DEPENDENCIES += sqlite
- endif
+We normally call them directories in Buildroot.
+
+ Maxime> +	  environment. Depending on your setup, it will probably be
+
++ based on
+
+ Maxime> +	  either the content of the defaultenv or defaultenv-2 folders
+
+s/folders/directories/
+
+ Maxime> +	  in the barebox source code plus the additions needed. The
+ Maxime> +	  output will be an image at the barebox devfs format, stored
+
+s/at the/in the/
+
+ Maxime> +	  in the images directory, with the same name than the folder
+
+s/folder/directory name/
+
+-- 
+Bye, Peter Korsgaard
