@@ -1,30 +1,47 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 28 Jan 2013 13:01:11 -0300
-Subject: [Buildroot] [PATCH] collectd: bump to version 5.1.2
-Message-ID: <1359388871-30583-1-git-send-email-gustavo@zacarias.com.ar>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Mon, 28 Jan 2013 17:09:11 +0100
+Subject: [Buildroot] post-build script is called before rootfs tweaking
+In-Reply-To: <50FAE5CE.5020004@relinux.de>
+References: <50FAD374.9010306@relinux.de> <871udhghmr.fsf@dell.be.48ers.dk>
+ <50FAE5CE.5020004@relinux.de>
+Message-ID: <5106A2A7.7060201@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/collectd/collectd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Am 19.01.2013 19:28, schrieb Stephan Hoffmann:
+> Am 19.01.2013 19:19, schrieb Peter Korsgaard:
+>>>>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
+>>  Stephan> Hello,
+>>  Stephan> buildroot's documentation says:
+>>  >> In the Buildroot configuration, you can specify the path to a
+>>  >> *post-build script*, that gets called /after/ Buildroot builds all the
+>>  >> selected software, but /before/ the rootfs packages are assembled.
+>>  Stephan> I understand this the way that the post-build script is called as the
+>>  Stephan> last action before package assembly.
+>>
+>>  Stephan> Is this a bug or a feature? I'd prefer having the script
+>>  Stephan> called after the target directory is completely set up.
+>>
+>> I would call it a bug. I recently fixed up a similar issue with the
+>> passwd handling happening after the post-build script.
+>>
+>> Care to send a patch to fix it?
+> I can try, but at the moment I am too busy. Maybe somewhere next week.
+This seems to be fixed in the meantime. I had this problem a
+distribution based on 2012.08.
 
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index f6aeb0d..a50be9c 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--COLLECTD_VERSION = 5.1.1
-+COLLECTD_VERSION = 5.1.2
- COLLECTD_SITE = http://collectd.org/files
- COLLECTD_MAKE_OPT = LDFLAGS="$(TARGET_LDFLAGS) -lm"
- COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+Sorry, I should have tried with the latest version before bothering the
+list.
+
+Kind regards
+
+Stephan
+
 -- 
-1.7.12.4
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
