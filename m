@@ -1,45 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Jan 2013 09:13:47 +0100
-Subject: [Buildroot] [RFC v1 05/14] autotools infrastructure: do the
- autoreconf as a post patch step
-In-Reply-To: <5105A7BF.4080701@mind.be>
-References: <1358725943-31485-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1358725943-31485-6-git-send-email-thomas.petazzoni@free-electrons.com>
- <510452A9.4050805@mind.be> <20130127172748.29a8d6cf@skate>
- <5105A7BF.4080701@mind.be>
-Message-ID: <20130128091347.4f2288ca@skate>
+From: Willy Lambert <lambert.willy@gmail.com>
+Date: Mon, 28 Jan 2013 09:30:18 +0100
+Subject: [Buildroot] Adding Orocos as a package
+Message-ID: <CAKvQZ_3kYAss=eHAam06WoFEpEzgEQ=_hRTOAz5B=sMPOVsOtg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Hi all,
 
-On Sun, 27 Jan 2013 23:18:39 +0100, Arnout Vandecappelle wrote:
+I would like to add Orocos as a package in buildroot
+(http://www.orocos.org/). there is an "old" try in Buildroot 2011.05
+of Philippe Hamelin there :
+https://github.com/phamelin/buildroot/tree/2011.05-sm. As I would like
+to update it and propose a patch mainline, here are some questions :
 
-> > So maybe the
-> > autotools infrastructure needs a special hook in the generic
-> > infrastructure (rather than a normal post patch hook), to ensure
-> > that the autoreconf step gets executed after all post patch hooks?
-> 
->   Or maybe (just thinking out loud here) there could be the
-> possibility for the package infrastructure to add additional steps in
-> the dependency chain. Something like
-> 
-> ifeq ($$($(2)_AUTORECONF),YES)
-> $(2)_TARGET_AUTORECONFIGURE = $$($(3)_SRCDIR)/.stamp_autoreconfigured
-> $(1)-autoreconfigure: $(1)-patch $$($(2)_TARGET_AUTORECONFIGURE)
-> $(1)-configure: $(1)-autoreconfigure
-> endif
+1/_ Is there anyone that have done that before ?
 
-Sounds interesting. I'll try to experiment around this idea.
+2/_ Orocos is in several indepedent CMake project in independant git
+repositories. For convinience they also provide a repository
+regrouping all this in a main git repo. So the root dir would be :
+orocos_toolchain/
+-- rtt (git submodule)
+-- ocl (git submodule)
+-- log4cpp (git submodule)
+-- ..
+What should I do ? From the manual I understand that I have to do a
+package for each of those subdirs. Is there a way to do
+package/orocos/rtt, package/orocos/ocl, ... or should I pur everything
+in package ? I don't think there is a way to compile several
+independant Cmake projets from a single Buildroot package, but let me
+know if this is wrong.
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+3/ _ Is it possible to select a git branch when cloning the repository
+? Something like : "git clone <url> --branch <branch> --single-branch
+<folder>". This is required because latest Orocos version is on a
+branch and default master is changing often.
