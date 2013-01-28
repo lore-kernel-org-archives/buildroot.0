@@ -1,36 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 28 Jan 2013 08:42:30 +0100
-Subject: [Buildroot] [git commit] libvncserver: bump version
-Message-ID: <20130128074236.13A589A836@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 28 Jan 2013 08:47:52 +0100
+Subject: [Buildroot] decreasing size of compile log
+In-Reply-To: <CALo-6+gmAO3aw8Oan1vWomnhJZpNiFpEp+aXjjE550+T0unmcA@mail.gmail.com>
+ (Charles Krinke's message of "Sun, 27 Jan 2013 18:15:58 -0800")
+References: <CALo-6+jBObEiK5reN1qno0bD-ufDK3jX2drKbcwzKLXt=A9reQ@mail.gmail.com>
+ <87a9rubboh.fsf@dell.be.48ers.dk>
+ <CALo-6+jaZx+NE3bbU3E9M8jxuQw9CEOjX+i-qt2=Hn0s2p6Hnw@mail.gmail.com>
+ <87y5fe9rse.fsf@dell.be.48ers.dk>
+ <CALo-6+gmAO3aw8Oan1vWomnhJZpNiFpEp+aXjjE550+T0unmcA@mail.gmail.com>
+Message-ID: <87txq1aguv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eed556c7feae527b59bb48b88737d77c3ca8a333
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Charles" == Charles Krinke <charles.krinke@gmail.com> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libvncserver/libvncserver.mk |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ Charles> A related question, if I may.
+ Charles> Is there a way to add to ver.mk or another file in the packages
+ Charles> directory to tell selected packages to be silent as opposed to all
+ Charles> packages?
 
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index ac55a95..011b174 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -4,10 +4,11 @@
- #
- #############################################################
- 
--LIBVNCSERVER_VERSION = 0.9.8.2
-+LIBVNCSERVER_VERSION = 0.9.9
- LIBVNCSERVER_SOURCE = LibVNCServer-$(LIBVNCSERVER_VERSION).tar.gz
- LIBVNCSERVER_SITE = http://downloads.sourceforge.net/project/libvncserver/libvncserver/$(LIBVNCSERVER_VERSION)
--
-+LIBVNCSERVER_LICENSE = GPLv2+
-+LIBVNCSERVER_LICENSE_FILES = COPYING
- LIBVNCSERVER_INSTALL_STAGING = YES
- 
- # only used for examples
+Not currently, no.
+
+-- 
+Bye, Peter Korsgaard
