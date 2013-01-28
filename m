@@ -1,32 +1,45 @@
-From: =?UTF-8?Q?Rafa=C5=82_Fabich?= <rafal.fabich@gmail.com>
-Date: Mon, 28 Jan 2013 10:51:11 +0100
-Subject: [Buildroot] kernel and u-boot source from local directory
-Message-ID: <CAPRxd43J2Cc+xwBAaUKvQSMccRgcHQJmMEGFg8S7+uQtQxpkyQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 28 Jan 2013 08:14:49 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
+	7}.x stable versions
+Message-ID: <1359371690-3703-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                                  | 6 +++---
+ ...0.61-headers_install-fix-__packed-in-exported-kernel-head.patch} | 0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.60-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.61-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-I have just made changes to the Buildroot (version 2012.11) so that it
-enables me to use local directories containing the U-boot anf Linux kernel
-source code.
-The addition is made to my linux.mk, uboot.mk and corresponding Config.in
-files. The boot/uboot/Config.in also contains addition regarding Freescale
-i.MX6 version of u-boot image (extension "imx").
-
-I think that these changes might be useful for anyone who works on
-development of Linux kernel or U-boot source code and uses Buildroot to
-configure the entire target system.
-
-If you agree and find it useful, please let me know if and how can I add
-those changes to the Buildroot.
-
-
-With kind regards,
-Rafal Fabich
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130128/54f9c6a1/attachment.html>
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index a966220..5fda815 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -58,13 +58,13 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.60"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.61"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.37"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.27"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.28"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+-	default "3.7.4"		if BR2_KERNEL_HEADERS_3_7
++	default "3.7.5"		if BR2_KERNEL_HEADERS_3_7
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.60-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.61-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.60-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.61-headers_install-fix-__packed-in-exported-kernel-head.patch
+-- 
+1.7.12.4
