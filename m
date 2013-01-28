@@ -1,56 +1,81 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 28 Jan 2013 20:58:18 +0100
-Subject: [Buildroot] [git commit] linux-firmware: add new config option of
-	iwlwifi 5000 firmware
-Message-ID: <20130128200328.0E6679A851@busybox.osuosl.org>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Mon, 28 Jan 2013 21:10:34 +0100
+Subject: [Buildroot] [PATCHv2] barebox: Allow to build an environment image
+Message-ID: <1359403834-1052-1-git-send-email-maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b4fc984b8728206c142b1ecfcd162d97126f2080
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 ---
- package/linux-firmware/Config.in         |    6 ++++++
- package/linux-firmware/linux-firmware.mk |    7 +++++++
- 2 files changed, 13 insertions(+), 0 deletions(-)
+ boot/barebox/Config.in  |   19 +++++++++++++++++++
+ boot/barebox/barebox.mk |   14 ++++++++++++++
+ 2 files changed, 33 insertions(+)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index bf264eb..9998f22 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -20,6 +20,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index b9e03b3..49d6c2b 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -99,4 +99,23 @@ config BR2_TARGET_BAREBOX_BAREBOXENV
  	help
- 	  Firmware files for the Atheros 9271 module
+ 	  Install bareboxenv tool in target.
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000
-+	bool "Intel iwlwifi 5000"
++config BR2_TARGET_BAREBOX_CUSTOM_ENV
++	bool "Generate an environment image"
 +	help
-+	  Firmware files for the Intel Wifi 5000 devices supported by
-+	  the iwlwifi kernel driver.
++	  Generate a custom environment image. This environment will
++	  contain the variables and scripts to be used at boot by
++	  barebox.
 +
- config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8
-        bool "Libertas SD 8686 v8"
-        help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index db20d33..8f96452 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -92,6 +92,13 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X) += \
- 	ti-connectivity/TIInit_7.2.31.bts 			\
- 	LICENCE.ti-connectivity
- 
-+# iwlwifi 5000. Multiple files are available (iwlwifi-5000-1.ucode,
-+# iwlwifi-5000-2.ucode, iwlwifi-5000-5.ucode), corresponding to
-+# different versions of the firmware API. For now, we only install the
-+# most recent one.
-+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000) += \
-+	iwlwifi-5000-5.ucode LICENCE.iwlwifi_firmware
++config BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH
++	string "Environment path"
++	depends on BR2_TARGET_BAREBOX_CUSTOM_ENV
++	help
++	  Path to the folder containing the custom barebox
++	  environment. Depending on your setup, it will probably be
++	  either the content of the defaultenv or defaultenv-2 folders
++	  in the barebox source code plus the additions needed. The
++	  output will be an image at the barebox devfs format, stored
++	  in the images directory, with the same name than the folder
++	  given here.
 +
- LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_XC5000) += \
- 	dvb-fe-xc5000-1.6.114.fw
+ endif
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 143338e..5ec47f6 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -67,9 +67,22 @@ define BAREBOX_BUILD_BAREBOXENV_CMDS
+ endef
+ endif
  
++ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_ENV),y)
++BAREBOX_ENV_NAME = $(notdir $(call qstrip, $(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)))
++define BAREBOX_BUILD_CUSTOM_ENV
++	$(@D)/scripts/bareboxenv -s \
++		$(call qstrip, $(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)) \
++		$(@D)/$(BAREBOX_ENV_NAME)
++endef
++define BAREBOX_INSTALL_CUSTOM_ENV
++	cp $(@D)/$(BAREBOX_ENV_NAME) $(BINARIES_DIR)
++endef
++endif
++
+ define BAREBOX_BUILD_CMDS
+ 	$(BAREBOX_BUILD_BAREBOXENV_CMDS)
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D)
++	$(BAREBOX_BUILD_CUSTOM_ENV)
+ endef
+ 
+ define BAREBOX_INSTALL_IMAGES_CMDS
+@@ -78,6 +91,7 @@ define BAREBOX_INSTALL_IMAGES_CMDS
+ 	else \
+ 		cp $(@D)/barebox.bin $(BINARIES_DIR);\
+ 	fi
++	$(BAREBOX_INSTALL_CUSTOM_ENV)
+ endef
+ 
+ ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
+-- 
+1.7.10.4
