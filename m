@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 28 Jan 2013 23:31:16 +0100
-Subject: [Buildroot] [git commit] tar: add license information
-Message-ID: <20130128223359.78AB381D2A@busybox.osuosl.org>
+Date: Mon, 28 Jan 2013 23:31:47 +0100
+Subject: [Buildroot] [git commit] quagga: add license information
+Message-ID: <20130128223400.5DDED9A864@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8fab45efd155c3ec980dccf26f4e842fc71adcc3
+commit: http://git.buildroot.net/buildroot/commit/?id=dedd61c471d129796951f55371d0f3bea61cdb27
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/tar/tar.mk |    2 ++
+ package/quagga/quagga.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index c1e625f..e465bfa 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index da022c3..fb060ef 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -7,6 +7,8 @@
+ QUAGGA_VERSION = 0.99.21
+ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+ QUAGGA_DEPENDENCIES = host-gawk
++QUAGGA_LICENSE = GPLv2+
++QUAGGA_LICENSE_FILES = COPYING
+ QUAGGA_CONF_OPT = --program-transform-name='' --enable-netlink
  
- TAR_VERSION = 1.26
- TAR_SITE = $(BR2_GNU_MIRROR)/tar
-+TAR_LICENSE = GPLv3+
-+TAR_LICENSE_FILES = COPYING
- 
- # Prefer full-blown tar over buybox's version
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_ZEBRA),--enable-zebra,--disable-zebra)
