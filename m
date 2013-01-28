@@ -1,41 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 28 Jan 2013 16:41:30 +0100
-Subject: [Buildroot] [git commit] linux: bump 3.7.x stable version
-Message-ID: <20130128154828.1E07B9A853@busybox.osuosl.org>
+Date: Mon, 28 Jan 2013 16:42:41 +0100
+Subject: [Buildroot] [git commit] qwt: fix project's URL
+Message-ID: <20130128154828.480B29A853@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3ae806d5dcc3c6a0f3d55194379575fcffa73ce5
+commit: http://git.buildroot.net/buildroot/commit/?id=93af90cfb670849931ffe3741baa630c00682fe5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/qwt/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 175a999..78b7b0c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/qwt/Config.in b/package/qwt/Config.in
+index d72b30e..3dc6f22 100644
+--- a/package/qwt/Config.in
++++ b/package/qwt/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_QWT
+ 	  Qwt is a graphics extension to the Qt GUI application
+ 	  framework. It provides a 2D plotting widget and more.
  
- config BR2_LINUX_KERNEL_3_7
--	bool "3.7.4"
-+	bool "3.7.5"
+-	  http://http://sourceforge.net/projects/qwt
++	  http://qwt.sourceforge.net/
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ if BR2_PACKAGE_QWT
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.7.4" if BR2_LINUX_KERNEL_3_7
-+	default "3.7.5" if BR2_LINUX_KERNEL_3_7
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
