@@ -1,25 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 30 Jan 2013 00:20:25 +0100
-Subject: [Buildroot] [PATCH 1] xtensa: sqlite requires special compiler
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 30 Jan 2013 00:19:42 +0100
+Subject: [Buildroot] [git commit] xtensa: sqlite requires special compiler
 	option
-In-Reply-To: <50fef791.c587440a.325a.2b65@mx.google.com> (Chris Zankel's
- message of "Tue, 22 Jan 2013 12:33:19 -0800")
-References: <50fef791.c587440a.325a.2b65@mx.google.com>
-Message-ID: <874nhza85i.fsf@dell.be.48ers.dk>
+Message-ID: <20130129232027.128F09A880@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Zankel <chris@zankel.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6a30cd3fb30b8057ddde2c72a88c0bb6ad7d1761
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Chris> Some of the generated object files are too large for PC-relative addressing,
- Chris> so use the --test-section-literals to move symbols closer to the code.
+Some of the generated object files are too large for PC-relative addressing,
+so use the -mtext-section-literals compiler flag to move symbols closer to
+the code.
 
-The option seems to be -mtext-section-literals.
+[Peter: fix commit message]
+Signed-off-by: Chris Zankel <chris@zankel.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sqlite/sqlite.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Committed with the commit message corrected, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index bf4b921..8eb6b2f 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -33,6 +33,10 @@ ifeq ($(BR2_PACKAGE_SQLITE_SECURE_DELETE),y)
+ SQLITE_CFLAGS += -DSQLITE_SECURE_DELETE
+ endif
+ 
++ifeq ($(BR2_xtensa),y)
++SQLITE_CFLAGS += -mtext-section-literals
++endif
++
+ SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
+ 
+ SQLITE_CONF_OPT = \
