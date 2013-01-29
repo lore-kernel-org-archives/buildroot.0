@@ -1,44 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jan 2013 23:44:09 +0100
-Subject: [Buildroot] [PATCH 25/29] package/qemu: option to build the docs
+Date: Tue, 29 Jan 2013 23:44:11 +0100
+Subject: [Buildroot] [PATCH 27/29] package/qemu: move sub-options into a
+	sub-menu
 In-Reply-To: <cover.1359498903.git.yann.morin.1998@free.fr>
 References: <cover.1359498903.git.yann.morin.1998@free.fr>
-Message-ID: <f70acfc0fb60b4f57f918f0154401567e749c986.1359498903.git.yann.morin.1998@free.fr>
+Message-ID: <71e672f52e60ae480eb43d671ce5a43cb4cde567.1359498903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+As there are now quite a few options to QEMU, move them into their own
+sub-menu, so it looks a bit less crowded in the 'misc' menu.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/qemu.mk |    7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index ddee260..90b1ebf 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -262,6 +262,12 @@ ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
- QEMU_OPTS += --disable-blobs
- endif
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 022b07b..64a7e6f 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -2,7 +2,7 @@ comment "QEMU requires a toolchain with threads"
+ 	depends on !BR2_i386 && !BR2_x86_64
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
  
-+ifeq ($(BR2_HAVE_DOCUMENTATION),y)
-+QEMU_OPTS += --enable-docs
-+else
-+QEMU_OPTS += --disable-docs
-+endif
-+
- # Post-install removal of unwanted keymaps:
- # - if we want 'all', we do nothing;
- # - if we want none, we completely remove the keymap dir
-@@ -342,7 +348,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-brlapi                    \
- 	        --disable-fdt                       \
- 	        --disable-guest-base                \
--	        --disable-docs                      \
- 	        --disable-rbd                       \
- 	        --disable-smartcard                 \
- 	        --disable-strip                     \
+-config BR2_PACKAGE_QEMU
++menuconfig BR2_PACKAGE_QEMU
+ 	bool "QEMU"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
 -- 
 1.7.2.5
