@@ -1,37 +1,25 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Jan 2013 00:00:17 +0100
-Subject: [Buildroot] [PATCH] package/linux-firmware: update to newer
-	version
-In-Reply-To: <87txpza9v6.fsf@dell.be.48ers.dk>
-References: <1358877743-16068-1-git-send-email-yann.morin.1998@free.fr>
- <87txpza9v6.fsf@dell.be.48ers.dk>
-Message-ID: <201301300000.17210.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 30 Jan 2013 00:20:25 +0100
+Subject: [Buildroot] [PATCH 1] xtensa: sqlite requires special compiler
+	option
+In-Reply-To: <50fef791.c587440a.325a.2b65@mx.google.com> (Chris Zankel's
+ message of "Tue, 22 Jan 2013 12:33:19 -0800")
+References: <50fef791.c587440a.325a.2b65@mx.google.com>
+Message-ID: <874nhza85i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+>>>>> "Chris" == Chris Zankel <chris@zankel.net> writes:
 
-On Tuesday 29 January 2013 Peter Korsgaard wrote:
-> For future commits, it would be good to state in the commit message WHY
-> we would go to the new version / what we gain from it.
+ Chris> Some of the generated object files are too large for PC-relative addressing,
+ Chris> so use the --test-section-literals to move symbols closer to the code.
 
-Right, I should know better.
+The option seems to be -mtext-section-literals.
 
-For the posterity: the firmware for rtl8712 was reverted to fix
-stability issues.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
+Committed with the commit message corrected, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
