@@ -1,40 +1,54 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 30 Jan 2013 00:19:42 +0100
-Subject: [Buildroot] [git commit] xtensa: sqlite requires special compiler
-	option
-Message-ID: <20130129232027.128F09A880@busybox.osuosl.org>
+From: John Stile <john@stilen.com>
+Date: Tue, 29 Jan 2013 15:33:05 -0800
+Subject: [Buildroot] configure buildroot to patch at91bootstrap
+In-Reply-To: <20130129214230.699afd2e@skate>
+References: <1359491391.7974.190.camel@genx> <20130129214230.699afd2e@skate>
+Message-ID: <1359502385.7974.197.camel@genx>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a30cd3fb30b8057ddde2c72a88c0bb6ad7d1761
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 2013-01-29 at 21:42 +0100, Thomas Petazzoni wrote:
+> Dear John Stile,
+> 
+> On Tue, 29 Jan 2013 12:29:51 -0800, John Stile wrote:
+> > I have modified output/build/at91bootstrap-1.16, and now I would like
+> > to save the patch set and have it applied when I rebuild
+> > at91bootstrap-1.16 from scratch.
+> > 
+> > To my buildroot .conf file, I added:
+> > BR2_TARGET_AT91BOOTSTRAP_PATCH="$(TOPDIR)/board/atmel/at91sam9g20ek/at91bootstrap-patch"
+> > but it is erased from .config after running make.
+> 
+> Never edit your .config file manually. There is no way it can work
+> properly, unless you know precisely what you're doing.
+> 
+> The reason why a BR2_TARGET_AT91BOOTSTRAP_PATCH line gets removed is
+> because this option simply doesn't exist.
+> 
+> Simply go in:
+> 
+>  Bootloaders
+>   -> at91bootstrap
+>     -> custom patch dir
+> 
+> And set your patch directory here.
+There in lines the problem.
+I do not have:
+ Bootloaders
+ -> at91bootstrap
+ -> custom patch dir
 
-Some of the generated object files are too large for PC-relative addressing,
-so use the -mtext-section-literals compiler flag to move symbols closer to
-the code.
+My buildroot 2011.11 has:
+ Bootloaders  --->
+ [*] AT91 Bootstrap
+ (at91sam9g20ek) Bootstrap board
+ Boot Memory (NAND Flash)  --->
+ [ ] AT91 DataFlashBoot
 
-[Peter: fix commit message]
-Signed-off-by: Chris Zankel <chris@zankel.net>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/sqlite/sqlite.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+Is is possible to back-port the ability to patch at91bootstrap in
+2011.11?
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index bf4b921..8eb6b2f 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -33,6 +33,10 @@ ifeq ($(BR2_PACKAGE_SQLITE_SECURE_DELETE),y)
- SQLITE_CFLAGS += -DSQLITE_SECURE_DELETE
- endif
- 
-+ifeq ($(BR2_xtensa),y)
-+SQLITE_CFLAGS += -mtext-section-literals
-+endif
-+
- SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
- 
- SQLITE_CONF_OPT = \
+What release added it?
