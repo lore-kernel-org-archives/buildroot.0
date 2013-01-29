@@ -1,45 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Jan 2013 21:42:30 +0100
-Subject: [Buildroot] configure buildroot to patch at91bootstrap
-In-Reply-To: <1359491391.7974.190.camel@genx>
-References: <1359491391.7974.190.camel@genx>
-Message-ID: <20130129214230.699afd2e@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 29 Jan 2013 18:19:58 -0300
+Subject: [Buildroot] [PATCH] olsr: bump to version 0.6.4
+In-Reply-To: <87halzd8wm.fsf@dell.be.48ers.dk>
+References: <1359468619-12256-1-git-send-email-gustavo@zacarias.com.ar>
+ <87halzd8wm.fsf@dell.be.48ers.dk>
+Message-ID: <51083CFE.7050009@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear John Stile,
+On 01/29/2013 05:35 PM, Peter Korsgaard wrote:
 
-On Tue, 29 Jan 2013 12:29:51 -0800, John Stile wrote:
-> I have modified output/build/at91bootstrap-1.16, and now I would like
-> to save the patch set and have it applied when I rebuild
-> at91bootstrap-1.16 from scratch.
+>  Gustavo> Switch to forked mode in the init script to avoid console noise.
 > 
-> To my buildroot .conf file, I added:
-> BR2_TARGET_AT91BOOTSTRAP_PATCH="$(TOPDIR)/board/atmel/at91sam9g20ek/at91bootstrap-patch"
-> but it is erased from .config after running make.
+> Does this mean it needs to depend on BR2_USE_MMU?
 
-Never edit your .config file manually. There is no way it can work
-properly, unless you know precisely what you're doing.
-
-The reason why a BR2_TARGET_AT91BOOTSTRAP_PATCH line gets removed is
-because this option simply doesn't exist.
-
-Simply go in:
-
- Bootloaders
-  -> at91bootstrap
-    -> custom patch dir
-
-And set your patch directory here.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Yes, but it's not my fault(tm)!
+The previous version wouldn't build on nommu anyway, we just didn't hit
+the issue before or i didn't see it since what i changed is just an
+invocation parameter of the initscript.
+I'll send v2.
+Regards.
