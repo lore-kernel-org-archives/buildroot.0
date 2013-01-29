@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jan 2013 23:43:50 +0100
-Subject: [Buildroot] [PATCH 06/29] package/qemu: add option to
-	enable/disable the VNC frontend
+Date: Tue, 29 Jan 2013 23:43:51 +0100
+Subject: [Buildroot] [PATCH 07/29] package/qemu: add VNC jpeg and png
+	compression
 In-Reply-To: <cover.1359498903.git.yann.morin.1998@free.fr>
 References: <cover.1359498903.git.yann.morin.1998@free.fr>
-Message-ID: <daea1b92113c38f8037cbdb6bdda7ec06eeaa10e.1359498903.git.yann.morin.1998@free.fr>
+Message-ID: <511776afd608622c852ed740c14cfbedc20eb37c.1359498903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +13,64 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |    7 +++++++
- package/qemu/qemu.mk   |   11 ++++++++++-
- 2 files changed, 17 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |   10 ++++++++++
+ package/qemu/qemu.mk   |   16 ++++++++++++++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index ad934ae..d904566 100644
+index d904566..82546a6 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -78,6 +78,13 @@ endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
+@@ -85,6 +85,16 @@ config BR2_PACKAGE_QEMU_VNC
+ 	  Say 'y' to enable the VNC frontend, that is, QEMU will act as a
+ 	  VNC server presenting the VM's display.
  
- comment "Frontends"
- 
-+config BR2_PACKAGE_QEMU_VNC
-+	bool "Enable VNC frontend"
-+	select BR2_PACKAGE_VNC
-+	help
-+	  Say 'y' to enable the VNC frontend, that is, QEMU will act as a
-+	  VNC server presenting the VM's display.
++config BR2_PACKAGE_QEMU_VNC_PNG
++	bool "PNG compression"
++	depends on BR2_PACKAGE_QEMU_VNC
++	select BR2_PACKAGE_LIBPNG
++
++config BR2_PACKAGE_QEMU_VNC_JPEG
++	bool "JPEG compression"
++	depends on BR2_PACKAGE_QEMU_VNC
++	select BR2_PACKAGE_JPEG
 +
  config BR2_PACKAGE_QEMU_SDL
  	bool "Enable SDL frontend"
  	select BR2_PACKAGE_SDL
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 1dd0c98..c122be7 100644
+index c122be7..7563e24 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -114,6 +114,12 @@ ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
- QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
+@@ -120,6 +120,20 @@ else
+ QEMU_OPTS += --disable-vnc
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_VNC),y)
-+QEMU_OPTS += --enable-vnc
++ifeq ($(BR2_PACKAGE_QEMU_VNC_PNG),y)
++QEMU_OPTS += --enable-vnc-png
++QEMU_DEPENDENCIES += libpng
 +else
-+QEMU_OPTS += --disable-vnc
++QEMU_OPTS += --disable-vnc-png
++endif
++
++ifeq ($(BR2_PACKAGE_QEMU_VNC_JPEG),y)
++QEMU_OPTS += --enable-vnc-jpeg
++QEMU_DEPENDENCIES += jpeg
++else
++QEMU_OPTS += --disable-vnc-jpeg
 +endif
 +
  ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
  QEMU_OPTS += --enable-sdl
  QEMU_DEPENDENCIES += sdl
-@@ -146,7 +152,10 @@ define QEMU_CONFIGURE_CMDS
+@@ -152,8 +166,6 @@ define QEMU_CONFIGURE_CMDS
  	        --disable-bsd-user                  \
  	        --disable-xen                       \
  	        --disable-slirp                     \
--	        --disable-vnc                       \
-+	        --disable-vnc-jpeg                  \
-+	        --disable-vnc-png                   \
-+	        --disable-vnc-tls                   \
-+	        --disable-vnc-sasl                  \
+-	        --disable-vnc-jpeg                  \
+-	        --disable-vnc-png                   \
+ 	        --disable-vnc-tls                   \
+ 	        --disable-vnc-sasl                  \
  	        --disable-virtfs                    \
- 	        --disable-brlapi                    \
- 	        --disable-curses                    \
 -- 
 1.7.2.5
