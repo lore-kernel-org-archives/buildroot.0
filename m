@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Jan 2013 15:23:58 -0300
-Subject: [Buildroot] [PATCH 09/10] kismet: add license information
+Date: Tue, 29 Jan 2013 15:23:59 -0300
+Subject: [Buildroot] [PATCH 10/10] wipe: add license information
 In-Reply-To: <1359483839-25357-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1359483839-25357-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1359483839-25357-9-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1359483839-25357-10-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/kismet/kismet.mk | 2 ++
+ package/wipe/wipe.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index c8ae8e3..3787f07 100644
---- a/package/kismet/kismet.mk
-+++ b/package/kismet/kismet.mk
-@@ -7,6 +7,8 @@
- KISMET_VERSION = 2011-03-R2
- KISMET_SITE = http://www.kismetwireless.net/code
- KISMET_DEPENDENCIES = libpcap ncurses
-+KISMET_LICENSE = GPLv2+
-+KISMET_LICENSE_FILES = GPL
+diff --git a/package/wipe/wipe.mk b/package/wipe/wipe.mk
+index e523a31..eed90be 100644
+--- a/package/wipe/wipe.mk
++++ b/package/wipe/wipe.mk
+@@ -8,6 +8,8 @@ WIPE_VERSION = 2.3.1
+ WIPE_SITE = http://downloads.sourceforge.net/project/wipe/wipe/$(WIPE_VERSION)
+ WIPE_SOURCE = wipe-$(WIPE_VERSION).tar.bz2
+ WIPE_AUTORECONF = YES
++WIPE_LICENSE = GPLv2+
++WIPE_LICENSE_FILES = LICENSE
  
- ifeq ($(BR2_PACKAGE_LIBNL),y)
- 	KISMET_DEPENDENCIES += libnl
+ define WIPE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D $(@D)/wipe $(TARGET_DIR)/usr/bin/wipe
 -- 
 1.7.12.4
