@@ -1,72 +1,147 @@
-From: Shawn J. Goff <shawn.goff@accelecon.com>
-Date: Tue, 29 Jan 2013 08:45:20 -0500
-Subject: [Buildroot] Linux and busybox-configfiles
-In-Reply-To: <510780F9.9050207@relinux.de>
-References: <510550FA.10502@relinux.de> <5105ABE8.70409@mind.be>
- <ke74ce$76p$1@ger.gmane.org> <510780F9.9050207@relinux.de>
-Message-ID: <ke8jpd$d31$1@ger.gmane.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 29 Jan 2013 11:10:19 -0300
+Subject: [Buildroot] [PATCH] olsr: bump to version 0.6.4
+Message-ID: <1359468619-12256-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bump olsrd to version 0.6.4
 
+Fixes:
+http://autobuild.buildroot.net/results/553c8157cd83ca60475caacc119779c778806781/
+which is due to the old version not being friendly with newer flex
+versions.
 
-On 01/29/2013 02:57 AM, Stephan Hoffmann wrote:
-> Am 29.01.2013 01:16, schrieb Shawn J. Goff:
->>
->>
->> On 01/27/2013 05:36 PM, Arnout Vandecappelle wrote:
->>> On 27/01/13 17:08, Stephan Hoffmann wrote:
->>>> Hello all,
->>>>
->>>> buildroot provides direct calls to the configuration menus for busybox
->>>> and linux:
->>>>
->>>> make linux-menuconfig
->>>> make busybox-menuconfig
->>>>
->>>> Additionally, there is a linux-savedefconfig make target.
->>>>
->>>> All these save their output in the build directory, so that all changes
->>>> get lost when "make clean" is called. Thus I don't think that I am the
->>>> only one who has been surprised to notice that "make busybox-menuconfig
->>>> && make clean && make" does not have any effect on busybox's
->>>> configuration.
->>>
->>>    This is a bit a philosophical discussion: should the configuration
->>> files of linux, busybox, etc. be considered part of the buildroot
->>> configuration or not? In the former case, they should survive a 'make
->>> clean', in the latter case they should be removed by 'make clean'.
->>>
->>>    I tend to agree that the package configs should be considered part of
->>> the buildroot config. However, if your buildroot config specifies some
->>> BR2_PACKAGE_BUSYBOX_CONFIG, then I would expect that after 'make clean',
->>> that is the config that will be used. More generically, I expect I
->>> can do:
->>>
->>>    make foo_defconfig
->>>    Do all kinds of weird stuff that completely messes things up
->>>    make clean
->>>    make
->>>
->>> and to be back in the same state as 'make foo_defconfig; make'.
->>>
->>>
->>
->> I'd like the busybox-*config and linux-*config targets should save the
->> resulting config in BR2_PACKAGE_BUSYBOX_CONFIG and
->> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE. I keep these two locations under
->> source control in board/my_company/board_name/, so when I completely
->> mess up the config, it's just a git checkout path/to/config, and if I
->> want to keep the changes, I just add and commit the file. It also lets
->> me clearly see something has changed when I run git status.
-> Do you know about busybox-update-config and linux-update-config?
+Enabled more plugins to make it more useful.
 
-I did not. I also see a barebox-update-config and a 
-uClibc-update-config. Why should those not get called by the make 
-*-config targets? One of the goals of Buildroot is to ensure consistent, 
-repeatable builds. If it's easy for me to do a make linux-menuconfig and 
-go on working without it reminding me that I've changed something and 
-it's not committed yet, I think that's a bug.
+Switch to forked mode in the init script to avoid console noise.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/olsr/Config.in                        |  5 +++--
+ package/olsr/S50olsr                          |  2 +-
+ package/olsr/olsr-configurable-ldconfig.patch | 19 +++++++++++--------
+ package/olsr/olsr.mk                          | 18 ++++++++++++------
+ 4 files changed, 27 insertions(+), 17 deletions(-)
+
+diff --git a/package/olsr/Config.in b/package/olsr/Config.in
+index ada82b4..33ef6c1 100644
+--- a/package/olsr/Config.in
++++ b/package/olsr/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_OLSR
+ 	bool "OLSR mesh networking Daemon"
+ 	depends on BR2_INET_IPV6
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  The Optimized Link State Routing protocol (OLSR) is a
+ 	  routing protocol that is optimised for mobile ad-hoc
+@@ -11,5 +12,5 @@ config BR2_PACKAGE_OLSR
+ 
+ 	  http://www.olsr.org/
+ 
+-comment "olsr requires a toolchain with IPv6 support"
+-	depends on !BR2_INET_IPV6
++comment "olsr requires a toolchain with IPv6 and threads support"
++	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/olsr/S50olsr b/package/olsr/S50olsr
+index a8aefd3..9f052da 100755
+--- a/package/olsr/S50olsr
++++ b/package/olsr/S50olsr
+@@ -6,7 +6,7 @@
+ case "$1" in
+   start)
+   	echo "Starting OLSRd daemon: "
+-	/usr/sbin/olsrd -d 0 -nofork & 
++	/usr/sbin/olsrd -d 0
+ 	;;
+   stop)
+   	echo "Stopping OLSRd daemon: "
+diff --git a/package/olsr/olsr-configurable-ldconfig.patch b/package/olsr/olsr-configurable-ldconfig.patch
+index 09e34f1..73fff7e 100644
+--- a/package/olsr/olsr-configurable-ldconfig.patch
++++ b/package/olsr/olsr-configurable-ldconfig.patch
+@@ -5,26 +5,29 @@ we make the path to ldconfig configurable through the environment/make
+ command line. This allows to pass LDCONFIG=/bin/true when doing
+ cross-compilation.
+ 
++[Gustavo: update patch for olsr 0.6.4]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ 
+-Index: b/make/Makefile.linux
+-===================================================================
+---- a/make/Makefile.linux
+-+++ b/make/Makefile.linux
++diff -Nura olsrd-0.6.4.orig/make/Makefile.linux olsrd-0.6.4/make/Makefile.linux
++--- olsrd-0.6.4.orig/make/Makefile.linux	2013-01-29 09:00:18.041356389 -0300
+++++ olsrd-0.6.4/make/Makefile.linux	2013-01-29 09:01:51.598226624 -0300
+ @@ -3,6 +3,7 @@
+  #
+  
+  ARCH := $(shell uname -m)
+ +LDCONFIG ?= /sbin/ldconfig
+- DESTDIR ?=
+- LIBDIR =	$(DESTDIR)$(shell if [ "$(ARCH)" = "x86_64" -a -d "/usr/lib64" ]; then echo "/usr/lib64"; else echo "/usr/lib"; fi)
+- 
+-@@ -14,7 +15,7 @@
+  
++ DESTDIR ?=
++ prefix ?= /usr/local
++@@ -26,9 +27,9 @@
++ PLUGIN_SONAME ?= lib$(PLUGIN_NAME).so
+  PLUGIN_FULLNAME ?= $(PLUGIN_NAME).so.$(PLUGIN_VER)
+  INSTALL_LIB =	install -D -m 755 $(PLUGIN_FULLNAME) $(LIBDIR)/$(PLUGIN_FULLNAME); \
+ -		/sbin/ldconfig -n $(LIBDIR)
+ +		$(LDCONFIG) -n $(LIBDIR)
++ UNINSTALL_LIB =	rm -f $(LIBDIR)/$(PLUGIN_FULLNAME); \
++-		/sbin/ldconfig -n $(LIBDIR)
+++		$(LDCONFIG) -n $(LIBDIR)
+  
+  ifdef OLSRD_PLUGIN
+  GENERATE_PIC = true
+diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
+index be1ae1e..97088f3 100644
+--- a/package/olsr/olsr.mk
++++ b/package/olsr/olsr.mk
+@@ -4,13 +4,17 @@
+ #
+ #############################################################
+ 
+-OLSR_VERSION_MAJOR = 0.5
+-OLSR_VERSION_MINOR = 6
++OLSR_VERSION_MAJOR = 0.6
++OLSR_VERSION_MINOR = 4
+ OLSR_VERSION = $(OLSR_VERSION_MAJOR).$(OLSR_VERSION_MINOR)
+ OLSR_SOURCE = olsrd-$(OLSR_VERSION).tar.bz2
+ OLSR_SITE = http://www.olsr.org/releases/$(OLSR_VERSION_MAJOR)
+-#OLSR_PLUGINS=httpinfo tas dot_draw nameservice dyn_gw dyn_gw_plain pgraph bmf quagga secure
+-OLSR_PLUGINS = dot_draw dyn_gw secure
++OLSR_PLUGINS = arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo jsoninfo \
++	mdns nameservice p2pd pgraph secure txtinfo watchdog
++# Doesn't really need quagga but not very useful without it
++OLSR_PLUGINS += $(if $(BR2_PACKAGE_QUAGGA),quagga)
++OLSR_LICENSE = BSD-3c LGPLv2.1+
++OLSR_LICENSE_FILES = license.txt lib/pud/nmealib/LICENSE
+ 
+ define OLSR_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D) olsrd
+@@ -20,10 +24,12 @@ define OLSR_BUILD_CMDS
+ endef
+ 
+ define OLSR_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install_bin
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
++		prefix="/usr" install_bin
+ 	for p in $(OLSR_PLUGINS) ; do \
+ 		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib/$$p \
+-			LDCONFIG=/bin/true DESTDIR=$(TARGET_DIR) install ; \
++			LDCONFIG=/bin/true DESTDIR=$(TARGET_DIR) \
++			prefix="/usr" install ; \
+ 	done
+ 	$(INSTALL) -D -m 0755 package/olsr/S50olsr $(TARGET_DIR)/etc/init.d/S50olsr
+ 	test -r $(TARGET_DIR)/etc/olsrd.conf || \
+-- 
+1.7.12.4
