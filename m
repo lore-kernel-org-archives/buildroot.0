@@ -1,70 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jan 2013 23:43:52 +0100
-Subject: [Buildroot] [PATCH 08/29] package/qemu: add VNC TLS-encryption
+Date: Tue, 29 Jan 2013 23:43:53 +0100
+Subject: [Buildroot] [PATCH 09/29] package/qemu: add option to not install
+	blobs
 In-Reply-To: <cover.1359498903.git.yann.morin.1998@free.fr>
 References: <cover.1359498903.git.yann.morin.1998@free.fr>
-Message-ID: <519e21a910db61854493048dc122b6470318a48e.1359498903.git.yann.morin.1998@free.fr>
+Message-ID: <f3fa000829e3a5c21c2963824f6b6a2f0b381e20.1359498903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Only TLS is supported, as buildroot has no package for the SASL library.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   11 +++++++++++
- package/qemu/qemu.mk   |    8 +++++++-
- 2 files changed, 18 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |   16 ++++++++++++++++
+ package/qemu/qemu.mk   |    4 ++++
+ 2 files changed, 20 insertions(+), 0 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 82546a6..1e80f6a 100644
+index 1e80f6a..54f49ff 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -95,6 +95,17 @@ config BR2_PACKAGE_QEMU_VNC_JPEG
- 	depends on BR2_PACKAGE_QEMU_VNC
- 	select BR2_PACKAGE_JPEG
+@@ -113,4 +113,20 @@ config BR2_PACKAGE_QEMU_SDL
+ 	  Say 'y' to enable the SDL frontend, that is, a graphical window
+ 	  presenting the VM's display.
  
-+# TLS does not work with static link, because the gnutls .pc is missing a
-+# dependency on libintl... :-(
-+config BR2_PACKAGE_QEMU_VNC_TLS
-+	bool "TLS encryption"
-+	depends on BR2_PACKAGE_QEMU_VNC
-+	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_PACKAGE_GNUTLS
++comment "Misc. features"
 +
-+comment "VNC TLS encryption does not work for static link"
-+    depends on BR2_PACKAGE_QEMU_VNC && BR2_PREFER_STATIC_LIB
++config BR2_PACKAGE_QEMU_BLOBS
++	bool "Install binary blobs"
++	default y
++	help
++	  Say 'y' here (the default) to install binary blobs (such as BIOS
++	  or firmwares for the different machines simulated by QEMU).
++	  Say 'n' to not install those blobs.
++	  
++	  Note: Some machines may be unbootable without those blobs.
++	        If unsure, say 'y'.
++	  
++	  Note2: This has nothing to do with the licensing of the blobs;
++	         some (most?) even have a free and/or open source license.
 +
- config BR2_PACKAGE_QEMU_SDL
- 	bool "Enable SDL frontend"
- 	select BR2_PACKAGE_SDL
+ endif # BR2_PACKAGE_QEMU
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 7563e24..fbf08fc 100644
+index fbf08fc..49e2f35 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -134,6 +134,13 @@ else
- QEMU_OPTS += --disable-vnc-jpeg
+@@ -149,6 +149,10 @@ else
+ QEMU_OPTS += --disable-sdl
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_VNC_TLS),y)
-+QEMU_OPTS += --enable-vnc-tls
-+QEMU_DEPENDENCIES += gnutls
-+else
-+QEMU_OPTS += --disable-vnc-tls
++ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
++QEMU_OPTS += --disable-blobs
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
- QEMU_OPTS += --enable-sdl
- QEMU_DEPENDENCIES += sdl
-@@ -166,7 +173,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-bsd-user                  \
- 	        --disable-xen                       \
- 	        --disable-slirp                     \
--	        --disable-vnc-tls                   \
- 	        --disable-vnc-sasl                  \
- 	        --disable-virtfs                    \
- 	        --disable-brlapi                    \
+ # Note: although QEMU uses a ./configure script, it is not compatible with
+ #       the traditional autotools options (eg. --target et al.), so we have
+ #       to override the default provided by the autotools-package infra, and
 -- 
 1.7.2.5
