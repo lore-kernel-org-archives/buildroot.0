@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jan 2013 23:33:15 +0100
-Subject: [Buildroot] [PATCH 4/7] package/libedit2: new package
+Date: Tue, 29 Jan 2013 23:33:16 +0100
+Subject: [Buildroot] [PATCH 5/7] package/ceph: new package
 In-Reply-To: <cover.1359498504.git.yann.morin.1998@free.fr>
 References: <cover.1359498504.git.yann.morin.1998@free.fr>
-Message-ID: <1b2aad271ae5ac114c9febf289ffe6886ccff663.1359498504.git.yann.morin.1998@free.fr>
+Message-ID: <4b56bb169552fe7a72364ca4c2732656c0ec34df.1359498504.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,427 +11,312 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
- package/Config.in                                  |    1 +
- package/libedit2/Config.in                         |    9 +++
- package/libedit2/libedit2-01-Makefile.patch        |   25 +++++++
- package/libedit2/libedit2-02-el.c-issetugid.patch  |   24 ++++++
- package/libedit2/libedit2-03-el.c-MAXPATHLEN.patch |   40 +++++++++++
- .../libedit2/libedit2-04-readline.h-stdio.patch    |   17 +++++
- .../libedit2/libedit2-08-readline-history.h.patch  |   20 +++++
- .../libedit2/libedit2-10-define_SIZE_T_MAX.patch   |   18 +++++
- .../libedit2/libedit2-12-libedit-Makefile.patch    |   54 ++++++++++++++
- package/libedit2/libedit2-20-fortify.patch         |   23 ++++++
- package/libedit2/libedit2.mk                       |   75 ++++++++++++++++++++
- package/libedit2/libedit2.pc                       |   13 ++++
- 12 files changed, 319 insertions(+), 0 deletions(-)
- create mode 100644 package/libedit2/Config.in
- create mode 100644 package/libedit2/libedit2-01-Makefile.patch
- create mode 100644 package/libedit2/libedit2-02-el.c-issetugid.patch
- create mode 100644 package/libedit2/libedit2-03-el.c-MAXPATHLEN.patch
- create mode 100644 package/libedit2/libedit2-04-readline.h-stdio.patch
- create mode 100644 package/libedit2/libedit2-08-readline-history.h.patch
- create mode 100644 package/libedit2/libedit2-10-define_SIZE_T_MAX.patch
- create mode 100644 package/libedit2/libedit2-12-libedit-Makefile.patch
- create mode 100644 package/libedit2/libedit2-20-fortify.patch
- create mode 100644 package/libedit2/libedit2.mk
- create mode 100644 package/libedit2/libedit2.pc
+ package/Config.in                          |    1 +
+ package/ceph/Config.in                     |   23 ++++++++++
+ package/ceph/ceph-no-envz.patch            |   63 ++++++++++++++++++++++++++++
+ package/ceph/ceph-no-getloadavg.patch      |   61 +++++++++++++++++++++++++++
+ package/ceph/ceph-no-posix_fallocate.patch |   50 ++++++++++++++++++++++
+ package/ceph/ceph.mk                       |   53 +++++++++++++++++++++++
+ 6 files changed, 251 insertions(+), 0 deletions(-)
+ create mode 100644 package/ceph/Config.in
+ create mode 100644 package/ceph/ceph-no-envz.patch
+ create mode 100644 package/ceph/ceph-no-getloadavg.patch
+ create mode 100644 package/ceph/ceph-no-posix_fallocate.patch
+ create mode 100644 package/ceph/ceph.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index a4ecc4f..a609a11 100644
+index a609a11..a071a5f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -572,6 +572,7 @@ menu "Text and terminal handling"
- source "package/enchant/Config.in"
- source "package/libfribidi/Config.in"
- source "package/icu/Config.in"
-+source "package/libedit2/Config.in"
- source "package/libiconv/Config.in"
- source "package/linenoise/Config.in"
- source "package/ncurses/Config.in"
-diff --git a/package/libedit2/Config.in b/package/libedit2/Config.in
+@@ -623,6 +623,7 @@ source "package/bind/Config.in"
+ source "package/bmon/Config.in"
+ source "package/bridge-utils/Config.in"
+ source "package/can-utils/Config.in"
++source "package/ceph/Config.in"
+ source "package/connman/Config.in"
+ source "package/ctorrent/Config.in"
+ source "package/conntrack-tools/Config.in"
+diff --git a/package/ceph/Config.in b/package/ceph/Config.in
 new file mode 100644
-index 0000000..1e7b95d
+index 0000000..743114e
 --- /dev/null
-+++ b/package/libedit2/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBEDIT2
-+	bool "libedit2"
-+	select BR2_PACKAGE_LIBBSD
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  The editline library (from BSD) provides generic line editing
-+	  and history functions. It slightly resembles GNU readline.
-+	  
-+	  http://ftp.netbsd.org/pub/NetBSD/NetBSD-release-5-0/src/lib/libedit/
-diff --git a/package/libedit2/libedit2-01-Makefile.patch b/package/libedit2/libedit2-01-Makefile.patch
-new file mode 100644
-index 0000000..91645e4
---- /dev/null
-+++ b/package/libedit2/libedit2-01-Makefile.patch
-@@ -0,0 +1,25 @@
-+ 01-Makefile.diff by Neal H Walfield <neal@cs.uml.edu> and
-+ Gergely Nagy <algernon@debian.org>
-+
-+ Add the necessary includes and other things to the libedit
-+ Makefile, so it will compile on GNU systems, with our supplied
-+ glue code
-+
-+ Yann E. MORIN: patch from debian.
-+
-+--- a/libedit/Makefile
-++++ b/libedit/Makefile
-+@@ -1,6 +1,13 @@
-+ #	$NetBSD: Makefile,v 1.36 2007/05/28 12:06:18 tls Exp $
-+ #	@(#)Makefile	8.1 (Berkeley) 6/4/93
-+ 
-++OS!=	sh -c "case `uname -s` in GNU|GNU/*) echo GNU ;; *) uname -s ;; esac"
-++
-++.if ${OS} == GNU || ${OS} == Linux
-++CFLAGS += -include bsd/bsd.h
-++MKLINT=no
-++.endif
-++
-+ USE_SHLIBDIR=	yes
-+ 
-+ WARNS=	3
-diff --git a/package/libedit2/libedit2-02-el.c-issetugid.patch b/package/libedit2/libedit2-02-el.c-issetugid.patch
-new file mode 100644
-index 0000000..b060fa4
---- /dev/null
-+++ b/package/libedit2/libedit2-02-el.c-issetugid.patch
-@@ -0,0 +1,24 @@
-+ 02-el.c-issetugid.diff by Gergely Nagy <algernon@debian.org>
-+
-+ issetugid(2) is not implemented on GNU systems, so #ifdef it out
-+
-+ Yann E. MORIN: patch from debian.
-+
-+--- a/libedit/el.c	2008-04-06 02:53:28.000000000 +1100
-++++ b/libedit/el.c	2009-06-23 08:51:48.000000000 +1000
-+@@ -479,12 +479,14 @@ el_source(EditLine *el, const char *fnam
-+ 
-+ 	fp = NULL;
-+ 	if (fname == NULL) {
-+-#ifdef HAVE_ISSETUGID
-++#if 1
-+ 		static const char elpath[] = "/.editrc";
-+ 		char path[MAXPATHLEN];
-+ 
-++#ifndef __GLIBC__
-+ 		if (issetugid())
-+ 			return (-1);
-++#endif
-+ 		if ((ptr = getenv("HOME")) == NULL)
-+ 			return (-1);
-+ 		if (strlcpy(path, ptr, sizeof(path)) >= sizeof(path))
-diff --git a/package/libedit2/libedit2-03-el.c-MAXPATHLEN.patch b/package/libedit2/libedit2-03-el.c-MAXPATHLEN.patch
-new file mode 100644
-index 0000000..aadd36a
---- /dev/null
-+++ b/package/libedit2/libedit2-03-el.c-MAXPATHLEN.patch
-@@ -0,0 +1,40 @@
-+ 03-el.c-MAXPATHLEN.diff by Gergely Nagy <algernon@debian.org>
-+
-+ on systems without MAXPATHLEN, allocate memory dynamically
-+
-+ Yann E. MORIN: patch from debian.
-+
-+--- a/libedit/el.c	2009-06-23 08:57:04.000000000 +1000
-++++ b/libedit/el.c	2009-06-23 08:57:30.000000000 +1000
-+@@ -481,7 +481,11 @@ el_source(EditLine *el, const char *fnam
-+ 	if (fname == NULL) {
-+ #if 1
-+ 		static const char elpath[] = "/.editrc";
-++#ifdef MAXPATHLEN
-+ 		char path[MAXPATHLEN];
-++#else
-++		char *path;
-++#endif
-+ 
-+ #ifndef __GLIBC__
-+ 		if (issetugid())
-+@@ -489,10 +493,19 @@ el_source(EditLine *el, const char *fnam
-+ #endif
-+ 		if ((ptr = getenv("HOME")) == NULL)
-+ 			return (-1);
-++#ifndef MAXPATHLEN
-++                path = (char *)malloc(strlen(ptr) + strlen(elpath) + 10);
-++		if (path == NULL)
-++			return (-1);
-++		/* Always succeeds, since we have enough memory */
-++		strcpy(path, ptr);
-++		strcat(path, elpath);
-++#else
-+ 		if (strlcpy(path, ptr, sizeof(path)) >= sizeof(path))
-+ 			return (-1);
-+ 		if (strlcat(path, elpath, sizeof(path)) >= sizeof(path))
-+ 			return (-1);
-++#endif
-+ 		fname = path;
-+ #else
-+ 		/*
-diff --git a/package/libedit2/libedit2-04-readline.h-stdio.patch b/package/libedit2/libedit2-04-readline.h-stdio.patch
-new file mode 100644
-index 0000000..84257b9
---- /dev/null
-+++ b/package/libedit2/libedit2-04-readline.h-stdio.patch
-@@ -0,0 +1,17 @@
-+ 04-readline.h-stdio.diff by Gergely Nagy <algernon@debian.org>
-+
-+ since readline.h uses types defined in stdio.h, that header should
-+ be included
-+
-+ Yann E. MORIN: patch from debian.
-+
-+--- a/libedit/readline/readline.h	2008-04-29 16:53:01.000000000 +1000
-++++ b/libedit/readline/readline.h	2009-06-23 08:35:58.000000000 +1000
-+@@ -31,6 +31,7 @@
-+ #ifndef _READLINE_H_
-+ #define _READLINE_H_
-+ 
-++#include <stdio.h>
-+ #include <sys/types.h>
-+ 
-+ /* list of readline stuff supported by editline library's readline wrapper */
-diff --git a/package/libedit2/libedit2-08-readline-history.h.patch b/package/libedit2/libedit2-08-readline-history.h.patch
-new file mode 100644
-index 0000000..f30093f
---- /dev/null
-+++ b/package/libedit2/libedit2-08-readline-history.h.patch
-@@ -0,0 +1,20 @@
-+ 08-readline-history.h.diff by Pawel Wiecek <coven@debian.org>
-+ (compatibility with older versions)
-+
-+ Setting the global variable rl_inhibit_completion to 1 did indeed
-+ disable completion, but the invoking key (e.g., <TAB>) was not
-+ inserted directly into the input line as it should be.
-+ This patch fixes this problem, and also declares rl_inhibit_completion
-+ in readline.h for better readline compatibility.
-+
-+ Yann E. MORIN: patch from debian.
-+
-+--- a/libedit/readline/Makefile	2003-08-03 19:23:15.000000000 +1000
-++++ b/libedit/readline/Makefile	2009-06-23 08:35:58.000000000 +1000
-+@@ -10,4 +10,6 @@ INCS=		readline.h
-+ INCSDIR=	/usr/include/readline
-+ INCSYMLINKS=	readline.h ${INCSDIR}/history.h
-+ 
-++incinstall:: linksinstall
-++
-+ .include <bsd.prog.mk>
-diff --git a/package/libedit2/libedit2-10-define_SIZE_T_MAX.patch b/package/libedit2/libedit2-10-define_SIZE_T_MAX.patch
-new file mode 100644
-index 0000000..c8ce262
---- /dev/null
-+++ b/package/libedit2/libedit2-10-define_SIZE_T_MAX.patch
-@@ -0,0 +1,18 @@
-+ 10-define_SIZE_T_MAX.diff by Anibal Monsalve Salazar
-+ define SIZE_T_MAX as UINT_MAX in limits.h
-+
-+ Yann E. MORIN: patch from debian.
-+
-+--- a/libedit/readline.c	2008-04-29 16:53:01.000000000 +1000
-++++ a/libedit/readline.c	2008-06-14 23:54:16.000000000 +1000
-+@@ -61,6 +61,10 @@ __RCSID("$NetBSD: readline.c,v 1.75 2008
-+ #include "readline/readline.h"
-+ #include "filecomplete.h"
-+ 
-++#ifndef SIZE_T_MAX
-++#define SIZE_T_MAX UINT_MAX
-++#endif
-++
-+ void rl_prep_terminal(int);
-+ void rl_deprep_terminal(void);
-+ 
-diff --git a/package/libedit2/libedit2-12-libedit-Makefile.patch b/package/libedit2/libedit2-12-libedit-Makefile.patch
-new file mode 100644
-index 0000000..3234f33
---- /dev/null
-+++ b/package/libedit2/libedit2-12-libedit-Makefile.patch
-@@ -0,0 +1,54 @@
-+ 12-libedit-Makefile.diff by Anibal Monsalve Salazar
-+ without this patch I get the following message:
-+ make: ${_MKTARGET_CREATE} expands to empty string
-+
-+ Yann E. MORIN: patch from debian.
-+
-+--- a/libedit/Makefile	2007-05-28 22:06:18.000000000 +1000
-++++ a/libedit/Makefile	2008-06-15 13:53:50.000000000 +1000
-+@@ -59,45 +59,37 @@ CLEANFILES+=	${AHDR} fcns.h help.h fcns.
-+ SUBDIR=	readline
-+ 
-+ vi.h: vi.c makelist Makefile
-+-	${_MKTARGET_CREATE}
-+ 	${HOST_SH} ${LIBEDITDIR}/makelist -h ${LIBEDITDIR}/vi.c \
-+ 	    > ${.TARGET}.tmp && \
-+ 	    mv ${.TARGET}.tmp ${.TARGET}
-+ 
-+ emacs.h: emacs.c makelist Makefile
-+-	${_MKTARGET_CREATE}
-+ 	${HOST_SH} ${LIBEDITDIR}/makelist -h ${LIBEDITDIR}/emacs.c \
-+ 	    > ${.TARGET}.tmp && \
-+ 	    mv ${.TARGET}.tmp ${.TARGET}
-+ 
-+ common.h: common.c makelist Makefile
-+-	${_MKTARGET_CREATE}
-+ 	${HOST_SH} ${LIBEDITDIR}/makelist -h ${LIBEDITDIR}/common.c \
-+ 	    > ${.TARGET}.tmp && \
-+ 	    mv ${.TARGET}.tmp ${.TARGET}
-+ 
-+ fcns.h: ${AHDR} makelist Makefile
-+-	${_MKTARGET_CREATE}
-+ 	${HOST_SH} ${LIBEDITDIR}/makelist -fh ${AHDR} > ${.TARGET}.tmp && \
-+ 	    mv ${.TARGET}.tmp ${.TARGET}
-+ 
-+ fcns.c: ${AHDR} fcns.h help.h makelist Makefile
-+-	${_MKTARGET_CREATE}
-+ 	${HOST_SH} ${LIBEDITDIR}/makelist -fc ${AHDR} > ${.TARGET}.tmp && \
-+ 	    mv ${.TARGET}.tmp ${.TARGET}
-+ 
-+ help.c: ${ASRC} makelist Makefile
-+-	${_MKTARGET_CREATE}
-+ 	${HOST_SH} ${LIBEDITDIR}/makelist -bc ${ASRC} > ${.TARGET}.tmp && \
-+ 	    mv ${.TARGET}.tmp ${.TARGET}
-+ 
-+ help.h: ${ASRC} makelist Makefile
-+-	${_MKTARGET_CREATE}
-+ 	${HOST_SH} ${LIBEDITDIR}/makelist -bh ${ASRC} > ${.TARGET}.tmp && \
-+ 	    mv ${.TARGET}.tmp ${.TARGET}
-+ 
-+ editline.c: ${OSRCS} makelist Makefile
-+-	${_MKTARGET_CREATE}
-+ 	${HOST_SH} ${LIBEDITDIR}/makelist -e ${OSRCS:T} > ${.TARGET}.tmp && \
-+ 	    mv ${.TARGET}.tmp ${.TARGET}
-+ 
-diff --git a/package/libedit2/libedit2-20-fortify.patch b/package/libedit2/libedit2-20-fortify.patch
-new file mode 100644
-index 0000000..0a41ce3
---- /dev/null
-+++ b/package/libedit2/libedit2-20-fortify.patch
++++ b/package/ceph/Config.in
 @@ -0,0 +1,23 @@
-+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=488456
++comment "ceph requires C++, largefiles, threads, wide chars"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	depends on !BR2_avr2 && !BR2_microblaze
 +
-+Patch by Kees Cook <kees@outflux.net>
-+
-+Yann E. MORIN: patch from debian.
-+
-+--- a/libedit/vi.c	2006-10-22 17:48:13.000000000 +1000
-++++ b/libedit/vi.c	2009-06-23 08:35:58.000000000 +1000
-+@@ -1012,8 +1012,12 @@ vi_histedit(EditLine *el, int c)
-+ 	if (fd < 0)
-+ 		return CC_ERROR;
-+ 	cp = el->el_line.buffer;
-+-	write(fd, cp, el->el_line.lastchar - cp +0u);
-+-	write(fd, "\n", 1);
-++	if (write(fd, cp, el->el_line.lastchar - cp +0u)<0 ||
-++	    write(fd, "\n", 1)<0) {
-++		close(fd);
-++		unlink(tempfile);
-++		return CC_ERROR;
-++	}
-+ 	pid = fork();
-+ 	switch (pid) {
-+ 	case -1:
-diff --git a/package/libedit2/libedit2.mk b/package/libedit2/libedit2.mk
++config BR2_PACKAGE_CEPH
++	bool "ceph"
++	depends on BR2_INSTALL_LIBSTDCPP            # boost
++	depends on BR2_LARGEFILE                    # boost, libnss, util-linux
++	depends on BR2_TOOLCHAIN_HAS_THREADS        # libnss
++	depends on BR2_USE_WCHAR                    # util-linux
++	depends on !BR2_avr32 && !BR2_microblaze    # keyutils
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_KEYUTILS
++	select BR2_PACKAGE_LIBEDIT2
++	select BR2_PACKAGE_LIBNSS
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	help
++	  Ceph is a distributed object store and file system designed to
++	  provide excellent performance, reliability and scalability.
++	  
++	  http://ceph.com/
+diff --git a/package/ceph/ceph-no-envz.patch b/package/ceph/ceph-no-envz.patch
 new file mode 100644
-index 0000000..b9ca41e
+index 0000000..c0369ba
 --- /dev/null
-+++ b/package/libedit2/libedit2.mk
-@@ -0,0 +1,75 @@
++++ b/package/ceph/ceph-no-envz.patch
+@@ -0,0 +1,63 @@
++tools+base: do not include envz.h on uClibc
++
++uClibc does not have envz, and no envz function is in fact used.
++So, simply do not include it under uClibc.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++--- ceph-0.51.orig/src/tools/common.cc	2012-09-09 00:13:32.128838177 +0200
+++++ ceph-0.51/src/tools/common.cc	2012-09-09 00:13:59.432064556 +0200
++@@ -17,9 +17,9 @@
++ #include <string>
++ using namespace std;
++ 
++-#if !defined(DARWIN) && !defined(__FreeBSD__)
+++#if !defined(DARWIN) && !defined(__FreeBSD__) && !defined(__UCLIBC__)
++ #include <envz.h>
++-#endif // DARWIN
+++#endif // DARWIN || __UCLIBC__
++ 
++ #include <memory>
++ #include <sys/types.h>
++--- ceph-0.51.orig/src/ceph_syn.cc	2012-09-09 00:25:23.302722032 +0200
+++++ ceph-0.51/src/ceph_syn.cc	2012-09-09 00:24:39.702892463 +0200
++@@ -31,9 +31,9 @@
++ #include "common/ceph_argparse.h"
++ #include "common/pick_address.h"
++ 
++-#if !defined(DARWIN) && !defined(__FreeBSD__)
+++#if !defined(DARWIN) && !defined(__FreeBSD__) && !defined(__UCLIBC__)
++ #include <envz.h>
++-#endif // DARWIN || __FreeBSD__
+++#endif // DARWIN || __FreeBSD__ || __UCLIBC__
++ 
++ #include <sys/types.h>
++ #include <sys/stat.h>
++--- ceph-0.51.orig/src/ceph_fuse.cc	2012-09-09 00:43:46.875065556 +0200
+++++ ceph-0.51/src/ceph_fuse.cc	2012-09-09 00:44:21.161597834 +0200
++@@ -32,9 +32,9 @@
++ #include "global/global_init.h"
++ #include "common/safe_io.h"
++        
++-#ifndef DARWIN
+++#if !defined(DARWIN) && !defined(__UCLIBC__)
++ #include <envz.h>
++-#endif // DARWIN
+++#endif // DARWIN || __UCLIBC__
++ 
++ #include <sys/types.h>
++ #include <sys/stat.h>
++--- ceph-0.51.orig/src/testmsgr.cc	2012-09-09 00:44:48.108158886 +0200
+++++ ceph-0.51/src/testmsgr.cc	2012-09-09 00:45:18.218040882 +0200
++@@ -28,9 +28,9 @@
++ #include "global/global_init.h"
++ #include "common/ceph_argparse.h"
++ 
++-#ifndef DARWIN
+++#if !defined(DARWIN) && !defined(__UCLIBC__)
++ #include <envz.h>
++-#endif // DARWIN
+++#endif // DARWIN || __UCLIBC__
++ 
++ #include <sys/types.h>
++ #include <sys/stat.h>
+diff --git a/package/ceph/ceph-no-getloadavg.patch b/package/ceph/ceph-no-getloadavg.patch
+new file mode 100644
+index 0000000..7e887df
+--- /dev/null
++++ b/package/ceph/ceph-no-getloadavg.patch
+@@ -0,0 +1,61 @@
++OSD: do not use getloadavg(3) on uClibc
++
++getloadavg(3) is not available on uClibc, so do not use it.
++
++getloadavg is used in two places:
++  - once to log the loadavg in the heartbeat logs: we simply remove this;
++  - once to decide whether to schedule scrub (whatever it is) or not: we
++    simply use the existing coin-flip random choice in this case.
++
++The second change will probably have an impact on performances... :-(
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN ceph-0.51.orig/src/osd/OSD.cc ceph-0.51/src/osd/OSD.cc
++--- ceph-0.51.orig/src/osd/OSD.cc	2012-08-26 00:58:06.000000000 +0200
+++++ ceph-0.51/src/osd/OSD.cc	2012-09-08 23:56:31.396177885 +0200
++@@ -15,6 +15,7 @@
++ #include <fstream>
++ #include <iostream>
++ #include <errno.h>
+++#include <features.h> /* For __ULIBC__ */
++ #include <sys/stat.h>
++ #include <signal.h>
++ #include <boost/scoped_ptr.hpp>
++@@ -1942,10 +1943,12 @@
++ {
++   dout(30) << "heartbeat" << dendl;
++ 
+++#ifndef __UCLIBC__
++   // get CPU load avg
++   double loadavgs[1];
++   if (getloadavg(loadavgs, 1) == 1)
++     logger->fset(l_osd_loadavg, loadavgs[0]);
+++#endif
++ 
++   dout(30) << "heartbeat checking stats" << dendl;
++ 
++@@ -3216,6 +3219,7 @@
++ 
++ bool OSDService::scrub_should_schedule()
++ {
+++#ifndef __UCLIBC__
++   double loadavgs[1];
++ 
++   // TODOSAM: is_active should be conveyed to OSDService
++@@ -3249,6 +3253,15 @@
++ 	   << " < max " << g_conf->osd_scrub_load_threshold
++ 	   << " = yes" << dendl;
++   return loadavgs[0] < g_conf->osd_scrub_load_threshold;
+++#else // ! defined  __UCLIBC__
+++  bool coin_flip = (rand() % 3) == whoami % 3;
+++  if (coin_flip) {
+++    dout(20) << "scrub_should_schedule randomly yes" << dendl;
+++  } else {
+++    dout(20) << "scrub_should_schedule randomly backing off" << dendl;
+++  }
+++  return coin_flip;
+++#endif // ! defined  __UCLIBC__
++ }
++ 
++ void OSD::sched_scrub()
+diff --git a/package/ceph/ceph-no-posix_fallocate.patch b/package/ceph/ceph-no-posix_fallocate.patch
+new file mode 100644
+index 0000000..479705d
+--- /dev/null
++++ b/package/ceph/ceph-no-posix_fallocate.patch
+@@ -0,0 +1,50 @@
++Do not call posix_fallocate() on uClibc
++
++Based on a patch by Thomas, for lttng-babeltrace, in which he states:
++
++    uClibc does not implement posix_fallocate(), and posix_fallocate() is
++    mostly only an hint to the kernel that we will need such or such
++    amount of space inside a file. So we just don't call posix_fallocate()
++    when building against uClibc.
++
++Just do the same here.
++
++NOTE! IMHO, this patch is not correct, because overcommit (eg. for sparse
++files) on the underlying filesystem may cause allocation failures later on,
++which is exactly the situation that posix_fallocate is supposed to avoid.
++But, as uClibc still lacks posix_fallocate, we have no choice.
++
++If you really are concerned about this issue, there exists a posix_fallocate
++patch that is not upstream, but is used by the AlpineLinux distribution:
++    http://git.alpinelinux.org/cgit/aports/tree/main/libc0.9.32/posix_fallocate.patch?id=98a000b8e92b3aa1e0b7a5f94a74910bb0993c4d
++    http://git.alpinelinux.org/cgit/aports/tree/main/libc0.9.32/posix_fallocate-fix.patch?id=98a000b8e92b3aa1e0b7a5f94a74910bb0993c4d
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN ceph-0.50.orig/src/os/FileJournal.cc ceph-0.50/src/os/FileJournal.cc
++--- ceph-0.50.orig/src/os/FileJournal.cc	2012-08-13 18:43:14.000000000 +0200
+++++ ceph-0.50/src/os/FileJournal.cc	2012-09-08 23:07:12.597910027 +0200
++@@ -23,6 +23,7 @@
++ #include "include/compat.h"
++ 
++ #include <fcntl.h>
+++#include <features.h>
++ #include <sstream>
++ #include <stdio.h>
++ #include <sys/types.h>
++@@ -303,6 +304,7 @@
++ 	   << newsize << " bytes: " << cpp_strerror(err) << dendl;
++       return -err;
++     }
+++#ifndef __UCLIBC__
++     ret = ::posix_fallocate(fd, 0, newsize);
++     if (ret < 0) {
++       int err = errno;
++@@ -310,6 +312,7 @@
++ 	   << newsize << " bytes: " << cpp_strerror(err) << dendl;
++       return -err;
++     }
+++#endif
++     max_size = newsize;
++   }
++   else {
+diff --git a/package/ceph/ceph.mk b/package/ceph/ceph.mk
+new file mode 100644
+index 0000000..0849837
+--- /dev/null
++++ b/package/ceph/ceph.mk
+@@ -0,0 +1,53 @@
 +#############################################################
 +#
-+# libedit2
++# ceph
 +#
 +#############################################################
 +
-+# Note: libedit2 does not have a regular homepage, and it seems
-+# there is no place where to download a tarball from. That's
-+# why we use the Debian way-back machine.
-+LIBEDIT2_VERSION_MAJOR   = 2
-+LIBEDIT2_VERSION_MINOR   = 11-20080614
-+LIBEDIT2_VERSION         = $(LIBEDIT2_VERSION_MAJOR).$(LIBEDIT2_VERSION_MINOR)
-+LIBEDIT2_SOURCE          = libedit_$(LIBEDIT2_VERSION).orig.tar.bz2
-+LIBEDIT2_SITE            = http://snapshot.debian.org/archive/debian/20120601T033558Z/pool/main/libe/libedit
-+LIBEDIT2_SUBDIR          = libedit
-+LIBEDIT2_INSTALL_STAGING = YES
-+LIBEDIT2_DEPENDENCIES    = host-pmake libbsd ncurses
++CEPH_VERSION         = 0.51
++CEPH_SOURCE          = ceph-$(CEPH_VERSION).tar.bz2
++CEPH_SITE            = http://ceph.com/download/
++CEPH_LICENSE         = LGPLv2.1 CC-BY-SA Apache-2.0 GPLv2 LGPLv2+ BSD-3c MIT PD
++CEPH_LICENSE_FILES   = COPYING
++CEPH_INSTALL_STAGING = YES
 +
-+define POST_PATCH_PERMISSIONS
-+	chmod +x $(@D)/libedit/makelist
-+endef
++CEPH_DEPENDENCIES    = \
++    boost              \
++    expat              \
++    keyutils           \
++    libedit2           \
++    libnss             \
++    util-linux         \
 +
-+LIBEDIT2_POST_PATCH_HOOKS += POST_PATCH_PERMISSIONS
++# We disable everything for now, because the dependency tree can become
++# quite deep if we try to enable some features, and I have not tested that.
++# We need@least one crypto lib, and the currently only one available in
++# BR, that ceph can use, is libnss
++CEPH_CONF_OPT =                     \
++    --with-nss                      \
++    --without-profiler              \
++    --without-debug                 \
++    --without-tcmalloc              \
++    --without-hadoop                \
++    --without-libatomic-ops         \
++    --without-system-leveldb        \
++    --without-system-libs3          \
++    --without-rest-bench            \
++    --without-cryptopp              \
++    --with-ocf                      \
 +
-+define LIBEDIT2_FIX_VIS_H_INCLUDE
-+	$(SED) 's/^#include <vis.h>$$/#include <bsd\/vis.h>/;' $(@D)/libedit/filecomplete.c
-+	$(SED) 's/^#include <vis.h>$$/#include <bsd\/vis.h>/;' $(@D)/libedit/history.c
-+	$(SED) 's/^#include <vis.h>$$/#include <bsd\/vis.h>/;' $(@D)/libedit/readline.c
-+endef
-+LIBEDIT2_POST_PATCH_HOOKS += LIBEDIT2_FIX_VIS_H_INCLUDE
++ifeq ($(BR2_PACKAGE_LIBFUSE),y)
++CEPH_DEPENDENCIES += libfuse
++CEPH_CONF_OPT     += --with-fuse
++else
++CEPH_CONF_OPT     += --without-fuse
++endif
 +
-+LIBEDIT2_PMAKE_ARGS = MKPROFILE=no MKCATPAGES=no MLINKS= MANPAGES= NOGCCERROR=1         \
-+                      SHLIB_SHFLAGS="-Wl,-soname,libedit.so.${LIBEDIT2_VERSION_MAJOR}"  \
++ifeq ($(BR2_PACKAGE_LIBAIO),y)
++CEPH_DEPENDENCIES += libaio
++CEPH_CONF_OPT     += --with-libaio
++else
++CEPH_CONF_OPT     += --without-libaio
++endif
 +
-+define LIBEDIT2_BUILD_CMDS
-+	cd $(@D)/$(LIBEDIT2_SUBDIR); \
-+	$(TARGET_CONFIGURE_OPTS) LDADD="-lbsd -lcurses" pmake $(LIBEDIT2_PMAKE_ARGS)
-+endef
-+
-+LIBEDIT2_MAN_LINKS = el_init el_end el_reset el_gets el_getc el_push el_parse   \
-+                     el_set el_get el_source el_resize el_line el_insertstr     \
-+                     el_deletestr history_init history_end history
-+
-+# $1: DESTDIR to install into
-+# Can't use pmake to install, it wants to be root. sigh... :-(
-+define LIBEDIT2_INSTALL_CMDS
-+	$(INSTALL) -D -m 0644 package/libedit2/libedit2.pc $(1)/usr/lib/pkgconfig/libedit2.pc
-+	ln -sf libedit2.pc $(1)/usr/lib/pkgconfig/libedit.pc
-+	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.a $(1)/usr/lib/libedit.a
-+	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit_pic.a $(1)/usr/lib/libedit_pic.a
-+	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.so.2.11 $(1)/usr/lib/libedit.so.2.11
-+	$(INSTALL) -D -m 0644 $(@D)/libedit/histedit.h $(1)/usr/include/histedit.h
-+	ln -sf libedit.so.$(LIBEDIT2_VERSION) $(1)/usr/lib/libedit.so.$(LIBEDIT2_VERSION_MAJOR)
-+	ln -sf libedit.so.$(LIBEDIT2_VERSION_MAJOR) $(1)/usr/lib/libedit.so
-+	$(INSTALL) -D -m 0644 $(@D)/libedit/readline/readline.h $(1)/usr/include/editline/readline.h
-+	if [ "$(BR2_HAVE_DOCUMENTATION)" = "y" ]; then                                              \
-+	    $(INSTALL) -v -D -m 0644 $(@D)/libedit/editline.3 $(1)/usr/share/man/man3/editline.3el; \
-+	    $(INSTALL) -v -D -m 0644 $(@D)/libedit/editrc.3 $(1)/usr/share/man/man5/editrc.5el;     \
-+	    for lnk in $(LIBEDIT2_MAN_LINKS); do                                                    \
-+	        ln -sfv editline.3el $(1)/usr/share/man/man3/$${lnk}.3el;                           \
-+	    done;                                                                                   \
-+	fi
-+endef
-+#	cd $(@D)/libedit; pmake install incinstall DESTDIR=$(1) $(LIBEDIT2_PMAKE_ARGS)
-+#	cd $(@D)/libedit/readline; pmake incinstall DESTDIR=$(1) $(LIBEDIT2_PMAKE_ARGS)
-+
-+define LIBEDIT2_INSTALL_STAGING_CMDS
-+	$(call LIBEDIT2_INSTALL_CMDS,$(STAGING_DIR))
-+endef
-+
-+define LIBEDIT2_INSTALL_TARGET_CMDS
-+	$(call LIBEDIT2_INSTALL_CMDS,$(TARGET_DIR))
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/libedit2/libedit2.pc b/package/libedit2/libedit2.pc
-new file mode 100644
-index 0000000..47ac871
---- /dev/null
-+++ b/package/libedit2/libedit2.pc
-@@ -0,0 +1,13 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: libedit
-+Description: Not just a replacement library for libreadline and libhistory.
-+Version: 2.11
-+Requires: libbsd ncurses
-+Requires.private:
-+Libs: -L${libdir} -ledit
-+Libs.private:
-+Cflags: -I${includedir}
++$(eval $(autotools-package))
 -- 
 1.7.2.5
