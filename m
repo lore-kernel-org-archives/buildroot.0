@@ -1,69 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jan 2013 23:44:00 +0100
-Subject: [Buildroot] [PATCH 16/29] package/qemu: enable use of the curses
-	frontend
+Date: Tue, 29 Jan 2013 23:44:02 +0100
+Subject: [Buildroot] [PATCH 18/29] package/qemu: add AIO support
 In-Reply-To: <cover.1359498903.git.yann.morin.1998@free.fr>
 References: <cover.1359498903.git.yann.morin.1998@free.fr>
-Message-ID: <4416afb15d94a17b3e3ab3d2e49dd6a9d096fe1d.1359498903.git.yann.morin.1998@free.fr>
+Message-ID: <2036002c921323269fa4106ed0430c629c18d2ac.1359498903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add support for Asynchronous Input/Ouput (AIO).
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   11 +++++++++++
+ package/qemu/Config.in |    9 +++++++++
  package/qemu/qemu.mk   |    8 +++++++-
- 2 files changed, 18 insertions(+), 1 deletions(-)
+ 2 files changed, 16 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 4e5b81b..dbe7cb9 100644
+index f22bb19..d57d2e9 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -113,6 +113,17 @@ config BR2_PACKAGE_QEMU_SDL
- 	  Say 'y' to enable the SDL frontend, that is, a graphical window
- 	  presenting the VM's display.
+@@ -150,6 +150,15 @@ config BR2_PACKAGE_QEMU_CURL
+ comment "cURL support is not possible with static linking"
+     depends on BR2_PREFER_STATIC_LIB
  
-+config BR2_PACKAGE_QEMU_CURSES
-+	bool "Enable the curses frontend"
-+	select BR2_PACKAGE_NCURSES
++config BR2_PACKAGE_QEMU_AIO
++	bool "Enable AIO"
++	depends on BR2_PACKAGE_LIBAIO
 +	help
-+	  Say 'y' to use curses to display the text-mode of VGA outpout.
-+	  
-+	  If the VM's graphic adapter does not support VGA text-mode, or it
-+	  is in graphical mode, then nothing will be displayed with this
-+	  frontend (although you can still use the SDL or VNC frontends to
-+	  display the graphical output).
++	  Say 'y' here to enable Asynchronous Input/Output (AIO).
 +
- comment "Block backends"
++comment "AIO support depends on libaio"
++	depends on !BR2_PACKAGE_LIBAIO
++
+ comment "Networking"
  
- config BR2_PACKAGE_QEMU_VIRTFS
+ config BR2_PACKAGE_QEMU_BLUEZ
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 6fda51e..055c151 100644
+index 4377b54..31bd2e7 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -149,6 +149,13 @@ else
- QEMU_OPTS += --disable-sdl
+@@ -169,6 +169,13 @@ else
+ QEMU_OPTS += --disable-curl
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_CURSES),y)
-+QEMU_OPTS += --enable-curses
-+QEMU_DEPENDENCIES += ncurses
++ifeq ($(BR2_PACKAGE_QEMU_AIO),y)
++QEMU_OPTS += --enable-linux-aio
++QEMU_DEPENDENCIES += libaio
 +else
-+QEMU_OPTS += --disable-curses
++QEMU_OPTS += --disable-linux-aio
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
- QEMU_OPTS += --enable-virtfs
- else
-@@ -269,7 +276,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-slirp                     \
- 	        --disable-vnc-sasl                  \
- 	        --disable-brlapi                    \
--	        --disable-curses                    \
+ ifeq ($(BR2_PACKAGE_QEMU_BLUEZ),y)
+ QEMU_OPTS += --enable-bluez
+ QEMU_DEPENDENCIES += bluez_utils
+@@ -286,7 +293,6 @@ define QEMU_CONFIGURE_CMDS
  	        --disable-fdt                       \
- 	        --disable-bluez                     \
  	        --disable-guest-base                \
+ 	        --disable-vde                       \
+-	        --disable-linux-aio                 \
+ 	        --disable-docs                      \
+ 	        --disable-spice                     \
+ 	        --disable-rbd                       \
 -- 
 1.7.2.5
