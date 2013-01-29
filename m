@@ -1,22 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 29 Jan 2013 23:31:07 +0100
-Subject: [Buildroot] [PATCH 10/10] wipe: add license information
-In-Reply-To: <1359483839-25357-10-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 29 Jan 2013 15:23:59 -0300")
-References: <1359483839-25357-1-git-send-email-gustavo@zacarias.com.ar>
- <1359483839-25357-10-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87y5fbaafo.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 29 Jan 2013 23:15:57 +0100
+Subject: [Buildroot] [git commit] bluez_utils: add license information
+Message-ID: <20130129223111.6E76E9A88E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b0978d6a1400fdc68aeabf649b3eef08d833cea6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/bluez_utils/bluez_utils.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/bluez_utils/bluez_utils.mk b/package/bluez_utils/bluez_utils.mk
+index 643b1fe..89e88e7 100644
+--- a/package/bluez_utils/bluez_utils.mk
++++ b/package/bluez_utils/bluez_utils.mk
+@@ -11,6 +11,8 @@ BLUEZ_UTILS_INSTALL_STAGING = YES
+ BLUEZ_UTILS_DEPENDENCIES = dbus libglib2
+ BLUEZ_UTILS_CONF_OPT = --enable-test --enable-tools
+ BLUEZ_UTILS_AUTORECONF = YES
++BLUEZ_UTILS_LICENSE = GPLv2+ LGPLv2.1+
++BLUEZ_UTILS_LICENSE_FILES = COPYING COPYING.LIB
+ 
+ # BlueZ 3.x compatibility
+ ifeq ($(BR2_PACKAGE_BLUEZ_UTILS_COMPAT),y)
