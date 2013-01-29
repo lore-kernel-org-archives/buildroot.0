@@ -1,57 +1,35 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 Jan 2013 18:47:45 +0100
-Subject: [Buildroot] [PATCH v3] New package: cache-calibrator
-In-Reply-To: <1359453232-23310-1-git-send-email-sho@relinux.de>
-References: <1359448315-22100-1-git-send-email-sho@relinux.de>
- <1359453232-23310-1-git-send-email-sho@relinux.de>
-Message-ID: <51080B41.8000401@mind.be>
+Date: Tue, 29 Jan 2013 18:50:41 +0100
+Subject: [Buildroot] [PATCH v3] pkg-infra: add <pkg>_CONFIG_FIXUP to fix
+ *-config files
+In-Reply-To: <CAHXCMMK69aYc=Hebivu1wPJOn0CXMn9SHQCA=-G4_JAdaw5Sjg@mail.gmail.com>
+References: <1359402723-5603-1-git-send-email-stefan.froberg@petroprogram.com>
+ <CAHXCMMK69aYc=Hebivu1wPJOn0CXMn9SHQCA=-G4_JAdaw5Sjg@mail.gmail.com>
+Message-ID: <51080BF1.3020009@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/01/13 10:53, Stephan Hoffmann wrote:
-> The Calibrator is a small C program that is supposed to analyze
-> a computers (cache-) memory system and extract the following
-> parameters:
->
->      number of cache levels
->      for each cache level:
->          its size
->          its linesize
->          its access/miss latency
->      main memory access latency
->      number of TLB levels
->      for each TLB level:
->          its capacity (i.e. number of entries)
->          the pagesize used
->          the TLB miss latency
->
-> http://homepages.cwi.nl/~manegold/Calibrator/
->
-> It is also recommended as a load generator for realtime testing in:
->
-> https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO#Benchmarking
->
-> Signed-off-by: Stephan Hoffmann<sho@relinux.de>
+On 29/01/13 08:14, Samuel Martin wrote:
+>> >+                       $(SED)  "s,^\(exec_\)\?prefix=.*,\1prefix=$(STAGING_DIR)/usr,g" \
+>> >+                               -e "s,-I/usr/,-I\${prefix}/usr/,g" \
+>> >+                               -e "s,-L/usr/,-L\${exec_prefix}/usr/,g" \
+> Well, just fixing the (exec_)?prefix may not be enough in some case:
+> Some quick grepping in the package directory will show that includedir
+> and libdir should be fixed as well.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (untested)
+  I wouldn't want to do too much in the generic fixup script.
 
-> ---
-> v2: Review by Arnout Vandecappelle
-> 	Fix License
+  In fact, the -L substitution is not necessarily correct - some config 
+scripts may not define ${exec_prefix}. I'd rather use $(STAGING_DIR) 
+explicitly.
 
-  Now I've looked at the license, it turns out to be _almost_ a BSD-3c. 
-But not exactly, so 'Cache calibrator license' is a good approximation.
+  BTW, Stefan: the $ should have been quoted ($$).
 
-> 	Use $(TARGET_CFLAGS) and $(TARGET_LDFLAGS)
-> 	Fix Typo
-> 	Remove $(CACHE_CALIBRATOR_DIR)
-> v3: Review by Thomas Petazzoni
-> 	Fix CACHE_CALIBRATOR_EXTRACT_CMDS
-
+  Regards,
+  Arnout
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
