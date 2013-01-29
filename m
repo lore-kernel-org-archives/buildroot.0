@@ -1,66 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jan 2013 23:44:10 +0100
-Subject: [Buildroot] [PATCH 26/29] package/qemu: add option to install tools
-	on the target
+Date: Tue, 29 Jan 2013 23:44:13 +0100
+Subject: [Buildroot] [PATCH 29/29] package/qemu: add support for FDT
 In-Reply-To: <cover.1359498903.git.yann.morin.1998@free.fr>
 References: <cover.1359498903.git.yann.morin.1998@free.fr>
-Message-ID: <7b23992399e493c0c3f92dae39ec27b80e19ee7b.1359498903.git.yann.morin.1998@free.fr>
+Message-ID: <09fd690e561e32cc412a80cc4131c0282bb325da.1359498903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Usually, tools on the target are not needed, so they are disabled
-by default. Add an option to install them on the target.
+FDT is the Flat Device Tree, and allows QEMU to pass DTs to the VMs.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |    6 ++++++
- package/qemu/qemu.mk   |    7 ++++++-
- 2 files changed, 12 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |    7 +++++++
+ package/qemu/qemu.mk   |    8 +++++++-
+ 2 files changed, 14 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index f71311d..022b07b 100644
+index e433cc0..e5bf7c0 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -271,6 +271,12 @@ config BR2_PACKAGE_QEMU_SECCOMP
- 	  Say 'y' here to have QEMU to use the Linux kernel's seccomp filter,
- 	  to more tightly confine the VMs.
+@@ -254,6 +254,13 @@ config BR2_PACKAGE_QEMU_SOUND_SDL
  
-+config BR2_PACKAGE_QEMU_TOOLS_ON_TARGET
-+	bool "tools on target"
-+	help
-+	  Say 'y' here to also install QEMU tools (qemu-{img,io,nbd}) on the
-+	  target.
+ comment "Misc. features"
+ 
++config BR2_PACKAGE_QEMU_FDT
++        bool "Enable FDT"
++        select BR2_PACKAGE_DTC
++        help
++          Say 'y' here to have QEMU capable of constructing Device Trees,
++          and passing them to the VMs.
 +
- config BR2_PACKAGE_QEMU_BLOBS
- 	bool "Install binary blobs"
- 	default y
+ config BR2_PACKAGE_QEMU_UUID
+ 	bool "Enable VMs UUID"
+ 	depends on BR2_PACKAGE_UTIL_LINUX
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 90b1ebf..d745e0d 100644
+index f4705cc..37f81bf 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -258,6 +258,12 @@ else
- QEMU_OPTS += --disable-seccomp
+@@ -228,6 +228,13 @@ ifeq ($(BR2_PACKAGE_QEMU_MIXEMU),y)
+ QEMU_OPTS += --enable-mixemu
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_TOOLS_ON_TARGET),y)
-+QEMU_OPTS += --enable-tools
++ifeq ($(BR2_PACKAGE_QEMU_FDT),y)
++QEMU_OPTS += --enable-fdt
++QEMU_DEPENDENCIES += dtc
 +else
-+QEMU_OPTS += --disable-tools
++QEMU_OPTS += --disable-fdt
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
- QEMU_OPTS += --disable-blobs
- endif
-@@ -352,7 +358,6 @@ define QEMU_CONFIGURE_CMDS
+ ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
+ QEMU_OPTS += --enable-uuid
+ QEMU_DEPENDENCIES += util-linux
+@@ -356,7 +363,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-slirp                     \
+ 	        --disable-vnc-sasl                  \
+ 	        --disable-brlapi                    \
+-	        --disable-fdt                       \
+ 	        --disable-guest-base                \
+ 	        --disable-rbd                       \
  	        --disable-smartcard                 \
- 	        --disable-strip                     \
- 	        --disable-sparse                    \
--	        --disable-tools                     \
- 	        $(QEMU_OPTS)                        \
- 	)
- endef
 -- 
 1.7.2.5
