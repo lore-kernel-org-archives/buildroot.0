@@ -1,26 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 29 Jan 2013 10:25:56 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Jan 2013 10:36:14 +0100
 Subject: [Buildroot] [PATCH] New package: cache-calibrator
-In-Reply-To: <510794A9.7090608@relinux.de> (Stephan Hoffmann's message of
- "Tue, 29 Jan 2013 10:21:45 +0100")
+In-Reply-To: <510794A9.7090608@relinux.de>
 References: <1359448315-22100-1-git-send-email-sho@relinux.de>
  <1359450921-22549-1-git-send-email-sho@relinux.de>
  <510794A9.7090608@relinux.de>
-Message-ID: <87sj5kcpcr.fsf@dell.be.48ers.dk>
+Message-ID: <20130129103614.0618791a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
+Dear Stephan Hoffmann,
 
- Stephan> Hello all, I tried to add a PATCHv3 to the header using "git
- Stephan> send-email --subject-prefix PATCHv3", but this obviously did
- Stephan> not work. Does anybody have an idea why?
+On Tue, 29 Jan 2013 10:21:45 +0100, Stephan Hoffmann wrote:
 
-The easiest is afaik to use --annotate which will open the email up in a
-text editor so you can tweak subject / add your changelog.
+> I tried to add a PATCHv3 to the header using "git send-email
+> --subject-prefix PATCHv3", but this obviously did not work. Does anybody
+> have an idea why?
 
+I routinely use --subject-prefix="PATCH v3" and it works perfectly fine
+here.
+
+Thanks,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
