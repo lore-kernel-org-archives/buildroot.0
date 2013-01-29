@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jan 2013 23:44:03 +0100
-Subject: [Buildroot] [PATCH 19/29] package/qemu: add support for VDE switches
+Date: Tue, 29 Jan 2013 23:44:04 +0100
+Subject: [Buildroot] [PATCH 20/29] package/qemu: add iSCSI support
 In-Reply-To: <cover.1359498903.git.yann.morin.1998@free.fr>
 References: <cover.1359498903.git.yann.morin.1998@free.fr>
-Message-ID: <661c5820fba63660d1730ad190b731e4914a34c7.1359498903.git.yann.morin.1998@free.fr>
+Message-ID: <b7e693d852fcb37568498d9fe40281fb6b2681f1.1359498903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +12,52 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |    7 +++++++
+ package/qemu/Config.in |    6 ++++++
  package/qemu/qemu.mk   |    8 +++++++-
- 2 files changed, 14 insertions(+), 1 deletions(-)
+ 2 files changed, 13 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index d57d2e9..123fe6b 100644
+index 123fe6b..9f50533 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -170,6 +170,13 @@ config BR2_PACKAGE_QEMU_BLUEZ
- comment "BlueZ connectivity depends on bluez-utils"
- 	depends on !BR2_PACKAGE_BLUEZ_UTILS
+@@ -150,6 +150,12 @@ config BR2_PACKAGE_QEMU_CURL
+ comment "cURL support is not possible with static linking"
+     depends on BR2_PREFER_STATIC_LIB
  
-+config BR2_PACKAGE_QEMU_VDE
-+	bool "Enable VDE"
-+	select BR2_PACKAGE_VDE2
++config BR2_PACKAGE_QEMU_ISCSI
++	bool "Enable remote block-devices using iSCSI"
++	select BR2_PACKAGE_LIBISCSI
 +	help
-+	  Say 'y' here to have QEMU connect to VDE (Virtual Distributed
-+	  Ethernet) switches.
++	  Say 'y' here to have QEMU use iSCSI targets as block-devices.
 +
- comment "Misc. features"
- 
- config BR2_PACKAGE_QEMU_UUID
+ config BR2_PACKAGE_QEMU_AIO
+ 	bool "Enable AIO"
+ 	depends on BR2_PACKAGE_LIBAIO
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 31bd2e7..9915155 100644
+index 9915155..77ecde4 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -183,6 +183,13 @@ else
- QEMU_OPTS += --disable-bluez
+@@ -169,6 +169,13 @@ else
+ QEMU_OPTS += --disable-curl
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_VDE),y)
-+QEMU_OPTS += --enable-vde
-+QEMU_DEPENDENCIES += vde2
++ifeq ($(BR2_PACKAGE_QEMU_ISCSI),y)
++QEMU_OPTS += --enable-libiscsi
++QEMU_DEPENDENCIES += libiscsi
 +else
-+QEMU_OPTS += --disable-vde
++QEMU_OPTS += --disable-libiscsi
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
- QEMU_OPTS += --enable-uuid
- QEMU_DEPENDENCIES += util-linux
-@@ -292,7 +299,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-brlapi                    \
- 	        --disable-fdt                       \
- 	        --disable-guest-base                \
--	        --disable-vde                       \
+ ifeq ($(BR2_PACKAGE_QEMU_AIO),y)
+ QEMU_OPTS += --enable-linux-aio
+ QEMU_DEPENDENCIES += libaio
+@@ -302,7 +309,6 @@ define QEMU_CONFIGURE_CMDS
  	        --disable-docs                      \
  	        --disable-spice                     \
  	        --disable-rbd                       \
+-	        --disable-libiscsi                  \
+ 	        --disable-usb-redir                 \
+ 	        --disable-smartcard                 \
+ 	        --disable-strip                     \
 -- 
 1.7.2.5
