@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 29 Jan 2013 23:29:21 +0100
-Subject: [Buildroot] [git commit] kismet: add license information
-Message-ID: <20130129223113.5B0519A88F@busybox.osuosl.org>
+Date: Tue, 29 Jan 2013 23:25:40 +0100
+Subject: [Buildroot] [git commit] libungif: add license information
+Message-ID: <20130129223113.193AF9A88E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3edc40ec84ab3aef5d27a818de5b12f431aa9235
+commit: http://git.buildroot.net/buildroot/commit/?id=706a016b29f6fe11c996cd61ab5a8b66cbc6b5e1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/kismet/kismet.mk |    2 ++
+ package/libungif/libungif.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index c8ae8e3..3787f07 100644
---- a/package/kismet/kismet.mk
-+++ b/package/kismet/kismet.mk
-@@ -7,6 +7,8 @@
- KISMET_VERSION = 2011-03-R2
- KISMET_SITE = http://www.kismetwireless.net/code
- KISMET_DEPENDENCIES = libpcap ncurses
-+KISMET_LICENSE = GPLv2+
-+KISMET_LICENSE_FILES = GPL
+diff --git a/package/libungif/libungif.mk b/package/libungif/libungif.mk
+index d4d281a..5196ccd 100644
+--- a/package/libungif/libungif.mk
++++ b/package/libungif/libungif.mk
+@@ -9,6 +9,8 @@ LIBUNGIF_SOURCE = libungif-$(LIBUNGIF_VERSION).tar.bz2
+ LIBUNGIF_SITE = http://downloads.sourceforge.net/project/giflib/libungif-4.x/libungif-$(LIBUNGIF_VERSION)
+ LIBUNGIF_INSTALL_STAGING = YES
+ LIBUNGIF_CONF_OPT = --without-x
++LIBUNGIF_LICENSE = MIT
++LIBUNGIF_LICENSE_FILES = COPYING
  
- ifeq ($(BR2_PACKAGE_LIBNL),y)
- 	KISMET_DEPENDENCIES += libnl
+ LIBUNGIF_BINS = gif2epsn gif2ps gif2rgb gif2x11 gifasm gifbg gifburst gifclip \
+ 		gifclrmp gifcolor gifcomb gifcompose giffiltr giffix gifflip  \
