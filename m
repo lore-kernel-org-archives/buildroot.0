@@ -1,36 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 Jan 2013 18:29:13 +0100
-Subject: [Buildroot] [PATCH] Docu: Add LIBFOO_EXTRACT_CMDS
-In-Reply-To: <5107A6EE.3060607@relinux.de>
-References: <1359453890-23460-1-git-send-email-sho@relinux.de>
- <CAHXCMM+zLhKOZaz9YAw=s147nSOBgP-WUAOFWhjaNafbjAQ4TA@mail.gmail.com>
- <5107A6EE.3060607@relinux.de>
-Message-ID: <510806E9.9060504@mind.be>
+Date: Tue, 29 Jan 2013 18:47:45 +0100
+Subject: [Buildroot] [PATCH v3] New package: cache-calibrator
+In-Reply-To: <1359453232-23310-1-git-send-email-sho@relinux.de>
+References: <1359448315-22100-1-git-send-email-sho@relinux.de>
+ <1359453232-23310-1-git-send-email-sho@relinux.de>
+Message-ID: <51080B41.8000401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/01/13 11:39, Stephan Hoffmann wrote:
-> Am 29.01.2013 11:18, schrieb Samuel Martin:
-[snip]
->>> >>+* +LIBFOO_EXTRACT_CMDS+ lists the actions to be performed to
->>> >>+  extract the package in case no standard method applies
->> >It could be nice to add what are the standard/supported methods
-> Sure. But I do not know them, I just decided to document this one
-> because I had to search for the information recently.
+On 29/01/13 10:53, Stephan Hoffmann wrote:
+> The Calibrator is a small C program that is supposed to analyze
+> a computers (cache-) memory system and extract the following
+> parameters:
+>
+>      number of cache levels
+>      for each cache level:
+>          its size
+>          its linesize
+>          its access/miss latency
+>      main memory access latency
+>      number of TLB levels
+>      for each TLB level:
+>          its capacity (i.e. number of entries)
+>          the pagesize used
+>          the TLB miss latency
+>
+> http://homepages.cwi.nl/~manegold/Calibrator/
+>
+> It is also recommended as a load generator for realtime testing in:
+>
+> https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO#Benchmarking
+>
+> Signed-off-by: Stephan Hoffmann<sho@relinux.de>
 
-  There is currently only one: tar - and if you don't override the 
-commands, tar is used regardless of filetype or extension.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  (untested)
 
-  It supports three compression types: gzip (extension .gz or .tgz), 
-bzip2 (extension .bz2, .tbz or .tbz2), and xz (extension .xz).
+> ---
+> v2: Review by Arnout Vandecappelle
+> 	Fix License
 
-  Feel free to copy the above directly :-)
+  Now I've looked at the license, it turns out to be _almost_ a BSD-3c. 
+But not exactly, so 'Cache calibrator license' is a good approximation.
 
-  Regards,
-  Arnout
+> 	Use $(TARGET_CFLAGS) and $(TARGET_LDFLAGS)
+> 	Fix Typo
+> 	Remove $(CACHE_CALIBRATOR_DIR)
+> v3: Review by Thomas Petazzoni
+> 	Fix CACHE_CALIBRATOR_EXTRACT_CMDS
 
 
 -- 
