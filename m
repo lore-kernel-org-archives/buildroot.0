@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jan 2013 23:43:49 +0100
-Subject: [Buildroot] [PATCH 05/29] package/qemu: add SDL frontends
+Date: Tue, 29 Jan 2013 23:43:50 +0100
+Subject: [Buildroot] [PATCH 06/29] package/qemu: add option to
+	enable/disable the VNC frontend
 In-Reply-To: <cover.1359498903.git.yann.morin.1998@free.fr>
 References: <cover.1359498903.git.yann.morin.1998@free.fr>
-Message-ID: <849174b967595153f7b59c87d3bdf0fc56b83a09.1359498903.git.yann.morin.1998@free.fr>
+Message-ID: <daea1b92113c38f8037cbdb6bdda7ec06eeaa10e.1359498903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,62 +13,56 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |    9 +++++++++
- package/qemu/qemu.mk   |   10 +++++++++-
- 2 files changed, 18 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |    7 +++++++
+ package/qemu/qemu.mk   |   11 ++++++++++-
+ 2 files changed, 17 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 4f1576b..ad934ae 100644
+index ad934ae..d904566 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -76,4 +76,13 @@ config BR2_PACKAGE_QEMU_LINUX_USER
+@@ -78,6 +78,13 @@ endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
  
- endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
+ comment "Frontends"
  
-+comment "Frontends"
-+
-+config BR2_PACKAGE_QEMU_SDL
-+	bool "Enable SDL frontend"
-+	select BR2_PACKAGE_SDL
++config BR2_PACKAGE_QEMU_VNC
++	bool "Enable VNC frontend"
++	select BR2_PACKAGE_VNC
 +	help
-+	  Say 'y' to enable the SDL frontend, that is, a graphical window
-+	  presenting the VM's display.
++	  Say 'y' to enable the VNC frontend, that is, QEMU will act as a
++	  VNC server presenting the VM's display.
 +
- endif # BR2_PACKAGE_QEMU
+ config BR2_PACKAGE_QEMU_SDL
+ 	bool "Enable SDL frontend"
+ 	select BR2_PACKAGE_SDL
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index c91c79b..1dd0c98 100644
+index 1dd0c98..c122be7 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -96,6 +96,7 @@ QEMU_OPTS =
- QEMU_VARS =                                                                         \
-     PYTHON=$(HOST_DIR)/usr/bin/python                                               \
-     PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages    \
-+    SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config                                    \
- 
- ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
- QEMU_OPTS += --enable-system
-@@ -113,6 +114,14 @@ ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
+@@ -114,6 +114,12 @@ ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
  QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
-+QEMU_OPTS += --enable-sdl
-+QEMU_DEPENDENCIES += sdl
-+QEMU_VARS += SDL_CONFIG=$(BR2_STAGING_DIR)/usr/bin/sdl-config
++ifeq ($(BR2_PACKAGE_QEMU_VNC),y)
++QEMU_OPTS += --enable-vnc
 +else
-+QEMU_OPTS += --disable-sdl
++QEMU_OPTS += --disable-vnc
 +endif
 +
- # Note: although QEMU uses a ./configure script, it is not compatible with
- #       the traditional autotools options (eg. --target et al.), so we have
- #       to override the default provided by the autotools-package infra, and
-@@ -137,7 +146,6 @@ define QEMU_CONFIGURE_CMDS
+ ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
+ QEMU_OPTS += --enable-sdl
+ QEMU_DEPENDENCIES += sdl
+@@ -146,7 +152,10 @@ define QEMU_CONFIGURE_CMDS
  	        --disable-bsd-user                  \
  	        --disable-xen                       \
  	        --disable-slirp                     \
--	        --disable-sdl                       \
- 	        --disable-vnc                       \
+-	        --disable-vnc                       \
++	        --disable-vnc-jpeg                  \
++	        --disable-vnc-png                   \
++	        --disable-vnc-tls                   \
++	        --disable-vnc-sasl                  \
  	        --disable-virtfs                    \
  	        --disable-brlapi                    \
+ 	        --disable-curses                    \
 -- 
 1.7.2.5
