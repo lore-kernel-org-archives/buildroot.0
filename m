@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jan 2013 23:44:05 +0100
-Subject: [Buildroot] [PATCH 21/29] package/qemu: add support for USB
-	redirection
+Date: Tue, 29 Jan 2013 23:44:06 +0100
+Subject: [Buildroot] [PATCH 22/29] package/qemu: add support for Spice
 In-Reply-To: <cover.1359498903.git.yann.morin.1998@free.fr>
 References: <cover.1359498903.git.yann.morin.1998@free.fr>
-Message-ID: <e61fbe13b3217d4354cf6c6d9133718aec1f989b.1359498903.git.yann.morin.1998@free.fr>
+Message-ID: <bfbcd9db5e723dd5e63a052d05165c7af59cc96a.1359498903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,50 +17,50 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  2 files changed, 16 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 9f50533..3b0221e 100644
+index 3b0221e..0e45b18 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -156,6 +156,15 @@ config BR2_PACKAGE_QEMU_ISCSI
- 	help
- 	  Say 'y' here to have QEMU use iSCSI targets as block-devices.
+@@ -124,6 +124,15 @@ config BR2_PACKAGE_QEMU_CURSES
+ 	  frontend (although you can still use the SDL or VNC frontends to
+ 	  display the graphical output).
  
-+config BR2_PACKAGE_QEMU_USBREDIR
-+	bool "Enable USB redirection"
-+	depends on BR2_PACKAGE_USBREDIR
++config BR2_PACKAGE_QEMU_SPICE
++	bool "Enable Spice frontend"
++	depends on BR2_PACKAGE_SPICE
 +	help
-+	  Say 'y' here to have QEMU support USB redirection over the network.
++	  Say 'y' here to have QEMU support Spice as a (VNC-like) frontend.
 +
-+comment "USB redirection requires usbredir"
-+	depends on !BR2_PACKAGE_USBREDIR
++comment "Spice support requires spice-server"
++	depends on !BR2_PACKAGE_SPICE
 +
- config BR2_PACKAGE_QEMU_AIO
- 	bool "Enable AIO"
- 	depends on BR2_PACKAGE_LIBAIO
+ comment "Block backends"
+ 
+ config BR2_PACKAGE_QEMU_VIRTFS
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 77ecde4..195a808 100644
+index 195a808..8a082b4 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -176,6 +176,13 @@ else
- QEMU_OPTS += --disable-libiscsi
+@@ -156,6 +156,13 @@ else
+ QEMU_OPTS += --disable-curses
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_USBREDIR),y)
-+QEMU_OPTS += --enable-usb-redir
-+QEMU_DEPENDENCIES += usbredir
++ifeq ($(BR2_PACKAGE_QEMU_SPICE),y)
++QEMU_OPTS += --enable-spice
++QEMU_DEPENDENCIES += spice
 +else
-+QEMU_OPTS += --disable-usb-redir
++QEMU_OPTS += --disable-spice
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_AIO),y)
- QEMU_OPTS += --enable-linux-aio
- QEMU_DEPENDENCIES += libaio
-@@ -309,7 +316,6 @@ define QEMU_CONFIGURE_CMDS
+ ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
+ QEMU_OPTS += --enable-virtfs
+ else
+@@ -314,7 +321,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-fdt                       \
+ 	        --disable-guest-base                \
  	        --disable-docs                      \
- 	        --disable-spice                     \
+-	        --disable-spice                     \
  	        --disable-rbd                       \
--	        --disable-usb-redir                 \
  	        --disable-smartcard                 \
  	        --disable-strip                     \
- 	        --disable-seccomp                   \
 -- 
 1.7.2.5
