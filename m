@@ -1,68 +1,217 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Tue, 29 Jan 2013 08:57:45 +0100
-Subject: [Buildroot] Linux and busybox-configfiles
-In-Reply-To: <ke74ce$76p$1@ger.gmane.org>
-References: <510550FA.10502@relinux.de> <5105ABE8.70409@mind.be>
- <ke74ce$76p$1@ger.gmane.org>
-Message-ID: <510780F9.9050207@relinux.de>
+Date: Tue, 29 Jan 2013 09:31:55 +0100
+Subject: [Buildroot] [PATCH] New package: cache-calibrator
+Message-ID: <1359448315-22100-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 29.01.2013 01:16, schrieb Shawn J. Goff:
->
->
-> On 01/27/2013 05:36 PM, Arnout Vandecappelle wrote:
->> On 27/01/13 17:08, Stephan Hoffmann wrote:
->>> Hello all,
->>>
->>> buildroot provides direct calls to the configuration menus for busybox
->>> and linux:
->>>
->>> make linux-menuconfig
->>> make busybox-menuconfig
->>>
->>> Additionally, there is a linux-savedefconfig make target.
->>>
->>> All these save their output in the build directory, so that all changes
->>> get lost when "make clean" is called. Thus I don't think that I am the
->>> only one who has been surprised to notice that "make busybox-menuconfig
->>> && make clean && make" does not have any effect on busybox's
->>> configuration.
->>
->>   This is a bit a philosophical discussion: should the configuration
->> files of linux, busybox, etc. be considered part of the buildroot
->> configuration or not? In the former case, they should survive a 'make
->> clean', in the latter case they should be removed by 'make clean'.
->>
->>   I tend to agree that the package configs should be considered part of
->> the buildroot config. However, if your buildroot config specifies some
->> BR2_PACKAGE_BUSYBOX_CONFIG, then I would expect that after 'make clean',
->> that is the config that will be used. More generically, I expect I
->> can do:
->>
->>   make foo_defconfig
->>   Do all kinds of weird stuff that completely messes things up
->>   make clean
->>   make
->>
->> and to be back in the same state as 'make foo_defconfig; make'.
->>
->>
->
-> I'd like the busybox-*config and linux-*config targets should save the
-> resulting config in BR2_PACKAGE_BUSYBOX_CONFIG and
-> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE. I keep these two locations under
-> source control in board/my_company/board_name/, so when I completely
-> mess up the config, it's just a git checkout path/to/config, and if I
-> want to keep the changes, I just add and commit the file. It also lets
-> me clearly see something has changed when I run git status.
-Do you know about busybox-update-config and linux-update-config?
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+The Calibrator is a small C program that is supposed to analyze
+a computers (cache-) memory system and extract the following
+parameters:
+
+    number of cache levels
+    for each cache level:
+        its size
+        its linesize
+        its access/miss latency
+    main memory access latency
+    number of TLB levels
+    for each TLB level:
+        its capacity (i.e. number of entries)
+        the pagesize used
+        the TLB miss latency
+
+http://homepages.cwi.nl/~manegold/Calibrator/
+
+It is also recommended as a load generator for realtime testing in:
+
+https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO#Benchmarking
+
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+---
+ package/Config.in                                  |    1 +
+ package/cache-calibrator/Config.in                 |   13 +++
+ ...calibrator-Fix-conflicting-round-function.patch |  108 ++++++++++++++++++++
+ package/cache-calibrator/cache-calibrator.mk       |   21 ++++
+ 4 files changed, 143 insertions(+), 0 deletions(-)
+ create mode 100644 package/cache-calibrator/Config.in
+ create mode 100644 package/cache-calibrator/cache-calibrator-Fix-conflicting-round-function.patch
+ create mode 100644 package/cache-calibrator/cache-calibrator.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index ebd9817..e6682fc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -19,6 +19,7 @@ endmenu
+ 
+ menu "Debugging, profiling and benchmark"
+ source "package/bonnie/Config.in"
++source "package/cache-calibrator/Config.in"
+ source "package/dhrystone/Config.in"
+ source "package/dstat/Config.in"
+ source "package/dmalloc/Config.in"
+diff --git a/package/cache-calibrator/Config.in b/package/cache-calibrator/Config.in
+new file mode 100644
+index 0000000..6425cd0
+--- /dev/null
++++ b/package/cache-calibrator/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_CACHE_CALIBRATOR
++	bool "cache-calibrator"
++	help
++	  Cache calibrator is a small C program that is
++	  supposed to analyze a computers (cache-) memory
++	  system and extract useful information
++
++	  http://homepages.cwi.nl/~manegold/Calibrator/
++
++	  It is also recommended as a load generator for
++	  realtime testing in:
++
++	  https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO
+diff --git a/package/cache-calibrator/cache-calibrator-Fix-conflicting-round-function.patch b/package/cache-calibrator/cache-calibrator-Fix-conflicting-round-function.patch
+new file mode 100644
+index 0000000..71181a6
+--- /dev/null
++++ b/package/cache-calibrator/cache-calibrator-Fix-conflicting-round-function.patch
+@@ -0,0 +1,108 @@
++From 39ac7268c4350040976005da98daf10edf676d3e Mon Sep 17 00:00:00 2001
++From: Stephan Hoffmann <sho@relinux.de>
++Date: Mon, 28 Jan 2013 17:32:10 +0100
++Subject: [PATCH] Fix conflicting round() function
++
++calibrator.c defines a local round() function that conflicts
++with the one from the standard library.
++
++This is fixed by renaming the local function.
++
++Signed-off-by: Stephan Hoffmann <sho@relinux.de>
++---
++ calibrator.c |   30 +++++++++++++++---------------
++ 1 files changed, 15 insertions(+), 15 deletions(-)
++
++diff --git a/calibrator.c b/calibrator.c
++index e045dfd..8471c04 100644
++--- a/calibrator.c
+++++ b/calibrator.c
++@@ -128,7 +128,7 @@ void ErrXit(char *format, ...) {
++ 	exit(1);
++ }
++ 
++-lng round(dbl x)
+++lng lng_round(dbl x)
++ {
++ 	return (lng)(x + 0.5);
++ }
++@@ -890,16 +890,16 @@ void plotCache(cacheInfo *cache, lng **result, lng MHz, char *fn, FILE *fp, lng
++ 	fprintf(fp, ")\n");
++ 	fprintf(fp, "set y2tics");
++ 	for (l = 0, s = " ("; l <= cache->levels; l++, s = ", ") {
++-		if (!delay)	fprintf(fp, "%s'(%ld)' %f", s, round(CYperIt(cache->latency1[l] - delay)), NSperIt(cache->latency1[l] - delay));
++-			else	fprintf(fp, "%s'(%ld)' %f", s, round(CYperIt(cache->latency2[l] - delay)), NSperIt(cache->latency2[l] - delay));
+++		if (!delay)	fprintf(fp, "%s'(%ld)' %f", s, lng_round(CYperIt(cache->latency1[l] - delay)), NSperIt(cache->latency1[l] - delay));
+++			else	fprintf(fp, "%s'(%ld)' %f", s, lng_round(CYperIt(cache->latency2[l] - delay)), NSperIt(cache->latency2[l] - delay));
++ 	}
++ 	for (y = 1; y <= yh; y *= 10) {
++ 		fprintf(fp, "%s'%1.3g' %ld", s, (dbl)(y * MHz) / 1000.0, y);
++ 	}
++ 	fprintf(fp, ")\n");
++ 	for (l = 0; l <= cache->levels; l++) {
++-		if (!delay)	z = (dbl)round(CYperIt(cache->latency1[l] - delay)) * 1000.0 / (dbl)MHz;
++-			else	z = (dbl)round(CYperIt(cache->latency2[l] - delay)) * 1000.0 / (dbl)MHz;
+++		if (!delay)	z = (dbl)lng_round(CYperIt(cache->latency1[l] - delay)) * 1000.0 / (dbl)MHz;
+++			else	z = (dbl)lng_round(CYperIt(cache->latency2[l] - delay)) * 1000.0 / (dbl)MHz;
++ 		fprintf(fp, "set label %ld '(%1.3g)  ' at %f,%f right\n", l + 1, z, xl, z);
++ 		fprintf(fp, "set arrow %ld from %f,%f to %f,%f nohead lt 0\n", l + 1, xl, z, xh, z);
++ 	}
++@@ -986,16 +986,16 @@ void plotTLB(TLBinfo *TLB, lng **result, lng MHz, char *fn, FILE *fp, lng delay)
++ 	fprintf(fp, "%s'<L1>' %ld)\n", s, TLB->mincachelines);
++ 	fprintf(fp, "set y2tics");
++ 	for (l = 0, s = " ("; l <= TLB->levels; l++, s = ", ") {
++-		if (!delay)	fprintf(fp, "%s'(%ld)' %f", s, round(CYperIt(TLB->latency1[l] - delay)), NSperIt(TLB->latency1[l] - delay));
++-			else	fprintf(fp, "%s'(%ld)' %f", s, round(CYperIt(TLB->latency2[l] - delay)), NSperIt(TLB->latency2[l] - delay));
+++		if (!delay)	fprintf(fp, "%s'(%ld)' %f", s, lng_round(CYperIt(TLB->latency1[l] - delay)), NSperIt(TLB->latency1[l] - delay));
+++			else	fprintf(fp, "%s'(%ld)' %f", s, lng_round(CYperIt(TLB->latency2[l] - delay)), NSperIt(TLB->latency2[l] - delay));
++ 	}
++ 	for (y = 1; y <= yh; y *= 10) {
++ 		fprintf(fp, "%s'%1.3g' %ld", s, (dbl)(y * MHz) / 1000.0, y);
++ 	}
++ 	fprintf(fp, ")\n");
++ 	for (l = 0; l <= TLB->levels; l++) {
++-		if (!delay)	z = (dbl)round(CYperIt(TLB->latency1[l] - delay)) * 1000.0 / (dbl)MHz;
++-			else	z = (dbl)round(CYperIt(TLB->latency2[l] - delay)) * 1000.0 / (dbl)MHz;
+++		if (!delay)	z = (dbl)lng_round(CYperIt(TLB->latency1[l] - delay)) * 1000.0 / (dbl)MHz;
+++			else	z = (dbl)lng_round(CYperIt(TLB->latency2[l] - delay)) * 1000.0 / (dbl)MHz;
++ 		fprintf(fp, "set label %ld '(%1.3g)  ' at %f,%f right\n", l + 1, z, xl, z);
++ 		fprintf(fp, "set arrow %ld from %f,%f to %f,%f nohead lt 0\n", l + 1, xl, z, xh, z);
++ 	}
++@@ -1023,9 +1023,9 @@ void printCPU(cacheInfo *cache, lng MHz, lng delay)
++ 	FILE	*fp = stdout;
++ 		
++ 	fprintf(fp, "CPU loop + L1 access:    ");
++-	fprintf(fp, " %6.2f ns = %3ld cy\n", NSperIt(cache->latency1[0]), round(CYperIt(cache->latency1[0])));
+++	fprintf(fp, " %6.2f ns = %3ld cy\n", NSperIt(cache->latency1[0]), lng_round(CYperIt(cache->latency1[0])));
++ 	fprintf(fp, "             ( delay:    ");
++-	fprintf(fp, " %6.2f ns = %3ld cy )\n", NSperIt(delay),            round(CYperIt(delay)));
+++	fprintf(fp, " %6.2f ns = %3ld cy )\n", NSperIt(delay),            lng_round(CYperIt(delay)));
++ 	fprintf(fp, "\n");
++ 	fflush(fp);
++ }
++@@ -1047,8 +1047,8 @@ void printCache(cacheInfo *cache, lng MHz)
++ 			fprintf(fp, " %3ld KB ", cache->size[l] / 1024);
++ 		}
++ 		fprintf(fp, " %3ld bytes ", cache->linesize[l + 1]);
++-		fprintf(fp, " %6.2f ns = %3ld cy " , NSperIt(cache->latency2[l + 1] - cache->latency2[l]), round(CYperIt(cache->latency2[l + 1] - cache->latency2[l])));
++-		fprintf(fp, " %6.2f ns = %3ld cy\n", NSperIt(cache->latency1[l + 1] - cache->latency1[l]), round(CYperIt(cache->latency1[l + 1] - cache->latency1[l])));
+++		fprintf(fp, " %6.2f ns = %3ld cy " , NSperIt(cache->latency2[l + 1] - cache->latency2[l]), lng_round(CYperIt(cache->latency2[l + 1] - cache->latency2[l])));
+++		fprintf(fp, " %6.2f ns = %3ld cy\n", NSperIt(cache->latency1[l + 1] - cache->latency1[l]), lng_round(CYperIt(cache->latency1[l + 1] - cache->latency1[l])));
++ 	}
++ 	fprintf(fp, "\n");
++ 	fflush(fp);
++@@ -1075,9 +1075,9 @@ void printTLB(TLBinfo *TLB, lng MHz)
++ 		} else {
++ 			fprintf(fp, "  %3ld KB  ", TLB->pagesize[l + 1] / 1024);
++ 		}
++-		fprintf(fp, " %6.2f ns = %3ld cy ", NSperIt(TLB->latency2[l + 1] - TLB->latency2[l]), round(CYperIt(TLB->latency2[l + 1] - TLB->latency2[l])));
+++		fprintf(fp, " %6.2f ns = %3ld cy ", NSperIt(TLB->latency2[l + 1] - TLB->latency2[l]), lng_round(CYperIt(TLB->latency2[l + 1] - TLB->latency2[l])));
++ /*
++-		fprintf(fp, " %6.2f ns = %3ld cy" , NSperIt(TLB->latency1[l + 1] - TLB->latency1[l]), round(CYperIt(TLB->latency1[l + 1] - TLB->latency1[l])));
+++		fprintf(fp, " %6.2f ns = %3ld cy" , NSperIt(TLB->latency1[l + 1] - TLB->latency1[l]), lng_round(CYperIt(TLB->latency1[l + 1] - TLB->latency1[l])));
++ */
++ 		fprintf(fp, "\n");
++ 	}
++-- 
++1.7.0.4
++
+diff --git a/package/cache-calibrator/cache-calibrator.mk b/package/cache-calibrator/cache-calibrator.mk
+new file mode 100644
+index 0000000..8abc647
+--- /dev/null
++++ b/package/cache-calibrator/cache-calibrator.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# cache-calibrator
++#
++#############################################################
++
++CACHE_CALIBRATOR_SOURCE = calibrator.c
++CACHE_CALIBRATOR_SITE = http://homepages.cwi.nl/~manegold/Calibrator/src
++CACHE_CALIBRATOR_EXTRACT_CMDS = cp $(DL_DIR)/$(CACHE_CALIBRATOR_SOURCE) $(D)
++CACHE_CALIBRATOR_LICENSE = Cache calibrator license
++CACHE_CALIBRATOR_LICENSE_FILES = calibrator.c
++
++define CACHE_CALIBRATOR_BUILD_CMDS
++	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(@D)/calibrator.c -o $(@D)/cache_calibrator -lm
++endef
++
++define CACHE_CALIBRATOR_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/cache_calibrator $(TARGET_DIR)/usr/bin/cache_calibrator
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.0.4
