@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jan 2013 23:43:56 +0100
-Subject: [Buildroot] [PATCH 12/29] package/qemu: add support for capabilities
+Date: Tue, 29 Jan 2013 23:43:58 +0100
+Subject: [Buildroot] [PATCH 14/29] package/qemu: add support for virtfs
 In-Reply-To: <cover.1359498903.git.yann.morin.1998@free.fr>
 References: <cover.1359498903.git.yann.morin.1998@free.fr>
-Message-ID: <6042e25313acb80ec5c0d2d1cbad9ef057535282.1359498903.git.yann.morin.1998@free.fr>
+Message-ID: <ea4d462bd6c6a937d9fbfc3d58470d606ea2353e.1359498903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,56 +12,61 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |    7 +++++++
- package/qemu/qemu.mk   |   11 ++++++++++-
- 2 files changed, 17 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |   16 ++++++++++++++++
+ package/qemu/qemu.mk   |    7 ++++++-
+ 2 files changed, 22 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 4952c34..2c46937 100644
+index 8719bde..75df82b 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -125,6 +125,13 @@ config BR2_PACKAGE_QEMU_UUID
- comment "UUID support requires util-linux (for libuuid)"
- 	depends on !BR2_PACKAGE_UTIL_LINUX
+@@ -113,6 +113,22 @@ config BR2_PACKAGE_QEMU_SDL
+ 	  Say 'y' to enable the SDL frontend, that is, a graphical window
+ 	  presenting the VM's display.
  
-+config BR2_PACKAGE_QEMU_CAP
-+	bool "Enable capabilities"
-+	select BR2_PACKAGE_LIBCAP
-+	select BR2_PACKAGE_LIBCAP_NG
-+	help
-+	  Say 'y' here if you want QEMU to support capabilities.
++comment "Block backends"
 +
- config BR2_PACKAGE_QEMU_BLOBS
- 	bool "Install binary blobs"
- 	default y
++config BR2_PACKAGE_QEMU_VIRTFS
++	bool "Enable plan9 ressources using VirtFS"
++	select BR2_PACKAGE_QEMU_CAP
++	select BR2_PACKAGE_QEMU_ATTR
++	help
++	  Say 'y' here if you want QEMU to provide a plan9 virtual "share"
++	  accessible from the guest OS for relatively fast access to host
++	  files.
++	  
++	  This requires that the guest OS is capable of accessing plan9
++	  ressources (typically, in Linux, this is done by a network
++	  file-system called 9p, and can be accelerated by using the 9p
++	  virtio).
++
+ comment "Misc. features"
+ 
+ config BR2_PACKAGE_QEMU_UUID
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index bdccbf5..7e704b9 100644
+index c5861f0..39e5c49 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -156,6 +156,16 @@ else
- QEMU_OPTS += --disable-uuid
+@@ -149,6 +149,12 @@ else
+ QEMU_OPTS += --disable-sdl
  endif
  
-+# There's no configure flag to disable use of libcap
-+# so we must use an environment variable
-+ifeq ($(BR2_PACKAGE_QEMU_CAP),y)
-+QEMU_OPTS += --enable-cap-ng
-+QEMU_DEPENDENCIES += libcap libcap-ng
++ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
++QEMU_OPTS += --enable-virtfs
 +else
-+QEMU_OPTS += --disable-cap-ng
-+QEMU_VARS += cap=no
++QEMU_OPTS += --disable-virtfs
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
- QEMU_OPTS += --disable-blobs
- endif
-@@ -249,7 +259,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-guest-base                \
- 	        --disable-vde                       \
- 	        --disable-linux-aio                 \
--	        --disable-cap-ng                    \
- 	        --disable-docs                      \
- 	        --disable-spice                     \
- 	        --disable-rbd                       \
+ ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
+ QEMU_OPTS += --enable-uuid
+ QEMU_DEPENDENCIES += util-linux
+@@ -255,7 +261,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-xen                       \
+ 	        --disable-slirp                     \
+ 	        --disable-vnc-sasl                  \
+-	        --disable-virtfs                    \
+ 	        --disable-brlapi                    \
+ 	        --disable-curses                    \
+ 	        --disable-curl                      \
 -- 
 1.7.2.5
