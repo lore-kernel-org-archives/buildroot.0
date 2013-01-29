@@ -1,68 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jan 2013 23:44:02 +0100
-Subject: [Buildroot] [PATCH 18/29] package/qemu: add AIO support
+Date: Tue, 29 Jan 2013 23:44:01 +0100
+Subject: [Buildroot] [PATCH 17/29] package/qemu: add BlueZ connectivity
 In-Reply-To: <cover.1359498903.git.yann.morin.1998@free.fr>
 References: <cover.1359498903.git.yann.morin.1998@free.fr>
-Message-ID: <2036002c921323269fa4106ed0430c629c18d2ac.1359498903.git.yann.morin.1998@free.fr>
+Message-ID: <1688c82a345517a63457730d61adead245189a1d.1359498903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for Asynchronous Input/Ouput (AIO).
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |    9 +++++++++
+ package/qemu/Config.in |   11 +++++++++++
  package/qemu/qemu.mk   |    8 +++++++-
- 2 files changed, 16 insertions(+), 1 deletions(-)
+ 2 files changed, 18 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index f22bb19..d57d2e9 100644
+index dbe7cb9..f22bb19 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -150,6 +150,15 @@ config BR2_PACKAGE_QEMU_CURL
+@@ -150,6 +150,17 @@ config BR2_PACKAGE_QEMU_CURL
  comment "cURL support is not possible with static linking"
      depends on BR2_PREFER_STATIC_LIB
  
-+config BR2_PACKAGE_QEMU_AIO
-+	bool "Enable AIO"
-+	depends on BR2_PACKAGE_LIBAIO
++comment "Networking"
++
++config BR2_PACKAGE_QEMU_BLUEZ
++	bool "Enable BlueZ connectivity"
++	depends on BR2_PACKAGE_BLUEZ_UTILS
 +	help
-+	  Say 'y' here to enable Asynchronous Input/Output (AIO).
++	  Say 'y' here to enable BlueZ (bluetooth) connectivity in QEMU.
 +
-+comment "AIO support depends on libaio"
-+	depends on !BR2_PACKAGE_LIBAIO
++comment "BlueZ connectivity depends on bluez-utils"
++	depends on !BR2_PACKAGE_BLUEZ_UTILS
 +
- comment "Networking"
+ comment "Misc. features"
  
- config BR2_PACKAGE_QEMU_BLUEZ
+ config BR2_PACKAGE_QEMU_UUID
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 4377b54..31bd2e7 100644
+index 055c151..4377b54 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
 @@ -169,6 +169,13 @@ else
  QEMU_OPTS += --disable-curl
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_AIO),y)
-+QEMU_OPTS += --enable-linux-aio
-+QEMU_DEPENDENCIES += libaio
++ifeq ($(BR2_PACKAGE_QEMU_BLUEZ),y)
++QEMU_OPTS += --enable-bluez
++QEMU_DEPENDENCIES += bluez_utils
 +else
-+QEMU_OPTS += --disable-linux-aio
++QEMU_OPTS += --disable-bluez
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_BLUEZ),y)
- QEMU_OPTS += --enable-bluez
- QEMU_DEPENDENCIES += bluez_utils
-@@ -286,7 +293,6 @@ define QEMU_CONFIGURE_CMDS
+ ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
+ QEMU_OPTS += --enable-uuid
+ QEMU_DEPENDENCIES += util-linux
+@@ -277,7 +284,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-vnc-sasl                  \
+ 	        --disable-brlapi                    \
  	        --disable-fdt                       \
+-	        --disable-bluez                     \
  	        --disable-guest-base                \
  	        --disable-vde                       \
--	        --disable-linux-aio                 \
- 	        --disable-docs                      \
- 	        --disable-spice                     \
- 	        --disable-rbd                       \
+ 	        --disable-linux-aio                 \
 -- 
 1.7.2.5
