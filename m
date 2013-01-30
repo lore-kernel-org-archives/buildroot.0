@@ -1,42 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Jan 2013 09:25:14 +0100
-Subject: [Buildroot] [PATCH 02/29] package/qemu: build for the target
- (i386 or x86_64 only)
-In-Reply-To: <f188c40e460742e03046b1c37cdfb739371e7241.1359498903.git.yann.morin.1998@free.fr>
-References: <cover.1359498903.git.yann.morin.1998@free.fr>
- <f188c40e460742e03046b1c37cdfb739371e7241.1359498903.git.yann.morin.1998@free.fr>
-Message-ID: <20130130092514.6cc28821@skate>
+Date: Wed, 30 Jan 2013 09:31:12 +0100
+Subject: [Buildroot] can not open ttyUSB0
+In-Reply-To: <5108BD5B.3050001@linkwisetech.com>
+References: <mailman.83813.1359524634.32592.buildroot@busybox.net>
+ <5108BD5B.3050001@linkwisetech.com>
+Message-ID: <20130130093112.73034ecd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Adeel Nafis,
 
-On Tue, 29 Jan 2013 23:43:46 +0100, Yann E. MORIN wrote:
+On Wed, 30 Jan 2013 11:27:39 +0500, Adeel Nafis wrote:
+> After attaching a 3G Modem USB  I am able to successfully use 
+> 'usb_modeswitch" and get the device to switch with messages indicating 
+> that the device is connected to /dev/ttyUSB0,1,2. However, after this I 
+> can not open the /dev/ttyUSBx any more. If i use gnokii for arm it 
+> prints out some messages indicating that it failed to open the port.
+> 
+> Gnokii output
+> GNOKII Version 0.6.26
+> Gnokii serial_open: open: No such device        <----- the port here is 
+> set to /dev/ttyUSB0
+> Couldn't open ATBUS device: No such device
+> Telephone interface init failed: Command failed.
+> Quitting.
+> Cannot unlock device.
+> Command failed.
+> 
+> I have tested the thing out with Ubuntu for arm on the same platform and 
+> can verify that it works.
 
-> +# Note: although QEMU uses a ./configure script, it is not compatible with
-> +#       the traditional autotools options (eg. --target et al.), so we have
-> +#       to override the default provided by the autotools-package infra, and
-> +#       provide our own. Sigh... :-/
+Before trying to access the device through /dev, make sure that your
+kernel has actually detected this device, and that a driver has been
+bound to it:
 
-Then please do not use the autotools-package infrastructure for this
-package. It doesn't use autoconf, it doesn't automake, it is *NOT*
-autotools.
+ *) Check your dmesg to see if there is something related to your 3G
+ modem and the creation of ttyUSB0
 
-It is not because it happens to work *today* by just overriding the
-QEMU_CONFIGURE_CMDS that it will continue to work tomorrow. For
-example, look at the out-of-tree stuff I was working on: for autotools
-packages, we will assume that out of tree build is supported, and that
-it works in a certain way. Wouldn't this break the qemu package, which
-pretends to be an autotools package, but in fact is not?
+ *) Check /sys/class/tty/ and check if there is a ttyUSB0 symlink.
+ Until there is no ttyUSB0 symlink, it means that the kernel hasn't
+ detected the device, or that a driver is missing for it.
 
-So, I've said this several times already: do not misuse package
-infrastructures, even if it happens to "work" today. Do the right
-thing, instead: qemu should use the generic-package infrastructure.
+ *) Once you have /sys/class/tty/, do a cat /dev/class/tty/ttyUSB0/dev
+ and check that the major/minor that you see here match the ones you
+ have used in the static device table (but it seems like 188:0 is
+ correct for ttyUSB0, so your problem is most likely due to the fact
+ that the kernel has not detected the device at all).
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
