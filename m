@@ -1,49 +1,34 @@
-From: Emmanuel BOUAZIZ <ebouaziz@neotion.com>
-Date: Wed, 30 Jan 2013 15:48:05 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Jan 2013 16:06:11 +0100
 Subject: [Buildroot] [git commit] busybox: add 1.19.4 / 1.20.2 fixes
-In-Reply-To: <20120904110844.1439997180@busybox.osuosl.org>
+In-Reply-To: <510932A5.4080303@neotion.com>
 References: <20120904110844.1439997180@busybox.osuosl.org>
-Message-ID: <510932A5.4080303@neotion.com>
+ <510932A5.4080303@neotion.com>
+Message-ID: <20130130160611.79cee153@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Emmanuel BOUAZIZ,
 
+On Wed, 30 Jan 2013 15:48:05 +0100, Emmanuel BOUAZIZ wrote:
 
-On 09/04/2012 01:08 PM, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=9ec1c5d9d31b4f377c91a0451efd3ba67416d6f8
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-> ---
->  .../busybox-1.19.4/busybox-1.19.4-udhcp.patch      |  164 ++++++++++++++++++++
->  .../busybox-1.20.2/busybox-1.20.2-kernel_ver.patch |   25 +++
->  2 files changed, 189 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/busybox/busybox-1.19.4/busybox-1.19.4-udhcp.patch b/package/busybox/busybox-1.19.4/busybox-1.19.4-udhcp.patch
-> new file mode 100644
-> index 0000000..94d5f34
-> --- /dev/null
-> +++ b/package/busybox/busybox-1.19.4/busybox-1.19.4-udhcp.patch
+> I don't know what this patch is for, but it breaks the TFTP_SERVER_NAME option for me. The $tftp variable now contains
+> "bad" instead or the TFTP server name (I use it in udhcpc.script). When I remove the patch, it works fine again.
 
-> [...]
+This patch comes directly from the Busybox community, so I would
+suggest that you report your bug to the Busybox community, saying that
+you're using the 1.19.4 version +
+http://busybox.net/downloads/fixes-1.19.4/busybox-1.19.4-udhcp.patch,
+and the problem that you have.
 
-> + //TODO: must be combined with 'sname' and 'file' handling:
-> +-	{ OPTION_STRING                           , 0x42 }, /* DHCP_TFTP_SERVER_NAME */
-> ++	{ OPTION_STRING_HOST                      , 0x42 }, /* DHCP_TFTP_SERVER_NAME */
-> + 	{ OPTION_STRING                           , 0x43 }, /* DHCP_BOOT_FILE     */
+Best regards,
 
-> [...]
-> 
-
-Hi,
-
-I don't know what this patch is for, but it breaks the TFTP_SERVER_NAME option for me. The $tftp variable now contains
-"bad" instead or the TFTP server name (I use it in udhcpc.script). When I remove the patch, it works fine again.
-
-regards,
-
+Thomas
 -- 
-Emmanuel
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
