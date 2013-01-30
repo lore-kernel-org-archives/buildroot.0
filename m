@@ -1,24 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 30 Jan 2013 08:47:19 -0300
-Subject: [Buildroot] [PATCH] wireshark: new package
-In-Reply-To: <9b4fd5a7c061d1912a23865e2cd2bbfe9cef6390.1359524462.git.baruch@tkos.co.il>
-References: <9b4fd5a7c061d1912a23865e2cd2bbfe9cef6390.1359524462.git.baruch@tkos.co.il>
-Message-ID: <51090847.2040208@zacarias.com.ar>
+From: Vikram Kerkar <vikramkerkar@gmail.com>
+Date: Wed, 30 Jan 2013 17:33:21 +0530
+Subject: [Buildroot] Netplug daemon Problem
+Message-ID: <CAKDF3SF2VGStrdaQDeo5wg=dtX1n=bJt834Sgqs1s-4qQpDrYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/30/2013 02:42 AM, Baruch Siach wrote:
-> +WIRESHARK_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
+Hello,
 
-I need ac_cv_path_PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config in
-CONF_ENV also. That's because configure is finding /usr/bin/pcap-config
-from my distribution before the staging one.
-And also the exec_prefix/prefix fixups in
-$(STAGING_DIR)/usr/bin/pcap-config since they point to /usr (the usual
-way in libpcap or Stefan's patch for the nice fixup).
-With these tweaks it builds nicely.
-Also might be worth to bump (again!) to 1.8.5 a security release.
-Regards.
+Recently I have upgraded buildroot version to 'Buildroot-2012.11.1' on my
+device (AT91SAM9260).
+I have noticed that I am getting some network related problem.
+PROBLEM :
+      When I remove the ethernet jack and re-insert it, device is not able
+to bring up the network, and hence no IP address.
+      But at boot time, if ethernet cable is connected to device, it gets
+IP address.
+
+As far as I can think, this problem is related to Netplug daemon.
+Netplug version in my buildroot is 'netplug-1.2.9.2'
+
+Really looking for your reply,
+Thanks in advance.
+
+-- 
+Regards,
+*Vikram Kerkar*
+Pune
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130130/91ccf732/attachment.html>
