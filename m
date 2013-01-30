@@ -1,149 +1,73 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 30 Jan 2013 07:42:39 +0200
-Subject: [Buildroot] [PATCH] wireshark: new package
-Message-ID: <9b4fd5a7c061d1912a23865e2cd2bbfe9cef6390.1359524462.git.baruch@tkos.co.il>
+From: Adeel Nafis <adeel@linkwisetech.com>
+Date: Wed, 30 Jan 2013 11:27:39 +0500
+Subject: [Buildroot] can not open ttyUSB0
+In-Reply-To: <mailman.83813.1359524634.32592.buildroot@busybox.net>
+References: <mailman.83813.1359524634.32592.buildroot@busybox.net>
+Message-ID: <5108BD5B.3050001@linkwisetech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is only the bare minimum needed to build the textual tshark utility.
-Support for more options, including the wireshark GUI, can be added later.
+Dear All,
+I have a kit2416 (http://www.armdesigner.com/KIT2416.html) module with 
+Samsung ARM926EJS*. *I have configured buildroot with static device 
+table, and added the ttyUSB0,1,2,3 to with major 188 and minor 0,1,2,3 
+to the file.
+I also added the line to /etc/fstab
 
-Cc: Stefan Fr?berg <stefan.froberg@petroprogram.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-The "big" wireshark build of Stefan Fr?berg isn't here yet, so please consider
-applying this minimal wireshark as a starting point.
+none    /dev/bus/usb    usbfs    defaults,devmode=0666    0    0
 
-tshark still contains build directories in its RPATH, but as Thomas has
-indicated (http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/52377),
-this should not be a show-stopper.
+After attaching a 3G Modem USB  I am able to successfully use 
+'usb_modeswitch" and get the device to switch with messages indicating 
+that the device is connected to /dev/ttyUSB0,1,2. However, after this I 
+can not open the /dev/ttyUSBx any more. If i use gnokii for arm it 
+prints out some messages indicating that it failed to open the port.
 
-Changes v3 -> v4:
-	* Update to version 1.8.4
+Gnokii output
+GNOKII Version 0.6.26
+Gnokii serial_open: open: No such device        <----- the port here is 
+set to /dev/ttyUSB0
+Couldn't open ATBUS device: No such device
+Telephone interface init failed: Command failed.
+Quitting.
+Cannot unlock device.
+Command failed.
 
-Changes v2 -> v3:
-	* Use an upstreamable patch as suggested by Thomas Petazzoni
-	* Add license info
+I have tested the thing out with Ubuntu for arm on the same platform and 
+can verify that it works.
 
-Changes v1 -> v2:
-	* Patch configure.in and enable autoreconf, instead of overriding
-	  $prefix
-	* Remove --with-sysroot as suggested by Arnout Vandecappelle
+If I do `cat /dev/bus/usb/devices` output is
+# cat /dev/bus/usb/devices
 
- package/Config.in                                  |    1 +
- package/wireshark/Config.in                        |   14 +++++++
- .../wireshark/wireshark-dont-include-prefix.patch  |   41 ++++++++++++++++++++
- package/wireshark/wireshark.mk                     |   18 +++++++++
- 4 files changed, 74 insertions(+)
- create mode 100644 package/wireshark/Config.in
- create mode 100644 package/wireshark/wireshark-dont-include-prefix.patch
- create mode 100644 package/wireshark/wireshark.mk
+T:  Bus=01 Lev=00 Prnt=00 Port=00 Cnt=00 Dev#=  1 Spd=12  MxCh= 2
+B:  Alloc=  0/900 us ( 0%), #Int=  0, #Iso=  0
+D:  Ver= 1.10 Cls=09(hub  ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=0000 ProdID=0000 Rev= 2.06
+S:  Manufacturer=Linux 2.6.21.5-cfs-v19 ohci_hcd
+S:  Product=S3C24XX OHCI
+S:  SerialNumber=s3c24xx
+C:* #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=  0mA
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=00 Driver=hub
+E:  Ad=81(I) Atr=03(Int.) MxPS=   2 Ivl=255ms
 
-diff --git a/package/Config.in b/package/Config.in
-index ebd9817..63ab1f3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -727,6 +727,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/wget/Config.in"
- endif
- source "package/wireless_tools/Config.in"
-+source "package/wireshark/Config.in"
- source "package/wpa_supplicant/Config.in"
- source "package/xinetd/Config.in"
- source "package/xl2tp/Config.in"
-diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
-new file mode 100644
-index 0000000..e6d4e72
---- /dev/null
-+++ b/package/wireshark/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_WIRESHARK
-+	bool "wireshark"
-+	select BR2_PACKAGE_LIBPCAP
-+	select BR2_PACKAGE_LIBGCRYPT
-+	select BR2_PACKAGE_LIBGLIB2
-+	depends on BR2_USE_WCHAR # glib2
-+	help
-+	  Network traffic sniffer and protocol decoder. Currently only tshark,
-+	  the console interface, is enabled.
-+
-+	  http://www.wireshark.org
-+
-+comment "wireshark requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/wireshark/wireshark-dont-include-prefix.patch b/package/wireshark/wireshark-dont-include-prefix.patch
-new file mode 100644
-index 0000000..567af9a
---- /dev/null
-+++ b/package/wireshark/wireshark-dont-include-prefix.patch
-@@ -0,0 +1,41 @@
-+configure.in: don't add the build host's /usr/include and /usr/lib to the 
-+search path of include files and libraries. This is not what you want when 
-+cross compiling.
-+
-+Sent upstream as https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=7926.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+diff -Nuar wireshark-1.8.3.orig/configure.in wireshark-1.8.3/configure.in
-+--- wireshark-1.8.3.orig/configure.in	2012-08-15 23:33:32.000000000 +0300
-++++ wireshark-1.8.3/configure.in	2012-10-28 10:07:54.864388531 +0200
-+@@ -635,29 +635,6 @@
-+ AC_SUBST(CORESERVICES_FRAMEWORKS)
-+ AC_SUBST(LAUNCHSERVICES_FRAMEWORKS)
-+ 
-+-#
-+-# If using $prefix we add "$prefix/include" to the include search path
-+-# and "$prefix/lib" to the library search path.
-+-#
-+-if test "x$prefix" != "x" ; then
-+-	AC_MSG_CHECKING(whether to use $prefix for headers and libraries)
-+-	if test -d $prefix/include ; then
-+-		AC_MSG_RESULT(yes)
-+-		#
-+-		# Arrange that we search for header files in "$prefix/include", as
-+-		# various packages we use may have been installed under "$prefix/include".
-+-		#
-+-		CPPFLAGS="$CPPFLAGS -I$prefix/include"
-+-
-+-		#
-+-		# Arrange that we search for libraries in "$prefix/lib".
-+-		#
-+-		AC_WIRESHARK_ADD_DASH_L(LDFLAGS, $prefix/lib)
-+-	else
-+-		AC_MSG_RESULT(no)
-+-	fi
-+-fi
-+-
-+ dnl Look in /usr/local for header files and libraries ?
-+ dnl XXX FIXME don't include /usr/local if it is already in the system
-+ dnl search path as this causes gcc 3.2 on Linux to complain about a change
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-new file mode 100644
-index 0000000..c2efc2c
---- /dev/null
-+++ b/package/wireshark/wireshark.mk
-@@ -0,0 +1,18 @@
-+#############################################################
-+#
-+# wireshark
-+#
-+#############################################################
-+
-+WIRESHARK_VERSION = 1.8.4
-+WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
-+WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
-+WIRESHARK_LICENSE = wireshark license
-+WIRESHARK_LICENSE_FILES = COPYING
-+WIRESHARK_DEPENDENCIES = libpcap libgcrypt libglib2
-+WIRESHARK_AUTORECONF = YES
-+WIRESHARK_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
-+WIRESHARK_CONF_OPT = --disable-wireshark --without-krb5 --disable-usr-local \
-+		     --enable-static=no
-+
-+$(eval $(call autotools-package))
--- 
-1.7.10.4
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=12  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=12d1 ProdID=1446 Rev= 0.00
+S:  Manufacturer=HUAWEI Technology
+S:  Product=HUAWEI Mobile
+S:  SerialNumber=1234567890ABCDEF
+C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=(none)
+E:  Ad=81(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=usb-storage
+E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+
+
+Any pointers?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130130/138bf6e6/attachment.html>
