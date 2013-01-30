@@ -1,89 +1,41 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Wed, 30 Jan 2013 08:51:50 +0100
-Subject: [Buildroot] [PATCH v3] New package: cache-calibrator
-In-Reply-To: <87libbd8zz.fsf@dell.be.48ers.dk>
-References: <1359448315-22100-1-git-send-email-sho@relinux.de>
- <1359453232-23310-1-git-send-email-sho@relinux.de>
- <87libbd8zz.fsf@dell.be.48ers.dk>
-Message-ID: <5108D116.1060606@relinux.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 Jan 2013 08:52:53 +0100
+Subject: [Buildroot] [PATCH 2/7] package/pmake: add host pmake
+In-Reply-To: <b0d70289993ab5426e1c411b1fc102c7a8022b5d.1359498504.git.yann.morin.1998@free.fr>
+References: <cover.1359498504.git.yann.morin.1998@free.fr>
+ <b0d70289993ab5426e1c411b1fc102c7a8022b5d.1359498504.git.yann.morin.1998@free.fr>
+Message-ID: <5108D155.3060208@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 29.01.2013 21:33, schrieb Peter Korsgaard:
->>>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
->  Stephan> The Calibrator is a small C program that is supposed to analyze
->  Stephan> a computers (cache-) memory system and extract the following
->  Stephan> parameters:
+On 29/01/13 23:33, Yann E. MORIN wrote:
+> pmake is the make command used by the BSD.
+> It will used to build BSD-related packages, coming later.
 >
->  Stephan>     number of cache levels
->  Stephan>     for each cache level:
->  Stephan>         its size
->  Stephan>         its linesize
->  Stephan>         its access/miss latency
->  Stephan>     main memory access latency
->  Stephan>     number of TLB levels
->  Stephan>     for each TLB level:
->  Stephan>         its capacity (i.e. number of entries)
->  Stephan>         the pagesize used
->  Stephan>         the TLB miss latency
->
->  Stephan> http://homepages.cwi.nl/~manegold/Calibrator/
->
->  Stephan> It is also recommended as a load generator for realtime testing in:
->
->  Stephan> https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO#Benchmarking
->
->  Stephan> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
->  Stephan> ---
->  Stephan> v2: Review by Arnout Vandecappelle
->  Stephan> 	Fix License
->  Stephan> 	Use $(TARGET_CFLAGS) and $(TARGET_LDFLAGS)
->  Stephan> 	Fix Typo
->  Stephan> 	Remove $(CACHE_CALIBRATOR_DIR) 
->  Stephan> v3: Review by Thomas Petazzoni
->  Stephan> 	Fix CACHE_CALIBRATOR_EXTRACT_CMDS
->
->  Stephan> @@ -0,0 +1,13 @@
->  Stephan> +config BR2_PACKAGE_CACHE_CALIBRATOR
->  Stephan> +	bool "cache-calibrator"
->  Stephan> +	help
->  Stephan> +	  Cache calibrator is a small C program that is
->  Stephan> +	  supposed to analyze a computers (cache-) memory
->  Stephan> +	  system and extract useful information
->  Stephan> +
->  Stephan> +	  http://homepages.cwi.nl/~manegold/Calibrator/
->  Stephan> +
->  Stephan> +	  It is also recommended as a load generator for
->  Stephan> +	  realtime testing in:
->
-> We normally wrap help text around col 70, not 50. I've reformatted this
-> to better fit menuconfig.
->
->
->  Stephan> +++ b/package/cache-calibrator/cache-calibrator.mk
->  Stephan> @@ -0,0 +1,24 @@
->  Stephan> +#############################################################
->  Stephan> +#
->  Stephan> +# cache-calibrator
->  Stephan> +#
->  Stephan> +#############################################################
->  Stephan> +
->  Stephan> +CACHE_CALIBRATOR_SOURCE = calibrator.c
->  Stephan> +CACHE_CALIBRATOR_SITE = http://homepages.cwi.nl/~manegold/Calibrator/src
->  Stephan> +CACHE_CALIBRATOR_LICENSE = Cache calibrator license
->  Stephan> +CACHE_CALIBRATOR_LICENSE_FILES = calibrator.c
->  Stephan> +
->  Stephan> +define CACHE_CALIBRATOR_EXTRACT_CMDS
->  Stephan> +	cp $(DL_DIR)/$(CACHE_CALIBRATOR_SOURCE) $(D)
->
-> Did you test this? It is $(@D) not $(D) (which expands to the empty
-> string)
-You're right, I did not. Thanx for the fix.
+> Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
+> ---
+>   package/pmake/pmake-100_mk.patch         | 2624 ++++++++++++++++++++++++++++++
+>   package/pmake/pmake-110_mkdep.patch      |  230 +++
+>   package/pmake/pmake-120_fixes.patch      |  266 +++
+>   package/pmake/pmake-130_maxpathlen.patch |   39 +
+>   package/pmake/pmake-140_multiarch.patch  |  354 ++++
+>   package/pmake/pmake-150_mktemp.patch     |   31 +
 
-Stephan
->
-> Committed with these fixes, thanks.
->
+  Can't these patches be downloaded with PMAKE_PATCH?
+
+  Regards,
+  Arnout
+
+>   package/pmake/pmake.mk                   |   46 +
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
