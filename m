@@ -1,41 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Jan 2013 08:52:53 +0100
-Subject: [Buildroot] [PATCH 2/7] package/pmake: add host pmake
-In-Reply-To: <b0d70289993ab5426e1c411b1fc102c7a8022b5d.1359498504.git.yann.morin.1998@free.fr>
-References: <cover.1359498504.git.yann.morin.1998@free.fr>
- <b0d70289993ab5426e1c411b1fc102c7a8022b5d.1359498504.git.yann.morin.1998@free.fr>
-Message-ID: <5108D155.3060208@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Jan 2013 08:58:36 +0100
+Subject: [Buildroot] configure buildroot to patch at91bootstrap
+In-Reply-To: <1359502385.7974.197.camel@genx>
+References: <1359491391.7974.190.camel@genx> <20130129214230.699afd2e@skate>
+ <1359502385.7974.197.camel@genx>
+Message-ID: <20130130085836.06d3a143@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/01/13 23:33, Yann E. MORIN wrote:
-> pmake is the make command used by the BSD.
-> It will used to build BSD-related packages, coming later.
->
-> Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
-> ---
->   package/pmake/pmake-100_mk.patch         | 2624 ++++++++++++++++++++++++++++++
->   package/pmake/pmake-110_mkdep.patch      |  230 +++
->   package/pmake/pmake-120_fixes.patch      |  266 +++
->   package/pmake/pmake-130_maxpathlen.patch |   39 +
->   package/pmake/pmake-140_multiarch.patch  |  354 ++++
->   package/pmake/pmake-150_mktemp.patch     |   31 +
+Dear John Stile,
 
-  Can't these patches be downloaded with PMAKE_PATCH?
+On Tue, 29 Jan 2013 15:33:05 -0800, John Stile wrote:
 
-  Regards,
-  Arnout
+> > And set your patch directory here.
+> There in lines the problem.
+> I do not have:
+>  Bootloaders
+>  -> at91bootstrap
+>  -> custom patch dir
+> 
+> My buildroot 2011.11 has:
+>  Bootloaders  --->
+>  [*] AT91 Bootstrap
+>  (at91sam9g20ek) Bootstrap board
+>  Boot Memory (NAND Flash)  --->
+>  [ ] AT91 DataFlashBoot
 
->   package/pmake/pmake.mk                   |   46 +
+Aaah, ok, it has been added after the Buildroot version you're
+currently using.
 
+> Is is possible to back-port the ability to patch at91bootstrap in
+> 2011.11?
 
+Yes, it should not be very complicated. The commit is
+502465e435610b54b247b44cf61e7f0ba3d05a22.
+
+> What release added it?
+
+The commit was made on February, 2nd this year, so I suspect it was
+part of 2012.02.
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
