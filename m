@@ -1,70 +1,64 @@
-From: Adeel Nafis <adeel@linkwisetech.com>
-Date: Wed, 30 Jan 2013 13:59:52 +0500
-Subject: [Buildroot] can not open ttyUSB0
-In-Reply-To: <mailman.83869.1359534753.32592.buildroot@busybox.net>
-References: <mailman.83869.1359534753.32592.buildroot@busybox.net>
-Message-ID: <5108E108.2020801@linkwisetech.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 Jan 2013 10:54:36 +0100
+Subject: [Buildroot] Linux and busybox-configfiles
+In-Reply-To: <ce1e1f6b-7d56-461e-87a7-d18a64240c35@zimbra2.corp.accelance.fr>
+References: <ce1e1f6b-7d56-461e-87a7-d18a64240c35@zimbra2.corp.accelance.fr>
+Message-ID: <5108EDDC.5050808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
-To: Adeel Nafis<adeel@linkwisetech.com>
-Cc:buildroot at busybox.net
-Subject: Re: [Buildroot] can not open ttyUSB0
-Message-ID: <20130130093112.73034ecd@skate>
-Content-Type: text/plain; charset=US-ASCII
-
-> Before trying to access the device through /dev, make sure that your
-> kernel has actually detected this device, and that a driver has been
-> bound to it:
+On 30/01/13 08:50, Jeremy Rosen wrote:
+>>    If this does go through, I would  like to have some way to throw
+>>    away
+>> the customized config and revert to the configured config.  Perhaps a
+>> 'realclean' target?
+>>
+>>
 >
->   *) Check your dmesg to see if there is something related to your 3G
->   modem and the creation of ttyUSB0
+> I am not sure what you mean by "the configured" vs "the customized"
 >
->   *) Check /sys/class/tty/ and check if there is a ttyUSB0 symlink.
->   Until there is no ttyUSB0 symlink, it means that the kernel hasn't
->   detected the device, or that a driver is missing for it.
-Thanks,
-the listing from dmesg does indicate the first detection and not the 
-subsequent mode switching or connection to the ttyUSB0 of the modem
+> I guess that the customized is the one from make linux-menuconfig and the configured is the one from make foo_defconfig
 
-usb 1-1: new full speed USB device using s3c2410-ohci and address 4
-usb 1-1: configuration #1 chosen from 1 choice
-scsi4 : SCSI emulation for USB Mass Storage devices
-usb-storage: device found at 4
-usb-storage: waiting for device to settle before scanning
-scsi5 : SCSI emulation for USB Mass Storage devices
-usb-storage: device found at 4
-usb-storage: waiting for device to settle before scanning
-mmc0: starting CMD25 arg 00360d30 flags 00000035
-mmc0: req done (CMD25): 0/0/0: 00000900 00000000 00000000 00000000
-mmc0: starting CMD13 arg e6240000 flags 00000015
-mmc0: req done (CMD13): 0/0/0: 00000900 00000000 00000000 00000000
-mmc0: starting CMD25 arg 00360d48 flags 00000035
-mmc0: req done (CMD25): 0/0/0: 00000900 00000000 00000000 00000000
-mmc0: starting CMD13 arg e6240000 flags 00000015
-mmc0: req done (CMD13): 0/0/0: 00000900 00000000 00000000 00000000
-scsi 4:0:0:0: CD-ROM            HUAWEI   Mass Storage     2.31 PQ: 0 ANSI: 2
-scsi 5:0:0:0: Direct-Access     HUAWEI   MMC Storage      2.31 PQ: 0 ANSI: 2
-usb-storage: device scan complete
-sd 5:0:0:0: Attached scsi removable disk sda
-usb-storage: device scan complete
+  Not from 'make foo_defconfig', but from 'make menuconfig'.
 
-there is no symlink for /sys/class/tty/ttyUSB0, so I guess this 
-indicates that there is a missing driver, but which one? I have also 
-tried doing the following
+  If in the buildroot config I select 'Use omap2plus defconfig' for the 
+kernel, then I expect it to use the omap2plus configuration. Similarly, 
+if I set the custom linux config to /some/path/linux.config, then I 
+expect that that configuration will be used.
 
-modprobe usbserial vendor=0x12d1 product=0x1446
+  So 'configured' is what you see in 'make menuconfig', 'customized' is 
+what you see in 'make linux-menuconfig'.
 
-but it makes no difference.
+
+> hmm, I see your use case.... I would tend to argue that the kernel is no exception to the way buildroot works
+>
+> * make clean removes all build-generated but doesn't touch user-defined configurations (BR configuration, kernel configuration)
+
+  But the problem is that the buildroot configuration conflicts with the 
+kernel configuration.
+
+
+  Regards,
+  Arnout
+
+> * to revert to BR's suggested configuration, use make xxx_defconfig, and that would override both the kernel and BR's configuration.
+>
+> I don't really see a use-case for "revert my changes to the kernel, but not the rest of buildroot" though providing targets like make linux-xxx_defconfig for all kernel defined defconfig
+> and/or a make linux-buildrootconfig to revert to the buildroot-suggested config might make sense...
+>
+>
+> Best
+> J?r?my
+>
+
 
 -- 
-Adeel Ahmed Nafis
-Design Engineer
-LINKWISE TECHNOLOGY PTE LTD
-Blk 3 Ang Mo Kio Industrial Park 2A
-#06-08, AMK TECH 1
-Singapore 568050
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
