@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Jan 2013 19:47:42 +0100
-Subject: [Buildroot] [PATCH 02/29] package/qemu: build for the target
-	(i386 or x86_64 only)
-In-Reply-To: <20130130092514.6cc28821@skate>
+Date: Wed, 30 Jan 2013 19:48:32 +0100
+Subject: [Buildroot] [PATCH 03/29] package/qemu: add basic target
+	selection
+In-Reply-To: <20130130093221.05bc0131@skate>
 References: <cover.1359498903.git.yann.morin.1998@free.fr>
- <f188c40e460742e03046b1c37cdfb739371e7241.1359498903.git.yann.morin.1998@free.fr>
- <20130130092514.6cc28821@skate>
-Message-ID: <201301301947.43258.yann.morin.1998@free.fr>
+ <333827ac19a2c39c08f387b846078441478d87af.1359498903.git.yann.morin.1998@free.fr>
+ <20130130093221.05bc0131@skate>
+Message-ID: <201301301948.32702.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,17 +16,19 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On Wednesday 30 January 2013 Thomas Petazzoni wrote:
-> On Tue, 29 Jan 2013 23:43:46 +0100, Yann E. MORIN wrote:
-> > +# Note: although QEMU uses a ./configure script, it is not compatible with
-> > +#       the traditional autotools options (eg. --target et al.), so we have
-> > +#       to override the default provided by the autotools-package infra, and
-> > +#       provide our own. Sigh... :-/
+> On Tue, 29 Jan 2013 23:43:47 +0100, Yann E. MORIN wrote:
+> > qemu-1.2.1 requires that at least one target emulation be enabled, so
+> > we use some kconfig-tricks to force at least the systems emulations to
+> > be enabled if user emulation is not selected.
+> > 
+> > This limitation will be lifted in the upcoming qemu-1.3.x
 > 
-> Then please do not use the autotools-package infrastructure for this
-> package. It doesn't use autoconf, it doesn't automake, it is *NOT*
-> autotools.
+> Humm, the qemu package actually uses version 1.3.1, as per "[PATCH
+> 01/29] package/qemu: bump version to 1.3.1" :-)
+> 
+> You also have the comment related to 1.2.x in the patch itself.
 
-ACK. :-)
+Arg. I'll fix that. Thanks.
 
 Regards,
 Yann E. MORIN.
