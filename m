@@ -1,36 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Jan 2013 09:32:21 +0100
-Subject: [Buildroot] [PATCH 03/29] package/qemu: add basic target
- selection
-In-Reply-To: <333827ac19a2c39c08f387b846078441478d87af.1359498903.git.yann.morin.1998@free.fr>
-References: <cover.1359498903.git.yann.morin.1998@free.fr>
- <333827ac19a2c39c08f387b846078441478d87af.1359498903.git.yann.morin.1998@free.fr>
-Message-ID: <20130130093221.05bc0131@skate>
+From: Adeel Nafis <adeel@linkwisetech.com>
+Date: Wed, 30 Jan 2013 13:59:52 +0500
+Subject: [Buildroot] can not open ttyUSB0
+In-Reply-To: <mailman.83869.1359534753.32592.buildroot@busybox.net>
+References: <mailman.83869.1359534753.32592.buildroot@busybox.net>
+Message-ID: <5108E108.2020801@linkwisetech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+From: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+To: Adeel Nafis<adeel@linkwisetech.com>
+Cc:buildroot at busybox.net
+Subject: Re: [Buildroot] can not open ttyUSB0
+Message-ID: <20130130093112.73034ecd@skate>
+Content-Type: text/plain; charset=US-ASCII
 
-On Tue, 29 Jan 2013 23:43:47 +0100, Yann E. MORIN wrote:
-> qemu-1.2.1 requires that at least one target emulation be enabled, so
-> we use some kconfig-tricks to force at least the systems emulations to
-> be enabled if user emulation is not selected.
-> 
-> This limitation will be lifted in the upcoming qemu-1.3.x
+> Before trying to access the device through /dev, make sure that your
+> kernel has actually detected this device, and that a driver has been
+> bound to it:
+>
+>   *) Check your dmesg to see if there is something related to your 3G
+>   modem and the creation of ttyUSB0
+>
+>   *) Check /sys/class/tty/ and check if there is a ttyUSB0 symlink.
+>   Until there is no ttyUSB0 symlink, it means that the kernel hasn't
+>   detected the device, or that a driver is missing for it.
+Thanks,
+the listing from dmesg does indicate the first detection and not the 
+subsequent mode switching or connection to the ttyUSB0 of the modem
 
-Humm, the qemu package actually uses version 1.3.1, as per "[PATCH
-01/29] package/qemu: bump version to 1.3.1" :-)
+usb 1-1: new full speed USB device using s3c2410-ohci and address 4
+usb 1-1: configuration #1 chosen from 1 choice
+scsi4 : SCSI emulation for USB Mass Storage devices
+usb-storage: device found at 4
+usb-storage: waiting for device to settle before scanning
+scsi5 : SCSI emulation for USB Mass Storage devices
+usb-storage: device found at 4
+usb-storage: waiting for device to settle before scanning
+mmc0: starting CMD25 arg 00360d30 flags 00000035
+mmc0: req done (CMD25): 0/0/0: 00000900 00000000 00000000 00000000
+mmc0: starting CMD13 arg e6240000 flags 00000015
+mmc0: req done (CMD13): 0/0/0: 00000900 00000000 00000000 00000000
+mmc0: starting CMD25 arg 00360d48 flags 00000035
+mmc0: req done (CMD25): 0/0/0: 00000900 00000000 00000000 00000000
+mmc0: starting CMD13 arg e6240000 flags 00000015
+mmc0: req done (CMD13): 0/0/0: 00000900 00000000 00000000 00000000
+scsi 4:0:0:0: CD-ROM            HUAWEI   Mass Storage     2.31 PQ: 0 ANSI: 2
+scsi 5:0:0:0: Direct-Access     HUAWEI   MMC Storage      2.31 PQ: 0 ANSI: 2
+usb-storage: device scan complete
+sd 5:0:0:0: Attached scsi removable disk sda
+usb-storage: device scan complete
 
-You also have the comment related to 1.2.x in the patch itself.
+there is no symlink for /sys/class/tty/ttyUSB0, so I guess this 
+indicates that there is a missing driver, but which one? I have also 
+tried doing the following
 
-Best regards,
+modprobe usbserial vendor=0x12d1 product=0x1446
 
-Thomas
+but it makes no difference.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Adeel Ahmed Nafis
+Design Engineer
+LINKWISE TECHNOLOGY PTE LTD
+Blk 3 Ang Mo Kio Industrial Park 2A
+#06-08, AMK TECH 1
+Singapore 568050
