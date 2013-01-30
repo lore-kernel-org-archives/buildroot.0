@@ -1,55 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Jan 2013 15:49:33 +0100
-Subject: [Buildroot] [PATCH 2/7] package/pmake: add host pmake
-In-Reply-To: <201301301534.41339.yann.morin.1998@free.fr>
-References: <cover.1359498504.git.yann.morin.1998@free.fr>
- <201301301413.13408.yann.morin.1998@free.fr>
- <20130130142442.3803d2bc@skate>
- <201301301534.41339.yann.morin.1998@free.fr>
-Message-ID: <20130130154933.419b91f2@skate>
+From: Emmanuel BOUAZIZ <ebouaziz@neotion.com>
+Date: Wed, 30 Jan 2013 15:48:05 +0100
+Subject: [Buildroot] [git commit] busybox: add 1.19.4 / 1.20.2 fixes
+In-Reply-To: <20120904110844.1439997180@busybox.osuosl.org>
+References: <20120904110844.1439997180@busybox.osuosl.org>
+Message-ID: <510932A5.4080303@neotion.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
 
-On Wed, 30 Jan 2013 15:34:41 +0100, Yann E. MORIN wrote:
 
-> Unfortunately, for pmake, the Debian "patch" does not come as a patch,
-> but as a tarball to be extracted in the pmake source dir. So, using:
+On 09/04/2012 01:08 PM, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=9ec1c5d9d31b4f377c91a0451efd3ba67416d6f8
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
->     PMAKE_DEB_VER = -3.2-debian
->     PMAKE_PATCH   = pmake_$(PMAKE_VERSION)$(PMAKE_DEB_VER).tar.gz
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+>  .../busybox-1.19.4/busybox-1.19.4-udhcp.patch      |  164 ++++++++++++++++++++
+>  .../busybox-1.20.2/busybox-1.20.2-kernel_ver.patch |   25 +++
+>  2 files changed, 189 insertions(+), 0 deletions(-)
 > 
-> will not work, as this is not a patch. :-(
+> diff --git a/package/busybox/busybox-1.19.4/busybox-1.19.4-udhcp.patch b/package/busybox/busybox-1.19.4/busybox-1.19.4-udhcp.patch
+> new file mode 100644
+> index 0000000..94d5f34
+> --- /dev/null
+> +++ b/package/busybox/busybox-1.19.4/busybox-1.19.4-udhcp.patch
 
-Argh, indeed. Those Debian people are really crazy. For some packages
-they have a .orig.tar.gz + a .diff.gz that applies as a patch on top of
-it, and for some other packages they have the .orig.tar.gz + a tarball
-with the Debian specific files. What a mess...
+> [...]
 
-What about:
+> + //TODO: must be combined with 'sname' and 'file' handling:
+> +-	{ OPTION_STRING                           , 0x42 }, /* DHCP_TFTP_SERVER_NAME */
+> ++	{ OPTION_STRING_HOST                      , 0x42 }, /* DHCP_TFTP_SERVER_NAME */
+> + 	{ OPTION_STRING                           , 0x43 }, /* DHCP_BOOT_FILE     */
 
- PMAKE_PATCH = \
-   http://patch-tracker.debian.org/patch/series/dl/pmake/1.111-3.2/100_mk.diff \
-   http://patch-tracker.debian.org/patch/series/dl/pmake/1.111-3.2/110_mkdep.diff \
-   http://patch-tracker.debian.org/patch/series/dl/pmake/1.111-3.2/120_fixes.diff \
-   http://patch-tracker.debian.org/patch/series/dl/pmake/1.111-3.2/130_maxpathlen.diff \
-   http://patch-tracker.debian.org/patch/series/dl/pmake/1.111-3.2/140_multiarch.diff \
-   http://patch-tracker.debian.org/patch/series/dl/pmake/1.111-3.2/150_mktemp.diff
+> [...]
+> 
 
-Note that this requires the possibility of getting patches from a
-different site than the tarball, but J?r?me Pouiller has submitted a
-patch that makes this possible, see "[PATCH] Add support for plain URL
-in $(PKG)_PATCH variable".
+Hi,
 
-Best regards,
+I don't know what this patch is for, but it breaks the TFTP_SERVER_NAME option for me. The $tftp variable now contains
+"bad" instead or the TFTP server name (I use it in udhcpc.script). When I remove the patch, it works fine again.
 
-Thomas
+regards,
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Emmanuel
