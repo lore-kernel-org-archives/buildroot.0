@@ -1,54 +1,62 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 30 Jan 2013 23:37:42 +0100
-Subject: [Buildroot] [PATCH] Add support for plain URL in $(PKG)_PATCH
-	variable
-In-Reply-To: <1359585462-1314-1-git-send-email-jezz@sysmic.org>
-References: <201301302023.59219.yann.morin.1998@free.fr>
- <1359585462-1314-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1359585462-1314-2-git-send-email-jezz@sysmic.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 30 Jan 2013 23:43:21 +0100
+Subject: [Buildroot] [PATCH 2/7] package/pmake: add host pmake
+In-Reply-To: <20130130233222.54f9173e@skate>
+References: <cover.1359498504.git.yann.morin.1998@free.fr>
+ <5109509F.50404@mind.be> <20130130233222.54f9173e@skate>
+Message-ID: <201301302343.22202.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, $(PKG)_PATCH allow only to download patches from same URL than tarball.
-This patch allow to detect when plain URL are used in $(PKG)_PATCH and correctly
-handle them.
+Thomas, Arnout, All,
 
-Downloaded patches are named $(PKG_NAME)-$(PKG_VERSION)-$(PKG_PATCH_FILENAME).patch
+On Wednesday 30 January 2013 Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
+> 
+> On Wed, 30 Jan 2013 17:55:59 +0100, Arnout Vandecappelle wrote:
+> 
+> >   Doesn't it?  It seems to work for liblockfile...
+> 
+> Does it really work properly?
+> 
+> In the past, a tarball was directly fed into patch, which was finding
+> some patch contents and that's it. Since then, the apply-patches.sh
+> script has been reworked to properly apply the patches within a
+> tarball, but I don't think it applies patches that are contained in
+> a debian/patches/ directory.
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/pkg-generic.mk |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Ah, I missed that. Indeed it works.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b0eca0a..0afa72d 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -40,7 +40,12 @@ ifeq ($(DL_MODE),DOWNLOAD)
- 	fi
- endif
- 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE)/$($(PKG)_SOURCE)))
--	$(foreach p,$($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE)/$(p))$(sep))
-+	$(foreach p,$($(PKG)_PATCH),\
-+		$(if $(findstring ://,$(p)),\
-+			$(call DOWNLOAD,$(p),$($(PKG)_NAME)-$($(PKG)_VERSION)-$(basename $(notdir $(p)).patch)),\
-+			$(call DOWNLOAD,$($(PKG)_SITE)/$(p))\
-+		)\
-+	$(sep))
- 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- ifeq ($(DL_MODE),DOWNLOAD)
- 	$(Q)mkdir -p $(@D)
-@@ -85,7 +90,7 @@ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
- $(BUILD_DIR)/%/.stamp_patched:
- 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
- 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
--	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(p)$(sep))
-+	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(notdir $(p))$(sep))
- 	$(Q)( \
- 	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
- 	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
+What happens (eek! apply-patches.sh is hard to read) is that, if a patch
+is neamd like a tarball, it is extracted in a temp dir, and that temp dir
+is scanned as if it was passed as arg to apply-patches.sh:
+
+---8<---
+elif echo "$i" | grep -q -E "\.tar(\..*)?$|\.tbz2?$|\.tgz$" ; then
+    unpackedarchivedir="$builddir/.patches-$(basename $i)-unpacked"
+    rm -rf "$unpackedarchivedir" 2> /dev/null
+    mkdir "$unpackedarchivedir"
+    tar -C "$unpackedarchivedir" -xaf "${path}/$i"
+    scan_patchdir "$unpackedarchivedir"
+---8<---
+
+So, yes, it works. Yet, I still find it a bit ugly (but less so than I
+initially suspected). And it is not documented.
+
+Should this be considered a feature? Can we rely on it?
+
+If so, then I'll update the doc accordingly.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.9.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
