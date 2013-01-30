@@ -1,34 +1,54 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 30 Jan 2013 23:37:41 +0100
+Date: Wed, 30 Jan 2013 23:37:42 +0100
 Subject: [Buildroot] [PATCH] Add support for plain URL in $(PKG)_PATCH
 	variable
-In-Reply-To: <201301302023.59219.yann.morin.1998@free.fr>
+In-Reply-To: <1359585462-1314-1-git-send-email-jezz@sysmic.org>
 References: <201301302023.59219.yann.morin.1998@free.fr>
-Message-ID: <1359585462-1314-1-git-send-email-jezz@sysmic.org>
+ <1359585462-1314-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1359585462-1314-2-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Until now, $(PKG)_PATCH allow only to download patches from same URL than tarball.
+This patch allow to detect when plain URL are used in $(PKG)_PATCH and correctly
+handle them.
 
-On Wednesday 30 January 2013 20:23:58 Yann E. MORIN wrote:
-[...]
-> In case one uses a custom directory to store all downloaded files (eg. I
-> use "${HOME}/src" so I don't have to download them again and again), this
-> directory gets cluttered with many files that are difficult to link to
-> the package they apply to.
-> 
-> It gets even worse with this change.
-> 
-> What about saving the patches to a file named thus:
->    $(PKG_NAME)-$(PKG_VERSION)-$(PKG_PATCH_FILENAME).patches
-Sure!
+Downloaded patches are named $(PKG_NAME)-$(PKG_VERSION)-$(PKG_PATCH_FILENAME).patch
 
-Patch follows, Looks doing the job. Nevertheless, I begin to found this feature a 
-little difficult to read (euphemism...). Someone has an opinion about coding 
-style?
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/pkg-generic.mk |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b0eca0a..0afa72d 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -40,7 +40,12 @@ ifeq ($(DL_MODE),DOWNLOAD)
+ 	fi
+ endif
+ 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE)/$($(PKG)_SOURCE)))
+-	$(foreach p,$($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE)/$(p))$(sep))
++	$(foreach p,$($(PKG)_PATCH),\
++		$(if $(findstring ://,$(p)),\
++			$(call DOWNLOAD,$(p),$($(PKG)_NAME)-$($(PKG)_VERSION)-$(basename $(notdir $(p)).patch)),\
++			$(call DOWNLOAD,$($(PKG)_SITE)/$(p))\
++		)\
++	$(sep))
+ 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ ifeq ($(DL_MODE),DOWNLOAD)
+ 	$(Q)mkdir -p $(@D)
+@@ -85,7 +90,7 @@ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
+ 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+-	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(p)$(sep))
++	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(notdir $(p))$(sep))
+ 	$(Q)( \
+ 	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
+ 	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
 -- 
-J?r?me Pouiller
+1.7.9.5
