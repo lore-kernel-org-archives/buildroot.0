@@ -1,36 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 30 Jan 2013 14:20:43 +0200
-Subject: [Buildroot] [PATCH] wireshark: new package
-In-Reply-To: <51090847.2040208@zacarias.com.ar>
-References: <9b4fd5a7c061d1912a23865e2cd2bbfe9cef6390.1359524462.git.baruch@tkos.co.il>
- <51090847.2040208@zacarias.com.ar>
-Message-ID: <20130130122042.GC12106@sapphire.tkos.co.il>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Wed, 30 Jan 2013 14:31:15 +0200
+Subject: [Buildroot] [PATCH v3] pkg-infra: add <pkg>_CONFIG_FIXUP to fix
+ *-config files
+In-Reply-To: <51080BF1.3020009@mind.be>
+References: <1359402723-5603-1-git-send-email-stefan.froberg@petroprogram.com>
+ <CAHXCMMK69aYc=Hebivu1wPJOn0CXMn9SHQCA=-G4_JAdaw5Sjg@mail.gmail.com>
+ <51080BF1.3020009@mind.be>
+Message-ID: <51091293.1010108@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+29.1.2013 19:50, Arnout Vandecappelle kirjoitti:
+> On 29/01/13 08:14, Samuel Martin wrote:
+>>> >+                       $(SED) 
+>>> "s,^\(exec_\)\?prefix=.*,\1prefix=$(STAGING_DIR)/usr,g" \
+>>> >+                               -e "s,-I/usr/,-I\${prefix}/usr/,g" \
+>>> >+                               -e
+>>> "s,-L/usr/,-L\${exec_prefix}/usr/,g" \
+>> Well, just fixing the (exec_)?prefix may not be enough in some case:
+>> Some quick grepping in the package directory will show that includedir
+>> and libdir should be fixed as well.
+>
+>  I wouldn't want to do too much in the generic fixup script.
+>
+>  In fact, the -L substitution is not necessarily correct - some config
+> scripts may not define ${exec_prefix}. I'd rather use $(STAGING_DIR)
+> explicitly.
+>
+>  BTW, Stefan: the $ should have been quoted ($$).
+>
+>  Regards,
+>  Arnout
+>
 
-On Wed, Jan 30, 2013 at 08:47:19AM -0300, Gustavo Zacarias wrote:
-> On 01/30/2013 02:42 AM, Baruch Siach wrote:
-> > +WIRESHARK_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
-> 
-> I need ac_cv_path_PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config in
-> CONF_ENV also. That's because configure is finding /usr/bin/pcap-config
-> from my distribution before the staging one.
-> And also the exec_prefix/prefix fixups in
-> $(STAGING_DIR)/usr/bin/pcap-config since they point to /usr (the usual
-> way in libpcap or Stefan's patch for the nice fixup).
-> With these tweaks it builds nicely.
-> Also might be worth to bump (again!) to 1.8.5 a security release.
+So like this ?
 
-Thanks for testing. I'll updated the patch an resend.
+-e 's,-I/usr/,-I$$(STAGING_DIR)/usr/,g" \
+-e 's,-L/usr/,-L$$(STAGING_DIR)/usr/,g" \
 
-baruch
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+
+I make one final v4 of that for FOSDEM then and that's that.
+
+Regards
+Stefan
