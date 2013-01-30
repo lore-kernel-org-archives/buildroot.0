@@ -1,69 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 30 Jan 2013 07:25:46 -0300
-Subject: [Buildroot] [PATCH] pcsc-lite: requires mmu
-Message-ID: <1359541546-32281-1-git-send-email-gustavo@zacarias.com.ar>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Wed, 30 Jan 2013 11:41:40 +0100
+Subject: [Buildroot] Linux and busybox-configfiles
+In-Reply-To: <f05257cb-b9a4-405c-8e3d-90a0bb017206@zimbra2.corp.accelance.fr>
+References: <f05257cb-b9a4-405c-8e3d-90a0bb017206@zimbra2.corp.accelance.fr>
+Message-ID: <5108F8E4.2010404@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/14400ae2c9e312729efa9a9026b5fdd487868c8a/
+Am 30.01.2013 11:01, schrieb Jeremy Rosen:
+>>   But the problem is that the buildroot configuration conflicts with
+>>   the
+>> kernel configuration.
+>>
+>>
+>>   Regards,
+>>   Arnout
+>>
+>
+> aha....
+>
+> so our problem is that make linux-menuconfig should change the buildroot configuration option from "use defconfig" to "use a custom configuration"
+>
+> is that it ?
+I don't think so. If we regard the buildroot configuration option more
+as a starting point for configuring busybox and linux than as the actual
+used value, we are right there:
 
-Also add license information while at it.
+After "make xxx_defconfig" we have the default configuration.
+"make xxx-menuconfig" takes us to a temporary "work in progress" point,
+where our system no longer matches the default configuration but is
+defined by .config, busybox-config and linux-config.
+"make xxx_defconfig && make clean" discards all changes and restores the
+default configuration.
+"make xxx-update-config" updates the config file named in buildroot's
+config file constituting a new default.
+"make savedefconfig && cp defconfig configs/xxx_defconfig" does the same
+for the changes in buildroot's config file.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ccid/Config.in         | 1 +
- package/pcsc-lite/Config.in    | 1 +
- package/pcsc-lite/pcsc-lite.mk | 5 ++++-
- 3 files changed, 6 insertions(+), 1 deletion(-)
+Maybe it makes sense to change some names?
 
-diff --git a/package/ccid/Config.in b/package/ccid/Config.in
-index c9b77d1..c85a71c 100644
---- a/package/ccid/Config.in
-+++ b/package/ccid/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_CCID
- 	select BR2_PACKAGE_PCSC_LITE
- 	select BR2_PACKAGE_LIBUSB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	depends on BR2_USE_MMU # pcsc-lite
- 	help
- 	  PC/SC driver for USB CCID smart card readers
- 
-diff --git a/package/pcsc-lite/Config.in b/package/pcsc-lite/Config.in
-index 621cc66..d6629d0 100644
---- a/package/pcsc-lite/Config.in
-+++ b/package/pcsc-lite/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PCSC_LITE
- 	bool "pcsc-lite"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Middleware to access smart card using SCard API (PC/SC).
- 
-diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
-index d1d7691..e1def7c 100644
---- a/package/pcsc-lite/pcsc-lite.mk
-+++ b/package/pcsc-lite/pcsc-lite.mk
-@@ -2,12 +2,15 @@
- #
- # PCSC-Lite
- #
--# ########################################################
-+#########################################################
-+
- PCSC_LITE_VERSION = 1.8.6
- PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
- PCSC_LITE_SITE = http://alioth.debian.org/frs/download.php/3757
- PCSC_LITE_INSTALL_STAGING = YES
- PCSC_LITE_DEPENDENCIES = host-pkgconf
-+PCSC_LITE_LICENSE = BSD-3c
-+PCSC_LITE_LICENSE_FILES = COPYING
- 
- # - libudev and libusb are optional
- # - libudev and libusb can't be used together
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE -> BR2_LINUX_KERNEL_DEFAULT_CONFIG_FILE
+BR2_PACKAGE_BUSYBOX_CONFIG -> BR2_PACKAGE_BUSYBOX_DEFAULT_CONFIG
+
+Regards
+
+Stephan
+
 -- 
-1.7.12.4
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
