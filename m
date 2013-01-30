@@ -1,34 +1,104 @@
-From: Vikram Kerkar <vikramkerkar@gmail.com>
-Date: Wed, 30 Jan 2013 17:33:21 +0530
-Subject: [Buildroot] Netplug daemon Problem
-Message-ID: <CAKDF3SF2VGStrdaQDeo5wg=dtX1n=bJt834Sgqs1s-4qQpDrYA@mail.gmail.com>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Wed, 30 Jan 2013 14:19:42 +0200
+Subject: [Buildroot] can not open ttyUSB0
+In-Reply-To: <5108BD5B.3050001@linkwisetech.com>
+References: <mailman.83813.1359524634.32592.buildroot@busybox.net>
+ <5108BD5B.3050001@linkwisetech.com>
+Message-ID: <51090FDE.7060809@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Adeel
 
-Recently I have upgraded buildroot version to 'Buildroot-2012.11.1' on my
-device (AT91SAM9260).
-I have noticed that I am getting some network related problem.
-PROBLEM :
-      When I remove the ethernet jack and re-insert it, device is not able
-to bring up the network, and hence no IP address.
-      But at boot time, if ethernet cable is connected to device, it gets
-IP address.
+30.1.2013 8:27, Adeel Nafis kirjoitti:
+> Dear All,
+> I have a kit2416 (http://www.armdesigner.com/KIT2416.html) module with
+> Samsung ARM926EJS*. *I have configured buildroot with static device
+> table, and added the ttyUSB0,1,2,3 to with major 188 and minor 0,1,2,3
+> to the file.
+> I also added the line to /etc/fstab
+>
+> none    /dev/bus/usb    usbfs    defaults,devmode=0666    0    0
+>
+> After attaching a 3G Modem USB  I am able to successfully use
+> 'usb_modeswitch" and get the device to switch with messages indicating
+> that the device is connected to /dev/ttyUSB0,1,2. However, after this
+> I can not open the /dev/ttyUSBx any more. If i use gnokii for arm it
+> prints out some messages indicating that it failed to open the port.
+>
+> Gnokii output
+> GNOKII Version 0.6.26
+> Gnokii serial_open: open: No such device        <----- the port here
+> is set to /dev/ttyUSB0
+> Couldn't open ATBUS device: No such device
+> Telephone interface init failed: Command failed.
+> Quitting.
+> Cannot unlock device.
+> Command failed.
+>
+> I have tested the thing out with Ubuntu for arm on the same platform
+> and can verify that it works.
+>
+> If I do `cat /dev/bus/usb/devices` output is
+> # cat /dev/bus/usb/devices
+>
+> T:  Bus=01 Lev=00 Prnt=00 Port=00 Cnt=00 Dev#=  1 Spd=12  MxCh= 2
+> B:  Alloc=  0/900 us ( 0%), #Int=  0, #Iso=  0
+> D:  Ver= 1.10 Cls=09(hub  ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=0000 ProdID=0000 Rev= 2.06
+> S:  Manufacturer=Linux 2.6.21.5-cfs-v19 ohci_hcd
+> S:  Product=S3C24XX OHCI
+> S:  SerialNumber=s3c24xx
+> C:* #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=  0mA
+> I:* If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=00 Driver=hub
+> E:  Ad=81(I) Atr=03(Int.) MxPS=   2 Ivl=255ms
+>
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=12  MxCh= 0
+> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=12d1 ProdID=1446 Rev= 0.00
+> S:  Manufacturer=HUAWEI Technology
+> S:  Product=HUAWEI Mobile
+> S:  SerialNumber=1234567890ABCDEF
+> C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=500mA
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=(none)
+> E:  Ad=81(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=usb-storage
+> E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+>
+>
+> Any pointers?
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-As far as I can think, this problem is related to Netplug daemon.
-Netplug version in my buildroot is 'netplug-1.2.9.2'
+If I remember correctly those Huawei modems (I had one once) detect
+allright at the boot but then they switch to usb storage because all(?)
+3G modems have some memory reserved
+to work as regular USB stick (all "CD-ROM" in windows).
 
-Really looking for your reply,
-Thanks in advance.
+So it might be that your modem detected ok at boot but then immediately
+switched to that storage mode and you have to switch it back by playing
+with usb_modeswitch
+command parameters.
 
--- 
-Regards,
-*Vikram Kerkar*
-Pune
+There is a meniton of that in "Troubleshooting, Kernel related issues"
+in usb_modeswitch makers pages:
+
+http://www.draisberghof.de/usb_modeswitch/#trouble
+
+Regards
+Stefan
+
+
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130130/91ccf732/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130130/2f989222/attachment.html>
