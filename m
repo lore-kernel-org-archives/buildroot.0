@@ -1,22 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 31 Jan 2013 14:09:48 +0100
-Subject: [Buildroot] [PATCH] ebtables: needs MMU
-In-Reply-To: <2421772085e9da9e5df5944b3f8ddbb581413052.1359532928.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 30 Jan 2013 10:02:59 +0200")
-References: <2421772085e9da9e5df5944b3f8ddbb581413052.1359532928.git.baruch@tkos.co.il>
-Message-ID: <87sj5h8pnn.fsf@dell.be.48ers.dk>
+Date: Thu, 31 Jan 2013 14:14:08 +0100
+Subject: [Buildroot] [PATCH] cjson: change source to svn repo
+In-Reply-To: <1359602797-4498-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Wed, 30 Jan 2013 22:26:37 -0500")
+References: <1359602797-4498-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <87k3qt8pgf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
- Baruch> Fixes:
- Baruch> http://autobuild.buildroot.net/results/201f8d3d58cdff0c3501a673003558103237fb22/
+ Danomi> The original cJSON submittal downloaded a .zip file from SourceForge.
+ Danomi> The .zip file did not have a version number, making it impossible
+ Danomi> to gaurantee that the same archive is downloaded on any given build.
+ Danomi> It also required a custom EXTRACT command.
 
-Committed, thanks.
+ Danomi> This patch changes the source for cJSON to the svn repository
+ Danomi> listed on the sf project web page - giving us an actual version
+ Danomi> number, and letting us use buildroot's normal extraction
+ Danomi> functionality.
+
+Looks good, but you forgot your signed-off-by. Can I add it, please?
 
 -- 
 Bye, Peter Korsgaard
