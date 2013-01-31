@@ -1,85 +1,96 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 25 Feb 2013 20:34:08 +0100
-Subject: [Buildroot] [git commit] nmap: new package
-Message-ID: <20130301101145.6123C9AACA@busybox.osuosl.org>
+From: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Fri,  1 Feb 2013 03:48:36 +0800
+Subject: [Buildroot] [PATCH 1/1] kernel: add support for building kernel
+	companied userspace tools
+Message-ID: <1359661716-18081-1-git-send-email-roylee17@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=06b3e4c50d8c110f8b905f133afa31739d7817fd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Change-Id: I66bdceb3cd76bb69b069b5bd8064e59a67374521
+Signed-off-by: Tzu-Jung Lee <roylee17@gmail.com>
 ---
- package/Config.in      |    1 +
- package/nmap/Config.in |   16 ++++++++++++++++
- package/nmap/nmap.mk   |   24 ++++++++++++++++++++++++
- 3 files changed, 41 insertions(+), 0 deletions(-)
+ linux/Config.in       |  3 +++
+ linux/Config.tools.in | 15 +++++++++++++++
+ linux/linux-tools.mk  | 19 +++++++++++++++++++
+ linux/linux.mk        |  1 +
+ 4 files changed, 38 insertions(+)
+ create mode 100644 linux/Config.tools.in
+ create mode 100644 linux/linux-tools.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 882d3c0..e96b58f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -677,6 +677,7 @@ source "package/netsnmp/Config.in"
- source "package/netstat-nat/Config.in"
- source "package/network-manager/Config.in"
- source "package/nfacct/Config.in"
-+source "package/nmap/Config.in"
- source "package/noip/Config.in"
- source "package/ngircd/Config.in"
- source "package/ngrep/Config.in"
-diff --git a/package/nmap/Config.in b/package/nmap/Config.in
+diff --git a/linux/Config.in b/linux/Config.in
+index 175a999..19ff356 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -288,6 +288,9 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
+ # Linux extensions
+ source "linux/Config.ext.in"
+ 
++# Linux userspace tools
++source "linux/Config.tools.in"
++
+ endif # BR2_LINUX_KERNEL
+ 
+ endmenu
+diff --git a/linux/Config.tools.in b/linux/Config.tools.in
 new file mode 100644
-index 0000000..be1be33
+index 0000000..9fd3ac4
 --- /dev/null
-+++ b/package/nmap/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_NMAP
-+	bool "nmap"
-+	depends on BR2_INET_IPV6
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBPCAP
-+	select BR2_PACKAGE_PCRE
++++ b/linux/Config.tools.in
+@@ -0,0 +1,15 @@
++#menu BR2_LINUX_KERNEL_TOOLS
++menu "Linux Kernel Userspace Tools"
++
++# Perf
++config BR2_LINUX_KERNEL_TOOLS_PERF
++	bool "Build Performance analysis tools for Linux"
++	default n
++	select BR2_PACKAGE_LIBELF
 +	help
-+	  Nmap ("Network Mapper") is a free and open source (license)
-+	  utility for network discovery and security auditing.
-+
-+	  http://nmap.org
-+
-+comment "nmap requires a toolchain with C++, IPV6 and thread support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
++	  Performance counters for Linux are a new kernel-based
++	  subsystem that provide a framework for all things
++	  performance analysis.  It covers hardware level (CPU/PMU,
++	  Performance Monitoring Unit) features and software features
++	  (software counters, tracepoints) as well.
++endmenu
+diff --git a/linux/linux-tools.mk b/linux/linux-tools.mk
 new file mode 100644
-index 0000000..a5b085d
+index 0000000..6499dd7
 --- /dev/null
-+++ b/package/nmap/nmap.mk
-@@ -0,0 +1,24 @@
-+#############################################################
-+#
-+# nmap
-+#
-+#############################################################
++++ b/linux/linux-tools.mk
+@@ -0,0 +1,19 @@
++define LINUX_BUILD_KERNEL_TOOLS_PERF
++	@$(call MESSAGE,"Building Kernel Tools - Perf")
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D)/tools/perf \
++		prefix=$(TARGET_DIR)/usr
++endef
 +
-+NMAP_VERSION = 6.01
-+NMAP_SITE = http://nmap.org/dist
-+NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
-+NMAP_DEPENDENCIES = libpcap pcre
-+NMAP_CONF_OPT = --without-liblua --without-zenmap \
-+	--with-libdnet=included --with-liblinear=included \
-+	--with-libpcre="$(STAGING_DIR)/usr"
-+NMAP_LICENSE = GPLv2
-+NMAP_LICENSE_FILES = COPYING
++define LINUX_INSTALL_KERNEL_TOOLS_PERF
++	@$(call MESSAGE,"Installing Kernel Tools - Perf")
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D)/tools/perf \
++		prefix=$(TARGET_DIR)/usr install
++endef
 +
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+NMAP_CONF_OPT += --with-openssl="$(STAGING_DIR)/usr"
-+NMAP_DEPENDENCIES += openssl
-+else
-+NMAP_CONF_OPT += --without-openssl
++ifeq ($(BR2_LINUX_KERNEL_TOOLS_PERF),y)
++LINUX_BUILD_KERNEL_TOOLS	+= LINUX_BUILD_KERNEL_TOOLS_PERF
++LINUX_INSTALL_KERNEL_TOOLS	+= LINUX_INSTALL_KERNEL_TOOLS_PERF
 +endif
 +
-+$(eval $(autotools-package))
++LINUX_POST_BUILD_HOOKS		+= $(LINUX_BUILD_KERNEL_TOOLS)
++LINUX_POST_INSTALL_TARGET_HOOKS	+= $(LINUX_INSTALL_KERNEL_TOOLS)
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 91a9f50..95bf4a5 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -265,6 +265,7 @@ define LINUX_INSTALL_TARGET_CMDS
+ endef
+ 
+ include linux/linux-ext-*.mk
++include linux/linux-tools.mk
+ 
+ $(eval $(generic-package))
+ 
+-- 
+1.8.1
