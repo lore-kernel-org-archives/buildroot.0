@@ -1,36 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jan 2013 12:52:34 +0100
-Subject: [Buildroot] Problem build haserl with lua support
-In-Reply-To: <1359630353.9888.41.camel@john-ubu>
-References: <1359630353.9888.41.camel@john-ubu>
-Message-ID: <20130131125234.166475a7@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 31 Jan 2013 14:10:04 +0100
+Subject: [Buildroot] [PATCH] pcsc-lite: requires mmu
+In-Reply-To: <1359541546-32281-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 30 Jan 2013 07:25:46 -0300")
+References: <1359541546-32281-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87obg58pn7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear john,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Thu, 31 Jan 2013 11:05:53 +0000, john wrote:
-> Hi,
-> 
-> I'm using Buildroot 2012.05 and am trying to configure haserl v0.9.X
-> with lua support. I select the lua intrepreter and have not selected lua
-> library modules.
+ Gustavo> Fixes:
+ Gustavo> http://autobuild.buildroot.net/results/14400ae2c9e312729efa9a9026b5fdd487868c8a/
 
-You may want to update your Buildroot version, because I think the
-problem have been fixed:
+Committed, thanks.
 
-https://bugs.busybox.net/show_bug.cgi?id=5354
-
-See commit 684f208ec 'lua: don't be fancy when creating shared library'.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
