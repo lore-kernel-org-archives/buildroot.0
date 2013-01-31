@@ -1,87 +1,45 @@
-From: Nicolas Dechesne <ndec13@gmail.com>
-Date: Thu, 31 Jan 2013 22:00:48 +0100
-Subject: [Buildroot] Pandaboard ethernet
-In-Reply-To: <CAGm1_kskvCZ771WMWZj5pLuJugQQEvoBcp9695Oyq5e-Ly7uWQ@mail.gmail.com>
-References: <510A2BC5.6000905@gmail.com>
- <CAGm1_kso1_L721ApeLnq2rhCGb5UQvr9cCp3ELS4qHFGBhJ90A@mail.gmail.com>
- <CAAfyv35nz3YqwTOK905zKGR9zBMUUo-yjX4coiJ9UZCTAGeMPw@mail.gmail.com>
- <510A3F16.4000400@gmail.com>
- <CAGm1_kskvCZ771WMWZj5pLuJugQQEvoBcp9695Oyq5e-Ly7uWQ@mail.gmail.com>
-Message-ID: <CAOT3mi+rqNF5mp=N7Gb5is2SfEXvJ4gVsUm6KtwX5zeJit=7EA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 Jan 2013 23:53:26 +0100
+Subject: [Buildroot] [PATCH 1/1] kernel: add support for building kernel
+ companied userspace tools
+In-Reply-To: <1359661716-18081-1-git-send-email-roylee17@gmail.com>
+References: <1359661716-18081-1-git-send-email-roylee17@gmail.com>
+Message-ID: <20130131235326.0ff65241@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-you probably need to enable EHCI too which is not enabled by default
+Dear Tzu-Jung Lee,
 
-+CONFIG_USB_EHCI_HCD_OMAP=y
+On Fri,  1 Feb 2013 03:48:36 +0800, Tzu-Jung Lee wrote:
 
+> +config BR2_LINUX_KERNEL_TOOLS_PERF
+> +	bool "Build Performance analysis tools for Linux"
+> +	default n
+> +	select BR2_PACKAGE_LIBELF
+> +	help
+> +	  Performance counters for Linux are a new kernel-based
+> +	  subsystem that provide a framework for all things
+> +	  performance analysis.  It covers hardware level (CPU/PMU,
+> +	  Performance Monitoring Unit) features and software features
+> +	  (software counters, tracepoints) as well.
 
-On Thu, Jan 31, 2013 at 11:44 AM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> Please provide complete dmesg and ifconfig -a outputs (for both Ubuntu
-> and BR). Please use http://pastebin.com/ for logs.
->
-> Yegor
->
-> On Thu, Jan 31, 2013 at 10:53 AM, Gerald <gerald.radix@gmail.com> wrote:
->> CONFIG_USB_NET_SMSC95XX=y in output/build/linux-3.6.8
->>
->> and the network works if i use ubuntu distrib...
->>
->>
->>
->>
->> Le 31/01/2013 09:52, Belisko Marek a ?crit :
->>>
->>> On Thu, Jan 31, 2013 at 9:43 AM, Yegor Yefremov
->>>
->>> <yegorslists@googlemail.com>  wrote:
->>>
->>>>
->>>> On Thu, Jan 31, 2013 at 9:31 AM, Gerald<gerald.radix@gmail.com>  wrote:
->>>>
->>>>>
->>>>> With Buildroot 2011.11.1, i use the  setting of pandaboard config, but i
->>>>> have no ethernet :
->>>>>
->>>>> ifconfig eth0 up :
->>>>> SIOCGIFFLAGS: No such device.
->>>>>
->>>>> What is the driver of ethernet pandaboard and how-to use it ?
->>>>>
->>>>
->>>> Just activate CONFIG_USB_NET_SMSC95XX and then post output of ifconfig:
->>>>
->>>
->>> Hmm BT 2011.1.1 using kernel 3.6.8 and in omap2plus_defconfig is in
->>> this veriosion:
->>> CONFIG_USB_NET_SMSC95XX=y so it should be enabled. Maybe HW problem?
->>>
->>>>
->>>> ifconfig -a
->>>>
->>>> Yegor
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at busybox.net
->>>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>>
->>>
->>> Cheers,
->>>
->>> mbe
->>>
->>>
->>
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thanks, but we already have a perf package. See package/perf/ in the
+current Git version of Buildroot (it isn't part of the latest stable
+2012.11 release, but it will be part of 2013.02).
+
+See http://git.buildroot.net/buildroot/tree/package/perf.
+
+If it somehow doesn't work for you, do not hesitate to report issues,
+we'll try to fix them.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
