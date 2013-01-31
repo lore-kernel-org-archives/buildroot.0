@@ -1,46 +1,87 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Thu, 31 Jan 2013 17:41:14 +0100
-Subject: [Buildroot] [PATCH] Clean kernel when "make linux-clean" is
-	called
-In-Reply-To: <1354886413-28939-1-git-send-email-sho@relinux.de>
-References: <20120827210633.608e9bfe@skate>
- <1354886413-28939-1-git-send-email-sho@relinux.de>
-Message-ID: <510A9EAA.5050907@relinux.de>
+From: Nicolas Dechesne <ndec13@gmail.com>
+Date: Thu, 31 Jan 2013 22:00:48 +0100
+Subject: [Buildroot] Pandaboard ethernet
+In-Reply-To: <CAGm1_kskvCZ771WMWZj5pLuJugQQEvoBcp9695Oyq5e-Ly7uWQ@mail.gmail.com>
+References: <510A2BC5.6000905@gmail.com>
+ <CAGm1_kso1_L721ApeLnq2rhCGb5UQvr9cCp3ELS4qHFGBhJ90A@mail.gmail.com>
+ <CAAfyv35nz3YqwTOK905zKGR9zBMUUo-yjX4coiJ9UZCTAGeMPw@mail.gmail.com>
+ <510A3F16.4000400@gmail.com>
+ <CAGm1_kskvCZ771WMWZj5pLuJugQQEvoBcp9695Oyq5e-Ly7uWQ@mail.gmail.com>
+Message-ID: <CAOT3mi+rqNF5mp=N7Gb5is2SfEXvJ4gVsUm6KtwX5zeJit=7EA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ping
-Am 07.12.2012 14:20, schrieb Stephan Hoffmann:
-> When "make linux-clean" is typed one expects that the kernel tree
-> gets cleaned. Before this patch, only the stamp files had been
-> removed.
->
-> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
-> ---
->  linux/linux.mk |    3 +++
->  1 files changed, 3 insertions(+), 0 deletions(-)
->
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index c4bdf90..e517d1d 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -221,6 +221,9 @@ define LINUX_BUILD_CMDS
->  	$(LINUX_APPEND_DTB)
->  endef
->  
-> +define LINUX_CLEAN_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) clean
-> +endef
->  
->  ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
->  define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
+you probably need to enable EHCI too which is not enabled by default
+
++CONFIG_USB_EHCI_HCD_OMAP=y
 
 
--- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+On Thu, Jan 31, 2013 at 11:44 AM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> Please provide complete dmesg and ifconfig -a outputs (for both Ubuntu
+> and BR). Please use http://pastebin.com/ for logs.
+>
+> Yegor
+>
+> On Thu, Jan 31, 2013 at 10:53 AM, Gerald <gerald.radix@gmail.com> wrote:
+>> CONFIG_USB_NET_SMSC95XX=y in output/build/linux-3.6.8
+>>
+>> and the network works if i use ubuntu distrib...
+>>
+>>
+>>
+>>
+>> Le 31/01/2013 09:52, Belisko Marek a ?crit :
+>>>
+>>> On Thu, Jan 31, 2013 at 9:43 AM, Yegor Yefremov
+>>>
+>>> <yegorslists@googlemail.com>  wrote:
+>>>
+>>>>
+>>>> On Thu, Jan 31, 2013 at 9:31 AM, Gerald<gerald.radix@gmail.com>  wrote:
+>>>>
+>>>>>
+>>>>> With Buildroot 2011.11.1, i use the  setting of pandaboard config, but i
+>>>>> have no ethernet :
+>>>>>
+>>>>> ifconfig eth0 up :
+>>>>> SIOCGIFFLAGS: No such device.
+>>>>>
+>>>>> What is the driver of ethernet pandaboard and how-to use it ?
+>>>>>
+>>>>
+>>>> Just activate CONFIG_USB_NET_SMSC95XX and then post output of ifconfig:
+>>>>
+>>>
+>>> Hmm BT 2011.1.1 using kernel 3.6.8 and in omap2plus_defconfig is in
+>>> this veriosion:
+>>> CONFIG_USB_NET_SMSC95XX=y so it should be enabled. Maybe HW problem?
+>>>
+>>>>
+>>>> ifconfig -a
+>>>>
+>>>> Yegor
+>>>> _______________________________________________
+>>>> buildroot mailing list
+>>>> buildroot at busybox.net
+>>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>>
+>>>
+>>> Cheers,
+>>>
+>>> mbe
+>>>
+>>>
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
