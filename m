@@ -1,28 +1,34 @@
-From: tallu <tallubko@yahoo.com>
-Date: Wed, 30 Jan 2013 19:53:39 -0800 (PST)
-Subject: [Buildroot] Problems compiling syslinux
-Message-ID: <1359604419891-39620.post@n4.nabble.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 30 Jan 2013 23:09:12 -0500
+Subject: [Buildroot] RFC: add check for post-build script existence?
+Message-ID: <CANxTyt5O6y45yR+ZecGGi4EomVU2mm4ar56g3iK7boGpFTQDOw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Everyone
+Hi,
 
-I've enabled syslinux build, but it fails to compile (version 4.05).
-I get the following error:
+I am on a project where the same buildroot defconfig is being used for
+multiple boards (LSI vendor's EVM, our custom board rev 1, rev 2,
+...), where the few changes can be taken care of by a post-build fixup
+script on just one or two scenarios.  I was thinking that I would set
+BR2_ROOTFS_POST_BUILD_SCRIPT to something like
+${BOARD_NAME}-fixups.sh, rather than maintain parallel nearly
+identical defconfigs.  But since the port-build script list processing
+doesn't check for file existence, this would force me to have a file
+for each of my boards, rather than having fixup files only for the
+scenarios which actually need it.
 
-In file included from syslinux.c:50:0:
-../libinstaller/linuxioctl.h:22:44: fatal error: linux/ext2_fs.h: No such
-file or directory
-compilation terminated.
+Would there be interest in adding a -e test before invoking the
+script, similar to the -d test before the target skeleton copy?
+Something like:
 
-Please help.
-Tal
+	@$(call MESSAGE,"Executing post-build script\(s\)")
+	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+		if [ -e $(s) ]; then $(s) $(TARGET_DIR); fi$(sep))
 
+If there is positive feedback, then I'll send in a patch.
 
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Problems-compiling-syslinux-tp39620.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Danomi -
