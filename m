@@ -1,24 +1,23 @@
-From: Daniel Price <daniel.price@gmail.com>
-Date: Thu, 28 Feb 2013 20:25:59 -0800
-Subject: [Buildroot] [PATCH] Add Qt5 packages
-In-Reply-To: <513011C9.8030301@je-eigen-domein.nl>
-References: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <513011C9.8030301@je-eigen-domein.nl>
-Message-ID: <CAKduhSsmDGk2w8p79_KY7Zb5hwdH0D-2z7kAcQK_Q5rakZGhfg@mail.gmail.com>
+From: Alex Bradbury <asb@asbradbury.org>
+Date: Fri, 1 Feb 2013 15:01:21 +1100
+Subject: [Buildroot] Buildroot Developers Meeting after FOSDEM 2013
+In-Reply-To: <20130127172205.7cbeb786@skate>
+References: <20121228212925.3c5074c6@skate>
+ <201301271709.49546.yann.morin.1998@free.fr>
+ <20130127172205.7cbeb786@skate>
+Message-ID: <CA+wH297DWAXR-X0TmNiVzqt-uduQ+vwE9Kr9A7t38w7G+thwgg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Floris,
+On 28 January 2013 03:22, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Thanks, looks good. I'll try to think about this and add more topics as
+> needed.
 
-That build problem in V8 is exactly the same as the one I had to fix
-in my nodejs (which also uses V8) patch, which I posted today.  See
-https://code.google.com/p/v8/source/detail?r=12094 for the fix.
+Perhaps this longstanding (but minor) issue could be addressed?
+http://lists.busybox.net/pipermail/buildroot/2012-December/063482.html
 
-Thomas, if we're going to have V8 in multiple places, perhaps it
-should be a separate package?  On the flip side, I don't know how
-sensitive webkit and nodejs are to version skew in V8.
-
-       -dp
+Alex
