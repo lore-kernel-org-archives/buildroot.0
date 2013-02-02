@@ -1,25 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 02 Feb 2013 08:43:49 +0100
-Subject: [Buildroot] [PATCH] blackfin: add 2012r2 and remove 2010rc1
-	toolchains
-In-Reply-To: <1359723890-6334-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 1 Feb 2013 10:04:50 -0300")
-References: <1359723890-6334-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mwvn6tze.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat,  2 Feb 2013 07:24:35 -0300
+Subject: [Buildroot] [PATCH] nuttcp: needs mmu
+Message-ID: <1359800675-17494-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Fixes:
+http://autobuild.buildroot.net/results/b8c019a5701377a1e134d01ac0bae5fe34dc975f/
 
- Gustavo> Remove the old 2010RC1 toolchain and add the new 2012R2-RC2 toolchain.
- Gustavo> On related good news the new toolchain fixes:
- Gustavo> http://autobuild.buildroot.net/results/eac5bd4f4766d98431e72a3c81492a962c85fa98/
- Gustavo> since it's got unshare() support now.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/nuttcp/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed, thanks.
-
+diff --git a/package/nuttcp/Config.in b/package/nuttcp/Config.in
+index fb6d3b1..eea88fd 100644
+--- a/package/nuttcp/Config.in
++++ b/package/nuttcp/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NUTTCP
+ 	bool "nuttcp"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  nuttcp is a TCP/UDP network testing tool, much like iperf
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.12.4
