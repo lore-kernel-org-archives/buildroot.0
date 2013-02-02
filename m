@@ -1,71 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  2 Feb 2013 14:46:20 +0100
-Subject: [Buildroot] [PATCH 1/4] toolchain-external: add support for ARM
-	Linaro 2013.01 toolchain
-Message-ID: <1359812783-22866-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 2 Feb 2013 08:28:22 +0100
+Subject: [Buildroot] [git commit] arch/Config.in.arm: Use armv6k for
+	arm1136jf-s rev1
+Message-ID: <20130202163911.8F90C9A8FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-external/Config.in   |   20 ++++++++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |    3 +++
- 2 files changed, 23 insertions(+)
+commit: http://git.buildroot.net/buildroot/commit/?id=88cf3bb91792c9c04586e14f293d89a6e0c13e1d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 2e79052..a3f254c 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -3,6 +3,25 @@ if BR2_TOOLCHAIN_EXTERNAL
- choice
- 	prompt "Toolchain"
+According to the ARM1136JF-S and ARM1136J-S Revision r1p5 Technical Reference
+Manual, from release rev1 (r1pn), the ARM1136JF-S processor implements the ARMv6
+instruction set with the ARMv6k additions.
+
+This patch differentiates the ARM1136JF-S revisions 0 and 1 in order to use
+either ARMv6j (e.g. on Freescale i.MX31) or ARMv6k (e.g. on Freescale i.MX35).
+
+Signed-off-by: Beno??t Th??baudeau <benoit.thebaudeau@advansee.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ arch/Config.in.arm |   13 ++++++++++---
+ 1 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 806b196..b681d27 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -31,8 +31,10 @@ config BR2_arm926t
+ 	bool "arm926t"
+ config BR2_arm10t
+ 	bool "arm10t"
+-config BR2_arm1136jf_s
+-	bool "arm1136jf_s"
++config BR2_arm1136jf_s_r0
++	bool "arm1136jf_s rev0"
++config BR2_arm1136jf_s_r1
++	bool "arm1136jf_s rev1"
+ config BR2_arm1176jz_s
+ 	bool "arm1176jz-s"
+ config BR2_arm1176jzf_s
+@@ -59,6 +61,10 @@ config BR2_iwmmxt
+ 	bool "iwmmxt"
+ endchoice
  
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
-+	bool "Linaro 2013.01"
-+	depends on BR2_arm
-+	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	help
-+	  Linaro toolchain for the ARM architecture. It uses Linaro
-+	  GCC 2013.01 (based on gcc 4.7), Linaro GDB 2013.01 (based on
-+	  GDB 7.5), eglibc 2.15. It generates code that runs on all
-+	  Cortex-A profile devices, but tuned for the Cortex-A9. The
-+	  code generated is Thumb 2, with the hard floating point
-+	  calling convention, and uses the VFPv3-D16 FPU instructions.
++config BR2_arm1136jf_s
++	bool
++	default BR2_arm1136jf_s_r0 || BR2_arm1136jf_s_r1
 +
-+	  To use this toolchain, you must disable soft float usage.
-+
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_12
- 	bool "Linaro 2012.12"
- 	depends on BR2_arm
-@@ -737,6 +756,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_12
-+	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index b0ca3cd..bfb1687 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -193,6 +193,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2012.11-20121123_li
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_12),y)
- TOOLCHAIN_EXTERNAL_SITE=http://releases.linaro.org/12.12/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2012.12-20121214_linux.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01),y)
-+TOOLCHAIN_EXTERNAL_SITE=http://releases.linaro.org/13.01/components/toolchain/binaries/
-+TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.01-20130125_linux.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.09-75-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
--- 
-1.7.9.5
+ choice
+ 	prompt "Target ABI"
+ 	depends on BR2_arm || BR2_armeb
+@@ -126,7 +132,8 @@ config BR2_GCC_TARGET_ARCH
+ 	default "armv4t"	if BR2_arm922t
+ 	default "armv5te"	if BR2_arm926t
+ 	default "armv5t"	if BR2_arm10t
+-	default "armv6j"	if BR2_arm1136jf_s
++	default "armv6j"	if BR2_arm1136jf_s_r0
++	default "armv6k"	if BR2_arm1136jf_s_r1
+ 	default "armv6zk"	if BR2_arm1176jz_s
+ 	default "armv6zk"	if BR2_arm1176jzf_s
+ 	default "armv7-a"	if BR2_cortex_a5
