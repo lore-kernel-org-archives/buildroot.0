@@ -1,115 +1,65 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 2 Feb 2013 14:45:16 +0100
-Subject: [Buildroot] [git commit] avr32: support uClibc 0.9.33.2
-Message-ID: <20130202163912.03DCE9A8FE@busybox.osuosl.org>
+Date: Sat, 2 Feb 2013 17:35:53 +0100
+Subject: [Buildroot] [git commit] toolchain-external: remove support for
+	AArch64 Linaro 2012.10 toolchain
+Message-ID: <20130202163912.E25229A8FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d7937773fd85daa675290816af981ff0079f21b8
+commit: http://git.buildroot.net/buildroot/commit/?id=1382af876b1f5d89201c1b96116b0814990a8dba
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a uClibc patch from OpenWRT, and tweak an existing patch to cope with
-the lack of a dup3 Linux syscall on avr32. This allow uClibc 0.9.33.2 to be
-built for avr32.
-
-[Peter: add upstream url for openwrt patch]
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-buildroot/Config.in.2          |    3 ++-
- toolchain/uClibc/Config.in                         |    3 +--
- ...ibc-0.9.33.2-OpenWRT-140-avr32_atomic_fix.patch |   16 ++++++++++++++++
- toolchain/uClibc/uClibc-0.9.33.2-dup3.patch        |    4 +++-
- 4 files changed, 22 insertions(+), 4 deletions(-)
+ toolchain/toolchain-external/Config.in   |   12 ------------
+ toolchain/toolchain-external/ext-tool.mk |    3 ---
+ 2 files changed, 0 insertions(+), 15 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
-index d27c9f3..a713727 100644
---- a/toolchain/toolchain-buildroot/Config.in.2
-+++ b/toolchain/toolchain-buildroot/Config.in.2
-@@ -68,7 +68,7 @@ config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 1021b62..5b26aa9 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -684,17 +684,6 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_11
+ 	  Toolchain for the AArch64 architecture, from
+ 	  http://www.linaro.org/engineering/armv8/
  
- choice
- 	prompt "Thread library implementation"
--	default BR2_PTHREADS_NATIVE if (!BR2_UCLIBC_VERSION_0_9_31) && !BR2_ARM_OABI && !BR2_xtensa
-+	default BR2_PTHREADS_NATIVE if (!BR2_UCLIBC_VERSION_0_9_31) && !BR2_ARM_OABI && !(BR2_avr32 || BR2_xtensa)
- 	default BR2_PTHREADS_OLD
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_10
+-	bool "Linaro AArch64 12.10"
+-	depends on BR2_aarch64
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	help
+-	  Toolchain for the AArch64 architecture, from
+-	  http://www.linaro.org/engineering/armv8/
+-
+ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ 	bool "Custom toolchain"
  	help
- 	  Use this option to select the thread library implementation
-@@ -95,6 +95,7 @@ choice
- 		depends on !BR2_UCLIBC_VERSION_0_9_31
- 		depends on !BR2_ARM_OABI
- 		depends on !BR2_x86_i386
-+		depends on !BR2_avr32
- 		depends on !BR2_xtensa
- endchoice
- 
-diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
-index e47bc9b..a48b6a0 100644
---- a/toolchain/uClibc/Config.in
-+++ b/toolchain/uClibc/Config.in
-@@ -5,7 +5,6 @@ comment "uClibc Options"
- 
- choice
- 	prompt "uClibc C library Version"
--	default BR2_UCLIBC_VERSION_0_9_31 if BR2_avr32 # 0.9.32 broken
- 	default BR2_UCLIBC_VERSION_0_9_33
- 	help
- 	  Select the version of uClibc you wish to use.
-@@ -20,7 +19,7 @@ choice
- 
- 	config BR2_UCLIBC_VERSION_0_9_33
- 		bool "uClibc 0.9.33.x"
--		depends on !(BR2_avr32 || BR2_xtensa)
-+		depends on !BR2_xtensa
- 
- 	config BR2_UCLIBC_VERSION_SNAPSHOT
- 		bool "daily snapshot"
-diff --git a/toolchain/uClibc/uClibc-0.9.33.2-OpenWRT-140-avr32_atomic_fix.patch b/toolchain/uClibc/uClibc-0.9.33.2-OpenWRT-140-avr32_atomic_fix.patch
-new file mode 100644
-index 0000000..e28b6d2
---- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.33.2-OpenWRT-140-avr32_atomic_fix.patch
-@@ -0,0 +1,16 @@
-+Patch from OpenWRT for avr32.
-+
-+https://dev.openwrt.org/browser/trunk/toolchain/uClibc/patches-0.9.32/140-avr32_atomic_fix.patch
-+
-+Signed-off-by: Simon Dawson <spdawson@gmail.com>
-+
-+--- a/libc/sysdeps/linux/avr32/bits/atomic.h
-++++ b/libc/sysdeps/linux/avr32/bits/atomic.h
-+@@ -28,6 +28,7 @@ typedef uintmax_t uatomic_max_t;
-+ 
-+ #define __arch_compare_and_exchange_val_32_acq(mem, newval, oldval)	\
-+ 	({								\
-++		__uint32_t __result;					\
-+ 		__typeof__(*(mem)) __prev;				\
-+ 		__asm__ __volatile__(					\
-+ 			"/* __arch_compare_and_exchange_val_32_acq */\n" \
-diff --git a/toolchain/uClibc/uClibc-0.9.33.2-dup3.patch b/toolchain/uClibc/uClibc-0.9.33.2-dup3.patch
-index 66b419e..87fe2a6 100644
---- a/toolchain/uClibc/uClibc-0.9.33.2-dup3.patch
-+++ b/toolchain/uClibc/uClibc-0.9.33.2-dup3.patch
-@@ -29,7 +29,7 @@ new file mode 100644
- index 0000000..5fdab2e
- --- /dev/null
- +++ b/libc/sysdeps/linux/common/dup3.c
--@@ -0,0 +1,15 @@
-+@@ -0,0 +1,17 @@
- +/* vi: set sw=4 ts=4: */
- +/*
- + * dup3() for uClibc
-@@ -43,8 +43,10 @@ index 0000000..5fdab2e
- +#include <unistd.h>
- +
- +
-++#ifdef __NR_dup3
- +_syscall3(int, dup3, int, oldfd, int, newfd, int, flags)
- +libc_hidden_def(dup3)
-++#endif
- -- 
- 1.7.5.4
- 
+@@ -751,7 +740,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
+-	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_10
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_11
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_12
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_01
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 8a41043..452204b 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -256,9 +256,6 @@ TOOLCHAIN_EXTERNAL_SOURCE=microblazeel-unknown-linux-gnu.tgz
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://git.xilinx.com/?p=xldk/microblaze_v2.0.git;a=blob;h=71e031ae990e063a5718f90d30cf97ad85e2f565;hb=569081301f0f1d8d3b24335a364e8ff1774190d4;f=
+ TOOLCHAIN_EXTERNAL_SOURCE=microblaze-unknown-linux-gnu.tgz
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_10),y)
+-TOOLCHAIN_EXTERNAL_SITE=http://releases.linaro.org/12.10/components/toolchain/gcc-linaro/aarch64/rc3/
+-TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-aarch64-linux-gnu-4.7+bzr115029-20121015+bzr2506_linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_11),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://releases.linaro.org/12.11/components/toolchain/binaries/
+ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-aarch64-linux-gnu-4.7-2012.11-1-20121127_linux.tar.bz2
