@@ -1,31 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  2 Feb 2013 07:24:35 -0300
-Subject: [Buildroot] [PATCH] nuttcp: needs mmu
-Message-ID: <1359800675-17494-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 Feb 2013 11:47:52 +0100
+Subject: [Buildroot] Problem build haserl with lua support
+In-Reply-To: <1359739826.4447.6.camel@john-ubu>
+References: <1359630353.9888.41.camel@john-ubu> <20130131125234.166475a7@skate>
+ <1359739826.4447.6.camel@john-ubu>
+Message-ID: <20130202114752.6b5e1fb6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/b8c019a5701377a1e134d01ac0bae5fe34dc975f/
+Dear john,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nuttcp/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+On Fri, 01 Feb 2013 17:30:26 +0000, john wrote:
 
-diff --git a/package/nuttcp/Config.in b/package/nuttcp/Config.in
-index fb6d3b1..eea88fd 100644
---- a/package/nuttcp/Config.in
-+++ b/package/nuttcp/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_NUTTCP
- 	bool "nuttcp"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  nuttcp is a TCP/UDP network testing tool, much like iperf
- 
+> I was just wondering what would be involved in updating the package
+> directory in Buildroot 2012.05 with the latest versions of haserl and
+> lua. Is it simply a matter of lets say copying the relevant package
+> directories for these appsa from buildroot-2012.11.1 into Buildroot
+> 2012.05?
+
+I think haserl and lua don't have many dependencies, so what you
+suggest might work. Of course, if there are issues related to some
+dependencies, you'd have to figure them out and fix them.
+
+That said, instead of moving to new versions of those packages, you can
+also just as well backport the patch I pointed to (but it may depend on
+many other patches, since the Lua package has seen quite a number of
+changes lately).
+
+Best regards,
+
+Thomas
 -- 
-1.7.12.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
