@@ -1,129 +1,100 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Feb 2013 14:40:07 +0100
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_7/7=5D_package/dtc=3A_add_option_t?=
-	=?utf-8?q?o_install_programs?=
-In-Reply-To: <cover.1359898663.git.yann.morin.1998@free.fr>
-References: <cover.1359898663.git.yann.morin.1998@free.fr>
-Message-ID: <e38f62bfa419db595ba5ad335b5a5bf7f8e87e91.1359898663.git.yann.morin.1998@free.fr>
+Date: Sun,  3 Feb 2013 15:06:37 +0100
+Subject: [Buildroot] [pull request v3] Pull request for branch
+	yem-target-qemu
+Message-ID: <cover.1359899108.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, we only install the libfdt library.
+Hello All!
 
-As suggested by Arnout, add an option that also
-installs the few dtc programs.
+This series is the last part required to build QEMU for the target.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+It depends on the previous series that was just sent:
+  - http://lists.busybox.net/pipermail/buildroot/2013-February/066541.html
 
----
-dtdiff, a diff for device trees, requires bash.
+The philosophy behind this long series is to add a basic, non-configurable
+QEMU build (which is already complex as it is), then add features one by
+one to ease review.
 
-I did not add a 'depends on bash' (or a 'select' either), because
-requiring bash just for that is a bit far-fetched.
+The latest patch, adding DTC, has been a bit controversial, but no final
+solution has been identified (as far as I remember), so I've kept it as-is.
 
-Instead, at dtc install time, if bash is selected, dtdiff is installed
-as usual to the target rootfs; if bash is not selected, dtdiff is
-removed from the target rootfs.
----
- package/dtc/Config.in |   24 ++++++++++++++++++++++--
- package/dtc/dtc.mk    |   29 +++++++++++++++++++++++------
- 2 files changed, 45 insertions(+), 8 deletions(-)
+Hopefully, we'll have time to review and definitely ack/nack this series
+during the DevDay in Brussels. ;-)
 
-diff --git a/package/dtc/Config.in b/package/dtc/Config.in
-index 96225e3..1c65a10 100644
---- a/package/dtc/Config.in
-+++ b/package/dtc/Config.in
-@@ -1,9 +1,29 @@
- config BR2_PACKAGE_DTC
--	bool "dtc"
-+	bool "dtc (libfdt)"
- 	help
- 	  The Device Tree Compiler, dtc, takes as input a device-tree in
- 	  a given format and outputs a device-tree in another format.
- 	  
--	  Note that only the library is installed for now.
-+	  Note that only the library is installed.
-+	  If you want the programs, say 'y' here, and to "dtc programs", below.
- 	  
- 	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
-+
-+if BR2_PACKAGE_DTC
-+
-+config BR2_PACKAGE_DTC_PROGRAMS
-+	bool "dtc programs"
-+	help
-+	  Say 'y' here if you also want the programs on the target:
-+	    - convert-dtsv0     convert from version 0 to version 1
-+	    - dtc               the device tree compiler
-+	    - dtdiff            compare two device trees (needs bash)
-+	    - fdtdump           print a readable version of a flat device tree
-+	    - fdtget            read values from device tree
-+	    - fdtput            write a property value to a device tree
-+	  
-+	  Note: dtdiff requires bash, so if bash is not selected, dtdiff will
-+	        be removed from the target file system. Enable bash if you
-+	        need dtdiff on the target.
-+
-+endif
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index a0e1e35..42843d5 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -8,27 +8,44 @@ DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
- DTC_SITE            = git://git.jdl.com/software/dtc.git
- DTC_LICENSE         = GPLv2+/BSD-2c
- DTC_LICENSE_FILES   = README.license GPL
--# Note: the dual-license only applies to the library.
--#       The DT compiler (dtc) is GPLv2+, but we do not install it.
- DTC_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_PACKAGE_DTC_PROGRAMS),y)
-+DTC_LICENSE        += (for the library), GPLv2+ (for the executables)
-+# Use default goal to build everything
-+DTC_BUILD_GOAL      =
-+DTC_INSTALL_GOAL    = install
-+DTC_CLEAN_GOAL      = clean
-+else # $(BR2_PACKAGE_DTC_PROGRAMS) != y
-+DTC_BUILD_GOAL      = libfdt
-+#?libfdt_install is our own install rule added by our patch
-+DTC_INSTALL_GOAL    = libfdt_install
-+DTC_CLEAN_GOAL      = libfdt_clean
-+ifeq ($(BR2_PACKAGE_BASH),)
-+DTC_POST_INSTALL_TARGET_HOOKS += DTC_POST_INSTALL_TARGET_RM_DTDIFF
-+endif
-+endif # $(BR2_PACKAGE_DTC_PROGRAMS) != y
-+
- define DTC_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS)    \
- 	CFLAGS="$(TARGET_CFLAGS)"   \
--	$(MAKE) -C $(@D) PREFIX=/usr libfdt
-+	$(MAKE) -C $(@D) PREFIX=/usr $(DTC_BUILD_GOAL)
- endef
- 
--#?libfdt_install is our own install rule added by our patch
-+# For staging, only the library is needed
- define DTC_INSTALL_STAGING_CMDS
- 	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
- endef
- 
- define DTC_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr libfdt_install
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr $(DTC_INSTALL_GOAL)
-+endef
-+define DTC_POST_INSTALL_TARGET_RM_DTDIFF
-+	rm -f $(TARGET_DIR)/usr/bin/dtdiff
- endef
- 
- define DTC_CLEAN_CMDS
--	$(MAKE) -C $(@D) libfdt_clean
-+	$(MAKE) -C $(@D) $(DTC_CLEAN_GOAL)
- endef
- 
- $(eval $(generic-package))
+
+Changes v2 -> v3:
+  - changed to using generic-package (Thomas)
+  - fixed comments about QEMU-1.2, we're using 1.3.1 now (Thomas)
+  - added ability to install tools on target
+  - added ability to install no emulator on target
+
+Changes v1 -> v2:
+  - rebased ontop latest tree
+  - fixed wreckage due to bump from QEMU 1.2.2 -> 1.3.0
+  - updated to QEMU 1.3.1
+  - added option to install QEMU tools on the target
+
+
+The following changes since commit e38f62bfa419db595ba5ad335b5a5bf7f8e87e91:
+
+  package/dtc: add option to install programs (2013-02-03 14:15:14 +0100)
+
+are available in the git repository at:
+  git://gitorious.org/buildroot/buildroot.git yem-target-qemu
+
+Yann E. MORIN (29):
+      package/qemu: bump version to 1.3.1
+      package/qemu: build for the target (i386 or x86_64 only)
+      package/qemu: add basic target selection
+      package/qemu: add fine-grained target selection
+      package/qemu: add SDL frontends
+      package/qemu: add option to enable/disable the VNC frontend
+      package/qemu: add VNC jpeg and png compression
+      package/qemu: add VNC TLS-encryption
+      package/qemu: add option to not install blobs
+      package/qemu: add option to remove unwanted keymaps
+      package/qemu: add uuid support
+      package/qemu: add support for capabilities
+      package/qemu: add attr/xattr option
+      package/qemu: add support for virtfs
+      package/qemu: add support for cURL
+      package/qemu: enable use of the curses frontend
+      package/qemu: add BlueZ connectivity
+      package/qemu: add AIO support
+      package/qemu: add support for VDE switches
+      package/qemu: add iSCSI support
+      package/qemu: add support for USB redirection
+      package/qemu: add support for Spice
+      package/qemu: enable sound
+      package/qemu: add support for libseccomp
+      package/qemu: option to build the docs
+      package/qemu: add option to install tools on the target
+      package/qemu: move sub-options into a sub-menu
+      package/qemu: enable a static build
+      package/qemu: add support for FDT
+
+ package/Config.in                   |    1 +
+ package/qemu/Config.in              |  320 +++++++++++++++++++++++++++++++++++
+ package/qemu/qemu-static-curl.patch |   72 ++++++++
+ package/qemu/qemu-static-sdl.patch  |   54 ++++++
+ package/qemu/qemu.mk                |  297 ++++++++++++++++++++++++++++++++-
+ 5 files changed, 743 insertions(+), 1 deletions(-)
+ create mode 100644 package/qemu/Config.in
+ create mode 100644 package/qemu/qemu-static-curl.patch
+ create mode 100644 package/qemu/qemu-static-sdl.patch
+
+Regards,
+Yann E. MORIN
+
 -- 
-1.7.2.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
