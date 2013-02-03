@@ -1,10 +1,9 @@
 From: yann.morin.1998 at free.fr <yann.morin.1998@free.fr>
-Date: Sun, 03 Feb 2013 13:50:38 +0100
-Subject: [Buildroot] [PATCH 2/2] tvheadend: disable on avr32
-In-Reply-To: <1359893728-4345-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1359893728-4345-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1359893728-4345-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1359895838.510e5d1e42886@imp.free.fr>
+Date: Sun, 03 Feb 2013 13:53:31 +0100
+Subject: [Buildroot] [PATCH] gdb: build gdbserver with TARGET_MAKE_ENV
+In-Reply-To: <1359894622-4783-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1359894622-4783-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1359896011.510e5dcbc1a23@imp.free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,14 +13,20 @@ To: buildroot@busybox.net
 Thomas, All,
 
 Quoting Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> tvheadend requires an atomic_add operation. Either you have a gcc >=
-> 4.3 toolchain and it uses the gcc intrinsics, or it has special code
-> for x86, x86-64, PPC and ARM. So in the context of Buildroot, the only
-> really problematic architecture is avr32, which uses gcc 4.2.
+> This commit fixes the exact same problem than
+> 21a0c11a90f9ff19c78a5f32e0a2e9064fd28054, but for the gdbserver
+> build. The problem is that when you use the Crosstool-NG toolchain
+> backend, gawk gets built as a dependency of Crosstool-NG. So the gdb
+> configure scripts detects it, and assumes it is in the PATH (because
+> the gdb configure step gets run with TARGET_MAKE_ENV).
+>
+> But then, the build fails, because it tries to run gawk, but gawk
+> isn't in the PATH, because we forget to use this TARGET_MAKE_ENV
+> variable when building gdbserver.
 >
 > Fixes
 >
-http://autobuild.buildroot.org/results/f015b1888d739c383aca61609059aa7675a4da7d/build-end.log
+http://autobuild.buildroot.org/results/d0173de533b5e2fffed2eff7327a502ed2d787cd/build-end.log
 >
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
