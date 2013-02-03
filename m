@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Feb 2013 15:06:42 +0100
-Subject: [Buildroot] [PATCH 05/29] package/qemu: add SDL frontends
+Date: Sun,  3 Feb 2013 15:06:46 +0100
+Subject: [Buildroot] [PATCH 09/29] package/qemu: add option to not install
+	blobs
 In-Reply-To: <cover.1359899108.git.yann.morin.1998@free.fr>
 References: <cover.1359899108.git.yann.morin.1998@free.fr>
-Message-ID: <6d00f31090c77f983856cb568aed623486489a6a.1359899108.git.yann.morin.1998@free.fr>
+Message-ID: <d071ef2f6d949cc0ee9613f5e37f530b004cb423.1359899108.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,62 +13,49 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |    9 +++++++++
- package/qemu/qemu.mk   |   10 +++++++++-
- 2 files changed, 18 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |   16 ++++++++++++++++
+ package/qemu/qemu.mk   |    4 ++++
+ 2 files changed, 20 insertions(+), 0 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index f1c2205..ac9f133 100644
+index ef0d8f7..a33c700 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -62,4 +62,13 @@ config BR2_PACKAGE_QEMU_LINUX_USER
+@@ -99,4 +99,20 @@ config BR2_PACKAGE_QEMU_SDL
+ 	  Say 'y' to enable the SDL frontend, that is, a graphical window
+ 	  presenting the VM's display.
  
- endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
- 
-+comment "Frontends"
++comment "Misc. features"
 +
-+config BR2_PACKAGE_QEMU_SDL
-+	bool "Enable SDL frontend"
-+	select BR2_PACKAGE_SDL
++config BR2_PACKAGE_QEMU_BLOBS
++	bool "Install binary blobs"
++	default y
 +	help
-+	  Say 'y' to enable the SDL frontend, that is, a graphical window
-+	  presenting the VM's display.
++	  Say 'y' here (the default) to install binary blobs (such as BIOS
++	  or firmwares for the different machines simulated by QEMU).
++	  Say 'n' to not install those blobs.
++	  
++	  Note: Some machines may be unbootable without those blobs.
++	        If unsure, say 'y'.
++	  
++	  Note2: This has nothing to do with the licensing of the blobs;
++	         some (most?) even have a free and/or open source license.
 +
  endif # BR2_PACKAGE_QEMU
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 1baca01..545d8c2 100644
+index f05c7ec..59d759f 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -96,6 +96,7 @@ QEMU_OPTS =
- QEMU_VARS =                                                                         \
-     PYTHON=$(HOST_DIR)/usr/bin/python                                               \
-     PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages    \
-+    SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config                                    \
- 
- ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
- QEMU_OPTS += --enable-system
-@@ -113,6 +114,14 @@ ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
- QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
+@@ -149,6 +149,10 @@ else
+ QEMU_OPTS += --disable-sdl
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
-+QEMU_OPTS += --enable-sdl
-+QEMU_DEPENDENCIES += sdl
-+QEMU_VARS += SDL_CONFIG=$(BR2_STAGING_DIR)/usr/bin/sdl-config
-+else
-+QEMU_OPTS += --disable-sdl
++ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
++QEMU_OPTS += --disable-blobs
 +endif
 +
  define QEMU_CONFIGURE_CMDS
  	( cd $(@D);                                 \
  	    LIBS='$(QEMU_LIBS)'                     \
-@@ -132,7 +141,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-bsd-user                  \
- 	        --disable-xen                       \
- 	        --disable-slirp                     \
--	        --disable-sdl                       \
- 	        --disable-vnc                       \
- 	        --disable-virtfs                    \
- 	        --disable-brlapi                    \
 -- 
 1.7.2.5
