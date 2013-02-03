@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Feb 2013 15:06:51 +0100
-Subject: [Buildroot] [PATCH 14/29] package/qemu: add support for virtfs
+Date: Sun,  3 Feb 2013 15:06:44 +0100
+Subject: [Buildroot] [PATCH 07/29] package/qemu: add VNC jpeg and png
+	compression
 In-Reply-To: <cover.1359899108.git.yann.morin.1998@free.fr>
 References: <cover.1359899108.git.yann.morin.1998@free.fr>
-Message-ID: <e0ae0b1884681a27f4c56827dc1562d3b9c3ca1f.1359899108.git.yann.morin.1998@free.fr>
+Message-ID: <8cfa05850f57edcc0fc6514f4900748d53ec9b2b.1359899108.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +13,64 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   16 ++++++++++++++++
- package/qemu/qemu.mk   |    7 ++++++-
- 2 files changed, 22 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |   10 ++++++++++
+ package/qemu/qemu.mk   |   16 ++++++++++++++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 8a724cf..b35429c 100644
+index ec9bcc6..1c2af6d 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -99,6 +99,22 @@ config BR2_PACKAGE_QEMU_SDL
- 	  Say 'y' to enable the SDL frontend, that is, a graphical window
- 	  presenting the VM's display.
+@@ -71,6 +71,16 @@ config BR2_PACKAGE_QEMU_VNC
+ 	  Say 'y' to enable the VNC frontend, that is, QEMU will act as a
+ 	  VNC server presenting the VM's display.
  
-+comment "Block backends"
++config BR2_PACKAGE_QEMU_VNC_PNG
++	bool "PNG compression"
++	depends on BR2_PACKAGE_QEMU_VNC
++	select BR2_PACKAGE_LIBPNG
 +
-+config BR2_PACKAGE_QEMU_VIRTFS
-+	bool "Enable plan9 ressources using VirtFS"
-+	select BR2_PACKAGE_QEMU_CAP
-+	select BR2_PACKAGE_QEMU_ATTR
-+	help
-+	  Say 'y' here if you want QEMU to provide a plan9 virtual "share"
-+	  accessible from the guest OS for relatively fast access to host
-+	  files.
-+	  
-+	  This requires that the guest OS is capable of accessing plan9
-+	  ressources (typically, in Linux, this is done by a network
-+	  file-system called 9p, and can be accelerated by using the 9p
-+	  virtio).
++config BR2_PACKAGE_QEMU_VNC_JPEG
++	bool "JPEG compression"
++	depends on BR2_PACKAGE_QEMU_VNC
++	select BR2_PACKAGE_JPEG
 +
- comment "Misc. features"
- 
- config BR2_PACKAGE_QEMU_UUID
+ config BR2_PACKAGE_QEMU_SDL
+ 	bool "Enable SDL frontend"
+ 	select BR2_PACKAGE_SDL
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 6d7407e..65e507f 100644
+index 7ca5966..bf892df 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -149,6 +149,12 @@ else
- QEMU_OPTS += --disable-sdl
+@@ -120,6 +120,20 @@ else
+ QEMU_OPTS += --disable-vnc
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
-+QEMU_OPTS += --enable-virtfs
++ifeq ($(BR2_PACKAGE_QEMU_VNC_PNG),y)
++QEMU_OPTS += --enable-vnc-png
++QEMU_DEPENDENCIES += libpng
 +else
-+QEMU_OPTS += --disable-virtfs
++QEMU_OPTS += --disable-vnc-png
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
- QEMU_OPTS += --enable-uuid
- QEMU_DEPENDENCIES += util-linux
-@@ -250,7 +256,6 @@ define QEMU_CONFIGURE_CMDS
++ifeq ($(BR2_PACKAGE_QEMU_VNC_JPEG),y)
++QEMU_OPTS += --enable-vnc-jpeg
++QEMU_DEPENDENCIES += jpeg
++else
++QEMU_OPTS += --disable-vnc-jpeg
++endif
++
+ ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
+ QEMU_OPTS += --enable-sdl
+ QEMU_DEPENDENCIES += sdl
+@@ -147,8 +161,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-bsd-user                  \
  	        --disable-xen                       \
  	        --disable-slirp                     \
+-	        --disable-vnc-jpeg                  \
+-	        --disable-vnc-png                   \
+ 	        --disable-vnc-tls                   \
  	        --disable-vnc-sasl                  \
--	        --disable-virtfs                    \
- 	        --disable-brlapi                    \
- 	        --disable-curses                    \
- 	        --disable-curl                      \
+ 	        --disable-virtfs                    \
 -- 
 1.7.2.5
