@@ -1,37 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 03 Feb 2013 17:34:06 +0100
-Subject: [Buildroot] Errors about BX when building toolchain under
-	latest buildroot
-In-Reply-To: <CAJXWAww+geVHWFvn4dy+HaFs0P8vNtHX11xCVUo5tCvAvEx1Pw@mail.gmail.com>
- (hayate's message of "Sun, 3 Feb 2013 23:13:18 +0800")
-References: <CAJXWAww+geVHWFvn4dy+HaFs0P8vNtHX11xCVUo5tCvAvEx1Pw@mail.gmail.com>
-Message-ID: <87obg14arl.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  3 Feb 2013 20:52:22 +0100
+Subject: [Buildroot] [PATCH] heirloom-mailx: needs fork()
+Message-ID: <1359921142-28296-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "hayate" == hayate  <hayatelee@gmail.com> writes:
+heirloom-mailx uses fork(), so we can't use it as is on !mmu
+platforms.
 
- hayate> Hi,
- hayate> Latest buildroot?buildroot-2012.11.1
- hayate> choose: arm-LittleEndian, generic arm, OABI, gcc 4.6.3, uClibc-0.9.33.1
+Fixes:
 
- hayate> Others are unchanged
+http://autobuild.buildroot.org/results/c5a8e3a4cbc1e1de985fe3c724b711027865abe7/build-end.log
 
- hayate> Then encounter errors saying that BX is not available on the
- hayate> target processor
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/heirloom-mailx/Config.in |    2 ++
+ 1 file changed, 2 insertions(+)
 
- hayate> However changing to uClibc from 0.9.33 to 0.9.31 makes building
- hayate> successful.
-
- hayate> Is this a bug? Should that USE_BX or 0.9.33 be disabled when
- hayate> selecting generic arm?
-
-Yes, sounds like a bug. Ancient ARM variants didn't have the BX
-instruction, so we should fixup uclibc.mk to enable/disable USE_BX
-depending on if the variant has it.
-
+diff --git a/package/heirloom-mailx/Config.in b/package/heirloom-mailx/Config.in
+index 9a871d4..ca83dc3 100644
+--- a/package/heirloom-mailx/Config.in
++++ b/package/heirloom-mailx/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_HEIRLOOM_MAILX
+ 	bool "heirloom-mailx"
++	# uses fork()
++	depends on BR2_USE_MMU
+ 	help
+ 	  Heirloom mailx (previously known as nail) is a mail user
+ 	  agent for Unix systems.
 -- 
-Bye, Peter Korsgaard
+1.7.9.5
