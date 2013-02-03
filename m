@@ -1,40 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 3 Feb 2013 15:29:14 +0100
-Subject: [Buildroot] [git commit] u-boot: bump 2013.01.x version
-Message-ID: <20130203142937.01EF39A917@busybox.osuosl.org>
+From: hayate <hayatelee@gmail.com>
+Date: Sun, 3 Feb 2013 23:13:18 +0800
+Subject: [Buildroot] Errors about BX when building toolchain under latest
+	buildroot
+Message-ID: <CAJXWAww+geVHWFvn4dy+HaFs0P8vNtHX11xCVUo5tCvAvEx1Pw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ea6f3bd9f25d7a0c3e39a166036a7f8b74935a72
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- boot/uboot/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Latest buildroot buildroot-2012.11.1
+choose: arm-LittleEndian, generic arm, OABI, gcc 4.6.3, uClibc-0.9.33.1
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index f10b6d0..d22e23b 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -19,7 +19,7 @@ choice
- 	  Select the specific U-Boot version you want to use
- 
- config BR2_TARGET_UBOOT_2013_01
--	bool "2013.01"
-+	bool "2013.01.01"
- 
- config BR2_TARGET_UBOOT_2012_10
- 	bool "2012.10"
-@@ -58,7 +58,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2013.01"	if BR2_TARGET_UBOOT_2013_01
-+	default "2013.01.01"	if BR2_TARGET_UBOOT_2013_01
- 	default "2012.10"	if BR2_TARGET_UBOOT_2012_10
- 	default "2012.07"	if BR2_TARGET_UBOOT_2012_07
- 	default "2012.04.01"	if BR2_TARGET_UBOOT_2012_04
+Others are unchanged
+
+Then encounter errors saying that BX is not available on the target
+processor
+
+However changing to uClibc from 0.9.33 to 0.9.31 makes building successful.
+
+Is this a bug? Should that USE_BX or 0.9.33 be disabled when selecting
+generic arm?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130203/4f3806fe/attachment.html>
