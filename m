@@ -1,228 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Feb 2013 14:37:23 +0100
-Subject: [Buildroot] [PATCH] neard: fix missing nfc.h header
-Message-ID: <1359898643-24467-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  3 Feb 2013 14:40:00 +0100
+Subject: [Buildroot] [pull request v4] Pull request for branch
+	yem-new-packages
+Message-ID: <cover.1359898663.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have a patch that allows neard to build even on toolchain using old
-kernel headers that lack the nfc.h header. However, after the bump to
-neard 0.9, this patch was not updated to take into account the two new
-plugins that neard has added.
+Hello All!
 
-Fixes http://autobuild.buildroot.org/results/5eeb6f62cc0e654a536b6614dc51e8af4e301bb6/build-end.log
+This series deals with adding the required packages to build QEMU on
+the target.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../neard/neard-fix-missing-linux-nfc-header.patch |  104 +++++++++++++-------
- 1 file changed, 68 insertions(+), 36 deletions(-)
+Hopefully, we'll have time to review and definitely ack/nack that
+during the DevDay in Brussels. ;-)
 
-diff --git a/package/neard/neard-fix-missing-linux-nfc-header.patch b/package/neard/neard-fix-missing-linux-nfc-header.patch
-index 9b9ce32..b04c5da 100644
---- a/package/neard/neard-fix-missing-linux-nfc-header.patch
-+++ b/package/neard/neard-fix-missing-linux-nfc-header.patch
-@@ -10,10 +10,10 @@ is available or not, and if not, use our own private copy of it.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
--Index: neard-0.8/configure.ac
-+Index: b/configure.ac
- ===================================================================
----- neard-0.8.orig/configure.ac	2012-11-03 19:56:07.000000000 +0100
--+++ neard-0.8/configure.ac	2012-12-09 17:08:00.000000000 +0100
-+--- a/configure.ac
-++++ b/configure.ac
- @@ -88,6 +88,8 @@
-  AC_SUBST(NETLINK_CFLAGS)
-  AC_SUBST(NETLINK_LIBS)
-@@ -23,10 +23,10 @@ Index: neard-0.8/configure.ac
-  AC_ARG_ENABLE(test, AC_HELP_STRING([--enable-test],
-  					[enable test/example scripts]),
-  					[enable_test=${enableval}])
--Index: neard-0.8/src/near.h
-+Index: b/src/near.h
- ===================================================================
----- neard-0.8.orig/src/near.h	2012-11-03 19:56:07.000000000 +0100
--+++ neard-0.8/src/near.h	2012-12-09 16:56:40.000000000 +0100
-+--- a/src/near.h
-++++ b/src/near.h
- @@ -23,7 +23,11 @@
-  #include <sys/socket.h>
-  
-@@ -39,10 +39,10 @@ Index: neard-0.8/src/near.h
-  
-  #include <glib.h>
-  
--Index: neard-0.8/src/linux-nfc.h
-+Index: b/src/linux-nfc.h
- ===================================================================
----- /dev/null	1970-01-01 00:00:00.000000000 +0000
--+++ neard-0.8/src/linux-nfc.h	2012-12-09 17:11:10.000000000 +0100
-+--- /dev/null
-++++ b/src/linux-nfc.h
- @@ -0,0 +1,197 @@
- +/*
- + * Copyright (C) 2011 Instituto Nokia de Tecnologia
-@@ -241,10 +241,10 @@ Index: neard-0.8/src/linux-nfc.h
- +#define NFC_LLCP_DIRECTION_TX		0x01
- +
- +#endif /*__LINUX_NFC_H */
--Index: neard-0.8/plugins/mifare.c
-+Index: b/plugins/mifare.c
- ===================================================================
----- neard-0.8.orig/plugins/mifare.c	2012-10-10 05:29:07.000000000 +0200
--+++ neard-0.8/plugins/mifare.c	2012-12-09 16:58:22.000000000 +0100
-+--- a/plugins/mifare.c
-++++ b/plugins/mifare.c
- @@ -29,7 +29,11 @@
-  #include <sys/socket.h>
-  
-@@ -257,10 +257,10 @@ Index: neard-0.8/plugins/mifare.c
-  
-  #include <near/plugin.h>
-  #include <near/log.h>
--Index: neard-0.8/plugins/p2p.c
-+Index: b/plugins/p2p.c
- ===================================================================
----- neard-0.8.orig/plugins/p2p.c	2012-11-03 19:56:07.000000000 +0100
--+++ neard-0.8/plugins/p2p.c	2012-12-09 16:59:06.000000000 +0100
-+--- a/plugins/p2p.c
-++++ b/plugins/p2p.c
- @@ -30,7 +30,11 @@
-  #include <sys/socket.h>
-  
-@@ -273,10 +273,10 @@ Index: neard-0.8/plugins/p2p.c
-  
-  #include <near/plugin.h>
-  #include <near/log.h>
--Index: neard-0.8/plugins/handover.c
-+Index: b/plugins/handover.c
- ===================================================================
----- neard-0.8.orig/plugins/handover.c	2012-11-03 19:56:07.000000000 +0100
--+++ neard-0.8/plugins/handover.c	2012-12-09 17:13:30.000000000 +0100
-+--- a/plugins/handover.c
-++++ b/plugins/handover.c
- @@ -29,7 +29,11 @@
-  #include <sys/socket.h>
-  
-@@ -289,10 +289,10 @@ Index: neard-0.8/plugins/handover.c
-  
-  #include <near/types.h>
-  #include <near/log.h>
--Index: neard-0.8/plugins/nfctype1.c
-+Index: b/plugins/nfctype1.c
- ===================================================================
----- neard-0.8.orig/plugins/nfctype1.c	2012-10-10 05:29:07.000000000 +0200
--+++ neard-0.8/plugins/nfctype1.c	2012-12-09 17:09:13.000000000 +0100
-+--- a/plugins/nfctype1.c
-++++ b/plugins/nfctype1.c
- @@ -29,7 +29,11 @@
-  #include <sys/socket.h>
-  
-@@ -305,10 +305,10 @@ Index: neard-0.8/plugins/nfctype1.c
-  
-  #include <near/plugin.h>
-  #include <near/log.h>
--Index: neard-0.8/plugins/nfctype2.c
-+Index: b/plugins/nfctype2.c
- ===================================================================
----- neard-0.8.orig/plugins/nfctype2.c	2012-10-10 05:29:07.000000000 +0200
--+++ neard-0.8/plugins/nfctype2.c	2012-12-09 17:09:52.000000000 +0100
-+--- a/plugins/nfctype2.c
-++++ b/plugins/nfctype2.c
- @@ -29,7 +29,11 @@
-  #include <sys/socket.h>
-  
-@@ -321,10 +321,10 @@ Index: neard-0.8/plugins/nfctype2.c
-  
-  #include <near/plugin.h>
-  #include <near/log.h>
--Index: neard-0.8/plugins/nfctype3.c
-+Index: b/plugins/nfctype3.c
- ===================================================================
----- neard-0.8.orig/plugins/nfctype3.c	2012-11-03 19:56:07.000000000 +0100
--+++ neard-0.8/plugins/nfctype3.c	2012-12-09 17:11:51.000000000 +0100
-+--- a/plugins/nfctype3.c
-++++ b/plugins/nfctype3.c
- @@ -29,7 +29,11 @@
-  #include <sys/socket.h>
-  
-@@ -337,10 +337,10 @@ Index: neard-0.8/plugins/nfctype3.c
-  
-  #include <near/plugin.h>
-  #include <near/log.h>
--Index: neard-0.8/plugins/nfctype4.c
-+Index: b/plugins/nfctype4.c
- ===================================================================
----- neard-0.8.orig/plugins/nfctype4.c	2012-11-03 19:56:07.000000000 +0100
--+++ neard-0.8/plugins/nfctype4.c	2012-12-09 17:12:14.000000000 +0100
-+--- a/plugins/nfctype4.c
-++++ b/plugins/nfctype4.c
- @@ -30,7 +30,11 @@
-  #include <sys/socket.h>
-  
-@@ -353,10 +353,10 @@ Index: neard-0.8/plugins/nfctype4.c
-  
-  #include <near/plugin.h>
-  #include <near/log.h>
--Index: neard-0.8/plugins/npp.c
-+Index: b/plugins/npp.c
- ===================================================================
----- neard-0.8.orig/plugins/npp.c	2012-10-10 05:29:07.000000000 +0200
--+++ neard-0.8/plugins/npp.c	2012-12-09 17:12:36.000000000 +0100
-+--- a/plugins/npp.c
-++++ b/plugins/npp.c
- @@ -29,7 +29,11 @@
-  #include <sys/socket.h>
-  
-@@ -369,10 +369,42 @@ Index: neard-0.8/plugins/npp.c
-  
-  #include <near/plugin.h>
-  #include <near/log.h>
--Index: neard-0.8/plugins/snep.c
-+Index: b/plugins/snep.c
- ===================================================================
----- neard-0.8.orig/plugins/snep.c	2012-11-03 19:56:07.000000000 +0100
--+++ neard-0.8/plugins/snep.c	2012-12-09 17:13:07.000000000 +0100
-+--- a/plugins/snep.c
-++++ b/plugins/snep.c
-+@@ -29,7 +29,11 @@
-+ #include <sys/socket.h>
-+ 
-+ #include <linux/socket.h>
-++#ifdef HAVE_LINUX_NFC_H
-+ #include <linux/nfc.h>
-++#else
-++#include "../src/linux-nfc.h"
-++#endif
-+ 
-+ #include <near/plugin.h>
-+ #include <near/log.h>
-+Index: b/plugins/snep-core.c
-+===================================================================
-+--- a/plugins/snep-core.c
-++++ b/plugins/snep-core.c
-+@@ -29,7 +29,11 @@
-+ #include <sys/socket.h>
-+ 
-+ #include <linux/socket.h>
-++#ifdef HAVE_LINUX_NFC_H
-+ #include <linux/nfc.h>
-++#else
-++#include "../src/linux-nfc.h"
-++#endif
-+ 
-+ #include <near/plugin.h>
-+ #include <near/log.h>
-+Index: b/plugins/snep-validation.c
-+===================================================================
-+--- a/plugins/snep-validation.c
-++++ b/plugins/snep-validation.c
- @@ -29,7 +29,11 @@
-  #include <sys/socket.h>
-  
+
+Changes v3 -> v4:
+  - removed pmake patches, grab them at download time (Arnout, Thomas)
+
+Changes v2 -> v3:
+  - rebased on-top latest tree, drop already applied packages
+  - bumped usbredir version (needed later for qemu 1.3.x)
+
+Changes v1 -> v2:
+  - vde2: do not require C++ (Peter)
+  - usbredir: select libusb (Peter)
+  - ceph: use 'select' instead of 'depends on'
+  - cegui06: add comment
+
+
+The following changes since commit 1382af876b1f5d89201c1b96116b0814990a8dba:
+
+  toolchain-external: remove support for AArch64 Linaro 2012.10 toolchain (2013-02-02 17:35:53 +0100)
+
+are available in the git repository at:
+  git://gitorious.org/buildroot/buildroot.git yem-new-packages
+
+Yann E. MORIN (7):
+      package/usbredir: update to version 0.6
+      package/pmake: add host pmake
+      package/libbsd: new package
+      package/libedit2: new package
+      package/ceph: new package
+      package/dtc: new package
+      package/dtc: add option to install programs
+
+ package/Config.in                                  |    4 +
+ package/ceph/Config.in                             |   23 ++++++
+ package/ceph/ceph-no-envz.patch                    |   63 ++++++++++++++++
+ package/ceph/ceph-no-getloadavg.patch              |   61 ++++++++++++++++
+ package/ceph/ceph-no-posix_fallocate.patch         |   50 +++++++++++++
+ package/ceph/ceph.mk                               |   53 ++++++++++++++
+ package/dtc/Config.in                              |   29 ++++++++
+ package/dtc/dtc-extra_cflags.patch                 |   27 +++++++
+ package/dtc/dtc-separate-lib-install.patch         |   28 +++++++
+ package/dtc/dtc.mk                                 |   51 +++++++++++++
+ package/libbsd/Config.in                           |   10 +++
+ package/libbsd/libbsd.mk                           |   21 ++++++
+ package/libedit2/Config.in                         |    9 +++
+ package/libedit2/libedit2-01-Makefile.patch        |   25 +++++++
+ package/libedit2/libedit2-02-el.c-issetugid.patch  |   24 ++++++
+ package/libedit2/libedit2-03-el.c-MAXPATHLEN.patch |   40 +++++++++++
+ .../libedit2/libedit2-04-readline.h-stdio.patch    |   17 +++++
+ .../libedit2/libedit2-08-readline-history.h.patch  |   20 +++++
+ .../libedit2/libedit2-10-define_SIZE_T_MAX.patch   |   18 +++++
+ .../libedit2/libedit2-12-libedit-Makefile.patch    |   54 ++++++++++++++
+ package/libedit2/libedit2-20-fortify.patch         |   23 ++++++
+ package/libedit2/libedit2.mk                       |   75 ++++++++++++++++++++
+ package/libedit2/libedit2.pc                       |   13 ++++
+ package/pmake/pmake.mk                             |   49 +++++++++++++
+ package/usbredir/usbredir.mk                       |    2 +-
+ 25 files changed, 788 insertions(+), 1 deletions(-)
+ create mode 100644 package/ceph/Config.in
+ create mode 100644 package/ceph/ceph-no-envz.patch
+ create mode 100644 package/ceph/ceph-no-getloadavg.patch
+ create mode 100644 package/ceph/ceph-no-posix_fallocate.patch
+ create mode 100644 package/ceph/ceph.mk
+ create mode 100644 package/dtc/Config.in
+ create mode 100644 package/dtc/dtc-extra_cflags.patch
+ create mode 100644 package/dtc/dtc-separate-lib-install.patch
+ create mode 100644 package/dtc/dtc.mk
+ create mode 100644 package/libbsd/Config.in
+ create mode 100644 package/libbsd/libbsd.mk
+ create mode 100644 package/libedit2/Config.in
+ create mode 100644 package/libedit2/libedit2-01-Makefile.patch
+ create mode 100644 package/libedit2/libedit2-02-el.c-issetugid.patch
+ create mode 100644 package/libedit2/libedit2-03-el.c-MAXPATHLEN.patch
+ create mode 100644 package/libedit2/libedit2-04-readline.h-stdio.patch
+ create mode 100644 package/libedit2/libedit2-08-readline-history.h.patch
+ create mode 100644 package/libedit2/libedit2-10-define_SIZE_T_MAX.patch
+ create mode 100644 package/libedit2/libedit2-12-libedit-Makefile.patch
+ create mode 100644 package/libedit2/libedit2-20-fortify.patch
+ create mode 100644 package/libedit2/libedit2.mk
+ create mode 100644 package/libedit2/libedit2.pc
+ create mode 100644 package/pmake/pmake.mk
+
+Regards,
+Yann E. MORIN
+
 -- 
-1.7.9.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
