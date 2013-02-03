@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Feb 2013 15:06:48 +0100
-Subject: [Buildroot] [PATCH 11/29] package/qemu: add uuid support
+Date: Sun,  3 Feb 2013 15:06:49 +0100
+Subject: [Buildroot] [PATCH 12/29] package/qemu: add support for capabilities
 In-Reply-To: <cover.1359899108.git.yann.morin.1998@free.fr>
 References: <cover.1359899108.git.yann.morin.1998@free.fr>
-Message-ID: <5a9b12a473dbac0a329967563eca01738fd98930.1359899108.git.yann.morin.1998@free.fr>
+Message-ID: <689b1334bb1d8dada6419b0304580d90e24dd1fd.1359899108.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,56 +12,56 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   10 ++++++++++
- package/qemu/qemu.mk   |    8 +++++++-
+ package/qemu/Config.in |    7 +++++++
+ package/qemu/qemu.mk   |   11 ++++++++++-
  2 files changed, 17 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 7823842..4384cc5 100644
+index 4384cc5..60a0b32 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -101,6 +101,16 @@ config BR2_PACKAGE_QEMU_SDL
+@@ -111,6 +111,13 @@ config BR2_PACKAGE_QEMU_UUID
+ comment "UUID support requires util-linux (for libuuid)"
+ 	depends on !BR2_PACKAGE_UTIL_LINUX
  
- comment "Misc. features"
- 
-+config BR2_PACKAGE_QEMU_UUID
-+	bool "Enable VMs UUID"
-+	depends on BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++config BR2_PACKAGE_QEMU_CAP
++	bool "Enable capabilities"
++	select BR2_PACKAGE_LIBCAP
++	select BR2_PACKAGE_LIBCAP_NG
 +	help
-+	  Say 'y' here to have QEMU support UUIDs for VMs.
-+
-+comment "UUID support requires util-linux (for libuuid)"
-+	depends on !BR2_PACKAGE_UTIL_LINUX
++	  Say 'y' here if you want QEMU to support capabilities.
 +
  config BR2_PACKAGE_QEMU_BLOBS
  	bool "Install binary blobs"
  	default y
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 8d08f6b..d2b1bbf 100644
+index d2b1bbf..7c6a7b9 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -149,6 +149,13 @@ else
- QEMU_OPTS += --disable-sdl
+@@ -156,6 +156,16 @@ else
+ QEMU_OPTS += --disable-uuid
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
-+QEMU_OPTS += --enable-uuid
-+QEMU_DEPENDENCIES += util-linux
++# There's no configure flag to disable use of libcap
++# so we must use an environment variable
++ifeq ($(BR2_PACKAGE_QEMU_CAP),y)
++QEMU_OPTS += --enable-cap-ng
++QEMU_DEPENDENCIES += libcap libcap-ng
 +else
-+QEMU_OPTS += --disable-uuid
++QEMU_OPTS += --disable-cap-ng
++QEMU_VARS += cap=no
 +endif
 +
  ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
  QEMU_OPTS += --disable-blobs
  endif
-@@ -235,7 +242,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-fdt                       \
- 	        --disable-bluez                     \
+@@ -244,7 +254,6 @@ define QEMU_CONFIGURE_CMDS
  	        --disable-guest-base                \
--	        --disable-uuid                      \
  	        --disable-vde                       \
  	        --disable-linux-aio                 \
- 	        --disable-cap-ng                    \
+-	        --disable-cap-ng                    \
+ 	        --disable-docs                      \
+ 	        --disable-spice                     \
+ 	        --disable-rbd                       \
 -- 
 1.7.2.5
