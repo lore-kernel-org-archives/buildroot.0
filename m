@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Feb 2013 13:15:28 +0100
-Subject: [Buildroot] [PATCH 2/2] tvheadend: disable on avr32
-In-Reply-To: <1359893728-4345-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1359893728-4345-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1359893728-4345-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun,  3 Feb 2013 13:30:22 +0100
+Subject: [Buildroot] [PATCH] gdb: build gdbserver with TARGET_MAKE_ENV
+Message-ID: <1359894622-4783-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tvheadend requires an atomic_add operation. Either you have a gcc >=
-4.3 toolchain and it uses the gcc intrinsics, or it has special code
-for x86, x86-64, PPC and ARM. So in the context of Buildroot, the only
-really problematic architecture is avr32, which uses gcc 4.2.
+This commit fixes the exact same problem than
+21a0c11a90f9ff19c78a5f32e0a2e9064fd28054, but for the gdbserver
+build. The problem is that when you use the Crosstool-NG toolchain
+backend, gawk gets built as a dependency of Crosstool-NG. So the gdb
+configure scripts detects it, and assumes it is in the PATH (because
+the gdb configure step gets run with TARGET_MAKE_ENV).
 
-Fixes http://autobuild.buildroot.org/results/f015b1888d739c383aca61609059aa7675a4da7d/build-end.log
+But then, the build fails, because it tries to run gawk, but gawk
+isn't in the PATH, because we forget to use this TARGET_MAKE_ENV
+variable when building gdbserver.
+
+Fixes http://autobuild.buildroot.org/results/d0173de533b5e2fffed2eff7327a502ed2d787cd/build-end.log
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tvheadend/Config.in |    6 ++++++
- 1 file changed, 6 insertions(+)
+ toolchain/gdb/gdb.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index 899b160..19ab276 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -4,6 +4,12 @@ comment "tvheadend requires a toolchain with LARGEFILE and IPv6 support"
- config BR2_PACKAGE_TVHEADEND
- 	bool "tvheadend"
- 	depends on BR2_LARGEFILE && BR2_INET_IPV6
-+	# tvheadend requires an atomic_add operation. Either you have
-+	# a gcc >= 4.3 toolchain and it uses the gcc intrinsics, or it
-+	# has special code for x86, x86-64, PPC and ARM. So in the
-+	# context of Buildroot, the only really problematic
-+	# architecture is avr32, which uses gcc 4.2.
-+	depends on !BR2_avr32
- 	select BR2_PACKAGE_DVB_APPS
- 	select BR2_PACKAGE_OPENSSL
- 	help
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index 4b8fe3a..a932b1f 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -144,6 +144,7 @@ $(GDB_SERVER_DIR)/.configured: $(GDB_DIR)/.unpacked
+ 	touch $@
+ 
+ $(GDB_SERVER_DIR)/gdbserver: $(GDB_SERVER_DIR)/.configured
++	$(TARGET_MAKE_ENV) \
+ 	$(MAKE) CC="$(TARGET_CC)" MT_CFLAGS="$(TARGET_CFLAGS)" \
+ 		-C $(GDB_SERVER_DIR)
+ 
 -- 
 1.7.9.5
