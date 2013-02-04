@@ -1,41 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  4 Feb 2013 22:05:40 +0000 (UTC)
-Subject: [Buildroot] [Bug 5900] config flags to the Xenomai build system ...
-In-Reply-To: <bug-5900-163@https.bugs.busybox.net/>
-References: <bug-5900-163@https.bugs.busybox.net/>
-Message-ID: <20130204220540.1A2999A883@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 04 Feb 2013 23:06:43 +0100
+Subject: [Buildroot] X11 component versions
+In-Reply-To: <CAOT3miJUfF3Oc2XFXJRiLCtMxtsHSWZWWLGvGyc+zNkqHGgnEw@mail.gmail.com>
+References: <CAOT3miKoAF=cPMfwy4=u=gZAjh+6NZE-qzVPUtqANCe5X3_LCg@mail.gmail.com>
+ <510F9155.6050904@carallon.com>
+ <CAOT3miLtOy0VwYc0b5DV_snUci0AD5gQzO=ugvsuniMsYd+dow@mail.gmail.com>
+ <510F9768.4020907@carallon.com> <20130204214018.2efc0bfb@skate>
+ <CAOT3miKRqb5EvLgrLPkxK32YHLj5QOsqgP5n0zy__rb5L22Kbg@mail.gmail.com>
+ <20130204223024.0e687d5b@skate>
+ <CAOT3miJUfF3Oc2XFXJRiLCtMxtsHSWZWWLGvGyc+zNkqHGgnEw@mail.gmail.com>
+Message-ID: <511030F3.1060407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5900
+On 04/02/13 22:37, Nicolas Dechesne wrote:
+> another question: do we really want to have 100+ patches to upgrade to
+> R7.7, or should we make 1 commit that bumps all components (and
+> remove/add the relevant ones)? I am asking because i think that any
+> 'commit' in between the 100+ patches could put BR in a bad state.. Of
+> course if we upgrade just 1 specific component later on (before R7.8
+> is made) then it can be made 'manually', but for large release
+> upgrade, maybe 1 commit makes sense..
 
---- Comment #2 from teratux <raespi@icid.cu> 2013-02-04 22:06:01 UTC ---
-Yes I'm using those two options:
-BR2_arm920t=y
-BR2_PREFER_SOFT_FLOAT=y
-BR2_SOFT_FLOAT=y
+  I certainly prefer a single tested patch than 100 patches where the 
+intermediate steps have not been tested.
 
-I noted they were missing when I saw the config.log in the build/xenomai-2.6.0/
-directory.  This is how it looks now after adding them manually in the
-xenomai.mk recipe:
+  The server should perhaps be a separate patch, because it probably 
+needs changes in the configure options as well. But then again, this 
+could leave the tree in an unbuildable state...
 
-  $ ./configure --target=arm-linux --host=arm-linux --build=i686-pc-linux-gnu
---prefix=/usr --exec-prefix=/usr --sysconfdir=/etc --program-prefix=
---disable-gtk-doc --enable-ipv6 --enable-static --enable-shared
---includedir=/usr/include/xenomai/ CFLAGS=-march=armv4t -msoft-float
-LDFLAGS=-march=armv4t -msoft-float
-
-Notice the CFLAGS and LDFLAGS at the end ...
-
-(In reply to comment #1)
-> If you select the proper armv4t core in "Target Architecture Variant" and have
-> the BR2_SOFT_FLOAT option enabled, then we are normally already passing those
-> two flags to Xenomai ./configure script.
+  Regards,
+  Arnout
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
