@@ -1,32 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Feb 2013 00:26:18 +0100
-Subject: [Buildroot] [git commit] package/qemu: bump version to 1.3.1
-Message-ID: <20130204233220.038A59A952@busybox.osuosl.org>
+From: Shawn J. Goff <shawn7400@gmail.com>
+Date: Mon, 04 Feb 2013 18:39:43 -0500
+Subject: [Buildroot] Insufficient RPC options for crosstool-ng toolchain
+In-Reply-To: <20130205003238.2ec5aa65@skate>
+References: <511037F4.8090906@gmail.com> <20130205003238.2ec5aa65@skate>
+Message-ID: <511046BF.1070902@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 02/04/2013 06:32 PM, Thomas Petazzoni wrote:
+> Dear Shawn J. Goff,
+>
+> On Mon, 04 Feb 2013 17:36:36 -0500, Shawn J. Goff wrote:
+>> I'm getting an error about a missing rpc_msg.h while building
+>> conntrack-tools. That package selects libtirpc if
+>> !BR2_TOOLCHAIN_HAS_NATIVE_RPC. I'm having BR build the toolchain using
+>> ct-ng; I looked at the  toolchain-crosstool-ng/Config.in and it selects
+>> BR2_TOOLCHAIN_HAS_NATIVE_RPC because the ct-ng config that ships with BR
+>> uses glibc 2.9. My ct-ng config uses glibc 2.14, which doesn't have
+>> native RPC support.
+> Correct.
+>
+>> I started to make a patch that allows for explicitly selecting
+>> BR2_TOOLCHAIN_HAS_NATIVE_RPC like the external-toolchain allows,
+> Seems like the good solution yes.
+>
+>> but I
+>> ran across check_glibc function and the ext-toolchain-checked stamp and
+>> it looks like quite a lot, so I wanted to find out if you actually want
+>> all that for this fix.
+> What problems did you encounter exactly? It should be fairly similar to
+> what we do for external toolchains I believe, no?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qemu/qemu.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 65989f4..806ffd8 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--QEMU_VERSION = 1.3.0
-+QEMU_VERSION = 1.3.1
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
- QEMU_SITE = http://wiki.qemu.org/download
- QEMU_LICENSE = GPLv2 LGPLv2.1 MIT BSD-3c BSD-2c Others/BSD-1c
+No problems, it just that when I started down the path, I thought it 
+would be just an option, but there turned out to be this whole 
+toolchain-checked thing behind it, so I wanted to make sure that is 
+what's wanted before I do it.
