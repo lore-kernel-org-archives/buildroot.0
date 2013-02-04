@@ -1,42 +1,32 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Mon, 04 Feb 2013 11:11:36 +0000
-Subject: [Buildroot] X11 component versions
-In-Reply-To: <CAOT3miLtOy0VwYc0b5DV_snUci0AD5gQzO=ugvsuniMsYd+dow@mail.gmail.com>
-References: <CAOT3miKoAF=cPMfwy4=u=gZAjh+6NZE-qzVPUtqANCe5X3_LCg@mail.gmail.com>
- <510F9155.6050904@carallon.com>
- <CAOT3miLtOy0VwYc0b5DV_snUci0AD5gQzO=ugvsuniMsYd+dow@mail.gmail.com>
-Message-ID: <510F9768.4020907@carallon.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  4 Feb 2013 09:20:30 -0300
+Subject: [Buildroot] [PATCH] iw: switch upstream site
+Message-ID: <1359980430-11982-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/2013 10:56, Nicolas Dechesne wrote:
-> On Mon, Feb 4, 2013 at 11:45 AM, Will Wagner <will_wagner@carallon.com> wrote:
->> I have a set of patches for doing just that, just not had a chance to get
->> back to it and tidy them up for submission.
->>
->> It's still on my list of things to do, hopefully I'll find some time for it
->> soon.
->
-> nice. if you have a 'not-yet-ready' branch somewhere, i can look at
-> it, and test. I am primarily interesting in trying it on Pandaboard,
-> and in that process I can package the xf86-video-omap X11 driver as
-> well (which was what I wanted to do initially, until i realized that
-> X11 in BR was too old ;-)
->
+It's moved from wireless.kernel.org to generic kernel.org
 
-You can find my work on updating to x11r7.7 on gitorious at
-https://gitorious.org/willw-buildroot/willw-buildroot/commits/remotes/gitorious/x11r7.7 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/iw/iw.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-It is now based on a much older buildroot version and needs a lot of 
-work to update.
-
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 22ea25c..9233833 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -6,7 +6,7 @@
+ 
+ IW_VERSION = 3.8
+ IW_SOURCE = iw-$(IW_VERSION).tar.bz2
+-IW_SITE = http://wireless.kernel.org/download/iw
++IW_SITE = http://www.kernel.org/pub/software/network/iw
+ IW_LICENSE = iw license
+ IW_LICENSE_FILES = COPYING
+ IW_DEPENDENCIES = host-pkgconf libnl
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+1.7.12.4
