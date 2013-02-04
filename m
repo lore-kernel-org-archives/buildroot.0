@@ -1,22 +1,23 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Feb 2013 23:34:20 +0100
-Subject: [Buildroot] [PATCH 1/2] tvheadend: get rid of trailing
-	spaces/tabs
-In-Reply-To: <1359893728-4345-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 3 Feb 2013 13:15:27 +0100")
-References: <1359893728-4345-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8762273dzn.fsf@dell.be.48ers.dk>
+From: Shawn J. Goff <shawn7400@gmail.com>
+Date: Mon, 04 Feb 2013 17:36:36 -0500
+Subject: [Buildroot] Insufficient RPC options for crosstool-ng toolchain
+Message-ID: <511037F4.8090906@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+I'm getting an error about a missing rpc_msg.h while building 
+conntrack-tools. That package selects libtirpc if 
+!BR2_TOOLCHAIN_HAS_NATIVE_RPC. I'm having BR build the toolchain using 
+ct-ng; I looked at the  toolchain-crosstool-ng/Config.in and it selects 
+BR2_TOOLCHAIN_HAS_NATIVE_RPC because the ct-ng config that ships with BR 
+uses glibc 2.9. My ct-ng config uses glibc 2.14, which doesn't have 
+native RPC support.
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+I started to make a patch that allows for explicitly selecting 
+BR2_TOOLCHAIN_HAS_NATIVE_RPC like the external-toolchain allows, but I 
+ran across check_glibc function and the ext-toolchain-checked stamp and 
+it looks like quite a lot, so I wanted to find out if you actually want 
+all that for this fix.
