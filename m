@@ -1,25 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  4 Feb 2013 22:31:19 +0000 (UTC)
-Subject: [Buildroot] [Bug 5900] config flags to the Xenomai build system ...
-In-Reply-To: <bug-5900-163@https.bugs.busybox.net/>
-References: <bug-5900-163@https.bugs.busybox.net/>
-Message-ID: <20130204223119.BC4109A946@busybox.osuosl.org>
+From: Alexandre Belloni <alexandre.belloni@piout.net>
+Date: Mon,  4 Feb 2013 23:26:12 +0100
+Subject: [Buildroot] [PATCH 1/2] Add defconfig for ATMEL at91sam9g45m10ek
+	board
+Message-ID: <1360016773-8691-1-git-send-email-alexandre.belloni@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5900
+Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
+---
+ configs/at91sam9g45m10ek_defconfig |    9 +++++++++
+ 1 file changed, 9 insertions(+)
+ create mode 100644 configs/at91sam9g45m10ek_defconfig
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-02-04 22:31:41 UTC ---
-They are in fact not necessarily present on the command line because since you
-use the internal backend, we build gcc to generate armv4t code by default, so
-it's not useful to pass -march=armv4t all the time.
-
-Is Xenomai actually checking the presence of those command line flags directly?
-
+diff --git a/configs/at91sam9g45m10ek_defconfig b/configs/at91sam9g45m10ek_defconfig
+new file mode 100644
+index 0000000..c958859
+--- /dev/null
++++ b/configs/at91sam9g45m10ek_defconfig
+@@ -0,0 +1,9 @@
++BR2_arm=y
++BR2_arm926t=y
++BR2_PACKAGE_HOST_SAM_BA=y
++BR2_TARGET_AT91BOOTSTRAP=y
++BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9m10g45ek"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="at91sam9m10g45ek_nandflash"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_DEFCONFIG="at91sam9g45"
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.10.4
