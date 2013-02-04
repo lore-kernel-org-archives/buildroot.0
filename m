@@ -1,35 +1,32 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 4 Feb 2013 20:33:43 +0200
-Subject: [Buildroot] Wireless config tool
-In-Reply-To: <CAN_xxrXSRK6-DPKkC+8UAVAWQQExVkgGPk4vvPWfMs_DsnJ2ng@mail.gmail.com>
-References: <CAN_xxrXSRK6-DPKkC+8UAVAWQQExVkgGPk4vvPWfMs_DsnJ2ng@mail.gmail.com>
-Message-ID: <20130204183343.GA4116@tarshish>
+From: Aditya Rawat <aditya@eddywebs.com>
+Date: Mon, 4 Feb 2013 13:51:34 -0500
+Subject: [Buildroot] Bumping Buildroot environment
+Message-ID: <CAFzEKXHEC4t+shO4F3YprMnxCJtRbNoo5RFp5A0bx5TOXJh+Vw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stephen,
+Hello, I am just starting out with working on Buildroot and so far its been
+amazing !
 
-On Mon, Feb 04, 2013 at 12:17:23PM -0500, Stephen Turner wrote:
-> Firstly i would like to say thank you for the support on the Squashfs
-> questions, i was able to get the information i needed to resolve that issue.
-> 
-> My current question is if im using a mobile device that will be connecting
-> to various wifi hotspots i will need to be able to setup wifi connections
-> easily from a gui. currently with buildroot i only see the option to
-> manually edit configs to set up hotspots. Is there a tool im overlooking
-> currently in buildroot to help with this setup or will i need to manually
-> add one in? Im looking for something similiar to wicd or how a android
-> device would manage wifi connections.
+my question was : How could we go about bumping a buildroot environment to
+the most recent one ?
+You see I had been working one a buildroot environment at
+https://github.com/j1nx/buildroot-AmLogic
+and noticed some of the packages were missing or not there at all as from
+the most recent Buildroot release.
 
-Seems you need connman (http://connman.net). Buildroot includes a fairly 
-recent version of connman. I haven't tried it myself, though.
+So I tried doing a  "Git merge" of the Buildroot current branch to the
+older buildroot environment at >> https://github.com/j1nx/buildroot-AmLogic
+and it went ahead broke dozen different things.
 
-baruch
+Any pointers to update the Buildroot environment the right way ?
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Best Wishes;
+Adi
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130204/03f9db10/attachment.html>
