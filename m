@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Feb 2013 00:01:46 +0100
-Subject: [Buildroot] [PATCH 08/10] liboping: add license information
-In-Reply-To: <51084F32.5000503@zacarias.com.ar> (Gustavo Zacarias's message of
- "Tue, 29 Jan 2013 19:37:38 -0300")
+Date: Tue, 05 Feb 2013 00:05:24 +0100
+Subject: [Buildroot] [PATCH 02/10] dialog: add license information
+In-Reply-To: <51084F9E.6080408@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Tue, 29 Jan 2013 19:39:26 -0300")
 References: <1359483839-25357-1-git-send-email-gustavo@zacarias.com.ar>
- <1359483839-25357-8-git-send-email-gustavo@zacarias.com.ar>
- <87a9rrbp3n.fsf@dell.be.48ers.dk> <51084F32.5000503@zacarias.com.ar>
-Message-ID: <87sj5by97p.fsf@dell.be.48ers.dk>
+ <1359483839-25357-2-git-send-email-gustavo@zacarias.com.ar>
+ <87zjzrbphn.fsf@dell.be.48ers.dk> <51084F9E.6080408@zacarias.com.ar>
+Message-ID: <87obfzy91n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,14 +15,18 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> On 01/29/2013 07:29 PM, Peter Korsgaard wrote:
- >> Hmm, I don't see any mention og GPL right away, and only a COPYING file
- >> (no COPYING.LIB)?
+ Gustavo> On 01/29/2013 07:20 PM, Peter Korsgaard wrote:
+ >> None of the source files mention anything else than LGPLv2.1, so I will
+ >> drop the +
+ >> 
+ >> Committed with that change, thanks.
 
- Gustavo> README
- Gustavo> src/oping.c
+ Gustavo> Actually progressbox.c...
 
-Ahh yes - Committed, thanks.
+Ahh, you're right. So we have 33 .c files (including the main one) not
+listing 'or later', and a single one which does.
+
+What does that mean?
 
 -- 
 Bye, Peter Korsgaard
