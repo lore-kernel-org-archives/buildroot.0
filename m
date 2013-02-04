@@ -1,32 +1,23 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Feb 2013 00:11:29 +0100
-Subject: [Buildroot] [git commit] package/usbredir: update to version 0.6
-Message-ID: <20130204232542.6D20C9A928@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 05 Feb 2013 00:29:56 +0100
+Subject: [Buildroot] [PATCH 01/29] package/qemu: bump version to 1.3.1
+In-Reply-To: <89f4d1b139ee9299e51dbc259a2c02f8f9545e3e.1359899108.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 3 Feb 2013 15:06:38 +0100")
+References: <cover.1359899108.git.yann.morin.1998@free.fr>
+ <cover.1359899108.git.yann.morin.1998@free.fr>
+ <89f4d1b139ee9299e51dbc259a2c02f8f9545e3e.1359899108.git.yann.morin.1998@free.fr>
+Message-ID: <87bobzy7wr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f47ae4ea0f67e1ae093365dc73bf82b7e7fdd80a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/usbredir/usbredir.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
-index f0530a7..efdb1be 100644
---- a/package/usbredir/usbredir.mk
-+++ b/package/usbredir/usbredir.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--USBREDIR_VERSION         = 0.4.4
-+USBREDIR_VERSION         = 0.6
- USBREDIR_SOURCE          = usbredir-$(USBREDIR_VERSION).tar.bz2
- USBREDIR_SITE            = http://spice-space.org/download/usbredir
- USBREDIR_LICENSE         = LGPLv2.1+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
