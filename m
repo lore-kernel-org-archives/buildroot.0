@@ -1,53 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  4 Feb 2013 22:21:00 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: support more gdbserver
-	locations
-Message-ID: <1360012860-26646-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Feb 2013 22:30:24 +0100
+Subject: [Buildroot] X11 component versions
+In-Reply-To: <CAOT3miKRqb5EvLgrLPkxK32YHLj5QOsqgP5n0zy__rb5L22Kbg@mail.gmail.com>
+References: <CAOT3miKoAF=cPMfwy4=u=gZAjh+6NZE-qzVPUtqANCe5X3_LCg@mail.gmail.com>
+ <510F9155.6050904@carallon.com>
+ <CAOT3miLtOy0VwYc0b5DV_snUci0AD5gQzO=ugvsuniMsYd+dow@mail.gmail.com>
+ <510F9768.4020907@carallon.com> <20130204214018.2efc0bfb@skate>
+ <CAOT3miKRqb5EvLgrLPkxK32YHLj5QOsqgP5n0zy__rb5L22Kbg@mail.gmail.com>
+Message-ID: <20130204223024.0e687d5b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The x86/x86-64 CodeSourcery toolchains use some weird locations for
-the gdbserver binary:
+Dear Nicolas Dechesne,
 
-$ find . -name 'gdbserver'
-./i686-pc-linux-gnu/libc/atom/usr/bin/gdbserver
-./i686-pc-linux-gnu/libc/atom/usr/lib/bin/gdbserver
-./i686-pc-linux-gnu/libc/core2/usr/bin/gdbserver
-./i686-pc-linux-gnu/libc/core2/usr/lib64/bin/gdbserver
-./i686-pc-linux-gnu/libc/usr/lib/bin/gdbserver
-./i686-pc-linux-gnu/libc/usr/lib64/bin/gdbserver
+On Mon, 4 Feb 2013 21:49:50 +0100, Nicolas Dechesne wrote:
 
-Notice that it's sometimes hidden in a usr/{lib,lib64}/bin
-directory. This patch changes the gdbserver logic to also try in this
-location.
+> especially because it explains why Will was trying to remove all the
+> components mentioned in my previous email.
+> 
+> i would tend to say that the scripts is wrong when it 'recomments'
+> 'remove from buildroot'. It looks like you check only for the
+> components in the 'src/everything' folder, however as I said in my
+> previous email, some components are generally not included in the
+> release, like the applications.
 
-Originally based on work done by Daniel Nilsson, visible at
-http://patchwork.ozlabs.org/patch/155767/.
+Yes, I am not sure what to do with the applications. Some of them
+appear to be part of X.org releases, but not all of them. Not sure what
+to do about these.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-external/ext-tool.mk |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Do you have a suggestion?
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 452204b..418409a 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -430,9 +430,9 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
- 	if test x"$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" == x"y"; then \
- 		$(call MESSAGE,"Copying gdbserver") ; \
- 		gdbserver_found=0 ; \
--		for d in $${ARCH_SYSROOT_DIR} $${ARCH_SYSROOT_DIR}/../debug-root/ ; do \
--			if test -f $${d}/usr/bin/gdbserver ; then \
--				install -m 0755 -D $${d}/usr/bin/gdbserver $(TARGET_DIR)/usr/bin/gdbserver ; \
-+		for d in $${ARCH_SYSROOT_DIR}/usr $${ARCH_SYSROOT_DIR}/../debug-root/usr $${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} ; do \
-+			if test -f $${d}/bin/gdbserver ; then \
-+				install -m 0755 -D $${d}/bin/gdbserver $(TARGET_DIR)/usr/bin/gdbserver ; \
- 				gdbserver_found=1 ; \
- 				break ; \
- 			fi ; \
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
