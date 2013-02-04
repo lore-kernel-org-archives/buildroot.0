@@ -1,34 +1,55 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 4 Feb 2013 08:01:48 +0100
-Subject: [Buildroot] [git commit] pptp-linux: rename patches to remove the
-	version number
-Message-ID: <20130204213436.828349A939@busybox.osuosl.org>
+Date: Mon, 4 Feb 2013 08:02:22 +0100
+Subject: [Buildroot] [git commit] pptp-linux: fix parallel build
+Message-ID: <20130204213436.CE6F09A939@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f72c65a3ae83ffd3d5e3bf0367d53daf437bea28
+commit: http://git.buildroot.net/buildroot/commit/?id=a5b8081b89ebd5f9ff224440376e811c43696866
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add a patch to fix a parallel build issue caused by a header file
+being generated too late.
+
+Fixes:
+
+http://autobuild.buildroot.org/results/2324974d4818b2657a7df4beee33fc4713d6116f/build-end.log
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...acy.patch => pptp-linux-001-susv3-legacy.patch} |    0
- ...pts.patch => pptp-linux-002-drop-stropts.patch} |    0
- ...-ip-path.patch => pptp-linux-003-ip-path.patch} |    0
- 3 files changed, 0 insertions(+), 0 deletions(-)
+ .../pptp-linux-004-fix-parallel-build.patch        |   23 ++++++++++++++++++++
+ 1 files changed, 23 insertions(+), 0 deletions(-)
 
-diff --git a/package/pptp-linux/pptp-linux-1.7.0-001-susv3-legacy.patch b/package/pptp-linux/pptp-linux-001-susv3-legacy.patch
-similarity index 100%
-rename from package/pptp-linux/pptp-linux-1.7.0-001-susv3-legacy.patch
-rename to package/pptp-linux/pptp-linux-001-susv3-legacy.patch
-diff --git a/package/pptp-linux/pptp-linux-1.7.2-drop-stropts.patch b/package/pptp-linux/pptp-linux-002-drop-stropts.patch
-similarity index 100%
-rename from package/pptp-linux/pptp-linux-1.7.2-drop-stropts.patch
-rename to package/pptp-linux/pptp-linux-002-drop-stropts.patch
-diff --git a/package/pptp-linux/pptp-linux-1.7.2-ip-path.patch b/package/pptp-linux/pptp-linux-003-ip-path.patch
-similarity index 100%
-rename from package/pptp-linux/pptp-linux-1.7.2-ip-path.patch
-rename to package/pptp-linux/pptp-linux-003-ip-path.patch
+diff --git a/package/pptp-linux/pptp-linux-004-fix-parallel-build.patch b/package/pptp-linux/pptp-linux-004-fix-parallel-build.patch
+new file mode 100644
+index 0000000..04a7977
+--- /dev/null
++++ b/package/pptp-linux/pptp-linux-004-fix-parallel-build.patch
+@@ -0,0 +1,23 @@
++Fix parallel build issue
++
++The config.h header file must be created before being used to build
++source files that include it, especially version.c. In order for this
++to happen even in highly-parallel builds, we add a dependency of all
++object files on config.h, in order to ensure it gets generated before
++make attempts to build the object files.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/Makefile
++===================================================================
++--- a/Makefile
+++++ b/Makefile
++@@ -37,6 +37,8 @@
++ 
++ all: config.h $(PPTP_BIN) pptpsetup.8
++ 
+++$(PPTP_OBJS): config.h
+++
++ $(PPTP_BIN): $(PPTP_OBJS) $(PPTP_DEPS)
++ 	$(CC) -o $(PPTP_BIN) $(PPTP_OBJS) $(LDFLAGS) $(LIBS)
++ 
