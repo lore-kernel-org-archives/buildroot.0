@@ -1,19 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 04 Feb 2013 20:17:27 -0300
-Subject: [Buildroot] [PATCH] uboot-tools: also bump to 2013.01.01
-In-Reply-To: <87ehgv3ekc.fsf@dell.be.48ers.dk>
-References: <1359980717-9587-1-git-send-email-gustavo@zacarias.com.ar>
- <87ehgv3ekc.fsf@dell.be.48ers.dk>
-Message-ID: <51104187.5010905@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 5 Feb 2013 00:11:29 +0100
+Subject: [Buildroot] [git commit] package/usbredir: update to version 0.6
+Message-ID: <20130204232542.6D20C9A928@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/04/2013 07:21 PM, Peter Korsgaard wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=f47ae4ea0f67e1ae093365dc73bf82b7e7fdd80a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The fixes afaik don't affect the tools, but ok - Committed, thanks.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/usbredir/usbredir.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-True, it's mostly to avoid the tarball collection.
-Regards.
+diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
+index f0530a7..efdb1be 100644
+--- a/package/usbredir/usbredir.mk
++++ b/package/usbredir/usbredir.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-USBREDIR_VERSION         = 0.4.4
++USBREDIR_VERSION         = 0.6
+ USBREDIR_SOURCE          = usbredir-$(USBREDIR_VERSION).tar.bz2
+ USBREDIR_SITE            = http://spice-space.org/download/usbredir
+ USBREDIR_LICENSE         = LGPLv2.1+
