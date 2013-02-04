@@ -1,70 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 04 Feb 2013 23:01:53 +0100
-Subject: [Buildroot] Bumping Buildroot environment
-In-Reply-To: <CAFzEKXHEC4t+shO4F3YprMnxCJtRbNoo5RFp5A0bx5TOXJh+Vw@mail.gmail.com>
-References: <CAFzEKXHEC4t+shO4F3YprMnxCJtRbNoo5RFp5A0bx5TOXJh+Vw@mail.gmail.com>
-Message-ID: <51102FD1.9020403@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  4 Feb 2013 22:05:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 5900] config flags to the Xenomai build system ...
+In-Reply-To: <bug-5900-163@https.bugs.busybox.net/>
+References: <bug-5900-163@https.bugs.busybox.net/>
+Message-ID: <20130204220540.1A2999A883@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/13 19:51, Aditya Rawat wrote:
-> Hello, I am just starting out with working on Buildroot and so far its
-> been amazing !
->
-> my question was : How could we go about bumping a buildroot environment
-> to the most recent one ?
-> You see I had been working one a buildroot environment at
-> https://github.com/j1nx/buildroot-AmLogic
-> and noticed some of the packages were missing or not there at all as from
-> the most recent Buildroot release.
->
-> So I tried doing a  "Git merge" of the Buildroot current branch to the
-> older buildroot environment at >> https://github.com/j1nx/buildroot-AmLogic
-> and it went ahead broke dozen different things.
->
-> Any pointers to update the Buildroot environment the right way ?
->
-> --
-> Best Wishes;
-> Adi
+https://bugs.busybox.net/show_bug.cgi?id=5900
 
-  Hi Adi,
+--- Comment #2 from teratux <raespi@icid.cu> 2013-02-04 22:06:01 UTC ---
+Yes I'm using those two options:
+BR2_arm920t=y
+BR2_PREFER_SOFT_FLOAT=y
+BR2_SOFT_FLOAT=y
 
-  Just today we were discussing on the Buildroot Developer Day what a 
-pity it is that there are so many buildroot forks and that we never hear 
-from them. So first of all, thank you for joining the list!
+I noted they were missing when I saw the config.log in the build/xenomai-2.6.0/
+directory.  This is how it looks now after adding them manually in the
+xenomai.mk recipe:
 
-  Forking a fast-moving project like buildroot, making 615 patches to it 
-and then expecting it to merge smoothly after two years is a fantasy :-)
+  $ ./configure --target=arm-linux --host=arm-linux --build=i686-pc-linux-gnu
+--prefix=/usr --exec-prefix=/usr --sysconfdir=/etc --program-prefix=
+--disable-gtk-doc --enable-ipv6 --enable-static --enable-shared
+--includedir=/usr/include/xenomai/ CFLAGS=-march=armv4t -msoft-float
+LDFLAGS=-march=armv4t -msoft-float
 
-  Although there are other paths such as rebasing or incremental merges, 
-in the end you'll just have to resolve the conflicts. But probably many 
-can be resolved by just checking out the buildroot version ("git checkout 
-origin/master Config.in").
+Notice the CFLAGS and LDFLAGS at the end ...
 
-  You'll also have to slightly rewrite all your packages, because it is 
-no longer $(eval $(call AUTOTARGETS,host)) but it's $(eval 
-$(host-autotools-package)).
-
-
-  For changes you think could be relevant to the buildroot community as a 
-whole, you could also consider upstreaming them first, so that during the 
-merge you can just resolve to the buildroot version. For the future, my 
-advise is to upstream more often (certainly whenever you're touching a 
-package that already exists in buildroot, and preferably also for new 
-packages), and to merge more often (for instance every buildroot release).
-
-
-  Regards,
-  Arnout
+(In reply to comment #1)
+> If you select the proper armv4t core in "Target Architecture Variant" and have
+> the BR2_SOFT_FLOAT option enabled, then we are normally already passing those
+> two flags to Xenomai ./configure script.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
