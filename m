@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Feb 2013 22:41:27 +0100
-Subject: [Buildroot] [PATCH] neard: fix missing nfc.h header
-In-Reply-To: <1359898643-24467-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 3 Feb 2013 14:37:23 +0100")
-References: <1359898643-24467-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87mwvj3gfs.fsf@dell.be.48ers.dk>
+Date: Mon, 04 Feb 2013 08:04:07 +0100
+Subject: [Buildroot] [PATCH] libfuse: add patch to fix AArch64 build
+	issue
+In-Reply-To: <1359928386-6044-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 3 Feb 2013 22:53:06 +0100")
+References: <1359928386-6044-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8738xc4l20.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> We have a patch that allows neard to build even on toolchain using old
- Thomas> kernel headers that lack the nfc.h header. However, after the bump to
- Thomas> neard 0.9, this patch was not updated to take into account the two new
- Thomas> plugins that neard has added.
-
- Thomas> Fixes http://autobuild.buildroot.org/results/5eeb6f62cc0e654a536b6614dc51e8af4e301bb6/build-end.log
+ Thomas> Fixes http://autobuild.buildroot.org/results/1fb89ab412935ab02494b269a367b283cf9618c1/build-end.log
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
