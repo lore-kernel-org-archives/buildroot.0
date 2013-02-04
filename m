@@ -1,41 +1,72 @@
-From: Nicolas Dechesne <ndec13@gmail.com>
-Date: Mon, 4 Feb 2013 22:37:36 +0100
-Subject: [Buildroot] X11 component versions
-In-Reply-To: <20130204223024.0e687d5b@skate>
-References: <CAOT3miKoAF=cPMfwy4=u=gZAjh+6NZE-qzVPUtqANCe5X3_LCg@mail.gmail.com>
- <510F9155.6050904@carallon.com>
- <CAOT3miLtOy0VwYc0b5DV_snUci0AD5gQzO=ugvsuniMsYd+dow@mail.gmail.com>
- <510F9768.4020907@carallon.com> <20130204214018.2efc0bfb@skate>
- <CAOT3miKRqb5EvLgrLPkxK32YHLj5QOsqgP5n0zy__rb5L22Kbg@mail.gmail.com>
- <20130204223024.0e687d5b@skate>
-Message-ID: <CAOT3miJUfF3Oc2XFXJRiLCtMxtsHSWZWWLGvGyc+zNkqHGgnEw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  4 Feb 2013 21:53:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 5900] New: config flags to the Xenomai build
+	system ...
+Message-ID: <bug-5900-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 4, 2013 at 10:30 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Yes, I am not sure what to do with the applications. Some of them
-> appear to be part of X.org releases, but not all of them. Not sure what
-> to do about these.
->
-> Do you have a suggestion?
+https://bugs.busybox.net/show_bug.cgi?id=5900
 
-well, what i would say is:
- - for apps included in X11 release, take them all
- - for other apps, it's a 'distro' choice to include it... so I would
-keep the one we have already, here I assume there must be a reason why
-they are there in BR already... and we can add new ones as needed...
+           Summary: config flags to the Xenomai build system ...
+           Product: buildroot
+           Version: 2012.05
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: raespi at icid.cu
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-another question: do we really want to have 100+ patches to upgrade to
-R7.7, or should we make 1 commit that bumps all components (and
-remove/add the relevant ones)? I am asking because i think that any
-'commit' in between the 100+ patches could put BR in a bad state.. Of
-course if we upgrade just 1 specific component later on (before R7.8
-is made) then it can be made 'manually', but for large release
-upgrade, maybe 1 commit makes sense..
 
-your xorg-release script is really nice, we could even have the script
-update the recipe ;-)
+The only two options passed to the xenomai package in the
+package/xenomai/xenomai.mk are:
+
+ifeq ($(BR2_PACKAGE_XENOMAI_SMP),y)
+XENOMAI_CONF_OPT += --enable-smp
+endif
+
+XENOMAI_CONF_OPT += --includedir=/usr/include/xenomai/
+
+On my target arch ( smdk2440 / s3c24xx ) I need these also:
+XENOMAI_CONF_OPT += CFLAGS="-march=armv4t -msoft-float" LDFLAGS="-march=armv4t
+-msoft-float"
+
+without them, the xenomai test suite fails to detect any FPU support at all,
+even if it's emulated by software such as this case.  It's something that needs
+to be passed to the ./configure according to their "Getting Started" document,
+and something that has been discussed recently in their mailing lists ...
+
+I know it can't be passed on like this exactly, but maybe with a conditional
+block for this architecture.  Here are the options by arch that you should pass
+( taken from the Xenomai site ):
+
+at91rm9200     :: CFLAGS="-march=armv4t -msoft-float"
+at91sam9x      :: CFLAGS="-march=armv5 -msoft-float"
+imx1           :: CFLAGS="-march=armv4t -msoft-float"
+imx21          :: CFLAGS="-march=armv5 -msoft-float"
+imx31          :: CFLAGS="-march=armv6 -mfpu=vfp"
+imx51/imx53    :: CFLAGS="-march=armv7-a -mfpu=vfp3"
+imx6q          :: CFLAGS="-march=armv7-a -mfpu=vfp3"
+ixp4xx         :: CFLAGS="-march=armv5 -msoft-float" --enable-arm-tsc=ixp4xx
+omap3          :: -march=armv7-a -mfpu=vfp3
+omap4          :: -march=armv7-a -mfpu=vfp3
+orion          :: -march=armv5 -mfpu=vfp
+pxa            :: -march=armv5 -msoft-float
+pxa3xx         :: CFLAGS="-march=armv5 -msoft-float"
+--enable-arm-quirks=xscale3
+s3c24xx        :: CFLAGS="-march=armv4t -msoft-float"
+sa1100         :: CFLAGS="-march=armv4t -msoft-float"
+--enable-arm-quirks=sa1100
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
