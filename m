@@ -1,37 +1,43 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 04 Feb 2013 19:48:53 +0100
-Subject: [Buildroot] Wireless config tool
-In-Reply-To: <2613604.oY2r6Uxrru@sagittae>
-References: <CAN_xxrXSRK6-DPKkC+8UAVAWQQExVkgGPk4vvPWfMs_DsnJ2ng@mail.gmail.com>
- <2613604.oY2r6Uxrru@sagittae>
-Message-ID: <51100295.7030307@mind.be>
+Date: Mon, 04 Feb 2013 19:40:50 +0100
+Subject: [Buildroot] [PATCH] iw: switch upstream site
+In-Reply-To: <1359980430-11982-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1359980430-11982-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <511000B2.5010900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/13 18:42, J?r?me Pouiller wrote:
-> Hi Stephen
+On 04/02/13 13:20, Gustavo Zacarias wrote:
+> It's moved from wireless.kernel.org to generic kernel.org
 >
-> On Monday 04 February 2013 12:17:23 Stephen Turner wrote:
-> [...]
->> My current question is if im using a mobile device that will be connecting
->> to various wifi hotspots i will need to be able to setup wifi connections
->> easily from a gui. currently with buildroot i only see the option to
->> manually edit configs to set up hotspots. Is there a tool im overlooking
->> currently in buildroot to help with this setup or will i need to manually
->> add one in? Im looking for something similiar to wicd or how a android
->> device would manage wifi connections.
-> Have you thrown a look at network-manager?
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>   package/iw/iw.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+> index 22ea25c..9233833 100644
+> --- a/package/iw/iw.mk
+> +++ b/package/iw/iw.mk
+> @@ -6,7 +6,7 @@
+>
+>   IW_VERSION = 3.8
+>   IW_SOURCE = iw-$(IW_VERSION).tar.bz2
+> -IW_SITE = http://wireless.kernel.org/download/iw
+> +IW_SITE = http://www.kernel.org/pub/software/network/iw
 
-  Or connman.
-
-  Or if you would like to contribute wicd, we will certainly consider the 
-patch!
+  Should be using $(BR2_KERNEL_MIRROR) then.
 
   Regards,
   Arnout
+
+>   IW_LICENSE = iw license
+>   IW_LICENSE_FILES = COPYING
+>   IW_DEPENDENCIES = host-pkgconf libnl
+>
 
 
 -- 
