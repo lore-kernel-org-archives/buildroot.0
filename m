@@ -1,31 +1,45 @@
-From: Nicolas Dechesne <ndec13@gmail.com>
-Date: Mon, 4 Feb 2013 10:44:39 +0100
-Subject: [Buildroot] X11 component versions
-Message-ID: <CAOT3miKoAF=cPMfwy4=u=gZAjh+6NZE-qzVPUtqANCe5X3_LCg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  4 Feb 2013 07:50:14 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
+	7}.x stable versions
+Message-ID: <1359975015-8369-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi there,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                                  | 6 +++---
+ ...0.62-headers_install-fix-__packed-in-exported-kernel-head.patch} | 0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.61-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.62-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-i was wondering if there is any policy regarding how/when X11
-components are being upgraded in BR. at the moment some pieces seem a
-little old (xserver is from b/o 2011, libdrm is from e/o 2010...)
-perhaps most BR population might not be using X11, but i might be
-wrong.
-
-i expect that upgrading all x11 components is not a trivial task...
-and I was thinking that we could at least try to bring up all
-components corresponding to the R7.7 [1] release which was done
-earlier this year...
-
-i would appreciate your thoughts on this!
-
-thx
-
-nicolas
-
-
-[1] : http://xorg.freedesktop.org/releases/X11R7.7/
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 5fda815..432ef20 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -58,13 +58,13 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.61"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.62"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.37"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.28"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.29"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+-	default "3.7.5"		if BR2_KERNEL_HEADERS_3_7
++	default "3.7.6"		if BR2_KERNEL_HEADERS_3_7
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.61-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.62-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.61-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.62-headers_install-fix-__packed-in-exported-kernel-head.patch
+-- 
+1.7.12.4
