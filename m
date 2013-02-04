@@ -1,22 +1,31 @@
-From: hayate <hayatelee@gmail.com>
-Date: Mon, 4 Feb 2013 17:15:06 +0800
-Subject: [Buildroot] gcc 4.7.2 and arm OABI
-Message-ID: <CAJXWAww6JFbdAYotGH1n2xEFJ=AFDrtEJEo=BhiRe4dCrtVr=g@mail.gmail.com>
+From: Nicolas Dechesne <ndec13@gmail.com>
+Date: Mon, 4 Feb 2013 10:44:39 +0100
+Subject: [Buildroot] X11 component versions
+Message-ID: <CAOT3miKoAF=cPMfwy4=u=gZAjh+6NZE-qzVPUtqANCe5X3_LCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The OABI is disabled in menuconfig with gcc 4.7.x, the latest gcc with OABI
-support is 4.6
+hi there,
 
-But recently I found that if configure gcc 4.7 with --enable-obsolete, it
-can be built with OABI support (--with-abi=apcs-gnu)
+i was wondering if there is any policy regarding how/when X11
+components are being upgraded in BR. at the moment some pieces seem a
+little old (xserver is from b/o 2011, libdrm is from e/o 2010...)
+perhaps most BR population might not be using X11, but i might be
+wrong.
 
-Is there any possibility to build gcc 4.7 with OABI in buildroot?
+i expect that upgrading all x11 components is not a trivial task...
+and I was thinking that we could at least try to bring up all
+components corresponding to the R7.7 [1] release which was done
+earlier this year...
 
-regards,
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130204/14a794d2/attachment.html>
+i would appreciate your thoughts on this!
+
+thx
+
+nicolas
+
+
+[1] : http://xorg.freedesktop.org/releases/X11R7.7/
