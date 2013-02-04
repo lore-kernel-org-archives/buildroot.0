@@ -1,120 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Feb 2013 23:49:05 +0100
-Subject: [Buildroot] [PATCH 2/2] package/tzdata: new package
-In-Reply-To: <cover.1360017945.git.yann.morin.1998@free.fr>
-References: <cover.1360017945.git.yann.morin.1998@free.fr>
-Message-ID: <3b37bfde822cb775f4f21b49052444442585fe26.1360017945.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 04 Feb 2013 23:35:34 +0100
+Subject: [Buildroot] [PATCH] gdb: build gdbserver with TARGET_MAKE_ENV
+In-Reply-To: <1359894622-4783-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 3 Feb 2013 13:30:22 +0100")
+References: <1359894622-4783-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <871ucv3dxl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Richard Braun <rbraun@sceen.net>
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-This is the time zone database, used by glibc for translations between
-UTC and local time.
+ Thomas> This commit fixes the exact same problem than
+ Thomas> 21a0c11a90f9ff19c78a5f32e0a2e9064fd28054, but for the gdbserver
+ Thomas> build. The problem is that when you use the Crosstool-NG toolchain
+ Thomas> backend, gawk gets built as a dependency of Crosstool-NG. So the gdb
+ Thomas> configure scripts detects it, and assumes it is in the PATH (because
+ Thomas> the gdb configure step gets run with TARGET_MAKE_ENV).
 
-Signed-off-by: Richard Braun <rbraun@sceen.net>
-[yann.morin.1998 at free.fr: use global ZIC, install posix TZ only once]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/Config.in        |    1 +
- package/tzdata/Config.in |   20 ++++++++++++++++++++
- package/tzdata/tzdata.mk |   46 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 67 insertions(+), 0 deletions(-)
- create mode 100644 package/tzdata/Config.in
- create mode 100644 package/tzdata/tzdata.mk
+ Thomas> But then, the build fails, because it tries to run gawk, but gawk
+ Thomas> isn't in the PATH, because we forget to use this TARGET_MAKE_ENV
+ Thomas> variable when building gdbserver.
 
-diff --git a/package/Config.in b/package/Config.in
-index 2f219b6..090216e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -566,6 +566,7 @@ source "package/protobuf/Config.in"
- source "package/schifra/Config.in"
- source "package/startup-notification/Config.in"
- source "package/liblog4c-localtime/Config.in"
-+source "package/tzdata/Config.in"
- endmenu
- 
- menu "Text and terminal handling"
-diff --git a/package/tzdata/Config.in b/package/tzdata/Config.in
-new file mode 100644
-index 0000000..4e68a97
---- /dev/null
-+++ b/package/tzdata/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_TZDATA
-+	bool "tzdata"
-+	depends on BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_glibc
-+	help
-+	  Time zone database
-+
-+	  http://www.iana.org/time-zones/repository/tz-link.html
-+
-+config BR2_PACKAGE_TZDATA_ZONELIST
-+	string "Time zone list"
-+	depends on BR2_PACKAGE_TZDATA
-+	default "default"
-+	help
-+	  Space-separated list of time zones to compile.
-+
-+	  The value "default" includes all commonly used time zones. Note
-+	  that this set consumes around 5.5M.
-+
-+	  The full list is the list of files in the time zone database source,
-+	  not including the build and .tab files.
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-new file mode 100644
-index 0000000..f74898f
---- /dev/null
-+++ b/package/tzdata/tzdata.mk
-@@ -0,0 +1,46 @@
-+#############################################################
-+#
-+# tzdata
-+#
-+#############################################################
-+
-+TZDATA_VERSION = 2012j
-+TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
-+TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
-+TZDATA_DEPENDENCIES = host-zic
-+TZDATA_LICENSE = Public domain
-+
-+TZDATA_DEFAULT_ZONELIST = africa antarctica asia australasia backward etcetera \
-+			europe factory northamerica pacificnew southamerica
-+
-+ifeq ($(call qstrip,$(BR2_PACKAGE_TZDATA_ZONELIST)),default)
-+TZDATA_ZONELIST = $(TZDATA_DEFAULT_ZONELIST)
-+else
-+TZDATA_ZONELIST = $(call qstrip,$(BR2_PACKAGE_TZDATA_ZONELIST))
-+endif
-+
-+# Don't strip any path components during extraction.
-+define TZDATA_EXTRACT_CMDS
-+	gzip -d -c $(DL_DIR)/$(TZDATA_SOURCE) \
-+		| $(TAR) --strip-components=0 -C $(@D) -xf -
-+endef
-+
-+define TZDATA_BUILD_CMDS
-+	(cd $(@D); \
-+		for zone in $(TZDATA_ZONELIST); do \
-+			$(ZIC) -d _output/posix -y yearistype.sh $$zone; \
-+			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone; \
-+		done; \
-+	)
-+endef
-+
-+define TZDATA_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/share/zoneinfo
-+	cp -a $(@D)/_output/* $(TARGET_DIR)/usr/share/zoneinfo
-+	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
-+	for zone in posix/*; do                 \
-+	    ln -s "$${zone}" "$${zone##*/}";    \
-+	done
-+endef
-+
-+$(eval $(generic-package))
+Committed, thanks.
+
 -- 
-1.7.2.5
+Bye, Peter Korsgaard
