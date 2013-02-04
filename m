@@ -1,43 +1,3489 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  4 Feb 2013 23:52:08 +0100
-Subject: [Buildroot] [PATCH 2/3] util-linux: add support for Xtensa
+Date: Mon,  4 Feb 2013 23:52:09 +0100
+Subject: [Buildroot] [PATCH 3/3] libffi: switch to using a Git version,
+	brings Microblaze and Xtensa support
 In-Reply-To: <1360018329-3911-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1360018329-3911-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1360018329-3911-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1360018329-3911-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Chris Zankel <chris@zankel.net>
+We already had backported patches for the Blackfin and AArch64
+support, and now we would have needed to also backport the Xtensa
+support and the Microblaze support. This starts to get crazy.
 
-[Thomas Petazzoni: rename patch to not have the package version in the
-patch file name, adjust the commit title.]
+Let's switch to using a Git version from Github, until libffi finally
+releases a new stable version.
 
-Signed-off-by: Chris Zankel <chris@zankel.net>
+In order to achieve this, we also need to:
+
+ * autoreconf the package, so that a libffi.pc file gets generated
+
+ * manually install the libffi.pc file, because it doesn't get
+   installed by libffi Makefile, for some reason
+
+ * remove the part of the target post install hook that was messing
+   with libffi.pc, since it was modifying the one in STAGING_DIR
+   (which is odd for a target post install hook), and the libffi.pc
+   file is anyway not installed to the target anymore.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../util-linux/util-linux-004-xtensa-support.patch |   11 +++++++++++
- 1 file changed, 11 insertions(+)
- create mode 100644 package/util-linux/util-linux-004-xtensa-support.patch
+ .../libffi-0001-Add-support-for-Blackfin.patch     | 1044 ---------
+ ...fi-0002-Add-aarch64-support-from-upstream.patch | 2326 --------------------
+ package/libffi/libffi.mk                           |   29 +-
+ 3 files changed, 23 insertions(+), 3376 deletions(-)
+ delete mode 100644 package/libffi/libffi-0001-Add-support-for-Blackfin.patch
+ delete mode 100644 package/libffi/libffi-0002-Add-aarch64-support-from-upstream.patch
 
-diff --git a/package/util-linux/util-linux-004-xtensa-support.patch b/package/util-linux/util-linux-004-xtensa-support.patch
-new file mode 100644
-index 0000000..ab294cc
---- /dev/null
-+++ b/package/util-linux/util-linux-004-xtensa-support.patch
-@@ -0,0 +1,11 @@
-+--- util-linux-2.20.1/fdisk/fdiskbsdlabel.h.orig	2013-01-21 19:17:58.023049856 -0800
-++++ util-linux-2.20.1/fdisk/fdiskbsdlabel.h	2013-01-21 19:18:09.867050151 -0800
-+@@ -49,7 +49,7 @@
-+ #if defined (i386) || defined (__sparc__) || defined (__arm__) || \
-+     defined (__mips__) || defined (__s390__) || defined (__sh__) || \
-+     defined(__x86_64__) || defined (__avr32__) || defined(__cris__) || \
-+-    defined(__aarch64__)
-++    defined(__aarch64__) || defined(__xtensa__)
-+ #define BSD_LABELSECTOR   1
-+ #define BSD_LABELOFFSET   0
-+ #elif defined (__alpha__) || defined (__powerpc__) || defined (__ia64__) || defined (__hppa__)
+diff --git a/package/libffi/libffi-0001-Add-support-for-Blackfin.patch b/package/libffi/libffi-0001-Add-support-for-Blackfin.patch
+deleted file mode 100644
+index 7a55b40..0000000
+--- a/package/libffi/libffi-0001-Add-support-for-Blackfin.patch
++++ /dev/null
+@@ -1,1044 +0,0 @@
+-From 643764d29559e2ca6280837069972b1d4790d61a Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Fri, 16 Nov 2012 01:10:10 +0100
+-Subject: [PATCH 1/2] Add support for Blackfin
+-
+-Taken upstream from
+-https://github.com/atgreen/libffi/commit/213ed15c70e72d666154c08e2b41dae3f61f20d3. Will
+-be part of the upcoming 3.0.12 release.
+-
+-We have kept the part of the patches changing configure and
+-Makefile.in in order to avoid having to autoreconf the package, which
+-requires autoconf 2.68.
+-
+-Code written by Alexandre Keunecke.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- ChangeLog            |    8 +++
+- Makefile.am          |    4 ++
+- Makefile.in          |  160 ++++++++++++++++++++++-------------------
+- README               |    8 ++-
+- configure            |  113 +++++++++++++----------------
+- configure.ac         |    5 ++
+- src/bfin/ffi.c       |  195 ++++++++++++++++++++++++++++++++++++++++++++++++++
+- src/bfin/ffitarget.h |   43 +++++++++++
+- src/bfin/sysv.S      |  177 +++++++++++++++++++++++++++++++++++++++++++++
+- 9 files changed, 574 insertions(+), 139 deletions(-)
+- create mode 100644 src/bfin/ffi.c
+- create mode 100644 src/bfin/ffitarget.h
+- create mode 100644 src/bfin/sysv.S
+-
+-diff --git a/ChangeLog b/ChangeLog
+-index f4148a9..376edf7 100644
+---- a/ChangeLog
+-+++ b/ChangeLog
+-@@ -1,3 +1,11 @@
+-+2012-04-23  Alexandre Keunecke I. de Mendonca <alexandre.keunecke@gmail.com>
+-+
+-+	* configure.ac: Add Blackfin/sysv support
+-+	* Makefile.am: Add Blackfin/sysv support
+-+	* src/bfin/ffi.c:  Add Blackfin/sysv support
+-+	* src/bfin/ffitarget.h: Add Blackfin/sysv support
+-+	* src/bfin/sysv.S: Add Blackfin/sysv support
+-+
+- 2012-04-11  Anthony Green  <green@moxielogic.com>
+- 
+- 	* Makefile.am (EXTRA_DIST): Add new script.
+-diff --git a/Makefile.am b/Makefile.am
+-index 4a855d7..16f32a6 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -27,6 +27,7 @@ EXTRA_DIST = LICENSE ChangeLog.v1 ChangeLog.libgcj configure.host \
+- 	src/x86/win64.S src/x86/freebsd.S src/x86/ffi64.c \
+- 	src/x86/unix64.S src/x86/ffitarget.h src/pa/ffitarget.h	\
+- 	src/pa/ffi.c src/pa/linux.S src/pa/hpux32.S src/frv/ffi.c \
+-+	src/bfin/ffi.c src/bfin/ffitarget.h src/bfin/sysv.S \
+- 	src/frv/eabi.S src/frv/ffitarget.h src/dlmalloc.c \
+- 	src/moxie/ffi.c src/moxie/eabi.S libtool-version \
+- 	ChangeLog.libffi m4/libtool.m4 m4/lt~obsolete.m4 \
+-@@ -105,6 +106,9 @@ endif
+- if MIPS
+- nodist_libffi_la_SOURCES += src/mips/ffi.c src/mips/o32.S src/mips/n32.S
+- endif
+-+if BFIN
+-+nodist_libffi_la_SOURCES += src/bfin/ffi.c src/bfin/sysv.S
+-+endif
+- if X86
+- nodist_libffi_la_SOURCES += src/x86/ffi.c src/x86/sysv.S
+- endif
+-diff --git a/Makefile.in b/Makefile.in
+-index 4308193..f5c10af 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -38,35 +38,36 @@ host_triplet = @host@
+- target_triplet = @target@
+- @FFI_DEBUG_TRUE at am__append_1 = src/debug.c
+- @MIPS_TRUE at am__append_2 = src/mips/ffi.c src/mips/o32.S src/mips/n32.S
+-- at X86_TRUE@am__append_3 = src/x86/ffi.c src/x86/sysv.S
+-- at X86_FREEBSD_TRUE@am__append_4 = src/x86/ffi.c src/x86/freebsd.S
+-- at X86_WIN32_TRUE@am__append_5 = src/x86/ffi.c src/x86/win32.S
+-- at X86_WIN64_TRUE@am__append_6 = src/x86/ffi.c src/x86/win64.S
+-- at X86_DARWIN_TRUE@am__append_7 = src/x86/ffi.c src/x86/darwin.S src/x86/ffi64.c src/x86/darwin64.S
+-- at SPARC_TRUE@am__append_8 = src/sparc/ffi.c src/sparc/v8.S src/sparc/v9.S
+-- at ALPHA_TRUE@am__append_9 = src/alpha/ffi.c src/alpha/osf.S
+-- at IA64_TRUE@am__append_10 = src/ia64/ffi.c src/ia64/unix.S
+-- at M32R_TRUE@am__append_11 = src/m32r/sysv.S src/m32r/ffi.c
+-- at M68K_TRUE@am__append_12 = src/m68k/ffi.c src/m68k/sysv.S
+-- at POWERPC_TRUE@am__append_13 = src/powerpc/ffi.c src/powerpc/sysv.S src/powerpc/ppc_closure.S src/powerpc/linux64.S src/powerpc/linux64_closure.S
+-- at POWERPC_AIX_TRUE@am__append_14 = src/powerpc/ffi_darwin.c src/powerpc/aix.S src/powerpc/aix_closure.S
+-- at POWERPC_DARWIN_TRUE@am__append_15 = src/powerpc/ffi_darwin.c src/powerpc/darwin.S src/powerpc/darwin_closure.S
+-- at POWERPC_FREEBSD_TRUE@am__append_16 = src/powerpc/ffi.c src/powerpc/sysv.S src/powerpc/ppc_closure.S
+-- at ARM_TRUE@am__append_17 = src/arm/sysv.S src/arm/ffi.c
+-- at ARM_TRUE@@FFI_EXEC_TRAMPOLINE_TABLE_TRUE at am__append_18 = src/arm/trampoline.S
+-- at AVR32_TRUE@am__append_19 = src/avr32/sysv.S src/avr32/ffi.c
+-- at LIBFFI_CRIS_TRUE@am__append_20 = src/cris/sysv.S src/cris/ffi.c
+-- at FRV_TRUE@am__append_21 = src/frv/eabi.S src/frv/ffi.c
+-- at MOXIE_TRUE@am__append_22 = src/moxie/eabi.S src/moxie/ffi.c
+-- at S390_TRUE@am__append_23 = src/s390/sysv.S src/s390/ffi.c
+-- at X86_64_TRUE@am__append_24 = src/x86/ffi64.c src/x86/unix64.S src/x86/ffi.c src/x86/sysv.S
+-- at SH_TRUE@am__append_25 = src/sh/sysv.S src/sh/ffi.c
+-- at SH64_TRUE@am__append_26 = src/sh64/sysv.S src/sh64/ffi.c
+-- at PA_LINUX_TRUE@am__append_27 = src/pa/linux.S src/pa/ffi.c
+-- at PA_HPUX_TRUE@am__append_28 = src/pa/hpux32.S src/pa/ffi.c
+-+ at BFIN_TRUE@am__append_3 = src/bfin/ffi.c src/bfin/sysv.S
+-+ at X86_TRUE@am__append_4 = src/x86/ffi.c src/x86/sysv.S
+-+ at X86_FREEBSD_TRUE@am__append_5 = src/x86/ffi.c src/x86/freebsd.S
+-+ at X86_WIN32_TRUE@am__append_6 = src/x86/ffi.c src/x86/win32.S
+-+ at X86_WIN64_TRUE@am__append_7 = src/x86/ffi.c src/x86/win64.S
+-+ at X86_DARWIN_TRUE@am__append_8 = src/x86/ffi.c src/x86/darwin.S src/x86/ffi64.c src/x86/darwin64.S
+-+ at SPARC_TRUE@am__append_9 = src/sparc/ffi.c src/sparc/v8.S src/sparc/v9.S
+-+ at ALPHA_TRUE@am__append_10 = src/alpha/ffi.c src/alpha/osf.S
+-+ at IA64_TRUE@am__append_11 = src/ia64/ffi.c src/ia64/unix.S
+-+ at M32R_TRUE@am__append_12 = src/m32r/sysv.S src/m32r/ffi.c
+-+ at M68K_TRUE@am__append_13 = src/m68k/ffi.c src/m68k/sysv.S
+-+ at POWERPC_TRUE@am__append_14 = src/powerpc/ffi.c src/powerpc/sysv.S src/powerpc/ppc_closure.S src/powerpc/linux64.S src/powerpc/linux64_closure.S
+-+ at POWERPC_AIX_TRUE@am__append_15 = src/powerpc/ffi_darwin.c src/powerpc/aix.S src/powerpc/aix_closure.S
+-+ at POWERPC_DARWIN_TRUE@am__append_16 = src/powerpc/ffi_darwin.c src/powerpc/darwin.S src/powerpc/darwin_closure.S
+-+ at POWERPC_FREEBSD_TRUE@am__append_17 = src/powerpc/ffi.c src/powerpc/sysv.S src/powerpc/ppc_closure.S
+-+ at ARM_TRUE@am__append_18 = src/arm/sysv.S src/arm/ffi.c
+-+ at ARM_TRUE@@FFI_EXEC_TRAMPOLINE_TABLE_TRUE at am__append_19 = src/arm/trampoline.S
+-+ at AVR32_TRUE@am__append_20 = src/avr32/sysv.S src/avr32/ffi.c
+-+ at LIBFFI_CRIS_TRUE@am__append_21 = src/cris/sysv.S src/cris/ffi.c
+-+ at FRV_TRUE@am__append_22 = src/frv/eabi.S src/frv/ffi.c
+-+ at MOXIE_TRUE@am__append_23 = src/moxie/eabi.S src/moxie/ffi.c
+-+ at S390_TRUE@am__append_24 = src/s390/sysv.S src/s390/ffi.c
+-+ at X86_64_TRUE@am__append_25 = src/x86/ffi64.c src/x86/unix64.S src/x86/ffi.c src/x86/sysv.S
+-+ at SH_TRUE@am__append_26 = src/sh/sysv.S src/sh/ffi.c
+-+ at SH64_TRUE@am__append_27 = src/sh64/sysv.S src/sh64/ffi.c
+-+ at PA_LINUX_TRUE@am__append_28 = src/pa/linux.S src/pa/ffi.c
+-+ at PA_HPUX_TRUE@am__append_29 = src/pa/hpux32.S src/pa/ffi.c
+- # Build debug. Define FFI_DEBUG on the commandline so that, when building with
+- # MSVC, it can link against the debug CRT.
+-- at FFI_DEBUG_TRUE@am__append_29 = -DFFI_DEBUG
+-+ at FFI_DEBUG_TRUE@am__append_30 = -DFFI_DEBUG
+- subdir = .
+- DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
+- 	$(srcdir)/Makefile.in $(srcdir)/doc/stamp-vti \
+-@@ -75,17 +76,7 @@ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
+- 	compile config.guess config.sub depcomp install-sh ltmain.sh \
+- 	mdate-sh missing texinfo.tex
+- ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+--am__aclocal_m4_deps = $(top_srcdir)/m4/asmcfi.m4 \
+--	$(top_srcdir)/m4/ax_cc_maxopt.m4 \
+--	$(top_srcdir)/m4/ax_cflags_warn_all.m4 \
+--	$(top_srcdir)/m4/ax_compiler_vendor.m4 \
+--	$(top_srcdir)/m4/ax_configure_args.m4 \
+--	$(top_srcdir)/m4/ax_enable_builddir.m4 \
+--	$(top_srcdir)/m4/ax_gcc_archflag.m4 \
+--	$(top_srcdir)/m4/ax_gcc_x86_cpuid.m4 \
+--	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
+--	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
+--	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/acinclude.m4 \
+-+am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
+- 	$(top_srcdir)/configure.ac
+- am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
+- 	$(ACLOCAL_M4)
+-@@ -126,44 +117,45 @@ am_libffi_la_OBJECTS = src/prep_cif.lo src/types.lo src/raw_api.lo \
+- @FFI_DEBUG_TRUE at am__objects_1 = src/debug.lo
+- @MIPS_TRUE at am__objects_2 = src/mips/ffi.lo src/mips/o32.lo \
+- @MIPS_TRUE@	src/mips/n32.lo
+-- at X86_TRUE@am__objects_3 = src/x86/ffi.lo src/x86/sysv.lo
+-- at X86_FREEBSD_TRUE@am__objects_4 = src/x86/ffi.lo src/x86/freebsd.lo
+-- at X86_WIN32_TRUE@am__objects_5 = src/x86/ffi.lo src/x86/win32.lo
+-- at X86_WIN64_TRUE@am__objects_6 = src/x86/ffi.lo src/x86/win64.lo
+-- at X86_DARWIN_TRUE@am__objects_7 = src/x86/ffi.lo src/x86/darwin.lo \
+-+ at BFIN_TRUE@am__objects_3 = src/bfin/ffi.lo src/bfin/sysv.lo
+-+ at X86_TRUE@am__objects_4 = src/x86/ffi.lo src/x86/sysv.lo
+-+ at X86_FREEBSD_TRUE@am__objects_5 = src/x86/ffi.lo src/x86/freebsd.lo
+-+ at X86_WIN32_TRUE@am__objects_6 = src/x86/ffi.lo src/x86/win32.lo
+-+ at X86_WIN64_TRUE@am__objects_7 = src/x86/ffi.lo src/x86/win64.lo
+-+ at X86_DARWIN_TRUE@am__objects_8 = src/x86/ffi.lo src/x86/darwin.lo \
+- @X86_DARWIN_TRUE@	src/x86/ffi64.lo src/x86/darwin64.lo
+-- at SPARC_TRUE@am__objects_8 = src/sparc/ffi.lo src/sparc/v8.lo \
+-+ at SPARC_TRUE@am__objects_9 = src/sparc/ffi.lo src/sparc/v8.lo \
+- @SPARC_TRUE@	src/sparc/v9.lo
+-- at ALPHA_TRUE@am__objects_9 = src/alpha/ffi.lo src/alpha/osf.lo
+-- at IA64_TRUE@am__objects_10 = src/ia64/ffi.lo src/ia64/unix.lo
+-- at M32R_TRUE@am__objects_11 = src/m32r/sysv.lo src/m32r/ffi.lo
+-- at M68K_TRUE@am__objects_12 = src/m68k/ffi.lo src/m68k/sysv.lo
+-- at POWERPC_TRUE@am__objects_13 = src/powerpc/ffi.lo src/powerpc/sysv.lo \
+-+ at ALPHA_TRUE@am__objects_10 = src/alpha/ffi.lo src/alpha/osf.lo
+-+ at IA64_TRUE@am__objects_11 = src/ia64/ffi.lo src/ia64/unix.lo
+-+ at M32R_TRUE@am__objects_12 = src/m32r/sysv.lo src/m32r/ffi.lo
+-+ at M68K_TRUE@am__objects_13 = src/m68k/ffi.lo src/m68k/sysv.lo
+-+ at POWERPC_TRUE@am__objects_14 = src/powerpc/ffi.lo src/powerpc/sysv.lo \
+- @POWERPC_TRUE@	src/powerpc/ppc_closure.lo \
+- @POWERPC_TRUE@	src/powerpc/linux64.lo \
+- @POWERPC_TRUE@	src/powerpc/linux64_closure.lo
+-- at POWERPC_AIX_TRUE@am__objects_14 = src/powerpc/ffi_darwin.lo \
+-+ at POWERPC_AIX_TRUE@am__objects_15 = src/powerpc/ffi_darwin.lo \
+- @POWERPC_AIX_TRUE@	src/powerpc/aix.lo \
+- @POWERPC_AIX_TRUE@	src/powerpc/aix_closure.lo
+-- at POWERPC_DARWIN_TRUE@am__objects_15 = src/powerpc/ffi_darwin.lo \
+-+ at POWERPC_DARWIN_TRUE@am__objects_16 = src/powerpc/ffi_darwin.lo \
+- @POWERPC_DARWIN_TRUE@	src/powerpc/darwin.lo \
+- @POWERPC_DARWIN_TRUE@	src/powerpc/darwin_closure.lo
+-- at POWERPC_FREEBSD_TRUE@am__objects_16 = src/powerpc/ffi.lo \
+-+ at POWERPC_FREEBSD_TRUE@am__objects_17 = src/powerpc/ffi.lo \
+- @POWERPC_FREEBSD_TRUE@	src/powerpc/sysv.lo \
+- @POWERPC_FREEBSD_TRUE@	src/powerpc/ppc_closure.lo
+-- at ARM_TRUE@am__objects_17 = src/arm/sysv.lo src/arm/ffi.lo
+-- at ARM_TRUE@@FFI_EXEC_TRAMPOLINE_TABLE_TRUE at am__objects_18 = src/arm/trampoline.lo
+-- at AVR32_TRUE@am__objects_19 = src/avr32/sysv.lo src/avr32/ffi.lo
+-- at LIBFFI_CRIS_TRUE@am__objects_20 = src/cris/sysv.lo src/cris/ffi.lo
+-- at FRV_TRUE@am__objects_21 = src/frv/eabi.lo src/frv/ffi.lo
+-- at MOXIE_TRUE@am__objects_22 = src/moxie/eabi.lo src/moxie/ffi.lo
+-- at S390_TRUE@am__objects_23 = src/s390/sysv.lo src/s390/ffi.lo
+-- at X86_64_TRUE@am__objects_24 = src/x86/ffi64.lo src/x86/unix64.lo \
+-+ at ARM_TRUE@am__objects_18 = src/arm/sysv.lo src/arm/ffi.lo
+-+ at ARM_TRUE@@FFI_EXEC_TRAMPOLINE_TABLE_TRUE at am__objects_19 = src/arm/trampoline.lo
+-+ at AVR32_TRUE@am__objects_20 = src/avr32/sysv.lo src/avr32/ffi.lo
+-+ at LIBFFI_CRIS_TRUE@am__objects_21 = src/cris/sysv.lo src/cris/ffi.lo
+-+ at FRV_TRUE@am__objects_22 = src/frv/eabi.lo src/frv/ffi.lo
+-+ at MOXIE_TRUE@am__objects_23 = src/moxie/eabi.lo src/moxie/ffi.lo
+-+ at S390_TRUE@am__objects_24 = src/s390/sysv.lo src/s390/ffi.lo
+-+ at X86_64_TRUE@am__objects_25 = src/x86/ffi64.lo src/x86/unix64.lo \
+- @X86_64_TRUE@	src/x86/ffi.lo src/x86/sysv.lo
+-- at SH_TRUE@am__objects_25 = src/sh/sysv.lo src/sh/ffi.lo
+-- at SH64_TRUE@am__objects_26 = src/sh64/sysv.lo src/sh64/ffi.lo
+-- at PA_LINUX_TRUE@am__objects_27 = src/pa/linux.lo src/pa/ffi.lo
+-- at PA_HPUX_TRUE@am__objects_28 = src/pa/hpux32.lo src/pa/ffi.lo
+-+ at SH_TRUE@am__objects_26 = src/sh/sysv.lo src/sh/ffi.lo
+-+ at SH64_TRUE@am__objects_27 = src/sh64/sysv.lo src/sh64/ffi.lo
+-+ at PA_LINUX_TRUE@am__objects_28 = src/pa/linux.lo src/pa/ffi.lo
+-+ at PA_HPUX_TRUE@am__objects_29 = src/pa/hpux32.lo src/pa/ffi.lo
+- nodist_libffi_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
+- 	$(am__objects_3) $(am__objects_4) $(am__objects_5) \
+- 	$(am__objects_6) $(am__objects_7) $(am__objects_8) \
+-@@ -173,17 +165,17 @@ nodist_libffi_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
+- 	$(am__objects_18) $(am__objects_19) $(am__objects_20) \
+- 	$(am__objects_21) $(am__objects_22) $(am__objects_23) \
+- 	$(am__objects_24) $(am__objects_25) $(am__objects_26) \
+--	$(am__objects_27) $(am__objects_28)
+-+	$(am__objects_27) $(am__objects_28) $(am__objects_29)
+- libffi_la_OBJECTS = $(am_libffi_la_OBJECTS) \
+- 	$(nodist_libffi_la_OBJECTS)
+- libffi_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+- 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+- 	$(libffi_la_LDFLAGS) $(LDFLAGS) -o $@
+- libffi_convenience_la_LIBADD =
+--am__objects_29 = src/prep_cif.lo src/types.lo src/raw_api.lo \
+-+am__objects_30 = src/prep_cif.lo src/types.lo src/raw_api.lo \
+- 	src/java_raw_api.lo src/closures.lo
+--am_libffi_convenience_la_OBJECTS = $(am__objects_29)
+--am__objects_30 = $(am__objects_1) $(am__objects_2) $(am__objects_3) \
+-+am_libffi_convenience_la_OBJECTS = $(am__objects_30)
+-+am__objects_31 = $(am__objects_1) $(am__objects_2) $(am__objects_3) \
+- 	$(am__objects_4) $(am__objects_5) $(am__objects_6) \
+- 	$(am__objects_7) $(am__objects_8) $(am__objects_9) \
+- 	$(am__objects_10) $(am__objects_11) $(am__objects_12) \
+-@@ -192,8 +184,8 @@ am__objects_30 = $(am__objects_1) $(am__objects_2) $(am__objects_3) \
+- 	$(am__objects_19) $(am__objects_20) $(am__objects_21) \
+- 	$(am__objects_22) $(am__objects_23) $(am__objects_24) \
+- 	$(am__objects_25) $(am__objects_26) $(am__objects_27) \
+--	$(am__objects_28)
+--nodist_libffi_convenience_la_OBJECTS = $(am__objects_30)
+-+	$(am__objects_28) $(am__objects_29)
+-+nodist_libffi_convenience_la_OBJECTS = $(am__objects_31)
+- libffi_convenience_la_OBJECTS = $(am_libffi_convenience_la_OBJECTS) \
+- 	$(nodist_libffi_convenience_la_OBJECTS)
+- DEFAULT_INCLUDES = -I. at am__isrc@
+-@@ -440,6 +432,7 @@ EXTRA_DIST = LICENSE ChangeLog.v1 ChangeLog.libgcj configure.host \
+- 	src/x86/win64.S src/x86/freebsd.S src/x86/ffi64.c \
+- 	src/x86/unix64.S src/x86/ffitarget.h src/pa/ffitarget.h	\
+- 	src/pa/ffi.c src/pa/linux.S src/pa/hpux32.S src/frv/ffi.c \
+-+	src/bfin/ffi.c src/bfin/ffitarget.h src/bfin/sysv.S \
+- 	src/frv/eabi.S src/frv/ffitarget.h src/dlmalloc.c \
+- 	src/moxie/ffi.c src/moxie/eabi.S libtool-version \
+- 	ChangeLog.libffi m4/libtool.m4 m4/lt~obsolete.m4 \
+-@@ -508,10 +501,10 @@ nodist_libffi_la_SOURCES = $(am__append_1) $(am__append_2) \
+- 	$(am__append_18) $(am__append_19) $(am__append_20) \
+- 	$(am__append_21) $(am__append_22) $(am__append_23) \
+- 	$(am__append_24) $(am__append_25) $(am__append_26) \
+--	$(am__append_27) $(am__append_28)
+-+	$(am__append_27) $(am__append_28) $(am__append_29)
+- libffi_convenience_la_SOURCES = $(libffi_la_SOURCES)
+- nodist_libffi_convenience_la_SOURCES = $(nodist_libffi_la_SOURCES)
+--AM_CFLAGS = -g $(am__append_29)
+-+AM_CFLAGS = -g $(am__append_30)
+- libffi_la_LDFLAGS = -version-info `grep -v '^\#' $(srcdir)/libtool-version` $(LTLDFLAGS) $(AM_LTLDFLAGS)
+- AM_CPPFLAGS = -I. -I$(top_srcdir)/include -Iinclude -I$(top_srcdir)/src -DFFI_BUILDING
+- AM_CCASFLAGS = $(AM_CPPFLAGS) -g
+-@@ -637,6 +630,16 @@ src/mips/o32.lo: src/mips/$(am__dirstamp) \
+- 	src/mips/$(DEPDIR)/$(am__dirstamp)
+- src/mips/n32.lo: src/mips/$(am__dirstamp) \
+- 	src/mips/$(DEPDIR)/$(am__dirstamp)
+-+src/bfin/$(am__dirstamp):
+-+	@$(MKDIR_P) src/bfin
+-+	@: > src/bfin/$(am__dirstamp)
+-+src/bfin/$(DEPDIR)/$(am__dirstamp):
+-+	@$(MKDIR_P) src/bfin/$(DEPDIR)
+-+	@: > src/bfin/$(DEPDIR)/$(am__dirstamp)
+-+src/bfin/ffi.lo: src/bfin/$(am__dirstamp) \
+-+	src/bfin/$(DEPDIR)/$(am__dirstamp)
+-+src/bfin/sysv.lo: src/bfin/$(am__dirstamp) \
+-+	src/bfin/$(DEPDIR)/$(am__dirstamp)
+- src/x86/$(am__dirstamp):
+- 	@$(MKDIR_P) src/x86
+- 	@: > src/x86/$(am__dirstamp)
+-@@ -852,6 +855,10 @@ mostlyclean-compile:
+- 	-rm -f src/avr32/ffi.lo
+- 	-rm -f src/avr32/sysv.$(OBJEXT)
+- 	-rm -f src/avr32/sysv.lo
+-+	-rm -f src/bfin/ffi.$(OBJEXT)
+-+	-rm -f src/bfin/ffi.lo
+-+	-rm -f src/bfin/sysv.$(OBJEXT)
+-+	-rm -f src/bfin/sysv.lo
+- 	-rm -f src/closures.$(OBJEXT)
+- 	-rm -f src/closures.lo
+- 	-rm -f src/cris/ffi.$(OBJEXT)
+-@@ -973,6 +980,8 @@ distclean-compile:
+- @AMDEP_TRUE@@am__include@ @am__quote at src/arm/$(DEPDIR)/trampoline.Plo at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at src/avr32/$(DEPDIR)/ffi.Plo at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at src/avr32/$(DEPDIR)/sysv.Plo at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at src/bfin/$(DEPDIR)/ffi.Plo at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at src/bfin/$(DEPDIR)/sysv.Plo at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at src/cris/$(DEPDIR)/ffi.Plo at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at src/cris/$(DEPDIR)/sysv.Plo at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at src/frv/$(DEPDIR)/eabi.Plo at am__quote@
+-@@ -1077,6 +1086,7 @@ clean-libtool:
+- 	-rm -rf src/alpha/.libs src/alpha/_libs
+- 	-rm -rf src/arm/.libs src/arm/_libs
+- 	-rm -rf src/avr32/.libs src/avr32/_libs
+-+	-rm -rf src/bfin/.libs src/bfin/_libs
+- 	-rm -rf src/cris/.libs src/cris/_libs
+- 	-rm -rf src/frv/.libs src/frv/_libs
+- 	-rm -rf src/ia64/.libs src/ia64/_libs
+-@@ -1631,6 +1641,8 @@ distclean-generic:
+- 	-rm -f src/arm/$(am__dirstamp)
+- 	-rm -f src/avr32/$(DEPDIR)/$(am__dirstamp)
+- 	-rm -f src/avr32/$(am__dirstamp)
+-+	-rm -f src/bfin/$(DEPDIR)/$(am__dirstamp)
+-+	-rm -f src/bfin/$(am__dirstamp)
+- 	-rm -f src/cris/$(DEPDIR)/$(am__dirstamp)
+- 	-rm -f src/cris/$(am__dirstamp)
+- 	-rm -f src/frv/$(DEPDIR)/$(am__dirstamp)
+-@@ -1670,7 +1682,7 @@ clean-am: clean-aminfo clean-generic clean-libLTLIBRARIES \
+- 
+- distclean: distclean-recursive
+- 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+--	-rm -rf src/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/x86/$(DEPDIR)
+-+	-rm -rf src/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/x86/$(DEPDIR)
+- 	-rm -f Makefile
+- distclean-am: clean-am distclean-compile distclean-generic \
+- 	distclean-hdr distclean-libtool distclean-tags
+-@@ -1790,7 +1802,7 @@ installcheck-am:
+- maintainer-clean: maintainer-clean-recursive
+- 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+- 	-rm -rf $(top_srcdir)/autom4te.cache
+--	-rm -rf src/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/x86/$(DEPDIR)
+-+	-rm -rf src/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/x86/$(DEPDIR)
+- 	-rm -f Makefile
+- maintainer-clean-am: distclean-am maintainer-clean-aminfo \
+- 	maintainer-clean-generic maintainer-clean-vti
+-diff --git a/README b/README
+-index bcc7178..ec240a4 100644
+---- a/README
+-+++ b/README
+-@@ -1,8 +1,8 @@
+- Status
+- ======
+- 
+--libffi-3.0.11 was released on April 11, 2012.  Check the libffi web
+--page for updates: <URL:http://sourceware.org/libffi/>.
+-+libffi-3.0.XX was released on XXXXXXX.  Check the libffi web page for
+-+updates: <URL:http://sourceware.org/libffi/>.
+- 
+- 
+- What is libffi?
+-@@ -56,6 +56,7 @@ tested:
+- | ARM          | Linux            |
+- | ARM          | iOS              |
+- | AVR32        | Linux            |
+-+| Blackfin     | uClinux          |
+- | HPPA         | HPUX             |
+- | IA-64        | Linux            |
+- | M68K         | FreeMiNT         |
+-@@ -148,6 +149,9 @@ History
+- 
+- See the ChangeLog files for details.
+- 
+-+3.0.12 XXX-XX-XX
+-+        Add Blackfin support.
+-+
+- 3.0.11 Apr-11-12
+-         Add support for variadic functions (ffi_prep_cif_var).
+- 	Add Linux/x32 support.
+-diff --git a/configure b/configure
+-index 91b2317..4ccba55 100755
+---- a/configure
+-+++ b/configure
+-@@ -679,6 +679,8 @@ X86_FALSE
+- X86_TRUE
+- SPARC_FALSE
+- SPARC_TRUE
+-+BFIN_FALSE
+-+BFIN_TRUE
+- MIPS_FALSE
+- MIPS_TRUE
+- AM_LTLDFLAGS
+-@@ -6840,14 +6842,7 @@ s390*-*linux*|s390*-*tpf*|sparc*-*linux*)
+- 	    LD="${LD-ld} -m elf_i386_fbsd"
+- 	    ;;
+- 	  x86_64-*linux*)
+--	    case `/usr/bin/file conftest.o` in
+--	      *x86-64*)
+--	         LD="${LD-ld} -m elf32_x86_64"
+--	         ;;
+--	      *)
+--	         LD="${LD-ld} -m elf_i386"
+--	         ;;
+--	    esac
+-+	    LD="${LD-ld} -m elf_i386"
+- 	    ;;
+- 	  ppc64-*linux*|powerpc64-*linux*)
+- 	    LD="${LD-ld} -m elf32ppclinux"
+-@@ -8418,10 +8413,6 @@ _lt_linker_boilerplate=`cat conftest.err`
+- $RM -r conftest*
+- 
+- 
+--## CAVEAT EMPTOR:
+--## There is no encapsulation within the following macros, do not change
+--## the running order or otherwise move them around unless you know exactly
+--## what you are doing...
+- if test -n "$compiler"; then
+- 
+- lt_prog_compiler_no_builtin_flag=
+-@@ -10972,10 +10963,14 @@ fi
+-   # before this can be enabled.
+-   hardcode_into_libs=yes
+- 
+-+  # Add ABI-specific directories to the system library path.
+-+  sys_lib_dlsearch_path_spec="/lib64 /usr/lib64 /lib /usr/lib"
+-+
+-   # Append ld.so.conf contents to the search path
+-   if test -f /etc/ld.so.conf; then
+-     lt_ld_extra=`awk '/^include / { system(sprintf("cd /etc; cat %s 2>/dev/null", \$2)); skip = 1; } { if (!skip) print \$0; skip = 0; }' < /etc/ld.so.conf | $SED -e 's/#.*//;/^[	 ]*hwcap[	 ]/d;s/[:,	]/ /g;s/=[^=]*$//;s/=[^= ]* / /g;s/"//g;/^$/d' | tr '\n' ' '`
+--    sys_lib_dlsearch_path_spec="/lib /usr/lib $lt_ld_extra"
+-+    sys_lib_dlsearch_path_spec="$sys_lib_dlsearch_path_spec $lt_ld_extra"
+-+
+-   fi
+- 
+-   # We used to test for /lib/ld.so.1 and disable shared libraries on
+-@@ -12419,7 +12414,7 @@ if test "x$ax_gcc_arch" = xyes; then
+- ax_gcc_arch=""
+- if test "$cross_compiling" = no; then
+- case $host_cpu in
+--  i[3456]86*|x86_64*) # use cpuid codes, in part from x86info-1.7 by D. Jones
+-+  i[3456]86*|x86_64*) # use cpuid codes
+- 
+- ac_ext=c
+- ac_cpp='$CPP $CPPFLAGS'
+-@@ -12535,18 +12530,24 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+-           case $ax_cv_gcc_x86_cpuid_1 in
+- 	    *5[48]?:*:*:*) ax_gcc_arch="pentium-mmx pentium" ;;
+- 	    *5??:*:*:*) ax_gcc_arch=pentium ;;
+--	    *6[3456]?:*:*:*) ax_gcc_arch="pentium2 pentiumpro" ;;
+--	    *6a?:*[01]:*:*) ax_gcc_arch="pentium2 pentiumpro" ;;
+--	    *6a?:*[234]:*:*) ax_gcc_arch="pentium3 pentiumpro" ;;
+--	    *6[9d]?:*:*:*) ax_gcc_arch="pentium-m pentium3 pentiumpro" ;;
+--	    *6[78b]?:*:*:*) ax_gcc_arch="pentium3 pentiumpro" ;;
+--	    *6??:*:*:*) ax_gcc_arch=pentiumpro ;;
+--            *f3[347]:*:*:*|*f41347:*:*:*)
+-+	    *0?6[3456]?:*:*:*) ax_gcc_arch="pentium2 pentiumpro" ;;
+-+	    *0?6a?:*[01]:*:*) ax_gcc_arch="pentium2 pentiumpro" ;;
+-+	    *0?6a?:*[234]:*:*) ax_gcc_arch="pentium3 pentiumpro" ;;
+-+	    *0?6[9de]?:*:*:*) ax_gcc_arch="pentium-m pentium3 pentiumpro" ;;
+-+	    *0?6[78b]?:*:*:*) ax_gcc_arch="pentium3 pentiumpro" ;;
+-+	    *0?6f?:*:*:*|*1?66?:*:*:*) ax_gcc_arch="core2 pentium-m pentium3 pentiumpro" ;;
+-+	    *1?6[7d]?:*:*:*) ax_gcc_arch="penryn core2 pentium-m pentium3 pentiumpro" ;;
+-+	    *1?6[aef]?:*:*:*|*2?6[5cef]?:*:*:*) ax_gcc_arch="corei7 core2 pentium-m pentium3 pentiumpro" ;;
+-+	    *1?6c?:*:*:*|*[23]?66?:*:*:*) ax_gcc_arch="atom core2 pentium-m pentium3 pentiumpro" ;;
+-+	    *2?6[ad]?:*:*:*) ax_gcc_arch="corei7-avx corei7 core2 pentium-m pentium3 pentiumpro" ;;
+-+	    *0?6??:*:*:*) ax_gcc_arch=pentiumpro ;;
+-+	    *6??:*:*:*) ax_gcc_arch="core2 pentiumpro" ;;
+-+	    ?000?f3[347]:*:*:*|?000?f41347:*:*:*|?000?f6?:*:*:*)
+- 		case $host_cpu in
+--                  x86_64*) ax_gcc_arch="nocona pentium4 pentiumpro" ;;
+--                  *) ax_gcc_arch="prescott pentium4 pentiumpro" ;;
+--                esac ;;
+--            *f??:*:*:*) ax_gcc_arch="pentium4 pentiumpro";;
+-+	          x86_64*) ax_gcc_arch="nocona pentium4 pentiumpro" ;;
+-+	          *) ax_gcc_arch="prescott pentium4 pentiumpro" ;;
+-+	        esac ;;
+-+	    ?000?f??:*:*:*) ax_gcc_arch="pentium4 pentiumpro";;
+-           esac ;;
+-        *:68747541:*:*) # AMD
+-           case $ax_cv_gcc_x86_cpuid_1 in
+-@@ -12618,10 +12619,13 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+- 			ax_gcc_arch="athlon-xp athlon-4 athlon k7" ;;
+-                  *) ax_gcc_arch="athlon-4 athlon k7" ;;
+- 	       esac ;;
+--	    *f[4cef8b]?:*:*:*) ax_gcc_arch="athlon64 k8" ;;
+--	    *f5?:*:*:*) ax_gcc_arch="opteron k8" ;;
+--	    *f7?:*:*:*) ax_gcc_arch="athlon-fx opteron k8" ;;
+--	    *f??:*:*:*) ax_gcc_arch="k8" ;;
+-+	    ?00??f[4cef8b]?:*:*:*) ax_gcc_arch="athlon64 k8" ;;
+-+	    ?00??f5?:*:*:*) ax_gcc_arch="opteron k8" ;;
+-+	    ?00??f7?:*:*:*) ax_gcc_arch="athlon-fx opteron k8" ;;
+-+	    ?00??f??:*:*:*) ax_gcc_arch="k8" ;;
+-+	    ?05??f??:*:*:*) ax_gcc_arch="btver1 amdfam10 k8" ;;
+-+	    ?06??f??:*:*:*) ax_gcc_arch="bdver1 amdfam10 k8" ;;
+-+	    *f??:*:*:*) ax_gcc_arch="amdfam10 k8" ;;
+-           esac ;;
+- 	*:746e6543:*:*) # IDT
+- 	   case $ax_cv_gcc_x86_cpuid_1 in
+-@@ -13150,6 +13154,10 @@ case "$host" in
+- 	TARGET=AVR32; TARGETDIR=avr32
+- 	;;
+- 
+-+  bfin*)
+-+  	TARGET=BFIN; TARGETDIR=bfin
+-+  	;;
+-+
+-   cris-*-*)
+- 	TARGET=LIBFFI_CRIS; TARGETDIR=cris
+- 	;;
+-@@ -13295,6 +13303,14 @@ else
+-   MIPS_FALSE=
+- fi
+- 
+-+ if test x$TARGET = xBFIN; then
+-+  BFIN_TRUE=
+-+  BFIN_FALSE='#'
+-+else
+-+  BFIN_TRUE='#'
+-+  BFIN_FALSE=
+-+fi
+-+
+-  if test x$TARGET = xSPARC; then
+-   SPARC_TRUE=
+-   SPARC_FALSE='#'
+-@@ -14134,40 +14150,7 @@ $as_echo "#define AC_APPLE_UNIVERSAL_BUILD 1" >>confdefs.h
+-  esac
+- 
+- 
+--{ $as_echo "$as_me:${as_lineno-$LINENO}: checking assembler .cfi pseudo-op support" >&5
+--$as_echo_n "checking assembler .cfi pseudo-op support... " >&6; }
+--if ${gcc_cv_as_cfi_pseudo_op+:} false; then :
+--  $as_echo_n "(cached) " >&6
+--else
+--
+--    gcc_cv_as_cfi_pseudo_op=unknown
+--    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+--/* end confdefs.h.  */
+--asm (".cfi_startproc\n\t.cfi_endproc");
+--int
+--main ()
+--{
+--
+--  ;
+--  return 0;
+--}
+--_ACEOF
+--if ac_fn_c_try_compile "$LINENO"; then :
+--  gcc_cv_as_cfi_pseudo_op=yes
+--else
+--  gcc_cv_as_cfi_pseudo_op=no
+--fi
+--rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+--
+--fi
+--{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gcc_cv_as_cfi_pseudo_op" >&5
+--$as_echo "$gcc_cv_as_cfi_pseudo_op" >&6; }
+-- if test "x$gcc_cv_as_cfi_pseudo_op" = xyes; then
+--
+--$as_echo "#define HAVE_AS_CFI_PSEUDO_OP 1" >>confdefs.h
+--
+-- fi
+--
+-+GCC_AS_CFI_PSEUDO_OP
+- 
+- if test x$TARGET = xSPARC; then
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: checking assembler and linker support unaligned pc related relocs" >&5
+-@@ -14739,6 +14722,10 @@ if test -z "${MIPS_TRUE}" && test -z "${MIPS_FALSE}"; then
+-   as_fn_error $? "conditional \"MIPS\" was never defined.
+- Usually this means the macro was only invoked conditionally." "$LINENO" 5
+- fi
+-+if test -z "${BFIN_TRUE}" && test -z "${BFIN_FALSE}"; then
+-+  as_fn_error $? "conditional \"BFIN\" was never defined.
+-+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+-+fi
+- if test -z "${SPARC_TRUE}" && test -z "${SPARC_FALSE}"; then
+-   as_fn_error $? "conditional \"SPARC\" was never defined.
+- Usually this means the macro was only invoked conditionally." "$LINENO" 5
+-diff --git a/configure.ac b/configure.ac
+-index 1021769..9b946a2 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -75,6 +75,10 @@ case "$host" in
+- 	TARGET=AVR32; TARGETDIR=avr32
+- 	;;
+- 
+-+  bfin*)
+-+  	TARGET=BFIN; TARGETDIR=bfin
+-+  	;;
+-+
+-   cris-*-*)
+- 	TARGET=LIBFFI_CRIS; TARGETDIR=cris
+- 	;;
+-@@ -213,6 +217,7 @@ if test $TARGETDIR = unknown; then
+- fi
+- 
+- AM_CONDITIONAL(MIPS, test x$TARGET = xMIPS)
+-+AM_CONDITIONAL(BFIN, test x$TARGET = xBFIN)
+- AM_CONDITIONAL(SPARC, test x$TARGET = xSPARC)
+- AM_CONDITIONAL(X86, test x$TARGET = xX86)
+- AM_CONDITIONAL(X86_FREEBSD, test x$TARGET = xX86_FREEBSD)
+-diff --git a/src/bfin/ffi.c b/src/bfin/ffi.c
+-new file mode 100644
+-index 0000000..0beccc1
+---- /dev/null
+-+++ b/src/bfin/ffi.c
+-@@ -0,0 +1,195 @@
+-+/* -----------------------------------------------------------------------
+-+   ffi.c - Copyright (c) 2012  Alexandre K. I. de Mendonca <alexandre.keunecke@gmail.com>
+-+
+-+   Blackfin Foreign Function Interface
+-+
+-+   Permission is hereby granted, free of charge, to any person obtaining
+-+   a copy of this software and associated documentation files (the
+-+   ``Software''), to deal in the Software without restriction, including
+-+   without limitation the rights to use, copy, modify, merge, publish,
+-+   distribute, sublicense, and/or sell copies of the Software, and to
+-+   permit persons to whom the Software is furnished to do so, subject to
+-+   the following conditions:
+-+
+-+   The above copyright notice and this permission notice shall be included
+-+   in all copies or substantial portions of the Software.
+-+
+-+   THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
+-+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+-+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+-+   NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+-+   HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+-+   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+-+   DEALINGS IN THE SOFTWARE.
+-+   ----------------------------------------------------------------------- */
+-+#include <ffi.h>
+-+#include <ffi_common.h>
+-+
+-+#include <stdlib.h>
+-+#include <stdio.h>
+-+
+-+/* Maximum number of GPRs available for argument passing.  */
+-+#define MAX_GPRARGS 3
+-+
+-+/*
+-+ * Return types
+-+ */
+-+#define FFIBFIN_RET_VOID 0
+-+#define FFIBFIN_RET_BYTE 1
+-+#define FFIBFIN_RET_HALFWORD 2
+-+#define FFIBFIN_RET_INT64 3
+-+#define FFIBFIN_RET_INT32 4
+-+
+-+/*====================================================================*/
+-+/*                          PROTOTYPE          *
+-+ /*====================================================================*/
+-+void ffi_prep_args(unsigned char *, extended_cif *);
+-+
+-+/*====================================================================*/
+-+/*                          Externals                                 */
+-+/*                          (Assembly)                                */
+-+/*====================================================================*/
+-+
+-+extern void ffi_call_SYSV(unsigned, extended_cif *, void(*)(unsigned char *, extended_cif *), unsigned, void *, void(*fn)(void));
+-+
+-+/*====================================================================*/
+-+/*                          Implementation                            */
+-+/*                                                            */
+-+/*====================================================================*/
+-+
+-+
+-+/*
+-+ * This function calculates the return type (size) based on type.
+-+ */
+-+
+-+ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
+-+{
+-+   /* --------------------------------------*
+-+    *   Return handling                *
+-+    * --------------------------------------*/
+-+   switch (cif->rtype->type) {
+-+      case FFI_TYPE_VOID:
+-+         cif->flags = FFIBFIN_RET_VOID;
+-+         break;
+-+      case FFI_TYPE_UINT16:
+-+      case FFI_TYPE_SINT16:
+-+         cif->flags = FFIBFIN_RET_HALFWORD;
+-+         break;
+-+      case FFI_TYPE_UINT8:
+-+         cif->flags = FFIBFIN_RET_BYTE;
+-+         break;
+-+      case FFI_TYPE_INT:
+-+      case FFI_TYPE_UINT32:
+-+      case FFI_TYPE_SINT32:
+-+      case FFI_TYPE_FLOAT:
+-+      case FFI_TYPE_POINTER:
+-+      case FFI_TYPE_SINT8:
+-+         cif->flags = FFIBFIN_RET_INT32;
+-+         break;
+-+      case FFI_TYPE_SINT64:
+-+      case FFI_TYPE_UINT64:
+-+      case FFI_TYPE_DOUBLE:
+-+          cif->flags = FFIBFIN_RET_INT64;
+-+          break;
+-+      case FFI_TYPE_STRUCT:
+-+         if (cif->rtype->size <= 4){
+-+        	 cif->flags = FFIBFIN_RET_INT32;
+-+         }else if (cif->rtype->size == 8){
+-+        	 cif->flags = FFIBFIN_RET_INT64;
+-+         }else{
+-+        	 //it will return via a hidden pointer in P0
+-+        	 cif->flags = FFIBFIN_RET_VOID;
+-+         }
+-+         break;
+-+      default:
+-+         FFI_ASSERT(0);
+-+         break;
+-+   }
+-+   return FFI_OK;
+-+}
+-+
+-+/*
+-+ * This will prepare the arguments and will call the assembly routine
+-+ * cif = the call interface
+-+ * fn = the function to be called
+-+ * rvalue = the return value
+-+ * avalue = the arguments
+-+ */
+-+void ffi_call(ffi_cif *cif, void(*fn)(void), void *rvalue, void **avalue)
+-+{
+-+   int ret_type = cif->flags;
+-+   extended_cif ecif;
+-+   ecif.cif = cif;
+-+   ecif.avalue = avalue;
+-+   ecif.rvalue = rvalue;
+-+
+-+   switch (cif->abi) {
+-+      case FFI_SYSV:
+-+         ffi_call_SYSV(cif->bytes, &ecif, ffi_prep_args, ret_type, ecif.rvalue, fn);
+-+         break;
+-+      default:
+-+         FFI_ASSERT(0);
+-+         break;
+-+   }
+-+}
+-+
+-+
+-+/*
+-+* This function prepares the parameters (copies them from the ecif to the stack)
+-+*  to call the function (ffi_prep_args is called by the assembly routine in file
+-+*  sysv.S, which also calls the actual function)
+-+*/
+-+void ffi_prep_args(unsigned char *stack, extended_cif *ecif)
+-+{
+-+   register unsigned int i = 0;
+-+   void **p_argv;
+-+   unsigned char *argp;
+-+   ffi_type **p_arg;
+-+   argp = stack;
+-+   p_argv = ecif->avalue;
+-+   for (i = ecif->cif->nargs, p_arg = ecif->cif->arg_types;
+-+        (i != 0);
+-+        i--, p_arg++) {
+-+      size_t z;
+-+      z = (*p_arg)->size;
+-+      if (z < sizeof(int)) {
+-+         z = sizeof(int);
+-+         switch ((*p_arg)->type) {
+-+            case FFI_TYPE_SINT8: {
+-+                  signed char v = *(SINT8 *)(* p_argv);
+-+                  signed int t = v;
+-+                  *(signed int *) argp = t;
+-+               }
+-+               break;
+-+            case FFI_TYPE_UINT8: {
+-+                  unsigned char v = *(UINT8 *)(* p_argv);
+-+                  unsigned int t = v;
+-+                  *(unsigned int *) argp = t;
+-+               }
+-+               break;
+-+            case FFI_TYPE_SINT16:
+-+               *(signed int *) argp = (signed int) * (SINT16 *)(* p_argv);
+-+               break;
+-+            case FFI_TYPE_UINT16:
+-+               *(unsigned int *) argp = (unsigned int) * (UINT16 *)(* p_argv);
+-+               break;
+-+            case FFI_TYPE_STRUCT:
+-+               memcpy(argp, *p_argv, (*p_arg)->size);
+-+               break;
+-+            default:
+-+               FFI_ASSERT(0);
+-+               break;
+-+         }
+-+      } else if (z == sizeof(int)) {
+-+         *(unsigned int *) argp = (unsigned int) * (UINT32 *)(* p_argv);
+-+      } else {
+-+         memcpy(argp, *p_argv, z);
+-+      }
+-+      p_argv++;
+-+      argp += z;
+-+   }
+-+}
+-+
+-+
+-+
+-diff --git a/src/bfin/ffitarget.h b/src/bfin/ffitarget.h
+-new file mode 100644
+-index 0000000..2175c01
+---- /dev/null
+-+++ b/src/bfin/ffitarget.h
+-@@ -0,0 +1,43 @@
+-+/* -----------------------------------------------------------------------
+-+   ffitarget.h - Copyright (c) 2012  Alexandre K. I. de Mendonca <alexandre.keunecke@gmail.com>
+-+
+-+   Blackfin Foreign Function Interface
+-+
+-+   Permission is hereby granted, free of charge, to any person obtaining
+-+   a copy of this software and associated documentation files (the
+-+   ``Software''), to deal in the Software without restriction, including
+-+   without limitation the rights to use, copy, modify, merge, publish,
+-+   distribute, sublicense, and/or sell copies of the Software, and to
+-+   permit persons to whom the Software is furnished to do so, subject to
+-+   the following conditions:
+-+
+-+   The above copyright notice and this permission notice shall be included
+-+   in all copies or substantial portions of the Software.
+-+
+-+   THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
+-+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+-+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+-+   NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+-+   HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+-+   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+-+   DEALINGS IN THE SOFTWARE.
+-+   ----------------------------------------------------------------------- */
+-+
+-+#ifndef LIBFFI_TARGET_H
+-+#define LIBFFI_TARGET_H
+-+
+-+#ifndef LIBFFI_ASM
+-+typedef unsigned long          ffi_arg;
+-+typedef signed 	 long          ffi_sarg;
+-+
+-+typedef enum ffi_abi {
+-+  FFI_FIRST_ABI = 0,
+-+  FFI_SYSV,
+-+  FFI_LAST_ABI,
+-+  FFI_DEFAULT_ABI = FFI_SYSV
+-+} ffi_abi;
+-+#endif
+-+
+-+#endif
+-+
+-diff --git a/src/bfin/sysv.S b/src/bfin/sysv.S
+-new file mode 100644
+-index 0000000..ae7a152
+---- /dev/null
+-+++ b/src/bfin/sysv.S
+-@@ -0,0 +1,177 @@
+-+/* -----------------------------------------------------------------------
+-+   sysv.S - Copyright (c) 2012  Alexandre K. I. de Mendonca <alexandre.keunecke@gmail.com>
+-+
+-+   Blackfin Foreign Function Interface
+-+
+-+   Permission is hereby granted, free of charge, to any person obtaining
+-+   a copy of this software and associated documentation files (the
+-+   ``Software''), to deal in the Software without restriction, including
+-+   without limitation the rights to use, copy, modify, merge, publish,
+-+   distribute, sublicense, and/or sell copies of the Software, and to
+-+   permit persons to whom the Software is furnished to do so, subject to
+-+   the following conditions:
+-+
+-+   The above copyright notice and this permission notice shall be included
+-+   in all copies or substantial portions of the Software.
+-+
+-+   THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
+-+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+-+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+-+   NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+-+   HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+-+   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+-+   DEALINGS IN THE SOFTWARE.
+-+   ----------------------------------------------------------------------- */
+-+
+-+#define LIBFFI_ASM
+-+#include <fficonfig.h>
+-+#include <ffi.h>
+-+
+-+.text
+-+.align 4
+-+
+-+	/*
+-+	 There is a "feature" in the bfin toolchain that it puts a _ before funcion names
+-+	 that's why the function here it's called _ffi_call_SYSV and not ffi_call_SYSV
+-+	 */
+-+	.global _ffi_call_SYSV;
+-+	.type _ffi_call_SYSV, STT_FUNC;
+-+	.func ffi_call_SYSV
+-+
+-+	/*
+-+	cif->bytes  	= R0	(fp+8)
+-+	&ecif			= R1	(fp+12)
+-+	ffi_prep_args	= R2	(fp+16)
+-+	ret_type		= stack (fp+20)
+-+	ecif.rvalue		= stack (fp+24)
+-+	fn				= stack	(fp+28)
+-+					  got	(fp+32)
+-+    There is room for improvement here (we can use temporary registers
+-+        instead of saving the values in the memory)
+-+	REGS:
+-+		P5 => Stack pointer (function arguments)
+-+		R5 => cif->bytes
+-+		R4 => ret->type
+-+
+-+		FP-20 = P3
+-+		FP-16 = SP (parameters area)
+-+		FP-12 = SP (temp)
+-+		FP-08 = function return part 1 [R0]
+-+		FP-04 = function return part 2 [R1]
+-+	*/
+-+
+-+_ffi_call_SYSV:
+-+.prologue:
+-+	LINK 20;
+-+	[FP-20] = P3;
+-+	[FP+8] = R0;
+-+	[FP+12] = R1;
+-+	[FP+16] = R2;
+-+
+-+.allocate_stack:
+-+	//alocate cif->bytes into the stack
+-+	R1 = [FP+8];
+-+	R0 = SP;
+-+	R0 = R0 - R1;
+-+	R1 = 4;
+-+	R0 = R0 - R1;
+-+	[FP-12] = SP;
+-+	SP = R0;
+-+	[FP-16] = SP;
+-+
+-+.call_prep_args:
+-+	//get the addr of prep_args
+-+	P0 = [P3 + _ffi_prep_args at FUNCDESC_GOT17M4];
+-+	P1 = [P0];
+-+	P3 = [P0+4];
+-+	R0 = [FP-16];//SP (parameter area)
+-+	R1 = [FP+12];//ecif
+-+	call (P1);
+-+
+-+.call_user_function:
+-+	//ajust SP so as to allow the user function access the parameters on the stack
+-+	SP = [FP-16]; //point to function parameters
+-+	R0 = [SP];
+-+	R1 = [SP+4];
+-+	R2 = [SP+8];
+-+	//load user function address
+-+	P0 = FP;
+-+	P0 +=28;
+-+	P1 = [P0];
+-+	P1 = [P1];
+-+	P3 = [P0+4];
+-+	/*
+-+		For functions returning aggregate values (struct) occupying more than 8 bytes,
+-+		the caller allocates the return value object on the stack and the address
+-+		of this object is passed to the callee as a hidden argument in register P0.
+-+	*/
+-+	P0 = [FP+24];
+-+
+-+	call (P1);
+-+	SP = [FP-12];
+-+.compute_return:
+-+	P2 = [FP-20];
+-+	[FP-8] = R0;
+-+	[FP-4] = R1;
+-+
+-+	R0 = [FP+20];
+-+	R1 = R0 << 2;
+-+
+-+	R0 = [P2+.rettable at GOT17M4];
+-+	R0 = R1 + R0;
+-+	P2 = R0;
+-+	R1 = [P2];
+-+
+-+	P2 = [FP+-20];
+-+	R0 = [P2+.rettable at GOT17M4];
+-+	R0 = R1 + R0;
+-+	P2 = R0;
+-+	R0 = [FP-8];
+-+	R1 = [FP-4];
+-+	jump (P2);
+-+
+-+/*
+-+#define FFIBFIN_RET_VOID 0
+-+#define FFIBFIN_RET_BYTE 1
+-+#define FFIBFIN_RET_HALFWORD 2
+-+#define FFIBFIN_RET_INT64 3
+-+#define FFIBFIN_RET_INT32 4
+-+*/
+-+.align 4
+-+.align 4
+-+.rettable:
+-+	.dd .epilogue - .rettable
+-+	.dd	.rbyte - .rettable;
+-+	.dd	.rhalfword - .rettable;
+-+	.dd	.rint64 - .rettable;
+-+	.dd	.rint32 - .rettable;
+-+
+-+.rbyte:
+-+	P0 = [FP+24];
+-+	R0 = R0.B (Z);
+-+	[P0] = R0;
+-+	JUMP .epilogue
+-+.rhalfword:
+-+	P0 = [FP+24];
+-+	R0 = R0.L;
+-+	[P0] = R0;
+-+	JUMP .epilogue
+-+.rint64:
+-+	P0 = [FP+24];// &rvalue
+-+	[P0] = R0;
+-+	[P0+4] = R1;
+-+	JUMP .epilogue
+-+.rint32:
+-+	P0 = [FP+24];
+-+	[P0] = R0;
+-+.epilogue:
+-+	R0 = [FP+8];
+-+	R1 = [FP+12];
+-+	R2 = [FP+16];
+-+	P3 = [FP-20];
+-+	UNLINK;
+-+	RTS;
+-+
+-+.size _ffi_call_SYSV,.-_ffi_call_SYSV;
+-+.endfunc
+--- 
+-1.7.9.5
+-
+diff --git a/package/libffi/libffi-0002-Add-aarch64-support-from-upstream.patch b/package/libffi/libffi-0002-Add-aarch64-support-from-upstream.patch
+deleted file mode 100644
+index a407130..0000000
+--- a/package/libffi/libffi-0002-Add-aarch64-support-from-upstream.patch
++++ /dev/null
+@@ -1,2326 +0,0 @@
+-From c77c9625dd63138512ce0f67e07dd254771e566f Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Fri, 16 Nov 2012 01:15:28 +0100
+-Subject: [PATCH 2/2] Add aarch64 support from upstream
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- ChangeLog                |   27 ++
+- Makefile.am              |    4 +
+- Makefile.in              |   44 +-
+- README                   |    3 +
+- configure                |  185 +++++---
+- configure.ac             |    5 +
+- src/aarch64/ffi.c        | 1076 ++++++++++++++++++++++++++++++++++++++++++++++
+- src/aarch64/ffitarget.h  |   59 +++
+- src/aarch64/sysv.S       |  307 +++++++++++++
+- testsuite/lib/libffi.exp |    4 +
+- 10 files changed, 1647 insertions(+), 67 deletions(-)
+- create mode 100644 src/aarch64/ffi.c
+- create mode 100644 src/aarch64/ffitarget.h
+- create mode 100644 src/aarch64/sysv.S
+-
+-diff --git a/ChangeLog b/ChangeLog
+-index 376edf7..4e8ea91 100644
+---- a/ChangeLog
+-+++ b/ChangeLog
+-@@ -1,3 +1,30 @@
+-+2012-10-30  James Greenhalgh  <james.greenhalgh@arm.com>
+-+            Marcus Shawcroft  <marcus.shawcroft@arm.com>
+-+
+-+        * README: Add details of aarch64 port.
+-+        * src/aarch64/ffi.c: New.
+-+        * src/aarch64/ffitarget.h: Likewise.
+-+        * src/aarch64/sysv.S: Likewise.
+-+	* Makefile.am: Support aarch64.
+-+	* configure.ac: Support aarch64.
+-+	* Makefile.in, configure: Rebuilt.
+-+
+-+2012-10-30  James Greenhalgh  <james.greenhalgh@arm.com>
+-+            Marcus Shawcroft  <marcus.shawcroft@arm.com>
+-+
+-+        * testsuite/lib/libffi.exp: Add support for aarch64.
+-+        * testsuite/libffi.call/cls_struct_va1.c: New.
+-+        * testsuite/libffi.call/cls_uchar_va.c: Likewise.
+-+        * testsuite/libffi.call/cls_uint_va.c: Likewise.
+-+        * testsuite/libffi.call/cls_ulong_va.c: Liekwise.
+-+        * testsuite/libffi.call/cls_ushort_va.c: Likewise.
+-+        * testsuite/libffi.call/nested_struct11.c: Likewise.
+-+        * testsuite/libffi.call/uninitialized.c: Likewise.
+-+        * testsuite/libffi.call/va_1.c: Likewise.
+-+        * testsuite/libffi.call/va_struct1.c: Likewise.
+-+        * testsuite/libffi.call/va_struct2.c: Likewise.
+-+        * testsuite/libffi.call/va_struct3.c: Likewise.
+-+
+- 2012-04-23  Alexandre Keunecke I. de Mendonca <alexandre.keunecke@gmail.com>
+- 
+- 	* configure.ac: Add Blackfin/sysv support
+-diff --git a/Makefile.am b/Makefile.am
+-index 16f32a6..bd4d5c4 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -5,6 +5,7 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
+- SUBDIRS = include testsuite man
+- 
+- EXTRA_DIST = LICENSE ChangeLog.v1 ChangeLog.libgcj configure.host \
+-+	src/aarch64/ffi.c src/aarch64/ffitarget.h \
+- 	src/alpha/ffi.c src/alpha/osf.S src/alpha/ffitarget.h \
+- 	src/arm/ffi.c src/arm/sysv.S src/arm/ffitarget.h \
+- 	src/avr32/ffi.c src/avr32/sysv.S src/avr32/ffitarget.h \
+-@@ -151,6 +152,9 @@ endif
+- if POWERPC_FREEBSD
+- nodist_libffi_la_SOURCES += src/powerpc/ffi.c src/powerpc/sysv.S src/powerpc/ppc_closure.S
+- endif
+-+if AARCH64
+-+nodist_libffi_la_SOURCES += src/aarch64/sysv.S src/aarch64/ffi.c
+-+endif
+- if ARM
+- nodist_libffi_la_SOURCES += src/arm/sysv.S src/arm/ffi.c
+- if FFI_EXEC_TRAMPOLINE_TABLE
+-diff --git a/Makefile.in b/Makefile.in
+-index f5c10af..c4f4470 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -65,9 +65,10 @@ target_triplet = @target@
+- @SH64_TRUE at am__append_27 = src/sh64/sysv.S src/sh64/ffi.c
+- @PA_LINUX_TRUE at am__append_28 = src/pa/linux.S src/pa/ffi.c
+- @PA_HPUX_TRUE at am__append_29 = src/pa/hpux32.S src/pa/ffi.c
+-+ at AARCH64_TRUE@am__append_30 = src/aarch64/sysv.S src/aarch64/ffi.c
+- # Build debug. Define FFI_DEBUG on the commandline so that, when building with
+- # MSVC, it can link against the debug CRT.
+-- at FFI_DEBUG_TRUE@am__append_30 = -DFFI_DEBUG
+-+ at FFI_DEBUG_TRUE@am__append_31 = -DFFI_DEBUG
+- subdir = .
+- DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
+- 	$(srcdir)/Makefile.in $(srcdir)/doc/stamp-vti \
+-@@ -156,6 +157,7 @@ am_libffi_la_OBJECTS = src/prep_cif.lo src/types.lo src/raw_api.lo \
+- @SH64_TRUE at am__objects_27 = src/sh64/sysv.lo src/sh64/ffi.lo
+- @PA_LINUX_TRUE at am__objects_28 = src/pa/linux.lo src/pa/ffi.lo
+- @PA_HPUX_TRUE at am__objects_29 = src/pa/hpux32.lo src/pa/ffi.lo
+-+ at AARCH64_TRUE@am__objects_29 = src/aarch64/sysv.lo src/aarch64/ffi.lo
+- nodist_libffi_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
+- 	$(am__objects_3) $(am__objects_4) $(am__objects_5) \
+- 	$(am__objects_6) $(am__objects_7) $(am__objects_8) \
+-@@ -165,17 +167,18 @@ nodist_libffi_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
+- 	$(am__objects_18) $(am__objects_19) $(am__objects_20) \
+- 	$(am__objects_21) $(am__objects_22) $(am__objects_23) \
+- 	$(am__objects_24) $(am__objects_25) $(am__objects_26) \
+--	$(am__objects_27) $(am__objects_28) $(am__objects_29)
+-+	$(am__objects_27) $(am__objects_28) $(am__objects_29) \
+-+	$(am__objects_30)
+- libffi_la_OBJECTS = $(am_libffi_la_OBJECTS) \
+- 	$(nodist_libffi_la_OBJECTS)
+- libffi_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+- 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+- 	$(libffi_la_LDFLAGS) $(LDFLAGS) -o $@
+- libffi_convenience_la_LIBADD =
+--am__objects_30 = src/prep_cif.lo src/types.lo src/raw_api.lo \
+-+am__objects_31 = src/prep_cif.lo src/types.lo src/raw_api.lo \
+- 	src/java_raw_api.lo src/closures.lo
+--am_libffi_convenience_la_OBJECTS = $(am__objects_30)
+--am__objects_31 = $(am__objects_1) $(am__objects_2) $(am__objects_3) \
+-+am_libffi_convenience_la_OBJECTS = $(am__objects_31)
+-+am__objects_32 = $(am__objects_1) $(am__objects_2) $(am__objects_3) \
+- 	$(am__objects_4) $(am__objects_5) $(am__objects_6) \
+- 	$(am__objects_7) $(am__objects_8) $(am__objects_9) \
+- 	$(am__objects_10) $(am__objects_11) $(am__objects_12) \
+-@@ -185,7 +188,7 @@ am__objects_31 = $(am__objects_1) $(am__objects_2) $(am__objects_3) \
+- 	$(am__objects_22) $(am__objects_23) $(am__objects_24) \
+- 	$(am__objects_25) $(am__objects_26) $(am__objects_27) \
+- 	$(am__objects_28) $(am__objects_29)
+--nodist_libffi_convenience_la_OBJECTS = $(am__objects_31)
+-+nodist_libffi_convenience_la_OBJECTS = $(am__objects_32)
+- libffi_convenience_la_OBJECTS = $(am_libffi_convenience_la_OBJECTS) \
+- 	$(nodist_libffi_convenience_la_OBJECTS)
+- DEFAULT_INCLUDES = -I. at am__isrc@
+-@@ -410,6 +413,7 @@ top_srcdir = @top_srcdir@
+- AUTOMAKE_OPTIONS = foreign subdir-objects
+- SUBDIRS = include testsuite man
+- EXTRA_DIST = LICENSE ChangeLog.v1 ChangeLog.libgcj configure.host \
+-+	src/aarch64/ffi.c src/aarch64/ffitarget.h \
+- 	src/alpha/ffi.c src/alpha/osf.S src/alpha/ffitarget.h \
+- 	src/arm/ffi.c src/arm/sysv.S src/arm/ffitarget.h \
+- 	src/avr32/ffi.c src/avr32/sysv.S src/avr32/ffitarget.h \
+-@@ -501,10 +505,11 @@ nodist_libffi_la_SOURCES = $(am__append_1) $(am__append_2) \
+- 	$(am__append_18) $(am__append_19) $(am__append_20) \
+- 	$(am__append_21) $(am__append_22) $(am__append_23) \
+- 	$(am__append_24) $(am__append_25) $(am__append_26) \
+--	$(am__append_27) $(am__append_28) $(am__append_29)
+-+	$(am__append_27) $(am__append_28) $(am__append_29) \
+-+	$(am__append_30)
+- libffi_convenience_la_SOURCES = $(libffi_la_SOURCES)
+- nodist_libffi_convenience_la_SOURCES = $(nodist_libffi_la_SOURCES)
+--AM_CFLAGS = -g $(am__append_30)
+-+AM_CFLAGS = -g $(am__append_31)
+- libffi_la_LDFLAGS = -version-info `grep -v '^\#' $(srcdir)/libtool-version` $(LTLDFLAGS) $(AM_LTLDFLAGS)
+- AM_CPPFLAGS = -I. -I$(top_srcdir)/include -Iinclude -I$(top_srcdir)/src -DFFI_BUILDING
+- AM_CCASFLAGS = $(AM_CPPFLAGS) -g
+-@@ -640,6 +645,16 @@ src/bfin/ffi.lo: src/bfin/$(am__dirstamp) \
+- 	src/bfin/$(DEPDIR)/$(am__dirstamp)
+- src/bfin/sysv.lo: src/bfin/$(am__dirstamp) \
+- 	src/bfin/$(DEPDIR)/$(am__dirstamp)
+-+src/aarch64/$(am__dirstamp):
+-+	@$(MKDIR_P) src/aarch64
+-+	@: > src/aarch64/$(am__dirstamp)
+-+src/aarch64/$(DEPDIR)/$(am__dirstamp):
+-+	@$(MKDIR_P) src/aarch64/$(DEPDIR)
+-+	@: > src/aarch64/$(DEPDIR)/$(am__dirstamp)
+-+src/aarch64/ffi.lo: src/aarch64/$(am__dirstamp) \
+-+	src/aarch64/$(DEPDIR)/$(am__dirstamp)
+-+src/aarch64/sysv.lo: src/aarch64/$(am__dirstamp) \
+-+	src/aarch64/$(DEPDIR)/$(am__dirstamp)
+- src/x86/$(am__dirstamp):
+- 	@$(MKDIR_P) src/x86
+- 	@: > src/x86/$(am__dirstamp)
+-@@ -859,6 +874,10 @@ mostlyclean-compile:
+- 	-rm -f src/bfin/ffi.lo
+- 	-rm -f src/bfin/sysv.$(OBJEXT)
+- 	-rm -f src/bfin/sysv.lo
+-+	-rm -f src/aarch64/ffi.$(OBJEXT)
+-+	-rm -f src/aarch64/ffi.lo
+-+	-rm -f src/aarch64/sysv.$(OBJEXT)
+-+	-rm -f src/aarch64/sysv.lo
+- 	-rm -f src/closures.$(OBJEXT)
+- 	-rm -f src/closures.lo
+- 	-rm -f src/cris/ffi.$(OBJEXT)
+-@@ -973,6 +992,8 @@ distclean-compile:
+- @AMDEP_TRUE@@am__include@ @am__quote at src/$(DEPDIR)/prep_cif.Plo at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at src/$(DEPDIR)/raw_api.Plo at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at src/$(DEPDIR)/types.Plo at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at src/aarch64/$(DEPDIR)/ffi.Plo at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at src/aarch64/$(DEPDIR)/sysv.Plo at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at src/alpha/$(DEPDIR)/ffi.Plo at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at src/alpha/$(DEPDIR)/osf.Plo at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at src/arm/$(DEPDIR)/ffi.Plo at am__quote@
+-@@ -1083,6 +1104,7 @@ mostlyclean-libtool:
+- clean-libtool:
+- 	-rm -rf .libs _libs
+- 	-rm -rf src/.libs src/_libs
+-+	-rm -rf src/aarch64/.libs src/aarch64/_libs
+- 	-rm -rf src/alpha/.libs src/alpha/_libs
+- 	-rm -rf src/arm/.libs src/arm/_libs
+- 	-rm -rf src/avr32/.libs src/avr32/_libs
+-@@ -1635,6 +1657,8 @@ distclean-generic:
+- 	-rm -f doc/$(am__dirstamp)
+- 	-rm -f src/$(DEPDIR)/$(am__dirstamp)
+- 	-rm -f src/$(am__dirstamp)
+-+	-rm -f src/aarch64/$(DEPDIR)/$(am__dirstamp)
+-+	-rm -f src/aarch64/$(am__dirstamp)
+- 	-rm -f src/alpha/$(DEPDIR)/$(am__dirstamp)
+- 	-rm -f src/alpha/$(am__dirstamp)
+- 	-rm -f src/arm/$(DEPDIR)/$(am__dirstamp)
+-@@ -1682,7 +1706,7 @@ clean-am: clean-aminfo clean-generic clean-libLTLIBRARIES \
+- 
+- distclean: distclean-recursive
+- 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+--	-rm -rf src/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/x86/$(DEPDIR)
+-+	-rm -rf src/$(DEPDIR) src/aarch64/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/x86/$(DEPDIR)
+- 	-rm -f Makefile
+- distclean-am: clean-am distclean-compile distclean-generic \
+- 	distclean-hdr distclean-libtool distclean-tags
+-@@ -1802,7 +1826,7 @@ installcheck-am:
+- maintainer-clean: maintainer-clean-recursive
+- 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+- 	-rm -rf $(top_srcdir)/autom4te.cache
+--	-rm -rf src/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/x86/$(DEPDIR)
+-+	-rm -rf src/$(DEPDIR) src/aarch64/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/x86/$(DEPDIR)
+- 	-rm -f Makefile
+- maintainer-clean-am: distclean-am maintainer-clean-aminfo \
+- 	maintainer-clean-generic maintainer-clean-vti
+-diff --git a/README b/README
+-index ec240a4..9aa99f4 100644
+---- a/README
+-+++ b/README
+-@@ -51,6 +51,7 @@ tested:
+- |--------------+------------------|
+- | Architecture | Operating System |
+- |--------------+------------------|
+-+| AArch64         | Linux            |
+- | Alpha        | Linux            |
+- | Alpha        | Tru64            |
+- | ARM          | Linux            |
+-@@ -151,6 +152,7 @@ See the ChangeLog files for details.
+- 
+- 3.0.12 XXX-XX-XX
+-         Add Blackfin support.
+-+	Add AArch64 support.
+- 
+- 3.0.11 Apr-11-12
+-         Add support for variadic functions (ffi_prep_cif_var).
+-@@ -320,6 +322,7 @@ Thorup.
+- Major processor architecture ports were contributed by the following
+- developers:
+- 
+-+aarch64		Marcus Shawcroft, James Greenhalgh
+- alpha		Richard Henderson
+- arm		Raffaele Sena
+- cris		Simon Posnjak, Hans-Peter Nilsson
+-diff --git a/configure b/configure
+-index 4ccba55..419275b 100755
+---- a/configure
+-+++ b/configure
+-@@ -649,6 +649,8 @@ AVR32_FALSE
+- AVR32_TRUE
+- ARM_FALSE
+- ARM_TRUE
+-+AARCH64_FALSE
+-+AARCH64_TRUE
+- POWERPC_FREEBSD_FALSE
+- POWERPC_FREEBSD_TRUE
+- POWERPC_DARWIN_FALSE
+-@@ -1478,7 +1480,7 @@ Optional Features:
+- Optional Packages:
+-   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+-   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+--  --with-pic              try to use only PIC/non-PIC objects [default=use
+-+  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
+-                           both]
+-   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+-   --with-sysroot=DIR Search for dependent libraries within DIR
+-@@ -5276,6 +5278,11 @@ else
+-     lt_cv_sys_max_cmd_len=196608
+-     ;;
+- 
+-+  os2*)
+-+    # The test takes a long time on OS/2.
+-+    lt_cv_sys_max_cmd_len=8192
+-+    ;;
+-+
+-   osf*)
+-     # Dr. Hans Ekkehard Plesser reports seeing a kernel panic running configure
+-     # due to this test when exec_disable_arg_limit is 1 on Tru64. It is not
+-@@ -5315,7 +5322,7 @@ else
+-       # If test is not a shell built-in, we'll probably end up computing a
+-       # maximum length that is only half of the actual maximum length, but
+-       # we can't tell.
+--      while { test "X"`func_fallback_echo "$teststring$teststring" 2>/dev/null` \
+-+      while { test "X"`env echo "$teststring$teststring" 2>/dev/null` \
+- 	         = "X$teststring$teststring"; } >/dev/null 2>&1 &&
+- 	      test $i != 17 # 1/2 MB should be enough
+-       do
+-@@ -5744,7 +5751,7 @@ irix5* | irix6* | nonstopux*)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+- 
+--# This must be Linux ELF.
+-+# This must be glibc/ELF.
+- linux* | k*bsd*-gnu | kopensolaris*-gnu)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+-@@ -6538,6 +6545,7 @@ for ac_symprfx in "" "_"; do
+-     # which start with @ or ?.
+-     lt_cv_sys_global_symbol_pipe="$AWK '"\
+- "     {last_section=section; section=\$ 3};"\
+-+"     /^COFF SYMBOL TABLE/{for(i in hide) delete hide[i]};"\
+- "     /Section length .*#relocs.*(pick any)/{hide[last_section]=1};"\
+- "     \$ 0!~/External *\|/{next};"\
+- "     / 0+ UNDEF /{next}; / UNDEF \([^|]\)*()/{next};"\
+-@@ -6926,7 +6934,7 @@ $as_echo "$lt_cv_cc_needs_belf" >&6; }
+-     CFLAGS="$SAVE_CFLAGS"
+-   fi
+-   ;;
+--sparc*-*solaris*)
+-+*-*solaris*)
+-   # Find out which ABI we are using.
+-   echo 'int i;' > conftest.$ac_ext
+-   if { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_compile\""; } >&5
+-@@ -6937,7 +6945,20 @@ sparc*-*solaris*)
+-     case `/usr/bin/file conftest.o` in
+-     *64-bit*)
+-       case $lt_cv_prog_gnu_ld in
+--      yes*) LD="${LD-ld} -m elf64_sparc" ;;
+-+      yes*)
+-+        case $host in
+-+        i?86-*-solaris*)
+-+          LD="${LD-ld} -m elf_x86_64"
+-+          ;;
+-+        sparc*-*-solaris*)
+-+          LD="${LD-ld} -m elf64_sparc"
+-+          ;;
+-+        esac
+-+        # GNU ld 2.21 introduced _sol2 emulations.  Use them if available.
+-+        if ${LD-ld} -V | grep _sol2 >/dev/null 2>&1; then
+-+          LD="${LD-ld}_sol2"
+-+        fi
+-+        ;;
+-       *)
+- 	if ${LD-ld} -64 -r -o conftest2.o conftest.o >/dev/null 2>&1; then
+- 	  LD="${LD-ld} -64"
+-@@ -7577,7 +7598,13 @@ else
+- 	$LTCC $LTCFLAGS $LDFLAGS -o libconftest.dylib \
+- 	  -dynamiclib -Wl,-single_module conftest.c 2>conftest.err
+-         _lt_result=$?
+--	if test -f libconftest.dylib && test ! -s conftest.err && test $_lt_result = 0; then
+-+	# If there is a non-empty error log, and "single_module"
+-+	# appears in it, assume the flag caused a linker warning
+-+        if test -s conftest.err && $GREP single_module conftest.err; then
+-+	  cat conftest.err >&5
+-+	# Otherwise, if the output was created with a 0 exit code from
+-+	# the compiler, it worked.
+-+	elif test -f libconftest.dylib && test $_lt_result -eq 0; then
+- 	  lt_cv_apple_cc_single_mod=yes
+- 	else
+- 	  cat conftest.err >&5
+-@@ -7588,6 +7615,7 @@ else
+- fi
+- { $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_apple_cc_single_mod" >&5
+- $as_echo "$lt_cv_apple_cc_single_mod" >&6; }
+-+
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for -exported_symbols_list linker flag" >&5
+- $as_echo_n "checking for -exported_symbols_list linker flag... " >&6; }
+- if ${lt_cv_ld_exported_symbols_list+:} false; then :
+-@@ -7620,6 +7648,7 @@ rm -f core conftest.err conftest.$ac_objext \
+- fi
+- { $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_ld_exported_symbols_list" >&5
+- $as_echo "$lt_cv_ld_exported_symbols_list" >&6; }
+-+
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for -force_load linker flag" >&5
+- $as_echo_n "checking for -force_load linker flag... " >&6; }
+- if ${lt_cv_ld_force_load+:} false; then :
+-@@ -7641,7 +7670,9 @@ _LT_EOF
+-       echo "$LTCC $LTCFLAGS $LDFLAGS -o conftest conftest.c -Wl,-force_load,./libconftest.a" >&5
+-       $LTCC $LTCFLAGS $LDFLAGS -o conftest conftest.c -Wl,-force_load,./libconftest.a 2>conftest.err
+-       _lt_result=$?
+--      if test -f conftest && test ! -s conftest.err && test $_lt_result = 0 && $GREP forced_load conftest 2>&1 >/dev/null; then
+-+      if test -s conftest.err && $GREP force_load conftest.err; then
+-+	cat conftest.err >&5
+-+      elif test -f conftest && test $_lt_result -eq 0 && $GREP forced_load conftest >/dev/null 2>&1 ; then
+- 	lt_cv_ld_force_load=yes
+-       else
+- 	cat conftest.err >&5
+-@@ -8046,7 +8077,22 @@ fi
+- 
+- # Check whether --with-pic was given.
+- if test "${with_pic+set}" = set; then :
+--  withval=$with_pic; pic_mode="$withval"
+-+  withval=$with_pic; lt_p=${PACKAGE-default}
+-+    case $withval in
+-+    yes|no) pic_mode=$withval ;;
+-+    *)
+-+      pic_mode=default
+-+      # Look at the argument we got.  We use all the common list separators.
+-+      lt_save_ifs="$IFS"; IFS="${IFS}$PATH_SEPARATOR,"
+-+      for lt_pkg in $withval; do
+-+	IFS="$lt_save_ifs"
+-+	if test "X$lt_pkg" = "X$lt_p"; then
+-+	  pic_mode=yes
+-+	fi
+-+      done
+-+      IFS="$lt_save_ifs"
+-+      ;;
+-+    esac
+- else
+-   pic_mode=default
+- fi
+-@@ -8124,6 +8170,10 @@ LIBTOOL='$(SHELL) $(top_builddir)/libtool'
+- 
+- 
+- 
+-+
+-+
+-+
+-+
+- test -z "$LN_S" && LN_S="ln -s"
+- 
+- 
+-@@ -8579,7 +8629,9 @@ lt_prog_compiler_static=
+-     case $cc_basename in
+-     nvcc*) # Cuda Compiler Driver 2.2
+-       lt_prog_compiler_wl='-Xlinker '
+--      lt_prog_compiler_pic='-Xcompiler -fPIC'
+-+      if test -n "$lt_prog_compiler_pic"; then
+-+        lt_prog_compiler_pic="-Xcompiler $lt_prog_compiler_pic"
+-+      fi
+-       ;;
+-     esac
+-   else
+-@@ -8670,18 +8722,33 @@ lt_prog_compiler_static=
+- 	;;
+-       *)
+- 	case `$CC -V 2>&1 | sed 5q` in
+--	*Sun\ F* | *Sun*Fortran*)
+-+	*Sun\ Ceres\ Fortran* | *Sun*Fortran*\ [1-7].* | *Sun*Fortran*\ 8.[0-3]*)
+- 	  # Sun Fortran 8.3 passes all unrecognized flags to the linker
+- 	  lt_prog_compiler_pic='-KPIC'
+- 	  lt_prog_compiler_static='-Bstatic'
+- 	  lt_prog_compiler_wl=''
+- 	  ;;
+-+	*Sun\ F* | *Sun*Fortran*)
+-+	  lt_prog_compiler_pic='-KPIC'
+-+	  lt_prog_compiler_static='-Bstatic'
+-+	  lt_prog_compiler_wl='-Qoption ld '
+-+	  ;;
+- 	*Sun\ C*)
+- 	  # Sun C 5.9
+- 	  lt_prog_compiler_pic='-KPIC'
+- 	  lt_prog_compiler_static='-Bstatic'
+- 	  lt_prog_compiler_wl='-Wl,'
+- 	  ;;
+-+        *Intel*\ [CF]*Compiler*)
+-+	  lt_prog_compiler_wl='-Wl,'
+-+	  lt_prog_compiler_pic='-fPIC'
+-+	  lt_prog_compiler_static='-static'
+-+	  ;;
+-+	*Portland\ Group*)
+-+	  lt_prog_compiler_wl='-Wl,'
+-+	  lt_prog_compiler_pic='-fpic'
+-+	  lt_prog_compiler_static='-Bstatic'
+-+	  ;;
+- 	esac
+- 	;;
+-       esac
+-@@ -9043,7 +9110,6 @@ $as_echo_n "checking whether the $compiler linker ($LD) supports shared librarie
+-   hardcode_direct=no
+-   hardcode_direct_absolute=no
+-   hardcode_libdir_flag_spec=
+--  hardcode_libdir_flag_spec_ld=
+-   hardcode_libdir_separator=
+-   hardcode_minus_L=no
+-   hardcode_shlibpath_var=unsupported
+-@@ -9293,8 +9359,7 @@ _LT_EOF
+- 	xlf* | bgf* | bgxlf* | mpixlf*)
+- 	  # IBM XL Fortran 10.1 on PPC cannot create shared libs itself
+- 	  whole_archive_flag_spec='--whole-archive$convenience --no-whole-archive'
+--	  hardcode_libdir_flag_spec=
+--	  hardcode_libdir_flag_spec_ld='-rpath $libdir'
+-+	  hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
+- 	  archive_cmds='$LD -shared $libobjs $deplibs $linker_flags -soname $soname -o $lib'
+- 	  if test "x$supports_anon_versioning" = xyes; then
+- 	    archive_expsym_cmds='echo "{ global:" > $output_objdir/$libname.ver~
+-@@ -9673,6 +9738,7 @@ fi
+- 	# The linker will not automatically build a static lib if we build a DLL.
+- 	# _LT_TAGVAR(old_archive_from_new_cmds, )='true'
+- 	enable_shared_with_static_runtimes=yes
+-+	exclude_expsyms='_NULL_IMPORT_DESCRIPTOR|_IMPORT_DESCRIPTOR_.*'
+- 	export_symbols_cmds='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[BCDGRS][ ]/s/.*[ ]\([^ ]*\)/\1,DATA/'\'' | $SED -e '\''/^[AITW][ ]/s/.*[ ]//'\'' | sort | uniq > $export_symbols'
+- 	# Don't use ranlib
+- 	old_postinstall_cmds='chmod 644 $oldlib'
+-@@ -9718,6 +9784,7 @@ fi
+-   hardcode_shlibpath_var=unsupported
+-   if test "$lt_cv_ld_force_load" = "yes"; then
+-     whole_archive_flag_spec='`for conv in $convenience\"\"; do test  -n \"$conv\" && new_convenience=\"$new_convenience ${wl}-force_load,$conv\"; done; func_echo_all \"$new_convenience\"`'
+-+
+-   else
+-     whole_archive_flag_spec=''
+-   fi
+-@@ -9746,10 +9813,6 @@ fi
+-       hardcode_shlibpath_var=no
+-       ;;
+- 
+--    freebsd1*)
+--      ld_shlibs=no
+--      ;;
+--
+-     # FreeBSD 2.2.[012] allows us to include c++rt0.o to get C++ constructor
+-     # support.  Future versions do this automatically, but an explicit c++rt0.o
+-     # does not break anything, and helps significantly (at the cost of a little
+-@@ -9762,7 +9825,7 @@ fi
+-       ;;
+- 
+-     # Unfortunately, older versions of FreeBSD 2 do not have this feature.
+--    freebsd2*)
+-+    freebsd2.*)
+-       archive_cmds='$LD -Bshareable -o $lib $libobjs $deplibs $linker_flags'
+-       hardcode_direct=yes
+-       hardcode_minus_L=yes
+-@@ -9801,7 +9864,6 @@ fi
+-       fi
+-       if test "$with_gnu_ld" = no; then
+- 	hardcode_libdir_flag_spec='${wl}+b ${wl}$libdir'
+--	hardcode_libdir_flag_spec_ld='+b $libdir'
+- 	hardcode_libdir_separator=:
+- 	hardcode_direct=yes
+- 	hardcode_direct_absolute=yes
+-@@ -10425,11 +10487,6 @@ esac
+- 
+- 
+- 
+--
+--
+--
+--
+--
+-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking dynamic linker characteristics" >&5
+- $as_echo_n "checking dynamic linker characteristics... " >&6; }
+- 
+-@@ -10519,7 +10576,7 @@ need_version=unknown
+- 
+- case $host_os in
+- aix3*)
+--  version_type=linux
+-+  version_type=linux # correct to gnu/linux during the next big refactor
+-   library_names_spec='${libname}${release}${shared_ext}$versuffix $libname.a'
+-   shlibpath_var=LIBPATH
+- 
+-@@ -10528,7 +10585,7 @@ aix3*)
+-   ;;
+- 
+- aix[4-9]*)
+--  version_type=linux
+-+  version_type=linux # correct to gnu/linux during the next big refactor
+-   need_lib_prefix=no
+-   need_version=no
+-   hardcode_into_libs=yes
+-@@ -10593,7 +10650,7 @@ beos*)
+-   ;;
+- 
+- bsdi[45]*)
+--  version_type=linux
+-+  version_type=linux # correct to gnu/linux during the next big refactor
+-   need_version=no
+-   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
+-   soname_spec='${libname}${release}${shared_ext}$major'
+-@@ -10732,7 +10789,7 @@ darwin* | rhapsody*)
+-   ;;
+- 
+- dgux*)
+--  version_type=linux
+-+  version_type=linux # correct to gnu/linux during the next big refactor
+-   need_lib_prefix=no
+-   need_version=no
+-   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname$shared_ext'
+-@@ -10740,10 +10797,6 @@ dgux*)
+-   shlibpath_var=LD_LIBRARY_PATH
+-   ;;
+- 
+--freebsd1*)
+--  dynamic_linker=no
+--  ;;
+--
+- freebsd* | dragonfly*)
+-   # DragonFly does not have aout.  When/if they implement a new
+-   # versioning mechanism, adjust this.
+-@@ -10751,7 +10804,7 @@ freebsd* | dragonfly*)
+-     objformat=`/usr/bin/objformat`
+-   else
+-     case $host_os in
+--    freebsd[123]*) objformat=aout ;;
+-+    freebsd[23].*) objformat=aout ;;
+-     *) objformat=elf ;;
+-     esac
+-   fi
+-@@ -10769,7 +10822,7 @@ freebsd* | dragonfly*)
+-   esac
+-   shlibpath_var=LD_LIBRARY_PATH
+-   case $host_os in
+--  freebsd2*)
+-+  freebsd2.*)
+-     shlibpath_overrides_runpath=yes
+-     ;;
+-   freebsd3.[01]* | freebsdelf3.[01]*)
+-@@ -10789,17 +10842,18 @@ freebsd* | dragonfly*)
+-   ;;
+- 
+- gnu*)
+--  version_type=linux
+-+  version_type=linux # correct to gnu/linux during the next big refactor
+-   need_lib_prefix=no
+-   need_version=no
+-   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}${major} ${libname}${shared_ext}'
+-   soname_spec='${libname}${release}${shared_ext}$major'
+-   shlibpath_var=LD_LIBRARY_PATH
+-+  shlibpath_overrides_runpath=no
+-   hardcode_into_libs=yes
+-   ;;
+- 
+- haiku*)
+--  version_type=linux
+-+  version_type=linux # correct to gnu/linux during the next big refactor
+-   need_lib_prefix=no
+-   need_version=no
+-   dynamic_linker="$host_os runtime_loader"
+-@@ -10860,7 +10914,7 @@ hpux9* | hpux10* | hpux11*)
+-   ;;
+- 
+- interix[3-9]*)
+--  version_type=linux
+-+  version_type=linux # correct to gnu/linux during the next big refactor
+-   need_lib_prefix=no
+-   need_version=no
+-   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major ${libname}${shared_ext}'
+-@@ -10876,7 +10930,7 @@ irix5* | irix6* | nonstopux*)
+-     nonstopux*) version_type=nonstopux ;;
+-     *)
+- 	if test "$lt_cv_prog_gnu_ld" = yes; then
+--		version_type=linux
+-+		version_type=linux # correct to gnu/linux during the next big refactor
+- 	else
+- 		version_type=irix
+- 	fi ;;
+-@@ -10913,9 +10967,9 @@ linux*oldld* | linux*aout* | linux*coff*)
+-   dynamic_linker=no
+-   ;;
+- 
+--# This must be Linux ELF.
+-+# This must be glibc/ELF.
+- linux* | k*bsd*-gnu | kopensolaris*-gnu)
+--  version_type=linux
+-+  version_type=linux # correct to gnu/linux during the next big refactor
+-   need_lib_prefix=no
+-   need_version=no
+-   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
+-@@ -11001,7 +11055,7 @@ netbsd*)
+-   ;;
+- 
+- newsos6)
+--  version_type=linux
+-+  version_type=linux # correct to gnu/linux during the next big refactor
+-   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
+-   shlibpath_var=LD_LIBRARY_PATH
+-   shlibpath_overrides_runpath=yes
+-@@ -11070,7 +11124,7 @@ rdos*)
+-   ;;
+- 
+- solaris*)
+--  version_type=linux
+-+  version_type=linux # correct to gnu/linux during the next big refactor
+-   need_lib_prefix=no
+-   need_version=no
+-   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
+-@@ -11095,7 +11149,7 @@ sunos4*)
+-   ;;
+- 
+- sysv4 | sysv4.3*)
+--  version_type=linux
+-+  version_type=linux # correct to gnu/linux during the next big refactor
+-   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
+-   soname_spec='${libname}${release}${shared_ext}$major'
+-   shlibpath_var=LD_LIBRARY_PATH
+-@@ -11119,7 +11173,7 @@ sysv4 | sysv4.3*)
+- 
+- sysv4*MP*)
+-   if test -d /usr/nec ;then
+--    version_type=linux
+-+    version_type=linux # correct to gnu/linux during the next big refactor
+-     library_names_spec='$libname${shared_ext}.$versuffix $libname${shared_ext}.$major $libname${shared_ext}'
+-     soname_spec='$libname${shared_ext}.$major'
+-     shlibpath_var=LD_LIBRARY_PATH
+-@@ -11150,7 +11204,7 @@ sysv5* | sco3.2v5* | sco5v6* | unixware* | OpenUNIX* | sysv4*uw2*)
+- 
+- tpf*)
+-   # TPF is a cross-target only.  Preferred cross-host = GNU/Linux.
+--  version_type=linux
+-+  version_type=linux # correct to gnu/linux during the next big refactor
+-   need_lib_prefix=no
+-   need_version=no
+-   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
+-@@ -11160,7 +11214,7 @@ tpf*)
+-   ;;
+- 
+- uts4*)
+--  version_type=linux
+-+  version_type=linux # correct to gnu/linux during the next big refactor
+-   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
+-   soname_spec='${libname}${release}${shared_ext}$major'
+-   shlibpath_var=LD_LIBRARY_PATH
+-@@ -11942,6 +11996,8 @@ CC="$lt_save_CC"
+- 
+- 
+- 
+-+
+-+
+-         ac_config_commands="$ac_config_commands libtool"
+- 
+- 
+-@@ -13132,6 +13188,10 @@ fi
+- 
+- TARGETDIR="unknown"
+- case "$host" in
+-+  aarch64*-*-*)
+-+	TARGET=AARCH64; TARGETDIR=aarch64
+-+	;;
+-+
+-   alpha*-*-*)
+- 	TARGET=ALPHA; TARGETDIR=alpha;
+- 	# Support 128-bit long double, changeable via command-line switch.
+-@@ -13431,6 +13491,14 @@ else
+-   POWERPC_FREEBSD_FALSE=
+- fi
+- 
+-+ if test x$TARGET = xAARCH64; then
+-+  AARCH64_TRUE=
+-+  AARCH64_FALSE='#'
+-+else
+-+  AARCH64_TRUE='#'
+-+  AARCH64_FALSE=
+-+fi
+-+
+-  if test x$TARGET = xARM; then
+-   ARM_TRUE=
+-   ARM_FALSE='#'
+-@@ -14786,6 +14854,10 @@ if test -z "${POWERPC_FREEBSD_TRUE}" && test -z "${POWERPC_FREEBSD_FALSE}"; then
+-   as_fn_error $? "conditional \"POWERPC_FREEBSD\" was never defined.
+- Usually this means the macro was only invoked conditionally." "$LINENO" 5
+- fi
+-+if test -z "${AARCH64_TRUE}" && test -z "${AARCH64_FALSE}"; then
+-+  as_fn_error $? "conditional \"AARCH64\" was never defined.
+-+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+-+fi
+- if test -z "${ARM_TRUE}" && test -z "${ARM_FALSE}"; then
+-   as_fn_error $? "conditional \"ARM\" was never defined.
+- Usually this means the macro was only invoked conditionally." "$LINENO" 5
+-@@ -15463,6 +15535,7 @@ pic_mode='`$ECHO "$pic_mode" | $SED "$delay_single_quote_subst"`'
+- enable_fast_install='`$ECHO "$enable_fast_install" | $SED "$delay_single_quote_subst"`'
+- SHELL='`$ECHO "$SHELL" | $SED "$delay_single_quote_subst"`'
+- ECHO='`$ECHO "$ECHO" | $SED "$delay_single_quote_subst"`'
+-+PATH_SEPARATOR='`$ECHO "$PATH_SEPARATOR" | $SED "$delay_single_quote_subst"`'
+- host_alias='`$ECHO "$host_alias" | $SED "$delay_single_quote_subst"`'
+- host='`$ECHO "$host" | $SED "$delay_single_quote_subst"`'
+- host_os='`$ECHO "$host_os" | $SED "$delay_single_quote_subst"`'
+-@@ -15545,7 +15618,6 @@ with_gnu_ld='`$ECHO "$with_gnu_ld" | $SED "$delay_single_quote_subst"`'
+- allow_undefined_flag='`$ECHO "$allow_undefined_flag" | $SED "$delay_single_quote_subst"`'
+- no_undefined_flag='`$ECHO "$no_undefined_flag" | $SED "$delay_single_quote_subst"`'
+- hardcode_libdir_flag_spec='`$ECHO "$hardcode_libdir_flag_spec" | $SED "$delay_single_quote_subst"`'
+--hardcode_libdir_flag_spec_ld='`$ECHO "$hardcode_libdir_flag_spec_ld" | $SED "$delay_single_quote_subst"`'
+- hardcode_libdir_separator='`$ECHO "$hardcode_libdir_separator" | $SED "$delay_single_quote_subst"`'
+- hardcode_direct='`$ECHO "$hardcode_direct" | $SED "$delay_single_quote_subst"`'
+- hardcode_direct_absolute='`$ECHO "$hardcode_direct_absolute" | $SED "$delay_single_quote_subst"`'
+-@@ -15601,6 +15673,7 @@ _LTECHO_EOF'
+- # Quote evaled strings.
+- for var in SHELL \
+- ECHO \
+-+PATH_SEPARATOR \
+- SED \
+- GREP \
+- EGREP \
+-@@ -15651,7 +15724,6 @@ with_gnu_ld \
+- allow_undefined_flag \
+- no_undefined_flag \
+- hardcode_libdir_flag_spec \
+--hardcode_libdir_flag_spec_ld \
+- hardcode_libdir_separator \
+- exclude_expsyms \
+- include_expsyms \
+-@@ -16633,8 +16705,8 @@ $as_echo X"$file" |
+- # NOTE: Changes made to this file will be lost: look at ltmain.sh.
+- #
+- #   Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005,
+--#                 2006, 2007, 2008, 2009, 2010 Free Software Foundation,
+--#                 Inc.
+-+#                 2006, 2007, 2008, 2009, 2010, 2011 Free Software
+-+#                 Foundation, Inc.
+- #   Written by Gordon Matzigkeit, 1996
+- #
+- #   This file is part of GNU Libtool.
+-@@ -16688,6 +16760,9 @@ SHELL=$lt_SHELL
+- # An echo program that protects backslashes.
+- ECHO=$lt_ECHO
+- 
+-+# The PATH separator for the build system.
+-+PATH_SEPARATOR=$lt_PATH_SEPARATOR
+-+
+- # The host system.
+- host_alias=$host_alias
+- host=$host
+-@@ -16989,10 +17064,6 @@ no_undefined_flag=$lt_no_undefined_flag
+- # This must work even if \$libdir does not exist
+- hardcode_libdir_flag_spec=$lt_hardcode_libdir_flag_spec
+- 
+--# If ld is used when linking, flag to hardcode \$libdir into a binary
+--# during linking.  This must work even if \$libdir does not exist.
+--hardcode_libdir_flag_spec_ld=$lt_hardcode_libdir_flag_spec_ld
+--
+- # Whether we need a single "-rpath" flag with a separated argument.
+- hardcode_libdir_separator=$lt_hardcode_libdir_separator
+- 
+-diff --git a/configure.ac b/configure.ac
+-index 9b946a2..8c3f40c 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -53,6 +53,10 @@ AM_CONDITIONAL(TESTSUBDIR, test -d $srcdir/testsuite)
+- 
+- TARGETDIR="unknown"
+- case "$host" in
+-+  aarch64*-*-*)
+-+	TARGET=AARCH64; TARGETDIR=aarch64
+-+	;;
+-+
+-   alpha*-*-*)
+- 	TARGET=ALPHA; TARGETDIR=alpha;
+- 	# Support 128-bit long double, changeable via command-line switch.
+-@@ -233,6 +237,7 @@ AM_CONDITIONAL(POWERPC, test x$TARGET = xPOWERPC)
+- AM_CONDITIONAL(POWERPC_AIX, test x$TARGET = xPOWERPC_AIX)
+- AM_CONDITIONAL(POWERPC_DARWIN, test x$TARGET = xPOWERPC_DARWIN)
+- AM_CONDITIONAL(POWERPC_FREEBSD, test x$TARGET = xPOWERPC_FREEBSD)
+-+AM_CONDITIONAL(AARCH64, test x$TARGET = xAARCH64)
+- AM_CONDITIONAL(ARM, test x$TARGET = xARM)
+- AM_CONDITIONAL(AVR32, test x$TARGET = xAVR32)
+- AM_CONDITIONAL(LIBFFI_CRIS, test x$TARGET = xLIBFFI_CRIS)
+-diff --git a/src/aarch64/ffi.c b/src/aarch64/ffi.c
+-new file mode 100644
+-index 0000000..1405665
+---- /dev/null
+-+++ b/src/aarch64/ffi.c
+-@@ -0,0 +1,1076 @@
+-+/* Copyright (c) 2009, 2010, 2011, 2012 ARM Ltd.
+-+
+-+Permission is hereby granted, free of charge, to any person obtaining
+-+a copy of this software and associated documentation files (the
+-+``Software''), to deal in the Software without restriction, including
+-+without limitation the rights to use, copy, modify, merge, publish,
+-+distribute, sublicense, and/or sell copies of the Software, and to
+-+permit persons to whom the Software is furnished to do so, subject to
+-+the following conditions:
+-+
+-+The above copyright notice and this permission notice shall be
+-+included in all copies or substantial portions of the Software.
+-+
+-+THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
+-+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+-+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+-+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+-+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+-+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+-+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
+-+
+-+#include <stdio.h>
+-+
+-+#include <ffi.h>
+-+#include <ffi_common.h>
+-+
+-+#include <stdlib.h>
+-+
+-+/* Stack alignment requirement in bytes */
+-+#define AARCH64_STACK_ALIGN 16
+-+
+-+#define N_X_ARG_REG 8
+-+#define N_V_ARG_REG 8
+-+
+-+#define AARCH64_FFI_WITH_V (1 << AARCH64_FFI_WITH_V_BIT)
+-+
+-+union _d
+-+{
+-+  UINT64 d;
+-+  UINT32 s[2];
+-+};
+-+
+-+struct call_context
+-+{
+-+  UINT64 x [AARCH64_N_XREG];
+-+  struct
+-+  {
+-+    union _d d[2];
+-+  } v [AARCH64_N_VREG];
+-+};
+-+
+-+static void *
+-+get_x_addr (struct call_context *context, unsigned n)
+-+{
+-+  return &context->x[n];
+-+}
+-+
+-+static void *
+-+get_s_addr (struct call_context *context, unsigned n)
+-+{
+-+#if defined __AARCH64EB__
+-+  return &context->v[n].d[1].s[1];
+-+#else
+-+  return &context->v[n].d[0].s[0];
+-+#endif
+-+}
+-+
+-+static void *
+-+get_d_addr (struct call_context *context, unsigned n)
+-+{
+-+#if defined __AARCH64EB__
+-+  return &context->v[n].d[1];
+-+#else
+-+  return &context->v[n].d[0];
+-+#endif
+-+}
+-+
+-+static void *
+-+get_v_addr (struct call_context *context, unsigned n)
+-+{
+-+  return &context->v[n];
+-+}
+-+
+-+/* Return the memory location at which a basic type would reside
+-+   were it to have been stored in register n.  */
+-+
+-+static void *
+-+get_basic_type_addr (unsigned short type, struct call_context *context,
+-+		     unsigned n)
+-+{
+-+  switch (type)
+-+    {
+-+    case FFI_TYPE_FLOAT:
+-+      return get_s_addr (context, n);
+-+    case FFI_TYPE_DOUBLE:
+-+      return get_d_addr (context, n);
+-+    case FFI_TYPE_LONGDOUBLE:
+-+      return get_v_addr (context, n);
+-+    case FFI_TYPE_UINT8:
+-+    case FFI_TYPE_SINT8:
+-+    case FFI_TYPE_UINT16:
+-+    case FFI_TYPE_SINT16:
+-+    case FFI_TYPE_UINT32:
+-+    case FFI_TYPE_SINT32:
+-+    case FFI_TYPE_INT:
+-+    case FFI_TYPE_POINTER:
+-+    case FFI_TYPE_UINT64:
+-+    case FFI_TYPE_SINT64:
+-+      return get_x_addr (context, n);
+-+    default:
+-+      FFI_ASSERT (0);
+-+      return NULL;
+-+    }
+-+}
+-+
+-+/* Return the alignment width for each of the basic types.  */
+-+
+-+static size_t
+-+get_basic_type_alignment (unsigned short type)
+-+{
+-+  switch (type)
+-+    {
+-+    case FFI_TYPE_FLOAT:
+-+    case FFI_TYPE_DOUBLE:
+-+      return sizeof (UINT64);
+-+    case FFI_TYPE_LONGDOUBLE:
+-+      return sizeof (long double);
+-+    case FFI_TYPE_UINT8:
+-+    case FFI_TYPE_SINT8:
+-+    case FFI_TYPE_UINT16:
+-+    case FFI_TYPE_SINT16:
+-+    case FFI_TYPE_UINT32:
+-+    case FFI_TYPE_INT:
+-+    case FFI_TYPE_SINT32:
+-+    case FFI_TYPE_POINTER:
+-+    case FFI_TYPE_UINT64:
+-+    case FFI_TYPE_SINT64:
+-+      return sizeof (UINT64);
+-+
+-+    default:
+-+      FFI_ASSERT (0);
+-+      return 0;
+-+    }
+-+}
+-+
+-+/* Return the size in bytes for each of the basic types.  */
+-+
+-+static size_t
+-+get_basic_type_size (unsigned short type)
+-+{
+-+  switch (type)
+-+    {
+-+    case FFI_TYPE_FLOAT:
+-+      return sizeof (UINT32);
+-+    case FFI_TYPE_DOUBLE:
+-+      return sizeof (UINT64);
+-+    case FFI_TYPE_LONGDOUBLE:
+-+      return sizeof (long double);
+-+    case FFI_TYPE_UINT8:
+-+      return sizeof (UINT8);
+-+    case FFI_TYPE_SINT8:
+-+      return sizeof (SINT8);
+-+    case FFI_TYPE_UINT16:
+-+      return sizeof (UINT16);
+-+    case FFI_TYPE_SINT16:
+-+      return sizeof (SINT16);
+-+    case FFI_TYPE_UINT32:
+-+      return sizeof (UINT32);
+-+    case FFI_TYPE_INT:
+-+    case FFI_TYPE_SINT32:
+-+      return sizeof (SINT32);
+-+    case FFI_TYPE_POINTER:
+-+    case FFI_TYPE_UINT64:
+-+      return sizeof (UINT64);
+-+    case FFI_TYPE_SINT64:
+-+      return sizeof (SINT64);
+-+
+-+    default:
+-+      FFI_ASSERT (0);
+-+      return 0;
+-+    }
+-+}
+-+
+-+extern void
+-+ffi_call_SYSV (unsigned (*)(struct call_context *context, unsigned char *,
+-+			    extended_cif *),
+-+               struct call_context *context,
+-+               extended_cif *,
+-+               unsigned,
+-+               void (*fn)(void));
+-+
+-+extern void
+-+ffi_closure_SYSV (ffi_closure *);
+-+
+-+/* Test for an FFI floating point representation.  */
+-+
+-+static unsigned
+-+is_floating_type (unsigned short type)
+-+{
+-+  return (type == FFI_TYPE_FLOAT || type == FFI_TYPE_DOUBLE
+-+	  || type == FFI_TYPE_LONGDOUBLE);
+-+}
+-+
+-+/* Test for a homogeneous structure.  */
+-+
+-+static unsigned short
+-+get_homogeneous_type (ffi_type *ty)
+-+{
+-+  if (ty->type == FFI_TYPE_STRUCT && ty->elements)
+-+    {
+-+      unsigned i;
+-+      unsigned short candidate_type
+-+	= get_homogeneous_type (ty->elements[0]);
+-+      for (i =1; ty->elements[i]; i++)
+-+	{
+-+	  unsigned short iteration_type = 0;
+-+	  /* If we have a nested struct, we must find its homogeneous type.
+-+	     If that fits with our candidate type, we are still
+-+	     homogeneous.  */
+-+	  if (ty->elements[i]->type == FFI_TYPE_STRUCT
+-+	      && ty->elements[i]->elements)
+-+	    {
+-+	      iteration_type = get_homogeneous_type (ty->elements[i]);
+-+	    }
+-+	  else
+-+	    {
+-+	      iteration_type = ty->elements[i]->type;
+-+	    }
+-+
+-+	  /* If we are not homogeneous, return FFI_TYPE_STRUCT.  */
+-+	  if (candidate_type != iteration_type)
+-+	    return FFI_TYPE_STRUCT;
+-+	}
+-+      return candidate_type;
+-+    }
+-+
+-+  /* Base case, we have no more levels of nesting, so we
+-+     are a basic type, and so, trivially homogeneous in that type.  */
+-+  return ty->type;
+-+}
+-+
+-+/* Determine the number of elements within a STRUCT.
+-+
+-+   Note, we must handle nested structs.
+-+
+-+   If ty is not a STRUCT this function will return 0.  */
+-+
+-+static unsigned
+-+element_count (ffi_type *ty)
+-+{
+-+  if (ty->type == FFI_TYPE_STRUCT && ty->elements)
+-+    {
+-+      unsigned n;
+-+      unsigned elems = 0;
+-+      for (n = 0; ty->elements[n]; n++)
+-+	{
+-+	  if (ty->elements[n]->type == FFI_TYPE_STRUCT
+-+	      && ty->elements[n]->elements)
+-+	    elems += element_count (ty->elements[n]);
+-+	  else
+-+	    elems++;
+-+	}
+-+      return elems;
+-+    }
+-+  return 0;
+-+}
+-+
+-+/* Test for a homogeneous floating point aggregate.
+-+
+-+   A homogeneous floating point aggregate is a homogeneous aggregate of
+-+   a half- single- or double- precision floating point type with one
+-+   to four elements.  Note that this includes nested structs of the
+-+   basic type.  */
+-+
+-+static int
+-+is_hfa (ffi_type *ty)
+-+{
+-+  if (ty->type == FFI_TYPE_STRUCT
+-+      && ty->elements[0]
+-+      && is_floating_type (get_homogeneous_type (ty)))
+-+    {
+-+      unsigned n = element_count (ty);
+-+      return n >= 1 && n <= 4;
+-+    }
+-+  return 0;
+-+}
+-+
+-+/* Test if an ffi_type is a candidate for passing in a register.
+-+
+-+   This test does not check that sufficient registers of the
+-+   appropriate class are actually available, merely that IFF
+-+   sufficient registers are available then the argument will be passed
+-+   in register(s).
+-+
+-+   Note that an ffi_type that is deemed to be a register candidate
+-+   will always be returned in registers.
+-+
+-+   Returns 1 if a register candidate else 0.  */
+-+
+-+static int
+-+is_register_candidate (ffi_type *ty)
+-+{
+-+  switch (ty->type)
+-+    {
+-+    case FFI_TYPE_VOID:
+-+    case FFI_TYPE_FLOAT:
+-+    case FFI_TYPE_DOUBLE:
+-+    case FFI_TYPE_LONGDOUBLE:
+-+    case FFI_TYPE_UINT8:
+-+    case FFI_TYPE_UINT16:
+-+    case FFI_TYPE_UINT32:
+-+    case FFI_TYPE_UINT64:
+-+    case FFI_TYPE_POINTER:
+-+    case FFI_TYPE_SINT8:
+-+    case FFI_TYPE_SINT16:
+-+    case FFI_TYPE_SINT32:
+-+    case FFI_TYPE_INT:
+-+    case FFI_TYPE_SINT64:
+-+      return 1;
+-+
+-+    case FFI_TYPE_STRUCT:
+-+      if (is_hfa (ty))
+-+        {
+-+          return 1;
+-+        }
+-+      else if (ty->size > 16)
+-+        {
+-+          /* Too large. Will be replaced with a pointer to memory. The
+-+             pointer MAY be passed in a register, but the value will
+-+             not. This test specifically fails since the argument will
+-+             never be passed by value in registers. */
+-+          return 0;
+-+        }
+-+      else
+-+        {
+-+          /* Might be passed in registers depending on the number of
+-+             registers required. */
+-+          return (ty->size + 7) / 8 < N_X_ARG_REG;
+-+        }
+-+      break;
+-+
+-+    default:
+-+      FFI_ASSERT (0);
+-+      break;
+-+    }
+-+
+-+  return 0;
+-+}
+-+
+-+/* Test if an ffi_type argument or result is a candidate for a vector
+-+   register.  */
+-+
+-+static int
+-+is_v_register_candidate (ffi_type *ty)
+-+{
+-+  return is_floating_type (ty->type)
+-+	   || (ty->type == FFI_TYPE_STRUCT && is_hfa (ty));
+-+}
+-+
+-+/* Representation of the procedure call argument marshalling
+-+   state.
+-+
+-+   The terse state variable names match the names used in the AARCH64
+-+   PCS. */
+-+
+-+struct arg_state
+-+{
+-+  unsigned ngrn;                /* Next general-purpose register number. */
+-+  unsigned nsrn;                /* Next vector register number. */
+-+  unsigned nsaa;                /* Next stack offset. */
+-+};
+-+
+-+/* Initialize a procedure call argument marshalling state.  */
+-+static void
+-+arg_init (struct arg_state *state, unsigned call_frame_size)
+-+{
+-+  state->ngrn = 0;
+-+  state->nsrn = 0;
+-+  state->nsaa = 0;
+-+}
+-+
+-+/* Return the number of available consecutive core argument
+-+   registers.  */
+-+
+-+static unsigned
+-+available_x (struct arg_state *state)
+-+{
+-+  return N_X_ARG_REG - state->ngrn;
+-+}
+-+
+-+/* Return the number of available consecutive vector argument
+-+   registers.  */
+-+
+-+static unsigned
+-+available_v (struct arg_state *state)
+-+{
+-+  return N_V_ARG_REG - state->nsrn;
+-+}
+-+
+-+static void *
+-+allocate_to_x (struct call_context *context, struct arg_state *state)
+-+{
+-+  FFI_ASSERT (state->ngrn < N_X_ARG_REG)
+-+  return get_x_addr (context, (state->ngrn)++);
+-+}
+-+
+-+static void *
+-+allocate_to_s (struct call_context *context, struct arg_state *state)
+-+{
+-+  FFI_ASSERT (state->nsrn < N_V_ARG_REG)
+-+  return get_s_addr (context, (state->nsrn)++);
+-+}
+-+
+-+static void *
+-+allocate_to_d (struct call_context *context, struct arg_state *state)
+-+{
+-+  FFI_ASSERT (state->nsrn < N_V_ARG_REG)
+-+  return get_d_addr (context, (state->nsrn)++);
+-+}
+-+
+-+static void *
+-+allocate_to_v (struct call_context *context, struct arg_state *state)
+-+{
+-+  FFI_ASSERT (state->nsrn < N_V_ARG_REG)
+-+  return get_v_addr (context, (state->nsrn)++);
+-+}
+-+
+-+/* Allocate an aligned slot on the stack and return a pointer to it.  */
+-+static void *
+-+allocate_to_stack (struct arg_state *state, void *stack, unsigned alignment,
+-+		   unsigned size)
+-+{
+-+  void *allocation;
+-+
+-+  /* Round up the NSAA to the larger of 8 or the natural
+-+     alignment of the argument's type.  */
+-+  state->nsaa = ALIGN (state->nsaa, alignment);
+-+  state->nsaa = ALIGN (state->nsaa, alignment);
+-+  state->nsaa = ALIGN (state->nsaa, 8);
+-+
+-+  allocation = stack + state->nsaa;
+-+
+-+  state->nsaa += size;
+-+  return allocation;
+-+}
+-+
+-+static void
+-+copy_basic_type (void *dest, void *source, unsigned short type)
+-+{
+-+  /* This is neccessary to ensure that basic types are copied
+-+     sign extended to 64-bits as libffi expects.  */
+-+  switch (type)
+-+    {
+-+    case FFI_TYPE_FLOAT:
+-+      *(float *) dest = *(float *) source;
+-+      break;
+-+    case FFI_TYPE_DOUBLE:
+-+      *(double *) dest = *(double *) source;
+-+      break;
+-+    case FFI_TYPE_LONGDOUBLE:
+-+      *(long double *) dest = *(long double *) source;
+-+      break;
+-+    case FFI_TYPE_UINT8:
+-+      *(ffi_arg *) dest = *(UINT8 *) source;
+-+      break;
+-+    case FFI_TYPE_SINT8:
+-+      *(ffi_sarg *) dest = *(SINT8 *) source;
+-+      break;
+-+    case FFI_TYPE_UINT16:
+-+      *(ffi_arg *) dest = *(UINT16 *) source;
+-+      break;
+-+    case FFI_TYPE_SINT16:
+-+      *(ffi_sarg *) dest = *(SINT16 *) source;
+-+      break;
+-+    case FFI_TYPE_UINT32:
+-+      *(ffi_arg *) dest = *(UINT32 *) source;
+-+      break;
+-+    case FFI_TYPE_INT:
+-+    case FFI_TYPE_SINT32:
+-+      *(ffi_sarg *) dest = *(SINT32 *) source;
+-+      break;
+-+    case FFI_TYPE_POINTER:
+-+    case FFI_TYPE_UINT64:
+-+      *(ffi_arg *) dest = *(UINT64 *) source;
+-+      break;
+-+    case FFI_TYPE_SINT64:
+-+      *(ffi_sarg *) dest = *(SINT64 *) source;
+-+      break;
+-+
+-+    default:
+-+      FFI_ASSERT (0);
+-+    }
+-+}
+-+
+-+static void
+-+copy_hfa_to_reg_or_stack (void *memory,
+-+			  ffi_type *ty,
+-+			  struct call_context *context,
+-+			  unsigned char *stack,
+-+			  struct arg_state *state)
+-+{
+-+  unsigned elems = element_count (ty);
+-+  if (available_v (state) < elems)
+-+    {
+-+      /* There are insufficient V registers. Further V register allocations
+-+	 are prevented, the NSAA is adjusted (by allocate_to_stack ())
+-+	 and the argument is copied to memory@the adjusted NSAA.  */
+-+      state->nsrn = N_V_ARG_REG;
+-+      memcpy (allocate_to_stack (state, stack, ty->alignment, ty->size),
+-+	      memory,
+-+	      ty->size);
+-+    }
+-+  else
+-+    {
+-+      int i;
+-+      unsigned short type = get_homogeneous_type (ty);
+-+      unsigned elems = element_count (ty);
+-+      for (i = 0; i < elems; i++)
+-+	{
+-+	  void *reg = allocate_to_v (context, state);
+-+	  copy_basic_type (reg, memory, type);
+-+	  memory += get_basic_type_size (type);
+-+	}
+-+    }
+-+}
+-+
+-+/* Either allocate an appropriate register for the argument type, or if
+-+   none are available, allocate a stack slot and return a pointer
+-+   to the allocated space.  */
+-+
+-+static void *
+-+allocate_to_register_or_stack (struct call_context *context,
+-+			       unsigned char *stack,
+-+			       struct arg_state *state,
+-+			       unsigned short type)
+-+{
+-+  size_t alignment = get_basic_type_alignment (type);
+-+  size_t size = alignment;
+-+  switch (type)
+-+    {
+-+    case FFI_TYPE_FLOAT:
+-+      /* This is the only case for which the allocated stack size
+-+	 should not match the alignment of the type.  */
+-+      size = sizeof (UINT32);
+-+      /* Fall through.  */
+-+    case FFI_TYPE_DOUBLE:
+-+      if (state->nsrn < N_V_ARG_REG)
+-+	return allocate_to_d (context, state);
+-+      state->nsrn = N_V_ARG_REG;
+-+      break;
+-+    case FFI_TYPE_LONGDOUBLE:
+-+      if (state->nsrn < N_V_ARG_REG)
+-+	return allocate_to_v (context, state);
+-+      state->nsrn = N_V_ARG_REG;
+-+      break;
+-+    case FFI_TYPE_UINT8:
+-+    case FFI_TYPE_SINT8:
+-+    case FFI_TYPE_UINT16:
+-+    case FFI_TYPE_SINT16:
+-+    case FFI_TYPE_UINT32:
+-+    case FFI_TYPE_SINT32:
+-+    case FFI_TYPE_INT:
+-+    case FFI_TYPE_POINTER:
+-+    case FFI_TYPE_UINT64:
+-+    case FFI_TYPE_SINT64:
+-+      if (state->ngrn < N_X_ARG_REG)
+-+	return allocate_to_x (context, state);
+-+      state->ngrn = N_X_ARG_REG;
+-+      break;
+-+    default:
+-+      FFI_ASSERT (0);
+-+    }
+-+
+-+    return allocate_to_stack (state, stack, alignment, size);
+-+}
+-+
+-+/* Copy a value to an appropriate register, or if none are
+-+   available, to the stack.  */
+-+
+-+static void
+-+copy_to_register_or_stack (struct call_context *context,
+-+			   unsigned char *stack,
+-+			   struct arg_state *state,
+-+			   void *value,
+-+			   unsigned short type)
+-+{
+-+  copy_basic_type (
+-+	  allocate_to_register_or_stack (context, stack, state, type),
+-+	  value,
+-+	  type);
+-+}
+-+
+-+/* Marshall the arguments from FFI representation to procedure call
+-+   context and stack.  */
+-+
+-+static unsigned
+-+aarch64_prep_args (struct call_context *context, unsigned char *stack,
+-+		   extended_cif *ecif)
+-+{
+-+  int i;
+-+  struct arg_state state;
+-+
+-+  arg_init (&state, ALIGN(ecif->cif->bytes, 16));
+-+
+-+  for (i = 0; i < ecif->cif->nargs; i++)
+-+    {
+-+      ffi_type *ty = ecif->cif->arg_types[i];
+-+      switch (ty->type)
+-+	{
+-+	case FFI_TYPE_VOID:
+-+	  FFI_ASSERT (0);
+-+	  break;
+-+
+-+	/* If the argument is a basic type the argument is allocated to an
+-+	   appropriate register, or if none are available, to the stack.  */
+-+	case FFI_TYPE_FLOAT:
+-+	case FFI_TYPE_DOUBLE:
+-+	case FFI_TYPE_LONGDOUBLE:
+-+	case FFI_TYPE_UINT8:
+-+	case FFI_TYPE_SINT8:
+-+	case FFI_TYPE_UINT16:
+-+	case FFI_TYPE_SINT16:
+-+	case FFI_TYPE_UINT32:
+-+	case FFI_TYPE_INT:
+-+	case FFI_TYPE_SINT32:
+-+	case FFI_TYPE_POINTER:
+-+	case FFI_TYPE_UINT64:
+-+	case FFI_TYPE_SINT64:
+-+	  copy_to_register_or_stack (context, stack, &state,
+-+				     ecif->avalue[i], ty->type);
+-+	  break;
+-+
+-+	case FFI_TYPE_STRUCT:
+-+	  if (is_hfa (ty))
+-+	    {
+-+	      copy_hfa_to_reg_or_stack (ecif->avalue[i], ty, context,
+-+					stack, &state);
+-+	    }
+-+	  else if (ty->size > 16)
+-+	    {
+-+	      /* If the argument is a composite type that is larger than 16
+-+		 bytes, then the argument has been copied to memory, and
+-+		 the argument is replaced by a pointer to the copy.  */
+-+
+-+	      copy_to_register_or_stack (context, stack, &state,
+-+					 &(ecif->avalue[i]), FFI_TYPE_POINTER);
+-+	    }
+-+	  else if (available_x (&state) >= (ty->size + 7) / 8)
+-+	    {
+-+	      /* If the argument is a composite type and the size in
+-+		 double-words is not more than the number of available
+-+		 X registers, then the argument is copied into consecutive
+-+		 X registers.  */
+-+	      int j;
+-+	      for (j = 0; j < (ty->size + 7) / 8; j++)
+-+		{
+-+		  memcpy (allocate_to_x (context, &state),
+-+			  &(((UINT64 *) ecif->avalue[i])[j]),
+-+			  sizeof (UINT64));
+-+		}
+-+	    }
+-+	  else
+-+	    {
+-+	      /* Otherwise, there are insufficient X registers. Further X
+-+		 register allocations are prevented, the NSAA is adjusted
+-+		 (by allocate_to_stack ()) and the argument is copied to
+-+		 memory at the adjusted NSAA.  */
+-+	      state.ngrn = N_X_ARG_REG;
+-+
+-+	      memcpy (allocate_to_stack (&state, stack, ty->alignment,
+-+					 ty->size), ecif->avalue + i, ty->size);
+-+	    }
+-+	  break;
+-+
+-+	default:
+-+	  FFI_ASSERT (0);
+-+	  break;
+-+	}
+-+    }
+-+
+-+  return ecif->cif->aarch64_flags;
+-+}
+-+
+-+ffi_status
+-+ffi_prep_cif_machdep (ffi_cif *cif)
+-+{
+-+  /* Round the stack up to a multiple of the stack alignment requirement. */
+-+  cif->bytes =
+-+    (cif->bytes + (AARCH64_STACK_ALIGN - 1)) & ~ (AARCH64_STACK_ALIGN - 1);
+-+
+-+  /* Initialize our flags. We are interested if this CIF will touch a
+-+     vector register, if so we will enable context save and load to
+-+     those registers, otherwise not. This is intended to be friendly
+-+     to lazy float context switching in the kernel.  */
+-+  cif->aarch64_flags = 0;
+-+
+-+  if (is_v_register_candidate (cif->rtype))
+-+    {
+-+      cif->aarch64_flags |= AARCH64_FFI_WITH_V;
+-+    }
+-+  else
+-+    {
+-+      int i;
+-+      for (i = 0; i < cif->nargs; i++)
+-+        if (is_v_register_candidate (cif->arg_types[i]))
+-+          {
+-+            cif->aarch64_flags |= AARCH64_FFI_WITH_V;
+-+            break;
+-+          }
+-+    }
+-+
+-+  return FFI_OK;
+-+}
+-+
+-+/* Call a function with the provided arguments and capture the return
+-+   value.  */
+-+void
+-+ffi_call (ffi_cif *cif, void (*fn)(void), void *rvalue, void **avalue)
+-+{
+-+  extended_cif ecif;
+-+
+-+  ecif.cif = cif;
+-+  ecif.avalue = avalue;
+-+  ecif.rvalue = rvalue;
+-+
+-+  switch (cif->abi)
+-+    {
+-+    case FFI_SYSV:
+-+      {
+-+        struct call_context context;
+-+	unsigned stack_bytes;
+-+
+-+	/* Figure out the total amount of stack space we need, the
+-+	   above call frame space needs to be 16 bytes aligned to
+-+	   ensure correct alignment of the first object inserted in
+-+	   that space hence the ALIGN applied to cif->bytes.*/
+-+	stack_bytes = ALIGN(cif->bytes, 16);
+-+
+-+	memset (&context, 0, sizeof (context));
+-+        if (is_register_candidate (cif->rtype))
+-+          {
+-+            ffi_call_SYSV (aarch64_prep_args, &context, &ecif, stack_bytes, fn);
+-+            switch (cif->rtype->type)
+-+              {
+-+              case FFI_TYPE_VOID:
+-+              case FFI_TYPE_FLOAT:
+-+              case FFI_TYPE_DOUBLE:
+-+              case FFI_TYPE_LONGDOUBLE:
+-+              case FFI_TYPE_UINT8:
+-+              case FFI_TYPE_SINT8:
+-+              case FFI_TYPE_UINT16:
+-+              case FFI_TYPE_SINT16:
+-+              case FFI_TYPE_UINT32:
+-+              case FFI_TYPE_SINT32:
+-+              case FFI_TYPE_POINTER:
+-+              case FFI_TYPE_UINT64:
+-+              case FFI_TYPE_INT:
+-+              case FFI_TYPE_SINT64:
+-+		{
+-+		  void *addr = get_basic_type_addr (cif->rtype->type,
+-+						    &context, 0);
+-+		  copy_basic_type (rvalue, addr, cif->rtype->type);
+-+		  break;
+-+		}
+-+
+-+              case FFI_TYPE_STRUCT:
+-+                if (is_hfa (cif->rtype))
+-+		  {
+-+		    int j;
+-+		    unsigned short type = get_homogeneous_type (cif->rtype);
+-+		    unsigned elems = element_count (cif->rtype);
+-+		    for (j = 0; j < elems; j++)
+-+		      {
+-+			void *reg = get_basic_type_addr (type, &context, j);
+-+			copy_basic_type (rvalue, reg, type);
+-+			rvalue += get_basic_type_size (type);
+-+		      }
+-+		  }
+-+                else if ((cif->rtype->size + 7) / 8 < N_X_ARG_REG)
+-+                  {
+-+                    unsigned size = ALIGN (cif->rtype->size, sizeof (UINT64));
+-+                    memcpy (rvalue, get_x_addr (&context, 0), size);
+-+                  }
+-+                else
+-+                  {
+-+                    FFI_ASSERT (0);
+-+                  }
+-+                break;
+-+
+-+              default:
+-+                FFI_ASSERT (0);
+-+                break;
+-+              }
+-+          }
+-+        else
+-+          {
+-+            memcpy (get_x_addr (&context, 8), &rvalue, sizeof (UINT64));
+-+            ffi_call_SYSV (aarch64_prep_args, &context, &ecif,
+-+			   stack_bytes, fn);
+-+          }
+-+        break;
+-+      }
+-+
+-+    default:
+-+      FFI_ASSERT (0);
+-+      break;
+-+    }
+-+}
+-+
+-+static unsigned char trampoline [] =
+-+{ 0x70, 0x00, 0x00, 0x58,	/* ldr	x16, 1f	*/
+-+  0x91, 0x00, 0x00, 0x10,	/* adr	x17, 2f	*/
+-+  0x00, 0x02, 0x1f, 0xd6	/* br	x16	*/
+-+};
+-+
+-+/* Build a trampoline.  */
+-+
+-+#define FFI_INIT_TRAMPOLINE(TRAMP,FUN,CTX,FLAGS)			\
+-+  ({unsigned char *__tramp = (unsigned char*)(TRAMP);			\
+-+    UINT64  __fun = (UINT64)(FUN);					\
+-+    UINT64  __ctx = (UINT64)(CTX);					\
+-+    UINT64  __flags = (UINT64)(FLAGS);					\
+-+    memcpy (__tramp, trampoline, sizeof (trampoline));			\
+-+    memcpy (__tramp + 12, &__fun, sizeof (__fun));			\
+-+    memcpy (__tramp + 20, &__ctx, sizeof (__ctx));			\
+-+    memcpy (__tramp + 28, &__flags, sizeof (__flags));			\
+-+    __clear_cache(__tramp, __tramp + FFI_TRAMPOLINE_SIZE);		\
+-+  })
+-+
+-+ffi_status
+-+ffi_prep_closure_loc (ffi_closure* closure,
+-+                      ffi_cif* cif,
+-+                      void (*fun)(ffi_cif*,void*,void**,void*),
+-+                      void *user_data,
+-+                      void *codeloc)
+-+{
+-+  if (cif->abi != FFI_SYSV)
+-+    return FFI_BAD_ABI;
+-+
+-+  FFI_INIT_TRAMPOLINE (&closure->tramp[0], &ffi_closure_SYSV, codeloc,
+-+		       cif->aarch64_flags);
+-+
+-+  closure->cif  = cif;
+-+  closure->user_data = user_data;
+-+  closure->fun  = fun;
+-+
+-+  return FFI_OK;
+-+}
+-+
+-+/* Primary handler to setup and invoke a function within a closure.
+-+
+-+   A closure when invoked enters via the assembler wrapper
+-+   ffi_closure_SYSV(). The wrapper allocates a call context on the
+-+   stack, saves the interesting registers (from the perspective of
+-+   the calling convention) into the context then passes control to
+-+   ffi_closure_SYSV_inner() passing the saved context and a pointer to
+-+   the stack at the point ffi_closure_SYSV() was invoked.
+-+
+-+   On the return path the assembler wrapper will reload call context
+-+   regsiters.
+-+
+-+   ffi_closure_SYSV_inner() marshalls the call context into ffi value
+-+   desriptors, invokes the wrapped function, then marshalls the return
+-+   value back into the call context.  */
+-+
+-+void
+-+ffi_closure_SYSV_inner (ffi_closure *closure, struct call_context *context,
+-+			void *stack)
+-+{
+-+  ffi_cif *cif = closure->cif;
+-+  void **avalue = (void**) alloca (cif->nargs * sizeof (void*));
+-+  void *rvalue = NULL;
+-+  int i;
+-+  struct arg_state state;
+-+
+-+  arg_init (&state, ALIGN(cif->bytes, 16));
+-+
+-+  for (i = 0; i < cif->nargs; i++)
+-+    {
+-+      ffi_type *ty = cif->arg_types[i];
+-+
+-+      switch (ty->type)
+-+	{
+-+	case FFI_TYPE_VOID:
+-+	  FFI_ASSERT (0);
+-+	  break;
+-+
+-+	case FFI_TYPE_UINT8:
+-+	case FFI_TYPE_SINT8:
+-+	case FFI_TYPE_UINT16:
+-+	case FFI_TYPE_SINT16:
+-+	case FFI_TYPE_UINT32:
+-+	case FFI_TYPE_SINT32:
+-+	case FFI_TYPE_INT:
+-+	case FFI_TYPE_POINTER:
+-+	case FFI_TYPE_UINT64:
+-+	case FFI_TYPE_SINT64:
+-+	case  FFI_TYPE_FLOAT:
+-+	case  FFI_TYPE_DOUBLE:
+-+	case  FFI_TYPE_LONGDOUBLE:
+-+	  avalue[i] = allocate_to_register_or_stack (context, stack,
+-+						     &state, ty->type);
+-+	  break;
+-+
+-+	case FFI_TYPE_STRUCT:
+-+	  if (is_hfa (ty))
+-+	    {
+-+	      unsigned n = element_count (ty);
+-+	      if (available_v (&state) < n)
+-+		{
+-+		  state.nsrn = N_V_ARG_REG;
+-+		  avalue[i] = allocate_to_stack (&state, stack, ty->alignment,
+-+						 ty->size);
+-+		}
+-+	      else
+-+		{
+-+		  switch (get_homogeneous_type (ty))
+-+		    {
+-+		    case FFI_TYPE_FLOAT:
+-+		      {
+-+			/* Eeek! We need a pointer to the structure,
+-+			   however the homogeneous float elements are
+-+			   being passed in individual S registers,
+-+			   therefore the structure is not represented as
+-+			   a contiguous sequence of bytes in our saved
+-+			   register context. We need to fake up a copy
+-+			   of the structure layed out in memory
+-+			   correctly. The fake can be tossed once the
+-+			   closure function has returned hence alloca()
+-+			   is sufficient. */
+-+			int j;
+-+			UINT32 *p = avalue[i] = alloca (ty->size);
+-+			for (j = 0; j < element_count (ty); j++)
+-+			  memcpy (&p[j],
+-+				  allocate_to_s (context, &state),
+-+				  sizeof (*p));
+-+			break;
+-+		      }
+-+
+-+		    case FFI_TYPE_DOUBLE:
+-+		      {
+-+			/* Eeek! We need a pointer to the structure,
+-+			   however the homogeneous float elements are
+-+			   being passed in individual S registers,
+-+			   therefore the structure is not represented as
+-+			   a contiguous sequence of bytes in our saved
+-+			   register context. We need to fake up a copy
+-+			   of the structure layed out in memory
+-+			   correctly. The fake can be tossed once the
+-+			   closure function has returned hence alloca()
+-+			   is sufficient. */
+-+			int j;
+-+			UINT64 *p = avalue[i] = alloca (ty->size);
+-+			for (j = 0; j < element_count (ty); j++)
+-+			  memcpy (&p[j],
+-+				  allocate_to_d (context, &state),
+-+				  sizeof (*p));
+-+			break;
+-+		      }
+-+
+-+		    case FFI_TYPE_LONGDOUBLE:
+-+			  memcpy (&avalue[i],
+-+				  allocate_to_v (context, &state),
+-+				  sizeof (*avalue));
+-+		      break;
+-+
+-+		    default:
+-+		      FFI_ASSERT (0);
+-+		      break;
+-+		    }
+-+		}
+-+	    }
+-+	  else if (ty->size > 16)
+-+	    {
+-+	      /* Replace Composite type of size greater than 16 with a
+-+		 pointer.  */
+-+	      memcpy (&avalue[i],
+-+		      allocate_to_register_or_stack (context, stack,
+-+						     &state, FFI_TYPE_POINTER),
+-+		      sizeof (avalue[i]));
+-+	    }
+-+	  else if (available_x (&state) >= (ty->size + 7) / 8)
+-+	    {
+-+	      avalue[i] = get_x_addr (context, state.ngrn);
+-+	      state.ngrn += (ty->size + 7) / 8;
+-+	    }
+-+	  else
+-+	    {
+-+	      state.ngrn = N_X_ARG_REG;
+-+
+-+	      avalue[i] = allocate_to_stack (&state, stack, ty->alignment,
+-+					     ty->size);
+-+	    }
+-+	  break;
+-+
+-+	default:
+-+	  FFI_ASSERT (0);
+-+	  break;
+-+	}
+-+    }
+-+
+-+  /* Figure out where the return value will be passed, either in
+-+     registers or in a memory block allocated by the caller and passed
+-+     in x8.  */
+-+
+-+  if (is_register_candidate (cif->rtype))
+-+    {
+-+      /* Register candidates are *always* returned in registers. */
+-+
+-+      /* Allocate a scratchpad for the return value, we will let the
+-+         callee scrible the result into the scratch pad then move the
+-+         contents into the appropriate return value location for the
+-+         call convention.  */
+-+      rvalue = alloca (cif->rtype->size);
+-+      (closure->fun) (cif, rvalue, avalue, closure->user_data);
+-+
+-+      /* Copy the return value into the call context so that it is returned
+-+         as expected to our caller.  */
+-+      switch (cif->rtype->type)
+-+        {
+-+        case FFI_TYPE_VOID:
+-+          break;
+-+
+-+        case FFI_TYPE_UINT8:
+-+        case FFI_TYPE_UINT16:
+-+        case FFI_TYPE_UINT32:
+-+        case FFI_TYPE_POINTER:
+-+        case FFI_TYPE_UINT64:
+-+        case FFI_TYPE_SINT8:
+-+        case FFI_TYPE_SINT16:
+-+        case FFI_TYPE_INT:
+-+        case FFI_TYPE_SINT32:
+-+        case FFI_TYPE_SINT64:
+-+        case FFI_TYPE_FLOAT:
+-+        case FFI_TYPE_DOUBLE:
+-+        case FFI_TYPE_LONGDOUBLE:
+-+	  {
+-+	    void *addr = get_basic_type_addr (cif->rtype->type, context, 0);
+-+	    copy_basic_type (addr, rvalue, cif->rtype->type);
+-+            break;
+-+	  }
+-+        case FFI_TYPE_STRUCT:
+-+          if (is_hfa (cif->rtype))
+-+	    {
+-+	      int i;
+-+	      unsigned short type = get_homogeneous_type (cif->rtype);
+-+	      unsigned elems = element_count (cif->rtype);
+-+	      for (i = 0; i < elems; i++)
+-+		{
+-+		  void *reg = get_basic_type_addr (type, context, i);
+-+		  copy_basic_type (reg, rvalue, type);
+-+		  rvalue += get_basic_type_size (type);
+-+		}
+-+	    }
+-+          else if ((cif->rtype->size + 7) / 8 < N_X_ARG_REG)
+-+            {
+-+              unsigned size = ALIGN (cif->rtype->size, sizeof (UINT64)) ;
+-+              memcpy (get_x_addr (context, 0), rvalue, size);
+-+            }
+-+          else
+-+            {
+-+              FFI_ASSERT (0);
+-+            }
+-+          break;
+-+        default:
+-+          FFI_ASSERT (0);
+-+          break;
+-+        }
+-+    }
+-+  else
+-+    {
+-+      memcpy (&rvalue, get_x_addr (context, 8), sizeof (UINT64));
+-+      (closure->fun) (cif, rvalue, avalue, closure->user_data);
+-+    }
+-+}
+-+
+-diff --git a/src/aarch64/ffitarget.h b/src/aarch64/ffitarget.h
+-new file mode 100644
+-index 0000000..6f1a348
+---- /dev/null
+-+++ b/src/aarch64/ffitarget.h
+-@@ -0,0 +1,59 @@
+-+/* Copyright (c) 2009, 2010, 2011, 2012 ARM Ltd.
+-+
+-+Permission is hereby granted, free of charge, to any person obtaining
+-+a copy of this software and associated documentation files (the
+-+``Software''), to deal in the Software without restriction, including
+-+without limitation the rights to use, copy, modify, merge, publish,
+-+distribute, sublicense, and/or sell copies of the Software, and to
+-+permit persons to whom the Software is furnished to do so, subject to
+-+the following conditions:
+-+
+-+The above copyright notice and this permission notice shall be
+-+included in all copies or substantial portions of the Software.
+-+
+-+THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
+-+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+-+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+-+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+-+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+-+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+-+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
+-+
+-+#ifndef LIBFFI_TARGET_H
+-+#define LIBFFI_TARGET_H
+-+
+-+#ifndef LIBFFI_H
+-+#error "Please do not include ffitarget.h directly into your source.  Use ffi.h instead."
+-+#endif
+-+
+-+#ifndef LIBFFI_ASM
+-+typedef unsigned long ffi_arg;
+-+typedef signed long ffi_sarg;
+-+
+-+typedef enum ffi_abi
+-+  {
+-+    FFI_FIRST_ABI = 0,
+-+    FFI_SYSV,
+-+    FFI_LAST_ABI,
+-+    FFI_DEFAULT_ABI = FFI_SYSV
+-+  } ffi_abi;
+-+#endif
+-+
+-+/* ---- Definitions for closures ----------------------------------------- */
+-+
+-+#define FFI_CLOSURES 1
+-+#define FFI_TRAMPOLINE_SIZE 36
+-+#define FFI_NATIVE_RAW_API 0
+-+
+-+/* ---- Internal ---- */
+-+
+-+
+-+#define FFI_EXTRA_CIF_FIELDS unsigned aarch64_flags
+-+
+-+#define AARCH64_FFI_WITH_V_BIT 0
+-+
+-+#define AARCH64_N_XREG 32
+-+#define AARCH64_N_VREG 32
+-+#define AARCH64_CALL_CONTEXT_SIZE (AARCH64_N_XREG * 8 + AARCH64_N_VREG * 16)
+-+
+-+#endif
+-diff --git a/src/aarch64/sysv.S b/src/aarch64/sysv.S
+-new file mode 100644
+-index 0000000..b8cd421
+---- /dev/null
+-+++ b/src/aarch64/sysv.S
+-@@ -0,0 +1,307 @@
+-+/* Copyright (c) 2009, 2010, 2011, 2012 ARM Ltd.
+-+
+-+Permission is hereby granted, free of charge, to any person obtaining
+-+a copy of this software and associated documentation files (the
+-+``Software''), to deal in the Software without restriction, including
+-+without limitation the rights to use, copy, modify, merge, publish,
+-+distribute, sublicense, and/or sell copies of the Software, and to
+-+permit persons to whom the Software is furnished to do so, subject to
+-+the following conditions:
+-+
+-+The above copyright notice and this permission notice shall be
+-+included in all copies or substantial portions of the Software.
+-+
+-+THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
+-+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+-+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+-+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+-+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+-+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+-+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
+-+
+-+#define LIBFFI_ASM
+-+#include <fficonfig.h>
+-+#include <ffi.h>
+-+
+-+#define cfi_adjust_cfa_offset(off)	.cfi_adjust_cfa_offset off
+-+#define cfi_rel_offset(reg, off)	.cfi_rel_offset reg, off
+-+#define cfi_restore(reg)		.cfi_restore reg
+-+#define cfi_def_cfa_register(reg)	.cfi_def_cfa_register reg
+-+
+-+        .text
+-+        .globl ffi_call_SYSV
+-+        .type ffi_call_SYSV, #function
+-+
+-+/* ffi_call_SYSV()
+-+
+-+   Create a stack frame, setup an argument context, call the callee
+-+   and extract the result.
+-+
+-+   The maximum required argument stack size is provided,
+-+   ffi_call_SYSV() allocates that stack space then calls the
+-+   prepare_fn to populate register context and stack.  The
+-+   argument passing registers are loaded from the register
+-+   context and the callee called, on return the register passing
+-+   register are saved back to the context.  Our caller will
+-+   extract the return value from the final state of the saved
+-+   register context.
+-+
+-+   Prototype:
+-+
+-+   extern unsigned
+-+   ffi_call_SYSV (void (*)(struct call_context *context, unsigned char *,
+-+			   extended_cif *),
+-+                  struct call_context *context,
+-+                  extended_cif *,
+-+                  unsigned required_stack_size,
+-+                  void (*fn)(void));
+-+
+-+   Therefore on entry we have:
+-+
+-+   x0 prepare_fn
+-+   x1 &context
+-+   x2 &ecif
+-+   x3 bytes
+-+   x4 fn
+-+
+-+   This function uses the following stack frame layout:
+-+
+-+   ==
+-+                saved x30(lr)
+-+   x29(fp)->    saved x29(fp)
+-+                saved x24
+-+                saved x23
+-+                saved x22
+-+   sp'    ->    saved x21
+-+                ...
+-+   sp     ->    (constructed callee stack arguments)
+-+   ==
+-+
+-+   Voila! */
+-+
+-+#define ffi_call_SYSV_FS (8 * 4)
+-+
+-+        .cfi_startproc
+-+ffi_call_SYSV:
+-+        stp     x29, x30, [sp, #-16]!
+-+	cfi_adjust_cfa_offset (16)
+-+        cfi_rel_offset (x29, 0)
+-+        cfi_rel_offset (x30, 8)
+-+
+-+        mov     x29, sp
+-+	cfi_def_cfa_register (x29)
+-+        sub     sp, sp, #ffi_call_SYSV_FS
+-+
+-+        stp     x21, x22, [sp, 0]
+-+        cfi_rel_offset (x21, 0 - ffi_call_SYSV_FS)
+-+        cfi_rel_offset (x22, 8 - ffi_call_SYSV_FS)
+-+
+-+        stp     x23, x24, [sp, 16]
+-+        cfi_rel_offset (x23, 16 - ffi_call_SYSV_FS)
+-+        cfi_rel_offset (x24, 24 - ffi_call_SYSV_FS)
+-+
+-+        mov     x21, x1
+-+        mov     x22, x2
+-+        mov     x24, x4
+-+
+-+        /* Allocate the stack space for the actual arguments, many
+-+           arguments will be passed in registers, but we assume
+-+           worst case and allocate sufficient stack for ALL of
+-+           the arguments.  */
+-+        sub     sp, sp, x3
+-+
+-+        /* unsigned (*prepare_fn) (struct call_context *context,
+-+				   unsigned char *stack, extended_cif *ecif);
+-+	 */
+-+        mov     x23, x0
+-+        mov     x0, x1
+-+        mov     x1, sp
+-+        /* x2 already in place */
+-+        blr     x23
+-+
+-+        /* Preserve the flags returned.  */
+-+        mov     x23, x0
+-+
+-+        /* Figure out if we should touch the vector registers.  */
+-+        tbz     x23, #AARCH64_FFI_WITH_V_BIT, 1f
+-+
+-+        /* Load the vector argument passing registers.  */
+-+        ldp     q0, q1, [x21, #8*32 +  0]
+-+        ldp     q2, q3, [x21, #8*32 + 32]
+-+        ldp     q4, q5, [x21, #8*32 + 64]
+-+        ldp     q6, q7, [x21, #8*32 + 96]
+-+1:
+-+        /* Load the core argument passing registers.  */
+-+        ldp     x0, x1, [x21,  #0]
+-+        ldp     x2, x3, [x21, #16]
+-+        ldp     x4, x5, [x21, #32]
+-+        ldp     x6, x7, [x21, #48]
+-+
+-+        /* Don't forget x8 which may be holding the address of a return buffer.
+-+	 */
+-+        ldr     x8,     [x21, #8*8]
+-+
+-+        blr     x24
+-+
+-+        /* Save the core argument passing registers.  */
+-+        stp     x0, x1, [x21,  #0]
+-+        stp     x2, x3, [x21, #16]
+-+        stp     x4, x5, [x21, #32]
+-+        stp     x6, x7, [x21, #48]
+-+
+-+        /* Note nothing useful ever comes back in x8!  */
+-+
+-+        /* Figure out if we should touch the vector registers.  */
+-+        tbz     x23, #AARCH64_FFI_WITH_V_BIT, 1f
+-+
+-+        /* Save the vector argument passing registers.  */
+-+        stp     q0, q1, [x21, #8*32 + 0]
+-+        stp     q2, q3, [x21, #8*32 + 32]
+-+        stp     q4, q5, [x21, #8*32 + 64]
+-+        stp     q6, q7, [x21, #8*32 + 96]
+-+1:
+-+        /* All done, unwind our stack frame.  */
+-+        ldp     x21, x22, [x29,  # - ffi_call_SYSV_FS]
+-+        cfi_restore (x21)
+-+        cfi_restore (x22)
+-+
+-+        ldp     x23, x24, [x29,  # - ffi_call_SYSV_FS + 16]
+-+        cfi_restore (x23)
+-+        cfi_restore (x24)
+-+
+-+        mov     sp, x29
+-+	cfi_def_cfa_register (sp)
+-+
+-+        ldp     x29, x30, [sp], #16
+-+	cfi_adjust_cfa_offset (-16)
+-+        cfi_restore (x29)
+-+        cfi_restore (x30)
+-+
+-+        ret
+-+
+-+        .cfi_endproc
+-+        .size ffi_call_SYSV, .-ffi_call_SYSV
+-+
+-+#define ffi_closure_SYSV_FS (8 * 2 + AARCH64_CALL_CONTEXT_SIZE)
+-+
+-+/* ffi_closure_SYSV
+-+
+-+   Closure invocation glue. This is the low level code invoked directly by
+-+   the closure trampoline to setup and call a closure.
+-+
+-+   On entry x17 points to a struct trampoline_data, x16 has been clobbered
+-+   all other registers are preserved.
+-+
+-+   We allocate a call context and save the argument passing registers,
+-+   then invoked the generic C ffi_closure_SYSV_inner() function to do all
+-+   the real work, on return we load the result passing registers back from
+-+   the call context.
+-+
+-+   On entry
+-+
+-+   extern void
+-+   ffi_closure_SYSV (struct trampoline_data *);
+-+
+-+   struct trampoline_data
+-+   {
+-+        UINT64 *ffi_closure;
+-+        UINT64 flags;
+-+   };
+-+
+-+   This function uses the following stack frame layout:
+-+
+-+   ==
+-+                saved x30(lr)
+-+   x29(fp)->    saved x29(fp)
+-+                saved x22
+-+                saved x21
+-+                ...
+-+   sp     ->    call_context
+-+   ==
+-+
+-+   Voila!  */
+-+
+-+        .text
+-+        .globl ffi_closure_SYSV
+-+        .cfi_startproc
+-+ffi_closure_SYSV:
+-+        stp     x29, x30, [sp, #-16]!
+-+	cfi_adjust_cfa_offset (16)
+-+        cfi_rel_offset (x29, 0)
+-+        cfi_rel_offset (x30, 8)
+-+
+-+        mov     x29, sp
+-+
+-+        sub     sp, sp, #ffi_closure_SYSV_FS
+-+	cfi_adjust_cfa_offset (ffi_closure_SYSV_FS)
+-+
+-+        stp     x21, x22, [x29, #-16]
+-+        cfi_rel_offset (x21, 0)
+-+        cfi_rel_offset (x22, 8)
+-+
+-+        /* Load x21 with &call_context.  */
+-+        mov     x21, sp
+-+        /* Preserve our struct trampoline_data *  */
+-+        mov     x22, x17
+-+
+-+        /* Save the rest of the argument passing registers.  */
+-+        stp     x0, x1, [x21, #0]
+-+        stp     x2, x3, [x21, #16]
+-+        stp     x4, x5, [x21, #32]
+-+        stp     x6, x7, [x21, #48]
+-+        /* Don't forget we may have been given a result scratch pad address.
+-+	 */
+-+        str     x8,     [x21, #64]
+-+
+-+        /* Figure out if we should touch the vector registers.  */
+-+        ldr     x0, [x22, #8]
+-+        tbz     x0, #AARCH64_FFI_WITH_V_BIT, 1f
+-+
+-+        /* Save the argument passing vector registers.  */
+-+        stp     q0, q1, [x21, #8*32 + 0]
+-+        stp     q2, q3, [x21, #8*32 + 32]
+-+        stp     q4, q5, [x21, #8*32 + 64]
+-+        stp     q6, q7, [x21, #8*32 + 96]
+-+1:
+-+        /* Load &ffi_closure..  */
+-+        ldr     x0, [x22, #0]
+-+        mov     x1, x21
+-+        /* Compute the location of the stack at the point that the
+-+           trampoline was called.  */
+-+        add     x2, x29, #16
+-+
+-+        bl      ffi_closure_SYSV_inner
+-+
+-+        /* Figure out if we should touch the vector registers.  */
+-+        ldr     x0, [x22, #8]
+-+        tbz     x0, #AARCH64_FFI_WITH_V_BIT, 1f
+-+
+-+        /* Load the result passing vector registers.  */
+-+        ldp     q0, q1, [x21, #8*32 + 0]
+-+        ldp     q2, q3, [x21, #8*32 + 32]
+-+        ldp     q4, q5, [x21, #8*32 + 64]
+-+        ldp     q6, q7, [x21, #8*32 + 96]
+-+1:
+-+        /* Load the result passing core registers.  */
+-+        ldp     x0, x1, [x21,  #0]
+-+        ldp     x2, x3, [x21, #16]
+-+        ldp     x4, x5, [x21, #32]
+-+        ldp     x6, x7, [x21, #48]
+-+        /* Note nothing usefull is returned in x8.  */
+-+
+-+        /* We are done, unwind our frame.  */
+-+        ldp     x21, x22, [x29,  #-16]
+-+        cfi_restore (x21)
+-+        cfi_restore (x22)
+-+
+-+        mov     sp, x29
+-+	cfi_adjust_cfa_offset (-ffi_closure_SYSV_FS)
+-+
+-+        ldp     x29, x30, [sp], #16
+-+	cfi_adjust_cfa_offset (-16)
+-+        cfi_restore (x29)
+-+        cfi_restore (x30)
+-+
+-+        ret
+-+        .cfi_endproc
+-+        .size ffi_closure_SYSV, .-ffi_closure_SYSV
+-diff --git a/testsuite/lib/libffi.exp b/testsuite/lib/libffi.exp
+-index 4a65ed1..8ee3f15 100644
+---- a/testsuite/lib/libffi.exp
+-+++ b/testsuite/lib/libffi.exp
+-@@ -203,6 +203,10 @@ proc libffi_target_compile { source dest type options } {
+- 
+-     lappend options "libs= -lffi"
+- 
+-+    if { [string match "aarch64*-*-linux*" $target_triplet] } {
+-+	lappend options "libs= -lpthread"
+-+    }
+-+
+-     verbose "options: $options"
+-     return [target_compile $source $dest $type $options]
+- }
+--- 
+-1.7.9.5
+-
+diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+index 64b3eb4..9fb86d7 100644
+--- a/package/libffi/libffi.mk
++++ b/package/libffi/libffi.mk
+@@ -4,12 +4,17 @@
+ #
+ #############################################################
+ 
+-LIBFFI_VERSION = 3.0.11
+-LIBFFI_SITE    = ftp://sources.redhat.com/pub/libffi/
++LIBFFI_VERSION = bcc0c28001b6d427d5cd8037d2e3c892babc6b4c
++LIBFFI_SITE    = http://github.com/atgreen/libffi/tarball/$(LIBFFI_VERSION)
+ LIBFFI_LICENSE = MIT
+ LIBFFI_LICENSE_FILES = LICENSE
+ LIBFFI_INSTALL_STAGING = YES
+ 
++# We're using a version from Git which strangely bundles a generated
++# configure script, but it's broken (doesn't generate the libffi.pc
++# file).
++LIBFFI_AUTORECONF = YES
++
+ # Newer CS MIPS toolchains use a different (compact) eh_frame format
+ # libffi don't like them, just switch to the older format
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209)$(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203),y)
+@@ -17,9 +22,11 @@ LIBFFI_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -mno-compact-eh"
+ endif
+ 
+ # Move the headers to the usual location, and adjust the .pc file
+-# accordingly
++# accordingly. For some reason, the libffi build system forgets to
++# install the .pc file, so we do it manually.
+ define LIBFFI_MOVE_STAGING_HEADERS
+ 	mv $(STAGING_DIR)/usr/lib/libffi-*/include/*.h $(STAGING_DIR)/usr/include/
++	$(INSTALL) -D -m 0644 $(@D)/libffi.pc $(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
+ 	$(SED) '/^includedir.*/d' $(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
+ 	$(SED) '/^Cflags:.*/d' $(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
+ 	rm -rf $(TARGET_DIR)/usr/lib/libffi-*
+@@ -31,13 +38,23 @@ LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
+ define LIBFFI_MOVE_TARGET_HEADERS
+ 	install -d $(TARGET_DIR)/usr/include/
+ 	mv $(TARGET_DIR)/usr/lib/libffi-*/include/*.h $(TARGET_DIR)/usr/include/
+-	$(SED) '/^includedir.*/d' $(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
+-	$(SED) '/^Cflags:.*/d' $(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
+ 	rm -rf $(TARGET_DIR)/usr/lib/libffi-*
+ endef
+ 
+ LIBFFI_POST_INSTALL_TARGET_HOOKS += LIBFFI_MOVE_TARGET_HEADERS
+ 
++# We're using a version from Git which strangely bundles a generated
++# configure script, but it's broken (doesn't generate the libffi.pc
++# file).
++HOST_LIBFFI_AUTORECONF = YES
++
++# For some reason, the libffi build system forgets to install the .pc
++# file, so we do it manually.
++define HOST_LIBFFI_INSTALL_PC_FILE
++	$(INSTALL) -D $(@D)/libffi.pc $(HOST_DIR)/usr/lib/pkgconfig/libffi.pc
++endef
++
++HOST_LIBFFI_POST_INSTALL_HOOKS += HOST_LIBFFI_INSTALL_PC_FILE
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-
 -- 
 1.7.9.5
