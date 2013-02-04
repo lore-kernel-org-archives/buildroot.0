@@ -1,44 +1,30 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 04 Feb 2013 19:40:50 +0100
-Subject: [Buildroot] [PATCH] iw: switch upstream site
-In-Reply-To: <1359980430-11982-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1359980430-11982-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <511000B2.5010900@mind.be>
+Date: Mon, 04 Feb 2013 19:54:21 +0100
+Subject: [Buildroot] [PATCH 2/7] package/pmake: add host pmake
+In-Reply-To: <453ed921e8645a7271b1b67d1c05ee96819a871b.1359993560.git.yann.morin.1998@free.fr>
+References: <cover.1359993560.git.yann.morin.1998@free.fr>
+ <453ed921e8645a7271b1b67d1c05ee96819a871b.1359993560.git.yann.morin.1998@free.fr>
+Message-ID: <511003DD.4080305@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/13 13:20, Gustavo Zacarias wrote:
-> It's moved from wireless.kernel.org to generic kernel.org
->
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->   package/iw/iw.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-> index 22ea25c..9233833 100644
-> --- a/package/iw/iw.mk
-> +++ b/package/iw/iw.mk
-> @@ -6,7 +6,7 @@
->
->   IW_VERSION = 3.8
->   IW_SOURCE = iw-$(IW_VERSION).tar.bz2
-> -IW_SITE = http://wireless.kernel.org/download/iw
-> +IW_SITE = http://www.kernel.org/pub/software/network/iw
+On 04/02/13 17:01, Yann E. MORIN wrote:
+> +	printf '#!/bin/sh\nexec %s -m %s "$$@"\n'   \
+> +	       $(HOST_DIR)/usr/bin/bmake            \
+> +	       $(HOST_DIR)/usr/share/pmake/mk       \
+> +	       >$(HOST_DIR)/usr/bin/pmake
+> +	chmod 0755 $(HOST_DIR)/usr/bin/pmake
 
-  Should be using $(BR2_KERNEL_MIRROR) then.
+  I should have mentioned this earlier of course, but:
+
+  I would prefer to have a package/pmake/pmake script that discovers the 
+mk path based on ${0%/*}. That immediately makes it relocatable :-)
 
   Regards,
   Arnout
-
->   IW_LICENSE = iw license
->   IW_LICENSE_FILES = COPYING
->   IW_DEPENDENCIES = host-pkgconf libnl
->
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
