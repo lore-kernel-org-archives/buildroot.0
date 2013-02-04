@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  4 Feb 2013 09:25:17 -0300
-Subject: [Buildroot] [PATCH] uboot-tools: also bump to 2013.01.01
-Message-ID: <1359980717-9587-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  4 Feb 2013 09:51:03 -0300
+Subject: [Buildroot] [PATCH] polarssl: security bump to version 1.2.5
+Message-ID: <1359982263-4484-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,42 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/uboot-tools/uboot-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/polarssl/polarssl-shared-and-static-library.patch | 4 ++--
+ package/polarssl/polarssl.mk                              | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 3470b60..9d7596a 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -3,7 +3,7 @@
- # uboot-tools
- #
- #############################################################
--UBOOT_TOOLS_VERSION = 2013.01
-+UBOOT_TOOLS_VERSION = 2013.01.01
- UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPLv2+
+diff --git a/package/polarssl/polarssl-shared-and-static-library.patch b/package/polarssl/polarssl-shared-and-static-library.patch
+index ec65285..8f7ce5f 100644
+--- a/package/polarssl/polarssl-shared-and-static-library.patch
++++ b/package/polarssl/polarssl-shared-and-static-library.patch
+@@ -9,7 +9,7 @@ This patch adds the USE_STATIC_POLARSSL_LIBRARY (which defaults to ON)
+ in addition to the existing USE_SHARED_POLARSSL_LIBRARY (which
+ defaults to OFF). Both options can be manipulated independently.
+ 
+-[Gustavo: update for polarssl 1.2.3]
++[Gustavo: update for polarssl 1.2.5]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+@@ -34,7 +34,7 @@ diff -Nura polarssl-1.2.3.orig/library/CMakeLists.txt polarssl-1.2.3/library/CMa
+ +if(USE_SHARED_POLARSSL_LIBRARY)
+  
+  add_library(polarssl SHARED ${src})
+- set_target_properties(polarssl PROPERTIES VERSION 1.2.3 SOVERSION 2)
++ set_target_properties(polarssl PROPERTIES VERSION 1.2.5 SOVERSION 2)
+ +set_target_properties(polarssl PROPERTIES OUTPUT_NAME polarssl)
+ +
+ +endif(USE_SHARED_POLARSSL_LIBRARY)
+diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
+index c66c633..0478f8a 100644
+--- a/package/polarssl/polarssl.mk
++++ b/package/polarssl/polarssl.mk
+@@ -1,5 +1,5 @@
+ POLARSSL_SITE = https://polarssl.org/download
+-POLARSSL_VERSION = 1.2.3
++POLARSSL_VERSION = 1.2.5
+ POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
+ POLARSSL_CONF_OPT = \
+ 	-DUSE_SHARED_POLARSSL_LIBRARY=ON \
 -- 
 1.7.12.4
