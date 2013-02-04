@@ -1,41 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Feb 2013 22:30:24 +0100
-Subject: [Buildroot] X11 component versions
-In-Reply-To: <CAOT3miKRqb5EvLgrLPkxK32YHLj5QOsqgP5n0zy__rb5L22Kbg@mail.gmail.com>
-References: <CAOT3miKoAF=cPMfwy4=u=gZAjh+6NZE-qzVPUtqANCe5X3_LCg@mail.gmail.com>
- <510F9155.6050904@carallon.com>
- <CAOT3miLtOy0VwYc0b5DV_snUci0AD5gQzO=ugvsuniMsYd+dow@mail.gmail.com>
- <510F9768.4020907@carallon.com> <20130204214018.2efc0bfb@skate>
- <CAOT3miKRqb5EvLgrLPkxK32YHLj5QOsqgP5n0zy__rb5L22Kbg@mail.gmail.com>
-Message-ID: <20130204223024.0e687d5b@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 4 Feb 2013 08:03:31 +0100
+Subject: [Buildroot] [git commit] libfuse: add patch to fix AArch64 build
+	issue
+Message-ID: <20130204213437.159DD9A939@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nicolas Dechesne,
+commit: http://git.buildroot.net/buildroot/commit/?id=c118c4350b38d2c936afbe2d696229eb8dd7ae8e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 4 Feb 2013 21:49:50 +0100, Nicolas Dechesne wrote:
+Fixes http://autobuild.buildroot.org/results/1fb89ab412935ab02494b269a367b283cf9618c1/build-end.log
 
-> especially because it explains why Will was trying to remove all the
-> components mentioned in my previous email.
-> 
-> i would tend to say that the scripts is wrong when it 'recomments'
-> 'remove from buildroot'. It looks like you check only for the
-> components in the 'src/everything' folder, however as I said in my
-> previous email, some components are generally not included in the
-> release, like the applications.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libfuse/libfuse-fix-aarch64-build.patch |   22 ++++++++++++++++++++++
+ 1 files changed, 22 insertions(+), 0 deletions(-)
 
-Yes, I am not sure what to do with the applications. Some of them
-appear to be part of X.org releases, but not all of them. Not sure what
-to do about these.
-
-Do you have a suggestion?
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/libfuse/libfuse-fix-aarch64-build.patch b/package/libfuse/libfuse-fix-aarch64-build.patch
+new file mode 100644
+index 0000000..3b88687
+--- /dev/null
++++ b/package/libfuse/libfuse-fix-aarch64-build.patch
+@@ -0,0 +1,22 @@
++Fix build on the AArch64 platform
++
++Upstream-Status: Submitted
++
++Signed-off-by: Riku Voipio <riku.voipio@linaro.org>
++
++--- a/include/fuse_kernel.h
+++++ b/include/fuse_kernel.h
++@@ -88,12 +88,7 @@
++ #ifndef _LINUX_FUSE_H
++ #define _LINUX_FUSE_H
++ 
++-#include <sys/types.h>
++-#define __u64 uint64_t
++-#define __s64 int64_t
++-#define __u32 uint32_t
++-#define __s32 int32_t
++-#define __u16 uint16_t
+++#include <linux/types.h>
++ 
++ /*
++  * Version negotiation:
