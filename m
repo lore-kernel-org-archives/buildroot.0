@@ -1,23 +1,19 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Feb 2013 00:14:17 +0100
-Subject: [Buildroot] [PATCH 1/7] package/usbredir: update to version 0.6
-In-Reply-To: <f5c06bd5a6b45b336c3f3b96c388ae37e06a465c.1359993560.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 4 Feb 2013 17:01:14 +0100")
-References: <cover.1359993560.git.yann.morin.1998@free.fr>
- <cover.1359993560.git.yann.morin.1998@free.fr>
- <f5c06bd5a6b45b336c3f3b96c388ae37e06a465c.1359993560.git.yann.morin.1998@free.fr>
-Message-ID: <87fw1by8mu.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 04 Feb 2013 20:17:27 -0300
+Subject: [Buildroot] [PATCH] uboot-tools: also bump to 2013.01.01
+In-Reply-To: <87ehgv3ekc.fsf@dell.be.48ers.dk>
+References: <1359980717-9587-1-git-send-email-gustavo@zacarias.com.ar>
+ <87ehgv3ekc.fsf@dell.be.48ers.dk>
+Message-ID: <51104187.5010905@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On 02/04/2013 07:21 PM, Peter Korsgaard wrote:
 
- Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> The fixes afaik don't affect the tools, but ok - Committed, thanks.
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+True, it's mostly to avoid the tarball collection.
+Regards.
