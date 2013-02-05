@@ -1,48 +1,33 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Tue,  5 Feb 2013 11:54:17 +0100
-Subject: [Buildroot] [PATCH 1/2] ProFTPD: Add config option to enable
-	mod_rewrite
-Message-ID: <1360061657-2329-1-git-send-email-sho@relinux.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 5 Feb 2013 12:10:13 +0100
+Subject: [Buildroot] [git commit] CHANGES: fix Aarch64 typo
+Message-ID: <20130205111041.2AD259A457@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
----
- package/proftpd/Config.in  |    6 ++++++
- package/proftpd/proftpd.mk |    4 ++++
- 2 files changed, 10 insertions(+), 0 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=dcc50b72a40d3fb5a708a5e9849c26d5148c83bb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
-index abdedc9..7866e0a 100644
---- a/package/proftpd/Config.in
-+++ b/package/proftpd/Config.in
-@@ -4,3 +4,9 @@ config BR2_PACKAGE_PROFTPD
- 	  ProFTPD, a highly configurable FTP server.
+Thanks to WIll Newton to noticing.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index 56bfd63..316f866 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,7 +2,7 @@
  
- 	  http://www.proftpd.org/
-+
-+config BR2_PACKAGE_PROFTPD_MOD_REWRITE
-+	bool "proftpd mod_rewrite"
-+	depends on BR2_PACKAGE_PROFTPD
-+	help
-+	  Compile ProFTPD with mod_rewrite
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 1d02194..92644a8 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -20,6 +20,10 @@ PROFTPD_CONF_OPT = --localstatedir=/var/run \
- 		--enable-shadow \
- 		--with-gnu-ld
- 
-+ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
-+PROFTPD_CONF_OPT += --with-modules=mod_rewrite
-+endif
-+
- define PROFTPD_MAKENAMES
- 	$(MAKE1) CC="$(HOSTCC)" CFLAGS="" LDFLAGS="" -C $(@D)/lib/libcap _makenames
- endef
--- 
-1.7.0.4
+ 	Toolchain: Crosstool-ng 1.17.0, default to GCC 4.6.3, target
+ 	libraries install fixed. Add Linaro ARM
+-	2012.11/2012.12/2013.01, Aarch4 12.11/12.12/13.01. Sourcery
++	2012.11/2012.12/2013.01, Aarch64 12.11/12.12/13.01. Sourcery
+ 	CodeBench MIPS 2012.03/09. Infrastructure to warn about
+ 	missing 32bit support for binary toolchains. Add GDB 7.5.1 /
+ 	Remove 6.8 / 7.0 / 7.1.
