@@ -1,10 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Feb 2013 20:39:22 +0100
-Subject: [Buildroot] [pull request] Pull request for branch arnout-legacy
-In-Reply-To: <cover.1360078421.git.arnout@mind.be> (Arnout Vandecappelle's
- message of "Tue, 5 Feb 2013 16:34:31 +0100")
-References: <cover.1360078421.git.arnout@mind.be>
-Message-ID: <87mwvipn2t.fsf@dell.be.48ers.dk>
+Date: Tue, 05 Feb 2013 21:04:55 +0100
+Subject: [Buildroot] [PATCH 1/4] manual: add section about storing the
+	configuration.
+In-Reply-To: <c389b413e9f055bfcc89bfd014a8a7c7e36b1819.1360084128.git.arnout@mind.be>
+ (Arnout Vandecappelle's message of "Tue, 5 Feb 2013 18:15:59 +0100")
+References: <cover.1360084128.git.arnout@mind.be>
+ <cover.1360084128.git.arnout@mind.be>
+ <c389b413e9f055bfcc89bfd014a8a7c7e36b1819.1360084128.git.arnout@mind.be>
+Message-ID: <87ehguplw8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +17,23 @@ To: buildroot@busybox.net
 >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
  Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Arnout> Hello,
+ Arnout> Reuse part of board-support.txt, and remove that one because it
+ Arnout> was unused.
 
- Arnout> Two patches to clean up the legacy config menu, as discussed in
- Arnout> the BR developer day.
+Committed with minor fixes (see below).
 
- Arnout> The following changes since commit
- Arnout> ddd69b5609cc9bd954afcfc2f91831d64b9cfff7:
+ Arnout> +Other package configuration
+ Arnout> +^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ Arnout> +
+ Arnout> +The configuration files for busybox, the linux kernel, barebox, uClibc and
+ Arnout> +crosstool-NG should be stored as well. For each of these, a
 
- Arnout>   libffi: switch to using a Git version, brings Microblaze and
- Arnout>   Xtensa support (2013-02-05 15:57:02 +0100)
+s/as well/as well if changed/
 
- Arnout> are available in the git repository at:
+ Arnout> +* For crosstool-NG and at91bootstrap3 and no helper exists so you
+ Arnout> +  have to copy the config file manually to
 
- Arnout>   https://git.gitorious.org/buildroot/buildroot.git arnout-legacy
-
- Arnout> for you to fetch changes up to
- Arnout> a5670953b17e7bbae7daf2ae2a98fdc43d53d8ad:
-
- Arnout>   Legacy: order the options reverse-chronologically. (2013-02-05 16:03:35 +0100)
-
- Arnout> ----------------------------------------------------------------
- Arnout> Arnout Vandecappelle (Essensium/Mind) (2):
- Arnout>       Legacy: make the menu a normal menu.
- Arnout>       Legacy: order the options reverse-chronologically.
-
-Committed both, thanks.
+s/at91bootstrap3 and no/at91bootstap3, no/
 
 -- 
 Bye, Peter Korsgaard
