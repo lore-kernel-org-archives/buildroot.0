@@ -1,191 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Feb 2013 15:06:31 +0100
-Subject: [Buildroot] [git commit] Make external toolchain relocatable
-Message-ID: <20130205141616.7F3209A946@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 05 Feb 2013 15:16:29 +0100
+Subject: [Buildroot] [PATCH v3] Make external toolchain relocatable
+In-Reply-To: <1342350726-29970-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 15 Jul 2012 13:12:05 +0200")
+References: <1342350726-29970-1-git-send-email-arnout@mind.be>
+Message-ID: <877gmmrgle.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=befb9a3ee0c5994162f527d8ef763d57d68ec48e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-The external toolchain wrapper sets sysroot etc. to an absolute path.
-By changing this to a relative path, it is possible to move the host
-directory to a different location and still have a working build
-system.
+ Arnout> The external toolchain wrapper sets sysroot etc. to an absolute path.
+ Arnout> By changing this to a relative path, it is possible to move the host
+ Arnout> directory to a different location and still have a working build
+ Arnout> system.
 
-This only works for a downloaded external toolchain.  For a pre-installed
-external toolchain, it is possible to move the host directory to a
-different location, but not the external toolchain directory (it does work
-if the external toolchain directory lies within the host directory).  For
-an internal or crosstool-ng toolchain, there is no wrapper so updating the
-sysroot path should be done in a different way.
+ Arnout> This only works for a downloaded external toolchain.  For a
+ Arnout> pre-installed external toolchain, it is possible to move the
+ Arnout> host directory to a different location, but not the external
+ Arnout> toolchain directory (it does work if the external toolchain
+ Arnout> directory lies within the host directory).  For an internal or
+ Arnout> crosstool-ng toolchain, there is no wrapper so updating the
+ Arnout> sysroot path should be done in a different way.
 
-See http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html
-for information about others things to do to make the host directory
-relocatable.
+ Arnout> See
+ Arnout> http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html
+ Arnout> for information about others things to do to make the host
+ Arnout> directory relocatable.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Makefile.in                                |    3 +-
- toolchain/toolchain-external/ext-tool.mk           |   16 ++++-
- .../toolchain-external/ext-toolchain-wrapper.c     |   64 ++++++++++++++-----
- 3 files changed, 61 insertions(+), 22 deletions(-)
+Committed, thanks.
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 038bd9c..a8bf36b 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -65,7 +65,8 @@ ifeq ($(BR2_xtensa),y)
- TARGET_ABI += -mlongcalls
- endif
- 
--STAGING_DIR=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sysroot
-+STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
-+STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
- 
- TARGET_OPTIMIZATION:=$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
- 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 452204b..b477bc0 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -121,9 +121,17 @@ endif
- TOOLCHAIN_EXTERNAL_CROSS=$(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- TOOLCHAIN_EXTERNAL_CC=$(TOOLCHAIN_EXTERNAL_CROSS)gcc
- TOOLCHAIN_EXTERNAL_CXX=$(TOOLCHAIN_EXTERNAL_CROSS)g++
--TOOLCHAIN_EXTERNAL_WRAPPER_ARGS = \
--	-DBR_CROSS_PATH='"$(TOOLCHAIN_EXTERNAL_BIN)/"' \
--	-DBR_SYSROOT='"$(STAGING_DIR)"'
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS = -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
-+
-+ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
-+# TOOLCHAIN_EXTERNAL_BIN points outside HOST_DIR => absolute path
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
-+	-DBR_CROSS_PATH_ABS='"$(TOOLCHAIN_EXTERNAL_BIN)"'
-+else
-+# TOOLCHAIN_EXTERNAL_BIN points inside HOST_DIR => relative path
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
-+	-DBR_CROSS_PATH_REL='"$(TOOLCHAIN_EXTERNAL_BIN:$(HOST_DIR)/%=%)"'
-+endif
- 
- CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
- CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
-@@ -456,7 +464,7 @@ $(HOST_DIR)/usr/bin/ext-toolchain-wrapper: $(STAMP_DIR)/ext-toolchain-installed
- 			ln -sf $(@F) $$base; \
- 			;; \
- 		*) \
--			ln -sf $$i .; \
-+			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
- 			;; \
- 		esac; \
- 	done ;
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index 82595ea..a92bada 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -2,9 +2,12 @@
-  * Buildroot wrapper for external toolchains. This simply executes the real
-  * toolchain with a number of arguments (sysroot/arch/..) hardcoded,
-  * to ensure the external toolchain uses the correct configuration.
-+ * The hardcoded path arguments are defined relative to the actual location
-+ * of the binary.
-  *
-  * (C) 2011 Peter Korsgaard <jacmet@sunsite.dk>
-  * (C) 2011 Daniel Nystr??m <daniel.nystrom@timeterminal.se>
-+ * (C) 2012 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  *
-  * This file is licensed under the terms of the GNU General Public License
-  * version 2.  This program is licensed "as is" without any warranty of any
-@@ -17,11 +20,12 @@
- #include <unistd.h>
- #include <stdlib.h>
- 
--static char path[PATH_MAX] = BR_CROSS_PATH;
-+static char path[PATH_MAX];
-+static char sysroot[PATH_MAX];
- 
- static char *predef_args[] = {
- 	path,
--	"--sysroot", BR_SYSROOT,
-+	"--sysroot", sysroot,
- #ifdef BR_ARCH
- 	"-march=" BR_ARCH,
- #endif /* BR_ARCH */
-@@ -48,22 +52,50 @@ static char *predef_args[] = {
- #endif
- };
- 
--static const char *get_basename(const char *name)
--{
--	const char *base;
--
--	base = strrchr(name, '/');
--	if (base)
--		base++;
--	else
--		base = name;
--
--	return base;
--}
--
- int main(int argc, char **argv)
- {
- 	char **args, **cur;
-+	char *relbasedir, *absbasedir;
-+	char *progpath = argv[0];
-+	char *basename;
-+	int ret;
-+
-+	/* Calculate the relative paths */
-+	basename = strrchr(progpath, '/');
-+	if (basename) {
-+		*basename = '\0';
-+		basename++;
-+		relbasedir = malloc(strlen(progpath) + 7);
-+		if (relbasedir == NULL) {
-+			perror(__FILE__ ": malloc");
-+			return 2;
-+		}
-+		sprintf(relbasedir, "%s/../..", argv[0]);
-+		absbasedir = realpath(relbasedir, NULL);
-+	} else {
-+		basename = progpath;
-+		absbasedir = realpath("../..", NULL);
-+	}
-+	if (absbasedir == NULL) {
-+		perror(__FILE__ ": realpath");
-+		return 2;
-+	}
-+
-+	/* Fill in the relative paths */
-+#ifdef BR_CROSS_PATH_REL
-+	ret = snprintf(path, sizeof(path), "%s/" BR_CROSS_PATH_REL "/%s", absbasedir, basename);
-+#else /* BR_CROSS_PATH_ABS */
-+	ret = snprintf(path, sizeof(path), BR_CROSS_PATH_ABS "/%s", basename);
-+#endif
-+	if (ret >= sizeof(path)) {
-+		perror(__FILE__ ": overflow");
-+		return 3;
-+	}
-+	ret = snprintf(sysroot, sizeof(sysroot), "%s/" BR_SYSROOT, absbasedir);
-+	if (ret >= sizeof(sysroot)) {
-+		perror(__FILE__ ": overflow");
-+		return 3;
-+	}
- 
- 	cur = args = malloc(sizeof(predef_args) + (sizeof(char *) * argc));
- 	if (args == NULL) {
-@@ -82,8 +114,6 @@ int main(int argc, char **argv)
- 	/* finish with NULL termination */
- 	*cur = NULL;
- 
--	strcat(path, get_basename(argv[0]));
--
- 	if (execv(path, args))
- 		perror(path);
- 
+-- 
+Bye, Peter Korsgaard
