@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue,  5 Feb 2013 16:34:32 +0100
-Subject: [Buildroot] [PATCH 1/2] Legacy: make the menu a normal menu.
+Date: Tue,  5 Feb 2013 16:34:33 +0100
+Subject: [Buildroot] [PATCH 2/2] Legacy: order the options
+	reverse-chronologically.
 In-Reply-To: <cover.1360078421.git.arnout@mind.be>
 References: <cover.1360078421.git.arnout@mind.be>
-Message-ID: <608f6cdedefe168055e4cc32598409c707246c9f.1360078421.git.arnout@mind.be>
+Message-ID: <a5670953b17e7bbae7daf2ae2a98fdc43d53d8ad.1360078421.git.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +13,83 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-The help text is moved to comments.
+This makes sure that the most interesting ones are at the top.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Config.in.legacy |   25 +++++++++++--------------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+ Config.in.legacy |   55 +++++++++++++++++++++++++++++-------------------------
+ 1 file changed, 30 insertions(+), 25 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 906c038..70958c3 100644
+index 70958c3..90a7b67 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -29,20 +29,17 @@ config BR2_LEGACY
- comment "Legacy detected: check the content of the menu below"
- 	depends on BR2_LEGACY
+@@ -42,7 +42,36 @@ endif
  
--# This option should get a new name with every buildroot release, so it defaults
--# to y again for people who upgrade.
--menuconfig BR2_LEGACY_CHECK_2012_11
--	bool "Check for legacy config options"
--	default y
--	help
--	  Select this option to see the config options that are present in your
--	  current .config but are no longer supported by buildroot. If any of
--	  the options in this menu is selected, they should be replaced with
--	  something else. As long as they stay selected, the build will fail.
--	  Just de-select this option to automatically remove all the legacy
--	  configuration.
-+menu "Legacy config options"
-+
-+if BR2_LEGACY
-+comment "Your old configuration uses legacy options that no  "
-+comment "longer exist in buildroot.                          "
-+comment "Please look at the options which have been selected "
-+comment "and read their help text.                           "
-+comment "As long as these options stay selected, the build   "
-+comment "will fail.                                          "
-+endif
- 
--if BR2_LEGACY_CHECK_2012_11
  
  #
- # Legacy options from 2012.08
-@@ -94,4 +91,4 @@ config BR2_PACKAGE_XSERVER_tinyx
- 	  The option has been renamed
- 	  BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE.
+-# Legacy options from 2012.08
++# Legacy options since 2012.11
++#
++
++config BR2_PACKAGE_XSERVER_xorg
++	bool "X.org modular server"
++	select BR2_LEGACY
++	select BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
++	help
++	  The option has been renamed
++	  BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR.
++
++config BR2_PACKAGE_XSERVER_tinyx
++	bool "KDrive / TinyX server"
++	select BR2_LEGACY
++	select BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
++	help
++	  The option has been renamed
++	  BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE.
++
++config BR2_PACKAGE_PTHREAD_STUBS
++	bool "pthread-stubs option has been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
++	help
++	  For consistency reason, the pthread-stubs package has been
++	  renamed to xlib_libpthread-stubs.
++
++
++#
++# Legacy options since 2012.08
+ #
  
--endif
-+endmenu
+ config BR2_PACKAGE_GETTEXT_STATIC
+@@ -67,28 +96,4 @@ config BR2_PACKAGE_INPUT_TOOLS_EVTEST
+ 	help
+ 	  The evtest program from input-tools is now a separate package.
+ 
+-config BR2_PACKAGE_PTHREAD_STUBS
+-	bool "pthread-stubs option has been renamed"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
+-	help
+-	  For consistency reason, the pthread-stubs package has been
+-	  renamed to xlib_libpthread-stubs.
+-
+-config BR2_PACKAGE_XSERVER_xorg
+-	bool "X.org modular server"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+-	help
+-	  The option has been renamed
+-	  BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR.
+-
+-config BR2_PACKAGE_XSERVER_tinyx
+-	bool "KDrive / TinyX server"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
+-	help
+-	  The option has been renamed
+-	  BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE.
+-
+ endmenu
 -- 
 1.7.10.4
