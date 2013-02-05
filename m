@@ -1,89 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Feb 2013 16:47:45 +0100
-Subject: [Buildroot] [PATCH v2] New package: googletest
-In-Reply-To: <1360077510-6556-1-git-send-email-sho@relinux.de>
-References: <1360076909-5929-1-git-send-email-sho@relinux.de>
- <1360077510-6556-1-git-send-email-sho@relinux.de>
-Message-ID: <20130205164745.6fc9d9aa@skate>
+Date: Tue, 5 Feb 2013 16:59:22 +0100
+Subject: [Buildroot] [git commit] CHANGES: fix Aarch64 typo
+In-Reply-To: <20130205111041.2AD259A457@busybox.osuosl.org>
+References: <20130205111041.2AD259A457@busybox.osuosl.org>
+Message-ID: <20130205165922.576b9a2a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stephan Hoffmann,
+Dear Peter Korsgaard,
 
-On Tue,  5 Feb 2013 16:18:30 +0100, Stephan Hoffmann wrote:
-> Google's framework for writing C++ tests on a variety of platforms (Linux,
-> Mac OS X, Windows, Cygwin, Windows CE, and Symbian). Based on the xUnit
-> architecture. Supports automatic test discovery, a rich set of assertions,
-> user-defined assertions, death tests, fatal and non-fatal failures, value-
-> and type-parameterized tests, various options for running the tests, and XML
-> test report generation.
-> 
-> Googletest also allows to easily build testsuites for C programs.
-> 
-> This package allows running testsuites on the target which might be
-> advanteous in certain cases.
+On Tue, 5 Feb 2013 12:10:13 +0100, Peter Korsgaard wrote:
 
-Typo: advantageous.
+>  	Toolchain: Crosstool-ng 1.17.0, default to GCC 4.6.3, target
+>  	libraries install fixed. Add Linaro ARM
+> -	2012.11/2012.12/2013.01, Aarch4 12.11/12.12/13.01. Sourcery
+> +	2012.11/2012.12/2013.01, Aarch64 12.11/12.12/13.01. Sourcery
 
-> --- /dev/null
-> +++ b/package/gtest/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_GTEST
+If I may be pedantic, then the real name of the architecture is
+AArch64, not Aarch64 :-)
 
-Maybe the package directory should be named "googletest" and the option
-BR2_PACKAGE_GOOGLETEST. But I'm not sure since the upstream tarball is
-just "gtest".
-
-> +	bool "googletest"
-> +	depends on BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && BR2_INSTALL_LIBSTDCPP
-> +	help
-> +	  Google's framework for writing C++ tests on a variety of platforms (Linux,
-> +	  Mac OS X, Windows, Cygwin, Windows CE, and Symbian). Based on the xUnit
-> +	  architecture. Supports automatic test discovery, a rich set of assertions,
-> +	  user-defined assertions, death tests, fatal and non-fatal failures, value-
-> +	  and type-parameterized tests, various options for running the tests, and XML
-> +	  test report generation.
-> +
-> +	  Googletest also allows to easily build testsuites for C programs.
-> +
-> +	  This package allows running testsiuites on the target which might be
-
-testsuites
-
-> +	  advanteous in certain cases.
-
-advantageous
-
-> +GTEST_VERSION = 1.6.0
-> +GTEST_SOURCE = gtest-1.6.0.zip
-> +GTEST_SITE = http://googletest.googlecode.com/files/
-> +GTEST_INSTALL_STAGING = YES
-> +GTEST_INSTALL_TARGET = NO
-
-Even though I understand that it is composed only of a static library,
-I find this GTEST_INSTALL_TARGET = NO a bit strange. But well, ok.
-
-> +
-> +define GTEST_EXTRACT_CMDS
-> +	unzip  $(DL_DIR)/$(GTEST_SOURCE) -d $(BUILD_DIR)
-> +endef
-
-Maybe some day we will want to have support in the package
-infrastructure to extract .zip files (we already have 3-4 packages that
-could benefit from this). But it can be done later.
-
-> +define GTEST_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/libgtest.a $(STAGING_DIR)/usr/lib/libgtest.a
-> +	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gtest/
-> +	cp -rp $(@D)/include/gtest/* $(STAGING_DIR)/usr/include/gtest/
-> +endef
-
-There's no "make install" or something like that?
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
