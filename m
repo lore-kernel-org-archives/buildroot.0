@@ -1,150 +1,242 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Feb 2013 21:45:05 +0100
-Subject: [Buildroot] [git commit] libsndfile: Add dependency on BR2_LARGEFILE
-Message-ID: <20130205204626.192FC9A9A0@busybox.osuosl.org>
+From: Willy Lambert <lambert.willy@gmail.com>
+Date: Tue,  5 Feb 2013 21:51:29 +0100
+Subject: [Buildroot] [PATCH 1/3] Documentation update : add tips to build
+	manual,
+	add information about buildroot toolchain not being relocable and put
+	some hints to use it,
+	move the Beyond Buildroot section before FAQs and add content
+Message-ID: <1360097491-20121-1-git-send-email-contact@team-ard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8f8e537d4329832fbe6e62e52ecfee8c41673f7d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "A.R.D" <contact@team-ard.com>
 
-libsndfile requires sizeof(sf_count_t) == 8, where sf_count_t is a
-typedef alias for off_t. This is not true by default for all
-tool-chains, which leads to a runtime assert failure in binaries
-compiled against libsndfile. See:
 
-  http://permalink.gmane.org/gmane.comp.audio.libsndfile.devel/229
-
-Add a dependency on BR2_LARGEFILE for libsndfile, and a comment if
-BR2_LARGEFILE is not selected.
-
-[Thomas: rebased patch, added more propagation of the new
-BR2_LARGEFILE dependency to gst-plugins-good and mpd.]
-
-Signed-off-by: Ryan Mallon <rmallon@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: A.R.D <contact@team-ard.com>
 ---
- package/bluez_utils/Config.in                 |    4 ++++
- package/libsndfile/Config.in                  |    7 +++++++
- package/multimedia/gst-plugins-bad/Config.in  |    4 ++++
- package/multimedia/gst-plugins-good/Config.in |    1 +
- package/multimedia/mpd/Config.in              |    5 +++++
- package/multimedia/pulseaudio/Config.in       |    5 +++--
- 6 files changed, 24 insertions(+), 2 deletions(-)
+ docs/manual/beyond-buildroot.txt    |   83 ++++++++++++++++++++++++++++++-----
+ docs/manual/customize-toolchain.txt |   45 ++++++++++++++++---
+ docs/manual/make-tips.txt           |   12 +++++
+ docs/manual/manual.txt              |    4 +-
+ 4 files changed, 125 insertions(+), 19 deletions(-)
 
-diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
-index 7ca23fc..72b900c 100644
---- a/package/bluez_utils/Config.in
-+++ b/package/bluez_utils/Config.in
-@@ -22,9 +22,13 @@ config BR2_PACKAGE_BLUEZ_UTILS_AUDIO
- 	bool "audio support"
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_LIBSNDFILE
-+	depends on BR2_LARGEFILE
- 	help
- 	  Audio support
+diff --git a/docs/manual/beyond-buildroot.txt b/docs/manual/beyond-buildroot.txt
+index a87b584..d9bdd32 100644
+--- a/docs/manual/beyond-buildroot.txt
++++ b/docs/manual/beyond-buildroot.txt
+@@ -3,17 +3,77 @@
+ Beyond Buildroot
+ ================
  
-+comment "bluez-utils audio requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
+-Boot the generated images
+--------------------------
++After having run Buildroot, you will have a brand new filesystem for your target exported in buildroot/output/images. The content of this folder depends of the option you choosed during buildroot configuration in the "Filesystem images" section. 
+ 
+-NFS boot
+-~~~~~~~~
++So what's next ? You will probably want to :
+ 
+-To achieve NFS-boot, enable _tar root filesystem_ in the _Filesystem
+-images_ menu.
++* generate a virtual disk to dump to real system or to use in virtualisation systems (http://wiki.qemu.org/Main_Page[Qemu], https://www.virtualbox.org/[VirtualBox],...)
 +
- config BR2_PACKAGE_BLUEZ_UTILS_USB
- 	bool "USB support"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-diff --git a/package/libsndfile/Config.in b/package/libsndfile/Config.in
-index 9afe496..cdba70b 100644
---- a/package/libsndfile/Config.in
-+++ b/package/libsndfile/Config.in
-@@ -1,8 +1,15 @@
- config BR2_PACKAGE_LIBSNDFILE
- 	bool "libsndfile"
-+	# The absence of largefile doesn't prevent libsndfile to
-+	# build, but at runtime the code assumes that off_t is 64
-+	# bits, and asserts if not.
-+	depends on BR2_LARGEFILE
- 	help
- 	  Libsndfile is a C library for reading and writing files containing
- 	  sampled sound (such as MS Windows WAV and the Apple/SGI AIFF format)
- 	  through one standard library interface.
- 
- 	  http://www.mega-nerd.com/libsndfile/
++* test your kernel and your rootfs in virtualisation systems
 +
-+comment "libsndfile requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
-diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
-index 8cbe021..370259b 100644
---- a/package/multimedia/gst-plugins-bad/Config.in
-+++ b/package/multimedia/gst-plugins-bad/Config.in
-@@ -305,6 +305,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SDL
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SNDFILE
- 	bool "sndfile"
- 	select BR2_PACKAGE_LIBSNDFILE
-+	depends on BR2_LARGEFILE
++* install your rootfs on the target to test it
 +
-+comment "gst-plugins-bad-plugin-sndfile requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
- 
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VCD
- 	bool "vcd"
-diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
-index 1498ed0..978aa0b 100644
---- a/package/multimedia/gst-plugins-good/Config.in
-+++ b/package/multimedia/gst-plugins-good/Config.in
-@@ -198,6 +198,7 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS4
- 
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
-+	depends on BR2_LARGEFILE # pulseaudio -> libsndfile
- 	select BR2_PACKAGE_PULSEAUDIO
- 	bool "pulseaudio"
- 
-diff --git a/package/multimedia/mpd/Config.in b/package/multimedia/mpd/Config.in
-index 2e44741..6e5c690 100644
---- a/package/multimedia/mpd/Config.in
-+++ b/package/multimedia/mpd/Config.in
-@@ -41,6 +41,7 @@ config BR2_PACKAGE_MPD_AUDIOFILE
- config BR2_PACKAGE_MPD_PULSEAUDIO
- 	bool "pulseaudio"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
-+	depends on BR2_LARGEFILE # pulseaudio -> libsndfile
- 	select BR2_PACKAGE_PULSEAUDIO
- 	help
- 	  Enable pulseaudio output support.
-@@ -105,10 +106,14 @@ config BR2_PACKAGE_MPD_LIBSAMPLERATE
- config BR2_PACKAGE_MPD_LIBSNDFILE
- 	bool "libsndfile"
- 	select BR2_PACKAGE_LIBSNDFILE
-+	depends on BR2_LARGEFILE
- 	help
- 	  Enable libsndfile input/streaming support.
- 	  Select this if you want to play back WAV files.
- 
-+comment "mpd-libsndfile requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
++This stuff is really depending on each project and hardware, so we cannot describe every solution here, and this is where Buildroot's work ends. The following section aims at guiding new user on what to do next to avoid staying in the dark. It is *not* an exact guide on how to precisely do what is described. Please take the time to have a look to refered projets to get those details.
 +
- config BR2_PACKAGE_MPD_MAD
- 	bool "mad"
- 	default y
-diff --git a/package/multimedia/pulseaudio/Config.in b/package/multimedia/pulseaudio/Config.in
-index eeb8b5a..03c2613 100644
---- a/package/multimedia/pulseaudio/Config.in
-+++ b/package/multimedia/pulseaudio/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_PULSEAUDIO
- 	select BR2_PACKAGE_LIBSNDFILE
- 	select BR2_PACKAGE_SPEEX
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-+	depends on BR2_LARGEFILE
- 	help
- 	  PulseAudio is a sound system for POSIX OSes, meaning that it
- 	  is a proxy for your sound applications. It allows you to do
-@@ -18,5 +19,5 @@ config BR2_PACKAGE_PULSEAUDIO
++Generate a bootable raw disk file
++---------------------------------
++
++If you plan to use virtual machines, or to copy a binary bootable image to your target, you will need to create a "virtual disk". To create a bootable raw disk file you will need to :
++
++* create an empty file with "dd"
++
++* partition the file as a disk with "fdisk"
++
++* set the MBR
++
++* create virtual devices in /dev pointing to your virtual disk partitions (as you will have with /dev/sda, /dev/sda1, /dev/sda2,...) with http://robert.penz.name/73/kpartx-a-tool-for-mounting-partitions-within-an-image-file/[kpartx] 
++
++* mount one (or several) partition of your virtual disk with "mount" 
++
++* extract your rootfs, boot folder,home directory, ... into them. 
++
++Network boot
++-------------
++
++Some device doesn't have external memory and need to be booted to be able to install the rootfs. A nice way of doing this is to boot from the network. If your device allows you to do that you will be able to :
++
++* test the in-progress-rootfs without installing it on your system (it prevents ruining flash memories)
++
++* create a second buildroot project with a minimalist installer that will install your production rootfs on the target.
++
++
++Network bootloaders (PXE,iPXE)
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++To fully boot on the network you need a network bootloader. This is optionnal and you could use your classic bootloader to mount a NFS rootfs.
++
++http://download.intel.com/design/archives/wfm/downloads/pxespec.pdf[PXE] is a specification that has been implemented at least by http://www.syslinux.org/wiki/index.php/PXELINUX[PXELINUX] and http://ipxe.org/[iPXE].
++
++The main idea is to have a DHCP server that provide a link to a generic boot ROM that is accessible from a simple FTP server (TFTP). Then your target boots with it and come back to the TFTP server to get the specific stuff (for instance it's boot menu).
++
++Here is some hints on how to setup this :
++http://www.digitalpeer.com/id/linuxnfs
++
++
++NFS rootfs mount on "/"
++~~~~~~~~~~~~~~~~~~~~~~~
++
++The idea is to mount "/" with a network shared folder from a http://tldp.org/HOWTO/NFS-HOWTO/index.html[NFS] server (in general your dev host). To enable the NFS-boot, you shall activate the _tar root filesystem_ option in the _Filesystem images_ menu.
++
++Your embedded kernel need at least the following option :
++
++* NFS filesystem support (CONFIG_NFS_FS).
++
++* Root file system on NFS (CONFIG_ROOT_NFS).
++
++* Ethernet (CONFIG_NET_ETHERNET).
++
++* The ethernet driver for the embedded network card.
++
++* IP: kernel level autoconfiguration (CONFIG_IP_PNP, CONFIG_IP_PNP_BOOTTP, CONFIG_IP_PNP_DHCP).
  
- 	  http://pulseaudio.org
+ After a complete build, just run the following commands to setup the
+-NFS-root directory:
++NFS-root directory of the server :
  
--comment "pulseaudio requires a toolchain with WCHAR and threads support"
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "pulseaudio requires a toolchain with WCHAR, LARGEFILE and threads support"
-+	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+ -------------------
+ sudo tar -xavf /path/to/output_dir/rootfs.tar -C /path/to/nfs_root_dir
+@@ -21,10 +81,13 @@ sudo tar -xavf /path/to/output_dir/rootfs.tar -C /path/to/nfs_root_dir
+ 
+ Remember to add this path to +/etc/exports+.
+ 
+-Then, you can execute a NFS-boot from your target.
++Then, you can execute a NFS-boot from your target. Here is a documentation hints :
++
++
++
+ 
+-Chroot
+-------
++Chroot into generated image
++---------------------------
+ 
+ If you want to chroot in a generated image, then there are few thing
+ you should be aware of:
+diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
+index 2b24412..1f146ad 100644
+--- a/docs/manual/customize-toolchain.txt
++++ b/docs/manual/customize-toolchain.txt
+@@ -16,6 +16,18 @@ generate it.
+ It also requires to set the Buildroot settings according to the toolchain ones
+ (see xref:external-toolchain[]).
+ 
++Using the Crosstool-NG backend
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++The http://crosstool-ng.org[crosstool-NG] toolchain backend enables a rather
++limited set of settings under the Buildroot +Toolchain+ menu:
++
++* The http://crosstool-ng.org[crosstool-NG] configuration file
++
++* Gdb and some toolchain options
++
++Then, the toolchain can be fine-tuned by invoking +make ctng-menuconfig+.
++
+ Using the internal Buildroot toolchain backend
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+@@ -33,14 +45,33 @@ However, it allows to tune major settings, such as:
+ These settings are available after selecting the +Buildroot toolchain+ type in
+ the menu +Toolchain+.
+ 
+-Using the Crosstool-NG backend
+-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+-The http://crosstool-ng.org[crosstool-NG] toolchain backend enables a rather
+-limited set of settings under the Buildroot +Toolchain+ menu:
++The common use case is to have a buildroot setup where you disable everything from the following menus:
+ 
+-* The http://crosstool-ng.org[crosstool-NG] configuration file
++* System configuration
+ 
+-* Gdb and some toolchain options
++* Package Selection for the target
++
++* Filesystem images
++
++* Bootloaders
++
++* Kernel
++
++And build this out of sources with :
++---------------------------------------
++ $ make menuconfig O=/path/to/somewhere
++---------------------------------------
++
++Then configure your working configuration with :
++
++* Toolchain type (External toolchain)
++
++* Toolchain (Custom toolchain)
++
++* Toolchain origin (Pre-installed toolchain)
++
++* (/path/to/somewhere/host/usr) Toolchain path
++
++Note that builroot toolchains are *not* relocable, so if you plan to share it with other machines, you will *have to* install it in the same position ("/path/to/somewhere")
+ 
+-Then, the toolchain can be fine-tuned by invoking +make ctng-menuconfig+.
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+index 8cd77c0..80574bd 100644
+--- a/docs/manual/make-tips.txt
++++ b/docs/manual/make-tips.txt
+@@ -53,6 +53,18 @@ and target trees, the images and the toolchain):
+  $ make clean
+ --------------------
+ 
++
++The present manual sources are in the buildroot/docs/manual folder. You may compile them with :
++
++---------------------------------
++ $ make manual-clean
++ $ make manual
++---------------------------------
++
++The output documentation is provided in the buildroot/output/docs/manual folder.
++
++*Note* : asciidoc is required to build it. There is a known issue that you can't build it under Dedian Squeeze.
++
+ To delete all build products as well as the configuration:
+ 
+ --------------------
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index c34e0ca..2f49674 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -17,6 +17,8 @@ include::starting-up.txt[]
+ 
+ include::working-with.txt[]
+ 
++include::beyond-buildroot.txt[]
++
+ include::faq-troubleshooting.txt[]
+ 
+ include::going-further.txt[]
+@@ -25,8 +27,6 @@ include::developer-guide.txt[]
+ 
+ include::legal-notice.txt[]
+ 
+-include::beyond-buildroot.txt[]
+-
+ include::get-involved.txt[]
+ 
+ include::contribute.txt[]
+-- 
+1.7.9.5
