@@ -1,24 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Feb 2013 16:00:55 +0100
-Subject: [Buildroot] [PATCH 1/3] util-linux: add numbers to patches
-In-Reply-To: <1360018329-3911-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 4 Feb 2013 23:52:07 +0100")
-References: <1360018329-3911-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8738xarejc.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 5 Feb 2013 15:56:33 +0100
+Subject: [Buildroot] [git commit] util-linux: add numbers to patches
+Message-ID: <20130205150055.349559A987@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=01e859ebffe7e0e335ba0b834789c04afea3f404
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> As we are going to add an Xtensa related patch that needs to be
- Thomas> applied *after* the AArch64 patch, let's first add a number to each
- Thomas> util-linux patch file name, so that we know they will be applied in
- Thomas> the right order.
+As we are going to add an Xtensa related patch that needs to be
+applied *after* the AArch64 patch, let's first add a number to each
+util-linux patch file name, so that we know they will be applied in
+the right order.
 
-Committed all 3, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ....patch => util-linux-001-sscanf-no-ms-as.patch} |    0
+ ...patch => util-linux-002-uclibc-build-fix.patch} |    0
+ ... => util-linux-003-fdisk-aarch64-support.patch} |    0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/util-linux-sscanf-no-ms-as.patch b/package/util-linux/util-linux-001-sscanf-no-ms-as.patch
+similarity index 100%
+rename from package/util-linux/util-linux-sscanf-no-ms-as.patch
+rename to package/util-linux/util-linux-001-sscanf-no-ms-as.patch
+diff --git a/package/util-linux/util-linux-uclibc-build-fix.patch b/package/util-linux/util-linux-002-uclibc-build-fix.patch
+similarity index 100%
+rename from package/util-linux/util-linux-uclibc-build-fix.patch
+rename to package/util-linux/util-linux-002-uclibc-build-fix.patch
+diff --git a/package/util-linux/util-linux-fdisk-aarch64-support.patch b/package/util-linux/util-linux-003-fdisk-aarch64-support.patch
+similarity index 100%
+rename from package/util-linux/util-linux-fdisk-aarch64-support.patch
+rename to package/util-linux/util-linux-003-fdisk-aarch64-support.patch
