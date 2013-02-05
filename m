@@ -1,34 +1,107 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Feb 2013 17:17:31 +0100
-Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.1d
-Message-ID: <20130205181329.953549A986@busybox.osuosl.org>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Tue,  5 Feb 2013 19:16:08 +0100
+Subject: [Buildroot] [PATCH v3] New package: gtest
+In-Reply-To: <51113304.5020807@relinux.de>
+References: <51113304.5020807@relinux.de>
+Message-ID: <1360088168-9012-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ae27c455682480af4c2e1c23f21ca3fc450b130b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Google's framework for writing C++ tests on a variety of platforms (Linux,
+Mac OS X, Windows, Cygwin, Windows CE, and Symbian). Based on the xUnit
+architecture. Supports automatic test discovery, a rich set of assertions,
+user-defined assertions, death tests, fatal and non-fatal failures, value-
+and type-parameterized tests, various options for running the tests, and XML
+test report generation.
 
-Fixes CVE-2013-0169, CVE-2012-2686 and CVE-2013-0166.
+Gtest also allows to easily build testsuites for C programs.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+This package allows running testsuites on the target which might be
+advantgeous in certain cases.
+
+http://code.google.com/p/googletest/
+
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
 ---
- package/openssl/openssl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+v2: Fixed whitespace errors
+v3: Renamed to gtest and fixed typos
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index ed52577..b4a3674 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--OPENSSL_VERSION = 1.0.1c
-+OPENSSL_VERSION = 1.0.1d
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+ package/Config.in       |    1 +
+ package/gtest/Config.in |   20 ++++++++++++++++++++
+ package/gtest/gtest.mk  |   23 +++++++++++++++++++++++
+ 3 files changed, 44 insertions(+), 0 deletions(-)
+ create mode 100644 package/gtest/Config.in
+ create mode 100644 package/gtest/gtest.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 2f219b6..845fe57 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -541,6 +541,7 @@ source "package/fftw/Config.in"
+ source "package/libargtable2/Config.in"
+ source "package/argp-standalone/Config.in"
+ source "package/boost/Config.in"
++source "package/gtest/Config.in"
+ source "package/libatomic_ops/Config.in"
+ source "package/libcap/Config.in"
+ source "package/libcap-ng/Config.in"
+diff --git a/package/gtest/Config.in b/package/gtest/Config.in
+new file mode 100644
+index 0000000..9064c6a
+--- /dev/null
++++ b/package/gtest/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_GTEST
++	bool "gtest"
++	depends on BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && BR2_INSTALL_LIBSTDCPP
++	help
++	  Google's framework for writing C++ tests on a variety of platforms (Linux,
++	  Mac OS X, Windows, Cygwin, Windows CE, and Symbian). Based on the xUnit
++	  architecture. Supports automatic test discovery, a rich set of assertions,
++	  user-defined assertions, death tests, fatal and non-fatal failures, value-
++	  and type-parameterized tests, various options for running the tests, and XML
++	  test report generation.
++
++	  Gtest also allows to easily build testsuites for C programs.
++
++	  This package allows running testsuites on the target which might be
++	  advantageous in certain cases.
++
++	  http://code.google.com/p/googletest/
++
++comment "gtest requires a toolchain with c++, WCHAR and PTHREADS support"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+new file mode 100644
+index 0000000..4090c14
+--- /dev/null
++++ b/package/gtest/gtest.mk
+@@ -0,0 +1,23 @@
++#############################################################
++#
++# googletest
++#
++#############################################################
++
++GTEST_VERSION = 1.6.0
++GTEST_SOURCE = gtest-1.6.0.zip
++GTEST_SITE = http://googletest.googlecode.com/files/
++GTEST_INSTALL_STAGING = YES
++GTEST_INSTALL_TARGET = NO
++
++define GTEST_EXTRACT_CMDS
++	unzip  $(DL_DIR)/$(GTEST_SOURCE) -d $(BUILD_DIR)
++endef
++
++define GTEST_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/libgtest.a $(STAGING_DIR)/usr/lib/libgtest.a
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gtest/
++	cp -rp $(@D)/include/gtest/* $(STAGING_DIR)/usr/include/gtest/
++endef
++
++$(eval $(cmake-package))
+-- 
+1.7.0.4
