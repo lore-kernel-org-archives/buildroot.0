@@ -1,36 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 5 Feb 2013 08:45:02 +0100
-Subject: [Buildroot] bug report: c++ programs built by toolchain crash
- by seg fault
-In-Reply-To: <CAJXWAwwHVddYF3StQByTW99aCDksiAwyOa_WdM7AbjGu3i6iJg@mail.gmail.com>
-References: <CAJXWAwwHVddYF3StQByTW99aCDksiAwyOa_WdM7AbjGu3i6iJg@mail.gmail.com>
-Message-ID: <20130205084502.6b370422@skate>
+Subject: [Buildroot] [git commit] liboping: fix legal-info
+Message-ID: <20130205074742.D56BD9A95E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear hayate,
+commit: http://git.buildroot.net/buildroot/commit/?id=94e04800b2bf063628a261f803781de91cbfc791
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 5 Feb 2013 14:24:55 +0800, hayate wrote:
+Fixes http://autobuild.buildroot.org/results/c0bfc03389382235782474b278ca4afd1d283d60
 
-> arm little endian; generic arm; OABI; gcc 4.6.3 with c++ support;
-> uclibc 0.9.31.1
+The included (LGPL) license file is called COPYING.
 
-Can you test with EABI?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/liboping/liboping.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Really OABI is deprecated. It would not be surprising at all that there
-are issues with OABI.
-
-Do you have a compelling reason to stick with OABI if you are making a
-new toolchain?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
+index d852ef9..3198b71 100644
+--- a/package/liboping/liboping.mk
++++ b/package/liboping/liboping.mk
+@@ -10,6 +10,6 @@ LIBOPING_INSTALL_STAGING = YES
+ LIBOPING_DEPENDENCIES = $(if $(BR2_PACKAGE_NCURSES),ncurses)
+ LIBOPING_CONF_OPT = --without-perl-bindings
+ LIBOPING_LICENSE = LGPLv2.1+ GPLv2
+-LIBOPING_LICENSE_FILES = COPYING.LIB
++LIBOPING_LICENSE_FILES = COPYING
+ 
+ $(eval $(autotools-package))
