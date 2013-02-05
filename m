@@ -1,32 +1,38 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 5 Feb 2013 07:50:12 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: add new Microblaze
- toolchains
-In-Reply-To: <1360021954-21225-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1360021954-21225-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20130205055011.GB4116@tarshish>
+From: hayate <hayatelee@gmail.com>
+Date: Tue, 5 Feb 2013 14:24:55 +0800
+Subject: [Buildroot] bug report: c++ programs built by toolchain crash by
+	seg fault
+Message-ID: <CAJXWAwwHVddYF3StQByTW99aCDksiAwyOa_WdM7AbjGu3i6iJg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+menuconfig:
 
-On Tue, Feb 05, 2013 at 12:52:34AM +0100, Thomas Petazzoni wrote:
-> +config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
-> +	bool "Xilinx Little Endian Microblaze GNU Tools"
+arm little endian; generic arm; OABI; gcc 4.6.3 with c++ support;
+uclibc 0.9.31.1
+others are unchanged
 
-[...]
+building is successful
 
-> +config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
-> +	bool "Xilinx Little Endian Microblaze GNU Tools"
+test c++ program
 
-Are both little endian?
+int main()
+{
+    delete new int(2);
+}
 
-baruch
+# arm-buildroot-linux-uclibc-g++ -static test.cpp
+# qemu-arm ./a.out
+qemu: uncaught target signal 11 (Segmentation fault) - core dumped
+Segmentation fault (core dumped)
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+noted that some other programs not involved new and delete run correctly
+
+I'm not sure if this is gcc upstream problem, but post it here for
+confirmation
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130205/6ce89536/attachment.html>
