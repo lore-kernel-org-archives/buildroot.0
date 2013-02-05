@@ -1,41 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Feb 2013 08:43:49 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: add new Microblaze
- toolchains
-In-Reply-To: <20130205055011.GB4116@tarshish>
-References: <1360021954-21225-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20130205055011.GB4116@tarshish>
-Message-ID: <20130205084349.3266b4c0@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 05 Feb 2013 08:44:35 +0100
+Subject: [Buildroot] [PATCH 08/10] liboping: add license information
+In-Reply-To: <87sj5by97p.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Tue, 05 Feb 2013 00:01:46 +0100")
+References: <1359483839-25357-1-git-send-email-gustavo@zacarias.com.ar>
+ <1359483839-25357-8-git-send-email-gustavo@zacarias.com.ar>
+ <87a9rrbp3n.fsf@dell.be.48ers.dk> <51084F32.5000503@zacarias.com.ar>
+ <87sj5by97p.fsf@dell.be.48ers.dk>
+Message-ID: <87wqunw6fw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
-On Tue, 5 Feb 2013 07:50:12 +0200, Baruch Siach wrote:
-> Hi Thomas,
-> 
-> On Tue, Feb 05, 2013 at 12:52:34AM +0100, Thomas Petazzoni wrote:
-> > +config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
-> > +	bool "Xilinx Little Endian Microblaze GNU Tools"
-> 
-> [...]
-> 
-> > +config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
-> > +	bool "Xilinx Little Endian Microblaze GNU Tools"
-> 
-> Are both little endian?
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+ Gustavo> On 01/29/2013 07:29 PM, Peter Korsgaard wrote:
+ >>> Hmm, I don't see any mention og GPL right away, and only a COPYING file
+ >>> (no COPYING.LIB)?
 
-Good catch. No they are not both little endian, and it was way too late
-when I send them, so my copy/pasting was wrong.
+ Gustavo> README
+ Gustavo> src/oping.c
 
-Thanks for the review!
+ Peter> Ahh yes - Committed, thanks.
 
-Thomas
+But that doesn't work as there's no COPYING.LIB:
+
+http://autobuild.buildroot.org/results/c0bfc03389382235782474b278ca4afd1d283d60/build-end.log
+
+I've changed it to use COPYING instead.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
