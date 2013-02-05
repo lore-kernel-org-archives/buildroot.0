@@ -1,43 +1,93 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue,  5 Feb 2013 16:34:31 +0100
-Subject: [Buildroot] [pull request] Pull request for branch arnout-legacy
-Message-ID: <cover.1360078421.git.arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Feb 2013 16:47:45 +0100
+Subject: [Buildroot] [PATCH v2] New package: googletest
+In-Reply-To: <1360077510-6556-1-git-send-email-sho@relinux.de>
+References: <1360076909-5929-1-git-send-email-sho@relinux.de>
+ <1360077510-6556-1-git-send-email-sho@relinux.de>
+Message-ID: <20130205164745.6fc9d9aa@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+Dear Stephan Hoffmann,
 
-Hello,
+On Tue,  5 Feb 2013 16:18:30 +0100, Stephan Hoffmann wrote:
+> Google's framework for writing C++ tests on a variety of platforms (Linux,
+> Mac OS X, Windows, Cygwin, Windows CE, and Symbian). Based on the xUnit
+> architecture. Supports automatic test discovery, a rich set of assertions,
+> user-defined assertions, death tests, fatal and non-fatal failures, value-
+> and type-parameterized tests, various options for running the tests, and XML
+> test report generation.
+> 
+> Googletest also allows to easily build testsuites for C programs.
+> 
+> This package allows running testsuites on the target which might be
+> advanteous in certain cases.
 
-Two patches to clean up the legacy config menu, as discussed in the BR
-developer day.
+Typo: advantageous.
 
-The following changes since commit ddd69b5609cc9bd954afcfc2f91831d64b9cfff7:
+> --- /dev/null
+> +++ b/package/gtest/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_GTEST
 
-  libffi: switch to using a Git version, brings Microblaze and Xtensa support (2013-02-05 15:57:02 +0100)
+Maybe the package directory should be named "googletest" and the option
+BR2_PACKAGE_GOOGLETEST. But I'm not sure since the upstream tarball is
+just "gtest".
 
-are available in the git repository at:
+> +	bool "googletest"
+> +	depends on BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && BR2_INSTALL_LIBSTDCPP
+> +	help
+> +	  Google's framework for writing C++ tests on a variety of platforms (Linux,
+> +	  Mac OS X, Windows, Cygwin, Windows CE, and Symbian). Based on the xUnit
+> +	  architecture. Supports automatic test discovery, a rich set of assertions,
+> +	  user-defined assertions, death tests, fatal and non-fatal failures, value-
+> +	  and type-parameterized tests, various options for running the tests, and XML
+> +	  test report generation.
+> +
+> +	  Googletest also allows to easily build testsuites for C programs.
+> +
+> +	  This package allows running testsiuites on the target which might be
 
-  https://git.gitorious.org/buildroot/buildroot.git arnout-legacy
+testsuites
 
-for you to fetch changes up to a5670953b17e7bbae7daf2ae2a98fdc43d53d8ad:
+> +	  advanteous in certain cases.
 
-  Legacy: order the options reverse-chronologically. (2013-02-05 16:03:35 +0100)
+advantageous
 
-----------------------------------------------------------------
-Arnout Vandecappelle (Essensium/Mind) (2):
-      Legacy: make the menu a normal menu.
-      Legacy: order the options reverse-chronologically.
+> +GTEST_VERSION = 1.6.0
+> +GTEST_SOURCE = gtest-1.6.0.zip
+> +GTEST_SITE = http://googletest.googlecode.com/files/
+> +GTEST_INSTALL_STAGING = YES
+> +GTEST_INSTALL_TARGET = NO
 
- Config.in.legacy |   78 ++++++++++++++++++++++++++++--------------------------
- 1 file changed, 40 insertions(+), 38 deletions(-)
---
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Even though I understand that it is composed only of a static library,
+I find this GTEST_INSTALL_TARGET = NO a bit strange. But well, ok.
+
+> +
+> +define GTEST_EXTRACT_CMDS
+> +	unzip  $(DL_DIR)/$(GTEST_SOURCE) -d $(BUILD_DIR)
+> +endef
+
+Maybe some day we will want to have support in the package
+infrastructure to extract .zip files (we already have 3-4 packages that
+could benefit from this). But it can be done later.
+
+> +define GTEST_INSTALL_STAGING_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/libgtest.a $(STAGING_DIR)/usr/lib/libgtest.a
+> +	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gtest/
+> +	cp -rp $(@D)/include/gtest/* $(STAGING_DIR)/usr/include/gtest/
+> +endef
+
+There's no "make install" or something like that?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
