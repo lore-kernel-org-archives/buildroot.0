@@ -1,7 +1,9 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Tue,  5 Feb 2013 16:08:29 +0100
-Subject: [Buildroot] [PATCH] New package: googletest
-Message-ID: <1360076909-5929-1-git-send-email-sho@relinux.de>
+Date: Tue,  5 Feb 2013 16:18:30 +0100
+Subject: [Buildroot] [PATCH v2] New package: googletest
+In-Reply-To: <1360076909-5929-1-git-send-email-sho@relinux.de>
+References: <1360076909-5929-1-git-send-email-sho@relinux.de>
+Message-ID: <1360077510-6556-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,9 +27,9 @@ http://code.google.com/p/googletest/
 Signed-off-by: Stephan Hoffmann <sho@relinux.de>
 ---
  package/Config.in       |    1 +
- package/gtest/Config.in |   22 ++++++++++++++++++++++
+ package/gtest/Config.in |   20 ++++++++++++++++++++
  package/gtest/gtest.mk  |   23 +++++++++++++++++++++++
- 3 files changed, 46 insertions(+), 0 deletions(-)
+ 3 files changed, 44 insertions(+), 0 deletions(-)
  create mode 100644 package/gtest/Config.in
  create mode 100644 package/gtest/gtest.mk
 
@@ -45,19 +47,19 @@ index 2f219b6..845fe57 100644
  source "package/libcap-ng/Config.in"
 diff --git a/package/gtest/Config.in b/package/gtest/Config.in
 new file mode 100644
-index 0000000..354ea02
+index 0000000..c7581b5
 --- /dev/null
 +++ b/package/gtest/Config.in
-@@ -0,0 +1,22 @@
+@@ -0,0 +1,20 @@
 +config BR2_PACKAGE_GTEST
 +	bool "googletest"
 +	depends on BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && BR2_INSTALL_LIBSTDCPP
 +	help
 +	  Google's framework for writing C++ tests on a variety of platforms (Linux,
-+	  Mac OS X, Windows, Cygwin, Windows CE, and Symbian). Based on the xUnit 
-+	  architecture. Supports automatic test discovery, a rich set of assertions, 
-+	  user-defined assertions, death tests, fatal and non-fatal failures, value- 
-+	  and type-parameterized tests, various options for running the tests, and XML 
++	  Mac OS X, Windows, Cygwin, Windows CE, and Symbian). Based on the xUnit
++	  architecture. Supports automatic test discovery, a rich set of assertions,
++	  user-defined assertions, death tests, fatal and non-fatal failures, value-
++	  and type-parameterized tests, various options for running the tests, and XML
 +	  test report generation.
 +
 +	  Googletest also allows to easily build testsuites for C programs.
@@ -69,8 +71,6 @@ index 0000000..354ea02
 +
 +comment "googletest requires a toolchain with c++, WCHAR and PTHREADS support"
 +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+
-+
 diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
 new file mode 100644
 index 0000000..4090c14
