@@ -1,21 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Feb 2013 21:44:51 +0100
-Subject: [Buildroot] [PATCH 1/2] squid: bump to version 3.2.7
-In-Reply-To: <1360092591-14958-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 5 Feb 2013 16:29:50 -0300")
-References: <1360092591-14958-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87r4kuo5h8.fsf@dell.be.48ers.dk>
+Date: Tue, 05 Feb 2013 21:46:15 +0100
+Subject: [Buildroot] [PATCH] libsndfile: Add dependency on BR2_LARGEFILE
+In-Reply-To: <1360083605-10855-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 5 Feb 2013 18:00:05 +0100")
+References: <1360083605-10855-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87mwvio5ew.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Thomas> From: Ryan Mallon <rmallon@gmail.com>
+ Thomas> libsndfile requires sizeof(sf_count_t) == 8, where sf_count_t is a
+ Thomas> typedef alias for off_t. This is not true by default for all
+ Thomas> tool-chains, which leads to a runtime assert failure in binaries
+ Thomas> compiled against libsndfile. See:
 
-Committed both, thanks.
+ Thomas>   http://permalink.gmane.org/gmane.comp.audio.libsndfile.devel/229
+
+ Thomas> Add a dependency on BR2_LARGEFILE for libsndfile, and a comment if
+ Thomas> BR2_LARGEFILE is not selected.
+
+ Thomas> [Thomas: rebased patch, added more propagation of the new
+ Thomas> BR2_LARGEFILE dependency to gst-plugins-good and mpd.]
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
