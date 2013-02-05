@@ -1,59 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  5 Feb 2013 08:38:19 -0300
-Subject: [Buildroot] [PATCH] busybox: add mdev patch for 1.21.0
-Message-ID: <1360064299-12709-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 5 Feb 2013 12:23:01 +0100
+Subject: [Buildroot] [git commit] samba: security bump to version 3.6.12
+Message-ID: <20130205114043.BC01D9A964@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../busybox-1.21.0/busybox-1.21.0-mdev.patch       | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/busybox/busybox-1.21.0/busybox-1.21.0-mdev.patch
+commit: http://git.buildroot.net/buildroot/commit/?id=b93bc6ebdcbae89547dc89dbce4701ea8037e02b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-mdev.patch b/package/busybox/busybox-1.21.0/busybox-1.21.0-mdev.patch
-new file mode 100644
-index 0000000..cb873fa
---- /dev/null
-+++ b/package/busybox/busybox-1.21.0/busybox-1.21.0-mdev.patch
-@@ -0,0 +1,35 @@
-+--- busybox-1.21.0/util-linux/mdev.c
-++++ busybox-1.21.0-mdev/util-linux/mdev.c
-+@@ -661,6 +661,8 @@ static void make_device(char *device_nam
-+ 			if (mknod(node_name, rule->mode | type, makedev(major, minor)) && errno != EEXIST)
-+ 				bb_perror_msg("can't create '%s'", node_name);
-+ 			if (ENABLE_FEATURE_MDEV_CONF) {
-++				if (G.verbose)
-++					bb_error_msg("chmod: %o chown: %u:%u", rule->mode, rule->ugid.uid, rule->ugid.gid);
-+ 				chmod(node_name, rule->mode);
-+ 				chown(node_name, rule->ugid.uid, rule->ugid.gid);
-+ 			}
-+@@ -813,6 +815,7 @@ static void load_firmware(const char *fi
-+ 		full_write(loading_fd, "-1", 2);
-+ 
-+  out:
-++	xchdir("/dev");
-+ 	if (ENABLE_FEATURE_CLEAN_UP) {
-+ 		close(firmware_fd);
-+ 		close(loading_fd);
-+@@ -919,11 +922,13 @@ int mdev_main(int argc UNUSED_PARAM, cha
-+ 		}
-+ 
-+ 		{
-+-			int logfd = open("/dev/mdev.log", O_WRONLY | O_APPEND);
-++			int logfd = open("mdev.log", O_WRONLY | O_APPEND);
-+ 			if (logfd >= 0) {
-+ 				xmove_fd(logfd, STDERR_FILENO);
-+ 				G.verbose = 1;
-+-				bb_error_msg("seq: %s action: %s", seq, action);
-++				if (seq)
-++					applet_name = xasprintf("%s[%s]", applet_name, seq);
-++				bb_error_msg("action: %s", action);
-+ 			}
-+ 		}
-+ 
--- 
-1.7.12.4
+Fixes CVE-2013-0213
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/samba/samba.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 4eb6a33..b31787b 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SAMBA_VERSION = 3.6.11
++SAMBA_VERSION = 3.6.12
+ SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA_SUBDIR = source3
+ SAMBA_INSTALL_STAGING = YES
