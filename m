@@ -1,32 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  5 Feb 2013 16:29:51 -0300
-Subject: [Buildroot] [PATCH 2/2] dhcp: bump to version 4.1-ESV-R8
-In-Reply-To: <1360092591-14958-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1360092591-14958-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1360092591-14958-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 05 Feb 2013 20:39:22 +0100
+Subject: [Buildroot] [pull request] Pull request for branch arnout-legacy
+In-Reply-To: <cover.1360078421.git.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Tue, 5 Feb 2013 16:34:31 +0100")
+References: <cover.1360078421.git.arnout@mind.be>
+Message-ID: <87mwvipn2t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/dhcp/dhcp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 8d90ea4..34c0afa 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--DHCP_VERSION = 4.1-ESV-R7
-+DHCP_VERSION = 4.1-ESV-R8
- DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
- DHCP_LICENSE = ISC
- DHCP_LICENSE_FILES = LICENSE
+ Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+ Arnout> Hello,
+
+ Arnout> Two patches to clean up the legacy config menu, as discussed in
+ Arnout> the BR developer day.
+
+ Arnout> The following changes since commit
+ Arnout> ddd69b5609cc9bd954afcfc2f91831d64b9cfff7:
+
+ Arnout>   libffi: switch to using a Git version, brings Microblaze and
+ Arnout>   Xtensa support (2013-02-05 15:57:02 +0100)
+
+ Arnout> are available in the git repository at:
+
+ Arnout>   https://git.gitorious.org/buildroot/buildroot.git arnout-legacy
+
+ Arnout> for you to fetch changes up to
+ Arnout> a5670953b17e7bbae7daf2ae2a98fdc43d53d8ad:
+
+ Arnout>   Legacy: order the options reverse-chronologically. (2013-02-05 16:03:35 +0100)
+
+ Arnout> ----------------------------------------------------------------
+ Arnout> Arnout Vandecappelle (Essensium/Mind) (2):
+ Arnout>       Legacy: make the menu a normal menu.
+ Arnout>       Legacy: order the options reverse-chronologically.
+
+Committed both, thanks.
+
 -- 
-1.7.12.4
+Bye, Peter Korsgaard
