@@ -1,79 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Feb 2013 09:45:24 +0100
-Subject: [Buildroot] [git commit] libupnp: security bump to version 1.6.18
-Message-ID: <20130205084643.3DC929A96D@busybox.osuosl.org>
+Date: Tue, 5 Feb 2013 10:39:17 +0100
+Subject: [Buildroot] [git commit] gnutls: bump version
+Message-ID: <20130205093948.29B3A9A95F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b8daf87b1526f258c5c1b48dfb2b7dcf21bfe0e
+commit: http://git.buildroot.net/buildroot/commit/?id=ab6f23bda038e83c7ff4f407579572fd4f4d8437
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2012-5958, CVE-2012-5959, CVE-2012-5960, CVE-2012-5961,
-CVE-2012-5962, CVE-2012-5963, CVE-2012-5964 and CVE-2012-5965.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libupnp/libupnp-1.6.17-no-ipv6.patch |   37 --------------------------
- package/libupnp/libupnp.mk                   |    2 +-
- 2 files changed, 1 insertions(+), 38 deletions(-)
+ package/gnutls/gnutls.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libupnp/libupnp-1.6.17-no-ipv6.patch b/package/libupnp/libupnp-1.6.17-no-ipv6.patch
-deleted file mode 100644
-index 67b3895..0000000
---- a/package/libupnp/libupnp-1.6.17-no-ipv6.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 812bdabc2c293173ea943059a577d480884a6cc1 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Wed, 11 Apr 2012 11:17:45 -0300
--Subject: [PATCH] ssdp_device: exclude IPv6 stuff when there's no IPv6
--
--Add an additional INET_IPV6 exclusion around IPV6_MULTICAST_HOPS since
--the definition isn't guaranteed to exist when the toolchain lacks IPv6
--support.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- upnp/src/ssdp/ssdp_device.c |    2 ++
-- 1 files changed, 2 insertions(+), 0 deletions(-)
--
--diff --git a/upnp/src/ssdp/ssdp_device.c b/upnp/src/ssdp/ssdp_device.c
--index d3517cc..a439005 100644
----- a/upnp/src/ssdp/ssdp_device.c
--+++ b/upnp/src/ssdp/ssdp_device.c
--@@ -210,6 +210,7 @@ static int NewRequestHandler(
-- 			   (char *)&ttl, sizeof(int));
-- 		socklen = sizeof(struct sockaddr_in);
-- 		break;
--+#ifdef INET_IPV6
-- 	case AF_INET6:
-- 		inet_ntop(AF_INET6,
-- 			  &((struct sockaddr_in6 *)DestAddr)->sin6_addr,
--@@ -219,6 +220,7 @@ static int NewRequestHandler(
-- 		setsockopt(ReplySock, IPPROTO_IPV6, IPV6_MULTICAST_HOPS,
-- 			   (char *)&hops, sizeof(hops));
-- 		break;
--+#endif
-- 	default:
-- 		UpnpPrintf(UPNP_CRITICAL, SSDP, __FILE__, __LINE__,
-- 			   "Invalid destination address specified.");
---- 
--1.7.3.4
--
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index 3d4606b..295dace 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index f65b05d..cadc147 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--LIBUPNP_VERSION = 1.6.17
-+LIBUPNP_VERSION = 1.6.18
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
- LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+-GNUTLS_VERSION = 3.1.6
++GNUTLS_VERSION = 3.1.7
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1
+ GNUTLS_LICENSE = GPLv3+ LGPLv3
