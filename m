@@ -1,36 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Feb 2013 11:17:07 +0100
-Subject: [Buildroot] [PATCH 2/3] gnutls: make it non-wchar friendly
-In-Reply-To: <1356530149-12305-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 26 Dec 2012 10:55:48 -0300")
-References: <1356530149-12305-1-git-send-email-gustavo@zacarias.com.ar>
- <1356530149-12305-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ip67t68s.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  5 Feb 2013 07:22:58 -0300
+Subject: [Buildroot] [PATCH] samba: security bump to version 3.6.12
+Message-ID: <1360059778-8482-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Fixes CVE-2013-0213
 
- Gustavo> Make gnutls work for non-wchar toolchains.
- Gustavo> It's just a matter of throwing a helping hand to configure.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/samba/samba.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-While this makes gnutls build, it doesn't actually work as there's no
-rpl_wctomb implementation so the .so ends up with an undefined reference
-to wctomb:
-
-./host/usr/bin/arm-linux-nm -D staging/usr/lib/libgnutls.so.28|grep wctomb
-         U wctomb
-
-Causing linker errors for packages trying to use it:
-
-  CCLD   msmtp
-host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgnutls.so: undefined reference to `wctomb'
-collect2: ld returned 1 exit status
-
-So I'll have to revert this.
-
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 4eb6a33..b31787b 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SAMBA_VERSION = 3.6.11
++SAMBA_VERSION = 3.6.12
+ SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA_SUBDIR = source3
+ SAMBA_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+1.7.12.4
