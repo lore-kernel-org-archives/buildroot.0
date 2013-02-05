@@ -1,78 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  4 Feb 2013 23:13:10 -0300
-Subject: [Buildroot] [PATCH] libupnp: security bump to version 1.6.18
-Message-ID: <1360030390-10197-1-git-send-email-gustavo@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 5 Feb 2013 07:50:12 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: add new Microblaze
+ toolchains
+In-Reply-To: <1360021954-21225-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1360021954-21225-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20130205055011.GB4116@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2012-5958, CVE-2012-5959, CVE-2012-5960, CVE-2012-5961,
-CVE-2012-5962, CVE-2012-5963, CVE-2012-5964 and CVE-2012-5965.
+Hi Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libupnp/libupnp-1.6.17-no-ipv6.patch | 37 ----------------------------
- package/libupnp/libupnp.mk                   |  2 +-
- 2 files changed, 1 insertion(+), 38 deletions(-)
- delete mode 100644 package/libupnp/libupnp-1.6.17-no-ipv6.patch
+On Tue, Feb 05, 2013 at 12:52:34AM +0100, Thomas Petazzoni wrote:
+> +config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
+> +	bool "Xilinx Little Endian Microblaze GNU Tools"
 
-diff --git a/package/libupnp/libupnp-1.6.17-no-ipv6.patch b/package/libupnp/libupnp-1.6.17-no-ipv6.patch
-deleted file mode 100644
-index 67b3895..0000000
---- a/package/libupnp/libupnp-1.6.17-no-ipv6.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 812bdabc2c293173ea943059a577d480884a6cc1 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Wed, 11 Apr 2012 11:17:45 -0300
--Subject: [PATCH] ssdp_device: exclude IPv6 stuff when there's no IPv6
--
--Add an additional INET_IPV6 exclusion around IPV6_MULTICAST_HOPS since
--the definition isn't guaranteed to exist when the toolchain lacks IPv6
--support.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- upnp/src/ssdp/ssdp_device.c |    2 ++
-- 1 files changed, 2 insertions(+), 0 deletions(-)
--
--diff --git a/upnp/src/ssdp/ssdp_device.c b/upnp/src/ssdp/ssdp_device.c
--index d3517cc..a439005 100644
----- a/upnp/src/ssdp/ssdp_device.c
--+++ b/upnp/src/ssdp/ssdp_device.c
--@@ -210,6 +210,7 @@ static int NewRequestHandler(
-- 			   (char *)&ttl, sizeof(int));
-- 		socklen = sizeof(struct sockaddr_in);
-- 		break;
--+#ifdef INET_IPV6
-- 	case AF_INET6:
-- 		inet_ntop(AF_INET6,
-- 			  &((struct sockaddr_in6 *)DestAddr)->sin6_addr,
--@@ -219,6 +220,7 @@ static int NewRequestHandler(
-- 		setsockopt(ReplySock, IPPROTO_IPV6, IPV6_MULTICAST_HOPS,
-- 			   (char *)&hops, sizeof(hops));
-- 		break;
--+#endif
-- 	default:
-- 		UpnpPrintf(UPNP_CRITICAL, SSDP, __FILE__, __LINE__,
-- 			   "Invalid destination address specified.");
---- 
--1.7.3.4
--
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index 3d4606b..295dace 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LIBUPNP_VERSION = 1.6.17
-+LIBUPNP_VERSION = 1.6.18
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
- LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+[...]
+
+> +config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
+> +	bool "Xilinx Little Endian Microblaze GNU Tools"
+
+Are both little endian?
+
+baruch
+
 -- 
-1.7.12.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
