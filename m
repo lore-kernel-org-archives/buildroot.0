@@ -1,40 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Feb 2013 15:56:42 +0100
-Subject: [Buildroot] [git commit] util-linux: add support for Xtensa
-Message-ID: <20130205150055.7C9859A987@busybox.osuosl.org>
+Date: Tue, 5 Feb 2013 15:57:02 +0100
+Subject: [Buildroot] [git commit] libffi: switch to using a Git version,
+	brings Microblaze and Xtensa support
+Message-ID: <20130205150055.C510A9A987@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b26e9f54996f1ccb198bf9599f6760be07da446f
+commit: http://git.buildroot.net/buildroot/commit/?id=ddd69b5609cc9bd954afcfc2f91831d64b9cfff7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas Petazzoni: rename patch to not have the package version in the
-patch file name, adjust the commit title.]
+We already had backported patches for the Blackfin and AArch64
+support, and now we would have needed to also backport the Xtensa
+support and the Microblaze support. This starts to get crazy.
 
-Signed-off-by: Chris Zankel <chris@zankel.net>
+Let's switch to using a Git version from Github, until libffi finally
+releases a new stable version.
+
+In order to achieve this, we also need to:
+
+ * autoreconf the package, so that a libffi.pc file gets generated
+
+ * manually install the libffi.pc file, because it doesn't get
+   installed by libffi Makefile, for some reason
+
+ * remove the part of the target post install hook that was messing
+   with libffi.pc, since it was modifying the one in STAGING_DIR
+   (which is odd for a target post install hook), and the libffi.pc
+   file is anyway not installed to the target anymore.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../util-linux/util-linux-004-xtensa-support.patch |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
+ .../libffi-0001-Add-support-for-Blackfin.patch     | 1044 ---------
+ ...fi-0002-Add-aarch64-support-from-upstream.patch | 2326 --------------------
+ package/libffi/libffi.mk                           |   29 +-
+ 3 files changed, 23 insertions(+), 3376 deletions(-)
 
-diff --git a/package/util-linux/util-linux-004-xtensa-support.patch b/package/util-linux/util-linux-004-xtensa-support.patch
-new file mode 100644
-index 0000000..ab294cc
---- /dev/null
-+++ b/package/util-linux/util-linux-004-xtensa-support.patch
-@@ -0,0 +1,11 @@
-+--- util-linux-2.20.1/fdisk/fdiskbsdlabel.h.orig	2013-01-21 19:17:58.023049856 -0800
-++++ util-linux-2.20.1/fdisk/fdiskbsdlabel.h	2013-01-21 19:18:09.867050151 -0800
-+@@ -49,7 +49,7 @@
-+ #if defined (i386) || defined (__sparc__) || defined (__arm__) || \
-+     defined (__mips__) || defined (__s390__) || defined (__sh__) || \
-+     defined(__x86_64__) || defined (__avr32__) || defined(__cris__) || \
-+-    defined(__aarch64__)
-++    defined(__aarch64__) || defined(__xtensa__)
-+ #define BSD_LABELSECTOR   1
-+ #define BSD_LABELOFFSET   0
-+ #elif defined (__alpha__) || defined (__powerpc__) || defined (__ia64__) || defined (__hppa__)
+Patch is too large, so refusing to show it
