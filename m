@@ -1,42 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 05 Feb 2013 22:28:04 +0100
-Subject: [Buildroot] [PATCH 2/4] target/generic: add filesystem overlay
-	option
-In-Reply-To: <874nhqpkdg.fsf@dell.be.48ers.dk>
-References: <cover.1360084128.git.arnout@mind.be>
- <cover.1360084128.git.arnout@mind.be>
- <228e7c83b0dda1bb7e9ba6748ade0974368b8335.1360084128.git.arnout@mind.be>
- <874nhqpkdg.fsf@dell.be.48ers.dk>
-Message-ID: <51117964.7070409@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 5 Feb 2013 23:09:44 +0100
+Subject: [Buildroot] [git commit] libvncserver: gnutls support needs gcrypt
+	as well
+Message-ID: <20130205221001.17A0D9A0BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/02/13 21:37, Peter Korsgaard wrote:
->   Arnout> +	@for dir in $(call qstrip,$(BR2_ROOTFS_OVERLAY)); do \
->   Arnout> +		if [ -d $${dir} ]; then \
->   Arnout> +			$(call MESSAGE,"Copying overlay $${dir}"); \
->   Arnout> +			rsync -a \
->   Arnout> +				--exclude .svn --exclude .git --exclude .hg --exclude '*~' \
->   Arnout> +				$${dir}/ $(TARGET_DIR); \
->   Arnout> +		fi \
->
-> Similar to the recent discussion about the post-build script, I don't
-> think we should ignore missing (misspelled?) directories, so I dropped
-> the -d test and committed, thanks.
+commit: http://git.buildroot.net/buildroot/commit/?id=cd88dae7e667c5ef8ef4c3fa2e5c65568efbf2e5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  Yes, thanks, that was a left-over from when I had a default value for 
-the overlay.
+Fixes http://autobuild.buildroot.org/results/3b479b8cf751cc0c075ab942b56aad36f79ada71
 
-  Regards,
-  Arnout
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libvncserver/libvncserver.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+index 011b174..550abc4 100644
+--- a/package/libvncserver/libvncserver.mk
++++ b/package/libvncserver/libvncserver.mk
+@@ -31,7 +31,7 @@ else
+ LIBVNCSERVER_CONF_OPT += --without-gcrypt
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GNUTLS),y)
++ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
+ LIBVNCSERVER_DEPENDENCIES += gnutls host-pkgconf
+ else
+ LIBVNCSERVER_CONF_OPT += --without-gnutls
