@@ -1,33 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Feb 2013 21:46:15 +0100
-Subject: [Buildroot] [PATCH] libsndfile: Add dependency on BR2_LARGEFILE
-In-Reply-To: <1360083605-10855-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 5 Feb 2013 18:00:05 +0100")
-References: <1360083605-10855-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87mwvio5ew.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 5 Feb 2013 20:35:33 +0100
+Subject: [Buildroot] [git commit] CHANGES: ARMv8 64bit arch is called AArch64
+Message-ID: <20130205204624.280FB9A9A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8ccef3b3e6428aaa11a63ade4bffb4ae49c4ed2a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> From: Ryan Mallon <rmallon@gmail.com>
- Thomas> libsndfile requires sizeof(sf_count_t) == 8, where sf_count_t is a
- Thomas> typedef alias for off_t. This is not true by default for all
- Thomas> tool-chains, which leads to a runtime assert failure in binaries
- Thomas> compiled against libsndfile. See:
+Thanks to Thomas for noticing.
 
- Thomas>   http://permalink.gmane.org/gmane.comp.audio.libsndfile.devel/229
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Thomas> Add a dependency on BR2_LARGEFILE for libsndfile, and a comment if
- Thomas> BR2_LARGEFILE is not selected.
-
- Thomas> [Thomas: rebased patch, added more propagation of the new
- Thomas> BR2_LARGEFILE dependency to gst-plugins-good and mpd.]
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/CHANGES b/CHANGES
+index 316f866..e824762 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,7 +2,7 @@
+ 
+ 	Toolchain: Crosstool-ng 1.17.0, default to GCC 4.6.3, target
+ 	libraries install fixed. Add Linaro ARM
+-	2012.11/2012.12/2013.01, Aarch64 12.11/12.12/13.01. Sourcery
++	2012.11/2012.12/2013.01, AArch64 12.11/12.12/13.01. Sourcery
+ 	CodeBench MIPS 2012.03/09. Infrastructure to warn about
+ 	missing 32bit support for binary toolchains. Add GDB 7.5.1 /
+ 	Remove 6.8 / 7.0 / 7.1.
