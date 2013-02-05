@@ -1,90 +1,41 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Tue, 05 Feb 2013 18:01:42 +0100 (CET)
-Subject: [Buildroot] [PATCH v2] New package: googletest
-In-Reply-To: <20130205175752.00d8e32e@skate>
-Message-ID: <a70ca00d-e52d-4fec-81b0-818674e52883@zimbra2.corp.accelance.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue,  5 Feb 2013 18:16:01 +0100
+Subject: [Buildroot] [PATCH 3/4] busybox: busybox-update-config should
+	depend on busybox-configure
+In-Reply-To: <cover.1360084128.git.arnout@mind.be>
+References: <cover.1360084128.git.arnout@mind.be>
+Message-ID: <906319b949f250124fdd06ea6bf4ac3b44337903.1360084128.git.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-on a slightly related note, the gperftools were previously known as googleperftools
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-so I think settling for gtest rather than googletest would make sense since its the direction google seems to be generally moving
+Before the config file can be copied, it has to exist.  The
+other xxx-update-config targets do this as well.
 
-    Cordialement
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+v4: Rebased against master.
 
-    J?r?my Rosen
+v2: small spelling mistake in commit message
+---
+ package/busybox/busybox.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-fight key loggers : write some perl using vim
-
------ Mail original -----
-> Dear Stephan Hoffmann,
-> 
-> On Tue, 05 Feb 2013 17:27:48 +0100, Stephan Hoffmann wrote:
-> 
-> > >> --- /dev/null
-> > >> +++ b/package/gtest/Config.in
-> > >> @@ -0,0 +1,20 @@
-> > >> +config BR2_PACKAGE_GTEST
-> > > Maybe the package directory should be named "googletest" and the
-> > > option
-> > > BR2_PACKAGE_GOOGLETEST. But I'm not sure since the upstream
-> > > tarball is
-> > > just "gtest".
-> > Hello Thomas,
-> > 
-> > first I named it googletest, but since it is named gtest upstream
-> > and
-> > unzip produces a directory with this name I decided to changed it.
-> 
-> Ok. The fact that we don't control the unzip output directory is a
-> bit
-> annoying, but it's a separate matter.
-> 
-> In general we really try to keep a 1:1 mapping between:
->  * the option name
->  * the directory name
->  * the name of the label attached to the configuration option in the
->    menuconfig
-> 
-> With the current proposal, people would see a "googletest" label in
-> menuconfig, and might therefore look for package/googletest/... which
-> won't exist.
-> 
-> > > Even though I understand that it is composed only of a static
-> > > library,
-> > > I find this GTEST_INSTALL_TARGET = NO a bit strange. But well,
-> > > ok.
-> > Yes, it is, but when there is nothing to install? Maybe it's also
-> > possible to compile it to a .so, but I am not sure if it's worth
-> > the
-> > effort. This way we can use googletest on the target and, when the
-> > testuites are not instaled, do not waste any space there.
-> 
-> Ok.
-> 
-> > BTW: Running googletest on the target out of eclipse works well.
-> 
-> Does it mean that you're using the Eclipse Buildroot plugin?
-> 
-> > I didn't find any. Of course it would be nicer. As far as I
-> > understand
-> > the documentation one shall point the compiler and linker to the
-> > build
-> > directory.
-> 
-> Ok.
-> 
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 9154c08..599e145 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -223,5 +223,5 @@ busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
+ 	rm -f $(BUSYBOX_DIR)/.stamp_built
+ 	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
+ 
+-busybox-update-config:
++busybox-update-config: busybox-configure
+ 	cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
+-- 
+1.7.10.4
