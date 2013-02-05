@@ -1,37 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Feb 2013 15:16:29 +0100
-Subject: [Buildroot] [PATCH v3] Make external toolchain relocatable
-In-Reply-To: <1342350726-29970-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sun, 15 Jul 2012 13:12:05 +0200")
-References: <1342350726-29970-1-git-send-email-arnout@mind.be>
-Message-ID: <877gmmrgle.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  5 Feb 2013 14:41:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 5900] config flags to the Xenomai build system ...
+In-Reply-To: <bug-5900-163@https.bugs.busybox.net/>
+References: <bug-5900-163@https.bugs.busybox.net/>
+Message-ID: <20130205144156.10DBC9A986@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+https://bugs.busybox.net/show_bug.cgi?id=5900
 
- Arnout> The external toolchain wrapper sets sysroot etc. to an absolute path.
- Arnout> By changing this to a relative path, it is possible to move the host
- Arnout> directory to a different location and still have a working build
- Arnout> system.
+--- Comment #4 from teratux <raespi@icid.cu> 2013-02-05 14:42:17 UTC ---
+I asked the Xenomai team and this is their response:
 
- Arnout> This only works for a downloaded external toolchain.  For a
- Arnout> pre-installed external toolchain, it is possible to move the
- Arnout> host directory to a different location, but not the external
- Arnout> toolchain directory (it does work if the external toolchain
- Arnout> directory lies within the host directory).  For an internal or
- Arnout> crosstool-ng toolchain, there is no wrapper so updating the
- Arnout> sysroot path should be done in a different way.
+Xenomai does not do anything special, it uses the autotools default
+which is:
+- if you pass CFLAGS and LDFLAGS on the right hand of the configure
+command line, the generated makefiles are hardcoded with these flags
+values, and you need not do anything special later on to get these flags
+used for all the compilations. This has been the recommended way of
+passing CFLAGS and LDFLAGS when building autotools-based projects for
+many years.
 
- Arnout> See
- Arnout> http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html
- Arnout> for information about others things to do to make the host
- Arnout> directory relocatable.
+- if you want to pass them as environment variables (so, on the left
+hand of the configure command line), the makefiles are not generated
+with these flags, so, you have to pass them in the environment of the
+"make" command.
 
-Committed, thanks.
+Maybe buildroot passes the parameters differently ??
+
+(In reply to comment #3)
+> They are in fact not necessarily present on the command line because since you
+> use the internal backend, we build gcc to generate armv4t code by default, so
+> it's not useful to pass -march=armv4t all the time.
+> 
+> Is Xenomai actually checking the presence of those command line flags directly?
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
