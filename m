@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue,  5 Feb 2013 18:16:02 +0100
-Subject: [Buildroot] [PATCH 4/4] Make savedefconfig save to a configured
-	file.
+Date: Tue,  5 Feb 2013 18:16:00 +0100
+Subject: [Buildroot] [PATCH 2/4] target/generic: add filesystem overlay
+	option
 In-Reply-To: <cover.1360084128.git.arnout@mind.be>
 References: <cover.1360084128.git.arnout@mind.be>
-Message-ID: <41e27bc2d2881606d1da299f6056d24bc9d34e78.1360084128.git.arnout@mind.be>
+Message-ID: <228e7c83b0dda1bb7e9ba6748ade0974368b8335.1360084128.git.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,145 +13,126 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-Store BR2_DEFCONFIG in .config, and use it to update the original input
-defconfig file after updating the configuration.  When a config is
-created by using the BR2_DEFCONFIG=... option, this is saved in the
-.config file; later runs of savedefconfig will update that same location.
-It is also possible to configure this place in the interactive
-configuration.
-
-The BR2_DEFCONFIG value itself is not saved into the generated
-defconfig, since Kconfig considers it at its default. This is
-intentional, to avoid hard-coding an absolute path in the defconfig.
-It will anyway be set again when the defconfig is used with the
-'make BR2_DEFCONFIG=... defconfig' command.
-
-As a side-effect of this change, the *config options have been moved out
-of the BR2_HAVE_DOT_CONFIG condition.  This doesn't make any functional
-difference, because the .config is still not read for the *config targets.
-However, the defconfig and savedefconfig targets do need to include
-.config now, which makes them slightly slower.
+The filesystem overlay is a tree that is copied over the target fs
+after building everything - which is currently usually done in the
+post-build script.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
 v4: Rebased against master.
 
-v3: replaced foo_defconfig documentation with BR2_DEFCONFIG.
----
- Config.in                       |   12 ++++++++++++
- Makefile                        |   17 +++++++++++++----
- docs/manual/customize-store.txt |   10 ++++++----
- 3 files changed, 31 insertions(+), 8 deletions(-)
+v3: keep the custom skeleton documentation
 
-diff --git a/Config.in b/Config.in
-index af77a83..4929a80 100644
---- a/Config.in
-+++ b/Config.in
-@@ -22,6 +22,18 @@ config BR2_HOSTARCH_NEEDS_IA32_LIBS
- 
- source "arch/Config.in"
- 
-+config BR2_DEFCONFIG_FROM_ENV
-+	string
-+	option env="BR2_DEFCONFIG"
-+
-+config BR2_DEFCONFIG
-+	string "Location to save buildroot config"
-+	default BR2_DEFCONFIG_FROM_ENV if BR2_DEFCONFIG_FROM_ENV != ""
-+	default "$(CONFIG_DIR)/defconfig"
-+	help
-+	  When running 'make savedefconfig', the defconfig file will be saved
-+	  in this location.
-+
- menu "Build options"
- 
- menu "Commands"
+v2: don't deprecate custom skeleton
+---
+ Makefile                         |    9 +++++++++
+ docs/manual/customize-rootfs.txt |   17 +++++++++++------
+ docs/manual/customize-store.txt  |   13 +++++--------
+ system/Config.in                 |   11 +++++++++++
+ 4 files changed, 36 insertions(+), 14 deletions(-)
+
 diff --git a/Makefile b/Makefile
-index ac59071..1476d97 100644
+index 6f8ed0e..ac59071 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -56,7 +56,7 @@ DATE:=$(shell date +%Y%m%d)
- export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
+@@ -501,6 +501,15 @@ endif
+ 		echo "PRETTY_NAME=\"Buildroot $(BR2_VERSION)\"" \
+ 	) >  $(TARGET_DIR)/etc/os-release
  
- noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
--	defconfig %_defconfig savedefconfig allyesconfig allnoconfig silentoldconfig release \
-+	%_defconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
- 	source-check print-version
- 
-@@ -594,6 +594,8 @@ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
- all: menuconfig
- 
-+endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
++	@for dir in $(call qstrip,$(BR2_ROOTFS_OVERLAY)); do \
++		if [ -d $${dir} ]; then \
++			$(call MESSAGE,"Copying overlay $${dir}"); \
++			rsync -a \
++				--exclude .svn --exclude .git --exclude .hg --exclude '*~' \
++				$${dir}/ $(TARGET_DIR); \
++		fi \
++	done
 +
- # configuration
- # ---------------------------------------------------------------------------
+ ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
+ 	@$(call MESSAGE,"Executing post-build script\(s\)")
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index 6399699..fa04d85 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -24,6 +24,12 @@ there are a few ways to customize the resulting target filesystem.
+   skeleton are copied to output/target before any package
+   installation.
  
-@@ -604,7 +606,12 @@ $(BUILD_DIR)/buildroot-config/%onf:
- 	mkdir -p $(@D)/lxdialog
- 	$(MAKE) CC="$(HOSTCC_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)" obj=$(@D) -C $(CONFIG) -f Makefile.br $(@F)
- 
-+DEFCONFIG = $(call qstrip,$(BR2_DEFCONFIG))
++* Create a filesystem overlay: a tree of files that are copied directly
++  over the target filesystem after it has been built.  Set
++  +BR2_ROOTFS_OVERLAY+ to the top of the tree.  +.git+, +.svn+,
++  +.hg+ directories and files ending with +~+ are excluded.
++  _Among these first 3 methods, this one should be preferred_.
 +
-+# We don't want to fully expand BR2_DEFCONFIG here, so Kconfig will
-+# recognize that if it's still at its default $(CONFIG_DIR)/defconfig
- COMMON_CONFIG_ENV = \
-+	BR2_DEFCONFIG='$(call qstrip,$(value BR2_DEFCONFIG))' \
- 	KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 	KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
- 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
-@@ -682,7 +689,7 @@ silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 
- defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(BR2_DEFCONFIG),=$(BR2_DEFCONFIG)) $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
- 
- %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
-@@ -690,13 +697,15 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --savedefconfig=$(CONFIG_DIR)/defconfig $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) $< \
-+		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
-+		$(CONFIG_CONFIG_IN)
- 
- # check if download URLs are outdated
- source-check:
- 	$(MAKE) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
- 
--endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
-+.PHONY: defconfig savedefconfig
- 
- #############################################################
- #
+ * In the Buildroot configuration, you can specify the path to a
+   *post-build script*, that gets called 'after' Buildroot builds all the
+   selected software, but 'before' the rootfs packages are
+@@ -31,12 +37,11 @@ there are a few ways to customize the resulting target filesystem.
+   specify the location of your post-build script. This option can be
+   found in the +System configuration+ menu. The destination root
+   filesystem folder is given as the first argument to this script,
+-  and this script can then be used to copy programs, static data or
+-  any other needed file to your target filesystem. You should,
+-  however, use this feature with care. Whenever you find that a
+-  certain package generates wrong or unneeded files, you should fix
+-  that package rather than work around it with a post-build cleanup
+-  script. _Among these first 3 methods, this one should be preferred_.
++  and this script can then be used to remove or modify any file in your
++  target filesystem. You should, however, use this feature with care.
++  Whenever you find that a certain package generates wrong or unneeded
++  files, you should fix that package rather than work around it with a
++  post-build cleanup script.
+   You may also use these variables in your post-build script:
+     - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
+     - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
 diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
-index 5d004ea..bf7bd14 100644
+index 435c1b9..5d004ea 100644
 --- a/docs/manual/customize-store.txt
 +++ b/docs/manual/customize-store.txt
-@@ -20,13 +20,15 @@ Buildroot configuration
- ^^^^^^^^^^^^^^^^^^^^^^^
+@@ -136,15 +136,12 @@ you can skip the steps that are not relevant for your use case.
+ 1. Create +board/<manufacturer>/<boardname>/fs-overlay/+ and fill it
+    with additional files you need on your rootfs, e.g.
+    +board/<manufacturer>/<boardname>/fs-overlay/etc/inittab+.
++   Set +BR2_ROOTFS_OVERLAY+
++   to +board/<manufacturer>/<boardname>/fs-overlay+.
+ 1. Create a post-build script
+-   +board/<manufacturer>/<boardname>/post-build.sh+.  It should contain
+-   the following command:
+-+
+-------------
+-rsync -a --exclude .empty --exclude '*~' ${0%/*}/fs-overlay $1
+-------------
+-+
+-1. Set +BR2_ROOTFS_POST_BUILD_SCRIPT+ to +board/<manufacturer>/<boardname>/post-build.sh+
++   +board/<manufacturer>/<boardname>/post-build.sh+.  Set
++   +BR2_ROOTFS_POST_BUILD_SCRIPT+ to
++   +board/<manufacturer>/<boardname>/post-build.sh+
+ 1. If additional setuid permissions have to be set or device nodes have
+    to be created, create +board/<manufacturer>/<boardname>/device_table.txt+
+    and add that path to +BR2_ROOTFS_DEVICE_TABLE+.
+diff --git a/system/Config.in b/system/Config.in
+index 69863c4..fa01d91 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -249,6 +249,17 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
  
- For storing the buildroot configuration itself, buildroot offers the
--following command: +make savedefconfig+
-+following command: +make savedefconfig+.
+ endif # BR2_ROOTFS_SKELETON_DEFAULT
  
- This strips the buildroot configuration down by removing configuration
- options that are@their default value. The result is stored in a file
--called +defconfig+. Copy this file to +foo_defconfig+ in the +configs+
--directory. The configuration can then be rebuilt by running
--+make foo_defconfig+
-+called +defconfig+.  If you want to save it in another place, update set
-+the +BR2_DEFCONFIG+ option, or call make with +make savedefconfig
-+BR2_DEFCONFIG=<path-to-defconfig>+.  The usual place is
-++configs/<boardname>_defconfig+. The configuration can then be rebuilt by
-+running +make <boardname>_defconfig+.
- 
- Alternatively, you can copy the file to any other place and rebuild with
- +make defconfig BR2_DEFCONFIG=<path-to-defconfig-file>+.
++config BR2_ROOTFS_OVERLAY
++	string "Root filesystem overlay directories"
++	default ""
++	help
++	  Specify a list of directories that are copied over the target
++	  root filesystem after the build has finished and before it is
++	  packed into the selected filesystem images.
++
++	  They are copied as-is into the rootfs, excluding files ending with
++	  ~ and .git, .svn and .hg directories.
++
+ config BR2_ROOTFS_POST_BUILD_SCRIPT
+ 	string "Custom script to run before creating filesystem images"
+ 	default ""
 -- 
 1.7.10.4
