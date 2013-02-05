@@ -1,36 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 05 Feb 2013 08:44:35 +0100
-Subject: [Buildroot] [PATCH 08/10] liboping: add license information
-In-Reply-To: <87sj5by97p.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Tue, 05 Feb 2013 00:01:46 +0100")
-References: <1359483839-25357-1-git-send-email-gustavo@zacarias.com.ar>
- <1359483839-25357-8-git-send-email-gustavo@zacarias.com.ar>
- <87a9rrbp3n.fsf@dell.be.48ers.dk> <51084F32.5000503@zacarias.com.ar>
- <87sj5by97p.fsf@dell.be.48ers.dk>
-Message-ID: <87wqunw6fw.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Feb 2013 08:45:02 +0100
+Subject: [Buildroot] bug report: c++ programs built by toolchain crash
+ by seg fault
+In-Reply-To: <CAJXWAwwHVddYF3StQByTW99aCDksiAwyOa_WdM7AbjGu3i6iJg@mail.gmail.com>
+References: <CAJXWAwwHVddYF3StQByTW99aCDksiAwyOa_WdM7AbjGu3i6iJg@mail.gmail.com>
+Message-ID: <20130205084502.6b370422@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+Dear hayate,
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
- Gustavo> On 01/29/2013 07:29 PM, Peter Korsgaard wrote:
- >>> Hmm, I don't see any mention og GPL right away, and only a COPYING file
- >>> (no COPYING.LIB)?
+On Tue, 5 Feb 2013 14:24:55 +0800, hayate wrote:
 
- Gustavo> README
- Gustavo> src/oping.c
+> arm little endian; generic arm; OABI; gcc 4.6.3 with c++ support;
+> uclibc 0.9.31.1
 
- Peter> Ahh yes - Committed, thanks.
+Can you test with EABI?
 
-But that doesn't work as there's no COPYING.LIB:
+Really OABI is deprecated. It would not be surprising at all that there
+are issues with OABI.
 
-http://autobuild.buildroot.org/results/c0bfc03389382235782474b278ca4afd1d283d60/build-end.log
+Do you have a compelling reason to stick with OABI if you are making a
+new toolchain?
 
-I've changed it to use COPYING instead.
+Best regards,
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
