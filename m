@@ -1,150 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  5 Feb 2013 18:00:05 +0100
-Subject: [Buildroot] [PATCH] libsndfile: Add dependency on BR2_LARGEFILE
-Message-ID: <1360083605-10855-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Tue, 05 Feb 2013 18:01:42 +0100 (CET)
+Subject: [Buildroot] [PATCH v2] New package: googletest
+In-Reply-To: <20130205175752.00d8e32e@skate>
+Message-ID: <a70ca00d-e52d-4fec-81b0-818674e52883@zimbra2.corp.accelance.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ryan Mallon <rmallon@gmail.com>
+on a slightly related note, the gperftools were previously known as googleperftools
 
-libsndfile requires sizeof(sf_count_t) == 8, where sf_count_t is a
-typedef alias for off_t. This is not true by default for all
-tool-chains, which leads to a runtime assert failure in binaries
-compiled against libsndfile. See:
+so I think settling for gtest rather than googletest would make sense since its the direction google seems to be generally moving
 
-  http://permalink.gmane.org/gmane.comp.audio.libsndfile.devel/229
+    Cordialement
 
-Add a dependency on BR2_LARGEFILE for libsndfile, and a comment if
-BR2_LARGEFILE is not selected.
+    J?r?my Rosen
 
-[Thomas: rebased patch, added more propagation of the new
-BR2_LARGEFILE dependency to gst-plugins-good and mpd.]
+fight key loggers : write some perl using vim
 
-Signed-off-by: Ryan Mallon <rmallon@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/bluez_utils/Config.in                 |    4 ++++
- package/libsndfile/Config.in                  |    7 +++++++
- package/multimedia/gst-plugins-bad/Config.in  |    4 ++++
- package/multimedia/gst-plugins-good/Config.in |    1 +
- package/multimedia/mpd/Config.in              |    5 +++++
- package/multimedia/pulseaudio/Config.in       |    5 +++--
- 6 files changed, 24 insertions(+), 2 deletions(-)
-
-diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
-index 7ca23fc..72b900c 100644
---- a/package/bluez_utils/Config.in
-+++ b/package/bluez_utils/Config.in
-@@ -22,9 +22,13 @@ config BR2_PACKAGE_BLUEZ_UTILS_AUDIO
- 	bool "audio support"
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_LIBSNDFILE
-+	depends on BR2_LARGEFILE
- 	help
- 	  Audio support
- 
-+comment "bluez-utils audio requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
-+
- config BR2_PACKAGE_BLUEZ_UTILS_USB
- 	bool "USB support"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-diff --git a/package/libsndfile/Config.in b/package/libsndfile/Config.in
-index 9afe496..cdba70b 100644
---- a/package/libsndfile/Config.in
-+++ b/package/libsndfile/Config.in
-@@ -1,8 +1,15 @@
- config BR2_PACKAGE_LIBSNDFILE
- 	bool "libsndfile"
-+	# The absence of largefile doesn't prevent libsndfile to
-+	# build, but at runtime the code assumes that off_t is 64
-+	# bits, and asserts if not.
-+	depends on BR2_LARGEFILE
- 	help
- 	  Libsndfile is a C library for reading and writing files containing
- 	  sampled sound (such as MS Windows WAV and the Apple/SGI AIFF format)
- 	  through one standard library interface.
- 
- 	  http://www.mega-nerd.com/libsndfile/
-+
-+comment "libsndfile requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
-diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
-index 8cbe021..370259b 100644
---- a/package/multimedia/gst-plugins-bad/Config.in
-+++ b/package/multimedia/gst-plugins-bad/Config.in
-@@ -305,6 +305,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SDL
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SNDFILE
- 	bool "sndfile"
- 	select BR2_PACKAGE_LIBSNDFILE
-+	depends on BR2_LARGEFILE
-+
-+comment "gst-plugins-bad-plugin-sndfile requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
- 
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VCD
- 	bool "vcd"
-diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
-index 1498ed0..978aa0b 100644
---- a/package/multimedia/gst-plugins-good/Config.in
-+++ b/package/multimedia/gst-plugins-good/Config.in
-@@ -198,6 +198,7 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS4
- 
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
-+	depends on BR2_LARGEFILE # pulseaudio -> libsndfile
- 	select BR2_PACKAGE_PULSEAUDIO
- 	bool "pulseaudio"
- 
-diff --git a/package/multimedia/mpd/Config.in b/package/multimedia/mpd/Config.in
-index 2e44741..6e5c690 100644
---- a/package/multimedia/mpd/Config.in
-+++ b/package/multimedia/mpd/Config.in
-@@ -41,6 +41,7 @@ config BR2_PACKAGE_MPD_AUDIOFILE
- config BR2_PACKAGE_MPD_PULSEAUDIO
- 	bool "pulseaudio"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
-+	depends on BR2_LARGEFILE # pulseaudio -> libsndfile
- 	select BR2_PACKAGE_PULSEAUDIO
- 	help
- 	  Enable pulseaudio output support.
-@@ -105,10 +106,14 @@ config BR2_PACKAGE_MPD_LIBSAMPLERATE
- config BR2_PACKAGE_MPD_LIBSNDFILE
- 	bool "libsndfile"
- 	select BR2_PACKAGE_LIBSNDFILE
-+	depends on BR2_LARGEFILE
- 	help
- 	  Enable libsndfile input/streaming support.
- 	  Select this if you want to play back WAV files.
- 
-+comment "mpd-libsndfile requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
-+
- config BR2_PACKAGE_MPD_MAD
- 	bool "mad"
- 	default y
-diff --git a/package/multimedia/pulseaudio/Config.in b/package/multimedia/pulseaudio/Config.in
-index eeb8b5a..03c2613 100644
---- a/package/multimedia/pulseaudio/Config.in
-+++ b/package/multimedia/pulseaudio/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_PULSEAUDIO
- 	select BR2_PACKAGE_LIBSNDFILE
- 	select BR2_PACKAGE_SPEEX
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-+	depends on BR2_LARGEFILE
- 	help
- 	  PulseAudio is a sound system for POSIX OSes, meaning that it
- 	  is a proxy for your sound applications. It allows you to do
-@@ -18,5 +19,5 @@ config BR2_PACKAGE_PULSEAUDIO
- 
- 	  http://pulseaudio.org
- 
--comment "pulseaudio requires a toolchain with WCHAR and threads support"
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "pulseaudio requires a toolchain with WCHAR, LARGEFILE and threads support"
-+	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
--- 
-1.7.9.5
+----- Mail original -----
+> Dear Stephan Hoffmann,
+> 
+> On Tue, 05 Feb 2013 17:27:48 +0100, Stephan Hoffmann wrote:
+> 
+> > >> --- /dev/null
+> > >> +++ b/package/gtest/Config.in
+> > >> @@ -0,0 +1,20 @@
+> > >> +config BR2_PACKAGE_GTEST
+> > > Maybe the package directory should be named "googletest" and the
+> > > option
+> > > BR2_PACKAGE_GOOGLETEST. But I'm not sure since the upstream
+> > > tarball is
+> > > just "gtest".
+> > Hello Thomas,
+> > 
+> > first I named it googletest, but since it is named gtest upstream
+> > and
+> > unzip produces a directory with this name I decided to changed it.
+> 
+> Ok. The fact that we don't control the unzip output directory is a
+> bit
+> annoying, but it's a separate matter.
+> 
+> In general we really try to keep a 1:1 mapping between:
+>  * the option name
+>  * the directory name
+>  * the name of the label attached to the configuration option in the
+>    menuconfig
+> 
+> With the current proposal, people would see a "googletest" label in
+> menuconfig, and might therefore look for package/googletest/... which
+> won't exist.
+> 
+> > > Even though I understand that it is composed only of a static
+> > > library,
+> > > I find this GTEST_INSTALL_TARGET = NO a bit strange. But well,
+> > > ok.
+> > Yes, it is, but when there is nothing to install? Maybe it's also
+> > possible to compile it to a .so, but I am not sure if it's worth
+> > the
+> > effort. This way we can use googletest on the target and, when the
+> > testuites are not instaled, do not waste any space there.
+> 
+> Ok.
+> 
+> > BTW: Running googletest on the target out of eclipse works well.
+> 
+> Does it mean that you're using the Eclipse Buildroot plugin?
+> 
+> > I didn't find any. Of course it would be nicer. As far as I
+> > understand
+> > the documentation one shall point the compiler and linker to the
+> > build
+> > directory.
+> 
+> Ok.
+> 
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
