@@ -1,141 +1,92 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 6 Feb 2013 20:00:10 +0100
-Subject: [Buildroot] [PATCH 4/7] package/libedit2: new package
-In-Reply-To: <5110390A.1040708@mind.be>
-References: <cover.1359993560.git.yann.morin.1998@free.fr>
- <d4a01f43840a933d1829c6e453378c995be77f4e.1359993560.git.yann.morin.1998@free.fr>
- <5110390A.1040708@mind.be>
-Message-ID: <201302062000.10836.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 06 Feb 2013 18:42:23 +0100
+Subject: [Buildroot] [PATCHv3] util-linux: disable installing binaries
+ by default
+In-Reply-To: <1360158623-19010-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1360158623-19010-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <511295FF.30002@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+On 06/02/13 14:50, Gustavo Zacarias wrote:
+[snip]
+> +config BR2_PACKAGE_UTIL_LINUX_BINARIES
+> +	bool "install utilities"
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
 
-On Monday 04 February 2013 Arnout Vandecappelle wrote:
-> On 04/02/13 17:01, Yann E. MORIN wrote:
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >   package/Config.in                                  |    1 +
-> >   package/libedit2/Config.in                         |    9 +++
-> >   package/libedit2/libedit2-01-Makefile.patch        |   25 +++++++
-> >   package/libedit2/libedit2-02-el.c-issetugid.patch  |   24 ++++++
-> >   package/libedit2/libedit2-03-el.c-MAXPATHLEN.patch |   40 +++++++++++
-> >   .../libedit2/libedit2-04-readline.h-stdio.patch    |   17 +++++
-> >   .../libedit2/libedit2-08-readline-history.h.patch  |   20 +++++
-> >   .../libedit2/libedit2-10-define_SIZE_T_MAX.patch   |   18 +++++
-> >   .../libedit2/libedit2-12-libedit-Makefile.patch    |   54 ++++++++++++++
-> >   package/libedit2/libedit2-20-fortify.patch         |   23 ++++++
-> 
->   Any chance of using libedit_2.11-20080614-5.debian.tar.bz2 instead?
+  Why is libmount selected? It wasn't selected before when you built just 
+one binary, e.g. mount. Same for the other two, actually. Of course, it's 
+possible that configure adds them implicitly anyway, I don't know that.
 
-Hey! ;-)
-Yes, I'll look at it.
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+> +	help
+> +	  Install util-linux binaries.
 
-> > diff --git a/package/libedit2/libedit2.mk b/package/libedit2/libedit2.mk
-> > new file mode 100644
-> > index 0000000..b9ca41e
-> > --- /dev/null
-> > +++ b/package/libedit2/libedit2.mk
-[--SNIP--]
-> > +define POST_PATCH_PERMISSIONS
->   Start the name with LIBEDIT2
+  Maybe it's worth mentioning that selecting this option installs some 
+binaries even if nothing is selected below.
 
-Done.
+[snip]
+> @@ -87,6 +87,41 @@ HOST_UTIL_LINUX_CONF_OPT += \
+>   	--disable-fallocate --disable-unshare --disable-rename \
+>   	--disable-schedutils --disable-wall --disable-partx
+>
+> +# Avoid the basic utilities if we just want the libraries
+> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),y)
+> +define UTIL_LINUX_INSTALL_BINARIES
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> +endef
+> +endif
 
-> > +	chmod +x $(@D)/libedit/makelist
-> > +endef
-> > +
-> > +LIBEDIT2_POST_PATCH_HOOKS += POST_PATCH_PERMISSIONS
-> > +
-> > +define LIBEDIT2_FIX_VIS_H_INCLUDE
-> > +	$(SED) 's/^#include <vis.h>$$/#include <bsd\/vis.h>/;' $(@D)/libedit/filecomplete.c
-> 
->   If you use s,foo,bar, instead of s/foo/bar/ you don't need to quote /. 
+  Shouldn't there be an else here instead of endif? If you do a top-level 
+install, there is no need to explicitly go into the subdirectories as well.
 
-Granted. I usualy do not do that, as I sometime have paths that do contain
-commas, and would broke anyway, so I always explicitly quote '/'.
 
-> Also, the ; is redundant.
+  Regards,
+  Arnout
 
-I like it that all my sed expressions are properly terminated, even if
-it is not mandatory. It is very annoying to me that, when there are two
-or more expressions, they are all terminated, save for the last one...
+> +
+> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
+> +define UTIL_LINUX_INSTALL_LIBBLKID
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libblkid \
+> +		DESTDIR=$(TARGET_DIR) install
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
+> +define UTIL_LINUX_INSTALL_LIBMOUNT
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libmount \
+> +		DESTDIR=$(TARGET_DIR) install
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+> +define UTIL_LINUX_INSTALL_LIBUUID
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libuuid \
+> +		DESTDIR=$(TARGET_DIR) install
+> +endef
+> +endif
+> +
+> +define UTIL_LINUX_INSTALL_TARGET_CMDS
+> +	$(UTIL_LINUX_INSTALL_BINARIES)
+> +	$(UTIL_LINUX_INSTALL_LIBBLKID)
+> +	$(UTIL_LINUX_INSTALL_LIBMOUNT)
+> +	$(UTIL_LINUX_INSTALL_LIBUUID)
+> +endef
+> +
+>   $(eval $(autotools-package))
+>   $(eval $(host-autotools-package))
+>
+>
 
-> > +	$(SED) 's/^#include <vis.h>$$/#include <bsd\/vis.h>/;' $(@D)/libedit/history.c
-> > +	$(SED) 's/^#include <vis.h>$$/#include <bsd\/vis.h>/;' $(@D)/libedit/readline.c
->   Three times the same sed rule => just apply once to all files.
-
-Done.
-
-> > +endef
-> > +LIBEDIT2_POST_PATCH_HOOKS += LIBEDIT2_FIX_VIS_H_INCLUDE
-> > +
-> > +LIBEDIT2_PMAKE_ARGS = MKPROFILE=no MKCATPAGES=no MLINKS= MANPAGES= NOGCCERROR=1         \
->   We normally use _OPTS, not _ARGS.  (There is TARGET_CONFIGURE_ARGS but 
-> it's just plain wrong.)
-
-OK, although I disagree. Those are really 'arguments' to the command (as
-we have when we declare in C: "main( int argc, char** argv )" ). But OK,
-I'll change to keep in sync with the Buildroot naming scheme. ;-)
-
-> > +                      SHLIB_SHFLAGS="-Wl,-soname,libedit.so.${LIBEDIT2_VERSION_MAJOR}"  \
->   Redundant trailing \.
-
-Yep.
-
-[--SNIP--]
-> > +# $1: DESTDIR to install into
-> > +# Can't use pmake to install, it wants to be root. sigh... :-(
-> > +define LIBEDIT2_INSTALL_CMDS
-> > +	$(INSTALL) -D -m 0644 package/libedit2/libedit2.pc $(1)/usr/lib/pkgconfig/libedit2.pc
-> > +	ln -sf libedit2.pc $(1)/usr/lib/pkgconfig/libedit.pc
-> > +	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.a $(1)/usr/lib/libedit.a
-> > +	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit_pic.a $(1)/usr/lib/libedit_pic.a
-> > +	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.so.2.11 $(1)/usr/lib/libedit.so.2.11
-> > +	$(INSTALL) -D -m 0644 $(@D)/libedit/histedit.h $(1)/usr/include/histedit.h
-> > +	ln -sf libedit.so.$(LIBEDIT2_VERSION) $(1)/usr/lib/libedit.so.$(LIBEDIT2_VERSION_MAJOR)
->   This doesn't seem right: LIBEDIT2_VERSION is 2.11-20080614, but you 
-> just installed 2.11...
-
-Hmmm... Lemme check...
-
-> > +	ln -sf libedit.so.$(LIBEDIT2_VERSION_MAJOR) $(1)/usr/lib/libedit.so
-> > +	$(INSTALL) -D -m 0644 $(@D)/libedit/readline/readline.h $(1)/usr/include/editline/readline.h
-> > +	if [ "$(BR2_HAVE_DOCUMENTATION)" = "y" ]; then                                              \
->   This condition is redundant, because the finalize step will remove man 
-> anyway if !BR2_HAVE_DOCUMENTATION.
-
-OK.
-
-> > +	    $(INSTALL) -v -D -m 0644 $(@D)/libedit/editline.3 $(1)/usr/share/man/man3/editline.3el; \
-> > +	    $(INSTALL) -v -D -m 0644 $(@D)/libedit/editrc.3 $(1)/usr/share/man/man5/editrc.5el;     \
-> > +	    for lnk in $(LIBEDIT2_MAN_LINKS); do                                                    \
-> > +	        ln -sfv editline.3el $(1)/usr/share/man/man3/$${lnk}.3el;                           \
-> > +	    done;                                                                                   \
-> > +	fi
-> > +endef
->   A perfect candidate to use the unified TARGET/STAGING install commands!
-
-But for now, we do not have this option. ;-)
-
-> > +#	cd $(@D)/libedit; pmake install incinstall DESTDIR=$(1) $(LIBEDIT2_PMAKE_ARGS)
-> > +#	cd $(@D)/libedit/readline; pmake incinstall DESTDIR=$(1) $(LIBEDIT2_PMAKE_ARGS)
->   Redundant comments.
-
-Yep, Thomas already mentionned it, but I forgot to remove them. Sorry.
-
-Thank you!
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
