@@ -1,9 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed,  6 Feb 2013 17:24:10 +0100
-Subject: [Buildroot] [PATCH 2/5] omap-u-boot-utils: define license
+Date: Wed,  6 Feb 2013 17:24:11 +0100
+Subject: [Buildroot] [PATCH 3/5] qt: define license
 In-Reply-To: <1360167853-7177-1-git-send-email-luca@lucaceresoli.net>
 References: <1360167853-7177-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1360167853-7177-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1360167853-7177-3-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/omap-u-boot-utils/omap-u-boot-utils.mk |    2 ++
+ package/qt/qt.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/omap-u-boot-utils/omap-u-boot-utils.mk b/package/omap-u-boot-utils/omap-u-boot-utils.mk
-index bb894a5..8615fdb 100644
---- a/package/omap-u-boot-utils/omap-u-boot-utils.mk
-+++ b/package/omap-u-boot-utils/omap-u-boot-utils.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index ee1a88b..06237ef 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -16,6 +16,8 @@ QT_SOURCE  = qt-everywhere-opensource-src-$(QT_VERSION).tar.gz
+ QT_SITE    = http://releases.qt-project.org/qt4/source
+ QT_DEPENDENCIES = host-pkgconf
+ QT_INSTALL_STAGING = YES
++QT_LICENSE = LGPLv2.1 with exceptions or GPLv3 or commercial
++QT_LICENSE_FILES = LICENSE.LGPL LGPL_EXCEPTION.txt LICENSE.GPL3
  
- OMAP_U_BOOT_UTILS_VERSION = 8aff852
- OMAP_U_BOOT_UTILS_SITE = http://github.com/nmenon/omap-u-boot-utils/tarball/master
-+OMAP_U_BOOT_UTILS_LICENSE = GPLv2, GPLv2+
-+OMAP_U_BOOT_UTILS_LICENSE_FILES = COPYING
- 
- define HOST_OMAP_U_BOOT_UTILS_BUILD_CMDS
- 	$(MAKE) -C $(@D)
+ ifeq ($(BR2_PACKAGE_QT_LICENSE_APPROVED),y)
+ QT_CONFIGURE_OPTS += -opensource -confirm-license
 -- 
 1.7.10.4
