@@ -1,43 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Feb 2013 11:43:57 +0100
-Subject: [Buildroot] Currently packaging Qt5
-In-Reply-To: <51122C85.2030907@eolane.com>
-References: <20130114105802.1199d10e@skate>
- <CAHQn0kiceG=GK44-_ajFvzvHLh4XrQ0XV+AzPG9CdLiXt0+pkg@mail.gmail.com>
- <20130206110401.66b6d875@skate> <51122C85.2030907@eolane.com>
-Message-ID: <20130206114357.066f4be4@skate>
+From: Victor Hiairrassary <victor.hiairrassary.ml@gmail.com>
+Date: Wed, 6 Feb 2013 12:15:43 +0100
+Subject: [Buildroot] [PATCH] boost: bump version to 1.53.0
+In-Reply-To: <20130206103244.68ca56b4@skate>
+References: <1360143004-29603-1-git-send-email-victor.hiairrassary.ml@gmail.com>
+ <1360143004-29603-2-git-send-email-victor.hiairrassary.ml@gmail.com>
+ <20130206103244.68ca56b4@skate>
+Message-ID: <CAP+5e18W7+M-bmRNJLaXhj2XdMAhnVgQgyvVUHMNk-3FOp-DGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fr?d?ric COIFFIER,
+ On 02/06/2013 10:32 AM, Thomas Petazzoni wrote:
 
-On Wed, 06 Feb 2013 11:12:21 +0100, Fr?d?ric COIFFIER wrote:
+Dear victor.hiairrassary.ml at gmail.com,
 
-> Did you get a patch for solving your segfault with the LinuxFb backend ?
-> I made a similar test few weeks ago and got the same problem on an i.MX6
-> board.
-> I saw your mail in the Qt-project mailing list but no answer from the Qt
-> team
+On Wed,  6 Feb 2013 10:30:04 +0100, victor.hiairrassary.ml at gmail.com
+wrote:
 
-Yes, there were two problems:
 
- * An ioctl() related problem, which I fixed (patch had been sent on
-   the qt-interest mailing list)
+  BOOST_FLAGS =
+-BOOST_WITHOUT_FLAGS = python context
++BOOST_WITHOUT_FLAGS = python atomic
 
- * A crash after that. But I was told a few days ago that the crash
-   only appeared with the specific example application I was trying,
-   and that all the other applications worked fine. Since I got this
-   information, I haven't been able to test it by myself. I'll do so as
-   soon as I start working on Qt5 again, hopefully this week.
+ Maybe there was a reason why "context" was unconditionally excluded
+from the build, before your patch. Did you check why?
 
-Best regards,
+ context was excluded because compilation is impossible with boost
+1.52.0 and uClibc, there is a problem with uintptr_t and intptr_t.
+But this is fixed in latest version, 1.53.0.
+
+Also, it would be good to have a comment here that explains why python
+and atomic are unconditionally excluded for the build.
+
+ atomic is a new boost library since boost 1.53.0. It is excluded because
+it can not compile with uClibc (uintptr_t missing too), but this is now
+fixed in
+trunk version, see ticket https://svn.boost.org/trac/boost/ticket/7979
+
+In this patch, atomic is simply excluded. So either we wait for boost 1.54.0
+releasing orI can add the patch to fix atomic compilation in buildroot and
+add boost-atomic in menuconfig?
+
+I do not nothing about pyhton exclusion, sorry.
+
+ Thanks,
 
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130206/f744c1a1/attachment.html>
