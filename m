@@ -1,501 +1,794 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 06 Feb 2013 01:12:57 +0100
-Subject: [Buildroot] [PATCH 1/2] packages: add ability for packages to
- create users
-In-Reply-To: <5f1de03287fa8817aa692419c52e0997ec3e2489.1360075956.git.yann.morin.1998@free.fr>
-References: <cover.1360075956.git.yann.morin.1998@free.fr>
- <5f1de03287fa8817aa692419c52e0997ec3e2489.1360075956.git.yann.morin.1998@free.fr>
-Message-ID: <5111A009.10304@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed,  6 Feb 2013 08:34:45 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-02-05
+Message-ID: <20130206073446.2491B52C08B@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Although I have a shitload of comments below, there's nothing critical so:
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-On 05/02/13 15:54, Yann E. MORIN wrote:
-[snip]
-> diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-> new file mode 100755
-> index 0000000..d98714c
-> --- /dev/null
-> +++ b/support/scripts/mkusers
-> @@ -0,0 +1,371 @@
-> +#!/bin/bash
+Hello,
 
-  Although we already do depend on bash, I would prefer not to add more 
-dependencies. The only bashism I could find is the 'local' declaration, 
-which unfortunately is really required where it is used in this script. 
-So never mind that.
+On 2013-02-05, 156 random build tests have been done and
+submitted on autobuild.buildroot.net.
+ 101 builds have been successful
+ 55 builds have failed
 
-> +set -e
-> +myname="${0##*/}"
-> +
-> +#----------------------------------------------------------------------------
-> +# Configurable items
-> +MIN_UID=1000
-> +MAX_UID=1999
-> +MIN_GID=1000
-> +MAX_GID=1999
-> +# No more is configurable below this point
-> +#----------------------------------------------------------------------------
-> +
-> +#----------------------------------------------------------------------------
-> +error() {
-> +    local fmt="${1}"
-> +    shift
-> +
-> +    printf "%s: " "${myname}" >&2
-> +    printf "${fmt}" "${@}" >&2
-> +}
-> +fail() {
-> +    error "$@"
-> +    exit 1
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +if [ ${#} -ne 2 ]; then
-> +    fail "usage: %s USERS_TBLE TARGET_DIR\n"
+Below the results of the failed builds. Successful builds are omitted.
 
-  USERS_TABLE
+Build a9af5ea89ba2ab9b5ff42576b5b1ef5f274821dd
+==============================================
 
-> +fi
-> +USERS_TABLE="${1}"
-> +TARGET_DIR="${2}"
-> +shift 2
-> +PASSWD="${TARGET_DIR}/etc/passwd"
-> +SHADOW="${TARGET_DIR}/etc/shadow"
-> +GROUP="${TARGET_DIR}/etc/group"
-> +# /etc/gsahdow is not part of the standard skeleton, so not everybody
+Status         : NOK
+Failure reason : libglib2-2.30.3
+Architecture   : bfin
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 00:07:47
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d4d9ece91e80dad662efbb0c7342ff14096e711b
+End of log     : http://autobuild.buildroot.net/results/a9af5ea89ba2ab9b5ff42576b5b1ef5f274821dd/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/a9af5ea89ba2ab9b5ff42576b5b1ef5f274821dd/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/a9af5ea89ba2ab9b5ff42576b5b1ef5f274821dd/config
+Defconfig      : http://autobuild.buildroot.net/results/a9af5ea89ba2ab9b5ff42576b5b1ef5f274821dd/defconfig
 
-  gshadow
+Build 2e310ed50f2f0714f7950e83ff197aba4b2d1527
+==============================================
 
-> +# will have it, but some may hav it, and its content must be in sync
-> +# with /etc/group, so any use of gshadow must be conditional.
-> +GSHADOW="${TARGET_DIR}/etc/gshadow"
-> +PASSWD_METHOD="$( sed -r -e '/^BR2_TARGET_GENERIC_PASSWD_METHOD="(.)*"$/!d' \
-> +                         -e 's//\1/;'                                       \
-> +                         "${BUILDROOT_CONFIG}"                              \
-> +                )"
+Status         : NOK
+Failure reason : host-gawk-4.0.2
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2013-02-05 01:44:09
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f47ae4ea0f67e1ae093365dc73bf82b7e7fdd80a
+End of log     : http://autobuild.buildroot.net/results/2e310ed50f2f0714f7950e83ff197aba4b2d1527/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/2e310ed50f2f0714f7950e83ff197aba4b2d1527/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/2e310ed50f2f0714f7950e83ff197aba4b2d1527/config
+Defconfig      : http://autobuild.buildroot.net/results/2e310ed50f2f0714f7950e83ff197aba4b2d1527/defconfig
 
-  I'm personally more in favour of sourcing ${BUILDROOT_CONFIG} and using 
-"${BR2_TARGET_GENERIC_PASSWD_METHOD}" directly.
+Build 739f1ceb7bdf5e3485e1833ebd37863f622623c9
+==============================================
 
-> +
-> +#----------------------------------------------------------------------------
-> +get_uid() {
-> +    local username="${1}"
-> +
-> +    awk -F: '$1=="'"${username}"'" { printf( "%d\n", $3 ); }' "${PASSWD}"
+Status         : NOK
+Failure reason : make: *** [liboping-legal-info] Error 1
+Architecture   : i686
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 01:50:47
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/739f1ceb7bdf5e3485e1833ebd37863f622623c9/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/739f1ceb7bdf5e3485e1833ebd37863f622623c9/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/739f1ceb7bdf5e3485e1833ebd37863f622623c9/config
+Defconfig      : http://autobuild.buildroot.net/results/739f1ceb7bdf5e3485e1833ebd37863f622623c9/defconfig
 
-  I personally find it easier to read an awk script that is written like 
-this:
+Build 4077045fa7877b23166708cc4652098bd2d46dba
+==============================================
 
-	awk -F: -v username="${1}" \
-		'$1 == username { printf( "%d\n", $3 ); }'
+Status         : NOK
+Failure reason : libglib2-2.30.3
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 02:24:35
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/4077045fa7877b23166708cc4652098bd2d46dba/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/4077045fa7877b23166708cc4652098bd2d46dba/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/4077045fa7877b23166708cc4652098bd2d46dba/config
+Defconfig      : http://autobuild.buildroot.net/results/4077045fa7877b23166708cc4652098bd2d46dba/defconfig
 
-(i.e. pass variables as awk variables rather than expanding them in the 
-awk script).
+Build 2639445e6d3b47195827b3696d8811c232cfaf5e
+==============================================
 
-  But obviously that's just personal opinion.
+Status         : NOK
+Failure reason : ltrace-0.7.2
+Architecture   : powerpc
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 03:09:26
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/2639445e6d3b47195827b3696d8811c232cfaf5e/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/2639445e6d3b47195827b3696d8811c232cfaf5e/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/2639445e6d3b47195827b3696d8811c232cfaf5e/config
+Defconfig      : http://autobuild.buildroot.net/results/2639445e6d3b47195827b3696d8811c232cfaf5e/defconfig
 
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +get_ugid() {
-> +    local username="${1}"
-> +
-> +    awk -F: '$1=="'"${username}"'" { printf( "%d\n", $4 ); }' "${PASSWD}"
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +get_gid() {
-> +    local group="${1}"
-> +
-> +    awk -F: '$1=="'"${group}"'" { printf( "%d\n", $3 ); }' "${GROUP}"
-> +}
+Build 7ffe53b751b69c4f6c4ba080af5cab0bde7d91e3
+==============================================
 
-  I would define a single get_id for passwd and group, where the file is 
-passed as a parameter. That allows to factor the generate_uid/gid, below, 
-as well.
+Status         : NOK
+Failure reason : make: *** [liboping-legal-info] Error 1
+Architecture   : mipsel
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 03:34:59
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/7ffe53b751b69c4f6c4ba080af5cab0bde7d91e3/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/7ffe53b751b69c4f6c4ba080af5cab0bde7d91e3/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/7ffe53b751b69c4f6c4ba080af5cab0bde7d91e3/config
+Defconfig      : http://autobuild.buildroot.net/results/7ffe53b751b69c4f6c4ba080af5cab0bde7d91e3/defconfig
 
-> +
-> +#----------------------------------------------------------------------------
-> +get_username() {
-> +    local uid="${1}"
-> +
-> +    awk -F: '$3=="'"${uid}"'" { printf( "%s\n", $1 ); }' "${PASSWD}"
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +get_group() {
-> +    local gid="${1}"
-> +
-> +    awk -F: '$3=="'"${gid}"'" { printf( "%s\n", $1 ); }' "${GROUP}"
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +get_ugroup() {
-> +    local username="${1}"
-> +    local ugid
-> +
-> +    ugid="$( get_ugid "${username}" )"
-> +    if [ -n "${ugid}" ]; then
-> +        get_group "${ugid}"
-> +    fi
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +# Sanity-check the new user/group:
-> +#   - check the gid is not already used for another group
-> +#   - check the group does not already exist with another gid
-> +#   - check the user does not already exist with another gid
-> +#   - check the uid is not already used for another user
-> +#   - check the user does not already exist with another uid
-> +#   - check the user does not already exist in another group
-> +check_user_validity() {
-> +    local username="${1}"
-> +    local uid="${2}"
-> +    local group="${3}"
-> +    local gid="${4}"
-> +    local _uid _ugid _gid _username _group _ugroup
-> +
-> +    _group="$( get_group "${gid}" )"
-> +    _gid="$( get_gid "${group}" )"
-> +    _ugid="$( get_ugid "${username}" )"
-> +    _username="$( get_username "${uid}" )"
-> +    _uid="$( get_uid "${username}" )"
-> +    _ugroup="$( get_ugroup "${username}" )"
-> +
-> +    if [ "${username}" = "root" ]; then
-> +        fail "invalid username '%s\n'" "${username}"
-> +    fi
-> +
-> +    if [ ${gid} -lt -1 -o ${gid} -eq 0 ]; then
+Build bd78e7e86db593693a25149bea50f76a138245c3
+==============================================
 
-  If ${gid} is not an integer, this will report:
-[: foo: integer expression expected
-in addition to the error below. Unfortunately there is no way to check 
-for integer, but you could redirect stderr to /dev/null.
+Status         : NOK
+Failure reason : collectd-5.1.2
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 03:40:38
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/bd78e7e86db593693a25149bea50f76a138245c3/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/bd78e7e86db593693a25149bea50f76a138245c3/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/bd78e7e86db593693a25149bea50f76a138245c3/config
+Defconfig      : http://autobuild.buildroot.net/results/bd78e7e86db593693a25149bea50f76a138245c3/defconfig
 
-> +        fail "invalid gid '%d'\n" ${gid}
-> +    elif [ ${gid} -ne -1 ]; then
-> +        # check the gid is not already used for another group
-> +        if [ -n "${_group}" -a "${_group}" != "${group}" ]; then
-> +            fail "gid is already used by group '${_group}'\n"
-> +        fi
-> +
-> +        # check the group does not already exists with another gid
-> +        if [ -n "${_gid}" -a ${_gid} -ne ${gid} ]; then
-> +            fail "group already exists with gid '${_gid}'\n"
-> +        fi
-> +
-> +        # check the user does not already exists with another gid
-> +        if [ -n "${_ugid}" -a ${_ugid} -ne ${gid} ]; then
-> +            fail "user already exists with gid '${_ugid}'\n"
-> +        fi
-> +    fi
-> +
-> +    if [ ${uid} -lt -1 -o ${uid} -eq 0 ]; then
-> +        fail "invalid uid '%d'\n" ${uid}
-> +    elif [ ${uid} -ne -1 ]; then
-> +        # check the uid is not already used for another user
-> +        if [ -n "${_username}" -a "${_username}" != "${username}" ]; then
-> +            fail "uid is already used by user '${_username}'\n"
-> +        fi
-> +
-> +        # check the user does not already exists with another uid
-> +        if [ -n "${_uid}" -a ${_uid} -ne ${uid} ]; then
-> +            fail "user already exists with uid '${_uid}'\n"
-> +        fi
-> +    fi
+Build 5849deada5f033d0e786e170e22d7c8cfeeaed3b
+==============================================
 
-  If the user already exists, I would check that _all_ fields are exactly 
-the same. Otherwise, it depends on the order of evaluation of the .mk 
-files what will end up in the passwd/group file.
+Status         : NOK
+Failure reason : host-gawk-4.0.2
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2013-02-05 03:55:44
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/5849deada5f033d0e786e170e22d7c8cfeeaed3b/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/5849deada5f033d0e786e170e22d7c8cfeeaed3b/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/5849deada5f033d0e786e170e22d7c8cfeeaed3b/config
+Defconfig      : http://autobuild.buildroot.net/results/5849deada5f033d0e786e170e22d7c8cfeeaed3b/defconfig
 
-> +
-> +    # check the user does not already exist in another group
-> +    if [ -n "${_ugroup}" -a "${_ugroup}" != "${group}" ]; then
-> +        fail "user already exists with group '${_ugroup}'\n"
-> +    fi
-> +
-> +    return 0
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +# Generate a unique GID for given group. If the group already exists,
-> +# then simply report its current GID. Otherwise, generate the lowest GID
-> +# that is:
-> +#   - not 0
-> +#   - comprised in [MIN_GID..MAX_GID]
-> +#   - not already used by a group
-> +generate_gid() {
+Build 688457f3032674f7686f0a6669ff4a0ce2ce24f2
+==============================================
 
-  So you could factor generate_gid/uid into a single generate_id which 
-you call like:
+Status         : NOK
+Failure reason : make: *** [liboping-legal-info] Error 1
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 04:07:32
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/688457f3032674f7686f0a6669ff4a0ce2ce24f2/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/688457f3032674f7686f0a6669ff4a0ce2ce24f2/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/688457f3032674f7686f0a6669ff4a0ce2ce24f2/config
+Defconfig      : http://autobuild.buildroot.net/results/688457f3032674f7686f0a6669ff4a0ce2ce24f2/defconfig
 
-generate_id ${group} ${GROUP} ${MIN_GID} ${MAX_GID}
+Build 57c4218cb01115fd0291babd88acfa1d5683608f
+==============================================
 
-> +    local group="${1}"
-> +    local gid
-> +
-> +    gid="$( get_gid "${group}" )"
-> +    if [ -z "${gid}" ]; then
-> +        for(( gid=MIN_GID; gid<=MAX_GID; gid++ )); do
-> +            if [ -z "$( get_group "${gid}" )" ]; then
-> +                break
-> +            fi
-> +        done
-> +        if [ ${gid} -gt ${MAX_GID} ]; then
-> +            fail "can not allocate a GID for group '%s'\n" "${group}"
-> +        fi
-> +    fi
-> +    printf "%d\n" "${gid}"
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +# Add a group; if it does already exist, remove it first
-> +add_one_group() {
-> +    local group="${1}"
-> +    local gid="${2}"
-> +    local _f
-> +
-> +    # Generate a new GID if needed
-> +    if [ ${gid} -eq -1 ]; then
-> +        gid="$( generate_gid "${group}" )"
-> +    fi
-> +
-> +    # Remove any previous instance of this group
-> +    for _f in "${GROUP}" "${GSHADOW}"; do
+Status         : NOK
+Failure reason : make: *** [liboping-legal-info] Error 1
+Architecture   : x86_64
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 04:33:33
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/57c4218cb01115fd0291babd88acfa1d5683608f/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/57c4218cb01115fd0291babd88acfa1d5683608f/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/57c4218cb01115fd0291babd88acfa1d5683608f/config
+Defconfig      : http://autobuild.buildroot.net/results/57c4218cb01115fd0291babd88acfa1d5683608f/defconfig
 
-  Since ${GROUP} always exists, I think having a loop here is harder to 
-read that just repeating the sed call.
+Build fa84c594346a887e69b132c06632b57e3df3f06d
+==============================================
 
-> +        [ -f "${_f}" ] || continue
-> +        sed -r -i -e '/^'"${group}"':.*/d;' "${_f}"
+Status         : NOK
+Failure reason : libvncserver-0.9.9
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 04:34:10
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/fa84c594346a887e69b132c06632b57e3df3f06d/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/fa84c594346a887e69b132c06632b57e3df3f06d/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/fa84c594346a887e69b132c06632b57e3df3f06d/config
+Defconfig      : http://autobuild.buildroot.net/results/fa84c594346a887e69b132c06632b57e3df3f06d/defconfig
 
-  -r is redundant (it's a plain regex).
+Build 021503056641359f4f03812ff65e588c33576ca0
+==============================================
 
-  Quoting could be simpler:
+Status         : NOK
+Failure reason : conntrack-tools-1.4.0
+Architecture   : bfin
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 04:52:53
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/021503056641359f4f03812ff65e588c33576ca0/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/021503056641359f4f03812ff65e588c33576ca0/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/021503056641359f4f03812ff65e588c33576ca0/config
+Defconfig      : http://autobuild.buildroot.net/results/021503056641359f4f03812ff65e588c33576ca0/defconfig
 
-	sed -i -e "/^${group}:.*/d;" "${GROUP}"
+Build 238cfb50a01d5e5151a41fb783a397ad9addfc1b
+==============================================
 
-> +    done
-> +
-> +    printf "%s:x:%d:\n" "${group}" "${gid}" >>"${GROUP}"
-> +    if [ -f "${GSHADOW}" ]; then
+Status         : NOK
+Failure reason : cdrkit-1.1.11
+Architecture   : powerpc
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 04:53:08
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/238cfb50a01d5e5151a41fb783a397ad9addfc1b/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/238cfb50a01d5e5151a41fb783a397ad9addfc1b/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/238cfb50a01d5e5151a41fb783a397ad9addfc1b/config
+Defconfig      : http://autobuild.buildroot.net/results/238cfb50a01d5e5151a41fb783a397ad9addfc1b/defconfig
 
-  Instead of having the condition twice, just put the sed statement for 
-GSHADOW here.
+Build 39e68258f051973f5c8b1643ac67c3b67a33c40b
+==============================================
 
-> +        printf "%s:*::\n" "${group}" >>"${GSHADOW}"
-> +    fi
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +# Generate a unique UID for given username. If the username already exists,
-> +# then simply report its current UID. Otherwise, generate the lowest UID
-> +# that is:
-> +#   - not 0
-> +#   - comprised in [MIN_UID..MAX_UID]
-> +#   - not already used by a user
-> +generate_uid() {
-> +    local username="${1}"
-> +    local uid
-> +
-> +    uid="$( get_uid "${username}" )"
-> +    if [ -z "${uid}" ]; then
-> +        for(( uid=MIN_UID; uid<=MAX_UID; uid++ )); do
-> +            if [ -z "$( get_username "${uid}" )" ]; then
-> +                break
-> +            fi
-> +        done
-> +        if [ ${uid} -gt ${MAX_UID} ]; then
-> +            fail "can not allocate a UID for user '%s'\n" "${username}"
-> +        fi
-> +    fi
-> +    printf "%d\n" "${uid}"
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +# Add given user to given group, if not already the case
-> +add_user_to_group() {
-> +    local username="${1}"
-> +    local group="${2}"
-> +    local _f
-> +
-> +    for _f in "${GROUP}" "${GSHADOW}"; do
-> +        [ -f "${_f}" ] || continue
-> +        sed -r -i -e 's/^('"${group}"':.*:)(([^:]+,)?)'"${username}"'(,[^:]+*)?$/\1\2\4/;'  \
-> +                  -e 's/^('"${group}"':.*)$/\1,'"${username}"'/;'                           \
-> +                  -e 's/,+/,/'                                                              \
-> +                  -e 's/:,/:/'                                                              \
-> +                  "${_f}"
-> +    done
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +# Encode a password
-> +encode_password() {
-> +    local passwd="${1}"
-> +
-> +    mkpasswd -m "${BR2_TARGET_GENERIC_PASSWD_METHOD}" "${passwd}"
+Status         : NOK
+Failure reason : oprofile-0.9.8
+Architecture   : powerpc
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 05:12:53
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/39e68258f051973f5c8b1643ac67c3b67a33c40b/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/39e68258f051973f5c8b1643ac67c3b67a33c40b/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/39e68258f051973f5c8b1643ac67c3b67a33c40b/config
+Defconfig      : http://autobuild.buildroot.net/results/39e68258f051973f5c8b1643ac67c3b67a33c40b/defconfig
 
-  Err, you defined it as PASSWD_METHOD above...  But if you source 
-.config as I suggested, this is OK :-)
+Build 3011d243dbc50778217551e1eb307900885354f3
+==============================================
 
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +# Add a user; if it does already exist, remove it first
-> +add_one_user() {
-> +    local username="${1}"
-> +    local uid="${2}"
-> +    local group="${3}"
-> +    local gid="${4}"
-> +    local passwd="${5}"
-> +    local home="${6}"
-> +    local shell="${7}"
-> +    local groups="${8}"
-> +    local comment="${9}"
-> +    local nb_days="$((($(date +%s)+(24*60*60-1))/(24*60*60)))"
+Status         : NOK
+Failure reason : libebml-1.2.2
+Architecture   : sh2a
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 05:13:52
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/3011d243dbc50778217551e1eb307900885354f3/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/3011d243dbc50778217551e1eb307900885354f3/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/3011d243dbc50778217551e1eb307900885354f3/config
+Defconfig      : http://autobuild.buildroot.net/results/3011d243dbc50778217551e1eb307900885354f3/defconfig
 
-  Hm, I don't like this. If I re-run the same configuration after a year, 
-it gives me a different shadow.
+Build dd9c4d0f591c421c25457cfccc89705e3b190dd8
+==============================================
 
-  I think the nb_days field in shadow should be left empty. The one in 
-the skeleton is arbitrarily set to Dec. 8 1999, it has been like that 
-since the first commit in 2001, and it has completely no meaning.
+Status         : NOK
+Failure reason : libvncserver-0.9.9
+Architecture   : powerpc
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 05:52:25
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/dd9c4d0f591c421c25457cfccc89705e3b190dd8/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/dd9c4d0f591c421c25457cfccc89705e3b190dd8/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/dd9c4d0f591c421c25457cfccc89705e3b190dd8/config
+Defconfig      : http://autobuild.buildroot.net/results/dd9c4d0f591c421c25457cfccc89705e3b190dd8/defconfig
 
-> +    local _f _group _home _shell _gid _passwd
-> +
-> +    # First, sanity-check the user
-> +    check_user_validity "${username}" "${uid}" "${group}" "${gid}"
-> +
-> +    # Generate a new UID if needed
-> +    if [ ${uid} -eq -1 ]; then
-> +        uid="$( generate_uid "${username}" )"
-> +    fi
-> +
-> +    # Remove any previous instance of this user
-> +    for _f in "${PASSWD}" "${SHADOW}"; do
-> +        sed -r -i -e '/^'"${username}"':.*/d;' "${_f}"
-> +    done
-> +
-> +    _gid="$( get_gid "${group}" )"
-> +    _shell="${shell}"
-> +    if [ "${shell}" = "-" ]; then
-> +        _shell="/bin/false"
-> +    fi
-> +    case "${home}" in
-> +        -)  _home="/";;
-> +        /)  fail "home can not explicitly be '/'\n";;
-> +        /*) _home="${home}";;
-> +        *)  fail "home must be an absolute path\n";;
-> +    esac
-> +    case "${passwd}" in
-> +        !=*)
-> +            _passwd='!'"$( encode_passwd "${passwd#!=}" )"
-> +            ;;
-> +        =*)
-> +            _passwd="$( encode_passwd "${passwd#=}" )"
-> +            ;;
-> +        *)
-> +            _passwd="${passwd}"
-> +            ;;
-> +    esac
-> +
-> +    printf "%s:x:%d:%d:%s:%s:%s\n"              \
-> +           "${username}" "${uid}" "${_gid}"     \
-> +           "${comment}" "${_home}" "${_shell}"  \
-> +           >>"${PASSWD}"
-> +    printf "%s:%s:%d:0:99999:7:::\n"                \
-> +           "${username}" "${_passwd}" "${nb_days}"  \
-> +           >>"${SHADOW}"
-> +
-> +    # Add the user to its additional groups
-> +    if [ "${groups}" != "-" ]; then
-> +        for _group in ${groups//,/ }; do
+Build 56185e227ed3a9ebd89d2a3c16f92651b5d5885a
+==============================================
 
-  Oh, here's another bashism. But also one which is much more difficult 
-to write in Posix sh.
+Status         : NOK
+Failure reason : host-gawk-4.0.2
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2013-02-05 06:13:12
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/56185e227ed3a9ebd89d2a3c16f92651b5d5885a/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/56185e227ed3a9ebd89d2a3c16f92651b5d5885a/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/56185e227ed3a9ebd89d2a3c16f92651b5d5885a/config
+Defconfig      : http://autobuild.buildroot.net/results/56185e227ed3a9ebd89d2a3c16f92651b5d5885a/defconfig
 
-> +            add_user_to_group "${username}" "${_group}"
-> +        done
-> +    fi
-> +
-> +    # If the user has a home, chown it
-> +    # (Note: stdout goes to the fakeroot-script)
-> +    if [ "${home}" != "-" ]; then
-> +        mkdir -p "${TARGET_DIR}/${home}"
-> +        printf "chown -R %d:%d '%s'\n" "${uid}" "${_gid}" "${TARGET_DIR}/${home}"
-> +    fi
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +main() {
-> +    local username uid group gid passwd home shell groups comment
-> +
-> +    # Some sanity checks
-> +    if [ ${MIN_UID} -le 0 ]; then
-> +        fail "MIN_UID must be >0 (currently %d)\n" ${MIN_UID}
-> +    fi
-> +    if [ ${MIN_GID} -le 0 ]; then
-> +        fail "MIN_GID must be >0 (currently %d)\n" ${MIN_GID}
-> +    fi
-> +
-> +    # First, create all the main groups
-> +    while read username uid group gid passwd home shell groups comment; do
-> +        [ -n "${username}" ] || continue    # Package with no user
-> +        add_one_group "${group}" "${gid}"
+Build dac12802f61c6b52ff5e191c1fb115fbe925db20
+==============================================
 
-  In the first pass, I would only add groups where gid != -1. Then, if 
-there is a line which sets gid and another one which doesn't, it still 
-works.  Of course that means you have to repeat the add_one_group for gid 
-== -1 in the second pass.
+Status         : NOK
+Failure reason : host-gawk-4.0.2
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2013-02-05 07:05:43
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/dac12802f61c6b52ff5e191c1fb115fbe925db20/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/dac12802f61c6b52ff5e191c1fb115fbe925db20/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/dac12802f61c6b52ff5e191c1fb115fbe925db20/config
+Defconfig      : http://autobuild.buildroot.net/results/dac12802f61c6b52ff5e191c1fb115fbe925db20/defconfig
 
-> +    done <"${USERS_TABLE}"
-> +
-> +    # Then, create all the additional groups
-> +    # If any additional group is already a main group, we should use
-> +    # the gid of that main group; otherwise, we can use any gid
-> +    while read username uid group gid passwd home shell groups comment; do
-> +        [ -n "${username}" ] || continue    # Package with no user
-> +        if [ "${groups}" != "-" ]; then
-> +            for g in ${groups//,/ }; do
-> +                add_one_group "${g}" -1
-> +            done
-> +        fi
-> +    done <"${USERS_TABLE}"
-> +
-> +    # Finally, add users
-> +    while read username uid group gid passwd home shell groups comment; do
-> +        [ -n "${username}" ] || continue    # Package with no user
-> +        add_one_user "${username}" "${uid}" "${group}" "${gid}" "${passwd}" \
-> +                     "${home}" "${shell}" "${groups}" "${comment}"
+Build cbc74e2fb5eaefac1fe17ada1dc46a5c906cc1c9
+==============================================
 
-  If you reverse-sort the USERS_TABLE in the makefile before the script 
-is called, then you also make it possible for one package setting uid to 
--1 and another giving a specific uid.
+Status         : NOK
+Failure reason : lvm2-2.02.79
+Architecture   : sh2a
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 07:10:18
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/cbc74e2fb5eaefac1fe17ada1dc46a5c906cc1c9/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/cbc74e2fb5eaefac1fe17ada1dc46a5c906cc1c9/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/cbc74e2fb5eaefac1fe17ada1dc46a5c906cc1c9/config
+Defconfig      : http://autobuild.buildroot.net/results/cbc74e2fb5eaefac1fe17ada1dc46a5c906cc1c9/defconfig
 
-  Regards,
-  Arnout
+Build 08bfe4b0fe55b36dd9bd693bbedd3dcc95904d12
+==============================================
 
-> +    done <"${USERS_TABLE}"
-> +}
-> +
-> +#----------------------------------------------------------------------------
-> +main "${@}"
->
+Status         : NOK
+Failure reason : qt-4.8.4
+Architecture   : mips64el
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 07:19:14
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/08bfe4b0fe55b36dd9bd693bbedd3dcc95904d12/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/08bfe4b0fe55b36dd9bd693bbedd3dcc95904d12/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/08bfe4b0fe55b36dd9bd693bbedd3dcc95904d12/config
+Defconfig      : http://autobuild.buildroot.net/results/08bfe4b0fe55b36dd9bd693bbedd3dcc95904d12/defconfig
+
+Build ef8219f0db0c33c6041d8a16cee0b77552db5cee
+==============================================
+
+Status         : NOK
+Failure reason : host-gawk-4.0.2
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2013-02-05 08:05:58
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/ef8219f0db0c33c6041d8a16cee0b77552db5cee/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/ef8219f0db0c33c6041d8a16cee0b77552db5cee/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/ef8219f0db0c33c6041d8a16cee0b77552db5cee/config
+Defconfig      : http://autobuild.buildroot.net/results/ef8219f0db0c33c6041d8a16cee0b77552db5cee/defconfig
+
+Build c0bfc03389382235782474b278ca4afd1d283d60
+==============================================
+
+Status         : NOK
+Failure reason : make: *** [liboping-legal-info] Error 1
+Architecture   : x86_64
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 08:09:56
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/c0bfc03389382235782474b278ca4afd1d283d60/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/c0bfc03389382235782474b278ca4afd1d283d60/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/c0bfc03389382235782474b278ca4afd1d283d60/config
+Defconfig      : http://autobuild.buildroot.net/results/c0bfc03389382235782474b278ca4afd1d283d60/defconfig
+
+Build 745469cf58e494f62aba82092281ea4274ad76e1
+==============================================
+
+Status         : NOK
+Failure reason : webkit-1.2.7
+Architecture   : powerpc
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 08:53:27
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/745469cf58e494f62aba82092281ea4274ad76e1/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/745469cf58e494f62aba82092281ea4274ad76e1/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/745469cf58e494f62aba82092281ea4274ad76e1/config
+Defconfig      : http://autobuild.buildroot.net/results/745469cf58e494f62aba82092281ea4274ad76e1/defconfig
+
+Build 46828cef48bc1267583ba8174c0e8ee993fac865
+==============================================
+
+Status         : NOK
+Failure reason : host-gawk-4.0.2
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2013-02-05 09:02:47
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=41fbdb0959c7b08e88eff271672522ecbd51d6e0
+End of log     : http://autobuild.buildroot.net/results/46828cef48bc1267583ba8174c0e8ee993fac865/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/46828cef48bc1267583ba8174c0e8ee993fac865/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/46828cef48bc1267583ba8174c0e8ee993fac865/config
+Defconfig      : http://autobuild.buildroot.net/results/46828cef48bc1267583ba8174c0e8ee993fac865/defconfig
+
+Build 0cb72e3240fc780670cb876711b441fa7cbede31
+==============================================
+
+Status         : NOK
+Failure reason : pv-1.2.0
+Architecture   : x86_64
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 09:15:54
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=e47219ea320dc9641e5674714352b4943095919e
+End of log     : http://autobuild.buildroot.net/results/0cb72e3240fc780670cb876711b441fa7cbede31/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/0cb72e3240fc780670cb876711b441fa7cbede31/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/0cb72e3240fc780670cb876711b441fa7cbede31/config
+Defconfig      : http://autobuild.buildroot.net/results/0cb72e3240fc780670cb876711b441fa7cbede31/defconfig
+
+Build a5ab8a7b901994ba550e0d065f09b46285e5f674
+==============================================
+
+Status         : NOK
+Failure reason : libglib2-2.30.3
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 09:22:13
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=e47219ea320dc9641e5674714352b4943095919e
+End of log     : http://autobuild.buildroot.net/results/a5ab8a7b901994ba550e0d065f09b46285e5f674/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/a5ab8a7b901994ba550e0d065f09b46285e5f674/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/a5ab8a7b901994ba550e0d065f09b46285e5f674/config
+Defconfig      : http://autobuild.buildroot.net/results/a5ab8a7b901994ba550e0d065f09b46285e5f674/defconfig
+
+Build 8d9a8cb7850b8f939a750aa8495c37739bad83f1
+==============================================
+
+Status         : NOK
+Failure reason : ltp-testsuite-20101031
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 09:26:50
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=e47219ea320dc9641e5674714352b4943095919e
+End of log     : http://autobuild.buildroot.net/results/8d9a8cb7850b8f939a750aa8495c37739bad83f1/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/8d9a8cb7850b8f939a750aa8495c37739bad83f1/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/8d9a8cb7850b8f939a750aa8495c37739bad83f1/config
+Defconfig      : http://autobuild.buildroot.net/results/8d9a8cb7850b8f939a750aa8495c37739bad83f1/defconfig
+
+Build 174f70a9c0546fe863d8696513fa6d4ab9fd131a
+==============================================
+
+Status         : NOK
+Failure reason : host-gawk-4.0.2
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2013-02-05 09:57:41
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=e47219ea320dc9641e5674714352b4943095919e
+End of log     : http://autobuild.buildroot.net/results/174f70a9c0546fe863d8696513fa6d4ab9fd131a/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/174f70a9c0546fe863d8696513fa6d4ab9fd131a/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/174f70a9c0546fe863d8696513fa6d4ab9fd131a/config
+Defconfig      : http://autobuild.buildroot.net/results/174f70a9c0546fe863d8696513fa6d4ab9fd131a/defconfig
+
+Build 4298918920ffa9857cb608b64f33205467c2f8b4
+==============================================
+
+Status         : NOK
+Failure reason : proxychains-ng-4.4
+Architecture   : powerpc
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 10:32:32
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=0b8daf87b1526f258c5c1b48dfb2b7dcf21bfe0e
+End of log     : http://autobuild.buildroot.net/results/4298918920ffa9857cb608b64f33205467c2f8b4/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/4298918920ffa9857cb608b64f33205467c2f8b4/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/4298918920ffa9857cb608b64f33205467c2f8b4/config
+Defconfig      : http://autobuild.buildroot.net/results/4298918920ffa9857cb608b64f33205467c2f8b4/defconfig
+
+Build cc3505a81e9b5839b427e6430c7550d7eee97d9b
+==============================================
+
+Status         : NOK
+Failure reason : pixman-0.28.2
+Architecture   : mips
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 12:45:21
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=dcc50b72a40d3fb5a708a5e9849c26d5148c83bb
+End of log     : http://autobuild.buildroot.net/results/cc3505a81e9b5839b427e6430c7550d7eee97d9b/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/cc3505a81e9b5839b427e6430c7550d7eee97d9b/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/cc3505a81e9b5839b427e6430c7550d7eee97d9b/config
+Defconfig      : http://autobuild.buildroot.net/results/cc3505a81e9b5839b427e6430c7550d7eee97d9b/defconfig
+
+Build e735846b16988e58a6b6709f2ba9e9bc81895bbe
+==============================================
+
+Status         : NOK
+Failure reason : oprofile-0.9.8
+Architecture   : powerpc
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 13:19:56
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b93bc6ebdcbae89547dc89dbce4701ea8037e02b
+End of log     : http://autobuild.buildroot.net/results/e735846b16988e58a6b6709f2ba9e9bc81895bbe/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/e735846b16988e58a6b6709f2ba9e9bc81895bbe/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/e735846b16988e58a6b6709f2ba9e9bc81895bbe/config
+Defconfig      : http://autobuild.buildroot.net/results/e735846b16988e58a6b6709f2ba9e9bc81895bbe/defconfig
+
+Build fdea650d302b2a8a5626780c7238adcf84ed60e1
+==============================================
+
+Status         : NOK
+Failure reason : pv-1.2.0
+Architecture   : x86_64
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 13:29:35
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b93bc6ebdcbae89547dc89dbce4701ea8037e02b
+End of log     : http://autobuild.buildroot.net/results/fdea650d302b2a8a5626780c7238adcf84ed60e1/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/fdea650d302b2a8a5626780c7238adcf84ed60e1/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/fdea650d302b2a8a5626780c7238adcf84ed60e1/config
+Defconfig      : http://autobuild.buildroot.net/results/fdea650d302b2a8a5626780c7238adcf84ed60e1/defconfig
+
+Build 6661e67dce7d2f01097a69424108db4920452004
+==============================================
+
+Status         : NOK
+Failure reason : gpsd-3.7
+Architecture   : x86_64
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 13:34:53
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b93bc6ebdcbae89547dc89dbce4701ea8037e02b
+End of log     : http://autobuild.buildroot.net/results/6661e67dce7d2f01097a69424108db4920452004/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/6661e67dce7d2f01097a69424108db4920452004/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/6661e67dce7d2f01097a69424108db4920452004/config
+Defconfig      : http://autobuild.buildroot.net/results/6661e67dce7d2f01097a69424108db4920452004/defconfig
+
+Build fd4a32aac39d7393900d792528f5bfcad917ed20
+==============================================
+
+Status         : NOK
+Failure reason : openssl-1.0.1c
+Architecture   : bfin
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 14:13:45
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b93bc6ebdcbae89547dc89dbce4701ea8037e02b
+End of log     : http://autobuild.buildroot.net/results/fd4a32aac39d7393900d792528f5bfcad917ed20/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/fd4a32aac39d7393900d792528f5bfcad917ed20/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/fd4a32aac39d7393900d792528f5bfcad917ed20/config
+Defconfig      : http://autobuild.buildroot.net/results/fd4a32aac39d7393900d792528f5bfcad917ed20/defconfig
+
+Build fee5a6af4636fb6d744624cea10b78f1b316f7e7
+==============================================
+
+Status         : NOK
+Failure reason : systemd-44
+Architecture   : i686
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 14:39:37
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b93bc6ebdcbae89547dc89dbce4701ea8037e02b
+End of log     : http://autobuild.buildroot.net/results/fee5a6af4636fb6d744624cea10b78f1b316f7e7/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/fee5a6af4636fb6d744624cea10b78f1b316f7e7/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/fee5a6af4636fb6d744624cea10b78f1b316f7e7/config
+Defconfig      : http://autobuild.buildroot.net/results/fee5a6af4636fb6d744624cea10b78f1b316f7e7/defconfig
+
+Build d82c3f7bbc9aaa7b494da7191ba1736a339f52f6
+==============================================
+
+Status         : NOK
+Failure reason : oprofile-0.9.8
+Architecture   : powerpc
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 16:21:51
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=befb9a3ee0c5994162f527d8ef763d57d68ec48e
+End of log     : http://autobuild.buildroot.net/results/d82c3f7bbc9aaa7b494da7191ba1736a339f52f6/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/d82c3f7bbc9aaa7b494da7191ba1736a339f52f6/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/d82c3f7bbc9aaa7b494da7191ba1736a339f52f6/config
+Defconfig      : http://autobuild.buildroot.net/results/d82c3f7bbc9aaa7b494da7191ba1736a339f52f6/defconfig
+
+Build cfd943219a32c80663a3e707764adf43a108a56c
+==============================================
+
+Status         : NOK
+Failure reason : gstreamer-0.10.36
+Architecture   : powerpc
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 16:27:35
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=ddd69b5609cc9bd954afcfc2f91831d64b9cfff7
+End of log     : http://autobuild.buildroot.net/results/cfd943219a32c80663a3e707764adf43a108a56c/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/cfd943219a32c80663a3e707764adf43a108a56c/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/cfd943219a32c80663a3e707764adf43a108a56c/config
+Defconfig      : http://autobuild.buildroot.net/results/cfd943219a32c80663a3e707764adf43a108a56c/defconfig
+
+Build cd256671b2675b904a942ea4b346d31159e9b1a7
+==============================================
+
+Status         : NOK
+Failure reason : bluez_utils-4.101
+Architecture   : avr32
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 16:34:45
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=ddd69b5609cc9bd954afcfc2f91831d64b9cfff7
+End of log     : http://autobuild.buildroot.net/results/cd256671b2675b904a942ea4b346d31159e9b1a7/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/cd256671b2675b904a942ea4b346d31159e9b1a7/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/cd256671b2675b904a942ea4b346d31159e9b1a7/config
+Defconfig      : http://autobuild.buildroot.net/results/cd256671b2675b904a942ea4b346d31159e9b1a7/defconfig
+
+Build 0670d2627d389943df24ab3698618cf110230166
+==============================================
+
+Status         : NOK
+Failure reason : libosip2-3.6.0
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 16:36:16
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=ddd69b5609cc9bd954afcfc2f91831d64b9cfff7
+End of log     : http://autobuild.buildroot.net/results/0670d2627d389943df24ab3698618cf110230166/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/0670d2627d389943df24ab3698618cf110230166/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/0670d2627d389943df24ab3698618cf110230166/config
+Defconfig      : http://autobuild.buildroot.net/results/0670d2627d389943df24ab3698618cf110230166/defconfig
+
+Build 9e0da748e57654d0ee93cce514ef9d3db8a1503d
+==============================================
+
+Status         : NOK
+Failure reason : libglib2-2.30.3
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 16:43:35
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=ddd69b5609cc9bd954afcfc2f91831d64b9cfff7
+End of log     : http://autobuild.buildroot.net/results/9e0da748e57654d0ee93cce514ef9d3db8a1503d/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/9e0da748e57654d0ee93cce514ef9d3db8a1503d/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/9e0da748e57654d0ee93cce514ef9d3db8a1503d/config
+Defconfig      : http://autobuild.buildroot.net/results/9e0da748e57654d0ee93cce514ef9d3db8a1503d/defconfig
+
+Build ca5e37803de83c342be6a9bce3de0f6bf152c00f
+==============================================
+
+Status         : NOK
+Failure reason : audiofile-0.3.4
+Architecture   : sh2a
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 16:44:05
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=ddd69b5609cc9bd954afcfc2f91831d64b9cfff7
+End of log     : http://autobuild.buildroot.net/results/ca5e37803de83c342be6a9bce3de0f6bf152c00f/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/ca5e37803de83c342be6a9bce3de0f6bf152c00f/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/ca5e37803de83c342be6a9bce3de0f6bf152c00f/config
+Defconfig      : http://autobuild.buildroot.net/results/ca5e37803de83c342be6a9bce3de0f6bf152c00f/defconfig
+
+Build 81fb6f778cd211d2f670ab66132952b2531a056f
+==============================================
+
+Status         : NOK
+Failure reason : dbus-1.4.24
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 16:50:40
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=ddd69b5609cc9bd954afcfc2f91831d64b9cfff7
+End of log     : http://autobuild.buildroot.net/results/81fb6f778cd211d2f670ab66132952b2531a056f/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/81fb6f778cd211d2f670ab66132952b2531a056f/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/81fb6f778cd211d2f670ab66132952b2531a056f/config
+Defconfig      : http://autobuild.buildroot.net/results/81fb6f778cd211d2f670ab66132952b2531a056f/defconfig
+
+Build 430bdc23ebd336c1b5dd6c0a86a84ded16e2ed76
+==============================================
+
+Status         : NOK
+Failure reason : ruby-1.9.3-p362
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2013-02-05 17:03:01
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=befb9a3ee0c5994162f527d8ef763d57d68ec48e
+End of log     : http://autobuild.buildroot.net/results/430bdc23ebd336c1b5dd6c0a86a84ded16e2ed76/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/430bdc23ebd336c1b5dd6c0a86a84ded16e2ed76/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/430bdc23ebd336c1b5dd6c0a86a84ded16e2ed76/config
+Defconfig      : http://autobuild.buildroot.net/results/430bdc23ebd336c1b5dd6c0a86a84ded16e2ed76/defconfig
+
+Build f12853e8604af7944fd89a1ce00f0952aa5da737
+==============================================
+
+Status         : NOK
+Failure reason : ltrace-0.7.2
+Architecture   : powerpc
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 17:52:02
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=ddd69b5609cc9bd954afcfc2f91831d64b9cfff7
+End of log     : http://autobuild.buildroot.net/results/f12853e8604af7944fd89a1ce00f0952aa5da737/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/f12853e8604af7944fd89a1ce00f0952aa5da737/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/f12853e8604af7944fd89a1ce00f0952aa5da737/config
+Defconfig      : http://autobuild.buildroot.net/results/f12853e8604af7944fd89a1ce00f0952aa5da737/defconfig
+
+Build c950d7920d384cb0d37403cbe8344691d4231a1a
+==============================================
+
+Status         : NOK
+Failure reason : sdl-1.2.15
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 18:12:54
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=ddd69b5609cc9bd954afcfc2f91831d64b9cfff7
+End of log     : http://autobuild.buildroot.net/results/c950d7920d384cb0d37403cbe8344691d4231a1a/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/c950d7920d384cb0d37403cbe8344691d4231a1a/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/c950d7920d384cb0d37403cbe8344691d4231a1a/config
+Defconfig      : http://autobuild.buildroot.net/results/c950d7920d384cb0d37403cbe8344691d4231a1a/defconfig
+
+Build 9e13b4816e4b5aec2aca5fb8c6069a05e4c24ce5
+==============================================
+
+Status         : NOK
+Failure reason : libtirpc-0.2.2
+Architecture   : bfin
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 19:32:27
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=ae27c455682480af4c2e1c23f21ca3fc450b130b
+End of log     : http://autobuild.buildroot.net/results/9e13b4816e4b5aec2aca5fb8c6069a05e4c24ce5/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/9e13b4816e4b5aec2aca5fb8c6069a05e4c24ce5/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/9e13b4816e4b5aec2aca5fb8c6069a05e4c24ce5/config
+Defconfig      : http://autobuild.buildroot.net/results/9e13b4816e4b5aec2aca5fb8c6069a05e4c24ce5/defconfig
+
+Build b336574309816911a9c47ca0dc4d51fc50370e5d
+==============================================
+
+Status         : NOK
+Failure reason : pv-1.2.0
+Architecture   : mips64el
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 19:58:45
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=ae27c455682480af4c2e1c23f21ca3fc450b130b
+End of log     : http://autobuild.buildroot.net/results/b336574309816911a9c47ca0dc4d51fc50370e5d/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/b336574309816911a9c47ca0dc4d51fc50370e5d/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/b336574309816911a9c47ca0dc4d51fc50370e5d/config
+Defconfig      : http://autobuild.buildroot.net/results/b336574309816911a9c47ca0dc4d51fc50370e5d/defconfig
+
+Build 3b479b8cf751cc0c075ab942b56aad36f79ada71
+==============================================
+
+Status         : NOK
+Failure reason : libvncserver-0.9.9
+Architecture   : powerpc
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 20:10:52
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=ae27c455682480af4c2e1c23f21ca3fc450b130b
+End of log     : http://autobuild.buildroot.net/results/3b479b8cf751cc0c075ab942b56aad36f79ada71/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/3b479b8cf751cc0c075ab942b56aad36f79ada71/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/3b479b8cf751cc0c075ab942b56aad36f79ada71/config
+Defconfig      : http://autobuild.buildroot.net/results/3b479b8cf751cc0c075ab942b56aad36f79ada71/defconfig
+
+Build 7be7cd04f7fcbc6f0d1a226336a2152aeb83c6e2
+==============================================
+
+Status         : NOK
+Failure reason : lmbench-3.0-a9
+Architecture   : xtensa
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 20:22:17
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=ae27c455682480af4c2e1c23f21ca3fc450b130b
+End of log     : http://autobuild.buildroot.net/results/7be7cd04f7fcbc6f0d1a226336a2152aeb83c6e2/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/7be7cd04f7fcbc6f0d1a226336a2152aeb83c6e2/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/7be7cd04f7fcbc6f0d1a226336a2152aeb83c6e2/config
+Defconfig      : http://autobuild.buildroot.net/results/7be7cd04f7fcbc6f0d1a226336a2152aeb83c6e2/defconfig
+
+Build 876038fa64dbd33e957f6f77b10fa33f4271b077
+==============================================
+
+Status         : NOK
+Failure reason : audiofile-0.3.4
+Architecture   : bfin
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 21:09:25
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=ae27c455682480af4c2e1c23f21ca3fc450b130b
+End of log     : http://autobuild.buildroot.net/results/876038fa64dbd33e957f6f77b10fa33f4271b077/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/876038fa64dbd33e957f6f77b10fa33f4271b077/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/876038fa64dbd33e957f6f77b10fa33f4271b077/config
+Defconfig      : http://autobuild.buildroot.net/results/876038fa64dbd33e957f6f77b10fa33f4271b077/defconfig
+
+Build ca45d3e51091b7a285bedf7a1975fed1c59c8213
+==============================================
+
+Status         : NOK
+Failure reason : systemd-44
+Architecture   : i686
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 21:53:52
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8f8e537d4329832fbe6e62e52ecfee8c41673f7d
+End of log     : http://autobuild.buildroot.net/results/ca45d3e51091b7a285bedf7a1975fed1c59c8213/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/ca45d3e51091b7a285bedf7a1975fed1c59c8213/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/ca45d3e51091b7a285bedf7a1975fed1c59c8213/config
+Defconfig      : http://autobuild.buildroot.net/results/ca45d3e51091b7a285bedf7a1975fed1c59c8213/defconfig
+
+Build 0ac1475a78390b2d5effae9e6ce28fb4e2fb1432
+==============================================
+
+Status         : NOK
+Failure reason : libgtk2-2.24.10
+Architecture   : sh4
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 22:27:56
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8f8e537d4329832fbe6e62e52ecfee8c41673f7d
+End of log     : http://autobuild.buildroot.net/results/0ac1475a78390b2d5effae9e6ce28fb4e2fb1432/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/0ac1475a78390b2d5effae9e6ce28fb4e2fb1432/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/0ac1475a78390b2d5effae9e6ce28fb4e2fb1432/config
+Defconfig      : http://autobuild.buildroot.net/results/0ac1475a78390b2d5effae9e6ce28fb4e2fb1432/defconfig
+
+Build 093bb4bceddc09eaed98513b7742d57dc1f6af88
+==============================================
+
+Status         : NOK
+Failure reason : cairo-1.12.10
+Architecture   : bfin
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 22:30:05
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8f8e537d4329832fbe6e62e52ecfee8c41673f7d
+End of log     : http://autobuild.buildroot.net/results/093bb4bceddc09eaed98513b7742d57dc1f6af88/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/093bb4bceddc09eaed98513b7742d57dc1f6af88/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/093bb4bceddc09eaed98513b7742d57dc1f6af88/config
+Defconfig      : http://autobuild.buildroot.net/results/093bb4bceddc09eaed98513b7742d57dc1f6af88/defconfig
+
+Build c168d7715e4f7295d0f59b0fd99176fd2562d26d
+==============================================
+
+Status         : NOK
+Failure reason : elfutils-0.155
+Architecture   : avr32
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 23:03:32
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8f8e537d4329832fbe6e62e52ecfee8c41673f7d
+End of log     : http://autobuild.buildroot.net/results/c168d7715e4f7295d0f59b0fd99176fd2562d26d/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/c168d7715e4f7295d0f59b0fd99176fd2562d26d/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/c168d7715e4f7295d0f59b0fd99176fd2562d26d/config
+Defconfig      : http://autobuild.buildroot.net/results/c168d7715e4f7295d0f59b0fd99176fd2562d26d/defconfig
+
+Build 4e6017493b0767168813b96b6f2f1aea2f1133fa
+==============================================
+
+Status         : NOK
+Failure reason : nettle-2.6
+Architecture   : microblaze
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2013-02-05 23:19:18
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=cd88dae7e667c5ef8ef4c3fa2e5c65568efbf2e5
+End of log     : http://autobuild.buildroot.net/results/4e6017493b0767168813b96b6f2f1aea2f1133fa/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/4e6017493b0767168813b96b6f2f1aea2f1133fa/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/4e6017493b0767168813b96b6f2f1aea2f1133fa/config
+Defconfig      : http://autobuild.buildroot.net/results/4e6017493b0767168813b96b6f2f1aea2f1133fa/defconfig
+
 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+http://autobuild.buildroot.net
