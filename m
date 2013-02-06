@@ -1,40 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 6 Feb 2013 09:14:08 +0100
-Subject: [Buildroot] [git commit] iftop: needs threads support
-Message-ID: <20130206081423.422E89A99F@busybox.osuosl.org>
+Date: Wed, 6 Feb 2013 09:19:02 +0100
+Subject: [Buildroot] [git commit] libatasmart: move under
+	libraries->hardware handling
+Message-ID: <20130206082131.564E39A9BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=142d65c31b7c47bb9613eb47f6cb219ccb00657c
+commit: http://git.buildroot.net/buildroot/commit/?id=b243cbb0f4f84fa12dc8bba632e3c05e568d2786
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.org/results/f2cb6113c360b8dbf63bafe5ae425921babdf636
+It is a library, so it should go under libraries.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/iftop/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/iftop/Config.in b/package/iftop/Config.in
-index 99ea973..5c68316 100644
---- a/package/iftop/Config.in
-+++ b/package/iftop/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_IFTOP
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_LIBPCAP
- 	depends on BR2_INET_IPV6
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  iftop does for network usage what top(1) does for CPU usage.
- 	  It listens to network traffic on a named interface and displays
-@@ -11,5 +12,5 @@ config BR2_PACKAGE_IFTOP
- 
- 	  http://www.ex-parrot.com/pdw/iftop/
- 
--comment "iftop requires IPv6 support in toolchain"
--	depends on !BR2_INET_IPV6
-+comment "iftop requires IPv6 and threads support in toolchain"
-+	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/Config.in b/package/Config.in
+index 2f219b6..8588951 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -247,7 +247,6 @@ source "package/iostat/Config.in"
+ source "package/irda-utils/Config.in"
+ source "package/kbd/Config.in"
+ source "package/lcdproc/Config.in"
+-source "package/libatasmart/Config.in"
+ source "package/lm-sensors/Config.in"
+ source "package/lshw/Config.in"
+ source "package/lsuio/Config.in"
+@@ -447,6 +446,7 @@ source "package/ccid/Config.in"
+ source "package/imx-lib/Config.in"
+ source "package/lcdapi/Config.in"
+ source "package/libaio/Config.in"
++source "package/libatasmart/Config.in"
+ source "package/libraw1394/Config.in"
+ source "package/tslib/Config.in"
+ source "package/libfreefare/Config.in"
