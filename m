@@ -1,53 +1,36 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Wed, 06 Feb 2013 09:40:29 +0100
-Subject: [Buildroot] Question about patches
-In-Reply-To: <EE5E77B503DE9A478B63A89AAD2585EDB66A46@vpane.excalyptech.com>
-References: <EE5E77B503DE9A478B63A89AAD2585EDB66A46@vpane.excalyptech.com>
-Message-ID: <511216FD.4020503@relinux.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Feb 2013 10:32:44 +0100
+Subject: [Buildroot] [PATCH] boost: bump version to 1.53.0
+In-Reply-To: <1360143004-29603-2-git-send-email-victor.hiairrassary.ml@gmail.com>
+References: <1360143004-29603-1-git-send-email-victor.hiairrassary.ml@gmail.com>
+ <1360143004-29603-2-git-send-email-victor.hiairrassary.ml@gmail.com>
+Message-ID: <20130206103244.68ca56b4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 06.02.2013 01:05, schrieb Przemyslaw Wrzos:
->
-> Hey Guys,
->
->  
->
-> Just a quick question about how the mailing list works. I submitted a
-> patch a week ago for netsnmp but it hasn't got any replies. Is it
-> appropriate to bump it with a follow up email until it gets noticed or
-> is it in the pipeline somewhere eventually to get looked at? Is it
-> better to start a discussion before submitting a patch instead?
->
-Hi,
+Dear victor.hiairrassary.ml at gmail.com,
 
-my experience is that it might take its time to get responses and often
-enough the only response is Peter's commit message.
+On Wed,  6 Feb 2013 10:30:04 +0100, victor.hiairrassary.ml at gmail.com
+wrote:
 
-Right now there is a lot traffic on the list, so that I feinitely would
-wait longer than one week, except there is a reason to want yout patch
-in 2013.02.
+>  BOOST_FLAGS =
+> -BOOST_WITHOUT_FLAGS = python context
+> +BOOST_WITHOUT_FLAGS = python atomic
 
-Regards
+Maybe there was a reason why "context" was unconditionally excluded
+from the build, before your patch. Did you check why?
 
-Stephan
->
->  
->
-> Thanks for the insight,
->
-> Przemyslaw Wrzos
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Also, it would be good to have a comment here that explains why python
+and atomic are unconditionally excluded for the build.
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130206/daed273c/attachment.html>
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
