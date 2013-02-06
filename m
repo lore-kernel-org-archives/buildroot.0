@@ -1,36 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Feb 2013 10:32:44 +0100
-Subject: [Buildroot] [PATCH] boost: bump version to 1.53.0
-In-Reply-To: <1360143004-29603-2-git-send-email-victor.hiairrassary.ml@gmail.com>
-References: <1360143004-29603-1-git-send-email-victor.hiairrassary.ml@gmail.com>
- <1360143004-29603-2-git-send-email-victor.hiairrassary.ml@gmail.com>
-Message-ID: <20130206103244.68ca56b4@skate>
+From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
+Date: Wed, 6 Feb 2013 10:56:32 +0100
+Subject: [Buildroot] Currently packaging Qt5
+In-Reply-To: <20130114105802.1199d10e@skate>
+References: <20130114105802.1199d10e@skate>
+Message-ID: <CAHQn0kiceG=GK44-_ajFvzvHLh4XrQ0XV+AzPG9CdLiXt0+pkg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear victor.hiairrassary.ml at gmail.com,
+On Mon, Jan 14, 2013 at 10:58 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-On Wed,  6 Feb 2013 10:30:04 +0100, victor.hiairrassary.ml at gmail.com
-wrote:
+> This is just a quick note to let people know that I've started
+> packaging Qt5. I'm re-using existing packaging efforts done by
+> RasberryPi folks, and I'm already quite far in the process. I hope to
+> be able to post something soon.
+>
 
->  BOOST_FLAGS =
-> -BOOST_WITHOUT_FLAGS = python context
-> +BOOST_WITHOUT_FLAGS = python atomic
+Hi Thomas! Do you think there are any chance Qt5 will make it to 2013.02?
 
-Maybe there was a reason why "context" was unconditionally excluded
-from the build, before your patch. Did you check why?
-
-Also, it would be good to have a comment here that explains why python
-and atomic are unconditionally excluded for the build.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Best regards
+Daniel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130206/ca8693a3/attachment-0001.html>
