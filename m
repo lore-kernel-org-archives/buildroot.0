@@ -1,63 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  6 Feb 2013 21:46:05 +0100
-Subject: [Buildroot] [PATCH 7/8] gptfdisk: add support for building and
-	install cgdisk
+Date: Wed,  6 Feb 2013 21:46:06 +0100
+Subject: [Buildroot] [PATCH 8/8] gptfdisk: factorize the
+	BR2_PACKAGE_GPTFDISK dependency
 In-Reply-To: <1360183566-27556-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1360183566-27556-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1360183566-27556-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1360183566-27556-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition to the command-line tool gdisk and the interactive tool
-sgdisk, gptfdisk also provides a ncurses based tool, cgdisk. This
-commit adds support for building and installing this tool.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gptfdisk/Config.in   |    8 ++++++++
- package/gptfdisk/gptfdisk.mk |    4 ++++
- 2 files changed, 12 insertions(+)
+ package/gptfdisk/Config.in |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/package/gptfdisk/Config.in b/package/gptfdisk/Config.in
-index 0d7e358..1cdd8eb 100644
+index 1cdd8eb..1b0639d 100644
 --- a/package/gptfdisk/Config.in
 +++ b/package/gptfdisk/Config.in
-@@ -31,5 +31,13 @@ config BR2_PACKAGE_GPTFDISK_SGDISK
- 	  /usr/sbin/sgdisk which is named after the traditional MBR based
- 	  sfdisk tool albeit with an entirely different option syntax.
- 
-+config BR2_PACKAGE_GPTFDISK_CGDISK
-+	bool "ncurses cgdisk"
-+	depends on BR2_PACKAGE_GPTFDISK
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  Install the ncurses-based GUID partition table (GPT)
-+	  manipulator /usr/sbin/cgdisk.
+@@ -1,3 +1,6 @@
++comment "gptfdisk requires a toolchain with LARGEFILE/WCHAR/C++ support enabled"
++	depends on !(BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
 +
- comment "gptfdisk requires a toolchain with LARGEFILE/WCHAR/C++ support enabled"
- 	depends on !(BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
-diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
-index 884edf4..63010d8 100644
---- a/package/gptfdisk/gptfdisk.mk
-+++ b/package/gptfdisk/gptfdisk.mk
-@@ -9,11 +9,15 @@ GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
+ config BR2_PACKAGE_GPTFDISK
+ 	bool "gptfdisk"
+ 	depends on BR2_LARGEFILE
+@@ -14,9 +17,10 @@ config BR2_PACKAGE_GPTFDISK
  
- GPTFDISK_TARGETS_$(BR2_PACKAGE_GPTFDISK_GDISK) += gdisk
- GPTFDISK_TARGETS_$(BR2_PACKAGE_GPTFDISK_SGDISK) += sgdisk
-+GPTFDISK_TARGETS_$(BR2_PACKAGE_GPTFDISK_CGDISK) += cgdisk
+ 	  http://www.rodsbooks.com/gdisk/
  
- GPTFDISK_DEPENDENCIES += util-linux
- ifeq ($(BR2_PACKAGE_GPTFDISK_SGDISK),y)
-     GPTFDISK_DEPENDENCIES += popt
- endif
-+ifeq ($(BR2_PACKAGE_GPTFDISK_CGDISK),y)
-+    GPTFDISK_DEPENDENCIES += ncurses
++if BR2_PACKAGE_GPTFDISK
++
+ config BR2_PACKAGE_GPTFDISK_GDISK
+ 	bool "interactive gdisk"
+-	depends on BR2_PACKAGE_GPTFDISK
+ 	help
+ 	  Install the interactive GUID partition table (GPT) manipulator
+ 	  /usr/sbin/gdisk which is modelled after and quite similar in use
+@@ -24,7 +28,6 @@ config BR2_PACKAGE_GPTFDISK_GDISK
+ 
+ config BR2_PACKAGE_GPTFDISK_SGDISK
+ 	bool "command line sgdisk"
+-	depends on BR2_PACKAGE_GPTFDISK
+ 	select BR2_PACKAGE_POPT
+ 	help
+ 	  Install the command-line GUID partition table (GPT) manipulator
+@@ -33,11 +36,9 @@ config BR2_PACKAGE_GPTFDISK_SGDISK
+ 
+ config BR2_PACKAGE_GPTFDISK_CGDISK
+ 	bool "ncurses cgdisk"
+-	depends on BR2_PACKAGE_GPTFDISK
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Install the ncurses-based GUID partition table (GPT)
+ 	  manipulator /usr/sbin/cgdisk.
+ 
+-comment "gptfdisk requires a toolchain with LARGEFILE/WCHAR/C++ support enabled"
+-	depends on !(BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
 +endif
- 
- ifeq ($(BR2_PACKAGE_ICU),y)
-     GPTFDISK_DEPENDENCIES += icu
 -- 
 1.7.9.5
