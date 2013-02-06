@@ -1,150 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  6 Feb 2013 21:45:59 +0100
-Subject: [Buildroot] [PATCH 1/8] gdisk: Update gdisk (gptfdisk) to version
-	0.8.6
+Date: Wed,  6 Feb 2013 21:46:01 +0100
+Subject: [Buildroot] [PATCH 3/8] gptfdisk: ensure that the package always
+	builds/installs something
 In-Reply-To: <1360183566-27556-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1360183566-27556-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1360183566-27556-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1360183566-27556-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Justin Maggard <jmaggard10@gmail.com>
+Until now, selecting just the gptfdisk package would do something. If
+wouldn't build anything at all, and wouldn't install anything. This is
+rather odd.
 
-[Thomas Petazzoni: bump to 0.8.6 and not 0.8.5]
+So now, we ensure that at least one of the two tools that gptfdisk can
+build and install is selected. This allows use to factorize a bit the
+select of util-linux in Config.in, and remove the if condition in the
+makefile that was preventing the package from being built if no tools
+was selected.
 
-Signed-off-by: Justin Maggard <jmaggard10@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gdisk/gdisk-0.6.14-unistd.patch |   19 --------------
- package/gdisk/gdisk-0.6.14-uuid.h.patch |   22 ----------------
- package/gdisk/gdisk-001-no-utf16.patch  |   43 +++++++++++++++++++++++++++++++
- package/gdisk/gdisk.mk                  |    6 ++---
- 4 files changed, 46 insertions(+), 44 deletions(-)
- delete mode 100644 package/gdisk/gdisk-0.6.14-unistd.patch
- delete mode 100644 package/gdisk/gdisk-0.6.14-uuid.h.patch
- create mode 100644 package/gdisk/gdisk-001-no-utf16.patch
+ package/gptfdisk/Config.in   |    7 +++----
+ package/gptfdisk/gptfdisk.mk |    4 ----
+ 2 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/package/gdisk/gdisk-0.6.14-unistd.patch b/package/gdisk/gdisk-0.6.14-unistd.patch
-deleted file mode 100644
-index 97627da..0000000
---- a/package/gdisk/gdisk-0.6.14-unistd.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--[PATCH] close(2) needs unistd.h
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- diskio-unix.cc |    1 +
-- 1 file changed, 1 insertion(+)
--
--Index: gdisk-0.6.14/diskio-unix.cc
--===================================================================
----- gdisk-0.6.14.orig/diskio-unix.cc
--+++ gdisk-0.6.14/diskio-unix.cc
--@@ -22,6 +22,7 @@
-- #include <errno.h>
-- #include <fcntl.h>
-- #include <sys/stat.h>
--+#include <unistd.h>
-- #include <iostream>
-- 
-- #include "diskio.h"
-diff --git a/package/gdisk/gdisk-0.6.14-uuid.h.patch b/package/gdisk/gdisk-0.6.14-uuid.h.patch
-deleted file mode 100644
-index ba447a1..0000000
---- a/package/gdisk/gdisk-0.6.14-uuid.h.patch
-+++ /dev/null
-@@ -1,22 +0,0 @@
--[PATCH] Don't hardcode uuid.h location
--
--Breaks cross compilation.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- guid.h |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--Index: gdisk-0.6.14/guid.h
--===================================================================
----- gdisk-0.6.14.orig/guid.h
--+++ gdisk-0.6.14/guid.h
--@@ -22,7 +22,7 @@
-- #ifdef _WIN32
-- typedef unsigned char my_uuid_t[16];
-- #else
---#include </usr/include/uuid/uuid.h>
--+#include <uuid/uuid.h>
-- typedef uuid_t my_uuid_t;
-- #endif
-- 
-diff --git a/package/gdisk/gdisk-001-no-utf16.patch b/package/gdisk/gdisk-001-no-utf16.patch
-new file mode 100644
-index 0000000..540e741
---- /dev/null
-+++ b/package/gdisk/gdisk-001-no-utf16.patch
-@@ -0,0 +1,43 @@
-+[PATCH] Disable UTF16 support
-+
-+libicu is quite large, and unicode partition names are uncommon.
-+
-+Signed-off-by: Justin Maggard <jmaggard10@gmail.com>
-+---
-+diff -ur gdisk-0.8.5/Makefile gptfdisk-0.8.5/Makefile
-+--- gdisk-0.8.5/Makefile	2012-05-30 08:38:43.000000000 -0700
-++++ gptfdisk-0.8.5/Makefile	2012-06-05 11:38:23.710597974 -0700
-+@@ -1,8 +1,8 @@
-+ CC=gcc
-+ CXX=g++
-+ CFLAGS+=-D_FILE_OFFSET_BITS=64
-+-CXXFLAGS+=-Wall -D_FILE_OFFSET_BITS=64 -D USE_UTF16
-+-#CXXFLAGS+=-Wall -D_FILE_OFFSET_BITS=64
-++#CXXFLAGS+=-Wall -D_FILE_OFFSET_BITS=64 -D USE_UTF16
-++CXXFLAGS+=-Wall -D_FILE_OFFSET_BITS=64
-+ LDFLAGS+=
-+ LIB_NAMES=crc32 support guid gptpart mbrpart basicmbr mbr gpt bsd parttypes attributes diskio diskio-unix
-+ MBR_LIBS=support diskio diskio-unix basicmbr mbrpart
-+@@ -14,16 +14,16 @@
-+ all:	cgdisk gdisk sgdisk fixparts
-+ 
-+ gdisk:	$(LIB_OBJS) gdisk.o gpttext.o
-+-#	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -luuid -o gdisk
-+-	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -licuio -licuuc -luuid -o gdisk
-++	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -luuid -o gdisk
-++#	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -licuio -licuuc -luuid -o gdisk
-+ 
-+ cgdisk: $(LIB_OBJS) cgdisk.o gptcurses.o
-+-#	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncurses -o cgdisk
-+-	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -licuio -licuuc -luuid -lncurses -o cgdisk
-++	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncurses -o cgdisk
-++#	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -licuio -licuuc -luuid -lncurses -o cgdisk
-+ 
-+ sgdisk: $(LIB_OBJS) sgdisk.o gptcl.o
-+-#	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -luuid -lpopt -o sgdisk
-+-	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -licuio -licuuc -luuid -lpopt -o sgdisk
-++	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -luuid -lpopt -o sgdisk
-++#	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -licuio -licuuc -luuid -lpopt -o sgdisk
-+ 
-+ fixparts: $(MBR_LIB_OBJS) fixparts.o
-+ 	$(CXX) $(MBR_LIB_OBJS) fixparts.o $(LDFLAGS) -o fixparts
-diff --git a/package/gdisk/gdisk.mk b/package/gdisk/gdisk.mk
-index f933436..cda369e 100644
---- a/package/gdisk/gdisk.mk
-+++ b/package/gdisk/gdisk.mk
-@@ -4,9 +4,9 @@
- #
- #############################################################
+diff --git a/package/gptfdisk/Config.in b/package/gptfdisk/Config.in
+index 7851dc3..0d7e358 100644
+--- a/package/gptfdisk/Config.in
++++ b/package/gptfdisk/Config.in
+@@ -3,6 +3,9 @@ config BR2_PACKAGE_GPTFDISK
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # util-linux
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	select BR2_PACKAGE_GPTFDISK_GDISK if !BR2_PACKAGE_GPTFDISK_SGDISK
+ 	help
+ 	  GPT fdisk (consisting of the gdisk and sgdisk programs) is a
+ 	  text-mode partitioning tool that works on Globally Unique Identifier
+@@ -14,8 +17,6 @@ config BR2_PACKAGE_GPTFDISK
+ config BR2_PACKAGE_GPTFDISK_GDISK
+ 	bool "interactive gdisk"
+ 	depends on BR2_PACKAGE_GPTFDISK
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  Install the interactive GUID partition table (GPT) manipulator
+ 	  /usr/sbin/gdisk which is modelled after and quite similar in use
+@@ -24,8 +25,6 @@ config BR2_PACKAGE_GPTFDISK_GDISK
+ config BR2_PACKAGE_GPTFDISK_SGDISK
+ 	bool "command line sgdisk"
+ 	depends on BR2_PACKAGE_GPTFDISK
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_POPT
+ 	help
+ 	  Install the command-line GUID partition table (GPT) manipulator
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index 7755a30..2d3cb1a 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
+@@ -10,8 +10,6 @@ GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
+ GPTFDISK_TARGETS_$(BR2_PACKAGE_GPTFDISK_GDISK) += gdisk
+ GPTFDISK_TARGETS_$(BR2_PACKAGE_GPTFDISK_SGDISK) += sgdisk
  
--GDISK_VERSION = 0.6.14
--GDISK_SITE = http://downloads.sourceforge.net/project/gptfdisk/gptfdisk/$(GDISK_VERSION)
--GDISK_SOURCE = gdisk-$(GDISK_VERSION).tgz
-+GDISK_VERSION = 0.8.6
-+GDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
-+GDISK_SOURCE = gptfdisk-$(GDISK_VERSION).tar.gz
+-ifneq ($(GPTFDISK_TARGETS_y),)
+-
+ GPTFDISK_DEPENDENCIES += util-linux
+ ifeq ($(BR2_PACKAGE_GPTFDISK_SGDISK),y)
+     GPTFDISK_DEPENDENCIES += popt
+@@ -33,6 +31,4 @@ define GPTFDISK_UNINSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/,$(GPTFDISK_TARGETS_y))
+ endef
  
- GDISK_TARGETS_$(BR2_PACKAGE_GDISK_GDISK) += gdisk
- GDISK_TARGETS_$(BR2_PACKAGE_GDISK_SGDISK) += sgdisk
+-endif
+-
+ $(eval $(generic-package))
 -- 
 1.7.9.5
