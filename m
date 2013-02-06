@@ -1,66 +1,67 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 06 Feb 2013 21:33:00 +0100
-Subject: [Buildroot] [PATCH] Add Gnublin board support
-In-Reply-To: <1360174408-18232-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1360174408-18232-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <5112BDFC.5020002@mind.be>
+Date: Wed, 06 Feb 2013 21:42:06 +0100
+Subject: [Buildroot] [PATCH] configs/{ea3250, fdi3250,
+ phy3250}: lock down kernel headers version
+In-Reply-To: <1360182113-23743-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1360182113-23743-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <5112C01E.2090807@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/02/13 19:13, Zoltan Gyarmati wrote:
-> diff --git a/configs/gnublin_defconfig b/configs/gnublin_defconfig
-> new file mode 100644
-> index 0000000..3664b96
-> --- /dev/null
-> +++ b/configs/gnublin_defconfig
-> @@ -0,0 +1,25 @@
-> +BR2_arm=y
-> +BR2_arm926t=y
-> +BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-> +BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-> +BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+On 06/02/13 21:21, Gustavo Zacarias wrote:
+> Update {ea3250,fdi3250,phy3250}_defconfig to lock down kernel headers to
+> an appropiate version.
+> Otherwise the target is building with, at the moment of this writing,
+> version 3.7 headers and a 2.6.34 kernel which usually isn't wise.
 
-  Why are these selected?
+  This should really be done for all defconfigs that build a custom 
+kernel version:
 
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to Gnublin"
-> +BR2_TARGET_GENERIC_PASSWD_SHA256=y
-> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV=y
+arm_foundationv8_defconfig
+armadeus_apf9328_defconfig
+at91sam9g20dfc_defconfig
+atstk100x_defconfig
+beaglebone_defconfig
+calao_snowball_defconfig
+kb9202_defconfig
+mini2440_defconfig
+mx53loco_defconfig
+sheevaplug_defconfig
 
-  Why is this one selected?
+  And the ones that allow it should probably set 
+BR2_LINUX_KERNEL_SAME_AS_HEADERS.
 
-> +BR2_PACKAGE_LIBFFI=y
-> +BR2_PACKAGE_NCURSES=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+  But all that is a lot of testing :-)
 
-  Why do you need these packages?
+>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>   configs/ea3250_defconfig  | 4 ++++
+>   configs/fdi3250_defconfig | 4 ++++
+>   configs/phy3250_defconfig | 4 ++++
+>   3 files changed, 12 insertions(+)
+>
+> diff --git a/configs/ea3250_defconfig b/configs/ea3250_defconfig
+> index 9cd7b34..2574dde 100644
+> --- a/configs/ea3250_defconfig
+> +++ b/configs/ea3250_defconfig
+> @@ -11,6 +11,10 @@ BR2_ARM_EABI=y
+>   # that will compile a kernel with ethernet working correctly
+>   BR2_GCC_VERSION_4_3_X=y
+>
+> +# Lock down headers to avoid breaking with new defaults
+> +BR2_KERNEL_HEADERS_VERSION=y
+> +BR2_DEFAULT_KERNEL_VERSION="2.6.34.7"
+> +BR2_DEFAULT_KERNEL_HEADERS="2.6.34.7"
 
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_BLOCKS=512000
-
-  You should mention in the README that the SD card size should be at 
-least 514MB (strange number by the way - wouldn't it make more sense to 
-set the size at 475000 so it may actually fit on a 500MB SD card?)
-
+  Only BR2_DEFAULT_KERNEL_VERSION is necessary - 
+BR2_DEFAULT_KERNEL_HEADERS is derived from it by Kconfig.
 
   Regards,
   Arnout
-
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BOARDNAME="GNUBLIN"
-> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> +BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://gitorious.org/u-boot-gnublin-support/u-boot-gnublin-support.git"
-> +BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="2009.11_gnublin_support_v2"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://gitorious.org/linux-3-7-gnublin/linux-3-7-gnublin.git"
-> +BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="gnublin_support_v1"
-> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/gnublin/gnublin_kernel_config"
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
