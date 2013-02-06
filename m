@@ -1,32 +1,67 @@
-From: Victor Hiairrassary <victor.hiairrassary.ml@gmail.com>
-Date: Wed, 06 Feb 2013 17:27:03 +0100
+From: victor.hiairrassary.ml at gmail.com <victor.hiairrassary.ml@gmail.com>
+Date: Wed,  6 Feb 2013 17:27:16 +0100
 Subject: [Buildroot] [PATCH] boost: bump version to 1.53.0
-In-Reply-To: <20130206124148.473db2e1@skate>
-References: <1360143004-29603-1-git-send-email-victor.hiairrassary.ml@gmail.com>
- <1360143004-29603-2-git-send-email-victor.hiairrassary.ml@gmail.com>
- <20130206103244.68ca56b4@skate>
- <CAP+5e18W7+M-bmRNJLaXhj2XdMAhnVgQgyvVUHMNk-3FOp-DGw@mail.gmail.com>
- <20130206124148.473db2e1@skate>
-Message-ID: <51128457.8020900@gmail.com>
+In-Reply-To: <[PATCH] boost: bump version to 1.53.0>
+References: <[PATCH] boost: bump version to 1.53.0>
+Message-ID: <1360168036-1073-1-git-send-email-victor.hiairrassary.ml@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/06/2013 12:41 PM, Thomas Petazzoni wrote:
-> Dear Victor Hiairrassary,
->
-> Would it be possible to use an e-mail client that complies with the
-> open-source community standards, by sending e-mails as plain text? The
-> plain text version of your e-mail makes no discussion between what you
-> said and what I said, which is very confusing.
-Oh, sorry for the mistake!
-> Could you resubmit a new version of the patch, with more details in the
-> commit log, and a comment before the line disabling the atomic module?
-Done in another mail! I hope that everything is good!
+From: Victor Hiairrassary <victor.hiairrassary.ml@gmail.com>
 
-Victor Hiairrassary
-> Thanks a lot!
->
-> Thomas
+and re-enable boost context library since its compilation with
+uClibc is fixed. Disable new atomic library because it can not
+compile with uClibc (fixed in upstream version).
+
+Signed-off-by: Victor Hiairrassary <victor.hiairrassary.ml@gmail.com>
+---
+ package/boost/Config.in | 3 +++
+ package/boost/boost.mk  | 7 +++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 19dcc60..e36e7d3 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -21,6 +21,9 @@ if BR2_PACKAGE_BOOST
+ config BR2_PACKAGE_BOOST_CHRONO
+ 	bool "boost-chrono"
+ 
++config BR2_PACKAGE_BOOST_CONTEXT
++	bool "boost-context"
++
+ config BR2_PACKAGE_BOOST_DATE_TIME
+ 	bool "boost-date_time"
+ 
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 5e1bb4e..84263d1 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-BOOST_VERSION = 1.52.0
++BOOST_VERSION = 1.53.0
+ BOOST_FILE_VERSION = $(subst .,_,$(BOOST_VERSION))
+ BOOST_SOURCE = boost_$(BOOST_FILE_VERSION).tar.bz2
+ BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
+@@ -15,9 +15,12 @@ TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
+ BOOST_DEPENDENCIES = bzip2 zlib
+ 
+ BOOST_FLAGS =
+-BOOST_WITHOUT_FLAGS = python context
++
++# atomic library compile only with upstream version, wait for next release
++BOOST_WITHOUT_FLAGS = python atomic
+ 
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,context)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
+-- 
+1.8.1.2
