@@ -1,45 +1,71 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 06 Feb 2013 17:52:00 -0300
-Subject: [Buildroot] [PATCH] configs/{ea3250, fdi3250,
- phy3250}: lock down kernel headers version
-In-Reply-To: <5112C01E.2090807@mind.be>
-References: <1360182113-23743-1-git-send-email-gustavo@zacarias.com.ar>
- <5112C01E.2090807@mind.be>
-Message-ID: <5112C270.90503@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 6 Feb 2013 22:07:41 +0100
+Subject: [Buildroot] [PATCH 5/7] package/ceph: new package
+In-Reply-To: <51103C8D.3060202@mind.be>
+References: <cover.1359993560.git.yann.morin.1998@free.fr>
+ <2c2dba5f2433d9f8cb2da88b89d131072eb8f3df.1359993560.git.yann.morin.1998@free.fr>
+ <51103C8D.3060202@mind.be>
+Message-ID: <201302062207.41427.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/06/2013 05:42 PM, Arnout Vandecappelle wrote:
->  This should really be done for all defconfigs that build a custom
-> kernel version:
-> 
-> arm_foundationv8_defconfig
-> armadeus_apf9328_defconfig
-> at91sam9g20dfc_defconfig
-> atstk100x_defconfig
-> beaglebone_defconfig
-> calao_snowball_defconfig
-> kb9202_defconfig
-> mini2440_defconfig
-> mx53loco_defconfig
-> sheevaplug_defconfig
-> 
->  And the ones that allow it should probably set
-> BR2_LINUX_KERNEL_SAME_AS_HEADERS.
-> 
->  But all that is a lot of testing :-)
+Arnout, All,
 
-Yes, i'm sending as i'm testing :)
-I'll also be switching these ones (*3250*) configs to git tags/releases
-!= master because there's a filename clash possibility there.
-Not at the moment though since those use the same upstream and no other
-BSP config does that, but it could happen.
+On Monday 04 February 2013 Arnout Vandecappelle wrote:
+> On 04/02/13 17:01, Yann E. MORIN wrote:
+[--SNIP--]
+> > diff --git a/package/ceph/ceph-no-envz.patch b/package/ceph/ceph-no-envz.patch
+> > new file mode 100644
+> > index 0000000..c0369ba
+> > --- /dev/null
+> > +++ b/package/ceph/ceph-no-envz.patch
+> > @@ -0,0 +1,63 @@
+> > +tools+base: do not include envz.h on uClibc
+> > +
+> > +uClibc does not have envz, and no envz function is in fact used.
+> > +So, simply do not include it under uClibc.
+>   If it's not used, why not just remove the header (and upstream the patch)?
 
->  Only BR2_DEFAULT_KERNEL_VERSION is necessary -
-> BR2_DEFAULT_KERNEL_HEADERS is derived from it by Kconfig.
+Well... IIRC, upstream never replied to my patch.
+So I kept it as-is, in case we needed to later bump ceph version
+with as litle impact as possible.
 
-Cool, i'll minimize them then.
-Regards.
+> > diff --git a/package/ceph/ceph.mk b/package/ceph/ceph.mk
+> > new file mode 100644
+> > index 0000000..33cee8c
+> > --- /dev/null
+> > +++ b/package/ceph/ceph.mk
+> > @@ -0,0 +1,57 @@
+> > +#############################################################
+> > +#
+> > +# ceph
+> > +#
+> > +#############################################################
+> > +
+> > +CEPH_VERSION         = 0.56.2
+> > +CEPH_SOURCE          = ceph-$(CEPH_VERSION).tar.bz2
+> > +CEPH_SITE            = http://ceph.com/download/
+> > +CEPH_LICENSE         = LGPLv2.1 CC-BY-SA Apache-2.0 GPLv2 LGPLv2+ BSD-3c MIT PD
+> 
+>   I'm not sure if PD is a generally accepted abbreviation. And I also 
+> don't think it is necessary to mention it in the first place (it the 
+> entire package is public domain, yes it makes sense, but if it's just 
+> part of it then no).
+
+OK, I'll drop it.
+
+Thank you!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
