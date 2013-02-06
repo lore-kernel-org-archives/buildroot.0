@@ -1,53 +1,68 @@
-From: Victor Hiairrassary <victor.hiairrassary.ml@gmail.com>
-Date: Wed, 6 Feb 2013 12:15:43 +0100
-Subject: [Buildroot] [PATCH] boost: bump version to 1.53.0
-In-Reply-To: <20130206103244.68ca56b4@skate>
-References: <1360143004-29603-1-git-send-email-victor.hiairrassary.ml@gmail.com>
- <1360143004-29603-2-git-send-email-victor.hiairrassary.ml@gmail.com>
- <20130206103244.68ca56b4@skate>
-Message-ID: <CAP+5e18W7+M-bmRNJLaXhj2XdMAhnVgQgyvVUHMNk-3FOp-DGw@mail.gmail.com>
+From: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
+Date: Wed,  6 Feb 2013 12:28:59 +0100
+Subject: [Buildroot] [PATCH] package: add libwebsockets
+Message-ID: <1360150139-6879-1-git-send-email-andreas.wetzel@nanotronic.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- On 02/06/2013 10:32 AM, Thomas Petazzoni wrote:
+Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
+---
+ package/Config.in                      |    1 +
+ package/libwebsockets/Config.in        |    8 ++++++++
+ package/libwebsockets/libwebsockets.mk |   15 +++++++++++++++
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/libwebsockets/Config.in
+ create mode 100644 package/libwebsockets/libwebsockets.mk
 
-Dear victor.hiairrassary.ml at gmail.com,
-
-On Wed,  6 Feb 2013 10:30:04 +0100, victor.hiairrassary.ml at gmail.com
-wrote:
-
-
-  BOOST_FLAGS =
--BOOST_WITHOUT_FLAGS = python context
-+BOOST_WITHOUT_FLAGS = python atomic
-
- Maybe there was a reason why "context" was unconditionally excluded
-from the build, before your patch. Did you check why?
-
- context was excluded because compilation is impossible with boost
-1.52.0 and uClibc, there is a problem with uintptr_t and intptr_t.
-But this is fixed in latest version, 1.53.0.
-
-Also, it would be good to have a comment here that explains why python
-and atomic are unconditionally excluded for the build.
-
- atomic is a new boost library since boost 1.53.0. It is excluded because
-it can not compile with uClibc (uintptr_t missing too), but this is now
-fixed in
-trunk version, see ticket https://svn.boost.org/trac/boost/ticket/7979
-
-In this patch, atomic is simply excluded. So either we wait for boost 1.54.0
-releasing orI can add the patch to fix atomic compilation in buildroot and
-add boost-atomic in menuconfig?
-
-I do not nothing about pyhton exclusion, sorry.
-
- Thanks,
-
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130206/f744c1a1/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index 15d7ad6..dc0a80d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -476,6 +476,7 @@ source "package/libtirpc/Config.in"
+ source "package/libtorrent/Config.in"
+ source "package/libupnp/Config.in"
+ source "package/libvncserver/Config.in"
++source "package/libwebsockets/Config.in"
+ source "package/nss-mdns/Config.in"
+ source "package/ortp/Config.in"
+ source "package/zeromq/Config.in"
+diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
+new file mode 100644
+index 0000000..c4d3beb
+--- /dev/null
++++ b/package/libwebsockets/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBWEBSOCKETS
++	bool "libwebsockets"
++	help
++	  Libwebsockets is a lightweight pure C library built to use
++	  minimal CPU and memory resources, and provide fast throughput
++	  in both directions.
++
++	  http://libwebsockets.org/
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+new file mode 100644
+index 0000000..a3d8936
+--- /dev/null
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libwebsockets
++#
++################################################################################
++
++LIBWEBSOCKETS_VERSION = v1.1-chrome26-firefox18
++LIBWEBSOCKETS_SITE = http://git.libwebsockets.org/cgi-bin/cgit/libwebsockets/snapshot
++LIBWEBSOCKETS_LICENSE = LGPLv2.1
++LIBWEBSOCKETS_LICENSE_FILES = COPYING
++LIBWEBSOCKETS_DEPENDENCIES = zlib
++LIBWEBSOCKETS_AUTORECONF = YES
++LIBWEBSOCKETS_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+-- 
+1.7.10.4
