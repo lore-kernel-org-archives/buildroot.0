@@ -1,32 +1,42 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed,  6 Feb 2013 17:24:13 +0100
-Subject: [Buildroot] [PATCH 5/5] ccache: define license
-In-Reply-To: <1360167853-7177-1-git-send-email-luca@lucaceresoli.net>
-References: <1360167853-7177-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1360167853-7177-5-git-send-email-luca@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Feb 2013 17:26:41 +0100
+Subject: [Buildroot] makedevs and symbolic links
+In-Reply-To: <CAJkQPOn=Pi+NhbRvVG_gk9ccQDaUoUuPH3aEsos032kAv6Y23A@mail.gmail.com>
+References: <CAJkQPOn=Pi+NhbRvVG_gk9ccQDaUoUuPH3aEsos032kAv6Y23A@mail.gmail.com>
+Message-ID: <20130206172641.4c042f87@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/ccache/ccache.mk |    2 ++
- 1 file changed, 2 insertions(+)
+Dear Aras Vaichas,
 
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 1cbad6e..faa7c9f 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -7,6 +7,8 @@
- CCACHE_VERSION = 3.1.8
- CCACHE_SITE    = http://samba.org/ftp/ccache
- CCACHE_SOURCE  = ccache-$(CCACHE_VERSION).tar.bz2
-+CCACHE_LICENSE = GPLv3+, others
-+CCACHE_LICENSE_FILES = LICENSE.txt GPL-3.0.txt
- 
- # When ccache is being built for the host, ccache is not yet
- # available, so we have to use the special C compiler without the
+On Wed, 6 Feb 2013 16:17:26 +0000, Aras Vaichas wrote:
+> I use Buildroot with my own custom root fs skeleton. My skeleton contains a
+> few symbolic links that I'd like to move out either into
+> the BR2_ROOTFS_POST_BUILD_SCRIPT or somewhere else.
+> 
+> makedevs seemed logical but it doesn't support symbolic link creation.
+> 
+> Is there a reason for this?
+> 
+> Would it be useful to add it?
+
+From my point of view, makedevs is here to do the things you can't do
+without being root: create device nodes and adjust ownership.
+
+Symbolic links can be created as non-root in a post-build script for
+example, so I'm not sure there's really a need to have support for
+symbolic links in makedevs.
+
+Or maybe I'm missing the point?
+
+Best regards,
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
