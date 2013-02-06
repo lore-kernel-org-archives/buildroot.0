@@ -1,44 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 06 Feb 2013 20:40:59 +0100
-Subject: [Buildroot] [PATCH 4/7] package/libedit2: new package
-In-Reply-To: <201302062000.10836.yann.morin.1998@free.fr>
-References: <cover.1359993560.git.yann.morin.1998@free.fr>
- <d4a01f43840a933d1829c6e453378c995be77f4e.1359993560.git.yann.morin.1998@free.fr>
- <5110390A.1040708@mind.be> <201302062000.10836.yann.morin.1998@free.fr>
-Message-ID: <5112B1CB.4030203@mind.be>
+Date: Wed, 06 Feb 2013 21:04:03 +0100
+Subject: [Buildroot] [PATCH 3/5] qt: define license
+In-Reply-To: <20130206175833.6c382929@skate>
+References: <1360167853-7177-1-git-send-email-luca@lucaceresoli.net>
+ <1360167853-7177-3-git-send-email-luca@lucaceresoli.net>
+ <20130206175833.6c382929@skate>
+Message-ID: <5112B733.6090103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/02/13 20:00, Yann E. MORIN wrote:
-> Arnout, All,
+On 06/02/13 17:58, Thomas Petazzoni wrote:
+> Dear Luca Ceresoli,
 >
-> On Monday 04 February 2013 Arnout Vandecappelle wrote:
->> On 04/02/13 17:01, Yann E. MORIN wrote:
-[snip]
->>> +define LIBEDIT2_FIX_VIS_H_INCLUDE
->>> +	$(SED) 's/^#include <vis.h>$$/#include <bsd\/vis.h>/;' $(@D)/libedit/filecomplete.c
->>
->>    If you use s,foo,bar, instead of s/foo/bar/ you don't need to quote /.
+> On Wed,  6 Feb 2013 17:24:11 +0100, Luca Ceresoli wrote:
 >
-> Granted. I usualy do not do that, as I sometime have paths that do contain
-> commas, and would broke anyway, so I always explicitly quote '/'.
+>> +QT_LICENSE = LGPLv2.1 with exceptions or GPLv3 or commercial
+>> +QT_LICENSE_FILES = LICENSE.LGPL LGPL_EXCEPTION.txt LICENSE.GPL3
+>
+> If Qt5, I've done:
+>
+> +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+> +QT5BASE_CONFIGURE_OPTS += -opensource -confirm-license
+> +QT5BASE_LICENSE = LGPLv2.1 or GPLv3.0
 
-  @ is a good alternative. But feel free to keep the quoting if you prefer.
+  Isn't it GPLv3 rather than GPLv3.0?
 
->
->> Also, the ; is redundant.
->
-> I like it that all my sed expressions are properly terminated, even if
-> it is not mandatory. It is very annoying to me that, when there are two
-> or more expressions, they are all terminated, save for the last one...
+> +QT5BASE_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
+> +else
+> +QT5BASE_LICENSE = Commercial license
+> +QT5BASE_REDISTRIBUTE = NO
 
-  OK, I thought it was a mistake.
+  Hm. If LICENSE_APPROVED is not set, it means that the compilation will 
+stop to ask the user which license s/he wants. That doesn't necessarily 
+imply the commercial license. So I prefer an OR construct here as well.
+And anyway, even if you hold a commercial license you're still free to 
+distribute it under one of the other licenses.
+
+  By the way, I'd also call it "Digia Qt Commercial license" to make it 
+more explicit. But that's just an opinion.
+
 
   Regards,
   Arnout
+
+> +endif
+>
+> See
+> http://git.free-electrons.com/users/thomas-petazzoni/buildroot/commit/?h=qt5&id=7c1f7b9967d814e3f5c838e7090ac04b9d06af51
+>
+> Best regards,
+>
+> Thomas
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
