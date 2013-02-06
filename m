@@ -1,61 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 6 Feb 2013 20:17:07 +0100
-Subject: [Buildroot] [PATCH 4/7] package/libedit2: new package
-In-Reply-To: <201302062000.10836.yann.morin.1998@free.fr>
-References: <cover.1359993560.git.yann.morin.1998@free.fr>
- <5110390A.1040708@mind.be> <201302062000.10836.yann.morin.1998@free.fr>
-Message-ID: <201302062017.07747.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 06 Feb 2013 16:24:32 -0300
+Subject: [Buildroot] [PATCHv3] util-linux: disable installing binaries
+ by default
+In-Reply-To: <511295FF.30002@mind.be>
+References: <1360158623-19010-1-git-send-email-gustavo@zacarias.com.ar>
+ <511295FF.30002@mind.be>
+Message-ID: <5112ADF0.5010104@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
-
-On Wednesday 06 February 2013 Yann E. MORIN wrote:
-> On Monday 04 February 2013 Arnout Vandecappelle wrote:
-> > On 04/02/13 17:01, Yann E. MORIN wrote:
-[--SNIP--]
-> > > +# $1: DESTDIR to install into
-> > > +# Can't use pmake to install, it wants to be root. sigh... :-(
-> > > +define LIBEDIT2_INSTALL_CMDS
-> > > +	$(INSTALL) -D -m 0644 package/libedit2/libedit2.pc $(1)/usr/lib/pkgconfig/libedit2.pc
-> > > +	ln -sf libedit2.pc $(1)/usr/lib/pkgconfig/libedit.pc
-> > > +	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.a $(1)/usr/lib/libedit.a
-> > > +	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit_pic.a $(1)/usr/lib/libedit_pic.a
-> > > +	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.so.2.11 $(1)/usr/lib/libedit.so.2.11
-> > > +	$(INSTALL) -D -m 0644 $(@D)/libedit/histedit.h $(1)/usr/include/histedit.h
-> > > +	ln -sf libedit.so.$(LIBEDIT2_VERSION) $(1)/usr/lib/libedit.so.$(LIBEDIT2_VERSION_MAJOR)
-> >   This doesn't seem right: LIBEDIT2_VERSION is 2.11-20080614, but you 
-> > just installed 2.11...
+On 02/06/2013 02:42 PM, Arnout Vandecappelle wrote:
+>> +config BR2_PACKAGE_UTIL_LINUX_BINARIES
+>> +    bool "install utilities"
+>> +    select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+>> +    select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
 > 
-> Hmmm... Lemme check...
+>  Why is libmount selected? It wasn't selected before when you built just
+> one binary, e.g. mount. Same for the other two, actually. Of course,
+> it's possible that configure adds them implicitly anyway, I don't know
+> that.
 
-OK, here's what in the build log:
+Because i'm explicitly disabling it otherwise in util-linux.mk
+Don't want to hit build breakages by guessing what configure wants/needs
+and if it's handled properly (maybe it is with this version and maybe
+not in newer ones).
 
-/usr/bin/install -D -m 0644 [...]/build/libedit2-2.11-20080614/libedit/libedit.so.2.11 [...]/target/usr/lib/libedit.so.2.11
-ln -sf libedit.so.2.11-20080614 [...]/target/usr/lib/libedit.so.2
-ln -sf libedit.so.2 [...]/target/usr/lib/libedit.so
+>> +    select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>> +    help
+>> +      Install util-linux binaries.
+> 
+>  Maybe it's worth mentioning that selecting this option installs some
+> binaries even if nothing is selected below.
 
-And now, here's what is in target/usr/lib:
+"Install the basic set of util-linux binaries" ?
+I'm not quite original making up a more verbose description at the moment.
 
-$ ls -l target/usr/lib/libedit*                                                                                                                                                                 
-lrwxrwxrwx 1 ymorin ymorin     12 Feb  6 20:09 target/usr/lib/libedit.so -> libedit.so.2
-lrwxrwxrwx 1 ymorin ymorin     15 Feb  6 20:09 target/usr/lib/libedit.so.2 -> libedit.so.2.11
--rw-r--r-- 1 ymorin ymorin 135945 Feb  6 20:09 target/usr/lib/libedit.so.2.11
+> [snip]
+>> @@ -87,6 +87,41 @@ HOST_UTIL_LINUX_CONF_OPT += \
+>>       --disable-fallocate --disable-unshare --disable-rename \
+>>       --disable-schedutils --disable-wall --disable-partx
+>>
+>> +# Avoid the basic utilities if we just want the libraries
+>> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),y)
+>> +define UTIL_LINUX_INSTALL_BINARIES
+>> +    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+>> +endef
+>> +endif
+> 
+>  Shouldn't there be an else here instead of endif? If you do a top-level
+> install, there is no need to explicitly go into the subdirectories as well.
 
-WTF?
-
-OK, I'll fix this. But dinner first! ;-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Noted for the next rev.
+Regards.
