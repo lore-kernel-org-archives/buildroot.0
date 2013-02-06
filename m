@@ -1,111 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 06 Feb 2013 18:31:24 +0100
-Subject: [Buildroot] [PATCH] add Gnublin board support
-In-Reply-To: <1360154267-18767-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1360154267-18767-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <5112936C.20509@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 6 Feb 2013 20:17:07 +0100
+Subject: [Buildroot] [PATCH 4/7] package/libedit2: new package
+In-Reply-To: <201302062000.10836.yann.morin.1998@free.fr>
+References: <cover.1359993560.git.yann.morin.1998@free.fr>
+ <5110390A.1040708@mind.be> <201302062000.10836.yann.morin.1998@free.fr>
+Message-ID: <201302062017.07747.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Zoltan,
+Arnout, All,
 
-  A few comments in addition to Thomas's.
+On Wednesday 06 February 2013 Yann E. MORIN wrote:
+> On Monday 04 February 2013 Arnout Vandecappelle wrote:
+> > On 04/02/13 17:01, Yann E. MORIN wrote:
+[--SNIP--]
+> > > +# $1: DESTDIR to install into
+> > > +# Can't use pmake to install, it wants to be root. sigh... :-(
+> > > +define LIBEDIT2_INSTALL_CMDS
+> > > +	$(INSTALL) -D -m 0644 package/libedit2/libedit2.pc $(1)/usr/lib/pkgconfig/libedit2.pc
+> > > +	ln -sf libedit2.pc $(1)/usr/lib/pkgconfig/libedit.pc
+> > > +	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.a $(1)/usr/lib/libedit.a
+> > > +	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit_pic.a $(1)/usr/lib/libedit_pic.a
+> > > +	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.so.2.11 $(1)/usr/lib/libedit.so.2.11
+> > > +	$(INSTALL) -D -m 0644 $(@D)/libedit/histedit.h $(1)/usr/include/histedit.h
+> > > +	ln -sf libedit.so.$(LIBEDIT2_VERSION) $(1)/usr/lib/libedit.so.$(LIBEDIT2_VERSION_MAJOR)
+> >   This doesn't seem right: LIBEDIT2_VERSION is 2.11-20080614, but you 
+> > just installed 2.11...
+> 
+> Hmmm... Lemme check...
 
-On 06/02/13 13:37, Zoltan Gyarmati wrote:
->
-> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> ---
->   board/gnublin/README                |   41 +
->   board/gnublin/gnublin_kernel_config | 1836 +++++++++++++++++++++++++++++++++++
+OK, here's what in the build log:
 
-  The kernel config is typically called "linux-<version>.config".  In 
-your case, the version is gnublin_support_v1 which is a bit unfortunate, 
-so perhaps 3.7 is better.
+/usr/bin/install -D -m 0644 [...]/build/libedit2-2.11-20080614/libedit/libedit.so.2.11 [...]/target/usr/lib/libedit.so.2.11
+ln -sf libedit.so.2.11-20080614 [...]/target/usr/lib/libedit.so.2
+ln -sf libedit.so.2 [...]/target/usr/lib/libedit.so
 
-  (It would be nice if the gnublin kernel tree would tag with e.g. 
-v3.7-gnublin-1 instead.)
+And now, here's what is in target/usr/lib:
 
-  It would also be nice if the gnublin kernel tree would contain a 
-defconfig for the board, then there's no need to include a custom linux 
-config in buildroot.
+$ ls -l target/usr/lib/libedit*                                                                                                                                                                 
+lrwxrwxrwx 1 ymorin ymorin     12 Feb  6 20:09 target/usr/lib/libedit.so -> libedit.so.2
+lrwxrwxrwx 1 ymorin ymorin     15 Feb  6 20:09 target/usr/lib/libedit.so.2 -> libedit.so.2.11
+-rw-r--r-- 1 ymorin ymorin 135945 Feb  6 20:09 target/usr/lib/libedit.so.2.11
 
-  It would also be nice if it would follow the stable kernel (currently 
-3.7.6 I think).
+WTF?
 
->   configs/gnublin_defconfig           | 1253 ++++++++++++++++++++++++
->   3 files changed, 3130 insertions(+)
->   create mode 100644 board/gnublin/README
->   create mode 100644 board/gnublin/gnublin_kernel_config
->   create mode 100644 configs/gnublin_defconfig
->
-> diff --git a/board/gnublin/README b/board/gnublin/README
-> new file mode 100644
-> index 0000000..a4fdeb1
-> --- /dev/null
-> +++ b/board/gnublin/README
-> @@ -0,0 +1,41 @@
-> +This the Buildroot support for the Gnublin board
-> +(see here: http://en.gnublin.org/) and to the Elektor Linux board
-> +(http://www.elektor.com/news/elektor-presents-embedded-linux-made-easy.2147294.lynkx)
-> +Unfortunately currently the AD and the pwm modules are not supported, i'm about to
-> +add also those drivers as well to the current kernel later.
+OK, I'll fix this. But dinner first! ;-)
 
-  Would be nice to mention the SoC used.
-
-> +
-> +Base kernel version: 3.7.0 (available here: https://gitorious.org/linux-3-7-gnublin/linux-3-7-gnublin/commits/gnublin-support)
-
-  I guess that should be 3.7 (there is no 3.7.0 tag or tarball).
-
-> +U-boot version: 2009.11 (available here: https://gitorious.org/u-boot-gnublin-support/u-boot-gnublin-support)
-> +
-> +Steps to create a bootable SD card:
-> +
-> +#config buildroot with the gnublin_defconfig:
-> +
-> +$ make gnublin_defconfig
-> +
-> +#tweak the config for your needs:
-> +
-> +$ make menuconfig
-> +
-> +#and build:
-> +
-> +$ make
-> +
-> +#Create 2 partitions on your SD card, one with type of BootIt (fdisk ID: df), the size should
-> +#be around 1M, and another partition with  all of the left space on the card, and
-> +#with the type of normal DOS partition.
-> +
-> +#from the output/images directory dump the u-boot image to the BootIt partition:
-> +
-> +$ dd if=output/images/u-boot.bin of=/dev/sdc2
-> +#                                      ^^^^  modify it accordingly
-
-  Tip: if you're not using conversions, cat is generally much more 
-efficient than dd:
-
-cat output/images/u-boot.bin > /dev/sdc2
-
-
-  Regards,
-  Arnout
-
-> +
-> +#and the dump the root fs image as well:
-> +$ dd if=output/images/rootfs.ext2 of=/dev/sdc1
-> +#                                      ^^^^  modify it accordingly
-> +#Insert the SD card into the board's slot, and your board should boot up with your newly created system
-> +Any feedback/report is welcome on the mr.zoltan.gyarmati[at]gmail.com
-
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
