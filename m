@@ -1,60 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 06 Feb 2013 20:33:27 +0100
+Date: Wed, 06 Feb 2013 20:40:59 +0100
 Subject: [Buildroot] [PATCH 4/7] package/libedit2: new package
-In-Reply-To: <201302062017.07747.yann.morin.1998@free.fr>
+In-Reply-To: <201302062000.10836.yann.morin.1998@free.fr>
 References: <cover.1359993560.git.yann.morin.1998@free.fr>
+ <d4a01f43840a933d1829c6e453378c995be77f4e.1359993560.git.yann.morin.1998@free.fr>
  <5110390A.1040708@mind.be> <201302062000.10836.yann.morin.1998@free.fr>
- <201302062017.07747.yann.morin.1998@free.fr>
-Message-ID: <5112B007.4080705@mind.be>
+Message-ID: <5112B1CB.4030203@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/02/13 20:17, Yann E. MORIN wrote:
+On 06/02/13 20:00, Yann E. MORIN wrote:
 > Arnout, All,
 >
-> On Wednesday 06 February 2013 Yann E. MORIN wrote:
->> On Monday 04 February 2013 Arnout Vandecappelle wrote:
->>> On 04/02/13 17:01, Yann E. MORIN wrote:
-> [--SNIP--]
->>>> +# $1: DESTDIR to install into
->>>> +# Can't use pmake to install, it wants to be root. sigh... :-(
->>>> +define LIBEDIT2_INSTALL_CMDS
->>>> +	$(INSTALL) -D -m 0644 package/libedit2/libedit2.pc $(1)/usr/lib/pkgconfig/libedit2.pc
->>>> +	ln -sf libedit2.pc $(1)/usr/lib/pkgconfig/libedit.pc
->>>> +	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.a $(1)/usr/lib/libedit.a
->>>> +	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit_pic.a $(1)/usr/lib/libedit_pic.a
->>>> +	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.so.2.11 $(1)/usr/lib/libedit.so.2.11
->>>> +	$(INSTALL) -D -m 0644 $(@D)/libedit/histedit.h $(1)/usr/include/histedit.h
->>>> +	ln -sf libedit.so.$(LIBEDIT2_VERSION) $(1)/usr/lib/libedit.so.$(LIBEDIT2_VERSION_MAJOR)
->>>    This doesn't seem right: LIBEDIT2_VERSION is 2.11-20080614, but you
->>> just installed 2.11...
+> On Monday 04 February 2013 Arnout Vandecappelle wrote:
+>> On 04/02/13 17:01, Yann E. MORIN wrote:
+[snip]
+>>> +define LIBEDIT2_FIX_VIS_H_INCLUDE
+>>> +	$(SED) 's/^#include <vis.h>$$/#include <bsd\/vis.h>/;' $(@D)/libedit/filecomplete.c
 >>
->> Hmmm... Lemme check...
+>>    If you use s,foo,bar, instead of s/foo/bar/ you don't need to quote /.
 >
-> OK, here's what in the build log:
->
-> /usr/bin/install -D -m 0644 [...]/build/libedit2-2.11-20080614/libedit/libedit.so.2.11 [...]/target/usr/lib/libedit.so.2.11
-> ln -sf libedit.so.2.11-20080614 [...]/target/usr/lib/libedit.so.2
-> ln -sf libedit.so.2 [...]/target/usr/lib/libedit.so
->
-> And now, here's what is in target/usr/lib:
->
-> $ ls -l target/usr/lib/libedit*
-> lrwxrwxrwx 1 ymorin ymorin     12 Feb  6 20:09 target/usr/lib/libedit.so -> libedit.so.2
-> lrwxrwxrwx 1 ymorin ymorin     15 Feb  6 20:09 target/usr/lib/libedit.so.2 -> libedit.so.2.11
-> -rw-r--r-- 1 ymorin ymorin 135945 Feb  6 20:09 target/usr/lib/libedit.so.2.11
->
-> WTF?
+> Granted. I usualy do not do that, as I sometime have paths that do contain
+> commas, and would broke anyway, so I always explicitly quote '/'.
 
-  Hang on... Aren't these links created by ldconfig? Is it even necessary 
-to create them manually, since we run ldconfig in target-finalize?
+  @ is a good alternative. But feel free to keep the quoting if you prefer.
+
+>
+>> Also, the ; is redundant.
+>
+> I like it that all my sed expressions are properly terminated, even if
+> it is not mandatory. It is very annoying to me that, when there are two
+> or more expressions, they are all terminated, save for the last one...
+
+  OK, I thought it was a mistake.
 
   Regards,
   Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
