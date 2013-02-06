@@ -1,36 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 6 Feb 2013 21:16:41 +0100
-Subject: [Buildroot] [PATCH 4/7] package/libedit2: new package
-In-Reply-To: <5112B007.4080705@mind.be>
-References: <cover.1359993560.git.yann.morin.1998@free.fr>
- <201302062017.07747.yann.morin.1998@free.fr> <5112B007.4080705@mind.be>
-Message-ID: <201302062116.42055.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  6 Feb 2013 17:21:53 -0300
+Subject: [Buildroot] [PATCH] configs/{ea3250, fdi3250,
+	phy3250}: lock down kernel headers version
+Message-ID: <1360182113-23743-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, all,
+Update {ea3250,fdi3250,phy3250}_defconfig to lock down kernel headers to
+an appropiate version.
+Otherwise the target is building with, at the moment of this writing,
+version 3.7 headers and a 2.6.34 kernel which usually isn't wise.
 
-On Wednesday 06 February 2013 Arnout Vandecappelle wrote:
-> On 06/02/13 20:17, Yann E. MORIN wrote:
-> > $ ls -l target/usr/lib/libedit*
-> > lrwxrwxrwx 1 ymorin ymorin     12 Feb  6 20:09 target/usr/lib/libedit.so -> libedit.so.2
-> > lrwxrwxrwx 1 ymorin ymorin     15 Feb  6 20:09 target/usr/lib/libedit.so.2 -> libedit.so.2.11
-> > -rw-r--r-- 1 ymorin ymorin 135945 Feb  6 20:09 target/usr/lib/libedit.so.2.11
->   Hang on... Aren't these links created by ldconfig? Is it even necessary 
-> to create them manually, since we run ldconfig in target-finalize?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ configs/ea3250_defconfig  | 4 ++++
+ configs/fdi3250_defconfig | 4 ++++
+ configs/phy3250_defconfig | 4 ++++
+ 3 files changed, 12 insertions(+)
 
-Just tried. Nice catch! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/configs/ea3250_defconfig b/configs/ea3250_defconfig
+index 9cd7b34..2574dde 100644
+--- a/configs/ea3250_defconfig
++++ b/configs/ea3250_defconfig
+@@ -11,6 +11,10 @@ BR2_ARM_EABI=y
+ # that will compile a kernel with ethernet working correctly
+ BR2_GCC_VERSION_4_3_X=y
+ 
++# Lock down headers to avoid breaking with new defaults
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="2.6.34.7"
++BR2_DEFAULT_KERNEL_HEADERS="2.6.34.7"
+ 
+ #
+ # Host utilities
+diff --git a/configs/fdi3250_defconfig b/configs/fdi3250_defconfig
+index 1fd0b05..b1c6684 100644
+--- a/configs/fdi3250_defconfig
++++ b/configs/fdi3250_defconfig
+@@ -11,6 +11,10 @@ BR2_ARM_EABI=y
+ # that will compile a kernel with ethernet working correctly
+ BR2_GCC_VERSION_4_3_X=y
+ 
++# Lock down headers to avoid breaking with new defaults
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="2.6.34.7"
++BR2_DEFAULT_KERNEL_HEADERS="2.6.34.7"
+ 
+ #
+ # Host utilities
+diff --git a/configs/phy3250_defconfig b/configs/phy3250_defconfig
+index bc17d5c..e95546f 100644
+--- a/configs/phy3250_defconfig
++++ b/configs/phy3250_defconfig
+@@ -11,6 +11,10 @@ BR2_ARM_EABI=y
+ # that will compile a kernel with ethernet working correctly
+ BR2_GCC_VERSION_4_3_X=y
+ 
++# Lock down headers to avoid breaking with new defaults
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="2.6.34.7"
++BR2_DEFAULT_KERNEL_HEADERS="2.6.34.7"
+ 
+ #
+ # Host utilities
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.12.4
