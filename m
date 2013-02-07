@@ -1,76 +1,67 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 07 Feb 2013 18:44:49 +0100
-Subject: [Buildroot] [PATCH 1/3] Documentation update : add tips to
- build manual,
- add information about buildroot toolchain not being relocable and put some
- hints to use it,
- move the Beyond Buildroot section before FAQs and add content
-In-Reply-To: <1360097491-20121-1-git-send-email-contact@team-ard.com>
-References: <1360097491-20121-1-git-send-email-contact@team-ard.com>
-Message-ID: <5113E811.2050003@mind.be>
+Date: Thu, 07 Feb 2013 18:01:54 +0100
+Subject: [Buildroot] [PATCH 3/5] qt: define license
+In-Reply-To: <5113672E.4030300@lucaceresoli.net>
+References: <1360167853-7177-1-git-send-email-luca@lucaceresoli.net>
+ <1360167853-7177-3-git-send-email-luca@lucaceresoli.net>
+ <20130206175833.6c382929@skate> <5112B733.6090103@mind.be>
+ <5113672E.4030300@lucaceresoli.net>
+Message-ID: <5113DE02.3080308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Willy,
+On 07/02/13 09:34, Luca Ceresoli wrote:
+> Arnout Vandecappelle wrote:
+>> On 06/02/13 17:58, Thomas Petazzoni wrote:
+>>> Dear Luca Ceresoli,
+>>>
+>>> On Wed,  6 Feb 2013 17:24:11 +0100, Luca Ceresoli wrote:
+>>>
+>>>> +QT_LICENSE = LGPLv2.1 with exceptions or GPLv3 or commercial
+>>>> +QT_LICENSE_FILES = LICENSE.LGPL LGPL_EXCEPTION.txt LICENSE.GPL3
+>>>
+>>> If Qt5, I've done:
+>>>
+>>> +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+>>> +QT5BASE_CONFIGURE_OPTS += -opensource -confirm-license
+>>> +QT5BASE_LICENSE = LGPLv2.1 or GPLv3.0
+>>
+>>   Isn't it GPLv3 rather than GPLv3.0?
+>>
+>>> +QT5BASE_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
+>>> +else
+>>> +QT5BASE_LICENSE = Commercial license
+>>> +QT5BASE_REDISTRIBUTE = NO
+>>
+>>   Hm. If LICENSE_APPROVED is not set, it means that the compilation will
+>> stop to ask the user which license s/he wants. That doesn't necessarily
+>> imply the commercial license. So I prefer an OR construct here as well.
+>> And anyway, even if you hold a commercial license you're still free to
+>> distribute it under one of the other licenses.
+>
+> How about the following?
+>
+> QT_LICENSE = LGPLv2.1 with exceptions or GPLv3
+> ifneq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+> QT_LICENSE += or Digia Qt Commercial license
+> endif
+> QT_LICENSE_FILES = LICENSE.LGPL LGPL_EXCEPTION.txt LICENSE.GPL3
 
-  When there are review comments you want to integrate, you should still 
-send it as a single patch. You can update an existing patch by doing 'git 
-commit --amend' instead of a single commit. Or, if you committed it in 
-pieces, you can use 'git rebase -i origin/master'. That will give you an 
-editor where you can tell git what to do with each patch. Select 'reword' 
-for the first patch, and 'fixup' for the subsequent patches.
-
-  The patch comment should be wrapped at 75 columns. It should look more 
-or less as follows:
-
-<<<<<<
-manual: extend "Beyond buildroot" section
-
-* Explain how to create a bootable disk image for PC.
-* Explain how to use PXE + NFS-root
-
-Signed-off-by: ...
----
-v3: [new things in v3]
-v2: [new things in v2]
- >>>>>>
-
-In other words: a title that fits on a 75-column line, then one  or more 
-paragraphs of explanation, then your Sob, then a line with three dashes, 
-and then any other comments that shouldn't go into the git history, e.g. 
-your patch changelog. The text after the three dashes is removed 
-automatically when the patch is applied by git-am.
-
-  As someone else noted before on the list, this patch is doing three 
-things so it should really be three patches. Splitting a patch is a bit 
-more complex in git, but here goes.
-
-git log --oneline -1
-# This prints something like:
-# 123abcd manual: extend "Beyond buildroot" section
-# note the commit ID (123abcd in this example).
-git reset HEAD^
-# Now you have undone the commit.
-git add -p
-# This allows you to interactively select which things you want to have
-# committed in this patch. Use '?' for help.
-git commit -c 123abcd # commit ID you noted before
-# This makes a commit and reuses the commit message you had before.
-git add -p
-git commit
-...
+  Sounds good to me.
 
 
-  I'm not going to comment on the patch itself, it's too difficult when 
-it has such long lines and with the extra 'review modifications'. I will 
-comment when you resend, though.
+> This way we still cannot automatically (and safely) set
+> _REDISTRIBUTE = NO, unless we add an explicit "Use commercial license"
+> knob in menuconfig.
 
+  I don't think that's very important.
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
