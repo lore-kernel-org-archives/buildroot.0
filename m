@@ -1,40 +1,50 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 7 Feb 2013 21:04:17 +0200
-Subject: [Buildroot] [PATCH] boost: bump version to 1.53.0
-In-Reply-To: <5113CB6F.8050609@gmail.com>
-References: <1360143004-29603-1-git-send-email-victor.hiairrassary.ml@gmail.com>
- <1360143004-29603-2-git-send-email-victor.hiairrassary.ml@gmail.com>
- <20130206103244.68ca56b4@skate>
- <CAP+5e18W7+M-bmRNJLaXhj2XdMAhnVgQgyvVUHMNk-3FOp-DGw@mail.gmail.com>
- <20130206124148.473db2e1@skate> <5113CB6F.8050609@gmail.com>
-Message-ID: <20130207190416.GE4116@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu,  7 Feb 2013 20:04:48 +0100
+Subject: [Buildroot] [PATCH] arch/arm: fix-up the ARM Kconfig warning
+Message-ID: <1360263888-5806-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Victor,
+Kconfig does not accepts that a symbol that is part of a choice
+be affected a default value.
 
-On Thu, Feb 07, 2013 at 04:42:39PM +0100, Victor Hiairrassary wrote:
-> On 02/06/2013 12:41 PM, Thomas Petazzoni wrote:
-> >Could you resubmit a new version of the patch, with more details in the
-> >commit log, and a comment before the line disabling the atomic module?
-> >
-> >Thanks a lot!
-> >
-> >Thomas
-> Yesterday I've sent the new patch through (git send-email) on
-> buildroot at busybox.net. But it is only available on buildroot
-> patchwork at http://patchwork.ozlabs.org/patch/218673/ and not
-> on mailing list (I don't know why).
+Fix this by introducing a dummy EABI symbol., and nake the real
+EABI symbol a prompt-less option that depends on !OABI.
 
-I got it. It is also archived at 
-http://lists.busybox.net/pipermail/buildroot/2013-February/066841.html.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ arch/Config.in.arm |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-baruch
-
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 37152c0..ecb45ab 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -76,7 +76,7 @@ choice
+ 	  Note:
+ 	    Using OABI is discouraged.
+ 
+-config BR2_ARM_EABI
++config BR2_ARM_EABI_DUMMY
+ 	bool "EABI"
+ config BR2_ARM_OABI
+ 	bool "OABI"
+@@ -84,8 +84,9 @@ config BR2_ARM_OABI
+ endchoice
+ 
+ config BR2_ARM_EABI
+-	default y
+-	depends on !BR2_DEPRECATED
++	def_bool y
++	depends on BR2_arm || BR2_armeb
++	depends on !BR2_ARM_OABI
+ 
+ config BR2_ARM_ENABLE_NEON
+ 	bool "Enable NEON SIMD extension support"
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.7.2.5
