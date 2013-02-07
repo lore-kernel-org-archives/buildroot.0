@@ -1,42 +1,70 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 7 Feb 2013 18:06:05 +0100
-Subject: [Buildroot] [PATCH v2 2/5] docs/manual: mention the new
- post-image mechanism
-In-Reply-To: <20130207154948.59736956@skate>
-References: <1360187346-30258-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1360187346-30258-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAHXCMM+DVbQp1370_mqt9QbU=TVGEneuwbN7XdTE-XTkLm8BLQ@mail.gmail.com>
- <20130207154948.59736956@skate>
-Message-ID: <CAHXCMMLc4ihR2nxHRpe5eRriMPMMqkd7RjB4O5rezyXUniRKWA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 7 Feb 2013 19:19:19 +0100
+Subject: [Buildroot] [git commit] proxychains-ng: ensure cross compiler is
+	used
+Message-ID: <20130207182100.B9BC19AA02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=2831427373db54b076e19c59c60c20f1018e8204
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-2013/2/7 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-[...]
-> I am not sure what you would like to see added exactly. Since they are
-> executed outside of fakeroot, then they are just executed after the
-> filesystem images are created, and that's it, no?
->
-> Of course, if those scripts were executed inside fakeroot, it should be
-> mentioned clearly. But since it's not the case, is it important to
-> mention that they are executed outside of fakeroot? We could give a lot
-> of things that those scripts do /not/ do, no? My feeling is that it
-> would add confusion, but I don't have a strong feeling about this.
->
-> Or maybe you were thinking about something else than just "These
-> scripts are executed outside of the fakeroot environment" ?
+Fixes http://autobuild.buildroot.org/results/e184fcb1c100e9d8aa3d9f18a8caee8c0839e207
 
-My point is that these scripts will most likely try to do things that
-requires root permissions;
-so it may be good to warn the user that this should be handled by the
-scripts themselves.
+Contrary to what the .mk file states, proxychains-ng doesn't use autotools.
+Instead it uses a handwritten configure script, so convert it to
+generic-package.
 
-Regards,
+This handwritten configure script generates config.mak which is then
+included by the Makefile. Unfortunately config.mak does:
 
--- 
-Samuel
+CC ?= $(TARGET_CC)
+
+But as make sets CC to 'cc' by default, this never does anything - So
+it ends up using the host compiler (and target CFLAGS), breaking the build.
+
+Fix it by passing the correct CC setting at build time as well.
+
+While we're at it, also cleanup the package by using 'make install-config'
+to install the configuration file.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/proxychains-ng/proxychains-ng.mk |   17 ++++++++++++-----
+ 1 files changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
+index c38a7db..2020e3f 100644
+--- a/package/proxychains-ng/proxychains-ng.mk
++++ b/package/proxychains-ng/proxychains-ng.mk
+@@ -3,15 +3,22 @@
+ # proxychains-ng
+ #
+ #############################################################
++
+ PROXYCHAINS_NG_VERSION = 4.4
+ PROXYCHAINS_NG_SOURCE = proxychains-$(PROXYCHAINS_NG_VERSION).tar.bz2
+ PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
+ 
+-define PROXYCHAINS_NG_POST_INSTALL_TARGET
+-	$(INSTALL) -m 644 -D $(@D)/src/proxychains.conf \
+-		$(TARGET_DIR)/etc/proxychains.conf
++define PROXYCHAINS_NG_CONFIGURE_CMDS
++	cd $(@D) && \
++	$(TARGET_CONFIGURE_OPTS) ./configure --prefix=/usr --sysconfdir=/etc
++endef
++
++define PROXYCHAINS_NG_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+ 
+-PROXYCHAINS_NG_POST_INSTALL_TARGET_HOOKS += PROXYCHAINS_NG_POST_INSTALL_TARGET
++define PROXYCHAINS_NG_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install install-config
++endef
+ 
+-$(eval $(autotools-package))
++$(eval $(generic-package))
