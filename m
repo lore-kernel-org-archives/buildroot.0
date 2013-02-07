@@ -1,71 +1,54 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 07 Feb 2013 18:01:54 +0100
-Subject: [Buildroot] [PATCH 3/5] qt: define license
-In-Reply-To: <5113672E.4030300@lucaceresoli.net>
-References: <1360167853-7177-1-git-send-email-luca@lucaceresoli.net>
- <1360167853-7177-3-git-send-email-luca@lucaceresoli.net>
- <20130206175833.6c382929@skate> <5112B733.6090103@mind.be>
- <5113672E.4030300@lucaceresoli.net>
-Message-ID: <5113DE02.3080308@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu,  7 Feb 2013 22:58:10 +0100
+Subject: [Buildroot] [PATCH] rootfs-overlay: also exclude .empty files
+In-Reply-To: <CAJkQPO=A+_7t-dbSP8VutAsen+MvG9J44qx3D6uxKt7C2mBQUg@mail.gmail.com>
+References: <CAJkQPO=A+_7t-dbSP8VutAsen+MvG9J44qx3D6uxKt7C2mBQUg@mail.gmail.com>
+Message-ID: <1360274290-16081-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/02/13 09:34, Luca Ceresoli wrote:
-> Arnout Vandecappelle wrote:
->> On 06/02/13 17:58, Thomas Petazzoni wrote:
->>> Dear Luca Ceresoli,
->>>
->>> On Wed,  6 Feb 2013 17:24:11 +0100, Luca Ceresoli wrote:
->>>
->>>> +QT_LICENSE = LGPLv2.1 with exceptions or GPLv3 or commercial
->>>> +QT_LICENSE_FILES = LICENSE.LGPL LGPL_EXCEPTION.txt LICENSE.GPL3
->>>
->>> If Qt5, I've done:
->>>
->>> +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
->>> +QT5BASE_CONFIGURE_OPTS += -opensource -confirm-license
->>> +QT5BASE_LICENSE = LGPLv2.1 or GPLv3.0
->>
->>   Isn't it GPLv3 rather than GPLv3.0?
->>
->>> +QT5BASE_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
->>> +else
->>> +QT5BASE_LICENSE = Commercial license
->>> +QT5BASE_REDISTRIBUTE = NO
->>
->>   Hm. If LICENSE_APPROVED is not set, it means that the compilation will
->> stop to ask the user which license s/he wants. That doesn't necessarily
->> imply the commercial license. So I prefer an OR construct here as well.
->> And anyway, even if you hold a commercial license you're still free to
->> distribute it under one of the other licenses.
->
-> How about the following?
->
-> QT_LICENSE = LGPLv2.1 with exceptions or GPLv3
-> ifneq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-> QT_LICENSE += or Digia Qt Commercial license
-> endif
-> QT_LICENSE_FILES = LICENSE.LGPL LGPL_EXCEPTION.txt LICENSE.GPL3
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-  Sounds good to me.
+This makes it possible to put empty directories in the overlay.
+Thanks to Aras Vaichas for pointing that out.
 
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Makefile                         |    3 ++-
+ docs/manual/customize-rootfs.txt |    4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-> This way we still cannot automatically (and safely) set
-> _REDISTRIBUTE = NO, unless we add an explicit "Use commercial license"
-> knob in menuconfig.
-
-  I don't think that's very important.
-
-  Regards,
-  Arnout
-
+diff --git a/Makefile b/Makefile
+index d9e5f24..b50c4ed 100644
+--- a/Makefile
++++ b/Makefile
+@@ -504,7 +504,8 @@ endif
+ 	@for dir in $(call qstrip,$(BR2_ROOTFS_OVERLAY)); do \
+ 		$(call MESSAGE,"Copying overlay $${dir}"); \
+ 		rsync -a \
+-			--exclude .svn --exclude .git --exclude .hg --exclude '*~' \
++			--exclude .empty --exclude .svn --exclude .git \
++			--exclude .hg --exclude '*~' \
+ 			$${dir}/ $(TARGET_DIR); \
+ 	done
+ 
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index fa04d85..1a47d7e 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -26,8 +26,8 @@ there are a few ways to customize the resulting target filesystem.
+ 
+ * Create a filesystem overlay: a tree of files that are copied directly
+   over the target filesystem after it has been built.  Set
+-  +BR2_ROOTFS_OVERLAY+ to the top of the tree.  +.git+, +.svn+,
+-  +.hg+ directories and files ending with +~+ are excluded.
++  +BR2_ROOTFS_OVERLAY+ to the top of the tree.  +.git+, +.svn+, +.hg+
++  directories, +.empty+ files and files ending with +~+ are excluded.
+   _Among these first 3 methods, this one should be preferred_.
+ 
+ * In the Buildroot configuration, you can specify the path to a
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
