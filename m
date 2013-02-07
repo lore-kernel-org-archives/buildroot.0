@@ -1,32 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 7 Feb 2013 21:37:03 +0100
-Subject: [Buildroot] [git commit] fbset: define license
-Message-ID: <20130207230042.1DCEE9A9B5@busybox.osuosl.org>
+From: Daniel Price <daniel.price@gmail.com>
+Date: Thu, 7 Feb 2013 15:14:25 -0800
+Subject: [Buildroot] Anyone working on a nodejs recipe?
+Message-ID: <CAKduhStLhHpAJmpDTqJwOROb1k67qEdt9b7pTGK7FQVeNEOFSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e1dd19d2a7b4a19395ed99420cf08d1a48081167
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-[Peter: license is GPLv2 like Linux]
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/fbset/fbset.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+I'm interested in building nodejs and nodejs modules within buildroot for
+x64 and ARM targets.  I've been using buildroot for several months and have
+developed several new recipes, although none are of the complexity required
+to build something like NodeJS.
 
-diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
-index 3423259..b8a8f43 100644
---- a/package/fbset/fbset.mk
-+++ b/package/fbset/fbset.mk
-@@ -7,6 +7,7 @@
- FBSET_VERSION = 2.1
- FBSET_SOURCE = fbset-$(FBSET_VERSION).tar.gz
- FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
-+FBSET_LICENSE = GPLv2
- 
- # Make sure full fbset wins over busybox fbset
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+I see that in August, another contributor posted a patch which started the
+work to get nodejs building (see http://patchwork.ozlabs.org/patch/176857/).
+I've been working on getting that patch to work with buildroot 2012.11 and
+node 0.8.x.  I was wondering if anyone else out there had worked on this as
+well?  Is anyone else interested in having NodeJS in buildroot or am I on
+an island?
+
+Thanks,
+
+       -dp
+
+--
+Daniel.Price at gmail.com; Twitter: @danielbprice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130207/360665f1/attachment.html>
