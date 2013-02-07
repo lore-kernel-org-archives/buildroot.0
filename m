@@ -1,36 +1,32 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 07 Feb 2013 23:40:41 +0100
-Subject: [Buildroot] [PATCH 3/5] qt: define license
-In-Reply-To: <5113DE02.3080308@mind.be>
-References: <1360167853-7177-1-git-send-email-luca@lucaceresoli.net>
- <1360167853-7177-3-git-send-email-luca@lucaceresoli.net>
- <20130206175833.6c382929@skate> <5112B733.6090103@mind.be>
- <5113672E.4030300@lucaceresoli.net> <5113DE02.3080308@mind.be>
-Message-ID: <51142D69.10008@lucaceresoli.net>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 7 Feb 2013 21:37:03 +0100
+Subject: [Buildroot] [git commit] fbset: define license
+Message-ID: <20130207230042.1DCEE9A9B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle wrote:
->> How about the following?
->>
->> QT_LICENSE = LGPLv2.1 with exceptions or GPLv3
->> ifneq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
->> QT_LICENSE += or Digia Qt Commercial license
->> endif
->> QT_LICENSE_FILES = LICENSE.LGPL LGPL_EXCEPTION.txt LICENSE.GPL3
->
->   Sounds good to me.
->
->
->> This way we still cannot automatically (and safely) set
->> _REDISTRIBUTE = NO, unless we add an explicit "Use commercial license"
->> knob in menuconfig.
->
->   I don't think that's very important.
+commit: http://git.buildroot.net/buildroot/commit/?id=e1dd19d2a7b4a19395ed99420cf08d1a48081167
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I agree. In fact I did not care about this in the v2 patch I just sent.
+[Peter: license is GPLv2 like Linux]
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/fbset/fbset.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Luca
+diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
+index 3423259..b8a8f43 100644
+--- a/package/fbset/fbset.mk
++++ b/package/fbset/fbset.mk
+@@ -7,6 +7,7 @@
+ FBSET_VERSION = 2.1
+ FBSET_SOURCE = fbset-$(FBSET_VERSION).tar.gz
+ FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
++FBSET_LICENSE = GPLv2
+ 
+ # Make sure full fbset wins over busybox fbset
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
