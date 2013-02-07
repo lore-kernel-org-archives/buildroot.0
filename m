@@ -1,61 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 07 Feb 2013 20:43:00 +0100
-Subject: [Buildroot] [PATCH] arch/arm: fix-up the ARM Kconfig warning
-In-Reply-To: <1360263888-5806-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Thu, 7 Feb 2013 20:04:48 +0100")
-References: <1360263888-5806-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87r4krlxkr.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 7 Feb 2013 20:39:26 +0100
+Subject: [Buildroot] [git commit] arch/arm: fix-up the ARM Kconfig warning
+Message-ID: <20130207194248.C52DB9AA03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=58c2500e2ab550e28a5edd8369e1cf9b043874d8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann> Kconfig does not accepts that a symbol that is part of a choice
- Yann> be affected a default value.
+Kconfig does not accepts that a symbol that is part of a choice
+be affected a default value.
 
- Yann> Fix this by introducing a dummy EABI symbol., and nake the real
- Yann> EABI symbol a prompt-less option that depends on !OABI.
+Fix this by introducing a dummy EABI symbol, and make the real
+EABI symbol a prompt-less option that depends on !OABI.
 
-Thanks, committed with small fixups (s/nake/make and below).
+[Peter: drop arm dependency, rename to EABI_CHOICE]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ arch/Config.in.arm |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-
- Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> Cc: Peter Korsgaard <jacmet@uclibc.org>
- Yann> Cc: Arnout Vandecappelle <arnout@mind.be>
- Yann> ---
- Yann>  arch/Config.in.arm |    7 ++++---
- Yann>  1 files changed, 4 insertions(+), 3 deletions(-)
-
- Yann> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
- Yann> index 37152c0..ecb45ab 100644
- Yann> --- a/arch/Config.in.arm
- Yann> +++ b/arch/Config.in.arm
- Yann> @@ -76,7 +76,7 @@ choice
- Yann>  	  Note:
- Yann>  	    Using OABI is discouraged.
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 37152c0..79f08f7 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -76,7 +76,7 @@ choice
+ 	  Note:
+ 	    Using OABI is discouraged.
  
- Yann> -config BR2_ARM_EABI
- Yann> +config BR2_ARM_EABI_DUMMY
-
-I renamed this to BR2_ARM_EABI_CHOICE
-
- Yann>  	bool "EABI"
- Yann>  config BR2_ARM_OABI
- Yann>  	bool "OABI"
- Yann> @@ -84,8 +84,9 @@ config BR2_ARM_OABI
- Yann>  endchoice
+-config BR2_ARM_EABI
++config BR2_ARM_EABI_CHOICE
+ 	bool "EABI"
+ config BR2_ARM_OABI
+ 	bool "OABI"
+@@ -84,8 +84,8 @@ config BR2_ARM_OABI
+ endchoice
  
- Yann>  config BR2_ARM_EABI
- Yann> -	default y
- Yann> -	depends on !BR2_DEPRECATED
- Yann> +	def_bool y
- Yann> +	depends on BR2_arm || BR2_armeb
-
-The entire file is only sourced for arm || armeb, so this can be
-dropped.
-
--- 
-Bye, Peter Korsgaard
+ config BR2_ARM_EABI
+-	default y
+-	depends on !BR2_DEPRECATED
++	def_bool y
++	depends on !BR2_ARM_OABI
+ 
+ config BR2_ARM_ENABLE_NEON
+ 	bool "Enable NEON SIMD extension support"
