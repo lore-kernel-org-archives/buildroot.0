@@ -1,7 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu,  7 Feb 2013 22:02:33 +0100
-Subject: [Buildroot] [PATCH v2 1/4] ffmpeg: define license
-Message-ID: <1360270956-8896-1-git-send-email-luca@lucaceresoli.net>
+Date: Thu,  7 Feb 2013 22:02:34 +0100
+Subject: [Buildroot] [PATCH v2 2/4] omap-u-boot-utils: define license
+In-Reply-To: <1360270956-8896-1-git-send-email-luca@lucaceresoli.net>
+References: <1360270956-8896-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1360270956-8896-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +12,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
-Changed since v1:
- - automagically add GPL license (Arnout/Peter suggestion).
+No change since v1.
 
- package/multimedia/ffmpeg/ffmpeg.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+ package/omap-u-boot-utils/omap-u-boot-utils.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
-index b018ea0..f63eb35 100644
---- a/package/multimedia/ffmpeg/ffmpeg.mk
-+++ b/package/multimedia/ffmpeg/ffmpeg.mk
-@@ -9,6 +9,13 @@ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+diff --git a/package/omap-u-boot-utils/omap-u-boot-utils.mk b/package/omap-u-boot-utils/omap-u-boot-utils.mk
+index bb894a5..8615fdb 100644
+--- a/package/omap-u-boot-utils/omap-u-boot-utils.mk
++++ b/package/omap-u-boot-utils/omap-u-boot-utils.mk
+@@ -6,6 +6,8 @@
  
-+FFMPEG_LICENSE = LGPLv2.1+, libjpeg license
-+FFMPEG_LICENSE_FILES = LICENSE COPYING.LGPLv2.1
-+ifeq ($(BR2_PACKAGE_FFMPEG_GPL),y)
-+FFMPEG_LICENSE += and GPLv2+
-+FFMPEG_LICENSE_FILES += COPYING.GPLv2
-+endif
-+
- FFMPEG_CONF_OPT = \
- 	--prefix=/usr		\
- 	--disable-avfilter	\
+ OMAP_U_BOOT_UTILS_VERSION = 8aff852
+ OMAP_U_BOOT_UTILS_SITE = http://github.com/nmenon/omap-u-boot-utils/tarball/master
++OMAP_U_BOOT_UTILS_LICENSE = GPLv2, GPLv2+
++OMAP_U_BOOT_UTILS_LICENSE_FILES = COPYING
+ 
+ define HOST_OMAP_U_BOOT_UTILS_BUILD_CMDS
+ 	$(MAKE) -C $(@D)
 -- 
 1.7.10.4
