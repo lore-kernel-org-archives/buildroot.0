@@ -1,64 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 7 Feb 2013 13:48:27 +0100
-Subject: [Buildroot] [git commit] Config.in: move BR2_DEFCONFIG to Build
-	options menu.
-Message-ID: <20130207125214.6A08C9A9F3@busybox.osuosl.org>
+Date: Thu, 7 Feb 2013 13:51:57 +0100
+Subject: [Buildroot] [git commit] coreutils: needs mmu
+Message-ID: <20130207125214.9870D9A9F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e0170d66da0b83604d497e717dbbe1052759b65
+commit: http://git.buildroot.net/buildroot/commit/?id=69d9fc6b4e2508556c81443a062e298ad9a5daf2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As suggested by gustavoz.
+Fixes:
+http://autobuild.buildroot.net/results/bb975d928c08d31d0c1ecfb9519034865120b244/
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Config.in |   24 ++++++++++++------------
- 1 files changed, 12 insertions(+), 12 deletions(-)
+ package/coreutils/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 4929a80..a2c305f 100644
---- a/Config.in
-+++ b/Config.in
-@@ -22,18 +22,6 @@ config BR2_HOSTARCH_NEEDS_IA32_LIBS
- 
- source "arch/Config.in"
- 
--config BR2_DEFCONFIG_FROM_ENV
--	string
--	option env="BR2_DEFCONFIG"
--
--config BR2_DEFCONFIG
--	string "Location to save buildroot config"
--	default BR2_DEFCONFIG_FROM_ENV if BR2_DEFCONFIG_FROM_ENV != ""
--	default "$(CONFIG_DIR)/defconfig"
--	help
--	  When running 'make savedefconfig', the defconfig file will be saved
--	  in this location.
--
- menu "Build options"
- 
- menu "Commands"
-@@ -107,6 +95,18 @@ config BR2_TAR_OPTIONS
- 
- endmenu
- 
-+config BR2_DEFCONFIG_FROM_ENV
-+	string
-+	option env="BR2_DEFCONFIG"
-+
-+config BR2_DEFCONFIG
-+	string "Location to save buildroot config"
-+	default BR2_DEFCONFIG_FROM_ENV if BR2_DEFCONFIG_FROM_ENV != ""
-+	default "$(CONFIG_DIR)/defconfig"
-+	help
-+	  When running 'make savedefconfig', the defconfig file will be saved
-+	  in this location.
-+
- config BR2_DL_DIR
- 	string "Download dir"
- 	default "$(TOPDIR)/dl"
+diff --git a/package/coreutils/Config.in b/package/coreutils/Config.in
+index bfd6f26..c416ab1 100644
+--- a/package/coreutils/Config.in
++++ b/package/coreutils/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_COREUTILS
+ 	bool "coreutils"
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  All of the basic file/text/shell utilities.  These are the
+ 	  core utilities which are expected to exist on every system.
