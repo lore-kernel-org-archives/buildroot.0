@@ -1,50 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Feb 2013 09:24:57 +0100
-Subject: [Buildroot] [git commit] qextserialport: don't require Qt GUI
- module
-In-Reply-To: <511350F7.9060504@mind.be>
-References: <20121114214738.427A799B26@busybox.osuosl.org>
- <50A580BA.5020402@mind.be> <511350F7.9060504@mind.be>
-Message-ID: <20130207092457.7ab44d3e@skate>
+Date: Thu, 7 Feb 2013 09:27:51 +0100
+Subject: [Buildroot] [PATCH 3/8] package/Makefile.in: update/fix
+ HOST_PATH variable
+In-Reply-To: <d29120e810fb080ac4304d6e51b01ec2efda168f.1356907750.git.s.martin49@gmail.com>
+References: <cover.1356907750.git.s.martin49@gmail.com>
+ <d29120e810fb080ac4304d6e51b01ec2efda168f.1356907750.git.s.martin49@gmail.com>
+Message-ID: <20130207092751.61fd256a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Samuel Martin,
 
-On Thu, 07 Feb 2013 08:00:07 +0100, Arnout Vandecappelle wrote:
-
-> >   While we're at it, we could also throw out our patching of the
-> > platform-specific qws config file: we are anyway replacing all
-> > "interesting" variables with our own values, so all useful content
-> > is thrown away.  Instead, we could make our own spec file that
-> > contains exactly what we need:
-> >
-> > include(../../common/linux.conf)
-> > include(../../common/gcc-base-unix.conf)
-> > include(../../common/g++-unix.conf)
-> > include(../../common/qws.conf)
-> > <our stuff goes here>
-> > load(qt_config)
-> >
-> >
-> >   What do you think?
+On Sun, 30 Dec 2012 23:54:10 +0100, Samuel Martin wrote:
 > 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/Makefile.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->   Thomas,
-> 
->   Now that you're working on Qt5, maybe you can check with qt-project
-> if this is indeed the way to go?
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index cc8f320..dd04e25 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -165,7 +165,7 @@ HOST_CFLAGS   ?= -O2
+>  HOST_CFLAGS   += $(HOST_CPPFLAGS)
+>  HOST_CXXFLAGS += $(HOST_CFLAGS)
+>  HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib
+> -Wl,-rpath,$(HOST_DIR)/usr/lib
+> -HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
+> +HOST_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(PATH)" 
+>  # hostcc version as an integer - E.G. 4.3.2 => 432
+>  HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
 
-I am not sure why you mean by "this", but in the Qt5 packaging, I do
-add our own linux-buildroot-g++ configuration. See
-http://git.free-electrons.com/users/thomas-petazzoni/buildroot/diff/package/qt5/qt5base/qt5base-mkspecs-files.patch?h=qt5&id=7c1f7b9967d814e3f5c838e7090ac04b9d06af51.
+I am ok with the patch, and also your 4/8, but I really believe you
+should be more verbose in the commit log. Here the only information is
+"update/fix HOST_PATH variable". But why? What is the reason? What are
+the impacts? It is especially true when we look at those patches with a
+little bit of delay as is the case now.
 
-Is that what you meant?
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
