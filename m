@@ -1,33 +1,54 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Thu, 7 Feb 2013 09:08:53 +0100
-Subject: [Buildroot] Question about patches
-In-Reply-To: <EE5E77B503DE9A478B63A89AAD2585EDB66A47@vpane.excalyptech.com>
-References: <EE5E77B503DE9A478B63A89AAD2585EDB66A46@vpane.excalyptech.com>
- <201302062337.26263.yann.morin.1998@free.fr>
- <EE5E77B503DE9A478B63A89AAD2585EDB66A47@vpane.excalyptech.com>
-Message-ID: <CAHQn0khK1A4AVB15urNppuw8hJrmi+c0dM9M2LHAff+8oeiTyQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 7 Feb 2013 09:24:57 +0100
+Subject: [Buildroot] [git commit] qextserialport: don't require Qt GUI
+ module
+In-Reply-To: <511350F7.9060504@mind.be>
+References: <20121114214738.427A799B26@busybox.osuosl.org>
+ <50A580BA.5020402@mind.be> <511350F7.9060504@mind.be>
+Message-ID: <20130207092457.7ab44d3e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 7, 2013 at 1:47 AM, Przemyslaw Wrzos <
-przemyslaw.wrzos@calyptech.com> wrote:
+Dear Arnout Vandecappelle,
 
-> Great, thanks for the heads up. The patch was more of an enhancement so
-> there's no rush, just wanted to make sure it wouldn't get lost.
->
+On Thu, 07 Feb 2013 08:00:07 +0100, Arnout Vandecappelle wrote:
 
-Another way to make sure your mail reach the mailinglist is to take a look
-at it's archive:
-http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot
+> >   While we're at it, we could also throw out our patching of the
+> > platform-specific qws config file: we are anyway replacing all
+> > "interesting" variables with our own values, so all useful content
+> > is thrown away.  Instead, we could make our own spec file that
+> > contains exactly what we need:
+> >
+> > include(../../common/linux.conf)
+> > include(../../common/gcc-base-unix.conf)
+> > include(../../common/g++-unix.conf)
+> > include(../../common/qws.conf)
+> > <our stuff goes here>
+> > load(qt_config)
+> >
+> >
+> >   What do you think?
+> 
+> 
+>   Thomas,
+> 
+>   Now that you're working on Qt5, maybe you can check with qt-project
+> if this is indeed the way to go?
 
-Finally, please avoid top posting. :)
-http://www.idallen.com/topposting.html
+I am not sure why you mean by "this", but in the Qt5 packaging, I do
+add our own linux-buildroot-g++ configuration. See
+http://git.free-electrons.com/users/thomas-petazzoni/buildroot/diff/package/qt5/qt5base/qt5base-mkspecs-files.patch?h=qt5&id=7c1f7b9967d814e3f5c838e7090ac04b9d06af51.
 
-Best regards
-Daniel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130207/f51484bd/attachment-0001.html>
+Is that what you meant?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
