@@ -1,42 +1,76 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 07 Feb 2013 18:14:28 +0100
-Subject: [Buildroot] makedevs and symbolic links
-In-Reply-To: <CAJkQPO=A+_7t-dbSP8VutAsen+MvG9J44qx3D6uxKt7C2mBQUg@mail.gmail.com>
-References: <CAJkQPOn=Pi+NhbRvVG_gk9ccQDaUoUuPH3aEsos032kAv6Y23A@mail.gmail.com>
- <20130206172641.4c042f87@skate>
- <CAJkQPOmpY_aT1DhDpxe2rw_endLzFkhmOWAkrbt1CzeG+7c=0Q@mail.gmail.com>
- <20130206175711.51603415@skate>
- <CAJkQPO=A+_7t-dbSP8VutAsen+MvG9J44qx3D6uxKt7C2mBQUg@mail.gmail.com>
-Message-ID: <5113E0F4.4070404@mind.be>
+Date: Thu, 07 Feb 2013 18:44:49 +0100
+Subject: [Buildroot] [PATCH 1/3] Documentation update : add tips to
+ build manual,
+ add information about buildroot toolchain not being relocable and put some
+ hints to use it,
+ move the Beyond Buildroot section before FAQs and add content
+In-Reply-To: <1360097491-20121-1-git-send-email-contact@team-ard.com>
+References: <1360097491-20121-1-git-send-email-contact@team-ard.com>
+Message-ID: <5113E811.2050003@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/02/13 11:14, Aras Vaichas wrote:
-> My current employer wants me to put my Buildroot configuration into their
-> version control system (MKS). So I am looking at ways that I can avoid
-> using empty directories and symbolic links to make it diff and MKS
-> friendly. I guess there's no getting around using multiple files and
-> scripts to achieve this.
+  Hi Willy,
 
-  Empty directories, I forgot about that!
+  When there are review comments you want to integrate, you should still 
+send it as a single patch. You can update an existing patch by doing 'git 
+commit --amend' instead of a single commit. Or, if you committed it in 
+pieces, you can use 'git rebase -i origin/master'. That will give you an 
+editor where you can tell git what to do with each patch. Select 'reword' 
+for the first patch, and 'fixup' for the subsequent patches.
 
-  Patch coming up. It excludes the .empty files, so that you can create 
-an empty directory in your VCS by populating it with a '.empty' file. We 
-use the same trick in the skeleton (git doesn't support empty directories 
-either).
+  The patch comment should be wrapped at 75 columns. It should look more 
+or less as follows:
 
-  For symlinks, I don't see a reason to add a workaround in buildroot. A 
-VCS that doesn't have symlinks is broken. I have a customer who uses CVS, 
-and their workaround is to put the overlay in a tar file and extract it 
-before building.
+<<<<<<
+manual: extend "Beyond buildroot" section
+
+* Explain how to create a bootable disk image for PC.
+* Explain how to use PXE + NFS-root
+
+Signed-off-by: ...
+---
+v3: [new things in v3]
+v2: [new things in v2]
+ >>>>>>
+
+In other words: a title that fits on a 75-column line, then one  or more 
+paragraphs of explanation, then your Sob, then a line with three dashes, 
+and then any other comments that shouldn't go into the git history, e.g. 
+your patch changelog. The text after the three dashes is removed 
+automatically when the patch is applied by git-am.
+
+  As someone else noted before on the list, this patch is doing three 
+things so it should really be three patches. Splitting a patch is a bit 
+more complex in git, but here goes.
+
+git log --oneline -1
+# This prints something like:
+# 123abcd manual: extend "Beyond buildroot" section
+# note the commit ID (123abcd in this example).
+git reset HEAD^
+# Now you have undone the commit.
+git add -p
+# This allows you to interactively select which things you want to have
+# committed in this patch. Use '?' for help.
+git commit -c 123abcd # commit ID you noted before
+# This makes a commit and reuses the commit message you had before.
+git add -p
+git commit
+...
+
+
+  I'm not going to comment on the patch itself, it's too difficult when 
+it has such long lines and with the extra 'review modifications'. I will 
+comment when you resend, though.
 
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
