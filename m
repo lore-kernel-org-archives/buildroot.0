@@ -1,72 +1,65 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 7 Feb 2013 17:06:28 +0100
-Subject: [Buildroot] [git commit] configs/{ea3250, fdi3250,
-	phy3250}: lock down kernel headers version
-Message-ID: <20130207160726.B49539A9FA@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 7 Feb 2013 17:48:13 +0100
+Subject: [Buildroot] [PATCH 3/8] package/Makefile.in: update/fix
+	HOST_PATH variable
+In-Reply-To: <20130207092751.61fd256a@skate>
+References: <cover.1356907750.git.s.martin49@gmail.com>
+ <d29120e810fb080ac4304d6e51b01ec2efda168f.1356907750.git.s.martin49@gmail.com>
+ <20130207092751.61fd256a@skate>
+Message-ID: <CAHXCMMJ41KL-3rggGZ2FtrW=B=ww-tuYW8qcoPfOT0k+qegJVQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2356d08bbdf18677e14cb21d18c9e024e749d50b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Update {ea3250,fdi3250,phy3250}_defconfig to lock down kernel headers to
-an appropiate version.
-Otherwise the target is building with, at the moment of this writing,
-version 3.7 headers and a 2.6.34 kernel which usually isn't wise.
+2013/2/7 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Samuel Martin,
+>
+> On Sun, 30 Dec 2012 23:54:10 +0100, Samuel Martin wrote:
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> ---
+>>  package/Makefile.in | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/Makefile.in b/package/Makefile.in
+>> index cc8f320..dd04e25 100644
+>> --- a/package/Makefile.in
+>> +++ b/package/Makefile.in
+>> @@ -165,7 +165,7 @@ HOST_CFLAGS   ?= -O2
+>>  HOST_CFLAGS   += $(HOST_CPPFLAGS)
+>>  HOST_CXXFLAGS += $(HOST_CFLAGS)
+>>  HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib
+>> -Wl,-rpath,$(HOST_DIR)/usr/lib
+>> -HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
+>> +HOST_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(PATH)"
+>>  # hostcc version as an integer - E.G. 4.3.2 => 432
+>>  HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
+>
+> I am ok with the patch, and also your 4/8, but I really believe you
+> should be more verbose in the commit log. Here the only information is
+> "update/fix HOST_PATH variable".
+I agree and I may be more guilty than anyone else since I regularly
+ask for more details. ;)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- configs/ea3250_defconfig  |    4 ++++
- configs/fdi3250_defconfig |    4 ++++
- configs/phy3250_defconfig |    4 ++++
- 3 files changed, 12 insertions(+), 0 deletions(-)
+> But why? What is the reason? What are
+> the impacts? It is especially true when we look at those patches with a
+> little bit of delay as is the case now.
+Well, I think I already answered this:
+http://lists.busybox.net/pipermail/buildroot/2012-December/064434.html
 
-diff --git a/configs/ea3250_defconfig b/configs/ea3250_defconfig
-index 9cd7b34..2574dde 100644
---- a/configs/ea3250_defconfig
-+++ b/configs/ea3250_defconfig
-@@ -11,6 +11,10 @@ BR2_ARM_EABI=y
- # that will compile a kernel with ethernet working correctly
- BR2_GCC_VERSION_4_3_X=y
- 
-+# Lock down headers to avoid breaking with new defaults
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="2.6.34.7"
-+BR2_DEFAULT_KERNEL_HEADERS="2.6.34.7"
- 
- #
- # Host utilities
-diff --git a/configs/fdi3250_defconfig b/configs/fdi3250_defconfig
-index 1fd0b05..b1c6684 100644
---- a/configs/fdi3250_defconfig
-+++ b/configs/fdi3250_defconfig
-@@ -11,6 +11,10 @@ BR2_ARM_EABI=y
- # that will compile a kernel with ethernet working correctly
- BR2_GCC_VERSION_4_3_X=y
- 
-+# Lock down headers to avoid breaking with new defaults
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="2.6.34.7"
-+BR2_DEFAULT_KERNEL_HEADERS="2.6.34.7"
- 
- #
- # Host utilities
-diff --git a/configs/phy3250_defconfig b/configs/phy3250_defconfig
-index bc17d5c..e95546f 100644
---- a/configs/phy3250_defconfig
-+++ b/configs/phy3250_defconfig
-@@ -11,6 +11,10 @@ BR2_ARM_EABI=y
- # that will compile a kernel with ethernet working correctly
- BR2_GCC_VERSION_4_3_X=y
- 
-+# Lock down headers to avoid breaking with new defaults
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="2.6.34.7"
-+BR2_DEFAULT_KERNEL_HEADERS="2.6.34.7"
- 
- #
- # Host utilities
+I planned to re-spin part of the serie, but would like some inputs to
+the question:
+"do we need 2 distinct variables for this?"
+
+So, meanwhile, if you prefer merge this patch as is (with a commit
+message more verbose), tell me, I'll repost it shortly.
+
+Regards,
+
+
+-- 
+Samuel
