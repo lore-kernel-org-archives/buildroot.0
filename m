@@ -1,45 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 7 Feb 2013 08:44:05 +0100
-Subject: [Buildroot] [git commit] arm: deprecate OABI
-Message-ID: <20130207075103.E53099A92A@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
+Date: Thu, 7 Feb 2013 09:08:53 +0100
+Subject: [Buildroot] Question about patches
+In-Reply-To: <EE5E77B503DE9A478B63A89AAD2585EDB66A47@vpane.excalyptech.com>
+References: <EE5E77B503DE9A478B63A89AAD2585EDB66A46@vpane.excalyptech.com>
+ <201302062337.26263.yann.morin.1998@free.fr>
+ <EE5E77B503DE9A478B63A89AAD2585EDB66A47@vpane.excalyptech.com>
+Message-ID: <CAHQn0khK1A4AVB15urNppuw8hJrmi+c0dM9M2LHAff+8oeiTyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c4cfa85b798cb744954d35aa05fa41e7a6956abd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, Feb 7, 2013 at 1:47 AM, Przemyslaw Wrzos <
+przemyslaw.wrzos@calyptech.com> wrote:
 
-The BR2_ARM_EABI config symbol is still kept in order to minimize
-the impact.
+> Great, thanks for the heads up. The patch was more of an enhancement so
+> there's no rush, just wanted to make sure it wouldn't get lost.
+>
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- arch/Config.in.arm |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+Another way to make sure your mail reach the mailinglist is to take a look
+at it's archive:
+http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index b681d27..37152c0 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -68,6 +68,7 @@ config BR2_arm1136jf_s
- choice
- 	prompt "Target ABI"
- 	depends on BR2_arm || BR2_armeb
-+	depends on BR2_DEPRECATED
- 	default BR2_ARM_EABI
- 	help
- 	  Application Binary Interface to use
-@@ -82,6 +83,10 @@ config BR2_ARM_OABI
- 	depends on !BR2_GCC_VERSION_4_7_X
- endchoice
- 
-+config BR2_ARM_EABI
-+	default y
-+	depends on !BR2_DEPRECATED
-+
- config BR2_ARM_ENABLE_NEON
- 	bool "Enable NEON SIMD extension support"
- 	depends on BR2_ARM_CPU_MAYBE_HAS_NEON
+Finally, please avoid top posting. :)
+http://www.idallen.com/topposting.html
+
+Best regards
+Daniel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130207/f51484bd/attachment-0001.html>
