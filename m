@@ -1,23 +1,38 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 7 Feb 2013 15:44:48 +0100
-Subject: [Buildroot] [PATCH 5/5] libgpg-error: use <pkg>_CONFIG_SCRIPTS
-In-Reply-To: <1360192218-30930-6-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1360192218-30930-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1360192218-30930-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMM+_tNwWDoZy4k4GH77O_q7Hs+b=EMfMPjXZm-kMtvbt9g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 7 Feb 2013 15:47:00 +0100
+Subject: [Buildroot] [PATCH] boost: Pass staging dir to --with-icu
+ option.
+In-Reply-To: <20130207134835.GA23603@zenon.in.qult.net>
+References: <20130207134835.GA23603@zenon.in.qult.net>
+Message-ID: <20130207154700.1d1da42b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/2/7 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> libgpg-error installs a gpg-error-config script, but it wasn't fixed
-> up properly. Use the <pkg>_CONFIG_SCRIPTS to handle this.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Samuel Martin" <s.martin49@gmail.com>
+Dear Ignacy Gawedzki,
 
+On Thu, 7 Feb 2013 14:48:35 +0100, Ignacy Gawedzki wrote:
+> When using the --with-icu option without specifying the directory,
+> boost's bootstrap.sh script will look at "common" locations (lines
+> 289-294):
+> 
+>     COMMON_ICU_PATHS="/usr /usr/local /sw"
+>     for p in $COMMON_ICU_PATHS; do
+>       if test -r $p/include/unicode/utypes.h; then
+>         ICU_ROOT=$p
+>       fi
+>     done
+> 
+> With buildroot it may surely become problematic at some point.
 
+This looks sensible. However, it doesn't explain how Boost could have
+been finding ICU before your patch. Any idea?
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
