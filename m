@@ -1,47 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Feb 2013 09:31:29 +0100
-Subject: [Buildroot] Question about patches
-In-Reply-To: <EE5E77B503DE9A478B63A89AAD2585EDB66A47@vpane.excalyptech.com>
-References: <EE5E77B503DE9A478B63A89AAD2585EDB66A46@vpane.excalyptech.com>
- <201302062337.26263.yann.morin.1998@free.fr>
- <EE5E77B503DE9A478B63A89AAD2585EDB66A47@vpane.excalyptech.com>
-Message-ID: <20130207093129.47baa875@skate>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 07 Feb 2013 09:34:54 +0100
+Subject: [Buildroot] [PATCH 3/5] qt: define license
+In-Reply-To: <5112B733.6090103@mind.be>
+References: <1360167853-7177-1-git-send-email-luca@lucaceresoli.net>
+ <1360167853-7177-3-git-send-email-luca@lucaceresoli.net>
+ <20130206175833.6c382929@skate> <5112B733.6090103@mind.be>
+Message-ID: <5113672E.4030300@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Przemyslaw Wrzos,
+Arnout Vandecappelle wrote:
+> On 06/02/13 17:58, Thomas Petazzoni wrote:
+>> Dear Luca Ceresoli,
+>>
+>> On Wed,  6 Feb 2013 17:24:11 +0100, Luca Ceresoli wrote:
+>>
+>>> +QT_LICENSE = LGPLv2.1 with exceptions or GPLv3 or commercial
+>>> +QT_LICENSE_FILES = LICENSE.LGPL LGPL_EXCEPTION.txt LICENSE.GPL3
+>>
+>> If Qt5, I've done:
+>>
+>> +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+>> +QT5BASE_CONFIGURE_OPTS += -opensource -confirm-license
+>> +QT5BASE_LICENSE = LGPLv2.1 or GPLv3.0
+>
+>   Isn't it GPLv3 rather than GPLv3.0?
+>
+>> +QT5BASE_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
+>> +else
+>> +QT5BASE_LICENSE = Commercial license
+>> +QT5BASE_REDISTRIBUTE = NO
+>
+>   Hm. If LICENSE_APPROVED is not set, it means that the compilation will
+> stop to ask the user which license s/he wants. That doesn't necessarily
+> imply the commercial license. So I prefer an OR construct here as well.
+> And anyway, even if you hold a commercial license you're still free to
+> distribute it under one of the other licenses.
 
-On Thu, 7 Feb 2013 11:47:35 +1100, Przemyslaw Wrzos wrote:
-> Great, thanks for the heads up. The patch was more of an enhancement
-> so there's no rush, just wanted to make sure it wouldn't get lost.
+How about the following?
 
-Nowadays, patches normally don't get lost: whenever a patch is sent to
-the list, it is recorded by our "patchwork" and becomes listed at
-http://patchwork.ozlabs.org/project/buildroot/list/. Then, it takes
-some human action to either apply the patch, or remove it from this
-list, or something. But at least all patches sent to the list are
-recorded.
+QT_LICENSE = LGPLv2.1 with exceptions or GPLv3
+ifneq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+QT_LICENSE += or Digia Qt Commercial license
+endif
+QT_LICENSE_FILES = LICENSE.LGPL LGPL_EXCEPTION.txt LICENSE.GPL3
 
-However, as you can see, the number of patches to be applied/considered
-is quite large, so if your patch hasn't had much attention, it is not
-bad after a week or two (as suggested by Arnout) to ask what is
-happening.
+This way we still cannot automatically (and safely) set
+_REDISTRIBUTE = NO, unless we add an explicit "Use commercial license"
+knob in menuconfig.
 
-> I had a quick look around the website but couldn't find a release
-> schedule, merge windows, etc. If there's nothing like that right now
-> it would probably be useful to help keep a track of what's going on
-> for end developers who are not as closely involved with the project.
+Luca
 
-Hum, indeed. Will try to cook a patch for the manual about this.
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+>
+>   By the way, I'd also call it "Digia Qt Commercial license" to make it
+> more explicit. But that's just an opinion.
