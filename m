@@ -1,80 +1,60 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Thu, 07 Feb 2013 10:53:10 +0100
-Subject: [Buildroot] [PATCH] Add Gnublin board support
-In-Reply-To: <5112BDFC.5020002@mind.be>
-References: <1360174408-18232-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <5112BDFC.5020002@mind.be>
-Message-ID: <51137986.3060400@gmail.com>
+From: Aras Vaichas <aras.vaichas@gmail.com>
+Date: Thu, 7 Feb 2013 10:14:18 +0000
+Subject: [Buildroot] makedevs and symbolic links
+In-Reply-To: <20130206175711.51603415@skate>
+References: <CAJkQPOn=Pi+NhbRvVG_gk9ccQDaUoUuPH3aEsos032kAv6Y23A@mail.gmail.com>
+ <20130206172641.4c042f87@skate>
+ <CAJkQPOmpY_aT1DhDpxe2rw_endLzFkhmOWAkrbt1CzeG+7c=0Q@mail.gmail.com>
+ <20130206175711.51603415@skate>
+Message-ID: <CAJkQPO=A+_7t-dbSP8VutAsen+MvG9J44qx3D6uxKt7C2mBQUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/06/2013 09:33 PM, Arnout Vandecappelle wrote:
-> On 06/02/13 19:13, Zoltan Gyarmati wrote:
->> diff --git a/configs/gnublin_defconfig b/configs/gnublin_defconfig
->> new file mode 100644
->> index 0000000..3664b96
->> --- /dev/null
->> +++ b/configs/gnublin_defconfig
->> @@ -0,0 +1,25 @@
->> +BR2_arm=y
->> +BR2_arm926t=y
->> +BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
->> +BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
->> +BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+On 6 February 2013 16:57, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> The current design is really:
 >
->  Why are these selected?
+>  * We have a base skeleton in system/skeleton that generally never
+>    needs to be modified. The base system/device_table.txt and
+>    system/device_table_dev.txt take care of setting the appropriate
+>    permissions/ownerships on the files part of the base skeleton.
 >
->> +BR2_TARGET_GENERIC_ISSUE="Welcome to Gnublin"
->> +BR2_TARGET_GENERIC_PASSWD_SHA256=y
->> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV=y
->
->  Why is this one selected?
->
->> +BR2_PACKAGE_LIBFFI=y
->> +BR2_PACKAGE_NCURSES=y
->> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
->
->  Why do you need these packages?
->
->> +BR2_TARGET_ROOTFS_EXT2=y
->> +BR2_TARGET_ROOTFS_EXT2_BLOCKS=512000
->
->  You should mention in the README that the SD card size should be at 
-> least 514MB (strange number by the way - wouldn't it make more sense 
-> to set the size at 475000 so it may actually fit on a 500MB SD card?)
->
->
->  Regards,
->  Arnout
->
->> +BR2_TARGET_UBOOT=y
->> +BR2_TARGET_UBOOT_BOARDNAME="GNUBLIN"
->> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
->> +BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://gitorious.org/u-boot-gnublin-support/u-boot-gnublin-support.git" 
->>
->> +BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="2009.11_gnublin_support_v2"
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
->> +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://gitorious.org/linux-3-7-gnublin/linux-3-7-gnublin.git" 
->>
->> +BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="gnublin_support_v1"
->> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/gnublin/gnublin_kernel_config" 
->>
->> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
->
+>  * For each project, we encourage people to create a rootfs overlay in
+>    board/<company>/<project>/rootfs-overlay/, where they can add their
+>    specific configuration files, symbolic links and so on. And a
+>    project-specific device table in
+>    board/<company>/<project>/device_table.txt sets the appropriate
+>    owernship for the files part of the rootfs-overlay.
 >
 
-Hi,
+Aaah, I don't have that version of Buildroot. I'm using 2012.11. I can see
+from the mailing lists now that patches were added for the "rootfs-overlay".
 
-hm, ok, i'll clean up more carefully(it seems the configs are still 
-representing my setup...), thx for your time and feedback.
+I might have to leave that until it's in the stable release. I'm currently
+documenting how to use Buildroot for my employer (a company with almost
+zero Linux knowledge) on their hardware, so I'd rather stick to official
+release versions for now. I can update my documentation later.
 
--- 
-br,
-Zoltan Gyarmati
-mail: mr.zoltan.gyarmati at gmail.com
-freenode nick: zgyarmati
+My current employer wants me to put my Buildroot configuration into their
+version control system (MKS). So I am looking at ways that I can avoid
+using empty directories and symbolic links to make it diff and MKS
+friendly. I guess there's no getting around using multiple files and
+scripts to achieve this.
+
+Crazy idea: If only patch/diff handled empty directories, symlinks,
+devices, permissions and ownerships. Then it could be done entirely in a
+single file that would be 100% friendly in all cases on all operating
+systems.
+
+Thanks!
+
+regards
+
+Aras Vaichas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130207/36b694d7/attachment-0001.html>
