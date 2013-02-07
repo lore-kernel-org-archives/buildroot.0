@@ -1,36 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 7 Feb 2013 19:20:30 +0100
-Subject: [Buildroot] [git commit] proxychains-ng: needs threads
-Message-ID: <20130207182101.292E596E73@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 7 Feb 2013 21:04:17 +0200
+Subject: [Buildroot] [PATCH] boost: bump version to 1.53.0
+In-Reply-To: <5113CB6F.8050609@gmail.com>
+References: <1360143004-29603-1-git-send-email-victor.hiairrassary.ml@gmail.com>
+ <1360143004-29603-2-git-send-email-victor.hiairrassary.ml@gmail.com>
+ <20130206103244.68ca56b4@skate>
+ <CAP+5e18W7+M-bmRNJLaXhj2XdMAhnVgQgyvVUHMNk-3FOp-DGw@mail.gmail.com>
+ <20130206124148.473db2e1@skate> <5113CB6F.8050609@gmail.com>
+Message-ID: <20130207190416.GE4116@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=124c4e040af817951ceb67bab04e2575269c827a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Victor,
 
-Also capitalize help text while we're at it.
+On Thu, Feb 07, 2013 at 04:42:39PM +0100, Victor Hiairrassary wrote:
+> On 02/06/2013 12:41 PM, Thomas Petazzoni wrote:
+> >Could you resubmit a new version of the patch, with more details in the
+> >commit log, and a comment before the line disabling the atomic module?
+> >
+> >Thanks a lot!
+> >
+> >Thomas
+> Yesterday I've sent the new patch through (git send-email) on
+> buildroot at busybox.net. But it is only available on buildroot
+> patchwork at http://patchwork.ozlabs.org/patch/218673/ and not
+> on mailing list (I don't know why).
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/proxychains-ng/Config.in |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+I got it. It is also archived at 
+http://lists.busybox.net/pipermail/buildroot/2013-February/066841.html.
 
-diff --git a/package/proxychains-ng/Config.in b/package/proxychains-ng/Config.in
-index 6fcebde..99e49bd 100644
---- a/package/proxychains-ng/Config.in
-+++ b/package/proxychains-ng/Config.in
-@@ -1,7 +1,10 @@
- config BR2_PACKAGE_PROXYCHAINS_NG
- 	bool "proxychains-ng"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
--	  force any tcp connections to flow through a proxy (or proxy chain)
-+	  Force any tcp connections to flow through a proxy (or proxy chain)
- 
- 	  https://github.com/rofl0r/proxychains
- 
-+comment "proxychains-ng needs a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
