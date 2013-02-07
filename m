@@ -1,39 +1,46 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu,  7 Feb 2013 22:02:35 +0100
-Subject: [Buildroot] [PATCH v2 3/4] qt: define license
-In-Reply-To: <1360270956-8896-1-git-send-email-luca@lucaceresoli.net>
-References: <1360270956-8896-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1360270956-8896-3-git-send-email-luca@lucaceresoli.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 07 Feb 2013 18:14:28 +0100
+Subject: [Buildroot] makedevs and symbolic links
+In-Reply-To: <CAJkQPO=A+_7t-dbSP8VutAsen+MvG9J44qx3D6uxKt7C2mBQUg@mail.gmail.com>
+References: <CAJkQPOn=Pi+NhbRvVG_gk9ccQDaUoUuPH3aEsos032kAv6Y23A@mail.gmail.com>
+ <20130206172641.4c042f87@skate>
+ <CAJkQPOmpY_aT1DhDpxe2rw_endLzFkhmOWAkrbt1CzeG+7c=0Q@mail.gmail.com>
+ <20130206175711.51603415@skate>
+ <CAJkQPO=A+_7t-dbSP8VutAsen+MvG9J44qx3D6uxKt7C2mBQUg@mail.gmail.com>
+Message-ID: <5113E0F4.4070404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
-Changed since v1:
- - automagically add commercial license (Thomas/Arnout suggestion).
+On 07/02/13 11:14, Aras Vaichas wrote:
+> My current employer wants me to put my Buildroot configuration into their
+> version control system (MKS). So I am looking at ways that I can avoid
+> using empty directories and symbolic links to make it diff and MKS
+> friendly. I guess there's no getting around using multiple files and
+> scripts to achieve this.
 
- package/qt/qt.mk |    6 ++++++
- 1 file changed, 6 insertions(+)
+  Empty directories, I forgot about that!
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index ee1a88b..2838070 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -17,6 +17,12 @@ QT_SITE    = http://releases.qt-project.org/qt4/source
- QT_DEPENDENCIES = host-pkgconf
- QT_INSTALL_STAGING = YES
- 
-+QT_LICENSE = LGPLv2.1 with exceptions or GPLv3
-+ifneq ($(BR2_PACKAGE_QT_LICENSE_APPROVED),y)
-+QT_LICENSE += or Digia Qt Commercial license
-+endif
-+QT_LICENSE_FILES = LICENSE.LGPL LGPL_EXCEPTION.txt LICENSE.GPL3
-+
- ifeq ($(BR2_PACKAGE_QT_LICENSE_APPROVED),y)
- QT_CONFIGURE_OPTS += -opensource -confirm-license
- endif
+  Patch coming up. It excludes the .empty files, so that you can create 
+an empty directory in your VCS by populating it with a '.empty' file. We 
+use the same trick in the skeleton (git doesn't support empty directories 
+either).
+
+  For symlinks, I don't see a reason to add a workaround in buildroot. A 
+VCS that doesn't have symlinks is broken. I have a customer who uses CVS, 
+and their workaround is to put the overlay in a tar file and extract it 
+before building.
+
+
+  Regards,
+  Arnout
+
 -- 
-1.7.10.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
