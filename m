@@ -1,52 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 7 Feb 2013 20:39:26 +0100
-Subject: [Buildroot] [git commit] arch/arm: fix-up the ARM Kconfig warning
-Message-ID: <20130207194248.C52DB9AA03@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 07 Feb 2013 21:36:38 +0100
+Subject: [Buildroot] [PATCH 4/5] fbset: define license
+In-Reply-To: <1360167853-7177-4-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Wed, 6 Feb 2013 17:24:12 +0100")
+References: <1360167853-7177-1-git-send-email-luca@lucaceresoli.net>
+ <1360167853-7177-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87mwvflv3d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58c2500e2ab550e28a5edd8369e1cf9b043874d8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-Kconfig does not accepts that a symbol that is part of a choice
-be affected a default value.
+ Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ Luca> ---
+ Luca>  package/fbset/fbset.mk |    1 +
+ Luca>  1 file changed, 1 insertion(+)
 
-Fix this by introducing a dummy EABI symbol, and make the real
-EABI symbol a prompt-less option that depends on !OABI.
+ Luca> diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
+ Luca> index 3423259..85d97d5 100644
+ Luca> --- a/package/fbset/fbset.mk
+ Luca> +++ b/package/fbset/fbset.mk
+ Luca> @@ -7,6 +7,7 @@
+ Luca>  FBSET_VERSION = 2.1
+ Luca>  FBSET_SOURCE = fbset-$(FBSET_VERSION).tar.gz
+ Luca>  FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
+ Luca> +FBSET_LICENSE = GPL
 
-[Peter: drop arm dependency, rename to EABI_CHOICE]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- arch/Config.in.arm |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+It's not explicitly said, but considering how much it is linked to the
+kernel fbdev interface and the references to COPYING in the Linux kernel
+I think it should be GPLv2.
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 37152c0..79f08f7 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -76,7 +76,7 @@ choice
- 	  Note:
- 	    Using OABI is discouraged.
- 
--config BR2_ARM_EABI
-+config BR2_ARM_EABI_CHOICE
- 	bool "EABI"
- config BR2_ARM_OABI
- 	bool "OABI"
-@@ -84,8 +84,8 @@ config BR2_ARM_OABI
- endchoice
- 
- config BR2_ARM_EABI
--	default y
--	depends on !BR2_DEPRECATED
-+	def_bool y
-+	depends on !BR2_ARM_OABI
- 
- config BR2_ARM_ENABLE_NEON
- 	bool "Enable NEON SIMD extension support"
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
