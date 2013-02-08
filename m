@@ -1,25 +1,26 @@
-From: Aditya Rawat <aditya@eddywebs.com>
-Date: Thu, 7 Feb 2013 19:55:40 -0500
-Subject: [Buildroot] Running Packages
-Message-ID: <CAFzEKXETDCU8FTapwDLP1gpTOP=y9ETGjUfrDRxUxMGtkxi-+Q@mail.gmail.com>
+From: W.P. <laurentp@wp.pl>
+Date: Fri, 08 Feb 2013 04:30:10 +0100
+Subject: [Buildroot] simple(?) question about OpenWRT
+Message-ID: <51147142.2020703@wp.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Okay this my first attempt of adding custom packages to Buildroot where I
-added  the "Php" package along with all its extensions.
-After the build when I try the updated image it does seem to have the php
-package installed
-I tried "php -v" in shell and it could not find anything :(
+Hi there,
+I am posting here since OpenWRT build system looks buildroot based.
 
-Is there something I am missing the equation ?, maybe more any other
-configuration that is required.
+I'd like to know, how to DISABLE (using menus or something similar) ALL 
+the *_tables related stuff.
+Cause if I disable (now) it, it builds *_tables modules anyway.
+And in my application (firmware for MR3220, 4M flash) it is a problem (I 
+need BlueZ + Bash there :( ).
 
--- 
-Best Wishes;
-Adi
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130207/071abaca/attachment.html>
+This device is NOT intended to work as router, only as AP + WDS. 
+(+AnyRemote host + internet radio).
+
+For now I used (discouraged, I know) "hand crafting" .config file,
+but this leads to "your config is out of sync" warning...
+
+W.P.
