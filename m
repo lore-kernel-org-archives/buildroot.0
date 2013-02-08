@@ -1,40 +1,94 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 08 Feb 2013 20:59:32 +0100
-Subject: [Buildroot] Running Packages
-In-Reply-To: <CAFzEKXHK58EP_KjNQA-x46YP-SXHQMoeBn_4U1DcpJ3Ho4Z7Sw@mail.gmail.com>
-References: <CAFzEKXETDCU8FTapwDLP1gpTOP=y9ETGjUfrDRxUxMGtkxi-+Q@mail.gmail.com>
- <511498BE.4030108@siganos.org>
- <CAFzEKXHK58EP_KjNQA-x46YP-SXHQMoeBn_4U1DcpJ3Ho4Z7Sw@mail.gmail.com>
-Message-ID: <51155924.5080206@mind.be>
+Date: Fri, 08 Feb 2013 21:26:22 +0100
+Subject: [Buildroot] [PATCH] aircrack-ng: new package
+In-Reply-To: <20130208163229.553918e3@skate>
+References: <1360340189-4409-1-git-send-email-laurent.cans@gmail.com>
+ <20130208163229.553918e3@skate>
+Message-ID: <51155F6E.5090806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/02/13 16:21, Aditya Rawat wrote:
-> Thank your for the insight Dimitris , the Buildroot environment is
-> quite aged( Released February 28th, 2011) but has php :D >>
-> https://github.com/j1nx/buildroot-AmLogic
+On 08/02/13 16:32, Thomas Petazzoni wrote:
+> Dear Laurent Cans,
 >
-> The original Buildroot environment above had php5.2 so I replaced only
-> the /package/php dir with the one which had a php5.3
-> (http://git.buildroot.net/buildroot/commit/?id=aeb9350cfbd2f4675f0d095394660cc0c2cc0d7b)
-> Seems like it missing it target altogether, I will try the "make
-> php-dirclean php" and post my findings.
+> Thanks, this looks pretty good; A few comments below.
 
-  The package infrastructure has changed in the mean time, so copying the 
-directory won't work.  You can either cherry-pick the commit in git
+  Yep, don't be discouraged by the large amount of feedback :-)
 
-git cherry-pick aeb9350cfbd2f467
+> On Fri,  8 Feb 2013 17:16:29 +0100, Laurent Cans wrote:
+>> Aircrack-ng is a set of tools for auditing wireless security.
+>>
+>> Although the last version is 1.1, I choose to package last svn version due to a fixed bug which fix a failed compilation.
 
-or you can modify the last line of php.mk into:
+  It would be good to repeat this comment in the .mk file. That helps to 
+see if a certain packaged upstream version is in fact more recent than 
+what is already there.
 
-$(eval $(call AUTOTARGETS,package,php))
+[snip]
+>> +ifeq($(BR2_PACKAGE_SQLITE),y)
+>> +      AIRCRACK_NG_OPTS = sqlite=true
+
+  I prefer AIRCRACK_NG_MAKE_OPTS.
+
+>> +      AIRCRACK_NG_DEPENDENCIES += sqlite
+>> +endif
+
+  I would add an else branch that explicitly sets sqlite=false, to make 
+sure it doesn't leak in through the environment.
+
+>
+> The src/Makefile contains:
+>
+> ifeq ($(subst TRUE,true,$(filter TRUE true,$(sqlite) $(SQLITE))),true)
+> 	LIBSQL		= -L/usr/local/lib -lsqlite3
+> else
+> 	LIBSQL		=
+> endif
+>
+> This -L/usr/local/lib isn't really nice since this is not where sqlite
+> will be installed, and it may cause issues when cross-compiling.
+
+  The solution is simple:
+
+AIRCRACK_NG_MAKE_OPTS += LIBSQL="-lsqlite3"
+
+(no -L is needed because libsqlite3.a is in the default library search path).
+
+>
+>> +
+>> +define AIRCRACK_NG_BUILD_CMDS
+>> +      $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) $(AIRCRACK_NG_OPTS) all
+>> +endef
+>
+> Use $(TARGET_CONFIGURE_OPTS) :
+>
+> 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(AIRCRACK_NG_OPTS) all
+
+  If it works, I prefer to put the TARGET_CONFIGURE_OPTS in the 
+environment instead:
+
+$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(AIRCRACK_NG_MAKE_OPTS) all
+
+That gives the Makefile the possibility to append to CFLAGS and LDFLAGS, 
+if necessary. However, some Makefiles unconditionally set CFLAGS or 
+LDFLAGS (or even CC), in that case passing through the environment 
+doesn't work.
 
 
   Regards,
   Arnout
+
+
+> And ditto for the other commands.
+>
+> Best regards,
+>
+> Thomas
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
