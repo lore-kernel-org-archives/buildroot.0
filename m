@@ -1,108 +1,125 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Fri, 08 Feb 2013 16:37:21 +0100
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Fri, 08 Feb 2013 18:20:33 +0200
 Subject: [Buildroot] [PATCH] aircrack-ng: new package
-In-Reply-To: <20130208163229.553918e3@skate>
+In-Reply-To: <1360340189-4409-1-git-send-email-laurent.cans@gmail.com>
 References: <1360340189-4409-1-git-send-email-laurent.cans@gmail.com>
- <20130208163229.553918e3@skate>
-Message-ID: <51151BB1.2080904@relinux.de>
+Message-ID: <511525D1.8010305@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 08.02.2013 16:32, schrieb Thomas Petazzoni:
-> Dear Laurent Cans,
->
-> Thanks, this looks pretty good; A few comments below.
->
-> On Fri,  8 Feb 2013 17:16:29 +0100, Laurent Cans wrote:
->> Aircrack-ng is a set of tools for auditing wireless security.
->>
->> Although the last version is 1.1, I choose to package last svn version due to a fixed bug which fix a failed compilation.
-> Please wrap lines at ~80 columns.
->
->> diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
->> new file mode 100644
->> index 0000000..1efa8e6
->> --- /dev/null
->> +++ b/package/aircrack-ng/Config.in
->> @@ -0,0 +1,9 @@
->> +config BR2_PACKAGE_AIRCRACK_NG
->> +	bool "aircrack-ng"
->> +	depends on BR2_LARGEFILE
->> +	select BR2_PACKAGE_OPENSSL
->> +	select BR2_PACKAGE_WI
->> +	help
->> +	  A set of tools for auditing wireless networks
->> +
->> +	  http://www.aircrack-ng.org/
-> Since your package depends on BR2_LARGEFILE, you must add a comment:
->
-> comment "aircrack-ng needs a toolchain with largefile support"
-> 	depends on !BR2_LARGEFILE
->
-> Like we do for all other packages.
->
->> diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
->> new file mode 100644
->> index 0000000..29f638c
->> --- /dev/null
->> +++ b/package/aircrack-ng/aircrack-ng.mk
->> @@ -0,0 +1,34 @@
->> +#############################################################
->> +#
->> +# Aircrack-ng
->> +#
->> +#############################################################
->> +AIRCRACK_NG_VERSION = 2245
-> One empty line between the header and the first variable definition.
-Someone should fix this in the manual. I'll do this and provide a patch.
+Hi Laurent
 
-Regards
+You mean 1.1 did not compile with latest buildroot ?
 
-Stephan
->
->> +AIRCRACK_NG_SITE = http://trac.aircrack-ng.org/svn/trunk
->> +AIRCRACK_NG_SITE_METHOD = svn
->> +AIRCRACK_NG_LICENSE = GPLv2
-> License is GPLv2+
->
->> +AIRCRACK_NG_LICENSE_FILES = LICENSE
->> +AIRCRACK_NG_DEPENDENCIES = openssl
->> +
->> +ifeq($(BR2_PACKAGE_SQLITE),y)
->> +      AIRCRACK_NG_OPTS = sqlite=true
->> +      AIRCRACK_NG_DEPENDENCIES += sqlite
->> +endif
-> The src/Makefile contains:
->
-> ifeq ($(subst TRUE,true,$(filter TRUE true,$(sqlite) $(SQLITE))),true)
-> 	LIBSQL		= -L/usr/local/lib -lsqlite3
-> else
-> 	LIBSQL		=
-> endif
->
-> This -L/usr/local/lib isn't really nice since this is not where sqlite
-> will be installed, and it may cause issues when cross-compiling.
->
->> +
->> +define AIRCRACK_NG_BUILD_CMDS
->> +      $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) $(AIRCRACK_NG_OPTS) all
->> +endef
-> Use $(TARGET_CONFIGURE_OPTS) :
->
-> 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(AIRCRACK_NG_OPTS) all
->
-> And ditto for the other commands.
->
-> Best regards,
->
-> Thomas
+Here's mine from 2012.05 days but ofcourse it needs fixing and cleanup ....
+
+#############################################################
+#
+# aircrack-ng
+#
+#############################################################
+
+AIRCRACK_NG_VERSION = 1.1
+AIRCRACK_NG_SOURCE = aircrack-ng-$(AIRCRACK_NG_VERSION).tar.gz
+AIRCRACK_NG_SITE = http://download.aircrack-ng.org
+AIRCRACK_NG_DEPENDENCIES = openssl sqlite
+
+define AIRCRACK_NG_BUILD_CMDS
+    $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE)
+CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" LD="$(TARGET_LD)" -C $(@D)
+sqlite=true unstable=true strip
+endef
+
+define AIRCRACK_NG_INSTALL_TARGET_CMDS
+    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)
+sqlite=true unstable=true install
+endef
+
+$(eval $(call GENTARGETS))
 
 
--- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+
+8.2.2013 18:16, Laurent Cans kirjoitti:
+> Aircrack-ng is a set of tools for auditing wireless security.
+>
+> Although the last version is 1.1, I choose to package last svn version due to a fixed bug which fix a failed compilation.
+>
+> Signed-off-by: Laurent Cans <laurent.cans@gmail.com>
+> ---
+>  package/Config.in                  |    1 +
+>  package/aircrack-ng/Config.in      |    9 +++++++++
+>  package/aircrack-ng/aircrack-ng.mk |   34 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 44 insertions(+)
+>  create mode 100644 package/aircrack-ng/Config.in
+>  create mode 100644 package/aircrack-ng/aircrack-ng.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 8588951..c820d68 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -612,6 +612,7 @@ source "package/sound-theme-freedesktop/Config.in"
+>  endmenu
+>  
+>  menu "Networking applications"
+> +source "package/aircrack-ng/Config.in"
+>  source "package/argus/Config.in"
+>  source "package/arptables/Config.in"
+>  source "package/avahi/Config.in"
+> diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
+> new file mode 100644
+> index 0000000..1efa8e6
+> --- /dev/null
+> +++ b/package/aircrack-ng/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_AIRCRACK_NG
+> +	bool "aircrack-ng"
+> +	depends on BR2_LARGEFILE
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_WI
+> +	help
+> +	  A set of tools for auditing wireless networks
+> +
+> +	  http://www.aircrack-ng.org/
+> diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
+> new file mode 100644
+> index 0000000..29f638c
+> --- /dev/null
+> +++ b/package/aircrack-ng/aircrack-ng.mk
+> @@ -0,0 +1,34 @@
+> +#############################################################
+> +#
+> +# Aircrack-ng
+> +#
+> +#############################################################
+> +AIRCRACK_NG_VERSION = 2245
+> +AIRCRACK_NG_SITE = http://trac.aircrack-ng.org/svn/trunk
+> +AIRCRACK_NG_SITE_METHOD = svn
+> +AIRCRACK_NG_LICENSE = GPLv2
+> +AIRCRACK_NG_LICENSE_FILES = LICENSE
+> +AIRCRACK_NG_DEPENDENCIES = openssl
+> +
+> +ifeq($(BR2_PACKAGE_SQLITE),y)
+> +      AIRCRACK_NG_OPTS = sqlite=true
+> +      AIRCRACK_NG_DEPENDENCIES += sqlite
+> +endif
+> +
+> +define AIRCRACK_NG_BUILD_CMDS
+> +      $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) $(AIRCRACK_NG_OPTS) all
+> +endef
+> +
+> +define AIRCRACK_NG_CLEAN_CMDS
+> +      $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) $(AIRCRACK_NG_OPTS) clean
+> +endef
+> +
+> +define AIRCRACK_NG_INSTALL_TARGET_CMDS
+> +      $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) $(AIRCRACK_NG_OPTS) install
+> +endef
+> +
+> +define AIRCRACK_NG_UNINSTALL_TARGET_CMDS
+> +      $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) $(AIRCRACK_NG_OPTS) uninstall
+> +endef
+> +
+> +$(eval $(generic-package))
