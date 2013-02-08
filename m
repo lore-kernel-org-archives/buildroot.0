@@ -1,10 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  8 Feb 2013 08:36:03 -0300
-Subject: [Buildroot] [PATCH 3/5] configs/armadeus_apf9328_defconfig: lock
-	down kernel headers version
+Date: Fri,  8 Feb 2013 08:36:05 -0300
+Subject: [Buildroot] [PATCH 5/5] config/kb9202_defconfig: update to latest
+	at91 kernel and lock headers
 In-Reply-To: <1360323365-5936-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1360323365-5936-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1360323365-5936-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1360323365-5936-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,29 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- configs/armadeus_apf9328_defconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+ configs/kb9202_defconfig | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/configs/armadeus_apf9328_defconfig b/configs/armadeus_apf9328_defconfig
-index 945d385..1ed1dd5 100644
---- a/configs/armadeus_apf9328_defconfig
-+++ b/configs/armadeus_apf9328_defconfig
-@@ -14,6 +14,11 @@ BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
- BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
+index 50b278c..1d01a22 100644
+--- a/configs/kb9202_defconfig
++++ b/configs/kb9202_defconfig
+@@ -5,10 +5,14 @@ BR2_arm920t=y
+ # Filesystem
+ BR2_TARGET_ROOTFS_TAR=y
  
-+
 +# Lock down headers to avoid breaking with new defaults
 +BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.1.1"
++BR2_DEFAULT_KERNEL_VERSION="2.6.38.8"
 +
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf9328"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.33"
+-BR2_LINUX_KERNEL_PATCH="http://maxim.org.za/AT91RM9200/2.6/2.6.33-at91.patch.gz"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.8"
++BR2_LINUX_KERNEL_PATCH="http://maxim.org.za/AT91RM9200/2.6/2.6.38-at91.patch.gz"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="kb9202"
 -- 
 1.7.12.4
