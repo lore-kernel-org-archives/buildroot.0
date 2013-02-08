@@ -1,48 +1,72 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  8 Feb 2013 22:56:47 +0100
-Subject: [Buildroot] [PATCH 1/6] package/e2fsprogs: add host-package
+Date: Fri,  8 Feb 2013 22:56:48 +0100
+Subject: [Buildroot] [PATCH 2/6] package/dosfstools: add host-package
 	selection
 In-Reply-To: <cover.1360360503.git.yann.morin.1998@free.fr>
 References: <cover.1360360503.git.yann.morin.1998@free.fr>
-Message-ID: <0385ef98f1a9d45aef1f0e741c343f962c72a660.1360360503.git.yann.morin.1998@free.fr>
+Message-ID: <148c4087365a4f67fac09ab8f482224b87996c4a.1360360503.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the e2fsprogs as a host-package selection in the menuconfig.
+Add dosfstools as a host-package selection in the menuconfig.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
 ---
- package/Config.in.host           |    1 +
- package/e2fsprogs/Config.in.host |    6 ++++++
- 2 files changed, 7 insertions(+), 0 deletions(-)
- create mode 100644 package/e2fsprogs/Config.in.host
+v1 -> v2
+  - use $(HOST_CONFIGURE_OPTS)  (Thomas)
+---
+ package/Config.in.host            |    1 +
+ package/dosfstools/Config.in.host |    6 ++++++
+ package/dosfstools/dosfstools.mk  |    9 +++++++++
+ 3 files changed, 16 insertions(+), 0 deletions(-)
+ create mode 100644 package/dosfstools/Config.in.host
 
 diff --git a/package/Config.in.host b/package/Config.in.host
-index 79050f2..8813f5b 100644
+index 8813f5b..43f292c 100644
 --- a/package/Config.in.host
 +++ b/package/Config.in.host
 @@ -1,6 +1,7 @@
  menu "Host utilities"
  
  source "package/dfu-util/Config.in.host"
-+source "package/e2fsprogs/Config.in.host"
++source "package/dosfstools/Config.in.host"
+ source "package/e2fsprogs/Config.in.host"
  source "package/lpc3250loader/Config.in.host"
  source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
-diff --git a/package/e2fsprogs/Config.in.host b/package/e2fsprogs/Config.in.host
+diff --git a/package/dosfstools/Config.in.host b/package/dosfstools/Config.in.host
 new file mode 100644
-index 0000000..ea6a0bd
+index 0000000..9f9ceab
 --- /dev/null
-+++ b/package/e2fsprogs/Config.in.host
++++ b/package/dosfstools/Config.in.host
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_E2FSPROGS
-+	bool "host e2fsprogs"
++config BR2_PACKAGE_HOST_DOSFSTOOLS
++	bool "host dosfstools"
 +	help
-+	  The EXT2 file system utilities.
++	  Tools for creating and checking DOS FAT filesystems.
 +	  
-+	  http://e2fsprogs.sf.net
++	  http://www.daniel-baumann.ch/software/dosfstools/
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index 4f89364..ab029e3 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -36,4 +36,13 @@ define DOSFSTOOLS_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
++define HOST_DOSFSTOOLS_BUILD_CMDS
++	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define HOST_DOSFSTOOLS_INSTALL_CMDS
++	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr install
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 1.7.2.5
