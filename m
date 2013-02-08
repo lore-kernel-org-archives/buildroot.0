@@ -1,59 +1,101 @@
-From: Dimitrios Siganos <dimitris@siganos.org>
-Date: Fri, 08 Feb 2013 10:58:09 +0000
-Subject: [Buildroot] crda and m2crypto
-In-Reply-To: <5114D0A3.7000501@zacarias.com.ar>
-References: <5114BF4B.7080007@siganos.org> <5114D0A3.7000501@zacarias.com.ar>
-Message-ID: <5114DA41.2040601@siganos.org>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Fri,  8 Feb 2013 12:31:12 +0100
+Subject: [Buildroot] [PATCH] Add Gnublin board support
+Message-ID: <1360323072-29592-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/02/13 10:17, Gustavo Zacarias wrote:
-> On 02/08/2013 06:03 AM, Dimitrios Siganos wrote:
-> 
->> Hi,
->>
->> I am integrating crda with buildroot and I have run into a problem that
->> I'd like some feedback on.
-> 
-> Any particular reason you don't want the static db integrated in the kernel?
-> Basically copy db.txt from wireless-regdb to linux-*/net/wireless/db.txt
-> and enable CONFIG_CFG80211_INTERNAL_REGDB=y.
-> Bam! No need for CRDA and all that.
-> Making a kernel extension for this should be relatively simple, or
-> alternatively just provide a patch for the kernel you're using.
-> Regards.
-> 
 
-Hi Gustavo,
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+---
+ board/gnublin/README      |   52 +++++++++++++++++++++++++++++++++++++++++++++
+ configs/gnublin_defconfig |   16 ++++++++++++++
+ 2 files changed, 68 insertions(+)
+ create mode 100644 board/gnublin/README
+ create mode 100644 configs/gnublin_defconfig
 
-There is no particular reason for going with crda other than it is the
-recommended way. I am a consultant working a with a module provider who
-provides modules to third parties. The third parties make the final call
-on everything but we want to deliver the recommended setup by default.
-
-For us, as a business, bypassing the HOST_DIR and forcing the user to
-install python-m2crypto is an acceptable solution. This is a nice
-example that shows why upstreaming is sometimes not a simple matter
-because of differing priorities between upstream/downstream.
-
-We would like to work closer with buildroot so I'll make an effort to
-upstream these changes. I have had a look at m2crypto and it seems
-simple enough to integrate with buildroot. However, m2crypto now needs
-'swig'.
-
-If I fail to integrate m2crypto and dependencies within a reasonable
-amount of time, I will go to plan to B. There seems to exist an easy
-alternative. The key files produced are not likely to change because
-they are the C representation of the public key that guarantees the
-authenticity of the data. So I could just add to them to the buildroot
-package to remove the need to build them and hence not need m2crypto.
-From Thomas' reply, it sounds like that would be an acceptable workaround.
-
-But for now, I will attempt to bring in m2crypto and dependencies as a
-learning exercise.
-
-Regards,
-Dimitris
+diff --git a/board/gnublin/README b/board/gnublin/README
+new file mode 100644
+index 0000000..e58b366
+--- /dev/null
++++ b/board/gnublin/README
+@@ -0,0 +1,52 @@
++This the Buildroot support for the  LPC3131 based Gnublin board (see here:
++http://en.gnublin.org/) and for the Elektor Linux board
++(http://www.elektor.com/news/elektor-presents-embedded-linux-made-easy.2147294.
++lynkx)
++
++Unfortunately currently the AD and the pwm modules are not supported, i'm about
++to add also those drivers as well to the current kernel later.
++
++Base kernel version: 3.7 (available here:
++https://gitorious.org/linux-3-7-gnublin/linux-3-7-gnublin/commits/gnublin-
++support)
++
++U-boot version: 2009.11 (available here:
++https://gitorious.org/u-boot-gnublin-support/u-boot-gnublin-support)
++
++
++Steps to create a bootable SD card (with the given config you need an at least
++500 MB SD card):
++
++1.Config buildroot with the gnublin_defconfig:
++
++$ make gnublin_defconfig
++
++2.Tweak the config for your needs:
++
++$ make menuconfig
++
++3.Build:
++
++$ make
++
++4.Create two partitions on your SD card, one with type of BootIt (fdisk ID: df),
++the size should be around 1M, and another partition with all of the left space
++on the card, and with the type of normal DOS partition.
++
++5.From the output/images directory dump the u-boot image to the BootIt partition
++(probably you have to modify the output /dev files according to your system):
++
++$ dd if=output/images/u-boot.bin of=/dev/sdc1
++
++6.Dump the root fs image as well:
++
++$ dd if=output/images/rootfs.ext2 of=/dev/sdc2
++
++7.Insert the SD card into the board's slot, and your board should boot up with
++your newly created system.
++
++Any feedback/report is welcome on the mr.zoltan.gyarmati[at]gmail.com 
++
++
++
++
+diff --git a/configs/gnublin_defconfig b/configs/gnublin_defconfig
+new file mode 100644
+index 0000000..68deca9
+--- /dev/null
++++ b/configs/gnublin_defconfig
+@@ -0,0 +1,16 @@
++BR2_arm=y
++BR2_arm926t=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to Gnublin"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_BLOCKS=475000
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="GNUBLIN"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://gitorious.org/u-boot-gnublin-support/u-boot-gnublin-support.git"
++BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="2009.11_gnublin_support_v2"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://gitorious.org/linux-3-7-gnublin/linux-3-7-gnublin.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="v3.7-gnublin-2"
++BR2_LINUX_KERNEL_DEFCONFIG="gnublin"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-- 
+1.7.9.5
