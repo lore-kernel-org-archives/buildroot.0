@@ -1,99 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  8 Feb 2013 18:32:59 +0100
-Subject: [Buildroot] [PATCH 5/6] package/genpart: new host-only package
-In-Reply-To: <cover.1360344619.git.yann.morin.1998@free.fr>
-References: <cover.1360344619.git.yann.morin.1998@free.fr>
-Message-ID: <37297931183492fa2e8a6e6b80bcc610c856c414.1360344619.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 8 Feb 2013 18:38:07 +0100
+Subject: [Buildroot] need smaller filesystem for NOR
+In-Reply-To: <1360344317.17385.31.camel@genx.eng.msli.com>
+References: <1360344317.17385.31.camel@genx.eng.msli.com>
+Message-ID: <20130208183807.2b2fe572@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/Config.in.host                        |    1 +
- package/genpart/Config.in.host                |    8 ++++++++
- package/genpart/genpart-fix-return-code.patch |   25 +++++++++++++++++++++++++
- package/genpart/genpart.mk                    |   11 +++++++++++
- 4 files changed, 45 insertions(+), 0 deletions(-)
- create mode 100644 package/genpart/Config.in.host
- create mode 100644 package/genpart/genpart-fix-return-code.patch
- create mode 100644 package/genpart/genpart.mk
+Dear John Stile,
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index c456d5d..e97f6e8 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -4,6 +4,7 @@ source "package/dfu-util/Config.in.host"
- source "package/dosfstools/Config.in.host"
- source "package/e2fsprogs/Config.in.host"
- source "package/genimage/Config.in.host"
-+source "package/genpart/Config.in.host"
- source "package/lpc3250loader/Config.in.host"
- source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
-diff --git a/package/genpart/Config.in.host b/package/genpart/Config.in.host
-new file mode 100644
-index 0000000..f986504
---- /dev/null
-+++ b/package/genpart/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_GENPART
-+	bool "host genpart"
-+	help
-+	  Generate a 16 byte partition table entry defined by command line
-+	  arguments and dump it to stdout. No CHS magic is done, only lba
-+	  entries are filled out.
-+	  
-+	  http://www.pengutronix.de/software/genpart/index_en.html
-diff --git a/package/genpart/genpart-fix-return-code.patch b/package/genpart/genpart-fix-return-code.patch
-new file mode 100644
-index 0000000..14ff165
---- /dev/null
-+++ b/package/genpart/genpart-fix-return-code.patch
-@@ -0,0 +1,25 @@
-+genpart: return 0 if partition writen OK, with no do_magic
-+
-+If do_magic is false, we don't won't write the 0xaa55 magic.
-+However, if we succesfully wrote the partition entry, we still
-+want to return 0 to indicate success.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Cc: Robert Schwebel <r.schwebel@pengutronix.de>
-+
-+--
-+Patch sent upstream, but no mailing list.
-+Status: pending...
-+
-+diff -durN host-genpart-1.0.2.orig/src/genpart.c host-genpart-1.0.2/src/genpart.c
-+--- host-genpart-1.0.2.orig/src/genpart.c	2009-12-20 21:54:56.000000000 +0100
-++++ host-genpart-1.0.2/src/genpart.c	2013-01-22 23:13:24.109752579 +0100
-+@@ -92,6 +92,8 @@
-+ 		if (do_magic) {
-+ 			if (fwrite(&magic, 2, 1, stdout) > 0)
-+ 				rc=0;
-++		} else {
-++			rc=0;
-+ 		}
-+ 	}
-+ 	return rc;
-diff --git a/package/genpart/genpart.mk b/package/genpart/genpart.mk
-new file mode 100644
-index 0000000..735333a
---- /dev/null
-+++ b/package/genpart/genpart.mk
-@@ -0,0 +1,11 @@
-+#############################################################
-+#
-+# genpart
-+#
-+#############################################################
-+
-+GENPART_VERSION       = 1.0.2
-+GENPART_SOURCE        = genpart-$(GENPART_VERSION).tar.bz2
-+GENPART_SITE          = http://www.pengutronix.de/software/genpart/download/
-+
-+$(eval $(host-autotools-package))
+On Fri, 08 Feb 2013 09:25:17 -0800, John Stile wrote:
+> I primarily boot from one of two 128Mb NAND areas, but I have an 8Mb NOR
+> failsafe if NAND is bad.  I have about 5.5Mb available for the
+> Filesystem after loading at91bootstrap, uboot, uboot-env, and kernel.
+> ...(using buildroot-2011.11)...
+> 
+> The rootfs.jffs2 for NAND is 41Mb.
+> I need one for NOR that is less than 5.5Mb.
+> 
+> Is there a good method or script to copy buildroot's rootfs.jffs2  to
+> make a smaller copy for NOR?
+> 
+> My first attempt  leads to
+> VFS: Mounted root (jffs2 filesystem) on device 31:1.
+> Freeing init memory: 104K
+> Warning: unable to open an initial console.
+> Kernel panic - not syncing: No init found.  Try passing init= option to kernel.
+> [<c0028678>] (unwind_backtrace+0x0/0xdc) from [<c0243990>] (panic+0x34/0x110)
+> [<c0243990>] (panic+0x34/0x110) from [<c002254c>] (init_post+0x138/0x170)
+> [<c002254c>] (init_post+0x138/0x170) from [<c0008408>] (kernel_init+0xbc/0xe8)
+> [<c0008408>] (kernel_init+0xbc/0xe8) from [<c003b634>] (do_exit+0x0/0x5a4)
+> [<c003b634>] (do_exit+0x0/0x5a4) from [<00000003>] (0x3)
+> 
+> I think this means the file system is found and mounted, and for some
+> reason, init isn't found, although I have played with init= to no avail,
+> and if I mount my little jffs2, I do see busybox and all the links
+> (/bin/init).
+
+Beware that if a NAND or NOR partition is empty and properly erase,
+jffs2 will happily mount it and show a filesystem that contains no
+file. So the behavior you're seeing here could perfectly happen if your
+NAND or NOR partition is simply empty.
+
+> I tried to trying to hack it (unsuccessfully) with a post-build script
+> that tries to do what buildroot does:
+
+Rather than doing this, what about having a separate Buildroot project
+that is used to build your small NOR failsafe filesystem? If it's only
+a 5.5 MB filesystem, most likely there isn't too much in it. Both
+Buildroot projects can share the same Buildroot source tree, but be
+built in different directories.
+
+Let's say ~/buildroot/ contains the Buildroot sources,
+~/buildroot/configs/project_defconfig and
+~/buildroot/configs/project_failsafe_defconfig are respectively the
+Buildroot configuration for your full filesystem and for the small
+failsafe filesystem. Then you can do:
+
+ mkdir -p ~/project/full/
+ cd ~/project/full/
+ make -C ~/buildroot O=$(pwd) project_defconfig
+ make
+
+ mkdir -p ~/project/failsafe/
+ cd ~/project/failsafe
+ make -C ~/buildroot O=$(pwd) project_failsafe_defconfig
+ make
+
+And that's it.
+
+Best regards,
+
+Thomas
 -- 
-1.7.2.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
