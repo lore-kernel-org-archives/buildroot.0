@@ -1,40 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 8 Feb 2013 22:06:41 +0100
-Subject: [Buildroot] [git commit] docs/manual: no longer mention the
-	package/customize thing
-Message-ID: <20130208210652.11BA3800DD@busybox.osuosl.org>
+Date: Fri, 8 Feb 2013 22:06:50 +0100
+Subject: [Buildroot] [git commit] Adjust prompt for the post-build scripts
+	option
+Message-ID: <20130208210652.629FD800DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=598fe672135fad66b55b4ab79a59e8110f3c590e
+commit: http://git.buildroot.net/buildroot/commit/?id=c482eed74c5238065ab1211c1e094be656fcda4f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Since the post-image config option uses the plural for "Custom
+scripts", do the same for the post-build config option, for
+consistency.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: "Samuel Martin" <s.martin49@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/customize-rootfs.txt |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+ system/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index f396c0d..5692887 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -50,12 +50,6 @@ there are a few ways to customize the resulting target filesystem.
-       stored
-     - +BASE_DIR+: the base output directory
+diff --git a/system/Config.in b/system/Config.in
+index bdd47c5..1e4fff3 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -261,7 +261,7 @@ config BR2_ROOTFS_OVERLAY
+ 	  ~ and .git, .svn and .hg directories.
  
--* A special package, 'customize', stored in +package/customize+ can be
--  used. You can put all the files that you want to see in the final
--  target root filesystem in +package/customize/source+, and then
--  enable this special package in the configuration system. _This
--  method is marked as deprecated_.
--
- Note also that if you want to perform some specific actions *after*
- all filesystem images have been created (for example to automatically
- extract your root filesystem tarball in a location exported by your
+ config BR2_ROOTFS_POST_BUILD_SCRIPT
+-	string "Custom script to run before creating filesystem images"
++	string "Custom scripts to run before creating filesystem images"
+ 	default ""
+ 	help
+ 	  Specify a space-separated list of scripts to be run after the build
