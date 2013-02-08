@@ -1,128 +1,132 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 8 Feb 2013 22:31:49 +0100
-Subject: [Buildroot] [git commit] package: rename <pkg>_CONFIG_FIXUP to
-	<pkg>_CONFIG_SCRIPTS
-Message-ID: <20130208214321.E135D9AA2D@busybox.osuosl.org>
+Date: Fri, 8 Feb 2013 22:40:49 +0100
+Subject: [Buildroot] [git commit] package: use <pkg>_CONFIG_SCRIPTS in
+	packages that used special handling
+Message-ID: <20130208214322.B464396DC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4705347ddfeaab3953cd86df2c7309b31b719f50
+commit: http://git.buildroot.net/buildroot/commit/?id=4d3f810aaf43aac7cb29ab6b875206da2a9a15b1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit renames the newly introduced <pkg>_CONFIG_FIXUP variable
-to <pkg>_CONFIG_SCRIPTS, for two reasons:
+The packages changed by this commit were not only changing prefix= and
+exec_prefix= during their <foo>-config fixups, they were also changing
+includedir= and/or libdir=. So, they could not be directly converted
+to the new <pkg>_CONFIG_SCRIPTS infrastructure.
 
- * <pkg>_CONFIG_SCRIPTS will not only "fixup" the scripts in
-   $(STAGING_DIR)/usr/bin, but also remove them from
-   $(TARGET_DIR)/usr/bin. So it is not only about doing a "fixup".
-
- * On the principle, it is strange that the variable carries an
-   indication of the action that will take place on those files. It
-   should rather be named to say "Here are the <foo>-config scripts",
-   and let the package infrastructure decide if it should fix them up,
-   remove them, etc.
-
-This commit also updates the documentation accordingly.
+However, a careful analysis of their default <foo>-config shows that
+includedir= and libdir= is defined relatively to either ${prefix} and
+${exec_prefix}. Therefore, the manual fixing of includedir= and
+libdir= is useless, and fixing prefix= and exec_prefix=, as done by
+the <pkg>_CONFIG_SCRIPTS mechanism is sufficient.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Acked-by: "Samuel Martin" <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/adding-packages-generic.txt |   17 +++++++++--------
- package/libpcap/libpcap.mk              |    2 +-
- package/pkg-generic.mk                  |    4 ++--
- 3 files changed, 12 insertions(+), 11 deletions(-)
+ package/freetype/freetype.mk |   19 +------------------
+ package/libpng/libpng.mk     |   20 +-------------------
+ package/libxslt/libxslt.mk   |   18 +-----------------
+ 3 files changed, 3 insertions(+), 54 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 41a94d7..13d200d 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -25,7 +25,7 @@ system is based on hand-written Makefiles or shell scripts.
- 09: LIBFOO_LICENSE = GPLv3+
- 10: LIBFOO_LICENSE_FILES = COPYING
- 11: LIBFOO_INSTALL_STAGING = YES
--12: LIBFOO_CONFIG_FIXUP = libfoo-config
-+12: LIBFOO_CONFIG_SCRIPTS = libfoo-config
- 13: LIBFOO_DEPENDENCIES = host-libaaa libbbb
- 14:
- 15: define LIBFOO_BUILD_CMDS
-@@ -86,7 +86,7 @@ or:		'-L/usr/lib' instead of '-L$(STAGING_DIR)/usr/lib'
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index be0f1a7..b08bbf7 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -14,26 +14,9 @@ FREETYPE_LICENSE_FILES = docs/FTL.TXT docs/GPLv2.TXT
+ FREETYPE_DEPENDENCIES = host-pkgconf \
+ 	$(if $(BR2_PACKAGE_ZLIB),zlib) \
+ 	$(if $(BR2_PACKAGE_BZIP2),bzip2)
++FREETYPE_CONFIG_SCRIPTS = freetype-config
  
- So some sed magic is done to these scripts to make them give correct
- flags.
--The argument to be given to +LIBFOO_CONFIG_FIXUP+ is the file name(s)
-+The argument to be given to +LIBFOO_CONFIG_SCRIPTS+ is the file name(s)
- of the shell script(s) needing fixing. All these names are relative to
- '$(STAGING_DIR)/usr/bin' and if needed multiple names can be given.
+ HOST_FREETYPE_DEPENDENCIES = host-pkgconf
  
-@@ -96,7 +96,7 @@ Package divine installs shell script '$(STAGING_DIR)/usr/bin/divine-config'.
+-define FREETYPE_FREETYPE_CONFIG_STAGING_FIXUP
+-	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
+-		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
+-		-e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include/freetype2\',g" \
+-		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
+-		$(STAGING_DIR)/usr/bin/freetype-config
+-endef
+-
+-FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_FREETYPE_CONFIG_STAGING_FIXUP
+-
+-define FREETYPE_FREETYPE_CONFIG_TARGET_REMOVE
+-	rm -f $(TARGET_DIR)/usr/bin/freetype-config
+-endef
+-
+-ifneq ($(BR2_HAVE_DEVFILES),y)
+-FREETYPE_POST_INSTALL_TARGET_HOOKS += FREETYPE_FREETYPE_CONFIG_TARGET_REMOVE
+-endif
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index d834876..2c18fde 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -12,25 +12,7 @@ LIBPNG_LICENSE = libpng license
+ LIBPNG_LICENSE_FILES = LICENSE
+ LIBPNG_INSTALL_STAGING = YES
+ LIBPNG_DEPENDENCIES = host-pkgconf zlib
+-
+-define LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
+-	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
+-		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
+-		-e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include/libpng$(LIBPNG_SERIES)\',g" \
+-		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
+-		$(STAGING_DIR)/usr/bin/libpng$(LIBPNG_SERIES)-config
+-endef
+-
+-LIBPNG_POST_INSTALL_STAGING_HOOKS += LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
+-
+-define LIBPNG_REMOVE_CONFIG_SCRIPTS
+-	$(RM) -f $(TARGET_DIR)/usr/bin/libpng$(LIBPNG_SERIES)-config \
+-		 $(TARGET_DIR)/usr/bin/libpng-config
+-endef
+-
+-ifneq ($(BR2_HAVE_DEVFILES),y)
+-LIBPNG_POST_INSTALL_TARGET_HOOKS += LIBPNG_REMOVE_CONFIG_SCRIPTS
+-endif
++LIBPNG_CONFIG_SCRIPTS = libpng$(LIBPNG_SERIES)-config libpng-config
  
- So it's fixup would be:
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index a35b955..b6c6aad 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -12,7 +12,7 @@ LIBXSLT_LICENSE_FILES = COPYING
  
--DIVINE_CONFIG = divine-config
-+DIVINE_CONFIG_SCRIPTS = divine-config
+ LIBXSLT_CONF_OPT = --with-gnu-ld --without-debug \
+ 		--without-python --with-libxml-prefix=$(STAGING_DIR)/usr/
+-
++LIBXSLT_CONFIG_SCRIPTS = xslt-config
+ LIBXSLT_DEPENDENCIES = libxml2
  
- Example 2:
+ # If we have enabled libgcrypt then use it, else disable crypto support.
+@@ -27,21 +27,5 @@ HOST_LIBXSLT_CONF_OPT = --without-debug --without-python --without-crypto
  
-@@ -105,8 +105,9 @@ Package imagemagick installs the following scripts:
+ HOST_LIBXSLT_DEPENDENCIES = host-libxml2
  
- So it's fixup would be:
- 
--IMAGEMAGICK_CONFIG_FIXUP = Magick-config Magick++-config \
--			   MagickCore-config MagickWand-config Wand-config
-+IMAGEMAGICK_CONFIG_SCRIPTS = \
-+   Magick-config Magick++-config \
-+   MagickCore-config MagickWand-config Wand-config
- 
- On line 13, we specify the list of dependencies this package relies
- on. These dependencies are listed in terms of lower-case package names,
-@@ -284,10 +285,10 @@ information is (assuming the package name is +libfoo+) :
-   variables are executed to install the package into the target
-   directory.
- 
--* +LIBFOO_CONFIG_FIXUP+ lists the names of the files in
-+* +LIBFOO_CONFIG_SCRIPTS+ lists the names of the files in
-   '$(STAGING_DIR)/usr/bin' that need some special fixing to make them
--  cross-compiling friendly. Multiple file names separated by space can be
--  given and all are relative to '$(STAGING_DIR)/usr/bin'.
-+  cross-compiling friendly. Multiple file names separated by space can
-+  be given and all are relative to '$(STAGING_DIR)/usr/bin'.
- 
- * +LIBFOO_DEVICES+ lists the device files to be created by Buildroot
-   when using the static device table. The syntax to use is the
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 5be61bf..06aec0f 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -24,7 +24,7 @@ LIBPCAP_DEPENDENCIES = zlib
- LIBPCAP_CONF_ENV = ac_cv_linux_vers=2 \
- 		ac_cv_header_linux_wireless_h=yes # configure misdetects this
- LIBPCAP_CONF_OPT = --disable-yydebug --with-pcap=linux
--LIBPCAP_CONFIG_FIXUP = pcap-config
-+LIBPCAP_CONFIG_SCRIPTS = pcap-config
- 
- ifeq ($(BR2_PACKAGE_LIBUSB),y)
- LIBPCAP_CONF_OPT += --enable-canusb
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 19a115e..066b6c8 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -128,12 +128,12 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- 	@$(call MESSAGE,"Installing to staging directory")
- 	$($(PKG)_INSTALL_STAGING_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
--	$(Q)if test -n "$($(PKG)_CONFIG_FIXUP)" ; then \
-+	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(call MESSAGE,"Fixing package configuration files") ;\
- 			$(SED)  "s,^\(exec_\)\?prefix=.*,\1prefix=$(STAGING_DIR)/usr,g" \
- 				-e "s,-I/usr/,-I$(STAGING_DIR)/usr/,g" \
- 				-e "s,-L/usr/,-L$(STAGING_DIR)/usr/,g" \
--				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_FIXUP)) ;\
-+				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
- 	fi
- 	$(Q)touch $@
- 
+-define LIBXSLT_XSLT_CONFIG_FIXUP
+-	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xslt-config
+-	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xslt-config
+-	$(SED) "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" $(STAGING_DIR)/usr/bin/xslt-config
+-endef
+-
+-LIBXSLT_POST_INSTALL_STAGING_HOOKS += LIBXSLT_XSLT_CONFIG_FIXUP
+-
+-define LIBXSLT_REMOVE_CONFIG_SCRIPTS
+-	$(RM) -f $(TARGET_DIR)/usr/bin/xslt-config
+-endef
+-
+-ifneq ($(BR2_HAVE_DEVFILES),y)
+-LIBXSLT_POST_INSTALL_TARGET_HOOKS += LIBXSLT_REMOVE_CONFIG_SCRIPTS
+-endif
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
