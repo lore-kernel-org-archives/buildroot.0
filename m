@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  8 Feb 2013 18:32:58 +0100
-Subject: [Buildroot] [PATCH 4/6] package/genimage: new host-only package
+Date: Fri,  8 Feb 2013 18:33:00 +0100
+Subject: [Buildroot] [PATCH 6/6] package/mtools: new host-package
 In-Reply-To: <cover.1360344619.git.yann.morin.1998@free.fr>
 References: <cover.1360344619.git.yann.morin.1998@free.fr>
-Message-ID: <9b2c2883493f48f89e7d6d67d259e4249c889bca.1360344619.git.yann.morin.1998@free.fr>
+Message-ID: <3103c5fb4a737edda5e8fc0dbd7d5dc20dda572e.1360344619.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,59 +12,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in.host          |    1 +
- package/genimage/Config.in.host |   12 ++++++++++++
- package/genimage/genimage.mk    |   12 ++++++++++++
+ package/Config.in.host        |    1 +
+ package/mtools/Config.in.host |    9 +++++++++
+ package/mtools/mtools.mk      |   15 +++++++++++++++
  3 files changed, 25 insertions(+), 0 deletions(-)
- create mode 100644 package/genimage/Config.in.host
- create mode 100644 package/genimage/genimage.mk
+ create mode 100644 package/mtools/Config.in.host
+ create mode 100644 package/mtools/mtools.mk
 
 diff --git a/package/Config.in.host b/package/Config.in.host
-index 43f292c..c456d5d 100644
+index e97f6e8..7c0dd20 100644
 --- a/package/Config.in.host
 +++ b/package/Config.in.host
-@@ -3,6 +3,7 @@ menu "Host utilities"
- source "package/dfu-util/Config.in.host"
- source "package/dosfstools/Config.in.host"
- source "package/e2fsprogs/Config.in.host"
-+source "package/genimage/Config.in.host"
+@@ -6,6 +6,7 @@ source "package/e2fsprogs/Config.in.host"
+ source "package/genimage/Config.in.host"
+ source "package/genpart/Config.in.host"
  source "package/lpc3250loader/Config.in.host"
++source "package/mtools/Config.in.host"
  source "package/omap-u-boot-utils/Config.in.host"
  source "package/openocd/Config.in.host"
-diff --git a/package/genimage/Config.in.host b/package/genimage/Config.in.host
+ source "package/sam-ba/Config.in.host"
+diff --git a/package/mtools/Config.in.host b/package/mtools/Config.in.host
 new file mode 100644
-index 0000000..cfa267c
+index 0000000..d534b5e
 --- /dev/null
-+++ b/package/genimage/Config.in.host
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_HOST_GENIMAGE
-+	bool "host genimage"
++++ b/package/mtools/Config.in.host
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HOST_MTOOLS
++	bool "host mtools"
 +	help
-+	  genimage is a tool to generate multiple filesystem and flash images
-+	  from a given root filesystem tree. genimage is intended to be run
-+	  in a fakeroot environment.
++	  Mtools is a collection of utilities to access MS-DOS disks from
++	  Unix without mounting them. It supports Win'95 style long file
++	  names, OS/2 Xdf disks and 2m disks (store up to 1992k on a high
++	  density 3 1/2 disk).
 +	  
-+	  Configuration is done is a config file parsed by libconfuse. Options
-+	  like the path to tools can be given in environment variables, the config
-+	  file or commandline switches.
-+	  
-+	  http://www.pengutronix.de/software/genimage/
-diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
++	  http://www.tux.org/pub/tux/mtools/
+diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
 new file mode 100644
-index 0000000..8fe9bf7
+index 0000000..95cc73e
 --- /dev/null
-+++ b/package/genimage/genimage.mk
-@@ -0,0 +1,12 @@
++++ b/package/mtools/mtools.mk
+@@ -0,0 +1,15 @@
 +#############################################################
 +#
-+# genimage
++# dosfstools
 +#
-+##############################################################
++#############################################################
 +
-+GENIMAGE_VERSION        = 4
-+GENIMAGE_SOURCE         = genimage-$(GENIMAGE_VERSION).tar.xz
-+GENIMAGE_SITE           = http://www.pengutronix.de/software/genimage/download/
-+GENIMAGE_DEPENDENCIES   = libconfuse
++MTOOLS_VERSION          = 4.0.18
++MTOOLS_SOURCE           = mtools-$(MTOOLS_VERSION).tar.bz2
++MTOOLS_SITE             = http://ftp.gnu.org/gnu/mtools/
++
++MTOOLS_CONF_OPT = --enable-xdf        \
++                  --enable-vold       \
++                  --enable-new-vold
 +
 +$(eval $(host-autotools-package))
 -- 
