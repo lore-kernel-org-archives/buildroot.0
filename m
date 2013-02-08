@@ -1,53 +1,79 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 8 Feb 2013 22:06:41 +0100
-Subject: [Buildroot] [git commit] docs/manual: mention the new post-image
-	mechanism
-Message-ID: <20130208210651.835529AA21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual: slightly reword the solutions
+	to customize rootfs
+Message-ID: <20130208210652.385FB800DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=04dea0c48b57177fab80bfff46d74162011b199d
+commit: http://git.buildroot.net/buildroot/commit/?id=bd86e4ff737d271e1051f899596e0e717e02ac13
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: fix minor typos]
+The order of the solutions to customize the root filesystem is
+changed: we now mention the post-build script mechanism *before* the
+custom root filesystem skeleton mechanism, because the former is
+preferred over the latter.
+
+In addition to this, we give a few more details about direct
+customization of the root filesystem in output/target, and about the
+custom target skeleton solution.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 Acked-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/customize-rootfs.txt |   22 ++++++++++++++++++++++
- 1 files changed, 22 insertions(+), 0 deletions(-)
+ docs/manual/customize-rootfs.txt |   29 ++++++++++++++++++-----------
+ 1 files changed, 18 insertions(+), 11 deletions(-)
 
 diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index fa04d85..f396c0d 100644
+index 5692887..3cdbaa1 100644
 --- a/docs/manual/customize-rootfs.txt
 +++ b/docs/manual/customize-rootfs.txt
-@@ -55,3 +55,25 @@ there are a few ways to customize the resulting target filesystem.
-   target root filesystem in +package/customize/source+, and then
-   enable this special package in the configuration system. _This
-   method is marked as deprecated_.
+@@ -12,17 +12,11 @@ there are a few ways to customize the resulting target filesystem.
+   simply make your changes here and run make afterwards - this will
+   rebuild the target filesystem image. This method allows you to do
+   anything to the target filesystem, but if you decide to completely
+-  rebuild your toolchain and tools, these changes will be lost.
+-  _Changes do not survive the +make clean+ command_.
+-
+-* Create your own 'target skeleton'. You can start with the default
+-  skeleton available under +system/skeleton+ and then customize it to
+-  suit your needs. The +BR2_ROOTFS_SKELETON_CUSTOM+ and
+-  +BR2_ROOTFS_SKELETON_CUSTOM_PATH+ will allow you to specify the
+-  location of your custom skeleton. These options can be found in the
+-  +System configuration+ menu. At build time, the contents of the
+-  skeleton are copied to output/target before any package
+-  installation.
++  rebuild your toolchain and tools, these changes will be lost. This
++  solution is therefore only useful for quick tests only: _changes do
++  not survive the +make clean+ command_. Once you have validated your
++  changes, you should make sure that they will persist after a +make
++  clean+ by using one of the following methods.
+ 
+ * Create a filesystem overlay: a tree of files that are copied directly
+   over the target filesystem after it has been built.  Set
+@@ -50,6 +44,19 @@ there are a few ways to customize the resulting target filesystem.
+       stored
+     - +BASE_DIR+: the base output directory
+ 
++* Create your own 'target skeleton'. You can start with the default
++  skeleton available under +system/skeleton+ and then customize it to
++  suit your needs. The +BR2_ROOTFS_SKELETON_CUSTOM+ and
++  +BR2_ROOTFS_SKELETON_CUSTOM_PATH+ will allow you to specify the
++  location of your custom skeleton. These options can be found in the
++  +System configuration+ menu. At build time, the contents of the
++  skeleton are copied to output/target before any package
++  installation. Note that this method is *not recommended*, as it
++  duplicates the entire skeleton, which prevents from taking advantage
++  of the fixes or improvements brought to the default Buildroot
++  skeleton. The recommended method is to use the _post-build script_
++  mechanism described in the previous item.
 +
-+Note also that if you want to perform some specific actions *after*
-+all filesystem images have been created (for example to automatically
-+extract your root filesystem tarball in a location exported by your
-+NFS server, or to create a special firmware image that bundles your
-+root filesystem and kernel image, or any other custom action), you can
-+specify a space-separated list of scripts in the
-++BR2_ROOTFS_POST_IMAGE_SCRIPT+ configuration option.
-+
-+Each of those scripts will be called with the path to the +images+
-+output directory as first and unique argument, and will be executed
-+with the main Buildroot source directory as the current
-+directory. Those scripts will be executed as the user that executes
-+Buildroot, which should normally not be the root user. Therefore, any
-+action requiring root permissions in one of these post-image script
-+will require special handling (usage of fakeroot or sudo), which is
-+left to the script developer.
-+
-+Just like for the _post-build scripts_ mentioned above, you also have
-+access to the following environment variables from your _post-image
-+scripts_: +BUILDROOT_CONFIG+, +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+,
-++BINARIES_DIR+ and +BASE_DIR+.
+ Note also that if you want to perform some specific actions *after*
+ all filesystem images have been created (for example to automatically
+ extract your root filesystem tarball in a location exported by your
