@@ -1,74 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  8 Feb 2013 18:32:54 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	yem-host-image-tools
-Message-ID: <cover.1360344619.git.yann.morin.1998@free.fr>
+Date: Fri,  8 Feb 2013 18:32:56 +0100
+Subject: [Buildroot] [PATCH 2/6] package/dosfstools: add host-package
+	selection
+In-Reply-To: <cover.1360344619.git.yann.morin.1998@free.fr>
+References: <cover.1360344619.git.yann.morin.1998@free.fr>
+Message-ID: <cb7500992ef0651a3689443522eaa5a54afe10c3.1360344619.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Add dosfstools as a host-package selection in the menuconfig.
 
-This series adds a few host packages usefull for manipulating the
-generated filesystem images.
-
-It is of much interest when the post-image series [0] from Thomas
-has been applied.
-
-[0] http://patchwork.ozlabs.org/patch/219004/
-
-I plan on submitting sample post-{build,image} scripts demonstrating
-use of these packages in the (hopefuly near) future (my current scripts
-are working great, but need some cleanup first).
-
-
-The following changes since commit 7d1184de763c2a9779d454ab96a05080458fb3c9:
-
-  package/tvheadend: use a non-root user to run the daemon (2013-02-08 15:50:17 +0100)
-
-are available in the git repository at:
-  git://gitorious.org/buildroot/buildroot.git yem-host-image-tools
-
-Yann E. MORIN (6):
-      package/e2fsprogs: add host-package selection
-      package/dosfstools: add host-package selection
-      package/libconfuse: add host variant
-      package/genimage: new host-only package
-      package/genpart: new host-only package
-      package/mtools: new host-package
-
- package/Config.in.host                        |    5 +++++
- package/dosfstools/Config.in.host             |    6 ++++++
- package/dosfstools/dosfstools.mk              |    9 +++++++++
- package/e2fsprogs/Config.in.host              |    6 ++++++
- package/genimage/Config.in.host               |   12 ++++++++++++
- package/genimage/genimage.mk                  |   12 ++++++++++++
- package/genpart/Config.in.host                |    8 ++++++++
- package/genpart/genpart-fix-return-code.patch |   25 +++++++++++++++++++++++++
- package/genpart/genpart.mk                    |   11 +++++++++++
- package/libconfuse/libconfuse.mk              |    1 +
- package/mtools/Config.in.host                 |    9 +++++++++
- package/mtools/mtools.mk                      |   15 +++++++++++++++
- 12 files changed, 119 insertions(+), 0 deletions(-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/Config.in.host            |    1 +
+ package/dosfstools/Config.in.host |    6 ++++++
+ package/dosfstools/dosfstools.mk  |    9 +++++++++
+ 3 files changed, 16 insertions(+), 0 deletions(-)
  create mode 100644 package/dosfstools/Config.in.host
- create mode 100644 package/e2fsprogs/Config.in.host
- create mode 100644 package/genimage/Config.in.host
- create mode 100644 package/genimage/genimage.mk
- create mode 100644 package/genpart/Config.in.host
- create mode 100644 package/genpart/genpart-fix-return-code.patch
- create mode 100644 package/genpart/genpart.mk
- create mode 100644 package/mtools/Config.in.host
- create mode 100644 package/mtools/mtools.mk
 
-Regards,
-Yann E. MORIN
-
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 8813f5b..43f292c 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,6 +1,7 @@
+ menu "Host utilities"
+ 
+ source "package/dfu-util/Config.in.host"
++source "package/dosfstools/Config.in.host"
+ source "package/e2fsprogs/Config.in.host"
+ source "package/lpc3250loader/Config.in.host"
+ source "package/omap-u-boot-utils/Config.in.host"
+diff --git a/package/dosfstools/Config.in.host b/package/dosfstools/Config.in.host
+new file mode 100644
+index 0000000..9f9ceab
+--- /dev/null
++++ b/package/dosfstools/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_DOSFSTOOLS
++	bool "host dosfstools"
++	help
++	  Tools for creating and checking DOS FAT filesystems.
++	  
++	  http://www.daniel-baumann.ch/software/dosfstools/
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index 4f89364..cacd6dd 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -36,4 +36,13 @@ define DOSFSTOOLS_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
++define HOST_DOSFSTOOLS_BUILD_CMDS
++	$(MAKE) CC="$(HOSTCC)" -C $(@D)
++endef
++
++define HOST_DOSFSTOOLS_INSTALL_CMDS
++	$(MAKE) -C $(@D) CC="$(HOSTCC)" PREFIX=$(HOST_DIR)/usr install
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.2.5
