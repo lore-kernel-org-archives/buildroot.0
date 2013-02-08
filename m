@@ -1,15 +1,17 @@
 From: Rafal Fabich <rafal.fabich@gmail.com>
-Date: Fri,  8 Feb 2013 09:05:24 +0100
+Date: Fri,  8 Feb 2013 09:05:25 +0100
 Subject: [Buildroot] [PATCH 1/1] Added local directory as soure of kernel
 	code
-Message-ID: <1360310725-6463-1-git-send-email-rafal.fabich@gmail.com>
+In-Reply-To: <1360310725-6463-1-git-send-email-rafal.fabich@gmail.com>
+References: <1360310725-6463-1-git-send-email-rafal.fabich@gmail.com>
+Message-ID: <1360310725-6463-2-git-send-email-rafal.fabich@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In 'menuconfig' user can choose a local directory as source of Linux kernel code.
+In 'menuconfig' user can choose the local directory as a source of Linux kernel code.
 Useful during kernel drivers or modules development.
 
 Tested on three different development machines and different kernel sources.
