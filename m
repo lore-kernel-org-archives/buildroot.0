@@ -1,79 +1,41 @@
-From: Rafal Fabich <rafal.fabich@gmail.com>
-Date: Fri,  8 Feb 2013 09:05:25 +0100
-Subject: [Buildroot] [PATCH 1/1] Added local directory as soure of kernel
-	code
-In-Reply-To: <1360310725-6463-1-git-send-email-rafal.fabich@gmail.com>
-References: <1360310725-6463-1-git-send-email-rafal.fabich@gmail.com>
-Message-ID: <1360310725-6463-2-git-send-email-rafal.fabich@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 8 Feb 2013 09:32:03 +0100
+Subject: [Buildroot] Anyone working on a nodejs recipe?
+In-Reply-To: <CAKduhStLhHpAJmpDTqJwOROb1k67qEdt9b7pTGK7FQVeNEOFSw@mail.gmail.com>
+References: <CAKduhStLhHpAJmpDTqJwOROb1k67qEdt9b7pTGK7FQVeNEOFSw@mail.gmail.com>
+Message-ID: <20130208093203.0b398503@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In 'menuconfig' user can choose the local directory as a source of Linux kernel code.
-Useful during kernel drivers or modules development.
+Dear Daniel Price,
 
-Tested on three different development machines and different kernel sources.
+On Thu, 7 Feb 2013 15:14:25 -0800, Daniel Price wrote:
 
-Signed-off-by: Rafal Fabich <rafal.fabich@gmail.com>
----
- linux/Config.in |   14 ++++++++++++++
- linux/linux.mk  |    3 +++
- 2 files changed, 17 insertions(+)
+> I'm interested in building nodejs and nodejs modules within buildroot for
+> x64 and ARM targets.  I've been using buildroot for several months and have
+> developed several new recipes, although none are of the complexity required
+> to build something like NodeJS.
+> 
+> I see that in August, another contributor posted a patch which started the
+> work to get nodejs building (see http://patchwork.ozlabs.org/patch/176857/).
+> I've been working on getting that patch to work with buildroot 2012.11 and
+> node 0.8.x.  I was wondering if anyone else out there had worked on this as
+> well?  Is anyone else interested in having NodeJS in buildroot or am I on
+> an island?
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 3c50acc..d88d920 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -52,6 +52,11 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT
- 	  This option allows Buildroot to get the Linux kernel source
- 	  code from a Git repository.
- 
-+config BR2_LINUX_KERNEL_CUSTOM_LOCAL
-+	bool "Local directory"
-+	help
-+	  This option allows Buildroot to get the Linux kernel source
-+	  code from a local directory.
- endchoice
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
-@@ -74,6 +79,13 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 	  Git revision to use in the format used by git rev-parse,
- 	  E.G. a sha id, a tag, branch, ..
- 
-+config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
-+	string "Path to the local directory"
-+	depends on BR2_LINUX_KERNEL_CUSTOM_LOCAL
-+	help
-+	  Path to the local directory with the Linux kernel source code.
-+
-+
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "3.7.6" if BR2_LINUX_KERNEL_3_7
-@@ -81,6 +93,8 @@ config BR2_LINUX_KERNEL_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	default $BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
-+	default "local" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
-+
- 
- #
- # Patch selection
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 91a9f50..3f2d460 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -15,6 +15,9 @@ LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
- else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
- LINUX_SITE_METHOD = git
-+else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
-+LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
-+LINUX_SITE_METHOD = local
- else
- LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
- # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+I think besides the patch we received back in August, no activity
+occurred around NodeJS packaging. Besides a few comments, the patch
+sent in August looked mostly good, so if you could push it further by
+fixing the issues, and resending it, it would definitely be nice.
+
+Best regards,
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
