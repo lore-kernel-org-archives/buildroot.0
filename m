@@ -1,125 +1,86 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Fri, 08 Feb 2013 18:20:33 +0200
-Subject: [Buildroot] [PATCH] aircrack-ng: new package
-In-Reply-To: <1360340189-4409-1-git-send-email-laurent.cans@gmail.com>
-References: <1360340189-4409-1-git-send-email-laurent.cans@gmail.com>
-Message-ID: <511525D1.8010305@petroprogram.com>
+From: John Stile <john@stilen.com>
+Date: Fri, 08 Feb 2013 09:25:17 -0800
+Subject: [Buildroot] need smaller filesystem for NOR
+Message-ID: <1360344317.17385.31.camel@genx.eng.msli.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Laurent
+I primarily boot from one of two 128Mb NAND areas, but I have an 8Mb NOR
+failsafe if NAND is bad.  I have about 5.5Mb available for the
+Filesystem after loading at91bootstrap, uboot, uboot-env, and kernel.
+...(using buildroot-2011.11)...
 
-You mean 1.1 did not compile with latest buildroot ?
+The rootfs.jffs2 for NAND is 41Mb.
+I need one for NOR that is less than 5.5Mb.
 
-Here's mine from 2012.05 days but ofcourse it needs fixing and cleanup ....
+Is there a good method or script to copy buildroot's rootfs.jffs2  to
+make a smaller copy for NOR?
 
-#############################################################
-#
-# aircrack-ng
-#
-#############################################################
+My first attempt  leads to
+VFS: Mounted root (jffs2 filesystem) on device 31:1.
+Freeing init memory: 104K
+Warning: unable to open an initial console.
+Kernel panic - not syncing: No init found.  Try passing init= option to kernel.
+[<c0028678>] (unwind_backtrace+0x0/0xdc) from [<c0243990>] (panic+0x34/0x110)
+[<c0243990>] (panic+0x34/0x110) from [<c002254c>] (init_post+0x138/0x170)
+[<c002254c>] (init_post+0x138/0x170) from [<c0008408>] (kernel_init+0xbc/0xe8)
+[<c0008408>] (kernel_init+0xbc/0xe8) from [<c003b634>] (do_exit+0x0/0x5a4)
+[<c003b634>] (do_exit+0x0/0x5a4) from [<00000003>] (0x3)
 
-AIRCRACK_NG_VERSION = 1.1
-AIRCRACK_NG_SOURCE = aircrack-ng-$(AIRCRACK_NG_VERSION).tar.gz
-AIRCRACK_NG_SITE = http://download.aircrack-ng.org
-AIRCRACK_NG_DEPENDENCIES = openssl sqlite
+I think this means the file system is found and mounted, and for some
+reason, init isn't found, although I have played with init= to no avail,
+and if I mount my little jffs2, I do see busybox and all the links
+(/bin/init).
 
-define AIRCRACK_NG_BUILD_CMDS
-    $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE)
-CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" LD="$(TARGET_LD)" -C $(@D)
-sqlite=true unstable=true strip
-endef
+I tried to trying to hack it (unsuccessfully) with a post-build script
+that tries to do what buildroot does:
 
-define AIRCRACK_NG_INSTALL_TARGET_CMDS
-    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)
-sqlite=true unstable=true install
-endef
+#!/bin/bash
+TARGET_DIR="${PWD}/output/target"
+BUILD_DIR="${PWD}/output/build"
+HOST_DIR="${PWD}/output/host"
+STAGE_DIR="${PWD}/output/NORtarget"
+TARGET_IMG="${PWD}/output/images/NORrootfs.jffs2"
+FILTER_LIST=${PWD}/boarts/atmel/at91sam9g20ek/nor_flash_list.txt
+ROOTFS_DEVICE_TABLES="${PWD}/target/generic/device_table.txt"
+FULL_DEVICE_TABLE="$BUILD_DIR/_device_table.txt"
 
-$(eval $(call GENTARGETS))
+echo "[--] Remove old image: ${TARGET_DIR}"
+rm -rf "${TARGET_DIR}"
 
+echo "[--] Coypy into new image"
+rsync -a \
+ --exclude-from=${FILTER_LIST} \
+${TARGET_DIR}/ ${STAGE_DIR}
 
+echo "[--]  Size of new image:"
+du -sh ${STAGE_DIR}
 
-8.2.2013 18:16, Laurent Cans kirjoitti:
-> Aircrack-ng is a set of tools for auditing wireless security.
->
-> Although the last version is 1.1, I choose to package last svn version due to a fixed bug which fix a failed compilation.
->
-> Signed-off-by: Laurent Cans <laurent.cans@gmail.com>
-> ---
->  package/Config.in                  |    1 +
->  package/aircrack-ng/Config.in      |    9 +++++++++
->  package/aircrack-ng/aircrack-ng.mk |   34 ++++++++++++++++++++++++++++++++++
->  3 files changed, 44 insertions(+)
->  create mode 100644 package/aircrack-ng/Config.in
->  create mode 100644 package/aircrack-ng/aircrack-ng.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 8588951..c820d68 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -612,6 +612,7 @@ source "package/sound-theme-freedesktop/Config.in"
->  endmenu
->  
->  menu "Networking applications"
-> +source "package/aircrack-ng/Config.in"
->  source "package/argus/Config.in"
->  source "package/arptables/Config.in"
->  source "package/avahi/Config.in"
-> diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
-> new file mode 100644
-> index 0000000..1efa8e6
-> --- /dev/null
-> +++ b/package/aircrack-ng/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_AIRCRACK_NG
-> +	bool "aircrack-ng"
-> +	depends on BR2_LARGEFILE
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_WI
-> +	help
-> +	  A set of tools for auditing wireless networks
-> +
-> +	  http://www.aircrack-ng.org/
-> diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
-> new file mode 100644
-> index 0000000..29f638c
-> --- /dev/null
-> +++ b/package/aircrack-ng/aircrack-ng.mk
-> @@ -0,0 +1,34 @@
-> +#############################################################
-> +#
-> +# Aircrack-ng
-> +#
-> +#############################################################
-> +AIRCRACK_NG_VERSION = 2245
-> +AIRCRACK_NG_SITE = http://trac.aircrack-ng.org/svn/trunk
-> +AIRCRACK_NG_SITE_METHOD = svn
-> +AIRCRACK_NG_LICENSE = GPLv2
-> +AIRCRACK_NG_LICENSE_FILES = LICENSE
-> +AIRCRACK_NG_DEPENDENCIES = openssl
-> +
-> +ifeq($(BR2_PACKAGE_SQLITE),y)
-> +      AIRCRACK_NG_OPTS = sqlite=true
-> +      AIRCRACK_NG_DEPENDENCIES += sqlite
-> +endif
-> +
-> +define AIRCRACK_NG_BUILD_CMDS
-> +      $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) $(AIRCRACK_NG_OPTS) all
-> +endef
-> +
-> +define AIRCRACK_NG_CLEAN_CMDS
-> +      $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) $(AIRCRACK_NG_OPTS) clean
-> +endef
-> +
-> +define AIRCRACK_NG_INSTALL_TARGET_CMDS
-> +      $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) $(AIRCRACK_NG_OPTS) install
-> +endef
-> +
-> +define AIRCRACK_NG_UNINSTALL_TARGET_CMDS
-> +      $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) $(AIRCRACK_NG_OPTS) uninstall
-> +endef
-> +
-> +$(eval $(generic-package))
+echo "[--]  Make device table:"
+cat $ROOTFS_DEVICE_TABLES > $FULL_DEVICE_TABLE
+
+FAKEROOT_SCRIPT="#!/bin/bash
+
+chown -R 0:0 ${TARGET_DIR}
+
+${HOST_DIR}/usr/bin/makedevs \
+ -d ${BUILD_DIR}/_device_table.txt \
+ ${TARGET_DIR}
+
+${HOST_DIR}/usr/sbin/mkfs.jffs2 \
+ -e 0x20000 -l -s 0x1000 -n \
+ -d ${TARGET_DIR} \
+ -o ${TARGET_IMG}
+
+${HOST_DIR}/usr/bin/makedevs \
+ -d ${BUILD_DIR}/_device_table.txt \
+ ${TARGET_DIR}
+"
+
+echo "[--]  Call FAKEROOT_SCRIPT"
+echo "${FAKEROOT_SCRIPT}"
+$HOST_DIR/usr/bin/fakeroot -- /bin/bash -c "${FAKEROOT_SCRIPT}"
+echo $?
