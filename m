@@ -1,34 +1,92 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 8 Feb 2013 15:12:09 +0100
-Subject: [Buildroot] [git commit] configs/beaglebone_defconfig: lock down
-	kernel headers version
-Message-ID: <20130208141159.3F4299AA0A@busybox.osuosl.org>
+From: Laurent Cans <laurent.cans@gmail.com>
+Date: Fri,  8 Feb 2013 17:16:29 +0100
+Subject: [Buildroot]  [PATCH] aircrack-ng: new package
+Message-ID: <1360340189-4409-1-git-send-email-laurent.cans@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=85ffaecb27d3ae5929437ae878a865b57f708df1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Aircrack-ng is a set of tools for auditing wireless security.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Although the last version is 1.1, I choose to package last svn version due to a fixed bug which fix a failed compilation.
+
+Signed-off-by: Laurent Cans <laurent.cans@gmail.com>
 ---
- configs/beaglebone_defconfig |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/Config.in                  |    1 +
+ package/aircrack-ng/Config.in      |    9 +++++++++
+ package/aircrack-ng/aircrack-ng.mk |   34 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 44 insertions(+)
+ create mode 100644 package/aircrack-ng/Config.in
+ create mode 100644 package/aircrack-ng/aircrack-ng.mk
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index f78a400..e19cdcb 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -8,6 +8,9 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
- # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
-+# Lock down headers to avoid breaking with new defaults
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.2.9"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
- BR2_TARGET_UBOOT_2012_10=y
+diff --git a/package/Config.in b/package/Config.in
+index 8588951..c820d68 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -612,6 +612,7 @@ source "package/sound-theme-freedesktop/Config.in"
+ endmenu
+ 
+ menu "Networking applications"
++source "package/aircrack-ng/Config.in"
+ source "package/argus/Config.in"
+ source "package/arptables/Config.in"
+ source "package/avahi/Config.in"
+diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
+new file mode 100644
+index 0000000..1efa8e6
+--- /dev/null
++++ b/package/aircrack-ng/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_AIRCRACK_NG
++	bool "aircrack-ng"
++	depends on BR2_LARGEFILE
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_WI
++	help
++	  A set of tools for auditing wireless networks
++
++	  http://www.aircrack-ng.org/
+diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
+new file mode 100644
+index 0000000..29f638c
+--- /dev/null
++++ b/package/aircrack-ng/aircrack-ng.mk
+@@ -0,0 +1,34 @@
++#############################################################
++#
++# Aircrack-ng
++#
++#############################################################
++AIRCRACK_NG_VERSION = 2245
++AIRCRACK_NG_SITE = http://trac.aircrack-ng.org/svn/trunk
++AIRCRACK_NG_SITE_METHOD = svn
++AIRCRACK_NG_LICENSE = GPLv2
++AIRCRACK_NG_LICENSE_FILES = LICENSE
++AIRCRACK_NG_DEPENDENCIES = openssl
++
++ifeq($(BR2_PACKAGE_SQLITE),y)
++      AIRCRACK_NG_OPTS = sqlite=true
++      AIRCRACK_NG_DEPENDENCIES += sqlite
++endif
++
++define AIRCRACK_NG_BUILD_CMDS
++      $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) $(AIRCRACK_NG_OPTS) all
++endef
++
++define AIRCRACK_NG_CLEAN_CMDS
++      $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) $(AIRCRACK_NG_OPTS) clean
++endef
++
++define AIRCRACK_NG_INSTALL_TARGET_CMDS
++      $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) $(AIRCRACK_NG_OPTS) install
++endef
++
++define AIRCRACK_NG_UNINSTALL_TARGET_CMDS
++      $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) $(AIRCRACK_NG_OPTS) uninstall
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.10.4
