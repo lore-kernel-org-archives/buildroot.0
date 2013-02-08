@@ -1,47 +1,87 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 Feb 2013 23:02:36 +0100
-Subject: [Buildroot] [PATCH 1/2] packages: add ability for packages to
-	create users
-In-Reply-To: <5111A009.10304@mind.be>
-References: <cover.1360075956.git.yann.morin.1998@free.fr>
- <5f1de03287fa8817aa692419c52e0997ec3e2489.1360075956.git.yann.morin.1998@free.fr>
- <5111A009.10304@mind.be>
-Message-ID: <201302082302.37055.yann.morin.1998@free.fr>
+Date: Fri,  8 Feb 2013 23:06:48 +0100
+Subject: [Buildroot] [pull request v6] Pull request for branch
+	yem-package-create-user
+Message-ID: <cover.1360360690.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hello All!
 
-On Wednesday 06 February 2013 Arnout Vandecappelle wrote:
-> On 05/02/13 15:54, Yann E. MORIN wrote:
-[--SNIP--]
-> > +PASSWD_METHOD="$( sed -r -e '/^BR2_TARGET_GENERIC_PASSWD_METHOD="(.)*"$/!d' \
-> > +                         -e 's//\1/;'                                       \
-> > +                         "${BUILDROOT_CONFIG}"                              \
-> > +                )"
-> 
->   I'm personally more in favour of sourcing ${BUILDROOT_CONFIG} and using 
-> "${BR2_TARGET_GENERIC_PASSWD_METHOD}" directly.
+Here is a series that allows packages to create users.
 
-We can't simply source .config from shell scripts. .config may contain
-constructs of the form:
-    BR2_HOST_DIR="$(BASE_DIR)/host"
+Packages that install daemons may well want to run those daemons as
+non-root users to avoid security issues. Currently, there are two users
+of choice to run 'generic' daemons: root or daemon (although there are
+a few dedicated users to run a few services: mail, sshd, ftp...).
 
-which would ultimately try to call a command named 'BASE_DIR' which is
-obviously wrong for virtually everybody on Earth (and probably other
-planets, too).
+This series builds upon both the package infrastrucutre to define the
+user(s) a package may want to create, and the filesystem infrastructure
+to actually generate these users, and chown their ${HOME}s.
 
-So, I kept a sed expression to extract the password encoding method form
-the .config.
+Documentation is updated accordingly.
 
-Note: I applied most of your suggestions, and added your ACK, as per your
-initial mail. I hope it will be still valid once you see the nes script! ;-)
+As a proof of concept, the package tvheadend has been updated to use
+a dedicated user to run its daemon as (call me stubborn! ;-] ).
+
+
+Changes v5 -> v6:  (All after suggestions by Arnout)
+  - clean up awk invocations
+  - ensure users with an explicit uid are created before users with a
+    computed uid
+  - ditto for groups/gid
+  - cleanup group-addign function
+  - fix password encoding method
+  - cleanup /etc/shadow fields
+  - fix typos
+
+Changes v4 -> v5:
+  - rebased ontop master after Developer's Day comments and upstreaming
+
+Changes v3 -> v4:
+  - use the configured password encryption scheme
+  - some tweaks and typo-fixes to the documentation
+
+Changes v2 -> v3:
+  - clarify password prefixes (Samuel)
+  - move makeuser syntax doc to its own file (Samuel)
+  - use awk instead of sed to parse /etc/passwd et al. (Cam, Thomas)
+  - sanitise use of grep (Cam)
+  - enhancements and fixes to makuser syntax doc (Cam)
+
+Changes v1 -> v2:
+  - drop the gshadow patch (Thomas, Peter)
+  - tvheadend user is now part of the video secondary group
+
+
+The following changes since commit 5ff6989445eac9ce59a5041c656bcb0319dce0eb:
+
+  libgpg-error: use <pkg>_CONFIG_SCRIPTS (2013-02-08 22:41:40 +0100)
+
+are available in the git repository at:
+  git://gitorious.org/buildroot/buildroot.git yem-package-create-user
+
+Yann E. MORIN (2):
+      packages: add ability for packages to create users
+      package/tvheadend: use a non-root user to run the daemon
+
+ docs/manual/adding-packages-generic.txt |   16 +-
+ docs/manual/appendix.txt                |    1 +
+ docs/manual/makeusers-syntax.txt        |   87 +++++++
+ fs/common.mk                            |    3 +
+ package/pkg-generic.mk                  |    1 +
+ package/tvheadend/etc.default.tvheadend |    5 +-
+ package/tvheadend/tvheadend.mk          |   10 +-
+ support/scripts/mkusers                 |  409 +++++++++++++++++++++++++++++++
+ 8 files changed, 525 insertions(+), 7 deletions(-)
+ create mode 100644 docs/manual/makeusers-syntax.txt
+ create mode 100755 support/scripts/mkusers
 
 Regards,
-Yann E. MORIN.
+Yann E. MORIN
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
