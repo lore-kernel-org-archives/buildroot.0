@@ -1,27 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat,  9 Feb 2013 18:30:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 5906] collectd client headers not exported
-In-Reply-To: <bug-5906-163@https.bugs.busybox.net/>
-References: <bug-5906-163@https.bugs.busybox.net/>
-Message-ID: <20130209183045.B5D519AA4D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 9 Feb 2013 19:33:01 +0100
+Subject: [Buildroot] [PATCH 1/1] mplayer: not supported on sh2/sh2a
+In-Reply-To: <1360434000-10341-1-git-send-email-gilles.talis@gmail.com>
+References: <y>
+	<1360434000-10341-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <20130209193301.6762a118@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5906
+Dear Gilles Talis,
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-02-09 18:31:07 UTC ---
-Thanks. I should however probably have been more precise. By "proper" patch, I
-meant a patch with a description, a Signed-off-by line, and sent to the mailing
-list, so that it can be committed by the project maintainer, and your
-authorship preserved.
+On Sat,  9 Feb 2013 10:20:00 -0800, Gilles Talis wrote:
+> mplayer configure script says that sh2a is not supported.
+> 
+> Fixes:
+> http://autobuild.buildroot.org/results/0e530fd99c4b37782208ee0549be500220643999/
+> 
+> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 
-Otherwise, if you're not interested in doing this by yourself, don't hesitate
-to tell us, and we'll cook a patch for your change.
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
