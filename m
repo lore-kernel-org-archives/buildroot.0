@@ -1,52 +1,39 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Sat, 09 Feb 2013 14:04:49 +0100
-Subject: [Buildroot] Qt X11 support
-In-Reply-To: <51164393.10602@petroprogram.com>
-References: <51164393.10602@petroprogram.com>
-Message-ID: <51164971.2090507@relinux.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  9 Feb 2013 14:05:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 5906] New: collectd client headers not exported
+Message-ID: <bug-5906-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 09.02.2013 13:39, schrieb Stefan Fr?berg:
-> Hello everyone
->
-> Has anyone tried X11 support with Qt lately ?
->
-> This was the last thing I could find of the subject:
-> http://lists.busybox.net/pipermail/buildroot/2012-March/050769.html
->
-> It would be great to have an menuconfig entry under Qt like "Embedded
-> Qt" which
-> could be on by default but for those who don't need or want Qt with
-> framebuffer
-> could switch if off.
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=5906
 
-as far as I remember you can select Qt but not X11, which gives you
-automatically the embedded version.
+           Summary: collectd client headers not exported
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: fli4l at carsten-spiess.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I ded this some months ago for my beaglebone with success, but do not
-remember if there were other config options needed.
 
-Kind regards
+The headers needed to compile unixsock clients using the collectd/client.h
+include are not exported by the collectd package.
 
-Stephan
->
-> Regards
-> Stefan
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Reason:
+in collectd.mk the line:
+  COLLECTD_INSTALL_STAGING = YES
+is missing.
 
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
