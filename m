@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  9 Feb 2013 19:09:41 +0100
-Subject: [Buildroot] [PATCH 2/6] package/libbsd: new package
+Date: Sat,  9 Feb 2013 19:09:42 +0100
+Subject: [Buildroot] [PATCH 3/6] package/libedit2: new package
 In-Reply-To: <cover.1360433324.git.yann.morin.1998@free.fr>
 References: <cover.1360433324.git.yann.morin.1998@free.fr>
-Message-ID: <76440f71466575498fd576fc04cbbdc7cda8d6f3.1360433324.git.yann.morin.1998@free.fr>
+Message-ID: <ddaa0f7f586394f4b24efdf135d5d0333e499d8b.1360433324.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,69 +11,144 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/Config.in        |    1 +
- package/libbsd/Config.in |   10 ++++++++++
- package/libbsd/libbsd.mk |   21 +++++++++++++++++++++
- 3 files changed, 32 insertions(+), 0 deletions(-)
- create mode 100644 package/libbsd/Config.in
- create mode 100644 package/libbsd/libbsd.mk
+ package/Config.in            |    1 +
+ package/libedit2/Config.in   |    9 +++++
+ package/libedit2/libedit2.mk |   76 ++++++++++++++++++++++++++++++++++++++++++
+ package/libedit2/libedit2.pc |   13 +++++++
+ 4 files changed, 99 insertions(+), 0 deletions(-)
+ create mode 100644 package/libedit2/Config.in
+ create mode 100644 package/libedit2/libedit2.mk
+ create mode 100644 package/libedit2/libedit2.pc
 
 diff --git a/package/Config.in b/package/Config.in
-index 2fad94d..ab09181 100644
+index ab09181..9d6055b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -541,6 +541,7 @@ source "package/libargtable2/Config.in"
- source "package/argp-standalone/Config.in"
- source "package/boost/Config.in"
- source "package/libatomic_ops/Config.in"
-+source "package/libbsd/Config.in"
- source "package/libcap/Config.in"
- source "package/libcap-ng/Config.in"
- source "package/libdaemon/Config.in"
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+@@ -572,6 +572,7 @@ menu "Text and terminal handling"
+ source "package/enchant/Config.in"
+ source "package/libfribidi/Config.in"
+ source "package/icu/Config.in"
++source "package/libedit2/Config.in"
+ source "package/libiconv/Config.in"
+ source "package/linenoise/Config.in"
+ source "package/ncurses/Config.in"
+diff --git a/package/libedit2/Config.in b/package/libedit2/Config.in
 new file mode 100644
-index 0000000..7f2b55a
+index 0000000..1e7b95d
 --- /dev/null
-+++ b/package/libbsd/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBBSD
-+	bool "libbsd"
++++ b/package/libedit2/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBEDIT2
++	bool "libedit2"
++	select BR2_PACKAGE_LIBBSD
++	select BR2_PACKAGE_NCURSES
 +	help
-+	  This library provides useful functions commonly found on BSD
-+	  systems, and lacking on others like GNU systems, thus making
-+	  it easier to port projects with strong BSD origins, without
-+	  needing to embed the same code over and over again on each
-+	  project.
++	  The editline library (from BSD) provides generic line editing
++	  and history functions. It slightly resembles GNU readline.
 +	  
-+	  http://libbsd.freedesktop.org/
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
++	  http://ftp.netbsd.org/pub/NetBSD/NetBSD-release-5-0/src/lib/libedit/
+diff --git a/package/libedit2/libedit2.mk b/package/libedit2/libedit2.mk
 new file mode 100644
-index 0000000..3af1002
+index 0000000..0916c2e
 --- /dev/null
-+++ b/package/libbsd/libbsd.mk
-@@ -0,0 +1,21 @@
++++ b/package/libedit2/libedit2.mk
+@@ -0,0 +1,76 @@
 +#############################################################
 +#
-+# libbsd
++# libedit2
 +#
 +#############################################################
 +
-+LIBBSD_VERSION         = 0.4.2
-+LIBBSD_SOURCE          = libbsd-$(LIBBSD_VERSION).tar.gz
-+LIBBSD_SITE            = http://libbsd.freedesktop.org/releases
-+LIBBSD_LICENSE         = BSD-3c MIT
-+LIBBSD_LICENSE_FILES   = LICENSE
++# Note: libedit2 does not have a regular homepage, and it seems
++# there is no place where to download a tarball from. That's
++# why we use the Debian way-back machine.
++LIBEDIT2_VERSION_MAJOR   = 2
++LIBEDIT2_VERSION_MINOR   = 11
++LIBEDIT2_VERSION_EXTRA   = -20080614
++LIBEDIT2_VERSION         = $(LIBEDIT2_VERSION_MAJOR).$(LIBEDIT2_VERSION_MINOR)
++LIBEDIT2_SOURCE          = libedit_$(LIBEDIT2_VERSION)$(LIBEDIT2_VERSION_EXTRA).orig.tar.bz2
++LIBEDIT2_SITE            = http://snapshot.debian.org/archive/debian/20120601T033558Z/pool/main/libe/libedit
++LIBEDIT2_SUBDIR          = libedit
++LIBEDIT2_PATCH           = libedit_2.11-20080614-5.debian.tar.bz2
++LIBEDIT2_INSTALL_STAGING = YES
++LIBEDIT2_DEPENDENCIES    = host-pmake libbsd ncurses
 +
-+# man-pages are BSD-4c, so that license only matters
-+# if doc is kept in the target rootfs
-+ifeq ($(BR2_HAVE_DOCUMENTATION),y)
-+LIBBSD_LICENSE        += (libraries), BSD-4c (documentation)
-+endif
++define LIBEDIT2_POST_PATCH_PERMISSIONS
++	chmod +x $(@D)/libedit/makelist
++endef
 +
-+LIBBSD_INSTALL_STAGING = YES
++LIBEDIT2_POST_PATCH_HOOKS += LIBEDIT2_POST_PATCH_PERMISSIONS
 +
-+$(eval $(autotools-package))
++define LIBEDIT2_FIX_VIS_H_INCLUDE
++	$(SED) 's,^#include <vis\.h>$$,#include <bsd/vis\.h>,;' \
++	       $(@D)/libedit/filecomplete.c                     \
++	       $(@D)/libedit/history.c                          \
++	       $(@D)/libedit/readline.c
++endef
++LIBEDIT2_POST_PATCH_HOOKS += LIBEDIT2_FIX_VIS_H_INCLUDE
++
++LIBEDIT2_PMAKE_OPTS = MKPROFILE=no MKCATPAGES=no MLINKS= MANPAGES= NOGCCERROR=1         \
++                      SHLIB_SHFLAGS="-Wl,-soname,libedit.so.${LIBEDIT2_VERSION_MAJOR}"  \
++
++define LIBEDIT2_BUILD_CMDS
++	cd $(@D)/$(LIBEDIT2_SUBDIR); \
++	$(TARGET_CONFIGURE_OPTS) LDADD="-lbsd -lcurses" pmake $(LIBEDIT2_PMAKE_OPTS)
++endef
++
++LIBEDIT2_MAN_LINKS = el_init el_end el_reset el_gets el_getc el_push el_parse   \
++                     el_set el_get el_source el_resize el_line el_insertstr     \
++                     el_deletestr history_init history_end history
++
++# $1: DESTDIR to install into
++# Can't use pmake to install, it wants to be root. sigh... :-(
++# We need to create the .so links, otherwise we can't link; and waiting for
++# ldconfig is too late as it's done just before building the images.
++define LIBEDIT2_INSTALL_CMDS
++	$(INSTALL) -D -m 0644 package/libedit2/libedit2.pc $(1)/usr/lib/pkgconfig/libedit2.pc
++	ln -sf libedit2.pc $(1)/usr/lib/pkgconfig/libedit.pc
++	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.a $(1)/usr/lib/libedit.a
++	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit_pic.a $(1)/usr/lib/libedit_pic.a
++	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.so.2.11 $(1)/usr/lib/libedit.so.2.11
++	$(INSTALL) -D -m 0644 $(@D)/libedit/histedit.h $(1)/usr/include/histedit.h
++	ln -sf libedit.so.$(LIBEDIT2_VERSION) $(1)/usr/lib/libedit.so.$(LIBEDIT2_VERSION_MAJOR)
++	ln -sf libedit.so.$(LIBEDIT2_VERSION_MAJOR) $(1)/usr/lib/libedit.so
++	$(INSTALL) -D -m 0644 $(@D)/libedit/readline/readline.h $(1)/usr/include/editline/readline.h
++	$(INSTALL) -v -D -m 0644 $(@D)/libedit/editline.3 $(1)/usr/share/man/man3/editline.3el
++	$(INSTALL) -v -D -m 0644 $(@D)/libedit/editrc.5 $(1)/usr/share/man/man5/editrc.5el
++	for lnk in $(LIBEDIT2_MAN_LINKS); do                            \
++	    ln -sfv editline.3el $(1)/usr/share/man/man3/$${lnk}.3el;   \
++	done
++endef
++
++define LIBEDIT2_INSTALL_STAGING_CMDS
++	$(call LIBEDIT2_INSTALL_CMDS,$(STAGING_DIR))
++endef
++
++define LIBEDIT2_INSTALL_TARGET_CMDS
++	$(call LIBEDIT2_INSTALL_CMDS,$(TARGET_DIR))
++endef
++
++$(eval $(generic-package))
+diff --git a/package/libedit2/libedit2.pc b/package/libedit2/libedit2.pc
+new file mode 100644
+index 0000000..47ac871
+--- /dev/null
++++ b/package/libedit2/libedit2.pc
+@@ -0,0 +1,13 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
++
++Name: libedit
++Description: Not just a replacement library for libreadline and libhistory.
++Version: 2.11
++Requires: libbsd ncurses
++Requires.private:
++Libs: -L${libdir} -ledit
++Libs.private:
++Cflags: -I${includedir}
 -- 
 1.7.2.5
