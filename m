@@ -1,38 +1,27 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sat,  9 Feb 2013 10:20:00 -0800
-Subject: [Buildroot] [PATCH 1/1] mplayer: not supported on sh2/sh2a
-In-Reply-To: <y>
-References: <y>
-Message-ID: <1360434000-10341-1-git-send-email-gilles.talis@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  9 Feb 2013 18:30:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 5906] collectd client headers not exported
+In-Reply-To: <bug-5906-163@https.bugs.busybox.net/>
+References: <bug-5906-163@https.bugs.busybox.net/>
+Message-ID: <20130209183045.B5D519AA4D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mplayer configure script says that sh2a is not supported.
+https://bugs.busybox.net/show_bug.cgi?id=5906
 
-Fixes:
-http://autobuild.buildroot.org/results/0e530fd99c4b37782208ee0549be500220643999/
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-02-09 18:31:07 UTC ---
+Thanks. I should however probably have been more precise. By "proper" patch, I
+meant a patch with a description, a Signed-off-by line, and sent to the mailing
+list, so that it can be committed by the project maintainer, and your
+authorship preserved.
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/multimedia/mplayer/Config.in |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Otherwise, if you're not interested in doing this by yourself, don't hesitate
+to tell us, and we'll cook a patch for your change.
 
-diff --git a/package/multimedia/mplayer/Config.in b/package/multimedia/mplayer/Config.in
-index e285644..e36fc46 100644
---- a/package/multimedia/mplayer/Config.in
-+++ b/package/multimedia/mplayer/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_MPLAYER
- 	bool "mplayer"
- 	# Those architectures are not supported by MPlayer
--	depends on !BR2_sh4a && !BR2_sh4aeb && !BR2_microblaze && !BR2_aarch64
-+	depends on !(BR2_sh2 || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
-+			|| BR2_microblaze || BR2_aarch64)
- 	depends on BR2_LARGEFILE
- 	help
- 	  MPlayer is a movie player which runs on many systems and supports
 -- 
-1.7.10.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
