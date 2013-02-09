@@ -1,40 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 9 Feb 2013 12:13:59 +0100
-Subject: [Buildroot] [git commit] imagemagick: fix CONFIG_SCRIPTS handling
-	when C++ isn't available
-Message-ID: <20130209111430.AF6B79AA59@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Sat, 09 Feb 2013 13:36:27 +0200
+Subject: [Buildroot] [PATCH] aircrack-ng: new package
+In-Reply-To: <CAA1eMkEu3DZTbtgjZgq3538N5dyE5g84NDDL4_ay6OQ7Ek4-eA@mail.gmail.com>
+References: <1360340189-4409-1-git-send-email-laurent.cans@gmail.com>
+ <511525D1.8010305@petroprogram.com>
+ <CAA1eMkEu3DZTbtgjZgq3538N5dyE5g84NDDL4_ay6OQ7Ek4-eA@mail.gmail.com>
+Message-ID: <511634BB.4000506@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=47b3a845cfa171a4f76c6c213e027acf4607c1c7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Laurent
 
-Fixes http://autobuild.buildroot.org/results/0b35567af8a41a14c9c33f3be5299978c5847e03
+9.2.2013 0:38, Laurent CANS kirjoitti:
+> 2013/2/8 Stefan Fr?berg <stefan.froberg@petroprogram.com>:
+>> Hi Laurent
+>>
+>> You mean 1.1 did not compile with latest buildroot ?
+> I faced a problem with gcc4.5 referenced by the project with this issue :
+>
+> http://trac.aircrack-ng.org/ticket/762
 
-Magick++-config only gets installed when C++ support is detected.
+Hmmm... I could swear that I was using 4.5  when compiling that 1.1
+version ages ago. But i tried compiling
+it with only 32-bit x86 target.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/imagemagick/imagemagick.mk |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
-
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 722ab40..def7a5d 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -17,7 +17,11 @@ IMAGEMAGICK_LICENSE_FILES = LICENSE
- IMAGEMAGICK_INSTALL_STAGING = YES
- IMAGEMAGICK_AUTORECONF = YES
- IMAGEMAGICK_CONFIG_SCRIPTS = \
--	$(addsuffix -config,Magick MagickCore MagickWand Wand Magick++)
-+	$(addsuffix -config,Magick MagickCore MagickWand Wand)
-+
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+IMAGEMAGICK_CONFIG_SCRIPTS += Magick++-config
-+endif
- 
- ifeq ($(BR2_LARGEFILE),y)
- IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=64
+Regards
+Stefan
