@@ -1,45 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Feb 2013 18:40:30 +0100
-Subject: [Buildroot] non-standard architecture targets
-In-Reply-To: <CAKPuMhNBQKufPGtau-SbYz50zqCnuAFpUaO4faWQspjNRzb+hg@mail.gmail.com>
-References: <CAKPuMhOrKZwAp5FZgvBO2M5dfvrFnCjBchwAfBn+_tu_XiwB2Q@mail.gmail.com>
- <201302101733.42143.yann.morin.1998@free.fr>
- <CAKPuMhNBQKufPGtau-SbYz50zqCnuAFpUaO4faWQspjNRzb+hg@mail.gmail.com>
-Message-ID: <201302101840.31016.yann.morin.1998@free.fr>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sun, 10 Feb 2013 09:54:54 -0800
+Subject: [Buildroot] [PATCH 1/1] libtirpc: requires toolchain with
+	threads support
+In-Reply-To: <87wqugebb8.fsf@dell.be.48ers.dk>
+References: <1360448834-21507-1-git-send-email-gilles.talis@gmail.com>
+ <87wqugebb8.fsf@dell.be.48ers.dk>
+Message-ID: <CAKcgs2zcpjXBk7hUpue3AfqWsc3ijAgb99dV4EQ9DmuF2YWXCw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin, all,
+Good point.
+Will fix and resend.
+Gilles.
 
-[Please, do *not* top-post, put your reply below the text you're replying to]
+2013/2/10 Peter Korsgaard <jacmet@uclibc.org>
 
-On Sunday 10 February 2013 martin krastev wrote:
-> Unfortunately the tuple pattern in question is not something I have
-> control over - that is what gcc expects to have as a target (pattern)
-> to enable paired-singles support for ppc750cl.
-
-(for reference, you suggested those tuples:
-  powerpc-buildroot-linux-uclibc-paired and
-  powerpc-buildroot-linux-paired-uclibc).
-
-Well, gcc can *not* expect such tuples, as they are invalid.
-
-However, the following tuples are valid, and match the pattern gcc expects:
-    powerpc-unknown-linux-gnupaired
-    powerpc-unknown-linux-uclibcpaired
-
-But AFAIK there is no way to set these using Buildroot.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> >>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+>
+>  Gilles> Fixes:
+>  Gilles>
+> http://autobuild.buildroot.org/results/8ba720f47f74df94b8c70ac4befd47c47ce65f2f
+>
+>  Gilles> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+>  Gilles> ---
+>  Gilles>  package/libtirpc/Config.in |    4 ++++
+>  Gilles>  1 file changed, 4 insertions(+)
+>
+>  Gilles> diff --git a/package/libtirpc/Config.in
+> b/package/libtirpc/Config.in
+>  Gilles> index 7e891b4..f2a6f83 100644
+>  Gilles> --- a/package/libtirpc/Config.in
+>  Gilles> +++ b/package/libtirpc/Config.in
+>  Gilles> @@ -1,7 +1,11 @@
+>  Gilles>  config BR2_PACKAGE_LIBTIRPC
+>  Gilles>        bool "libtirpc"
+>  Gilles> +      depends on BR2_TOOLCHAIN_HAS_THREADS
+>
+> Thanks, but you also need to propagate this dependency to libtirpc's
+> reverse dependencies:
+>
+> git grep -l 'select BR2_PACKAGE_LIBTIRPC'
+> package/conntrack-tools/Config.in
+> package/lmbench/Config.in
+> package/nfs-utils/Config.in
+> package/quota/Config.in
+> package/rpcbind/Config.in
+>
+> Care to fix that up and resend?
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130210/50a1720c/attachment-0001.html>
