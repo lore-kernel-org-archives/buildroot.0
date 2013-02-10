@@ -1,130 +1,94 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 10 Feb 2013 13:17:15 +0100
-Subject: [Buildroot] [PATCH] package/rpi-userland: update to fix
-	no-longer applying patch
-In-Reply-To: <1360497506-31282-1-git-send-email-yann.morin.1998@free.fr>
-References: <1360497506-31282-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAGduivy7-GCGUDHbuZ=JbL6-zVYW=2G0zqpEoQtDg3zqm=Xe1w@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 10 Feb 2013 11:07:12 +0100
+Subject: [Buildroot] [git commit] Update for 2013.02-rc1
+Message-ID: <20130210124352.4D07C9A9B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+commit: http://git.buildroot.net/buildroot/commit/?id=e68acefb3bad6c61a214c9919c8f76fdf4739b03
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I haven't tested this patch yet, but it seems all good.
-The inclusion of Floris Bos's patch was done by this commit :
-https://github.com/raspberrypi/userland/commit/f7b1cad78497c65e59715d78be2b4fc9c63708c1
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES            |    2 +-
+ Makefile           |    2 +-
+ docs/download.html |   10 +++++-----
+ docs/news.html     |   13 +++++++++++++
+ 4 files changed, 20 insertions(+), 7 deletions(-)
 
-As Yann noted, I find interesting that the patch did not apply
-although we haven't bumped the version... I'll try to look into that.
-
-
-On Sun, Feb 10, 2013 at 12:58 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Our patches do not apply as-is against the version of rpi-userland we
-> package (weird...).
->
-> Since rpi-userland does not have releases, and is a relatively fast-moving
-> target, just bump the version to the latest cset from the git tree, and
-> get rid of one our failing patch, since it was applied upstream.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  ...0002-Test-for-the-existence-of-execinfo-h.patch |   69 --------------------
->  package/rpi-userland/rpi-userland.mk               |    2 +-
->  2 files changed, 1 insertions(+), 70 deletions(-)
->  delete mode 100644 package/rpi-userland/rpi-userland-0002-Test-for-the-existence-of-execinfo-h.patch
->
-> diff --git a/package/rpi-userland/rpi-userland-0002-Test-for-the-existence-of-execinfo-h.patch b/package/rpi-userland/rpi-userland-0002-Test-for-the-existence-of-execinfo-h.patch
-> deleted file mode 100644
-> index ccc67d9..0000000
-> --- a/package/rpi-userland/rpi-userland-0002-Test-for-the-existence-of-execinfo-h.patch
-> +++ /dev/null
-> @@ -1,69 +0,0 @@
-> -From 93ae1bcd8005216baf7361ba860b53a2cf2e0401 Mon Sep 17 00:00:00 2001
-> -From: Floris Bos <bos@je-eigen-domein.nl>
-> -Date: Sun, 25 Nov 2012 19:05:07 +0100
-> -Subject: [PATCH] Test for the existence of execinfo.h
-> -
-> -Previous code assumed that on Linux the execinfo.h functions are always available, which is a glibc extension.
-> -This change fixes building the library under buildroot, which uses uClibc by default
-> ----
-> - interface/vcos/glibc/vcos_backtrace.c |    7 +++++--
-> - makefiles/cmake/arm-linux.cmake       |    4 ++++
-> - makefiles/cmake/cmake_config.h.in     |    3 +++
-> - 3 files changed, 12 insertions(+), 2 deletions(-)
-> -
-> -diff --git a/interface/vcos/glibc/vcos_backtrace.c b/interface/vcos/glibc/vcos_backtrace.c
-> -index 474a328..3bb8aa3 100644
-> ---- a/interface/vcos/glibc/vcos_backtrace.c
-> -+++ b/interface/vcos/glibc/vcos_backtrace.c
-> -@@ -26,7 +26,10 @@
-> - */
-> -
-> - #include <interface/vcos/vcos.h>
-> --#ifdef __linux__
-> -+#ifdef HAVE_CMAKE_CONFIG
-> -+#include "cmake_config.h"
-> -+#endif
-> -+#ifdef HAVE_EXECINFO_H
-> - #include <execinfo.h>
-> - #endif
-> - #include <stdio.h>
-> -@@ -35,7 +38,7 @@
-> -
-> - void vcos_backtrace_self(void)
-> - {
-> --#ifdef __linux__
-> -+#ifdef HAVE_EXECINFO_H
-> -    void *stack[64];
-> -    int depth = backtrace(stack, sizeof(stack)/sizeof(stack[0]));
-> -    char **names = backtrace_symbols(stack, depth);
-> -diff --git a/makefiles/cmake/arm-linux.cmake b/makefiles/cmake/arm-linux.cmake
-> -index 89d8bbf..6f2114f 100644
-> ---- a/makefiles/cmake/arm-linux.cmake
-> -+++ b/makefiles/cmake/arm-linux.cmake
-> -@@ -115,6 +115,10 @@ try_compile(HAVE_MTRACE
-> -             ${CMAKE_SOURCE_DIR}/makefiles/cmake/srcs/test-mtrace.c
-> -             OUTPUT_VARIABLE foo)
-> -
-> -+# test for existence of execinfo.h header
-> -+include(CheckIncludeFile)
-> -+check_include_file(execinfo.h HAVE_EXECINFO_H)
-> -+
-> - add_definitions(-DHAVE_CMAKE_CONFIG)
-> - configure_file (
-> -     "makefiles/cmake/cmake_config.h.in"
-> -diff --git a/makefiles/cmake/cmake_config.h.in b/makefiles/cmake/cmake_config.h.in
-> -index 5f08ad5..080b8e8 100644
-> ---- a/makefiles/cmake/cmake_config.h.in
-> -+++ b/makefiles/cmake/cmake_config.h.in
-> -@@ -8,5 +8,8 @@
-> - /** Do we have support for GLIBC mtrace() ? */
-> - #cmakedefine                    HAVE_MTRACE
-> -
-> -+/** Do we have the execinfo.h include file ? */
-> -+#cmakedefine                    HAVE_EXECINFO_H
-> -+
-> - #endif
-> -
-> ---
-> -1.7.10
-> -
-> diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-> index ece37d4..522a97f 100644
-> --- a/package/rpi-userland/rpi-userland.mk
-> +++ b/package/rpi-userland/rpi-userland.mk
-> @@ -4,7 +4,7 @@
->  #
->  #############################################################
->
-> -RPI_USERLAND_VERSION = 9852ce28826889e50c4d6786b942f51bccccac54
-> +RPI_USERLAND_VERSION = 5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108
->  RPI_USERLAND_SITE = http://github.com/raspberrypi/userland/tarball/master
->  RPI_USERLAND_LICENSE = BSD-3c
->  RPI_USERLAND_LICENSE_FILE = LICENCE
-> --
-> 1.7.2.5
->
+diff --git a/CHANGES b/CHANGES
+index 63a16fd..02dbc27 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,4 @@
+-2013.02, Not released yet:
++2013.02-rc1, Released February 10th, 2013
+ 
+ 	Toolchain: Crosstool-ng 1.17.0, default to GCC 4.6.3, target
+ 	libraries install fixed. Add Linaro ARM
+diff --git a/Makefile b/Makefile
+index 7f0822f..3f967b2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,7 @@
+ #--------------------------------------------------------------
+ 
+ # Set and export the version string
+-export BR2_VERSION:=2013.02
++export BR2_VERSION:=2013.02-rc1
+ 
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION=3.81
+diff --git a/docs/download.html b/docs/download.html
+index 2b1bb80..f7369d6 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -12,16 +12,16 @@ here:<p>
+ <a href="/downloads/buildroot-2012.11.1.tar.gz">buildroot-2012.11.1.tar.gz</a>
+ or
+ <a href="/downloads/buildroot-2012.11.1.tar.bz2">buildroot-2012.11.1.tar.bz2</a>.
+-<!--
++
+ <p>
+-The latest release candidate is <b>2012.11-rc2</b>, which can be
++The latest release candidate is <b>2013.02-rc1</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2012.11-rc2.tar.gz">buildroot-2012.11-rc2.tar.gz</a>
++<a href="/downloads/buildroot-2013.02-rc1.tar.gz">buildroot-2013.02-rc1.tar.gz</a>
+ or
+-<a href="/downloads/buildroot-2012.11-rc2.tar.bz2">buildroot-2012.11-rc2.tar.bz2</a>.
++<a href="/downloads/buildroot-2013.02-rc1.tar.bz2">buildroot-2013.02-rc1.tar.bz2</a>.
+ <p>
+--->
++
+ This and earlier releases can always be downloaded from
+ <a href="/downloads/">http://buildroot.net/downloads/</a>.
+ 
+diff --git a/docs/news.html b/docs/news.html
+index ceb3c69..bc8a16a 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,19 @@
+ <p>
+ 
+ <ul>
++  <li><b>10 February 2013 -- 2013.02-rc1 released</b>
++
++    <p>We have a new release candidate! Lots of changes all over the
++    tree, see the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.02_rc1">CHANGES</a>
++    file for details.</p>
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2013.02-rc1.tar.bz2">2013.02-rc1
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>10 February 2013 -- Report from Buildroot Developers Meeting</b>
+ 
+     <p>A report from the recent Buildroot Developers Meeting is now
