@@ -1,47 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Feb 2013 11:02:35 +0100
-Subject: [Buildroot] [PATCH 1/1] libtirpc: requires toolchain with
-	threads support
-In-Reply-To: <1360448834-21507-1-git-send-email-gilles.talis@gmail.com>
- (Gilles Talis's message of "Sat, 9 Feb 2013 14:27:14 -0800")
-References: <1360448834-21507-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87wqugebb8.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 10 Feb 2013 10:58:14 +0100
+Subject: [Buildroot] [git commit] docs/news.html: announce dev meeting report
+Message-ID: <20130210100222.1E96F9AA67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=fced72cc72d607df3de86e86f71910c94fe6427c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gilles> Fixes:
- Gilles> http://autobuild.buildroot.org/results/8ba720f47f74df94b8c70ac4befd47c47ce65f2f
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/news.html |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
 
- Gilles> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
- Gilles> ---
- Gilles>  package/libtirpc/Config.in |    4 ++++
- Gilles>  1 file changed, 4 insertions(+)
-
- Gilles> diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
- Gilles> index 7e891b4..f2a6f83 100644
- Gilles> --- a/package/libtirpc/Config.in
- Gilles> +++ b/package/libtirpc/Config.in
- Gilles> @@ -1,7 +1,11 @@
- Gilles>  config BR2_PACKAGE_LIBTIRPC
- Gilles>  	bool "libtirpc"
- Gilles> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-
-Thanks, but you also need to propagate this dependency to libtirpc's
-reverse dependencies:
-
-git grep -l 'select BR2_PACKAGE_LIBTIRPC'
-package/conntrack-tools/Config.in
-package/lmbench/Config.in
-package/nfs-utils/Config.in
-package/quota/Config.in
-package/rpcbind/Config.in
-
-Care to fix that up and resend?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/news.html b/docs/news.html
+index f158034..ceb3c69 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,17 @@
+ <p>
+ 
+ <ul>
++  <li><b>10 February 2013 -- Report from Buildroot Developers Meeting</b>
++
++    <p>A report from the recent Buildroot Developers Meeting is now
++    <a href="http://lists.busybox.net/pipermail/buildroot/2013-February/067105.html">available</a>.
++    <a href="http://emlinews.net">Embedded Linux News</a> also has a
++    <a href="http://www.emlinews.net/2013/02/buildroot-developers-meeting-report/">
++    writeup about the event</a>, including photos.</p>
++
++    <p>Once again, thanks to all the participants and to
++    <a href="http://www.google.com">Google</a> for sponsoring the event.</p>
++
+   <li><b>12 January 2013 -- Next Buildroot Developers Meeting next to FOSDEM, Brussels</b>
+ 
+     <p>The next Buildroot Developers Meeting will take place on Monday
