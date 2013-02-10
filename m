@@ -1,131 +1,69 @@
-From: Laurent CANS <laurent.cans@gmail.com>
-Date: Sun, 10 Feb 2013 16:08:25 +0100
-Subject: [Buildroot] [PATCH] aircrack-ng: new package
-In-Reply-To: <51155F6E.5090806@mind.be>
-References: <1360340189-4409-1-git-send-email-laurent.cans@gmail.com>
- <20130208163229.553918e3@skate> <51155F6E.5090806@mind.be>
-Message-ID: <CAA1eMkHU92kZyhp_ChMFfPDRLViGNmmM-M+NbXWBNFs1ghh7nA@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 10 Feb 2013 16:10:45 +0100
+Subject: [Buildroot] [PATCH] package/rpi-userland: update to fix
+ no-longer applying patch
+In-Reply-To: <5117B3FB.1010401@je-eigen-domein.nl>
+References: <1360497506-31282-1-git-send-email-yann.morin.1998@free.fr>
+ <51179F8D.6050800@je-eigen-domein.nl>
+ <CAGduivzJBf_OzuFce2Ym_yFpSx9RWLzOXvhLRPjfXrQU8NgZmQ@mail.gmail.com>
+ <5117B3FB.1010401@je-eigen-domein.nl>
+Message-ID: <CAHXCMML7-7p5+iTCAn_9OPZfYp141re-Hx21JLCizNzsdER1dg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Thomas,
+Hi all,
 
-I tried to use $(TARGET_CONFIGURE_OPTS) passed by variable or by
-environment but the 2 methods fails.
-
-What is the correct methode to handle this?
-- Correct package makefiles
-- Don't use $(TARGET_CONFIGURE_OPTS) but CC and LD fixed by variable
-- Another solution
-
-Best regards,
-
-Laurent
-
-2013/2/8 Arnout Vandecappelle <arnout@mind.be>:
-> On 08/02/13 16:32, Thomas Petazzoni wrote:
+2013/2/10 Floris Bos <bos@je-eigen-domein.nl>:
+> On 02/10/2013 03:14 PM, Maxime Hadjinlian wrote:
 >>
->> Dear Laurent Cans,
->>
->> Thanks, this looks pretty good; A few comments below.
->
->
->  Yep, don't be discouraged by the large amount of feedback :-)
->
->
->> On Fri,  8 Feb 2013 17:16:29 +0100, Laurent Cans wrote:
+>> On Sun, Feb 10, 2013 at 2:24 PM, Floris Bos <bos@je-eigen-domein.nl>
+>> wrote:
 >>>
->>> Aircrack-ng is a set of tools for auditing wireless security.
+>>> On 02/10/2013 12:58 PM, Yann E. MORIN wrote:
+>>>>
+>>>> Our patches do not apply as-is against the version of rpi-userland we
+>>>> package (weird...).
 >>>
->>> Although the last version is 1.1, I choose to package last svn version
->>> due to a fixed bug which fix a failed compilation.
->
->
->  It would be good to repeat this comment in the .mk file. That helps to see
-> if a certain packaged upstream version is in fact more recent than what is
-> already there.
->
-> [snip]
->
->>> +ifeq($(BR2_PACKAGE_SQLITE),y)
->>> +      AIRCRACK_NG_OPTS = sqlite=true
->
->
->  I prefer AIRCRACK_NG_MAKE_OPTS.
->
->
->>> +      AIRCRACK_NG_DEPENDENCIES += sqlite
->>> +endif
->
->
->  I would add an else branch that explicitly sets sqlite=false, to make sure
-> it doesn't leak in through the environment.
->
->
+>>>
+>>> RPI_USERLAND_SITE = http://github.com/raspberrypi/userland/tarball/master
+>>>
+>>> Shouldn't that be something like this?
+>>>
+>>> RPI_USERLAND_SITE =
+>>> http://github.com/raspberrypi/userland/tarball/$(RPI_USERLAND_VERSION)
+>>>
+>> You are using the version variable only if the projects has tag, which
+>> this one hasn't.
+>> Then, you are forced to use sha1 version, then you give the branch
+>> where this sha1 can be found.
+>> As specified in the doc :
 >>
->> The src/Makefile contains:
->>
->> ifeq ($(subst TRUE,true,$(filter TRUE true,$(sqlite) $(SQLITE))),true)
->>         LIBSQL          = -L/usr/local/lib -lsqlite3
->> else
->>         LIBSQL          =
->> endif
->>
->> This -L/usr/local/lib isn't really nice since this is not where sqlite
->> will be installed, and it may cause issues when cross-compiling.
+>> http://buildroot.uclibc.org/downloads/manual/manual.html#github-download-url
 >
 >
->  The solution is simple:
+> Documentation is incorrect/outdated.
 >
-> AIRCRACK_NG_MAKE_OPTS += LIBSQL="-lsqlite3"
+> Github only looks at the folder name, ignores the filename, and will
+> redirect you to
+> https://nodeload.github.com/raspberrypi/userland/legacy.tar.gz/master
 >
-> (no -L is needed because libsqlite3.a is in the default library search
-> path).
+[...]
 >
->
->>
->>> +
->>> +define AIRCRACK_NG_BUILD_CMDS
->>> +      $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)
->>> $(AIRCRACK_NG_OPTS) all
->>> +endef
->>
->>
->> Use $(TARGET_CONFIGURE_OPTS) :
->>
->>         $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(AIRCRACK_NG_OPTS) all
->
->
->  If it works, I prefer to put the TARGET_CONFIGURE_OPTS in the environment
-> instead:
->
-> $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(AIRCRACK_NG_MAKE_OPTS) all
->
-> That gives the Makefile the possibility to append to CFLAGS and LDFLAGS, if
-> necessary. However, some Makefiles unconditionally set CFLAGS or LDFLAGS (or
-> even CC), in that case passing through the environment doesn't work.
->
->
->  Regards,
->  Arnout
->
->
->
->> And ditto for the other commands.
->>
->> Best regards,
->>
->> Thomas
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> With
+> "RPI_USERLAND_SITE=http://github.com/raspberrypi/userland/tarball/$(RPI_USERLAND_VERSION)"
+> it does work:
+[...]
+
+Fair enough.
+Care to fix/update the doc?
+
+Also, rpi-userland is not the only package fetched from github...
+So patches for all other potentially broken packages will be welcome as well.
+
+Regards,
+
+-- 
+Samuel
