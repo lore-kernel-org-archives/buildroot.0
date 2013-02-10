@@ -1,45 +1,116 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Sun, 10 Feb 2013 12:28:32 +0100
-Subject: [Buildroot] Buildroot at ELC: review/suggestions needed
-In-Reply-To: <20130209195709.323b9f5e@skate>
-References: <20130209195709.323b9f5e@skate>
-Message-ID: <51178460.9020309@relinux.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 10 Feb 2013 12:58:26 +0100
+Subject: [Buildroot] [PATCH] package/rpi-userland: update to fix no-longer
+	applying patch
+Message-ID: <1360497506-31282-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 09.02.2013 19:57, schrieb Thomas Petazzoni:
-> Therefore, I am requesting your help to:
->
->  * Review the Buildroot poster I've made. The poster will be printed by
->    the event organizers in big format, and I've tried to highlight the
->    main fact about Buildroot, and recent developments.
->
->    See http://free-electrons.com/~thomas/pub/buildroot-poster.png
-Hello Thomas,
+Our patches do not apply as-is against the version of rpi-userland we
+package (weird...).
 
-A friend of mine is designer, she has some points to improve and
-possibly is willing to help. Which software did you use?
+Since rpi-userland does not have releases, and is a relatively fast-moving
+target, just bump the version to the latest cset from the git tree, and
+get rid of one our failing patch, since it was applied upstream.
 
-Her points are:
-* "Embedded Linux build system" should be bigger font size than "What is
-it?" and "Recent developments", because it is the most important headline.
-* The key points "Simple", "Fast" and "Efficient" should be emphasized
-somehow, maybe as a bullet list or formed like a stamp.
-* Maybe it could be better to change the layout: put the Buildroot logo
-and the headline in the grey box to the top, the yellow and orange boxes
-side by sie below and the webaddress and the key point at the buttom.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ ...0002-Test-for-the-existence-of-execinfo-h.patch |   69 --------------------
+ package/rpi-userland/rpi-userland.mk               |    2 +-
+ 2 files changed, 1 insertions(+), 70 deletions(-)
+ delete mode 100644 package/rpi-userland/rpi-userland-0002-Test-for-the-existence-of-execinfo-h.patch
 
-One more point: Shouldn't it be 24/7 instead of 24/24?
-
-Kind regards
-
-Stephan
-
+diff --git a/package/rpi-userland/rpi-userland-0002-Test-for-the-existence-of-execinfo-h.patch b/package/rpi-userland/rpi-userland-0002-Test-for-the-existence-of-execinfo-h.patch
+deleted file mode 100644
+index ccc67d9..0000000
+--- a/package/rpi-userland/rpi-userland-0002-Test-for-the-existence-of-execinfo-h.patch
++++ /dev/null
+@@ -1,69 +0,0 @@
+-From 93ae1bcd8005216baf7361ba860b53a2cf2e0401 Mon Sep 17 00:00:00 2001
+-From: Floris Bos <bos@je-eigen-domein.nl>
+-Date: Sun, 25 Nov 2012 19:05:07 +0100
+-Subject: [PATCH] Test for the existence of execinfo.h
+-
+-Previous code assumed that on Linux the execinfo.h functions are always available, which is a glibc extension.
+-This change fixes building the library under buildroot, which uses uClibc by default
+----
+- interface/vcos/glibc/vcos_backtrace.c |    7 +++++--
+- makefiles/cmake/arm-linux.cmake       |    4 ++++
+- makefiles/cmake/cmake_config.h.in     |    3 +++
+- 3 files changed, 12 insertions(+), 2 deletions(-)
+-
+-diff --git a/interface/vcos/glibc/vcos_backtrace.c b/interface/vcos/glibc/vcos_backtrace.c
+-index 474a328..3bb8aa3 100644
+---- a/interface/vcos/glibc/vcos_backtrace.c
+-+++ b/interface/vcos/glibc/vcos_backtrace.c
+-@@ -26,7 +26,10 @@
+- */
+- 
+- #include <interface/vcos/vcos.h>
+--#ifdef __linux__
+-+#ifdef HAVE_CMAKE_CONFIG
+-+#include "cmake_config.h"
+-+#endif
+-+#ifdef HAVE_EXECINFO_H
+- #include <execinfo.h>
+- #endif
+- #include <stdio.h>
+-@@ -35,7 +38,7 @@
+- 
+- void vcos_backtrace_self(void)
+- {
+--#ifdef __linux__
+-+#ifdef HAVE_EXECINFO_H
+-    void *stack[64];
+-    int depth = backtrace(stack, sizeof(stack)/sizeof(stack[0]));
+-    char **names = backtrace_symbols(stack, depth);
+-diff --git a/makefiles/cmake/arm-linux.cmake b/makefiles/cmake/arm-linux.cmake
+-index 89d8bbf..6f2114f 100644
+---- a/makefiles/cmake/arm-linux.cmake
+-+++ b/makefiles/cmake/arm-linux.cmake
+-@@ -115,6 +115,10 @@ try_compile(HAVE_MTRACE
+-             ${CMAKE_SOURCE_DIR}/makefiles/cmake/srcs/test-mtrace.c
+-             OUTPUT_VARIABLE foo)
+- 
+-+# test for existence of execinfo.h header
+-+include(CheckIncludeFile)
+-+check_include_file(execinfo.h HAVE_EXECINFO_H)
+-+
+- add_definitions(-DHAVE_CMAKE_CONFIG)
+- configure_file (
+-     "makefiles/cmake/cmake_config.h.in"
+-diff --git a/makefiles/cmake/cmake_config.h.in b/makefiles/cmake/cmake_config.h.in
+-index 5f08ad5..080b8e8 100644
+---- a/makefiles/cmake/cmake_config.h.in
+-+++ b/makefiles/cmake/cmake_config.h.in
+-@@ -8,5 +8,8 @@
+- /** Do we have support for GLIBC mtrace() ? */
+- #cmakedefine                    HAVE_MTRACE
+- 
+-+/** Do we have the execinfo.h include file ? */
+-+#cmakedefine                    HAVE_EXECINFO_H
+-+
+- #endif
+- 
+--- 
+-1.7.10
+-
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index ece37d4..522a97f 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-RPI_USERLAND_VERSION = 9852ce28826889e50c4d6786b942f51bccccac54
++RPI_USERLAND_VERSION = 5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108
+ RPI_USERLAND_SITE = http://github.com/raspberrypi/userland/tarball/master
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILE = LICENCE
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+1.7.2.5
