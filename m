@@ -1,3570 +1,2180 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Feb 2013 00:47:23 +0100
-Subject: [Buildroot] Buildroot at ELC: review/suggestions needed
-In-Reply-To: <20130209195709.323b9f5e@skate>
-References: <20130209195709.323b9f5e@skate>
-Message-ID: <201302100047.23872.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 10 Feb 2013 08:34:49 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-02-09
+Message-ID: <20130210073449.7DE9452C6CA@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
 
-On Saturday 09 February 2013 Thomas Petazzoni wrote:
->  * Review the Buildroot poster I've made. The poster will be printed by
->    the event organizers in big format, and I've tried to highlight the
->    main fact about Buildroot, and recent developments.
->    See http://free-electrons.com/~thomas/pub/buildroot-poster.png
+Hello,
 
-I would add arrows to the lines, to further ensure that what is
-dark-green and brown is input to buildroot, while what is gray
-is the output.
+On 2013-02-09, 154 random build tests have been done and
+submitted on autobuild.buildroot.net.
+ 0 builds have been successful
+ 154 builds have failed
 
-Besides, I've counted packages with:
-    $ grep -r -E -e '^[^[:space:]]+_VERSION[[:space:]]*:?='   \
-    | $(find package/ -type f -name '*.mk')                 \
-    | wc -l
-    944
+Below the results of the failed builds. Successful builds are omitted.
 
-So you can bump the number of packages to 900+. But beware: be consistent
-between the poster and the slides.
+Build 
+==============================================
 
->  * Give me suggestions on what to demonstrate. I will prepare a
->    slideshow of 10-20 slides that continuously loops (it should
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
 
-20 slides is too much. The people attending wil not have time to wait
-to see the complete slideshow, so I'd stick with no more than 10 slides
-with a very few points in each, switching after 7-10 seconds.
+Build 
+==============================================
 
-Points for those slides (out-of-order, obviously):
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
 
----8<---
-    entirely community managed
-    not backed by a single company
----8<---
-    24/7 continuous testing
-    2 auto-builders
-    120+ combinations tested a day
----8<---
-    900+ packages
-    Xorg directfb       <- a few other high-profile packages
-    systemd             <- if you are willing to be trolling a bit! ;-)
----8<---
-    Minimal network-enabled system:   [*]
-      ARM Raspberry Pi
-      Pre-built ct-ng toolchain
-      busybox + not-so-minimal kernel
-      Build time: 1 minute 55 seconds
-      Image size: 9.2 MiB (rootfs) + 1.8 MiB (kernel)
----8<---
+Build 
+==============================================
 
-[*] .config files to reproduce this system attached. May need tweaking
-for the paths, though...
-That was a quick test, size can be further reduced with a fewer kernel
-modules. Time does not include toolchain build, nor does it include
-downloads.
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
 
-Regards,
-Yann E. MORIN.
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 23:30:59.000000000
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : www-data 1544192
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results/23:30:59.000000000/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/23:30:59.000000000/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/23:30:59.000000000/config
+Defconfig      : http://autobuild.buildroot.net/results/23:30:59.000000000/defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-#
-# Automatically generated file; DO NOT EDIT.
-# Linux/arm 3.6.11 Kernel Configuration
-#
-CONFIG_ARM=y
-CONFIG_SYS_SUPPORTS_APM_EMULATION=y
-CONFIG_GENERIC_GPIO=y
-CONFIG_HAVE_PROC_CPU=y
-CONFIG_STACKTRACE_SUPPORT=y
-CONFIG_HAVE_LATENCYTOP_SUPPORT=y
-CONFIG_LOCKDEP_SUPPORT=y
-CONFIG_TRACE_IRQFLAGS_SUPPORT=y
-CONFIG_RWSEM_GENERIC_SPINLOCK=y
-CONFIG_ARCH_HAS_CPUFREQ=y
-CONFIG_GENERIC_HWEIGHT=y
-CONFIG_GENERIC_CALIBRATE_DELAY=y
-CONFIG_NEED_DMA_MAP_STATE=y
-CONFIG_FIQ=y
-CONFIG_VECTORS_BASE=0xffff0000
-# CONFIG_ARM_PATCH_PHYS_VIRT is not set
-CONFIG_NEED_MACH_IO_H=y
-CONFIG_NEED_MACH_MEMORY_H=y
-CONFIG_GENERIC_BUG=y
-CONFIG_DEFCONFIG_LIST="/lib/modules/$UNAME_RELEASE/.config"
-CONFIG_HAVE_IRQ_WORK=y
-
-#
-# General setup
-#
-CONFIG_EXPERIMENTAL=y
-CONFIG_BROKEN_ON_SMP=y
-CONFIG_INIT_ENV_ARG_LIMIT=32
-CONFIG_CROSS_COMPILE=""
-CONFIG_LOCALVERSION=""
-# CONFIG_LOCALVERSION_AUTO is not set
-CONFIG_HAVE_KERNEL_GZIP=y
-CONFIG_HAVE_KERNEL_LZMA=y
-CONFIG_HAVE_KERNEL_XZ=y
-CONFIG_HAVE_KERNEL_LZO=y
-CONFIG_KERNEL_GZIP=y
-# CONFIG_KERNEL_LZMA is not set
-# CONFIG_KERNEL_XZ is not set
-# CONFIG_KERNEL_LZO is not set
-CONFIG_DEFAULT_HOSTNAME="(none)"
-# CONFIG_SWAP is not set
-CONFIG_SYSVIPC=y
-CONFIG_SYSVIPC_SYSCTL=y
-CONFIG_POSIX_MQUEUE=y
-CONFIG_POSIX_MQUEUE_SYSCTL=y
-# CONFIG_BSD_PROCESS_ACCT is not set
-CONFIG_FHANDLE=y
-# CONFIG_TASKSTATS is not set
-# CONFIG_AUDIT is not set
-CONFIG_HAVE_GENERIC_HARDIRQS=y
-
-#
-# IRQ subsystem
-#
-CONFIG_GENERIC_HARDIRQS=y
-CONFIG_GENERIC_IRQ_PROBE=y
-CONFIG_GENERIC_IRQ_SHOW=y
-CONFIG_HARDIRQS_SW_RESEND=y
-CONFIG_KTIME_SCALAR=y
-CONFIG_GENERIC_CLOCKEVENTS=y
-CONFIG_GENERIC_CLOCKEVENTS_BUILD=y
-
-#
-# Timers subsystem
-#
-CONFIG_TICK_ONESHOT=y
-CONFIG_NO_HZ=y
-CONFIG_HIGH_RES_TIMERS=y
-
-#
-# RCU Subsystem
-#
-CONFIG_TINY_PREEMPT_RCU=y
-CONFIG_PREEMPT_RCU=y
-# CONFIG_TREE_RCU_TRACE is not set
-# CONFIG_RCU_BOOST is not set
-CONFIG_IKCONFIG=m
-CONFIG_IKCONFIG_PROC=y
-CONFIG_LOG_BUF_SHIFT=21
-# CONFIG_CGROUPS is not set
-# CONFIG_CHECKPOINT_RESTORE is not set
-# CONFIG_NAMESPACES is not set
-# CONFIG_SCHED_AUTOGROUP is not set
-# CONFIG_SYSFS_DEPRECATED is not set
-CONFIG_RELAY=y
-# CONFIG_BLK_DEV_INITRD is not set
-# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
-CONFIG_SYSCTL=y
-CONFIG_ANON_INODES=y
-CONFIG_EXPERT=y
-# CONFIG_UID16 is not set
-# CONFIG_SYSCTL_SYSCALL is not set
-CONFIG_KALLSYMS=y
-CONFIG_KALLSYMS_ALL=y
-CONFIG_HOTPLUG=y
-CONFIG_PRINTK=y
-CONFIG_BUG=y
-# CONFIG_ELF_CORE is not set
-CONFIG_BASE_FULL=y
-CONFIG_FUTEX=y
-CONFIG_EPOLL=y
-CONFIG_SIGNALFD=y
-CONFIG_TIMERFD=y
-CONFIG_EVENTFD=y
-CONFIG_SHMEM=y
-CONFIG_AIO=y
-CONFIG_EMBEDDED=y
-CONFIG_HAVE_PERF_EVENTS=y
-CONFIG_PERF_USE_VMALLOC=y
-
-#
-# Kernel Performance Events And Counters
-#
-# CONFIG_PERF_EVENTS is not set
-# CONFIG_VM_EVENT_COUNTERS is not set
-# CONFIG_SLUB_DEBUG is not set
-# CONFIG_COMPAT_BRK is not set
-# CONFIG_SLAB is not set
-CONFIG_SLUB=y
-# CONFIG_SLOB is not set
-# CONFIG_PROFILING is not set
-CONFIG_HAVE_OPROFILE=y
-# CONFIG_KPROBES is not set
-# CONFIG_JUMP_LABEL is not set
-CONFIG_HAVE_KPROBES=y
-CONFIG_HAVE_KRETPROBES=y
-CONFIG_HAVE_ARCH_TRACEHOOK=y
-CONFIG_HAVE_DMA_ATTRS=y
-CONFIG_HAVE_DMA_CONTIGUOUS=y
-CONFIG_GENERIC_SMP_IDLE_THREAD=y
-CONFIG_HAVE_REGS_AND_STACK_ACCESS_API=y
-CONFIG_HAVE_CLK=y
-CONFIG_HAVE_DMA_API_DEBUG=y
-CONFIG_HAVE_ARCH_JUMP_LABEL=y
-CONFIG_ARCH_WANT_IPC_PARSE_VERSION=y
-
-#
-# GCOV-based kernel profiling
-#
-CONFIG_HAVE_GENERIC_DMA_COHERENT=y
-CONFIG_RT_MUTEXES=y
-CONFIG_BASE_SMALL=0
-CONFIG_MODULES=y
-# CONFIG_MODULE_FORCE_LOAD is not set
-CONFIG_MODULE_UNLOAD=y
-# CONFIG_MODULE_FORCE_UNLOAD is not set
-# CONFIG_MODVERSIONS is not set
-# CONFIG_MODULE_SRCVERSION_ALL is not set
-CONFIG_BLOCK=y
-CONFIG_LBDAF=y
-CONFIG_BLK_DEV_BSG=y
-# CONFIG_BLK_DEV_BSGLIB is not set
-# CONFIG_BLK_DEV_INTEGRITY is not set
-
-#
-# Partition Types
-#
-# CONFIG_PARTITION_ADVANCED is not set
-CONFIG_MSDOS_PARTITION=y
-
-#
-# IO Schedulers
-#
-CONFIG_IOSCHED_NOOP=y
-# CONFIG_IOSCHED_DEADLINE is not set
-# CONFIG_IOSCHED_CFQ is not set
-CONFIG_DEFAULT_NOOP=y
-CONFIG_DEFAULT_IOSCHED="noop"
-# CONFIG_INLINE_SPIN_TRYLOCK is not set
-# CONFIG_INLINE_SPIN_TRYLOCK_BH is not set
-# CONFIG_INLINE_SPIN_LOCK is not set
-# CONFIG_INLINE_SPIN_LOCK_BH is not set
-# CONFIG_INLINE_SPIN_LOCK_IRQ is not set
-# CONFIG_INLINE_SPIN_LOCK_IRQSAVE is not set
-CONFIG_UNINLINE_SPIN_UNLOCK=y
-# CONFIG_INLINE_SPIN_UNLOCK_BH is not set
-# CONFIG_INLINE_SPIN_UNLOCK_IRQ is not set
-# CONFIG_INLINE_SPIN_UNLOCK_IRQRESTORE is not set
-# CONFIG_INLINE_READ_TRYLOCK is not set
-# CONFIG_INLINE_READ_LOCK is not set
-# CONFIG_INLINE_READ_LOCK_BH is not set
-# CONFIG_INLINE_READ_LOCK_IRQ is not set
-# CONFIG_INLINE_READ_LOCK_IRQSAVE is not set
-# CONFIG_INLINE_READ_UNLOCK is not set
-# CONFIG_INLINE_READ_UNLOCK_BH is not set
-# CONFIG_INLINE_READ_UNLOCK_IRQ is not set
-# CONFIG_INLINE_READ_UNLOCK_IRQRESTORE is not set
-# CONFIG_INLINE_WRITE_TRYLOCK is not set
-# CONFIG_INLINE_WRITE_LOCK is not set
-# CONFIG_INLINE_WRITE_LOCK_BH is not set
-# CONFIG_INLINE_WRITE_LOCK_IRQ is not set
-# CONFIG_INLINE_WRITE_LOCK_IRQSAVE is not set
-# CONFIG_INLINE_WRITE_UNLOCK is not set
-# CONFIG_INLINE_WRITE_UNLOCK_BH is not set
-# CONFIG_INLINE_WRITE_UNLOCK_IRQ is not set
-# CONFIG_INLINE_WRITE_UNLOCK_IRQRESTORE is not set
-# CONFIG_MUTEX_SPIN_ON_OWNER is not set
-# CONFIG_FREEZER is not set
-
-#
-# System Type
-#
-CONFIG_MMU=y
-# CONFIG_ARCH_SOCFPGA is not set
-# CONFIG_ARCH_INTEGRATOR is not set
-# CONFIG_ARCH_REALVIEW is not set
-# CONFIG_ARCH_VERSATILE is not set
-# CONFIG_ARCH_VEXPRESS is not set
-# CONFIG_ARCH_AT91 is not set
-# CONFIG_ARCH_BCMRING is not set
-# CONFIG_ARCH_HIGHBANK is not set
-# CONFIG_ARCH_CLPS711X is not set
-# CONFIG_ARCH_CNS3XXX is not set
-# CONFIG_ARCH_GEMINI is not set
-# CONFIG_ARCH_PRIMA2 is not set
-# CONFIG_ARCH_EBSA110 is not set
-# CONFIG_ARCH_EP93XX is not set
-# CONFIG_ARCH_FOOTBRIDGE is not set
-# CONFIG_ARCH_MXC is not set
-# CONFIG_ARCH_MXS is not set
-# CONFIG_ARCH_NETX is not set
-# CONFIG_ARCH_H720X is not set
-# CONFIG_ARCH_IOP13XX is not set
-# CONFIG_ARCH_IOP32X is not set
-# CONFIG_ARCH_IOP33X is not set
-# CONFIG_ARCH_IXP4XX is not set
-# CONFIG_ARCH_MVEBU is not set
-# CONFIG_ARCH_DOVE is not set
-# CONFIG_ARCH_KIRKWOOD is not set
-# CONFIG_ARCH_LPC32XX is not set
-# CONFIG_ARCH_MV78XX0 is not set
-# CONFIG_ARCH_ORION5X is not set
-# CONFIG_ARCH_MMP is not set
-# CONFIG_ARCH_KS8695 is not set
-# CONFIG_ARCH_W90X900 is not set
-# CONFIG_ARCH_TEGRA is not set
-# CONFIG_ARCH_PICOXCELL is not set
-# CONFIG_ARCH_PNX4008 is not set
-# CONFIG_ARCH_PXA is not set
-# CONFIG_ARCH_MSM is not set
-# CONFIG_ARCH_SHMOBILE is not set
-# CONFIG_ARCH_RPC is not set
-# CONFIG_ARCH_SA1100 is not set
-# CONFIG_ARCH_S3C24XX is not set
-# CONFIG_ARCH_S3C64XX is not set
-# CONFIG_ARCH_S5P64X0 is not set
-# CONFIG_ARCH_S5PC100 is not set
-# CONFIG_ARCH_S5PV210 is not set
-# CONFIG_ARCH_EXYNOS is not set
-# CONFIG_ARCH_SHARK is not set
-# CONFIG_ARCH_U300 is not set
-# CONFIG_ARCH_U8500 is not set
-# CONFIG_ARCH_NOMADIK is not set
-# CONFIG_ARCH_DAVINCI is not set
-# CONFIG_ARCH_OMAP is not set
-# CONFIG_PLAT_SPEAR is not set
-CONFIG_ARCH_BCM2708=y
-# CONFIG_ARCH_VT8500 is not set
-# CONFIG_ARCH_ZYNQ is not set
-# CONFIG_GPIO_PCA953X is not set
-
-#
-# Broadcom BCM2708 Implementations
-#
-CONFIG_MACH_BCM2708=y
-CONFIG_BCM2708_GPIO=y
-CONFIG_BCM2708_VCMEM=y
-# CONFIG_BCM2708_NOL2CACHE is not set
-CONFIG_BCM2708_DMAER=m
-
-#
-# Processor Type
-#
-CONFIG_CPU_V6=y
-CONFIG_CPU_32v6=y
-CONFIG_CPU_ABRT_EV6=y
-CONFIG_CPU_PABRT_V6=y
-CONFIG_CPU_CACHE_V6=y
-CONFIG_CPU_CACHE_VIPT=y
-CONFIG_CPU_COPY_V6=y
-CONFIG_CPU_TLB_V6=y
-CONFIG_CPU_HAS_ASID=y
-CONFIG_CPU_CP15=y
-CONFIG_CPU_CP15_MMU=y
-CONFIG_CPU_USE_DOMAINS=y
-
-#
-# Processor Features
-#
-# CONFIG_ARCH_PHYS_ADDR_T_64BIT is not set
-CONFIG_ARM_THUMB=y
-# CONFIG_CPU_ICACHE_DISABLE is not set
-# CONFIG_CPU_DCACHE_DISABLE is not set
-# CONFIG_CPU_BPREDICT_DISABLE is not set
-# CONFIG_CACHE_L2X0 is not set
-CONFIG_ARM_L1_CACHE_SHIFT=5
-CONFIG_ARM_DMA_MEM_BUFFERABLE=y
-CONFIG_ARM_NR_BANKS=8
-CONFIG_CPU_HAS_PMU=y
-# CONFIG_ARM_ERRATA_326103 is not set
-CONFIG_ARM_ERRATA_411920=y
-# CONFIG_ARM_ERRATA_364296 is not set
-
-#
-# Bus support
-#
-CONFIG_ARM_AMBA=y
-# CONFIG_PCI_SYSCALL is not set
-# CONFIG_ARCH_SUPPORTS_MSI is not set
-# CONFIG_PCCARD is not set
-
-#
-# Kernel Features
-#
-CONFIG_VMSPLIT_3G=y
-# CONFIG_VMSPLIT_2G is not set
-# CONFIG_VMSPLIT_1G is not set
-CONFIG_PAGE_OFFSET=0xC0000000
-CONFIG_ARCH_NR_GPIO=0
-# CONFIG_PREEMPT_NONE is not set
-# CONFIG_PREEMPT_VOLUNTARY is not set
-CONFIG_PREEMPT=y
-CONFIG_PREEMPT_COUNT=y
-CONFIG_HZ=100
-CONFIG_AEABI=y
-# CONFIG_OABI_COMPAT is not set
-# CONFIG_ARCH_SPARSEMEM_DEFAULT is not set
-# CONFIG_ARCH_SELECT_MEMORY_MODEL is not set
-CONFIG_HAVE_ARCH_PFN_VALID=y
-# CONFIG_HIGHMEM is not set
-CONFIG_SELECT_MEMORY_MODEL=y
-CONFIG_FLATMEM_MANUAL=y
-CONFIG_FLATMEM=y
-CONFIG_FLAT_NODE_MEM_MAP=y
-CONFIG_HAVE_MEMBLOCK=y
-CONFIG_MEMORY_ISOLATION=y
-CONFIG_PAGEFLAGS_EXTENDED=y
-CONFIG_SPLIT_PTLOCK_CPUS=4
-CONFIG_COMPACTION=y
-CONFIG_MIGRATION=y
-# CONFIG_PHYS_ADDR_T_64BIT is not set
-CONFIG_ZONE_DMA_FLAG=0
-CONFIG_VIRT_TO_BUS=y
-# CONFIG_KSM is not set
-CONFIG_DEFAULT_MMAP_MIN_ADDR=4096
-CONFIG_CROSS_MEMORY_ATTACH=y
-CONFIG_NEED_PER_CPU_KM=y
-CONFIG_CLEANCACHE=y
-CONFIG_FORCE_MAX_ZONEORDER=11
-CONFIG_ALIGNMENT_TRAP=y
-CONFIG_UACCESS_WITH_MEMCPY=y
-# CONFIG_SECCOMP is not set
-CONFIG_CC_STACKPROTECTOR=y
-# CONFIG_DEPRECATED_PARAM_STRUCT is not set
-
-#
-# Boot options
-#
-# CONFIG_USE_OF is not set
-CONFIG_ZBOOT_ROM_TEXT=0x0
-CONFIG_ZBOOT_ROM_BSS=0x0
-CONFIG_CMDLINE=""
-# CONFIG_XIP_KERNEL is not set
-CONFIG_KEXEC=y
-CONFIG_ATAGS_PROC=y
-# CONFIG_CRASH_DUMP is not set
-# CONFIG_AUTO_ZRELADDR is not set
-
-#
-# CPU Power Management
-#
-
-#
-# CPU Frequency scaling
-#
-CONFIG_CPU_FREQ=y
-CONFIG_CPU_FREQ_TABLE=y
-# CONFIG_CPU_FREQ_STAT is not set
-# CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE is not set
-# CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE is not set
-# CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE is not set
-CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
-# CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE is not set
-CONFIG_CPU_FREQ_GOV_PERFORMANCE=y
-# CONFIG_CPU_FREQ_GOV_POWERSAVE is not set
-# CONFIG_CPU_FREQ_GOV_USERSPACE is not set
-CONFIG_CPU_FREQ_GOV_ONDEMAND=y
-# CONFIG_CPU_FREQ_GOV_CONSERVATIVE is not set
-
-#
-# ARM CPU frequency scaling drivers
-#
-# CONFIG_ARM_EXYNOS4210_CPUFREQ is not set
-# CONFIG_ARM_EXYNOS4X12_CPUFREQ is not set
-# CONFIG_ARM_EXYNOS5250_CPUFREQ is not set
-CONFIG_ARM_BCM2835_CPUFREQ=y
-CONFIG_CPU_IDLE=y
-CONFIG_CPU_IDLE_GOV_LADDER=y
-CONFIG_CPU_IDLE_GOV_MENU=y
-# CONFIG_ARCH_NEEDS_CPU_IDLE_COUPLED is not set
-
-#
-# Floating point emulation
-#
-
-#
-# At least one emulation must be selected
-#
-CONFIG_VFP=y
-
-#
-# Userspace binary formats
-#
-CONFIG_BINFMT_ELF=y
-CONFIG_ARCH_BINFMT_ELF_RANDOMIZE_PIE=y
-CONFIG_HAVE_AOUT=y
-# CONFIG_BINFMT_AOUT is not set
-# CONFIG_BINFMT_MISC is not set
-
-#
-# Power management options
-#
-# CONFIG_SUSPEND is not set
-# CONFIG_PM_RUNTIME is not set
-CONFIG_CPU_PM=y
-CONFIG_ARCH_SUSPEND_POSSIBLE=y
-# CONFIG_ARM_CPU_SUSPEND is not set
-CONFIG_NET=y
-
-#
-# Networking options
-#
-CONFIG_PACKET=y
-CONFIG_UNIX=y
-CONFIG_UNIX_DIAG=y
-CONFIG_XFRM=y
-# CONFIG_XFRM_USER is not set
-# CONFIG_XFRM_SUB_POLICY is not set
-# CONFIG_XFRM_MIGRATE is not set
-# CONFIG_XFRM_STATISTICS is not set
-# CONFIG_NET_KEY is not set
-CONFIG_INET=y
-CONFIG_IP_MULTICAST=y
-# CONFIG_IP_ADVANCED_ROUTER is not set
-# CONFIG_IP_PNP is not set
-# CONFIG_NET_IPIP is not set
-# CONFIG_NET_IPGRE_DEMUX is not set
-# CONFIG_IP_MROUTE is not set
-# CONFIG_ARPD is not set
-CONFIG_SYN_COOKIES=y
-# CONFIG_INET_AH is not set
-# CONFIG_INET_ESP is not set
-# CONFIG_INET_IPCOMP is not set
-# CONFIG_INET_XFRM_TUNNEL is not set
-# CONFIG_INET_TUNNEL is not set
-# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-# CONFIG_INET_XFRM_MODE_BEET is not set
-# CONFIG_INET_LRO is not set
-CONFIG_INET_DIAG=m
-CONFIG_INET_TCP_DIAG=m
-CONFIG_INET_UDP_DIAG=m
-# CONFIG_TCP_CONG_ADVANCED is not set
-CONFIG_TCP_CONG_CUBIC=y
-CONFIG_DEFAULT_TCP_CONG="cubic"
-# CONFIG_TCP_MD5SIG is not set
-CONFIG_IPV6=y
-CONFIG_IPV6_PRIVACY=y
-CONFIG_IPV6_ROUTER_PREF=y
-CONFIG_IPV6_ROUTE_INFO=y
-CONFIG_IPV6_OPTIMISTIC_DAD=y
-# CONFIG_INET6_AH is not set
-# CONFIG_INET6_ESP is not set
-# CONFIG_INET6_IPCOMP is not set
-CONFIG_IPV6_MIP6=m
-# CONFIG_INET6_XFRM_TUNNEL is not set
-# CONFIG_INET6_TUNNEL is not set
-# CONFIG_INET6_XFRM_MODE_TRANSPORT is not set
-# CONFIG_INET6_XFRM_MODE_TUNNEL is not set
-# CONFIG_INET6_XFRM_MODE_BEET is not set
-# CONFIG_INET6_XFRM_MODE_ROUTEOPTIMIZATION is not set
-# CONFIG_IPV6_SIT is not set
-# CONFIG_IPV6_TUNNEL is not set
-# CONFIG_IPV6_MULTIPLE_TABLES is not set
-# CONFIG_IPV6_MROUTE is not set
-# CONFIG_NETWORK_SECMARK is not set
-# CONFIG_NETWORK_PHY_TIMESTAMPING is not set
-# CONFIG_NETFILTER is not set
-# CONFIG_IP_DCCP is not set
-# CONFIG_IP_SCTP is not set
-# CONFIG_RDS is not set
-# CONFIG_TIPC is not set
-# CONFIG_ATM is not set
-# CONFIG_L2TP is not set
-# CONFIG_BRIDGE is not set
-# CONFIG_NET_DSA is not set
-# CONFIG_VLAN_8021Q is not set
-# CONFIG_DECNET is not set
-# CONFIG_LLC2 is not set
-# CONFIG_IPX is not set
-# CONFIG_ATALK is not set
-# CONFIG_X25 is not set
-# CONFIG_LAPB is not set
-# CONFIG_WAN_ROUTER is not set
-# CONFIG_PHONET is not set
-# CONFIG_IEEE802154 is not set
-# CONFIG_NET_SCHED is not set
-# CONFIG_DCB is not set
-# CONFIG_BATMAN_ADV is not set
-# CONFIG_OPENVSWITCH is not set
-CONFIG_BQL=y
-CONFIG_BPF_JIT=y
-
-#
-# Network testing
-#
-# CONFIG_NET_PKTGEN is not set
-# CONFIG_HAMRADIO is not set
-# CONFIG_CAN is not set
-# CONFIG_IRDA is not set
-# CONFIG_BT is not set
-# CONFIG_AF_RXRPC is not set
-# CONFIG_WIRELESS is not set
-# CONFIG_WIMAX is not set
-# CONFIG_RFKILL is not set
-# CONFIG_NET_9P is not set
-# CONFIG_CAIF is not set
-# CONFIG_CEPH_LIB is not set
-# CONFIG_NFC is not set
-CONFIG_HAVE_BPF_JIT=y
-
-#
-# Device Drivers
-#
-
-#
-# Generic Driver Options
-#
-CONFIG_UEVENT_HELPER_PATH="/sbin/mdev"
-CONFIG_DEVTMPFS=y
-CONFIG_DEVTMPFS_MOUNT=y
-CONFIG_STANDALONE=y
-CONFIG_PREVENT_FIRMWARE_BUILD=y
-CONFIG_FW_LOADER=y
-CONFIG_FIRMWARE_IN_KERNEL=y
-CONFIG_EXTRA_FIRMWARE=""
-# CONFIG_DEBUG_DRIVER is not set
-# CONFIG_DEBUG_DEVRES is not set
-# CONFIG_SYS_HYPERVISOR is not set
-# CONFIG_GENERIC_CPU_DEVICES is not set
-CONFIG_REGMAP=y
-CONFIG_REGMAP_I2C=m
-CONFIG_REGMAP_SPI=m
-# CONFIG_DMA_SHARED_BUFFER is not set
-CONFIG_CMA=y
-# CONFIG_CMA_DEBUG is not set
-
-#
-# Default contiguous memory area size:
-#
-CONFIG_CMA_SIZE_MBYTES=16
-CONFIG_CMA_SIZE_SEL_MBYTES=y
-# CONFIG_CMA_SIZE_SEL_PERCENTAGE is not set
-# CONFIG_CMA_SIZE_SEL_MIN is not set
-# CONFIG_CMA_SIZE_SEL_MAX is not set
-CONFIG_CMA_ALIGNMENT=8
-CONFIG_CMA_AREAS=7
-CONFIG_CONNECTOR=m
-# CONFIG_MTD is not set
-# CONFIG_PARPORT is not set
-CONFIG_BLK_DEV=y
-# CONFIG_BLK_DEV_COW_COMMON is not set
-# CONFIG_BLK_DEV_LOOP is not set
-# CONFIG_BLK_DEV_DRBD is not set
-# CONFIG_BLK_DEV_NBD is not set
-# CONFIG_BLK_DEV_UB is not set
-# CONFIG_BLK_DEV_RAM is not set
-# CONFIG_CDROM_PKTCDVD is not set
-# CONFIG_ATA_OVER_ETH is not set
-# CONFIG_MG_DISK is not set
-# CONFIG_BLK_DEV_RBD is not set
-
-#
-# Misc devices
-#
-# CONFIG_SENSORS_LIS3LV02D is not set
-# CONFIG_AD525X_DPOT is not set
-# CONFIG_ATMEL_PWM is not set
-# CONFIG_ICS932S401 is not set
-# CONFIG_ENCLOSURE_SERVICES is not set
-# CONFIG_APDS9802ALS is not set
-# CONFIG_ISL29003 is not set
-# CONFIG_ISL29020 is not set
-# CONFIG_SENSORS_TSL2550 is not set
-# CONFIG_SENSORS_BH1780 is not set
-# CONFIG_SENSORS_BH1770 is not set
-# CONFIG_SENSORS_APDS990X is not set
-# CONFIG_HMC6352 is not set
-# CONFIG_DS1682 is not set
-# CONFIG_TI_DAC7512 is not set
-# CONFIG_BMP085_I2C is not set
-# CONFIG_BMP085_SPI is not set
-# CONFIG_USB_SWITCH_FSA9480 is not set
-# CONFIG_C2PORT is not set
-
-#
-# EEPROM support
-#
-# CONFIG_EEPROM_AT24 is not set
-# CONFIG_EEPROM_AT25 is not set
-# CONFIG_EEPROM_LEGACY is not set
-# CONFIG_EEPROM_MAX6875 is not set
-# CONFIG_EEPROM_93CX6 is not set
-# CONFIG_EEPROM_93XX46 is not set
-
-#
-# Texas Instruments shared transport line discipline
-#
-# CONFIG_TI_ST is not set
-# CONFIG_SENSORS_LIS3_SPI is not set
-# CONFIG_SENSORS_LIS3_I2C is not set
-
-#
-# Altera FPGA firmware download module
-#
-# CONFIG_ALTERA_STAPL is not set
-CONFIG_BCM2708_VCHIQ=y
-
-#
-# SCSI device support
-#
-CONFIG_SCSI_MOD=m
-# CONFIG_RAID_ATTRS is not set
-CONFIG_SCSI=m
-CONFIG_SCSI_DMA=y
-# CONFIG_SCSI_TGT is not set
-# CONFIG_SCSI_NETLINK is not set
-# CONFIG_SCSI_PROC_FS is not set
-
-#
-# SCSI support type (disk, tape, CD-ROM)
-#
-CONFIG_BLK_DEV_SD=m
-# CONFIG_CHR_DEV_ST is not set
-# CONFIG_CHR_DEV_OSST is not set
-# CONFIG_BLK_DEV_SR is not set
-# CONFIG_CHR_DEV_SG is not set
-# CONFIG_CHR_DEV_SCH is not set
-CONFIG_SCSI_MULTI_LUN=y
-# CONFIG_SCSI_CONSTANTS is not set
-# CONFIG_SCSI_LOGGING is not set
-# CONFIG_SCSI_SCAN_ASYNC is not set
-
-#
-# SCSI Transports
-#
-# CONFIG_SCSI_SPI_ATTRS is not set
-# CONFIG_SCSI_FC_ATTRS is not set
-# CONFIG_SCSI_ISCSI_ATTRS is not set
-# CONFIG_SCSI_SAS_ATTRS is not set
-# CONFIG_SCSI_SAS_LIBSAS is not set
-# CONFIG_SCSI_SRP_ATTRS is not set
-# CONFIG_SCSI_LOWLEVEL is not set
-# CONFIG_SCSI_DH is not set
-# CONFIG_SCSI_OSD_INITIATOR is not set
-# CONFIG_ATA is not set
-# CONFIG_MD is not set
-# CONFIG_TARGET_CORE is not set
-CONFIG_NETDEVICES=y
-CONFIG_NET_CORE=y
-# CONFIG_BONDING is not set
-# CONFIG_DUMMY is not set
-# CONFIG_EQUALIZER is not set
-CONFIG_MII=m
-# CONFIG_NET_TEAM is not set
-# CONFIG_MACVLAN is not set
-# CONFIG_NETCONSOLE is not set
-# CONFIG_NETPOLL is not set
-# CONFIG_NET_POLL_CONTROLLER is not set
-# CONFIG_TUN is not set
-# CONFIG_VETH is not set
-
-#
-# CAIF transport drivers
-#
-# CONFIG_ETHERNET is not set
-CONFIG_PHYLIB=m
-
-#
-# MII PHY device drivers
-#
-# CONFIG_AMD_PHY is not set
-# CONFIG_MARVELL_PHY is not set
-# CONFIG_DAVICOM_PHY is not set
-# CONFIG_QSEMI_PHY is not set
-# CONFIG_LXT_PHY is not set
-# CONFIG_CICADA_PHY is not set
-# CONFIG_VITESSE_PHY is not set
-# CONFIG_SMSC_PHY is not set
-# CONFIG_BROADCOM_PHY is not set
-# CONFIG_BCM87XX_PHY is not set
-# CONFIG_ICPLUS_PHY is not set
-# CONFIG_REALTEK_PHY is not set
-# CONFIG_NATIONAL_PHY is not set
-# CONFIG_STE10XP is not set
-# CONFIG_LSI_ET1011C_PHY is not set
-# CONFIG_MICREL_PHY is not set
-CONFIG_MDIO_BITBANG=m
-CONFIG_MDIO_GPIO=m
-# CONFIG_MICREL_KS8995MA is not set
-# CONFIG_PPP is not set
-# CONFIG_SLIP is not set
-
-#
-# USB Network Adapters
-#
-# CONFIG_USB_CATC is not set
-# CONFIG_USB_KAWETH is not set
-# CONFIG_USB_PEGASUS is not set
-# CONFIG_USB_RTL8150 is not set
-CONFIG_USB_USBNET=m
-# CONFIG_USB_NET_AX8817X is not set
-# CONFIG_USB_NET_CDCETHER is not set
-# CONFIG_USB_NET_CDC_EEM is not set
-# CONFIG_USB_NET_CDC_NCM is not set
-# CONFIG_USB_NET_DM9601 is not set
-# CONFIG_USB_NET_SMSC75XX is not set
-CONFIG_USB_NET_SMSC95XX=m
-# CONFIG_USB_NET_GL620A is not set
-# CONFIG_USB_NET_NET1080 is not set
-# CONFIG_USB_NET_PLUSB is not set
-# CONFIG_USB_NET_MCS7830 is not set
-# CONFIG_USB_NET_RNDIS_HOST is not set
-# CONFIG_USB_NET_CDC_SUBSET is not set
-# CONFIG_USB_NET_ZAURUS is not set
-# CONFIG_USB_NET_CX82310_ETH is not set
-# CONFIG_USB_NET_KALMIA is not set
-# CONFIG_USB_NET_QMI_WWAN is not set
-# CONFIG_USB_NET_INT51X1 is not set
-# CONFIG_USB_IPHETH is not set
-# CONFIG_USB_SIERRA_NET is not set
-# CONFIG_WLAN is not set
-
-#
-# Enable WiMAX (Networking options) to see the WiMAX drivers
-#
-# CONFIG_WAN is not set
-# CONFIG_ISDN is not set
-
-#
-# Input device support
-#
-CONFIG_INPUT=y
-# CONFIG_INPUT_FF_MEMLESS is not set
-# CONFIG_INPUT_POLLDEV is not set
-# CONFIG_INPUT_SPARSEKMAP is not set
-# CONFIG_INPUT_MATRIXKMAP is not set
-
-#
-# Userland interfaces
-#
-# CONFIG_INPUT_MOUSEDEV is not set
-# CONFIG_INPUT_JOYDEV is not set
-# CONFIG_INPUT_EVDEV is not set
-# CONFIG_INPUT_EVBUG is not set
-
-#
-# Input Device Drivers
-#
-# CONFIG_INPUT_KEYBOARD is not set
-# CONFIG_INPUT_MOUSE is not set
-# CONFIG_INPUT_JOYSTICK is not set
-# CONFIG_INPUT_TABLET is not set
-# CONFIG_INPUT_TOUCHSCREEN is not set
-# CONFIG_INPUT_MISC is not set
-
-#
-# Hardware I/O ports
-#
-# CONFIG_SERIO is not set
-# CONFIG_GAMEPORT is not set
-
-#
-# Character devices
-#
-CONFIG_VT=y
-CONFIG_CONSOLE_TRANSLATIONS=y
-CONFIG_VT_CONSOLE=y
-CONFIG_HW_CONSOLE=y
-CONFIG_VT_HW_CONSOLE_BINDING=y
-CONFIG_UNIX98_PTYS=y
-# CONFIG_DEVPTS_MULTIPLE_INSTANCES is not set
-# CONFIG_LEGACY_PTYS is not set
-# CONFIG_SERIAL_NONSTANDARD is not set
-# CONFIG_N_GSM is not set
-# CONFIG_TRACE_SINK is not set
-# CONFIG_DEVKMEM is not set
-
-#
-# Serial drivers
-#
-# CONFIG_SERIAL_8250 is not set
-
-#
-# Non-8250 serial port support
-#
-# CONFIG_SERIAL_AMBA_PL010 is not set
-CONFIG_SERIAL_AMBA_PL011=y
-CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
-# CONFIG_SERIAL_MAX3100 is not set
-# CONFIG_SERIAL_MAX3107 is not set
-CONFIG_SERIAL_CORE=y
-CONFIG_SERIAL_CORE_CONSOLE=y
-# CONFIG_SERIAL_TIMBERDALE is not set
-# CONFIG_SERIAL_ALTERA_JTAGUART is not set
-# CONFIG_SERIAL_ALTERA_UART is not set
-# CONFIG_SERIAL_IFX6X60 is not set
-# CONFIG_SERIAL_XILINX_PS_UART is not set
-CONFIG_TTY_PRINTK=y
-# CONFIG_HVC_DCC is not set
-# CONFIG_IPMI_HANDLER is not set
-# CONFIG_HW_RANDOM is not set
-# CONFIG_R3964 is not set
-# CONFIG_RAW_DRIVER is not set
-# CONFIG_TCG_TPM is not set
-CONFIG_BRCM_CHAR_DRIVERS=y
-CONFIG_BCM_VC_CMA=y
-CONFIG_I2C=y
-CONFIG_I2C_BOARDINFO=y
-CONFIG_I2C_COMPAT=y
-CONFIG_I2C_CHARDEV=m
-# CONFIG_I2C_MUX is not set
-CONFIG_I2C_HELPER_AUTO=y
-
-#
-# I2C Hardware Bus support
-#
-
-#
-# I2C system bus drivers (mostly embedded / system-on-chip)
-#
-CONFIG_I2C_BCM2708=m
-CONFIG_I2C_BCM2708_BAUDRATE=100000
-# CONFIG_I2C_DESIGNWARE_PLATFORM is not set
-# CONFIG_I2C_GPIO is not set
-# CONFIG_I2C_NOMADIK is not set
-# CONFIG_I2C_OCORES is not set
-# CONFIG_I2C_PCA_PLATFORM is not set
-# CONFIG_I2C_PXA_PCI is not set
-# CONFIG_I2C_SIMTEC is not set
-# CONFIG_I2C_XILINX is not set
-
-#
-# External I2C/SMBus adapter drivers
-#
-# CONFIG_I2C_DIOLAN_U2C is not set
-# CONFIG_I2C_PARPORT_LIGHT is not set
-# CONFIG_I2C_TAOS_EVM is not set
-# CONFIG_I2C_TINY_USB is not set
-
-#
-# Other I2C/SMBus bus drivers
-#
-# CONFIG_I2C_STUB is not set
-# CONFIG_I2C_DEBUG_CORE is not set
-# CONFIG_I2C_DEBUG_ALGO is not set
-# CONFIG_I2C_DEBUG_BUS is not set
-CONFIG_SPI=y
-# CONFIG_SPI_DEBUG is not set
-CONFIG_SPI_MASTER=y
-
-#
-# SPI Master Controller Drivers
-#
-# CONFIG_SPI_ALTERA is not set
-CONFIG_SPI_BCM2708=m
-# CONFIG_SPI_BITBANG is not set
-# CONFIG_SPI_GPIO is not set
-# CONFIG_SPI_OC_TINY is not set
-# CONFIG_SPI_PL022 is not set
-# CONFIG_SPI_PXA2XX_PCI is not set
-# CONFIG_SPI_XCOMM is not set
-# CONFIG_SPI_XILINX is not set
-# CONFIG_SPI_DESIGNWARE is not set
-
-#
-# SPI Protocol Masters
-#
-CONFIG_SPI_SPIDEV=m
-# CONFIG_SPI_TLE62X0 is not set
-# CONFIG_HSI is not set
-
-#
-# PPS support
-#
-# CONFIG_PPS is not set
-
-#
-# PPS generators support
-#
-
-#
-# PTP clock support
-#
-
-#
-# Enable Device Drivers -> PPS to see the PTP clock options.
-#
-CONFIG_ARCH_HAVE_CUSTOM_GPIO_H=y
-CONFIG_ARCH_REQUIRE_GPIOLIB=y
-CONFIG_GPIOLIB=y
-# CONFIG_DEBUG_GPIO is not set
-CONFIG_GPIO_SYSFS=y
-
-#
-# Memory mapped GPIO drivers:
-#
-# CONFIG_GPIO_GENERIC_PLATFORM is not set
-# CONFIG_GPIO_EM is not set
-# CONFIG_GPIO_PL061 is not set
-
-#
-# I2C GPIO expanders:
-#
-# CONFIG_GPIO_MAX7300 is not set
-# CONFIG_GPIO_MAX732X is not set
-# CONFIG_GPIO_PCF857X is not set
-# CONFIG_GPIO_SX150X is not set
-# CONFIG_GPIO_ADP5588 is not set
-
-#
-# PCI GPIO expanders:
-#
-
-#
-# SPI GPIO expanders:
-#
-# CONFIG_GPIO_MAX7301 is not set
-# CONFIG_GPIO_MCP23S08 is not set
-# CONFIG_GPIO_MC33880 is not set
-# CONFIG_GPIO_74X164 is not set
-
-#
-# AC97 GPIO expanders:
-#
-
-#
-# MODULbus GPIO expanders:
-#
-# CONFIG_W1 is not set
-# CONFIG_POWER_SUPPLY is not set
-# CONFIG_POWER_AVS is not set
-# CONFIG_HWMON is not set
-CONFIG_THERMAL=y
-CONFIG_THERMAL_BCM2835=y
-CONFIG_WATCHDOG=y
-# CONFIG_WATCHDOG_CORE is not set
-# CONFIG_WATCHDOG_NOWAYOUT is not set
-
-#
-# Watchdog Device Drivers
-#
-# CONFIG_SOFT_WATCHDOG is not set
-# CONFIG_ARM_SP805_WATCHDOG is not set
-# CONFIG_DW_WATCHDOG is not set
-# CONFIG_MAX63XX_WATCHDOG is not set
-CONFIG_BCM2708_WDT=m
-
-#
-# USB-based Watchdog Cards
-#
-# CONFIG_USBPCWATCHDOG is not set
-CONFIG_SSB_POSSIBLE=y
-
-#
-# Sonics Silicon Backplane
-#
-# CONFIG_SSB is not set
-CONFIG_BCMA_POSSIBLE=y
-
-#
-# Broadcom specific AMBA
-#
-# CONFIG_BCMA is not set
-
-#
-# Multifunction device drivers
-#
-# CONFIG_MFD_CORE is not set
-# CONFIG_MFD_88PM860X is not set
-# CONFIG_MFD_88PM800 is not set
-# CONFIG_MFD_88PM805 is not set
-# CONFIG_MFD_SM501 is not set
-# CONFIG_MFD_ASIC3 is not set
-# CONFIG_HTC_EGPIO is not set
-# CONFIG_HTC_PASIC3 is not set
-# CONFIG_HTC_I2CPLD is not set
-# CONFIG_MFD_LM3533 is not set
-# CONFIG_TPS6105X is not set
-# CONFIG_TPS65010 is not set
-# CONFIG_TPS6507X is not set
-# CONFIG_MFD_TPS65217 is not set
-# CONFIG_MFD_TPS65910 is not set
-# CONFIG_MFD_TPS65912_I2C is not set
-# CONFIG_MFD_TPS65912_SPI is not set
-# CONFIG_TWL4030_CORE is not set
-# CONFIG_TWL6040_CORE is not set
-# CONFIG_MFD_STMPE is not set
-# CONFIG_MFD_TC3589X is not set
-# CONFIG_MFD_TMIO is not set
-# CONFIG_MFD_T7L66XB is not set
-# CONFIG_MFD_TC6387XB is not set
-# CONFIG_MFD_TC6393XB is not set
-# CONFIG_PMIC_DA903X is not set
-# CONFIG_MFD_DA9052_SPI is not set
-# CONFIG_MFD_DA9052_I2C is not set
-# CONFIG_PMIC_ADP5520 is not set
-# CONFIG_MFD_MAX77686 is not set
-# CONFIG_MFD_MAX77693 is not set
-# CONFIG_MFD_MAX8925 is not set
-# CONFIG_MFD_MAX8997 is not set
-# CONFIG_MFD_MAX8998 is not set
-# CONFIG_MFD_SEC_CORE is not set
-# CONFIG_MFD_ARIZONA_I2C is not set
-# CONFIG_MFD_ARIZONA_SPI is not set
-# CONFIG_MFD_WM8400 is not set
-# CONFIG_MFD_WM831X_I2C is not set
-# CONFIG_MFD_WM831X_SPI is not set
-# CONFIG_MFD_WM8350_I2C is not set
-# CONFIG_MFD_WM8994 is not set
-# CONFIG_MFD_PCF50633 is not set
-# CONFIG_MFD_MC13XXX_SPI is not set
-# CONFIG_MFD_MC13XXX_I2C is not set
-# CONFIG_ABX500_CORE is not set
-# CONFIG_EZX_PCAP is not set
-# CONFIG_MFD_WL1273_CORE is not set
-# CONFIG_MFD_TPS65090 is not set
-# CONFIG_MFD_AAT2870_CORE is not set
-# CONFIG_MFD_RC5T583 is not set
-# CONFIG_MFD_PALMAS is not set
-# CONFIG_REGULATOR is not set
-# CONFIG_MEDIA_SUPPORT is not set
-
-#
-# Graphics support
-#
-# CONFIG_DRM is not set
-# CONFIG_VGASTATE is not set
-# CONFIG_VIDEO_OUTPUT_CONTROL is not set
-CONFIG_FB=y
-CONFIG_FIRMWARE_EDID=y
-# CONFIG_FB_DDC is not set
-# CONFIG_FB_BOOT_VESA_SUPPORT is not set
-CONFIG_FB_CFB_FILLRECT=y
-CONFIG_FB_CFB_COPYAREA=y
-CONFIG_FB_CFB_IMAGEBLIT=y
-# CONFIG_FB_CFB_REV_PIXELS_IN_BYTE is not set
-# CONFIG_FB_SYS_FILLRECT is not set
-# CONFIG_FB_SYS_COPYAREA is not set
-# CONFIG_FB_SYS_IMAGEBLIT is not set
-# CONFIG_FB_FOREIGN_ENDIAN is not set
-# CONFIG_FB_SYS_FOPS is not set
-# CONFIG_FB_WMT_GE_ROPS is not set
-# CONFIG_FB_SVGALIB is not set
-# CONFIG_FB_MACMODES is not set
-# CONFIG_FB_BACKLIGHT is not set
-# CONFIG_FB_MODE_HELPERS is not set
-# CONFIG_FB_TILEBLITTING is not set
-
-#
-# Frame buffer hardware drivers
-#
-CONFIG_FB_BCM2708=y
-# CONFIG_FB_ARMCLCD is not set
-# CONFIG_FB_UVESA is not set
-# CONFIG_FB_S1D13XXX is not set
-# CONFIG_FB_SMSCUFX is not set
-# CONFIG_FB_UDL is not set
-# CONFIG_FB_VIRTUAL is not set
-# CONFIG_FB_METRONOME is not set
-# CONFIG_FB_BROADSHEET is not set
-# CONFIG_FB_AUO_K190X is not set
-# CONFIG_EXYNOS_VIDEO is not set
-# CONFIG_BACKLIGHT_LCD_SUPPORT is not set
-
-#
-# Console display driver support
-#
-CONFIG_DUMMY_CONSOLE=y
-CONFIG_FRAMEBUFFER_CONSOLE=y
-# CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY is not set
-# CONFIG_FRAMEBUFFER_CONSOLE_ROTATION is not set
-# CONFIG_FONTS is not set
-CONFIG_FONT_8x8=y
-CONFIG_FONT_8x16=y
-CONFIG_LOGO=y
-# CONFIG_LOGO_LINUX_MONO is not set
-# CONFIG_LOGO_LINUX_VGA16 is not set
-CONFIG_LOGO_LINUX_CLUT224=y
-CONFIG_SOUND=m
-CONFIG_SOUND_OSS_CORE=y
-CONFIG_SOUND_OSS_CORE_PRECLAIM=y
-CONFIG_SND=m
-CONFIG_SND_TIMER=m
-CONFIG_SND_PCM=m
-CONFIG_SND_JACK=y
-CONFIG_SND_SEQUENCER=m
-# CONFIG_SND_SEQ_DUMMY is not set
-CONFIG_SND_OSSEMUL=y
-CONFIG_SND_MIXER_OSS=m
-CONFIG_SND_PCM_OSS=m
-CONFIG_SND_PCM_OSS_PLUGINS=y
-CONFIG_SND_SEQUENCER_OSS=y
-CONFIG_SND_HRTIMER=m
-CONFIG_SND_SEQ_HRTIMER_DEFAULT=y
-CONFIG_SND_DYNAMIC_MINORS=y
-# CONFIG_SND_SUPPORT_OLD_API is not set
-# CONFIG_SND_VERBOSE_PROCFS is not set
-# CONFIG_SND_VERBOSE_PRINTK is not set
-# CONFIG_SND_DEBUG is not set
-# CONFIG_SND_RAWMIDI_SEQ is not set
-# CONFIG_SND_OPL3_LIB_SEQ is not set
-# CONFIG_SND_OPL4_LIB_SEQ is not set
-# CONFIG_SND_SBAWE_SEQ is not set
-# CONFIG_SND_EMU10K1_SEQ is not set
-# CONFIG_SND_DRIVERS is not set
-CONFIG_SND_ARM=y
-# CONFIG_SND_ARMAACI is not set
-CONFIG_SND_BCM2835=m
-# CONFIG_SND_SPI is not set
-# CONFIG_SND_USB is not set
-CONFIG_SND_SOC=m
-# CONFIG_SND_DESIGNWARE_I2S is not set
-CONFIG_SND_SOC_I2C_AND_SPI=m
-CONFIG_SND_SOC_ALL_CODECS=m
-CONFIG_SND_SOC_WM_HUBS=m
-CONFIG_SND_SOC_AD1836=m
-CONFIG_SND_SOC_AD193X=m
-CONFIG_SND_SOC_AD73311=m
-CONFIG_SND_SOC_ADAU1373=m
-CONFIG_SND_SOC_ADAV80X=m
-CONFIG_SND_SOC_ADS117X=m
-CONFIG_SND_SOC_AK4104=m
-CONFIG_SND_SOC_AK4535=m
-CONFIG_SND_SOC_AK4641=m
-CONFIG_SND_SOC_AK4642=m
-CONFIG_SND_SOC_AK4671=m
-CONFIG_SND_SOC_ALC5623=m
-CONFIG_SND_SOC_ALC5632=m
-CONFIG_SND_SOC_CS42L51=m
-CONFIG_SND_SOC_CS42L52=m
-CONFIG_SND_SOC_CS42L73=m
-CONFIG_SND_SOC_CS4270=m
-CONFIG_SND_SOC_CS4271=m
-CONFIG_SND_SOC_CX20442=m
-CONFIG_SND_SOC_JZ4740_CODEC=m
-CONFIG_SND_SOC_L3=m
-CONFIG_SND_SOC_DA7210=m
-CONFIG_SND_SOC_DA732X=m
-CONFIG_SND_SOC_DFBMCS320=m
-CONFIG_SND_SOC_ISABELLE=m
-CONFIG_SND_SOC_LM49453=m
-CONFIG_SND_SOC_MAX98088=m
-CONFIG_SND_SOC_MAX98095=m
-CONFIG_SND_SOC_MAX9850=m
-CONFIG_SND_SOC_PCM3008=m
-CONFIG_SND_SOC_RT5631=m
-CONFIG_SND_SOC_SGTL5000=m
-CONFIG_SND_SOC_SPDIF=m
-CONFIG_SND_SOC_SSM2602=m
-CONFIG_SND_SOC_STA32X=m
-CONFIG_SND_SOC_STA529=m
-CONFIG_SND_SOC_TLV320AIC23=m
-CONFIG_SND_SOC_TLV320AIC26=m
-CONFIG_SND_SOC_TLV320AIC32X4=m
-CONFIG_SND_SOC_TLV320AIC3X=m
-CONFIG_SND_SOC_TLV320DAC33=m
-CONFIG_SND_SOC_UDA134X=m
-CONFIG_SND_SOC_UDA1380=m
-CONFIG_SND_SOC_WM1250_EV1=m
-CONFIG_SND_SOC_WM2000=m
-CONFIG_SND_SOC_WM2200=m
-CONFIG_SND_SOC_WM5100=m
-CONFIG_SND_SOC_WM8510=m
-CONFIG_SND_SOC_WM8523=m
-CONFIG_SND_SOC_WM8580=m
-CONFIG_SND_SOC_WM8711=m
-CONFIG_SND_SOC_WM8727=m
-CONFIG_SND_SOC_WM8728=m
-CONFIG_SND_SOC_WM8731=m
-CONFIG_SND_SOC_WM8737=m
-CONFIG_SND_SOC_WM8741=m
-CONFIG_SND_SOC_WM8750=m
-CONFIG_SND_SOC_WM8753=m
-CONFIG_SND_SOC_WM8770=m
-CONFIG_SND_SOC_WM8776=m
-CONFIG_SND_SOC_WM8782=m
-CONFIG_SND_SOC_WM8804=m
-CONFIG_SND_SOC_WM8900=m
-CONFIG_SND_SOC_WM8903=m
-CONFIG_SND_SOC_WM8904=m
-CONFIG_SND_SOC_WM8940=m
-CONFIG_SND_SOC_WM8955=m
-CONFIG_SND_SOC_WM8960=m
-CONFIG_SND_SOC_WM8961=m
-CONFIG_SND_SOC_WM8962=m
-CONFIG_SND_SOC_WM8971=m
-CONFIG_SND_SOC_WM8974=m
-CONFIG_SND_SOC_WM8978=m
-CONFIG_SND_SOC_WM8983=m
-CONFIG_SND_SOC_WM8985=m
-CONFIG_SND_SOC_WM8988=m
-CONFIG_SND_SOC_WM8990=m
-CONFIG_SND_SOC_WM8991=m
-CONFIG_SND_SOC_WM8993=m
-CONFIG_SND_SOC_WM8995=m
-CONFIG_SND_SOC_WM8996=m
-CONFIG_SND_SOC_WM9081=m
-CONFIG_SND_SOC_WM9090=m
-CONFIG_SND_SOC_LM4857=m
-CONFIG_SND_SOC_MAX9768=m
-CONFIG_SND_SOC_MAX9877=m
-CONFIG_SND_SOC_ML26124=m
-CONFIG_SND_SOC_TPA6130A2=m
-CONFIG_SND_SIMPLE_CARD=m
-# CONFIG_SOUND_PRIME is not set
-
-#
-# HID support
-#
-CONFIG_HID=y
-CONFIG_HIDRAW=y
-# CONFIG_UHID is not set
-CONFIG_HID_GENERIC=m
-
-#
-# Special HID drivers
-#
-# CONFIG_HID_A4TECH is not set
-# CONFIG_HID_ACRUX is not set
-# CONFIG_HID_APPLE is not set
-# CONFIG_HID_AUREAL is not set
-# CONFIG_HID_BELKIN is not set
-CONFIG_HID_CHERRY=m
-# CONFIG_HID_CHICONY is not set
-# CONFIG_HID_PRODIKEYS is not set
-# CONFIG_HID_CYPRESS is not set
-# CONFIG_HID_DRAGONRISE is not set
-# CONFIG_HID_EMS_FF is not set
-# CONFIG_HID_EZKEY is not set
-# CONFIG_HID_HOLTEK is not set
-# CONFIG_HID_KEYTOUCH is not set
-# CONFIG_HID_KYE is not set
-# CONFIG_HID_UCLOGIC is not set
-# CONFIG_HID_WALTOP is not set
-# CONFIG_HID_GYRATION is not set
-# CONFIG_HID_TWINHAN is not set
-# CONFIG_HID_KENSINGTON is not set
-# CONFIG_HID_LCPOWER is not set
-# CONFIG_HID_LENOVO_TPKBD is not set
-# CONFIG_HID_LOGITECH is not set
-# CONFIG_HID_MICROSOFT is not set
-# CONFIG_HID_MONTEREY is not set
-# CONFIG_HID_MULTITOUCH is not set
-# CONFIG_HID_NTRIG is not set
-# CONFIG_HID_ORTEK is not set
-# CONFIG_HID_PANTHERLORD is not set
-# CONFIG_HID_PETALYNX is not set
-# CONFIG_HID_PICOLCD is not set
-# CONFIG_HID_PRIMAX is not set
-# CONFIG_HID_ROCCAT is not set
-# CONFIG_HID_SAITEK is not set
-# CONFIG_HID_SAMSUNG is not set
-# CONFIG_HID_SONY is not set
-# CONFIG_HID_SPEEDLINK is not set
-# CONFIG_HID_SUNPLUS is not set
-# CONFIG_HID_GREENASIA is not set
-# CONFIG_HID_SMARTJOYPLUS is not set
-# CONFIG_HID_TIVO is not set
-# CONFIG_HID_TOPSEED is not set
-# CONFIG_HID_THRUSTMASTER is not set
-# CONFIG_HID_ZEROPLUS is not set
-# CONFIG_HID_ZYDACRON is not set
-
-#
-# USB HID support
-#
-CONFIG_USB_HID=m
-CONFIG_HID_PID=y
-CONFIG_USB_HIDDEV=y
-
-#
-# USB HID Boot Protocol drivers
-#
-# CONFIG_USB_KBD is not set
-# CONFIG_USB_MOUSE is not set
-# CONFIG_USB_ARCH_HAS_OHCI is not set
-# CONFIG_USB_ARCH_HAS_EHCI is not set
-# CONFIG_USB_ARCH_HAS_XHCI is not set
-CONFIG_USB_SUPPORT=y
-CONFIG_USB_COMMON=y
-CONFIG_USB_ARCH_HAS_HCD=y
-CONFIG_USB=y
-# CONFIG_USB_DEBUG is not set
-CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-
-#
-# Miscellaneous USB options
-#
-CONFIG_USB_DYNAMIC_MINORS=y
-# CONFIG_USB_OTG_WHITELIST is not set
-# CONFIG_USB_OTG_BLACKLIST_HUB is not set
-# CONFIG_USB_MON is not set
-# CONFIG_USB_WUSB_CBAF is not set
-
-#
-# USB Host Controller Drivers
-#
-# CONFIG_USB_C67X00_HCD is not set
-# CONFIG_USB_OXU210HP_HCD is not set
-# CONFIG_USB_ISP116X_HCD is not set
-# CONFIG_USB_ISP1760_HCD is not set
-# CONFIG_USB_ISP1362_HCD is not set
-# CONFIG_USB_SL811_HCD is not set
-# CONFIG_USB_R8A66597_HCD is not set
-CONFIG_USB_DWCOTG=y
-# CONFIG_USB_CHIPIDEA is not set
-
-#
-# USB Device Class drivers
-#
-# CONFIG_USB_ACM is not set
-# CONFIG_USB_PRINTER is not set
-# CONFIG_USB_WDM is not set
-# CONFIG_USB_TMC is not set
-
-#
-# NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may
-#
-
-#
-# also be needed; see USB_STORAGE Help for more info
-#
-CONFIG_USB_STORAGE=m
-# CONFIG_USB_STORAGE_DEBUG is not set
-CONFIG_USB_STORAGE_REALTEK=m
-CONFIG_USB_STORAGE_DATAFAB=m
-CONFIG_USB_STORAGE_FREECOM=m
-CONFIG_USB_STORAGE_ISD200=m
-CONFIG_USB_STORAGE_USBAT=m
-CONFIG_USB_STORAGE_SDDR09=m
-CONFIG_USB_STORAGE_SDDR55=m
-CONFIG_USB_STORAGE_JUMPSHOT=m
-CONFIG_USB_STORAGE_ALAUDA=m
-CONFIG_USB_STORAGE_ONETOUCH=m
-CONFIG_USB_STORAGE_KARMA=m
-CONFIG_USB_STORAGE_CYPRESS_ATACB=m
-CONFIG_USB_STORAGE_ENE_UB6250=m
-# CONFIG_USB_LIBUSUAL is not set
-
-#
-# USB Imaging devices
-#
-# CONFIG_USB_MDC800 is not set
-# CONFIG_USB_MICROTEK is not set
-
-#
-# USB port drivers
-#
-# CONFIG_USB_SERIAL is not set
-
-#
-# USB Miscellaneous drivers
-#
-# CONFIG_USB_EMI62 is not set
-# CONFIG_USB_EMI26 is not set
-# CONFIG_USB_ADUTUX is not set
-# CONFIG_USB_SEVSEG is not set
-# CONFIG_USB_RIO500 is not set
-# CONFIG_USB_LEGOTOWER is not set
-# CONFIG_USB_LCD is not set
-# CONFIG_USB_LED is not set
-# CONFIG_USB_CYPRESS_CY7C63 is not set
-# CONFIG_USB_CYTHERM is not set
-# CONFIG_USB_IDMOUSE is not set
-# CONFIG_USB_FTDI_ELAN is not set
-# CONFIG_USB_APPLEDISPLAY is not set
-# CONFIG_USB_LD is not set
-# CONFIG_USB_TRANCEVIBRATOR is not set
-# CONFIG_USB_IOWARRIOR is not set
-# CONFIG_USB_TEST is not set
-# CONFIG_USB_ISIGHTFW is not set
-# CONFIG_USB_YUREX is not set
-
-#
-# USB Physical Layer drivers
-#
-# CONFIG_USB_ISP1301 is not set
-# CONFIG_USB_GADGET is not set
-
-#
-# OTG and related infrastructure
-#
-# CONFIG_USB_GPIO_VBUS is not set
-# CONFIG_USB_ULPI is not set
-# CONFIG_NOP_USB_XCEIV is not set
-CONFIG_MMC=y
-# CONFIG_MMC_DEBUG is not set
-# CONFIG_MMC_UNSAFE_RESUME is not set
-# CONFIG_MMC_CLKGATE is not set
-
-#
-# MMC/SD/SDIO Card Drivers
-#
-CONFIG_MMC_BLOCK=y
-CONFIG_MMC_BLOCK_MINORS=8
-CONFIG_MMC_BLOCK_BOUNCE=y
-# CONFIG_SDIO_UART is not set
-# CONFIG_MMC_TEST is not set
-
-#
-# MMC/SD/SDIO Host Controller Drivers
-#
-# CONFIG_MMC_ARMMMCI is not set
-CONFIG_MMC_SDHCI=y
-CONFIG_MMC_SDHCI_IO_ACCESSORS=y
-CONFIG_MMC_SDHCI_PLTFM=y
-# CONFIG_MMC_SDHCI_PXAV3 is not set
-# CONFIG_MMC_SDHCI_PXAV2 is not set
-CONFIG_MMC_SDHCI_BCM2708=y
-CONFIG_MMC_SDHCI_BCM2708_DMA=y
-# CONFIG_MMC_SPI is not set
-# CONFIG_MMC_DW is not set
-# CONFIG_MMC_VUB300 is not set
-# CONFIG_MMC_USHC is not set
-# CONFIG_MEMSTICK is not set
-CONFIG_NEW_LEDS=y
-CONFIG_LEDS_CLASS=m
-
-#
-# LED drivers
-#
-# CONFIG_LEDS_LM3530 is not set
-# CONFIG_LEDS_PCA9532 is not set
-CONFIG_LEDS_GPIO=m
-# CONFIG_LEDS_LP3944 is not set
-# CONFIG_LEDS_LP5521 is not set
-# CONFIG_LEDS_LP5523 is not set
-# CONFIG_LEDS_PCA955X is not set
-# CONFIG_LEDS_PCA9633 is not set
-# CONFIG_LEDS_DAC124S085 is not set
-# CONFIG_LEDS_BD2802 is not set
-# CONFIG_LEDS_LT3593 is not set
-# CONFIG_LEDS_TCA6507 is not set
-# CONFIG_LEDS_LM3556 is not set
-# CONFIG_LEDS_OT200 is not set
-# CONFIG_LEDS_BLINKM is not set
-CONFIG_LEDS_TRIGGERS=y
-
-#
-# LED Triggers
-#
-CONFIG_LEDS_TRIGGER_TIMER=m
-CONFIG_LEDS_TRIGGER_ONESHOT=m
-CONFIG_LEDS_TRIGGER_HEARTBEAT=m
-CONFIG_LEDS_TRIGGER_BACKLIGHT=m
-CONFIG_LEDS_TRIGGER_GPIO=m
-CONFIG_LEDS_TRIGGER_DEFAULT_ON=m
-
-#
-# iptables trigger is under Netfilter config (LED target)
-#
-CONFIG_LEDS_TRIGGER_TRANSIENT=m
-# CONFIG_ACCESSIBILITY is not set
-# CONFIG_EDAC is not set
-CONFIG_RTC_LIB=y
-# CONFIG_RTC_CLASS is not set
-# CONFIG_DMADEVICES is not set
-# CONFIG_AUXDISPLAY is not set
-# CONFIG_UIO is not set
-
-#
-# Virtio drivers
-#
-# CONFIG_VIRTIO_BALLOON is not set
-# CONFIG_VIRTIO_MMIO is not set
-
-#
-# Microsoft Hyper-V guest support
-#
-# CONFIG_STAGING is not set
-CONFIG_CLKDEV_LOOKUP=y
-
-#
-# Hardware Spinlock drivers
-#
-# CONFIG_IOMMU_SUPPORT is not set
-
-#
-# Remoteproc drivers (EXPERIMENTAL)
-#
-
-#
-# Rpmsg drivers (EXPERIMENTAL)
-#
-# CONFIG_VIRT_DRIVERS is not set
-# CONFIG_PM_DEVFREQ is not set
-# CONFIG_EXTCON is not set
-# CONFIG_MEMORY is not set
-# CONFIG_IIO is not set
-# CONFIG_PWM is not set
-
-#
-# File systems
-#
-CONFIG_DCACHE_WORD_ACCESS=y
-CONFIG_EXT2_FS=y
-# CONFIG_EXT2_FS_XATTR is not set
-# CONFIG_EXT2_FS_XIP is not set
-# CONFIG_EXT3_FS is not set
-# CONFIG_EXT4_FS is not set
-# CONFIG_REISERFS_FS is not set
-# CONFIG_JFS_FS is not set
-# CONFIG_XFS_FS is not set
-# CONFIG_GFS2_FS is not set
-# CONFIG_OCFS2_FS is not set
-# CONFIG_BTRFS_FS is not set
-# CONFIG_NILFS2_FS is not set
-# CONFIG_FS_POSIX_ACL is not set
-CONFIG_EXPORTFS=y
-CONFIG_FILE_LOCKING=y
-CONFIG_FSNOTIFY=y
-# CONFIG_DNOTIFY is not set
-CONFIG_INOTIFY_USER=y
-CONFIG_FANOTIFY=y
-# CONFIG_QUOTA is not set
-# CONFIG_QUOTACTL is not set
-# CONFIG_AUTOFS4_FS is not set
-# CONFIG_FUSE_FS is not set
-
-#
-# Caches
-#
-# CONFIG_FSCACHE is not set
-
-#
-# CD-ROM/DVD Filesystems
-#
-# CONFIG_ISO9660_FS is not set
-CONFIG_UDF_FS=m
-CONFIG_UDF_NLS=y
-
-#
-# DOS/FAT/NT Filesystems
-#
-CONFIG_FAT_FS=m
-CONFIG_MSDOS_FS=m
-CONFIG_VFAT_FS=m
-CONFIG_FAT_DEFAULT_CODEPAGE=850
-CONFIG_FAT_DEFAULT_IOCHARSET="iso8859-15"
-# CONFIG_NTFS_FS is not set
-
-#
-# Pseudo filesystems
-#
-CONFIG_PROC_FS=y
-CONFIG_PROC_SYSCTL=y
-CONFIG_PROC_PAGE_MONITOR=y
-CONFIG_SYSFS=y
-CONFIG_TMPFS=y
-# CONFIG_TMPFS_POSIX_ACL is not set
-# CONFIG_TMPFS_XATTR is not set
-# CONFIG_HUGETLB_PAGE is not set
-CONFIG_CONFIGFS_FS=y
-# CONFIG_MISC_FILESYSTEMS is not set
-# CONFIG_NETWORK_FILESYSTEMS is not set
-CONFIG_NLS=y
-CONFIG_NLS_DEFAULT="utf8"
-CONFIG_NLS_CODEPAGE_437=m
-# CONFIG_NLS_CODEPAGE_737 is not set
-# CONFIG_NLS_CODEPAGE_775 is not set
-CONFIG_NLS_CODEPAGE_850=m
-# CONFIG_NLS_CODEPAGE_852 is not set
-# CONFIG_NLS_CODEPAGE_855 is not set
-# CONFIG_NLS_CODEPAGE_857 is not set
-# CONFIG_NLS_CODEPAGE_860 is not set
-# CONFIG_NLS_CODEPAGE_861 is not set
-# CONFIG_NLS_CODEPAGE_862 is not set
-# CONFIG_NLS_CODEPAGE_863 is not set
-# CONFIG_NLS_CODEPAGE_864 is not set
-# CONFIG_NLS_CODEPAGE_865 is not set
-# CONFIG_NLS_CODEPAGE_866 is not set
-# CONFIG_NLS_CODEPAGE_869 is not set
-# CONFIG_NLS_CODEPAGE_936 is not set
-# CONFIG_NLS_CODEPAGE_950 is not set
-# CONFIG_NLS_CODEPAGE_932 is not set
-# CONFIG_NLS_CODEPAGE_949 is not set
-# CONFIG_NLS_CODEPAGE_874 is not set
-# CONFIG_NLS_ISO8859_8 is not set
-# CONFIG_NLS_CODEPAGE_1250 is not set
-# CONFIG_NLS_CODEPAGE_1251 is not set
-CONFIG_NLS_ASCII=m
-CONFIG_NLS_ISO8859_1=m
-# CONFIG_NLS_ISO8859_2 is not set
-# CONFIG_NLS_ISO8859_3 is not set
-# CONFIG_NLS_ISO8859_4 is not set
-# CONFIG_NLS_ISO8859_5 is not set
-# CONFIG_NLS_ISO8859_6 is not set
-# CONFIG_NLS_ISO8859_7 is not set
-# CONFIG_NLS_ISO8859_9 is not set
-# CONFIG_NLS_ISO8859_13 is not set
-# CONFIG_NLS_ISO8859_14 is not set
-CONFIG_NLS_ISO8859_15=m
-# CONFIG_NLS_KOI8_R is not set
-# CONFIG_NLS_KOI8_U is not set
-# CONFIG_NLS_MAC_ROMAN is not set
-# CONFIG_NLS_MAC_CELTIC is not set
-# CONFIG_NLS_MAC_CENTEURO is not set
-# CONFIG_NLS_MAC_CROATIAN is not set
-# CONFIG_NLS_MAC_CYRILLIC is not set
-# CONFIG_NLS_MAC_GAELIC is not set
-# CONFIG_NLS_MAC_GREEK is not set
-# CONFIG_NLS_MAC_ICELAND is not set
-# CONFIG_NLS_MAC_INUIT is not set
-# CONFIG_NLS_MAC_ROMANIAN is not set
-# CONFIG_NLS_MAC_TURKISH is not set
-CONFIG_NLS_UTF8=m
-# CONFIG_DLM is not set
-
-#
-# Kernel hacking
-#
-CONFIG_PRINTK_TIME=y
-CONFIG_DEFAULT_MESSAGE_LOGLEVEL=4
-CONFIG_ENABLE_WARN_DEPRECATED=y
-CONFIG_ENABLE_MUST_CHECK=y
-CONFIG_FRAME_WARN=1024
-# CONFIG_MAGIC_SYSRQ is not set
-# CONFIG_STRIP_ASM_SYMS is not set
-# CONFIG_READABLE_ASM is not set
-# CONFIG_UNUSED_SYMBOLS is not set
-# CONFIG_DEBUG_FS is not set
-# CONFIG_HEADERS_CHECK is not set
-# CONFIG_DEBUG_SECTION_MISMATCH is not set
-CONFIG_DEBUG_KERNEL=y
-# CONFIG_DEBUG_SHIRQ is not set
-# CONFIG_LOCKUP_DETECTOR is not set
-# CONFIG_HARDLOCKUP_DETECTOR is not set
-# CONFIG_PANIC_ON_OOPS is not set
-CONFIG_PANIC_ON_OOPS_VALUE=0
-# CONFIG_DETECT_HUNG_TASK is not set
-# CONFIG_SCHED_DEBUG is not set
-# CONFIG_SCHEDSTATS is not set
-# CONFIG_TIMER_STATS is not set
-# CONFIG_DEBUG_OBJECTS is not set
-# CONFIG_SLUB_STATS is not set
-# CONFIG_DEBUG_KMEMLEAK is not set
-# CONFIG_DEBUG_PREEMPT is not set
-# CONFIG_DEBUG_RT_MUTEXES is not set
-# CONFIG_RT_MUTEX_TESTER is not set
-# CONFIG_DEBUG_SPINLOCK is not set
-# CONFIG_DEBUG_MUTEXES is not set
-# CONFIG_DEBUG_LOCK_ALLOC is not set
-# CONFIG_PROVE_LOCKING is not set
-# CONFIG_SPARSE_RCU_POINTER is not set
-# CONFIG_LOCK_STAT is not set
-# CONFIG_DEBUG_ATOMIC_SLEEP is not set
-# CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
-# CONFIG_DEBUG_STACK_USAGE is not set
-# CONFIG_DEBUG_KOBJECT is not set
-# CONFIG_DEBUG_BUGVERBOSE is not set
-# CONFIG_DEBUG_INFO is not set
-# CONFIG_DEBUG_VM is not set
-# CONFIG_DEBUG_WRITECOUNT is not set
-# CONFIG_DEBUG_MEMORY_INIT is not set
-# CONFIG_DEBUG_LIST is not set
-# CONFIG_TEST_LIST_SORT is not set
-# CONFIG_DEBUG_SG is not set
-# CONFIG_DEBUG_NOTIFIERS is not set
-# CONFIG_DEBUG_CREDENTIALS is not set
-CONFIG_FRAME_POINTER=y
-# CONFIG_BOOT_PRINTK_DELAY is not set
-# CONFIG_RCU_TORTURE_TEST is not set
-# CONFIG_RCU_TRACE is not set
-# CONFIG_BACKTRACE_SELF_TEST is not set
-# CONFIG_DEBUG_BLOCK_EXT_DEVT is not set
-# CONFIG_DEBUG_FORCE_WEAK_PER_CPU is not set
-# CONFIG_NOTIFIER_ERROR_INJECTION is not set
-# CONFIG_FAULT_INJECTION is not set
-# CONFIG_LATENCYTOP is not set
-# CONFIG_DEBUG_PAGEALLOC is not set
-CONFIG_HAVE_FUNCTION_TRACER=y
-CONFIG_HAVE_FUNCTION_GRAPH_TRACER=y
-CONFIG_HAVE_DYNAMIC_FTRACE=y
-CONFIG_HAVE_FTRACE_MCOUNT_RECORD=y
-CONFIG_HAVE_C_RECORDMCOUNT=y
-CONFIG_TRACING_SUPPORT=y
-# CONFIG_FTRACE is not set
-# CONFIG_DMA_API_DEBUG is not set
-# CONFIG_ATOMIC64_SELFTEST is not set
-# CONFIG_SAMPLES is not set
-CONFIG_HAVE_ARCH_KGDB=y
-# CONFIG_KGDB is not set
-# CONFIG_TEST_KSTRTOX is not set
-CONFIG_STRICT_DEVMEM=y
-# CONFIG_ARM_UNWIND is not set
-# CONFIG_DEBUG_USER is not set
-# CONFIG_DEBUG_LL is not set
-# CONFIG_OC_ETM is not set
-# CONFIG_PID_IN_CONTEXTIDR is not set
-
-#
-# Security options
-#
-# CONFIG_KEYS is not set
-# CONFIG_SECURITY_DMESG_RESTRICT is not set
-# CONFIG_SECURITY is not set
-# CONFIG_SECURITYFS is not set
-CONFIG_DEFAULT_SECURITY_DAC=y
-CONFIG_DEFAULT_SECURITY=""
-CONFIG_CRYPTO=y
-
-#
-# Crypto core or helper
-#
-CONFIG_CRYPTO_ALGAPI2=m
-CONFIG_CRYPTO_AEAD2=m
-CONFIG_CRYPTO_BLKCIPHER2=m
-CONFIG_CRYPTO_HASH2=m
-CONFIG_CRYPTO_RNG2=m
-CONFIG_CRYPTO_PCOMP2=m
-CONFIG_CRYPTO_MANAGER=m
-CONFIG_CRYPTO_MANAGER2=m
-# CONFIG_CRYPTO_USER is not set
-CONFIG_CRYPTO_MANAGER_DISABLE_TESTS=y
-# CONFIG_CRYPTO_GF128MUL is not set
-# CONFIG_CRYPTO_NULL is not set
-CONFIG_CRYPTO_WORKQUEUE=m
-# CONFIG_CRYPTO_CRYPTD is not set
-# CONFIG_CRYPTO_AUTHENC is not set
-# CONFIG_CRYPTO_TEST is not set
-
-#
-# Authenticated Encryption with Associated Data
-#
-# CONFIG_CRYPTO_CCM is not set
-# CONFIG_CRYPTO_GCM is not set
-# CONFIG_CRYPTO_SEQIV is not set
-
-#
-# Block modes
-#
-# CONFIG_CRYPTO_CBC is not set
-# CONFIG_CRYPTO_CTR is not set
-# CONFIG_CRYPTO_CTS is not set
-# CONFIG_CRYPTO_ECB is not set
-# CONFIG_CRYPTO_LRW is not set
-# CONFIG_CRYPTO_PCBC is not set
-# CONFIG_CRYPTO_XTS is not set
-
-#
-# Hash modes
-#
-# CONFIG_CRYPTO_HMAC is not set
-# CONFIG_CRYPTO_XCBC is not set
-# CONFIG_CRYPTO_VMAC is not set
-
-#
-# Digest
-#
-# CONFIG_CRYPTO_CRC32C is not set
-# CONFIG_CRYPTO_GHASH is not set
-# CONFIG_CRYPTO_MD4 is not set
-# CONFIG_CRYPTO_MD5 is not set
-# CONFIG_CRYPTO_MICHAEL_MIC is not set
-# CONFIG_CRYPTO_RMD128 is not set
-# CONFIG_CRYPTO_RMD160 is not set
-# CONFIG_CRYPTO_RMD256 is not set
-# CONFIG_CRYPTO_RMD320 is not set
-# CONFIG_CRYPTO_SHA1 is not set
-# CONFIG_CRYPTO_SHA256 is not set
-# CONFIG_CRYPTO_SHA512 is not set
-# CONFIG_CRYPTO_TGR192 is not set
-# CONFIG_CRYPTO_WP512 is not set
-
-#
-# Ciphers
-#
-# CONFIG_CRYPTO_AES is not set
-# CONFIG_CRYPTO_ANUBIS is not set
-# CONFIG_CRYPTO_ARC4 is not set
-# CONFIG_CRYPTO_BLOWFISH is not set
-# CONFIG_CRYPTO_CAMELLIA is not set
-# CONFIG_CRYPTO_CAST5 is not set
-# CONFIG_CRYPTO_CAST6 is not set
-# CONFIG_CRYPTO_DES is not set
-# CONFIG_CRYPTO_FCRYPT is not set
-# CONFIG_CRYPTO_KHAZAD is not set
-# CONFIG_CRYPTO_SALSA20 is not set
-# CONFIG_CRYPTO_SEED is not set
-# CONFIG_CRYPTO_SERPENT is not set
-# CONFIG_CRYPTO_TEA is not set
-# CONFIG_CRYPTO_TWOFISH is not set
-
-#
-# Compression
-#
-# CONFIG_CRYPTO_DEFLATE is not set
-# CONFIG_CRYPTO_ZLIB is not set
-# CONFIG_CRYPTO_LZO is not set
-
-#
-# Random Number Generation
-#
-# CONFIG_CRYPTO_ANSI_CPRNG is not set
-# CONFIG_CRYPTO_USER_API_HASH is not set
-# CONFIG_CRYPTO_USER_API_SKCIPHER is not set
-# CONFIG_CRYPTO_HW is not set
-# CONFIG_BINARY_PRINTF is not set
-
-#
-# Library routines
-#
-CONFIG_BITREVERSE=y
-CONFIG_GENERIC_STRNCPY_FROM_USER=y
-CONFIG_GENERIC_STRNLEN_USER=y
-CONFIG_GENERIC_PCI_IOMAP=y
-CONFIG_GENERIC_IO=y
-# CONFIG_CRC_CCITT is not set
-# CONFIG_CRC16 is not set
-# CONFIG_CRC_T10DIF is not set
-CONFIG_CRC_ITU_T=m
-CONFIG_CRC32=y
-# CONFIG_CRC32_SELFTEST is not set
-CONFIG_CRC32_SLICEBY8=y
-# CONFIG_CRC32_SLICEBY4 is not set
-# CONFIG_CRC32_SARWATE is not set
-# CONFIG_CRC32_BIT is not set
-# CONFIG_CRC7 is not set
-# CONFIG_LIBCRC32C is not set
-# CONFIG_CRC8 is not set
-CONFIG_LZO_COMPRESS=y
-CONFIG_LZO_DECOMPRESS=y
-# CONFIG_XZ_DEC is not set
-# CONFIG_XZ_DEC_BCJ is not set
-CONFIG_HAS_IOMEM=y
-CONFIG_HAS_IOPORT=y
-CONFIG_HAS_DMA=y
-CONFIG_DQL=y
-CONFIG_NLATTR=y
-CONFIG_GENERIC_ATOMIC64=y
-CONFIG_ARCH_HAS_ATOMIC64_DEC_IF_POSITIVE=y
-# CONFIG_AVERAGE is not set
-# CONFIG_CORDIC is not set
-# CONFIG_DDR is not set
--------------- next part --------------
-BR2_arm=y
-BR2_DL_DIR="$(HOME)/dev/src"
-BR2_OPTIMIZE_3=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_PATH="/home/ymorin/x-tools/armv6-rpi-linux-gnueabi"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv6-rpi-linux-gnueabi"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_TARGET_GENERIC_HOSTNAME="tvheadend"
-BR2_TARGET_GENERIC_PASSWD_SHA512=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-BR2_TARGET_GENERIC_ROOT_PASSWD="root"
-BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-BR2_TARGET_ROOTFS_EXT2=y
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_GIT=y
-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/raspberrypi/linux.git"
-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="91a3be5b2b783b930b2d7cdbf38283b613bce7d4"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(CONFIG_DIR)/linux.config"
-BR2_LINUX_KERNEL_ZIMAGE=y
--------------- next part --------------
-#
-# Automatically generated make config: don't edit
-# Busybox version: 1.21.0
-# Thu Jan 24 00:15:56 2013
-#
-CONFIG_HAVE_DOT_CONFIG=y
-
-#
-# Busybox Settings
-#
-
-#
-# General Configuration
-#
-CONFIG_DESKTOP=y
-# CONFIG_EXTRA_COMPAT is not set
-CONFIG_INCLUDE_SUSv2=y
-# CONFIG_USE_PORTABLE_CODE is not set
-CONFIG_PLATFORM_LINUX=y
-CONFIG_FEATURE_BUFFERS_USE_MALLOC=y
-# CONFIG_FEATURE_BUFFERS_GO_ON_STACK is not set
-# CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
-CONFIG_SHOW_USAGE=y
-CONFIG_FEATURE_VERBOSE_USAGE=y
-# CONFIG_FEATURE_COMPRESS_USAGE is not set
-CONFIG_FEATURE_INSTALLER=y
-# CONFIG_INSTALL_NO_USR is not set
-CONFIG_LOCALE_SUPPORT=y
-CONFIG_UNICODE_SUPPORT=y
-CONFIG_UNICODE_USING_LOCALE=y
-# CONFIG_FEATURE_CHECK_UNICODE_IN_ENV is not set
-CONFIG_SUBST_WCHAR=63
-CONFIG_LAST_SUPPORTED_WCHAR=767
-CONFIG_UNICODE_COMBINING_WCHARS=y
-CONFIG_UNICODE_WIDE_WCHARS=y
-# CONFIG_UNICODE_BIDI_SUPPORT is not set
-# CONFIG_UNICODE_NEUTRAL_TABLE is not set
-# CONFIG_UNICODE_PRESERVE_BROKEN is not set
-CONFIG_LONG_OPTS=y
-CONFIG_FEATURE_DEVPTS=y
-CONFIG_FEATURE_CLEAN_UP=y
-CONFIG_FEATURE_UTMP=y
-CONFIG_FEATURE_WTMP=y
-# CONFIG_FEATURE_PIDFILE is not set
-CONFIG_PID_FILE_PATH=""
-CONFIG_FEATURE_SUID=y
-# CONFIG_FEATURE_SUID_CONFIG is not set
-# CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
-# CONFIG_SELINUX is not set
-# CONFIG_FEATURE_PREFER_APPLETS is not set
-CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
-CONFIG_FEATURE_SYSLOG=y
-# CONFIG_FEATURE_HAVE_RPC is not set
-
-#
-# Build Options
-#
-# CONFIG_STATIC is not set
-# CONFIG_PIE is not set
-# CONFIG_NOMMU is not set
-# CONFIG_BUILD_LIBBUSYBOX is not set
-# CONFIG_FEATURE_INDIVIDUAL is not set
-# CONFIG_FEATURE_SHARED_BUSYBOX is not set
-CONFIG_LFS=y
-CONFIG_CROSS_COMPILER_PREFIX=""
-CONFIG_SYSROOT=""
-CONFIG_EXTRA_CFLAGS=""
-CONFIG_EXTRA_LDFLAGS=""
-CONFIG_EXTRA_LDLIBS=""
-
-#
-# Debugging Options
-#
-# CONFIG_DEBUG is not set
-# CONFIG_DEBUG_PESSIMIZE is not set
-# CONFIG_WERROR is not set
-CONFIG_NO_DEBUG_LIB=y
-# CONFIG_DMALLOC is not set
-# CONFIG_EFENCE is not set
-
-#
-# Installation Options ("make install" behavior)
-#
-CONFIG_INSTALL_APPLET_SYMLINKS=y
-# CONFIG_INSTALL_APPLET_HARDLINKS is not set
-# CONFIG_INSTALL_APPLET_SCRIPT_WRAPPERS is not set
-# CONFIG_INSTALL_APPLET_DONT is not set
-# CONFIG_INSTALL_SH_APPLET_SYMLINK is not set
-# CONFIG_INSTALL_SH_APPLET_HARDLINK is not set
-# CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER is not set
-CONFIG_PREFIX="./_install"
-
-#
-# Busybox Library Tuning
-#
-# CONFIG_FEATURE_SYSTEMD is not set
-CONFIG_FEATURE_RTMINMAX=y
-CONFIG_PASSWORD_MINLEN=6
-CONFIG_MD5_SMALL=0
-CONFIG_SHA3_SMALL=1
-CONFIG_FEATURE_FAST_TOP=y
-CONFIG_FEATURE_ETC_NETWORKS=y
-CONFIG_FEATURE_USE_TERMIOS=y
-CONFIG_FEATURE_EDITING=y
-CONFIG_FEATURE_EDITING_MAX_LEN=1024
-CONFIG_FEATURE_EDITING_VI=y
-CONFIG_FEATURE_EDITING_HISTORY=999
-CONFIG_FEATURE_EDITING_SAVEHISTORY=y
-CONFIG_FEATURE_EDITING_SAVE_ON_EXIT=y
-CONFIG_FEATURE_REVERSE_SEARCH=y
-CONFIG_FEATURE_TAB_COMPLETION=y
-CONFIG_FEATURE_USERNAME_COMPLETION=y
-CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
-CONFIG_FEATURE_EDITING_ASK_TERMINAL=y
-CONFIG_FEATURE_NON_POSIX_CP=y
-CONFIG_FEATURE_VERBOSE_CP_MESSAGE=y
-CONFIG_FEATURE_COPYBUF_KB=4
-CONFIG_FEATURE_SKIP_ROOTFS=y
-CONFIG_MONOTONIC_SYSCALL=y
-CONFIG_IOCTL_HEX2STR_ERROR=y
-# CONFIG_FEATURE_HWIB is not set
-
-#
-# Applets
-#
-
-#
-# Archival Utilities
-#
-# CONFIG_FEATURE_SEAMLESS_XZ is not set
-# CONFIG_FEATURE_SEAMLESS_LZMA is not set
-# CONFIG_FEATURE_SEAMLESS_BZ2 is not set
-# CONFIG_FEATURE_SEAMLESS_GZ is not set
-# CONFIG_FEATURE_SEAMLESS_Z is not set
-# CONFIG_AR is not set
-# CONFIG_FEATURE_AR_LONG_FILENAMES is not set
-# CONFIG_FEATURE_AR_CREATE is not set
-CONFIG_BUNZIP2=y
-CONFIG_BZIP2=y
-# CONFIG_CPIO is not set
-# CONFIG_FEATURE_CPIO_O is not set
-# CONFIG_FEATURE_CPIO_P is not set
-# CONFIG_DPKG is not set
-# CONFIG_DPKG_DEB is not set
-# CONFIG_FEATURE_DPKG_DEB_EXTRACT_ONLY is not set
-CONFIG_GUNZIP=y
-CONFIG_GZIP=y
-# CONFIG_FEATURE_GZIP_LONG_OPTIONS is not set
-CONFIG_GZIP_FAST=2
-# CONFIG_LZOP is not set
-# CONFIG_LZOP_COMPR_HIGH is not set
-# CONFIG_RPM2CPIO is not set
-# CONFIG_RPM is not set
-CONFIG_TAR=y
-CONFIG_FEATURE_TAR_CREATE=y
-# CONFIG_FEATURE_TAR_AUTODETECT is not set
-CONFIG_FEATURE_TAR_FROM=y
-# CONFIG_FEATURE_TAR_OLDGNU_COMPATIBILITY is not set
-# CONFIG_FEATURE_TAR_OLDSUN_COMPATIBILITY is not set
-CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
-CONFIG_FEATURE_TAR_LONG_OPTIONS=y
-CONFIG_FEATURE_TAR_TO_COMMAND=y
-CONFIG_FEATURE_TAR_UNAME_GNAME=y
-CONFIG_FEATURE_TAR_NOPRESERVE_TIME=y
-# CONFIG_FEATURE_TAR_SELINUX is not set
-# CONFIG_UNCOMPRESS is not set
-CONFIG_UNLZMA=y
-CONFIG_FEATURE_LZMA_FAST=y
-# CONFIG_LZMA is not set
-CONFIG_UNXZ=y
-# CONFIG_XZ is not set
-CONFIG_UNZIP=y
-
-#
-# Coreutils
-#
-CONFIG_BASENAME=y
-CONFIG_CAT=y
-CONFIG_DATE=y
-CONFIG_FEATURE_DATE_ISOFMT=y
-# CONFIG_FEATURE_DATE_NANO is not set
-CONFIG_FEATURE_DATE_COMPAT=y
-CONFIG_HOSTID=y
-CONFIG_ID=y
-# CONFIG_GROUPS is not set
-CONFIG_TEST=y
-CONFIG_FEATURE_TEST_64=y
-CONFIG_TOUCH=y
-CONFIG_FEATURE_TOUCH_SUSV3=y
-CONFIG_TR=y
-CONFIG_FEATURE_TR_CLASSES=y
-CONFIG_FEATURE_TR_EQUIV=y
-CONFIG_BASE64=y
-CONFIG_WHO=y
-# CONFIG_USERS is not set
-# CONFIG_CAL is not set
-# CONFIG_CATV is not set
-CONFIG_CHGRP=y
-CONFIG_CHMOD=y
-CONFIG_CHOWN=y
-# CONFIG_FEATURE_CHOWN_LONG_OPTIONS is not set
-# CONFIG_CHROOT is not set
-# CONFIG_CKSUM is not set
-# CONFIG_COMM is not set
-CONFIG_CP=y
-CONFIG_FEATURE_CP_LONG_OPTIONS=y
-CONFIG_CUT=y
-CONFIG_DD=y
-CONFIG_FEATURE_DD_SIGNAL_HANDLING=y
-CONFIG_FEATURE_DD_THIRD_STATUS_LINE=y
-CONFIG_FEATURE_DD_IBS_OBS=y
-CONFIG_DF=y
-CONFIG_FEATURE_DF_FANCY=y
-CONFIG_DIRNAME=y
-# CONFIG_DOS2UNIX is not set
-# CONFIG_UNIX2DOS is not set
-CONFIG_DU=y
-CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K=y
-CONFIG_ECHO=y
-CONFIG_FEATURE_FANCY_ECHO=y
-CONFIG_ENV=y
-# CONFIG_FEATURE_ENV_LONG_OPTIONS is not set
-# CONFIG_EXPAND is not set
-# CONFIG_FEATURE_EXPAND_LONG_OPTIONS is not set
-CONFIG_EXPR=y
-CONFIG_EXPR_MATH_SUPPORT_64=y
-CONFIG_FALSE=y
-# CONFIG_FOLD is not set
-# CONFIG_FSYNC is not set
-CONFIG_HEAD=y
-CONFIG_FEATURE_FANCY_HEAD=y
-CONFIG_INSTALL=y
-CONFIG_FEATURE_INSTALL_LONG_OPTIONS=y
-CONFIG_LN=y
-CONFIG_LOGNAME=y
-CONFIG_LS=y
-CONFIG_FEATURE_LS_FILETYPES=y
-CONFIG_FEATURE_LS_FOLLOWLINKS=y
-CONFIG_FEATURE_LS_RECURSIVE=y
-CONFIG_FEATURE_LS_SORTFILES=y
-CONFIG_FEATURE_LS_TIMESTAMPS=y
-CONFIG_FEATURE_LS_USERNAME=y
-CONFIG_FEATURE_LS_COLOR=y
-# CONFIG_FEATURE_LS_COLOR_IS_DEFAULT is not set
-CONFIG_MD5SUM=y
-CONFIG_MKDIR=y
-CONFIG_FEATURE_MKDIR_LONG_OPTIONS=y
-CONFIG_MKFIFO=y
-CONFIG_MKNOD=y
-CONFIG_MV=y
-CONFIG_FEATURE_MV_LONG_OPTIONS=y
-CONFIG_NICE=y
-CONFIG_NOHUP=y
-CONFIG_OD=y
-CONFIG_PRINTENV=y
-CONFIG_PRINTF=y
-CONFIG_PWD=y
-CONFIG_READLINK=y
-CONFIG_FEATURE_READLINK_FOLLOW=y
-CONFIG_REALPATH=y
-CONFIG_RM=y
-# CONFIG_RMDIR is not set
-# CONFIG_FEATURE_RMDIR_LONG_OPTIONS is not set
-CONFIG_SEQ=y
-CONFIG_SHA1SUM=y
-CONFIG_SHA256SUM=y
-CONFIG_SHA512SUM=y
-CONFIG_SHA3SUM=y
-CONFIG_SLEEP=y
-CONFIG_FEATURE_FANCY_SLEEP=y
-CONFIG_FEATURE_FLOAT_SLEEP=y
-CONFIG_SORT=y
-CONFIG_FEATURE_SORT_BIG=y
-# CONFIG_SPLIT is not set
-# CONFIG_FEATURE_SPLIT_FANCY is not set
-# CONFIG_STAT is not set
-# CONFIG_FEATURE_STAT_FORMAT is not set
-CONFIG_STTY=y
-# CONFIG_SUM is not set
-CONFIG_SYNC=y
-# CONFIG_TAC is not set
-CONFIG_TAIL=y
-CONFIG_FEATURE_FANCY_TAIL=y
-CONFIG_TEE=y
-CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
-CONFIG_TRUE=y
-CONFIG_TTY=y
-CONFIG_UNAME=y
-# CONFIG_UNEXPAND is not set
-# CONFIG_FEATURE_UNEXPAND_LONG_OPTIONS is not set
-CONFIG_UNIQ=y
-CONFIG_USLEEP=y
-# CONFIG_UUDECODE is not set
-# CONFIG_UUENCODE is not set
-CONFIG_WC=y
-# CONFIG_FEATURE_WC_LARGE is not set
-CONFIG_WHOAMI=y
-CONFIG_YES=y
-
-#
-# Common options for cp and mv
-#
-CONFIG_FEATURE_PRESERVE_HARDLINKS=y
-
-#
-# Common options for ls, more and telnet
-#
-CONFIG_FEATURE_AUTOWIDTH=y
-
-#
-# Common options for df, du, ls
-#
-CONFIG_FEATURE_HUMAN_READABLE=y
-
-#
-# Common options for md5sum, sha1sum, sha256sum, sha512sum, sha3sum
-#
-CONFIG_FEATURE_MD5_SHA1_SUM_CHECK=y
-
-#
-# Console Utilities
-#
-# CONFIG_CHVT is not set
-# CONFIG_FGCONSOLE is not set
-CONFIG_CLEAR=y
-# CONFIG_DEALLOCVT is not set
-# CONFIG_DUMPKMAP is not set
-# CONFIG_KBD_MODE is not set
-# CONFIG_LOADFONT is not set
-# CONFIG_LOADKMAP is not set
-CONFIG_OPENVT=y
-CONFIG_RESET=y
-CONFIG_RESIZE=y
-CONFIG_FEATURE_RESIZE_PRINT=y
-CONFIG_SETCONSOLE=y
-# CONFIG_FEATURE_SETCONSOLE_LONG_OPTIONS is not set
-# CONFIG_SETFONT is not set
-# CONFIG_FEATURE_SETFONT_TEXTUAL_MAP is not set
-CONFIG_DEFAULT_SETFONT_DIR=""
-# CONFIG_SETKEYCODES is not set
-CONFIG_SETLOGCONS=y
-# CONFIG_SHOWKEY is not set
-# CONFIG_FEATURE_LOADFONT_PSF2 is not set
-# CONFIG_FEATURE_LOADFONT_RAW is not set
-
-#
-# Debian Utilities
-#
-CONFIG_MKTEMP=y
-CONFIG_PIPE_PROGRESS=y
-CONFIG_RUN_PARTS=y
-CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
-# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
-CONFIG_START_STOP_DAEMON=y
-CONFIG_FEATURE_START_STOP_DAEMON_FANCY=y
-CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y
-CONFIG_WHICH=y
-
-#
-# Editors
-#
-# CONFIG_PATCH is not set
-CONFIG_VI=y
-CONFIG_FEATURE_VI_MAX_LEN=4096
-CONFIG_FEATURE_VI_8BIT=y
-CONFIG_FEATURE_VI_COLON=y
-CONFIG_FEATURE_VI_YANKMARK=y
-CONFIG_FEATURE_VI_SEARCH=y
-CONFIG_FEATURE_VI_REGEX_SEARCH=y
-CONFIG_FEATURE_VI_USE_SIGNALS=y
-CONFIG_FEATURE_VI_DOT_CMD=y
-CONFIG_FEATURE_VI_READONLY=y
-CONFIG_FEATURE_VI_SETOPTS=y
-CONFIG_FEATURE_VI_SET=y
-CONFIG_FEATURE_VI_WIN_RESIZE=y
-CONFIG_FEATURE_VI_ASK_TERMINAL=y
-CONFIG_AWK=y
-CONFIG_FEATURE_AWK_LIBM=y
-CONFIG_CMP=y
-CONFIG_DIFF=y
-CONFIG_FEATURE_DIFF_LONG_OPTIONS=y
-CONFIG_FEATURE_DIFF_DIR=y
-# CONFIG_ED is not set
-CONFIG_SED=y
-CONFIG_FEATURE_ALLOW_EXEC=y
-
-#
-# Finding Utilities
-#
-CONFIG_FIND=y
-CONFIG_FEATURE_FIND_PRINT0=y
-CONFIG_FEATURE_FIND_MTIME=y
-CONFIG_FEATURE_FIND_MMIN=y
-CONFIG_FEATURE_FIND_PERM=y
-CONFIG_FEATURE_FIND_TYPE=y
-CONFIG_FEATURE_FIND_XDEV=y
-CONFIG_FEATURE_FIND_MAXDEPTH=y
-CONFIG_FEATURE_FIND_NEWER=y
-CONFIG_FEATURE_FIND_INUM=y
-CONFIG_FEATURE_FIND_EXEC=y
-CONFIG_FEATURE_FIND_USER=y
-CONFIG_FEATURE_FIND_GROUP=y
-CONFIG_FEATURE_FIND_NOT=y
-CONFIG_FEATURE_FIND_DEPTH=y
-CONFIG_FEATURE_FIND_PAREN=y
-CONFIG_FEATURE_FIND_SIZE=y
-CONFIG_FEATURE_FIND_PRUNE=y
-CONFIG_FEATURE_FIND_DELETE=y
-CONFIG_FEATURE_FIND_PATH=y
-CONFIG_FEATURE_FIND_REGEX=y
-# CONFIG_FEATURE_FIND_CONTEXT is not set
-CONFIG_FEATURE_FIND_LINKS=y
-CONFIG_GREP=y
-CONFIG_FEATURE_GREP_EGREP_ALIAS=y
-CONFIG_FEATURE_GREP_FGREP_ALIAS=y
-CONFIG_FEATURE_GREP_CONTEXT=y
-CONFIG_XARGS=y
-# CONFIG_FEATURE_XARGS_SUPPORT_CONFIRMATION is not set
-CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
-CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
-CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
-
-#
-# Init Utilities
-#
-# CONFIG_BOOTCHARTD is not set
-# CONFIG_FEATURE_BOOTCHARTD_BLOATED_HEADER is not set
-# CONFIG_FEATURE_BOOTCHARTD_CONFIG_FILE is not set
-CONFIG_HALT=y
-# CONFIG_FEATURE_CALL_TELINIT is not set
-CONFIG_TELINIT_PATH=""
-CONFIG_INIT=y
-CONFIG_FEATURE_USE_INITTAB=y
-CONFIG_FEATURE_KILL_REMOVED=y
-CONFIG_FEATURE_KILL_DELAY=2
-CONFIG_FEATURE_INIT_SCTTY=y
-CONFIG_FEATURE_INIT_SYSLOG=y
-CONFIG_FEATURE_EXTRA_QUIET=y
-# CONFIG_FEATURE_INIT_COREDUMPS is not set
-CONFIG_FEATURE_INITRD=y
-CONFIG_INIT_TERMINAL_TYPE="linux"
-# CONFIG_MESG is not set
-# CONFIG_FEATURE_MESG_ENABLE_ONLY_GROUP is not set
-
-#
-# Login/Password Management Utilities
-#
-# CONFIG_ADD_SHELL is not set
-# CONFIG_REMOVE_SHELL is not set
-CONFIG_FEATURE_SHADOWPASSWDS=y
-# CONFIG_USE_BB_PWD_GRP is not set
-# CONFIG_USE_BB_SHADOW is not set
-# CONFIG_USE_BB_CRYPT is not set
-# CONFIG_USE_BB_CRYPT_SHA is not set
-# CONFIG_ADDUSER is not set
-# CONFIG_FEATURE_ADDUSER_LONG_OPTIONS is not set
-# CONFIG_FEATURE_CHECK_NAMES is not set
-CONFIG_FIRST_SYSTEM_ID=0
-CONFIG_LAST_SYSTEM_ID=0
-# CONFIG_ADDGROUP is not set
-# CONFIG_FEATURE_ADDGROUP_LONG_OPTIONS is not set
-# CONFIG_FEATURE_ADDUSER_TO_GROUP is not set
-# CONFIG_DELUSER is not set
-# CONFIG_DELGROUP is not set
-# CONFIG_FEATURE_DEL_USER_FROM_GROUP is not set
-CONFIG_GETTY=y
-CONFIG_LOGIN=y
-CONFIG_LOGIN_SESSION_AS_CHILD=y
-# CONFIG_PAM is not set
-# CONFIG_LOGIN_SCRIPTS is not set
-CONFIG_FEATURE_NOLOGIN=y
-CONFIG_FEATURE_SECURETTY=y
-# CONFIG_PASSWD is not set
-# CONFIG_FEATURE_PASSWD_WEAK_CHECK is not set
-# CONFIG_CRYPTPW is not set
-# CONFIG_CHPASSWD is not set
-CONFIG_FEATURE_DEFAULT_PASSWD_ALGO=""
-CONFIG_SU=y
-CONFIG_FEATURE_SU_SYSLOG=y
-CONFIG_FEATURE_SU_CHECKS_SHELLS=y
-CONFIG_SULOGIN=y
-CONFIG_VLOCK=y
-
-#
-# Linux Ext2 FS Progs
-#
-# CONFIG_CHATTR is not set
-CONFIG_FSCK=y
-# CONFIG_LSATTR is not set
-# CONFIG_TUNE2FS is not set
-
-#
-# Linux Module Utilities
-#
-# CONFIG_MODINFO is not set
-# CONFIG_MODPROBE_SMALL is not set
-# CONFIG_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE is not set
-# CONFIG_FEATURE_MODPROBE_SMALL_CHECK_ALREADY_LOADED is not set
-CONFIG_INSMOD=y
-CONFIG_RMMOD=y
-CONFIG_LSMOD=y
-CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT=y
-CONFIG_MODPROBE=y
-# CONFIG_FEATURE_MODPROBE_BLACKLIST is not set
-# CONFIG_DEPMOD is not set
-
-#
-# Options common to multiple modutils
-#
-# CONFIG_FEATURE_2_4_MODULES is not set
-CONFIG_FEATURE_INSMOD_TRY_MMAP=y
-# CONFIG_FEATURE_INSMOD_VERSION_CHECKING is not set
-# CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS is not set
-# CONFIG_FEATURE_INSMOD_LOADINKMEM is not set
-# CONFIG_FEATURE_INSMOD_LOAD_MAP is not set
-# CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL is not set
-CONFIG_FEATURE_CHECK_TAINTED_MODULE=y
-CONFIG_FEATURE_MODUTILS_ALIAS=y
-CONFIG_FEATURE_MODUTILS_SYMBOLS=y
-CONFIG_DEFAULT_MODULES_DIR="/lib/modules"
-CONFIG_DEFAULT_DEPMOD_FILE="modules.dep"
-
-#
-# Linux System Utilities
-#
-# CONFIG_BLOCKDEV is not set
-# CONFIG_MDEV is not set
-# CONFIG_FEATURE_MDEV_CONF is not set
-# CONFIG_FEATURE_MDEV_RENAME is not set
-# CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
-# CONFIG_FEATURE_MDEV_EXEC is not set
-# CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
-# CONFIG_REV is not set
-# CONFIG_ACPID is not set
-# CONFIG_FEATURE_ACPID_COMPAT is not set
-CONFIG_BLKID=y
-# CONFIG_FEATURE_BLKID_TYPE is not set
-CONFIG_DMESG=y
-CONFIG_FEATURE_DMESG_PRETTY=y
-# CONFIG_FBSET is not set
-# CONFIG_FEATURE_FBSET_FANCY is not set
-# CONFIG_FEATURE_FBSET_READMODE is not set
-# CONFIG_FDFLUSH is not set
-# CONFIG_FDFORMAT is not set
-# CONFIG_FDISK is not set
-# CONFIG_FDISK_SUPPORT_LARGE_DISKS is not set
-# CONFIG_FEATURE_FDISK_WRITABLE is not set
-# CONFIG_FEATURE_AIX_LABEL is not set
-# CONFIG_FEATURE_SGI_LABEL is not set
-# CONFIG_FEATURE_SUN_LABEL is not set
-# CONFIG_FEATURE_OSF_LABEL is not set
-# CONFIG_FEATURE_GPT_LABEL is not set
-# CONFIG_FEATURE_FDISK_ADVANCED is not set
-# CONFIG_FINDFS is not set
-# CONFIG_FLOCK is not set
-CONFIG_FREERAMDISK=y
-# CONFIG_FSCK_MINIX is not set
-# CONFIG_MKFS_EXT2 is not set
-# CONFIG_MKFS_MINIX is not set
-# CONFIG_FEATURE_MINIX2 is not set
-# CONFIG_MKFS_REISER is not set
-# CONFIG_MKFS_VFAT is not set
-CONFIG_GETOPT=y
-CONFIG_FEATURE_GETOPT_LONG=y
-CONFIG_HEXDUMP=y
-# CONFIG_FEATURE_HEXDUMP_REVERSE is not set
-# CONFIG_HD is not set
-CONFIG_HWCLOCK=y
-CONFIG_FEATURE_HWCLOCK_LONG_OPTIONS=y
-CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS=y
-CONFIG_IPCRM=y
-CONFIG_IPCS=y
-CONFIG_LOSETUP=y
-# CONFIG_LSPCI is not set
-# CONFIG_LSUSB is not set
-# CONFIG_MKSWAP is not set
-# CONFIG_FEATURE_MKSWAP_UUID is not set
-CONFIG_MORE=y
-CONFIG_MOUNT=y
-CONFIG_FEATURE_MOUNT_FAKE=y
-CONFIG_FEATURE_MOUNT_VERBOSE=y
-CONFIG_FEATURE_MOUNT_HELPERS=y
-CONFIG_FEATURE_MOUNT_LABEL=y
-# CONFIG_FEATURE_MOUNT_NFS is not set
-CONFIG_FEATURE_MOUNT_CIFS=y
-CONFIG_FEATURE_MOUNT_FLAGS=y
-CONFIG_FEATURE_MOUNT_FSTAB=y
-# CONFIG_PIVOT_ROOT is not set
-# CONFIG_RDATE is not set
-# CONFIG_RDEV is not set
-# CONFIG_READPROFILE is not set
-# CONFIG_RTCWAKE is not set
-# CONFIG_SCRIPT is not set
-# CONFIG_SCRIPTREPLAY is not set
-# CONFIG_SETARCH is not set
-# CONFIG_SWAPONOFF is not set
-# CONFIG_FEATURE_SWAPON_PRI is not set
-CONFIG_SWITCH_ROOT=y
-CONFIG_UMOUNT=y
-CONFIG_FEATURE_UMOUNT_ALL=y
-
-#
-# Common options for mount/umount
-#
-CONFIG_FEATURE_MOUNT_LOOP=y
-CONFIG_FEATURE_MOUNT_LOOP_CREATE=y
-# CONFIG_FEATURE_MTAB_SUPPORT is not set
-CONFIG_VOLUMEID=y
-
-#
-# Filesystem/Volume identification
-#
-CONFIG_FEATURE_VOLUMEID_EXT=y
-CONFIG_FEATURE_VOLUMEID_BTRFS=y
-# CONFIG_FEATURE_VOLUMEID_REISERFS is not set
-CONFIG_FEATURE_VOLUMEID_FAT=y
-CONFIG_FEATURE_VOLUMEID_EXFAT=y
-# CONFIG_FEATURE_VOLUMEID_HFS is not set
-# CONFIG_FEATURE_VOLUMEID_JFS is not set
-# CONFIG_FEATURE_VOLUMEID_XFS is not set
-CONFIG_FEATURE_VOLUMEID_NILFS=y
-CONFIG_FEATURE_VOLUMEID_NTFS=y
-CONFIG_FEATURE_VOLUMEID_ISO9660=y
-CONFIG_FEATURE_VOLUMEID_UDF=y
-# CONFIG_FEATURE_VOLUMEID_LUKS is not set
-CONFIG_FEATURE_VOLUMEID_LINUXSWAP=y
-# CONFIG_FEATURE_VOLUMEID_CRAMFS is not set
-# CONFIG_FEATURE_VOLUMEID_ROMFS is not set
-# CONFIG_FEATURE_VOLUMEID_SQUASHFS is not set
-# CONFIG_FEATURE_VOLUMEID_SYSV is not set
-# CONFIG_FEATURE_VOLUMEID_OCFS2 is not set
-CONFIG_FEATURE_VOLUMEID_LINUXRAID=y
-
-#
-# Miscellaneous Utilities
-#
-# CONFIG_CONSPY is not set
-CONFIG_LESS=y
-CONFIG_FEATURE_LESS_MAXLINES=9999999
-CONFIG_FEATURE_LESS_BRACKETS=y
-CONFIG_FEATURE_LESS_FLAGS=y
-# CONFIG_FEATURE_LESS_MARKS is not set
-CONFIG_FEATURE_LESS_REGEXP=y
-# CONFIG_FEATURE_LESS_WINCH is not set
-# CONFIG_FEATURE_LESS_ASK_TERMINAL is not set
-# CONFIG_FEATURE_LESS_DASHCMD is not set
-# CONFIG_FEATURE_LESS_LINENUMS is not set
-# CONFIG_NANDWRITE is not set
-# CONFIG_NANDDUMP is not set
-# CONFIG_SETSERIAL is not set
-# CONFIG_UBIATTACH is not set
-# CONFIG_UBIDETACH is not set
-# CONFIG_UBIMKVOL is not set
-# CONFIG_UBIRMVOL is not set
-# CONFIG_UBIRSVOL is not set
-# CONFIG_UBIUPDATEVOL is not set
-# CONFIG_ADJTIMEX is not set
-# CONFIG_BBCONFIG is not set
-# CONFIG_FEATURE_COMPRESS_BBCONFIG is not set
-# CONFIG_BEEP is not set
-CONFIG_FEATURE_BEEP_FREQ=0
-CONFIG_FEATURE_BEEP_LENGTH_MS=0
-# CONFIG_CHAT is not set
-# CONFIG_FEATURE_CHAT_NOFAIL is not set
-# CONFIG_FEATURE_CHAT_TTY_HIFI is not set
-# CONFIG_FEATURE_CHAT_IMPLICIT_CR is not set
-# CONFIG_FEATURE_CHAT_SWALLOW_OPTS is not set
-# CONFIG_FEATURE_CHAT_SEND_ESCAPES is not set
-# CONFIG_FEATURE_CHAT_VAR_ABORT_LEN is not set
-# CONFIG_FEATURE_CHAT_CLR_ABORT is not set
-# CONFIG_CHRT is not set
-CONFIG_CROND=y
-# CONFIG_FEATURE_CROND_D is not set
-# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
-CONFIG_FEATURE_CROND_DIR="/var/spool/cron"
-CONFIG_CRONTAB=y
-CONFIG_DC=y
-CONFIG_FEATURE_DC_LIBM=y
-# CONFIG_DEVFSD is not set
-# CONFIG_DEVFSD_MODLOAD is not set
-# CONFIG_DEVFSD_FG_NP is not set
-# CONFIG_DEVFSD_VERBOSE is not set
-# CONFIG_FEATURE_DEVFS is not set
-# CONFIG_DEVMEM is not set
-# CONFIG_EJECT is not set
-# CONFIG_FEATURE_EJECT_SCSI is not set
-# CONFIG_FBSPLASH is not set
-# CONFIG_FLASHCP is not set
-# CONFIG_FLASH_LOCK is not set
-# CONFIG_FLASH_UNLOCK is not set
-# CONFIG_FLASH_ERASEALL is not set
-# CONFIG_IONICE is not set
-# CONFIG_INOTIFYD is not set
-# CONFIG_LAST is not set
-# CONFIG_FEATURE_LAST_SMALL is not set
-# CONFIG_FEATURE_LAST_FANCY is not set
-# CONFIG_HDPARM is not set
-# CONFIG_FEATURE_HDPARM_GET_IDENTITY is not set
-# CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is not set
-# CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is not set
-# CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET is not set
-# CONFIG_FEATURE_HDPARM_HDIO_TRISTATE_HWIF is not set
-# CONFIG_FEATURE_HDPARM_HDIO_GETSET_DMA is not set
-# CONFIG_MAKEDEVS is not set
-# CONFIG_FEATURE_MAKEDEVS_LEAF is not set
-# CONFIG_FEATURE_MAKEDEVS_TABLE is not set
-# CONFIG_MAN is not set
-# CONFIG_MICROCOM is not set
-CONFIG_MOUNTPOINT=y
-# CONFIG_MT is not set
-# CONFIG_RAIDAUTORUN is not set
-# CONFIG_READAHEAD is not set
-# CONFIG_RFKILL is not set
-CONFIG_RUNLEVEL=y
-# CONFIG_RX is not set
-CONFIG_SETSID=y
-CONFIG_STRINGS=y
-# CONFIG_TASKSET is not set
-# CONFIG_FEATURE_TASKSET_FANCY is not set
-CONFIG_TIME=y
-# CONFIG_TIMEOUT is not set
-# CONFIG_TTYSIZE is not set
-# CONFIG_VOLNAME is not set
-# CONFIG_WALL is not set
-CONFIG_WATCHDOG=y
-
-#
-# Networking Utilities
-#
-# CONFIG_NAMEIF is not set
-# CONFIG_FEATURE_NAMEIF_EXTENDED is not set
-# CONFIG_NBDCLIENT is not set
-# CONFIG_NC is not set
-# CONFIG_NC_SERVER is not set
-# CONFIG_NC_EXTRA is not set
-# CONFIG_NC_110_COMPAT is not set
-CONFIG_PING=y
-# CONFIG_PING6 is not set
-CONFIG_FEATURE_FANCY_PING=y
-# CONFIG_WHOIS is not set
-# CONFIG_FEATURE_IPV6 is not set
-# CONFIG_FEATURE_UNIX_LOCAL is not set
-# CONFIG_FEATURE_PREFER_IPV4_ADDRESS is not set
-# CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
-# CONFIG_ARP is not set
-# CONFIG_ARPING is not set
-# CONFIG_BRCTL is not set
-# CONFIG_FEATURE_BRCTL_FANCY is not set
-# CONFIG_FEATURE_BRCTL_SHOW is not set
-# CONFIG_DNSD is not set
-# CONFIG_ETHER_WAKE is not set
-# CONFIG_FAKEIDENTD is not set
-# CONFIG_FTPD is not set
-# CONFIG_FEATURE_FTP_WRITE is not set
-# CONFIG_FEATURE_FTPD_ACCEPT_BROKEN_LIST is not set
-# CONFIG_FTPGET is not set
-# CONFIG_FTPPUT is not set
-# CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS is not set
-CONFIG_HOSTNAME=y
-# CONFIG_HTTPD is not set
-# CONFIG_FEATURE_HTTPD_RANGES is not set
-# CONFIG_FEATURE_HTTPD_USE_SENDFILE is not set
-# CONFIG_FEATURE_HTTPD_SETUID is not set
-# CONFIG_FEATURE_HTTPD_BASIC_AUTH is not set
-# CONFIG_FEATURE_HTTPD_AUTH_MD5 is not set
-# CONFIG_FEATURE_HTTPD_CGI is not set
-# CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR is not set
-# CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV is not set
-# CONFIG_FEATURE_HTTPD_ENCODE_URL_STR is not set
-# CONFIG_FEATURE_HTTPD_ERROR_PAGES is not set
-# CONFIG_FEATURE_HTTPD_PROXY is not set
-# CONFIG_FEATURE_HTTPD_GZIP is not set
-# CONFIG_IFCONFIG is not set
-# CONFIG_FEATURE_IFCONFIG_STATUS is not set
-# CONFIG_FEATURE_IFCONFIG_SLIP is not set
-# CONFIG_FEATURE_IFCONFIG_MEMSTART_IOADDR_IRQ is not set
-# CONFIG_FEATURE_IFCONFIG_HW is not set
-# CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS is not set
-# CONFIG_IFENSLAVE is not set
-# CONFIG_IFPLUGD is not set
-CONFIG_IFUPDOWN=y
-CONFIG_IFUPDOWN_IFSTATE_PATH="/var/run/ifstate"
-CONFIG_FEATURE_IFUPDOWN_IP=y
-CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN=y
-# CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN is not set
-CONFIG_FEATURE_IFUPDOWN_IPV4=y
-# CONFIG_FEATURE_IFUPDOWN_IPV6 is not set
-# CONFIG_FEATURE_IFUPDOWN_MAPPING is not set
-# CONFIG_FEATURE_IFUPDOWN_EXTERNAL_DHCP is not set
-CONFIG_INETD=y
-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO=y
-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD=y
-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_TIME=y
-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DAYTIME=y
-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_CHARGEN=y
-# CONFIG_FEATURE_INETD_RPC is not set
-CONFIG_IP=y
-CONFIG_FEATURE_IP_ADDRESS=y
-CONFIG_FEATURE_IP_LINK=y
-CONFIG_FEATURE_IP_ROUTE=y
-# CONFIG_FEATURE_IP_TUNNEL is not set
-CONFIG_FEATURE_IP_RULE=y
-# CONFIG_FEATURE_IP_SHORT_FORMS is not set
-# CONFIG_FEATURE_IP_RARE_PROTOCOLS is not set
-# CONFIG_IPADDR is not set
-# CONFIG_IPLINK is not set
-# CONFIG_IPROUTE is not set
-# CONFIG_IPTUNNEL is not set
-# CONFIG_IPRULE is not set
-# CONFIG_IPCALC is not set
-# CONFIG_FEATURE_IPCALC_FANCY is not set
-# CONFIG_FEATURE_IPCALC_LONG_OPTIONS is not set
-# CONFIG_NETSTAT is not set
-# CONFIG_FEATURE_NETSTAT_WIDE is not set
-# CONFIG_FEATURE_NETSTAT_PRG is not set
-# CONFIG_NSLOOKUP is not set
-# CONFIG_NTPD is not set
-# CONFIG_FEATURE_NTPD_SERVER is not set
-# CONFIG_PSCAN is not set
-# CONFIG_ROUTE is not set
-# CONFIG_SLATTACH is not set
-# CONFIG_TCPSVD is not set
-# CONFIG_TELNET is not set
-# CONFIG_FEATURE_TELNET_TTYPE is not set
-# CONFIG_FEATURE_TELNET_AUTOLOGIN is not set
-# CONFIG_TELNETD is not set
-# CONFIG_FEATURE_TELNETD_STANDALONE is not set
-# CONFIG_FEATURE_TELNETD_INETD_WAIT is not set
-# CONFIG_TFTP is not set
-# CONFIG_TFTPD is not set
-# CONFIG_FEATURE_TFTP_GET is not set
-# CONFIG_FEATURE_TFTP_PUT is not set
-# CONFIG_FEATURE_TFTP_BLOCKSIZE is not set
-# CONFIG_FEATURE_TFTP_PROGRESS_BAR is not set
-# CONFIG_TFTP_DEBUG is not set
-# CONFIG_TRACEROUTE is not set
-# CONFIG_TRACEROUTE6 is not set
-# CONFIG_FEATURE_TRACEROUTE_VERBOSE is not set
-# CONFIG_FEATURE_TRACEROUTE_SOURCE_ROUTE is not set
-# CONFIG_FEATURE_TRACEROUTE_USE_ICMP is not set
-# CONFIG_TUNCTL is not set
-# CONFIG_FEATURE_TUNCTL_UG is not set
-# CONFIG_UDHCPC6 is not set
-# CONFIG_UDHCPD is not set
-# CONFIG_DHCPRELAY is not set
-# CONFIG_DUMPLEASES is not set
-# CONFIG_FEATURE_UDHCPD_WRITE_LEASES_EARLY is not set
-# CONFIG_FEATURE_UDHCPD_BASE_IP_ON_MAC is not set
-CONFIG_DHCPD_LEASES_FILE=""
-# CONFIG_UDHCPC is not set
-# CONFIG_FEATURE_UDHCPC_ARPING is not set
-# CONFIG_FEATURE_UDHCP_PORT is not set
-CONFIG_UDHCP_DEBUG=0
-# CONFIG_FEATURE_UDHCP_RFC3397 is not set
-# CONFIG_FEATURE_UDHCP_8021Q is not set
-CONFIG_UDHCPC_DEFAULT_SCRIPT=""
-CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=0
-CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS=""
-# CONFIG_UDPSVD is not set
-# CONFIG_VCONFIG is not set
-CONFIG_WGET=y
-CONFIG_FEATURE_WGET_STATUSBAR=y
-CONFIG_FEATURE_WGET_AUTHENTICATION=y
-CONFIG_FEATURE_WGET_LONG_OPTIONS=y
-CONFIG_FEATURE_WGET_TIMEOUT=y
-# CONFIG_ZCIP is not set
-
-#
-# Print Utilities
-#
-# CONFIG_LPD is not set
-# CONFIG_LPR is not set
-# CONFIG_LPQ is not set
-
-#
-# Mail Utilities
-#
-# CONFIG_MAKEMIME is not set
-CONFIG_FEATURE_MIME_CHARSET=""
-# CONFIG_POPMAILDIR is not set
-# CONFIG_FEATURE_POPMAILDIR_DELIVERY is not set
-# CONFIG_REFORMIME is not set
-# CONFIG_FEATURE_REFORMIME_COMPAT is not set
-# CONFIG_SENDMAIL is not set
-
-#
-# Process Utilities
-#
-# CONFIG_IOSTAT is not set
-CONFIG_LSOF=y
-# CONFIG_MPSTAT is not set
-# CONFIG_NMETER is not set
-# CONFIG_PMAP is not set
-# CONFIG_POWERTOP is not set
-# CONFIG_PSTREE is not set
-# CONFIG_PWDX is not set
-# CONFIG_SMEMCAP is not set
-CONFIG_TOP=y
-CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
-CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS=y
-CONFIG_FEATURE_TOP_SMP_CPU=y
-CONFIG_FEATURE_TOP_DECIMALS=y
-CONFIG_FEATURE_TOP_SMP_PROCESS=y
-CONFIG_FEATURE_TOPMEM=y
-CONFIG_UPTIME=y
-# CONFIG_FEATURE_UPTIME_UTMP_SUPPORT is not set
-CONFIG_FREE=y
-CONFIG_FUSER=y
-CONFIG_KILL=y
-CONFIG_KILLALL=y
-CONFIG_KILLALL5=y
-# CONFIG_PGREP is not set
-CONFIG_PIDOF=y
-CONFIG_FEATURE_PIDOF_SINGLE=y
-CONFIG_FEATURE_PIDOF_OMIT=y
-# CONFIG_PKILL is not set
-CONFIG_PS=y
-# CONFIG_FEATURE_PS_WIDE is not set
-# CONFIG_FEATURE_PS_LONG is not set
-CONFIG_FEATURE_PS_TIME=y
-CONFIG_FEATURE_PS_ADDITIONAL_COLUMNS=y
-# CONFIG_FEATURE_PS_UNUSUAL_SYSTEMS is not set
-CONFIG_RENICE=y
-CONFIG_BB_SYSCTL=y
-CONFIG_FEATURE_SHOW_THREADS=y
-CONFIG_WATCH=y
-
-#
-# Runit Utilities
-#
-# CONFIG_RUNSV is not set
-# CONFIG_RUNSVDIR is not set
-# CONFIG_FEATURE_RUNSVDIR_LOG is not set
-# CONFIG_SV is not set
-CONFIG_SV_DEFAULT_SERVICE_DIR=""
-# CONFIG_SVLOGD is not set
-# CONFIG_CHPST is not set
-# CONFIG_SETUIDGID is not set
-# CONFIG_ENVUIDGID is not set
-# CONFIG_ENVDIR is not set
-# CONFIG_SOFTLIMIT is not set
-# CONFIG_CHCON is not set
-# CONFIG_FEATURE_CHCON_LONG_OPTIONS is not set
-# CONFIG_GETENFORCE is not set
-# CONFIG_GETSEBOOL is not set
-# CONFIG_LOAD_POLICY is not set
-# CONFIG_MATCHPATHCON is not set
-# CONFIG_RESTORECON is not set
-# CONFIG_RUNCON is not set
-# CONFIG_FEATURE_RUNCON_LONG_OPTIONS is not set
-# CONFIG_SELINUXENABLED is not set
-# CONFIG_SETENFORCE is not set
-# CONFIG_SETFILES is not set
-# CONFIG_FEATURE_SETFILES_CHECK_OPTION is not set
-# CONFIG_SETSEBOOL is not set
-# CONFIG_SESTATUS is not set
-
-#
-# Shells
-#
-CONFIG_ASH=y
-CONFIG_ASH_BASH_COMPAT=y
-CONFIG_ASH_IDLE_TIMEOUT=y
-CONFIG_ASH_JOB_CONTROL=y
-CONFIG_ASH_ALIAS=y
-CONFIG_ASH_GETOPTS=y
-CONFIG_ASH_BUILTIN_ECHO=y
-CONFIG_ASH_BUILTIN_PRINTF=y
-CONFIG_ASH_BUILTIN_TEST=y
-CONFIG_ASH_CMDCMD=y
-# CONFIG_ASH_MAIL is not set
-CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
-CONFIG_ASH_RANDOM_SUPPORT=y
-CONFIG_ASH_EXPAND_PRMT=y
-# CONFIG_CTTYHACK is not set
-# CONFIG_HUSH is not set
-# CONFIG_HUSH_BASH_COMPAT is not set
-# CONFIG_HUSH_BRACE_EXPANSION is not set
-# CONFIG_HUSH_HELP is not set
-# CONFIG_HUSH_INTERACTIVE is not set
-# CONFIG_HUSH_SAVEHISTORY is not set
-# CONFIG_HUSH_JOB is not set
-# CONFIG_HUSH_TICK is not set
-# CONFIG_HUSH_IF is not set
-# CONFIG_HUSH_LOOPS is not set
-# CONFIG_HUSH_CASE is not set
-# CONFIG_HUSH_FUNCTIONS is not set
-# CONFIG_HUSH_LOCAL is not set
-# CONFIG_HUSH_RANDOM_SUPPORT is not set
-# CONFIG_HUSH_EXPORT_N is not set
-# CONFIG_HUSH_MODE_X is not set
-# CONFIG_MSH is not set
-CONFIG_FEATURE_SH_IS_ASH=y
-# CONFIG_FEATURE_SH_IS_HUSH is not set
-# CONFIG_FEATURE_SH_IS_NONE is not set
-# CONFIG_FEATURE_BASH_IS_ASH is not set
-# CONFIG_FEATURE_BASH_IS_HUSH is not set
-CONFIG_FEATURE_BASH_IS_NONE=y
-CONFIG_SH_MATH_SUPPORT=y
-CONFIG_SH_MATH_SUPPORT_64=y
-CONFIG_FEATURE_SH_EXTRA_QUIET=y
-# CONFIG_FEATURE_SH_STANDALONE is not set
-# CONFIG_FEATURE_SH_NOFORK is not set
-# CONFIG_FEATURE_SH_HISTFILESIZE is not set
-
-#
-# System Logging Utilities
-#
-CONFIG_SYSLOGD=y
-CONFIG_FEATURE_ROTATE_LOGFILE=y
-CONFIG_FEATURE_REMOTE_LOG=y
-# CONFIG_FEATURE_SYSLOGD_DUP is not set
-# CONFIG_FEATURE_SYSLOGD_CFG is not set
-CONFIG_FEATURE_SYSLOGD_READ_BUFFER_SIZE=256
-# CONFIG_FEATURE_IPC_SYSLOG is not set
-CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=0
-# CONFIG_LOGREAD is not set
-# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
-CONFIG_FEATURE_KMSG_SYSLOG=y
-CONFIG_KLOGD=y
-
-#
-# klogd should not be used together with syslog to kernel printk buffer
-#
-CONFIG_FEATURE_KLOGD_KLOGCTL=y
-CONFIG_LOGGER=y
--------------- next part --------------
-#
-# Automatically generated make config: don't edit
-# crosstool-NG hg+default-47fcff010954 Configuration
-# Mon Jan 21 22:16:42 2013
-#
-CT_CONFIGURE_has_xz=y
-CT_CONFIGURE_has_cvs=y
-CT_CONFIGURE_has_svn=y
-CT_MODULES=y
-
-#
-# Paths and misc options
-#
-
-#
-# crosstool-NG behavior
-#
-# CT_OBSOLETE is not set
-CT_EXPERIMENTAL=y
-# CT_ALLOW_BUILD_AS_ROOT is not set
-# CT_DEBUG_CT is not set
-
-#
-# Paths
-#
-CT_LOCAL_TARBALLS_DIR="${HOME}/src"
-CT_SAVE_TARBALLS=y
-CT_CUSTOM_LOCATION_ROOT_DIR=""
-CT_WORK_DIR="${CT_TOP_DIR}/.build"
-CT_PREFIX_DIR="${HOME}/x-tools/${CT_TARGET}"
-CT_INSTALL_DIR="${CT_PREFIX_DIR}"
-CT_RM_RF_PREFIX_DIR=y
-CT_REMOVE_DOCS=y
-CT_INSTALL_DIR_RO=y
-CT_STRIP_ALL_TOOLCHAIN_EXECUTABLES=y
-
-#
-# Downloading
-#
-# CT_FORBID_DOWNLOAD is not set
-# CT_FORCE_DOWNLOAD is not set
-CT_CONNECT_TIMEOUT=10
-# CT_ONLY_DOWNLOAD is not set
-# CT_USE_MIRROR is not set
-
-#
-# Extracting
-#
-# CT_FORCE_EXTRACT is not set
-CT_OVERIDE_CONFIG_GUESS_SUB=y
-# CT_ONLY_EXTRACT is not set
-CT_PATCH_BUNDLED=y
-# CT_PATCH_LOCAL is not set
-# CT_PATCH_BUNDLED_LOCAL is not set
-# CT_PATCH_LOCAL_BUNDLED is not set
-# CT_PATCH_BUNDLED_FALLBACK_LOCAL is not set
-# CT_PATCH_LOCAL_FALLBACK_BUNDLED is not set
-# CT_PATCH_NONE is not set
-CT_PATCH_ORDER="bundled"
-
-#
-# Build behavior
-#
-CT_PARALLEL_JOBS=0
-CT_LOAD=0
-CT_USE_PIPES=y
-CT_EXTRA_CFLAGS_FOR_BUILD=""
-CT_EXTRA_LDFLAGS_FOR_BUILD=""
-CT_EXTRA_CFLAGS_FOR_HOST=""
-CT_EXTRA_LDFLAGS_FOR_HOST=""
-# CT_CONFIG_SHELL_SH is not set
-# CT_CONFIG_SHELL_ASH is not set
-CT_CONFIG_SHELL_BASH=y
-# CT_CONFIG_SHELL_CUSTOM is not set
-CT_CONFIG_SHELL="${bash}"
-
-#
-# Logging
-#
-# CT_LOG_ERROR is not set
-# CT_LOG_WARN is not set
-# CT_LOG_INFO is not set
-CT_LOG_EXTRA=y
-# CT_LOG_ALL is not set
-# CT_LOG_DEBUG is not set
-CT_LOG_LEVEL_MAX="EXTRA"
-# CT_LOG_SEE_TOOLS_WARN is not set
-CT_LOG_PROGRESS_BAR=y
-CT_LOG_TO_FILE=y
-CT_LOG_FILE_COMPRESS=y
-
-#
-# Target options
-#
-CT_ARCH="arm"
-CT_ARCH_SUPPORTS_BOTH_MMU=y
-CT_ARCH_SUPPORTS_BOTH_ENDIAN=y
-CT_ARCH_SUPPORTS_32=y
-CT_ARCH_SUPPORTS_WITH_ARCH=y
-CT_ARCH_SUPPORTS_WITH_CPU=y
-CT_ARCH_SUPPORTS_WITH_TUNE=y
-CT_ARCH_SUPPORTS_WITH_FLOAT=y
-CT_ARCH_SUPPORTS_WITH_FPU=y
-CT_ARCH_SUPPORTS_SOFTFP=y
-CT_ARCH_DEFAULT_HAS_MMU=y
-CT_ARCH_DEFAULT_LE=y
-CT_ARCH_DEFAULT_32=y
-CT_ARCH_ARCH="armv6zk"
-CT_ARCH_CPU="arm1176jzf-s"
-CT_ARCH_TUNE="arm1176jzf-s"
-CT_ARCH_FPU="vfp"
-# CT_ARCH_BE is not set
-CT_ARCH_LE=y
-CT_ARCH_32=y
-CT_ARCH_BITNESS=32
-CT_ARCH_FLOAT_HW=y
-# CT_ARCH_FLOAT_SW is not set
-CT_TARGET_CFLAGS=""
-CT_TARGET_LDFLAGS=""
-# CT_ARCH_alpha is not set
-CT_ARCH_arm=y
-# CT_ARCH_avr32 is not set
-# CT_ARCH_blackfin is not set
-# CT_ARCH_m68k is not set
-# CT_ARCH_microblaze is not set
-# CT_ARCH_mips is not set
-# CT_ARCH_powerpc is not set
-# CT_ARCH_s390 is not set
-# CT_ARCH_sh is not set
-# CT_ARCH_sparc is not set
-# CT_ARCH_x86 is not set
-CT_ARCH_alpha_AVAILABLE=y
-CT_ARCH_arm_AVAILABLE=y
-CT_ARCH_avr32_AVAILABLE=y
-CT_ARCH_blackfin_AVAILABLE=y
-CT_ARCH_m68k_AVAILABLE=y
-CT_ARCH_microblaze_AVAILABLE=y
-CT_ARCH_mips_AVAILABLE=y
-CT_ARCH_powerpc_AVAILABLE=y
-CT_ARCH_s390_AVAILABLE=y
-CT_ARCH_sh_AVAILABLE=y
-CT_ARCH_sparc_AVAILABLE=y
-CT_ARCH_x86_AVAILABLE=y
-CT_ARCH_SUFFIX="v6"
-
-#
-# Generic target options
-#
-# CT_MULTILIB is not set
-CT_ARCH_USE_MMU=y
-CT_ARCH_ENDIAN="little"
-
-#
-# Target optimisations
-#
-# CT_ARCH_FLOAT_SOFTFP is not set
-CT_ARCH_FLOAT="hard"
-
-#
-# arm other options
-#
-CT_ARCH_ARM_MODE="arm"
-CT_ARCH_ARM_MODE_ARM=y
-# CT_ARCH_ARM_MODE_THUMB is not set
-# CT_ARCH_ARM_INTERWORKING is not set
-CT_ARCH_ARM_EABI_FORCE=y
-CT_ARCH_ARM_EABI=y
-# CT_ARCH_ARM_TUPLE_USE_EABIHF is not set
-
-#
-# Toolchain options
-#
-
-#
-# General toolchain options
-#
-CT_FORCE_SYSROOT=y
-CT_USE_SYSROOT=y
-CT_SYSROOT_NAME="sysroot"
-CT_SYSROOT_DIR_PREFIX=""
-# CT_STATIC_TOOLCHAIN is not set
-CT_TOOLCHAIN_PKGVERSION=""
-CT_TOOLCHAIN_BUGURL=""
-
-#
-# Tuple completion and aliasing
-#
-CT_TARGET_VENDOR="rpi"
-CT_TARGET_ALIAS_SED_EXPR=""
-CT_TARGET_ALIAS=""
-
-#
-# Toolchain type
-#
-# CT_NATIVE is not set
-CT_CROSS=y
-# CT_CROSS_NATIVE is not set
-# CT_CANADIAN is not set
-CT_TOOLCHAIN_TYPE="cross"
-
-#
-# Build system
-#
-CT_BUILD=""
-CT_BUILD_PREFIX=""
-CT_BUILD_SUFFIX=""
-
-#
-# Misc options
-#
-# CT_TOOLCHAIN_ENABLE_NLS is not set
-
-#
-# Operating System
-#
-CT_KERNEL_SUPPORTS_SHARED_LIBS=y
-CT_KERNEL="linux"
-CT_KERNEL_VERSION="3.6.11"
-# CT_KERNEL_bare_metal is not set
-CT_KERNEL_linux=y
-CT_KERNEL_bare_metal_AVAILABLE=y
-CT_KERNEL_linux_AVAILABLE=y
-# CT_KERNEL_V_3_7_3 is not set
-# CT_KERNEL_V_3_7_2 is not set
-# CT_KERNEL_V_3_7_1 is not set
-# CT_KERNEL_V_3_7 is not set
-CT_KERNEL_V_3_6_11=y
-# CT_KERNEL_V_3_5_7 is not set
-# CT_KERNEL_V_3_4_26 is not set
-# CT_KERNEL_V_3_3_8 is not set
-# CT_KERNEL_V_3_2_37 is not set
-# CT_KERNEL_V_3_1_10 is not set
-# CT_KERNEL_V_3_0_59 is not set
-# CT_KERNEL_V_2_6_39_4 is not set
-# CT_KERNEL_V_2_6_38_8 is not set
-# CT_KERNEL_V_2_6_37_6 is not set
-# CT_KERNEL_V_2_6_36_4 is not set
-# CT_KERNEL_V_2_6_33_20 is not set
-# CT_KERNEL_V_2_6_32_60 is not set
-# CT_KERNEL_V_2_6_31_14 is not set
-# CT_KERNEL_V_2_6_27_62 is not set
-# CT_KERNEL_LINUX_CUSTOM is not set
-CT_KERNEL_windows_AVAILABLE=y
-
-#
-# Common kernel options
-#
-CT_SHARED_LIBS=y
-
-#
-# linux other options
-#
-CT_KERNEL_LINUX_VERBOSITY_0=y
-# CT_KERNEL_LINUX_VERBOSITY_1 is not set
-# CT_KERNEL_LINUX_VERBOSITY_2 is not set
-CT_KERNEL_LINUX_VERBOSE_LEVEL=0
-CT_KERNEL_LINUX_INSTALL_CHECK=y
-
-#
-# Binary utilities
-#
-CT_ARCH_BINFMT_ELF=y
-CT_BINUTILS="binutils"
-CT_BINUTILS_binutils=y
-
-#
-# GNU binutils
-#
-# CT_BINUTILS_V_2_23_1 is not set
-CT_BINUTILS_V_2_22=y
-# CT_BINUTILS_V_2_21_53 is not set
-# CT_BINUTILS_V_2_21_1a is not set
-# CT_BINUTILS_V_2_20_1a is not set
-# CT_BINUTILS_V_2_19_1a is not set
-# CT_BINUTILS_V_2_18a is not set
-# CT_BINUTILS_CUSTOM is not set
-CT_BINUTILS_VERSION="2.22"
-CT_BINUTILS_2_22_or_later=y
-CT_BINUTILS_2_21_or_later=y
-CT_BINUTILS_2_20_or_later=y
-CT_BINUTILS_2_19_or_later=y
-CT_BINUTILS_2_18_or_later=y
-CT_BINUTILS_HAS_HASH_STYLE=y
-CT_BINUTILS_HAS_GOLD=y
-CT_BINUTILS_GOLD_SUPPORTS_ARCH=y
-CT_BINUTILS_HAS_PLUGINS=y
-CT_BINUTILS_HAS_PKGVERSION_BUGURL=y
-CT_BINUTILS_FORCE_LD_BFD=y
-# CT_BINUTILS_LINKER_LD is not set
-CT_BINUTILS_LINKER_LD_GOLD=y
-# CT_BINUTILS_LINKER_GOLD_LD is not set
-CT_BINUTILS_GOLD_INSTALLED=y
-CT_BINUTILS_GOLD_THREADS=y
-CT_BINUTILS_LINKER_BOTH=y
-CT_BINUTILS_LINKERS_LIST="ld,gold"
-CT_BINUTILS_LD_WRAPPER=y
-CT_BINUTILS_LINKER_DEFAULT="bfd"
-CT_BINUTILS_PLUGINS=y
-CT_BINUTILS_EXTRA_CONFIG_ARRAY=""
-# CT_BINUTILS_FOR_TARGET is not set
-
-#
-# binutils other options
-#
-
-#
-# C compiler
-#
-CT_CC="gcc"
-CT_CC_VERSION="linaro-4.7-2013.01"
-CT_CC_CORE_PASSES_NEEDED=y
-CT_CC_gcc=y
-CT_CC_GCC_SHOW_LINARO=y
-CT_CC_V_linaro_4_7_2013_01=y
-# CT_CC_V_4_7_2 is not set
-# CT_CC_V_4_7_1 is not set
-# CT_CC_V_4_7_0 is not set
-# CT_CC_V_linaro_4_6_2013_01 is not set
-# CT_CC_V_4_6_3 is not set
-# CT_CC_V_4_6_2 is not set
-# CT_CC_V_4_6_1 is not set
-# CT_CC_V_4_6_0 is not set
-# CT_CC_V_linaro_4_5_2012_03 is not set
-# CT_CC_V_4_5_3 is not set
-# CT_CC_V_4_5_2 is not set
-# CT_CC_V_4_5_1 is not set
-# CT_CC_V_4_5_0 is not set
-# CT_CC_V_linaro_4_4_2011_02_0 is not set
-# CT_CC_V_4_4_7 is not set
-# CT_CC_V_4_4_6 is not set
-# CT_CC_V_4_4_5 is not set
-# CT_CC_V_4_4_4 is not set
-# CT_CC_V_4_4_3 is not set
-# CT_CC_V_4_4_2 is not set
-# CT_CC_V_4_4_1 is not set
-# CT_CC_V_4_4_0 is not set
-# CT_CC_V_4_3_6 is not set
-# CT_CC_V_4_3_5 is not set
-# CT_CC_V_4_3_4 is not set
-# CT_CC_V_4_3_3 is not set
-# CT_CC_V_4_3_2 is not set
-# CT_CC_V_4_3_1 is not set
-# CT_CC_V_4_2_4 is not set
-# CT_CC_V_4_2_2 is not set
-# CT_CC_CUSTOM is not set
-CT_CC_GCC_4_2_or_later=y
-CT_CC_GCC_4_3_or_later=y
-CT_CC_GCC_4_4_or_later=y
-CT_CC_GCC_4_5_or_later=y
-CT_CC_GCC_4_6_or_later=y
-CT_CC_GCC_4_7=y
-CT_CC_GCC_4_7_or_later=y
-CT_CC_GCC_HAS_GRAPHITE=y
-CT_CC_GCC_HAS_LTO=y
-CT_CC_GCC_HAS_PKGVERSION_BUGURL=y
-CT_CC_GCC_HAS_BUILD_ID=y
-CT_CC_GCC_HAS_LNK_HASH_STYLE=y
-CT_CC_GCC_ENABLE_PLUGINS=y
-CT_CC_GCC_GOLD=y
-CT_CC_GCC_USE_GMP_MPFR=y
-CT_CC_GCC_USE_PPL_CLOOG=y
-CT_CC_GCC_USE_MPC=y
-CT_CC_GCC_HAS_LIBQUADMATH=y
-# CT_CC_LANG_FORTRAN is not set
-CT_CC_SUPPORT_CXX=y
-CT_CC_SUPPORT_FORTRAN=y
-CT_CC_SUPPORT_JAVA=y
-CT_CC_SUPPORT_ADA=y
-CT_CC_SUPPORT_OBJC=y
-CT_CC_SUPPORT_OBJCXX=y
-
-#
-# Additional supported languages:
-#
-CT_CC_LANG_CXX=y
-# CT_CC_LANG_JAVA is not set
-# CT_CC_LANG_ADA is not set
-# CT_CC_LANG_OBJC is not set
-# CT_CC_LANG_OBJCXX is not set
-CT_CC_LANG_OTHERS=""
-
-#
-# gcc other options
-#
-CT_CC_ENABLE_CXX_FLAGS=""
-CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
-CT_CC_EXTRA_CONFIG_ARRAY=""
-# CT_CC_STATIC_LIBSTDCXX is not set
-# CT_CC_GCC_SYSTEM_ZLIB is not set
-
-#
-# Optimisation features
-#
-CT_CC_GCC_USE_GRAPHITE=y
-CT_CC_GCC_USE_LTO=y
-
-#
-# Settings for libraries running on target
-#
-CT_CC_GCC_ENABLE_TARGET_OPTSPACE=y
-# CT_CC_GCC_LIBMUDFLAP is not set
-# CT_CC_GCC_LIBGOMP is not set
-# CT_CC_GCC_LIBSSP is not set
-# CT_CC_GCC_LIBQUADMATH is not set
-
-#
-# Misc. obscure options.
-#
-CT_CC_CXA_ATEXIT=y
-CT_CC_GCC_DISABLE_PCH=y
-CT_CC_GCC_SJLJ_EXCEPTIONS=m
-CT_CC_GCC_LDBL_128=m
-CT_CC_GCC_BUILD_ID=y
-# CT_CC_GCC_LNK_HASH_STYLE_DEFAULT is not set
-# CT_CC_GCC_LNK_HASH_STYLE_SYSV is not set
-# CT_CC_GCC_LNK_HASH_STYLE_GNU is not set
-CT_CC_GCC_LNK_HASH_STYLE_BOTH=y
-CT_CC_GCC_LNK_HASH_STYLE="both"
-
-#
-# C-library
-#
-CT_LIBC="eglibc"
-CT_LIBC_VERSION="2_16"
-CT_LIBC_eglibc=y
-# CT_LIBC_glibc is not set
-# CT_LIBC_uClibc is not set
-CT_LIBC_eglibc_AVAILABLE=y
-# CT_LIBC_EGLIBC_V_2_17 is not set
-CT_LIBC_EGLIBC_V_2_16=y
-# CT_LIBC_EGLIBC_V_2_15 is not set
-# CT_LIBC_EGLIBC_V_2_14 is not set
-# CT_LIBC_EGLIBC_V_2_13 is not set
-# CT_LIBC_EGLIBC_V_2_12 is not set
-# CT_LIBC_EGLIBC_V_2_11 is not set
-# CT_LIBC_EGLIBC_V_2_10 is not set
-# CT_LIBC_EGLIBC_V_2_9 is not set
-# CT_LIBC_EGLIBC_V_TRUNK is not set
-CT_LIBC_EGLIBC_2_16_or_later=y
-CT_EGLIBC_REVISION="HEAD"
-# CT_EGLIBC_HTTP is not set
-# CT_EGLIBC_CHECKOUT is not set
-CT_EGLIBC_OPT_SIZE=y
-# CT_EGLIBC_CUSTOM_CONFIG is not set
-CT_LIBC_glibc_AVAILABLE=y
-CT_LIBC_mingw_AVAILABLE=y
-CT_LIBC_newlib_AVAILABLE=y
-CT_LIBC_none_AVAILABLE=y
-CT_LIBC_uClibc_AVAILABLE=y
-CT_LIBC_SUPPORT_THREADS_ANY=y
-CT_LIBC_SUPPORT_NPTL=y
-CT_LIBC_SUPPORT_LINUXTHREADS=y
-CT_THREADS="nptl"
-
-#
-# Common C library options
-#
-CT_THREADS_NPTL=y
-# CT_THREADS_LINUXTHREADS is not set
-CT_LIBC_XLDD=y
-
-#
-# eglibc other options
-#
-CT_LIBC_GLIBC_MAY_FORCE_PORTS=y
-CT_LIBC_glibc_familly=y
-CT_LIBC_GLIBC_EXTRA_CONFIG_ARRAY=""
-CT_LIBC_GLIBC_CONFIGPARMS=""
-CT_LIBC_GLIBC_EXTRA_CFLAGS=""
-CT_LIBC_EXTRA_CC_ARGS=""
-# CT_LIBC_ENABLE_FORTIFIED_BUILD is not set
-# CT_LIBC_DISABLE_VERSIONING is not set
-CT_LIBC_OLDEST_ABI=""
-CT_LIBC_GLIBC_FORCE_UNWIND=y
-CT_LIBC_GLIBC_USE_PORTS=y
-CT_LIBC_ADDONS_LIST=""
-
-#
-# WARNING !!!                                            
-#
-
-#
-#   For glibc >= 2.8, it can happen that the tarballs    
-#
-
-#
-#   for the addons are not available for download.       
-#
-
-#
-#   If that happens, bad luck... Try a previous version  
-#
-
-#
-#   or try again later... :-(                            
-#
-# CT_LIBC_LOCALES is not set
-# CT_LIBC_GLIBC_KERNEL_VERSION_NONE is not set
-# CT_LIBC_GLIBC_KERNEL_VERSION_AS_HEADERS is not set
-CT_LIBC_GLIBC_KERNEL_VERSION_CHOSEN=y
-CT_LIBC_GLIBC_MIN_KERNEL_VERSION="3.2.27"
-CT_LIBC_GLIBC_MIN_KERNEL="3.2.27"
-
-#
-# Debug facilities
-#
-# CT_DEBUG_dmalloc is not set
-# CT_DEBUG_duma is not set
-# CT_DEBUG_gdb is not set
-# CT_DEBUG_ltrace is not set
-# CT_DEBUG_strace is not set
-
-#
-# Companion libraries
-#
-CT_COMPLIBS_NEEDED=y
-CT_GMP_NEEDED=y
-CT_MPFR_NEEDED=y
-CT_PPL_NEEDED=y
-CT_CLOOG_NEEDED=y
-CT_MPC_NEEDED=y
-CT_COMPLIBS=y
-CT_GMP=y
-CT_MPFR=y
-CT_PPL=y
-CT_CLOOG=y
-CT_MPC=y
-CT_GMP_V_5_0_2=y
-# CT_GMP_V_5_0_1 is not set
-# CT_GMP_V_4_3_2 is not set
-# CT_GMP_V_4_3_1 is not set
-# CT_GMP_V_4_3_0 is not set
-CT_GMP_VERSION="5.0.2"
-CT_MPFR_V_3_1_0=y
-# CT_MPFR_V_3_0_1 is not set
-# CT_MPFR_V_3_0_0 is not set
-# CT_MPFR_V_2_4_2 is not set
-# CT_MPFR_V_2_4_1 is not set
-# CT_MPFR_V_2_4_0 is not set
-CT_MPFR_VERSION="3.1.0"
-CT_PPL_V_0_11_2=y
-# CT_PPL_V_0_11_1 is not set
-# CT_PPL_V_0_11 is not set
-# CT_PPL_V_0_10_2 is not set
-CT_PPL_VERSION="0.11.2"
-CT_PPL_0_11=y
-CT_PPL_NEEDS_LIBPWL=y
-CT_CLOOG_V_0_15_11=y
-# CT_CLOOG_V_0_15_10 is not set
-# CT_CLOOG_V_0_15_9 is not set
-# CT_CLOOG_V_0_15_8 is not set
-# CT_CLOOG_V_0_15_7 is not set
-# CT_CLOOG_V_0_15_6 is not set
-CT_CLOOG_VERSION="0.15.11"
-CT_CLOOG_0_15_1x=y
-CT_CLOOG_NEEDS_AUTORECONF=y
-CT_MPC_V_0_9=y
-# CT_MPC_V_0_8_2 is not set
-# CT_MPC_V_0_8_1 is not set
-# CT_MPC_V_0_7 is not set
-CT_MPC_VERSION="0.9"
-
-#
-# Companion libraries common options
-#
-# CT_COMPLIBS_CHECK is not set
-
-#
-# Companion tools
-#
-
-#
-# READ HELP before you say 'Y' below !!!
-#
-# CT_COMP_TOOLS is not set
-
-#
-# Test suite
-#
-# CT_TEST_SUITE_GCC is not set
+http://autobuild.buildroot.net
