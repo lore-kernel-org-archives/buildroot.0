@@ -1,35 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Feb 2013 12:01:37 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-02-09
-In-Reply-To: <20130210073449.7DE9452C6CA@lolut.humanoidz.org>
-References: <20130210073449.7DE9452C6CA@lolut.humanoidz.org>
-Message-ID: <201302101201.37263.yann.morin.1998@free.fr>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Sun, 10 Feb 2013 12:28:32 +0100
+Subject: [Buildroot] Buildroot at ELC: review/suggestions needed
+In-Reply-To: <20130209195709.323b9f5e@skate>
+References: <20130209195709.323b9f5e@skate>
+Message-ID: <51178460.9020309@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Am 09.02.2013 19:57, schrieb Thomas Petazzoni:
+> Therefore, I am requesting your help to:
+>
+>  * Review the Buildroot poster I've made. The poster will be printed by
+>    the event organizers in big format, and I've tried to highlight the
+>    main fact about Buildroot, and recent developments.
+>
+>    See http://free-electrons.com/~thomas/pub/buildroot-poster.png
+Hello Thomas,
 
-On Sunday 10 February 2013 Thomas Petazzoni wrote:
-> On 2013-02-09, 154 random build tests have been done and
-> submitted on autobuild.buildroot.net.
->  0 builds have been successful
->  154 builds have failed
+A friend of mine is designer, she has some points to improve and
+possibly is willing to help. Which software did you use?
 
-Woopsie... That close to -rc1, that's bad.. :-(
+Her points are:
+* "Embedded Linux build system" should be bigger font size than "What is
+it?" and "Recent developments", because it is the most important headline.
+* The key points "Simple", "Fast" and "Efficient" should be emphasized
+somehow, maybe as a bullet list or formed like a stamp.
+* Maybe it could be better to change the layout: put the Buildroot logo
+and the headline in the grey box to the top, the yellow and orange boxes
+side by sie below and the webaddress and the key point at the buttom.
 
-I'm looking at what went wrong..
+One more point: Shouldn't it be 24/7 instead of 24/24?
 
-Regards,
-Yann E. MORIN.
+Kind regards
+
+Stephan
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
