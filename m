@@ -1,52 +1,47 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Feb 2013 10:50:18 +0100
-Subject: [Buildroot] Buildroot at ELC: review/suggestions needed
-In-Reply-To: <201302100047.23872.yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 10 Feb 2013 00:47:23 +0100")
-References: <20130209195709.323b9f5e@skate>
- <201302100047.23872.yann.morin.1998@free.fr>
-Message-ID: <876220fqg5.fsf@dell.be.48ers.dk>
+Date: Sun, 10 Feb 2013 11:02:35 +0100
+Subject: [Buildroot] [PATCH 1/1] libtirpc: requires toolchain with
+	threads support
+In-Reply-To: <1360448834-21507-1-git-send-email-gilles.talis@gmail.com>
+ (Gilles Talis's message of "Sat, 9 Feb 2013 14:27:14 -0800")
+References: <1360448834-21507-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <87wqugebb8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
-Hi,
+ Gilles> Fixes:
+ Gilles> http://autobuild.buildroot.org/results/8ba720f47f74df94b8c70ac4befd47c47ce65f2f
 
- Yann> Besides, I've counted packages with:
- Yann>     $ grep -r -E -e '^[^[:space:]]+_VERSION[[:space:]]*:?='   \
- Yann>     | $(find package/ -type f -name '*.mk')                 \
- Yann>     | wc -l
- Yann>     944
+ Gilles> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+ Gilles> ---
+ Gilles>  package/libtirpc/Config.in |    4 ++++
+ Gilles>  1 file changed, 4 insertions(+)
 
-I normally just count .mk files under package, which gives a pretty good
-estimate:
+ Gilles> diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
+ Gilles> index 7e891b4..f2a6f83 100644
+ Gilles> --- a/package/libtirpc/Config.in
+ Gilles> +++ b/package/libtirpc/Config.in
+ Gilles> @@ -1,7 +1,11 @@
+ Gilles>  config BR2_PACKAGE_LIBTIRPC
+ Gilles>  	bool "libtirpc"
+ Gilles> +	depends on BR2_TOOLCHAIN_HAS_THREADS
 
-find package -name \*.mk | wc -l
-946
+Thanks, but you also need to propagate this dependency to libtirpc's
+reverse dependencies:
 
+git grep -l 'select BR2_PACKAGE_LIBTIRPC'
+package/conntrack-tools/Config.in
+package/lmbench/Config.in
+package/nfs-utils/Config.in
+package/quota/Config.in
+package/rpcbind/Config.in
 
- Yann> Points for those slides (out-of-order, obviously):
-
-Good points.
-
- Yann> ---8<---
- Yann>     Minimal network-enabled system:   [*]
- Yann>       ARM Raspberry Pi
- Yann>       Pre-built ct-ng toolchain
- Yann>       busybox + not-so-minimal kernel
- Yann>       Build time: 1 minute 55 seconds
- Yann>       Image size: 9.2 MiB (rootfs) + 1.8 MiB (kernel)
-
-Why is the rootfs so big? Kernel modules / glibc? A default rootfs
-(internal toolchain, busybox) is less than 1.5MB:
-
--rw-r--r-- 1 peko peko 1.4M Feb 10 09:49 output/images/rootfs.tar
-
-Around half of that is busybox, other half is uClibc.
+Care to fix that up and resend?
 
 -- 
 Bye, Peter Korsgaard
