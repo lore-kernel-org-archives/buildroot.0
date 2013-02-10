@@ -1,43 +1,30 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Feb 2013 11:59:39 +0100
-Subject: [Buildroot] Buildroot at ELC: review/suggestions needed
-In-Reply-To: <876220fqg5.fsf@dell.be.48ers.dk>
-References: <20130209195709.323b9f5e@skate>
- <201302100047.23872.yann.morin.1998@free.fr>
- <876220fqg5.fsf@dell.be.48ers.dk>
-Message-ID: <201302101159.39204.yann.morin.1998@free.fr>
+Date: Sun, 10 Feb 2013 12:01:37 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-02-09
+In-Reply-To: <20130210073449.7DE9452C6CA@lolut.humanoidz.org>
+References: <20130210073449.7DE9452C6CA@lolut.humanoidz.org>
+Message-ID: <201302101201.37263.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Thomas, All,
 
-On Sunday 10 February 2013 Peter Korsgaard wrote:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->  Yann> ---8<---
->  Yann>     Minimal network-enabled system:   [*]
->  Yann>       ARM Raspberry Pi
->  Yann>       Pre-built ct-ng toolchain
->  Yann>       busybox + not-so-minimal kernel
->  Yann>       Build time: 1 minute 55 seconds
->  Yann>       Image size: 9.2 MiB (rootfs) + 1.8 MiB (kernel)
-> 
-> Why is the rootfs so big? Kernel modules / glibc?
+On Sunday 10 February 2013 Thomas Petazzoni wrote:
+> On 2013-02-09, 154 random build tests have been done and
+> submitted on autobuild.buildroot.net.
+>  0 builds have been successful
+>  154 builds have failed
 
-Yes, this was not a "default" configuration, and there are so many
-kernel modules. And glibc does not account for much of the size.
+Woopsie... That close to -rc1, that's bad.. :-(
 
-> A default rootfs (internal toolchain, busybox) is less than 1.5MB:
-> -rw-r--r-- 1 peko peko 1.4M Feb 10 09:49 output/images/rootfs.tar
-> Around half of that is busybox, other half is uClibc.
-
-Yes, we already achieved such a size at ELC-E 2 years ago, during the
-Yocto presentation. ;-)
+I'm looking at what went wrong..
 
 Regards,
-Yann E. MORIN
+Yann E. MORIN.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
