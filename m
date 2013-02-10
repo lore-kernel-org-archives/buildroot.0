@@ -1,59 +1,34 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 10 Feb 2013 09:54:54 -0800
-Subject: [Buildroot] [PATCH 1/1] libtirpc: requires toolchain with
-	threads support
-In-Reply-To: <87wqugebb8.fsf@dell.be.48ers.dk>
-References: <1360448834-21507-1-git-send-email-gilles.talis@gmail.com>
- <87wqugebb8.fsf@dell.be.48ers.dk>
-Message-ID: <CAKcgs2zcpjXBk7hUpue3AfqWsc3ijAgb99dV4EQ9DmuF2YWXCw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 10 Feb 2013 21:50:20 +0100
+Subject: [Buildroot] [PATCH 1/1] Added local directory as soure of
+	kernel code
+In-Reply-To: <1360310725-6463-2-git-send-email-rafal.fabich@gmail.com>
+References: <1360310725-6463-1-git-send-email-rafal.fabich@gmail.com>
+ <1360310725-6463-2-git-send-email-rafal.fabich@gmail.com>
+Message-ID: <201302102150.20584.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Good point.
-Will fix and resend.
-Gilles.
+Rafal, All,
 
-2013/2/10 Peter Korsgaard <jacmet@uclibc.org>
+On Friday 08 February 2013 Rafal Fabich wrote:
+> In 'menuconfig' user can choose the local directory as a source of Linux
+> kernel code.
+> Useful during kernel drivers or modules development.
 
-> >>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
->
->  Gilles> Fixes:
->  Gilles>
-> http://autobuild.buildroot.org/results/8ba720f47f74df94b8c70ac4befd47c47ce65f2f
->
->  Gilles> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
->  Gilles> ---
->  Gilles>  package/libtirpc/Config.in |    4 ++++
->  Gilles>  1 file changed, 4 insertions(+)
->
->  Gilles> diff --git a/package/libtirpc/Config.in
-> b/package/libtirpc/Config.in
->  Gilles> index 7e891b4..f2a6f83 100644
->  Gilles> --- a/package/libtirpc/Config.in
->  Gilles> +++ b/package/libtirpc/Config.in
->  Gilles> @@ -1,7 +1,11 @@
->  Gilles>  config BR2_PACKAGE_LIBTIRPC
->  Gilles>        bool "libtirpc"
->  Gilles> +      depends on BR2_TOOLCHAIN_HAS_THREADS
->
-> Thanks, but you also need to propagate this dependency to libtirpc's
-> reverse dependencies:
->
-> git grep -l 'select BR2_PACKAGE_LIBTIRPC'
-> package/conntrack-tools/Config.in
-> package/lmbench/Config.in
-> package/nfs-utils/Config.in
-> package/quota/Config.in
-> package/rpcbind/Config.in
->
-> Care to fix that up and resend?
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130210/50a1720c/attachment-0001.html>
+Why not using the _OVERRIDE_SRCDIR mechanism:
+    $ export LINUX_OVERRIDE_SRCDIR=/path/to/your/kernel/tree
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
