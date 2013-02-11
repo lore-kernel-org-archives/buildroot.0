@@ -1,54 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Feb 2013 09:24:01 +0100
+Date: Mon, 11 Feb 2013 09:26:20 +0100
 Subject: [Buildroot] Buildroot at ELC: review/suggestions needed
-In-Reply-To: <201302100047.23872.yann.morin.1998@free.fr>
+In-Reply-To: <51178460.9020309@relinux.de>
 References: <20130209195709.323b9f5e@skate>
- <201302100047.23872.yann.morin.1998@free.fr>
-Message-ID: <20130211092401.086be57e@skate>
+	<51178460.9020309@relinux.de>
+Message-ID: <20130211092620.4eec6481@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Stephan Hoffmann,
 
-On Sun, 10 Feb 2013 00:47:23 +0100, Yann E. MORIN wrote:
+On Sun, 10 Feb 2013 12:28:32 +0100, Stephan Hoffmann wrote:
 
-> I would add arrows to the lines, to further ensure that what is
-> dark-green and brown is input to buildroot, while what is gray
-> is the output.
+> A friend of mine is designer, she has some points to improve and
+> possibly is willing to help. Which software did you use?
 
-I would love to as well, but arrows are not immediately available in
-Inkscape, you have to draw them manually. And since my designer skills
-are very, very limited, I gave up on this.
+I used Inkscape. Having a designer work on this would definitely be
+great, but unfortunately the delays are really tight to deliver the
+poster, I am already after the deadline, and I don't want to wait too
+much.
 
-> Besides, I've counted packages with:
->     $ grep -r -E -e '^[^[:space:]]+_VERSION[[:space:]]*:?='   \
->     | $(find package/ -type f -name '*.mk')                 \
->     | wc -l
->     944
-> 
-> So you can bump the number of packages to 900+. But beware: be
-> consistent between the poster and the slides.
+> Her points are:
+> * "Embedded Linux build system" should be bigger font size than "What
+> is it?" and "Recent developments", because it is the most important
+> headline.
+> * The key points "Simple", "Fast" and "Efficient" should be emphasized
+> somehow, maybe as a bullet list or formed like a stamp.
+> * Maybe it could be better to change the layout: put the Buildroot
+> logo and the headline in the grey box to the top, the yellow and
+> orange boxes side by sie below and the webaddress and the key point
+> at the buttom.
 
-Indeed, thanks.
+I'll try to work on these, but I don't promise I'll take all of them
+into account, considering the limited time I have.
 
-> >  * Give me suggestions on what to demonstrate. I will prepare a
-> >    slideshow of 10-20 slides that continuously loops (it should
-> 
-> 20 slides is too much. The people attending wil not have time to wait
-> to see the complete slideshow, so I'd stick with no more than 10
-> slides with a very few points in each, switching after 7-10 seconds.
+> One more point: Shouldn't it be 24/7 instead of 24/24?
 
-Ok. I will see how many topics I believe should be mentioned. But I
-don't think we need to limit those too much: people don't necessarily
-need to watch the entire slide set. As long as they get some of the
-information, that's good enough.
-
-> Points for those slides (out-of-order, obviously):
-
-Thanks for those suggestions!
+Indeed, will fix.
 
 Thomas
 -- 
