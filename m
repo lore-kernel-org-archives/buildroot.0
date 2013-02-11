@@ -1,33 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Feb 2013 09:12:55 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-02-09
-In-Reply-To: <201302101201.37263.yann.morin.1998@free.fr>
-References: <20130210073449.7DE9452C6CA@lolut.humanoidz.org>
- <201302101201.37263.yann.morin.1998@free.fr>
-Message-ID: <20130211091255.7f80900a@skate>
+Date: Mon, 11 Feb 2013 09:18:37 +0100
+Subject: [Buildroot] [PATCH 1/1] libtirpc: requires toolchain with
+ threads support
+In-Reply-To: <1360448834-21507-1-git-send-email-gilles.talis@gmail.com>
+References: <y>
+	<1360448834-21507-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <20130211091837.6fd77a1c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Gilles Talis,
 
-On Sun, 10 Feb 2013 12:01:37 +0100, Yann E. MORIN wrote:
-
-> On Sunday 10 February 2013 Thomas Petazzoni wrote:
-> > On 2013-02-09, 154 random build tests have been done and
-> > submitted on autobuild.buildroot.net.
-> >  0 builds have been successful
-> >  154 builds have failed
+On Sat,  9 Feb 2013 14:27:14 -0800, Gilles Talis wrote:
+> Fixes:
+> http://autobuild.buildroot.org/results/8ba720f47f74df94b8c70ac4befd47c47ce65f2f
 > 
-> Woopsie... That close to -rc1, that's bad.. :-(
-> 
-> I'm looking at what went wrong..
+> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 
-It's the build infrastructure that went wrong. I've fixed it up, and
-build results have started accumulating since yesterday evening.
+I believe libtirpc pthread usage could be made optional, and that would
+probably be an useful contribution upstream, and avoid us from having
+to add this toolchain dependency.
+
+Best regards,
 
 Thomas
 -- 
