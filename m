@@ -1,37 +1,40 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon, 11 Feb 2013 16:30:00 +0100
-Subject: [Buildroot] [PATCH] New host package: sunxi-tools
-In-Reply-To: <511267E7.6080603@je-eigen-domein.nl>
-References: <1360158308-16233-1-git-send-email-bos@je-eigen-domein.nl>
- <20130206145604.7ae023bd@skate> <511267E7.6080603@je-eigen-domein.nl>
-Message-ID: <51190E78.50405@free-electrons.com>
+From: Patrick <kpa_info@yahoo.fr>
+Date: Mon, 11 Feb 2013 15:40:36 +0000 (GMT)
+Subject: [Buildroot] [RFC] Python 3 external packages support
+In-Reply-To: <20130211162231.0ac06f9c@skate>
+References: <1360594442.60393.YahooMailNeo@web171801.mail.ir2.yahoo.com>
+ <20130211160908.2da60098@skate>
+ <1360595860.22602.YahooMailNeo@web171805.mail.ir2.yahoo.com>
+ <20130211162231.0ac06f9c@skate>
+Message-ID: <1360597236.46911.YahooMailNeo@web171802.mail.ir2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-Le 06/02/2013 15:25, Floris Bos a ?crit :
-> On 02/06/2013 02:56 PM, Thomas Petazzoni wrote:
->> I think it should be noted somewhere that those tools are needed for
->> the non-mainline Linux kernel for Allwinner SoCs, which has chosen to
->> use completely non-standard mechanisms for board definition files and
->> pinmuxing description.
+
+
+On Mon, 11 Feb 2013 15:17:40 +0000 (GMT), Patrick wrote:
 > 
-> The description already mentions it is for the linux-sunxi kernel.
-> Could add the word "non-mainline" though, to avoid confusion.
+> > If we make them exclusive, then we can ensure that
+> > $(HOST_DIR)/usr/bin/python is either a symbolic link to python2
+> > (when Python 2 is used) or a symbolic link on python3 (when Python
+> > 3 is used), and that should make the thing work pretty smoothly.
+> 
+> 
+> Indeed, if we dont need to support both simultaeously it simple.
+> I will work on this.
+> 
+> Patrick
+> 
 
-Well, linux-sunxi isn't very explicit for someone that is not very used
-to the Allwinner platform. There's no way he'll get that it means "the
-fork of allwinner's linux source code maintained on github by a separate
-community".
+One more question,
 
-Maxime
+Does it sounds accetable to move all the Python related stuff (python2, python3 and all python-* packages) to a single directory called python ?
+I know that you would like to have a flat arborescence for all packages, but this will help to provide a more friendly python menu
 
--- 
-Maxime Ripard, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks for your feedback
+
+Patrick
