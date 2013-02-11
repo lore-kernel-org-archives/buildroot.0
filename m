@@ -1,36 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 11 Feb 2013 13:49:46 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 11 Feb 2013 13:54:12 +0100
 Subject: [Buildroot] [PATCH 1/1] openpgm: new package
-In-Reply-To: <20130211134547.02bedae4@skate>
+In-Reply-To: <201302111349.46451.yann.morin.1998@free.fr>
 References: <1360585826-17996-1-git-send-email-alexander.lukichev@gmail.com>
  <20130211134547.02bedae4@skate>
-Message-ID: <201302111349.46451.yann.morin.1998@free.fr>
+ <201302111349.46451.yann.morin.1998@free.fr>
+Message-ID: <20130211135412.2267b75a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Alexander, All,
+Dear Yann E. MORIN,
 
-On Monday 11 February 2013 13:45:47 Thomas Petazzoni wrote:
-> On Mon, 11 Feb 2013 14:30:26 +0200, Alexander Lukichev wrote:
-[--SNIP--)
-> > +OPENPGM_AUTORECONF = YES
+On Mon, 11 Feb 2013 13:49:46 +0100, Yann E. MORIN wrote:
+
+> > Since the source code comes as a tarball, it's uncommon to have to do
+> > an autoreconf. Could you add a comment right before this line that
+> > explains why it is needed?
 > 
-> Since the source code comes as a tarball, it's uncommon to have to do
-> an autoreconf. Could you add a comment right before this line that
-> explains why it is needed?
+> Because the patch touches configure.ac.
 
-Because the patch touches configure.ac.
+Sigh, indeed. Need more sleep, it seems.
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
