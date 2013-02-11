@@ -1,40 +1,50 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 11 Feb 2013 09:33:58 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 11 Feb 2013 09:42:06 +0100
 Subject: [Buildroot] Buildroot at ELC: review/suggestions needed
-In-Reply-To: <20130209195709.323b9f5e@skate>
+In-Reply-To: <CAAfyv37Orrms8Jz1jLUg1BOCf0eD0HJzy1rK+y+S056m9BzFFg@mail.gmail.com>
 References: <20130209195709.323b9f5e@skate>
-Message-ID: <CAGm1_kuV46TjCdX2zNzpvWuSyvaOzXa+5MRE7fcLGidZ7Yg9Lw@mail.gmail.com>
+ <CAAfyv37Orrms8Jz1jLUg1BOCf0eD0HJzy1rK+y+S056m9BzFFg@mail.gmail.com>
+Message-ID: <20130211094206.7b9a4c53@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 9, 2013 at 7:57 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> As I am going to the Embedded Linux Conference in San Francisco, I've
-> submitted a proposal to have a booth at the technical showcase to
-> demonstrate Buildroot. The technical showcase takes place after the
-> conferences, during about 1 hour, on one evening of the event. My
-> proposal has been accepted. It's a good opportunity to raise the
-> attention around Buildroot to the ELC crowd.
->
-> Therefore, I am requesting your help to:
->
->  * Review the Buildroot poster I've made. The poster will be printed by
->    the event organizers in big format, and I've tried to highlight the
->    main fact about Buildroot, and recent developments.
->
->    See http://free-electrons.com/~thomas/pub/buildroot-poster.png
->
->  * Give me suggestions on what to demonstrate. I will prepare a
->    slideshow of 10-20 slides that continuously loops (it should
->    present the main characteristics and features of Buildroot), but I
->    also would like to have some demo to show (I can bring an ARM board
->    if needed). Any suggestions, both for the slideshow and the demo?
+Dear Belisko Marek,
 
-What about extending kernel image to kernel image / device tree image?
+On Sun, 10 Feb 2013 13:46:25 +0100, Belisko Marek wrote:
 
-Yegor
+> >  * Review the Buildroot poster I've made. The poster will be
+> > printed by the event organizers in big format, and I've tried to
+> > highlight the main fact about Buildroot, and recent developments.
+> Poster is great. Maybe one comment: why only Google Fiber is mention
+> as product which
+> using BR? Isn't there any other companies (products)?
+
+There are of course many more companies using Buildroot, and we've
+discussed this during the last Buildroot Developers meeting: in the
+next version of the Buildroot website, we'll have a place to list
+companies/products using Buildroot.
+
+Regarding the poster itself, there are multiple reasons for choosing
+this example:
+
+ * Google is a well-known company, and generally developers are
+   "impressed" by what Google does. So having Google using Buildroot is
+   "waouh".
+
+ * The Buildroot code that Google uses is public and clearly associated
+   to the Google Fiber project, which means that Google is OK with the
+   people knowing that Buildroot is used. Many other companies that are
+   using Buildroot are not so public with the fact that they use
+   Buildroot.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
