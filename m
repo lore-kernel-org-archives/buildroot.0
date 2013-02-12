@@ -1,48 +1,32 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Tue, 12 Feb 2013 11:59:16 +0000
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 12 Feb 2013 13:08:28 +0100
 Subject: [Buildroot] [PATCH v2] vim: Add post-install hook to remove
  documentation from target
-In-Reply-To: <20130212122323.276f018f@skate>
+In-Reply-To: <CAG2jQ8jzrz=fUPuqkjQTGfhWrcNCb-dZKSye=XQo3fmjoPvfUA@mail.gmail.com>
 References: <1360666299-3661-1-git-send-email-markos.chandras@gmail.com>
  <20130212122323.276f018f@skate>
-Message-ID: <CAG2jQ8jzrz=fUPuqkjQTGfhWrcNCb-dZKSye=XQo3fmjoPvfUA@mail.gmail.com>
+ <CAG2jQ8jzrz=fUPuqkjQTGfhWrcNCb-dZKSye=XQo3fmjoPvfUA@mail.gmail.com>
+Message-ID: <20130212130828.22a0522e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12 February 2013 11:23, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Markos Chandras,
->
-> On Tue, 12 Feb 2013 10:51:39 +0000, Markos Chandras wrote:
->> From: Markos Chandras <markos.chandras@imgtec.com>
->>
->> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
->
-> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-> We often try to keep the define ... endef block within the ifneq
-> condition, since there is no reason for the VIM_REMOVE_DOCS variable to
-> be defined if it is useless. But it's not something that has been done
-> systematically in the entire code base (for example, the
-> VIM_INSTALL_RUNTIME_CMDS just above your patch, doesn't follow this
-> rule).
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+Dear Markos Chandras,
 
-Hi Thomas,
+On Tue, 12 Feb 2013 11:59:16 +0000, Markos Chandras wrote:
 
-I agree but seeing how the VIM_INSTALL_RUMTIME_CMDS is implemented, I
-figured this was the recommended practice.
-If you need me to submit a new patch please let me know.
+> I agree but seeing how the VIM_INSTALL_RUMTIME_CMDS is implemented, I
+> figured this was the recommended practice.
+> If you need me to submit a new patch please let me know.
 
+For me, the patch is fine as is, since it's a rule we haven't been
+enforcing everywhere.
+
+Thomas
 -- 
-Regards,
-Markos Chandras
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
