@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Feb 2013 22:45:54 +0100
-Subject: [Buildroot] [PATCH 1/1] Added local directory as soure of
- kernel code
-In-Reply-To: <511A78BA.4010200@mind.be>
-References: <1360310725-6463-1-git-send-email-rafal.fabich@gmail.com>
- <1360310725-6463-2-git-send-email-rafal.fabich@gmail.com>
- <511A78BA.4010200@mind.be>
-Message-ID: <20130212224554.40134349@skate>
+Date: Tue, 12 Feb 2013 22:50:43 +0100
+Subject: [Buildroot] need smaller filesystem for NOR
+In-Reply-To: <511A7C8E.9010407@mind.be>
+References: <1360344317.17385.31.camel@genx.eng.msli.com>
+ <20130208183807.2b2fe572@skate>
+ <1360359245.28641.79.camel@genx.eng.msli.com>
+ <1360628370.13529.110.camel@genx> <511A7C8E.9010407@mind.be>
+Message-ID: <20130212225043.4ecc0f25@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,23 +15,39 @@ To: buildroot@busybox.net
 
 Dear Arnout Vandecappelle,
 
-On Tue, 12 Feb 2013 18:15:38 +0100, Arnout Vandecappelle wrote:
+On Tue, 12 Feb 2013 18:31:58 +0100, Arnout Vandecappelle wrote:
 
->   Looks like this is asked for over and over again, so I think it is 
-> really worth adding this option. I think this was in fact briefly 
-> discussed at the BR Developer Days but I didn't write it down in the 
-> report...
+>   A jffs2 filesystem should be mounted through /dev/mtdN, not through 
+> /dev/mtdblockN. So root=/dev/mtd13 is a better idea.
 
-I think that I managed to be convinced that for packages for which we
-already support a way of configuring the source location (from Git,
-from a custom tarball, etc.), it makes sense to also offer an option to
-set a local location, even if technically it is redundant with what
-<foo>_OVERRIDE_SRCDIR is doing.
+Really? I've always used root=/dev/mtdblockX without any problems. Your
+statement even seems to contradict
+http://www.linux-mtd.infradead.org/faq/jffs2.html#L_mtdblock :
 
-So I agree with the approach, as long as we limit it to a few key
-packages like the Linux kernel and bootloaders.
+"""
+There are two cases where this does not work. The first is when JFFS2
+is used as a root filesystem. For now, this requires the mtdblock
+device to be specified for root= on the kernel command line. The second
+case is when the mount binary that is being used does not play nicely
+with the above format. The BusyBox version of mount is known to not
+work without the mtdblock device. 
+"""
 
-Best regards,
+
+> > Next I tried to edit my jffs options in the .config for my recovery
+> > 'failsafe' buildroot:
+> > Filesystem images  --->
+> >   [*] jffs2 root filesystem
+> >   Flash Type (Select custom page and erase size)  --->
+> >   (0x1065) Page Size
+> >   (0xC60) Erase block size
+> 
+>   Those numbers are unlikely. 0x1065 is a very odd number (literally). 
+> Also, the erase block size is always larger than the page size, and for 
+> NOR I think it's normally equal to it.
+
+I remember dataflash having bizarre erase block sizes, but I don't
+think it was an odd number.
 
 Thomas
 -- 
