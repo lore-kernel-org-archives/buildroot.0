@@ -1,25 +1,61 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 11 Feb 2013 21:36:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 5906] collectd client headers not exported
-In-Reply-To: <bug-5906-163@https.bugs.busybox.net/>
-References: <bug-5906-163@https.bugs.busybox.net/>
-Message-ID: <20130211213645.746CA9AAB8@busybox.osuosl.org>
+From: martin krastev <blu.dark@gmail.com>
+Date: Tue, 12 Feb 2013 02:09:16 +0200
+Subject: [Buildroot] non-standard architecture targets
+In-Reply-To: <201302101840.31016.yann.morin.1998@free.fr>
+References: <CAKPuMhOrKZwAp5FZgvBO2M5dfvrFnCjBchwAfBn+_tu_XiwB2Q@mail.gmail.com>
+ <201302101733.42143.yann.morin.1998@free.fr>
+ <CAKPuMhNBQKufPGtau-SbYz50zqCnuAFpUaO4faWQspjNRzb+hg@mail.gmail.com>
+ <201302101840.31016.yann.morin.1998@free.fr>
+Message-ID: <CAKPuMhO=7y19ZJCNfoyuT=fsiTPZ9NK9y9JaRuri9bS9c+sxKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5906
+On Sun, Feb 10, 2013 at 7:40 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Martin, all,
+>
+> [Please, do *not* top-post, put your reply below the text you're replying to]
 
---- Comment #4 from Carsten Spie? <fli4l@carsten-spiess.de> 2013-02-11 21:37:06 UTC ---
-> Otherwise, if you're not interested in doing this by yourself, don't hesitate
-> to tell us, and we'll cook a patch for your change.
-sorry, i don't subscribe the busybox mailing-list so please make the path cfor
-me.
-Thanks.
+My apologies.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+>
+> On Sunday 10 February 2013 martin krastev wrote:
+>> Unfortunately the tuple pattern in question is not something I have
+>> control over - that is what gcc expects to have as a target (pattern)
+>> to enable paired-singles support for ppc750cl.
+>
+> (for reference, you suggested those tuples:
+>   powerpc-buildroot-linux-uclibc-paired and
+>   powerpc-buildroot-linux-paired-uclibc).
+>
+> Well, gcc can *not* expect such tuples, as they are invalid.
+>
+> However, the following tuples are valid, and match the pattern gcc expects:
+>     powerpc-unknown-linux-gnupaired
+>     powerpc-unknown-linux-uclibcpaired
+>
+> But AFAIK there is no way to set these using Buildroot.
+
+Well, I've found a way that produces the desired effect. The target
+tuple is set in this file and line (buildroot-2012.11.1):
+
+./package/Makefile.in:23
+
+
+Best regards, and thank you for your time.
+
+Martin
+
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
