@@ -1,24 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Feb 2013 12:56:28 +0100
-Subject: [Buildroot] [PATCH] dependencies: suggest package name if hg is
- missing.
-In-Reply-To: <1360669726-30288-1-git-send-email-luca@lucaceresoli.net>
-References: <1360669726-30288-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20130212125628.35cc16cb@skate>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Tue, 12 Feb 2013 11:59:16 +0000
+Subject: [Buildroot] [PATCH v2] vim: Add post-install hook to remove
+ documentation from target
+In-Reply-To: <20130212122323.276f018f@skate>
+References: <1360666299-3661-1-git-send-email-markos.chandras@gmail.com>
+ <20130212122323.276f018f@skate>
+Message-ID: <CAG2jQ8jzrz=fUPuqkjQTGfhWrcNCb-dZKSye=XQo3fmjoPvfUA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+On 12 February 2013 11:23, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Markos Chandras,
+>
+> On Tue, 12 Feb 2013 10:51:39 +0000, Markos Chandras wrote:
+>> From: Markos Chandras <markos.chandras@imgtec.com>
+>>
+>> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+>
+> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+> We often try to keep the define ... endef block within the ifneq
+> condition, since there is no reason for the VIM_REMOVE_DOCS variable to
+> be defined if it is useless. But it's not something that has been done
+> systematically in the entire code base (for example, the
+> VIM_INSTALL_RUNTIME_CMDS just above your patch, doesn't follow this
+> rule).
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
-On Tue, 12 Feb 2013 12:48:46 +0100, Luca Ceresoli wrote:
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Hi Thomas,
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+I agree but seeing how the VIM_INSTALL_RUMTIME_CMDS is implemented, I
+figured this was the recommended practice.
+If you need me to submit a new patch please let me know.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards,
+Markos Chandras
