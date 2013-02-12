@@ -1,31 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Feb 2013 12:23:23 +0100
-Subject: [Buildroot] [PATCH v2] vim: Add post-install hook to remove
- documentation from target
-In-Reply-To: <1360666299-3661-1-git-send-email-markos.chandras@gmail.com>
-References: <1360666299-3661-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <20130212122323.276f018f@skate>
+Date: Tue, 12 Feb 2013 12:25:51 +0100
+Subject: [Buildroot] [[PATCH v2]] strongswan: new package
+In-Reply-To: <1360667974-9734-2-git-send-email-jezz@sysmic.org>
+References: <20130208190247.7da881c9@skate>
+ <1360667974-9734-1-git-send-email-jezz@sysmic.org>
+ <1360667974-9734-2-git-send-email-jezz@sysmic.org>
+Message-ID: <20130212122551.46e895b6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Dear J?r?me Pouiller,
 
-On Tue, 12 Feb 2013 10:51:39 +0000, Markos Chandras wrote:
-> From: Markos Chandras <markos.chandras@imgtec.com>
-> 
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+On Tue, 12 Feb 2013 12:19:33 +0100, J?r?me Pouiller wrote:
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +config BR2_PACKAGE_STRONGSWAN_OPENSSL
+> +	bool "Enables OpenSSL based crypto backends"
+> +	select OPENSSL
+> +
+> +config BR2_PACKAGE_STRONGSWAN_GCRYPT
+> +	bool "Enables libgcrypt based crypto backends"
+> +	select LIBGCRYPT
 
-We often try to keep the define ... endef block within the ifneq
-condition, since there is no reason for the VIM_REMOVE_DOCS variable to
-be defined if it is useless. But it's not something that has been done
-systematically in the entire code base (for example, the
-VIM_INSTALL_RUNTIME_CMDS just above your patch, doesn't follow this
-rule).
+"select OPENSSL" or "select LIBGCRYPT" definitely cannot work, we don't
+have such options in Buildroot.
+
+Best regards,
 
 Thomas
 -- 
