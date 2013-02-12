@@ -1,47 +1,58 @@
-From: Patrick Gerber <kpa_info@yahoo.fr>
-Date: Tue, 12 Feb 2013 15:14:01 +0100
-Subject: [Buildroot] [PATCH 5/5] python-serial: Convert package to be used
-	with python2 or python3
-In-Reply-To: <1360678441-3199-1-git-send-email-kpa_info@yahoo.fr>
-References: <1360678441-3199-1-git-send-email-kpa_info@yahoo.fr>
-Message-ID: <1360678441-3199-6-git-send-email-kpa_info@yahoo.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 12 Feb 2013 15:18:23 +0100
+Subject: [Buildroot] Report from the Buildroot Developers Meeting
+In-Reply-To: <CAHQn0ki4wo2xtMcsQr7ACY_EihgePe=UaWUjziHeAP_80nPR7A@mail.gmail.com>
+References: <20130209004253.207e0741@skate>
+ <CAHQn0ki4wo2xtMcsQr7ACY_EihgePe=UaWUjziHeAP_80nPR7A@mail.gmail.com>
+Message-ID: <20130212151823.6f38a844@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Daniel Nystr?m,
 
-Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
----
- package/python-serial/Config.in        |    2 +-
- package/python-serial/python-serial.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Tue, 12 Feb 2013 15:14:37 +0100, Daniel Nystr?m wrote:
 
-diff --git a/package/python-serial/Config.in b/package/python-serial/Config.in
-index ea090bd..db6a4b1 100644
---- a/package/python-serial/Config.in
-+++ b/package/python-serial/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_SERIAL
- 	bool "python-serial"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on (BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
- 	help
- 	  python-serial is a Python library to access serial ports.
- 
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-index fb6b31c..6f2bb85 100644
---- a/package/python-serial/python-serial.mk
-+++ b/package/python-serial/python-serial.mk
-@@ -8,7 +8,7 @@ PYTHON_SERIAL_VERSION = 2.6
- PYTHON_SERIAL_SOURCE  = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
- PYTHON_SERIAL_SITE    = http://pypi.python.org/packages/source/p/pyserial/
- 
--PYTHON_SERIAL_DEPENDENCIES = python
-+PYTHON_SERIAL_DEPENDENCIES = $(PYTHON_GENERIC_DEPENDENCIES)
- 
- define PYTHON_SERIAL_BUILD_CMDS
- 	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
+> According to the announcement of udev and systemd being merged, they
+> claimed udev would still be able to be build independently (although
+> through the systemd source tree of course). I requested some info
+> regarding the D-Bus dependency in #systemd and here is the dialog:
+> 
+> < speakman> Just heard about udev and systemd merging. And it seems
+> like udev can still be compiled individually although from the same
+> source tree as systemd. But how about it's DBus dependency - will
+> "udev" compile without D-Bus libraries?
+> < ssuominen> speakman: yes, but you have to call specific Makefile.am
+> targets individually... and set environment flags DBUS_CFLAGS=' ' and
+> DBUS_LIBS='
+>                    ' to get past the ./configure check
+> < ssuominen> speakman: gentoo is packaging udev like that, and ebuilds
+> are mostly bash, you could take look at the rather complex setup from
+> the ebuild
+
+Interesting, thanks for asking about this topic.
+
+Note that there was an effort last year to make this easier:
+http://comments.gmane.org/gmane.linux.hotplug.devel/17478. But it
+doesn't seem to have been merged, and the systemd maintainers don't
+think building D-Bus is a problem:
+http://lists.freedesktop.org/archives/systemd-devel/2012-June/005516.html.
+
+> Regarding Buildroot I assume dbus and systemd will merge into one
+> single package. Are there anything preventing "systemd" from being
+> "optional" and depend on D-Bus only when enabled?
+
+Why would systemd and dbus would merge into one single package? Are you
+sure you didn't confuse with "systemd and udev would merge into one
+single package" ?
+
+Best regards,
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
