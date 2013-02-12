@@ -1,101 +1,82 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Feb 2013 18:15:38 +0100
-Subject: [Buildroot] [PATCH 1/1] Added local directory as soure of
- kernel code
-In-Reply-To: <1360310725-6463-2-git-send-email-rafal.fabich@gmail.com>
-References: <1360310725-6463-1-git-send-email-rafal.fabich@gmail.com>
- <1360310725-6463-2-git-send-email-rafal.fabich@gmail.com>
-Message-ID: <511A78BA.4010200@mind.be>
+Date: Tue, 12 Feb 2013 18:01:44 +0100
+Subject: [Buildroot] [PATCH] aircrack-ng: new package
+In-Reply-To: <CAA1eMkHU92kZyhp_ChMFfPDRLViGNmmM-M+NbXWBNFs1ghh7nA@mail.gmail.com>
+References: <1360340189-4409-1-git-send-email-laurent.cans@gmail.com>
+ <20130208163229.553918e3@skate> <51155F6E.5090806@mind.be>
+ <CAA1eMkHU92kZyhp_ChMFfPDRLViGNmmM-M+NbXWBNFs1ghh7nA@mail.gmail.com>
+Message-ID: <511A7578.6010501@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/02/13 09:05, Rafal Fabich wrote:
-> In 'menuconfig' user can choose the local directory as a source of Linux kernel code.
-> Useful during kernel drivers or modules development.
+On 10/02/13 16:08, Laurent CANS wrote:
+> Arnout, Thomas,
 >
-> Tested on three different development machines and different kernel sources.
+> I tried to use $(TARGET_CONFIGURE_OPTS) passed by variable or by
+> environment but the 2 methods fails.
 >
-> Signed-off-by: Rafal Fabich <rafal.fabich@gmail.com>
+> What is the correct methode to handle this?
+> - Correct package makefiles
+> - Don't use $(TARGET_CONFIGURE_OPTS) but CC and LD fixed by variable
+> - Another solution
+>
+> Best regards,
+>
+> Laurent
 
-  Looks like this is asked for over and over again, so I think it is 
-really worth adding this option. I think this was in fact briefly 
-discussed at the BR Developer Days but I didn't write it down in the 
-report...
+  Laurent,
 
-  Between this patch and Richard Braun's, I think this one is closer to 
-how it should be.
+  First of all, please don't top-post, but cut down the quoted message to 
+the relevant parts and reply under them, like below.
 
-  One comment below, though.
+>
+> 2013/2/8 Arnout Vandecappelle <arnout@mind.be>:
+>> On 08/02/13 16:32, Thomas Petazzoni wrote:
+>>> On Fri,  8 Feb 2013 17:16:29 +0100, Laurent Cans wrote:
+[snip]
+>>>> +
+>>>> +define AIRCRACK_NG_BUILD_CMDS
+>>>> +      $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)
+>>>> $(AIRCRACK_NG_OPTS) all
+>>>> +endef
+>>>
+>>>
+>>> Use $(TARGET_CONFIGURE_OPTS) :
+>>>
+>>>          $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(AIRCRACK_NG_OPTS) all
+>>
+>>
+>>   If it works, I prefer to put the TARGET_CONFIGURE_OPTS in the environment
+>> instead:
+>>
+>> $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(AIRCRACK_NG_MAKE_OPTS) all
+>>
+>> That gives the Makefile the possibility to append to CFLAGS and LDFLAGS, if
+>> necessary. However, some Makefiles unconditionally set CFLAGS or LDFLAGS (or
+>> even CC), in that case passing through the environment doesn't work.
 
-> ---
->   linux/Config.in |   14 ++++++++++++++
->   linux/linux.mk  |    3 +++
->   2 files changed, 17 insertions(+)
->
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 3c50acc..d88d920 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -52,6 +52,11 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT
->   	  This option allows Buildroot to get the Linux kernel source
->   	  code from a Git repository.
->
-> +config BR2_LINUX_KERNEL_CUSTOM_LOCAL
-> +	bool "Local directory"
-> +	help
-> +	  This option allows Buildroot to get the Linux kernel source
-> +	  code from a local directory.
->   endchoice
->
->   config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
-> @@ -74,6 +79,13 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
->   	  Git revision to use in the format used by git rev-parse,
->   	  E.G. a sha id, a tag, branch, ..
->
-> +config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
-> +	string "Path to the local directory"
-> +	depends on BR2_LINUX_KERNEL_CUSTOM_LOCAL
-> +	help
-> +	  Path to the local directory with the Linux kernel source code.
-> +
-> +
->   config BR2_LINUX_KERNEL_VERSION
->   	string
->   	default "3.7.6" if BR2_LINUX_KERNEL_3_7
-> @@ -81,6 +93,8 @@ config BR2_LINUX_KERNEL_VERSION
->   	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
->   	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
->   	default $BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
-> +	default "local" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
-> +
+  If setting $(TARGET_CONFIGURE_OPTS) in the environment doesn't work, 
+then you can try setting it on the command line instead. If that doesn't 
+work either, it indicates that something funny is done in the Makefile 
+and it's important to find out what exactly. Probably it's a matter of 
+CFLAGS or LDFLAGS that need to be set, but are now overridden from the 
+command line.
 
-  This is a bit confusing, because the 'local' site method will force 
-LINUX_VERSION to "custom". So I would call it custom here as well.
+  In that case, the best option is to fix the Makefile (and upstream the 
+fix). A less preferred option is something like:
+
+$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+   CC="$(TARGET_CC)" LD="$(TARGET_LD)" $(AIRCRACK_NG_MAKE_OPTS) all
+
+i.e. use the command line to force CC and LD and pass the things that the 
+Makefile needs to have control over (CFLAGS and LDFLAGS) through the 
+environment.
 
   Regards,
   Arnout
-
->
->   #
->   # Patch selection
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 91a9f50..3f2d460 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -15,6 +15,9 @@ LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
->   else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
->   LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
->   LINUX_SITE_METHOD = git
-> +else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
-> +LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
-> +LINUX_SITE_METHOD = local
->   else
->   LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
->   # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
->
 
 
 -- 
