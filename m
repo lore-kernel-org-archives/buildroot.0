@@ -1,37 +1,43 @@
-From: Jezz <jezz@sysmic.org>
-Date: Tue, 12 Feb 2013 18:59:02 +0100
-Subject: [Buildroot] [[PATCH v2]] strongswan: new package
-In-Reply-To: <20130212122551.46e895b6@skate>
-References: <20130208190247.7da881c9@skate>
- <1360667974-9734-2-git-send-email-jezz@sysmic.org>
- <20130212122551.46e895b6@skate>
-Message-ID: <1696554.VhhAAgJSGv@sagittae>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 12 Feb 2013 20:27:36 +0100
+Subject: [Buildroot] [PATCH] Fixed dts parent directory issue.
+In-Reply-To: <1360688135-7785-1-git-send-email-nagy@accelecon.com>
+References: <1360688135-7785-1-git-send-email-nagy@accelecon.com>
+Message-ID: <20130212202736.30974aac@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 12 February 2013 12:25:51 Thomas Petazzoni wrote:
-> Dear J?r?me Pouiller,
-> 
-> On Tue, 12 Feb 2013 12:19:33 +0100, J?r?me Pouiller wrote:
-> > +config BR2_PACKAGE_STRONGSWAN_OPENSSL
-> > +	bool "Enables OpenSSL based crypto backends"
-> > +	select OPENSSL
-> > +
-> > +config BR2_PACKAGE_STRONGSWAN_GCRYPT
-> > +	bool "Enables libgcrypt based crypto backends"
-> > +	select LIBGCRYPT
-> 
-> "select OPENSSL" or "select LIBGCRYPT" definitely cannot work, we don't
-> have such options in Buildroot.
-Sure. 
+Dear Michael Nagy,
 
-hmm... Config cannot warn me about stupid errors like this?
+On Tue, 12 Feb 2013 11:55:35 -0500, Michael Nagy wrote:
 
+>  define LINUX_INSTALL_DTB
+> -	cp $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
+> +	cp $(KERNEL_ARCH_PATH)/boot/dts/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
+>  endef
+>  endif
+>  endif
 
+This has already been fixed in the Git repository by
+5b33e0b6a139ce3a622817b45a8882a448312fc0 and
+a1cfe20df6c6b4f148db0c104e8ff701654a2c09.
+
+Your fix was also not entirely correct, because it would have broken
+the build of kernel earlier than 3.8 (at which time dtbs were build in
+arch/<arch>/boot and not arch/<arch>/boot/dts). The commits we have in
+the Git repository take this into account.
+
+Note that those two fixes are also part of the 2013.02-rc1 release
+candidate that was published a few days ago.
+
+Best regards,
+
+Thomas
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
