@@ -1,20 +1,42 @@
 From: Patrick Gerber <kpa_info@yahoo.fr>
-Date: Tue, 12 Feb 2013 15:13:56 +0100
-Subject: [Buildroot] [PATCH v2] Python 3, simple, external package support
-Message-ID: <1360678441-3199-1-git-send-email-kpa_info@yahoo.fr>
+Date: Tue, 12 Feb 2013 15:13:58 +0100
+Subject: [Buildroot] [PATCH 2/5] Add python3 to python simlinks in staging
+In-Reply-To: <1360678441-3199-1-git-send-email-kpa_info@yahoo.fr>
+References: <1360678441-3199-1-git-send-email-kpa_info@yahoo.fr>
+Message-ID: <1360678441-3199-3-git-send-email-kpa_info@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series refactor python support in buildroot to enable the use of
-from line 'This patch series refactor python support in buildroot to enable
-the use of external package with both python2 and python3. The packages 
-python-bottle and python-serial have adapted as examples.
+When using python3 a symlink "python" is added in staging and point to
+python3. This is needed to call python setup for external package. A
+second simlink is added to alias the config-3.3m directory to config
 
-To support others external package more work is needed as they are based on
-python setuptools. It's no more supported by python3 and should be replaced
-by "Distribute". This should be done in another patch series.
+Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
+---
+ package/python3/python3.mk |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-v2: Add short patch title
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 7551a7b..5974824 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -160,6 +160,14 @@ ifneq ($(BR2_PACKAGE_PYTHON),y)
+ PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
+ endif
+ 
++define HOST_PYTHON3_INSTALL_SYMLINK
++	ln -fs python3 $(HOST_DIR)/usr/bin/python
++	ln -fs config-3.3m $(HOST_DIR)/usr/lib/python3.3/config
++endef
++
++HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
++
++
+ ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
+ define PYTHON3_REMOVE_MODULES_FILES
+ 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
+-- 
+1.7.10.4
