@@ -1,37 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Feb 2013 12:25:51 +0100
-Subject: [Buildroot] [[PATCH v2]] strongswan: new package
-In-Reply-To: <1360667974-9734-2-git-send-email-jezz@sysmic.org>
-References: <20130208190247.7da881c9@skate>
- <1360667974-9734-1-git-send-email-jezz@sysmic.org>
- <1360667974-9734-2-git-send-email-jezz@sysmic.org>
-Message-ID: <20130212122551.46e895b6@skate>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 12 Feb 2013 12:48:46 +0100
+Subject: [Buildroot] [PATCH] dependencies: suggest package name if hg is
+	missing.
+Message-ID: <1360669726-30288-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ support/dependencies/dependencies.sh |    2 ++
+ 1 file changed, 2 insertions(+)
 
-On Tue, 12 Feb 2013 12:19:33 +0100, J?r?me Pouiller wrote:
-
-> +config BR2_PACKAGE_STRONGSWAN_OPENSSL
-> +	bool "Enables OpenSSL based crypto backends"
-> +	select OPENSSL
-> +
-> +config BR2_PACKAGE_STRONGSWAN_GCRYPT
-> +	bool "Enables libgcrypt based crypto backends"
-> +	select LIBGCRYPT
-
-"select OPENSSL" or "select LIBGCRYPT" definitely cannot work, we don't
-have such options in Buildroot.
-
-Best regards,
-
-Thomas
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index acba57c..1dad6eb 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -140,6 +140,8 @@ for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 perl tar wget cpio p
+ 	    /bin/echo -e "msgfmt is usually part of the gettext package in your distribution\n"
+ 	elif test $prog = "svn" ; then
+ 	    /bin/echo -e "svn is usually part of the subversion package in your distribution\n"
++	elif test $prog = "hg" ; then
++	    /bin/echo -e "hg is usually part of the mercurial package in your distribution\n"
+ 	else
+ 	    /bin/echo -e "\n"
+ 	fi
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10.4
