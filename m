@@ -1,46 +1,162 @@
 From: Patrick Gerber <kpa_info@yahoo.fr>
-Date: Tue, 12 Feb 2013 15:14:00 +0100
-Subject: [Buildroot] [PATCH 4/5] python-bottle: Convert package to be used
-	with python2 or python3
+Date: Tue, 12 Feb 2013 15:13:57 +0100
+Subject: [Buildroot] [PATCH 1/5] Python menu reorganization
 In-Reply-To: <1360678441-3199-1-git-send-email-kpa_info@yahoo.fr>
 References: <1360678441-3199-1-git-send-email-kpa_info@yahoo.fr>
-Message-ID: <1360678441-3199-5-git-send-email-kpa_info@yahoo.fr>
+Message-ID: <1360678441-3199-2-git-send-email-kpa_info@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+In order to have a better support for python external package make the python
+menu clearer. Python2 and Python3 are now mutually exclusive
 
 Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
 ---
- package/python-bottle/Config.in        |    1 +
- package/python-bottle/python-bottle.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/Config.in                |   19 +------------
+ package/python-generic/Config.in |   56 ++++++++++++++++++++++++++++++++++++++
+ package/python/Config.in         |   14 ----------
+ package/python3/Config.in        |   14 ----------
+ 4 files changed, 57 insertions(+), 46 deletions(-)
+ create mode 100644 package/python-generic/Config.in
 
-diff --git a/package/python-bottle/Config.in b/package/python-bottle/Config.in
-index f9b60ca..e6f2f3b 100644
---- a/package/python-bottle/Config.in
-+++ b/package/python-bottle/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_BOTTLE
- 	bool "python-bottle"
-+	depends on (BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
- 	help
- 	  Bottle is a fast, simple and lightweight WSGI micro web-framework
- 	  for Python. It is distributed as a single file module and has no
-diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
-index 370b31b..d24e0ec 100644
---- a/package/python-bottle/python-bottle.mk
-+++ b/package/python-bottle/python-bottle.mk
-@@ -7,7 +7,7 @@
- PYTHON_BOTTLE_VERSION = 0.11.4
- PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
- PYTHON_BOTTLE_SITE = http://pypi.python.org/packages/source/b/bottle
--PYTHON_BOTTLE_DEPENDENCIES = python
-+PYTHON_BOTTLE_DEPENDENCIES = $(PYTHON_GENERIC_DEPENDENCIES)
- PYTHON_BOTTLE_LICENSE = MIT
- # README.rst refers to the file "LICENSE" but it's not included
+diff --git a/package/Config.in b/package/Config.in
+index 2fad94d..b7da22f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -315,24 +315,7 @@ endmenu
+ endif
+ source "package/microperl/Config.in"
+ source "package/php/Config.in"
+-source "package/python/Config.in"
+-source "package/python3/Config.in"
+-if BR2_PACKAGE_PYTHON
+-menu "external python modules"
+-source "package/python-bottle/Config.in"
+-source "package/python-dpkt/Config.in"
+-source "package/python-id3/Config.in"
+-source "package/python-mad/Config.in"
+-source "package/python-meld3/Config.in"
+-source "package/python-netifaces/Config.in"
+-source "package/python-nfc/Config.in"
+-source "package/python-protobuf/Config.in"
+-source "package/python-pygame/Config.in"
+-source "package/python-pyparsing/Config.in"
+-source "package/python-serial/Config.in"
+-source "package/python-setuptools/Config.in"
+-endmenu
+-endif
++source "package/python-generic/Config.in"
+ source "package/ruby/Config.in"
+ source "package/tcl/Config.in"
+ if BR2_PACKAGE_TCL
+diff --git a/package/python-generic/Config.in b/package/python-generic/Config.in
+new file mode 100644
+index 0000000..4acd79b
+--- /dev/null
++++ b/package/python-generic/Config.in
+@@ -0,0 +1,56 @@
++config BR2_PACKAGE_PYTHON_GENERIC
++	bool "Python"
++	depends on BR2_USE_WCHAR
++	# uses fork()
++	depends on BR2_USE_MMU
++	help
++	  The python language interpreter.
++
++	  http://www.python.org/
++
++comment "python3 requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
++
++choice
++	depends on BR2_PACKAGE_PYTHON_GENERIC
++	prompt "Python interpreter"
++	help
++	  Select which version of Python you would like to use.
++
++config BR2_PACKAGE_PYTHON
++	bool "python2"
++	select BR2_PACKAGE_LIBFFI
++	help
++	  Use Python 2.x 
++
++
++config BR2_PACKAGE_PYTHON3
++	bool "python3"
++	# uses fork()
++	depends on BR2_USE_MMU
++	select BR2_PACKAGE_LIBFFI
++	help
++	  Use Python 3.x 
++
++endchoice
++
++source "package/python/Config.in"
++source "package/python3/Config.in"
++
++if (BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
++menu "external python modules"
++source "package/python-bottle/Config.in"
++source "package/python-dpkt/Config.in"
++source "package/python-id3/Config.in"
++source "package/python-mad/Config.in"
++source "package/python-meld3/Config.in"
++source "package/python-netifaces/Config.in"
++source "package/python-nfc/Config.in"
++source "package/python-protobuf/Config.in"
++source "package/python-pygame/Config.in"
++source "package/python-pyparsing/Config.in"
++source "package/python-serial/Config.in"
++source "package/python-setuptools/Config.in"
++endmenu
++endif
++
+diff --git a/package/python/Config.in b/package/python/Config.in
+index 4089cce..b4fd6c2 100644
+--- a/package/python/Config.in
++++ b/package/python/Config.in
+@@ -1,17 +1,3 @@
+-config BR2_PACKAGE_PYTHON
+-	bool "python"
+-	depends on BR2_USE_WCHAR
+-	# uses fork()
+-	depends on BR2_USE_MMU
+-	select BR2_PACKAGE_LIBFFI
+-	help
+-	  The python language interpreter.
+-
+-	  http://www.python.org/
+-
+-comment "python requires a toolchain with WCHAR support"
+-	depends on !BR2_USE_WCHAR
+-
+ if BR2_PACKAGE_PYTHON
  
+ choice
+diff --git a/package/python3/Config.in b/package/python3/Config.in
+index 5959d31..279f31b 100644
+--- a/package/python3/Config.in
++++ b/package/python3/Config.in
+@@ -1,17 +1,3 @@
+-config BR2_PACKAGE_PYTHON3
+-	bool "python3"
+-	depends on BR2_USE_WCHAR
+-	# uses fork()
+-	depends on BR2_USE_MMU
+-	select BR2_PACKAGE_LIBFFI
+-	help
+-	  The python language interpreter.
+-
+-	  http://www.python.org/
+-
+-comment "python3 requires a toolchain with WCHAR support"
+-	depends on !BR2_USE_WCHAR
+-
+ if BR2_PACKAGE_PYTHON3
+ 
+ choice
 -- 
 1.7.10.4
