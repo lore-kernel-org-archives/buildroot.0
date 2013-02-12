@@ -1,37 +1,37 @@
-From: Michael Nagy <nagy@accelecon.com>
-Date: Tue, 12 Feb 2013 11:55:35 -0500
-Subject: [Buildroot] [PATCH] Fixed dts parent directory issue.
-Message-ID: <1360688135-7785-1-git-send-email-nagy@accelecon.com>
+From: Jezz <jezz@sysmic.org>
+Date: Tue, 12 Feb 2013 18:59:02 +0100
+Subject: [Buildroot] [[PATCH v2]] strongswan: new package
+In-Reply-To: <20130212122551.46e895b6@skate>
+References: <20130208190247.7da881c9@skate>
+ <1360667974-9734-2-git-send-email-jezz@sysmic.org>
+ <20130212122551.46e895b6@skate>
+Message-ID: <1696554.VhhAAgJSGv@sagittae>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- linux/linux.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Tuesday 12 February 2013 12:25:51 Thomas Petazzoni wrote:
+> Dear J?r?me Pouiller,
+> 
+> On Tue, 12 Feb 2013 12:19:33 +0100, J?r?me Pouiller wrote:
+> > +config BR2_PACKAGE_STRONGSWAN_OPENSSL
+> > +	bool "Enables OpenSSL based crypto backends"
+> > +	select OPENSSL
+> > +
+> > +config BR2_PACKAGE_STRONGSWAN_GCRYPT
+> > +	bool "Enables libgcrypt based crypto backends"
+> > +	select LIBGCRYPT
+> 
+> "select OPENSSL" or "select LIBGCRYPT" definitely cannot work, we don't
+> have such options in Buildroot.
+Sure. 
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c4bdf90..8182f62 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -190,14 +190,14 @@ define LINUX_BUILD_DTB
- 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTS_NAME).dtb
- endef
- define LINUX_INSTALL_DTB
--	cp $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
-+	cp $(KERNEL_ARCH_PATH)/boot/dts/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
- endef
- endif
- endif
- 
- ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
- define LINUX_APPEND_DTB
--	cat $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb >> $(KERNEL_ARCH_PATH)/boot/zImage
-+	cat $(KERNEL_ARCH_PATH)/boot/dts/$(KERNEL_DTS_NAME).dtb >> $(KERNEL_ARCH_PATH)/boot/zImage
- 	# We need to generate the uImage here after that so that the uImage is
- 	# generated with the right image size.
- 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) uImage
+hmm... Config cannot warn me about stupid errors like this?
+
+
 -- 
-1.7.9.5
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
