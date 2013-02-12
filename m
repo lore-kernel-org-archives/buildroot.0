@@ -1,58 +1,76 @@
-From: Patrick <kpa_info@yahoo.fr>
-Date: Tue, 12 Feb 2013 15:42:54 +0100
-Subject: [Buildroot] [PATCH v2] Python 3, simple,
-	external package support
-In-Reply-To: <20130212152155.0d3c5301@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 12 Feb 2013 15:46:30 +0100
+Subject: [Buildroot] [PATCH 2/5] Add python3 to python simlinks in
+	staging
+In-Reply-To: <1360678441-3199-3-git-send-email-kpa_info@yahoo.fr>
 References: <1360678441-3199-1-git-send-email-kpa_info@yahoo.fr>
- <20130212152155.0d3c5301@skate>
-Message-ID: <511A54EE.5010509@yahoo.fr>
+ <1360678441-3199-3-git-send-email-kpa_info@yahoo.fr>
+Message-ID: <CAHXCMMJQesfQXa3RZV7WdK=88STK8YvsTHdm_Kjk_7dQ8KEnQQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/12/2013 03:21 PM, Thomas Petazzoni wrote:
-> Dear Patrick Gerber,
->
-> On Tue, 12 Feb 2013 15:13:56 +0100, Patrick Gerber wrote:
->> This patch series refactor python support in buildroot to enable the use of
->> from line 'This patch series refactor python support in buildroot to enable
->> the use of external package with both python2 and python3. The packages
->> python-bottle and python-serial have adapted as examples.
->>
->> To support others external package more work is needed as they are based on
->> python setuptools. It's no more supported by python3 and should be replaced
->> by "Distribute". This should be done in another patch series.
->
-> Thanks, but it still doesn't answer the question:
->
-> """
-> As Samuel pointed it out, this unfortunately may break a number of
-> things in Buildroot. They are packages that depend on host-python, and
-> would only be capable of using an Python 2.x host-python.
->
-> Or at least, I would like to have the confirmation that all packages
-> that depend on host-python continue to build normally when host-python
-> is Python 3.
->
-> That said, some packages are not really clear about this. For example,
-> Scons uses the Python provided with the distribution, and not the
-> host-python built by Buildroot.
->
-> As you can see, this is not a trivial topic.
-> """
->
-> Best regards,
->
-> Thomas
->
+Hi Patrick,
 
-Related with host-python, the only difference is that now the patch add 
-a symlink in  HOST_DIR. I agree that this could be a problem.
+2013/2/12 Patrick Gerber <kpa_info@yahoo.fr>:
+> When using python3 a symlink "python" is added in staging and point to
+s/staging/host directory/
 
-I could edit the external python package to use "python" or "python3" 
-depending of the selected version. This will not impact host-python at 
-all. Does it seems good to you ?
+> python3. This is needed to call python setup for external package. A
+> second simlink is added to alias the config-3.3m directory to config
+s/simlink/symlink/
 
-Patrick
+>
+> Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
+> ---
+>  package/python3/python3.mk |    8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index 7551a7b..5974824 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -160,6 +160,14 @@ ifneq ($(BR2_PACKAGE_PYTHON),y)
+>  PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
+>  endif
+>
+> +define HOST_PYTHON3_INSTALL_SYMLINK
+> +       ln -fs python3 $(HOST_DIR)/usr/bin/python
+> +       ln -fs config-3.3m $(HOST_DIR)/usr/lib/python3.3/config
+> +endef
+> +
+> +HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
+BTW, I'm a bit concerned about the consequencies this may have...
+
+From my experience, having python poiting to python3 in the PATH has
+some bad effect,
+and some patch have been posted some time ago to fix this issue:
+http://patchwork.ozlabs.org/patch/208803/
+
+Also, I'm dubious about having python poiting to python3.
+Though there is nothing really stated, there is usually a consensus:
+"python" refers to the
+python-2 interpreter if it exists on the system, otherwise it refers
+to the python-3 one (if existing).
+
+What worries me is that, python (i.e. python 2.6 or 2.7) is currently
+a mandatory for Buildroot
+(see: http://buildroot.org/downloads/manual/manual.html#requirement-mandatory),
+and here,
+you are overriding it with python3 in the PATH inside Buildroot.
+
+I undersatnd that, when BR2_PACKAGE_PYTHON3_PY_ONLY is enabled, you
+want to build
+all modules using python3, but meanwhile some other build scripts may
+use 'python' referring
+to python2 and may badly failed because they will trigger python3...
+
+I may have missed something... so, enlighten me please.
+
+
+Regards,
+
+-- 
+Samuel
