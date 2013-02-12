@@ -1,46 +1,51 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 12 Feb 2013 14:25:18 +0100
-Subject: [Buildroot] [RFC] Removing CLEAN_CMDS and
-	UNINSTALL_(STAGING|TARGET)_CMDS
-In-Reply-To: <1360363083-28747-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1360363083-28747-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <511A42BE.8060506@lucaceresoli.net>
+From: Patrick <kpa_info@yahoo.fr>
+Date: Tue, 12 Feb 2013 15:02:09 +0100
+Subject: [Buildroot] [PATCH 1/5] In order to have a better support for
+ python external package make the python menu clearer. Python2 and Python3
+ are now mutually exclusive
+In-Reply-To: <20130212134952.1b43d8b6@skate>
+References: <1360671849-7621-1-git-send-email-kpa_info@yahoo.fr>
+ <1360671849-7621-2-git-send-email-kpa_info@yahoo.fr>
+ <20130212134952.1b43d8b6@skate>
+Message-ID: <511A4B61.4070605@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
-> Hello,
+On 02/12/2013 01:49 PM, Thomas Petazzoni wrote:
+> Dear Patrick Gerber,
 >
-> This is an RFC patch set to discuss whether or not we should keep the
-> <pkg>_CLEAN_CMDS, <pkg>_UNINSTALL_TARGET_CMDS and
-> <pkg>_UNINSTALL_STAGING_CMDS. It is a topic that has been discussed at
-> various times in the past months/years.
+> On Tue, 12 Feb 2013 13:24:05 +0100, Patrick Gerber wrote:
+>>
+>> Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
+>> ---
+>>   package/Config.in                |   19 +------------
+>>   package/python-generic/Config.in |   56 ++++++++++++++++++++++++++++++++++++++
+>>   package/python/Config.in         |   14 ----------
+>>   package/python3/Config.in        |   14 ----------
+>>   4 files changed, 57 insertions(+), 46 deletions(-)
+>>   create mode 100644 package/python-generic/Config.in
 >
-> A lot of packages don't implement them, we generally don't ask for
-> them to be implemented when reviewing packages, and the uninstall
-> commands are generally never updated when a package version is bumped,
-> which means that they are probably bitrotting pretty quickly. We also
-> have no automated way of testing these commands.
+> This seems really complicated. Can't we just have a depends
+> on !BR2_PACKAGE_PYTHON in the python3 package, and a depends
+> on !BR2_PACKAGE_PYTHON3 in the python package?
 >
-> That said, it is true that the <pkg>-clean target might be useful for
-> some use cases. However, is <pkg>-uninstall really useful, considering
-> that it doesn't take into account the removal of the reverse
-> dependencies?
+> Thomas
 >
-> Again, this patch set is not meant to be applied as is, it is here to
-> get the discussion started. Sending the patches with it is simply a
-> way to ensure that the discussion is considered seriously :-)
 
-Never used this feature. For development it is not necessary to have a
-perfectly stripped down rootfs. For releases, as well as after important
-package bumps, i just do:
-git clean -xdf ; make foo_defconfig ; make
-With ccache the build time is reasonable.
+Hi Thomas,
 
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+This is not so complicated, I have only moved some lines from 
+package/Config.in, package/python/Config.in and 
+package/python3/Config.in to package/python-generic/Config.in and added 
+few lines to handle the "choice" menu.
 
-Luca
+I have tried as you suggest but it have some strange behaviour...
+
+If you care about the python-generic directory we need it also to add 
+some "common" stuff to handle properly the support of both python's 
+version by the external packages.
+
+Patrick
