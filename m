@@ -1,46 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Feb 2013 07:32:15 +0100
-Subject: [Buildroot] [RFC] Removing CLEAN_CMDS and
-	UNINSTALL_(STAGING|TARGET)_CMDS
-In-Reply-To: <1360363083-28747-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1360363083-28747-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <5119E1EF.3070507@mind.be>
+Date: Tue, 12 Feb 2013 07:59:06 +0100
+Subject: [Buildroot] [RFC] Support libraries for TI OMAP and DaVinci DSP
+ accelerators
+In-Reply-To: <CAHQn0kjX0WZm-YpBi2qzjcVuQWgrAzcPzBF1j6PvWJHUFr58HQ@mail.gmail.com>
+References: <1327251861-16833-1-git-send-email-arnout@mind.be>
+ <87sjj234qr.fsf@macbook.be.48ers.dk>
+ <CAHQn0kjX0WZm-YpBi2qzjcVuQWgrAzcPzBF1j6PvWJHUFr58HQ@mail.gmail.com>
+Message-ID: <5119E83A.9000007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/02/13 23:37, Thomas Petazzoni wrote:
-> This is an RFC patch set to discuss whether or not we should keep the
-> <pkg>_CLEAN_CMDS, <pkg>_UNINSTALL_TARGET_CMDS and
-> <pkg>_UNINSTALL_STAGING_CMDS. It is a topic that has been discussed at
-> various times in the past months/years.
+On 11/02/13 14:48, Daniel Nystr?m wrote:
+> On Thu, Jan 26, 2012 at 3:42 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>
+>> Hi,
+>>
+>>   Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+>>   Arnout> This (huge) patch adds the support libraries for OMAP and DaVinci
+>>   Arnout> processors to buildroot.  This is an RFC: there are still a bunch
+>>   Arnout> of FIXMEs and I've only tried it on a DM365.  I post it as one
+>>   Arnout> big patch this time, so it is easier to see the overall structure.
+>>
+>>   Arnout> As I said, it is far from ready.  However, it has been sitting
+>>   Arnout> in my repository for more than two months now and I haven't had
+>>   Arnout> time to improve it.  So I thought it would be better to post it
+>>   Arnout> now, unfinished, rather than risking that it becomes unusable.
+>>
+>> Thanks! Lets discuss some more about it during the dev day. I'm starting
+>> a TI-based project at work at the moment, and I've takend a quick look
+>> at the powervr situation, which is a similar mess.
 >
-> A lot of packages don't implement them, we generally don't ask for
-> them to be implemented when reviewing packages, and the uninstall
-> commands are generally never updated when a package version is bumped,
-> which means that they are probably bitrotting pretty quickly. We also
-> have no automated way of testing these commands.
->
-> That said, it is true that the <pkg>-clean target might be useful for
-> some use cases. However, is <pkg>-uninstall really useful, considering
-> that it doesn't take into account the removal of the reverse
-> dependencies?
->
-> Again, this patch set is not meant to be applied as is, it is here to
-> get the discussion started. Sending the patches with it is simply a
-> way to ensure that the discussion is considered seriously:-)
+> Any news on this? I'm back on my needs for the SGX/PowerVR libraries,
+> but would like to get updated on latest status before I start up a new
+> project.
 
-  I think I'm the biggest proponent of the idea, so
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-to the series.
-
-  That said, I wouldn't oppose to keeping the CLEAN around for one more 
-release, until the out-of-tree build has settled in.
+  I haven't done any work anymore on the davinci libraries.
 
   Regards,
   Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
