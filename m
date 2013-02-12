@@ -1,31 +1,58 @@
-From: Alexander Lukichev <alexander.lukichev@gmail.com>
-Date: Tue, 12 Feb 2013 12:08:07 +0200
-Subject: [Buildroot] [PATCH 1/1] openpgm: new package
-In-Reply-To: <20130211151429.682ea550@skate>
-References: <1360585826-17996-1-git-send-email-alexander.lukichev@gmail.com>
- <20130211134547.02bedae4@skate> <5118EF9A.1030106@gmail.com>
- <20130211151429.682ea550@skate>
-Message-ID: <511A1487.2060507@gmail.com>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Tue, 12 Feb 2013 10:14:55 +0000
+Subject: [Buildroot] [PATCH] vim: Add option to remove documentation from
+	target
+Message-ID: <1360664095-16562-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Thomas, All!
+From: Markos Chandras <markos.chandras@imgtec.com>
 
-On 02/11/2013 04:14 PM, Thomas Petazzoni wrote:
->>> unclear if we should choose libpgm or openpgm. Does the openpgm
->>> projects delivers something else than libpgm?
->> Not as far as I know.
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ package/vim/Config.in |    8 ++++++++
+ package/vim/vim.mk    |    8 ++++++++
+ 2 files changed, 16 insertions(+), 0 deletions(-)
 
-Well, actually yes. It's mostly libpgm but there are also bindings for Perl and GStreamer.
-
-> Then maybe we want to call the package libpgm ?
-It is referenced from ZeroMQ (in everything, including scripts and documentation) as OpenPGM. I don't know about other packages using it, though.
-It is also referenced from inside the package itself (the subdir is openpgm/pgm/ etc). It seems that only the archive and installed library files have libpgm in their names: everything else is named openpgm.
-So, I'll do what you and the community advise but I'd rather call it "OpenPGM implementation of libpgm".
-
---
-Best regards,
-  Alexander Lukichev
+diff --git a/package/vim/Config.in b/package/vim/Config.in
+index 891715e..28e34b5 100644
+--- a/package/vim/Config.in
++++ b/package/vim/Config.in
+@@ -14,3 +14,11 @@ config BR2_PACKAGE_VIM_RUNTIME
+ 	help
+ 	  Install VIM runtime (syntax highlighing + macros).
+ 	  This option adds about 15MB of data to /usr/share/
++
++config BR2_PACKAGE_VIM_REMOVE_DOCS
++	bool "remove documentation"
++	default y
++	depends on BR2_PACKAGE_VIM
++	help
++	  Remove documentation files from the target.
++	  This option removes about 5.6MB of data from /usr/share/
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index fa5f8ae..d199d9b 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -36,8 +36,16 @@ define VIM_INSTALL_RUNTIME_CMDS
+ 		$(MAKE) DESTDIR=$(TARGET_DIR) installmacros
+ endef
+ 
++define VIM_REMOVE_DOCS
++	find $(TARGET_DIR)/usr/share/vim -type f -name "*.txt" -delete
++endef
++
+ ifeq ($(BR2_PACKAGE_VIM_RUNTIME),y)
+ VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_RUNTIME_CMDS
+ endif
+ 
++ifeq ($(BR2_PACKAGE_VIM_REMOVE_DOCS),y)
++VIM_POST_INSTALL_TARGET_HOOKS += VIM_REMOVE_DOCS
++endif
++
+ $(eval $(autotools-package))
+-- 
+1.7.1
