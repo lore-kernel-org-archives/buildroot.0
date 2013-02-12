@@ -1,48 +1,46 @@
 From: Patrick Gerber <kpa_info@yahoo.fr>
-Date: Tue, 12 Feb 2013 15:13:59 +0100
-Subject: [Buildroot] [PATCH 3/5] Add common declaration to ease the support
-	of both version
+Date: Tue, 12 Feb 2013 15:14:00 +0100
+Subject: [Buildroot] [PATCH 4/5] python-bottle: Convert package to be used
+	with python2 or python3
 In-Reply-To: <1360678441-3199-1-git-send-email-kpa_info@yahoo.fr>
 References: <1360678441-3199-1-git-send-email-kpa_info@yahoo.fr>
-Message-ID: <1360678441-3199-4-git-send-email-kpa_info@yahoo.fr>
+Message-ID: <1360678441-3199-5-git-send-email-kpa_info@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Define a new variable called PYTHON_GENERIC_DEPENDENCIES either to
-"python" or "python3" depending of the selected Python version. This
-is needed to easily set dependencies for packages that could be used
-either with Python 2 or Python 3.
 
 Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
 ---
- package/python-generic/python-generic.mk |   16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 package/python-generic/python-generic.mk
+ package/python-bottle/Config.in        |    1 +
+ package/python-bottle/python-bottle.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-generic/python-generic.mk b/package/python-generic/python-generic.mk
-new file mode 100644
-index 0000000..0cf0e9d
---- /dev/null
-+++ b/package/python-generic/python-generic.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# python-generic
-+#
-+#############################################################
-+# PYTHON_GENERIC_DEPENDENCIES is defined to the selected python 
-+# version. 
-+
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+	PYTHON_GENERIC_DEPENDENCIES = python
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+	PYTHON_GENERIC_DEPENDENCIES = python3
-+endif
-+
+diff --git a/package/python-bottle/Config.in b/package/python-bottle/Config.in
+index f9b60ca..e6f2f3b 100644
+--- a/package/python-bottle/Config.in
++++ b/package/python-bottle/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_BOTTLE
+ 	bool "python-bottle"
++	depends on (BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
+ 	help
+ 	  Bottle is a fast, simple and lightweight WSGI micro web-framework
+ 	  for Python. It is distributed as a single file module and has no
+diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
+index 370b31b..d24e0ec 100644
+--- a/package/python-bottle/python-bottle.mk
++++ b/package/python-bottle/python-bottle.mk
+@@ -7,7 +7,7 @@
+ PYTHON_BOTTLE_VERSION = 0.11.4
+ PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
+ PYTHON_BOTTLE_SITE = http://pypi.python.org/packages/source/b/bottle
+-PYTHON_BOTTLE_DEPENDENCIES = python
++PYTHON_BOTTLE_DEPENDENCIES = $(PYTHON_GENERIC_DEPENDENCIES)
+ PYTHON_BOTTLE_LICENSE = MIT
+ # README.rst refers to the file "LICENSE" but it's not included
+ 
 -- 
 1.7.10.4
