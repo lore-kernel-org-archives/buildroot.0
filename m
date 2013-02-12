@@ -1,24 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 12 Feb 2013 01:52:40 +0000 (UTC)
-Subject: [Buildroot] [Bug 5918] Linux Kernel Headers Wrong Version
-In-Reply-To: <bug-5918-163@https.bugs.busybox.net/>
-References: <bug-5918-163@https.bugs.busybox.net/>
-Message-ID: <20130212015240.83B469AA47@busybox.osuosl.org>
+From: Belisko Marek <marek.belisko@gmail.com>
+Date: Tue, 12 Feb 2013 07:34:47 +0100
+Subject: [Buildroot] Fwd:
+In-Reply-To: <5119985b.4253700a.1464.ffffbacf@mx.google.com>
+References: <5119985b.4253700a.1464.ffffbacf@mx.google.com>
+Message-ID: <CAAfyv34Oiwf8CjRbWQicnc3nwytM-Ysrw1n5YEnzx_fRTVR5Kw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5918
+Sorry guys, seems my account was attacked by something (someone).
 
-Matt Ihnen <mihnen@mecmidwest.com> changed:
+On Tue, Feb 12, 2013 at 1:18 AM, Belisko Marek <marek.belisko@gmail.com> wrote:
+> http://www.prinzicase.com/qnyigp.php?s=ot
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Platform|Other                       |PC
+marek
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
+
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
