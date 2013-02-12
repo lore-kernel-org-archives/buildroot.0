@@ -1,51 +1,107 @@
-From: John Stile <john@stilen.com>
-Date: Tue, 12 Feb 2013 13:30:26 -0800
-Subject: [Buildroot] post-build script calling another buildroot fails
-Message-ID: <1360704626.13529.179.camel@genx>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Feb 2013 18:15:38 +0100
+Subject: [Buildroot] [PATCH 1/1] Added local directory as soure of
+ kernel code
+In-Reply-To: <1360310725-6463-2-git-send-email-rafal.fabich@gmail.com>
+References: <1360310725-6463-1-git-send-email-rafal.fabich@gmail.com>
+ <1360310725-6463-2-git-send-email-rafal.fabich@gmail.com>
+Message-ID: <511A78BA.4010200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am having a problem with one make buildroot calling another make
-buildroot with a different configuration, via a post-build script.
+On 08/02/13 09:05, Rafal Fabich wrote:
+> In 'menuconfig' user can choose the local directory as a source of Linux kernel code.
+> Useful during kernel drivers or modules development.
+>
+> Tested on three different development machines and different kernel sources.
+>
+> Signed-off-by: Rafal Fabich <rafal.fabich@gmail.com>
 
-One configuration is for NAND flash
-Another  configuration is for NOR flash.
-The NAND flash .config calls a post-build script.
-The post-build scrip tries to make the NOR buildroot.
+  Looks like this is asked for over and over again, so I think it is 
+really worth adding this option. I think this was in fact briefly 
+discussed at the BR Developer Days but I didn't write it down in the 
+report...
 
-If I run the script from the command line it works.
+  Between this patch and Richard Braun's, I think this one is closer to 
+how it should be.
 
-The error when called from NAND buildroot make:
-make[1]: Entering directory
-`/home/jstile/svn_rmserver/buildroot-2011.11'
-make[1]: *** No rule to make target `project_failsafe_defconfig'.  Stop.
-make[1]: Leaving directory `/home/jstile/svn_rmserver/buildroot-2011.11'
+  One comment below, though.
 
-Filesystem layout looks like this:
-|
-|-buildroot-2011.11/
-| |-.config
-| |-configs/project_failsafe_defconfig
-| |-output/images/rootfs.jffs2
-| \-post-build-script.bash
-| 
-|-failsafe/
-| |-images/rootfs.jffs2
+> ---
+>   linux/Config.in |   14 ++++++++++++++
+>   linux/linux.mk  |    3 +++
+>   2 files changed, 17 insertions(+)
+>
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 3c50acc..d88d920 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -52,6 +52,11 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT
+>   	  This option allows Buildroot to get the Linux kernel source
+>   	  code from a Git repository.
+>
+> +config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+> +	bool "Local directory"
+> +	help
+> +	  This option allows Buildroot to get the Linux kernel source
+> +	  code from a local directory.
+>   endchoice
+>
+>   config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+> @@ -74,6 +79,13 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+>   	  Git revision to use in the format used by git rev-parse,
+>   	  E.G. a sha id, a tag, branch, ..
+>
+> +config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+> +	string "Path to the local directory"
+> +	depends on BR2_LINUX_KERNEL_CUSTOM_LOCAL
+> +	help
+> +	  Path to the local directory with the Linux kernel source code.
+> +
+> +
+>   config BR2_LINUX_KERNEL_VERSION
+>   	string
+>   	default "3.7.6" if BR2_LINUX_KERNEL_3_7
+> @@ -81,6 +93,8 @@ config BR2_LINUX_KERNEL_VERSION
+>   	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+>   	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+>   	default $BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
+> +	default "local" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
+> +
 
-'buildroot-2011.11' is where I build my NAND system.
-'failsafe' is where I build my NOR system.
+  This is a bit confusing, because the 'local' site method will force 
+LINUX_VERSION to "custom". So I would call it custom here as well.
 
-From buildroot-2011.11 directory, I run 'make', which calls my
-post-build-script.bash as the post-build script.
+  Regards,
+  Arnout
 
-The post-build script:
-#!/bin/bash
-mkdir -p ../failsafe
-cd ../failsafe
-make -C ../buildroot-2011.11 O=$(pwd) project_failsafe_defconfig
-make
+>
+>   #
+>   # Patch selection
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 91a9f50..3f2d460 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -15,6 +15,9 @@ LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
+>   else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+>   LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
+>   LINUX_SITE_METHOD = git
+> +else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
+> +LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
+> +LINUX_SITE_METHOD = local
+>   else
+>   LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
+>   # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+>
 
-The first make statement is the source of the error message.
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
