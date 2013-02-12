@@ -1,48 +1,54 @@
-From: Patrick <kpa_info@yahoo.fr>
-Date: Tue, 12 Feb 2013 16:49:33 +0100
-Subject: [Buildroot] [PATCH v2] Python 3, simple,
-	external package support
-In-Reply-To: <20130212162922.7e940756@skate>
-References: <1360678441-3199-1-git-send-email-kpa_info@yahoo.fr>
- <20130212152155.0d3c5301@skate> <511A54EE.5010509@yahoo.fr>
- <20130212155333.1cf75e26@skate> <511A5DD5.1030005@yahoo.fr>
- <20130212162922.7e940756@skate>
-Message-ID: <511A648D.1060006@yahoo.fr>
+From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
+Date: Tue, 12 Feb 2013 16:57:27 +0100
+Subject: [Buildroot] Report from the Buildroot Developers Meeting
+In-Reply-To: <20130212151823.6f38a844@skate>
+References: <20130209004253.207e0741@skate>
+ <CAHQn0ki4wo2xtMcsQr7ACY_EihgePe=UaWUjziHeAP_80nPR7A@mail.gmail.com>
+ <20130212151823.6f38a844@skate>
+Message-ID: <CAHQn0kh_8=seM=OybRGC--XY1wYFnhnB7Mts4Y+it1AWMqRgcw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
-
-On 02/12/2013 04:29 PM, Thomas Petazzoni wrote:
-> Dear Patrick,
+On Tue, Feb 12, 2013 at 3:18 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Daniel Nystr?m,
+> On Tue, 12 Feb 2013 15:14:37 +0100, Daniel Nystr?m wrote:
+>> According to the announcement of udev and systemd being merged, they
+>> claimed udev would still be able to be build independently (although
+>> through the systemd source tree of course). I requested some info
+>> regarding the D-Bus dependency in #systemd and here is the dialog:
+>>
+>> < speakman> Just heard about udev and systemd merging. And it seems
+>> like udev can still be compiled individually although from the same
+>> source tree as systemd. But how about it's DBus dependency - will
+>> "udev" compile without D-Bus libraries?
+>> < ssuominen> speakman: yes, but you have to call specific Makefile.am
+>> targets individually... and set environment flags DBUS_CFLAGS=' ' and
+>> DBUS_LIBS='
+>>                    ' to get past the ./configure check
+>> < ssuominen> speakman: gentoo is packaging udev like that, and ebuilds
+>> are mostly bash, you could take look at the rather complex setup from
+>> the ebuild
 >
-> On Tue, 12 Feb 2013 16:20:53 +0100, Patrick wrote:
+> Interesting, thanks for asking about this topic.
 >
->> Thomas, I am aware that there is others packages that depends on
->> host-python, mostly x11. But I have not changed the way host-python nor
->> host-python3 are build and used. I don't understand how the changes I
->> have made could break this compared as previously ? If I'm not mistaken,
->> host-python is selected directly by the package (mesa3d for example)
->> when needed, and this is independent of the selected python package, right ?
+> Note that there was an effort last year to make this easier:
+> http://comments.gmane.org/gmane.linux.hotplug.devel/17478. But it
+> doesn't seem to have been merged, and the systemd maintainers don't
+> think building D-Bus is a problem:
+> http://lists.freedesktop.org/archives/systemd-devel/2012-June/005516.html.
+
+That's one sad attitude by the developers. Looks like we're on our own here.
+
+>> Regarding Buildroot I assume dbus and systemd will merge into one
+>> single package. Are there anything preventing "systemd" from being
+>> "optional" and depend on D-Bus only when enabled?
 >
-> True.
->
-> So we might end up with two versions of Python installed in
-> $(HOST_DIR): python2 and python3. Hopefully, it should work.
->
+> Why would systemd and dbus would merge into one single package? Are you
+> sure you didn't confuse with "systemd and udev would merge into one
+> single package" ?
 
-This is already the case if I enable python3, no ?
-
-> Regarding the patch set, I think I would prefer to rename the current
-> python package to python2, and have the 'python' package be the virtual
-> package that provides either python2 or python3. That's indeed more
-> work, but I find the name "python-generic" not so great.
-
-I have tried like you suggest, but then I have to rename python.mk to 
-python2.mk and then any occurrence of python or host-python to python2 
-and host-python2 in many package dependencies, no ?
-
-But I could rename python-generic to python-common or something like that ?
+That's my typo, sorry.
