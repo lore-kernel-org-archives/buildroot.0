@@ -1,46 +1,65 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Tue, 12 Feb 2013 09:12:46 +0100
-Subject: [Buildroot] kernel drivers
-In-Reply-To: <1360613608.96975.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-References: <1360613608.96975.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-Message-ID: <5119F97E.2040405@relinux.de>
+Date: Tue, 12 Feb 2013 09:38:56 +0100
+Subject: [Buildroot] [RFC] Removing CLEAN_CMDS and
+	UNINSTALL_(STAGING|TARGET)_CMDS
+In-Reply-To: <1360363083-28747-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1360363083-28747-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <5119FFA0.2090804@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 11.02.2013 21:13, schrieb Zoran Djordjevic:
-> My question is mostly theoretical, so I will be much obliged if I'll be pointed at some links, although
-> (as Buildroot user) I am interested in the way I can do things with Buildroot. What I would like to 
-> know is how can I incorporate some new kernel driver (having it's source) into kernel build? First, where 
-> should I put it in kernel source tree, then can I compile it independently, without rebuilding whole kernel 
-> (I imagine modules can do the job)?
-Hello Zoran,
+Am 08.02.2013 23:37, schrieb Thomas Petazzoni:
+> Hello,
+>
+> This is an RFC patch set to discuss whether or not we should keep the
+> <pkg>_CLEAN_CMDS, <pkg>_UNINSTALL_TARGET_CMDS and
+> <pkg>_UNINSTALL_STAGING_CMDS. It is a topic that has been discussed at
+> various times in the past months/years.
+Hello Thomas,
 
-there are some topics not already mentioned by Dimitros' and Grant's
-replies:
+the "make <pkg>-clean" handling we have is practically useless, since
+some packages implement it more or less and others only remove the stamp
+files or whatever. So we could either repair it or remove it.
 
-* If you put your driver into the kernel tree it has to be GPL
-* Nowadays editing the kernel outside of buildroot and building it with
-buildroot is easy thanks to the source override feature
-* There are some samples of "out-of-kerneltree" drivers in buildroot
-that can be used as a guideline for this, e.g. package/owl-linux/
+Since the only reason to clean a package is that one has changed the
+configuration "make <pkg>-dirclean" does as well. So I opt for removing
+the <pkg>-clean target and the <pkg>_CLEAN_CMDS.
 
-Reards
+>
+> A lot of packages don't implement them, we generally don't ask for
+> them to be implemented when reviewing packages, and the uninstall
+> commands are generally never updated when a package version is bumped,
+> which means that they are probably bitrotting pretty quickly. We also
+> have no automated way of testing these commands.
+>
+> That said, it is true that the <pkg>-clean target might be useful for
+> some use cases. However, is <pkg>-uninstall really useful, considering
+> that it doesn't take into account the removal of the reverse
+> dependencies?
+From buildroot's concept of defining the packages with Kconfig I did not
+see the point of uninstall at all. It could either be called
+automatically after removing packages from .config or, when make
+<package>_uninstall is called, update .config afterwards. Both does not
+seem practicable to me.
+
+So I opt for removing this, too.
+
+
+Regards
 
 Stephan
-> How can I compile it as a module or to be more precise, do I write driver in some special way to be a module? 
-> (I see that Buildroot offers some driver to be choosed for module compiling or to be part of monolitic kernel).
->  
-> Regards
+> Again, this patch set is not meant to be applied as is, it is here to
+> get the discussion started. Sending the patches with it is simply a
+> way to ensure that the discussion is considered seriously :-)
 >
+> Best regards,
+>
+> Thomas
 >
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130212/fb0e7ea2/attachment.html>
