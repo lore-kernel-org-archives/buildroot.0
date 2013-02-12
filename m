@@ -1,64 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Feb 2013 07:27:26 +0100
-Subject: [Buildroot] [PATCH 1/2] packages: add ability for packages to
- create users
-In-Reply-To: <201302082302.37055.yann.morin.1998@free.fr>
-References: <cover.1360075956.git.yann.morin.1998@free.fr>
- <5f1de03287fa8817aa692419c52e0997ec3e2489.1360075956.git.yann.morin.1998@free.fr>
- <5111A009.10304@mind.be> <201302082302.37055.yann.morin.1998@free.fr>
-Message-ID: <5119E0CE.5040801@mind.be>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Tue, 12 Feb 2013 09:12:46 +0100
+Subject: [Buildroot] kernel drivers
+In-Reply-To: <1360613608.96975.YahooMailNeo@web164601.mail.gq1.yahoo.com>
+References: <1360613608.96975.YahooMailNeo@web164601.mail.gq1.yahoo.com>
+Message-ID: <5119F97E.2040405@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/02/13 23:02, Yann E. MORIN wrote:
-> Arnout, All,
+Am 11.02.2013 21:13, schrieb Zoran Djordjevic:
+> My question is mostly theoretical, so I will be much obliged if I'll be pointed at some links, although
+> (as Buildroot user) I am interested in the way I can do things with Buildroot. What I would like to 
+> know is how can I incorporate some new kernel driver (having it's source) into kernel build? First, where 
+> should I put it in kernel source tree, then can I compile it independently, without rebuilding whole kernel 
+> (I imagine modules can do the job)?
+Hello Zoran,
+
+there are some topics not already mentioned by Dimitros' and Grant's
+replies:
+
+* If you put your driver into the kernel tree it has to be GPL
+* Nowadays editing the kernel outside of buildroot and building it with
+buildroot is easy thanks to the source override feature
+* There are some samples of "out-of-kerneltree" drivers in buildroot
+that can be used as a guideline for this, e.g. package/owl-linux/
+
+Reards
+
+Stephan
+> How can I compile it as a module or to be more precise, do I write driver in some special way to be a module? 
+> (I see that Buildroot offers some driver to be choosed for module compiling or to be part of monolitic kernel).
+>  
+> Regards
 >
-> On Wednesday 06 February 2013 Arnout Vandecappelle wrote:
->> On 05/02/13 15:54, Yann E. MORIN wrote:
-> [--SNIP--]
->>> +PASSWD_METHOD="$( sed -r -e '/^BR2_TARGET_GENERIC_PASSWD_METHOD="(.)*"$/!d' \
->>> +                         -e 's//\1/;'                                       \
->>> +                         "${BUILDROOT_CONFIG}"                              \
->>> +                )"
->>
->>    I'm personally more in favour of sourcing ${BUILDROOT_CONFIG} and using
->> "${BR2_TARGET_GENERIC_PASSWD_METHOD}" directly.
 >
-> We can't simply source .config from shell scripts. .config may contain
-> constructs of the form:
->      BR2_HOST_DIR="$(BASE_DIR)/host"
->
-> which would ultimately try to call a command named 'BASE_DIR' which is
-> obviously wrong for virtually everybody on Earth (and probably other
-> planets, too).
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-  Ah, yes, that's why I prefer to put ${...} references in .config 
-(${...} is the same as $(...) in GNU make).
-
-  But there are about 10 references to $(...) in Config.in defaults, so 
-changing that is a bit too heavy.
-
-
-> So, I kept a sed expression to extract the password encoding method form
-> the .config.
->
-> Note: I applied most of your suggestions, and added your ACK, as per your
-> initial mail. I hope it will be still valid once you see the nes script! ;-)
-
-  No problem.
-
-  Regards,
-  Arnout
-
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130212/fb0e7ea2/attachment.html>
