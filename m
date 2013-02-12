@@ -1,29 +1,39 @@
-From: Alexander Lukichev <alexander.lukichev@gmail.com>
-Date: Tue, 12 Feb 2013 12:57:10 +0200
-Subject: [Buildroot] [PATCH 1/1] openpgm: new package
-In-Reply-To: <20130212115305.3c4b6990@skate>
-References: <1360666051-16475-1-git-send-email-alexander.lukichev@gmail.com>
- <1360666051-16475-2-git-send-email-alexander.lukichev@gmail.com>
- <20130212115305.3c4b6990@skate>
-Message-ID: <511A2006.90203@gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Tue, 12 Feb 2013 12:19:32 +0100
+Subject: [Buildroot] [PATCH] strongswan: new package
+In-Reply-To: <20130208190247.7da881c9@skate>
+References: <20130208190247.7da881c9@skate>
+Message-ID: <1360667974-9734-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Thomas!
 
-On 02/12/2013 12:53 PM, Thomas Petazzoni wrote:
-> The only thing missing I believe is a
-> description + Signed-off-by line in the
-> package/openpgm/openpgm-cross-compile.patch file.
+On Friday 08 February 2013 19:02:47 Thomas Petazzoni wrote:
+> Dear J?r?me Pouiller,
+> 
+> A few comments (at the top because the patch is big and the comments
+> are very general) :
+[...] 
+>  * Are you sure we need gazillions of configuration options like you
+>    had? It seems like you went on by adding one kconfig option for each
+>    option the ./configure script provides. This is generally not what
+>    we do. Package what you need, possibly with some kconfig options,
+>    and then people can progressively extend that with more options as
+>    needed.
+I confess, I used perl to make it. 
 
-Oops! I intended to do so but it fell out of my head. Will be fixed.
+I am not final user of this package. It's difficult to choose which options 
+are usefull to present. I tried to do my best in following version.
 
-> Also, did you test this package against uClibc or glibc?
-uClibc 0.9.33 only with largefile, threads and all the friends. I guess, threads are mandatory for this library. I'll set the correct dependencies and test with different base libs. Thanks.
 
---
-Best regards,
-  Alexander Lukichev
+[...other comments...]
+
+New patch follows.
+
+-- 
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
