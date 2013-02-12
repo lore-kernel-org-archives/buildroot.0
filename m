@@ -1,83 +1,68 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Feb 2013 18:01:44 +0100
-Subject: [Buildroot] [PATCH] aircrack-ng: new package
-In-Reply-To: <CAA1eMkHU92kZyhp_ChMFfPDRLViGNmmM-M+NbXWBNFs1ghh7nA@mail.gmail.com>
-References: <1360340189-4409-1-git-send-email-laurent.cans@gmail.com>
- <20130208163229.553918e3@skate> <51155F6E.5090806@mind.be>
- <CAA1eMkHU92kZyhp_ChMFfPDRLViGNmmM-M+NbXWBNFs1ghh7nA@mail.gmail.com>
-Message-ID: <511A7578.6010501@mind.be>
+Date: Tue, 12 Feb 2013 18:47:25 +0100
+Subject: [Buildroot] [PATCH 1/1] openpgm: new package
+In-Reply-To: <511A2006.90203@gmail.com>
+References: <1360666051-16475-1-git-send-email-alexander.lukichev@gmail.com>
+ <1360666051-16475-2-git-send-email-alexander.lukichev@gmail.com>
+ <20130212115305.3c4b6990@skate> <511A2006.90203@gmail.com>
+Message-ID: <511A802D.9030708@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/02/13 16:08, Laurent CANS wrote:
-> Arnout, Thomas,
+On 12/02/13 11:57, Alexander Lukichev wrote:
+> Hi, Thomas!
 >
-> I tried to use $(TARGET_CONFIGURE_OPTS) passed by variable or by
-> environment but the 2 methods fails.
+> On 02/12/2013 12:53 PM, Thomas Petazzoni wrote:
+>> The only thing missing I believe is a
+>> description + Signed-off-by line in the
+>> package/openpgm/openpgm-cross-compile.patch file.
 >
-> What is the correct methode to handle this?
-> - Correct package makefiles
-> - Don't use $(TARGET_CONFIGURE_OPTS) but CC and LD fixed by variable
-> - Another solution
+> Oops! I intended to do so but it fell out of my head. Will be fixed.
 >
-> Best regards,
->
-> Laurent
+>> Also, did you test this package against uClibc or glibc?
+> uClibc 0.9.33 only with largefile, threads and all the friends. I guess, threads are mandatory for this library. I'll set the correct dependencies and test with different base libs. Thanks.
 
-  Laurent,
+  When you resubmit, please also:
 
-  First of all, please don't top-post, but cut down the quoted message to 
-the relevant parts and reply under them, like below.
+- set the patch prefix to 'PATCH v3', using
 
->
-> 2013/2/8 Arnout Vandecappelle <arnout@mind.be>:
->> On 08/02/13 16:32, Thomas Petazzoni wrote:
->>> On Fri,  8 Feb 2013 17:16:29 +0100, Laurent Cans wrote:
-[snip]
->>>> +
->>>> +define AIRCRACK_NG_BUILD_CMDS
->>>> +      $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)
->>>> $(AIRCRACK_NG_OPTS) all
->>>> +endef
->>>
->>>
->>> Use $(TARGET_CONFIGURE_OPTS) :
->>>
->>>          $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(AIRCRACK_NG_OPTS) all
->>
->>
->>   If it works, I prefer to put the TARGET_CONFIGURE_OPTS in the environment
->> instead:
->>
->> $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(AIRCRACK_NG_MAKE_OPTS) all
->>
->> That gives the Makefile the possibility to append to CFLAGS and LDFLAGS, if
->> necessary. However, some Makefiles unconditionally set CFLAGS or LDFLAGS (or
->> even CC), in that case passing through the environment doesn't work.
+git send-email --subject-prefix='PATCH v3' ...
 
-  If setting $(TARGET_CONFIGURE_OPTS) in the environment doesn't work, 
-then you can try setting it on the command line instead. If that doesn't 
-work either, it indicates that something funny is done in the Makefile 
-and it's important to find out what exactly. Probably it's a matter of 
-CFLAGS or LDFLAGS that need to be set, but are now overridden from the 
-command line.
+- Include the changelog (which you now had in a separate mail) in the 
+commit message itself, like so:
 
-  In that case, the best option is to fix the Makefile (and upstream the 
-fix). A less preferred option is something like:
+====================
+openpgm: new package
 
-$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-   CC="$(TARGET_CC)" LD="$(TARGET_LD)" $(AIRCRACK_NG_MAKE_OPTS) all
+OpenPGM is an open source implementation of the Pragmatic General
+Multicast (PGM) specification in RFC 3208 available at www.ietf.org.
+It is required for PGM/EPGM support in ZeroMQ library.
 
-i.e. use the command line to force CC and LD and pass the things that the 
-Makefile needs to have control over (CFLAGS and LDFLAGS) through the 
-environment.
+Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
+---
+v3: Added Signed-off-by to the patch
+
+v2: improved according to community suggestions:
+- legal information supplied;
+- OPENPGM_SUBDIR is used instead of a post extract hook;
+- more recent release of the package is used;
+- cross-compilation fix uses cached values instead of hard-coded ones.
+
+The last thing has been implemented as recommended in Autoconf manual
+(http://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.69/html_node/Runtime.html#Runtime)
+for cross-compilation-friendly runtime tests. Direct caching of
+pgm_unaligned_pointers variable produced a warning during autoreconfigure
+that said that only variables containing _cv_ were cached, and
+ac_cv_lbl_unaligned_fail was already used in Buildroot, so I based the
+test on that one and set pgm_unaligned_pointers later from its result.
+====================
+
 
   Regards,
   Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
