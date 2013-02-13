@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Feb 2013 22:55:56 +0100
-Subject: [Buildroot] [PATCH] libvorbis: fix LIBVORBIS_SITE
-Message-ID: <1360792556-4732-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Feb 2013 23:13:46 +0100
+Subject: [Buildroot] Buildroot at ELC: review/suggestions needed
+In-Reply-To: <20130209195709.323b9f5e@skate>
+References: <20130209195709.323b9f5e@skate>
+Message-ID: <20130213231346.0ed68b45@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The LIBVORBIS_SITE included a reference to $(LIBVORBIS-SOURCE), which
-doesn't exist. And anyway was useless because the <pkg>_SITE variable
-should not contain the name of the tarball.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libvorbis/libvorbis.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, 9 Feb 2013 19:57:09 +0100, Thomas Petazzoni wrote:
 
-diff --git a/package/libvorbis/libvorbis.mk b/package/libvorbis/libvorbis.mk
-index ace8147..5b9048e 100644
---- a/package/libvorbis/libvorbis.mk
-+++ b/package/libvorbis/libvorbis.mk
-@@ -6,7 +6,7 @@
- 
- LIBVORBIS_VERSION = 1.3.3
- LIBVORBIS_SOURCE = libvorbis-$(LIBVORBIS_VERSION).tar.gz
--LIBVORBIS_SITE = http://downloads.xiph.org/releases/vorbis/$(LIBVORBIS-SOURCE)
-+LIBVORBIS_SITE = http://downloads.xiph.org/releases/vorbis/
- LIBVORBIS_INSTALL_STAGING = YES
- LIBVORBIS_CONF_OPT = --disable-oggtest
- LIBVORBIS_DEPENDENCIES = host-pkgconf libogg
+>  * Give me suggestions on what to demonstrate. I will prepare a
+>    slideshow of 10-20 slides that continuously loops (it should
+>    present the main characteristics and features of Buildroot), but I
+>    also would like to have some demo to show (I can bring an ARM board
+>    if needed). Any suggestions, both for the slideshow and the demo?
+
+The current state of the slides is visible at
+http://free-electrons.com/~thomas/pub/buildroot-slides.pdf.
+
+The two slides about build time and system size are still empty, I'm
+currently making the experiments to get the numbers.
+
+Best regards,
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
