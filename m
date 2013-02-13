@@ -1,94 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Feb 2013 23:57:03 +0100
-Subject: [Buildroot] uboot-tools and uboot being separate
-In-Reply-To: <20130213212002.25c976ca@skate>
-References: <511BCBEE.5040704@siganos.org> <20130213212002.25c976ca@skate>
-Message-ID: <511C1A3F.2080804@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 Feb 2013 23:57:27 +0100
+Subject: [Buildroot] Buildroot at ELC: review/suggestions needed
+In-Reply-To: <20130213231346.0ed68b45@skate>
+References: <20130209195709.323b9f5e@skate> <20130213231346.0ed68b45@skate>
+Message-ID: <201302132357.27593.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/02/13 21:20, Thomas Petazzoni wrote:
-> Dear Dimitrios Siganos,
->
-> On Wed, 13 Feb 2013 17:22:54 +0000, Dimitrios Siganos wrote:
->
->> I have a query regarding uboot and uboot-tools. Currently they are
->> separate packages.
->>
->> However, if I am building both the uboot bootloader and the uboot tools
->> would it not be reasonable to expect to use the same sources for
->> compiling both? At the moment, I am in a situation where I am building
->> uboot with one set of files and uboot-tools (e.g. fw_printenv) with another.
->>
->> Is the recommended solution to point both uboot and uboot-tools to the
->> same package version and apply the same patches to both? And have two
->> parallel builds (uboot, uboot-tools) that should be identical?
+Thomas, All,
 
-  I've had the same issue once: a patch to add some functionality to 
-mkimage that I needed both on the host and on the target.
+On Wednesday 13 February 2013 Thomas Petazzoni wrote:
+> On Sat, 9 Feb 2013 19:57:09 +0100, Thomas Petazzoni wrote:
+> 
+> >  * Give me suggestions on what to demonstrate. I will prepare a
+> >    slideshow of 10-20 slides that continuously loops (it should
+> >    present the main characteristics and features of Buildroot), but I
+> >    also would like to have some demo to show (I can bring an ARM board
+> >    if needed). Any suggestions, both for the slideshow and the demo?
+> 
+> The current state of the slides is visible at
+> http://free-electrons.com/~thomas/pub/buildroot-slides.pdf.
 
->
-> No. You don't have to have identical uboot-tools and uboot. Basically
-> uboot-tools provide one tool to create U-Boot images (mkimage) and
-> tools to manipulate the U-Boot environment from Linux (fw_printenv,
-> fw_setenv). Those tools are backward compatible, and so you can
-> perfectly use the tools from U-Boot 2010.x with a running U-Boot 2012.x
-> or 2013.x.
+Looks good! :-)
+Slide 7:
+  - beware automatic line-wrapping: U-Boot gets splitted as:
+        U-
+        Boot
+  - I'd add busybox, it's well-known enough to warrant its presence
+    on the slide
 
-  Unless some feature has been added or removed.
+> The two slides about build time and system size are still empty, I'm
+> currently making the experiments to get the numbers.
 
->
-> There is really no need to have the same source code base for both
-> uboot and uboot-tools.
->
->> I have also being thinking along these lines:
->>
->> 1) Edit the uboot-tools makefile to not use its own build directory but
->> use uboot's build instead (silly idea idea I admit, but you never know...).
+It'd be interesting to have:
+  - build time with internal toolchain
+  - build time with an external toolchain
 
-  This will be the way to go - and much easier as soon as the out-of-tree 
-build is there. But it still requires more infrastructural change, since 
-currently there is no way to specify that a package doesn't have a source 
-itself, but the source comes from another package.
+Also, I wonder how and how much we could evaluate the Buildroot overhead.
+For example, considering a system that only has buildroot in it, how long
+does it take to build busybox, compile the filesystem generator (eg.
+genext2fs and fakeroot) and assemble the file system images, all manually
+(but only couting the build time, not the manual keying of the commands),
+and how long does it take Buildroot to achieve the same?
 
-  There are actually a few other packages out there that have or could 
-have the same "shared source, separate build" issue: kernel-headers, 
-udev, perf.
+If you can provide the .config files for your test setup, I'll try to come
+up with a script that just rolls out all required commands, and time the
+result.
 
+/me expects something less than a 1% overhead, or even in the measure
+noise, for simple .configs, and even less for bigger .configs... :-)
 
-  Regards,
-  Arnout
-
->>
->> 2) Edit the uboot package to optionally compile and install the
->> uboot-tools as well (this seems to me to be the most logical way).
->>
->> Can I have your feedback?
->
-> Basically, no, there's a good reason why we wanted two separate
-> packages: we wanted to be able to build the U-Boot tools sometimes for
-> the host (mkimage), sometimes for the target (fw_printenv, fw_setenv).
-> The host-uboot-tools package is also used as a dependency of the Linux
-> kernel package, and it is much simpler to depend on host-uboot-tools
-> that to depend on the uboot package itself.
->
-> So really, the current way things are done for uboot vs. uboot-tools
-> has proven to work really well, and for now I don't see a compelling
-> reason to change that.
->
-> Best regards,
->
-> Thomas
->
-
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
