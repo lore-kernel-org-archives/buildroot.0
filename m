@@ -1,61 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Feb 2013 19:08:10 +0100
-Subject: [Buildroot] [PATCH 1/1] Added local directory as soure of
-	kernel code
-In-Reply-To: <CAPRxd43q0nW6CBtzAx3QCo9Loyyvz7_78D3ZFYWH797_Z8yr+A@mail.gmail.com>
-References: <1360310725-6463-1-git-send-email-rafal.fabich@gmail.com>
- <511A78BA.4010200@mind.be>
- <CAPRxd43q0nW6CBtzAx3QCo9Loyyvz7_78D3ZFYWH797_Z8yr+A@mail.gmail.com>
-Message-ID: <201302131908.10869.yann.morin.1998@free.fr>
+Date: Wed, 13 Feb 2013 19:55:35 +0100
+Subject: [Buildroot] Report from the Buildroot Developers Meeting
+In-Reply-To: <20130209004253.207e0741@skate>
+References: <20130209004253.207e0741@skate>
+Message-ID: <201302131955.35889.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rafa?, All,
+Thomas, All,
 
-On Wednesday 13 February 2013 Rafa? Fabich wrote:
-> On Tue, Feb 12, 2013 at 6:15 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >
-> >  One comment below, though.
-> >
-> >> +       default "local" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
-> >
-> >
-> >  This is a bit confusing, because the 'local' site method will force
-> > LINUX_VERSION to "custom". So I would call it custom here as well.
-> >
-> 
-> I would like to send a new version of this patch, should I create a
-> new thread or use this one?
+On Saturday 09 February 2013 Thomas Petazzoni wrote:
+> During the meeting, a large number of topics have been discussed, and
+> notes were taken live, mainly by Arnout. Those notes are all available
+> on the wiki page of the event at:
+>   http://elinux.org/Buildroot:DeveloperDaysFOSDEM2013#List_of_topics_to_discuss
 
-Create a new thread. Also, specify in the subject that this is version 2
-of your patch, eg.:
+Amongst those topics was the possibility for Buildroot to submit a
+proposal for the next Googl Summer of Code (GSoC). The schedule for
+GSoC`13 has now been published:
+    https://www.google-melange.com/gsoc/events/google/gsoc2013
 
-    [PATH v2] Add local directory as soure of kernel code
+In short:
+  - mentoring applications must be sent from 2013-03-18 19:00Z, and
+    no later than 2013-03-29 19:00Z.
+  - list of accepted mentoring organisations published on 2013-04-08 19:00Z
+  - students start working 2013-06-17, until 2013-09-23 19:00Z
+  - mentor submit is on 2013-10-19 and 2013-10-20 (at Google HQs?)
 
-('git send-email' helps you do that easily.)
-
-And add the changes to your patch commit, after a line starting with
-three dashes (git interpret this as an end-of-commit-log' separator:
-
----8<---
-    linux: add option to use local directory as kernel source
-    
-    Add the option to use a local directory as the source for
-    building the Linux kernel, which can be usefull during
-    kernel development.
-    
-    ---
-    Changes v1 -> v2
-      - fixed foo bar  (Reviewer)
-      - added baz buz
----8<---
-
-This way, it is easy for the reviewer what to look at, and for the
-maintainer as it knws a previous patch with the same subject is not
-to be applied.
+Now, we're left to imagining what we'll be submitting. ;-)
 
 Regards,
 Yann E. MORIN.
