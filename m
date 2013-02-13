@@ -1,76 +1,42 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 13 Feb 2013 23:59:06 +0100
-Subject: [Buildroot] [PATCH 5/9] manual: faq: add workaround to avoid
-	rebuilding the buildroot toolchain after each clean
-In-Reply-To: <cover.1360795941.git.s.martin49@gmail.com>
-References: <cover.1360795941.git.s.martin49@gmail.com>
-Message-ID: <e5a14b33f5b34b4fbfd5c5b3e2b1077c7ef91573.1360795941.git.s.martin49@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 14 Feb 2013 00:13:55 +0100
+Subject: [Buildroot] Buildroot at ELC: review/suggestions needed
+In-Reply-To: <201302132357.27593.yann.morin.1998@free.fr>
+References: <20130209195709.323b9f5e@skate> <20130213231346.0ed68b45@skate>
+ <201302132357.27593.yann.morin.1998@free.fr>
+Message-ID: <511C1E33.4060500@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 13/02/13 23:57, Yann E. MORIN wrote:
+> Also, I wonder how and how much we could evaluate the Buildroot overhead.
+> For example, considering a system that only has buildroot in it, how long
+> does it take to build busybox, compile the filesystem generator (eg.
+> genext2fs and fakeroot) and assemble the file system images, all manually
+> (but only couting the build time, not the manual keying of the commands),
+> and how long does it take Buildroot to achieve the same?
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- docs/manual/common-usage.txt        |  1 +
- docs/manual/faq-troubleshooting.txt | 34 ++++++++++++++++++++++++++++++++++
- 2 files changed, 35 insertions(+)
+  You can approximate the overhead with 'make -qp > /dev/null'. 
+Everything else that actually does get executed is necessary. Oh, wait: 
+the time of dependencies.sh should also be taken along. But basically, 
+the Buildroot overhead is roughly 5 seconds.
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index c7f511a..b36965f 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -20,6 +20,7 @@ all sources that you previously selected in the configurator
- You can now disconnect or copy the content of your +dl+
- directory to the build-host.
- 
-+[[daily-oot-build]]
- Building out-of-tree
- ~~~~~~~~~~~~~~~~~~~~
- 
-diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
-index 8b0882a..f367275 100644
---- a/docs/manual/faq-troubleshooting.txt
-+++ b/docs/manual/faq-troubleshooting.txt
-@@ -147,3 +147,37 @@ Using the internal Buildroot toolchain backend
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
- These toolchains are currently *not relocatable*.
-+
-+However, it is possible to build a toolchain using the internal Buildroot
-+backend in another location (see xref:daily-oot-build[]), then use it as an
-+_external_ one to prevent from rebuilding it after issuing +make clean+
-+(see xref:faq-avoid-rebuild-toolchain[]).
-+
-+[[faq-avoid-rebuild-toolchain]]
-+How to avoid always rebuilding the toolchain?
-+---------------------------------------------
-+
-+When using the internal Buildroot toolchain backend or the
-+http://crosstool-ng.org[crosstool-NG] one, runnong +make clean+ not only
-+remove the built binaries, but also the whole toolchain.
-+
-+It is possible to prevent this by, first, building the toolchain in a
-+place different from the one  where the images will be built.
-+
-+To do so:
-+
-+1. Build the toolchain somewhere:
-++
-+----------------------------
-+make toolchain O=/path/to/toolchain
-+----------------------------
-++
-+1. Use this pre-built toolchain as an external one in a new and clean
-+   build (see xref:external-toolchain-backend[]) with a different output
-+   directory than the pre-built toolchain one.
-+
-+This way, you will not have to rebuild the toolchain after invoking
-++make clean+.
-+
-+However, the toolchain should be regenerated after any change of the
-++Target Architecture+ (or its _variant_), or done in the +Toolchain+ menu.
+  Of course, with manually typing commands, you can make some shortcuts, 
+like not using 'find' to find which things to remove in the finalize 
+steps. On my allpackageyesconfig setup the finalize step takes in the 
+order of 30 seconds.
+
+
+  Regards,
+  Arnout
+
 -- 
-1.8.1.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
