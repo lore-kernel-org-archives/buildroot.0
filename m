@@ -1,67 +1,93 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Feb 2013 21:20:02 +0100
-Subject: [Buildroot] uboot-tools and uboot being separate
-In-Reply-To: <511BCBEE.5040704@siganos.org>
-References: <511BCBEE.5040704@siganos.org>
-Message-ID: <20130213212002.25c976ca@skate>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Wed, 13 Feb 2013 22:43:13 +0100
+Subject: [Buildroot] [PATCH v0] Add support for automated building of
+ Opkg repository
+In-Reply-To: <1358268430-2431-1-git-send-email-jezz@sysmic.org>
+References: <1358268430-2431-1-git-send-email-jezz@sysmic.org>
+Message-ID: <511C08F1.702@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Dimitrios Siganos,
+Hello J?r?me,
 
-On Wed, 13 Feb 2013 17:22:54 +0000, Dimitrios Siganos wrote:
-
-> I have a query regarding uboot and uboot-tools. Currently they are
-> separate packages.
+Am 15.01.2013 17:47, schrieb J?r?me Pouiller:
+> Dear,
 > 
-> However, if I am building both the uboot bootloader and the uboot tools
-> would it not be reasonable to expect to use the same sources for
-> compiling both? At the moment, I am in a situation where I am building
-> uboot with one set of files and uboot-tools (e.g. fw_printenv) with another.
+> I wrote a first draft of support of building deb or ipk file in Buildroot. The 
+> result looks like this:
+>   http://sysmic.org/~jezz/ipk_repository
+
+This looks impressive and the OPKG packaging would be a really "killer"
+feature in buildroot for me! OPKG packages is one of the features I'm
+really missing.
+
+> This patch use inotify to spy which file are installed by package. Once 
+> installation is done, it copy file to a temporary directory where ipk file is 
+> built.
 > 
-> Is the recommended solution to point both uboot and uboot-tools to the
-> same package version and apply the same patches to both? And have two
-> parallel builds (uboot, uboot-tools) that should be identical?
+> During this copy, file are splited in 5 ipk files:
+>         - main package with debug symbols stripped off
+>         - debug symbols
+>         - development files
+>         - documentation files
+>         - locales
 
-No. You don't have to have identical uboot-tools and uboot. Basically
-uboot-tools provide one tool to create U-Boot images (mkimage) and
-tools to manipulate the U-Boot environment from Linux (fw_printenv,
-fw_setenv). Those tools are backward compatible, and so you can
-perfectly use the tools from U-Boot 2010.x with a running U-Boot 2012.x
-or 2013.x.
+This would be much more than I use currently in an other existing
+project, sounds like you wanted to build the *one* big solution. ;)
 
-There is really no need to have the same source code base for both
-uboot and uboot-tools.
-
-> I have also being thinking along these lines:
 > 
-> 1) Edit the uboot-tools makefile to not use its own build directory but
-> use uboot's build instead (silly idea idea I admit, but you never know...).
+> All these files exist since it is done before target-finalize rule. 
 > 
-> 2) Edit the uboot package to optionally compile and install the
-> uboot-tools as well (this seems to me to be the most logical way).
+> Next script create "control" files needed for building. Script parse Config.in 
+> file to extract help and place it as Description in ipk file.
+
+Creating the control file in runtime would remove the necessary to
+rework the current packages, if this works ... great!
+
+> Finaly, dpkg-deb is used to create files. Files get deb extention but they are 
+> compatible with opkg/ipkg. I don't know if it would be better to use opkg-build 
+> script.
+
+I would say this depends on the nature of the script, but this can be
+tested.
+
+> Result is not so bad, as you can see on URL above and it is not intrusive. I would
+> be glad to get your opinion about this work. What do you think about it?
 > 
-> Can I have your feedback?
+> Current restrictions and things to do:
+>   - Be able to correctly extract Help from complex Config.in
+>   - Parse Depends field of Config.in
+>   - Check dependencies using ldd
 
-Basically, no, there's a good reason why we wanted two separate
-packages: we wanted to be able to build the U-Boot tools sometimes for
-the host (mkimage), sometimes for the target (fw_printenv, fw_setenv).
-The host-uboot-tools package is also used as a dependency of the Linux
-kernel package, and it is much simpler to depend on host-uboot-tools
-that to depend on the uboot package itself.
+In the buildsystem-cs [1] (a system for building images for various DVB
+setopboxes) a friend of mine use some scripts [2] to get the
+dependencies and doing the creating of the packages incl. the comparing
+if the package is really new. Maybe there is something useful to find.
 
-So really, the current way things are done for uboot vs. uboot-tools
-has proven to work really well, and for now I don't see a compelling
-reason to change that.
+>   - Add packages for skeleton copy, libc copy and target-finalize rule
+>   - Detect file written by multiple packages
+>   - Be able to package setuid binaries
+>   - Kill inotify if make is interrupted
+>   - Allow to customize Maintener name, Company name, etc...
+>   - Allow to append a suffix to package versions
+>   - Re-use strip commands defined in .config
+>   - Add gnu-debuglink to binaries
+>   - I need plenty of Makefile variables. It would be better if ipk-pre.sh and 
+>     ipk-post.sh were converted to Makefiles?
+>   - Make Architecture field a standard field recognized by Debian
+>   - Check inotifywait is correctly started before continue installation
+>   - Be able to do parallel installation
+>   - Check host tools dependencies
 
-Best regards,
+What about a package with the basic rootfs after passing the overlay and
+post-build.sh script? Do you have allready think about that?
 
-Thomas
+[1] http://gitorious.org/neutrino-hd/buildsystem-cs
+[2] https://gitorious.org/neutrino-hd/buildsystem-cs/trees/master/scripts
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Mit freundlichen Gr??en
+Carsten Sch?nert
