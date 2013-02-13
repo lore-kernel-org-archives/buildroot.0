@@ -1,29 +1,63 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 12 Feb 2013 22:56:59 +0000 (UTC)
-Subject: [Buildroot] [Bug 5918] Linux Kernel Headers Wrong Version
-In-Reply-To: <bug-5918-163@https.bugs.busybox.net/>
-References: <bug-5918-163@https.bugs.busybox.net/>
-Message-ID: <20130212225659.224A29AAD9@busybox.osuosl.org>
+From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
+Date: Wed, 13 Feb 2013 15:21:58 +1100
+Subject: [Buildroot] [PATCH 1/1] python: fix to ensure libpython is stripped
+Message-ID: <1360729319-28028-1-git-send-email-przemyslaw.wrzos@calyptech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5918
+From: przemyslaw <przemyslaw.wrzos@calyptech.com>
 
-Matt Ihnen <mihnen@mecmidwest.com> changed:
+The python and python3 builds mark libpython as read-only which prevents
+it from being stripped out correctly for the target.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |INVALID
+Signed-off-by: przemyslaw <przemyslaw.wrzos@calyptech.com>
+---
+ package/python/python.mk   |    9 +++++++++
+ package/python3/python3.mk |    9 +++++++++
+ 2 files changed, 18 insertions(+)
 
---- Comment #1 from Matt Ihnen <mihnen@mecmidwest.com> 2013-02-12 22:57:20 UTC ---
-This was due to using a codesourcery toolchain that was compiled against newer
-kernel headers than my kernel version.
-
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 71591b7..b5d409c 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -163,6 +163,15 @@ endef
+ 
+ PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
+ 
++#
++# Make sure libpython gets stripped out on target
++#
++define PYTHON_ENSURE_LIBPYTHON_STRIPPED
++	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR)*.so
++endef
++
++PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_ENSURE_LIBPYTHON_STRIPPED
++
+ PYTHON_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 7551a7b..d551115 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -150,6 +150,15 @@ endef
+ 
+ PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_USELESS_FILES
+ 
++#
++# Make sure libpython gets stripped out on target
++#
++define PYTHON3_ENSURE_LIBPYTHON_STRIPPED
++	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)*.so
++endef
++
++PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_ENSURE_LIBPYTHON_STRIPPED
++
+ PYTHON3_AUTORECONF = YES
+ 
+ define PYTHON3_INSTALL_SYMLINK
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.10.4
