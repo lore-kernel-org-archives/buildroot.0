@@ -1,36 +1,48 @@
-From: Joe Halpin <jhalpin@luminatorusa.com>
-Date: Wed, 13 Feb 2013 07:54:45 -0600
-Subject: [Buildroot]  [PATCH] add pre-build script
-Message-ID: <05255DE50A102443A25D42F2CCAC151FA58C25@LUMEXCH.luminatorusa.com>
+From: =?UTF-8?q?Arnaud=20R=C3=A9billout?= <rebillout@syscom.ch>
+Date: Wed, 13 Feb 2013 16:25:45 +0100
+Subject: [Buildroot] [PATCH] flot: add fillbetween plugin.
+Message-ID: <1360769145-1610-1-git-send-email-rebillout@syscom.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a patch to add a pre-build script, which runs before the build
-starts. This lets us setup symlinks and such before the build starts,
-which makes things easier and cleaner for us. Maybe it will for other
-people too. This was made from the 20.12.11 release.
+Flot plugin for computing bottoms for filled line and bar charts.
 
-I searched for a patch like this but didn't find one. Apologies if I'm
-being redundant.
+Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
+---
+ package/flot/Config.in |    5 +++++
+ package/flot/flot.mk   |    1 +
+ 2 files changed, 6 insertions(+)
 
-Joe
-
-----
-
-Joe Halpin | Software Engineer | Luminator LTG | 972-516-3083
-
+diff --git a/package/flot/Config.in b/package/flot/Config.in
+index 60534c1..0124b2d 100644
+--- a/package/flot/Config.in
++++ b/package/flot/Config.in
+@@ -20,6 +20,11 @@ if BR2_PACKAGE_FLOT
  
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130213/3b296ae1/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-prebuild.patch
-Type: application/octet-stream
-Size: 1608 bytes
-Desc: buildroot-prebuild.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130213/3b296ae1/attachment.obj>
+ comment "flot plugins"
+ 
++config BR2_PACKAGE_FLOT_FILLBETWEEN
++	bool "fillbetween"
++	help
++	  Flot plugin for computing bottoms for filled line and bar charts. 
++
+ config BR2_PACKAGE_FLOT_NAVIGATE
+ 	bool "navigate"
+ 	help
+diff --git a/package/flot/flot.mk b/package/flot/flot.mk
+index f4ba604..41f5a42 100644
+--- a/package/flot/flot.mk
++++ b/package/flot/flot.mk
+@@ -1,6 +1,7 @@
+ FLOT_VERSION = 0.7
+ FLOT_SITE = http://flot.googlecode.com/files
+ FLOT_FILES = jquery.flot $(addprefix jquery.flot.,\
++	$(if $(BR2_PACKAGE_FLOT_FILLBETWEEN),fillbetween) \
+ 	$(if $(BR2_PACKAGE_FLOT_NAVIGATE),navigate) \
+ 	$(if $(BR2_PACKAGE_FLOT_PIE),pie) \
+ 	$(if $(BR2_PACKAGE_FLOT_RESIZE),resize) \
+-- 
+1.7.10.4
