@@ -1,48 +1,39 @@
 From: Patrick Gerber <kpa_info@yahoo.fr>
-Date: Wed, 13 Feb 2013 10:20:35 +0100
-Subject: [Buildroot] [PATCH v3 3/5] Add common declaration to ease the
-	support of both version
+Date: Wed, 13 Feb 2013 10:20:34 +0100
+Subject: [Buildroot] [PATCH v3 2/5] Add python3 config directory simlink
 In-Reply-To: <1360747237-30048-1-git-send-email-kpa_info@yahoo.fr>
 References: <1360747237-30048-1-git-send-email-kpa_info@yahoo.fr>
-Message-ID: <1360747237-30048-4-git-send-email-kpa_info@yahoo.fr>
+Message-ID: <1360747237-30048-3-git-send-email-kpa_info@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Define a new variable called PYTHON that contains either "python" or
-"python3" depending of the selected Python version. This is needed
-to easily set dependencies and to call the right version of python
-for packages that support both version of python.
+Add a simlink to alias the python3.3/config-3.3m directory to python3.3/config
+in the staging directory
 
 Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
 ---
- package/python-common/python-common.mk |   16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 package/python-common/python-common.mk
+ package/python3/python3.mk |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/python-common/python-common.mk b/package/python-common/python-common.mk
-new file mode 100644
-index 0000000..712b895
---- /dev/null
-+++ b/package/python-common/python-common.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# python-common
-+#
-+#############################################################
-+# Define some symbol usefull to make python package that works 
-+# with python2 and python3. 
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 7551a7b..8af4d50 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -160,6 +160,12 @@ ifneq ($(BR2_PACKAGE_PYTHON),y)
+ PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
+ endif
+ 
++define HOST_PYTHON3_INSTALL_SYMLINK
++	ln -fs config-3.3m $(HOST_DIR)/usr/lib/python3.3/config
++endef
 +
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+	PYTHON = python
-+endif
++HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
 +
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+	PYTHON = python3
-+endif
-+
+ ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
+ define PYTHON3_REMOVE_MODULES_FILES
+ 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
 -- 
 1.7.9.5
