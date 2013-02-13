@@ -1,35 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Feb 2013 23:12:48 +0100
-Subject: [Buildroot] [PATCH v3 1/1] openpgm: new package
-In-Reply-To: <1360749821-19238-1-git-send-email-alexander.lukichev@gmail.com>
-References: <1360749821-19238-1-git-send-email-alexander.lukichev@gmail.com>
-Message-ID: <511C0FE0.8020105@mind.be>
+Date: Wed, 13 Feb 2013 23:34:33 +0100
+Subject: [Buildroot] [PATCH] apply-patches.sh : applying xz compressed
+ patches
+In-Reply-To: <1360770393-2864-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1360770393-2864-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <511C14F9.2050705@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/02/13 11:03, Alexander Lukichev wrote:
-> OpenPGM is an open source implementation of the Pragmatic General
-> Multicast (PGM) specification in RFC 3208 available atwww.ietf.org.
-> It is required for PGM/EPGM support in ZeroMQ library.
->
-> Signed-off-by: Alexander Lukichev<alexander.lukichev@gmail.com>
-> ---
-> v3: improved according to community suggestions:
-> - added Signed-off-by and the reason to the cross-compilation patch;
-> - specified toolchain requirements in Config.in.
->
-> The package can be built without WCHAR but this is supported
-> only by its SCons and CMake build systems (for development). Autotools
-> based build system (for releases) does not support this. IPV6 and
-> thread support requirements are mandatory.
+On 13/02/13 16:46, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
-  In that case, why not just use cmake instead of autotools?
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  (untested)
+
 
   Regards,
   Arnout
+
+> ---
+>   support/scripts/apply-patches.sh |    6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+> index 7a6c1fa..7d5856c 100755
+> --- a/support/scripts/apply-patches.sh
+> +++ b/support/scripts/apply-patches.sh
+> @@ -23,8 +23,8 @@
+>   # files than series file and archives are considered as a patch.
+>   #
+>   # Once a patch is found, the script will try to apply it. If its name doesn't
+> -# end with '.gz', '.bz', '.bz2', '.zip', '.Z', '.diff*' or '.patch*', it will
+> -# be skipped. If necessary, the patch will be uncompressed before being
+> +# end with '.gz', '.bz', '.bz2', '.xz', '.zip', '.Z', '.diff*' or '.patch*',
+> +# it will be skipped. If necessary, the patch will be uncompressed before being
+>   # applied. The list of the patches applied is stored in '.applied_patches_list'
+>   # file in the build directory.
+>
+> @@ -59,6 +59,8 @@ function apply_patch {
+>   	type="bzip"; uncomp="bunzip -dc"; ;;
+>   	*.bz2)
+>   	type="bzip2"; uncomp="bunzip2 -dc"; ;;
+> +	*.xz)
+> +	type="xz"; uncomp="unxz -dc"; ;;
+>   	*.zip)
+>   	type="zip"; uncomp="unzip -d"; ;;
+>   	*.Z)
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
