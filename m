@@ -1,36 +1,69 @@
-From: Dimitrios Siganos <dimitris@siganos.org>
-Date: Wed, 13 Feb 2013 17:22:54 +0000
-Subject: [Buildroot] uboot-tools and uboot being separate
-Message-ID: <511BCBEE.5040704@siganos.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 Feb 2013 19:08:10 +0100
+Subject: [Buildroot] [PATCH 1/1] Added local directory as soure of
+	kernel code
+In-Reply-To: <CAPRxd43q0nW6CBtzAx3QCo9Loyyvz7_78D3ZFYWH797_Z8yr+A@mail.gmail.com>
+References: <1360310725-6463-1-git-send-email-rafal.fabich@gmail.com>
+ <511A78BA.4010200@mind.be>
+ <CAPRxd43q0nW6CBtzAx3QCo9Loyyvz7_78D3ZFYWH797_Z8yr+A@mail.gmail.com>
+Message-ID: <201302131908.10869.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys,
+Rafa?, All,
 
-I have a query regarding uboot and uboot-tools. Currently they are
-separate packages.
+On Wednesday 13 February 2013 Rafa? Fabich wrote:
+> On Tue, Feb 12, 2013 at 6:15 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> >
+> >  One comment below, though.
+> >
+> >> +       default "local" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
+> >
+> >
+> >  This is a bit confusing, because the 'local' site method will force
+> > LINUX_VERSION to "custom". So I would call it custom here as well.
+> >
+> 
+> I would like to send a new version of this patch, should I create a
+> new thread or use this one?
 
-However, if I am building both the uboot bootloader and the uboot tools
-would it not be reasonable to expect to use the same sources for
-compiling both? At the moment, I am in a situation where I am building
-uboot with one set of files and uboot-tools (e.g. fw_printenv) with another.
+Create a new thread. Also, specify in the subject that this is version 2
+of your patch, eg.:
 
-Is the recommended solution to point both uboot and uboot-tools to the
-same package version and apply the same patches to both? And have two
-parallel builds (uboot, uboot-tools) that should be identical?
+    [PATH v2] Add local directory as soure of kernel code
 
-I have also being thinking along these lines:
+('git send-email' helps you do that easily.)
 
-1) Edit the uboot-tools makefile to not use its own build directory but
-use uboot's build instead (silly idea idea I admit, but you never know...).
+And add the changes to your patch commit, after a line starting with
+three dashes (git interpret this as an end-of-commit-log' separator:
 
-2) Edit the uboot package to optionally compile and install the
-uboot-tools as well (this seems to me to be the most logical way).
+---8<---
+    linux: add option to use local directory as kernel source
+    
+    Add the option to use a local directory as the source for
+    building the Linux kernel, which can be usefull during
+    kernel development.
+    
+    ---
+    Changes v1 -> v2
+      - fixed foo bar  (Reviewer)
+      - added baz buz
+---8<---
 
-Can I have your feedback?
+This way, it is easy for the reviewer what to look at, and for the
+maintainer as it knws a previous patch with the same subject is not
+to be applied.
 
 Regards,
-Dimitris
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
