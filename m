@@ -1,48 +1,42 @@
-From: =?UTF-8?q?Arnaud=20R=C3=A9billout?= <rebillout@syscom.ch>
-Date: Wed, 13 Feb 2013 16:25:45 +0100
-Subject: [Buildroot] [PATCH] flot: add fillbetween plugin.
-Message-ID: <1360769145-1610-1-git-send-email-rebillout@syscom.ch>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 13 Feb 2013 16:46:32 +0100
+Subject: [Buildroot] [PATCH] apply-patches.sh : applying xz compressed
+	patches
+Message-ID: <1360770393-2864-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Flot plugin for computing bottoms for filled line and bar charts.
-
-Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/flot/Config.in |    5 +++++
- package/flot/flot.mk   |    1 +
- 2 files changed, 6 insertions(+)
+ support/scripts/apply-patches.sh |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/flot/Config.in b/package/flot/Config.in
-index 60534c1..0124b2d 100644
---- a/package/flot/Config.in
-+++ b/package/flot/Config.in
-@@ -20,6 +20,11 @@ if BR2_PACKAGE_FLOT
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 7a6c1fa..7d5856c 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -23,8 +23,8 @@
+ # files than series file and archives are considered as a patch.
+ #
+ # Once a patch is found, the script will try to apply it. If its name doesn't
+-# end with '.gz', '.bz', '.bz2', '.zip', '.Z', '.diff*' or '.patch*', it will
+-# be skipped. If necessary, the patch will be uncompressed before being
++# end with '.gz', '.bz', '.bz2', '.xz', '.zip', '.Z', '.diff*' or '.patch*',
++# it will be skipped. If necessary, the patch will be uncompressed before being
+ # applied. The list of the patches applied is stored in '.applied_patches_list'
+ # file in the build directory.
  
- comment "flot plugins"
- 
-+config BR2_PACKAGE_FLOT_FILLBETWEEN
-+	bool "fillbetween"
-+	help
-+	  Flot plugin for computing bottoms for filled line and bar charts. 
-+
- config BR2_PACKAGE_FLOT_NAVIGATE
- 	bool "navigate"
- 	help
-diff --git a/package/flot/flot.mk b/package/flot/flot.mk
-index f4ba604..41f5a42 100644
---- a/package/flot/flot.mk
-+++ b/package/flot/flot.mk
-@@ -1,6 +1,7 @@
- FLOT_VERSION = 0.7
- FLOT_SITE = http://flot.googlecode.com/files
- FLOT_FILES = jquery.flot $(addprefix jquery.flot.,\
-+	$(if $(BR2_PACKAGE_FLOT_FILLBETWEEN),fillbetween) \
- 	$(if $(BR2_PACKAGE_FLOT_NAVIGATE),navigate) \
- 	$(if $(BR2_PACKAGE_FLOT_PIE),pie) \
- 	$(if $(BR2_PACKAGE_FLOT_RESIZE),resize) \
+@@ -59,6 +59,8 @@ function apply_patch {
+ 	type="bzip"; uncomp="bunzip -dc"; ;; 
+ 	*.bz2)
+ 	type="bzip2"; uncomp="bunzip2 -dc"; ;; 
++	*.xz)
++	type="xz"; uncomp="unxz -dc"; ;;
+ 	*.zip)
+ 	type="zip"; uncomp="unzip -d"; ;; 
+ 	*.Z)
 -- 
-1.7.10.4
+1.7.9.5
