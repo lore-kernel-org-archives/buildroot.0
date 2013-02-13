@@ -1,42 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 14 Feb 2013 00:13:55 +0100
-Subject: [Buildroot] Buildroot at ELC: review/suggestions needed
-In-Reply-To: <201302132357.27593.yann.morin.1998@free.fr>
-References: <20130209195709.323b9f5e@skate> <20130213231346.0ed68b45@skate>
- <201302132357.27593.yann.morin.1998@free.fr>
-Message-ID: <511C1E33.4060500@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Feb 2013 00:14:04 +0100
+Subject: [Buildroot] uboot-tools and uboot being separate
+In-Reply-To: <511C1A3F.2080804@mind.be>
+References: <511BCBEE.5040704@siganos.org> <20130213212002.25c976ca@skate>
+ <511C1A3F.2080804@mind.be>
+Message-ID: <20130214001404.199dbd64@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/02/13 23:57, Yann E. MORIN wrote:
-> Also, I wonder how and how much we could evaluate the Buildroot overhead.
-> For example, considering a system that only has buildroot in it, how long
-> does it take to build busybox, compile the filesystem generator (eg.
-> genext2fs and fakeroot) and assemble the file system images, all manually
-> (but only couting the build time, not the manual keying of the commands),
-> and how long does it take Buildroot to achieve the same?
+Dear Arnout Vandecappelle,
 
-  You can approximate the overhead with 'make -qp > /dev/null'. 
-Everything else that actually does get executed is necessary. Oh, wait: 
-the time of dependencies.sh should also be taken along. But basically, 
-the Buildroot overhead is roughly 5 seconds.
+On Wed, 13 Feb 2013 23:57:03 +0100, Arnout Vandecappelle wrote:
 
-  Of course, with manually typing commands, you can make some shortcuts, 
-like not using 'find' to find which things to remove in the finalize 
-steps. On my allpackageyesconfig setup the finalize step takes in the 
-order of 30 seconds.
+>   I've had the same issue once: a patch to add some functionality to 
+> mkimage that I needed both on the host and on the target.
 
+Then easy enough; put your patch in package/uboot-tools/. It handles
+the build and installation of both the host *and* target variant of the
+U-Boot tools.
 
-  Regards,
-  Arnout
+> > No. You don't have to have identical uboot-tools and uboot.
+> > Basically uboot-tools provide one tool to create U-Boot images
+> > (mkimage) and tools to manipulate the U-Boot environment from Linux
+> > (fw_printenv, fw_setenv). Those tools are backward compatible, and
+> > so you can perfectly use the tools from U-Boot 2010.x with a
+> > running U-Boot 2012.x or 2013.x.
+> 
+>   Unless some feature has been added or removed.
 
+In which case you bump the version of the uboot-tools package, just
+like any other package.
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
