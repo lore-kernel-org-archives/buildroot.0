@@ -1,110 +1,100 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 13 Feb 2013 23:59:03 +0100
-Subject: [Buildroot] [PATCH 2/9] manual: fix cross-refs
-In-Reply-To: <cover.1360795941.git.s.martin49@gmail.com>
-References: <cover.1360795941.git.s.martin49@gmail.com>
-Message-ID: <e90370a2ea8deb23fd0d2c058f251d702f6bb783.1360795941.git.s.martin49@gmail.com>
+Date: Wed, 13 Feb 2013 23:59:01 +0100
+Subject: [Buildroot] [pull request] Pull request for branch for-master/doc
+Message-ID: <cover.1360795941.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- docs/manual/configure.txt           | 3 +++
- docs/manual/customize-store.txt     | 7 ++++++-
- docs/manual/customize-toolchain.txt | 2 +-
- docs/manual/working-with.txt        | 3 ++-
- 4 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index 86cb173..4f9a6bb 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -64,6 +64,7 @@ Type+ option in the +Toolchain+ menu. Once one solution has been
- chosen, a number of configuration options appear, they are detailed in
- the following sections.
- 
-+[[internal-toolchain-backend]]
- Internal toolchain backend
- ^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
-@@ -138,6 +139,7 @@ Drawbacks of this backend:
-   using the _External toolchain backend_.
- * Limited to the _uClibc_ C library.
- 
-+[[external-toolchain-backend]]
- External toolchain backend
- ^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
-@@ -240,6 +242,7 @@ Drawbacks of this backend:
-   fix from the toolchain vendor, unless you build your external
-   toolchain by yourself using Crosstool-NG.
- 
-+[[crosstool-ng-toolchain-backend]]
- Crosstool-NG toolchain backend
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
-diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
-index d770f0e..5083339 100644
---- a/docs/manual/customize-store.txt
-+++ b/docs/manual/customize-store.txt
-@@ -13,10 +13,13 @@ consists of the buildroot configuration, the configuration files for
- packages that you use (kernel, busybox, uClibc, ...), and your rootfs
- modifications.
- 
-+
-+[[customize-store-basics]]
- Basics for storing the configuration
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--[[customize-store-basics]]
- 
-+
-+[[customize-store-buildroot-config]]
- Buildroot configuration
- ^^^^^^^^^^^^^^^^^^^^^^^
- 
-@@ -35,6 +38,7 @@ Alternatively, you can copy the file to any other place and rebuild with
- +make defconfig BR2_DEFCONFIG=<path-to-defconfig-file>+.
- 
- 
-+[[customize-store-package-config]]
- Other package configuration
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
-@@ -71,6 +75,7 @@ configuration files easier.
-   resp. +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
- 
- 
-+[[customize-store-board-support]]
- Creating your own board support
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
-diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
-index 4397979..811a6dc 100644
---- a/docs/manual/customize-toolchain.txt
-+++ b/docs/manual/customize-toolchain.txt
-@@ -15,7 +15,7 @@ There is no way of tuning an external toolchain since Buildroot does not
- generate it.
- 
- It also requires to set the Buildroot settings according to the toolchain ones
--(see xref:external-toolchain[]).
-+(see xref:external-toolchain-backend[]).
- 
- Using the internal Buildroot toolchain backend
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-diff --git a/docs/manual/working-with.txt b/docs/manual/working-with.txt
-index b69d1e2..a57169c 100644
---- a/docs/manual/working-with.txt
-+++ b/docs/manual/working-with.txt
-@@ -25,4 +25,5 @@ interested in hacking it to add:
- 
- * new packages: refer to the xref:adding-packages[Developer guide]
- 
--* new board support: refer to the xref:board-support[Developer guide]
-+* new board support: refer to the xref:customize-store[], more specifically
-+  xref:customize-store-board-support[].
--- 
-1.8.1.3
+Here is some updates and fixes in the manual.
+
+The following changes since commit 6056de8971bf25c9853c38583dc50b5abcb982de:
+
+  rpi-userland: update to fix no-longer applying patch (2013-02-10 13:58:51 +0100)
+
+are available in the git repository at:
+
+  git at github.com:tSed/buildroot.git for-master/doc
+
+for you to fetch changes up to 73205fcda9f19a8e4717799831d0eb41a376da27:
+
+  Makefile: add to the release target a warning about the manual updates. (2013-02-13 23:49:12 +0100)
+
+----------------------------------------------------------------
+Samuel Martin (9):
+      manual: cleanup and update editor tags
+      manual: fix cross-refs
+      manual: sprinkle with some calls to MESSAGE
+      manual: faq: add entry about the relocatable toolchain
+      manual: faq: add workaround to avoid rebuilding the buildroot toolchain after
+      manual: minor fix in patch-policy.txt
+      manual: misc. post-{build,image} scripts fixes
+      manual: update {deprecated,package}-list.txt
+      Makefile: add to the release target a warning about the manual updates.
+
+ Makefile                                   |   2 +
+ docs/manual/adding-packages-autotools.txt  |   1 +
+ docs/manual/adding-packages-cmake.txt      |   1 +
+ docs/manual/adding-packages-conclusion.txt |   1 +
+ docs/manual/adding-packages-directory.txt  |   1 +
+ docs/manual/adding-packages-generic.txt    |   1 +
+ docs/manual/adding-packages-gettext.txt    |   1 +
+ docs/manual/adding-packages-tips.txt       |   1 +
+ docs/manual/adding-packages.txt            |   3 +-
+ docs/manual/advanced.txt                   |   1 +
+ docs/manual/appendix.txt                   |  14 +-
+ docs/manual/beyond-buildroot.txt           |   1 +
+ docs/manual/ccache-support.txt             |   3 +-
+ docs/manual/common-usage.txt               |   2 +
+ docs/manual/configure.txt                  |   6 +-
+ docs/manual/contribute.txt                 |   1 +
+ docs/manual/customize-busybox-config.txt   |   3 +-
+ docs/manual/customize-kernel-config.txt    |   3 +-
+ docs/manual/customize-rootfs.txt           |  33 +-
+ docs/manual/customize-store.txt            |  10 +-
+ docs/manual/customize-toolchain.txt        |   5 +-
+ docs/manual/customize-uclibc-config.txt    |   3 +-
+ docs/manual/customize.txt                  |   1 +
+ docs/manual/deprecated-list.txt            |  81 ++-
+ docs/manual/developer-guide.txt            |   1 +
+ docs/manual/download-infra.txt             |   3 +-
+ docs/manual/download-location.txt          |   1 +
+ docs/manual/eclipse-integration.txt        |   1 +
+ docs/manual/faq-troubleshooting.txt        |  56 ++
+ docs/manual/get-involved.txt               |   1 +
+ docs/manual/getting.txt                    |   3 +-
+ docs/manual/going-further.txt              |   1 +
+ docs/manual/how-buildroot-works.txt        |   1 +
+ docs/manual/introduction.txt               |   1 +
+ docs/manual/legal-notice.txt               |   1 +
+ docs/manual/make-tips.txt                  |   3 +-
+ docs/manual/makedev-syntax.txt             |   3 +-
+ docs/manual/manual.mk                      |   9 +-
+ docs/manual/manual.txt                     |   1 +
+ docs/manual/package-list.txt               | 948 +++++++++++++++++++++++++++++
+ docs/manual/package-make-target.txt        |   1 +
+ docs/manual/patch-policy.txt               |   7 +-
+ docs/manual/pkg-list.txt                   | 870 --------------------------
+ docs/manual/prerequisite.txt               |   3 +-
+ docs/manual/rebuilding-packages.txt        |   3 +-
+ docs/manual/starting-up.txt                |   1 +
+ docs/manual/using-buildroot-toolchain.txt  |   1 +
+ docs/manual/using.txt                      |   1 +
+ docs/manual/working-with.txt               |   4 +-
+ docs/manual/writing-rules.txt              |   1 +
+ support/scripts/gen-manual-lists.py        | 237 ++++++++
+ 51 files changed, 1383 insertions(+), 959 deletions(-)
+ create mode 100644 docs/manual/package-list.txt
+ delete mode 100644 docs/manual/pkg-list.txt
+ create mode 100755 support/scripts/gen-manual-lists.py
+
+Yours,
+
+--
+
+Samuel
