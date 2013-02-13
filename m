@@ -1,65 +1,110 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Feb 2013 23:57:27 +0100
-Subject: [Buildroot] Buildroot at ELC: review/suggestions needed
-In-Reply-To: <20130213231346.0ed68b45@skate>
-References: <20130209195709.323b9f5e@skate> <20130213231346.0ed68b45@skate>
-Message-ID: <201302132357.27593.yann.morin.1998@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 13 Feb 2013 23:59:03 +0100
+Subject: [Buildroot] [PATCH 2/9] manual: fix cross-refs
+In-Reply-To: <cover.1360795941.git.s.martin49@gmail.com>
+References: <cover.1360795941.git.s.martin49@gmail.com>
+Message-ID: <e90370a2ea8deb23fd0d2c058f251d702f6bb783.1360795941.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
 
-On Wednesday 13 February 2013 Thomas Petazzoni wrote:
-> On Sat, 9 Feb 2013 19:57:09 +0100, Thomas Petazzoni wrote:
-> 
-> >  * Give me suggestions on what to demonstrate. I will prepare a
-> >    slideshow of 10-20 slides that continuously loops (it should
-> >    present the main characteristics and features of Buildroot), but I
-> >    also would like to have some demo to show (I can bring an ARM board
-> >    if needed). Any suggestions, both for the slideshow and the demo?
-> 
-> The current state of the slides is visible at
-> http://free-electrons.com/~thomas/pub/buildroot-slides.pdf.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ docs/manual/configure.txt           | 3 +++
+ docs/manual/customize-store.txt     | 7 ++++++-
+ docs/manual/customize-toolchain.txt | 2 +-
+ docs/manual/working-with.txt        | 3 ++-
+ 4 files changed, 12 insertions(+), 3 deletions(-)
 
-Looks good! :-)
-Slide 7:
-  - beware automatic line-wrapping: U-Boot gets splitted as:
-        U-
-        Boot
-  - I'd add busybox, it's well-known enough to warrant its presence
-    on the slide
-
-> The two slides about build time and system size are still empty, I'm
-> currently making the experiments to get the numbers.
-
-It'd be interesting to have:
-  - build time with internal toolchain
-  - build time with an external toolchain
-
-Also, I wonder how and how much we could evaluate the Buildroot overhead.
-For example, considering a system that only has buildroot in it, how long
-does it take to build busybox, compile the filesystem generator (eg.
-genext2fs and fakeroot) and assemble the file system images, all manually
-(but only couting the build time, not the manual keying of the commands),
-and how long does it take Buildroot to achieve the same?
-
-If you can provide the .config files for your test setup, I'll try to come
-up with a script that just rolls out all required commands, and time the
-result.
-
-/me expects something less than a 1% overhead, or even in the measure
-noise, for simple .configs, and even less for bigger .configs... :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+index 86cb173..4f9a6bb 100644
+--- a/docs/manual/configure.txt
++++ b/docs/manual/configure.txt
+@@ -64,6 +64,7 @@ Type+ option in the +Toolchain+ menu. Once one solution has been
+ chosen, a number of configuration options appear, they are detailed in
+ the following sections.
+ 
++[[internal-toolchain-backend]]
+ Internal toolchain backend
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+@@ -138,6 +139,7 @@ Drawbacks of this backend:
+   using the _External toolchain backend_.
+ * Limited to the _uClibc_ C library.
+ 
++[[external-toolchain-backend]]
+ External toolchain backend
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+@@ -240,6 +242,7 @@ Drawbacks of this backend:
+   fix from the toolchain vendor, unless you build your external
+   toolchain by yourself using Crosstool-NG.
+ 
++[[crosstool-ng-toolchain-backend]]
+ Crosstool-NG toolchain backend
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
+index d770f0e..5083339 100644
+--- a/docs/manual/customize-store.txt
++++ b/docs/manual/customize-store.txt
+@@ -13,10 +13,13 @@ consists of the buildroot configuration, the configuration files for
+ packages that you use (kernel, busybox, uClibc, ...), and your rootfs
+ modifications.
+ 
++
++[[customize-store-basics]]
+ Basics for storing the configuration
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-[[customize-store-basics]]
+ 
++
++[[customize-store-buildroot-config]]
+ Buildroot configuration
+ ^^^^^^^^^^^^^^^^^^^^^^^
+ 
+@@ -35,6 +38,7 @@ Alternatively, you can copy the file to any other place and rebuild with
+ +make defconfig BR2_DEFCONFIG=<path-to-defconfig-file>+.
+ 
+ 
++[[customize-store-package-config]]
+ Other package configuration
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+@@ -71,6 +75,7 @@ configuration files easier.
+   resp. +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
+ 
+ 
++[[customize-store-board-support]]
+ Creating your own board support
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
+index 4397979..811a6dc 100644
+--- a/docs/manual/customize-toolchain.txt
++++ b/docs/manual/customize-toolchain.txt
+@@ -15,7 +15,7 @@ There is no way of tuning an external toolchain since Buildroot does not
+ generate it.
+ 
+ It also requires to set the Buildroot settings according to the toolchain ones
+-(see xref:external-toolchain[]).
++(see xref:external-toolchain-backend[]).
+ 
+ Using the internal Buildroot toolchain backend
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+diff --git a/docs/manual/working-with.txt b/docs/manual/working-with.txt
+index b69d1e2..a57169c 100644
+--- a/docs/manual/working-with.txt
++++ b/docs/manual/working-with.txt
+@@ -25,4 +25,5 @@ interested in hacking it to add:
+ 
+ * new packages: refer to the xref:adding-packages[Developer guide]
+ 
+-* new board support: refer to the xref:board-support[Developer guide]
++* new board support: refer to the xref:customize-store[], more specifically
++  xref:customize-store-board-support[].
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.3
