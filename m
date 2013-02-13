@@ -1,54 +1,48 @@
 From: Patrick Gerber <kpa_info@yahoo.fr>
-Date: Wed, 13 Feb 2013 10:20:32 +0100
-Subject: [Buildroot] [PATCH v3 0/5] Python 3, simple,
-	external package support
-Message-ID: <1360747237-30048-1-git-send-email-kpa_info@yahoo.fr>
+Date: Wed, 13 Feb 2013 10:20:35 +0100
+Subject: [Buildroot] [PATCH v3 3/5] Add common declaration to ease the
+	support of both version
+In-Reply-To: <1360747237-30048-1-git-send-email-kpa_info@yahoo.fr>
+References: <1360747237-30048-1-git-send-email-kpa_info@yahoo.fr>
+Message-ID: <1360747237-30048-4-git-send-email-kpa_info@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series refactor python support in buildroot to enable the 
-use of external package with both; python2 and python3. The packages
-python-bottle and python-serial have been adapted as examples.
+Define a new variable called PYTHON that contains either "python" or
+"python3" depending of the selected Python version. This is needed
+to easily set dependencies and to call the right version of python
+for packages that support both version of python.
 
-To support others external package more work is needed as they are
-based on python setuptools. It's no more supported by python3 and
-should be replaced by "Distribute". This should be done in another
-patch series.
-
-Changes between v2 and v3:
-
-* Same new menu organisation as v2 but with less modifications in 
-  package/Config.in (Requested by Thomas Petazzoni)
-
-* New directory called python-common instead of python generic.  
-  (Requested by Thomas Petazzoni)
-
-* No more symlink from python to python3 in staging (Requested by 
-  Samuel Martin)
-
-
-Patrick Gerber (5):
-  Python menu reorganization
-  Add python3 config directory simlink
-  Add common declaration to ease the support of both version
-  python-bottle: Convert package to be used with python2 or python3
-  python-serial: Convert package to be used with python2 or python3
-
- package/Config.in                      |    3 ++-
- package/python-bottle/python-bottle.mk |    6 +++---
- package/python-common/Config.in        |   35 ++++++++++++++++++++++++++++++++
- package/python-common/python-common.mk |   16 +++++++++++++++
- package/python-serial/Config.in        |    1 -
- package/python-serial/python-serial.mk |    6 +++---
- package/python/Config.in               |   14 -------------
- package/python3/Config.in              |   14 -------------
- package/python3/python3.mk             |    6 ++++++
- 9 files changed, 65 insertions(+), 36 deletions(-)
- create mode 100644 package/python-common/Config.in
+Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
+---
+ package/python-common/python-common.mk |   16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
  create mode 100644 package/python-common/python-common.mk
 
+diff --git a/package/python-common/python-common.mk b/package/python-common/python-common.mk
+new file mode 100644
+index 0000000..712b895
+--- /dev/null
++++ b/package/python-common/python-common.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# python-common
++#
++#############################################################
++# Define some symbol usefull to make python package that works 
++# with python2 and python3. 
++
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++	PYTHON = python
++endif
++
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++	PYTHON = python3
++endif
++
 -- 
 1.7.9.5
