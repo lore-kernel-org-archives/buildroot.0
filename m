@@ -1,63 +1,26 @@
-From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
-Date: Wed, 13 Feb 2013 15:21:58 +1100
-Subject: [Buildroot] [PATCH 1/1] python: fix to ensure libpython is stripped
-Message-ID: <1360729319-28028-1-git-send-email-przemyslaw.wrzos@calyptech.com>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Wed, 13 Feb 2013 09:30:14 +0200
+Subject: [Buildroot] [PATCH 1/1] openpgm: new package
+In-Reply-To: <511A802D.9030708@mind.be>
+References: <1360666051-16475-1-git-send-email-alexander.lukichev@gmail.com>
+ <1360666051-16475-2-git-send-email-alexander.lukichev@gmail.com>
+ <20130212115305.3c4b6990@skate> <511A2006.90203@gmail.com>
+ <511A802D.9030708@mind.be>
+Message-ID: <511B4106.8000502@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: przemyslaw <przemyslaw.wrzos@calyptech.com>
+Hi, Arnout, All!
 
-The python and python3 builds mark libpython as read-only which prevents
-it from being stripped out correctly for the target.
+On 02/12/2013 07:47 PM, Arnout Vandecappelle wrote:
+>  When you resubmit, please also:
+> - set the patch prefix to 'PATCH v3', using
+> - Include the changelog (which you now had in a separate mail) in the commit message itself, like so:
+I will. Thanks!
 
-Signed-off-by: przemyslaw <przemyslaw.wrzos@calyptech.com>
----
- package/python/python.mk   |    9 +++++++++
- package/python3/python3.mk |    9 +++++++++
- 2 files changed, 18 insertions(+)
-
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 71591b7..b5d409c 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -163,6 +163,15 @@ endef
- 
- PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
- 
-+#
-+# Make sure libpython gets stripped out on target
-+#
-+define PYTHON_ENSURE_LIBPYTHON_STRIPPED
-+	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR)*.so
-+endef
-+
-+PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_ENSURE_LIBPYTHON_STRIPPED
-+
- PYTHON_AUTORECONF = YES
- 
- $(eval $(autotools-package))
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 7551a7b..d551115 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -150,6 +150,15 @@ endef
- 
- PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_USELESS_FILES
- 
-+#
-+# Make sure libpython gets stripped out on target
-+#
-+define PYTHON3_ENSURE_LIBPYTHON_STRIPPED
-+	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)*.so
-+endef
-+
-+PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_ENSURE_LIBPYTHON_STRIPPED
-+
- PYTHON3_AUTORECONF = YES
- 
- define PYTHON3_INSTALL_SYMLINK
--- 
-1.7.10.4
+--
+Best regards,
+  Alexander Lukichev
