@@ -1,42 +1,35 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Feb 2013 23:24:01 +0100
-Subject: [Buildroot] [PATCH] add pre-build script
-In-Reply-To: <05255DE50A102443A25D42F2CCAC151FA58C25@LUMEXCH.luminatorusa.com>
-References: <05255DE50A102443A25D42F2CCAC151FA58C25@LUMEXCH.luminatorusa.com>
-Message-ID: <511C1281.5040502@mind.be>
+Date: Wed, 13 Feb 2013 23:12:48 +0100
+Subject: [Buildroot] [PATCH v3 1/1] openpgm: new package
+In-Reply-To: <1360749821-19238-1-git-send-email-alexander.lukichev@gmail.com>
+References: <1360749821-19238-1-git-send-email-alexander.lukichev@gmail.com>
+Message-ID: <511C0FE0.8020105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/02/13 14:54, Joe Halpin wrote:
-> This is a patch to add a pre-build script, which runs before the build
-> starts. This lets us setup symlinks and such before the build starts,
-> which makes things easier and cleaner for us. Maybe it will for other
-> people too. This was made from the 20.12.11 release.
+On 13/02/13 11:03, Alexander Lukichev wrote:
+> OpenPGM is an open source implementation of the Pragmatic General
+> Multicast (PGM) specification in RFC 3208 available atwww.ietf.org.
+> It is required for PGM/EPGM support in ZeroMQ library.
+>
+> Signed-off-by: Alexander Lukichev<alexander.lukichev@gmail.com>
+> ---
+> v3: improved according to community suggestions:
+> - added Signed-off-by and the reason to the cross-compilation patch;
+> - specified toolchain requirements in Config.in.
+>
+> The package can be built without WCHAR but this is supported
+> only by its SCons and CMake build systems (for development). Autotools
+> based build system (for releases) does not support this. IPV6 and
+> thread support requirements are mandatory.
 
-  Could you clarify a bit more what the use case is? Then we can consider 
-if there are maybe better ways to achieve it.
-
-
-  Also, a properly formatted patch has a commit message which is 
-formatted as follows: a single summary line of max. 80 characters, an 
-empty line, one or more paragraphs explaining why the patch is necessary, 
-your Signed-off-by line, a line containing three dashes, the patch 
-changelog (if you resubmit it). Look at other patches on the list for 
-examples. And you should send the patch with git send-email or similar, 
-so that whitespace is retained and we can comment in-line.
-
-
-  Regarding the patch itself: why do you pass $(TARGET_DIR) as an 
-argument? Since the 'dirs' step comes after the 'prepare' step, 
-$(TARGET_DIR) doesn't exist yet...
-
+  In that case, why not just use cmake instead of autotools?
 
   Regards,
   Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
