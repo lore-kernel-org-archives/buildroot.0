@@ -1,35 +1,46 @@
-From: Reuben Dowle <reuben.dowle@4rf.com>
-Date: Thu, 14 Feb 2013 01:12:02 +0000
-Subject: [Buildroot] [PATCH] dmalloc: Stop libdmalloc*.so files from being
- deleted from staging directory
-Message-ID: <069B5A25F9844945B625ADE7258AC94C061E73B0@4rf-nz-orion.local.4rf.com>
+From: Dimitrios Siganos <dimitris@siganos.org>
+Date: Thu, 14 Feb 2013 02:15:11 +0000
+Subject: [Buildroot] uboot-tools and uboot being separate
+In-Reply-To: <511C1FE8.60103@mind.be>
+References: <511BCBEE.5040704@siganos.org> <20130213212002.25c976ca@skate>
+ <511C1A3F.2080804@mind.be> <20130214001404.199dbd64@skate>
+ <511C1FE8.60103@mind.be>
+Message-ID: <511C48AF.5060106@siganos.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix libdmalloc*.so files being deleted from the staging directory as the
-package is installed into the target.
+On 13/02/13 23:21, Arnout Vandecappelle wrote:
+> On 14/02/13 00:14, Thomas Petazzoni wrote:
+>> Dear Arnout Vandecappelle,
+>>
+>> On Wed, 13 Feb 2013 23:57:03 +0100, Arnout Vandecappelle wrote:
+>>
+>>>    I've had the same issue once: a patch to add some functionality to
+>>> mkimage that I needed both on the host and on the target.
+>>
+>> Then easy enough; put your patch in package/uboot-tools/. It handles
+>> the build and installation of both the host *and* target variant of the
+>> U-Boot tools.
+> 
+>  In my particular use case (IIRC), the patched mkimage was used to
+> process u-boot.bin into a ROM-bootable image. So the same patch had to
+> be applied to uboot-tools and uboot. But it was not in fact the same
+> patch, because the uboot version was different. What we did in the end
+> is just change the uboot-tools site to the same git repository.
 
-Signed-off-by: Reuben Dowle <reuben.dowle@4rf.com>
----
- package/dmalloc/dmalloc.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Thomas, Arnout,
 
-diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
-index 8623829..ee7799b 100644
---- a/package/dmalloc/dmalloc.mk
-+++ b/package/dmalloc/dmalloc.mk
-@@ -47,7 +47,7 @@ define DMALLOC_INSTALL_STAGING_CMDS
- endef
+So if I understand this well, the consensus is that the preferred way to
+solve this is to set both packages to point to the same site, method and
+version and have two identical copies of the same uboot source code, one
+in uboot package and one in uboot-tools package.
 
- define DMALLOC_INSTALL_TARGET_CMDS
--       mv $(STAGING_DIR)/usr/lib/libdmalloc*.so $(TARGET_DIR)/usr/lib
-+       cp -dpf $(STAGING_DIR)/usr/lib/libdmalloc*.so $(TARGET_DIR)/usr/lib
-        cp -dpf $(STAGING_DIR)/usr/bin/dmalloc $(TARGET_DIR)/usr/bin/dmalloc
- endef
+That certainly sounds the simplest way although I agree with Arnout that
+it is also the strangest and less intuitive approach. Some people will
+still raise an eyebrow at such an arrangement.
 
---
-1.7.10.4
-The information in this email communication (inclusive of attachments) is confidential to 4RF Limited and the intended recipient(s). If you are not the intended recipient(s), please note that any use, disclosure, distribution or copying of this information or any part thereof is strictly prohibited and that the author accepts no liability for the consequences of any action taken on the basis of the information provided. If you have received this email in error, please notify the sender immediately by return email and then delete all instances of this email from your system. 4RF Limited will not accept responsibility for any consequences associated with the use of this email (including, but not limited to, damages sustained as a result of any viruses and/or any action or lack of action taken in reliance on it).
+Regards,
+Dimitris
