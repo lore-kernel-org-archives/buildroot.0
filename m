@@ -1,125 +1,224 @@
-From: Joe Halpin <jhalpin@luminatorusa.com>
-Date: Thu, 14 Feb 2013 09:08:46 -0600
-Subject: [Buildroot] [PATCH] add pre-build scrip. Patch V2
-In-Reply-To: <511C1281.5040502@mind.be>
-References: <05255DE50A102443A25D42F2CCAC151FA58C25@LUMEXCH.luminatorusa.com>
- <511C1281.5040502@mind.be>
-Message-ID: <05255DE50A102443A25D42F2CCAC151FA58C2A@LUMEXCH.luminatorusa.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Thu, 14 Feb 2013 16:10:05 +0100
+Subject: [Buildroot] [PATCH v4 1/2] strongswan: new package
+In-Reply-To: <20130214143957.1095407a@skate>
+References: <20130214143957.1095407a@skate>
+Message-ID: <1360854606-13787-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here's a resend of the patch, I think I got it right this time.
-Arnout, please ignore my last reply about CONFIG_DIR, I was thinking
-about my own world and missed what you were trying to tell me. I'm
-passing CONFIG_DIR in the patch now, which is probably the best place to
-start from.
+strongSwan is an OpenSource IPsec implementation for the
+Linux operating system. It is based on the discontinued
+FreeS/WAN project and the X.509 patch.
 
+The focus is on:
+     - simplicity of configuration
+     - strong encryption and authentication methods
+     - powerful IPsec policies supporting large and complex VPN networks
 
-Add a pre-build script that can be used to setup directories, scripts
-etc.
+http://www.strongswan.org/
 
-This allows scripts which may change .config. CONFIG_DIR is passed as
-the
-target directory for this reason.
-
-Signed-off-by Joe Halpin jhelpin at luminatorusa.com
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
-Correction to the original patch
+ package/Config.in                |    1 +
+ package/strongswan/Config.in     |  105 ++++++++++++++++++++++++++++++++++++++
+ package/strongswan/strongswan.mk |   61 ++++++++++++++++++++++
+ 3 files changed, 167 insertions(+)
+ create mode 100644 package/strongswan/Config.in
+ create mode 100644 package/strongswan/strongswan.mk
 
-diff --git a/Makefile b/Makefile
-index 3f967b2..29d3bd6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -393,6 +393,12 @@ $(BUILD_DIR)/buildroot-config/auto.conf:
-$(BUILDROOT_CONFI\
-G)
-        $(MAKE) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)"
-HOSTCXX="$(HOSTCXX\
-_NOCCACHE)" silentoldconfig
-
- prepare: $(BUILD_DIR)/buildroot-config/auto.conf
-+ifneq ($(BR2_ROOTFS_PRE_BUILD_SCRIPT),"")
-+       @$(call MESSAGE,"Executing pre-build script\(s\)")
-+       @$(foreach s, $(call qstrip,$(BR2_ROOTFS_PRE_BUILD_SCRIPT)), \
-+               $(s) $(CONFIG_DIR)$(sep))
+diff --git a/package/Config.in b/package/Config.in
+index 8e4235b..383a0e0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -700,6 +700,7 @@ source "package/spawn-fcgi/Config.in"
+ source "package/spice-protocol/Config.in"
+ source "package/spice/Config.in"
+ source "package/squid/Config.in"
++source "package/strongswan/Config.in"
+ source "package/stunnel/Config.in"
+ source "package/tcpdump/Config.in"
+ source "package/tcpreplay/Config.in"
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+new file mode 100644
+index 0000000..24b30ad
+--- /dev/null
++++ b/package/strongswan/Config.in
+@@ -0,0 +1,105 @@
++menuconfig BR2_PACKAGE_STRONGSWAN
++	bool "strongswan"
++	help
++	  strongSwan is an OpenSource IPsec implementation for the 
++	  Linux operating system. It is based on the discontinued 
++	  FreeS/WAN project and the X.509 patch.
++
++	  The focus is on:
++	     - simplicity of configuration
++	     - strong encryption and authentication methods
++	     - powerful IPsec policies supporting large and complex VPN networks
++
++	  strongSwan provide many plugins. Only a few are presented here.
++
++	  http://www.strongswan.org/
++
++if BR2_PACKAGE_STRONGSWAN
++
++config BR2_PACKAGE_STRONGSWAN_OPENSSL
++	bool "Enables OpenSSL based crypto backends"
++	select BR2_PACKAGE_OPENSSL
++
++config BR2_PACKAGE_STRONGSWAN_GCRYPT
++	bool "Enables libgcrypt based crypto backends"
++	select BR2_PACKAGE_LIBGCRYPT
++	
++config BR2_PACKAGE_STRONGSWAN_GMP
++	bool "Enable GNU MP (libgmp) based crypto backends"
++	select BR2_PACKAGE_GMP
++	default y
++
++config BR2_PACKAGE_STRONGSWAN_AF_ALG
++	bool "Enable AF_ALG crypto interface to Linux Crypto API"
++
++config BR2_PACKAGE_STRONGSWAN_CURL
++	bool "Enable CURL fetcher plugin to fetch files via libcurl"
++	select BR2_PACKAGE_LIBCURL
++
++config BR2_PACKAGE_STRONGSWAN_CHARON
++	bool "Enable the IKEv1/IKEv2 keying daemon charon"
++	default y
++
++if BR2_PACKAGE_STRONGSWAN_CHARON
++
++config BR2_PACKAGE_STRONGSWAN_TNCCS_11
++	bool "Enable TNCCS 1.1 protocol module"
++	select BR2_PACKAGE_LIBXML2
++
++config BR2_PACKAGE_STRONGSWAN_TNCCS_20
++	bool "Enable TNCCS 2.0 protocol module"
++
++config BR2_PACKAGE_STRONGSWAN_TNCCS_DYNAMIC
++	bool "Enable dynamic TNCCS protocol discovery module"
++
++config BR2_PACKAGE_STRONGSWAN_EAP
++	bool "Enable EAP protocols"
++	help
++	  Enable various EAP protocols:
++	    - mschapv2
++	    - tls
++	    - ttls
++	    - peap
++	    - sim
++	    - sim-file
++	    - aka
++	    - aka-3gpp2
++	    - simaka-sql
++	    - simaka-pseudonym
++	    - simaka-reauth
++	    - identity
++	    - md5
++	    - gtc
++	    - tnc
++	    - dynamic
++	    - radius
++
++if BR2_PACKAGE_STRONGSWAN_EAP
++
++config BR2_PACKAGE_STRONGSWAN_EAP_SIM_PCSC
++	bool "Enable EAP-SIM smart card backend"
++	select BR2_PACKAGE_PCSC_LITE
++
 +endif
 +
-
- toolchain: prepare dirs dependencies $(BASE_TARGETS)
-
-diff --git a/system/Config.in b/system/Config.in
-index 1e4fff3..df9e5ce 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -260,6 +260,19 @@ config BR2_ROOTFS_OVERLAY
-          They are copied as-is into the rootfs, excluding files ending
-with
-          ~ and .git, .svn and .hg directories.
-
-+config BR2_ROOTFS_PRE_BUILD_SCRIPT
-+       string "Custom scripts to run before starting the build"
-+       default ""
-+       help
-+         Specify a space-separated list of scripts to be run before the
-build
-+         has started.
++config BR2_PACKAGE_STRONGSWAN_UNITY
++	bool "Enables Cisco Unity extension plugin"
 +
-+         This gives users the oportunity to do board-specific
-preparation.
++config BR2_PACKAGE_STRONGSWAN_STROKE
++	bool "Enable charons stroke configuration backend"
++	default y
 +
-+         These scripts are called with $(CONFIG_DIR) as first and
-+         only argument. Make sure the exit code of those scripts are 0,
-+         otherwise make will stop after calling them.
++config BR2_PACKAGE_STRONGSWAN_SQL
++	bool "Enable SQL database configuration backend"
 +
- config BR2_ROOTFS_POST_BUILD_SCRIPT
-        string "Custom scripts to run before creating filesystem images"
-        default ""
-
-
------Original Message-----
-From: Arnout Vandecappelle [mailto:arnout at mind.be] 
-Sent: Wednesday, February 13, 2013 4:24 PM
-To: Joe Halpin
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] [PATCH] add pre-build script
-
-On 13/02/13 14:54, Joe Halpin wrote:
-> This is a patch to add a pre-build script, which runs before the build
-> starts. This lets us setup symlinks and such before the build starts,
-> which makes things easier and cleaner for us. Maybe it will for other
-> people too. This was made from the 20.12.11 release.
-
-  Could you clarify a bit more what the use case is? Then we can
-consider 
-if there are maybe better ways to achieve it.
-
-
-  Also, a properly formatted patch has a commit message which is 
-formatted as follows: a single summary line of max. 80 characters, an 
-empty line, one or more paragraphs explaining why the patch is
-necessary, 
-your Signed-off-by line, a line containing three dashes, the patch 
-changelog (if you resubmit it). Look at other patches on the list for 
-examples. And you should send the patch with git send-email or similar, 
-so that whitespace is retained and we can comment in-line.
-
-
-  Regarding the patch itself: why do you pass $(TARGET_DIR) as an 
-argument? Since the 'dirs' step comes after the 'prepare' step, 
-$(TARGET_DIR) doesn't exist yet...
-
-
-  Regards,
-  Arnout
-
-
++endif
++
++config BR2_PACKAGE_STRONGSWAN_TOOLS
++	bool "Enable additional utilities (openac, scepclient and pki)"
++	default y
++
++config BR2_PACKAGE_STRONGSWAN_SCRIPTS
++	bool "Enable additional utilities (found in directory scripts)"
++	default y
++
++endif
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+new file mode 100644
+index 0000000..e235a04
+--- /dev/null
++++ b/package/strongswan/strongswan.mk
+@@ -0,0 +1,61 @@
++#############################################################
++#
++# strongSwan
++#
++#############################################################
++
++STRONGSWAN_VERSION = 5.0.1
++STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
++STRONGSWAN_SITE = http://download.strongswan.org
++STRONGSWAN_LICENSE = GPLv2+
++STRONGSWAN_LICENSE_FILES = COPYING LICENSE
++STRONGSWAN_CONF_OPT +=                                                             \
++      --enable-pkcs11                                                              \
++      --enable-openssl=$(if $(BR2_PACKAGE_STRONGSWAN_OPENSSL),yes,no)              \
++      --enable-gcrypt=$(if $(BR2_PACKAGE_STRONGSWAN_GCRYPT),yes,no)                \
++      --enable-gmp=$(if $(BR2_PACKAGE_STRONGSWAN_GMP),yes,no)                      \
++      --enable-af-alg=$(if $(BR2_PACKAGE_STRONGSWAN_AF_ALG),yes,no)                \
++      --enable-curl=$(if $(BR2_PACKAGE_STRONGSWAN_CURL),yes,no)                    \
++      --enable-charon=$(if $(BR2_PACKAGE_STRONGSWAN_CHARON),yes,no)                \
++      --enable-tnccs-11=$(if $(BR2_PACKAGE_STRONGSWAN_TNCCS_11),yes,no)            \
++      --enable-tnccs-20=$(if $(BR2_PACKAGE_STRONGSWAN_TNCCS_20),yes,no)            \
++      --enable-tnccs-dynamic=$(if $(BR2_PACKAGE_STRONGSWAN_TNCCS_DYNAMIC),yes,no)  \
++      --enable-eap-sim-pcsc=$(if $(BR2_PACKAGE_STRONGSWAN_EAP_SIM_PCSC),yes,no)    \
++      --enable-unity=$(if $(BR2_PACKAGE_STRONGSWAN_UNITY),yes,no)                  \
++      --enable-stroke=$(if $(BR2_PACKAGE_STRONGSWAN_STROKE),yes,no)                \
++      --enable-sql=$(if $(BR2_PACKAGE_STRONGSWAN_SQL),yes,no)                      \
++      --enable-tools=$(if $(BR2_PACKAGE_STRONGSWAN_TOOLS),yes,no)                  \
++      --enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no)
++
++ifeq ($(BR2_PACKAGE_STRONGSWAN_EAP),y)
++STRONGSWAN_CONF_OPT +=              \
++      --enable-eap-sim              \
++      --enable-eap-sim-file         \
++      --enable-eap-aka              \
++      --enable-eap-aka-3gpp2        \
++      --enable-eap-simaka-sql       \
++      --enable-eap-simaka-pseudonym \
++      --enable-eap-simaka-reauth    \
++      --enable-eap-identity         \
++      --enable-eap-md5              \
++      --enable-eap-gtc              \
++      --enable-eap-mschapv2         \
++      --enable-eap-tls              \
++      --enable-eap-ttls             \
++      --enable-eap-peap             \
++      --enable-eap-tnc              \
++      --enable-eap-dynamic          \
++      --enable-eap-radius
++endif
++
++STRONGSWAN_DEPENDENCIES +=                               \
++      $(if $(BR2_PACKAGE_STRONGSWAN_OPENSSL),openssl)    \
++      $(if $(BR2_PACKAGE_STRONGSWAN_GCRYPT),libgcrypt)   \
++      $(if $(BR2_PACKAGE_STRONGSWAN_GMP),gmp)            \
++      $(if $(BR2_PACKAGE_STRONGSWAN_CURL),libcurl)       \
++      $(if $(BR2_PACKAGE_STRONGSWAN_TNCCS_11),libxml2)   \
++      $(if $(BR2_PACKAGE_STRONGSWAN_EAP_SIM_PCSC),pcsc-lite)
++
++
++$(eval $(autotools-package))
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.9.5
