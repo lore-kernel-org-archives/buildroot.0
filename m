@@ -1,61 +1,76 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Thu, 14 Feb 2013 17:14:52 +0000
-Subject: [Buildroot] [git commit] libffi: switch to using a Git version,
- brings Microblaze and Xtensa support
-In-Reply-To: <20130205150055.C510A9A987@busybox.osuosl.org>
-References: <20130205150055.C510A9A987@busybox.osuosl.org>
-Message-ID: <CAG2jQ8iKxtdxCTc2DyMTy-3naNtQjWRdonxP8u0e7tVF0tsecA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Feb 2013 18:32:48 +0100
+Subject: [Buildroot] [PATCH 4/9] manual: faq: add entry about the
+ relocatable toolchain
+In-Reply-To: <c99516cd998754307f0a5e3b19579316f37d9f95.1360795941.git.s.martin49@gmail.com>
+References: <cover.1360795941.git.s.martin49@gmail.com>
+ <c99516cd998754307f0a5e3b19579316f37d9f95.1360795941.git.s.martin49@gmail.com>
+Message-ID: <20130214183248.51280157@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 5 February 2013 14:57, Peter Korsgaard <jacmet@sunsite.dk> wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=ddd69b5609cc9bd954afcfc2f91831d64b9cfff7
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> We already had backported patches for the Blackfin and AArch64
-> support, and now we would have needed to also backport the Xtensa
-> support and the Microblaze support. This starts to get crazy.
->
-> Let's switch to using a Git version from Github, until libffi finally
-> releases a new stable version.
->
-> In order to achieve this, we also need to:
->
->  * autoreconf the package, so that a libffi.pc file gets generated
->
->  * manually install the libffi.pc file, because it doesn't get
->    installed by libffi Makefile, for some reason
->
->  * remove the part of the target post install hook that was messing
->    with libffi.pc, since it was modifying the one in STAGING_DIR
->    (which is odd for a target post install hook), and the libffi.pc
->    file is anyway not installed to the target anymore.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Dear Samuel Martin,
+
+On Wed, 13 Feb 2013 23:59:05 +0100, Samuel Martin wrote:
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > ---
->  .../libffi-0001-Add-support-for-Blackfin.patch     | 1044 ---------
->  ...fi-0002-Add-aarch64-support-from-upstream.patch | 2326 --------------------
->  package/libffi/libffi.mk                           |   29 +-
->  3 files changed, 23 insertions(+), 3376 deletions(-)
->
-> Patch is too large, so refusing to show it
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  docs/manual/faq-troubleshooting.txt | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+> index f91a8ef..8b0882a 100644
+> --- a/docs/manual/faq-troubleshooting.txt
+> +++ b/docs/manual/faq-troubleshooting.txt
+> @@ -126,3 +126,24 @@ directory as the new root, will most likely fail.
+>  If you want to run the target filesystem inside a chroot, or as an NFS
+>  root, then use the tarball image generated in +images/+ and extract it
+>  as root.
+> +
+> +[[faq-relocatable-toolchains]]
+> +Are Buildroot toolchains relocatable?
+> +-------------------------------------
+> +
+> +Because Buildroot uses several toolchain backends, there is one anwser
+> +per backend:
+> +
+> +Using the external or crosstool-NG toolchain backend
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +These toolchains are mostly likely relocatable; the _Buildroot compiler
+> +wrapper_ is relocatable.
+> +
+> +However, some tools built and installed into the +HOST_DIR+ may not be
+> +relocatable, with some absolute pathes hard-coded inside.
 
-Hi Peter,
+I find this text rather confusing. What does "mostly likely" means for
+the reader? The reader surely wants to know if the toolchain is
+relocatable or not.
 
-A new libffi is released[1]. Maybe we should revert to the old
-Makefile now that a new version is out?
-I can provide a patch if needed.
+Therefore, I think this text should be changed to clarify what is meant
+by "toolchain". Is it just the bare toolchain (gcc, binutils, libc,
+kernel headers), or is it the complete toolchain that Buildroot
+produces, with all the additional libraries and headers?
 
-[1] ftp://sourceware.org/pub/libffi/libffi-3.0.12.tar.gz
+Also, you mention the "Buildroot compiler wrapper", but nowhere in the
+documentation we explain what it is, and I don't think it should be
+explained in the documentation, except in a section dedicated to "Deep
+Buildroot internals", but certainly not to answer a FAQ question about
+relocatable toolchains.
 
+I would rather think that a section discussing how to use the "SDK"
+produced by Buildroot, and how it can be shared with application
+developers, could mention that the SDK is currently not relocatable,
+but that we are working on fixing this.
+
+Best regards,
+
+Thomas
 -- 
-Regards,
-Markos Chandras
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
