@@ -1,65 +1,35 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 13 Feb 2013 19:04:30 -0600
-Subject: [Buildroot] [PATCH] add pre-build script
-In-Reply-To: <511C1281.5040502@mind.be>
-References: <05255DE50A102443A25D42F2CCAC151FA58C25@LUMEXCH.luminatorusa.com>
- <511C1281.5040502@mind.be>
-Message-ID: <CAEBucnA1BebDBHWb4PcQBGiUpyiAcT0=vs3Tu4D+LVw1YdN0_A@mail.gmail.com>
+From: Reuben Dowle <reuben.dowle@4rf.com>
+Date: Thu, 14 Feb 2013 01:12:02 +0000
+Subject: [Buildroot] [PATCH] dmalloc: Stop libdmalloc*.so files from being
+ deleted from staging directory
+Message-ID: <069B5A25F9844945B625ADE7258AC94C061E73B0@4rf-nz-orion.local.4rf.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Feb 13, 2013 4:28 PM, "Arnout Vandecappelle" <arnout@mind.be> wrote:
->
-> On 13/02/13 14:54, Joe Halpin wrote:
->>
->> This is a patch to add a pre-build script, which runs before the build
->> starts. This lets us setup symlinks and such before the build starts,
->> which makes things easier and cleaner for us. Maybe it will for other
->> people too. This was made from the 20.12.11 release.
->
->
->  Could you clarify a bit more what the use case is? Then we can consider
-if there are maybe better ways to achieve it.
->
->
->  Also, a properly formatted patch has a commit message which is formatted
-as follows: a single summary line of max. 80 characters, an empty line, one
-or more paragraphs explaining why the patch is necessary, your
-Signed-off-by line, a line containing three dashes, the patch changelog (if
-you resubmit it). Look at other patches on the list for examples. And you
-should send the patch with git send-email or similar, so that whitespace is
-retained and we can comment in-line.
->
->
->  Regarding the patch itself: why do you pass $(TARGET_DIR) as an
-argument? Since the 'dirs' step comes after the 'prepare' step,
-$(TARGET_DIR) doesn't exist yet...
->
->
->  Regards,
->  Arnout
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fix libdmalloc*.so files being deleted from the staging directory as the
+package is installed into the target.
 
-I have a use case for this.  In Microblaze builds, it would be nice to
-generate optimal cflags from the dts/mhs for use in all software.  This
-could be accomplished by a pre script.
+Signed-off-by: Reuben Dowle <reuben.dowle@4rf.com>
+---
+ package/dmalloc/dmalloc.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Spenser
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130213/a2cd0333/attachment-0001.html>
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index 8623829..ee7799b 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -47,7 +47,7 @@ define DMALLOC_INSTALL_STAGING_CMDS
+ endef
+
+ define DMALLOC_INSTALL_TARGET_CMDS
+-       mv $(STAGING_DIR)/usr/lib/libdmalloc*.so $(TARGET_DIR)/usr/lib
++       cp -dpf $(STAGING_DIR)/usr/lib/libdmalloc*.so $(TARGET_DIR)/usr/lib
+        cp -dpf $(STAGING_DIR)/usr/bin/dmalloc $(TARGET_DIR)/usr/bin/dmalloc
+ endef
+
+--
+1.7.10.4
+The information in this email communication (inclusive of attachments) is confidential to 4RF Limited and the intended recipient(s). If you are not the intended recipient(s), please note that any use, disclosure, distribution or copying of this information or any part thereof is strictly prohibited and that the author accepts no liability for the consequences of any action taken on the basis of the information provided. If you have received this email in error, please notify the sender immediately by return email and then delete all instances of this email from your system. 4RF Limited will not accept responsibility for any consequences associated with the use of this email (including, but not limited to, damages sustained as a result of any viruses and/or any action or lack of action taken in reliance on it).
