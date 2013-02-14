@@ -1,63 +1,57 @@
-From: Dimitrios Siganos <dimitris@siganos.org>
-Date: Thu, 14 Feb 2013 16:18:32 +0000
-Subject: [Buildroot] uboot-tools and uboot being separate
-In-Reply-To: <20130214085749.09ce593b@skate>
-References: <511BCBEE.5040704@siganos.org> <20130213212002.25c976ca@skate>
- <511C1A3F.2080804@mind.be> <20130214001404.199dbd64@skate>
- <511C1FE8.60103@mind.be> <20130214085749.09ce593b@skate>
-Message-ID: <511D0E58.2040308@siganos.org>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Thu, 14 Feb 2013 10:28:24 -0600
+Subject: [Buildroot] [PATCH] add pre-build script
+In-Reply-To: <20130214085604.52619b06@skate>
+References: <05255DE50A102443A25D42F2CCAC151FA58C25@LUMEXCH.luminatorusa.com>
+ <511C1281.5040502@mind.be>
+ <CAEBucnA1BebDBHWb4PcQBGiUpyiAcT0=vs3Tu4D+LVw1YdN0_A@mail.gmail.com>
+ <20130214085604.52619b06@skate>
+Message-ID: <CAEBucnCBe83aOfTPOTfjvVjKNAdE0CbYp540-OPZy-ecgEYuMA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/02/13 07:57, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
-> 
-> On Thu, 14 Feb 2013 00:21:12 +0100, Arnout Vandecappelle wrote:
-> 
->>   It's not that it's impossible to solve, it's just inconvenient and 
->> counter-intuitive. It's also inconvenient to have two U-Boot versions
->> in your legal-info output. Just like it's inconvenient to have two
->> linux tarballs.
-> 
-> Indeed, but what solution do you propose?
-> 
+On Thu, Feb 14, 2013 at 1:56 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Spenser Gilliland,
+>
+> On Wed, 13 Feb 2013 19:04:30 -0600, Spenser Gilliland wrote:
+>
+>> I have a use case for this.  In Microblaze builds, it would be nice to
+>> generate optimal cflags from the dts/mhs for use in all software.
+>> This could be accomplished by a pre script.
+>
+> Do you have the example of pre-build script that does this? Changing
+> the CFLAGS requires changing some internal Buildroot make variables, so
+> I'm not sure how you're doing this from a pre-build script.
+>
+> Best regards,
+>
 > Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
-The ideal scenario that I am picturing is this.
+I'm not doing this with the specific implementation posted.  I'm just
+saying it would be a nice feature to have.  Many device trees specify
+processor/arch features and optimized cflags can be constructed from
+this data.
 
-* Add an option to uboot (let's call it UBOOT_BUILD_ENV_TOOLS), to
-additionally do the work that is currently done by uboot-tools.
+I currently do this outside of buildroot and just provide
+BR2_TARGET_OPTIMIZATION on the make command line from the buildscripts
+for the hardware.
 
-* Add an option to uboot-tools to make it a "virtual" package (let's
-call it UBOOT_TOOLS_VIRTUAL) that tells uboot-tools to do nothing
-because uboot will do all the work. The virtual package is needed so
-that the dependency chains can lead to uboot.
+It would be nice to have buildroot completely self contained and not
+require the software developers to download the additional hardware
+files.
 
-* Turning on virtual mode in uboot-tools also turns on uboot
-UBOOT_BUILD_ENV_TOOLS.
+Spenser
 
-* The uboot-tools virtual package would add uboot as a dependency if
-UBOOT_TOOLS_VIRTUAL is on.
-
-I do not have much hands-on experience on this so I could talking
-rubbish. Please let me know if I am talking rubbish.
-
-In the mean time, the practical way to ensure building from both sources
-is to set:
-
-UBOOT_VERSION equal to UBOOT_TOOLS_VERSION
-UBOOT_SITE equal to UBOOT_TOOLS_SITE
-UBOOT_METHOD equal to UBOOT_TOOLS_METHOD
-
-However, because uboot has many more options for setting SITE and
-METHOD, it is currently not always possible to set them to pull the same
-sources without patching buildroot. I currently get uboot from a git repo.
-
-If I created a patch to give uboot-tools the same pull options as the
-uboot package, would you accept it (if it passes review of course)?
-
-Regards,
-Dimitris
+-- 
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
