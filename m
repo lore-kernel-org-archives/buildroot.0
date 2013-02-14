@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Feb 2013 18:36:45 +0100
-Subject: [Buildroot] [PATCH 5/9] manual: faq: add workaround to avoid
- rebuilding the buildroot toolchain after each clean
-In-Reply-To: <e5a14b33f5b34b4fbfd5c5b3e2b1077c7ef91573.1360795941.git.s.martin49@gmail.com>
+Date: Thu, 14 Feb 2013 18:37:27 +0100
+Subject: [Buildroot] [PATCH 6/9] manual: minor fix in patch-policy.txt
+In-Reply-To: <28331a810710249524be2ea3a286fff996ead804.1360795941.git.s.martin49@gmail.com>
 References: <cover.1360795941.git.s.martin49@gmail.com>
- <e5a14b33f5b34b4fbfd5c5b3e2b1077c7ef91573.1360795941.git.s.martin49@gmail.com>
-Message-ID: <20130214183645.6b098294@skate>
+ <28331a810710249524be2ea3a286fff996ead804.1360795941.git.s.martin49@gmail.com>
+Message-ID: <20130214183727.402fbb13@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,82 +13,39 @@ To: buildroot@busybox.net
 
 Dear Samuel Martin,
 
-On Wed, 13 Feb 2013 23:59:06 +0100, Samuel Martin wrote:
+On Wed, 13 Feb 2013 23:59:07 +0100, Samuel Martin wrote:
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > ---
->  docs/manual/common-usage.txt        |  1 +
->  docs/manual/faq-troubleshooting.txt | 34 ++++++++++++++++++++++++++++++++++
->  2 files changed, 35 insertions(+)
+>  docs/manual/patch-policy.txt | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-> index c7f511a..b36965f 100644
-> --- a/docs/manual/common-usage.txt
-> +++ b/docs/manual/common-usage.txt
-> @@ -20,6 +20,7 @@ all sources that you previously selected in the configurator
->  You can now disconnect or copy the content of your +dl+
->  directory to the build-host.
+> diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+> index 78ac5b6..468a954 100644
+> --- a/docs/manual/patch-policy.txt
+> +++ b/docs/manual/patch-policy.txt
+> @@ -34,7 +34,7 @@ Most patches are provided within Buildroot, in the package
+>  directory; these typically aim to fix cross-compilation, libc support,
+>  or other such issues.
 >  
-> +[[daily-oot-build]]
->  Building out-of-tree
->  ~~~~~~~~~~~~~~~~~~~~
+> -These patch files should be named +<packagename>-*.patch+.
+> +These patch files should be named +<packagename>-<description>.patch+.
 >  
-> diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
-> index 8b0882a..f367275 100644
-> --- a/docs/manual/faq-troubleshooting.txt
-> +++ b/docs/manual/faq-troubleshooting.txt
-> @@ -147,3 +147,37 @@ Using the internal Buildroot toolchain backend
->  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->  
->  These toolchains are currently *not relocatable*.
-> +
-> +However, it is possible to build a toolchain using the internal Buildroot
-> +backend in another location (see xref:daily-oot-build[]), then use it as an
-> +_external_ one to prevent from rebuilding it after issuing +make clean+
-> +(see xref:faq-avoid-rebuild-toolchain[]).
-> +
-> +[[faq-avoid-rebuild-toolchain]]
-> +How to avoid always rebuilding the toolchain?
-> +---------------------------------------------
-> +
-> +When using the internal Buildroot toolchain backend or the
-> +http://crosstool-ng.org[crosstool-NG] one, runnong +make clean+ not only
-> +remove the built binaries, but also the whole toolchain.
-> +
-> +It is possible to prevent this by, first, building the toolchain in a
-> +place different from the one  where the images will be built.
-> +
-> +To do so:
-> +
-> +1. Build the toolchain somewhere:
-> ++
-> +----------------------------
-> +make toolchain O=/path/to/toolchain
-> +----------------------------
-> ++
-> +1. Use this pre-built toolchain as an external one in a new and clean
-> +   build (see xref:external-toolchain-backend[]) with a different output
-> +   directory than the pre-built toolchain one.
-> +
-> +This way, you will not have to rebuild the toolchain after invoking
-> ++make clean+.
-> +
-> +However, the toolchain should be regenerated after any change of the
-> ++Target Architecture+ (or its _variant_), or done in the +Toolchain+ menu.
+>  A +series+ file, as used by +quilt+, may also be added in the
+>  package directory. In that case, the +series+ file defines the patch
+> @@ -57,8 +57,8 @@ How patches are applied
+>    applied according to the +series+ file;
+>  +
+>  * Otherwise, patch files matching `<packagename>-*.patch` or
+> -  `<packagename>-*.patch.<arch>` (where +<arch>+ is the architecture
+> -  name) are applied following the +ls+ command order.
+> +  `<packagename>-<description>.patch.<arch>` (where +<arch>+ is the
+> +  architecture name) are applied following the +ls+ command order.
 
-I think this text is misleading, because it suggests that the only way
-to avoid rebuilding the toolchain over and over again is to build a
-toolchain with Buildroot, and then use it as an external toolchain in
-Buildroot. There are other options that are possible:
- * Use Crosstool-NG outside of Buildroot to generate a toolchain
- * Use a pre-built toolchain
+The <packagename>-<description>.patch.<arch> naming is deprecated, and
+I think should no longer be mentioned in the documentation.
 
-I have the feeling that this new text doesn't articulate very well with
-the text that was added in 401d323698266468e322471530ee1997835fc335.
-
-We have to be careful to not add a set of random facts in the manual
-one after the other, without keeping a consistency and ordering on the
-different parts of the manual.
+Best regards,
 
 Thomas
 -- 
