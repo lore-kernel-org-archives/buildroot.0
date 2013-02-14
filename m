@@ -1,62 +1,62 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 14 Feb 2013 22:21:49 +0100
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 14 Feb 2013 22:49:38 +0100
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-02-12
-In-Reply-To: <20130213073425.9C3C052C6D2@lolut.humanoidz.org>
-References: <20130213073425.9C3C052C6D2@lolut.humanoidz.org>
-Message-ID: <511D556D.3060503@lucaceresoli.net>
+	2013-02-11
+In-Reply-To: <20130212073431.F3A9752C982@lolut.humanoidz.org>
+References: <20130212073431.F3A9752C982@lolut.humanoidz.org>
+Message-ID: <511D5BF2.5060906@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
-> Hello,
->
-> On 2013-02-12, 152 random build tests have been done and
-> submitted on autobuild.buildroot.net.
->   104 builds have been successful
->   48 builds have failed
->
-> Below the results of the failed builds. Successful builds are omitted.
->
-...
-> Build 648265012591280fa592a239f86ee39aec2d5fa6
+On 12/02/13 08:34, Thomas Petazzoni wrote:
+> Build 4fedd1a67957f52272b63948e766d7ad10bf4f85
 > ==============================================
->
+> 
 > Status         : NOK
-> Failure reason : qt-4.8.4
-> Architecture   : arm
+> Failure reason : pv-1.2.0
+> Architecture   : x86_64
 > Submitted by   : Thomas Petazzoni (Free Electrons build server)
-> Submitted at   : 2013-02-12 07:22:08
+> Submitted at   : 2013-02-11 07:01:56
 > Git commit ID  :http://git.buildroot.net/buildroot/commit/?id=6056de8971bf25c9853c38583dc50b5abcb982de
-> End of log     :http://autobuild.buildroot.net/results/648265012591280fa592a239f86ee39aec2d5fa6/build-end.log
-> Complete log   :http://autobuild.buildroot.net/results/648265012591280fa592a239f86ee39aec2d5fa6/build.log.bz2
-> Configuration  :http://autobuild.buildroot.net/results/648265012591280fa592a239f86ee39aec2d5fa6/config
-> Defconfig      :http://autobuild.buildroot.net/results/648265012591280fa592a239f86ee39aec2d5fa6/defconfig
-
-This is a build with Linaro 2012.11. Linaro 2013.01 fails with the same 
-message.
-Building with Sourcery 2011.03 succeeds.
-
-The log ends with an issue about precompiled headers:
-
-> moc util/qcompleter.h
-> compiling ../3rdparty/pixman/pixman-arm-neon-asm.S
-> cc1: fatal error: .pch/release-shared-emb-arm/QtGui: No such file or directory
-> compilation terminated.
+> End of log     :http://autobuild.buildroot.net/results/4fedd1a67957f52272b63948e766d7ad10bf4f85/build-end.log
+> Complete log   :http://autobuild.buildroot.net/results/4fedd1a67957f52272b63948e766d7ad10bf4f85/build.log.bz2
+> Configuration  :http://autobuild.buildroot.net/results/4fedd1a67957f52272b63948e766d7ad10bf4f85/config
+> Defconfig      :http://autobuild.buildroot.net/results/4fedd1a67957f52272b63948e766d7ad10bf4f85/defconfig
 
 
-I don't know the exact cause, but adding -no-pchto QT_CONFIGURE_OPTS 
-makes it
-compile again with Linaro.
+ The problem with this one is the following:
 
-Should I send a patch to set -no-pch? I'm reluctant because it's not a real
-fix, and compile time could increase significantly, I guess.
+/home/test/test/output1/host/usr/bin/i686-pc-linux-gnu-ld -r -o src/library.o  src/library/getopt.o src/library/gettext.o
+/home/test/test/output1/host/usr/bin/i686-pc-linux-gnu-ld: i386:x86-64 architecture of input file `src/library/gettext.o' is incompatible with i386 output
 
-Thomas, this probably affects Qt5 Beta 1 as well, according to this blog 
-post:
-http://gpupowered.org/node/14. Would you mind testing it on your Qt5 branch?
 
-Luca
+ This is because the Sourcery toolchain is a multilib toolchain that can
+generate two different emulations (elf_i386 and elf_x86_64). gcc adds the
+"-m elf_x86_64" option to ld, but of course there is no way for configure
+or whatever to discover that this is necessary.
+
+ There are probably other packages that suffer the same problem - in fact,
+any package that uses $(TARGET_LD) will most likely suffer from it.
+
+ I'm not sure how to solve this. We could set TARGET_LD to 
+"$(TARGET_CROSS)ld -m elf_x86_64" for the specific case of x86_64 external
+toolchains (it probably doesn't hurt to add the default emulation 
+explicitly). But there may be other external toolchains with the same
+problem - none of the current ones, at first sight, but who knows what the
+future brings.
+
+ So what do you think?
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
