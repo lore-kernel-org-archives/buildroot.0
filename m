@@ -1,44 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Feb 2013 15:25:47 +0100
-Subject: [Buildroot] Google Summer of Code 2013
-In-Reply-To: <201302131955.35889.yann.morin.1998@free.fr>
-References: <20130209004253.207e0741@skate>
- <201302131955.35889.yann.morin.1998@free.fr>
-Message-ID: <20130214152547.555d4553@skate>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Thu, 14 Feb 2013 15:27:54 +0100
+Subject: [Buildroot] [PATCH] linux: Install the device tree in /boot when
+	installing the kernel
+Message-ID: <1360852074-22050-1-git-send-email-maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+The option BR2_LINUX_KERNEL_INSTALL_TARGET used to install the kernel in
+/boot in the rootfs. The introduction of the device tree builds made it
+possible to generate device tree blobs, and stored them in IMAGES_DIR
+like the kernel, but didn't copy the dtb in /boot when _INSTALL_TARGET
+was enabled.
 
-On Wed, 13 Feb 2013 19:55:35 +0100, Yann E. MORIN wrote:
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+---
+When having a DT-enabled kernel started from /boot, the current behaviour
+is broken right now, so this patch should probably go into the next release. 
 
-> Amongst those topics was the possibility for Buildroot to submit a
-> proposal for the next Googl Summer of Code (GSoC). The schedule for
-> GSoC`13 has now been published:
->     https://www.google-melange.com/gsoc/events/google/gsoc2013
-> 
-> In short:
->   - mentoring applications must be sent from 2013-03-18 19:00Z, and
->     no later than 2013-03-29 19:00Z.
->   - list of accepted mentoring organisations published on 2013-04-08 19:00Z
->   - students start working 2013-06-17, until 2013-09-23 19:00Z
->   - mentor submit is on 2013-10-19 and 2013-10-20 (at Google HQs?)
-> 
-> Now, we're left to imagining what we'll be submitting. ;-)
+ linux/linux.mk |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-I've written down three ideas:
-http://elinux.org/Buildroot:GSoC2013Ideas.
-
-Comments on those ideas are welcome, as well as additional ideas.
-
-Thanks,
-
-Thomas
+diff --git a/linux/linux.mk b/linux/linux.mk
+index fe5f738..12573ad 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -198,6 +198,13 @@ define LINUX_INSTALL_DTB
+ 		$(addprefix $(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
+ 		$(BINARIES_DIR)/
+ endef
++define LINUX_INSTALL_DTB_TARGET
++	# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
++	cp $(addprefix \
++		$(KERNEL_ARCH_PATH)/boot/$(if $(wildcard \
++		$(addprefix $(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
++		$(TARGET_DIR)/boot/
++endef
+ endif
+ endif
+ 
+@@ -237,6 +244,7 @@ endef
+ ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
+ define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
+ 	install -m 0644 -D $(LINUX_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
++	$(LINUX_INSTALL_DTB_TARGET)
+ endef
+ endif
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10.4
