@@ -1,50 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Feb 2013 18:04:02 +0100
-Subject: [Buildroot] [PATCH] add pre-build script
-In-Reply-To: <CAEBucnCBe83aOfTPOTfjvVjKNAdE0CbYp540-OPZy-ecgEYuMA@mail.gmail.com>
-References: <05255DE50A102443A25D42F2CCAC151FA58C25@LUMEXCH.luminatorusa.com>
- <511C1281.5040502@mind.be>
- <CAEBucnA1BebDBHWb4PcQBGiUpyiAcT0=vs3Tu4D+LVw1YdN0_A@mail.gmail.com>
- <20130214085604.52619b06@skate>
- <CAEBucnCBe83aOfTPOTfjvVjKNAdE0CbYp540-OPZy-ecgEYuMA@mail.gmail.com>
-Message-ID: <20130214180402.6b2dbb17@skate>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Thu, 14 Feb 2013 17:14:52 +0000
+Subject: [Buildroot] [git commit] libffi: switch to using a Git version,
+ brings Microblaze and Xtensa support
+In-Reply-To: <20130205150055.C510A9A987@busybox.osuosl.org>
+References: <20130205150055.C510A9A987@busybox.osuosl.org>
+Message-ID: <CAG2jQ8iKxtdxCTc2DyMTy-3naNtQjWRdonxP8u0e7tVF0tsecA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+On 5 February 2013 14:57, Peter Korsgaard <jacmet@sunsite.dk> wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=ddd69b5609cc9bd954afcfc2f91831d64b9cfff7
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> We already had backported patches for the Blackfin and AArch64
+> support, and now we would have needed to also backport the Xtensa
+> support and the Microblaze support. This starts to get crazy.
+>
+> Let's switch to using a Git version from Github, until libffi finally
+> releases a new stable version.
+>
+> In order to achieve this, we also need to:
+>
+>  * autoreconf the package, so that a libffi.pc file gets generated
+>
+>  * manually install the libffi.pc file, because it doesn't get
+>    installed by libffi Makefile, for some reason
+>
+>  * remove the part of the target post install hook that was messing
+>    with libffi.pc, since it was modifying the one in STAGING_DIR
+>    (which is odd for a target post install hook), and the libffi.pc
+>    file is anyway not installed to the target anymore.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+>  .../libffi-0001-Add-support-for-Blackfin.patch     | 1044 ---------
+>  ...fi-0002-Add-aarch64-support-from-upstream.patch | 2326 --------------------
+>  package/libffi/libffi.mk                           |   29 +-
+>  3 files changed, 23 insertions(+), 3376 deletions(-)
+>
+> Patch is too large, so refusing to show it
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-On Thu, 14 Feb 2013 10:28:24 -0600, Spenser Gilliland wrote:
+Hi Peter,
 
-> I'm not doing this with the specific implementation posted.  I'm just
-> saying it would be a nice feature to have.  Many device trees specify
-> processor/arch features and optimized cflags can be constructed from
-> this data.
-> 
-> I currently do this outside of buildroot and just provide
-> BR2_TARGET_OPTIMIZATION on the make command line from the buildscripts
-> for the hardware.
-> 
-> It would be nice to have buildroot completely self contained and not
-> require the software developers to download the additional hardware
-> files.
+A new libffi is released[1]. Maybe we should revert to the old
+Makefile now that a new version is out?
+I can provide a patch if needed.
 
-Indeed, but the pre-build script approach you posted would not allow to
-customize the CFLAGS. The CFLAGS are part of Buildroot .config file,
-which is loaded at the time you run "make". So when your pre-build
-script gets executed by Buildroot, make has already loaded the value of
-BR2_TARGET_OPTIMIZATION.
+[1] ftp://sourceware.org/pub/libffi/libffi-3.0.12.tar.gz
 
-You would have to make a specific script that returns custom CFLAGS,
-and add some code in Buildroot that does:
-
-CUSTOM_CFLAGS = $(shell ./your/custom/script)
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards,
+Markos Chandras
