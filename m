@@ -1,57 +1,64 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 14 Feb 2013 22:49:38 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-02-11
-In-Reply-To: <20130212073431.F3A9752C982@lolut.humanoidz.org>
-References: <20130212073431.F3A9752C982@lolut.humanoidz.org>
-Message-ID: <511D5BF2.5060906@mind.be>
+Date: Thu, 14 Feb 2013 23:10:04 +0100
+Subject: [Buildroot] [PATCH] add pre-build script
+In-Reply-To: <20130214180402.6b2dbb17@skate>
+References: <05255DE50A102443A25D42F2CCAC151FA58C25@LUMEXCH.luminatorusa.com>
+ <511C1281.5040502@mind.be>
+ <CAEBucnA1BebDBHWb4PcQBGiUpyiAcT0=vs3Tu4D+LVw1YdN0_A@mail.gmail.com>
+ <20130214085604.52619b06@skate>
+ <CAEBucnCBe83aOfTPOTfjvVjKNAdE0CbYp540-OPZy-ecgEYuMA@mail.gmail.com>
+ <20130214180402.6b2dbb17@skate>
+Message-ID: <511D60BC.9000205@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/02/13 08:34, Thomas Petazzoni wrote:
-> Build 4fedd1a67957f52272b63948e766d7ad10bf4f85
-> ==============================================
-> 
-> Status         : NOK
-> Failure reason : pv-1.2.0
-> Architecture   : x86_64
-> Submitted by   : Thomas Petazzoni (Free Electrons build server)
-> Submitted at   : 2013-02-11 07:01:56
-> Git commit ID  :http://git.buildroot.net/buildroot/commit/?id=6056de8971bf25c9853c38583dc50b5abcb982de
-> End of log     :http://autobuild.buildroot.net/results/4fedd1a67957f52272b63948e766d7ad10bf4f85/build-end.log
-> Complete log   :http://autobuild.buildroot.net/results/4fedd1a67957f52272b63948e766d7ad10bf4f85/build.log.bz2
-> Configuration  :http://autobuild.buildroot.net/results/4fedd1a67957f52272b63948e766d7ad10bf4f85/config
-> Defconfig      :http://autobuild.buildroot.net/results/4fedd1a67957f52272b63948e766d7ad10bf4f85/defconfig
+On 14/02/13 18:04, Thomas Petazzoni wrote:
+> Dear Spenser Gilliland,
+>
+> On Thu, 14 Feb 2013 10:28:24 -0600, Spenser Gilliland wrote:
+>
+>> I'm not doing this with the specific implementation posted.  I'm just
+>> saying it would be a nice feature to have.  Many device trees specify
+>> processor/arch features and optimized cflags can be constructed from
+>> this data.
+>>
+>> I currently do this outside of buildroot and just provide
+>> BR2_TARGET_OPTIMIZATION on the make command line from the buildscripts
+>> for the hardware.
+>>
+>> It would be nice to have buildroot completely self contained and not
+>> require the software developers to download the additional hardware
+>> files.
+>
+> Indeed, but the pre-build script approach you posted would not allow to
+> customize the CFLAGS.
 
+  Spenser didn't post it...
 
- The problem with this one is the following:
+> The CFLAGS are part of Buildroot .config file,
+> which is loaded at the time you run "make".
 
-/home/test/test/output1/host/usr/bin/i686-pc-linux-gnu-ld -r -o src/library.o  src/library/getopt.o src/library/gettext.o
-/home/test/test/output1/host/usr/bin/i686-pc-linux-gnu-ld: i386:x86-64 architecture of input file `src/library/gettext.o' is incompatible with i386 output
+  Ah, right, major shortcoming if the pre-build script can't update the 
+.config...
 
+> So when your pre-build
+> script gets executed by Buildroot, make has already loaded the value of
+> BR2_TARGET_OPTIMIZATION.
+>
+> You would have to make a specific script that returns custom CFLAGS,
+> and add some code in Buildroot that does:
+>
+> CUSTOM_CFLAGS = $(shell ./your/custom/script)
 
- This is because the Sourcery toolchain is a multilib toolchain that can
-generate two different emulations (elf_i386 and elf_x86_64). gcc adds the
-"-m elf_x86_64" option to ld, but of course there is no way for configure
-or whatever to discover that this is necessary.
+  This is a good place to do := instead of =, otherwise the script gets 
+re-run for every build step...
 
- There are probably other packages that suffer the same problem - in fact,
-any package that uses $(TARGET_LD) will most likely suffer from it.
+  Regards,
+  Arnout
 
- I'm not sure how to solve this. We could set TARGET_LD to 
-"$(TARGET_CROSS)ld -m elf_x86_64" for the specific case of x86_64 external
-toolchains (it probably doesn't hurt to add the default emulation 
-explicitly). But there may be other external toolchains with the same
-problem - none of the current ones, at first sight, but who knows what the
-future brings.
-
- So what do you think?
-
- Regards,
- Arnout
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
