@@ -1,52 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 14 Feb 2013 07:48:21 +0100
-Subject: [Buildroot] [PATCH 3/9] manual: sprinkle with some calls to
-	MESSAGE
-In-Reply-To: <6aee23c2362a6fe3b8428805af5330f388e2b3aa.1360795941.git.s.martin49@gmail.com>
-References: <cover.1360795941.git.s.martin49@gmail.com>
- <6aee23c2362a6fe3b8428805af5330f388e2b3aa.1360795941.git.s.martin49@gmail.com>
-Message-ID: <511C88B5.8060204@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Feb 2013 08:56:04 +0100
+Subject: [Buildroot] [PATCH] add pre-build script
+In-Reply-To: <CAEBucnA1BebDBHWb4PcQBGiUpyiAcT0=vs3Tu4D+LVw1YdN0_A@mail.gmail.com>
+References: <05255DE50A102443A25D42F2CCAC151FA58C25@LUMEXCH.luminatorusa.com>
+ <511C1281.5040502@mind.be>
+ <CAEBucnA1BebDBHWb4PcQBGiUpyiAcT0=vs3Tu4D+LVw1YdN0_A@mail.gmail.com>
+Message-ID: <20130214085604.52619b06@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/02/13 23:59, Samuel Martin wrote:
->
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Dear Spenser Gilliland,
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Wed, 13 Feb 2013 19:04:30 -0600, Spenser Gilliland wrote:
 
-  Doesn't hurt to include it in 2013.02.
+> I have a use case for this.  In Microblaze builds, it would be nice to
+> generate optimal cflags from the dts/mhs for use in all software.
+> This could be accomplished by a pre script.
 
-  Regards,
-  Arnout
+Do you have the example of pre-build script that does this? Changing
+the CFLAGS requires changing some internal Buildroot make variables, so
+I'm not sure how you're doing this from a pre-build script.
 
-> ---
->   docs/manual/manual.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-> index d664603..aa20534 100644
-> --- a/docs/manual/manual.mk
-> +++ b/docs/manual/manual.mk
-> @@ -18,7 +18,7 @@ $(1): $(1)-$(3)
->   $(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
->
->   $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES)
-> -	@echo "Generating $(5) $(1)..."
-> +	@$(call MESSAGE,"Generating $(5) $(1)...")
->   	$(Q)mkdir -p $$(@D)
->   	$(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
->   	  -D $$(@D) $$<
->
+Best regards,
 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
