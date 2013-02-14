@@ -1,48 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Feb 2013 14:39:57 +0100
-Subject: [Buildroot] [PATCH v3] strongswan: new package
-In-Reply-To: <1360848306-4577-1-git-send-email-jezz@sysmic.org>
-References: <20130212122551.46e895b6@skate>
- <1360848306-4577-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20130214143957.1095407a@skate>
+Date: Thu, 14 Feb 2013 14:47:13 +0100
+Subject: [Buildroot] [PATCH 2/2] libcurl: packages that use it need mmu
+ also
+In-Reply-To: <1360846981-26122-2-git-send-email-gustavo@zacarias.com.ar>
+References: <1360846981-26122-1-git-send-email-gustavo@zacarias.com.ar>
+ <1360846981-26122-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130214144713.632dcc63@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Dear Gustavo Zacarias,
 
-On Thu, 14 Feb 2013 14:25:06 +0100, J?r?me Pouiller wrote:
-> strongSwan is an OpenSource IPsec implementation for the
-> Linux operating system. It is based on the discontinued
-> FreeS/WAN project and the X.509 patch.
+On Thu, 14 Feb 2013 10:03:01 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/b812b8931a7291ea8969c9818aea1044ee302c20
 > 
-> The focus is on:
->      - simplicity of configuration
->      - strong encryption and authentication methods
->      - powerful IPsec policies supporting large and complex VPN networks
-> 
-> http://www.strongswan.org/
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-It looks pretty good now, thanks!
+I don't agree. I believe the libcurl package should not depend on
+BR2_USE_MMU instead. I have a patch that I'll send as a reply to this
+e-mail.
 
-Did you test with a minimal uClibc configuration, i.e no large file, no
-IPv6, no C++, no wide char, no locales, to make sure that you don't
-need to depend on specific toolchain options?
-
-I don't remember if I asked you this question already or not. I might
-at least suspect that the code may not build if IPv6 support is
-disabled in the toolchain.
-
-If you don't want to spend time building a minimal uClibc toolchain,
-you can use the one at
-http://autobuild.buildroot.org/toolchains/tarballs/br-arm-basic-2012.11.1-1.tar.bz2
-as an external toolchain.
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
