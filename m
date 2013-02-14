@@ -1,45 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 14 Feb 2013 07:35:03 +0200
-Subject: [Buildroot] Buildroot at ELC: review/suggestions needed
-In-Reply-To: <20130213231346.0ed68b45@skate>
-References: <20130209195709.323b9f5e@skate>
- <20130213231346.0ed68b45@skate>
-Message-ID: <20130214053500.GB15440@sapphire.tkos.co.il>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Thu, 14 Feb 2013 07:38:12 +0200
+Subject: [Buildroot] [PATCH v3 1/1] openpgm: new package
+In-Reply-To: <511C0FE0.8020105@mind.be>
+References: <1360749821-19238-1-git-send-email-alexander.lukichev@gmail.com>
+ <511C0FE0.8020105@mind.be>
+Message-ID: <511C7843.4030405@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi, Arnout, All!
 
-On Wed, Feb 13, 2013 at 11:13:46PM +0100, Thomas Petazzoni wrote:
-> On Sat, 9 Feb 2013 19:57:09 +0100, Thomas Petazzoni wrote:
-> 
-> >  * Give me suggestions on what to demonstrate. I will prepare a
-> >    slideshow of 10-20 slides that continuously loops (it should
-> >    present the main characteristics and features of Buildroot), but I
-> >    also would like to have some demo to show (I can bring an ARM board
-> >    if needed). Any suggestions, both for the slideshow and the demo?
-> 
-> The current state of the slides is visible at
-> http://free-electrons.com/~thomas/pub/buildroot-slides.pdf.
+On 02/14/2013 12:12 AM, Arnout Vandecappelle wrote:
+>> The package can be built without WCHAR but this is supported
+>> only by its SCons and CMake build systems (for development). Autotools
+>> based build system (for releases) does not support this. IPV6 and
+>> thread support requirements are mandatory.
+>  In that case, why not just use cmake instead of autotools?
 
-A few comment/suggestions:
+To quote the INSTALL for the package:
+"Note this package includes three build systems each with different targets:
 
-Slide 3/11: I'd change "Not the product of any company" to "Not controlled by 
-any company".
+ * SCons is used for development, there is minimal auto-configuration, one
+   SConstruct script per target compiler and platform.
 
-Slide 6/11: It should be noted somehow that these automatic tests are build 
-test only. Maybe that caption should be "Automatic build testing".
+ * Autoconf is used for Unix-only library release.
 
-A mention of the built-in support for many popular boards may also be 
-appropriate.
+ * CMake is used for Windows-only library release and installer packaging.
+"
 
-Thanks for the good work,
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+--
+Best regards,
+  Alexander Lukichev
