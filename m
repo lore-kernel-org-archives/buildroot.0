@@ -1,39 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Feb 2013 09:32:37 +0100
-Subject: [Buildroot] disable downloaded source cache
-In-Reply-To: <CAKAx1cjXjZscmy-D8Fa0WDqt-GotQoavBMr_SCSOJZdnyEwcqg@mail.gmail.com>
-References: <CAKAx1cjcxkBq67w_DV7sFK_Z+7X9+WkMuEkVWiswWgsq-Eskig@mail.gmail.com>
- <511C16E2.4010105@mind.be>
- <CAKAx1cjXjZscmy-D8Fa0WDqt-GotQoavBMr_SCSOJZdnyEwcqg@mail.gmail.com>
-Message-ID: <20130214093237.0953545c@skate>
+From: Rafal Fabich <rafal.fabich@gmail.com>
+Date: Thu, 14 Feb 2013 10:14:13 +0100
+Subject: [Buildroot] [PATCH v2] Added local directory as soure of kernel code
+Message-ID: <1360833253-26809-1-git-send-email-rafal.fabich@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lionel Orry,
+Add the option to use a local directory as the source for
+building the Linux kernel, which can be useful during
+kernel development.
 
-On Thu, 14 Feb 2013 09:11:30 +0100, Lionel Orry wrote:
+Signed-off-by: Rafal Fabich <rafal.fabich@gmail.com>
 
-> Well I have a cleaner way actually that I used previously, which is to
-> use a ROOTFS_POST_BUILD build script that clones the repository and
-> 'rsync' it on the target rootfs, I was mainly wondering if I could
-> achieve the same using the ROOTFS_OVERLAY feature. It seems it's not
-> enough for my needs, so I will actually stick to my previous
-> ROOTFS_POST_BUILD script and forget about ROOTFS_OVERLAY.
+---
+Changes v1 -> v2 after comments from Arnout Vandecappelle
+  - default setting of BR2_LINUX_KERNEL_VERSION changed to "custom"
+  - removed ifeq ($(LINUX_VERSION),custom) condition from linux.mk for better consistency
 
-Yes, I think you're right. The ROOTFS_OVERLAY feature was added to help
-people that are in the simple case of a rootfs overlay stored in
-board/<something>/<foobar>/, and make the possibility of using a rootfs
-overlay more practical to use for newcomers.
+---
+ linux/Config.in |   13 +++++++++++++
+ linux/linux.mk  |    5 ++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-However, for more complicated/specific cases, using the post-build
-script remains the right option.
-
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index 3c50acc..53e81ba 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -52,6 +52,12 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT
+ 	  This option allows Buildroot to get the Linux kernel source
+ 	  code from a Git repository.
+ 
++config BR2_LINUX_KERNEL_CUSTOM_LOCAL
++	bool "Local directory"
++	help
++	  This option allows Buildroot to get the Linux kernel source
++	  code from a local directory.
++
+ endchoice
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+@@ -74,6 +80,12 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 	  Git revision to use in the format used by git rev-parse,
+ 	  E.G. a sha id, a tag, branch, ..
+ 
++config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
++	string "Path to the local directory"
++	depends on BR2_LINUX_KERNEL_CUSTOM_LOCAL
++	help
++	  Path to the local directory with the Linux kernel source code.
++
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "3.7.6" if BR2_LINUX_KERNEL_3_7
+@@ -81,6 +93,7 @@ config BR2_LINUX_KERNEL_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 	default $BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
++	default "custom" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
+ 
+ #
+ # Patch selection
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 91a9f50..494911b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -8,10 +8,13 @@ LINUX_LICENSE = GPLv2
+ LINUX_LICENSE_FILES = COPYING
+ 
+ # Compute LINUX_SOURCE and LINUX_SITE from the configuration
+-ifeq ($(LINUX_VERSION),custom)
++ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
+ LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
+ LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
+ LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
++else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
++LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
++LINUX_SITE_METHOD = local
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
+ LINUX_SITE_METHOD = git
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
