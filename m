@@ -1,53 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 15 Feb 2013 14:20:17 +0200
-Subject: [Buildroot] [PATCHv5 2/2] wireshark: new package
-In-Reply-To: <511E2637.4010008@petroprogram.com>
-References: <f903151303143f85e1e9c69b1f20400af878be97.1359870806.git.baruch@tkos.co.il>
- <f41bbd107d237f76229f44b7d78fcec962c15309.1359870806.git.baruch@tkos.co.il>
- <510E53EB.7020704@petroprogram.com>
- <20130214045630.GA15440@sapphire.tkos.co.il>
- <511CFD48.8000300@petroprogram.com>
- <511D0638.90106@petroprogram.com>
- <511D0854.7010506@petroprogram.com>
- <20130215115112.GA1249@tarshish>
- <511E2637.4010008@petroprogram.com>
-Message-ID: <20130215122013.GB1249@tarshish>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 15 Feb 2013 09:48:38 -0300
+Subject: [Buildroot] [PATCH 1/3] kernel-headers: bump 3.{0, 4,
+	7}.x stable versions
+Message-ID: <1360932520-18897-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stefan,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                                  | 6 +++---
+ ...0.64-headers_install-fix-__packed-in-exported-kernel-head.patch} | 0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.62-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.64-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-On Fri, Feb 15, 2013 at 02:12:39PM +0200, Stefan Fr?berg wrote:
-> 15.2.2013 13:51, Baruch Siach kirjoitti:
-> > On Thu, Feb 14, 2013 at 05:52:52PM +0200, Stefan Fr?berg wrote:
-> > [...]
-> >> It seems I need to upgrade to latest git version if I want this to work.
-> >> That version of gnutls has
-> >> --disable-rpath in it's conf.
-> > Thanks for testing.
-> >
-> >> BTW, Baruch did you manage to compile this version of wireshark against
-> >> that gnutls 3 ?
-> > Nope. I only tried OpenSSL which I already have on my target.
-> 
-> Your .mk file needs --with-gnutls=no added to it's configuration in case
-> both OpenSSL and gnutls are installed.
-> And maybe later a submenu of choice what SSL (if any) implementation to
-> use for decrypting.
-
-Ok. I'll fix that in my next patch iteration.
-
-> I will try later this evening how far I get this time with compiling it.
-
-Keep me posted.
-
-Thanks,
-baruch
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 38e051f..ea65b4f 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -58,13 +58,13 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.62"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.64"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.38"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.29"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.31"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+-	default "3.7.6"		if BR2_KERNEL_HEADERS_3_7
++	default "3.7.8"		if BR2_KERNEL_HEADERS_3_7
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.62-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.64-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.62-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.64-headers_install-fix-__packed-in-exported-kernel-head.patch
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.7.12.4
