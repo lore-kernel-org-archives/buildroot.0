@@ -1,25 +1,50 @@
-From: Greg Beresford <greg.beresford@zbdsolutions.com>
-Date: Fri, 15 Feb 2013 11:22:00 +0000
-Subject: [Buildroot] Using external toolchain wrapper outside of buildroot
-Message-ID: <BF980CD5635D994FA25831A4A9C113BF1328583EBE@THHS2E12BE9X.hostedservice2.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 15 Feb 2013 13:51:23 +0200
+Subject: [Buildroot] [PATCHv5 2/2] wireshark: new package
+In-Reply-To: <511D0854.7010506@petroprogram.com>
+References: <f903151303143f85e1e9c69b1f20400af878be97.1359870806.git.baruch@tkos.co.il>
+ <f41bbd107d237f76229f44b7d78fcec962c15309.1359870806.git.baruch@tkos.co.il>
+ <510E53EB.7020704@petroprogram.com>
+ <20130214045630.GA15440@sapphire.tkos.co.il>
+ <511CFD48.8000300@petroprogram.com>
+ <511D0638.90106@petroprogram.com>
+ <511D0854.7010506@petroprogram.com>
+Message-ID: <20130215115112.GA1249@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi Stefan,
 
-It looks like making the external toolchain wrapper relocatable may have broken it for use outside of buildroot. If you add the wrapper directory to your path and invoke the wrapper as arm-linux-gcc (for example), execution will enter the 'else' on line 76 of ext-toolchain-wrapper.c. This sets basename to arm-linux-gcc, which is fine, but it also sets absbasedir to whatever $(pwd)/../.. resolves to which then gets used when calculating the sysroot directory, resulting in gcc not having the real sysroot in its search paths.
+On Thu, Feb 14, 2013 at 05:52:52PM +0200, Stefan Fr?berg wrote:
+[...]
+> It seems I need to upgrade to latest git version if I want this to work.
+> That version of gnutls has
+> --disable-rpath in it's conf.
 
-The above all works fine if the wrapper is invoked with an absolute path. (I've not tried with a relative path with slashes in.)
+Thanks for testing.
 
-I've attached a patch with a fix below which calculates absbasedir from /proc/self/exe. (I don't know of any other way of reliably getting the path to the current executable.) My C is rusty though, so it might need to be fixed up before it's applied. (Was there a reason for avoiding the basename and dirname functions from libgen.h?)
+> BTW, Baruch did you manage to compile this version of wireshark against
+> that gnutls 3 ?
 
-Cheers
-Greg
+Nope. I only tried OpenSSL which I already have on my target.
 
-zbd
-d +44 (0) 1344 292 123  t +44 (0)1344 292 110
-w  www.zbdsolutions.com
-ZBD Displays Ltd | Building 3 | Kingswood | Kings Ride | Ascot | Berkshire | SL5 8AD | UK
+> Im asking it because in gentoo there is a patch for wireshark 1.8.5 that
+> is supposedly to support gnutls 3
+> 
+> Here's the patch
+> http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/net-analyzer/wireshark/files/wireshark-1.8.3-gnutls3.patch?revision=1.1&view=markup
+> 
+> And heres their ebuild file where they are applying that patch against
+> 1.8..5
+> 
+> http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/net-analyzer/wireshark/wireshark-1.8.5.ebuild?view=markup
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
