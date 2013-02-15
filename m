@@ -1,55 +1,60 @@
 From: Patrick Gerber <kpa_info@yahoo.fr>
-Date: Fri, 15 Feb 2013 11:00:12 +0100
-Subject: [Buildroot] [PATCH v4 5/5] python-serial: Convert package to be
-	used with python2 or python3
+Date: Fri, 15 Feb 2013 11:00:10 +0100
+Subject: [Buildroot] [PATCH v4 3/5] Add PYTHON variable to ease the support
+	of both version
 In-Reply-To: <1360922412-32559-1-git-send-email-kpa_info@yahoo.fr>
 References: <1360922412-32559-1-git-send-email-kpa_info@yahoo.fr>
-Message-ID: <1360922412-32559-6-git-send-email-kpa_info@yahoo.fr>
+Message-ID: <1360922412-32559-4-git-send-email-kpa_info@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Define a new variable called PYTHON that contains either "python" or
+"python3" depending of the selected Python version. This is needed
+to easily set dependencies and to call the right version of python
+for packages that support both version of python.
 
 Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
 ---
- package/python-serial/Config.in        |    1 -
- package/python-serial/python-serial.mk |    6 +++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/python/python.mk   |    6 ++++++
+ package/python3/python3.mk |    6 ++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/python-serial/Config.in b/package/python-serial/Config.in
-index ea090bd..55a9cc1 100644
---- a/package/python-serial/Config.in
-+++ b/package/python-serial/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_SERIAL
- 	bool "python-serial"
--	depends on BR2_PACKAGE_PYTHON
- 	help
- 	  python-serial is a Python library to access serial ports.
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 71591b7..6a7de43 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -53,6 +53,12 @@ HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
  
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-index fb6b31c..6528a6b 100644
---- a/package/python-serial/python-serial.mk
-+++ b/package/python-serial/python-serial.mk
-@@ -8,14 +8,14 @@ PYTHON_SERIAL_VERSION = 2.6
- PYTHON_SERIAL_SOURCE  = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
- PYTHON_SERIAL_SITE    = http://pypi.python.org/packages/source/p/pyserial/
+ PYTHON_INSTALL_STAGING = YES
  
--PYTHON_SERIAL_DEPENDENCIES = python
-+PYTHON_SERIAL_DEPENDENCIES = $(PYTHON)
++# The PYTHON variable could be used by external python package to
++# works with both python's version (python and python3)
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++	PYTHON = python
++endif
++
+ ifeq ($(BR2_PACKAGE_PYTHON_READLINE),y)
+ PYTHON_DEPENDENCIES += readline
+ endif
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 74af9b4..44136fc 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -55,6 +55,12 @@ HOST_PYTHON3_DEPENDENCIES = host-expat host-zlib
  
- define PYTHON_SERIAL_BUILD_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-+	(cd $(@D); $(HOST_DIR)/usr/bin/$(PYTHON) setup.py build)
- endef
+ PYTHON3_INSTALL_STAGING = YES
  
- define PYTHON_SERIAL_INSTALL_TARGET_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+	(cd $(@D); $(HOST_DIR)/usr/bin/$(PYTHON) setup.py install --prefix=$(TARGET_DIR)/usr)
- endef
- 
- $(eval $(generic-package))
++# The PYTHON variable could be used by external python package to
++# works with both python's version (python and python3)
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++	PYTHON = python3
++endif
++
+ ifeq ($(BR2_PACKAGE_PYTHON3_READLINE),y)
+ PYTHON3_DEPENDENCIES += readline
+ endif
 -- 
 1.7.9.5
