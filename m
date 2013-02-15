@@ -1,44 +1,45 @@
 From: Patrick Gerber <kpa_info@yahoo.fr>
-Date: Fri, 15 Feb 2013 11:00:09 +0100
-Subject: [Buildroot] [PATCH v4 2/5] Add python3 config directory simlink
+Date: Fri, 15 Feb 2013 11:00:11 +0100
+Subject: [Buildroot] [PATCH v4 4/5] python-bottle: Convert package to be
+	used with python2 or python3
 In-Reply-To: <1360922412-32559-1-git-send-email-kpa_info@yahoo.fr>
 References: <1360922412-32559-1-git-send-email-kpa_info@yahoo.fr>
-Message-ID: <1360922412-32559-3-git-send-email-kpa_info@yahoo.fr>
+Message-ID: <1360922412-32559-5-git-send-email-kpa_info@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using host python to install an external module, the setup tool
-look for some files in python3.3/config/. The python3 package config
-directory is called config-3.3m. This is why we need to alias config
-to config-3.3m.
 
 Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
 ---
- package/python3/python3.mk |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/python-bottle/python-bottle.mk |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 7551a7b..74af9b4 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -160,6 +160,15 @@ ifneq ($(BR2_PACKAGE_PYTHON),y)
- PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
- endif
+diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
+index 370b31b..b8a1847 100644
+--- a/package/python-bottle/python-bottle.mk
++++ b/package/python-bottle/python-bottle.mk
+@@ -7,16 +7,16 @@
+ PYTHON_BOTTLE_VERSION = 0.11.4
+ PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
+ PYTHON_BOTTLE_SITE = http://pypi.python.org/packages/source/b/bottle
+-PYTHON_BOTTLE_DEPENDENCIES = python
++PYTHON_BOTTLE_DEPENDENCIES = $(PYTHON)
+ PYTHON_BOTTLE_LICENSE = MIT
+ # README.rst refers to the file "LICENSE" but it's not included
  
-+# Alias the python3.3/config-3.3m to python3.3/config
-+# This is needed when installing an external python module, because
-+# the setup is looking for files in python3.3/config/
-+define HOST_PYTHON3_INSTALL_SYMLINK
-+	ln -fs config-3.3m $(HOST_DIR)/usr/lib/python3.3/config
-+endef
-+
-+HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
-+
- ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
- define PYTHON3_REMOVE_MODULES_FILES
- 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
+ define PYTHON_BOTTLE_BUILD_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++	(cd $(@D); $(HOST_DIR)/usr/bin/$(PYTHON) setup.py build)
+ endef
+ 
+ define PYTHON_BOTTLE_INSTALL_TARGET_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++	(cd $(@D); $(HOST_DIR)/usr/bin/$(PYTHON) setup.py install --prefix=$(TARGET_DIR)/usr)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 1.7.9.5
