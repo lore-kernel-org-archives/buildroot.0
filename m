@@ -1,31 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Feb 2013 05:54:00 +0100
+Date: Fri, 15 Feb 2013 05:57:42 +0100
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-02-12
-In-Reply-To: <511D556D.3060503@lucaceresoli.net>
-References: <20130213073425.9C3C052C6D2@lolut.humanoidz.org>
- <511D556D.3060503@lucaceresoli.net>
-Message-ID: <20130215055400.6688c117@skate>
+ 2013-02-11
+In-Reply-To: <511D5BF2.5060906@mind.be>
+References: <20130212073431.F3A9752C982@lolut.humanoidz.org>
+ <511D5BF2.5060906@mind.be>
+Message-ID: <20130215055742.4402d9ee@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+Dear Arnout Vandecappelle,
 
-On Thu, 14 Feb 2013 22:21:49 +0100, Luca Ceresoli wrote:
+On Thu, 14 Feb 2013 22:49:38 +0100, Arnout Vandecappelle wrote:
 
-> Should I send a patch to set -no-pch? I'm reluctant because it's not a real
-> fix, and compile time could increase significantly, I guess.
+>  The problem with this one is the following:
 > 
-> Thomas, this probably affects Qt5 Beta 1 as well, according to this blog 
-> post:
-> http://gpupowered.org/node/14. Would you mind testing it on your Qt5 branch?
+> /home/test/test/output1/host/usr/bin/i686-pc-linux-gnu-ld -r -o src/library.o  src/library/getopt.o src/library/gettext.o
+> /home/test/test/output1/host/usr/bin/i686-pc-linux-gnu-ld: i386:x86-64 architecture of input file `src/library/gettext.o' is incompatible with i386 output
+> 
+> 
+>  This is because the Sourcery toolchain is a multilib toolchain that can
+> generate two different emulations (elf_i386 and elf_x86_64). gcc adds the
+> "-m elf_x86_64" option to ld, but of course there is no way for configure
+> or whatever to discover that this is necessary.
+> 
+>  There are probably other packages that suffer the same problem - in fact,
+> any package that uses $(TARGET_LD) will most likely suffer from it.
+> 
+>  I'm not sure how to solve this. We could set TARGET_LD to 
+> "$(TARGET_CROSS)ld -m elf_x86_64" for the specific case of x86_64 external
+> toolchains (it probably doesn't hurt to add the default emulation 
+> explicitly). But there may be other external toolchains with the same
+> problem - none of the current ones, at first sight, but who knows what the
+> future brings.
+> 
+>  So what do you think?
 
-For Qt5, I do have -no-pch otherwise it doesn't build
-(http://git.free-electrons.com/users/thomas-petazzoni/buildroot/commit/?h=qt5&id=7c1f7b9967d814e3f5c838e7090ac04b9d06af51).
-Apparently, there are bugs in the precompiled headers implementation.
+We discussed this during the Buildroot Developers meeting, don't you
+remember ? :-)
+
+From your report:
+
+   Flags in external toolchain wrapper. The source of this discussion
+   is the Cavium toolchain which requires an additional linker option
+   to link correctly. Note that this is only about compile/link flags
+   that are strictly needed for compiling for the right target, so
+   typically things like -mfpu. The conclusion is that we want: 
+   [...]
+
+Just like the Cavium toolchain required a special -m flag at link time,
+the Sourcery toolchain also needs a -m flag at link time.
+
+Best regards,
 
 Thomas
 -- 
