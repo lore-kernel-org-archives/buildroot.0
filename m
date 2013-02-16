@@ -1,291 +1,200 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Sat, 16 Feb 2013 16:21:07 +0100
-Subject: [Buildroot] [PATCH v2] Manual: add empty line after header im .mk
-	files
-Message-ID: <1361028067-2782-1-git-send-email-sho@relinux.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 Feb 2013 16:34:00 +0100
+Subject: [Buildroot] [PATCH] package/tvheadend: update to v3.5
+Message-ID: <1361028840-18042-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+Remove two patches upstreamed; rebase remaining patch.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v2: rebased to master
+ package/tvheadend/tvheadend-fix-Werror.patch       |   44 ----------------
+ .../tvheadend-no-auto-download-dvbscans.patch      |   55 +++++++++++---------
+ package/tvheadend/tvheadend-no-wordexp.patch       |   20 -------
+ package/tvheadend/tvheadend.mk                     |    2 +-
+ 4 files changed, 31 insertions(+), 90 deletions(-)
+ delete mode 100644 package/tvheadend/tvheadend-fix-Werror.patch
+ delete mode 100644 package/tvheadend/tvheadend-no-wordexp.patch
 
- docs/manual/adding-packages-autotools.txt |   33 ++++++------
- docs/manual/adding-packages-cmake.txt     |   33 ++++++------
- docs/manual/adding-packages-generic.txt   |   83 +++++++++++++++--------------
- 3 files changed, 76 insertions(+), 73 deletions(-)
-
-diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
-index 84d76f9..81c833e 100644
---- a/docs/manual/adding-packages-autotools.txt
-+++ b/docs/manual/adding-packages-autotools.txt
-@@ -17,24 +17,25 @@ package, with an example :
- 03: # libfoo
- 04: #
- 05: #############################################################
--06: LIBFOO_VERSION = 1.0
--07: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
--08: LIBFOO_SITE = http://www.foosoftware.org/download
--09: LIBFOO_INSTALL_STAGING = YES
--10: LIBFOO_INSTALL_TARGET = NO
--11: LIBFOO_CONF_OPT = --disable-shared
--12: LIBFOO_DEPENDENCIES = libglib2 host-pkgconf
--13:
--14: $(eval $(autotools-package))
-+06:
-+07: LIBFOO_VERSION = 1.0
-+08: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
-+09: LIBFOO_SITE = http://www.foosoftware.org/download
-+10: LIBFOO_INSTALL_STAGING = YES
-+11: LIBFOO_INSTALL_TARGET = NO
-+12: LIBFOO_CONF_OPT = --disable-shared
-+13: LIBFOO_DEPENDENCIES = libglib2 host-pkgconf
-+14:
-+15: $(eval $(autotools-package))
- ------------------------
+diff --git a/package/tvheadend/tvheadend-fix-Werror.patch b/package/tvheadend/tvheadend-fix-Werror.patch
+deleted file mode 100644
+index 5f6dbad..0000000
+--- a/package/tvheadend/tvheadend-fix-Werror.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-commit 1334869bf0ea668e58e1c72daa3c09c1a95b5d81
+-Author: Alexey I. Froloff <raorn@raorn.name>
+-Date:   Wed Oct 24 21:10:15 2012 +0400
+-
+-    [PR-172] Fix compilatioin issues on OpenWRT
+-    
+-    Fix SHA1_* function names
+-    Fix unused variables and functions
+-
+----
+-"Yann E. MORIN" <yann.morin.1998@free.fr>:
+-    For buildroot, I removed the SHA_* fixes, as we're not affected.
+-    No point in fixing something that does not bug us.
+-
+-diff --git a/src/trap.c b/src/trap.c
+-index bd76118..b0fe543 100644
+---- a/src/trap.c
+-+++ b/src/trap.c
+-@@ -67,6 +67,7 @@ sappend(char *buf, size_t l, const char *fmt, ...)
+- /**
+-  *
+-  */
+-+#if ENABLE_EXECINFO
+- static int
+- add2lineresolve(const char *binary, void *addr, char *buf0, size_t buflen)
+- {
+-@@ -126,6 +127,7 @@ add2lineresolve(const char *binary, void *addr, char *buf0, size_t buflen)
+-   close(fd[0]);
+-   return 0;
+- }
+-+#endif /* ENABLE_EXECINFO */
+- 
+- 
+- 
+-@@ -133,8 +135,8 @@ static void
+- traphandler(int sig, siginfo_t *si, void *UC)
+- {
+-   ucontext_t *uc = UC;
+--  char buf[200];
+- #if ENABLE_EXECINFO
+-+  char buf[200];
+-   static void *frames[MAXFRAMES];
+-   int nframes = backtrace(frames, MAXFRAMES);
+-   Dl_info dli;
+diff --git a/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch b/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
+index 963d4f2..ac0a361 100644
+--- a/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
++++ b/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
+@@ -8,35 +8,40 @@ it is no longer needed to install those as part of tvheadend.
  
--On line 6, we declare the version of the package.
-+On line 7, we declare the version of the package.
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  
--On line 7 and 8, we declare the name of the tarball and the location
-+On line 8 and 9, we declare the name of the tarball and the location
- of the tarball on the Web. Buildroot will automatically download the
- tarball from this location.
+-diff -durN tvheadend-v3.3.orig//configure tvheadend-v3.3/configure
+---- tvheadend-v3.3.orig//configure	2012-09-25 15:32:31.000000000 +0200
+-+++ tvheadend-v3.3/configure	2012-12-28 17:17:23.580253413 +0100
+-@@ -96,13 +96,14 @@
++diff -durN tvheadend-v3.5.orig/configure tvheadend-v3.5/configure
++--- tvheadend-v3.5.orig/configure	2013-02-15 14:41:26.000000000 +0100
+++++ tvheadend-v3.5/configure	2013-02-16 15:41:16.675556099 +0100
++@@ -178,15 +178,16 @@
+  #
+  # DVB scan
+  #
+ -if enabled linuxdvb && enabled dvbscan; then
+--  if [ ! -d ${ROOTDIR}/data/dvb-scan ]; then
+--    echo -n "Fetching dvb-scan files... "
+--    ${ROOTDIR}/support/getmuxlist &> /dev/null || die "Failed to fetch dvb-scan files (use --disable-dvbscan to skip)"
+--    echo "done"
++-  printf "${TAB}" "fetching dvb-scan files ..."
++-  ${ROOTDIR}/support/getmuxlist
++-  if [ $? -ne 0 ]; then
++-    echo "fail"
++-    die "Failed to fetch dvb-scan data (use --disable-dvbscan)"
+ -  fi
++-  echo "ok"
+ -fi
+ +# For buildroot, we already installed those files via the dvb-apps package
+ +#if enabled linuxdvb && enabled dvbscan; then
+-+#  if [ ! -d ${ROOTDIR}/data/dvb-scan ]; then
+-+#    echo -n "Fetching dvb-scan files... "
+-+#    ${ROOTDIR}/support/getmuxlist &> /dev/null || die "Failed to fetch dvb-scan files (use --disable-dvbscan to skip)"
+-+#    echo "done"
+++#  printf "${TAB}" "fetching dvb-scan files ..."
+++#  ${ROOTDIR}/support/getmuxlist
+++#  if [ $? -ne 0 ]; then
+++#    echo "fail"
+++#    die "Failed to fetch dvb-scan data (use --disable-dvbscan)"
+ +#  fi
+++#  echo "ok"
+ +#fi
+  
+  # ###########################################################################
+  # Write config
+-diff -durN tvheadend-v3.3.orig//Makefile tvheadend-v3.3/Makefile
+---- tvheadend-v3.3.orig//Makefile	2012-09-25 15:32:31.000000000 +0200
+-+++ tvheadend-v3.3/Makefile	2012-12-28 17:17:47.573497346 +0100
+-@@ -180,7 +180,7 @@
++Binary files tvheadend-v3.5.orig/.configure.swp and tvheadend-v3.5/.configure.swp differ
++diff -durN tvheadend-v3.5.orig/Makefile tvheadend-v3.5/Makefile
++--- tvheadend-v3.5.orig/Makefile	2013-02-15 14:41:26.000000000 +0100
+++++ tvheadend-v3.5/Makefile	2013-02-16 15:41:38.218821287 +0100
++@@ -207,7 +207,7 @@
+  SRCS-${CONFIG_BUNDLE}     += bundle.c
+  BUNDLES-yes               += docs/html docs/docresources src/webui/static
+  BUNDLES-yes               += data/conf
+@@ -45,16 +50,16 @@ diff -durN tvheadend-v3.3.orig//Makefile tvheadend-v3.3/Makefile
+  BUNDLES                    = $(BUNDLES-yes)
+  
+  #
+-diff -durN tvheadend-v3.3.orig//support/posix.mk tvheadend-v3.3/support/posix.mk
+---- tvheadend-v3.3.orig//support/posix.mk	2012-09-25 15:32:31.000000000 +0200
+-+++ tvheadend-v3.3/support/posix.mk	2012-12-28 17:19:28.903121722 +0100
+-@@ -12,7 +12,8 @@
+- 		mkdir -p ${DESTDIR}${datadir}/tvheadend/$$bundle ;\
+- 		cp -r $$bundle/*  ${DESTDIR}${datadir}/tvheadend/$$bundle ;\
+- 	done
+--
++diff -durN tvheadend-v3.5.orig/support/posix.mk tvheadend-v3.5/support/posix.mk
++--- tvheadend-v3.5.orig/support/posix.mk	2013-02-15 14:41:26.000000000 +0100
+++++ tvheadend-v3.5/support/posix.mk	2013-02-16 15:42:41.015290003 +0100
++@@ -15,6 +15,9 @@
++ 
++ 	find ${DESTDIR}${datadir}/tvheadend -name .git -exec rm -rf {} \; &>/dev/null || /bin/true
++ 
+ +	mkdir -p ${DESTDIR}${datadir}/tvheadend/data
+ +	ln -sf /usr/share/dvb ${DESTDIR}${datadir}/tvheadend/data/dvb-scan
+- 
+++
+  uninstall:
+  	rm -f ${DESTDIR}${bindir)/tvheadend
++ 	rm -f ${DESTDIR}${mandir)/tvheadend.1
+diff --git a/package/tvheadend/tvheadend-no-wordexp.patch b/package/tvheadend/tvheadend-no-wordexp.patch
+deleted file mode 100644
+index ae290ed..0000000
+--- a/package/tvheadend/tvheadend-no-wordexp.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-epggrab: do not include wordexp.h
+-
+-Nothing from wordexp.h is needed (stray include?)
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+----
+-Patch sent upstream, but no mailing-list. :-(
+-Status: awaiting feedback.
+-
+-diff -durN tvheadend-v3.3.orig/src/epggrab.c tvheadend-v3.3/src/epggrab.c
+---- tvheadend-v3.3.orig/src/epggrab.c	2012-09-25 15:32:31.000000000 +0200
+-+++ tvheadend-v3.3/src/epggrab.c	2012-12-31 19:22:29.768431849 +0100
+-@@ -20,7 +20,6 @@
+- #include <stdlib.h>
+- #include <string.h>
+- #include <assert.h>
+--#include <wordexp.h>
+- #include <unistd.h>
+- #include <sys/types.h>
+- #include <sys/un.h>
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 5100781..5a971b8 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ##############################################################
  
--On line 9, we tell Buildroot to install the package to the staging
-+On line 10, we tell Buildroot to install the package to the staging
- directory. The staging directory, located in +output/staging/+
- is the directory where all the packages are installed, including their
- development files, etc. By default, packages are not installed to the
-@@ -44,7 +45,7 @@ other libraries or applications depending on them. Also by default, when
- staging installation is enabled, packages are installed in this location
- using the +make install+ command.
- 
--On line 10, we tell Buildroot to not install the package to the
-+On line 11, we tell Buildroot to not install the package to the
- target directory. This directory contains what will become the root
- filesystem running on the target. For purely static libraries, it is
- not necessary to install them in the target directory because they will
-@@ -52,14 +53,14 @@ not be used at runtime. By default, target installation is enabled; setting
- this variable to NO is almost never needed. Also by default, packages are
- installed in this location using the +make install+ command.
- 
--On line 11, we tell Buildroot to pass a custom configure option, that
-+On line 12, we tell Buildroot to pass a custom configure option, that
- will be passed to the +./configure+ script before configuring
- and building the package.
- 
--On line 12, we declare our dependencies, so that they are built
-+On line 13, we declare our dependencies, so that they are built
- before the build process of our package starts.
- 
--Finally, on line line 14, we invoke the +autotools-package+
-+Finally, on line line 15, we invoke the +autotools-package+
- macro that generates all the Makefile rules that actually allows the
- package to be built.
- 
-diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
-index bb1705b..b904c28 100644
---- a/docs/manual/adding-packages-cmake.txt
-+++ b/docs/manual/adding-packages-cmake.txt
-@@ -17,24 +17,25 @@ with an example :
- 03: # libfoo
- 04: #
- 05: #############################################################
--06: LIBFOO_VERSION = 1.0
--07: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
--08: LIBFOO_SITE = http://www.foosoftware.org/download
--09: LIBFOO_INSTALL_STAGING = YES
--10: LIBFOO_INSTALL_TARGET = NO
--11: LIBFOO_CONF_OPT = -DBUILD_DEMOS=ON
--12: LIBFOO_DEPENDENCIES = libglib2 host-pkgconf
--13:
--14: $(eval $(cmake-package))
-+06:
-+07: LIBFOO_VERSION = 1.0
-+08: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
-+09: LIBFOO_SITE = http://www.foosoftware.org/download
-+10: LIBFOO_INSTALL_STAGING = YES
-+11: LIBFOO_INSTALL_TARGET = NO
-+12: LIBFOO_CONF_OPT = -DBUILD_DEMOS=ON
-+13: LIBFOO_DEPENDENCIES = libglib2 host-pkgconf
-+14:
-+15: $(eval $(cmake-package))
- ------------------------
- 
--On line 6, we declare the version of the package.
-+On line 7, we declare the version of the package.
- 
--On line 7 and 8, we declare the name of the tarball and the location
-+On line 8 and 9, we declare the name of the tarball and the location
- of the tarball on the Web. Buildroot will automatically download the
- tarball from this location.
- 
--On line 9, we tell Buildroot to install the package to the staging
-+On line 10, we tell Buildroot to install the package to the staging
- directory. The staging directory, located in +output/staging/+
- is the directory where all the packages are installed, including their
- development files, etc. By default, packages are not installed to the
-@@ -44,7 +45,7 @@ other libraries or applications depending on them. Also by default, when
- staging installation is enabled, packages are installed in this location
- using the +make install+ command.
- 
--On line 10, we tell Buildroot to not install the package to the
-+On line 11, we tell Buildroot to not install the package to the
- target directory. This directory contains what will become the root
- filesystem running on the target. For purely static libraries, it is
- not necessary to install them in the target directory because they will
-@@ -52,13 +53,13 @@ not be used at runtime. By default, target installation is enabled; setting
- this variable to NO is almost never needed. Also by default, packages are
- installed in this location using the +make install+ command.
- 
--On line 11, we tell Buildroot to pass custom options to CMake when it is
-+On line 12, we tell Buildroot to pass custom options to CMake when it is
- configuring the package.
- 
--On line 12, we declare our dependencies, so that they are built
-+On line 13, we declare our dependencies, so that they are built
- before the build process of our package starts.
- 
--Finally, on line line 14, we invoke the +cmake-package+
-+Finally, on line line 15, we invoke the +cmake-package+
- macro that generates all the Makefile rules that actually allows the
- package to be built.
- 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 78df24a..14d08f3 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -19,42 +19,43 @@ system is based on hand-written Makefiles or shell scripts.
- 03: # libfoo
- 04: #
- 05: #############################################################
--06: LIBFOO_VERSION = 1.0
--07: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
--08: LIBFOO_SITE = http://www.foosoftware.org/download
--09: LIBFOO_LICENSE = GPLv3+
--10: LIBFOO_LICENSE_FILES = COPYING
--11: LIBFOO_INSTALL_STAGING = YES
--12: LIBFOO_CONFIG_SCRIPTS = libfoo-config
--13: LIBFOO_DEPENDENCIES = host-libaaa libbbb
--14:
--15: define LIBFOO_BUILD_CMDS
--16:	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
--17: endef
--18:
--19: define LIBFOO_INSTALL_STAGING_CMDS
--20:	$(INSTALL) -D -m 0755 $(@D)/libfoo.a $(STAGING_DIR)/usr/lib/libfoo.a
--21:	$(INSTALL) -D -m 0644 $(@D)/foo.h $(STAGING_DIR)/usr/include/foo.h
--22:	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(STAGING_DIR)/usr/lib
--23: endef
--24:
--25: define LIBFOO_INSTALL_TARGET_CMDS
--26:	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(TARGET_DIR)/usr/lib
--27:	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
--28: endef
--29:
--30: define LIBFOO_DEVICES
--31:	/dev/foo  c  666  0  0	42  0  -  -  -
--32: endef
--33:
--34: define LIBFOO_PERMISSIONS
--35:	/bin/foo  f  4755  0  0	 -  -  -  -  -
--36: endef
--37:
--38: $(eval $(generic-package))
-+06:
-+07: LIBFOO_VERSION = 1.0
-+08: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
-+09: LIBFOO_SITE = http://www.foosoftware.org/download
-+10: LIBFOO_LICENSE = GPLv3+
-+11: LIBFOO_LICENSE_FILES = COPYING
-+12: LIBFOO_INSTALL_STAGING = YES
-+13: LIBFOO_CONFIG_SCRIPTS = libfoo-config
-+14: LIBFOO_DEPENDENCIES = host-libaaa libbbb
-+15:
-+16: define LIBFOO_BUILD_CMDS
-+17:	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-+18: endef
-+19:
-+20: define LIBFOO_INSTALL_STAGING_CMDS
-+21:	$(INSTALL) -D -m 0755 $(@D)/libfoo.a $(STAGING_DIR)/usr/lib/libfoo.a
-+22:	$(INSTALL) -D -m 0644 $(@D)/foo.h $(STAGING_DIR)/usr/include/foo.h
-+23:	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(STAGING_DIR)/usr/lib
-+24: endef
-+25:
-+26: define LIBFOO_INSTALL_TARGET_CMDS
-+27:	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(TARGET_DIR)/usr/lib
-+28:	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
-+29: endef
-+30:
-+31: define LIBFOO_DEVICES
-+32:	/dev/foo  c  666  0  0	42  0  -  -  -
-+33: endef
-+34:
-+35: define LIBFOO_PERMISSIONS
-+36:	/bin/foo  f  4755  0  0	 -  -  -  -  -
-+37: endef
-+38:
-+39: $(eval $(generic-package))
- --------------------------------
- 
--The Makefile begins on line 6 to 10 with metadata information: the
-+The Makefile begins on line 7 to 11 with metadata information: the
- version of the package (+LIBFOO_VERSION+), the name of the
- tarball containing the package (+LIBFOO_SOURCE+) the
- Internet location at which the tarball can be downloaded from
-@@ -64,13 +65,13 @@ the same prefix, +LIBFOO_+ in this case. This prefix is always the
- uppercased version of the package name (see below to understand where
- the package name is defined).
- 
--On line 11, we specify that this package wants to install something to
-+On line 12, we specify that this package wants to install something to
- the staging space. This is often needed for libraries, since they must
- install header files and other development files in the staging space.
- This will ensure that the commands listed in the
- +LIBFOO_INSTALL_STAGING_CMDS+ variable will be executed.
- 
--On line 12, we specify that there is some fixing to be done to some
-+On line 13, we specify that there is some fixing to be done to some
- of the 'libfoo-config' files that were installed during
- +LIBFOO_INSTALL_STAGING_CMDS+ phase.
- These *-config files are executable shell script files that are
-@@ -112,14 +113,14 @@ IMAGEMAGICK_CONFIG_SCRIPTS = \
-    Magick-config Magick++-config \
-    MagickCore-config MagickWand-config Wand-config
- 
--On line 13, we specify the list of dependencies this package relies
-+On line 14, we specify the list of dependencies this package relies
- on. These dependencies are listed in terms of lower-case package names,
- which can be packages for the target (without the +host-+
- prefix) or packages for the host (with the +host-+) prefix).
- Buildroot will ensure that all these packages are built and installed
- 'before' the current package starts its configuration.
- 
--The rest of the Makefile, lines 14..27, defines what should be done
-+The rest of the Makefile, lines 16..29, defines what should be done
- at the different steps of the package configuration, compilation and
- installation.
- +LIBFOO_BUILD_CMDS+ tells what steps should be performed to
-@@ -132,13 +133,13 @@ All these steps rely on the +$(@D)+ variable, which
- contains the directory where the source code of the package has been
- extracted.
- 
--On line 29..31, we define a device-node file used by this package
-+On line 31..33, we define a device-node file used by this package
- (+LIBFOO_DEVICES+).
- 
--On line 33..35, we define the permissions to set to specific files
-+On line 35..37, we define the permissions to set to specific files
- installed by this package (+LIBFOO_PERMISSIONS+).
- 
--Finally, on line 37, we call the +generic-package+ function, which
-+Finally, on line 39, we call the +generic-package+ function, which
- generates, according to the variables defined previously, all the
- Makefile code necessary to make your package working.
- 
+-TVHEADEND_VERSION           = v3.3
++TVHEADEND_VERSION           = v3.5
+ TVHEADEND_SITE              = http://github.com/tvheadend/tvheadend/tarball/$(TVHEADEND_VERSION)
+ TVHEADEND_LICENSE           = GPLv3+
+ TVHEADEND_LICENSE_FILES     = LICENSE
 -- 
-1.7.0.4
+1.7.2.5
