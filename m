@@ -1,60 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Feb 2013 03:06:25 +0100
-Subject: [Buildroot] [PATCH] new package: adns
-In-Reply-To: <1360959402-24775-1-git-send-email-stefan.froberg@petroprogram.com>
-References: <1360959402-24775-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <20130216030625.04d9545d@skate>
+Date: Sat, 16 Feb 2013 03:12:20 +0100
+Subject: [Buildroot] [PATCH 1/2] Add bzip2 to host-python when it is
+ selected (aids in compiling nodejs)
+In-Reply-To: <CAKduhStasUzEq99Dfb9mF8DEKuTPc4cjaXKA1T+sMzaj7-CDEQ@mail.gmail.com>
+References: <CAKduhStasUzEq99Dfb9mF8DEKuTPc4cjaXKA1T+sMzaj7-CDEQ@mail.gmail.com>
+Message-ID: <20130216031220.5a6eca44@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stefan Fr?berg,
+Dear Daniel Price,
 
-Thanks for this package, definitely something useful to have.
+On Thu, 14 Feb 2013 17:05:48 -0800, Daniel Price wrote:
 
-On Fri, 15 Feb 2013 22:16:42 +0200, Stefan Fr?berg wrote:
-> GNU adns
+> diff --git a/package/python/python.mk b/package/python/python.mk
+> index 71591b7..580eda2 100644
+> --- a/package/python/python.mk
+> +++ b/package/python/python.mk
+> @@ -30,7 +30,6 @@ HOST_PYTHON_CONF_OPT += \
+>   --disable-gdbm \
+>   --disable-bsddb \
+>   --disable-test-modules \
+> - --disable-bz2 \
+>   --disable-ssl
 > 
-> Advanced, easy to use, asynchronous-capable DNS client library and utilities.
+>  HOST_PYTHON_MAKE_ENV = \
+> @@ -98,6 +97,8 @@ endif
 > 
-> adns is a resolver library for C (and C++) programs, and a collection of
-> useful DNS resolver utilities.
-> 
-> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> ---
->  package/Config.in                      |    1 +
->  package/adns/Config.in                 |    7 +
->  package/adns/adns-1.4-cnamechain.patch | 1275 +++++++++++++++
->  package/adns/adns-1.4-destdir.patch    |   54 +
->  package/adns/adns-1.4-ipv6.patch       | 2725 ++++++++++++++++++++++++++++++++
->  package/adns/adns-1.4-rh514838.patch   |   26 +
+>  ifeq ($(BR2_PACKAGE_PYTHON_BZIP2),y)
+>  PYTHON_DEPENDENCIES += bzip2
+> +HOST_PYTHON_DEPENDENCIES += host-bzip2
+> +PYTHON_CONF_OPT += --enable-bz2
 
-If possible, I think I would prefer to have the adns package download
-those patches rather than have them in the Buildroot source tree
-directly.
+Wasn't the intention of adding bz2 support to the host python?
 
-ADNS_PATCHES = http://somewhere.com/foobar.patch \
-	http://somewhereelse.com/barfoo.patch
+But anyway, the fact that BR2_PACKAGE_PYTHON_BZIP2 is enabled or not
+should not influence the host-python build. BR2_PACKAGE_PYTHON_BZIP2
+is here to configure the target python, not the host one. We presently
+don't have a good way to provide configuration options for host
+packages.
 
-I am not sure if the patch that allows that has already been merged
-upstream, but it has been floating on the list for some time, and I
-think it's a good thing to have.
+So your patch should presumably just:
 
-> +ADNS_VERSION = 1.4
-> +ADNS_SOURCE = adns-$(ADNS_VERSION).tar.gz
-> +ADNS_SITE = http://www.chiark.greenend.org.uk/~ian/adns/ftp/
-> +ADNS_AUTORECONF = YES
-> +ADNS_INSTALL_STAGING = YES
-> +ADNS_CONF_OPT += --enable-dynamic=elf
+ * Remove the --disable-bz2 line from HOST_PYTHON_CONF_OPT, as you did,
+   and replace it with --enable-bz2.
 
-You should add ADNS_LICENSE and ADNS_LICENSE_FILES.
+ * Outside of any ifeq condition, do HOST_PYTHON_DEPENDENCIES +=
+   host-bzip2.
 
-Also, did you test build this adns thing with a minimal uClibc? No
-specific toolchain feature needed (largefile, IPv6, etc.) ?
+That will mean that everybody building host-python will have to build
+host-bzip2 and the bz2 support in Python, but I think it's OK.
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
