@@ -1,62 +1,64 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Fri, 15 Feb 2013 14:50:15 -0600
-Subject: [Buildroot] [PATCH] add pre-build script
-In-Reply-To: <20130215060914.4f889699@skate>
-References: <05255DE50A102443A25D42F2CCAC151FA58C25@LUMEXCH.luminatorusa.com>
- <511C1281.5040502@mind.be>
- <CAEBucnA1BebDBHWb4PcQBGiUpyiAcT0=vs3Tu4D+LVw1YdN0_A@mail.gmail.com>
- <20130214085604.52619b06@skate>
- <CAEBucnCBe83aOfTPOTfjvVjKNAdE0CbYp540-OPZy-ecgEYuMA@mail.gmail.com>
- <20130214180402.6b2dbb17@skate> <511D60BC.9000205@mind.be>
- <20130215060914.4f889699@skate>
-Message-ID: <CAEBucnBb_BbR_NT=4vykLgxt_A7Mk0dPZ7aYtfzFogf1ch0M_w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 16 Feb 2013 03:06:25 +0100
+Subject: [Buildroot] [PATCH] new package: adns
+In-Reply-To: <1360959402-24775-1-git-send-email-stefan.froberg@petroprogram.com>
+References: <1360959402-24775-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <20130216030625.04d9545d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm just describing a use case for the concept of a pre-build script.
-I want to make sure that you know that this feature is valuable in
-more than just Joe's use case.
+Dear Stefan Fr?berg,
 
-Thanks,
-Spenser
+Thanks for this package, definitely something useful to have.
 
-On Thu, Feb 14, 2013 at 11:09 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Arnout Vandecappelle,
->
-> On Thu, 14 Feb 2013 23:10:04 +0100, Arnout Vandecappelle wrote:
->
->> > Indeed, but the pre-build script approach you posted would not allow to
->> > customize the CFLAGS.
->>
->>   Spenser didn't post it...
->
-> Ah, I got confused with the patch from "Joe Halpin"
-> <jhalpin@luminatorusa.com> in the same thread. Isn't this the same
-> thing? I'm not sure how Joe's patch is related to Spenser's discussion.
->
-> But surely, the patch from Joe Halpin does allow to alter the
-> configuration.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+On Fri, 15 Feb 2013 22:16:42 +0200, Stefan Fr?berg wrote:
+> GNU adns
+> 
+> Advanced, easy to use, asynchronous-capable DNS client library and utilities.
+> 
+> adns is a resolver library for C (and C++) programs, and a collection of
+> useful DNS resolver utilities.
+> 
+> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+> ---
+>  package/Config.in                      |    1 +
+>  package/adns/Config.in                 |    7 +
+>  package/adns/adns-1.4-cnamechain.patch | 1275 +++++++++++++++
+>  package/adns/adns-1.4-destdir.patch    |   54 +
+>  package/adns/adns-1.4-ipv6.patch       | 2725 ++++++++++++++++++++++++++++++++
+>  package/adns/adns-1.4-rh514838.patch   |   26 +
 
+If possible, I think I would prefer to have the adns package download
+those patches rather than have them in the Buildroot source tree
+directly.
 
+ADNS_PATCHES = http://somewhere.com/foobar.patch \
+	http://somewhereelse.com/barfoo.patch
 
+I am not sure if the patch that allows that has already been merged
+upstream, but it has been floating on the list for some time, and I
+think it's a good thing to have.
+
+> +ADNS_VERSION = 1.4
+> +ADNS_SOURCE = adns-$(ADNS_VERSION).tar.gz
+> +ADNS_SITE = http://www.chiark.greenend.org.uk/~ian/adns/ftp/
+> +ADNS_AUTORECONF = YES
+> +ADNS_INSTALL_STAGING = YES
+> +ADNS_CONF_OPT += --enable-dynamic=elf
+
+You should add ADNS_LICENSE and ADNS_LICENSE_FILES.
+
+Also, did you test build this adns thing with a minimal uClibc? No
+specific toolchain feature needed (largefile, IPv6, etc.) ?
+
+Thanks!
+
+Thomas
 -- 
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
