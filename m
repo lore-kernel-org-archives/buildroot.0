@@ -1,7 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 16 Feb 2013 18:02:47 +0100
+Date: Sat, 16 Feb 2013 18:34:27 +0100
 Subject: [Buildroot] [PATCH] neard: fix build with kernel headers 3.1 - 3.6
-Message-ID: <1361034167-10068-1-git-send-email-arnout@mind.be>
+In-Reply-To: <1361034167-10068-1-git-send-email-arnout@mind.be>
+References: <1361034167-10068-1-git-send-email-arnout@mind.be>
+Message-ID: <1361036067-26971-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,19 +22,21 @@ To resolve that, add a check for one of the newly introduced symbols
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
+v2: Forgot to include <sys/socket.h>.
+
 Probably wanted for 2013.02.
 
 I selected the symbol to check for with 'git log -p v3.7 include/linux/nfc.h'
 in the kernel.
 ---
- package/neard/neard-fix-missing-linux-nfc-header.patch |   10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/neard/neard-fix-missing-linux-nfc-header.patch |   13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/package/neard/neard-fix-missing-linux-nfc-header.patch b/package/neard/neard-fix-missing-linux-nfc-header.patch
-index b04c5da..cb9a701 100644
+index b04c5da..377269e 100644
 --- a/package/neard/neard-fix-missing-linux-nfc-header.patch
 +++ b/package/neard/neard-fix-missing-linux-nfc-header.patch
-@@ -8,17 +8,23 @@ As a workaround until all reasonable toolchains get this header
+@@ -8,17 +8,26 @@ As a workaround until all reasonable toolchains get this header
  included, add a configure check in neard to test whether this header
  is available or not, and if not, use our own private copy of it.
  
@@ -48,12 +52,15 @@ index b04c5da..cb9a701 100644
  --- a/configure.ac
  +++ b/configure.ac
 -@@ -88,6 +88,8 @@
-+@@ -88,6 +88,9 @@
++@@ -88,6 +88,12 @@
   AC_SUBST(NETLINK_CFLAGS)
   AC_SUBST(NETLINK_LIBS)
   
 -+AC_CHECK_HEADER(linux/nfc.h, [AC_DEFINE(HAVE_LINUX_NFC_H, 1, [Defines if linux/nfc.h header is available])], [], [#include <sys/socket.h>])
-++AC_TRY_COMPILE([#include <linux/nfc.h>], [int err[[NFC_LLCP_RAW_HEADER_SIZE-2]];],
+++AC_TRY_COMPILE([
+++#include <sys/socket.h>
+++#include <linux/nfc.h>
+++	], [int err[NFC_LLCP_RAW_HEADER_SIZE-2];],
 ++	[AC_DEFINE(HAVE_LINUX_NFC_H, 1, [Defines if linux/nfc.h header is available])], [])
  +
   AC_ARG_ENABLE(test, AC_HELP_STRING([--enable-test],
