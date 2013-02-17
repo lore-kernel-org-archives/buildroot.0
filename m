@@ -1,20 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Feb 2013 22:48:28 +0100
-Subject: [Buildroot] [PATCH] thttpd: needs mmu
-In-Reply-To: <1360749823-26295-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 13 Feb 2013 07:03:43 -0300")
-References: <1360749823-26295-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <878v6mobmb.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Feb 2013 22:49:31 +0100
+Subject: [Buildroot] [PATCH] libvorbis: fix LIBVORBIS_SITE
+In-Reply-To: <1360792556-4732-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 13 Feb 2013 22:55:56 +0100")
+References: <1360792556-4732-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <874nhaobkk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Gustavo> Fixes
- Gustavo> http://autobuild.buildroot.net/results/0b73d2b45a5bac94b65893725de46d87a9626b37/
+ Thomas> The LIBVORBIS_SITE included a reference to $(LIBVORBIS-SOURCE), which
+ Thomas> doesn't exist. And anyway was useless because the <pkg>_SITE variable
+ Thomas> should not contain the name of the tarball.
+
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
