@@ -1,66 +1,60 @@
-From: Dimitrios Siganos <dimitris@siganos.org>
-Date: Sun, 17 Feb 2013 23:06:26 +0000
-Subject: [Buildroot] bump libnl to 3.2.21 before release
-In-Reply-To: <51214646.5080304@zacarias.com.ar>
-References: <51212637.6020406@siganos.org> <512127BC.9050004@zacarias.com.ar>
- <5121441D.5040506@siganos.org> <51214646.5080304@zacarias.com.ar>
-Message-ID: <51216272.6040201@siganos.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 18 Feb 2013 00:10:26 +0100
+Subject: [Buildroot] [PATCH 1/4] fs/ext2: enclose the ext2 options in
+	if...endif
+In-Reply-To: <cover.1361142401.git.yann.morin.1998@free.fr>
+References: <cover.1361142401.git.yann.morin.1998@free.fr>
+Message-ID: <2c860a63881f99014f80c4bc8f47045ad4b46846.1361142401.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/02/13 21:06, Gustavo Zacarias wrote:
-> On 02/17/2013 05:57 PM, Dimitrios Siganos wrote:
-> 
->> There is no problem that I can't work around but it is an inconvenience
->> that can be avoided.
->>
->> How am I affected? We do binary releases of our software applications
->> and 3.2.18 doesn't work for us and we'd have to release a special
->> version for that or create a patch for buildroot.
-> 
-> Binary releases as in a sepparate/propietary app that's only shipped as
-> a binary? (not built with buildroot and/or not able to share the source).
-> I'm not asking because of any licensing crazyiness, it's perfectly
-> valid, just want to understand the scenario.
+Use a 'if...endif' construct instead of repeating the
+'depends on' for each symbols.
 
-Yes, we ship our app without sources and only in binary form. However,
-we also sell linux hardware modules with a ready to go buildroot
-environment so that customers can build their own apps too. Obviously,
-we'd liek our customers to integrate our software into buildroot with as
-little hassle as possible and API breakages make our more difficult.
-This ABI in unnecessary, so that's why I asked you to consider bumping
-the version.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ fs/ext2/Config.in |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
 
-
->> The important thing to note here is that version 3.2.18 broke backwards
->> compatibility and version 3.2.20 restored it. For example, v3.2.16 is
->> compatible with 3.2.21 but 3.2.18 isn't compatible with either of them.
->>
->> If there is no specific reason to stay at 3.2.18 then why not go to
->> 3.2.21 and spare some buildroot users (the ones that operate in mixed
->> open/closed source) from that unnecessary libnl hassle?
-> 
-> Well the binary compatibility isn't an issue for typical buildroot
-> scenarios, that's why i'm asking what i asked.
-> The changelog entry is a typical linux distribution issue where you just
-> upgrade individual components when necessary.
-> That's usually not what buildroot is about, you're building a root
-> filesystem (in simplified terms) so your upgrade path is usually a
-> complete image upgrade, call it firmware, flash or disk image.
-> Hence ABI compatibility doesn't matter.
-> Understand i'm hesitant to bump libnl this close to the release unless
-> there's a really pressing issue - libnl bumps usually break packages
-> subtly and this requires testing.
-> And it also breaks every other release with varying linux headers when
-> new features are introduced (like CAN support).
-
-OK, I just thought I'll ask. Obviously it seems to work for me but I
-guess you are worried about the packages that I am not using and not
-testing, which is understandable. I can work around this by applying a
-patch to buildroot to avoid this ABI breakage. Thanks for listening.
-
-Regards,
-Dimitris
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index 2af44a8..cb4beed 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -3,25 +3,23 @@ config BR2_TARGET_ROOTFS_EXT2
+ 	help
+ 	  Build an ext2 root filesystem
+ 
++if BR2_TARGET_ROOTFS_EXT2
++
+ config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+ 	int "size in blocks (leave at 0 for auto calculation)"
+-	depends on BR2_TARGET_ROOTFS_EXT2
+ 	default 0
+ 
+ config BR2_TARGET_ROOTFS_EXT2_INODES
+ 	int "inodes (leave at 0 for auto calculation)"
+-	depends on BR2_TARGET_ROOTFS_EXT2
+ 	default 0
+ 
+ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+ 	int "reserved blocks percentage"
+-	depends on BR2_TARGET_ROOTFS_EXT2
+ 	default 0
+ 
+ choice
+ 	prompt "Compression method"
+ 	default BR2_TARGET_ROOTFS_EXT2_NONE
+-	depends on BR2_TARGET_ROOTFS_EXT2
+ 	help
+ 	  Select compressor for ext2 filesystem of the root filesystem
+ 
+@@ -47,3 +45,4 @@ config BR2_TARGET_ROOTFS_EXT2_LZMA
+ 
+ endchoice
+ 
++endif # BR2_TARGET_ROOTFS_EXT2
+-- 
+1.7.2.5
