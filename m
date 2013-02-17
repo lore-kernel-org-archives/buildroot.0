@@ -1,72 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 17 Feb 2013 21:44:09 +0100
-Subject: [Buildroot] [PATCH] xlib_libpthread-stubs: needs -pthread when
- linking statically
-In-Reply-To: <20130217183823.4f196ea9@skate>
-References: <1361109023-21403-1-git-send-email-arnout@mind.be>
- <20130217183823.4f196ea9@skate>
-Message-ID: <51214119.6020806@mind.be>
+From: Dimitrios Siganos <dimitris@siganos.org>
+Date: Sun, 17 Feb 2013 20:57:01 +0000
+Subject: [Buildroot] bump libnl to 3.2.21 before release
+In-Reply-To: <512127BC.9050004@zacarias.com.ar>
+References: <51212637.6020406@siganos.org> <512127BC.9050004@zacarias.com.ar>
+Message-ID: <5121441D.5040506@siganos.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/02/13 18:38, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle (Essensium/Mind),
->
-> On Sun, 17 Feb 2013 14:50:22 +0100, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
->> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+On 17/02/13 18:55, Gustavo Zacarias wrote:
+> On 02/17/2013 03:49 PM, Dimitrios Siganos wrote:
+>> If you linked against 3.2.18 or 3.2.19 your binary will not be
+>> compatible with >= 3.2.20. You will have to relink your binary. We are
+>> sorry for any inconvenience this may cause.
 >>
->> Fixes http://autobuild.buildroot.net/results/392512cb348123d76962df02e38675a80eae41b1
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> ---
->> My gcc manual only documents the -pthread option for some architectures,
->> but it seems to work for x86, sh and arm as well.
->
-> Thanks. However, I'd like to see if an upstream fix would not be more
-> appropriate for this. If you look at the build log, it shows:
->
-> checking for pthread_self... no
-> checking for pthread_mutex_init... no
-> checking for pthread_mutex_destroy... no
-> checking for pthread_mutex_lock... no
-> checking for pthread_mutex_unlock... no
-> checking for pthread_cond_init... no
-> checking for pthread_cond_destroy... no
-> checking for pthread_condattr_init... no
-> checking for pthread_condattr_destroy... no
-> checking for pthread_cond_wait... no
-> checking for pthread_cond_timedwait... no
-> checking for pthread_cond_signal... no
-> checking for pthread_cond_broadcast... no
-> checking for pthread_equal... no
-> checking for pthread_exit... no
->
-> It is really those tests that are wrong I'd say. They should have
-> detected that the C library provides the pthread functions.
->
-> The AC_CHECK_FUNCS test in configure.ac checks those functions, but
-> does not specify that those functions should be tested by linking
-> against -lpthread. Wouldn't an upstreamable configure.ac patch be more
-> appropriate here?
+>> Note: The API/ABI that is exported as of 3.2.21 is considered 100%
+>> stable. No more exceptions that cause confusion and breakage. I will no
+>> longer merge patches that break API/ABI even though the API seems unused
+>> at this point. Things have been broken too many times.
+> 
+> The keyword here is "binary".
+> Breaking ABI isn't important in the buildroot context of packages since
+> you're building from source thus you don't care about ABI.
+> It's the same boat like when we moved the openssl package from 0.9.8* to
+> 1.0.*
+> Is there any explicit problem 3.2.18 causes that affects you?
+> Regards.
+> 
 
-  Linking against -lpthread isn't enough, apparently.
+There is no problem that I can't work around but it is an inconvenience
+that can be avoided.
 
-  Many packages use the ACX_PTHREAD macro [1]. That is probably a 
-possibility.
+How am I affected? We do binary releases of our software applications
+and 3.2.18 doesn't work for us and we'd have to release a special
+version for that or create a patch for buildroot.
 
-  Regards,
-  Arnout
+The important thing to note here is that version 3.2.18 broke backwards
+compatibility and version 3.2.20 restored it. For example, v3.2.16 is
+compatible with 3.2.21 but 3.2.18 isn't compatible with either of them.
 
-[1] http://ac-archive.sourceforge.net/ac-archive/acx_pthread.html
+If there is no specific reason to stay at 3.2.18 then why not go to
+3.2.21 and spare some buildroot users (the ones that operate in mixed
+open/closed source) from that unnecessary libnl hassle?
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Regards,
+Dimitris
