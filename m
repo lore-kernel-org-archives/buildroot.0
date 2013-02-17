@@ -1,41 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Feb 2013 19:17:26 +0100
-Subject: [Buildroot] Adding a ModemManager package
-In-Reply-To: <512119BB.9000200@gmail.com>
-References: <51210E6F.6000504@gmail.com> <20130217183148.2cc7dd92@skate>
- <512119BB.9000200@gmail.com>
-Message-ID: <20130217191726.52f867ee@skate>
+From: Dimitrios Siganos <dimitris@siganos.org>
+Date: Sun, 17 Feb 2013 18:49:27 +0000
+Subject: [Buildroot] bump libnl to 3.2.21 before release
+Message-ID: <51212637.6020406@siganos.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Shawn J. Goff,
+Hi,
 
-On Sun, 17 Feb 2013 12:56:11 -0500, Shawn J. Goff wrote:
+The libnl library versions 3.2.18 and 3.2.19 have an unnecessary
+incompatibility problem that has been removed in the later versions.
+This problem affected me and went away when I went to 3.2.21.
 
-> Sure, here's a patch. udev was disabling gudev; for now, I had to remove 
+I suggest we bump the libnl package to 3.2.21, before the release, to
+avoid that incompatibility mess.
 
-If you read the udev.mk, you see that gudev is disabled unless
-BR2_PACKAGE_UDEV_ALL_EXTRAS is enabled. And your package selects it, so
-it should "just" work.
+From libnl website:
 
-> that part because the default configuration of ModemManager seems to 
-> require it. I don't have a patch for the autogen-created files yet. I 
-> run make, then go to the build directory and run "NOCONFIGURE=yes 
-> ./autogen.sh", then go back and continue running make.
+Important: 3.2.10 reverted an an uneeded SONAME bump that was done due
+to an ABI/API breakage in an unused API. After severe discussion, it was
+decided to undo the SONAME bump to make life easier for distribution
+maintainers by removing the unused APIs from the public header files and
+by providing compat header files that mistakenly included them.
 
-Use MODEM_MANAGER_AUTORECONF = YES instead.
+If you linked against 3.2.18 or 3.2.19 your binary will not be
+compatible with >= 3.2.20. You will have to relink your binary. We are
+sorry for any inconvenience this may cause.
 
-I don't have the time to try and reproduce the problem right now, but
-hopefully someone else will have a look.
+Note: The API/ABI that is exported as of 3.2.21 is considered 100%
+stable. No more exceptions that cause confusion and breakage. I will no
+longer merge patches that break API/ABI even though the API seems unused
+at this point. Things have been broken too many times.
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards,
+Dimitris
