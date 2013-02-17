@@ -1,41 +1,210 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 17 Feb 2013 23:09:26 +0100
-Subject: [Buildroot] [git commit] linux: bump 3.7.x stable version
-Message-ID: <20130217221226.C7D9B9AB44@busybox.osuosl.org>
+Date: Sun, 17 Feb 2013 23:09:31 +0100
+Subject: [Buildroot] [git commit] configs/qemu: bump relevant configurations
+	to new 3.7.x stable kernels
+Message-ID: <20130217221226.F3A949AB44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=21de23ef6505bae1cbf7f95916d2c2883ebba974
+commit: http://git.buildroot.net/buildroot/commit/?id=92da10e3d87f41331d1ddd673c81d1d04d6c5833
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ configs/qemu_arm_nuri_defconfig         |    2 +-
+ configs/qemu_arm_versatile_defconfig    |    2 +-
+ configs/qemu_arm_vexpress_defconfig     |    2 +-
+ configs/qemu_microblazebe_mmu_defconfig |    2 +-
+ configs/qemu_microblazeel_mmu_defconfig |    2 +-
+ configs/qemu_mips64_malta_defconfig     |    2 +-
+ configs/qemu_mips_malta_defconfig       |    2 +-
+ configs/qemu_mipsel_malta_defconfig     |    2 +-
+ configs/qemu_ppc_g3beige_defconfig      |    2 +-
+ configs/qemu_ppc_mpc8544ds_defconfig    |    2 +-
+ configs/qemu_ppc_virtex_ml507_defconfig |    2 +-
+ configs/qemu_sparc_ss10_defconfig       |    2 +-
+ configs/qemu_x86_64_defconfig           |    2 +-
+ configs/qemu_x86_defconfig              |    2 +-
+ 14 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 3c50acc..f48e660 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
+index 4bc7bb2..a18f5a9 100644
+--- a/configs/qemu_arm_nuri_defconfig
++++ b/configs/qemu_arm_nuri_defconfig
+@@ -20,6 +20,6 @@ BR2_KERNEL_HEADERS_3_7=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index cbd7dd1..65ee198 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -16,7 +16,7 @@ BR2_KERNEL_HEADERS_3_7=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.7.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index 8ff5a46..7b8a7ba 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -20,6 +20,6 @@ BR2_KERNEL_HEADERS_3_7=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+index 4643017..6e47edf 100644
+--- a/configs/qemu_microblazebe_mmu_defconfig
++++ b/configs/qemu_microblazebe_mmu_defconfig
+@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.7.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index 6ecbd4c..8be173a 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.7.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+index b8ca948..1b0b622 100644
+--- a/configs/qemu_mips64_malta_defconfig
++++ b/configs/qemu_mips64_malta_defconfig
+@@ -16,7 +16,7 @@ BR2_KERNEL_HEADERS_3_7=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.7.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
+index 6b034f6..f5a6e09 100644
+--- a/configs/qemu_mips_malta_defconfig
++++ b/configs/qemu_mips_malta_defconfig
+@@ -12,7 +12,7 @@ BR2_KERNEL_HEADERS_3_7=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.7.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
+index adaaedd..a768556 100644
+--- a/configs/qemu_mipsel_malta_defconfig
++++ b/configs/qemu_mipsel_malta_defconfig
+@@ -12,7 +12,7 @@ BR2_KERNEL_HEADERS_3_7=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.7.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
+index 080ee4d..8cbf170 100644
+--- a/configs/qemu_ppc_g3beige_defconfig
++++ b/configs/qemu_ppc_g3beige_defconfig
+@@ -12,7 +12,7 @@ BR2_KERNEL_HEADERS_3_7=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.7.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
+index 68211a0..ddaaa45 100644
+--- a/configs/qemu_ppc_mpc8544ds_defconfig
++++ b/configs/qemu_ppc_mpc8544ds_defconfig
+@@ -12,7 +12,7 @@ BR2_KERNEL_HEADERS_3_7=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
+ BR2_LINUX_KERNEL_VMLINUX=y
  
- config BR2_LINUX_KERNEL_3_7
--	bool "3.7.6"
-+	bool "3.7.8"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.7.6" if BR2_LINUX_KERNEL_3_7
-+	default "3.7.8" if BR2_LINUX_KERNEL_3_7
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
+index 9dfbe52..f7f957d 100644
+--- a/configs/qemu_ppc_virtex_ml507_defconfig
++++ b/configs/qemu_ppc_virtex_ml507_defconfig
+@@ -15,7 +15,7 @@ BR2_SOFT_FLOAT=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="44x/virtex5"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 906671b..6b88365 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -12,6 +12,6 @@ BR2_KERNEL_HEADERS_3_7=y
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
+index 74011fc..45f0e0a 100644
+--- a/configs/qemu_x86_64_defconfig
++++ b/configs/qemu_x86_64_defconfig
+@@ -15,6 +15,6 @@ BR2_KERNEL_HEADERS_3_7=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.7.config"
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index 2734fdb..60ceacc 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -16,6 +16,6 @@ BR2_KERNEL_HEADERS_3_7=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.8"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.7.config"
