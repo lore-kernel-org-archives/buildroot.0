@@ -1,23 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Feb 2013 22:49:31 +0100
-Subject: [Buildroot] [PATCH] libvorbis: fix LIBVORBIS_SITE
-In-Reply-To: <1360792556-4732-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 13 Feb 2013 22:55:56 +0100")
-References: <1360792556-4732-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <874nhaobkk.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Feb 2013 22:50:26 +0100
+Subject: [Buildroot] [PATCH 1/9] manual: cleanup and update editor tags
+In-Reply-To: <e946f61281a9fe12843f84c397c3c2ff8ebb33a3.1360795941.git.s.martin49@gmail.com>
+ (Samuel Martin's message of "Wed, 13 Feb 2013 23:59:02 +0100")
+References: <cover.1360795941.git.s.martin49@gmail.com>
+ <cover.1360795941.git.s.martin49@gmail.com>
+ <e946f61281a9fe12843f84c397c3c2ff8ebb33a3.1360795941.git.s.martin49@gmail.com>
+Message-ID: <87zjz2mwyl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
- Thomas> The LIBVORBIS_SITE included a reference to $(LIBVORBIS-SOURCE), which
- Thomas> doesn't exist. And anyway was useless because the <pkg>_SITE variable
- Thomas> should not contain the name of the tarball.
-
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 Committed, thanks.
 
