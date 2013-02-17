@@ -1,23 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Feb 2013 22:54:32 +0100
-Subject: [Buildroot] [PATCH 6/9] manual: minor fix in patch-policy.txt
-In-Reply-To: <28331a810710249524be2ea3a286fff996ead804.1360795941.git.s.martin49@gmail.com>
- (Samuel Martin's message of "Wed, 13 Feb 2013 23:59:07 +0100")
-References: <cover.1360795941.git.s.martin49@gmail.com>
- <cover.1360795941.git.s.martin49@gmail.com>
- <28331a810710249524be2ea3a286fff996ead804.1360795941.git.s.martin49@gmail.com>
-Message-ID: <87r4kemwrr.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Feb 2013 22:57:50 +0100
+Subject: [Buildroot] [PATCH 1/2] gesftpserver: needs mmu
+In-Reply-To: <1360846981-26122-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 14 Feb 2013 10:03:00 -0300")
+References: <1360846981-26122-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87mwv2mwm9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ Gustavo> Fixes:
+ Gustavo> http://autobuild.buildroot.net/results/23298ba81896e473e903c17e12ad547049b8d348
 
-Committed with the .patch.<arch> part dropped as mentioned by Thomas.
+ Gustavo> Also fix the sort order.
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
