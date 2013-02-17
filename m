@@ -1,22 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Feb 2013 22:57:50 +0100
-Subject: [Buildroot] [PATCH 1/2] gesftpserver: needs mmu
-In-Reply-To: <1360846981-26122-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 14 Feb 2013 10:03:00 -0300")
-References: <1360846981-26122-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mwv2mwm9.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Feb 2013 23:02:48 +0100
+Subject: [Buildroot] [PATCH] libcurl: re-enable on non-MMU platforms
+In-Reply-To: <1360849818-30031-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 14 Feb 2013 14:50:18 +0100")
+References: <20130214144713.632dcc63@skate>
+ <1360849818-30031-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87ip5qmwdz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Gustavo> Fixes:
- Gustavo> http://autobuild.buildroot.net/results/23298ba81896e473e903c17e12ad547049b8d348
+ Thomas> In 9229b82d6326ea425a258b91a9f0157ef6b223b7 ('libcurl: needs MMU'),
+ Thomas> the libcurl package was disabled on non-MMU systems, due to the usage
+ Thomas> of the fork() function in the library.
 
- Gustavo> Also fix the sort order.
+ Thomas> However, a deeper inspection reveals that fork() is only used in the
+ Thomas> implementation of NTLM, an obscure, undocumented, Microsoft specific
+ Thomas> authentication method that apparently isn't common anymore. See
+ Thomas> http://curl.haxx.se/docs/manpage.html#--ntlm.
+
+Yeah, tell me about it - I know of a certain company using it :/
 
 Committed, thanks.
 
