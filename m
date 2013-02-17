@@ -1,460 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 18 Feb 2013 00:22:31 +0100
-Subject: [Buildroot] [PATCH 5/6] package/vtun: update to 3.0.3
-In-Reply-To: <cover.1361143078.git.yann.morin.1998@free.fr>
-References: <cover.1361143078.git.yann.morin.1998@free.fr>
-Message-ID: <0e42607923bb818b5edd55c055ddad4cfff4743f.1361143078.git.yann.morin.1998@free.fr>
+From: Shawn J. Goff <shawn7400@gmail.com>
+Date: Sun, 17 Feb 2013 18:22:53 -0500
+Subject: [Buildroot] Adding a ModemManager package
+In-Reply-To: <51214BB2.4090907@mind.be>
+References: <51210E6F.6000504@gmail.com> <51214BB2.4090907@mind.be>
+Message-ID: <5121664D.2070207@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Against all odds, vtun had a new release sometime last year.
 
-Still, the code needs patching:
-  - the existing patch to fix installation has been refreshed
-  - the existing patch to fix blowfish header location has been
-    replaced (see below)
-  - configure looks in hard-coded, host paths (eg. /usr/include)
-    without any consideration for scross-compilation
-    --> new patch
-  - configure.in does not even pass an autoreconf without a
-    bit of love first (it's written in an ancient dialect that
-    autoreconf does no longer recognise)
-    --> new patch
+On 02/17/2013 04:29 PM, Arnout Vandecappelle wrote:
+> On 17/02/13 18:07, Shawn J. Goff wrote:
+>> I'm trying to add a ModemManager package. While building, I'm getting
+>> this error during the installation step: "/usr/lib/libgcc_s.so: file not
+>> recognized: File format not recognized". This looks like it's looking at
+>> my host's libgcc_s.so instead of the target's version. If that's the 
+>> case
+>> I'm not sure why or how to fix it. I did have to use autogen.sh to 
+>> create
+>> the configure script and lots of other stuff; I did this on my host
+>> system, so I'm not sure if that is affecting it.
+>
+>  Hi Shawn,
+>
+>  I haven't been able to reproduce your issue because your patch didn't 
+> include the libqmi package.
+Oops... forgot about that. I've been sitting on that patch because 
+libqmi v1.0 has some bugs that have been fixed, but they haven't set a 
+version number since then, so it's just got a sha for the version 
+number. I'll go ahead and submit that, though.
 
-Remove obsolete, unused, bit-rotting scripts and warning.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/vtun/Config.in                             |    2 +-
- package/vtun/README.txt                            |   37 --------
- ...le.in.patch => vtun-001-fix-installation.patch} |   21 ++++-
- package/vtun/vtun-002-fix-ssl-headers-checks.patch |   47 ++++++++++
- package/vtun/vtun-003-fixup-configure.in.patch     |   92 ++++++++++++++++++++
- package/vtun/vtun-3.0.2-003-configure.patch        |   12 ---
- package/vtun/vtun.mk                               |    3 +-
- package/vtun/vtund.rc.debian-2.6                   |   50 -----------
- package/vtun/vtund.rc.debian-3.0.2                 |   61 -------------
- 9 files changed, 158 insertions(+), 167 deletions(-)
- delete mode 100644 package/vtun/README.txt
- rename package/vtun/{vtun-3.0.2-001-Makefile.in.patch => vtun-001-fix-installation.patch} (57%)
- create mode 100644 package/vtun/vtun-002-fix-ssl-headers-checks.patch
- create mode 100644 package/vtun/vtun-003-fixup-configure.in.patch
- delete mode 100644 package/vtun/vtun-3.0.2-003-configure.patch
- delete mode 100644 package/vtun/vtund.rc.debian-2.6
- delete mode 100644 package/vtun/vtund.rc.debian-3.0.2
-
-diff --git a/package/vtun/Config.in b/package/vtun/Config.in
-index 7afda9e..fc35212 100644
---- a/package/vtun/Config.in
-+++ b/package/vtun/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_VTUN
--	bool "vtun - BEWARE: read package/vtun/README.txt before use"
-+	bool "vtun"
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
-diff --git a/package/vtun/README.txt b/package/vtun/README.txt
-deleted file mode 100644
-index 5ee0479..0000000
---- a/package/vtun/README.txt
-+++ /dev/null
-@@ -1,37 +0,0 @@
--Previous vtun was version 2.6.
--This does not buld because its "configure" requires
--that -llzo contains "lzolx_decompress".
--"vtun" does not build, evenm if liblzo is available.
--
--The LZO package currently used by buildroot
--does not contain ANY reference to "lzolx_decompress"
--
--"vtun" has been upgraded to 3.0.2 and now builds OK,
--but is yet to be tested on a target.
--The previous patch containing three diffs,
--has been broken up into three files.
--
--The second patch fails.
--
--This patch tries to replace a perl script
--($(VTUN_DIR)/scripts/vtund.rc.debian)
--with a shell script with the same name.
--
--In vtun-3.0.2, vtund.rc.debian is a shell script which is
--fairly similar to the shell script provided by the patch.
--For now, it has been decided not to replace this shell 
--script with the script generated by the patch for 2.6
--
--vtun will thus be built with the 3.0.2 vtund.rc.debian.
--The start-stop-daemon parameters and other things
--in this script may be inappropriate for something based on busybox.
--
--I will leave the decision which script to use,
--the 2-6 script or the 3.0.2 script to someone else.
--
--Both files are kept in the directory, but should
--be removed once it has been decided what to do
--about this script.
--
--Signed-Off by: Ulf Samuelsson <ulf.samuelsson@atmel.com>
--
-diff --git a/package/vtun/vtun-3.0.2-001-Makefile.in.patch b/package/vtun/vtun-001-fix-installation.patch
-similarity index 57%
-rename from package/vtun/vtun-3.0.2-001-Makefile.in.patch
-rename to package/vtun/vtun-001-fix-installation.patch
-index 1f93969..d9659fa 100644
---- a/package/vtun/vtun-3.0.2-001-Makefile.in.patch
-+++ b/package/vtun/vtun-001-fix-installation.patch
-@@ -1,6 +1,17 @@
--diff -urN vtun/Makefile.in vtun-2.6/Makefile.in
----- vtun/Makefile.in	2002-12-20 09:55:47.000000000 -0700
--+++ vtun-2.6/Makefile.in	2003-06-05 12:38:31.000000000 -0600
-+Makefile.in: fix installation steps
-+
-+Not sure what the reason for that patch is, but originally added by Ulf
-+Samuelsson <ulf.samuelsson@atmel.com>, when upgrading from 2.6.x to 3.0.2.
-+
-+yann.morin.1998 at free.fr: the initial commit in the Buildroot tree had the
-+SoB by Ulf, but it was not explicitly reproduced here in the patch; so I
-+added it here directly in the patch.
-+
-+Somewhat-signed-off-by: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+diff -durN vtun-3.0.3.orig/Makefile.in vtun-3.0.3/Makefile.in
-+--- vtun-3.0.3.orig/Makefile.in	2012-07-09 06:55:38.000000000 +0200
-++++ vtun-3.0.3/Makefile.in	2013-02-16 23:28:47.034036869 +0100
- @@ -28,7 +28,7 @@
-  LEXFLAGS = -t 
-  
-@@ -10,7 +21,7 @@ diff -urN vtun/Makefile.in vtun-2.6/Makefile.in
-  
-  prefix = @prefix@
-  exec_prefix = @exec_prefix@
--@@ -86,15 +86,15 @@
-+@@ -89,16 +89,15 @@
-  
-  install_config: 
-  	$(INSTALL) -d -m 755 $(INSTALL_OWNER) $(DESTDIR)$(ETC_DIR)
-@@ -26,8 +37,8 @@ diff -urN vtun/Makefile.in vtun-2.6/Makefile.in
-  	$(INSTALL) -d -m 755 $(INSTALL_OWNER) $(DESTDIR)$(LOCK_DIR)
-  	$(INSTALL) -d -m 755 $(INSTALL_OWNER) $(DESTDIR)$(SBIN_DIR)
-  	$(INSTALL) -m 755 $(INSTALL_OWNER) vtund $(DESTDIR)$(SBIN_DIR)
-+-	$(BIN_DIR)/strip $(DESTDIR)$(SBIN_DIR)/vtund
- +	$(INSTALL) -m 755 -D $(INSTALL_OWNER) scripts/vtund.rc.debian \
- +		$(DESTDIR)$(ETC_DIR)/init.d/S90vtun
-  
-  # DO NOT DELETE THIS LINE -- make depend depends on it.
--
-diff --git a/package/vtun/vtun-002-fix-ssl-headers-checks.patch b/package/vtun/vtun-002-fix-ssl-headers-checks.patch
-new file mode 100644
-index 0000000..765411a
---- /dev/null
-+++ b/package/vtun/vtun-002-fix-ssl-headers-checks.patch
-@@ -0,0 +1,47 @@
-+configure.in: do not hard-code search patch for SSL headers
-+
-+Do. Not. Do. That. It breaks cross-compilation.
-+
-+Also use the SSL headers dir to look for blowfish headers.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN vtun-3.0.3.orig/configure.in vtun-3.0.3/configure.in
-+--- vtun-3.0.3.orig/configure.in	2009-03-29 12:08:51.000000000 +0200
-++++ vtun-3.0.3/configure.in	2013-02-16 23:44:44.004339680 +0100
-+@@ -166,7 +166,7 @@
-+    AC_MSG_RESULT()
-+    AC_CHECKING( for md5 Library and Header files ... )
-+ AC_SEARCH_HEADERS(md5.h,
-+-    $SSL_HDR_DIR /usr/include/openssl "" /usr/include /usr/include/ssl /usr/local/include /usr/local/ssl/include /usr/include/sys, 
-++    $SSL_HDR_DIR "" , 
-+     ,
-+     AC_MSG_ERROR( SSL headers not found. )
-+    )
-+@@ -176,7 +176,7 @@
-+    AC_MSG_RESULT()
-+    AC_CHECKING( for blowfish Library and Header files ... )
-+    AC_SEARCH_HEADERS(blowfish.h,
-+-    $BLOWFISH_HDR_DIR /usr/include/ssl /usr/include/openssl /usr/include /usr/local/include /usr/local/ssl/include  /usr/include/crypto,
-++    $BLOWFISH_HDR_DIR $SSL_HDR_DIR,
-+ 	AC_CHECK_LIB(crypto, BF_set_key,
-+ 	    [
-+ 	       LIBS="$LIBS -lcrypto"
-+@@ -193,7 +193,7 @@
-+    AC_MSG_RESULT()
-+    AC_CHECKING( for AES Library and Header files ... )
-+    AC_SEARCH_HEADERS(aes.h,
-+-    $SSL_HDR_DIR /usr/include/ssl /usr/include/openssl /usr/include /usr/local/include /usr/local/ssl/include  /usr/include/crypto,
-++    $SSL_HDR_DIR ,
-+ 	AC_CHECK_LIB(crypto, AES_set_encrypt_key,
-+ 	    [
-+ 	       AC_DEFINE(HAVE_SSL_AES)
-+@@ -208,7 +208,7 @@
-+    AC_MSG_RESULT()
-+    AC_CHECKING( for EVP Library and Header files ... )
-+    AC_SEARCH_HEADERS(evp.h,
-+-    $SSL_HDR_DIR /usr/include/ssl /usr/include/openssl /usr/include /usr/local/include /usr/local/ssl/include  /usr/include/crypto,
-++    $SSL_HDR_DIR ,
-+ 	AC_CHECK_LIB(crypto, EVP_EncryptInit,
-+ 	    [
-+ 	       AC_DEFINE(HAVE_SSL_EVP)
-diff --git a/package/vtun/vtun-003-fixup-configure.in.patch b/package/vtun/vtun-003-fixup-configure.in.patch
-new file mode 100644
-index 0000000..cb2ac67
---- /dev/null
-+++ b/package/vtun/vtun-003-fixup-configure.in.patch
-@@ -0,0 +1,92 @@
-+configure.in: minimal syntax fixup for autoreconf
-+
-+This is the strictly minimal syntax fixups to make autoreconf happy...
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Note: configure.in is still full of incorrect syntax, but fixing it is
-+a task for another day, and would have to be upstreamed. But upstream
-+looks to be moribund at best, if not dead... :-(
-+
-+So, keep it for ourselves for now... Too bad, vtun is really helpfull.
-+
-+--- vtun-3.0.3.orig/configure.in	2013-02-16 23:54:52.582451817 +0100
-++++ vtun-3.0.3/configure.in	2013-02-17 00:03:13.640887353 +0100
-+@@ -110,10 +110,10 @@
-+ AC_SEARCH_LIBS(nanosleep, rt posix4)
-+ 
-+ dnl Check for setproctitle in libutil
-+-AC_SEARCH_LIBS(setproctitle, util bsd, AC_DEFINE(HAVE_SETPROC_TITLE) )
-++AC_SEARCH_LIBS(setproctitle, util bsd, AC_DEFINE([HAVE_SETPROC_TITLE],[],[Define to set title in /proc]) )
-+ 
-+ if test "$SHAPER" = "yes"; then
-+-   AC_DEFINE(HAVE_SHAPER)
-++   AC_DEFINE([HAVE_SHAPER],[],[Define to use shapper])
-+ fi
-+ 
-+ if test "$ZLIB" = "yes"; then
-+@@ -121,7 +121,7 @@
-+    AC_CHECKING( for ZLIB Library and Header files ... )
-+    AC_CHECK_LIB(z, deflate,
-+ 	LIBS="$LIBS -lz"
-+-	AC_DEFINE(HAVE_ZLIB),
-++	AC_DEFINE([HAVE_ZLIB],[],[Define to use ZLIB]),
-+ 	AC_MSG_ERROR( Zlib library not found.)
-+    )
-+ fi
-+@@ -148,7 +148,7 @@
-+ 	    AC_CHECK_LIB($I, lzo1x_decompress,
-+ 	    [
-+ 	          LIBS="$LIBS -l"$I
-+-	       AC_DEFINE(HAVE_LZO)
-++	       AC_DEFINE([HAVE_LZO],[],[Define to use LZO])
-+ 	          havelzo=1
-+ 	      ]
-+ 	    )
-+@@ -180,8 +180,8 @@
-+ 	AC_CHECK_LIB(crypto, BF_set_key,
-+ 	    [
-+ 	       LIBS="$LIBS -lcrypto"
-+-	       AC_DEFINE(HAVE_SSL)
-+-	       AC_DEFINE(HAVE_SSL_BLOWFISH)
-++	       AC_DEFINE([HAVE_SSL],[],[Define to use SSL])
-++	       AC_DEFINE([HAVE_SSL_BLOWFISH],[],[Define to use blowfish])
-+ 	    ],
-+ 	    AC_MSG_ERROR( SSL library not found. )
-+ 	),
-+@@ -196,7 +196,7 @@
-+     $SSL_HDR_DIR ,
-+ 	AC_CHECK_LIB(crypto, AES_set_encrypt_key,
-+ 	    [
-+-	       AC_DEFINE(HAVE_SSL_AES)
-++	       AC_DEFINE([HAVE_SSL_AES],[],[Define to use AES])
-+ 	    ],
-+ 	    AC_MSG_ERROR( AES library not found. )
-+ 	),
-+@@ -211,7 +211,7 @@
-+     $SSL_HDR_DIR ,
-+ 	AC_CHECK_LIB(crypto, EVP_EncryptInit,
-+ 	    [
-+-	       AC_DEFINE(HAVE_SSL_EVP)
-++	       AC_DEFINE([HAVE_SSL_EVP],[],Define to use EVP)
-+ 	    ],
-+ 	    AC_MSG_ERROR( EVP library not found. )
-+ 	),
-+@@ -220,7 +220,7 @@
-+ fi
-+ 
-+ if test "$NATHACK" = "yes"; then
-+-   AC_DEFINE(ENABLE_NAT_HACK)
-++   AC_DEFINE([ENABLE_NAT_HACK],[],[Define to use NAT hack])
-+ fi
-+ 
-+ if test "$SOCKS" = "yes"; then
-+@@ -274,6 +274,6 @@
-+ REL=`echo 'BRANCH-3_X' | tr -d '$: \-' | sed 's/^[A-Za-z]*//' | sed 's/\_/\./'`
-+ changequote([,])
-+ 
-+-AC_DEFINE_UNQUOTED(VTUN_VER, "$REL `date '+%m/%d/%Y'`")
-++AC_DEFINE_UNQUOTED([VTUN_VER], ["$REL `date '+%m/%d/%Y'`"], [vtun version])
-+ 
-+ AC_OUTPUT(Makefile)
-diff --git a/package/vtun/vtun-3.0.2-003-configure.patch b/package/vtun/vtun-3.0.2-003-configure.patch
-deleted file mode 100644
-index 7ddc043..0000000
---- a/package/vtun/vtun-3.0.2-003-configure.patch
-+++ /dev/null
-@@ -1,12 +0,0 @@
----- vtun-2.6/configure.dist	2004-03-11 10:39:10.000000000 -0600
--+++ vtun-2.6/configure	2004-03-11 10:45:52.000000000 -0600
--@@ -2112,7 +2112,7 @@
--     echo $ac_n "checking "for blowfish.h"""... $ac_c" 1>&6
-- echo "configure:2114: checking "for blowfish.h"" >&5 
--     ac_hdr_found=no
---    for p in $BLOWFISH_HDR_DIR /usr/include/ssl /usr/include/openssl /usr/include /usr/local/include /usr/local/ssl/include  /usr/include/crypto; do
--+    for p in $BLOWFISH_HDR_DIR $SSL_HDR_DIR /usr/include/ssl /usr/include/openssl /usr/include /usr/local/include /usr/local/ssl/include  /usr/include/crypto; do
-- 	if test -n "$p"; then
-- 	  dir="$p"
-- 	else
--
-diff --git a/package/vtun/vtun.mk b/package/vtun/vtun.mk
-index 7bc0a81..2affa2e 100644
---- a/package/vtun/vtun.mk
-+++ b/package/vtun/vtun.mk
-@@ -7,10 +7,11 @@
- #
- #############################################################
- 
--VTUN_VERSION = 3.0.2
-+VTUN_VERSION = 3.0.3
- VTUN_SOURCE = vtun-$(VTUN_VERSION).tar.gz
- VTUN_SITE = http://downloads.sourceforge.net/project/vtun/vtun/$(VTUN_VERSION)
- VTUN_DEPENDENCIES = zlib lzo openssl
-+VTUN_AUTORECONF = YES
- 
- VTUN_CONF_OPT = \
- 		--with-ssl-headers=$(STAGING_DIR)/usr/include/openssl \
-diff --git a/package/vtun/vtund.rc.debian-2.6 b/package/vtun/vtund.rc.debian-2.6
-deleted file mode 100644
-index eb8226e..0000000
---- a/package/vtun/vtund.rc.debian-2.6
-+++ /dev/null
-@@ -1,50 +0,0 @@
--#! /bin/sh
--#
-- 
--PATH=/bin:/usr/bin:/sbin:/usr/sbin
--DAEMON=/usr/sbin/vtund
--CONFFILE=/etc/vtund-start.conf
--PIDPREFIX=/var/run/vtund
--  
--test -f $DAEMON || exit 0
--  
--case "$1" in 
--       start)
--      # find all the defined tunnels
--      egrep -v '^[:space:]*(#.*)?$' $CONFFILE | while true;
--      do
--          read i
--          # no more lines available? done, then.
--          if [ $? != 0 ] ; then break; fi
--              SARGS=`echo $i|sed -ne 's/--server--\s*/-s -P /p'`;
--              if [ -n "$SARGS" ];
--              then
--                 echo "Starting vtund server."
--                  start-stop-daemon -S -x $DAEMON -- $SARGS;
--              else
--                  # split args into host and rest
--                  HOST=`echo $i|cut -f 1 -d " "`;
--                  TARGET=`echo $i|cut -f 2 -d " "`;
--                  echo  "Starting vtund client $HOST to $TARGET.";
--                  start-stop-daemon -S -x $DAEMON -- $i;
--
--              fi
--          done
--              ;;
--       stop) 
--	  echo "Stopping vtund.";
--	  start-stop-daemon -K -x vtund;
--	  ;;
--
--       restart|reload|force-reload) 
--	   $0 stop
--	   sleep 1;
--	   $0 start
--	   ;;
--   *)
--      echo "Usage: $0 {start|stop|restart|reload|force-reload}" >&2
--       exit 1
--               ;;
--esac
--exit 0
--
-diff --git a/package/vtun/vtund.rc.debian-3.0.2 b/package/vtun/vtund.rc.debian-3.0.2
-deleted file mode 100644
-index 5158663..0000000
---- a/package/vtun/vtund.rc.debian-3.0.2
-+++ /dev/null
-@@ -1,61 +0,0 @@
--#! /bin/sh
--#
--# submitted by Morgon Kanter
--# 
--
--PATH=/bin:/usr/bin:/sbin:/usr/sbin
--DAEMON=/usr/sbin/vtund
--CONFFILE=/etc/vtund-start.conf
--PIDPREFIX=/var/run/vtund
--  
--test -f $DAEMON || exit 0
--  
--case "$1" in 
--       start)
--      # find all the defined tunnels
--      egrep -v '^[:space:]*(#.*)?$' $CONFFILE | while true;
--      do
--          read i
--          # no more lines available? done, then.
--          if [ $? != 0 ] ; then break; fi
--              SARGS=`echo $i|sed -ne 's/--server--\s*/-s -P /p'`;
--              if [ -n "$SARGS" ];
--              then
--                 echo "Starting vtund server."
--                  start-stop-daemon --start --exec $DAEMON --pidfile $PIDPREFIX.pid -- $SARGS;
--              else
--                  # split args into host and rest
--                  HOST=`echo $i|cut -f 1 -d " "`;
--                  TARGET=`echo $i|cut -f 2 -d " "`;
--                  echo  "Starting vtund client $HOST to $TARGET.";
--                  start-stop-daemon --start --exec $DAEMON --pidfile $PIDPREFIX.$HOST.pid -- $i;
-- 
--              fi
--          done
--              ;;
--       stop) 
--          echo "Stopping vtund.";
--          for i in $PIDPREFIX*;
--          do
--              start-stop-daemon --stop --pidfile $i; 
--              rm -f $i;
--          done
--               ;;
--       reload|force-reload)
--          echo "Reloading vtund.";
--          for i in $PIDPREFIX*;
--          do
--              start-stop-daemon --stop --signal 1 --pidfile $i; 
--          done
--              ;;
--       restart) 
--          $0 stop
--          sleep 1;
--          $0 start
--          ;;
--   *)
--      echo "Usage: $0 {start|stop|restart|reload|force-reload}" >&2
--       exit 1
--               ;;
--esac
--exit 0
--- 
-1.7.2.5
+> However, it is very well possible that the issue is caused by running 
+> 'autogen.sh'. Is it possible that the libtool patch doesn't get 
+> applied? I see that libtool adds "-rpath /usr/lib" to the link 
+> command, and I believe the libtool patch removes exactly that.
+>
+>  To create configure properly, you need to set _AUTORECONF to YES, as 
+> mentioned by Thomas. Unfortunately, that is not so easy...
+>
+Yes - I noticed :-)
+> - modem-manager uses gettext macros provided by the gettext package, 
+> so you need to add host-gettext to the dependencies. But host-gettext 
+> doesn't exist yet - I'll send a patch to add it.
+>
+Awesome.
+> - modem-manager requires gtkdocize to be run. We certainly don't want 
+> to add gtkdocize to buildroot. But since it just generates two files 
+> for a total of 350 lines, it's easy to add that with a package patch.
+Yes, actually, I do that with libqmi, so I'm familiar with that.
+>
+>  Hopefully this will help you to solve the problem.
+>
+>  Regards,
+>  Arnout
