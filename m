@@ -1,34 +1,44 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Sun, 17 Feb 2013 19:55:11 +0200
-Subject: [Buildroot] [PATCH] new package: iso-codes
-In-Reply-To: <20130217183012.73c87347@skate>
-References: <1361118896-2263-1-git-send-email-stefan.froberg@petroprogram.com>
- <20130217183012.73c87347@skate>
-Message-ID: <5121197F.1060201@petroprogram.com>
+From: Shawn J. Goff <shawn7400@gmail.com>
+Date: Sun, 17 Feb 2013 12:56:11 -0500
+Subject: [Buildroot] Adding a ModemManager package
+In-Reply-To: <20130217183148.2cc7dd92@skate>
+References: <51210E6F.6000504@gmail.com> <20130217183148.2cc7dd92@skate>
+Message-ID: <512119BB.9000200@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-17.2.2013 19:30, Thomas Petazzoni kirjoitti:
-> Dear Stefan Fr?berg,
+On 02/17/2013 12:31 PM, Thomas Petazzoni wrote:
+> Dear Shawn J. Goff,
 >
-> On Sun, 17 Feb 2013 18:34:56 +0200, Stefan Fr?berg wrote:
+> On Sun, 17 Feb 2013 12:07:59 -0500, Shawn J. Goff wrote:
+>> I'm trying to add a ModemManager package. While building, I'm getting
+>> this error during the installation step: "/usr/lib/libgcc_s.so: file not
+>> recognized: File format not recognized". This looks like it's looking at
+>> my host's libgcc_s.so instead of the target's version. If that's the
+>> case I'm not sure why or how to fix it. I did have to use autogen.sh to
+>> create the configure script and lots of other stuff; I did this on my
+>> host system, so I'm not sure if that is affecting it.
+> Could you post the in-progress patch you have to add the modem-manager
+> package? This would allow us to check for potential suspicious things
+> in the .mk file, and if nothing suspicious shows up, to try and
+> reproduce the issue.
 >
->> +	select BR2_PACKAGE_GETTEXT
-> Are you sure it really needs gettext as a build dependency?
-
-Well, I did not try to build it without gettext installed but that's
-what the gentoo ebuild file
-lists as its hard dependency
-
-> Also, this seems to install a big bunch of files. Maybe
-> network-manager-applet needs only some of the ISOxyz files, and
-> therefore having suboptions to select which ISOxyz set of files should
-> be installed would be useful?
+> Thanks!
 >
+> Thomas
 
-I have to check it.
-
-Stefan
+Sure, here's a patch. udev was disabling gudev; for now, I had to remove 
+that part because the default configuration of ModemManager seems to 
+require it. I don't have a patch for the autogen-created files yet. I 
+run make, then go to the build directory and run "NOCONFIGURE=yes 
+./autogen.sh", then go back and continue running make.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-ModemManager-initial-package-addition.patch
+Type: text/x-patch
+Size: 3149 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130217/066dc0c9/attachment.bin>
