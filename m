@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 18 Feb 2013 00:24:34 +0100
-Subject: [Buildroot] [PATCH 1/6] Kickoff 2013.05 cycle
-In-Reply-To: <4bf3c452a507d4997f869875e4fd412a3af1a5cd.1361143078.git.yann.morin.1998@free.fr>
-References: <cover.1361143078.git.yann.morin.1998@free.fr>
- <4bf3c452a507d4997f869875e4fd412a3af1a5cd.1361143078.git.yann.morin.1998@free.fr>
-Message-ID: <201302180024.34664.yann.morin.1998@free.fr>
+Date: Mon, 18 Feb 2013 00:34:22 +0100
+Subject: [Buildroot] [pull request] Pull request for branch yem-misc
+In-Reply-To: <cover.1360017945.git.yann.morin.1998@free.fr>
+References: <cover.1360017945.git.yann.morin.1998@free.fr>
+Message-ID: <201302180034.22557.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +12,29 @@ To: buildroot@busybox.net
 
 Peter, All,
 
-On Monday 18 February 2013 Yann E. MORIN wrote:
-> From: Peter Korsgaard <jacmet@sunsite.dk>
+On Monday 04 February 2013 Yann E. MORIN wrote:
+> This series is a based on Richard's tzdata initial series, with some fixes
+> discussed today during the Developper's Day.
 > 
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-> ---
->  Makefile |    2 +-
->  1 files changed, 1 insertions(+), 1 deletions(-)
+> Changes since Richard's post:
+>   - install POSIX time zones only once
+>   - path to 'zic' is exported by the 'zic' package
 > 
-> diff --git a/Makefile b/Makefile
-> index 3f967b2..1300725 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -24,7 +24,7 @@
->  #--------------------------------------------------------------
->  
->  # Set and export the version string
-> -export BR2_VERSION:=2013.02-rc1
-> +export BR2_VERSION:=2013.05-git
+> The following changes since commit d3e7fbd75e49e3368b8c361c45344266ceca5cfd:
+> 
+>   heirloom-mailx: needs fork() (2013-02-03 21:37:32 +0100)
+> 
+> are available in the git repository at:
+>   git://gitorious.org/buildroot/buildroot.git yem-misc
+> 
+> Richard Braun (2):
+>       package/zic: new host package
+>       package/tzdata: new package
 
-Hmmm. I used the wrong starting point when sending this series. Sorry. :-(
+Ping? This is material for the 'next' branch, of course! ;-)
+
+Not re-spinning this series, since it has not changed.
+It's still in the patchwork.
 
 Regards,
 Yann E. MORIN.
