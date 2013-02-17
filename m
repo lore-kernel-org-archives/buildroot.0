@@ -1,33 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 17 Feb 2013 22:51:03 +0100
-Subject: [Buildroot] [git commit] manual: sprinkle with some calls to MESSAGE
-Message-ID: <20130217221225.B36009A7C8@busybox.osuosl.org>
+Date: Sun, 17 Feb 2013 23:03:25 +0100
+Subject: [Buildroot] [git commit] collectd: also install to staging
+Message-ID: <20130217221226.59E0C9AB44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4b95b369b1422b205ffde220d9cb20cc18f6b2dd
+commit: http://git.buildroot.net/buildroot/commit/?id=f73f6787bd836e72436efd3339e3232c9637d316
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fixes bug #5906
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/manual.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/collectd/collectd.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index d664603..aa20534 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -18,7 +18,7 @@ $(1): $(1)-$(3)
- $(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index a50be9c..6d26622 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -8,6 +8,7 @@ COLLECTD_VERSION = 5.1.2
+ COLLECTD_SITE = http://collectd.org/files
+ COLLECTD_MAKE_OPT = LDFLAGS="$(TARGET_LDFLAGS) -lm"
+ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
++COLLECTD_INSTALL_STAGING = YES
+ COLLECTD_LICENSE = GPLv2 LGPLv2.1
+ COLLECTD_LICENSE_FILES = COPYING
  
- $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES)
--	@echo "Generating $(5) $(1)..."
-+	@$(call MESSAGE,"Generating $(5) $(1)...")
- 	$(Q)mkdir -p $$(@D)
- 	$(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
- 	  -D $$(@D) $$<
