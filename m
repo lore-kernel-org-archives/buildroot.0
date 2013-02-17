@@ -1,41 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 16 Feb 2013 19:05:46 +0100
-Subject: [Buildroot] need smaller filesystem for NOR
-In-Reply-To: <20130212225043.4ecc0f25@skate> (Thomas Petazzoni's message of
- "Tue, 12 Feb 2013 22:50:43 +0100")
-References: <1360344317.17385.31.camel@genx.eng.msli.com>
- <20130208183807.2b2fe572@skate>
- <1360359245.28641.79.camel@genx.eng.msli.com>
- <1360628370.13529.110.camel@genx> <511A7C8E.9010407@mind.be>
- <20130212225043.4ecc0f25@skate>
-Message-ID: <877gm8qglh.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 17 Feb 2013 02:52:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 5948] AT91 Bootstrap3 defconfig name change not
+ detected (by make process)
+In-Reply-To: <bug-5948-163@https.bugs.busybox.net/>
+References: <bug-5948-163@https.bugs.busybox.net/>
+Message-ID: <20130217025206.46FB29AB3C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=5948
 
-Hi,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
- >> > Next I tried to edit my jffs options in the .config for my recovery
- >> > 'failsafe' buildroot:
- >> > Filesystem images  --->
- >> >   [*] jffs2 root filesystem
- >> >   Flash Type (Select custom page and erase size)  --->
- >> >   (0x1065) Page Size
- >> >   (0xC60) Erase block size
- >> 
- >> Those numbers are unlikely. 0x1065 is a very odd number (literally). 
- >> Also, the erase block size is always larger than the page size, and for 
- >> NOR I think it's normally equal to it.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
 
- Thomas> I remember dataflash having bizarre erase block sizes, but I don't
- Thomas> think it was an odd number.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-02-17 02:52:27 UTC ---
+This is expected. When you make a change to your configuration, Buildroot does
+not try to guess what needs to be rebuilt, because it's very complicated to
+achieve in a safe and reliable manner. So we simply decide not to do it, and
+leave it to the user to know what parts of Buildroot need to be cleaned after
+making a configuration change.
 
-No, it's afaik 256bytes + 8 extra, or multiples of this. Judging from
-the above, I guess John wanted 1056 (0x420) page size.
+In your case, you can do:
+
+ make at91bootstrap3-reconfigure
+
+to restart the build process of AT91Bootstrap3 from its configuration step.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
