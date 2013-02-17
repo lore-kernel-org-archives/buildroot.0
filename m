@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Feb 2013 19:10:25 +0100
-Subject: [Buildroot] [PATCH] new package: libtasn1
-In-Reply-To: <512118D6.8020009@petroprogram.com>
-References: <1361118230-9138-1-git-send-email-stefan.froberg@petroprogram.com>
- <20130217182518.4f9d9d76@skate> <512118D6.8020009@petroprogram.com>
-Message-ID: <20130217191025.073b57c9@skate>
+Date: Sun, 17 Feb 2013 19:11:39 +0100
+Subject: [Buildroot] [PATCH] new package: iso-codes
+In-Reply-To: <5121197F.1060201@petroprogram.com>
+References: <1361118896-2263-1-git-send-email-stefan.froberg@petroprogram.com>
+ <20130217183012.73c87347@skate> <5121197F.1060201@petroprogram.com>
+Message-ID: <20130217191139.651f79c1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,30 @@ To: buildroot@busybox.net
 
 Dear Stefan Fr?berg,
 
-On Sun, 17 Feb 2013 19:52:22 +0200, Stefan Fr?berg wrote:
-> 17.2.2013 19:25, Thomas Petazzoni kirjoitti:
-> > Dear Stefan Fr?berg,
-> >
-> > On Sun, 17 Feb 2013 18:23:50 +0200, Stefan Fr?berg wrote:
-> >
-> >> +LIBTASN1_VERSION = 3.2
-> >> +LIBTASN1_SOURCE = libtasn1-$(LIBTASN1_VERSION).tar.gz
-> >> +LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
-> >> +LIBTASN1_DEPENDENCIES = host-bison host-microperl
-> > The microperl package is deprecated, and since perl is part of the
-> > mandatory dependencies of Buildroot (checked by
-> > support/dependencies/dependencies.sh), we generally do not make package
-> > depend on host-microperl.
-> 
-> So I can remove perl completely from dependencies ?
+On Sun, 17 Feb 2013 19:55:11 +0200, Stefan Fr?berg wrote:
 
-You can remove host-microperl from your package dependencies, yes. It
-should work.
+> >> +	select BR2_PACKAGE_GETTEXT
+> > Are you sure it really needs gettext as a build dependency?
+> 
+> Well, I did not try to build it without gettext installed but that's
+> what the gentoo ebuild file
+> lists as its hard dependency
+
+We need to figure out what is needed exactly. gettext support in the C
+library (in which case it depends on whether you're using glibc or
+uClibc, see
+http://buildroot.org/downloads/manual/manual.html#_gettext_integration_and_interaction_with_packages.
+Or instead the host gettext tools to generate some stuff.
+
+> > Also, this seems to install a big bunch of files. Maybe
+> > network-manager-applet needs only some of the ISOxyz files, and
+> > therefore having suboptions to select which ISOxyz set of files should
+> > be installed would be useful?
+> >
+> 
+> I have to check it.
+
+Thanks.
 
 Thomas
 -- 
