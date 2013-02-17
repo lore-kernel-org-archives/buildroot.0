@@ -1,49 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 17 Feb 2013 18:06:14 -0300
-Subject: [Buildroot] bump libnl to 3.2.21 before release
-In-Reply-To: <5121441D.5040506@siganos.org>
-References: <51212637.6020406@siganos.org> <512127BC.9050004@zacarias.com.ar>
- <5121441D.5040506@siganos.org>
-Message-ID: <51214646.5080304@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 17 Feb 2013 22:29:22 +0100
+Subject: [Buildroot] Adding a ModemManager package
+In-Reply-To: <51210E6F.6000504@gmail.com>
+References: <51210E6F.6000504@gmail.com>
+Message-ID: <51214BB2.4090907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/17/2013 05:57 PM, Dimitrios Siganos wrote:
+On 17/02/13 18:07, Shawn J. Goff wrote:
+> I'm trying to add a ModemManager package. While building, I'm getting
+> this error during the installation step: "/usr/lib/libgcc_s.so: file not
+> recognized: File format not recognized". This looks like it's looking at
+> my host's libgcc_s.so instead of the target's version. If that's the case
+> I'm not sure why or how to fix it. I did have to use autogen.sh to create
+> the configure script and lots of other stuff; I did this on my host
+> system, so I'm not sure if that is affecting it.
 
-> There is no problem that I can't work around but it is an inconvenience
-> that can be avoided.
-> 
-> How am I affected? We do binary releases of our software applications
-> and 3.2.18 doesn't work for us and we'd have to release a special
-> version for that or create a patch for buildroot.
+  Hi Shawn,
 
-Binary releases as in a sepparate/propietary app that's only shipped as
-a binary? (not built with buildroot and/or not able to share the source).
-I'm not asking because of any licensing crazyiness, it's perfectly
-valid, just want to understand the scenario.
+  I haven't been able to reproduce your issue because your patch didn't 
+include the libqmi package. However, it is very well possible that the 
+issue is caused by running 'autogen.sh'. Is it possible that the libtool 
+patch doesn't get applied? I see that libtool adds "-rpath /usr/lib" to 
+the link command, and I believe the libtool patch removes exactly that.
 
-> The important thing to note here is that version 3.2.18 broke backwards
-> compatibility and version 3.2.20 restored it. For example, v3.2.16 is
-> compatible with 3.2.21 but 3.2.18 isn't compatible with either of them.
-> 
-> If there is no specific reason to stay at 3.2.18 then why not go to
-> 3.2.21 and spare some buildroot users (the ones that operate in mixed
-> open/closed source) from that unnecessary libnl hassle?
+  To create configure properly, you need to set _AUTORECONF to YES, as 
+mentioned by Thomas. Unfortunately, that is not so easy...
 
-Well the binary compatibility isn't an issue for typical buildroot
-scenarios, that's why i'm asking what i asked.
-The changelog entry is a typical linux distribution issue where you just
-upgrade individual components when necessary.
-That's usually not what buildroot is about, you're building a root
-filesystem (in simplified terms) so your upgrade path is usually a
-complete image upgrade, call it firmware, flash or disk image.
-Hence ABI compatibility doesn't matter.
-Understand i'm hesitant to bump libnl this close to the release unless
-there's a really pressing issue - libnl bumps usually break packages
-subtly and this requires testing.
-And it also breaks every other release with varying linux headers when
-new features are introduced (like CAN support).
-Regards.
+- modem-manager uses gettext macros provided by the gettext package, so 
+you need to add host-gettext to the dependencies. But host-gettext 
+doesn't exist yet - I'll send a patch to add it.
+
+- modem-manager requires gtkdocize to be run. We certainly don't want to 
+add gtkdocize to buildroot. But since it just generates two files for a 
+total of 350 lines, it's easy to add that with a package patch.
+
+  Hopefully this will help you to solve the problem.
+
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
