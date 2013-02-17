@@ -1,76 +1,91 @@
-From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Sun, 17 Feb 2013 18:34:56 +0200
-Subject: [Buildroot] [PATCH] new package: iso-codes
-Message-ID: <1361118896-2263-1-git-send-email-stefan.froberg@petroprogram.com>
+From: Shawn J. Goff <shawn7400@gmail.com>
+Date: Sun, 17 Feb 2013 12:07:59 -0500
+Subject: [Buildroot] Adding a ModemManager package
+Message-ID: <51210E6F.6000504@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-iso-codes
+I'm trying to add a ModemManager package. While building, I'm getting 
+this error during the installation step: "/usr/lib/libgcc_s.so: file not 
+recognized: File format not recognized". This looks like it's looking at 
+my host's libgcc_s.so instead of the target's version. If that's the 
+case I'm not sure why or how to fix it. I did have to use autogen.sh to 
+create the configure script and lots of other stuff; I did this on my 
+host system, so I'm not sure if that is affecting it.
 
-This package provides the ISO-639 Language code list, the ISO-4217 
-Currency code list, the ISO-3166 Territory code list, and ISO-3166-2
-sub-territory lists, and all their translations in gettext .po form.
+Below is a larger part of the output for context.
 
-Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
----
-Note: This package is needed by network-manager-applet (coming soon)
 
- package/Config.in              |    1 +
- package/iso-codes/Config.in    |   10 ++++++++++
- package/iso-codes/iso-codes.mk |   13 +++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/iso-codes/Config.in
- create mode 100644 package/iso-codes/iso-codes.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index e1788c2..cf4b456 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -571,6 +571,7 @@ endmenu
- 
- menu "Text and terminal handling"
- source "package/enchant/Config.in"
-+source "package/iso-codes/Config.in"
- source "package/libfribidi/Config.in"
- source "package/icu/Config.in"
- source "package/libiconv/Config.in"
-diff --git a/package/iso-codes/Config.in b/package/iso-codes/Config.in
-new file mode 100644
-index 0000000..ee3ac49
---- /dev/null
-+++ b/package/iso-codes/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_ISO_CODES
-+	bool "iso-codes"
-+	select BR2_PACKAGE_GETTEXT
-+	help
-+	  This package provides the ISO-639 Language code list, the ISO-3166
-+	  Territory code list, and ISO-3166-2 sub-territory lists, and all
-+	  their translations in gettext .po form.
-+
-+	  http://alioth.debian.org/projects/pkg-isocodes
-+
-diff --git a/package/iso-codes/iso-codes.mk b/package/iso-codes/iso-codes.mk
-new file mode 100644
-index 0000000..ac40f9c
---- /dev/null
-+++ b/package/iso-codes/iso-codes.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# iso-codes
-+#
-+#############################################################
-+
-+ISO_CODES_VERSION = 3.40
-+ISO_CODES_SOURCE = iso-codes-$(ISO_CODES_VERSION).tar.xz
-+ISO_CODES_SITE = http://pkg-isocodes.alioth.debian.org/downloads
-+ISO_CODES_INSTALL_STAGING = YES
-+ISO_CODES_DEPENDENCIES = gettext
-+
-+$(eval $(autotools-package))
--- 
-1.7.7.6
+  CCLD     libmm-glib.la
+make[4]: Entering directory 
+`/home/shawn/projects/all-projects/fx/buildroot-modemmanager/output/build/modem-manager-0.7.990/libmm-glib'
+  /usr/bin/mkdir -p 
+'/home/shawn/projects/fx/buildroot-modemmanager/output/target/usr/lib'
+  /usr/bin/mkdir -p 
+'/home/shawn/projects/fx/buildroot-modemmanager/output/target/usr/include/libmm-glib'
+  /bin/sh ../libtool   --mode=install /usr/bin/install -c libmm-glib.la 
+'/home/shawn/projects/fx/buildroot-modemmanager/output/target/usr/lib'
+  /usr/bin/install -c -m 644 libmm-glib.h mm-manager.h mm-object.h 
+mm-modem.h mm-modem-3gpp.h mm-modem-3gpp-ussd.h mm-modem-cdma.h 
+mm-modem-messaging.h mm-modem-location.h mm-modem-time.h 
+mm-modem-firmware.h mm-modem-simple.h mm-sim.h mm-sms.h mm-bearer.h 
+mm-simple-status.h mm-simple-connect-properties.h mm-bearer-properties.h 
+mm-sms-properties.h mm-bearer-ip-config.h mm-location-common.h 
+mm-location-3gpp.h mm-location-gps-nmea.h mm-location-gps-raw.h 
+mm-location-cdma-bs.h mm-unlock-retries.h mm-network-timezone.h 
+mm-firmware-properties.h 
+'/home/shawn/projects/fx/buildroot-modemmanager/output/target/usr/include/libmm-glib'
+libtool: install: warning: relinking `libmm-glib.la'
+libtool: install: (cd 
+/home/shawn/projects/all-projects/fx/buildroot-modemmanager/output/build/modem-manager-0.7.990/libmm-glib; 
+/bin/sh 
+/home/shawn/projects/all-projects/fx/buildroot-modemmanager/output/build/modem-manager-0.7.990/libtool 
+--silent --tag CC --mode=relink 
+/home/shawn/projects/fx/buildroot-modemmanager/output/host/usr/bin/arm-unknown-linux-gnueabi-gcc 
+-Wall -Werror -std=gnu89 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE 
+-D_FILE_OFFSET_BITS=64 -pipe -ggdb -Os -Wmissing-declarations 
+-Wmissing-prototypes -Wdeclaration-after-statement -Wno-unused-parameter 
+-Wno-sign-compare -fno-strict-aliasing -Wno-deprecated-declarations 
+-Wno-unused-but-set-variable -o libmm-glib.la -rpath /usr/lib 
+libmm_glib_la-mm-manager.lo libmm_glib_la-mm-object.lo 
+libmm_glib_la-mm-modem.lo libmm_glib_la-mm-modem-3gpp.lo 
+libmm_glib_la-mm-modem-3gpp-ussd.lo libmm_glib_la-mm-modem-cdma.lo 
+libmm_glib_la-mm-modem-simple.lo libmm_glib_la-mm-modem-location.lo 
+libmm_glib_la-mm-modem-time.lo libmm_glib_la-mm-modem-firmware.lo 
+libmm_glib_la-mm-sim.lo libmm_glib_la-mm-sms.lo 
+libmm_glib_la-mm-modem-messaging.lo libmm_glib_la-mm-bearer.lo 
+libmm_glib_la-mm-common-helpers.lo libmm_glib_la-mm-simple-status.lo 
+libmm_glib_la-mm-simple-connect-properties.lo 
+libmm_glib_la-mm-bearer-properties.lo libmm_glib_la-mm-sms-properties.lo 
+libmm_glib_la-mm-bearer-ip-config.lo libmm_glib_la-mm-location-3gpp.lo 
+libmm_glib_la-mm-location-gps-raw.lo 
+libmm_glib_la-mm-location-gps-nmea.lo 
+libmm_glib_la-mm-location-cdma-bs.lo libmm_glib_la-mm-unlock-retries.lo 
+libmm_glib_la-mm-network-timezone.lo 
+libmm_glib_la-mm-firmware-properties.lo 
+../libmm-glib/generated/libmm-generated.la -lgio-2.0 -lgobject-2.0 
+-L/home/shawn/projects/fx/buildroot-modemmanager/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib 
+-lglib-2.0 -inst-prefix-dir 
+/home/shawn/projects/fx/buildroot-modemmanager/output/target)
+/usr/lib/libgcc_s.so: file not recognized: File format not recognized
+collect2: ld returned 1 exit status
+libtool: install: error: relink `libmm-glib.la' with the above command 
+before installing it
+make[4]: *** [install-libLTLIBRARIES] Error 1
+make[4]: Leaving directory 
+`/home/shawn/projects/all-projects/fx/buildroot-modemmanager/output/build/modem-manager-0.7.990/libmm-glib'
+make[3]: *** [install-am] Error 2
+make[3]: Leaving directory 
+`/home/shawn/projects/all-projects/fx/buildroot-modemmanager/output/build/modem-manager-0.7.990/libmm-glib'
+make[2]: *** [install-recursive] Error 1
+make[2]: Leaving directory 
+`/home/shawn/projects/all-projects/fx/buildroot-modemmanager/output/build/modem-manager-0.7.990/libmm-glib'
+make[1]: *** [install-recursive] Error 1
+make[1]: Leaving directory 
+`/home/shawn/projects/all-projects/fx/buildroot-modemmanager/output/build/modem-manager-0.7.990'
+make: *** 
+[/home/shawn/projects/fx/buildroot-modemmanager/output/build/modem-manager-0.7.990/.stamp_target_installed] 
+Error 2
