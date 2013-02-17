@@ -1,12 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Feb 2013 22:50:26 +0100
-Subject: [Buildroot] [PATCH 1/9] manual: cleanup and update editor tags
-In-Reply-To: <e946f61281a9fe12843f84c397c3c2ff8ebb33a3.1360795941.git.s.martin49@gmail.com>
- (Samuel Martin's message of "Wed, 13 Feb 2013 23:59:02 +0100")
+Date: Sun, 17 Feb 2013 22:51:12 +0100
+Subject: [Buildroot] [PATCH 3/9] manual: sprinkle with some calls to
+	MESSAGE
+In-Reply-To: <6aee23c2362a6fe3b8428805af5330f388e2b3aa.1360795941.git.s.martin49@gmail.com>
+ (Samuel Martin's message of "Wed, 13 Feb 2013 23:59:04 +0100")
 References: <cover.1360795941.git.s.martin49@gmail.com>
  <cover.1360795941.git.s.martin49@gmail.com>
- <e946f61281a9fe12843f84c397c3c2ff8ebb33a3.1360795941.git.s.martin49@gmail.com>
-Message-ID: <87zjz2mwyl.fsf@dell.be.48ers.dk>
+ <6aee23c2362a6fe3b8428805af5330f388e2b3aa.1360795941.git.s.martin49@gmail.com>
+Message-ID: <87vc9qmwxb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
