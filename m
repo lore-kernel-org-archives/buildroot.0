@@ -1,32 +1,78 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 18 Feb 2013 08:37:37 -0300
-Subject: [Buildroot] [PATCH] ntfs-3g: needs mmu
-Message-ID: <1361187457-8689-1-git-send-email-gustavo@zacarias.com.ar>
+From: Viallard Anthony <viallard@syscom-instruments.com>
+Date: Mon, 18 Feb 2013 12:40:27 +0100
+Subject: [Buildroot] QUILT helper
+In-Reply-To: <7241967.ZJo92yCnzW@sagittae>
+References: <50F92F70.2070808@syscom-instruments.com>
+ <50FACBAA.7020602@mind.be> <7241967.ZJo92yCnzW@sagittae>
+Message-ID: <5122132B.5000402@syscom-instruments.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The internal libfuse-lite implementation uses it, and since the external
-full-blown libfuse also requires it there's no other choice.
+On 14. 02. 13 17:53, J?r?me Pouiller wrote:
+>
+> A way to work with patches for a package is currently:
+>    make $PKG-dirclean
+>    make $PKG-extract
+>    cd build/$PKG-$PKG_VERSION
+>    git init
+>    git add .
+>    git rm --cached .stamp_*
+>    git commit -m 'initial tarball'
+>    git tag initial
+>
+> After that, import all relevant patches using
+>    git am $PATCH
+> or
+>    git apply $PATCH
+>    git commit -a -m "$PATCH"
+> depending of format of $PATCH
+>
+> After that, you may create manually files .stamp_patched and
+> .applied_patches_list
+>
+> Use git rebase to edit each patch. Once you are satisfied, use
+>    git format-patch initial
+>
+> Copy your work in package/$PKG directory
+>
+> IFAIK you may also use guilt on top of git. Guilt which have nearly same
+> commands than quilt. Use "guilt push/pop/refresh" instead of rebase and "guilt
+> export" instead of "git format-patch".
+>
+> We could add an option to apply-patches.sh to automatically do first steps. We
+> could do:
+>     make $PKG-dirclean
+>     make CREATE_GIT=1 $PKG-patch
+>     cd build/$PKG-$PKG_VERSION
+>     git rebase -i
+>     git format-patch initial
+>
+> And with guilt:
+>     make $PKG-dirclean
+>     make CREATE_GIT=1 $PKG-patch
+>     cd build/$PKG-$PKG_VERSION
+>     guilt push/pop/refresh
+>     guilt export
+>
+> What do you think about it?
+>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ntfs-3g/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Hello J?r?me,
 
-diff --git a/package/ntfs-3g/Config.in b/package/ntfs-3g/Config.in
-index 1d3e2fb..be19a57 100644
---- a/package/ntfs-3g/Config.in
-+++ b/package/ntfs-3g/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_NTFS_3G
- 	bool "ntfs-3g"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_USE_MMU
- 	help
- 	  The NTFS-3G driver is an open source, freely available
- 	  read/write NTFS driver for Linux, FreeBSD, Mac OS X, NetBSD,
--- 
-1.7.12.4
+I think using QUILT directly will be the best. Because, we don't need 
+git here. We just need a buildroot system to init quilt env, copy 
+patches and when the job is done, copy the patches from quilt env to the 
+package directory.
+
+I want so much this feature ! I'm the only one here :) ?
+
+I began to do some research about how openwrt do that and how we can do 
+this in buildroot. But, I'm pretty busy and don't have time to do it 
+now. If someone who know internal stuff in buildroot can tell where to 
+do the modifications, it will be appreciable.
+
+Cheers,
+avd.
