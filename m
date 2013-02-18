@@ -1,50 +1,78 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 18 Feb 2013 20:39:32 +0100
-Subject: [Buildroot] [PATCH] qt: disable precompiled headers to workaround
-	compilation failure
-In-Reply-To: <512282EB.7070702@lucaceresoli.net>
-References: <512282EB.7070702@lucaceresoli.net>
-Message-ID: <1361216372-13946-1-git-send-email-luca@lucaceresoli.net>
+From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
+Date: Mon, 18 Feb 2013 22:28:58 +0200
+Subject: [Buildroot] [PATCH v2] new package: libtasn1
+Message-ID: <1361219338-27624-1-git-send-email-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Precompiled header implementation is buggy in current Qt as described at
-http://comments.gmane.org/gmane.comp.lib.qt.devel/5933.
+Libtasn1
 
-The only known workaround is currently to add -no-pch to configure.
+Libtasn1 is the ASN.1 library used by GnuTLS, GNU Shishi and some
+other packages. It was written by Fabio Fiorina, and has been
+shipped as part of GnuTLS for some time but is now a proper
+GNU package.
 
-Fixes build failure terminating with error
-  compiling ../3rdparty/pixman/pixman-arm-neon-asm.S
-  cc1: fatal error: .pch/release-shared-emb-arm/QtGui: No such file or directory
-  compilation terminated.
-such as:
-http://autobuild.buildroot.net/results/648265012591280fa592a239f86ee39aec2d5fa6/build-end.log
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
 ---
- package/qt/qt.mk |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes v1 -> v2:
+	- removed unneeded host-microperl dependency (Thomas Petazzoni)
+	- removed unneeded LIBTASN1_SOURCE because default value for it is
+	  packagename-version.tar.gz (Baruch Siach)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index ee1a88b..9f50f91 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -416,10 +416,10 @@ else
- QT_CONFIGURE_OPTS += -no-declarative
- endif
- 
--# ccache and precompiled headers don't play well together
--ifeq ($(BR2_CCACHE),y)
-+# -no-pch is needed to workaround the issue described at
-+# http://comments.gmane.org/gmane.comp.lib.qt.devel/5933.
-+# In addition, ccache and precompiled headers don't play well together
- QT_CONFIGURE_OPTS += -no-pch
--endif
- 
- # x86x86fix
- # Workaround Qt Embedded bug when crosscompiling for x86 under x86 with linux
+ package/Config.in            |    1 +
+ package/libtasn1/Config.in   |    7 +++++++
+ package/libtasn1/libtasn1.mk |   14 ++++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
+ create mode 100644 package/libtasn1/Config.in
+ create mode 100644 package/libtasn1/libtasn1.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 8588951..7b9b2c9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -554,6 +554,7 @@ source "package/libglib2/Config.in"
+ source "package/libical/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libsigc/Config.in"
++source "package/libtasn1/Config.in"
+ source "package/libtpl/Config.in"
+ source "package/libseccomp/Config.in"
+ source "package/liburcu/Config.in"
+diff --git a/package/libtasn1/Config.in b/package/libtasn1/Config.in
+new file mode 100644
+index 0000000..2812157
+--- /dev/null
++++ b/package/libtasn1/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBTASN1
++	bool "libtasn1"
++	help
++	  ASN.1 library
++
++	  http://www.gnu.org/software/libtasn1
++
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+new file mode 100644
+index 0000000..2326d76
+--- /dev/null
++++ b/package/libtasn1/libtasn1.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# libtasn1
++#
++#############################################################
++
++LIBTASN1_VERSION = 3.2
++LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
++LIBTASN1_DEPENDENCIES = host-bison
++LIBTASN1_LICENSE = GPLv3 LGPLv2.1
++LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
++LIBTASN1_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
 -- 
-1.7.10.4
+1.7.7.6
