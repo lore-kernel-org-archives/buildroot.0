@@ -1,92 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Feb 2013 13:47:52 +0100
-Subject: [Buildroot] [git commit] libcurl: add SASL security patch
-Message-ID: <20130218124813.974409AB66@busybox.osuosl.org>
+Date: Mon, 18 Feb 2013 13:48:23 +0100
+Subject: [Buildroot] [git commit] gnutls: bump to version 3.1.8
+Message-ID: <20130218124813.B618C9AB66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f167245f6036b9d4dde77f6a41a27cac44bedc6a
+commit: http://git.buildroot.net/buildroot/commit/?id=e6f0a3bd5ff4bcbb5cc24a0c79f7669055a16a75
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2013-0249, see http://curl.haxx.se/docs/adv_20130206.html
+Fixes a regression in 3.1.7 regarding the priority string NORMAL.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libcurl/libcurl-cve-2013-0249.patch |   65 +++++++++++++++++++++++++++
- 1 files changed, 65 insertions(+), 0 deletions(-)
+ package/gnutls/gnutls.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcurl/libcurl-cve-2013-0249.patch b/package/libcurl/libcurl-cve-2013-0249.patch
-new file mode 100644
-index 0000000..7d2af2a
---- /dev/null
-+++ b/package/libcurl/libcurl-cve-2013-0249.patch
-@@ -0,0 +1,65 @@
-+From ee45a34907ffeb5fd95b0513040d8491d565b663 Mon Sep 17 00:00:00 2001
-+From: Eldar Zaitov <kyprizel@volema.com>
-+Date: Wed, 30 Jan 2013 23:22:27 +0100
-+Subject: [PATCH] Curl_sasl_create_digest_md5_message: fix buffer overflow
-+
-+When negotiating SASL DIGEST-MD5 authentication, the function
-+Curl_sasl_create_digest_md5_message() uses the data provided from the
-+server without doing the proper length checks and that data is then
-+appended to a local fixed-size buffer on the stack.
-+
-+This vulnerability can be exploited by someone who is in control of a
-+server that a libcurl based program is accessing with POP3, SMTP or
-+IMAP. For applications that accept user provided URLs, it is also
-+thinkable that a malicious user would feed an application with a URL to
-+a server hosting code targetting this flaw.
-+
-+Bug: http://curl.haxx.se/docs/adv_20130206.html
-+---
-+ lib/curl_sasl.c |   23 ++++++-----------------
-+ 1 file changed, 6 insertions(+), 17 deletions(-)
-+
-+diff --git a/lib/curl_sasl.c b/lib/curl_sasl.c
-+index 57116b6..d07387d 100644
-+--- a/lib/curl_sasl.c
-++++ b/lib/curl_sasl.c
-+@@ -346,9 +346,7 @@ CURLcode Curl_sasl_create_digest_md5_message(struct SessionHandle *data,
-+     snprintf(&HA1_hex[2 * i], 3, "%02x", digest[i]);
-+ 
-+   /* Prepare the URL string */
-+-  strcpy(uri, service);
-+-  strcat(uri, "/");
-+-  strcat(uri, realm);
-++  snprintf(uri, sizeof(uri), "%s/%s", service, realm);
-+ 
-+   /* Calculate H(A2) */
-+   ctxt = Curl_MD5_init(Curl_DIGEST_MD5);
-+@@ -392,20 +390,11 @@ CURLcode Curl_sasl_create_digest_md5_message(struct SessionHandle *data,
-+   for(i = 0; i < MD5_DIGEST_LEN; i++)
-+     snprintf(&resp_hash_hex[2 * i], 3, "%02x", digest[i]);
-+ 
-+-  strcpy(response, "username=\"");
-+-  strcat(response, userp);
-+-  strcat(response, "\",realm=\"");
-+-  strcat(response, realm);
-+-  strcat(response, "\",nonce=\"");
-+-  strcat(response, nonce);
-+-  strcat(response, "\",cnonce=\"");
-+-  strcat(response, cnonce);
-+-  strcat(response, "\",nc=");
-+-  strcat(response, nonceCount);
-+-  strcat(response, ",digest-uri=\"");
-+-  strcat(response, uri);
-+-  strcat(response, "\",response=");
-+-  strcat(response, resp_hash_hex);
-++  snprintf(response, sizeof(response),
-++           "username=\"%s\",realm=\"%s\",nonce=\"%s\","
-++           "cnonce=\"%s\",nc=\"%s\",digest-uri=\"%s\",response=%s",
-++           userp, realm, nonce,
-++           cnonce, nonceCount, uri, resp_hash_hex);
-+ 
-+   /* Base64 encode the reply */
-+   return Curl_base64_encode(data, response, 0, outptr, outlen);
-+-- 
-+1.7.10.4
-+
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index cadc147..ff9cffa 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-GNUTLS_VERSION = 3.1.7
++GNUTLS_VERSION = 3.1.8
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1
+ GNUTLS_LICENSE = GPLv3+ LGPLv3
