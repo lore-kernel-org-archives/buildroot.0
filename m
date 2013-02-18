@@ -1,34 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Feb 2013 13:48:23 +0100
-Subject: [Buildroot] [git commit] gnutls: bump to version 3.1.8
-Message-ID: <20130218124813.B618C9AB66@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Mon, 18 Feb 2013 15:49:16 +0200
+Subject: [Buildroot] multchoice menu with kconfig
+Message-ID: <5122315C.3070806@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e6f0a3bd5ff4bcbb5cc24a0c79f7669055a16a75
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello all
 
-Fixes a regression in 3.1.7 regarding the priority string NORMAL.
+Could someone show me how to make a multi-choice menu with kconfig
+language with the ability to select
+several menu entries and then storing those values as a space separated
+string variable.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gnutls/gnutls.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Let's say I have the following locales:
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index cadc147..ff9cffa 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--GNUTLS_VERSION = 3.1.7
-+GNUTLS_VERSION = 3.1.8
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1
- GNUTLS_LICENSE = GPLv3+ LGPLv3
+af
+ak
+ar
+as
+ast
+etc .... bazillion other locale values
+
+and I would like to be able to select as many of those locales I want.
+Let's say I select locales "ak" and "ast" and then store them in a
+variable like BR2_PACKAGE_FOO_LOCALES so that it would look like
+
+BR2_PACKAGE_FOO_LOCALES = "ak ast"
+
+how to do that in the least amount of typing ?
+
+Regards
+Stefan
