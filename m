@@ -1,42 +1,50 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 18 Feb 2013 20:37:15 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-02-12
-In-Reply-To: <20130215055400.6688c117@skate>
-References: <20130213073425.9C3C052C6D2@lolut.humanoidz.org>
- <511D556D.3060503@lucaceresoli.net> <20130215055400.6688c117@skate>
-Message-ID: <512282EB.7070702@lucaceresoli.net>
+Date: Mon, 18 Feb 2013 20:39:32 +0100
+Subject: [Buildroot] [PATCH] qt: disable precompiled headers to workaround
+	compilation failure
+In-Reply-To: <512282EB.7070702@lucaceresoli.net>
+References: <512282EB.7070702@lucaceresoli.net>
+Message-ID: <1361216372-13946-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
-> Dear Luca Ceresoli,
->
-> On Thu, 14 Feb 2013 22:21:49 +0100, Luca Ceresoli wrote:
->
->> Should I send a patch to set -no-pch? I'm reluctant because it's not a real
->> fix, and compile time could increase significantly, I guess.
->>
->> Thomas, this probably affects Qt5 Beta 1 as well, according to this blog
->> post:
->> http://gpupowered.org/node/14. Would you mind testing it on your Qt5 branch?
-> For Qt5, I do have -no-pch otherwise it doesn't build
-> (http://git.free-electrons.com/users/thomas-petazzoni/buildroot/commit/?h=qt5&id=7c1f7b9967d814e3f5c838e7090ac04b9d06af51).
-> Apparently, there are bugs in the precompiled headers implementation.
+Precompiled header implementation is buggy in current Qt as described at
+http://comments.gmane.org/gmane.comp.lib.qt.devel/5933.
 
-Given that precompiled headers are disabled when using ccache, and they are
-broken otherwise (at least with some toolchains), I think it's best to just
-add -no-pch inconditionally.
+The only known workaround is currently to add -no-pch to configure.
 
-I'll send a patch that does so, and copy your comment at the commit you
-pointedme to:
+Fixes build failure terminating with error
+  compiling ../3rdparty/pixman/pixman-arm-neon-asm.S
+  cc1: fatal error: .pch/release-shared-emb-arm/QtGui: No such file or directory
+  compilation terminated.
+such as:
+http://autobuild.buildroot.net/results/648265012591280fa592a239f86ee39aec2d5fa6/build-end.log
 
- > -no-pch to workaround the issue described at
- > http://comments.gmane.org/gmane.comp.lib.qt.devel/5933
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/qt/qt.mk |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-You might want to sign off the patch then.
-
-Luca
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index ee1a88b..9f50f91 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -416,10 +416,10 @@ else
+ QT_CONFIGURE_OPTS += -no-declarative
+ endif
+ 
+-# ccache and precompiled headers don't play well together
+-ifeq ($(BR2_CCACHE),y)
++# -no-pch is needed to workaround the issue described at
++# http://comments.gmane.org/gmane.comp.lib.qt.devel/5933.
++# In addition, ccache and precompiled headers don't play well together
+ QT_CONFIGURE_OPTS += -no-pch
+-endif
+ 
+ # x86x86fix
+ # Workaround Qt Embedded bug when crosscompiling for x86 under x86 with linux
+-- 
+1.7.10.4
