@@ -1,78 +1,81 @@
-From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Mon, 18 Feb 2013 22:28:58 +0200
-Subject: [Buildroot] [PATCH v2] new package: libtasn1
-Message-ID: <1361219338-27624-1-git-send-email-stefan.froberg@petroprogram.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 18 Feb 2013 19:07:56 +0100
+Subject: [Buildroot] QUILT helper
+In-Reply-To: <5122132B.5000402@syscom-instruments.com>
+References: <50F92F70.2070808@syscom-instruments.com>
+ <50FACBAA.7020602@mind.be> <7241967.ZJo92yCnzW@sagittae>
+ <5122132B.5000402@syscom-instruments.com>
+Message-ID: <51226DFC.306@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libtasn1
+On 18/02/13 12:40, Viallard Anthony wrote:
+>>
+>> We could add an option to apply-patches.sh to automatically do first
+>> steps. We
+>> could do:
+>>     make $PKG-dirclean
+>>     make CREATE_GIT=1 $PKG-patch
 
-Libtasn1 is the ASN.1 library used by GnuTLS, GNU Shishi and some
-other packages. It was written by Fabio Fiorina, and has been
-shipped as part of GnuTLS for some time but is now a proper
-GNU package.
+  I would make it something like 'make $PKG-prepare-patch'. That gives us 
+the possibility to later add a PATCH_BACKEND variable that can be set to 
+git, hg or quilt (or something else).
 
-Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
----
-Changes v1 -> v2:
-	- removed unneeded host-microperl dependency (Thomas Petazzoni)
-	- removed unneeded LIBTASN1_SOURCE because default value for it is
-	  packagename-version.tar.gz (Baruch Siach)
+>>     cd build/$PKG-$PKG_VERSION
+>>     git rebase -i
+>>     git format-patch initial
+>>
+>> And with guilt:
+>>     make $PKG-dirclean
+>>     make CREATE_GIT=1 $PKG-patch
+>>     cd build/$PKG-$PKG_VERSION
+>>     guilt push/pop/refresh
+>>     guilt export
+>>
+>> What do you think about it?
+>>
+>
+> Hello J?r?me,
+>
+> I think using QUILT directly will be the best. Because, we don't need git
+> here. We just need a buildroot system to init quilt env, copy patches and
+> when the job is done, copy the patches from quilt env to the package
+> directory.
 
- package/Config.in            |    1 +
- package/libtasn1/Config.in   |    7 +++++++
- package/libtasn1/libtasn1.mk |   14 ++++++++++++++
- 3 files changed, 22 insertions(+), 0 deletions(-)
- create mode 100644 package/libtasn1/Config.in
- create mode 100644 package/libtasn1/libtasn1.mk
+  I think more people (in particular, the buildroot developers) are 
+familiar with git (or hg) workflows than quilt workflows.
 
-diff --git a/package/Config.in b/package/Config.in
-index 8588951..7b9b2c9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -554,6 +554,7 @@ source "package/libglib2/Config.in"
- source "package/libical/Config.in"
- source "package/libnspr/Config.in"
- source "package/libsigc/Config.in"
-+source "package/libtasn1/Config.in"
- source "package/libtpl/Config.in"
- source "package/libseccomp/Config.in"
- source "package/liburcu/Config.in"
-diff --git a/package/libtasn1/Config.in b/package/libtasn1/Config.in
-new file mode 100644
-index 0000000..2812157
---- /dev/null
-+++ b/package/libtasn1/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBTASN1
-+	bool "libtasn1"
-+	help
-+	  ASN.1 library
-+
-+	  http://www.gnu.org/software/libtasn1
-+
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-new file mode 100644
-index 0000000..2326d76
---- /dev/null
-+++ b/package/libtasn1/libtasn1.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# libtasn1
-+#
-+#############################################################
-+
-+LIBTASN1_VERSION = 3.2
-+LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
-+LIBTASN1_DEPENDENCIES = host-bison
-+LIBTASN1_LICENSE = GPLv3 LGPLv2.1
-+LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
-+LIBTASN1_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
+  guilt combines the best features of git and quilt for this particular 
+purpose, I think (not that I ever used guilt :-). quilt has the 
+disadvantage that you have to add a file before modifying it - this is 
+solved by guilt. git has the disadvantage that it is easy to loose your 
+orientation in the middle of a rebase (with edits) - that is also solved 
+by guilt.
+
+
+> I want so much this feature ! I'm the only one here :) ?
+
+  I'm also in favour of this feature. In fact, a long time ago I posted a 
+patch to add a script to do the reverse: create a patch series from a git 
+repository.
+
+  Regards,
+  Arnout
+
+>
+> I began to do some research about how openwrt do that and how we can do
+> this in buildroot. But, I'm pretty busy and don't have time to do it now.
+> If someone who know internal stuff in buildroot can tell where to do the
+> modifications, it will be appreciable.
+
+
 -- 
-1.7.7.6
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
