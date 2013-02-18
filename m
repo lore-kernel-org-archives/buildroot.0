@@ -1,78 +1,50 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Mon, 18 Feb 2013 18:32:43 +0200
-Subject: [Buildroot] multchoice menu with kconfig
-In-Reply-To: <51225580.3060206@mind.be>
-References: <5122315C.3070806@petroprogram.com> <512249D5.5020107@mind.be>
- <51224C88.4020108@petroprogram.com> <51224F93.9060102@mind.be>
- <5122506E.8030008@petroprogram.com> <512251F3.7060101@mind.be>
- <512253C8.2050309@petroprogram.com> <51225580.3060206@mind.be>
-Message-ID: <512257AB.6040001@petroprogram.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 18 Feb 2013 18:01:29 +0100
+Subject: [Buildroot] [PATCH 4/6] package/genimage: new host-only package
+In-Reply-To: <fb512f72-301c-41de-8b2c-968784696955@zimbra2.corp.accelance.fr>
+References: <fb512f72-301c-41de-8b2c-968784696955@zimbra2.corp.accelance.fr>
+Message-ID: <201302181801.29121.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-18.2.2013 18:23, Arnout Vandecappelle kirjoitti:
-> On 18/02/13 17:16, Stefan Fr?berg wrote:
->> 18.2.2013 18:08, Arnout Vandecappelle kirjoitti:
->>> >On 18/02/13 17:01, Stefan Fr?berg wrote:
->>>> >>And because this iso-codes package does not seem to have nothing but
->>>> >>punch .po files
->>>> >>and not link against anything then changing that
->>>> ISO_CODES_DEPENDENCIES
->>>> >>to host-gettext should be good.
->>> >
->>> >  Err... But iso-codes doesn't need host-gettext, does it? It probably
->>> >doesn't make much sense without locale support in the toolchain, but
->>> >otherwise I see no dependencies except python (which is already a
->>> >buildroot dependency).
->>> >
->> But don't you need at least host gettext stuff to process those .po
->> files ?
->>
->> I should now tell at this point that besides giving  -lintl linker flags
->> and giving --disable-nls to configure scripts
->> I absolutely have no idea how gettext works. :D
->>
->> Im confused now.
->> So no dependencies at all ????? Or gettext dependencies with locale
->> checking ?????? (Like Thomas said in his post)
->
->  Sorry, correction: it does need host-gettext, but the gettext package
-> (or rather, msgfmt) is one of our global dependencies.
->
+Jeremy, All,
 
-Ah, I see.
-So if it's only that msgfmt that is needed and it is already there then
-I can remove ISO_CODES_DEPENDENCIES completely?
+On Monday 18 February 2013 Jeremy Rosen wrote:
+> do you plan to integrate this more tightly into buildroot ?
 
->  host-gettext is only needed for the autoconf macros (because we don't
-> use the system's autoconf, only our own version).
->
->  Regards,
->  Arnout
->
+More tightly, I am not sure. However...
 
-Speaking of autoconf (or actually autoreconf):
+> i.e : for boards that need a particular partition layout have
+> them provide a decription file for genimage and have genimage
+> called directly from the fakeroot jail when such a file is
+> configured ?
 
-I have a prelink package ready here and I had to do PRELINK_AUTORECONF =
-YES what happens is that it complains about
-missing ./ABOUT-NLS and ./config.rpath .
-I tried to give PRELINK_AUTORECONF_OPTS = --install --force so that it
-would create those missing files but it did not change anything.
+... these tools are intended to be used by post-image scripts, so
+boards could provide both a genimage layout and a post-image script.
 
-The only thing that worked was doing the following horrible looking stuff:
+I am not sure we would want to integrate that into buildroot itself.
+I am afraid doing so would complexify the infrastructure.
 
-define PRELINK_POST_PATCH_FIXUP
-    (cd $(@D); \
-    autopoint)
-endef
+Also, the fakeroot jail is restricted to the filesystem image generation,
+and post-image (and post-build) scripts are *not* run in the fakeroot,
+although it is trivial to re-enter a new fakeroot from inside such a
+post-{build,image} script, a-la:
 
-PRELINK_POST_PATCH_HOOKS += PRELINK_POST_PATCH_FIXUP
+    #!/bin/sh
+    if [ $(id -u) -ne 0 ]; then
+        exec fakeroot "${0}" "${@}"
+    fi
 
-Im still using 2012.08 version of buildroot so could that be the reason
-that buildroots autoreconf does not create those two missing files ?
+Regards,
+Yann E. MORIN.
 
-Regards
-Stefan
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
