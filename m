@@ -1,42 +1,59 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Tue, 19 Feb 2013 10:58:38 +0000
-Subject: [Buildroot] [PATCH v2] vim: Add post-install hook to remove
- documentation from target
-In-Reply-To: <20130212130828.22a0522e@skate>
-References: <1360666299-3661-1-git-send-email-markos.chandras@gmail.com>
- <20130212122323.276f018f@skate>
- <CAG2jQ8jzrz=fUPuqkjQTGfhWrcNCb-dZKSye=XQo3fmjoPvfUA@mail.gmail.com>
- <20130212130828.22a0522e@skate>
-Message-ID: <CAG2jQ8jmNCBAbuZ1+uyCb4nVUamtketebQfNq-aeGyAcDo7s+w@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 18 Feb 2013 22:30:42 +0100
+Subject: [Buildroot] [git commit] busybox: support millisecond watchdog
+	periods
+Message-ID: <20130219112835.B19A09AB89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12 February 2013 12:08, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Markos Chandras,
->
-> On Tue, 12 Feb 2013 11:59:16 +0000, Markos Chandras wrote:
->
->> I agree but seeing how the VIM_INSTALL_RUMTIME_CMDS is implemented, I
->> figured this was the recommended practice.
->> If you need me to submit a new patch please let me know.
->
-> For me, the patch is fine as is, since it's a rule we haven't been
-> enforcing everywhere.
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+commit: http://git.buildroot.net/buildroot/commit/?id=34945ebbd00c19f534d7d11d62bd03da2b3c4425
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Friendly reminder, just making sure this fix will be included in the
-2013.02 release.
+The BusyBox watchdog application supports reset periods specified in
+milliseconds. The Buildroot package will only allow an integer reset period,
+which prevents the use of the required "ms" suffix. Change the watchdog period
+configuration item to a string, to allow the use of the "ms" suffix.
 
--- 
-Regards,
-Markos Chandras
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/busybox/Config.in  |    4 +++-
+ package/busybox/busybox.mk |    2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 2890c49..4d9899d 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -64,12 +64,14 @@ config BR2_PACKAGE_BUSYBOX_WATCHDOG
+ if BR2_PACKAGE_BUSYBOX_WATCHDOG
+ 
+ config BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD
+-	int "Delay between reset"
++	string "Delay between reset"
+ 	default "5"
+ 	help
+ 	  Select the number of seconds between each
+ 	  reset of the watchdog (default 5)
+ 
++	  Use ms suffix to specify milliseconds (e.g. 500ms)
++
+ endif
+ 
+ endif
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 599e145..900896f 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -168,7 +168,7 @@ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
+ 	[ -f $(TARGET_DIR)/etc/init.d/S15watchdog ] || \
+ 		install -D -m 0755 package/busybox/S15watchdog \
+ 			$(TARGET_DIR)/etc/init.d/S15watchdog && \
+-		sed -i s/PERIOD/$(BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD)/ \
++		sed -i s/PERIOD/$(call qstrip,$(BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD))/ \
+ 			$(TARGET_DIR)/etc/init.d/S15watchdog
+ endef
+ endif
