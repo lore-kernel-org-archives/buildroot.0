@@ -1,61 +1,16 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Tue, 19 Feb 2013 00:03:11 +0200
-Subject: [Buildroot] autopoint [was: Re:  multchoice menu with kconfig]
-In-Reply-To: <51229EE0.2000706@mind.be>
-References: <5122315C.3070806@petroprogram.com> <512249D5.5020107@mind.be>
- <51224C88.4020108@petroprogram.com> <51224F93.9060102@mind.be>
- <5122506E.8030008@petroprogram.com> <512251F3.7060101@mind.be>
- <512253C8.2050309@petroprogram.com> <51225580.3060206@mind.be>
- <512257AB.6040001@petroprogram.com> <51229EE0.2000706@mind.be>
-Message-ID: <5122A51F.1040708@petroprogram.com>
+From: Dimitrios Siganos <dimitris@siganos.org>
+Date: Mon, 18 Feb 2013 23:03:34 +0000
+Subject: [Buildroot] [PATCH] wireless-regdb: new package
+Message-ID: <5122B346.2090006@siganos.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-18.2.2013 23:36, Arnout Vandecappelle kirjoitti:
-> On 18/02/13 17:32, Stefan Fr?berg wrote:
->> Speaking of autoconf (or actually autoreconf):
->>
->> I have a prelink package ready here and I had to do PRELINK_AUTORECONF =
->> YES what happens is that it complains about
->> missing ./ABOUT-NLS and ./config.rpath .
->> I tried to give PRELINK_AUTORECONF_OPTS = --install --force so that it
->> would create those missing files but it did not change anything.
->>
->> The only thing that worked was doing the following horrible looking
->> stuff:
->>
->> define PRELINK_POST_PATCH_FIXUP
->>      (cd $(@D); \
->>      autopoint)
->> endef
->>
->> PRELINK_POST_PATCH_HOOKS += PRELINK_POST_PATCH_FIXUP
->>
->> Im still using 2012.08 version of buildroot so could that be the reason
->> that buildroots autoreconf does not create those two missing files ?
->
->  Packages that require autopoint can't be reconfigured by buildroot -
-> I'm not sure why. The autopoint program is not one of our
-> dependencies, so we can't rely on autopoint being present.
->
->  However, now that there is a host-gettext package, we could probably
-> add the possibility to add autopoint support to autoreconf.
->
->  Just touching ABOUT-NLS and config.rpath may also work, though.
->
-
-Yes, touch works too.
-I will wait untill host-gettext with autopoint is committed to latest
-git before submitting prelink
-
-Regards
-Stefan
-
-
->  Regards,
->  Arnout
->
->
+A non-text attachment was scrubbed...
+Name: 0001-wireless-regdb-new-package.patch
+Type: text/x-patch
+Size: 2426 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130218/23a7a30b/attachment-0001.bin>
