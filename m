@@ -1,85 +1,61 @@
-From: Henrique Camargo <henrique@henriquecamargo.com>
-Date: Mon, 18 Feb 2013 18:29:03 -0300
-Subject: [Buildroot] [PATCH] json-glib: new package
-Message-ID: <1361222943-1892-1-git-send-email-henrique@henriquecamargo.com>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Tue, 19 Feb 2013 00:03:11 +0200
+Subject: [Buildroot] autopoint [was: Re:  multchoice menu with kconfig]
+In-Reply-To: <51229EE0.2000706@mind.be>
+References: <5122315C.3070806@petroprogram.com> <512249D5.5020107@mind.be>
+ <51224C88.4020108@petroprogram.com> <51224F93.9060102@mind.be>
+ <5122506E.8030008@petroprogram.com> <512251F3.7060101@mind.be>
+ <512253C8.2050309@petroprogram.com> <51225580.3060206@mind.be>
+ <512257AB.6040001@petroprogram.com> <51229EE0.2000706@mind.be>
+Message-ID: <5122A51F.1040708@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-JSON-GLib is a library providing serialization and deserialization
-support for the JavaScript Object Notation (JSON) format described by
-RFC 4627.
+18.2.2013 23:36, Arnout Vandecappelle kirjoitti:
+> On 18/02/13 17:32, Stefan Fr?berg wrote:
+>> Speaking of autoconf (or actually autoreconf):
+>>
+>> I have a prelink package ready here and I had to do PRELINK_AUTORECONF =
+>> YES what happens is that it complains about
+>> missing ./ABOUT-NLS and ./config.rpath .
+>> I tried to give PRELINK_AUTORECONF_OPTS = --install --force so that it
+>> would create those missing files but it did not change anything.
+>>
+>> The only thing that worked was doing the following horrible looking
+>> stuff:
+>>
+>> define PRELINK_POST_PATCH_FIXUP
+>>      (cd $(@D); \
+>>      autopoint)
+>> endef
+>>
+>> PRELINK_POST_PATCH_HOOKS += PRELINK_POST_PATCH_FIXUP
+>>
+>> Im still using 2012.08 version of buildroot so could that be the reason
+>> that buildroots autoreconf does not create those two missing files ?
+>
+>  Packages that require autopoint can't be reconfigured by buildroot -
+> I'm not sure why. The autopoint program is not one of our
+> dependencies, so we can't rely on autopoint being present.
+>
+>  However, now that there is a host-gettext package, we could probably
+> add the possibility to add autopoint support to autoreconf.
+>
+>  Just touching ABOUT-NLS and config.rpath may also work, though.
+>
 
-https://live.gnome.org/JsonGlib/
+Yes, touch works too.
+I will wait untill host-gettext with autopoint is committed to latest
+git before submitting prelink
 
-Signed-off-by: Henrique Camargo <henrique@henriquecamargo.com>
----
- package/Config.in              |    1 +
- package/json-glib/Config.in    |   14 ++++++++++++++
- package/json-glib/json-glib.mk |   20 ++++++++++++++++++++
- 3 files changed, 35 insertions(+)
- create mode 100644 package/json-glib/Config.in
- create mode 100644 package/json-glib/json-glib.mk
+Regards
+Stefan
 
-diff --git a/package/Config.in b/package/Config.in
-index 2fad94d..4959680 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -586,6 +586,7 @@ source "package/cjson/Config.in"
- source "package/expat/Config.in"
- source "package/ezxml/Config.in"
- source "package/json-c/Config.in"
-+source "package/json-glib/Config.in"
- source "package/libroxml/Config.in"
- source "package/libxml-parser-perl/Config.in"
- source "package/libxml2/Config.in"
-diff --git a/package/json-glib/Config.in b/package/json-glib/Config.in
-new file mode 100644
-index 0000000..f2e3a7c
---- /dev/null
-+++ b/package/json-glib/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_JSON_GLIB
-+	bool "json-glib"
-+	depends on BR2_USE_WCHAR # glib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-+	help
-+	  JSON-GLib is a library providing serialization and deserialization
-+	  support for the JavaScript Object Notation (JSON) format described by
-+	  RFC 4627.
-+
-+	  https://live.gnome.org/JsonGlib/
-+
-+comment "json-glib requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-new file mode 100644
-index 0000000..06e33ab
---- /dev/null
-+++ b/package/json-glib/json-glib.mk
-@@ -0,0 +1,20 @@
-+#############################################################
-+#
-+# json-glib
-+#
-+#############################################################
-+
-+JSON_GLIB_MAJOR_VERSION = 0.14
-+JSON_GLIB_MINOR_VERSION = 2
-+JSON_GLIB_VERSION = $(JSON_GLIB_MAJOR_VERSION).$(JSON_GLIB_MINOR_VERSION)
-+JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_MAJOR_VERSION)
-+JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
-+
-+JSON_GLIB_INSTALL_STAGING = YES
-+
-+JSON_GLIB_DEPENDENCIES = \
-+	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
-+	host-pkgconf \
-+	libglib2
-+
-+$(eval $(autotools-package))
--- 
-1.7.10.4
+
+>  Regards,
+>  Arnout
+>
+>
