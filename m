@@ -1,59 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Feb 2013 22:28:22 +0100
-Subject: [Buildroot] Can I make USB sound card be available over BT? How?
-In-Reply-To: <51216E27.2010508@wp.pl>
-References: <51216E27.2010508@wp.pl>
-Message-ID: <5123EE76.6020205@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 19 Feb 2013 22:29:08 +0100
+Subject: [Buildroot] Buildroot 2013.02-rc2 released
+Message-ID: <87fw0sj8m3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/02/13 00:56, W.P. wrote:
-> Hi there,
-> I have following setup:
-> router with USB - TP-LINK MR-3220,
-> USB 2.0 hub,
-> CSR BT USB dongle plugged to hub,
-> "USB audio card" plugged to the same hub.
->
-> I use (successfully) this "card" to play internet radio (wget | madplay).
->
-> Now I want to enable this router to act as HF (stereo, A2DP?) device over
-> Bluetooth.
-> What modules (programs) I need,
-> and most important:how to configure it?
->
-> Current software is OpenWRT trunk 33310, compiled at home.
-> [I am not "purist", I don't need WWW interface..., so I may switch to
-> pure buildroot, if I find the "solution"]
->
-> [same question on OpenWRT forum is still w/o response... :( ]
+Hi,
 
-  I guess you may have more success on a bluetooth mailing list... 
-Perhaps start with looking at the bleuz_utils documentation.
+Buildroot 2013.02-rc2 is released - Go download it at:
 
-  Regards,
-  Arnout
+http://buildroot.net/downloads/buildroot-2013.02-rc2.tar.gz
 
->
-> [BTW, anyone interested in serial(USB maybe) IR transceiver? based on
-> ATMega328P, LIRC compatible] - working with ANY serial (including
-> USB->serial dongles)
->
-> W.P.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+or
 
+http://buildroot.net/downloads/buildroot-2013.02-rc2.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Another week, another release candidate.
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
+
+git shortlog -s -n 2013.02_rc1..
+    11  Gustavo Zacarias
+     6  Peter Korsgaard
+     3  Samuel Martin
+     2  Markos Chandras
+     2  Thomas Petazzoni
+     1  Arnout Vandecappelle (Essensium/Mind)
+     1  Henrique Camargo
+     1  Luca Ceresoli
+     1  Simon Dawson
+     1  Yann E. MORIN
+
+For more details, see the CHANGES file:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.02_rc2
+
+Expect the final 2013.02 release at the end of the month. Depending on
+the amount of fixes showing up until then, I might do a -rc3 as well.
+
+Enjoy!
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
