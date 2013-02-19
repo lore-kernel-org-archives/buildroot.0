@@ -1,36 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 19 Feb 2013 16:11:33 +0100
-Subject: [Buildroot] [git commit] glib-networking: fix a typo in the .mk file
-Message-ID: <20130219151452.0C8C59ABA0@busybox.osuosl.org>
+Date: Tue, 19 Feb 2013 16:19:16 +0100
+Subject: [Buildroot] [PATCH v2] vim: Add post-install hook to remove
+	documentation from target
+In-Reply-To: <871uccil82.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Tue, 19 Feb 2013 12:42:05 +0100")
+References: <1360666299-3661-1-git-send-email-markos.chandras@gmail.com>
+ <871uccil82.fsf@dell.be.48ers.dk>
+Message-ID: <87wqu4fi17.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6bec692f9790021e937f612f71ea90ae42512659
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
-The variable GLIB_NETWORKING_MINOR_VERSION had a typo.
+>>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
+ Markos> From: Markos Chandras <markos.chandras@imgtec.com>
+ Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 
-Signed-off-by: Henrique Camargo <henrique@henriquecamargo.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/glib-networking/glib-networking.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ Peter> Committed, thanks.
 
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index e8d71e5..4812fd6 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -5,8 +5,8 @@
- #############################################################
- 
- GLIB_NETWORKING_MAJOR_VERSION = 2.30
--GLIB_NETWORLING_MINOR_VERSION = 2
--GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_MAJOR_VERSION).$(GLIB_NETWORLING_MINOR_VERSION)
-+GLIB_NETWORKING_MINOR_VERSION = 2
-+GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_MAJOR_VERSION).$(GLIB_NETWORKING_MINOR_VERSION)
- GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_MAJOR_VERSION)
- GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
- 
+Hmm, I take that back:
+
+http://autobuild.buildroot.net/results/adc3e2f876f83a4011574e03bceb0007d7e891a2/build-end.log
+
+Seems like it perhaps only should be done if BR2_PACKAGE_VIM_RUNTIME is
+enabled?
+
+Care to fix that?
+
+-- 
+Bye, Peter Korsgaard
