@@ -1,56 +1,74 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 19 Feb 2013 13:03:10 +0100
-Subject: [Buildroot] [PATCH 2/4] fs/ext2: add ability to build ext3/4 too
-In-Reply-To: <512323E4.7000901@mind.be> (Arnout Vandecappelle's message of
- "Tue, 19 Feb 2013 08:04:04 +0100")
-References: <cover.1361142401.git.yann.morin.1998@free.fr>
- <1a995bdbc65141cf4e8a540c41cb56f4a43fba5f.1361142401.git.yann.morin.1998@free.fr>
- <512323E4.7000901@mind.be>
-Message-ID: <87wqu4h5oh.fsf@dell.be.48ers.dk>
+From: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
+Date: Tue, 19 Feb 2013 13:07:33 +0100
+Subject: [Buildroot] [PATCH 1/1] bump json-c to 0.10
+Message-ID: <1361275653-10601-1-git-send-email-andreas.wetzel@nanotronic.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+this patch bumps json-c to version 0.10 and adapts the no-reentrant patch
+to the new version.
 
-Hi,
+Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
+---
+ package/json-c/json-c-no-reentrant.patch |   16 +++++++---------
+ package/json-c/json-c.mk                 |    4 ++--
+ 2 files changed, 9 insertions(+), 11 deletions(-)
 
- >> if BR2_TARGET_ROOTFS_EXT2
- >> 
- >> +choice
- >> +	bool "ext generation"
-
- Arnout>  Given the way it appears in menuconfig, I think this will be hard to
- Arnout> understand for many users. Perhaps "ext generation (ext2, ext3 or
- Arnout> ext4)".
-
-Or simply ext variant?
-
- >> +	default BR2_TARGET_ROOTFS_EXT2_2
-
- Arnout>  Although this matches the current default, doesn't it make
- Arnout> more sense to "bump" to ext4?
-
-Possibly. It would break existing configs though.
-
- >> +config BR2_TARGET_ROOTFS_EXT2_2
- >> +	bool "ext2"
- >> +
- >> +config BR2_TARGET_ROOTFS_EXT2_3
- >> +	bool "ext3"
- >> +	select BR2_PACKAGE_HOST_E2FSPROGS
-
- Arnout>  We don't usually select the host package. On the other hand, the
- Arnout> support for user-selectable host packages is pretty recent, so we
- Arnout> don't have a real tradition for this.
-
- Arnout>  Peter?
-
-I would argue that we should keep kconfig and makefiles consistent when
-possible, so when we have a user selectable host package (kconfig
-symbol), we should select it.
-
+diff --git a/package/json-c/json-c-no-reentrant.patch b/package/json-c/json-c-no-reentrant.patch
+index a01181c..31343c0 100644
+--- a/package/json-c/json-c-no-reentrant.patch
++++ b/package/json-c/json-c-no-reentrant.patch
+@@ -8,26 +8,24 @@ patch to avoid having to autoreconfigure the package.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ 
+-Index: b/Makefile.am
++Index: b/Makefile.am.inc
+ ===================================================================
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -1,4 +1,4 @@
++--- a/Makefile.am.inc
+++++ b/Makefile.am.inc
++@@ -1,2 +1,2 @@
+ -AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
+ +AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE
+  
+- EXTRA_DIST = README.html README-WIN32.html config.h.win32 doc
+- 
+ Index: b/Makefile.in
+ ===================================================================
+ --- a/Makefile.in
+ +++ b/Makefile.in
+-@@ -219,7 +219,7 @@
++@@ -263,7 +263,7 @@
+  top_build_prefix = @top_build_prefix@
+  top_builddir = @top_builddir@
+  top_srcdir = @top_srcdir@
+ -AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
+ +AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE
+- EXTRA_DIST = README.html README-WIN32.html config.h.win32 doc
++ EXTRA_DIST = README.html README-WIN32.html config.h.win32 doc json-c.vcproj
++ SUBDIRS = . tests
+  lib_LTLIBRARIES = libjson.la
+- pkgconfigdir = $(libdir)/pkgconfig
+diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
+index ed4a6d0..a0b5cae 100644
+--- a/package/json-c/json-c.mk
++++ b/package/json-c/json-c.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-JSON_C_VERSION = 0.9
+-JSON_C_SITE = http://oss.metaparadigm.com/json-c/
++JSON_C_VERSION = 0.10
++JSON_C_SITE = https://github.com/downloads/json-c/json-c
+ JSON_C_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+1.7.10.4
