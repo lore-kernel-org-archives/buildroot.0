@@ -1,64 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 20 Feb 2013 00:18:50 +0100
-Subject: [Buildroot] Advice on buildroot implementation
-In-Reply-To: <718DFA7882181D45B8BD18F31C46D55427A6A8E3@MBX204.domain.local>
-References: <718DFA7882181D45B8BD18F31C46D55427A6A8E3@MBX204.domain.local>
-Message-ID: <5124085A.1080903@mind.be>
+From: W.P. <laurentp@wp.pl>
+Date: Wed, 20 Feb 2013 00:16:39 +0100
+Subject: [Buildroot] Can I make USB sound card be available over BT? How?
+In-Reply-To: <5123EE76.6020205@mind.be>
+References: <51216E27.2010508@wp.pl> <5123EE76.6020205@mind.be>
+Message-ID: <512407D7.6010501@wp.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/02/13 00:03, Gregory Perry wrote:
-> Hello again,
+U?ytkownik Arnout Vandecappelle napisa?:
+> On 18/02/13 00:56, W.P. wrote:
+>> Hi there,
+>> I have following setup:
+>> router with USB - TP-LINK MR-3220,
+>> USB 2.0 hub,
+>> CSR BT USB dongle plugged to hub,
+>> "USB audio card" plugged to the same hub.
+>>
+>> I use (successfully) this "card" to play internet radio (wget | madplay).
+>>
+>> Now I want to enable this router to act as HF (stereo, A2DP?) device over
+>> Bluetooth.
+>> What modules (programs) I need,
+>> and most important:how to configure it?
+>>
+>> Current software is OpenWRT trunk 33310, compiled at home.
+>> [I am not "purist", I don't need WWW interface..., so I may switch to
+>> pure buildroot, if I find the "solution"]
+>>
+>> [same question on OpenWRT forum is still w/o response... :( ]
 >
-> Does anyone have some advice on using buildroot to create a LiveCD filesystem?
+>   I guess you may have more success on a bluetooth mailing list...
+> Perhaps start with looking at the bleuz_utils documentation.
+
+I am not a (Linux) programmer :(, I'll try the list.
+
+A little bit of progress:
+I have managed to compile "2years old" "nohands" software, tweaking 
+"libhfp" Makefile with CPPFLAGS = -f permissive and
+"tests" Makefile with LDFLAGS = -lpthreads
+
+After doing (suggested by software) hciconfig hci0 scomtu 64:8 (as root),
+application (and daemon) hfconsole started, I could search my phone (SE 
+X8, Android one), and connect.
+Even place / answer calls, but ONLY on headset audio.
+
+When I tried to switch to "speaker" I got total system FREEZE. (repeatable).
+
+I am now guessing if it is related to BT or Alsa audio... (no Pulse 
+support in this soft, Alsa and OSS only).
+
+And audio (at least output) looks working good on this machine - I can 
+play music /movies.
+
+Would a test with external USB "sound card" give some relevant information?
+
+W.P.
+
+[BTW, Arnout: I am trying to do something in Your "domain" - embedded :) ].
 >
-> Here are the requirements:
+>   Regards,
+>   Arnout
 >
-> 1) Universal boot support on any x86 hardware platform;
-> 2) Read only (UnionFS or OverlayFS); and
-> 2) NFS root capabilities after kernel/initrd launch (if the ISO is PXE-boostrapped)
-
-  On x86, I find the easiest approach to use a cpio initramfs, with a 
-syslinux boot loader. But if universal boot is required, it means you 
-have to stuff all the modules bloat in the cpio image...
-
-  For basic boot you don't need unionfs. The NFS root you can have by 
-combining the cpio initramfs with a unionfs overlay (assuming the 
-initramfs contains all the modules and firmware). I posted a script 
-recently [1] to mount a unionfs-root early in init. Don't forget to 
-select the unionfs-fuse package.
-
-
-  Regards,
-  Arnout
-
-[1] http://lists.busybox.net/pipermail/buildroot/2013-January/066146.html
-
-
-> The problems I am seeing with this approach so far (at least from the NFS
-> root perspective) is that things like /lib/firmware are not accessible during the
-> boot process which hangs the boot process.
->
-> Has anyone successfully created a buildroot install that can be used over a
-> read only NFS mount?  How did you get around issues like eth0 firmware not
-> being accessible during the initial boot?
->
-> Thanks in advance
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>> [BTW, anyone interested in serial(USB maybe) IR transceiver? based on
+>> ATMega328P, LIRC compatible] - working with ANY serial (including
+>> USB->serial dongles)
+>>
+>> W.P.
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
 >
 >
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
