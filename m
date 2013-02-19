@@ -1,39 +1,17 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Feb 2013 20:01:57 +0100
-Subject: [Buildroot] [PATCH 2/4] fs/ext2: add ability to build ext3/4 too
-In-Reply-To: <201302191833.23535.yann.morin.1998@free.fr>
-References: <cover.1361142401.git.yann.morin.1998@free.fr>
- <512323E4.7000901@mind.be> <201302191833.23535.yann.morin.1998@free.fr>
-Message-ID: <201302192001.57065.yann.morin.1998@free.fr>
+From: Gregory Perry <Gregory.Perry@govirtual.tv>
+Date: Tue, 19 Feb 2013 19:34:36 +0000
+Subject: [Buildroot] SSHFS userland support
+Message-ID: <718DFA7882181D45B8BD18F31C46D55427A6A7E0@MBX204.domain.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hello list members!
 
-On Tuesday 19 February 2013 Yann E. MORIN wrote:
-> On Tuesday 19 February 2013 Arnout Vandecappelle wrote:
-[--SNIP--]
-> > > +# Remove -{2,3,4} from the arguments, they are not recognised
-> > > +# by genext2fs and we handle them manually later
-> > 
-> >   Wouldn't it be a lot simpler to pass the generation through the 
-> > environment instead?
-> 
-> I'd like to avoid 'scanning' .config if possible.
-> But I'll see what to do about it.
+I am doing a buildroot integration for an i386 target but I can't for the life of me figure out how to include SSHFS userland support (the SSHFS binary itself.  I've selected the FUSE filesystem dependencies as well as support for OpenSSH, but the sshfs binary needed to instantiate an SSH/FUSE connection is not present in the target.
 
-Forget it, I've seen The Light! ;-)
+Maybe this is a dependency issue, or did I miss an SSHFS config option in the menuconfig?
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks in advance
