@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Feb 2013 08:55:29 +0100
-Subject: [Buildroot] [PATCH 4/4] fs/ext: add support for ext2 rev0 and
- rev1
-In-Reply-To: <2f41f484f574512df6919967f641cf2152049a22.1361142401.git.yann.morin.1998@free.fr>
+Date: Tue, 19 Feb 2013 08:20:13 +0100
+Subject: [Buildroot] [PATCH 3/4] fs/ext2: rename to 'ext' as it can now
+ build ext2/3/4 filesystems
+In-Reply-To: <bcd3b138016eb551aa3b5e3dfe461e718e83bcb3.1361142401.git.yann.morin.1998@free.fr>
 References: <cover.1361142401.git.yann.morin.1998@free.fr>
- <2f41f484f574512df6919967f641cf2152049a22.1361142401.git.yann.morin.1998@free.fr>
-Message-ID: <51232FF1.2080306@mind.be>
+ <bcd3b138016eb551aa3b5e3dfe461e718e83bcb3.1361142401.git.yann.morin.1998@free.fr>
+Message-ID: <512327AD.3040703@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,145 +13,78 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 18/02/13 00:10, Yann E. MORIN wrote:
-> Some bootloaders have a buggy ext2 support, and require ext2 rev1
-> instead of the traditional ext2 rev0 that genext2fs produces.
+> Update defconfigs and boards readmes accordingly.
+
+  I don't really like this. I think it falls in the category "yes it 
+would make things more consistent, but it's major API breakage that may 
+make upgrading unnecessarily difficult". Peter decided to be more careful 
+with that kind of changes, and rightly so.
+
+  That said, I would like it if the resulting image would be called 
+rootfs.ext3 instead of rootfs.ext2. However, the patch doesn't do that, 
+and the infrastructure currently doesn't allow it. But we could redefine 
+ROOTFS_TARGET:
+
+define ROOTFS_TARGET
+$(call ROOTFS_TARGET_INTERNAL,$(or $(2),$(1)),$(call UPPERCASE,$(1)))
+endef
+
+and then call it with
+
+$(call ROOTFS_TARGET,ext2,ext$(BR2_TARGET_ROOTFS_EXT2_GEN))
+
+
+  It would also be useful to convert some of the boards to ext4.
+
 >
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by:yann.morin.1998 at free.fr
 > ---
->   fs/ext/Config.in   |   19 ++++++++++++-------
->   fs/ext/genextfs.sh |   38 +++++++++++++++++++++++++++-----------
->   2 files changed, 39 insertions(+), 18 deletions(-)
->
-> diff --git a/fs/ext/Config.in b/fs/ext/Config.in
-> index 1a7a315..be0ed9c 100644
-> --- a/fs/ext/Config.in
-> +++ b/fs/ext/Config.in
-> @@ -7,10 +7,14 @@ if BR2_TARGET_ROOTFS_EXT
->
->   choice
->   	bool "ext generation"
-> -	default BR2_TARGET_ROOTFS_EXT_EXT2
-> +	default BR2_TARGET_ROOTFS_EXT_EXT2r0
->
-> -config BR2_TARGET_ROOTFS_EXT_EXT2
-> -	bool "ext2"
-> +config BR2_TARGET_ROOTFS_EXT_EXT2r0
-> +	bool "ext2 (rev0)"
-> +
-> +config BR2_TARGET_ROOTFS_EXT_EXT2r1
-> +	bool "ext2 (rev1)"
-> +	select BR2_PACKAGE_HOST_E2FSPROGS
->
->   config BR2_TARGET_ROOTFS_EXT_EXT3
->   	bool "ext3"
-> @@ -23,10 +27,11 @@ config BR2_TARGET_ROOTFS_EXT_EXT4
->   endchoice
->
->   config BR2_TARGET_ROOTFS_EXT_GEN
-> -	int
-> -	default 2 if BR2_TARGET_ROOTFS_EXT_EXT2
-> -	default 3 if BR2_TARGET_ROOTFS_EXT_EXT3
-> -	default 4 if BR2_TARGET_ROOTFS_EXT_EXT4
-> +	string
-> +	default 2.0 if BR2_TARGET_ROOTFS_EXT_EXT2r0
-> +	default 2.1 if BR2_TARGET_ROOTFS_EXT_EXT2r1
-> +	default 3   if BR2_TARGET_ROOTFS_EXT_EXT3
-> +	default 4   if BR2_TARGET_ROOTFS_EXT_EXT4
+>   board/arm/foundation-v8/readme.txt          |    2 +-
+>   board/boundarydevices/nitrogen6x/readme.txt |    8 +++---
+>   board/qemu/arm-versatile/readme.txt         |    2 +-
+>   board/qemu/arm-vexpress/readme.txt          |    2 +-
+>   board/qemu/mips-malta/readme.txt            |    2 +-
+>   board/qemu/mips64-malta/readme.txt          |    2 +-
+>   board/qemu/mipsel-malta/readme.txt          |    2 +-
+>   board/qemu/powerpc-g3beige/readme.txt       |    2 +-
+>   board/qemu/sh4-r2d/readme.txt               |    2 +-
+>   board/qemu/sparc-ss10/readme.txt            |    2 +-
+>   board/qemu/x86/readme.txt                   |    2 +-
+>   board/qemu/x86_64/readme.txt                |    2 +-
+>   configs/arm_foundationv8_defconfig          |    2 +-
+>   configs/beaglebone_defconfig                |    2 +-
+>   configs/mx53loco_defconfig                  |    2 +-
+>   configs/nitrogen6x_defconfig                |    2 +-
+>   configs/pandaboard_defconfig                |    2 +-
+>   configs/qemu_arm_versatile_defconfig        |    2 +-
+>   configs/qemu_arm_vexpress_defconfig         |    2 +-
+>   configs/qemu_mips64_malta_defconfig         |    2 +-
+>   configs/qemu_mips_malta_defconfig           |    2 +-
+>   configs/qemu_mipsel_malta_defconfig         |    2 +-
+>   configs/qemu_ppc_g3beige_defconfig          |    2 +-
+>   configs/qemu_sh4_r2d_defconfig              |    2 +-
+>   configs/qemu_sparc_ss10_defconfig           |    2 +-
+>   configs/qemu_x86_64_defconfig               |    2 +-
+>   configs/qemu_x86_defconfig                  |    2 +-
+>   fs/Config.in                                |    2 +-
+>   fs/{ext2 => ext}/Config.in                  |   38 +++++++++++++-------------
+>   fs/ext/ext.mk                               |   27 +++++++++++++++++++
+>   fs/{ext2/genext2fs.sh => ext/genextfs.sh}   |    0
+>   fs/ext2/ext2.mk                             |   27 -------------------
+>   32 files changed, 77 insertions(+), 77 deletions(-)
+>   rename fs/{ext2 => ext}/Config.in (55%)
+>   create mode 100644 fs/ext/ext.mk
+>   rename fs/{ext2/genext2fs.sh => ext/genextfs.sh} (100%)
 
-  I think it makes things simpler if you keep the GEN as it is, and 
-process the rev separately. Or perhaps set
+  This rename is useful, though, and it shouldn't hurt anyone. If anyone 
+is using it, it will be pretty clear what happened, and it wil draw their 
+attention to the new features of genextfs.sh.
 
-config BR2_TARGET_ROOTFS_EXT_REV
-	int
-	default 0 if BR2_TARGET_ROOTFS_EXT_EXT2r0
-	default 1
-
->
->   config BR2_TARGET_ROOTFS_EXT_BLOCKS
->   	int "size in blocks (leave at 0 for auto calculation)"
-> diff --git a/fs/ext/genextfs.sh b/fs/ext/genextfs.sh
-> index fcbd43c..ef47a25 100755
-> --- a/fs/ext/genextfs.sh
-> +++ b/fs/ext/genextfs.sh
-> @@ -6,11 +6,13 @@ export LC_ALL=C
->
->   CALC_BLOCKS=1
->   CALC_INODES=1
-> +EXT2_REV=0
->
->   while getopts x:d:D:b:i:N:m:g:e:zfqUPhVv234 f
->   do
->       case $f in
-> -	2|3|4) GEN=$f ;;
-> +	2.*) GEN=2; EXT2_REV=${f#*.} ;;
-> +	3|4) GEN=$f ;;
->   	b) CALC_BLOCKS=0 ;;
->   	N) CALC_INODES=0; INODES=$OPTARG ;;
->   	d) TARGET_DIR=$OPTARG ;;
-> @@ -56,25 +58,39 @@ for o; do
->       esac
->   done
->
-> +ext_fsck() {
-> +    gen="${1}"
-> +    img="${2}"
-> +    ret=0
-> +    fsck.ext${gen} -pDf "${img}" >/dev/null || ret=$?
-
-  Don't bother with ${gen}, just use e2fsck.
-
-> +    # Exit codes 1 & 2 are OK, it means fs errors
-> +    # were successfully corrected
-> +    case ${ret} in
-> +	0|1|2) ;;
-> +	*)   exit 1;;
-> +    esac
-> +    # fsck.ext* will force a UUID, which we do not want
-> +    tune2fs -U clear "${img}" >/dev/null
-> +}
-> +
->   # Generate the base ext2 file system
->   genext2fs "$@"
->
-> +# Upgrade to ext2 rev1 if needed
-> +if [ ${EXT2_REV} -ge 1 -o ${GEN} -ge 3 ]; then
-
-  With BR2_TARGET_ROOTFS_EXT_REV this condition becomes simpler.
-
-> +    tune2fs -O filetype "${IMG}" >/dev/null
-> +    ext_fsck 2 "${IMG}"
-> +fi
-> +
->   # Upgrade to ext3 if needed
->   if [ ${GEN} -ge 3 ]; then
->       tune2fs -j -J size=1 "${IMG}" >/dev/null
-> +    ext_fsck 3 "${IMG}"
->   fi
->
->   # Upgrade to ext4 if needed
->   if [ ${GEN} -ge 4 ]; then
->       tune2fs -O extents,uninit_bg,dir_index "${IMG}" >/dev/null
-> -    ret=0
-> -    fsck.ext4 -pDf "${IMG}" >/dev/null || ret=$?
-> -    # Exit codes 1 & 2 are OK, it means fs errors
-> -    # were successfully corrected
-> -    case ${ret} in
-> -	0|1|2) ;;
-> -	*)   exit 1;;
-> -    esac
-> -    # fsck.ext4 will force a UUID, which we do not want
-> -    tune2fs -U clear "${IMG}" >/dev/null
-> +    NEED_FSCK=1
-
-  I guess you originally had just a single fsck and used this variable to 
-decide if it was needed. That's actually a good idea.
 
   Regards,
   Arnout
 
-> +    ext_fsck 4 "${IMG}"
->   fi
->
+>   delete mode 100644 fs/ext2/ext2.mk
 
 
 -- 
