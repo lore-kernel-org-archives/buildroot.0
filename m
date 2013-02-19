@@ -1,42 +1,56 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 19 Feb 2013 12:41:00 +0100
-Subject: [Buildroot] [git commit] vim: Add post-install hook to remove
-	documentation from target
-Message-ID: <20130219114157.14A529AB88@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 19 Feb 2013 13:03:10 +0100
+Subject: [Buildroot] [PATCH 2/4] fs/ext2: add ability to build ext3/4 too
+In-Reply-To: <512323E4.7000901@mind.be> (Arnout Vandecappelle's message of
+ "Tue, 19 Feb 2013 08:04:04 +0100")
+References: <cover.1361142401.git.yann.morin.1998@free.fr>
+ <1a995bdbc65141cf4e8a540c41cb56f4a43fba5f.1361142401.git.yann.morin.1998@free.fr>
+ <512323E4.7000901@mind.be>
+Message-ID: <87wqu4h5oh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=443b66ae4bd6957ba66851324a8d1bd9f8a86075
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/vim/vim.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+Hi,
 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index fa5f8ae..4e273d4 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -36,8 +36,16 @@ define VIM_INSTALL_RUNTIME_CMDS
- 		$(MAKE) DESTDIR=$(TARGET_DIR) installmacros
- endef
- 
-+define VIM_REMOVE_DOCS
-+	find $(TARGET_DIR)/usr/share/vim -type f -name "*.txt" -delete
-+endef
-+
- ifeq ($(BR2_PACKAGE_VIM_RUNTIME),y)
- VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_RUNTIME_CMDS
- endif
- 
-+ifneq ($(BR2_HAVE_DOCUMENTATION),y)
-+VIM_POST_INSTALL_TARGET_HOOKS += VIM_REMOVE_DOCS
-+endif
-+
- $(eval $(autotools-package))
+ >> if BR2_TARGET_ROOTFS_EXT2
+ >> 
+ >> +choice
+ >> +	bool "ext generation"
+
+ Arnout>  Given the way it appears in menuconfig, I think this will be hard to
+ Arnout> understand for many users. Perhaps "ext generation (ext2, ext3 or
+ Arnout> ext4)".
+
+Or simply ext variant?
+
+ >> +	default BR2_TARGET_ROOTFS_EXT2_2
+
+ Arnout>  Although this matches the current default, doesn't it make
+ Arnout> more sense to "bump" to ext4?
+
+Possibly. It would break existing configs though.
+
+ >> +config BR2_TARGET_ROOTFS_EXT2_2
+ >> +	bool "ext2"
+ >> +
+ >> +config BR2_TARGET_ROOTFS_EXT2_3
+ >> +	bool "ext3"
+ >> +	select BR2_PACKAGE_HOST_E2FSPROGS
+
+ Arnout>  We don't usually select the host package. On the other hand, the
+ Arnout> support for user-selectable host packages is pretty recent, so we
+ Arnout> don't have a real tradition for this.
+
+ Arnout>  Peter?
+
+I would argue that we should keep kconfig and makefiles consistent when
+possible, so when we have a user selectable host package (kconfig
+symbol), we should select it.
+
+-- 
+Bye, Peter Korsgaard
