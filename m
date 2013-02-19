@@ -1,59 +1,82 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Feb 2013 22:30:42 +0100
-Subject: [Buildroot] [git commit] busybox: support millisecond watchdog
-	periods
-Message-ID: <20130219112835.B19A09AB89@busybox.osuosl.org>
+Date: Tue, 19 Feb 2013 09:36:42 +0100
+Subject: [Buildroot] [git commit] libffi: bump version
+Message-ID: <20130219112835.DE62C9AB89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=34945ebbd00c19f534d7d11d62bd03da2b3c4425
+commit: http://git.buildroot.net/buildroot/commit/?id=192efcdaeb58cdb5c0e82d6f6d34c069af1a7f82
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The BusyBox watchdog application supports reset periods specified in
-milliseconds. The Buildroot package will only allow an integer reset period,
-which prevents the use of the required "ms" suffix. Change the watchdog period
-configuration item to a string, to allow the use of the "ms" suffix.
+It makes more sense to use a released version for 2013.02 rather than a
+git snapshot.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+The build system now correctly installs libffi.pc, so we can drop the
+manual install.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/busybox/Config.in  |    4 +++-
- package/busybox/busybox.mk |    2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/libffi/libffi.mk |   27 +++++----------------------
+ 1 files changed, 5 insertions(+), 22 deletions(-)
 
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index 2890c49..4d9899d 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -64,12 +64,14 @@ config BR2_PACKAGE_BUSYBOX_WATCHDOG
- if BR2_PACKAGE_BUSYBOX_WATCHDOG
+diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+index 9fb86d7..28a2916 100644
+--- a/package/libffi/libffi.mk
++++ b/package/libffi/libffi.mk
+@@ -4,15 +4,11 @@
+ #
+ #############################################################
  
- config BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD
--	int "Delay between reset"
-+	string "Delay between reset"
- 	default "5"
- 	help
- 	  Select the number of seconds between each
- 	  reset of the watchdog (default 5)
+-LIBFFI_VERSION = bcc0c28001b6d427d5cd8037d2e3c892babc6b4c
+-LIBFFI_SITE    = http://github.com/atgreen/libffi/tarball/$(LIBFFI_VERSION)
++LIBFFI_VERSION = 3.0.12
++LIBFFI_SITE    = ftp://sourceware.org/pub/libffi/
+ LIBFFI_LICENSE = MIT
+ LIBFFI_LICENSE_FILES = LICENSE
+ LIBFFI_INSTALL_STAGING = YES
+-
+-# We're using a version from Git which strangely bundles a generated
+-# configure script, but it's broken (doesn't generate the libffi.pc
+-# file).
+ LIBFFI_AUTORECONF = YES
  
-+	  Use ms suffix to specify milliseconds (e.g. 500ms)
-+
+ # Newer CS MIPS toolchains use a different (compact) eh_frame format
+@@ -22,13 +18,11 @@ LIBFFI_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -mno-compact-eh"
  endif
  
- endif
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 599e145..900896f 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -168,7 +168,7 @@ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
- 	[ -f $(TARGET_DIR)/etc/init.d/S15watchdog ] || \
- 		install -D -m 0755 package/busybox/S15watchdog \
- 			$(TARGET_DIR)/etc/init.d/S15watchdog && \
--		sed -i s/PERIOD/$(BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD)/ \
-+		sed -i s/PERIOD/$(call qstrip,$(BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD))/ \
- 			$(TARGET_DIR)/etc/init.d/S15watchdog
+ # Move the headers to the usual location, and adjust the .pc file
+-# accordingly. For some reason, the libffi build system forgets to
+-# install the .pc file, so we do it manually.
++# accordingly.
+ define LIBFFI_MOVE_STAGING_HEADERS
+ 	mv $(STAGING_DIR)/usr/lib/libffi-*/include/*.h $(STAGING_DIR)/usr/include/
+-	$(INSTALL) -D -m 0644 $(@D)/libffi.pc $(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
+-	$(SED) '/^includedir.*/d' $(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
+-	$(SED) '/^Cflags:.*/d' $(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
++	$(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
++		$(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
+ 	rm -rf $(TARGET_DIR)/usr/lib/libffi-*
  endef
- endif
+ 
+@@ -43,18 +37,7 @@ endef
+ 
+ LIBFFI_POST_INSTALL_TARGET_HOOKS += LIBFFI_MOVE_TARGET_HEADERS
+ 
+-# We're using a version from Git which strangely bundles a generated
+-# configure script, but it's broken (doesn't generate the libffi.pc
+-# file).
+ HOST_LIBFFI_AUTORECONF = YES
+ 
+-# For some reason, the libffi build system forgets to install the .pc
+-# file, so we do it manually.
+-define HOST_LIBFFI_INSTALL_PC_FILE
+-	$(INSTALL) -D $(@D)/libffi.pc $(HOST_DIR)/usr/lib/pkgconfig/libffi.pc
+-endef
+-
+-HOST_LIBFFI_POST_INSTALL_HOOKS += HOST_LIBFFI_INSTALL_PC_FILE
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
