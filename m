@@ -1,130 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Feb 2013 19:10:33 +0100
-Subject: [Buildroot] [PATCH 4/4] fs/ext: add support for ext2 rev0 and
-	rev1
-In-Reply-To: <51232FF1.2080306@mind.be>
+Date: Tue, 19 Feb 2013 19:14:43 +0100
+Subject: [Buildroot] [PATCH 3/4] fs/ext2: rename to 'ext' as it can now
+	build ext2/3/4 filesystems
+In-Reply-To: <87ppzwh3vw.fsf@dell.be.48ers.dk>
 References: <cover.1361142401.git.yann.morin.1998@free.fr>
- <2f41f484f574512df6919967f641cf2152049a22.1361142401.git.yann.morin.1998@free.fr>
- <51232FF1.2080306@mind.be>
-Message-ID: <201302191910.33509.yann.morin.1998@free.fr>
+ <512327AD.3040703@mind.be> <87ppzwh3vw.fsf@dell.be.48ers.dk>
+Message-ID: <201302191914.43962.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Peter, Arnout, All,
 
-On Tuesday 19 February 2013 Arnout Vandecappelle wrote:
-> On 18/02/13 00:10, Yann E. MORIN wrote:
-> > Some bootloaders have a buggy ext2 support, and require ext2 rev1
-> > instead of the traditional ext2 rev0 that genext2fs produces.
-[--SNIP--]
-> > @@ -23,10 +27,11 @@ config BR2_TARGET_ROOTFS_EXT_EXT4
-> >   endchoice
-> >
-> >   config BR2_TARGET_ROOTFS_EXT_GEN
-> > -	int
-> > -	default 2 if BR2_TARGET_ROOTFS_EXT_EXT2
-> > -	default 3 if BR2_TARGET_ROOTFS_EXT_EXT3
-> > -	default 4 if BR2_TARGET_ROOTFS_EXT_EXT4
-> > +	string
-> > +	default 2.0 if BR2_TARGET_ROOTFS_EXT_EXT2r0
-> > +	default 2.1 if BR2_TARGET_ROOTFS_EXT_EXT2r1
-> > +	default 3   if BR2_TARGET_ROOTFS_EXT_EXT3
-> > +	default 4   if BR2_TARGET_ROOTFS_EXT_EXT4
+On Tuesday 19 February 2013 Peter Korsgaard wrote:
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 > 
->   I think it makes things simpler if you keep the GEN as it is, and 
-> process the rev separately. Or perhaps set
+>  Arnout> On 18/02/13 00:10, Yann E. MORIN wrote:
+>  >> Update defconfigs and boards readmes accordingly.
 > 
-> config BR2_TARGET_ROOTFS_EXT_REV
-> 	int
-> 	default 0 if BR2_TARGET_ROOTFS_EXT_EXT2r0
-> 	default 1
-
-Not sure. ext2 rev1 is just that: a revision 1 ext2. ext3 or ext4 rev1
-do not mean anything, AFAIK.
-
-[--SNIP--]
-> > +ext_fsck() {
-> > +    gen="${1}"
-> > +    img="${2}"
-> > +    ret=0
-> > +    fsck.ext${gen} -pDf "${img}" >/dev/null || ret=$?
+>  Arnout>  I don't really like this. I think it falls in the category "yes it
+>  Arnout> would make things more consistent, but it's major API breakage that
+>  Arnout> may make upgrading unnecessarily difficult". Peter decided to be more
+>  Arnout> careful with that kind of changes, and rightly so.
 > 
->   Don't bother with ${gen}, just use e2fsck.
-
-OK, I've just checked, and e2fsck's behavior does indeed not depend
-on its argv[0], so I'll use that.
-
-[--SNIP--]
-> > +# Upgrade to ext2 rev1 if needed
-> > +if [ ${EXT2_REV} -ge 1 -o ${GEN} -ge 3 ]; then
+> Agreed.
 > 
->   With BR2_TARGET_ROOTFS_EXT_REV this condition becomes simpler.
-
-Yes, but as I said above, rev0/1 is only meaningfull for ext2, not ext3/4.
-
-I'd rather keep the semantics clear. The ext filesystem can be:
-  - ext2 rev0
-  - ext2 rev1
-  - ext3
-  - ext4
-
-And the fsck is only needed for ext2 rev1, ext3 or ext4.
-
-But it is not stupid to always run the fsck anyway, so I'll simplify the
-code by always calling e2fsck, even if it is not strictly required. Doing
-so will also help catching badly generated ext2 rev0 filesystems, so it's
-a net gain (and does not cost too much, anyway).
-
-> > +    tune2fs -O filetype "${IMG}" >/dev/null
-> > +    ext_fsck 2 "${IMG}"
-> > +fi
-> > +
-> >   # Upgrade to ext3 if needed
-> >   if [ ${GEN} -ge 3 ]; then
-> >       tune2fs -j -J size=1 "${IMG}" >/dev/null
-> > +    ext_fsck 3 "${IMG}"
-> >   fi
-> >
-> >   # Upgrade to ext4 if needed
-> >   if [ ${GEN} -ge 4 ]; then
-> >       tune2fs -O extents,uninit_bg,dir_index "${IMG}" >/dev/null
-> > -    ret=0
-> > -    fsck.ext4 -pDf "${IMG}" >/dev/null || ret=$?
-> > -    # Exit codes 1 & 2 are OK, it means fs errors
-> > -    # were successfully corrected
-> > -    case ${ret} in
-> > -	0|1|2) ;;
-> > -	*)   exit 1;;
-> > -    esac
-> > -    # fsck.ext4 will force a UUID, which we do not want
-> > -    tune2fs -U clear "${IMG}" >/dev/null
-> > +    NEED_FSCK=1
+>  Arnout>  This rename is useful, though, and it shouldn't hurt anyone. If
+>  Arnout> anyone is using it, it will be pretty clear what happened, and it wil
+>  Arnout> draw their attention to the new features of genextfs.sh.
 > 
->   I guess you originally had just a single fsck and used this variable to 
-> decide if it was needed. That's actually a good idea.
+> Agreed.
 
-Oh, I forgot to remove that variable. We can't run fsck once at the end.
-It has to be called after each tune2fs call.
+OK, I'm puzzled. 8-/
 
-Also, I'll rework the code as thus:
-
-    ext_opts=""
-    ext_opts_O=""
-    if ! ext2rev0:
-        ext_opts_O+="filetype"
-    if ext3:
-        ext_opts+="-j -J size=1"
-    if ext4:
-        ext_opts_O+="extents,uninit_bg,dir_index"
-    if ext_opts_O != "":
-        ext_opts+="-O ext_opts_O"
-    tune2fs ext_opts img
-    e2fsck img
-
-That is even better, I think.
+Peter, you agreed on both points, which are the opposites one of the other.
+What should I conclude about this: do the change, or not do the change?
 
 Regards,
 Yann E. MORIN.
