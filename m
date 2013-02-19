@@ -1,74 +1,33 @@
-From: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
-Date: Tue, 19 Feb 2013 13:07:33 +0100
-Subject: [Buildroot] [PATCH 1/1] bump json-c to 0.10
-Message-ID: <1361275653-10601-1-git-send-email-andreas.wetzel@nanotronic.ch>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 19 Feb 2013 13:14:43 +0100
+Subject: [Buildroot] [git commit] network-manager: needs host-intltool
+Message-ID: <20130219121448.651C49AB95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this patch bumps json-c to version 0.10 and adapts the no-reentrant patch
-to the new version.
+commit: http://git.buildroot.net/buildroot/commit/?id=2f230025e846c46dd6424878accdb5183f53f162
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
+Fixes http://autobuild.buildroot.net/results/a37bb8395334814d5c829c27194ad99409baf54b/
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/json-c/json-c-no-reentrant.patch |   16 +++++++---------
- package/json-c/json-c.mk                 |    4 ++--
- 2 files changed, 9 insertions(+), 11 deletions(-)
+ package/network-manager/network-manager.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/json-c/json-c-no-reentrant.patch b/package/json-c/json-c-no-reentrant.patch
-index a01181c..31343c0 100644
---- a/package/json-c/json-c-no-reentrant.patch
-+++ b/package/json-c/json-c-no-reentrant.patch
-@@ -8,26 +8,24 @@ patch to avoid having to autoreconfigure the package.
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 2a68c96..b3715d8 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -8,7 +8,7 @@ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.bz2
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.9/
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
+-	libgcrypt wireless_tools util-linux
++	libgcrypt wireless_tools util-linux host-intltool
  
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
--Index: b/Makefile.am
-+Index: b/Makefile.am.inc
- ===================================================================
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -1,4 +1,4 @@
-+--- a/Makefile.am.inc
-++++ b/Makefile.am.inc
-+@@ -1,2 +1,2 @@
- -AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
- +AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE
-  
-- EXTRA_DIST = README.html README-WIN32.html config.h.win32 doc
-- 
- Index: b/Makefile.in
- ===================================================================
- --- a/Makefile.in
- +++ b/Makefile.in
--@@ -219,7 +219,7 @@
-+@@ -263,7 +263,7 @@
-  top_build_prefix = @top_build_prefix@
-  top_builddir = @top_builddir@
-  top_srcdir = @top_srcdir@
- -AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
- +AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE
-- EXTRA_DIST = README.html README-WIN32.html config.h.win32 doc
-+ EXTRA_DIST = README.html README-WIN32.html config.h.win32 doc json-c.vcproj
-+ SUBDIRS = . tests
-  lib_LTLIBRARIES = libjson.la
-- pkgconfigdir = $(libdir)/pkgconfig
-diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
-index ed4a6d0..a0b5cae 100644
---- a/package/json-c/json-c.mk
-+++ b/package/json-c/json-c.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--JSON_C_VERSION = 0.9
--JSON_C_SITE = http://oss.metaparadigm.com/json-c/
-+JSON_C_VERSION = 0.10
-+JSON_C_SITE = https://github.com/downloads/json-c/json-c
- JSON_C_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
--- 
-1.7.10.4
+ NETWORK_MANAGER_CONF_ENV = \
+ 	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
