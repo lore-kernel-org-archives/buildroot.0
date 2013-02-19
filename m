@@ -1,36 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Feb 2013 16:29:59 +0100
-Subject: [Buildroot] Currently packaging Qt5
-In-Reply-To: <1361247529229-40702.post@n4.nabble.com>
-References: <20130114105802.1199d10e@skate>
- <CAHQn0kiUCGte++HwWEgW6=awTCZ0FNN7kxZ9LxVBnek2p2qZWA@mail.gmail.com>
- <20130114120416.42b34d77@skate>
- <1361247529229-40702.post@n4.nabble.com>
-Message-ID: <20130219162959.34295207@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 19 Feb 2013 16:33:36 +0100
+Subject: [Buildroot] [PATCH 2/4] fs/ext2: add ability to build ext3/4 too
+In-Reply-To: <87wqu4h5oh.fsf@dell.be.48ers.dk>
+References: <cover.1361142401.git.yann.morin.1998@free.fr>
+ <1a995bdbc65141cf4e8a540c41cb56f4a43fba5f.1361142401.git.yann.morin.1998@free.fr>
+ <512323E4.7000901@mind.be> <87wqu4h5oh.fsf@dell.be.48ers.dk>
+Message-ID: <51239B50.4080702@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello prabindh,
+On 19/02/13 13:03, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>
+> Hi,
+>
+>   >> if BR2_TARGET_ROOTFS_EXT2
+>   >>
+>   >> +choice
+>   >> +	bool "ext generation"
+>
+>   Arnout>  Given the way it appears in menuconfig, I think this will be hard to
+>   Arnout> understand for many users. Perhaps "ext generation (ext2, ext3 or
+>   Arnout> ext4)".
+>
+> Or simply ext variant?
+>
+>   >> +	default BR2_TARGET_ROOTFS_EXT2_2
+>
+>   Arnout>  Although this matches the current default, doesn't it make
+>   Arnout> more sense to "bump" to ext4?
+>
+> Possibly. It would break existing configs though.
 
-On Mon, 18 Feb 2013 20:18:49 -0800 (PST), prabindh wrote:
+  No it doesn't. It just _changes_ existing _defconfigs_. It is similar 
+to (though a bit more invasive than) bumping the default kernel version.
 
-> On below - how can I help ? Note that sgxconfiguro, while useful in
-> autoconfigure for egl/gles2, for Qt5 is not especially useful as it
-> fails because of missing icu detection via autoconfig. So I reverted
-> back to regular configurations via qmake.conf at this time.
 
-If you're interested in Buildroot, the best way you can help is by
-creating packages for the SGX stuff needed to bring OpenGL support on
-OMAP platforms. That would definitely be useful.
+>
+>   >> +config BR2_TARGET_ROOTFS_EXT2_2
+>   >> +	bool "ext2"
+>   >> +
+>   >> +config BR2_TARGET_ROOTFS_EXT2_3
+>   >> +	bool "ext3"
+>   >> +	select BR2_PACKAGE_HOST_E2FSPROGS
+>
+>   Arnout>  We don't usually select the host package. On the other hand, the
+>   Arnout> support for user-selectable host packages is pretty recent, so we
+>   Arnout> don't have a real tradition for this.
+>
+>   Arnout>  Peter?
+>
+> I would argue that we should keep kconfig and makefiles consistent when
+> possible, so when we have a user selectable host package (kconfig
+> symbol), we should select it.
 
-Best regards,
+  OK. We probably have quite a few violations of this convention, but we 
+can look out for it when changes are made.
 
-Thomas
+  Regards,
+  Arnout
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
