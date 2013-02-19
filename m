@@ -1,39 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Feb 2013 21:30:28 +0100
-Subject: [Buildroot] SSHFS userland support
-In-Reply-To: <718DFA7882181D45B8BD18F31C46D55427A6A7E0@MBX204.domain.local>
-References: <718DFA7882181D45B8BD18F31C46D55427A6A7E0@MBX204.domain.local>
-Message-ID: <201302192130.29112.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 19 Feb 2013 21:48:06 +0100
+Subject: [Buildroot] [PATCH 3/4] fs/ext2: rename to 'ext' as it can now
+	build ext2/3/4 filesystems
+In-Reply-To: <201302191914.43962.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Tue, 19 Feb 2013 19:14:43 +0100")
+References: <cover.1361142401.git.yann.morin.1998@free.fr>
+ <512327AD.3040703@mind.be> <87ppzwh3vw.fsf@dell.be.48ers.dk>
+ <201302191914.43962.yann.morin.1998@free.fr>
+Message-ID: <87obfgjaih.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gregory, All,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-[Please, wrap your lines at ~78 columns, reading wider columns is not easy]
+ Yann> Peter, Arnout, All,
+ Yann> On Tuesday 19 February 2013 Peter Korsgaard wrote:
+ >> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+ >> 
+ Arnout> On 18/02/13 00:10, Yann E. MORIN wrote:
+ >> >> Update defconfigs and boards readmes accordingly.
+ >> 
+ Arnout> I don't really like this. I think it falls in the category "yes it
+ Arnout> would make things more consistent, but it's major API breakage that
+ Arnout> may make upgrading unnecessarily difficult". Peter decided to be more
+ Arnout> careful with that kind of changes, and rightly so.
+ >> 
+ >> Agreed.
+ >> 
+ Arnout> This rename is useful, though, and it shouldn't hurt anyone. If
+ Arnout> anyone is using it, it will be pretty clear what happened, and it wil
+ Arnout> draw their attention to the new features of genextfs.sh.
+ >> 
+ >> Agreed.
 
-On Tuesday 19 February 2013 Gregory Perry wrote:
-> I am doing a buildroot integration for an i386 target but I can't for
-> the life of me figure out how to include SSHFS userland support (the
-> SSHFS binary itself.  I've selected the FUSE filesystem dependencies
-> as well as support for OpenSSH, but the sshfs binary needed to
-> instantiate an SSH/FUSE connection is not present in the target.
+ Yann> OK, I'm puzzled. 8-/
 
-sshfs is provided by separate package:
+ Yann> Peter, you agreed on both points, which are the opposites one of
+ Yann> the other.  What should I conclude about this: do the change, or
+ Yann> not do the change?
 
-    Package Selection for the target  --->
-        Filesystem and flash utilities  --->
-            [ ] sshfs (FUSE)
+Huh, Arnout's first comment was about the defconfigs /
+BR2_TARGET_ROOTFS_EXT{2,} change, which we both dislike - And the 2nd
+was about the fs/ renames which should be transparent to the user.
 
-Regards,
-Yann E. MORIN.
+Unless I'm confused, atleast.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
