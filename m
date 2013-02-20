@@ -1,30 +1,23 @@
-From: Alexander Lukichev <alexander.lukichev@gmail.com>
-Date: Wed, 20 Feb 2013 15:22:34 +0200
-Subject: [Buildroot] [PATCH v3 1/1] openpgm: new package
-In-Reply-To: <511C7843.4030405@gmail.com>
-References: <1360749821-19238-1-git-send-email-alexander.lukichev@gmail.com>
- <511C0FE0.8020105@mind.be> <511C7843.4030405@gmail.com>
-Message-ID: <5124CE1A.4090407@gmail.com>
+From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
+Date: Wed, 20 Feb 2013 16:17:59 +0100
+Subject: [Buildroot] Using external toolchain wrapper outside of
+	buildroot
+In-Reply-To: <BF980CD5635D994FA25831A4A9C113BF1328583EBE@THHS2E12BE9X.hostedservice2.net>
+References: <BF980CD5635D994FA25831A4A9C113BF1328583EBE@THHS2E12BE9X.hostedservice2.net>
+Message-ID: <CAHQn0khK6LmkqTbKBPwp9hSUzB-Fvr5hx8E13aRfBTk7rq48OA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, All!
+Hi Greg
 
-On 02/14/2013 07:38 AM, Alexander Lukichev wrote:
->>> The package can be built without WCHAR but this is supported
->>> only by its SCons and CMake build systems (for development). Autotools
->>> based build system (for releases) does not support this. IPV6 and
->>> thread support requirements are mandatory.
->>  In that case, why not just use cmake instead of autotools?
-> To quote the INSTALL for the package:
-> "* Autoconf is used for Unix-only library release.
->  * CMake is used for Windows-only library release and installer packaging."
+On Fri, Feb 15, 2013 at 12:22 PM, Greg Beresford
+<greg.beresford@zbdsolutions.com> wrote:
+> I've attached a patch with a fix below which calculates absbasedir from /proc/self/exe. (I don't know of any other way of reliably getting the path to the current executable.) My C is rusty though, so it might need to be fixed up before it's applied. (Was there a reason for avoiding the basename and dirname functions from libgen.h?)
 
-  Could I please ask about the status of this patch? Does it need some improvements or is it completely useless? Thanks.
+I've tested it and it solved my problems with the external toolchain.
+I can't find any obvious C flaws either, so for what it's worth:
 
---
-Best regards,
-  Alexander Lukichev
+Acked-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
