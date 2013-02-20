@@ -1,62 +1,45 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 20 Feb 2013 18:55:13 +0100
-Subject: [Buildroot] [PATCH 1/1] forward a patch (powerpc) from uClibc
-	0.9.32.1 to 0.9.33.2
-Message-ID: <1361382913-25236-1-git-send-email-sagaert.johan@skynet.be>
+From: Joe Halpin <jhalpin@luminatorusa.com>
+Date: Wed, 20 Feb 2013 19:13:26 +0000
+Subject: [Buildroot] build error: "fixdep: permission denied"
+In-Reply-To: <87mwuzhqmf.fsf@dell.be.48ers.dk>
+References: <7E1FF160F2C5E94FB297D1FE759079CAAD24@LUMEXCH3.luminatorusa.com>
+ <87mwuzhqmf.fsf@dell.be.48ers.dk>
+Message-ID: <7E1FF160F2C5E94FB297D1FE759079CAAF6C@LUMEXCH3.luminatorusa.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I'm using Xubuntu 12.04, with ext4 file system.
+And you're right, it doesn't happen when I build in my home directory. I'm not sure what that means, everything under /opt is owned by me. 
+Thanks
+Joe
 
-Forward the uClibc-0.9.32.1-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
-to uClibc 0.9.33.2  (Original from Jason Woodward.)
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- ...x-e500-__fe_nomask_env-use-of-__set_errno.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 toolchain/uClibc/uClibc-0.9.33.2-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
+-----Original Message-----
+From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter Korsgaard
+Sent: Wednesday, February 20, 2013 10:55 AM
+To: Joe Halpin
+Cc: buildroot at busybox.net
+Subject: Re: build error: "fixdep: permission denied"
 
-diff --git a/toolchain/uClibc/uClibc-0.9.33.2-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch b/toolchain/uClibc/uClibc-0.9.33.2-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
-new file mode 100644
-index 0000000..1908925
---- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.33.2-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
-@@ -0,0 +1,34 @@
-+>From 49f58308779cb0b798f5e7bc902bbc515c1ec394 Mon Sep 17 00:00:00 2001
-+From: Jason Woodward <jason.woodward@timesys.com>
-+Date: Sat, 11 Jun 2011 22:00:59 -0400
-+Subject: [PATCH] Fix e500 __fe_nomask_env use of __set_errno w/o CFLAGS-libm
-+
-+Since the new _LIBC guard in 96c9a8f7d00cdf6bb7968a2390b9d87da8a45e2d we need
-+to use CFLAGS-libm (-DNOT_IN_libc -DIS_IN_libm) or we end up with linker
-+errors like:
-+
-+  lib/libm.a(fe_nomask.os): In function `__fe_nomask_env':
-+  fe_nomask.c:(.text+0x26): undefined reference to `__libc_errno'
-+  collect2: ld returned 1 exit status
-+
-+Signed-off-by: Jason Woodward <jason.woodward@timesys.com>
-+---
-+ libm/powerpc/e500/fpu/Makefile.arch |    2 ++
-+ 1 files changed, 2 insertions(+), 0 deletions(-)
-+
-+diff --git a/libm/powerpc/e500/fpu/Makefile.arch b/libm/powerpc/e500/fpu/Makefile.arch
-+index 904561e..a64843f 100644
-+--- a/libm/powerpc/e500/fpu/Makefile.arch
-++++ b/libm/powerpc/e500/fpu/Makefile.arch
-+@@ -11,6 +11,8 @@ libm_ARCH_SRC:=$(wildcard $(libm_ARCH_fpu_DIR)/*.c)
-+ libm_ARCH_OBJ:=$(patsubst $(libm_ARCH_fpu_DIR)/%.c,$(libm_ARCH_fpu_OUT)/%.o,$(libm_ARCH_SRC))
-+ endif
-+ 
-++CFLAGS-fe_nomask.c := $(CFLAGS-libm)
-++
-+ libm_ARCH_OBJS:=$(libm_ARCH_OBJ)
-+ 
-+ ifeq ($(DOPIC),y)
-+-- 
-+1.7.0.4
-+
+>>>>> "Joe" == Joe Halpin <jhalpin@luminatorusa.com> writes:
+
+ Joe> When I try to build, I've been getting either this error or "... fixdep: not
+ Joe> found". After I get this error, if I run make again, it all completes with no
+ Joe> other errors.
+
+ Joe> When I look at the directory, fixdep is there, and has the required
+ Joe> permissions. I haven't been able to divine the problem from looking at the
+ Joe> makefiles, so if anyone can point me in the right direction I'd appreciate it.
+
+ Joe> I've been googling this, but haven't found a solution yet. I've seen this in
+ Joe> 2012.11, 2012.11.1 and 2013.02_rc2.
+
+Funky. Could you please provide some more details about your build setup
+(Linux distribution, file system, ..)?
+
+Does it work if you build it in your homedir instead?
+
 -- 
-1.8.1.2
+Bye, Peter Korsgaard
