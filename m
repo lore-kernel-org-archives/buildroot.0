@@ -1,52 +1,97 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 19 Feb 2013 23:30:10 +0100
-Subject: [Buildroot] [git commit] linux: Install the device tree in /boot
-	when installing the kernel
-Message-ID: <20130220155358.C396F9ABEC@busybox.osuosl.org>
+Date: Wed, 20 Feb 2013 10:04:32 +0100
+Subject: [Buildroot] [git commit] uClibc: port linuxthreads errno patch to
+	0.9.33.2
+Message-ID: <20130220155358.F17029ABEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=88d350ca3ccdd91fd78ecf3e24e31e27726c5bc8
+commit: http://git.buildroot.net/buildroot/commit/?id=1d8c3e6caf6be14644ef8ef5ae2704105322442b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The option BR2_LINUX_KERNEL_INSTALL_TARGET used to install the kernel in
-/boot in the rootfs. The introduction of the device tree builds made it
-possible to generate device tree blobs, and stored them in IMAGES_DIR
-like the kernel, but didn't copy the dtb in /boot when _INSTALL_TARGET
-was enabled.
+Without this patch programs using libglib2 (libsoup, etc.. ) and pthread
+may be broken.
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/linux.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ .../uClibc-0.9.33.2-linuxthreads-errno-fix.patch   |   68 ++++++++++++++++++++
+ 1 files changed, 68 insertions(+), 0 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 91a9f50..0352acd 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -198,6 +198,13 @@ define LINUX_INSTALL_DTB
- 		$(addprefix $(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
- 		$(BINARIES_DIR)/
- endef
-+define LINUX_INSTALL_DTB_TARGET
-+	# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
-+	cp $(addprefix \
-+		$(KERNEL_ARCH_PATH)/boot/$(if $(wildcard \
-+		$(addprefix $(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
-+		$(TARGET_DIR)/boot/
-+endef
- endif
- endif
- 
-@@ -234,6 +241,7 @@ endef
- ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
- define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
- 	install -m 0644 -D $(LINUX_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
-+	$(LINUX_INSTALL_DTB_TARGET)
- endef
- endif
- 
+diff --git a/toolchain/uClibc/uClibc-0.9.33.2-linuxthreads-errno-fix.patch b/toolchain/uClibc/uClibc-0.9.33.2-linuxthreads-errno-fix.patch
+new file mode 100644
+index 0000000..c4d0d00
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.33.2-linuxthreads-errno-fix.patch
+@@ -0,0 +1,68 @@
++From af8b2d71ce37b9d4d24ddbc755cdea68de02949a Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <jacmet@sunsite.dk>
++Date: Mon, 5 Jul 2010 14:08:17 +0200
++Subject: [PATCH] don't make __errno_location / __h_errno_location hidden
++
++Closes #2089 (https://bugs.busybox.net/show_bug.cgi?id=2089)
++
++__errno_location / __h_errno_location access has to go through the PLT
++like malloc/free, so the linuxthread variants gets used instead when
++compiling with -pthread.
++
++Based on http://github.com/mat-c/uClibc/commit/328d392c54aa5dc2b8e7f398a419087de497de2b
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ include/netdb.h                               |    1 -
++ libc/misc/internals/__errno_location.c        |    3 ---
++ libc/misc/internals/__h_errno_location.c      |    1 -
++ libc/sysdeps/linux/common/bits/errno.h        |    1 -
++ 6 files changed, 0 insertions(+), 11 deletions(-)
++
++diff --git a/include/netdb.h b/include/netdb.h
++index 9d3807d..ac411ab 100644
++--- a/include/netdb.h
+++++ b/include/netdb.h
++@@ -59,7 +59,6 @@ __BEGIN_DECLS
++ 
++ /* Function to get address of global `h_errno' variable.  */
++ extern int *__h_errno_location (void) __THROW __attribute__ ((__const__));
++-libc_hidden_proto(__h_errno_location)
++ 
++ /* Macros for accessing h_errno from inside libc.  */
++ #ifdef _LIBC
++diff --git a/libc/misc/internals/__errno_location.c b/libc/misc/internals/__errno_location.c
++index 487a9c2..0620860 100644
++--- a/libc/misc/internals/__errno_location.c
+++++ b/libc/misc/internals/__errno_location.c
++@@ -15,6 +15,3 @@ int * weak_const_function __errno_location (void)
++ {
++     return &errno;
++ }
++-#ifdef IS_IN_libc /* not really need, only to keep in sync w/ libc_hidden_proto */
++-libc_hidden_weak(__errno_location)
++-#endif
++diff --git a/libc/misc/internals/__h_errno_location.c b/libc/misc/internals/__h_errno_location.c
++index 213d398..235df4e 100644
++--- a/libc/misc/internals/__h_errno_location.c
+++++ b/libc/misc/internals/__h_errno_location.c
++@@ -10,4 +10,3 @@ int * weak_const_function __h_errno_location (void)
++ {
++     return &h_errno;
++ }
++-libc_hidden_weak(__h_errno_location)
++diff --git a/libc/misc/internals/__uClibc_main.c b/libc/misc/internals/__uClibc_main.c
++index 6e520fa..f4a9ebb 100644
++--- a/libc/sysdeps/linux/common/bits/errno.h
+++++ b/libc/sysdeps/linux/common/bits/errno.h
++@@ -43,7 +43,6 @@
++ # ifndef __ASSEMBLER__
++ /* Function to get address of global `errno' variable.  */
++ extern int *__errno_location (void) __THROW __attribute__ ((__const__));
++-libc_hidden_proto(__errno_location)
++ 
++ #  ifdef __UCLIBC_HAS_THREADS__
++ /* When using threads, errno is a per-thread value.  */
++-- 
++1.7.1
++
