@@ -1,45 +1,63 @@
-From: Joe Halpin <jhalpin@luminatorusa.com>
-Date: Wed, 20 Feb 2013 19:13:26 +0000
-Subject: [Buildroot] build error: "fixdep: permission denied"
-In-Reply-To: <87mwuzhqmf.fsf@dell.be.48ers.dk>
-References: <7E1FF160F2C5E94FB297D1FE759079CAAD24@LUMEXCH3.luminatorusa.com>
- <87mwuzhqmf.fsf@dell.be.48ers.dk>
-Message-ID: <7E1FF160F2C5E94FB297D1FE759079CAAF6C@LUMEXCH3.luminatorusa.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 20 Feb 2013 20:48:22 +0100
+Subject: [Buildroot] [git commit] uClibc: backport bits/time.h update to
+	0.9.33.2
+Message-ID: <20130220200816.15E509ABEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm using Xubuntu 12.04, with ext4 file system.
-And you're right, it doesn't happen when I build in my home directory. I'm not sure what that means, everything under /opt is owned by me. 
-Thanks
-Joe
+commit: http://git.buildroot.net/buildroot/commit/?id=a87471ee758b464c87f24e50e46d314a964176ef
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
------Original Message-----
-From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter Korsgaard
-Sent: Wednesday, February 20, 2013 10:55 AM
-To: Joe Halpin
-Cc: buildroot at busybox.net
-Subject: Re: build error: "fixdep: permission denied"
+Some packages uses CLOCK_MONOTONIC_RAW, so add it.
 
->>>>> "Joe" == Joe Halpin <jhalpin@luminatorusa.com> writes:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ...0.9.33.2-bits-time.h-sync-with-glibc-2.16.patch |   36 ++++++++++++++++++++
+ 1 files changed, 36 insertions(+), 0 deletions(-)
 
- Joe> When I try to build, I've been getting either this error or "... fixdep: not
- Joe> found". After I get this error, if I run make again, it all completes with no
- Joe> other errors.
-
- Joe> When I look at the directory, fixdep is there, and has the required
- Joe> permissions. I haven't been able to divine the problem from looking at the
- Joe> makefiles, so if anyone can point me in the right direction I'd appreciate it.
-
- Joe> I've been googling this, but haven't found a solution yet. I've seen this in
- Joe> 2012.11, 2012.11.1 and 2013.02_rc2.
-
-Funky. Could you please provide some more details about your build setup
-(Linux distribution, file system, ..)?
-
-Does it work if you build it in your homedir instead?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/uClibc/uClibc-0.9.33.2-bits-time.h-sync-with-glibc-2.16.patch b/toolchain/uClibc/uClibc-0.9.33.2-bits-time.h-sync-with-glibc-2.16.patch
+new file mode 100644
+index 0000000..2ad0032
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.33.2-bits-time.h-sync-with-glibc-2.16.patch
+@@ -0,0 +1,36 @@
++From 3d1b82c7d9dce11c733fe23a85df7f975c7e2486 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <jacmet@sunsite.dk>
++Date: Tue, 3 Jul 2012 15:54:57 +0200
++Subject: [PATCH] bits/time.h: sync with glibc 2.16
++
++CLOCK_MONOTONIC_RAW is available since 2.6.28
++(2d42244ae71d: clocksource: introduce CLOCK_MONOTONIC_RAW), and
++CLOCK_*_COARSE since 2.6.32 (da15cfdae033: time: Introduce
++CLOCK_REALTIME_COARSE).
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++ libc/sysdeps/linux/common/bits/time.h |    6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/libc/sysdeps/linux/common/bits/time.h b/libc/sysdeps/linux/common/bits/time.h
++index 7ed54bf..c871223 100644
++--- a/libc/sysdeps/linux/common/bits/time.h
+++++ b/libc/sysdeps/linux/common/bits/time.h
++@@ -54,6 +54,12 @@
++ #   define CLOCK_PROCESS_CPUTIME_ID	2
++ /* Thread-specific CPU-time clock.  */
++ #   define CLOCK_THREAD_CPUTIME_ID	3
+++/* Monotonic system-wide clock, not adjusted for frequency scaling.  */
+++#   define CLOCK_MONOTONIC_RAW		4
+++/* Identifier for system-wide realtime clock, updated only on ticks.  */
+++#   define CLOCK_REALTIME_COARSE	5
+++/* Monotonic system-wide clock, updated only on ticks.  */
+++#   define CLOCK_MONOTONIC_COARSE	6
++ 
++ /* Flag to indicate time is absolute.  */
++ #   define TIMER_ABSTIME		1
++-- 
++1.7.10.4
++
