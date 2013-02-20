@@ -1,23 +1,23 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Wed, 20 Feb 2013 16:17:59 +0100
-Subject: [Buildroot] Using external toolchain wrapper outside of
-	buildroot
-In-Reply-To: <BF980CD5635D994FA25831A4A9C113BF1328583EBE@THHS2E12BE9X.hostedservice2.net>
-References: <BF980CD5635D994FA25831A4A9C113BF1328583EBE@THHS2E12BE9X.hostedservice2.net>
-Message-ID: <CAHQn0khK6LmkqTbKBPwp9hSUzB-Fvr5hx8E13aRfBTk7rq48OA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 20 Feb 2013 16:54:04 +0100
+Subject: [Buildroot] [PATCH 1/1] port the patch from uClibc 0.9.33.1 to
+	0.9.33.2
+In-Reply-To: <1360847701-27267-1-git-send-email-sagaert.johan@skynet.be>
+ (Sagaert Johan's message of "Thu, 14 Feb 2013 14:15:01 +0100")
+References: <1360847701-27267-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <87vc9nhtgj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Greg
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-On Fri, Feb 15, 2013 at 12:22 PM, Greg Beresford
-<greg.beresford@zbdsolutions.com> wrote:
-> I've attached a patch with a fix below which calculates absbasedir from /proc/self/exe. (I don't know of any other way of reliably getting the path to the current executable.) My C is rusty though, so it might need to be fixed up before it's applied. (Was there a reason for avoiding the basename and dirname functions from libgen.h?)
+ Sagaert> Port the linuxthreads-errno-fix path to uclibc 0.9.33.2
+ Sagaert> Without this patch programs using libglib2 (libsoup, etc.. ) and pthread may be broken.
 
-I've tested it and it solved my problems with the external toolchain.
-I can't find any obvious C flaws either, so for what it's worth:
+Committed, thanks.
 
-Acked-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+-- 
+Bye, Peter Korsgaard
