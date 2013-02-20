@@ -1,40 +1,33 @@
-From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
-Date: Thu, 21 Feb 2013 00:14:23 +0100 (CET)
-Subject: [Buildroot] libmad and AVR32 optimisations
-In-Reply-To: <CAKcgs2zty=9pybVT7FwDMmSK0omc1x9tgwmDkgiMbixjFkv-oA@mail.gmail.com>
-References: <CAKcgs2zty=9pybVT7FwDMmSK0omc1x9tgwmDkgiMbixjFkv-oA@mail.gmail.com>
-Message-ID: <771436318.25518.1361402063381.JavaMail.root@advansee.com>
+From: John Stile <john@stilen.com>
+Date: Wed, 20 Feb 2013 15:37:40 -0800
+Subject: [Buildroot] editing device_table_dev.txt
+Message-ID: <1361403460.22521.44.camel@genx.eng.msli.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gilles,
+I need a better way to auto-populate /dev, using buildroot-2011.11, with
+2.6.30 kernel, but it seems not matter what I do, /dev/ is not populated
+automaticly. 
 
-On Wednesday, February 20, 2013 11:58:29 PM, Gilles Talis wrote:
-> All,
+My config looks like this:
 
-> There is small issue in the AVR32 optimization patch [1]. This is root cause
-> for autobuild failures: e01f5a5484299dce1797966445f3972583c67b22 and
-> 7ed0563fbbfc19c93ec5be35d3b6a95e496b4c5d.
+BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS is not set
+# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV is not set
+# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV is not set
+BR2_ROOTFS_DEVICE_TABLE="target/generic/device_table.txt target/generic/device_table_dev.txt"
+BR2_ROOTFS_STATIC_DEVICE_TABLE="target/generic/device_table_dev.txt"
+# BR2_ROOTFS_SKELETON_DEFAULT is not set
+BR2_ROOTFS_SKELETON_CUSTOM=y
+BR2_ROOTFS_SKELETON_CUSTOM_PATH="fs/skeletonMiLON"
+BR2_ROOTFS_POST_BUILD_SCRIPT="$(TOPDIR)/board/atmel/at91sam9g20ek/post-build/post-build-scripts.bash"
 
-> Reason is that some fixed-point math routines are implemented in
-> architecture-specific files. If "architecture-specific optimizations" option
-> is disabled from the build configuration, these routines are not compiled,
-> but libmad is built with references to these functions though.
+To use hwclock I had to create dev/rtc0.
+Although my kernel argument contains mtdparts, the  mtd* and mtdblock*
+devices are not created.
+There are others too.
 
-> My question is: is this issue worth fixing? I assume that libmad users will
-> usually enable all possible architecture-specific optimizations.
-
-> Thanks
-> Gilles.
-
-> [1] package/libmad/libmad-0.15.1b-optimization.patch.avr32
-
-This patch was clearly made for specific libmad settings. Rather than fixing it,
-it would be easier to simply add a "depends on !BR2_avr32" to the config options
-that fail on AVR32.
-
-Best regards,
-Beno?t
+What should my config look like in order to auto-populate /dev?
