@@ -1,65 +1,55 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 20 Feb 2013 10:32:55 +0100
-Subject: [Buildroot] [For master RFC] fix compiler warnings: use puts()
-	instead of printf()
-In-Reply-To: <1361352688-25309-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1361352688-25309-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <CAHkwnC-c4Xgsrh_qzJV=gxkN=Y7QGe4C4U_mp0V58MVy9aQhDQ@mail.gmail.com>
+From: =?UTF-8?q?Daniel=20Nystr=C3=B6m?= <daniel.nystrom@timeterminal.se>
+Date: Wed, 20 Feb 2013 11:18:51 +0100
+Subject: [Buildroot] [PATCH] qt: install QML imports on target
+Message-ID: <1361355531-2909-1-git-send-email-daniel.nystrom@timeterminal.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 20, 2013 at 10:31 AM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> Use puts() because printf() isn't needed,
-> to fix the following compiler warnings:
->
-> /barebox/common/menu.c: In function ?menu_show?:
-> /barebox/common/menu.c:277:4: warning: format not a string literal and no format arguments [-Wformat-security]
->
-> /barebox/scripts/omap4_usbboot.c: In function ?read_asic_id?:
-> /barebox/scripts/omap4_usbboot.c:101:3: warning: format not a string literal and no format arguments [-Wformat-security]
->
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
->  common/menu.c           | 2 +-
->  scripts/omap4_usbboot.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/common/menu.c b/common/menu.c
-> index ce93838..30dced7 100644
-> --- a/common/menu.c
-> +++ b/common/menu.c
-> @@ -274,7 +274,7 @@ int menu_show(struct menu *m)
->                         printf("Auto Select in");
->                 } else {
->                         auto_display_len = strlen(m->auto_display);
-> -                       printf(m->auto_display);
-> +                       puts(m->auto_display);
->                 }
->                 printf(" %2d", countdown--);
->         }
-> diff --git a/scripts/omap4_usbboot.c b/scripts/omap4_usbboot.c
-> index 8c5775d..34e53c0 100644
-> --- a/scripts/omap4_usbboot.c
-> +++ b/scripts/omap4_usbboot.c
-> @@ -98,7 +98,7 @@ int read_asic_id(struct usb_handle *usb)
->                         sprintf(line+4+j*3, "%02X ", id[i+j]);
->                 line[4+j*3+0] = '\n';
->                 line[4+j*3+1] = 0;
-> -               printf(line);
-> +               puts(line);
->         }
->         ret = 0;
->         for (i = 1, j = 0; i < sizeof(id) && j < id[0]; i += 2+id[i+1], j++) {
-> --
-> 1.8.1.1
->
+When selecting the Qt declarative module, all the QML imports was
+built and installed to staging, but never installed to the target.
 
-I'm sorry, i've sent to the wrong mailing list.
+Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+---
+ package/qt/qt.mk |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Best regards
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index ee1a88b..3767810 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -498,6 +498,7 @@ define QT_CONFIGURE_CMDS
+ 		-no-separate-debug-info \
+ 		-prefix /usr \
+ 		-plugindir /usr/lib/qt/plugins \
++		-importdir /usr/lib/qt/imports \
+ 		-hostprefix $(STAGING_DIR) \
+ 		-fast \
+ 		-no-rpath \
+@@ -610,6 +611,14 @@ define QT_INSTALL_TARGET_PLUGINS
+ 	fi
+ endef
+ 
++# Import installation
++define QT_INSTALL_TARGET_IMPORTS
++	if [ -d $(STAGING_DIR)/usr/lib/qt/imports/ ] ; then \
++		mkdir -p $(TARGET_DIR)/usr/lib/qt/imports ; \
++		cp -dpfr $(STAGING_DIR)/usr/lib/qt/imports/* $(TARGET_DIR)/usr/lib/qt/imports ; \
++	fi
++endef
++
+ # Fonts installation
+ ifneq ($(QT_FONTS),)
+ define QT_INSTALL_TARGET_FONTS
+@@ -628,6 +637,7 @@ endif
+ define QT_INSTALL_TARGET_CMDS
+ 	$(QT_INSTALL_TARGET_LIBS)
+ 	$(QT_INSTALL_TARGET_PLUGINS)
++	$(QT_INSTALL_TARGET_IMPORTS)
+ 	$(QT_INSTALL_TARGET_FONTS)
+ 	$(QT_INSTALL_TARGET_FONTS_TTF)
+ endef
 -- 
-Fabio Porcedda
+1.7.10.4
