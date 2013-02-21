@@ -1,67 +1,38 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Thu, 21 Feb 2013 11:22:07 +0000
-Subject: [Buildroot] [PATCH v2] Add support for extra uClibc patches
-Message-ID: <1361445727-8446-1-git-send-email-spdawson@gmail.com>
+From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
+Date: Thu, 21 Feb 2013 13:28:40 +0100 (CET)
+Subject: [Buildroot] libmad and AVR32 optimisations
+In-Reply-To: <87y5eigchn.fsf@dell.be.48ers.dk>
+References: <CAKcgs2zty=9pybVT7FwDMmSK0omc1x9tgwmDkgiMbixjFkv-oA@mail.gmail.com>
+ <771436318.25518.1361402063381.JavaMail.root@advansee.com>
+ <87621mhs7d.fsf@dell.be.48ers.dk>
+ <CAHt8ZCNf=k9LyXMob_DpzcOYtfBfhfNugr8n02vNwpB+s1fpkg@mail.gmail.com>
+ <87y5eigchn.fsf@dell.be.48ers.dk>
+Message-ID: <59153487.35651.1361449720550.JavaMail.root@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Dear Peter Korsgaard, all,
 
-This patch adds a very simple mechanism for applying a set of "extra" patches
-to uClibc, on top of the patch set provided by Buildroot.
+On Thursday, February 21, 2013 11:58:12 AM, Peter Korsgaard wrote:
+> >>>>> "Simon" == Simon Dawson <spdawson@gmail.com> writes:
+> 
+>  Simon> On 21 February 2013 10:33, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>  >> Or simply get rid of the huge patch - It's just an optimization, and not
+>  >> really needed, right?
+> 
+>  Simon> The problem is that, for libmad to be usable on avr32, this
+>  Simon> optimization patch really *is* needed.
+> 
+> Ok, then lets fix it up instead.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- v2: Rebased on top of next branch
+To fix it up, you can check if libmad is provided with the ASF:
+http://www.atmel.com/tools/AVRSOFTWAREFRAMEWORK.aspx
 
- toolchain/uClibc/Config.in |    6 ++++++
- toolchain/uClibc/uclibc.mk |   11 +++++++++++
- 2 files changed, 17 insertions(+)
+If so, it may have been cleaned up since the BuildRoot patch, so generate a new
+patch from the ASF against mainline libmad, and retest.
 
-diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
-index 57c9933..e883667 100644
---- a/toolchain/uClibc/Config.in
-+++ b/toolchain/uClibc/Config.in
-@@ -53,6 +53,12 @@ config BR2_UCLIBC_CONFIG
- 	  See also docs/README in this package.
- 	  If unsure, use the default.
- 
-+config BR2_UCLIBC_EXTRA_PATCH_DIR
-+	string "extra uClibc patch directory"
-+	help
-+	  You may specify a directory containing extra patches for uClibc.
-+	  Note that extra patches will be applied AFTER the Buildroot patch set.
-+
- config BR2_PTHREAD_DEBUG
- 	bool "Thread library debugging"
- 	depends on BR2_PTHREADS || BR2_PTHREADS_OLD || BR2_PTHREADS_NATIVE
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 1b49a8d..a640084 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -80,9 +80,20 @@ ifneq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
- 	support/scripts/apply-patches.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) \
- 		uClibc-$(UCLIBC_VERSION)-\*.patch \
- 		uClibc-$(UCLIBC_VERSION)-\*.patch.$(ARCH)
-+ifneq ($(BR2_UCLIBC_EXTRA_PATCH_DIR),"")
-+	support/scripts/apply-patches.sh $(UCLIBC_DIR) \
-+		$(call qstrip,$(BR2_UCLIBC_EXTRA_PATCH_DIR)) \
-+		uClibc-$(UCLIBC_VERSION)-\*.patch \
-+		uClibc-$(UCLIBC_VERSION)-\*.patch.$(ARCH)
-+endif
- else
- 	support/scripts/apply-patches.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) \
- 		uClibc.\*.patch uClibc.\*.patch.$(ARCH)
-+ifneq ($(BR2_UCLIBC_EXTRA_PATCH_DIR),"")
-+	support/scripts/apply-patches.sh $(UCLIBC_DIR) \
-+		$(call qstrip,$(BR2_UCLIBC_EXTRA_PATCH_DIR)) \
-+		uClibc.\*.patch uClibc.\*.patch.$(ARCH)
-+endif
- endif
- 	touch $@
- 
--- 
-1.7.10.4
+Best regards,
+Beno?t
