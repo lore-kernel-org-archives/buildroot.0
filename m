@@ -1,74 +1,49 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 21 Feb 2013 10:59:06 +0100
-Subject: [Buildroot] [git commit] matchbox-wm: fix mbtheme build issue when
-	png support is disabled
-Message-ID: <20130221100115.01E3F9AAAA@busybox.osuosl.org>
+Date: Thu, 21 Feb 2013 10:55:57 +0100
+Subject: [Buildroot] [git commit] matchbox-desktop: needs zlib
+Message-ID: <20130221100114.D76AE9AC0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=32ceab7ec0584be334618576e52b214aa2c3c04e
+commit: http://git.buildroot.net/buildroot/commit/?id=30876b26a7683384f7aeb3b6254e387c6bea6cac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/c02af7b66ae2c14d94edaa940f9edfcde9a9fad5
+Otherwise the build fails with:
+
+In file included from mbdesktop_win_plugin.c:1:0:
+mbdesktop.h:31:18: fatal error: zlib.h: No such file or directory
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../matchbox-wm/matchbox-wm-defaulttheme.patch     |   47 ++++++++++++++++++++
- 1 files changed, 47 insertions(+), 0 deletions(-)
+ package/matchbox/Config.in                         |    1 +
+ .../matchbox/matchbox-desktop/matchbox-desktop.mk  |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/matchbox/matchbox-wm/matchbox-wm-defaulttheme.patch b/package/matchbox/matchbox-wm/matchbox-wm-defaulttheme.patch
-new file mode 100644
-index 0000000..b4da664
---- /dev/null
-+++ b/package/matchbox/matchbox-wm/matchbox-wm-defaulttheme.patch
-@@ -0,0 +1,47 @@
-+[PATCH] fix mbtheme build issue when png support is disabled
-+
-+DEFAULTTHEME{,NAME} is not defined when png support is disabled, leading
-+to compile errors in mbtheme.c:
-+
-+mbtheme.c: In function 'show_parse_error':
-+mbtheme.c:2422:28: error: 'DEFAULTTHEME' undeclared (first use in this function)
-+mbtheme.c:2422:28: note: each undeclared identifier is reported only once for each function it appears in
-+mbtheme.c: In function 'mbtheme_init':
-+mbtheme.c:2448:30: error: 'DEFAULTTHEME' undeclared (first use in this function)
-+mbtheme.c:2470:25: error: 'DEFAULTTHEMENAME' undeclared (first use in this function)
-+
-+Fix it by unconditionally defining them as the values used are the same
-+in png / !png cases anyway.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ src/structs.h |    9 ---------
-+ 1 file changed, 9 deletions(-)
-+
-+Index: matchbox-window-manager-1.2/src/structs.h
-+===================================================================
-+--- matchbox-window-manager-1.2.orig/src/structs.h
-++++ matchbox-window-manager-1.2/src/structs.h
-+@@ -81,8 +81,6 @@
-+ 
-+ #define GENERIC_ICON        PKGDATADIR "/mbnoapp.xpm"
-+ 
-+-#ifdef MB_HAVE_PNG
-+-
-+ #define DEFAULT_THEME       DATADIR "/themes/Default/matchbox/theme.xml"
-+ 
-+ #define DEFAULTTHEME       DATADIR "/themes/Default/matchbox/theme.xml"
-+@@ -91,13 +89,6 @@
-+ 
-+ #define DEFAULTTHEMENAME  "Default"
-+ 
-+-#else
-+-
-+-#define DEFAULT_THEME       DATADIR "/themes/Default/matchbox/theme.xml"
-+-#define DEFAULT_THEME_NAME  "Default"
-+-
-+-#endif
-+-
-+ #define CONFDEFAULTS       PKGDATADIR "/defaults"
-+ 
-+ /* Simple Macros  */
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index e4b6149..d89a176 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -19,6 +19,7 @@ config BR2_PACKAGE_MATCHBOX_PANEL
+ config BR2_PACKAGE_MATCHBOX_DESKTOP
+ 	bool "Matchbox Desktop"
+ 	depends on BR2_PACKAGE_MATCHBOX
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  A PDA style application launcher or 'item browser'.
+ 
+diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.mk b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
+index f8e854c..13ea730 100644
+--- a/package/matchbox/matchbox-desktop/matchbox-desktop.mk
++++ b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
+@@ -10,7 +10,7 @@ MATCHBOX_DESKTOP_SOURCE = matchbox-desktop-$(MATCHBOX_DESKTOP_VERSION).tar.bz2
+ MATCHBOX_DESKTOP_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-desktop/$(MATCHBOX_DESKTOP_VERSION_MAJOR)
+ MATCHBOX_DESKTOP_LICENSE = GPLv2+
+ MATCHBOX_DESKTOP_LICENSE_FILES = COPYING
+-MATCHBOX_DESKTOP_DEPENDENCIES = matchbox-lib
++MATCHBOX_DESKTOP_DEPENDENCIES = matchbox-lib zlib
+ MATCHBOX_DESKTOP_CONF_OPT = --enable-expat
+ 
+ # The bundled configure script does not properly replace LIBADD_DL, so
