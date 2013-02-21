@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Thu, 21 Feb 2013 11:15:48 +0000
-Subject: [Buildroot] [PATCH v4] Add support for custom package patches
-Message-ID: <1361445348-7720-1-git-send-email-spdawson@gmail.com>
+Date: Thu, 21 Feb 2013 11:22:07 +0000
+Subject: [Buildroot] [PATCH v2] Add support for extra uClibc patches
+Message-ID: <1361445727-8446-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,121 +10,58 @@ To: buildroot@busybox.net
 
 From: Simon Dawson <spdawson@gmail.com>
 
-Add a configuration item to allow a space-separated list of directories
-to be specified, from which custom package patches will be applied.
+This patch adds a very simple mechanism for applying a set of "extra" patches
+to uClibc, on top of the patch set provided by Buildroot.
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 ---
- v4: Rebased on top of next branch
- v3: Add documentation, as suggested by Samuel Martin. Incorporate further
-     improvements suggested by Arnout Vandecappelle
- v2: Incorporate improvements suggested by Arnout Vandecappelle, and
-     fix handling of the case where the new configuration item is not set
+ v2: Rebased on top of next branch
 
- Config.in                          |    7 +++++++
- docs/manual/customize-packages.txt |   15 +++++++++++++++
- docs/manual/customize.txt          |    2 ++
- package/pkg-generic.mk             |   29 +++++++++++++++++------------
- 4 files changed, 41 insertions(+), 12 deletions(-)
- create mode 100644 docs/manual/customize-packages.txt
+ toolchain/uClibc/Config.in |    6 ++++++
+ toolchain/uClibc/uclibc.mk |   11 +++++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index a2c305f..26f8724 100644
---- a/Config.in
-+++ b/Config.in
-@@ -437,6 +437,13 @@ config BR2_PACKAGE_OVERRIDE_FILE
- 	  as the source directory for a particular package. See the
- 	  Buildroot documentation for more details on this feature.
+diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
+index 57c9933..e883667 100644
+--- a/toolchain/uClibc/Config.in
++++ b/toolchain/uClibc/Config.in
+@@ -53,6 +53,12 @@ config BR2_UCLIBC_CONFIG
+ 	  See also docs/README in this package.
+ 	  If unsure, use the default.
  
-+config BR2_EXTRA_PACKAGE_PATCH_DIRS
-+	string "extra package patch directories"
++config BR2_UCLIBC_EXTRA_PATCH_DIR
++	string "extra uClibc patch directory"
 +	help
-+	  You may specify a space-separated list of directories containing
-+	  extra package patches. Note that any extra patches for a package
-+	  will be applied AFTER the Buildroot patch set for the package.
++	  You may specify a directory containing extra patches for uClibc.
++	  Note that extra patches will be applied AFTER the Buildroot patch set.
 +
- endmenu
- 
- source "toolchain/Config.in"
-diff --git a/docs/manual/customize-packages.txt b/docs/manual/customize-packages.txt
-new file mode 100644
-index 0000000..4dea34a
---- /dev/null
-+++ b/docs/manual/customize-packages.txt
-@@ -0,0 +1,15 @@
-+// -*- mode:doc -*- ;
-+
-+[[packages-custom]]
-+Customizing packages
-+~~~~~~~~~~~~~~~~~~~~
-+
-+It is sometimes useful to apply 'extra' patches to packages - over and
-+above those provided in Buildroot. This might be used to support custom
-+features in a project, for example, or when working on a new architecture.
-+
-+The +BR2_EXTRA_PACKAGE_PATCH_DIRS+ configuration file option can be
-+used to specify a set of extra package patch directories. The option
-+should be set to a space-separated list of directories containing the
-+extra package patches. Note that any extra patches for a package
-+will be applied *after* the Buildroot patch set for the package.
-diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
-index a13ba8f..2894f91 100644
---- a/docs/manual/customize.txt
-+++ b/docs/manual/customize.txt
-@@ -14,3 +14,5 @@ include::customize-kernel-config.txt[]
- include::customize-toolchain.txt[]
- 
- include::customize-store.txt[]
-+
-+include::customize-packages.txt[]
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 57b0fd0..a5effec 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -76,6 +76,22 @@ else
- 	@true # Nothing to do to source a local package
+ config BR2_PTHREAD_DEBUG
+ 	bool "Thread library debugging"
+ 	depends on BR2_PTHREADS || BR2_PTHREADS_OLD || BR2_PTHREADS_NATIVE
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index 1b49a8d..a640084 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -80,9 +80,20 @@ ifneq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+ 	support/scripts/apply-patches.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) \
+ 		uClibc-$(UCLIBC_VERSION)-\*.patch \
+ 		uClibc-$(UCLIBC_VERSION)-\*.patch.$(ARCH)
++ifneq ($(BR2_UCLIBC_EXTRA_PATCH_DIR),"")
++	support/scripts/apply-patches.sh $(UCLIBC_DIR) \
++		$(call qstrip,$(BR2_UCLIBC_EXTRA_PATCH_DIR)) \
++		uClibc-$(UCLIBC_VERSION)-\*.patch \
++		uClibc-$(UCLIBC_VERSION)-\*.patch.$(ARCH)
++endif
+ else
+ 	support/scripts/apply-patches.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) \
+ 		uClibc.\*.patch uClibc.\*.patch.$(ARCH)
++ifneq ($(BR2_UCLIBC_EXTRA_PATCH_DIR),"")
++	support/scripts/apply-patches.sh $(UCLIBC_DIR) \
++		$(call qstrip,$(BR2_UCLIBC_EXTRA_PATCH_DIR)) \
++		uClibc.\*.patch uClibc.\*.patch.$(ARCH)
++endif
  endif
- 
-+# Apply package patches from the specified directory
-+define pkg-apply-patch-directory
-+	if test -d $(1); then \
-+	  if test "$(wildcard $(1)/$(NAMEVER)*.patch*)"; then \
-+	    support/scripts/apply-patches.sh $(@D) $(1) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
-+	  else \
-+	    support/scripts/apply-patches.sh $(@D) $(1) $(RAWNAME)\*.patch $(RAWNAME)\*.patch.$(ARCH) || exit 1; \
-+	    if test -d $(1)/$(NAMEVER); then \
-+	      support/scripts/apply-patches.sh $(@D) $(1)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
-+	    fi; \
-+	  fi; \
-+	fi;
-+endef
-+
-+PACKAGE_PATCH_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_EXTRA_PACKAGE_PATCH_DIRS))
-+
- # Patch
- #
- # The RAWNAME variable is the lowercased package name, which allows to
-@@ -86,18 +102,7 @@ $(BUILD_DIR)/%/.stamp_patched:
- 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
- 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
- 	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(p)$(sep))
--	$(Q)( \
--	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
--	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
--	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
--	  else \
--	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(RAWNAME)\*.patch $(RAWNAME)\*.patch.$(ARCH) || exit 1; \
--	    if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER); then \
--	      support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
--	    fi; \
--	  fi; \
--	fi; \
--	)
-+	$(Q)$(foreach patchdir,$(PACKAGE_PATCH_DIRS),$(call pkg-apply-patch-directory,$(patchdir)))
- 	$(foreach hook,$($(PKG)_POST_PATCH_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
+ 	touch $@
  
 -- 
 1.7.10.4
