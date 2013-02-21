@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Feb 2013 20:49:29 +0100
-Subject: [Buildroot] [PATCH 07/13] libmodplug: new package
-In-Reply-To: <c2eecc3b657fbcad032c74fcb8448d65903c8376.1361458625.git.maxime.hadjinlian@gmail.com>
+Date: Thu, 21 Feb 2013 20:53:05 +0100
+Subject: [Buildroot] [PATCH 08/13] libnfs: new package
+In-Reply-To: <6f49fb1679eb12c011edfaf52648c065a049c101.1361458625.git.maxime.hadjinlian@gmail.com>
 References: <cover.1361458625.git.maxime.hadjinlian@gmail.com>
- <c2eecc3b657fbcad032c74fcb8448d65903c8376.1361458625.git.maxime.hadjinlian@gmail.com>
-Message-ID: <201302212049.30208.yann.morin.1998@free.fr>
+ <6f49fb1679eb12c011edfaf52648c065a049c101.1361458625.git.maxime.hadjinlian@gmail.com>
+Message-ID: <201302212053.06244.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +14,49 @@ To: buildroot@busybox.net
 Maxime, All,
 
 On Thursday 21 February 2013 Maxime Hadjinlian wrote:
-> MOD music file decoder.
+> nfs userspace implementation.
 > This package was originally found at : https://github.com/huceke/buildroot-rbp
 > By gimli <ebsi4711@gmail.com>
 [--SNIP--]
 > diff --git a/package/Config.in b/package/Config.in
-> index c6e1fd4..ac021e8 100644
+> index ac021e8..a9cb9ed 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -349,6 +349,7 @@ source "package/alsa-lib/Config.in"
->  source "package/audiofile/Config.in"
->  source "package/celt051/Config.in"
->  source "package/libao/Config.in"
-> +source "package/libmodplug/Config.in"
+> @@ -404,6 +404,7 @@ source "package/gamin/Config.in"
+>  source "package/libconfig/Config.in"
+>  source "package/libconfuse/Config.in"
+>  source "package/libfuse/Config.in"
+> +source "package/libnfs/Config.in"
+>  source "package/liblockfile/Config.in"
 
 Alphabetical order, please.
 
-> diff --git a/package/libmodplug/libmodplug.mk b/package/libmodplug/libmodplug.mk
+> diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
 > new file mode 100644
-> index 0000000..889056e
+> index 0000000..693de46
 > --- /dev/null
-> +++ b/package/libmodplug/libmodplug.mk
-> @@ -0,0 +1,11 @@
+> +++ b/package/libnfs/libnfs.mk
+> @@ -0,0 +1,16 @@
 > +#############################################################
 > +#
-> +# libmodplug
+> +# libnfs
 > +#
 > +#############################################################
 > +
-> +LIBMODPLUG_VERSION = 0.8.7
-> +LIBMODPLUG_SITE = http://downloads.sourceforge.net/project/modplug-xmms/libmodplug/$(LIBMODPLUG_VERSION)
-> +LIBMODPLUG_INSTALL_STAGING = YES
+> +LIBNFS_VERSION = libnfs-1.3.0
+> +LIBNFS_SITE = http://github.com/sahlberg/libnfs/tarball/$(LIBNFS_VERSION)
+> +LIBNFS_INSTALL_STAGING = YES
+> +LIBNFS_AUTORECONF = YES
+> +LIBNFS_MAKE = $(MAKE1)
+> +LIBNFS_LICENSE = LGPLv2.1
 
-Add the license; it is "Public Domain".
+It looks like it is in fact LGPLv2.1+.
+
+There's at least one file (lib/init.c) that does not have the 'or later'
+clause, but just a terse reference to the license, while all other files
+I've looked at explicitly state 'or later'.
+
+So, I'd be enclined to believe it is LGPLv2.1+.
 
 Regards,
 Yann E. MORIN.
