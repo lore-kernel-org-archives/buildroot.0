@@ -1,29 +1,130 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 21 Feb 2013 11:58:12 +0100
-Subject: [Buildroot] libmad and AVR32 optimisations
-In-Reply-To: <CAHt8ZCNf=k9LyXMob_DpzcOYtfBfhfNugr8n02vNwpB+s1fpkg@mail.gmail.com>
- (Simon Dawson's message of "Thu, 21 Feb 2013 10:52:46 +0000")
-References: <CAKcgs2zty=9pybVT7FwDMmSK0omc1x9tgwmDkgiMbixjFkv-oA@mail.gmail.com>
- <771436318.25518.1361402063381.JavaMail.root@advansee.com>
- <87621mhs7d.fsf@dell.be.48ers.dk>
- <CAHt8ZCNf=k9LyXMob_DpzcOYtfBfhfNugr8n02vNwpB+s1fpkg@mail.gmail.com>
-Message-ID: <87y5eigchn.fsf@dell.be.48ers.dk>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Thu, 21 Feb 2013 11:15:48 +0000
+Subject: [Buildroot] [PATCH v4] Add support for custom package patches
+Message-ID: <1361445348-7720-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Simon" == Simon Dawson <spdawson@gmail.com> writes:
+From: Simon Dawson <spdawson@gmail.com>
 
- Simon> On 21 February 2013 10:33, Peter Korsgaard <jacmet@uclibc.org> wrote:
- >> Or simply get rid of the huge patch - It's just an optimization, and not
- >> really needed, right?
+Add a configuration item to allow a space-separated list of directories
+to be specified, from which custom package patches will be applied.
 
- Simon> The problem is that, for libmad to be usable on avr32, this
- Simon> optimization patch really *is* needed.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Ok, then lets fix it up instead.
+---
+ v4: Rebased on top of next branch
+ v3: Add documentation, as suggested by Samuel Martin. Incorporate further
+     improvements suggested by Arnout Vandecappelle
+ v2: Incorporate improvements suggested by Arnout Vandecappelle, and
+     fix handling of the case where the new configuration item is not set
 
+ Config.in                          |    7 +++++++
+ docs/manual/customize-packages.txt |   15 +++++++++++++++
+ docs/manual/customize.txt          |    2 ++
+ package/pkg-generic.mk             |   29 +++++++++++++++++------------
+ 4 files changed, 41 insertions(+), 12 deletions(-)
+ create mode 100644 docs/manual/customize-packages.txt
+
+diff --git a/Config.in b/Config.in
+index a2c305f..26f8724 100644
+--- a/Config.in
++++ b/Config.in
+@@ -437,6 +437,13 @@ config BR2_PACKAGE_OVERRIDE_FILE
+ 	  as the source directory for a particular package. See the
+ 	  Buildroot documentation for more details on this feature.
+ 
++config BR2_EXTRA_PACKAGE_PATCH_DIRS
++	string "extra package patch directories"
++	help
++	  You may specify a space-separated list of directories containing
++	  extra package patches. Note that any extra patches for a package
++	  will be applied AFTER the Buildroot patch set for the package.
++
+ endmenu
+ 
+ source "toolchain/Config.in"
+diff --git a/docs/manual/customize-packages.txt b/docs/manual/customize-packages.txt
+new file mode 100644
+index 0000000..4dea34a
+--- /dev/null
++++ b/docs/manual/customize-packages.txt
+@@ -0,0 +1,15 @@
++// -*- mode:doc -*- ;
++
++[[packages-custom]]
++Customizing packages
++~~~~~~~~~~~~~~~~~~~~
++
++It is sometimes useful to apply 'extra' patches to packages - over and
++above those provided in Buildroot. This might be used to support custom
++features in a project, for example, or when working on a new architecture.
++
++The +BR2_EXTRA_PACKAGE_PATCH_DIRS+ configuration file option can be
++used to specify a set of extra package patch directories. The option
++should be set to a space-separated list of directories containing the
++extra package patches. Note that any extra patches for a package
++will be applied *after* the Buildroot patch set for the package.
+diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
+index a13ba8f..2894f91 100644
+--- a/docs/manual/customize.txt
++++ b/docs/manual/customize.txt
+@@ -14,3 +14,5 @@ include::customize-kernel-config.txt[]
+ include::customize-toolchain.txt[]
+ 
+ include::customize-store.txt[]
++
++include::customize-packages.txt[]
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 57b0fd0..a5effec 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -76,6 +76,22 @@ else
+ 	@true # Nothing to do to source a local package
+ endif
+ 
++# Apply package patches from the specified directory
++define pkg-apply-patch-directory
++	if test -d $(1); then \
++	  if test "$(wildcard $(1)/$(NAMEVER)*.patch*)"; then \
++	    support/scripts/apply-patches.sh $(@D) $(1) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
++	  else \
++	    support/scripts/apply-patches.sh $(@D) $(1) $(RAWNAME)\*.patch $(RAWNAME)\*.patch.$(ARCH) || exit 1; \
++	    if test -d $(1)/$(NAMEVER); then \
++	      support/scripts/apply-patches.sh $(@D) $(1)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
++	    fi; \
++	  fi; \
++	fi;
++endef
++
++PACKAGE_PATCH_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_EXTRA_PACKAGE_PATCH_DIRS))
++
+ # Patch
+ #
+ # The RAWNAME variable is the lowercased package name, which allows to
+@@ -86,18 +102,7 @@ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
+ 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+ 	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(p)$(sep))
+-	$(Q)( \
+-	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
+-	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
+-	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
+-	  else \
+-	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(RAWNAME)\*.patch $(RAWNAME)\*.patch.$(ARCH) || exit 1; \
+-	    if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER); then \
+-	      support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
+-	    fi; \
+-	  fi; \
+-	fi; \
+-	)
++	$(Q)$(foreach patchdir,$(PACKAGE_PATCH_DIRS),$(call pkg-apply-patch-directory,$(patchdir)))
+ 	$(foreach hook,$($(PKG)_POST_PATCH_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.10.4
