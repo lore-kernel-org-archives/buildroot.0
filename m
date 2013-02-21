@@ -1,64 +1,30 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Thu, 21 Feb 2013 12:32:27 +0200
-Subject: [Buildroot] editing device_table_dev.txt
-In-Reply-To: <20130221102315.GB12155@sapphire.tkos.co.il>
-References: <1361403460.22521.44.camel@genx.eng.msli.com>
- <5125F38B.2030204@petroprogram.com> <5125F50C.7020902@petroprogram.com>
- <20130221102315.GB12155@sapphire.tkos.co.il>
-Message-ID: <5125F7BB.50403@petroprogram.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 21 Feb 2013 11:33:26 +0100
+Subject: [Buildroot] libmad and AVR32 optimisations
+In-Reply-To: <771436318.25518.1361402063381.JavaMail.root@advansee.com>
+ (=?utf-8?Q?=22Beno=C3=AEt_Th=C3=A9baudeau=22's?= message of "Thu, 21 Feb
+ 2013 00:14:23 +0100 (CET)")
+References: <CAKcgs2zty=9pybVT7FwDMmSK0omc1x9tgwmDkgiMbixjFkv-oA@mail.gmail.com>
+ <771436318.25518.1361402063381.JavaMail.root@advansee.com>
+Message-ID: <87621mhs7d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-21.2.2013 12:23, Baruch Siach kirjoitti:
-> Hi Stefan,
->
-> On Thu, Feb 21, 2013 at 12:21:00PM +0200, Stefan Fr?berg wrote:
->> 21.2.2013 12:14, Stefan Fr?berg kirjoitti:
->>> 21.2.2013 1:37, John Stile kirjoitti:
->>>> I need a better way to auto-populate /dev, using buildroot-2011.11, with
->>>> 2.6.30 kernel, but it seems not matter what I do, /dev/ is not populated
->>>> automaticly. 
->>>>
->>>> My config looks like this:
->>>>
->>>> BR2_ROOTFS_DEVICE_CREATION_STATIC=y
->>>> # BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS is not set
->>>> # BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV is not set
->>>> # BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV is not set
->>>> BR2_ROOTFS_DEVICE_TABLE="target/generic/device_table.txt target/generic/device_table_dev.txt"
->>>> BR2_ROOTFS_STATIC_DEVICE_TABLE="target/generic/device_table_dev.txt"
->>>> # BR2_ROOTFS_SKELETON_DEFAULT is not set
->>>> BR2_ROOTFS_SKELETON_CUSTOM=y
->>>> BR2_ROOTFS_SKELETON_CUSTOM_PATH="fs/skeletonMiLON"
->>>> BR2_ROOTFS_POST_BUILD_SCRIPT="$(TOPDIR)/board/atmel/at91sam9g20ek/post-build/post-build-scripts.bash"
->>>>
->>>> To use hwclock I had to create dev/rtc0.
->>>> Although my kernel argument contains mtdparts, the  mtd* and mtdblock*
->>>> devices are not created.
->>>> There are others too.
->>>>
->>>> What should my config look like in order to auto-populate /dev?
->>>>
->>> Well, if you don't want to manually create your device nodes then there
->>> are several ways to autopopulate /dev
->>>
->>> Maybe the simplest would be just let the kernel handle it by mounting
->>> /dev with tmpfs
->>> So selecting BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y is the
->>> correct option.
->>>
->>> Also kernel .config file should also have CONFIG_DEVTMPFS and DEVTMPFS
->>> as 'y'.
->> Sorry, that should have been CONFIG_DEVTMPFS=y and CONFIG_DEVTMPFS_MOUNT=y
-> Kernel version 2.6.30 is too old for that.
->
-> baruch
->
+>>>>> "Beno?t" == Beno?t Th?baudeau <benoit.thebaudeau@advansee.com> writes:
 
-It is ?
-Damn, then the only options are mdev and udev.
 
-Stefan
+ >> [1] package/libmad/libmad-0.15.1b-optimization.patch.avr32
+
+ Beno?t> This patch was clearly made for specific libmad
+ Beno?t> settings. Rather than fixing it, it would be easier to simply
+ Beno?t> add a "depends on !BR2_avr32" to the config options that fail
+ Beno?t> on AVR32.
+
+Or simply get rid of the huge patch - It's just an optimization, and not
+really needed, right?
+
+-- 
+Bye, Peter Korsgaard
