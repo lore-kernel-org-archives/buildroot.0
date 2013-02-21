@@ -1,69 +1,89 @@
 From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Thu, 21 Feb 2013 21:12:43 +0200
-Subject: [Buildroot] [PATCH] busybox: remove pid file after stopping daemon
-	with start-stop-daemon applet
-Message-ID: <1361473963-5943-1-git-send-email-stefan.froberg@petroprogram.com>
+Date: Thu, 21 Feb 2013 21:22:14 +0200
+Subject: [Buildroot] [PATCH] new package: network-manager-applet
+Message-ID: <1361474534-6070-1-git-send-email-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Many daemons leave pid files lying around when they are stopped with
-start-stop-daemon applet in BusyBox.
-This patch will ensure that they are properly cleaned away.
+GTK+ applet for NetworkManager
 
 Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
 ---
 
-Note: I did not make this patch but found it from old thread in BusyBox
-mailing list from 2006 and just fitted it against v1.19.4.
-So far it has been tested to work with busybox v1.19.4.
+ package/Config.in                                  |    1 +
+ package/network-manager-applet/Config.in           |   13 +++++++++
+ .../network-manager-applet.mk                      |   28 ++++++++++++++++++++
+ 3 files changed, 42 insertions(+), 0 deletions(-)
+ create mode 100644 package/network-manager-applet/Config.in
+ create mode 100644 package/network-manager-applet/network-manager-applet.mk
 
- .../busybox-1.19.4-start-stop-daemon-rm-pid.patch  |   35 ++++++++++++++++++++
- 1 files changed, 35 insertions(+), 0 deletions(-)
- create mode 100755 package/busybox/busybox-1.19.4-start-stop-daemon-rm-pid.patch
-
-diff --git a/package/busybox/busybox-1.19.4-start-stop-daemon-rm-pid.patch b/package/busybox/busybox-1.19.4-start-stop-daemon-rm-pid.patch
-new file mode 100755
-index 0000000..db199a3
+diff --git a/package/Config.in b/package/Config.in
+index 55c99bb..266f487 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -678,6 +678,7 @@ source "package/netplug/Config.in"
+ source "package/netsnmp/Config.in"
+ source "package/netstat-nat/Config.in"
+ source "package/network-manager/Config.in"
++source "package/network-manager-applet/Config.in"
+ source "package/nfacct/Config.in"
+ source "package/noip/Config.in"
+ source "package/ngircd/Config.in"
+diff --git a/package/network-manager-applet/Config.in b/package/network-manager-applet/Config.in
+new file mode 100644
+index 0000000..03cf0e7
 --- /dev/null
-+++ b/package/busybox/busybox-1.19.4-start-stop-daemon-rm-pid.patch
-@@ -0,0 +1,35 @@
-+diff -Naur busybox-1.19.4.org/debianutils/Config.src busybox-1.19.4/debianutils/Config.src
-+--- busybox-1.19.4.org/debianutils/Config.src	2013-02-21 15:56:12.056163205 +0200
-++++ busybox-1.19.4/debianutils/Config.src	2013-02-21 15:59:21.369223915 +0200
-+@@ -58,6 +58,15 @@
-+ 	  termination of system-level processes, usually the ones
-+ 	  started during the startup of the system.
-+ 
-++config FEATURE_START_STOP_DAEMON_REMOVE_PIDFILE
-++	bool "Remove pidfile on stop"
-++	default y
-++	depends on START_STOP_DAEMON
-++	help
-++	  If a pidfile is specified when a process is scheluded
-++	  to be stopped, remove the pidfile after the process
-++	  is successfully stopped.
-++
-+ config FEATURE_START_STOP_DAEMON_FANCY
-+ 	bool "Support additional arguments"
-+ 	default y
-+diff -Naur busybox-1.19.4.org/debianutils/start_stop_daemon.c busybox-1.19.4/debianutils/start_stop_daemon.c
-+--- busybox-1.19.4.org/debianutils/start_stop_daemon.c	2013-02-21 15:56:12.056163205 +0200
-++++ busybox-1.19.4/debianutils/start_stop_daemon.c	2013-02-21 16:03:38.119855595 +0200
-+@@ -353,8 +353,11 @@
-+ 	if (!QUIET && killed) {
-+ 		printf("stopped %s (pid", what);
-+ 		for (p = G.found_procs; p; p = p->next)
-+-			if (p->pid)
-++			if (p->pid) {
-+ 				printf(" %u", (unsigned)p->pid);
-++				if (ENABLE_FEATURE_START_STOP_DAEMON_REMOVE_PIDFILE)
-++					unlink(pidfile);
-++			}
-+ 		puts(")");
-+ 	}
-+  ret:
++++ b/package/network-manager-applet/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_NETWORK_MANAGER_APPLET
++	bool "network-manager-applet"
++	depends on BR2_PACKAGE_NETWORK_MANAGER
++	depends on BR2_PACKAGE_ISO_CODES
++	select BR2_PACKAGE_LIBTASN1
++	select BR2_PACKAGE_GNOME_KEYRING
++	select BR2_PACKAGE_NOTIFICATION_DAEMON
++	select BR2_PACKAGE_CONSOLEKIT
++	help
++	  GTK+ applet for NetworkManager
++
++	  http://projects.gnome.org/NetworkManager/
++
+diff --git a/package/network-manager-applet/network-manager-applet.mk b/package/network-manager-applet/network-manager-applet.mk
+new file mode 100644
+index 0000000..51834b5
+--- /dev/null
++++ b/package/network-manager-applet/network-manager-applet.mk
+@@ -0,0 +1,28 @@
++#############################################################
++#
++# network-manager-applet
++#
++#############################################################
++
++NETWORK_MANAGER_APPLET_VERSION = 0.9.2.0
++NETWORK_MANAGER_APPLET_SOURCE = network-manager-applet-$(NETWORK_MANAGER_APPLET_VERSION).tar.xz
++NETWORK_MANAGER_APPLET_SITE = http://ftp.gnome.org/pub/GNOME/sources/network-manager-applet/0.9/
++NETWORK_MANAGER_APPLET_INSTALL_STAGING = YES
++NETWORK_MANAGER_APPLET_DEPENDENCIES = network-manager iso-codes libtasn1 \
++				     gnome-keyring notification-daemon \
++				     consolekit
++NETWORK_MANAGER_APPLET_CONF_OPT += --disable-more-warnings \
++				   --localstatedir=/var --enable-migration \
++				   --with-gtkver=2
++NETWORK_MANAGER_APPLET_AUTORECONF = YES
++
++define	NETWORK_MANAGER_APPLET_FIXUP
++	# This file adds that annoying -Werror even if told *no*. Kick it out
++	rm -f $(@D)/m4/compiler_warnings.m4
++endef
++
++NETWORK_MANAGER_APPLET_PRE_CONFIGURE_HOOKS += NETWORK_MANAGER_APPLET_FIXUP
++
++$(eval $(autotools-package))
++
++
 -- 
 1.7.7.6
