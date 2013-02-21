@@ -1,80 +1,87 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 21 Feb 2013 15:58:34 +0100
-Subject: [Buildroot] [PATCH 04/13] libcdio: new package
+Date: Thu, 21 Feb 2013 15:58:35 +0100
+Subject: [Buildroot] [PATCH 05/13] lockdev: new package
 In-Reply-To: <cover.1361458625.git.maxime.hadjinlian@gmail.com>
 References: <cover.1361458625.git.maxime.hadjinlian@gmail.com>
-Message-ID: <e06bb5510036fde83350074e66d17f52d314ee2c.1361458625.git.maxime.hadjinlian@gmail.com>
+Message-ID: <b997b137fd4de75941873cc414dfe8e0d6f5722b.1361458625.git.maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The GNU Compact Disc Input and Control library.
+library for locking devices
 This package was originally found at : https://github.com/huceke/buildroot-rbp
 By gimli <ebsi4711@gmail.com>
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
  package/Config.in          |    1 +
- package/libcdio/Config.in  |   11 +++++++++++
- package/libcdio/libcdio.mk |   18 ++++++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100644 package/libcdio/Config.in
- create mode 100644 package/libcdio/libcdio.mk
+ package/lockdev/Config.in  |    6 ++++++
+ package/lockdev/lockdev.mk |   30 ++++++++++++++++++++++++++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 package/lockdev/Config.in
+ create mode 100644 package/lockdev/lockdev.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 5682cd2..01eeee8 100644
+index 01eeee8..2106391 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -350,6 +350,7 @@ source "package/audiofile/Config.in"
- source "package/celt051/Config.in"
- source "package/libao/Config.in"
- source "package/libcdaudio/Config.in"
-+source "package/libcdio/Config.in"
- source "package/libcue/Config.in"
- source "package/libcuefile/Config.in"
- source "package/libid3tag/Config.in"
-diff --git a/package/libcdio/Config.in b/package/libcdio/Config.in
+@@ -555,6 +555,7 @@ source "package/libffi/Config.in"
+ source "package/gsl/Config.in"
+ source "package/libglib2/Config.in"
+ source "package/libical/Config.in"
++source "package/lockdev/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libsigc/Config.in"
+ source "package/libtpl/Config.in"
+diff --git a/package/lockdev/Config.in b/package/lockdev/Config.in
 new file mode 100644
-index 0000000..4e6c800
+index 0000000..abb640c
 --- /dev/null
-+++ b/package/libcdio/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBCDIO
-+	bool "libcdio"
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	depends on BR2_INSTALL_LIBSTDCPP
++++ b/package/lockdev/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LOCKDEV
++	bool "lockdev"
 +	help
-+	  The GNU Compact Disc Input and Control library.
++	  library for locking devices
 +
-+	  http://www.gnu.org/software/libcdio/
-+
-+comment "libcdio requires C++ support in toolchain"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libcdio/libcdio.mk b/package/libcdio/libcdio.mk
++	  http://packages.debian.org/source/sid/lockdev
+diff --git a/package/lockdev/lockdev.mk b/package/lockdev/lockdev.mk
 new file mode 100644
-index 0000000..71ffe91
+index 0000000..2012211
 --- /dev/null
-+++ b/package/libcdio/libcdio.mk
-@@ -0,0 +1,18 @@
++++ b/package/lockdev/lockdev.mk
+@@ -0,0 +1,30 @@
 +#############################################################
 +#
-+# libcdio
++# lockdev
 +#
 +#############################################################
 +
-+LIBCDIO_VERSION = 0.82
-+LIBCDIO_SITE = $(BR2_GNU_MIRROR)/libcdio
-+LIBCDIO_INSTALL_STAGING = YES
-+LIBCDIO_LICENSE = GPLv3
-+LIBCDIO_LICENSE_FILES = COPYING
-+LIBCDIO_CONF_OPT = --disable-example-progs
++LOCKDEV_VERSION = 1.0.3
++LOCKDEV_SITE = http://ftp.de.debian.org/debian/pool/main/l/lockdev
++LOCKDEV_SOURCE = lockdev_$(LOCKDEV_VERSION).orig.tar.gz
++LOCKDEV_INSTALL_STAGING = YES
++LOCKDEV_LICENSE = LGPLv2.1
++LOCKDEV_LICENSE_FILES = LICENSE
 +
-+ifeq ($(BR2_ENABLE_LOCALE),)
-+LIBCDIO_DEPENDENCIES = libiconv
-+endif
++define LOCKDEV_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) OPTIM= -C $(@D) V=1 shared
++endef
 +
-+$(eval $(autotools-package))
++define LOCKDEV_INSTALL_STAGING_CMDS
++	$(MAKE) basedir=$(STAGING_DIR)/usr -C $(@D) install
++	ln -s $(STAGING_DIR)/usr/lib/liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so
++	ln -s $(STAGING_DIR)/usr/lib/liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.1
++endef
++
++define LOCKDEV_INSTALL_TARGET_CMDS
++	$(MAKE) basedir=$(TARGET_DIR)/usr -C $(@D) install
++	ln -s $(TARGET_DIR)/usr/lib/liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so
++	ln -s $(TARGET_DIR)/usr/lib/liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so.1
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.10.4
