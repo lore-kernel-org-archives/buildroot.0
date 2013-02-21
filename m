@@ -1,80 +1,68 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Thu, 21 Feb 2013 18:21:42 +0200
-Subject: [Buildroot] network-manager-applet for buildroot almost ready
-In-Reply-To: <51263203.4070709@petroprogram.com>
-References: <51263203.4070709@petroprogram.com>
-Message-ID: <51264996.5060404@petroprogram.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 21 Feb 2013 17:39:06 +0100
+Subject: [Buildroot] [PATCH 11/13] libshairport: new package
+In-Reply-To: <b0b591df9513c8714c641b591d64591e38dc554f.1361458625.git.maxime.hadjinlian@gmail.com>
+References: <cover.1361458625.git.maxime.hadjinlian@gmail.com>
+ <b0b591df9513c8714c641b591d64591e38dc554f.1361458625.git.maxime.hadjinlian@gmail.com>
+Message-ID: <CAHXCMMJ+gu3e0hemH2JCn-_xoJbR_Fh7LML1yYriWZzgmdYtzQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-21.2.2013 16:41, Stefan Fr?berg kirjoitti:
-> Hello all!
->
-> I have network-manager-applet running and it appears into fluxbox system
-> tray but
-> it does not detect any networks.
->
-> When starting it from terminal it spits the following:
->
-> ** Message: applet now removed from the notification area
-> ** Message: applet now embedded in the notification area
->
-> ** (nm-applet:766): WARNING **: Failed to register as an agent: (32) No
-> session found for uid 0
->
-> Does that "No session found for uid 0" mean that there is something
-> wrong with dbus ????
->
-> Or is that error related to consolekit ?
->
-> I have it here running too (and soon will submit to buildroot)
-> Also running are NetworkManager and dbus.
->
-> I start fluxbox with normal startx command and I have just "exec
-> /usr/bin/startfluxbox" in my .xinitrc file.
->
->
-> Regards
-> Stefan
->
->
+Hi Maxime,
 
-I added ConsoleKits ck-launch-session to my .xinitrc as instructed here
-http://fluxbox-wiki.org/index.php?title=Start_fluxbox_from_the_command_line
+2013/2/21 Maxime Hadjinlian <maxime.hadjinlian@gmail.com>:
+> libshairport is a client library that emulates an airplay server
+> This package was originally found at : https://github.com/huceke/buildroot-rbp
+> By gimli <ebsi4711@gmail.com>
+>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/Config.in                                  |    1 +
+>  package/libshairport/Config.in                     |   12 +
+>  .../libshairport-1.2.0.20310_lib-001_add_ao.patch  |  270 +++++++
+>  ...rt-1.2.0.20310_lib-002_fix_install_header.patch |   12 +
+>  ...hairport-1.2.0.20310_lib-003_fix_deadlock.patch |   10 +
+>  ...irport-1.2.0.20310_lib-004_fix_bad_access.patch |   22 +
+>  ...hairport-1.2.0.20310_lib-005_fix_shutdown.patch |   10 +
+>  ...ibshairport-1.2.0.20310_lib-006_no_printf.patch |  843 ++++++++++++++++++++
+>  ...rt-1.2.0.20310_lib-007_fix_syslog_defines.patch |   24 +
+>  ...port-1.2.0.20310_lib-008-add-missing-libs.patch |   21 +
+>  ...libshairport-1.2.0.20310_lib-009_fix_ipv6.patch |   22 +
+>  package/libshairport/libshairport.mk               |   13 +
+[...]
+> diff --git a/package/libshairport/libshairport-1.2.0.20310_lib-001_add_ao.patch b/package/libshairport/libshairport-1.2.0.20310_lib-001_add_ao.patch
+> new file mode 100644
+> index 0000000..b2debed
+> --- /dev/null
+> +++ b/package/libshairport/libshairport-1.2.0.20310_lib-001_add_ao.patch
+> @@ -0,0 +1,270 @@
+> +diff -uP libshairport-1.2.0.20310_lib/src/ao.h ../../../../../libshairport-1.2.0.20310_lib/src/ao.h
+> +--- libshairport-1.2.0.20310_lib-org/src/ao.h  1970-01-01 01:00:00.000000000 +0100
+> ++++ libshairport-1.2.0.20310_lib-mod/src/ao.h  2011-09-25 20:36:36.000000000 +0200
 
-Now it does not anymore nag about missing session.
-However, still no networks detected and when I try to click and view
-properties of nm-applet it spits this:
+I guess you get the patches from the web?
 
-** Message: applet now removed from the notification area
-** Message: applet now embedded in the notification area
+Could you reformat the patches' header according to:
+http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+and/or:
+http://buildroot.org/downloads/manual/manual.html#_integrating_patches_found_on_the_web
 
-** (nm-applet:905): WARNING **: async_got_type: could not read
-properties for /org/freedesktop/NetworkManager/ActiveConnection/10:
-Method "Get" with signature "ss" on interface
-"org.freedesktop.DBus.Properties" doesn't exist
+[...]
+> +LIBSHAIRPORT_VERSION = 1.2.0.20310_lib
+> +LIBSHAIRPORT_SITE = http://mirrors.xbmc.org/build-deps/darwin-libs
+> +LIBSHAIRPORT_INSTALL_STAGING = YES
+> +LIBSHAIRPORT_AUTORECONF = YES
+A short comment why autoreconf is necessary would be appreciated.
 
-
-** (nm-applet:905): WARNING **: async_got_type: could not read
-properties for /org/freedesktop/NetworkManager/ActiveConnection/10:
-Method "Get" with signature "ss" on interface
-"org.freedesktop.DBus.Properties" doesn't exist
+> +LIBSHAIRPORT_DEPENDENCIES = openssl
+> +
+> +$(eval $(autotools-package))
 
 
-** (nm-applet:905): WARNING **: Connection activation failed: Creating
-object for path '/org/freedesktop/NetworkManager/ActiveConnection/10'
-failed in libnm-glib.
+Regards,
 
-** (nm-applet:905): WARNING **: async_got_type: could not read
-properties for /org/freedesktop/NetworkManager/ActiveConnection/10:
-Method "Get" with signature "ss" on interface
-"org.freedesktop.DBus.Properties" doesn't exist
-
-
-So this is definetely either dbus or networkmanager (or both) problem
-
-Regards
-Stefan
+-- 
+Samuel
