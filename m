@@ -1,87 +1,104 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 21 Feb 2013 15:58:35 +0100
-Subject: [Buildroot] [PATCH 05/13] lockdev: new package
+Date: Thu, 21 Feb 2013 15:58:36 +0100
+Subject: [Buildroot] [PATCH 06/13] libcec: new package
 In-Reply-To: <cover.1361458625.git.maxime.hadjinlian@gmail.com>
 References: <cover.1361458625.git.maxime.hadjinlian@gmail.com>
-Message-ID: <b997b137fd4de75941873cc414dfe8e0d6f5722b.1361458625.git.maxime.hadjinlian@gmail.com>
+Message-ID: <af62c92a3e5c4bfce4ec2e5cb0bc587ff13cec0a.1361458625.git.maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-library for locking devices
+libCEC allows you in combination with the right hardware to control your device
+with your TV remote control. Utilising your existing HDMI cabling
 This package was originally found at : https://github.com/huceke/buildroot-rbp
 By gimli <ebsi4711@gmail.com>
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/Config.in          |    1 +
- package/lockdev/Config.in  |    6 ++++++
- package/lockdev/lockdev.mk |   30 ++++++++++++++++++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 package/lockdev/Config.in
- create mode 100644 package/lockdev/lockdev.mk
+ package/Config.in        |    1 +
+ package/libcec/Config.in |   30 ++++++++++++++++++++++++++++++
+ package/libcec/libcec.mk |   22 ++++++++++++++++++++++
+ 3 files changed, 53 insertions(+)
+ create mode 100644 package/libcec/Config.in
+ create mode 100644 package/libcec/libcec.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 01eeee8..2106391 100644
+index 2106391..c6e1fd4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -555,6 +555,7 @@ source "package/libffi/Config.in"
- source "package/gsl/Config.in"
- source "package/libglib2/Config.in"
- source "package/libical/Config.in"
-+source "package/lockdev/Config.in"
- source "package/libnspr/Config.in"
- source "package/libsigc/Config.in"
- source "package/libtpl/Config.in"
-diff --git a/package/lockdev/Config.in b/package/lockdev/Config.in
+@@ -448,6 +448,7 @@ source "package/imx-lib/Config.in"
+ source "package/lcdapi/Config.in"
+ source "package/libaio/Config.in"
+ source "package/libatasmart/Config.in"
++source "package/libcec/Config.in"
+ source "package/libraw1394/Config.in"
+ source "package/tslib/Config.in"
+ source "package/libfreefare/Config.in"
+diff --git a/package/libcec/Config.in b/package/libcec/Config.in
 new file mode 100644
-index 0000000..abb640c
+index 0000000..5051b94
 --- /dev/null
-+++ b/package/lockdev/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LOCKDEV
-+	bool "lockdev"
-+	help
-+	  library for locking devices
-+
-+	  http://packages.debian.org/source/sid/lockdev
-diff --git a/package/lockdev/lockdev.mk b/package/lockdev/lockdev.mk
-new file mode 100644
-index 0000000..2012211
---- /dev/null
-+++ b/package/lockdev/lockdev.mk
++++ b/package/libcec/Config.in
 @@ -0,0 +1,30 @@
++config BR2_PACKAGE_LIBCEC
++	bool "libcec"
++	select BR2_PACKAGE_LOCKDEV
++	depends on BR2_USE_WCHAR
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  libCEC allows you in combination with the right hardware to
++	  control your device with your TV remote control. Utilising your
++	  existing HDMI cabling.
++	  
++	  https://github.com/Pulse-Eight/libcec
++
++if BR2_PACKAGE_LIBCEC && BR2_arm
++
++config BR2_PACKAGE_LIBCEC_RBP
++	bool "rpi support"
++	depends on BR2_LARGEFILE
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_RPI_USERLAND
++	help
++	  Enable RasberryPi support
++
++comment "rpi support requires a toolchain with LARGEFILE and C++ support"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_LARGEFILE)
++
++endif
++
++comment "libcec requires a toolchain with WCHAR and C++ support"
++	depends on !(BR2_USE_WCHAR && BR2_INSTALL_LIBSTDCPP)
++
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+new file mode 100644
+index 0000000..2974cbf
+--- /dev/null
++++ b/package/libcec/libcec.mk
+@@ -0,0 +1,22 @@
 +#############################################################
 +#
-+# lockdev
++# libcec
 +#
 +#############################################################
 +
-+LOCKDEV_VERSION = 1.0.3
-+LOCKDEV_SITE = http://ftp.de.debian.org/debian/pool/main/l/lockdev
-+LOCKDEV_SOURCE = lockdev_$(LOCKDEV_VERSION).orig.tar.gz
-+LOCKDEV_INSTALL_STAGING = YES
-+LOCKDEV_LICENSE = LGPLv2.1
-+LOCKDEV_LICENSE_FILES = LICENSE
++LIBCEC_VERSION = 89ea1724e7a4bde3f7a4f958b414889cefddb841
++LIBCEC_SITE = http://github.com/Pulse-Eight/libcec/tarball/master
++LIBCEC_INSTALL_STAGING = YES
++LIBCEC_AUTORECONF = YES
++LIBCEC_LICENSE = GPLv2
++LIBCEC_LICENSE_FILES = COPYING
++LIBCEC_DEPENDENCIES = lockdev host-pkgconf
 +
-+define LOCKDEV_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) OPTIM= -C $(@D) V=1 shared
-+endef
++ifeq ($(BR2_PACKAGE_LIBCEC_RBP),y)
++LIBCEC_DEPENDENCIES += rpi-userland
++LIBCEC_CONF_OPT += --enable-rpi \
++	--with-rpi-lib-path=$(STAGING_DIR)/usr/lib \
++	--with-rpi-include-path=$(STAGING_DIR)/usr/include
++endif
 +
-+define LOCKDEV_INSTALL_STAGING_CMDS
-+	$(MAKE) basedir=$(STAGING_DIR)/usr -C $(@D) install
-+	ln -s $(STAGING_DIR)/usr/lib/liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so
-+	ln -s $(STAGING_DIR)/usr/lib/liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.1
-+endef
-+
-+define LOCKDEV_INSTALL_TARGET_CMDS
-+	$(MAKE) basedir=$(TARGET_DIR)/usr -C $(@D) install
-+	ln -s $(TARGET_DIR)/usr/lib/liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so
-+	ln -s $(TARGET_DIR)/usr/lib/liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so.1
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.10.4
