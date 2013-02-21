@@ -1,44 +1,60 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Thu, 21 Feb 2013 19:36:08 +0000
-Subject: [Buildroot] libmad and AVR32 optimisations
-In-Reply-To: <87ppzthm85.fsf@dell.be.48ers.dk>
-References: <CAKcgs2zty=9pybVT7FwDMmSK0omc1x9tgwmDkgiMbixjFkv-oA@mail.gmail.com>
- <771436318.25518.1361402063381.JavaMail.root@advansee.com>
- <87621mhs7d.fsf@dell.be.48ers.dk>
- <CAHt8ZCNf=k9LyXMob_DpzcOYtfBfhfNugr8n02vNwpB+s1fpkg@mail.gmail.com>
- <87y5eigchn.fsf@dell.be.48ers.dk>
- <59153487.35651.1361449720550.JavaMail.root@advansee.com>
- <87ppzthm85.fsf@dell.be.48ers.dk>
-Message-ID: <CAHt8ZCNHZec838Ouh5tLtcxfhQJ1UHBQ1AhpaMGX1V+o-mjjkw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 21 Feb 2013 20:49:29 +0100
+Subject: [Buildroot] [PATCH 07/13] libmodplug: new package
+In-Reply-To: <c2eecc3b657fbcad032c74fcb8448d65903c8376.1361458625.git.maxime.hadjinlian@gmail.com>
+References: <cover.1361458625.git.maxime.hadjinlian@gmail.com>
+ <c2eecc3b657fbcad032c74fcb8448d65903c8376.1361458625.git.maxime.hadjinlian@gmail.com>
+Message-ID: <201302212049.30208.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21 February 2013 12:42, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Beno?t" == Beno?t Th?baudeau <benoit.thebaudeau@advansee.com> writes:
->
->  Simon> The problem is that, for libmad to be usable on avr32, this
->  Simon> optimization patch really *is* needed.
->  >>
->  >> Ok, then lets fix it up instead.
->
->  Beno?t> To fix it up, you can check if libmad is provided with the ASF:
->  Beno?t> http://www.atmel.com/tools/AVRSOFTWAREFRAMEWORK.aspx
->
->  Beno?t> If so, it may have been cleaned up since the BuildRoot patch,
->  Beno?t> so generate a new patch from the ASF against mainline libmad,
->  Beno?t> and retest.
->
-> Simon, will you look into this?
+Maxime, All,
 
-Unfortunately, this approach doesn't work: using a regenerated avr32
-patch from ASF, the madplay build still fails in exactly the same
-manner if the architecture-specific optimisations are disabled for
-libmad.
+On Thursday 21 February 2013 Maxime Hadjinlian wrote:
+> MOD music file decoder.
+> This package was originally found at : https://github.com/huceke/buildroot-rbp
+> By gimli <ebsi4711@gmail.com>
+[--SNIP--]
+> diff --git a/package/Config.in b/package/Config.in
+> index c6e1fd4..ac021e8 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -349,6 +349,7 @@ source "package/alsa-lib/Config.in"
+>  source "package/audiofile/Config.in"
+>  source "package/celt051/Config.in"
+>  source "package/libao/Config.in"
+> +source "package/libmodplug/Config.in"
 
-A simpler approach would be to force the arch-specific optimisations
-to be enabled for avr32; would that be an acceptable compromise?
+Alphabetical order, please.
 
-Simon.
+> diff --git a/package/libmodplug/libmodplug.mk b/package/libmodplug/libmodplug.mk
+> new file mode 100644
+> index 0000000..889056e
+> --- /dev/null
+> +++ b/package/libmodplug/libmodplug.mk
+> @@ -0,0 +1,11 @@
+> +#############################################################
+> +#
+> +# libmodplug
+> +#
+> +#############################################################
+> +
+> +LIBMODPLUG_VERSION = 0.8.7
+> +LIBMODPLUG_SITE = http://downloads.sourceforge.net/project/modplug-xmms/libmodplug/$(LIBMODPLUG_VERSION)
+> +LIBMODPLUG_INSTALL_STAGING = YES
+
+Add the license; it is "Public Domain".
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
