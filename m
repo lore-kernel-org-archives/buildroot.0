@@ -1,103 +1,91 @@
-From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Thu, 21 Feb 2013 21:03:26 +0200
-Subject: [Buildroot] [PATCH] new package: gnome-keyring
-Message-ID: <1361473406-5765-1-git-send-email-stefan.froberg@petroprogram.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 21 Feb 2013 20:03:46 +0100
+Subject: [Buildroot] [PATCH 06/13] libcec: new package
+In-Reply-To: <af62c92a3e5c4bfce4ec2e5cb0bc587ff13cec0a.1361458625.git.maxime.hadjinlian@gmail.com>
+References: <cover.1361458625.git.maxime.hadjinlian@gmail.com>
+ <af62c92a3e5c4bfce4ec2e5cb0bc587ff13cec0a.1361458625.git.maxime.hadjinlian@gmail.com>
+Message-ID: <201302212003.47612.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GNOME Keyring
+Maxime, All,
 
-GNOME Keyring is a collection of components in GNOME that store secrets,
-passwords, keys, certificates and makes them available to applications.
+On Thursday 21 February 2013 Maxime Hadjinlian wrote:
+> libCEC allows you in combination with the right hardware to control your device
+> with your TV remote control. Utilising your existing HDMI cabling
+> This package was originally found at : https://github.com/huceke/buildroot-rbp
+> By gimli <ebsi4711@gmail.com>
+[--SNIP--]
+> diff --git a/package/libcec/Config.in b/package/libcec/Config.in
+> new file mode 100644
+> index 0000000..5051b94
+> --- /dev/null
+> +++ b/package/libcec/Config.in
+> @@ -0,0 +1,30 @@
+> +config BR2_PACKAGE_LIBCEC
+> +	bool "libcec"
+> +	select BR2_PACKAGE_LOCKDEV
+> +	depends on BR2_USE_WCHAR
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	help
+> +	  libCEC allows you in combination with the right hardware to
+> +	  control your device with your TV remote control. Utilising your
+> +	  existing HDMI cabling.
+> +	  
+> +	  https://github.com/Pulse-Eight/libcec
+> +
+> +if BR2_PACKAGE_LIBCEC && BR2_arm
+> +
+> +config BR2_PACKAGE_LIBCEC_RBP
+> +	bool "rpi support"
+> +	depends on BR2_LARGEFILE
+> +	depends on BR2_INSTALL_LIBSTDCPP
 
-GNOME Keyring is integrated with the user's login, so that their secret
-storage can be unlocked when the user's logins into their session.
+No need for 'depends on BR2_INSTALL_LIBSTDCPP', it's guaranteed by
+the same depends on for the main symbol.
 
-GNOME Keyring is based around a standard called PKCS#11 which is a standard
-way for applications to manage certificates and keys on smart cards or secure
-storage.
+> +	select BR2_PACKAGE_RPI_USERLAND
+> +	help
+> +	  Enable RasberryPi support
+> +
+> +comment "rpi support requires a toolchain with LARGEFILE and C++ support"
+> +	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_LARGEFILE)
 
-Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
----
- package/Config.in                      |    1 +
- package/gnome-keyring/Config.in        |   24 ++++++++++++++++++++++++
- package/gnome-keyring/gnome-keyring.mk |   22 ++++++++++++++++++++++
- 3 files changed, 47 insertions(+), 0 deletions(-)
- create mode 100644 package/gnome-keyring/Config.in
- create mode 100644 package/gnome-keyring/gnome-keyring.mk
+Ditto, just mention LARGEFILE.
 
-diff --git a/package/Config.in b/package/Config.in
-index b2b580b..55c99bb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -169,6 +169,7 @@ source "package/feh/Config.in"
- source "package/freerdp/Config.in"
- source "package/gqview/Config.in"
- source "package/gmpc/Config.in"
-+source "package/gnome-keyring/Config.in"
- source "package/gob2/Config.in"
- source "package/gtkperf/Config.in"
- source "package/leafpad/Config.in"
-diff --git a/package/gnome-keyring/Config.in b/package/gnome-keyring/Config.in
-new file mode 100644
-index 0000000..a29fa9f
---- /dev/null
-+++ b/package/gnome-keyring/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_GNOME_KEYRING
-+	bool "gnome-keyring"
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBGTK2
-+	select BR2_PACKAGE_GCONF
-+	select BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_LINUX_PAM
-+	select BR2_PACKAGE_LIBTASN1
-+	select BR2_PACKAGE_LIBGCRYPT
-+	help
-+	  GNOME Keyring is a collection of components in GNOME that store 
-+	  secrets, passwords, kets, certificates  and make them available
-+	  to applications.
-+
-+	  GNOME Keyring is integrated with the user's login, so that their
-+	  secret storage can be unlocked when the user logins into their
-+	  session.
-+
-+	  GNOME Keyring is based around a standard called PKCS#11,
-+	  which is a standard way for applications to manage
-+	  certificates and keys on smart cards or secure storage
-+
-+	  https://live.gnome.org/GnomeKeyring
-+
-diff --git a/package/gnome-keyring/gnome-keyring.mk b/package/gnome-keyring/gnome-keyring.mk
-new file mode 100644
-index 0000000..4daa204
---- /dev/null
-+++ b/package/gnome-keyring/gnome-keyring.mk
-@@ -0,0 +1,22 @@
-+#############################################################
-+#
-+# gnome-keyring
-+#
-+#############################################################
-+
-+GNOME_KEYRING_MAJOR_VERSION = 2.28
-+GNOME_KEYRING_MINOR_VERSION = 2
-+GNOME_KEYRING_VERSION = $(GNOME_KEYRING_MAJOR_VERSION).$(GNOME_KEYRING_MINOR_VERSION)
-+GNOME_KEYRING_SOURCE = gnome-keyring-$(GNOME_KEYRING_VERSION).tar.bz2
-+GNOME_KEYRING_SITE = http://ftp.gnome.org/pub/gnome/sources/gnome-keyring/$(GNOME_KEYRING_MAJOR_VERSION)
-+GNOME_KEYRING_DEPENDENCIES += dbus linux-pam libtasn1 libgcrypt gconf \
-+			      libglib2 libgtk2
-+GNOME_KEYRING_CONF_OPT += --with-pam-dir=/lib/security \
-+			  --with-root-certs=/etc/ssl/certs
-+GNOME_KEYRING_AUTORECONF = YES
-+GNOME_KEYRING_INSTALL_STAGING = YES
-+GNOME_KEYRING_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
-+			 ASN1PARSER=$(STAGING_DIR)/usr/bin/asn1Parser \
-+			 ac_cv_file__dev_random=yes
-+
-+$(eval $(autotools-package))
+[--SNIP--]
+> diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+> new file mode 100644
+> index 0000000..2974cbf
+> --- /dev/null
+> +++ b/package/libcec/libcec.mk
+> @@ -0,0 +1,22 @@
+> +#############################################################
+> +#
+> +# libcec
+> +#
+> +#############################################################
+> +
+> +LIBCEC_VERSION = 89ea1724e7a4bde3f7a4f958b414889cefddb841
+> +LIBCEC_SITE = http://github.com/Pulse-Eight/libcec/tarball/master
+> +LIBCEC_INSTALL_STAGING = YES
+> +LIBCEC_AUTORECONF = YES
+> +LIBCEC_LICENSE = GPLv2
+
+It's GPLv2+
+
+(The rest of the series I'll look at after dinner. Hang on tight! ;-) )
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.7.6
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
