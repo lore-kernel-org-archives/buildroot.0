@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Feb 2013 19:44:52 +0100
-Subject: [Buildroot] [PATCH 03/13] libbluray: new package
-In-Reply-To: <687bab14d1ef9d217df22d2875e5ccc03b924e0e.1361458625.git.maxime.hadjinlian@gmail.com>
+Date: Thu, 21 Feb 2013 19:47:04 +0100
+Subject: [Buildroot] [PATCH 04/13] libcdio: new package
+In-Reply-To: <e06bb5510036fde83350074e66d17f52d314ee2c.1361458625.git.maxime.hadjinlian@gmail.com>
 References: <cover.1361458625.git.maxime.hadjinlian@gmail.com>
- <687bab14d1ef9d217df22d2875e5ccc03b924e0e.1361458625.git.maxime.hadjinlian@gmail.com>
-Message-ID: <201302211944.52590.yann.morin.1998@free.fr>
+ <e06bb5510036fde83350074e66d17f52d314ee2c.1361458625.git.maxime.hadjinlian@gmail.com>
+Message-ID: <201302211947.04788.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,29 +14,28 @@ To: buildroot@busybox.net
 Maxime, All,
 
 On Thursday 21 February 2013 Maxime Hadjinlian wrote:
-> LIBBLURAY is a client library for accessing bluray disks.
+> The GNU Compact Disc Input and Control library.
 > This package was originally found at : https://github.com/huceke/buildroot-rbp
 > By gimli <ebsi4711@gmail.com>
 [--SNIP--]
-> diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+> diff --git a/package/libcdio/libcdio.mk b/package/libcdio/libcdio.mk
 > new file mode 100644
-> index 0000000..a1fc69b
+> index 0000000..71ffe91
 > --- /dev/null
-> +++ b/package/libbluray/libbluray.mk
-> @@ -0,0 +1,14 @@
+> +++ b/package/libcdio/libcdio.mk
+> @@ -0,0 +1,18 @@
 > +#############################################################
 > +#
-> +# libbluray
+> +# libcdio
 > +#
 > +#############################################################
 > +
-> +LIBBLURAY_VERSION = 0.2.2
-> +LIBBLURAY_SITE = ftp://ftp.videolan.org/pub/videolan/libbluray/$(LIBBLURAY_VERSION)
-> +LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
-> +LIBBLURAY_INSTALL_STAGING = YES
-> +LIBBLURAY_LICENSE = LGPLv2.1
+> +LIBCDIO_VERSION = 0.82
+> +LIBCDIO_SITE = $(BR2_GNU_MIRROR)/libcdio
+> +LIBCDIO_INSTALL_STAGING = YES
+> +LIBCDIO_LICENSE = GPLv3
 
-It is LGPLv2.1+.
+It is GPLv3+.
 
 Regards,
 Yann E. MORIN.
