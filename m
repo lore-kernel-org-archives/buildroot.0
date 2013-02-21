@@ -1,86 +1,103 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Feb 2013 19:54:22 +0100
-Subject: [Buildroot] [PATCH 05/13] lockdev: new package
-In-Reply-To: <b997b137fd4de75941873cc414dfe8e0d6f5722b.1361458625.git.maxime.hadjinlian@gmail.com>
-References: <cover.1361458625.git.maxime.hadjinlian@gmail.com>
- <b997b137fd4de75941873cc414dfe8e0d6f5722b.1361458625.git.maxime.hadjinlian@gmail.com>
-Message-ID: <201302211954.23165.yann.morin.1998@free.fr>
+From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
+Date: Thu, 21 Feb 2013 21:03:26 +0200
+Subject: [Buildroot] [PATCH] new package: gnome-keyring
+Message-ID: <1361473406-5765-1-git-send-email-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+GNOME Keyring
 
-On Thursday 21 February 2013 Maxime Hadjinlian wrote:
-> library for locking devices
-> This package was originally found at : https://github.com/huceke/buildroot-rbp
-> By gimli <ebsi4711@gmail.com>
-[--SNIP--]
-> diff --git a/package/Config.in b/package/Config.in
-> index 01eeee8..2106391 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -555,6 +555,7 @@ source "package/libffi/Config.in"
->  source "package/gsl/Config.in"
->  source "package/libglib2/Config.in"
->  source "package/libical/Config.in"
-> +source "package/lockdev/Config.in"
+GNOME Keyring is a collection of components in GNOME that store secrets,
+passwords, keys, certificates and makes them available to applications.
 
-Alphabetical order, please.
+GNOME Keyring is integrated with the user's login, so that their secret
+storage can be unlocked when the user's logins into their session.
 
-[--SNIP--]
-> diff --git a/package/lockdev/lockdev.mk b/package/lockdev/lockdev.mk
-> new file mode 100644
-> index 0000000..2012211
-> --- /dev/null
-> +++ b/package/lockdev/lockdev.mk
-> @@ -0,0 +1,30 @@
-> +#############################################################
-> +#
-> +# lockdev
-> +#
-> +#############################################################
-> +
-> +LOCKDEV_VERSION = 1.0.3
-> +LOCKDEV_SITE = http://ftp.de.debian.org/debian/pool/main/l/lockdev
-> +LOCKDEV_SOURCE = lockdev_$(LOCKDEV_VERSION).orig.tar.gz
-> +LOCKDEV_INSTALL_STAGING = YES
-> +LOCKDEV_LICENSE = LGPLv2.1
-> +LOCKDEV_LICENSE_FILES = LICENSE
-> +
-> +define LOCKDEV_BUILD_CMDS
-> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) OPTIM= -C $(@D) V=1 shared
+GNOME Keyring is based around a standard called PKCS#11 which is a standard
+way for applications to manage certificates and keys on smart cards or secure
+storage.
 
-No 'V=1' please. Add building the static version (if possible).
+Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+---
+ package/Config.in                      |    1 +
+ package/gnome-keyring/Config.in        |   24 ++++++++++++++++++++++++
+ package/gnome-keyring/gnome-keyring.mk |   22 ++++++++++++++++++++++
+ 3 files changed, 47 insertions(+), 0 deletions(-)
+ create mode 100644 package/gnome-keyring/Config.in
+ create mode 100644 package/gnome-keyring/gnome-keyring.mk
 
-> +endef
-> +
-> +define LOCKDEV_INSTALL_STAGING_CMDS
-> +	$(MAKE) basedir=$(STAGING_DIR)/usr -C $(@D) install
-> +	ln -s $(STAGING_DIR)/usr/lib/liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so
-> +	ln -s $(STAGING_DIR)/usr/lib/liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.1
-
-And install the static version, too. ;-)
-
-> +endef
-> +
-> +define LOCKDEV_INSTALL_TARGET_CMDS
-> +	$(MAKE) basedir=$(TARGET_DIR)/usr -C $(@D) install
-> +	ln -s $(TARGET_DIR)/usr/lib/liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so
-> +	ln -s $(TARGET_DIR)/usr/lib/liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so.1
-> +endef
-> +
-> +$(eval $(generic-package))
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index b2b580b..55c99bb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -169,6 +169,7 @@ source "package/feh/Config.in"
+ source "package/freerdp/Config.in"
+ source "package/gqview/Config.in"
+ source "package/gmpc/Config.in"
++source "package/gnome-keyring/Config.in"
+ source "package/gob2/Config.in"
+ source "package/gtkperf/Config.in"
+ source "package/leafpad/Config.in"
+diff --git a/package/gnome-keyring/Config.in b/package/gnome-keyring/Config.in
+new file mode 100644
+index 0000000..a29fa9f
+--- /dev/null
++++ b/package/gnome-keyring/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_GNOME_KEYRING
++	bool "gnome-keyring"
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBGTK2
++	select BR2_PACKAGE_GCONF
++	select BR2_PACKAGE_DBUS
++	select BR2_PACKAGE_LINUX_PAM
++	select BR2_PACKAGE_LIBTASN1
++	select BR2_PACKAGE_LIBGCRYPT
++	help
++	  GNOME Keyring is a collection of components in GNOME that store 
++	  secrets, passwords, kets, certificates  and make them available
++	  to applications.
++
++	  GNOME Keyring is integrated with the user's login, so that their
++	  secret storage can be unlocked when the user logins into their
++	  session.
++
++	  GNOME Keyring is based around a standard called PKCS#11,
++	  which is a standard way for applications to manage
++	  certificates and keys on smart cards or secure storage
++
++	  https://live.gnome.org/GnomeKeyring
++
+diff --git a/package/gnome-keyring/gnome-keyring.mk b/package/gnome-keyring/gnome-keyring.mk
+new file mode 100644
+index 0000000..4daa204
+--- /dev/null
++++ b/package/gnome-keyring/gnome-keyring.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# gnome-keyring
++#
++#############################################################
++
++GNOME_KEYRING_MAJOR_VERSION = 2.28
++GNOME_KEYRING_MINOR_VERSION = 2
++GNOME_KEYRING_VERSION = $(GNOME_KEYRING_MAJOR_VERSION).$(GNOME_KEYRING_MINOR_VERSION)
++GNOME_KEYRING_SOURCE = gnome-keyring-$(GNOME_KEYRING_VERSION).tar.bz2
++GNOME_KEYRING_SITE = http://ftp.gnome.org/pub/gnome/sources/gnome-keyring/$(GNOME_KEYRING_MAJOR_VERSION)
++GNOME_KEYRING_DEPENDENCIES += dbus linux-pam libtasn1 libgcrypt gconf \
++			      libglib2 libgtk2
++GNOME_KEYRING_CONF_OPT += --with-pam-dir=/lib/security \
++			  --with-root-certs=/etc/ssl/certs
++GNOME_KEYRING_AUTORECONF = YES
++GNOME_KEYRING_INSTALL_STAGING = YES
++GNOME_KEYRING_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
++			 ASN1PARSER=$(STAGING_DIR)/usr/bin/asn1Parser \
++			 ac_cv_file__dev_random=yes
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.7.6
