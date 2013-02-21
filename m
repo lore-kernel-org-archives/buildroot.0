@@ -1,55 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Feb 2013 21:53:40 +0100
-Subject: [Buildroot] [PATCH 12/13] tinyxml: new package
-In-Reply-To: <ad24f17c066c0f28873e76aaf0f69b08ca205e36.1361458625.git.maxime.hadjinlian@gmail.com>
+Date: Thu, 21 Feb 2013 21:54:15 +0100
+Subject: [Buildroot] [PATCH 13/13] Install libfribidi to staging
+In-Reply-To: <ba6371a6ed52c760f18dbf14b662f6310b29f776.1361458625.git.maxime.hadjinlian@gmail.com>
 References: <cover.1361458625.git.maxime.hadjinlian@gmail.com>
- <ad24f17c066c0f28873e76aaf0f69b08ca205e36.1361458625.git.maxime.hadjinlian@gmail.com>
-Message-ID: <201302212153.41241.yann.morin.1998@free.fr>
+ <ba6371a6ed52c760f18dbf14b662f6310b29f776.1361458625.git.maxime.hadjinlian@gmail.com>
+Message-ID: <201302212154.15635.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
-
-Sorry, I forgot something in the previous review...
-
 On Thursday 21 February 2013 Maxime Hadjinlian wrote:
-[--SNIP--]
-> diff --git a/package/tinyxml/tinyxml.mk b/package/tinyxml/tinyxml.mk
-> new file mode 100644
-> index 0000000..f4f042b
-> --- /dev/null
-> +++ b/package/tinyxml/tinyxml.mk
-> @@ -0,0 +1,12 @@
-> +#############################################################
-> +#
-> +# tinyxml
-> +#
-> +#############################################################
-> +
-> +TINYXML_VERSION = 2.6.2_2
-> +TINYXML_SITE = http://mirrors.xbmc.org/build-deps/sources
-> +TINYXML_AUTORECONF = YES
+> Install libfribi to staging to be able to link against it.
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-Explain why it needs autoreconf.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-As you point the help text to the git repository, I looked there, and
-there is *no* configure.{ac,in}.
-
-But looking at the download URL, I downloaded the tarball, and it seems
-the XBMC folks have added a configure.ac in their distribution of tinyxml2.
-
-But looking even more closely, it seems XBMC is using tinyxml, and *not*
-tinyxml2. Specifically, they are using tinyxml 2.6.2, originally available
-there (not to say that's the one we should use):
-    http://sourceforge.net/projects/tinyxml/
-
-So, Id 'update the help text to refer to tinyxml, not tinyxml2.
-
-Regards,
-Yann E. MORIN.
+> ---
+>  package/libfribidi/libfribidi.mk |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
+> index 538997c..45568ca 100644
+> --- a/package/libfribidi/libfribidi.mk
+> +++ b/package/libfribidi/libfribidi.mk
+> @@ -9,5 +9,6 @@ LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.bz2
+>  LIBFRIBIDI_SITE = http://www.fribidi.org/download/
+>  LIBFRIBIDI_LICENSE = LGPLv2.1+
+>  LIBFRIBIDI_LICENSE_FILES = COPYING
+> +LIBFRIBIDI_INSTALL_STAGING = YES
+>  
+>  $(eval $(autotools-package))
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
