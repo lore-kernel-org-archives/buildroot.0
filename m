@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Feb 2013 22:26:14 +0100
-Subject: [Buildroot] [PATCH] polkit: bump to version 0.104
-In-Reply-To: <1361468671-9589-1-git-send-email-stefan.froberg@petroprogram.com>
-References: <1361468671-9589-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <201302212226.14845.yann.morin.1998@free.fr>
+Date: Thu, 21 Feb 2013 22:30:17 +0100
+Subject: [Buildroot] [PATCH] new package: libwnck
+In-Reply-To: <1361469999-9963-1-git-send-email-stefan.froberg@petroprogram.com>
+References: <1361469999-9963-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <201302212230.17978.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,40 @@ To: buildroot@busybox.net
 Stefan, All,
 
 On Thursday 21 February 2013 Stefan Fr?berg wrote:
-> Polkit 0.104.
+> libwnck
   ^^^
 Useless line.
 
-> Also some minor configuration fixes and patch to enable building
-> with uClibc.
+> A window navigation construction kit
 > 
 > Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> ---
->  package/polkit/polkit-0.104-uclibc-netgroup.patch |   41 +++++++++++++++++++++
->  package/polkit/polkit.mk                          |    6 ++-
->  2 files changed, 45 insertions(+), 2 deletions(-)
->  create mode 100755 package/polkit/polkit-0.104-uclibc-netgroup.patch
-> 
-> diff --git a/package/polkit/polkit-0.104-uclibc-netgroup.patch b/package/polkit/polkit-0.104-uclibc-netgroup.patch
-> new file mode 100755
-> index 0000000..423cc5d
+[--SNIP--]
+> diff --git a/package/libwnck/Config.in b/package/libwnck/Config.in
+> new file mode 100644
+> index 0000000..42ca4fc
 > --- /dev/null
-> +++ b/package/polkit/polkit-0.104-uclibc-netgroup.patch
+> +++ b/package/libwnck/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_LIBWNCK
+> +	bool "libwnck"
+> +	select	BR2_PACKAGE_LIBGTK2
 
-Can't you use:
-    POLKIT_PATCH = URL-to-patch
+You have to inherit the dependencies for libgtk2:
+    depends on BR2_PACKAGE_XORG7||BR2_PACKAGE_DIRECTFB # libgtk2
+    depends on BR2_USE_WCHAR # glib2
+    depends on BR2_INSTALL_LIBSTDCPP # pango
 
-Otherwise:
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+But I'd prefer it it were a 'depends on BR2_PACKAGE_LIBGTK2' rather than
+a 'select'.
+
+And add a comment anyway to state why libwnck is not available.
+
+> +	select	BR2_PACKAGE_STARTUP_NOTIFICATION
+
+Ditto, you need to forward startyup-notification's dependencies.
 
 Regards,
-Yann E. MORIN.
+Yann E. MORIN, getting a bit tired of only doing reviews, tonight... ;-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
