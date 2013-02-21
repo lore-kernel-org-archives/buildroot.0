@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Feb 2013 22:30:17 +0100
-Subject: [Buildroot] [PATCH] new package: libwnck
-In-Reply-To: <1361469999-9963-1-git-send-email-stefan.froberg@petroprogram.com>
-References: <1361469999-9963-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <201302212230.17978.yann.morin.1998@free.fr>
+Date: Thu, 21 Feb 2013 22:41:37 +0100
+Subject: [Buildroot] [PATCH] new package: libcanberra
+In-Reply-To: <1361471297-23210-1-git-send-email-stefan.froberg@petroprogram.com>
+References: <1361471297-23210-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <201302212241.37780.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +13,46 @@ To: buildroot@busybox.net
 Stefan, All,
 
 On Thursday 21 February 2013 Stefan Fr?berg wrote:
-> libwnck
+> libcanberra
   ^^^
 Useless line.
 
-> A window navigation construction kit
+> Portable sound event library
 > 
 > Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
 [--SNIP--]
-> diff --git a/package/libwnck/Config.in b/package/libwnck/Config.in
+> diff --git a/package/libcanberra/Config.in b/package/libcanberra/Config.in
 > new file mode 100644
-> index 0000000..42ca4fc
+> index 0000000..59accd0
 > --- /dev/null
-> +++ b/package/libwnck/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_LIBWNCK
-> +	bool "libwnck"
+> +++ b/package/libcanberra/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_LIBCANBERRA
+> +	bool "libcanberra"
+> +	select	BR2_PACKAGE_ALSA_LIB
+
+You need to inherit the depndencies of alsa-lib:
+    depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+
+(add a comment when it's not availalbe.)
+
+Also, single-space between 'select' and the symbol name.
+
 > +	select	BR2_PACKAGE_LIBGTK2
 
-You have to inherit the dependencies for libgtk2:
-    depends on BR2_PACKAGE_XORG7||BR2_PACKAGE_DIRECTFB # libgtk2
-    depends on BR2_USE_WCHAR # glib2
-    depends on BR2_INSTALL_LIBSTDCPP # pango
+Ditto the previous patch: I'd prefer a 'depends on' rather than a
+'select'
 
-But I'd prefer it it were a 'depends on BR2_PACKAGE_LIBGTK2' rather than
-a 'select'.
+> +	select	BR2_PACKAGE_LIBVORBIS
+> +	help
+> +	  Portable sound event library
+> +
+> +	  http://0pointer.de/lennart/projects/libcanberra
 
-And add a comment anyway to state why libwnck is not available.
-
-> +	select	BR2_PACKAGE_STARTUP_NOTIFICATION
-
-Ditto, you need to forward startyup-notification's dependencies.
+Ah-ah! Yet another poetteringy lib. ;-)
 
 Regards,
-Yann E. MORIN, getting a bit tired of only doing reviews, tonight... ;-)
+Yann E. MORIN.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
