@@ -1,25 +1,16 @@
-From: Stephen Turner <artic.knight31337@gmail.com>
-Date: Thu, 21 Feb 2013 10:43:56 -0500
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Thu, 21 Feb 2013 18:21:42 +0200
 Subject: [Buildroot] network-manager-applet for buildroot almost ready
 In-Reply-To: <51263203.4070709@petroprogram.com>
 References: <51263203.4070709@petroprogram.com>
-Message-ID: <CAN_xxrXpuxK+5JwR7_QeqryFRsEPRgFbdVFs2mSqf_0rLdX5qA@mail.gmail.com>
+Message-ID: <51264996.5060404@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When i try using network manager It completely dissapears from the make
-menu. if i do not have ipv6 support it has a place holder saying your
-missing blah but if i include all dependencies its no longer available? a
-bit different from the issue you guys are having but maybe its a bug then?
-or is my issue user error? i was running with the latest git repository as
-of yesterday.
-
-On Thu, Feb 21, 2013 at 9:41 AM, Stefan Fr?berg <
-stefan.froberg@petroprogram.com> wrote:
-
+21.2.2013 16:41, Stefan Fr?berg kirjoitti:
 > Hello all!
 >
 > I have network-manager-applet running and it appears into fluxbox system
@@ -50,16 +41,40 @@ stefan.froberg@petroprogram.com> wrote:
 > Stefan
 >
 >
->
->
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130221/77b8f66d/attachment.html>
+
+I added ConsoleKits ck-launch-session to my .xinitrc as instructed here
+http://fluxbox-wiki.org/index.php?title=Start_fluxbox_from_the_command_line
+
+Now it does not anymore nag about missing session.
+However, still no networks detected and when I try to click and view
+properties of nm-applet it spits this:
+
+** Message: applet now removed from the notification area
+** Message: applet now embedded in the notification area
+
+** (nm-applet:905): WARNING **: async_got_type: could not read
+properties for /org/freedesktop/NetworkManager/ActiveConnection/10:
+Method "Get" with signature "ss" on interface
+"org.freedesktop.DBus.Properties" doesn't exist
+
+
+** (nm-applet:905): WARNING **: async_got_type: could not read
+properties for /org/freedesktop/NetworkManager/ActiveConnection/10:
+Method "Get" with signature "ss" on interface
+"org.freedesktop.DBus.Properties" doesn't exist
+
+
+** (nm-applet:905): WARNING **: Connection activation failed: Creating
+object for path '/org/freedesktop/NetworkManager/ActiveConnection/10'
+failed in libnm-glib.
+
+** (nm-applet:905): WARNING **: async_got_type: could not read
+properties for /org/freedesktop/NetworkManager/ActiveConnection/10:
+Method "Get" with signature "ss" on interface
+"org.freedesktop.DBus.Properties" doesn't exist
+
+
+So this is definetely either dbus or networkmanager (or both) problem
+
+Regards
+Stefan
