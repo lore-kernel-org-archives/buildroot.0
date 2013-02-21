@@ -1,99 +1,95 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Feb 2013 21:17:57 +0100
-Subject: [Buildroot] [PATCH 10/13] librtmp: new package
-In-Reply-To: <b7845a27b24e15e0657906431ba388d10d725f73.1361458625.git.maxime.hadjinlian@gmail.com>
-References: <cover.1361458625.git.maxime.hadjinlian@gmail.com>
- <b7845a27b24e15e0657906431ba388d10d725f73.1361458625.git.maxime.hadjinlian@gmail.com>
-Message-ID: <201302212117.57668.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 21 Feb 2013 19:28:05 +0100
+Subject: [Buildroot] [PATCH 1/1] Added local directory as soure of
+ kernel code
+In-Reply-To: <1360310725-6463-2-git-send-email-rafal.fabich@gmail.com>
+References: <1360310725-6463-1-git-send-email-rafal.fabich@gmail.com>
+ <1360310725-6463-2-git-send-email-rafal.fabich@gmail.com>
+Message-ID: <51266735.6080603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+On 08/02/13 09:05, Rafal Fabich wrote:
+> In 'menuconfig' user can choose the local directory as a source of Linux kernel code.
+> Useful during kernel drivers or modules development.
+>
+> Tested on three different development machines and different kernel sources.
+>
+> Signed-off-by: Rafal Fabich <rafal.fabich@gmail.com>
 
-On Thursday 21 February 2013 Maxime Hadjinlian wrote:
-> librtmp - RTMPDump Real-Time Messaging Protocol API
-> This package was originally found at : https://github.com/huceke/buildroot-rbp
-> By gimli <ebsi4711@gmail.com>
+  Since we get this kind of patch very regularly, I think it's time we 
+commit it :-)
 
-> diff --git a/package/librtmp/Config.in b/package/librtmp/Config.in
-> new file mode 100644
-> index 0000000..8152f87
-> --- /dev/null
-> +++ b/package/librtmp/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_LIBRTMP
-> +	bool "librtmp"
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-The package is 'rtmpdump' so I'd just call it 'rtmpdump' in Buildroot as
-well (you can add in the help text that only the librtmp is installed).
-
-> +	select BR2_PACKAGE_OPENSSL
-
-rtmpdump can also use gnutls, so I'd rather do:
-
-    select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_POLARSSL && !BR2_PACKAGE_GNUTLS
-
-And adapt the .mk accordingly, of course.
-
-There is no point in forcing openssl if the user already chose to use
-another SSL library.
-
-> diff --git a/package/librtmp/librtmp.mk b/package/librtmp/librtmp.mk
-> new file mode 100644
-> index 0000000..5e60428
-> --- /dev/null
-> +++ b/package/librtmp/librtmp.mk
-> @@ -0,0 +1,27 @@
-> +#############################################################
-> +#
-> +#librtmp
-> +#
-> +#############################################################
+> ---
+>   linux/Config.in |   14 ++++++++++++++
+>   linux/linux.mk  |    3 +++
+>   2 files changed, 17 insertions(+)
+>
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 3c50acc..d88d920 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -52,6 +52,11 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT
+>   	  This option allows Buildroot to get the Linux kernel source
+>   	  code from a Git repository.
+>
+> +config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+> +	bool "Local directory"
+> +	help
+> +	  This option allows Buildroot to get the Linux kernel source
+> +	  code from a local directory.
+>   endchoice
+>
+>   config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+> @@ -74,6 +79,13 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+>   	  Git revision to use in the format used by git rev-parse,
+>   	  E.G. a sha id, a tag, branch, ..
+>
+> +config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+> +	string "Path to the local directory"
+> +	depends on BR2_LINUX_KERNEL_CUSTOM_LOCAL
+> +	help
+> +	  Path to the local directory with the Linux kernel source code.
 > +
-> +LIBRTMP_VERSION = e0056c51cc1710c9a44d2a2c4e2f344fa9cabcf4
-> +LIBRTMP_SITE = git://git.ffmpeg.org/rtmpdump
-> +LIBRTMP_INSTALL_STAGING = YES
-> +LIBRTMP_LICENSE = GPLv2
+> +
+>   config BR2_LINUX_KERNEL_VERSION
+>   	string
+>   	default "3.7.6" if BR2_LINUX_KERNEL_3_7
+> @@ -81,6 +93,8 @@ config BR2_LINUX_KERNEL_VERSION
+>   	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+>   	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+>   	default $BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
+> +	default "local" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
+> +
+>
+>   #
+>   # Patch selection
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 91a9f50..3f2d460 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -15,6 +15,9 @@ LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
+>   else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+>   LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
+>   LINUX_SITE_METHOD = git
+> +else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
+> +LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
+> +LINUX_SITE_METHOD = local
+>   else
+>   LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
+>   # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+>
 
-Since you only install the library, it's LGPLv2.1+.
-
-librtmp/ has its own COPYING file, which is LGPLv2.1, and source files
-in librtmp/ all refer to LGPLv2.1 or later. So, GPLv2.1+.
-
-Add a comment in this file that the LICENSE should be updated, should
-the program(s) be one day installed.
-
-> +LIBRTMP_LICENSE_FILES = COPYING
-> +LIBRTMP_DEPENDENCIES = openssl zlib
-
-And here, I'd do something like:
-
-    LIBRTMP_DEPENDENCIES = openssl zlib
-    ifeq ($(BR2_PACKAGE_GNUTLS),y)
-    LIBRTMP_DEPENDENCIES += gnutls
-    else
-    ifeq ($(BR2_PACKAGE_POLARSSL),y)
-    LIBRTMP_DEPENDENCIES += polarssl
-    else
-    LIBRTMP_DEPENDENCIES += openssl
-    endif
-    endif
-
-> +define LIBRTMP_BUILD_CMDS
-> +	sed -ie "s|prefix=/usr/local|prefix=/usr|" $(@D)/librtmp/Makefile
-
-I'd do that as a post-extract (or post-patch) hook instead.
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
