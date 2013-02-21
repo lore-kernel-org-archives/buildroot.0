@@ -1,48 +1,42 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Fri, 22 Feb 2013 01:32:54 +0200
-Subject: [Buildroot] editing device_table_dev.txt
-In-Reply-To: <5126AC9B.30302@mind.be>
-References: <1361403460.22521.44.camel@genx.eng.msli.com>
- <5125F38B.2030204@petroprogram.com> <5125F50C.7020902@petroprogram.com>
- <20130221102315.GB12155@sapphire.tkos.co.il>
- <5125F7BB.50403@petroprogram.com> <5126A675.2060308@mind.be>
- <5126A8C7.2000009@petroprogram.com> <5126AC9B.30302@mind.be>
-Message-ID: <5126AEA6.7060004@petroprogram.com>
+From: Daniel Price <daniel.price@gmail.com>
+Date: Thu, 21 Feb 2013 15:33:55 -0800
+Subject: [Buildroot] [PATCH 1/2] V2: Add bzip2 to host-python when it is
+ selected (aids in compiling nodejs)
+Message-ID: <CAKduhSvKSsC0qCBVBO6poDzbaMiYZ2fACjThGW3JVO5GLP82nw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[snip]
->>>   I'm afraid that mdev and udev no longer work with old kernels that
->>> don't support the DEVTMPFS option...
->>>
->>>   mdev and udev don't create device nodes; they only do something
->>> configurable when a hotplug event happens.
->>>
->>
->> What you mean that mdev or udev does not create device nodes ???
->> If older kernels don't support devtmpfs like Baruch
->> said then who does that device node creation if not the mdev or udev
->> when event happens ???
->
->  Well, nobody...
->
->  Turns out that mdev still does device node creation. Makes me wonder
-> if I'm not mistaken about udev as well... I just remember hearing that
-> device node creation was removed when DEVTMPFS was introduced.
->
+Based off of patches posted by (and Signed-off-by): Jonathan Liu
+<net147@gmail.com>
 
-Speaking of udev, I must say that Im not very happy of that recent
-including of systemd as hard dependency.
-If it would be optional then it would be ok and fine, but to forcefully
-cram yet-another init system (in addition to bazillion other existing ones)
-down the throats of latest udev users .... not good, not good at all!
+Signed-off-by: Daniel Price <daniel.price@gmail.com>
+---
+ package/python/python.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-Also, what I have studied little of those Gnome3 software packages,
-there also seems to spreading this systemd thing.
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 71591b7..91496e1 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -30,7 +30,6 @@ HOST_PYTHON_CONF_OPT += \
+  --disable-gdbm \
+  --disable-bsddb \
+  --disable-test-modules \
+- --disable-bz2 \
+  --disable-ssl
 
+ HOST_PYTHON_MAKE_ENV = \
+@@ -49,7 +48,7 @@ HOST_PYTHON_MAKE = $(MAKE1)
 
+ PYTHON_DEPENDENCIES  = host-python libffi
 
-Stefan
+-HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
++HOST_PYTHON_DEPENDENCIES = host-expat host-zlib host-bzip2
+
+ PYTHON_INSTALL_STAGING = YES
+
+--
+1.7.6.5
