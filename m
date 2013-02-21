@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Feb 2013 23:05:27 +0100
-Subject: [Buildroot] [PATCH] new package: gnome-keyring
-In-Reply-To: <1361473406-5765-1-git-send-email-stefan.froberg@petroprogram.com>
-References: <1361473406-5765-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <201302212305.27963.yann.morin.1998@free.fr>
+Date: Thu, 21 Feb 2013 23:11:21 +0100
+Subject: [Buildroot] [PATCH] new package: network-manager-applet
+In-Reply-To: <1361474534-6070-1-git-send-email-stefan.froberg@petroprogram.com>
+References: <1361474534-6070-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <201302212311.21768.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,96 +13,69 @@ To: buildroot@busybox.net
 Stefan, All,
 
 On Thursday 21 February 2013 Stefan Fr?berg wrote:
-> GNOME Keyring
-  ^^^
-Useless line.
+> GTK+ applet for NetworkManager
 
-> GNOME Keyring is a collection of components in GNOME that store secrets,
-> passwords, keys, certificates and makes them available to applications.
-> 
-> GNOME Keyring is integrated with the user's login, so that their secret
-> storage can be unlocked when the user's logins into their session.
-> 
-> GNOME Keyring is based around a standard called PKCS#11 which is a standard
-> way for applications to manage certificates and keys on smart cards or secure
-> storage.
-> 
+Oh, nice! Did you finally managed to make it work?
+
 > Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
 [--SNIP--]
-> diff --git a/package/gnome-keyring/Config.in b/package/gnome-keyring/Config.in
+> diff --git a/package/network-manager-applet/Config.in b/package/network-manager-applet/Config.in
 > new file mode 100644
-> index 0000000..a29fa9f
+> index 0000000..03cf0e7
 > --- /dev/null
-> +++ b/package/gnome-keyring/Config.in
-> @@ -0,0 +1,24 @@
-> +config BR2_PACKAGE_GNOME_KEYRING
-> +	bool "gnome-keyring"
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_PACKAGE_LIBGTK2
-> +	select BR2_PACKAGE_GCONF
-> +	select BR2_PACKAGE_DBUS
-> +	select BR2_PACKAGE_LINUX_PAM
+> +++ b/package/network-manager-applet/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_NETWORK_MANAGER_APPLET
+> +	bool "network-manager-applet"
+> +	depends on BR2_PACKAGE_NETWORK_MANAGER
+> +	depends on BR2_PACKAGE_ISO_CODES
 > +	select BR2_PACKAGE_LIBTASN1
-> +	select BR2_PACKAGE_LIBGCRYPT
 
-Be careful to properly inherit all required dependencies of the packages
-you 'select'.
+We do not currently have libtasn1 in the packages (although I've seen
+a patch to add it float by recently, maybe your patch? If so, say that
+it needs to be applied before this one).
 
-> +	help
-> +	  GNOME Keyring is a collection of components in GNOME that store 
-> +	  secrets, passwords, kets, certificates  and make them available
-                              ^^^^              ^^
-keys, I presume?
-Please, squash multiple spaces.
+> +	select BR2_PACKAGE_GNOME_KEYRING
+> +	select BR2_PACKAGE_NOTIFICATION_DAEMON
+> +	select BR2_PACKAGE_CONSOLEKIT
 
-> +	  to applications.
-> +
-> +	  GNOME Keyring is integrated with the user's login, so that their
-                                               ^^^^^^[1]
-> +	  secret storage can be unlocked when the user logins into their
-                                                       ^^^^^^[2]
-I know you copied the text on the frontpage, but:
-  [1] the users' login  (its a plural form because of the subsequent "their")
-  [2] the user logs in  (the verb is: to log in)
+Be careful to properly inherit dependencies from packages you 'select'.
 
-> +	  session.
-> +
-> +	  GNOME Keyring is based around a standard called PKCS#11,
-> +	  which is a standard way for applications to manage
-> +	  certificates and keys on smart cards or secure storage
-
-Missing trailing dot (yes, nit-picking here ;-) )
-
-[--SNIP--]
-> diff --git a/package/gnome-keyring/gnome-keyring.mk b/package/gnome-keyring/gnome-keyring.mk
+> diff --git a/package/network-manager-applet/network-manager-applet.mk b/package/network-manager-applet/network-manager-applet.mk
 > new file mode 100644
-> index 0000000..4daa204
+> index 0000000..51834b5
 > --- /dev/null
-> +++ b/package/gnome-keyring/gnome-keyring.mk
-> @@ -0,0 +1,22 @@
+> +++ b/package/network-manager-applet/network-manager-applet.mk
+> @@ -0,0 +1,28 @@
 > +#############################################################
 > +#
-> +# gnome-keyring
+> +# network-manager-applet
 > +#
 > +#############################################################
 > +
-> +GNOME_KEYRING_MAJOR_VERSION = 2.28
-> +GNOME_KEYRING_MINOR_VERSION = 2
-> +GNOME_KEYRING_VERSION = $(GNOME_KEYRING_MAJOR_VERSION).$(GNOME_KEYRING_MINOR_VERSION)
-> +GNOME_KEYRING_SOURCE = gnome-keyring-$(GNOME_KEYRING_VERSION).tar.bz2
-> +GNOME_KEYRING_SITE = http://ftp.gnome.org/pub/gnome/sources/gnome-keyring/$(GNOME_KEYRING_MAJOR_VERSION)
-> +GNOME_KEYRING_DEPENDENCIES += dbus linux-pam libtasn1 libgcrypt gconf \
-> +			      libglib2 libgtk2
-> +GNOME_KEYRING_CONF_OPT += --with-pam-dir=/lib/security \
-> +			  --with-root-certs=/etc/ssl/certs
-> +GNOME_KEYRING_AUTORECONF = YES
+> +NETWORK_MANAGER_APPLET_VERSION = 0.9.2.0
+> +NETWORK_MANAGER_APPLET_SOURCE = network-manager-applet-$(NETWORK_MANAGER_APPLET_VERSION).tar.xz
+> +NETWORK_MANAGER_APPLET_SITE = http://ftp.gnome.org/pub/GNOME/sources/network-manager-applet/0.9/
+> +NETWORK_MANAGER_APPLET_INSTALL_STAGING = YES
+> +NETWORK_MANAGER_APPLET_DEPENDENCIES = network-manager iso-codes libtasn1 \
+> +				     gnome-keyring notification-daemon \
+> +				     consolekit
+> +NETWORK_MANAGER_APPLET_CONF_OPT += --disable-more-warnings \
+> +				   --localstatedir=/var --enable-migration \
+> +				   --with-gtkver=2
+> +NETWORK_MANAGER_APPLET_AUTORECONF = YES
 
-Add a comment explaining why you need autoreconf.
+Why autoreconf?
 
-> +GNOME_KEYRING_INSTALL_STAGING = YES
-> +GNOME_KEYRING_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+> +define	NETWORK_MANAGER_APPLET_FIXUP
+> +	# This file adds that annoying -Werror even if told *no*. Kick it out
+> +	rm -f $(@D)/m4/compiler_warnings.m4
+> +endef
+> +
+> +NETWORK_MANAGER_APPLET_PRE_CONFIGURE_HOOKS += NETWORK_MANAGER_APPLET_FIXUP
 
-This should point to the host-variant of libgcrypt-config.
+Make this a post-extract hook, not a pre-configure hook.
+(Unless it is added by autoreconf?)
 
 Regards,
 Yann E. MORIN.
