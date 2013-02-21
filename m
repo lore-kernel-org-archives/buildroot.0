@@ -1,91 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Feb 2013 20:03:46 +0100
-Subject: [Buildroot] [PATCH 06/13] libcec: new package
-In-Reply-To: <af62c92a3e5c4bfce4ec2e5cb0bc587ff13cec0a.1361458625.git.maxime.hadjinlian@gmail.com>
-References: <cover.1361458625.git.maxime.hadjinlian@gmail.com>
- <af62c92a3e5c4bfce4ec2e5cb0bc587ff13cec0a.1361458625.git.maxime.hadjinlian@gmail.com>
-Message-ID: <201302212003.47612.yann.morin.1998@free.fr>
+From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
+Date: Thu, 21 Feb 2013 21:12:43 +0200
+Subject: [Buildroot] [PATCH] busybox: remove pid file after stopping daemon
+	with start-stop-daemon applet
+Message-ID: <1361473963-5943-1-git-send-email-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+Many daemons leave pid files lying around when they are stopped with
+start-stop-daemon applet in BusyBox.
+This patch will ensure that they are properly cleaned away.
 
-On Thursday 21 February 2013 Maxime Hadjinlian wrote:
-> libCEC allows you in combination with the right hardware to control your device
-> with your TV remote control. Utilising your existing HDMI cabling
-> This package was originally found at : https://github.com/huceke/buildroot-rbp
-> By gimli <ebsi4711@gmail.com>
-[--SNIP--]
-> diff --git a/package/libcec/Config.in b/package/libcec/Config.in
-> new file mode 100644
-> index 0000000..5051b94
-> --- /dev/null
-> +++ b/package/libcec/Config.in
-> @@ -0,0 +1,30 @@
-> +config BR2_PACKAGE_LIBCEC
-> +	bool "libcec"
-> +	select BR2_PACKAGE_LOCKDEV
-> +	depends on BR2_USE_WCHAR
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	help
-> +	  libCEC allows you in combination with the right hardware to
-> +	  control your device with your TV remote control. Utilising your
-> +	  existing HDMI cabling.
-> +	  
-> +	  https://github.com/Pulse-Eight/libcec
-> +
-> +if BR2_PACKAGE_LIBCEC && BR2_arm
-> +
-> +config BR2_PACKAGE_LIBCEC_RBP
-> +	bool "rpi support"
-> +	depends on BR2_LARGEFILE
-> +	depends on BR2_INSTALL_LIBSTDCPP
+Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+---
 
-No need for 'depends on BR2_INSTALL_LIBSTDCPP', it's guaranteed by
-the same depends on for the main symbol.
+Note: I did not make this patch but found it from old thread in BusyBox
+mailing list from 2006 and just fitted it against v1.19.4.
+So far it has been tested to work with busybox v1.19.4.
 
-> +	select BR2_PACKAGE_RPI_USERLAND
-> +	help
-> +	  Enable RasberryPi support
-> +
-> +comment "rpi support requires a toolchain with LARGEFILE and C++ support"
-> +	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_LARGEFILE)
+ .../busybox-1.19.4-start-stop-daemon-rm-pid.patch  |   35 ++++++++++++++++++++
+ 1 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100755 package/busybox/busybox-1.19.4-start-stop-daemon-rm-pid.patch
 
-Ditto, just mention LARGEFILE.
-
-[--SNIP--]
-> diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-> new file mode 100644
-> index 0000000..2974cbf
-> --- /dev/null
-> +++ b/package/libcec/libcec.mk
-> @@ -0,0 +1,22 @@
-> +#############################################################
-> +#
-> +# libcec
-> +#
-> +#############################################################
-> +
-> +LIBCEC_VERSION = 89ea1724e7a4bde3f7a4f958b414889cefddb841
-> +LIBCEC_SITE = http://github.com/Pulse-Eight/libcec/tarball/master
-> +LIBCEC_INSTALL_STAGING = YES
-> +LIBCEC_AUTORECONF = YES
-> +LIBCEC_LICENSE = GPLv2
-
-It's GPLv2+
-
-(The rest of the series I'll look at after dinner. Hang on tight! ;-) )
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/busybox/busybox-1.19.4-start-stop-daemon-rm-pid.patch b/package/busybox/busybox-1.19.4-start-stop-daemon-rm-pid.patch
+new file mode 100755
+index 0000000..db199a3
+--- /dev/null
++++ b/package/busybox/busybox-1.19.4-start-stop-daemon-rm-pid.patch
+@@ -0,0 +1,35 @@
++diff -Naur busybox-1.19.4.org/debianutils/Config.src busybox-1.19.4/debianutils/Config.src
++--- busybox-1.19.4.org/debianutils/Config.src	2013-02-21 15:56:12.056163205 +0200
+++++ busybox-1.19.4/debianutils/Config.src	2013-02-21 15:59:21.369223915 +0200
++@@ -58,6 +58,15 @@
++ 	  termination of system-level processes, usually the ones
++ 	  started during the startup of the system.
++ 
+++config FEATURE_START_STOP_DAEMON_REMOVE_PIDFILE
+++	bool "Remove pidfile on stop"
+++	default y
+++	depends on START_STOP_DAEMON
+++	help
+++	  If a pidfile is specified when a process is scheluded
+++	  to be stopped, remove the pidfile after the process
+++	  is successfully stopped.
+++
++ config FEATURE_START_STOP_DAEMON_FANCY
++ 	bool "Support additional arguments"
++ 	default y
++diff -Naur busybox-1.19.4.org/debianutils/start_stop_daemon.c busybox-1.19.4/debianutils/start_stop_daemon.c
++--- busybox-1.19.4.org/debianutils/start_stop_daemon.c	2013-02-21 15:56:12.056163205 +0200
+++++ busybox-1.19.4/debianutils/start_stop_daemon.c	2013-02-21 16:03:38.119855595 +0200
++@@ -353,8 +353,11 @@
++ 	if (!QUIET && killed) {
++ 		printf("stopped %s (pid", what);
++ 		for (p = G.found_procs; p; p = p->next)
++-			if (p->pid)
+++			if (p->pid) {
++ 				printf(" %u", (unsigned)p->pid);
+++				if (ENABLE_FEATURE_START_STOP_DAEMON_REMOVE_PIDFILE)
+++					unlink(pidfile);
+++			}
++ 		puts(")");
++ 	}
++  ret:
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.7.6
