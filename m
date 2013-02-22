@@ -1,41 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 22 Feb 2013 14:24:55 +0100
-Subject: [Buildroot] [PATCH 1/1] libmad: force architecture-specific
-	optimisations on AVR32
-In-Reply-To: <CAHt8ZCNfxNTptRTohRX24h9Gbm89jWfaWAS89yGv6-B68AAjQA@mail.gmail.com>
- (Simon Dawson's message of "Fri, 22 Feb 2013 08:21:49 +0000")
-References: <1361494881-27134-1-git-send-email-gilles.talis@gmail.com>
- <CAHt8ZCNfxNTptRTohRX24h9Gbm89jWfaWAS89yGv6-B68AAjQA@mail.gmail.com>
-Message-ID: <87vc9keb14.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 22 Feb 2013 14:20:35 +0100
+Subject: [Buildroot] [git commit] keyutils: needs mmu
+Message-ID: <20130222132447.7F5849AC4D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Simon" == Simon Dawson <spdawson@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3dc86ad93759ccd110541f4dc535257e8084c414
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Simon> Hi Gilles,
- Simon> On 22 February 2013 01:01, Gilles Talis <gilles.talis@gmail.com> wrote:
- >> Fixes:
- >> http://autobuild.buildroot.net/results/e01f5a5484299dce1797966445f3972583c67b22
- >> http://autobuild.buildroot.net/results/7ed0563fbbfc19c93ec5be35d3b6a95e496b4c5d
- >> 
- >> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Fixes:
+http://autobuild.buildroot.org/results/ff84ee5335e3302dbb47d881d9903db81884014c
 
- Simon> This looks fine, but wouldn't it be simpler to just do
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/keyutils/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- Simon> config BR2_PACKAGE_LIBMAD
- Simon>   bool "libmad"
- Simon>   select BR2_PACKAGE_LIBMAD_ASO if BR2_avr32
-
- Simon> in the libmad Config.in?
-
-Indeed. That or simply hiding (forcing) the option on avr32, E.G.:
-
-config BR2_PACKAGE_LIBMAD_ASO
- 	bool "Architecture-specific optimizations" if !BR2_avr32
- 	default y
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
+index 9b9f9bc..6978687 100644
+--- a/package/keyutils/Config.in
++++ b/package/keyutils/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_KEYUTILS
+ 	bool "keyutils"
+ 	depends on !BR2_avr32 && !BR2_microblaze
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  These tools are used to control the key management system
+ 	  built into the Linux kernel.
