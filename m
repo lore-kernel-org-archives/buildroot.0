@@ -1,24 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 22 Feb 2013 17:23:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 5960] fusion.ko driver does not install to target
-	rootfs
-In-Reply-To: <bug-5960-163@https.bugs.busybox.net/>
-References: <bug-5960-163@https.bugs.busybox.net/>
-Message-ID: <20130222172332.D3A889AC4C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 22 Feb 2013 19:42:01 +0100
+Subject: [Buildroot] [PATCH] libffi: fix powerpc build breakage
+In-Reply-To: <1361552133-16421-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 22 Feb 2013 13:55:33 -0300")
+References: <1361552133-16421-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ip5kdwcm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5960
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
---- Comment #3 from broot at monkster.hopto.org 2013-02-22 17:23:56 UTC ---
-Created attachment 4784
-  --> https://bugs.busybox.net/attachment.cgi?id=4784
-buildroot config
+ Gustavo> Happens with the latest release when there are no FP registers.
+ Gustavo> Fixes:
+ Gustavo> http://autobuild.buildroot.net/results/bc43261d3ddc9d4c320522563249f4a0695a35a4/
+
+Thanks, but probably it makes more sense to use Gilles' version:
+
+http://sourceware.org/ml/libffi-discuss/2013/msg00079.html
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
