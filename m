@@ -1,12 +1,14 @@
 From: Daniel Price <daniel.price@gmail.com>
-Date: Thu, 21 Feb 2013 15:49:59 -0800
-Subject: [Buildroot] [PATCH 2/2] V2 nodejs: new package
-Message-ID: <CAKduhSubx9KHfCu8zWm54gPjQvgPPEg5h2Wd5no2_-agfs3xuQ@mail.gmail.com>
+Date: Thu, 21 Feb 2013 16:12:18 -0800
+Subject: [Buildroot] [PATCH 2/2] V3 nodejs: new package
+Message-ID: <CAKduhSuDBhEZYedf3Fr5tf_1stfo4+3k-HaoxTNzrsSj--=jOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+[V3: a small fixup to Config.in]
 
 Based off of patches posted by (and Signed-off-by:) Jonathan Liu
 <net147@gmail.com>
@@ -36,7 +38,7 @@ index 2fad94d..4c44818 100644
  source "package/python3/Config.in"
 diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
 new file mode 100644
-index 0000000..1716dcd
+index 0000000..79787e0
 --- /dev/null
 +++ b/package/nodejs/Config.in
 @@ -0,0 +1,65 @@
@@ -104,7 +106,7 @@ git://github.com/isaacs/npm.git#v1.0.27
 +
 +endmenu
 +
-+comment "WARNING: Note that 'npm' on the target will not work without openssl
++comment "WARNING: Note that 'npm' on the target will not work without openssl"
 + depends on !BR2_PACKAGE_OPENSSL
 +
 +endif
