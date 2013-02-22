@@ -1,31 +1,32 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Fri, 22 Feb 2013 08:21:49 +0000
-Subject: [Buildroot] [PATCH 1/1] libmad: force architecture-specific
- optimisations on AVR32
-In-Reply-To: <1361494881-27134-1-git-send-email-gilles.talis@gmail.com>
-References: <1361494881-27134-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <CAHt8ZCNfxNTptRTohRX24h9Gbm89jWfaWAS89yGv6-B68AAjQA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 22 Feb 2013 07:24:33 -0300
+Subject: [Buildroot] [PATCH] conntrack-tools: needs mmu
+Message-ID: <1361528673-24052-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gilles,
+Fixes
+http://autobuild.buildroot.net/results/641755fbc61b47361b71161eabbf3075c7598c88/
 
-On 22 February 2013 01:01, Gilles Talis <gilles.talis@gmail.com> wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/e01f5a5484299dce1797966445f3972583c67b22
-> http://autobuild.buildroot.net/results/7ed0563fbbfc19c93ec5be35d3b6a95e496b4c5d
->
-> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/conntrack-tools/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-This looks fine, but wouldn't it be simpler to just do
-
-config BR2_PACKAGE_LIBMAD
-  bool "libmad"
-  select BR2_PACKAGE_LIBMAD_ASO if BR2_avr32
-
-in the libmad Config.in?
-
-Simon.
+diff --git a/package/conntrack-tools/Config.in b/package/conntrack-tools/Config.in
+index ddede0e..50f2000 100644
+--- a/package/conntrack-tools/Config.in
++++ b/package/conntrack-tools/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_CONNTRACK_TOOLS
+ 	bool "conntrack-tools"
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_LARGEFILE
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
+ 	select BR2_PACKAGE_LIBNETFILTER_CTHELPER
+ 	select BR2_PACKAGE_LIBNETFILTER_CTTIMEOUT
+-- 
+1.7.12.4
