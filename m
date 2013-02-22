@@ -1,20 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 22 Feb 2013 14:20:56 +0100
-Subject: [Buildroot] [PATCH] keyutils: needs mmu
-In-Reply-To: <1361513336-16816-1-git-send-email-gilles.talis@gmail.com>
- (Gilles Talis's message of "Thu, 21 Feb 2013 22:08:56 -0800")
-References: <1361513336-16816-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <874nh4fps7.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Feb 2013 14:21:36 +0100
+Subject: [Buildroot] [PATCH] conntrack-tools: needs mmu
+In-Reply-To: <1361528673-24052-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 22 Feb 2013 07:24:33 -0300")
+References: <1361528673-24052-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zjyweb6n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gilles> Fixes:
- Gilles> http://autobuild.buildroot.org/results/ff84ee5335e3302dbb47d881d9903db81884014c
+ Gustavo> Fixes
+ Gustavo> http://autobuild.buildroot.net/results/641755fbc61b47361b71161eabbf3075c7598c88/
 
 Committed, thanks.
 
