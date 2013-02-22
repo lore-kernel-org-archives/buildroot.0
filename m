@@ -1,32 +1,34 @@
-From: =?UTF-8?Q?Rafa=C5=82_Fabich?= <rafal.fabich@gmail.com>
-Date: Fri, 22 Feb 2013 07:06:49 +0100
-Subject: [Buildroot] [PATCH 1/1] Added local directory as soure of
-	kernel code
-In-Reply-To: <51266735.6080603@mind.be>
-References: <1360310725-6463-1-git-send-email-rafal.fabich@gmail.com>
- <1360310725-6463-2-git-send-email-rafal.fabich@gmail.com>
- <51266735.6080603@mind.be>
-Message-ID: <CAPRxd40HCvPHaharxM-vjeER8VQ+wvmY1NiSqLTU2grSMruWVw@mail.gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Thu, 21 Feb 2013 22:08:56 -0800
+Subject: [Buildroot] [PATCH] keyutils: needs mmu
+In-Reply-To: <y>
+References: <y>
+Message-ID: <1361513336-16816-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 21, 2013 at 7:28 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+Fixes:
+http://autobuild.buildroot.org/results/ff84ee5335e3302dbb47d881d9903db81884014c
 
->
->  Since we get this kind of patch very regularly, I think it's time we commit
-> it :-)
->
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
->
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ package/keyutils/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
-Great! Thanks :-)
-By the way, there was a second version of this patch (
-[Buildroot][PATCH v2] Added local directory as soure of kernel code )
-Which one will you commit?
-
-Best regards,
-Rafal Fabich
+diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
+index 9b9f9bc..6978687 100644
+--- a/package/keyutils/Config.in
++++ b/package/keyutils/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_KEYUTILS
+ 	bool "keyutils"
+ 	depends on !BR2_avr32 && !BR2_microblaze
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  These tools are used to control the key management system
+ 	  built into the Linux kernel.
+-- 
+1.7.10.4
