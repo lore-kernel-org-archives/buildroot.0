@@ -1,32 +1,23 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 22 Feb 2013 23:28:24 +0100
-Subject: [Buildroot] [git commit branch/next] luajit: bump to version 2.0.1
-Message-ID: <20130222222818.A83329AC58@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 22 Feb 2013 23:26:41 +0100
+Subject: [Buildroot] [PATCH 1/3] kernel-headers: bump 3.{0, 2, 4,
+	7}.x stable version and add 3.8
+In-Reply-To: <1361459814-15294-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 21 Feb 2013 12:16:52 -0300")
+References: <1361459814-15294-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871uc8dly6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f68a28d78eee37dd32f0fcf9083e86ad1e79485
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/luajit/luajit.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Gustavo> Also mark 3.6.x as deprecated to match upstream EOL.
 
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 844122e..bf9cfe8 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LUAJIT_VERSION = 2.0.0
-+LUAJIT_VERSION = 2.0.1
- LUAJIT_SOURCE  = LuaJIT-$(LUAJIT_VERSION).tar.gz
- LUAJIT_SITE    = http://luajit.org/download
- LUAJIT_LICENSE = MIT
+I was going to add this series to -next, but I cannot as it doesn't
+apply (it is made against master).
+
+-- 
+Bye, Peter Korsgaard
