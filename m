@@ -1,34 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 22 Feb 2013 14:20:40 +0100
-Subject: [Buildroot] [git commit] conntrack-tools: needs mmu
-Message-ID: <20130222132447.EA9B5997D7@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 22 Feb 2013 13:52:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 5960] fusion.ko driver does not install to target
+	rootfs
+In-Reply-To: <bug-5960-163@https.bugs.busybox.net/>
+References: <bug-5960-163@https.bugs.busybox.net/>
+Message-ID: <20130222135204.CC8659AC4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=669dcf3a624c18a9b260e890a48cc416217bbd28
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=5960
 
-Fixes
-http://autobuild.buildroot.net/results/641755fbc61b47361b71161eabbf3075c7598c88/
+--- Comment #2 from broot at monkster.hopto.org 2013-02-22 13:52:29 UTC ---
+Any? config, select kernel to build (dependancy of fusion) and then fusion
+package in graphics packages (BR2_PACKAGE_LINUX_FUSION)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/conntrack-tools/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+fusion.ko would build in
+buildroot-2012.11/output/build/linux-fusion-8.10.4/linux/drivers/char/fusion
+however fusion.o will be installed to target.
 
-diff --git a/package/conntrack-tools/Config.in b/package/conntrack-tools/Config.in
-index ddede0e..50f2000 100644
---- a/package/conntrack-tools/Config.in
-+++ b/package/conntrack-tools/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_CONNTRACK_TOOLS
- 	bool "conntrack-tools"
- 	depends on BR2_INET_IPV6
- 	depends on BR2_LARGEFILE
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
- 	select BR2_PACKAGE_LIBNETFILTER_CTHELPER
- 	select BR2_PACKAGE_LIBNETFILTER_CTTIMEOUT
+I don't remember which release this started to show in, but some older releases
+did it correctly.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
