@@ -1,112 +1,43 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Fri, 22 Feb 2013 14:23:06 +0200
-Subject: [Buildroot] network-manager-applet for buildroot almost ready
-In-Reply-To: <51264996.5060404@petroprogram.com>
-References: <51263203.4070709@petroprogram.com>
- <51264996.5060404@petroprogram.com>
-Message-ID: <5127632A.4040507@petroprogram.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Fri, 22 Feb 2013 13:39:18 +0100
+Subject: [Buildroot] [PATCH] Revert "uClibc: port linuxthreads
+	errnopatch to 0.9.33.2"
+In-Reply-To: <877gm1hhsm.fsf@dell.be.48ers.dk>
+References: <1361455787-4846-1-git-send-email-gustavo@zacarias.com.ar>
+ <877gm1hhsm.fsf@dell.be.48ers.dk>
+Message-ID: <CFB67F3F72BB450DAF0C0E10C27DFC00@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-21.2.2013 18:21, Stefan Fr?berg kirjoitti:
-> 21.2.2013 16:41, Stefan Fr?berg kirjoitti:
->> Hello all!
->>
->> I have network-manager-applet running and it appears into fluxbox system
->> tray but
->> it does not detect any networks.
->>
->> When starting it from terminal it spits the following:
->>
->> ** Message: applet now removed from the notification area
->> ** Message: applet now embedded in the notification area
->>
->> ** (nm-applet:766): WARNING **: Failed to register as an agent: (32) No
->> session found for uid 0
->>
->> Does that "No session found for uid 0" mean that there is something
->> wrong with dbus ????
->>
->> Or is that error related to consolekit ?
->>
->> I have it here running too (and soon will submit to buildroot)
->> Also running are NetworkManager and dbus.
->>
->> I start fluxbox with normal startx command and I have just "exec
->> /usr/bin/startfluxbox" in my .xinitrc file.
->>
->>
->> Regards
->> Stefan
->>
->>
-> I added ConsoleKits ck-launch-session to my .xinitrc as instructed here
-> http://fluxbox-wiki.org/index.php?title=Start_fluxbox_from_the_command_line
->
-> Now it does not anymore nag about missing session.
-> However, still no networks detected and when I try to click and view
-> properties of nm-applet it spits this:
->
-> ** Message: applet now removed from the notification area
-> ** Message: applet now embedded in the notification area
->
-> ** (nm-applet:905): WARNING **: async_got_type: could not read
-> properties for /org/freedesktop/NetworkManager/ActiveConnection/10:
-> Method "Get" with signature "ss" on interface
-> "org.freedesktop.DBus.Properties" doesn't exist
->
->
-> ** (nm-applet:905): WARNING **: async_got_type: could not read
-> properties for /org/freedesktop/NetworkManager/ActiveConnection/10:
-> Method "Get" with signature "ss" on interface
-> "org.freedesktop.DBus.Properties" doesn't exist
->
->
-> ** (nm-applet:905): WARNING **: Connection activation failed: Creating
-> object for path '/org/freedesktop/NetworkManager/ActiveConnection/10'
-> failed in libnm-glib.
->
-> ** (nm-applet:905): WARNING **: async_got_type: could not read
-> properties for /org/freedesktop/NetworkManager/ActiveConnection/10:
-> Method "Get" with signature "ss" on interface
-> "org.freedesktop.DBus.Properties" doesn't exist
->
->
-> So this is definetely either dbus or networkmanager (or both) problem
->
-> Regards
-> Stefan
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ 
+Hi
 
-God dammit Im stupid! 
-I was trying to use NetworkManger with busybox udhcpc .....
+I saw this patch was reverted, so I wonder is there (already or in the making) a way so I can point to a directory in the buildroot
+configuration where I have additional ?Clibc patches and a 'series' file ? (similar like the infrastructure for the kernel patches.)
+Annoying problem anyway, my app fails at runtime without the patch.
 
-Fixed NetworkManger with adding dhcp as dependency and adding
---with-dhclient in configuration (and few other fixes).
-Also fixed little bit dhcp package (added symlink to /usr/sbin/dhclient
--> /sbin/dhclient because that's
-what NetworkManager seems to expect in it's configuration summary, just
-before starting compiling)
+Johan
 
-Works like a charm now! :-)
+-----Oorspronkelijk bericht-----
+Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Peter Korsgaard
+Verzonden: donderdag 21 februari 2013 15:18
+Aan: Gustavo Zacarias
+CC: buildroot at busybox.net
+Onderwerp: Re: [Buildroot] [PATCH] Revert "uClibc: port linuxthreads errnopatch to 0.9.33.2"
 
-Fowever, there is still left's unanswered questions:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
--  Did NetworkManager package work for anyone before ?
-Did you use just static IP or try DHCP and with what client & configuration?
+ Gustavo> This reverts commit 1d8c3e6caf6be14644ef8ef5ae2704105322442b
+ Gustavo> The forward port breaks compilation at least for SPARC NPTL  Gustavo> toolchains:
 
-- ConsoleKits's ck-list-session still spits "active=FALSE" and "is
-local=FALSE" for Seat2. Where is Seat1 and why does it not show it ?
-(doing ck-history --log shows that Seat1 had been created)
-Adding CONFIG_AUDIT=y and CONFIG_SYSCALLAUDIT=y did nothing more than
-add  login id number to ck-list-session output. Yay....
+Committed, thanks.
 
-Regards
-Stefan
+--
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
