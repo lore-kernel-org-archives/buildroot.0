@@ -1,34 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 22 Feb 2013 23:44:05 +0100
-Subject: [Buildroot] [git commit] package/vtun: add missing 'depends on' zlib
-Message-ID: <20130301101141.D2C249AE16@busybox.osuosl.org>
+Date: Fri, 22 Feb 2013 23:46:32 +0100
+Subject: [Buildroot] [git commit] package/connman: bump version to 1.11
+Message-ID: <20130301101142.D5D809ADCE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=54b2bad158fd10c0514fe37832108c30e0c4a291
+commit: http://git.buildroot.net/buildroot/commit/?id=3833cf499484a1ccab971c3b74210e10ce4028bd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The dependency on zlib is correctly expresed in vtun.mk,
-but was missing from the Config.in.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/vtun/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/connman/connman.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/vtun/Config.in b/package/vtun/Config.in
-index b40de25..7afda9e 100644
---- a/package/vtun/Config.in
-+++ b/package/vtun/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_VTUN
- 	bool "vtun - BEWARE: read package/vtun/README.txt before use"
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  Tool for easily creating Virtual Tunnels over TCP/IP networks
- 	  with traffic shaping, compression, and encryption.
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 73ea70d..bb528b4 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ #######################################################
+ 
+-CONNMAN_VERSION = 1.10
++CONNMAN_VERSION = 1.11
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
+ CONNMAN_INSTALL_STAGING = YES
