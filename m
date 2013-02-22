@@ -1,48 +1,57 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Fri, 22 Feb 2013 10:55:24 -0800
-Subject: [Buildroot] [PATCH 1/1] libmad: force architecture-specific
- optimisations on AVR32
-In-Reply-To: <87vc9keb14.fsf@dell.be.48ers.dk>
-References: <1361494881-27134-1-git-send-email-gilles.talis@gmail.com>
- <CAHt8ZCNfxNTptRTohRX24h9Gbm89jWfaWAS89yGv6-B68AAjQA@mail.gmail.com>
- <87vc9keb14.fsf@dell.be.48ers.dk>
-Message-ID: <CAKcgs2xAU_+jHhxctzO_vxu6NJHpN4RmuKc20H4R3xbud6-Uxw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 22 Feb 2013 15:56:54 -0300
+Subject: [Buildroot] [PATCHv2] libffi: fix powerpc build breakage
+Message-ID: <1361559414-19521-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Simon, Benoit and Peter,
+Happens with the latest release when there are no FP registers.
+Fixes:
+http://autobuild.buildroot.net/results/bc43261d3ddc9d4c320522563249f4a0695a35a4/
 
-2013/2/22 Peter Korsgaard <jacmet@uclibc.org>:
->>>>>> "Simon" == Simon Dawson <spdawson@gmail.com> writes:
->
->  Simon> Hi Gilles,
->  Simon> On 22 February 2013 01:01, Gilles Talis <gilles.talis@gmail.com> wrote:
->  >> Fixes:
->  >> http://autobuild.buildroot.net/results/e01f5a5484299dce1797966445f3972583c67b22
->  >> http://autobuild.buildroot.net/results/7ed0563fbbfc19c93ec5be35d3b6a95e496b4c5d
->  >>
->  >> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
->
->  Simon> This looks fine, but wouldn't it be simpler to just do
->
->  Simon> config BR2_PACKAGE_LIBMAD
->  Simon>   bool "libmad"
->  Simon>   select BR2_PACKAGE_LIBMAD_ASO if BR2_avr32
->
->  Simon> in the libmad Config.in?
->
-> Indeed. That or simply hiding (forcing) the option on avr32, E.G.:
->
-> config BR2_PACKAGE_LIBMAD_ASO
->         bool "Architecture-specific optimizations" if !BR2_avr32
->         default y
->
-> --
-> Bye, Peter Korsgaard
-Thanks for your valuable comments. Will send a second version of the
-patch with your suggestions later on.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libffi/libffi-002-fix-ppc-nofpr.patch | 29 +++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/libffi/libffi-002-fix-ppc-nofpr.patch
 
-Gilles.
+diff --git a/package/libffi/libffi-002-fix-ppc-nofpr.patch b/package/libffi/libffi-002-fix-ppc-nofpr.patch
+new file mode 100644
+index 0000000..729bae8
+--- /dev/null
++++ b/package/libffi/libffi-002-fix-ppc-nofpr.patch
+@@ -0,0 +1,29 @@
++From: Gilles Talis <gilles.talis@gmail.com>
++
++On PPC, if __NO_FPRS__ is defined, fparg_count and NUM_FPR_ARG_REGISTERS
++are not defined, thus must not be used.
++
++Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
++---
++ src/powerpc/ffi.c |    3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/powerpc/ffi.c b/src/powerpc/ffi.c
++index f3a96a1..9c69584 100644
++--- a/src/powerpc/ffi.c
+++++ b/src/powerpc/ffi.c
++@@ -376,9 +376,10 @@ ffi_prep_args_SYSV (extended_cif *ecif, unsigned *const stack)
++      with the number found in ffi_prep_cif_machdep().  However, intarg_count
++      is incremeneted whenever we place an FP arg on the stack, so account for
++      that before our assert test.  */
+++#ifndef __NO_FPRS__
++   if (fparg_count > NUM_FPR_ARG_REGISTERS)
++     intarg_count -= fparg_count - NUM_FPR_ARG_REGISTERS;
++-#ifndef __NO_FPRS__
+++
++   FFI_ASSERT (fpr_base.u
++ 	      <= stacktop.u - ASM_NEEDS_REGISTERS - NUM_GPR_ARG_REGISTERS);
++ #endif
++-- 
++1.7.10.4
++
+-- 
+1.7.12.4
