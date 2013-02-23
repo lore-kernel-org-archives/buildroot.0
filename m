@@ -1,37 +1,47 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 23 Feb 2013 18:18:48 +0100
-Subject: [Buildroot] [PATCH] linux-fusion: bump to 9.0.0
-Message-ID: <1361639928-24841-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 23 Feb 2013 18:20:42 +0100
+Subject: [Buildroot] [PATCH] new package: adns
+In-Reply-To: <5128BCD8.5030807@petroprogram.com>
+References: <1360959402-24775-1-git-send-email-stefan.froberg@petroprogram.com>
+ <20130216030625.04d9545d@skate> <5128A8C4.6040804@petroprogram.com>
+ <5128BA82.1080501@mind.be> <5128BCD8.5030807@petroprogram.com>
+Message-ID: <5128FA6A.3020802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+On 23/02/13 13:58, Stefan Fr?berg wrote:
+> Yes, that adns-1.4-cnamechain.patch is originally from their mailing
+> list but Gentoo hosts it too:
+> http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/net-libs/adns/files/adns-1.4-cnamechain.patch
+>
+> However, here's the problem:
+> As you can see that cnamechain patch is patch level -p0
+> But those others patches are not.
+>
+> Even worse, that adns-1.4-rh514838.patch (patch level -p1) is extracted
+> from Fedora src.rpm file.
+>
+> And that adns-1.4-destdir.patch, AFAIK, can only be located from here
+> (and is also patch level -p0)
+> https://build.opensuse.org/package/view_file?file=adns-1.4-destdir.patch&package=adns&project=devel%3Alibraries%3Ac_c%2B%2B
+>
+> So it's a mess and I don't think using direct download method will ever
+> work for this complete patch set.
 
-Fixes https://bugs.busybox.net/show_bug.cgi?id=5960
+  In that case, keep it in the buildroot tree but clean up the redundant 
+stuff -- I'll flag in the original commit where the redundant stuff is.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: broot at monkster.hopto.org
----
-Although it fixes a bug, it's probably for next (version bump).
----
- package/linux-fusion/linux-fusion.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
-index 5ea7900..a2340bd 100644
---- a/package/linux-fusion/linux-fusion.mk
-+++ b/package/linux-fusion/linux-fusion.mk
-@@ -3,7 +3,7 @@
- # linux-fusion
- #
- #############################################################
--LINUX_FUSION_VERSION = 8.10.4
-+LINUX_FUSION_VERSION = 9.0.0
- LINUX_FUSION_SOURCE = linux-fusion-$(LINUX_FUSION_VERSION).tar.gz
- LINUX_FUSION_SITE = http://directfb.org/downloads/Core/linux-fusion
- LINUX_FUSION_INSTALL_STAGING = YES
+  Regards,
+  Arnout
+
 -- 
-1.7.10.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
