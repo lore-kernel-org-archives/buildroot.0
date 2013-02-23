@@ -1,26 +1,21 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 23 Feb 2013 10:20:54 +0100
-Subject: [Buildroot] [PATCH] new package: libwnck
-In-Reply-To: <201302212230.17978.yann.morin.1998@free.fr>
-References: <1361469999-9963-1-git-send-email-stefan.froberg@petroprogram.com>
- <201302212230.17978.yann.morin.1998@free.fr>
-Message-ID: <512889F6.5000005@mind.be>
+Date: Sat, 23 Feb 2013 10:25:31 +0100
+Subject: [Buildroot] [PATCH] new package: gnome-keyring
+In-Reply-To: <201302212305.27963.yann.morin.1998@free.fr>
+References: <1361473406-5765-1-git-send-email-stefan.froberg@petroprogram.com>
+ <201302212305.27963.yann.morin.1998@free.fr>
+Message-ID: <51288B0B.80504@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/02/13 22:30, Yann E. MORIN wrote:
-> But I'd prefer it it were a 'depends on BR2_PACKAGE_LIBGTK2' rather than
-> a 'select'.
->
-> And add a comment anyway to state why libwnck is not available.
+On 21/02/13 23:05, Yann E. MORIN wrote:
+>> >+GNOME_KEYRING_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+> This should point to the host-variant of libgcrypt-config.
 
-  The other packages that depend on libgtk2 don't have a comment...
-
-  Actually, I think all of them should be sorted under libgtk2, so 
-they're nicely indented and fold open when libgtk2 is selected.
+  Huh? There is no host-libgcrypt...
 
   Regards,
   Arnout
