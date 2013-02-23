@@ -1,12 +1,12 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 23 Feb 2013 14:33:49 +0100
-Subject: [Buildroot] [PATCH 4/9] manual: faq: add entry about the
- relocatable toolchain
-In-Reply-To: <20130214183248.51280157@skate>
+Date: Sat, 23 Feb 2013 14:34:10 +0100
+Subject: [Buildroot] [PATCH 5/9] manual: faq: add workaround to avoid
+ rebuilding the buildroot toolchain after each clean
+In-Reply-To: <20130214183645.6b098294@skate>
 References: <cover.1360795941.git.s.martin49@gmail.com>
- <c99516cd998754307f0a5e3b19579316f37d9f95.1360795941.git.s.martin49@gmail.com>
- <20130214183248.51280157@skate>
-Message-ID: <CAHXCMMJ1OgMH_HUj1muMSUqnB_Pef9ap3-psASgUavtH86XMRw@mail.gmail.com>
+ <e5a14b33f5b34b4fbfd5c5b3e2b1077c7ef91573.1360795941.git.s.martin49@gmail.com>
+ <20130214183645.6b098294@skate>
+Message-ID: <CAHXCMMJQn2OzrrsGQxMogYVTwOJW-wJosURYP0g=ZnzpwiYtgg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,65 +18,96 @@ Hi Thomas,
 2013/2/14 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 > Dear Samuel Martin,
 >
-> On Wed, 13 Feb 2013 23:59:05 +0100, Samuel Martin wrote:
+> On Wed, 13 Feb 2013 23:59:06 +0100, Samuel Martin wrote:
 >>
 >> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 >> ---
->>  docs/manual/faq-troubleshooting.txt | 21 +++++++++++++++++++++
->>  1 file changed, 21 insertions(+)
+>>  docs/manual/common-usage.txt        |  1 +
+>>  docs/manual/faq-troubleshooting.txt | 34 ++++++++++++++++++++++++++++++++++
+>>  2 files changed, 35 insertions(+)
+>>
+>> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+>> index c7f511a..b36965f 100644
+>> --- a/docs/manual/common-usage.txt
+>> +++ b/docs/manual/common-usage.txt
+>> @@ -20,6 +20,7 @@ all sources that you previously selected in the configurator
+>>  You can now disconnect or copy the content of your +dl+
+>>  directory to the build-host.
+>>
+>> +[[daily-oot-build]]
+>>  Building out-of-tree
+>>  ~~~~~~~~~~~~~~~~~~~~
 >>
 >> diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
->> index f91a8ef..8b0882a 100644
+>> index 8b0882a..f367275 100644
 >> --- a/docs/manual/faq-troubleshooting.txt
 >> +++ b/docs/manual/faq-troubleshooting.txt
->> @@ -126,3 +126,24 @@ directory as the new root, will most likely fail.
->>  If you want to run the target filesystem inside a chroot, or as an NFS
->>  root, then use the tarball image generated in +images/+ and extract it
->>  as root.
+>> @@ -147,3 +147,37 @@ Using the internal Buildroot toolchain backend
+>>  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>>  These toolchains are currently *not relocatable*.
 >> +
->> +[[faq-relocatable-toolchains]]
->> +Are Buildroot toolchains relocatable?
->> +-------------------------------------
+>> +However, it is possible to build a toolchain using the internal Buildroot
+>> +backend in another location (see xref:daily-oot-build[]), then use it as an
+>> +_external_ one to prevent from rebuilding it after issuing +make clean+
+>> +(see xref:faq-avoid-rebuild-toolchain[]).
 >> +
->> +Because Buildroot uses several toolchain backends, there is one anwser
->> +per backend:
+>> +[[faq-avoid-rebuild-toolchain]]
+>> +How to avoid always rebuilding the toolchain?
+>> +---------------------------------------------
 >> +
->> +Using the external or crosstool-NG toolchain backend
->> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> +When using the internal Buildroot toolchain backend or the
+>> +http://crosstool-ng.org[crosstool-NG] one, runnong +make clean+ not only
+>> +remove the built binaries, but also the whole toolchain.
 >> +
->> +These toolchains are mostly likely relocatable; the _Buildroot compiler
->> +wrapper_ is relocatable.
+>> +It is possible to prevent this by, first, building the toolchain in a
+>> +place different from the one  where the images will be built.
 >> +
->> +However, some tools built and installed into the +HOST_DIR+ may not be
->> +relocatable, with some absolute pathes hard-coded inside.
+>> +To do so:
+>> +
+>> +1. Build the toolchain somewhere:
+>> ++
+>> +----------------------------
+>> +make toolchain O=/path/to/toolchain
+>> +----------------------------
+>> ++
+>> +1. Use this pre-built toolchain as an external one in a new and clean
+>> +   build (see xref:external-toolchain-backend[]) with a different output
+>> +   directory than the pre-built toolchain one.
+>> +
+>> +This way, you will not have to rebuild the toolchain after invoking
+>> ++make clean+.
+>> +
+>> +However, the toolchain should be regenerated after any change of the
+>> ++Target Architecture+ (or its _variant_), or done in the +Toolchain+ menu.
 >
-> I find this text rather confusing. What does "mostly likely" means for
-> the reader? The reader surely wants to know if the toolchain is
-> relocatable or not.
->
-> Therefore, I think this text should be changed to clarify what is meant
-> by "toolchain". Is it just the bare toolchain (gcc, binutils, libc,
-> kernel headers), or is it the complete toolchain that Buildroot
-> produces, with all the additional libraries and headers?
-I agree with this point.
+> I think this text is misleading, because it suggests that the only way
+> to avoid rebuilding the toolchain over and over again is to build a
+> toolchain with Buildroot, and then use it as an external toolchain in
+> Buildroot. There are other options that are possible:
+>  * Use Crosstool-NG outside of Buildroot to generate a toolchain
+>  * Use a pre-built toolchain
+Here, I only focus on the internal backend, but I agree it may not be
+as clear as I thought...
 
 >
-> Also, you mention the "Buildroot compiler wrapper", but nowhere in the
-> documentation we explain what it is, and I don't think it should be
-> explained in the documentation, except in a section dedicated to "Deep
-> Buildroot internals", but certainly not to answer a FAQ question about
-> relocatable toolchains.
+> I have the feeling that this new text doesn't articulate very well with
+> the text that was added in 401d323698266468e322471530ee1997835fc335.
+My bad :s, I forgot to check how it goes with the rest of the manual...
+
+>
+> We have to be careful to not add a set of random facts in the manual
+> one after the other, without keeping a consistency and ordering on the
+> different parts of the manual.
 Agree.
 
->
-> I would rather think that a section discussing how to use the "SDK"
-> produced by Buildroot, and how it can be shared with application
-> developers, could mention that the SDK is currently not relocatable,
-> but that we are working on fixing this.
-Well, this will certainly be a better section to develop this point.
+Well, I see 2 options (at least) to rework this patch:
+- either reword it (still as a faq entry) to properly integrate it
+with the rest of the manual;
+- or add this workaround in the paragraph "Internal toolchain backend"
+from the section 3.1.1.
 
-The SDK section will come later (not sure it'll be ready for the
-2013.02 release...).
+But any other suggestion is welcome.
 
 
 Regards,
