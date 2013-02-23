@@ -1,116 +1,32 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 23 Feb 2013 14:34:10 +0100
-Subject: [Buildroot] [PATCH 5/9] manual: faq: add workaround to avoid
- rebuilding the buildroot toolchain after each clean
-In-Reply-To: <20130214183645.6b098294@skate>
-References: <cover.1360795941.git.s.martin49@gmail.com>
- <e5a14b33f5b34b4fbfd5c5b3e2b1077c7ef91573.1360795941.git.s.martin49@gmail.com>
- <20130214183645.6b098294@skate>
-Message-ID: <CAHXCMMJQn2OzrrsGQxMogYVTwOJW-wJosURYP0g=ZnzpwiYtgg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 23 Feb 2013 13:43:38 -0300
+Subject: [Buildroot] [PATCH] ruby: security bump to version 1.9.3-p392
+Message-ID: <1361637818-20383-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes JSON DoS (CVE-2013-0269) and REXML DoS (no assigned CVE yet).
 
-2013/2/14 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Samuel Martin,
->
-> On Wed, 13 Feb 2013 23:59:06 +0100, Samuel Martin wrote:
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->> ---
->>  docs/manual/common-usage.txt        |  1 +
->>  docs/manual/faq-troubleshooting.txt | 34 ++++++++++++++++++++++++++++++++++
->>  2 files changed, 35 insertions(+)
->>
->> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
->> index c7f511a..b36965f 100644
->> --- a/docs/manual/common-usage.txt
->> +++ b/docs/manual/common-usage.txt
->> @@ -20,6 +20,7 @@ all sources that you previously selected in the configurator
->>  You can now disconnect or copy the content of your +dl+
->>  directory to the build-host.
->>
->> +[[daily-oot-build]]
->>  Building out-of-tree
->>  ~~~~~~~~~~~~~~~~~~~~
->>
->> diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
->> index 8b0882a..f367275 100644
->> --- a/docs/manual/faq-troubleshooting.txt
->> +++ b/docs/manual/faq-troubleshooting.txt
->> @@ -147,3 +147,37 @@ Using the internal Buildroot toolchain backend
->>  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->>  These toolchains are currently *not relocatable*.
->> +
->> +However, it is possible to build a toolchain using the internal Buildroot
->> +backend in another location (see xref:daily-oot-build[]), then use it as an
->> +_external_ one to prevent from rebuilding it after issuing +make clean+
->> +(see xref:faq-avoid-rebuild-toolchain[]).
->> +
->> +[[faq-avoid-rebuild-toolchain]]
->> +How to avoid always rebuilding the toolchain?
->> +---------------------------------------------
->> +
->> +When using the internal Buildroot toolchain backend or the
->> +http://crosstool-ng.org[crosstool-NG] one, runnong +make clean+ not only
->> +remove the built binaries, but also the whole toolchain.
->> +
->> +It is possible to prevent this by, first, building the toolchain in a
->> +place different from the one  where the images will be built.
->> +
->> +To do so:
->> +
->> +1. Build the toolchain somewhere:
->> ++
->> +----------------------------
->> +make toolchain O=/path/to/toolchain
->> +----------------------------
->> ++
->> +1. Use this pre-built toolchain as an external one in a new and clean
->> +   build (see xref:external-toolchain-backend[]) with a different output
->> +   directory than the pre-built toolchain one.
->> +
->> +This way, you will not have to rebuild the toolchain after invoking
->> ++make clean+.
->> +
->> +However, the toolchain should be regenerated after any change of the
->> ++Target Architecture+ (or its _variant_), or done in the +Toolchain+ menu.
->
-> I think this text is misleading, because it suggests that the only way
-> to avoid rebuilding the toolchain over and over again is to build a
-> toolchain with Buildroot, and then use it as an external toolchain in
-> Buildroot. There are other options that are possible:
->  * Use Crosstool-NG outside of Buildroot to generate a toolchain
->  * Use a pre-built toolchain
-Here, I only focus on the internal backend, but I agree it may not be
-as clear as I thought...
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ruby/ruby.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> I have the feeling that this new text doesn't articulate very well with
-> the text that was added in 401d323698266468e322471530ee1997835fc335.
-My bad :s, I forgot to check how it goes with the rest of the manual...
-
->
-> We have to be careful to not add a set of random facts in the manual
-> one after the other, without keeping a consistency and ordering on the
-> different parts of the manual.
-Agree.
-
-Well, I see 2 options (at least) to rework this patch:
-- either reword it (still as a faq entry) to properly integrate it
-with the rest of the manual;
-- or add this workaround in the paragraph "Internal toolchain backend"
-from the section 3.1.1.
-
-But any other suggestion is welcome.
-
-
-Regards,
-
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index ee1f9ed..601ae90 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-RUBY_VERSION = 1.9.3-p362
++RUBY_VERSION = 1.9.3-p392
+ RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/1.9
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+ HOST_RUBY_DEPENDENCIES = host-pkgconf
 -- 
-Samuel
+1.7.12.4
