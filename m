@@ -1,28 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 23 Feb 2013 21:39:38 +0100
-Subject: [Buildroot] [PATCH] gstreamer: ALSA plugin requires threads
-	support
-In-Reply-To: <1361603043-22539-1-git-send-email-gilles.talis@gmail.com>
- (Gilles Talis's message of "Fri, 22 Feb 2013 23:04:03 -0800")
-References: <1361603043-22539-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87mwuubw8l.fsf@dell.be.48ers.dk>
+Date: Sat, 23 Feb 2013 21:40:05 +0100
+Subject: [Buildroot] [PATCH v2] libmad: force architecture-specific
+	optimisations on AVR32
+In-Reply-To: <51285e9f.a7c1440a.5732.6e6b@mx.google.com> (gilles talis's
+ message of "Fri, 22 Feb 2013 22:15:54 -0800")
+References: <51285e9f.a7c1440a.5732.6e6b@mx.google.com>
+Message-ID: <87ip5ibw7u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+>>>>> "gilles" == gilles talis <gilles.talis@gmail.com> writes:
 
- Gilles> Fixes:
- Gilles> http://autobuild.buildroot.org/results/2782b5ee6af25da9d49d9bc7b950dc2a92fb5bca
+ gilles> From: Gilles Talis <gilles.talis@gmail.com>
+ gilles> Fixes:
+ gilles> http://autobuild.buildroot.net/results/e01f5a5484299dce1797966445f3972583c67b22
+ gilles> http://autobuild.buildroot.net/results/7ed0563fbbfc19c93ec5be35d3b6a95e496b4c5d
 
-Isn't all of gstreamer heavily threaded?
-
- Gilles> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
- Gilles> ---
- Gilles>  package/multimedia/gst-plugins-base/Config.in |    4 ++++
- Gilles>  1 file changed, 4 insertions(+)
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
