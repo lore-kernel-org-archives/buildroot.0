@@ -1,22 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 22 Feb 2013 21:29:44 -0300
-Subject: [Buildroot] [PATCH v6] wireshark: new package
-In-Reply-To: <e64c965f3221d977b9bd2edf99405efd7405f848.1361167992.git.baruch@tkos.co.il>
-References: <e64c965f3221d977b9bd2edf99405efd7405f848.1361167992.git.baruch@tkos.co.il>
-Message-ID: <51280D78.6040501@zacarias.com.ar>
+From: gilles.talis at gmail.com <gilles.talis@gmail.com>
+Date: Fri, 22 Feb 2013 22:15:54 -0800
+Subject: [Buildroot] [PATCH v2] libmad: force architecture-specific
+	optimisations on AVR32
+In-Reply-To: <y>
+References: <y>
+Message-ID: <51285e9f.a7c1440a.5732.6e6b@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/18/2013 03:18 AM, Baruch Siach wrote:
+From: Gilles Talis <gilles.talis@gmail.com>
 
-> This is only the bare minimum needed to build the textual tshark utility.
-> Support for more options, including the wireshark GUI, can be added later.
-> 
-> Cc: Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes:
+http://autobuild.buildroot.net/results/e01f5a5484299dce1797966445f3972583c67b22
+http://autobuild.buildroot.net/results/7ed0563fbbfc19c93ec5be35d3b6a95e496b4c5d
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ package/libmad/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libmad/Config.in b/package/libmad/Config.in
+index d0edc49..80ed853 100644
+--- a/package/libmad/Config.in
++++ b/package/libmad/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBMAD
+ 	bool "libmad"
++	select BR2_PACKAGE_LIBMAD_ASO if BR2_avr32
+ 	help
+ 	  High-quality MPEG audio decoder.  All computations are performed
+ 	  with fixed-point integer arithmetic, making it ideal for systems
+-- 
+1.7.10.4
