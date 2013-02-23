@@ -1,109 +1,85 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Sat, 23 Feb 2013 14:58:00 +0200
-Subject: [Buildroot] [PATCH] new package: adns
-In-Reply-To: <5128BA82.1080501@mind.be>
-References: <1360959402-24775-1-git-send-email-stefan.froberg@petroprogram.com>
- <20130216030625.04d9545d@skate> <5128A8C4.6040804@petroprogram.com>
- <5128BA82.1080501@mind.be>
-Message-ID: <5128BCD8.5030807@petroprogram.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 23 Feb 2013 14:33:49 +0100
+Subject: [Buildroot] [PATCH 4/9] manual: faq: add entry about the
+ relocatable toolchain
+In-Reply-To: <20130214183248.51280157@skate>
+References: <cover.1360795941.git.s.martin49@gmail.com>
+ <c99516cd998754307f0a5e3b19579316f37d9f95.1360795941.git.s.martin49@gmail.com>
+ <20130214183248.51280157@skate>
+Message-ID: <CAHXCMMJ1OgMH_HUj1muMSUqnB_Pef9ap3-psASgUavtH86XMRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-23.2.2013 14:48, Arnout Vandecappelle kirjoitti:
-> On 23/02/13 12:32, Stefan Fr?berg wrote:
->> Hi Thomas
+Hi Thomas,
+
+2013/2/14 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Samuel Martin,
+>
+> On Wed, 13 Feb 2013 23:59:05 +0100, Samuel Martin wrote:
 >>
->> 16.2.2013 4:06, Thomas Petazzoni kirjoitti:
->>> Dear Stefan Fr?berg,
->>>
->>> Thanks for this package, definitely something useful to have.
->>>
->>> On Fri, 15 Feb 2013 22:16:42 +0200, Stefan Fr?berg wrote:
->>>> GNU adns
->>>>
->>>> Advanced, easy to use, asynchronous-capable DNS client library and
->>>> utilities.
->>>>
->>>> adns is a resolver library for C (and C++) programs, and a
->>>> collection of
->>>> useful DNS resolver utilities.
->>>>
->>>> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
->>>> ---
->>>>   package/Config.in                      |    1 +
->>>>   package/adns/Config.in                 |    7 +
->>>>   package/adns/adns-1.4-cnamechain.patch | 1275 +++++++++++++++
->>>>   package/adns/adns-1.4-destdir.patch    |   54 +
->>>>   package/adns/adns-1.4-ipv6.patch       | 2725
->>>> ++++++++++++++++++++++++++++++++
->>>>   package/adns/adns-1.4-rh514838.patch   |   26 +
->>> If possible, I think I would prefer to have the adns package download
->>> those patches rather than have them in the Buildroot source tree
->>> directly.
->>>
->>> ADNS_PATCHES = http://somewhere.com/foobar.patch \
->>>     http://somewhereelse.com/barfoo.patch
->>>
->>> I am not sure if the patch that allows that has already been merged
->>> upstream, but it has been floating on the list for some time, and I
->>> think it's a good thing to have.
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> ---
+>>  docs/manual/faq-troubleshooting.txt | 21 +++++++++++++++++++++
+>>  1 file changed, 21 insertions(+)
 >>
->> I tried to contact upstream about these patches but got no response.
->>
->> So is it's ok to include them in buildroot or should I try to search
->> home for them ?
+>> diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+>> index f91a8ef..8b0882a 100644
+>> --- a/docs/manual/faq-troubleshooting.txt
+>> +++ b/docs/manual/faq-troubleshooting.txt
+>> @@ -126,3 +126,24 @@ directory as the new root, will most likely fail.
+>>  If you want to run the target filesystem inside a chroot, or as an NFS
+>>  root, then use the tarball image generated in +images/+ and extract it
+>>  as root.
+>> +
+>> +[[faq-relocatable-toolchains]]
+>> +Are Buildroot toolchains relocatable?
+>> +-------------------------------------
+>> +
+>> +Because Buildroot uses several toolchain backends, there is one anwser
+>> +per backend:
+>> +
+>> +Using the external or crosstool-NG toolchain backend
+>> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> +
+>> +These toolchains are mostly likely relocatable; the _Buildroot compiler
+>> +wrapper_ is relocatable.
+>> +
+>> +However, some tools built and installed into the +HOST_DIR+ may not be
+>> +relocatable, with some absolute pathes hard-coded inside.
 >
->  What Thomas means is this:
+> I find this text rather confusing. What does "mostly likely" means for
+> the reader? The reader surely wants to know if the toolchain is
+> relocatable or not.
 >
-> It looks like you directly fetched these patches from some mailing
-> list archive. Then it would be cleaner to let buildroot download them
-> from there, rather than copying the patch in the buildroot tree.
->
+> Therefore, I think this text should be changed to clarify what is meant
+> by "toolchain". Is it just the bare toolchain (gcc, binutils, libc,
+> kernel headers), or is it the complete toolchain that Buildroot
+> produces, with all the additional libraries and headers?
+I agree with this point.
 
-Yes, that adns-1.4-cnamechain.patch is originally from their mailing
-list but Gentoo hosts it too:
-http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/net-libs/adns/files/adns-1.4-cnamechain.patch
-
-However, here's the problem:
-As you can see that cnamechain patch is patch level -p0
-But those others patches are not.
-
-Even worse, that adns-1.4-rh514838.patch (patch level -p1) is extracted
-from Fedora src.rpm file.
-
-And that adns-1.4-destdir.patch, AFAIK, can only be located from here
-(and is also patch level -p0)
-https://build.opensuse.org/package/view_file?file=adns-1.4-destdir.patch&package=adns&project=devel%3Alibraries%3Ac_c%2B%2B
-
-So it's a mess and I don't think using direct download method will ever
-work for this complete patch set.
+>
+> Also, you mention the "Buildroot compiler wrapper", but nowhere in the
+> documentation we explain what it is, and I don't think it should be
+> explained in the documentation, except in a section dedicated to "Deep
+> Buildroot internals", but certainly not to answer a FAQ question about
+> relocatable toolchains.
+Agree.
 
 >
->  If for whatever reason it is difficult to retrieve from the 'net,
-> then it would be nice if you could clean up the patches a little. Some
-> of them even create a .orig file...
->
->
->> (currently they are on my server but I don't know how long I can keep
->> them there,
->> keeping enterprise ready Internet connection is not exactly cheap here)
->>
->> Those adns patches can be grabbed from here:
->> http://www.micro-os.com/
->
->  No, we don't want to ask you to host those patches - then it's better
-> to keep them in the buildroot tree.
->
+> I would rather think that a section discussing how to use the "SDK"
+> produced by Buildroot, and how it can be shared with application
+> developers, could mention that the SDK is currently not relocatable,
+> but that we are working on fixing this.
+Well, this will certainly be a better section to develop this point.
 
-That would be great!
+The SDK section will come later (not sure it'll be ready for the
+2013.02 release...).
 
->  Regards,
->  Arnout
->
->
 
-Regards
-Stefan
+Regards,
+
+-- 
+Samuel
