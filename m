@@ -1,62 +1,39 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Sun, 24 Feb 2013 13:14:31 +0200
-Subject: [Buildroot] [PATCH] polkit: bump to version 0.104
-In-Reply-To: <20130224043730.04cb6369@skate>
-References: <1361468671-9589-1-git-send-email-stefan.froberg@petroprogram.com>
- <20130224043730.04cb6369@skate>
-Message-ID: <5129F617.2000207@petroprogram.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Feb 2013 15:41:15 +0100
+Subject: [Buildroot] [PATCH] new package: gnome-keyring
+In-Reply-To: <20130224044212.06c85151@skate>
+References: <1361473406-5765-1-git-send-email-stefan.froberg@petroprogram.com>
+ <201302212305.27963.yann.morin.1998@free.fr> <20130224044212.06c85151@skate>
+Message-ID: <201302241541.15534.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas
+Thomas, All,
 
-24.2.2013 5:37, Thomas Petazzoni kirjoitti:
-> Dear Stefan Fr?berg,
->
-> On Thu, 21 Feb 2013 19:44:31 +0200, Stefan Fr?berg wrote:
->
->>  package/polkit/polkit-0.104-uclibc-netgroup.patch |   41 +++++++++++++++++++++
-> We no longer want to have the version in the patch file names. So it
-> should be "polkit-uclibc-netgroup.patch".
->
-> Best regards,
->
-> Thomas
+On Sunday 24 February 2013 Thomas Petazzoni wrote:
+> On Thu, 21 Feb 2013 23:05:27 +0100, Yann E. MORIN wrote:
+> 
+> > > +GNOME_KEYRING_INSTALL_STAGING = YES
+> > > +GNOME_KEYRING_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+> > 
+> > This should point to the host-variant of libgcrypt-config.
+> 
+> Hu? No, gnome-keyring is being built for the target here, and we
+> install the <foo>-config scripts in $(STAGING_DIR), even though they
+> are ultimately executed on the host.
 
-Ok.
-I think I will wait that patch download mechanisms and just point it to
-that
-http://repository.timesys.com/buildsources/p/polkit/polkit-0.104/polkit-0.104-uclibc-netgroup.patch
-in next update.
+Yes, of course, I've completely busted that one. :-(
 
+Regards,
+Yann E. MORIN.
 
-BTW, I have a question about two of those configure switches I added to
-this patch and have been bugging me:
-
-1 )
-
-This is ok right?
-
---localstatedir=/var
-
-I mean, without this switch I have seen some packages to install some
-crazy location like /usr/var
-
-2 )
-
-Witch would be more correct ?
-
---libexecdir=/usr/lib/polkit-1
-
-or
-
---libexecdir=/usr/libexec/polkit-1
-
-?
-What does the standards say about this ?
-
-Regards
-Stefan
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
