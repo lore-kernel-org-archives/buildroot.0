@@ -1,41 +1,31 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sun, 24 Feb 2013 19:27:45 +0100
-Subject: [Buildroot] [PATCH 1/2] ncurses: Add wchar support
-References: <1295280886-20910-1-git-send-email-serj.kalichev@gmail.com>
-Message-ID: <13mdgk.h4t.ln@bernd-kuhls.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 24 Feb 2013 22:53:46 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-02-23
+In-Reply-To: <201302241638.19487.yann.morin.1998@free.fr>
+References: <20130224073422.A0E2C43043B@lolut.humanoidz.org>
+ <201302241638.19487.yann.morin.1998@free.fr>
+Message-ID: <512A8BEA.4070905@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Serj Kalichev <serj.kalichev@gmail.com>
-wrote in news:1295280886-20910-1-git-send-email-serj.kalichev at gmail.com: 
+On 24/02/13 16:38, Yann E. MORIN wrote:
+> What's so special about mips64el that it does not like v4l2_std_id as an
+> unsigned 64-bit value (I've checked the headers, it is an __u64).
 
-> When the BR2_USE_WCHAR is "y" the ncurses will be configured with
-> wide char support. It will build ncursesw.* instead ncurses.*.
-> ---
->  package/ncurses/ncurses.mk |   28 +++++++++++++++++-----------
->  1 files changed, 17 insertions(+), 11 deletions(-)
+  I guess mips64 defines it as an unsigned long instead of unsigned long 
+long. unsigned long long could be more than 64 bits.
 
-Hi,
+  Regards,
+  Arnout
 
-following up Thomas Petazzonis todays post about optimizing the ncurses build 
-I would like to bump this patch as well for inclusion with the following 
-change:
-
-The line including NCURSES_CONFIG_SCRIPTS needs to be moved after the
-"ifeq ($(BR2_USE_WCHAR),y)"-area containing this line of code instead:
-
-NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_W)5-config
-
-(Sorry, I do not use git)
-
-Ncursesw seems to be needed[1] for VLC if BR2_PACKAGE_VLC_NCURSES=y is set, 
-see http://patchwork.ozlabs.org/patch/171335/ for the VLC patch.
-
-Regards,
-
-Bernd
-
-[1] http://forums.gentoo.org/viewtopic-p-7217872.html
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
