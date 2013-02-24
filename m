@@ -1,31 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Feb 2013 15:41:15 +0100
-Subject: [Buildroot] [PATCH] new package: gnome-keyring
-In-Reply-To: <20130224044212.06c85151@skate>
-References: <1361473406-5765-1-git-send-email-stefan.froberg@petroprogram.com>
- <201302212305.27963.yann.morin.1998@free.fr> <20130224044212.06c85151@skate>
-Message-ID: <201302241541.15534.yann.morin.1998@free.fr>
+Date: Sun, 24 Feb 2013 16:38:19 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-02-23
+In-Reply-To: <20130224073422.A0E2C43043B@lolut.humanoidz.org>
+References: <20130224073422.A0E2C43043B@lolut.humanoidz.org>
+Message-ID: <201302241638.19487.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+All,
 
 On Sunday 24 February 2013 Thomas Petazzoni wrote:
-> On Thu, 21 Feb 2013 23:05:27 +0100, Yann E. MORIN wrote:
+> Build 7eae46b1a84fb5bde78e4f9b8d42c66eb843ecbb
+> ==============================================
 > 
-> > > +GNOME_KEYRING_INSTALL_STAGING = YES
-> > > +GNOME_KEYRING_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
-> > 
-> > This should point to the host-variant of libgcrypt-config.
-> 
-> Hu? No, gnome-keyring is being built for the target here, and we
-> install the <foo>-config scripts in $(STAGING_DIR), even though they
-> are ultimately executed on the host.
+> Status         : NOK
+> Failure reason : tvheadend-v3.3
+> Architecture   : mips64el
+> Submitted by   : Thomas Petazzoni (Free Electrons build server)
+> Submitted at   : 2013-02-23 05:31:20
+> Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=0b9e763e161ceb0b4d81a344d10c1a33c1036af7
+> End of log     : http://autobuild.buildroot.net/results/7eae46b1a84fb5bde78e4f9b8d42c66eb843ecbb/build-end.log
 
-Yes, of course, I've completely busted that one. :-(
+I'm not sure how to solve that one:
+
+CC		build.linux/src/v4l.o
+/home/test/test/output1/build/tvheadend-v3.3/src/v4l.c: In function
+'v4l_adapter_check':
+/home/test/test/output1/build/tvheadend-v3.3/src/v4l.c:465:5: error: format
+'%llx' expects argument of type 'long long unsigned int', but argument 6 has
+type 'v4l2_std_id' [-Werror=format]
+
+(twice the same error).
+
+But:
+  - "long long unsigned int" is 64-bit wide, unsigned
+  - "v4l2_std_id" is a "__u64", so is 64-bit wide, unsigned
+  - it's only used for logging to stderr
+
+I'm not very happy with disabling -Werror, so I was thinking about casting
+the value to hush gcc.
+
+Strangely enough, all these %llx errors only occur on mips64el:
+  2013-01-17 - http://autobuild.buildroot.net/results/9a01b9244be38395db144207622a860a6aaf40fe/
+  2013-01-16 - http://autobuild.buildroot.net/results/a55b61b733c9a8a95f7f930d8d4395accf2e50f9/
+
+What's so special about mips64el that it does not like v4l2_std_id as an
+unsigned 64-bit value (I've checked the headers, it is an __u64).
 
 Regards,
 Yann E. MORIN.
