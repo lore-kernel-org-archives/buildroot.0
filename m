@@ -1,40 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Feb 2013 05:14:16 +0100
-Subject: [Buildroot] sdkdir in xorg-server.pc
-In-Reply-To: <87ehgemw3t.fsf@dell.be.48ers.dk>
-References: <511D7A62.1040004@mind.be>
-	<87ehgemw3t.fsf@dell.be.48ers.dk>
-Message-ID: <20130224051416.4e0d4d52@skate>
+Date: Sun, 24 Feb 2013 05:27:45 +0100
+Subject: [Buildroot] [PATCH] new package: adns
+In-Reply-To: <512900E0.9080605@mind.be>
+References: <1360959402-24775-1-git-send-email-stefan.froberg@petroprogram.com>
+ <512900E0.9080605@mind.be>
+Message-ID: <20130224052745.754b4567@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Arnout Vandecappelle,
 
-On Sun, 17 Feb 2013 23:08:54 +0100, Peter Korsgaard wrote:
+On Sat, 23 Feb 2013 18:48:16 +0100, Arnout Vandecappelle wrote:
 
->  Arnout>  By the way, Peter, Thomas, do the autobuilders ever compile
->  Arnout> the full Xorg server? I don't see how
->  Arnout> xdriver_xf86-input-synaptics can ever build with this issue...
-> 
-> They should as long as the needed toolchain dependencies are
-> available (wchar/largefile/c++).
-> 
-> gcc10.fsffrance.org uses:
-> 
-> BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-> BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-> BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> 
-> So that should be sufficient. Gcc14/114 don't have C++. Thomas' glibc
-> toolchains should also catch it.
+>   BTW, is this patch really 4 years old? Does that imply that adns is in 
+> fact dead?
 
-And in practice full X.org never gets selected, see the mail I just
-sent on the same thread, which explains what's happening.
+The last release (1.4) was apparently published in 2006, according to
+the dates in http://www.chiark.greenend.org.uk/~ian/adns/ftp/. So I
+guess we can call that a pretty much dead project indeed. See also the
+mailing list archives:
+http://www.chiark.greenend.org.uk/pipermail/adns-discuss/ and
+http://www.chiark.greenend.org.uk/pipermail/adns-announce/ (empty) for
+more details.
 
 Best regards,
 
