@@ -1,63 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Feb 2013 18:26:20 +0100
-Subject: [Buildroot] editing device_table_dev.txt
-In-Reply-To: <5126AC9B.30302@mind.be>
-References: <1361403460.22521.44.camel@genx.eng.msli.com>
- <5125F38B.2030204@petroprogram.com>
- <5125F50C.7020902@petroprogram.com>
- <20130221102315.GB12155@sapphire.tkos.co.il>
- <5125F7BB.50403@petroprogram.com> <5126A675.2060308@mind.be>
- <5126A8C7.2000009@petroprogram.com> <5126AC9B.30302@mind.be>
-Message-ID: <20130224182620.2283ceb3@skate>
+Date: Sun, 24 Feb 2013 18:27:50 +0100
+Subject: [Buildroot] [PATCH 1/2] ncurses: speed up the build by not
+	installing manpages
+Message-ID: <1361726871-18016-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+The installation of manpages during the installation step of
+host-ncurses and ncurses is horribly slow, and useless. This commit
+therefore disables the installation of those manpages, using the
+--without-manpages configuration option.
 
-On Fri, 22 Feb 2013 00:24:11 +0100, Arnout Vandecappelle wrote:
+It brings the combined host-ncurses+ncurses configure/build/install
+time from 3 minutes and 18 seconds to 1 minute and 36 seconds.
 
-> > What you mean that mdev or udev does not create device nodes ???
-> > If older kernels don't support devtmpfs like Baruch
-> > said then who does that device node creation if not the mdev or udev
-> > when event happens ???
-> 
->   Well, nobody...
-> 
->   Turns out that mdev still does device node creation. Makes me
-> wonder if I'm not mistaken about udev as well... I just remember
-> hearing that device node creation was removed when DEVTMPFS was
-> introduced.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ncurses/ncurses.mk |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Yes, I think you got the thing wrong: udev and mdev are still creating
-the device nodes. Of course, they might have already been created by
-devtmpfs, but I don't think it is a requirement. At least, devtmpfs is
-definitely not a requirement for mdev to work (except in Buildroot, in
-which we made the decision that if mdev is to be used, then devtmpfs
-support must be there).
-
-> >>   That said, you can create custom mdev/udev rules to create device
-> >> nodes. But it's all manual - and much simpler to just create the
-> >> device nodes manually.
-> >>
-> >
-> > for mdev it's just a single file, /etc/mdev.conf (I can even
-> > copy-paste it here, it's not that long and will cover 99% of needs).
-> 
->   Yes, but that file just specifies the chmod/chown rules, not how to 
-> create the device nodes. But as I just saw in the code, mdev does in
-> fact create the device nodes.
-
-udev can also create symbolic links to device files based on custom
-rules, or other funky things.
-
-Best regards,
-
-Thomas
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index aa2b6bc..e77a0f1 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -27,7 +27,8 @@ NCURSES_CONF_OPT = \
+ 	--enable-echo \
+ 	--enable-const \
+ 	--enable-overwrite \
+-	--enable-pc-files
++	--enable-pc-files \
++	$(if $(BR2_HAVE_DOCUMENTATION),,--without-manpages)
+ 
+ ifneq ($(BR2_ENABLE_DEBUG),y)
+ NCURSES_CONF_OPT += --without-debug
+@@ -115,7 +116,8 @@ define HOST_NCURSES_BUILD_CMDS
+ endef
+ 
+ HOST_NCURSES_CONF_OPT = \
+-	--without-shared --without-gpm
++	--without-shared --without-gpm \
++	--without-manpages
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
