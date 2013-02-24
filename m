@@ -1,51 +1,65 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 Feb 2013 17:39:00 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-02-23
-In-Reply-To: <201302241638.19487.yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 24 Feb 2013 16:38:19 +0100")
-References: <20130224073422.A0E2C43043B@lolut.humanoidz.org>
- <201302241638.19487.yann.morin.1998@free.fr>
-Message-ID: <87bob9bra3.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Feb 2013 18:24:16 +0100
+Subject: [Buildroot] editing device_table_dev.txt
+In-Reply-To: <5125F7BB.50403@petroprogram.com>
+References: <1361403460.22521.44.camel@genx.eng.msli.com>
+ <5125F38B.2030204@petroprogram.com>
+ <5125F50C.7020902@petroprogram.com>
+ <20130221102315.GB12155@sapphire.tkos.co.il>
+ <5125F7BB.50403@petroprogram.com>
+Message-ID: <20130224182416.64b51c7b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Dear Stefan Fr?berg,
 
-Hi,
+On Thu, 21 Feb 2013 12:32:27 +0200, Stefan Fr?berg wrote:
 
- Yann> I'm not sure how to solve that one:
+> >>> Also kernel .config file should also have CONFIG_DEVTMPFS and
+> >>> DEVTMPFS as 'y'.
+> >> Sorry, that should have been CONFIG_DEVTMPFS=y and
+> >> CONFIG_DEVTMPFS_MOUNT=y
+> > Kernel version 2.6.30 is too old for that.
+> >
+> > baruch
+> >
+> 
+> It is ?
+> Damn, then the only options are mdev and udev.
 
- Yann> CC		build.linux/src/v4l.o
- Yann> /home/test/test/output1/build/tvheadend-v3.3/src/v4l.c: In function
- Yann> 'v4l_adapter_check':
- Yann> /home/test/test/output1/build/tvheadend-v3.3/src/v4l.c:465:5: error: format
- Yann> '%llx' expects argument of type 'long long unsigned int', but argument 6 has
- Yann> type 'v4l2_std_id' [-Werror=format]
+No, because our mdev/udev handling makes the assumption that devtmpfs
+support is enabled in the kernel.
 
- Yann> (twice the same error).
+Contrary to what Arnout says, I don't think devtmpfs support is
+*mandatory* to get mdev to work. But in Buildroot, we've decided to
+support only mdev on top of devtmpfs.
 
- Yann> But:
- Yann>   - "long long unsigned int" is 64-bit wide, unsigned
- Yann>   - "v4l2_std_id" is a "__u64", so is 64-bit wide, unsigned
- Yann>   - it's only used for logging to stderr
+From linux/linux.mk:
 
- Yann> I'm not very happy with disabling -Werror, so I was thinking
- Yann> about casting the value to hush gcc.
+        $(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
+                $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
 
-Why not? Software should imho not use -Werror in release builds (it can
-be very interesting during development though).
+So whenever we're not using the "static" method, we enable DEVTMPFS +
+DEVTMPFS_MOUNT.
 
-We already disable it for a number of other packages (cifs-utils,
-classpath, ipsec-tools, libroxml, bellagio, synergy).
+So if you're using a kernel < 2.6.32 (I think that's the kernel release
+in which devtmpfs was introduced), then your only choice is to use the
+static method. Obviously, another better solution is to upgrade the
+kernel version you're using. The .config posted by John Stile
+originally mentions a board/atmel/at91sam9g20ek/ directory, which seems
+to indicate John is using the AT91SAM9G20 SoC. This SoC is perfectly
+well supported by mainline kernel versions, so there should normally be
+no reason to stick with the old 2.6.30.
 
- Yann> What's so special about mips64el that it does not like v4l2_std_id as an
- Yann> unsigned 64-bit value (I've checked the headers, it is an __u64).
+Best regards,
 
-Sorry, don't know.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
