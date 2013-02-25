@@ -1,83 +1,109 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 25 Feb 2013 22:31:20 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch for-master/doc
-Message-ID: <cover.1361827174.git.s.martin49@gmail.com>
+Date: Mon, 25 Feb 2013 22:31:21 +0100
+Subject: [Buildroot] [PATCH 01/11] manual: fix cross-refs
+In-Reply-To: <cover.1361827174.git.s.martin49@gmail.com>
+References: <cover.1361827174.git.s.martin49@gmail.com>
+Message-ID: <29c963fa2feb3c10ed9e5d1df37fd931a00214ab.1361827174.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ docs/manual/configure.txt           | 3 +++
+ docs/manual/customize-store.txt     | 7 ++++++-
+ docs/manual/customize-toolchain.txt | 2 +-
+ docs/manual/working-with.txt        | 3 ++-
+ 4 files changed, 12 insertions(+), 3 deletions(-)
 
-Here is the 2nd round of this doc series.
-
-Changes v1 -> v2:
-  - drop the patches 4/9 and 5/9 (adding faq entries about controversial topic,
-  they will be handled later);
-  - integrate the kconfiglib module in the Buildroot source tree
-  - rework gen-manual-lists.py;
-  - split doc patches (generator script, makefiles and generated files) in
-  distinct patches (hope this will ease the review ;-));
-  - integrate the patch from Stephan Hoffmann in this series.
-
-
-The following changes since commit 9ef10c2cf302a6a45205c998e555dc80b0409884:
-
-  linux-firmware: switch to http url (2013-02-25 19:26:19 +0100)
-
-are available in the git repository at:
-
-  git://github.com/tSed/buildroot.git for-master/doc
-
-for you to fetch changes up to 72489a607185be4b7e1e443ef340fc28395a54a0:
-
-  Manual: add empty line after header in .mk files (2013-02-25 21:52:42 +0100)
-
-----------------------------------------------------------------
-Samuel Martin (10):
-      manual: fix cross-refs
-      manual: minor fix in patch-policy.txt
-      manual: misc. post-{build,image} scripts fixes
-      working-with: board support
-      support: add kconfiglib python module
-      support/scripts: add gen-manual-lists.py
-      manual: add a make target 'manual-update-lists'
-      manual: cleanup appendix.txt
-      Makefile: add to the release target a warning about the manual updates.
-      manual: update generated lists
-
-Stephan Hoffmann (1):
-      Manual: add empty line after header in .mk files
-
- Makefile                                  |    2 +
- docs/manual/adding-packages-autotools.txt |   33 +-
- docs/manual/adding-packages-cmake.txt     |   33 +-
- docs/manual/adding-packages-generic.txt   |   83 +-
- docs/manual/appendix.txt                  |   29 +-
- docs/manual/configure.txt                 |    3 +
- docs/manual/customize-rootfs.txt          |   30 +-
- docs/manual/customize-store.txt           |    7 +-
- docs/manual/customize-toolchain.txt       |    2 +-
- docs/manual/deprecated-list.txt           |   79 +-
- docs/manual/host-package-list.txt         |   19 +
- docs/manual/manual.mk                     |    8 +-
- docs/manual/package-list.txt              |  930 +++++++
- docs/manual/patch-policy.txt              |   12 +-
- docs/manual/pkg-list.txt                  |  870 -------
- docs/manual/working-with.txt              |    3 +-
- support/pym/kconfiglib.py                 | 3772 +++++++++++++++++++++++++++++
- support/pym/readme                        |   14 +
- support/scripts/gen-manual-lists.py       |  336 +++
- 19 files changed, 5250 insertions(+), 1015 deletions(-)
- create mode 100644 docs/manual/host-package-list.txt
- create mode 100644 docs/manual/package-list.txt
- delete mode 100644 docs/manual/pkg-list.txt
- create mode 100644 support/pym/kconfiglib.py
- create mode 100644 support/pym/readme
- create mode 100755 support/scripts/gen-manual-lists.py
-
-Yours,
-Samuel
-
---
+diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+index 86cb173..4f9a6bb 100644
+--- a/docs/manual/configure.txt
++++ b/docs/manual/configure.txt
+@@ -64,6 +64,7 @@ Type+ option in the +Toolchain+ menu. Once one solution has been
+ chosen, a number of configuration options appear, they are detailed in
+ the following sections.
+ 
++[[internal-toolchain-backend]]
+ Internal toolchain backend
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+@@ -138,6 +139,7 @@ Drawbacks of this backend:
+   using the _External toolchain backend_.
+ * Limited to the _uClibc_ C library.
+ 
++[[external-toolchain-backend]]
+ External toolchain backend
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+@@ -240,6 +242,7 @@ Drawbacks of this backend:
+   fix from the toolchain vendor, unless you build your external
+   toolchain by yourself using Crosstool-NG.
+ 
++[[crosstool-ng-toolchain-backend]]
+ Crosstool-NG toolchain backend
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
+index d770f0e..5083339 100644
+--- a/docs/manual/customize-store.txt
++++ b/docs/manual/customize-store.txt
+@@ -13,10 +13,13 @@ consists of the buildroot configuration, the configuration files for
+ packages that you use (kernel, busybox, uClibc, ...), and your rootfs
+ modifications.
+ 
++
++[[customize-store-basics]]
+ Basics for storing the configuration
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-[[customize-store-basics]]
+ 
++
++[[customize-store-buildroot-config]]
+ Buildroot configuration
+ ^^^^^^^^^^^^^^^^^^^^^^^
+ 
+@@ -35,6 +38,7 @@ Alternatively, you can copy the file to any other place and rebuild with
+ +make defconfig BR2_DEFCONFIG=<path-to-defconfig-file>+.
+ 
+ 
++[[customize-store-package-config]]
+ Other package configuration
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+@@ -71,6 +75,7 @@ configuration files easier.
+   resp. +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
+ 
+ 
++[[customize-store-board-support]]
+ Creating your own board support
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
+index 4397979..811a6dc 100644
+--- a/docs/manual/customize-toolchain.txt
++++ b/docs/manual/customize-toolchain.txt
+@@ -15,7 +15,7 @@ There is no way of tuning an external toolchain since Buildroot does not
+ generate it.
+ 
+ It also requires to set the Buildroot settings according to the toolchain ones
+-(see xref:external-toolchain[]).
++(see xref:external-toolchain-backend[]).
+ 
+ Using the internal Buildroot toolchain backend
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+diff --git a/docs/manual/working-with.txt b/docs/manual/working-with.txt
+index b69d1e2..a57169c 100644
+--- a/docs/manual/working-with.txt
++++ b/docs/manual/working-with.txt
+@@ -25,4 +25,5 @@ interested in hacking it to add:
+ 
+ * new packages: refer to the xref:adding-packages[Developer guide]
+ 
+-* new board support: refer to the xref:board-support[Developer guide]
++* new board support: refer to the xref:customize-store[], more specifically
++  xref:customize-store-board-support[].
+-- 
+1.8.1.4
