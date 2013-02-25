@@ -1,60 +1,85 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 27 Feb 2013 23:57:50 +0100
-Subject: [Buildroot] [git commit] qt: install QML imports on target
-Message-ID: <20130301101146.DBB0D9AACA@busybox.osuosl.org>
+Date: Mon, 25 Feb 2013 20:34:08 +0100
+Subject: [Buildroot] [git commit] nmap: new package
+Message-ID: <20130301101145.6123C9AACA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1942836999ad64b7a84bd95a6bd1f5c75b81bf45
+commit: http://git.buildroot.net/buildroot/commit/?id=06b3e4c50d8c110f8b905f133afa31739d7817fd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When selecting the Qt declarative module, all the QML imports was
-built and installed to staging, but never installed to the target.
-
-Signed-off-by: Daniel Nystr??m <daniel.nystrom@timeterminal.se>
-Acked-by: Alexander Lukichev <alexander.lukichev@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt/qt.mk |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+ package/Config.in      |    1 +
+ package/nmap/Config.in |   16 ++++++++++++++++
+ package/nmap/nmap.mk   |   24 ++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index ee1a88b..3767810 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -498,6 +498,7 @@ define QT_CONFIGURE_CMDS
- 		-no-separate-debug-info \
- 		-prefix /usr \
- 		-plugindir /usr/lib/qt/plugins \
-+		-importdir /usr/lib/qt/imports \
- 		-hostprefix $(STAGING_DIR) \
- 		-fast \
- 		-no-rpath \
-@@ -610,6 +611,14 @@ define QT_INSTALL_TARGET_PLUGINS
- 	fi
- endef
- 
-+# Import installation
-+define QT_INSTALL_TARGET_IMPORTS
-+	if [ -d $(STAGING_DIR)/usr/lib/qt/imports/ ] ; then \
-+		mkdir -p $(TARGET_DIR)/usr/lib/qt/imports ; \
-+		cp -dpfr $(STAGING_DIR)/usr/lib/qt/imports/* $(TARGET_DIR)/usr/lib/qt/imports ; \
-+	fi
-+endef
+diff --git a/package/Config.in b/package/Config.in
+index 882d3c0..e96b58f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -677,6 +677,7 @@ source "package/netsnmp/Config.in"
+ source "package/netstat-nat/Config.in"
+ source "package/network-manager/Config.in"
+ source "package/nfacct/Config.in"
++source "package/nmap/Config.in"
+ source "package/noip/Config.in"
+ source "package/ngircd/Config.in"
+ source "package/ngrep/Config.in"
+diff --git a/package/nmap/Config.in b/package/nmap/Config.in
+new file mode 100644
+index 0000000..be1be33
+--- /dev/null
++++ b/package/nmap/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_NMAP
++	bool "nmap"
++	depends on BR2_INET_IPV6
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_PCRE
++	help
++	  Nmap ("Network Mapper") is a free and open source (license)
++	  utility for network discovery and security auditing.
 +
- # Fonts installation
- ifneq ($(QT_FONTS),)
- define QT_INSTALL_TARGET_FONTS
-@@ -628,6 +637,7 @@ endif
- define QT_INSTALL_TARGET_CMDS
- 	$(QT_INSTALL_TARGET_LIBS)
- 	$(QT_INSTALL_TARGET_PLUGINS)
-+	$(QT_INSTALL_TARGET_IMPORTS)
- 	$(QT_INSTALL_TARGET_FONTS)
- 	$(QT_INSTALL_TARGET_FONTS_TTF)
- endef
++	  http://nmap.org
++
++comment "nmap requires a toolchain with C++, IPV6 and thread support"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+new file mode 100644
+index 0000000..a5b085d
+--- /dev/null
++++ b/package/nmap/nmap.mk
+@@ -0,0 +1,24 @@
++#############################################################
++#
++# nmap
++#
++#############################################################
++
++NMAP_VERSION = 6.01
++NMAP_SITE = http://nmap.org/dist
++NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
++NMAP_DEPENDENCIES = libpcap pcre
++NMAP_CONF_OPT = --without-liblua --without-zenmap \
++	--with-libdnet=included --with-liblinear=included \
++	--with-libpcre="$(STAGING_DIR)/usr"
++NMAP_LICENSE = GPLv2
++NMAP_LICENSE_FILES = COPYING
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++NMAP_CONF_OPT += --with-openssl="$(STAGING_DIR)/usr"
++NMAP_DEPENDENCIES += openssl
++else
++NMAP_CONF_OPT += --without-openssl
++endif
++
++$(eval $(autotools-package))
