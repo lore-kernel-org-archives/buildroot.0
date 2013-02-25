@@ -1,38 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Feb 2013 09:34:39 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-02-23
-In-Reply-To: <201302241638.19487.yann.morin.1998@free.fr>
-References: <20130224073422.A0E2C43043B@lolut.humanoidz.org>
- <201302241638.19487.yann.morin.1998@free.fr>
-Message-ID: <20130225093439.0b2b43b2@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 25 Feb 2013 07:20:49 -0300
+Subject: [Buildroot] [PATCH] spawn-fcgi: needs mmu
+Message-ID: <1361787649-13829-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Fixes
+http://autobuild.buildroot.net/results/cb6605b223642e647981e697f17d89bb97e223a6/
 
-On Sun, 24 Feb 2013 16:38:19 +0100, Yann E. MORIN wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/spawn-fcgi/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-> /home/test/test/output1/build/tvheadend-v3.3/src/v4l.c:465:5: error:
-> format '%llx' expects argument of type 'long long unsigned int', but
-> argument 6 has type 'v4l2_std_id' [-Werror=format]
-
-Change the code to use:
-
-  "%s: Standard #%d: %016" PRIx64 " %s, frameperiod: %d/%d, %d lines",
-
-PRIx64 will automatically expand to llx on 32 bits platforms, and lx on
-64 bits platforms. See <inttypes.h>. I think this should fix your
-problem.
-
-Best regards,
-
-Thomas
+diff --git a/package/spawn-fcgi/Config.in b/package/spawn-fcgi/Config.in
+index 34cbbb1..59791e8 100644
+--- a/package/spawn-fcgi/Config.in
++++ b/package/spawn-fcgi/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SPAWN_FCGI
+ 	bool "spawn-fcgi"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  FastCGI process spawner.
+ 	  Project split from lighttpd.
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.12.4
