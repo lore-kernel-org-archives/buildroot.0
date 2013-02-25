@@ -1,47 +1,82 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 25 Feb 2013 16:15:37 +0100
-Subject: [Buildroot] force buildroot to regenerate the output/target
-	directory tree
-In-Reply-To: <loom.20130225T144049-821@post.gmane.org>
-References: <loom.20130225T144049-821@post.gmane.org>
-Message-ID: <3428566.nT0fW9ztJD@sagittae>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 25 Feb 2013 16:21:44 +0100
+Subject: [Buildroot] [PATCH] f2fs-tools: new package
+In-Reply-To: <1361804829-5961-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1361804829-5961-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <CAGm1_kuGGo9M6j829D9oYZ3BfJ+jo=sv8DGPBytGidaJPqs-Og@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Francesco,
+Hi Gustavo,
 
-On Monday 25 February 2013 13:46:00 Francesco Montorsi wrote:
-> Hi,
-> I've been using buildroot since some time and there is a thing I didn't
-> figure out yet. Consider this situation: I have a working buildroot
-> environment; I have copied into the output/target folder some stuff so that
-> when I run "make" buildroot generates for me images into output/images
-> which already contain the contents I manually copied.
-> Now I would like to "reset" the output/target folder, i.e. obtain the
-> buildroot "vanilla" output/target tree and to obtian the buildroot vanilla
-> output/images.... how can I do that without doing a "make clean" (which
-> requires re-compilation of all packages and takes a lot of time)?
-> 
-> does a "rm -rf output/target && make" works?
-As Thomas said, it does not work. But, some unofficial hacks exist:
+On Mon, Feb 25, 2013 at 4:07 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/Config.in                |  1 +
+>  package/f2fs-tools/Config.in     | 12 ++++++++++++
+>  package/f2fs-tools/f2fs-tools.mk | 13 +++++++++++++
+>  3 files changed, 26 insertions(+)
+>  create mode 100644 package/f2fs-tools/Config.in
+>  create mode 100644 package/f2fs-tools/f2fs-tools.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index e65396a..f77911f 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -191,6 +191,7 @@ source "package/dosfstools/Config.in"
+>  source "package/e2fsprogs/Config.in"
+>  source "package/exfat/Config.in"
+>  source "package/exfat-utils/Config.in"
+> +source "package/f2fs-tools/Config.in"
+>  source "package/flashbench/Config.in"
+>  source "package/genext2fs/Config.in"
+>  source "package/genromfs/Config.in"
+> diff --git a/package/f2fs-tools/Config.in b/package/f2fs-tools/Config.in
+> new file mode 100644
+> index 0000000..20db928
+> --- /dev/null
+> +++ b/package/f2fs-tools/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_F2FS_TOOLS
+> +       bool "f2fs-tools"
+> +       select BR2_PACKAGE_UTIL_LINUX
+> +       depends on BR2_LARGEFILE
+> +       depends on BR2_USE_WCHAR # util-linux
+> +       help
+> +         Tools for Flash-Friendly File System (F2FS)
+> +
+> +         http://sourceforge.net/projects/f2fs-tools/
+> +
+> +comment "f2fs-tools requires a toolchain with LARGEFILE and WCHAR support"
+> +       depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+> diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+> new file mode 100644
+> index 0000000..4de4adb
+> --- /dev/null
+> +++ b/package/f2fs-tools/f2fs-tools.mk
+> @@ -0,0 +1,13 @@
+> +#############################################################
+> +#
+> +# f2fs-tools
+> +#
+> +#############################################################
+> +
+> +F2FS_TOOLS_VERSION = e3eadd686ed1da1828f32977a36b694bc0090f4e
+> +F2FS_TOOLS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
+> +F2FS_TOOLS_CONF_ENV = ac_cv_file__git=yes
+> +F2FS_TOOLS_DEPENDENCIES = host-pkgconf util-linux
+> +F2FS_TOOLS_AUTORECONF = YES
+> +
+> +$(eval $(autotools-package))
+> --
+> 1.7.12.4
 
-  * remove build/.root will force to reinstall skeleton
+what about adding http or https instead of git protocol like
+http://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git?
+It were useful for people behind a proxy.
 
-  * remove build/*/.stamp_target_installed force reinstall each target package
-
-  * depending of you toolchain, you can reinstall libc and co by removing
-      # stamps/ext-toolchain-installed (external)
-      # stamps/ct-ng-toolchain-installed (ctng)
-      # target/lib/libc.so.0 (buildroot)
-
-Remind, there are ton of reasons these tips could do wrong things. The only 
-current official way to rebuild target is "make clean".
-
-
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Yegor
