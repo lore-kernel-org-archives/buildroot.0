@@ -1,46 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Feb 2013 15:16:37 +0100
-Subject: [Buildroot] force buildroot to regenerate the output/target
- directory tree
-In-Reply-To: <loom.20130225T144049-821@post.gmane.org>
-References: <loom.20130225T144049-821@post.gmane.org>
-Message-ID: <20130225151637.078e3155@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 25 Feb 2013 11:39:51 -0300
+Subject: [Buildroot] [PATCH] nmap: new package
+Message-ID: <1361803191-5120-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francesco Montorsi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/Config.in      |  1 +
+ package/nmap/Config.in | 16 ++++++++++++++++
+ package/nmap/nmap.mk   | 24 ++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+)
+ create mode 100644 package/nmap/Config.in
+ create mode 100644 package/nmap/nmap.mk
 
-On Mon, 25 Feb 2013 13:46:00 +0000 (UTC), Francesco Montorsi wrote:
-
-> I've been using buildroot since some time and there is a thing I
-> didn't figure out yet. Consider this situation: I have a working
-> buildroot environment; I have copied into the output/target folder
-> some stuff so that when I run "make" buildroot generates for me
-> images into output/images which already contain the contents I
-> manually copied. Now I would like to "reset" the output/target
-> folder, i.e. obtain the buildroot "vanilla" output/target tree and to
-> obtian the buildroot vanilla output/images.... how can I do that
-> without doing a "make clean" (which requires re-compilation of all
-> packages and takes a lot of time)? 
-> 
-> does a "rm -rf output/target && make" works? 
-
-No, it doesn't work, and as of today, there isn't really a simple and
-reliable way of doing that.
-
-How long is your entire build? What is your configuration (post
-your .config if possible)? Do you have an external toolchain? Have you
-used ccache? Are you perhaps building inside a virtual machine and/or
-on a slow laptop?
-
-Best regards,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index f77911f..4defd72 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -680,6 +680,7 @@ source "package/netsnmp/Config.in"
+ source "package/netstat-nat/Config.in"
+ source "package/network-manager/Config.in"
+ source "package/nfacct/Config.in"
++source "package/nmap/Config.in"
+ source "package/noip/Config.in"
+ source "package/ngircd/Config.in"
+ source "package/ngrep/Config.in"
+diff --git a/package/nmap/Config.in b/package/nmap/Config.in
+new file mode 100644
+index 0000000..be1be33
+--- /dev/null
++++ b/package/nmap/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_NMAP
++	bool "nmap"
++	depends on BR2_INET_IPV6
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_PCRE
++	help
++	  Nmap ("Network Mapper") is a free and open source (license)
++	  utility for network discovery and security auditing.
++
++	  http://nmap.org
++
++comment "nmap requires a toolchain with C++, IPV6 and thread support"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+new file mode 100644
+index 0000000..a5b085d
+--- /dev/null
++++ b/package/nmap/nmap.mk
+@@ -0,0 +1,24 @@
++#############################################################
++#
++# nmap
++#
++#############################################################
++
++NMAP_VERSION = 6.01
++NMAP_SITE = http://nmap.org/dist
++NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
++NMAP_DEPENDENCIES = libpcap pcre
++NMAP_CONF_OPT = --without-liblua --without-zenmap \
++	--with-libdnet=included --with-liblinear=included \
++	--with-libpcre="$(STAGING_DIR)/usr"
++NMAP_LICENSE = GPLv2
++NMAP_LICENSE_FILES = COPYING
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++NMAP_CONF_OPT += --with-openssl="$(STAGING_DIR)/usr"
++NMAP_DEPENDENCIES += openssl
++else
++NMAP_CONF_OPT += --without-openssl
++endif
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.12.4
