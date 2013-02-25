@@ -1,22 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 25 Feb 2013 19:27:50 +0100
-Subject: [Buildroot] [PATCH] linux-firmware: switch to http url
-In-Reply-To: <1361809597-24092-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 25 Feb 2013 13:26:37 -0300")
-References: <1361809597-24092-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k3pw9rkp.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 25 Feb 2013 19:26:19 +0100
+Subject: [Buildroot] [git commit] linux-firmware: switch to http url
+Message-ID: <20130225183936.5A8BB9AD3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9ef10c2cf302a6a45205c998e555dc80b0409884
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> As recommended by Yegor Yefremov for f2fs-tools some firewalls might
- Gustavo> restrict the git port and make life harder.
+As recommended by Yegor Yefremov for f2fs-tools some firewalls might
+restrict the git port and make life harder.
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/linux-firmware/linux-firmware.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 9268608..0cb08b4 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -3,8 +3,9 @@
+ # linux-firmware
+ #
+ #############################################################
++
+ LINUX_FIRMWARE_VERSION = 65a5163b8bb77bd7759efa3ca780867fcaed89b0
+-LINUX_FIRMWARE_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
++LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
+ 
+ # rt2501/rt61
