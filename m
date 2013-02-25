@@ -1,39 +1,70 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 25 Feb 2013 15:53:01 +0100
-Subject: [Buildroot] [git commit] enlightenment: Alsa backend needs mixer
-	support
-Message-ID: <20130225145348.EE0BB9AD31@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 25 Feb 2013 12:07:09 -0300
+Subject: [Buildroot] [PATCH] f2fs-tools: new package
+Message-ID: <1361804829-5961-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5c54347c35006acbcade56256b5b09d12ee8938d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes http://autobuild.buildroot.net/results/3d6e35e3cda9428cc422b4f6203ba912bdc11faf/
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/enlightenment/enlightenment.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/Config.in                |  1 +
+ package/f2fs-tools/Config.in     | 12 ++++++++++++
+ package/f2fs-tools/f2fs-tools.mk | 13 +++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/f2fs-tools/Config.in
+ create mode 100644 package/f2fs-tools/f2fs-tools.mk
 
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index cd3b21f..5d77869 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -28,6 +28,13 @@ ENLIGHTENMENT_CONF_OPT = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 			 --with-eet-eet=$(HOST_DIR)/usr/bin/eet \
- 			 --disable-rpath
- 
-+# alsa backend needs mixer support
-+ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
-+ENLIGHTENMENT_DEPENDENCIES += alsa-lib
-+else
-+ENLIGHTENMENT_CONF_ENV += enable_alsa=no
-+endif
+diff --git a/package/Config.in b/package/Config.in
+index e65396a..f77911f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -191,6 +191,7 @@ source "package/dosfstools/Config.in"
+ source "package/e2fsprogs/Config.in"
+ source "package/exfat/Config.in"
+ source "package/exfat-utils/Config.in"
++source "package/f2fs-tools/Config.in"
+ source "package/flashbench/Config.in"
+ source "package/genext2fs/Config.in"
+ source "package/genromfs/Config.in"
+diff --git a/package/f2fs-tools/Config.in b/package/f2fs-tools/Config.in
+new file mode 100644
+index 0000000..20db928
+--- /dev/null
++++ b/package/f2fs-tools/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_F2FS_TOOLS
++	bool "f2fs-tools"
++	select BR2_PACKAGE_UTIL_LINUX
++	depends on BR2_LARGEFILE
++	depends on BR2_USE_WCHAR # util-linux
++	help
++	  Tools for Flash-Friendly File System (F2FS)
 +
- ifeq ($(BR2_HAVE_DOCUMENTATION),)
- define ENLIGHTENMENT_REMOVE_DOCUMENTATION
- 	rm -rf $(TARGET_DIR)/usr/share/enlightenment/doc/
++	  http://sourceforge.net/projects/f2fs-tools/
++
++comment "f2fs-tools requires a toolchain with LARGEFILE and WCHAR support"
++	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+new file mode 100644
+index 0000000..4de4adb
+--- /dev/null
++++ b/package/f2fs-tools/f2fs-tools.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# f2fs-tools
++#
++#############################################################
++
++F2FS_TOOLS_VERSION = e3eadd686ed1da1828f32977a36b694bc0090f4e
++F2FS_TOOLS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
++F2FS_TOOLS_CONF_ENV = ac_cv_file__git=yes
++F2FS_TOOLS_DEPENDENCIES = host-pkgconf util-linux
++F2FS_TOOLS_AUTORECONF = YES
++
++$(eval $(autotools-package))
+-- 
+1.7.12.4
