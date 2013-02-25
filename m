@@ -1,49 +1,37 @@
 From: Francesco Montorsi <francesco.montorsi@gmail.com>
-Date: Mon, 25 Feb 2013 19:59:42 +0000 (UTC)
-Subject: [Buildroot] force buildroot to regenerate the output/target
-	directory tree
+Date: Mon, 25 Feb 2013 20:02:32 +0000 (UTC)
+Subject: [Buildroot]
+	=?utf-8?q?force_buildroot_to_regenerate_the_output/ta?=
+	=?utf-8?q?rget=09directory_tree?=
 References: <loom.20130225T144049-821@post.gmane.org>
- <20130225151637.078e3155@skate>
-Message-ID: <loom.20130225T205428-835@post.gmane.org>
+ <3428566.nT0fW9ztJD@sagittae>
+Message-ID: <loom.20130225T210005-949@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@...> writes:
-> > does a "rm -rf output/target && make" works? 
+J?r?me Pouiller <jezz@...> writes:
+> > does a "rm -rf output/target && make" works?
+> As Thomas said, it does not work. But, some unofficial hacks exist:
 > 
-> No, it doesn't work, and as of today, there isn't really a simple and
-> reliable way of doing that.
-ok... I think it would be nice to add one, though!
- 
-> How long is your entire build? What is your configuration (post
-> your .config if possible)? Do you have an external toolchain? Have you
-> used ccache? Are you perhaps building inside a virtual machine and/or
-> on a slow laptop?
-my build is about 1h on an core i5... yes: I'm using ccache.
-Anyway, it's not really a matter of compilation flags / development machine. The 
-point is that in a development stage I often find myself doing several small 
-changes in the configuration files and other stuff (in a SVN environment); then 
-I copy them in the output/target tree... my point is that I would like to be 
-sure that there are no leftovers from previous cp commands I issued.
+>   * remove build/.root will force to reinstall skeleton
+> 
+>   * remove build/*/.stamp_target_installed force reinstall each target package
+> 
+>   * depending of you toolchain, you can reinstall libc and co by removing
+>       # stamps/ext-toolchain-installed (external)
+>       # stamps/ct-ng-toolchain-installed (ctng)
+>       # target/lib/libc.so.0 (buildroot)
+> 
+> Remind, there are ton of reasons these tips could do wrong things. The only 
+> current official way to rebuild target is "make clean".
+> 
+Thanks!
+I will test this approach next time, after doing a backup copy :)
 
-Perhaps I can do:
-  make   # in buildroot folder
-  cp -rf output/target output/targetVANILLA
-  cp -rf /mystuff output/target
-  make   # to generate images containing my customized stuff in output/images
+Anyway I think it would be nice to have an additional target in the buildroot 
+Makefile which does the operations above (with possible additional quirks) :)
 
-and then
-
-  rm -rf output/target 
-  cp -rf output/targetVANILLA output/target
-
-to start over in the future.
-
-Perhaps skeletons are the most clean way to do that... I will look into it as 
-soon as I find the time!
-
-THanks,
 Francesco
