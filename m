@@ -1,37 +1,41 @@
-From: Francesco Montorsi <francesco.montorsi@gmail.com>
-Date: Mon, 25 Feb 2013 20:02:32 +0000 (UTC)
-Subject: [Buildroot]
-	=?utf-8?q?force_buildroot_to_regenerate_the_output/ta?=
-	=?utf-8?q?rget=09directory_tree?=
-References: <loom.20130225T144049-821@post.gmane.org>
- <3428566.nT0fW9ztJD@sagittae>
-Message-ID: <loom.20130225T210005-949@post.gmane.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 25 Feb 2013 21:41:05 +0100
+Subject: [Buildroot] [PATCH] neard: fix build with kernel headers 3.1 -
+ 3.6
+In-Reply-To: <20130225114038.4b045521@skate>
+References: <1361034167-10068-1-git-send-email-arnout@mind.be>
+ <1361036067-26971-1-git-send-email-arnout@mind.be>
+ <87621qmvzc.fsf@dell.be.48ers.dk> <5121D7D2.1000401@mind.be>
+ <20130225114038.4b045521@skate>
+Message-ID: <512BCC61.4040707@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me Pouiller <jezz@...> writes:
-> > does a "rm -rf output/target && make" works?
-> As Thomas said, it does not work. But, some unofficial hacks exist:
-> 
->   * remove build/.root will force to reinstall skeleton
-> 
->   * remove build/*/.stamp_target_installed force reinstall each target package
-> 
->   * depending of you toolchain, you can reinstall libc and co by removing
->       # stamps/ext-toolchain-installed (external)
->       # stamps/ct-ng-toolchain-installed (ctng)
->       # target/lib/libc.so.0 (buildroot)
-> 
-> Remind, there are ton of reasons these tips could do wrong things. The only 
-> current official way to rebuild target is "make clean".
-> 
-Thanks!
-I will test this approach next time, after doing a backup copy :)
+On 25/02/13 11:40, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
+>
+> On Mon, 18 Feb 2013 08:27:14 +0100, Arnout Vandecappelle wrote:
+>
+>>> Committed, thanks. Don't forget to send upstream.
+>>
+>>    Thomas, did you ever send the original patch upstream?
+>
+> No, I did not. Since the patch carries an entire copy of the kernel
+> header, I am fairly sure that upstream will not be very interested.
 
-Anyway I think it would be nice to have an additional target in the buildroot 
-Makefile which does the operations above (with possible additional quirks) :)
+  In that case I won't upstream my patch either :-)
 
-Francesco
+  Regards,
+  Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
