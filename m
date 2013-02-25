@@ -1,85 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 25 Feb 2013 11:39:51 -0300
-Subject: [Buildroot] [PATCH] nmap: new package
-Message-ID: <1361803191-5120-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 25 Feb 2013 15:53:01 +0100
+Subject: [Buildroot] [git commit] enlightenment: Alsa backend needs mixer
+	support
+Message-ID: <20130225145348.EE0BB9AD31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in      |  1 +
- package/nmap/Config.in | 16 ++++++++++++++++
- package/nmap/nmap.mk   | 24 ++++++++++++++++++++++++
- 3 files changed, 41 insertions(+)
- create mode 100644 package/nmap/Config.in
- create mode 100644 package/nmap/nmap.mk
+commit: http://git.buildroot.net/buildroot/commit/?id=5c54347c35006acbcade56256b5b09d12ee8938d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/Config.in b/package/Config.in
-index f77911f..4defd72 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -680,6 +680,7 @@ source "package/netsnmp/Config.in"
- source "package/netstat-nat/Config.in"
- source "package/network-manager/Config.in"
- source "package/nfacct/Config.in"
-+source "package/nmap/Config.in"
- source "package/noip/Config.in"
- source "package/ngircd/Config.in"
- source "package/ngrep/Config.in"
-diff --git a/package/nmap/Config.in b/package/nmap/Config.in
-new file mode 100644
-index 0000000..be1be33
---- /dev/null
-+++ b/package/nmap/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_NMAP
-+	bool "nmap"
-+	depends on BR2_INET_IPV6
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBPCAP
-+	select BR2_PACKAGE_PCRE
-+	help
-+	  Nmap ("Network Mapper") is a free and open source (license)
-+	  utility for network discovery and security auditing.
-+
-+	  http://nmap.org
-+
-+comment "nmap requires a toolchain with C++, IPV6 and thread support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-new file mode 100644
-index 0000000..a5b085d
---- /dev/null
-+++ b/package/nmap/nmap.mk
-@@ -0,0 +1,24 @@
-+#############################################################
-+#
-+# nmap
-+#
-+#############################################################
-+
-+NMAP_VERSION = 6.01
-+NMAP_SITE = http://nmap.org/dist
-+NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
-+NMAP_DEPENDENCIES = libpcap pcre
-+NMAP_CONF_OPT = --without-liblua --without-zenmap \
-+	--with-libdnet=included --with-liblinear=included \
-+	--with-libpcre="$(STAGING_DIR)/usr"
-+NMAP_LICENSE = GPLv2
-+NMAP_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+NMAP_CONF_OPT += --with-openssl="$(STAGING_DIR)/usr"
-+NMAP_DEPENDENCIES += openssl
+Fixes http://autobuild.buildroot.net/results/3d6e35e3cda9428cc422b4f6203ba912bdc11faf/
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/enlightenment/enlightenment.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index cd3b21f..5d77869 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -28,6 +28,13 @@ ENLIGHTENMENT_CONF_OPT = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+ 			 --with-eet-eet=$(HOST_DIR)/usr/bin/eet \
+ 			 --disable-rpath
+ 
++# alsa backend needs mixer support
++ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
++ENLIGHTENMENT_DEPENDENCIES += alsa-lib
 +else
-+NMAP_CONF_OPT += --without-openssl
++ENLIGHTENMENT_CONF_ENV += enable_alsa=no
 +endif
 +
-+$(eval $(autotools-package))
--- 
-1.7.12.4
+ ifeq ($(BR2_HAVE_DOCUMENTATION),)
+ define ENLIGHTENMENT_REMOVE_DOCUMENTATION
+ 	rm -rf $(TARGET_DIR)/usr/share/enlightenment/doc/
