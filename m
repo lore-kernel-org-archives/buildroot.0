@@ -1,74 +1,83 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 25 Feb 2013 20:18:41 +0100
-Subject: [Buildroot] [git commit branch/next] f2fs-tools: new package
-Message-ID: <20130225191845.C40369AD34@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 25 Feb 2013 20:46:19 +0100
+Subject: [Buildroot] [PATCH] nmap: new package
+In-Reply-To: <1361803191-5120-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 25 Feb 2013 11:39:51 -0300")
+References: <1361803191-5120-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877glw9nxw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=98de049686e67b0866f7024c61eb51bdbd1091f5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in                |    1 +
- package/f2fs-tools/Config.in     |   12 ++++++++++++
- package/f2fs-tools/f2fs-tools.mk |   17 +++++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  package/Config.in      |  1 +
+ Gustavo>  package/nmap/Config.in | 16 ++++++++++++++++
+ Gustavo>  package/nmap/nmap.mk   | 24 ++++++++++++++++++++++++
+ Gustavo>  3 files changed, 41 insertions(+)
+ Gustavo>  create mode 100644 package/nmap/Config.in
+ Gustavo>  create mode 100644 package/nmap/nmap.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 3df85f4..882d3c0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -191,6 +191,7 @@ source "package/dosfstools/Config.in"
- source "package/e2fsprogs/Config.in"
- source "package/exfat/Config.in"
- source "package/exfat-utils/Config.in"
-+source "package/f2fs-tools/Config.in"
- source "package/flashbench/Config.in"
- source "package/genext2fs/Config.in"
- source "package/genromfs/Config.in"
-diff --git a/package/f2fs-tools/Config.in b/package/f2fs-tools/Config.in
-new file mode 100644
-index 0000000..20db928
---- /dev/null
-+++ b/package/f2fs-tools/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_F2FS_TOOLS
-+	bool "f2fs-tools"
-+	select BR2_PACKAGE_UTIL_LINUX
-+	depends on BR2_LARGEFILE
-+	depends on BR2_USE_WCHAR # util-linux
-+	help
-+	  Tools for Flash-Friendly File System (F2FS)
-+
-+	  http://sourceforge.net/projects/f2fs-tools/
-+
-+comment "f2fs-tools requires a toolchain with LARGEFILE and WCHAR support"
-+	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-new file mode 100644
-index 0000000..f217bf4
---- /dev/null
-+++ b/package/f2fs-tools/f2fs-tools.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# f2fs-tools
-+#
-+#############################################################
-+
-+F2FS_TOOLS_VERSION = e3eadd686ed1da1828f32977a36b694bc0090f4e
-+F2FS_TOOLS_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
-+F2FS_TOOLS_SITE_METHOD = git
-+F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
-+F2FS_TOOLS_DEPENDENCIES = host-pkgconf util-linux
-+# GIT version, shipped without configure
-+F2FS_TOOLS_AUTORECONF = YES
-+F2FS_LICENSE = GPLv2
-+F2FS_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+ Gustavo> diff --git a/package/Config.in b/package/Config.in
+ Gustavo> index f77911f..4defd72 100644
+ Gustavo> --- a/package/Config.in
+ Gustavo> +++ b/package/Config.in
+ Gustavo> @@ -680,6 +680,7 @@ source "package/netsnmp/Config.in"
+ Gustavo>  source "package/netstat-nat/Config.in"
+ Gustavo>  source "package/network-manager/Config.in"
+ Gustavo>  source "package/nfacct/Config.in"
+ Gustavo> +source "package/nmap/Config.in"
+ Gustavo>  source "package/noip/Config.in"
+ Gustavo>  source "package/ngircd/Config.in"
+ Gustavo>  source "package/ngrep/Config.in"
+ Gustavo> diff --git a/package/nmap/Config.in b/package/nmap/Config.in
+ Gustavo> new file mode 100644
+ Gustavo> index 0000000..be1be33
+ Gustavo> --- /dev/null
+ Gustavo> +++ b/package/nmap/Config.in
+ Gustavo> @@ -0,0 +1,16 @@
+ Gustavo> +config BR2_PACKAGE_NMAP
+ Gustavo> +	bool "nmap"
+ Gustavo> +	depends on BR2_INET_IPV6
+ Gustavo> +	depends on BR2_INSTALL_LIBSTDCPP
+ Gustavo> +	depends on BR2_USE_MMU # fork()
+ Gustavo> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+ Gustavo> +	select BR2_PACKAGE_LIBPCAP
+ Gustavo> +	select BR2_PACKAGE_PCRE
+ Gustavo> +	help
+ Gustavo> +	  Nmap ("Network Mapper") is a free and open source (license)
+ Gustavo> +	  utility for network discovery and security auditing.
+ Gustavo> +
+ Gustavo> +	  http://nmap.org
+ Gustavo> +
+ Gustavo> +comment "nmap requires a toolchain with C++, IPV6 and thread support"
+ Gustavo> +	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS)
+ Gustavo> diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+ Gustavo> new file mode 100644
+ Gustavo> index 0000000..a5b085d
+ Gustavo> --- /dev/null
+ Gustavo> +++ b/package/nmap/nmap.mk
+ Gustavo> @@ -0,0 +1,24 @@
+ Gustavo> +#############################################################
+ Gustavo> +#
+ Gustavo> +# nmap
+ Gustavo> +#
+ Gustavo> +#############################################################
+ Gustavo> +
+ Gustavo> +NMAP_VERSION = 6.01
+ Gustavo> +NMAP_SITE = http://nmap.org/dist
+ Gustavo> +NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ Gustavo> +NMAP_DEPENDENCIES = libpcap pcre
+ Gustavo> +NMAP_CONF_OPT = --without-liblua --without-zenmap \
+ Gustavo> +	--with-libdnet=included --with-liblinear=included \
+ Gustavo> +	--with-libpcre="$(STAGING_DIR)/usr"
+
+Committed to next, thanks. It would be good to see optional lua support
+as a followup.
+
+-- 
+Bye, Peter Korsgaard
