@@ -1,35 +1,35 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 25 Feb 2013 21:02:50 -0500
-Subject: [Buildroot] [PATCH 2/2] package/tzdata: new package
-In-Reply-To: <3b37bfde822cb775f4f21b49052444442585fe26.1360017945.git.yann.morin.1998@free.fr>
-References: <cover.1360017945.git.yann.morin.1998@free.fr>
- <3b37bfde822cb775f4f21b49052444442585fe26.1360017945.git.yann.morin.1998@free.fr>
-Message-ID: <CANxTyt5ROnfpwLwwoTkN+jJBmjWdubXKy9Pc4TCiiz1nMJnaaQ@mail.gmail.com>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Tue, 26 Feb 2013 08:23:38 +0200
+Subject: [Buildroot] [PATCH] qt: install QML imports on target
+In-Reply-To: <878v6c859c.fsf@dell.be.48ers.dk>
+References: <1361355531-2909-1-git-send-email-daniel.nystrom@timeterminal.se>
+ <CAHQn0kg71pmwYCTo9EbGZOFF-PO2s99pZ4GrSC2gDbuy31QUqA@mail.gmail.com>
+ <878v6c859c.fsf@dell.be.48ers.dk>
+Message-ID: <512C54EA.60307@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-+define TZDATA_INSTALL_TARGET_CMDS
-+       mkdir -p $(TARGET_DIR)/usr/share/zoneinfo
-+       cp -a $(@D)/_output/* $(TARGET_DIR)/usr/share/zoneinfo
-+       cd $(TARGET_DIR)/usr/share/zoneinfo;    \
-+       for zone in posix/*; do                 \
-+           ln -s "$${zone}" "$${zone##*/}";    \
-+       done
-+endef
+Hi, Daniel, Peter, All!
 
-Yann,
+On 02/25/2013 11:15 PM, Peter Korsgaard wrote:
+>  Daniel>     When selecting the Qt declarative module, all the QML imports was
+>  Daniel>     built and installed to staging, but never installed to the target.
+>  Daniel>     Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+>  Daniel> Bumping this patch as I think this is a good candidate for the
+>  Daniel> 2013.02 release.  Currently QtDeclarative is supported by
+> It would be good if someone who knows anything about Qt can ack this
+> patch for 2013.02.
 
-Today, a co-worker applied these patches, and ran into a small problem
-during the install phase.  He had made a mistake while applying the
-companion zic patch, which caused the tzdata package to stop.  Then,
-after he fixed his mistake, the tzdata failed to install, because the
-'ln -s' failed to overwrite symlinks that already exist.  So I think
-that it might be good to add an 'rm -f "$${zone##*/}";' before the 'ln
--s'.  (Or at least make it an 'ln -sf', though I personally am
-distrustful of 'ln -sf' due to sometimes unexpected behavior when the
-target of the symlink is a directory.)
+  I don't yet have much reputation here but looks a nice thing to add to 2013.02,
+and implemented just as should be. At least, I had to do exactly the same thing
+a couple of months ago (based on Buildroot 2012.08) when doing a QML project, and
+wished it were in the next release :) So here it comes.
 
-Danomi -
+  Acked-by: Alexander Lukichev <alexander.lukichev@gmail.com>
+
+--
+Best regards,
+  Alexander Lukichev
