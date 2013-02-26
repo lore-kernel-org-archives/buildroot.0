@@ -1,46 +1,100 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 26 Feb 2013 10:44:39 +0100
-Subject: [Buildroot] [PATCH 02/11] manual: minor fix in patch-policy.txt
-In-Reply-To: <20130226092907.48b09b41@skate>
-References: <cover.1361827174.git.s.martin49@gmail.com>
- <677f6fbb5a9c1994131975c171a285c4335c38d8.1361827174.git.s.martin49@gmail.com>
- <20130226092907.48b09b41@skate>
-Message-ID: <CAHXCMMKCb9fPS_Umqd8WMAKN66sQO4_=sujqX1ms0H+djLmLBw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 26 Feb 2013 07:16:41 -0300
+Subject: [Buildroot] [PATCH] libfuse: not available for static builds
+Message-ID: <1361873801-8672-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Unfortunately libfuse uses dl functions exclusively so it can't be used
+for static builds so exclude it so.
+Fixes:
+http://autobuild.buildroot.net/results/a1c3d2b9c436023675c363d9d3b365c95ade0329/
 
-2013/2/26 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Samuel Martin,
->
-> On Mon, 25 Feb 2013 22:31:22 +0100, Samuel Martin wrote:
->
->> +- If a patch does some package version fixes, this should be documented in the
->> +commit message of the patch itself (or the message prepended to the 'diff'
->> +itself).
->
-> I am not sure to understand this part.
-I don't know how to explain this clearly.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/curlftpfs/Config.in | 5 +++--
+ package/libfuse/Config.in   | 6 ++++--
+ package/sshfs/Config.in     | 5 +++--
+ package/unionfs/Config.in   | 5 +++--
+ 4 files changed, 13 insertions(+), 8 deletions(-)
 
-My point is, for some packages, BR does not provide the latest version,
-but some fix may be available upstream, so they have been backported in BR
-(e.g.: package/libglib2/libglib2-make-codegen-python2-python3-compliant.patch).
-
-Any suggestion to explain this point in a better way is welcome.
-
->
->> +* Otherwise, patch files matching +<packagename>-<description>.patch+
->> +  are applied following the +ls+ command order.
->
-> Shouldn't we be enforcing a <packagename>-<number>-<description>.patch
-> policy, in order to ensure that patches are applied in the right order?
-Well, here I stick to the current apply-patches.sh implementation.
-
-Regards,
-
+diff --git a/package/curlftpfs/Config.in b/package/curlftpfs/Config.in
+index e946d0a..0d8e715 100644
+--- a/package/curlftpfs/Config.in
++++ b/package/curlftpfs/Config.in
+@@ -10,11 +10,12 @@ config BR2_PACKAGE_CURLFTPFS
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
+ 	depends on BR2_USE_MMU # libfuse
++	depends on !BR2_PREFER_STATIC_LIB # libfuse
+ 	help
+ 	  CurlFtpFS is a filesystem for accessing FTP hosts based on FUSE
+ 	  and libcurl.
+ 
+ 	  http://curlftpfs.sourceforge.net/
+ 
+-comment "curlftpfs requires a toolchain with LARGEFILE, WCHAR and threads support"
+-	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++comment "curlftpfs requires a toolchain with LARGEFILE, WCHAR, threads and dynamic library support"
++	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
+diff --git a/package/libfuse/Config.in b/package/libfuse/Config.in
+index 5d30892..e42f9e0 100644
+--- a/package/libfuse/Config.in
++++ b/package/libfuse/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_LIBFUSE
+ 	bool "libfuse"
++	# Really doesn't like static, see fuse/lib/fuse.c
++	depends on !BR2_PREFER_STATIC_LIB
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+@@ -8,5 +10,5 @@ config BR2_PACKAGE_LIBFUSE
+ 
+ 	  http://fuse.sourceforge.net/
+ 
+-comment "libfuse requires a toolchain with LARGEFILE and threads support"
+-        depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++comment "libfuse requires a toolchain with LARGEFILE, threads and dyanmic library support"
++        depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
+diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
+index 11b6bb9..b6d5aa6 100644
+--- a/package/sshfs/Config.in
++++ b/package/sshfs/Config.in
+@@ -9,10 +9,11 @@ config BR2_PACKAGE_SSHFS
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
+ 	depends on BR2_USE_MMU # libfuse
++	depends on !BR2_PREFER_STATIC_LIB # libfuse
+ 	help
+ 	  FUSE filesystem client based on the SSH File Transfer Protocol.
+ 
+ 	  http://fuse.sourceforge.net/sshfs.html
+ 
+-comment "sshfs requires a toolchain with LARGEFILE, WCHAR and threads support"
+-	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++comment "sshfs requires a toolchain with LARGEFILE, WCHAR, threads and dynamic library support"
++	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
+diff --git a/package/unionfs/Config.in b/package/unionfs/Config.in
+index 2ac7be9..6ceee89 100644
+--- a/package/unionfs/Config.in
++++ b/package/unionfs/Config.in
+@@ -4,10 +4,11 @@ config BR2_PACKAGE_UNIONFS
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
+ 	depends on BR2_USE_MMU # libfuse
++	depends on !BR2_PREFER_STATIC_LIB # libfuse
+ 	help
+ 	  A userspace unionfs implementation.
+ 
+ 	  http://podgorny.cz/moin/UnionFsFuse
+ 
+-comment "unionfs requires a toolchain with LARGEFILE and threads support"
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++comment "unionfs requires a toolchain with LARGEFILE, threads and dynamic library support"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
 -- 
-Samuel
+1.7.12.4
