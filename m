@@ -1,70 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Feb 2013 21:18:41 +0100
-Subject: [Buildroot] [PATCH 05/11] support: add kconfiglib python module
-In-Reply-To: <bd31d6b5313a660aaa80d596fdd3396e6a57751f.1361827174.git.s.martin49@gmail.com>
-References: <cover.1361827174.git.s.martin49@gmail.com>
- <bd31d6b5313a660aaa80d596fdd3396e6a57751f.1361827174.git.s.martin49@gmail.com>
-Message-ID: <512D18A1.3060308@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 26 Feb 2013 21:29:46 +0100
+Subject: [Buildroot] [PATCH v6] wireshark: new package
+In-Reply-To: <e64c965f3221d977b9bd2edf99405efd7405f848.1361167992.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 18 Feb 2013 08:18:11 +0200")
+References: <e64c965f3221d977b9bd2edf99405efd7405f848.1361167992.git.baruch@tkos.co.il>
+Message-ID: <87wqtu7r9h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/02/13 22:31, Samuel Martin wrote:
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->   support/pym/kconfiglib.py | 3772 +++++++++++++++++++++++++++++++++++++++++++++
->   support/pym/readme        |   14 +
->   2 files changed, 3786 insertions(+)
->   create mode 100644 support/pym/kconfiglib.py
->   create mode 100644 support/pym/readme
->
-> diff --git a/support/pym/kconfiglib.py b/support/pym/kconfiglib.py
-> new file mode 100644
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-  If you would put it in the same location as the gen-manual-lists.py 
-script, then you don't need to mess with PYTHONPATH (the module's 
-directory is always in PYTHONPATH).
+ Baruch> This is only the bare minimum needed to build the textual
+ Baruch> tshark utility.  Support for more options, including the
+ Baruch> wireshark GUI, can be added later.
 
-[snip]
+I was going to commit this to next, but a small test build fails as it
+ends up using system includes:
 
-> diff --git a/support/pym/readme b/support/pym/readme
-> new file mode 100644
+libtool: compile:  /home/peko/source/buildroot/outf2fs/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -DHAVE_CONFIG_H -I. -I../.. -I../.. -I/usr/include -DG_DISABLE_DEPRECATED -DG_DISABLE_SINGLE_INCLUDES -D_FORTIFY_SOURCE=2 "-D_U_=__attribute__((unused))" -I/home/peko/source/buildroot/outf2fs/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include -DPLUGIN_DIR=\"/usr/lib/wireshark/plugins/1.8.5\" -pipe -Os -Wall -W -Wextra -Wdeclaration-after-statement -Wendif-labels -Wpointer-arith -Wno-pointer-sign -Warray-bounds -Wcast-align -Wformat-security -Wold-style-definition -Wno-error=unused-but-set-variable -fexcess-precision=fast -pthread -I/home/peko/source/buildroot/outf2fs/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/glib-2.0 -I/home/peko/source/buildroot/outf2fs/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/glib-2.0/include -MT packet-asn1.lo -MD -MP -MF .deps/packet-asn1.Tpo -c packet-asn1.c  -fPIC -DPIC -o .libs/packet-asn1.o
+In file included from /usr/include/errno.h:29:0,
+                 from packet-asn1.c:66:
+/usr/include/features.h:323:26: fatal error: bits/predefs.h: No such file or directory
+compilation terminated.
+make[5]: *** [packet-asn1.lo] Error 1
 
-  Obviously, if it moves from pym to scripts, it should be called 
-README.kconfiglib or something similar.
+This is with a basic internal ARM toolchain:
 
-> index 0000000..f44609c
-> --- /dev/null
-> +++ b/support/pym/readme
-> @@ -0,0 +1,14 @@
-> +Readme
-> +======
-> +
-> +Kconfiglib
-> +----------
-> +
-> +This is a python module fetched from:
-> +
-> +https://github.com/ulfalizer/Kconfiglib
-> +commit: 417d62d1bf5fbfc7271c9d9b8dc2661b6332e288
-> +
-> +This module is not released under any explicit license, but it is a fair
-> +asumption kconfiglib is released under the same license as the linux kernel,
-> +i.e. GPLv2.
+cat defconfig
+BR2_arm=y
+BR2_arm926t=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PACKAGE_WIRESHARK=y
 
-  Unfortunately, that's not a fair assumption... Perhaps we should mail 
-the guy to verify.
+Looking closer at it, I see it is caused by a bunch of Makefile.am files
+having:
 
-  Regards,
-  Arnout
+INCLUDES = -I$(top_srcdir) -I$(includedir)
+
+E.G. look in srcdir + /usr/include. A quick workaround is to pass
+--includedir=$(STAGING_DIR)/usr/include to configure. If wireshark
+itself would install any headers, this would cause problems, but in this
+case it seems ok, so I think it's the best approach.
+
+Alternatively we could patch all the Makefile.am files to drop
+-I$(includedir) and autoreconf the package.
 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
