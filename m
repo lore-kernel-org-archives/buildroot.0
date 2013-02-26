@@ -1,40 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Feb 2013 18:54:15 +0100
-Subject: [Buildroot] [PATCH] kernel-headers: remove legacy code
-Message-ID: <1361901255-28462-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 Feb 2013 18:56:02 +0100
+Subject: [Buildroot] [git commit branch/next] exfat-utils: new package
+In-Reply-To: <20130222231134.2F5C79AC62@busybox.osuosl.org>
+References: <20130222231134.2F5C79AC62@busybox.osuosl.org>
+Message-ID: <201302261856.03004.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The BR2_KERNEL_HEADERS_2_6_35 symbol no longer exists since some time,
-so get rid of code that was specific to this kernel version.
+Gustavo, All,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/kernel-headers/kernel-headers.mk |    9 ---------
- 1 file changed, 9 deletions(-)
+On Saturday 23 February 2013 Peter Korsgaard wrote:
+[--SNIP--]
+> --- /dev/null
+> +++ b/package/exfat-utils/exfat-utils.mk
+> @@ -0,0 +1,24 @@
+> +#############################################################
+> +#
+> +# exfat-utils
+> +#
+> +#############################################################
+> +
+> +EXFAT_UTILS_VERSION = 1.0.1
+> +EXFAT_UTILS_SITE = http://exfat.googlecode.com/files
+> +EXFAT_UTILS_DEPENDENCIES = host-scons
+> +EXFAT_UTILS_LICENSE = GPLv3
 
-diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
-index 76602d8..073d609 100644
---- a/toolchain/kernel-headers/kernel-headers.mk
-+++ b/toolchain/kernel-headers/kernel-headers.mk
-@@ -36,15 +36,6 @@ LINUX_HEADERS_CAT:=$(BZCAT)
- LINUX_HEADERS_UNPACK_DIR:=$(TOOLCHAIN_DIR)/linux-$(LINUX_HEADERS_VERSION)
- LINUX_HEADERS_DIR:=$(TOOLCHAIN_DIR)/linux
- 
--# long term support kernels are stored in a longterm/v2.6.x subdir
--ifeq ($(BR2_KERNEL_HEADERS_2_6_35),y)
--DEFAULT_KERNEL_HEADERS_MAJOR := \
--	$(shell echo $(DEFAULT_KERNEL_HEADERS) | sed 's/\.[0-9]*$$//')
--# += adds a space between
--LINUX_HEADERS_SITE:= \
--	$(LINUX_HEADERS_SITE)longterm/v$(DEFAULT_KERNEL_HEADERS_MAJOR)/
--endif
--
- LINUX_HEADERS_DEPENDS:=
- 
- $(LINUX_HEADERS_UNPACK_DIR)/.unpacked: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
+In fact, it is GPLv3+.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.9.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
