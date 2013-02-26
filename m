@@ -1,22 +1,137 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 Feb 2013 22:32:15 +0100
-Subject: [Buildroot] [PATCH] package/exfat{,-utils}: license is GPLv3+
-In-Reply-To: <1361901719-7713-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Tue, 26 Feb 2013 19:01:59 +0100")
-References: <1361901719-7713-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87obf67odc.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 26 Feb 2013 22:11:55 +0100
+Subject: [Buildroot] [git commit branch/next] wireshark: new package
+Message-ID: <20130226213301.1C9359AD7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e3b3be6bb63e9cf5d2465ff55c01c24299f0caed
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This is only the bare minimum needed to build the textual tshark utility.
+Support for more options, including the wireshark GUI, can be added later.
 
-Committed to next, thanks.
+[Peter: point includedir at staging to workaround host/target headers issue]
+Cc: Stefan Fr??berg <stefan.froberg@petroprogram.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in                                  |    1 +
+ package/wireshark/Config.in                        |   14 +++++++
+ .../wireshark/wireshark-dont-include-prefix.patch  |   41 ++++++++++++++++++++
+ package/wireshark/wireshark.mk                     |   23 +++++++++++
+ 4 files changed, 79 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index e96b58f..1393652 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -732,6 +732,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/wget/Config.in"
+ endif
+ source "package/wireless_tools/Config.in"
++source "package/wireshark/Config.in"
+ source "package/wpa_supplicant/Config.in"
+ source "package/xinetd/Config.in"
+ source "package/xl2tp/Config.in"
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+new file mode 100644
+index 0000000..e6d4e72
+--- /dev/null
++++ b/package/wireshark/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_WIRESHARK
++	bool "wireshark"
++	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_LIBGCRYPT
++	select BR2_PACKAGE_LIBGLIB2
++	depends on BR2_USE_WCHAR # glib2
++	help
++	  Network traffic sniffer and protocol decoder. Currently only tshark,
++	  the console interface, is enabled.
++
++	  http://www.wireshark.org
++
++comment "wireshark requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/wireshark/wireshark-dont-include-prefix.patch b/package/wireshark/wireshark-dont-include-prefix.patch
+new file mode 100644
+index 0000000..567af9a
+--- /dev/null
++++ b/package/wireshark/wireshark-dont-include-prefix.patch
+@@ -0,0 +1,41 @@
++configure.in: don't add the build host's /usr/include and /usr/lib to the 
++search path of include files and libraries. This is not what you want when 
++cross compiling.
++
++Sent upstream as https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=7926.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++diff -Nuar wireshark-1.8.3.orig/configure.in wireshark-1.8.3/configure.in
++--- wireshark-1.8.3.orig/configure.in	2012-08-15 23:33:32.000000000 +0300
+++++ wireshark-1.8.3/configure.in	2012-10-28 10:07:54.864388531 +0200
++@@ -635,29 +635,6 @@
++ AC_SUBST(CORESERVICES_FRAMEWORKS)
++ AC_SUBST(LAUNCHSERVICES_FRAMEWORKS)
++ 
++-#
++-# If using $prefix we add "$prefix/include" to the include search path
++-# and "$prefix/lib" to the library search path.
++-#
++-if test "x$prefix" != "x" ; then
++-	AC_MSG_CHECKING(whether to use $prefix for headers and libraries)
++-	if test -d $prefix/include ; then
++-		AC_MSG_RESULT(yes)
++-		#
++-		# Arrange that we search for header files in "$prefix/include", as
++-		# various packages we use may have been installed under "$prefix/include".
++-		#
++-		CPPFLAGS="$CPPFLAGS -I$prefix/include"
++-
++-		#
++-		# Arrange that we search for libraries in "$prefix/lib".
++-		#
++-		AC_WIRESHARK_ADD_DASH_L(LDFLAGS, $prefix/lib)
++-	else
++-		AC_MSG_RESULT(no)
++-	fi
++-fi
++-
++ dnl Look in /usr/local for header files and libraries ?
++ dnl XXX FIXME don't include /usr/local if it is already in the system
++ dnl search path as this causes gcc 3.2 on Linux to complain about a change
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+new file mode 100644
+index 0000000..2e89987
+--- /dev/null
++++ b/package/wireshark/wireshark.mk
+@@ -0,0 +1,23 @@
++#############################################################
++#
++# wireshark
++#
++#############################################################
++
++WIRESHARK_VERSION = 1.8.5
++WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
++WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
++WIRESHARK_LICENSE = wireshark license
++WIRESHARK_LICENSE_FILES = COPYING
++WIRESHARK_DEPENDENCIES = libpcap libgcrypt libglib2
++WIRESHARK_AUTORECONF = YES
++WIRESHARK_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
++			ac_cv_path_PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
++
++# wireshark adds -I$includedir to CFLAGS, causing host/target headers mixup.
++# Work around it by pointing includedir at staging
++WIRESHARK_CONF_OPT = --disable-wireshark --without-krb5 --disable-usr-local \
++		     --enable-static=no --with-gnutls=no \
++		     --includedir=$(STAGING_DIR)/usr/include
++
++$(eval $(call autotools-package))
