@@ -1,65 +1,56 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 26 Feb 2013 12:15:55 +0100
-Subject: [Buildroot] [PATCH 02/11] manual: minor fix in patch-policy.txt
-In-Reply-To: <20130226120121.0c49bfc8@skate>
-References: <cover.1361827174.git.s.martin49@gmail.com>
- <677f6fbb5a9c1994131975c171a285c4335c38d8.1361827174.git.s.martin49@gmail.com>
- <20130226092907.48b09b41@skate>
- <CAHXCMMKCb9fPS_Umqd8WMAKN66sQO4_=sujqX1ms0H+djLmLBw@mail.gmail.com>
- <20130226120121.0c49bfc8@skate>
-Message-ID: <CAHXCMMKsfkDemmd5FYiOFs5iFC38=YM5bw3+-DHzA1zuTLagpw@mail.gmail.com>
+Date: Tue, 26 Feb 2013 12:50:31 +0100
+Subject: [Buildroot] [PATCH v3] manual: minor fix in patch-policy.txt
+Message-ID: <1361879431-21694-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ docs/manual/patch-policy.txt | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-2013/2/26 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Samuel Martin,
->
-> On Tue, 26 Feb 2013 10:44:39 +0100, Samuel Martin wrote:
->
->> >> +- If a patch does some package version fixes, this should be documented in the
->> >> +commit message of the patch itself (or the message prepended to the 'diff'
->> >> +itself).
->> >
->> > I am not sure to understand this part.
->> I don't know how to explain this clearly.
->>
->> My point is, for some packages, BR does not provide the latest version,
->> but some fix may be available upstream, so they have been backported in BR
->> (e.g.: package/libglib2/libglib2-make-codegen-python2-python3-compliant.patch).
->>
->> Any suggestion to explain this point in a better way is welcome.
->
-> I don't understand why you would want to put this here in the
-> documentation. What you're saying is just a detail on what the patch
-> could possibly contain (i.e a backport from upstream versus a
-> Buildroot-specific hack for cross-compilation), I don't see what it
-> changes in terms of patch policy.
-Fair enough, I'll drop this point.
-
-
->
->> >> +* Otherwise, patch files matching +<packagename>-<description>.patch+
->> >> +  are applied following the +ls+ command order.
->> >
->> > Shouldn't we be enforcing a <packagename>-<number>-<description>.patch
->> > policy, in order to ensure that patches are applied in the right order?
->> Well, here I stick to the current apply-patches.sh implementation.
->
-> The current apply-patches.sh implementation takes the patches in
-> alphabetical order, which is why it is important to have the patches
-> numbered to make sure that the patches are applied in a well-known
-> order, and not an order based on the <description> field alphabetical
-> sorting.
-
-Well, explicit numbering is better than implicit, so should be the doc.
-I'll fix it and re-spin this patch.
-
-Regards,
-
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+index 14c6efc..0f55b26 100644
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -34,12 +34,18 @@ Most patches are provided within Buildroot, in the package
+ directory; these typically aim to fix cross-compilation, libc support,
+ or other such issues.
+ 
+-These patch files should be named +<packagename>-<description>.patch+.
++These patch files should be named +<packagename>-<number>-<description>.patch+.
+ 
+ A +series+ file, as used by +quilt+, may also be added in the
+ package directory. In that case, the +series+ file defines the patch
+ application order.
+ 
++.Notes
++- The patch files coming with Buildroot should not contain any package version
++reference in their filename.
++- The field +<number>+ in the patch file name refers to the 'apply order'.
++
++
+ How patches are applied
+ ~~~~~~~~~~~~~~~~~~~~~~~
+ 
+@@ -56,8 +62,12 @@ How patches are applied
+ * If a +series+ file exists in the package directory, then patches are
+   applied according to the +series+ file;
+ +
+-* Otherwise, patch files matching `<packagename>-*.patch` are applied
+-  following the +ls+ command order.
++* Otherwise, patch files matching +<packagename>-*.patch+
++  are applied in alphabetical order.
++  So, to ensure they are applied in the right order, it is hightly
++  recommended to named the patch files like this:
++  +<packagename>-<number>-<description>.patch+, where +<number>+
++  refers to the 'apply order'.
+ 
+ . Run the +<packagename>_POST_PATCH_HOOKS+ commands if defined.
+ 
 -- 
-Samuel
+1.8.1.4
