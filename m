@@ -1,53 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 Feb 2013 21:29:46 +0100
-Subject: [Buildroot] [PATCH v6] wireshark: new package
-In-Reply-To: <e64c965f3221d977b9bd2edf99405efd7405f848.1361167992.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 18 Feb 2013 08:18:11 +0200")
-References: <e64c965f3221d977b9bd2edf99405efd7405f848.1361167992.git.baruch@tkos.co.il>
-Message-ID: <87wqtu7r9h.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 Feb 2013 21:52:55 +0100
+Subject: [Buildroot] [PATCH 2/2] package/tzdata: new package
+In-Reply-To: <CANxTyt5ROnfpwLwwoTkN+jJBmjWdubXKy9Pc4TCiiz1nMJnaaQ@mail.gmail.com>
+References: <cover.1360017945.git.yann.morin.1998@free.fr>
+ <3b37bfde822cb775f4f21b49052444442585fe26.1360017945.git.yann.morin.1998@free.fr>
+ <CANxTyt5ROnfpwLwwoTkN+jJBmjWdubXKy9Pc4TCiiz1nMJnaaQ@mail.gmail.com>
+Message-ID: <201302262152.55268.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Danomi, Richard, All,
 
- Baruch> This is only the bare minimum needed to build the textual
- Baruch> tshark utility.  Support for more options, including the
- Baruch> wireshark GUI, can be added later.
+On Tuesday 26 February 2013 Danomi Manchego wrote:
+> +define TZDATA_INSTALL_TARGET_CMDS
+> +       mkdir -p $(TARGET_DIR)/usr/share/zoneinfo
+> +       cp -a $(@D)/_output/* $(TARGET_DIR)/usr/share/zoneinfo
+> +       cd $(TARGET_DIR)/usr/share/zoneinfo;    \
+> +       for zone in posix/*; do                 \
+> +           ln -s "$${zone}" "$${zone##*/}";    \
+> +       done
+> +endef
+> 
+> Yann,
+> 
+> Today, a co-worker applied these patches, and ran into a small problem
+> during the install phase.  He had made a mistake while applying the
+> companion zic patch, which caused the tzdata package to stop.  Then,
+> after he fixed his mistake, the tzdata failed to install, because the
+> 'ln -s' failed to overwrite symlinks that already exist.  So I think
+> that it might be good to add an 'rm -f "$${zone##*/}";' before the 'ln
+> -s'.  (Or at least make it an 'ln -sf', though I personally am
+> distrustful of 'ln -sf' due to sometimes unexpected behavior when the
+> target of the symlink is a directory.)
 
-I was going to commit this to next, but a small test build fails as it
-ends up using system includes:
+OK, I'll apply Richard's "ln -sfn" fix, and re-submit.
+Thank you both for the feedback!
 
-libtool: compile:  /home/peko/source/buildroot/outf2fs/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -DHAVE_CONFIG_H -I. -I../.. -I../.. -I/usr/include -DG_DISABLE_DEPRECATED -DG_DISABLE_SINGLE_INCLUDES -D_FORTIFY_SOURCE=2 "-D_U_=__attribute__((unused))" -I/home/peko/source/buildroot/outf2fs/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include -DPLUGIN_DIR=\"/usr/lib/wireshark/plugins/1.8.5\" -pipe -Os -Wall -W -Wextra -Wdeclaration-after-statement -Wendif-labels -Wpointer-arith -Wno-pointer-sign -Warray-bounds -Wcast-align -Wformat-security -Wold-style-definition -Wno-error=unused-but-set-variable -fexcess-precision=fast -pthread -I/home/peko/source/buildroot/outf2fs/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/glib-2.0 -I/home/peko/source/buildroot/outf2fs/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/glib-2.0/include -MT packet-asn1.lo -MD -MP -MF .deps/packet-asn1.Tpo -c packet-asn1.c  -fPIC -DPIC -o .libs/packet-asn1.o
-In file included from /usr/include/errno.h:29:0,
-                 from packet-asn1.c:66:
-/usr/include/features.h:323:26: fatal error: bits/predefs.h: No such file or directory
-compilation terminated.
-make[5]: *** [packet-asn1.lo] Error 1
-
-This is with a basic internal ARM toolchain:
-
-cat defconfig
-BR2_arm=y
-BR2_arm926t=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PACKAGE_WIRESHARK=y
-
-Looking closer at it, I see it is caused by a bunch of Makefile.am files
-having:
-
-INCLUDES = -I$(top_srcdir) -I$(includedir)
-
-E.G. look in srcdir + /usr/include. A quick workaround is to pass
---includedir=$(STAGING_DIR)/usr/include to configure. If wireshark
-itself would install any headers, this would cause problems, but in this
-case it seems ok, so I think it's the best approach.
-
-Alternatively we could patch all the Makefile.am files to drop
--I$(includedir) and autoreconf the package.
-
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
