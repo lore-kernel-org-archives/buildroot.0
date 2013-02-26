@@ -1,46 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 26 Feb 2013 23:47:19 +0100
-Subject: [Buildroot] [git commit] mii-diag: fix race condition
-Message-ID: <20130226225051.2D3359AD8E@busybox.osuosl.org>
+Date: Wed, 27 Feb 2013 00:01:36 +0100
+Subject: [Buildroot] [git commit] collectd: don't build with -Werror
+Message-ID: <20130226230151.512FD9AD91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a84432044e0eed6f6c2f895fd5641a08c370bd4b
+commit: http://git.buildroot.net/buildroot/commit/?id=c264e38fce27789a0ab050b6296c2fee8da3752c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The mii-diag buildsystem doesn't correctly encode the needed
-dependencies, so the install step can race against the mii-diag-udeb
-(through all) to either cause mii-diag to be built for the host or
-not be available when 'install' is executed.
-
-Work around it by explicitly calling the needed steps and not building
-the (unused) udeb version at all.
-
-Fixes http://autobuild.buildroot.net/results/4825d267025c74c522077f84330b47f1110315fa
+Fixes http://autobuild.buildroot.net/results/09659472f504a364590727a05ac900108ed027b4
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mii-diag/mii-diag.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/collectd/collectd.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
-index a4ad474..b9d763c 100644
---- a/package/mii-diag/mii-diag.mk
-+++ b/package/mii-diag/mii-diag.mk
-@@ -21,11 +21,11 @@ endef
- MII_DIAG_POST_PATCH_HOOKS = MII_DIAG_DEBIAN_PATCHES
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 6d26622..88f6737 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -122,6 +122,14 @@ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ 	COLLECTD_CONF_OPT += --with-libgcrypt=$(STAGING_DIR)/usr
+ endif
  
- define MII_DIAG_BUILD_CMDS
--	$(MAKE) $(MII_DIAG_MAKE_OPT) -C $(@D)
-+	$(MAKE) $(MII_DIAG_MAKE_OPT) -C $(@D) mii-diag
- endef
- 
- define MII_DIAG_INSTALL_TARGET_CMDS
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
-+	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install-mii-diag
- endef
- 
- define MII_DIAG_UNINSTALL_TARGET_CMDS
++# released software should not break on minor warnings
++define COLLECTD_DROP_WERROR
++	$(SED) 's/-Werror//' \
++		$(@D)/src/Makefile.in $(@D)/src/libcollectdclient/Makefile.in
++endef
++
++COLLECTD_POST_PATCH_HOOKS += COLLECTD_DROP_WERROR
++
+ define COLLECTD_INSTALL_TARGET_CMDS
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+ 	rm -f $(TARGET_DIR)/usr/bin/collectd-nagios
