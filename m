@@ -1,28 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 26 Feb 2013 22:15:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 5960] fusion.ko driver does not install to target
-	rootfs
-In-Reply-To: <bug-5960-163@https.bugs.busybox.net/>
-References: <bug-5960-163@https.bugs.busybox.net/>
-Message-ID: <20130226221501.40C1E9AD79@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 26 Feb 2013 22:46:42 +0100
+Subject: [Buildroot] [git commit] linux-fusion: bump to 9.0.0
+Message-ID: <20130226222004.462BD9AD76@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5960
+commit: http://git.buildroot.net/buildroot/commit/?id=208b36a234fe3bf1c02ad8ea1dcb45b4a378d260
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Fixes https://bugs.busybox.net/show_bug.cgi?id=5960
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|WORKSFORME                  |FIXED
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: broot at monkster.hopto.org
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/linux-fusion/linux-fusion.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
---- Comment #6 from Peter Korsgaard <jacmet@uclibc.org> 2013-02-26 22:15:24 UTC ---
-Fixed in git by Arnout (208b36a234fe)
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
+index 5ea7900..a2340bd 100644
+--- a/package/linux-fusion/linux-fusion.mk
++++ b/package/linux-fusion/linux-fusion.mk
+@@ -3,7 +3,7 @@
+ # linux-fusion
+ #
+ #############################################################
+-LINUX_FUSION_VERSION = 8.10.4
++LINUX_FUSION_VERSION = 9.0.0
+ LINUX_FUSION_SOURCE = linux-fusion-$(LINUX_FUSION_VERSION).tar.gz
+ LINUX_FUSION_SITE = http://directfb.org/downloads/Core/linux-fusion
+ LINUX_FUSION_INSTALL_STAGING = YES
