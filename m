@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Feb 2013 18:45:11 +0100
-Subject: [Buildroot] [PATCH 04/11] working-with: board support
-In-Reply-To: <bd4236ff40f9132d14f2f6610588847e92df93dc.1361827174.git.s.martin49@gmail.com>
+Date: Tue, 26 Feb 2013 21:18:41 +0100
+Subject: [Buildroot] [PATCH 05/11] support: add kconfiglib python module
+In-Reply-To: <bd31d6b5313a660aaa80d596fdd3396e6a57751f.1361827174.git.s.martin49@gmail.com>
 References: <cover.1361827174.git.s.martin49@gmail.com>
- <bd4236ff40f9132d14f2f6610588847e92df93dc.1361827174.git.s.martin49@gmail.com>
-Message-ID: <512CF4A7.1030802@mind.be>
+ <bd31d6b5313a660aaa80d596fdd3396e6a57751f.1361827174.git.s.martin49@gmail.com>
+Message-ID: <512D18A1.3060308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,53 @@ To: buildroot@busybox.net
 
 On 25/02/13 22:31, Samuel Martin wrote:
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->
 > ---
-> Changes since v1:
-> * simplify cross-ref (Arnout)
-> ---
->   docs/manual/working-with.txt | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   support/pym/kconfiglib.py | 3772 +++++++++++++++++++++++++++++++++++++++++++++
+>   support/pym/readme        |   14 +
+>   2 files changed, 3786 insertions(+)
+>   create mode 100644 support/pym/kconfiglib.py
+>   create mode 100644 support/pym/readme
 >
-> diff --git a/docs/manual/working-with.txt b/docs/manual/working-with.txt
-> index a57169c..4432b54 100644
-> --- a/docs/manual/working-with.txt
-> +++ b/docs/manual/working-with.txt
-> @@ -25,5 +25,5 @@ interested in hacking it to add:
->
->   * new packages: refer to the xref:adding-packages[Developer guide]
->
-> -* new board support: refer to the xref:customize-store[], more specifically
-> -  xref:customize-store-board-support[].
-> +* new board support: refer to the
-> +  xref:customize-store-board-support[Developer guide].
->
+> diff --git a/support/pym/kconfiglib.py b/support/pym/kconfiglib.py
+> new file mode 100644
 
-  Could you merge this with patch 1/11 (adding your own SoB of course)?
+  If you would put it in the same location as the gen-manual-lists.py 
+script, then you don't need to mess with PYTHONPATH (the module's 
+directory is always in PYTHONPATH).
+
+[snip]
+
+> diff --git a/support/pym/readme b/support/pym/readme
+> new file mode 100644
+
+  Obviously, if it moves from pym to scripts, it should be called 
+README.kconfiglib or something similar.
+
+> index 0000000..f44609c
+> --- /dev/null
+> +++ b/support/pym/readme
+> @@ -0,0 +1,14 @@
+> +Readme
+> +======
+> +
+> +Kconfiglib
+> +----------
+> +
+> +This is a python module fetched from:
+> +
+> +https://github.com/ulfalizer/Kconfiglib
+> +commit: 417d62d1bf5fbfc7271c9d9b8dc2661b6332e288
+> +
+> +This module is not released under any explicit license, but it is a fair
+> +asumption kconfiglib is released under the same license as the linux kernel,
+> +i.e. GPLv2.
+
+  Unfortunately, that's not a fair assumption... Perhaps we should mail 
+the guy to verify.
 
   Regards,
   Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
