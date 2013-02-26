@@ -1,52 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 26 Feb 2013 07:53:14 -0300
-Subject: [Buildroot] Proposed util-linux split
-Message-ID: <512C941A.1070207@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Feb 2013 12:01:21 +0100
+Subject: [Buildroot] [PATCH 02/11] manual: minor fix in patch-policy.txt
+In-Reply-To: <CAHXCMMKCb9fPS_Umqd8WMAKN66sQO4_=sujqX1ms0H+djLmLBw@mail.gmail.com>
+References: <cover.1361827174.git.s.martin49@gmail.com>
+ <677f6fbb5a9c1994131975c171a285c4335c38d8.1361827174.git.s.martin49@gmail.com>
+ <20130226092907.48b09b41@skate>
+ <CAHXCMMKCb9fPS_Umqd8WMAKN66sQO4_=sujqX1ms0H+djLmLBw@mail.gmail.com>
+Message-ID: <20130226120121.0c49bfc8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Samuel Martin,
 
-Hi all.
-The last couple of days i've been thinking and working towards a
-solution that would split out libblkid/libuuid out of the util-linux
-package.
-It's a remake of my previous "util-linux don't install binaries" patch.
-The objectives are:
+On Tue, 26 Feb 2013 10:44:39 +0100, Samuel Martin wrote:
 
-* Upgrading to newer versions of the libraries - it's not required by
-any package, but it's useful for libblkid to recognize newer superblock
-types.
+> >> +- If a patch does some package version fixes, this should be documented in the
+> >> +commit message of the patch itself (or the message prepended to the 'diff'
+> >> +itself).
+> >
+> > I am not sure to understand this part.
+> I don't know how to explain this clearly.
+> 
+> My point is, for some packages, BR does not provide the latest version,
+> but some fix may be available upstream, so they have been backported in BR
+> (e.g.: package/libglib2/libglib2-make-codegen-python2-python3-compliant.patch).
+> 
+> Any suggestion to explain this point in a better way is welcome.
 
-* We can't upgrade util-linux past 2.20.1 unless we want to drop the
-basic loginutils functionality since it requires PAM starting from 2.21.
-By splitting the libraries out i can use just the libraries from newer
-util-linux versions. Caveat is you won't get the newer libraries if
-you're installing util-linux with the library options on.
+I don't understand why you would want to put this here in the
+documentation. What you're saying is just a detail on what the patch
+could possibly contain (i.e a backport from upstream versus a
+Buildroot-specific hack for cross-compilation), I don't see what it
+changes in terms of patch policy.
 
-* Reduce bloat! The most important point for me, one packages needs
-libuuid and we get a dozen util-linux binaries around as a free gift.
+> >> +* Otherwise, patch files matching +<packagename>-<description>.patch+
+> >> +  are applied following the +ls+ command order.
+> >
+> > Shouldn't we be enforcing a <packagename>-<number>-<description>.patch
+> > policy, in order to ensure that patches are applied in the right order?
+> Well, here I stick to the current apply-patches.sh implementation.
 
-I've got a working not-quite-ready (needs cleanup) patchset that adds
-the libblkid and libuuid packages. These are based on a slightly patched
-(configure.ac & Makefile.am) util-linux-2.22.2 that basically reduces
-build time and keeps the original install target (you can't make -C
-libblkid install with newer util-linux versions, see
-http://karelzak.blogspot.com/2013/02/non-recursive-automake.html)
+The current apply-patches.sh implementation takes the patches in
+alphabetical order, which is why it is important to have the patches
+numbered to make sure that the patches are applied in a well-known
+order, and not an order based on the <description> field alphabetical
+sorting.
 
-When a package needs libuuid it would now change to:
-select BR2_PACKAGE_LIBUUID if !BR2_PACKAGE_UTIL_LINUX_LIBUUID
-to avoid duplication.
-And on libuuid Config.in:
-depends on !BR2_PACKAGE_UTIL_LINUX_LIBUUID
+Best regards,
 
-This lets us keep util-linux around (which doesn't work with external
-libblkid/libuuid because it doesn't expect them to be so) and slimmer
-versions of the libraries when people don't want util-linux.
-
-Another added bonus is libuuid doesn't require wchar this way.
-
-What do you think?
-Regards.
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
