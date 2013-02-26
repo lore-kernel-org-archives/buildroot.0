@@ -1,27 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 Feb 2013 23:14:36 +0100
-Subject: [Buildroot] [PATCH] linux-fusion: bump to 9.0.0
-In-Reply-To: <1361639928-24841-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sat, 23 Feb 2013 18:18:48 +0100")
-References: <1361639928-24841-1-git-send-email-arnout@mind.be>
-Message-ID: <874ngy7mer.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 26 Feb 2013 22:15:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 5960] fusion.ko driver does not install to target
+	rootfs
+In-Reply-To: <bug-5960-163@https.bugs.busybox.net/>
+References: <bug-5960-163@https.bugs.busybox.net/>
+Message-ID: <20130226221501.40C1E9AD79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+https://bugs.busybox.net/show_bug.cgi?id=5960
 
- Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Arnout> Fixes https://bugs.busybox.net/show_bug.cgi?id=5960
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Arnout> Cc: broot at monkster.hopto.org
- Arnout> ---
- Arnout> Although it fixes a bug, it's probably for next (version bump).
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|WORKSFORME                  |FIXED
 
-Committed, thanks. I decided to take it for 2013.02 still.
+--- Comment #6 from Peter Korsgaard <jacmet@uclibc.org> 2013-02-26 22:15:24 UTC ---
+Fixed in git by Arnout (208b36a234fe)
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
