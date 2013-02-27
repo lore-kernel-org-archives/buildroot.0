@@ -1,132 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Feb 2013 00:25:56 +0100
-Subject: [Buildroot] [PATCH 05/30] package: create virtual package for
-	libGLES, libOpenVG and libEGL
+Date: Thu, 28 Feb 2013 00:25:57 +0100
+Subject: [Buildroot] [PATCH 06/30] rpi-userland: provides OpenGL ES,
+	EGL and OpenVG
 In-Reply-To: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362007582-14753-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362007582-14753-7-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Those acceleration libraries typically have multiple implementations:
-some are free (Mesa), some are proprietary (generally SoC specific).
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                     |    1 +
- package/opengl/Config.in              |    8 ++++++++
- package/opengl/libegl/libegl.mk       |   16 ++++++++++++++++
- package/opengl/libgles/libgles.mk     |   16 ++++++++++++++++
- package/opengl/libopenvg/libopenvg.mk |   16 ++++++++++++++++
- package/opengl/opengl.mk              |    1 +
- 6 files changed, 58 insertions(+)
- create mode 100644 package/opengl/Config.in
- create mode 100644 package/opengl/libegl/libegl.mk
- create mode 100644 package/opengl/libgles/libgles.mk
- create mode 100644 package/opengl/libopenvg/libopenvg.mk
- create mode 100644 package/opengl/opengl.mk
+ package/opengl/libegl/libegl.mk       |    4 ++++
+ package/opengl/libgles/libgles.mk     |    4 ++++
+ package/opengl/libopenvg/libopenvg.mk |    4 ++++
+ package/rpi-userland/Config.in        |    3 +++
+ 4 files changed, 15 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2fad94d..c8b6c1a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -433,6 +433,7 @@ source "package/librsvg/Config.in"
- source "package/libsvgtiny/Config.in"
- source "package/libungif/Config.in"
- source "package/opencv/Config.in"
-+source "package/opengl/Config.in"
- source "package/pango/Config.in"
- source "package/pixman/Config.in"
- source "package/tiff/Config.in"
-diff --git a/package/opengl/Config.in b/package/opengl/Config.in
-new file mode 100644
-index 0000000..81616f9
---- /dev/null
-+++ b/package/opengl/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HAS_OPENGL_EGL
-+	bool
-+
-+config BR2_PACKAGE_HAS_OPENGL_ES
-+	bool
-+
-+config BR2_PACKAGE_HAS_OPENVG
-+	bool
 diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
-new file mode 100644
-index 0000000..56cc8ac
---- /dev/null
+index 56cc8ac..c495496 100644
+--- a/package/opengl/libegl/libegl.mk
 +++ b/package/opengl/libegl/libegl.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# Virtual package for libEGL
-+#
-+#############################################################
-+
-+LIBEGL_SOURCE =
-+
-+ifeq ($(LIBEGL_DEPENDENCIES),y)
-+define LIBEGL_CONFIGURE_CMDS
-+	echo "No libEGL implementation selected. Configuration error."
-+	exit 1
-+endef
+@@ -6,6 +6,10 @@
+ 
+ LIBEGL_SOURCE =
+ 
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++LIBEGL_DEPENDENCIES += rpi-userland
 +endif
 +
-+$(eval $(generic-package))
+ ifeq ($(LIBEGL_DEPENDENCIES),y)
+ define LIBEGL_CONFIGURE_CMDS
+ 	echo "No libEGL implementation selected. Configuration error."
 diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
-new file mode 100644
-index 0000000..753f53e
---- /dev/null
+index 753f53e..f0d0eec 100644
+--- a/package/opengl/libgles/libgles.mk
 +++ b/package/opengl/libgles/libgles.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# Virtual package for libGLES
-+#
-+#############################################################
-+
-+LIBGLES_SOURCE =
-+
-+ifeq ($(LIBGLES_DEPENDENCIES),y)
-+define LIBGLES_CONFIGURE_CMDS
-+	echo "No libGLES implementation selected. Configuration error."
-+	exit 1
-+endef
+@@ -6,6 +6,10 @@
+ 
+ LIBGLES_SOURCE =
+ 
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++LIBGLES_DEPENDENCIES += rpi-userland
 +endif
 +
-+$(eval $(generic-package))
+ ifeq ($(LIBGLES_DEPENDENCIES),y)
+ define LIBGLES_CONFIGURE_CMDS
+ 	echo "No libGLES implementation selected. Configuration error."
 diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
-new file mode 100644
-index 0000000..2fcc99f
---- /dev/null
+index 2fcc99f..573fa78 100644
+--- a/package/opengl/libopenvg/libopenvg.mk
 +++ b/package/opengl/libopenvg/libopenvg.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# Virtual package for libOpenVG
-+#
-+#############################################################
-+
-+LIBOPENVG_SOURCE =
-+
-+ifeq ($(LIBOPENVG_DEPENDENCIES),y)
-+define LIBOPENVG_CONFIGURE_CMDS
-+	echo "No libOpenVG implementation selected. Configuration error."
-+	exit 1
-+endef
+@@ -6,6 +6,10 @@
+ 
+ LIBOPENVG_SOURCE =
+ 
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++LIBOPENVG_DEPENDENCIES += rpi-userland
 +endif
 +
-+$(eval $(generic-package))
-diff --git a/package/opengl/opengl.mk b/package/opengl/opengl.mk
-new file mode 100644
-index 0000000..68df3b1
---- /dev/null
-+++ b/package/opengl/opengl.mk
-@@ -0,0 +1 @@
-+include package/opengl/*/*.mk
+ ifeq ($(LIBOPENVG_DEPENDENCIES),y)
+ define LIBOPENVG_CONFIGURE_CMDS
+ 	echo "No libOpenVG implementation selected. Configuration error."
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index 58ea8cb..2c35fb7 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -3,6 +3,9 @@ config BR2_PACKAGE_RPI_USERLAND
+ 	depends on BR2_arm
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_LARGEFILE
++	select BR2_PACKAGE_HAS_OPENGL_EGL
++	select BR2_PACKAGE_HAS_OPENGL_ES
++	select BR2_PACKAGE_HAS_OPENVG
+ 	help
+ 	  Raspberry Pi Userland contains the necessary library to use the
+ 	  VideoCore driver.
 -- 
 1.7.9.5
