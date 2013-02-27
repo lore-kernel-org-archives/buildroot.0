@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Feb 2013 00:25:57 +0100
-Subject: [Buildroot] [PATCH 06/30] rpi-userland: provides OpenGL ES,
-	EGL and OpenVG
+Date: Thu, 28 Feb 2013 00:25:58 +0100
+Subject: [Buildroot] [PATCH 07/30] rpi-userland: add .pc files for
+	OpenGLESv2 and EGL libs
 In-Reply-To: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362007582-14753-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362007582-14753-8-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,70 +13,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/opengl/libegl/libegl.mk       |    4 ++++
- package/opengl/libgles/libgles.mk     |    4 ++++
- package/opengl/libopenvg/libopenvg.mk |    4 ++++
- package/rpi-userland/Config.in        |    3 +++
- 4 files changed, 15 insertions(+)
+ .../rpi-userland-add-pkgconfig-files.patch         |   53 ++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 package/rpi-userland/rpi-userland-add-pkgconfig-files.patch
 
-diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
-index 56cc8ac..c495496 100644
---- a/package/opengl/libegl/libegl.mk
-+++ b/package/opengl/libegl/libegl.mk
-@@ -6,6 +6,10 @@
- 
- LIBEGL_SOURCE =
- 
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+LIBEGL_DEPENDENCIES += rpi-userland
-+endif
+diff --git a/package/rpi-userland/rpi-userland-add-pkgconfig-files.patch b/package/rpi-userland/rpi-userland-add-pkgconfig-files.patch
+new file mode 100644
+index 0000000..0da9afd
+--- /dev/null
++++ b/package/rpi-userland/rpi-userland-add-pkgconfig-files.patch
+@@ -0,0 +1,53 @@
++Add .pc files for the OpenGLESv2 and EGL libraries
 +
- ifeq ($(LIBEGL_DEPENDENCIES),y)
- define LIBEGL_CONFIGURE_CMDS
- 	echo "No libEGL implementation selected. Configuration error."
-diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
-index 753f53e..f0d0eec 100644
---- a/package/opengl/libgles/libgles.mk
-+++ b/package/opengl/libgles/libgles.mk
-@@ -6,6 +6,10 @@
- 
- LIBGLES_SOURCE =
- 
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+LIBGLES_DEPENDENCIES += rpi-userland
-+endif
++Those pkg-config files make it easier for Qt5 to find those libraries
++and the appropriate link flags.
 +
- ifeq ($(LIBGLES_DEPENDENCIES),y)
- define LIBGLES_CONFIGURE_CMDS
- 	echo "No libGLES implementation selected. Configuration error."
-diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
-index 2fcc99f..573fa78 100644
---- a/package/opengl/libopenvg/libopenvg.mk
-+++ b/package/opengl/libopenvg/libopenvg.mk
-@@ -6,6 +6,10 @@
- 
- LIBOPENVG_SOURCE =
- 
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+LIBOPENVG_DEPENDENCIES += rpi-userland
-+endif
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
- ifeq ($(LIBOPENVG_DEPENDENCIES),y)
- define LIBOPENVG_CONFIGURE_CMDS
- 	echo "No libOpenVG implementation selected. Configuration error."
-diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
-index 58ea8cb..2c35fb7 100644
---- a/package/rpi-userland/Config.in
-+++ b/package/rpi-userland/Config.in
-@@ -3,6 +3,9 @@ config BR2_PACKAGE_RPI_USERLAND
- 	depends on BR2_arm
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE
-+	select BR2_PACKAGE_HAS_OPENGL_EGL
-+	select BR2_PACKAGE_HAS_OPENGL_ES
-+	select BR2_PACKAGE_HAS_OPENVG
- 	help
- 	  Raspberry Pi Userland contains the necessary library to use the
- 	  VideoCore driver.
++Index: b/interface/khronos/egl/egl.pc.in
++===================================================================
++--- /dev/null
+++++ b/interface/khronos/egl/egl.pc.in
++@@ -0,0 +1,10 @@
+++prefix=@CMAKE_INSTALL_PREFIX@
+++exec_prefix=${prefix}
+++libdir=${exec_prefix}/lib
+++includedir=${prefix}/include
+++
+++Name: egl
+++Description: RasberryPi implementation of EGL
+++Version: 1.0
+++Libs: -L${libdir} -lEGL -lGLESv2
+++Cflags: -I${includedir}/ -I${includedir}/interface/vcos/pthreads/
++Index: b/interface/khronos/CMakeLists.txt
++===================================================================
++--- a/interface/khronos/CMakeLists.txt
+++++ b/interface/khronos/CMakeLists.txt
++@@ -73,3 +73,11 @@
++ 
++ install(TARGETS EGL GLESv2 OpenVG WFC khrn_client DESTINATION lib)
++ install(TARGETS EGL_static GLESv2_static khrn_static DESTINATION lib)
+++configure_file("${CMAKE_CURRENT_SOURCE_DIR}/egl/egl.pc.in"
+++  "${CMAKE_CURRENT_BINARY_DIR}/egl/egl.pc" @ONLY)
+++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/egl/egl.pc"
+++  DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
+++configure_file("${CMAKE_CURRENT_SOURCE_DIR}/glxx/glesv2.pc.in"
+++  "${CMAKE_CURRENT_BINARY_DIR}/glxx/glesv2.pc" @ONLY)
+++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/glxx/glesv2.pc"
+++  DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
++Index: b/interface/khronos/glxx/glesv2.pc.in
++===================================================================
++--- /dev/null
+++++ b/interface/khronos/glxx/glesv2.pc.in
++@@ -0,0 +1,10 @@
+++prefix=@CMAKE_INSTALL_PREFIX@
+++exec_prefix=${prefix}
+++libdir=${exec_prefix}/lib
+++includedir=${prefix}/include
+++
+++Name: glesv2
+++Description: RasberryPi implementation of OpenGL ESv2
+++Version: 2.0
+++Libs: -L${libdir} -lGLESv2
+++Cflags: -I${includedir}/
 -- 
 1.7.9.5
