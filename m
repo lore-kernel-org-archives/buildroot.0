@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Feb 2013 00:26:03 +0100
-Subject: [Buildroot] [PATCH 12/30] qt5base: add GUI support
+Date: Thu, 28 Feb 2013 00:26:06 +0100
+Subject: [Buildroot] [PATCH 15/30] qt5base: add eglfs graphics backend
 In-Reply-To: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362007582-14753-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362007582-14753-16-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,118 +12,106 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/Config.in  |   44 ++++++++++++++++++++++++++++++++++++++++
- package/qt5/qt5base/qt5base.mk |   29 +++++++++++++++++++++-----
- 2 files changed, 68 insertions(+), 5 deletions(-)
+ package/qt5/qt5base/Config.in                      |   11 ++++++-
+ ...nce-add-egl-to-CONFIG-to-get-correct-incl.patch |   32 ++++++++++++++++++++
+ package/qt5/qt5base/qt5base.mk                     |    9 ++++--
+ 3 files changed, 49 insertions(+), 3 deletions(-)
+ create mode 100644 package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
 
 diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 4cd6ce0..801ef6f 100644
+index 540c8b2..e91c405 100644
 --- a/package/qt5/qt5base/Config.in
 +++ b/package/qt5/qt5base/Config.in
-@@ -53,4 +53,48 @@ config BR2_PACKAGE_QT5BASE_XML
+@@ -67,7 +67,8 @@ config BR2_PACKAGE_QT5BASE_GUI
+ 	# linuxfb if nothing is enabled.
+ 	select BR2_PACKAGE_QT5BASE_LINUXFB if \
+ 	       !BR2_PACKAGE_QT5BASE_DIRECTFB && \
+-	       !BR2_PACKAGE_QT5BASE_XCB
++	       !BR2_PACKAGE_QT5BASE_XCB && \
++	       !BR2_PACKAGE_QT5BASE_EGLFS
  	help
- 	  This options enables the Qt5Xml library.
+ 	  This option enables the Qt5Gui library.
  
-+config BR2_PACKAGE_QT5BASE_GUI
-+	bool "gui module"
-+	# At least one graphic backend must be enabled, so enable
-+	# linuxfb if nothing is enabled.
-+	select BR2_PACKAGE_QT5BASE_LINUXFB if \
-+	       !BR2_PACKAGE_QT5BASE_DIRECTFB && \
-+	       !BR2_PACKAGE_QT5BASE_XCB
-+	help
-+	  This option enables the Qt5Gui library.
+@@ -97,6 +98,14 @@ config BR2_PACKAGE_QT5BASE_XCB
+ comment "X.org XCB backend available if X.org is enabled"
+ 	depends on !BR2_PACKAGE_XORG7
+ 
++config BR2_PACKAGE_QT5BASE_EGLFS
++	bool "eglfs support"
++	depends on BR2_PACKAGE_HAS_OPENGL_EGL
++	depends on BR2_PACKAGE_HAS_OPENGL_ES
 +
-+if BR2_PACKAGE_QT5BASE_GUI
++comment "eglfs backend available if OpenGLES and EGL are enabled"
++	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
 +
-+config BR2_PACKAGE_QT5BASE_WIDGETS
-+	bool "widgets module"
-+	help
-+	  This option enables the Qt5Widgets library.
+ config BR2_PACKAGE_QT5BASE_PRINTSUPPORT
+ 	bool "print support module"
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
+diff --git a/package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch b/package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
+new file mode 100644
+index 0000000..a85a5aa
+--- /dev/null
++++ b/package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
+@@ -0,0 +1,32 @@
++From 588c60d0c3d11e79d19860fa62b03c935658d13a Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 13 Jan 2013 14:36:48 +0100
++Subject: [PATCH qtbase] eglconvenience: add egl to CONFIG to get correct include
++ paths
 +
-+config BR2_PACKAGE_QT5BASE_LINUXFB
-+	bool "linuxfb support"
++The eglconvenience code includes <EGL/egl.h>. Therefore, it should get
++the appropriate EGL-specific include paths from QMAKE_INCDIR_EGL,
++otherwise the build might if the EGL library has its headers in
++special locations. In order to achieve this, we simply add the "egl"
++feature to the list of features imported by eglconvenience.
 +
-+config BR2_PACKAGE_QT5BASE_DIRECTFB
-+	bool "directfb support"
-+	select BR2_PACKAGE_DIRECTFB
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ .../eglconvenience/eglconvenience.pri              |    1 +
++ 1 file changed, 1 insertion(+)
 +
-+config BR2_PACKAGE_QT5BASE_XCB
-+	bool "X.org XCB support"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBX11
-+	select BR2_PACKAGE_LIBXCB
-+	select BR2_PACKAGE_XCB_UTIL_IMAGE
-+	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
-+	select BR2_PACKAGE_XCB_UTIL_WM
++diff --git a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
++index 188eb1c..8996cea 100644
++--- a/src/platformsupport/eglconvenience/eglconvenience.pri
+++++ b/src/platformsupport/eglconvenience/eglconvenience.pri
++@@ -5,6 +5,7 @@ contains(QT_CONFIG,egl) {
++     SOURCES += \
++         $$PWD/qeglconvenience.cpp \
++         $$PWD/qeglplatformcontext.cpp
+++    CONFIG += egl
++ 
++     contains(QT_CONFIG,xlib) {
++         HEADERS += \
++-- 
++1.7.9.5
 +
-+comment "X.org XCB backend available if X.org is enabled"
-+	depends on !BR2_PACKAGE_XORG7
-+
-+config BR2_PACKAGE_QT5BASE_PRINTSUPPORT
-+	bool "print support module"
-+	select BR2_PACKAGE_QT5BASE_WIDGETS
-+	help
-+	  This option enables the Qt5PrintSupport
-+
-+endif
-+
- endif
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 094ded1..7213238 100644
+index 79cbc48..3e8bde1 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -20,13 +20,8 @@ QT5BASE_INSTALL_STAGING = YES
+@@ -20,9 +20,7 @@ QT5BASE_INSTALL_STAGING = YES
  #    want to use the one packaged in Buildroot
  QT5BASE_CONFIGURE_OPTS += \
  	-optimized-qmake \
--	-no-linuxfb \
--	-no-xcb \
--	-no-directfb \
- 	-no-eglfs \
+-	-no-eglfs \
  	-no-kms \
--	-no-gui \
--	-no-widgets \
- 	-no-opengl \
+-	-no-opengl \
  	-no-glib \
  	-no-cups \
-@@ -61,6 +56,26 @@ QT5BASE_LICENSE = Commercial license
- QT5BASE_REDISTRIBUTE = NO
+ 	-no-nis \
+@@ -81,6 +79,13 @@ else
+ QT5_BASE_CONFIGURE_OPTS += -no-xcb
  endif
  
-+# We have to use --enable-linuxfb, otherwise Qt thinks that -linuxfb
-+# is to add a link against the "inuxfb" library.
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-gui,-no-gui)
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_WIDGETS),-widgets,-no-widgets)
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_LINUXFB),--enable-linuxfb,-no-linuxfb)
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),-directfb,-no-directfb)
-+QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),directfb)
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
-+QT5BASE_CONFIGURE_OPTS += -xcb
-+QT5BASE_DEPENDENCIES   += \
-+	libxcb \
-+	xcb-util-wm \
-+	xcb-util-image \
-+	xcb-util-keysyms \
-+	xlib_libX11
++ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
++QT5BASE_CONFIGURE_OPTS += -opengl es2 -eglfs
++QT5BASE_DEPENDENCIES   += libgles libegl
 +else
-+QT5_BASE_CONFIGURE_OPTS += -no-xcb
++QT5BASE_CONFIGURE_OPTS += -no-opengl -no-eglfs
 +endif
 +
- # Build the list of libraries to be installed on the target
- QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
-@@ -69,6 +84,10 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_SQL)        += Qt5Sql
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_TEST)       += Qt5Test
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XML)        += Qt5Xml
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),-openssl,-no-openssl)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),openssl)
  
-+QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_GUI)          += Qt5Gui
-+QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_WIDGETS)      += Qt5Widgets
-+QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
-+
- # Ideally, we could use -device-option to substitute variable values
- # in our linux-buildroot-g++/qmake.config, but this mechanism doesn't
- # nicely support variable values that contain spaces. So we use the
 -- 
 1.7.9.5
