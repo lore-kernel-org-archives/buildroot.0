@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Feb 2013 00:26:09 +0100
-Subject: [Buildroot] [PATCH 18/30] qt5base: add glib support
+Date: Thu, 28 Feb 2013 00:26:11 +0100
+Subject: [Buildroot] [PATCH 20/30] qt5: factor Qt5 version
 In-Reply-To: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362007582-14753-19-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362007582-14753-21-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since the Qt5 version will be the same for all Qt5 modules, factor it
+in qt5/qt5.mk as QT5_VERSION.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/qt5base.mk |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/qt5/qt5.mk             |    1 +
+ package/qt5/qt5base/qt5base.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index f220508..0c6d0f9 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -1,3 +1,4 @@
++QT5_VERSION = 5.0.0
+ include package/qt5/*/*.mk
+ 
+ define QT5_LA_PRL_FILES_FIXUP
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 7988ce2..414410a 100644
+index 865377f..0ea15c2 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -21,7 +21,6 @@ QT5BASE_INSTALL_STAGING = YES
- QT5BASE_CONFIGURE_OPTS += \
- 	-optimized-qmake \
- 	-no-kms \
--	-no-glib \
- 	-no-cups \
- 	-no-nis \
- 	-no-libudev \
-@@ -95,6 +94,9 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_PNG),libpng)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DBUS),-dbus,-no-dbus)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DBUS),dbus)
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBGLIB2),-glib,-no-glib)
-+QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBGLIB2),libglib2)
-+
- # Build the list of libraries to be installed on the target
- QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
+-QT5BASE_VERSION = 5.0.0
++QT5BASE_VERSION = $(QT5_VERSION)
+ QT5BASE_SITE = http://releases.qt-project.org/qt5/$(QT5BASE_VERSION)/submodules_tar/
+ QT5BASE_SOURCE = qtbase-opensource-src-$(QT5BASE_VERSION).tar.xz
+ 
 -- 
 1.7.9.5
