@@ -1,73 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Feb 2013 00:25:52 +0100
-Subject: [Buildroot] [PATCH 01/30] pcre: add support for 16 bits and 32 bits
-	variants
-In-Reply-To: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362007582-14753-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Feb 2013 00:25:51 +0100
+Subject: [Buildroot] [PATCH] Add Qt5 packages
+Message-ID: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, we have been building only the 8bits PCRE variant. However,
-Qt5 requires the 16bits variant. This commit therefore adds support to
-build the 16bits and 32bits variants of PCRE. In order to preserve
-backward compatibility, the 8bits variant is automatically chosen is
-no specific variant is defined.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pcre/Config.in |   22 ++++++++++++++++++++++
- package/pcre/pcre.mk   |    4 ++++
- 2 files changed, 26 insertions(+)
+Here is a set of patches that add Qt5 support in Buildroot. I have
+built a number of different combinations, but there are some many
+different possibilities, that I obviously couldn't test all of
+them. Some testing will be appreciated, but for sure, only the
+autobuilders will really help in getting a good build coverage of all
+this.
 
-diff --git a/package/pcre/Config.in b/package/pcre/Config.in
-index a4e2547..3b77cb2 100644
---- a/package/pcre/Config.in
-+++ b/package/pcre/Config.in
-@@ -1,6 +1,28 @@
- config BR2_PACKAGE_PCRE
- 	bool "pcre"
-+	# Ensure at least the default 8-bit library is enabled.
-+	select BR2_PACKAGE_PCRE_8 if \
-+	       (!BR2_PACKAGE_PCRE_16 && !BR2_PACKAGE_PCRE_32)
- 	help
- 	  Perl Compatible Regular Expressions
- 
- 	  http://www.pcre.org/
-+
-+if BR2_PACKAGE_PCRE
-+
-+config BR2_PACKAGE_PCRE_8
-+	bool "8-bit pcre"
-+	help
-+	  This option builds the 8-bit pcre library, i.e 'libpcre'
-+
-+config BR2_PACKAGE_PCRE_16
-+	bool "16-bit pcre"
-+	help
-+	  This option builds the 8-bit pcre library, i.e 'libpcre16'
-+
-+config BR2_PACKAGE_PCRE_32
-+	bool "32-bit pcre"
-+	help
-+	  This option builds the 8-bit pcre library, i.e 'libpcre32'
-+
-+endif
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index 48266ff..b1339fb 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -16,4 +16,8 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
- PCRE_CONF_OPT = --disable-cpp
- endif
- 
-+PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_8),--enable-pcre8,--disable-pcre8)
-+PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
-+PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
-+
- $(eval $(autotools-package))
--- 
-1.7.9.5
+In short:
+
+ * Patch 1 improves our pcre package to add support for 16 bits and 32
+   bits variants, need by Qt5.
+
+ * Patches 2 to 4 bump the version or add new XCB-util packages that
+   are needed to build the XCB backend of Qt5.
+
+ * Patches 5 to 7 add virtual packages for OpenGLES, OpenVG and EGL,
+   and make rpi-userland provide an implementation of those virtual
+   packages.
+
+ * Patch 8 converts the jpeg virtual package to a real package.
+
+ * Patch 9 and 10 adds some basic infrastructure to support the Qt5
+   packages.
+
+ * Patch 11 adds the Qt5Base package.
+
+ * Patches 12 to 19 extend the Qt5Base package with various features
+   (GUI, OpenSSL, EGL, D-Bus, etc.)
+
+ * Patch 20 creates a common variable to share the Qt5 version between
+   all the Qt5 packages.
+
+ * Patches 21 to 30 add more Qt5 libraries: Qt5Svg, Qt5Webkit,
+   Qt5Script, and more.
+
+Best regards,
+
+Thomas
