@@ -1,108 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 27 Feb 2013 18:55:02 +0100
-Subject: [Buildroot] [git commit] busybox: add 1.21.0 xz fix
-Message-ID: <20130227175500.33F9F9ADBE@busybox.osuosl.org>
+Date: Wed, 27 Feb 2013 19:23:58 +0100
+Subject: [Buildroot] [git commit] busybox: 1.21.0 platform fix-on-fix
+Message-ID: <20130227185415.7D3459ADC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=44efedbec469da9c94ecbb71f81f83a5025c30f0
+commit: http://git.buildroot.net/buildroot/commit/?id=e4ee2811e30a952bf5a9c35b4d069c7c9b4c3bfe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The unxz hunk was missing.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../busybox/busybox-1.21.0/busybox-1.21.0-xz.patch |   84 ++++++++++++++++++++
- 1 files changed, 84 insertions(+), 0 deletions(-)
+ .../busybox-1.21.0/busybox-1.21.0-platform.patch   |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
 
-diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-xz.patch b/package/busybox/busybox-1.21.0/busybox-1.21.0-xz.patch
-new file mode 100644
-index 0000000..56ba1a2
---- /dev/null
-+++ b/package/busybox/busybox-1.21.0/busybox-1.21.0-xz.patch
-@@ -0,0 +1,84 @@
+diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch b/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch
+index 2401b86..9be6cb8 100644
+--- a/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch
++++ b/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch
+@@ -1,3 +1,16 @@
 +--- busybox-1.21.0/archival/libarchive/decompress_unxz.c
-++++ busybox-1.21.0-xz/archival/libarchive/decompress_unxz.c
-+@@ -40,6 +40,7 @@ static uint32_t xz_crc32(const uint8_t *
-+ IF_DESKTOP(long long) int FAST_FUNC
-+ unpack_xz_stream(transformer_aux_data_t *aux, int src_fd, int dst_fd)
-+ {
-++	enum xz_ret xz_result;
-+ 	struct xz_buf iobuf;
-+ 	struct xz_dec *state;
-+ 	unsigned char *membuf;
-+@@ -63,9 +64,8 @@ unpack_xz_stream(transformer_aux_data_t
-+ 	/* Limit memory usage to about 64 MiB. */
-+ 	state = xz_dec_init(XZ_DYNALLOC, 64*1024*1024);
+++++ busybox-1.21.0-platform/archival/libarchive/decompress_unxz.c
++@@ -30,8 +30,8 @@ static uint32_t xz_crc32(const uint8_t *
++ /* We use arch-optimized unaligned accessors */
++ #define get_unaligned_le32(buf) ({ uint32_t v; move_from_unaligned32(v, buf); SWAP_LE32(v); })
++ #define get_unaligned_be32(buf) ({ uint32_t v; move_from_unaligned32(v, buf); SWAP_BE32(v); })
++-#define put_unaligned_le32(val, buf) move_to_unaligned16(buf, SWAP_LE32(val))
++-#define put_unaligned_be32(val, buf) move_to_unaligned16(buf, SWAP_BE32(val))
+++#define put_unaligned_le32(val, buf) move_to_unaligned32(buf, SWAP_LE32(val))
+++#define put_unaligned_be32(val, buf) move_to_unaligned32(buf, SWAP_BE32(val))
 + 
-++	xz_result = X_OK;
-+ 	while (1) {
-+-		enum xz_ret r;
-+-
-+ 		if (iobuf.in_pos == iobuf.in_size) {
-+ 			int rd = safe_read(src_fd, membuf, BUFSIZ);
-+ 			if (rd < 0) {
-+@@ -73,28 +73,57 @@ unpack_xz_stream(transformer_aux_data_t
-+ 				total = -1;
-+ 				break;
-+ 			}
-++			if (rd == 0 && xz_result == XZ_STREAM_END)
-++				break;
-+ 			iobuf.in_size = rd;
-+ 			iobuf.in_pos = 0;
-+ 		}
-++		if (xz_result == XZ_STREAM_END) {
-++			/*
-++			 * Try to start decoding next concatenated stream.
-++			 * Stream padding must always be a multiple of four
-++			 * bytes to preserve four-byte alignment. To keep the
-++			 * code slightly smaller, we aren't as strict here as
-++			 * the .xz spec requires. We just skip all zero-bytes
-++			 * without checking the alignment and thus can accept
-++			 * files that aren't valid, e.g. the XZ utils test
-++			 * files bad-0pad-empty.xz and bad-0catpad-empty.xz.
-++			 */
-++			do {
-++				if (membuf[iobuf.in_pos] != 0) {
-++					xz_dec_reset(state);
-++					goto do_run;
-++				}
-++				iobuf.in_pos++;
-++			} while (iobuf.in_pos < iobuf.in_size);
-++		}
-++ do_run:
-+ //		bb_error_msg(">in pos:%d size:%d out pos:%d size:%d",
-+ //				iobuf.in_pos, iobuf.in_size, iobuf.out_pos, iobuf.out_size);
-+-		r = xz_dec_run(state, &iobuf);
-++		xz_result = xz_dec_run(state, &iobuf);
-+ //		bb_error_msg("<in pos:%d size:%d out pos:%d size:%d r:%d",
-+-//				iobuf.in_pos, iobuf.in_size, iobuf.out_pos, iobuf.out_size, r);
-++//				iobuf.in_pos, iobuf.in_size, iobuf.out_pos, iobuf.out_size, xz_result);
-+ 		if (iobuf.out_pos) {
-+ 			xwrite(dst_fd, iobuf.out, iobuf.out_pos);
-+ 			IF_DESKTOP(total += iobuf.out_pos;)
-+ 			iobuf.out_pos = 0;
-+ 		}
-+-		if (r == XZ_STREAM_END) {
-+-			break;
-++		if (xz_result == XZ_STREAM_END) {
-++			/*
-++			 * Can just "break;" here, if not for concatenated
-++			 * .xz streams.
-++			 * Checking for padding may require buffer
-++			 * replenishment. Can't do it here.
-++			 */
-++			continue;
-+ 		}
-+-		if (r != XZ_OK && r != XZ_UNSUPPORTED_CHECK) {
-++		if (xz_result != XZ_OK && xz_result != XZ_UNSUPPORTED_CHECK) {
-+ 			bb_error_msg("corrupted data");
-+ 			total = -1;
-+ 			break;
-+ 		}
-+ 	}
-++
-+ 	xz_dec_end(state);
-+ 	free(membuf);
-+ 
++ #include "unxz/xz_dec_bcj.c"
++ #include "unxz/xz_dec_lzma2.c"
+ --- busybox-1.21.0/include/platform.h
+ +++ busybox-1.21.0-platform/include/platform.h
+ @@ -228,7 +228,7 @@ typedef uint32_t bb__aliased_uint32_t FI
