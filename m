@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Feb 2013 00:25:53 +0100
-Subject: [Buildroot] [PATCH 02/30] x11r7/xcb-util: bump to 0.3.9
+Date: Thu, 28 Feb 2013 00:25:54 +0100
+Subject: [Buildroot] [PATCH 03/30] x11r7/xcb-util-wm: new package
 In-Reply-To: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362007582-14753-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362007582-14753-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,64 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xcb-util/xcb-util.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/x11r7/Config.in                  |    1 +
+ package/x11r7/xcb-util-wm/Config.in      |   15 +++++++++++++++
+ package/x11r7/xcb-util-wm/xcb-util-wm.mk |   13 +++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/x11r7/xcb-util-wm/Config.in
+ create mode 100644 package/x11r7/xcb-util-wm/xcb-util-wm.mk
 
-diff --git a/package/x11r7/xcb-util/xcb-util.mk b/package/x11r7/xcb-util/xcb-util.mk
-index 5681b72..fcf99ea 100644
---- a/package/x11r7/xcb-util/xcb-util.mk
-+++ b/package/x11r7/xcb-util/xcb-util.mk
-@@ -3,7 +3,7 @@
- # xcb-util
- #
- #############################################################
--XCB_UTIL_VERSION = 0.3.6
-+XCB_UTIL_VERSION = 0.3.9
- XCB_UTIL_SOURCE = xcb-util-$(XCB_UTIL_VERSION).tar.bz2
- XCB_UTIL_SITE = http://xcb.freedesktop.org/dist/
- XCB_UTIL_INSTALL_STAGING = YES
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 706574c..2abd593 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -16,6 +16,7 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/mesa3d/Config.in
+ 		source package/x11r7/xcb-util/Config.in
+ 		source package/x11r7/xcb-util-keysyms/Config.in
++		source package/x11r7/xcb-util-wm/Config.in
+ 		source package/x11r7/xlib_libFS/Config.in
+ 		source package/x11r7/xlib_libICE/Config.in
+ 		source package/x11r7/xlib_libSM/Config.in
+diff --git a/package/x11r7/xcb-util-wm/Config.in b/package/x11r7/xcb-util-wm/Config.in
+new file mode 100644
+index 0000000..491e7a3
+--- /dev/null
++++ b/package/x11r7/xcb-util-wm/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_XCB_UTIL_WM
++	bool "xcb-util-wm"
++	help
++	  The XCB util modules provides a number of libraries which sit on top
++	  of libxcb, the core X protocol library, and some of the extension
++	  libraries. These experimental libraries provide convenience functions
++	  and interfaces which make the raw X protocol more usable. Some of the
++	  libraries also provide client-side code which is not strictly part of
++	  the X protocol but which have traditionally been provided by Xlib.
++
++	  XCB util-wm module provides the following libraries:
++	    - ewmh: Both client and window-manager helpers for EWMH.
++	    - icccm: Both client and window-manager helpers for ICCCM.
++
++	  http://xcb.freedesktop.org/
+diff --git a/package/x11r7/xcb-util-wm/xcb-util-wm.mk b/package/x11r7/xcb-util-wm/xcb-util-wm.mk
+new file mode 100644
+index 0000000..a631fa6
+--- /dev/null
++++ b/package/x11r7/xcb-util-wm/xcb-util-wm.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# xcb-util-wm
++#
++#############################################################
++
++XCB_UTIL_WM_VERSION = 0.3.9
++XCB_UTIL_WM_SITE = http://xcb.freedesktop.org/dist/
++XCB_UTIL_WM_SOURCE = xcb-util-wm-$(XCB_UTIL_WM_VERSION).tar.bz2
++XCB_UTIL_WM_INSTALL_STAGING = YES
++XCB_UTIL_WM_LICENSE = MIT
++
++$(eval $(autotools-package))
 -- 
 1.7.9.5
