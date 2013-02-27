@@ -1,68 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Feb 2013 00:26:08 +0100
-Subject: [Buildroot] [PATCH 17/30] qt5base: add D-Bus support
+Date: Thu, 28 Feb 2013 00:26:10 +0100
+Subject: [Buildroot] [PATCH 19/30] qt5base: add support to build against ICU
 In-Reply-To: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362007582-14753-18-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362007582-14753-20-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Qt5Webkit requires Qt5Base to be built with ICU support, so we add
+such support.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/Config.in  |    8 ++++++++
- package/qt5/qt5base/qt5base.mk |    6 +++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ package/qt5/qt5base/Config.in  |    7 +++++++
+ package/qt5/qt5base/qt5base.mk |    4 +++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 08e3c16..baf471f 100644
+index baf471f..71c2ccd 100644
 --- a/package/qt5/qt5base/Config.in
 +++ b/package/qt5/qt5base/Config.in
-@@ -140,4 +140,12 @@ config BR2_PACKAGE_QT5BASE_PNG
+@@ -148,4 +148,11 @@ config BR2_PACKAGE_QT5BASE_DBUS
+ 	help
+ 	  This option enables the D-Bus module.
  
- endif
- 
-+config BR2_PACKAGE_QT5BASE_DBUS
-+	bool "DBus module"
-+	select BR2_PACKAGE_DBUS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
++config BR2_PACKAGE_QT5BASE_ICU
++	bool "Enable ICU support"
++	select BR2_PACKAGE_ICU
 +	help
-+	  This option enables the D-Bus module.
++	  This option enables ICU support in Qt5. This is for example
++	  needed for Qt5Webkit.
 +
  endif
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index ac25f17..7988ce2 100644
+index 414410a..865377f 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -27,7 +27,6 @@ QT5BASE_CONFIGURE_OPTS += \
+@@ -25,7 +25,6 @@ QT5BASE_CONFIGURE_OPTS += \
+ 	-no-nis \
  	-no-libudev \
  	-no-iconv \
- 	-no-icu \
--	-no-dbus \
+-	-no-icu \
  	-no-gstreamer \
  	-no-gtkstyle \
  	-system-zlib \
-@@ -93,6 +92,9 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_JPEG),jpeg)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_PNG),-system-libpng,-no-libpng)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_PNG),libpng)
+@@ -97,6 +96,9 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DBUS),dbus)
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBGLIB2),-glib,-no-glib)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBGLIB2),libglib2)
  
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DBUS),-dbus,-no-dbus)
-+QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DBUS),dbus)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_ICU),-icu,-no-icu)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_ICU),icu)
 +
  # Build the list of libraries to be installed on the target
  QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
  QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
-@@ -105,6 +107,8 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_GUI)          += Qt5Gui
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_WIDGETS)      += Qt5Widgets
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
- 
-+QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
-+
- # Ideally, we could use -device-option to substitute variable values
- # in our linux-buildroot-g++/qmake.config, but this mechanism doesn't
- # nicely support variable values that contain spaces. So we use the
 -- 
 1.7.9.5
