@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Feb 2013 00:26:06 +0100
-Subject: [Buildroot] [PATCH 15/30] qt5base: add eglfs graphics backend
+Date: Thu, 28 Feb 2013 00:26:08 +0100
+Subject: [Buildroot] [PATCH 17/30] qt5base: add D-Bus support
 In-Reply-To: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362007582-14753-16-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362007582-14753-18-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,106 +12,57 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/Config.in                      |   11 ++++++-
- ...nce-add-egl-to-CONFIG-to-get-correct-incl.patch |   32 ++++++++++++++++++++
- package/qt5/qt5base/qt5base.mk                     |    9 ++++--
- 3 files changed, 49 insertions(+), 3 deletions(-)
- create mode 100644 package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
+ package/qt5/qt5base/Config.in  |    8 ++++++++
+ package/qt5/qt5base/qt5base.mk |    6 +++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 540c8b2..e91c405 100644
+index 08e3c16..baf471f 100644
 --- a/package/qt5/qt5base/Config.in
 +++ b/package/qt5/qt5base/Config.in
-@@ -67,7 +67,8 @@ config BR2_PACKAGE_QT5BASE_GUI
- 	# linuxfb if nothing is enabled.
- 	select BR2_PACKAGE_QT5BASE_LINUXFB if \
- 	       !BR2_PACKAGE_QT5BASE_DIRECTFB && \
--	       !BR2_PACKAGE_QT5BASE_XCB
-+	       !BR2_PACKAGE_QT5BASE_XCB && \
-+	       !BR2_PACKAGE_QT5BASE_EGLFS
- 	help
- 	  This option enables the Qt5Gui library.
+@@ -140,4 +140,12 @@ config BR2_PACKAGE_QT5BASE_PNG
  
-@@ -97,6 +98,14 @@ config BR2_PACKAGE_QT5BASE_XCB
- comment "X.org XCB backend available if X.org is enabled"
- 	depends on !BR2_PACKAGE_XORG7
- 
-+config BR2_PACKAGE_QT5BASE_EGLFS
-+	bool "eglfs support"
-+	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+	depends on BR2_PACKAGE_HAS_OPENGL_ES
-+
-+comment "eglfs backend available if OpenGLES and EGL are enabled"
-+	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
-+
- config BR2_PACKAGE_QT5BASE_PRINTSUPPORT
- 	bool "print support module"
- 	select BR2_PACKAGE_QT5BASE_WIDGETS
-diff --git a/package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch b/package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
-new file mode 100644
-index 0000000..a85a5aa
---- /dev/null
-+++ b/package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
-@@ -0,0 +1,32 @@
-+From 588c60d0c3d11e79d19860fa62b03c935658d13a Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 13 Jan 2013 14:36:48 +0100
-+Subject: [PATCH qtbase] eglconvenience: add egl to CONFIG to get correct include
-+ paths
-+
-+The eglconvenience code includes <EGL/egl.h>. Therefore, it should get
-+the appropriate EGL-specific include paths from QMAKE_INCDIR_EGL,
-+otherwise the build might if the EGL library has its headers in
-+special locations. In order to achieve this, we simply add the "egl"
-+feature to the list of features imported by eglconvenience.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ .../eglconvenience/eglconvenience.pri              |    1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
-+index 188eb1c..8996cea 100644
-+--- a/src/platformsupport/eglconvenience/eglconvenience.pri
-++++ b/src/platformsupport/eglconvenience/eglconvenience.pri
-+@@ -5,6 +5,7 @@ contains(QT_CONFIG,egl) {
-+     SOURCES += \
-+         $$PWD/qeglconvenience.cpp \
-+         $$PWD/qeglplatformcontext.cpp
-++    CONFIG += egl
-+ 
-+     contains(QT_CONFIG,xlib) {
-+         HEADERS += \
-+-- 
-+1.7.9.5
-+
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 79cbc48..3e8bde1 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -20,9 +20,7 @@ QT5BASE_INSTALL_STAGING = YES
- #    want to use the one packaged in Buildroot
- QT5BASE_CONFIGURE_OPTS += \
- 	-optimized-qmake \
--	-no-eglfs \
- 	-no-kms \
--	-no-opengl \
- 	-no-glib \
- 	-no-cups \
- 	-no-nis \
-@@ -81,6 +79,13 @@ else
- QT5_BASE_CONFIGURE_OPTS += -no-xcb
  endif
  
-+ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
-+QT5BASE_CONFIGURE_OPTS += -opengl es2 -eglfs
-+QT5BASE_DEPENDENCIES   += libgles libegl
-+else
-+QT5BASE_CONFIGURE_OPTS += -no-opengl -no-eglfs
-+endif
++config BR2_PACKAGE_QT5BASE_DBUS
++	bool "DBus module"
++	select BR2_PACKAGE_DBUS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
++	help
++	  This option enables the D-Bus module.
 +
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),-openssl,-no-openssl)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),openssl)
+ endif
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index ac25f17..7988ce2 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -27,7 +27,6 @@ QT5BASE_CONFIGURE_OPTS += \
+ 	-no-libudev \
+ 	-no-iconv \
+ 	-no-icu \
+-	-no-dbus \
+ 	-no-gstreamer \
+ 	-no-gtkstyle \
+ 	-system-zlib \
+@@ -93,6 +92,9 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_JPEG),jpeg)
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_PNG),-system-libpng,-no-libpng)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_PNG),libpng)
  
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DBUS),-dbus,-no-dbus)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DBUS),dbus)
++
+ # Build the list of libraries to be installed on the target
+ QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
+@@ -105,6 +107,8 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_GUI)          += Qt5Gui
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_WIDGETS)      += Qt5Widgets
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
+ 
++QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
++
+ # Ideally, we could use -device-option to substitute variable values
+ # in our linux-buildroot-g++/qmake.config, but this mechanism doesn't
+ # nicely support variable values that contain spaces. So we use the
 -- 
 1.7.9.5
