@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Feb 2013 00:26:13 +0100
-Subject: [Buildroot] [PATCH 22/30] qt5/qt5script: new package
+Date: Thu, 28 Feb 2013 00:26:07 +0100
+Subject: [Buildroot] [PATCH 16/30] qt5base: add support for fontconfig, png,
+	jpeg, gif
 In-Reply-To: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362007582-14753-23-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362007582-14753-17-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,86 +13,76 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/Config.in              |    1 +
- package/qt5/qt5script/Config.in    |   10 +++++++++
- package/qt5/qt5script/qt5script.mk |   41 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 52 insertions(+)
- create mode 100644 package/qt5/qt5script/Config.in
- create mode 100644 package/qt5/qt5script/qt5script.mk
+ package/qt5/qt5base/Config.in  |   26 ++++++++++++++++++++++++++
+ package/qt5/qt5base/qt5base.mk |   12 ++++++++----
+ 2 files changed, 34 insertions(+), 4 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index f4d2b45..3f303e2 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -15,5 +15,6 @@ menuconfig BR2_PACKAGE_QT5
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index e91c405..08e3c16 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -112,6 +112,32 @@ config BR2_PACKAGE_QT5BASE_PRINTSUPPORT
+ 	help
+ 	  This option enables the Qt5PrintSupport
  
- if BR2_PACKAGE_QT5
- source "package/qt5/qt5base/Config.in"
-+source "package/qt5/qt5script/Config.in"
- source "package/qt5/qt5svg/Config.in"
- endif
-diff --git a/package/qt5/qt5script/Config.in b/package/qt5/qt5script/Config.in
-new file mode 100644
-index 0000000..3c5d60c
---- /dev/null
-+++ b/package/qt5/qt5script/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_QT5SCRIPT
-+	bool "qt5script"
-+	select BR2_PACKAGE_QT5BASE
++config BR2_PACKAGE_QT5BASE_FONTCONFIG
++	bool "fontconfig support"
++	select BR2_PACKAGE_FONTCONFIG
 +	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
++	  This option enables Fontconfig and Freetype support using
++	  the system fontconfig and freetype2 libraries.
 +
-+	  This package corresponds to the qt5script module.
++config BR2_PACKAGE_QT5BASE_GIF
++	bool "GIF support"
++	help
++	  This compiles and installs the plugin for GIF reading support.
 +
-+	  http://qt-project.org
-diff --git a/package/qt5/qt5script/qt5script.mk b/package/qt5/qt5script/qt5script.mk
-new file mode 100644
-index 0000000..a009402
---- /dev/null
-+++ b/package/qt5/qt5script/qt5script.mk
-@@ -0,0 +1,41 @@
-+#############################################################
-+#
-+# qt5script
-+#
-+#############################################################
++config BR2_PACKAGE_QT5BASE_JPEG
++	bool "JPEG support"
++	select BR2_PACKAGE_JPEG
++	help
++	  This option enables JPEG support using the system libjpeg
++	  library.
 +
-+QT5SCRIPT_VERSION = $(QT5_VERSION)
-+QT5SCRIPT_SITE = http://releases.qt-project.org/qt5/$(QT5SCRIPT_VERSION)/submodules_tar/
-+QT5SCRIPT_SOURCE = qtscript-opensource-src-$(QT5SCRIPT_VERSION).tar.xz
-+QT5SCRIPT_DEPENDENCIES = qt5base
-+QT5SCRIPT_INSTALL_STAGING = YES
++config BR2_PACKAGE_QT5BASE_PNG
++	bool "PNG support"
++	select BR2_PACKAGE_LIBPNG
++	help
++	  This option enables PNG support using the system libpng
++	  library.
 +
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5SCRIPT_CONFIGURE_OPTS += -opensource -confirm-license
-+QT5SCRIPT_LICENSE = LGPLv2.1 or GPLv3.0
-+# Here we would like to get license files from qt5base, but qt5base
-+# may not be extracted at the time we get the legal-info for
-+# qt5script.
-+else
-+QT5SCRIPT_LICENSE = Commercial license
-+QT5SCRIPT_REDISTRIBUTE = NO
-+endif
+ endif
+ 
+ endif
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 3e8bde1..ac25f17 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -26,10 +26,6 @@ QT5BASE_CONFIGURE_OPTS += \
+ 	-no-nis \
+ 	-no-libudev \
+ 	-no-iconv \
+-	-no-fontconfig \
+-	-no-gif \
+-	-no-libpng \
+-	-no-libjpeg \
+ 	-no-icu \
+ 	-no-dbus \
+ 	-no-gstreamer \
+@@ -89,6 +85,14 @@ endif
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),-openssl,-no-openssl)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),openssl)
+ 
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),-fontconfig,-no-fontconfig)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),fontconfig)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GIF),,-no-gif)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_JPEG),-system-libjpeg,-no-libjpeg)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_JPEG),jpeg)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_PNG),-system-libpng,-no-libpng)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_PNG),libpng)
 +
-+define QT5SCRIPT_CONFIGURE_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+endef
-+
-+define QT5SCRIPT_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT5SCRIPT_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+define QT5SCRIPT_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Script*.so.* $(TARGET_DIR)/usr/lib
-+endef
-+
-+$(eval $(generic-package))
+ # Build the list of libraries to be installed on the target
+ QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
 -- 
 1.7.9.5
