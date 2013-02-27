@@ -1,40 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 27 Feb 2013 08:45:44 +0100
-Subject: [Buildroot] [git commit] flashbench: force gnu99 dialect on sh2a
-Message-ID: <20130227074643.B1FC19AD9D@busybox.osuosl.org>
+Date: Wed, 27 Feb 2013 09:22:59 +0100
+Subject: [Buildroot] [git commit] quota: needs mmu
+Message-ID: <20130227082311.32E0D9AB74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba5ba0a279a9ed5dbc1d29f930d4183a34db1acf
+commit: http://git.buildroot.net/buildroot/commit/?id=9403f92867f67c26ccbfba3fd47de03a52d1a776
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.org/results/33880036054c39cb04dad71bc8c0a9eece16fac6
+Fixes http://autobuild.buildroot.net/results/85e3c73d1c0b5c6843d65a487203b20f62bf3075
 
-CodeSourcery toolchains for sh2a only provide LLONG_MAX when
-used with the gnu99 dialect.
-
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/flashbench/flashbench.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/quota/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/flashbench/flashbench.mk b/package/flashbench/flashbench.mk
-index faf8ae6..45d0540 100644
---- a/package/flashbench/flashbench.mk
-+++ b/package/flashbench/flashbench.mk
-@@ -11,8 +11,8 @@ FLASHBENCH_LICENSE_FILES = COPYING
- 
- FLASHBENCH_CFLAGS = $(TARGET_CFLAGS)
- 
--ifeq ($(BR2_microblaze),y)
--# microblaze toolchain only provides LLONG_MAX when used with gnu99 dialect
-+ifeq ($(BR2_microblaze)$(BR2_sh2a),y)
-+# microblaze and sh2a toolchains only provide LLONG_MAX when used with gnu99 dialect
- FLASHBENCH_CFLAGS += -std=gnu99
- endif
- 
+diff --git a/package/quota/Config.in b/package/quota/Config.in
+index f7d0fe9..f6341d3 100644
+--- a/package/quota/Config.in
++++ b/package/quota/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_QUOTA
+ 	bool "quota"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
