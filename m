@@ -1,72 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Feb 2013 22:19:56 +0100
-Subject: [Buildroot] [git commit] busybox: 1.21.1 fix for
-	move_to_unaligned16()
-In-Reply-To: <874ngx5vn5.fsf@dell.be.48ers.dk>
-References: <20130227145817.F35689ADAC@busybox.osuosl.org>
- <512E5E7E.2000806@mind.be> <874ngx5vn5.fsf@dell.be.48ers.dk>
-Message-ID: <512E787C.9090303@mind.be>
+Date: Wed, 27 Feb 2013 22:47:24 +0100
+Subject: [Buildroot] segfault in uClibc-0.9.33.2 when using busybox ip
+In-Reply-To: <1361983607940-41081.post@n4.nabble.com>
+References: <1361983607940-41081.post@n4.nabble.com>
+Message-ID: <512E7EEC.7010007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/02/13 21:50, Peter Korsgaard wrote:
->>>>>> >>>>>"Arnout" == Arnout Vandecappelle<arnout@mind.be>  writes:
->   Arnout> On 27/02/13 15:57, Peter Korsgaard wrote:
->   >> commit:http://git.buildroot.net/buildroot/commit/?id=d8024d2d87864eb0ba381291e0e2986f7643c8dc
->   >> branch:http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->   >>
->   >> Signed-off-by: Peter Korsgaard<jacmet@sunsite.dk>
->   >> ---
->   >> .../busybox-1.21.0/busybox-1.21.0-platform.patch   |   11 +++++++++++
->   >> 1 files changed, 11 insertions(+), 0 deletions(-)
->   >>
->   >> diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch b/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch
->   >> new file mode 100644
->   >> index 0000000..2401b86
->   >> --- /dev/null
->   >> +++ b/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch
->   >> @@ -0,0 +1,11 @@
+On 27/02/13 17:46, mathematician1975 wrote:
+> I have used buildroot to generate my crosstools, root file system, kernel
+> (3.6.11) and busybox (1.21.0) for an i386 (Geode) target board. Basically I
+> am using buildroot to generate everything. I was recently trying to
+> configure my network but when I invoked the following from the command line
 >
->   Arnout>  Why do we bother to tell our contributors to add a patch description
->   Arnout> and Signed-off-by if our maintainer doesn't even do it?:-)
+> # ip addr show dev eth0
 >
-> Mainly because busybox upstream unfortunately doesn't do it even though
-> he has been asked.
+> I received the following report of a segfault.
 >
-> But ok, I guess I could dig through busybox git and come up with a
-> description
+> 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast qlen
+>      1000 link/ether 00:18:7d:19:a0:d8 brd ff:ff:ff:ff:ff:ff
+>      inet 172.18.255.212/24 brd 172.18.255.255 scope global eth0
+> [  331.700545] ip[951]: segfault at 0 ip b76e1f26 sp bfbd29b0 error 4 in
+> libuClibc-0.9.33.2.so[b76b5000+4d000]
+> Segmentation fault
+>
+> I have searched these archives for similar reports but I cannot find
+> anything. I would be very grateful for any advice that anyone who has had a
+> similar problem can offer, or how I go about trying to establish if this is
+> down to user error on my part or a bug in busybox/uClibc.
 
-  In that case you could even do a format-patch.
+  User error is unlikely, unless you did something very strange while 
+building. Given that the segfault happens in uClibc, it's most likely a 
+uClibc problem. Definitely not a buildroot problem :-)
 
+  Here are some hints how to debug:
 
-> or atleast link to the upstream location.
+- Rebuild with another uClibc version.
 
-  That's what I mean:
+- Do an 'objdump -d output/staging/lib/libc.so | less' and look what is 
+at address b76e1f26.
 
-  - copy your own commit message text into the patch;
+- Run it in a chroot or emulated environment. If that works, then it's 
+most likely a problem with mismatch of your build options and the Geode 
+processor (so user error after all :-).
 
-  - mention the upstream URL 
-http://busybox.net/downloads/fixes-1.21.0/busybox-1.21.0-platform.patch
+- Run the 'ip' program in a debugger (gdbserver) to find what goes wrong.
 
-  - Add your Sob.
+- Check uClibc mailing lists for similar issues.
 
-
-  Actually, I don't even really want to claim that this is the way it 
-_should_ be done. Rather, it is what I as a reviewer tell our 
-contributors, because that's what I understand our policy is.
-
-
-> Upstream unfortunately also updates these files without renaming them.
-
-  That is... unfortunate.  Otherwise we could apply them directly with 
-BUSYBOX_PATCH (after the patch that allows foreign URLs has been applied).
-
+  Good luck!
 
   Regards,
   Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
