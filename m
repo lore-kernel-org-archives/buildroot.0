@@ -1,36 +1,108 @@
-From: mathematician1975 <pcooper1975@googlemail.com>
-Date: Wed, 27 Feb 2013 08:46:47 -0800 (PST)
-Subject: [Buildroot] segfault in uClibc-0.9.33.2 when using busybox ip
-Message-ID: <1361983607940-41081.post@n4.nabble.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 27 Feb 2013 18:55:02 +0100
+Subject: [Buildroot] [git commit] busybox: add 1.21.0 xz fix
+Message-ID: <20130227175500.33F9F9ADBE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have used buildroot to generate my crosstools, root file system, kernel
-(3.6.11) and busybox (1.21.0) for an i386 (Geode) target board. Basically I
-am using buildroot to generate everything. I was recently trying to
-configure my network but when I invoked the following from the command line
+commit: http://git.buildroot.net/buildroot/commit/?id=44efedbec469da9c94ecbb71f81f83a5025c30f0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-# ip addr show dev eth0
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../busybox/busybox-1.21.0/busybox-1.21.0-xz.patch |   84 ++++++++++++++++++++
+ 1 files changed, 84 insertions(+), 0 deletions(-)
 
-I received the following report of a segfault.
-
-2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast qlen
-    1000 link/ether 00:18:7d:19:a0:d8 brd ff:ff:ff:ff:ff:ff
-    inet 172.18.255.212/24 brd 172.18.255.255 scope global eth0
-[  331.700545] ip[951]: segfault at 0 ip b76e1f26 sp bfbd29b0 error 4 in 
-libuClibc-0.9.33.2.so[b76b5000+4d000]
-Segmentation fault
-
-I have searched these archives for similar reports but I cannot find
-anything. I would be very grateful for any advice that anyone who has had a
-similar problem can offer, or how I go about trying to establish if this is
-down to user error on my part or a bug in busybox/uClibc. 
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/segfault-in-uClibc-0-9-33-2-when-using-busybox-ip-tp41081.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-xz.patch b/package/busybox/busybox-1.21.0/busybox-1.21.0-xz.patch
+new file mode 100644
+index 0000000..56ba1a2
+--- /dev/null
++++ b/package/busybox/busybox-1.21.0/busybox-1.21.0-xz.patch
+@@ -0,0 +1,84 @@
++--- busybox-1.21.0/archival/libarchive/decompress_unxz.c
+++++ busybox-1.21.0-xz/archival/libarchive/decompress_unxz.c
++@@ -40,6 +40,7 @@ static uint32_t xz_crc32(const uint8_t *
++ IF_DESKTOP(long long) int FAST_FUNC
++ unpack_xz_stream(transformer_aux_data_t *aux, int src_fd, int dst_fd)
++ {
+++	enum xz_ret xz_result;
++ 	struct xz_buf iobuf;
++ 	struct xz_dec *state;
++ 	unsigned char *membuf;
++@@ -63,9 +64,8 @@ unpack_xz_stream(transformer_aux_data_t
++ 	/* Limit memory usage to about 64 MiB. */
++ 	state = xz_dec_init(XZ_DYNALLOC, 64*1024*1024);
++ 
+++	xz_result = X_OK;
++ 	while (1) {
++-		enum xz_ret r;
++-
++ 		if (iobuf.in_pos == iobuf.in_size) {
++ 			int rd = safe_read(src_fd, membuf, BUFSIZ);
++ 			if (rd < 0) {
++@@ -73,28 +73,57 @@ unpack_xz_stream(transformer_aux_data_t
++ 				total = -1;
++ 				break;
++ 			}
+++			if (rd == 0 && xz_result == XZ_STREAM_END)
+++				break;
++ 			iobuf.in_size = rd;
++ 			iobuf.in_pos = 0;
++ 		}
+++		if (xz_result == XZ_STREAM_END) {
+++			/*
+++			 * Try to start decoding next concatenated stream.
+++			 * Stream padding must always be a multiple of four
+++			 * bytes to preserve four-byte alignment. To keep the
+++			 * code slightly smaller, we aren't as strict here as
+++			 * the .xz spec requires. We just skip all zero-bytes
+++			 * without checking the alignment and thus can accept
+++			 * files that aren't valid, e.g. the XZ utils test
+++			 * files bad-0pad-empty.xz and bad-0catpad-empty.xz.
+++			 */
+++			do {
+++				if (membuf[iobuf.in_pos] != 0) {
+++					xz_dec_reset(state);
+++					goto do_run;
+++				}
+++				iobuf.in_pos++;
+++			} while (iobuf.in_pos < iobuf.in_size);
+++		}
+++ do_run:
++ //		bb_error_msg(">in pos:%d size:%d out pos:%d size:%d",
++ //				iobuf.in_pos, iobuf.in_size, iobuf.out_pos, iobuf.out_size);
++-		r = xz_dec_run(state, &iobuf);
+++		xz_result = xz_dec_run(state, &iobuf);
++ //		bb_error_msg("<in pos:%d size:%d out pos:%d size:%d r:%d",
++-//				iobuf.in_pos, iobuf.in_size, iobuf.out_pos, iobuf.out_size, r);
+++//				iobuf.in_pos, iobuf.in_size, iobuf.out_pos, iobuf.out_size, xz_result);
++ 		if (iobuf.out_pos) {
++ 			xwrite(dst_fd, iobuf.out, iobuf.out_pos);
++ 			IF_DESKTOP(total += iobuf.out_pos;)
++ 			iobuf.out_pos = 0;
++ 		}
++-		if (r == XZ_STREAM_END) {
++-			break;
+++		if (xz_result == XZ_STREAM_END) {
+++			/*
+++			 * Can just "break;" here, if not for concatenated
+++			 * .xz streams.
+++			 * Checking for padding may require buffer
+++			 * replenishment. Can't do it here.
+++			 */
+++			continue;
++ 		}
++-		if (r != XZ_OK && r != XZ_UNSUPPORTED_CHECK) {
+++		if (xz_result != XZ_OK && xz_result != XZ_UNSUPPORTED_CHECK) {
++ 			bb_error_msg("corrupted data");
++ 			total = -1;
++ 			break;
++ 		}
++ 	}
+++
++ 	xz_dec_end(state);
++ 	free(membuf);
++ 
