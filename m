@@ -1,26 +1,23 @@
-From: John Stile <john@stilen.com>
-Date: Wed, 27 Feb 2013 13:51:29 -0800
-Subject: [Buildroot] setting timezone from web page
-Message-ID: <1362001889.29197.269.camel@genx.eng.msli.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 27 Feb 2013 23:58:13 +0100
+Subject: [Buildroot] [PATCH] qt: install QML imports on target
+In-Reply-To: <1361355531-2909-1-git-send-email-daniel.nystrom@timeterminal.se>
+ ("Daniel =?utf-8?Q?Nystr=C3=B6m=22's?= message of "Wed, 20 Feb 2013
+ 11:18:51 +0100")
+References: <1361355531-2909-1-git-send-email-daniel.nystrom@timeterminal.se>
+Message-ID: <87zjyp4b5m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am using buildroot for a device where the user can set the timezone
-via a web page, and the web page gets it's list of timezones from:
-http://www.ietf.org/timezones/data/zone.tab
-But those don't work in /etc/TZ.
+>>>>> "Daniel" == Daniel Nystr?m <daniel.nystrom@timeterminal.se> writes:
 
-I found some documentation that says buildroot's /etc/TZ should follow
-rules according to Single Unix Specification Version 3
+ Daniel> When selecting the Qt declarative module, all the QML imports was
+ Daniel> built and installed to staging, but never installed to the target.
 
-Is there a way to translates/transcribes IETF timezone into a Single
-Unix Specification Version 3?
+Committed to next, thanks.
 
-If not is there a compatible zone.tab for buildroot's  /etc/TZ?
-
-Is there a better way to do all this?
-
-I'm on buildroot-2011.11.
+-- 
+Bye, Peter Korsgaard
