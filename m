@@ -1,61 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Feb 2013 20:29:02 +0100
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 27 Feb 2013 21:50:22 +0100
 Subject: [Buildroot] [git commit] busybox: 1.21.1 fix for
 	move_to_unaligned16()
-In-Reply-To: <20130227145817.F35689ADAC@busybox.osuosl.org>
+In-Reply-To: <512E5E7E.2000806@mind.be> (Arnout Vandecappelle's message of
+ "Wed, 27 Feb 2013 20:29:02 +0100")
 References: <20130227145817.F35689ADAC@busybox.osuosl.org>
-Message-ID: <512E5E7E.2000806@mind.be>
+ <512E5E7E.2000806@mind.be>
+Message-ID: <874ngx5vn5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/02/13 15:57, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=d8024d2d87864eb0ba381291e0e2986f7643c8dc
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-> ---
->   .../busybox-1.21.0/busybox-1.21.0-platform.patch   |   11 +++++++++++
->   1 files changed, 11 insertions(+), 0 deletions(-)
->
-> diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch b/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch
-> new file mode 100644
-> index 0000000..2401b86
-> --- /dev/null
-> +++ b/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch
-> @@ -0,0 +1,11 @@
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-  Why do we bother to tell our contributors to add a patch description 
-and Signed-off-by if our maintainer doesn't even do it? :-)
+ Arnout> On 27/02/13 15:57, Peter Korsgaard wrote:
+ >> commit: http://git.buildroot.net/buildroot/commit/?id=d8024d2d87864eb0ba381291e0e2986f7643c8dc
+ >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ >> 
+ >> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+ >> ---
+ >> .../busybox-1.21.0/busybox-1.21.0-platform.patch   |   11 +++++++++++
+ >> 1 files changed, 11 insertions(+), 0 deletions(-)
+ >> 
+ >> diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch b/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch
+ >> new file mode 100644
+ >> index 0000000..2401b86
+ >> --- /dev/null
+ >> +++ b/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch
+ >> @@ -0,0 +1,11 @@
 
-  Regards,
-  Arnout
+ Arnout>  Why do we bother to tell our contributors to add a patch description
+ Arnout> and Signed-off-by if our maintainer doesn't even do it? :-)
 
-> +--- busybox-1.21.0/include/platform.h
-> ++++ busybox-1.21.0-platform/include/platform.h
-> +@@ -228,7 +228,7 @@ typedef uint32_t bb__aliased_uint32_t FI
-> + # define move_from_unaligned32(v, u32p) (memcpy(&(v), (u32p), 4))
-> + # define move_to_unaligned16(u16p, v) do { \
-> + 	uint16_t __t = (v); \
-> +-	memcpy((u16p), &__t, 4); \
-> ++	memcpy((u16p), &__t, 2); \
-> + } while (0)
-> + # define move_to_unaligned32(u32p, v) do { \
-> + 	uint32_t __t = (v); \
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
+Mainly because busybox upstream unfortunately doesn't do it even though
+he has been asked.
 
+But ok, I guess I could dig through busybox git and come up with a
+description or atleast link to the upstream location.
+
+Upstream unfortunately also updates these files without renaming them.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
