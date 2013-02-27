@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Feb 2013 00:26:04 +0100
-Subject: [Buildroot] [PATCH 13/30] qt5base: support debug or release modes
+Date: Thu, 28 Feb 2013 00:26:05 +0100
+Subject: [Buildroot] [PATCH 14/30] qt5base: add OpenSSL support
 In-Reply-To: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362007582-14753-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362007582-14753-15-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,50 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/qt5base.mk |    6 ++++++
- 1 file changed, 6 insertions(+)
+ package/qt5/qt5base/Config.in  |    8 ++++++++
+ package/qt5/qt5base/qt5base.mk |    4 +++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 801ef6f..540c8b2 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -33,6 +33,14 @@ config BR2_PACKAGE_QT5BASE_NETWORK
+ 	help
+ 	  This options enables the Qt5Network library.
+ 
++config BR2_PACKAGE_QT5BASE_NETWORK_OPENSSL
++	bool "OpenSSL support"
++	select BR2_PACKAGE_OPENSSL
++	depends on BR2_PACKAGE_QT5BASE_NETWORK
++	help
++	  This option enables the OpenSSL support in the Qt5Network
++	  library.
++
+ config BR2_PACKAGE_QT5BASE_CONCURRENT
+ 	bool "concurrent module"
+ 	help
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 7213238..41e7779 100644
+index 41e7779..79cbc48 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -41,6 +41,12 @@ QT5BASE_CONFIGURE_OPTS += \
- 	-system-pcre \
- 	-no-pch
+@@ -28,7 +28,6 @@ QT5BASE_CONFIGURE_OPTS += \
+ 	-no-nis \
+ 	-no-libudev \
+ 	-no-iconv \
+-	-no-openssl \
+ 	-no-fontconfig \
+ 	-no-gif \
+ 	-no-libpng \
+@@ -82,6 +81,9 @@ else
+ QT5_BASE_CONFIGURE_OPTS += -no-xcb
+ endif
  
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+QT5BASE_CONFIGURE_OPTS += -debug
-+else
-+QT5BASE_CONFIGURE_OPTS += -release
-+endif
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),-openssl,-no-openssl)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),openssl)
 +
- ifeq ($(BR2_LARGEFILE),y)
- QT5BASE_CONFIGURE_OPTS += -largefile
- else
+ # Build the list of libraries to be installed on the target
+ QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
 -- 
 1.7.9.5
