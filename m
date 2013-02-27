@@ -1,60 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Feb 2013 20:15:53 +0100
-Subject: [Buildroot] [PATCH] qt: install QML imports on target
-In-Reply-To: <878v6c859c.fsf@dell.be.48ers.dk>
-References: <1361355531-2909-1-git-send-email-daniel.nystrom@timeterminal.se>
- <CAHQn0kg71pmwYCTo9EbGZOFF-PO2s99pZ4GrSC2gDbuy31QUqA@mail.gmail.com>
- <878v6c859c.fsf@dell.be.48ers.dk>
-Message-ID: <512E5B69.7070201@mind.be>
+Date: Wed, 27 Feb 2013 20:29:02 +0100
+Subject: [Buildroot] [git commit] busybox: 1.21.1 fix for
+	move_to_unaligned16()
+In-Reply-To: <20130227145817.F35689ADAC@busybox.osuosl.org>
+References: <20130227145817.F35689ADAC@busybox.osuosl.org>
+Message-ID: <512E5E7E.2000806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/02/13 22:15, Peter Korsgaard wrote:
->>>>>> "Daniel" == Daniel Nystr?m<daniel.nystrom@timeterminal.se>  writes:
->   Daniel> On Wed, Feb 20, 2013 at 11:18 AM, Daniel Nystr?m <
->   Daniel>daniel.nystrom at timeterminal.se> wrote:
+On 27/02/13 15:57, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=d8024d2d87864eb0ba381291e0e2986f7643c8dc
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 >
->   Daniel>     When selecting the Qt declarative module, all the QML imports was
->   Daniel>     built and installed to staging, but never installed to the target.
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+>   .../busybox-1.21.0/busybox-1.21.0-platform.patch   |   11 +++++++++++
+>   1 files changed, 11 insertions(+), 0 deletions(-)
 >
->   Daniel>     Signed-off-by: Daniel Nystr?m<daniel.nystrom@timeterminal.se>
->
->
->   Daniel> Bumping this patch as I think this is a good candidate for the
->   Daniel> 2013.02 release.  Currently QtDeclarative is supported by
->   Daniel> Buildroot, but the QML imports are not installed to target. The
->   Daniel> current imports are:
->
->   Daniel> ./QtWebKit/libqmlwebkitplugin.so
->   Daniel> ./Qt/labs/folderlistmodel/libqmlfolderlistmodelplugin.so
->   Daniel> ./Qt/labs/gestures/libqmlgesturesplugin.so
->   Daniel> ./Qt/labs/particles/libqmlparticlesplugin.so
->
-> It would be good if someone who knows anything about Qt can ack this
-> patch for 2013.02.
+> diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch b/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch
+> new file mode 100644
+> index 0000000..2401b86
+> --- /dev/null
+> +++ b/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch
+> @@ -0,0 +1,11 @@
 
-  Basic QML works without this patch. (Actually, I can't be 100% sure 
-because the display on my board is currently broken, but at least the 
-application doesn't report an error when I start it.) So I don't think 
-this is really needed for 2013.02.
-
-  This patch is only necessary if you want to use one of those plugins in 
-your QML application. I therefore don't agree with always installing 
-them. There should be a configure option to enable it. Although, maybe 
-making this 200K installation configurable for a package that already 
-consumes 15M is perhaps a bit silly... Therefore:
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (for next)
-
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (build-test)
+  Why do we bother to tell our contributors to add a patch description 
+and Signed-off-by if our maintainer doesn't even do it? :-)
 
   Regards,
   Arnout
+
+> +--- busybox-1.21.0/include/platform.h
+> ++++ busybox-1.21.0-platform/include/platform.h
+> +@@ -228,7 +228,7 @@ typedef uint32_t bb__aliased_uint32_t FI
+> + # define move_from_unaligned32(v, u32p) (memcpy(&(v), (u32p), 4))
+> + # define move_to_unaligned16(u16p, v) do { \
+> + 	uint16_t __t = (v); \
+> +-	memcpy((u16p), &__t, 4); \
+> ++	memcpy((u16p), &__t, 2); \
+> + } while (0)
+> + # define move_to_unaligned32(u32p, v) do { \
+> + 	uint32_t __t = (v); \
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
