@@ -1,49 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 28 Feb 2013 13:23:32 +0100
-Subject: [Buildroot] WebkitGtk upgradation
-In-Reply-To: <20130228122855.6ceb26ce@skate> (Thomas Petazzoni's message of
- "Thu, 28 Feb 2013 12:28:55 +0100")
-References: <CAJsG2H5B=ZdfDZm_wTmOqMkG6_kME=y_7oc5gkMygtd6HA4p+g@mail.gmail.com>
- <512F0B0A.4050403@relinux.de>
- <CAJsG2H4pZWE7FZGFUJuhYhjrNkf0Aa62y12WW3YQdbScJ1HTtA@mail.gmail.com>
- <CAFbHwiTZgmQn8EChYXSLAmmr9+WSoVLL5jUBqnOYA7qzUNFCnA@mail.gmail.com>
- <20130228122855.6ceb26ce@skate>
-Message-ID: <87ehg04ofv.fsf@dell.be.48ers.dk>
+From: James Hogan <james.hogan@imgtec.com>
+Date: Thu, 28 Feb 2013 12:24:50 +0000
+Subject: [Buildroot] [PATCH] gdb: convert to the package infrastructure
+In-Reply-To: <20130228132048.727cf7fa@skate>
+References: <1361916812-29395-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <512F0EAD.4080406@mind.be> <512F17B6.70501@imgtec.com>
+ <20130228094741.50f605fc@skate> <512F4977.6000402@imgtec.com>
+ <20130228132048.727cf7fa@skate>
+Message-ID: <512F4C92.90407@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Thomas,
 
- Thomas> Dear Will Newton,
- Thomas> On Thu, 28 Feb 2013 10:22:27 +0000, Will Newton wrote:
+On 28/02/13 12:20, Thomas Petazzoni wrote:
+> On Thu, 28 Feb 2013 12:11:35 +0000, James Hogan wrote:
+> 
+>>> Not sure to follow here: Arnout mentions the choice list of gdb
+>>> versions, which only have a limited number of choices already. If you
+>>> need Buildroot to use some custom gdb version, then you already have to
+>>> modify Buildroot anyway. Or maybe I'm missing the point you're making?
+>>
+>> Yes, but the modification is as simple as adding a patch file in the
+>> right place.
+> 
+> It's still the case here: just add your patch in
+> package/gdb/<version>/, and that's it.
 
- >> As far as I can tell DirectFB is not really supported any more. If I
- >> remember correctly the current WebKit in buildroot will build with
- >> GTK+/DirectFB but will crash on startup. The crash is fairly easy to
- >> work around but I think is a symptom of the fact that no one is
- >> running with this setup.
- >> 
- >> Newer versions of GTK+ removed the DirectFB backend so it may have to
- >> be removed from buildroot in the future too.
+I may have misunderstood what Arnout meant then. I thought he was
+referring to removing the choice of GDB version ("Can't we just remove
+the user-selectable version completely?").
 
- Thomas> My feeling is also that the DirectFB backend of Gtk has never been
- Thomas> seriously maintained over time. There are from time to time some people
- Thomas> who fix the issues, but then it goes on unmaintained for a number of
- Thomas> months/years, during which it slowly degrades into an unusable state.
+Anyway, no big deal.
 
- Thomas> I would therefore suggest that Buildroot follows upstream: get
- Thomas> rid of the DirectFB backend. If anyone really wants the
- Thomas> DirectFB backend in Gtk, then it should be fixed upstream. But
- Thomas> I don't think it should force Buildroot users to stay with old
- Thomas> Webkit/Gtk because of this.
-
-Agreed. I've added a comment for 2013.02 to warn users that it is
-deprecated:
-
-http://git.buildroot.net/buildroot/commit/?id=0e0e42176d4a46515aff577d9702d91208e27c5d
-
--- 
-Bye, Peter Korsgaard
+Cheers
+James
