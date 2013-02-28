@@ -1,25 +1,60 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Thu, 28 Feb 2013 10:47:05 -0800
-Subject: [Buildroot] [PATCH 2/2] V4 nodejs: new package
-In-Reply-To: <20130228092922.0fd1b88f@skate>
-References: <CAKduhSvCfsfx0Pi_ZVo2CYddDY8NW4iChiTTkGEoeddMqXpxnA@mail.gmail.com>
- <20130227103035.2ecc398b@skate>
- <CAKduhSvKJPpuQu7EYsRAJwnSn-P5e2q3y0_-45dAEPGsUZZPQg@mail.gmail.com>
- <20130228092922.0fd1b88f@skate>
-Message-ID: <CAKcgs2wKTyDTiaBKNy1zV00zxo8TOxoGU7dEE3Yk7njZAMpePQ@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 28 Feb 2013 22:24:26 +0100
+Subject: [Buildroot] [PATCH v3 02/10] manual: minor fix in patch-policy.txt
+Message-ID: <1362086666-3412-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Daniel, Thomas,
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-2013/2/28 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> See
-> http://morefedora.blogspot.fr/2009/02/configuring-git-send-email-to-use-gmail.html
-> to configure git send-email to use GMail. Untested, as I don't use
-> GMail myself.
-Acked-By: Gilles Talis.
+---
+Changes since v2:
+* mention patch apply order and how to force this order (Thomas P.)
+---
+ docs/manual/patch-policy.txt | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-I actually followed these steps and it seems to be working :-)
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+index 14c6efc..0f55b26 100644
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -34,12 +34,18 @@ Most patches are provided within Buildroot, in the package
+ directory; these typically aim to fix cross-compilation, libc support,
+ or other such issues.
+ 
+-These patch files should be named +<packagename>-<description>.patch+.
++These patch files should be named +<packagename>-<number>-<description>.patch+.
+ 
+ A +series+ file, as used by +quilt+, may also be added in the
+ package directory. In that case, the +series+ file defines the patch
+ application order.
+ 
++.Notes
++- The patch files coming with Buildroot should not contain any package version
++reference in their filename.
++- The field +<number>+ in the patch file name refers to the 'apply order'.
++
++
+ How patches are applied
+ ~~~~~~~~~~~~~~~~~~~~~~~
+ 
+@@ -56,8 +62,12 @@ How patches are applied
+ * If a +series+ file exists in the package directory, then patches are
+   applied according to the +series+ file;
+ +
+-* Otherwise, patch files matching `<packagename>-*.patch` are applied
+-  following the +ls+ command order.
++* Otherwise, patch files matching +<packagename>-*.patch+
++  are applied in alphabetical order.
++  So, to ensure they are applied in the right order, it is hightly
++  recommended to named the patch files like this:
++  +<packagename>-<number>-<description>.patch+, where +<number>+
++  refers to the 'apply order'.
+ 
+ . Run the +<packagename>_POST_PATCH_HOOKS+ commands if defined.
+ 
+-- 
+1.8.1.4
