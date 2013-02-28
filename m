@@ -1,80 +1,213 @@
-From: Bhupal Singh <singhbhupal88@gmail.com>
-Date: Thu, 28 Feb 2013 14:22:26 +0530
-Subject: [Buildroot] WebkitGtk upgradation
-In-Reply-To: <512F0B0A.4050403@relinux.de>
-References: <CAJsG2H5B=ZdfDZm_wTmOqMkG6_kME=y_7oc5gkMygtd6HA4p+g@mail.gmail.com>
- <512F0B0A.4050403@relinux.de>
-Message-ID: <CAJsG2H4pZWE7FZGFUJuhYhjrNkf0Aa62y12WW3YQdbScJ1HTtA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Feb 2013 09:56:45 +0100
+Subject: [Buildroot] [PATCH] gdb: convert to the package infrastructure
+In-Reply-To: <512F0EAD.4080406@mind.be>
+References: <1361916812-29395-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <512F0EAD.4080406@mind.be>
+Message-ID: <20130228095645.2cdfffd6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Stephan,
+Dear Arnout Vandecappelle,
 
-Yeah correct Webkit1.10.2 requires few other packages to be updated, Since
-webkit1.10.2 is a currect stable version, Is the only reason I am sticking
-to this version.
-Okay here are some more details
+On Thu, 28 Feb 2013 09:00:45 +0100, Arnout Vandecappelle wrote:
 
-To build Webkit1.10.2 requires Libglib, Pango, Cairo, Gstreamer, Atk,
-Gdk-pixbuf, All these packages needs to be updated, And new package
-Geoclue-0.12.99 to be added in the buildroot.
+>   This looks like a great idea!
 
-I have updated all the above said packages and its build completely fine,
-The only place where I am stuck is while building Webkit.
-The build fails here Xrender package required and it looks for x11
-libraries, Though I have given target as DirectFB.
-And like icu-config not found even though icu package is already build, To
-my knowledge I can either build using icu or glib as a backend-unicode in
-which icu is default I tried to change this option as well but no success
-yet.
+Thanks :-)
 
+>   Just a couple of generic remarks, and then a few specific ones
+> below. The generic remarks are probably for follow-up patches.
+> 
+> * It really doesn't make sense to build host-gdb without a gdbserver
+> for the target. So I would auto-select gdbserver from host-gdb.
+
+See the point made by James Hogan regarding kgdb. I don't have a strong
+opinion on this one, and we could decide that gdbserver is lightweight
+enough that even with James use case of kgdb, it still makes sense to
+have gdbserver on the target when host-gdb is enabled.
+
+> * Does it really make sense to keep options for four different gdb 
+> versions? Can't we just remove the user-selectable version completely?
+
+I just kept as it was.
+
+> * Do gdb-7.2+ actually work for avr32? If yes, why keep the 6.7.1
+> around?
+
+I also just kept it as it was. If we want to upgrade gdb for avr32,
+then let's do it as a follow-up. People having access to avr32 hardware
+should test that.
+
+> > ---
+> > It would be good to have a few people testing this before
+> > committing.
+> 
+>   Nah, just let the autobuilders do it :-)
+
+Autobuilders are nice, but they are not yet capable of starting
+gdbserver on the target, connect gdb, and verify that it works :)
+
+> > +	  For embedded development, the most common solution is to
+> > +	  build only 'gdbserver' for the target, and use a
+> > cross-gdb
+> > +	  on the host. See BR2_PACKAGE_HOST_GDB to enable one.
+> 
+>   "See BR2_PACKAGE_HOST_GDB in the Toolchain menu to enable one."
+> 
+>   It could be useful to add a comment that external toolchains often 
+> provide gdb/gdbserver.
+
+Indeed. I am not sure what do with external toolchains here. In the
+past, I was hiding the option to build host-gdb and gdbserver for
+the target, making the assumption that the external toolchain already
+have those, and instead there was the option to copy the toolchain's
+gdbserver to the target. Now, everything is available: host-gdb built
+by Buildroot, gdbserver built by Buildroot, and gdbserver copied from
+the external toolchain. Should I keep all this?
+
+Also, the "gdbserver build by Buildroot" thing is in Packages ->
+Debugging, but the "copy gdbserver from toolchain" thing is in
+Toolchain. But it's not easy to put it in a package, as the code needed
+to copy gdbserver from the toolchain really relates to all the complex
+external toolchain logic.
+
+> > +	  http://www.gnu.org/software/gdb/
+> > +
+> > +if BR2_PACKAGE_GDB
+> > +
+> > +config BR2_PACKAGE_GDB_SERVER
+> > +	bool "gdbserver"
+> > +	help
+> > +	  Build the gdbserver stub to run on the target.
+> > +	  A full gdb is needed to debug the progam.
+> > +
+> > +config BR2_PACKAGE_GDB_DEBUGGER
+> > +	bool "full debugger"
+> > +	select BR2_PACKAGE_NCURSES
+> > +	depends on BR2_USE_WCHAR
+> > +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> > +	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32
+> > && !BR2_microblaze && !BR2_bfin && !BR2_aarch64
+> > +	depends on BR2_TOOLCHAIN_HAS_THREADS_DEBUG_IF_NEEDED
+> > +	select BR2_PTHREAD_DEBUG if (BR2_TOOLCHAIN_BUILDROOT
+> > && !BR2_PTHREADS_NONE)
+> 
+>   It feels pretty strange to modify a toolchain option from a package 
+> Config.in. Remember, the user may add gdb in a second run and try to
+> do an incremental build... So I would say: move it to a depends like
+> we usually do.
+
+Ok.
+
+> > +comment "full gdb on target needs WCHAR and threads support in
+> > toolchain"
+> > +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> > +
+> > +endif
+> > diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+> > new file mode 100644
+> > index 0000000..6ee1d26
+> > --- /dev/null
+> > +++ b/package/gdb/Config.in.host
+> > @@ -0,0 +1,56 @@
+> > +config BR2_PACKAGE_HOST_GDB
+> > +	bool "Build cross gdb for the host"
+> > +	help
+> > +	    Build a cross gdb that runs on the host machine and
+> > debugs
+> > +	    programs running on the target. It requires 'gdbserver'
+> > +	    installed on the target, see BR2_PACKAGE_GDB_SERVER to
+> > +	    enable it.
+> 
+>   As I said, I would just auto-select BR2_PACKAGE_GDB, which will
+> select BR2_PACKAGE_GDB_SERVER
+
+Hum, why not select BR2_PACKAGE_GDB and BR2_PACKAGE_GDB_SERVER? If you
+select BR2_PACKAGE_GDB only, it still the user the possibility to build
+only the target debugger, and not gdbserver.
+
+> > +# When no version is defined, it means that cross-gdb for the host
+> > has +# not been enabled, and we will only build gdbserver or gdb
+> > for the +# target. In this case, use the latest available version
+> > +# automatically.
+> > +ifeq ($(GDB_VERSION),)
+> > +ifeq ($(BR2_bfin),y)
+> > +GDB_VERSION = 6.6a
+> > +GDB_SITE    = $(BR2_GNU_MIRROR)/gdb
+> 
+>   Just define this once, either before the condition (and override it
+> for avr32), or after the condition (and use ?=).
+
+Ok.
+
+> 
+> > +else ifeq ($(BR2_avr32),y)
+> > +GDB_VERSION = 6.7.1-avr32-2.1.5
+> > +GDB_SITE    = ftp://www.at91.com/pub/buildroot/
+> > +else
+> > +GDB_VERSION = 7.5.1
+> > +GDB_SITE    = $(BR2_GNU_MIRROR)/gdb
+> > +endif
+> > +endif
+> > +
+> > +GDB_SOURCE = gdb-$(GDB_VERSION).tar.bz2
+> > +GDB_LICENSE = GPLv2+ LGPLv2+ GPLv3+ LGPLv3+
+> > +GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+> > +
+> > +# We only want gdbserver and not the entire debugger.
+> > +ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),)
+> > +GDB_SUBDIR = gdb/gdbserver
+> > +HOST_GDB_SUBDIR = .
+> > +else
+> > +GDB_DEPENDENCIES = ncurses
+> > +endif
+> > +
+> > +# For the host variant, we really want to build with XML support,
+> > +# which is needed to read XML descriptions of target architectures.
+> > +HOST_GDB_DEPENDENCIES = host-expat
+> 
+>   Can we rely on host-nurses being present? It is not checked in 
+> dependencies.sh AFAIK. Admittedly, it is not a dependency of host-gdb 
+> now, but most people have ncurses installed anyway for menuconfig...
+
+host-ncurses wasn't a dependency, and our host-ncurses package is only
+here to build a version of "tic" that works properly. Some systems had
+a "tic" version causing problems when building a more recent ncurses
+for the target. I think that other than for this "tic" program, we
+should really on the pre-installed ncurses library, which should
+already be present since the user uses menuconfig.
+
+However, it's true we don't check it in dependencies.sh, and the user
+could very well be using xconfig or gconfig, neither of which require
+ncurses.
+
+I'd say that's a separate matter really.
+
+> [snip]
+> > +define GDB_REMOVE_UNNEEDED_FILES
+> > +	$(RM) -rf $(TARGET_DIR)/usr/share/gdb
+> > +endef
+> 
+>   Perhaps a comment why this is needed? Or is it just to keep it 
+> consistent with the current behaviour?
+
+The old gdb installation logic was to manually copy the gdb binary to
+the $(TARGET_DIR). In my patch, I've chosen to use 'make install'
+instead, which requires removing a bunch of generally useless stuff
+(Python scripts and XML descriptions of targets, which as per my
+understanding, are needed only when you do remote debugging).
+
+Thanks for the review!
+
+Best regards,
+
+Thomas
 -- 
-Warm Regards,
-BS_Chauhan
-
-
-On Thu, Feb 28, 2013 at 1:15 PM, Stephan Hoffmann <sho@relinux.de> wrote:
-
-> Hello Bhupal!
->
-> Am 28.02.2013 06:53, schrieb Bhupal Singh:
-> > Hi All,
-> >
-> > I was trying to update webkit 1.10.2 in the latest buildroot which was
-> > released on feb 2013, for a cross-compilation toolchain. But seems
-> > that the latest buildroot has webkit1.2.7 which seems to be very old.
-> >
-> > While building webkit1.10.2 with target as DirectFB, The build fails
-> > due to the other packages which are not compatible with the
-> > webkit1.10.2 and lot of issues which I really could not figure out.
-> I also tried this some time before, but there were some other packages
-> that had to be updated. I am not sure if GTK3 is needed, which isn't
-> supported yet. So I had to give up because I was running out of time.
-> > If some one can tell me why does latest buildroot has such an old
-> > webkit1.2.7 version, Or is it that the current stable webkit1.10.2 is
-> > not feasible with the latest buildroot.
-> I am sure this is simply due to the fact that nobody had time to do it
-> or needed a newer version.
-> > Since I am new to this platform, I have very little understanding on
-> > buildroot,Please help.
-> Quite sure that you would get help here on the list if you decide to
-> bump webkit's version.
->
-> When I'm back in my office I'll review my recent work and give you some
-> more details.
->
-> Kind regards
->
-> Stephan
-> >
-> > Thanks in advance.
-> >
-> >
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130228/2a7f1fed/attachment-0001.html>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
