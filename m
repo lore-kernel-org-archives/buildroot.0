@@ -1,35 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 28 Feb 2013 11:20:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 2245] nc needs to support -k (multiple listen) BSD
-	extension
-In-Reply-To: <bug-2245-163@https.bugs.busybox.net/>
-References: <bug-2245-163@https.bugs.busybox.net/>
-Message-ID: <20130228112034.95BE89ADCC@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Feb 2013 12:28:55 +0100
+Subject: [Buildroot] WebkitGtk upgradation
+In-Reply-To: <CAFbHwiTZgmQn8EChYXSLAmmr9+WSoVLL5jUBqnOYA7qzUNFCnA@mail.gmail.com>
+References: <CAJsG2H5B=ZdfDZm_wTmOqMkG6_kME=y_7oc5gkMygtd6HA4p+g@mail.gmail.com>
+ <512F0B0A.4050403@relinux.de>
+ <CAJsG2H4pZWE7FZGFUJuhYhjrNkf0Aa62y12WW3YQdbScJ1HTtA@mail.gmail.com>
+ <CAFbHwiTZgmQn8EChYXSLAmmr9+WSoVLL5jUBqnOYA7qzUNFCnA@mail.gmail.com>
+Message-ID: <20130228122855.6ceb26ce@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2245
+Dear Will Newton,
 
-Denys Vlasenko <vda.linux@googlemail.com> changed:
+On Thu, 28 Feb 2013 10:22:27 +0000, Will Newton wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|REOPENED                    |RESOLVED
-         Resolution|                            |FIXED
+> As far as I can tell DirectFB is not really supported any more. If I
+> remember correctly the current WebKit in buildroot will build with
+> GTK+/DirectFB but will crash on startup. The crash is fairly easy to
+> work around but I think is a symptom of the fact that no one is
+> running with this setup.
+> 
+> Newer versions of GTK+ removed the DirectFB backend so it may have to
+> be removed from buildroot in the future too.
 
---- Comment #7 from Denys Vlasenko <vda.linux@googlemail.com> 2013-02-28 11:20:58 UTC ---
-Fixed in git:
+My feeling is also that the DirectFB backend of Gtk has never been
+seriously maintained over time. There are from time to time some people
+who fix the issues, but then it goes on unmaintained for a number of
+months/years, during which it slowly degrades into an unusable state.
 
-commit de6f14800675cd0401106876da81da7618de71c6
-Author: Denys Vlasenko <vda.linux@googlemail.com>
-Date:   Thu Feb 28 12:20:06 2013 +0100
+I would therefore suggest that Buildroot follows upstream: get rid of
+the DirectFB backend. If anyone really wants the DirectFB backend in
+Gtk, then it should be fixed upstream. But I don't think it should
+force Buildroot users to stay with old Webkit/Gtk because of this.
 
-    nc_bloaty: support -ll and -lk. Closes 2245
+Best regards,
 
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
