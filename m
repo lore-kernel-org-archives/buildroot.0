@@ -1,87 +1,58 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 28 Feb 2013 22:37:44 +0100
-Subject: [Buildroot] [git commit] manual: misc. post-{build,
-	image} scripts fixes
-Message-ID: <20130228214033.0F4679ADDD@busybox.osuosl.org>
+Date: Thu, 28 Feb 2013 22:37:12 +0100
+Subject: [Buildroot] [git commit] manual: minor fix in patch-policy.txt
+Message-ID: <20130228214032.DC91D9ADDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0ccfbb5db930812c43d8688dd102eb7204af7fea
+commit: http://git.buildroot.net/buildroot/commit/?id=7a26f2f66360ddbcf1be5833d4834a72ccde769f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* update post-build scripts mechanism that now support several scripts
-* fix formatting
-
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/customize-rootfs.txt |   30 ++++++++++++++++--------------
- 1 files changed, 16 insertions(+), 14 deletions(-)
+ docs/manual/patch-policy.txt |   16 +++++++++++++---
+ 1 files changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 4a4d620..7ff8d8b 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -25,18 +25,18 @@ there are a few ways to customize the resulting target filesystem.
-   directories, +.empty+ files and files ending with +~+ are excluded.
-   _Among these first 3 methods, this one should be preferred_.
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+index 14c6efc..0f55b26 100644
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -34,12 +34,18 @@ Most patches are provided within Buildroot, in the package
+ directory; these typically aim to fix cross-compilation, libc support,
+ or other such issues.
  
--* In the Buildroot configuration, you can specify the path to a
--  *post-build script*, that gets called 'after' Buildroot builds all the
--  selected software, but 'before' the rootfs packages are
--  assembled. The +BR2_ROOTFS_POST_BUILD_SCRIPT+ will allow you to
--  specify the location of your post-build script. This option can be
-+* In the Buildroot configuration, you can specify the paths to one or
-+  more *post-build scripts*. These scripts are called in the given order,
-+  'after' Buildroot builds all the selected software, but 'before' the
-+  rootfs images are assembled. The +BR2_ROOTFS_POST_BUILD_SCRIPT+ allows
-+  you to specify the location of your post-build scripts. This option can be
-   found in the +System configuration+ menu. The destination root
--  filesystem folder is given as the first argument to this script,
--  and this script can then be used to remove or modify any file in your
-+  filesystem folder is given as the first argument to these scripts,
-+  and these scripts can then be used to remove or modify any file in your
-   target filesystem. You should, however, use this feature with care.
-   Whenever you find that a certain package generates wrong or unneeded
--  files, you should fix that package rather than work around it with a
--  post-build cleanup script.
-+  files, you should fix that package rather than work around it with some
-+  post-build cleanup scripts.
-   You may also use these variables in your post-build script:
-     - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
-     - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
-@@ -55,23 +55,25 @@ there are a few ways to customize the resulting target filesystem.
-   installation. Note that this method is *not recommended*, as it
-   duplicates the entire skeleton, which prevents from taking advantage
-   of the fixes or improvements brought to the default Buildroot
--  skeleton. The recommended method is to use the _post-build script_
-+  skeleton. The recommended method is to use the _post-build scripts_
-   mechanism described in the previous item.
+-These patch files should be named +<packagename>-<description>.patch+.
++These patch files should be named +<packagename>-<number>-<description>.patch+.
  
--Note also that if you want to perform some specific actions *after*
--all filesystem images have been created (for example to automatically
-+Note also that you can use the *post-image scripts*
-+if you want to perform some specific actions 'after' all
-+filesystem images have been created (for example to automatically
- extract your root filesystem tarball in a location exported by your
- NFS server, or to create a special firmware image that bundles your
- root filesystem and kernel image, or any other custom action), you can
- specify a space-separated list of scripts in the
--+BR2_ROOTFS_POST_IMAGE_SCRIPT+ configuration option.
-++BR2_ROOTFS_POST_IMAGE_SCRIPT+ configuration option. This option can be
-+found in the +System configuration+ menu as well.
+ A +series+ file, as used by +quilt+, may also be added in the
+ package directory. In that case, the +series+ file defines the patch
+ application order.
  
- Each of those scripts will be called with the path to the +images+
- output directory as first and unique argument, and will be executed
- with the main Buildroot source directory as the current
- directory. Those scripts will be executed as the user that executes
- Buildroot, which should normally not be the root user. Therefore, any
--action requiring root permissions in one of these post-image script
-+action requiring root permissions in one of these _post-image scripts_
- will require special handling (usage of fakeroot or sudo), which is
- left to the script developer.
++.Notes
++- The patch files coming with Buildroot should not contain any package version
++reference in their filename.
++- The field +<number>+ in the patch file name refers to the 'apply order'.
++
++
+ How patches are applied
+ ~~~~~~~~~~~~~~~~~~~~~~~
+ 
+@@ -56,8 +62,12 @@ How patches are applied
+ * If a +series+ file exists in the package directory, then patches are
+   applied according to the +series+ file;
+ +
+-* Otherwise, patch files matching `<packagename>-*.patch` are applied
+-  following the +ls+ command order.
++* Otherwise, patch files matching +<packagename>-*.patch+
++  are applied in alphabetical order.
++  So, to ensure they are applied in the right order, it is hightly
++  recommended to named the patch files like this:
++  +<packagename>-<number>-<description>.patch+, where +<number>+
++  refers to the 'apply order'.
+ 
+ . Run the +<packagename>_POST_PATCH_HOOKS+ commands if defined.
  
