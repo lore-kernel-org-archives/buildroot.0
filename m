@@ -1,65 +1,58 @@
-From: Philipp Claves <claves@budelmann-elektronik.com>
-Date: Thu, 28 Feb 2013 15:04:42 +0100
-Subject: [Buildroot] [PATCH] opkg: Add option to enable package verification
-	support with GnuPG
-Message-ID: <64891469.UzFDExKfyb@arawn>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Feb 2013 15:38:19 +0100
+Subject: [Buildroot] [PATCH] opkg: Add option to enable package
+ verification support with GnuPG
+In-Reply-To: <64891469.UzFDExKfyb@arawn>
+References: <64891469.UzFDExKfyb@arawn>
+Message-ID: <20130228153819.57a2c5ae@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Philipp Claves,
 
-This set of patches enables the opkg support for verifying package signatures 
-with gnupg.
+On Thu, 28 Feb 2013 15:04:42 +0100, Philipp Claves wrote:
 
-The first two patches add the required libraries (libassuan and libgpgme).
-The third adds new option: opkg-gnupg-support. It selects the needed packages 
-and sets the --enable-gpg configure option for opkg.
+> This set of patches enables the opkg support for verifying package signatures 
+> with gnupg.
+> 
+> The first two patches add the required libraries (libassuan and libgpgme).
+> The third adds new option: opkg-gnupg-support. It selects the needed packages 
+> and sets the --enable-gpg configure option for opkg.
+> 
+> The patch dependency chain is:
+>   (0003) opkg -> (0002) libgpgme -> (0001) libassuan
+> 
+> Comments are welcome.
 
-The patch dependency chain is:
-  (0003) opkg -> (0002) libgpgme -> (0001) libassuan
+Thanks, they look (almost) good! Could you submit them, one mail per
+patch, preferably using git send-email?
 
-Comments are welcome.
+On libassuan, please wrap the help text, and add a final newline at the
+end of the .mk file.
 
-Regards,
-Philipp Claves
+On libgpgme, please wrap the help text, add the final newline at the
+end of the .mk file. The --with-gpg=/usr/bin/gpg doesn't look very
+good. gpg is not a mandatory dependency of Buildroot, so if libgpgme
+really needs gpg, then we should build host-gnupg I guess. But does it
+really need it? Can you detail this --with-gpg option? Or maybe it's
+just the path where gpg will be installed on the target? If it's the
+case, then maybe a comment would be appropriate to clarify this.
+
+In the opkg patch, in the .mk file, you should use
+BR2_PACKAGE_OPKG_GPG_SIGN in your condition rather than
+BR2_PACKAGE_LIBGPGME. Also, in your Config.in, you add GNUPG as a
+dependency, but it is not listed in the .mk file. This is sometimes
+correct if it is only a runtime dependency, in which case we usually
+put a comment in the Config.in just above the corresponding select line.
+
+Thanks!
+
+Thomas
 -- 
-Budelmann Elektronik GmbH
-Von-Renesse-Weg 60
-48163 M?nster
-Germany
-
-Tel.  +49 (0)2501 9208440
-Fax   +49 (0)2501 5887024
-claves at budelmann-elektronik.com
-www.budelmann-elektronik.com
-
-General Managers: Dipl.-Kffr. Jeannine Budelmann,
-Dipl.-Ing. Christoph Budelmann, Ing?nieur diplom? de
-l'Ecole nationale d'Electronique et de ses Applications
-Registered Office: M?nster, Germany
-Registered Court: M?nster HRB 12729     
-VAT Identification Number: DE 272 067 273
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Add-libassuan-IPC-library.patch
-Type: text/x-patch
-Size: 2213 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130228/36e85af4/attachment.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0002-Add-GnuPG-Made-Easy-gpgme-library.patch
-Type: text/x-patch
-Size: 2261 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130228/36e85af4/attachment-0001.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0003-opkg-Add-gnupg-signature-checking-support.patch
-Type: text/x-patch
-Size: 1647 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130228/36e85af4/attachment-0002.bin>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
