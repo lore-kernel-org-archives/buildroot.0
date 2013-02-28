@@ -1,34 +1,49 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 28 Feb 2013 13:20:47 +0100
-Subject: [Buildroot] [git commit] libgtk2: warn that directfb backend is
-	deprecated
-Message-ID: <20130228122205.3B6D89ADE7@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 28 Feb 2013 13:23:32 +0100
+Subject: [Buildroot] WebkitGtk upgradation
+In-Reply-To: <20130228122855.6ceb26ce@skate> (Thomas Petazzoni's message of
+ "Thu, 28 Feb 2013 12:28:55 +0100")
+References: <CAJsG2H5B=ZdfDZm_wTmOqMkG6_kME=y_7oc5gkMygtd6HA4p+g@mail.gmail.com>
+ <512F0B0A.4050403@relinux.de>
+ <CAJsG2H4pZWE7FZGFUJuhYhjrNkf0Aa62y12WW3YQdbScJ1HTtA@mail.gmail.com>
+ <CAFbHwiTZgmQn8EChYXSLAmmr9+WSoVLL5jUBqnOYA7qzUNFCnA@mail.gmail.com>
+ <20130228122855.6ceb26ce@skate>
+Message-ID: <87ehg04ofv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0e0e42176d4a46515aff577d9702d91208e27c5d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-And will go away in the future, as discussed here:
+ Thomas> Dear Will Newton,
+ Thomas> On Thu, 28 Feb 2013 10:22:27 +0000, Will Newton wrote:
 
-http://lists.busybox.net/pipermail/buildroot/2013-February/067977.html
+ >> As far as I can tell DirectFB is not really supported any more. If I
+ >> remember correctly the current WebKit in buildroot will build with
+ >> GTK+/DirectFB but will crash on startup. The crash is fairly easy to
+ >> work around but I think is a symptom of the fact that no one is
+ >> running with this setup.
+ >> 
+ >> Newer versions of GTK+ removed the DirectFB backend so it may have to
+ >> be removed from buildroot in the future too.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libgtk2/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ Thomas> My feeling is also that the DirectFB backend of Gtk has never been
+ Thomas> seriously maintained over time. There are from time to time some people
+ Thomas> who fix the issues, but then it goes on unmaintained for a number of
+ Thomas> months/years, during which it slowly degrades into an unusable state.
 
-diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
-index 3e8cf75..88f4cc1 100644
---- a/package/libgtk2/Config.in
-+++ b/package/libgtk2/Config.in
-@@ -29,3 +29,6 @@ config BR2_PACKAGE_LIBGTK2_DEMO
- 
- comment "libgtk2 requires a toolchain with WCHAR and C++ support"
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-+
-+comment "WARNING: Libgtk2 directfb backend is deprecated"
-+	depends on BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_XORG7
+ Thomas> I would therefore suggest that Buildroot follows upstream: get
+ Thomas> rid of the DirectFB backend. If anyone really wants the
+ Thomas> DirectFB backend in Gtk, then it should be fixed upstream. But
+ Thomas> I don't think it should force Buildroot users to stay with old
+ Thomas> Webkit/Gtk because of this.
+
+Agreed. I've added a comment for 2013.02 to warn users that it is
+deprecated:
+
+http://git.buildroot.net/buildroot/commit/?id=0e0e42176d4a46515aff577d9702d91208e27c5d
+
+-- 
+Bye, Peter Korsgaard
