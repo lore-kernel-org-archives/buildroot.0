@@ -1,67 +1,42 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Thu, 28 Feb 2013 15:36:15 +0000
-Subject: [Buildroot] Help needed with cross-compiling libotr
-In-Reply-To: <20130228162157.37abbe84@skate>
-References: <512F71F7.20409@petroprogram.com> <20130228162157.37abbe84@skate>
-Message-ID: <CAG2jQ8jiP6g7Fuhy_H3CgocC8CAMbT9ZF1sX22tsdOmyjhgsaQ@mail.gmail.com>
+From: Henrik Frilund <henrik.frilund@convergens.fi>
+Date: Thu, 28 Feb 2013 17:31:19 +0200
+Subject: [Buildroot] Buildroot, none working GStreamer
+In-Reply-To: <mailman.101702.1362062313.32592.buildroot@busybox.net>
+References: <mailman.101702.1362062313.32592.buildroot@busybox.net>
+Message-ID: <512F7847.7090107@convergens.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28 February 2013 15:21, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello all,
->
-> On Thu, 28 Feb 2013 17:04:23 +0200, Stefan Fr?berg wrote:
->
->> I have been trying to cross-compile libotr package that makes it possible,
->> with the help of pidgin-otr plugin, to send encrypted messages with
->> Pidgin IM software
->> (which I already have successfully cross-compiled for buildroot and plan
->> to submit soon).
->
-> I'd like to state my feeling on this: I believe that packaging
-> desktop-level software like Pidgin or the Network-Manager Applet in
-> Buildroot is useless. I don't think Buildroot is appropriate to build a
-> full-blown desktop distro, and even though Stefan is doing good work
-> with all those packages, I fear that once Stefan's work is over, those
-> packages will bit rot.
->
-> Stefan, are you sure that Buildroot is appropriate for what you're
-> trying to achieve? Have you looked at something like Gentoo? It builds
-> from source like Buildroot, has a package management system, and
-> gazillions of desktop-level software already packaged. Since you're
-> targeting x86, you don't need cross-compilation, which would have been
-> the reason for using Buildroot in the first place.
->
-> And don't tell me you use Buildroot because of uClibc: when you're
-> doing a full-blown desktop environment, using glibc or uClibc doesn't
-> make *any* difference, be it from a size perspective or a performance
-> perspective.
->
-> What do others think about this?
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Hello,
+  I have question regarding the build of GStreamer in buildroot 2012-08 
+and 2012-11-01.
+I have a custom board that is based around a Texas am335x chip which is 
+a ARM Cortex A8 chip.
+The embedded application I have is built around GStreamer and I use 
+buildroot to build the rootfs
+and the app itself.
+  The problem i have encountered is that if I use any newer compiler 
+than Sourcery 2010q1 of the external tool chains I get a broken 
+GStreamer build. This meaning that the built gstreamer fails with
+SIGABRT as soon as I launch the application.
+  The same behaviour can be seen if i just do gst-inspect on the console 
+with a debug level >3.
 
-I tend to agree that these kind of packages might be too much for
-buildroot, but keep in mind that Gentoo comes with a rather big uClibc
-rootfs by default [1]
+The things that I've noticed that on the broken builds in the debug 
+information the thread ID information
+is missing so what could cause that to happen.
 
-[1] http://distfiles.gentoo.org/experimental/x86/uclibc/
+I've talked to some of the GStreamer developers and they thought is was 
+a toolchain issue but I'm having
+a hard time believing that all newer sourcery toolchains and Linaro ones 
+have the same issue. I also tried to build a custom toolchain with 
+crosstool-ng but it has the same issue.
 
--- 
-Regards,
-Markos Chandras
+Anyone encountered anything like this before?
+
+BR
+
+//H
