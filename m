@@ -1,31 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 28 Feb 2013 08:36:46 -0300
-Subject: [Buildroot] WebkitGtk upgradation
-In-Reply-To: <20130228122855.6ceb26ce@skate>
-References: <CAJsG2H5B=ZdfDZm_wTmOqMkG6_kME=y_7oc5gkMygtd6HA4p+g@mail.gmail.com>
- <512F0B0A.4050403@relinux.de>
- <CAJsG2H4pZWE7FZGFUJuhYhjrNkf0Aa62y12WW3YQdbScJ1HTtA@mail.gmail.com>
- <CAFbHwiTZgmQn8EChYXSLAmmr9+WSoVLL5jUBqnOYA7qzUNFCnA@mail.gmail.com>
- <20130228122855.6ceb26ce@skate>
-Message-ID: <512F414E.5090203@zacarias.com.ar>
+From: James Hogan <james.hogan@imgtec.com>
+Date: Thu, 28 Feb 2013 12:11:35 +0000
+Subject: [Buildroot] [PATCH] gdb: convert to the package infrastructure
+In-Reply-To: <20130228094741.50f605fc@skate>
+References: <1361916812-29395-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <512F0EAD.4080406@mind.be> <512F17B6.70501@imgtec.com>
+ <20130228094741.50f605fc@skate>
+Message-ID: <512F4977.6000402@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/28/2013 08:28 AM, Thomas Petazzoni wrote:
+Hi Thomas,
 
-> My feeling is also that the DirectFB backend of Gtk has never been
-> seriously maintained over time. There are from time to time some people
-> who fix the issues, but then it goes on unmaintained for a number of
-> months/years, during which it slowly degrades into an unusable state.
+On 28/02/13 08:47, Thomas Petazzoni wrote:
+> On Thu, 28 Feb 2013 08:39:18 +0000, James Hogan wrote:
 > 
-> I would therefore suggest that Buildroot follows upstream: get rid of
-> the DirectFB backend. If anyone really wants the DirectFB backend in
-> Gtk, then it should be fixed upstream. But I don't think it should
-> force Buildroot users to stay with old Webkit/Gtk because of this.
+>>> * It really doesn't make sense to build host-gdb without a
+>>> gdbserver for the target. So I would auto-select gdbserver from
+>>> host-gdb.
+>>
+>> Kgdb (kernel debugging) is one use case where you'd want host-gdb
+>> without necessarily gdbserver.
+> 
+> Hum, correct.
+> 
+>>> * Does it really make sense to keep options for four different gdb
+>>> versions? Can't we just remove the user-selectable version
+>>> completely?
+>>
+>> The option is useful for arches which don't have their gdb port
+>> upstream yet, giving them a chance to update their patches.
+> 
+> Not sure to follow here: Arnout mentions the choice list of gdb
+> versions, which only have a limited number of choices already. If you
+> need Buildroot to use some custom gdb version, then you already have to
+> modify Buildroot anyway. Or maybe I'm missing the point you're making?
 
-+1
-Our current webkit-gtk has more CVEs than spots on a dalmatian dog.
-Regards.
+Yes, but the modification is as simple as adding a patch file in the
+right place.
+
+Cheers
+James
