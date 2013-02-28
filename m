@@ -1,33 +1,51 @@
-From: Bhupal Singh <singhbhupal88@gmail.com>
-Date: Thu, 28 Feb 2013 11:23:58 +0530
-Subject: [Buildroot] WebkitGtk upgradation
-Message-ID: <CAJsG2H5B=ZdfDZm_wTmOqMkG6_kME=y_7oc5gkMygtd6HA4p+g@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 28 Feb 2013 07:54:31 +0200
+Subject: [Buildroot] [PATCH v2] crda: new package
+In-Reply-To: <5123740E.6040203@siganos.org>
+References: <5123740E.6040203@siganos.org>
+Message-ID: <20130228055431.GA19549@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Hi Dimitrios,
 
-I was trying to update webkit 1.10.2 in the latest buildroot which was
-released on feb 2013, for a cross-compilation toolchain. But seems
-that the latest buildroot has webkit1.2.7 which seems to be very old.
+On Tue, Feb 19, 2013 at 12:46:06PM +0000, Dimitrios Siganos wrote:
+> From 23f7a55f8c06a098c8d6bc8f56021f9954159419 Mon Sep 17 00:00:00 2001
+> From: Dimitrios Siganos <dimitris@siganos.org>
+> Date: Fri, 15 Feb 2013 11:52:25 +0000
+> Subject: [PATCH 02/11] crda: new package
+> 
+> 
+> Signed-off-by: Dimitrios Siganos <dimitris@siganos.org>
+> ---
+>  package/Config.in          |    1 +
+>  package/crda/Config.in     |   12 ++++++++++
+>  package/crda/crda.mk       |   32 ++++++++++++++++++++++++++
+>  package/crda/keys-gcrypt.c |   53 ++++++++++++++++++++++++++++++++++++++++++++
+>  package/crda/keys-ssl.c    |   38 +++++++++++++++++++++++++++++++
 
-While building webkit1.10.2 with target as DirectFB, The build fails
-due to the other packages which are not compatible with the
-webkit1.10.2 and lot of issues which I really could not figure out.
+Please explain what these two .c files are, and why they are needed. Adding 
+them as patches may be preferable, since you won't have to copy them 
+explicitly.
 
-If some one can tell me why does latest buildroot has such an old
-webkit1.2.7 version, Or is it that the current stable webkit1.10.2 is
-not feasible with the latest buildroot.
+[...]
 
-Since I am new to this platform, I have very little understanding on
-buildroot,Please help.
+> +CRDA_DEPENDENCIES = host-pkgconf libnl libgcrypt wireless-regdb
 
-Thanks in advance.
+You need to add a 'select' for libnl, libgcrypt, and wireless-regdb in your 
+Config.in.
 
+> +CRDA_LICENSE := ISC
+> +CRDA_LICENSE_FILES := LICENSE
+
+Please use '=' only.
+
+baruch
 
 -- 
-Warm Regards,
-BS_Chauhan
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
