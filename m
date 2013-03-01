@@ -1,13 +1,16 @@
 From: Daniel Price <daniel.price@gmail.com>
-Date: Fri,  1 Mar 2013 14:56:52 -0800
-Subject: [Buildroot] [PATCH] new package: redis
-Message-ID: <1362178612-16168-1-git-send-email-daniel.price@gmail.com>
+Date: Fri,  1 Mar 2013 15:03:19 -0800
+Subject: [Buildroot] [PATCH V2] new package: redis
+In-Reply-To: <1362178612-16168-1-git-send-email-daniel.price@gmail.com>
+References: <1362178612-16168-1-git-send-email-daniel.price@gmail.com>
+Message-ID: <1362178999-16577-1-git-send-email-daniel.price@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Daniel Price <daniel.price@gmail.com>
 ---
  package/Config.in                           |    1 +
  package/redis/Config.in                     |   11 +++++++
