@@ -1,14 +1,14 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 01 Mar 2013 10:12:13 -0000
+Date: Fri, 1 Mar 2013 11:11:02 +0100
 Subject: [Buildroot] [git commit] Kickoff 2013.05 cycle
-Message-ID: <20130301101140.65CD19AE16@busybox.osuosl.org>
+Message-ID: <20130301101147.56C109ADCE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4bf3c452a507d4997f869875e4fd412a3af1a5cd
+commit: http://git.buildroot.net/buildroot/commit/?id=37d2ab569d83845a86b980bf4e27e27755294538
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
