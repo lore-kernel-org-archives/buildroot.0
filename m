@@ -1,39 +1,67 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 01 Mar 2013 21:26:38 +0100
-Subject: [Buildroot] [PATCH] <pkg>-rsync: exclude version control files
-Message-ID: <f9ac20b69b1bfd3f77ef.1362169598@BEANTN0L019720>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 01 Mar 2013 23:03:47 +0100
+Subject: [Buildroot] [PATCHv2] dosfstools: bump to version 3.0.15
+In-Reply-To: <1362155044-23258-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 1 Mar 2013 13:24:04 -0300")
+References: <1362155044-23258-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87obf2ydz0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using rsync to import package sources (typically with
-PKG_OVERRIDE_SRCDIR), it often happens that these external sources
-are under version control, and contain directories like .git,
-.hg, etc.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Depending on the project, these directories can become pretty large
-and typically have a lot of files. Moreover, they are not necessary
-in the context of building the package. Therefore, this commit adds
-the --cvs-exclude option to the rsync call, saving both disk space
-and sync time.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  package/dosfstools/Config.in     |  2 ++
+ Gustavo>  package/dosfstools/dosfstools.mk | 10 ++++++----
+ Gustavo>  2 files changed, 8 insertions(+), 4 deletions(-)
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ Gustavo> diff --git a/package/dosfstools/Config.in b/package/dosfstools/Config.in
+ Gustavo> index 1b92026..bd5cf89 100644
+ Gustavo> --- a/package/dosfstools/Config.in
+ Gustavo> +++ b/package/dosfstools/Config.in
+ Gustavo> @@ -1,6 +1,8 @@
+ Gustavo>  config BR2_PACKAGE_DOSFSTOOLS
+ Gustavo>  	bool "dosfstools"
+ Gustavo>  	depends on BR2_LARGEFILE
+ Gustavo> +	depends on BR2_USE_WCHAR
+ Gustavo> +	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ Gustavo>  	help
+ Gustavo>  	  Tools for creating and checking DOS FAT filesystems.
 
----
- package/pkg-generic.mk |  2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -62,7 +62,7 @@ endif
- $(BUILD_DIR)/%/.stamp_rsynced:
- 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
--	rsync -au $(SRCDIR)/ $(@D)
-+	rsync -au --cvs-exclude $(SRCDIR)/ $(@D)
- 	$(Q)touch $@
+You forgot to update the comment to say explain why it isn't available.
  
- # Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
+ Gustavo> diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+ Gustavo> index 4f89364..1e1d891 100644
+ Gustavo> --- a/package/dosfstools/dosfstools.mk
+ Gustavo> +++ b/package/dosfstools/dosfstools.mk
+ Gustavo> @@ -4,8 +4,10 @@
+ Gustavo>  #
+ Gustavo>  #############################################################
+ 
+ Gustavo> -DOSFSTOOLS_VERSION = 3.0.12
+ Gustavo> -DOSFSTOOLS_SITE = http://fossies.org/linux/misc/
+ Gustavo> +DOSFSTOOLS_VERSION = 3.0.15
+ Gustavo> +DOSFSTOOLS_SITE = http://fossies.org/linux/misc
+ Gustavo> +DOSFSTOOLS_DEPENDENCIES = $(if $(BR2_ENABLE_LOCALE),,libiconv)
+ Gustavo> +DOSFSTOOLS_LDFLAGS = "$(if $(BR2_ENABLE_LOCALE),,-liconv)"
+ Gustavo>  DOSFSTOOLS_LICENSE = GPLv3+
+ Gustavo>  DOSFSTOOLS_LICENSE_FILES = COPYING
+ Gustavo>  MKDOSFS_BINARY = mkdosfs
+ Gustavo> @@ -13,8 +15,8 @@ DOSFSCK_BINARY = dosfsck
+ Gustavo>  DOSFSLABEL_BINARY = dosfslabel
+ 
+ Gustavo>  define DOSFSTOOLS_BUILD_CMDS
+ Gustavo> -	$(MAKE) CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
+ Gustavo> -		CC="$(TARGET_CC)" -C $(@D)
+ Gustavo> +	$(MAKE) CFLAGS="$(TARGET_CFLAGS)" CC="$(TARGET_CC)" \
+ Gustavo> +		LDFLAGS="$(TARGET_LDFLAGS) $(DOSFSTOOLS_LDFLAGS)" -C $(@D)
+
+What I ment was to stick all flags in DOSFSTOOLS_LDFLAGS. I've fixed up
+these things and committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
