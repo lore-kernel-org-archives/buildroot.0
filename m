@@ -1,84 +1,69 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Fri, 01 Mar 2013 03:26:17 +0100
-Subject: [Buildroot] [PATCH] Add Qt5 packages
-In-Reply-To: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1362007582-14753-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <513011C9.8030301@je-eigen-domein.nl>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Fri, 01 Mar 2013 08:46:36 +0200
+Subject: [Buildroot] [PATCH v3 1/1] openpgm: new package
+In-Reply-To: <1360749821-19238-1-git-send-email-alexander.lukichev@gmail.com>
+References: <1360749821-19238-1-git-send-email-alexander.lukichev@gmail.com>
+Message-ID: <51304ECC.2020301@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/28/2013 12:25 AM, Thomas Petazzoni wrote:
-> Here is a set of patches that add Qt5 support in Buildroot. I have
-> built a number of different combinations, but there are some many
-> different possibilities, that I obviously couldn't test all of
-> them. Some testing will be appreciated, but for sure, only the
-> autobuilders will really help in getting a good build coverage of all
-> this.
+Hello,
 
-Nice job.
-Gave it a try, and it seems to work, except some minor issues:
+On 02/13/2013 12:03 PM, Alexander Lukichev wrote:
+> From: Alexander Lukichev <alexander.lukichev@espotel.com>
+> 
+> OpenPGM is an open source implementation of the Pragmatic General
+> Multicast (PGM) specification in RFC 3208 available at www.ietf.org.
+> It is required for PGM/EPGM support in ZeroMQ library.
+> 
+> Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
 
-- declarative and webkit depend on gui
-- build error when using an ARM buildroot/uClibc toolchain:
+  I won't do it again but would like to inquire once more about the
+patch. Is it lost/ignored/useless? Maybe it could be improved?
 
-../3rdparty/v8/src/platform-linux.cc: In function 'void 
-v8::internal::ProfilerSignalHandler(int, siginfo_t*, void*)':
-../3rdparty/v8/src/platform-linux.cc:1034:51: error: 'mcontext_t' has no 
-member named 'gregs'
-../3rdparty/v8/src/platform-linux.cc:1035:51: error: 'mcontext_t' has no 
-member named 'gregs'
-../3rdparty/v8/src/platform-linux.cc:1036:51: error: 'mcontext_t' has no 
-member named 'gregs'
-make[3]: *** [.obj/release-shared/platform-linux.o] Error 1
+  The reason for the patch was to add support for PGM/EPGM protocol
+in zeromq 2.2.0 library, which is already present in Buildroot.
 
-==
-#if (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
-   sample->pc = reinterpret_cast<Address>(mcontext.gregs[R15]);
-   sample->sp = reinterpret_cast<Address>(mcontext.gregs[R13]);
-   sample->fp = reinterpret_cast<Address>(mcontext.gregs[R11]);
-#else
-   sample->pc = reinterpret_cast<Address>(mcontext.arm_pc);
-   sample->sp = reinterpret_cast<Address>(mcontext.arm_sp);
-   sample->fp = reinterpret_cast<Address>(mcontext.arm_fp);
-#endif  // (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
-==
+The source of zeromq comes with an archive of openpgm, and during a
+build of zeromq this pre-packaged version of openpgm can also be
+built, but this phase of the build process is not very cross-compiler-
+friendly, i.e.:
+  - the archive is unpacked, configure and make are executed from the
+    configure script of zeromq;
+  - some openpgm configure.ac tests do not account for cross builds,
+    you have to set up specific environment and patch configure.ac
+    to cross build.
 
-For testing purposes I changed it to #if (0) to let it use 
-mcontext.arm_pc and that compiles fine.
+So in order to cross build openpgm, pre-packaged in zeromq sources,
+zeromq's configure.in has to be patched and configure script
+regenerated before starting zeromq build. Since you don't have to do
+it if PGM/EPGM support is not needed, this looks somewhat weird:
+adding PGM/EPGM support needs patching configure.in and regenerating
+configure to patch and reconfigure openpgm's autoconf scripts. All
+because openpgm autoconf tests are not cross-build-friendly which is
+openpgm's problem, not zeromq's.
 
+  On the other hand, support for PGM/EPGM in zeromq can be added
+when it is built also with --with-system-pgm configure option, which
+allows for entirely independent build and installation of openpgm.
+This approach allows to solve openpgm's cross build issues without
+tweaking zeromq. It seemed a cleaner approach, which was taken in
+this patch.
 
-- At runtime:
+  After this patch is applied, in order to add support for PGM/EPGM
+in zeromq, you have to pass --with-system-pgm option to configure,
+and add a dependency on openpgm package in packages/zeromq/zeromq.mk,
+the patch for which I planned to send if this patch was accepted.
 
-QFontDatabase: Cannot find font directory /usr/lib/fonts - is Qt 
-installed correctly?
+  I have build-tested the patch in several architectures and toolchain
+combinations, and run-tested the built library in x86 (eglibc,
+uClibc 0.9.33) and ARM (uClibc 0.9.33).
 
-Seems no fonts installed with Qt.
-Selected "liberation" package, but that installs the fonts to 
-/usr/share/fonts
-Worked around by making a symlink from /usr/lib/fonts to there.
+  Thank you for any feedback and thoughts you might have on this.
 
-
-- When building for a Raspberry Pi (eglfs plugin), applications fails to 
-start@runtime:
-
-assertion 
-failure:/hdd/max/dev/qtbuildroot/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108/interface/vmcs_host/vc_vchi_dispmanx.c:84:lock_obtain():dispmanx_client.initialised
-Aborted
-
-Library does not seem to get initialised properly.
-Looks like there is rPi specific glue code that is supposed to call 
-bcm_host_init() in 
-qt5base-5.0.0/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
-
-But it did not compile that file.
-
-buildroot/output/build/qt5base-5.0.0$ find . |grep eglfshooks |grep \\.o
-./src/plugins/platforms/eglfs/.obj/release-shared/qeglfshooks_stub.o
-
-
-Yours sincerely,
-
-Floris Bos
+--
+Best regards,
+  Alexander Lukichev
