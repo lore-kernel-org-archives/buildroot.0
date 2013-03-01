@@ -1,32 +1,65 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  1 Mar 2013 07:23:27 -0300
-Subject: [Buildroot] [PATCH 7/7] file: bump to version 5.13
-In-Reply-To: <1362133407-5840-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1362133407-5840-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1362133407-5840-7-git-send-email-gustavo@zacarias.com.ar>
+From: Philipp Claves <claves@budelmann-elektronik.com>
+Date: Fri,  1 Mar 2013 14:38:29 +0100
+Subject: [Buildroot] [PATCH 3/3] opkg: Add gnupg signature checking support.
+In-Reply-To: <1362145109-32509-1-git-send-email-claves@budelmann-elektronik.com>
+References: <20130301111856.4753d13b@skate>
+ <1362145109-32509-1-git-send-email-claves@budelmann-elektronik.com>
+Message-ID: <1362145109-32509-3-git-send-email-claves@budelmann-elektronik.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Philipp Claves <claves@budelmann-elektronik.com>
 ---
- package/file/file.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/opkg/Config.in | 9 +++++++++
+ package/opkg/opkg.mk   | 9 ++++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/package/file/file.mk b/package/file/file.mk
-index db68f66..7206705 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/package/opkg/Config.in b/package/opkg/Config.in
+index eb997a7..b8b4a13 100644
+--- a/package/opkg/Config.in
++++ b/package/opkg/Config.in
+@@ -11,3 +11,12 @@ config BR2_PACKAGE_OPKG
  
--FILE_VERSION = 5.11
-+FILE_VERSION = 5.13
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- FILE_INSTALL_STAGING = YES
+ 	  http://code.google.com/p/opkg/
+ 
++if BR2_PACKAGE_OPKG
++
++config BR2_PACKAGE_OPKG_GPG_SIGN
++	bool "opkg-gnupg-support"
++	select BR2_PACKAGE_LIBGPGME
++	help
++	  Enable opkg package signature checking support using gnupg/libgpgme.
++
++endif
+diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+index 9932d3f..3c53299 100644
+--- a/package/opkg/opkg.mk
++++ b/package/opkg/opkg.mk
+@@ -9,7 +9,7 @@ OPKG_SOURCE = opkg-$(OPKG_VERSION).tar.gz
+ OPKG_SITE = http://opkg.googlecode.com/svn/trunk/
+ OPKG_SITE_METHOD = svn
+ OPKG_INSTALL_STAGING = YES
+-OPKG_CONF_OPT = --disable-curl --disable-gpg
++OPKG_CONF_OPT = --disable-curl
+ OPKG_AUTORECONF = YES
+ # Uses PKG_CHECK_MODULES() in configure.ac
+ OPKG_DEPENDENCIES = host-pkgconf
+@@ -19,6 +19,13 @@ define OPKG_CREATE_LOCKDIR
+ 	mkdir -p $(TARGET_DIR)/usr/lib/opkg
+ endef
+ 
++ifeq ($(BR2_PACKAGE_OPKG_GPG_SIGN),y)
++	OPKG_CONF_OPT += --enable-gpg
++	OPKG_DEPENDENCIES += libgpgme
++else
++	OPKG_CONF_OPT += --disable-gpg
++endif
++
+ OPKG_POST_INSTALL_TARGET_HOOKS += OPKG_CREATE_LOCKDIR
+ 
+ $(eval $(autotools-package))
 -- 
-1.7.12.4
+1.8.1.4
