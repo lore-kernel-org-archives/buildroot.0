@@ -1,74 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Mar 2013 18:32:49 +0100
-Subject: [Buildroot] [PATCH V2] new package: redis
-In-Reply-To: <1362178999-16577-1-git-send-email-daniel.price@gmail.com>
-References: <1362178612-16168-1-git-send-email-daniel.price@gmail.com>
- <1362178999-16577-1-git-send-email-daniel.price@gmail.com>
-Message-ID: <20130302183249.52df2dee@skate>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Sat,  2 Mar 2013 20:47:27 +0200
+Subject: [Buildroot] [PATCH 1/1] Added lcms2 package
+Message-ID: <1362250047-26425-1-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Daniel Price,
+Little CMS intends to be an OPEN SOURCE small-footprint color management engine, with special focus on accuracy and performance.
 
-Looks mostly good, thanks! A few comments below.
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+---
+ package/Config.in       |    1 +
+ package/lcms2/Config.in |   12 ++++++++++++
+ package/lcms2/lcms2.mk  |   23 +++++++++++++++++++++++
+ 3 files changed, 36 insertions(+)
+ create mode 100644 package/lcms2/Config.in
+ create mode 100644 package/lcms2/lcms2.mk
 
-On Fri,  1 Mar 2013 15:03:19 -0800, Daniel Price wrote:
-
-> +config BR2_PACKAGE_REDIS
-> +	bool "redis"
-> +	depends on BR2_USE_MMU # fork()
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_LARGEFILE
-> +	help
-> +	  Redis is an open source, advanced key-value store. It is often referred
-> +	  to as a data structure server since keys can contain strings, hashes,
-> +	  lists, sets and sorted sets.
-> +
-> +	  http://www.redis.io
-
-We usually add a comment:
-
-comment "redis needs largefile and thread support in toolchain"
-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-
-> diff --git a/package/redis/redis-2.6.10-001-uclibc.patch b/package/redis/redis-2.6.10-001-uclibc.patch
-> new file mode 100644
-> index 0000000..22206eb
-> --- /dev/null
-> +++ b/package/redis/redis-2.6.10-001-uclibc.patch
-
-Please don't put the version number in the patch file name. It should
-be just redis-001-uclibc.patch.
-
-> +REDIS_VERSION = 2.6.10
-> +REDIS_SOURCE = redis-$(REDIS_VERSION).tar.gz
-> +REDIS_SITE = http://redis.googlecode.com/files
-> +REDIS_LICENSE = BSD-3c
-> +REDIS_LICENSE_FILES = COPYING
-> +
-> +# Redis doesn't support DESTDIR (yet, see
-> +# https://github.com/antirez/redis/pull/609).  We set PREFIX
-> +# instead.
-> +REDIS_BUILDOPTS = MALLOC=libc CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-> +    PREFIX=$(TARGET_DIR)/usr
-
-Can you try instead:
-
-REDIS_BUILDOPTS = MALLOC=libc $(TARGET_CONFIGURE_OPTS) \
-	PREFIX=$(TARGET_DIR)/usr
-
-i.e, TARGET_CONFIGURE_OPTS already contains the definition for CC,
-CFLAGS and more, so we generally prefer to use $(TARGET_CONFIGURE_OPTS)
-when possible.
-
-Thanks!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 8a02506..ce9c6be 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -421,6 +421,7 @@ source "package/gtk2-engines/Config.in"
+ source "package/gtk2-themes/Config.in"
+ source "package/imlib2/Config.in"
+ source "package/jpeg/Config.in"
++source "package/lcms2/Config.in"
+ source "package/libart/Config.in"
+ source "package/libdmtx/Config.in"
+ source "package/libdrm/Config.in"
+diff --git a/package/lcms2/Config.in b/package/lcms2/Config.in
+new file mode 100644
+index 0000000..d648d24
+--- /dev/null
++++ b/package/lcms2/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LCMS2
++	bool "lcms2"
++	help
++	  Little Color Management Software
++	  Little CMS intends to be an OPEN SOURCE small-footprint color 
++	  management engine, with special focus on accuracy and performance. 
++	  It uses the International Color Consortium standard (ICC), which is
++	  the modern standard when regarding to color management.
++
++	  http://www.littlecms.com/
++
++
+diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+new file mode 100644
+index 0000000..be14554
+--- /dev/null
++++ b/package/lcms2/lcms2.mk
+@@ -0,0 +1,23 @@
++#############################################################
++#
++# lcms2-2.4.tar.gz
++#
++#############################################################
++LCMS2_VERSION = 2.4
++LCMS2_SITE = http://prdownloads.sourceforge.net/LCMS2/LCMS2/
++LCMS2_SOURCE = lcms2-$(LCMS2_VERSION).tar.gz
++LCMS2_INSTALL_STAGING = YES
++LCMS2_LIBTOOL_PATCH = YES 
++LCMS2_AUTORECONF = NO
++LCMS2_CONF_OPT =           
++
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++             LCMS2_CONF_OPT += --disable-shared 
++else
++             LCMS2_CONF_OPT += --enable-shared 
++endif
++
++LCMS2_DEPENDENCIES = host-lcms2
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10.4
