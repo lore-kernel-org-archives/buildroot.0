@@ -1,37 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Mar 2013 14:43:39 +0100
-Subject: [Buildroot] Google Summer of Code 2013
-In-Reply-To: <20130214152547.555d4553@skate>
-References: <20130209004253.207e0741@skate>
- <201302131955.35889.yann.morin.1998@free.fr>
- <20130214152547.555d4553@skate>
-Message-ID: <20130303144339.7c5a189a@skate>
+Date: Sun, 3 Mar 2013 17:11:02 +0100
+Subject: [Buildroot] [PATCH 1/1] Added lcms2 package
+In-Reply-To: <1362250047-26425-1-git-send-email-olivier.schonken@gmail.com>
+References: <1362250047-26425-1-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <20130303171102.20719854@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Olivier Schonken,
 
-On Thu, 14 Feb 2013 15:25:47 +0100, Thomas Petazzoni wrote:
+Thanks for your contribution! A few comments below.
 
-> > In short:
-> >   - mentoring applications must be sent from 2013-03-18 19:00Z, and
-> >     no later than 2013-03-29 19:00Z.
-> >   - list of accepted mentoring organisations published on 2013-04-08 19:00Z
-> >   - students start working 2013-06-17, until 2013-09-23 19:00Z
-> >   - mentor submit is on 2013-10-19 and 2013-10-20 (at Google HQs?)
-> > 
-> > Now, we're left to imagining what we'll be submitting. ;-)
-> 
-> I've written down three ideas:
-> http://elinux.org/Buildroot:GSoC2013Ideas.
-> 
-> Comments on those ideas are welcome, as well as additional ideas.
+On Sat,  2 Mar 2013 20:47:27 +0200, Olivier Schonken wrote:
+> Little CMS intends to be an OPEN SOURCE small-footprint color management engine, with special focus on accuracy and performance.
 
-Any opinions about this?
+This should be wrapped at ~80 columns.
 
-Thanks,
+
+> diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+> new file mode 100644
+> index 0000000..be14554
+> --- /dev/null
+> +++ b/package/lcms2/lcms2.mk
+> @@ -0,0 +1,23 @@
+> +#############################################################
+> +#
+> +# lcms2-2.4.tar.gz
+
+Should be just "lcms2"
+
+> +#
+> +#############################################################
+> +LCMS2_VERSION = 2.4
+
+One line between the comment header and the first variable line.
+
+> +LCMS2_SITE = http://prdownloads.sourceforge.net/LCMS2/LCMS2/
+
+This should use http://downloads.sourceforge.net instead, see other
+packages. downloads.sourceforge.net automatically redirects to a
+working SourceForge mirror. 
+
+> +LCMS2_SOURCE = lcms2-$(LCMS2_VERSION).tar.gz
+
+This is not needed, that's the default.
+
+> +LCMS2_INSTALL_STAGING = YES
+> +LCMS2_LIBTOOL_PATCH = YES 
+
+This is not needed, that's the default (for LIBTOOL_PATCH).
+
+> +LCMS2_AUTORECONF = NO
+
+This is not needed, that's the default.
+
+> +LCMS2_CONF_OPT =           
+
+Not needed.
+
+> +
+> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> +             LCMS2_CONF_OPT += --disable-shared 
+> +else
+> +             LCMS2_CONF_OPT += --enable-shared 
+> +endif
+
+Not needed, that's already done by the common autotools infrastructure,
+see:
+http://git.buildroot.net/buildroot/tree/package/pkg-autotools.mk#n112,
+where SHARED_STATIC_LIBS_OPTS is defined at
+http://git.buildroot.net/buildroot/tree/package/Makefile.in#n321.
+
+Best regards,
 
 Thomas
 -- 
