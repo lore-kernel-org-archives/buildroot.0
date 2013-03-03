@@ -1,75 +1,54 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Sun,  3 Mar 2013 23:43:04 +0200
-Subject: [Buildroot] [PATCHv2] Added lcms2 package
-In-Reply-To: <20130303171102.20719854@skate>
-References: <20130303171102.20719854@skate>
-Message-ID: <1362346984-20701-1-git-send-email-olivier.schonken@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 03 Mar 2013 23:57:14 +0100
+Subject: [Buildroot] [PATCH] aumix.mk: fix typo
+In-Reply-To: <1362335872-2643-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ (Jerzy Grzegorek's message of "Sun, 3 Mar 2013 19:37:52 +0100")
+References: <1362335872-2643-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <87ehfwt7lh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Little CMS intends to be an OPEN SOURCE small-footprint color management engine,
-with special focus on accuracy and performance.
+>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
----
- package/Config.in       |    1 +
- package/lcms2/Config.in |   12 ++++++++++++
- package/lcms2/lcms2.mk  |   13 +++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/lcms2/Config.in
- create mode 100644 package/lcms2/lcms2.mk
+ Jerzy> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
-diff --git a/package/Config.in b/package/Config.in
-index 646dd68..b88afd0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -421,6 +421,7 @@ source "package/gtk2-engines/Config.in"
- source "package/gtk2-themes/Config.in"
- source "package/imlib2/Config.in"
- source "package/jpeg/Config.in"
-+source "package/lcms2/Config.in"
- source "package/libart/Config.in"
- source "package/libdmtx/Config.in"
- source "package/libdrm/Config.in"
-diff --git a/package/lcms2/Config.in b/package/lcms2/Config.in
-new file mode 100644
-index 0000000..d648d24
---- /dev/null
-+++ b/package/lcms2/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LCMS2
-+	bool "lcms2"
-+	help
-+	  Little Color Management Software
-+	  Little CMS intends to be an OPEN SOURCE small-footprint color 
-+	  management engine, with special focus on accuracy and performance. 
-+	  It uses the International Color Consortium standard (ICC), which is
-+	  the modern standard when regarding to color management.
-+
-+	  http://www.littlecms.com/
-+
-+
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-new file mode 100644
-index 0000000..239fcac
---- /dev/null
-+++ b/package/lcms2/lcms2.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# lcms2
-+#
-+#############################################################
-+
-+LCMS2_VERSION = 2.4
-+LCMS2_SITE = http://downloads.sourceforge.net/LCMS2/LCMS2/
-+
-+LCMS2_DEPENDENCIES = host-lcms2
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+Ehh, what typo? As far as I can see from git show -w you only changed
+whitespace.
+
+ Jerzy> ---
+ Jerzy>  package/multimedia/aumix/aumix.mk |    8 ++++----
+ Jerzy>  1 file changed, 4 insertions(+), 4 deletions(-)
+
+ Jerzy> diff --git a/package/multimedia/aumix/aumix.mk b/package/multimedia/aumix/aumix.mk
+ Jerzy> index 534f3cf..130bda0 100644
+ Jerzy> --- a/package/multimedia/aumix/aumix.mk
+ Jerzy> +++ b/package/multimedia/aumix/aumix.mk
+ Jerzy> @@ -4,10 +4,10 @@
+ Jerzy>  #
+ Jerzy>  #############################################################
+ 
+ Jerzy> -AUMIX_VERSION=2.8
+ Jerzy> -AUMIX_SOURCE=aumix-$(AUMIX_VERSION).tar.bz2
+ Jerzy> -AUMIX_SITE=http://jpj.net/~trevor/aumix/releases
+ Jerzy> -AUMIX_AUTORECONF=YES
+ Jerzy> +AUMIX_VERSION = 2.8
+ Jerzy> +AUMIX_SOURCE = aumix-$(AUMIX_VERSION).tar.bz2
+ Jerzy> +AUMIX_SITE = http://jpj.net/~trevor/aumix/releases
+ Jerzy> +AUMIX_AUTORECONF = YES
+ 
+ Jerzy>  AUMIX_CONF_OPT = \
+ Jerzy>  	--without-gtk \
+ Jerzy> -- 
+ Jerzy> 1.7.9.5
+
+ Jerzy> _______________________________________________
+ Jerzy> buildroot mailing list
+ Jerzy> buildroot at busybox.net
+ Jerzy> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
