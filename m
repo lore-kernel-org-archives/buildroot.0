@@ -1,50 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Mar 2013 19:26:30 +0100
-Subject: [Buildroot] Google Summer of Code 2013
-In-Reply-To: <51338DA1.3090000@relinux.de>
-References: <20130209004253.207e0741@skate>
- <201302131955.35889.yann.morin.1998@free.fr>
- <20130214152547.555d4553@skate> <20130303144339.7c5a189a@skate>
- <51338DA1.3090000@relinux.de>
-Message-ID: <20130303192630.4e730af4@skate>
+Date: Sun, 3 Mar 2013 19:28:24 +0100
+Subject: [Buildroot] [PATCH] u-boot: u-boot SPL is usually under ./spl/
+In-Reply-To: <1362329351-7738-1-git-send-email-carlo.caione@gmail.com>
+References: <1362329351-7738-1-git-send-email-carlo.caione@gmail.com>
+Message-ID: <20130303192824.2a2faf5d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stephan Hoffmann,
+Dear Carlo Caione,
 
-On Sun, 03 Mar 2013 18:51:29 +0100, Stephan Hoffmann wrote:
-
-> I think all the suggestions are good, but the ARM SoC multimedia
-> libraries are most important. These chips seem to become very popular,
-> especially since there are low-cost platforms available as Beaglebone,
-> Pengwyn, Wandboard or Raspberry Pi. As I have seen at the Embedded World
-> in Nuremberg last week there are lots of industrial grade boards and
-> modules especially with iMX5x, iMX6 and AM335x available or introduced.
-> I expect that these systems will get a significant market share soon. So
-> it might be really important to have good support for them in buildroot.
+On Sun,  3 Mar 2013 17:49:11 +0100, Carlo Caione wrote:
+> Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
+> ---
+>  boot/uboot/uboot.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> There are gazillions of such SoC available, but I think that Freescale
-> and Texas are the most wide spread. Of course we cannot leave out RPi,
-> although  I do not think that it has a significance in the industrial
-> sector.
-> 
-> Maybe we should think about splitting this up into different projects,
-> since the three platforms might be to much for one student.
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index ea77259..3dfcca3 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -103,7 +103,7 @@ endef
+>  define UBOOT_INSTALL_IMAGES_CMDS
+>  	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
+>  	$(if $(BR2_TARGET_UBOOT_SPL),
+> -		cp -dpf $(@D)/$(BR2_TARGET_UBOOT_SPL_NAME) $(BINARIES_DIR)/)
+> +		cp -dpf $(@D)/spl/$(BR2_TARGET_UBOOT_SPL_NAME) $(BINARIES_DIR)/)
 
-I think we should maybe get started with only one GSoC project, since
-we don't have much experience in mentoring a student.
-
-The only issue with the topic related to multimedia packages for ARM
-SoCs is that it requires some hardware, and I'm not sure where to get
-the funding for that. Google says they pay $500 to the mentoring
-organization, but I think this gets paid at the end of the GSoC, and
-anyway we don't have any legal organization to receive this money.
-
-Another solution is to get a little bit of sponsoring: getting one
-BeagleBone and one i.MX6 based board sponsored shouldn't be too hard.
+In the case of OMAP, the SPL gets generated in the main source
+directory. For which configuration do you see that it is installed only
+in the spl/ sub-directory?
 
 Best regards,
 
