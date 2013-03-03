@@ -1,36 +1,32 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun,  3 Mar 2013 10:55:44 +0200
-Subject: [Buildroot] [PATCH] wireshark: explicitly disable libsmi
-Message-ID: <e3a671643f7a6f4508e3abeec73ae3bec032834f.1362300524.git.baruch@tkos.co.il>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun,  3 Mar 2013 08:28:47 -0300
+Subject: [Buildroot] [PATCH] f2fs-tools: explicitly select libuuid
+Message-ID: <1362310127-27764-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-wireshark's libsmi detection is not cross compile friendly. We don't have
-libsmi in Buildroot yet anyway, so just disable support for it in wireshark.
+Explicitly select BR2_PACKAGE_UTIL_LINUX_LIBUUID. Fixes:
+http://autobuild.buildroot.net/results/da5c52b658d9efc25d2c2ad3980add3a36b99ee2/
 
-Fixes
-http://autobuild.buildroot.net/results/0daaa3dd74315ac901920e7daf89620ef4c088a0
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/wireshark/wireshark.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/f2fs-tools/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 2e89987..c9fb44b 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -17,7 +17,7 @@ WIRESHARK_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
- # wireshark adds -I$includedir to CFLAGS, causing host/target headers mixup.
- # Work around it by pointing includedir at staging
- WIRESHARK_CONF_OPT = --disable-wireshark --without-krb5 --disable-usr-local \
--		     --enable-static=no --with-gnutls=no \
-+		     --enable-static=no --with-gnutls=no --with-libsmi=no \
- 		     --includedir=$(STAGING_DIR)/usr/include
- 
- $(eval $(call autotools-package))
+diff --git a/package/f2fs-tools/Config.in b/package/f2fs-tools/Config.in
+index 20db928..99ee91c 100644
+--- a/package/f2fs-tools/Config.in
++++ b/package/f2fs-tools/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_F2FS_TOOLS
+ 	bool "f2fs-tools"
+ 	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	help
 -- 
-1.7.10.4
+1.7.12.4
