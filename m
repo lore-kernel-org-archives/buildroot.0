@@ -1,64 +1,90 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Sun, 03 Mar 2013 18:51:29 +0100
-Subject: [Buildroot] Google Summer of Code 2013
-In-Reply-To: <20130303144339.7c5a189a@skate>
-References: <20130209004253.207e0741@skate>
- <201302131955.35889.yann.morin.1998@free.fr> <20130214152547.555d4553@skate>
- <20130303144339.7c5a189a@skate>
-Message-ID: <51338DA1.3090000@relinux.de>
+From: John Stile <john@stilen.com>
+Date: Sun, 03 Mar 2013 10:04:43 -0800
+Subject: [Buildroot] fw_printenv and mtdparts
+Message-ID: <1362333883.20183.60.camel@genx>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 03.03.2013 14:43, schrieb Thomas Petazzoni:
-> On Thu, 14 Feb 2013 15:25:47 +0100, Thomas Petazzoni wrote:
->
->>> In short:
->>>   - mentoring applications must be sent from 2013-03-18 19:00Z, and
->>>     no later than 2013-03-29 19:00Z.
->>>   - list of accepted mentoring organisations published on 2013-04-08 19:00Z
->>>   - students start working 2013-06-17, until 2013-09-23 19:00Z
->>>   - mentor submit is on 2013-10-19 and 2013-10-20 (at Google HQs?)
->>>
->>> Now, we're left to imagining what we'll be submitting. ;-)
->> I've written down three ideas:
->> http://elinux.org/Buildroot:GSoC2013Ideas.
->>
->> Comments on those ideas are welcome, as well as additional ideas.
-> Any opinions about this?
-Hello Thomas,
+I'm trying to read the uboot environment from my booted embedded Linux
+system, created with buildroot-2011.11, on a at91sam9g20ek with a 8Mb
+NOR and 256Mb NAND.
 
-I think all the suggestions are good, but the ARM SoC multimedia
-libraries are most important. These chips seem to become very popular,
-especially since there are low-cost platforms available as Beaglebone,
-Pengwyn, Wandboard or Raspberry Pi. As I have seen at the Embedded World
-in Nuremberg last week there are lots of industrial grade boards and
-modules especially with iMX5x, iMX6 and AM335x available or introduced.
-I expect that these systems will get a significant market share soon. So
-it might be really important to have good support for them in buildroot.
+I've had some strange progress, but I need some help.
 
-There are gazillions of such SoC available, but I think that Freescale
-and Texas are the most wide spread. Of course we cannot leave out RPi,
-although  I do not think that it has a significance in the industrial
-sector.
+First the background:
 
-Maybe we should think about splitting this up into different projects,
-since the three platforms might be to much for one student.
+My actual write addresses in the tcl used by sam-ba to write the NAND
+and NOR:
+## NandFlash Mapping
+set bootStrapAddrNand1  0x00000000
+set ubootAddrNand1      0x00020000
+set ubootEnvAddrNand1   0x00060000
+set kernelAddrNand1     0x00200000
+set rootfsAddrNand1     0x00400000
+set bootStrapAddrNand2  0x08000000
+set ubootAddrNand2      0x08020000
+set ubootEnvAddrNand2   0x08060000
+set kernelAddrNand2     0x08200000
+set rootfsAddNand2      0x08400000
+## DataFlash Mapping
+set baseAddrNor         0xD0000000
+set bootStrapAddrNor    0x00000000
+set ubootEnvAddrNor     0x00004200
+set ubootAddrNor        0x00008400
+set kernelAddrNor       0x00042000
+set rootfsAddrNor       0x00294000
 
-Regarding the autotests I'd really like to see some automatically tested
-well-defined configurations, also regarding the SoC multimedia
-libraries. These could also be a convenient start point for new users.
+My Linux kernel gets the /proc/mtd lines form the 'mtdparts' in the
+'bootargs', which I suspect is wrong.
+bootargs=mem=64M console=ttyS0,115200
+mtdparts=atmel_nand:128k(bootstrap1)ro,256k(uboot1)ro,128k(env1)ro,1536K(unused),2M(linux1),124M(rootfs1),128k(bootstrap2)ro,256k(uboot2)ro,128k(env2)ro,1536k(unused2),2M(linux2),124M(rootfs2);spi0.1-AT45DB642x:2640k(bootstrap/env/uboot/kernel)ro,-(rootfs) root=/dev/mtdblock13 rw rootfstype=jffs2"
 
-Kind regards
+When I cat /proc/mtd I see:
+dev:    size   erasesize  name
+mtd0: 00020000 00020000 "bootstrap1"
+mtd1: 00040000 00020000 "uboot1"
+mtd2: 00020000 00020000 "env1"
+mtd3: 00180000 00020000 "unused"
+mtd4: 00200000 00020000 "linux1"
+mtd5: 07c00000 00020000 "rootfs1"
+mtd6: 00020000 00020000 "bootstrap2"
+mtd7: 00040000 00020000 "uboot2"
+mtd8: 00020000 00020000 "env2"
+mtd9: 00180000 00020000 "unused2"
+mtd10: 00200000 00020000 "linux2"
+mtd11: 07c00000 00020000 "rootfs2"
+mtd12: 00294000 00000420 "bootstrap/env/uboot/kernel"
+mtd13: 005ac000 00000420 "rootfs"
+ 
+On the booted system, When I run these: 
+ od -t xz /dev/mtd4
+ od -t xz /dev/mtd5
+I see ascii uboot-environment data, 
+both show timestamp=1236, which is a variable I added to env1, but I do
+not see the timestamp=1237 I added to env2, so I'm not getting to nand2
+env.
+I would expect this to be in /dev/mtd2, so I must be off.
 
-Stephan
->
-> Thanks,
->
-> Thomas
+When I try any one of the following lines in /etc/fw_env.config:
+/dev/mtd8  0x00000 0x20000 0x20000 
+/ev/mtd2   0x00000 0x20000 0x20000 
+/dev/mtd8  0xa0000 0x20000 0x20000
+/dev/mtd8  0x60000 0x20000 0x20000
+/dev/mtd4   0x00000 0x20000 0x20000
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130303/d9da4a46/attachment.html>
+It prints the default, which are compiled into uboot.
+Warning: Bad CRC, using default environment
+bootcmd=bootp; setenv bootargs root=/dev/nfs nfsroot=${serverip}:
+${rootpath} ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}:
+${hostname}::off; bootm
+bootdelay=5
+baudrate=115200
+
+I suspect my mtdparts statement is wrong.
+
+Is there some way I check my 'mtdparts' in 'bootcmd'?
+
+Is there some other problem happening here?
