@@ -1,90 +1,225 @@
-From: John Stile <john@stilen.com>
-Date: Sun, 03 Mar 2013 10:04:43 -0800
-Subject: [Buildroot] fw_printenv and mtdparts
-Message-ID: <1362333883.20183.60.camel@genx>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Mar 2013 19:07:45 +0100
+Subject: [Buildroot] [PATCH 1/1] Added package HPLIP for printing to HP
+ printers
+In-Reply-To: <1362243769-8714-1-git-send-email-olivier.schonken@gmail.com>
+References: <1362243769-8714-1-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <20130303190745.0f89b2e4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm trying to read the uboot environment from my booted embedded Linux
-system, created with buildroot-2011.11, on a at91sam9g20ek with a 8Mb
-NOR and 256Mb NAND.
+Dear Olivier Schonken,
 
-I've had some strange progress, but I need some help.
+On Sat,  2 Mar 2013 19:02:49 +0200, Olivier Schonken wrote:
+> HPLIP (Hewlett-Packard Linux Imaging & Printing) is an HP-developed solution for printing, scanning, and faxing with HP inkjet and laser based printers in Linux.
 
-First the background:
+The commit log should be wrapped at ~80 columns.
 
-My actual write addresses in the tcl used by sam-ba to write the NAND
-and NOR:
-## NandFlash Mapping
-set bootStrapAddrNand1  0x00000000
-set ubootAddrNand1      0x00020000
-set ubootEnvAddrNand1   0x00060000
-set kernelAddrNand1     0x00200000
-set rootfsAddrNand1     0x00400000
-set bootStrapAddrNand2  0x08000000
-set ubootAddrNand2      0x08020000
-set ubootEnvAddrNand2   0x08060000
-set kernelAddrNand2     0x08200000
-set rootfsAddNand2      0x08400000
-## DataFlash Mapping
-set baseAddrNor         0xD0000000
-set bootStrapAddrNor    0x00000000
-set ubootEnvAddrNor     0x00004200
-set ubootAddrNor        0x00008400
-set kernelAddrNor       0x00042000
-set rootfsAddrNor       0x00294000
+> diff --git a/package/cups/Config.in b/package/cups/Config.in
+> index dc1c2ed..7b703ff 100644
+> --- a/package/cups/Config.in
+> +++ b/package/cups/Config.in
+> @@ -18,4 +18,5 @@ config BR2_PACKAGE_CUPS_PDFTOPS
+>  comment "pdftops support requires a toolchain with C++ support enabled"
+>  	depends on !BR2_INSTALL_LIBSTDCPP
+>  
+> +source "package/hplip/Config.in"
+>  endif
 
-My Linux kernel gets the /proc/mtd lines form the 'mtdparts' in the
-'bootargs', which I suspect is wrong.
-bootargs=mem=64M console=ttyS0,115200
-mtdparts=atmel_nand:128k(bootstrap1)ro,256k(uboot1)ro,128k(env1)ro,1536K(unused),2M(linux1),124M(rootfs1),128k(bootstrap2)ro,256k(uboot2)ro,128k(env2)ro,1536k(unused2),2M(linux2),124M(rootfs2);spi0.1-AT45DB642x:2640k(bootstrap/env/uboot/kernel)ro,-(rootfs) root=/dev/mtdblock13 rw rootfstype=jffs2"
+No, I think the package should still be included from package/Config.in
+like all other packages, but maybe it can carry a "depends on
+BR2_PACKAGE_CUPS" in package/hplip/Config.in. I guess we can assume
+that the person who wants the HP printer drivers will know that CUPS
+should be enabled.
 
-When I cat /proc/mtd I see:
-dev:    size   erasesize  name
-mtd0: 00020000 00020000 "bootstrap1"
-mtd1: 00040000 00020000 "uboot1"
-mtd2: 00020000 00020000 "env1"
-mtd3: 00180000 00020000 "unused"
-mtd4: 00200000 00020000 "linux1"
-mtd5: 07c00000 00020000 "rootfs1"
-mtd6: 00020000 00020000 "bootstrap2"
-mtd7: 00040000 00020000 "uboot2"
-mtd8: 00020000 00020000 "env2"
-mtd9: 00180000 00020000 "unused2"
-mtd10: 00200000 00020000 "linux2"
-mtd11: 07c00000 00020000 "rootfs2"
-mtd12: 00294000 00000420 "bootstrap/env/uboot/kernel"
-mtd13: 005ac000 00000420 "rootfs"
- 
-On the booted system, When I run these: 
- od -t xz /dev/mtd4
- od -t xz /dev/mtd5
-I see ascii uboot-environment data, 
-both show timestamp=1236, which is a variable I added to env1, but I do
-not see the timestamp=1237 I added to env2, so I'm not getting to nand2
-env.
-I would expect this to be in /dev/mtd2, so I must be off.
+> diff --git a/package/hplip/Config.in b/package/hplip/Config.in
+> new file mode 100644
+> index 0000000..b0d802a
+> --- /dev/null
+> +++ b/package/hplip/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_HPLIP
+> +	bool "hplip"
+> +	select BR2_PACKAGE_LIBUSB
+> +	help
+> +	  HP Linux Imaging and Printing (HPLIP)
+> +	  HPLIP is an HP-developed solution for printing, scanning, and faxing
+> +	  with HP inkjet and laser based printers in Linux. The HPLIP project 
+> +	  provides printing support for 2,211 printer models, including 
+> +	  Deskjet, Officejet, Photosmart, PSC (Print Scan Copy), Business 
+> +	  Inkjet, LaserJet, Edgeline MFP, and LaserJet MFP. 
+> +	  
+> +	  http://hplipopensource.com/
+> +
+> diff --git a/package/hplip/hplip-fix-make.patch b/package/hplip/hplip-fix-make.patch
+> new file mode 100644
+> index 0000000..339e58e
+> --- /dev/null
+> +++ b/package/hplip/hplip-fix-make.patch
+> @@ -0,0 +1,80 @@
+> +From 1e03ca316a3784290b489470b16c34b7f44a0c75 Mon Sep 17 00:00:00 2001
+> +From: Olivier Schonken <olivier.schonken@gmail.com>
+> +Date: Sat, 2 Mar 2013 18:01:03 +0200
+> +Subject: [PATCH] Changed Makefile.am and Makefile.in to allow
+> + cross-compilation of HPLIP
+> +
+> +Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+> +---
+> + Makefile.am |    4 ++--
+> + Makefile.in |   16 ++--------------
+> + 2 files changed, 4 insertions(+), 16 deletions(-)
+> +
+> +diff --git a/Makefile.am b/Makefile.am
+> +index 16ea902..00ec8da 100644
+> +--- a/Makefile.am
+> ++++ b/Makefile.am
+> +@@ -72,7 +72,7 @@ libhpmud_la_SOURCES = io/hpmud/hpmud.c io/hpmud/mlc.c io/hpmud/model.c io/hpmud/
+> + 	  io/hpmud/hpmud.h io/hpmud/hpmudi.h io/hpmud/list.h io/hpmud/mlc.h io/hpmud/pml.h io/hpmud/dot4.c \
+> + 	  io/hpmud/dot4.h io/hpmud/jd.c io/hpmud/jd.h io/hpmud/pp.c io/hpmud/pp.h io/hpmud/musb.h io/hpmud/musb_libusb01.c
+> + else
+> +-libhpmud_la_CFLAGS = -I/usr/include/libusb-1.0 -DMUDNAME=\"$(MUDNAME)\" -DCONFDIR=\"$(hplip_confdir)\"
+> ++libhpmud_la_CFLAGS = -I$(includedir)/usr/include/libusb-1.0 -DMUDNAME=\"$(MUDNAME)\" -DCONFDIR=\"$(hplip_confdir)\"
 
-When I try any one of the following lines in /etc/fw_env.config:
-/dev/mtd8  0x00000 0x20000 0x20000 
-/ev/mtd2   0x00000 0x20000 0x20000 
-/dev/mtd8  0xa0000 0x20000 0x20000
-/dev/mtd8  0x60000 0x20000 0x20000
-/dev/mtd4   0x00000 0x20000 0x20000
+You should make this -I$(includedir)/libusb-1.0
 
-It prints the default, which are compiled into uboot.
-Warning: Bad CRC, using default environment
-bootcmd=bootp; setenv bootargs root=/dev/nfs nfsroot=${serverip}:
-${rootpath} ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}:
-${hostname}::off; bootm
-bootdelay=5
-baudrate=115200
+> + libhpmud_la_SOURCES = io/hpmud/hpmud.c io/hpmud/mlc.c io/hpmud/model.c io/hpmud/pml.c \
+> + 	  io/hpmud/hpmud.h io/hpmud/hpmudi.h io/hpmud/list.h io/hpmud/mlc.h io/hpmud/pml.h io/hpmud/dot4.c \
+> + 	  io/hpmud/dot4.h io/hpmud/jd.c io/hpmud/jd.h io/hpmud/pp.c io/hpmud/pp.h io/hpmud/musb.h io/hpmud/musb.c
+> +@@ -292,7 +292,7 @@ hpmudext_la_LIBADD = libhpmud.la
+> + if LIBUSB01_BUILD
+> + hpmudext_la_CFLAGS = -I$(PYTHONINCLUDEDIR)
+> + else
+> +-hpmudext_la_CFLAGS =-I/usr/include/libusb-1.0 -I$(PYTHONINCLUDEDIR)
+> ++hpmudext_la_CFLAGS =-I$(includedir)/usr/include/libusb-1.0 -I$(PYTHONINCLUDEDIR)
 
-I suspect my mtdparts statement is wrong.
+Ditto, -I$(includedir)/libusb-1.0
 
-Is there some way I check my 'mtdparts' in 'bootcmd'?
+> + endif
+> + 
+> + # ui (qt3)
+> +diff --git a/Makefile.in b/Makefile.in
+> +index e8e6142..5d9c331 100644
+> +--- a/Makefile.in
+> ++++ b/Makefile.in
 
-Is there some other problem happening here?
+You are patching both Makefile.am and Makefile.in. Normally, we prefer
+to patch Makefile.am and do HPLIP_AUTORECONF=YES. Have you tried that?
+Have you had issues in doing this?
+
+> diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
+> new file mode 100644
+> index 0000000..03fb514
+> --- /dev/null
+> +++ b/package/hplip/hplip.mk
+> @@ -0,0 +1,52 @@
+> +#############################################################
+> +#
+> +# hplip
+> +#
+> +#############################################################
+
+One blank line between header and first variable.
+
+> +HPLIP_VERSION = 3.12.11
+> +HPLIP_SITE = http://prdownloads.sourceforge.net/hplip/hplip/
+
+Please use http://downloads.sourceforge.net instead (see other
+packages).
+
+> +HPLIP_SOURCE = hplip-$(HPLIP_VERSION).tar.gz
+
+Not needed, that's the default.
+
+> +HPLIP_INSTALL_STAGING = NO
+> +HPLIP_LIBTOOL_PATCH = YES 
+> +HPLIP_AUTORECONF = NO
+
+All those values are the default, so they are unneeded. However, if
+possible, make your patch only on Makefile.am and do
+HPLIP_AUTORECONF = YES.
+
+> +
+> +#HPLIP_CONF_ENV += \
+> +#	ac_cv_prog_ac_ct_STRIP=arm-none-linux-gnueabi-strip
+
+Please remove such dead code.
+
+> +
+> +HPLIP_CONF_OPT =           --disable-qt4 \
+> +                           --disable-scan-build \
+> +                           --disable-gui-build \
+> +                           --disable-doc-build \
+> +                           --disable-network-build \
+> +                           --enable-hpcups-install \
+> +                           --disable-hpijs-install \
+> +                           --enable-cups-ppd-install \
+> +                           --enable-cups-drv-install \
+> +                           --disable-foomatic-ppd-install \
+> +                           --disable-foomatic-drv-install \
+> +                           --disable-foomatic-rip-hplip-install \
+> +                           --enable-new-hpcups \
+> +                           --enable-lite-build \
+> +                           --with-sysroot=$(STAGING_DIR) \
+
+Why is this needed?
+
+> +			   --includedir=$(STAGING_DIR)
+
+Remove this --includedir, once you make the modification I suggested
+above (-I$(includedir)/libusb-1.0), it should no longer be needed to
+pass a custom --incluedir.
+
+Also, that's nitpicking, but we usually prefer the following formatting:
+
+HPLIP_CONF_OPT = \
+	--enable-foo \
+	--disable-bar \
+	--with-something=foobar
+
+> +
+> +ifeq ($(BR2_PACKAGE_DBUS),y)
+> +             HPLIP_CONF_OPT += --enable-dbus-build 
+> +endif
+
+Add a:
+
+else
+	HPLIP_CONFIG_OPT += --disable-dbus-build
+endif
+
+
+> +   
+> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> +             HPLIP_CONF_OPT += --disable-shared 
+> +else
+> +             HPLIP_CONF_OPT += --enable-shared 
+> +endif
+
+Not needed, already passed by the autotools package infrastructure.
+
+> +
+> +HPLIP_DEPENDENCIES = cups libusb
+> +
+> +
+> +define HPLIP_POST_INSTALL_TARGET_FIXUP
+> +	mkdir -p $(TARGET_DIR)/usr/share/hplip/data/models
+> +        cp $(@D)/data/models/* $(TARGET_DIR)/usr/share/hplip/data/models
+> +endef
+
+Please fix the indentation here, it should be one tab.
+
+> +HPLIP_POST_INSTALL_TARGET_HOOKS += HPLIP_POST_INSTALL_TARGET_FIXUP
+> +
+> +$(eval $(autotools-package))
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
