@@ -1,53 +1,66 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 03 Mar 2013 17:51:26 +0100
-Subject: [Buildroot] [PATCH] stress: honor the BR2_PREFER_STATIC_LIB
-	preference
-In-Reply-To: <1362206128-27771-1-git-send-email-roylee17@gmail.com>
-References: <1362206128-27771-1-git-send-email-roylee17@gmail.com>
-Message-ID: <51337F8E.9070803@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Sun, 3 Mar 2013 18:29:24 +0100
+Subject: [Buildroot] Google Summer of Code 2013
+In-Reply-To: <20130303144339.7c5a189a@skate>
+References: <20130209004253.207e0741@skate>
+ <201302131955.35889.yann.morin.1998@free.fr>
+ <20130214152547.555d4553@skate> <20130303144339.7c5a189a@skate>
+Message-ID: <CAAXf6LW8ACwDL_1=gAMFo9-hrZj5RnUR6rCcXsuxin1n3+CNNA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/03/13 07:35, Tzu-Jung Lee wrote:
-> From: roylee17 <roylee17@gmail.com>
+Hi Thomas,
+
+On Sun, Mar 3, 2013 at 2:43 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 >
-> Change-Id: I13f849e76557fac81b488ab26b4ac8b999888bc1
-> ---
->   package/stress/stress.mk | 3 +++
->   1 file changed, 3 insertions(+)
+> On Thu, 14 Feb 2013 15:25:47 +0100, Thomas Petazzoni wrote:
 >
-> diff --git a/package/stress/stress.mk b/package/stress/stress.mk
-> index 3a047b5..af79bf2 100644
-> --- a/package/stress/stress.mk
-> +++ b/package/stress/stress.mk
-> @@ -10,4 +10,7 @@ STRESS_VERSION = 1.0.4
->   STRESS_SITE    = http://weather.ou.edu/~apw/projects/stress
->   STRESS_AUTORECONF = YES
+>> > In short:
+>> >   - mentoring applications must be sent from 2013-03-18 19:00Z, and
+>> >     no later than 2013-03-29 19:00Z.
+>> >   - list of accepted mentoring organisations published on 2013-04-08 19:00Z
+>> >   - students start working 2013-06-17, until 2013-09-23 19:00Z
+>> >   - mentor submit is on 2013-10-19 and 2013-10-20 (at Google HQs?)
+>> >
+>> > Now, we're left to imagining what we'll be submitting. ;-)
+>>
+>> I've written down three ideas:
+>> http://elinux.org/Buildroot:GSoC2013Ideas.
+>>
+>> Comments on those ideas are welcome, as well as additional ideas.
 >
-> +STRESS_CONF_OPT = \
-> +	$(if $(BR2_PREFER_STATIC_LIB),--enable-static,--disable-static)
+> Any opinions about this?
 
-  This is already part of the standard SHARED_STATIC_LIBS_OPTS, which is 
-part of the argument list of configure. The difference being that in the 
-shared case, --enable-static is still passed (to allow building static 
-libraries, in case some client prefers to link statically after all).
+Thanks for your efforts in writing this down!
 
-  Any reason why this doesn't work for stress?
+A few small remarks:
+- For the ARM SoC multimedia support, one of the steps written is:
+"Get some packages accepted upstream in the official Buildroot Git
+repository, by going through the traditional patch submission/review
+process."
+In my opinion, the goal is to get *all* packages accepted upstream.
+With a partial integration, someone else will have to pick up the
+remaining patches and prepare them for inclusion.
 
-  Regards,
-  Arnout
+- For the Blackfin integration project, I think that prior
+experience/knowledge with/about Blackfin and/or other no-MMU platforms
+would also be a plus.
 
-> +
->   $(eval $(autotools-package))
+- Finally, for the testing infrastructure: in addition to the qemu
+testing, it would also be nice if we had automatic real target testing
+on some boards, for example with Beaglebone/Beagleboard/Pandaboard.
+This would require some of these boards to be permanently hooked up to
+a host machine, and a set of tests to execute on the device. Being
+able to remotely reset the board even without a booting system would
+also be nice, to prevent needing to much manual rescuing. Obviously,
+this is more involved than with qemu, and we'd need a place where
+these setups are hosted (somewhere at Peter's place or in Free
+Electron's offices?) It may also be too much for this GSoC, but I
+thought I'd mention it anyway.
 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Best regards,
+Thomas
