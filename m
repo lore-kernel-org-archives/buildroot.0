@@ -1,40 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Mar 2013 19:56:08 +0100
-Subject: [Buildroot] [PATCH 1/3] microperl: remove it
-In-Reply-To: <1362220740-17593-1-git-send-email-francois.perrad@gadz.org>
-References: <1362220740-17593-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20130303195608.6d85ef7b@skate>
+Date: Sun, 3 Mar 2013 20:09:44 +0100
+Subject: [Buildroot] [PATCH 1/2] qt5: add rPi EGL glue code
+In-Reply-To: <1362175994-17431-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1362175994-17431-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <20130303200944.6a684478@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Floris Bos,
 
-On Sat,  2 Mar 2013 11:38:58 +0100, Francois Perrad wrote:
-> microperl has been deprecated by perl
+On Fri,  1 Mar 2013 23:13:13 +0100, Floris Bos wrote:
+> When the rpi-userland package is selected, assume we are targetting
+> the Raspberry Pi, and add the right platform glue code when building
+> the Qt5 EGLFS plugin.
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  docs/manual/deprecated-list.txt                    |    1 -
->  package/Config.in                                  |    1 -
->  package/libxml-parser-perl/libxml-parser-perl.mk   |    6 -
->  package/microperl/Config.in                        |   30 ----
->  .../microperl/microperl-no-signal-handlers.patch   |   22 ---
->  package/microperl/microperl-uudmap.patch           |   47 ------
->  package/microperl/microperl.mk                     |  156 --------------------
->  7 files changed, 263 deletions(-)
->  delete mode 100644 package/microperl/Config.in
->  delete mode 100644 package/microperl/microperl-no-signal-handlers.patch
->  delete mode 100644 package/microperl/microperl-uudmap.patch
->  delete mode 100644 package/microperl/microperl.mk
+> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Thanks. I've applied your 3 patches (the two ones related to Rasberry
+Pi), and the one related to installation of fonts. They will be sent
+when I send the next version of my Qt5 pull request.
 
-I think docs/manual/deprecated-list.txt is automatically generated, so
-it probably shouldn't be changed, but I guess Peter can fix that when
-committing.
+Thanks!
 
 Thomas
 -- 
