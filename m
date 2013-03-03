@@ -1,29 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Mar 2013 20:09:44 +0100
-Subject: [Buildroot] [PATCH 1/2] qt5: add rPi EGL glue code
-In-Reply-To: <1362175994-17431-1-git-send-email-bos@je-eigen-domein.nl>
-References: <1362175994-17431-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20130303200944.6a684478@skate>
+Date: Sun, 3 Mar 2013 20:52:42 +0100
+Subject: [Buildroot] [PATCH] u-boot: u-boot SPL is usually under ./spl/
+In-Reply-To: <CAOQ7t2ZJsu5u706BHJsuX6vOPgB5_oUJfF05EZYESpCjunvb=Q@mail.gmail.com>
+References: <1362329351-7738-1-git-send-email-carlo.caione@gmail.com>
+ <20130303192824.2a2faf5d@skate>
+ <CAOQ7t2ZJsu5u706BHJsuX6vOPgB5_oUJfF05EZYESpCjunvb=Q@mail.gmail.com>
+Message-ID: <20130303205242.423ad324@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Floris Bos,
+Dear Carlo Caione,
 
-On Fri,  1 Mar 2013 23:13:13 +0100, Floris Bos wrote:
-> When the rpi-userland package is selected, assume we are targetting
-> the Raspberry Pi, and add the right platform glue code when building
-> the Qt5 EGLFS plugin.
+On Sun, 3 Mar 2013 19:55:48 +0100, Carlo Caione wrote:
+
+> > In the case of OMAP, the SPL gets generated in the main source
+> > directory. For which configuration do you see that it is installed only
+> > in the spl/ sub-directory?
 > 
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> I'm trying to use buildroot to create an image for a cubieboard
+> (http://cubieboard.org/).
+> In this case I have to use u-boot-sunxi and SPL gets generated only in spl/
 
-Thanks. I've applied your 3 patches (the two ones related to Rasberry
-Pi), and the one related to installation of fonts. They will be sent
-when I send the next version of my Qt5 pull request.
+Right, I tested this, and it gets installed in spl/.
 
-Thanks!
+What about setting BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin" ?
+
+Best regards,
 
 Thomas
 -- 
