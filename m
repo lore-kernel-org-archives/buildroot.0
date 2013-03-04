@@ -1,21 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Mar 2013 14:41:40 +0100
-Subject: [Buildroot] [PATCH] httping: bump to version 1.6.0
-In-Reply-To: <1362346059-22762-1-git-send-email-gilles.talis@gmail.com>
- (Gilles Talis's message of "Sun, 3 Mar 2013 13:27:39 -0800")
-References: <1362346059-22762-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87vc97b7u3.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 4 Mar 2013 14:41:30 +0100
+Subject: [Buildroot] [git commit] httping: bump to version 1.6.0
+Message-ID: <20130304134119.8182A9AE9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=bbd47813f3196864e4f88aa9f771cf723b5d2fd6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gilles> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/httping/httping.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+index e92be61..2ebc75e 100644
+--- a/package/httping/httping.mk
++++ b/package/httping/httping.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-HTTPING_VERSION = 1.5.7
++HTTPING_VERSION = 1.6
+ HTTPING_SOURCE = httping-$(HTTPING_VERSION).tgz
+ HTTPING_SITE = http://www.vanheusden.com/httping
+ HTTPING_LICENSE = GPLv2
