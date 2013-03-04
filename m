@@ -1,70 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Mar 2013 22:29:32 +0100
-Subject: [Buildroot] [PATCH 2/2] luajit: allow to build Lua extensions
- without lua
-In-Reply-To: <1355564002-14490-2-git-send-email-francois.perrad@gadz.org>
-References: <1355564002-14490-1-git-send-email-francois.perrad@gadz.org>
- <1355564002-14490-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20130304222932.40f646b4@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 4 Mar 2013 22:57:42 +0100
+Subject: [Buildroot] [PATCH 2/2 V5] nodejs: new package
+In-Reply-To: <20130304221946.6c6d62cd@skate>
+References: <1362102967-10236-1-git-send-email-daniel.price@gmail.com>
+ <20130304221946.6c6d62cd@skate>
+Message-ID: <201303042257.42979.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Daniel, Thomas, Luca, All,
 
-On Sat, 15 Dec 2012 10:33:22 +0100, Francois Perrad wrote:
+On Monday 04 March 2013 Thomas Petazzoni wrote:
+> On Thu, 28 Feb 2013 17:56:07 -0800, Daniel Price wrote:
+[--SNIP--]
+> > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> > new file mode 100644
+> > index 0000000..b30fcd4
+> > --- /dev/null
+> > +++ b/package/nodejs/nodejs.mk
+> > @@ -0,0 +1,109 @@
+> > +#############################################################
+> > +#
+> > +# nodejs
+> > +#
+> > +#############################################################
+> > +
+> > +NODEJS_VERSION = 0.8.21
+> > +NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
+> > +NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+> > +NODEJS_DEPENDENCIES = host-python host-nodejs \
+> > +    $(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
+> > +HOST_NODEJS_DEPENDENCIES = host-python
+> > +NODEJS_LICENSE = MIT
+> 
+> Please add:
+> 
+> NODEJS_LICENSE_FILES = LICENSE
+> 
+> That said, as the LICENSE file explains, nodejs source code includes
+> some code from various other projects, under other licenses. Maybe the
+> licensing experts should tell us what value NODEJS_LICENSE should have
+> here. Yann? Luca? See
+> https://github.com/joyent/node/blob/master/LICENSE if you don't want to
+> download the whole nodejs source code.
 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 8dea51e..c19887b 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -307,6 +307,12 @@ else
->  SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LUA),y)
-> +LUA_INTERPRETER = lua
-> +else ifeq ($(BR2_PACKAGE_LUAJIT),y)
-> +LUA_INTERPRETER = luajit
-> +endif
+First: I am not an authoritative licensing expert.
 
-I think what we want instead here is a virtual package, in the sense of
-the OpenGL virtual package I proposed in my Qt5 patch set. See
-http://git.free-electrons.com/users/thomas-petazzoni/buildroot/commit/?h=qt5&id=31ceec3926db7fea4fa2ac4b328b022bcec97aac.
+What I would state would be something like:
 
-In your case, it could be package/luainterpreter/Config.in:
+NODEJS_LICENSE = MIT (core code); non-copyleft BSD-like (bundled libraries)
 
-config BR2_PACKAGE_HAS_LUA_INTERPRETER
-	bool
+In any case, I'd leave it to the user (or his/her legal department) to sort
+out the exact licensing terms by looking at the LICENSE file, which as Thomas
+mentionned, shall be referenced by the NODEJS_LICENSE_FILES variable.
 
-package/luainterpreter/luainterpreter.mk:
+IIRC, the licensing infrastrucutre in Buildroot is not meant to be
+authoritative, and should be regarded by the user only as a guide.
 
-LUAINTERPRETER_SOURCE =
+Regards,
+Yann E. MORIN.
 
-ifeq ($(BR2_PACKAGE_LUA),y)
-LUAINTERPRETER_DEPENDENCIES = lua
-endif
-
-ifeq ($(BR2_PACKAGE_LUAJIT),y)
-LUAINTERPRETER_DEPENDENCIES = luajit
-endif
-
-$(eval $(generic-package))
-
-and then package/lua/Config.in and package/luajit/Config.in would
-'select BR2_PACKAGE_HAS_LUA_INTERPRETER'.
-
-And all lua modules would do a 'depends on
-BR2_PACKAGE_HAS_LUA_INTERPRETER' and have <pkg>_DEPENDENCIES =
-luainterpreter in their .mk file.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
