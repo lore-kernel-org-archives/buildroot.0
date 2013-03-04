@@ -1,40 +1,43 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Mar 2013 20:30:59 +0100
+Date: Mon, 04 Mar 2013 20:31:34 +0100
 Subject: [Buildroot] What to do about systemd/udev/eudev?
-In-Reply-To: <5134F134.10207@petroprogram.com> ("Stefan =?utf-8?Q?Fr=C3=B6?=
- =?utf-8?Q?berg=22's?= message of
- "Mon, 04 Mar 2013 21:08:36 +0200")
+In-Reply-To: <20130303195436.49654719@skate> (Thomas Petazzoni's message of
+ "Sun, 3 Mar 2013 19:54:36 +0100")
 References: <1362312574-17701-1-git-send-email-olivier.schonken@gmail.com>
  <20130303195436.49654719@skate>
- <948441.33302.bm@smtp138.mail.ir2.yahoo.com>
- <CAKAx1cjwOtqE9ZK1RnB0=wWXhVw+8end_j8roL8RZ9aZwAj=EQ@mail.gmail.com>
- <5134E40D.6@petroprogram.com> <20130304183729.GA4651@tarshish>
- <5134F134.10207@petroprogram.com>
-Message-ID: <87txor9d3g.fsf@dell.be.48ers.dk>
+Message-ID: <87ppzf9d2h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
 Hi,
 
- Stefan> Currently udev:
- Stefan> - requires /usr to be mounted before it starts
- Stefan> - systemd init system to rule them all (altought Arnout said that  it is
- Stefan> still optional???)
- Stefan> - dbus (why the heck would I want/need dbus if im just making
- Stefan> rescue/repair initramfs to boot system straight to shell ?)
- Stefan> - other ?
+ Thomas> So in fact building udev only without systemd doesn't seem like
+ Thomas> a good idea moving forward. Therefore, I see two options:
 
- Stefan> So IMHO, buildroot should definetely have plan B that will have some
- Stefan> other alternative device handling than udev.
- Stefan> Be it eudev, mdev with steroids(Funtoo) or whatever....
+ Thomas>  (1) Follow the upstream decision, and simply make udev available only
+ Thomas>      if the init system is systemd. Unlike some other distributions, we
+ Thomas>      never had the the desire of fighting against upstream. If someone
+ Thomas>      is dissatisfied with decisions made by upstream projects, then
+ Thomas>      that someone should go upstream and fix the problem here.
 
-Well, we do: static /dev, devtmpfs and mdev. For a rescue initramfs
-devtmpfs is probably the best option.
+ Thomas>      This is the solution I would personally prefer. If some were using
+ Thomas>      udev for some reason and mdev doesn't work for them, then we can
+ Thomas>      probably help make mdev better where needed.
+
+ Thomas>  (2) Package eudev and use it for non-systemd systems, and use the
+ Thomas>      built-in udev for systemd systems. There is of course the problem
+ Thomas>      that udev is not stand-alone: it provides a library, and there are
+ Thomas>      some uncertainties on whether the libudev library will remain
+ Thomas>      source-compatible between eudev and system's udev.
+
+ Thomas> Thoughts?
+
+I think option (1) is the best as well.
 
 -- 
 Bye, Peter Korsgaard
