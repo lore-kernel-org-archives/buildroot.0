@@ -1,32 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  4 Mar 2013 13:50:40 -0300
-Subject: [Buildroot] [PATCH 6/6] iptables: bump to version 1.4.18
-In-Reply-To: <1362415840-9634-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1362415840-9634-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1362415840-9634-6-git-send-email-gustavo@zacarias.com.ar>
+From: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Tue,  5 Mar 2013 01:47:20 +0800
+Subject: [Buildroot] [PATCH] stress: honor the BR2_PREFER_STATIC_LIB
+	preference
+In-Reply-To: <1362206128-27771-1-git-send-email-roylee17@gmail.com>
+References: <1362206128-27771-1-git-send-email-roylee17@gmail.com>
+Message-ID: <1362419240-7979-1-git-send-email-roylee17@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/iptables/iptables.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+From: roylee17 <roylee17@gmail.com>
 
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 518b90e..ed11fdc 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+Stress is linked statically if the --enable-static is specified.
+However, this option is always specified in the global
+SHARED_STATIC_LIBS_OPTS to tell packages to build static libraries,
+if supported.
+
+If the BR2_PREFER_STATIC_LIB is not defined, we have to specify
+--disable-static explicitly to get stress linked dynamically.
+
+Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+---
+ package/stress/stress.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/package/stress/stress.mk b/package/stress/stress.mk
+index 3a047b5..a20b0c6 100644
+--- a/package/stress/stress.mk
++++ b/package/stress/stress.mk
+@@ -10,4 +10,14 @@ STRESS_VERSION = 1.0.4
+ STRESS_SITE    = http://weather.ou.edu/~apw/projects/stress
+ STRESS_AUTORECONF = YES
  
--IPTABLES_VERSION = 1.4.17
-+IPTABLES_VERSION = 1.4.18
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
- IPTABLES_INSTALL_STAGING = YES
++# Stress is linked statically if the --enable-static is specified.
++# However, this option is always specified in the global
++# SHARED_STATIC_LIBS_OPTS to tell packages to build static libraries,
++# if supported.
++#
++# If the BR2_PREFER_STATIC_LIB is not defined, we have to specify
++# --disable-static explicitly to get stress linked dynamically.
++STRESS_CONF_OPT = \
++	$(if $(BR2_PREFER_STATIC_LIB),,--disable-static)
++
+ $(eval $(autotools-package))
 -- 
-1.7.12.4
+1.8.1.5
