@@ -1,34 +1,44 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 4 Mar 2013 12:24:05 +0100
-Subject: [Buildroot] [git commit] f2fs-tools: explicitly select libuuid
-Message-ID: <20130304112555.D961E9AE7E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 04 Mar 2013 13:39:39 +0100
+Subject: [Buildroot] [PATCH 1/2] ProFTPD: Add config option to enable
+	mod_rewrite
+In-Reply-To: <513475CC.8010705@relinux.de> (Stephan Hoffmann's message of
+ "Mon, 04 Mar 2013 11:22:04 +0100")
+References: <1360061657-2329-1-git-send-email-sho@relinux.de>
+ <513475CC.8010705@relinux.de>
+Message-ID: <874ngrcp9w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8e8eddaf2f1a66e80605e4e9e349799f1ff3cd43
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
 
-Explicitly select BR2_PACKAGE_UTIL_LINUX_LIBUUID. Fixes:
-http://autobuild.buildroot.net/results/da5c52b658d9efc25d2c2ad3980add3a36b99ee2/
+ Stephan> Ping?
+ Stephan> I'd really like to get this committed since I am using it in a customer
+ Stephan> system.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/f2fs-tools/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ Stephan> Am 05.02.2013 11:54, schrieb Stephan Hoffmann:
+ >> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+ >> ---
+ >> package/proftpd/Config.in  |    6 ++++++
+ >> package/proftpd/proftpd.mk |    4 ++++
+ >> 2 files changed, 10 insertions(+), 0 deletions(-)
+ >> 
+ >> diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+ >> index abdedc9..7866e0a 100644
+ >> --- a/package/proftpd/Config.in
+ >> +++ b/package/proftpd/Config.in
+ >> @@ -4,3 +4,9 @@ config BR2_PACKAGE_PROFTPD
+ >> ProFTPD, a highly configurable FTP server.
+ >> 
+ >> http://www.proftpd.org/
+ >> +
+ >> +config BR2_PACKAGE_PROFTPD_MOD_REWRITE
+ >> +	bool "proftpd mod_rewrite"
 
-diff --git a/package/f2fs-tools/Config.in b/package/f2fs-tools/Config.in
-index 20db928..99ee91c 100644
---- a/package/f2fs-tools/Config.in
-+++ b/package/f2fs-tools/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_F2FS_TOOLS
- 	bool "f2fs-tools"
- 	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR # util-linux
- 	help
+Committed with the option text changed to "mod_rewrite support", thanks.
+
+-- 
+Bye, Peter Korsgaard
