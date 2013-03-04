@@ -1,22 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Mar 2013 12:23:00 +0100
-Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
-	8}.x stable version
-In-Reply-To: <1362394319-721-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 4 Mar 2013 07:51:58 -0300")
-References: <1362394319-721-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87lia3cstn.fsf@dell.be.48ers.dk>
+Date: Mon, 04 Mar 2013 12:23:37 +0100
+Subject: [Buildroot] [PATCH] wireshark: explicitly disable libsmi
+In-Reply-To: <e3a671643f7a6f4508e3abeec73ae3bec032834f.1362300524.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 3 Mar 2013 10:55:44 +0200")
+References: <e3a671643f7a6f4508e3abeec73ae3bec032834f.1362300524.git.baruch@tkos.co.il>
+Message-ID: <87hakrcssm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Baruch> wireshark's libsmi detection is not cross compile friendly. We
+ Baruch> don't have libsmi in Buildroot yet anyway, so just disable
+ Baruch> support for it in wireshark.
 
-Committed both, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
