@@ -1,34 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  4 Mar 2013 13:00:03 -0300
-Subject: [Buildroot] [PATCH 4/4] squid: bump to version 3.3.2
-In-Reply-To: <1362412803-11393-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1362412803-11393-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1362412803-11393-4-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 04 Mar 2013 17:12:05 +0100
+Subject: [Buildroot] [PATCH] gpsd: bump version to 3.8
+In-Reply-To: <1361870169-27227-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Tue, 26 Feb 2013 09:16:09 +0000")
+References: <1361870169-27227-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87ip57b0ve.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/squid/squid.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 7cae0be..a4093f4 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
- 
--SQUID_VERSION = 3.2.7
--SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.2
-+SQUID_VERSION = 3.3.2
-+SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.3
- SQUID_LICENSE = GPLv2+
- SQUID_LICENSE_FILES = COPYING
- SQUID_DEPENDENCIES = libcap host-libcap host-pkgconf \
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+
+ spdawson> Version 3.8 of gpsd has been released, which includes some
+ spdawson> patches sent upstream by Thomas Petazzoni. This patch bumps
+ spdawson> the gpsd package version, and removes the upstreamed patches.
+
+Committed, thanks.
+
 -- 
-1.7.12.4
+Bye, Peter Korsgaard
