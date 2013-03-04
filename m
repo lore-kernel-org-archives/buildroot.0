@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  4 Mar 2013 13:50:37 -0300
-Subject: [Buildroot] [PATCH 3/6] nfacct: bump to version 1.0.1
+Date: Mon,  4 Mar 2013 13:50:38 -0300
+Subject: [Buildroot] [PATCH 4/6] ulogd: bump to version 2.0.2
 In-Reply-To: <1362415840-9634-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1362415840-9634-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1362415840-9634-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1362415840-9634-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,58 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/nfacct/nfacct.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ulogd/ulogd-fix-libpcap-conditional.patch | 29 -----------------------
+ package/ulogd/ulogd.mk                            |  2 +-
+ 2 files changed, 1 insertion(+), 30 deletions(-)
+ delete mode 100644 package/ulogd/ulogd-fix-libpcap-conditional.patch
 
-diff --git a/package/nfacct/nfacct.mk b/package/nfacct/nfacct.mk
-index 60c6e44..cde9cad 100644
---- a/package/nfacct/nfacct.mk
-+++ b/package/nfacct/nfacct.mk
+diff --git a/package/ulogd/ulogd-fix-libpcap-conditional.patch b/package/ulogd/ulogd-fix-libpcap-conditional.patch
+deleted file mode 100644
+index 3d73d37..0000000
+--- a/package/ulogd/ulogd-fix-libpcap-conditional.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 08387386821f356834bac14c7c5ea7296fb0f428 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 9 Oct 2012 16:23:12 -0300
+-Subject: [PATCH] autoconf/ulogd: fix broken libpcap AM_CONDITIONAL
+-
+-The AM_CONDITIONAL lacks the opening bracket, hence it always evaluates
+-as true, even if there's no libpcap found thus causing build breakage.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- configure.ac |    2 +-
+- 1 files changed, 1 insertions(+), 1 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 10b6e1f..57c596c 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -21,7 +21,7 @@ AC_SEARCH_LIBS([dlopen], [dl], [libdl_LIBS="$LIBS"; LIBS=""])
+- AC_SUBST([libdl_LIBS])
+- AC_SEARCH_LIBS([pcap_close], [pcap], [libpcap_LIBS="-lpcap"; LIBS=""])
+- AC_SUBST([libpcap_LIBS])
+--AM_CONDITIONAL([HAVE_PCAP], test -n "$libpcap_LIBS"])
+-+AM_CONDITIONAL([HAVE_PCAP],[test -n "$libpcap_LIBS"])
+- 
+- dnl Checks for header files.
+- AC_HEADER_DIRENT
+--- 
+-1.7.8.6
+-
+diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
+index 34d8665..9425ac5 100644
+--- a/package/ulogd/ulogd.mk
++++ b/package/ulogd/ulogd.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--NFACCT_VERSION = 1.0.0
-+NFACCT_VERSION = 1.0.1
- NFACCT_SOURCE = nfacct-$(NFACCT_VERSION).tar.bz2
- NFACCT_SITE = http://www.netfilter.org/projects/nfacct/files
- NFACCT_DEPENDENCIES = host-pkgconf \
+-ULOGD_VERSION = 2.0.1
++ULOGD_VERSION = 2.0.2
+ ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
+ ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
+ ULOGD_CONF_OPT = --with-dbi=no --with-pgsql=no
 -- 
 1.7.12.4
