@@ -1,36 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Mar 2013 20:51:23 +0100
-Subject: [Buildroot] [PATCH] Revert "uClibc: port linuxthreads
-	errnopatch to 0.9.33.2"
-In-Reply-To: <9E7C87F7A6274E3EBBC491EE4122270E@JohanW7> (Sagaert Johan's
- message of "Mon, 4 Mar 2013 20:46:05 +0100")
-References: <1361455787-4846-1-git-send-email-gustavo@zacarias.com.ar>
- <877gm1hhsm.fsf@dell.be.48ers.dk>
- <CFB67F3F72BB450DAF0C0E10C27DFC00@JohanW7>
- <51276813.7050604@zacarias.com.ar>
- <9E7C87F7A6274E3EBBC491EE4122270E@JohanW7>
-Message-ID: <87lia39c5g.fsf@dell.be.48ers.dk>
+From: Kevin Chadwick <ma1l1ists@yahoo.co.uk>
+Date: Mon, 4 Mar 2013 19:52:09 +0000
+Subject: [Buildroot] What to do about systemd/udev/eudev?
+In-Reply-To: <87ppzf9d2h.fsf@dell.be.48ers.dk>
+References: <1362312574-17701-1-git-send-email-olivier.schonken@gmail.com>
+ <20130303195436.49654719@skate> <87ppzf9d2h.fsf@dell.be.48ers.dk>
+Message-ID: <946118.25355.bm@smtp119.mail.ird.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+> Hi,
+> 
+>  Thomas> So in fact building udev only without systemd doesn't seem like
+>  Thomas> a good idea moving forward. Therefore, I see two options:  
+> 
+>  Thomas>  (1) Follow the upstream decision, and simply make udev available only
+>  Thomas>      if the init system is systemd. Unlike some other distributions, we
+>  Thomas>      never had the the desire of fighting against upstream. If someone
+>  Thomas>      is dissatisfied with decisions made by upstream projects, then
+>  Thomas>      that someone should go upstream and fix the problem here.  
+> 
+>  Thomas>      This is the solution I would personally prefer. If some were using
+>  Thomas>      udev for some reason and mdev doesn't work for them, then we can
+>  Thomas>      probably help make mdev better where needed.  
+> 
+>  Thomas>  (2) Package eudev and use it for non-systemd systems, and use the
+>  Thomas>      built-in udev for systemd systems. There is of course the problem
+>  Thomas>      that udev is not stand-alone: it provides a library, and there are
+>  Thomas>      some uncertainties on whether the libudev library will remain
+>  Thomas>      source-compatible between eudev and system's udev.  
+> 
+>  Thomas> Thoughts?  
+> 
+> I think option (1) is the best as well.
 
- Sagaert> Hi
+It's worth bearing in mind however that in the long run and if eudev is
+still around then I would expect (2) to be by far the best option for
+their reduced dependencies, older kernel support and just general
+all round sane and considerate decision making.
 
- Sagaert> It took some time till I could verify it against real hardware.
+It's been a few weeks since I checked, is eudev considered stable yet.
+When it is I'd say (2) definately.
 
- Sagaert> I switched to NTPL and so far got no problems with any package.
-
- Sagaert> It's a bit mysterious when to use the other options (pthreads
- Sagaert> and pthreads old).  Incompatible packages mostly do build, but
- Sagaert> the problems show up at runtime.
-
-The pthreads options are basically just there for legacy reasons (from
-before NPTL existed) and presumably see very little testing these
-days. We should aguable deprecate them.
+Why not both. I don't believe there is too much difference? and eudev
+is tracking udev but less so the other way around I believe.
 
 -- 
-Bye, Peter Korsgaard
+_______________________________________________________________________
+
+'Write programs that do one thing and do it well. Write programs to work
+together. Write programs to handle text streams, because that is a
+universal interface'
+
+(Doug McIlroy)
+_______________________________________________________________________
