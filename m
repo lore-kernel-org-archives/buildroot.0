@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 4 Mar 2013 20:56:47 +0100
-Subject: [Buildroot] [git commit] dosfstools: bump to version 3.0.16
-Message-ID: <20130304200436.121909AEAF@busybox.osuosl.org>
+Date: Mon, 4 Mar 2013 20:56:37 +0100
+Subject: [Buildroot] [git commit] ethtool: bump to version 3.8
+Message-ID: <20130304200435.D6F329AEAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3a1fd4be2c849fabb54cf303c2ca753eb9a0314e
+commit: http://git.buildroot.net/buildroot/commit/?id=3ceb91e8b14233f4b40c3acb14384f5898461f95
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dosfstools/dosfstools.mk |    2 +-
+ package/ethtool/ethtool.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index e3cc9cf..3a0856a 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 11abbc2..b791ca7 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--DOSFSTOOLS_VERSION = 3.0.15
-+DOSFSTOOLS_VERSION = 3.0.16
- DOSFSTOOLS_SITE = http://fossies.org/linux/misc
- DOSFSTOOLS_LICENSE = GPLv3+
- DOSFSTOOLS_LICENSE_FILES = COPYING
+-ETHTOOL_VERSION = 3.7
++ETHTOOL_VERSION = 3.8
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPLv2
+ ETHTOOL_LICENSE_FILES = COPYING
