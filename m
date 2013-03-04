@@ -1,235 +1,335 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 4 Mar 2013 17:11:28 +0100
-Subject: [Buildroot] [git commit] gpsd: bump version to 3.8
-Message-ID: <20130304161739.B52179AEAB@busybox.osuosl.org>
+Date: Mon, 4 Mar 2013 17:16:24 +0100
+Subject: [Buildroot] [git commit] microperl: remove it
+Message-ID: <20130304161739.E3B8B9AE9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd5ae087837330b9445f3c35358b19497781bbff
+commit: http://git.buildroot.net/buildroot/commit/?id=abaab88e578683dd56fbb9f57737131549b1f648
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Version 3.8 of gpsd has been released, which includes some patches sent
-upstream by Thomas Petazzoni. This patch bumps the gpsd package version,
-and removes the upstreamed patches.
+microperl has been deprecated by perl
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../gpsd-01-sconstruct-python-2.5-compat.patch     |   79 --------------------
- ...sconstruct-python-2.5-compat-distro-check.patch |   27 -------
- .../gpsd-05-fix-leapsecond-script-python2.5.patch  |   71 ------------------
- package/gpsd/gpsd.mk                               |    3 +-
- 4 files changed, 2 insertions(+), 178 deletions(-)
+ package/Config.in                                  |    1 -
+ package/libxml-parser-perl/libxml-parser-perl.mk   |    6 -
+ package/microperl/Config.in                        |   30 ----
+ .../microperl/microperl-no-signal-handlers.patch   |   22 ---
+ package/microperl/microperl-uudmap.patch           |   47 ------
+ package/microperl/microperl.mk                     |  156 --------------------
+ 6 files changed, 0 insertions(+), 262 deletions(-)
 
-diff --git a/package/gpsd/gpsd-01-sconstruct-python-2.5-compat.patch b/package/gpsd/gpsd-01-sconstruct-python-2.5-compat.patch
+diff --git a/package/Config.in b/package/Config.in
+index 8a02506..6701dc6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -316,7 +316,6 @@ menu "Perl libraries/modules"
+ source "package/cpanminus/Config.in"
+ endmenu
+ endif
+-source "package/microperl/Config.in"
+ source "package/php/Config.in"
+ source "package/python/Config.in"
+ source "package/python3/Config.in"
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+index 996b10d..4454e57 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.mk
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+@@ -10,12 +10,6 @@ LIBXML_PARSER_PERL_SITE = http://www.cpan.org/modules/by-module/XML/
+ 
+ LIBXML_PARSER_PERL_DEPENDENCIES = expat
+ 
+-ifeq ($(BR2_PACKAGE_MICROPERL),y)
+-# microperl builds host-microperl, so ensure we build after that to build
+-# against host-microperl instead of the system perl
+-LIBXML_PARSER_PERL_DEPENDENCIES += microperl
+-endif
+-
+ define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
+  (cd $(@D) ; \
+    $(HOST_CONFIGURE_OPTS) perl Makefile.PL \
+diff --git a/package/microperl/Config.in b/package/microperl/Config.in
 deleted file mode 100644
-index 4306af2..0000000
---- a/package/gpsd/gpsd-01-sconstruct-python-2.5-compat.patch
+index 19d104a..0000000
+--- a/package/microperl/Config.in
 +++ /dev/null
-@@ -1,79 +0,0 @@
--Remove all the with ... as foo constructs
+@@ -1,30 +0,0 @@
+-config BR2_PACKAGE_MICROPERL
+-	bool "microperl"
+-	# needs fork()
+-	depends on BR2_USE_MMU
+-	depends on BR2_DEPRECATED
+-	help
+-	  Perl without operating-specific functions such as readdir.
 -
--Those constructs have been introduced in Python 2.6, and some of our
--autobuilders still use Python 2.5, so replace them with constructs
--that are compatible with Python 2.5.
+-if BR2_PACKAGE_MICROPERL
 -
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-config BR2_PACKAGE_MICROPERL_MODULES
+-	string "additional modules"
+-	help
+-	  List of space-separated microperl modules to copy to the rootfs.
 -
--Index: b/SConstruct
--===================================================================
----- a/SConstruct
--+++ b/SConstruct
--@@ -366,8 +366,8 @@
-- 
-- def CheckXsltproc(context):
--     context.Message('Checking that xsltproc can make man pages... ')
---    with open("xmltest.xml", "w") as ofp:
---        ofp.write('''
--+    ofp = open("xmltest.xml", "w")
--+    ofp.write('''
--        <refentry id="foo.1">
--       <refmeta>
--         <refentrytitle>foo</refentrytitle>
--@@ -380,6 +380,7 @@
--       </refnamediv>
--     </refentry>
-- ''')
--+    ofp.close()
--     probe = "xsltproc --nonet --noout '%s' xmltest.xml" % (docbook_man_uri,)
--     ret = context.TryAction(probe)[0]
--     os.remove("xmltest.xml")
--@@ -1042,8 +1043,9 @@
-- # build timebase.h
-- def timebase_h(target, source, env):
--     from leapsecond import make_leapsecond_include
---    with open(target[0].abspath, 'w') as f:
---        f.write(make_leapsecond_include(source[0].abspath))
--+    f = open(target[0].abspath, 'w')
--+    f.write(make_leapsecond_include(source[0].abspath))
--+    f.close()
-- env.Command(target="timebase.h", source="leapseconds.cache",
--             action=timebase_h)
-- 
--@@ -1116,15 +1118,17 @@
--         ('@DEVMAIL@',    devmail),
--         ('@LIBGPSVERSION@', libgps_version),
--         )
---    with open(str(source[0])) as sfp:
---        content = sfp.read()
--+    sfp = open(str(source[0]))
--+    content = sfp.read()
--+    sfp.close()
--     for (s, t) in substmap:
--         content = content.replace(s, t)
--     m = re.search("@[A-Z]+@", content)
--     if m and m.group(0) not in map(lambda x: x[0], substmap):
--         print >>sys.stderr, "Unknown subst token %s in %s." % (m.group(0), sfp.name)
---    with open(str(target[0]), "w") as tfp:
---        tfp.write(content)
--+    tfp = open(str(target[0]), "w")
--+    tfp.write(content)
--+    tfp.close()
-- 
-- templated = glob.glob("*.in") + glob.glob("*/*.in") + glob.glob("*/*/*.in")
-- 
--@@ -1560,9 +1564,10 @@
-- def validation_list(target, source, env):
--     for page in glob.glob("www/*.html"):
--         if not '-head' in page:
---            with open(page) as fp:
---                if "Valid HTML" in fp.read():
---                    print os.path.join(website, os.path.basename(page))
--+            fp = open(page)
--+            if "Valid HTML" in fp.read():
--+                print os.path.join(website, os.path.basename(page))
--+            fp.close()
-- Utility("validation-list", [www], validation_list)
-- 
-- # How to update the website
-diff --git a/package/gpsd/gpsd-04-sconstruct-python-2.5-compat-distro-check.patch b/package/gpsd/gpsd-04-sconstruct-python-2.5-compat-distro-check.patch
+-	  Examples: warnings.pm Getopt/Std.pm Time::Local
+-
+-	  Module dependencies are not automatic so check your needs.
+-	  You can't use XS modules like IO.
+-
+-menu "module bundles"
+-
+-config BR2_PACKAGE_MICROPERL_BUNDLE_CGI
+-	bool "CGI"
+-	help
+-	  Copy required modules to do CGI scripting.
+-
+-endmenu
+-
+-endif
+diff --git a/package/microperl/microperl-no-signal-handlers.patch b/package/microperl/microperl-no-signal-handlers.patch
 deleted file mode 100644
-index 767a450..0000000
---- a/package/gpsd/gpsd-04-sconstruct-python-2.5-compat-distro-check.patch
+index 3c9aa41..0000000
+--- a/package/microperl/microperl-no-signal-handlers.patch
 +++ /dev/null
-@@ -1,27 +0,0 @@
--The platform.linux_distribution method was introduced in Python 2.6. Some
--of the Buildroot autobuilders still use Python 2.5, which is causing build
--failures such as the following.
+@@ -1,22 +0,0 @@
+-Backport of http://perl5.git.perl.org/perl.git/commitdiff/01d65469392dfc0a?hp=a82b5f080d91ffe184d8ac4795ac71e72e612c2f
 -
--  http://autobuild.buildroot.net/results/045f1f69bac170d8e75cb4952a2e5b4e85a677b8/build-end.log
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
--This patch removes the linux distribution check from the gpsd SConstruct file.
--
--Signed-off-by: Simon Dawson <spdawson@gmail.com>
--diff -Nurp a/SConstruct b/SConstruct
----- a/SConstruct	2012-07-30 07:57:16.515688546 +0100
--+++ b/SConstruct	2012-07-30 08:00:30.135679914 +0100
--@@ -80,14 +80,6 @@ systemd = os.path.exists("/usr/share/sys
+-diff -Nura perl-5.12.3/miniperlmain.c perl-5.12.3-nosig/miniperlmain.c
+---- perl-5.12.3/miniperlmain.c	2011-01-09 17:20:57.000000000 -0300
+-+++ perl-5.12.3-nosig/miniperlmain.c	2011-04-14 10:16:53.564639438 -0300
+-@@ -116,12 +116,14 @@
+-     if (!exitstatus)
+-         perl_run(my_perl);
 - 
-- # Set distribution-specific defaults here
-- imloads = True
---if sys.platform.startswith('linux'):
---    (distro, version, cutename) = platform.linux_distribution()
---    if distro == 'Fedora':
---        if int(version) >= 13:
---            # See https://fedoraproject.org/wiki/Features/ChangeInImplicitDSOLinking
---            imloads = False
---    elif os.path.exists("/etc/arch-release"):
---        imloads = False
+-+#ifndef PERL_MICRO
+-     /* Unregister our signal handler before destroying my_perl */
+-     for (i = 0; PL_sig_name[i]; i++) {
+- 	if (rsignal_state(PL_sig_num[i]) == (Sighandler_t) PL_csighandlerp) {
+- 	    rsignal(PL_sig_num[i], (Sighandler_t) SIG_DFL);
+- 	}
+-     }
+-+#endif
 - 
-- # Does our platform has a working memory-barrier instruction?
-- # The shared-memory export won't be reliable without it.
-diff --git a/package/gpsd/gpsd-05-fix-leapsecond-script-python2.5.patch b/package/gpsd/gpsd-05-fix-leapsecond-script-python2.5.patch
+-     exitstatus = perl_destruct(my_perl);
+- 
+diff --git a/package/microperl/microperl-uudmap.patch b/package/microperl/microperl-uudmap.patch
 deleted file mode 100644
-index 8866b81..0000000
---- a/package/gpsd/gpsd-05-fix-leapsecond-script-python2.5.patch
+index c72f9c9..0000000
+--- a/package/microperl/microperl-uudmap.patch
 +++ /dev/null
-@@ -1,71 +0,0 @@
--the json module was added with python2.6, so a regular python 2.5
--machine will lack this module and won't probably have the simplejson
--module imported by the leapsecond.py script.
+@@ -1,47 +0,0 @@
+-From a82b5f080d91ffe184d8ac4795ac71e72e612c2f Mon Sep 17 00:00:00 2001
+-From: David Leadbeater <dgl@dgl.cx>
+-Date: Mon, 7 Mar 2011 18:40:55 +0000
+-Subject: [PATCH] microperl: Update generate_uudmap in Makefile.micro
 -
--Since the only function used is the isotime function, which is
--self-contained and quite trivial, only copy this function into the
--leapsecond script to avoid the import of the gps.misc module, which
--needs simplejson.
--
--Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+-Makefile.micro hadn't kept up with the changes for generate_uudmap,
+-make it match the real Makefile.
 ----
-- leapsecond.py |   27 ++++++++++++++++++++++++---
-- 1 file changed, 24 insertions(+), 3 deletions(-)
+- Makefile.micro |    8 ++++----
+- 1 files changed, 4 insertions(+), 4 deletions(-)
 -
--diff --git a/leapsecond.py b/leapsecond.py
--index 2059f6c..cdacdb4 100755
----- a/leapsecond.py
--+++ b/leapsecond.py
--@@ -24,7 +24,6 @@
-- # BSD terms apply: see the file COPYING in the distribution root for details.
-- #
-- import os, urllib, re, random, time, calendar, math, sys
---import gps.misc
+-diff --git a/Makefile.micro b/Makefile.micro
+-index 4b738f5..567d98a 100644
+---- a/Makefile.micro
+-+++ b/Makefile.micro
+-@@ -35,7 +35,7 @@ H = av.h uconfig.h cop.h cv.h embed.h embedvar.h form.h gv.h handy.h \
+- HE = $(H) EXTERN.h
 - 
-- __locations = [
--     (
--@@ -48,6 +47,28 @@ __locations = [
-- # between times it might change, in seconds since Unix epoch GMT.
-- __cachepath = "/var/run/leapsecond"
+- clean:
+--	-rm -f $(O) microperl generate_uudmap$(_X) uudmap.h
+-+	-rm -f $(O) microperl generate_uudmap$(_X) uudmap.h bitcount.h
 - 
--+def isotime(s):
--+    "Convert timestamps in ISO8661 format to and from Unix time."
--+    if type(s) == type(1):
--+        return time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(s))
--+    elif type(s) == type(1.0):
--+        date = int(s)
--+        msec = s - date
--+        date = time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(s))
--+        return date + "." + repr(msec)[3:]
--+    elif type(s) == type("") or type(s) == type(u""):
--+        if s[-1] == "Z":
--+            s = s[:-1]
--+        if "." in s:
--+            (date, msec) = s.split(".")
--+        else:
--+            date = s
--+            msec = "0"
--+        # Note: no leap-second correction!
--+        return calendar.timegm(time.strptime(date, "%Y-%m-%dT%H:%M:%S")) + float("0." + msec)
--+    else:
--+        raise TypeError
--+
-- def retrieve():
--     "Retrieve current leap-second from Web sources."
--     random.shuffle(__locations)	# To spread the load
--@@ -261,10 +282,10 @@ if __name__ == '__main__':
--             print unix_to_rfc822(float(val))
--             raise SystemExit, 0
--         elif (switch == '-I'):  # Compute Unix time from ISO8601 date
---            print gps.misc.isotime(val)
--+            print isotime(val)
--             raise SystemExit, 0
--         elif (switch == '-O'):  # Compute ISO8601 date from Unix time
---            print gps.misc.isotime(float(val))
--+            print isotime(float(val))
--             raise SystemExit, 0
+- distclean:	clean
 - 
--         print "Current leap second:", retrieve()
+-@@ -74,7 +74,7 @@ udoop$(_O):	$(HE) doop.c
+- udump$(_O):	$(HE) dump.c regcomp.h regnodes.h
+- 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) dump.c
+- 
+--uglobals$(_O):	$(H) globals.c INTERN.h perlapi.h
+-+uglobals$(_O):	$(H) globals.c INTERN.h perlapi.h uudmap.h bitcount.h
+- 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) globals.c
+- 
+- ugv$(_O):	$(HE) gv.c
+-@@ -173,8 +173,8 @@ uutil$(_O):	$(HE) util.c
+- uperlapi$(_O):	$(HE) perlapi.c perlapi.h
+- 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) perlapi.c
+- 
+--uudmap.h: generate_uudmap$(_X)
+--	$(RUN) ./generate_uudmap$(_X) >uudmap.h
+-+uudmap.h bitcount.h: generate_uudmap$(_X)
+-+	$(RUN) ./generate_uudmap$(_X) uudmap.h bitcount.h
+- 
+- generate_uudmap$(_O): generate_uudmap.c
+- 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) generate_uudmap.c
 --- 
--1.7.9.5
+-1.6.5.2.74.g610f9.dirty
 -
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index e472044..ccf99ca 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -3,7 +3,8 @@
- # gpsd
- #
- #############################################################
--GPSD_VERSION = 3.7
-+
-+GPSD_VERSION = 3.8
- GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd/
- GPSD_LICENSE = BSD-3c
- GPSD_LICENSE_FILES = COPYING
+diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
+deleted file mode 100644
+index b2a912a..0000000
+--- a/package/microperl/microperl.mk
++++ /dev/null
+@@ -1,156 +0,0 @@
+-#############################################################
+-#
+-# microperl
+-#
+-#############################################################
+-
+-MICROPERL_VERSION = 5.12.4
+-MICROPERL_SITE = http://www.cpan.org/src/5.0
+-MICROPERL_SOURCE = perl-$(MICROPERL_VERSION).tar.bz2
+-MICROPERL_LICENSE = Artistic
+-MICROPERL_LICENSE_FILES = Artistic
+-MICROPERL_DEPENDENCIES = host-microperl
+-MICROPERL_MODS_DIR = /usr/lib/perl5/$(MICROPERL_VERSION)
+-MICROPERL_ARCH_DIR = $(MICROPERL_MODS_DIR)/$(GNU_TARGET_NAME)
+-MICROPERL_MODS = $(call qstrip,$(BR2_PACKAGE_MICROPERL_MODULES))
+-
+-# Minimal set of modules required for 'perl -V' to work
+-MICROPERL_ARCH_MODS = Config.pm Config_git.pl Config_heavy.pl
+-MICROPERL_BASE_MODS = strict.pm
+-
+-# CGI bundle
+-ifeq ($(BR2_PACKAGE_MICROPERL_BUNDLE_CGI),y)
+-MICROPERL_MODS += constant.pm CGI CGI.pm Carp.pm Exporter.pm overload.pm \
+-	vars.pm warnings.pm warnings/register.pm
+-endif
+-
+-# Host microperl is actually full-blown perl
+-define HOST_MICROPERL_CONFIGURE_CMDS
+-	cd $(@D) ; \
+-	./Configure -Dcc="$(HOSTCC)" -Dprefix="$(HOST_DIR)/usr" \
+-		-Dloclibpth='/lib /lib64 /usr/lib /usr/lib64' -des
+-endef
+-
+-define HOST_MICROPERL_BUILD_CMDS
+-	$(MAKE) -C $(@D)
+-endef
+-
+-define HOST_MICROPERL_INSTALL_CMDS
+-	$(MAKE) -C $(@D) install
+-endef
+-
+-ifeq ($(BR2_ENDIAN),"BIG")
+-define MICROPERL_BIGENDIAN
+-	$(SED) '/^byteorder=/d' $(@D)/uconfig.sh
+-	echo "byteorder='4321'" >>$(@D)/uconfig.sh
+-endef
+-endif
+-
+-ifeq ($(BR2_LARGEFILE),y)
+-define MICROPERL_LARGEFILE
+-	$(SED) '/^uselargefiles=/d' $(@D)/uconfig.sh
+-	echo "uselargefiles='define'" >>$(@D)/uconfig.sh
+-endef
+-endif
+-
+-ifeq ($(BR2_USE_WCHAR),y)
+-define MICROPERL_WCHAR
+-	$(SED) '/^d_mbstowcs=/d' -e '/^d_mbtowc=/d' -e '/^d_wcstombs=/d' \
+-		-e '/^d_wctomb=/d' $(@D)/uconfig.sh
+-	echo "d_mbstowcs='define'" >>$(@D)/uconfig.sh
+-	echo "d_mbtowc='define'" >>$(@D)/uconfig.sh
+-	echo "d_wcstombs='define'" >>$(@D)/uconfig.sh
+-	echo "d_wctomb='define'" >>$(@D)/uconfig.sh
+-endef
+-endif
+-
+-define MICROPERL_CONFIGURE_CMDS
+-	$(SED) '/^archlib=/d' -e '/^archlibexp=/d' -e '/^optimize=/d' \
+-		-e '/^archname=/d' -e '/^d_poll=/d' -e '/^i_poll=/d' \
+-		-e '/^osname=/d' -e '/^u32type=/d' -e '/^d_archlib=/d' \
+-		-e '/^d_memset=/d' -e '/^i_fcntl=/d' -e '/^useperlio=/d' \
+-		-e '/^need_va_copy=/d' $(@D)/uconfig.sh
+-	$(SED) 's/5.12/$(MICROPERL_VERSION)/' $(@D)/uconfig.sh
+-	echo "archlib='$(MICROPERL_ARCH_DIR)'" >>$(@D)/uconfig.sh
+-	echo "archlibexp='$(MICROPERL_ARCH_DIR)'" >>$(@D)/uconfig.sh
+-	echo "d_archlib='define'" >>$(@D)/uconfig.sh
+-	echo "archname='$(GNU_TARGET_NAME)'" >>$(@D)/uconfig.sh
+-	echo "osname='linux'" >>$(@D)/uconfig.sh
+-	echo "cc='$(TARGET_CC)'" >>$(@D)/uconfig.sh
+-	echo "ccflags='$(TARGET_CFLAGS)'" >>$(@D)/uconfig.sh
+-	echo "optimize='$(TARGET_CFLAGS)'" >>$(@D)/uconfig.sh
+-	echo "usecrosscompile='define'" >>$(@D)/uconfig.sh
+-	echo "d_memset='define'" >>$(@D)/uconfig.sh
+-	echo "i_fcntl='define'" >>$(@D)/uconfig.sh
+-	echo "useperlio='define'" >>$(@D)/uconfig.sh
+-	echo "u32type='unsigned int'" >>$(@D)/uconfig.sh
+-	echo "need_va_copy='define'" >>$(@D)/uconfig.sh
+-	echo "d_poll='define'" >>$(@D)/uconfig.sh
+-	echo "i_poll='define'" >>$(@D)/uconfig.sh
+-	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
+-	$(SED) 's/local\///' $(@D)/uconfig.sh
+-	$(MICROPERL_BIGENDIAN)
+-	$(MICROPERL_LARGEFILE)
+-	$(MICROPERL_WCHAR)
+-	$(MAKE) -C $(@D) -f Makefile.micro regen_uconfig
+-	cp -f $(@D)/uconfig.h $(@D)/config.h
+-	cp -f $(@D)/uconfig.sh $(@D)/config.sh
+-	echo "ccname='$(TARGET_CC)'" >>$(@D)/config.sh
+-	echo "PERL_CONFIG_SH=true" >>$(@D)/config.sh
+-	cd $(@D) ; $(HOST_DIR)/usr/bin/perl make_patchnum.pl ; \
+-	$(HOST_DIR)/usr/bin/perl configpm
+-endef
+-
+-define MICROPERL_BUILD_CMDS
+-	$(MAKE) -f Makefile.micro -C $(@D) \
+-		CC="$(HOSTCC)" bitcount.h
+-	$(MAKE) -f Makefile.micro -C $(@D) \
+-		CC="$(TARGET_CC)" OPTIMIZE="$(TARGET_CFLAGS)"
+-endef
+-
+-# Some extensions don't need a build run
+-# We try to build anyway to avoid a huge black list
+-# Just ignore make_ext.pl warning/errors
+-define MICROPERL_BUILD_EXTENSIONS
+-	for i in $(MICROPERL_MODS); do \
+-	cd $(@D); ln -sf $(HOST_DIR)/usr/bin/perl miniperl; \
+-		PERL5LIB=$(TARGET_DIR)/$(MICROPERL_ARCH_DIR) \
+-		$(HOST_DIR)/usr/bin/perl make_ext.pl MAKE="$(MAKE)" --nonxs \
+-		`echo $$i|sed -e 's/.pm//'`; \
+-	done
+-endef
+-
+-define MICROPERL_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/microperl $(TARGET_DIR)/usr/bin/microperl
+-	ln -sf microperl $(TARGET_DIR)/usr/bin/perl
+-	for i in $(MICROPERL_ARCH_MODS); do \
+-		$(INSTALL) -m 0644 -D $(@D)/lib/$$i \
+-			$(TARGET_DIR)/$(MICROPERL_ARCH_DIR)/$$i; \
+-	done
+-	for i in $(MICROPERL_BASE_MODS); do \
+-		$(INSTALL) -m 0644 -D $(@D)/lib/$$i \
+-			$(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
+-	done
+-	$(MICROPERL_BUILD_EXTENSIONS)
+-	for i in $(MICROPERL_MODS); do \
+-		j=`echo $$i|cut -d : -f 1` ; \
+-		if [ -d $(@D)/lib/$$j ] ; then \
+-			cp -af $(@D)/lib/$$j $(TARGET_DIR)/$(MICROPERL_MODS_DIR) ; \
+-		fi ; \
+-		if [ -f $(@D)/lib/$$i ] ; then \
+-			$(INSTALL) -m 0644 -D $(@D)/lib/$$i $(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
+-		fi ; \
+-	done
+-	# Remove test files
+-	find $(TARGET_DIR)/$(MICROPERL_MODS_DIR) -type f -name *.t \
+-		-exec rm -f {} \;
+-endef
+-
+-define MICROPERL_UNINSTALL_TARGET_CMDS
+-	rm -f $(TARGET_DIR)/usr/bin/perl
+-	rm -f $(TARGET_DIR)/usr/bin/microperl
+-	rm -rf $(TARGET_DIR)/usr/lib/perl5
+-endef
+-
+-$(eval $(generic-package))
+-$(eval $(host-generic-package))
