@@ -1,57 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 4 Mar 2013 10:41:09 +0200
-Subject: [Buildroot] [PATCHv2] Added package HPLIP for printing to HP
- printers
-In-Reply-To: <1362346010-7174-1-git-send-email-olivier.schonken@gmail.com>
-References: <20130303190745.0f89b2e4@skate>
- <1362346010-7174-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <20130304084108.GB10626@sapphire.tkos.co.il>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 04 Mar 2013 10:29:14 +0100
+Subject: [Buildroot] [PATCH 11/33] ltp-testsuite: fix build on uClibc
+	exp10
+In-Reply-To: <1353543503-8952-12-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Thu, 22 Nov 2012 01:18:01 +0100")
+References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
+ <1353543503-8952-12-git-send-email-s.martin49@gmail.com>
+Message-ID: <87a9qjecnp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Olivier,
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-On Sun, Mar 03, 2013 at 11:26:50PM +0200, Olivier Schonken wrote:
-> HPLIP (Hewlett-Packard Linux Imaging & Printing) is an HP-developed solution
-> for printing, scanning, and faxing with HP inkjet and laser based printers
-> in Linux.
-> 
-> The --includedir=$(STAGING_DIR)/usr/include is unfortunately necessary even 
-> with the modified Makefile.am for a succesful build.
-> 
-> Created a menu for cups related components to be kept close together.
-> 
-> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+ Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ Samuel> ---
+ Samuel>  ...tsuite-20101031-fix-build-on-uClibc-exp10.patch | 22 ++++++++++++++++++++++
+ Samuel>  1 file changed, 22 insertions(+)
+ Samuel>  create mode 100644 package/ltp-testsuite/ltp-testsuite-20101031-fix-build-on-uClibc-exp10.patch
 
-[...]
+ Samuel> diff --git a/package/ltp-testsuite/ltp-testsuite-20101031-fix-build-on-uClibc-exp10.patch b/package/ltp-testsuite/ltp-testsuite-20101031-fix-build-on-uClibc-exp10.patch
+ Samuel> new file mode 100644
+ Samuel> index 0000000..7a02d95
+ Samuel> --- /dev/null
+ Samuel> +++ b/package/ltp-testsuite/ltp-testsuite-20101031-fix-build-on-uClibc-exp10.patch
+ Samuel> @@ -0,0 +1,22 @@
+ Samuel> +Inspired by: http://peter.korsgaard.com/patches/alsa-utils/alsamixer-fix-build-on-uClibc-exp10.patch
 
-> +config BR2_PACKAGE_HPLIP
-> +	bool "hplip"
-> +	select BR2_PACKAGE_LIBUSB
+Nice ;)
 
-Also select BR2_PACKAGE_CUPS, since it is listed as dependency below. Remember 
-to also depend on dbus' dependencies.
-
-[...]
-
-> +ifeq ($(BR2_PACKAGE_DBUS),y)
-> +	HPLIP_CONF_OPT += --enable-dbus-build 
-
-Add 'HPLIP_DEPENDENCIES += dbus', and make sure you do not override this 
-assignment below.
-
-> +else
-> +	HPLIP_CONF_OPT += --disable-dbus-build 
-> +endif
-> +   
-> +HPLIP_DEPENDENCIES = cups libusb
-
-baruch
+Committed, thanks.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Bye, Peter Korsgaard
