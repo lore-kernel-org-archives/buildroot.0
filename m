@@ -1,45 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Mar 2013 21:14:40 +0100
-Subject: [Buildroot] What to do about systemd/udev/eudev?
-In-Reply-To: <946118.25355.bm@smtp119.mail.ird.yahoo.com>
-References: <1362312574-17701-1-git-send-email-olivier.schonken@gmail.com>
- <20130303195436.49654719@skate> <87ppzf9d2h.fsf@dell.be.48ers.dk>
- <946118.25355.bm@smtp119.mail.ird.yahoo.com>
-Message-ID: <20130304211440.1b5e2c03@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 4 Mar 2013 21:15:06 +0100
+Subject: [Buildroot] [PATCH] <pkg>-rsync: exclude version control files
+In-Reply-To: <871ubv9bk0.fsf@dell.be.48ers.dk>
+References: <f9ac20b69b1bfd3f77ef.1362169598@BEANTN0L019720>
+ <871ubv9bk0.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LXoVUisH8k2bUobe4i9Z2PwURG=HCG2YxYZc0apRrPsow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Kevin Chadwick,
+On Mon, Mar 4, 2013 at 9:04 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+>
+>  Thomas> When using rsync to import package sources (typically with
+>  Thomas> PKG_OVERRIDE_SRCDIR), it often happens that these external sources
+>  Thomas> are under version control, and contain directories like .git,
+>  Thomas> .hg, etc.
+>
+>  Thomas> Depending on the project, these directories can become pretty large
+>  Thomas> and typically have a lot of files. Moreover, they are not necessary
+>  Thomas> in the context of building the package. Therefore, this commit adds
+>  Thomas> the --cvs-exclude option to the rsync call, saving both disk space
+>  Thomas> and sync time.
+>
+> I don't personally use this, but doesn't that break stuff using the
+> version info (like E.G. the kernel storing the git id)?
 
-On Mon, 4 Mar 2013 19:52:09 +0000, Kevin Chadwick wrote:
+Hmm, it probably will. Are people actually relying on this when using local.mk?
+I have always thought of local.mk to be a personal developer way of
+working, not something you'd rely on for a real project. In these
+cases, I'd define the version number in the defconfig.
 
-> It's worth bearing in mind however that in the long run and if eudev is
-> still around then I would expect (2) to be by far the best option for
-> their reduced dependencies, older kernel support and just general
-> all round sane and considerate decision making.
-
-We already have support for static /dev, devtmpfs or mdev, and none of
-those options require *any* dependency beyond some basic kernel options
-and Busybox. So for anyone looking for a lightweight solution, we
-already have plenty of choices.
-
-> It's been a few weeks since I checked, is eudev considered stable yet.
-> When it is I'd say (2) definately.
-> 
-> Why not both. I don't believe there is too much difference? and eudev
-> is tracking udev but less so the other way around I believe.
-
-If someone contributes sane patches that implement both systemd-udev
-and eudev, then we will of course review them and consider them.
+Input from other users could be welcome here.
+If needed, we can make this a configurable option?
 
 Best regards,
-
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
