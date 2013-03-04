@@ -1,97 +1,81 @@
-From: Ronald Kortekaas <Ronald.Kortekaas@kvernelandgroup.com>
-Date: Mon, 4 Mar 2013 15:02:19 +0000
-Subject: [Buildroot] iconv charmaps
-Message-ID: <0239798F2EB77A48A8ED16336D6B4CB7149063E2@k1exch01.kverneland.com>
+From: Mark Jackson <mpfj-list@mimc.co.uk>
+Date: Mon, 04 Mar 2013 15:28:01 +0000
+Subject: [Buildroot] [PATCH] Allow extra options to be passed to ubifs
+	creation tools
+Message-ID: <5134BD81.1070406@mimc.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
+---
+ fs/ubifs/Config.in |   14 ++++++++++++++
+ fs/ubifs/ubi.mk    |    2 ++
+ fs/ubifs/ubifs.mk  |    4 +++-
+ 3 files changed, 19 insertions(+), 1 deletion(-)
 
-Currently there are a few available charmaps for iconv. I need some aliases for this charmaps and to add some additional one. What are the possibilities to add these charmaps?
-
-I need the following:
-
-UTF8 (alias on UTF-8)
-ISO8859-1 (alias on ISO-8859-1)
-ISO8859-2
-ISO8859-4
-ISO8859-5
-ISO8859-7
-ISO8859-15
-
-Best regards,
-Ronald Kortekaas
-
-[cid:image002.png at 01CE18F1.A47A0C50]<http://www.kvernelandgroup.com/welcome>Ronald Kortekaas * Software Engineer * R&D * Kverneland Group Mechatronics BV
-Phone: (+31) 252 662 165 * Fax: (+31) 252 662 246
-ronald.kortekaas at kvernelandgroup.com<mailto:ronald.kortekaas@kvernelandgroup.com> * www.kvernelandgroup.com<http://www.kvernelandgroup.com/>
-Hoofdweg 1278, 2153LR Nieuw-Vennep, The Netherlands, Chamber of Commerce: 34167591
-[Beschrijving: Beskrivelse: cid:image008.png at 01CD86A1.DEF1D620][Beschrijving: Beskrivelse: cid:image009.png at 01CD86A1.DEF1D620]<http://www.facebook.com/KvernelandGroup>[Beschrijving: Beskrivelse: cid:image010.png at 01CD86A1.DEF1D620]<https://twitter.com/KvernelandGroup>[Beschrijving: Beskrivelse: cid:image011.png at 01CD86A1.DEF1D620]<http://www.youtube.com/kvernelandgrp>[Beschrijving: Beskrivelse: cid:image012.png at 01CD86A1.DEF1D620]<http://www.facebook.com/iMFarming>
-
-
-
--------------------------------------------------------------------------
-This message contains information that may be privileged or confidential
-and is the property of Kverneland Group.
-It is intended only for the person to whom it is addressed.
-
-If you are not the intended recipient, you are not authorised to read, print,
-retain, copy, disseminate, distribute or use this message or any part thereof.
-If you receive this message in error, please notify the sender immediately
-and delete all copies of this message.
------------------------------------------------------------------------
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130304/b2d7cadf/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image001.jpg
-Type: image/jpeg
-Size: 796 bytes
-Desc: image001.jpg
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130304/b2d7cadf/attachment-0001.jpg>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image002.png
-Type: image/png
-Size: 9585 bytes
-Desc: image002.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130304/b2d7cadf/attachment-0006.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image003.png
-Type: image/png
-Size: 3107 bytes
-Desc: image003.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130304/b2d7cadf/attachment-0007.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image004.png
-Type: image/png
-Size: 1316 bytes
-Desc: image004.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130304/b2d7cadf/attachment-0008.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image005.png
-Type: image/png
-Size: 1435 bytes
-Desc: image005.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130304/b2d7cadf/attachment-0009.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image006.png
-Type: image/png
-Size: 2506 bytes
-Desc: image006.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130304/b2d7cadf/attachment-0010.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image007.png
-Type: image/png
-Size: 1436 bytes
-Desc: image007.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130304/b2d7cadf/attachment-0011.png>
+diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
+index a5ef5f2..f707737 100644
+--- a/fs/ubifs/Config.in
++++ b/fs/ubifs/Config.in
+@@ -77,6 +77,13 @@ config BR2_TARGET_ROOTFS_UBIFS_LZMA
+ 
+ endchoice
+ 
++config BR2_TARGET_ROOTFS_UBIFS_OPTS
++	string "Additional mkfs.ubifs options"
++	default ""
++	depends on BR2_TARGET_ROOTFS_UBIFS
++	help
++	  Any additional mkfs.ubifs options you may want to include.
++
+ config BR2_TARGET_ROOTFS_UBI
+ 	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	bool "Embed into an UBI image"
+@@ -98,3 +105,10 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
+ 	help
+ 	  Tells ubinize that the flash supports sub-pages and the sub-page
+ 	  size. Use 0 if subpages are not supported on flash chip.
++
++config BR2_TARGET_ROOTFS_UBI_OPTS
++	string "Additional ubinize options"
++	default ""
++	depends on BR2_TARGET_ROOTFS_UBI
++	help
++	  Any additional ubinize options you may want to include.
+diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
+index 51ab42d..e9033e8 100644
+--- a/fs/ubifs/ubi.mk
++++ b/fs/ubifs/ubi.mk
+@@ -10,6 +10,8 @@ ifneq ($(BR2_TARGET_ROOTFS_UBI_SUBSIZE),0)
+ UBI_UBINIZE_OPTS += -s $(BR2_TARGET_ROOTFS_UBI_SUBSIZE)
+ endif
+ 
++UBI_UBINIZE_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_OPTS))
++
+ ROOTFS_UBI_DEPENDENCIES = rootfs-ubifs
+ 
+ define ROOTFS_UBI_CMD
+diff --git a/fs/ubifs/ubifs.mk b/fs/ubifs/ubifs.mk
+index 8506dbd..dca2e04 100644
+--- a/fs/ubifs/ubifs.mk
++++ b/fs/ubifs/ubifs.mk
+@@ -16,10 +16,12 @@ ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_NONE),y)
+ UBIFS_OPTS += -x none
+ endif
+ 
++UBIFS_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBIFS_OPTS))
++
+ ROOTFS_UBIFS_DEPENDENCIES = host-mtd
+ 
+ define ROOTFS_UBIFS_CMD
+ 	$(HOST_DIR)/usr/sbin/mkfs.ubifs -d $(TARGET_DIR) $(UBIFS_OPTS) -o $@
+ endef
+ 
+-$(eval $(call ROOTFS_TARGET,ubifs))
+\ No newline at end of file
++$(eval $(call ROOTFS_TARGET,ubifs))
+-- 
+1.7.9.5
