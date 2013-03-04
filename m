@@ -1,33 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Mar 2013 12:26:00 +0100
-Subject: [Buildroot] [PATCH] u-boot: u-boot SPL is usually under ./spl/
-In-Reply-To: <CAOQ7t2bGKQ7y_9ap1AMxi9On8Z_CqUTJDwDPcG3XEM+9KMzrQw@mail.gmail.com>
- (Carlo Caione's message of "Sun, 3 Mar 2013 21:53:16 +0100")
-References: <1362329351-7738-1-git-send-email-carlo.caione@gmail.com>
- <20130303192824.2a2faf5d@skate>
- <CAOQ7t2ZJsu5u706BHJsuX6vOPgB5_oUJfF05EZYESpCjunvb=Q@mail.gmail.com>
- <20130303205242.423ad324@skate>
- <CAOQ7t2bGKQ7y_9ap1AMxi9On8Z_CqUTJDwDPcG3XEM+9KMzrQw@mail.gmail.com>
-Message-ID: <878v63cson.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 4 Mar 2013 12:22:29 +0100
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 4,
+	8}.x stable version
+Message-ID: <20130304112555.31CEB9AE7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlo" == Carlo Caione <carlo.caione@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=5323cd35b657c9f444b3a96aab203639df0ee707
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> What about setting BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin" ?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in                 |    6 +++---
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- Carlo> Well, honestly I don't like it (not really clean) but I'll go for it
- Carlo> if there is no other way :)
-
- Carlo> (BTW, IIRC MLO in OMAP is just spl/u-boot-spl.bin with an
- Carlo> additional header)
-
-True, but the header is essential to get the ROM to use it.
-
-I find it ok that the path is relative to the u-boot basedir.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 38cf9d3..0c417e6 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -62,14 +62,14 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.67"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.68"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.39"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.34"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.35"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+-	default "3.8.1"		if BR2_KERNEL_HEADERS_3_8
++	default "3.8.2"		if BR2_KERNEL_HEADERS_3_8
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.67-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.68-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.67-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.68-headers_install-fix-__packed-in-exported-kernel-head.patch
