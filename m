@@ -1,24 +1,246 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Mar 2013 17:28:47 +0100
-Subject: [Buildroot] [PATCH] Add Armadeus systems APF28 SOM basic
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 4 Mar 2013 17:27:37 +0100
+Subject: [Buildroot] [git commit] Add Armadeus systems APF28 SOM basic
 	support.
-In-Reply-To: <1362257154-31031-1-git-send-email-julien.boibessot@free.fr>
- (julien boibessot's message of "Sat, 2 Mar 2013 21:45:54 +0100")
-References: <1362257154-31031-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <87y5e39lj4.fsf@dell.be.48ers.dk>
+Message-ID: <20130304162827.2B8739AEAA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6deb0685e40d2e0023032565e60725632877be3a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- julien> From: Julien Boibessot <julien.boibessot@armadeus.com>
- julien> Buildroot toolchain, UBIFS rootfs, Linux kernel (board is mainlined
- julien> since 3.8).
+Buildroot toolchain, UBIFS rootfs, Linux kernel (board is mainlined
+since 3.8).
 
-Committed, thanks.
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ board/armadeus/apf28/linux-3.8.config |  180 +++++++++++++++++++++++++++++++++
+ configs/armadeus_apf28_defconfig      |   29 ++++++
+ 2 files changed, 209 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/board/armadeus/apf28/linux-3.8.config b/board/armadeus/apf28/linux-3.8.config
+new file mode 100644
+index 0000000..c9f1142
+--- /dev/null
++++ b/board/armadeus/apf28/linux-3.8.config
+@@ -0,0 +1,180 @@
++CONFIG_EXPERIMENTAL=y
++# CONFIG_LOCALVERSION_AUTO is not set
++# CONFIG_SWAP is not set
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_LOG_BUF_SHIFT=14
++CONFIG_EMBEDDED=y
++# CONFIG_COMPAT_BRK is not set
++CONFIG_SLAB=y
++CONFIG_PROFILING=y
++CONFIG_OPROFILE=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++# CONFIG_BLK_DEV_BSG is not set
++CONFIG_PARTITION_ADVANCED=y
++CONFIG_BSD_DISKLABEL=y
++# CONFIG_IOSCHED_CFQ is not set
++CONFIG_ARCH_MXS=y
++CONFIG_MACH_MXS_DT=y
++CONFIG_PREEMPT=y
++CONFIG_AEABI=y
++# CONFIG_OABI_COMPAT is not set
++CONFIG_ZBOOT_ROM_TEXT=0x0
++CONFIG_ZBOOT_ROM_BSS=0x0
++CONFIG_CPU_IDLE=y
++# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_PNP=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_LRO is not set
++# CONFIG_INET_DIAG is not set
++CONFIG_IPV6=y
++CONFIG_CAN=m
++CONFIG_CAN_RAW=m
++CONFIG_CAN_BCM=m
++CONFIG_CAN_VCAN=m
++CONFIG_CAN_FLEXCAN=m
++CONFIG_BT=m
++CONFIG_BT_RFCOMM=m
++CONFIG_BT_RFCOMM_TTY=y
++CONFIG_BT_BNEP=m
++CONFIG_BT_BNEP_MC_FILTER=y
++CONFIG_BT_BNEP_PROTO_FILTER=y
++CONFIG_BT_HIDP=m
++CONFIG_BT_HCIBTUSB=m
++CONFIG_CFG80211=m
++CONFIG_MAC80211=m
++CONFIG_MAC80211_RC_PID=y
++CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_FW_LOADER=m
++CONFIG_MTD=y
++CONFIG_MTD_CMDLINE_PARTS=y
++CONFIG_MTD_CHAR=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_NAND=y
++CONFIG_MTD_NAND_GPMI_NAND=y
++CONFIG_MTD_UBI=y
++CONFIG_EEPROM_AT24=y
++CONFIG_EEPROM_AT25=y
++CONFIG_SCSI=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_CHR_DEV_ST=y
++CONFIG_BLK_DEV_SR=y
++CONFIG_CHR_DEV_SG=y
++CONFIG_CHR_DEV_SCH=y
++CONFIG_SCSI_MULTI_LUN=y
++CONFIG_SCSI_LOGGING=y
++CONFIG_SCSI_SCAN_ASYNC=y
++CONFIG_NETDEVICES=y
++CONFIG_RTL8187=m
++CONFIG_RT2X00=m
++CONFIG_RT73USB=m
++CONFIG_ZD1211RW=m
++CONFIG_INPUT_JOYDEV=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_KEYBOARD_GPIO=y
++CONFIG_INPUT_TOUCHSCREEN=y
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_UINPUT=m
++# CONFIG_LEGACY_PTYS is not set
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
++CONFIG_SERIAL_MXS_AUART=y
++# CONFIG_HW_RANDOM is not set
++CONFIG_I2C=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_MXS=y
++CONFIG_SPI=y
++CONFIG_SPI_BITBANG=m
++CONFIG_SPI_MXS=y
++CONFIG_SPI_SPIDEV=m
++CONFIG_GPIO_SYSFS=y
++CONFIG_HWMON=m
++CONFIG_WATCHDOG=y
++CONFIG_MEDIA_SUPPORT=m
++CONFIG_MEDIA_CAMERA_SUPPORT=y
++CONFIG_FB=y
++CONFIG_FB_MXS=y
++CONFIG_BACKLIGHT_LCD_SUPPORT=y
++CONFIG_BACKLIGHT_CLASS_DEVICE=y
++# CONFIG_BACKLIGHT_GENERIC is not set
++CONFIG_BACKLIGHT_PWM=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_FONTS=y
++CONFIG_FONT_8x8=y
++CONFIG_LOGO=y
++# CONFIG_LOGO_LINUX_MONO is not set
++# CONFIG_LOGO_LINUX_VGA16 is not set
++CONFIG_USB=y
++CONFIG_USB_DEBUG=y
++CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
++CONFIG_USB_MON=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_CHIPIDEA=y
++CONFIG_USB_CHIPIDEA_HOST=y
++CONFIG_USB_ACM=y
++CONFIG_USB_PRINTER=y
++CONFIG_USB_WDM=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_GADGET_DEBUG_FILES=y
++CONFIG_USB_ETH=m
++CONFIG_USB_ULPI=y
++CONFIG_USB_MXS_PHY=y
++CONFIG_MMC=y
++CONFIG_MMC_MXS=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGERS=y
++CONFIG_LEDS_TRIGGER_TIMER=y
++CONFIG_LEDS_TRIGGER_ONESHOT=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_LEDS_TRIGGER_BACKLIGHT=y
++CONFIG_LEDS_TRIGGER_GPIO=y
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_STMP=y
++CONFIG_DMADEVICES=y
++CONFIG_MXS_DMA=y
++CONFIG_STAGING=y
++CONFIG_MXS_LRADC=y
++CONFIG_IIO=y
++CONFIG_PWM=y
++CONFIG_PWM_MXS=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT2_FS_XATTR=y
++CONFIG_EXT2_FS_POSIX_ACL=y
++CONFIG_EXT2_FS_SECURITY=y
++CONFIG_EXT2_FS_XIP=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++CONFIG_EXT3_FS_SECURITY=y
++CONFIG_AUTOFS4_FS=y
++CONFIG_ISO9660_FS=y
++CONFIG_JOLIET=y
++CONFIG_ZISOFS=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS=y
++CONFIG_UBIFS_FS=y
++CONFIG_NFS_FS=y
++CONFIG_NFS_V4=y
++CONFIG_ROOT_NFS=y
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_CODEPAGE_850=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_DEBUG_FS=y
++# CONFIG_CRYPTO_ANSI_CPRNG is not set
++# CONFIG_CRYPTO_HW is not set
+diff --git a/configs/armadeus_apf28_defconfig b/configs/armadeus_apf28_defconfig
+new file mode 100644
+index 0000000..ae443e1
+--- /dev/null
++++ b/configs/armadeus_apf28_defconfig
+@@ -0,0 +1,29 @@
++# Architecture
++BR2_arm=y
++BR2_arm926t=y
++
++# Lock down headers to avoid breaking with new defaults
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.8.1"
++
++# System
++BR2_TARGET_GENERIC_HOSTNAME="apf28"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++
++# Filesystem
++BR2_TARGET_ROOTFS_UBIFS=y
++BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
++BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=4227
++BR2_TARGET_ROOTFS_UBI=y
++BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf28/linux-3.8.config"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-apf28dev"
