@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  4 Mar 2013 13:00:02 -0300
-Subject: [Buildroot] [PATCH 3/4] gnutls: bump to version 3.1.9
+Date: Mon,  4 Mar 2013 13:00:03 -0300
+Subject: [Buildroot] [PATCH 4/4] squid: bump to version 3.3.2
 In-Reply-To: <1362412803-11393-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1362412803-11393-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1362412803-11393-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1362412803-11393-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gnutls/gnutls.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/squid/squid.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index ff9cffa..21ace1c 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 7cae0be..a4093f4 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,8 +4,8 @@
  #
  #############################################################
  
--GNUTLS_VERSION = 3.1.8
-+GNUTLS_VERSION = 3.1.9
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1
- GNUTLS_LICENSE = GPLv3+ LGPLv3
+-SQUID_VERSION = 3.2.7
+-SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.2
++SQUID_VERSION = 3.3.2
++SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.3
+ SQUID_LICENSE = GPLv2+
+ SQUID_LICENSE_FILES = COPYING
+ SQUID_DEPENDENCIES = libcap host-libcap host-pkgconf \
 -- 
 1.7.12.4
