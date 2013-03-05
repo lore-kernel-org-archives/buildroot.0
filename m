@@ -1,22 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Mar 2013 15:51:10 +0100
-Subject: [Buildroot] [PATCH] htop: needs MMU
-In-Reply-To: <1362458515-7743-1-git-send-email-gilles.talis@gmail.com> (Gilles
- Talis's message of "Mon, 4 Mar 2013 20:41:55 -0800")
-References: <1362458515-7743-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87ehft99y9.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 5 Mar 2013 15:51:01 +0100
+Subject: [Buildroot] [git commit] htop: needs MMU
+Message-ID: <20130305145044.8A2589AED5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=83287ee571db6ffd876c90b6db12fa59be87ae67
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gilles> Fixes:
- Gilles> http://autobuild.buildroot.org/results/023b40f48c8006cd49c585efae3cfa065b21bf51
+Fixes:
+http://autobuild.buildroot.org/results/023b40f48c8006cd49c585efae3cfa065b21bf51
 
-Committed, thanks.
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/htop/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/htop/Config.in b/package/htop/Config.in
+index 55b4b15..51304af 100644
+--- a/package/htop/Config.in
++++ b/package/htop/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_HTOP
+ 	bool "htop"
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  htop is an interactive text-mode process viewer for Linux.
