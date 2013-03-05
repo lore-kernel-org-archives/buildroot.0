@@ -1,33 +1,81 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Mar 2013 15:51:01 +0100
-Subject: [Buildroot] [git commit] htop: needs MMU
-Message-ID: <20130305145044.8A2589AED5@busybox.osuosl.org>
+From: Rob Landley <rob@landley.net>
+Date: Tue, 05 Mar 2013 02:24:49 -0600
+Subject: [Buildroot] What to do about systemd/udev/eudev?
+In-Reply-To: <20130304183729.GA4651@tarshish> (from baruch@tkos.co.il on Mon
+ Mar  4 12:37:29 2013)
+References: <1362312574-17701-1-git-send-email-olivier.schonken@gmail.com>
+ <20130303195436.49654719@skate>
+ <948441.33302.bm@smtp138.mail.ir2.yahoo.com>
+ <CAKAx1cjwOtqE9ZK1RnB0=wWXhVw+8end_j8roL8RZ9aZwAj=EQ@mail.gmail.com>
+ <5134E40D.6@petroprogram.com> <20130304183729.GA4651@tarshish>
+Message-ID: <1362471889.7276.3@driftwood>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=83287ee571db6ffd876c90b6db12fa59be87ae67
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/04/2013 12:37:29 PM, Baruch Siach wrote:
+> Hi Stefan,
+> 
+> On Mon, Mar 04, 2013 at 08:12:29PM +0200, Stefan Fr?berg wrote:
+> > 4.3.2013 12:53, Lionel Orry kirjoitti:
+> > > Another note, Funtoo Linux (a gentoo derivative) team is  
+> experimenting
+> > > with usage of mdev as a complete udev replacement for the whole
+> > > distro. It seems to work and tries to prove the scalability of  
+> mdev
+> > > which sounds promising. Here are some files resulting from these
+> > > attempts:
+> > >
+> > > - mdev from busybox configured for funtoo (1 tiny patch and simple
+> > > configuration in the ebuild):
+> > >  
+> https://github.com/slashbeast/foo-overlay/tree/master/sys-fs/mdev-bb
+> > > - repository for notes and mdev config/init scripts (may be worth  
+> a
+> > > look at mdev.conf and mdev.init):
+> > > https://github.com/slashbeast/mdev-like-a-boss
+> > >
+> > > What I wanna say, is that it *may* sound reasonable to strongly
+> > > suggest people to stick with mdev as much as they can.
+> >
+> > Yes, I for one can confirm that if you don't need anything else  
+> than to
+> > populate /dev with nodes and maybe few
+> > symlinks then mdev is perfectly fine.
+> >
+> > I have run buildroot xorg with mdev without any problems.
+> >
+> > *But* ... (and this is a big but) I have not tested how it reacts to
+> > kernel events after boot when you *plug/unplug* devices and if mdev
+> > is capable of *running programs/scripts when some event happens*.
+> >
+> > If Funtoo can make it work and make it also work seamlessly with  
+> all the
+> > other crazy stuff (network-manager, and some other
+> > gnome stuff) then I will kick out udev from my system in a  
+> nanosecond :-)
+> 
+> Of course it does. Quoting docs/mdev.txt from Busybox source:
+> 
+> Here's a typical code snippet from the init script:
+> [0] mount -t proc proc /proc
+> [1] mount -t sysfs sysfs /sys
+> [2] echo /sbin/mdev > /proc/sys/kernel/hotplug
+> [3] mdev -s
+> 
+> End of quote.
+> 
+> The only trouble is that the hotplug interface is racy. Events are not
+> guaranteed to be processed at the same order they were generated.  
+> udev listens
+> to events over netlink which guarantees sequential processing.
 
-Fixes:
-http://autobuild.buildroot.org/results/023b40f48c8006cd49c585efae3cfa065b21bf51
+Which is why mdev added /dev/mdev.seq which is described in the same  
+mdev.txt file you just quoted from in the "SEQUENCING" section.
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/htop/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+(It turns out most embedded systems don't actually need it, but it's  
+there if you just can't sleep otherwise...)
 
-diff --git a/package/htop/Config.in b/package/htop/Config.in
-index 55b4b15..51304af 100644
---- a/package/htop/Config.in
-+++ b/package/htop/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_HTOP
- 	bool "htop"
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  htop is an interactive text-mode process viewer for Linux.
+Rob
