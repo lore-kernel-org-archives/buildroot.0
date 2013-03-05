@@ -1,56 +1,36 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue,  5 Mar 2013 22:35:29 +0100
-Subject: [Buildroot] [PATCH 3/6] manual: add a make target
-	'manual-update-lists'
+Date: Tue,  5 Mar 2013 22:35:31 +0100
+Subject: [Buildroot] [PATCH 5/6] Makefile: add to the release target a
+	warning about the manual updates.
 In-Reply-To: <cover.1362518799.git.s.martin49@gmail.com>
 References: <cover.1362518799.git.s.martin49@gmail.com>
-Message-ID: <020ca3cb681ac17a9b2cf83adf3d65044a0cbf99.1362518799.git.s.martin49@gmail.com>
+Message-ID: <e7929ec170e7b97af398284a0fe1c95b3de157cc.1362518799.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The manual-update-lists target is not added to the dependencies of the
+release target to allow editing the generated files.
+
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
 ---
-Changes since v2:
-* remove PYTHONPATH stuff since the kconfiglib module is next to
-  gen-manual-lists.py (Arnout)
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Changes since v1:
-* add manual-update-lists target to the .PHONY one (Arnout)
-* misc. fixes/updates
----
- docs/manual/manual.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index aa20534..012d0e7 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -24,6 +24,11 @@ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES)
- 	  -D $$(@D) $$<
- endef
- 
-+manual-update-lists:
-+	@$(call MESSAGE,"Updating the manual lists...")
-+	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) \
-+		$(TOPDIR)/support/scripts/gen-manual-lists.py
-+
- ################################################################################
- # GENDOC -- generates the make targets needed to build asciidoc documentation.
- #
-@@ -41,8 +46,9 @@ $(call GENDOC_INNER,$(1),epub,epub,epub,EPUB)
- clean: $(1)-clean
- $(1)-clean:
- 	$(Q)$(RM) -rf $(O)/docs/$(1)
--.PHONY: $(1) $(1)-clean
-+.PHONY: $(1) $(1)-clean manual-update-lists
- endef
- 
- MANUAL_SOURCES = $(wildcard docs/manual/*.txt) $(wildcard docs/images/*)
- $(eval $(call GENDOC,manual))
-+
+diff --git a/Makefile b/Makefile
+index 1300725..bcd896c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -815,6 +815,8 @@ release: OUT=buildroot-$(BR2_VERSION)
+ # Create release tarballs. We need to fiddle a bit to add the generated
+ # documentation to the git output
+ release:
++	$(warning Make sure the manual is up-to-date. To update the manual, run:)
++	$(warning $$ make manual-update-lists)
+ 	git archive --format=tar --prefix=$(OUT)/ master > $(OUT).tar
+ 	$(MAKE) O=$(OUT) manual-html manual-txt manual-pdf
+ 	tar rf $(OUT).tar $(OUT)
 -- 
 1.8.1.5
