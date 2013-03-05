@@ -1,37 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  5 Mar 2013 19:59:21 +0100
-Subject: [Buildroot] [PATCH] graph-depends: ignore the 'target-post-image'
-	target
-Message-ID: <1362509961-27574-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue,  5 Mar 2013 22:35:26 +0100
+Subject: [Buildroot] [pull request v3] Pull request for branch for-master/doc
+Message-ID: <cover.1362518799.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the introduction of the post-image mechanism, the graph-depends
-script is broken: it tries to call 'make
-target-post-image-show-depends', which doesn't exist since
-'target-post-image' is not a package.
+Hello All!
 
-So we should simply ignore this 'target-post-image'.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/scripts/graph-depends |    1 +
- 1 file changed, 1 insertion(+)
+Here is the remaining part of the doc series.
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 1163d79..180c81d 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -168,6 +168,7 @@ TARGET_EXCEPTIONS = [
-     "erase-fakeroots",
-     "target-generic-hostname",
-     "target-root-passwd",
-+    "target-post-image",
- ]
- 
- # In full mode, start with the result of get_targets() to get the main
--- 
-1.7.9.5
+Nothing scary for this 3rd round, but some cleanup and updates.
+
+
+The following changes since commit 83287ee571db6ffd876c90b6db12fa59be87ae67:
+
+  htop: needs MMU (2013-03-05 15:51:01 +0100)
+
+are available in the git repository at:
+
+  git://github.com/tSed/buildroot.git for-master/doc
+
+for you to fetch changes up to e6dec8955255699c4cb7d57fda85768c9e0582f5:
+
+  manual: update generated lists (2013-03-05 22:25:16 +0100)
+
+----------------------------------------------------------------
+Samuel Martin (6):
+      support: add kconfiglib python module
+      support/scripts: add gen-manual-lists.py
+      manual: add a make target 'manual-update-lists'
+      manual: cleanup appendix.txt
+      Makefile: add to the release target a warning about the manual updates.
+      manual: update generated lists
+
+ Makefile                            |    2 +
+ docs/manual/appendix.txt            |   29 +-
+ docs/manual/deprecated-list.txt     |   79 +-
+ docs/manual/host-package-list.txt   |   19 +
+ docs/manual/manual.mk               |    8 +-
+ docs/manual/package-list.txt        |  936 +++++++++
+ docs/manual/pkg-list.txt            |  870 --------
+ support/scripts/gen-manual-lists.py |  336 ++++
+ support/scripts/kconfiglib.py       | 3772 +++++++++++++++++++++++++++++++++++
+ support/scripts/readme              |   11 +
+ 10 files changed, 5139 insertions(+), 923 deletions(-)
+ create mode 100644 docs/manual/host-package-list.txt
+ create mode 100644 docs/manual/package-list.txt
+ delete mode 100644 docs/manual/pkg-list.txt
+ create mode 100755 support/scripts/gen-manual-lists.py
+ create mode 100644 support/scripts/kconfiglib.py
+ create mode 100644 support/scripts/readme
+
+Yours,
+Samuel
+
+--
