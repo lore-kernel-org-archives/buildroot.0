@@ -1,33 +1,37 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 05 Mar 2013 07:25:25 +0100
-Subject: [Buildroot] Google Summer of Code 2013
-In-Reply-To: <20130303192630.4e730af4@skate>
-References: <20130209004253.207e0741@skate>
- <201302131955.35889.yann.morin.1998@free.fr> <20130214152547.555d4553@skate>
- <20130303144339.7c5a189a@skate> <51338DA1.3090000@relinux.de>
- <20130303192630.4e730af4@skate>
-Message-ID: <51358FD5.5040908@mind.be>
+Date: Tue, 05 Mar 2013 07:40:56 +0100
+Subject: [Buildroot] What to do about systemd/udev/eudev?
+In-Reply-To: <948441.33302.bm@smtp138.mail.ir2.yahoo.com>
+References: <1362312574-17701-1-git-send-email-olivier.schonken@gmail.com>
+ <20130303195436.49654719@skate> <948441.33302.bm@smtp138.mail.ir2.yahoo.com>
+Message-ID: <51359378.3010307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/03/13 19:26, Thomas Petazzoni wrote:
-> The only issue with the topic related to multimedia packages for ARM
-> SoCs is that it requires some hardware, and I'm not sure where to get
-> the funding for that. Google says they pay $500 to the mentoring
-> organization, but I think this gets paid at the end of the GSoC, and
-> anyway we don't have any legal organization to receive this money.
->
-> Another solution is to get a little bit of sponsoring: getting one
-> BeagleBone and one i.MX6 based board sponsored shouldn't be too hard.
+On 04/03/13 11:16, Kevin Chadwick wrote:
+> Not saying this is the way to go at all as I haven't got stuck into mdev
+> yet but thought I may as well air another option which Gentoo was
+> following due to broken boot for seperate /usr without initramfs, which
+> is to stay at the udev version 17? (I think before the 192?
+> amalgamation or inheritance by an ignoramus) until the time that eudev
+> is said to be ready for production.
 
-  Don't quote me on this, but I might be able to get my hands on a 
-Gumstix Overo, with display and everything. Second-hand, of course.
+  And this is exactly what Olivier Schonken's patch does, right? For 
+systemd init systems, systemd's udev is used; for other init systems, the 
+old udev 17 is used.
+
+  As to compatibility of the udev library users: we can make them depend 
+on BR2_ROOTFS_DEVICE_CREATION_SYSTEMD_DYNAMIC_UDEV if they really require 
+the new udev. It's of course a pity that some simple package like 
+libatasmart requires a specific init system to be installed, but that's 
+what you get when you enter Leonard Poettering's cathedral...
 
   Regards,
   Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
