@@ -1,57 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Mar 2013 19:42:47 +0100
-Subject: [Buildroot] [v2 2/2] luajit: allow to build Lua extensions
- without lua
-In-Reply-To: <1362487763-28694-2-git-send-email-francois.perrad@gadz.org>
-References: <1362487763-28694-1-git-send-email-francois.perrad@gadz.org>
- <1362487763-28694-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20130305194247.54a6176f@skate>
+Date: Tue, 5 Mar 2013 19:47:07 +0100
+Subject: [Buildroot] adding dhcpcd
+In-Reply-To: <1362500477.20183.74.camel@genx>
+References: <1362163072.19802.25.camel@genx.eng.msli.com>
+ <5130F7CA.6090203@zacarias.com.ar> <1362500477.20183.74.camel@genx>
+Message-ID: <20130305194707.474ded42@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear John Stile,
 
-On Tue,  5 Mar 2013 13:49:23 +0100, Francois Perrad wrote:
-> add a virtual package : luainterpreter
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Tue, 05 Mar 2013 08:21:17 -0800, John Stile wrote:
 
-Looks a lot better to me. I hope other Buildroot developers will agree
-with this approach of virtual packages :)
+> Does this look like a good make file for buildroot?  
 
-However, the following change in my opinion belongs to a different
-patch, because it has nothing to do with the current patch:
+Unfortunately no, it is not a good makefile. It uses a way of writing
+packages that is deprecated since multiple years. Please use the
+generic-package or autotools-package infrastructure. Refer to the
+Buildroot manual at
+http://buildroot.org/downloads/manual/manual.html#adding-packages.
 
-> -LUAJIT_VERSION = 2.0.1
-> +LUAJIT_MAJVER=  2
-> +LUAJIT_MINVER=  0
-> +LUAJIT_RELVER=  1
-> +LUAJIT_VERSION = $(LUAJIT_MAJVER).$(LUAJIT_MINVER).$(LUAJIT_RELVER)
->  LUAJIT_SOURCE  = LuaJIT-$(LUAJIT_VERSION).tar.gz
->  LUAJIT_SITE    = http://luajit.org/download
->  LUAJIT_LICENSE = MIT
-> @@ -47,8 +50,14 @@ define LUAJIT_BUILD_CMDS
->  		-C $(@D) amalg
->  endef
->  
-> +LUAJIT_FILES_INC= lua.h lualib.h lauxlib.h luaconf.h lua.hpp
-> +
->  define LUAJIT_INSTALL_STAGING_CMDS
->  	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" -C $(@D) install
-> +	for i in $(LUAJIT_FILES_INC); do \
-> +		ln -sf $(STAGING_DIR)/usr/include/luajit-$(LUAJIT_MAJVER).$(LUAJIT_MINVER)/$$i \
-> +		       $(STAGING_DIR)/usr/include/$$i; \
-> +	done
->  endef
+> Is this the right place to get advice on a make file, or even submit?
 
-Also, I think your patches should generally have a longer commit log,
-explaining *why* the patch is needed, what problem it is solving, etc.
-Your commit log tend to be a little bit short in explanations, I feel.
+It is a good place.
 
-Thanks!
+> I put this together from various sources/references.
+
+Could you list which sources/references you've found, so that we can
+kill them, and make those incorrect informations disappear?
+
+The authoritative source of documentation for Buildroot is the
+Buildroot documentation itself.
+
+Raah, Google is great... but nowadays people use Google first and find
+some random information, rather than first look at the project's
+documentation. I don't blame you: I do the same in many cases :-)
+
+Best regards,
 
 Thomas
 -- 
