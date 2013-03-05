@@ -1,42 +1,87 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 05 Mar 2013 07:40:56 +0100
-Subject: [Buildroot] What to do about systemd/udev/eudev?
-In-Reply-To: <948441.33302.bm@smtp138.mail.ir2.yahoo.com>
-References: <1362312574-17701-1-git-send-email-olivier.schonken@gmail.com>
- <20130303195436.49654719@skate> <948441.33302.bm@smtp138.mail.ir2.yahoo.com>
-Message-ID: <51359378.3010307@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 05 Mar 2013 08:57:21 +0100
+Subject: [Buildroot] [PATCH v2] new package: libtasn1
+In-Reply-To: <1361219338-27624-1-git-send-email-stefan.froberg@petroprogram.com>
+ ("Stefan =?utf-8?Q?Fr=C3=B6berg=22's?= message of "Mon, 18 Feb 2013
+ 22:28:58 +0200")
+References: <1361219338-27624-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <87obey8eji.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/03/13 11:16, Kevin Chadwick wrote:
-> Not saying this is the way to go at all as I haven't got stuck into mdev
-> yet but thought I may as well air another option which Gentoo was
-> following due to broken boot for seperate /usr without initramfs, which
-> is to stay at the udev version 17? (I think before the 192?
-> amalgamation or inheritance by an ignoramus) until the time that eudev
-> is said to be ready for production.
+>>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
 
-  And this is exactly what Olivier Schonken's patch does, right? For 
-systemd init systems, systemd's udev is used; for other init systems, the 
-old udev 17 is used.
+ Stefan> Libtasn1
+ Stefan> Libtasn1 is the ASN.1 library used by GnuTLS, GNU Shishi and some
+ Stefan> other packages. It was written by Fabio Fiorina, and has been
+ Stefan> shipped as part of GnuTLS for some time but is now a proper
+ Stefan> GNU package.
 
-  As to compatibility of the udev library users: we can make them depend 
-on BR2_ROOTFS_DEVICE_CREATION_SYSTEMD_DYNAMIC_UDEV if they really require 
-the new udev. It's of course a pity that some simple package like 
-libatasmart requires a specific init system to be installed, but that's 
-what you get when you enter Leonard Poettering's cathedral...
+ Stefan> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+ Stefan> ---
+ Stefan> Changes v1 -> v2:
+ Stefan> 	- removed unneeded host-microperl dependency (Thomas Petazzoni)
+ Stefan> 	- removed unneeded LIBTASN1_SOURCE because default value for it is
+ Stefan> 	  packagename-version.tar.gz (Baruch Siach)
 
-  Regards,
-  Arnout
+ Stefan>  package/Config.in            |    1 +
+ Stefan>  package/libtasn1/Config.in   |    7 +++++++
+ Stefan>  package/libtasn1/libtasn1.mk |   14 ++++++++++++++
+ Stefan>  3 files changed, 22 insertions(+), 0 deletions(-)
+ Stefan>  create mode 100644 package/libtasn1/Config.in
+ Stefan>  create mode 100644 package/libtasn1/libtasn1.mk
 
+ Stefan> diff --git a/package/Config.in b/package/Config.in
+ Stefan> index 8588951..7b9b2c9 100644
+ Stefan> --- a/package/Config.in
+ Stefan> +++ b/package/Config.in
+ Stefan> @@ -554,6 +554,7 @@ source "package/libglib2/Config.in"
+ Stefan>  source "package/libical/Config.in"
+ Stefan>  source "package/libnspr/Config.in"
+ Stefan>  source "package/libsigc/Config.in"
+ Stefan> +source "package/libtasn1/Config.in"
+ Stefan>  source "package/libtpl/Config.in"
+ Stefan>  source "package/libseccomp/Config.in"
+ Stefan>  source "package/liburcu/Config.in"
+ Stefan> diff --git a/package/libtasn1/Config.in b/package/libtasn1/Config.in
+ Stefan> new file mode 100644
+ Stefan> index 0000000..2812157
+ Stefan> --- /dev/null
+ Stefan> +++ b/package/libtasn1/Config.in
+ Stefan> @@ -0,0 +1,7 @@
+ Stefan> +config BR2_PACKAGE_LIBTASN1
+ Stefan> +	bool "libtasn1"
+ Stefan> +	help
+ Stefan> +	  ASN.1 library
+ Stefan> +
+ Stefan> +	  http://www.gnu.org/software/libtasn1
+ Stefan> +
+
+Extra line here.
+
+ Stefan> diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+ Stefan> new file mode 100644
+ Stefan> index 0000000..2326d76
+ Stefan> --- /dev/null
+ Stefan> +++ b/package/libtasn1/libtasn1.mk
+ Stefan> @@ -0,0 +1,14 @@
+ Stefan> +#############################################################
+ Stefan> +#
+ Stefan> +# libtasn1
+ Stefan> +#
+ Stefan> +#############################################################
+ Stefan> +
+ Stefan> +LIBTASN1_VERSION = 3.2
+ Stefan> +LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
+ Stefan> +LIBTASN1_DEPENDENCIES = host-bison
+ Stefan> +LIBTASN1_LICENSE = GPLv3 LGPLv2.1
+
+Both licenses are 'any layter version', so they should have a '+'.
+
+Committed with these fixes, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
