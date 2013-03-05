@@ -1,53 +1,89 @@
-From: Attila Kinali <attila@kinali.ch>
-Date: Tue, 5 Mar 2013 10:53:15 +0100
-Subject: [Buildroot] What to do about systemd/udev/eudev?
-In-Reply-To: <20130304211743.7ff322e9@skate>
-References: <1362312574-17701-1-git-send-email-olivier.schonken@gmail.com>
- <20130303195436.49654719@skate>
- <20130304204731.3134cc5b569baf8ffeb5d3b0@kinali.ch>
- <20130304211743.7ff322e9@skate>
-Message-ID: <20130305105315.87f8750467e5901e0c0a26e0@kinali.ch>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Tue, 05 Mar 2013 13:01:39 +0200
+Subject: [Buildroot] [PATCH v2] new package: libtasn1
+In-Reply-To: <87obey8eji.fsf@dell.be.48ers.dk>
+References: <1361219338-27624-1-git-send-email-stefan.froberg@petroprogram.com>
+ <87obey8eji.fsf@dell.be.48ers.dk>
+Message-ID: <5135D093.5060001@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 4 Mar 2013 21:17:43 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+5.3.2013 9:57, Peter Korsgaard kirjoitti:
+>>>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
+>  Stefan> Libtasn1
+>  Stefan> Libtasn1 is the ASN.1 library used by GnuTLS, GNU Shishi and some
+>  Stefan> other packages. It was written by Fabio Fiorina, and has been
+>  Stefan> shipped as part of GnuTLS for some time but is now a proper
+>  Stefan> GNU package.
+>
+>  Stefan> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+>  Stefan> ---
+>  Stefan> Changes v1 -> v2:
+>  Stefan> 	- removed unneeded host-microperl dependency (Thomas Petazzoni)
+>  Stefan> 	- removed unneeded LIBTASN1_SOURCE because default value for it is
+>  Stefan> 	  packagename-version.tar.gz (Baruch Siach)
+>
+>  Stefan>  package/Config.in            |    1 +
+>  Stefan>  package/libtasn1/Config.in   |    7 +++++++
+>  Stefan>  package/libtasn1/libtasn1.mk |   14 ++++++++++++++
+>  Stefan>  3 files changed, 22 insertions(+), 0 deletions(-)
+>  Stefan>  create mode 100644 package/libtasn1/Config.in
+>  Stefan>  create mode 100644 package/libtasn1/libtasn1.mk
+>
+>  Stefan> diff --git a/package/Config.in b/package/Config.in
+>  Stefan> index 8588951..7b9b2c9 100644
+>  Stefan> --- a/package/Config.in
+>  Stefan> +++ b/package/Config.in
+>  Stefan> @@ -554,6 +554,7 @@ source "package/libglib2/Config.in"
+>  Stefan>  source "package/libical/Config.in"
+>  Stefan>  source "package/libnspr/Config.in"
+>  Stefan>  source "package/libsigc/Config.in"
+>  Stefan> +source "package/libtasn1/Config.in"
+>  Stefan>  source "package/libtpl/Config.in"
+>  Stefan>  source "package/libseccomp/Config.in"
+>  Stefan>  source "package/liburcu/Config.in"
+>  Stefan> diff --git a/package/libtasn1/Config.in b/package/libtasn1/Config.in
+>  Stefan> new file mode 100644
+>  Stefan> index 0000000..2812157
+>  Stefan> --- /dev/null
+>  Stefan> +++ b/package/libtasn1/Config.in
+>  Stefan> @@ -0,0 +1,7 @@
+>  Stefan> +config BR2_PACKAGE_LIBTASN1
+>  Stefan> +	bool "libtasn1"
+>  Stefan> +	help
+>  Stefan> +	  ASN.1 library
+>  Stefan> +
+>  Stefan> +	  http://www.gnu.org/software/libtasn1
+>  Stefan> +
+>
+> Extra line here.
+>
+>  Stefan> diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+>  Stefan> new file mode 100644
+>  Stefan> index 0000000..2326d76
+>  Stefan> --- /dev/null
+>  Stefan> +++ b/package/libtasn1/libtasn1.mk
+>  Stefan> @@ -0,0 +1,14 @@
+>  Stefan> +#############################################################
+>  Stefan> +#
+>  Stefan> +# libtasn1
+>  Stefan> +#
+>  Stefan> +#############################################################
+>  Stefan> +
+>  Stefan> +LIBTASN1_VERSION = 3.2
+>  Stefan> +LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
+>  Stefan> +LIBTASN1_DEPENDENCIES = host-bison
+>  Stefan> +LIBTASN1_LICENSE = GPLv3 LGPLv2.1
+>
+> Both licenses are 'any layter version', so they should have a '+'.
+>
+> Committed with these fixes, thanks.
+>
 
-> Why the heck would people caring about every KB use udev in the first
-> place? Once again, we already have static /dev, devtmpfs and mdev
-> support, and those are *way* more lightweight than udev.
+Thanks Peter!
 
-Ok, i might have exagerated. But still, systemd is a lot more heavyweight
-than standard sysV init. Not to talk about the added complexity that
-has very little benefit, especialy for embedded systems.
- 
-> > So, to come back to the original issue, i would say just freeze the current
-> > version and wait a couple of months until it either becomes clear what will
-> > happen or incompatibilites force you to upgrade.
-> 
-> Our udev version is 182, released March 2012, almost a year ago.
-> Our systemd version is 44, released March 2012, almost a year ago.
-> 
-> I think we've already waited 12 months. Isn't that enough?
-
-Uhmm.. oh..kay... 
-
-I don't know, 1 year is a damn long time in opensource. And yes,
-I agree that there should be an update soonish. But forcing people
-to either use an old Buildroot release or to swallow systemd isn't
-a very nice prospect either. 
-
-All of that being said, I'm not a developer, so please regard this
-as only my opinion as a mere user. I'm not trying to push the decision
-in any way or other.
-
-			Attila Kinali
-
--- 
-The trouble with you, Shev, is you don't say anything until you've saved
-up a whole truckload of damned heavy brick arguments and then you dump
-them all out and never look at the bleeding body mangled beneath the heap
-		-- Tirin, The Dispossessed, U. Le Guin
+Best Regards
+Stefan
