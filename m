@@ -1,88 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Mar 2013 19:19:10 +0100
-Subject: [Buildroot] What to do about systemd/udev/eudev?
-In-Reply-To: <20130305105315.87f8750467e5901e0c0a26e0@kinali.ch>
-References: <1362312574-17701-1-git-send-email-olivier.schonken@gmail.com>
- <20130303195436.49654719@skate>
- <20130304204731.3134cc5b569baf8ffeb5d3b0@kinali.ch>
- <20130304211743.7ff322e9@skate>
- <20130305105315.87f8750467e5901e0c0a26e0@kinali.ch>
-Message-ID: <20130305191910.5d570f56@skate>
+Date: Tue, 5 Mar 2013 19:32:02 +0100
+Subject: [Buildroot] Google Summer of Code 2013
+In-Reply-To: <51358FD5.5040908@mind.be>
+References: <20130209004253.207e0741@skate>
+ <201302131955.35889.yann.morin.1998@free.fr>
+ <20130214152547.555d4553@skate> <20130303144339.7c5a189a@skate>
+ <51338DA1.3090000@relinux.de> <20130303192630.4e730af4@skate>
+ <51358FD5.5040908@mind.be>
+Message-ID: <20130305193202.083a7562@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Attila Kinali,
+Dear Arnout Vandecappelle,
 
-On Tue, 5 Mar 2013 10:53:15 +0100, Attila Kinali wrote:
+On Tue, 05 Mar 2013 07:25:25 +0100, Arnout Vandecappelle wrote:
 
-> > Why the heck would people caring about every KB use udev in the first
-> > place? Once again, we already have static /dev, devtmpfs and mdev
-> > support, and those are *way* more lightweight than udev.
+> > Another solution is to get a little bit of sponsoring: getting one
+> > BeagleBone and one i.MX6 based board sponsored shouldn't be too hard.
 > 
-> Ok, i might have exagerated. But still, systemd is a lot more heavyweight
-> than standard sysV init. Not to talk about the added complexity that
-> has very little benefit, especialy for embedded systems.
+>   Don't quote me on this, but I might be able to get my hands on a 
+> Gumstix Overo, with display and everything. Second-hand, of course.
 
-Indeed, but where have you read that we will force people to use
-systemd?
-
-Busybox init will remain the default init system, like it has always
-been in Buildroot. SysV init will remain an option (so I don't really
-understand what it really provides in terms of useful features of
-Busybox init, but that's a different question).
-
-Only people who *really* want to use udev and nothing else would have
-to use systemd.
-
-> > > So, to come back to the original issue, i would say just freeze the current
-> > > version and wait a couple of months until it either becomes clear what will
-> > > happen or incompatibilites force you to upgrade.
-> > 
-> > Our udev version is 182, released March 2012, almost a year ago.
-> > Our systemd version is 44, released March 2012, almost a year ago.
-> > 
-> > I think we've already waited 12 months. Isn't that enough?
-> 
-> Uhmm.. oh..kay... 
-> 
-> I don't know, 1 year is a damn long time in opensource. And yes,
-> I agree that there should be an update soonish. But forcing people
-> to either use an old Buildroot release or to swallow systemd isn't
-> a very nice prospect either. 
-
-Where the heck have you read that we will force people to use systemd.
-
-We currently support three init systems:
-
- * Busybox init
- * SysV init
- * systemd
-
-And four /dev management methods:
-
- * static
- * devtmpfs only
- * devtmpfs + mdev
- * devtmpfs + udev
-
-The *ONLY* change we're talking about here is to change the four /dev
-management methods to:
-
- * static
- * devtmpfs only
- * devtmpfs + mdev
- * devtmpfs + udev, depends on init system == systemd
-
-So besides the people who would want to use udev, all the other
-options/combinations would still be available. You will still be able
-to do Busybox init + static, or SysV init + devtmpfs, or whatever
-combination, *EXCEPT* udev without systemd.
-
-Why is it that as soon as systemd starts being discussed, people have
-the feeling that the entire world is blowing up?
+Ok. Then I'll try to work on the administrative details to submit this
+proposal. I think it's safe to say that participant to the GSoC this
+year with only one proposal of topic is more reasonable. Having to
+support multiple students could be difficult.
 
 Best regards,
 
