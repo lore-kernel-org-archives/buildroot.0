@@ -1,87 +1,71 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Mar 2013 08:57:21 +0100
-Subject: [Buildroot] [PATCH v2] new package: libtasn1
-In-Reply-To: <1361219338-27624-1-git-send-email-stefan.froberg@petroprogram.com>
- ("Stefan =?utf-8?Q?Fr=C3=B6berg=22's?= message of "Mon, 18 Feb 2013
- 22:28:58 +0200")
-References: <1361219338-27624-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <87obey8eji.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 5 Mar 2013 08:55:44 +0100
+Subject: [Buildroot] [git commit] new package: libtasn1
+Message-ID: <20130305075651.3CE629AECB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e4d32a7a465e98770cb1da7afddf4b2d6b154790
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Stefan> Libtasn1
- Stefan> Libtasn1 is the ASN.1 library used by GnuTLS, GNU Shishi and some
- Stefan> other packages. It was written by Fabio Fiorina, and has been
- Stefan> shipped as part of GnuTLS for some time but is now a proper
- Stefan> GNU package.
+Libtasn1 is the ASN.1 library used by GnuTLS, GNU Shishi and some
+other packages. It was written by Fabio Fiorina, and has been
+shipped as part of GnuTLS for some time but is now a proper
+GNU package.
 
- Stefan> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
- Stefan> ---
- Stefan> Changes v1 -> v2:
- Stefan> 	- removed unneeded host-microperl dependency (Thomas Petazzoni)
- Stefan> 	- removed unneeded LIBTASN1_SOURCE because default value for it is
- Stefan> 	  packagename-version.tar.gz (Baruch Siach)
+[Peter: Both licenses are '+']
+Signed-off-by: Stefan Fr??berg <stefan.froberg@petroprogram.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in            |    1 +
+ package/libtasn1/Config.in   |    6 ++++++
+ package/libtasn1/libtasn1.mk |   14 ++++++++++++++
+ 3 files changed, 21 insertions(+), 0 deletions(-)
 
- Stefan>  package/Config.in            |    1 +
- Stefan>  package/libtasn1/Config.in   |    7 +++++++
- Stefan>  package/libtasn1/libtasn1.mk |   14 ++++++++++++++
- Stefan>  3 files changed, 22 insertions(+), 0 deletions(-)
- Stefan>  create mode 100644 package/libtasn1/Config.in
- Stefan>  create mode 100644 package/libtasn1/libtasn1.mk
-
- Stefan> diff --git a/package/Config.in b/package/Config.in
- Stefan> index 8588951..7b9b2c9 100644
- Stefan> --- a/package/Config.in
- Stefan> +++ b/package/Config.in
- Stefan> @@ -554,6 +554,7 @@ source "package/libglib2/Config.in"
- Stefan>  source "package/libical/Config.in"
- Stefan>  source "package/libnspr/Config.in"
- Stefan>  source "package/libsigc/Config.in"
- Stefan> +source "package/libtasn1/Config.in"
- Stefan>  source "package/libtpl/Config.in"
- Stefan>  source "package/libseccomp/Config.in"
- Stefan>  source "package/liburcu/Config.in"
- Stefan> diff --git a/package/libtasn1/Config.in b/package/libtasn1/Config.in
- Stefan> new file mode 100644
- Stefan> index 0000000..2812157
- Stefan> --- /dev/null
- Stefan> +++ b/package/libtasn1/Config.in
- Stefan> @@ -0,0 +1,7 @@
- Stefan> +config BR2_PACKAGE_LIBTASN1
- Stefan> +	bool "libtasn1"
- Stefan> +	help
- Stefan> +	  ASN.1 library
- Stefan> +
- Stefan> +	  http://www.gnu.org/software/libtasn1
- Stefan> +
-
-Extra line here.
-
- Stefan> diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
- Stefan> new file mode 100644
- Stefan> index 0000000..2326d76
- Stefan> --- /dev/null
- Stefan> +++ b/package/libtasn1/libtasn1.mk
- Stefan> @@ -0,0 +1,14 @@
- Stefan> +#############################################################
- Stefan> +#
- Stefan> +# libtasn1
- Stefan> +#
- Stefan> +#############################################################
- Stefan> +
- Stefan> +LIBTASN1_VERSION = 3.2
- Stefan> +LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
- Stefan> +LIBTASN1_DEPENDENCIES = host-bison
- Stefan> +LIBTASN1_LICENSE = GPLv3 LGPLv2.1
-
-Both licenses are 'any layter version', so they should have a '+'.
-
-Committed with these fixes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index 56fdd2f..3706763 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -555,6 +555,7 @@ source "package/libglib2/Config.in"
+ source "package/libical/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libsigc/Config.in"
++source "package/libtasn1/Config.in"
+ source "package/libtpl/Config.in"
+ source "package/libseccomp/Config.in"
+ source "package/liburcu/Config.in"
+diff --git a/package/libtasn1/Config.in b/package/libtasn1/Config.in
+new file mode 100644
+index 0000000..181fc69
+--- /dev/null
++++ b/package/libtasn1/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBTASN1
++	bool "libtasn1"
++	help
++	  ASN.1 library
++
++	  http://www.gnu.org/software/libtasn1
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+new file mode 100644
+index 0000000..d874b9a
+--- /dev/null
++++ b/package/libtasn1/libtasn1.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# libtasn1
++#
++#############################################################
++
++LIBTASN1_VERSION = 3.2
++LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
++LIBTASN1_DEPENDENCIES = host-bison
++LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
++LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
++LIBTASN1_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
