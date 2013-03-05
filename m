@@ -1,32 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Mar 2013 19:15:17 +0100
+Date: Tue, 5 Mar 2013 19:19:10 +0100
 Subject: [Buildroot] What to do about systemd/udev/eudev?
-In-Reply-To: <CALo-6+izu2DJE6+PGDSFqQLz9tA=dF7DxEOS2rVcrdGjMwcapg@mail.gmail.com>
-References: <20130304192156.7bfe23bf@skate> <1362471660.7276.2@driftwood>
- <CALo-6+izu2DJE6+PGDSFqQLz9tA=dF7DxEOS2rVcrdGjMwcapg@mail.gmail.com>
-Message-ID: <20130305191517.378a1c82@skate>
+In-Reply-To: <20130305105315.87f8750467e5901e0c0a26e0@kinali.ch>
+References: <1362312574-17701-1-git-send-email-olivier.schonken@gmail.com>
+ <20130303195436.49654719@skate>
+ <20130304204731.3134cc5b569baf8ffeb5d3b0@kinali.ch>
+ <20130304211743.7ff322e9@skate>
+ <20130305105315.87f8750467e5901e0c0a26e0@kinali.ch>
+Message-ID: <20130305191910.5d570f56@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Charles Krinke,
+Dear Attila Kinali,
 
-On Tue, 5 Mar 2013 07:04:45 -0800, Charles Krinke wrote:
-> As a user working on an AM3517 project with buildroot, I am having
-> trouble seeing anything wrong with the existing implementation of
-> mdev. We have 802.11 and USB disks that are plugged in and removed and
-> the mdev subsystem seems to be working fine.
+On Tue, 5 Mar 2013 10:53:15 +0100, Attila Kinali wrote:
+
+> > Why the heck would people caring about every KB use udev in the first
+> > place? Once again, we already have static /dev, devtmpfs and mdev
+> > support, and those are *way* more lightweight than udev.
 > 
-> Having other alternatives is nice, but I hope we do not remove the
-> existing mdev which appears to work fine in embedded systems.
+> Ok, i might have exagerated. But still, systemd is a lot more heavyweight
+> than standard sysV init. Not to talk about the added complexity that
+> has very little benefit, especialy for embedded systems.
 
-There has never been any plan to remove mdev. We are talking about
-possibility removing udev if systemd is not chosen as the init system.
-That's all.
+Indeed, but where have you read that we will force people to use
+systemd?
 
-mdev will stay here, for sure.
+Busybox init will remain the default init system, like it has always
+been in Buildroot. SysV init will remain an option (so I don't really
+understand what it really provides in terms of useful features of
+Busybox init, but that's a different question).
+
+Only people who *really* want to use udev and nothing else would have
+to use systemd.
+
+> > > So, to come back to the original issue, i would say just freeze the current
+> > > version and wait a couple of months until it either becomes clear what will
+> > > happen or incompatibilites force you to upgrade.
+> > 
+> > Our udev version is 182, released March 2012, almost a year ago.
+> > Our systemd version is 44, released March 2012, almost a year ago.
+> > 
+> > I think we've already waited 12 months. Isn't that enough?
+> 
+> Uhmm.. oh..kay... 
+> 
+> I don't know, 1 year is a damn long time in opensource. And yes,
+> I agree that there should be an update soonish. But forcing people
+> to either use an old Buildroot release or to swallow systemd isn't
+> a very nice prospect either. 
+
+Where the heck have you read that we will force people to use systemd.
+
+We currently support three init systems:
+
+ * Busybox init
+ * SysV init
+ * systemd
+
+And four /dev management methods:
+
+ * static
+ * devtmpfs only
+ * devtmpfs + mdev
+ * devtmpfs + udev
+
+The *ONLY* change we're talking about here is to change the four /dev
+management methods to:
+
+ * static
+ * devtmpfs only
+ * devtmpfs + mdev
+ * devtmpfs + udev, depends on init system == systemd
+
+So besides the people who would want to use udev, all the other
+options/combinations would still be available. You will still be able
+to do Busybox init + static, or SysV init + devtmpfs, or whatever
+combination, *EXCEPT* udev without systemd.
+
+Why is it that as soon as systemd starts being discussed, people have
+the feeling that the entire world is blowing up?
+
+Best regards,
 
 Thomas
 -- 
