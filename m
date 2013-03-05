@@ -1,39 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Mar 2013 19:51:12 +0100
+Date: Tue, 5 Mar 2013 19:55:14 +0100
 Subject: [Buildroot] What to do about systemd/udev/eudev?
-In-Reply-To: <51363494.7010708@petroprogram.com>
+In-Reply-To: <51359378.3010307@mind.be>
 References: <1362312574-17701-1-git-send-email-olivier.schonken@gmail.com>
  <20130303195436.49654719@skate>
  <948441.33302.bm@smtp138.mail.ir2.yahoo.com>
- <CAKAx1cjwOtqE9ZK1RnB0=wWXhVw+8end_j8roL8RZ9aZwAj=EQ@mail.gmail.com>
- <5134E40D.6@petroprogram.com> <20130304192156.7bfe23bf@skate>
- <5134E729.8070708@petroprogram.com> <20130304193024.0c2d0490@skate>
- <51363494.7010708@petroprogram.com>
-Message-ID: <20130305195112.6d176d8b@skate>
+ <51359378.3010307@mind.be>
+Message-ID: <20130305195514.14ba14fd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stefan Fr?berg,
+Dear Arnout Vandecappelle,
 
-On Tue, 05 Mar 2013 20:08:20 +0200, Stefan Fr?berg wrote:
+On Tue, 05 Mar 2013 07:40:56 +0100, Arnout Vandecappelle wrote:
 
-> Would it make sense to rip libudev out from latest systemd and make it
-> as a separate package ?
-> Just for satisfying dependency need for those packages ?
+>   And this is exactly what Olivier Schonken's patch does, right? For 
+> systemd init systems, systemd's udev is used; for other init systems, the 
+> old udev 17 is used.
 
-libudev on its own doesn't make any sense, it needs to communicate with
-udev somehow, I believe.
+udev 17 ? I guess you mean 182, right?
 
-And anyway, in Buildroot, we don't want to derive from upstream, so we
-clearly don't want to rip some part of an upstream package and make it
-a new upstream package.
+Sure that's what Olivier Schonken's patch does. But how compatible are
+the libudev from the modern udev bundled with systemd, and the old udev?
 
-If someone is not happy with upstream, then start a new upstream
-project, or fix the upstream project directly. It doesn't make sense to
-fix upstream at Buildroot's level.
+Also, Olivier's patch doesn't update all the packages that depend on
+udev so that they can either depend on the old udev, or systemd.
+
+That's why I started this thread, to decide where we want to go, and
+then implement the relevant patches. Without knowing this direction, it
+was impossible to review Olivier's patch properly.
 
 Best regards,
 
