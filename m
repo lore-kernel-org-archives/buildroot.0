@@ -1,43 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Mar 2013 19:47:07 +0100
-Subject: [Buildroot] adding dhcpcd
-In-Reply-To: <1362500477.20183.74.camel@genx>
-References: <1362163072.19802.25.camel@genx.eng.msli.com>
- <5130F7CA.6090203@zacarias.com.ar> <1362500477.20183.74.camel@genx>
-Message-ID: <20130305194707.474ded42@skate>
+Date: Tue, 5 Mar 2013 19:51:12 +0100
+Subject: [Buildroot] What to do about systemd/udev/eudev?
+In-Reply-To: <51363494.7010708@petroprogram.com>
+References: <1362312574-17701-1-git-send-email-olivier.schonken@gmail.com>
+ <20130303195436.49654719@skate>
+ <948441.33302.bm@smtp138.mail.ir2.yahoo.com>
+ <CAKAx1cjwOtqE9ZK1RnB0=wWXhVw+8end_j8roL8RZ9aZwAj=EQ@mail.gmail.com>
+ <5134E40D.6@petroprogram.com> <20130304192156.7bfe23bf@skate>
+ <5134E729.8070708@petroprogram.com> <20130304193024.0c2d0490@skate>
+ <51363494.7010708@petroprogram.com>
+Message-ID: <20130305195112.6d176d8b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear John Stile,
+Dear Stefan Fr?berg,
 
-On Tue, 05 Mar 2013 08:21:17 -0800, John Stile wrote:
+On Tue, 05 Mar 2013 20:08:20 +0200, Stefan Fr?berg wrote:
 
-> Does this look like a good make file for buildroot?  
+> Would it make sense to rip libudev out from latest systemd and make it
+> as a separate package ?
+> Just for satisfying dependency need for those packages ?
 
-Unfortunately no, it is not a good makefile. It uses a way of writing
-packages that is deprecated since multiple years. Please use the
-generic-package or autotools-package infrastructure. Refer to the
-Buildroot manual at
-http://buildroot.org/downloads/manual/manual.html#adding-packages.
+libudev on its own doesn't make any sense, it needs to communicate with
+udev somehow, I believe.
 
-> Is this the right place to get advice on a make file, or even submit?
+And anyway, in Buildroot, we don't want to derive from upstream, so we
+clearly don't want to rip some part of an upstream package and make it
+a new upstream package.
 
-It is a good place.
-
-> I put this together from various sources/references.
-
-Could you list which sources/references you've found, so that we can
-kill them, and make those incorrect informations disappear?
-
-The authoritative source of documentation for Buildroot is the
-Buildroot documentation itself.
-
-Raah, Google is great... but nowadays people use Google first and find
-some random information, rather than first look at the project's
-documentation. I don't blame you: I do the same in many cases :-)
+If someone is not happy with upstream, then start a new upstream
+project, or fix the upstream project directly. It doesn't make sense to
+fix upstream at Buildroot's level.
 
 Best regards,
 
