@@ -1,282 +1,131 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  5 Mar 2013 13:49:23 +0100
-Subject: [Buildroot] [v2 2/2] luajit: allow to build Lua extensions without
-	lua
-In-Reply-To: <1362487763-28694-1-git-send-email-francois.perrad@gadz.org>
-References: <1362487763-28694-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1362487763-28694-2-git-send-email-francois.perrad@gadz.org>
+Date: Tue,  5 Mar 2013 13:49:22 +0100
+Subject: [Buildroot] [v2 1/2] lua: remove built dependencies
+Message-ID: <1362487763-28694-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-add a virtual package : luainterpreter
+runtime dependencies are handled in Config.in
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                                |    1 +
- package/lua-msgpack-native/Config.in             |    1 +
- package/lua-msgpack-native/lua-msgpack-native.mk |    2 +-
- package/lua/Config.in                            |    1 +
- package/luacjson/Config.in                       |    1 +
- package/luacjson/luacjson.mk                     |    2 +-
- package/luaexpat/Config.in                       |    1 +
- package/luaexpat/luaexpat.mk                     |    2 +-
- package/luafilesystem/Config.in                  |    1 +
- package/luafilesystem/luafilesystem.mk           |    2 +-
- package/luainterpreter/Config.in                 |    2 ++
- package/luainterpreter/luainterpreter.mk         |   17 +++++++++++++++++
- package/luajit/Config.in                         |    1 +
- package/luajit/luajit.mk                         |   11 ++++++++++-
- package/luasocket/Config.in                      |    1 +
- package/luasocket/luasocket.mk                   |    2 +-
- package/rings/Config.in                          |    1 +
- package/rings/rings.mk                           |    2 +-
- 18 files changed, 44 insertions(+), 7 deletions(-)
- create mode 100644 package/luainterpreter/Config.in
- create mode 100644 package/luainterpreter/luainterpreter.mk
+ package/cgilua/Config.in     |    1 +
+ package/cgilua/cgilua.mk     |    1 -
+ package/copas/Config.in      |    1 +
+ package/copas/copas.mk       |    1 -
+ package/coxpcall/coxpcall.mk |    1 -
+ package/wsapi/Config.in      |    1 +
+ package/wsapi/wsapi.mk       |    1 -
+ package/xavante/Config.in    |    1 +
+ package/xavante/xavante.mk   |    1 -
+ 9 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index faee5c3..b76da36 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -292,6 +292,7 @@ source "package/haserl/Config.in"
- source "package/jamvm/Config.in"
- source "package/lua/Config.in"
- source "package/luajit/Config.in"
-+source "package/luainterpreter/Config.in"
- if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT
- menu "LUA libraries/modules"
- source "package/cgilua/Config.in"
-diff --git a/package/lua-msgpack-native/Config.in b/package/lua-msgpack-native/Config.in
-index 8894ee5..1014298 100644
---- a/package/lua-msgpack-native/Config.in
-+++ b/package/lua-msgpack-native/Config.in
+diff --git a/package/cgilua/Config.in b/package/cgilua/Config.in
+index 01928f0..d1e7fbf 100644
+--- a/package/cgilua/Config.in
++++ b/package/cgilua/Config.in
 @@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUA_MSGPACK_NATIVE
- 	bool "lua-msgpack-native"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+ config BR2_PACKAGE_CGILUA
+ 	bool "cgilua"
++	# Runtime dependency only
+ 	select BR2_PACKAGE_LUAFILESYSTEM
  	help
- 	  This is a native, C language implementation of msgpack
- 	  (http://msgpack.org) library/protocol for Lua language
-diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
-index 97ce83c..7b9329b 100644
---- a/package/lua-msgpack-native/lua-msgpack-native.mk
-+++ b/package/lua-msgpack-native/lua-msgpack-native.mk
-@@ -5,7 +5,7 @@
- #############################################################
- LUA_MSGPACK_NATIVE_VERSION = g41cce91
- LUA_MSGPACK_NATIVE_SITE = http://github.com/kengonakajima/lua-msgpack-native/tarball/master
--LUA_MSGPACK_NATIVE_DEPENDENCIES = lua
-+LUA_MSGPACK_NATIVE_DEPENDENCIES = luainterpreter
- LUA_MSGPACK_NATIVE_LICENSE = Apache-2.0
- LUA_MSGPACK_NATIVE_LICENSE_FILES = LICENSE.txt
+ 	  CGILua is a tool for creating dynamic HTML pages
+diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
+index 48ee005..184d836 100644
+--- a/package/cgilua/cgilua.mk
++++ b/package/cgilua/cgilua.mk
+@@ -6,7 +6,6 @@
  
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 4166730..cc62dee 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
+ CGILUA_VERSION = 5.1.4
+ CGILUA_SITE = http://github.com/downloads/keplerproject/cgilua
+-CGILUA_DEPENDENCIES = luafilesystem
+ CGILUA_LICENSE = MIT
+ 
+ define CGILUA_INSTALL_TARGET_CMDS
+diff --git a/package/copas/Config.in b/package/copas/Config.in
+index 9969c8f..21dd0eb 100644
+--- a/package/copas/Config.in
++++ b/package/copas/Config.in
 @@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUA
- 	bool "lua"
-+	select BR2_PACKAGE_HAS_LUA_INTERPRETER
+ config BR2_PACKAGE_COPAS
+ 	bool "copas"
++	# Runtime dependency only
+ 	select BR2_PACKAGE_COXPCALL
+ 	select BR2_PACKAGE_LUASOCKET
  	help
- 	  Lua is a powerful, fast, light-weight, embeddable scripting language.
+diff --git a/package/copas/copas.mk b/package/copas/copas.mk
+index c84a6cc..d3e6576 100644
+--- a/package/copas/copas.mk
++++ b/package/copas/copas.mk
+@@ -6,7 +6,6 @@
  
-diff --git a/package/luacjson/Config.in b/package/luacjson/Config.in
-index 8a5624f..d3665c0 100644
---- a/package/luacjson/Config.in
-+++ b/package/luacjson/Config.in
+ COPAS_VERSION = 1.1.6
+ COPAS_SITE = http://github.com/downloads/keplerproject/copas
+-COPAS_DEPENDENCIES = lua coxpcall luasocket
+ COPAS_LICENSE = MIT
+ 
+ define COPAS_INSTALL_TARGET_CMDS
+diff --git a/package/coxpcall/coxpcall.mk b/package/coxpcall/coxpcall.mk
+index e7fb76d..329d6fd 100644
+--- a/package/coxpcall/coxpcall.mk
++++ b/package/coxpcall/coxpcall.mk
+@@ -6,7 +6,6 @@
+ 
+ COXPCALL_VERSION = 1.13.0
+ COXPCALL_SITE = http://luaforge.net/frs/download.php/3406
+-COXPCALL_DEPENDENCIES = lua
+ COXPCALL_LICENSE = MIT
+ 
+ define COXPCALL_INSTALL_TARGET_CMDS
+diff --git a/package/wsapi/Config.in b/package/wsapi/Config.in
+index 3621648..348a040 100644
+--- a/package/wsapi/Config.in
++++ b/package/wsapi/Config.in
 @@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUACJSON
- 	bool "luacjson"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  The Lua CJSON module provides JSON support for Lua. It features:
- 	  - Fast, standards compliant encoding/parsing routines
-diff --git a/package/luacjson/luacjson.mk b/package/luacjson/luacjson.mk
-index 1f79d5d..69393e9 100644
---- a/package/luacjson/luacjson.mk
-+++ b/package/luacjson/luacjson.mk
-@@ -6,7 +6,7 @@
- LUACJSON_VERSION       = 2.1.0
- LUACJSON_SOURCE        = lua-cjson-$(LUACJSON_VERSION).tar.gz
- LUACJSON_SITE          = http://www.kyne.com.au/~mark/software/download
--LUACJSON_DEPENDENCIES  = lua
-+LUACJSON_DEPENDENCIES  = luainterpreter
- LUACJSON_LICENSE       = MIT
- LUACJSON_LICENSE_FILES = LICENSE
+ config BR2_PACKAGE_WSAPI
+ 	bool "wsapi"
++	# Runtime dependency only
+ 	select BR2_PACKAGE_COXPCALL
+ 	select BR2_PACKAGE_LUAFILESYSTEM
+ 	select BR2_PACKAGE_RINGS
+diff --git a/package/wsapi/wsapi.mk b/package/wsapi/wsapi.mk
+index eb2b51c..4628530 100644
+--- a/package/wsapi/wsapi.mk
++++ b/package/wsapi/wsapi.mk
+@@ -6,7 +6,6 @@
  
-diff --git a/package/luaexpat/Config.in b/package/luaexpat/Config.in
-index 186c5c9..f8db318 100644
---- a/package/luaexpat/Config.in
-+++ b/package/luaexpat/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LUAEXPAT
- 	bool "luaexpat"
- 	select BR2_PACKAGE_EXPAT
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  LuaExpat is a SAX XML parser based on the Expat library.
+ WSAPI_VERSION = 1.5
+ WSAPI_SITE = http://github.com/downloads/keplerproject/wsapi
+-WSAPI_DEPENDENCIES = coxpcall luafilesystem rings
+ WSAPI_LICENSE = MIT
  
-diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
-index 2d4c517..7c46fda 100644
---- a/package/luaexpat/luaexpat.mk
-+++ b/package/luaexpat/luaexpat.mk
-@@ -6,7 +6,7 @@
- 
- LUAEXPAT_VERSION      = 1.2.0
- LUAEXPAT_SITE         = http://matthewwild.co.uk/projects/luaexpat
--LUAEXPAT_DEPENDENCIES = lua expat
-+LUAEXPAT_DEPENDENCIES = luainterpreter expat
- LUAEXPAT_LICENSE      = MIT
- 
- 
-diff --git a/package/luafilesystem/Config.in b/package/luafilesystem/Config.in
-index 7c130f8..489ebf3 100644
---- a/package/luafilesystem/Config.in
-+++ b/package/luafilesystem/Config.in
+ define WSAPI_INSTALL_TARGET_CMDS
+diff --git a/package/xavante/Config.in b/package/xavante/Config.in
+index db34d66..be8e6d9 100644
+--- a/package/xavante/Config.in
++++ b/package/xavante/Config.in
 @@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUAFILESYSTEM
- 	bool "luafilesystem"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  LuaFileSystem offers a portable way to access
- 	  the underlying directory structure and file attributes.
-diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
-index 8553212..6678af0 100644
---- a/package/luafilesystem/luafilesystem.mk
-+++ b/package/luafilesystem/luafilesystem.mk
-@@ -6,7 +6,7 @@
+ config BR2_PACKAGE_XAVANTE
+ 	bool "xavante"
++	# Runtime dependency only
+ 	select BR2_PACKAGE_CGILUA
+ 	select BR2_PACKAGE_COPAS
+ 	select BR2_PACKAGE_COXPCALL
+diff --git a/package/xavante/xavante.mk b/package/xavante/xavante.mk
+index 0c1c6f1..d1ca320 100644
+--- a/package/xavante/xavante.mk
++++ b/package/xavante/xavante.mk
+@@ -6,7 +6,6 @@
  
- LUAFILESYSTEM_VERSION = 1.5.0
- LUAFILESYSTEM_SITE = http://github.com/downloads/keplerproject/luafilesystem
--LUAFILESYSTEM_DEPENDENCIES = lua
-+LUAFILESYSTEM_DEPENDENCIES = luainterpreter
- LUAFILESYSTEM_LICENSE = MIT
+ XAVANTE_VERSION = 2.2.1
+ XAVANTE_SITE = http://github.com/downloads/keplerproject/xavante
+-XAVANTE_DEPENDENCIES = cgilua copas coxpcall lua luafilesystem luasocket wsapi
+ XAVANTE_LICENSE = MIT
  
- ifeq ($(BR2_LARGEFILE),y)
-diff --git a/package/luainterpreter/Config.in b/package/luainterpreter/Config.in
-new file mode 100644
-index 0000000..d85d7e8
---- /dev/null
-+++ b/package/luainterpreter/Config.in
-@@ -0,0 +1,2 @@
-+config BR2_PACKAGE_HAS_LUA_INTERPRETER
-+	bool
-diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
-new file mode 100644
-index 0000000..40c66aa
---- /dev/null
-+++ b/package/luainterpreter/luainterpreter.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# Virtual package for luainterpreter
-+#
-+#############################################################
-+
-+LUAINTERPRETER_SOURCE =
-+
-+ifeq ($(BR2_PACKAGE_LUA),y)
-+LUAINTERPRETER_DEPENDENCIES = lua
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+LUAINTERPRETER_DEPENDENCIES = luajit
-+endif
-+
-+$(eval $(generic-package))
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index 23b2650..97013e4 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUAJIT
- 	bool "luajit"
-+	select BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	# Luajit is only available for some target architectures, and
- 	# has some complexity wrt 32/64. See luajit.mk for details.
- 	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index bf9cfe8..86eb5ff 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -4,7 +4,10 @@
- #
- #############################################################
- 
--LUAJIT_VERSION = 2.0.1
-+LUAJIT_MAJVER=  2
-+LUAJIT_MINVER=  0
-+LUAJIT_RELVER=  1
-+LUAJIT_VERSION = $(LUAJIT_MAJVER).$(LUAJIT_MINVER).$(LUAJIT_RELVER)
- LUAJIT_SOURCE  = LuaJIT-$(LUAJIT_VERSION).tar.gz
- LUAJIT_SITE    = http://luajit.org/download
- LUAJIT_LICENSE = MIT
-@@ -47,8 +50,14 @@ define LUAJIT_BUILD_CMDS
- 		-C $(@D) amalg
- endef
- 
-+LUAJIT_FILES_INC= lua.h lualib.h lauxlib.h luaconf.h lua.hpp
-+
- define LUAJIT_INSTALL_STAGING_CMDS
- 	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" -C $(@D) install
-+	for i in $(LUAJIT_FILES_INC); do \
-+		ln -sf $(STAGING_DIR)/usr/include/luajit-$(LUAJIT_MAJVER).$(LUAJIT_MINVER)/$$i \
-+		       $(STAGING_DIR)/usr/include/$$i; \
-+	done
- endef
- 
- define LUAJIT_INSTALL_TARGET_CMDS
-diff --git a/package/luasocket/Config.in b/package/luasocket/Config.in
-index 4526303..619d649 100644
---- a/package/luasocket/Config.in
-+++ b/package/luasocket/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUASOCKET
- 	bool "luasocket"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  LuaSocket is the most comprehensive networking support library
- 	  for the Lua language.
-diff --git a/package/luasocket/luasocket.mk b/package/luasocket/luasocket.mk
-index 45fb9a3..7c1fc36 100644
---- a/package/luasocket/luasocket.mk
-+++ b/package/luasocket/luasocket.mk
-@@ -6,7 +6,7 @@
- 
- LUASOCKET_VERSION = 2.0.2
- LUASOCKET_SITE = http://luaforge.net/frs/download.php/2664
--LUASOCKET_DEPENDENCIES = lua
-+LUASOCKET_DEPENDENCIES = luainterpreter
- LUASOCKET_LICENSE = MIT
- LUASOCKET_LICENSE_FILES = LICENSE
- 
-diff --git a/package/rings/Config.in b/package/rings/Config.in
-index d1f1efe..b1d41f3 100644
---- a/package/rings/Config.in
-+++ b/package/rings/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_RINGS
- 	bool "rings"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  Provides a way to create new Lua states from within Lua.
- 
-diff --git a/package/rings/rings.mk b/package/rings/rings.mk
-index e2a2bd7..5823857 100644
---- a/package/rings/rings.mk
-+++ b/package/rings/rings.mk
-@@ -6,7 +6,7 @@
- 
- RINGS_VERSION = 1.2.3
- RINGS_SITE = http://github.com/downloads/keplerproject/rings
--RINGS_DEPENDENCIES = lua
-+RINGS_DEPENDENCIES = luainterpreter
- RINGS_LICENSE = MIT
- 
- define RINGS_BUILD_CMDS
+ define XAVANTE_INSTALL_TARGET_CMDS
 -- 
 1.7.9.5
