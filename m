@@ -1,40 +1,61 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Tue, 05 Mar 2013 20:37:21 +0200
-Subject: [Buildroot] What to do about systemd/udev/eudev?
-In-Reply-To: <20130305191910.5d570f56@skate>
-References: <1362312574-17701-1-git-send-email-olivier.schonken@gmail.com>
- <20130303195436.49654719@skate>
- <20130304204731.3134cc5b569baf8ffeb5d3b0@kinali.ch>
- <20130304211743.7ff322e9@skate>
- <20130305105315.87f8750467e5901e0c0a26e0@kinali.ch>
- <20130305191910.5d570f56@skate>
-Message-ID: <51363B61.1040301@petroprogram.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Mar 2013 19:42:47 +0100
+Subject: [Buildroot] [v2 2/2] luajit: allow to build Lua extensions
+ without lua
+In-Reply-To: <1362487763-28694-2-git-send-email-francois.perrad@gadz.org>
+References: <1362487763-28694-1-git-send-email-francois.perrad@gadz.org>
+ <1362487763-28694-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20130305194247.54a6176f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[snip]
->
-> Why is it that as soon as systemd starts being discussed, people have
-> the feeling that the entire world is blowing up?
->
-> Best regards,
->
-> Thomas
+Dear Francois Perrad,
 
-Eh, maybe it's because some of us have invested time to make "perfect"
-custom init for their systems and now
-systemd developers are saying: "no, you can't use our latest udev with
-your perfectly working init system anymore.
-so use systemd or screw you"
+On Tue,  5 Mar 2013 13:49:23 +0100, Francois Perrad wrote:
+> add a virtual package : luainterpreter
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Of course people will get upset when forced to change their working
-systems at the upstreams whims.
+Looks a lot better to me. I hope other Buildroot developers will agree
+with this approach of virtual packages :)
 
-But anyway, personally Im more than happy with mdev and happy that
-buildroot continues to offers so many *choices*, unlike others....
+However, the following change in my opinion belongs to a different
+patch, because it has nothing to do with the current patch:
 
-Regards
-Stefan
+> -LUAJIT_VERSION = 2.0.1
+> +LUAJIT_MAJVER=  2
+> +LUAJIT_MINVER=  0
+> +LUAJIT_RELVER=  1
+> +LUAJIT_VERSION = $(LUAJIT_MAJVER).$(LUAJIT_MINVER).$(LUAJIT_RELVER)
+>  LUAJIT_SOURCE  = LuaJIT-$(LUAJIT_VERSION).tar.gz
+>  LUAJIT_SITE    = http://luajit.org/download
+>  LUAJIT_LICENSE = MIT
+> @@ -47,8 +50,14 @@ define LUAJIT_BUILD_CMDS
+>  		-C $(@D) amalg
+>  endef
+>  
+> +LUAJIT_FILES_INC= lua.h lualib.h lauxlib.h luaconf.h lua.hpp
+> +
+>  define LUAJIT_INSTALL_STAGING_CMDS
+>  	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" -C $(@D) install
+> +	for i in $(LUAJIT_FILES_INC); do \
+> +		ln -sf $(STAGING_DIR)/usr/include/luajit-$(LUAJIT_MAJVER).$(LUAJIT_MINVER)/$$i \
+> +		       $(STAGING_DIR)/usr/include/$$i; \
+> +	done
+>  endef
+
+Also, I think your patches should generally have a longer commit log,
+explaining *why* the patch is needed, what problem it is solving, etc.
+Your commit log tend to be a little bit short in explanations, I feel.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
