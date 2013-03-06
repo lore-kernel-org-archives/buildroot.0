@@ -1,82 +1,73 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 6 Mar 2013 22:18:39 +0100
-Subject: [Buildroot] [git commit] rpi-userland: provides OpenGL ES,
-	EGL and OpenVG
-Message-ID: <20130306212505.BFBE69AEFD@busybox.osuosl.org>
+Date: Wed, 6 Mar 2013 21:53:49 +0100
+Subject: [Buildroot] [git commit] pcre: add support for 16 bits and 32 bits
+	variants
+Message-ID: <20130306212505.26E169AEFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=203c30796e232faaf3a7de19090657bf3e7db16a
+commit: http://git.buildroot.net/buildroot/commit/?id=7154798a461a8b2c2882fa2c1ce2c58b0d8d6614
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Until now, we have been building only the 8bits PCRE variant. However,
+Qt5 requires the 16bits variant. This commit therefore adds support to
+build the 16bits and 32bits variants of PCRE. In order to preserve
+backward compatibility, the 8bits variant is automatically chosen if
+no specific variant is defined.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/opengl/libegl/libegl.mk       |    4 ++++
- package/opengl/libgles/libgles.mk     |    4 ++++
- package/opengl/libopenvg/libopenvg.mk |    4 ++++
- package/rpi-userland/Config.in        |    3 +++
- 4 files changed, 15 insertions(+), 0 deletions(-)
+ package/pcre/Config.in |   22 ++++++++++++++++++++++
+ package/pcre/pcre.mk   |    4 ++++
+ 2 files changed, 26 insertions(+), 0 deletions(-)
 
-diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
-index 56cc8ac..c495496 100644
---- a/package/opengl/libegl/libegl.mk
-+++ b/package/opengl/libegl/libegl.mk
-@@ -6,6 +6,10 @@
- 
- LIBEGL_SOURCE =
- 
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+LIBEGL_DEPENDENCIES += rpi-userland
-+endif
-+
- ifeq ($(LIBEGL_DEPENDENCIES),y)
- define LIBEGL_CONFIGURE_CMDS
- 	echo "No libEGL implementation selected. Configuration error."
-diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
-index 753f53e..f0d0eec 100644
---- a/package/opengl/libgles/libgles.mk
-+++ b/package/opengl/libgles/libgles.mk
-@@ -6,6 +6,10 @@
- 
- LIBGLES_SOURCE =
- 
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+LIBGLES_DEPENDENCIES += rpi-userland
-+endif
-+
- ifeq ($(LIBGLES_DEPENDENCIES),y)
- define LIBGLES_CONFIGURE_CMDS
- 	echo "No libGLES implementation selected. Configuration error."
-diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
-index 2fcc99f..573fa78 100644
---- a/package/opengl/libopenvg/libopenvg.mk
-+++ b/package/opengl/libopenvg/libopenvg.mk
-@@ -6,6 +6,10 @@
- 
- LIBOPENVG_SOURCE =
- 
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+LIBOPENVG_DEPENDENCIES += rpi-userland
-+endif
-+
- ifeq ($(LIBOPENVG_DEPENDENCIES),y)
- define LIBOPENVG_CONFIGURE_CMDS
- 	echo "No libOpenVG implementation selected. Configuration error."
-diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
-index 58ea8cb..2c35fb7 100644
---- a/package/rpi-userland/Config.in
-+++ b/package/rpi-userland/Config.in
-@@ -3,6 +3,9 @@ config BR2_PACKAGE_RPI_USERLAND
- 	depends on BR2_arm
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE
-+	select BR2_PACKAGE_HAS_OPENGL_EGL
-+	select BR2_PACKAGE_HAS_OPENGL_ES
-+	select BR2_PACKAGE_HAS_OPENVG
+diff --git a/package/pcre/Config.in b/package/pcre/Config.in
+index a4e2547..5d16e6d 100644
+--- a/package/pcre/Config.in
++++ b/package/pcre/Config.in
+@@ -1,6 +1,28 @@
+ config BR2_PACKAGE_PCRE
+ 	bool "pcre"
++	# Ensure at least the default 8-bit library is enabled.
++	select BR2_PACKAGE_PCRE_8 if \
++	       (!BR2_PACKAGE_PCRE_16 && !BR2_PACKAGE_PCRE_32)
  	help
- 	  Raspberry Pi Userland contains the necessary library to use the
- 	  VideoCore driver.
+ 	  Perl Compatible Regular Expressions
+ 
+ 	  http://www.pcre.org/
++
++if BR2_PACKAGE_PCRE
++
++config BR2_PACKAGE_PCRE_8
++	bool "8-bit pcre"
++	help
++	  This option builds the 8-bits pcre library, i.e 'libpcre'
++
++config BR2_PACKAGE_PCRE_16
++	bool "16-bit pcre"
++	help
++	  This option builds the 16-bits pcre library, i.e 'libpcre16'
++
++config BR2_PACKAGE_PCRE_32
++	bool "32-bit pcre"
++	help
++	  This option builds the 32-bits pcre library, i.e 'libpcre32'
++
++endif
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index 48266ff..b1339fb 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -16,4 +16,8 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ PCRE_CONF_OPT = --disable-cpp
+ endif
+ 
++PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_8),--enable-pcre8,--disable-pcre8)
++PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
++PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
++
+ $(eval $(autotools-package))
