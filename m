@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  6 Mar 2013 21:22:54 +0100
-Subject: [Buildroot] [PATCH 12/34] qt5: add macro to fixup Qt5 .la and .prl
-	files
+Date: Wed,  6 Mar 2013 21:22:57 +0100
+Subject: [Buildroot] [PATCH 15/34] qt5base: support debug or release modes
 In-Reply-To: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362601396-32250-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362601396-32250-16-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5.mk |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/qt5/qt5base/qt5base.mk |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index 8b1a7ed..f220508 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -1 +1,11 @@
- include package/qt5/*/*.mk
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 7213238..41e7779 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -41,6 +41,12 @@ QT5BASE_CONFIGURE_OPTS += \
+ 	-system-pcre \
+ 	-no-pch
+ 
++ifeq ($(BR2_ENABLE_DEBUG),y)
++QT5BASE_CONFIGURE_OPTS += -debug
++else
++QT5BASE_CONFIGURE_OPTS += -release
++endif
 +
-+define QT5_LA_PRL_FILES_FIXUP
-+	for i in $$(find $(STAGING_DIR)/usr/lib* -name "libQt5*.la"); do \
-+		$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$i; \
-+		$(SED) "/^dependency_libs=/s%-L/usr/lib %%g" $$i ; \
-+	done
-+	for i in $$(find $(STAGING_DIR)/usr/lib* -name "libQt5*.prl"); do \
-+		$(SED) "s%-L/usr/lib%%" $$i; \
-+	done
-+endef
+ ifeq ($(BR2_LARGEFILE),y)
+ QT5BASE_CONFIGURE_OPTS += -largefile
+ else
 -- 
 1.7.9.5
