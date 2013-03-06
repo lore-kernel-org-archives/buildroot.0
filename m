@@ -1,38 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Mar 2013 19:59:13 +0100
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 6 Mar 2013 20:02:02 +0100
 Subject: [Buildroot] [PATCH 4/5] Enable ccache for cmake packages
 In-Reply-To: <1362590066-5448-5-git-send-email-luca@lucaceresoli.net>
 References: <1362590066-5448-1-git-send-email-luca@lucaceresoli.net>
  <1362590066-5448-5-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20130306195913.2c7e6db7@skate>
+Message-ID: <CAHXCMMKpKo_jagngfJFDHPKfiMeUb3+zx5wZ++tg81OjwQ_8iA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+Hi Lucas,
 
-On Wed,  6 Mar 2013 18:14:25 +0100, Luca Ceresoli wrote:
+2013/3/6 Luca Ceresoli <luca@lucaceresoli.net>:
 > CMake fails in detecting the compiler when ccache is used. Add a wrapper
 > script to make it happy.
 
-This raises the question of whether we want to generalize this in some
-way: should we be doing the ccache wrapper thing in a generic way, and
-use it everywhere? Since we already have a wrapper for external
-toolchain tools, does it really make sense to have a shell wrapper
-around a C wrapper? Should we have a single C wrapper used in all cases
-(internal, external, crosstool-ng), that handles everything?
+It is possible to do this without any wrapper, setting
+CMAKE_C_COMPILER and CMAKE_CXX_COMPILER to the ccache binary path, and
+CMAKE_C_COMPILER_ARG1 and CMAKE_CXX_COMPILER_ARG1 to the actual
+C-compiler, respectively to the C++-compiler.
 
-I don't (yet) have a strong opinion on this, I just wanted to have a
-more global reflection about wrappers, and avoid creating many
-wrappers to solve different problems.
+BTW, note that we currently don't handle space in the paths at all;
+hope that nobody triggers issues related to this ;)
 
-Best regards,
+Regards,
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Samuel
