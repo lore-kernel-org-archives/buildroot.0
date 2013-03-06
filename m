@@ -1,73 +1,127 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 6 Mar 2013 21:53:49 +0100
-Subject: [Buildroot] [git commit] pcre: add support for 16 bits and 32 bits
-	variants
-Message-ID: <20130306212505.26E169AEFD@busybox.osuosl.org>
+Date: Wed, 6 Mar 2013 22:07:56 +0100
+Subject: [Buildroot] [git commit] package: create virtual package for
+	libGLES, libOpenVG and libEGL
+Message-ID: <20130306212505.868F19AEFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7154798a461a8b2c2882fa2c1ce2c58b0d8d6614
+commit: http://git.buildroot.net/buildroot/commit/?id=5e6696713c20615d0c1fdbafb8189fce9992e534
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Until now, we have been building only the 8bits PCRE variant. However,
-Qt5 requires the 16bits variant. This commit therefore adds support to
-build the 16bits and 32bits variants of PCRE. In order to preserve
-backward compatibility, the 8bits variant is automatically chosen if
-no specific variant is defined.
+Those acceleration libraries typically have multiple implementations:
+some are free (Mesa), some are proprietary (generally SoC specific).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pcre/Config.in |   22 ++++++++++++++++++++++
- package/pcre/pcre.mk   |    4 ++++
- 2 files changed, 26 insertions(+), 0 deletions(-)
+ package/Config.in                     |    1 +
+ package/opengl/Config.in              |    8 ++++++++
+ package/opengl/libegl/libegl.mk       |   16 ++++++++++++++++
+ package/opengl/libgles/libgles.mk     |   16 ++++++++++++++++
+ package/opengl/libopenvg/libopenvg.mk |   16 ++++++++++++++++
+ package/opengl/opengl.mk              |    1 +
+ 6 files changed, 58 insertions(+), 0 deletions(-)
 
-diff --git a/package/pcre/Config.in b/package/pcre/Config.in
-index a4e2547..5d16e6d 100644
---- a/package/pcre/Config.in
-+++ b/package/pcre/Config.in
-@@ -1,6 +1,28 @@
- config BR2_PACKAGE_PCRE
- 	bool "pcre"
-+	# Ensure at least the default 8-bit library is enabled.
-+	select BR2_PACKAGE_PCRE_8 if \
-+	       (!BR2_PACKAGE_PCRE_16 && !BR2_PACKAGE_PCRE_32)
- 	help
- 	  Perl Compatible Regular Expressions
- 
- 	  http://www.pcre.org/
+diff --git a/package/Config.in b/package/Config.in
+index 3706763..22e64f8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -435,6 +435,7 @@ source "package/librsvg/Config.in"
+ source "package/libsvgtiny/Config.in"
+ source "package/libungif/Config.in"
+ source "package/opencv/Config.in"
++source "package/opengl/Config.in"
+ source "package/pango/Config.in"
+ source "package/pixman/Config.in"
+ source "package/tiff/Config.in"
+diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+new file mode 100644
+index 0000000..81616f9
+--- /dev/null
++++ b/package/opengl/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HAS_OPENGL_EGL
++	bool
 +
-+if BR2_PACKAGE_PCRE
++config BR2_PACKAGE_HAS_OPENGL_ES
++	bool
 +
-+config BR2_PACKAGE_PCRE_8
-+	bool "8-bit pcre"
-+	help
-+	  This option builds the 8-bits pcre library, i.e 'libpcre'
++config BR2_PACKAGE_HAS_OPENVG
++	bool
+diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
+new file mode 100644
+index 0000000..56cc8ac
+--- /dev/null
++++ b/package/opengl/libegl/libegl.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# Virtual package for libEGL
++#
++#############################################################
 +
-+config BR2_PACKAGE_PCRE_16
-+	bool "16-bit pcre"
-+	help
-+	  This option builds the 16-bits pcre library, i.e 'libpcre16'
++LIBEGL_SOURCE =
 +
-+config BR2_PACKAGE_PCRE_32
-+	bool "32-bit pcre"
-+	help
-+	  This option builds the 32-bits pcre library, i.e 'libpcre32'
-+
++ifeq ($(LIBEGL_DEPENDENCIES),y)
++define LIBEGL_CONFIGURE_CMDS
++	echo "No libEGL implementation selected. Configuration error."
++	exit 1
++endef
 +endif
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index 48266ff..b1339fb 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -16,4 +16,8 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
- PCRE_CONF_OPT = --disable-cpp
- endif
- 
-+PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_8),--enable-pcre8,--disable-pcre8)
-+PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
-+PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
 +
- $(eval $(autotools-package))
++$(eval $(generic-package))
+diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
+new file mode 100644
+index 0000000..753f53e
+--- /dev/null
++++ b/package/opengl/libgles/libgles.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# Virtual package for libGLES
++#
++#############################################################
++
++LIBGLES_SOURCE =
++
++ifeq ($(LIBGLES_DEPENDENCIES),y)
++define LIBGLES_CONFIGURE_CMDS
++	echo "No libGLES implementation selected. Configuration error."
++	exit 1
++endef
++endif
++
++$(eval $(generic-package))
+diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
+new file mode 100644
+index 0000000..2fcc99f
+--- /dev/null
++++ b/package/opengl/libopenvg/libopenvg.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# Virtual package for libOpenVG
++#
++#############################################################
++
++LIBOPENVG_SOURCE =
++
++ifeq ($(LIBOPENVG_DEPENDENCIES),y)
++define LIBOPENVG_CONFIGURE_CMDS
++	echo "No libOpenVG implementation selected. Configuration error."
++	exit 1
++endef
++endif
++
++$(eval $(generic-package))
+diff --git a/package/opengl/opengl.mk b/package/opengl/opengl.mk
+new file mode 100644
+index 0000000..68df3b1
+--- /dev/null
++++ b/package/opengl/opengl.mk
+@@ -0,0 +1 @@
++include package/opengl/*/*.mk
