@@ -1,61 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  6 Mar 2013 21:22:58 +0100
-Subject: [Buildroot] [PATCH 16/34] qt5base: add OpenSSL support
+Date: Wed,  6 Mar 2013 21:22:51 +0100
+Subject: [Buildroot] [PATCH 09/34] efl/libeet,
+	efl/libevas: use host-libjpeg instead of host-jpeg
 In-Reply-To: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362601396-32250-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362601396-32250-10-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Before creating a real virtual package named 'jpeg', we want to ensure
+that no package is using the host variant of the virtual
+package. Instead, we make them use directly the host-libjpeg package.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/Config.in  |    8 ++++++++
- package/qt5/qt5base/qt5base.mk |    4 +++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/efl/libeet/libeet.mk   |    2 +-
+ package/efl/libevas/libevas.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 801ef6f..540c8b2 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -33,6 +33,14 @@ config BR2_PACKAGE_QT5BASE_NETWORK
- 	help
- 	  This options enables the Qt5Network library.
+diff --git a/package/efl/libeet/libeet.mk b/package/efl/libeet/libeet.mk
+index 3d5b460..db3ec6e 100644
+--- a/package/efl/libeet/libeet.mk
++++ b/package/efl/libeet/libeet.mk
+@@ -13,7 +13,7 @@ LIBEET_LICENSE_FILES = COPYING
+ LIBEET_INSTALL_STAGING = YES
  
-+config BR2_PACKAGE_QT5BASE_NETWORK_OPENSSL
-+	bool "OpenSSL support"
-+	select BR2_PACKAGE_OPENSSL
-+	depends on BR2_PACKAGE_QT5BASE_NETWORK
-+	help
-+	  This option enables the OpenSSL support in the Qt5Network
-+	  library.
-+
- config BR2_PACKAGE_QT5BASE_CONCURRENT
- 	bool "concurrent module"
- 	help
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 41e7779..79cbc48 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -28,7 +28,6 @@ QT5BASE_CONFIGURE_OPTS += \
- 	-no-nis \
- 	-no-libudev \
- 	-no-iconv \
--	-no-openssl \
- 	-no-fontconfig \
- 	-no-gif \
- 	-no-libpng \
-@@ -82,6 +81,9 @@ else
- QT5_BASE_CONFIGURE_OPTS += -no-xcb
- endif
+ LIBEET_DEPENDENCIES = host-pkgconf zlib jpeg libeina
+-HOST_LIBEET_DEPENDENCIES = host-pkgconf host-zlib host-jpeg host-libeina
++HOST_LIBEET_DEPENDENCIES = host-pkgconf host-zlib host-libjpeg host-libeina
  
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),-openssl,-no-openssl)
-+QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),openssl)
-+
- # Build the list of libraries to be installed on the target
- QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
+ ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
+ LIBEET_DEPENDENCIES += gnutls libgcrypt
+diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+index 0a90842..5bdcba5 100644
+--- a/package/efl/libevas/libevas.mk
++++ b/package/efl/libevas/libevas.mk
+@@ -15,7 +15,7 @@ LIBEVAS_INSTALL_STAGING = YES
+ LIBEVAS_DEPENDENCIES = host-pkgconf zlib libeina freetype
+ 
+ HOST_LIBEVAS_DEPENDENCIES = host-pkgconf host-zlib host-libeina \
+-				host-freetype host-libpng host-jpeg
++				host-freetype host-libpng host-libjpeg
+ HOST_LIBEVAS_CONF_OPT += \
+ 	--enable-image-loader-png \
+ 	--enable-image-loader-jpeg \
 -- 
 1.7.9.5
