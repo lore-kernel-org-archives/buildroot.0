@@ -1,43 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 06 Mar 2013 22:10:21 +0100
-Subject: [Buildroot] [PATCH 05/34] package: create virtual package for
-	libGLES, libOpenVG and libEGL
-In-Reply-To: <1362601396-32250-6-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 6 Mar 2013 21:22:47 +0100")
-References: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1362601396-32250-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <874ngo6xqa.fsf@dell.be.48ers.dk>
+From: Bryce Schober <bryce.schober@gmail.com>
+Date: Wed, 6 Mar 2013 13:11:57 -0800
+Subject: [Buildroot] Pre-compiled XOrg kbd files for read-only targets
+Message-ID: <CAJpxd07kzuWMgotZ8LREd5b6mSpE5wKN96Fbm6sdViAw3a532w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello all,
 
- Thomas> Those acceleration libraries typically have multiple implementations:
- Thomas> some are free (Mesa), some are proprietary (generally SoC specific).
+I have a target with fixed hardware and a read-only file-system that would
+really prefer to have a single static keyboard setup. This would ideally
+prune the ~2.5MB worth of /usr/share/X11/xkb/* down to a minimum. I've
+googled around, and found all kinds of stuff, mostly that linked from xorg's
+wiki <http://www.x.org/wiki/XKB>, but I'm apparently not smart enough to
+see through all that toward what I'm looking for. All I want is simple
+support for a pc104 keyboard in a read-only file-system. How hard can that
+possibly be? ;-)
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  package/Config.in                     |    1 +
- Thomas>  package/opengl/Config.in              |    8 ++++++++
- Thomas>  package/opengl/libegl/libegl.mk       |   16 ++++++++++++++++
- Thomas>  package/opengl/libgles/libgles.mk     |   16 ++++++++++++++++
- Thomas>  package/opengl/libopenvg/libopenvg.mk |   16 ++++++++++++++++
- Thomas>  package/opengl/opengl.mk              |    1 +
- Thomas>  6 files changed, 58 insertions(+)
- Thomas>  create mode 100644 package/opengl/Config.in
- Thomas>  create mode 100644 package/opengl/libegl/libegl.mk
- Thomas>  create mode 100644 package/opengl/libgles/libgles.mk
- Thomas>  create mode 100644 package/opengl/libopenvg/libopenvg.mk
- Thomas>  create mode 100644 package/opengl/opengl.mk
+Have any of you all worked out this, or some alternative solution for a
+minimal static xkb configuration on a read-only target?
 
-Committed, thanks.
-
-I personally don't really like the opengl subdir, and I think we need to
-be clear about what we mean when we say opengles (E.G. v1/v2/v3), but we
-can fix that up later.
-
--- 
-Bye, Peter Korsgaard
+<><  <><  <><
+Bryce Schober
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130306/c1539e8b/attachment.html>
