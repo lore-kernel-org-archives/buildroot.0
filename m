@@ -1,229 +1,35 @@
-From: John Stile <john@stilen.com>
-Date: Wed, 06 Mar 2013 11:50:17 -0800
-Subject: [Buildroot] adding dhcpcd
-In-Reply-To: <20130306195844.2f8c14b6@skate>
-References: <1362163072.19802.25.camel@genx.eng.msli.com>
- <5130F7CA.6090203@zacarias.com.ar> <1362500477.20183.74.camel@genx>
- <20130305194707.474ded42@skate> <1362592916.20183.152.camel@genx>
- <20130306195844.2f8c14b6@skate>
-Message-ID: <1362599417.20183.159.camel@genx>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 06 Mar 2013 20:52:23 +0100
+Subject: [Buildroot] [PATCH 4/5] Enable ccache for cmake packages
+In-Reply-To: <CAHXCMMKpKo_jagngfJFDHPKfiMeUb3+zx5wZ++tg81OjwQ_8iA@mail.gmail.com>
+ (Samuel Martin's message of "Wed, 6 Mar 2013 20:02:02 +0100")
+References: <1362590066-5448-1-git-send-email-luca@lucaceresoli.net>
+ <1362590066-5448-5-git-send-email-luca@lucaceresoli.net>
+ <CAHXCMMKpKo_jagngfJFDHPKfiMeUb3+zx5wZ++tg81OjwQ_8iA@mail.gmail.com>
+Message-ID: <877glk8fwo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
-On Wed, 2013-03-06 at 19:58 +0100, Thomas Petazzoni wrote:
-> Dear John Stile,
-> 
-> On Wed, 06 Mar 2013 10:01:56 -0800, John Stile wrote:
-> 
-> > If I'm going to rebuild a good package I might as well use the latest
-> > version of dhcpcd, so I'll start with 5.6.7.
-> 
-> Good idea.
-> 
-> > I am not sure if
-> > http://roy.marples.name/downloads/dhcpcd/dhcpcd-5.6.7.tar.bz2
-> > uses cmake or automake.  The tarball contains a Makefile, and their
-> > configure script has the comment, "Try and be like autotools configure,
-> > but without autotools", so I assume it is just using gnu make.
-> 
-> Your analysis is correct. It has an hand-crafted configure script that
-> writes values into a config.mk, which presumably, gets read by the
-> Makefile. So it's neither autotools nor CMake, so you have to use the
-> "generic-package" infrastructure.
-> 
-> >  It does
-> > contain a Makefile... but I don't see how to use it from:
-> > http://buildroot.org/downloads/manual/manual.html#generic-package-tutorial
-> > 
-> > So I tried to make a pacakge using 
-> > $(eval $(generic-package))
-> 
-> Good.
-> 
-> Your file below has been line-wrapped by your e-mail client. Not a big
-> issue just to discuss, but if you want to submit a patch, you'll have
-> to fix your e-mail client, or better, use 'git send-email'.
-> 
-> > When I run make in buildroot, the package is not downloaded, or built.
-> > Below is my package file so far.
-> 
-> Please send a complete patch. The main reason is usually that your
-> BR2_PACKAGE_<foo> option is misnamed, or that the package is not
-> located in the proper directory.
-> 
-> When creating a package named "foo", it is very important that:
-> 
->  * The option in Config.in is BR2_PACKAGE_FOO.
-> 
->  * The package is located in package/foo/.
-> 
-> > #############################################################
-> > #
-> > # dhcpcd
-> > #
-> > #############################################################
-> > 
-> > DHCPCD_VERSION = 5.6.7
-> > DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
-> > DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
-> > DHCPCD_LICENSE = GPLv3+
-> > DHCPCD_LICENSE_FILES = COPYING
-> 
-> The license is not GPLv3+, it's BSD-2c, and there is no COPYING file.
-> 
-> > DHCPCD_INSTALL_STAGING = YES
-> 
-> No, it's just installing an application, so setting
-> DHCPD_INSTALL_STAGING to YES is not necessary.
-> 
-> > DHCPCD_CONFIG_SCRIPTS = configure
-> 
-> No, the configure script is not a <foo>-config script.
-> 
-> > DHCPCD_DEPENDENCIES = 
-> 
-> Not needed, it is empty by default.
-> 
-> > DHCPCD_SITE_METHOD = wget
-> 
-> Not needed, it is guessed automatically from the URL (which starts by
-> http://).
-> 
-> Before the BUILD_CMDS, you should have a:
-> 
-> define DHCPD_CONFIGURE_CMDS
-> 	(cd $(@D);
-> 		...some environment variables...
-> 		./configure
-> 		...some options...)
-> endef
-> 
-> This will call the configure script.
-> 
-> > define DHCPCD_BUILD_CMDS
-> > 	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-> > endef
-> 
-> If you run the configure script, then the CC and LD are defined in
-> config.mk, so there should be no need to pass them in the environment
-> anymore.
-> 
-> > define DHCPCD_INSTALL_STAGING_CMDS
-> > 	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf
-> > $(STAGING_DIR)/etc/dhcpcd.conf 
-> > 	$(INSTALL) -D -m 0755 $(@D)/dhcpcd $(STAGING_DIR)/usr/bin/dhcpcd
-> > endef
-> 
-> Not needed as we should not be installing dhcpcd in the staging area.
-> 
-> > define DHCPCD_INSTALL_TARGET_CMDS
-> > 	$(INSTALL) -D -m 0755 $(@D)/dhcpcd $(TARGET_DIR)/usr/bin
-> 
-> This should be:
-> 
-> 	$(INSTALL) -D -m 0755 $(@D)/dhcpcd $(TARGET_DIR)/usr/bin/dhcpcd
-> 
-> > 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/dhcpcd.conf
-> 
-> Are you you want to create the /etc/dhcpcd.conf file? It would have
-> thought you wanted to copy the default dhcpcd.conf configuration file,
-> no? If so:
-> 
-> 	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf $(TARGET_DIR)/etc/dhcpcd.conf
-> 
-> > endef
-> > 
-> > define DHCPCD_PERMISSIONS
-> > 	/usr/bin/dhcpcd  f  4755  0  0  -  -  -  -  -
-> > endef
-> 
-> I'm not sure, does dhcpcd needs to be installed setuid-root?
-> 
-> Anyway, despite those comments, you are definitely on the right track
-> to create a proper package!
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-> Thanks,
-> 
-> Thomas
+ Samuel> Hi Lucas,
+ Samuel> 2013/3/6 Luca Ceresoli <luca@lucaceresoli.net>:
+ >> CMake fails in detecting the compiler when ccache is used. Add a wrapper
+ >> script to make it happy.
 
-I think I have addressed the problem with the make file, but it still
-silently does not build.  I am attaching a complete patch.
+ Samuel> It is possible to do this without any wrapper, setting
+ Samuel> CMAKE_C_COMPILER and CMAKE_CXX_COMPILER to the ccache binary path, and
+ Samuel> CMAKE_C_COMPILER_ARG1 and CMAKE_CXX_COMPILER_ARG1 to the actual
+ Samuel> C-compiler, respectively to the C++-compiler.
 
-------------------
-Begin dhcpcd.patch
-------------------
+ Samuel> BTW, note that we currently don't handle space in the paths at all;
+ Samuel> hope that nobody triggers issues related to this ;)
 
-Adding package dhcpcd to buildroot
+I bet a lot of (make based) build systems don't handle paths with spaces
+either.
 
-signed-off-by: John Stile <john@stilen.com>
-
---- a/buildroot-2011.11/package/Config.in	2013-03-06 11:40:52.000000000 -0800
-+++ b/buildroot-2011.11/package/Config.in	2013-02-28 14:59:32.000000000 -0800
-@@ -409,6 +409,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/dhcp/Config.in"
- endif
- source "package/dhcpdump/Config.in"
-+source "package/dhcpcd/Config.in"
- source "package/dnsmasq/Config.in"
- source "package/dropbear/Config.in"
- source "package/ebtables/Config.in"
-
---- a/buildroot-2011.11/package/dhcpcd/Config.in	2013-03-06 11:44:03.000000000 -0800
-+++ b/buildroot-2011.11/package/dhcpcd/Config.in	2013-03-06 07:55:53.000000000 -0800
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_DHCPCD
-+	bool "dhcpcd"
-+	depends on BR2_INET_IPV6
-+	help
-+	an RFC2131 compliant DHCP client
-
---- a/buildroot-2011.11/package/dhcpcd/dhcpcd.mk	2013-03-06 11:44:03.000000000 -0800
-+++ b/buildroot-2011.11/package/dhcpcd/dhcpcd.mk	2013-03-06 11:38:17.000000000 -0800
-@@ -0,0 +1,43 @@
-+#############################################################
-+#
-+# dhcpcd
-+#
-+#############################################################
-+
-+DHCPCD_VERSION = 5.6.7
-+DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
-+DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd/
-+DHCPCD_LICENSE = BSD-2c
-+DHCPCD_INSTALL_STAGING = NO
-+
-+CONFIG_ARGS = $(BR2_GCC_TARGET_ARCH)
-+
-+ifeq ($(BR2_USE_MMU),n)
-+    CONFIG_ARGS =: --disable-fork
-+endif 
-+
-+define DHCPD_CONFIGURE_CMDS
-+	(cd $(@D);
-+	...some environment variables...
-+	./configure \
-+	$(CONFIG_ARGS) )
-+endef
-+
-+define DHCPCD_BUILD_CMDS
-+	$(MAKE) -C $(@D) all
-+endef
-+
-+define DHCPCD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/dhcpcd $(TARGET_DIR)/usr/bin/dhcpcd
-+	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf $(TARGET_DIR)/etc/dhcpcd.conf
-+endef
-+
-+define DHCPCD_DEVICES
-+	#/dev/foo  c  666  0  0  42  0  -  -  -
-+endef
-+
-+define DHCPCD_PERMISSIONS
-+	/usr/bin/dhcpcd  f  4755  0  0  -  -  -  -  -
-+endef
-+
-+$(eval $(generic-package))
+-- 
+Bye, Peter Korsgaard
