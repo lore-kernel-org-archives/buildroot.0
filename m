@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  6 Mar 2013 21:23:04 +0100
-Subject: [Buildroot] [PATCH 22/34] qt5base: add rPi EGL glue code
+Date: Wed,  6 Mar 2013 21:23:05 +0100
+Subject: [Buildroot] [PATCH 23/34] qt5base: install bundled fonts to target
 In-Reply-To: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362601396-32250-23-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362601396-32250-24-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,63 +12,36 @@ To: buildroot@busybox.net
 
 From: Floris Bos <bos@je-eigen-domein.nl>
 
-When the rpi-userland package is selected, assume we are targetting
-the Raspberry Pi, and add the right platform glue code when building
-the Qt5 EGLFS plugin.
+If not using font-config, Qt 5 offers a set of standard fonts to
+use instead. Install these to target.
 
 Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/qt5base-mkspecs-files.patch |    5 ++++-
- package/qt5/qt5base/qt5base.mk                  |    6 ++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ package/qt5/qt5base/qt5base.mk |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/qt5/qt5base/qt5base-mkspecs-files.patch b/package/qt5/qt5base/qt5base-mkspecs-files.patch
-index a86d0b1..d5827f6 100644
---- a/package/qt5/qt5base/qt5base-mkspecs-files.patch
-+++ b/package/qt5/qt5base/qt5base-mkspecs-files.patch
-@@ -14,7 +14,7 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
- ===================================================================
- --- /dev/null
- +++ b/mkspecs/devices/linux-buildroot-g++/qmake.conf
--@@ -0,0 +1,38 @@
-+@@ -0,0 +1,41 @@
- +MAKEFILE_GENERATOR      = UNIX
- +CONFIG                  += incremental gdb_dwarf_index
- +QMAKE_INCREMENTAL_STYLE = sublib
-@@ -49,6 +49,9 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
- +
- +QMAKE_LIBS             += -lrt -lpthread -ldl
- +
-++# device specific glue code
-++EGLFS_PLATFORM_HOOKS_SOURCES =
-++
- +# Sanity check
- +deviceSanityCheckCompiler()
- +
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 865377f..953e194 100644
+index 953e194..31d6dff 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -75,6 +75,10 @@ endif
- ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
- QT5BASE_CONFIGURE_OPTS += -opengl es2 -eglfs
- QT5BASE_DEPENDENCIES   += libgles libegl
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
-+	$(@D)/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
-+endif
- else
- QT5BASE_CONFIGURE_OPTS += -no-opengl -no-eglfs
- endif
-@@ -125,6 +129,8 @@ define QT5BASE_CONFIGURE_CMDS
- 	$(call QT5BASE_CONFIG_SET,CROSS_COMPILE,$(TARGET_CROSS))
- 	$(call QT5BASE_CONFIG_SET,COMPILER_CFLAGS,$(TARGET_CFLAGS))
- 	$(call QT5BASE_CONFIG_SET,COMPILER_CXXFLAGS,$(TARGET_CXXFLAGS))
-+	$(call QT5BASE_CONFIG_SET,EGLFS_PLATFORM_HOOKS_SOURCES, \
-+		$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES))
- 	(cd $(@D); \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
+@@ -173,9 +173,17 @@ define QT5BASE_INSTALL_TARGET_PLUGINS
+ 	fi
+ endef
+ 
++define QT5BASE_INSTALL_TARGET_FONTS
++	if [ -d $(STAGING_DIR)/usr/lib/fonts/ ] ; then \
++		mkdir -p $(TARGET_DIR)/usr/lib/fonts ; \
++		cp -dpfr $(STAGING_DIR)/usr/lib/fonts/* $(TARGET_DIR)/usr/lib/fonts ; \
++	fi
++endef
++
+ define QT5BASE_INSTALL_TARGET_CMDS
+ 	$(QT5BASE_INSTALL_TARGET_LIBS)
+ 	$(QT5BASE_INSTALL_TARGET_PLUGINS)
++	$(QT5BASE_INSTALL_TARGET_FONTS)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 1.7.9.5
