@@ -1,26 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 06 Mar 2013 21:09:58 +0100
-Subject: [Buildroot] [PATCH] json-c: Add json_object_iterator.h to
-	installed headers
-In-Reply-To: <1362551468-5510-1-git-send-email-gilles.talis@gmail.com> (Gilles
- Talis's message of "Tue, 5 Mar 2013 22:31:08 -0800")
-References: <1362551468-5510-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87y5e070ix.fsf@dell.be.48ers.dk>
+Date: Wed, 06 Mar 2013 21:10:32 +0100
+Subject: [Buildroot] [PATCH] graph-depends: ignore the
+	'target-post-image' target
+In-Reply-To: <1362509961-27574-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 5 Mar 2013 19:59:21 +0100")
+References: <1362509961-27574-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87txoo70hz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Gilles> json_object_iterator.h is not installed in staging directory.
- Gilles> This leads to an error during pulseaudio build process:
+ Thomas> Since the introduction of the post-image mechanism, the graph-depends
+ Thomas> script is broken: it tries to call 'make
+ Thomas> target-post-image-show-depends', which doesn't exist since
+ Thomas> 'target-post-image' is not a package.
 
- Gilles> fatal error: json_object_iterator.h: No such file or directory
+ Thomas> So we should simply ignore this 'target-post-image'.
 
- Gilles> Fixes autobuild failures like:
- Gilles> http://autobuild.buildroot.org/results/079f9265cd768f88ad57f6f7b794641c845f3079
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
