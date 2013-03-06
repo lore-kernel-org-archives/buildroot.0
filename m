@@ -1,45 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  6 Mar 2013 21:23:06 +0100
-Subject: [Buildroot] [PATCH 24/34] qt5: factor Qt5 version
+Date: Wed,  6 Mar 2013 21:23:07 +0100
+Subject: [Buildroot] [PATCH 25/34] qt5/qt5svg: new package
 In-Reply-To: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362601396-32250-25-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362601396-32250-26-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the Qt5 version will be the same for all Qt5 modules, factor it
-in qt5/qt5.mk as QT5_VERSION.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5.mk             |    1 +
- package/qt5/qt5base/qt5base.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/qt5/Config.in        |    1 +
+ package/qt5/qt5svg/Config.in |   11 ++++++++++
+ package/qt5/qt5svg/qt5svg.mk |   47 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+)
+ create mode 100644 package/qt5/qt5svg/Config.in
+ create mode 100644 package/qt5/qt5svg/qt5svg.mk
 
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index f220508..0c6d0f9 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -1,3 +1,4 @@
-+QT5_VERSION = 5.0.0
- include package/qt5/*/*.mk
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 1c9f8a6..f4d2b45 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -15,4 +15,5 @@ menuconfig BR2_PACKAGE_QT5
  
- define QT5_LA_PRL_FILES_FIXUP
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 31d6dff..fc08b77 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--QT5BASE_VERSION = 5.0.0
-+QT5BASE_VERSION = $(QT5_VERSION)
- QT5BASE_SITE = http://releases.qt-project.org/qt5/$(QT5BASE_VERSION)/submodules_tar/
- QT5BASE_SOURCE = qtbase-opensource-src-$(QT5BASE_VERSION).tar.xz
- 
+ if BR2_PACKAGE_QT5
+ source "package/qt5/qt5base/Config.in"
++source "package/qt5/qt5svg/Config.in"
+ endif
+diff --git a/package/qt5/qt5svg/Config.in b/package/qt5/qt5svg/Config.in
+new file mode 100644
+index 0000000..27e6b05
+--- /dev/null
++++ b/package/qt5/qt5svg/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_QT5SVG
++	bool "qt5svg"
++	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_GUI
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  This package corresponds to the qt5svg module.
++
++	  http://qt-project.org
+diff --git a/package/qt5/qt5svg/qt5svg.mk b/package/qt5/qt5svg/qt5svg.mk
+new file mode 100644
+index 0000000..8db28ba
+--- /dev/null
++++ b/package/qt5/qt5svg/qt5svg.mk
+@@ -0,0 +1,47 @@
++#############################################################
++#
++# qt5svg
++#
++#############################################################
++
++QT5SVG_VERSION = $(QT5_VERSION)
++QT5SVG_SITE = http://releases.qt-project.org/qt5/$(QT5SVG_VERSION)/submodules_tar/
++QT5SVG_SOURCE = qtsvg-opensource-src-$(QT5SVG_VERSION).tar.xz
++QT5SVG_DEPENDENCIES = qt5base
++QT5SVG_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
++QT5SVG_CONFIGURE_OPTS += -opensource -confirm-license
++QT5SVG_LICENSE = LGPLv2.1 or GPLv3.0
++# Here we would like to get license files from qt5base, but qt5base
++# may not be extracted at the time we get the legal-info for qt5svg.
++else
++QT5SVG_LICENSE = Commercial license
++QT5SVG_REDISTRIBUTE = NO
++endif
++
++define QT5SVG_CONFIGURE_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
++endef
++
++define QT5SVG_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT5SVG_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(QT5_LA_PRL_FILES_FIXUP)
++endef
++
++ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
++define QT5SVG_INSTALL_ICONENGINES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/iconengines $(TARGET_DIR)/usr/lib/qt/plugins
++endef
++endif
++define QT5SVG_INSTALL_TARGET_CMDS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Svg*.so.* $(TARGET_DIR)/usr/lib
++	cp -dpf $(STAGING_DIR)/usr/lib/qt/plugins/imageformats/libqsvg.so $(TARGET_DIR)/usr/lib/qt/plugins/imageformats/
++	$(QT5SVG_INSTALL_ICONENGINES)
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.9.5
