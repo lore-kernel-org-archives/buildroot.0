@@ -1,113 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  6 Mar 2013 21:23:12 +0100
-Subject: [Buildroot] [PATCH 30/34] qt5/qt5declarative: new package
-In-Reply-To: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362601396-32250-31-git-send-email-thomas.petazzoni@free-electrons.com>
+From: John Stile <john@stilen.com>
+Date: Wed, 06 Mar 2013 12:41:20 -0800
+Subject: [Buildroot] adding dhcpcd
+In-Reply-To: <20130306210831.4fbe8150@skate>
+References: <1362163072.19802.25.camel@genx.eng.msli.com>
+ <5130F7CA.6090203@zacarias.com.ar> <1362500477.20183.74.camel@genx>
+ <20130305194707.474ded42@skate> <1362592916.20183.152.camel@genx>
+ <20130306195844.2f8c14b6@skate> <1362599417.20183.159.camel@genx>
+ <069B5A25F9844945B625ADE7258AC94C061FF823@4rf-nz-orion.local.4rf.com>
+ <20130306210831.4fbe8150@skate>
+Message-ID: <1362602480.20183.169.camel@genx>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt5/Config.in                        |    1 +
- package/qt5/qt5declarative/Config.in         |   18 ++++++++++
- package/qt5/qt5declarative/qt5declarative.mk |   48 ++++++++++++++++++++++++++
- 3 files changed, 67 insertions(+)
- create mode 100644 package/qt5/qt5declarative/Config.in
- create mode 100644 package/qt5/qt5declarative/qt5declarative.mk
+On Wed, 2013-03-06 at 21:08 +0100, Thomas Petazzoni wrote:
+> Dear Reuben Dowle,
+> 
+> On Wed, 6 Mar 2013 20:05:49 +0000, Reuben Dowle wrote:
+> 
+> > In your patch, you should probably replace the place-holder "...some environment variables..." with setting some actual environment variables.
+> 
+> Yes, indeed, but John was saying that the build of his package doesn't
+> even start, which I understood as "I run make", but nothing happens.
+> 
+> Oh, John, remember to do a 'make dhcpcd-dirclean' every time you want
+> to retry the build of your package. Once a package has been built in
+> output/build/<somepkg>-<someversion>/, Buildroot doesn't rebuild it.
+> 
+> Best regards,
+> 
+> Thomas
+Yes, the place holder is bad, so I took it out.
+I ran: make dhcpcd-dirclean
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 8a4ed53..ff98b9e 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -15,6 +15,7 @@ menuconfig BR2_PACKAGE_QT5
- 
- if BR2_PACKAGE_QT5
- source "package/qt5/qt5base/Config.in"
-+source "package/qt5/qt5declarative/Config.in"
- source "package/qt5/qt5imageformats/Config.in"
- source "package/qt5/qt5jsbackend/Config.in"
- source "package/qt5/qt5script/Config.in"
-diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
-new file mode 100644
-index 0000000..f862b94
---- /dev/null
-+++ b/package/qt5/qt5declarative/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_QT5DECLARATIVE
-+	bool "qt5declarative"
-+	select BR2_PACKAGE_QT5XMLPATTERNS
-+	select BR2_PACKAGE_QT5JSBACKEND
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_EGLFS
-+	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+	depends on BR2_PACKAGE_HAS_OPENGL_ES
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  This package corresponds to the qt5declarative module.
-+
-+	  http://qt-project.org
-+
-+comment "qt5declarative requires an OpenGL-capable backend"
-+	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
-diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
-new file mode 100644
-index 0000000..02fae6a
---- /dev/null
-+++ b/package/qt5/qt5declarative/qt5declarative.mk
-@@ -0,0 +1,48 @@
-+#############################################################
-+#
-+# qt5declarative
-+#
-+#############################################################
-+
-+QT5DECLARATIVE_VERSION = $(QT5_VERSION)
-+QT5DECLARATIVE_SITE = http://releases.qt-project.org/qt5/$(QT5DECLARATIVE_VERSION)/submodules_tar/
-+QT5DECLARATIVE_SOURCE = qtdeclarative-opensource-src-$(QT5DECLARATIVE_VERSION).tar.xz
-+QT5DECLARATIVE_DEPENDENCIES = qt5base qt5xmlpatterns qt5jsbackend
-+QT5DECLARATIVE_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5DECLARATIVE_CONFIGURE_OPTS += -opensource -confirm-license
-+QT5DECLARATIVE_LICENSE = LGPLv2.1 or GPLv3.0
-+# Here we would like to get license files from qt5base, but qt5base
-+# may not be extracted at the time we get the legal-info for
-+# qt5script.
-+else
-+QT5DECLARATIVE_LICENSE = Commercial license
-+QT5DECLARATIVE_REDISTRIBUTE = NO
-+endif
-+
-+define QT5DECLARATIVE_CONFIGURE_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+endef
-+
-+define QT5DECLARATIVE_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		sub-src-all sub-tools-all
-+endef
-+
-+define QT5DECLARATIVE_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		sub-src-install_subtargets \
-+		sub-tools-install_subtargets
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+define QT5DECLARATIVE_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Qml*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Quick*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpf $(STAGING_DIR)/usr/bin/qml* $(TARGET_DIR)/usr/bin
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/qml* $(TARGET_DIR)/usr/lib/qt/plugins
-+	cp -dpfr $(STAGING_DIR)/usr/qml $(TARGET_DIR)/usr
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.9.5
+My buildroot-2011.11/.config  holds
+BR2_PACKAGE_DHCPCD=y
+BR2_INET_IPV6=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+
+I cleaned up using:
+rm -rf \
+./dl/dhcpcd-3.2.3.tar.bz2 \
+./output/build/dhcpcd-3.2.3 \
+./output/build/buildroot-config/br2/package/dhcpcd.h \
+./output/target/etc/init.d/dhcpcd.sh \
+./output/target/usr/bin/dhcpcd
+
+But make still does not do anything for dhcpcd.
