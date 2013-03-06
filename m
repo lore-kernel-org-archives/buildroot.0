@@ -1,51 +1,39 @@
-From: John Stile <john@stilen.com>
-Date: Wed, 06 Mar 2013 12:41:20 -0800
-Subject: [Buildroot] adding dhcpcd
-In-Reply-To: <20130306210831.4fbe8150@skate>
-References: <1362163072.19802.25.camel@genx.eng.msli.com>
- <5130F7CA.6090203@zacarias.com.ar> <1362500477.20183.74.camel@genx>
- <20130305194707.474ded42@skate> <1362592916.20183.152.camel@genx>
- <20130306195844.2f8c14b6@skate> <1362599417.20183.159.camel@genx>
- <069B5A25F9844945B625ADE7258AC94C061FF823@4rf-nz-orion.local.4rf.com>
- <20130306210831.4fbe8150@skate>
-Message-ID: <1362602480.20183.169.camel@genx>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 6 Mar 2013 21:10:24 +0100
+Subject: [Buildroot] [git commit] graph-depends: ignore the
+	'target-post-image' target
+Message-ID: <20130306205128.291FE9AEFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2013-03-06 at 21:08 +0100, Thomas Petazzoni wrote:
-> Dear Reuben Dowle,
-> 
-> On Wed, 6 Mar 2013 20:05:49 +0000, Reuben Dowle wrote:
-> 
-> > In your patch, you should probably replace the place-holder "...some environment variables..." with setting some actual environment variables.
-> 
-> Yes, indeed, but John was saying that the build of his package doesn't
-> even start, which I understood as "I run make", but nothing happens.
-> 
-> Oh, John, remember to do a 'make dhcpcd-dirclean' every time you want
-> to retry the build of your package. Once a package has been built in
-> output/build/<somepkg>-<someversion>/, Buildroot doesn't rebuild it.
-> 
-> Best regards,
-> 
-> Thomas
-Yes, the place holder is bad, so I took it out.
-I ran: make dhcpcd-dirclean
+commit: http://git.buildroot.net/buildroot/commit/?id=a9ba807c588e285960e08140127ea43a6066204c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-My buildroot-2011.11/.config  holds
-BR2_PACKAGE_DHCPCD=y
-BR2_INET_IPV6=y
-BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+Since the introduction of the post-image mechanism, the graph-depends
+script is broken: it tries to call 'make
+target-post-image-show-depends', which doesn't exist since
+'target-post-image' is not a package.
 
-I cleaned up using:
-rm -rf \
-./dl/dhcpcd-3.2.3.tar.bz2 \
-./output/build/dhcpcd-3.2.3 \
-./output/build/buildroot-config/br2/package/dhcpcd.h \
-./output/target/etc/init.d/dhcpcd.sh \
-./output/target/usr/bin/dhcpcd
+So we should simply ignore this 'target-post-image'.
 
-But make still does not do anything for dhcpcd.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ support/scripts/graph-depends |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 1163d79..180c81d 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -168,6 +168,7 @@ TARGET_EXCEPTIONS = [
+     "erase-fakeroots",
+     "target-generic-hostname",
+     "target-root-passwd",
++    "target-post-image",
+ ]
+ 
+ # In full mode, start with the result of get_targets() to get the main
