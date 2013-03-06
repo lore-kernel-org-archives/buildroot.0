@@ -1,29 +1,41 @@
-From: Bryce Schober <bryce.schober@gmail.com>
-Date: Wed, 6 Mar 2013 13:11:57 -0800
-Subject: [Buildroot] Pre-compiled XOrg kbd files for read-only targets
-Message-ID: <CAJpxd07kzuWMgotZ8LREd5b6mSpE5wKN96Fbm6sdViAw3a532w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Mar 2013 22:14:41 +0100
+Subject: [Buildroot] adding dhcpcd
+In-Reply-To: <1362603756.20183.170.camel@genx>
+References: <1362163072.19802.25.camel@genx.eng.msli.com>
+ <5130F7CA.6090203@zacarias.com.ar> <1362500477.20183.74.camel@genx>
+ <20130305194707.474ded42@skate> <1362592916.20183.152.camel@genx>
+ <20130306195844.2f8c14b6@skate> <1362599417.20183.159.camel@genx>
+ <069B5A25F9844945B625ADE7258AC94C061FF823@4rf-nz-orion.local.4rf.com>
+ <20130306210831.4fbe8150@skate> <1362602480.20183.169.camel@genx>
+ <20130306215414.23271383@skate> <1362603756.20183.170.camel@genx>
+Message-ID: <20130306221441.03439842@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Dear John Stile,
 
-I have a target with fixed hardware and a read-only file-system that would
-really prefer to have a single static keyboard setup. This would ideally
-prune the ~2.5MB worth of /usr/share/X11/xkb/* down to a minimum. I've
-googled around, and found all kinds of stuff, mostly that linked from xorg's
-wiki <http://www.x.org/wiki/XKB>, but I'm apparently not smart enough to
-see through all that toward what I'm looking for. All I want is simple
-support for a pc104 keyboard in a read-only file-system. How hard can that
-possibly be? ;-)
+On Wed, 06 Mar 2013 13:02:36 -0800, John Stile wrote:
 
-Have any of you all worked out this, or some alternative solution for a
-minimal static xkb configuration on a read-only target?
+> > Put the contents of logfile on http://code.bulix.org, and post the URL?
+> > 
+> > Thanks,
+>
+> http://code.bulix.org/j63bd0-83103
 
-<><  <><  <><
-Bryce Schober
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130306/c1539e8b/attachment.html>
+Nothing besides that? Really weird, it all works fine from here. I'm
+out of ideas for now, sorry. But again, if the dhcpcd tarball was
+downloaded to dl/, then for sure at least at some point your
+package .mk file got used.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
