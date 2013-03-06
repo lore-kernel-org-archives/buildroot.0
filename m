@@ -1,61 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  6 Mar 2013 21:23:03 +0100
-Subject: [Buildroot] [PATCH 21/34] qt5base: add support to build against ICU
+Date: Wed,  6 Mar 2013 21:23:04 +0100
+Subject: [Buildroot] [PATCH 22/34] qt5base: add rPi EGL glue code
 In-Reply-To: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362601396-32250-22-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362601396-32250-23-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt5Webkit requires Qt5Base to be built with ICU support, so we add
-such support.
+From: Floris Bos <bos@je-eigen-domein.nl>
 
+When the rpi-userland package is selected, assume we are targetting
+the Raspberry Pi, and add the right platform glue code when building
+the Qt5 EGLFS plugin.
+
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/Config.in  |    7 +++++++
- package/qt5/qt5base/qt5base.mk |    4 +++-
+ package/qt5/qt5base/qt5base-mkspecs-files.patch |    5 ++++-
+ package/qt5/qt5base/qt5base.mk                  |    6 ++++++
  2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index baf471f..71c2ccd 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -148,4 +148,11 @@ config BR2_PACKAGE_QT5BASE_DBUS
- 	help
- 	  This option enables the D-Bus module.
- 
-+config BR2_PACKAGE_QT5BASE_ICU
-+	bool "Enable ICU support"
-+	select BR2_PACKAGE_ICU
-+	help
-+	  This option enables ICU support in Qt5. This is for example
-+	  needed for Qt5Webkit.
-+
- endif
+diff --git a/package/qt5/qt5base/qt5base-mkspecs-files.patch b/package/qt5/qt5base/qt5base-mkspecs-files.patch
+index a86d0b1..d5827f6 100644
+--- a/package/qt5/qt5base/qt5base-mkspecs-files.patch
++++ b/package/qt5/qt5base/qt5base-mkspecs-files.patch
+@@ -14,7 +14,7 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+ ===================================================================
+ --- /dev/null
+ +++ b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+-@@ -0,0 +1,38 @@
++@@ -0,0 +1,41 @@
+ +MAKEFILE_GENERATOR      = UNIX
+ +CONFIG                  += incremental gdb_dwarf_index
+ +QMAKE_INCREMENTAL_STYLE = sublib
+@@ -49,6 +49,9 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+ +
+ +QMAKE_LIBS             += -lrt -lpthread -ldl
+ +
+++# device specific glue code
+++EGLFS_PLATFORM_HOOKS_SOURCES =
+++
+ +# Sanity check
+ +deviceSanityCheckCompiler()
+ +
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 414410a..865377f 100644
+index 865377f..953e194 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -25,7 +25,6 @@ QT5BASE_CONFIGURE_OPTS += \
- 	-no-nis \
- 	-no-libudev \
- 	-no-iconv \
--	-no-icu \
- 	-no-gstreamer \
- 	-no-gtkstyle \
- 	-system-zlib \
-@@ -97,6 +96,9 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DBUS),dbus)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBGLIB2),-glib,-no-glib)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBGLIB2),libglib2)
- 
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_ICU),-icu,-no-icu)
-+QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_ICU),icu)
-+
- # Build the list of libraries to be installed on the target
- QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
+@@ -75,6 +75,10 @@ endif
+ ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
+ QT5BASE_CONFIGURE_OPTS += -opengl es2 -eglfs
+ QT5BASE_DEPENDENCIES   += libgles libegl
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
++	$(@D)/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
++endif
+ else
+ QT5BASE_CONFIGURE_OPTS += -no-opengl -no-eglfs
+ endif
+@@ -125,6 +129,8 @@ define QT5BASE_CONFIGURE_CMDS
+ 	$(call QT5BASE_CONFIG_SET,CROSS_COMPILE,$(TARGET_CROSS))
+ 	$(call QT5BASE_CONFIG_SET,COMPILER_CFLAGS,$(TARGET_CFLAGS))
+ 	$(call QT5BASE_CONFIG_SET,COMPILER_CXXFLAGS,$(TARGET_CXXFLAGS))
++	$(call QT5BASE_CONFIG_SET,EGLFS_PLATFORM_HOOKS_SOURCES, \
++		$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES))
+ 	(cd $(@D); \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
 -- 
 1.7.9.5
