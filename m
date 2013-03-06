@@ -1,56 +1,43 @@
-From: John Stile <john@stilen.com>
-Date: Wed, 06 Mar 2013 13:02:36 -0800
-Subject: [Buildroot] adding dhcpcd
-In-Reply-To: <20130306215414.23271383@skate>
-References: <1362163072.19802.25.camel@genx.eng.msli.com>
- <5130F7CA.6090203@zacarias.com.ar> <1362500477.20183.74.camel@genx>
- <20130305194707.474ded42@skate> <1362592916.20183.152.camel@genx>
- <20130306195844.2f8c14b6@skate> <1362599417.20183.159.camel@genx>
- <069B5A25F9844945B625ADE7258AC94C061FF823@4rf-nz-orion.local.4rf.com>
- <20130306210831.4fbe8150@skate> <1362602480.20183.169.camel@genx>
- <20130306215414.23271383@skate>
-Message-ID: <1362603756.20183.170.camel@genx>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 06 Mar 2013 22:10:21 +0100
+Subject: [Buildroot] [PATCH 05/34] package: create virtual package for
+	libGLES, libOpenVG and libEGL
+In-Reply-To: <1362601396-32250-6-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 6 Mar 2013 21:22:47 +0100")
+References: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1362601396-32250-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <874ngo6xqa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-On Wed, 2013-03-06 at 21:54 +0100, Thomas Petazzoni wrote:
-> Dear John Stile,
-> 
-> On Wed, 06 Mar 2013 12:41:20 -0800, John Stile wrote:
-> 
-> > Yes, the place holder is bad, so I took it out.
-> > I ran: make dhcpcd-dirclean
-> > 
-> > My buildroot-2011.11/.config  holds
-> > BR2_PACKAGE_DHCPCD=y
-> > BR2_INET_IPV6=y
-> > BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-> > 
-> > I cleaned up using:
-> > rm -rf \
-> > ./dl/dhcpcd-3.2.3.tar.bz2 \
-> > ./output/build/dhcpcd-3.2.3 \
-> > ./output/build/buildroot-config/br2/package/dhcpcd.h \
-> > ./output/target/etc/init.d/dhcpcd.sh \
-> > ./output/target/usr/bin/dhcpcd
-> > 
-> > But make still does not do anything for dhcpcd.
-> 
-> If you have dl/dhcpcd-3.2.3.tar.bz2 in your dl/ directory, then it
-> means that the package build process was started.
-> 
-> Can you do:
-> 
-> make dhcpcd-dirclean
-> make 2>&1 | tee logfile
-> 
-> Put the contents of logfile on http://code.bulix.org, and post the URL?
-> 
-> Thanks,
-> 
-> Thomas
-http://code.bulix.org/j63bd0-83103
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+
+ Thomas> Those acceleration libraries typically have multiple implementations:
+ Thomas> some are free (Mesa), some are proprietary (generally SoC specific).
+
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  package/Config.in                     |    1 +
+ Thomas>  package/opengl/Config.in              |    8 ++++++++
+ Thomas>  package/opengl/libegl/libegl.mk       |   16 ++++++++++++++++
+ Thomas>  package/opengl/libgles/libgles.mk     |   16 ++++++++++++++++
+ Thomas>  package/opengl/libopenvg/libopenvg.mk |   16 ++++++++++++++++
+ Thomas>  package/opengl/opengl.mk              |    1 +
+ Thomas>  6 files changed, 58 insertions(+)
+ Thomas>  create mode 100644 package/opengl/Config.in
+ Thomas>  create mode 100644 package/opengl/libegl/libegl.mk
+ Thomas>  create mode 100644 package/opengl/libgles/libgles.mk
+ Thomas>  create mode 100644 package/opengl/libopenvg/libopenvg.mk
+ Thomas>  create mode 100644 package/opengl/opengl.mk
+
+Committed, thanks.
+
+I personally don't really like the opengl subdir, and I think we need to
+be clear about what we mean when we say opengles (E.G. v1/v2/v3), but we
+can fix that up later.
+
+-- 
+Bye, Peter Korsgaard
