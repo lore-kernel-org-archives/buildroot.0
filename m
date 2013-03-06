@@ -1,47 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  6 Mar 2013 21:23:05 +0100
-Subject: [Buildroot] [PATCH 23/34] qt5base: install bundled fonts to target
+Date: Wed,  6 Mar 2013 21:23:06 +0100
+Subject: [Buildroot] [PATCH 24/34] qt5: factor Qt5 version
 In-Reply-To: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362601396-32250-24-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362601396-32250-25-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Floris Bos <bos@je-eigen-domein.nl>
+Since the Qt5 version will be the same for all Qt5 modules, factor it
+in qt5/qt5.mk as QT5_VERSION.
 
-If not using font-config, Qt 5 offers a set of standard fonts to
-use instead. Install these to target.
-
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/qt5base.mk |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/qt5/qt5.mk             |    1 +
+ package/qt5/qt5base/qt5base.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index f220508..0c6d0f9 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -1,3 +1,4 @@
++QT5_VERSION = 5.0.0
+ include package/qt5/*/*.mk
+ 
+ define QT5_LA_PRL_FILES_FIXUP
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 953e194..31d6dff 100644
+index 31d6dff..fc08b77 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -173,9 +173,17 @@ define QT5BASE_INSTALL_TARGET_PLUGINS
- 	fi
- endef
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
-+define QT5BASE_INSTALL_TARGET_FONTS
-+	if [ -d $(STAGING_DIR)/usr/lib/fonts/ ] ; then \
-+		mkdir -p $(TARGET_DIR)/usr/lib/fonts ; \
-+		cp -dpfr $(STAGING_DIR)/usr/lib/fonts/* $(TARGET_DIR)/usr/lib/fonts ; \
-+	fi
-+endef
-+
- define QT5BASE_INSTALL_TARGET_CMDS
- 	$(QT5BASE_INSTALL_TARGET_LIBS)
- 	$(QT5BASE_INSTALL_TARGET_PLUGINS)
-+	$(QT5BASE_INSTALL_TARGET_FONTS)
- endef
+-QT5BASE_VERSION = 5.0.0
++QT5BASE_VERSION = $(QT5_VERSION)
+ QT5BASE_SITE = http://releases.qt-project.org/qt5/$(QT5BASE_VERSION)/submodules_tar/
+ QT5BASE_SOURCE = qtbase-opensource-src-$(QT5BASE_VERSION).tar.xz
  
- $(eval $(generic-package))
 -- 
 1.7.9.5
