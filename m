@@ -1,51 +1,117 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  6 Mar 2013 21:22:51 +0100
-Subject: [Buildroot] [PATCH 09/34] efl/libeet,
-	efl/libevas: use host-libjpeg instead of host-jpeg
+Date: Wed,  6 Mar 2013 21:22:59 +0100
+Subject: [Buildroot] [PATCH 17/34] qt5base: add eglfs graphics backend
 In-Reply-To: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362601396-32250-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362601396-32250-18-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Before creating a real virtual package named 'jpeg', we want to ensure
-that no package is using the host variant of the virtual
-package. Instead, we make them use directly the host-libjpeg package.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/libeet/libeet.mk   |    2 +-
- package/efl/libevas/libevas.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt5/qt5base/Config.in                      |   11 ++++++-
+ ...nce-add-egl-to-CONFIG-to-get-correct-incl.patch |   32 ++++++++++++++++++++
+ package/qt5/qt5base/qt5base.mk                     |    9 ++++--
+ 3 files changed, 49 insertions(+), 3 deletions(-)
+ create mode 100644 package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
 
-diff --git a/package/efl/libeet/libeet.mk b/package/efl/libeet/libeet.mk
-index 3d5b460..db3ec6e 100644
---- a/package/efl/libeet/libeet.mk
-+++ b/package/efl/libeet/libeet.mk
-@@ -13,7 +13,7 @@ LIBEET_LICENSE_FILES = COPYING
- LIBEET_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 540c8b2..e91c405 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -67,7 +67,8 @@ config BR2_PACKAGE_QT5BASE_GUI
+ 	# linuxfb if nothing is enabled.
+ 	select BR2_PACKAGE_QT5BASE_LINUXFB if \
+ 	       !BR2_PACKAGE_QT5BASE_DIRECTFB && \
+-	       !BR2_PACKAGE_QT5BASE_XCB
++	       !BR2_PACKAGE_QT5BASE_XCB && \
++	       !BR2_PACKAGE_QT5BASE_EGLFS
+ 	help
+ 	  This option enables the Qt5Gui library.
  
- LIBEET_DEPENDENCIES = host-pkgconf zlib jpeg libeina
--HOST_LIBEET_DEPENDENCIES = host-pkgconf host-zlib host-jpeg host-libeina
-+HOST_LIBEET_DEPENDENCIES = host-pkgconf host-zlib host-libjpeg host-libeina
+@@ -97,6 +98,14 @@ config BR2_PACKAGE_QT5BASE_XCB
+ comment "X.org XCB backend available if X.org is enabled"
+ 	depends on !BR2_PACKAGE_XORG7
  
- ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
- LIBEET_DEPENDENCIES += gnutls libgcrypt
-diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
-index 0a90842..5bdcba5 100644
---- a/package/efl/libevas/libevas.mk
-+++ b/package/efl/libevas/libevas.mk
-@@ -15,7 +15,7 @@ LIBEVAS_INSTALL_STAGING = YES
- LIBEVAS_DEPENDENCIES = host-pkgconf zlib libeina freetype
++config BR2_PACKAGE_QT5BASE_EGLFS
++	bool "eglfs support"
++	depends on BR2_PACKAGE_HAS_OPENGL_EGL
++	depends on BR2_PACKAGE_HAS_OPENGL_ES
++
++comment "eglfs backend available if OpenGLES and EGL are enabled"
++	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
++
+ config BR2_PACKAGE_QT5BASE_PRINTSUPPORT
+ 	bool "print support module"
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
+diff --git a/package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch b/package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
+new file mode 100644
+index 0000000..a85a5aa
+--- /dev/null
++++ b/package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
+@@ -0,0 +1,32 @@
++From 588c60d0c3d11e79d19860fa62b03c935658d13a Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 13 Jan 2013 14:36:48 +0100
++Subject: [PATCH qtbase] eglconvenience: add egl to CONFIG to get correct include
++ paths
++
++The eglconvenience code includes <EGL/egl.h>. Therefore, it should get
++the appropriate EGL-specific include paths from QMAKE_INCDIR_EGL,
++otherwise the build might if the EGL library has its headers in
++special locations. In order to achieve this, we simply add the "egl"
++feature to the list of features imported by eglconvenience.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ .../eglconvenience/eglconvenience.pri              |    1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
++index 188eb1c..8996cea 100644
++--- a/src/platformsupport/eglconvenience/eglconvenience.pri
+++++ b/src/platformsupport/eglconvenience/eglconvenience.pri
++@@ -5,6 +5,7 @@ contains(QT_CONFIG,egl) {
++     SOURCES += \
++         $$PWD/qeglconvenience.cpp \
++         $$PWD/qeglplatformcontext.cpp
+++    CONFIG += egl
++ 
++     contains(QT_CONFIG,xlib) {
++         HEADERS += \
++-- 
++1.7.9.5
++
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 79cbc48..3e8bde1 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -20,9 +20,7 @@ QT5BASE_INSTALL_STAGING = YES
+ #    want to use the one packaged in Buildroot
+ QT5BASE_CONFIGURE_OPTS += \
+ 	-optimized-qmake \
+-	-no-eglfs \
+ 	-no-kms \
+-	-no-opengl \
+ 	-no-glib \
+ 	-no-cups \
+ 	-no-nis \
+@@ -81,6 +79,13 @@ else
+ QT5_BASE_CONFIGURE_OPTS += -no-xcb
+ endif
  
- HOST_LIBEVAS_DEPENDENCIES = host-pkgconf host-zlib host-libeina \
--				host-freetype host-libpng host-jpeg
-+				host-freetype host-libpng host-libjpeg
- HOST_LIBEVAS_CONF_OPT += \
- 	--enable-image-loader-png \
- 	--enable-image-loader-jpeg \
++ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
++QT5BASE_CONFIGURE_OPTS += -opengl es2 -eglfs
++QT5BASE_DEPENDENCIES   += libgles libegl
++else
++QT5BASE_CONFIGURE_OPTS += -no-opengl -no-eglfs
++endif
++
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),-openssl,-no-openssl)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),openssl)
+ 
 -- 
 1.7.9.5
