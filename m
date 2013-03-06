@@ -1,35 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 06 Mar 2013 20:52:23 +0100
-Subject: [Buildroot] [PATCH 4/5] Enable ccache for cmake packages
-In-Reply-To: <CAHXCMMKpKo_jagngfJFDHPKfiMeUb3+zx5wZ++tg81OjwQ_8iA@mail.gmail.com>
- (Samuel Martin's message of "Wed, 6 Mar 2013 20:02:02 +0100")
-References: <1362590066-5448-1-git-send-email-luca@lucaceresoli.net>
- <1362590066-5448-5-git-send-email-luca@lucaceresoli.net>
- <CAHXCMMKpKo_jagngfJFDHPKfiMeUb3+zx5wZ++tg81OjwQ_8iA@mail.gmail.com>
-Message-ID: <877glk8fwo.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Mar 2013 20:58:22 +0100
+Subject: [Buildroot] [PATCH] json-c: Add json_object_iterator.h to
+ installed headers
+In-Reply-To: <1362551468-5510-1-git-send-email-gilles.talis@gmail.com>
+References: <y>
+	<1362551468-5510-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <20130306205822.4f03863e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+Dear Gilles Talis,
 
- Samuel> Hi Lucas,
- Samuel> 2013/3/6 Luca Ceresoli <luca@lucaceresoli.net>:
- >> CMake fails in detecting the compiler when ccache is used. Add a wrapper
- >> script to make it happy.
+On Tue,  5 Mar 2013 22:31:08 -0800, Gilles Talis wrote:
+> json_object_iterator.h is not installed in staging directory.
+> This leads to an error during pulseaudio build process:
+> 
+> fatal error: json_object_iterator.h: No such file or directory
+> 
+> Fixes autobuild failures like:
+> http://autobuild.buildroot.org/results/079f9265cd768f88ad57f6f7b794641c845f3079
+> 
+> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 
- Samuel> It is possible to do this without any wrapper, setting
- Samuel> CMAKE_C_COMPILER and CMAKE_CXX_COMPILER to the ccache binary path, and
- Samuel> CMAKE_C_COMPILER_ARG1 and CMAKE_CXX_COMPILER_ARG1 to the actual
- Samuel> C-compiler, respectively to the C++-compiler.
-
- Samuel> BTW, note that we currently don't handle space in the paths at all;
- Samuel> hope that nobody triggers issues related to this ;)
-
-I bet a lot of (make based) build systems don't handle paths with spaces
-either.
-
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
