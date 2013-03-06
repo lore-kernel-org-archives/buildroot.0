@@ -1,42 +1,42 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 06 Mar 2013 18:44:14 +0100
-Subject: [Buildroot] [PATCH] Revert "uClibc: port linuxthreads
- errnopatch to 0.9.33.2"
-In-Reply-To: <87lia39c5g.fsf@dell.be.48ers.dk>
-References: <1361455787-4846-1-git-send-email-gustavo@zacarias.com.ar>
- <877gm1hhsm.fsf@dell.be.48ers.dk> <CFB67F3F72BB450DAF0C0E10C27DFC00@JohanW7>
- <51276813.7050604@zacarias.com.ar> <9E7C87F7A6274E3EBBC491EE4122270E@JohanW7>
- <87lia39c5g.fsf@dell.be.48ers.dk>
-Message-ID: <5137806E.4020507@mind.be>
+Date: Wed, 06 Mar 2013 18:47:33 +0100
+Subject: [Buildroot] [PATCH] <pkg>-rsync: exclude version control files
+In-Reply-To: <871ubv9bk0.fsf@dell.be.48ers.dk>
+References: <f9ac20b69b1bfd3f77ef.1362169598@BEANTN0L019720>
+ <871ubv9bk0.fsf@dell.be.48ers.dk>
+Message-ID: <51378135.6070006@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/04/13 20:51, Peter Korsgaard wrote:
->>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+On 03/04/13 21:04, Peter Korsgaard wrote:
+>>>>>> >>>>>"Thomas" == Thomas De Schampheleire<patrickdepinguin+buildroot@gmail.com>  writes:
+>   Thomas> When using rsync to import package sources (typically with
+>   Thomas> PKG_OVERRIDE_SRCDIR), it often happens that these external sources
+>   Thomas> are under version control, and contain directories like .git,
+>   Thomas> .hg, etc.
 >
->   Sagaert> Hi
+>   Thomas> Depending on the project, these directories can become pretty large
+>   Thomas> and typically have a lot of files. Moreover, they are not necessary
+>   Thomas> in the context of building the package. Therefore, this commit adds
+>   Thomas> the --cvs-exclude option to the rsync call, saving both disk space
+>   Thomas> and sync time.
 >
->   Sagaert> It took some time till I could verify it against real hardware.
->
->   Sagaert> I switched to NTPL and so far got no problems with any package.
->
->   Sagaert> It's a bit mysterious when to use the other options (pthreads
->   Sagaert> and pthreads old).  Incompatible packages mostly do build, but
->   Sagaert> the problems show up at runtime.
->
-> The pthreads options are basically just there for legacy reasons (from
-> before NPTL existed) and presumably see very little testing these
-> days. We should aguable deprecate them.
+> I don't personally use this, but doesn't that break stuff using the
+> version info (like E.G. the kernel storing the git id)?
 
-  That would be a good idea. For who really wants it, there is still the 
-crosstool-NG toolchain.
-
+  Depends on what you call breaking. The kernel will find buildroot's git 
+ID, which is fine by me (that's of course assuming the output directory 
+is a subdirectory of the buildroot directory). Or failing that, it will 
+use the plain version number. The latter is actually what I prefer, 
+because it means I can easily exchange modules with the non-OVERRIDE'n 
+kernel.
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
