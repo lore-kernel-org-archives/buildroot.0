@@ -1,50 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  6 Mar 2013 21:22:50 +0100
-Subject: [Buildroot] [PATCH 08/34] rpi-userland: add bcm_host to egl.pc
+Date: Wed,  6 Mar 2013 21:22:52 +0100
+Subject: [Buildroot] [PATCH 10/34] jpeg: convert to a real package
 In-Reply-To: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362601396-32250-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362601396-32250-11-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Floris Bos <bos@je-eigen-domein.nl>
+jpeg is a virtual package, but since it is listed in the dependencies
+of other packages, it should obey to all the normal make rules for
+packages. Notably, the jpeg-show-depends target is mandatory for the
+graph-depends script to work.
 
-bcm_host is the Broadcom hardware interface library
-And is currently a dependency to use the EGL functions
+Instead to implement such a make target manually, make jpeg a normal
+generic-package, except that it doesn't have any source.
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../rpi-userland-add-pkgconfig-files.patch         |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/jpeg/jpeg.mk |   22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland-add-pkgconfig-files.patch b/package/rpi-userland/rpi-userland-add-pkgconfig-files.patch
-index 0da9afd..4ffc2b0 100644
---- a/package/rpi-userland/rpi-userland-add-pkgconfig-files.patch
-+++ b/package/rpi-userland/rpi-userland-add-pkgconfig-files.patch
-@@ -9,7 +9,7 @@ Index: b/interface/khronos/egl/egl.pc.in
- ===================================================================
- --- /dev/null
- +++ b/interface/khronos/egl/egl.pc.in
--@@ -0,0 +1,10 @@
-+@@ -0,0 +1,11 @@
- +prefix=@CMAKE_INSTALL_PREFIX@
- +exec_prefix=${prefix}
- +libdir=${exec_prefix}/lib
-@@ -18,8 +18,9 @@ Index: b/interface/khronos/egl/egl.pc.in
- +Name: egl
- +Description: RasberryPi implementation of EGL
- +Version: 1.0
--+Libs: -L${libdir} -lEGL -lGLESv2
--+Cflags: -I${includedir}/ -I${includedir}/interface/vcos/pthreads/
-++Libs: -L${libdir} -lEGL -lGLESv2 -lbcm_host
-++Cflags: -I${includedir}/ -I${includedir}/interface/vcos/pthreads/ \
-++        -I${includedir}/interface/vmcs_host/linux/
- Index: b/interface/khronos/CMakeLists.txt
- ===================================================================
- --- a/interface/khronos/CMakeLists.txt
+diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
+index 3caacaa..962908d 100644
+--- a/package/jpeg/jpeg.mk
++++ b/package/jpeg/jpeg.mk
+@@ -1,10 +1,24 @@
+ #############################################################
+ #
+-# jpeg
++# Virtual jpeg package
+ #
+ #############################################################
+ 
+-jpeg: $(if $(BR2_PACKAGE_JPEG_TURBO),jpeg-turbo,libjpeg)
++JPEG_SOURCE =
+ 
+-host-jpeg: host-libjpeg
+-host-jpeg-source: host-libjpeg-source
++ifeq ($(BR2_PACKAGE_JPEG_TURBO),y)
++JPEG_DEPENDENCIES += jpeg-turbo
++endif
++
++ifeq ($(BR2_PACKAGE_LIBJPEG),y)
++JPEG_DEPENDENCIES += libjpeg
++endif
++
++ifeq ($(JPEG_DEPENDENCIES),)
++define JPEG_CONFIGURE_CMDS
++	echo "No JPEG implementation defined. Configuration error"
++	exit 1
++endef
++endif
++
++$(eval $(generic-package))
 -- 
 1.7.9.5
