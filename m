@@ -1,41 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Mar 2013 09:24:24 +0100
-Subject: [Buildroot] What to do about systemd/udev/eudev?
-In-Reply-To: <5136F5C4.6070300@mind.be>
-References: <1362312574-17701-1-git-send-email-olivier.schonken@gmail.com>
- <20130303195436.49654719@skate>
- <948441.33302.bm@smtp138.mail.ir2.yahoo.com>
- <51359378.3010307@mind.be> <20130305195514.14ba14fd@skate>
- <5136F5C4.6070300@mind.be>
-Message-ID: <20130306092424.52b72106@skate>
+Date: Wed, 6 Mar 2013 09:30:16 +0100
+Subject: [Buildroot] [PATCH 1/6] support: add kconfiglib python module
+In-Reply-To: <4f58a52ecbf613882b6e31b54956ccd61ab07559.1362518799.git.s.martin49@gmail.com>
+References: <cover.1362518799.git.s.martin49@gmail.com>
+ <4f58a52ecbf613882b6e31b54956ccd61ab07559.1362518799.git.s.martin49@gmail.com>
+Message-ID: <20130306093016.4df2799a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Samuel Martin,
 
-On Wed, 06 Mar 2013 08:52:36 +0100, Arnout Vandecappelle wrote:
-> > Also, Olivier's patch doesn't update all the packages that depend on
-> > udev so that they can either depend on the old udev, or systemd.
-> 
->   Yes, that's what Olivier's patch does: packages that depend on udev 
-> will use the old udev, not the systemd udev.
-> 
->   Hm, just now I realized that that means that you get two udevs when 
-> using systemd...
+On Tue,  5 Mar 2013 22:35:27 +0100, Samuel Martin wrote:
+> diff --git a/support/scripts/readme b/support/scripts/readme
+> new file mode 100644
+> index 0000000..4c2d68b
+> --- /dev/null
+> +++ b/support/scripts/readme
+> @@ -0,0 +1,11 @@
+> +Readme
+> +======
+> +
+> +Kconfiglib
+> +----------
+> +
+> +This python module, developped by Ulf Magnusson and released "as is", is
+> +fetched from:
 
-Yeah, yes this is what I meant by "Olivier's patch doesn't update all
-the packages that depend on udev so that they can either depend on the
-old udev, or systemd."
-
-> OK, so this is not really the way to go :-(
-
-Well, it might be the way to go, but it needs a bit more work.
-
-We can make a udev-virtual package, or whatever the name, that will
-depend on the old udev or systemd.
+Unfortunately, "as is" is not a license that allows us to redistribute
+this code and incorporate it in a work under GPLv2. So the author
+should really decide on a license. If the author really doesn't care,
+he might decide to use the WTFPL or even public domain, but definitely
+"as is" is not a license.
 
 Best regards,
 
