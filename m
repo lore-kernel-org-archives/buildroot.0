@@ -1,84 +1,78 @@
-From: Bhupal Singh <singhbhupal88@gmail.com>
-Date: Wed, 6 Mar 2013 10:12:08 +0530
-Subject: [Buildroot] WebkitGtk upgradation
-In-Reply-To: <87ehg04ofv.fsf@dell.be.48ers.dk>
-References: <CAJsG2H5B=ZdfDZm_wTmOqMkG6_kME=y_7oc5gkMygtd6HA4p+g@mail.gmail.com>
- <512F0B0A.4050403@relinux.de>
- <CAJsG2H4pZWE7FZGFUJuhYhjrNkf0Aa62y12WW3YQdbScJ1HTtA@mail.gmail.com>
- <CAFbHwiTZgmQn8EChYXSLAmmr9+WSoVLL5jUBqnOYA7qzUNFCnA@mail.gmail.com>
- <20130228122855.6ceb26ce@skate> <87ehg04ofv.fsf@dell.be.48ers.dk>
-Message-ID: <CAJsG2H51hU+fPXTOToHAFc9ccd2vQbMZrvmT1fvV5n_+9ez-QQ@mail.gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Tue,  5 Mar 2013 22:31:08 -0800
+Subject: [Buildroot] [PATCH] json-c: Add json_object_iterator.h to installed
+	headers
+In-Reply-To: <y>
+References: <y>
+Message-ID: <1362551468-5510-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed earlier, I am trying to build webkitgtk-1.10.2 with gtk-2.0
-(GTK version-2.14.10) and directFB as target.
+json_object_iterator.h is not installed in staging directory.
+This leads to an error during pulseaudio build process:
 
-When I try to build webkitgtk through buildroot it is not able to find
-required header files. When looked into GNUmake file of webkit(1.10.2), I
-found that it is looking for headers at location* /usr/include*
-instead of* /$(STAGING_DIR)/usr/include
-*which was not the case while building  older webkit(1.2.7).
+fatal error: json_object_iterator.h: No such file or directory
 
-Is there any workaround to solve this issue?
+Fixes autobuild failures like:
+http://autobuild.buildroot.org/results/079f9265cd768f88ad57f6f7b794641c845f3079
 
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ ...n-c-add-missing-file-to-installed-headers.patch |   43 ++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/json-c/json-c-add-missing-file-to-installed-headers.patch
 
-Warm Regards,
-BS_Chauhan
-
-On Thu, Feb 28, 2013 at 5:53 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
-
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> writes:
->
->  Thomas> Dear Will Newton,
->  Thomas> On Thu, 28 Feb 2013 10:22:27 +0000, Will Newton wrote:
->
->  >> As far as I can tell DirectFB is not really supported any more. If I
->  >> remember correctly the current WebKit in buildroot will build with
->  >> GTK+/DirectFB but will crash on startup. The crash is fairly easy to
->  >> work around but I think is a symptom of the fact that no one is
->  >> running with this setup.
->  >>
->  >> Newer versions of GTK+ removed the DirectFB backend so it may have to
->  >> be removed from buildroot in the future too.
->
->  Thomas> My feeling is also that the DirectFB backend of Gtk has never been
->  Thomas> seriously maintained over time. There are from time to time some
-> people
->  Thomas> who fix the issues, but then it goes on unmaintained for a number
-> of
->  Thomas> months/years, during which it slowly degrades into an unusable
-> state.
->
->  Thomas> I would therefore suggest that Buildroot follows upstream: get
->  Thomas> rid of the DirectFB backend. If anyone really wants the
->  Thomas> DirectFB backend in Gtk, then it should be fixed upstream. But
->  Thomas> I don't think it should force Buildroot users to stay with old
->  Thomas> Webkit/Gtk because of this.
->
-> Agreed. I've added a comment for 2013.02 to warn users that it is
-> deprecated:
->
->
-> http://git.buildroot.net/buildroot/commit/?id=0e0e42176d4a46515aff577d9702d91208e27c5d
->
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
-
+diff --git a/package/json-c/json-c-add-missing-file-to-installed-headers.patch b/package/json-c/json-c-add-missing-file-to-installed-headers.patch
+new file mode 100644
+index 0000000..12ef855
+--- /dev/null
++++ b/package/json-c/json-c-add-missing-file-to-installed-headers.patch
+@@ -0,0 +1,43 @@
++From 2ab6524ca0cfaab7feb42f7c328db8fca7b111fc Mon Sep 17 00:00:00 2001
++From: Gilles Talis <gilles.talis@gmail.com>
++Date: Tue, 5 Mar 2013 21:59:11 -0800
++Subject: [PATCH] Add json_object_iterator.h to installed headers
++
++Backported from: 4154c55edae6f6b34d6ef4fcc331055fdf8e1a23
++
++In addition to original patch, applied the same change to Makefile.in
++to avoid having the package to be autoreconfigured.
++
++Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
++---
++ Makefile.am |    1 +
++ Makefile.in |    1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/Makefile.am b/Makefile.am
++index d4a7bbb..8f09ca8 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -17,6 +17,7 @@ libjsoninclude_HEADERS = \
++ 	json_config.h \
++ 	json_inttypes.h \
++ 	json_object.h \
+++	json_object_iterator.h \
++ 	json_object_private.h \
++ 	json_tokener.h \
++ 	json_util.h \
++diff --git a/Makefile.in b/Makefile.in
++index c06db3e..9d924cd 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -278,6 +278,7 @@ libjsoninclude_HEADERS = \
++ 	json_config.h \
++ 	json_inttypes.h \
++ 	json_object.h \
+++	json_object_iterator.h \
++ 	json_object_private.h \
++ 	json_tokener.h \
++ 	json_util.h \
++-- 
++1.7.10.4
++
 -- 
-Warm Regards,
-BS_Chauhan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130306/301db5ca/attachment.html>
+1.7.10.4
