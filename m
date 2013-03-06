@@ -1,100 +1,58 @@
-From: John Stile <john@stilen.com>
-Date: Wed, 06 Mar 2013 10:01:56 -0800
-Subject: [Buildroot] adding dhcpcd
-In-Reply-To: <20130305194707.474ded42@skate>
-References: <1362163072.19802.25.camel@genx.eng.msli.com>
- <5130F7CA.6090203@zacarias.com.ar> <1362500477.20183.74.camel@genx>
- <20130305194707.474ded42@skate>
-Message-ID: <1362592916.20183.152.camel@genx>
+From: Rob Landley <rob@landley.net>
+Date: Tue, 05 Mar 2013 22:22:36 -0600
+Subject: [Buildroot] What to do about systemd/udev/eudev?
+In-Reply-To: <CALo-6+izu2DJE6+PGDSFqQLz9tA=dF7DxEOS2rVcrdGjMwcapg@mail.gmail.com>
+ (from charles.krinke@gmail.com on Tue Mar  5 09:04:45 2013)
+References: <20130304192156.7bfe23bf@skate> <1362471660.7276.2@driftwood>
+ <CALo-6+izu2DJE6+PGDSFqQLz9tA=dF7DxEOS2rVcrdGjMwcapg@mail.gmail.com>
+Message-ID: <1362543756.7276.13@driftwood>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2013-03-05 at 19:47 +0100, Thomas Petazzoni wrote:
-> Dear John Stile,
+On 03/05/2013 09:04:45 AM, Charles Krinke wrote:
+> As a user working on an AM3517 project with buildroot, I am having
+> trouble seeing anything wrong with the existing implementation of
+> mdev. We have 802.11 and USB disks that are plugged in and removed and
+> the mdev subsystem seems to be working fine.
 > 
-> On Tue, 05 Mar 2013 08:21:17 -0800, John Stile wrote:
+> Having other alternatives is nice, but I hope we do not remove the
+> existing mdev which appears to work fine in embedded systems.
 > 
-> > Does this look like a good make file for buildroot?  
+> Charles
+
+The existing mdev does work great. (solar at gentoo and myself designed  
+it, Denys has extended it quite a bit since then.) This would be an  
+extension for those other packages.
+
+(It may be posible to just call some notify program and not modify mdev  
+at all.)
+
+Rob
+
+> On 3/5/13, Rob Landley <rob@landley.net> wrote:
+> > On 03/04/2013 12:21:56 PM, Thomas Petazzoni wrote:
+> >> However, if an application relies on libudev to get notifications  
+> of
+> >> devices appearing/disappearing, or other services, then of course,  
+> it
+> >> cannot work with mdev.
+> >
+> > Notifications are pretty straightforward. Should be possible for  
+> mdev
+> > to poke something simple and a shim library to provide the right
+> > interface...
+> >
+> > Rob
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
 > 
-> Unfortunately no, it is not a good makefile. It uses a way of writing
-> packages that is deprecated since multiple years. Please use the
-> generic-package or autotools-package infrastructure. Refer to the
-> Buildroot manual at
-> http://buildroot.org/downloads/manual/manual.html#adding-packages.
 > 
-> > Is this the right place to get advice on a make file, or even submit?
+> --
+> Charles Krinke
 > 
-> It is a good place.
-> 
-> > I put this together from various sources/references.
-> 
-> Could you list which sources/references you've found, so that we can
-> kill them, and make those incorrect informations disappear?
-> 
-> The authoritative source of documentation for Buildroot is the
-> Buildroot documentation itself.
-> 
-> Raah, Google is great... but nowadays people use Google first and find
-> some random information, rather than first look at the project's
-> documentation. I don't blame you: I do the same in many cases :-)
-> 
-> Best regards,
-> 
-> Thomas
-If I'm going to rebuild a good package I might as well use the latest
-version of dhcpcd, so I'll start with 5.6.7.
-
-I am not sure if
-http://roy.marples.name/downloads/dhcpcd/dhcpcd-5.6.7.tar.bz2
-uses cmake or automake.  The tarball contains a Makefile, and their
-configure script has the comment, "Try and be like autotools configure,
-but without autotools", so I assume it is just using gnu make.  It does
-contain a Makefile... but I don't see how to use it from:
-http://buildroot.org/downloads/manual/manual.html#generic-package-tutorial
-
-So I tried to make a pacakge using 
-$(eval $(generic-package))
-
-When I run make in buildroot, the package is not downloaded, or built.
-Below is my package file so far.
-
-
-#############################################################
-#
-# dhcpcd
-#
-#############################################################
-
-DHCPCD_VERSION = 5.6.7
-DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
-DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
-DHCPCD_LICENSE = GPLv3+
-DHCPCD_LICENSE_FILES = COPYING
-DHCPCD_INSTALL_STAGING = YES
-DHCPCD_CONFIG_SCRIPTS = configure
-DHCPCD_DEPENDENCIES = 
-DHCPCD_SITE_METHOD = wget
-
-define DHCPCD_BUILD_CMDS
-	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-endef
-
-define DHCPCD_INSTALL_STAGING_CMDS
-	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf
-$(STAGING_DIR)/etc/dhcpcd.conf 
-	$(INSTALL) -D -m 0755 $(@D)/dhcpcd $(STAGING_DIR)/usr/bin/dhcpcd
-endef
-
-define DHCPCD_INSTALL_TARGET_CMDS
-	$(INSTALL) -D -m 0755 $(@D)/dhcpcd $(TARGET_DIR)/usr/bin
-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/dhcpcd.conf
-endef
-
-define DHCPCD_PERMISSIONS
-	/usr/bin/dhcpcd  f  4755  0  0  -  -  -  -  -
-endef
-
-$(eval $(generic-package))
