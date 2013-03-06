@@ -1,29 +1,68 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 06 Mar 2013 21:10:32 +0100
-Subject: [Buildroot] [PATCH] graph-depends: ignore the
-	'target-post-image' target
-In-Reply-To: <1362509961-27574-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 5 Mar 2013 19:59:21 +0100")
-References: <1362509961-27574-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87txoo70hz.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed,  6 Mar 2013 21:22:42 +0100
+Subject: [Buildroot] [PATCH v2] Add Qt5 packages
+Message-ID: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- Thomas> Since the introduction of the post-image mechanism, the graph-depends
- Thomas> script is broken: it tries to call 'make
- Thomas> target-post-image-show-depends', which doesn't exist since
- Thomas> 'target-post-image' is not a package.
+Here is a set of patches that add Qt5 support in Buildroot. I have
+built a number of different combinations, but there are some many
+different possibilities, that I obviously couldn't test all of
+them. Some testing will be appreciated, but for sure, only the
+autobuilders will really help in getting a good build coverage of all
+this.
 
- Thomas> So we should simply ignore this 'target-post-image'.
+In short:
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ * Patch 1 improves our pcre package to add support for 16 bits and 32
+   bits variants, need by Qt5.
 
-Committed, thanks.
+ * Patches 2 to 4 bump the version or add new XCB-util packages that
+   are needed to build the XCB backend of Qt5.
 
--- 
-Bye, Peter Korsgaard
+ * Patches 5 to 8 add virtual packages for OpenGLES, OpenVG and EGL,
+   and make rpi-userland provide an implementation of those virtual
+   packages, and do other related fixes to RPi OpenGLES/EGL support.
+
+ * Patch 9 makes packages using host-jpeg use host-libjpeg instead so
+   that we don't have to provide a virtual host-jpeg package.
+
+ * Patch 10 converts the jpeg virtual package to a real package.
+
+ * Patch 11 and 12 adds some basic infrastructure to support the Qt5
+   packages.
+
+ * Patch 13 adds the Qt5Base package.
+
+ * Patches 14 to 23 extend the Qt5Base package with various features
+   (GUI, OpenSSL, EGL, D-Bus, etc.)
+
+ * Patch 24 creates a common variable to share the Qt5 version between
+   all the Qt5 packages.
+
+ * Patches 25 to 34 add more Qt5 libraries: Qt5Svg, Qt5Webkit,
+   Qt5Script, and more.
+
+Changes v1 -> v2:
+
+ * Make the package that depended on host-jpeg depend on host-libjpeg
+   directly, so that we don't need to provide a virtual host-jpeg
+   package.
+ * Integrated patches from Floris Bos to fix issues related RPi
+   OpenGLES/EGL libraries, and to get the installation of fonts done
+   by the qt5base package.
+ * pcre: fixed typo is -> if in commit log [Gustavo Zacarias]
+ * pcre: fix help text in Config.in [Gustavo Zacarias]
+
+The patches are also available from:
+
+  http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=qt5
+
+Best regards,
+
+Thomas
