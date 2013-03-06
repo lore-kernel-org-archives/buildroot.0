@@ -1,77 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  6 Mar 2013 21:22:43 +0100
-Subject: [Buildroot] [PATCH 01/34] pcre: add support for 16 bits and 32 bits
-	variants
+Date: Wed,  6 Mar 2013 21:22:46 +0100
+Subject: [Buildroot] [PATCH 04/34] x11r7/xcb-util-image: new package
 In-Reply-To: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362601396-32250-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362601396-32250-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, we have been building only the 8bits PCRE variant. However,
-Qt5 requires the 16bits variant. This commit therefore adds support to
-build the 16bits and 32bits variants of PCRE. In order to preserve
-backward compatibility, the 8bits variant is automatically chosen if
-no specific variant is defined.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v1->v2:
- * Fix commit message is -> if [Gustavo Zacarias]
- * Fix help text in Config.in [Gustavo Zacarias]
----
- package/pcre/Config.in |   22 ++++++++++++++++++++++
- package/pcre/pcre.mk   |    4 ++++
- 2 files changed, 26 insertions(+)
+ package/x11r7/Config.in                        |    1 +
+ package/x11r7/xcb-util-image/Config.in         |   15 +++++++++++++++
+ package/x11r7/xcb-util-image/xcb-util-image.mk |   14 ++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/x11r7/xcb-util-image/Config.in
+ create mode 100644 package/x11r7/xcb-util-image/xcb-util-image.mk
 
-diff --git a/package/pcre/Config.in b/package/pcre/Config.in
-index a4e2547..5d16e6d 100644
---- a/package/pcre/Config.in
-+++ b/package/pcre/Config.in
-@@ -1,6 +1,28 @@
- config BR2_PACKAGE_PCRE
- 	bool "pcre"
-+	# Ensure at least the default 8-bit library is enabled.
-+	select BR2_PACKAGE_PCRE_8 if \
-+	       (!BR2_PACKAGE_PCRE_16 && !BR2_PACKAGE_PCRE_32)
- 	help
- 	  Perl Compatible Regular Expressions
- 
- 	  http://www.pcre.org/
-+
-+if BR2_PACKAGE_PCRE
-+
-+config BR2_PACKAGE_PCRE_8
-+	bool "8-bit pcre"
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 2abd593..5d0f991 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -15,6 +15,7 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/libxcb/Config.in
+ 		source package/x11r7/mesa3d/Config.in
+ 		source package/x11r7/xcb-util/Config.in
++		source package/x11r7/xcb-util-image/Config.in
+ 		source package/x11r7/xcb-util-keysyms/Config.in
+ 		source package/x11r7/xcb-util-wm/Config.in
+ 		source package/x11r7/xlib_libFS/Config.in
+diff --git a/package/x11r7/xcb-util-image/Config.in b/package/x11r7/xcb-util-image/Config.in
+new file mode 100644
+index 0000000..31fc61a
+--- /dev/null
++++ b/package/x11r7/xcb-util-image/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_XCB_UTIL_IMAGE
++	bool "xcb-util-image"
++	select BR2_PACKAGE_XCB_UTIL
 +	help
-+	  This option builds the 8-bits pcre library, i.e 'libpcre'
++	  The XCB util modules provides a number of libraries which sit on top
++	  of libxcb, the core X protocol library, and some of the extension
++	  libraries. These experimental libraries provide convenience functions
++	  and interfaces which make the raw X protocol more usable. Some of the
++	  libraries also provide client-side code which is not strictly part of
++	  the X protocol but which have traditionally been provided by Xlib.
 +
-+config BR2_PACKAGE_PCRE_16
-+	bool "16-bit pcre"
-+	help
-+	  This option builds the 16-bits pcre library, i.e 'libpcre16'
++	  XCB util-image module provides the following library:
++	    - image: Port of Xlib's XImage and XShmImage functions.
 +
-+config BR2_PACKAGE_PCRE_32
-+	bool "32-bit pcre"
-+	help
-+	  This option builds the 32-bits pcre library, i.e 'libpcre32'
++	  http://xcb.freedesktop.org/
+diff --git a/package/x11r7/xcb-util-image/xcb-util-image.mk b/package/x11r7/xcb-util-image/xcb-util-image.mk
+new file mode 100644
+index 0000000..0309f3b
+--- /dev/null
++++ b/package/x11r7/xcb-util-image/xcb-util-image.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# xcb-util-image
++#
++#############################################################
 +
-+endif
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index 48266ff..b1339fb 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -16,4 +16,8 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
- PCRE_CONF_OPT = --disable-cpp
- endif
- 
-+PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_8),--enable-pcre8,--disable-pcre8)
-+PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
-+PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
++XCB_UTIL_IMAGE_VERSION = 0.3.9
++XCB_UTIL_IMAGE_SITE = http://xcb.freedesktop.org/dist/
++XCB_UTIL_IMAGE_SOURCE = xcb-util-image-$(XCB_UTIL_IMAGE_VERSION).tar.bz2
++XCB_UTIL_IMAGE_INSTALL_STAGING = YES
++XCB_UTIL_IMAGE_LICENSE = MIT
++XCB_UTIL_IMAGE_DEPENDENCIES = xcb-util
 +
- $(eval $(autotools-package))
++$(eval $(autotools-package))
 -- 
 1.7.9.5
