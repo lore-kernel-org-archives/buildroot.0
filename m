@@ -1,76 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  7 Mar 2013 22:55:31 +0100
-Subject: [Buildroot] [PATCH 6/6] package/mtools: new host-package
-In-Reply-To: <cover.1362693294.git.yann.morin.1998@free.fr>
-References: <cover.1362693294.git.yann.morin.1998@free.fr>
-Message-ID: <296699691239a90d5118c5cbe72f1ff57b3761a5.1362693294.git.yann.morin.1998@free.fr>
+Date: Thu,  7 Mar 2013 23:04:37 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch yem-ext234
+Message-ID: <cover.1362693453.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Hello All!
 
----
-v1 -> v2
-  - remove extraneous spaces, use $(BR2_GNU_MIRROR)  (Thomas)
----
- package/Config.in.host        |    1 +
- package/mtools/Config.in.host |    9 +++++++++
- package/mtools/mtools.mk      |   15 +++++++++++++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
- create mode 100644 package/mtools/Config.in.host
- create mode 100644 package/mtools/mtools.mk
+This patch series enhances the ext2 fs backend to also build ext3 and ext4
+filesystems, and differentiate between ext2 rev0 and ext2 rev1 filesystems.
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index e97f6e8..7c0dd20 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -6,6 +6,7 @@ source "package/e2fsprogs/Config.in.host"
- source "package/genimage/Config.in.host"
- source "package/genpart/Config.in.host"
- source "package/lpc3250loader/Config.in.host"
-+source "package/mtools/Config.in.host"
- source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
- source "package/sam-ba/Config.in.host"
-diff --git a/package/mtools/Config.in.host b/package/mtools/Config.in.host
-new file mode 100644
-index 0000000..d534b5e
---- /dev/null
-+++ b/package/mtools/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_MTOOLS
-+	bool "host mtools"
-+	help
-+	  Mtools is a collection of utilities to access MS-DOS disks from
-+	  Unix without mounting them. It supports Win'95 style long file
-+	  names, OS/2 Xdf disks and 2m disks (store up to 1992k on a high
-+	  density 3 1/2 disk).
-+	  
-+	  http://www.tux.org/pub/tux/mtools/
-diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
-new file mode 100644
-index 0000000..1542799
---- /dev/null
-+++ b/package/mtools/mtools.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# dosfstools
-+#
-+#############################################################
-+
-+MTOOLS_VERSION  = 4.0.18
-+MTOOLS_SOURCE   = mtools-$(MTOOLS_VERSION).tar.bz2
-+MTOOLS_SITE     = $(BR2_GNU_MIRROR)/mtools/
-+
-+MTOOLS_CONF_OPT = --enable-xdf        \
-+                  --enable-vold       \
-+                  --enable-new-vold
-+
-+$(eval $(host-autotools-package))
+This patch series is based on the previously-sent 'yem-host-image-tools'
+pull-request, and requires changes in that series.
+
+Changes v1 -> v2:
+  - enhance the ext2/3/4 generation (Arnout, Peter)
+  - allow fs generators to specify the image extension (Arnout)
+  - remove ext2 count- and time-based fsck (Arnout)
+
+
+The following changes since commit 296699691239a90d5118c5cbe72f1ff57b3761a5:
+
+  package/mtools: new host-package (2013-03-07 00:29:51 +0100)
+
+are available in the git repository at:
+  git://gitorious.org/buildroot/buildroot.git yem-ext234
+
+Yann E. MORIN (6):
+      fs/ext2: enclose the ext2 options in if...endif
+      fs/ext2: add ability to build ext3/4 too
+      fs: allow image generators to specify file-extension
+      fs/ext2: use the ext2 variant to name the generated rootfs image
+      fs/ext2: add support for ext2 rev0 and rev1
+      fs/ext2: remove count- and time-based fsck
+
+ fs/common.mk                     |   17 ++++++--
+ fs/ext2/Config.in                |   57 ++++++++++++++++++++++-----
+ fs/ext2/ext2.mk                  |   10 ++++-
+ fs/ext2/genext2fs.sh             |   77 +++++++++++++++++++++++++++++++++++++-
+ package/e2fsprogs/Config.in.host |    2 +-
+ 5 files changed, 144 insertions(+), 19 deletions(-)
+
+Regards,
+Yann E. MORIN
+
 -- 
-1.7.2.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
