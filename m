@@ -1,72 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Mar 2013 09:59:39 +0100
-Subject: [Buildroot] [uclinux-dist-devel] [Announcement] The 2012R2
- buildroot Linux release for Blackfin
-In-Reply-To: <DB904C5425BA6F4E8424B3B51A1414D173F6FB6E58@NWD2CMBX1.ad.analog.com>
-References: <DB904C5425BA6F4E8424B3B51A1414D173F6FB6E58@NWD2CMBX1.ad.analog.com>
-Message-ID: <20130307095939.1316014e@skate>
+Date: Thu,  7 Mar 2013 10:18:22 +0100
+Subject: [Buildroot] [PATCH] autoconf: don't try to build Emacs files
+Message-ID: <1362647902-13742-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sonic Zhang,
+When building autoconf for the target, we already passed EMACS="no" to
+prevent autoconf from building Emacs mode files. But we weren't doing
+that when building autoconf for the host. This causes problems when
+'emacs' is not really emacs, but a sort of clone like Jove. So we also
+pass EMACS="no" when building host-autoconf to avoid autoconf
+./configure script from detecting emacs and then use it to build .elc
+files from .el source code.
 
-On Mon, 4 Feb 2013 05:03:22 -0500, Zhang, Sonic wrote:
-> The 2012R2 buildroot Linux release for Blackfin
-> 
-> The new buildroot distribution was introduced in the 2012R1 Linux
-> release for BF60x in Aug. 2012. To help BF5xx customers to leverage
-> new features in the buildroot distribution, we are pleased to
-> announce the 2012R2 buildroot Linux release for both BF5xx and BF60x
-> families. Although the uClinux related issues in 2011R1 and former
-> releases are still supported via the Linux community on the ADI
-> Engineering Zone, the uClinux distribution for BF5xx is discontinued
-> since the 2012R2 release. Please upgrade to the buildroot
-> distribution in the 2012R2 release for latest features in Linux
-> kernel and middle wares. An overview and basic development guide for
-> the buildroot can be found at
-> http://docs.blackfin.uclinux.org/doku.php?id=buildroot_on_blackfin .
+Reported-by: Spielmann Werner <Werner.Spielmann@swarovski.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/autoconf/autoconf.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-As a Buildroot developer, I'm glad to hear that Analog Devices is now
-using it as its official build system.
-
-However, I can only find regrettable that none of the Blackfin changes
-that you and your team has made have gotten upstream. This means that
-you're now working on a fork of Buildroot that has significantly
-derived from the original project. It means that it will be a pain for
-you and your team to upgrade to new Buildroot versions, and it removes
-the possibility for your users to easily benefit from all the package
-updates and new packages that are introduced regularly in the upstream
-Buildroot project (where the level of activity is very good).
-
-Could we find a way of getting your changes upstream, so that your
-Buildroot is closer to the upstream version?
-
-Also, your page
-http://docs.blackfin.uclinux.org/doku.php?id=buildroot:build-system is
-incorrect. It says "The buildroot build system is based on GNU
-configure and build system". This is completely false: it is based on
-the kernel kconfig configuration system, and GNU make.
-
-Then your Wiki page goes on with " The top level Makefile builds the
-GNU configuration utility under package/config at first". This is not
-true, it is *not* the GNU configuration utility, but the Linux kernel
-kconfig system.
-
-The Wiki page then describes a number of Config.in files, as if
-modifying them was necessary to change the configuration. This is
-obviously completely wrong: users should change the configuration using
-'make menuconfig', 'make xconfig, 'make gconfig', and certainly not by
-editing Config.in files, whose purpose is to *describe* configuration
-options, not to *define* the value of configuration options.
-
-Best regards,
-
-Thomas
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index 0c36b66..daac1f2 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -15,7 +15,7 @@ AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
+ 
+ AUTOCONF_DEPENDENCIES = host-m4 perl
+ 
+-HOST_AUTOCONF_CONF_ENV = ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
++HOST_AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
+ 			ac_cv_prog_gnu_m4_gnu=no
+ 
+ HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
