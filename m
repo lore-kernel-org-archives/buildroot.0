@@ -1,41 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  7 Mar 2013 23:04:43 +0100
-Subject: [Buildroot] [PATCH 6/6] fs/ext2: remove count- and time-based fsck
-In-Reply-To: <cover.1362693453.git.yann.morin.1998@free.fr>
-References: <cover.1362693453.git.yann.morin.1998@free.fr>
-Message-ID: <20da59bb44bf9f9331f343a2c7308b7aaa5cb834.1362693453.git.yann.morin.1998@free.fr>
+From: Carlo Caione <carlo.caione@gmail.com>
+Date: Thu,  7 Mar 2013 23:39:22 +0100
+Subject: [Buildroot] [PATCH 1/3] sunxi-tools: new host package
+Message-ID: <1362695964-20697-1-git-send-email-carlo.caione@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set the count- and time-based checks intervals to 0, thus
-effectively disabling automatic checks at boot.
+Tools to help hacking Allwinner A10 (aka sun4i) based devices
 
-(After a suggestion by Arnout.)
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
 ---
- fs/ext2/genext2fs.sh |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/Config.in.host             |  1 +
+ package/sunxi-tools/Config.in.host |  7 +++++++
+ package/sunxi-tools/sunxi-tools.mk | 20 ++++++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/sunxi-tools/Config.in.host
+ create mode 100644 package/sunxi-tools/sunxi-tools.mk
 
-diff --git a/fs/ext2/genext2fs.sh b/fs/ext2/genext2fs.sh
-index c466bc2..e4177ae 100755
---- a/fs/ext2/genext2fs.sh
-+++ b/fs/ext2/genext2fs.sh
-@@ -70,8 +70,9 @@ e2tunefsck() {
-     esac
-     printf "e2fsck was successfully run on rootfs.ext${GEN}\n"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 79050f2..b2b9fbd 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -5,6 +5,7 @@ source "package/lpc3250loader/Config.in.host"
+ source "package/omap-u-boot-utils/Config.in.host"
+ source "package/openocd/Config.in.host"
+ source "package/sam-ba/Config.in.host"
++source "package/sunxi-tools/Config.in.host"
+ source "package/uboot-tools/Config.in.host"
  
--    # e2fsck will force a UUID, which we do not want
--    tune2fs -U clear "${IMG}"
-+    # e2fsck will force a UUID, which we do not want;
-+    # remove count- and time-based checks
-+    tune2fs -U clear -c 0 -i 0 "${IMG}"
- }
- 
- # Check we know what generation to generate
+ endmenu
+diff --git a/package/sunxi-tools/Config.in.host b/package/sunxi-tools/Config.in.host
+new file mode 100644
+index 0000000..71e0418
+--- /dev/null
++++ b/package/sunxi-tools/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_SUNXI_TOOLS
++	bool "host sunxi-tools"
++	help
++          Tools to help hacking Allwinner A10 (aka sun4i) based devices and
++	  possibly it's successors
++
++	  https://github.com/linux-sunxi/sunxi-tools
+diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+new file mode 100644
+index 0000000..60acff5
+--- /dev/null
++++ b/package/sunxi-tools/sunxi-tools.mk
+@@ -0,0 +1,20 @@
++#############################################################
++#
++# sunxi-tools
++#
++#############################################################
++
++SUNXI_TOOLS_VERSION = master
++SUNXI_TOOLS_SITE = git://github.com/linux-sunxi/sunxi-tools.git
++
++define HOST_SUNXI_TOOLS_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define HOST_SUNXI_TOOLS_INSTALL_CMDS
++	for f in fexc bin2fex fex2bin bootinfo fel pio nand-part ; do \
++		install -m 755 -D $(@D)/$$f $(HOST_DIR)/usr/bin/$$f ; \
++	done
++endef
++
++$(eval $(host-generic-package))
 -- 
-1.7.2.5
+1.8.1.5
