@@ -1,74 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  7 Mar 2013 21:18:47 +0100
-Subject: [Buildroot] [PATCH 19/32] qt5base: add rPi EGL glue code
+Date: Thu,  7 Mar 2013 21:18:49 +0100
+Subject: [Buildroot] [PATCH 21/32] qt5: factor Qt5 version
 In-Reply-To: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362687540-19440-20-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362687540-19440-22-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Floris Bos <bos@je-eigen-domein.nl>
+Since the Qt5 version will be the same for all Qt5 modules, factor it
+in qt5/qt5.mk as QT5_VERSION.
 
-When the rpi-userland package is selected, assume we are targetting
-the Raspberry Pi, and add the right platform glue code when building
-the Qt5 EGLFS plugin.
-
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/qt5base-mkspecs-files.patch |    5 ++++-
- package/qt5/qt5base/qt5base.mk                  |    6 ++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ package/qt5/qt5.mk             |    1 +
+ package/qt5/qt5base/qt5base.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/qt5base-mkspecs-files.patch b/package/qt5/qt5base/qt5base-mkspecs-files.patch
-index a86d0b1..d5827f6 100644
---- a/package/qt5/qt5base/qt5base-mkspecs-files.patch
-+++ b/package/qt5/qt5base/qt5base-mkspecs-files.patch
-@@ -14,7 +14,7 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
- ===================================================================
- --- /dev/null
- +++ b/mkspecs/devices/linux-buildroot-g++/qmake.conf
--@@ -0,0 +1,38 @@
-+@@ -0,0 +1,41 @@
- +MAKEFILE_GENERATOR      = UNIX
- +CONFIG                  += incremental gdb_dwarf_index
- +QMAKE_INCREMENTAL_STYLE = sublib
-@@ -49,6 +49,9 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
- +
- +QMAKE_LIBS             += -lrt -lpthread -ldl
- +
-++# device specific glue code
-++EGLFS_PLATFORM_HOOKS_SOURCES =
-++
- +# Sanity check
- +deviceSanityCheckCompiler()
- +
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index f220508..83cc0e1 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -1,3 +1,4 @@
++QT5_VERSION = 5.0.1
+ include package/qt5/*/*.mk
+ 
+ define QT5_LA_PRL_FILES_FIXUP
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 6317457..708da8f 100644
+index ee2f6ad..faa16da 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -75,6 +75,10 @@ endif
- ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
- QT5BASE_CONFIGURE_OPTS += -opengl es2 -eglfs
- QT5BASE_DEPENDENCIES   += libgles libegl
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
-+	$(@D)/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
-+endif
- else
- QT5BASE_CONFIGURE_OPTS += -no-opengl -no-eglfs
- endif
-@@ -125,6 +129,8 @@ define QT5BASE_CONFIGURE_CMDS
- 	$(call QT5BASE_CONFIG_SET,CROSS_COMPILE,$(TARGET_CROSS))
- 	$(call QT5BASE_CONFIG_SET,COMPILER_CFLAGS,$(TARGET_CFLAGS))
- 	$(call QT5BASE_CONFIG_SET,COMPILER_CXXFLAGS,$(TARGET_CXXFLAGS))
-+	$(call QT5BASE_CONFIG_SET,EGLFS_PLATFORM_HOOKS_SOURCES, \
-+		$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES))
- 	(cd $(@D); \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-QT5BASE_VERSION = 5.0.1
++QT5BASE_VERSION = $(QT5_VERSION)
+ QT5BASE_SITE = http://releases.qt-project.org/qt5/$(QT5BASE_VERSION)/submodules_tar/
+ QT5BASE_SOURCE = qtbase-opensource-src-$(QT5BASE_VERSION).tar.xz
+ 
 -- 
 1.7.9.5
