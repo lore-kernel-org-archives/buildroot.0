@@ -1,113 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  7 Mar 2013 21:18:55 +0100
-Subject: [Buildroot] [PATCH 27/32] qt5/qt5declarative: new package
+Date: Thu,  7 Mar 2013 21:19:00 +0100
+Subject: [Buildroot] [PATCH 32/32] qt5webkit: add EGL dir to includepath
 In-Reply-To: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362687540-19440-28-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362687540-19440-33-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Floris Bos <bos@je-eigen-domein.nl>
+
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/Config.in                        |    1 +
- package/qt5/qt5declarative/Config.in         |   18 ++++++++++
- package/qt5/qt5declarative/qt5declarative.mk |   48 ++++++++++++++++++++++++++
- 3 files changed, 67 insertions(+)
- create mode 100644 package/qt5/qt5declarative/Config.in
- create mode 100644 package/qt5/qt5declarative/qt5declarative.mk
+ .../qt5/qt5webkit/qt5webkit-egl-includepath.patch  |   40 ++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/qt5/qt5webkit/qt5webkit-egl-includepath.patch
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 8a4ed53..ff98b9e 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -15,6 +15,7 @@ menuconfig BR2_PACKAGE_QT5
- 
- if BR2_PACKAGE_QT5
- source "package/qt5/qt5base/Config.in"
-+source "package/qt5/qt5declarative/Config.in"
- source "package/qt5/qt5imageformats/Config.in"
- source "package/qt5/qt5jsbackend/Config.in"
- source "package/qt5/qt5script/Config.in"
-diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
+diff --git a/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch b/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch
 new file mode 100644
-index 0000000..f862b94
+index 0000000..de5bcff
 --- /dev/null
-+++ b/package/qt5/qt5declarative/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_QT5DECLARATIVE
-+	bool "qt5declarative"
-+	select BR2_PACKAGE_QT5XMLPATTERNS
-+	select BR2_PACKAGE_QT5JSBACKEND
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_EGLFS
-+	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+	depends on BR2_PACKAGE_HAS_OPENGL_ES
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
++++ b/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch
+@@ -0,0 +1,40 @@
++From d6b1b33a12c0cf6c52667afafe34e58a7b00d0d8 Mon Sep 17 00:00:00 2001
++From: Floris Bos <bos@je-eigen-domein.nl>
++Date: Thu, 7 Mar 2013 19:25:17 +0100
++Subject: [PATCH] Webcore: add EGL and OpenGL (ES) INCDIR to INCLUDEPATH
 +
-+	  This package corresponds to the qt5declarative module.
++When building with 3D graphics support enabled, add the
++OpenGL (ES) and EGL include directories to the include path.
 +
-+	  http://qt-project.org
++Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
++---
++ Source/WebCore/Target.pri |    4 ++++
++ 1 file changed, 4 insertions(+)
 +
-+comment "qt5declarative requires an OpenGL-capable backend"
-+	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
-diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
-new file mode 100644
-index 0000000..02fae6a
---- /dev/null
-+++ b/package/qt5/qt5declarative/qt5declarative.mk
-@@ -0,0 +1,48 @@
-+#############################################################
-+#
-+# qt5declarative
-+#
-+#############################################################
++diff --git a/Source/WebCore/Target.pri b/Source/WebCore/Target.pri
++index 2669748..421a849 100644
++--- a/Source/WebCore/Target.pri
+++++ b/Source/WebCore/Target.pri
++@@ -3992,15 +3992,19 @@ use?(3D_GRAPHICS) {
++ 
++     contains(QT_CONFIG, opengl) | contains(QT_CONFIG, opengles2) {
++         !contains(QT_CONFIG, opengles2) {
+++            INCLUDEPATH += $$QMAKE_INCDIR_OPENGL
++             SOURCES += \
++                platform/graphics/opengl/GraphicsContext3DOpenGL.cpp \
++                platform/graphics/opengl/Extensions3DOpenGL.cpp
++         } else {
+++            INCLUDEPATH += $$QMAKE_INCDIR_OPENGL_ES2
++             SOURCES += \
++                platform/graphics/opengl/GraphicsContext3DOpenGLES.cpp \
++                platform/graphics/opengl/Extensions3DOpenGLES.cpp
++         }
++ 
+++        !isEmpty(QMAKE_INCDIR_EGL): INCLUDEPATH += $$QMAKE_INCDIR_EGL
+++
++         HEADERS += platform/graphics/opengl/Extensions3DOpenGL.h
++ 
++         SOURCES += \
++-- 
++1.7.10.4
 +
-+QT5DECLARATIVE_VERSION = $(QT5_VERSION)
-+QT5DECLARATIVE_SITE = http://releases.qt-project.org/qt5/$(QT5DECLARATIVE_VERSION)/submodules_tar/
-+QT5DECLARATIVE_SOURCE = qtdeclarative-opensource-src-$(QT5DECLARATIVE_VERSION).tar.xz
-+QT5DECLARATIVE_DEPENDENCIES = qt5base qt5xmlpatterns qt5jsbackend
-+QT5DECLARATIVE_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5DECLARATIVE_CONFIGURE_OPTS += -opensource -confirm-license
-+QT5DECLARATIVE_LICENSE = LGPLv2.1 or GPLv3.0
-+# Here we would like to get license files from qt5base, but qt5base
-+# may not be extracted at the time we get the legal-info for
-+# qt5script.
-+else
-+QT5DECLARATIVE_LICENSE = Commercial license
-+QT5DECLARATIVE_REDISTRIBUTE = NO
-+endif
-+
-+define QT5DECLARATIVE_CONFIGURE_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+endef
-+
-+define QT5DECLARATIVE_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		sub-src-all sub-tools-all
-+endef
-+
-+define QT5DECLARATIVE_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		sub-src-install_subtargets \
-+		sub-tools-install_subtargets
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+define QT5DECLARATIVE_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Qml*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Quick*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpf $(STAGING_DIR)/usr/bin/qml* $(TARGET_DIR)/usr/bin
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/qml* $(TARGET_DIR)/usr/lib/qt/plugins
-+	cp -dpfr $(STAGING_DIR)/usr/qml $(TARGET_DIR)/usr
-+endef
-+
-+$(eval $(generic-package))
 -- 
 1.7.9.5
