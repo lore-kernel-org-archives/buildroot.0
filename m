@@ -1,250 +1,80 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  7 Mar 2013 23:04:39 +0100
-Subject: [Buildroot] [PATCH 2/6] fs/ext2: add ability to build ext3/4 too
+Date: Thu,  7 Mar 2013 23:04:40 +0100
+Subject: [Buildroot] [PATCH 3/6] fs: allow image generators to specify
+	file-extension
 In-Reply-To: <cover.1362693453.git.yann.morin.1998@free.fr>
 References: <cover.1362693453.git.yann.morin.1998@free.fr>
-Message-ID: <b55a35d2b1dc1f5bb2598cc8bb29f787407250bc.1362693453.git.yann.morin.1998@free.fr>
+Message-ID: <89f7ec68ff45d56fb1c6e20778032a5a4a1cb004.1362693453.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the host-e2fsprogs to tune2fs the generated rootfs.ext2 image,
-and upgrade it to either one of ext2, ext3 or ext4.
+For some filesystems, the generator can output different /versions/ of
+the filesystem (eg. ext can output ext{2,3,4}). In this case, it can
+be usefull to have the generated rootfs image with the actual version
+of the filesystem, rather than the generic name.
 
-Since calling tune2fs may require running e2fsck (tune2fs will warn
-to do so when certain FS options are changed), we systematically call
-e2fsck. This makes the code path simpler, and as a side-effect checks
-that genext2fs did not generate garbage.
+Add a second parameter to ROOTFS_TARGET, to specify the extension, and
+default to using the generator name.
 
-In turn, e2fsck will unconditionally add a UUID to the filesystem,
-which is bad for reproducibility, so we call tune2fs again to remove
-the UUID. This does not require checking the filesystem.
-
-To ensure compatibility of Buildroot's .config, leave ext2 as the
-default. Boards' .config can override this at will.
+Thanks to Arnout for the initial idea (my implementation is a bit
+different than what he suggested):
+    http://lists.busybox.net/pipermail/buildroot/2013-February/067554.html
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-
 ---
-Changes v1->v2: (all after comments by Arnout)
-  - menuconfig prompt rework (& Peter)
-  - cleanup ext2.mk
-  - use environment to pass ext generation/variant
-  - add rational for 1081 additional blocks
-  - explain the reason we run e2fsck
----
- fs/ext2/Config.in                |   36 ++++++++++++++++----
- fs/ext2/ext2.mk                  |    7 +++-
- fs/ext2/genext2fs.sh             |   70 +++++++++++++++++++++++++++++++++++++-
- package/e2fsprogs/Config.in.host |    2 +-
- 4 files changed, 105 insertions(+), 10 deletions(-)
+ fs/common.mk |   17 +++++++++++++----
+ 1 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index cb4beed..c8320e2 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -1,10 +1,32 @@
- config BR2_TARGET_ROOTFS_EXT2
--	bool "ext2 root filesystem"
-+	bool "ext2/3/4 root filesystem"
-+	select BR2_PACKAGE_HOST_E2FSPROGS
- 	help
--	  Build an ext2 root filesystem
-+	  Build an ext2/3/4 root filesystem
+diff --git a/fs/common.mk b/fs/common.mk
+index 8b5b2f2..9ba9faa 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -36,13 +36,18 @@ FULL_DEVICE_TABLE = $(BUILD_DIR)/_device_table.txt
+ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE)) \
+ 	$(call qstrip,$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
  
- if BR2_TARGET_ROOTFS_EXT2
++# Internal image generation rules
++# Arguments:
++#   $1: name of the image generator (eg. ext, squashfs, tar...)
++#   $2: uppercase of $1
++#   $3: file-extension of the generated image file
+ define ROOTFS_TARGET_INTERNAL
  
-+choice
-+	bool "ext2/3/4 variant"
-+	default BR2_TARGET_ROOTFS_EXT2_2
-+
-+config BR2_TARGET_ROOTFS_EXT2_2
-+	bool "ext2"
-+
-+config BR2_TARGET_ROOTFS_EXT2_3
-+	bool "ext3"
-+
-+config BR2_TARGET_ROOTFS_EXT2_4
-+	bool "ext4"
-+
-+endchoice
-+
-+config BR2_TARGET_ROOTFS_EXT2_GEN
-+	int
-+	default 2 if BR2_TARGET_ROOTFS_EXT2_2
-+	default 3 if BR2_TARGET_ROOTFS_EXT2_3
-+	default 4 if BR2_TARGET_ROOTFS_EXT2_4
-+
- config BR2_TARGET_ROOTFS_EXT2_BLOCKS
- 	int "size in blocks (leave at 0 for auto calculation)"
- 	default 0
-@@ -21,27 +43,27 @@ choice
- 	prompt "Compression method"
- 	default BR2_TARGET_ROOTFS_EXT2_NONE
- 	help
--	  Select compressor for ext2 filesystem of the root filesystem
-+	  Select compressor for ext2/3/4 filesystem of the root filesystem
+ # extra deps
+ ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma)
  
- config BR2_TARGET_ROOTFS_EXT2_NONE
- 	bool "no compression"
- 	help
--	  Do not compress the ext2 filesystem.
-+	  Do not compress the ext2/3/4 filesystem.
+-$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+-	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
++$$(BINARIES_DIR)/rootfs.$(3): $$(ROOTFS_$(2)_DEPENDENCIES)
++	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(3)")
+ 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
+ 	rm -f $$(FAKEROOT_SCRIPT)
+ 	rm -f $$(TARGET_DIR_WARNING_FILE)
+@@ -74,15 +79,19 @@ endif
+ rootfs-$(1)-show-depends:
+ 	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
  
- config BR2_TARGET_ROOTFS_EXT2_GZIP
- 	bool "gzip"
- 	help
--	  Do compress the ext2 filesystem with gzip.
-+	  Do compress the ext2/3/4 filesystem with gzip.
+-rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
++rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(3) $$(ROOTFS_$(2)_POST_TARGETS)
  
- config BR2_TARGET_ROOTFS_EXT2_BZIP2
- 	bool "bzip2"
- 	help
--	  Do compress the ext2 filesystem with bzip2.
-+	  Do compress the ext2/3/4 filesystem with bzip2.
- 
- config BR2_TARGET_ROOTFS_EXT2_LZMA
- 	bool "lzma"
- 	help
--	  Do compress the ext2 filesystem with lzma.
-+	  Do compress the ext2/3/4 filesystem with lzma.
- 
- endchoice
- 
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 7b71592..1660d9c 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -19,9 +19,14 @@ EXT2_OPTS += -m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+ TARGETS += rootfs-$(1)
  endif
- 
- ROOTFS_EXT2_DEPENDENCIES = host-genext2fs
-+ifeq ($(BR2_PACKAGE_HOST_E2FSPROGS),y)
-+ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
-+endif
-+
-+EXT2_ENV = GEN=$(BR2_TARGET_ROOTFS_EXT2_GEN)
- 
- define ROOTFS_EXT2_CMD
--	PATH=$(TARGET_PATH) fs/ext2/genext2fs.sh -d $(TARGET_DIR) $(EXT2_OPTS) $@
-+	PATH=$(TARGET_PATH) $(EXT2_ENV) fs/ext2/genext2fs.sh -d $(TARGET_DIR) $(EXT2_OPTS) $@
  endef
  
- $(eval $(call ROOTFS_TARGET,ext2))
-diff --git a/fs/ext2/genext2fs.sh b/fs/ext2/genext2fs.sh
-index 7a518ae..0790729 100755
---- a/fs/ext2/genext2fs.sh
-+++ b/fs/ext2/genext2fs.sh
-@@ -1,10 +1,13 @@
- #!/bin/sh
- # genext2fs wrapper calculating needed blocks/inodes values if not specified
-+set -e
++# Define the way to build a rootfs image (eg. filesystem, tarball...)
++# Arguments:
++#   $1: name of the image generator (eg. ext2, tar...)
++#   $2: file-extension of the generated image (optional, defaults to $1)
+ define ROOTFS_TARGET
+-$(call ROOTFS_TARGET_INTERNAL,$(1),$(call UPPERCASE,$(1)))
++$(call ROOTFS_TARGET_INTERNAL,$(1),$(call UPPERCASE,$(1)),$(or $(2),$(1)))
+ endef
  
- export LC_ALL=C
- 
- CALC_BLOCKS=1
- CALC_INODES=1
-+EXT_OPTS=
-+EXT_OPTS_O=
- 
- while getopts x:d:D:b:i:N:m:g:e:zfqUPhVv f
- do
-@@ -14,6 +17,7 @@ do
- 	d) TARGET_DIR=$OPTARG ;;
-     esac
- done
-+eval IMG="\"\${${OPTIND}}\""
- 
- # calculate needed inodes
- if [ $CALC_INODES -eq 1 ];
-@@ -30,7 +34,71 @@ then
-     # we scale inodes / blocks with 10% to compensate for bitmaps size + slack
-     BLOCKS=$(du -s -c -k $TARGET_DIR | grep total | sed -e "s/total//")
-     BLOCKS=$(expr 500 + \( $BLOCKS + $INODES / 8 \) \* 11 / 10)
-+    # we add 1081 blocks (a bit more than 1 MiB, assuming 1KiB blocks) for
-+    # the journal if ext3/4
-+    # Note: I came to 1081 blocks after trial-and-error checks. With 1080 or
-+    # less additional blocks, and tune2fs would refuse to add the journal;
-+    # with 1081 additional blocks or above, tune2fs wil happily add a journal.
-+    # YMMV.
-+    if [ ${GEN} -ge 3 ]; then
-+        BLOCKS=$(expr 1081 + $BLOCKS )
-+    fi
-     set -- $@ -b $BLOCKS
- fi
- 
--exec genext2fs $@
-+e2tunefsck() {
-+    # Upgrade the file system
-+    if [ $# -ne 0 ]; then
-+        tune2fs "$@" "${IMG}"
-+    fi
-+
-+    # After changing filesystem options, running fsck is required
-+    # (see: man tune2fs). Running e2fsck in other cases will ensure
-+    # coherency of the filesystem, although it is not required.
-+    # 'e2fsck -pDF -C0' means:
-+    #  - automatically repair
-+    #  - optimise and check for duplicate entries
-+    #  - force checking
-+    #  - print progress on stdout
-+    # Exit codes 1 & 2 are OK, it means fs errors were successfully
-+    # corrected, hence our little trick with $ret.
-+    ret=0
-+    e2fsck -pDf -C0 "${IMG}" >/dev/null || ret=$?
-+    case ${ret} in
-+       0|1|2) ;;
-+       *)   exit ${ret};;
-+    esac
-+    printf "e2fsck was successfully run on rootfs.ext${GEN}\n"
-+
-+    # e2fsck will force a UUID, which we do not want
-+    tune2fs -U clear "${IMG}"
-+}
-+
-+# Check we know what generation to generate
-+case "${GEN}" in
-+    2|3|4)
-+	;;
-+    *)
-+	printf "%s: unknown ext generation to generate\n" "${0##*/}" >&2
-+	exit 1
-+	;;
-+esac
-+
-+# Add a journal for ext3 and above
-+if [ ${GEN} -ge 3 ]; then
-+    EXT_OPTS="${EXT_OPTS} -j -J size=1"
-+fi
-+
-+# Add ext4 specific features
-+if [ ${GEN} -ge 4 ]; then
-+    EXT_OPTS_O="${EXT_OPTS_O},extents,uninit_bg,dir_index"
-+fi
-+
-+# Add our -O options (there will be at most one leading comma, remove it)
-+if [ -n "${EXT_OPTS_O}" ]; then
-+    EXT_OPTS="${EXT_OPTS} -O ${EXT_OPTS_O#,}"
-+fi
-+
-+# Generate and upgrade the filesystem
-+genext2fs "$@"
-+e2tunefsck ${EXT_OPTS}
-diff --git a/package/e2fsprogs/Config.in.host b/package/e2fsprogs/Config.in.host
-index ea6a0bd..0c001c2 100644
---- a/package/e2fsprogs/Config.in.host
-+++ b/package/e2fsprogs/Config.in.host
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_HOST_E2FSPROGS
- 	bool "host e2fsprogs"
- 	help
--	  The EXT2 file system utilities.
-+	  The EXT2/3/4 file system utilities.
- 	  
- 	  http://e2fsprogs.sf.net
+ include fs/*/*.mk
 -- 
 1.7.2.5
