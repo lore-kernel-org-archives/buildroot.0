@@ -1,48 +1,84 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  7 Mar 2013 22:55:26 +0100
-Subject: [Buildroot] [PATCH 1/6] package/e2fsprogs: add host-package
-	selection
-In-Reply-To: <cover.1362693294.git.yann.morin.1998@free.fr>
-References: <cover.1362693294.git.yann.morin.1998@free.fr>
-Message-ID: <244188a6f1640091399927117ee94942f9264afc.1362693294.git.yann.morin.1998@free.fr>
+Date: Thu,  7 Mar 2013 22:55:25 +0100
+Subject: [Buildroot] [pull request v4] Pull request for branch
+	yem-host-image-tools
+Message-ID: <cover.1362693294.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the e2fsprogs as a host-package selection in the menuconfig.
+Hello All!
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/Config.in.host           |    1 +
- package/e2fsprogs/Config.in.host |    6 ++++++
- 2 files changed, 7 insertions(+), 0 deletions(-)
+This series adds a few host packages usefull for manipulating the
+generated filesystem images.
+
+It is of much interest now that the post-image series from Thomas
+has been applied.
+
+I plan on submitting sample post-{build,image} scripts demonstrating
+use of those packages in the (hopefuly near) future (my current scripts
+are working great, but need some cleanup first).
+
+
+Changes v3 -> v4:
+  - rebased on master
+
+Changes v2 -> v3:
+  - rebased onto the 'next' branch for Peter
+
+Changes v1 -> v2:
+  - use $(HOST_CONFIGURE_OPTS) instead of hand-crafted CC et al.  (Thomas)
+  - use $(BR2_GNU_MIRROR)  (Thomas)
+  - strip superfluous spaces  (Thomas)
+
+
+The following changes since commit 203c30796e232faaf3a7de19090657bf3e7db16a:
+
+  rpi-userland: provides OpenGL ES, EGL and OpenVG (2013-03-06 22:18:39 +0100)
+
+are available in the git repository at:
+  git://gitorious.org/buildroot/buildroot.git yem-host-image-tools
+
+Yann E. MORIN (6):
+      package/e2fsprogs: add host-package selection
+      package/dosfstools: add host-package selection
+      package/libconfuse: add host variant
+      package/genimage: new host-only package
+      package/genpart: new host-only package
+      package/mtools: new host-package
+
+ package/Config.in.host                        |    5 +++++
+ package/dosfstools/Config.in.host             |    6 ++++++
+ package/dosfstools/dosfstools.mk              |    9 +++++++++
+ package/e2fsprogs/Config.in.host              |    6 ++++++
+ package/genimage/Config.in.host               |   12 ++++++++++++
+ package/genimage/genimage.mk                  |   12 ++++++++++++
+ package/genpart/Config.in.host                |    8 ++++++++
+ package/genpart/genpart-fix-return-code.patch |   25 +++++++++++++++++++++++++
+ package/genpart/genpart.mk                    |   11 +++++++++++
+ package/libconfuse/libconfuse.mk              |    1 +
+ package/mtools/Config.in.host                 |    9 +++++++++
+ package/mtools/mtools.mk                      |   15 +++++++++++++++
+ 12 files changed, 119 insertions(+), 0 deletions(-)
+ create mode 100644 package/dosfstools/Config.in.host
  create mode 100644 package/e2fsprogs/Config.in.host
+ create mode 100644 package/genimage/Config.in.host
+ create mode 100644 package/genimage/genimage.mk
+ create mode 100644 package/genpart/Config.in.host
+ create mode 100644 package/genpart/genpart-fix-return-code.patch
+ create mode 100644 package/genpart/genpart.mk
+ create mode 100644 package/mtools/Config.in.host
+ create mode 100644 package/mtools/mtools.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 79050f2..8813f5b 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,6 +1,7 @@
- menu "Host utilities"
- 
- source "package/dfu-util/Config.in.host"
-+source "package/e2fsprogs/Config.in.host"
- source "package/lpc3250loader/Config.in.host"
- source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
-diff --git a/package/e2fsprogs/Config.in.host b/package/e2fsprogs/Config.in.host
-new file mode 100644
-index 0000000..ea6a0bd
---- /dev/null
-+++ b/package/e2fsprogs/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_E2FSPROGS
-+	bool "host e2fsprogs"
-+	help
-+	  The EXT2 file system utilities.
-+	  
-+	  http://e2fsprogs.sf.net
+Regards,
+Yann E. MORIN
+
 -- 
-1.7.2.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
