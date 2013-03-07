@@ -1,77 +1,110 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 07 Mar 2013 11:53:46 +0100
-Subject: [Buildroot] ARM allyespackageconfig report
-In-Reply-To: <20130307111108.64a6dc0a@skate> (Thomas Petazzoni's message of
- "Thu, 7 Mar 2013 11:11:08 +0100")
-References: <20130307111108.64a6dc0a@skate>
-Message-ID: <87hakn5vlw.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 7 Mar 2013 12:14:30 +0100
+Subject: [Buildroot] [uclinux-dist-devel] [Announcement] The 2012R2
+ buildroot Linux release for Blackfin
+In-Reply-To: <DB904C5425BA6F4E8424B3B51A1414D173FF40BA46@NWD2CMBX1.ad.analog.com>
+References: <DB904C5425BA6F4E8424B3B51A1414D173F6FB6E58@NWD2CMBX1.ad.analog.com>
+ <20130307095939.1316014e@skate>
+ <DB904C5425BA6F4E8424B3B51A1414D173FF40BA46@NWD2CMBX1.ad.analog.com>
+Message-ID: <20130307121430.2780392a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Zhang, Sonic,
 
- Thomas> Hello,
- Thomas> I again did a build of an ARM allyespackageconfig configuration, with
- Thomas> the Linaro 2013.01 toolchain. Results are not too bad:
+On Thu, 7 Mar 2013 05:40:26 -0500, Zhang, Sonic wrote:
 
- Thomas>  * I'm disabling jamvm and classpath because I don't have javac
- Thomas>    installed in the chroot I used to test Buildroot. Installing javac
- Thomas>    builds gazillions of dependencies, and since I want my chroot to
- Thomas>    remain as limited as possible in terms of number of distro packages,
- Thomas>    I don't want to installed javac. So definitely, those two packages
- Thomas>    have not been tested.
+> >Could we find a way of getting your changes upstream, so that your
+> >Buildroot is closer to the upstream version?
+> 
+> I sent some initial Blackfin supporting patches against 2012.08
+> upstream release to the buildroot mailing list last Aug. But, I got
+> no response.
 
- Thomas>  * Besides those two packages that I disable ahead of time, only three
- Thomas>    packages failed to build: mplayer, ltp-testsuite and sconeserver.
+This is not true. You got some response precisely from me:
 
- Thomas> After disabling those 5 packages, the entire build went
- Thomas> through.  output/target/ weights 1023 MB, output/build/ weights
- Thomas> 17 GB with a total number of 785324 files and directories. I
- Thomas> don't have the overall build time though, since the build was
- Thomas> interrupted 3 times due to the 3 failed packages.
+ http://lists.busybox.net/pipermail/buildroot/2012-August/057117.html
+ http://lists.busybox.net/pipermail/buildroot/2012-August/057116.html
+ http://lists.busybox.net/pipermail/buildroot/2012-August/057118.html
+ http://lists.busybox.net/pipermail/buildroot/2012-August/057157.html
+ http://lists.busybox.net/pipermail/buildroot/2012-August/057471.html
+ http://lists.busybox.net/pipermail/buildroot/2012-August/057253.html
+ http://lists.busybox.net/pipermail/buildroot/2012-August/057448.html
+ http://lists.busybox.net/pipermail/buildroot/2012-August/057254.html
+ http://lists.busybox.net/pipermail/buildroot/2012-August/057255.html
+ http://lists.busybox.net/pipermail/buildroot/2012-August/057256.html
+ http://lists.busybox.net/pipermail/buildroot/2012-August/057252.html
+ http://lists.busybox.net/pipermail/buildroot/2012-August/057172.html
 
-Cool!
+For sure, some of your patches regarding override source directory
+didn't get any response. I'm currently working on the out-of-tree
+support to build packages, which should solve the original problem you
+reported.
 
+> So, we can't sent more patches on top. I may sent out
+> these patches against for comments after we update to your 2013.02
+> release.
 
- Thomas> mplayer build failure
- Thomas> =====================
+Great.
 
- Thomas> {standard input}: Assembler messages:
- Thomas> {standard input}:2857: Error: selected FPU does not support instruction -- `vmul.f32 q0,q0,q1'
- Thomas> {standard input}:2951: Error: selected processor does not support ARM mode `veor q0,q0,q2'
- Thomas> {standard input}:2952: Error: selected FPU does not support instruction -- `vmul.f32 q0,q0,q1'
- Thomas> {standard input}:3023: Error: selected FPU does not support instruction -- `vmul.f32 d0,d0,d1'
- Thomas> {standard input}:3106: Error: selected processor does not support ARM mode `veor d0,d0,d2'
- Thomas> {standard input}:3107: Error: selected FPU does not support instruction -- `vmul.f32 d0,d0,d1'
+The thing is that your patches didn't take into account that there is a
+life beyond Blackfin in Buildroot. While in your own fork you can do a
+Blackfin-specific hack, we have to make it generic and maintainable in
+Buildroot upstream.
 
-Sounds like thumb2 / arm mismatch.
+Also, you started with the most complicated patches (such as patches
+making modifications to the core infrastructure). I would suggest to
+first start to upstream all the fixes you did to get the different
+packages build on non-MMU platforms. However, even here, we might ask
+you to make some changes compared to your patches. For example,
+http://blackfin.uclinux.org/git/?p=buildroot;a=blob;f=package/libglib2/libglib2-nommu.patch;h=3979aa79195cf28876a45e7ed7c884bfaeadb5ad;hb=HEAD
+isn't acceptable, because the __NOMMU__ is something that has been
+invented specifically in your Buildroot fork.
 
- Thomas> ltp-testsuite build failure
- Thomas> ===========================
+The right way of handling this specific patch is to add a configure.ac
+check for the fork() function, which will define HAVE_FORK if fork() is
+available, and then we can use HAVE_FORK in the glib code. This way,
+the patch has a chance of getting merged upstream.
 
- Thomas> par_chld_ipv6.c: In function 'main':
- Thomas> par_chld_ipv6.c:55:14: error: 'CLONE_NEWNS' undeclared (first use in this function)
- Thomas> par_chld_ipv6.c:55:14: note: each undeclared identifier is reported only once for each function it appears in
- Thomas> par_chld_ipv6.c:84:9: warning: implicit declaration of function 'unshare' [-Wimplicit-function-declaration]
- Thomas> par_chld_ipv6.c:93:5: warning: implicit declaration of function 'crtchild' [-Wimplicit-function-declaration]
- Thomas> two_children_ns.c: In function 'main':make[6]: *** [par_chld_ipv6.o] Error 1
+> >The Wiki page then describes a number of Config.in files, as if
+> >modifying them was necessary to change the configuration. This is
+> >obviously completely wrong: users should change the configuration
+> >using 'make menuconfig', 'make xconfig, 'make gconfig', and
+> >certainly not by editing Config.in files, whose purpose is to
+> >*describe* configuration options, not to *define* the value of
+> >configuration options.
+> 
+> The explanation to these Config.in files are aimed to give developers
+> a basic concept on how the configure options are generated. Yes,
+> developers should only use the make xxxconfig command to change any
+> option.
 
-Odd, do the Linaro guys build against old kernel headers (without
-NEWNS/unshare)?
+I still find the entire wording still very confusing. "When done, the
+saved selections will be written to .config and autoconf.h." This is
+not true: only .config is important here, autoconf.h is just generated
+from it.
 
- Thomas> sconeserver build failure
- Thomas> =========================
+Also, "Default buildroot settings are passed to make as a text file
+configs/xxxxx_defconfig." This doesn't mean anything. The
+configs/xxxx_defconfig files are minimal defconfig describing a
+particular configuration, that one can use as a sample to start a new
+configuration:
 
- Thomas> checking for InitializeMagick in -lMagick++... no
- Thomas> configure: error: library 'Magick++' is required for Sconesite:image
- Thomas> make[1]: *** [/home/test/outputs/allpkg/build/sconeserver-183/.stamp_configured] Error 1
- Thomas> make: *** [all] Error 2
+	make <foobar>_defconfig
+	make menuconfig
+	make
 
-Could you have a look in config.log to see what goes wrong with the
-InitializeMagick check?
+BTW, the title of the section is still "GNU configure Overview",
+which is wrong.
 
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
