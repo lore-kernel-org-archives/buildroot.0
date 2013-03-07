@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  7 Mar 2013 21:18:30 +0100
-Subject: [Buildroot] [PATCH 02/32] x11r7/xcb-util-wm: new package
+Date: Thu,  7 Mar 2013 21:18:31 +0100
+Subject: [Buildroot] [PATCH 03/32] x11r7/xcb-util-image: new package
 In-Reply-To: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362687540-19440-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362687540-19440-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/Config.in                  |    1 +
- package/x11r7/xcb-util-wm/Config.in      |   16 ++++++++++++++++
- package/x11r7/xcb-util-wm/xcb-util-wm.mk |   14 ++++++++++++++
- 3 files changed, 31 insertions(+)
- create mode 100644 package/x11r7/xcb-util-wm/Config.in
- create mode 100644 package/x11r7/xcb-util-wm/xcb-util-wm.mk
+ package/x11r7/Config.in                        |    1 +
+ package/x11r7/xcb-util-image/Config.in         |   15 +++++++++++++++
+ package/x11r7/xcb-util-image/xcb-util-image.mk |   14 ++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/x11r7/xcb-util-image/Config.in
+ create mode 100644 package/x11r7/xcb-util-image/xcb-util-image.mk
 
 diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 706574c..2abd593 100644
+index 2abd593..5d0f991 100644
 --- a/package/x11r7/Config.in
 +++ b/package/x11r7/Config.in
-@@ -16,6 +16,7 @@ if BR2_PACKAGE_XORG7
+@@ -15,6 +15,7 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/libxcb/Config.in
  		source package/x11r7/mesa3d/Config.in
  		source package/x11r7/xcb-util/Config.in
++		source package/x11r7/xcb-util-image/Config.in
  		source package/x11r7/xcb-util-keysyms/Config.in
-+		source package/x11r7/xcb-util-wm/Config.in
+ 		source package/x11r7/xcb-util-wm/Config.in
  		source package/x11r7/xlib_libFS/Config.in
- 		source package/x11r7/xlib_libICE/Config.in
- 		source package/x11r7/xlib_libSM/Config.in
-diff --git a/package/x11r7/xcb-util-wm/Config.in b/package/x11r7/xcb-util-wm/Config.in
+diff --git a/package/x11r7/xcb-util-image/Config.in b/package/x11r7/xcb-util-image/Config.in
 new file mode 100644
-index 0000000..5e7d94e
+index 0000000..31fc61a
 --- /dev/null
-+++ b/package/x11r7/xcb-util-wm/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_XCB_UTIL_WM
-+	bool "xcb-util-wm"
-+	select BR2_PACKAGE_LIBXCB
++++ b/package/x11r7/xcb-util-image/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_XCB_UTIL_IMAGE
++	bool "xcb-util-image"
++	select BR2_PACKAGE_XCB_UTIL
 +	help
 +	  The XCB util modules provides a number of libraries which sit on top
 +	  of libxcb, the core X protocol library, and some of the extension
@@ -48,29 +48,28 @@ index 0000000..5e7d94e
 +	  libraries also provide client-side code which is not strictly part of
 +	  the X protocol but which have traditionally been provided by Xlib.
 +
-+	  XCB util-wm module provides the following libraries:
-+	    - ewmh: Both client and window-manager helpers for EWMH.
-+	    - icccm: Both client and window-manager helpers for ICCCM.
++	  XCB util-image module provides the following library:
++	    - image: Port of Xlib's XImage and XShmImage functions.
 +
 +	  http://xcb.freedesktop.org/
-diff --git a/package/x11r7/xcb-util-wm/xcb-util-wm.mk b/package/x11r7/xcb-util-wm/xcb-util-wm.mk
+diff --git a/package/x11r7/xcb-util-image/xcb-util-image.mk b/package/x11r7/xcb-util-image/xcb-util-image.mk
 new file mode 100644
-index 0000000..0338b85
+index 0000000..0309f3b
 --- /dev/null
-+++ b/package/x11r7/xcb-util-wm/xcb-util-wm.mk
++++ b/package/x11r7/xcb-util-image/xcb-util-image.mk
 @@ -0,0 +1,14 @@
 +#############################################################
 +#
-+# xcb-util-wm
++# xcb-util-image
 +#
 +#############################################################
 +
-+XCB_UTIL_WM_VERSION = 0.3.9
-+XCB_UTIL_WM_SITE = http://xcb.freedesktop.org/dist/
-+XCB_UTIL_WM_SOURCE = xcb-util-wm-$(XCB_UTIL_WM_VERSION).tar.bz2
-+XCB_UTIL_WM_INSTALL_STAGING = YES
-+XCB_UTIL_WM_LICENSE = MIT
-+XCB_UTIL_WM_DEPENDENCIES = libxcb
++XCB_UTIL_IMAGE_VERSION = 0.3.9
++XCB_UTIL_IMAGE_SITE = http://xcb.freedesktop.org/dist/
++XCB_UTIL_IMAGE_SOURCE = xcb-util-image-$(XCB_UTIL_IMAGE_VERSION).tar.bz2
++XCB_UTIL_IMAGE_INSTALL_STAGING = YES
++XCB_UTIL_IMAGE_LICENSE = MIT
++XCB_UTIL_IMAGE_DEPENDENCIES = xcb-util
 +
 +$(eval $(autotools-package))
 -- 
