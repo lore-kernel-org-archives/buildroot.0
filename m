@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  7 Mar 2013 21:18:50 +0100
-Subject: [Buildroot] [PATCH 22/32] qt5/qt5svg: new package
+Date: Thu,  7 Mar 2013 21:18:56 +0100
+Subject: [Buildroot] [PATCH 28/32] qt5/qt5graphicaleffects: new package
 In-Reply-To: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362687540-19440-23-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362687540-19440-29-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,90 +12,88 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/Config.in        |    1 +
- package/qt5/qt5svg/Config.in |   11 ++++++++++
- package/qt5/qt5svg/qt5svg.mk |   47 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 59 insertions(+)
- create mode 100644 package/qt5/qt5svg/Config.in
- create mode 100644 package/qt5/qt5svg/qt5svg.mk
+ package/qt5/Config.in                              |    1 +
+ package/qt5/qt5graphicaleffects/Config.in          |   14 +++++++
+ .../qt5/qt5graphicaleffects/qt5graphicaleffects.mk |   40 ++++++++++++++++++++
+ 3 files changed, 55 insertions(+)
+ create mode 100644 package/qt5/qt5graphicaleffects/Config.in
+ create mode 100644 package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
 
 diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 1c9f8a6..f4d2b45 100644
+index ff98b9e..59234dd 100644
 --- a/package/qt5/Config.in
 +++ b/package/qt5/Config.in
-@@ -15,4 +15,5 @@ menuconfig BR2_PACKAGE_QT5
- 
+@@ -16,6 +16,7 @@ menuconfig BR2_PACKAGE_QT5
  if BR2_PACKAGE_QT5
  source "package/qt5/qt5base/Config.in"
-+source "package/qt5/qt5svg/Config.in"
- endif
-diff --git a/package/qt5/qt5svg/Config.in b/package/qt5/qt5svg/Config.in
+ source "package/qt5/qt5declarative/Config.in"
++source "package/qt5/qt5graphicaleffects/Config.in"
+ source "package/qt5/qt5imageformats/Config.in"
+ source "package/qt5/qt5jsbackend/Config.in"
+ source "package/qt5/qt5script/Config.in"
+diff --git a/package/qt5/qt5graphicaleffects/Config.in b/package/qt5/qt5graphicaleffects/Config.in
 new file mode 100644
-index 0000000..27e6b05
+index 0000000..859cd5a
 --- /dev/null
-+++ b/package/qt5/qt5svg/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_QT5SVG
-+	bool "qt5svg"
++++ b/package/qt5/qt5graphicaleffects/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_QT5GRAPHICALEFFECTS
++	bool "qt5graphicaleffects"
 +	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_GUI
++	select BR2_PACKAGE_QT5DECLARATIVE
 +	help
 +	  Qt is a cross-platform application and UI framework for
 +	  developers using C++.
 +
-+	  This package corresponds to the qt5svg module.
++	  This package corresponds to the qt5graphicaleffects module.
 +
 +	  http://qt-project.org
-diff --git a/package/qt5/qt5svg/qt5svg.mk b/package/qt5/qt5svg/qt5svg.mk
++
++comment "qt5graphicaleffects requires an OpenGL-capable backend"
++	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
+diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
 new file mode 100644
-index 0000000..8db28ba
+index 0000000..c4b7231
 --- /dev/null
-+++ b/package/qt5/qt5svg/qt5svg.mk
-@@ -0,0 +1,47 @@
++++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
+@@ -0,0 +1,40 @@
 +#############################################################
 +#
-+# qt5svg
++# qt5graphicaleffects
 +#
 +#############################################################
 +
-+QT5SVG_VERSION = $(QT5_VERSION)
-+QT5SVG_SITE = http://releases.qt-project.org/qt5/$(QT5SVG_VERSION)/submodules_tar/
-+QT5SVG_SOURCE = qtsvg-opensource-src-$(QT5SVG_VERSION).tar.xz
-+QT5SVG_DEPENDENCIES = qt5base
-+QT5SVG_INSTALL_STAGING = YES
++QT5GRAPHICALEFFECTS_VERSION = $(QT5_VERSION)
++QT5GRAPHICALEFFECTS_SITE = http://releases.qt-project.org/qt5/$(QT5GRAPHICALEFFECTS_VERSION)/submodules_tar/
++QT5GRAPHICALEFFECTS_SOURCE = qtgraphicaleffects-opensource-src-$(QT5GRAPHICALEFFECTS_VERSION).tar.xz
++QT5GRAPHICALEFFECTS_DEPENDENCIES = qt5base qt5declarative
++QT5GRAPHICALEFFECTS_INSTALL_STAGING = YES
 +
 +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5SVG_CONFIGURE_OPTS += -opensource -confirm-license
-+QT5SVG_LICENSE = LGPLv2.1 or GPLv3.0
++QT5GRAPHICALEFFECTS_CONFIGURE_OPTS += -opensource -confirm-license
++QT5GRAPHICALEFFECTS_LICENSE = LGPLv2.1 or GPLv3.0
 +# Here we would like to get license files from qt5base, but qt5base
-+# may not be extracted at the time we get the legal-info for qt5svg.
++# may not be extracted at the time we get the legal-info for
++# qt5script.
 +else
-+QT5SVG_LICENSE = Commercial license
-+QT5SVG_REDISTRIBUTE = NO
++QT5GRAPHICALEFFECTS_LICENSE = Commercial license
++QT5GRAPHICALEFFECTS_REDISTRIBUTE = NO
 +endif
 +
-+define QT5SVG_CONFIGURE_CMDS
++define QT5GRAPHICALEFFECTS_CONFIGURE_CMDS
 +	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
 +endef
 +
-+define QT5SVG_BUILD_CMDS
++define QT5GRAPHICALEFFECTS_BUILD_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 +endef
 +
-+define QT5SVG_INSTALL_STAGING_CMDS
++define QT5GRAPHICALEFFECTS_INSTALL_STAGING_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
 +endef
 +
-+ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
-+define QT5SVG_INSTALL_ICONENGINES
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/iconengines $(TARGET_DIR)/usr/lib/qt/plugins
-+endef
-+endif
-+define QT5SVG_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Svg*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpf $(STAGING_DIR)/usr/lib/qt/plugins/imageformats/libqsvg.so $(TARGET_DIR)/usr/lib/qt/plugins/imageformats/
-+	$(QT5SVG_INSTALL_ICONENGINES)
++define QT5GRAPHICALEFFECTS_INSTALL_TARGET_CMDS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtGraphicalEffects $(TARGET_DIR)/usr/qml
 +endef
 +
 +$(eval $(generic-package))
