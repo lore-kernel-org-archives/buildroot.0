@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  7 Mar 2013 21:18:57 +0100
-Subject: [Buildroot] [PATCH 29/32] qt5/qt5multimedia: new package
+Date: Thu,  7 Mar 2013 21:18:39 +0100
+Subject: [Buildroot] [PATCH 11/32] qt5base: add GUI support
 In-Reply-To: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362687540-19440-30-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362687540-19440-12-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,93 +12,118 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/Config.in                      |    1 +
- package/qt5/qt5multimedia/Config.in        |   14 +++++++++
- package/qt5/qt5multimedia/qt5multimedia.mk |   43 ++++++++++++++++++++++++++++
- 3 files changed, 58 insertions(+)
- create mode 100644 package/qt5/qt5multimedia/Config.in
- create mode 100644 package/qt5/qt5multimedia/qt5multimedia.mk
+ package/qt5/qt5base/Config.in  |   44 ++++++++++++++++++++++++++++++++++++++++
+ package/qt5/qt5base/qt5base.mk |   29 +++++++++++++++++++++-----
+ 2 files changed, 68 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 59234dd..e8e581c 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -19,6 +19,7 @@ source "package/qt5/qt5declarative/Config.in"
- source "package/qt5/qt5graphicaleffects/Config.in"
- source "package/qt5/qt5imageformats/Config.in"
- source "package/qt5/qt5jsbackend/Config.in"
-+source "package/qt5/qt5multimedia/Config.in"
- source "package/qt5/qt5script/Config.in"
- source "package/qt5/qt5svg/Config.in"
- source "package/qt5/qt5xmlpatterns/Config.in"
-diff --git a/package/qt5/qt5multimedia/Config.in b/package/qt5/qt5multimedia/Config.in
-new file mode 100644
-index 0000000..9065f87
---- /dev/null
-+++ b/package/qt5/qt5multimedia/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_QT5MULTIMEDIA
-+	bool "qt5multimedia"
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5DECLARATIVE
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 4cd6ce0..801ef6f 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -53,4 +53,48 @@ config BR2_PACKAGE_QT5BASE_XML
+ 	help
+ 	  This options enables the Qt5Xml library.
+ 
++config BR2_PACKAGE_QT5BASE_GUI
++	bool "gui module"
++	# At least one graphic backend must be enabled, so enable
++	# linuxfb if nothing is enabled.
++	select BR2_PACKAGE_QT5BASE_LINUXFB if \
++	       !BR2_PACKAGE_QT5BASE_DIRECTFB && \
++	       !BR2_PACKAGE_QT5BASE_XCB
 +	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
++	  This option enables the Qt5Gui library.
 +
-+	  This package corresponds to the qt5multimedia module.
++if BR2_PACKAGE_QT5BASE_GUI
 +
-+	  http://qt-project.org
++config BR2_PACKAGE_QT5BASE_WIDGETS
++	bool "widgets module"
++	help
++	  This option enables the Qt5Widgets library.
 +
-+comment "qt5multimedia requires an OpenGL-capable backend"
-+	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-new file mode 100644
-index 0000000..5248b2e
---- /dev/null
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -0,0 +1,43 @@
-+#############################################################
-+#
-+# qt5multimedia
-+#
-+#############################################################
++config BR2_PACKAGE_QT5BASE_LINUXFB
++	bool "linuxfb support"
 +
-+QT5MULTIMEDIA_VERSION = $(QT5_VERSION)
-+QT5MULTIMEDIA_SITE = http://releases.qt-project.org/qt5/$(QT5MULTIMEDIA_VERSION)/submodules_tar/
-+QT5MULTIMEDIA_SOURCE = qtmultimedia-opensource-src-$(QT5MULTIMEDIA_VERSION).tar.xz
-+QT5MULTIMEDIA_DEPENDENCIES = qt5base qt5declarative
-+QT5MULTIMEDIA_INSTALL_STAGING = YES
++config BR2_PACKAGE_QT5BASE_DIRECTFB
++	bool "directfb support"
++	select BR2_PACKAGE_DIRECTFB
 +
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5MULTIMEDIA_CONFIGURE_OPTS += -opensource -confirm-license
-+QT5MULTIMEDIA_LICENSE = LGPLv2.1 or GPLv3.0
-+# Here we would like to get license files from qt5base, but qt5base
-+# may not be extracted at the time we get the legal-info for
-+# qt5script.
-+else
-+QT5MULTIMEDIA_LICENSE = Commercial license
-+QT5MULTIMEDIA_REDISTRIBUTE = NO
++config BR2_PACKAGE_QT5BASE_XCB
++	bool "X.org XCB support"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBX11
++	select BR2_PACKAGE_LIBXCB
++	select BR2_PACKAGE_XCB_UTIL_IMAGE
++	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
++	select BR2_PACKAGE_XCB_UTIL_WM
++
++comment "X.org XCB backend available if X.org is enabled"
++	depends on !BR2_PACKAGE_XORG7
++
++config BR2_PACKAGE_QT5BASE_PRINTSUPPORT
++	bool "print support module"
++	select BR2_PACKAGE_QT5BASE_WIDGETS
++	help
++	  This option enables the Qt5PrintSupport
++
 +endif
 +
-+define QT5MULTIMEDIA_CONFIGURE_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+endef
+ endif
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index fd85c4d..cad7b8d 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -20,13 +20,8 @@ QT5BASE_INSTALL_STAGING = YES
+ #    want to use the one packaged in Buildroot
+ QT5BASE_CONFIGURE_OPTS += \
+ 	-optimized-qmake \
+-	-no-linuxfb \
+-	-no-xcb \
+-	-no-directfb \
+ 	-no-eglfs \
+ 	-no-kms \
+-	-no-gui \
+-	-no-widgets \
+ 	-no-opengl \
+ 	-no-glib \
+ 	-no-cups \
+@@ -61,6 +56,26 @@ QT5BASE_LICENSE = Commercial license
+ QT5BASE_REDISTRIBUTE = NO
+ endif
+ 
++# We have to use --enable-linuxfb, otherwise Qt thinks that -linuxfb
++# is to add a link against the "inuxfb" library.
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-gui,-no-gui)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_WIDGETS),-widgets,-no-widgets)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_LINUXFB),--enable-linuxfb,-no-linuxfb)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),-directfb,-no-directfb)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),directfb)
 +
-+define QT5MULTIMEDIA_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
++ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
++QT5BASE_CONFIGURE_OPTS += -xcb
++QT5BASE_DEPENDENCIES   += \
++	libxcb \
++	xcb-util-wm \
++	xcb-util-image \
++	xcb-util-keysyms \
++	xlib_libX11
++else
++QT5BASE_CONFIGURE_OPTS += -no-xcb
++endif
 +
-+define QT5MULTIMEDIA_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
+ # Build the list of libraries to be installed on the target
+ QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
+@@ -69,6 +84,10 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_SQL)        += Qt5Sql
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_TEST)       += Qt5Test
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XML)        += Qt5Xml
+ 
++QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_GUI)          += Qt5Gui
++QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_WIDGETS)      += Qt5Widgets
++QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
 +
-+define QT5MULTIMEDIA_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Multimedia*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/* $(TARGET_DIR)/usr/lib/qt/plugins
-+	cp -dpfr $(STAGING_DIR)/usr/qml/* $(TARGET_DIR)/usr/qml
-+endef
-+
-+$(eval $(generic-package))
+ # Ideally, we could use -device-option to substitute variable values
+ # in our linux-buildroot-g++/qmake.config, but this mechanism doesn't
+ # nicely support variable values that contain spaces. So we use the
 -- 
 1.7.9.5
