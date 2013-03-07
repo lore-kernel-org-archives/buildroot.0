@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  7 Mar 2013 21:18:31 +0100
-Subject: [Buildroot] [PATCH 03/32] x11r7/xcb-util-image: new package
+Date: Thu,  7 Mar 2013 21:18:32 +0100
+Subject: [Buildroot] [PATCH 04/32] rpi-userland: add .pc files for
+	OpenGLESv2 and EGL libs
 In-Reply-To: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362687540-19440-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362687540-19440-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,65 +13,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/Config.in                        |    1 +
- package/x11r7/xcb-util-image/Config.in         |   15 +++++++++++++++
- package/x11r7/xcb-util-image/xcb-util-image.mk |   14 ++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100644 package/x11r7/xcb-util-image/Config.in
- create mode 100644 package/x11r7/xcb-util-image/xcb-util-image.mk
+ .../rpi-userland-add-pkgconfig-files.patch         |   53 ++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 package/rpi-userland/rpi-userland-add-pkgconfig-files.patch
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 2abd593..5d0f991 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -15,6 +15,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/libxcb/Config.in
- 		source package/x11r7/mesa3d/Config.in
- 		source package/x11r7/xcb-util/Config.in
-+		source package/x11r7/xcb-util-image/Config.in
- 		source package/x11r7/xcb-util-keysyms/Config.in
- 		source package/x11r7/xcb-util-wm/Config.in
- 		source package/x11r7/xlib_libFS/Config.in
-diff --git a/package/x11r7/xcb-util-image/Config.in b/package/x11r7/xcb-util-image/Config.in
+diff --git a/package/rpi-userland/rpi-userland-add-pkgconfig-files.patch b/package/rpi-userland/rpi-userland-add-pkgconfig-files.patch
 new file mode 100644
-index 0000000..31fc61a
+index 0000000..0da9afd
 --- /dev/null
-+++ b/package/x11r7/xcb-util-image/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_XCB_UTIL_IMAGE
-+	bool "xcb-util-image"
-+	select BR2_PACKAGE_XCB_UTIL
-+	help
-+	  The XCB util modules provides a number of libraries which sit on top
-+	  of libxcb, the core X protocol library, and some of the extension
-+	  libraries. These experimental libraries provide convenience functions
-+	  and interfaces which make the raw X protocol more usable. Some of the
-+	  libraries also provide client-side code which is not strictly part of
-+	  the X protocol but which have traditionally been provided by Xlib.
++++ b/package/rpi-userland/rpi-userland-add-pkgconfig-files.patch
+@@ -0,0 +1,53 @@
++Add .pc files for the OpenGLESv2 and EGL libraries
 +
-+	  XCB util-image module provides the following library:
-+	    - image: Port of Xlib's XImage and XShmImage functions.
++Those pkg-config files make it easier for Qt5 to find those libraries
++and the appropriate link flags.
 +
-+	  http://xcb.freedesktop.org/
-diff --git a/package/x11r7/xcb-util-image/xcb-util-image.mk b/package/x11r7/xcb-util-image/xcb-util-image.mk
-new file mode 100644
-index 0000000..0309f3b
---- /dev/null
-+++ b/package/x11r7/xcb-util-image/xcb-util-image.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# xcb-util-image
-+#
-+#############################################################
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
-+XCB_UTIL_IMAGE_VERSION = 0.3.9
-+XCB_UTIL_IMAGE_SITE = http://xcb.freedesktop.org/dist/
-+XCB_UTIL_IMAGE_SOURCE = xcb-util-image-$(XCB_UTIL_IMAGE_VERSION).tar.bz2
-+XCB_UTIL_IMAGE_INSTALL_STAGING = YES
-+XCB_UTIL_IMAGE_LICENSE = MIT
-+XCB_UTIL_IMAGE_DEPENDENCIES = xcb-util
-+
-+$(eval $(autotools-package))
++Index: b/interface/khronos/egl/egl.pc.in
++===================================================================
++--- /dev/null
+++++ b/interface/khronos/egl/egl.pc.in
++@@ -0,0 +1,10 @@
+++prefix=@CMAKE_INSTALL_PREFIX@
+++exec_prefix=${prefix}
+++libdir=${exec_prefix}/lib
+++includedir=${prefix}/include
+++
+++Name: egl
+++Description: RasberryPi implementation of EGL
+++Version: 1.0
+++Libs: -L${libdir} -lEGL -lGLESv2
+++Cflags: -I${includedir}/ -I${includedir}/interface/vcos/pthreads/
++Index: b/interface/khronos/CMakeLists.txt
++===================================================================
++--- a/interface/khronos/CMakeLists.txt
+++++ b/interface/khronos/CMakeLists.txt
++@@ -73,3 +73,11 @@
++ 
++ install(TARGETS EGL GLESv2 OpenVG WFC khrn_client DESTINATION lib)
++ install(TARGETS EGL_static GLESv2_static khrn_static DESTINATION lib)
+++configure_file("${CMAKE_CURRENT_SOURCE_DIR}/egl/egl.pc.in"
+++  "${CMAKE_CURRENT_BINARY_DIR}/egl/egl.pc" @ONLY)
+++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/egl/egl.pc"
+++  DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
+++configure_file("${CMAKE_CURRENT_SOURCE_DIR}/glxx/glesv2.pc.in"
+++  "${CMAKE_CURRENT_BINARY_DIR}/glxx/glesv2.pc" @ONLY)
+++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/glxx/glesv2.pc"
+++  DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
++Index: b/interface/khronos/glxx/glesv2.pc.in
++===================================================================
++--- /dev/null
+++++ b/interface/khronos/glxx/glesv2.pc.in
++@@ -0,0 +1,10 @@
+++prefix=@CMAKE_INSTALL_PREFIX@
+++exec_prefix=${prefix}
+++libdir=${exec_prefix}/lib
+++includedir=${prefix}/include
+++
+++Name: glesv2
+++Description: RasberryPi implementation of OpenGL ESv2
+++Version: 2.0
+++Libs: -L${libdir} -lGLESv2
+++Cflags: -I${includedir}/
 -- 
 1.7.9.5
