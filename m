@@ -1,98 +1,186 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Mar 2013 18:07:40 +0100
-Subject: [Buildroot] ARM allyespackageconfig report
-In-Reply-To: <87hakn5vlw.fsf@dell.be.48ers.dk>
-References: <20130307111108.64a6dc0a@skate> <87hakn5vlw.fsf@dell.be.48ers.dk>
-Message-ID: <20130307180740.51c1b9b6@skate>
+Date: Thu, 7 Mar 2013 18:15:25 +0100
+Subject: [Buildroot] adding dhcpcd
+In-Reply-To: <1362670216.30287.9.camel@genx>
+References: <1362163072.19802.25.camel@genx.eng.msli.com>
+ <5130F7CA.6090203@zacarias.com.ar> <1362500477.20183.74.camel@genx>
+ <20130305194707.474ded42@skate> <1362592916.20183.152.camel@genx>
+ <20130306195844.2f8c14b6@skate> <1362599417.20183.159.camel@genx>
+ <069B5A25F9844945B625ADE7258AC94C061FF823@4rf-nz-orion.local.4rf.com>
+ <20130306210831.4fbe8150@skate> <1362602480.20183.169.camel@genx>
+ <20130306215414.23271383@skate> <1362603756.20183.170.camel@genx>
+ <20130306221441.03439842@skate> <1362604828.20183.172.camel@genx>
+ <20130306222902.2d736c06@skate> <1362610654.20183.176.camel@genx>
+ <CAKcgs2wB=t_PY9hSEc2137Axov5=s8ugLnktRkbWgXBaXsVq2g@mail.gmail.com>
+ <1362620699.20183.193.camel@genx>
+ <CAKcgs2yMcJMbJ+aM3XSpV7TdFdrAgTzZx0v6DL6qHv0gWv2SKg@mail.gmail.com>
+ <1362641501.11556.12.camel@genx>
+ <CAKcgs2zvC-vxm78cqQYN4=kahsWkoNQ+yTToUGsz3SmbSA1rTQ@mail.gmail.com>
+ <1362667990.30287.6.camel@genx> <20130307160350.1fdeb066@skate>
+ <1362670216.30287.9.camel@genx>
+Message-ID: <20130307181525.340f8050@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear John Stile,
 
-On Thu, 07 Mar 2013 11:53:46 +0100, Peter Korsgaard wrote:
+On Thu, 07 Mar 2013 07:30:16 -0800, John Stile wrote:
 
->  Thomas> mplayer build failure
->  Thomas> =====================
+> How does this look?
+
+Do you want this patch to be integrated? If so, please send just your
+patch in an e-mail, with nothing else. The best thing is to use git
+send-email.
+
+> -----------------
+> dhcpcd patch
+> -----------------
+> Adding pacakge dhcpcd to buildroot, ordered alphbetically in Networking pacakges, warning about uClibc config.
 > 
->  Thomas> {standard input}: Assembler messages:
->  Thomas> {standard input}:2857: Error: selected FPU does not support instruction -- `vmul.f32 q0,q0,q1'
->  Thomas> {standard input}:2951: Error: selected processor does not support ARM mode `veor q0,q0,q2'
->  Thomas> {standard input}:2952: Error: selected FPU does not support instruction -- `vmul.f32 q0,q0,q1'
->  Thomas> {standard input}:3023: Error: selected FPU does not support instruction -- `vmul.f32 d0,d0,d1'
->  Thomas> {standard input}:3106: Error: selected processor does not support ARM mode `veor d0,d0,d2'
->  Thomas> {standard input}:3107: Error: selected FPU does not support instruction -- `vmul.f32 d0,d0,d1'
+> signed-off-by: John Stile <john@stilen.com>
+
+Formatting of the commit log is not correct:
+
+ * One first line, less than ~80-100 characters, giving the title of
+   the patch. So something like 'dhcpcd: new package'
+
+ * One empty line.
+
+ * One or more paragraphs giving details about what the patch does. It
+   should be line-wrapped at ~80 columns. Please fix the typos in the
+   message.
+
+ * One empty line.
+
+ * Signed-off-by line. Note the capital S.
+
 > 
-> Sounds like thumb2 / arm mismatch.
+> --- a/buildroot-2011.11/package/Config.in	2013-03-07 07:17:35.000000000 -0800
+> +++ b/buildroot-2011.11/package/Config.in	2013-03-07 07:17:05.000000000 -0800
 
-Seems more like floating point stuff, but I don't know yet.
+Please use Git to generate your patches. Those patches are generated to
+be applied for patch -p2 while they should be generated to apply with
+patch -p1. Just use Git, it will do the Right Thing (TM).
 
->  Thomas> ltp-testsuite build failure
->  Thomas> ===========================
+> @@ -408,6 +408,7 @@ source "package/cups/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  source "package/dhcp/Config.in"
+>  endif
+> +source "package/dhcpcd/Config.in"
+>  source "package/dhcpdump/Config.in"
+>  source "package/dnsmasq/Config.in"
+>  source "package/dropbear/Config.in"
 > 
->  Thomas> par_chld_ipv6.c: In function 'main':
->  Thomas> par_chld_ipv6.c:55:14: error: 'CLONE_NEWNS' undeclared (first use in this function)
->  Thomas> par_chld_ipv6.c:55:14: note: each undeclared identifier is reported only once for each function it appears in
->  Thomas> par_chld_ipv6.c:84:9: warning: implicit declaration of function 'unshare' [-Wimplicit-function-declaration]
->  Thomas> par_chld_ipv6.c:93:5: warning: implicit declaration of function 'crtchild' [-Wimplicit-function-declaration]
->  Thomas> two_children_ns.c: In function 'main':make[6]: *** [par_chld_ipv6.o] Error 1
-> 
-> Odd, do the Linaro guys build against old kernel headers (without
-> NEWNS/unshare)?
+> --- a/buildroot-2011.11/package/dhcpcd/Config.in	2013-03-07 07:23:25.000000000 -0800
+> +++ b/buildroot-2011.11/package/dhcpcd/Config.in	2013-03-07 07:21:47.000000000 -0800
+> @@ -0,0 +1,5 @@
+> +config BR2_PACKAGE_DHCPCD
+> +	        bool "dhcpcd"
+> +	        help
+> +	          an RFC2131 compliant DHCP client
+> +	          NOTE: If uClibc, depends on  UCLIBC_SUPPORT_AI_ADDRCONFIG=y
 
-$ grep -r CLONE_NEWNS staging/usr/include/*
-staging/usr/include/arm-linux-gnueabi/bits/sched.h:# define CLONE_NEWNS   0x00020000 /* Set to create new namespace.  */
-staging/usr/include/arm-linux-gnueabihf/bits/sched.h:# define CLONE_NEWNS   0x00020000 /* Set to create new namespace.  */
-staging/usr/include/linux/sched.h:#define CLONE_NEWNS   0x00020000      /* New namespace group? */
+Indentation for bool/help: one tab.
 
-$ grep -r unshare staging/usr/include/*
-staging/usr/include/arm-linux-gnueabi/bits/sched.h:extern int unshare (int __flags) __THROW;
-staging/usr/include/arm-linux-gnueabi/bits/syscall.h:#define SYS_unshare __NR_unshare
-staging/usr/include/arm-linux-gnueabi/asm/unistd.h:#define __NR_unshare                 (__NR_SYSCALL_BASE+337)
-staging/usr/include/arm-linux-gnueabihf/bits/sched.h:extern int unshare (int __flags) __THROW;
-staging/usr/include/arm-linux-gnueabihf/bits/syscall.h:#define SYS_unshare __NR_unshare
-staging/usr/include/arm-linux-gnueabihf/asm/unistd.h:#define __NR_unshare                       (__NR_SYSCALL_BASE+337)
-staging/usr/include/asm-generic/unistd.h:#define __NR_unshare 97
-staging/usr/include/asm-generic/unistd.h:__SYSCALL(__NR_unshare, sys_unshare)
+Indentation for the help text: one tab + two spaces.
 
-$ cat staging/usr/include/linux/version.h 
-#define LINUX_VERSION_CODE 197134
-#define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))
+> --- a/buildroot-2011.11/package/dhcpcd/dhcpcd.mk	2013-03-07 07:13:09.000000000 -0800
+> +++ b/buildroot-2011.11/package/dhcpcd/dhcpcd.mk	2013-03-07 07:00:54.000000000 -0800
+> @@ -0,0 +1,46 @@
+> +#############################################################
+> +#
+> +# dhcpcd
+> +#
+> +#############################################################
+> +
+> +DHCPCD_VERSION = 5.6.7
+> +DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
+> +DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd/
+> +DHCPCD_LICENSE = BSD-2c
+> +DHCPCD_INSTALL_STAGING = NO
 
-$ python
-Python 2.6.6 (r266:84292, Dec 26 2010, 22:31:48) 
-[GCC 4.4.5] on linux2
-Type "help", "copyright", "credits" or "license" for more information.
->>> 197134 >> 16
-3
->>> (197134 >> 8) & 0xFF
-2
->>> 197134 & 0xFF
-14
+Line not needed.
 
-So seems like their kernel headers are 3.2.14, and that they have
-CLONE_NEWNS/unshare.
+> +
+> +CONFIG_ARGS += --target=$(BR2_GCC_TARGET_ARCH)
+> +CONFIG_ARGS += --os=linux
 
->  Thomas> sconeserver build failure
->  Thomas> =========================
-> 
->  Thomas> checking for InitializeMagick in -lMagick++... no
->  Thomas> configure: error: library 'Magick++' is required for Sconesite:image
->  Thomas> make[1]: *** [/home/test/outputs/allpkg/build/sconeserver-183/.stamp_configured] Error 1
->  Thomas> make: *** [all] Error 2
-> 
-> Could you have a look in config.log to see what goes wrong with the
-> InitializeMagick check?
+All variables should be prefixed with the package name. However, in
+this case it makes more sense to put those options directly in the
+DHCPCD_CONFIGURE_CMDS.
 
-Seems like the .pc file forgets to link against some library:
+> +ifeq ($(BR2_USE_MMU),n)
+> +	CONFIG_ARGS += --disable-fork
+> +endif 
 
-configure:15580: /home/test/outputs/allpkg/host/usr/bin/arm-linux-gnueabihf-g++ -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -I/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/libxml2 -I/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/mysql -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/test/outputs/allpkg/host/usr/include/libxml2  -L/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/mysql conftest.cpp -lMagick++  -lcrypt -lpcre -lpthread -ldl  >&5
-/home/test/outputs/allpkg/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/4.7.3/../../../../arm-linux-gnueabihf/bin/ld: /tmp/ccVrnXFg.o: undefined reference to symbol 'InitializeMagick'
-/home/test/outputs/allpkg/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/4.7.3/../../../../arm-linux-gnueabihf/bin/ld: note: 'InitializeMagick' is defined in DSO /home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libMagickCore.so.5 so try adding it to the linker command line
-/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libMagickCore.so.5: could not read symbols: Invalid operation
-collect2: error: ld returned 1 exit status
+BR2_USE_MMU will never be 'n'. It can be either 'y' or the empty
+value. So:
+
+ifeq ($(BR2_USE_MMU),)
+	DHCPCD_CONF_OPT += --disable-fork
+endif
+
+> +
+> +ifeq ($(BR2_INET_IPV6),)
+> +	DHCPCD_CFLAGS += -UHASIPv6
+> +endif
+
+So when IPv6 is not available, you enable IPv6 in your package?
+
+> +define DHCPCD_CONFIGURE_CMDS
+> +	(cd $(@D); \
+> +	./configure $(CONFIG_ARGS) )
+> +endef
+
+Make this:
+
+define DHCPCD_CONFIGURE_CMDS
+	(cd $(@D); \
+		./configure \
+		--target=$(GNU_TARGET_NAME) \
+		--os=linux \
+		$(DHCPCD_CONF_OPT))
+endef
+
+> +
+> +define DHCPCD_BUILD_CMDS
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS)  CC="$(TARGET_CC)" LD="$(TARGET_LD)"  PATH=$(TARGET_PATH) $(DHCPCD_CFLAGS) -C $(@D) all
+> +endef
+
+No need to pass CC, LD and PATH, they are already part of
+TARGET_CONFIGURE_OPTS.
+
+> +define DHCPCD_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/dhcpcd $(TARGET_DIR)/usr/bin/dhcpcd
+> +	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf $(TARGET_DIR)/etc/dhcpcd.conf
+> +endef
+> +
+> +define DHCPCD_DEVICES
+> +	#/dev/foo  c  666  0  0  42  0  -  -  -
+> +endef
+
+DHCPCD_DEVICES not needed.
+
+> +define DHCPCD_PERMISSIONS
+> +	/usr/bin/dhcpcd  f  4755  0  0  -  -  -  -  -
+> +endef
+
+Are you sure this is needed?
+
+> +$(eval $(call GENTARGETS))
+
+This should be $(eval $(generic-package)) if you want your patch to be
+merged in Buildroot.
+
+Also, please add a comment just above $(eval $(generic-package)) that
+says something like: "Even though the package has a configure script,
+it is not a configure script generated using the autotools, so we have
+to use the generic package infrastructure".
+
+Best regards,
 
 Thomas
 -- 
