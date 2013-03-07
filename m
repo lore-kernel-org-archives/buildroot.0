@@ -1,56 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  7 Mar 2013 23:04:37 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch yem-ext234
-Message-ID: <cover.1362693453.git.yann.morin.1998@free.fr>
+Date: Thu,  7 Mar 2013 23:04:38 +0100
+Subject: [Buildroot] [PATCH 1/6] fs/ext2: enclose the ext2 options in
+	if...endif
+In-Reply-To: <cover.1362693453.git.yann.morin.1998@free.fr>
+References: <cover.1362693453.git.yann.morin.1998@free.fr>
+Message-ID: <f2791dd673a1f0e27520d8ab102fe852ea75d9b9.1362693453.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Use a 'if...endif' construct instead of repeating the
+'depends on' for each symbols.
 
-This patch series enhances the ext2 fs backend to also build ext3 and ext4
-filesystems, and differentiate between ext2 rev0 and ext2 rev1 filesystems.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ fs/ext2/Config.in |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
 
-This patch series is based on the previously-sent 'yem-host-image-tools'
-pull-request, and requires changes in that series.
-
-Changes v1 -> v2:
-  - enhance the ext2/3/4 generation (Arnout, Peter)
-  - allow fs generators to specify the image extension (Arnout)
-  - remove ext2 count- and time-based fsck (Arnout)
-
-
-The following changes since commit 296699691239a90d5118c5cbe72f1ff57b3761a5:
-
-  package/mtools: new host-package (2013-03-07 00:29:51 +0100)
-
-are available in the git repository at:
-  git://gitorious.org/buildroot/buildroot.git yem-ext234
-
-Yann E. MORIN (6):
-      fs/ext2: enclose the ext2 options in if...endif
-      fs/ext2: add ability to build ext3/4 too
-      fs: allow image generators to specify file-extension
-      fs/ext2: use the ext2 variant to name the generated rootfs image
-      fs/ext2: add support for ext2 rev0 and rev1
-      fs/ext2: remove count- and time-based fsck
-
- fs/common.mk                     |   17 ++++++--
- fs/ext2/Config.in                |   57 ++++++++++++++++++++++-----
- fs/ext2/ext2.mk                  |   10 ++++-
- fs/ext2/genext2fs.sh             |   77 +++++++++++++++++++++++++++++++++++++-
- package/e2fsprogs/Config.in.host |    2 +-
- 5 files changed, 144 insertions(+), 19 deletions(-)
-
-Regards,
-Yann E. MORIN
-
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index 2af44a8..cb4beed 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -3,25 +3,23 @@ config BR2_TARGET_ROOTFS_EXT2
+ 	help
+ 	  Build an ext2 root filesystem
+ 
++if BR2_TARGET_ROOTFS_EXT2
++
+ config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+ 	int "size in blocks (leave at 0 for auto calculation)"
+-	depends on BR2_TARGET_ROOTFS_EXT2
+ 	default 0
+ 
+ config BR2_TARGET_ROOTFS_EXT2_INODES
+ 	int "inodes (leave at 0 for auto calculation)"
+-	depends on BR2_TARGET_ROOTFS_EXT2
+ 	default 0
+ 
+ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+ 	int "reserved blocks percentage"
+-	depends on BR2_TARGET_ROOTFS_EXT2
+ 	default 0
+ 
+ choice
+ 	prompt "Compression method"
+ 	default BR2_TARGET_ROOTFS_EXT2_NONE
+-	depends on BR2_TARGET_ROOTFS_EXT2
+ 	help
+ 	  Select compressor for ext2 filesystem of the root filesystem
+ 
+@@ -47,3 +45,4 @@ config BR2_TARGET_ROOTFS_EXT2_LZMA
+ 
+ endchoice
+ 
++endif # BR2_TARGET_ROOTFS_EXT2
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.2.5
