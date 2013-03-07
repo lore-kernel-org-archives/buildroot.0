@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  7 Mar 2013 21:18:36 +0100
-Subject: [Buildroot] [PATCH 08/32] qt5: base infrastructure
+Date: Thu,  7 Mar 2013 21:18:37 +0100
+Subject: [Buildroot] [PATCH 09/32] qt5: add macro to fixup Qt5 .la and .prl
+	files
 In-Reply-To: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362687540-19440-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362687540-19440-10-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/Config.in |   18 ++++++++++++++++++
- package/qt5/qt5.mk    |    1 +
- 2 files changed, 19 insertions(+)
- create mode 100644 package/qt5/Config.in
- create mode 100644 package/qt5/qt5.mk
+ package/qt5/qt5.mk |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-new file mode 100644
-index 0000000..0acb89e
---- /dev/null
-+++ b/package/qt5/Config.in
-@@ -0,0 +1,18 @@
-+comment "Qt5 needs a toolchain with WCHAR, IPv6, thread and C++ support"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+menuconfig BR2_PACKAGE_QT5
-+	bool "Qt5"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_INET_IPV6
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  This option enables the Qt5 framework. Sub-options allow to
-+	  select which modules should be built.
-+
-+	  http://qt-project.org
-+
-+if BR2_PACKAGE_QT5
-+
-+endif
 diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-new file mode 100644
-index 0000000..8b1a7ed
---- /dev/null
+index 8b1a7ed..f220508 100644
+--- a/package/qt5/qt5.mk
 +++ b/package/qt5/qt5.mk
-@@ -0,0 +1 @@
-+include package/qt5/*/*.mk
+@@ -1 +1,11 @@
+ include package/qt5/*/*.mk
++
++define QT5_LA_PRL_FILES_FIXUP
++	for i in $$(find $(STAGING_DIR)/usr/lib* -name "libQt5*.la"); do \
++		$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$i; \
++		$(SED) "/^dependency_libs=/s%-L/usr/lib %%g" $$i ; \
++	done
++	for i in $$(find $(STAGING_DIR)/usr/lib* -name "libQt5*.prl"); do \
++		$(SED) "s%-L/usr/lib%%" $$i; \
++	done
++endef
 -- 
 1.7.9.5
