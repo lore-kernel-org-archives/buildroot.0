@@ -1,35 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Mar 2013 09:33:02 +0100
-Subject: [Buildroot] [PATCH 13/34] qt5base: new package
-In-Reply-To: <51382D15.40206@gmail.com>
-References: <1362601396-32250-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1362601396-32250-14-git-send-email-thomas.petazzoni@free-electrons.com>
- <51382D15.40206@gmail.com>
-Message-ID: <20130307093302.18c742fc@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 07 Mar 2013 09:52:37 +0100
+Subject: [Buildroot] [PATCH] Revert "uClibc: port linuxthreads
+	errnopatch to 0.9.33.2"
+In-Reply-To: <5137806E.4020507@mind.be> (Arnout Vandecappelle's message of
+ "Wed, 06 Mar 2013 18:44:14 +0100")
+References: <1361455787-4846-1-git-send-email-gustavo@zacarias.com.ar>
+ <877gm1hhsm.fsf@dell.be.48ers.dk>
+ <CFB67F3F72BB450DAF0C0E10C27DFC00@JohanW7>
+ <51276813.7050604@zacarias.com.ar>
+ <9E7C87F7A6274E3EBBC491EE4122270E@JohanW7>
+ <87lia39c5g.fsf@dell.be.48ers.dk> <5137806E.4020507@mind.be>
+Message-ID: <87li9z617u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Lukichev,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Thu, 07 Mar 2013 08:00:53 +0200, Alexander Lukichev wrote:
+ >> The pthreads options are basically just there for legacy reasons (from
+ >> before NPTL existed) and presumably see very little testing these
+ >> days. We should aguable deprecate them.
 
->   Why not 5.0.1, which was rolled out quite quickly after 5.0.0
-> with fixes for many bugs? Please see
-> 
->   http://blog.qt.digia.com/blog/2013/01/31/qt-5-0-1-released/
-> 
-> and e.g.
-> 
->   https://qt.gitorious.org/qt/qtbase/blobs/release/dist/changes-5.0.1
+ Arnout>  That would be a good idea. For who really wants it, there is
+ Arnout> still the crosstool-NG toolchain.
 
-Good point, I'll update the patch set to 5.0.1, thanks!
+Yes. Unfortunately NPTL has a number of dependencies:
 
-Thomas
+                depends on !BR2_UCLIBC_VERSION_0_9_31
+                depends on !BR2_ARM_OABI
+                depends on !BR2_x86_i386
+                depends on !BR2_avr32
+                depends on !BR2_xtensa
+
+uClibc 0.9.31 and OABI are deprecated, so that's ok - but i386 (and
+generic, which is the same), avr32 and xtensa aren't.
+
+We could naturally mark pthread as
+
+depends on BR2_DEPRECATED if !(BR2_x86_i386 || BR2_avr32 || !BR2_xtensa)
+
+But that isn't very nice.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
