@@ -1,62 +1,72 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Thu, 7 Mar 2013 00:53:03 -0800
-Subject: [Buildroot] adding dhcpcd
-In-Reply-To: <1362641501.11556.12.camel@genx>
-References: <1362163072.19802.25.camel@genx.eng.msli.com>
- <5130F7CA.6090203@zacarias.com.ar>
- <1362500477.20183.74.camel@genx> <20130305194707.474ded42@skate>
- <1362592916.20183.152.camel@genx> <20130306195844.2f8c14b6@skate>
- <1362599417.20183.159.camel@genx>
- <069B5A25F9844945B625ADE7258AC94C061FF823@4rf-nz-orion.local.4rf.com>
- <20130306210831.4fbe8150@skate> <1362602480.20183.169.camel@genx>
- <20130306215414.23271383@skate> <1362603756.20183.170.camel@genx>
- <20130306221441.03439842@skate> <1362604828.20183.172.camel@genx>
- <20130306222902.2d736c06@skate> <1362610654.20183.176.camel@genx>
- <CAKcgs2wB=t_PY9hSEc2137Axov5=s8ugLnktRkbWgXBaXsVq2g@mail.gmail.com>
- <1362620699.20183.193.camel@genx>
- <CAKcgs2yMcJMbJ+aM3XSpV7TdFdrAgTzZx0v6DL6qHv0gWv2SKg@mail.gmail.com>
- <1362641501.11556.12.camel@genx>
-Message-ID: <CAKcgs2zvC-vxm78cqQYN4=kahsWkoNQ+yTToUGsz3SmbSA1rTQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 7 Mar 2013 09:59:39 +0100
+Subject: [Buildroot] [uclinux-dist-devel] [Announcement] The 2012R2
+ buildroot Linux release for Blackfin
+In-Reply-To: <DB904C5425BA6F4E8424B3B51A1414D173F6FB6E58@NWD2CMBX1.ad.analog.com>
+References: <DB904C5425BA6F4E8424B3B51A1414D173F6FB6E58@NWD2CMBX1.ad.analog.com>
+Message-ID: <20130307095939.1316014e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi John,
+Dear Sonic Zhang,
 
-2013/3/6 John Stile <john@stilen.com>:
-> That did get me quite a bit farther.
->
-> ... now it fails to find a few more symbols:
-> bpf.c:32:21: error: net/bpf.h: No such file or directory
-> In file included from bpf.c:49:
-> bpf-filter.h:33: error: array type has incomplete element type
-> bpf-filter.h:36: error: 'BPF_LD' undeclared here (not in a function)
-> bpf-filter.h:36: error: 'BPF_H' undeclared here (not in a function)
-> bpf-filter.h:36: error: 'BPF_ABS' undeclared here (not in a function)
-> bpf-filter.h:37: error: 'BPF_JMP' undeclared here (not in a function)
-> bpf-filter.h:37: error: 'BPF_JEQ' undeclared here (not in a function)
-> bpf-filter.h:37: error: 'BPF_K' undeclared here (not in a function)
-> bpf-filter.h:46: error: 'BPF_RET' undeclared here (not in a function)
-> bpf-filter.h:78: error: array type has incomplete element type
-> bpf-filter.h:85: error: 'BPF_B' undeclared here (not in a function)
-> bpf-filter.h:89: error: 'BPF_JSET' undeclared here (not in a function)
-> bpf-filter.h:91: error: 'BPF_LDX' undeclared here (not in a function)
-> bpf-filter.h:91: error: 'BPF_MSH' undeclared here (not in a function)
-> bpf-filter.h:93: error: 'BPF_IND' undeclared here (not in a function)
->
-> I can see output/build/dhcpcd-5.6.7/bpf.c
-> has: #include "bpf-filter.h"
->
-> I can see the symbols are defined in several files.
-> ./output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include/linux/filter.h
-> ./output/toolchain/linux/include/linux/filter.h
-> ./output/toolchain/uClibc_dev/usr/include/linux/filter.h
-> ./output/toolchain/linux-2.6.38.8/include/linux/filter.h
-Which OS are you trying to build this on? bpf.c is compiled only on
-non-linux based-platforms (e.g. BSD).
-I have tried myself on my ubuntu machine and dhcpcd builds fine.
+On Mon, 4 Feb 2013 05:03:22 -0500, Zhang, Sonic wrote:
+> The 2012R2 buildroot Linux release for Blackfin
+> 
+> The new buildroot distribution was introduced in the 2012R1 Linux
+> release for BF60x in Aug. 2012. To help BF5xx customers to leverage
+> new features in the buildroot distribution, we are pleased to
+> announce the 2012R2 buildroot Linux release for both BF5xx and BF60x
+> families. Although the uClinux related issues in 2011R1 and former
+> releases are still supported via the Linux community on the ADI
+> Engineering Zone, the uClinux distribution for BF5xx is discontinued
+> since the 2012R2 release. Please upgrade to the buildroot
+> distribution in the 2012R2 release for latest features in Linux
+> kernel and middle wares. An overview and basic development guide for
+> the buildroot can be found at
+> http://docs.blackfin.uclinux.org/doku.php?id=buildroot_on_blackfin .
 
-Thanks
-Gilles.
+As a Buildroot developer, I'm glad to hear that Analog Devices is now
+using it as its official build system.
+
+However, I can only find regrettable that none of the Blackfin changes
+that you and your team has made have gotten upstream. This means that
+you're now working on a fork of Buildroot that has significantly
+derived from the original project. It means that it will be a pain for
+you and your team to upgrade to new Buildroot versions, and it removes
+the possibility for your users to easily benefit from all the package
+updates and new packages that are introduced regularly in the upstream
+Buildroot project (where the level of activity is very good).
+
+Could we find a way of getting your changes upstream, so that your
+Buildroot is closer to the upstream version?
+
+Also, your page
+http://docs.blackfin.uclinux.org/doku.php?id=buildroot:build-system is
+incorrect. It says "The buildroot build system is based on GNU
+configure and build system". This is completely false: it is based on
+the kernel kconfig configuration system, and GNU make.
+
+Then your Wiki page goes on with " The top level Makefile builds the
+GNU configuration utility under package/config at first". This is not
+true, it is *not* the GNU configuration utility, but the Linux kernel
+kconfig system.
+
+The Wiki page then describes a number of Config.in files, as if
+modifying them was necessary to change the configuration. This is
+obviously completely wrong: users should change the configuration using
+'make menuconfig', 'make xconfig, 'make gconfig', and certainly not by
+editing Config.in files, whose purpose is to *describe* configuration
+options, not to *define* the value of configuration options.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
