@@ -1,39 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  7 Mar 2013 10:18:22 +0100
-Subject: [Buildroot] [PATCH] autoconf: don't try to build Emacs files
-Message-ID: <1362647902-13742-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 7 Mar 2013 10:29:33 +0100
+Subject: [Buildroot] [PATCH] Revert "uClibc: port linuxthreads
+	errnopatch to 0.9.33.2"
+In-Reply-To: <87li9z617u.fsf@dell.be.48ers.dk>
+References: <1361455787-4846-1-git-send-email-gustavo@zacarias.com.ar><877gm1hhsm.fsf@dell.be.48ers.dk><CFB67F3F72BB450DAF0C0E10C27DFC00@JohanW7><51276813.7050604@zacarias.com.ar><9E7C87F7A6274E3EBBC491EE4122270E@JohanW7><87lia39c5g.fsf@dell.be.48ers.dk>
+ <5137806E.4020507@mind.be> <87li9z617u.fsf@dell.be.48ers.dk>
+Message-ID: <C128438637A54EB3922031EED15D1CAF@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building autoconf for the target, we already passed EMACS="no" to
-prevent autoconf from building Emacs mode files. But we weren't doing
-that when building autoconf for the host. This causes problems when
-'emacs' is not really emacs, but a sort of clone like Jove. So we also
-pass EMACS="no" when building host-autoconf to avoid autoconf
-./configure script from detecting emacs and then use it to build .elc
-files from .el source code.
+ 
+Hi
 
-Reported-by: Spielmann Werner <Werner.Spielmann@swarovski.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/autoconf/autoconf.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Maybe setting the default uClibc-0.9.33.config to use NTPL would already be something to consider.
 
-diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-index 0c36b66..daac1f2 100644
---- a/package/autoconf/autoconf.mk
-+++ b/package/autoconf/autoconf.mk
-@@ -15,7 +15,7 @@ AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
- 
- AUTOCONF_DEPENDENCIES = host-m4 perl
- 
--HOST_AUTOCONF_CONF_ENV = ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
-+HOST_AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
- 			ac_cv_prog_gnu_m4_gnu=no
- 
- HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
--- 
-1.7.9.5
+Johan
+
+-----Oorspronkelijk bericht-----
+Van: Peter Korsgaard [mailto:jacmet at gmail.com] Namens Peter Korsgaard
+Verzonden: donderdag 7 maart 2013 9:53
+Aan: Arnout Vandecappelle
+CC: Peter Korsgaard; Sagaert Johan; buildroot at busybox.net
+Onderwerp: Re: [PATCH] Revert "uClibc: port linuxthreads errnopatch to 0.9.33.2"
+
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+
+ >> The pthreads options are basically just there for legacy reasons (from  >> before NPTL existed) and presumably see very little
+testing these  >> days. We should aguable deprecate them.
+
+ Arnout>  That would be a good idea. For who really wants it, there is  Arnout> still the crosstool-NG toolchain.
+
+Yes. Unfortunately NPTL has a number of dependencies:
+
+                depends on !BR2_UCLIBC_VERSION_0_9_31
+                depends on !BR2_ARM_OABI
+                depends on !BR2_x86_i386
+                depends on !BR2_avr32
+                depends on !BR2_xtensa
+
+uClibc 0.9.31 and OABI are deprecated, so that's ok - but i386 (and generic, which is the same), avr32 and xtensa aren't.
+
+We could naturally mark pthread as
+
+depends on BR2_DEPRECATED if !(BR2_x86_i386 || BR2_avr32 || !BR2_xtensa)
+
+But that isn't very nice.
+
+--
+Bye, Peter Korsgaard
