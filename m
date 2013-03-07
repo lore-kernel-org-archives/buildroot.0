@@ -1,60 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  7 Mar 2013 21:18:35 +0100
-Subject: [Buildroot] [PATCH 07/32] jpeg: convert to a real package
+Date: Thu,  7 Mar 2013 21:18:36 +0100
+Subject: [Buildroot] [PATCH 08/32] qt5: base infrastructure
 In-Reply-To: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362687540-19440-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1362687540-19440-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-jpeg is a virtual package, but since it is listed in the dependencies
-of other packages, it should obey to all the normal make rules for
-packages. Notably, the jpeg-show-depends target is mandatory for the
-graph-depends script to work.
-
-Instead to implement such a make target manually, make jpeg a normal
-generic-package, except that it doesn't have any source.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/jpeg/jpeg.mk |   22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+ package/qt5/Config.in |   18 ++++++++++++++++++
+ package/qt5/qt5.mk    |    1 +
+ 2 files changed, 19 insertions(+)
+ create mode 100644 package/qt5/Config.in
+ create mode 100644 package/qt5/qt5.mk
 
-diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
-index 3caacaa..962908d 100644
---- a/package/jpeg/jpeg.mk
-+++ b/package/jpeg/jpeg.mk
-@@ -1,10 +1,24 @@
- #############################################################
- #
--# jpeg
-+# Virtual jpeg package
- #
- #############################################################
- 
--jpeg: $(if $(BR2_PACKAGE_JPEG_TURBO),jpeg-turbo,libjpeg)
-+JPEG_SOURCE =
- 
--host-jpeg: host-libjpeg
--host-jpeg-source: host-libjpeg-source
-+ifeq ($(BR2_PACKAGE_JPEG_TURBO),y)
-+JPEG_DEPENDENCIES += jpeg-turbo
-+endif
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+new file mode 100644
+index 0000000..0acb89e
+--- /dev/null
++++ b/package/qt5/Config.in
+@@ -0,0 +1,18 @@
++comment "Qt5 needs a toolchain with WCHAR, IPv6, thread and C++ support"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
 +
-+ifeq ($(BR2_PACKAGE_LIBJPEG),y)
-+JPEG_DEPENDENCIES += libjpeg
-+endif
++menuconfig BR2_PACKAGE_QT5
++	bool "Qt5"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
++	depends on BR2_INET_IPV6
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  This option enables the Qt5 framework. Sub-options allow to
++	  select which modules should be built.
 +
-+ifeq ($(JPEG_DEPENDENCIES),)
-+define JPEG_CONFIGURE_CMDS
-+	echo "No JPEG implementation defined. Configuration error"
-+	exit 1
-+endef
-+endif
++	  http://qt-project.org
 +
-+$(eval $(generic-package))
++if BR2_PACKAGE_QT5
++
++endif
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+new file mode 100644
+index 0000000..8b1a7ed
+--- /dev/null
++++ b/package/qt5/qt5.mk
+@@ -0,0 +1 @@
++include package/qt5/*/*.mk
 -- 
 1.7.9.5
