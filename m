@@ -1,249 +1,82 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu,  7 Mar 2013 08:17:21 +0100
-Subject: [Buildroot] [v3 2/3] luainterpreter: create virtual package
-In-Reply-To: <1362640642-9951-1-git-send-email-francois.perrad@gadz.org>
-References: <1362640642-9951-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1362640642-9951-2-git-send-email-francois.perrad@gadz.org>
+From: John Stile <john@stilen.com>
+Date: Wed, 06 Mar 2013 23:31:41 -0800
+Subject: [Buildroot] adding dhcpcd
+In-Reply-To: <CAKcgs2yMcJMbJ+aM3XSpV7TdFdrAgTzZx0v6DL6qHv0gWv2SKg@mail.gmail.com>
+References: <1362163072.19802.25.camel@genx.eng.msli.com>
+ <5130F7CA.6090203@zacarias.com.ar> <1362500477.20183.74.camel@genx>
+ <20130305194707.474ded42@skate> <1362592916.20183.152.camel@genx>
+ <20130306195844.2f8c14b6@skate> <1362599417.20183.159.camel@genx>
+ <069B5A25F9844945B625ADE7258AC94C061FF823@4rf-nz-orion.local.4rf.com>
+ <20130306210831.4fbe8150@skate> <1362602480.20183.169.camel@genx>
+ <20130306215414.23271383@skate> <1362603756.20183.170.camel@genx>
+ <20130306221441.03439842@skate> <1362604828.20183.172.camel@genx>
+ <20130306222902.2d736c06@skate> <1362610654.20183.176.camel@genx>
+ <CAKcgs2wB=t_PY9hSEc2137Axov5=s8ugLnktRkbWgXBaXsVq2g@mail.gmail.com>
+ <1362620699.20183.193.camel@genx>
+ <CAKcgs2yMcJMbJ+aM3XSpV7TdFdrAgTzZx0v6DL6qHv0gWv2SKg@mail.gmail.com>
+Message-ID: <1362641501.11556.12.camel@genx>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-luainterpreter is lua or luajit
+Hello Gilles,
+On Wed, 2013-03-06 at 20:51 -0800, Gilles Talis wrote:
+> Hi John,
+> 
+> > That did help.  Thank you.
+> > The build now fails because it can't find ifaddrs.h:
+> > ipv6.c:34:21: error: ifaddrs.h: No such file or directory
+> > net.c:56:21: error: ifaddrs.h: No such file or directory
+> >
+> > But I do see the file here:
+> > ./output/toolchain/uClibc-0.9.32/include/ifaddrs.h
+> >
+> > Is there a good way to specify the path in my .mk file?
+> Did you build your toolchain with Buildroot? In buildroot-2011.11,
+> this feature is not enabled in uClibc-0.9.32 configuration.
+> In order to enable it, you can follow these steps (if you built your
+> toolchain using buildroot):
+> 
+> 1. in  toolchain/uClibc/uClibc-0.9.32.config, replace
+> # UCLIBC_SUPPORT_AI_ADDRCONFIG is not set
+> with
+> UCLIBC_SUPPORT_AI_ADDRCONFIG=y
+> 
+> 2. run "make clean" then
+> 3. run "make". Toolchain will be rebuilt with ifaddrs.h
+> 
+> This should get you going.
+> Gilles.
+That did get me quite a bit farther.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/Config.in                                |    1 +
- package/lua-msgpack-native/Config.in             |    1 +
- package/lua-msgpack-native/lua-msgpack-native.mk |    2 +-
- package/lua/Config.in                            |    1 +
- package/luacjson/Config.in                       |    1 +
- package/luacjson/luacjson.mk                     |    2 +-
- package/luaexpat/Config.in                       |    1 +
- package/luaexpat/luaexpat.mk                     |    2 +-
- package/luafilesystem/Config.in                  |    1 +
- package/luafilesystem/luafilesystem.mk           |    2 +-
- package/luainterpreter/Config.in                 |    2 ++
- package/luainterpreter/luainterpreter.mk         |   17 +++++++++++++++++
- package/luajit/Config.in                         |    1 +
- package/luasocket/Config.in                      |    1 +
- package/luasocket/luasocket.mk                   |    2 +-
- package/rings/Config.in                          |    1 +
- package/rings/rings.mk                           |    2 +-
- 17 files changed, 34 insertions(+), 6 deletions(-)
- create mode 100644 package/luainterpreter/Config.in
- create mode 100644 package/luainterpreter/luainterpreter.mk
+... now it fails to find a few more symbols:
+bpf.c:32:21: error: net/bpf.h: No such file or directory
+In file included from bpf.c:49:
+bpf-filter.h:33: error: array type has incomplete element type
+bpf-filter.h:36: error: 'BPF_LD' undeclared here (not in a function)
+bpf-filter.h:36: error: 'BPF_H' undeclared here (not in a function)
+bpf-filter.h:36: error: 'BPF_ABS' undeclared here (not in a function)
+bpf-filter.h:37: error: 'BPF_JMP' undeclared here (not in a function)
+bpf-filter.h:37: error: 'BPF_JEQ' undeclared here (not in a function)
+bpf-filter.h:37: error: 'BPF_K' undeclared here (not in a function)
+bpf-filter.h:46: error: 'BPF_RET' undeclared here (not in a function)
+bpf-filter.h:78: error: array type has incomplete element type
+bpf-filter.h:85: error: 'BPF_B' undeclared here (not in a function)
+bpf-filter.h:89: error: 'BPF_JSET' undeclared here (not in a function)
+bpf-filter.h:91: error: 'BPF_LDX' undeclared here (not in a function)
+bpf-filter.h:91: error: 'BPF_MSH' undeclared here (not in a function)
+bpf-filter.h:93: error: 'BPF_IND' undeclared here (not in a function)
 
-diff --git a/package/Config.in b/package/Config.in
-index faee5c3..b76da36 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -292,6 +292,7 @@ source "package/haserl/Config.in"
- source "package/jamvm/Config.in"
- source "package/lua/Config.in"
- source "package/luajit/Config.in"
-+source "package/luainterpreter/Config.in"
- if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT
- menu "LUA libraries/modules"
- source "package/cgilua/Config.in"
-diff --git a/package/lua-msgpack-native/Config.in b/package/lua-msgpack-native/Config.in
-index 8894ee5..1014298 100644
---- a/package/lua-msgpack-native/Config.in
-+++ b/package/lua-msgpack-native/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUA_MSGPACK_NATIVE
- 	bool "lua-msgpack-native"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  This is a native, C language implementation of msgpack
- 	  (http://msgpack.org) library/protocol for Lua language
-diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
-index 97ce83c..7b9329b 100644
---- a/package/lua-msgpack-native/lua-msgpack-native.mk
-+++ b/package/lua-msgpack-native/lua-msgpack-native.mk
-@@ -5,7 +5,7 @@
- #############################################################
- LUA_MSGPACK_NATIVE_VERSION = g41cce91
- LUA_MSGPACK_NATIVE_SITE = http://github.com/kengonakajima/lua-msgpack-native/tarball/master
--LUA_MSGPACK_NATIVE_DEPENDENCIES = lua
-+LUA_MSGPACK_NATIVE_DEPENDENCIES = luainterpreter
- LUA_MSGPACK_NATIVE_LICENSE = Apache-2.0
- LUA_MSGPACK_NATIVE_LICENSE_FILES = LICENSE.txt
- 
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 4166730..cc62dee 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUA
- 	bool "lua"
-+	select BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  Lua is a powerful, fast, light-weight, embeddable scripting language.
- 
-diff --git a/package/luacjson/Config.in b/package/luacjson/Config.in
-index 8a5624f..d3665c0 100644
---- a/package/luacjson/Config.in
-+++ b/package/luacjson/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUACJSON
- 	bool "luacjson"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  The Lua CJSON module provides JSON support for Lua. It features:
- 	  - Fast, standards compliant encoding/parsing routines
-diff --git a/package/luacjson/luacjson.mk b/package/luacjson/luacjson.mk
-index 1f79d5d..69393e9 100644
---- a/package/luacjson/luacjson.mk
-+++ b/package/luacjson/luacjson.mk
-@@ -6,7 +6,7 @@
- LUACJSON_VERSION       = 2.1.0
- LUACJSON_SOURCE        = lua-cjson-$(LUACJSON_VERSION).tar.gz
- LUACJSON_SITE          = http://www.kyne.com.au/~mark/software/download
--LUACJSON_DEPENDENCIES  = lua
-+LUACJSON_DEPENDENCIES  = luainterpreter
- LUACJSON_LICENSE       = MIT
- LUACJSON_LICENSE_FILES = LICENSE
- 
-diff --git a/package/luaexpat/Config.in b/package/luaexpat/Config.in
-index 186c5c9..f8db318 100644
---- a/package/luaexpat/Config.in
-+++ b/package/luaexpat/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LUAEXPAT
- 	bool "luaexpat"
- 	select BR2_PACKAGE_EXPAT
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  LuaExpat is a SAX XML parser based on the Expat library.
- 
-diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
-index 2d4c517..7c46fda 100644
---- a/package/luaexpat/luaexpat.mk
-+++ b/package/luaexpat/luaexpat.mk
-@@ -6,7 +6,7 @@
- 
- LUAEXPAT_VERSION      = 1.2.0
- LUAEXPAT_SITE         = http://matthewwild.co.uk/projects/luaexpat
--LUAEXPAT_DEPENDENCIES = lua expat
-+LUAEXPAT_DEPENDENCIES = luainterpreter expat
- LUAEXPAT_LICENSE      = MIT
- 
- 
-diff --git a/package/luafilesystem/Config.in b/package/luafilesystem/Config.in
-index 7c130f8..489ebf3 100644
---- a/package/luafilesystem/Config.in
-+++ b/package/luafilesystem/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUAFILESYSTEM
- 	bool "luafilesystem"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  LuaFileSystem offers a portable way to access
- 	  the underlying directory structure and file attributes.
-diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
-index 8553212..6678af0 100644
---- a/package/luafilesystem/luafilesystem.mk
-+++ b/package/luafilesystem/luafilesystem.mk
-@@ -6,7 +6,7 @@
- 
- LUAFILESYSTEM_VERSION = 1.5.0
- LUAFILESYSTEM_SITE = http://github.com/downloads/keplerproject/luafilesystem
--LUAFILESYSTEM_DEPENDENCIES = lua
-+LUAFILESYSTEM_DEPENDENCIES = luainterpreter
- LUAFILESYSTEM_LICENSE = MIT
- 
- ifeq ($(BR2_LARGEFILE),y)
-diff --git a/package/luainterpreter/Config.in b/package/luainterpreter/Config.in
-new file mode 100644
-index 0000000..d85d7e8
---- /dev/null
-+++ b/package/luainterpreter/Config.in
-@@ -0,0 +1,2 @@
-+config BR2_PACKAGE_HAS_LUA_INTERPRETER
-+	bool
-diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
-new file mode 100644
-index 0000000..40c66aa
---- /dev/null
-+++ b/package/luainterpreter/luainterpreter.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# Virtual package for luainterpreter
-+#
-+#############################################################
-+
-+LUAINTERPRETER_SOURCE =
-+
-+ifeq ($(BR2_PACKAGE_LUA),y)
-+LUAINTERPRETER_DEPENDENCIES = lua
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+LUAINTERPRETER_DEPENDENCIES = luajit
-+endif
-+
-+$(eval $(generic-package))
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index 23b2650..97013e4 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUAJIT
- 	bool "luajit"
-+	select BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	# Luajit is only available for some target architectures, and
- 	# has some complexity wrt 32/64. See luajit.mk for details.
- 	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb
-diff --git a/package/luasocket/Config.in b/package/luasocket/Config.in
-index 4526303..619d649 100644
---- a/package/luasocket/Config.in
-+++ b/package/luasocket/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUASOCKET
- 	bool "luasocket"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  LuaSocket is the most comprehensive networking support library
- 	  for the Lua language.
-diff --git a/package/luasocket/luasocket.mk b/package/luasocket/luasocket.mk
-index 45fb9a3..7c1fc36 100644
---- a/package/luasocket/luasocket.mk
-+++ b/package/luasocket/luasocket.mk
-@@ -6,7 +6,7 @@
- 
- LUASOCKET_VERSION = 2.0.2
- LUASOCKET_SITE = http://luaforge.net/frs/download.php/2664
--LUASOCKET_DEPENDENCIES = lua
-+LUASOCKET_DEPENDENCIES = luainterpreter
- LUASOCKET_LICENSE = MIT
- LUASOCKET_LICENSE_FILES = LICENSE
- 
-diff --git a/package/rings/Config.in b/package/rings/Config.in
-index d1f1efe..b1d41f3 100644
---- a/package/rings/Config.in
-+++ b/package/rings/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_RINGS
- 	bool "rings"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  Provides a way to create new Lua states from within Lua.
- 
-diff --git a/package/rings/rings.mk b/package/rings/rings.mk
-index e2a2bd7..5823857 100644
---- a/package/rings/rings.mk
-+++ b/package/rings/rings.mk
-@@ -6,7 +6,7 @@
- 
- RINGS_VERSION = 1.2.3
- RINGS_SITE = http://github.com/downloads/keplerproject/rings
--RINGS_DEPENDENCIES = lua
-+RINGS_DEPENDENCIES = luainterpreter
- RINGS_LICENSE = MIT
- 
- define RINGS_BUILD_CMDS
--- 
-1.7.9.5
+I can see output/build/dhcpcd-5.6.7/bpf.c
+has: #include "bpf-filter.h"
+
+I can see the symbols are defined in several files.
+./output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include/linux/filter.h
+./output/toolchain/linux/include/linux/filter.h
+./output/toolchain/uClibc_dev/usr/include/linux/filter.h
+./output/toolchain/linux-2.6.38.8/include/linux/filter.h
+
+Are there more magical ideas to keep this compile going?
+Possibly another uClibc option?
