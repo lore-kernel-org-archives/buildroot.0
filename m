@@ -1,47 +1,62 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 07 Mar 2013 09:52:37 +0100
-Subject: [Buildroot] [PATCH] Revert "uClibc: port linuxthreads
-	errnopatch to 0.9.33.2"
-In-Reply-To: <5137806E.4020507@mind.be> (Arnout Vandecappelle's message of
- "Wed, 06 Mar 2013 18:44:14 +0100")
-References: <1361455787-4846-1-git-send-email-gustavo@zacarias.com.ar>
- <877gm1hhsm.fsf@dell.be.48ers.dk>
- <CFB67F3F72BB450DAF0C0E10C27DFC00@JohanW7>
- <51276813.7050604@zacarias.com.ar>
- <9E7C87F7A6274E3EBBC491EE4122270E@JohanW7>
- <87lia39c5g.fsf@dell.be.48ers.dk> <5137806E.4020507@mind.be>
-Message-ID: <87li9z617u.fsf@dell.be.48ers.dk>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Thu, 7 Mar 2013 00:53:03 -0800
+Subject: [Buildroot] adding dhcpcd
+In-Reply-To: <1362641501.11556.12.camel@genx>
+References: <1362163072.19802.25.camel@genx.eng.msli.com>
+ <5130F7CA.6090203@zacarias.com.ar>
+ <1362500477.20183.74.camel@genx> <20130305194707.474ded42@skate>
+ <1362592916.20183.152.camel@genx> <20130306195844.2f8c14b6@skate>
+ <1362599417.20183.159.camel@genx>
+ <069B5A25F9844945B625ADE7258AC94C061FF823@4rf-nz-orion.local.4rf.com>
+ <20130306210831.4fbe8150@skate> <1362602480.20183.169.camel@genx>
+ <20130306215414.23271383@skate> <1362603756.20183.170.camel@genx>
+ <20130306221441.03439842@skate> <1362604828.20183.172.camel@genx>
+ <20130306222902.2d736c06@skate> <1362610654.20183.176.camel@genx>
+ <CAKcgs2wB=t_PY9hSEc2137Axov5=s8ugLnktRkbWgXBaXsVq2g@mail.gmail.com>
+ <1362620699.20183.193.camel@genx>
+ <CAKcgs2yMcJMbJ+aM3XSpV7TdFdrAgTzZx0v6DL6qHv0gWv2SKg@mail.gmail.com>
+ <1362641501.11556.12.camel@genx>
+Message-ID: <CAKcgs2zvC-vxm78cqQYN4=kahsWkoNQ+yTToUGsz3SmbSA1rTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hi John,
 
- >> The pthreads options are basically just there for legacy reasons (from
- >> before NPTL existed) and presumably see very little testing these
- >> days. We should aguable deprecate them.
+2013/3/6 John Stile <john@stilen.com>:
+> That did get me quite a bit farther.
+>
+> ... now it fails to find a few more symbols:
+> bpf.c:32:21: error: net/bpf.h: No such file or directory
+> In file included from bpf.c:49:
+> bpf-filter.h:33: error: array type has incomplete element type
+> bpf-filter.h:36: error: 'BPF_LD' undeclared here (not in a function)
+> bpf-filter.h:36: error: 'BPF_H' undeclared here (not in a function)
+> bpf-filter.h:36: error: 'BPF_ABS' undeclared here (not in a function)
+> bpf-filter.h:37: error: 'BPF_JMP' undeclared here (not in a function)
+> bpf-filter.h:37: error: 'BPF_JEQ' undeclared here (not in a function)
+> bpf-filter.h:37: error: 'BPF_K' undeclared here (not in a function)
+> bpf-filter.h:46: error: 'BPF_RET' undeclared here (not in a function)
+> bpf-filter.h:78: error: array type has incomplete element type
+> bpf-filter.h:85: error: 'BPF_B' undeclared here (not in a function)
+> bpf-filter.h:89: error: 'BPF_JSET' undeclared here (not in a function)
+> bpf-filter.h:91: error: 'BPF_LDX' undeclared here (not in a function)
+> bpf-filter.h:91: error: 'BPF_MSH' undeclared here (not in a function)
+> bpf-filter.h:93: error: 'BPF_IND' undeclared here (not in a function)
+>
+> I can see output/build/dhcpcd-5.6.7/bpf.c
+> has: #include "bpf-filter.h"
+>
+> I can see the symbols are defined in several files.
+> ./output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include/linux/filter.h
+> ./output/toolchain/linux/include/linux/filter.h
+> ./output/toolchain/uClibc_dev/usr/include/linux/filter.h
+> ./output/toolchain/linux-2.6.38.8/include/linux/filter.h
+Which OS are you trying to build this on? bpf.c is compiled only on
+non-linux based-platforms (e.g. BSD).
+I have tried myself on my ubuntu machine and dhcpcd builds fine.
 
- Arnout>  That would be a good idea. For who really wants it, there is
- Arnout> still the crosstool-NG toolchain.
-
-Yes. Unfortunately NPTL has a number of dependencies:
-
-                depends on !BR2_UCLIBC_VERSION_0_9_31
-                depends on !BR2_ARM_OABI
-                depends on !BR2_x86_i386
-                depends on !BR2_avr32
-                depends on !BR2_xtensa
-
-uClibc 0.9.31 and OABI are deprecated, so that's ok - but i386 (and
-generic, which is the same), avr32 and xtensa aren't.
-
-We could naturally mark pthread as
-
-depends on BR2_DEPRECATED if !(BR2_x86_i386 || BR2_avr32 || !BR2_xtensa)
-
-But that isn't very nice.
-
--- 
-Bye, Peter Korsgaard
+Thanks
+Gilles.
