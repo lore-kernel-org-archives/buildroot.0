@@ -1,34 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Mar 2013 14:16:58 +0100
-Subject: [Buildroot] Problem with buildroot-2013.02 - ncurses
-In-Reply-To: <84EA0F7435E5F64C9B660453645DB90497AD52AA77@DSW350.wattens.swarovski.com>
-References: <84EA0F7435E5F64C9B660453645DB90497AD4DEF0D@DSW350.wattens.swarovski.com>
- <20130307093024.30cb7d23@skate>
- <84EA0F7435E5F64C9B660453645DB90497AD52A6B0@DSW350.wattens.swarovski.com>
- <20130307140818.0d48c197@skate>
- <84EA0F7435E5F64C9B660453645DB90497AD52AA50@DSW350.wattens.swarovski.com>
- <20130308131625.1bcf31c2@skate>
- <84EA0F7435E5F64C9B660453645DB90497AD52AA77@DSW350.wattens.swarovski.com>
-Message-ID: <20130308141658.4dbd20ea@skate>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Fri, 8 Mar 2013 14:21:53 +0100 (CET)
+Subject: [Buildroot] providing post-build scripts in buildroot
+In-Reply-To: <20130308131203.2a847c24@skate>
+Message-ID: <520542980.236150.1362748913901.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spielmann Werner,
+> Yes, the scripts included directly into the documentation. At the
+> last
+> Buildroot meeting, we've discussed the idea of extending the
+> documentation with more "Use cases descriptions", i.e how to use
+> Buildroot in practice for a project. I think examples of what can be
+> done in post-build scripts who fit quite well in this.
+> 
 
-On Fri, 8 Mar 2013 14:07:20 +0100, Spielmann Werner wrote:
+ok, thx
 
-> I have placed the output of make on pastebin.com with title "ncurses-make".
-
-Please give the direct URL. They are gazillions of people posting stuff
-on pastebin.com, and I will not go through the list of the last pastes
-to find yours.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+i'll get my scripts into an upstreamable shape and include them in the documentation
