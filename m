@@ -1,34 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Mar 2013 13:12:03 +0100
-Subject: [Buildroot] providing post-build scripts in buildroot
-In-Reply-To: <1787200172.233322.1362742213566.JavaMail.root@openwide.fr>
-References: <20130308115829.700879e1@skate>
- <1787200172.233322.1362742213566.JavaMail.root@openwide.fr>
-Message-ID: <20130308131203.2a847c24@skate>
+Date: Fri, 8 Mar 2013 13:16:25 +0100
+Subject: [Buildroot] Problem with buildroot-2013.02 - ncurses
+In-Reply-To: <84EA0F7435E5F64C9B660453645DB90497AD52AA50@DSW350.wattens.swarovski.com>
+References: <84EA0F7435E5F64C9B660453645DB90497AD4DEF0D@DSW350.wattens.swarovski.com>
+ <20130307093024.30cb7d23@skate>
+ <84EA0F7435E5F64C9B660453645DB90497AD52A6B0@DSW350.wattens.swarovski.com>
+ <20130307140818.0d48c197@skate>
+ <84EA0F7435E5F64C9B660453645DB90497AD52AA50@DSW350.wattens.swarovski.com>
+Message-ID: <20130308131625.1bcf31c2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jeremy Rosen,
+Dear Spielmann Werner,
 
-On Fri, 8 Mar 2013 12:30:13 +0100 (CET), Jeremy Rosen wrote:
+On Fri, 8 Mar 2013 12:29:10 +0100, Spielmann Werner wrote:
 
-> i'm not sure what you mean here... do you want the script mentionned
-> in the documentation ? in that case yes, that makes sense
-> 
-> do you want the script "directly included as text" in the doc ?
-> I am less convinced, unless you want to use them as examples rather
-> than tools provided by the poject....
+> After solving the being-not-emcacs problem of jove with the help of Thomas Petazzoni I ran into the next problem caused by ncurses:
 
-Yes, the scripts included directly into the documentation. At the last
-Buildroot meeting, we've discussed the idea of extending the
-documentation with more "Use cases descriptions", i.e how to use
-Buildroot in practice for a project. I think examples of what can be
-done in post-build scripts who fit quite well in this.
+Please post on pastebin the entire output of:
 
-Best regards,
+ make host-ncurses-dirclean
+ make
+
+Thanks,
 
 Thomas
 -- 
