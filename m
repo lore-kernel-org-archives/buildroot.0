@@ -1,35 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  8 Mar 2013 09:17:54 -0300
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 1.8.6
-Message-ID: <1362745074-7281-1-git-send-email-gustavo@zacarias.com.ar>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Fri, 08 Mar 2013 13:18:42 +0100
+Subject: [Buildroot] [PATCH 1/3] sunxi-tools: new host package
+In-Reply-To: <1362695964-20697-1-git-send-email-carlo.caione@gmail.com>
+References: <1362695964-20697-1-git-send-email-carlo.caione@gmail.com>
+Message-ID: <5139D722.3010006@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2013-2475, CVE-2013-2476, CVE-2013-2477, CVE-2013-2478,
-CVE-2013-2479, CVE-2013-2480, CVE-2013-2481, CVE-2013-2482,
-CVE-2013-2483, CVE-2013-2484, CVE-2013-2485, CVE-2013-2486,
-CVE-2013-2487, and CVE-2013-2488.
+On 03/07/2013 11:39 PM, Carlo Caione wrote:
+> Tools to help hacking Allwinner A10 (aka sun4i) based devices
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/wireshark/wireshark.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Submitted a patch for the same package earlier: 
+http://patchwork.ozlabs.org/patch/218616/
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index c9fb44b..5a4d8b5 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--WIRESHARK_VERSION = 1.8.5
-+WIRESHARK_VERSION = 1.8.6
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
--- 
-1.8.1.5
+> +SUNXI_TOOLS_VERSION = master
+> +SUNXI_TOOLS_SITE = git://github.com/linux-sunxi/sunxi-tools.git
+> +
+> +define HOST_SUNXI_TOOLS_BUILD_CMDS
+> +	$(MAKE) -C $(@D)
+> +endef
+
+Note that sunxi-tools (at least fel) has a dependency on libusb.
+Your package is assuming that is always present on the host system.
+
+
+Yours sincerely,
+
+Floris Bos
