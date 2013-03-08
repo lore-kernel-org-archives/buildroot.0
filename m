@@ -1,35 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Mar 2013 13:16:25 +0100
-Subject: [Buildroot] Problem with buildroot-2013.02 - ncurses
-In-Reply-To: <84EA0F7435E5F64C9B660453645DB90497AD52AA50@DSW350.wattens.swarovski.com>
-References: <84EA0F7435E5F64C9B660453645DB90497AD4DEF0D@DSW350.wattens.swarovski.com>
- <20130307093024.30cb7d23@skate>
- <84EA0F7435E5F64C9B660453645DB90497AD52A6B0@DSW350.wattens.swarovski.com>
- <20130307140818.0d48c197@skate>
- <84EA0F7435E5F64C9B660453645DB90497AD52AA50@DSW350.wattens.swarovski.com>
-Message-ID: <20130308131625.1bcf31c2@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  8 Mar 2013 09:17:54 -0300
+Subject: [Buildroot] [PATCH] wireshark: security bump to version 1.8.6
+Message-ID: <1362745074-7281-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spielmann Werner,
+Fixes CVE-2013-2475, CVE-2013-2476, CVE-2013-2477, CVE-2013-2478,
+CVE-2013-2479, CVE-2013-2480, CVE-2013-2481, CVE-2013-2482,
+CVE-2013-2483, CVE-2013-2484, CVE-2013-2485, CVE-2013-2486,
+CVE-2013-2487, and CVE-2013-2488.
 
-On Fri, 8 Mar 2013 12:29:10 +0100, Spielmann Werner wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/wireshark/wireshark.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> After solving the being-not-emcacs problem of jove with the help of Thomas Petazzoni I ran into the next problem caused by ncurses:
-
-Please post on pastebin the entire output of:
-
- make host-ncurses-dirclean
- make
-
-Thanks,
-
-Thomas
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index c9fb44b..5a4d8b5 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-WIRESHARK_VERSION = 1.8.5
++WIRESHARK_VERSION = 1.8.6
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.5
