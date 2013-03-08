@@ -1,38 +1,29 @@
-From: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
-Date: Fri,  8 Mar 2013 11:11:30 +0100
-Subject: [Buildroot] [PATCH 2/2] Fix PS1
-In-Reply-To: <1362737490-26398-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
-References: <1362737490-26398-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
-Message-ID: <1362737490-26398-2-git-send-email-xvikto03@stud.fit.vutbr.cz>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Fri, 8 Mar 2013 11:55:39 +0100 (CET)
+Subject: [Buildroot] providing post-build scripts in buildroot
+In-Reply-To: <1890922777.231675.1362739947331.JavaMail.root@openwide.fr>
+Message-ID: <1825560181.231790.1362740139485.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change prompt when switching to root by su.
+Hello everybody
 
-Signed-off-by: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
----
- system/skeleton/etc/profile |    6 +-----
- 1 files changed, 1 insertions(+), 5 deletions(-)
+I am currently creating a couple of post-build scripts for my own personal use that could 
+be usefull for the general audience...
 
-diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
-index 31d3180..7586f39 100644
---- a/system/skeleton/etc/profile
-+++ b/system/skeleton/etc/profile
-@@ -17,11 +17,7 @@ if [ "$PS1" ]; then
- 	alias ls='/bin/ls --color=tty -F'
- 	export LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.png=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:';
-     else
--      if [ "`id -u`" -eq 0 ]; then 
--	export PS1='# '
--      else
--	export PS1='$ '
--      fi
-+	export PS1='\$ '
-     fi
- 
-     export USER=`id -un`
--- 
-1.7.1
+* copy the local id_ras.pub to the target
+* generate the host key of the target during build time
+* copy the target's host key to the known_host of the user
+
+Since post-build is a new feature I was wondering if the project was opened to distributing that 
+sort of scripts somewhere in the support directory ( something like support/post-build)
+
+
+    Cordialement
+
+    J?r?my Rosen
+
+fight key loggers : write some perl using vim
