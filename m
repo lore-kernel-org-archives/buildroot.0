@@ -1,46 +1,26 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Fri, 8 Mar 2013 17:00:51 +0100 (CET)
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 8 Mar 2013 17:05:21 +0100
 Subject: [Buildroot] Q. How to use a custom kernel tree?
 In-Reply-To: <CAHUKsLJM76BFzZunyc=6Jc=UUo4NKq=07_BHNRpVZwYc5VkkRg@mail.gmail.com>
-Message-ID: <625541783.243878.1362758451151.JavaMail.root@openwide.fr>
+References: <CAHUKsLJM76BFzZunyc=6Jc=UUo4NKq=07_BHNRpVZwYc5VkkRg@mail.gmail.com>
+Message-ID: <20130308170521.3e8926ff@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-simplest is to set a local.mk containing
+Dear Chris Wilkinson,
 
-LINUX_OVERRIDE_SRCDIR=<path to your uncompressed source>
-
-
-this will use your directory as the sources.
-
-there is also an option to specify the config file.
-
-with those two you should be good
-
-
-
-    Cordialement
-
-    J?r?my Rosen
-
-fight key loggers : write some perl using vim
-
------ Mail original -----
-> 
-> 
-> 
-> 
-> 
+On Fri, 8 Mar 2013 10:47:42 -0500, Chris Wilkinson wrote:
 > I have a customized, patched kernel tree which I'd like BR to use.
 > 
-> I tar'd the custom kernel tree, selected custom tarball for the
-> kernel version and put the full URL/path to the archive in
+> I tar'd the custom kernel tree, selected custom tarball for the kernel
+> version and put the full URL/path to the archive in
 > BR2_LINUX_KERNEL_CUSTOM_TARBALL.
-> 
-> 
+
+Can you pastebin your .config file somewhere?
+
 > The custom tree also contains a defconfig for my arch. I set
 > BR2_LINUX_KERNEL_USE_DEFCONFIG=y and gave it's name in
 > BR2_LINUX_KERNEL_DEFCONFIG.
@@ -50,22 +30,21 @@ fight key loggers : write some perl using vim
 > >>> linux custom Extracting
 > cat /home/chrisw/embedded/buildroot/dl/linux-3.4-ss4000e.tar | tar
 > --strip-components=1 -C
-> /home/chrisw/embedded/buildroot/output/build/linux-custom -xf -
-> cat: /home/chrisw/embedded/buildroot/dl/linux-3.4-ss4000e.tar: No
-> such file or directory
+> /home/chrisw/embedded/buildroot/output/build/linux-custom  -xf -
+> cat: /home/chrisw/embedded/buildroot/dl/linux-3.4-ss4000e.tar: No such file
+> or directory
 > tar: This does not look like a tar archive
 > tar: Exiting with failure status due to previous errors
 > 
-> It appears that BR expects to find the custom tarball in <BR>/dl, not
-> the path I specified.
-> 
-> What should I do to have BR use my custom kernel tree and config?
-> 
-> 
-> 
-> --
-> -Chris-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> It appears that BR expects to find the custom tarball in <BR>/dl, not the
+> path I specified.
+
+Hum, let's see your .config first. Once we check that, we'll be able to
+tell you if it's a configuration problem  or indeed a Buildroot bug.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
