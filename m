@@ -1,56 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  8 Mar 2013 15:22:32 -0300
-Subject: [Buildroot] [PATCHv2] ser2net: bump to version 2.8
-Message-ID: <1362766952-24065-1-git-send-email-gustavo@zacarias.com.ar>
+From: Chris Wilkinson <winstonian36@gmail.com>
+Date: Fri, 8 Mar 2013 14:21:42 -0500
+Subject: [Buildroot] Q. How to use a custom kernel tree?
+In-Reply-To: <20130308171217.6299453a@skate>
+References: <20130308170703.66d093d7@skate>
+ <1083080215.244170.1362758977242.JavaMail.root@openwide.fr>
+ <20130308171217.6299453a@skate>
+Message-ID: <CAHUKsLLn8wnyqR70sMCRYoB+SeU=WrfL+3fBV3EDRUj=1F0vSg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump ser2net to version 2.8.
+Thanks for the tip. Where should this file be located? I read somewhere
+else that it is at the root of the BR sources directory but I don't see
+that in my BR tree.
 
-Exclude for nommu (uses fork).
-Version 2.7 also did, guess the autobuilders never caught it.
+My .config in in Pastebin here http://pastebin.com/6XDsAGzv
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ser2net/Config.in  | 4 ++++
- package/ser2net/ser2net.mk | 5 ++---
- 2 files changed, 6 insertions(+), 3 deletions(-)
+Chris
 
-diff --git a/package/ser2net/Config.in b/package/ser2net/Config.in
-index 7eb3a6a..e3b8870 100644
---- a/package/ser2net/Config.in
-+++ b/package/ser2net/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_SER2NET
- 	bool "ser2net"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_INET_IPV6
- 	help
- 	  Ser2net provides a way for a user to connect from a network
- 	  connection to a serial port..
- 
- 	  http://ser2net.sourceforge.net
- 
-+comment "ser2net requires a toolchain with IPV6 support"
-+	depends on !BR2_INET_IPV6
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index e4ad340..378dc06 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,9 +4,8 @@
- #
- #############################################################
- 
--SER2NET_VERSION = 2.7
--SER2NET_SOURCE = ser2net-$(SER2NET_VERSION).tar.gz
--SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net/$(SER2NET_VERSION)
-+SER2NET_VERSION = 2.8
-+SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPLv2+
- SER2NET_LICENSE_FILES = COPYING
- 
+
+On Fri, Mar 8, 2013 at 11:12 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Jeremy Rosen,
+>
+> On Fri, 8 Mar 2013 17:09:37 +0100 (CET), Jeremy Rosen wrote:
+> > ok, I misunderstood...
+> >
+> > I thought he was actively developing and that he did the tarbal because
+> > CUSTOM_TARBALL was the only way to override, not the other way round
+> >
+> > my bad...
+>
+> Can you please stop this horrible practice of top-posting?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
+
+
+
 -- 
-1.8.1.5
+-Chris-
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130308/f8ecc880/attachment.html>
