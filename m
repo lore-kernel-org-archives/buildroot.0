@@ -1,26 +1,37 @@
-From: W.P. <laurentp@wp.pl>
-Date: Fri, 08 Mar 2013 03:21:06 +0100
-Subject: [Buildroot] [RFD] IPv6 ....
-Message-ID: <51394B12.8090608@wp.pl>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  8 Mar 2013 04:22:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 6080] New: Git fetch caching
+Message-ID: <bug-6080-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi there,
-I am a bit ... with options in buildroot "require IPv6".
-And what if USER does NOT want to enable / build IPv6?
+https://bugs.busybox.net/show_bug.cgi?id=6080
 
-If he/she relies only on IPv4?
+           Summary: Git fetch caching
+           Product: buildroot
+           Version: 2012.08
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: acooks at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-In "regular" Linux distributions (like mine, Fedora 16), there is NO 
-easy way to get rid of IPv6. Except deleting all ipv6 related stuff from 
-/lib/modules....
 
-Why?
-What for?
+When using the Custom Git tree kernel option, changes to the git repository are
+not detected by buildroot. Even a 'make clean' doesn't remove the stale cached
+sources. 
 
-I know advantages of IPv6, but what "regular ISP" provides this?
+Please provide a way to use a local git repo directly, without any caching.
 
-W.P.
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
