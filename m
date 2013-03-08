@@ -1,74 +1,61 @@
 From: Carlo Caione <carlo.caione@gmail.com>
-Date: Fri,  8 Mar 2013 07:22:54 +0100
-Subject: [Buildroot] [PATCH 1/3] sunxi-tools: new host package
-Message-ID: <1362723776-23330-1-git-send-email-carlo.caione@gmail.com>
+Date: Fri,  8 Mar 2013 07:22:55 +0100
+Subject: [Buildroot] [PATCH 2/3] cubieboard: config file
+In-Reply-To: <1362723776-23330-1-git-send-email-carlo.caione@gmail.com>
+References: <1362723776-23330-1-git-send-email-carlo.caione@gmail.com>
+Message-ID: <1362723776-23330-2-git-send-email-carlo.caione@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tools to help hacking Allwinner A10 (aka sun4i) based devices
+Configuration file for cubieboard (http://cubieboard.org/)
 
 Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
 ---
- package/Config.in.host             |  1 +
- package/sunxi-tools/Config.in.host |  7 +++++++
- package/sunxi-tools/sunxi-tools.mk | 20 ++++++++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/sunxi-tools/Config.in.host
- create mode 100644 package/sunxi-tools/sunxi-tools.mk
+ configs/cubieboard_defconfig | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 configs/cubieboard_defconfig
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 79050f2..b2b9fbd 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -5,6 +5,7 @@ source "package/lpc3250loader/Config.in.host"
- source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
- source "package/sam-ba/Config.in.host"
-+source "package/sunxi-tools/Config.in.host"
- source "package/uboot-tools/Config.in.host"
- 
- endmenu
-diff --git a/package/sunxi-tools/Config.in.host b/package/sunxi-tools/Config.in.host
+diff --git a/configs/cubieboard_defconfig b/configs/cubieboard_defconfig
 new file mode 100644
-index 0000000..71e0418
+index 0000000..42d8eb3
 --- /dev/null
-+++ b/package/sunxi-tools/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_SUNXI_TOOLS
-+	bool "host sunxi-tools"
-+	help
-+          Tools to help hacking Allwinner A10 (aka sun4i) based devices and
-+	  possibly it's successors
++++ b/configs/cubieboard_defconfig
+@@ -0,0 +1,33 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a8=y
 +
-+	  https://github.com/linux-sunxi/sunxi-tools
-diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
-new file mode 100644
-index 0000000..60acff5
---- /dev/null
-+++ b/package/sunxi-tools/sunxi-tools.mk
-@@ -0,0 +1,20 @@
-+#############################################################
-+#
-+# sunxi-tools
-+#
-+#############################################################
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="sun4i"
++BR2_TARGET_GENERIC_ISSUE="Welcome to use sun4i"
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubieboard/post-build.sh"
 +
-+SUNXI_TOOLS_VERSION = master
-+SUNXI_TOOLS_SITE = git://github.com/linux-sunxi/sunxi-tools.git
++# Additional tools
++BR2_PACKAGE_HOST_SUNXI_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 +
-+define HOST_SUNXI_TOOLS_BUILD_CMDS
-+	$(MAKE) -C $(@D)
-+endef
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="https://github.com/linux-sunxi/linux-sunxi.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="sunxi-3.4"
++BR2_LINUX_KERNEL_VERSION="sunxi-3.4"
++BR2_LINUX_KERNEL_DEFCONFIG="sun4i"
 +
-+define HOST_SUNXI_TOOLS_INSTALL_CMDS
-+	for f in fexc bin2fex fex2bin bootinfo fel pio nand-part ; do \
-+		install -m 755 -D $(@D)/$$f $(HOST_DIR)/usr/bin/$$f ; \
-+	done
-+endef
-+
-+$(eval $(host-generic-package))
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="cubieboard"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_VERSION="sunxi"
++BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="https://github.com/linux-sunxi/u-boot-sunxi.git"
++BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="sunxi"
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
 -- 
 1.8.1.5
