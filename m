@@ -1,55 +1,24 @@
-From: Chris Wilkinson <winstonian36@gmail.com>
-Date: Fri, 8 Mar 2013 14:21:42 -0500
-Subject: [Buildroot] Q. How to use a custom kernel tree?
-In-Reply-To: <20130308171217.6299453a@skate>
-References: <20130308170703.66d093d7@skate>
- <1083080215.244170.1362758977242.JavaMail.root@openwide.fr>
- <20130308171217.6299453a@skate>
-Message-ID: <CAHUKsLLn8wnyqR70sMCRYoB+SeU=WrfL+3fBV3EDRUj=1F0vSg@mail.gmail.com>
+From: Carlo Caione <carlo.caione@gmail.com>
+Date: Fri, 8 Mar 2013 21:39:32 +0100
+Subject: [Buildroot] [PATCH 1/3] sunxi-tools: new host package
+In-Reply-To: <5139D722.3010006@je-eigen-domein.nl>
+References: <1362695964-20697-1-git-send-email-carlo.caione@gmail.com>
+ <5139D722.3010006@je-eigen-domein.nl>
+Message-ID: <CAOQ7t2byEU6VBOOMzj+uVy+WBNMF7LDcc-nMkFvSi7apLDxvsw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the tip. Where should this file be located? I read somewhere
-else that it is at the root of the BR sources directory but I don't see
-that in my BR tree.
-
-My .config in in Pastebin here http://pastebin.com/6XDsAGzv
-
-Chris
-
-
-On Fri, Mar 8, 2013 at 11:12 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Dear Jeremy Rosen,
+On Fri, Mar 8, 2013 at 1:18 PM, Floris Bos <bos@je-eigen-domein.nl> wrote:
+> On 03/07/2013 11:39 PM, Carlo Caione wrote:
+>>
+>> Tools to help hacking Allwinner A10 (aka sun4i) based devices
 >
-> On Fri, 8 Mar 2013 17:09:37 +0100 (CET), Jeremy Rosen wrote:
-> > ok, I misunderstood...
-> >
-> > I thought he was actively developing and that he did the tarbal because
-> > CUSTOM_TARBALL was the only way to override, not the other way round
-> >
-> > my bad...
 >
-> Can you please stop this horrible practice of top-posting?
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
->
+> Submitted a patch for the same package earlier:
+> http://patchwork.ozlabs.org/patch/218616/
 
-
-
--- 
--Chris-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130308/f8ecc880/attachment.html>
+Ups, I didn't see it. Sorry for the overlapping.
+I'm going to use your package :)
