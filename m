@@ -1,29 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Mar 2013 17:12:17 +0100
-Subject: [Buildroot] Q. How to use a custom kernel tree?
-In-Reply-To: <1083080215.244170.1362758977242.JavaMail.root@openwide.fr>
-References: <20130308170703.66d093d7@skate>
- <1083080215.244170.1362758977242.JavaMail.root@openwide.fr>
-Message-ID: <20130308171217.6299453a@skate>
+Date: Fri, 8 Mar 2013 17:32:21 +0100
+Subject: [Buildroot] [uclinux-dist-devel] [Announcement] The 2012R2
+ buildroot Linux release for Blackfin
+In-Reply-To: <CAAXf6LVArO=ttzj1zkz9wkxyRWkUMOU3OJQaQ0bPBykq4gt8BA@mail.gmail.com>
+References: <DB904C5425BA6F4E8424B3B51A1414D173F6FB6E58@NWD2CMBX1.ad.analog.com>
+ <20130307095939.1316014e@skate>
+ <DB904C5425BA6F4E8424B3B51A1414D173FF40BA46@NWD2CMBX1.ad.analog.com>
+ <20130307121430.2780392a@skate>
+ <DB904C5425BA6F4E8424B3B51A1414D173FF40BDC3@NWD2CMBX1.ad.analog.com>
+ <20130308093352.73ab92e5@skate>
+ <CAAXf6LVArO=ttzj1zkz9wkxyRWkUMOU3OJQaQ0bPBykq4gt8BA@mail.gmail.com>
+Message-ID: <20130308173221.50ef6b30@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jeremy Rosen,
+Dear Thomas De Schampheleire,
 
-On Fri, 8 Mar 2013 17:09:37 +0100 (CET), Jeremy Rosen wrote:
-> ok, I misunderstood...
+On Fri, 8 Mar 2013 15:52:12 +0100, Thomas De Schampheleire wrote:
+
+> > That's also why I was proposing you to get started with all the package
+> > changes first. They are a lot easier to handle, less intrusive, and
+> > therefore easier to get merged.
 > 
-> I thought he was actively developing and that he did the tarbal because
-> CUSTOM_TARBALL was the only way to override, not the other way round
-> 
-> my bad...
+> I fully agree with Thomas P. that integrating the Blackfin changes
+> into mainline buildroot would be beneficial for both the buildroot as
+> the Blackfin community. As Thomas indicated, the buildroot community
+> is now more alive than ever, and I'm sure that a new series of
+> buildroot patches from the Blackfin community will not go unnoticed,
+> especially now that you're in the middle of our radar ;-)
 
-Can you please stop this horrible practice of top-posting?
+I agree. One example of a good thing you will benefit from being part
+of the wider Buildroot community is for example our autobuilder
+infrastructure. It tests which packages are building properly or not
+building properly, and ultimately helps in improving Buildroot's
+quality and therefore the user experience. Our autobuilders are already
+regularly building Blackfin configurations.
 
-Thanks!
+> By the way: I don't see Sonic's replies appearing on the buildroot
+> mailing list. Is it possible to keep that list in copy?
+
+Sonic e-mails have the Buildroot list in Cc. I'm not sure why they
+don't make it to the list. Probably because he is posting with his
+@analog.com address, while he is subscribed with an @gmail.com address
+on the Buildroot list.
+
+Best regards,
 
 Thomas
 -- 
