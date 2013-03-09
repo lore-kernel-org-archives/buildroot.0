@@ -1,44 +1,41 @@
-From: Marc Schultz <marcschultz27@gmail.com>
-Date: Sat, 9 Mar 2013 12:37:12 +0100
-Subject: [Buildroot] Fwd: Google doesn't help Buildroot newcomers really much
-In-Reply-To: <CAMFO431gatpdNG5oEcAQqCWVLs6St6-0P1SBA3h3SiTimk5tvg@mail.gmail.com>
-References: <CAMFO431gatpdNG5oEcAQqCWVLs6St6-0P1SBA3h3SiTimk5tvg@mail.gmail.com>
-Message-ID: <CAMFO433vmKwUuc6ap2654izNBpchHu7_6wzG10MisbGO9rvF6w@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 9 Mar 2013 12:07:35 +0100
+Subject: [Buildroot] [git commit] autoconf: don't try to build Emacs files
+Message-ID: <20130309114337.4A19A9AF46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Buildroot team!
+commit: http://git.buildroot.net/buildroot/commit/?id=d2be9be63d2b1120c4ec0c3c445075a7311ef523
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'd like to make buildroot running on a similar board of BF537-STAMP. Now I
-want to change the sound device to a Cirrus Logic CS4270, but after booting
-the uImage and loading as much sound modules as I can (e.g. snd-soc-cs4270)
-"aslactl init" says that there is no sound card. Do I have to modify the
-board file "linux/linux-kernel/arch/<my_arch>/mach-<board_arch>/<board>.c"
-and if yes, is there a good workflow for that to prevent
-hard-to-debug-mistakes?
+When building autoconf for the target, we already passed EMACS="no" to
+prevent autoconf from building Emacs mode files. But we weren't doing
+that when building autoconf for the host. This causes problems when
+'emacs' is not really emacs, but a sort of clone like Jove. So we also
+pass EMACS="no" when building host-autoconf to avoid autoconf
+./configure script from detecting emacs and then use it to build .elc
+files from .el source code.
 
-The ALSA-Project
-website<http://www.alsa-project.org/main/index.php/Matrix%3aModule-cs4270>
-shows
-a specific module named "snd-cs4270". Can I get this module installed by
-buildroot or do I have to download and integrate it into my target hardware
-on my own?
+Reported-by: Spielmann Werner <Werner.Spielmann@swarovski.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/autoconf/autoconf.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I'm using the buildroot revision from
-Blackfin<http://docs.blackfin.uclinux.org/doku.php?id=buildroot:build-system:build_a_target>
-(2012.08)
-and I get this thing booting on my target hardware. Now I wanted to try the
-newest Buildroot revision (2013.05) from your website, but I always get a
-"No rule to make target `uImage'.  Stop." compiling error. Any idea what I
-might have done wrong?
-
-Thanks for your help!
-
-Regards,
-Marc Schultz
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130309/5e631ae8/attachment.html>
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index 0c36b66..daac1f2 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -15,7 +15,7 @@ AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
+ 
+ AUTOCONF_DEPENDENCIES = host-m4 perl
+ 
+-HOST_AUTOCONF_CONF_ENV = ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
++HOST_AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
+ 			ac_cv_prog_gnu_m4_gnu=no
+ 
+ HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
