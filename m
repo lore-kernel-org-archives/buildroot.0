@@ -1,32 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 9 Mar 2013 21:20:22 +0100
-Subject: [Buildroot] [git commit] gettext: bump to version 0.18.2.1
-Message-ID: <20130309202159.8ACCF9AF55@busybox.osuosl.org>
+Date: Sat, 9 Mar 2013 21:22:04 +0100
+Subject: [Buildroot] [git commit] package/tvheadend: fix startup script
+Message-ID: <20130309202200.00D269AF55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58e2d30b4d2ea3fcb752f71c20b150dbeb333723
+commit: http://git.buildroot.net/buildroot/commit/?id=f46682109b4cb01d91cbbeb6f269f084058995ee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Obvious fix to the startup script: 'restart' is 'stop+start',
+not 'stop+stop'.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gettext/gettext.mk |    2 +-
+ package/tvheadend/S99tvheadend |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index 204af10..d374050 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--GETTEXT_VERSION = 0.18.2
-+GETTEXT_VERSION = 0.18.2.1
- GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
- GETTEXT_INSTALL_STAGING = YES
- GETTEXT_LICENSE = GPLv2+
+diff --git a/package/tvheadend/S99tvheadend b/package/tvheadend/S99tvheadend
+index 407b873..c29e32d 100644
+--- a/package/tvheadend/S99tvheadend
++++ b/package/tvheadend/S99tvheadend
+@@ -43,7 +43,7 @@ case "$1" in
+     restart|force-reload)
+         "${0}" stop
+         sleep 2
+-        "${0}" stop
++        "${0}" start
+         ;;
+     *)
+         echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
