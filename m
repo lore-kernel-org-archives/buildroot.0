@@ -1,48 +1,39 @@
-From: Ezequiel Garcia <elezegarcia@gmail.com>
-Date: Sat, 9 Mar 2013 09:26:36 -0300
-Subject: [Buildroot] Regarding /dev management
-Message-ID: <CALF0-+WdzsqUdQyiwagDELkqx5HhdxEe+_LwKpwgs-LVosLd0g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat,  9 Mar 2013 15:02:57 +0100
+Subject: [Buildroot] [PATCH 0/3] Misc improvements and fixes to 'icu' package
+Message-ID: <1362837781-27071-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+Hello,
 
-Yesterday I spent a couple hours trying to build my first buildroot fs.
-In particular, I wanted to use devtmpfs
-(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS)
-but found that /dev is not mounted by default in skeleton fs scripts,
-it should be mounted in inittab before some other things.
+This set of 3 patches make a few improvements and fixes to the icu
+package.
 
-After some hacking in skeleton files, I managed to get the thing working.
+First patch workarounds an internal compiler error that occurs with
+certain toolchains when building icu.
 
-Did I miss something? Is this the expected behavior?
-
-Notice that I'm using the cpio image output and using the rootfs as in
-initramfs.
-In this case, CONFIG_DEVTMPFS=y and CONFIG_DEVTMPFS_MOUNT=y
-kernel options do not matter, because... (quoting Kconfig)
-
-""This will instruct the kernel to automatically mount the
-devtmpfs filesystem at /dev, directly after the kernel has
-mounted the root filesystem. The behavior can be overridden
-with the commandline parameter: devtmpfs.mount=0|1.
-
-This option does not affect initramfs based booting, here
-the devtmpfs filesystem always needs to be mounted manually
-after the roots is mounted.""
-
-Perhaps we can add some hack to add:
-
-::sysinit:/bin/mount -t devtmpfs devtmpfs /dev
-
-to skeleton when BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y.
-
-However, being new to buildroot, perhaps I'm speaking non-sense and the
-developer is expected to use its own custom skeleton in this case.
+The second and third patch make nice build time improvements when
+building the icu package.
 
 Thanks,
+
+Thomas
+
+Thomas Petazzoni (3):
+  icu: workaround toolchain bugs
+  icu: don't build object files twice
+  icu: speed up host build
+
+ .../icu/icu-dont-build-static-dynamic-twice.patch  |   37 ++++++++++++++++++++
+ package/icu/icu-workaround-toolchain-bugs.patch    |   36 +++++++++++++++++++
+ package/icu/icu.mk                                 |    7 +++-
+ 3 files changed, 79 insertions(+), 1 deletion(-)
+ create mode 100644 package/icu/icu-dont-build-static-dynamic-twice.patch
+ create mode 100644 package/icu/icu-workaround-toolchain-bugs.patch
+
 -- 
-    Ezequiel
+1.7.9.5
