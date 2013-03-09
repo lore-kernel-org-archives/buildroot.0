@@ -1,53 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 9 Mar 2013 10:13:25 +0100
-Subject: [Buildroot] moving package divine from autotools-package to
- generic-package
-In-Reply-To: <513A5360.8080707@googlemail.com>
-References: <513A5360.8080707@googlemail.com>
-Message-ID: <20130309101325.7b8352e8@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 09 Mar 2013 12:09:40 +0100
+Subject: [Buildroot] [PATCH] autoconf: don't try to build Emacs files
+In-Reply-To: <1362647902-13742-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 7 Mar 2013 10:18:22 +0100")
+References: <1362647902-13742-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87a9qc4yob.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Carsten Schoenert,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Fri, 08 Mar 2013 22:08:48 +0100, Carsten Schoenert wrote:
+ Thomas> When building autoconf for the target, we already passed EMACS="no" to
+ Thomas> prevent autoconf from building Emacs mode files. But we weren't doing
+ Thomas> that when building autoconf for the host. This causes problems when
+ Thomas> 'emacs' is not really emacs, but a sort of clone like Jove. So we also
+ Thomas> pass EMACS="no" when building host-autoconf to avoid autoconf
+ Thomas> ./configure script from detecting emacs and then use it to build .elc
+ Thomas> files from .el source code.
 
-> But, the archive on directfb.org is broken, inside the archive in the
-> lib/ directory the Header idivine.h is missing. Inside the Git Repo
-> everything is fine. I wrote up the maintainer and describe the issue but
-> until now no response from there.
-> So I tried to change package divine from a autotools-package to a
-> generic package because the Git Repo just shipped a file autogen.sh for
-> package preparation.
+Committed, thanks.
 
-No, no, it should continue to be an autotools-package. It has a
-configure.in, and Makefile.am, it is autotools based, so it should
-remain an autotools-package.
-
-Now, since you're getting it from git instead of a tarball, the
-configure script and Makefile.in are not pre-generated, so we have to
-get them generated.
-
-Can you just try to do:
-
-DIVINE_AUTORECONF = YES
-
-in the package recipe?
-
-Looking at what the autogen.sh script does, I think our autoreconf
-logic should work. Otherwise, we will just add a hook in the package
-recipe in order to call autogen.
-
-But clearly, converting to generic-package is the wrong way to go.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
