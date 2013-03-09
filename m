@@ -1,42 +1,78 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 9 Mar 2013 21:18:29 +0100
-Subject: [Buildroot] [git commit] libglib2: use system pcre when available
-Message-ID: <20130309201910.2A4329AF33@busybox.osuosl.org>
+Date: Sat, 9 Mar 2013 21:06:46 +0100
+Subject: [Buildroot] [git commit] pcre: always enable the 8-bits version
+Message-ID: <20130309201909.7CE8F9AF41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fe192908a4e3195b6f724310fe83fadaf18b66e7
+commit: http://git.buildroot.net/buildroot/commit/?id=eaf42394208b2cbcb73f374e39ddb4ee7b8aee60
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-By default, glib builds its own internal copy of the pcre library, but
-it also allows to use the one available from the system. Use this
-possibility when pcre is already selected in the Buildroot
-configuration.
+Commit 7154798a461a8b2c (pcre: add support for 16 bits and 32 bits
+variants), added in preparation to the introduction of the Qt5
+packages, could break other packages that use pcre.
+
+Even though by default the pcre 8 bits library is selected if no other
+variant is selected, a randpackageconfig, or an user, could
+potentially enable the 16 bits variant even if a package requires the
+8 bits variant.
+
+This has caused a number of build breakage on packages like ngrep,
+cegui, nmap and others in the autobuilders.
+
+In older to solve this, we simply unconditionally build the 8-bits
+variant. Since each variant is only ~90k in size, it's probably not
+worth the effort giving the possibility of building the 16 bits
+variant only.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libglib2/libglib2.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/pcre/Config.in |   12 +++---------
+ package/pcre/pcre.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index b108b89..4ca6ca3 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -81,6 +81,13 @@ LIBGLIB2_CONF_OPT += --with-libiconv=gnu
- LIBGLIB2_DEPENDENCIES += libiconv
+diff --git a/package/pcre/Config.in b/package/pcre/Config.in
+index 5d16e6d..dc92274 100644
+--- a/package/pcre/Config.in
++++ b/package/pcre/Config.in
+@@ -1,20 +1,14 @@
+ config BR2_PACKAGE_PCRE
+ 	bool "pcre"
+-	# Ensure at least the default 8-bit library is enabled.
+-	select BR2_PACKAGE_PCRE_8 if \
+-	       (!BR2_PACKAGE_PCRE_16 && !BR2_PACKAGE_PCRE_32)
+ 	help
+-	  Perl Compatible Regular Expressions
++	  Perl Compatible Regular Expressions. By default, only the
++	  8-bits libpcre is built. To get the 16-bits and/or 32-bits
++	  variants libpcre16/libpcre32, use the package sub-options.
+ 
+ 	  http://www.pcre.org/
+ 
+ if BR2_PACKAGE_PCRE
+ 
+-config BR2_PACKAGE_PCRE_8
+-	bool "8-bit pcre"
+-	help
+-	  This option builds the 8-bits pcre library, i.e 'libpcre'
+-
+ config BR2_PACKAGE_PCRE_16
+ 	bool "16-bit pcre"
+ 	help
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index b1339fb..745309f 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -16,7 +16,7 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ PCRE_CONF_OPT = --disable-cpp
  endif
  
-+ifeq ($(BR2_PACKAGE_PCRE),y)
-+LIBGLIB2_CONF_OPT += --with-pcre=system
-+LIBGLIB2_DEPENDENCIES += pcre
-+else
-+LIBGLIB2_CONF_OPT += --with-pcre=internal
-+endif
-+
- define LIBGLIB2_REMOVE_DEV_FILES
- 	rm -rf $(TARGET_DIR)/usr/lib/glib-2.0
- 	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gettext
+-PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_8),--enable-pcre8,--disable-pcre8)
++PCRE_CONF_OPT += --enable-pcre8
+ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
+ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
+ 
