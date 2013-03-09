@@ -1,75 +1,48 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 9 Mar 2013 12:12:14 +0100
-Subject: [Buildroot] [git commit] x11r7/xcb-util-wm: new package
-Message-ID: <20130309114337.9212D9AF42@busybox.osuosl.org>
+From: Ezequiel Garcia <elezegarcia@gmail.com>
+Date: Sat, 9 Mar 2013 09:26:36 -0300
+Subject: [Buildroot] Regarding /dev management
+Message-ID: <CALF0-+WdzsqUdQyiwagDELkqx5HhdxEe+_LwKpwgs-LVosLd0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=046a908b01e26cb90572e36260d7cd3674e61ff5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi everyone,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/x11r7/Config.in                  |    1 +
- package/x11r7/xcb-util-wm/Config.in      |   16 ++++++++++++++++
- package/x11r7/xcb-util-wm/xcb-util-wm.mk |   14 ++++++++++++++
- 3 files changed, 31 insertions(+), 0 deletions(-)
+Yesterday I spent a couple hours trying to build my first buildroot fs.
+In particular, I wanted to use devtmpfs
+(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS)
+but found that /dev is not mounted by default in skeleton fs scripts,
+it should be mounted in inittab before some other things.
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 706574c..2abd593 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -16,6 +16,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/mesa3d/Config.in
- 		source package/x11r7/xcb-util/Config.in
- 		source package/x11r7/xcb-util-keysyms/Config.in
-+		source package/x11r7/xcb-util-wm/Config.in
- 		source package/x11r7/xlib_libFS/Config.in
- 		source package/x11r7/xlib_libICE/Config.in
- 		source package/x11r7/xlib_libSM/Config.in
-diff --git a/package/x11r7/xcb-util-wm/Config.in b/package/x11r7/xcb-util-wm/Config.in
-new file mode 100644
-index 0000000..5e7d94e
---- /dev/null
-+++ b/package/x11r7/xcb-util-wm/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_XCB_UTIL_WM
-+	bool "xcb-util-wm"
-+	select BR2_PACKAGE_LIBXCB
-+	help
-+	  The XCB util modules provides a number of libraries which sit on top
-+	  of libxcb, the core X protocol library, and some of the extension
-+	  libraries. These experimental libraries provide convenience functions
-+	  and interfaces which make the raw X protocol more usable. Some of the
-+	  libraries also provide client-side code which is not strictly part of
-+	  the X protocol but which have traditionally been provided by Xlib.
-+
-+	  XCB util-wm module provides the following libraries:
-+	    - ewmh: Both client and window-manager helpers for EWMH.
-+	    - icccm: Both client and window-manager helpers for ICCCM.
-+
-+	  http://xcb.freedesktop.org/
-diff --git a/package/x11r7/xcb-util-wm/xcb-util-wm.mk b/package/x11r7/xcb-util-wm/xcb-util-wm.mk
-new file mode 100644
-index 0000000..0338b85
---- /dev/null
-+++ b/package/x11r7/xcb-util-wm/xcb-util-wm.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# xcb-util-wm
-+#
-+#############################################################
-+
-+XCB_UTIL_WM_VERSION = 0.3.9
-+XCB_UTIL_WM_SITE = http://xcb.freedesktop.org/dist/
-+XCB_UTIL_WM_SOURCE = xcb-util-wm-$(XCB_UTIL_WM_VERSION).tar.bz2
-+XCB_UTIL_WM_INSTALL_STAGING = YES
-+XCB_UTIL_WM_LICENSE = MIT
-+XCB_UTIL_WM_DEPENDENCIES = libxcb
-+
-+$(eval $(autotools-package))
+After some hacking in skeleton files, I managed to get the thing working.
+
+Did I miss something? Is this the expected behavior?
+
+Notice that I'm using the cpio image output and using the rootfs as in
+initramfs.
+In this case, CONFIG_DEVTMPFS=y and CONFIG_DEVTMPFS_MOUNT=y
+kernel options do not matter, because... (quoting Kconfig)
+
+""This will instruct the kernel to automatically mount the
+devtmpfs filesystem at /dev, directly after the kernel has
+mounted the root filesystem. The behavior can be overridden
+with the commandline parameter: devtmpfs.mount=0|1.
+
+This option does not affect initramfs based booting, here
+the devtmpfs filesystem always needs to be mounted manually
+after the roots is mounted.""
+
+Perhaps we can add some hack to add:
+
+::sysinit:/bin/mount -t devtmpfs devtmpfs /dev
+
+to skeleton when BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y.
+
+However, being new to buildroot, perhaps I'm speaking non-sense and the
+developer is expected to use its own custom skeleton in this case.
+
+Thanks,
+-- 
+    Ezequiel
