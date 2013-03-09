@@ -1,41 +1,74 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 9 Mar 2013 12:07:35 +0100
-Subject: [Buildroot] [git commit] autoconf: don't try to build Emacs files
-Message-ID: <20130309114337.4A19A9AF46@busybox.osuosl.org>
+Date: Sat, 9 Mar 2013 12:12:18 +0100
+Subject: [Buildroot] [git commit] x11r7/xcb-util-image: new package
+Message-ID: <20130309114337.DC9F79AF42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d2be9be63d2b1120c4ec0c3c445075a7311ef523
+commit: http://git.buildroot.net/buildroot/commit/?id=8d3f97257ffb9ed89761f503014f0e3375f2d6a3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When building autoconf for the target, we already passed EMACS="no" to
-prevent autoconf from building Emacs mode files. But we weren't doing
-that when building autoconf for the host. This causes problems when
-'emacs' is not really emacs, but a sort of clone like Jove. So we also
-pass EMACS="no" when building host-autoconf to avoid autoconf
-./configure script from detecting emacs and then use it to build .elc
-files from .el source code.
-
-Reported-by: Spielmann Werner <Werner.Spielmann@swarovski.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/autoconf/autoconf.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/x11r7/Config.in                        |    1 +
+ package/x11r7/xcb-util-image/Config.in         |   15 +++++++++++++++
+ package/x11r7/xcb-util-image/xcb-util-image.mk |   14 ++++++++++++++
+ 3 files changed, 30 insertions(+), 0 deletions(-)
 
-diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-index 0c36b66..daac1f2 100644
---- a/package/autoconf/autoconf.mk
-+++ b/package/autoconf/autoconf.mk
-@@ -15,7 +15,7 @@ AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
- 
- AUTOCONF_DEPENDENCIES = host-m4 perl
- 
--HOST_AUTOCONF_CONF_ENV = ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
-+HOST_AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
- 			ac_cv_prog_gnu_m4_gnu=no
- 
- HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 2abd593..5d0f991 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -15,6 +15,7 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/libxcb/Config.in
+ 		source package/x11r7/mesa3d/Config.in
+ 		source package/x11r7/xcb-util/Config.in
++		source package/x11r7/xcb-util-image/Config.in
+ 		source package/x11r7/xcb-util-keysyms/Config.in
+ 		source package/x11r7/xcb-util-wm/Config.in
+ 		source package/x11r7/xlib_libFS/Config.in
+diff --git a/package/x11r7/xcb-util-image/Config.in b/package/x11r7/xcb-util-image/Config.in
+new file mode 100644
+index 0000000..31fc61a
+--- /dev/null
++++ b/package/x11r7/xcb-util-image/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_XCB_UTIL_IMAGE
++	bool "xcb-util-image"
++	select BR2_PACKAGE_XCB_UTIL
++	help
++	  The XCB util modules provides a number of libraries which sit on top
++	  of libxcb, the core X protocol library, and some of the extension
++	  libraries. These experimental libraries provide convenience functions
++	  and interfaces which make the raw X protocol more usable. Some of the
++	  libraries also provide client-side code which is not strictly part of
++	  the X protocol but which have traditionally been provided by Xlib.
++
++	  XCB util-image module provides the following library:
++	    - image: Port of Xlib's XImage and XShmImage functions.
++
++	  http://xcb.freedesktop.org/
+diff --git a/package/x11r7/xcb-util-image/xcb-util-image.mk b/package/x11r7/xcb-util-image/xcb-util-image.mk
+new file mode 100644
+index 0000000..0309f3b
+--- /dev/null
++++ b/package/x11r7/xcb-util-image/xcb-util-image.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# xcb-util-image
++#
++#############################################################
++
++XCB_UTIL_IMAGE_VERSION = 0.3.9
++XCB_UTIL_IMAGE_SITE = http://xcb.freedesktop.org/dist/
++XCB_UTIL_IMAGE_SOURCE = xcb-util-image-$(XCB_UTIL_IMAGE_VERSION).tar.bz2
++XCB_UTIL_IMAGE_INSTALL_STAGING = YES
++XCB_UTIL_IMAGE_LICENSE = MIT
++XCB_UTIL_IMAGE_DEPENDENCIES = xcb-util
++
++$(eval $(autotools-package))
