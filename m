@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 09 Mar 2013 12:09:40 +0100
-Subject: [Buildroot] [PATCH] autoconf: don't try to build Emacs files
-In-Reply-To: <1362647902-13742-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 7 Mar 2013 10:18:22 +0100")
-References: <1362647902-13742-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87a9qc4yob.fsf@dell.be.48ers.dk>
+Date: Sat, 09 Mar 2013 12:11:49 +0100
+Subject: [Buildroot] [PATCH 01/32] xcb-util: add dependency on libxcb
+In-Reply-To: <1362687540-19440-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 7 Mar 2013 21:18:29 +0100")
+References: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1362687540-19440-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8762104ykq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +14,16 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> When building autoconf for the target, we already passed EMACS="no" to
- Thomas> prevent autoconf from building Emacs mode files. But we weren't doing
- Thomas> that when building autoconf for the host. This causes problems when
- Thomas> 'emacs' is not really emacs, but a sort of clone like Jove. So we also
- Thomas> pass EMACS="no" when building host-autoconf to avoid autoconf
- Thomas> ./configure script from detecting emacs and then use it to build .elc
- Thomas> files from .el source code.
+ Thomas> The xcb-util lacks a dependency on libxcb. Without this dependency, it
+ Thomas> fails to build with:
+
+ Thomas> checking for XCB... no
+
+ Thomas> configure: error: in
+ Thomas> `/home/thomas/projets/buildroot/output/build/xcb-util-0.3.9':
+ Thomas> configure: error: The pkg-config script could not be found or
+ Thomas> is too old.  Make sure it is in your PATH or set the PKG_CONFIG
+ Thomas> environment variable to the full path to pkg-config.
 
 Committed, thanks.
 
