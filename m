@@ -1,83 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  9 Mar 2013 15:02:59 +0100
-Subject: [Buildroot] [PATCH 2/3] icu: don't build object files twice
-In-Reply-To: <1362837781-27071-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1362837781-27071-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1362837781-27071-3-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 09 Mar 2013 15:09:45 +0100
+Subject: [Buildroot] Regarding /dev management
+In-Reply-To: <CALF0-+WdzsqUdQyiwagDELkqx5HhdxEe+_LwKpwgs-LVosLd0g@mail.gmail.com>
+ (Ezequiel Garcia's message of "Sat, 9 Mar 2013 09:26:36 -0300")
+References: <CALF0-+WdzsqUdQyiwagDELkqx5HhdxEe+_LwKpwgs-LVosLd0g@mail.gmail.com>
+Message-ID: <87ppz83brq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When passed --enable-static and --enable-shared, icu will generate
-both a shared and a static version of its libraries.
+>>>>> "E" == Ezequiel Garcia <elezegarcia@gmail.com> writes:
 
-However, in order to do so, it builds each and every object file
-twice: once with -fPIC (for the shared library), and once without
--fPIC (for the static library). While admittedly building -fPIC for a
-static library generates a slightly suboptimal code, this is what all
-the autotools-based project are doing. They build each object file
-once, and they use it for both the static and shared libraries.
+ E> Hi everyone,
+ E> Yesterday I spent a couple hours trying to build my first buildroot fs.
+ E> In particular, I wanted to use devtmpfs
+ E> (BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS)
+ E> but found that /dev is not mounted by default in skeleton fs scripts,
+ E> it should be mounted in inittab before some other things.
 
-icu builds the object files for the shared library as .o files, and
-the object files for static library as .ao files. By simply changing
-the suffix of object files used for static libraries to ".o", we tell
-icu to use the ones built for the shared library (i.e, with -fPIC),
-and avoid the double build of icu.
+ E> After some hacking in skeleton files, I managed to get the thing working.
 
-On a fast build server, this brings the target icu build from
-3m41.302s down to 1m43.926s (approximate numbers: some other builds
-are running on the system at the same time).
+ E> Did I miss something? Is this the expected behavior?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../icu/icu-dont-build-static-dynamic-twice.patch  |   37 ++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/icu/icu-dont-build-static-dynamic-twice.patch
+ E> Notice that I'm using the cpio image output and using the rootfs as in
+ E> initramfs.
+ E> In this case, CONFIG_DEVTMPFS=y and CONFIG_DEVTMPFS_MOUNT=y
+ E> kernel options do not matter, because... (quoting Kconfig)
 
-diff --git a/package/icu/icu-dont-build-static-dynamic-twice.patch b/package/icu/icu-dont-build-static-dynamic-twice.patch
-new file mode 100644
-index 0000000..ccbe534
---- /dev/null
-+++ b/package/icu/icu-dont-build-static-dynamic-twice.patch
-@@ -0,0 +1,37 @@
-+Don't build object files twice
-+
-+When passed --enable-static and --enable-shared, icu will generate
-+both a shared and a static version of its libraries.
-+
-+However, in order to do so, it builds each and every object file
-+twice: once with -fPIC (for the shared library), and once without
-+-fPIC (for the static library). While admittedly building -fPIC for a
-+static library generates a slightly suboptimal code, this is what all
-+the autotools-based project are doing. They build each object file
-+once, and they use it for both the static and shared libraries.
-+
-+icu builds the object files for the shared library as .o files, and
-+the object files for static library as .ao files. By simply changing
-+the suffix of object files used for static libraries to ".o", we tell
-+icu to use the ones built for the shared library (i.e, with -fPIC),
-+and avoid the double build of icu.
-+
-+On a fast build server, this brings the target icu build from
-+3m41.302s down to 1m43.926s (approximate numbers: some other builds
-+are running on the system at the same time).
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/source/config/mh-linux
-+===================================================================
-+--- a/source/config/mh-linux
-++++ b/source/config/mh-linux
-+@@ -35,7 +35,7 @@
-+ ## Shared object suffix
-+ SO = so
-+ ## Non-shared intermediate object suffix
-+-STATIC_O = ao
-++STATIC_O = o
-+ 
-+ ## Compilation rules
-+ %.$(STATIC_O): $(srcdir)/%.c
+ E> ""This will instruct the kernel to automatically mount the
+ E> devtmpfs filesystem at /dev, directly after the kernel has
+ E> mounted the root filesystem. The behavior can be overridden
+ E> with the commandline parameter: devtmpfs.mount=0|1.
+
+ E> This option does not affect initramfs based booting, here
+ E> the devtmpfs filesystem always needs to be mounted manually
+ E> after the roots is mounted.""
+
+Indeed, for everything besides initramfs CONFIG_DEVTMPFS_MOUNT does the
+right thing, and we don't need to do anything in userspace.
+
+ E> Perhaps we can add some hack to add:
+
+ E> ::sysinit:/bin/mount -t devtmpfs devtmpfs /dev
+
+ E> to skeleton when BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y.
+
+ E> However, being new to buildroot, perhaps I'm speaking non-sense and the
+ E> developer is expected to use its own custom skeleton in this case.
+
+We already take care of this for initramfs, see fs/cpio/init and the
+ROOTFS_CPIO_ADD_INIT rule. Doesn't that work for you?
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
