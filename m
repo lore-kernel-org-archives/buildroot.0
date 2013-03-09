@@ -1,34 +1,41 @@
-From: Ezequiel Garcia <elezegarcia@gmail.com>
-Date: Sat, 9 Mar 2013 12:02:05 -0300
-Subject: [Buildroot] Regarding /dev management
-In-Reply-To: <87ppz83brq.fsf@dell.be.48ers.dk>
-References: <CALF0-+WdzsqUdQyiwagDELkqx5HhdxEe+_LwKpwgs-LVosLd0g@mail.gmail.com>
- <87ppz83brq.fsf@dell.be.48ers.dk>
-Message-ID: <CALF0-+VFD6Jg=sJycngDifUoD5UcbmWgJpVRoL7iZXE7rtkN4w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 9 Mar 2013 16:50:44 +0100
+Subject: [Buildroot] Few question about Buildroot from a newbie
+In-Reply-To: <513B5338.14142.19AC2F6F@jana1972.centrum.cz>
+References: <513B5338.14142.19AC2F6F@jana1972.centrum.cz>
+Message-ID: <20130309165044.19f16466@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Dear jana1972 at centrum.cz,
 
-Thanks for your reply.
+On Sat, 09 Mar 2013 15:20:24 +0100, jana1972 at centrum.cz wrote:
 
-On Sat, Mar 9, 2013 at 11:09 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->
->  E> However, being new to buildroot, perhaps I'm speaking non-sense and the
->  E> developer is expected to use its own custom skeleton in this case.
->
-> We already take care of this for initramfs, see fs/cpio/init and the
-> ROOTFS_CPIO_ADD_INIT rule. Doesn't that work for you?
->
+> 1. I have a Linux MIPS embeded device that I did not design so it uses some utilities and 
+> software  and behaves somehow. I would like to make it behave in a little different way. So 
+> my idea is to use the hardware but different software. Is it  possible?
+> if so, where should I start? Is there any tutorial?
 
-Ah, I see. Yes that works for me. I was using "rdinit=/linuxrc" in my
-kernel parameters. Removing that, and now it works fine! Thanks a lot!
+Get the sources of the Linux kernel for your device, rebuilt it, and
+build a userspace for it with Buildroot.
 
-Another question:
-Isn't any configuration option to add a debugfs mount to fstab?
+> 2.When I build my software using buildroot, how can I upload it  to my embeded device?
 
+It is entirely device-specific, so it absolutely impossible to answer
+this question without knowing in detail which device you're targeting.
+
+Beware though that a big number of consumer-grade devices are sometimes
+difficult to hack on, and it may be difficult to reflash them with your
+own system. It really depends on the device you're targeting.
+
+Best regards,
+
+Thomas
 -- 
-    Ezequiel
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
