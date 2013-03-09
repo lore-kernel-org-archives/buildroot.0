@@ -1,84 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 9 Mar 2013 21:08:53 +0100
-Subject: [Buildroot] [git commit] alsa-lib: fix noMMU build
-Message-ID: <20130309201909.D180C9AF33@busybox.osuosl.org>
+Date: Sat, 9 Mar 2013 21:07:56 +0100
+Subject: [Buildroot] [git commit] aircrack-ng: disable on non-MMU systems
+Message-ID: <20130309201909.A78D49AF33@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d4b074554faa9451630cde47eb8378a8b0803252
+commit: http://git.buildroot.net/buildroot/commit/?id=3bae624d5fd924f34dfccb6c020f599b189ca8f9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch to use vfork() instead of fork().
+aircrack-ng uses fork() and therefore fails to build on non-MMU
+systems:
+
+aircrack-ng.o: In function `_clean_exit':
+aircrack-ng.c:(.text+0x555c): undefined reference to `_fork'
+collect2: ld returned 1 exit status
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/alsa-lib/alsa-lib-no-mmu.patch |   44 ++++++++++++++++++++++++++++++++
- package/alsa-lib/alsa-lib.mk           |    1 +
- 2 files changed, 45 insertions(+), 0 deletions(-)
+ package/aircrack-ng/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/alsa-lib/alsa-lib-no-mmu.patch b/package/alsa-lib/alsa-lib-no-mmu.patch
-new file mode 100644
-index 0000000..317676a
---- /dev/null
-+++ b/package/alsa-lib/alsa-lib-no-mmu.patch
-@@ -0,0 +1,44 @@
-+Don't use fork() on noMMU platforms
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: alsa-lib-1.0.26/configure.in
-+===================================================================
-+--- alsa-lib-1.0.26.orig/configure.in	2012-09-06 10:55:14.000000000 +0200
-++++ alsa-lib-1.0.26/configure.in	2013-03-09 16:22:08.000000000 +0100
-+@@ -66,6 +66,8 @@
-+ AM_CONDITIONAL(ALSA_HSEARCH_R, [test "x$HAVE_HSEARCH_R" != xyes])
-+ AC_CHECK_FUNCS([uselocale])
-+ 
-++AC_CHECK_FUNC([fork])
-++
-+ SAVE_LIBRARY_VERSION
-+ AC_SUBST(LIBTOOL_VERSION_INFO)
-+ 
-+Index: alsa-lib-1.0.26/src/pcm/pcm_direct.c
-+===================================================================
-+--- alsa-lib-1.0.26.orig/src/pcm/pcm_direct.c	2012-09-06 10:55:14.000000000 +0200
-++++ alsa-lib-1.0.26/src/pcm/pcm_direct.c	2013-03-09 16:22:51.000000000 +0100
-+@@ -424,13 +424,21 @@
-+ 		close(dmix->server_fd);
-+ 		return ret;
-+ 	}
-+-	
-++
-++#ifdef HAVE_FORK
-+ 	ret = fork();
-++#else
-++	ret = vfork();
-++#endif
-+ 	if (ret < 0) {
-+ 		close(dmix->server_fd);
-+ 		return ret;
-+ 	} else if (ret == 0) {
-++#ifdef HAVE_FORK
-+ 		ret = fork();
-++#else
-++		ret = vfork();
-++#endif
-+ 		if (ret == 0)
-+ 			server_job(dmix);
-+ 		_exit(EXIT_SUCCESS);
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index ba222db..2856407 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -11,6 +11,7 @@ ALSA_LIB_LICENSE = LGPLv2.1+
- ALSA_LIB_LICENSE_FILES = COPYING
- ALSA_LIB_INSTALL_STAGING = YES
- ALSA_LIB_CFLAGS=$(TARGET_CFLAGS)
-+ALSA_LIB_AUTORECONF = YES
- ALSA_LIB_CONF_OPT = --with-alsa-devdir=$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_DEVDIR)) \
- 		    --with-pcm-plugins="$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_PCM_PLUGINS))" \
- 		    --with-ctl-plugins="$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_CTL_PLUGINS))" \
+diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
+index 419f991..319b7c4 100644
+--- a/package/aircrack-ng/Config.in
++++ b/package/aircrack-ng/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_AIRCRACK_NG
+ 	bool "aircrack-ng"
+ 	depends on BR2_LARGEFILE
++	depends on BR2_USE_MMU # uses fork()
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_IW # runtime
+ 	help
