@@ -1,74 +1,57 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 9 Mar 2013 12:12:18 +0100
-Subject: [Buildroot] [git commit] x11r7/xcb-util-image: new package
-Message-ID: <20130309114337.DC9F79AF42@busybox.osuosl.org>
+Date: Sat, 9 Mar 2013 12:10:52 +0100
+Subject: [Buildroot] [git commit] xcb-util: add dependency on libxcb
+Message-ID: <20130309114337.6559C9AEF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d3f97257ffb9ed89761f503014f0e3375f2d6a3
+commit: http://git.buildroot.net/buildroot/commit/?id=70f99d80ef87b1de02fe0f4353128dc9f5101409
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The xcb-util lacks a dependency on libxcb. Without this dependency, it
+fails to build with:
+
+checking for XCB... no
+configure: error: in `/home/thomas/projets/buildroot/output/build/xcb-util-0.3.9':
+configure: error: The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
+
+Alternatively, you may set the environment variables XCB_CFLAGS
+and XCB_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/Config.in                        |    1 +
- package/x11r7/xcb-util-image/Config.in         |   15 +++++++++++++++
- package/x11r7/xcb-util-image/xcb-util-image.mk |   14 ++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
+ package/x11r7/xcb-util/Config.in   |    1 +
+ package/x11r7/xcb-util/xcb-util.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 2abd593..5d0f991 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -15,6 +15,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/libxcb/Config.in
- 		source package/x11r7/mesa3d/Config.in
- 		source package/x11r7/xcb-util/Config.in
-+		source package/x11r7/xcb-util-image/Config.in
- 		source package/x11r7/xcb-util-keysyms/Config.in
- 		source package/x11r7/xcb-util-wm/Config.in
- 		source package/x11r7/xlib_libFS/Config.in
-diff --git a/package/x11r7/xcb-util-image/Config.in b/package/x11r7/xcb-util-image/Config.in
-new file mode 100644
-index 0000000..31fc61a
---- /dev/null
-+++ b/package/x11r7/xcb-util-image/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_XCB_UTIL_IMAGE
-+	bool "xcb-util-image"
-+	select BR2_PACKAGE_XCB_UTIL
-+	help
-+	  The XCB util modules provides a number of libraries which sit on top
-+	  of libxcb, the core X protocol library, and some of the extension
-+	  libraries. These experimental libraries provide convenience functions
-+	  and interfaces which make the raw X protocol more usable. Some of the
-+	  libraries also provide client-side code which is not strictly part of
-+	  the X protocol but which have traditionally been provided by Xlib.
-+
-+	  XCB util-image module provides the following library:
-+	    - image: Port of Xlib's XImage and XShmImage functions.
-+
-+	  http://xcb.freedesktop.org/
-diff --git a/package/x11r7/xcb-util-image/xcb-util-image.mk b/package/x11r7/xcb-util-image/xcb-util-image.mk
-new file mode 100644
-index 0000000..0309f3b
---- /dev/null
-+++ b/package/x11r7/xcb-util-image/xcb-util-image.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# xcb-util-image
-+#
-+#############################################################
-+
-+XCB_UTIL_IMAGE_VERSION = 0.3.9
-+XCB_UTIL_IMAGE_SITE = http://xcb.freedesktop.org/dist/
-+XCB_UTIL_IMAGE_SOURCE = xcb-util-image-$(XCB_UTIL_IMAGE_VERSION).tar.bz2
-+XCB_UTIL_IMAGE_INSTALL_STAGING = YES
-+XCB_UTIL_IMAGE_LICENSE = MIT
-+XCB_UTIL_IMAGE_DEPENDENCIES = xcb-util
-+
-+$(eval $(autotools-package))
+diff --git a/package/x11r7/xcb-util/Config.in b/package/x11r7/xcb-util/Config.in
+index cf79327..dd77b1d 100644
+--- a/package/x11r7/xcb-util/Config.in
++++ b/package/x11r7/xcb-util/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XCB_UTIL
+ 	bool "xcb-util"
++	depends on BR2_PACKAGE_LIBXCB
+ 	help
+ 	  Libraries which sit on top of libxcb, the core X protocol library,
+ 	  and some of the extension libraries.
+diff --git a/package/x11r7/xcb-util/xcb-util.mk b/package/x11r7/xcb-util/xcb-util.mk
+index fcf99ea..a1948e1 100644
+--- a/package/x11r7/xcb-util/xcb-util.mk
++++ b/package/x11r7/xcb-util/xcb-util.mk
+@@ -7,7 +7,7 @@ XCB_UTIL_VERSION = 0.3.9
+ XCB_UTIL_SOURCE = xcb-util-$(XCB_UTIL_VERSION).tar.bz2
+ XCB_UTIL_SITE = http://xcb.freedesktop.org/dist/
+ XCB_UTIL_INSTALL_STAGING = YES
+-XCB_UTIL_DEPENDENCIES = host-gperf
++XCB_UTIL_DEPENDENCIES = host-gperf libxcb
+ 
+ $(eval $(autotools-package))
+ 
