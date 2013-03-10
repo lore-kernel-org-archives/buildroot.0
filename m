@@ -1,40 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Mar 2013 12:44:09 +0100
-Subject: [Buildroot] [PATCH 5/6] package/genpart: new host-only package
-In-Reply-To: <bfe10d7db2c24538af439516e719f4e1c98eba5b.1362693294.git.yann.morin.1998@free.fr>
+Date: Sun, 10 Mar 2013 12:49:44 +0100
+Subject: [Buildroot] [PATCH 6/6] package/mtools: new host-package
+In-Reply-To: <296699691239a90d5118c5cbe72f1ff57b3761a5.1362693294.git.yann.morin.1998@free.fr>
 References: <cover.1362693294.git.yann.morin.1998@free.fr>
- <bfe10d7db2c24538af439516e719f4e1c98eba5b.1362693294.git.yann.morin.1998@free.fr>
-Message-ID: <20130310124409.1a4d33a8@skate>
+ <296699691239a90d5118c5cbe72f1ff57b3761a5.1362693294.git.yann.morin.1998@free.fr>
+Message-ID: <20130310124944.261867c4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Yann, Luca,
 
-On Thu,  7 Mar 2013 22:55:30 +0100, Yann E. MORIN wrote:
+Cc'ing Luca, there is a licensing infrastructure question below.
 
-> --- /dev/null
-> +++ b/package/genpart/genpart.mk
-> @@ -0,0 +1,11 @@
-> +#############################################################
-> +#
-> +# genpart
-> +#
-> +#############################################################
-> +
-> +GENPART_VERSION       = 1.0.2
-> +GENPART_SOURCE        = genpart-$(GENPART_VERSION).tar.bz2
-> +GENPART_SITE          = http://www.pengutronix.de/software/genpart/download/
+On Thu,  7 Mar 2013 22:55:31 +0100, Yann E. MORIN wrote:
 
-There's no license at all mentioned in the source code. It's true the
-code is pretty trivial, but anyway. Maybe you could add:
+> +MTOOLS_VERSION  = 4.0.18
+> +MTOOLS_SOURCE   = mtools-$(MTOOLS_VERSION).tar.bz2
+> +MTOOLS_SITE     = $(BR2_GNU_MIRROR)/mtools/
 
-GENPART_LICENSE = Currently being decided by authors
+MTOOLS_LICENSE = GPLv3+
+MTOOLS_LICENSE_FILES = COPYING
 
-And contact the Pengutronix people to get your patches merged and ask
-them to put a proper license in there.
+However, this makes me realize that we don't distinguish host packages
+from target packages in the manifest.csv file. For example, once I had
+the licensing informations for this mtools file, I have the following
+line in my manifest.csv:
+
+"mtools","4.0.18","GPLv3+","COPYING","mtools-4.0.18.tar.bz2"
+
+And then, someone might think "damn, I have some GPLv3 software in my
+system, I now need to comply with the additional special requirements
+of GPLv3", while in fact it's not the case (as far as I know) because
+mtools is not distributed on the embedded device. Maybe we need to
+explicit which packages are on the target, which packages are on the
+host, and which packages are on both, no?
 
 Best regards,
 
