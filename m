@@ -1,7 +1,9 @@
 From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Sun, 10 Mar 2013 19:32:41 +0100
-Subject: [Buildroot] [PATCH 00/10] [reworked] Updating directfb and divine
-Message-ID: <1362940371-25899-1-git-send-email-c.schoenert@gmail.com>
+Date: Sun, 10 Mar 2013 19:32:42 +0100
+Subject: [Buildroot] [PATCH 01/10] directfb: bumping version to 1.6.3
+In-Reply-To: <1362940371-25899-1-git-send-email-c.schoenert@gmail.com>
+References: <1362940371-25899-1-git-send-email-c.schoenert@gmail.com>
+Message-ID: <1362940371-25899-2-git-send-email-c.schoenert@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,45 +12,25 @@ To: buildroot@busybox.net
 
 From: Carsten Schoenert <c.schoenert@gmail.com>
 
-Hello,
+Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+---
+ package/directfb/directfb.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-after the reviewing of my previous patches by Thomas I have reworked
-those patches. After some tests related to the dependencies of other
-packages on directfb I expanded my patch series because of broken
-dependencies by the newer directfb version.
-
-The packages directfb-exambles and sawman are bumped to current versions
-so the packages are buildable against the newer directfb version.
-The Qt package I doesn't have tested.
-
-I added new entrys into Config.in.legacy for the renamed BR2 variables.
-Hopefully in the correct format.
-
-If something is still wrong please let me know.
-
-Regards
-Carsten
-
-Carsten Schoenert (10):
-  directfb: bumping version to 1.6.3
-  divine: bumping version to 1.6.3
-  directfb: expanding the help strings
-  directfb: fixing typo in variables
-  Config.in.legacy: adding renamed BR2 Options
-  directfb-examples: correcting indentation and expanding help text
-  directfb-examples: bump to version 1.6.0
-  directfb-exambles: adding new examples to the menu
-  directfb-examples: adding license information
-  sawman: bumping version to 1.6.3
-
- Config.in.legacy                               |   18 +++
- package/directfb-examples/Config.in            |  186 +++++++++++++++++-------
- package/directfb-examples/directfb-examples.mk |    6 +-
- package/directfb/Config.in                     |   15 +-
- package/directfb/directfb.mk                   |    8 +-
- package/divine/divine.mk                       |   11 +-
- package/sawman/sawman.mk                       |    2 +-
- 7 files changed, 185 insertions(+), 61 deletions(-)
-
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 4f05ed2..8c701db 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -3,8 +3,8 @@
+ # directfb
+ #
+ #############################################################
+-DIRECTFB_VERSION_MAJOR = 1.4
+-DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).17
++DIRECTFB_VERSION_MAJOR = 1.6
++DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).3
+ DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
+ DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_LICENSE = LGPLv2.1+
 -- 
 1.7.10.4
