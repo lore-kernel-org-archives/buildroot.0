@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 11 Mar 2013 00:39:31 +0100
-Subject: [Buildroot] [PATCH 4/6] package/genimage: new host-only package
-In-Reply-To: <20130310124158.65520084@skate>
+Date: Mon, 11 Mar 2013 00:50:51 +0100
+Subject: [Buildroot] [PATCH 5/6] package/genpart: new host-only package
+In-Reply-To: <20130310124409.1a4d33a8@skate>
 References: <cover.1362693294.git.yann.morin.1998@free.fr>
- <40cdfc7c804704b95c963d3c76852e6d2b82de31.1362693294.git.yann.morin.1998@free.fr>
- <20130310124158.65520084@skate>
-Message-ID: <201303110039.31451.yann.morin.1998@free.fr>
+ <bfe10d7db2c24538af439516e719f4e1c98eba5b.1362693294.git.yann.morin.1998@free.fr>
+ <20130310124409.1a4d33a8@skate>
+Message-ID: <201303110050.51939.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +15,34 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On Sunday 10 March 2013 Thomas Petazzoni wrote:
-> On Thu,  7 Mar 2013 22:55:29 +0100, Yann E. MORIN wrote:
-> > +GENIMAGE_VERSION        = 4
-> > +GENIMAGE_SOURCE         = genimage-$(GENIMAGE_VERSION).tar.xz
-> > +GENIMAGE_SITE           = http://www.pengutronix.de/software/genimage/download/
-> > +GENIMAGE_DEPENDENCIES   = libconfuse
+> On Thu,  7 Mar 2013 22:55:30 +0100, Yann E. MORIN wrote:
 > 
-> Even though it is a host package, we could add:
+> > --- /dev/null
+> > +++ b/package/genpart/genpart.mk
+> > @@ -0,0 +1,11 @@
+> > +#############################################################
+> > +#
+> > +# genpart
+> > +#
+> > +#############################################################
+> > +
+> > +GENPART_VERSION       = 1.0.2
+> > +GENPART_SOURCE        = genpart-$(GENPART_VERSION).tar.bz2
+> > +GENPART_SITE          = http://www.pengutronix.de/software/genpart/download/
 > 
-> GENIMAGE_LICENSE = GPLv2
+> There's no license at all mentioned in the source code. It's true the
+> code is pretty trivial, but anyway. Maybe you could add:
 > 
-> Unfortunately, there is no license file.
+> GENPART_LICENSE = Currently being decided by authors
+> 
+> And contact the Pengutronix people to get your patches merged and ask
+> them to put a proper license in there.
 
-I am a bit uneasy at adding licensing information for packages that are
-purely host packages.
+Path has already been accepted upstream, but they said they will probably
+never ever make another release of genpart, which in their opinion has
+been superseded by genimage.
 
-As you said in your other mail, this might confuse a user reviewing the
-licensing terms.
-But I will add it.
+I'll make sure to contact them to clarify the license.
 
 Thank you!
 
