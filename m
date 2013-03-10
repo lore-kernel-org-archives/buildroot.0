@@ -1,93 +1,117 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 10 Mar 2013 23:37:00 +0100
-Subject: [Buildroot] [git commit] package/zic: new host package
-Message-ID: <20130310223947.54F0B9AFFE@busybox.osuosl.org>
+Date: Sun, 10 Mar 2013 23:37:04 +0100
+Subject: [Buildroot] [git commit] package/tzdata: new package
+Message-ID: <20130310223947.9D3909AFF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d13f6718742553b144946d56205ab23fe1f2972
+commit: http://git.buildroot.net/buildroot/commit/?id=1ca9e06f1c9a5ef12feb63711a48379c0eae7e42
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is the zone information compiler, used to compile the time zone
-database.
+This is the time zone database, used by glibc for translations between
+UTC and local time.
 
 Signed-off-by: Richard Braun <rbraun@sceen.net>
-[yann.morin.1998 at free.fr: export ZIC for all to use]
+[yann.morin.1998 at free.fr: use global ZIC, install posix TZ only once]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/zic/zic-fix-dependencies.patch |   27 +++++++++++++++++++++++++++
- package/zic/zic.mk                     |   29 +++++++++++++++++++++++++++++
- 2 files changed, 56 insertions(+), 0 deletions(-)
+ package/Config.in        |    1 +
+ package/tzdata/Config.in |   20 ++++++++++++++++++++
+ package/tzdata/tzdata.mk |   46 ++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 67 insertions(+), 0 deletions(-)
 
-diff --git a/package/zic/zic-fix-dependencies.patch b/package/zic/zic-fix-dependencies.patch
+diff --git a/package/Config.in b/package/Config.in
+index 0ba7762..a65054c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -570,6 +570,7 @@ source "package/protobuf/Config.in"
+ source "package/schifra/Config.in"
+ source "package/startup-notification/Config.in"
+ source "package/liblog4c-localtime/Config.in"
++source "package/tzdata/Config.in"
+ endmenu
+ 
+ menu "Text and terminal handling"
+diff --git a/package/tzdata/Config.in b/package/tzdata/Config.in
 new file mode 100644
-index 0000000..e1cbc12
+index 0000000..4e68a97
 --- /dev/null
-+++ b/package/zic/zic-fix-dependencies.patch
-@@ -0,0 +1,27 @@
-+From 4a2a55a640dd9316dac5f31832064f28f59ab0ae Mon Sep 17 00:00:00 2001
-+From: Richard Braun <rbraun@sceen.net>
-+Date: Fri, 4 Jan 2013 10:57:24 +0100
-+Subject: [PATCH] zic: fix dependencies
++++ b/package/tzdata/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_TZDATA
++	bool "tzdata"
++	depends on BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_glibc
++	help
++	  Time zone database
 +
-+The yearistype script is provided by the tzdata package, and is required
-+at runtime only.
-+---
-+ Makefile |    2 +-
-+ 1 files changed, 1 insertions(+), 1 deletions(-)
++	  http://www.iana.org/time-zones/repository/tz-link.html
 +
-+diff --git a/Makefile b/Makefile
-+index d76a81e..30df7dc 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -349,7 +349,7 @@ version.h:
-+ zdump:		$(TZDOBJS)
-+ 		$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $(TZDOBJS) $(LDLIBS)
-+ 
-+-zic:		$(TZCOBJS) yearistype
-++zic:		$(TZCOBJS)
-+ 		$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $(TZCOBJS) $(LDLIBS)
-+ 
-+ yearistype:	yearistype.sh
-+-- 
-+1.7.2.5
++config BR2_PACKAGE_TZDATA_ZONELIST
++	string "Time zone list"
++	depends on BR2_PACKAGE_TZDATA
++	default "default"
++	help
++	  Space-separated list of time zones to compile.
 +
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
++	  The value "default" includes all commonly used time zones. Note
++	  that this set consumes around 5.5M.
++
++	  The full list is the list of files in the time zone database source,
++	  not including the build and .tab files.
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
 new file mode 100644
-index 0000000..3dec6af
+index 0000000..04d9b27
 --- /dev/null
-+++ b/package/zic/zic.mk
-@@ -0,0 +1,29 @@
++++ b/package/tzdata/tzdata.mk
+@@ -0,0 +1,46 @@
 +#############################################################
 +#
-+# zic
++# tzdata
 +#
 +#############################################################
 +
-+ZIC_VERSION = 2012j
-+ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
-+ZIC_SITE = http://www.iana.org/time-zones/repository/releases
-+ZIC_LICENSE = Public domain
++TZDATA_VERSION = 2012j
++TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
++TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
++TZDATA_DEPENDENCIES = host-zic
++TZDATA_LICENSE = Public domain
++
++TZDATA_DEFAULT_ZONELIST = africa antarctica asia australasia backward etcetera \
++			europe factory northamerica pacificnew southamerica
++
++ifeq ($(call qstrip,$(BR2_PACKAGE_TZDATA_ZONELIST)),default)
++TZDATA_ZONELIST = $(TZDATA_DEFAULT_ZONELIST)
++else
++TZDATA_ZONELIST = $(call qstrip,$(BR2_PACKAGE_TZDATA_ZONELIST))
++endif
 +
 +# Don't strip any path components during extraction.
-+define HOST_ZIC_EXTRACT_CMDS
-+	gzip -d -c $(DL_DIR)/$(ZIC_SOURCE) \
++define TZDATA_EXTRACT_CMDS
++	gzip -d -c $(DL_DIR)/$(TZDATA_SOURCE) \
 +		| $(TAR) --strip-components=0 -C $(@D) -xf -
 +endef
 +
-+define HOST_ZIC_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) zic
++define TZDATA_BUILD_CMDS
++	(cd $(@D); \
++		for zone in $(TZDATA_ZONELIST); do \
++			$(ZIC) -d _output/posix -y yearistype.sh $$zone; \
++			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone; \
++		done; \
++	)
 +endef
 +
-+define HOST_ZIC_INSTALL_CMDS
-+	mkdir -p $(HOST_DIR)/usr/sbin
-+	install -D -m 755 $(@D)/zic $(HOST_DIR)/usr/sbin/zic
++define TZDATA_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/share/zoneinfo
++	cp -a $(@D)/_output/* $(TARGET_DIR)/usr/share/zoneinfo
++	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
++	for zone in posix/*; do                 \
++	    ln -sfn "$${zone}" "$${zone##*/}";    \
++	done
 +endef
 +
-+$(eval $(host-generic-package))
-+
-+ZIC = $(HOST_DIR)/usr/sbin/zic
++$(eval $(generic-package))
