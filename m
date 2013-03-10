@@ -1,36 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Mar 2013 14:58:51 +0100
-Subject: [Buildroot] [PATCH 2/6] fs/ext2: add ability to build ext3/4 too
-In-Reply-To: <b55a35d2b1dc1f5bb2598cc8bb29f787407250bc.1362693453.git.yann.morin.1998@free.fr>
-References: <cover.1362693453.git.yann.morin.1998@free.fr>
- <b55a35d2b1dc1f5bb2598cc8bb29f787407250bc.1362693453.git.yann.morin.1998@free.fr>
-Message-ID: <20130310145851.4f1f6539@skate>
+Date: Sun, 10 Mar 2013 15:07:30 +0100
+Subject: [Buildroot] [PATCH 1/3] sunxi-tools: new host package
+In-Reply-To: <CAOQ7t2byEU6VBOOMzj+uVy+WBNMF7LDcc-nMkFvSi7apLDxvsw@mail.gmail.com>
+References: <1362695964-20697-1-git-send-email-carlo.caione@gmail.com>
+ <5139D722.3010006@je-eigen-domein.nl>
+ <CAOQ7t2byEU6VBOOMzj+uVy+WBNMF7LDcc-nMkFvSi7apLDxvsw@mail.gmail.com>
+Message-ID: <20130310150730.368b891e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Carlo Caione,
 
-On Thu,  7 Mar 2013 23:04:39 +0100, Yann E. MORIN wrote:
+On Fri, 8 Mar 2013 21:39:32 +0100, Carlo Caione wrote:
 
-> +    # e2fsck will force a UUID, which we do not want
-> +    tune2fs -U clear "${IMG}"
+> Ups, I didn't see it. Sorry for the overlapping.
+> I'm going to use your package :)
 
-I think you already explained that you're removing the UUID to make the
-filesystem creation reproducible (i.e avoid having random bits in the
-filesystem image). Even though I'm not it's entirely feasible (some
-binaries inside the filesystem may contain build dates and things like
-that), I think it's an interesting goal. So my only suggestion here
-would be to extend a bit your comment, to explain *why* you do not want
-this UUID.
+Yes, but it would be good if you could take Floris patch into your
+patch series, and resend it in the next versions of your patch set.
 
-Maybe we could set the volume name to 'buildroot' ? I.e:
-
-	tune2fs -L buildroot "${IMG}"
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
