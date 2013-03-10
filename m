@@ -1,24 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Mar 2013 21:30:55 +0100
-Subject: [Buildroot] [PATCH 5/5] CMake packages: remove .cmake files
-	from target directory
-In-Reply-To: <1362590066-5448-6-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Wed, 6 Mar 2013 18:14:26 +0100")
-References: <1362590066-5448-1-git-send-email-luca@lucaceresoli.net>
- <1362590066-5448-6-git-send-email-luca@lucaceresoli.net>
-Message-ID: <871ubnyp34.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 10 Mar 2013 21:27:50 +0100
+Subject: [Buildroot] [git commit] cmake: remove target package macro
+Message-ID: <20130310203045.2367A9AF86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cea14a589a1632cbf16af9192c18a72d8b89790d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Luca> Just like pkgconfig files.
- Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+The dummy target package is not needed anymore since commit 79bfcd556027901.
 
-Committed, thanks.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/cmake/cmake.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index d0db502e..cfe8ab4 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -25,5 +25,4 @@ define HOST_CMAKE_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
+-$(eval $(generic-package))
+ $(eval $(host-generic-package))
