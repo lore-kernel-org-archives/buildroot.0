@@ -1,43 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 10 Mar 2013 23:15:58 +0100
-Subject: [Buildroot] [git commit] icu: speed up host build
-Message-ID: <20130310223431.5EF029AFF6@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 10 Mar 2013 23:40:17 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch yem-misc
+In-Reply-To: <cover.1362693141.git.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Thu, 7 Mar 2013 22:53:39 +0100")
+References: <cover.1362693141.git.yann.morin.1998@free.fr>
+Message-ID: <87k3pevpym.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5f6baf89d487c6aaf5fb3684c48032a3460e2b45
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-The host build of icu doesn't need to build everything, so we can add
-a few more --disable-<foo> options to save a little bit of build time.
+ Yann> Hello All!
+ Yann> This series is a based on Richard's tzdata initial series, with some fixes
+ Yann> discussed during the Developper's Day.
 
-On a fast build server, this bring the host icu build from 2m28.517s
-to 2m5.192s.
+ Yann> Changes v1 -> v2:
+ Yann>   -  rebased on master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/icu/icu.mk |    7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+ Yann> Changes since Richard's post -> v1:
+ Yann>   - install POSIX time zones only once
+ Yann>   - path to 'zic' is exported by the 'zic' package
 
-diff --git a/package/icu/icu.mk b/package/icu/icu.mk
-index 5a88496..7658589 100644
---- a/package/icu/icu.mk
-+++ b/package/icu/icu.mk
-@@ -15,7 +15,12 @@ ICU_INSTALL_STAGING = YES
- ICU_CONFIG_SCRIPTS = icu-config
- ICU_CONF_OPT = --with-cross-build=$(HOST_ICU_DIR)/source --disable-samples \
- 		--disable-tests
--HOST_ICU_CONF_OPT = --disable-samples --disable-tests
-+HOST_ICU_CONF_OPT = \
-+	--disable-samples \
-+	--disable-tests \
-+	--disable-extras \
-+	--disable-icuio \
-+	--disable-layout
- ICU_MAKE = $(MAKE1)
- ICU_SUBDIR = source
- HOST_ICU_SUBDIR = source
+ Yann> The following changes since commit 203c30796e232faaf3a7de19090657bf3e7db16a:
+
+ Yann>   rpi-userland: provides OpenGL ES, EGL and OpenVG (2013-03-06 22:18:39 +0100)
+
+ Yann> are available in the git repository at:
+ Yann>   git://gitorious.org/buildroot/buildroot.git yem-misc
+
+ Yann> Richard Braun (2):
+ Yann>       package/zic: new host package
+ Yann>       package/tzdata: new package
+
+Committed both, thanks.
+
+-- 
+Bye, Peter Korsgaard
