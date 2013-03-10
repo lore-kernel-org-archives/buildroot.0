@@ -1,48 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Mar 2013 12:49:44 +0100
-Subject: [Buildroot] [PATCH 6/6] package/mtools: new host-package
-In-Reply-To: <296699691239a90d5118c5cbe72f1ff57b3761a5.1362693294.git.yann.morin.1998@free.fr>
-References: <cover.1362693294.git.yann.morin.1998@free.fr>
- <296699691239a90d5118c5cbe72f1ff57b3761a5.1362693294.git.yann.morin.1998@free.fr>
-Message-ID: <20130310124944.261867c4@skate>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Sun, 10 Mar 2013 13:21:06 +0100
+Subject: [Buildroot] [PATCH 3/4] directfb: expanding the help strings
+In-Reply-To: <20130310112701.5ac2f9bc@skate>
+References: <1362908858-6340-1-git-send-email-c.schoenert@gmail.com>
+ <1362908858-6340-4-git-send-email-c.schoenert@gmail.com>
+ <20130310112701.5ac2f9bc@skate>
+Message-ID: <513C7AB2.3080000@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Luca,
+Hello Thomas,
 
-Cc'ing Luca, there is a licensing infrastructure question below.
+Am 10.03.2013 11:27, schrieb Thomas Petazzoni:
+>> +    help
+>> +      The Marvell PXA3xx Processor Family is a system-on-chip based
+>> +      on XScale? microarchitecture. The PXA3xx processor provide
+>> +      high-performance multimedia, low-power capabilities, and rich
+>> +      peripheral integration. The PXA3xx Processor Family provide
+>> +      enhanced features compared to the PXA27x Processor Family, and
+>> +      are the first Marvell applications processors to integrate a
+>> +      hardware video accelerator unit.
+>> +
+>> +      http://www.marvell.com/application-processors/pxa-family/
+> 
+> Indentation is wrong. It should be one tab for "help" and one tab + two
+> spaces for the help text.
 
-On Thu,  7 Mar 2013 22:55:31 +0100, Yann E. MORIN wrote:
+Hmm, I have to check my vim settings, sorry.
+What about modlines in thees files? This would be helpful and it's just
+a one-liner on top of this files.
 
-> +MTOOLS_VERSION  = 4.0.18
-> +MTOOLS_SOURCE   = mtools-$(MTOOLS_VERSION).tar.bz2
-> +MTOOLS_SITE     = $(BR2_GNU_MIRROR)/mtools/
+> In addition to that, I'm not sure the wording of the help text is so
+> useful. Something like "This option enables a graphics driver specific
+> to the graphics hardware of the Marvell PXA3xx processor family", would
+> be a bit more useful.
 
-MTOOLS_LICENSE = GPLv3+
-MTOOLS_LICENSE_FILES = COPYING
+It have take some times for me to find out what this option is for and
+what kind of devices are supported by this option, so at least directfb
+is something for the frame buffer the most people know the options are
+of course depending on this frame buffer and graphic output related things.
+So I think it's worth to explain a little bit more than just 'it's for
+the Marvel PXA family foo ...'. But yes, we can discuss about the word
+and formulation. ;)
+I will rethink about that.
 
-However, this makes me realize that we don't distinguish host packages
-from target packages in the manifest.csv file. For example, once I had
-the licensing informations for this mtools file, I have the following
-line in my manifest.csv:
-
-"mtools","4.0.18","GPLv3+","COPYING","mtools-4.0.18.tar.bz2"
-
-And then, someone might think "damn, I have some GPLv3 software in my
-system, I now need to comply with the additional special requirements
-of GPLv3", while in fact it's not the case (as far as I know) because
-mtools is not distributed on the embedded device. Maybe we need to
-explicit which packages are on the target, which packages are on the
-host, and which packages are on both, no?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards
+Carsten
