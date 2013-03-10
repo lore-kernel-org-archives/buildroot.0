@@ -1,9 +1,9 @@
 From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Sun, 10 Mar 2013 19:32:43 +0100
-Subject: [Buildroot] [PATCH 02/10] divine: bumping version to 1.6.3
+Date: Sun, 10 Mar 2013 19:32:45 +0100
+Subject: [Buildroot] [PATCH 04/10] directfb: fixing typo in variables
 In-Reply-To: <1362940371-25899-1-git-send-email-c.schoenert@gmail.com>
 References: <1362940371-25899-1-git-send-email-c.schoenert@gmail.com>
-Message-ID: <1362940371-25899-3-git-send-email-c.schoenert@gmail.com>
+Message-ID: <1362940371-25899-5-git-send-email-c.schoenert@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +12,51 @@ To: buildroot@busybox.net
 
 From: Carsten Schoenert <c.schoenert@gmail.com>
 
-To be identical to the version of directfb switching also to version
-1.6.3. The divine package needs at minimum directfb 1.6.0 as
-dependencie.
-Adding the license information to the package divine.
-Also switch to Git for getting the package source because the tar.gz
-for version 1.6.3 on directfb.org is broken because of a missed header
-file inside.
-
 Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
 ---
- package/divine/divine.mk |   11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ package/directfb/Config.in   |    4 ++--
+ package/directfb/directfb.mk |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/divine/divine.mk b/package/divine/divine.mk
-index b949601..df59a18 100644
---- a/package/divine/divine.mk
-+++ b/package/divine/divine.mk
-@@ -4,11 +4,16 @@
- #
- #############################################################
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 796be37..23f4947 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -109,13 +109,13 @@ config BR2_PACKAGE_DIRECTFB_PNG
+ 	default y
+ 	select BR2_PACKAGE_LIBPNG
  
--DIVINE_VERSION = 0.4.0
--DIVINE_SITE = http://www.directfb.org/downloads/Extras
--DIVINE_SOURCE = DiVine-$(DIVINE_VERSION).tar.gz
-+# tagged version 1.6.3
-+DIVINE_VERSION = 83cafc257a42b9465cd9d6185bf66b8c1b7ed704
-+DIVINE_SITE = git://git.directfb.org/git/directfb/extras/DiVine.git
-+DIVINE_LICENSE = LGPLv2.1+
-+DIVINE_LICENSE_FILE = COPYING
- DIVINE_INSTALL_STAGING = YES
- DIVINE_DEPENDENCIES = directfb
- DIVINE_CONFIG_SCRIPTS = divine-config
+-config BR2_PACKAGE_DIRECTB_DITHER_RGB16
++config BR2_PACKAGE_DIRECTFB_DITHER_RGB16
+ 	bool "enable advanced dithering of RGB16 surfaces"
+ 	help
+ 	  Enable dithering when loading images to RGB16 surfaces.
+ 	  This increases the data section by 64 KBytes.
  
-+# package has no configure script so we have generate it
-+DIVINE_AUTORECONF = YES
-+
- $(eval $(autotools-package))
+-config BR2_PACKAGE_DIRECTB_TESTS
++config BR2_PACKAGE_DIRECTFB_TESTS
+ 	bool "build directfb tests"
+ 
+ endif # BR2_PACKAGE_DIRECTFB
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 8c701db..5ead084 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -108,13 +108,13 @@ else
+ DIRECTFB_CONF_OPT += --disable-jpeg
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DIRECTB_DITHER_RGB16),y)
++ifeq ($(BR2_PACKAGE_DIRECTFB_DITHER_RGB16),y)
+ DIRECTFB_CONF_OPT += --with-dither-rgb16=advanced
+ else
+ DIRECTFB_CONF_OPT += --with-dither-rgb16=none
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DIRECTB_TESTS),y)
++ifeq ($(BR2_PACKAGE_DIRECTFB_TESTS),y)
+ DIRECTFB_CONF_OPT += --with-tests
+ endif
+ 
 -- 
 1.7.10.4
