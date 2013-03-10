@@ -1,51 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 10 Mar 2013 21:27:21 +0100
-Subject: [Buildroot] [git commit] cmake: convert spaces to tabs in make rules
-Message-ID: <20130310203044.E19899AF86@busybox.osuosl.org>
+Date: Sun, 10 Mar 2013 21:30:16 +0100
+Subject: [Buildroot] [git commit] CMake packages: remove .cmake files from
+	target directory
+Message-ID: <20130310203045.A85E69AF86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a9b0023c5b2c41002aae8826a63e1127cb6d846d
+commit: http://git.buildroot.net/buildroot/commit/?id=df99efb3d9114aa09153fdb1f47b7ce695e8f53b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Just like pkgconfig files.
+
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/cmake/cmake.mk |   14 +++++++-------
- 1 files changed, 7 insertions(+), 7 deletions(-)
+ Makefile |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 6836172..d0db502e 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -10,19 +10,19 @@ CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
- 
- define HOST_CMAKE_CONFIGURE_CMDS
-- (cd $(@D); \
--	LDFLAGS="$(HOST_LDFLAGS)" \
--	CFLAGS="$(HOST_CFLAGS)" \
--	./bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(PARALLEL_JOBS) \
-- )
-+	(cd $(@D); \
-+		LDFLAGS="$(HOST_LDFLAGS)" \
-+		CFLAGS="$(HOST_CFLAGS)" \
-+		./bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(PARALLEL_JOBS) \
-+	)
- endef
- 
- define HOST_CMAKE_BUILD_CMDS
-- $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
- endef
- 
- define HOST_CMAKE_INSTALL_CMDS
-- $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
- endef
- 
- $(eval $(generic-package))
+diff --git a/Makefile b/Makefile
+index 1300725..c462bb1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -452,7 +452,9 @@ ifeq ($(BR2_HAVE_DEVFILES),y)
+ 	( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
+ else
+ 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+-		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig
++		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
++		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
++	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
+ 	find $(TARGET_DIR)/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
+ 	find $(TARGET_DIR)/usr/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
+ endif
