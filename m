@@ -1,32 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 10 Mar 2013 21:28:20 +0100
-Subject: [Buildroot] [git commit] cmake: bump to 2.8.10.2
-Message-ID: <20130310203045.603999AF86@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 10 Mar 2013 22:06:06 +0100
+Subject: [Buildroot] [PATCH v2 1/8] gdisk: Update gdisk (gptfdisk) to
+	version 0.8.6
+In-Reply-To: <1362689131-1479-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 7 Mar 2013 21:45:23 +0100")
+References: <1362689131-1479-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1362689131-1479-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87txojx8w1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be9e675ae3c10db39b0babe9a8225b572596b2e2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/cmake/cmake.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Thomas> From: Justin Maggard <jmaggard10@gmail.com>
+ Thomas> [Thomas Petazzoni: bump to 0.8.6 and not 0.8.5]
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index cfe8ab4..8e3e751 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--CMAKE_VERSION = 2.8.9
-+CMAKE_VERSION = 2.8.10.2
- CMAKE_SITE = http://www.cmake.org/files/v2.8/
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
