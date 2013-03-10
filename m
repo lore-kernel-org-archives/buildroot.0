@@ -1,10 +1,10 @@
 From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Sun, 10 Mar 2013 19:32:44 +0100
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_v2_03/10=5D_directfb=3A_expanding_?=
-	=?utf-8?q?the_help_strings?=
+Date: Sun, 10 Mar 2013 19:32:46 +0100
+Subject: [Buildroot] [PATCH 05/10] Config.in.legacy: adding renamed BR2
+	Options
 In-Reply-To: <1362940371-25899-1-git-send-email-c.schoenert@gmail.com>
 References: <1362940371-25899-1-git-send-email-c.schoenert@gmail.com>
-Message-ID: <1362940371-25899-4-git-send-email-c.schoenert@gmail.com>
+Message-ID: <1362940371-25899-6-git-send-email-c.schoenert@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +13,44 @@ To: buildroot@busybox.net
 
 From: Carsten Schoenert <c.schoenert@gmail.com>
 
-Adding a helper string for the PXA3xx and graphics driver from Marvell
-and the EP9x graphics driver from Cirrus Logic.
+Related to the changed directfb variables for
+BR2_PACKAGE_DIRECTFB_DITHER_RGB16 and
+BR2_PACKAGE_DIRECTFB_TESTS
+adding a legacy check.
 
 Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
 ---
-Changes in v2:
-	- reworking the helper text after suggestions from Thomas Petazzoni
+ Config.in.legacy |   18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
- package/directfb/Config.in |   11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index a184568..796be37 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -49,10 +49,21 @@ config BR2_PACKAGE_DIRECTFB_MATROX
- config BR2_PACKAGE_DIRECTFB_PXA3XX
- 	bool "compile pxa3xx graphics driver"
- 	depends on BR2_arm
-+	help
-+	  The Marvell PXA3xx Processor Family is a system-on-chip based
-+	  on XScale? microarchitecture. This option enables the graphic
-+	  driver support for the PXA3xx processor family.
-+
-+	  http://www.marvell.com/application-processors/pxa-family/
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d90132c..838e7fc 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -40,6 +40,24 @@ comment "As long as these options stay selected, the build   "
+ comment "will fail.                                          "
+ endif
  
- config BR2_PACKAGE_DIRECTFB_EP9X
- 	bool "compile ep9x graphics driver"
- 	depends on BR2_arm
++#
++# Legacy options since 2013.02
++#
++config BR2_PACKAGE_DIRECTB_DITHER_RGB16
++	bool "DirectFB RGB16 dithering option has been renamed"
++	select BR2_PACKAGE_DIRECTFB_DITHER_RGB16
++	select BR2_LEGACY
 +	help
-+	  Enable the graphic driver support for the EP93xx ARMv9 based
-+	  processors from Cirrus Logic.
++	  The option has been renamed
++	  BR2_PACKAGE_DIRECTFB_DITHER_RGB16.
 +
-+	  http://cirrus.com/en/products/arm9.html
++config BR2_PACKAGE_DIRECTFB_TESTS
++	bool "DirectFB Tests option has been renamed"
++	select BR2_PACKAGE_DIRECTFB_TESTS
++	select BR2_LEGACY
++	help
++	  The option has been renamed
++	  BR2_PACKAGE_DIRECTFB_TESTS.
  
- config BR2_PACKAGE_DIRECTFB_UNICHROME
- 	bool "compile unichrome graphics driver"
+ #
+ # Legacy options since 2012.11
 -- 
 1.7.10.4
