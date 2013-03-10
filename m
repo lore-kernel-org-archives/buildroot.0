@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Mar 2013 22:26:53 +0100
-Subject: [Buildroot] [PATCH v2 6/8] gptfdisk: make utf16 support
-	configurable
-In-Reply-To: <1362689131-1479-7-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 7 Mar 2013 21:45:28 +0100")
+Date: Sun, 10 Mar 2013 22:32:01 +0100
+Subject: [Buildroot] [PATCH v2 7/8] gptfdisk: add support for building
+	and install cgdisk
+In-Reply-To: <1362689131-1479-8-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 7 Mar 2013 21:45:29 +0100")
 References: <1362689131-1479-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1362689131-1479-7-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878v5vx7xe.fsf@dell.be.48ers.dk>
+ <1362689131-1479-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <874ngjx7ou.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,38 +15,34 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Instead of always disabling the UTF16 support, make it
- Thomas> configurable. When ICU is available, enable UTF16 support, otherwise
- Thomas> disable it.
+ Thomas> In addition to the command-line tool gdisk and the interactive tool
+ Thomas> sgdisk, gptfdisk also provides a ncurses based tool, cgdisk. This
+ Thomas> commit adds support for building and installing this tool.
 
- Thomas> diff --git a/package/gptfdisk/gptfdisk-001-configurable-utf16-support.patch b/package/gptfdisk/gptfdisk-001-configurable-utf16-support.patch
- Thomas> new file mode 100644
- Thomas> index 0000000..2d51e6f
- Thomas> --- /dev/null
- Thomas> +++ b/package/gptfdisk/gptfdisk-001-configurable-utf16-support.patch
- Thomas> @@ -0,0 +1,48 @@
- Thomas> +[PATCH] Make the UTF16 support configurable
- Thomas> +
- Thomas> +libicu is quite large, and unicode partition names are uncommon, so we
- Thomas> +may not necessarily want to have UTF16 support unconditionnally. This
- Thomas> +patch adds a USE_UTF16 environment variable to tell whether we want
- Thomas> +the UTF16 support or not.
- Thomas> +
- Thomas> +Signed-off-by: Justin Maggard <jmaggard10@gmail.com>
- Thomas> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  package/gptfdisk/Config.in   |    8 ++++++++
+ Thomas>  package/gptfdisk/gptfdisk.mk |    4 ++++
+ Thomas>  2 files changed, 12 insertions(+)
 
-Please consider sending this upstream.
+ Thomas> diff --git a/package/gptfdisk/Config.in b/package/gptfdisk/Config.in
+ Thomas> index 0d7e358..1cdd8eb 100644
+ Thomas> --- a/package/gptfdisk/Config.in
+ Thomas> +++ b/package/gptfdisk/Config.in
+ Thomas> @@ -31,5 +31,13 @@ config BR2_PACKAGE_GPTFDISK_SGDISK
+ Thomas>  	  /usr/sbin/sgdisk which is named after the traditional MBR based
+ Thomas>  	  sfdisk tool albeit with an entirely different option syntax.
  
- Thomas>  define GPTFDISK_BUILD_CMDS
- Thomas> -	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
- Thomas> -		$(GPTFDISK_TARGETS_y)
- Thomas> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) $(GPTFDISK_MAKE_OPTS) \
- Thomas> +		-C $(@D) $(GPTFDISK_TARGETS_y)
- Thomas>  endef
+ Thomas> +config BR2_PACKAGE_GPTFDISK_CGDISK
+ Thomas> +	bool "ncurses cgdisk"
+ Thomas> +	depends on BR2_PACKAGE_GPTFDISK
+ Thomas> +	select BR2_PACKAGE_NCURSES
+ Thomas> +	help
+ Thomas> +	  Install the ncurses-based GUID partition table (GPT)
+ Thomas> +	  manipulator /usr/sbin/cgdisk.
 
-Instead of this long line I moved the _MAKE_OPTS into the 2nd line.
-
-Committed, thanks.
+You forgot to update the select-gdisk-if-nothing-else-is-enabled logic,
+so I've fixed that and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
