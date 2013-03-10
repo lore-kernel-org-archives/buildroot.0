@@ -1,69 +1,54 @@
 From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Sun, 10 Mar 2013 17:50:37 +0100
-Subject: [Buildroot] [PATCH 1/4] directfb: bumping version to 1.6.3
-In-Reply-To: <20130310113224.4e3dbb2a@skate>
-References: <1362908858-6340-1-git-send-email-c.schoenert@gmail.com>
- <1362908858-6340-2-git-send-email-c.schoenert@gmail.com>
- <20130310113224.4e3dbb2a@skate>
-Message-ID: <513CB9DD.2050103@googlemail.com>
+Date: Sun, 10 Mar 2013 19:32:41 +0100
+Subject: [Buildroot] [PATCH 00/10] [reworked] Updating directfb and divine
+Message-ID: <1362940371-25899-1-git-send-email-c.schoenert@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+From: Carsten Schoenert <c.schoenert@gmail.com>
 
-Am 10.03.2013 11:32, schrieb Thomas Petazzoni:
-> This looks good. However, we have a number of packages that depend or
-> can use DirectFB: cairo, directfb-examples, libecore, libevas, libgtk2,
-> links, lite, gst-plugins-bad, opencv, qt, sawman, sdl, webkit. Did you
-> test if those still build after this DirectFB bump? I have no idea if
-> the DirectFB bump from 1.4.x to 1.6.x is a major bump (like with API
-> breakage) or a minor bump. Depending on that, some testing of the
-> packages using DirectFB would be needed, or not.
+Hello,
 
-I have greped which packages depending direct on the directfb package,
-this aren't much, I was a little bit surprised and suspected more packages.
+after the reviewing of my previous patches by Thomas I have reworked
+those patches. After some tests related to the dependencies of other
+packages on directfb I expanded my patch series because of broken
+dependencies by the newer directfb version.
 
-> $ git grep -n "depends on BR2_PACKAGE_DIRECTFB"
-> package/directfb-examples/Config.in:3:  depends on BR2_PACKAGE_DIRECTFB
-> ... # more hits on directfb-exables
+The packages directfb-exambles and sawman are bumped to current versions
+so the packages are buildable against the newer directfb version.
+The Qt package I doesn't have tested.
 
-I tested the directfb-examples, this package has to be bumped. This I
-have successful tested and prepared three patches here.
+I added new entrys into Config.in.legacy for the renamed BR2 variables.
+Hopefully in the correct format.
 
-> package/divine/Config.in:3:       depends on BR2_PACKAGE_DIRECTFB
-
-Already done in one of my previous patches.
-
-> package/efl/libecore/Config.in:15:      depends on BR2_PACKAGE_DIRECTFB
-
-Successful builded.
-
-> package/efl/libevas/Config.in:56:       depends on BR2_PACKAGE_DIRECTFB
-
-Successful builded with most of the options (expect OpenGL related stuff).
-
-> package/lite/Config.in:3:       depends on BR2_PACKAGE_DIRECTFB
-
-Works perfect, the version is still the current version.
-
-> package/qt/Config.gfx.in:23:    depends on BR2_PACKAGE_DIRECTFB
-
-This I will not test, to big the QT beast. :)
-
-> package/sawman/Config.in:3:     depends on BR2_PACKAGE_DIRECTFB
-
-Sawan must also bumped to the current version, locally successful done
-and builded. Also prepared a patch.
-
-> package/sdl/Config.in:18:       depends on BR2_PACKAGE_DIRECTFB
-
-SDL works successful with the new directfb version.
-
-In summary it looks good.
-So hopefully I will post later a new patch series.
+If something is still wrong please let me know.
 
 Regards
 Carsten
+
+Carsten Schoenert (10):
+  directfb: bumping version to 1.6.3
+  divine: bumping version to 1.6.3
+  directfb: expanding the help strings
+  directfb: fixing typo in variables
+  Config.in.legacy: adding renamed BR2 Options
+  directfb-examples: correcting indentation and expanding help text
+  directfb-examples: bump to version 1.6.0
+  directfb-exambles: adding new examples to the menu
+  directfb-examples: adding license information
+  sawman: bumping version to 1.6.3
+
+ Config.in.legacy                               |   18 +++
+ package/directfb-examples/Config.in            |  186 +++++++++++++++++-------
+ package/directfb-examples/directfb-examples.mk |    6 +-
+ package/directfb/Config.in                     |   15 +-
+ package/directfb/directfb.mk                   |    8 +-
+ package/divine/divine.mk                       |   11 +-
+ package/sawman/sawman.mk                       |    2 +-
+ 7 files changed, 185 insertions(+), 61 deletions(-)
+
+-- 
+1.7.10.4
