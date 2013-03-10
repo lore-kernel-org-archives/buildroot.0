@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Mar 2013 12:40:38 +0100
-Subject: [Buildroot] [pull request v4] Pull request for branch
- yem-host-image-tools
-In-Reply-To: <cover.1362693294.git.yann.morin.1998@free.fr>
+Date: Sun, 10 Mar 2013 12:41:58 +0100
+Subject: [Buildroot] [PATCH 4/6] package/genimage: new host-only package
+In-Reply-To: <40cdfc7c804704b95c963d3c76852e6d2b82de31.1362693294.git.yann.morin.1998@free.fr>
 References: <cover.1362693294.git.yann.morin.1998@free.fr>
-Message-ID: <20130310124038.171b1edd@skate>
+ <40cdfc7c804704b95c963d3c76852e6d2b82de31.1362693294.git.yann.morin.1998@free.fr>
+Message-ID: <20130310124158.65520084@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,20 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Thu,  7 Mar 2013 22:55:25 +0100, Yann E. MORIN wrote:
+On Thu,  7 Mar 2013 22:55:29 +0100, Yann E. MORIN wrote:
 
-> Yann E. MORIN (6):
->       package/e2fsprogs: add host-package selection
->       package/dosfstools: add host-package selection
->       package/libconfuse: add host variant
->       package/genimage: new host-only package
->       package/genpart: new host-only package
->       package/mtools: new host-package
+> +GENIMAGE_VERSION        = 4
+> +GENIMAGE_SOURCE         = genimage-$(GENIMAGE_VERSION).tar.xz
+> +GENIMAGE_SITE           = http://www.pengutronix.de/software/genimage/download/
+> +GENIMAGE_DEPENDENCIES   = libconfuse
 
-For the six patches:
+Even though it is a host package, we could add:
 
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+GENIMAGE_LICENSE = GPLv2
+
+Unfortunately, there is no license file.
+
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
