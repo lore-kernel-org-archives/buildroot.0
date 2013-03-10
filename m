@@ -1,37 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 10 Mar 2013 21:30:16 +0100
-Subject: [Buildroot] [git commit] CMake packages: remove .cmake files from
-	target directory
-Message-ID: <20130310203045.A85E69AF86@busybox.osuosl.org>
+Date: Sun, 10 Mar 2013 21:28:20 +0100
+Subject: [Buildroot] [git commit] cmake: bump to 2.8.10.2
+Message-ID: <20130310203045.603999AF86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=df99efb3d9114aa09153fdb1f47b7ce695e8f53b
+commit: http://git.buildroot.net/buildroot/commit/?id=be9e675ae3c10db39b0babe9a8225b572596b2e2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Just like pkgconfig files.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/cmake/cmake.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 1300725..c462bb1 100644
---- a/Makefile
-+++ b/Makefile
-@@ -452,7 +452,9 @@ ifeq ($(BR2_HAVE_DEVFILES),y)
- 	( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
- else
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
--		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig
-+		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
-+		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
-+	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/usr/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
- endif
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index cfe8ab4..8e3e751 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-CMAKE_VERSION = 2.8.9
++CMAKE_VERSION = 2.8.10.2
+ CMAKE_SITE = http://www.cmake.org/files/v2.8/
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
