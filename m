@@ -1,26 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Mar 2013 22:30:35 +0100
-Subject: [Buildroot] [PATCH 6/6] package/mtools: new host-package
-In-Reply-To: <201303110102.06732.yann.morin.1998@free.fr>
-References: <cover.1362693294.git.yann.morin.1998@free.fr>
- <296699691239a90d5118c5cbe72f1ff57b3761a5.1362693294.git.yann.morin.1998@free.fr>
- <20130310124944.261867c4@skate>
- <201303110102.06732.yann.morin.1998@free.fr>
-Message-ID: <20130311223035.59280cc1@skate>
+Date: Sun, 10 Mar 2013 18:25:23 +0100
+Subject: [Buildroot] [PATCH 1/4] directfb: bumping version to 1.6.3
+In-Reply-To: <513CB9DD.2050103@googlemail.com>
+References: <1362908858-6340-1-git-send-email-c.schoenert@gmail.com>
+ <1362908858-6340-2-git-send-email-c.schoenert@gmail.com>
+ <20130310113224.4e3dbb2a@skate> <513CB9DD.2050103@googlemail.com>
+Message-ID: <20130310182523.142ff288@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Carsten Schoenert,
 
-On Mon, 11 Mar 2013 01:02:06 +0100, Yann E. MORIN wrote:
+On Sun, 10 Mar 2013 17:50:37 +0100, Carsten Schoenert wrote:
 
-> I would suggest that we not install licensing information about host
-> packages, unless they are also used on the target.
+> In summary it looks good.
+> So hopefully I will post later a new patch series.
 
-That would make sense, IMO.
+Excellent, thanks a lot for all this testing effort!
 
 Thomas
 -- 
