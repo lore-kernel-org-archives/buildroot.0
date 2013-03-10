@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Mar 2013 11:48:42 +0100
-Subject: [Buildroot] [PATCH 2/5] alsa-lib: fix noMMU build
-In-Reply-To: <87a9qc2uu2.fsf@dell.be.48ers.dk>
-References: <1362853290-15592-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1362853290-15592-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <87a9qc2uu2.fsf@dell.be.48ers.dk>
-Message-ID: <20130310114842.4cd6647e@skate>
+Date: Sun, 10 Mar 2013 12:40:38 +0100
+Subject: [Buildroot] [pull request v4] Pull request for branch
+ yem-host-image-tools
+In-Reply-To: <cover.1362693294.git.yann.morin.1998@free.fr>
+References: <cover.1362693294.git.yann.morin.1998@free.fr>
+Message-ID: <20130310124038.171b1edd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Yann E. MORIN,
 
-On Sat, 09 Mar 2013 21:15:33 +0100, Peter Korsgaard wrote:
+On Thu,  7 Mar 2013 22:55:25 +0100, Yann E. MORIN wrote:
 
-> Are you sending this upstream? What's the reason for the HAVE_FORK
-> check? Why not just always use vfork() instead? That should work fine on
-> mmu as well (and be a tiny bit faster).
+> Yann E. MORIN (6):
+>       package/e2fsprogs: add host-package selection
+>       package/dosfstools: add host-package selection
+>       package/libconfuse: add host variant
+>       package/genimage: new host-only package
+>       package/genpart: new host-only package
+>       package/mtools: new host-package
 
-I could possibly send this upstream, yes. The reason to use HAVE_FORK
-is to not change the MMU code, which probably is going to make the
-patch easier to get merged upstream, and also because that's the way
-the Blackfin people handled the problem.
+For the six patches:
 
-Best regards,
-
-Thomas
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
