@@ -1,36 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Mar 2013 23:45:13 +0100
-Subject: [Buildroot] [PATCH] <pkg>-rsync: exclude version control files
-In-Reply-To: <51378135.6070006@mind.be> (Arnout Vandecappelle's message of
- "Wed, 06 Mar 2013 18:47:33 +0100")
-References: <f9ac20b69b1bfd3f77ef.1362169598@BEANTN0L019720>
- <871ubv9bk0.fsf@dell.be.48ers.dk> <51378135.6070006@mind.be>
-Message-ID: <87fw02vpqe.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 10 Mar 2013 20:19:49 -0300
+Subject: [Buildroot] [PATCH] quota: select
+	BR2_PACKAGE_UTIL_LINUX_BINARIES
+In-Reply-To: <87wqtevreo.fsf@dell.be.48ers.dk>
+References: <1362907622-27511-1-git-send-email-gustavo@zacarias.com.ar>
+ <87wqtevreo.fsf@dell.be.48ers.dk>
+Message-ID: <513D1515.9050303@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+On 03/10/2013 07:09 PM, Peter Korsgaard wrote:
+> Ehh, that log rather looks like BR2_PACKAGE_UTIL_LINUX_MOUNT needing to
+> select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT?
 
-Hi,
-
- >> I don't personally use this, but doesn't that break stuff using the
- >> version info (like E.G. the kernel storing the git id)?
-
- Arnout>  Depends on what you call breaking. The kernel will find
- Arnout> buildroot's git ID, which is fine by me (that's of course
- Arnout> assuming the output directory is a subdirectory of the
- Arnout> buildroot directory). Or failing that, it will use the plain
- Arnout> version number. The latter is actually what I prefer, because
- Arnout> it means I can easily exchange modules with the non-OVERRIDE'n
- Arnout> kernel.
-
-Ok, but it will atleast change the current behaviour, which people might
-rely on..
-
-What do others say?
-
--- 
-Bye, Peter Korsgaard
+I'd rather get all the libs enabled when any binaries are wanted.
+Otherwise for each util-linux bump a full study of those details will
+need to be done.
+It's not like the libs take that much space....
+And otherwise it'll be a hidden option without BINARIES being selected.
+Regards.
