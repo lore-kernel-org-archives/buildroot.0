@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Mar 2013 22:28:58 +0100
-Subject: [Buildroot] [PATCH 00/32 v3] Add Qt5 packages
-In-Reply-To: <513DEBAB.6010800@mind.be>
-References: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <513DEBAB.6010800@mind.be>
-Message-ID: <20130311222858.7495aaba@skate>
+Date: Mon, 11 Mar 2013 22:30:09 +0100
+Subject: [Buildroot] [PATCH 4/6] package/genimage: new host-only package
+In-Reply-To: <201303110039.31451.yann.morin.1998@free.fr>
+References: <cover.1362693294.git.yann.morin.1998@free.fr>
+ <40cdfc7c804704b95c963d3c76852e6d2b82de31.1362693294.git.yann.morin.1998@free.fr>
+ <20130310124158.65520084@skate>
+ <201303110039.31451.yann.morin.1998@free.fr>
+Message-ID: <20130311223009.4f0dbd67@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Yann E. MORIN,
 
-On Mon, 11 Mar 2013 15:35:23 +0100, Arnout Vandecappelle wrote:
-> On 03/07/13 21:18, Thomas Petazzoni wrote:
-> > The patches are also available from:
-> >
-> >    http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=qt5
+On Mon, 11 Mar 2013 00:39:31 +0100, Yann E. MORIN wrote:
+
+> I am a bit uneasy at adding licensing information for packages that are
+> purely host packages.
 > 
->   It looks like they're not available there... Did you push?
+> As you said in your other mail, this might confuse a user reviewing the
+> licensing terms.
 
-I have now pushed an updated branch, rebased on top of master.
+I think this is not a good reason to not add the license. We already
+have it in a number of packages that have a host variant. It should be
+something for the licensing infrastructure to handle.
 
->   BTW it would be convenient to have a git URL there.
+> But I will add it.
 
-git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git qt5
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
