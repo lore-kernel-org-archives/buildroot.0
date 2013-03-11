@@ -1,49 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 11 Mar 2013 01:02:06 +0100
-Subject: [Buildroot] [PATCH 6/6] package/mtools: new host-package
-In-Reply-To: <20130310124944.261867c4@skate>
-References: <cover.1362693294.git.yann.morin.1998@free.fr>
- <296699691239a90d5118c5cbe72f1ff57b3761a5.1362693294.git.yann.morin.1998@free.fr>
- <20130310124944.261867c4@skate>
-Message-ID: <201303110102.06732.yann.morin.1998@free.fr>
+Date: Mon, 11 Mar 2013 01:05:14 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch yem-ext234
+In-Reply-To: <20130310143136.15eb1320@skate>
+References: <cover.1362693453.git.yann.morin.1998@free.fr>
+ <20130310143136.15eb1320@skate>
+Message-ID: <201303110105.15370.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Luca, All,
+Thomas, All,
 
 On Sunday 10 March 2013 Thomas Petazzoni wrote:
-> On Thu,  7 Mar 2013 22:55:31 +0100, Yann E. MORIN wrote:
+> On Thu,  7 Mar 2013 23:04:37 +0100, Yann E. MORIN wrote:
 > 
-> > +MTOOLS_VERSION  = 4.0.18
-> > +MTOOLS_SOURCE   = mtools-$(MTOOLS_VERSION).tar.bz2
-> > +MTOOLS_SITE     = $(BR2_GNU_MIRROR)/mtools/
+> > This patch series enhances the ext2 fs backend to also build ext3 and ext4
+> > filesystems, and differentiate between ext2 rev0 and ext2 rev1 filesystems.
+> > 
+> > This patch series is based on the previously-sent 'yem-host-image-tools'
+> > pull-request, and requires changes in that series.
 > 
-> MTOOLS_LICENSE = GPLv3+
-> MTOOLS_LICENSE_FILES = COPYING
-
-Done.
-
-> However, this makes me realize that we don't distinguish host packages
-> from target packages in the manifest.csv file. For example, once I had
-> the licensing informations for this mtools file, I have the following
-> line in my manifest.csv:
+> I just tested this with the following defconfig:
 > 
-> "mtools","4.0.18","GPLv3+","COPYING","mtools-4.0.18.tar.bz2"
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TARGET_ROOTFS_EXT2=y
+> BR2_TARGET_ROOTFS_EXT2_4=y
+> # BR2_TARGET_ROOTFS_TAR is not set
 > 
-> And then, someone might think "damn, I have some GPLv3 software in my
-> system, I now need to comply with the additional special requirements
-> of GPLv3", while in fact it's not the case (as far as I know) because
-> mtools is not distributed on the embedded device. Maybe we need to
-> explicit which packages are on the target, which packages are on the
-> host, and which packages are on both, no?
+> and building the ext4 image fails:
+> 
+> tune2fs 1.42.7 (21-Jan-2013)
+> 
+> Please run e2fsck on the filesystem.
 
-Yes, fully agreed; this would be very puzzling.
+That part is expected: tune2fs will explicitly state the above when
+some features of ext2/3/4 are activated.
 
-I would suggest that we not install licensing information about host
-packages, unless they are also used on the target.
+WE handle that in the script by explictly calling to e2fsck afterward.
+
+> Creating journal inode: 
+> Journal size too big for filesystem.
+> make: *** [/home/thomas/projets/buildroot/output/images/rootfs.ext4] Erreur 1
+
+Ah, this is... sad. It seems the heuristic to compute the number of extra
+sectors to add is not good enough.
+
+I'll see what I can do with that.
 
 Regards,
 Yann E. MORIN.
