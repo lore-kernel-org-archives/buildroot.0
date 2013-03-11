@@ -1,32 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Mar 2013 18:30:33 +0100
-Subject: [Buildroot] Q. How to use a custom kernel tree?
-In-Reply-To: <CAHUKsLLd56BrLOeN_7xa1cx3M0M+dbQyX2fxZcc_4nof0k3cFg@mail.gmail.com>
-References: <CAHUKsLJM76BFzZunyc=6Jc=UUo4NKq=07_BHNRpVZwYc5VkkRg@mail.gmail.com>
- <20130308170521.3e8926ff@skate>
- <CAHUKsLLd56BrLOeN_7xa1cx3M0M+dbQyX2fxZcc_4nof0k3cFg@mail.gmail.com>
-Message-ID: <20130311183033.51c1ba4d@skate>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Mon, 11 Mar 2013 10:41:24 -0700
+Subject: [Buildroot] [PATCH] lcdproc: needs MMU
+In-Reply-To: <y>
+References: <y>
+Message-ID: <1363023684-3479-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Chris Wilkinson,
+Fixes:
+http://autobuild.buildroot.org/results/58d0231cc39ee6be3064906f07307b438ea4c30b
 
-On Mon, 11 Mar 2013 11:49:29 -0400, Chris Wilkinson wrote:
-> Is this a config error on my part or a BR bug? Stephan suggests it's
-> currently a BR limitation that custom tarballs can only be got from an http
-> server not a local directory.
+Also fixed some indentation issues
 
-Yes, I think Stefan is correct. There is a patch pending to fix this
-issue.
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ package/lcdproc/Config.in |   15 ++++++++-------
+ 1 files changed, 8 insertions(+), 7 deletions(-)
 
-Best regards,
-
-Thomas
+diff --git a/package/lcdproc/Config.in b/package/lcdproc/Config.in
+index e0afc44..5635a02 100644
+--- a/package/lcdproc/Config.in
++++ b/package/lcdproc/Config.in
+@@ -1,12 +1,13 @@
+ config BR2_PACKAGE_LCDPROC
+-       bool "lcdproc"
+-       select BR2_PACKAGE_FREETYPE
+-       select BR2_PACKAGE_NCURSES
+-       select BR2_PACKAGE_ZLIB
+-       help
+-         LCD display driver daemon and clients
++	bool "lcdproc"
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_ZLIB
++	help
++	  LCD display driver daemon and clients
+ 
+-         http://lcdproc.org/
++	  http://lcdproc.org/
+ 
+ config BR2_PACKAGE_LCDPROC_DRIVERS
+ 	string "List of drivers to build"
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.4.1
