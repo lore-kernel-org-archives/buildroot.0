@@ -1,33 +1,69 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 11 Mar 2013 15:35:23 +0100
-Subject: [Buildroot] [PATCH 00/32 v3] Add Qt5 packages
-In-Reply-To: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <513DEBAB.6010800@mind.be>
+From: Chris Wilkinson <winstonian36@gmail.com>
+Date: Mon, 11 Mar 2013 11:49:29 -0400
+Subject: [Buildroot] Q. How to use a custom kernel tree?
+In-Reply-To: <20130308170521.3e8926ff@skate>
+References: <CAHUKsLJM76BFzZunyc=6Jc=UUo4NKq=07_BHNRpVZwYc5VkkRg@mail.gmail.com>
+ <20130308170521.3e8926ff@skate>
+Message-ID: <CAHUKsLLd56BrLOeN_7xa1cx3M0M+dbQyX2fxZcc_4nof0k3cFg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/07/13 21:18, Thomas Petazzoni wrote:
-> The patches are also available from:
+Is this a config error on my part or a BR bug? Stephan suggests it's
+currently a BR limitation that custom tarballs can only be got from an http
+server not a local directory.
+
+
+On Fri, Mar 8, 2013 at 11:05 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Chris Wilkinson,
 >
->    http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=qt5
+> On Fri, 8 Mar 2013 10:47:42 -0500, Chris Wilkinson wrote:
+> > I have a customized, patched kernel tree which I'd like BR to use.
+> >
+> > I tar'd the custom kernel tree, selected custom tarball for the kernel
+> > version and put the full URL/path to the archive in
+> > BR2_LINUX_KERNEL_CUSTOM_TARBALL.
+>
+> Can you pastebin your .config file somewhere?
+>
+> > The custom tree also contains a defconfig for my arch. I set
+> > BR2_LINUX_KERNEL_USE_DEFCONFIG=y and gave it's name in
+> > BR2_LINUX_KERNEL_DEFCONFIG.
+> >
+> > Using make, BR error'ed out thus.
+> >
+> > >>> linux custom Extracting
+> > cat /home/chrisw/embedded/buildroot/dl/linux-3.4-ss4000e.tar | tar
+> > --strip-components=1 -C
+> > /home/chrisw/embedded/buildroot/output/build/linux-custom  -xf -
+> > cat: /home/chrisw/embedded/buildroot/dl/linux-3.4-ss4000e.tar: No such
+> file
+> > or directory
+> > tar: This does not look like a tar archive
+> > tar: Exiting with failure status due to previous errors
+> >
+> > It appears that BR expects to find the custom tarball in <BR>/dl, not the
+> > path I specified.
+>
+> Hum, let's see your .config first. Once we check that, we'll be able to
+> tell you if it's a configuration problem  or indeed a Buildroot bug.
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
 
-  It looks like they're not available there... Did you push?
-
-  BTW it would be convenient to have a git URL there.
-
-
-  Regards,
-  Arnout
 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+-Chris-
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130311/1757010f/attachment.html>
