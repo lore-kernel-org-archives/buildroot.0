@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 11 Mar 2013 01:05:14 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch yem-ext234
-In-Reply-To: <20130310143136.15eb1320@skate>
+Date: Mon, 11 Mar 2013 01:20:28 +0100
+Subject: [Buildroot] [PATCH 2/6] fs/ext2: add ability to build ext3/4 too
+In-Reply-To: <20130310145201.60cc8b1c@skate>
 References: <cover.1362693453.git.yann.morin.1998@free.fr>
- <20130310143136.15eb1320@skate>
-Message-ID: <201303110105.15370.yann.morin.1998@free.fr>
+ <b55a35d2b1dc1f5bb2598cc8bb29f787407250bc.1362693453.git.yann.morin.1998@free.fr>
+ <20130310145201.60cc8b1c@skate>
+Message-ID: <201303110120.28329.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +15,55 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On Sunday 10 March 2013 Thomas Petazzoni wrote:
-> On Thu,  7 Mar 2013 23:04:37 +0100, Yann E. MORIN wrote:
+> On Thu,  7 Mar 2013 23:04:39 +0100, Yann E. MORIN wrote:
 > 
-> > This patch series enhances the ext2 fs backend to also build ext3 and ext4
-> > filesystems, and differentiate between ext2 rev0 and ext2 rev1 filesystems.
-> > 
-> > This patch series is based on the previously-sent 'yem-host-image-tools'
-> > pull-request, and requires changes in that series.
+> >  ROOTFS_EXT2_DEPENDENCIES = host-genext2fs
+> > +ifeq ($(BR2_PACKAGE_HOST_E2FSPROGS),y)
+> > +ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
+> > +endif
 > 
-> I just tested this with the following defconfig:
-> 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TARGET_ROOTFS_EXT2=y
-> BR2_TARGET_ROOTFS_EXT2_4=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> 
-> and building the ext4 image fails:
-> 
-> tune2fs 1.42.7 (21-Jan-2013)
-> 
-> Please run e2fsck on the filesystem.
+> I believe the ifeq () here is useless: you are anyway selecting
+> BR2_PACKAGE_HOST_E2FSPROGS from BR2_TARGET_ROOTFS_EXT2.
 
-That part is expected: tune2fs will explicitly state the above when
-some features of ext2/3/4 are activated.
+Oh, right, we just have to have an unconditional dependency.
 
-WE handle that in the script by explictly calling to e2fsck afterward.
+> Initially, I was confused by this test: it would mean that you could
+> potentially work without host-e2fsprogs, which isn't the case.
 
-> Creating journal inode: 
-> Journal size too big for filesystem.
-> make: *** [/home/thomas/projets/buildroot/output/images/rootfs.ext4] Erreur 1
+That was just a remnant from when e2fsprogs was a dependency only
+for ext3 and ext4. Now, we need it for ext2, too.
 
-Ah, this is... sad. It seems the heuristic to compute the number of extra
-sectors to add is not good enough.
+Nice catch! :-)
 
-I'll see what I can do with that.
+> > +EXT2_ENV = GEN=$(BR2_TARGET_ROOTFS_EXT2_GEN)
+> >  
+> >  define ROOTFS_EXT2_CMD
+> > -	PATH=$(TARGET_PATH) fs/ext2/genext2fs.sh -d $(TARGET_DIR) $(EXT2_OPTS) $@
+> > +	PATH=$(TARGET_PATH) $(EXT2_ENV) fs/ext2/genext2fs.sh -d $(TARGET_DIR) $(EXT2_OPTS) $@
+> >  endef
+> 
+> Why PATH=$(TARGET_PATH) ? I know it was like this, but HOST_PATH would
+> be more appropriate. That said, it's completely silly to have both
+> TARGET_PATH and HOST_PATH, since they are essentially the same thing.
+
+Well, ask Peter! ;-)
+    http://git.buildroot.org/buildroot/commit/fs/ext2/ext2.mk?id=fb951b9
+
+> Also, why do you pass GEN= in the environment? Other options are passed
+> through normal command line options, so it's strange to move away from
+> this idea just for GEN=<foo>, no?
+
+That's what I initially did, but Arnout suggested to pass it in the env
+instead:
+    http://lists.busybox.net/pipermail/buildroot/2013-February/067488.html
+    http://lists.busybox.net/pipermail/buildroot/2013-February/067552.html
+
+The problem I see with passing it as an option is that it is not a valid
+option for genext2fs, and it means we have to reconstruct the genext2fs
+options in the script, which is a bit ugly, as you can see in my previous
+submission.
+
+But I do not have a strong opinion either...
 
 Regards,
 Yann E. MORIN.
