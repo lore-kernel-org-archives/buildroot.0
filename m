@@ -1,87 +1,33 @@
-From: Chris Wilkinson <winstonian36@gmail.com>
-Date: Mon, 11 Mar 2013 10:34:41 -0400
-Subject: [Buildroot] Q. How to use a custom kernel tree?
-In-Reply-To: <513A0CD0.2060205@relinux.de>
-References: <CAHUKsLJM76BFzZunyc=6Jc=UUo4NKq=07_BHNRpVZwYc5VkkRg@mail.gmail.com>
- <513A0CD0.2060205@relinux.de>
-Message-ID: <CAHUKsLKOUNPwB_1cQsDrEsfy=+HxXkxce7EHfHERGn=FWCcJKw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 11 Mar 2013 15:35:23 +0100
+Subject: [Buildroot] [PATCH 00/32 v3] Add Qt5 packages
+In-Reply-To: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1362687540-19440-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <513DEBAB.6010800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pity this didn't get taken up. Perhaps it got overlooked. You could try
-again possibly?
+On 03/07/13 21:18, Thomas Petazzoni wrote:
+> The patches are also available from:
+>
+>    http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=qt5
 
-Chris
+  It looks like they're not available there... Did you push?
+
+  BTW it would be convenient to have a git URL there.
 
 
-On Fri, Mar 8, 2013 at 11:07 AM, Stephan Hoffmann <sho@relinux.de> wrote:
-
->  Am 08.03.2013 16:47, schrieb Chris Wilkinson:
->
->
->  I have a customized, patched kernel tree which I'd like BR to use.
->
-> I tar'd the custom kernel tree, selected custom tarball for the kernel
-> version and put the full URL/path to the archive in
-> BR2_LINUX_KERNEL_CUSTOM_TARBALL.
->
->  The custom tree also contains a defconfig for my arch. I set
-> BR2_LINUX_KERNEL_USE_DEFCONFIG=y and gave it's name in
-> BR2_LINUX_KERNEL_DEFCONFIG.
->
->  Using make, BR error'ed out thus.
->
-> >>> linux custom Extracting
-> cat /home/chrisw/embedded/buildroot/dl/linux-3.4-ss4000e.tar | tar
-> --strip-components=1 -C
-> /home/chrisw/embedded/buildroot/output/build/linux-custom  -xf -
-> cat: /home/chrisw/embedded/buildroot/dl/linux-3.4-ss4000e.tar: No such
-> file or directory
-> tar: This does not look like a tar archive
-> tar: Exiting with failure status due to previous errors
->
-> It appears that BR expects to find the custom tarball in <BR>/dl, not the
-> path I specified.
->
-> What should I do to have BR use my custom kernel tree and config?
->
-> Hello Chris,
->
-> unfortunatelly, buildroot always assumes that the "custom tarball" is on a
-> server where it can be fetched using wget. I submitted a patch (
-> http://patchwork.ozlabs.org/patch/217204/) some time ago to improve this,
-> but noone responded.
->
-> You can use Source Override (see docu) to use your local kernel tree (not
-> gzipped).
->
-> Regards
->
-> Stephan
->
->
->  --
-> -Chris-
->
->
-> _______________________________________________
-> buildroot mailing listbuildroot at busybox.nethttp://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
-> --
-> reLinux     -    Stephan Hoffmann
-> Am Schmidtgrund 124    50765 K?ln
-> Tel. +49.221.95595-19    Fax: -64www.reLinux.de     sho at reLinux.de
->
->
+  Regards,
+  Arnout
 
 
 -- 
--Chris-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130311/1c852f1f/attachment-0001.html>
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
