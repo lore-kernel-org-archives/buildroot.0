@@ -1,50 +1,99 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 11 Mar 2013 01:26:37 +0100
-Subject: [Buildroot] [PATCH 2/6] fs/ext2: add ability to build ext3/4 too
-In-Reply-To: <20130310145851.4f1f6539@skate>
-References: <cover.1362693453.git.yann.morin.1998@free.fr>
- <b55a35d2b1dc1f5bb2598cc8bb29f787407250bc.1362693453.git.yann.morin.1998@free.fr>
- <20130310145851.4f1f6539@skate>
-Message-ID: <201303110126.38259.yann.morin.1998@free.fr>
+From: John Stile <john@stilen.com>
+Date: Sun, 10 Mar 2013 18:23:14 -0700
+Subject: [Buildroot] [PATCH] dhcpcd: new package
+Message-ID: <1362964994-32042-1-git-send-email-john@stilen.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: John Stile <johns@msli.com>
 
-On Sunday 10 March 2013 Thomas Petazzoni wrote:
-> On Thu,  7 Mar 2013 23:04:39 +0100, Yann E. MORIN wrote:
-> 
-> > +    # e2fsck will force a UUID, which we do not want
-> > +    tune2fs -U clear "${IMG}"
-> 
-> I think you already explained that you're removing the UUID to make the
-> filesystem creation reproducible (i.e avoid having random bits in the
-> filesystem image). Even though I'm not it's entirely feasible (some
-> binaries inside the filesystem may contain build dates and things like
-> that), I think it's an interesting goal. So my only suggestion here
-> would be to extend a bit your comment, to explain *why* you do not want
-> this UUID.
+Dhcpcd is an RFC2131 compliant DHCP client.
 
-Yes, will do.
+Signed-off-by: John Stile <john@stilen.com>
+---
+ package/Config.in        |  1 +
+ package/dhcpcd/Config.in |  7 +++++++
+ package/dhcpcd/dhcpcd.mk | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 51 insertions(+)
+ create mode 100644 package/dhcpcd/Config.in
+ create mode 100644 package/dhcpcd/dhcpcd.mk
 
-> Maybe we could set the volume name to 'buildroot' ? I.e:
-> 
-> 	tune2fs -L buildroot "${IMG}"
-
-Good idea, too.
-
-Thank you!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index 0ba7762..4bfa1e7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -634,6 +634,7 @@ source "package/cups/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/dhcp/Config.in"
+ endif
++source "package/dhcpcd/Config.in"
+ source "package/dhcpdump/Config.in"
+ source "package/dnsmasq/Config.in"
+ source "package/dropbear/Config.in"
+diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
+new file mode 100644
+index 0000000..152d7f3
+--- /dev/null
++++ b/package/dhcpcd/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_DHCPCD
++	bool "dhcpcd"
++	help
++	  An RFC2131 compliant DHCP client
++	  NOTE: If uClibc, depends on  UCLIBC_SUPPORT_AI_ADDRCONFIG=y
++
++	  http://roy.marples.name/downloads/dhcpcd
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+new file mode 100644
+index 0000000..cab7a9e
+--- /dev/null
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -0,0 +1,43 @@
++#############################################################
++#
++# dhcpcd
++#
++#############################################################
++
++DHCPCD_VERSION = 5.6.7
++DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
++DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd/
++DHCPCD_LICENSE = BSD-2c
++
++ifeq ($(BR2_USE_MMU),)
++	DHCPCD_CONFIG_OPT += --disable-fork
++endif 
++
++define DHCPCD_CONFIGURE_CMDS
++	(cd $(@D); \
++	./configure \
++		--target=$(BR2_GCC_TARGET_ARCH) \
++		--os=linux \
++		$(DHCPCD_CONFIG_OPT) )
++endef
++
++define DHCPCD_BUILD_CMDS
++	$(MAKE) \
++		$(TARGET_CONFIGURE_OPTS) \
++		-C $(@D) all
++endef
++
++define DHCPCD_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/dhcpcd \
++		$(TARGET_DIR)/usr/bin/dhcpcd
++	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf \
++		$(TARGET_DIR)/etc/dhcpcd.conf
++	$(INSTALL) -D -m 0755 $(@D)/dhcpcd-run-hooks \
++		$(TARGET_DIR)/libexec/dhcpcd-run-hooks
++endef
++
++# NOTE: Even though this package has a configure script, it is not generated
++# using the autotools, so we have to use the generic package infrastructure.
++
++$(eval $(call generic-package))
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.12.4
