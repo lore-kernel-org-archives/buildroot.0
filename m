@@ -1,99 +1,56 @@
-From: John Stile <john@stilen.com>
-Date: Sun, 10 Mar 2013 18:23:14 -0700
-Subject: [Buildroot] [PATCH] dhcpcd: new package
-Message-ID: <1362964994-32042-1-git-send-email-john@stilen.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 11 Mar 2013 03:24:44 +0000 (UTC)
+Subject: [Buildroot] [Bug 6080] Git fetch caching
+In-Reply-To: <bug-6080-163@https.bugs.busybox.net/>
+References: <bug-6080-163@https.bugs.busybox.net/>
+Message-ID: <20130311032444.BAF3E9AFA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: John Stile <johns@msli.com>
+https://bugs.busybox.net/show_bug.cgi?id=6080
 
-Dhcpcd is an RFC2131 compliant DHCP client.
+--- Comment #2 from Andrew Cooks <acooks@gmail.com> 2013-03-11 03:25:27 UTC ---
+OVERRIDE_SRCDIR is not sufficiently described in the manual, but I found a
+description at http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf
 
-Signed-off-by: John Stile <john@stilen.com>
----
- package/Config.in        |  1 +
- package/dhcpcd/Config.in |  7 +++++++
- package/dhcpcd/dhcpcd.mk | 43 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 51 insertions(+)
- create mode 100644 package/dhcpcd/Config.in
- create mode 100644 package/dhcpcd/dhcpcd.mk
+It helps, but it's not exactly what I was looking for.
 
-diff --git a/package/Config.in b/package/Config.in
-index 0ba7762..4bfa1e7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -634,6 +634,7 @@ source "package/cups/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/dhcp/Config.in"
- endif
-+source "package/dhcpcd/Config.in"
- source "package/dhcpdump/Config.in"
- source "package/dnsmasq/Config.in"
- source "package/dropbear/Config.in"
-diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
-new file mode 100644
-index 0000000..152d7f3
---- /dev/null
-+++ b/package/dhcpcd/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_DHCPCD
-+	bool "dhcpcd"
-+	help
-+	  An RFC2131 compliant DHCP client
-+	  NOTE: If uClibc, depends on  UCLIBC_SUPPORT_AI_ADDRCONFIG=y
-+
-+	  http://roy.marples.name/downloads/dhcpcd
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-new file mode 100644
-index 0000000..cab7a9e
---- /dev/null
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -0,0 +1,43 @@
-+#############################################################
-+#
-+# dhcpcd
-+#
-+#############################################################
-+
-+DHCPCD_VERSION = 5.6.7
-+DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
-+DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd/
-+DHCPCD_LICENSE = BSD-2c
-+
-+ifeq ($(BR2_USE_MMU),)
-+	DHCPCD_CONFIG_OPT += --disable-fork
-+endif 
-+
-+define DHCPCD_CONFIGURE_CMDS
-+	(cd $(@D); \
-+	./configure \
-+		--target=$(BR2_GCC_TARGET_ARCH) \
-+		--os=linux \
-+		$(DHCPCD_CONFIG_OPT) )
-+endef
-+
-+define DHCPCD_BUILD_CMDS
-+	$(MAKE) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		-C $(@D) all
-+endef
-+
-+define DHCPCD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/dhcpcd \
-+		$(TARGET_DIR)/usr/bin/dhcpcd
-+	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf \
-+		$(TARGET_DIR)/etc/dhcpcd.conf
-+	$(INSTALL) -D -m 0755 $(@D)/dhcpcd-run-hooks \
-+		$(TARGET_DIR)/libexec/dhcpcd-run-hooks
-+endef
-+
-+# NOTE: Even though this package has a configure script, it is not generated
-+# using the autotools, so we have to use the generic package infrastructure.
-+
-+$(eval $(call generic-package))
-+
+Consider this section from my config file:
+--
+#
+# Kernel
+#
+BR2_LINUX_KERNEL=y
+# BR2_LINUX_KERNEL_3_6 is not set
+# BR2_LINUX_KERNEL_SAME_AS_HEADERS is not set
+# BR2_LINUX_KERNEL_CUSTOM_VERSION is not set
+# BR2_LINUX_KERNEL_CUSTOM_TARBALL is not set
+BR2_LINUX_KERNEL_CUSTOM_GIT=y
+BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="/home/andrew/devel/lk.git"
+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="dma_maps-20130306"
+BR2_LINUX_KERNEL_VERSION="dma_maps-20130306"
+BR2_LINUX_KERNEL_PATCH=""
+# BR2_LINUX_KERNEL_USE_DEFCONFIG is not set
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="/home/andrew/devel/lk.git/.config_mod_ahci"
+BR2_LINUX_KERNEL_BZIMAGE=y
+# BR2_LINUX_KERNEL_VMLINUX is not set
+# BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM is not set
+# BR2_LINUX_KERNEL_DTS_SUPPORT is not set
+# BR2_LINUX_KERNEL_INSTALL_TARGET is not set
+--
+
+It isn't clear to me whether using a local path for the CUSTOM_GIT_REPO_URL is
+a recognised and valid use case. It works, but with nasty caching.
+
+If you accept that it is a valid use case, I think it would be sensible to
+detect the local path and use rsync without creating a tarball, similar to
+'SITE METHOD = local'.
+
 -- 
-1.7.12.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
