@@ -1,58 +1,26 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 11 Mar 2013 10:54:08 +0100
-Subject: [Buildroot] [PATCH] barebox: add 2013.03.0, remove 2012.11
-Message-ID: <1362995648-8207-1-git-send-email-fabio.porcedda@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Mar 2013 11:01:12 +0100
+Subject: [Buildroot] [PATCH] flot: add fillbetween plugin.
+In-Reply-To: <513DA912.6090500@syscom.ch> ("Arnaud =?utf-8?Q?R=C3=A9billou?=
+ =?utf-8?Q?t=22's?= message of "Mon, 11 Mar 2013 10:51:14 +0100")
+References: <1360769145-1610-1-git-send-email-rebillout@syscom.ch>
+ <87sj42vr7g.fsf@dell.be.48ers.dk> <513DA912.6090500@syscom.ch>
+Message-ID: <87boaquufr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- boot/barebox/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+>>>>> "Arnaud" == Arnaud R?billout <rebillout@syscom.ch> writes:
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 769a1bd..f111c04 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -8,13 +8,10 @@ config BR2_TARGET_BAREBOX
- if BR2_TARGET_BAREBOX
- choice
- 	prompt "version"
--	default BR2_TARGET_BAREBOX_2013_02
-+	default BR2_TARGET_BAREBOX_2013_03
- 	help
- 	  Select the specific Barebox version you want to use
- 
--config BR2_TARGET_BAREBOX_2012_11
--	bool "2012.11"
--
- config BR2_TARGET_BAREBOX_2012_12
- 	bool "2012.12.1"
- 
-@@ -24,6 +21,9 @@ config BR2_TARGET_BAREBOX_2013_01
- config BR2_TARGET_BAREBOX_2013_02
- 	bool "2013.02.0"
- 
-+config BR2_TARGET_BAREBOX_2013_03
-+	bool "2013.03.0"
-+
- config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	bool "Custom tarball"
- 
-@@ -41,10 +41,10 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2012.11.0"	if BR2_TARGET_BAREBOX_2012_11
- 	default "2012.12.1"	if BR2_TARGET_BAREBOX_2012_12
- 	default "2013.01.0"	if BR2_TARGET_BAREBOX_2013_01
- 	default "2013.02.0"	if BR2_TARGET_BAREBOX_2013_02
-+	default "2013.03.0"	if BR2_TARGET_BAREBOX_2013_03
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
- 
+ Arnaud> You have sharp eyes !
+
+It helps that my editor highlights trailing spaces ;)
+
+ Arnaud> Thanks for committing,
+
+You're welcome. Thanks for constributing to buildroot.
+
 -- 
-1.8.1.5
+Bye, Peter Korsgaard
