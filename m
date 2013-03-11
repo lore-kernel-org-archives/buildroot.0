@@ -1,117 +1,62 @@
-From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Date: Mon, 11 Mar 2013 16:05:26 +0530
-Subject: [Buildroot] uClibc trunk build error
-In-Reply-To: <513AD64F.90607@synopsys.com>
-References: <513AD64F.90607@synopsys.com>
-Message-ID: <513DB36E.5040900@synopsys.com>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Mon, 11 Mar 2013 11:35:34 +0100
+Subject: [Buildroot] [PATCH] [RFC] Add a LOADADDR= option when building
+	uImage
+Message-ID: <1362998134-4614-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday 09 March 2013 11:57 AM, Vineet Gupta wrote:
-> Hi,
-> 
-> I'm seeing a compile error with uClibc trunk (commit 60c1fe7,
-> "nptl/allocatestack.c: Fix stack mprotect") - ported to ARC architecture (with old
-> pthreads + no-legacy-syscall ABI)
-> 
-> The test case is extracted from a dated version of LTP open posix suite and it
-> simply involves
-> (1) #include signal.h
-> (2) build options -D_POSIX_C_SOURCE=200112L
-> 
-> #include <signal.h>
-> 
-> int main(void)
-> {
->     return 0;
-> }
-> 
-> See the patch below to see the exact error:
-> 
-> The problem is happening because pthreadtypes.h doesn't ensure that all it's
-> dependencies are actually met
-> IMHO it's not an arch specific error, but a generic one, primarily triggered after
-> the following upstream commit
-> 52029220899bc6, "bits/types.h: remove thread types, users should include pthread.h"
-> 
-> Please consider applying.
-> 
-> Thx,
-> -Vineet
-> 
-> ---------------------->
-> From: Vineet Gupta <vgupta@synopsys.com>
-> Date: Sat, 9 Mar 2013 11:41:08 +0530
-> Subject: [PATCH] libpthreads{,old}: Fix Build error
-> 
-> A user application built with -D_POSIX_C_SOURCE=200112L and
->  #include signal.h, yields following compilation error:
-> 
-> ------------------->8-----------------------------
-> arc-linux-uclibc-gcc -D_POSIX_C_SOURCE=200112L hello.c
-> In file included from
-> /opt/INSTALL/lib/gcc/arc-linux-uclibc/4.4.7/../../../../arc-linux-uclibc/sys-include/signal.h:429,
->                  from hello.c:1:
-> /opt/INSTALL/lib/gcc/arc-linux-uclibc/4.4.7/../../../../arc-linux-uclibc/sys-include/bits/pthreadtypes.h:48:
-> error: expected specifier-qualifier-list before 'size_t'
-> ------------------->8-----------------------------
-> 
-> The fix is to make sure size_t is explicitly provided to pthreadtype.h
-> 
-> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
-> ---
->  .../sysdeps/pthread/bits/pthreadtypes.h            |    3 +++
->  .../sysdeps/pthread/bits/pthreadtypes.h            |    3 +++
->  2 files changed, 6 insertions(+), 0 deletions(-)
-> 
-> diff --git a/libpthread/linuxthreads.old/sysdeps/pthread/bits/pthreadtypes.h
-> b/libpthread/linuxthreads.old/sysdeps/pthread/bits/pthreadtypes.h
-> index faec63b..3eb5929 100644
-> --- a/libpthread/linuxthreads.old/sysdeps/pthread/bits/pthreadtypes.h
-> +++ b/libpthread/linuxthreads.old/sysdeps/pthread/bits/pthreadtypes.h
-> @@ -19,6 +19,9 @@
->  #ifndef _BITS_PTHREADTYPES_H
->  #define _BITS_PTHREADTYPES_H    1
->  
-> +#define __need_size_t
-> +#include <stddef.h>
-> +
->  #define __need_schedparam
->  #include <bits/sched.h>
->  
-> diff --git a/libpthread/linuxthreads/sysdeps/pthread/bits/pthreadtypes.h
-> b/libpthread/linuxthreads/sysdeps/pthread/bits/pthreadtypes.h
-> index 4ea6d8a..8d01c89 100644
-> --- a/libpthread/linuxthreads/sysdeps/pthread/bits/pthreadtypes.h
-> +++ b/libpthread/linuxthreads/sysdeps/pthread/bits/pthreadtypes.h
-> @@ -19,6 +19,9 @@
->  #ifndef _BITS_PTHREADTYPES_H
->  #define _BITS_PTHREADTYPES_H    1
->  
-> +#define __need_size_t
-> +#include <stddef.h>
-> +
->  #define __need_schedparam
->  #include <bits/sched.h>
->  
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
+This seems mandatory in recent Linux kernels configured with ARCH_MULTIPLATFORM
+(well at least on ARM/i.MX).
+If LOADADDR variable is not set when building multi-arch uImage then a dummy
+loadaddr is used, that prevent this image to boot in U-Boot (2012.04 in my
+case).
+Anyone else who need the same fix ?
 
-I can confirm that an ARM buildroot based toolchain,  configured with uClibc daily
-snapshot (BR2_UCLIBC_VERSION_SNAPSHOT) + old pthreads suffers from same problem.
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ linux/Config.in |    8 ++++++++
+ linux/linux.mk  |    4 ++++
+ 2 files changed, 12 insertions(+), 0 deletions(-)
 
------------------------>8---------------------------
-./host/usr/bin/arm-linux-gcc test.c -D_POSIX_C_SOURCE=200112L
-In file included from
-/home/vineetg/arc/buildroot/VERSATILE/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/signal.h:429:0,
-                 from test.c:1:
-/home/vineetg/arc/buildroot/VERSATILE/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/bits/pthreadtypes.h:48:3:
-error: unknown type name 'size_t'
-/home/vineetg/arc/buildroot/VERSATILE/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/bits/pthreadtypes.h:51:3:
-error: unknown type name 'size_t'
------------------------>8---------------------------
-
-Thanks,
--Vineet
+diff --git a/linux/Config.in b/linux/Config.in
+index 94ce951..c582439 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -213,6 +213,14 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
+ 	  Specify the kernel make target to build the kernel that you
+ 	  need.
+ 
++config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
++	string "loadaddr for uImage"
++	depends on BR2_LINUX_KERNEL_UIMAGE || BR2_LINUX_KERNEL_APPENDED_UIMAGE
++	help
++	  When configured for multi-arch support, it is mandatory to define
++	  LOADADDR=0x... when asking recent kernels to generate a uImage.
++	  Let this option empty if your kernel is single-arch only.
++
+ config BR2_LINUX_KERNEL_DTS_SUPPORT
+ 	bool "Device tree support"
+ 	help
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 0352acd..361ce3c 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -95,6 +95,10 @@ LINUX_IMAGE_NAME=vmlinuz
+ endif
+ endif
+ 
++ifeq ($(LINUX_IMAGE_NAME),uImage)
++LINUX_MAKE_FLAGS+=LOADADDR=$(call qstrip,$(BR2_LINUX_KERNEL_UIMAGE_LOADADDR))
++endif
++
+ ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
+ LINUX_IMAGE_TARGET=zImage
+ else
+-- 
+1.7.5.4
