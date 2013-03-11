@@ -1,55 +1,58 @@
-From: =?UTF-8?B?QXJuYXVkIFLDqWJpbGxvdXQ=?= <rebillout@syscom.ch>
-Date: Mon, 11 Mar 2013 10:51:14 +0100
-Subject: [Buildroot] [PATCH] flot: add fillbetween plugin.
-In-Reply-To: <87sj42vr7g.fsf@dell.be.48ers.dk>
-References: <1360769145-1610-1-git-send-email-rebillout@syscom.ch>
- <87sj42vr7g.fsf@dell.be.48ers.dk>
-Message-ID: <513DA912.6090500@syscom.ch>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 11 Mar 2013 10:54:08 +0100
+Subject: [Buildroot] [PATCH] barebox: add 2013.03.0, remove 2012.11
+Message-ID: <1362995648-8207-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-You have sharp eyes !
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ boot/barebox/Config.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Thanks for committing,
-
-Regards,
-Arnaud
-
-On 03/10/2013 11:13 PM, Peter Korsgaard wrote:
->>>>>> "Arnaud" == Arnaud R?billout<rebillout@syscom.ch>  writes:
->   Arnaud>  Flot plugin for computing bottoms for filled line and bar charts.
->   Arnaud>  Signed-off-by: Arnaud R?billout<rebillout@syscom.ch>
->   Arnaud>  ---
->   Arnaud>   package/flot/Config.in |    5 +++++
->   Arnaud>   package/flot/flot.mk   |    1 +
->   Arnaud>   2 files changed, 6 insertions(+)
->
->   Arnaud>  diff --git a/package/flot/Config.in b/package/flot/Config.in
->   Arnaud>  index 60534c1..0124b2d 100644
->   Arnaud>  --- a/package/flot/Config.in
->   Arnaud>  +++ b/package/flot/Config.in
->   Arnaud>  @@ -20,6 +20,11 @@ if BR2_PACKAGE_FLOT
->
->   Arnaud>   comment "flot plugins"
->
->   Arnaud>  +config BR2_PACKAGE_FLOT_FILLBETWEEN
->   Arnaud>  +	bool "fillbetween"
->   Arnaud>  +	help
->   Arnaud>  +	  Flot plugin for computing bottoms for filled line and bar charts.
->
-> You have a trailing space here in the help text.
->
-> Otherwise it looks good, committed - Thanks.
->
-
-
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 769a1bd..f111c04 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -8,13 +8,10 @@ config BR2_TARGET_BAREBOX
+ if BR2_TARGET_BAREBOX
+ choice
+ 	prompt "version"
+-	default BR2_TARGET_BAREBOX_2013_02
++	default BR2_TARGET_BAREBOX_2013_03
+ 	help
+ 	  Select the specific Barebox version you want to use
+ 
+-config BR2_TARGET_BAREBOX_2012_11
+-	bool "2012.11"
+-
+ config BR2_TARGET_BAREBOX_2012_12
+ 	bool "2012.12.1"
+ 
+@@ -24,6 +21,9 @@ config BR2_TARGET_BAREBOX_2013_01
+ config BR2_TARGET_BAREBOX_2013_02
+ 	bool "2013.02.0"
+ 
++config BR2_TARGET_BAREBOX_2013_03
++	bool "2013.03.0"
++
+ config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+ 
+@@ -41,10 +41,10 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2012.11.0"	if BR2_TARGET_BAREBOX_2012_11
+ 	default "2012.12.1"	if BR2_TARGET_BAREBOX_2012_12
+ 	default "2013.01.0"	if BR2_TARGET_BAREBOX_2013_01
+ 	default "2013.02.0"	if BR2_TARGET_BAREBOX_2013_02
++	default "2013.03.0"	if BR2_TARGET_BAREBOX_2013_03
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+ 
 -- 
-Arnaud R?billout
-SYSCOM Instruments SA
-rue de l'industrie 21
-CH-1450 Sainte-Croix
-Switzerland
-Tel: +41 (0)24 455 44 11
+1.8.1.5
