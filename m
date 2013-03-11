@@ -1,27 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Mar 2013 18:45:32 +0100
-Subject: [Buildroot] [PATCH v4 2/2] zeromq: add PGM/EPGM support
-In-Reply-To: <1362390492-22434-2-git-send-email-alexander.lukichev@gmail.com>
-References: <1362390492-22434-1-git-send-email-alexander.lukichev@gmail.com>
- <1362390492-22434-2-git-send-email-alexander.lukichev@gmail.com>
-Message-ID: <20130311184532.646b19ec@skate>
+Date: Mon, 11 Mar 2013 18:51:06 +0100
+Subject: [Buildroot] [PATCH] <pkg>-rsync: exclude version control files
+In-Reply-To: <87fw02vpqe.fsf@dell.be.48ers.dk>
+References: <f9ac20b69b1bfd3f77ef.1362169598@BEANTN0L019720>
+ <871ubv9bk0.fsf@dell.be.48ers.dk> <51378135.6070006@mind.be>
+ <87fw02vpqe.fsf@dell.be.48ers.dk>
+Message-ID: <20130311185106.5ea959a4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Lukichev,
+Dear Peter Korsgaard,
 
-On Mon,  4 Mar 2013 11:48:12 +0200, Alexander Lukichev wrote:
-> This adds support for Pragmatic General Multicast protocol on raw
-> IP (PGM, RFC 3208) or UDP frames (EPGM) for use as zeromq reliable
-> multicast transport. The library relies on openpgm package to
-> implement the protocol itself.
+On Sun, 10 Mar 2013 23:45:13 +0100, Peter Korsgaard wrote:
+
+> Ok, but it will atleast change the current behaviour, which people might
+> rely on..
 > 
-> Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
+> What do others say?
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+If the per-package out-of-tree stuff is merged, then in most cases,
+it will no longer be needed to do this rsync, except for packages that
+don't support out-of-tree build.
+
+As far as the actual code goes, I would find it ok that the .git/.svn
+stuff is not copied. It's pretty big, and 'breaks' only this very
+specific 'commit ID' thing, so I would tend to agree with Thomas's
+patch.
+
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
