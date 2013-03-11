@@ -1,69 +1,46 @@
-From: Chris Wilkinson <winstonian36@gmail.com>
-Date: Mon, 11 Mar 2013 11:49:29 -0400
-Subject: [Buildroot] Q. How to use a custom kernel tree?
-In-Reply-To: <20130308170521.3e8926ff@skate>
-References: <CAHUKsLJM76BFzZunyc=6Jc=UUo4NKq=07_BHNRpVZwYc5VkkRg@mail.gmail.com>
- <20130308170521.3e8926ff@skate>
-Message-ID: <CAHUKsLLd56BrLOeN_7xa1cx3M0M+dbQyX2fxZcc_4nof0k3cFg@mail.gmail.com>
+From: Christophe Vu-Brugier <cvubrugier@lacie.com>
+Date: Mon, 11 Mar 2013 17:19:37 +0100
+Subject: [Buildroot] [PATCH 1/1] host util-linux: disable login and su since
+	they depend on PAM
+Message-ID: <1363018777-13122-1-git-send-email-cvubrugier@lacie.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Is this a config error on my part or a BR bug? Stephan suggests it's
-currently a BR limitation that custom tarballs can only be got from an http
-server not a local directory.
+This fixes the following errors when building util-linux v2.22.2 for
+the host in case the PAM headers are missing:
 
+  configure: error: login selected, but required PAM header file not available
+  configure: error: su selected, but required PAM header file not available
 
-On Fri, Mar 8, 2013 at 11:05 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Signed-off-by: Christophe Vu-Brugier <cvubrugier@lacie.com>
+---
+ package/util-linux/util-linux.mk |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-> Dear Chris Wilkinson,
->
-> On Fri, 8 Mar 2013 10:47:42 -0500, Chris Wilkinson wrote:
-> > I have a customized, patched kernel tree which I'd like BR to use.
-> >
-> > I tar'd the custom kernel tree, selected custom tarball for the kernel
-> > version and put the full URL/path to the archive in
-> > BR2_LINUX_KERNEL_CUSTOM_TARBALL.
->
-> Can you pastebin your .config file somewhere?
->
-> > The custom tree also contains a defconfig for my arch. I set
-> > BR2_LINUX_KERNEL_USE_DEFCONFIG=y and gave it's name in
-> > BR2_LINUX_KERNEL_DEFCONFIG.
-> >
-> > Using make, BR error'ed out thus.
-> >
-> > >>> linux custom Extracting
-> > cat /home/chrisw/embedded/buildroot/dl/linux-3.4-ss4000e.tar | tar
-> > --strip-components=1 -C
-> > /home/chrisw/embedded/buildroot/output/build/linux-custom  -xf -
-> > cat: /home/chrisw/embedded/buildroot/dl/linux-3.4-ss4000e.tar: No such
-> file
-> > or directory
-> > tar: This does not look like a tar archive
-> > tar: Exiting with failure status due to previous errors
-> >
-> > It appears that BR expects to find the custom tarball in <BR>/dl, not the
-> > path I specified.
->
-> Hum, let's see your .config first. Once we check that, we'll be able to
-> tell you if it's a configuration problem  or indeed a Buildroot bug.
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
->
-
-
-
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 5e88206..b562206 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -79,11 +79,12 @@ UTIL_LINUX_CONF_OPT += \
+ # and none of the util-linux utilities, so we disable all of them.
+ HOST_UTIL_LINUX_CONF_OPT += \
+ 	--enable-libuuid \
+-	--disable-mount --disable-fsck --disable-libmount \
+-	--disable-uuidd --disable-libblkid --disable-agetty \
+-	--disable-cramfs --disable-switch_root --disable-pivot_root \
+-	--disable-fallocate --disable-unshare --disable-rename \
+-	--disable-schedutils --disable-wall --disable-partx
++	--disable-agetty --disable-cramfs --disable-fallocate \
++	--disable-fsck --disable-libblkid --disable-libmount \
++	--disable-login --disable-mount --disable-partx \
++	--disable-pivot_root --disable-rename --disable-schedutils \
++	--disable-su --disable-switch_root --disable-unshare \
++	--disable-uuidd --disable-wall
+ 
+ # Avoid building the tools if they are disabled since we can't install on
+ # a per-directory basis.
 -- 
--Chris-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130311/1757010f/attachment.html>
+1.7.10.4
