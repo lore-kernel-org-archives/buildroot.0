@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Mar 2013 22:30:09 +0100
-Subject: [Buildroot] [PATCH 4/6] package/genimage: new host-only package
-In-Reply-To: <201303110039.31451.yann.morin.1998@free.fr>
+Date: Mon, 11 Mar 2013 22:30:35 +0100
+Subject: [Buildroot] [PATCH 6/6] package/mtools: new host-package
+In-Reply-To: <201303110102.06732.yann.morin.1998@free.fr>
 References: <cover.1362693294.git.yann.morin.1998@free.fr>
- <40cdfc7c804704b95c963d3c76852e6d2b82de31.1362693294.git.yann.morin.1998@free.fr>
- <20130310124158.65520084@skate>
- <201303110039.31451.yann.morin.1998@free.fr>
-Message-ID: <20130311223009.4f0dbd67@skate>
+ <296699691239a90d5118c5cbe72f1ff57b3761a5.1362693294.git.yann.morin.1998@free.fr>
+ <20130310124944.261867c4@skate>
+ <201303110102.06732.yann.morin.1998@free.fr>
+Message-ID: <20130311223035.59280cc1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,12 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Mon, 11 Mar 2013 00:39:31 +0100, Yann E. MORIN wrote:
+On Mon, 11 Mar 2013 01:02:06 +0100, Yann E. MORIN wrote:
 
-> I am a bit uneasy at adding licensing information for packages that are
-> purely host packages.
-> 
-> As you said in your other mail, this might confuse a user reviewing the
-> licensing terms.
+> I would suggest that we not install licensing information about host
+> packages, unless they are also used on the target.
 
-I think this is not a good reason to not add the license. We already
-have it in a number of packages that have a host variant. It should be
-something for the licensing infrastructure to handle.
-
-> But I will add it.
-
-Thanks!
+That would make sense, IMO.
 
 Thomas
 -- 
