@@ -1,50 +1,34 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 12 Mar 2013 10:05:04 +0100
-Subject: [Buildroot] [RFC/PATCH] fs/common.mk: Fix wrong double dollar
-	usage
-In-Reply-To: <1362863052-8781-1-git-send-email-ezequiel.garcia@free-electrons.com>
-References: <1362863052-8781-1-git-send-email-ezequiel.garcia@free-electrons.com>
-Message-ID: <CAAXf6LXzA2qSxq+5XRzRQUrXTHhTwYg2VA9GdTiNpPzkcNndxQ@mail.gmail.com>
+Date: Tue, 12 Mar 2013 10:16:17 +0100
+Subject: [Buildroot] [PATCH] pkg-autotools.mk: remove extra space from
+ config-update message
+In-Reply-To: <20130312084157.4528e185@skate>
+References: <1363053511-9208-1-git-send-email-danomimanchego123@gmail.com>
+ <20130312084157.4528e185@skate>
+Message-ID: <CAAXf6LW_YCuORrWj7j352RkgO-Mhbs=D_4jKddCQ=htQO48zCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-On Sat, Mar 9, 2013 at 10:04 PM, Ezequiel Garcia
-<ezequiel.garcia@free-electrons.com> wrote:
-> Double dollar sign is used to put an explicit dollar sign,
-> for instance, when writing a makefile rule.
+On Tue, Mar 12, 2013 at 8:41 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Danomi Manchego,
 >
-> In this case, there are some makefile conditionals where
-> makefile variables are evaluated using double dollar signs
-> instead of single dollar, which is wrong.
+> On Mon, 11 Mar 2013 21:58:31 -0400, Danomi Manchego wrote:
+>> If you do a "make -s", you will notice that the UPDATE_CONFIG_HOOK message
+>> has an extra space compared to other highlighted messages.  For example:
+>>
+>> >>> util-linux 2.20.1  Updating config.sub and config.guess
+>> >>> util-linux 2.20.1 Patching libtool
+>> >>> util-linux 2.20.1 Autoreconfiguring
+>>
+>> A grep shows this is the only instance of the extra space. This patch
+>> removes the extra space.
+>>
+>> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 >
-> In particular, this fixes a buildroot 'make' stall
-> when building with an empty device table (empty BR2_ROOTFS_DEVICE_TABLE).
->
-> Signed-off-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-> ---
-> I'm sending this as RFC because I'm new to buildroot
-> and because I'm not a makefile wizard.
-> AFAIK, this fixes a real bug in my compilation,
-> as explained in the commit message.
+> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-In fact you are reverting changes made by Arnout a while back, see git
-commit 847895d29524d81b64afb059b8649a77802a469b
-http://git.buildroot.org/buildroot/commit/?id=847895d29524d81b64afb059b8649a77802a469b
-There were specific reasons to make these changes, so I don't think we
-should revert them like this.
-
-Be aware that these make targets are inside a 'define
-ROOTFS_TARGET_INTERNAL' statement, and later in the file this
-'function' is executed with 'call'. This makes the rules for $ or $$ a
-little different than in standard make recipes.
-
-You mention a 'stall', can you elaborate more? What happens exactly?
-Can you debug this further?
-
-Best regards,
-Thomas
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
