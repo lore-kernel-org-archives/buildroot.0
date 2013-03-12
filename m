@@ -1,22 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 12 Mar 2013 10:32:00 +0100
-Subject: [Buildroot] [PATCH] lcdproc: needs MMU
-In-Reply-To: <1363023684-3479-1-git-send-email-gilles.talis@gmail.com> (Gilles
- Talis's message of "Mon, 11 Mar 2013 10:41:24 -0700")
-References: <1363023684-3479-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87r4jlt14f.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 12 Mar 2013 10:31:06 +0100
+Subject: [Buildroot] [git commit] lcdproc: needs MMU
+Message-ID: <20130312093227.8B08D9B04F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=4af3bb1d0e8054a8041bf0c9e015b93b5d124a46
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gilles> Fixes:
- Gilles> http://autobuild.buildroot.org/results/58d0231cc39ee6be3064906f07307b438ea4c30b
+Fixes:
+http://autobuild.buildroot.org/results/58d0231cc39ee6be3064906f07307b438ea4c30b
 
-Committed, thanks.
+Also fixed some indentation issues
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/lcdproc/Config.in |   15 ++++++++-------
+ 1 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/package/lcdproc/Config.in b/package/lcdproc/Config.in
+index e0afc44..5635a02 100644
+--- a/package/lcdproc/Config.in
++++ b/package/lcdproc/Config.in
+@@ -1,12 +1,13 @@
+ config BR2_PACKAGE_LCDPROC
+-       bool "lcdproc"
+-       select BR2_PACKAGE_FREETYPE
+-       select BR2_PACKAGE_NCURSES
+-       select BR2_PACKAGE_ZLIB
+-       help
+-         LCD display driver daemon and clients
++	bool "lcdproc"
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_ZLIB
++	help
++	  LCD display driver daemon and clients
+ 
+-         http://lcdproc.org/
++	  http://lcdproc.org/
+ 
+ config BR2_PACKAGE_LCDPROC_DRIVERS
+ 	string "List of drivers to build"
