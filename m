@@ -1,41 +1,59 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 11 Mar 2013 21:58:31 -0400
-Subject: [Buildroot] [PATCH] pkg-autotools.mk: remove extra space from
-	config-update message
-Message-ID: <1363053511-9208-1-git-send-email-danomimanchego123@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 12 Mar 2013 05:47:13 +0100
+Subject: [Buildroot] [pull request v4] Pull request for branch for-master/doc
+Message-ID: <cover.1363063387.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If you do a "make -s", you will notice that the UPDATE_CONFIG_HOOK message
-has an extra space compared to other highlighted messages. ?For example:
+Hello All!
 
->>> util-linux 2.20.1 ?Updating config.sub and config.guess
->>> util-linux 2.20.1 Patching libtool
->>> util-linux 2.20.1 Autoreconfiguring
 
-A grep shows this is the only instance of the extra space. This patch
-removes the extra space.
+No big changes in this 4th revision of the series.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/pkg-autotools.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v3 -> v4:
+  - Do not embed Kconfiglib python module (because of licensing incertainty,
+  the whole discussion is available online on github);
+  - Usual list updates.
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 890506b..995c685 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -145,7 +145,7 @@ endif
- # Hook to update config.sub and config.guess if needed
- #
- define UPDATE_CONFIG_HOOK
--       @$$(call MESSAGE, "Updating config.sub and config.guess")
-+       @$$(call MESSAGE,"Updating config.sub and config.guess")
-        $$(call CONFIG_UPDATE,$$(@D))
- endef
- 
--- 
-1.7.9.5
+
+The following changes since commit 1ca9e06f1c9a5ef12feb63711a48379c0eae7e42:
+
+  package/tzdata: new package (2013-03-10 23:37:04 +0100)
+
+are available in the git repository at:
+
+  git://github.com/tSed/buildroot.git for-master/doc
+
+for you to fetch changes up to 942902bac4f98be7c13942d93f1a1ba46fc171d7:
+
+  manual: update generated lists (2013-03-12 05:42:27 +0100)
+
+----------------------------------------------------------------
+Samuel Martin (5):
+      support/scripts: add gen-manual-lists.py
+      manual: add a make target 'manual-update-lists'
+      manual: cleanup appendix.txt
+      Makefile: add to the release target a warning about the manual updates.
+      manual: update generated lists
+
+ Makefile                            |   2 +
+ docs/manual/appendix.txt            |  29 +-
+ docs/manual/deprecated-list.txt     |  79 ++-
+ docs/manual/host-package-list.txt   |  19 +
+ docs/manual/manual.mk               |   8 +-
+ docs/manual/package-list.txt        | 941 ++++++++++++++++++++++++++++++++++++
+ docs/manual/pkg-list.txt            | 870 ---------------------------------
+ support/scripts/gen-manual-lists.py | 354 ++++++++++++++
+ 8 files changed, 1379 insertions(+), 923 deletions(-)
+ create mode 100644 docs/manual/host-package-list.txt
+ create mode 100644 docs/manual/package-list.txt
+ delete mode 100644 docs/manual/pkg-list.txt
+ create mode 100755 support/scripts/gen-manual-lists.py
+
+Yours,
+Samuel
+
+--
