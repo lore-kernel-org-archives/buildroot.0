@@ -1,44 +1,31 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Tue, 12 Mar 2013 09:12:12 +0100 (CET)
-Subject: [Buildroot] [PATCH] change default location for local.mk to
- $(CONFIG_DIR)
-In-Reply-To: <20130311222630.5a75029d@skate>
-Message-ID: <1706669320.395518.1363075932486.JavaMail.root@openwide.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Mar 2013 07:59:02 +0100
+Subject: [Buildroot] qt4 and qt5 side-by-side
+Message-ID: <513ED236.20305@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Dear J?r?my Rosen,
-> 
-> On Thu,  7 Mar 2013 11:49:23 +0100, J?r?my Rosen wrote:
-> > the previous default of $(TOPDIR) broke the philosophy of builds
-> > with O=
-> > which try to keep all configuration files within the $(CONFIG_DIR)
-> > subtree
-> 
-> Hum, that's an interesting vision of things. I think I would tend to
-> agree with this idea.
-> 
-> What do others think?
-> 
+  Qt4 and Qt5 are currently not mutually exclusive. As I just found out, 
+they really are...
 
-A bit of context : 
+  Qt4 installs qt.conf in $(HOST_DIR)/usr/bin; if you use this with qt5's 
+qmake, qmake will spit out bogus configuration options. As soon as you 
+commit one of the other qt5 packages, you'll start to get autobuilder 
+failures (which are pretty hard to debug as I can testify :-).
 
-I am trying to keep my buildroot project in git, but I am trying to 
-cleanly separate "changes made to git" and "changes due to my project.
+  For the time being, I propose to add a 'depends on !BR2_PACKAGE_QT' to
+BR2_PACKAGE_QT5. Ideally, QT should become a virtual package with choices 
+between qt4 and qt5.
 
-that basically means that all config file needs to be out of the 
-buildroot/ subdirectory to be able to easily generate patches against
-mainline and still keep my changes in git. I do that using git-subtree
-
-I also change the location of the kernel config file for the same reason
-and would do that for ctng and busybox if I needed to change them from
-their default config
-
-    Regards
-
-    J?r?my Rosen
-
-fight key loggers : write some perl using vim
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
