@@ -1,53 +1,41 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Tue, 12 Mar 2013 21:44:57 +0100
-Subject: [Buildroot] [PATCH] [RFC] Add a LOADADDR= option when building
- uImage
-In-Reply-To: <CAKduhStbK-9P4GhALmssGO07TdwX1r1rkfOtdUH6NqaYdHJcfg@mail.gmail.com>
-References: <1362998134-4614-1-git-send-email-julien.boibessot@free.fr>
- <CAKduhStbK-9P4GhALmssGO07TdwX1r1rkfOtdUH6NqaYdHJcfg@mail.gmail.com>
-Message-ID: <513F93C9.7090206@free.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 12 Mar 2013 22:17:05 +0100
+Subject: [Buildroot] [PATCH] libv4l: depends on jpeg so must select it
+Message-ID: <1363123025-8481-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Daniel,
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-On 03/12/2013 09:39 AM, Daniel Price wrote:
-> Julien,
->
-> I would appreciate this patch because I spent a lot of time
-> discovering LOADADDR and this would have really helped me.  My
-> suggestions:
+Fixes http://autobuild.buildroot.net/results/3053854fccd65bc5b28384f2a2039a33abeeea47
 
-thanks for your feedback !
+The introduction of the error message for the jpeg virtual package exposes
+this kind of error.
 
-> 1) Should this variable be exposed only for ARM for now?  ("depends on
-> BR2_arm || BR2_armeb")
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+Perhaps it would be nice to add this type of check to the generic package
+infrastructure: if a package is built, it should always be selected. Of
+course, that makes it impossible to do a quick build of a package without
+reconfiguring, but we can add another make variable that bypasses the check.
+---
+ package/libv4l/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
-yes, I will do
-
-> 2) Should this variable only be exposed for linux versions >= 3.7?
-> 3.7 is when CONFIG_ARCH_MULTIPLATFORM appears.
-
-yes, but I don't know how to do that.
-any idea ?
-
-> 3) The description in the help text might not help someone new to this
-> topic (like me).  I would suggest something like:
->
-> "If your ARM system's kernel is configured via the new (3.7+)
-> multi-architecture support (CONFIG_ARCH_MULTIPLATFORM=y in your linux
-> kernel .config), then it is necessary to specify a kernel load address
-> for the uImage.  This should be a hexadecimal string beginning with
-> 0x.  Example setting: 0x00008000."
-
-yes that's better than mine.
-I'm just trying to figure out how to depend from
-CONFIG_ARCH_MULTIPLATFORM and then I will send a new version of my patch.
-
-Thanks !
-
-Regards,
-Julien
+diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+index 1e5eec6..cb0f43c 100644
+--- a/package/libv4l/Config.in
++++ b/package/libv4l/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBV4L
+ 	bool "libv4l"
+ 	depends on BR2_LARGEFILE
++	select BR2_PACKAGE_JPEG
+ 	help
+ 	  libv4l is an accompanying collection of libraries that adds a thin
+ 	  abstraction layer on top of video4linux2 (V4L2) devices.
+-- 
+1.7.10.4
