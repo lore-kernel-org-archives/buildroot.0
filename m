@@ -1,57 +1,34 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Mar 2013 18:42:10 +0100
-Subject: [Buildroot] [PATCH 4/6] fs/ext2: use the ext2 variant to name
- the generated rootfs image
-In-Reply-To: <20130310145501.7e5dec1f@skate>
+Date: Tue, 12 Mar 2013 18:44:41 +0100
+Subject: [Buildroot] [PATCH 5/6] fs/ext2: add support for ext2 rev0 and
+	rev1
+In-Reply-To: <31898da643046864f71fe6c6b553cc4bd00f0897.1362693453.git.yann.morin.1998@free.fr>
 References: <cover.1362693453.git.yann.morin.1998@free.fr>
- <1d86b1b76a2c56aaf0098ec389e570862e7aa3fb.1362693453.git.yann.morin.1998@free.fr>
- <20130310145501.7e5dec1f@skate>
-Message-ID: <513F68F2.5050009@mind.be>
+ <31898da643046864f71fe6c6b553cc4bd00f0897.1362693453.git.yann.morin.1998@free.fr>
+Message-ID: <513F6989.70202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/10/13 14:55, Thomas Petazzoni wrote:
-> Dear Yann E. MORIN,
+On 03/07/13 23:04, Yann E. MORIN wrote:
+> Some bootloaders have a buggy ext2 support, and require ext2 rev1
+> instead of the traditional ext2 rev0 that genext2fs produces.
 >
-> On Thu,  7 Mar 2013 23:04:41 +0100, Yann E. MORIN wrote:
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Arnout Vandecappelle <arnout@mind.be>
->> ---
->>   fs/ext2/ext2.mk |    2 +-
->>   1 files changed, 1 insertions(+), 1 deletions(-)
->>
->> diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
->> index 1660d9c..57acad7 100644
->> --- a/fs/ext2/ext2.mk
->> +++ b/fs/ext2/ext2.mk
->> @@ -29,4 +29,4 @@ define ROOTFS_EXT2_CMD
->>   	PATH=$(TARGET_PATH) $(EXT2_ENV) fs/ext2/genext2fs.sh -d $(TARGET_DIR) $(EXT2_OPTS) $@
->>   endef
->>
->> -$(eval $(call ROOTFS_TARGET,ext2))
->> +$(eval $(call ROOTFS_TARGET,ext2,ext$(BR2_TARGET_ROOTFS_EXT2_GEN)))
+> tune2fs accepts only one '-O list' at a time, so we need to construct
+> a list of -O options.
 >
-> It is not a very strong opinion here, but I'm not sure I like this idea
-> of the file extension being dependent on BR2_TARGET_ROOTFS_EXT2_GEN.
->
-> I think I would have preferred something that renames the filesystem
-> to:
->
-> $(eval $(call ROOTFS_TARGET,ext))
->
-> which generates a rootfs.ext image, with a compatibility symbolic link
-> ext2 -> ext. This can for example be done in a
-> ROOTFS_EXT_POST_GEN_HOOKS.
+> Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle<arnout@mind.be>
 
-  That sounds like a good idea to me.
+  I like your new approach for gen/rev configuration!
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
   Regards,
   Arnout
-
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
