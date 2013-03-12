@@ -1,28 +1,37 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Mar 2013 18:40:34 +0100
-Subject: [Buildroot] [PATCH 2/6] fs/ext2: add ability to build ext3/4 too
-In-Reply-To: <20130310145851.4f1f6539@skate>
-References: <cover.1362693453.git.yann.morin.1998@free.fr>
- <b55a35d2b1dc1f5bb2598cc8bb29f787407250bc.1362693453.git.yann.morin.1998@free.fr>
- <20130310145851.4f1f6539@skate>
-Message-ID: <513F6892.7070409@mind.be>
+Date: Tue, 12 Mar 2013 18:23:32 +0100
+Subject: [Buildroot] Fwd: Google doesn't help Buildroot newcomers really
+ much
+In-Reply-To: <CAMFO430Fv-AZ+5bO=4pZR+VDzMAXE=mmzYCrMYx5FOVuKYh3yQ@mail.gmail.com>
+References: <CAMFO431gatpdNG5oEcAQqCWVLs6St6-0P1SBA3h3SiTimk5tvg@mail.gmail.com>
+ <CAMFO433vmKwUuc6ap2654izNBpchHu7_6wzG10MisbGO9rvF6w@mail.gmail.com>
+ <20130309151845.6a7da709@skate>
+ <CAMFO430Fv-AZ+5bO=4pZR+VDzMAXE=mmzYCrMYx5FOVuKYh3yQ@mail.gmail.com>
+Message-ID: <513F6494.2070206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/10/13 14:58, Thomas Petazzoni wrote:
-> Maybe we could set the volume name to 'buildroot' ? I.e:
->
-> 	tune2fs -L buildroot "${IMG}"
+On 03/11/13 15:23, Marc Schultz wrote:
+[snip]
+> BR2_LINUX_KERNEL_UIMAGE=y
+> # BR2_LINUX_KERNEL_VMLINUX is not set
+> # BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM is not set
 
-  I don't particularly like that. If you're going to add volume names, it 
-should be configurable.
+  Upstream kernel doesn't support uImage (it's a U-Boot image, but under 
+a different name). Select BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM and set 
+the image name to vmImage.
+
+  But I guess you had to do that in the blackfin buildroot fork as well, 
+no? Or maybe they have a fix to linux/linux.mk to change the name into 
+vmImage for blackfin...
 
   Regards,
   Arnout
 
+[snip]
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
