@@ -1,49 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Mar 2013 00:32:33 +0100
-Subject: [Buildroot] IOzone license questions
-In-Reply-To: <CAKcgs2yfYVyZHbBVno+u4uLLkfNeL8iLqXmqgtF4+9xv12akgQ@mail.gmail.com>
-References: <CAKcgs2yfYVyZHbBVno+u4uLLkfNeL8iLqXmqgtF4+9xv12akgQ@mail.gmail.com>
-Message-ID: <513FBB11.8070900@mind.be>
+Date: Wed, 13 Mar 2013 00:41:04 +0100
+Subject: [Buildroot] [PATCH] [RFC] Add a LOADADDR= option when building
+ uImage
+In-Reply-To: <513F93C9.7090206@free.fr>
+References: <1362998134-4614-1-git-send-email-julien.boibessot@free.fr>
+ <CAKduhStbK-9P4GhALmssGO07TdwX1r1rkfOtdUH6NqaYdHJcfg@mail.gmail.com>
+ <513F93C9.7090206@free.fr>
+Message-ID: <513FBD10.3070909@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/12/13 19:10, Gilles Talis wrote:
-> Hi all,
+On 03/12/13 21:44, Julien Boibessot wrote:
+> Hello Daniel,
 >
-> These questions are for the license experts out there.
-> I would like to add IOzone as a new package to buildroot. Problem is
-> that IOzone license is quite restrictive.
-> Here's the main part:
+> On 03/12/2013 09:39 AM, Daniel Price wrote:
+>> Julien,
+[snip]
+>> 2) Should this variable only be exposed for linux versions >= 3.7?
+>> 3.7 is when CONFIG_ARCH_MULTIPLATFORM appears.
 >
-> License to freely use and distribute this software is hereby granted
->    by the author, subject to the condition that this copyright notice
->    remains intact.  The author retains the exclusive right to publish
->    derivative works based on this work, including, but not limited to,
->    revised versions of this work.
+> yes, but I don't know how to do that.
+> any idea ?
+
+  That's not currently possible in buildroot. It's impossible to derive 
+that automatically at configure time.
+
+
+>> 3) The description in the help text might not help someone new to this
+>> topic (like me).  I would suggest something like:
+>>
+>> "If your ARM system's kernel is configured via the new (3.7+)
+>> multi-architecture support (CONFIG_ARCH_MULTIPLATFORM=y in your linux
+>> kernel .config), then it is necessary to specify a kernel load address
+>> for the uImage.  This should be a hexadecimal string beginning with
+>> 0x.  Example setting: 0x00008000."
 >
->
-> My questions are the following:
-> - Is it OK to add this package to buildroot, despite its restrictive license?
+> yes that's better than mine.
+> I'm just trying to figure out how to depend from
+> CONFIG_ARCH_MULTIPLATFORM and then I will send a new version of my patch.
 
-  Yes. But it means that we are not allowed to add cross-compilation 
-patches... So we'll probably have to add a bunch of 'depends on' conditions.
+  Also not possible, because the kernel configuration is separate from 
+the buildroot configuration.
 
-  I propose something like
 
-IOZONE_LICENSE = IOZone license (NO DERIVED WORKS ALLOWED)
+  Having an extensive help text is generally considered sufficient.
 
-> - The text of the license is not provided with the source code, but is
-> available on IOzone website.
-> Should I point to the website link in the package makefile?
-> e.g. IOZONE_LICENSE_FILES = http://www.iozone.org/docs/Iozone_License.txt
-> Or should I leave it to the user to go and find it on his own?
-
-  Unfortunately, URLs don't work for LICENSE_FILES. So just add a comment 
-in the .mk file pointing to the URL.
-
+  Perhaps the prompt could be a bit more explicit still, e.g. "load 
+address (for multi-platform image)" (note that the reference to U-Boot is 
+redundant since it's already a dependency).
 
   Regards,
   Arnout
