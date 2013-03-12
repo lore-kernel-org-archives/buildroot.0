@@ -1,49 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 12 Mar 2013 10:31:06 +0100
-Subject: [Buildroot] [git commit] lcdproc: needs MMU
-Message-ID: <20130312093227.8B08D9B04F@busybox.osuosl.org>
+From: Roland Uuesoo <rolandu@gmail.com>
+Date: Tue, 12 Mar 2013 11:37:43 +0200
+Subject: [Buildroot] 2013.02: sysvinit-2.88 build failure undefined
+	reference to -lcrypt
+Message-ID: <CAG0mjpsiXECXSfAC2_K5GfwMhC76Tws-yw9ygst=_EMRAZG4tA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4af3bb1d0e8054a8041bf0c9e015b93b5d124a46
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi.
 
-Fixes:
-http://autobuild.buildroot.org/results/58d0231cc39ee6be3064906f07307b438ea4c30b
+Sysvinit doesn't build on the following system:
 
-Also fixed some indentation issues
+Buildroot: 2013.02
+OS: Ubuntu 12.10 x64
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/lcdproc/Config.in |   15 ++++++++-------
- 1 files changed, 8 insertions(+), 7 deletions(-)
+The problem looks very similar to this....
+http://buildroot-busybox.2317881.n4.nabble.com/Bug-2401-New-sysvinit-2-86-fails-to-build-on-MIPS-because-is-missing-lcrypt-td6901.html
 
-diff --git a/package/lcdproc/Config.in b/package/lcdproc/Config.in
-index e0afc44..5635a02 100644
---- a/package/lcdproc/Config.in
-+++ b/package/lcdproc/Config.in
-@@ -1,12 +1,13 @@
- config BR2_PACKAGE_LCDPROC
--       bool "lcdproc"
--       select BR2_PACKAGE_FREETYPE
--       select BR2_PACKAGE_NCURSES
--       select BR2_PACKAGE_ZLIB
--       help
--         LCD display driver daemon and clients
-+	bool "lcdproc"
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  LCD display driver daemon and clients
- 
--         http://lcdproc.org/
-+	  http://lcdproc.org/
- 
- config BR2_PACKAGE_LCDPROC_DRIVERS
- 	string "List of drivers to build"
+Compile output is basically the same as the link above:
+sulogin.c:(.text+0xf94): undefined reference to `crypt'
+
+As I understand the problem is this...
+
+sysvinit's makefile can't find libcrypt.a and doesn't add -lcrypt to
+sulogin.c linker options.
+
+On 64bit ubuntu the libcrypt.a is located at
+/usr/lib/x86_64-linux-gnu/libcrypt.a
+
+Best regards,
+Roland Uuesoo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130312/3a36e8f5/attachment-0001.html>
