@@ -1,36 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 12 Mar 2013 22:32:08 +0100
-Subject: [Buildroot] [PATCH] libv4l: depends on jpeg so must select it
-In-Reply-To: <1363123025-8481-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Tue, 12 Mar 2013 22:17:05 +0100")
-References: <1363123025-8481-1-git-send-email-arnout@mind.be>
-Message-ID: <87fw00s3s7.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 12 Mar 2013 22:29:50 +0100
+Subject: [Buildroot] [git commit] eeprog.mk: fix site
+Message-ID: <20130312213138.5223B9B061@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7bc8cd99591491b622f6444de2f1f9d7aa6048e1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Arnout> Fixes http://autobuild.buildroot.net/results/3053854fccd65bc5b28384f2a2039a33abeeea47
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/eeprog/eeprog.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Arnout> The introduction of the error message for the jpeg virtual
- Arnout> package exposes this kind of error.
-
-Committed, thanks.
-
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Arnout> ---
-
- Arnout> Perhaps it would be nice to add this type of check to the
- Arnout> generic package infrastructure: if a package is built, it
- Arnout> should always be selected. Of course, that makes it impossible
- Arnout> to do a quick build of a package without reconfiguring, but we
- Arnout> can add another make variable that bypasses the check.
-
-Yes, sounds like a nice feature. Care to cook up a patch for that?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/eeprog/eeprog.mk b/package/eeprog/eeprog.mk
+index e64fa06..3b1b3e9 100644
+--- a/package/eeprog/eeprog.mk
++++ b/package/eeprog/eeprog.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ 
+ EEPROG_VERSION = 0.7.6
+-EEPROG_SITE = http://codesink.org/download
++EEPROG_SITE = http://www.codesink.org/download
+ 
+ define EEPROG_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
