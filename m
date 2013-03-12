@@ -1,48 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Mar 2013 00:14:23 +0100
-Subject: [Buildroot] Problem with buildroot-2013.02 - ncurses
-In-Reply-To: <84EA0F7435E5F64C9B660453645DB90497AD52AA50@DSW350.wattens.swarovski.com>
-References: <84EA0F7435E5F64C9B660453645DB90497AD4DEF0D@DSW350.wattens.swarovski.com>
- <20130307093024.30cb7d23@skate>
- <84EA0F7435E5F64C9B660453645DB90497AD52A6B0@DSW350.wattens.swarovski.com>
- <20130307140818.0d48c197@skate>
- <84EA0F7435E5F64C9B660453645DB90497AD52AA50@DSW350.wattens.swarovski.com>
-Message-ID: <513FB6CF.1070301@mind.be>
+Date: Wed, 13 Mar 2013 00:24:31 +0100
+Subject: [Buildroot] [PATCH 6/6] package/mtools: new host-package
+In-Reply-To: <CAAXf6LX26RGbawv-RYHA6HKNs3myuiJpNgZ1u2drABrFsudkQg@mail.gmail.com>
+References: <cover.1362693294.git.yann.morin.1998@free.fr>
+ <296699691239a90d5118c5cbe72f1ff57b3761a5.1362693294.git.yann.morin.1998@free.fr>
+ <20130310124944.261867c4@skate> <201303110102.06732.yann.morin.1998@free.fr>
+ <513F62F0.6050303@lucaceresoli.net>
+ <CAAXf6LX26RGbawv-RYHA6HKNs3myuiJpNgZ1u2drABrFsudkQg@mail.gmail.com>
+Message-ID: <513FB92F.4010107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/08/13 12:29, Spielmann Werner wrote:
-> /usr/bin/gcc -DHAVE_CONFIG_H -I../ncurses -I. -I<MY_WORKSPACE>/buildroot-2013.02/output/host/usr/include -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64  -DNDEBUG -I. -I../include -I<MY_WORKSPACE>/buildroot-2013.02/output/host/usr/include/ncurses -O2 -I<MY_WORKSPACE>/buildroot-2013.02/output/host/usr/include  --param max-inline-insns-single=1200 -c ../ncurses/./base/lib_addstr.c -o ../objects/lib_addstr.o
-> /usr/bin/gcc -DHAVE_CONFIG_H -I../ncurses -I. -I<MY_WORKSPACE>/buildroot-2013.02/output/host/usr/include -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64  -DNDEBUG -I. -I../include -I<MY_WORKSPACE>/buildroot-2013.02/output/host/usr/include/ncurses -O2 -I<MY_WORKSPACE>/buildroot-2013.02/output/host/usr/include  --param max-inline-insns-single=1200 -c ../ncurses/./base/lib_beep.c -o ../objects/lib_beep.o
-> In file included from ../include/term_entry.h:48,
->                   from ../progs/progs.priv.h:111,
->                   from ../progs/tic.c:41:
-> ../include/term.h:702: error: field ?Ottyb? has incomplete type
+On 03/12/13 18:40, Thomas De Schampheleire wrote:
+> Hi,
+>
+> On Tue, Mar 12, 2013 at 6:16 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+[snip]
+>> Bottom line, I think it would be useful to save in the package manifest
+>> an additional column stating whether the package is on the target, on
+>> the host, or both. But skipping host-only packages is not safe.
 
- Looks like there's something fishy with your host's environment...
+  I agree. And I have a second reason for that: I have one customer who 
+distributes an "SDK", i.e. host packages.
 
- The field 'tty' that is indicated has type TTY, which is defined as 
-'struct termios'.  struct termios is defined in 
-/usr/include/bits/termios.h, which is included by 
-/usr/include/termios.h, which is included by ../include/term.h.
-So it _should_ work.
 
- Can you do the following:
+> I follow Luca's reasoning here. As we discussed on the Buildroot
+> Developer Day 2012, we will include the toolchain/host sources
+> precisely for the above reasons, and so they should be described in a
+> manifest. I also agree with Thomas' point about the confusion.
+>
+> But, instead of an extra column, wouldn't it be more clear to separate
+> the legal-license manifest files for host and target packages? This
+> would result in a manifest-host.csv and manifest.csv. Packages that
+> appear on both host and target, would be present in both files. An end
+> user that is only interested in getting a list of target packages, can
+> find that info in a glance.
 
-cd /home/spiewe/svnws/buildroot-2013.02/output/build/host-ncurses-5.9/progs
+  Very good idea.
 
-/usr/bin/gcc -I../progs -I. -DHAVE_CONFIG_H -I/home/spiewe/svnws/buildroot-2013.02/output/host/usr/include -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64  -DNDEBUG -I. -I../include -I/home/spiewe/svnws/buildroot-2013.02/output/host/usr/include/ncurses -O2 -I/home/spiewe/svnws/buildroot-2013.02/output/host/usr/include  --param max-inline-insns-single=1200 -E ../progs/dump_entry.c > /tmp/dump_entry.E
-
- and post the resulting /tmp/dump_entry.E in a pastebin. Then we can check
-what is going wrong with termios.
-
- BTW which distro do you use?
-
- Regards,
- Arnout
+  Regards,
+  Arnout
 
 
 -- 
