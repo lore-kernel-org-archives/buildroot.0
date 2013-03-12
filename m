@@ -1,40 +1,41 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 12 Mar 2013 09:26:51 +0100
-Subject: [Buildroot] [PATCH] change default location for local.mk to
-	$(CONFIG_DIR)
-In-Reply-To: <20130311222630.5a75029d@skate>
-References: <1362653363-24915-1-git-send-email-jeremy.rosen@openwide.fr>
- <20130311222630.5a75029d@skate>
-Message-ID: <CAAXf6LWABPZcHrftL3LFLVB4ApLdS19-kRME101DG+9rfrfK4Q@mail.gmail.com>
+From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
+Date: Tue, 12 Mar 2013 05:30:01 -0300
+Subject: [Buildroot] [RFC/PATCH] fs/common.mk: Fix wrong double dollar
+	usage
+In-Reply-To: <1362863052-8781-1-git-send-email-ezequiel.garcia@free-electrons.com>
+References: <1362863052-8781-1-git-send-email-ezequiel.garcia@free-electrons.com>
+Message-ID: <20130312083000.GA2506@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Sat, Mar 09, 2013 at 06:04:12PM -0300, Ezequiel Garcia wrote:
+> Double dollar sign is used to put an explicit dollar sign,
+> for instance, when writing a makefile rule.
+> 
+> In this case, there are some makefile conditionals where
+> makefile variables are evaluated using double dollar signs
+> instead of single dollar, which is wrong.
+> 
+> In particular, this fixes a buildroot 'make' stall
+> when building with an empty device table (empty BR2_ROOTFS_DEVICE_TABLE).
+> 
+> Signed-off-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
+> ---
+> I'm sending this as RFC because I'm new to buildroot
+> and because I'm not a makefile wizard.
+> AFAIK, this fixes a real bug in my compilation,
+> as explained in the commit message.
+> 
+>  fs/common.mk |   12 ++++++------
+>  1 files changed, 6 insertions(+), 6 deletions(-)
+> 
 
-On Mon, Mar 11, 2013 at 10:26 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear J?r?my Rosen,
->
-> On Thu,  7 Mar 2013 11:49:23 +0100, J?r?my Rosen wrote:
->> the previous default of $(TOPDIR) broke the philosophy of builds with O=
->> which try to keep all configuration files within the $(CONFIG_DIR)
->> subtree
->
-> Hum, that's an interesting vision of things. I think I would tend to
-> agree with this idea.
->
-> What do others think?
+Any comments? How does this look like?
 
-I can follow the reasoning of J?r?my and have no problems with the
-proposed patch.
-
-However, unlike other config files, I still think of local.mk as a
-local hack used by an individual developer, and not something you
-would put under version control, neither in git nor in
-project-specific patches.
-
-Best regards,
-Thomas
+-- 
+Ezequiel Garc?a, Free Electrons
+Embedded Linux, Kernel and Android Engineering
+http://free-electrons.com
