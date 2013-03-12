@@ -1,58 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Mar 2013 22:40:17 +0100
-Subject: [Buildroot] [PATCH 4/5] Enable ccache for cmake packages
-In-Reply-To: <20130306195913.2c7e6db7@skate>
-References: <1362590066-5448-1-git-send-email-luca@lucaceresoli.net>
- <1362590066-5448-5-git-send-email-luca@lucaceresoli.net>
- <20130306195913.2c7e6db7@skate>
-Message-ID: <513FA0C1.6070404@mind.be>
+Date: Tue, 12 Mar 2013 23:22:56 +0100
+Subject: [Buildroot] [RFC/PATCH] fs/common.mk: Fix wrong double dollar
+ usage
+In-Reply-To: <CAAXf6LUevRWy7hgHh2rrL9BVq2A95W=MAh8wCd8cZCy_c0A_sg@mail.gmail.com>
+References: <1362863052-8781-1-git-send-email-ezequiel.garcia@free-electrons.com>
+ <CAAXf6LXzA2qSxq+5XRzRQUrXTHhTwYg2VA9GdTiNpPzkcNndxQ@mail.gmail.com>
+ <20130312100611.GD2506@localhost>
+ <CAAXf6LUevRWy7hgHh2rrL9BVq2A95W=MAh8wCd8cZCy_c0A_sg@mail.gmail.com>
+Message-ID: <513FAAC0.3050100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/06/13 19:59, Thomas Petazzoni wrote:
-> Dear Luca Ceresoli,
+On 03/12/13 12:28, Thomas De Schampheleire wrote:
+> The main problem is that the 'ifneq' never evaluates to false, as you
+> mentioned, even if its contents are 'empty'. They are never really
+> empty, because of this line:
 >
-> On Wed,  6 Mar 2013 18:14:25 +0100, Luca Ceresoli wrote:
->> CMake fails in detecting the compiler when ccache is used. Add a wrapper
->> script to make it happy.
+> ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE)) \
+>          $(call qstrip,$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
 >
-> This raises the question of whether we want to generalize this in some
-> way: should we be doing the ccache wrapper thing in a generic way, and
-> use it everywhere? Since we already have a wrapper for external
-> toolchain tools, does it really make sense to have a shell wrapper
-> around a C wrapper? Should we have a single C wrapper used in all cases
-> (internal, external, crosstool-ng), that handles everything?
+> Because it is a concatenation of two strings separated by spaces,
+> there will always be a space in the final variable, which means it's
+> not empty. We need to strip it.
+> The following change fixes your problem, it runs the qstrip on the
+> overal combination of the variables, causing the space to be removed
+> if it's the only thing left.
 
-  Yes, I would be very much in favour of that. It also solves the issue 
-that some configure systems don't deal very well with a CC that contains 
-spaces. And for external toolchains, it's nice that the actual options 
-that are passed to the external toolchain are also visible to ccache.
-
-  I see two issues however:
-
-- How to deal with HOSTCC?
-
-- How to deal with HOSTCC_NOCCACHE? (TARGET_CC_NOCCACHE can probably be 
-removed)
-
-
-  Anyway, for cmake the solution proposed by Samuel works even better.
+  Alternatively, you could remove the space before the backslash. But I 
+think I prefer the overall qstrip.
 
   Regards,
   Arnout
-
-
-> I don't (yet) have a strong opinion on this, I just wanted to have a
-> more global reflection about wrappers, and avoid creating many
-> wrappers to solve different problems.
->
-> Best regards,
->
-> Thomas
->
 
 
 -- 
