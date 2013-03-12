@@ -1,84 +1,73 @@
-From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-Date: Tue, 12 Mar 2013 07:06:11 -0300
-Subject: [Buildroot] [RFC/PATCH] fs/common.mk: Fix wrong double dollar
- usage
-In-Reply-To: <CAAXf6LXzA2qSxq+5XRzRQUrXTHhTwYg2VA9GdTiNpPzkcNndxQ@mail.gmail.com>
-References: <1362863052-8781-1-git-send-email-ezequiel.garcia@free-electrons.com>
- <CAAXf6LXzA2qSxq+5XRzRQUrXTHhTwYg2VA9GdTiNpPzkcNndxQ@mail.gmail.com>
-Message-ID: <20130312100611.GD2506@localhost>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 12 Mar 2013 11:37:19 +0100
+Subject: [Buildroot] [PATCH] qt5jsbackend: Remove dependency on bz2 module
+In-Reply-To: <1362687540-19440-27-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1362687540-19440-27-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1363084639-9610-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-Thanks for your answer.
+The Python bz2 module is only needed in certain cases, so only import
+it when needed. In the normal qt5jsbackend build, this allows to remove
+the dependency on this module.
 
-On Tue, Mar 12, 2013 at 10:05:04AM +0100, Thomas De Schampheleire wrote:
-> Hi,
-> 
-> On Sat, Mar 9, 2013 at 10:04 PM, Ezequiel Garcia
-> <ezequiel.garcia@free-electrons.com> wrote:
-> > Double dollar sign is used to put an explicit dollar sign,
-> > for instance, when writing a makefile rule.
-> >
-> > In this case, there are some makefile conditionals where
-> > makefile variables are evaluated using double dollar signs
-> > instead of single dollar, which is wrong.
-> >
-> > In particular, this fixes a buildroot 'make' stall
-> > when building with an empty device table (empty BR2_ROOTFS_DEVICE_TABLE).
-> >
-> > Signed-off-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-> > ---
-> > I'm sending this as RFC because I'm new to buildroot
-> > and because I'm not a makefile wizard.
-> > AFAIK, this fixes a real bug in my compilation,
-> > as explained in the commit message.
-> 
-> In fact you are reverting changes made by Arnout a while back, see git
-> commit 847895d29524d81b64afb059b8649a77802a469b
-> http://git.buildroot.org/buildroot/commit/?id=847895d29524d81b64afb059b8649a77802a469b
-> There were specific reasons to make these changes, so I don't think we
-> should revert them like this.
-> 
-> Be aware that these make targets are inside a 'define
-> ROOTFS_TARGET_INTERNAL' statement, and later in the file this
-> 'function' is executed with 'call'. This makes the rules for $ or $$ a
-> little different than in standard make recipes.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+Thomas, feel free to squash this with the qt5jsbackend patch.
+---
+ ...8-js2c.py-Remove-dependency-on-bz2-module.patch |   38 ++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/qt5/qt5jsbackend/qt5jsbackend-0001-v8-js2c.py-Remove-dependency-on-bz2-module.patch
 
-Mmmm, I see. So it's not as easy as it seemed!
-However, please note I'm *only* fixing the conditionals,
-not the targets or the rules. See below.
-
-> 
-> You mention a 'stall', can you elaborate more? What happens exactly?
-> Can you debug this further?
-> 
-
-Yes, I have. The problem is that this conditional
-
-  ifneq ($$(ROOTFS_DEVICE_TABLES),)
-         cat $$(ROOTFS_DEVICE_TABLES) > $$(FULL_DEVICE_TABLE)
-
-is *never* false. However, if ROOTFS_DEVICE_TABLES is empty
-the command will execute like this:
-
-  $ cat > some_file
-
-which simply stalls (well it doesn't stall, it's waiting for EOF at stdin).
-I think this is easily reproducible, just set an empty value in your
-BR2_ROOTFS_DEVICE_TABLE option.
-
-As I said in the patch I'm far from a makefile wizard, but it seems
-to me that $$(ROOTFS_DEVICE_TABLES) (double dollar) is not equivalent
-to $(ROOTFS_DEVICE_TABLES) (single dollar) from the perspective of the
-conditional.
-
-Thanks,
+diff --git a/package/qt5/qt5jsbackend/qt5jsbackend-0001-v8-js2c.py-Remove-dependency-on-bz2-module.patch b/package/qt5/qt5jsbackend/qt5jsbackend-0001-v8-js2c.py-Remove-dependency-on-bz2-module.patch
+new file mode 100644
+index 0000000..17ceda1
+--- /dev/null
++++ b/package/qt5/qt5jsbackend/qt5jsbackend-0001-v8-js2c.py-Remove-dependency-on-bz2-module.patch
+@@ -0,0 +1,38 @@
++From 51d6d005eb383908a4d7031c61cef14cc4cbdc38 Mon Sep 17 00:00:00 2001
++From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
++Date: Tue, 12 Mar 2013 08:07:09 +0100
++Subject: [PATCH] v8: js2c.py: Remove dependency on bz2 module
++
++The Python bz2 module is only needed in certain cases, so only import
++it when needed. In the normal qtjsbackend build, this allows to remove the
++dependency on this module.
++
++[arnout at mind.be: ported patch from nodejs]
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++ src/3rdparty/v8/tools/js2c.py |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/3rdparty/v8/tools/js2c.py b/src/3rdparty/v8/tools/js2c.py
++index d06cbe4..c63a640 100644
++--- a/src/3rdparty/v8/tools/js2c.py
+++++ b/src/3rdparty/v8/tools/js2c.py
++@@ -33,7 +33,6 @@
++ 
++ import os, re, sys, string
++ import jsmin
++-import bz2
++ 
++ 
++ def ToCAsciiArray(lines):
++@@ -344,6 +343,7 @@ def JS2C(source, target, env):
++   else:
++     raw_sources_declaration = RAW_SOURCES_COMPRESSION_DECLARATION
++     if env['COMPRESSION'] == 'bz2':
+++      import bz2
++       all_sources = bz2.compress("".join(all_sources))
++     total_length = len(all_sources)
++     sources_data = ToCArray(all_sources)
++-- 
 -- 
-Ezequiel Garc?a, Free Electrons
-Embedded Linux, Kernel and Android Engineering
-http://free-electrons.com
+1.7.10.4
