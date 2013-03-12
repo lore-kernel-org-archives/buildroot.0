@@ -1,32 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Mar 2013 08:41:57 +0100
-Subject: [Buildroot] [PATCH] pkg-autotools.mk: remove extra space from
- config-update message
-In-Reply-To: <1363053511-9208-1-git-send-email-danomimanchego123@gmail.com>
-References: <1363053511-9208-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20130312084157.4528e185@skate>
+Date: Tue, 12 Mar 2013 08:59:45 +0100
+Subject: [Buildroot] [PATCH 2/5] manual: add a make target
+ 'manual-update-lists'
+In-Reply-To: <da0b536e458646ecade2fd7d2a8cee2e04148e66.1363063387.git.s.martin49@gmail.com>
+References: <cover.1363063387.git.s.martin49@gmail.com>
+ <da0b536e458646ecade2fd7d2a8cee2e04148e66.1363063387.git.s.martin49@gmail.com>
+Message-ID: <20130312085945.7d595fb2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+Dear Samuel Martin,
 
-On Mon, 11 Mar 2013 21:58:31 -0400, Danomi Manchego wrote:
-> If you do a "make -s", you will notice that the UPDATE_CONFIG_HOOK message
-> has an extra space compared to other highlighted messages. ?For example:
-> 
-> >>> util-linux 2.20.1 ?Updating config.sub and config.guess
-> >>> util-linux 2.20.1 Patching libtool
-> >>> util-linux 2.20.1 Autoreconfiguring
-> 
-> A grep shows this is the only instance of the extra space. This patch
-> removes the extra space.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+On Tue, 12 Mar 2013 05:47:15 +0100, Samuel Martin wrote:
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +manual-update-lists:
+> +	@$(call MESSAGE,"Updating the manual lists...")
+> +	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) \
+> +		$(TOPDIR)/support/scripts/gen-manual-lists.py
+
+Sorry if this has been discussed before. Why don't we make this part of
+the normal manual build process (make manual-pdf, make manual-html,
+etc.), so that we don't have to version control the generated lists of
+packages, and this updating of the lists is done automatically whenever
+we generate the manual?
+
+Best regards,
+
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
