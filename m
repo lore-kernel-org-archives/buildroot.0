@@ -1,60 +1,64 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 12 Mar 2013 22:32:31 +0100
-Subject: [Buildroot] [git commit] barebox: add 2013.03.0, remove 2012.11
-Message-ID: <20130312213218.191E59B061@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Mar 2013 22:40:17 +0100
+Subject: [Buildroot] [PATCH 4/5] Enable ccache for cmake packages
+In-Reply-To: <20130306195913.2c7e6db7@skate>
+References: <1362590066-5448-1-git-send-email-luca@lucaceresoli.net>
+ <1362590066-5448-5-git-send-email-luca@lucaceresoli.net>
+ <20130306195913.2c7e6db7@skate>
+Message-ID: <513FA0C1.6070404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a7fbcd013be42075a3c98056bcb82a471c2ff7a3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/06/13 19:59, Thomas Petazzoni wrote:
+> Dear Luca Ceresoli,
+>
+> On Wed,  6 Mar 2013 18:14:25 +0100, Luca Ceresoli wrote:
+>> CMake fails in detecting the compiler when ccache is used. Add a wrapper
+>> script to make it happy.
+>
+> This raises the question of whether we want to generalize this in some
+> way: should we be doing the ccache wrapper thing in a generic way, and
+> use it everywhere? Since we already have a wrapper for external
+> toolchain tools, does it really make sense to have a shell wrapper
+> around a C wrapper? Should we have a single C wrapper used in all cases
+> (internal, external, crosstool-ng), that handles everything?
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- boot/barebox/Config.in |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+  Yes, I would be very much in favour of that. It also solves the issue 
+that some configure systems don't deal very well with a CC that contains 
+spaces. And for external toolchains, it's nice that the actual options 
+that are passed to the external toolchain are also visible to ccache.
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 769a1bd..f111c04 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -8,13 +8,10 @@ config BR2_TARGET_BAREBOX
- if BR2_TARGET_BAREBOX
- choice
- 	prompt "version"
--	default BR2_TARGET_BAREBOX_2013_02
-+	default BR2_TARGET_BAREBOX_2013_03
- 	help
- 	  Select the specific Barebox version you want to use
- 
--config BR2_TARGET_BAREBOX_2012_11
--	bool "2012.11"
--
- config BR2_TARGET_BAREBOX_2012_12
- 	bool "2012.12.1"
- 
-@@ -24,6 +21,9 @@ config BR2_TARGET_BAREBOX_2013_01
- config BR2_TARGET_BAREBOX_2013_02
- 	bool "2013.02.0"
- 
-+config BR2_TARGET_BAREBOX_2013_03
-+	bool "2013.03.0"
-+
- config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	bool "Custom tarball"
- 
-@@ -41,10 +41,10 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2012.11.0"	if BR2_TARGET_BAREBOX_2012_11
- 	default "2012.12.1"	if BR2_TARGET_BAREBOX_2012_12
- 	default "2013.01.0"	if BR2_TARGET_BAREBOX_2013_01
- 	default "2013.02.0"	if BR2_TARGET_BAREBOX_2013_02
-+	default "2013.03.0"	if BR2_TARGET_BAREBOX_2013_03
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
- 
+  I see two issues however:
+
+- How to deal with HOSTCC?
+
+- How to deal with HOSTCC_NOCCACHE? (TARGET_CC_NOCCACHE can probably be 
+removed)
+
+
+  Anyway, for cmake the solution proposed by Samuel works even better.
+
+  Regards,
+  Arnout
+
+
+> I don't (yet) have a strong opinion on this, I just wanted to have a
+> more global reflection about wrappers, and avoid creating many
+> wrappers to solve different problems.
+>
+> Best regards,
+>
+> Thomas
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
