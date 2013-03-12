@@ -1,31 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Mar 2013 07:59:02 +0100
-Subject: [Buildroot] qt4 and qt5 side-by-side
-Message-ID: <513ED236.20305@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 12 Mar 2013 09:26:51 +0100
+Subject: [Buildroot] [PATCH] change default location for local.mk to
+	$(CONFIG_DIR)
+In-Reply-To: <20130311222630.5a75029d@skate>
+References: <1362653363-24915-1-git-send-email-jeremy.rosen@openwide.fr>
+ <20130311222630.5a75029d@skate>
+Message-ID: <CAAXf6LWABPZcHrftL3LFLVB4ApLdS19-kRME101DG+9rfrfK4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Qt4 and Qt5 are currently not mutually exclusive. As I just found out, 
-they really are...
+Hi,
 
-  Qt4 installs qt.conf in $(HOST_DIR)/usr/bin; if you use this with qt5's 
-qmake, qmake will spit out bogus configuration options. As soon as you 
-commit one of the other qt5 packages, you'll start to get autobuilder 
-failures (which are pretty hard to debug as I can testify :-).
+On Mon, Mar 11, 2013 at 10:26 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear J?r?my Rosen,
+>
+> On Thu,  7 Mar 2013 11:49:23 +0100, J?r?my Rosen wrote:
+>> the previous default of $(TOPDIR) broke the philosophy of builds with O=
+>> which try to keep all configuration files within the $(CONFIG_DIR)
+>> subtree
+>
+> Hum, that's an interesting vision of things. I think I would tend to
+> agree with this idea.
+>
+> What do others think?
 
-  For the time being, I propose to add a 'depends on !BR2_PACKAGE_QT' to
-BR2_PACKAGE_QT5. Ideally, QT should become a virtual package with choices 
-between qt4 and qt5.
+I can follow the reasoning of J?r?my and have no problems with the
+proposed patch.
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+However, unlike other config files, I still think of local.mk as a
+local hack used by an individual developer, and not something you
+would put under version control, neither in git nor in
+project-specific patches.
+
+Best regards,
+Thomas
