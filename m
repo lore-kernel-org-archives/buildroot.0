@@ -1,39 +1,66 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 12 Mar 2013 17:53:53 +0100
-Subject: [Buildroot] Configuring Buildroot menuconfig to show current
- directory within Linux shell
-In-Reply-To: <1363105579.93717.YahooMailNeo@web172406.mail.ir2.yahoo.com>
-References: <1363105579.93717.YahooMailNeo@web172406.mail.ir2.yahoo.com>
-Message-ID: <CAAXf6LX8UwPjv2EM1ipX3tsTUDY31SFnVeiJ3_T51gHEfT3i1Q@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 12 Mar 2013 16:54:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 6092] New: Bootable ISO image creation seems to
+ have stopped working since 2012.08
+Message-ID: <bug-6092-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Daniele,
+https://bugs.busybox.net/show_bug.cgi?id=6092
 
-On Tue, Mar 12, 2013 at 5:26 PM, Daniele Romano
-<romanodaniele71@yahoo.it> wrote:
-> Hi, all.
->
-> I'm looking for the way, within the Buildroot configuration menu options, to
-> let
-> the Linux shell show the current directory the logged user is actually in.
-> Hithertho, whatever directory I'm in, the shell always shows "#".
-> Is there any option to activate this feature?
+           Summary: Bootable ISO image creation seems to have stopped
+                    working since 2012.08
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gfx229-uclibc at yahoo.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-This behavior is handled by the shell (in turn typically provided by
-busybox), using variable PS1.
-For example, setting it to:
 
-PS1='\u@\h:\w\$ '
+2012.08 and prior generated bootable ISO images whereas the changes after this
+(which defaulted to CPIO initramfs from Ext2 filesystem image) seems to have
+stopped working (could be operator error but no obvious documentation in this
+scenario).
 
-will show you the username, hostname, and current directory.
-The buildroot default configuration has a fixed setting, but you could
-create an executable file /etc/profile.d/prompt.sh (the name 'prompt'
-is arbitrary) in which you can set PS1 to the value you like.
-This file will be read when creating a new login shell, via /etc/profile.
+Repro (2012.11 to 2013.02) - used mostly straight-line defaults:
+ [ ] Linux kernel - Install kernel image to /boot in target, used 
+                    i386_defconfig extracted from Linux kernel build as
+                    defined kernel config
+ [ ] Bootloaders - specified both grub and syslinux (Install isolinux)
+ [ ] Filesystem images - iso image, fs/iso9660/menu.lst
+                       - cpio the root filesystem (no compression method)
+ [ ] Package selection - nothing but BusyBox
 
-Best regards,
-Thomas
+Observed behavior - burned ISO boots and hangs after "Loading Stage2 ....."
+
+Previous good (2012.08) 
+ [ ] Burned ISO bootable (I think because initrd is Ext2 rather than
+Initramfs/CPIO)
+
+---
+
+Perhaps I'm doing something wrong or need other configuration parameters for
+the Linux kernel (I tried adding other filesystem module support but that did
+not help nor do I suspect it is necessary).  If there is some BuildRoot
+documentation that I'm overlooking or need to do more directly with Linux
+kernel configuration to ensure even a "linked-in" initramfs copy works, I'm
+happy to further investigate my own issues.  (It just was working fine with the
+Ext2 initrd but seems to have stopped after the changes in 2012.11 so I was
+wondering where I've gone wrong or if this is not a widely tested scenario.)
+
+Thank you very much and best regards.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
