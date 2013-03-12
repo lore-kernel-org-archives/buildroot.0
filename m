@@ -1,135 +1,47 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 12 Mar 2013 14:34:39 +0100
-Subject: [Buildroot] [RFC/PATCH] fs/common.mk: Fix wrong double dollar
-	usage
-In-Reply-To: <20130312124400.GA3443@localhost>
-References: <1362863052-8781-1-git-send-email-ezequiel.garcia@free-electrons.com>
- <CAAXf6LXzA2qSxq+5XRzRQUrXTHhTwYg2VA9GdTiNpPzkcNndxQ@mail.gmail.com>
- <20130312100611.GD2506@localhost>
- <CAAXf6LUevRWy7hgHh2rrL9BVq2A95W=MAh8wCd8cZCy_c0A_sg@mail.gmail.com>
- <20130312124400.GA3443@localhost>
-Message-ID: <CAAXf6LX4-K5S-Q1R4StQNzA2iAUKhmtG9z6wHNdf9Do7jobucw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Mar 2013 14:59:25 +0100
+Subject: [Buildroot] [PATCH] qt5jsbackend: Remove dependency on bz2
+	module
+In-Reply-To: <20130312133604.19ae49c5@skate>
+References: <1362687540-19440-27-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1363084639-9610-1-git-send-email-arnout@mind.be>
+ <20130312133604.19ae49c5@skate>
+Message-ID: <513F34BD.1050803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ezequiel,
+On 03/12/13 13:36, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle (Essensium/Mind),
+>
+> On Tue, 12 Mar 2013 11:37:19 +0100, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+>> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+>>
+>> The Python bz2 module is only needed in certain cases, so only import
+>> it when needed. In the normal qt5jsbackend build, this allows to remove
+>> the dependency on this module.
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+> Hum, thanks but my Qt5 branch already has a similar patch:
+> http://git.free-electrons.com/users/thomas-petazzoni/buildroot/commit/?h=qt5&id=7c841620816f18bb4547bc905aa3255c7cb967b5
 
-On Tue, Mar 12, 2013 at 1:44 PM, Ezequiel Garcia
-<ezequiel.garcia@free-electrons.com> wrote:
-> On Tue, Mar 12, 2013 at 12:28:15PM +0100, Thomas De Schampheleire wrote:
->> Hi Ezequiel,
->>
->> On Tue, Mar 12, 2013 at 11:06 AM, Ezequiel Garcia
->> <ezequiel.garcia@free-electrons.com> wrote:
->> > Hi Thomas,
->> >
->> > Thanks for your answer.
->> >
->> > On Tue, Mar 12, 2013 at 10:05:04AM +0100, Thomas De Schampheleire wrote:
->> >> Hi,
->> >>
->> >> On Sat, Mar 9, 2013 at 10:04 PM, Ezequiel Garcia
->> >> <ezequiel.garcia@free-electrons.com> wrote:
->> >> > Double dollar sign is used to put an explicit dollar sign,
->> >> > for instance, when writing a makefile rule.
->> >> >
->> >> > In this case, there are some makefile conditionals where
->> >> > makefile variables are evaluated using double dollar signs
->> >> > instead of single dollar, which is wrong.
->> >> >
->> >> > In particular, this fixes a buildroot 'make' stall
->> >> > when building with an empty device table (empty BR2_ROOTFS_DEVICE_TABLE).
->> >> >
->> >> > Signed-off-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
->> >> > ---
->> >> > I'm sending this as RFC because I'm new to buildroot
->> >> > and because I'm not a makefile wizard.
->> >> > AFAIK, this fixes a real bug in my compilation,
->> >> > as explained in the commit message.
->> >>
->> >> In fact you are reverting changes made by Arnout a while back, see git
->> >> commit 847895d29524d81b64afb059b8649a77802a469b
->> >> http://git.buildroot.org/buildroot/commit/?id=847895d29524d81b64afb059b8649a77802a469b
->> >> There were specific reasons to make these changes, so I don't think we
->> >> should revert them like this.
->> >>
->> >> Be aware that these make targets are inside a 'define
->> >> ROOTFS_TARGET_INTERNAL' statement, and later in the file this
->> >> 'function' is executed with 'call'. This makes the rules for $ or $$ a
->> >> little different than in standard make recipes.
->> >
->> > Mmmm, I see. So it's not as easy as it seemed!
->> > However, please note I'm *only* fixing the conditionals,
->> > not the targets or the rules. See below.
->> >
->> >>
->> >> You mention a 'stall', can you elaborate more? What happens exactly?
->> >> Can you debug this further?
->> >>
->> >
->> > Yes, I have. The problem is that this conditional
->> >
->> >   ifneq ($$(ROOTFS_DEVICE_TABLES),)
->> >          cat $$(ROOTFS_DEVICE_TABLES) > $$(FULL_DEVICE_TABLE)
->> >
->> > is *never* false. However, if ROOTFS_DEVICE_TABLES is empty
->> > the command will execute like this:
->> >
->> >   $ cat > some_file
->> >
->> > which simply stalls (well it doesn't stall, it's waiting for EOF at stdin).
->> > I think this is easily reproducible, just set an empty value in your
->> > BR2_ROOTFS_DEVICE_TABLE option.
->> >
->> > As I said in the patch I'm far from a makefile wizard, but it seems
->> > to me that $$(ROOTFS_DEVICE_TABLES) (double dollar) is not equivalent
->> > to $(ROOTFS_DEVICE_TABLES) (single dollar) from the perspective of the
->> > conditional.
->>
->> I can reproduce the problem you mention.
->> The main problem is that the 'ifneq' never evaluates to false, as you
->> mentioned, even if its contents are 'empty'. They are never really
->> empty, because of this line:
->>
->> ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE)) \
->>         $(call qstrip,$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
->>
->> Because it is a concatenation of two strings separated by spaces,
->> there will always be a space in the final variable, which means it's
->> not empty. We need to strip it.
->
-> You're right! (I actually verified this before sending the patch,
-> but I was doing something wrong because I missed the extra space).
->
->> The following change fixes your problem, it runs the qstrip on the
->> overal combination of the variables, causing the space to be removed
->> if it's the only thing left.
->>
->> diff --git a/fs/common.mk b/fs/common.mk
->> --- a/fs/common.mk
->> +++ b/fs/common.mk
->> @@ -33,8 +33,8 @@
->>
->>  FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
->>  FULL_DEVICE_TABLE = $(BUILD_DIR)/_device_table.txt
->> -ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE)) \
->> -       $(call qstrip,$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
->> +ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
->> +       $(BR2_ROOTFS_STATIC_DEVICE_TABLE))
->>
->>  define ROOTFS_TARGET_INTERNAL
->>
->>
->
-> Indeed, this patch fixes my problem. Do you want me to prepare a patch?
->
-> Otherwise, if you plan to submit the patch yourself, feel free to add:
-> Tested-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
+  Yeah, sorry, since you hadn't pushed I was still working against the 
+older version of your patch - and I didn't actually look at the mail I 
+was replying to :-)
 
-Feel free to send the patch yourself, I don't mind. It will be quicker :)
+  Regards,
+  Arnout
 
-Best regards,
-Thomas
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
