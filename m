@@ -1,84 +1,71 @@
-From: Vinicius Tinti <viniciustinti@gmail.com>
-Date: Wed, 13 Mar 2013 11:43:28 -0300
-Subject: [Buildroot] [PATCH v2 1/1] python-thrift: new package
-Message-ID: <1363185808-14279-1-git-send-email-viniciustinti@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 13 Mar 2013 17:14:09 +0100
+Subject: [Buildroot] [PATCH 3 of 3] oprofile 0.9.8: fix compilation on
+	powerpc
+In-Reply-To: <069B5A25F9844945B625ADE7258AC94C06200429@4rf-nz-orion.local.4rf.com>
+References: <patchbomb.1363111853@BEANTN0L019720>
+ <e866a53b0e64b92f119b.1363111856@BEANTN0L019720>
+ <069B5A25F9844945B625ADE7258AC94C06200429@4rf-nz-orion.local.4rf.com>
+Message-ID: <CAAXf6LXsr5Jw4=q8M=oZRbaiLnOzokt_svb2dmiKqvw1oGzwHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add Python bindings for the Apache Thrift RPC.
+Hi Reuben,
 
-Thrift is an interface definition language that is used to define and create
-services for numerous languages using remote procedure calls (RPC).
+On Tue, Mar 12, 2013 at 9:20 PM, Reuben Dowle <reuben.dowle@4rf.com> wrote:
+> This series of patches fixes my build error I got when updating to latest buildroot sources on Friday. Fixing this was going to be my first task this Monday. Thanks!
+>
+> I will check everything is working on my target later today. One possible minor change below:
 
-This patch does not include the Thrift code generator. It only includes the
-Thrift libraries used at runtime.
+Thanks for your feedback.
+I noticed there is still a problem with one of the patches, but I'm
+already looking forward to your runtime test.
+See below...
 
-Signed-off-by: Tiago Maluta <tiagomaluta@gmail.com>
-Signed-off-by: Vinicius Tinti <viniciustinti@gmail.com>
----
- package/Config.in                      |    1 +
- package/python-thrift/Config.in        |    7 +++++++
- package/python-thrift/python-thrift.mk |   23 +++++++++++++++++++++++
- 3 files changed, 31 insertions(+)
- create mode 100644 package/python-thrift/Config.in
- create mode 100644 package/python-thrift/python-thrift.mk
+>
+>> diff --git a/package/oprofile/oprofile.mk
+>> b/package/oprofile/oprofile.mk
+>> --- a/package/oprofile/oprofile.mk
+>> +++ b/package/oprofile/oprofile.mk
+>> @@ -8,7 +8,7 @@ OPROFILE_VERSION = 0.9.8
+>>  OPROFILE_SITE =
+>> http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-
+>> $(OPROFILE_VERSION)
+>>  OPROFILE_LICENSE = GPLv2+
+>>  OPROFILE_LICENSE_FILES = COPYING
+>> -OPROFILE_CONF_OPT = --localstatedir=/var --with-kernel-support
+>> +OPROFILE_CONF_OPT = --localstatedir=/var --with-kernel=$(SYSROOT_DIR)
+>>  OPROFILE_BINARIES = utils/ophelp pp/opannotate pp/oparchive pp/opgprof
+>>  OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv daemon/oprofiled
+>>  OPROFILE_BINARIES += utils/op-check-perfevents pe_profiling/operf
+>> libabi/opimport
+>> @@ -29,7 +29,19 @@ ifeq ($(OPROFILE_ARCH),)
+>>  OPROFILE_ARCH = $(BR2_ARCH)
+>>  endif
+>>
+>> -OPROFILE_DEPENDENCIES = popt binutils
+>> +OPROFILE_DEPENDENCIES = popt binutils libpfm4
+>
+> I think this dependency is only needed for powerpc. So something like:
+>
+> OPROFILE_DEPENDENCIES = popt binutils
+> ifeq ($(BR2_powerpc),y)
+> OPROFILE_DEPENDENCIES += libpfm4
+> Endif
+>
+> Might be better?
 
-diff --git a/package/Config.in b/package/Config.in
-index a65054c..8467735 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -334,6 +334,7 @@ source "package/python-pygame/Config.in"
- source "package/python-pyparsing/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
-+source "package/python-thrift/Config.in"
- endmenu
- endif
- source "package/ruby/Config.in"
-diff --git a/package/python-thrift/Config.in b/package/python-thrift/Config.in
-new file mode 100644
-index 0000000..f4ad4ba
---- /dev/null
-+++ b/package/python-thrift/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_THRIFT
-+	bool "python-thrift"
-+	help
-+	  python-thrift is a Python bindings for the Apache Thrift RPC system.
-+
-+	  http://thrift.apache.org/
-+
-diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
-new file mode 100644
-index 0000000..40ae57b
---- /dev/null
-+++ b/package/python-thrift/python-thrift.mk
-@@ -0,0 +1,23 @@
-+#############################################################
-+#
-+# python-thrift
-+#
-+#############################################################
-+
-+PYTHON_THRIFT_VERSION = 0.9.0
-+PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
-+PYTHON_THRIFT_SITE = https://pypi.python.org/packages/source/t/thrift/
-+PYTHON_THRIFT_LICENSE = Apache v2.0
-+PYTHON_THRIFT_LICENSE_FILES = README
-+
-+PYTHON_THRIFT_DEPENDENCIES = python
-+
-+define PYTHON_THRIFT_BUILD_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+define PYTHON_THRIFT_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.9.5
+As far as I understand, these dependencies are only used for
+build-time ordering. This means that libfm4, *if selected in the
+config* will be built before oprofile. However, if libpfm4 is not
+selected, and you're not on powerpc, you can still build oprofile.
+The only benefit from the suggested code above, I think, is that on
+non-powerpc targets the unnecessary ordering of oprofile / libpfm4 is
+not enforced, but I think this will hardly give an impact on build
+time.
+
+Best regards,
+Thomas
