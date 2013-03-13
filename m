@@ -1,45 +1,25 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 13 Mar 2013 23:09:40 +0100
-Subject: [Buildroot] [git commit] fs/common.mk: Strip extra whitespace when
-	device table is empty
-Message-ID: <20130313221243.332ED9B084@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 14 Mar 2013 00:06:33 +0100
+Subject: [Buildroot] [PATCH 1/5] openobex: new package
+In-Reply-To: <5396952b52f8a5fdae94050335f4d50ded8d054a.1363063832.git.s.martin49@gmail.com>
+ (Samuel Martin's message of "Tue, 12 Mar 2013 05:58:39 +0100")
+References: <cover.1363063832.git.s.martin49@gmail.com>
+ <cover.1363063832.git.s.martin49@gmail.com>
+ <5396952b52f8a5fdae94050335f4d50ded8d054a.1363063832.git.s.martin49@gmail.com>
+Message-ID: <87fvzyrjba.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=402d1476f7159ab8055ec8b811b4fb5cd78b5609
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-Since ROOTFS_DEVICE_TABLES is a concatenation of two strings separated by
-spaces, there will always be a space in it, which means it's never empty.
-Therefore, when testing for empty, the condition never evaluate to false.
+ Samuel> Cc: Julien Boibessot <julien.boibessot@armadeus.com>
+ Samuel> Cc: Eric Jarrige <eric.jarrige@armadeus.org>
+ Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-The following change fixes this problem; it runs qstrip on the overall
-combination of the variables, causing the space to be removed if it's the
-only thing left.
+Committed, thanks.
 
-Tested-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-Signed-off-by: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- fs/common.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/common.mk b/fs/common.mk
-index 8b5b2f2..a0b7b39 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -33,8 +33,8 @@
- 
- FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
- FULL_DEVICE_TABLE = $(BUILD_DIR)/_device_table.txt
--ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE)) \
--	$(call qstrip,$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
-+ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
-+       $(BR2_ROOTFS_STATIC_DEVICE_TABLE))
- 
- define ROOTFS_TARGET_INTERNAL
- 
+-- 
+Bye, Peter Korsgaard
