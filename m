@@ -1,34 +1,45 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 13 Mar 2013 23:07:02 +0100
-Subject: [Buildroot] [git commit] poco: bump to 1.4.6p1
-Message-ID: <20130313221243.0EEAC9B088@busybox.osuosl.org>
+Date: Wed, 13 Mar 2013 23:09:40 +0100
+Subject: [Buildroot] [git commit] fs/common.mk: Strip extra whitespace when
+	device table is empty
+Message-ID: <20130313221243.332ED9B084@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=19d1cfdb25b4a313b8f916ae80da9f60dc134bf5
+commit: http://git.buildroot.net/buildroot/commit/?id=402d1476f7159ab8055ec8b811b4fb5cd78b5609
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Since ROOTFS_DEVICE_TABLES is a concatenation of two strings separated by
+spaces, there will always be a space in it, which means it's never empty.
+Therefore, when testing for empty, the condition never evaluate to false.
+
+The following change fixes this problem; it runs qstrip on the overall
+combination of the variables, causing the space to be removed if it's the
+only thing left.
+
+Tested-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
+Signed-off-by: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/poco/poco.mk |    4 ++--
+ fs/common.mk |    4 ++--
  1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 942b9b2..32a026b 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -3,8 +3,8 @@
- # poco
- #
- #############################################################
--POCO_VERSION_MAJOR = 1.4.4
--POCO_VERSION = $(POCO_VERSION_MAJOR)
-+POCO_VERSION_MAJOR = 1.4.6
-+POCO_VERSION = $(POCO_VERSION_MAJOR)p1
- POCO_SOURCE = poco-$(POCO_VERSION)-all.tar.gz
- POCO_SITE = http://downloads.sourceforge.net/project/poco/sources/poco-$(POCO_VERSION_MAJOR)
- POCO_LICENSE = Boost-v1.0
+diff --git a/fs/common.mk b/fs/common.mk
+index 8b5b2f2..a0b7b39 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -33,8 +33,8 @@
+ 
+ FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
+ FULL_DEVICE_TABLE = $(BUILD_DIR)/_device_table.txt
+-ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE)) \
+-	$(call qstrip,$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
++ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
++       $(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+ 
+ define ROOTFS_TARGET_INTERNAL
+ 
