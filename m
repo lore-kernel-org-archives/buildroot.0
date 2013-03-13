@@ -1,28 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Mar 2013 08:45:41 +0100
-Subject: [Buildroot] [PATCH 2/5] ussp-push: new package
-In-Reply-To: <ca4550a344c7c447994a6353faa5a161acb27a94.1363063832.git.s.martin49@gmail.com>
-References: <cover.1363063832.git.s.martin49@gmail.com>
- <ca4550a344c7c447994a6353faa5a161acb27a94.1363063832.git.s.martin49@gmail.com>
-Message-ID: <20130313084541.79b20d10@skate>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Wed, 13 Mar 2013 09:48:25 +0200
+Subject: [Buildroot] [PATCH 1/1] zeromq: bump version to 3.2.2
+In-Reply-To: <1363002189-8109-1-git-send-email-alexander.lukichev@gmail.com>
+References: <1363002189-8109-1-git-send-email-alexander.lukichev@gmail.com>
+Message-ID: <CAAHaz6GCf_OfU3qpSpotuSUYRCD=ARFaD32qggGy6Uvf5AVzqA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Hi,
 
-On Tue, 12 Mar 2013 05:58:40 +0100, Samuel Martin wrote:
-> Cc: Eric Jarrige <eric.jarrige@armadeus.org>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+  This patch does not break other two patches that I sent earlier:
+  http://patchwork.ozlabs.org/patch/224666/
+  http://patchwork.ozlabs.org/patch/224667/
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Built-tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  They are still valid because zeromq 3.2.2 uses the same version of
+openpgm 5.1.118~dfsg.
+  Thanks.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+--
+Best regards,
+  Alexander Lukichev
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130313/060fa445/attachment.html>
