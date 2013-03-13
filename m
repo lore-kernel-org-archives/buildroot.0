@@ -1,33 +1,27 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Mar 2013 20:38:28 +0100
-Subject: [Buildroot] Problem with buildroot-2013.02 - ncurses
-In-Reply-To: <84EA0F7435E5F64C9B660453645DB90497AE6FBC34@DSW350.wattens.swarovski.com>
-References: <84EA0F7435E5F64C9B660453645DB90497AD4DEF0D@DSW350.wattens.swarovski.com>
- <20130307093024.30cb7d23@skate>
- <84EA0F7435E5F64C9B660453645DB90497AD52A6B0@DSW350.wattens.swarovski.com>
- <20130307140818.0d48c197@skate>
- <84EA0F7435E5F64C9B660453645DB90497AD52AA50@DSW350.wattens.swarovski.com>
- <513FB6CF.1070301@mind.be>
- <84EA0F7435E5F64C9B660453645DB90497AE6FBC34@DSW350.wattens.swarovski.com>
-Message-ID: <5140D5B4.3060903@mind.be>
+Date: Wed, 13 Mar 2013 20:48:11 +0100
+Subject: [Buildroot] [pull request v4] Pull request for branch
+	for-master/doc
+In-Reply-To: <cover.1363063387.git.s.martin49@gmail.com>
+References: <cover.1363063387.git.s.martin49@gmail.com>
+Message-ID: <5140D7FB.3080004@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/13/13 09:47, Spielmann Werner wrote:
-> I'm using Ubuntu 10.04 LTS Server.
->
-> You can find the output of the preprocessed code here:http://pastebin.com/XnT1wzLK
+On 03/12/13 05:47, Samuel Martin wrote:
+>    - Do not embed Kconfiglib python module (because of licensing incertainty,
+>    the whole discussion is available online on github);
 
-  OK, so neither HAVE_TERMIOS_H nor HAVE_TERMIO_H is defined by 
-configure, while both should exist on an Ubuntu system with libc6-dev 
-(and I think you need libc6-dev to build kconfig, so you must have it).
+  With "the whole discussion" I guess you mean issue #6? There, Ulfalizer 
+actually says "Do what you want with it except claim that you wrote it". 
+So it is safe to include it.
 
-  Can you do a sanity check that /usr/include/termios.h exists? If it 
-doesn't, your Ubuntu installation is broken. If it does, then something 
-is going wrong in the configure script. Can you pastebin the config.log file?
+  I've added a comment asking to put this expressly in the source code. 
+But with the "do what you want" license, we're allowed to add it 
+ourselves :-)
 
   Regards,
   Arnout
