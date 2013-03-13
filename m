@@ -1,212 +1,41 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Wed, 13 Mar 2013 21:36:08 +0200
-Subject: [Buildroot] [PATCHv3] Added package HPLIP for printing to HP
-	printers
-In-Reply-To: <20130304084108.GB10626@sapphire.tkos.co.il>
-References: <20130304084108.GB10626@sapphire.tkos.co.il>
-Message-ID: <1363203368-19909-1-git-send-email-olivier.schonken@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 13 Mar 2013 20:38:28 +0100
+Subject: [Buildroot] Problem with buildroot-2013.02 - ncurses
+In-Reply-To: <84EA0F7435E5F64C9B660453645DB90497AE6FBC34@DSW350.wattens.swarovski.com>
+References: <84EA0F7435E5F64C9B660453645DB90497AD4DEF0D@DSW350.wattens.swarovski.com>
+ <20130307093024.30cb7d23@skate>
+ <84EA0F7435E5F64C9B660453645DB90497AD52A6B0@DSW350.wattens.swarovski.com>
+ <20130307140818.0d48c197@skate>
+ <84EA0F7435E5F64C9B660453645DB90497AD52AA50@DSW350.wattens.swarovski.com>
+ <513FB6CF.1070301@mind.be>
+ <84EA0F7435E5F64C9B660453645DB90497AE6FBC34@DSW350.wattens.swarovski.com>
+Message-ID: <5140D5B4.3060903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HPLIP (Hewlett-Packard Linux Imaging & Printing) is an HP-developed solution
-for printing, scanning, and faxing with HP inkjet and laser based printers
-in Linux.
+On 03/13/13 09:47, Spielmann Werner wrote:
+> I'm using Ubuntu 10.04 LTS Server.
+>
+> You can find the output of the preprocessed code here:http://pastebin.com/XnT1wzLK
 
-The --includedir=$(STAGING_DIR)/usr/include is unfortunately necessary even
-with the modified Makefile.am for a succesful build.
+  OK, so neither HAVE_TERMIOS_H nor HAVE_TERMIO_H is defined by 
+configure, while both should exist on an Ubuntu system with libc6-dev 
+(and I think you need libc6-dev to build kconfig, so you must have it).
 
-Created a menu for cups related components to be kept close together.
+  Can you do a sanity check that /usr/include/termios.h exists? If it 
+doesn't, your Ubuntu installation is broken. If it does, then something 
+is going wrong in the configure script. Can you pastebin the config.log file?
 
-Fixed a jpeg and dbus dependencies, Thanks for pointing out the dbus 
-dependency Baruch.
+  Regards,
+  Arnout
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
----
- package/Config.in                  |    3 ++
- package/hplip/Config.in            |   15 ++++++++
- package/hplip/hplip-fix-make.patch |   74 ++++++++++++++++++++++++++++++++++++
- package/hplip/hplip.mk             |   52 +++++++++++++++++++++++++
- 4 files changed, 144 insertions(+)
- create mode 100644 package/hplip/Config.in
- create mode 100644 package/hplip/hplip-fix-make.patch
- create mode 100644 package/hplip/hplip.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index a65054c..21c3ec9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -631,7 +631,10 @@ source "package/can-utils/Config.in"
- source "package/connman/Config.in"
- source "package/ctorrent/Config.in"
- source "package/conntrack-tools/Config.in"
-+menu "cups (common unix printing system)"
- source "package/cups/Config.in"
-+source "package/hplip/Config.in"
-+endmenu #cups
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/dhcp/Config.in"
- endif
-diff --git a/package/hplip/Config.in b/package/hplip/Config.in
-new file mode 100644
-index 0000000..4c673e6
---- /dev/null
-+++ b/package/hplip/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_HPLIP
-+	bool "hplip"
-+	depends on BR2_PACKAGE_CUPS
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_JPEG
-+	help
-+	  HP Linux Imaging and Printing (HPLIP)
-+	  HPLIP is an HP-developed solution for printing, scanning, and faxing
-+	  with HP inkjet and laser based printers in Linux. The HPLIP project 
-+	  provides printing support for 2,211 printer models, including 
-+	  Deskjet, Officejet, Photosmart, PSC (Print Scan Copy), Business 
-+	  Inkjet, LaserJet, Edgeline MFP, and LaserJet MFP. 
-+	  
-+	  http://hplipopensource.com/
-+
-diff --git a/package/hplip/hplip-fix-make.patch b/package/hplip/hplip-fix-make.patch
-new file mode 100644
-index 0000000..8f4aab5
---- /dev/null
-+++ b/package/hplip/hplip-fix-make.patch
-@@ -0,0 +1,74 @@
-+From 6019d012246578ae1a191d3510284e7b894fb528 Mon Sep 17 00:00:00 2001
-+From: Olivier Schonken <olivier.schonken@gmail.com>
-+Date: Sat, 2 Mar 2013 18:01:03 +0200
-+Subject: [PATCH] Changed Makefile.am to allow cross-compilation of HPLIP
-+
-+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-+---
-+ Makefile.am |   28 ++++++++++++++--------------
-+ 1 file changed, 14 insertions(+), 14 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 16ea902..b22f46a 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -72,7 +72,7 @@ libhpmud_la_SOURCES = io/hpmud/hpmud.c io/hpmud/mlc.c io/hpmud/model.c io/hpmud/
-+ 	  io/hpmud/hpmud.h io/hpmud/hpmudi.h io/hpmud/list.h io/hpmud/mlc.h io/hpmud/pml.h io/hpmud/dot4.c \
-+ 	  io/hpmud/dot4.h io/hpmud/jd.c io/hpmud/jd.h io/hpmud/pp.c io/hpmud/pp.h io/hpmud/musb.h io/hpmud/musb_libusb01.c
-+ else
-+-libhpmud_la_CFLAGS = -I/usr/include/libusb-1.0 -DMUDNAME=\"$(MUDNAME)\" -DCONFDIR=\"$(hplip_confdir)\"
-++libhpmud_la_CFLAGS = -I$(includedir)/libusb-1.0 -DMUDNAME=\"$(MUDNAME)\" -DCONFDIR=\"$(hplip_confdir)\"
-+ libhpmud_la_SOURCES = io/hpmud/hpmud.c io/hpmud/mlc.c io/hpmud/model.c io/hpmud/pml.c \
-+ 	  io/hpmud/hpmud.h io/hpmud/hpmudi.h io/hpmud/list.h io/hpmud/mlc.h io/hpmud/pml.h io/hpmud/dot4.c \
-+ 	  io/hpmud/dot4.h io/hpmud/jd.c io/hpmud/jd.h io/hpmud/pp.c io/hpmud/pp.h io/hpmud/musb.h io/hpmud/musb.c
-+@@ -292,7 +292,7 @@ hpmudext_la_LIBADD = libhpmud.la
-+ if LIBUSB01_BUILD
-+ hpmudext_la_CFLAGS = -I$(PYTHONINCLUDEDIR)
-+ else
-+-hpmudext_la_CFLAGS =-I/usr/include/libusb-1.0 -I$(PYTHONINCLUDEDIR)
-++hpmudext_la_CFLAGS =-I$(includedir)/libusb-1.0 -I$(PYTHONINCLUDEDIR)
-+ endif
-+ 
-+ # ui (qt3)
-+@@ -551,26 +551,26 @@ endif
-+ 
-+ install-dist_hplip_LogDATA:
-+ if FULL_BUILD
-+-	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
-+-	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
-+-	chmod 777 $(DESTDIR)$(hplip_Logdir)
-++#	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
-++#	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
-++#	chmod 777 $(DESTDIR)$(hplip_Logdir)
-+ endif	#FULL_BUILD
-+ if HPLIP_BUILD
-+-	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
-+-	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
-+-	chmod 777 $(DESTDIR)$(hplip_Logdir)
-++#	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
-++#	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
-++#	chmod 777 $(DESTDIR)$(hplip_Logdir)
-+ endif	#FULL_BUILD
-+ 
-+ install-dist_hplip_tmpDATA:
-+ if FULL_BUILD
-+-	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
-+-	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
-+-	chmod 1777 $(DESTDIR)$(hplip_tmpdir)
-++#	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
-++#	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
-++#	chmod 1777 $(DESTDIR)$(hplip_tmpdir)
-+ endif	#FULL_BUILD
-+ if HPLIP_BUILD
-+-	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
-+-	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
-+-	chmod 1777 $(DESTDIR)$(hplip_tmpdir)
-++#	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
-++#	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
-++#	chmod 1777 $(DESTDIR)$(hplip_tmpdir)
-+ endif	#FULL_BUILD
-+ 
-+ install-dist_cronDATA:$(dist_cron_DATA)
-+-- 
-+1.7.10.4
-+
-diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
-new file mode 100644
-index 0000000..1bfac40
---- /dev/null
-+++ b/package/hplip/hplip.mk
-@@ -0,0 +1,52 @@
-+#############################################################
-+#
-+# hplip
-+#
-+#############################################################
-+
-+HPLIP_VERSION = 3.12.11
-+HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip/
-+HPLIP_AUTORECONF = YES
-+HPLIP_DEPENDENCIES = cups libusb jpeg
-+
-+HPLIP_CONF_OPT = \
-+	--disable-qt4 \
-+	--disable-scan-build \
-+	--disable-gui-build \
-+	--disable-doc-build \
-+	--disable-network-build \
-+	--enable-hpcups-install \
-+	--disable-hpijs-install \
-+	--enable-cups-ppd-install \
-+	--enable-cups-drv-install \
-+	--disable-foomatic-ppd-install \
-+	--disable-foomatic-drv-install \
-+	--disable-foomatic-rip-hplip-install \
-+	--enable-new-hpcups \
-+	--enable-lite-build \
-+	--with-sysroot=$(STAGING_DIR) \
-+	--includedir=$(STAGING_DIR)/usr/include
-+
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+	HPLIP_CONF_OPT += --enable-dbus-build 
-+	HPLIP_DEPENDENCIES += dbus
-+else
-+	HPLIP_CONF_OPT += --disable-dbus-build 
-+endif
-+
-+define HPLIP_POST_INSTALL_TARGET_FIXUP
-+	mkdir -p $(TARGET_DIR)/usr/share/hplip/data/models
-+	cp $(@D)/data/models/* $(TARGET_DIR)/usr/share/hplip/data/models
-+endef
-+HPLIP_POST_INSTALL_TARGET_HOOKS += HPLIP_POST_INSTALL_TARGET_FIXUP
-+
-+define HPLIP_PRE_CONFIGURE_FIXUP
-+	touch $(@D)/AUTHORS
-+	touch $(@D)/ChangeLog
-+	touch $(@D)/CHANGES
-+	touch $(@D)/NEWS
-+	touch $(@D)/README
-+endef
-+HPLIP_PRE_CONFIGURE_HOOKS += HPLIP_PRE_CONFIGURE_FIXUP
-+
-+$(eval $(autotools-package))
 -- 
-1.7.10.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
