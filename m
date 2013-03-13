@@ -1,32 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Mar 2013 08:21:29 +0100
-Subject: [Buildroot] Problem with buildroot-2013.02 - ncurses
-In-Reply-To: <513FB6CF.1070301@mind.be>
-References: <84EA0F7435E5F64C9B660453645DB90497AD4DEF0D@DSW350.wattens.swarovski.com>
- <20130307093024.30cb7d23@skate>
- <84EA0F7435E5F64C9B660453645DB90497AD52A6B0@DSW350.wattens.swarovski.com>
- <20130307140818.0d48c197@skate>
- <84EA0F7435E5F64C9B660453645DB90497AD52AA50@DSW350.wattens.swarovski.com>
- <513FB6CF.1070301@mind.be>
-Message-ID: <20130313082129.188d23f2@skate>
+Date: Wed, 13 Mar 2013 08:24:20 +0100
+Subject: [Buildroot] [PATCH 2 of 3] oprofile: upstep 0.9.7 patches to
+ 0.9.8
+In-Reply-To: <41943bd3969a02bce5f9.1363111855@BEANTN0L019720>
+References: <patchbomb.1363111853@BEANTN0L019720>
+ <41943bd3969a02bce5f9.1363111855@BEANTN0L019720>
+Message-ID: <20130313082420.0ae03777@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Thomas De Schampheleire,
 
-On Wed, 13 Mar 2013 00:14:23 +0100, Arnout Vandecappelle wrote:
+On Tue, 12 Mar 2013 19:10:55 +0100, Thomas De Schampheleire wrote:
 
->  Looks like there's something fishy with your host's environment...
+> rename from package/oprofile/oprofile-0.9.7-002-no-query-modules.patch
+> rename to package/oprofile/oprofile-0.9.8-002-no-query-modules.patch
 
-I agree. I had a look at Werner's build log yesterday evening, and it
-really doesn't make much sense to have this failure. I agree with
-Arnout's suggestion of looking at the preprocessed C code to see what's
-going on.
-
-Best regards,
+We no longer want the version number in patch file names, for precisely
+the reason why you're doing this patch in the first place :-)
 
 Thomas
 -- 
