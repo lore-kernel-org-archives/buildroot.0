@@ -1,13 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Mar 2013 08:39:59 +0100
-Subject: [Buildroot] [PATCH 2/5] manual: add a make target
- 'manual-update-lists'
-In-Reply-To: <CAHXCMMJMP5o34AAX29Rx0HqWOtysCz4bFJNrMo+pyHYBf0++fg@mail.gmail.com>
-References: <cover.1363063387.git.s.martin49@gmail.com>
- <da0b536e458646ecade2fd7d2a8cee2e04148e66.1363063387.git.s.martin49@gmail.com>
- <20130312085945.7d595fb2@skate>
- <CAHXCMMJMP5o34AAX29Rx0HqWOtysCz4bFJNrMo+pyHYBf0++fg@mail.gmail.com>
-Message-ID: <20130313083959.49853d83@skate>
+Date: Wed, 13 Mar 2013 08:42:48 +0100
+Subject: [Buildroot] [PATCH 1/5] openobex: new package
+In-Reply-To: <5396952b52f8a5fdae94050335f4d50ded8d054a.1363063832.git.s.martin49@gmail.com>
+References: <cover.1363063832.git.s.martin49@gmail.com>
+ <5396952b52f8a5fdae94050335f4d50ded8d054a.1363063832.git.s.martin49@gmail.com>
+Message-ID: <20130313084248.237e1f8c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,26 +13,13 @@ To: buildroot@busybox.net
 
 Dear Samuel Martin,
 
-On Tue, 12 Mar 2013 09:41:27 +0100, Samuel Martin wrote:
+On Tue, 12 Mar 2013 05:58:39 +0100, Samuel Martin wrote:
+> Cc: Julien Boibessot <julien.boibessot@armadeus.com>
+> Cc: Eric Jarrige <eric.jarrige@armadeus.org>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-> I don't have a strong opinion about this, but since there is some
-> date/version in
-> the generated files (see patch 5/5), I don't want to bother people
-> with this insignificant
-> change just because they (re)build the manual...
-
-I'm not sure to understand the problem with the dates. I'd say you
-shouldn't put the date specifically in the list of packages. I would
-expect "make manual-pdf" to generate the list of packages with your
-script, get it included into the manual sources, and get the manual
-built.
-
-Separately, we may want to introduce something at the beginning of the
-manual that says at which date the manual was built, and on which Git
-version of the Buildroot sources. But I don't see a reason to make this
-related to the list of packages specifically.
-
-Best regards,
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Build-tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Thomas
 -- 
