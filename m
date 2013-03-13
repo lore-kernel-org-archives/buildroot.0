@@ -1,41 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 13 Mar 2013 10:15:48 +0200
-Subject: [Buildroot] [PATCH 1/2] poco: needs threads
-Message-ID: <00f6f81991bf095cfd67cff42e32a4881435236b.1363162371.git.baruch@tkos.co.il>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 13 Mar 2013 09:27:56 +0100
+Subject: [Buildroot] [PATCH 2 of 3] oprofile: upstep 0.9.7 patches to
+	0.9.8
+In-Reply-To: <20130313082420.0ae03777@skate>
+References: <patchbomb.1363111853@BEANTN0L019720>
+ <41943bd3969a02bce5f9.1363111855@BEANTN0L019720>
+ <20130313082420.0ae03777@skate>
+Message-ID: <CAAXf6LXwyWv2KfQ3OW=KNYm7SN+y++79puqeN=C+yR50M-f5cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/98f8ae541939bd7b44601d3ee039bbc84becea84.
+Hi Thomas,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/poco/Config.in |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On Wed, Mar 13, 2013 at 8:24 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Tue, 12 Mar 2013 19:10:55 +0100, Thomas De Schampheleire wrote:
+>
+>> rename from package/oprofile/oprofile-0.9.7-002-no-query-modules.patch
+>> rename to package/oprofile/oprofile-0.9.8-002-no-query-modules.patch
+>
+> We no longer want the version number in patch file names, for precisely
+> the reason why you're doing this patch in the first place :-)
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index 20a8f2d..b823071 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_POCO
- 	bool "poco"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_PCRE
- 	help
-@@ -57,5 +58,6 @@ config BR2_PACKAGE_POCO_DATA_MYSQL
- 
- endif # BR2_PACKAGE_POCO
- 
--comment "poco requires a toolchain with WCHAR and C++ support"
--	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-+comment "poco requires a toolchain with WCHAR, threads, and C++ support"
-+	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS
--- 
-1.7.10.4
+Are we already making these changes, or are we waiting for someone to
+fix the central patching code according to the new rules first?
+
+Best regards,
+Thomas
