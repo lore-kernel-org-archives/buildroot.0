@@ -1,71 +1,104 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 13 Mar 2013 17:14:09 +0100
-Subject: [Buildroot] [PATCH 3 of 3] oprofile 0.9.8: fix compilation on
-	powerpc
-In-Reply-To: <069B5A25F9844945B625ADE7258AC94C06200429@4rf-nz-orion.local.4rf.com>
-References: <patchbomb.1363111853@BEANTN0L019720>
- <e866a53b0e64b92f119b.1363111856@BEANTN0L019720>
- <069B5A25F9844945B625ADE7258AC94C06200429@4rf-nz-orion.local.4rf.com>
-Message-ID: <CAAXf6LXsr5Jw4=q8M=oZRbaiLnOzokt_svb2dmiKqvw1oGzwHw@mail.gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Wed, 13 Mar 2013 10:31:57 -0700
+Subject: [Buildroot] [PATCH] iozone: new package
+In-Reply-To: <y>
+References: <y>
+Message-ID: <1363195917-13185-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Reuben,
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ package/Config.in        |    1 +
+ package/iozone/Config.in |   14 ++++++++++++++
+ package/iozone/iozone.mk |   43 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 58 insertions(+), 0 deletions(-)
+ create mode 100644 package/iozone/Config.in
+ create mode 100644 package/iozone/iozone.mk
 
-On Tue, Mar 12, 2013 at 9:20 PM, Reuben Dowle <reuben.dowle@4rf.com> wrote:
-> This series of patches fixes my build error I got when updating to latest buildroot sources on Friday. Fixing this was going to be my first task this Monday. Thanks!
->
-> I will check everything is working on my target later today. One possible minor change below:
-
-Thanks for your feedback.
-I noticed there is still a problem with one of the patches, but I'm
-already looking forward to your runtime test.
-See below...
-
->
->> diff --git a/package/oprofile/oprofile.mk
->> b/package/oprofile/oprofile.mk
->> --- a/package/oprofile/oprofile.mk
->> +++ b/package/oprofile/oprofile.mk
->> @@ -8,7 +8,7 @@ OPROFILE_VERSION = 0.9.8
->>  OPROFILE_SITE =
->> http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-
->> $(OPROFILE_VERSION)
->>  OPROFILE_LICENSE = GPLv2+
->>  OPROFILE_LICENSE_FILES = COPYING
->> -OPROFILE_CONF_OPT = --localstatedir=/var --with-kernel-support
->> +OPROFILE_CONF_OPT = --localstatedir=/var --with-kernel=$(SYSROOT_DIR)
->>  OPROFILE_BINARIES = utils/ophelp pp/opannotate pp/oparchive pp/opgprof
->>  OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv daemon/oprofiled
->>  OPROFILE_BINARIES += utils/op-check-perfevents pe_profiling/operf
->> libabi/opimport
->> @@ -29,7 +29,19 @@ ifeq ($(OPROFILE_ARCH),)
->>  OPROFILE_ARCH = $(BR2_ARCH)
->>  endif
->>
->> -OPROFILE_DEPENDENCIES = popt binutils
->> +OPROFILE_DEPENDENCIES = popt binutils libpfm4
->
-> I think this dependency is only needed for powerpc. So something like:
->
-> OPROFILE_DEPENDENCIES = popt binutils
-> ifeq ($(BR2_powerpc),y)
-> OPROFILE_DEPENDENCIES += libpfm4
-> Endif
->
-> Might be better?
-
-As far as I understand, these dependencies are only used for
-build-time ordering. This means that libfm4, *if selected in the
-config* will be built before oprofile. However, if libpfm4 is not
-selected, and you're not on powerpc, you can still build oprofile.
-The only benefit from the suggested code above, I think, is that on
-non-powerpc targets the unnecessary ordering of oprofile / libpfm4 is
-not enforced, but I think this will hardly give an impact on build
-time.
-
-Best regards,
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index a65054c..4d1aa67 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -22,6 +22,7 @@ source "package/cache-calibrator/Config.in"
+ source "package/dhrystone/Config.in"
+ source "package/dstat/Config.in"
+ source "package/dmalloc/Config.in"
++source "package/iozone/Config.in"
+ source "package/kexec/Config.in"
+ source "package/latencytop/Config.in"
+ source "package/lmbench/Config.in"
+diff --git a/package/iozone/Config.in b/package/iozone/Config.in
+new file mode 100644
+index 0000000..f07e65c
+--- /dev/null
++++ b/package/iozone/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_IOZONE
++	bool "IOzone"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_LARGEFILE
++	depends on BR2_USE_MMU # fork()
++	help
++	  IOzone is a filesystem benchmark tool.
++	  The benchmark generates and measures a variety of file operations
++
++	  http://www.iozone.org/
++
++comment "IOzone requires a toolchain with LARGEFILE and threads support"
++	depends on !(BR2_LARGEFILE && BR2_TOOLCHAIN_HAS_THREADS)
++
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+new file mode 100644
+index 0000000..2a046bc
+--- /dev/null
++++ b/package/iozone/iozone.mk
+@@ -0,0 +1,43 @@
++#############################################################
++#
++# IOZONE
++#
++#############################################################
++
++IOZONE_MAJOR_VERSION = 3
++IOZONE_MINOR_VERSION = 414
++IOZONE_VERSION = $(IOZONE_MAJOR_VERSION)_$(IOZONE_MINOR_VERSION)
++
++IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
++IOZONE_SITE = http://www.iozone.org/src/current
++IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
++# IOzone license details can be found at:
++# http://www.iozone.org/docs/Iozone_License.txt
++
++
++ifeq ($(BR2_arm)$(BR2_armeb),y)
++IOZONE_TARGET = linux-arm
++else ifeq ($(BR2_x86_64),y)
++IOZONE_TARGET = linux-ia64
++else ifeq ($(BR2_powerpc),y)
++IOZONE_TARGET = linux-powerpc
++else ifeq ($(BR2_sparc),y)
++IOZONE_TARGET = linux-sparc
++else
++IOZONE_TARGET = linux
++endif
++
++define IOZONE_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(IOZONE_TARGET) -C $(@D)/src/current
++endef
++
++define IOZONE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/src/current/iozone \
++		$(TARGET_DIR)/usr/bin/iozone
++endef
++
++define IOZONE_CLEAN_CMDS
++       $(MAKE) -C $(@D)/src/current clean
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.4.1
