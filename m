@@ -1,50 +1,73 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 13 Mar 2013 09:38:38 +0100
-Subject: [Buildroot] [PATCH 0 of 3] Fix oprofile build on powerpc
-In-Reply-To: <20130313082821.1ac38352@skate>
-References: <patchbomb.1363111853@BEANTN0L019720>
- <20130313082821.1ac38352@skate>
-Message-ID: <CAAXf6LVnEgPTnc2RcCCPQUuJJxgr3V4eTG9UmjOcSgszY2QNgw@mail.gmail.com>
+From: Spielmann Werner <Werner.Spielmann@SWAROVSKI.COM>
+Date: Wed, 13 Mar 2013 09:47:56 +0100
+Subject: [Buildroot] Problem with buildroot-2013.02 - ncurses
+In-Reply-To: <513FB6CF.1070301@mind.be>
+References: <84EA0F7435E5F64C9B660453645DB90497AD4DEF0D@DSW350.wattens.swarovski.com>
+ <20130307093024.30cb7d23@skate>
+ <84EA0F7435E5F64C9B660453645DB90497AD52A6B0@DSW350.wattens.swarovski.com>
+ <20130307140818.0d48c197@skate>
+ <84EA0F7435E5F64C9B660453645DB90497AD52AA50@DSW350.wattens.swarovski.com>
+ <513FB6CF.1070301@mind.be>
+Message-ID: <84EA0F7435E5F64C9B660453645DB90497AE6FBC34@DSW350.wattens.swarovski.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Arnout, hello Thomas,
 
-On Wed, Mar 13, 2013 at 8:28 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Tue, 12 Mar 2013 19:10:53 +0100, Thomas De Schampheleire wrote:
->
->> Since the upstep of oprofile to 0.9.8, the powerpc build was broken.
->> This series fixes this problem.
->>
->> As the last patch indicates, this is compile tested on x86 and powerpc,
->> but not runtime-tested.
->
-> I think those patches are good, but when I started working on this
-> issue, I also discovered that oprofile looks at /usr/include/linux by
-> default to find out whether perf is supported or not in the kernel.
-> Which obviously doesn't make sense in cross-compilation.
->
-> I've just pushed at
-> http://git.free-electrons.com/users/thomas-petazzoni/buildroot/commit/?h=oprofile-ppc-fix&id=dda400c3f798ba49b1b638f927b3089a9df24105
-> the work I started some time ago, which was unfinished. Note that I
-> don't ask you to also fix those issues, I just thought it would be good
-> mentioning these other potential problems.
+Thanks for your response!
 
-I haven't yet looked at your patches in detail, but I did also notice
-the check on perf_event.h in /usr/src/linux. However, this should have
-been fixed with the --with-kernel=$(SYSROOT_DIR).
-However, I just now notice that SYSROOT_DIR does not exist here, and I
-need to find a better solution. I will investigate that aspect
-further.
+I'm using Ubuntu 10.04 LTS Server.
 
-Ideally we'd indeed merge your work together with these patches. Do
-you recall what was still missing or not working with your patches?
+You can find the output of the preprocessed code here:  http://pastebin.com/XnT1wzLK
 
-Thanks,
-Thomas
+Do you have any ideas what is going wrong? Thanks for your help!
+
+
+Best regards
+
+Werner
+
+-----Original Message-----
+From: Arnout Vandecappelle [mailto:arnout at mind.be] 
+Sent: Wednesday, March 13, 2013 12:14 AM
+To: Spielmann Werner
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] Problem with buildroot-2013.02 - ncurses
+
+On 03/08/13 12:29, Spielmann Werner wrote:
+> /usr/bin/gcc -DHAVE_CONFIG_H -I../ncurses -I. 
+> -I<MY_WORKSPACE>/buildroot-2013.02/output/host/usr/include 
+> -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64  -DNDEBUG -I. -I../include -I<MY_WORKSPACE>/buildroot-2013.02/output/host/usr/include/ncurses -O2 -I<MY_WORKSPACE>/buildroot-2013.02/output/host/usr/include  --param max-inline-insns-single=1200 -c ../ncurses/./base/lib_addstr.c -o ../objects/lib_addstr.o /usr/bin/gcc -DHAVE_CONFIG_H -I../ncurses -I. -I<MY_WORKSPACE>/buildroot-2013.02/output/host/usr/include -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64  -DNDEBUG -I. -I../include -I<MY_WORKSPACE>/buildroot-2013.02/output/host/usr/include/ncurses -O2 -I<MY_WORKSPACE>/buildroot-2013.02/output/host/usr/include  --param max-inline-insns-single=1200 -c ../ncurses/./base/lib_beep.c -o ../objects/lib_beep.o In file included from ../include/term_entry.h:48,
+>                   from ../progs/progs.priv.h:111,
+>                   from ../progs/tic.c:41:
+> ../include/term.h:702: error: field ?Ottyb? has incomplete type
+
+ Looks like there's something fishy with your host's environment...
+
+ The field 'tty' that is indicated has type TTY, which is defined as 'struct termios'.  struct termios is defined in /usr/include/bits/termios.h, which is included by /usr/include/termios.h, which is included by ../include/term.h.
+So it _should_ work.
+
+ Can you do the following:
+
+cd /home/spiewe/svnws/buildroot-2013.02/output/build/host-ncurses-5.9/progs
+
+/usr/bin/gcc -I../progs -I. -DHAVE_CONFIG_H -I/home/spiewe/svnws/buildroot-2013.02/output/host/usr/include -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64  -DNDEBUG -I. -I../include -I/home/spiewe/svnws/buildroot-2013.02/output/host/usr/include/ncurses -O2 -I/home/spiewe/svnws/buildroot-2013.02/output/host/usr/include  --param max-inline-insns-single=1200 -E ../progs/dump_entry.c > /tmp/dump_entry.E
+
+ and post the resulting /tmp/dump_entry.E in a pastebin. Then we can check what is going wrong with termios.
+
+ BTW which distro do you use?
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
