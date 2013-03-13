@@ -1,28 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 13 Mar 2013 23:13:13 +0100
-Subject: [Buildroot] [PATCH] fs/common.mk: Strip extra whitespace when
-	device table is empty
-In-Reply-To: <1363177697-31728-1-git-send-email-ezequiel.garcia@free-electrons.com>
- (Ezequiel Garcia's message of "Wed, 13 Mar 2013 09:28:16 -0300")
-References: <1363177697-31728-1-git-send-email-ezequiel.garcia@free-electrons.com>
-Message-ID: <87k3pbq77q.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 13 Mar 2013 23:06:44 +0100
+Subject: [Buildroot] [git commit] poco: needs threads
+Message-ID: <20130313221242.CEA999B084@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ezequiel" == Ezequiel Garcia <ezequiel.garcia@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=55700e9871d6f74c280aaf399a7b3d91252640ba
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Ezequiel> Since ROOTFS_DEVICE_TABLES it is a concatenation of two strings
- Ezequiel> separated by spaces, there will always be a space on it, which means
- Ezequiel> it's never empty. Therefore, when testing for empty, the condition
- Ezequiel> never evaluate to false.
+Fixes
+http://autobuild.buildroot.net/results/98f8ae541939bd7b44601d3ee039bbc84becea84.
 
- Ezequiel> The following change fixes this problem; it runs the qstrip on
- Ezequiel> the overall combination of the variables, causing the space to be
- Ezequiel> removed if it's the only thing left.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/poco/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-Committed, thanks.
--- 
-Bye, Peter Korsgaard
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index 20a8f2d..b823071 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_POCO
+ 	bool "poco"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_PCRE
+ 	help
+@@ -57,5 +58,6 @@ config BR2_PACKAGE_POCO_DATA_MYSQL
+ 
+ endif # BR2_PACKAGE_POCO
+ 
+-comment "poco requires a toolchain with WCHAR and C++ support"
+-	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
++comment "poco requires a toolchain with WCHAR, threads, and C++ support"
++	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_HAS_THREADS
