@@ -1,22 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 13 Mar 2013 23:07:56 +0100
-Subject: [Buildroot] [PATCH 1/2] poco: needs threads
-In-Reply-To: <00f6f81991bf095cfd67cff42e32a4881435236b.1363162371.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 13 Mar 2013 10:15:48 +0200")
-References: <00f6f81991bf095cfd67cff42e32a4881435236b.1363162371.git.baruch@tkos.co.il>
-Message-ID: <87obenq7gj.fsf@dell.be.48ers.dk>
+Date: Wed, 13 Mar 2013 23:13:13 +0100
+Subject: [Buildroot] [PATCH] fs/common.mk: Strip extra whitespace when
+	device table is empty
+In-Reply-To: <1363177697-31728-1-git-send-email-ezequiel.garcia@free-electrons.com>
+ (Ezequiel Garcia's message of "Wed, 13 Mar 2013 09:28:16 -0300")
+References: <1363177697-31728-1-git-send-email-ezequiel.garcia@free-electrons.com>
+Message-ID: <87k3pbq77q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel.garcia@free-electrons.com> writes:
 
- Baruch> Fixes
- Baruch> http://autobuild.buildroot.net/results/98f8ae541939bd7b44601d3ee039bbc84becea84.
+ Ezequiel> Since ROOTFS_DEVICE_TABLES it is a concatenation of two strings
+ Ezequiel> separated by spaces, there will always be a space on it, which means
+ Ezequiel> it's never empty. Therefore, when testing for empty, the condition
+ Ezequiel> never evaluate to false.
 
-Committed both, thanks.
+ Ezequiel> The following change fixes this problem; it runs the qstrip on
+ Ezequiel> the overall combination of the variables, causing the space to be
+ Ezequiel> removed if it's the only thing left.
 
+Committed, thanks.
 -- 
 Bye, Peter Korsgaard
