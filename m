@@ -1,28 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 13 Mar 2013 21:54:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 6092] Bootable ISO image creation seems to have
- stopped working since 2012.08
-In-Reply-To: <bug-6092-163@https.bugs.busybox.net/>
-References: <bug-6092-163@https.bugs.busybox.net/>
-Message-ID: <20130313215438.139D59B076@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 13 Mar 2013 23:07:56 +0100
+Subject: [Buildroot] [PATCH 1/2] poco: needs threads
+In-Reply-To: <00f6f81991bf095cfd67cff42e32a4881435236b.1363162371.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 13 Mar 2013 10:15:48 +0200")
+References: <00f6f81991bf095cfd67cff42e32a4881435236b.1363162371.git.baruch@tkos.co.il>
+Message-ID: <87obenq7gj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6092
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
---- Comment #4 from gfx229-uclibc at yahoo.com 2013-03-13 21:55:21 UTC ---
-FYI - I now believe this is a GCC versionitis issue per se.  Kicking my build
-back to GCC 4.5.x (instead of 4.6.x as is the current default) restores the
-bootability of the resulting bits.  I'm not sure how these newer compilers are
-impacting the build of the Grub directory but I will ad this note as an
-advisory at this point.  If you wish to close this as not a bug you wish to
-track (but rather document for work-around status), please feel free.  Thanks
-for your continued valued work.
+ Baruch> Fixes
+ Baruch> http://autobuild.buildroot.net/results/98f8ae541939bd7b44601d3ee039bbc84becea84.
+
+Committed both, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
