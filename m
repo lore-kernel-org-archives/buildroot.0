@@ -1,28 +1,42 @@
-From: Alexander Lukichev <alexander.lukichev@gmail.com>
-Date: Wed, 13 Mar 2013 09:48:25 +0200
-Subject: [Buildroot] [PATCH 1/1] zeromq: bump version to 3.2.2
-In-Reply-To: <1363002189-8109-1-git-send-email-alexander.lukichev@gmail.com>
-References: <1363002189-8109-1-git-send-email-alexander.lukichev@gmail.com>
-Message-ID: <CAAHaz6GCf_OfU3qpSpotuSUYRCD=ARFaD32qggGy6Uvf5AVzqA@mail.gmail.com>
+From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
+Date: Wed, 13 Mar 2013 19:12:17 +1100
+Subject: [Buildroot] Crosstool-NG unnecessary rebuilds [BUG]
+References: <EE5E77B503DE9A478B63A89AAD2585EDB66A60@vpane.excalyptech.com>
+ <20130313083725.4605312e@skate>
+Message-ID: <EE5E77B503DE9A478B63A89AAD2585EDB66A61@vpane.excalyptech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Thomas,
 
-  This patch does not break other two patches that I sent earlier:
-  http://patchwork.ozlabs.org/patch/224666/
-  http://patchwork.ozlabs.org/patch/224667/
+On Wed, 13 Mar 2013 at 18:37:25, Thomas Petazzoni wrote:
 
-  They are still valid because zeromq 3.2.2 uses the same version of
-openpgm 5.1.118~dfsg.
-  Thanks.
+> Dear Przemyslaw Wrzos,
+> 
+> On Wed, 13 Mar 2013 14:14:17 +1100, Przemyslaw Wrzos wrote:
+> 
+>> I'm finding that when using Crosstool-NG, the toolchain often seems
+to
+>> rebuild unnecessarily.
+> 
+> Isn't this caused by the following dependency
+> 
+> $(CTNG_DIR)/.config: $(CTNG_CONFIG_FILE) $(BUILDROOT_CONFIG)
+> 
+> I don't think we should depend on the Buildroot configuration here. It
+> tries to be too smart by triggering the rebuild of the toolchain
+> whenever the Buildroot configuration has changed, but this isn't
+> normally done in Buildroot, so I'd say this dependency on
+> $(BUILDROOT_CONFIG) shouldn't be there. Cc'ing Yann on this one.
+> 
+> Best regards,
+> 
+> Thomas
 
---
-Best regards,
-  Alexander Lukichev
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130313/060fa445/attachment.html>
+Yes, removing that dependency should also resolve this issue.
+
+Cheers,
+Przemyslaw Wrzos
