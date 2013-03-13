@@ -1,104 +1,67 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Wed, 13 Mar 2013 10:31:57 -0700
-Subject: [Buildroot] [PATCH] iozone: new package
-In-Reply-To: <y>
-References: <y>
-Message-ID: <1363195917-13185-1-git-send-email-gilles.talis@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 Mar 2013 19:10:06 +0100
+Subject: [Buildroot] Crosstool-NG unnecessary rebuilds [BUG]
+In-Reply-To: <20130313083725.4605312e@skate>
+References: <EE5E77B503DE9A478B63A89AAD2585EDB66A60@vpane.excalyptech.com>
+ <20130313083725.4605312e@skate>
+Message-ID: <201303131910.06613.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/Config.in        |    1 +
- package/iozone/Config.in |   14 ++++++++++++++
- package/iozone/iozone.mk |   43 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 58 insertions(+), 0 deletions(-)
- create mode 100644 package/iozone/Config.in
- create mode 100644 package/iozone/iozone.mk
+Przemyslaw, Thomas, All,
 
-diff --git a/package/Config.in b/package/Config.in
-index a65054c..4d1aa67 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -22,6 +22,7 @@ source "package/cache-calibrator/Config.in"
- source "package/dhrystone/Config.in"
- source "package/dstat/Config.in"
- source "package/dmalloc/Config.in"
-+source "package/iozone/Config.in"
- source "package/kexec/Config.in"
- source "package/latencytop/Config.in"
- source "package/lmbench/Config.in"
-diff --git a/package/iozone/Config.in b/package/iozone/Config.in
-new file mode 100644
-index 0000000..f07e65c
---- /dev/null
-+++ b/package/iozone/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_IOZONE
-+	bool "IOzone"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_LARGEFILE
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  IOzone is a filesystem benchmark tool.
-+	  The benchmark generates and measures a variety of file operations
-+
-+	  http://www.iozone.org/
-+
-+comment "IOzone requires a toolchain with LARGEFILE and threads support"
-+	depends on !(BR2_LARGEFILE && BR2_TOOLCHAIN_HAS_THREADS)
-+
-diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
-new file mode 100644
-index 0000000..2a046bc
---- /dev/null
-+++ b/package/iozone/iozone.mk
-@@ -0,0 +1,43 @@
-+#############################################################
-+#
-+# IOZONE
-+#
-+#############################################################
-+
-+IOZONE_MAJOR_VERSION = 3
-+IOZONE_MINOR_VERSION = 414
-+IOZONE_VERSION = $(IOZONE_MAJOR_VERSION)_$(IOZONE_MINOR_VERSION)
-+
-+IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
-+IOZONE_SITE = http://www.iozone.org/src/current
-+IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
-+# IOzone license details can be found at:
-+# http://www.iozone.org/docs/Iozone_License.txt
-+
-+
-+ifeq ($(BR2_arm)$(BR2_armeb),y)
-+IOZONE_TARGET = linux-arm
-+else ifeq ($(BR2_x86_64),y)
-+IOZONE_TARGET = linux-ia64
-+else ifeq ($(BR2_powerpc),y)
-+IOZONE_TARGET = linux-powerpc
-+else ifeq ($(BR2_sparc),y)
-+IOZONE_TARGET = linux-sparc
-+else
-+IOZONE_TARGET = linux
-+endif
-+
-+define IOZONE_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(IOZONE_TARGET) -C $(@D)/src/current
-+endef
-+
-+define IOZONE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/src/current/iozone \
-+		$(TARGET_DIR)/usr/bin/iozone
-+endef
-+
-+define IOZONE_CLEAN_CMDS
-+       $(MAKE) -C $(@D)/src/current clean
-+endef
-+
-+$(eval $(generic-package))
+On Wednesday 13 March 2013 Thomas Petazzoni wrote:
+> On Wed, 13 Mar 2013 14:14:17 +1100, Przemyslaw Wrzos wrote:
+> > I'm finding that when using Crosstool-NG, the toolchain often seems to
+> > rebuild unnecessarily.
+[--SNIP--]
+> Isn't this caused by the following dependency
+> $(CTNG_DIR)/.config: $(CTNG_CONFIG_FILE) $(BUILDROOT_CONFIG)
+
+Yes, and this dependency is here on purpose: we can't configure the
+crosstool-NG backend until we first have the Buildroot config.
+
+> I don't think we should depend on the Buildroot configuration here. It
+> tries to be too smart by triggering the rebuild of the toolchain
+> whenever the Buildroot configuration has changed, but this isn't
+> normally done in Buildroot, so I'd say this dependency on
+> $(BUILDROOT_CONFIG) shouldn't be there. Cc'ing Yann on this one.
+
+Well, the .config file should not change if the toolchain options in
+Buildroot have not changed.
+
+That's the purpose of the .timestamp trick: if the .config did change,
+then we leave the new .config, and that will kick in the rebuild of the
+toolchain. OTOH, if the .config did not change, then we restore the
+previous .config, and as the date of the .config has not changed, the
+dependency is fulfilled, and the toolchain would not be re-built.
+
+This *is* needed to catch tolchain changes. Admitedly, the internal backend
+does not do that, but I think it is better to do it rather than not.
+
+I have just checked that, and indeed, if I just change package options
+without touching toolchain-related features, the toolchain is not rebuilt.
+
+Now, getting the Buildroot version in the crostool-NG backend is arguably
+usefull, especially if using (as is currently the case) the complete
+version string. I personally find it useful, but I agree this can be seen
+as an annoyance (note: I am not impacted, because I usually build the
+toolchain directly with ct-ng, and use that as an external toolchain).
+
+Maybe we can switch to using the short Buildroot version string, which
+does not include the git cset in it. I'll propose a patch to this effect
+shortly.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.4.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
