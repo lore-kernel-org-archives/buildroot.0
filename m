@@ -1,44 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Mar 2013 19:30:25 +0100
-Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: only use the un-tainted
-	Buildroot version sting
-Message-ID: <1363199425-17105-1-git-send-email-yann.morin.1998@free.fr>
+From: John Stile <john@stilen.com>
+Date: Wed, 13 Mar 2013 11:30:49 -0700
+Subject: [Buildroot] question about my pevious dhcpcd patch
+Message-ID: <1363199449.8204.157.camel@genx.eng.msli.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 'full' Buildroot version string contains the git cset hash, so will
-change for each commit in the current tree.
+I have an update to my patch to add dhcpd.
 
-As Przemyslaw points out, this will cause the crosstool-NG backend to
-rebuild the toolchain, as the 'full' Buildroot version is included in
-the crosstool-NG config (to further push down to the components version
-string).
+First issue: I discovered I also need to copy a script directory, but
+don't see a good method to copy more than each file one at a time.  
 
-Using the 'full' Buildroot version string is arguably useful, so switch
-to using the 'simple' Buildroot version string instead.
+Is there a good way to copy all files in dhcpcd-hooks except the
+Makefile, into $(TARGET_DIR)/libexec/dhcpcd-hooks?
 
-Reported-by: "Przemyslaw Wrzos" <przemyslaw.wrzos@calyptech.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Right now I'm doing it one at a time like this:
+	$(INSTALL) -D -m 0755 \
+		$(@D)/dhcpcd-hooks/01-test \
+		$(TARGET_DIR)/libexec/dhcpcd-hooks/01-test
+	$(INSTALL) -D -m 0755 \
+		$(@D)/dhcpcd-hooks/02-dump \
+		$(TARGET_DIR)/libexec/dhcpcd-hooks/02-dump
+	$(INSTALL) -D -m 0755 \
+		$(@D)/dhcpcd-hooks/20-resolv.conf \
+		$(TARGET_DIR)/libexec/dhcpcd-hooks/20-resolv.conf
+	$(INSTALL) -D -m 0755 \
+		$(@D)/dhcpcd-hooks/29-lookup-hostname \
+		$(TARGET_DIR)/libexec/dhcpcd-hooks/29-lookup-hostname
+  ...etc...
 
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 6554982..fbace5f 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -206,7 +206,7 @@ CTNG_FIX_BUILDROOT_CONFIG_SED += s:^(|\# )(CT_ARCH_(32|64)).*:\# \2 is not set:;
- CTNG_FIX_BUILDROOT_CONFIG_SED += s:^\# (CT_ARCH_$(CTNG_BIT)) is not set:\1=y:;
- CTNG_FIX_BUILDROOT_CONFIG_SED += s:^(CT_TARGET_VENDOR)=.*:\1="buildroot":;
- CTNG_FIX_BUILDROOT_CONFIG_SED += s:^(CT_TARGET_ALIAS)=.*:\1="$(ARCH)-linux":;
--CTNG_FIX_BUILDROOT_CONFIG_SED += s:^(CT_TOOLCHAIN_PKGVERSION)="(.*)":\1="buildroot $(BR2_VERSION_FULL)":;
-+CTNG_FIX_BUILDROOT_CONFIG_SED += s:^(CT_TOOLCHAIN_PKGVERSION)="(.*)":\1="buildroot $(BR2_VERSION)":;
- ifneq ($(call qstrip,$(BR2_USE_MMU)),)
- CTNG_FIX_BUILDROOT_CONFIG_SED += s:^\# (CT_ARCH_USE_MMU) is not set:\1=y:;
- else
--- 
-1.7.2.5
+Second issue:  how do I submit an updated patch?  The first one was
+submitted a few days ago.  Do i just do a fresh clone, and then try to
+add my stuff and submit via send-email, and pretend the first patch was
+never sent?
