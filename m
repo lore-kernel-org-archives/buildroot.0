@@ -1,59 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Mar 2013 08:37:25 +0100
-Subject: [Buildroot] Crosstool-NG unnecessary rebuilds [BUG]
-In-Reply-To: <EE5E77B503DE9A478B63A89AAD2585EDB66A60@vpane.excalyptech.com>
-References: <EE5E77B503DE9A478B63A89AAD2585EDB66A60@vpane.excalyptech.com>
-Message-ID: <20130313083725.4605312e@skate>
+Date: Wed, 13 Mar 2013 08:39:59 +0100
+Subject: [Buildroot] [PATCH 2/5] manual: add a make target
+ 'manual-update-lists'
+In-Reply-To: <CAHXCMMJMP5o34AAX29Rx0HqWOtysCz4bFJNrMo+pyHYBf0++fg@mail.gmail.com>
+References: <cover.1363063387.git.s.martin49@gmail.com>
+ <da0b536e458646ecade2fd7d2a8cee2e04148e66.1363063387.git.s.martin49@gmail.com>
+ <20130312085945.7d595fb2@skate>
+ <CAHXCMMJMP5o34AAX29Rx0HqWOtysCz4bFJNrMo+pyHYBf0++fg@mail.gmail.com>
+Message-ID: <20130313083959.49853d83@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Przemyslaw Wrzos,
+Dear Samuel Martin,
 
-On Wed, 13 Mar 2013 14:14:17 +1100, Przemyslaw Wrzos wrote:
+On Tue, 12 Mar 2013 09:41:27 +0100, Samuel Martin wrote:
 
-> I'm finding that when using Crosstool-NG, the toolchain often seems to
-> rebuild unnecessarily.
-> 
-> The condition seems to trigger if any change is made to the main
-> buildroot configuration file (even though the change is unrelated to the
-> toolchain) and a new git commit is made (or uncommitted changes are
-> introduced into the build tree). As far as I can tell this is caused by
-> one of the CTNG_FIX_BUILDROOT_CONFIG_SED rules used to modify the
-> crosstool-NG configuration (found in
-> toolchain/toolchain-crosstool-ng/crosstool-ng.mk).
-> 
-> The rule is:
->     CTNG_FIX_BUILDROOT_CONFIG_SED +=
-> s:^(CT_TOOLCHAIN_PKGVERSION)="(.*)":\1="buildroot $(BR2_VERSION_FULL)":;
-> 
-> The problem is its dependence on BR2_VERSION_FULL which changes every
-> time a git commit is made.
-> 
-> I'm not sure what the best way to tackle this is. Perhaps allowing the
-> user to specify a fixed TOOLCHAIN_PKGVERSION in the ctng-menuconfig, the
-> above rule would then become something like:
->         CTNG_FIX_BUILDROOT_CONFIG_SED +=
-> s:^(CT_TOOLCHAIN_PKGVERSION)="(\s*)":\1="buildroot
-> $(BR2_VERSION_FULL)":;
-> 
-> Otherwise we could use BR2_VERSION instead. This would still trigger an
-> unnecessary rebuild every time the buildroot version is bumped but that
-> would happen a lot less often.
-> 
-> Any suggestions on the best way to tackle this issue?
+> I don't have a strong opinion about this, but since there is some
+> date/version in
+> the generated files (see patch 5/5), I don't want to bother people
+> with this insignificant
+> change just because they (re)build the manual...
 
-Isn't this caused by the following dependency
+I'm not sure to understand the problem with the dates. I'd say you
+shouldn't put the date specifically in the list of packages. I would
+expect "make manual-pdf" to generate the list of packages with your
+script, get it included into the manual sources, and get the manual
+built.
 
-$(CTNG_DIR)/.config: $(CTNG_CONFIG_FILE) $(BUILDROOT_CONFIG)
-
-I don't think we should depend on the Buildroot configuration here. It
-tries to be too smart by triggering the rebuild of the toolchain
-whenever the Buildroot configuration has changed, but this isn't
-normally done in Buildroot, so I'd say this dependency on
-$(BUILDROOT_CONFIG) shouldn't be there. Cc'ing Yann on this one.
+Separately, we may want to introduce something at the beginning of the
+manual that says at which date the manual was built, and on which Git
+version of the Buildroot sources. But I don't see a reason to make this
+related to the list of packages specifically.
 
 Best regards,
 
