@@ -1,34 +1,41 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 13 Mar 2013 10:15:49 +0200
-Subject: [Buildroot] [PATCH 2/2] poco: bump to 1.4.6p1
-In-Reply-To: <00f6f81991bf095cfd67cff42e32a4881435236b.1363162371.git.baruch@tkos.co.il>
-References: <00f6f81991bf095cfd67cff42e32a4881435236b.1363162371.git.baruch@tkos.co.il>
-Message-ID: <439e183cec4684ac540ea8b697cddf94ea698b5c.1363162371.git.baruch@tkos.co.il>
+Date: Wed, 13 Mar 2013 10:15:48 +0200
+Subject: [Buildroot] [PATCH 1/2] poco: needs threads
+Message-ID: <00f6f81991bf095cfd67cff42e32a4881435236b.1363162371.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes
+http://autobuild.buildroot.net/results/98f8ae541939bd7b44601d3ee039bbc84becea84.
+
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/poco/poco.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/poco/Config.in |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 942b9b2..32a026b 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -3,8 +3,8 @@
- # poco
- #
- #############################################################
--POCO_VERSION_MAJOR = 1.4.4
--POCO_VERSION = $(POCO_VERSION_MAJOR)
-+POCO_VERSION_MAJOR = 1.4.6
-+POCO_VERSION = $(POCO_VERSION_MAJOR)p1
- POCO_SOURCE = poco-$(POCO_VERSION)-all.tar.gz
- POCO_SITE = http://downloads.sourceforge.net/project/poco/sources/poco-$(POCO_VERSION_MAJOR)
- POCO_LICENSE = Boost-v1.0
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index 20a8f2d..b823071 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_POCO
+ 	bool "poco"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_PCRE
+ 	help
+@@ -57,5 +58,6 @@ config BR2_PACKAGE_POCO_DATA_MYSQL
+ 
+ endif # BR2_PACKAGE_POCO
+ 
+-comment "poco requires a toolchain with WCHAR and C++ support"
+-	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
++comment "poco requires a toolchain with WCHAR, threads, and C++ support"
++	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 1.7.10.4
