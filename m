@@ -1,8 +1,10 @@
 From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-Date: Wed, 13 Mar 2013 09:28:16 -0300
+Date: Wed, 13 Mar 2013 09:28:17 -0300
 Subject: [Buildroot] [PATCH] fs/common.mk: Strip extra whitespace when
 	device table is empty
-Message-ID: <1363177697-31728-1-git-send-email-ezequiel.garcia@free-electrons.com>
+In-Reply-To: <1363177697-31728-1-git-send-email-ezequiel.garcia@free-electrons.com>
+References: <1363177697-31728-1-git-send-email-ezequiel.garcia@free-electrons.com>
+Message-ID: <1363177697-31728-2-git-send-email-ezequiel.garcia@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
