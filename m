@@ -1,45 +1,36 @@
-From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
-Date: Wed, 13 Mar 2013 14:14:17 +1100
-Subject: [Buildroot] Crosstool-NG unnecessary rebuilds [BUG]
-Message-ID: <EE5E77B503DE9A478B63A89AAD2585EDB66A60@vpane.excalyptech.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Mar 2013 08:21:29 +0100
+Subject: [Buildroot] Problem with buildroot-2013.02 - ncurses
+In-Reply-To: <513FB6CF.1070301@mind.be>
+References: <84EA0F7435E5F64C9B660453645DB90497AD4DEF0D@DSW350.wattens.swarovski.com>
+ <20130307093024.30cb7d23@skate>
+ <84EA0F7435E5F64C9B660453645DB90497AD52A6B0@DSW350.wattens.swarovski.com>
+ <20130307140818.0d48c197@skate>
+ <84EA0F7435E5F64C9B660453645DB90497AD52AA50@DSW350.wattens.swarovski.com>
+ <513FB6CF.1070301@mind.be>
+Message-ID: <20130313082129.188d23f2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Arnout Vandecappelle,
 
-I'm finding that when using Crosstool-NG, the toolchain often seems to
-rebuild unnecessarily.
+On Wed, 13 Mar 2013 00:14:23 +0100, Arnout Vandecappelle wrote:
 
-The condition seems to trigger if any change is made to the main
-buildroot configuration file (even though the change is unrelated to the
-toolchain) and a new git commit is made (or uncommitted changes are
-introduced into the build tree). As far as I can tell this is caused by
-one of the CTNG_FIX_BUILDROOT_CONFIG_SED rules used to modify the
-crosstool-NG configuration (found in
-toolchain/toolchain-crosstool-ng/crosstool-ng.mk).
+>  Looks like there's something fishy with your host's environment...
 
-The rule is:
-    CTNG_FIX_BUILDROOT_CONFIG_SED +=
-s:^(CT_TOOLCHAIN_PKGVERSION)="(.*)":\1="buildroot $(BR2_VERSION_FULL)":;
+I agree. I had a look at Werner's build log yesterday evening, and it
+really doesn't make much sense to have this failure. I agree with
+Arnout's suggestion of looking at the preprocessed C code to see what's
+going on.
 
-The problem is its dependence on BR2_VERSION_FULL which changes every
-time a git commit is made.
+Best regards,
 
-I'm not sure what the best way to tackle this is. Perhaps allowing the
-user to specify a fixed TOOLCHAIN_PKGVERSION in the ctng-menuconfig, the
-above rule would then become something like:
-        CTNG_FIX_BUILDROOT_CONFIG_SED +=
-s:^(CT_TOOLCHAIN_PKGVERSION)="(\s*)":\1="buildroot
-$(BR2_VERSION_FULL)":;
-
-Otherwise we could use BR2_VERSION instead. This would still trigger an
-unnecessary rebuild every time the buildroot version is bumped but that
-would happen a lot less often.
-
-Any suggestions on the best way to tackle this issue?
-
-Regards,
-Przemyslaw Wrzos
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
