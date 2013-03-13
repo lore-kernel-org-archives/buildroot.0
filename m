@@ -1,132 +1,66 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Mar 2013 21:35:14 +0100
-Subject: [Buildroot] [PATCH v2 1/1] python-thrift: new package
-In-Reply-To: <1363185808-14279-1-git-send-email-viniciustinti@gmail.com>
-References: <1363185808-14279-1-git-send-email-viniciustinti@gmail.com>
-Message-ID: <5140E302.4020500@mind.be>
+Date: Wed, 13 Mar 2013 21:46:00 +0100
+Subject: [Buildroot] question about my pevious dhcpcd patch
+In-Reply-To: <1363199449.8204.157.camel@genx.eng.msli.com>
+References: <1363199449.8204.157.camel@genx.eng.msli.com>
+Message-ID: <5140E588.8070208@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/13/13 15:43, Vinicius Tinti wrote:
-> Add Python bindings for the Apache Thrift RPC.
+On 03/13/13 19:30, John Stile wrote:
+> I have an update to my patch to add dhcpd.
 >
-> Thrift is an interface definition language that is used to define and create
-> services for numerous languages using remote procedure calls (RPC).
+> First issue: I discovered I also need to copy a script directory, but
+> don't see a good method to copy more than each file one at a time.
 >
-> This patch does not include the Thrift code generator. It only includes the
-> Thrift libraries used at runtime.
+> Is there a good way to copy all files in dhcpcd-hooks except the
+> Makefile, into $(TARGET_DIR)/libexec/dhcpcd-hooks?
 >
-> Signed-off-by: Tiago Maluta <tiagomaluta@gmail.com>
-> Signed-off-by: Vinicius Tinti <viniciustinti@gmail.com>
+> Right now I'm doing it one at a time like this:
+> 	$(INSTALL) -D -m 0755 \
+> 		$(@D)/dhcpcd-hooks/01-test \
+> 		$(TARGET_DIR)/libexec/dhcpcd-hooks/01-test
+> 	$(INSTALL) -D -m 0755 \
+> 		$(@D)/dhcpcd-hooks/02-dump \
+> 		$(TARGET_DIR)/libexec/dhcpcd-hooks/02-dump
+> 	$(INSTALL) -D -m 0755 \
+> 		$(@D)/dhcpcd-hooks/20-resolv.conf \
+> 		$(TARGET_DIR)/libexec/dhcpcd-hooks/20-resolv.conf
+> 	$(INSTALL) -D -m 0755 \
+> 		$(@D)/dhcpcd-hooks/29-lookup-hostname \
+> 		$(TARGET_DIR)/libexec/dhcpcd-hooks/29-lookup-hostname
 
-  When you post a v2 of a patch, it is nice if you can add a changelog 
-below your signed-off-by line (separated by ---).
+  Just do
+	mkdir -p $(TARGET_DIR)/libexec/dhcpcd-hooks
+	cp $(@D)/dhcpcd-hooks/* $(TARGET_DIR)/libexec/dhcpcd-hooks
 
-> ---
->   package/Config.in                      |    1 +
->   package/python-thrift/Config.in        |    7 +++++++
->   package/python-thrift/python-thrift.mk |   23 +++++++++++++++++++++++
->   3 files changed, 31 insertions(+)
->   create mode 100644 package/python-thrift/Config.in
->   create mode 100644 package/python-thrift/python-thrift.mk
+  If permissions of the original files are wrong, just add a chmod.
+
+  By the way, we don't have a /libexec at the moment, but we do have a 
+/usr/libexec. So I would put it there.
+
+>    ...etc...
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index a65054c..8467735 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -334,6 +334,7 @@ source "package/python-pygame/Config.in"
->   source "package/python-pyparsing/Config.in"
->   source "package/python-serial/Config.in"
->   source "package/python-setuptools/Config.in"
-> +source "package/python-thrift/Config.in"
->   endmenu
->   endif
->   source "package/ruby/Config.in"
-> diff --git a/package/python-thrift/Config.in b/package/python-thrift/Config.in
-> new file mode 100644
-> index 0000000..f4ad4ba
-> --- /dev/null
-> +++ b/package/python-thrift/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_THRIFT
-> +	bool "python-thrift"
-> +	help
-> +	  python-thrift is a Python bindings for the Apache Thrift RPC system.
-> +
-> +	  http://thrift.apache.org/
-> +
+> Second issue:  how do I submit an updated patch?  The first one was
+> submitted a few days ago.  Do i just do a fresh clone, and then try to
+> add my stuff and submit via send-email, and pretend the first patch was
+> never sent?
 
-  Redundant empty line at end of file.
+  Assuming your patch is in git, you can make more changes, and then 
+update your patch with "git commit --amend". Then you can just use git 
+send-email like before.
 
-> diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
-> new file mode 100644
-> index 0000000..40ae57b
-> --- /dev/null
-> +++ b/package/python-thrift/python-thrift.mk
-> @@ -0,0 +1,23 @@
-> +#############################################################
-> +#
-> +# python-thrift
-> +#
-> +#############################################################
-> +
-> +PYTHON_THRIFT_VERSION = 0.9.0
-> +PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
+  If you have made other changes in the mean time, you can commit your 
+changes and squash them with the patch with 'git rebase -i origin/master'
 
-  This is the default, so can be removed.
-
-> +PYTHON_THRIFT_SITE = https://pypi.python.org/packages/source/t/thrift/
-> +PYTHON_THRIFT_LICENSE = Apache v2.0
-
-  We currently have Apache-v2 (ImageMagick), Apache-2.0 (lua-msgpack) and 
-Apache v2.0 (zxing). I personally prefer Apache-2.0.
-
-
-> +PYTHON_THRIFT_LICENSE_FILES = README
-> +
-> +PYTHON_THRIFT_DEPENDENCIES = python
-> +
-> +define PYTHON_THRIFT_BUILD_CMDS
-> +	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-> +endef
-> +
-> +define PYTHON_THRIFT_INSTALL_TARGET_CMDS
-> +	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-> +endef
-
-  Unfortunately, installation fails when host-python-distutilscross has 
-been installed already (by python-protobuf or python-netifaces).
-
-
-------
-running install
-Checking .pth file support in $(TARGET_DIR)/usr/lib/python2.7/site-packages/
-$(HOST_DIR)/usr/bin/python -E -c pass
-TEST FAILED: $(TARGET_DIR)/usr/lib/python2.7/site-packages/ does NOT 
-support .pth files
-error: bad install directory or PYTHONPATH
-
-You are attempting to install a package to a directory that is not
-on PYTHONPATH and which Python does not read ".pth" files from.  The
-installation directory you specified (via --install-dir, --prefix, or
-the distutils default setting) was:
-
-     $(TARGET_DIR)/usr/lib/python2.7/site-packages/
-------
-
-  What happens is very clear: we're installing using the host-python, 
-which doesn't look at TARGET_DIR to load packages. I would expect that 
-distutilscross knows how to deal with that, but haven't found how...
+  Also make sure you update your git repository with 'git pull --rebase'
 
   Regards,
   Arnout
 
-> +
-> +$(eval $(generic-package))
->
 
 
 -- 
