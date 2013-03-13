@@ -1,101 +1,193 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 14 Mar 2013 00:05:34 +0100
-Subject: [Buildroot] [git commit] ussp-push: new package
-Message-ID: <20130313230629.7ECA39B07E@busybox.osuosl.org>
+Date: Wed, 13 Mar 2013 23:32:46 +0100
+Subject: [Buildroot] [git commit] openobex: new package
+Message-ID: <20130313230629.5FA229B08E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87854c12d1c81bade3522405ce1ac42d45475263
+commit: http://git.buildroot.net/buildroot/commit/?id=04092fa3570f0315042327148a0fe62854fc8722
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Cc: Julien Boibessot <julien.boibessot@armadeus.com>
 Cc: Eric Jarrige <eric.jarrige@armadeus.org>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
  package/Config.in                                  |    1 +
- package/ussp-push/Config.in                        |   18 ++++++++++++++++++
- .../ussp-push-fix-build-against-bluez-4.patch      |   15 +++++++++++++++
- package/ussp-push/ussp-push.mk                     |   14 ++++++++++++++
- 4 files changed, 48 insertions(+), 0 deletions(-)
+ package/openobex/Config.in                         |   45 ++++++++++++++++++++
+ ...penobex-libusb_check_when_cross-compiling.patch |   18 ++++++++
+ .../openobex-replace_deprecated_functions.patch    |   30 +++++++++++++
+ package/openobex/openobex.mk                       |   38 ++++++++++++++++
+ 5 files changed, 132 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 560ae9c..b8b1e60 100644
+index a65054c..560ae9c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -729,6 +729,7 @@ source "package/tvheadend/Config.in"
- source "package/udpcast/Config.in"
- source "package/ulogd/Config.in"
- source "package/ushare/Config.in"
-+source "package/ussp-push/Config.in"
- source "package/vde2/Config.in"
- source "package/vpnc/Config.in"
- source "package/vsftpd/Config.in"
-diff --git a/package/ussp-push/Config.in b/package/ussp-push/Config.in
+@@ -689,6 +689,7 @@ source "package/ntp/Config.in"
+ source "package/nuttcp/Config.in"
+ source "package/olsr/Config.in"
+ source "package/openntpd/Config.in"
++source "package/openobex/Config.in"
+ source "package/openssh/Config.in"
+ source "package/openswan/Config.in"
+ source "package/openvpn/Config.in"
+diff --git a/package/openobex/Config.in b/package/openobex/Config.in
 new file mode 100644
-index 0000000..716ce34
+index 0000000..6494b29
 --- /dev/null
-+++ b/package/ussp-push/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_USSP_PUSH
-+	bool "ussp-push"
++++ b/package/openobex/Config.in
+@@ -0,0 +1,45 @@
++comment "openobex requires a toolchain with IPV6 support"
++	depends on !BR2_INET_IPV6
++
++config BR2_PACKAGE_OPENOBEX
++	bool "openobex"
 +	depends on BR2_INET_IPV6
++	help
++	  Free open source implementation of the Object Exchange (OBEX)
++	  protocol.
++
++	  http://www.openobex.org
++
++if BR2_PACKAGE_OPENOBEX
++
++comment "bluez support require a toolchain with WCHAR and thread support"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_OPENOBEX_BLUEZ
++	bool "enable bluez support"
 +	depends on !BR2_avr32
 +	depends on BR2_USE_WCHAR # libglib2
 +	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib
 +	depends on BR2_USE_MMU # dbus
-+	select BR2_PACKAGE_OPENOBEX
-+	select BR2_PACKAGE_OPENOBEX_BLUEZ
 +	select BR2_PACKAGE_BLUEZ_UTILS
++
++comment "libusb support require a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_OPENOBEX_LIBUSB
++	bool "enable libusb support"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBUSB
++
++config BR2_PACKAGE_OPENOBEX_APPS
++	bool "install test applications"
 +	help
-+	  ussp-push is an OBEX object pusher for Linux, using the BlueZ
-+	  BlueTooth stack.
++	  Also install the openobex test applications on target.
 +
-+	  http://www.xmailserver.org/ussp-push.html
++config BR2_PACKAGE_OPENOBEX_SYSLOG
++	bool "enable debugging to the system logger"
 +
-+comment "ussp-push require a toolchain with WCHAR, IPV6 and thread support"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6
-diff --git a/package/ussp-push/ussp-push-fix-build-against-bluez-4.patch b/package/ussp-push/ussp-push-fix-build-against-bluez-4.patch
++config BR2_PACKAGE_OPENOBEX_DUMP
++	bool "enable protocol dumping for debugging"
++
++endif
+diff --git a/package/openobex/openobex-libusb_check_when_cross-compiling.patch b/package/openobex/openobex-libusb_check_when_cross-compiling.patch
 new file mode 100644
-index 0000000..0694bfb
+index 0000000..7b8056a
 --- /dev/null
-+++ b/package/ussp-push/ussp-push-fix-build-against-bluez-4.patch
-@@ -0,0 +1,15 @@
-+Fix build against bluez4.
++++ b/package/openobex/openobex-libusb_check_when_cross-compiling.patch
+@@ -0,0 +1,18 @@
++Fix libusb check when cross-compiling.
 +
++Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 +
-+--- ussp-push-0.11.orig/src/obex_socket.c	2012-11-01 09:58:51.049538708 +0100
-++++ ussp-push-0.11/src/obex_socket.c	2012-11-01 12:10:10.719506951 +0100
-+@@ -197,7 +197,7 @@ static int bt_sock_name2bth(int devid, c
-+ 	for (i = 0; i < niinf; i++) {
-+ 		char devname[128];
-+ 
-+-		if (hci_remote_name(dd, &piinf[i].bdaddr, sizeof(devname) - 1,
-++		if (hci_read_remote_name(dd, &piinf[i].bdaddr, sizeof(devname) - 1,
-+ 				    devname, 100000) >= 0) {
-+ 			if (strcasecmp(devname, btname) == 0) {
-+ 				*btaddr = piinf[i].bdaddr;
-diff --git a/package/ussp-push/ussp-push.mk b/package/ussp-push/ussp-push.mk
++Index: openobex-1.5/acinclude.m4
++===================================================================
++--- openobex-1.5.orig/acinclude.m4	2010-06-16 10:32:47.000000000 +0200
+++++ openobex-1.5/acinclude.m4	2010-06-16 10:35:33.000000000 +0200
++@@ -158,7 +158,7 @@
++ 		;;
++ 	*)
++ 		PKG_CHECK_MODULES(USB, libusb, usb_lib_found=yes, AC_MSG_RESULT(no))
++-		AC_CHECK_FILE(${prefix}/lib/pkgconfig/libusb.pc, REQUIRES="libusb")
+++		REQUIRES="libusb"
++ 		;;
++ 	esac
++ 	AC_SUBST(USB_CFLAGS)
+diff --git a/package/openobex/openobex-replace_deprecated_functions.patch b/package/openobex/openobex-replace_deprecated_functions.patch
 new file mode 100644
-index 0000000..c109554
+index 0000000..17274d3
 --- /dev/null
-+++ b/package/ussp-push/ussp-push.mk
-@@ -0,0 +1,14 @@
++++ b/package/openobex/openobex-replace_deprecated_functions.patch
+@@ -0,0 +1,30 @@
++obex_test_cable.c: avoid to use SuSv3 LEGACY APIs
++
++Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++
++Index: openobex-1.5/apps/obex_test_cable.c
++===================================================================
++--- openobex-1.5.orig/apps/obex_test_cable.c	2009-02-08 19:30:22.000000000 +0100
+++++ openobex-1.5/apps/obex_test_cable.c	2010-06-16 11:11:05.000000000 +0200
++@@ -113,9 +113,9 @@
++ 			if(total == sizeof(tmpbuf))
++ 				return -1;
++ 
++-			if( (answer = index(tmpbuf, '\n')) )	{
+++			if( (answer = strchr(tmpbuf, '\n')) )	{
++ 				// Remove first line (echo)
++-				if( (answer_end = index(answer+1, '\n')) )	{
+++				if( (answer_end = strchr(answer+1, '\n')) )	{
++ 					// Found end of answer
++ 					done = 1;
++ 				}
++@@ -178,7 +178,7 @@
++ 	}
++ 
++ 	tcgetattr(gt->ttyfd, &gt->oldtio);
++-	bzero(&gt->newtio, sizeof(struct termios));
+++	memset(&gt->newtio, 0, sizeof(struct termios));
++ 	gt->newtio.c_cflag = B115200 | CS8 | CREAD | CRTSCTS;
++ 	gt->newtio.c_iflag = IGNPAR;
++ 	gt->newtio.c_oflag = 0;
+diff --git a/package/openobex/openobex.mk b/package/openobex/openobex.mk
+new file mode 100644
+index 0000000..0fb4f65
+--- /dev/null
++++ b/package/openobex/openobex.mk
+@@ -0,0 +1,38 @@
 +#############################################################
 +#
-+# ussp-push
++# openobex
 +#
 +#############################################################
 +
-+USSP_PUSH_VERSION = 0.11
-+USSP_PUSH_SITE = http://www.xmailserver.org
-+USSP_PUSH_LICENSE = GPLv2+
-+USSP_PUSH_LICENSE_FILES = COPYING
++OPENOBEX_VERSION = 1.5
++OPENOBEX_SITE = http://ftp.osuosl.org/pub/linux/bluetooth
++# Libraries seems to be released under LGPLv2.1+,
++# while other material is under GPLv2+.
++OPENOBEX_LICENSE = GPLv2+/LGPLv2.1+
++OPENOBEX_LICENSE_FILES = COPYING COPYING.LIB
 +
-+USSP_PUSH_DEPENDENCIES = bluez_utils openobex
++OPENOBEX_DEPENDENCIES = host-pkgconf
++OPENOBEX_AUTORECONF = YES
++OPENOBEX_INSTALL_STAGING = YES
++
++OPENOBEX_CONF_OPT += \
++	$(if $(BR2_ENABLE_DEBUG),--enable-debug) \
++	$(if $(BR2_PACKAGE_OPENOBEX_APPS),--enable-apps) \
++	$(if $(BR2_PACKAGE_OPENOBEX_SYSLOG),--enable-syslog) \
++	$(if $(BR2_PACKAGE_OPENOBEX_DUMP),--enable-dump)
++
++ifeq ($(BR2_PACKAGE_OPENOBEX_BLUEZ),y)
++OPENOBEX_DEPENDENCIES += bluez_utils
++OPENOBEX_CONF_OPT += --with-bluez=$(STAGING_DIR)
++else
++OPENOBEX_CONF_OPT += --disable-bluetooth
++endif
++
++ifeq ($(BR2_PACKAGE_OPENOBEX_LIBUSB),y)
++OPENOBEX_DEPENDENCIES += libusb
++OPENOBEX_CONF_OPT += --with-usb=$(STAGING_DIR)
++else
++OPENOBEX_CONF_OPT += --disable-usb
++endif
 +
 +$(eval $(autotools-package))
