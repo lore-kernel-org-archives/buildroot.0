@@ -1,35 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Mar 2013 08:28:21 +0100
-Subject: [Buildroot] [PATCH 0 of 3] Fix oprofile build on powerpc
-In-Reply-To: <patchbomb.1363111853@BEANTN0L019720>
-References: <patchbomb.1363111853@BEANTN0L019720>
-Message-ID: <20130313082821.1ac38352@skate>
+Date: Wed, 13 Mar 2013 08:30:19 +0100
+Subject: [Buildroot] [PATCH 1/1] python-thrift: new package
+In-Reply-To: <1363115372-5679-1-git-send-email-viniciustinti@gmail.com>
+References: <1363115372-5679-1-git-send-email-viniciustinti@gmail.com>
+Message-ID: <20130313083019.4d9129ff@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Vinicius Tinti,
 
-On Tue, 12 Mar 2013 19:10:53 +0100, Thomas De Schampheleire wrote:
+On Tue, 12 Mar 2013 16:09:31 -0300, Vinicius Tinti wrote:
+> diff --git a/package/python-thrift/Config.in b/package/python-thrift/Config.in
+> new file mode 100644
+> index 0000000..3aa6bfb
+> --- /dev/null
+> +++ b/package/python-thrift/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_THRIFT
+> +	bool "python-thrift"
+> +	depends on BR2_PACKAGE_PYTHON
 
-> Since the upstep of oprofile to 0.9.8, the powerpc build was broken.
-> This series fixes this problem.
-> 
-> As the last patch indicates, this is compile tested on x86 and powerpc,
-> but not runtime-tested.
+The "depends on BR2_PACKAGE_PYTHON" here is not needed, since the
+'source "package/python-thrift/Config.in"' in package/Config.in is
+already enclosed in a if BR2_PACKAGE_PYTHON...endif.
 
-I think those patches are good, but when I started working on this
-issue, I also discovered that oprofile looks at /usr/include/linux by
-default to find out whether perf is supported or not in the kernel.
-Which obviously doesn't make sense in cross-compilation.
+> +PYTHON_THRIFT_VERSION = 0.9.0
+> +PYTHON_THRIFT_SOURCE  = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
+> +PYTHON_THRIFT_SITE    = https://pypi.python.org/packages/source/t/thrift/
 
-I've just pushed at
-http://git.free-electrons.com/users/thomas-petazzoni/buildroot/commit/?h=oprofile-ppc-fix&id=dda400c3f798ba49b1b638f927b3089a9df24105
-the work I started some time ago, which was unfinished. Note that I
-don't ask you to also fix those issues, I just thought it would be good
-mentioning these other potential problems.
+Could you add PYTHON_THRIFT_LICENSE and PYTHON_THRIFT_LICENSE_FILES ?
+
+Otherwise, looks good to me.
 
 Thomas
 -- 
