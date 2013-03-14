@@ -1,102 +1,59 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 14 Mar 2013 07:36:04 +0100
-Subject: [Buildroot] [PATCH v1] Add a load address option for building
- uImage on 3.7+ multi-platform kernels.
-In-Reply-To: <1363209204-3604-1-git-send-email-julien.boibessot@free.fr>
-References: <1363209204-3604-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <51416FD4.6010602@mind.be>
+Date: Thu, 14 Mar 2013 08:22:13 +0100
+Subject: [Buildroot] [PATCH 4/6] fs/ext2: use the ext2 variant to name
+ the generated rootfs image
+In-Reply-To: <201303122351.55358.yann.morin.1998@free.fr>
+References: <cover.1362693453.git.yann.morin.1998@free.fr>
+ <1d86b1b76a2c56aaf0098ec389e570862e7aa3fb.1362693453.git.yann.morin.1998@free.fr>
+ <20130310145501.7e5dec1f@skate> <201303122351.55358.yann.morin.1998@free.fr>
+Message-ID: <51417AA5.7050503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/13/13 22:13, julien.boibessot at free.fr wrote:
-> From: Julien Boibessot <julien.boibessot@armadeus.com>
+On 03/12/13 23:51, Yann E. MORIN wrote:
+> So, what next? I see four options:
 >
-> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (visual inspection only)
-
-> ---
-> Changes since RFC:
->   * Took Daniel Price and Arnout Vandecappelle remarks into account to be more
->     explicit in the description of the option + add ARM dependancy.
->   * Changed the way option is used in linux.mk to prevent empty LOADADDR=
+>   0- don't rename anything, continue calling it .ext2 (although it may be
+>      ext2, ext3 or ext4): status-quo;
+>   1- only rename the fs directory, which*is*  transparent
+>        - fs/ext2                 ->  fs/ext
+>   2- completely rename the filesystem:
+>        - fs/ext2                 ->  fs/ext
+>        - BR2_TARGET_ROOTFS_EXT2  ->  BR2_TARGET_ROOTFS_EXT
+>      but do not fix the defconfigs and boards doc. Anyway, add a deprecated
+>      symbol for BR2_TARGET_ROOTFS_EXT2.
+>   3- same as 3, but also fix defconfigs and boards doc.
 >
->   linux/Config.in |   13 +++++++++++++
->   linux/linux.mk  |    5 +++++
->   2 files changed, 18 insertions(+), 0 deletions(-)
+> For all those four options, we can add a post-fs-hook that symlinks the
+> image file with the correct extension.
 >
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 94ce951..a44880f 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -213,6 +213,19 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
->   	  Specify the kernel make target to build the kernel that you
->   	  need.
->
-> +config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
-> +	string "load address (for 3.7+ multi-platform image)"
-> +	depends on BR2_arm || BR2_armeb
-> +	depends on BR2_LINUX_KERNEL_UIMAGE || BR2_LINUX_KERNEL_APPENDED_UIMAGE
-> +	help
-> +	  If your ARM system's Linux kernel is configured with the new (3.7+)
-> +	  multi-architecture support (CONFIG_ARCH_MULTIPLATFORM=y in your
-> +	  kernel config), then it is necessary to specify a kernel load address
-> +	  when building the uImage. This should be a hexadecimal string
-> +	  beginning with 0x, for example: 0x00008000.
-> +
-> +	  If unsure, let this option empty.
-> +
->   config BR2_LINUX_KERNEL_DTS_SUPPORT
->   	bool "Device tree support"
->   	help
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 0352acd..c8f7b57 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -95,6 +95,11 @@ LINUX_IMAGE_NAME=vmlinuz
->   endif
->   endif
->
-> +LINUX_KERNEL_UIMAGE_LOADADDR=$(call qstrip,$(BR2_LINUX_KERNEL_UIMAGE_LOADADDR))
-> +ifneq ($(LINUX_KERNEL_UIMAGE_LOADADDR),)
-> +LINUX_MAKE_FLAGS+=LOADADDR=$(LINUX_KERNEL_UIMAGE_LOADADDR)
+> Finally, the curent proposal (allow to specify the FS extension) is not
+> incompatible with any of the above four options.
 
-  I would put quotes around the value, just in case the user was so 
-stupid to insert a space. Alternatively, add an explicit check here:
+  I don't have a problem with the directory and the config symbol using 
+ext2 - these are anyway internal kitchen. I wouldn't want to change only 
+the directory name and not the config symbol, because that does make 
+reading the code more difficult.
 
-ifneq ($(words $(LINUX_KERNEL_UIMAGE_LOADDR)),1)
-$(error Multiple load addresses specified, please check \ 
-BR2_LINUX_KERNEL_UIMAGE_LOADADDR)
-endif
+  What is important, is that the name in the images directory has the 
+correct extension. This can be done either by the addition ROOTFS_TARGET 
+argument, or by symlinking in a post-hook. I'm slightly in favour of the 
+latter, because it is much simpler. On the other hand, Yann has done the 
+change already and it may be useful for other filesystems at some point too.
 
-  But honestly I think that is going a bit too far.
+  So for me, it is either Yann's implementation, or symlinking in a 
+post-hook.
 
-> +endif
-> +
 
-  Coding style question: the rest of the linux.mk doesn't comply with the 
-buildroot coding style to put spaces around assignment operators. Should 
-patches against linux.mk follow the buildroot coding style or the local 
-linux.mk coding style? Or maybe even accept whatever the contributor fancies?
-
-  I have no preference either way, I guess it's just Peter's executive 
-decision.
-
+  BTW, note that the image still is an ext2 image (it can be read by ext2 
+code). So having the rootfs.ext4 -> rootfs.ext2 symlink is not a problem 
+at all.
 
   Regards,
   Arnout
-
-
->   ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
->   LINUX_IMAGE_TARGET=zImage
->   else
->
-
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
