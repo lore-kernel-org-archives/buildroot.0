@@ -1,56 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Mar 2013 19:42:47 +0100
-Subject: [Buildroot] question about my pevious dhcpcd patch
-In-Reply-To: <1363199449.8204.157.camel@genx.eng.msli.com>
-References: <1363199449.8204.157.camel@genx.eng.msli.com>
-Message-ID: <20130314194247.6ce999a5@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 14 Mar 2013 19:44:10 +0100
+Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: do not depend on the
+	top-level Buildroot's .config
+Message-ID: <1363286650-11208-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear John Stile,
+Previously, the crosstool-NG backend did depend on the top-level
+Buildroot's .config to detect changes in the toolchain options,
+using a tentatively-clever heuristic, which also included the full
+Buildroot's version string to push down to set the components' versions
+strings.
 
-On Wed, 13 Mar 2013 11:30:49 -0700, John Stile wrote:
+In doing so, any commit in the Buildroot tree would imply a complete
+rebuild of the toolchain, even in the case the toolchain options did
+not change, thus being a large annoyance (to say the least).
 
-> First issue: I discovered I also need to copy a script directory, but
-> don't see a good method to copy more than each file one at a time.  
-> 
-> Is there a good way to copy all files in dhcpcd-hooks except the
-> Makefile, into $(TARGET_DIR)/libexec/dhcpcd-hooks?
-> 
-> Right now I'm doing it one at a time like this:
-> 	$(INSTALL) -D -m 0755 \
-> 		$(@D)/dhcpcd-hooks/01-test \
-> 		$(TARGET_DIR)/libexec/dhcpcd-hooks/01-test
-> 	$(INSTALL) -D -m 0755 \
-> 		$(@D)/dhcpcd-hooks/02-dump \
-> 		$(TARGET_DIR)/libexec/dhcpcd-hooks/02-dump
-> 	$(INSTALL) -D -m 0755 \
-> 		$(@D)/dhcpcd-hooks/20-resolv.conf \
-> 		$(TARGET_DIR)/libexec/dhcpcd-hooks/20-resolv.conf
-> 	$(INSTALL) -D -m 0755 \
-> 		$(@D)/dhcpcd-hooks/29-lookup-hostname \
-> 		$(TARGET_DIR)/libexec/dhcpcd-hooks/29-lookup-hostname
->   ...etc...
+As Buildroot never guaranteed that toolchain options would be detected,
+even less handled, and that the internal backend does neither detect nor
+act on toolchain options changes, and delegate that to the user, there
+is no point in individualising the crosstool-NG backend's behaviour.
 
-You should probably use $(MAKE) -C $(@D) install in order to use the
-integrated installation procedure of dhcpcd Makefile.
+So, just drop the not-so-clever heuristic, and just build the toolchain
+once, leaving to the user the responsibility to explictly ask Buildroot
+to rebuild it.
 
-> Second issue:  how do I submit an updated patch?  The first one was
-> submitted a few days ago.  Do i just do a fresh clone, and then try to
-> add my stuff and submit via send-email, and pretend the first patch was
-> never sent?
+Reported-by: "Przemyslaw Wrzos" <przemyslaw.wrzos@calyptech.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: "Przemyslaw Wrzos" <przemyslaw.wrzos@calyptech.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    8 +-------
+ 1 files changed, 1 insertions(+), 7 deletions(-)
 
-Since your patch has not yet been merged, you should resent an updated
-version.
-
-Best regards,
-
-Thomas
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+index 6554982..9d503b0 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+@@ -362,16 +362,13 @@ endef
+ $(CTNG_DIR)/.config: | host-crosstool-ng
+ 
+ # Default configuration
+-# Depends on top-level .config because it has options we have to shoe-horn
+-# into crosstool-NG's .config
+ # Only copy the original .config file if we don't have one already.
+ # Check that given config file matches selected C library.
+ # We need to call oldconfig twice in a row to ensure the options
+ # are correctly set ( eg. if an option is new, then the initial sed
+ # can't do anything about it ) Ideally, this should go in oldconfig
+ # itself, but it's much easier to handle here.
+-
+-$(CTNG_DIR)/.config: $(CTNG_CONFIG_FILE) $(BUILDROOT_CONFIG)
++$(CTNG_DIR)/.config:
+ 	$(Q)if [ ! -f $@ ]; then                                                        \
+ 	        mkdir -p "$(CTNG_DIR)";                                                 \
+ 	        libc="$$(awk -F '"' '$$1=="CT_LIBC=" { print $$2; }' "$<")";            \
+@@ -383,11 +380,8 @@ $(CTNG_DIR)/.config: $(CTNG_CONFIG_FILE) $(BUILDROOT_CONFIG)
+ 	        fi;                                                                     \
+ 	        cp -f $< $@;                                                            \
+ 	    fi
+-	$(Q)cp -a $@ $@.timestamp
+ 	$(call ctng-oldconfig,$@)
+ 	$(call ctng-oldconfig,$@)
+-	$(call ctng-check-config-changed,$@,$@.timestamp)
+-	$(Q)rm -f $@.timestamp
+ 
+ # Manual configuration
+ ctng-menuconfig: $(CTNG_DIR)/.config
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.2.5
