@@ -1,237 +1,250 @@
 From: Carlo Caione <carlo.caione@gmail.com>
-Date: Thu, 14 Mar 2013 20:31:37 +0100
-Subject: [Buildroot] [PATCH 2/3] sunxi-boards: new package
+Date: Thu, 14 Mar 2013 20:31:38 +0100
+Subject: [Buildroot] [PATCH 3/3] cubieboard: add support
 In-Reply-To: <1363289498-20993-1-git-send-email-carlo.caione@gmail.com>
 References: <1363289498-20993-1-git-send-email-carlo.caione@gmail.com>
-Message-ID: <1363289498-20993-2-git-send-email-carlo.caione@gmail.com>
+Message-ID: <1363289498-20993-3-git-send-email-carlo.caione@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sunxi-boards requires a compiled .fex files for hardware description, used by
-kernel during boot for hardware initialization.
+patch adding:
+	- defconfig file
+	- post-build script
+	- script to generate bootable sd-card
 
 Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
----
- package/Config.in                    |   1 +
- package/sunxi-boards/Config.in       | 170 +++++++++++++++++++++++++++++++++++
- package/sunxi-boards/sunxi-boards.mk |  17 ++++
- 3 files changed, 188 insertions(+)
- create mode 100644 package/sunxi-boards/Config.in
- create mode 100644 package/sunxi-boards/sunxi-boards.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 4bb8c77..72db358 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -214,6 +214,7 @@ source "package/b43-firmware/Config.in"
- source "package/firmware-imx/Config.in"
- source "package/linux-firmware/Config.in"
- source "package/rpi-firmware/Config.in"
-+source "package/sunxi-boards/Config.in"
- source "package/ux500-firmware/Config.in"
- source "package/zd1211-firmware/Config.in"
- endmenu
-diff --git a/package/sunxi-boards/Config.in b/package/sunxi-boards/Config.in
+v1 -> v2:
+	- Generation of script.bin now moved from post-build script to a new
+	  package
+	- mkcubiecard.sh: small modifications
+	- new packages in defconfig
+---
+ board/sunxi/cubieboard/boot.cmd       |   4 ++
+ board/sunxi/cubieboard/mkcubiecard.sh | 119 ++++++++++++++++++++++++++++++++++
+ board/sunxi/cubieboard/post-build.sh  |  19 ++++++
+ configs/cubieboard_defconfig          |  47 ++++++++++++++
+ 4 files changed, 189 insertions(+)
+ create mode 100644 board/sunxi/cubieboard/boot.cmd
+ create mode 100755 board/sunxi/cubieboard/mkcubiecard.sh
+ create mode 100755 board/sunxi/cubieboard/post-build.sh
+ create mode 100644 configs/cubieboard_defconfig
+
+diff --git a/board/sunxi/cubieboard/boot.cmd b/board/sunxi/cubieboard/boot.cmd
 new file mode 100644
-index 0000000..7d5db53
+index 0000000..849ed00
 --- /dev/null
-+++ b/package/sunxi-boards/Config.in
-@@ -0,0 +1,170 @@
-+config BR2_PACKAGE_SUNXI_BOARDS
-+	bool "sunxi script.bin board file"
-+	select BR2_PACKAGE_HOST_SUNXI_TOOLS
-+	help
-+	  Compiled '.fex' file used by the sun4i kernel
++++ b/board/sunxi/cubieboard/boot.cmd
+@@ -0,0 +1,4 @@
++setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p2 rootwait panic=10 ${extra}
++fatload mmc 0 0x43000000 script.bin
++fatload mmc 0 0x48000000 uImage
++bootm 0x48000000
+diff --git a/board/sunxi/cubieboard/mkcubiecard.sh b/board/sunxi/cubieboard/mkcubiecard.sh
+new file mode 100755
+index 0000000..bed8002
+--- /dev/null
++++ b/board/sunxi/cubieboard/mkcubiecard.sh
+@@ -0,0 +1,119 @@
++#! /bin/sh
++# mkCubieCard.sh v0.1:
++# 2013, Carlo Caione <carlo.caione@gmail.com>
++# heavely based on :
++# mkA10card.sh v0.1
++# 2012, Jason Plum <jplum@archlinuxarm.org>
++# loosely based on :
++# mkcard.sh v0.5
++# (c) Copyright 2009 Graeme Gregory <dp@xora.org.uk>
++# Licensed under terms of GPLv2
++#
++# Parts of the procudure base on the work of Denys Dmytriyenko
++# http://wiki.omap.com/index.php/MMC_Boot_Format
 +
-+	  https://github.com/linux-sunxi/sunxi-boards
++IMAGES_DIR=../../../output/images
++SPL_IMG=$IMAGES_DIR/sunxi-spl.bin
++UBOOT_IMG=$IMAGES_DIR/u-boot.bin
++UIMAGE=$IMAGES_DIR/uImage
++BIN_BOARD_FILE=$IMAGES_DIR/script.bin
++ROOTFS=$IMAGES_DIR/rootfs.tar
++BOOT_CMD_H=$IMAGES_DIR/boot.scr
 +
-+choice
-+	prompt "sunxi board"
-+	default BR2_PACKAGE_SUNXI_BOARDS_CUBIEBOARD
-+	depends on BR2_PACKAGE_SUNXI_BOARDS
-+	help
-+	  Select the sunxi board
++export LC_ALL=C
 +
-+config BR2_PACKAGE_SUNXI_BOARDS_CUBIEBOARD
-+	bool "Cubieboard"
-+	help
-+	  Cubieboard
++if [ $# -ne 1 ]; then
++	echo "Usage: $0 <drive>"
++	exit 1;
++fi
 +
-+config BR2_PACKAGE_SUNXI_BOARDS_A10_MID_1GB
-+	bool "A10_mid_1GB"
-+	help
-+	  A10_mid_1GB
++if [ $EUID -ne 0 ]; then
++	echo "This script must be run as root" 1>&2
++	exit 1
++fi
 +
-+config BR2_PACKAGE_SUNXI_BOARDS_BA10_TV_BOX
-+	bool "A10_tv_box"
-+	help
-+	  A10_tv_box
++if [ ! -f $SPL_IMG ] ||
++   [ ! -f $UBOOT_IMG ] ||
++   [ ! -f $UIMAGE ] ||
++   [ ! -f $BIN_BOARD_FILE ] ||
++   [ ! -f $ROOTFS ] ||
++   [ ! -f $BOOT_CMD_H ]; then
++	echo "File(s) missing."
++	exit 1
++fi
 +
-+config BR2_PACKAGE_SUNXI_BOARDS_COBY_MID7042
-+	bool "coby_mid7042"
-+	help
-+	  coby_mid7042
++DRIVE=$1
++P1=`mktemp -d`
++P2=`mktemp -d`
 +
-+config BR2_PACKAGE_SUNXI_BOARDS_COBY_MID8042
-+	bool "coby_mid8042"
-+	help
-+	  coby_mid8042
++dd if=/dev/zero of=$DRIVE bs=1M count=3
 +
-+config BR2_PACKAGE_SUNXI_BOARDS_COBY_MID9742
-+	bool "coby_mid9742"
-+	help
-+	  coby_mid9742
++SIZE=`fdisk -l $DRIVE | grep Disk | grep bytes | awk '{print $5}'`
 +
-+config BR2_PACKAGE_SUNXI_BOARDS_CUBIEBOARD_512
-+	bool "Cubieboard_512"
-+	help
-+	  Cubieboard_512
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_GOOSEBERRY_A721
-+	bool "Gooseberry_a721"
-+	help
-+	  Gooseberry_a721
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_H6
-+	bool "h6"
-+	help
-+	  h6
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_HACKBERRY
-+	bool "Hackberry"
-+	help
-+	  Hackberry
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_HYUNDAI_A7HD
-+	bool "hyundai_a7hd"
-+	help
-+	  hyundai_a7hd
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_INET97F_II
-+	bool "inet97f-ii"
-+	help
-+	  inet97f-ii
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_MELE_A1000
-+	bool "mele_a1000"
-+	help
-+	  mele_a1000
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_MELE_A1000G
-+	bool "mele_a1000G"
-+	help
-+	  mele_a1000g
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_MINI_X_1GB
-+	bool "mini-x-1gb"
-+	help
-+	  mini-x-1gb
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_MINI_X
-+	bool "mini-x"
-+	help
-+	  mini-x
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_MK802_1GB
-+	bool "mk802-1gb"
-+	help
-+	  mk802-1gb
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_MK802
-+	bool "mk802"
-+	help
-+	  mk802
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_MK802II
-+	bool "mk802ii"
-+	help
-+	  mk802ii
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_POV_PROTAB2_IPS_3G
-+	bool "pov_protab2_ips_3g"
-+	help
-+	  pov_protab2_ips_3g
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_POV_PROTAB2_IPS9
-+	bool "pov_protab2_ips9"
-+	help
-+	  pov_protab2_ips9
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_UHOST_U1A
-+	bool "uhost_u1a"
-+	help
-+	  uhost_u1a
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_ZATAB
-+	bool "zatab"
-+	help
-+	  zatab
-+
-+endchoice
-+
-+config BR2_PACKAGE_SUNXI_BOARDS_FILE
-+	string
-+	default "cubieboard"		if BR2_PACKAGE_SUNXI_BOARDS_CUBIEBOARD
-+	default "a10_mid_1gb"		if BR2_PACKAGE_SUNXI_BOARDS_A10_MID_1GB
-+	default "ba10_tv_box"		if BR2_PACKAGE_SUNXI_BOARDS_BA10_TV_BOX
-+	default "coby_mid7042"		if BR2_PACKAGE_SUNXI_BOARDS_COBY_MID7042
-+	default "coby_mid8042"		if BR2_PACKAGE_SUNXI_BOARDS_COBY_MID8042
-+	default "coby_mid9742"		if BR2_PACKAGE_SUNXI_BOARDS_COBY_MID9742
-+	default "cubieboard_512"	if BR2_PACKAGE_SUNXI_BOARDS_CUBIEBOARD_512
-+	default "gooseberry_a721"	if BR2_PACKAGE_SUNXI_BOARDS_GOOSEBERRY_A721
-+	default "h6"			if BR2_PACKAGE_SUNXI_BOARDS_H6
-+	default "hackberry"		if BR2_PACKAGE_SUNXI_BOARDS_HACKBERRY
-+	default "hyundai_a7hd"		if BR2_PACKAGE_SUNXI_BOARDS_HYUNDAI_A7HD
-+	default "inet97f-ii"		if BR2_PACKAGE_SUNXI_BOARDS_INET97F_II
-+	default "mele_a1000"		if BR2_PACKAGE_SUNXI_BOARDS_MELE_A1000
-+	default "mele_a1000g"		if BR2_PACKAGE_SUNXI_BOARDS_MELE_A1000G
-+	default "mini-x-1gb"		if BR2_PACKAGE_SUNXI_BOARDS_MINI_X_1GB
-+	default "mini-x"		if BR2_PACKAGE_SUNXI_BOARDS_MINI_X
-+	default "mk802-1gb"		if BR2_PACKAGE_SUNXI_BOARDS_MK802_1GB
-+	default "mk802"			if BR2_PACKAGE_SUNXI_BOARDS_MK802
-+	default "mk802ii"		if BR2_PACKAGE_SUNXI_BOARDS_MK802II
-+	default "pov_protab2_ips_3g"	if BR2_PACKAGE_SUNXI_BOARDS_POV_PROTAB2_IPS_3g
-+	default "pov_protab2_ips9"	if BR2_PACKAGE_SUNXI_BOARDS_POV_PROTAB2_IPS9
-+	default "uhost_u1a"		if BR2_PACKAGE_SUNXI_BOARDS_UHOST_U1A
-+	default "zatab"			if BR2_PACKAGE_SUNXI_BOARDS_ZATAB
++echo DISK SIZE - $SIZE bytes
 +
 +
++# ~2048, 16MB, FAT, bootable
++# ~rest of drive, Ext4
++{
++echo 32,512,0x0C,*
++echo 544,,,-
++} | sfdisk -D $DRIVE
++
++sleep 1
++
++if [ -b ${DRIVE}1 ]; then
++	D1=${DRIVE}1
++	umount ${DRIVE}1
++	mkfs.vfat -n "boot" ${DRIVE}1
++else
++	if [ -b ${DRIVE}p1 ]; then
++		D1=${DRIVE}p1
++		umount ${DRIVE}p1
++		mkfs.vfat -n "boot" ${DRIVE}p1
++	else
++		echo "Cant find boot partition in /dev"
++		exit 1
++	fi
++fi
 +
 +
++if [ -b ${DRIVE}2 ]; then
++	D2=${DRIVE}2
++	umount ${DRIVE}2
++	mkfs.ext4 -L "Cubie" ${DRIVE}2
++else
++	if [ -b ${DRIVE}p2 ]; then
++		D2=${DRIVE}p2
++		umount ${DRIVE}p2
++		mkfs.ext4 -L "Cubie" ${DRIVE}p2
++	else
++		echo "Cant find rootfs partition in /dev"
++		exit 1
++	fi
++fi
 +
++mount $D1 $P1
++mount $D2 $P2
 +
++# write uImage
++cp $UIMAGE $P1
++# write board file
++cp $BIN_BOARD_FILE $P1
++# write u-boot script
++cp $BOOT_CMD_H $P1
++# write rootfs
++tar -C $P2 -xvf $ROOTFS
 +
++sync
 +
++umount $D1
++umount $D2
 +
-+	
++rm -fr $P1
++rm -fr $P2
 +
++# write SPL
++dd if=$SPL_IMG of=$DRIVE bs=1024 seek=8
++# write mele u-boot
++dd if=$UBOOT_IMG of=$DRIVE bs=1024 seek=32
+diff --git a/board/sunxi/cubieboard/post-build.sh b/board/sunxi/cubieboard/post-build.sh
+new file mode 100755
+index 0000000..1f560e0
+--- /dev/null
++++ b/board/sunxi/cubieboard/post-build.sh
+@@ -0,0 +1,19 @@
++#!/bin/sh
++# post-build.sh for CubieBoard
++# 2013, Carlo Caione <carlo.caione@gmail.com>
 +
++TARGET_DIR=$1
++IMAGES_DIR=$1/../images
++BOARD_DIR="$(dirname $0)"
++HOST_DIR=$1/../host/usr/bin
 +
-diff --git a/package/sunxi-boards/sunxi-boards.mk b/package/sunxi-boards/sunxi-boards.mk
++MKIMAGE=$HOST_DIR/mkimage
++BOOT_CMD=$BOARD_DIR/boot.cmd
++BOOT_CMD_H=$IMAGES_DIR/boot.scr
++
++# U-Boot script
++if [ -e $MKIMAGE -a -e $BOOT_CMD ];
++then
++	$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
++fi
++
+diff --git a/configs/cubieboard_defconfig b/configs/cubieboard_defconfig
 new file mode 100644
-index 0000000..dbbc063
+index 0000000..1e0bfb8
 --- /dev/null
-+++ b/package/sunxi-boards/sunxi-boards.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# sunxi-boards
-+#
-+#############################################################
++++ b/configs/cubieboard_defconfig
+@@ -0,0 +1,47 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a8=y
 +
-+SUNXI_BOARDS_VERSION = 88d663db44f65b73ef65c4148a28c6fa3665d2b6
-+SUNXI_BOARDS_SITE = https://github.com/linux-sunxi/sunxi-boards/tarball/master
-+SUNXI_BOARDS_DEPENDENCIES = host-sunxi-tools
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="Cubieboard"
++BR2_TARGET_GENERIC_ISSUE="Welcome to use Cubieboard!"
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/sunxi/cubieboard/post-build.sh"
 +
-+FEX2BIN = $(HOST_DIR)/usr/bin/fex2bin
++# Additional tools
++BR2_PACKAGE_HOST_SUNXI_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_SUNXI_TOOLS=y
++BR2_PACKAGE_SUNXI_BOARDS=y
++BR2_PACKAGE_SUNXI_BOARDS_CUBIEBOARD=y
++BR2_PACKAGE_SUNXI_BOARDS_FILE="cubieboard"
 +
-+define SUNXI_BOARDS_INSTALL_TARGET_CMDS
-+	$(FEX2BIN) $(@D)/sys_config/a10/$(BR2_PACKAGE_SUNXI_BOARDS_FILE).fex $(BINARIES_DIR)/script.bin
-+endef
++# Kernel Header Options
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.4.29"
++BR2_DEFAULT_KERNEL_HEADERS="3.4.29"
 +
-+$(eval $(generic-package))
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="https://github.com/linux-sunxi/linux-sunxi.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="66025966cbe563e356b5e1dda0a572e738e13c42"
++BR2_LINUX_KERNEL_VERSION="sunxi-3.4"
++BR2_LINUX_KERNEL_DEFCONFIG="sun4i"
++
++# Misc
++BR2_JLEVEL=0
++BR2_CCACHE=y
++BR2_CCACHE_DIR="$(HOME)/.buildroot-ccache"
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="cubieboard"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_VERSION="sunxi"
++BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="https://github.com/linux-sunxi/u-boot-sunxi.git"
++BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="7aa9f04f571247a6bb999c168b49e09f05b86465"
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
 -- 
 1.8.1.5
