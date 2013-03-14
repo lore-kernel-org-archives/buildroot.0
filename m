@@ -1,54 +1,100 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Mar 2013 22:47:07 +0100
-Subject: [Buildroot] [PATCH] change default location for local.mk to
-	$(CONFIG_DIR)
-In-Reply-To: <1706669320.395518.1363075932486.JavaMail.root@openwide.fr>
-References: <1706669320.395518.1363075932486.JavaMail.root@openwide.fr>
-Message-ID: <513FA25B.5030908@mind.be>
+Date: Thu, 14 Mar 2013 07:36:04 +0100
+Subject: [Buildroot] [PATCH v1] Add a load address option for building
+ uImage on 3.7+ multi-platform kernels.
+In-Reply-To: <1363209204-3604-1-git-send-email-julien.boibessot@free.fr>
+References: <1363209204-3604-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <51416FD4.6010602@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/12/13 09:12, Jeremy Rosen wrote:
->> Dear J?r?my Rosen,
->>
->> On Thu,  7 Mar 2013 11:49:23 +0100, J?r?my Rosen wrote:
->>> the previous default of $(TOPDIR) broke the philosophy of builds
->>> with O=
->>> which try to keep all configuration files within the $(CONFIG_DIR)
->>> subtree
->>
->> Hum, that's an interesting vision of things. I think I would tend to
->> agree with this idea.
->>
->> What do others think?
->>
+On 03/13/13 22:13, julien.boibessot at free.fr wrote:
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
 >
-> A bit of context :
->
-> I am trying to keep my buildroot project in git, but I am trying to
-> cleanly separate "changes made to git" and "changes due to my project.
->
-> that basically means that all config file needs to be out of the
-> buildroot/ subdirectory to be able to easily generate patches against
-> mainline and still keep my changes in git. I do that using git-subtree
->
-> I also change the location of the kernel config file for the same reason
-> and would do that for ctng and busybox if I needed to change them from
-> their default config
+> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 
-  But $(CONFIG_DIR) is not a good location then... $(CONFIG_DIR) is 
-$(TOPDIR) if doing in-tree build, and $(O) if doing out-of-tree build. 
-When you delete your out-of-tree dir, local.mk will also be gone...
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  (visual inspection only)
 
-  I also don't really like the idea that with a defconfig, the build 
-result will be different when you change the O= command line parameter.
+> ---
+> Changes since RFC:
+>   * Took Daniel Price and Arnout Vandecappelle remarks into account to be more
+>     explicit in the description of the option + add ARM dependancy.
+>   * Changed the way option is used in linux.mk to prevent empty LOADADDR=
+>
+>   linux/Config.in |   13 +++++++++++++
+>   linux/linux.mk  |    5 +++++
+>   2 files changed, 18 insertions(+), 0 deletions(-)
+>
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 94ce951..a44880f 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -213,6 +213,19 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
+>   	  Specify the kernel make target to build the kernel that you
+>   	  need.
+>
+> +config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
+> +	string "load address (for 3.7+ multi-platform image)"
+> +	depends on BR2_arm || BR2_armeb
+> +	depends on BR2_LINUX_KERNEL_UIMAGE || BR2_LINUX_KERNEL_APPENDED_UIMAGE
+> +	help
+> +	  If your ARM system's Linux kernel is configured with the new (3.7+)
+> +	  multi-architecture support (CONFIG_ARCH_MULTIPLATFORM=y in your
+> +	  kernel config), then it is necessary to specify a kernel load address
+> +	  when building the uImage. This should be a hexadecimal string
+> +	  beginning with 0x, for example: 0x00008000.
+> +
+> +	  If unsure, let this option empty.
+> +
+>   config BR2_LINUX_KERNEL_DTS_SUPPORT
+>   	bool "Device tree support"
+>   	help
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 0352acd..c8f7b57 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -95,6 +95,11 @@ LINUX_IMAGE_NAME=vmlinuz
+>   endif
+>   endif
+>
+> +LINUX_KERNEL_UIMAGE_LOADADDR=$(call qstrip,$(BR2_LINUX_KERNEL_UIMAGE_LOADADDR))
+> +ifneq ($(LINUX_KERNEL_UIMAGE_LOADADDR),)
+> +LINUX_MAKE_FLAGS+=LOADADDR=$(LINUX_KERNEL_UIMAGE_LOADADDR)
+
+  I would put quotes around the value, just in case the user was so 
+stupid to insert a space. Alternatively, add an explicit check here:
+
+ifneq ($(words $(LINUX_KERNEL_UIMAGE_LOADDR)),1)
+$(error Multiple load addresses specified, please check \ 
+BR2_LINUX_KERNEL_UIMAGE_LOADADDR)
+endif
+
+  But honestly I think that is going a bit too far.
+
+> +endif
+> +
+
+  Coding style question: the rest of the linux.mk doesn't comply with the 
+buildroot coding style to put spaces around assignment operators. Should 
+patches against linux.mk follow the buildroot coding style or the local 
+linux.mk coding style? Or maybe even accept whatever the contributor fancies?
+
+  I have no preference either way, I guess it's just Peter's executive 
+decision.
 
 
   Regards,
   Arnout
+
+
+>   ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
+>   LINUX_IMAGE_TARGET=zImage
+>   else
+>
 
 
 -- 
