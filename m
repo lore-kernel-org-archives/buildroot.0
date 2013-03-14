@@ -1,67 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Mar 2013 19:16:54 +0100
-Subject: [Buildroot] [PATCH 4/6] fs/ext2: use the ext2 variant to name
-	the generated rootfs image
-In-Reply-To: <51417AA5.7050503@mind.be>
-References: <cover.1362693453.git.yann.morin.1998@free.fr>
- <201303122351.55358.yann.morin.1998@free.fr> <51417AA5.7050503@mind.be>
-Message-ID: <201303141916.54835.yann.morin.1998@free.fr>
+Date: Thu, 14 Mar 2013 19:21:27 +0100
+Subject: [Buildroot] Crosstool-NG unnecessary rebuilds [BUG]
+In-Reply-To: <20130314084816.00d23bd7@skate>
+References: <EE5E77B503DE9A478B63A89AAD2585EDB66A60@vpane.excalyptech.com>
+ <201303131910.06613.yann.morin.1998@free.fr> <20130314084816.00d23bd7@skate>
+Message-ID: <201303141921.27713.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Thomas, All,
+Thomas, All,
 
-On Thursday 14 March 2013 Arnout Vandecappelle wrote:
-> On 03/12/13 23:51, Yann E. MORIN wrote:
-> > So, what next? I see four options:
-> >
-> >   0- don't rename anything, continue calling it .ext2 (although it may be
-> >      ext2, ext3 or ext4): status-quo;
-> >   1- only rename the fs directory, which*is*  transparent
-> >        - fs/ext2                 ->  fs/ext
-> >   2- completely rename the filesystem:
-> >        - fs/ext2                 ->  fs/ext
-> >        - BR2_TARGET_ROOTFS_EXT2  ->  BR2_TARGET_ROOTFS_EXT
-> >      but do not fix the defconfigs and boards doc. Anyway, add a deprecated
-> >      symbol for BR2_TARGET_ROOTFS_EXT2.
-> >   3- same as 3, but also fix defconfigs and boards doc.
-> >
-> > For all those four options, we can add a post-fs-hook that symlinks the
-> > image file with the correct extension.
-> >
-> > Finally, the curent proposal (allow to specify the FS extension) is not
-> > incompatible with any of the above four options.
+On Thursday 14 March 2013 Thomas Petazzoni wrote:
+> On Wed, 13 Mar 2013 19:10:06 +0100, Yann E. MORIN wrote:
+> > > Isn't this caused by the following dependency
+> > > $(CTNG_DIR)/.config: $(CTNG_CONFIG_FILE) $(BUILDROOT_CONFIG)
+> > 
+> > Yes, and this dependency is here on purpose: we can't configure the
+> > crosstool-NG backend until we first have the Buildroot config.
 > 
->   I don't have a problem with the directory and the config symbol using 
-> ext2 - these are anyway internal kitchen. I wouldn't want to change only 
-> the directory name and not the config symbol, because that does make 
-> reading the code more difficult.
-
-OK, fair enough.
-
->   What is important, is that the name in the images directory has the 
-> correct extension. This can be done either by the addition ROOTFS_TARGET 
-> argument, or by symlinking in a post-hook. I'm slightly in favour of the 
-> latter, because it is much simpler. On the other hand, Yann has done the 
-> change already and it may be useful for other filesystems at some point too.
+> Hum there are many other places in Buildroot that can't be done until
+> we have the Buildroot config and still we don't have this Buildroot
+> configuration dependency. I think this dependency is useless because of
+> the big:
 > 
->   So for me, it is either Yann's implementation, or symlinking in a 
-> post-hook.
+> ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+> [... do all the normal build stuff... ]
+> endif
+> 
+> that we have in the main Makefile.
 
-In that case, I think the post-image-hook is more appropriate.
-I will rework this to use a hook.
+Indeed, if we do not want to catch toolchain options changes, then the
+dependency is superfluous.
 
-I will also drop patch 3/6:
-    fs: allow image generators to specify file-extension
+> > > I don't think we should depend on the Buildroot configuration here. It
+> > > tries to be too smart by triggering the rebuild of the toolchain
+> > > whenever the Buildroot configuration has changed, but this isn't
+> > > normally done in Buildroot, so I'd say this dependency on
+> > > $(BUILDROOT_CONFIG) shouldn't be there. Cc'ing Yann on this one.
+> > 
+> > Well, the .config file should not change if the toolchain options in
+> > Buildroot have not changed.
+> 
+> Which .config, crosstool-ng one, or Buildroot one?
 
->   BTW, note that the image still is an ext2 image (it can be read by ext2 
-> code). So having the rootfs.ext4 -> rootfs.ext2 symlink is not a problem 
-> at all.
+Let me repjrase this:
+    The crosstool-NG's .config should not change if the toolchain
+    options in the Buildroot's .config did not change.
 
-OK, will do.
+[--SNIP discussion about catching changes in toolchain options--]
+> > Maybe we can switch to using the short Buildroot version string, which
+> > does not include the git cset in it. I'll propose a patch to this effect
+> > shortly.
+> 
+> I think the real fix is to just comply with the Buildroot principle of
+> not trying to magically adapt to configuration changes.
+
+I am not a fan, but I agree: let's adhere to the overall philosophy.
+
+I will rework the patch to get rid of the changes-catching heuristic.
 
 Thank you!
 
