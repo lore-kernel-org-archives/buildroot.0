@@ -1,193 +1,75 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 13 Mar 2013 23:32:46 +0100
-Subject: [Buildroot] [git commit] openobex: new package
-Message-ID: <20130313230629.5FA229B08E@busybox.osuosl.org>
+From: Spielmann Werner <Werner.Spielmann@SWAROVSKI.COM>
+Date: Thu, 14 Mar 2013 08:15:25 +0100
+Subject: [Buildroot] Problem with buildroot-2013.02 - ncurses
+In-Reply-To: <5140D5B4.3060903@mind.be>
+References: <84EA0F7435E5F64C9B660453645DB90497AD4DEF0D@DSW350.wattens.swarovski.com>
+ <20130307093024.30cb7d23@skate>
+ <84EA0F7435E5F64C9B660453645DB90497AD52A6B0@DSW350.wattens.swarovski.com>
+ <20130307140818.0d48c197@skate>
+ <84EA0F7435E5F64C9B660453645DB90497AD52AA50@DSW350.wattens.swarovski.com>
+ <513FB6CF.1070301@mind.be>
+ <84EA0F7435E5F64C9B660453645DB90497AE6FBC34@DSW350.wattens.swarovski.com>
+ <5140D5B4.3060903@mind.be>
+Message-ID: <84EA0F7435E5F64C9B660453645DB90497AE6FC15F@DSW350.wattens.swarovski.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=04092fa3570f0315042327148a0fe62854fc8722
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Good morning Arnout,
 
-Cc: Julien Boibessot <julien.boibessot@armadeus.com>
-Cc: Eric Jarrige <eric.jarrige@armadeus.org>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in                                  |    1 +
- package/openobex/Config.in                         |   45 ++++++++++++++++++++
- ...penobex-libusb_check_when_cross-compiling.patch |   18 ++++++++
- .../openobex-replace_deprecated_functions.patch    |   30 +++++++++++++
- package/openobex/openobex.mk                       |   38 ++++++++++++++++
- 5 files changed, 132 insertions(+), 0 deletions(-)
+Thanks again for your answer!
 
-diff --git a/package/Config.in b/package/Config.in
-index a65054c..560ae9c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -689,6 +689,7 @@ source "package/ntp/Config.in"
- source "package/nuttcp/Config.in"
- source "package/olsr/Config.in"
- source "package/openntpd/Config.in"
-+source "package/openobex/Config.in"
- source "package/openssh/Config.in"
- source "package/openswan/Config.in"
- source "package/openvpn/Config.in"
-diff --git a/package/openobex/Config.in b/package/openobex/Config.in
-new file mode 100644
-index 0000000..6494b29
---- /dev/null
-+++ b/package/openobex/Config.in
-@@ -0,0 +1,45 @@
-+comment "openobex requires a toolchain with IPV6 support"
-+	depends on !BR2_INET_IPV6
-+
-+config BR2_PACKAGE_OPENOBEX
-+	bool "openobex"
-+	depends on BR2_INET_IPV6
-+	help
-+	  Free open source implementation of the Object Exchange (OBEX)
-+	  protocol.
-+
-+	  http://www.openobex.org
-+
-+if BR2_PACKAGE_OPENOBEX
-+
-+comment "bluez support require a toolchain with WCHAR and thread support"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_OPENOBEX_BLUEZ
-+	bool "enable bluez support"
-+	depends on !BR2_avr32
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib
-+	depends on BR2_USE_MMU # dbus
-+	select BR2_PACKAGE_BLUEZ_UTILS
-+
-+comment "libusb support require a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_OPENOBEX_LIBUSB
-+	bool "enable libusb support"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBUSB
-+
-+config BR2_PACKAGE_OPENOBEX_APPS
-+	bool "install test applications"
-+	help
-+	  Also install the openobex test applications on target.
-+
-+config BR2_PACKAGE_OPENOBEX_SYSLOG
-+	bool "enable debugging to the system logger"
-+
-+config BR2_PACKAGE_OPENOBEX_DUMP
-+	bool "enable protocol dumping for debugging"
-+
-+endif
-diff --git a/package/openobex/openobex-libusb_check_when_cross-compiling.patch b/package/openobex/openobex-libusb_check_when_cross-compiling.patch
-new file mode 100644
-index 0000000..7b8056a
---- /dev/null
-+++ b/package/openobex/openobex-libusb_check_when_cross-compiling.patch
-@@ -0,0 +1,18 @@
-+Fix libusb check when cross-compiling.
-+
-+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+
-+Index: openobex-1.5/acinclude.m4
-+===================================================================
-+--- openobex-1.5.orig/acinclude.m4	2010-06-16 10:32:47.000000000 +0200
-++++ openobex-1.5/acinclude.m4	2010-06-16 10:35:33.000000000 +0200
-+@@ -158,7 +158,7 @@
-+ 		;;
-+ 	*)
-+ 		PKG_CHECK_MODULES(USB, libusb, usb_lib_found=yes, AC_MSG_RESULT(no))
-+-		AC_CHECK_FILE(${prefix}/lib/pkgconfig/libusb.pc, REQUIRES="libusb")
-++		REQUIRES="libusb"
-+ 		;;
-+ 	esac
-+ 	AC_SUBST(USB_CFLAGS)
-diff --git a/package/openobex/openobex-replace_deprecated_functions.patch b/package/openobex/openobex-replace_deprecated_functions.patch
-new file mode 100644
-index 0000000..17274d3
---- /dev/null
-+++ b/package/openobex/openobex-replace_deprecated_functions.patch
-@@ -0,0 +1,30 @@
-+obex_test_cable.c: avoid to use SuSv3 LEGACY APIs
-+
-+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+
-+Index: openobex-1.5/apps/obex_test_cable.c
-+===================================================================
-+--- openobex-1.5.orig/apps/obex_test_cable.c	2009-02-08 19:30:22.000000000 +0100
-++++ openobex-1.5/apps/obex_test_cable.c	2010-06-16 11:11:05.000000000 +0200
-+@@ -113,9 +113,9 @@
-+ 			if(total == sizeof(tmpbuf))
-+ 				return -1;
-+ 
-+-			if( (answer = index(tmpbuf, '\n')) )	{
-++			if( (answer = strchr(tmpbuf, '\n')) )	{
-+ 				// Remove first line (echo)
-+-				if( (answer_end = index(answer+1, '\n')) )	{
-++				if( (answer_end = strchr(answer+1, '\n')) )	{
-+ 					// Found end of answer
-+ 					done = 1;
-+ 				}
-+@@ -178,7 +178,7 @@
-+ 	}
-+ 
-+ 	tcgetattr(gt->ttyfd, &gt->oldtio);
-+-	bzero(&gt->newtio, sizeof(struct termios));
-++	memset(&gt->newtio, 0, sizeof(struct termios));
-+ 	gt->newtio.c_cflag = B115200 | CS8 | CREAD | CRTSCTS;
-+ 	gt->newtio.c_iflag = IGNPAR;
-+ 	gt->newtio.c_oflag = 0;
-diff --git a/package/openobex/openobex.mk b/package/openobex/openobex.mk
-new file mode 100644
-index 0000000..0fb4f65
---- /dev/null
-+++ b/package/openobex/openobex.mk
-@@ -0,0 +1,38 @@
-+#############################################################
-+#
-+# openobex
-+#
-+#############################################################
-+
-+OPENOBEX_VERSION = 1.5
-+OPENOBEX_SITE = http://ftp.osuosl.org/pub/linux/bluetooth
-+# Libraries seems to be released under LGPLv2.1+,
-+# while other material is under GPLv2+.
-+OPENOBEX_LICENSE = GPLv2+/LGPLv2.1+
-+OPENOBEX_LICENSE_FILES = COPYING COPYING.LIB
-+
-+OPENOBEX_DEPENDENCIES = host-pkgconf
-+OPENOBEX_AUTORECONF = YES
-+OPENOBEX_INSTALL_STAGING = YES
-+
-+OPENOBEX_CONF_OPT += \
-+	$(if $(BR2_ENABLE_DEBUG),--enable-debug) \
-+	$(if $(BR2_PACKAGE_OPENOBEX_APPS),--enable-apps) \
-+	$(if $(BR2_PACKAGE_OPENOBEX_SYSLOG),--enable-syslog) \
-+	$(if $(BR2_PACKAGE_OPENOBEX_DUMP),--enable-dump)
-+
-+ifeq ($(BR2_PACKAGE_OPENOBEX_BLUEZ),y)
-+OPENOBEX_DEPENDENCIES += bluez_utils
-+OPENOBEX_CONF_OPT += --with-bluez=$(STAGING_DIR)
-+else
-+OPENOBEX_CONF_OPT += --disable-bluetooth
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENOBEX_LIBUSB),y)
-+OPENOBEX_DEPENDENCIES += libusb
-+OPENOBEX_CONF_OPT += --with-usb=$(STAGING_DIR)
-+else
-+OPENOBEX_CONF_OPT += --disable-usb
-+endif
-+
-+$(eval $(autotools-package))
+Both the /usr/include/termios.h and /usr/include/termio.h files exist (and are also readable):
+
+$ ll /usr/include/termios.h
+-rw-r--r-- 1 root root 3611 2012-11-15 23:20 /usr/include/termios.h
+
+$ ll  /usr/include/termio.h
+-rw-r--r-- 1 root root 214 2012-11-15 23:20 /usr/include/termio.h
+
+I made an md5sum cross check with another installation. It gave the identical results on both PCs.
+
+> Can you pastebin the config.log file?
+
+I think you mean the "host-ncurses-5.9/config.log"?
+Here you can find buildroot-2013.02/output/build/host-ncurses-5.9/config.log:
+http://pastebin.com/nuZby0hi
+
+As far as I can see there is in line 1139 an "#ifdef HAVE_TERMIOS_H" and in line 1143 an "#ifdef HAVE_TERMIO_H" construct but there are no equivalent defines.
+
+What does this mean?
+ 
+Best regards
+
+Werner
+
+
+-----Original Message-----
+From: Arnout Vandecappelle [mailto:arnout at mind.be] 
+Sent: Wednesday, March 13, 2013 8:38 PM
+To: Spielmann Werner
+Cc: Thomas Petazzoni; buildroot at busybox.net
+Subject: Re: [Buildroot] Problem with buildroot-2013.02 - ncurses
+
+On 03/13/13 09:47, Spielmann Werner wrote:
+> I'm using Ubuntu 10.04 LTS Server.
+>
+> You can find the output of the preprocessed code 
+> here:http://pastebin.com/XnT1wzLK
+
+  OK, so neither HAVE_TERMIOS_H nor HAVE_TERMIO_H is defined by configure, while both should exist on an Ubuntu system with libc6-dev (and I think you need libc6-dev to build kconfig, so you must have it).
+
+  Can you do a sanity check that /usr/include/termios.h exists? If it doesn't, your Ubuntu installation is broken. If it does, then something is going wrong in the configure script. Can you pastebin the config.log file?
+
+  Regards,
+  Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
