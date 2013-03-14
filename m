@@ -1,63 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 14 Mar 2013 08:22:13 +0100
-Subject: [Buildroot] [PATCH 4/6] fs/ext2: use the ext2 variant to name
- the generated rootfs image
-In-Reply-To: <201303122351.55358.yann.morin.1998@free.fr>
-References: <cover.1362693453.git.yann.morin.1998@free.fr>
- <1d86b1b76a2c56aaf0098ec389e570862e7aa3fb.1362693453.git.yann.morin.1998@free.fr>
- <20130310145501.7e5dec1f@skate> <201303122351.55358.yann.morin.1998@free.fr>
-Message-ID: <51417AA5.7050503@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Mar 2013 08:49:36 +0100
+Subject: [Buildroot] [PATCH 2 of 3] oprofile: upstep 0.9.7 patches to
+ 0.9.8
+In-Reply-To: <5140DD96.3040104@mind.be>
+References: <patchbomb.1363111853@BEANTN0L019720>
+ <41943bd3969a02bce5f9.1363111855@BEANTN0L019720>
+ <20130313082420.0ae03777@skate>
+ <CAAXf6LXwyWv2KfQ3OW=KNYm7SN+y++79puqeN=C+yR50M-f5cw@mail.gmail.com>
+ <5140DD96.3040104@mind.be>
+Message-ID: <20130314084936.1a16bf2f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/12/13 23:51, Yann E. MORIN wrote:
-> So, what next? I see four options:
->
->   0- don't rename anything, continue calling it .ext2 (although it may be
->      ext2, ext3 or ext4): status-quo;
->   1- only rename the fs directory, which*is*  transparent
->        - fs/ext2                 ->  fs/ext
->   2- completely rename the filesystem:
->        - fs/ext2                 ->  fs/ext
->        - BR2_TARGET_ROOTFS_EXT2  ->  BR2_TARGET_ROOTFS_EXT
->      but do not fix the defconfigs and boards doc. Anyway, add a deprecated
->      symbol for BR2_TARGET_ROOTFS_EXT2.
->   3- same as 3, but also fix defconfigs and boards doc.
->
-> For all those four options, we can add a post-fs-hook that symlinks the
-> image file with the correct extension.
->
-> Finally, the curent proposal (allow to specify the FS extension) is not
-> incompatible with any of the above four options.
+Arnout, Thomas,
 
-  I don't have a problem with the directory and the config symbol using 
-ext2 - these are anyway internal kitchen. I wouldn't want to change only 
-the directory name and not the config symbol, because that does make 
-reading the code more difficult.
+On Wed, 13 Mar 2013 21:12:06 +0100, Arnout Vandecappelle wrote:
 
-  What is important, is that the name in the images directory has the 
-correct extension. This can be done either by the addition ROOTFS_TARGET 
-argument, or by symlinking in a post-hook. I'm slightly in favour of the 
-latter, because it is much simpler. On the other hand, Yann has done the 
-change already and it may be useful for other filesystems at some point too.
+> > Are we already making these changes, or are we waiting for someone to
+> > fix the central patching code according to the new rules first?
+> 
+>   There is nothing to be fixed in the central patching code (at least not 
+> for this use case). Remove the version number.
 
-  So for me, it is either Yann's implementation, or symlinking in a 
-post-hook.
+Just to expand on Arnout answer: even though we haven't yet removed the
+support for versioned patches in the infrastructure, we have already
+been converting all the new packages, and many packages we were
+touching, to unversioned names. This will make it easier to change the
+package infrastructure later.
 
+Best regards,
 
-  BTW, note that the image still is an ext2 image (it can be read by ext2 
-code). So having the rootfs.ext4 -> rootfs.ext2 symlink is not a problem 
-at all.
-
-  Regards,
-  Arnout
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
