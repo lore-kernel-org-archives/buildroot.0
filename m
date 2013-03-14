@@ -1,76 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Mar 2013 19:21:27 +0100
-Subject: [Buildroot] Crosstool-NG unnecessary rebuilds [BUG]
-In-Reply-To: <20130314084816.00d23bd7@skate>
-References: <EE5E77B503DE9A478B63A89AAD2585EDB66A60@vpane.excalyptech.com>
- <201303131910.06613.yann.morin.1998@free.fr> <20130314084816.00d23bd7@skate>
-Message-ID: <201303141921.27713.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Mar 2013 19:42:47 +0100
+Subject: [Buildroot] question about my pevious dhcpcd patch
+In-Reply-To: <1363199449.8204.157.camel@genx.eng.msli.com>
+References: <1363199449.8204.157.camel@genx.eng.msli.com>
+Message-ID: <20130314194247.6ce999a5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear John Stile,
 
-On Thursday 14 March 2013 Thomas Petazzoni wrote:
-> On Wed, 13 Mar 2013 19:10:06 +0100, Yann E. MORIN wrote:
-> > > Isn't this caused by the following dependency
-> > > $(CTNG_DIR)/.config: $(CTNG_CONFIG_FILE) $(BUILDROOT_CONFIG)
-> > 
-> > Yes, and this dependency is here on purpose: we can't configure the
-> > crosstool-NG backend until we first have the Buildroot config.
+On Wed, 13 Mar 2013 11:30:49 -0700, John Stile wrote:
+
+> First issue: I discovered I also need to copy a script directory, but
+> don't see a good method to copy more than each file one at a time.  
 > 
-> Hum there are many other places in Buildroot that can't be done until
-> we have the Buildroot config and still we don't have this Buildroot
-> configuration dependency. I think this dependency is useless because of
-> the big:
+> Is there a good way to copy all files in dhcpcd-hooks except the
+> Makefile, into $(TARGET_DIR)/libexec/dhcpcd-hooks?
 > 
-> ifeq ($(BR2_HAVE_DOT_CONFIG),y)
-> [... do all the normal build stuff... ]
-> endif
-> 
-> that we have in the main Makefile.
+> Right now I'm doing it one at a time like this:
+> 	$(INSTALL) -D -m 0755 \
+> 		$(@D)/dhcpcd-hooks/01-test \
+> 		$(TARGET_DIR)/libexec/dhcpcd-hooks/01-test
+> 	$(INSTALL) -D -m 0755 \
+> 		$(@D)/dhcpcd-hooks/02-dump \
+> 		$(TARGET_DIR)/libexec/dhcpcd-hooks/02-dump
+> 	$(INSTALL) -D -m 0755 \
+> 		$(@D)/dhcpcd-hooks/20-resolv.conf \
+> 		$(TARGET_DIR)/libexec/dhcpcd-hooks/20-resolv.conf
+> 	$(INSTALL) -D -m 0755 \
+> 		$(@D)/dhcpcd-hooks/29-lookup-hostname \
+> 		$(TARGET_DIR)/libexec/dhcpcd-hooks/29-lookup-hostname
+>   ...etc...
 
-Indeed, if we do not want to catch toolchain options changes, then the
-dependency is superfluous.
+You should probably use $(MAKE) -C $(@D) install in order to use the
+integrated installation procedure of dhcpcd Makefile.
 
-> > > I don't think we should depend on the Buildroot configuration here. It
-> > > tries to be too smart by triggering the rebuild of the toolchain
-> > > whenever the Buildroot configuration has changed, but this isn't
-> > > normally done in Buildroot, so I'd say this dependency on
-> > > $(BUILDROOT_CONFIG) shouldn't be there. Cc'ing Yann on this one.
-> > 
-> > Well, the .config file should not change if the toolchain options in
-> > Buildroot have not changed.
-> 
-> Which .config, crosstool-ng one, or Buildroot one?
+> Second issue:  how do I submit an updated patch?  The first one was
+> submitted a few days ago.  Do i just do a fresh clone, and then try to
+> add my stuff and submit via send-email, and pretend the first patch was
+> never sent?
 
-Let me repjrase this:
-    The crosstool-NG's .config should not change if the toolchain
-    options in the Buildroot's .config did not change.
+Since your patch has not yet been merged, you should resent an updated
+version.
 
-[--SNIP discussion about catching changes in toolchain options--]
-> > Maybe we can switch to using the short Buildroot version string, which
-> > does not include the git cset in it. I'll propose a patch to this effect
-> > shortly.
-> 
-> I think the real fix is to just comply with the Buildroot principle of
-> not trying to magically adapt to configuration changes.
+Best regards,
 
-I am not a fan, but I agree: let's adhere to the overall philosophy.
-
-I will rework the patch to get rid of the changes-catching heuristic.
-
-Thank you!
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
