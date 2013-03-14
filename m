@@ -1,74 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Mar 2013 19:44:10 +0100
-Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: do not depend on the
-	top-level Buildroot's .config
-Message-ID: <1363286650-11208-1-git-send-email-yann.morin.1998@free.fr>
+From: Jorge Ventura <jorge.araujo.ventura@gmail.com>
+Date: Thu, 14 Mar 2013 14:07:48 -0500
+Subject: [Buildroot] =?windows-1252?q?=91=5F=5Fctype=5Ftouplow=5Ft=92_and_?=
+	=?windows-1252?q?=91=5F=5Fctype=5Fmask=5Ft=92_does_not_name_a_type?=
+Message-ID: <CAJEG_NdqCrS=ny=BMgF4n8ui5kavmOxtWyzMvxe-_97e=wRPTg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Previously, the crosstool-NG backend did depend on the top-level
-Buildroot's .config to detect changes in the toolchain options,
-using a tentatively-clever heuristic, which also included the full
-Buildroot's version string to push down to set the components' versions
-strings.
+Hi,
 
-In doing so, any commit in the Buildroot tree would imply a complete
-rebuild of the toolchain, even in the case the toolchain options did
-not change, thus being a large annoyance (to say the least).
+I am trying to compile one code and I am getting the following errors:
 
-As Buildroot never guaranteed that toolchain options would be detected,
-even less handled, and that the internal backend does neither detect nor
-act on toolchain options changes, and delegate that to the user, there
-is no point in individualising the crosstool-NG backend's behaviour.
+buildroot-2013.02/output/host/usr/lib/gcc/i586-buildroot-linux-uclibc/4.6.3/../../../../i586-buildroot-linux-uclibc/include/c++/4.6.3/i586-buildroot-linux-uclibc/bits/ctype_base.h:47:19:
+*error: ?__ctype_touplow_t? does not name a type*
 
-So, just drop the not-so-clever heuristic, and just build the toolchain
-once, leaving to the user the responsibility to explictly ask Buildroot
-to rebuild it.
+buildroot-2013.02/output/host/usr/lib/gcc/i586-buildroot-linux-uclibc/4.6.3/../../../../i586-buildroot-linux-uclibc/include/c++/4.6.3/i586-buildroot-linux-uclibc/bits/ctype_base.h:51:13:
+*error: ?__ctype_mask_t? does not name a type*
 
-Reported-by: "Przemyslaw Wrzos" <przemyslaw.wrzos@calyptech.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: "Przemyslaw Wrzos" <przemyslaw.wrzos@calyptech.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    8 +-------
- 1 files changed, 1 insertions(+), 7 deletions(-)
+Taking a look in the source ctype_base.h I found the comment:
 
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 6554982..9d503b0 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -362,16 +362,13 @@ endef
- $(CTNG_DIR)/.config: | host-crosstool-ng
- 
- # Default configuration
--# Depends on top-level .config because it has options we have to shoe-horn
--# into crosstool-NG's .config
- # Only copy the original .config file if we don't have one already.
- # Check that given config file matches selected C library.
- # We need to call oldconfig twice in a row to ensure the options
- # are correctly set ( eg. if an option is new, then the initial sed
- # can't do anything about it ) Ideally, this should go in oldconfig
- # itself, but it's much easier to handle here.
--
--$(CTNG_DIR)/.config: $(CTNG_CONFIG_FILE) $(BUILDROOT_CONFIG)
-+$(CTNG_DIR)/.config:
- 	$(Q)if [ ! -f $@ ]; then                                                        \
- 	        mkdir -p "$(CTNG_DIR)";                                                 \
- 	        libc="$$(awk -F '"' '$$1=="CT_LIBC=" { print $$2; }' "$<")";            \
-@@ -383,11 +380,8 @@ $(CTNG_DIR)/.config: $(CTNG_CONFIG_FILE) $(BUILDROOT_CONFIG)
- 	        fi;                                                                     \
- 	        cp -f $< $@;                                                            \
- 	    fi
--	$(Q)cp -a $@ $@.timestamp
- 	$(call ctng-oldconfig,$@)
- 	$(call ctng-oldconfig,$@)
--	$(call ctng-check-config-changed,$@,$@.timestamp)
--	$(Q)rm -f $@.timestamp
- 
- # Manual configuration
- ctng-menuconfig: $(CTNG_DIR)/.config
--- 
-1.7.2.5
+namespace std _GLIBCXX_VISIBILITY(default)
+{
+_GLIBCXX_BEGIN_NAMESPACE_VERSION
+
+  /// @brief  Base class for ctype.
+  struct ctype_base
+  {
+    *// Note: In uClibc, the following two types depend on configuration.*
+
+    // Non-standard typedefs.
+    typedef const __ctype_touplow_t* __to_type;
+
+    // NB: Offsets into ctype<char>::_M_table force a particular size
+    // on the mask type. Because of this, we don't use an enum.
+    typedef __ctype_mask_t      mask;
+    static const mask upper     = _ISupper;
+    static const mask lower     = _ISlower;
+    static const mask alpha     = _ISalpha;
+
+It seems that something is missing in my uClibc configuration that cause
+the two types be undefined or another include is missing in the code that I
+am trying to compile.
+
+Someone has any clue about this problem?
+
+Thank you.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130314/8ae45925/attachment.html>
