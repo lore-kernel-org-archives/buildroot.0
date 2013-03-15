@@ -1,60 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Mar 2013 10:47:04 +0100
-Subject: [Buildroot] [PATCHv3] Added package HPLIP for printing to HP
- printers
-In-Reply-To: <1363203368-19909-1-git-send-email-olivier.schonken@gmail.com>
-References: <20130304084108.GB10626@sapphire.tkos.co.il>
- <1363203368-19909-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <20130315104704.1c268db3@skate>
+Date: Fri, 15 Mar 2013 10:54:21 +0100
+Subject: [Buildroot] =?utf-8?b?4oCYX19jdHlwZV90b3VwbG93X3TigJkgYW5kIA==?=
+ =?utf-8?b?4oCYX19jdHlwZV9tYXNrX3TigJkgZG9lcyBub3QgbmFtZSBhIHR5cGU=?=
+In-Reply-To: <CAJEG_NdqCrS=ny=BMgF4n8ui5kavmOxtWyzMvxe-_97e=wRPTg@mail.gmail.com>
+References: <CAJEG_NdqCrS=ny=BMgF4n8ui5kavmOxtWyzMvxe-_97e=wRPTg@mail.gmail.com>
+Message-ID: <20130315105421.675ecf61@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Olivier Schonken,
+Dear Jorge Ventura,
 
-On Wed, 13 Mar 2013 21:36:08 +0200, Olivier Schonken wrote:
-> HPLIP (Hewlett-Packard Linux Imaging & Printing) is an HP-developed solution
-> for printing, scanning, and faxing with HP inkjet and laser based printers
-> in Linux.
+On Thu, 14 Mar 2013 14:07:48 -0500, Jorge Ventura wrote:
+
+> It seems that something is missing in my uClibc configuration that cause
+> the two types be undefined or another include is missing in the code that I
+> am trying to compile.
 > 
-> The --includedir=$(STAGING_DIR)/usr/include is unfortunately necessary even
-> with the modified Makefile.am for a succesful build.
-> 
-> Created a menu for cups related components to be kept close together.
-> 
-> Fixed a jpeg and dbus dependencies, Thanks for pointing out the dbus 
-> dependency Baruch.
+> Someone has any clue about this problem?
 
-The "changelog" shouldn't go in the commit log, but instead...
+Is this happening after a complete "make clean all" cycle? If so, could
+you post your Buildroot .config? Did you modify the uClibc
+configuration with "make uclibc-menuconfig" ?
 
-> 
-> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-> ---
-
-... here. Otherwise, it gets committed and kept in the project history,
-which doesn't make much sense.
-
-> new file mode 100644
-> index 0000000..1bfac40
-> --- /dev/null
-> +++ b/package/hplip/hplip.mk
-> @@ -0,0 +1,52 @@
-> +#############################################################
-> +#
-> +# hplip
-> +#
-> +#############################################################
-> +
-> +HPLIP_VERSION = 3.12.11
-> +HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip/
-> +HPLIP_AUTORECONF = YES
-> +HPLIP_DEPENDENCIES = cups libusb jpeg
-
-You should add HPLIP_LICENSE and HPLIP_LICENSE_FILES here.
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
