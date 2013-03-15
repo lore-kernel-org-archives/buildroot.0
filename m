@@ -1,27 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 15 Mar 2013 14:56:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 6092] Bootable ISO image creation seems to have
- stopped working since 2012.08
-In-Reply-To: <bug-6092-163@https.bugs.busybox.net/>
-References: <bug-6092-163@https.bugs.busybox.net/>
-Message-ID: <20130315145608.181F39B112@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Mar 2013 16:07:02 +0100
+Subject: [Buildroot] =?utf-8?b?4oCYX19jdHlwZV90b3VwbG93X3TigJkgYW5kIA==?=
+ =?utf-8?b?4oCYX19jdHlwZV9tYXNrX3TigJkgZG9lcyBub3QgbmFtZSBhIHR5cGU=?=
+In-Reply-To: <CAJEG_NfYFc782e3iy+z_gwitxQT60BPJkX-2R0Ho5CAu9pxL6w@mail.gmail.com>
+References: <CAJEG_NdqCrS=ny=BMgF4n8ui5kavmOxtWyzMvxe-_97e=wRPTg@mail.gmail.com>
+ <20130315105421.675ecf61@skate>
+ <CAJEG_NfYFc782e3iy+z_gwitxQT60BPJkX-2R0Ho5CAu9pxL6w@mail.gmail.com>
+Message-ID: <20130315160702.7a6a9f7c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6092
+Dear Jorge Ventura,
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-03-15 14:56:49 UTC ---
-Thanks a lot for the great investigation! Can you try the patch at
-http://free-electrons.com/~thomas/pub/0001-grub-bump-to-0.97-67.patch ?
+On Fri, 15 Mar 2013 08:51:03 -0500, Jorge Ventura wrote:
 
-I think it should fix the gcc 4.6 problem. The patch simply bumps the Grub
-version we use to a slightly more recent Debian patch version, which precisely
-includes a gcc 4.6 related fix.
+> //-------------------- Buildroot ---------------------
+> 
+> #
+> # Automatically generated make config: don't edit
+> # Version: 0.9.33.2
+> # Thu Mar 14 20:46:25 2013
 
+Sorry but what you posted here is the uClibc configuration. What I need
+is your Buildroot configuration file.
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
