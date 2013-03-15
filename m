@@ -1,51 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Mar 2013 09:25:25 +0100
-Subject: [Buildroot] Crosstool-NG unnecessary rebuilds [BUG]
-In-Reply-To: <EE5E77B503DE9A478B63A89AAD2585EDB66A63@vpane.excalyptech.com>
-References: <EE5E77B503DE9A478B63A89AAD2585EDB66A60@vpane.excalyptech.com>
- <20130313083725.4605312e@skate>
- <201303131910.06613.yann.morin.1998@free.fr>
- <20130314084816.00d23bd7@skate>
- <EE5E77B503DE9A478B63A89AAD2585EDB66A63@vpane.excalyptech.com>
-Message-ID: <20130315092525.0fd38998@skate>
+Date: Fri, 15 Mar 2013 10:47:04 +0100
+Subject: [Buildroot] [PATCHv3] Added package HPLIP for printing to HP
+ printers
+In-Reply-To: <1363203368-19909-1-git-send-email-olivier.schonken@gmail.com>
+References: <20130304084108.GB10626@sapphire.tkos.co.il>
+ <1363203368-19909-1-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <20130315104704.1c268db3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Przemyslaw Wrzos,
+Dear Olivier Schonken,
 
-On Fri, 15 Mar 2013 11:18:44 +1100, Przemyslaw Wrzos wrote:
+On Wed, 13 Mar 2013 21:36:08 +0200, Olivier Schonken wrote:
+> HPLIP (Hewlett-Packard Linux Imaging & Printing) is an HP-developed solution
+> for printing, scanning, and faxing with HP inkjet and laser based printers
+> in Linux.
+> 
+> The --includedir=$(STAGING_DIR)/usr/include is unfortunately necessary even
+> with the modified Makefile.am for a succesful build.
+> 
+> Created a menu for cups related components to be kept close together.
+> 
+> Fixed a jpeg and dbus dependencies, Thanks for pointing out the dbus 
+> dependency Baruch.
 
-> So just a question about the effect of that. If we remove that
-> dependency then won't this be inconsistent with how the internal
-> buildroot toolchain build works?
+The "changelog" shouldn't go in the commit log, but instead...
 
-Nothing in Buildroot tries to get rebuilt automatically when there are
-configuration changes. This has been the Buildroot policy for a long
-time, and only the Crosstool-NG backend was moving away from this
-general policy.
+> 
+> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+> ---
 
-If you make a change in the Buildroot configuration, it's up to you to
-understand the consequences of the change, and take the appropriate
-actions (a complete "make clean all" in some situations, remove some
-stuff in other situations, etc.).
+... here. Otherwise, it gets committed and kept in the project history,
+which doesn't make much sense.
 
-> Or does it not matter because the
-> internal toolchain is going to be deprecated eventually anyway.
+> new file mode 100644
+> index 0000000..1bfac40
+> --- /dev/null
+> +++ b/package/hplip/hplip.mk
+> @@ -0,0 +1,52 @@
+> +#############################################################
+> +#
+> +# hplip
+> +#
+> +#############################################################
+> +
+> +HPLIP_VERSION = 3.12.11
+> +HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip/
+> +HPLIP_AUTORECONF = YES
+> +HPLIP_DEPENDENCIES = cups libusb jpeg
 
-From the discussions of the last Buildroot Developers Meeting, it is
-really not clear whether the internal toolchain backend will be
-deprecated one day. There are still some integration problems in the
-Crosstool-NG backend (download infrastructure, license infrastructure)
-that are not easy to handle.
+You should add HPLIP_LICENSE and HPLIP_LICENSE_FILES here.
 
-See http://elinux.org/Buildroot:DeveloperDaysFOSDEM2013 (search for
-"Switching to ct-ng as the default toolchain backend has been in the
-plans for several years").
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
