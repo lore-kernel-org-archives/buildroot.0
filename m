@@ -1,28 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Mar 2013 11:54:06 +0100
-Subject: [Buildroot] Adding a patch in a different directory
-In-Reply-To: <CAHt8ZCNXyqyB_r63OaCSSx86eXz-YpPicoo7ftzsyvHLeW4whA@mail.gmail.com>
-References: <CAE21AQoQPni=ck0LN1W=DRRdWWw6jjvFf9dxvX6cK5fmZV_+XQ@mail.gmail.com>
- <CAHt8ZCMY=kbSmCg8r7BWFZ1GFuXutRjBDov+wWCa_ZGMncUMtg@mail.gmail.com>
- <20130315110129.2454684f@skate>
- <CAHt8ZCNXyqyB_r63OaCSSx86eXz-YpPicoo7ftzsyvHLeW4whA@mail.gmail.com>
-Message-ID: <20130315115406.65ac798d@skate>
+Date: Fri, 15 Mar 2013 12:46:24 +0100
+Subject: [Buildroot] [PATCH] change default location for local.mk to
+ $(CONFIG_DIR)
+In-Reply-To: <CAAXf6LWABPZcHrftL3LFLVB4ApLdS19-kRME101DG+9rfrfK4Q@mail.gmail.com>
+References: <1362653363-24915-1-git-send-email-jeremy.rosen@openwide.fr>
+ <20130311222630.5a75029d@skate>
+ <CAAXf6LWABPZcHrftL3LFLVB4ApLdS19-kRME101DG+9rfrfK4Q@mail.gmail.com>
+Message-ID: <20130315124624.60f408f9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Simon Dawson,
+Dear Thomas De Schampheleire,
 
-On Fri, 15 Mar 2013 10:15:26 +0000, Simon Dawson wrote:
+On Tue, 12 Mar 2013 09:26:51 +0100, Thomas De Schampheleire wrote:
 
-> That sounds like a very good plan. Do you know if anyone is working on
-> this at the moment? I'm happy to pick it up, but don't want to step on
-> anyone's toes.
+> However, unlike other config files, I still think of local.mk as a
+> local hack used by an individual developer, and not something you
+> would put under version control, neither in git nor in
+> project-specific patches.
 
-I am not aware of anyone working on this at the moment, and having
-someone look at this would definitely be very good.
+I would say it depends. We may imagine that some people use git
+submodules to achieve something like this:
+
+ + project
+ --+ buildroot
+ --+ linux
+ --+ uboot
+ --+ application
+
+with a suitable local.mk, under version control, that tells Buildroot
+to look for the kernel source code in $(TOPDIR)/../linux, U-Boot
+source code in $(TOPDIR)/../uboot, etc.
+
+(in the above, buildroot, linux, uboot and application are separate Git
+repositories that are put together into a global project Git
+repositories using git submodules).
+
+But J?r?my's patch doesn't prevent from doing that, since it just
+changes the default value.
 
 Best regards,
 
