@@ -1,51 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Mar 2013 11:03:03 +0100
-Subject: [Buildroot] segfault of test on buildroot system
-In-Reply-To: <5141FFBD.6050206@mail.ru>
-References: <5141FFBD.6050206@mail.ru>
-Message-ID: <20130315110303.507c9f8a@skate>
+Date: Fri, 15 Mar 2013 11:11:30 +0100
+Subject: [Buildroot] [PATCH] iozone: new package
+In-Reply-To: <1363195917-13185-1-git-send-email-gilles.talis@gmail.com>
+References: <y>
+	<1363195917-13185-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <20130315111130.27f6aeeb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Varnin,
+Dear Gilles Talis,
 
-On Thu, 14 Mar 2013 20:50:05 +0400, Alexander Varnin wrote:
+On Wed, 13 Mar 2013 10:31:57 -0700, Gilles Talis wrote:
 
-> I'm using buildroot based system with ARM samsung processor (s3c2443).
-> I've found a case, when i get segfault in my application. Using x86 
-> debian compilers doesn't reproduce error.
-> Attaching test program to this letter. There is an exception getting 
-> throw from constructor of child-class (DisplayPassDevice). At that time 
-> parent destructor (~PassageDevice) getting called. When exiting from 
-> parent destructor i got segfault.
-> # ./throw
-> ~PassageDevice
-> Aborted (core dumped)
-> 
-> One more necessary condition. The bug appears only when i compile my 
-> code with pthread:
-> ../minipos-OS-build/host/usr/bin/arm-linux-g++ throw.cpp -o throw -lpthread
-> 
-> When i compile without -lpthread flag, program works OK.
-> # ./throw
-> ~PassageDevice
-> catched
-> 
-> I don't know what does this problem belongs to, so i write there for 
-> help. Probably you'll just point me, where to report it.
-> Software i use is following: gcc 4.5.4, uClibc 0.9.33.2, linux 3.6.
-> Just in case, i'll attach buildroot config
+> +IOZONE_MAJOR_VERSION = 3
+> +IOZONE_MINOR_VERSION = 414
+> +IOZONE_VERSION = $(IOZONE_MAJOR_VERSION)_$(IOZONE_MINOR_VERSION)
 
-I personally don't have much clue for the moment, so the only
-suggestion I can do is to rebuild your system with BR2_ENABLE_DEBUG,
-and then use gdbserver + cross-gdb to figure out where the segmentation
-fault happens (or getting a core file generated and use cross-gdb to
-inspect it).
+Any reason to split major and minor versions here? I only see
+IOZONE_VERSION used below.
 
-Best regards,
+> +IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
+> +IOZONE_SITE = http://www.iozone.org/src/current
+> +IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
+> +# IOzone license details can be found at:
+> +# http://www.iozone.org/docs/Iozone_License.txt
+> +
+> +
+> +ifeq ($(BR2_arm)$(BR2_armeb),y)
+> +IOZONE_TARGET = linux-arm
+> +else ifeq ($(BR2_x86_64),y)
+> +IOZONE_TARGET = linux-ia64
+
+This seems wrong IA64 is the Itanium architecture from Intel, and not
+the x86-64 architecture.
+
+> +else ifeq ($(BR2_powerpc),y)
+> +IOZONE_TARGET = linux-powerpc
+> +else ifeq ($(BR2_sparc),y)
+> +IOZONE_TARGET = linux-sparc
+> +else
+> +IOZONE_TARGET = linux
+> +endif
+
+What happens for other architectures? Does it still build? What
+are the differences between those per-architecture make targets?
+
+Thanks,
 
 Thomas
 -- 
