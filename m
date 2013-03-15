@@ -1,35 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Mar 2013 10:54:21 +0100
-Subject: [Buildroot] =?utf-8?b?4oCYX19jdHlwZV90b3VwbG93X3TigJkgYW5kIA==?=
- =?utf-8?b?4oCYX19jdHlwZV9tYXNrX3TigJkgZG9lcyBub3QgbmFtZSBhIHR5cGU=?=
-In-Reply-To: <CAJEG_NdqCrS=ny=BMgF4n8ui5kavmOxtWyzMvxe-_97e=wRPTg@mail.gmail.com>
-References: <CAJEG_NdqCrS=ny=BMgF4n8ui5kavmOxtWyzMvxe-_97e=wRPTg@mail.gmail.com>
-Message-ID: <20130315105421.675ecf61@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 15 Mar 2013 09:58:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 6122] iconv.h missing for charconv.c build
+In-Reply-To: <bug-6122-163@https.bugs.busybox.net/>
+References: <bug-6122-163@https.bugs.busybox.net/>
+Message-ID: <20130315095811.83E229B0A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jorge Ventura,
+https://bugs.busybox.net/show_bug.cgi?id=6122
 
-On Thu, 14 Mar 2013 14:07:48 -0500, Jorge Ventura wrote:
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-03-15 09:58:53 UTC ---
+I don't understand, which package failed to build?
 
-> It seems that something is missing in my uClibc configuration that cause
-> the two types be undefined or another include is missing in the code that I
-> am trying to compile.
-> 
-> Someone has any clue about this problem?
+Is it dosfstools? If so, dosfstools correctly has a dependency on WCHAR. I see
+'*** dosfstools requires a toolchain with LARGEFILE and WCHAR support ***' in
+my menuconfig.
 
-Is this happening after a complete "make clean all" cycle? If so, could
-you post your Buildroot .config? Did you modify the uClibc
-configuration with "make uclibc-menuconfig" ?
+And I don't see any package that depend on it without taking care of the WCHAR
+dependency.
 
-Thanks,
+Could you provide a few more details? Thanks!
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
