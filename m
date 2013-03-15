@@ -1,71 +1,42 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Fri, 15 Mar 2013 16:22:38 +0000
-Subject: [Buildroot] [PATCH] libcap: Add optional support for libattr
-	capabilities
-Message-ID: <1363364558-5321-1-git-send-email-markos.chandras@gmail.com>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Fri, 15 Mar 2013 12:34:02 -0500
+Subject: [Buildroot] target /etc/inittab
+Message-ID: <ADE657CA350FB648AAC2C43247A983F0020980106B97@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Markos Chandras <markos.chandras@imgtec.com>
+Hello all,
 
-libcap can optionally link to libattr to support extra
-file capabilities. Link to this library and pull it as
-dependency if BR2_PACKAGE_ATTR is selected.
+I recently pulled the latest buildroot and ran into an issue I can't
+figure out.
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
----
- package/libcap/libcap.mk |   17 ++++++++++++-----
- 1 files changed, 12 insertions(+), 5 deletions(-)
+I'm using buildroot to create a rootfs for an ep93xx board. This
+board has 3 serial ports ttyAM0-3. When the rootfs is created I
+get this in the /etc/inittab:
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index dcd3a18..c319335 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -15,18 +15,25 @@ LIBCAP_LICENSE_FILES = License
- LIBCAP_DEPENDENCIES = host-libcap
- LIBCAP_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_PACKAGE_ATTR),y)
-+	LIBCAP_DEPENDENCIES += host-attr attr
-+	HAVE_LIBATTR = yes
-+else
-+	HAVE_LIBATTR = no
-+endif
-+
- define LIBCAP_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
--		LIBATTR=no BUILD_CC="$(HOSTCC)" BUILD_CFLAGS="$(HOST_CFLAGS)"
-+		LIBATTR=$(HAVE_LIBATTR) BUILD_CC="$(HOSTCC)" BUILD_CFLAGS="$(HOST_CFLAGS)"
- endef
- 
- define LIBCAP_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(STAGING_DIR) \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=$(HAVE_LIBATTR) DESTDIR=$(STAGING_DIR) \
- 		prefix=/usr lib=lib install
- endef
- 
- define LIBCAP_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(TARGET_DIR) \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=$(HAVE_LIBATTR) DESTDIR=$(TARGET_DIR) \
- 		prefix=/usr lib=lib install
- endef
- 
-@@ -38,11 +45,11 @@ endef
- LIBCAP_POST_PATCH_HOOKS += LIBCAP_DISABLE_PROGS
- 
- define HOST_LIBCAP_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=$(HAVE_LIBATTR)
- endef
- 
- define HOST_LIBCAP_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(HOST_DIR) \
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=$(HAVE_LIBATTR) DESTDIR=$(HOST_DIR) \
- 		prefix=/usr lib=lib install
- endef
- 
--- 
-1.7.1
+# Set up a couple of getty's
+tty1::respawn:/sbin/getty 38400 tty1
+tty2::respawn:/sbin/getty 38400 tty2
+
+# Put a getty on the serial port
+ttyAM0::respawn:/sbin/getty -L ttyAM0 57600 vt100 # GENERIC_SERIAL
+#ttyAM1::respawn:/sbin/getty -L ttyAM1 57600 vt100 # GENERIC_SERIAL
+#ttyAM2::respawn:/sbin/getty -L ttyAM2 57600 vt100 # GENERIC_SERIAL
+
+The problem is tty1 and tty2. They don't exist on my board and
+give me issues when the board boots. I can't figure out why they
+are being added to /etc/inittab and how to prevent theses getty's
+from showing up.
+
+Also how do I get a getty on ttyAM1 and ttyAM2?
+
+If I edit output/target/etc/inittab and then do a make to create the
+rootfs image it just gets changed back.
+
+Any pointers?
+
+Thanks,
+Hartley
