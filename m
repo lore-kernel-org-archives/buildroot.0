@@ -1,53 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Mar 2013 11:01:29 +0100
-Subject: [Buildroot] Adding a patch in a different directory
-In-Reply-To: <CAHt8ZCMY=kbSmCg8r7BWFZ1GFuXutRjBDov+wWCa_ZGMncUMtg@mail.gmail.com>
-References: <CAE21AQoQPni=ck0LN1W=DRRdWWw6jjvFf9dxvX6cK5fmZV_+XQ@mail.gmail.com>
- <CAHt8ZCMY=kbSmCg8r7BWFZ1GFuXutRjBDov+wWCa_ZGMncUMtg@mail.gmail.com>
-Message-ID: <20130315110129.2454684f@skate>
+Date: Fri, 15 Mar 2013 11:03:03 +0100
+Subject: [Buildroot] segfault of test on buildroot system
+In-Reply-To: <5141FFBD.6050206@mail.ru>
+References: <5141FFBD.6050206@mail.ru>
+Message-ID: <20130315110303.507c9f8a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Simon Dawson,
+Dear Alexander Varnin,
 
-On Fri, 15 Mar 2013 07:30:56 +0000, Simon Dawson wrote:
-> On 15 March 2013 00:50, Charles Manning <cdhmanning@gmail.com> wrote:
-> > What I would like to do is get buildroot to use the patch in foo/patches.
-> >
-> > Any ideas how to achieve this?
+On Thu, 14 Mar 2013 20:50:05 +0400, Alexander Varnin wrote:
+
+> I'm using buildroot based system with ARM samsung processor (s3c2443).
+> I've found a case, when i get segfault in my application. Using x86 
+> debian compilers doesn't reproduce error.
+> Attaching test program to this letter. There is an exception getting 
+> throw from constructor of child-class (DisplayPassDevice). At that time 
+> parent destructor (~PassageDevice) getting called. When exiting from 
+> parent destructor i got segfault.
+> # ./throw
+> ~PassageDevice
+> Aborted (core dumped)
 > 
-> I submitted a patch a while ago to add support for custom package patches:
+> One more necessary condition. The bug appears only when i compile my 
+> code with pthread:
+> ../minipos-OS-build/host/usr/bin/arm-linux-g++ throw.cpp -o throw -lpthread
 > 
-> http://patchwork.ozlabs.org/patch/222260/
+> When i compile without -lpthread flag, program works OK.
+> # ./throw
+> ~PassageDevice
+> catched
 > 
-> The patch has not been accepted as of this writing, but you can
-> achieve your goal by adding something like the following to your
-> local.mk
+> I don't know what does this problem belongs to, so i write there for 
+> help. Probably you'll just point me, where to report it.
+> Software i use is following: gcc 4.5.4, uClibc 0.9.33.2, linux 3.6.
+> Just in case, i'll attach buildroot config
 
-We discussed this at the Buildroot Developers Meeting, and we agreed on
-a model for patches, that would apply to both "internal" patches and
-"external" patches.
-
-The report of the meeting contains:
-
-"""
-
-Change of the patch logic
-
- * For the patches stored in the package directory, if
-   package/<pkg>/<version>/ does exist, apply
-   package/<pkg>/<version>/*.patch, otherwise, apply
-   package/<pkg>/*.patch
-
- * For the patches stored in the global patches directory, if
-   $(GLOBAL_PATCH_DIR)/<pkg>/<version>/ does exist, apply
-   $(GLOBAL_PATCH_DIR)/<pkg>/<version>/*.patch, otherwise, apply
-   $(GLOBAL_PATCH_DIR)/<pkg>/*.patch 
-
-"""
+I personally don't have much clue for the moment, so the only
+suggestion I can do is to rebuild your system with BR2_ENABLE_DEBUG,
+and then use gdbserver + cross-gdb to figure out where the segmentation
+fault happens (or getting a core file generated and use cross-gdb to
+inspect it).
 
 Best regards,
 
