@@ -1,37 +1,29 @@
-From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
-Date: Fri, 15 Mar 2013 11:18:44 +1100
-Subject: [Buildroot] Crosstool-NG unnecessary rebuilds [BUG]
-References: <EE5E77B503DE9A478B63A89AAD2585EDB66A60@vpane.excalyptech.com><20130313083725.4605312e@skate><201303131910.06613.yann.morin.1998@free.fr>
- <20130314084816.00d23bd7@skate>
-Message-ID: <EE5E77B503DE9A478B63A89AAD2585EDB66A63@vpane.excalyptech.com>
+From: Charles Manning <cdhmanning@gmail.com>
+Date: Fri, 15 Mar 2013 13:50:46 +1300
+Subject: [Buildroot] Adding a patch in a different directory
+Message-ID: <CAE21AQoQPni=ck0LN1W=DRRdWWw6jjvFf9dxvX6cK5fmZV_+XQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello buildrooters
 
-On Thu, 14 Mar 2013 at 18:48:16, Thomas Petazzoni wrote:
+I have a situation where I am adding a patch to bluez_utils to modify
+its behaviour.
 
-> I'm not sure to agree here. The Buildroot policy is: we don't even try
-> to rebuild whatever would be needed when there are configuration
-> changes. For example, when there is a change of toolchain
-> configuration, you will with your code maybe rebuild the toolchain,
-but
-> not the entire userspace.
-> 
-> So either we do it completely, and correctly, or we don't do it. And
-as
-> far I as remember, the Buildroot project position on this has always
-> been: it is too complex to achieve entirely correctly, so we just
-don't
-> do it.
+If I just add the patch to package/bluez_utils/ then everything works
+fine. However, we're trying to keep all our mods separate to make it
+easier to track buildroot changes.
 
-So just a question about the effect of that. If we remove that
-dependency then won't this be inconsistent with how the internal
-buildroot toolchain build works? Or does it not matter because the
-internal toolchain is going to be deprecated eventually anyway.
+I already have a directory foo where I keep a custom skeleton, custom
+packages, etc.
 
-Cheers,
-Przemyslaw Wrzos
+What I would like to do is get buildroot to use the patch in foo/patches.
+
+Any ideas how to achieve this?
+
+Thanks
+
+Charles
