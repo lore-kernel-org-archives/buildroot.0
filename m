@@ -1,33 +1,34 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Fri, 15 Mar 2013 11:52:33 +0100 (CET)
-Subject: [Buildroot] Learning the eclipse plugin... relocation problems
-Message-ID: <1222224449.534707.1363344753688.JavaMail.root@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Mar 2013 11:54:06 +0100
+Subject: [Buildroot] Adding a patch in a different directory
+In-Reply-To: <CAHt8ZCNXyqyB_r63OaCSSx86eXz-YpPicoo7ftzsyvHLeW4whA@mail.gmail.com>
+References: <CAE21AQoQPni=ck0LN1W=DRRdWWw6jjvFf9dxvX6cK5fmZV_+XQ@mail.gmail.com>
+ <CAHt8ZCMY=kbSmCg8r7BWFZ1GFuXutRjBDov+wWCa_ZGMncUMtg@mail.gmail.com>
+ <20130315110129.2454684f@skate>
+ <CAHt8ZCNXyqyB_r63OaCSSx86eXz-YpPicoo7ftzsyvHLeW4whA@mail.gmail.com>
+Message-ID: <20130315115406.65ac798d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everybody
+Dear Simon Dawson,
 
-I am experimenting with the eclipse plugin and I am stumbling a bit... 
+On Fri, 15 Mar 2013 10:15:26 +0000, Simon Dawson wrote:
 
-I am starting an eclipse/buildroot project that I want to share via git.
+> That sounds like a very good plan. Do you know if anyone is working on
+> this at the moment? I'm happy to pick it up, but don't want to step on
+> anyone's toes.
 
-I create the project using the tutorials on the eclipse pluging page and
-all works well, but when I try to share it I am not sure how to deal with
-the toolchain integration
+I am not aware of anyone working on this at the moment, and having
+someone look at this would definitely be very good.
 
-my problem is that the second user doesn't have his toolchaing located at 
-the same place (it's a different user) His toolchaing is registered with
-the eclispe plugin, but the path to the toolchain seems hardcoded in 
-both the .cproject file and in the various .mk files.
+Best regards,
 
-what is the recommanded way of sharing an ecplise project ? did I miss 
-something or is this a new feature that needs to be worked on ?
-
-    Regards
-
-    J?r?my Rosen
-
-fight key loggers : write some perl using vim
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
