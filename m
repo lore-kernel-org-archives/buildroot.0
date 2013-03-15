@@ -1,49 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Mar 2013 15:00:51 +0100
-Subject: [Buildroot] =?utf-8?b?4oCYX19jdHlwZV90b3VwbG93X3TigJkgYW5kIA==?=
- =?utf-8?b?4oCYX19jdHlwZV9tYXNrX3TigJkgZG9lcyBub3QgbmFtZSBhIHR5cGU=?=
-In-Reply-To: <CAJEG_NfYFc782e3iy+z_gwitxQT60BPJkX-2R0Ho5CAu9pxL6w@mail.gmail.com>
-References: <CAJEG_NdqCrS=ny=BMgF4n8ui5kavmOxtWyzMvxe-_97e=wRPTg@mail.gmail.com>
- <20130315105421.675ecf61@skate>
- <CAJEG_NfYFc782e3iy+z_gwitxQT60BPJkX-2R0Ho5CAu9pxL6w@mail.gmail.com>
-Message-ID: <20130315150051.0b91422e@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 15 Mar 2013 14:56:08 +0000 (UTC)
+Subject: [Buildroot] [Bug 6092] Bootable ISO image creation seems to have
+ stopped working since 2012.08
+In-Reply-To: <bug-6092-163@https.bugs.busybox.net/>
+References: <bug-6092-163@https.bugs.busybox.net/>
+Message-ID: <20130315145608.181F39B112@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jorge Ventura,
+https://bugs.busybox.net/show_bug.cgi?id=6092
 
-On Fri, 15 Mar 2013 08:51:03 -0500, Jorge Ventura wrote:
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-03-15 14:56:49 UTC ---
+Thanks a lot for the great investigation! Can you try the patch at
+http://free-electrons.com/~thomas/pub/0001-grub-bump-to-0.97-67.patch ?
 
-> Thank you for your attention to my problem.
-> Yes, after clean all cycle. No matter what I do, I have always the same
-> error. The program I am trying to compile is firewall builder that is based
-> on qt4. Buildroot has all libraries required by the package (it's not too
-> many).
+I think it should fix the gcc 4.6 problem. The patch simply bumps the Grub
+version we use to a slightly more recent Debian patch version, which precisely
+includes a gcc 4.6 related fix.
 
-Ok.
-
-> To avoid problems trying to fix that I always do a complete clean when I
-> make change in the configuration. Here is the buildroot config and next the
-> uClibc config with no change made by me.
-> 
-> Please, at uClibc config take a look in the options UCLIBC_HAS_CTYPE_xxxx,
-> maybe what I am having is related with those parameters.
-
-I will try to reproduce your problem. However, you really should *not*
-be making modifications to the uClibc configuration, unless you really
-know what you're doing. All the Buildroot dependencies and package
-testing is done with our default uClibc configuration. If you move
-away, even slightly, from this default configuration, then it is pretty
-much expected that you get build issues.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
