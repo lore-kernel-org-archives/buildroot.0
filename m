@@ -1,23 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 15 Mar 2013 14:58:11 +0100
-Subject: [Buildroot] [PATCH v1] Add a load address option for building
-	uImage on 3.7+ multi-platform kernels.
-In-Reply-To: <1363209204-3604-1-git-send-email-julien.boibessot@free.fr>
- (julien boibessot's message of "Wed, 13 Mar 2013 22:13:24 +0100")
-References: <1363209204-3604-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <87ppz04vf0.fsf@dell.be.48ers.dk>
+Date: Fri, 15 Mar 2013 14:59:10 +0100
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 2, 4,
+	8}.x stable version
+In-Reply-To: <1363344695-8486-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 15 Mar 2013 07:51:34 -0300")
+References: <1363344695-8486-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87li9o4vdd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- julien> From: Julien Boibessot <julien.boibessot@armadeus.com>
- julien> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed with the quotes added as suggested by Arnout - Thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
