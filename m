@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Sat, 16 Mar 2013 20:49:02 +0000
-Subject: [Buildroot] [PATCH] rework patch model
-Message-ID: <1363466942-21510-1-git-send-email-spdawson@gmail.com>
+Date: Sat, 16 Mar 2013 21:07:13 +0000
+Subject: [Buildroot] [PATCH] gpsd: add upstream patches
+Message-ID: <1363468033-1701-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,76 +10,95 @@ To: buildroot@busybox.net
 
 From: Simon Dawson <spdawson@gmail.com>
 
-At the Buildroot Developers Meeting (4-5 February 2013, in Brussels) a change
-to the patch logic was discussed. See 
+Add a couple of patches submitted by Mike Frysinger to gpsd upstream. One of
+these patches (that for the gpsd/dbus interface) fixes autobuild failures
+such as the following.
 
-http://elinux.org/Buildroot:DeveloperDaysFOSDEM2013
+  http://autobuild.buildroot.net/results/41ccc838c5d44ab237a7195767940585bbb8b1f6
 
-for details. In summary:
-
-* For patches stored in the package directory, if package/<pkg>/<version>/ does exist, apply package/<pkg>/<version>/*.patch, otherwise, apply package/<pkg>/*.patch
-* For patches stored in the global patches directory, if $(GLOBAL_PATCH_DIR)/<pkg>/<version>/ does exist, apply $(GLOBAL_PATCH_DIR)/<pkg>/<version>/*.patch, otherwise, apply $(GLOBAL_PATCH_DIR)/<pkg>/*.patch
-
-This patch adds the new BR2_GLOBAL_PATCH_DIR configuration item, and reworks
-the generic package infrastructure to implement the new patch logic.
+Note that neither of these patches has yet been accepted upstream.
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- Config.in              |    7 +++++++
- package/pkg-generic.mk |   16 ++++++++--------
- 2 files changed, 15 insertions(+), 8 deletions(-)
+ package/gpsd/gpsd-03-upstream-dbus.patch |   31 ++++++++++++++++++++++++++++++
+ package/gpsd/gpsd-04-upstream-udev.patch |   31 ++++++++++++++++++++++++++++++
+ 2 files changed, 62 insertions(+)
+ create mode 100644 package/gpsd/gpsd-03-upstream-dbus.patch
+ create mode 100644 package/gpsd/gpsd-04-upstream-udev.patch
 
-diff --git a/Config.in b/Config.in
-index a2c305f..3008374 100644
---- a/Config.in
-+++ b/Config.in
-@@ -437,6 +437,13 @@ config BR2_PACKAGE_OVERRIDE_FILE
- 	  as the source directory for a particular package. See the
- 	  Buildroot documentation for more details on this feature.
- 
-+config BR2_GLOBAL_PATCH_DIR
-+	string "global patch directory"
-+	help
-+	  You may specify a directory containing global package patches.
-+	  Note that any global patches for a package will be applied AFTER
-+	  the default Buildroot patch set for the package.
+diff --git a/package/gpsd/gpsd-03-upstream-dbus.patch b/package/gpsd/gpsd-03-upstream-dbus.patch
+new file mode 100644
+index 0000000..2345484
+--- /dev/null
++++ b/package/gpsd/gpsd-03-upstream-dbus.patch
+@@ -0,0 +1,31 @@
++The current libgps.a logic doesn't pass down pkg-config output from
++dbus and such which breaks building when compiling:
 +
- endmenu
- 
- source "toolchain/Config.in"
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 57b0fd0..db0b025 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -82,21 +82,21 @@ endif
- # find the package directory (typically package/<pkgname>) and the
- # prefix of the patches
- $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
-+$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
- $(BUILD_DIR)/%/.stamp_patched:
- 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
- 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
- 	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(p)$(sep))
- 	$(Q)( \
--	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
--	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
--	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
--	  else \
--	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(RAWNAME)\*.patch $(RAWNAME)\*.patch.$(ARCH) || exit 1; \
--	    if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER); then \
--	      support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
-+	for D in $(PATCH_BASE_DIRS); do \
-+	  if test -d $${D}; then \
-+	    if test -d $${D}/$($(PKG)_VERSION); then \
-+	      support/scripts/apply-patches.sh $(@D) $${D}/$($(PKG)_VERSION) \*.patch \*.patch.$(ARCH) || exit 1; \
-+	    else \
-+	      support/scripts/apply-patches.sh $(@D) $${D} \*.patch \*.patch.$(ARCH) || exit 1; \
- 	    fi; \
- 	  fi; \
--	fi; \
-+	done; \
- 	)
- 	$(foreach hook,$($(PKG)_POST_PATCH_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
++gcc -o libgps_dbus.o -c -D_GNU_SOURCE -Wextra -Wall -Wno-uninitialized \
++	-Wno-missing-field-initializers -Wcast-align -Wmissing-declarations \
++	-Wmissing-prototypes -Wstrict-prototypes -Wpointer-arith -Wreturn-type \
++	-O2 libgps_dbus.c
++libgps_dbus.c:26:23: fatal error: dbus/dbus.h: No such file or directory
++compilation terminated.
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++---
++ SConstruct | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/SConstruct b/SConstruct
++index e5d1f54..a56fa9b 100644
++--- a/SConstruct
+++++ b/SConstruct
++@@ -886,7 +886,9 @@ gpsdlibs = ["-lgpsd"] + usblibs + bluezlibs + gpslibs + caplibs
++ #          linking
++ # The final executable will build but not be portable.
++ 
++-env.StaticLibrary(target = 'libgps.a', source = libgps_sources)
+++env.StaticLibrary(target='libgps.a',
+++                  source=libgps_sources,
+++                  parse_flags=dbus_libs + rtlibs)
++ 
++ # Source groups
++ 
+diff --git a/package/gpsd/gpsd-04-upstream-udev.patch b/package/gpsd/gpsd-04-upstream-udev.patch
+new file mode 100644
+index 0000000..6de058d
+--- /dev/null
++++ b/package/gpsd/gpsd-04-upstream-udev.patch
+@@ -0,0 +1,31 @@
++Commit 102e29d16c3fd9b414eeac53c794302f902ae8da reverted the DESTDIR
++logic when upgrading the udev path handling.
++
++It also slightly broke the mkdir setup by not creating the rules.d
++subdir under the udev path.
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++---
++ SConstruct | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/SConstruct b/SConstruct
++index a56fa9b..1c187f3 100644
++--- a/SConstruct
+++++ b/SConstruct
++@@ -1662,10 +1662,10 @@ if env['python']:
++ # is plugged in.
++ 
++ Utility('udev-install', 'install', [
++-    'mkdir -p ' + env['udevdir'],
++-    'cp $SRCDIR/gpsd.rules ' + env['udevdir'] + '/rules.d/25-gpsd.rules',
++-    'cp $SRCDIR/gpsd.hotplug ' + env['udevdir'],
++-    'chmod a+x ' + env['udevdir'] + '/gpsd.hotplug',
+++    'mkdir -p ' + DESTDIR + env['udevdir'] + '/rules.d',
+++    'cp $SRCDIR/gpsd.rules ' + DESTDIR + env['udevdir'] + '/rules.d/25-gpsd.rules',
+++    'cp $SRCDIR/gpsd.hotplug ' + DESTDIR + env['udevdir'],
+++    'chmod a+x ' + DESTDIR + env['udevdir'] + '/gpsd.hotplug',
++         ])
++ 
++ Utility('udev-uninstall', '', [
 -- 
 1.7.10.4
