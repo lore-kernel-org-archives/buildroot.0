@@ -1,62 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Mar 2013 19:51:12 +0100
-Subject: [Buildroot] target /etc/inittab
-In-Reply-To: <ADE657CA350FB648AAC2C43247A983F0020980106B97@AUSP01VMBX24.collaborationhost.net>
-References: <ADE657CA350FB648AAC2C43247A983F0020980106B97@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <20130316195112.67246764@skate>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Sat, 16 Mar 2013 19:52:45 +0000
+Subject: [Buildroot] [PATCH] libcap: Add optional support for libattr
+	capabilities
+In-Reply-To: <20130316191153.29c28d2b@skate>
+References: <1363364558-5321-1-git-send-email-markos.chandras@gmail.com>
+ <20130316191153.29c28d2b@skate>
+Message-ID: <CAG2jQ8gJzTXxWmr085JQAVmypJ4TSJWWQxfqj1SX72YqzjtONg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear H Hartley Sweeten,
+On 16 March 2013 18:11, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Markos Chandras,
+>
+> On Fri, 15 Mar 2013 16:22:38 +0000, Markos Chandras wrote:
+>
+>> +ifeq ($(BR2_PACKAGE_ATTR),y)
+>> +     LIBCAP_DEPENDENCIES += host-attr attr
+>
+> We don't generally tie dependencies of host packages on
+> BR2_PACKAGE_<foo> options. Is there a specific reason that requires
+> host-libcap to be built against host-attr?
+>
+Hi Thomas,
 
-On Fri, 15 Mar 2013 12:34:02 -0500, H Hartley Sweeten wrote:
+No special reason, just making sure the host-libcap is built the same
+way as the target one does so it can support the same functionality.
+Should I resend this patch but only changing the way the target libcap is built?
 
-> I'm using buildroot to create a rootfs for an ep93xx board. This
-> board has 3 serial ports ttyAM0-3. When the rootfs is created I
-> get this in the /etc/inittab:
-> 
-> # Set up a couple of getty's
-> tty1::respawn:/sbin/getty 38400 tty1
-> tty2::respawn:/sbin/getty 38400 tty2
-
-This is strange, we have removed these since
-7d9d09db673abbedc1cc865c213b742e0450268d, which appeared in 2011.05 it
-seems. Those lines are no longer part of the default skeleton.
-
-> # Put a getty on the serial port
-> ttyAM0::respawn:/sbin/getty -L ttyAM0 57600 vt100 # GENERIC_SERIAL
-> #ttyAM1::respawn:/sbin/getty -L ttyAM1 57600 vt100 # GENERIC_SERIAL
-> #ttyAM2::respawn:/sbin/getty -L ttyAM2 57600 vt100 # GENERIC_SERIAL
-
-These are not coming from Buildroot default skeleton. Maybe you're
-using a modified Buildroot version and not the upstream version?
-
-> The problem is tty1 and tty2. They don't exist on my board and
-> give me issues when the board boots. I can't figure out why they
-> are being added to /etc/inittab and how to prevent theses getty's
-> from showing up.
-
-Just use a recent upstream Buildroot version, those lines are no longer
-present in the default inittab.
-
-> Also how do I get a getty on ttyAM1 and ttyAM2?
-
-In a recent upstream Buildroot version, I would do that with a
-post-build script.
-
-Make sure to do add a # GENERIC_SERIAL comment at the end of those
-additional lines: this # GENERIC_SERIAL is a marker that tells
-Buildroot to modify this line to start a getty on the default tty
-(which is defined in the Buildroot configuration).
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards,
+Markos Chandras
