@@ -1,37 +1,118 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Mar 2013 23:37:08 +0100
-Subject: [Buildroot] [PATCH 3/5] fs/ext2: add a symlink 'rootfs.ext#' ->
-	'rootfs.ext2'
+Date: Sun, 17 Mar 2013 23:37:09 +0100
+Subject: [Buildroot] [PATCH 4/5] fs/ext2: add support for ext2 rev0 and rev1
 In-Reply-To: <cover.1363559530.git.yann.morin.1998@free.fr>
 References: <cover.1363559530.git.yann.morin.1998@free.fr>
-Message-ID: <82b51e4ec85a5faa64a6107de0ad141311e20301.1363559530.git.yann.morin.1998@free.fr>
+Message-ID: <230719126eab0f42e98e89712be2d8dac03dc25c.1363559530.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Some bootloaders have a buggy ext2 support, and require ext2 rev1
+instead of the traditional ext2 rev0 that genext2fs produces.
+
+tune2fs accepts only one '-O list' at a time, so we need to construct
+a list of -O options.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Arnout Vandecappelle <arnout@mind.be>
----
- fs/ext2/ext2.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+---
+Changes v1->v2:
+  - separate GEN/REV and use two environment variables (Arnout)
+  - all are revision 1, except ext2r0 (Arnout)
+---
+ fs/ext2/Config.in    |   20 +++++++++++++++++---
+ fs/ext2/ext2.mk      |    3 ++-
+ fs/ext2/genext2fs.sh |   12 +++++++++---
+ 3 files changed, 28 insertions(+), 7 deletions(-)
+
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index c8320e2..097242e 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -6,12 +6,20 @@ config BR2_TARGET_ROOTFS_EXT2
+ 
+ if BR2_TARGET_ROOTFS_EXT2
+ 
++config BR2_TARGET_ROOTFS_EXT2_2
++	bool
++
+ choice
+ 	bool "ext2/3/4 variant"
+-	default BR2_TARGET_ROOTFS_EXT2_2
++	default BR2_TARGET_ROOTFS_EXT2_2r0
+ 
+-config BR2_TARGET_ROOTFS_EXT2_2
+-	bool "ext2"
++config BR2_TARGET_ROOTFS_EXT2_2r0
++	bool "ext2 (rev0)"
++	select BR2_TARGET_ROOTFS_EXT2_2
++
++config BR2_TARGET_ROOTFS_EXT2_2r1
++	bool "ext2 (rev1)"
++	select BR2_TARGET_ROOTFS_EXT2_2
+ 
+ config BR2_TARGET_ROOTFS_EXT2_3
+ 	bool "ext3"
+@@ -27,6 +35,12 @@ config BR2_TARGET_ROOTFS_EXT2_GEN
+ 	default 3 if BR2_TARGET_ROOTFS_EXT2_3
+ 	default 4 if BR2_TARGET_ROOTFS_EXT2_4
+ 
++# All ext generations are revision 1, except ext2r0, which is revision 0
++config BR2_TARGET_ROOTFS_EXT2_REV
++    int
++    default 0   if BR2_TARGET_ROOTFS_EXT2_2r0
++    default 1   if !BR2_TARGET_ROOTFS_EXT2_2r0
++
+ config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+ 	int "size in blocks (leave at 0 for auto calculation)"
+ 	default 0
 diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 018a5a3..ffb7257 100644
+index ffb7257..d74f31e 100644
 --- a/fs/ext2/ext2.mk
 +++ b/fs/ext2/ext2.mk
-@@ -26,4 +26,11 @@ define ROOTFS_EXT2_CMD
- 	PATH=$(TARGET_PATH) $(EXT2_ENV) fs/ext2/genext2fs.sh -d $(TARGET_DIR) $(EXT2_OPTS) $@
- endef
+@@ -20,7 +20,8 @@ endif
  
-+define ROOTFS_EXT2_HOOK_SYMLINK
-+	ln -sf rootfs.ext2 $(BINARIES_DIR)/rootfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN)
-+endef
-+ifneq ($(BR2_TARGET_ROOTFS_EXT2_GEN),2)
-+ROOTFS_EXT2_POST_GEN_HOOKS += ROOTFS_EXT2_HOOK_SYMLINK
-+endif
+ ROOTFS_EXT2_DEPENDENCIES = host-genext2fs host-e2fsprogs
+ 
+-EXT2_ENV = GEN=$(BR2_TARGET_ROOTFS_EXT2_GEN)
++EXT2_ENV  = GEN=$(BR2_TARGET_ROOTFS_EXT2_GEN)
++EXT2_ENV += REV=$(BR2_TARGET_ROOTFS_EXT2_REV)
+ 
+ define ROOTFS_EXT2_CMD
+ 	PATH=$(TARGET_PATH) $(EXT2_ENV) fs/ext2/genext2fs.sh -d $(TARGET_DIR) $(EXT2_OPTS) $@
+diff --git a/fs/ext2/genext2fs.sh b/fs/ext2/genext2fs.sh
+index c2049f5..76f454c 100755
+--- a/fs/ext2/genext2fs.sh
++++ b/fs/ext2/genext2fs.sh
+@@ -78,15 +78,21 @@ e2tunefsck() {
+ }
+ 
+ # Check we know what generation to generate
+-case "${GEN}" in
+-    2|3|4)
++case "${GEN}:${REV}" in
++    2:0|2:1|3:1|4:1)
+ 	;;
+     *)
+-	printf "%s: unknown ext generation to generate\n" "${0##*/}" >&2
++	printf "%s: unknown ext generation '%s' and/or revision '%s'\n" \
++	       "${0##*/}" "${GEN}" "${REV}" >&2
+ 	exit 1
+ 	;;
+ esac
+ 
++# Upgrade to rev1 if needed
++if [ ${REV} -ge 1 ]; then
++    EXT_OPTS_O="${EXT_OPTS_O},filetype"
++fi
 +
- $(eval $(call ROOTFS_TARGET,ext2))
+ # Add a journal for ext3 and above
+ if [ ${GEN} -ge 3 ]; then
+     EXT_OPTS="${EXT_OPTS} -j -J size=1"
 -- 
 1.7.2.5
