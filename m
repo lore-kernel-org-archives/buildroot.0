@@ -1,82 +1,88 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Mar 2013 19:19:45 +0100
-Subject: [Buildroot] [PATCH 6/6] package/mtools: new host-package
-In-Reply-To: <cover.1363544331.git.yann.morin.1998@free.fr>
-References: <cover.1363544331.git.yann.morin.1998@free.fr>
-Message-ID: <66be2f38b5888d903831ad36714b00cd2efb4bc0.1363544331.git.yann.morin.1998@free.fr>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Sun, 17 Mar 2013 22:04:48 +0200
+Subject: [Buildroot] [PATCH 1/2] Added package enscript
+In-Reply-To: <1363535972-29959-1-git-send-email-olivier.schonken@gmail.com>
+References: <1363535972-29959-1-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <1363550688-29686-1-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+GNU Enscript is a free replacement for Adobe's enscript program.
+GNU Enscript converts ASCII files to PostScript, HTML, or RTF and
+stores generated output to a file or sends it directly to the
+printer. It includes features for `pretty-printing' (language-
+sensitive code highlighting) in several programming languages.
 
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
-v2 -> v3:
-  - add licensing terms (Thomas)
+Changelog
+Removed Selection of GETTEXT_PACKAGE in Config.in
 
-v1 -> v2
-  - remove extraneous spaces, use $(BR2_GNU_MIRROR)  (Thomas)
----
- package/Config.in.host        |    1 +
- package/mtools/Config.in.host |    9 +++++++++
- package/mtools/mtools.mk      |   17 +++++++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100644 package/mtools/Config.in.host
- create mode 100644 package/mtools/mtools.mk
+ package/Config.in            |    1 +
+ package/enscript/Config.in   |   12 ++++++++++++
+ package/enscript/enscript.mk |   20 ++++++++++++++++++++
+ 3 files changed, 33 insertions(+)
+ create mode 100644 package/enscript/Config.in
+ create mode 100644 package/enscript/enscript.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index e97f6e8..7c0dd20 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -6,6 +6,7 @@ source "package/e2fsprogs/Config.in.host"
- source "package/genimage/Config.in.host"
- source "package/genpart/Config.in.host"
- source "package/lpc3250loader/Config.in.host"
-+source "package/mtools/Config.in.host"
- source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
- source "package/sam-ba/Config.in.host"
-diff --git a/package/mtools/Config.in.host b/package/mtools/Config.in.host
+diff --git a/package/Config.in b/package/Config.in
+index 4cf71d6..78bd745 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -292,6 +292,7 @@ endmenu
+ 
+ menu "Interpreter languages and scripting"
+ source "package/erlang/Config.in"
++source "package/enscript/Config.in"
+ source "package/haserl/Config.in"
+ source "package/jamvm/Config.in"
+ source "package/lua/Config.in"
+diff --git a/package/enscript/Config.in b/package/enscript/Config.in
 new file mode 100644
-index 0000000..d534b5e
+index 0000000..7c824dd
 --- /dev/null
-+++ b/package/mtools/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_MTOOLS
-+	bool "host mtools"
++++ b/package/enscript/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_ENSCRIPT
++	bool "enscript"
 +	help
-+	  Mtools is a collection of utilities to access MS-DOS disks from
-+	  Unix without mounting them. It supports Win'95 style long file
-+	  names, OS/2 Xdf disks and 2m disks (store up to 1992k on a high
-+	  density 3 1/2 disk).
++	   GNU Enscript is a free replacement for Adobe's enscript program.
++
++	   GNU Enscript converts ASCII files to PostScript, HTML, or RTF and 
++	   stores generated output to a file or sends it directly to the 
++	   printer. It includes features for `pretty-printing' (language-
++	   sensitive code highlighting) in several programming languages. 
 +	  
-+	  http://www.tux.org/pub/tux/mtools/
-diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
++	   http://www.gnu.org/software/enscript
++
+diff --git a/package/enscript/enscript.mk b/package/enscript/enscript.mk
 new file mode 100644
-index 0000000..a27c4fd
+index 0000000..29fd6d4
 --- /dev/null
-+++ b/package/mtools/mtools.mk
-@@ -0,0 +1,17 @@
++++ b/package/enscript/enscript.mk
+@@ -0,0 +1,20 @@
 +#############################################################
 +#
-+# mtools
++# enscript
 +#
 +#############################################################
++ENSCRIPT_VERSION = 1.6.6
++ENSCRIPT_SITE = $(BR2_GNU_MIRROR)/enscript/
++ENSCRIPT_SOURCE = enscript-$(ENSCRIPT_VERSION).tar.gz
++ENSCRIPT_DEPENDENCIES = 
++ENSCRIPT_LICENSE = GPLv3
++ENSCRIPT_LICENSE_FILES = COPYING
 +
-+MTOOLS_VERSION       = 4.0.18
-+MTOOLS_SOURCE        = mtools-$(MTOOLS_VERSION).tar.bz2
-+MTOOLS_SITE          = $(BR2_GNU_MIRROR)/mtools/
-+MTOOLS_LICENSE       = GPLv3+
-+MTOOLS_LICENSE_FILES = COPYING
++#Enable pthread threads if toolchain supports threads
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS), y)
++	ENSCRIPT_CONF_OPT += --enable-threads=pth
++else
++	ENSCRIPT_CONF_OPT += --disable-threads
++endif
 +
-+MTOOLS_CONF_OPT = --enable-xdf        \
-+                  --enable-vold       \
-+                  --enable-new-vold
-+
-+$(eval $(host-autotools-package))
++$(eval $(autotools-package))
 -- 
-1.7.2.5
+1.7.10.4
