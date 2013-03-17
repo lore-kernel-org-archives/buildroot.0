@@ -1,43 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 17 Mar 2013 14:40:23 +0100
-Subject: [Buildroot] [git commit] <pkg>-rsync: exclude version control files
-Message-ID: <20130317134124.D38629B0BB@busybox.osuosl.org>
+Date: Sun, 17 Mar 2013 14:36:07 +0100
+Subject: [Buildroot] [git commit] perl: bump to version 5.16.3
+Message-ID: <20130317134124.7F3989B12D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3b681efa4c2910c020662c1510efb4ee17008a17
+commit: http://git.buildroot.net/buildroot/commit/?id=58917a65dc6ec987621fc07c865322cdef0ddb7f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When using rsync to import package sources (typically with
-PKG_OVERRIDE_SRCDIR), it often happens that these external sources
-are under version control, and contain directories like .git,
-.hg, etc.
-
-Depending on the project, these directories can become pretty large
-and typically have a lot of files. Moreover, they are not necessary
-in the context of building the package. Therefore, this commit adds
-the --cvs-exclude option to the rsync call, saving both disk space
-and sync time.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pkg-generic.mk |    2 +-
+ package/perl/perl.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 57b0fd0..8d964a1 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -62,7 +62,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
- $(BUILD_DIR)/%/.stamp_rsynced:
- 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
--	rsync -au $(SRCDIR)/ $(@D)
-+	rsync -au --cvs-exclude $(SRCDIR)/ $(@D)
- 	$(Q)touch $@
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index da54ef1..66f7daa 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -5,7 +5,7 @@
+ #############################################################
  
- # Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
+ PERL_VERSION_MAJOR = 16
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
+ PERL_SITE = http://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
+ PERL_LICENSE = Artistic
