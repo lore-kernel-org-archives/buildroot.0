@@ -1,34 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Mar 2013 16:14:01 +0100
-Subject: [Buildroot] Buildroot Patchwork day March 2013
-In-Reply-To: <20130304110541.4ae1a82e@skate>
-References: <20130304110541.4ae1a82e@skate>
-Message-ID: <201303171614.01614.yann.morin.1998@free.fr>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Sun, 17 Mar 2013 17:59:31 +0200
+Subject: [Buildroot] [PATCH 1/2] Added package enscript
+Message-ID: <1363535972-29959-1-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
+GNU Enscript is a free replacement for Adobe's enscript program.
+GNU Enscript converts ASCII files to PostScript, HTML, or RTF and
+stores generated output to a file or sends it directly to the
+printer. It includes features for `pretty-printing' (language-
+sensitive code highlighting) in several programming languages.
 
-On Monday 04 March 2013 Thomas Petazzoni wrote:
-[--SNIP--]
-> In order to get things started, I'm proposing a quick poll to decide on
-> a first day for the month of March:
-> 
->   http://www.doodle.com/up4fzf7qa8bm9bqp
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+---
+ package/Config.in            |    1 +
+ package/enscript/Config.in   |   13 +++++++++++++
+ package/enscript/enscript.mk |   20 ++++++++++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 package/enscript/Config.in
+ create mode 100644 package/enscript/enscript.mk
 
-It seems we have a consensus for March the 24th, 2013, that is, next Sunday.
-Can we consider this date to be confirmed?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index 4cf71d6..78bd745 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -292,6 +292,7 @@ endmenu
+ 
+ menu "Interpreter languages and scripting"
+ source "package/erlang/Config.in"
++source "package/enscript/Config.in"
+ source "package/haserl/Config.in"
+ source "package/jamvm/Config.in"
+ source "package/lua/Config.in"
+diff --git a/package/enscript/Config.in b/package/enscript/Config.in
+new file mode 100644
+index 0000000..5198da9
+--- /dev/null
++++ b/package/enscript/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_ENSCRIPT
++	bool "enscript"
++	select BR2_PACKAGE_GETTEXT
++	help
++	   GNU Enscript is a free replacement for Adobe's enscript program.
++
++	   GNU Enscript converts ASCII files to PostScript, HTML, or RTF and 
++	   stores generated output to a file or sends it directly to the 
++	   printer. It includes features for `pretty-printing' (language-
++	   sensitive code highlighting) in several programming languages. 
++	  
++	   http://www.gnu.org/software/enscript
++
+diff --git a/package/enscript/enscript.mk b/package/enscript/enscript.mk
+new file mode 100644
+index 0000000..29fd6d4
+--- /dev/null
++++ b/package/enscript/enscript.mk
+@@ -0,0 +1,20 @@
++#############################################################
++#
++# enscript
++#
++#############################################################
++ENSCRIPT_VERSION = 1.6.6
++ENSCRIPT_SITE = $(BR2_GNU_MIRROR)/enscript/
++ENSCRIPT_SOURCE = enscript-$(ENSCRIPT_VERSION).tar.gz
++ENSCRIPT_DEPENDENCIES = 
++ENSCRIPT_LICENSE = GPLv3
++ENSCRIPT_LICENSE_FILES = COPYING
++
++#Enable pthread threads if toolchain supports threads
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS), y)
++	ENSCRIPT_CONF_OPT += --enable-threads=pth
++else
++	ENSCRIPT_CONF_OPT += --disable-threads
++endif
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
