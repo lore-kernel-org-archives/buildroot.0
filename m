@@ -1,57 +1,41 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Mon, 18 Mar 2013 01:53:38 +0400
-Subject: [Buildroot] nspr and aarch64 build issue
-Message-ID: <CABtOAfxeHbNeKc8eWfxaTLPgOeh10HmF2psbXnvZh9mLF0hKTg@mail.gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Sun, 17 Mar 2013 22:37:35 +0100
+Subject: [Buildroot] [PATCH] apply-patches.sh: applying xz-ed patches
+Message-ID: <1363556255-865-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello, guys!
-I'm trying to build aarch64 libnspr package
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ support/scripts/apply-patches.sh |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-
-cd freebl; /usr/bin/make libs
-make[3]: Entering directory
-`/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss/lib/freebl'
-../../../coreconf/nsinstall/Linux2.6_aarch64_glibc_PTH_OPT.OBJ/nsinstall -R
--m 664 Linux2.6_aarch64_glibc_PTH_OPT.OBJ/libfreebl.a
-/home/user/buildroot/output/build/libnss-3.12.9/mozilla/dist/lib
-/usr/bin/make FREEBL_CHILD_BUILD=1 \
- OBJDIR=Linux2.6_aarch64_glibc_PTH_OPT.OBJ/Linux_SINGLE_SHLIB libs
- make[4]: Entering directory
-`/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss/lib/freebl'
- /home/user/buildroot/output/host/usr/bin/aarch64-linux-gnu-gcc -o
-Linux2.6_aarch64_glibc_PTH_OPT.OBJ/Linux_SINGLE_SHLIB/drbg.o -c
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe
--Os  -ansi -D_POSIX_SOURCE -D_BSD_SOURCE -D_XOPEN_SOURCE -fPIC -DLINUX2_1
--Wall -Werror-implicit-function-declaration -Wno-switch -pipe -DLINUX
--Dlinux -DHAVE_STRERROR -DXP_UNIX -DSHLIB_SUFFIX=\"so\"
--DSHLIB_PREFIX=\"lib\" -DSHLIB_VERSION=\"3\" -DSOFTOKEN_SHLIB_VERSION=\"3\"
--DRIJNDAEL_INCLUDE_TABLES -UDEBUG -DNDEBUG -D_REENTRANT -DNSS_ENABLE_ECC
--DUSE_UTIL_DIRECTLY -DFREEBL_NO_DEPEND -DMP_API_COMPATIBLE
--I/home/user/buildroot/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/nspr
--I/home/user/buildroot/output/build/libnss-3.12.9/mozilla/dist/include
--I../../../../dist/public/nss -I../../../../dist/private/nss -Impi -Iecl
-drbg.c
- drbg.c: In function 'RNG_RandomUpdate':
- *drbg.c:516:5: error: size of array 'arg' is negative*
- make[4]: ***
-[Linux2.6_aarch64_glibc_PTH_OPT.OBJ/Linux_SINGLE_SHLIB/drbg.o] Error 1
- make[4]: Leaving directory
-`/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss/lib/freebl'
- make[3]: *** [libs] Error 2
- make[3]: Leaving directory
-`/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss/lib/freebl'
- make[2]: *** [libs] Error 2
- make[2]: Leaving directory
-`/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss/lib'
- make[1]: *** [libs] Error 2
- make[1]: Leaving directory
-`/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss'
- make: *** [/home/user/buildroot/output/build/libnss-3.12.9/.stamp_built]
-Error 2
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130318/934be1a5/attachment-0001.html>
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 7a6c1fa..b677ed0 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -23,8 +23,8 @@
+ # files than series file and archives are considered as a patch.
+ #
+ # Once a patch is found, the script will try to apply it. If its name doesn't
+-# end with '.gz', '.bz', '.bz2', '.zip', '.Z', '.diff*' or '.patch*', it will
+-# be skipped. If necessary, the patch will be uncompressed before being
++# end with '.gz', '.bz', '.bz2', '.xz', '.zip', '.Z', '.diff*' or '.patch*',
++# it will be skipped. If necessary, the patch will be uncompressed before being
+ # applied. The list of the patches applied is stored in '.applied_patches_list'
+ # file in the build directory.
+ 
+@@ -59,6 +59,8 @@ function apply_patch {
+ 	type="bzip"; uncomp="bunzip -dc"; ;; 
+ 	*.bz2)
+ 	type="bzip2"; uncomp="bunzip2 -dc"; ;; 
++	*.xz)
++	type="xz"; uncomp="unxz -dc"; ;; 
+ 	*.zip)
+ 	type="zip"; uncomp="unzip -d"; ;; 
+ 	*.Z)
+-- 
+1.7.9.5
