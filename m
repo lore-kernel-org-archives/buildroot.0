@@ -1,86 +1,114 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Mar 2013 23:20:37 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch yem-ext234
-In-Reply-To: <20130310143136.15eb1320@skate>
-References: <cover.1362693453.git.yann.morin.1998@free.fr>
- <20130310143136.15eb1320@skate>
-Message-ID: <201303172320.38083.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 17 Mar 2013 23:22:34 +0100
+Subject: [Buildroot] [PATCH v3] New package: gtest
+In-Reply-To: <1360088168-9012-1-git-send-email-sho@relinux.de> (Stephan
+ Hoffmann's message of "Tue, 5 Feb 2013 19:16:08 +0100")
+References: <51113304.5020807@relinux.de>
+ <1360088168-9012-1-git-send-email-sho@relinux.de>
+Message-ID: <87wqt51xat.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
 
-On Sunday 10 March 2013 Thomas Petazzoni wrote:
-> On Thu,  7 Mar 2013 23:04:37 +0100, Yann E. MORIN wrote:
-> 
-> > This patch series enhances the ext2 fs backend to also build ext3 and ext4
-> > filesystems, and differentiate between ext2 rev0 and ext2 rev1 filesystems.
-> > 
-> > This patch series is based on the previously-sent 'yem-host-image-tools'
-> > pull-request, and requires changes in that series.
-> 
-> I just tested this with the following defconfig:
-> 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TARGET_ROOTFS_EXT2=y
-> BR2_TARGET_ROOTFS_EXT2_4=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> 
-> and building the ext4 image fails:
-> 
-> tune2fs 1.42.7 (21-Jan-2013)
-> 
-> Please run e2fsck on the filesystem.
-> 
-> Creating journal inode: 
-> Journal size too big for filesystem.
-> make: *** [/home/thomas/projets/buildroot/output/images/rootfs.ext4] Erreur 1
+ Stephan> Google's framework for writing C++ tests on a variety of
+ Stephan> platforms (Linux, Mac OS X, Windows, Cygwin, Windows CE, and
+ Stephan> Symbian). Based on the xUnit architecture. Supports automatic
+ Stephan> test discovery, a rich set of assertions, user-defined
+ Stephan> assertions, death tests, fatal and non-fatal failures, value-
+ Stephan> and type-parameterized tests, various options for running the
+ Stephan> tests, and XML test report generation.
 
-I am unable to reproduce this failure with your defconfig:
+ Stephan> Gtest also allows to easily build testsuites for C programs.
 
----8<---
-echo "  PATH="/home/ymorin/dev/buildroot/O-misc/host/bin:/home/ymorin/dev/bu
-ildroot/O-misc/host/usr/bin:/home/ymorin/dev/buildroot/O-misc/host/usr/sbin/
-:/home/ymorin/bin:/home/ymorin/bin:/opt/zbar/bin:/opt/stgit/bin:/opt/qemu/bi
-n:/opt/pkg++/bin:/opt/kcfg/bin:/opt/hg/bin:/opt/firefox/bin:/opt/bencode/bin
-:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games" GEN=4 REV=1 fs/ex
-t2/genext2fs.sh -d /home/ymorin/dev/buildroot/O-misc/target  /home/ymorin/de
-v/buildroot/O-misc/images/rootfs.ext2" >> /home/ymorin/dev/buildroot/O-misc/
-build/_fakeroot.fs
-chmod a+x /home/ymorin/dev/buildroot/O-misc/build/_fakeroot.fs
-/home/ymorin/dev/buildroot/O-misc/host/usr/bin/fakeroot -- /home/ymorin/dev/
-buildroot/O-misc/build/_fakeroot.fs
-rootdir=/home/ymorin/dev/buildroot/O-misc/target
-table='/home/ymorin/dev/buildroot/O-misc/build/_device_table.txt'
-tune2fs 1.42.7 (21-Jan-2013)
+ Stephan> This package allows running testsuites on the target which might be
+ Stephan> advantgeous in certain cases.
 
-Please run e2fsck on the filesystem.
+ Stephan> http://code.google.com/p/googletest/
 
-Creating journal inode: done
-This filesystem will be automatically checked every 20 mounts or
-0 days, whichever comes first.  Use tune2fs -c or -i to override.
+ Stephan> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+ Stephan> ---
+ Stephan> v2: Fixed whitespace errors
+ Stephan> v3: Renamed to gtest and fixed typos
 
-e2fsck was successfully run on 'rootfs.ext2' (ext4)
+ Stephan>  package/Config.in       |    1 +
+ Stephan>  package/gtest/Config.in |   20 ++++++++++++++++++++
+ Stephan>  package/gtest/gtest.mk  |   23 +++++++++++++++++++++++
+ Stephan>  3 files changed, 44 insertions(+), 0 deletions(-)
+ Stephan>  create mode 100644 package/gtest/Config.in
+ Stephan>  create mode 100644 package/gtest/gtest.mk
 
-tune2fs 1.42.7 (21-Jan-2013)
-Setting maximal mount count to -1
-Setting interval between checks to 0 seconds
-cp support/misc/target-dir-warning.txt /home/ymorin/dev/buildroot/O-misc/tar
-get/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
-ln -sf rootfs.ext2 /home/ymorin/dev/buildroot/O-misc/images/rootfs.ext4
----8<---
+ Stephan> diff --git a/package/Config.in b/package/Config.in
+ Stephan> index 2f219b6..845fe57 100644
+ Stephan> --- a/package/Config.in
+ Stephan> +++ b/package/Config.in
+ Stephan> @@ -541,6 +541,7 @@ source "package/fftw/Config.in"
+ Stephan>  source "package/libargtable2/Config.in"
+ Stephan>  source "package/argp-standalone/Config.in"
+ Stephan>  source "package/boost/Config.in"
+ Stephan> +source "package/gtest/Config.in"
+ Stephan>  source "package/libatomic_ops/Config.in"
+ Stephan>  source "package/libcap/Config.in"
+ Stephan>  source "package/libcap-ng/Config.in"
+ Stephan> diff --git a/package/gtest/Config.in b/package/gtest/Config.in
+ Stephan> new file mode 100644
+ Stephan> index 0000000..9064c6a
+ Stephan> --- /dev/null
+ Stephan> +++ b/package/gtest/Config.in
+ Stephan> @@ -0,0 +1,20 @@
+ Stephan> +config BR2_PACKAGE_GTEST
+ Stephan> +	bool "gtest"
+ Stephan> +	depends on BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && BR2_INSTALL_LIBSTDCPP
 
-Regards,
-Yann E. MORIN.
+We normally have seperate 'depends on' for each individual dependency.
+
+ Stephan> +	help
+ Stephan> +	  Google's framework for writing C++ tests on a variety of platforms (Linux,
+ Stephan> +	  Mac OS X, Windows, Cygwin, Windows CE, and Symbian). Based on the xUnit
+ Stephan> +	  architecture. Supports automatic test discovery, a rich set of assertions,
+ Stephan> +	  user-defined assertions, death tests, fatal and non-fatal failures, value-
+ Stephan> +	  and type-parameterized tests, various options for running the tests, and XML
+ Stephan> +	  test report generation.
+
+I've word wrapped this to fit inside ~70 chars.
+
+ Stephan> +comment "gtest requires a toolchain with c++, WCHAR and PTHREADS support"
+ Stephan> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+
+We normally just talk about threads support, as it can come from
+pthreads or nptl.
+
+ Stephan> diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+ Stephan> new file mode 100644
+ Stephan> index 0000000..4090c14
+ Stephan> --- /dev/null
+ Stephan> +++ b/package/gtest/gtest.mk
+ Stephan> @@ -0,0 +1,23 @@
+ Stephan> +#############################################################
+ Stephan> +#
+ Stephan> +# googletest
+ Stephan> +#
+ Stephan> +#############################################################
+ Stephan> +
+ Stephan> +GTEST_VERSION = 1.6.0
+ Stephan> +GTEST_SOURCE = gtest-1.6.0.zip
+
+This should be GTEST_SOURCE = gtest-$(GTEST_SOURCE).zip
+
+ Stephan> +GTEST_SITE = http://googletest.googlecode.com/files/
+ Stephan> +GTEST_INSTALL_STAGING = YES
+ Stephan> +GTEST_INSTALL_TARGET = NO
+ Stephan> +
+ Stephan> +define GTEST_EXTRACT_CMDS
+ Stephan> +	unzip  $(DL_DIR)/$(GTEST_SOURCE) -d $(BUILD_DIR)
+ Stephan> +endef
+
+Double space after unzip.
+
+Committed with these fixes, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
