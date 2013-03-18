@@ -1,51 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Mar 2013 16:20:33 +0100
-Subject: [Buildroot] nspr and aarch64 build issue
-In-Reply-To: <CABtOAfxeHbNeKc8eWfxaTLPgOeh10HmF2psbXnvZh9mLF0hKTg@mail.gmail.com>
-References: <CABtOAfxeHbNeKc8eWfxaTLPgOeh10HmF2psbXnvZh9mLF0hKTg@mail.gmail.com>
-Message-ID: <20130318162033.30fbd920@skate>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 18 Mar 2013 17:27:06 +0200
+Subject: [Buildroot] [PATCH] zeromq: add C++ bindings
+In-Reply-To: <1363618617-2969-1-git-send-email-spdawson@gmail.com>
+References: <1363618617-2969-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20130318152706.GV5654@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Khryukin,
+Hi Simon,
 
-On Mon, 18 Mar 2013 01:53:38 +0400, Alexander Khryukin wrote:
+On Mon, Mar 18, 2013 at 02:56:57PM +0000, spdawson at gmail.com wrote:
+> From: Simon Dawson <spdawson@gmail.com>
+> 
+> Now that zeromq has been bumped to version 3.2.2, we need to provide the
+> C++ bindings using separate packages. Two C++ bindings are provided by this
+> patch:
+> 
+>   * cppzmq is a very simple single-header binding
+>   * zmqpp is a high-level binding, implemented in C++ as a separate library
+> 
+> When the new "C++ bindings" option for zeromq is selected, both of these
+> C++ bindings are built and installed.
+> 
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> ---
 
->  drbg.c: In function 'RNG_RandomUpdate':
->  *drbg.c:516:5: error: size of array 'arg' is negative*
->  make[4]: ***
-> [Linux2.6_aarch64_glibc_PTH_OPT.OBJ/Linux_SINGLE_SHLIB/drbg.o] Error 1
->  make[4]: Leaving directory
-> `/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss/lib/freebl'
+[...]
 
-I sent a patch that should hopefully fix this. The BR2_ARCH_IS_64 was
-not selected on the AArch64 architecture, so the following bit of code
-in libnss.mk was not being triggered:
+> --- a/package/zeromq/Config.in
+> +++ b/package/zeromq/Config.in
+> @@ -1,9 +1,8 @@
+> -comment "zeromq requires a toolchain with C++, LARGEFILE + WCHAR support"
+> -	depends on !(BR2_INSTALL_LIBSTDCPP &&  BR2_LARGEFILE && BR2_USE_WCHAR)
+> +comment "zeromq requires a toolchain with LARGEFILE and WCHAR support"
+> +	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+>  
+>  config BR2_PACKAGE_ZEROMQ
+>  	bool "zeromq"
+> -	depends on BR2_INSTALL_LIBSTDCPP
 
-ifeq ($(BR2_ARCH_IS_64),y)
-LIBNSS_BUILD_VARS += USE_64=1
-endif
+Although only the C binding is bundled with zeromq, the library itself seems 
+to be implemented in C++, so this is not correct.
 
-However, I am rather surprised, because here, the build of libnspr
-(which is a dependency of libnss) doesn't work. I get:
+baruch
 
-In file included from ../../../dist/include/nspr/prtypes.h:26:0,
-                 from ../../../dist/include/nspr/pratom.h:14,
-                 from ../../../dist/include/nspr/nspr.h:9,
-                 from ../../../pr/include/private/primpl.h:39,
-                 from prfdcach.c:6:
-../../../dist/include/nspr/prcpucfg.h:817:2: error: #error "Unknown CPU architecture"
-
-Have you fixed this?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
