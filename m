@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Mar 2013 23:07:36 +0100
-Subject: [Buildroot] [PATCH 4/6] package/genimage: new host-only package
-In-Reply-To: <54a4d3e4cadf57b105adf8f8a216ebe846bcbeeb.1363544331.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 17 Mar 2013 19:19:43 +0100")
+Date: Mon, 18 Mar 2013 23:11:28 +0100
+Subject: [Buildroot] [PATCH 5/6] package/genpart: new host-only package
+In-Reply-To: <df62482b9becf843f11526c5c8117ff6a4043d56.1363544331.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 17 Mar 2013 19:19:44 +0100")
 References: <cover.1363544331.git.yann.morin.1998@free.fr>
  <cover.1363544331.git.yann.morin.1998@free.fr>
- <54a4d3e4cadf57b105adf8f8a216ebe846bcbeeb.1363544331.git.yann.morin.1998@free.fr>
-Message-ID: <87zjy0wedz.fsf@dell.be.48ers.dk>
+ <df62482b9becf843f11526c5c8117ff6a4043d56.1363544331.git.yann.morin.1998@free.fr>
+Message-ID: <87vc8owe7j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,46 +20,30 @@ To: buildroot@busybox.net
 
  Yann> ---
  Yann> Changes v1 -> v2:
- Yann>   - add license info (Thomas)
+ Yann>   - add due note about potential licensing issue (Thomas)
  Yann> ---
- Yann>  package/Config.in.host          |    1 +
- Yann>  package/genimage/Config.in.host |   12 ++++++++++++
- Yann>  package/genimage/genimage.mk    |   13 +++++++++++++
- Yann>  3 files changed, 26 insertions(+), 0 deletions(-)
- Yann>  create mode 100644 package/genimage/Config.in.host
- Yann>  create mode 100644 package/genimage/genimage.mk
+ Yann>  package/Config.in.host                        |    1 +
+ Yann>  package/genpart/Config.in.host                |    8 ++++++++
+ Yann>  package/genpart/genpart-fix-return-code.patch |   25 +++++++++++++++++++++++++
+ Yann>  package/genpart/genpart.mk                    |   18 ++++++++++++++++++
+ Yann>  4 files changed, 52 insertions(+), 0 deletions(-)
+ Yann>  create mode 100644 package/genpart/Config.in.host
+ Yann>  create mode 100644 package/genpart/genpart-fix-return-code.patch
+ Yann>  create mode 100644 package/genpart/genpart.mk
 
- Yann> diff --git a/package/Config.in.host b/package/Config.in.host
- Yann> index 43f292c..c456d5d 100644
- Yann> --- a/package/Config.in.host
- Yann> +++ b/package/Config.in.host
- Yann> @@ -3,6 +3,7 @@ menu "Host utilities"
- Yann>  source "package/dfu-util/Config.in.host"
- Yann>  source "package/dosfstools/Config.in.host"
- Yann>  source "package/e2fsprogs/Config.in.host"
- Yann> +source "package/genimage/Config.in.host"
- Yann>  source "package/lpc3250loader/Config.in.host"
- Yann>  source "package/omap-u-boot-utils/Config.in.host"
- Yann>  source "package/openocd/Config.in.host"
- Yann> diff --git a/package/genimage/Config.in.host b/package/genimage/Config.in.host
+ Yann> diff --git a/package/genpart/genpart-fix-return-code.patch b/package/genpart/genpart-fix-return-code.patch
  Yann> new file mode 100644
- Yann> index 0000000..cfa267c
+ Yann> index 0000000..ec18c82
  Yann> --- /dev/null
- Yann> +++ b/package/genimage/Config.in.host
- Yann> @@ -0,0 +1,12 @@
- Yann> +config BR2_PACKAGE_HOST_GENIMAGE
- Yann> +	bool "host genimage"
- Yann> +	help
- Yann> +	  genimage is a tool to generate multiple filesystem and flash images
- Yann> +	  from a given root filesystem tree. genimage is intended to be run
- Yann> +	  in a fakeroot environment.
- Yann> +	  
- Yann> +	  Configuration is done is a config file parsed by libconfuse. Options
- Yann> +	  like the path to tools can be given in environment variables, the config
- Yann> +	  file or commandline switches.
- Yann> +	  
+ Yann> +++ b/package/genpart/genpart-fix-return-code.patch
+ Yann> @@ -0,0 +1,25 @@
+ Yann> +genpart: return 0 if partition writen OK, with no do_magic
+ Yann> +
+ Yann> +If do_magic is false, we don't won't write the 0xaa55 magic.
 
-The help text lines are too long. Committed with that fixed, thanks.
+s/don't//
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
