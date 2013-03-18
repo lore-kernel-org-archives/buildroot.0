@@ -1,41 +1,70 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 18 Mar 2013 09:42:05 +0000
-Subject: [Buildroot] [PATCH] zeromq: require IPv6 support in toolchain
-Message-ID: <1363599725-23511-1-git-send-email-spdawson@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Mar 2013 10:43:10 +0100
+Subject: [Buildroot] [PATCH 4/5] flite: new package
+In-Reply-To: <87vc8p3dfs.fsf@dell.be.48ers.dk>
+References: <cover.1363063832.git.s.martin49@gmail.com>
+ <cover.1363063832.git.s.martin49@gmail.com>
+ <359a800fb351cc1d10532e184d9dc7d30c5cd991.1363063832.git.s.martin49@gmail.com>
+ <87vc8p3dfs.fsf@dell.be.48ers.dk>
+Message-ID: <20130318104310.718e14d0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
 
-The zeromq package was recently bumped from version 2.2.0 to version 3.2.2,
-which has introduced a requirement for IPv6 support in the toolchain. At
-present, IPv6 support is mandatory in zeromq: there is no configuration option
-to enable/disable the feature.
+On Sun, 17 Mar 2013 22:48:39 +0100, Peter Korsgaard wrote:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/zeromq/Config.in |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+>  Samuel> +FLITE_CONF_OPT = \
+>  Samuel> +	$(if $(BR2_PREFER_STATIC_LIB),,--enable-shared)
+> 
+> We're already pass --enable-shared in the autotools infrastructure, so
+> why is this needed?
 
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-index b7dc8a6..f93ab5d 100644
---- a/package/zeromq/Config.in
-+++ b/package/zeromq/Config.in
-@@ -1,9 +1,10 @@
--comment "zeromq requires a toolchain with C++, LARGEFILE + WCHAR support"
--	depends on !(BR2_INSTALL_LIBSTDCPP &&  BR2_LARGEFILE && BR2_USE_WCHAR)
-+comment "zeromq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE && BR2_USE_WCHAR)
- 
- config BR2_PACKAGE_ZEROMQ
- 	bool "zeromq"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_INET_IPV6
- 	depends on BR2_LARGEFILE # util-linux
- 	depends on BR2_USE_WCHAR # util-linux
- 	select BR2_PACKAGE_UTIL_LINUX
+I've tested without this part, and the package builds fine, so I'm
+also not sure why it's needed.
+
+>  Samuel> +
+>  Samuel> +FLITE_INSTALL_STAGING_OPT = \
+>  Samuel> +	INSTALLBINDIR=$(STAGING_DIR)/usr/bin \
+>  Samuel> +	INSTALLLIBDIR=$(STAGING_DIR)/usr/lib \
+>  Samuel> +	INSTALLINCDIR=$(STAGING_DIR)/usr/include/flite \
+>  Samuel> +	install
+>  Samuel> +
+>  Samuel> +FLITE_INSTALL_TARGET_OPT = \
+>  Samuel> +	INSTALLBINDIR=$(TARGET_DIR)/usr/bin \
+>  Samuel> +	INSTALLLIBDIR=$(TARGET_DIR)/usr/lib \
+>  Samuel> +	INSTALLINCDIR=$(TARGET_DIR)/usr/include/flite \
+>  Samuel> +	install
+> 
+> It could be good with a note about why this is needed (E.G. flite
+> used a handwritten a Makefile which doesn't handle DESTDIR even
+> though it uses autoconf).
+
+Another option is to add a patch like:
+
+Index: b/config/config.in
+===================================================================
+--- a/config/config.in
++++ b/config/config.in
+@@ -49,6 +49,6 @@
+ prefix        = @prefix@
+ exec_prefix   = @exec_prefix@
+ EXEEXT	      = @EXEEXT@
+-INSTALLBINDIR = @bindir@
+-INSTALLLIBDIR = @libdir@
+-INSTALLINCDIR = @includedir@/flite
++INSTALLBINDIR = $(DESTDIR)@bindir@
++INSTALLLIBDIR = $(DESTDIR)@libdir@
++INSTALLINCDIR = $(DESTDIR)@includedir@/flite
+
+That said, the project hasn't done any release since 2009, so the
+chances of getting this upstream are pretty small...
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
