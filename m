@@ -1,27 +1,35 @@
-From: Alexander Lukichev <alexander.lukichev@gmail.com>
-Date: Mon, 18 Mar 2013 14:54:58 +0200
-Subject: [Buildroot] Problems with zeromq 3.2.2
-In-Reply-To: <CAAHaz6HmMaXNjSh_ZsqWDaOe3Ajm0kFhyPd0PxMCHsBys967JA@mail.gmail.com>
-References: <CAHt8ZCM0W1Lnn4LotB8QYp90J3CgUjR4VL17WnPLum6M9Q0E8Q@mail.gmail.com>
- <CAAHaz6HmMaXNjSh_ZsqWDaOe3Ajm0kFhyPd0PxMCHsBys967JA@mail.gmail.com>
-Message-ID: <CAAHaz6HMukALkp6H32KRWrp8+LPOoiuqCpEfS=8uqLc6thRhPg@mail.gmail.com>
+From: Jesper Baekdahl <jbb@gamblify.com>
+Date: Mon, 18 Mar 2013 13:52:57 +0100
+Subject: [Buildroot] [PATCH 017/120] xapp_sessreg: bump revision to X11R7.7
+In-Reply-To: <1363611219-26971-1-git-send-email-jbb@gamblify.com>
+References: <1363611219-26971-1-git-send-email-jbb@gamblify.com>
+Message-ID: <1363611219-26971-18-git-send-email-jbb@gamblify.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Simon!
+From: Will Wagner <will_wagner@carallon.com>
 
-2013/3/18 Alexander Lukichev <alexander.lukichev@gmail.com>
-> you use C++ bindings. That was bundled with zmq-2.x but as the
-> library itself is written in C language
-Ooops. I mean, the library API is expressed in C (the source
-is in C++).
+Signed-off-by: Will Wagner <will_wagner@carallon.com>
+Signed-off-by: Jesper Baekdahl <jbb@gamblify.com>
+---
+ package/x11r7/xapp_sessreg/xapp_sessreg.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---
-Best regards,
-  Alexander Lukichev
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130318/198bdd60/attachment.html>
+diff --git a/package/x11r7/xapp_sessreg/xapp_sessreg.mk b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
+index 6b0fbde..6f7fd88 100644
+--- a/package/x11r7/xapp_sessreg/xapp_sessreg.mk
++++ b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XAPP_SESSREG_VERSION = 1.0.6
++XAPP_SESSREG_VERSION = 1.0.7
+ XAPP_SESSREG_SOURCE = sessreg-$(XAPP_SESSREG_VERSION).tar.bz2
+ XAPP_SESSREG_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_SESSREG_DEPENDENCIES = xlib_libX11 xproto_xproto
+-- 
+1.7.10.4
