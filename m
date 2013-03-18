@@ -1,183 +1,118 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Mar 2013 21:19:44 +0100
-Subject: [Buildroot] [PATCHv4] Added package HPLIP for printing to HP
-	printers
-In-Reply-To: <1363372025-10592-1-git-send-email-olivier.schonken@gmail.com>
- (Olivier Schonken's message of "Fri, 15 Mar 2013 20:27:05 +0200")
-References: <1362243769-8714-1-git-send-email-olivier.schonken@gmail.com>
- <1363372025-10592-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <87r4jczcin.fsf@dell.be.48ers.dk>
+From: Charles Manning <cdhmanning@gmail.com>
+Date: Tue, 19 Mar 2013 09:28:53 +1300
+Subject: [Buildroot] Package overriding
+In-Reply-To: <20130318100842.17dc0b01@skate>
+References: <CAE21AQraBRp3_94Td_Gw+D9NML+-X0e+2U=cwR979ww99_aJ=w@mail.gmail.com>
+ <20130318100842.17dc0b01@skate>
+Message-ID: <CAE21AQqhh24gSZXTNy0fv0_CTZmeit8o+juhkYViet4PRxiHcQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "O" == Olivier Schonken <olivier.schonken@gmail.com> writes:
+On Mon, Mar 18, 2013 at 10:08 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Charles Manning,
+>
+> On Mon, 18 Mar 2013 15:33:27 +1300, Charles Manning wrote:
+>
+>> It seems to me that the package override feature is misnamed and has
+>> some shortcomings.
+>>
+>> First off, the name is, IMHO, poor. Package Override is applied before
+>> tha packages are parsed. It does not override them. Instead it is
+>> really overriding configurations before the packages are read. Perhaps
+>> it should really be called CONFIG_OVERRIDE?
+>>
+>> There is also a deficiency in that Package Override cannot override
+>> anything set up in the packages.
+>
+> Yes. The idea is that the "package override file" use special variables
+> when it needs to override something from a package recipe. For now, the
+> only special variable available is <pkg>_OVERRIDE_SRCDIR. It actually
+> does more than just overriding the source directory: it also changes
+> the behavior of the package infrastructure: instead of
+> download/extract/patch, it switches to just use the provided source
+> directory.
+>
+>> For example, I recently needed to add two more configuration lines to
+>> building bluez_utils.
+>>
+>> Instead of:
+>>
+>> BLUEZ_UTILS_CONF_OPT = --enable-test --enable-tools
+>> I wanted
+>> BLUEZ_UTILS_CONF_OPT = --enable-test --enable-tools --enable-bccmd --enable-dund
+>
+> Yes, the current override mechanism doesn't support this.
+>
+>> A logical way I can see to do this would be to have a mechanism
+>> similar to Package Override but that is applied after the packages are
+>> parsed.
+>>
+>> --- Makefile  (revision 20385)
+>> +++ Makefile  (working copy)
+>
+> Using Subversion ? :-)
+>
+>> @@ -319,11 +319,20 @@
+>>  -include $(PACKAGE_OVERRIDE_FILE)
+>>  endif
+>>
+>>  include package/*/*.mk
+>>  include boot/common.mk
+>>  include linux/linux.mk
+>>
+>> +POST_PACKAGE_OVERRIDE_FILE=$(call qstrip,$(BR2_POST_PACKAGE_OVERRIDE_FILE))
+>> +ifneq ($(POST_PACKAGE_OVERRIDE_FILE),)
+>> +-include $(POST_PACKAGE_OVERRIDE_FILE)
+>> +endif
+>> +
+>> +
+>>
+>> Then have POST_PACKAGE_OVERRIDE_FILE point to a file which has
+>>
+>> # Add bluez_utils options we need
+>> BLUEZ_UTILS_CONF_OPT +=  --enable-bccmd --enable-dund
+>>
+>> Does that sound useful?
+>
+> Does this actually work?
 
- O> HPLIP (Hewlett-Packard Linux Imaging & Printing) is an HP-developed
- O> solution for printing, scanning, and faxing with HP inkjet and laser
- O> based printers in Linux.
+Yes this actually works.
 
- O> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
- O> ---
- O> Changelog:
- O> The --includedir=$(STAGING_DIR)/usr/include is unfortunately necessary even
- O> with the modified Makefile.am for a succesful build.
-
- O> Created a menu for cups related components to be kept close together.
-
- O> Fixed a jpeg and dbus dependencies, Thanks for pointing out the dbus
- O> dependency Baruch.
-
- O> Added Licensing information
-
- O>  package/Config.in                  |    3 ++
- O>  package/hplip/Config.in            |   15 ++++++++
- O>  package/hplip/hplip-fix-make.patch |   74 ++++++++++++++++++++++++++++++++++++
- O>  package/hplip/hplip.mk             |   54 ++++++++++++++++++++++++++
- O>  4 files changed, 146 insertions(+)
- O>  create mode 100644 package/hplip/Config.in
- O>  create mode 100644 package/hplip/hplip-fix-make.patch
- O>  create mode 100644 package/hplip/hplip.mk
-
- O> diff --git a/package/Config.in b/package/Config.in
- O> index a65054c..21c3ec9 100644
- O> --- a/package/Config.in
- O> +++ b/package/Config.in
- O> @@ -631,7 +631,10 @@ source "package/can-utils/Config.in"
- O>  source "package/connman/Config.in"
- O>  source "package/ctorrent/Config.in"
- O>  source "package/conntrack-tools/Config.in"
- O> +menu "cups (common unix printing system)"
- O>  source "package/cups/Config.in"
- O> +source "package/hplip/Config.in"
- O> +endmenu #cups
-
-With only a single sub package I don't think the menu makes sense (but
-keep hplip right after cups).
-
-
- O>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- O>  source "package/dhcp/Config.in"
- O>  endif
- O> diff --git a/package/hplip/Config.in b/package/hplip/Config.in
- O> new file mode 100644
- O> index 0000000..4c673e6
- O> --- /dev/null
- O> +++ b/package/hplip/Config.in
- O> @@ -0,0 +1,15 @@
- O> +config BR2_PACKAGE_HPLIP
- O> +	bool "hplip"
- O> +	depends on BR2_PACKAGE_CUPS
- O> +	select BR2_PACKAGE_LIBUSB
- O> +	select BR2_PACKAGE_JPEG
-
-It needs atleast C++ support as well:
-
-checking whether the C++ compiler works... no
-configure: error: in `/home/peko/source/buildroot/output/build/hplip-3.12.11':
-configure: error: C++ compiler cannot create executables
-See `config.log' for more details
-
-Please check with a minimal build to ensure you have all dependencies.
-
-
- O> +	help
- O> +	  HP Linux Imaging and Printing (HPLIP)
- O> +	  HPLIP is an HP-developed solution for printing, scanning, and faxing
- O> +	  with HP inkjet and laser based printers in Linux. The HPLIP project 
- O> +	  provides printing support for 2,211 printer models, including 
- O> +	  Deskjet, Officejet, Photosmart, PSC (Print Scan Copy), Business 
- O> +	  Inkjet, LaserJet, Edgeline MFP, and LaserJet MFP. 
- O> +	  
- O> +	  http://hplipopensource.com/
- O> +
-
-You have a number of trailing spaces and an extra empty line at the
-bottom here.
-
- O> diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
- O> new file mode 100644
- O> index 0000000..2d62392
- O> --- /dev/null
- O> +++ b/package/hplip/hplip.mk
- O> @@ -0,0 +1,54 @@
- O> +#############################################################
- O> +#
- O> +# hplip
- O> +#
- O> +#############################################################
- O> +
- O> +HPLIP_VERSION = 3.12.11
-
-Latest version is 3.13.3. Any reason why you are not using that?
-
- O> +HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip/
-
-That URL doesn't work. It seems like it should be:
-
-http://prdownloads.sourceforge.net/hplip/
+If you set this up in PACKAGE_OVERRIDE the " BLUEZ_UTILS_CONF_OPT =
+..." line in bluez_utils wipes out the settings.
 
 
- O> +HPLIP_AUTORECONF = YES
- O> +HPLIP_DEPENDENCIES = cups libusb jpeg
- O> +HPLIP_LICENSE = GPLv2 BSD-3c MIT
- O> +HPLIP_LICENSE_FILES = COPYING
- O> +
- O> +HPLIP_CONF_OPT = \
- O> +	--disable-qt4 \
- O> +	--disable-scan-build \
- O> +	--disable-gui-build \
- O> +	--disable-doc-build \
- O> +	--disable-network-build \
- O> +	--enable-hpcups-install \
- O> +	--disable-hpijs-install \
- O> +	--enable-cups-ppd-install \
- O> +	--enable-cups-drv-install \
- O> +	--disable-foomatic-ppd-install \
- O> +	--disable-foomatic-drv-install \
- O> +	--disable-foomatic-rip-hplip-install \
- O> +	--enable-new-hpcups \
- O> +	--enable-lite-build \
- O> +	--with-sysroot=$(STAGING_DIR) \
- O> +	--includedir=$(STAGING_DIR)/usr/include
+>
+> The potential problem I see is that the package variables
+> (<pkg>_BLABLA) are defined in the package .mk file and then used when
+> the generic-package, autotools-package or cmake-package macros are
+> expanded. I'm a bit lost as to whether those <pkg>_BLABLA variables are
+> actually used when the package macros are expanded, or when the
+> functions defined by the package macros are executed. This would have
+> to be verified, or confirmed by someone who is more capable than me in
+> understanding how many dollar signs are needed to make this work :)
+>
+> Also, will this work to override the source directory? We definitely
+> don't want to have two different mechanisms to override stuff.
 
-We do have qt4, sane, polkit and python in buildroot, so optional
-support for these would be nice (but isn't essential).
+It really depends on what you're overriding.
 
- O> +
- O> +ifeq ($(BR2_PACKAGE_DBUS),y)
- O> +	HPLIP_CONF_OPT += --enable-dbus-build 
- O> +	HPLIP_DEPENDENCIES += dbus
- O> +else
- O> +	HPLIP_CONF_OPT += --disable-dbus-build 
- O> +endif
+If you're overriding config stuff (before package/* gets parsed) then
+the current PACKAGE_OVERRIDE works file.
 
-Again trailing spaces for both.
+For instance, I sent the .config to  use HEAD as the revision for
+various source fetches but then use a revison override file to set
+them to the desired revisions.
 
+Unfortunately it would seem that there is not just one place where you
+can do all overriding, hence my proposal for adding another mechanism
+**after** the packages to tweak them.
 
- O> +
- O> +define HPLIP_POST_INSTALL_TARGET_FIXUP
- O> +	mkdir -p $(TARGET_DIR)/usr/share/hplip/data/models
- O> +	cp $(@D)/data/models/* $(TARGET_DIR)/usr/share/hplip/data/models
- O> +endef
- O> +HPLIP_POST_INSTALL_TARGET_HOOKS += HPLIP_POST_INSTALL_TARGET_FIXUP
- O> +
- O> +define HPLIP_PRE_CONFIGURE_FIXUP
- O> +	touch $(@D)/AUTHORS
- O> +	touch $(@D)/ChangeLog
- O> +	touch $(@D)/CHANGES
- O> +	touch $(@D)/NEWS
- O> +	touch $(@D)/README
- O> +endef
- O> +HPLIP_PRE_CONFIGURE_HOOKS += HPLIP_PRE_CONFIGURE_FIXUP
+Even this will not do everything for all packages as make immediately
+uses some values and defers the evaluation of others.
 
-As far as I can see CHANGES isn't needed. It would be good with a
-comment explaining why it is needed (missing from tarball but needed to
-autoreconf).
-
-Care to fix these issues and resend?
-
--- 
-Bye, Peter Korsgaard
+-- Charles
