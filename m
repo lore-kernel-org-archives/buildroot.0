@@ -1,9 +1,9 @@
 From: Jesper Baekdahl <jbb@gamblify.com>
-Date: Mon, 18 Mar 2013 14:04:59 +0100
-Subject: [Buildroot] [PATCH 093/120] xlib_libXtst: bump revision to X11R7.7
+Date: Mon, 18 Mar 2013 14:04:55 +0100
+Subject: [Buildroot] [PATCH 089/120] xlib_libXmu: bump revision to X11R7.7
 In-Reply-To: <1363611926-27105-1-git-send-email-jbb@gamblify.com>
 References: <1363611926-27105-1-git-send-email-jbb@gamblify.com>
-Message-ID: <1363611926-27105-34-git-send-email-jbb@gamblify.com>
+Message-ID: <1363611926-27105-30-git-send-email-jbb@gamblify.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,21 @@ From: Will Wagner <will_wagner@carallon.com>
 Signed-off-by: Will Wagner <will_wagner@carallon.com>
 Signed-off-by: Jesper Baekdahl <jbb@gamblify.com>
 ---
- package/x11r7/xlib_libXtst/xlib_libXtst.mk |    2 +-
+ package/x11r7/xlib_libXmu/xlib_libXmu.mk |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.mk b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-index ea12389..8ca44b7 100644
---- a/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-+++ b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
+diff --git a/package/x11r7/xlib_libXmu/xlib_libXmu.mk b/package/x11r7/xlib_libXmu/xlib_libXmu.mk
+index ce20897..fd2a679 100644
+--- a/package/x11r7/xlib_libXmu/xlib_libXmu.mk
++++ b/package/x11r7/xlib_libXmu/xlib_libXmu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXTST_VERSION = 1.2.0
-+XLIB_LIBXTST_VERSION = 1.2.1
- XLIB_LIBXTST_SOURCE = libXtst-$(XLIB_LIBXTST_VERSION).tar.bz2
- XLIB_LIBXTST_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXTST_INSTALL_STAGING = YES
+-XLIB_LIBXMU_VERSION = 1.1.0
++XLIB_LIBXMU_VERSION = 1.1.1
+ XLIB_LIBXMU_SOURCE = libXmu-$(XLIB_LIBXMU_VERSION).tar.bz2
+ XLIB_LIBXMU_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXMU_INSTALL_STAGING = YES
 -- 
 1.7.10.4
