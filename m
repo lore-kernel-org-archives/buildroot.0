@@ -1,31 +1,62 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Mar 2013 16:58:21 +0100
-Subject: [Buildroot] [git commit] Mark AArch64 as a 64 bits architecture
-Message-ID: <20130318174847.ABBB79B166@busybox.osuosl.org>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Mon, 18 Mar 2013 21:56:14 +0400
+Subject: [Buildroot] nspr and aarch64 build issue
+In-Reply-To: <20130318162033.30fbd920@skate>
+References: <CABtOAfxeHbNeKc8eWfxaTLPgOeh10HmF2psbXnvZh9mLF0hKTg@mail.gmail.com>
+ <20130318162033.30fbd920@skate>
+Message-ID: <CABtOAfxbXDUq8XXPnMzpz7AEE9ZNfB1Kn--szudRnRbsiMySMA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8e7b4ae8d27f612684ce7e82b4d7c53b01c91567
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yes, fixed. I'll send patch in a short time
+18.03.2013 19:20 ???????????? "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> ???????:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- arch/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/arch/Config.in b/arch/Config.in
-index 472b10c..795f24f 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -25,6 +25,7 @@ config BR2_armeb
- 
- config BR2_aarch64
- 	bool "AArch64"
-+	select BR2_ARCH_IS_64
- 	help
- 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
- 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
+> Dear Alexander Khryukin,
+>
+> On Mon, 18 Mar 2013 01:53:38 +0400, Alexander Khryukin wrote:
+>
+> >  drbg.c: In function 'RNG_RandomUpdate':
+> >  *drbg.c:516:5: error: size of array 'arg' is negative*
+> >  make[4]: ***
+> > [Linux2.6_aarch64_glibc_PTH_OPT.OBJ/Linux_SINGLE_SHLIB/drbg.o] Error 1
+> >  make[4]: Leaving directory
+> >
+> `/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss/lib/freebl'
+>
+> I sent a patch that should hopefully fix this. The BR2_ARCH_IS_64 was
+> not selected on the AArch64 architecture, so the following bit of code
+> in libnss.mk was not being triggered:
+>
+> ifeq ($(BR2_ARCH_IS_64),y)
+> LIBNSS_BUILD_VARS += USE_64=1
+> endif
+>
+> However, I am rather surprised, because here, the build of libnspr
+> (which is a dependency of libnss) doesn't work. I get:
+>
+> In file included from ../../../dist/include/nspr/prtypes.h:26:0,
+>                  from ../../../dist/include/nspr/pratom.h:14,
+>                  from ../../../dist/include/nspr/nspr.h:9,
+>                  from ../../../pr/include/private/primpl.h:39,
+>                  from prfdcach.c:6:
+> ../../../dist/include/nspr/prcpucfg.h:817:2: error: #error "Unknown CPU
+> architecture"
+>
+> Have you fixed this?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130318/d5a8ffdb/attachment.html>
