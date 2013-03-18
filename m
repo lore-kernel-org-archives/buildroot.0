@@ -1,41 +1,56 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Mar 2013 11:39:39 +0100
-Subject: [Buildroot] [git commit] zeromq: require IPv6 support in toolchain
-Message-ID: <20130318120456.19FA09B166@busybox.osuosl.org>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Mon, 18 Mar 2013 14:13:48 +0200
+Subject: [Buildroot] Problems with zeromq 3.2.2
+In-Reply-To: <CAHt8ZCM0W1Lnn4LotB8QYp90J3CgUjR4VL17WnPLum6M9Q0E8Q@mail.gmail.com>
+References: <CAHt8ZCM0W1Lnn4LotB8QYp90J3CgUjR4VL17WnPLum6M9Q0E8Q@mail.gmail.com>
+Message-ID: <CAAHaz6HmMaXNjSh_ZsqWDaOe3Ajm0kFhyPd0PxMCHsBys967JA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7f28c09767200dbf04cd1c87861370085188188
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi, Simon!
 
-The zeromq package was recently bumped from version 2.2.0 to version 3.2.2,
-which has introduced a requirement for IPv6 support in the toolchain. At
-present, IPv6 support is mandatory in zeromq: there is no configuration option
-to enable/disable the feature.
+2013/3/18 Simon Dawson <spdawson@gmail.com>
+> The zeromq package was recently bumped from version 2.2.0 to
+> version 3.2.2. Unfortunately, zeromq 3.x.x is not backward-compatible
+> with client code developed to use version 2.2.x.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/zeromq/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+  I should probably be blamed for this and I am sorry the version bump
+breaks your code (most probably, other people's too)!
 
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-index b7dc8a6..f93ab5d 100644
---- a/package/zeromq/Config.in
-+++ b/package/zeromq/Config.in
-@@ -1,9 +1,10 @@
--comment "zeromq requires a toolchain with C++, LARGEFILE + WCHAR support"
--	depends on !(BR2_INSTALL_LIBSTDCPP &&  BR2_LARGEFILE && BR2_USE_WCHAR)
-+comment "zeromq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE && BR2_USE_WCHAR)
- 
- config BR2_PACKAGE_ZEROMQ
- 	bool "zeromq"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_INET_IPV6
- 	depends on BR2_LARGEFILE # util-linux
- 	depends on BR2_USE_WCHAR # util-linux
- 	select BR2_PACKAGE_UTIL_LINUX
+  The ZeroMQ has moved from version 2.x to 3.2 almost a year ago and
+they tried hard not to break things. There is a migration guide for existing
+2.x-based code here http://www.zeromq.org/docs:3-1-upgrade It provides
+a header that helps preserve compatibility with both zmq-2.x and zmq-3.2.
+For example, CZMQ high-level wrapper (http://czmq.zeromq.org/) uses it
+to work with both versions of the library.
+
+> For example, it appears that the C++ binding has been removed, and is
+> now available as a separate project.
+
+  As I understand, the guide only will not help much in your case because
+you use C++ bindings. That was bundled with zmq-2.x but as the library
+itself is written in C language and the number of other language bindings
+has grown significantly (see the list here
+http://www.zeromq.org/bindings:_start ), C++ bindings were made into a
+separate project, just like other languages.
+
+> I'm wondering if we should have separate packages in Buildroot for
+> zeromq versions 2.2.x and "latest supported". Does anybody have any
+> objections? I suppose the alternative is to try to understand the
+> complex system of zeromq sub-projects, in order to re-instate the C++
+> binding which has been lost in the seemingly-innocuous version bump.
+
+  Maybe it would make sense to make an option to build and install bindings
+for C++ when a user selected ZeroMQ in configuration? What do you think?
+Bindings for other languages (Python? Perl?) may be installed in a similar
+fashion. This makes it more flexible for the user.
+
+--
+Best regards,
+  Alexander Lukichev
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130318/7a4d53da/attachment.html>
