@@ -1,9 +1,10 @@
 From: Jesper Baekdahl <jbb@gamblify.com>
-Date: Mon, 18 Mar 2013 14:05:00 +0100
-Subject: [Buildroot] [PATCH 094/120] xlib_libXv: bump revision to X11R7.7
+Date: Mon, 18 Mar 2013 14:05:05 +0100
+Subject: [Buildroot] [PATCH 099/120] xlib_libfontenc: bump revision to
+	X11R7.7
 In-Reply-To: <1363611926-27105-1-git-send-email-jbb@gamblify.com>
 References: <1363611926-27105-1-git-send-email-jbb@gamblify.com>
-Message-ID: <1363611926-27105-35-git-send-email-jbb@gamblify.com>
+Message-ID: <1363611926-27105-40-git-send-email-jbb@gamblify.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +16,21 @@ From: Will Wagner <will_wagner@carallon.com>
 Signed-off-by: Will Wagner <will_wagner@carallon.com>
 Signed-off-by: Jesper Baekdahl <jbb@gamblify.com>
 ---
- package/x11r7/xlib_libXv/xlib_libXv.mk |    2 +-
+ package/x11r7/xlib_libfontenc/xlib_libfontenc.mk |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xlib_libXv/xlib_libXv.mk b/package/x11r7/xlib_libXv/xlib_libXv.mk
-index 8d69217..06c1145 100644
---- a/package/x11r7/xlib_libXv/xlib_libXv.mk
-+++ b/package/x11r7/xlib_libXv/xlib_libXv.mk
+diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
+index 219cf7a..191db88 100644
+--- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
++++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXV_VERSION = 1.0.6
-+XLIB_LIBXV_VERSION = 1.0.7
- XLIB_LIBXV_SOURCE = libXv-$(XLIB_LIBXV_VERSION).tar.bz2
- XLIB_LIBXV_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXV_INSTALL_STAGING = YES
+-XLIB_LIBFONTENC_VERSION = 1.1.0
++XLIB_LIBFONTENC_VERSION = 1.1.1
+ XLIB_LIBFONTENC_SOURCE = libfontenc-$(XLIB_LIBFONTENC_VERSION).tar.bz2
+ XLIB_LIBFONTENC_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBFONTENC_INSTALL_STAGING = YES
 -- 
 1.7.10.4
