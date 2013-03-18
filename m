@@ -1,46 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Mar 2013 10:31:46 +0100
-Subject: [Buildroot] vlc: new package
-In-Reply-To: <CAML3pwX2xxx56p=xgHO=jP1oe4wL3DG9qyhHv+rR4dPJyXcpJQ@mail.gmail.com>
-References: <CAML3pwX2xxx56p=xgHO=jP1oe4wL3DG9qyhHv+rR4dPJyXcpJQ@mail.gmail.com>
-Message-ID: <20130318103146.7cc34b0e@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon, 18 Mar 2013 09:42:05 +0000
+Subject: [Buildroot] [PATCH] zeromq: require IPv6 support in toolchain
+Message-ID: <1363599725-23511-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear ??????? ???????,
+From: Simon Dawson <spdawson@gmail.com>
 
-On Thu, 14 Mar 2013 23:46:26 +0400, ??????? ??????? wrote:
+The zeromq package was recently bumped from version 2.2.0 to version 3.2.2,
+which has introduced a requirement for IPv6 support in the toolchain. At
+present, IPv6 support is mandatory in zeromq: there is no configuration option
+to enable/disable the feature.
 
-> I saw your patch for addition of vlc in Buildroot you posted back in
-> July 2012 here http://patchwork.ozlabs.org/patch/171335/
-> Since then there were no changes done so patch was not accepted.
-> 
-> I've done some minor changes for it to build successfully vlc in
-> buildroot from latest git.
-> You may find my changes in-lined below.
-> 
-> And at this point I'm wondering on how to proceed to get vlc support
-> in buildroot finally.
-> I see these options:
-> 
-> 1. You may incorporate my changes in your patch and post v7 in
-> mailing list. 2. I may do this re-spin and post v7 on your behalf.
-> 3. Or I may start from scratch based on your patch, split changes on
-> small parts (as was suggested by Thomas earlier) and post them
-> one-by-one.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/zeromq/Config.in |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-I think it would be really good if you could resend a complete new
-patch that integrates your changes. You can credit Ismael for the
-original work.
-
-Best regards,
-
-Thomas
+diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+index b7dc8a6..f93ab5d 100644
+--- a/package/zeromq/Config.in
++++ b/package/zeromq/Config.in
+@@ -1,9 +1,10 @@
+-comment "zeromq requires a toolchain with C++, LARGEFILE + WCHAR support"
+-	depends on !(BR2_INSTALL_LIBSTDCPP &&  BR2_LARGEFILE && BR2_USE_WCHAR)
++comment "zeromq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE && BR2_USE_WCHAR)
+ 
+ config BR2_PACKAGE_ZEROMQ
+ 	bool "zeromq"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_INET_IPV6
+ 	depends on BR2_LARGEFILE # util-linux
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	select BR2_PACKAGE_UTIL_LINUX
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10.4
