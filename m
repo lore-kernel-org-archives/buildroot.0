@@ -1,89 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Mar 2013 17:06:14 +0100
-Subject: [Buildroot] [PATCH] zeromq: add C++ bindings
-In-Reply-To: <1363618617-2969-1-git-send-email-spdawson@gmail.com>
-References: <1363618617-2969-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20130318170614.2c9d21f3@skate>
+Date: Mon, 18 Mar 2013 17:34:41 +0100
+Subject: [Buildroot] [PATCH 1/2] Added package enscript
+In-Reply-To: <1363535972-29959-1-git-send-email-olivier.schonken@gmail.com>
+References: <1363535972-29959-1-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <20130318173441.0e7fe442@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon,
+Dear Olivier Schonken,
 
-On Mon, 18 Mar 2013 14:56:57 +0000, spdawson at gmail.com wrote:
+On Sun, 17 Mar 2013 17:59:31 +0200, Olivier Schonken wrote:
 
-> diff --git a/package/Config.in b/package/Config.in
-> index 9853b06..9519852 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -495,6 +495,7 @@ source "package/mediastreamer/Config.in"
->  endmenu
->  
->  menu "Networking"
-> +source "package/cppzmq/Config.in"
->  source "package/glib-networking/Config.in"
->  source "package/libcgi/Config.in"
->  source "package/libcgicc/Config.in"
-> @@ -535,6 +536,7 @@ source "package/ortp/Config.in"
->  source "package/slirp/Config.in"
->  source "package/usbredir/Config.in"
->  source "package/zeromq/Config.in"
-> +source "package/zmqpp/Config.in"
->  endmenu
+>  menu "Interpreter languages and scripting"
+>  source "package/erlang/Config.in"
+> +source "package/enscript/Config.in"
+>  source "package/haserl/Config.in"
+>  source "package/jamvm/Config.in"
+>  source "package/lua/Config.in"
 
-You should probably submit two separate patches for the two separate
-packages.
+Even though strictly speaking, enscript is an interpreter, I don't
+think I would put it under the "Interpreter languages and scripting"
+section.
 
->  menu "Other"
-> diff --git a/package/cppzmq/Config.in b/package/cppzmq/Config.in
+> +config BR2_PACKAGE_ENSCRIPT
+> +	bool "enscript"
+> +	select BR2_PACKAGE_GETTEXT
+
+Why? You don't even have gettext as a dependency in the .mk file.
+Moreover, gettext handling is generally more complicated than just a
+simple select, see
+http://buildroot.org/downloads/manual/manual.html#_gettext_integration_and_interaction_with_packages.
+
+> diff --git a/package/enscript/enscript.mk b/package/enscript/enscript.mk
 > new file mode 100644
-> index 0000000..6ec168e
+> index 0000000..29fd6d4
 > --- /dev/null
-> +++ b/package/cppzmq/Config.in
-> @@ -0,0 +1,2 @@
-> +config BR2_PACKAGE_CPPZMQ
-> +	bool
+> +++ b/package/enscript/enscript.mk
+> @@ -0,0 +1,20 @@
+> +#############################################################
+> +#
+> +# enscript
+> +#
+> +#############################################################
+> +ENSCRIPT_VERSION = 1.6.6
 
-Why don't you make this a normal package?
+Nitpick: one empty line between header and first variable.
 
+> +ENSCRIPT_SITE = $(BR2_GNU_MIRROR)/enscript/
+> +ENSCRIPT_SOURCE = enscript-$(ENSCRIPT_VERSION).tar.gz
 
-> +CPPZMQ_INSTALL_TARGET = NO
+Line not needed.
 
-Not needed.
+> +ENSCRIPT_DEPENDENCIES = 
 
+Line not needed.
 
-> +config BR2_PACKAGE_ZEROMQ_CPP
-> +	bool "C++ bindings"
-> +	depends on BR2_PACKAGE_ZEROMQ
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	select BR2_PACKAGE_CPPZMQ
-> +	select BR2_PACKAGE_ZMQPP
-> +	help
-> +	  C++ bindings.
+> +ENSCRIPT_LICENSE = GPLv3
 
-I really believe cppzmq and zmqpp should be normal separate packages,
-that select the zeromq package. I don't see why we would "invert" the
-traditional logic we use for all packages.
+The license is really not GPLv3+ ?
 
-> new file mode 100644
-> index 0000000..954cf29
-> --- /dev/null
-> +++ b/package/zmqpp/Config.in
-> @@ -0,0 +1,2 @@
-> +config BR2_PACKAGE_ZMQPP
-> +	bool
+> +ENSCRIPT_LICENSE_FILES = COPYING
+> +
+> +#Enable pthread threads if toolchain supports threads
+> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS), y)
 
-Same thing for zmqpp.
+No space before the "y".
 
-> +define ZMQPP_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(ZMQPP_MAKE_ENV) $(MAKE) $(ZMQPP_MAKE_OPT) -C $(@D)
-> +endef
-
-I'm surprised, you're not passing CC, CXX and al. ? Not needed?
-
-Best regards,
+> +	ENSCRIPT_CONF_OPT += --enable-threads=pth
+> +else
+> +	ENSCRIPT_CONF_OPT += --disable-threads
+> +endif
+> +
+> +$(eval $(autotools-package))
 
 Thomas
 -- 
