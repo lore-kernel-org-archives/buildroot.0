@@ -1,89 +1,87 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Mar 2013 22:01:26 +0100
-Subject: [Buildroot] [PATCH] json-glib: new package
-In-Reply-To: <1361222943-1892-1-git-send-email-henrique@henriquecamargo.com>
- (Henrique Camargo's message of "Mon, 18 Feb 2013 18:29:03 -0300")
-References: <1361222943-1892-1-git-send-email-henrique@henriquecamargo.com>
-Message-ID: <87ehfczal5.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 18 Mar 2013 22:00:02 +0100
+Subject: [Buildroot] [git commit] json-glib: new package
+Message-ID: <20130318210058.81D659B169@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Henrique" == Henrique Camargo <henrique@henriquecamargo.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0a2a3c9cd6a873a0ca190c9f20e9a42a9d1df58a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Henrique> JSON-GLib is a library providing serialization and deserialization
- Henrique> support for the JavaScript Object Notation (JSON) format described by
- Henrique> RFC 4627.
+JSON-GLib is a library providing serialization and deserialization
+support for the JavaScript Object Notation (JSON) format described by
+RFC 4627.
 
- Henrique> https://live.gnome.org/JsonGlib/
+https://live.gnome.org/JsonGlib/
 
- Henrique> Signed-off-by: Henrique Camargo <henrique@henriquecamargo.com>
- Henrique> ---
- Henrique>  package/Config.in              |    1 +
- Henrique>  package/json-glib/Config.in    |   14 ++++++++++++++
- Henrique>  package/json-glib/json-glib.mk |   20 ++++++++++++++++++++
- Henrique>  3 files changed, 35 insertions(+)
- Henrique>  create mode 100644 package/json-glib/Config.in
- Henrique>  create mode 100644 package/json-glib/json-glib.mk
+[Peter: add license info, tweak help text]
+Signed-off-by: Henrique Camargo <henrique@henriquecamargo.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in              |    1 +
+ package/json-glib/Config.in    |   14 ++++++++++++++
+ package/json-glib/json-glib.mk |   21 +++++++++++++++++++++
+ 3 files changed, 36 insertions(+), 0 deletions(-)
 
- Henrique> diff --git a/package/Config.in b/package/Config.in
- Henrique> index 2fad94d..4959680 100644
- Henrique> --- a/package/Config.in
- Henrique> +++ b/package/Config.in
- Henrique> @@ -586,6 +586,7 @@ source "package/cjson/Config.in"
- Henrique>  source "package/expat/Config.in"
- Henrique>  source "package/ezxml/Config.in"
- Henrique>  source "package/json-c/Config.in"
- Henrique> +source "package/json-glib/Config.in"
- Henrique>  source "package/libroxml/Config.in"
- Henrique>  source "package/libxml-parser-perl/Config.in"
- Henrique>  source "package/libxml2/Config.in"
- Henrique> diff --git a/package/json-glib/Config.in b/package/json-glib/Config.in
- Henrique> new file mode 100644
- Henrique> index 0000000..f2e3a7c
- Henrique> --- /dev/null
- Henrique> +++ b/package/json-glib/Config.in
- Henrique> @@ -0,0 +1,14 @@
- Henrique> +config BR2_PACKAGE_JSON_GLIB
- Henrique> +	bool "json-glib"
- Henrique> +	depends on BR2_USE_WCHAR # glib2
- Henrique> +	select BR2_PACKAGE_LIBGLIB2
- Henrique> +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- Henrique> +	help
- Henrique> +	  JSON-GLib is a library providing serialization and deserialization
- Henrique> +	  support for the JavaScript Object Notation (JSON) format described by
- Henrique> +	  RFC 4627.
- Henrique> +
- Henrique> +	  https://live.gnome.org/JsonGlib/
-
-The help text lines are a bit too long.
-
- Henrique> diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
- Henrique> new file mode 100644
- Henrique> index 0000000..06e33ab
- Henrique> --- /dev/null
- Henrique> +++ b/package/json-glib/json-glib.mk
- Henrique> @@ -0,0 +1,20 @@
- Henrique> +#############################################################
- Henrique> +#
- Henrique> +# json-glib
- Henrique> +#
- Henrique> +#############################################################
- Henrique> +
- Henrique> +JSON_GLIB_MAJOR_VERSION = 0.14
- Henrique> +JSON_GLIB_MINOR_VERSION = 2
- Henrique> +JSON_GLIB_VERSION = $(JSON_GLIB_MAJOR_VERSION).$(JSON_GLIB_MINOR_VERSION)
- Henrique> +JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_MAJOR_VERSION)
- Henrique> +JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
- Henrique> +
- Henrique> +JSON_GLIB_INSTALL_STAGING = YES
- Henrique> +
-
-You're missing LICENSE / LICENSE_FILES lines.
-
-Committed with those fixes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index 10ce824..167eb5b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -597,6 +597,7 @@ source "package/cjson/Config.in"
+ source "package/expat/Config.in"
+ source "package/ezxml/Config.in"
+ source "package/json-c/Config.in"
++source "package/json-glib/Config.in"
+ source "package/libroxml/Config.in"
+ source "package/libxml-parser-perl/Config.in"
+ source "package/libxml2/Config.in"
+diff --git a/package/json-glib/Config.in b/package/json-glib/Config.in
+new file mode 100644
+index 0000000..3ebc76d
+--- /dev/null
++++ b/package/json-glib/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_JSON_GLIB
++	bool "json-glib"
++	depends on BR2_USE_WCHAR # glib2
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
++	help
++	  JSON-GLib is a library providing serialization and
++	  deserialization support for the JavaScript Object Notation
++	  (JSON) format described by RFC 4627.
++
++	  https://live.gnome.org/JsonGlib/
++
++comment "json-glib requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+new file mode 100644
+index 0000000..4e3f987
+--- /dev/null
++++ b/package/json-glib/json-glib.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# json-glib
++#
++#############################################################
++
++JSON_GLIB_MAJOR_VERSION = 0.14
++JSON_GLIB_MINOR_VERSION = 2
++JSON_GLIB_VERSION = $(JSON_GLIB_MAJOR_VERSION).$(JSON_GLIB_MINOR_VERSION)
++JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_MAJOR_VERSION)
++JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
++JSON_GLIB_LICENSE = LGPLv2.1+
++JSON_GLIB_LICENSE_FILES = COPYING
++JSON_GLIB_INSTALL_STAGING = YES
++
++JSON_GLIB_DEPENDENCIES = \
++	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
++	host-pkgconf \
++	libglib2
++
++$(eval $(autotools-package))
