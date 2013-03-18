@@ -1,53 +1,93 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 18 Mar 2013 17:27:06 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Mar 2013 17:06:14 +0100
 Subject: [Buildroot] [PATCH] zeromq: add C++ bindings
 In-Reply-To: <1363618617-2969-1-git-send-email-spdawson@gmail.com>
 References: <1363618617-2969-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20130318152706.GV5654@sapphire.tkos.co.il>
+Message-ID: <20130318170614.2c9d21f3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Simon,
+Simon,
 
-On Mon, Mar 18, 2013 at 02:56:57PM +0000, spdawson at gmail.com wrote:
-> From: Simon Dawson <spdawson@gmail.com>
-> 
-> Now that zeromq has been bumped to version 3.2.2, we need to provide the
-> C++ bindings using separate packages. Two C++ bindings are provided by this
-> patch:
-> 
->   * cppzmq is a very simple single-header binding
->   * zmqpp is a high-level binding, implemented in C++ as a separate library
-> 
-> When the new "C++ bindings" option for zeromq is selected, both of these
-> C++ bindings are built and installed.
-> 
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> ---
+On Mon, 18 Mar 2013 14:56:57 +0000, spdawson at gmail.com wrote:
 
-[...]
-
-> --- a/package/zeromq/Config.in
-> +++ b/package/zeromq/Config.in
-> @@ -1,9 +1,8 @@
-> -comment "zeromq requires a toolchain with C++, LARGEFILE + WCHAR support"
-> -	depends on !(BR2_INSTALL_LIBSTDCPP &&  BR2_LARGEFILE && BR2_USE_WCHAR)
-> +comment "zeromq requires a toolchain with LARGEFILE and WCHAR support"
-> +	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+> diff --git a/package/Config.in b/package/Config.in
+> index 9853b06..9519852 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -495,6 +495,7 @@ source "package/mediastreamer/Config.in"
+>  endmenu
 >  
->  config BR2_PACKAGE_ZEROMQ
->  	bool "zeromq"
-> -	depends on BR2_INSTALL_LIBSTDCPP
+>  menu "Networking"
+> +source "package/cppzmq/Config.in"
+>  source "package/glib-networking/Config.in"
+>  source "package/libcgi/Config.in"
+>  source "package/libcgicc/Config.in"
+> @@ -535,6 +536,7 @@ source "package/ortp/Config.in"
+>  source "package/slirp/Config.in"
+>  source "package/usbredir/Config.in"
+>  source "package/zeromq/Config.in"
+> +source "package/zmqpp/Config.in"
+>  endmenu
 
-Although only the C binding is bundled with zeromq, the library itself seems 
-to be implemented in C++, so this is not correct.
+You should probably submit two separate patches for the two separate
+packages.
 
-baruch
+>  menu "Other"
+> diff --git a/package/cppzmq/Config.in b/package/cppzmq/Config.in
+> new file mode 100644
+> index 0000000..6ec168e
+> --- /dev/null
+> +++ b/package/cppzmq/Config.in
+> @@ -0,0 +1,2 @@
+> +config BR2_PACKAGE_CPPZMQ
+> +	bool
 
+Why don't you make this a normal package?
+
+
+> +CPPZMQ_INSTALL_TARGET = NO
+
+Not needed.
+
+
+> +config BR2_PACKAGE_ZEROMQ_CPP
+> +	bool "C++ bindings"
+> +	depends on BR2_PACKAGE_ZEROMQ
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	select BR2_PACKAGE_CPPZMQ
+> +	select BR2_PACKAGE_ZMQPP
+> +	help
+> +	  C++ bindings.
+
+I really believe cppzmq and zmqpp should be normal separate packages,
+that select the zeromq package. I don't see why we would "invert" the
+traditional logic we use for all packages.
+
+> new file mode 100644
+> index 0000000..954cf29
+> --- /dev/null
+> +++ b/package/zmqpp/Config.in
+> @@ -0,0 +1,2 @@
+> +config BR2_PACKAGE_ZMQPP
+> +	bool
+
+Same thing for zmqpp.
+
+> +define ZMQPP_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(ZMQPP_MAKE_ENV) $(MAKE) $(ZMQPP_MAKE_OPT) -C $(@D)
+> +endef
+
+I'm surprised, you're not passing CC, CXX and al. ? Not needed?
+
+Best regards,
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
