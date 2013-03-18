@@ -1,24 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Mar 2013 22:45:35 +0100
-Subject: [Buildroot] [PATCH] pkg-autotools.mk: remove extra space from
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 18 Mar 2013 22:45:11 +0100
+Subject: [Buildroot] [git commit] pkg-autotools.mk: remove extra space from
 	config-update message
-In-Reply-To: <1363053511-9208-1-git-send-email-danomimanchego123@gmail.com>
- (Danomi Manchego's message of "Mon, 11 Mar 2013 21:58:31 -0400")
-References: <1363053511-9208-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <87li9kxtz4.fsf@dell.be.48ers.dk>
+Message-ID: <20130318214520.61D149B164@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=28bb03ac9d6c8cb73dc01451efcc02c8b87b0456
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Danomi> If you do a "make -s", you will notice that the
- Danomi> UPDATE_CONFIG_HOOK message has an extra space compared to other
- Danomi> highlighted messages. ?For example:
+If you do a "make -s", you will notice that the UPDATE_CONFIG_HOOK message
+has an extra space compared to other highlighted messages. ??For example:
 
-Committed, thanks.
+>>> util-linux 2.20.1 ??Updating config.sub and config.guess
+>>> util-linux 2.20.1 Patching libtool
+>>> util-linux 2.20.1 Autoreconfiguring
 
--- 
-Bye, Peter Korsgaard
+A grep shows this is the only instance of the extra space. This patch
+removes the extra space.
+
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/pkg-autotools.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 890506b..995c685 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -145,7 +145,7 @@ endif
+ # Hook to update config.sub and config.guess if needed
+ #
+ define UPDATE_CONFIG_HOOK
+-       @$$(call MESSAGE, "Updating config.sub and config.guess")
++       @$$(call MESSAGE,"Updating config.sub and config.guess")
+        $$(call CONFIG_UPDATE,$$(@D))
+ endef
+ 
