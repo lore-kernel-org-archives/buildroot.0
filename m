@@ -1,48 +1,42 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Mar 2013 23:01:32 +0100
-Subject: [Buildroot] [git commit] package/e2fsprogs: add host-package
-	selection
-Message-ID: <20130318221419.9100B9B173@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 18 Mar 2013 23:17:10 +0100
+Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: do not depend on
+	the top-level Buildroot's .config
+In-Reply-To: <1363644183-29242-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Mon, 18 Mar 2013 23:03:03 +0100")
+References: <1363644183-29242-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87mwu0wdy1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=59d1fe58fac77ae6d4e574719b48475c8030ed07
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Add the e2fsprogs as a host-package selection in the menuconfig.
+ Yann> Previously, the crosstool-NG backend did depend on the top-level
+ Yann> Buildroot's .config to detect changes in the toolchain options,
+ Yann> using a tentatively-clever heuristic, which also included the full
+ Yann> Buildroot's version string to push down to set the components' versions
+ Yann> strings.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in.host           |    1 +
- package/e2fsprogs/Config.in.host |    6 ++++++
- 2 files changed, 7 insertions(+), 0 deletions(-)
+ Yann> In doing so, any commit in the Buildroot tree would imply a complete
+ Yann> rebuild of the toolchain, even in the case the toolchain options did
+ Yann> not change, thus being a large annoyance (to say the least).
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 79050f2..8813f5b 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,6 +1,7 @@
- menu "Host utilities"
- 
- source "package/dfu-util/Config.in.host"
-+source "package/e2fsprogs/Config.in.host"
- source "package/lpc3250loader/Config.in.host"
- source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
-diff --git a/package/e2fsprogs/Config.in.host b/package/e2fsprogs/Config.in.host
-new file mode 100644
-index 0000000..ea6a0bd
---- /dev/null
-+++ b/package/e2fsprogs/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_E2FSPROGS
-+	bool "host e2fsprogs"
-+	help
-+	  The EXT2 file system utilities.
-+	  
-+	  http://e2fsprogs.sf.net
+ Yann> As Buildroot never guaranteed that toolchain options would be detected,
+ Yann> even less handled, and that the internal backend does neither detect nor
+ Yann> act on toolchain options changes, and delegate that to the user, there
+ Yann> is no point in individualising the crosstool-NG backend's behaviour.
+
+ Yann> This reasoning also applies to the depdency on the crosstool-NG's bundled
+ Yann> .config file, too.
+
+ Yann> So, just drop the not-so-clever heuristic, and just build the toolchain
+ Yann> once, leaving to the user the responsibility to explictly ask Buildroot
+ Yann> to rebuild the toolchain.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
