@@ -1,9 +1,10 @@
 From: Jesper Baekdahl <jbb@gamblify.com>
-Date: Mon, 18 Mar 2013 13:52:44 +0100
-Subject: [Buildroot] [PATCH 004/120] xlib_libXp: removed in X11R7.7
+Date: Mon, 18 Mar 2013 13:52:45 +0100
+Subject: [Buildroot] [PATCH 005/120] xlib_libXprintAppUtil: removed in
+	X11R7.7
 In-Reply-To: <1363611219-26971-1-git-send-email-jbb@gamblify.com>
 References: <1363611219-26971-1-git-send-email-jbb@gamblify.com>
-Message-ID: <1363611219-26971-5-git-send-email-jbb@gamblify.com>
+Message-ID: <1363611219-26971-6-git-send-email-jbb@gamblify.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,109 +16,55 @@ From: Will Wagner <will_wagner@carallon.com>
 Signed-off-by: Will Wagner <will_wagner@carallon.com>
 Signed-off-by: Jesper Baekdahl <jbb@gamblify.com>
 ---
- package/x11r7/Config.in                      |    1 -
- package/x11r7/xapp_xdpyinfo/Config.in        |    1 -
- package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk |    2 +-
- package/x11r7/xlib_libXaw/Config.in          |    1 -
- package/x11r7/xlib_libXaw/xlib_libXaw.mk     |    2 +-
- package/x11r7/xlib_libXp/Config.in           |    8 --------
- package/x11r7/xlib_libXp/xlib_libXp.mk       |   14 --------------
- 7 files changed, 2 insertions(+), 27 deletions(-)
- delete mode 100644 package/x11r7/xlib_libXp/Config.in
- delete mode 100644 package/x11r7/xlib_libXp/xlib_libXp.mk
+ package/x11r7/Config.in                                   |    1 -
+ package/x11r7/xlib_libXprintAppUtil/Config.in             |    7 -------
+ .../x11r7/xlib_libXprintAppUtil/xlib_libXprintAppUtil.mk  |   13 -------------
+ 3 files changed, 21 deletions(-)
+ delete mode 100644 package/x11r7/xlib_libXprintAppUtil/Config.in
+ delete mode 100644 package/x11r7/xlib_libXprintAppUtil/xlib_libXprintAppUtil.mk
 
 diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 8f0d679..1e647c3 100644
+index 1e647c3..8e44112 100644
 --- a/package/x11r7/Config.in
 +++ b/package/x11r7/Config.in
-@@ -36,7 +36,6 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xlib_libXi/Config.in
+@@ -37,7 +37,6 @@ if BR2_PACKAGE_XORG7
  		source package/x11r7/xlib_libXinerama/Config.in
  		source package/x11r7/xlib_libXmu/Config.in
--		source package/x11r7/xlib_libXp/Config.in
  		source package/x11r7/xlib_libXpm/Config.in
- 		source package/x11r7/xlib_libXprintAppUtil/Config.in
+-		source package/x11r7/xlib_libXprintAppUtil/Config.in
  		source package/x11r7/xlib_libXprintUtil/Config.in
-diff --git a/package/x11r7/xapp_xdpyinfo/Config.in b/package/x11r7/xapp_xdpyinfo/Config.in
-index e6ff686..9b19ad3 100644
---- a/package/x11r7/xapp_xdpyinfo/Config.in
-+++ b/package/x11r7/xapp_xdpyinfo/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_XAPP_XDPYINFO
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_XLIB_LIBXI
--	select BR2_PACKAGE_XLIB_LIBXP
- 	select BR2_PACKAGE_XLIB_LIBXRENDER
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	select BR2_PACKAGE_XLIB_LIBXXF86DGA
-diff --git a/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk b/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
-index fea4fb0..2134eca 100644
---- a/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
-+++ b/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
-@@ -7,6 +7,6 @@
- XAPP_XDPYINFO_VERSION = 1.2.0
- XAPP_XDPYINFO_SOURCE = xdpyinfo-$(XAPP_XDPYINFO_VERSION).tar.bz2
- XAPP_XDPYINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
--XAPP_XDPYINFO_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXi xlib_libXp xlib_libXrender xlib_libXtst xlib_libXxf86dga xlib_libXxf86vm xproto_inputproto xproto_kbproto xproto_printproto xproto_renderproto xproto_xf86dgaproto xproto_xf86vidmodeproto xlib_libdmx
-+XAPP_XDPYINFO_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXi xlib_libXrender xlib_libXtst xlib_libXxf86dga xlib_libXxf86vm xproto_inputproto xproto_kbproto xproto_printproto xproto_renderproto xproto_xf86dgaproto xproto_xf86vidmodeproto xlib_libdmx
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xlib_libXaw/Config.in b/package/x11r7/xlib_libXaw/Config.in
-index 1c10bc0..3695bb6 100644
---- a/package/x11r7/xlib_libXaw/Config.in
-+++ b/package/x11r7/xlib_libXaw/Config.in
-@@ -5,6 +5,5 @@ config BR2_PACKAGE_XLIB_LIBXAW
- 	select BR2_PACKAGE_XLIB_LIBXMU
- 	select BR2_PACKAGE_XLIB_LIBXPM
- 	select BR2_PACKAGE_XPROTO_XPROTO
--	select BR2_PACKAGE_XLIB_LIBXP
- 	help
- 	  X.Org Xaw library
-diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.mk b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-index 6c8a681..d5b8049 100644
---- a/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-+++ b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-@@ -8,7 +8,7 @@ XLIB_LIBXAW_VERSION = 1.0.9
- XLIB_LIBXAW_SOURCE = libXaw-$(XLIB_LIBXAW_VERSION).tar.bz2
- XLIB_LIBXAW_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXAW_INSTALL_STAGING = YES
--XLIB_LIBXAW_DEPENDENCIES = xlib_libX11 xlib_libXt xlib_libXmu xlib_libXpm xproto_xproto xlib_libXp
-+XLIB_LIBXAW_DEPENDENCIES = xlib_libX11 xlib_libXt xlib_libXmu xlib_libXpm xproto_xproto
- XLIB_LIBXAW_CONF_OPT = --disable-docs
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xlib_libXp/Config.in b/package/x11r7/xlib_libXp/Config.in
+ 		source package/x11r7/xlib_libXrandr/Config.in
+ 		source package/x11r7/xlib_libXrender/Config.in
+diff --git a/package/x11r7/xlib_libXprintAppUtil/Config.in b/package/x11r7/xlib_libXprintAppUtil/Config.in
 deleted file mode 100644
-index 532d8ac..0000000
---- a/package/x11r7/xlib_libXp/Config.in
+index 351675a..0000000
+--- a/package/x11r7/xlib_libXprintAppUtil/Config.in
 +++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_XLIB_LIBXP
--	bool "libXp"
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_XLIB_LIBXPRINTAPPUTIL
+-	bool "libXprintAppUtil"
 -	select BR2_PACKAGE_XLIB_LIBX11
--	select BR2_PACKAGE_XLIB_LIBXAU
--	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XPROTO_PRINTPROTO
+-	select BR2_PACKAGE_XLIB_LIBXP
+-	select BR2_PACKAGE_XLIB_LIBXPRINTUTIL
 -	help
--	  X.Org Xp library
-diff --git a/package/x11r7/xlib_libXp/xlib_libXp.mk b/package/x11r7/xlib_libXp/xlib_libXp.mk
+-	  X.Org XprintAppUtil library
+diff --git a/package/x11r7/xlib_libXprintAppUtil/xlib_libXprintAppUtil.mk b/package/x11r7/xlib_libXprintAppUtil/xlib_libXprintAppUtil.mk
 deleted file mode 100644
-index 9b2e4de..0000000
---- a/package/x11r7/xlib_libXp/xlib_libXp.mk
+index b01af40..0000000
+--- a/package/x11r7/xlib_libXprintAppUtil/xlib_libXprintAppUtil.mk
 +++ /dev/null
-@@ -1,14 +0,0 @@
+@@ -1,13 +0,0 @@
 -################################################################################
 -#
--# xlib_libXp -- X.Org Xp library
+-# xlib_libXprintAppUtil -- X.Org XprintAppUtil library
 -#
 -################################################################################
 -
--XLIB_LIBXP_VERSION = 1.0.1
--XLIB_LIBXP_SOURCE = libXp-$(XLIB_LIBXP_VERSION).tar.bz2
--XLIB_LIBXP_SITE = http://xorg.freedesktop.org/releases/individual/lib
--XLIB_LIBXP_INSTALL_STAGING = YES
--XLIB_LIBXP_DEPENDENCIES = xlib_libX11 xlib_libXau xlib_libXext xproto_printproto
--XLIB_LIBXP_CONF_OPT = --disable-malloc0returnsnull
+-XLIB_LIBXPRINTAPPUTIL_VERSION = 1.0.1
+-XLIB_LIBXPRINTAPPUTIL_SOURCE = libXprintAppUtil-$(XLIB_LIBXPRINTAPPUTIL_VERSION).tar.bz2
+-XLIB_LIBXPRINTAPPUTIL_SITE = http://xorg.freedesktop.org/releases/individual/lib
+-XLIB_LIBXPRINTAPPUTIL_INSTALL_STAGING = YES
+-XLIB_LIBXPRINTAPPUTIL_DEPENDENCIES = xlib_libX11 xlib_libXp xlib_libXprintUtil
 -
 -$(eval $(autotools-package))
 -- 
