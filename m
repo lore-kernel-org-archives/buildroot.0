@@ -1,33 +1,53 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Mar 2013 22:28:57 +0100
-Subject: [Buildroot] [git commit] Install libfribidi to staging
-Message-ID: <20130318213053.796AB9B170@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 18 Mar 2013 22:44:35 +0100
+Subject: [Buildroot] [PATCH v2] new package: redis
+In-Reply-To: <1363052831-17436-1-git-send-email-daniel.price@gmail.com>
+ (Daniel Price's message of "Mon, 11 Mar 2013 18:47:11 -0700")
+References: <1363052831-17436-1-git-send-email-daniel.price@gmail.com>
+Message-ID: <87ppywxu0s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=96879b87a90d8c1e4de3c399a9e8df6dc4537180
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Daniel" == Daniel Price <daniel.price@gmail.com> writes:
 
-Install libfribi to staging to be able to link against it.
+ Daniel> Signed-off-by: Daniel Price <daniel.price@gmail.com>
+ Daniel> ---
+ Daniel>  package/Config.in                    |    1 +
+ Daniel>  package/redis/Config.in              |   14 ++++++++++
+ Daniel>  package/redis/redis-001-uclibc.patch |   45 ++++++++++++++++++++++++++++++++++
+ Daniel>  package/redis/redis-002-lua-AR.patch |   32 ++++++++++++++++++++++++
+ Daniel>  package/redis/redis.mk               |   28 +++++++++++++++++++++
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libfribidi/libfribidi.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ Daniel> +config BR2_PACKAGE_REDIS
+ Daniel> +	bool "redis"
+ Daniel> +	depends on BR2_USE_MMU # fork()
+ Daniel> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+ Daniel> +	depends on BR2_LARGEFILE
+ Daniel> +	help
+ Daniel> +	  Redis is an open source, advanced key-value store. It is often referred
+ Daniel> +	  to as a data structure server since keys can contain strings, hashes,
+ Daniel> +	  lists, sets and sorted sets.
+ Daniel> +
 
-diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
-index 538997c..45568ca 100644
---- a/package/libfribidi/libfribidi.mk
-+++ b/package/libfribidi/libfribidi.mk
-@@ -9,5 +9,6 @@ LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.bz2
- LIBFRIBIDI_SITE = http://www.fribidi.org/download/
- LIBFRIBIDI_LICENSE = LGPLv2.1+
- LIBFRIBIDI_LICENSE_FILES = COPYING
-+LIBFRIBIDI_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+The help text is a bit too long, so I've word wrapped it.
+
+ Daniel> +++ b/package/redis/redis.mk
+ Daniel> @@ -0,0 +1,28 @@
+ Daniel> +#############################################################
+ Daniel> +#
+ Daniel> +# redis
+ Daniel> +#
+ Daniel> +#############################################################
+ Daniel> +
+ Daniel> +REDIS_VERSION = 2.6.11
+ Daniel> +REDIS_SOURCE = redis-$(REDIS_VERSION).tar.gz
+
+That's the default value for _SOURCE, so I've dropped this.
+
+Committed with those fixes, thanks.
+
+-- 
+Bye, Peter Korsgaard
