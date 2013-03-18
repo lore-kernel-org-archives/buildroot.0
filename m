@@ -1,34 +1,67 @@
-From: Chris Wilkinson <winstonian36@gmail.com>
-Date: Sun, 17 Mar 2013 21:45:34 -0400
-Subject: [Buildroot] Q. vmlinuz on ARM?
-Message-ID: <CAHUKsLL9aV9NH-NmtgRmDONGjnAkaeJjJepM65AMq3sU+LBbkw@mail.gmail.com>
+From: Charles Manning <cdhmanning@gmail.com>
+Date: Mon, 18 Mar 2013 15:33:27 +1300
+Subject: [Buildroot] Package overriding
+Message-ID: <CAE21AQraBRp3_94Td_Gw+D9NML+-X0e+2U=cwR979ww99_aJ=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Is vmlinuz an output option for ARM? It appears to be an option only for
-MIPS.
+Hello Buildrooters
 
-My current iop32x stock kernel is vmlinuz, see below.
+It seems to me that the package override feature is misnamed and has
+some shortcomings.
 
-root at freestor:/boot# ls -la
-total 4597
-drwxr-xr-x  3 root root    1024 Mar 16 17:29 .
-drwxr-xr-x 21 root root    4096 Mar 16 22:31 ..
--rw-r--r--  1 root root   81828 Feb 25 17:50 config-2.6.32-5-iop32x
-lrwxrwxrwx  1 root root      26 Mar 16 17:08 initrd.img ->
-initrd.img-2.6.32-5-iop32x
--rw-r--r--  1 root root 2378526 Mar 16 17:29 initrd.img-2.6.32-5-iop32x
-drwxr-xr-x  2 root root   12288 Mar 16 16:49 lost+found
--rw-r--r--  1 root root  946840 Feb 25 17:50 System.map-2.6.32-5-iop32x
-lrwxrwxrwx  1 root root      23 Mar 16 17:08 vmlinuz ->
-vmlinuz-2.6.32-5-iop32x
--rw-r--r--  1 root root 1258000 Feb 25 17:48 vmlinuz-2.6.32-5-iop32x
+First off, the name is, IMHO, poor. Package Override is applied before
+tha packages are parsed. It does not override them. Instead it is
+really overriding configurations before the packages are read. Perhaps
+it should really be called CONFIG_OVERRIDE?
 
--- 
--Chris-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130317/d877e642/attachment.html>
+There is also a deficiency in that Package Override cannot override
+anything set up in the packages.
+
+For example, I recently needed to add two more configuration lines to
+building bluez_utils.
+
+Instead of:
+
+BLUEZ_UTILS_CONF_OPT = --enable-test --enable-tools
+I wanted
+BLUEZ_UTILS_CONF_OPT = --enable-test --enable-tools --enable-bccmd --enable-dund
+
+
+A logical way I can see to do this would be to have a mechanism
+similar to Package Override but that is applied after the packages are
+parsed.
+
+--- Makefile	(revision 20385)
++++ Makefile	(working copy)
+@@ -319,11 +319,20 @@
+ -include $(PACKAGE_OVERRIDE_FILE)
+ endif
+
+ include package/*/*.mk
+ include hj/package/*/*.mk
+ include boot/common.mk
+ include linux/linux.mk
+
++POST_PACKAGE_OVERRIDE_FILE=$(call qstrip,$(BR2_POST_PACKAGE_OVERRIDE_FILE))
++ifneq ($(POST_PACKAGE_OVERRIDE_FILE),)
++-include $(POST_PACKAGE_OVERRIDE_FILE)
++endif
++
++
+
+Then have POST_PACKAGE_OVERRIDE_FILE point to a file which has
+
+# Add bluez_utils options we need
+BLUEZ_UTILS_CONF_OPT +=  --enable-bccmd --enable-dund
+
+Does that sound useful?
+
+Is there a better way?
+
+Thanks
+
+Charles
