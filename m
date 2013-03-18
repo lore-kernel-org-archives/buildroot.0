@@ -1,48 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Mar 2013 22:54:16 +0100
-Subject: [Buildroot] [git commit] host util-linux: disable login and su
-	since they depend on PAM
-Message-ID: <20130318215922.DFBDD9B171@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 18 Mar 2013 23:02:58 +0100
+Subject: [Buildroot] [PATCH 1/6] package/e2fsprogs: add host-package
+	selection
+In-Reply-To: <ce74c5a7551fd249b4cc19c2d07748cbde803aa3.1363544331.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 17 Mar 2013 19:19:40 +0100")
+References: <cover.1363544331.git.yann.morin.1998@free.fr>
+ <cover.1363544331.git.yann.morin.1998@free.fr>
+ <ce74c5a7551fd249b4cc19c2d07748cbde803aa3.1363544331.git.yann.morin.1998@free.fr>
+Message-ID: <87d2uwxt65.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4123d76e76e26ab8af351b8f9af5fa8eb38bae2a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-This fixes the following errors when building util-linux v2.22.2 for
-the host in case the PAM headers are missing:
+ Yann> Add the e2fsprogs as a host-package selection in the menuconfig.
+ Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-  configure: error: login selected, but required PAM header file not available
-  configure: error: su selected, but required PAM header file not available
+Committed, thanks.
 
-Signed-off-by: Christophe Vu-Brugier <cvubrugier@lacie.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/util-linux/util-linux.mk |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 5e88206..b562206 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -79,11 +79,12 @@ UTIL_LINUX_CONF_OPT += \
- # and none of the util-linux utilities, so we disable all of them.
- HOST_UTIL_LINUX_CONF_OPT += \
- 	--enable-libuuid \
--	--disable-mount --disable-fsck --disable-libmount \
--	--disable-uuidd --disable-libblkid --disable-agetty \
--	--disable-cramfs --disable-switch_root --disable-pivot_root \
--	--disable-fallocate --disable-unshare --disable-rename \
--	--disable-schedutils --disable-wall --disable-partx
-+	--disable-agetty --disable-cramfs --disable-fallocate \
-+	--disable-fsck --disable-libblkid --disable-libmount \
-+	--disable-login --disable-mount --disable-partx \
-+	--disable-pivot_root --disable-rename --disable-schedutils \
-+	--disable-su --disable-switch_root --disable-unshare \
-+	--disable-uuidd --disable-wall
- 
- # Avoid building the tools if they are disabled since we can't install on
- # a per-directory basis.
+-- 
+Bye, Peter Korsgaard
