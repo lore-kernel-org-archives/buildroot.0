@@ -1,29 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Mar 2013 10:25:32 +0100
-Subject: [Buildroot] Buildroot Patchwork Day, 24th March 2013
-Message-ID: <20130318102532.50f0fc8e@skate>
+Date: Mon, 18 Mar 2013 10:31:46 +0100
+Subject: [Buildroot] vlc: new package
+In-Reply-To: <CAML3pwX2xxx56p=xgHO=jP1oe4wL3DG9qyhHv+rR4dPJyXcpJQ@mail.gmail.com>
+References: <CAML3pwX2xxx56p=xgHO=jP1oe4wL3DG9qyhHv+rR4dPJyXcpJQ@mail.gmail.com>
+Message-ID: <20130318103146.7cc34b0e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear ??????? ???????,
 
-After seeing the results of the poll
-(http://www.doodle.com/up4fzf7qa8bm9bqp), it appears clearly that the
-best date for the first Buildroot Patchwork Day is Sunday, 24th March
-2013. We will start around 10 AM CET on #buildroot (Freenode). Six
-participants have expressed their interest, if there are other
-interested people, do not hesitate to join.
+On Thu, 14 Mar 2013 23:46:26 +0400, ??????? ??????? wrote:
 
-I have started an Etherpad to gather all the informations regarding
-this online event, see
-http://lite.framapad.org/p/Buildroot_Patchwork_Day_March_2013. We may
-use this Etherpad during the day in addition to the IRC channel to sync
-up who is working on what in order to avoid stepping on each other toes.
+> I saw your patch for addition of vlc in Buildroot you posted back in
+> July 2012 here http://patchwork.ozlabs.org/patch/171335/
+> Since then there were no changes done so patch was not accepted.
+> 
+> I've done some minor changes for it to build successfully vlc in
+> buildroot from latest git.
+> You may find my changes in-lined below.
+> 
+> And at this point I'm wondering on how to proceed to get vlc support
+> in buildroot finally.
+> I see these options:
+> 
+> 1. You may incorporate my changes in your patch and post v7 in
+> mailing list. 2. I may do this re-spin and post v7 on your behalf.
+> 3. Or I may start from scratch based on your patch, split changes on
+> small parts (as was suggested by Thomas earlier) and post them
+> one-by-one.
 
-Thanks for your participation!
+I think it would be really good if you could resend a complete new
+patch that integrates your changes. You can credit Ismael for the
+original work.
+
+Best regards,
 
 Thomas
 -- 
