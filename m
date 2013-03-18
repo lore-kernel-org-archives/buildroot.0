@@ -1,88 +1,86 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 18 Mar 2013 16:53:19 +0000
-Subject: [Buildroot] [PATCH] cppzmq: new package
-Message-ID: <1363625599-3345-1-git-send-email-spdawson@gmail.com>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Mon, 18 Mar 2013 12:10:59 -0500
+Subject: [Buildroot] target /etc/inittab
+In-Reply-To: <20130316195112.67246764@skate>
+References: <ADE657CA350FB648AAC2C43247A983F0020980106B97@AUSP01VMBX24.collaborationhost.net>
+ <20130316195112.67246764@skate>
+Message-ID: <ADE657CA350FB648AAC2C43247A983F0020980106DF3@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+On Saturday, March 16, 2013 11:51 AM, Thomas Petazzoni wrote:
+> On Fri, 15 Mar 2013 12:34:02 -0500, H Hartley Sweeten wrote:
+>> I'm using buildroot to create a rootfs for an ep93xx board. This
+>> board has 3 serial ports ttyAM0-3. When the rootfs is created I
+>> get this in the /etc/inittab:
+>> 
+>> # Set up a couple of getty's
+>> tty1::respawn:/sbin/getty 38400 tty1
+>> tty2::respawn:/sbin/getty 38400 tty2
+>
+> This is strange, we have removed these since
+> 7d9d09db673abbedc1cc865c213b742e0450268d, which appeared in 2011.05 it
+> seems. Those lines are no longer part of the default skeleton.
+>
+>> # Put a getty on the serial port
+>> ttyAM0::respawn:/sbin/getty -L ttyAM0 57600 vt100 # GENERIC_SERIAL
+>> #ttyAM1::respawn:/sbin/getty -L ttyAM1 57600 vt100 # GENERIC_SERIAL
+>> #ttyAM2::respawn:/sbin/getty -L ttyAM2 57600 vt100 # GENERIC_SERIAL
+>
+> These are not coming from Buildroot default skeleton. Maybe you're
+> using a modified Buildroot version and not the upstream version?
 
-Now that zeromq has been bumped to version 3.2.2, we need to provide the
-C++ binding using a separate package. The cppzmq package provides a simple
-single-header C++ binding.
+Thomas,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/Config.in        |    1 +
- package/cppzmq/Config.in |   15 +++++++++++++++
- package/cppzmq/cppzmq.mk |   22 ++++++++++++++++++++++
- 3 files changed, 38 insertions(+)
- create mode 100644 package/cppzmq/Config.in
- create mode 100644 package/cppzmq/cppzmq.mk
+I'm pretty sure there are no modifications.
 
-diff --git a/package/Config.in b/package/Config.in
-index 9853b06..e4b9854 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -495,6 +495,7 @@ source "package/mediastreamer/Config.in"
- endmenu
- 
- menu "Networking"
-+source "package/cppzmq/Config.in"
- source "package/glib-networking/Config.in"
- source "package/libcgi/Config.in"
- source "package/libcgicc/Config.in"
-diff --git a/package/cppzmq/Config.in b/package/cppzmq/Config.in
-new file mode 100644
-index 0000000..878f414
---- /dev/null
-+++ b/package/cppzmq/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_CPPZMQ
-+	bool "cppzmq"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_INET_IPV6 # zeromq
-+	depends on BR2_LARGEFILE # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	select BR2_PACKAGE_ZEROMQ
-+	help
-+	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
-+
-+	  http://github.com/zeromq/cppzmq
-+
-+comment "cppzmq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
-+		&& BR2_USE_WCHAR)
-diff --git a/package/cppzmq/cppzmq.mk b/package/cppzmq/cppzmq.mk
-new file mode 100644
-index 0000000..11664b6
---- /dev/null
-+++ b/package/cppzmq/cppzmq.mk
-@@ -0,0 +1,22 @@
-+#############################################################
-+#
-+# cppzmq
-+#
-+#############################################################
-+
-+CPPZMQ_VERSION = b232978
-+CPPZMQ_SITE = git://github.com/zeromq/cppzmq.git
-+CPPZMQ_INSTALL_STAGING = YES
-+CPPZMQ_DEPENDENCIES = zeromq
-+CPPZMQ_LICENSE = MIT
-+CPPZMQ_LICENSE_FILES = zmq.hpp
-+
-+define CPPZMQ_INSTALL_STAGING_CMDS
-+	$(INSTALL) -m 0644 -D $(@D)/zmq.hpp $(STAGING_DIR)/usr/include/zmq.hpp
-+endef
-+
-+define CPPZMQ_UNINSTALL_STAGING_CMDS
-+	$(RM) $(STAGING_DIR)/usr/include/zmq.hpp
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.10.4
+$ git status
+# On branch master
+nothing to commit, working directory clean
+$ git log
+commit 87854c12d1c81bade3522405ce1ac42d45475263
+Author: Samuel Martin <s.martin49@gmail.com>
+Date:   Mon Mar 11 18:58:40 2013 +0000
+
+    ussp-push: new package
+...
+
+$ grep 'export BR2_VERSION:=' Makefile
+export BR2_VERSION:=2013.05-git
+
+I think the ttyAM0 getty is getting created because of my .config.
+
+BR2_TARGET_GENERIC_GETTY_PORT="ttyAM0"
+
+I'm not sure why the commented out ttyAM1 and ttyAM2 getty's
+are showing up.
+
+>> The problem is tty1 and tty2. They don't exist on my board and
+>> give me issues when the board boots. I can't figure out why they
+>> are being added to /etc/inittab and how to prevent theses getty's
+>> from showing up.
+>
+> Just use a recent upstream Buildroot version, those lines are no longer
+> present in the default inittab.
+
+Those lines are not in the default inittab in the Buildroot
+version I am trying... Strange...
+
+>> Also how do I get a getty on ttyAM1 and ttyAM2?
+>
+> In a recent upstream Buildroot version, I would do that with a
+> post-build script.
+
+It just seems strange that they are getting put into the inittab for some
+reason.
+
+> Make sure to do add a # GENERIC_SERIAL comment at the end of those
+> additional lines: this # GENERIC_SERIAL is a marker that tells
+> Buildroot to modify this line to start a getty on the default tty
+> (which is defined in the Buildroot configuration).
+
+Regards,
+Hartley
