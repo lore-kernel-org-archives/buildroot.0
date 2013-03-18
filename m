@@ -1,29 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Mar 2013 16:18:09 +0100
-Subject: [Buildroot] [PATCH] Mark AArch64 as a 64 bits architecture
-Message-ID: <1363619889-8342-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Mar 2013 16:20:33 +0100
+Subject: [Buildroot] nspr and aarch64 build issue
+In-Reply-To: <CABtOAfxeHbNeKc8eWfxaTLPgOeh10HmF2psbXnvZh9mLF0hKTg@mail.gmail.com>
+References: <CABtOAfxeHbNeKc8eWfxaTLPgOeh10HmF2psbXnvZh9mLF0hKTg@mail.gmail.com>
+Message-ID: <20130318162033.30fbd920@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- arch/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+Dear Alexander Khryukin,
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 472b10c..795f24f 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -25,6 +25,7 @@ config BR2_armeb
- 
- config BR2_aarch64
- 	bool "AArch64"
-+	select BR2_ARCH_IS_64
- 	help
- 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
- 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
+On Mon, 18 Mar 2013 01:53:38 +0400, Alexander Khryukin wrote:
+
+>  drbg.c: In function 'RNG_RandomUpdate':
+>  *drbg.c:516:5: error: size of array 'arg' is negative*
+>  make[4]: ***
+> [Linux2.6_aarch64_glibc_PTH_OPT.OBJ/Linux_SINGLE_SHLIB/drbg.o] Error 1
+>  make[4]: Leaving directory
+> `/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss/lib/freebl'
+
+I sent a patch that should hopefully fix this. The BR2_ARCH_IS_64 was
+not selected on the AArch64 architecture, so the following bit of code
+in libnss.mk was not being triggered:
+
+ifeq ($(BR2_ARCH_IS_64),y)
+LIBNSS_BUILD_VARS += USE_64=1
+endif
+
+However, I am rather surprised, because here, the build of libnspr
+(which is a dependency of libnss) doesn't work. I get:
+
+In file included from ../../../dist/include/nspr/prtypes.h:26:0,
+                 from ../../../dist/include/nspr/pratom.h:14,
+                 from ../../../dist/include/nspr/nspr.h:9,
+                 from ../../../pr/include/private/primpl.h:39,
+                 from prfdcach.c:6:
+../../../dist/include/nspr/prcpucfg.h:817:2: error: #error "Unknown CPU architecture"
+
+Have you fixed this?
+
+Thanks,
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
