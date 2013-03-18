@@ -1,10 +1,10 @@
 From: Jesper Baekdahl <jbb@gamblify.com>
-Date: Mon, 18 Mar 2013 14:05:07 +0100
-Subject: [Buildroot] [PATCH 101/120] xlib_libxkbfile: bump revision to
+Date: Mon, 18 Mar 2013 14:05:10 +0100
+Subject: [Buildroot] [PATCH 104/120] xproto_bigreqsproto: bump revision to
 	X11R7.7
 In-Reply-To: <1363611926-27105-1-git-send-email-jbb@gamblify.com>
 References: <1363611926-27105-1-git-send-email-jbb@gamblify.com>
-Message-ID: <1363611926-27105-42-git-send-email-jbb@gamblify.com>
+Message-ID: <1363611926-27105-45-git-send-email-jbb@gamblify.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +16,21 @@ From: Will Wagner <will_wagner@carallon.com>
 Signed-off-by: Will Wagner <will_wagner@carallon.com>
 Signed-off-by: Jesper Baekdahl <jbb@gamblify.com>
 ---
- package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk |    2 +-
+ package/x11r7/xproto_bigreqsproto/xproto_bigreqsproto.mk |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
-index 6db20db..bd63961 100644
---- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
-+++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+diff --git a/package/x11r7/xproto_bigreqsproto/xproto_bigreqsproto.mk b/package/x11r7/xproto_bigreqsproto/xproto_bigreqsproto.mk
+index dc236fa..1cf4b5f 100644
+--- a/package/x11r7/xproto_bigreqsproto/xproto_bigreqsproto.mk
++++ b/package/x11r7/xproto_bigreqsproto/xproto_bigreqsproto.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXKBFILE_VERSION = 1.0.7
-+XLIB_LIBXKBFILE_VERSION = 1.0.8
- XLIB_LIBXKBFILE_SOURCE = libxkbfile-$(XLIB_LIBXKBFILE_VERSION).tar.bz2
- XLIB_LIBXKBFILE_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXKBFILE_INSTALL_STAGING = YES
+-XPROTO_BIGREQSPROTO_VERSION = 1.1.1
++XPROTO_BIGREQSPROTO_VERSION = 1.1.2
+ XPROTO_BIGREQSPROTO_SOURCE = bigreqsproto-$(XPROTO_BIGREQSPROTO_VERSION).tar.bz2
+ XPROTO_BIGREQSPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
+ XPROTO_BIGREQSPROTO_INSTALL_STAGING = YES
 -- 
 1.7.10.4
