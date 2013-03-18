@@ -1,100 +1,184 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Mar 2013 10:08:42 +0100
-Subject: [Buildroot] Package overriding
-In-Reply-To: <CAE21AQraBRp3_94Td_Gw+D9NML+-X0e+2U=cwR979ww99_aJ=w@mail.gmail.com>
-References: <CAE21AQraBRp3_94Td_Gw+D9NML+-X0e+2U=cwR979ww99_aJ=w@mail.gmail.com>
-Message-ID: <20130318100842.17dc0b01@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon, 18 Mar 2013 09:13:47 +0000
+Subject: [Buildroot] [PATCH v3] rework patch model
+Message-ID: <1363598027-25900-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Charles Manning,
+From: Simon Dawson <spdawson@gmail.com>
 
-On Mon, 18 Mar 2013 15:33:27 +1300, Charles Manning wrote:
+At the Buildroot Developers Meeting (4-5 February 2013, in Brussels) a change
+to the patch logic was discussed. See 
 
-> It seems to me that the package override feature is misnamed and has
-> some shortcomings.
-> 
-> First off, the name is, IMHO, poor. Package Override is applied before
-> tha packages are parsed. It does not override them. Instead it is
-> really overriding configurations before the packages are read. Perhaps
-> it should really be called CONFIG_OVERRIDE?
-> 
-> There is also a deficiency in that Package Override cannot override
-> anything set up in the packages.
+http://elinux.org/Buildroot:DeveloperDaysFOSDEM2013
 
-Yes. The idea is that the "package override file" use special variables
-when it needs to override something from a package recipe. For now, the
-only special variable available is <pkg>_OVERRIDE_SRCDIR. It actually
-does more than just overriding the source directory: it also changes
-the behavior of the package infrastructure: instead of
-download/extract/patch, it switches to just use the provided source
-directory.
+for details. In summary:
 
-> For example, I recently needed to add two more configuration lines to
-> building bluez_utils.
-> 
-> Instead of:
-> 
-> BLUEZ_UTILS_CONF_OPT = --enable-test --enable-tools
-> I wanted
-> BLUEZ_UTILS_CONF_OPT = --enable-test --enable-tools --enable-bccmd --enable-dund
+* For patches stored in the package directory, if
+  package/<pkg>/<version>/ does exist, apply package/<pkg>/<version>/*.patch,
+  otherwise, apply package/<pkg>/*.patch
+* For patches stored in the global patches directory, if
+  $(GLOBAL_PATCH_DIR)/<pkg>/<version>/ does exist, apply
+  $(GLOBAL_PATCH_DIR)/<pkg>/<version>/*.patch, otherwise, apply
+  $(GLOBAL_PATCH_DIR)/<pkg>/*.patch
 
-Yes, the current override mechanism doesn't support this.
+This patch adds the new BR2_GLOBAL_PATCH_DIR configuration item, and reworks
+the generic package infrastructure to implement the new patch logic.
 
-> A logical way I can see to do this would be to have a mechanism
-> similar to Package Override but that is applied after the packages are
-> parsed.
-> 
-> --- Makefile	(revision 20385)
-> +++ Makefile	(working copy)
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ v3: Wrap commit message properly; incoroporate changes to manual, as
+     suggested by Samuel Martin
+ v2: Add documentation, as suggested by Baruch Siach
 
-Using Subversion ? :-)
+ Config.in                          |   15 +++++++++++++++
+ docs/manual/customize-packages.txt |   23 +++++++++++++++++++++++
+ docs/manual/customize.txt          |    2 ++
+ docs/manual/patch-policy.txt       |   14 +++++++++++---
+ package/pkg-generic.mk             |   16 ++++++++--------
+ 5 files changed, 59 insertions(+), 11 deletions(-)
+ create mode 100644 docs/manual/customize-packages.txt
 
-> @@ -319,11 +319,20 @@
->  -include $(PACKAGE_OVERRIDE_FILE)
->  endif
-> 
->  include package/*/*.mk
->  include hj/package/*/*.mk
->  include boot/common.mk
->  include linux/linux.mk
-> 
-> +POST_PACKAGE_OVERRIDE_FILE=$(call qstrip,$(BR2_POST_PACKAGE_OVERRIDE_FILE))
-> +ifneq ($(POST_PACKAGE_OVERRIDE_FILE),)
-> +-include $(POST_PACKAGE_OVERRIDE_FILE)
-> +endif
-> +
-> +
-> 
-> Then have POST_PACKAGE_OVERRIDE_FILE point to a file which has
-> 
-> # Add bluez_utils options we need
-> BLUEZ_UTILS_CONF_OPT +=  --enable-bccmd --enable-dund
-> 
-> Does that sound useful?
-
-Does this actually work?
-
-The potential problem I see is that the package variables
-(<pkg>_BLABLA) are defined in the package .mk file and then used when
-the generic-package, autotools-package or cmake-package macros are
-expanded. I'm a bit lost as to whether those <pkg>_BLABLA variables are
-actually used when the package macros are expanded, or when the
-functions defined by the package macros are executed. This would have
-to be verified, or confirmed by someone who is more capable than me in
-understanding how many dollar signs are needed to make this work :)
-
-Also, will this work to override the source directory? We definitely
-don't want to have two different mechanisms to override stuff.
-
-Best regards,
-
-Thomas
+diff --git a/Config.in b/Config.in
+index a2c305f..bbb9885 100644
+--- a/Config.in
++++ b/Config.in
+@@ -437,6 +437,21 @@ config BR2_PACKAGE_OVERRIDE_FILE
+ 	  as the source directory for a particular package. See the
+ 	  Buildroot documentation for more details on this feature.
+ 
++config BR2_GLOBAL_PATCH_DIR
++	string "global patch directory"
++	help
++	  You may specify a directory containing global package patches.
++	  For a specific version <packageversion> of a specific package
++	  <packagename>, patches are applied as follows.
++
++	  First, the default Buildroot patch set for the package is applied.
++
++	  If the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>
++	  exists, then all *.patch files in the directory will be applied.
++
++	  Otherwise, if the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename> exists,
++	  then all *.patch files in the directory will be applied.
++
+ endmenu
+ 
+ source "toolchain/Config.in"
+diff --git a/docs/manual/customize-packages.txt b/docs/manual/customize-packages.txt
+new file mode 100644
+index 0000000..a71a7a3
+--- /dev/null
++++ b/docs/manual/customize-packages.txt
+@@ -0,0 +1,23 @@
++// -*- mode:doc -*- ;
++
++[[packages-custom]]
++Customizing packages
++~~~~~~~~~~~~~~~~~~~~
++
++It is sometimes useful to apply 'extra' patches to packages - over and
++above those provided in Buildroot. This might be used to support custom
++features in a project, for example, or when working on a new architecture.
++
++The +BR2_GLOBAL_PATCH_DIR+ configuration file option can be
++used to specify a directory containing global package patches.
++
++For a specific version <packageversion> of a specific package <packagename>,
++patches are applied as follows.
++
++First, the default Buildroot patch set for the package is applied.
++
++If the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>
++exists, then all *.patch files in the directory will be applied.
++
++Otherwise, if the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename> exists, then
++all *.patch files in the directory will be applied.
+diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
+index 3b1a5a7..0456ef1 100644
+--- a/docs/manual/customize.txt
++++ b/docs/manual/customize.txt
+@@ -15,3 +15,5 @@ include::customize-kernel-config.txt[]
+ include::customize-toolchain.txt[]
+ 
+ include::customize-store.txt[]
++
++include::customize-packages.txt[]
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+index 0f55b26..d2250ad 100644
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -11,8 +11,9 @@ necessary to patch the source of the software to get it cross-built within
+ Buildroot.
+ 
+ Buildroot offers an infrastructure to automatically handle this during
+-the builds. It supports two ways of applying patch sets: downloaded patches
+-and patches supplied within buildroot.
++the builds. It supports three ways of applying patch sets: downloaded patches,
++patches supplied within buildroot and patches located in a user-defined
++global patch directory.
+ 
+ Providing patches
+ ~~~~~~~~~~~~~~~~~
+@@ -45,6 +46,13 @@ application order.
+ reference in their filename.
+ - The field +<number>+ in the patch file name refers to the 'apply order'.
+ 
++Global patch directory
++^^^^^^^^^^^^^^^^^^^^^^
++
++The +BR2_GLOBAL_PATCH_DIR+ configuration file option can be
++used to specify a directory containing global package patches. See
++xref:packages-custom[] for details.
++
+ 
+ How patches are applied
+ ~~~~~~~~~~~~~~~~~~~~~~~
+@@ -57,7 +65,7 @@ How patches are applied
+   tarballs are applied;
+ 
+ . If there are some +*.patch+ files in the package directory or in the
+-  a package subdirectory named +<packagename>-<packageversion>+, then:
++  a package subdirectory named +<packageversion>+, then:
+ +
+ * If a +series+ file exists in the package directory, then patches are
+   applied according to the +series+ file;
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 8d964a1..afb90bf 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -82,21 +82,21 @@ endif
+ # find the package directory (typically package/<pkgname>) and the
+ # prefix of the patches
+ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
++$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
+ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
+ 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+ 	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(p)$(sep))
+ 	$(Q)( \
+-	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
+-	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
+-	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
+-	  else \
+-	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(RAWNAME)\*.patch $(RAWNAME)\*.patch.$(ARCH) || exit 1; \
+-	    if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER); then \
+-	      support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
++	for D in $(PATCH_BASE_DIRS); do \
++	  if test -d $${D}; then \
++	    if test -d $${D}/$($(PKG)_VERSION); then \
++	      support/scripts/apply-patches.sh $(@D) $${D}/$($(PKG)_VERSION) \*.patch \*.patch.$(ARCH) || exit 1; \
++	    else \
++	      support/scripts/apply-patches.sh $(@D) $${D} \*.patch \*.patch.$(ARCH) || exit 1; \
+ 	    fi; \
+ 	  fi; \
+-	fi; \
++	done; \
+ 	)
+ 	$(foreach hook,$($(PKG)_POST_PATCH_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10.4
