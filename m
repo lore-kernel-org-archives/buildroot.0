@@ -1,45 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Mar 2013 16:06:03 +0100
-Subject: [Buildroot] Project specific packages
-In-Reply-To: <15AE5A936F5E3A42A9144E66875A0A893089DA@server1-derijp.CLB-Benelux.lokaal>
-References: <15AE5A936F5E3A42A9144E66875A0A893089DA@server1-derijp.CLB-Benelux.lokaal>
-Message-ID: <20130318160603.76dc3f81@skate>
+Date: Mon, 18 Mar 2013 16:07:32 +0100
+Subject: [Buildroot] Q. vmlinuz on ARM?
+In-Reply-To: <CAHUKsLL9aV9NH-NmtgRmDONGjnAkaeJjJepM65AMq3sU+LBbkw@mail.gmail.com>
+References: <CAHUKsLL9aV9NH-NmtgRmDONGjnAkaeJjJepM65AMq3sU+LBbkw@mail.gmail.com>
+Message-ID: <20130318160732.2a6117d7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ruud Commandeur,
+Dear Chris Wilkinson,
 
-On Mon, 18 Mar 2013 12:14:26 +0100, Ruud Commandeur wrote:
+On Sun, 17 Mar 2013 21:45:34 -0400, Chris Wilkinson wrote:
 
-> I'm trying to add some project specific packages, as described in
-> "Using-buildroot-real-project". Just as described, I created a <company>
-> folder and within that folder a <test-app> folder, with the required
-> Config.in and .mk files. Also adjusted the Config.in to enable/disable
-> my test-app package.
+> Is vmlinuz an output option for ARM? It appears to be an option only for
+> MIPS.
 > 
-> However, if I do a "make test-app", I get:
-> 
-> make: *** No rule to make target `test-app'.  Stop.
-> 
-> I also tried a "make <company>", to force a make of all comapny
-> packages, with the same result. It seems that this only succeeds, if I
-> move the <test-app> folder to the root of the packages. But there goes
-> the idea of isolating all company specific packages in one directory.
-> 
-> Can anyone tell me how this should be done?
+> My current iop32x stock kernel is vmlinuz, see below.
 
-Could you post the patch containing the changes you have done? In
-principle, what you've done looks good, but the devil is in the details.
+Most likely, it's just zImage that has been renamed. On x86, the kernel
+generates 'bzImage', and distributions typically rename it to
+vmlinuz-<version> when the kernel image is installed in /boot.
 
-> N.B. I hope I'm using the right mail-address for this kind of questions.
-> I also took a look at the mailing-list, but this seems to be more
-> development related and not so much for user questions. Please let me
-> know if I should a different address for posting my (future) questions.
+If you want a vmlinuz on ARM:
 
-You're on the right mailing list!
+	cp /path/to/linux/build/dir/arch/arm/boot/zImage /boot/vmlinuz-<version>
 
 Best regards,
 
