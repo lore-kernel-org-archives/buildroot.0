@@ -1,73 +1,68 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Mar 2013 23:11:45 +0100
-Subject: [Buildroot] [git commit] package/mtools: new host-package
-Message-ID: <20130318221420.A70E99B173@busybox.osuosl.org>
+Date: Mon, 18 Mar 2013 23:02:28 +0100
+Subject: [Buildroot] [git commit] package/dosfstools: add host-package
+	selection
+Message-ID: <20130318221419.DD2489B169@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ae2cd54a2706082c6056017790da01ab5139419d
+commit: http://git.buildroot.net/buildroot/commit/?id=24c2535f52550095a863a65e48bbf423b09fbed0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add dosfstools as a host-package selection in the menuconfig.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in.host        |    1 +
- package/mtools/Config.in.host |    9 +++++++++
- package/mtools/mtools.mk      |   17 +++++++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
+ package/Config.in.host            |    1 +
+ package/dosfstools/Config.in.host |    6 ++++++
+ package/dosfstools/dosfstools.mk  |    9 +++++++++
+ 3 files changed, 16 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in.host b/package/Config.in.host
-index e97f6e8..7c0dd20 100644
+index 8813f5b..43f292c 100644
 --- a/package/Config.in.host
 +++ b/package/Config.in.host
-@@ -6,6 +6,7 @@ source "package/e2fsprogs/Config.in.host"
- source "package/genimage/Config.in.host"
- source "package/genpart/Config.in.host"
+@@ -1,6 +1,7 @@
+ menu "Host utilities"
+ 
+ source "package/dfu-util/Config.in.host"
++source "package/dosfstools/Config.in.host"
+ source "package/e2fsprogs/Config.in.host"
  source "package/lpc3250loader/Config.in.host"
-+source "package/mtools/Config.in.host"
  source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
- source "package/sam-ba/Config.in.host"
-diff --git a/package/mtools/Config.in.host b/package/mtools/Config.in.host
+diff --git a/package/dosfstools/Config.in.host b/package/dosfstools/Config.in.host
 new file mode 100644
-index 0000000..d534b5e
+index 0000000..9f9ceab
 --- /dev/null
-+++ b/package/mtools/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_MTOOLS
-+	bool "host mtools"
++++ b/package/dosfstools/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_DOSFSTOOLS
++	bool "host dosfstools"
 +	help
-+	  Mtools is a collection of utilities to access MS-DOS disks from
-+	  Unix without mounting them. It supports Win'95 style long file
-+	  names, OS/2 Xdf disks and 2m disks (store up to 1992k on a high
-+	  density 3 1/2 disk).
++	  Tools for creating and checking DOS FAT filesystems.
 +	  
-+	  http://www.tux.org/pub/tux/mtools/
-diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
-new file mode 100644
-index 0000000..a27c4fd
---- /dev/null
-+++ b/package/mtools/mtools.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# mtools
-+#
-+#############################################################
++	  http://www.daniel-baumann.ch/software/dosfstools/
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index 3a0856a..332f2ee 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -43,4 +43,13 @@ define DOSFSTOOLS_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
++define HOST_DOSFSTOOLS_BUILD_CMDS
++	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
++endef
 +
-+MTOOLS_VERSION       = 4.0.18
-+MTOOLS_SOURCE        = mtools-$(MTOOLS_VERSION).tar.bz2
-+MTOOLS_SITE          = $(BR2_GNU_MIRROR)/mtools/
-+MTOOLS_LICENSE       = GPLv3+
-+MTOOLS_LICENSE_FILES = COPYING
++define HOST_DOSFSTOOLS_INSTALL_CMDS
++	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr install
++endef
 +
-+MTOOLS_CONF_OPT = --enable-xdf        \
-+                  --enable-vold       \
-+                  --enable-new-vold
-+
-+$(eval $(host-autotools-package))
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
