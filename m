@@ -1,42 +1,88 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Mar 2013 23:17:10 +0100
-Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: do not depend on
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 18 Mar 2013 23:16:54 +0100
+Subject: [Buildroot] [git commit] toolchain/crosstool-NG: do not depend on
 	the top-level Buildroot's .config
-In-Reply-To: <1363644183-29242-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Mon, 18 Mar 2013 23:03:03 +0100")
-References: <1363644183-29242-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87mwu0wdy1.fsf@dell.be.48ers.dk>
+Message-ID: <20130318221642.1D78E9B173@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=bae18e117b52c73cf2b84fc0e357d68d18fa39c6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann> Previously, the crosstool-NG backend did depend on the top-level
- Yann> Buildroot's .config to detect changes in the toolchain options,
- Yann> using a tentatively-clever heuristic, which also included the full
- Yann> Buildroot's version string to push down to set the components' versions
- Yann> strings.
+Previously, the crosstool-NG backend did depend on the top-level
+Buildroot's .config to detect changes in the toolchain options,
+using a tentatively-clever heuristic, which also included the full
+Buildroot's version string to push down to set the components' versions
+strings.
 
- Yann> In doing so, any commit in the Buildroot tree would imply a complete
- Yann> rebuild of the toolchain, even in the case the toolchain options did
- Yann> not change, thus being a large annoyance (to say the least).
+In doing so, any commit in the Buildroot tree would imply a complete
+rebuild of the toolchain, even in the case the toolchain options did
+not change, thus being a large annoyance (to say the least).
 
- Yann> As Buildroot never guaranteed that toolchain options would be detected,
- Yann> even less handled, and that the internal backend does neither detect nor
- Yann> act on toolchain options changes, and delegate that to the user, there
- Yann> is no point in individualising the crosstool-NG backend's behaviour.
+As Buildroot never guaranteed that toolchain options would be detected,
+even less handled, and that the internal backend does neither detect nor
+act on toolchain options changes, and delegate that to the user, there
+is no point in individualising the crosstool-NG backend's behaviour.
 
- Yann> This reasoning also applies to the depdency on the crosstool-NG's bundled
- Yann> .config file, too.
+This reasoning also applies to the depdency on the crosstool-NG's bundled
+.config file, too.
 
- Yann> So, just drop the not-so-clever heuristic, and just build the toolchain
- Yann> once, leaving to the user the responsibility to explictly ask Buildroot
- Yann> to rebuild the toolchain.
+So, just drop the not-so-clever heuristic, and just build the toolchain
+once, leaving to the user the responsibility to explictly ask Buildroot
+to rebuild the toolchain.
 
-Committed, thanks.
+Reported-by: "Przemyslaw Wrzos" <przemyslaw.wrzos@calyptech.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: "Przemyslaw Wrzos" <przemyslaw.wrzos@calyptech.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |   16 ++++++----------
+ 1 files changed, 6 insertions(+), 10 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+index 6554982..59f18c7 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+@@ -362,32 +362,28 @@ endef
+ $(CTNG_DIR)/.config: | host-crosstool-ng
+ 
+ # Default configuration
+-# Depends on top-level .config because it has options we have to shoe-horn
+-# into crosstool-NG's .config
+ # Only copy the original .config file if we don't have one already.
+ # Check that given config file matches selected C library.
+ # We need to call oldconfig twice in a row to ensure the options
+ # are correctly set ( eg. if an option is new, then the initial sed
+ # can't do anything about it ) Ideally, this should go in oldconfig
+ # itself, but it's much easier to handle here.
+-
+-$(CTNG_DIR)/.config: $(CTNG_CONFIG_FILE) $(BUILDROOT_CONFIG)
++$(CTNG_DIR)/.config:
+ 	$(Q)if [ ! -f $@ ]; then                                                        \
+ 	        mkdir -p "$(CTNG_DIR)";                                                 \
+-	        libc="$$(awk -F '"' '$$1=="CT_LIBC=" { print $$2; }' "$<")";            \
++	        libc="$$(awk -F '"' '$$1=="CT_LIBC=" { print $$2; }'                    \
++	                        "$(CTNG_CONFIG_FILE)"                                   \
++	                )";                                                             \
+ 	        if [ "$${libc}" != "$(BR2_TOOLCHAIN_CTNG_LIBC)" ]; then                 \
+-	            echo "* Inconsistency in crosstool-NG config file '$<'";            \
++	            echo "* Inconsistency in crosstool-NG config file '$(CTNG_CONFIG_FILE)'"; \
+ 	            echo "* - buildroot configured for '$(BR2_TOOLCHAIN_CTNG_LIBC)'";   \
+ 	            echo "* - given config file for '$${libc}'";                        \
+ 	            exit 1;                                                             \
+ 	        fi;                                                                     \
+-	        cp -f $< $@;                                                            \
++	        cp -f $(CTNG_CONFIG_FILE) $@;                                                            \
+ 	    fi
+-	$(Q)cp -a $@ $@.timestamp
+ 	$(call ctng-oldconfig,$@)
+ 	$(call ctng-oldconfig,$@)
+-	$(call ctng-check-config-changed,$@,$@.timestamp)
+-	$(Q)rm -f $@.timestamp
+ 
+ # Manual configuration
+ ctng-menuconfig: $(CTNG_DIR)/.config
