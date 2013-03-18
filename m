@@ -1,36 +1,27 @@
-From: Jesper Baekdahl <jbb@gamblify.com>
-Date: Mon, 18 Mar 2013 13:53:30 +0100
-Subject: [Buildroot] [PATCH 050/120] xdriver_xf86-video-ati: bump revision
-	to X11R7.7
-In-Reply-To: <1363611219-26971-1-git-send-email-jbb@gamblify.com>
-References: <1363611219-26971-1-git-send-email-jbb@gamblify.com>
-Message-ID: <1363611219-26971-51-git-send-email-jbb@gamblify.com>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Mon, 18 Mar 2013 14:54:58 +0200
+Subject: [Buildroot] Problems with zeromq 3.2.2
+In-Reply-To: <CAAHaz6HmMaXNjSh_ZsqWDaOe3Ajm0kFhyPd0PxMCHsBys967JA@mail.gmail.com>
+References: <CAHt8ZCM0W1Lnn4LotB8QYp90J3CgUjR4VL17WnPLum6M9Q0E8Q@mail.gmail.com>
+ <CAAHaz6HmMaXNjSh_ZsqWDaOe3Ajm0kFhyPd0PxMCHsBys967JA@mail.gmail.com>
+Message-ID: <CAAHaz6HMukALkp6H32KRWrp8+LPOoiuqCpEfS=8uqLc6thRhPg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Will Wagner <will_wagner@carallon.com>
+Hi, Simon!
 
-Signed-off-by: Will Wagner <will_wagner@carallon.com>
-Signed-off-by: Jesper Baekdahl <jbb@gamblify.com>
----
- package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+2013/3/18 Alexander Lukichev <alexander.lukichev@gmail.com>
+> you use C++ bindings. That was bundled with zmq-2.x but as the
+> library itself is written in C language
+Ooops. I mean, the library API is expressed in C (the source
+is in C++).
 
-diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-index ea2d3c3..65ecffb 100644
---- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-+++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_ATI_VERSION = 6.14.1
-+XDRIVER_XF86_VIDEO_ATI_VERSION = 6.14.4
- XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_ATI_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_glproto xproto_randrproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xineramaproto xproto_xproto
--- 
-1.7.10.4
+--
+Best regards,
+  Alexander Lukichev
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130318/198bdd60/attachment.html>
