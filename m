@@ -1,94 +1,89 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Mar 2013 21:40:50 +0100
-Subject: [Buildroot] [git commit] Added lcms2 package
-Message-ID: <20130318204025.D0B5F9B168@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 18 Mar 2013 22:01:26 +0100
+Subject: [Buildroot] [PATCH] json-glib: new package
+In-Reply-To: <1361222943-1892-1-git-send-email-henrique@henriquecamargo.com>
+ (Henrique Camargo's message of "Mon, 18 Feb 2013 18:29:03 -0300")
+References: <1361222943-1892-1-git-send-email-henrique@henriquecamargo.com>
+Message-ID: <87ehfczal5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=901282aa6e330c5e61ab25a83ba68e443cb3aec2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Henrique" == Henrique Camargo <henrique@henriquecamargo.com> writes:
 
-Little CMS intends to be an OPEN SOURCE small-footprint color management
-engine, with special focus on accuracy and performance.
+ Henrique> JSON-GLib is a library providing serialization and deserialization
+ Henrique> support for the JavaScript Object Notation (JSON) format described by
+ Henrique> RFC 4627.
 
-[Peter: tweak help text, fix white space]
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in       |    1 +
- package/lcms2/Config.in |   10 ++++++++++
- package/lcms2/lcms2.mk  |   35 +++++++++++++++++++++++++++++++++++
- 3 files changed, 46 insertions(+), 0 deletions(-)
+ Henrique> https://live.gnome.org/JsonGlib/
 
-diff --git a/package/Config.in b/package/Config.in
-index 9853b06..10ce824 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -422,6 +422,7 @@ source "package/gtk2-engines/Config.in"
- source "package/gtk2-themes/Config.in"
- source "package/imlib2/Config.in"
- source "package/jpeg/Config.in"
-+source "package/lcms2/Config.in"
- source "package/libart/Config.in"
- source "package/libdmtx/Config.in"
- source "package/libdrm/Config.in"
-diff --git a/package/lcms2/Config.in b/package/lcms2/Config.in
-new file mode 100644
-index 0000000..d94c075
---- /dev/null
-+++ b/package/lcms2/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LCMS2
-+	bool "lcms2"
-+	help
-+	  Little Color Management Software (CMS) intends to be an OPEN
-+	  SOURCE small-footprint color management engine, with special
-+	  focus on accuracy and performance.
-+	  It uses the International Color Consortium standard (ICC), which is
-+	  the modern standard when regarding to color management.
-+
-+	  http://www.littlecms.com/
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-new file mode 100644
-index 0000000..0d222c0
---- /dev/null
-+++ b/package/lcms2/lcms2.mk
-@@ -0,0 +1,35 @@
-+#############################################################
-+#
-+# lcms2
-+#
-+#############################################################
-+
-+LCMS2_VERSION = 2.4
-+LCMS2_SITE = http://downloads.sourceforge.net/lcms/lcms
-+LCMS2_LICENSE = MIT
-+LCMS2_LICENSE_FILES = COPYING
-+
-+LCMS2_CONF_OPT = \
-+
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+	LCMS2_CONF_OPT += --with-jpeg
-+	LCMS2_DEPENDENCIES += jpeg
-+else
-+	LCMS2_CONF_OPT += --without-jpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TIFF),y)
-+	LCMS2_CONF_OPT += --with-tiff
-+	LCMS2_DEPENDENCIES += tiff
-+else
-+	LCMS2_CONF_OPT += --without-tiff
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+	LCMS2_CONF_OPT += --with-zlib
-+	LCMS2_DEPENDENCIES += zlib
-+else
-+	LCMS2_CONF_OPT += --without-zlib
-+endif
-+
-+$(eval $(autotools-package))
+ Henrique> Signed-off-by: Henrique Camargo <henrique@henriquecamargo.com>
+ Henrique> ---
+ Henrique>  package/Config.in              |    1 +
+ Henrique>  package/json-glib/Config.in    |   14 ++++++++++++++
+ Henrique>  package/json-glib/json-glib.mk |   20 ++++++++++++++++++++
+ Henrique>  3 files changed, 35 insertions(+)
+ Henrique>  create mode 100644 package/json-glib/Config.in
+ Henrique>  create mode 100644 package/json-glib/json-glib.mk
+
+ Henrique> diff --git a/package/Config.in b/package/Config.in
+ Henrique> index 2fad94d..4959680 100644
+ Henrique> --- a/package/Config.in
+ Henrique> +++ b/package/Config.in
+ Henrique> @@ -586,6 +586,7 @@ source "package/cjson/Config.in"
+ Henrique>  source "package/expat/Config.in"
+ Henrique>  source "package/ezxml/Config.in"
+ Henrique>  source "package/json-c/Config.in"
+ Henrique> +source "package/json-glib/Config.in"
+ Henrique>  source "package/libroxml/Config.in"
+ Henrique>  source "package/libxml-parser-perl/Config.in"
+ Henrique>  source "package/libxml2/Config.in"
+ Henrique> diff --git a/package/json-glib/Config.in b/package/json-glib/Config.in
+ Henrique> new file mode 100644
+ Henrique> index 0000000..f2e3a7c
+ Henrique> --- /dev/null
+ Henrique> +++ b/package/json-glib/Config.in
+ Henrique> @@ -0,0 +1,14 @@
+ Henrique> +config BR2_PACKAGE_JSON_GLIB
+ Henrique> +	bool "json-glib"
+ Henrique> +	depends on BR2_USE_WCHAR # glib2
+ Henrique> +	select BR2_PACKAGE_LIBGLIB2
+ Henrique> +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ Henrique> +	help
+ Henrique> +	  JSON-GLib is a library providing serialization and deserialization
+ Henrique> +	  support for the JavaScript Object Notation (JSON) format described by
+ Henrique> +	  RFC 4627.
+ Henrique> +
+ Henrique> +	  https://live.gnome.org/JsonGlib/
+
+The help text lines are a bit too long.
+
+ Henrique> diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+ Henrique> new file mode 100644
+ Henrique> index 0000000..06e33ab
+ Henrique> --- /dev/null
+ Henrique> +++ b/package/json-glib/json-glib.mk
+ Henrique> @@ -0,0 +1,20 @@
+ Henrique> +#############################################################
+ Henrique> +#
+ Henrique> +# json-glib
+ Henrique> +#
+ Henrique> +#############################################################
+ Henrique> +
+ Henrique> +JSON_GLIB_MAJOR_VERSION = 0.14
+ Henrique> +JSON_GLIB_MINOR_VERSION = 2
+ Henrique> +JSON_GLIB_VERSION = $(JSON_GLIB_MAJOR_VERSION).$(JSON_GLIB_MINOR_VERSION)
+ Henrique> +JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_MAJOR_VERSION)
+ Henrique> +JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
+ Henrique> +
+ Henrique> +JSON_GLIB_INSTALL_STAGING = YES
+ Henrique> +
+
+You're missing LICENSE / LICENSE_FILES lines.
+
+Committed with those fixes, thanks.
+
+-- 
+Bye, Peter Korsgaard
