@@ -1,69 +1,26 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Mon, 18 Mar 2013 14:40:12 +0400
-Subject: [Buildroot] nspr and aarch64 build issue
-In-Reply-To: <CABtOAfxeHbNeKc8eWfxaTLPgOeh10HmF2psbXnvZh9mLF0hKTg@mail.gmail.com>
-References: <CABtOAfxeHbNeKc8eWfxaTLPgOeh10HmF2psbXnvZh9mLF0hKTg@mail.gmail.com>
-Message-ID: <CABtOAfy2TVZ5JcsQ3ueFhfaRC4Qs93Uu=5sJ7rks_J8zY3GMUw@mail.gmail.com>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Mon, 18 Mar 2013 11:01:24 +0000
+Subject: [Buildroot] Problems with zeromq 3.2.2
+Message-ID: <CAHt8ZCM0W1Lnn4LotB8QYp90J3CgUjR4VL17WnPLum6M9Q0E8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/3/18 Alexander Khryukin <alexander@mezon.ru>
+The zeromq package was recently bumped from version 2.2.0 to
+version 3.2.2. Unfortunately, zeromq 3.x.x is not backward-compatible
+with client code developed to use version 2.2.x. For example, it
+appears that the C++ binding has been removed, and is now available as
+a separate project.
 
-> Hello, guys!
-> I'm trying to build aarch64 libnspr package
->
->
-> cd freebl; /usr/bin/make libs
-> make[3]: Entering directory
-> `/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss/lib/freebl'
-> ../../../coreconf/nsinstall/Linux2.6_aarch64_glibc_PTH_OPT.OBJ/nsinstall
-> -R -m 664 Linux2.6_aarch64_glibc_PTH_OPT.OBJ/libfreebl.a
-> /home/user/buildroot/output/build/libnss-3.12.9/mozilla/dist/lib
-> /usr/bin/make FREEBL_CHILD_BUILD=1 \
->  OBJDIR=Linux2.6_aarch64_glibc_PTH_OPT.OBJ/Linux_SINGLE_SHLIB libs
->  make[4]: Entering directory
-> `/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss/lib/freebl'
->  /home/user/buildroot/output/host/usr/bin/aarch64-linux-gnu-gcc -o
-> Linux2.6_aarch64_glibc_PTH_OPT.OBJ/Linux_SINGLE_SHLIB/drbg.o -c
-> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe
-> -Os  -ansi -D_POSIX_SOURCE -D_BSD_SOURCE -D_XOPEN_SOURCE -fPIC -DLINUX2_1
-> -Wall -Werror-implicit-function-declaration -Wno-switch -pipe -DLINUX
-> -Dlinux -DHAVE_STRERROR -DXP_UNIX -DSHLIB_SUFFIX=\"so\"
-> -DSHLIB_PREFIX=\"lib\" -DSHLIB_VERSION=\"3\" -DSOFTOKEN_SHLIB_VERSION=\"3\"
-> -DRIJNDAEL_INCLUDE_TABLES -UDEBUG -DNDEBUG -D_REENTRANT -DNSS_ENABLE_ECC
-> -DUSE_UTIL_DIRECTLY -DFREEBL_NO_DEPEND -DMP_API_COMPATIBLE
-> -I/home/user/buildroot/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/nspr
-> -I/home/user/buildroot/output/build/libnss-3.12.9/mozilla/dist/include
-> -I../../../../dist/public/nss -I../../../../dist/private/nss -Impi -Iecl
-> drbg.c
->  drbg.c: In function 'RNG_RandomUpdate':
->  *drbg.c:516:5: error: size of array 'arg' is negative*
->  make[4]: ***
-> [Linux2.6_aarch64_glibc_PTH_OPT.OBJ/Linux_SINGLE_SHLIB/drbg.o] Error 1
->  make[4]: Leaving directory
-> `/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss/lib/freebl'
->  make[3]: *** [libs] Error 2
->  make[3]: Leaving directory
-> `/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss/lib/freebl'
->  make[2]: *** [libs] Error 2
->  make[2]: Leaving directory
-> `/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss/lib'
->  make[1]: *** [libs] Error 2
->  make[1]: Leaving directory
-> `/home/user/buildroot/output/build/libnss-3.12.9/mozilla/security/nss'
->  make: *** [/home/user/buildroot/output/build/libnss-3.12.9/.stamp_built]
-> Error 2
->
->
+For my particular use case, I need the C++ binding, and would prefer to
+remain using the 2.2.x branch.
 
-Well i fixed it when do
+I'm wondering if we should have separate packages in Buildroot for
+zeromq versions 2.2.x and "latest supported". Does anybody have any
+objections? I suppose the alternative is to try to understand the
+complex system of zeromq sub-projects, in order to re-instate the C++
+binding which has been lost in the seemingly-innocuous version bump.
 
-
-export USE_64=1
-and run make again
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130318/11c6accd/attachment.html>
+Simon.
