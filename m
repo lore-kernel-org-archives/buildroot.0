@@ -1,70 +1,96 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Mar 2013 10:43:10 +0100
-Subject: [Buildroot] [PATCH 4/5] flite: new package
-In-Reply-To: <87vc8p3dfs.fsf@dell.be.48ers.dk>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 18 Mar 2013 11:30:18 +0100
+Subject: [Buildroot] [PATCH 5/5] libcanfestival: new package
+In-Reply-To: <2e13931db1a39313732a16c48f923eb4445dc3d3.1363063832.git.s.martin49@gmail.com>
 References: <cover.1363063832.git.s.martin49@gmail.com>
- <cover.1363063832.git.s.martin49@gmail.com>
- <359a800fb351cc1d10532e184d9dc7d30c5cd991.1363063832.git.s.martin49@gmail.com>
- <87vc8p3dfs.fsf@dell.be.48ers.dk>
-Message-ID: <20130318104310.718e14d0@skate>
+ <2e13931db1a39313732a16c48f923eb4445dc3d3.1363063832.git.s.martin49@gmail.com>
+Message-ID: <CAGm1_kt5bYhGnY1QZghkvFKhJUm610srDdfvcpS4pr0tfHFuYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Mar 12, 2013 at 5:58 AM, Samuel Martin <s.martin49@gmail.com> wrote:
+> Cc: Eric Jarrige <eric.jarrige@armadeus.org>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>
+> ---
+> Changes since v1:
+> - clean/fix *.mk
+> ---
+>  package/Config.in                                  |   1 +
+>  package/libcanfestival/Config.in                   |  90 +++
+>  .../libcanfestival-allow-to-set-DESTDIR.patch      | 717 +++++++++++++++++++++
+>  package/libcanfestival/libcanfestival.mk           |  43 ++
+>  4 files changed, 851 insertions(+)
+>  create mode 100644 package/libcanfestival/Config.in
+>  create mode 100644 package/libcanfestival/libcanfestival-allow-to-set-DESTDIR.patch
+>  create mode 100644 package/libcanfestival/libcanfestival.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 7d66b75..edfd4c4 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -495,6 +495,7 @@ endmenu
+>
+>  menu "Networking"
+>  source "package/glib-networking/Config.in"
+> +source "package/libcanfestival/Config.in"
+>  source "package/libcgi/Config.in"
+>  source "package/libcgicc/Config.in"
+>  source "package/libcurl/Config.in"
+> diff --git a/package/libcanfestival/Config.in b/package/libcanfestival/Config.in
+> new file mode 100644
+> index 0000000..0be45cf
+> --- /dev/null
+> +++ b/package/libcanfestival/Config.in
+> @@ -0,0 +1,90 @@
+> +config BR2_PACKAGE_LIBCANFESTIVAL
+> +       bool "CanFestival"
+> +       help
+> +         CanFestival is an OpenSource CANOpen framework, licensed with GPLv2
+> +         and LGPLv2.
+> +
+> +         http://www.canfestival.org
+> +
+> +if BR2_PACKAGE_LIBCANFESTIVAL
+> +
+> +config BR2_PACKAGE_LIBCANFESTIVAL_NBMMAXCAN
+> +       string "Number of can bus to use"
+> +       default "4"
+> +
+> +choice
+> +       prompt "Driver to use"
+> +       default BR2_PACKAGE_LIBCANFESTIVAL_SOCKET
+> +
+> +config BR2_PACKAGE_LIBCANFESTIVAL_ANAGATE_LINUX
+> +       bool "anagate_linux"
+> +       help
+> +         AnaGate CAN(duo) driver for linux
+> +
+> +config BR2_PACKAGE_LIBCANFESTIVAL_PEAK_LINUX
+> +       bool "peak_linux"
+> +       help
+> +         Linux build host installed Peak driver and library
+> +
+> +         http://www.peak-system.com/linux/
+> +
+> +config BR2_PACKAGE_LIBCANFESTIVAL_VIRTUAL
+> +       bool "virtual"
+> +       help
+> +         Unix pipe based virtual can driver
+> +
+> +config BR2_PACKAGE_LIBCANFESTIVAL_VIRTUAL_KERNEL
+> +       bool "virtual_kernel"
+> +       help
+> +         Kernel module virtual can driver
+> +
+> +config BR2_PACKAGE_LIBCANFESTIVAL_SOCKET
+> +       bool "socket"
+> +       help
+> +         Socket-can
 
-On Sun, 17 Mar 2013 22:48:39 +0100, Peter Korsgaard wrote:
+s/Socket-can/SocketCAN
 
->  Samuel> +FLITE_CONF_OPT = \
->  Samuel> +	$(if $(BR2_PREFER_STATIC_LIB),,--enable-shared)
-> 
-> We're already pass --enable-shared in the autotools infrastructure, so
-> why is this needed?
-
-I've tested without this part, and the package builds fine, so I'm
-also not sure why it's needed.
-
->  Samuel> +
->  Samuel> +FLITE_INSTALL_STAGING_OPT = \
->  Samuel> +	INSTALLBINDIR=$(STAGING_DIR)/usr/bin \
->  Samuel> +	INSTALLLIBDIR=$(STAGING_DIR)/usr/lib \
->  Samuel> +	INSTALLINCDIR=$(STAGING_DIR)/usr/include/flite \
->  Samuel> +	install
->  Samuel> +
->  Samuel> +FLITE_INSTALL_TARGET_OPT = \
->  Samuel> +	INSTALLBINDIR=$(TARGET_DIR)/usr/bin \
->  Samuel> +	INSTALLLIBDIR=$(TARGET_DIR)/usr/lib \
->  Samuel> +	INSTALLINCDIR=$(TARGET_DIR)/usr/include/flite \
->  Samuel> +	install
-> 
-> It could be good with a note about why this is needed (E.G. flite
-> used a handwritten a Makefile which doesn't handle DESTDIR even
-> though it uses autoconf).
-
-Another option is to add a patch like:
-
-Index: b/config/config.in
-===================================================================
---- a/config/config.in
-+++ b/config/config.in
-@@ -49,6 +49,6 @@
- prefix        = @prefix@
- exec_prefix   = @exec_prefix@
- EXEEXT	      = @EXEEXT@
--INSTALLBINDIR = @bindir@
--INSTALLLIBDIR = @libdir@
--INSTALLINCDIR = @includedir@/flite
-+INSTALLBINDIR = $(DESTDIR)@bindir@
-+INSTALLLIBDIR = $(DESTDIR)@libdir@
-+INSTALLINCDIR = $(DESTDIR)@includedir@/flite
-
-That said, the project hasn't done any release since 2009, so the
-chances of getting this upstream are pretty small...
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Yegor
