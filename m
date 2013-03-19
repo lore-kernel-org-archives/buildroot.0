@@ -1,41 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Mar 2013 20:29:38 +0100
-Subject: [Buildroot] [PATCH v4 05/21] qt5base: add glib support
+Date: Tue, 19 Mar 2013 20:29:41 +0100
+Subject: [Buildroot] [PATCH v4 08/21] qt5base: install bundled fonts to
+	target
 In-Reply-To: <1363721394-14973-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1363721394-14973-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1363721394-14973-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1363721394-14973-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Floris Bos <bos@je-eigen-domein.nl>
+
+If not using font-config, Qt 5 offers a set of standard fonts to
+use instead. Install these to target.
+
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/qt5base.mk |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/qt5/qt5base/qt5base.mk |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 62f0b9a..d5dcb7d 100644
+index 3b4c007..83ce999 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -21,7 +21,6 @@ QT5BASE_INSTALL_STAGING = YES
- QT5BASE_CONFIGURE_OPTS += \
- 	-optimized-qmake \
- 	-no-kms \
--	-no-glib \
- 	-no-cups \
- 	-no-nis \
- 	-no-libudev \
-@@ -95,6 +94,9 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_PNG),libpng)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DBUS),-dbus,-no-dbus)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DBUS),dbus)
+@@ -172,9 +172,17 @@ define QT5BASE_INSTALL_TARGET_PLUGINS
+ 	fi
+ endef
  
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBGLIB2),-glib,-no-glib)
-+QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBGLIB2),libglib2)
++define QT5BASE_INSTALL_TARGET_FONTS
++	if [ -d $(STAGING_DIR)/usr/lib/fonts/ ] ; then \
++		mkdir -p $(TARGET_DIR)/usr/lib/fonts ; \
++		cp -dpfr $(STAGING_DIR)/usr/lib/fonts/* $(TARGET_DIR)/usr/lib/fonts ; \
++	fi
++endef
 +
- # Build the list of libraries to be installed on the target
- QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
+ define QT5BASE_INSTALL_TARGET_CMDS
+ 	$(QT5BASE_INSTALL_TARGET_LIBS)
+ 	$(QT5BASE_INSTALL_TARGET_PLUGINS)
++	$(QT5BASE_INSTALL_TARGET_FONTS)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 1.7.9.5
