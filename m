@@ -1,52 +1,43 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 19 Mar 2013 10:05:11 -0300
-Subject: [Buildroot] [PATCH] audiofile: bump to version 0.3.6
-Message-ID: <1363698311-16371-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 19 Mar 2013 10:22:12 -0300
+Subject: [Buildroot] [PATCH] iproute2: needs mmu
+Message-ID: <1363699332-29500-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now with FLAC support.
+Fixes
+http://autobuild.buildroot.net/results/08beca1cae9dc55b2f770a01ad95bcbe56594300/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/audiofile/audiofile.mk | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ package/iproute2/Config.in | 1 +
+ package/openswan/Config.in | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/audiofile/audiofile.mk b/package/audiofile/audiofile.mk
-index 9886c4d..51173e6 100644
---- a/package/audiofile/audiofile.mk
-+++ b/package/audiofile/audiofile.mk
-@@ -4,18 +4,20 @@
- #
- #############################################################
- 
--AUDIOFILE_VERSION = 0.3.4
-+AUDIOFILE_VERSION = 0.3.6
- AUDIOFILE_SITE = http://audiofile.68k.org
- AUDIOFILE_INSTALL_STAGING = YES
- AUDIOFILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
--AUDIOFILE_LICENSE = GPLv2+ LGPLv2+
-+AUDIOFILE_CONF_OPT = --disable-examples --disable-docs
-+AUDIOFILE_DEPENDENCIES = host-pkgconf
-+AUDIOFILE_LICENSE = GPLv2+ LGPLv2.1+
- AUDIOFILE_LICENSE_FILES = COPYING COPYING.GPL
- 
--# Useless and needs alsa-lib
--define AUDIOFILE_DISABLE_EXAMPLES
--	$(SED) 's/examples//' $(@D)/Makefile.in
--endef
--
--AUDIOFILE_POST_PATCH_HOOKS += AUDIOFILE_DISABLE_EXAMPLES
-+ifeq ($(BR2_PACKAGE_FLAC),y)
-+AUDIOFILE_DEPENDENCIES += flac
-+AUDIOFILE_CONF_OPT += --enable-flac
-+else
-+AUDIOFILE_CONF_OPT += --disable-flac
-+endif
- 
- $(eval $(autotools-package))
+diff --git a/package/iproute2/Config.in b/package/iproute2/Config.in
+index b6ee86e..4da0d2b 100644
+--- a/package/iproute2/Config.in
++++ b/package/iproute2/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_IPROUTE2
+ 	bool "iproute2"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Kernel routing and traffic control utilities.  Provides things
+ 	  like ip and tc.
+diff --git a/package/openswan/Config.in b/package/openswan/Config.in
+index 3336156..932a75f 100644
+--- a/package/openswan/Config.in
++++ b/package/openswan/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_OPENSWAN
+ 	bool "openswan"
++	depends on BR2_USE_MMU # iproute2
+ 	select BR2_PACKAGE_GMP
+ 	select BR2_PACKAGE_IPROUTE2
+ 	help
 -- 
 1.8.1.5
