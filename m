@@ -1,52 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Mar 2013 20:52:37 +0100
-Subject: [Buildroot] [PATCH] toolchain: update crosstool-NG project URL
-In-Reply-To: <1363720538-12992-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1363720538-12992-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <201303192052.37818.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 19 Mar 2013 20:56:55 +0100
+Subject: [Buildroot] [PATCH v3] rework patch model
+In-Reply-To: <1363598027-25900-1-git-send-email-spdawson@gmail.com>
+References: <1363598027-25900-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20130319205655.0e163354@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 19 March 2013 Thomas Petazzoni wrote:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Simon,
 
-Obviously:
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Mon, 18 Mar 2013 09:13:47 +0000, spdawson at gmail.com wrote:
+> From: Simon Dawson <spdawson@gmail.com>
+> 
+> At the Buildroot Developers Meeting (4-5 February 2013, in Brussels) a change
+> to the patch logic was discussed. See 
+> 
+> http://elinux.org/Buildroot:DeveloperDaysFOSDEM2013
+> 
+> for details. In summary:
+> 
+> * For patches stored in the package directory, if
+>   package/<pkg>/<version>/ does exist, apply package/<pkg>/<version>/*.patch,
+>   otherwise, apply package/<pkg>/*.patch
+> * For patches stored in the global patches directory, if
+>   $(GLOBAL_PATCH_DIR)/<pkg>/<version>/ does exist, apply
+>   $(GLOBAL_PATCH_DIR)/<pkg>/<version>/*.patch, otherwise, apply
+>   $(GLOBAL_PATCH_DIR)/<pkg>/*.patch
+> 
+> This patch adds the new BR2_GLOBAL_PATCH_DIR configuration item, and reworks
+> the generic package infrastructure to implement the new patch logic.
+> 
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
-> ---
->  toolchain/Config.in |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index 6311349..fa78cf4 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -26,7 +26,7 @@ config BR2_TOOLCHAIN_CTNG
->  	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
->  	help
->  	  Say 'y' if you want to generate the toolchain with crosstool-NG
-> -	  ( http://ymorin.is-a-geek.org/projects/crosstool )
-> +	  (http://crosstool-ng.org).
->  
->  	  This is considered experimental, and you can expect some breakage.
->  
-> -- 
-> 1.7.9.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
+One minor nit below, but doesn't prevent from committing the patch IMO.
+Peter can probably fix that up when committing.
+
+> +It is sometimes useful to apply 'extra' patches to packages - over and
+> +above those provided in Buildroot. This might be used to support custom
+> +features in a project, for example, or when working on a new architecture.
+> +
+> +The +BR2_GLOBAL_PATCH_DIR+ configuration file option can be
+> +used to specify a directory containing global package patches.
+> +
+> +For a specific version <packageversion> of a specific package <packagename>,
+> +patches are applied as follows.
+> +
+> +First, the default Buildroot patch set for the package is applied.
+> +
+> +If the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>
+
+Should be +$(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>+
+
+> +exists, then all *.patch files in the directory will be applied.
+
+Should be +*.patch+.
+
+So really, it's nitpicking :-)
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
