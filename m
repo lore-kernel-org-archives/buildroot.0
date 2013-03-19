@@ -1,30 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Mar 2013 20:15:38 +0100
-Subject: [Buildroot] [PATCH] toolchain: update crosstool-NG project URL
-Message-ID: <1363720538-12992-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 19 Mar 2013 20:22:30 +0100
+Subject: [Buildroot] [PATCH] kexec: bump to version 2.0.4
+In-Reply-To: <1363709561-4091-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Tue, 19 Mar 2013 17:12:41 +0100")
+References: <1363709561-4091-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87zjxztcsp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/Config.in |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 6311349..fa78cf4 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -26,7 +26,7 @@ config BR2_TOOLCHAIN_CTNG
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 	help
- 	  Say 'y' if you want to generate the toolchain with crosstool-NG
--	  ( http://ymorin.is-a-geek.org/projects/crosstool )
-+	  (http://crosstool-ng.org).
- 
- 	  This is considered experimental, and you can expect some breakage.
- 
+ Sven> Version 2.0.4 has improved support for handling of device-tree
+ Sven> blobs on the ARM platform.
+
+Committed, thanks.
+
+ Sven> -KEXEC_VERSION = 2.0.3
+ Sven> -KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.bz2
+ Sven> +
+ Sven> +KEXEC_VERSION = 2.0.4
+ Sven> +KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ Sven>  KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+
+It would be nice if you could also send a patch adding _LICENSE /
+_LICENSE_FILES tags for kexec.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
