@@ -1,31 +1,34 @@
 From: Alexander Lukichev <alexander.lukichev@gmail.com>
-Date: Tue, 19 Mar 2013 07:33:15 +0200
-Subject: [Buildroot] Problems with zeromq 3.2.2
-In-Reply-To: <CAAHaz6ExNEoZW-SF_U6byhEO_J4AEw4fMHv8mzy5HaqiBjKw2Q@mail.gmail.com>
-References: <CAHt8ZCM0W1Lnn4LotB8QYp90J3CgUjR4VL17WnPLum6M9Q0E8Q@mail.gmail.com>
- <CAAHaz6HmMaXNjSh_ZsqWDaOe3Ajm0kFhyPd0PxMCHsBys967JA@mail.gmail.com>
- <20130318155928.6334b9b8@skate>
- <CAAHaz6ExNEoZW-SF_U6byhEO_J4AEw4fMHv8mzy5HaqiBjKw2Q@mail.gmail.com>
-Message-ID: <CAAHaz6GcCnVU4kKO3wX6hco2sRb_GMhLrD9n9km27nPSLamHig@mail.gmail.com>
+Date: Tue, 19 Mar 2013 07:42:20 +0200
+Subject: [Buildroot] [PATCH] zeromq: add C++ bindings
+In-Reply-To: <1363618617-2969-1-git-send-email-spdawson@gmail.com>
+References: <1363618617-2969-1-git-send-email-spdawson@gmail.com>
+Message-ID: <CAAHaz6E+7jgzJVcS4YXMEF=05yVsY5d-o=dxS0NFD5UOhptjUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello, all!
+Hi, Simon!
 
-2013/3/19 Alexander Lukichev <alexander.lukichev@gmail.com>
-> I'll try to make a patch that installs that if the user
-> selected zeromq and "C++ bindings" for it, and send it here
-> for comments.
+2013/3/18 <spdawson@gmail.com>
+> diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+> index b7dc8a6..db2384e 100644
+> --- a/package/zeromq/Config.in
+> +++ b/package/zeromq/Config.in
+> @@ -1,9 +1,8 @@
+> -comment "zeromq requires a toolchain with C++, LARGEFILE + WCHAR support"
+> -       depends on !(BR2_INSTALL_LIBSTDCPP &&  BR2_LARGEFILE &&
+BR2_USE_WCHAR)
+> +comment "zeromq requires a toolchain with LARGEFILE and WCHAR support"
+> +       depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
 
-Sorry, I write before I read. A patch was already sent here. I'll try
-to flood less in the future.
+Doesn't zeromq 3.2.x also require BR2_INET_IPV6, like you posted earlier?
 
 --
 Best regards,
   Alexander Lukichev
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130319/6b70c8f8/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130319/d3ff5716/attachment.html>
