@@ -1,48 +1,49 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 19 Mar 2013 22:52:11 +0100
-Subject: [Buildroot] [PATCH 2/5] manual: add a make target
-	'manual-update-lists'
-In-Reply-To: <20130313083959.49853d83@skate>
-References: <cover.1363063387.git.s.martin49@gmail.com>
- <da0b536e458646ecade2fd7d2a8cee2e04148e66.1363063387.git.s.martin49@gmail.com>
- <20130312085945.7d595fb2@skate>
- <CAHXCMMJMP5o34AAX29Rx0HqWOtysCz4bFJNrMo+pyHYBf0++fg@mail.gmail.com>
- <20130313083959.49853d83@skate>
-Message-ID: <CAHXCMMJenyhQiKPp+vKbcM_c280ghGVeAG9tsGxtXnR0s3b0CA@mail.gmail.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Tue, 19 Mar 2013 23:07:27 +0100
+Subject: [Buildroot] [PATCH v4 08/21] qt5base: install bundled fonts to
+ target
+In-Reply-To: <87obefrrq1.fsf@dell.be.48ers.dk>
+References: <1363721394-14973-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1363721394-14973-9-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87obefrrq1.fsf@dell.be.48ers.dk>
+Message-ID: <5148E19F.7030501@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On 03/19/2013 10:43 PM, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>   Thomas> From: Floris Bos <bos@je-eigen-domein.nl>
+>   Thomas> If not using font-config, Qt 5 offers a set of standard fonts to
+>   Thomas> use instead. Install these to target.
+>
+> Should that then only happen if !BR2_PACKAGE_QT5BASE_FONTCONFIG?
 
-2013/3/13 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Samuel Martin,
->
-> On Tue, 12 Mar 2013 09:41:27 +0100, Samuel Martin wrote:
->
->> I don't have a strong opinion about this, but since there is some
->> date/version in
->> the generated files (see patch 5/5), I don't want to bother people
->> with this insignificant
->> change just because they (re)build the manual...
->
-> I'm not sure to understand the problem with the dates. I'd say you
-> shouldn't put the date specifically in the list of packages. I would
-> expect "make manual-pdf" to generate the list of packages with your
-> script, get it included into the manual sources, and get the manual
-> built.
->
-> Separately, we may want to introduce something at the beginning of the
-> manual that says at which date the manual was built, and on which Git
-> version of the Buildroot sources. But I don't see a reason to make this
-> related to the list of packages specifically.
-Just to be sure, here, you mean something like a non-versioned version.txt file,
-which would be automatically generated and included in manual.txt?
+Could add a check to only execute QT5BASE_INSTALL_TARGET_FONTS if 
+!BR2_PACKAGE_QT5BASE_FONTCONFIG, if that looks cleaner.
 
+But the standard Qt build script already causes that:
 
-Regards,
+==
+mkspecs/features/qpa/genericunixfontdatabase.prf
+
+CONFIG += qpa/basicunixfontdatabase
+contains(QT_CONFIG, fontconfig) {
+     DEFINES += Q_FONTCONFIGDATABASE
+     LIBS += -lfontconfig
+} else {
+     fonts.path = $$[QT_INSTALL_LIBS]/fonts
+     fonts.files = $$QT_SOURCE_TREE/lib/fonts/*
+     INSTALLS += fonts
+}
+==
+
+If fonts are not installed to staging (by INSTALLS += fonts), they are 
+not copied to target either.
 
 -- 
-Samuel
+Yours sincerely,
+
+Floris Bos
