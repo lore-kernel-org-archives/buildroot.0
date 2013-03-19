@@ -1,21 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 19 Mar 2013 22:43:33 +0100
-Subject: [Buildroot] [PATCH] smartmontools: bump to version 6.1
-In-Reply-To: <1363723464-21293-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 19 Mar 2013 17:04:24 -0300")
-References: <1363723464-21293-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k3p3rrp6.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 19 Mar 2013 22:43:24 +0100
+Subject: [Buildroot] [git commit] smartmontools: bump to version 6.1
+Message-ID: <20130319214257.078869B1BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=424d69bc9b48e08398fce3adafd0c5c94edc7281
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/smartmontools/Config.in        |    1 +
+ package/smartmontools/smartmontools.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/smartmontools/Config.in b/package/smartmontools/Config.in
+index 18320f0..dd8197f 100644
+--- a/package/smartmontools/Config.in
++++ b/package/smartmontools/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SMARTMONTOOLS
+ 	bool "smartmontools"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Control and monitor storage systems using S.M.A.R.T.
+ 
+diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
+index 5736771..850001a 100644
+--- a/package/smartmontools/smartmontools.mk
++++ b/package/smartmontools/smartmontools.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SMARTMONTOOLS_VERSION = 6.0
++SMARTMONTOOLS_VERSION = 6.1
+ SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
+ SMARTMONTOOLS_LICENSE = GPLv2+
+ SMARTMONTOOLS_LICENSE_FILES = COPYING
