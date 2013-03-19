@@ -1,69 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Mar 2013 20:29:53 +0100
-Subject: [Buildroot] [PATCH v4 20/21] qt5webkit: add EGL dir to includepath
+Date: Tue, 19 Mar 2013 20:29:52 +0100
+Subject: [Buildroot] [PATCH v4 19/21] qt5/qt5webkit: new package
 In-Reply-To: <1363721394-14973-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1363721394-14973-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1363721394-14973-21-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1363721394-14973-20-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Floris Bos <bos@je-eigen-domein.nl>
-
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../qt5/qt5webkit/qt5webkit-egl-includepath.patch  |   40 ++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/qt5/qt5webkit/qt5webkit-egl-includepath.patch
+ package/qt5/Config.in              |    1 +
+ package/qt5/qt5webkit/Config.in    |   12 ++++++++++
+ package/qt5/qt5webkit/qt5webkit.mk |   43 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+)
+ create mode 100644 package/qt5/qt5webkit/Config.in
+ create mode 100644 package/qt5/qt5webkit/qt5webkit.mk
 
-diff --git a/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch b/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 0db6c45..5662f55 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -23,5 +23,6 @@ source "package/qt5/qt5multimedia/Config.in"
+ source "package/qt5/qt5quick1/Config.in"
+ source "package/qt5/qt5script/Config.in"
+ source "package/qt5/qt5svg/Config.in"
++source "package/qt5/qt5webkit/Config.in"
+ source "package/qt5/qt5xmlpatterns/Config.in"
+ endif
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
 new file mode 100644
-index 0000000..de5bcff
+index 0000000..17ee3ab
 --- /dev/null
-+++ b/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch
-@@ -0,0 +1,40 @@
-+From d6b1b33a12c0cf6c52667afafe34e58a7b00d0d8 Mon Sep 17 00:00:00 2001
-+From: Floris Bos <bos@je-eigen-domein.nl>
-+Date: Thu, 7 Mar 2013 19:25:17 +0100
-+Subject: [PATCH] Webcore: add EGL and OpenGL (ES) INCDIR to INCLUDEPATH
++++ b/package/qt5/qt5webkit/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_QT5WEBKIT
++	bool "qt5webkit"
++	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_ICU
++	select BR2_PACKAGE_SQLITE
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
 +
-+When building with 3D graphics support enabled, add the
-+OpenGL (ES) and EGL include directories to the include path.
++	  This package corresponds to the qt5webkit module.
 +
-+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-+---
-+ Source/WebCore/Target.pri |    4 ++++
-+ 1 file changed, 4 insertions(+)
++	  http://qt-project.org
+diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+new file mode 100644
+index 0000000..d577cf8
+--- /dev/null
++++ b/package/qt5/qt5webkit/qt5webkit.mk
+@@ -0,0 +1,43 @@
++#############################################################
++#
++# qt5webkit
++#
++#############################################################
 +
-+diff --git a/Source/WebCore/Target.pri b/Source/WebCore/Target.pri
-+index 2669748..421a849 100644
-+--- a/Source/WebCore/Target.pri
-++++ b/Source/WebCore/Target.pri
-+@@ -3992,15 +3992,19 @@ use?(3D_GRAPHICS) {
-+ 
-+     contains(QT_CONFIG, opengl) | contains(QT_CONFIG, opengles2) {
-+         !contains(QT_CONFIG, opengles2) {
-++            INCLUDEPATH += $$QMAKE_INCDIR_OPENGL
-+             SOURCES += \
-+                platform/graphics/opengl/GraphicsContext3DOpenGL.cpp \
-+                platform/graphics/opengl/Extensions3DOpenGL.cpp
-+         } else {
-++            INCLUDEPATH += $$QMAKE_INCDIR_OPENGL_ES2
-+             SOURCES += \
-+                platform/graphics/opengl/GraphicsContext3DOpenGLES.cpp \
-+                platform/graphics/opengl/Extensions3DOpenGLES.cpp
-+         }
-+ 
-++        !isEmpty(QMAKE_INCDIR_EGL): INCLUDEPATH += $$QMAKE_INCDIR_EGL
-++
-+         HEADERS += platform/graphics/opengl/Extensions3DOpenGL.h
-+ 
-+         SOURCES += \
-+-- 
-+1.7.10.4
++QT5WEBKIT_VERSION = $(QT5_VERSION)
++QT5WEBKIT_SITE = http://releases.qt-project.org/qt5/$(QT5WEBKIT_VERSION)/submodules_tar/
++QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
++QT5WEBKIT_DEPENDENCIES = qt5base sqlite host-ruby host-gperf
++QT5WEBKIT_INSTALL_STAGING = YES
 +
++ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
++QT5WEBKIT_CONFIGURE_OPTS += -opensource -confirm-license
++QT5WEBKIT_LICENSE = LGPLv2.1 or GPLv3.0
++# Here we would like to get license files from qt5base, but qt5base
++# may not be extracted at the time we get the legal-info for
++# qt5script.
++else
++QT5WEBKIT_LICENSE = Commercial license
++QT5WEBKIT_REDISTRIBUTE = NO
++endif
++
++define QT5WEBKIT_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
++endef
++
++define QT5WEBKIT_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT5WEBKIT_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(QT5_LA_PRL_FILES_FIXUP)
++endef
++
++define QT5WEBKIT_INSTALL_TARGET_CMDS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebKit*.so.* $(TARGET_DIR)/usr/lib
++	cp -dpf $(@D)/bin/* $(TARGET_DIR)/usr/bin/
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebKit $(TARGET_DIR)/usr/qml/
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.9.5
