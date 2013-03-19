@@ -1,62 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Mar 2013 20:29:39 +0100
-Subject: [Buildroot] [PATCH v4 06/21] qt5base: add support to build against
-	ICU
+Date: Tue, 19 Mar 2013 20:29:42 +0100
+Subject: [Buildroot] [PATCH v4 09/21] qt5: factor Qt5 version
 In-Reply-To: <1363721394-14973-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1363721394-14973-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1363721394-14973-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1363721394-14973-10-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt5Webkit requires Qt5Base to be built with ICU support, so we add
-such support.
+Since the Qt5 version will be the same for all Qt5 modules, factor it
+in qt5/qt5.mk as QT5_VERSION.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/Config.in  |    7 +++++++
- package/qt5/qt5base/qt5base.mk |    4 +++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ package/qt5/qt5.mk             |    1 +
+ package/qt5/qt5base/qt5base.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index d313db9..7974357 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -140,4 +140,11 @@ config BR2_PACKAGE_QT5BASE_DBUS
- 	help
- 	  This option enables the D-Bus module.
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index f220508..83cc0e1 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -1,3 +1,4 @@
++QT5_VERSION = 5.0.1
+ include package/qt5/*/*.mk
  
-+config BR2_PACKAGE_QT5BASE_ICU
-+	bool "Enable ICU support"
-+	select BR2_PACKAGE_ICU
-+	help
-+	  This option enables ICU support in Qt5. This is for example
-+	  needed for Qt5Webkit.
-+
- endif
+ define QT5_LA_PRL_FILES_FIXUP
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index d5dcb7d..ac63e98 100644
+index 83ce999..d22ab66 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -25,7 +25,6 @@ QT5BASE_CONFIGURE_OPTS += \
- 	-no-nis \
- 	-no-libudev \
- 	-no-iconv \
--	-no-icu \
- 	-no-gstreamer \
- 	-no-gtkstyle \
- 	-system-zlib \
-@@ -97,6 +96,9 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DBUS),dbus)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBGLIB2),-glib,-no-glib)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBGLIB2),libglib2)
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_ICU),-icu,-no-icu)
-+QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_ICU),icu)
-+
- # Build the list of libraries to be installed on the target
- QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
+-QT5BASE_VERSION = 5.0.1
++QT5BASE_VERSION = $(QT5_VERSION)
+ QT5BASE_SITE = http://releases.qt-project.org/qt5/$(QT5BASE_VERSION)/submodules_tar/
+ QT5BASE_SOURCE = qtbase-opensource-src-$(QT5BASE_VERSION).tar.xz
+ 
 -- 
 1.7.9.5
