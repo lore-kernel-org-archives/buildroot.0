@@ -1,45 +1,56 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 19 Mar 2013 22:43:24 +0100
-Subject: [Buildroot] [git commit] smartmontools: bump to version 6.1
-Message-ID: <20130319214257.078869B1BC@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 19 Mar 2013 22:46:07 +0100
+Subject: [Buildroot] [PATCH v3] rework patch model
+In-Reply-To: <20130319205655.0e163354@skate>
+References: <1363598027-25900-1-git-send-email-spdawson@gmail.com>
+ <20130319205655.0e163354@skate>
+Message-ID: <CAHXCMMKsXKxMFyAZ1GGVdzf0wNq14ox7fz41zHfCR5v88wUqhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=424d69bc9b48e08398fce3adafd0c5c94edc7281
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Simon, Thomas, all,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/smartmontools/Config.in        |    1 +
- package/smartmontools/smartmontools.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+2013/3/19 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Simon,
+>
+> On Mon, 18 Mar 2013 09:13:47 +0000, spdawson at gmail.com wrote:
+>> From: Simon Dawson <spdawson@gmail.com>
+>>
+>> At the Buildroot Developers Meeting (4-5 February 2013, in Brussels) a change
+>> to the patch logic was discussed. See
+>>
+>> http://elinux.org/Buildroot:DeveloperDaysFOSDEM2013
+>>
+>> for details. In summary:
+>>
+>> * For patches stored in the package directory, if
+>>   package/<pkg>/<version>/ does exist, apply package/<pkg>/<version>/*.patch,
+>>   otherwise, apply package/<pkg>/*.patch
+>> * For patches stored in the global patches directory, if
+>>   $(GLOBAL_PATCH_DIR)/<pkg>/<version>/ does exist, apply
+>>   $(GLOBAL_PATCH_DIR)/<pkg>/<version>/*.patch, otherwise, apply
+>>   $(GLOBAL_PATCH_DIR)/<pkg>/*.patch
+>>
+>> This patch adds the new BR2_GLOBAL_PATCH_DIR configuration item, and reworks
+>> the generic package infrastructure to implement the new patch logic.
+>>
+>> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+>
+> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/smartmontools/Config.in b/package/smartmontools/Config.in
-index 18320f0..dd8197f 100644
---- a/package/smartmontools/Config.in
-+++ b/package/smartmontools/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SMARTMONTOOLS
- 	bool "smartmontools"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Control and monitor storage systems using S.M.A.R.T.
- 
-diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
-index 5736771..850001a 100644
---- a/package/smartmontools/smartmontools.mk
-+++ b/package/smartmontools/smartmontools.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SMARTMONTOOLS_VERSION = 6.0
-+SMARTMONTOOLS_VERSION = 6.1
- SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
- SMARTMONTOOLS_LICENSE = GPLv2+
- SMARTMONTOOLS_LICENSE_FILES = COPYING
+>
+> One minor nit below, but doesn't prevent from committing the patch IMO.
+> Peter can probably fix that up when committing.
+I agree, even if a couple of literal formatting is missing, it does
+not break anything and can easily be fixed later.
+
+Regards,
+
+
+-- 
+Samuel
