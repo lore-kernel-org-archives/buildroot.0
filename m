@@ -1,56 +1,48 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 19 Mar 2013 22:46:07 +0100
-Subject: [Buildroot] [PATCH v3] rework patch model
-In-Reply-To: <20130319205655.0e163354@skate>
-References: <1363598027-25900-1-git-send-email-spdawson@gmail.com>
- <20130319205655.0e163354@skate>
-Message-ID: <CAHXCMMKsXKxMFyAZ1GGVdzf0wNq14ox7fz41zHfCR5v88wUqhA@mail.gmail.com>
+Date: Tue, 19 Mar 2013 22:52:11 +0100
+Subject: [Buildroot] [PATCH 2/5] manual: add a make target
+	'manual-update-lists'
+In-Reply-To: <20130313083959.49853d83@skate>
+References: <cover.1363063387.git.s.martin49@gmail.com>
+ <da0b536e458646ecade2fd7d2a8cee2e04148e66.1363063387.git.s.martin49@gmail.com>
+ <20130312085945.7d595fb2@skate>
+ <CAHXCMMJMP5o34AAX29Rx0HqWOtysCz4bFJNrMo+pyHYBf0++fg@mail.gmail.com>
+ <20130313083959.49853d83@skate>
+Message-ID: <CAHXCMMJenyhQiKPp+vKbcM_c280ghGVeAG9tsGxtXnR0s3b0CA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Simon, Thomas, all,
+Hi Thomas,
 
-2013/3/19 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Simon,
+2013/3/13 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Samuel Martin,
 >
-> On Mon, 18 Mar 2013 09:13:47 +0000, spdawson at gmail.com wrote:
->> From: Simon Dawson <spdawson@gmail.com>
->>
->> At the Buildroot Developers Meeting (4-5 February 2013, in Brussels) a change
->> to the patch logic was discussed. See
->>
->> http://elinux.org/Buildroot:DeveloperDaysFOSDEM2013
->>
->> for details. In summary:
->>
->> * For patches stored in the package directory, if
->>   package/<pkg>/<version>/ does exist, apply package/<pkg>/<version>/*.patch,
->>   otherwise, apply package/<pkg>/*.patch
->> * For patches stored in the global patches directory, if
->>   $(GLOBAL_PATCH_DIR)/<pkg>/<version>/ does exist, apply
->>   $(GLOBAL_PATCH_DIR)/<pkg>/<version>/*.patch, otherwise, apply
->>   $(GLOBAL_PATCH_DIR)/<pkg>/*.patch
->>
->> This patch adds the new BR2_GLOBAL_PATCH_DIR configuration item, and reworks
->> the generic package infrastructure to implement the new patch logic.
->>
->> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> On Tue, 12 Mar 2013 09:41:27 +0100, Samuel Martin wrote:
 >
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+>> I don't have a strong opinion about this, but since there is some
+>> date/version in
+>> the generated files (see patch 5/5), I don't want to bother people
+>> with this insignificant
+>> change just because they (re)build the manual...
+>
+> I'm not sure to understand the problem with the dates. I'd say you
+> shouldn't put the date specifically in the list of packages. I would
+> expect "make manual-pdf" to generate the list of packages with your
+> script, get it included into the manual sources, and get the manual
+> built.
+>
+> Separately, we may want to introduce something at the beginning of the
+> manual that says at which date the manual was built, and on which Git
+> version of the Buildroot sources. But I don't see a reason to make this
+> related to the list of packages specifically.
+Just to be sure, here, you mean something like a non-versioned version.txt file,
+which would be automatically generated and included in manual.txt?
 
->
-> One minor nit below, but doesn't prevent from committing the patch IMO.
-> Peter can probably fix that up when committing.
-I agree, even if a couple of literal formatting is missing, it does
-not break anything and can easily be fixed later.
 
 Regards,
-
 
 -- 
 Samuel
