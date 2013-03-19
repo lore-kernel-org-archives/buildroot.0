@@ -1,25 +1,61 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 19 Mar 2013 22:43:02 +0100
-Subject: [Buildroot] [PATCH v4 08/21] qt5base: install bundled fonts to
-	target
-In-Reply-To: <1363721394-14973-9-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 19 Mar 2013 20:29:41 +0100")
-References: <1363721394-14973-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1363721394-14973-9-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87obefrrq1.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 19 Mar 2013 22:39:39 +0100
+Subject: [Buildroot] [git commit] qt5base: add support to build against ICU
+Message-ID: <20130319214235.AA6D49B1BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=53fbd8a7c529ba307f6d693ceb1f42696cdf05d9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> From: Floris Bos <bos@je-eigen-domein.nl>
- Thomas> If not using font-config, Qt 5 offers a set of standard fonts to
- Thomas> use instead. Install these to target.
+Qt5Webkit requires Qt5Base to be built with ICU support, so we add
+such support.
 
-Should that then only happen if !BR2_PACKAGE_QT5BASE_FONTCONFIG?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/qt5/qt5base/Config.in  |    7 +++++++
+ package/qt5/qt5base/qt5base.mk |    4 +++-
+ 2 files changed, 10 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index d313db9..7974357 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -140,4 +140,11 @@ config BR2_PACKAGE_QT5BASE_DBUS
+ 	help
+ 	  This option enables the D-Bus module.
+ 
++config BR2_PACKAGE_QT5BASE_ICU
++	bool "Enable ICU support"
++	select BR2_PACKAGE_ICU
++	help
++	  This option enables ICU support in Qt5. This is for example
++	  needed for Qt5Webkit.
++
+ endif
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index d5dcb7d..ac63e98 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -25,7 +25,6 @@ QT5BASE_CONFIGURE_OPTS += \
+ 	-no-nis \
+ 	-no-libudev \
+ 	-no-iconv \
+-	-no-icu \
+ 	-no-gstreamer \
+ 	-no-gtkstyle \
+ 	-system-zlib \
+@@ -97,6 +96,9 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DBUS),dbus)
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBGLIB2),-glib,-no-glib)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBGLIB2),libglib2)
+ 
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_ICU),-icu,-no-icu)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_ICU),icu)
++
+ # Build the list of libraries to be installed on the target
+ QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
