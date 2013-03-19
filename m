@@ -1,60 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Mar 2013 14:46:27 +0100
-Subject: [Buildroot] [PATCH 000/120] x11: update to R7.7
-In-Reply-To: <CALnvph238b9O2Db3DoOYPw6VLPpW39Tz2z3HcM=C+og=q-bH5w@mail.gmail.com>
-References: <1363611219-26971-1-git-send-email-jbb@gamblify.com>
- <20130318160415.704c31a2@skate>
- <CALnvph238b9O2Db3DoOYPw6VLPpW39Tz2z3HcM=C+og=q-bH5w@mail.gmail.com>
-Message-ID: <20130319144627.02a9cd4b@skate>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Tue, 19 Mar 2013 15:01:07 +0000
+Subject: [Buildroot] [git commit] libcap: Add optional support for
+	libattr capabilities
+In-Reply-To: <20130319121032.26CD49AE30@busybox.osuosl.org>
+References: <20130319121032.26CD49AE30@busybox.osuosl.org>
+Message-ID: <CAG2jQ8it65FVV8zQJ+mSUqMpSQ1LCQ=K8ojA71n83T=XigYnfg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jesper Birks? B?kdahl,
+On 19 March 2013 12:10, Peter Korsgaard <jacmet@sunsite.dk> wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=1bf3d6f8cf3a2dca9ce1c6f3e68b077724f21db6
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> libcap can optionally link to libattr to support extra
+> file capabilities. Link to this library and pull it as
+> dependency if BR2_PACKAGE_ATTR is selected.
+>
+> [Peter: use LIBCAP_ prefix on variable]
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+>  package/libcap/libcap.mk |   18 +++++++++++++-----
+>  1 files changed, 13 insertions(+), 5 deletions(-)
+>
+> diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+> index dcd3a18..6adac73 100644
+> --- a/package/libcap/libcap.mk
+> +++ b/package/libcap/libcap.mk
+> @@ -15,19 +15,27 @@ LIBCAP_LICENSE_FILES = License
+>  LIBCAP_DEPENDENCIES = host-libcap
+>  LIBCAP_INSTALL_STAGING = YES
+>
+> +ifeq ($(BR2_PACKAGE_ATTR),y)
+> +       LIBCAP_DEPENDENCIES += attr
+> +       LIBCAP_HAVE_LIBATTR = yes
+> +else
+> +       LIBCAP_HAVE_LIBATTR = no
+> +endif
+> +
+>  define LIBCAP_BUILD_CMDS
+>         $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> -               LIBATTR=no BUILD_CC="$(HOSTCC)" BUILD_CFLAGS="$(HOST_CFLAGS)"
+> +               LIBATTR=$(LIBCAP_HAVE_LIBATTR) BUILD_CC="$(HOSTCC)" \
+> +               BUILD_CFLAGS="$(HOST_CFLAGS)"
+>  endef
+>
+>  define LIBCAP_INSTALL_STAGING_CMDS
+> -       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(STAGING_DIR) \
+> -               prefix=/usr lib=lib install
+> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=$(LIBCAP_HAVE_LIBATTR) \
+> +               DESTDIR=$(STAGING_DIR) prefix=/usr lib=lib install
+>  endef
+>
+>  define LIBCAP_INSTALL_TARGET_CMDS
+> -       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(TARGET_DIR) \
+> -               prefix=/usr lib=lib install
+> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=$(LIBCAP_HAVE_LIBATTR) \
+> +               DESTDIR=$(TARGET_DIR) prefix=/usr lib=lib install
+>  endef
+>
+>  # progs use fork()
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-On Tue, 19 Mar 2013 14:23:13 +0100, Jesper Birks? B?kdahl wrote:
+Peter,
 
-> >  * xproto_fontcacheproto removal: it is still being used as a
-> >    dependency in xlib_libXfont.mk.
-> >
-> 
-> Yes, I missed that. Im going to undo those.
+After this commit I am seeing this problem
 
-I don't know if you should undo it, or adjust the dependencies of
-packages that depended on xproto_fontcacheproto.
+Applying libcap-2.22-build-system.patch using patch:
+patching file libcap/Makefile
+patching file Make.Rules
+make: *** No rule to make target `host-attr', needed by `host-libcap-depends'.
 
-> >  * xproto_xf86rushproto: same problem as other packages, it is removed
-> >    while it is still being used by the X.org server (which gets
-> >    changed only later in the patch series).
-> >
-> > Generally speaking, I would suggest to put all the version bumps and
-> > related dependency removals first, and then the package removals.
-> >
-> > That said, achieving complete bisectability may be difficult: many of
-> > the version bumps are related, and it may be hard to find the right
-> > ordering. Maybe there should be one big patch that does all the version
-> > bumps at once, and then patches to remove the packages that are no
-> > longer useful.
-> >
-> 
-> I going to do as you suggest and make one big patch with version bumps,
-> followed by individual patches removing packages starting with the leaves
-> in the dependency tree.
-> Did not know that you would accept ONE patch with version bumps for
-> several packages, but I think it is appropriate in this situation.
+I am not sure what tirggers it. Any ideas? host-attr shouldn't be
+needed as I removed that from  LIBCAP_DEPENDENCIES
 
-I am not the Buildroot maintainer, so I can't say what Peter Korsgaard
-will accept exactly. Generally we want fine grained patches, but in the
-case of the mechanical version bumping of a huge set of interrelated
-packages such as X.org, maybe a single patch is better to keep
-bisectability. Before doing this work, let's way for the opinion of
-Peter, because he will be the one who will ultimately pull your patches.
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards,
+Markos Chandras
