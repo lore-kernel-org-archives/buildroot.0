@@ -1,26 +1,73 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 20 Mar 2013 07:14:36 -0300
-Subject: [Buildroot] [PATCH] quota: util-linux libmount is needed to
- build mount
-In-Reply-To: <1363753355-27054-1-git-send-email-gilles.talis@gmail.com>
-References: <y> <1363753355-27054-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <51498C0C.5040202@zacarias.com.ar>
+From: Will Moore <will.moore@beraninstruments.com>
+Date: Wed, 20 Mar 2013 12:29:52 -0000
+Subject: [Buildroot] Interest in upgrading syslinux to 5.x?
+In-Reply-To: <2F83768108B8464BAD971EB5BCDBE1E5@beraninstruments.com.local>
+References: <CAKduhSuJ_-2B7i7YOKyuErfhve_CXi1UvmNX_U7iQUXYt3c7hw@mail.gmail.com><ECCCCA15FFC640AAA891EA6FC4BB8F28@beraninstruments.com.local>
+ <CAKduhSt3Vkpc+bLP4UM8On472BZqZ7aRVRmFZsG0kOKEm4XtEg@mail.gmail.com>
+ <2F83768108B8464BAD971EB5BCDBE1E5@beraninstruments.com.local>
+Message-ID: <EBADBC9F10F448F49B067CB7A90C908C@beraninstruments.com.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/20/2013 01:22 AM, Gilles Talis wrote:
 
-> quota configuration explicitly selects util-linux mount package,
-> but mount requires libmount to build.
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] On
+> Behalf Of Will Moore
+> Sent: 20 March 2013 09:51
 > 
-> Explicitly select libmount to fix this.
+> Hi Daniel, please bottom post, I've killed off the old part of the thread to
+> hide the sin ;-)
+> 
+> > -----Original Message-----
+> > From: Daniel Price [mailto:daniel.price at gmail.com]
+> > Sent: 20 March 2013 09:26
+> > To: Will Moore
+> > Cc: buildroot at busybox.net
+> > Subject: Re: [Buildroot] Interest in upgrading syslinux to 5.x?
+> >
+> > Thanks Will, this is very helpful.  And the document you mentioned is
+> > a good reference, especially the background about 'make installer'--
+> > while I've been building the whole thing from source, I had been
+> > wondering what that was about.  I have a working syslinux-5.01 build
+> > which seems to solve my problems, but I am by no means an expert.  To
+> > answer your other question: yes, I think we have similar problems-- I
+> > need to support install from media and install from pxe, in a
+> > development environment.
+> >
+> > Today I posted a small patch to upgrade syslinux to 4.06.  You could
+> > test that if you like.  It seems like 4.06 cleaned up some rough edges
+> > when compiling 4.05-- or at least for me it did.
+> 
+> I will see what I can do.
+> 
+> >
+> > I guess we could add to buildroot a 'boot/syslinux5' recipe as a peer
+> > to 'boot/syslinux,' to provide some time for people to transition over
+> > (if the project heads were OK with that).  It has seemed to me by
+> > reading various forums that there are some transition headaches.
+> 
+> I am not sure on the policy for multiple versions but I know generally
+> buildroot
+> does not do this.  This is a question for Peter and co...
+> 
+> If 4.06 is enough for you and the paint is still a little wet on 5.x then IMHO
+> better to stick to implementing the new features in 4.06 then updating at some
+> later time.
 
-But it's not the proper fix realy, see line 92 of util-linux.mk - it
-won't build ANY util-linux binary unless BR2_PACKAGE_UTIL_LINUX_BINARIES
-is set, hence it may pass in the autobuilders but you'll never get
-util-linux mount (and quota will cry when used).
-The proper fix is the one i've sent before.
-Regards.
+It might help to see what Arnout is up to with his grub2 patch which is also
+looking at providing a bootloader with host and target tools.  See
+http://patchwork.ozlabs.org/patch/191813/
+
+> 
+> >
+> >          -dp
+> >
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
