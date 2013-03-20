@@ -1,65 +1,64 @@
 From: Jesper Baekdahl <jbb@gamblify.com>
 Date: Wed, 20 Mar 2013 15:11:03 +0100
-Subject: [Buildroot] [git commit] xlib_libXfontcache: removed in X11R7.7
-Message-ID: <20130324225159.BE6759B21A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] xlib_libxkbui: removed in X11R7.7
+Message-ID: <20130324225159.EC7FF9B21A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3ecb1945835036127b317554c0fb737d4b24cbc4
+commit: http://git.buildroot.net/buildroot/commit/?id=922a349431af614a92530c1dc83d4faeb5ae8a22
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Will Wagner <will_wagner@carallon.com>
 ---
- package/x11r7/Config.in                            |    1 -
- package/x11r7/xlib_libXfontcache/Config.in         |    7 -------
- .../x11r7/xlib_libXfontcache/xlib_libXfontcache.mk |   14 --------------
- 3 files changed, 0 insertions(+), 22 deletions(-)
+ package/x11r7/Config.in                      |    1 -
+ package/x11r7/xlib_libxkbui/Config.in        |    7 -------
+ package/x11r7/xlib_libxkbui/xlib_libxkbui.mk |   13 -------------
+ 3 files changed, 0 insertions(+), 21 deletions(-)
 
 diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 81b16f0..3773e45 100644
+index 3773e45..3c342e7 100644
 --- a/package/x11r7/Config.in
 +++ b/package/x11r7/Config.in
-@@ -32,7 +32,6 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xlib_libXext/Config.in
- 		source package/x11r7/xlib_libXfixes/Config.in
- 		source package/x11r7/xlib_libXfont/Config.in
--		source package/x11r7/xlib_libXfontcache/Config.in
- 		source package/x11r7/xlib_libXft/Config.in
- 		source package/x11r7/xlib_libXi/Config.in
- 		source package/x11r7/xlib_libXinerama/Config.in
-diff --git a/package/x11r7/xlib_libXfontcache/Config.in b/package/x11r7/xlib_libXfontcache/Config.in
+@@ -52,7 +52,6 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/xlib_libdmx/Config.in
+ 		source package/x11r7/xlib_libfontenc/Config.in
+ 		source package/x11r7/xlib_libxkbfile/Config.in
+-		source package/x11r7/xlib_libxkbui/Config.in
+ 		source package/x11r7/xlib_xtrans/Config.in
+ 		source package/x11r7/xlib_libpciaccess/Config.in
+ 		source package/x11r7/xlib_libpthread-stubs/Config.in
+diff --git a/package/x11r7/xlib_libxkbui/Config.in b/package/x11r7/xlib_libxkbui/Config.in
 deleted file mode 100644
-index 3a20451..0000000
---- a/package/x11r7/xlib_libXfontcache/Config.in
+index ceab305..0000000
+--- a/package/x11r7/xlib_libxkbui/Config.in
 +++ /dev/null
 @@ -1,7 +0,0 @@
--config BR2_PACKAGE_XLIB_LIBXFONTCACHE
--	bool "libXfontcache"
--	select BR2_PACKAGE_XLIB_LIBX11
--	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XPROTO_FONTCACHEPROTO
+-config BR2_PACKAGE_XLIB_LIBXKBUI
+-	bool "libxkbui"
+-	select BR2_PACKAGE_XLIB_LIBXKBFILE
+-	select BR2_PACKAGE_XLIB_LIBXT
+-	select BR2_PACKAGE_XPROTO_KBPROTO
 -	help
--	  X.Org Xfontcache library
-diff --git a/package/x11r7/xlib_libXfontcache/xlib_libXfontcache.mk b/package/x11r7/xlib_libXfontcache/xlib_libXfontcache.mk
+-	  X.Org xkbui library
+diff --git a/package/x11r7/xlib_libxkbui/xlib_libxkbui.mk b/package/x11r7/xlib_libxkbui/xlib_libxkbui.mk
 deleted file mode 100644
-index b2faf5c..0000000
---- a/package/x11r7/xlib_libXfontcache/xlib_libXfontcache.mk
+index 7e6ec25..0000000
+--- a/package/x11r7/xlib_libxkbui/xlib_libxkbui.mk
 +++ /dev/null
-@@ -1,14 +0,0 @@
+@@ -1,13 +0,0 @@
 -################################################################################
 -#
--# xlib_libXfontcache -- X.Org Xfontcache library
+-# xlib_libxkbui -- X.Org xkbui library
 -#
 -################################################################################
 -
--XLIB_LIBXFONTCACHE_VERSION = 1.0.5
--XLIB_LIBXFONTCACHE_SOURCE = libXfontcache-$(XLIB_LIBXFONTCACHE_VERSION).tar.bz2
--XLIB_LIBXFONTCACHE_SITE = http://xorg.freedesktop.org/releases/individual/lib
--XLIB_LIBXFONTCACHE_INSTALL_STAGING = YES
--XLIB_LIBXFONTCACHE_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_fontcacheproto
--XLIB_LIBXFONTCACHE_CONF_OPT = --disable-malloc0returnsnull
+-XLIB_LIBXKBUI_VERSION = 1.0.2
+-XLIB_LIBXKBUI_SOURCE = libxkbui-$(XLIB_LIBXKBUI_VERSION).tar.bz2
+-XLIB_LIBXKBUI_SITE = http://xorg.freedesktop.org/releases/individual/lib
+-XLIB_LIBXKBUI_INSTALL_STAGING = YES
+-XLIB_LIBXKBUI_DEPENDENCIES = xlib_libxkbfile xlib_libXt xproto_kbproto
 -
 -$(eval $(autotools-package))
