@@ -1,43 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Mar 2013 22:16:17 +0100
-Subject: [Buildroot] [PATCH] xinetd: follow the convention for patch location
-Message-ID: <1363814178-24310-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Mar 2013 22:23:41 +0100
+Subject: [Buildroot] [git commit] package/connman: bump version to 1.11
+In-Reply-To: <20130301101142.D5D809ADCE@busybox.osuosl.org>
+References: <20130301101142.D5D809ADCE@busybox.osuosl.org>
+Message-ID: <20130320222341.5e947d69@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following 5538e4766201aa0 ("rework patch model"), the xinetd patches
-were no longer being applied, because they were stored in
-package/xinetd/xinetd-2.3.15/*.patch. This lead to xinetd build
-failures such as:
-http://autobuild.buildroot.org/results/1a032bca894b76facd9e7f01c3b5d370987d7fc8/build-end.log.
+Peter, Yann,
 
-This patch fixes this by changing the location and name of the xinetd
-patches to follow the new conventions.
+On Fri, 22 Feb 2013 23:46:32 +0100, Peter Korsgaard wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../001-ar.patch => xinetd-001-ar.patch}           |    0
- .../002-destdir.patch => xinetd-002-destdir.patch} |    0
- .../003-rpc_fix.patch => xinetd-003-rpc-fix.patch} |    0
- 3 files changed, 0 insertions(+), 0 deletions(-)
- rename package/xinetd/{xinetd-2.3.15/001-ar.patch => xinetd-001-ar.patch} (100%)
- rename package/xinetd/{xinetd-2.3.15/002-destdir.patch => xinetd-002-destdir.patch} (100%)
- rename package/xinetd/{xinetd-2.3.15/003-rpc_fix.patch => xinetd-003-rpc-fix.patch} (100%)
+> -CONNMAN_VERSION = 1.10
+> +CONNMAN_VERSION = 1.11
 
-diff --git a/package/xinetd/xinetd-2.3.15/001-ar.patch b/package/xinetd/xinetd-001-ar.patch
-similarity index 100%
-rename from package/xinetd/xinetd-2.3.15/001-ar.patch
-rename to package/xinetd/xinetd-001-ar.patch
-diff --git a/package/xinetd/xinetd-2.3.15/002-destdir.patch b/package/xinetd/xinetd-002-destdir.patch
-similarity index 100%
-rename from package/xinetd/xinetd-2.3.15/002-destdir.patch
-rename to package/xinetd/xinetd-002-destdir.patch
-diff --git a/package/xinetd/xinetd-2.3.15/003-rpc_fix.patch b/package/xinetd/xinetd-003-rpc-fix.patch
-similarity index 100%
-rename from package/xinetd/xinetd-2.3.15/003-rpc_fix.patch
-rename to package/xinetd/xinetd-003-rpc-fix.patch
+Seems like Connman 1.11 is not happy with some IPv6 issues:
+http://autobuild.buildroot.org/results/f99ae7af46c70f7c356b7771321511a42eb3694d/build-end.log.
+
+Interestingly, the toolchain used here has IPv6 support. The toolchain
+is an internal toolchain, using 3.8 kernel headers, so pretty recent.
+
+Ideas?
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
