@@ -1,31 +1,31 @@
 From: Jesper Baekdahl <jbb@gamblify.com>
 Date: Wed, 20 Mar 2013 15:11:02 +0100
-Subject: [Buildroot] [git commit] xproto_xextproto: bump revision to X11R7.7
-Message-ID: <20130324225157.28E719B226@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] mesa3d: bump version
+Message-ID: <20130324225157.EC5559B226@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=040baa82f3769ac6c6ea4557f81bc7eb16d4709c
+commit: http://git.buildroot.net/buildroot/commit/?id=53cea4462c67a6707bf8dad83fa928262e44fce9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Will Wagner <will_wagner@carallon.com>
 ---
- package/x11r7/xproto_xextproto/xproto_xextproto.mk |    2 +-
+ package/x11r7/mesa3d/mesa3d.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xproto_xextproto/xproto_xextproto.mk b/package/x11r7/xproto_xextproto/xproto_xextproto.mk
-index 8114f78..cf7bd21 100644
---- a/package/x11r7/xproto_xextproto/xproto_xextproto.mk
-+++ b/package/x11r7/xproto_xextproto/xproto_xextproto.mk
+diff --git a/package/x11r7/mesa3d/mesa3d.mk b/package/x11r7/mesa3d/mesa3d.mk
+index b16d5e6..7b7f5b4 100644
+--- a/package/x11r7/mesa3d/mesa3d.mk
++++ b/package/x11r7/mesa3d/mesa3d.mk
 @@ -4,7 +4,7 @@
  #
- ################################################################################
+ #############################################################
  
--XPROTO_XEXTPROTO_VERSION = 7.2.0
-+XPROTO_XEXTPROTO_VERSION = 7.2.1
- XPROTO_XEXTPROTO_SOURCE = xextproto-$(XPROTO_XEXTPROTO_VERSION).tar.bz2
- XPROTO_XEXTPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
- XPROTO_XEXTPROTO_INSTALL_STAGING = YES
+-MESA3D_VERSION = 7.10.1
++MESA3D_VERSION = 7.10.3
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.gz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_AUTORECONF = YES
