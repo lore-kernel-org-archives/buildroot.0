@@ -1,72 +1,63 @@
-From: Will Moore <will.moore@beraninstruments.com>
-Date: Wed, 20 Mar 2013 12:29:52 -0000
-Subject: [Buildroot] Interest in upgrading syslinux to 5.x?
-In-Reply-To: <2F83768108B8464BAD971EB5BCDBE1E5@beraninstruments.com.local>
-References: <CAKduhSuJ_-2B7i7YOKyuErfhve_CXi1UvmNX_U7iQUXYt3c7hw@mail.gmail.com><ECCCCA15FFC640AAA891EA6FC4BB8F28@beraninstruments.com.local>
- <CAKduhSt3Vkpc+bLP4UM8On472BZqZ7aRVRmFZsG0kOKEm4XtEg@mail.gmail.com>
- <2F83768108B8464BAD971EB5BCDBE1E5@beraninstruments.com.local>
-Message-ID: <EBADBC9F10F448F49B067CB7A90C908C@beraninstruments.com.local>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Wed, 20 Mar 2013 13:58:26 +0100
+Subject: [Buildroot] [PATCH 2/5] manual: add a make target
+	'manual-update-lists'
+In-Reply-To: <20130320092540.4b14570b@skate>
+References: <cover.1363063387.git.s.martin49@gmail.com>
+ <da0b536e458646ecade2fd7d2a8cee2e04148e66.1363063387.git.s.martin49@gmail.com>
+ <20130312085945.7d595fb2@skate>
+ <CAHXCMMJMP5o34AAX29Rx0HqWOtysCz4bFJNrMo+pyHYBf0++fg@mail.gmail.com>
+ <20130313083959.49853d83@skate>
+ <CAHXCMMJenyhQiKPp+vKbcM_c280ghGVeAG9tsGxtXnR0s3b0CA@mail.gmail.com>
+ <20130320092540.4b14570b@skate>
+Message-ID: <CAKAx1cicUqrkg1Q1VHZQAzPc7YivcfiJdEZoJ9DbErazMiN2CQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all,
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] On
-> Behalf Of Will Moore
-> Sent: 20 March 2013 09:51
-> 
-> Hi Daniel, please bottom post, I've killed off the old part of the thread to
-> hide the sin ;-)
-> 
-> > -----Original Message-----
-> > From: Daniel Price [mailto:daniel.price at gmail.com]
-> > Sent: 20 March 2013 09:26
-> > To: Will Moore
-> > Cc: buildroot at busybox.net
-> > Subject: Re: [Buildroot] Interest in upgrading syslinux to 5.x?
-> >
-> > Thanks Will, this is very helpful.  And the document you mentioned is
-> > a good reference, especially the background about 'make installer'--
-> > while I've been building the whole thing from source, I had been
-> > wondering what that was about.  I have a working syslinux-5.01 build
-> > which seems to solve my problems, but I am by no means an expert.  To
-> > answer your other question: yes, I think we have similar problems-- I
-> > need to support install from media and install from pxe, in a
-> > development environment.
-> >
-> > Today I posted a small patch to upgrade syslinux to 4.06.  You could
-> > test that if you like.  It seems like 4.06 cleaned up some rough edges
-> > when compiling 4.05-- or at least for me it did.
-> 
-> I will see what I can do.
-> 
-> >
-> > I guess we could add to buildroot a 'boot/syslinux5' recipe as a peer
-> > to 'boot/syslinux,' to provide some time for people to transition over
-> > (if the project heads were OK with that).  It has seemed to me by
-> > reading various forums that there are some transition headaches.
-> 
-> I am not sure on the policy for multiple versions but I know generally
-> buildroot
-> does not do this.  This is a question for Peter and co...
-> 
-> If 4.06 is enough for you and the paint is still a little wet on 5.x then IMHO
-> better to stick to implementing the new features in 4.06 then updating at some
-> later time.
+On Wed, Mar 20, 2013 at 9:25 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Samuel Martin,
+>
+> On Tue, 19 Mar 2013 22:52:11 +0100, Samuel Martin wrote:
+>
+>> > I'm not sure to understand the problem with the dates. I'd say you
+>> > shouldn't put the date specifically in the list of packages. I would
+>> > expect "make manual-pdf" to generate the list of packages with your
+>> > script, get it included into the manual sources, and get the manual
+>> > built.
+>> >
+>> > Separately, we may want to introduce something at the beginning of the
+>> > manual that says at which date the manual was built, and on which Git
+>> > version of the Buildroot sources. But I don't see a reason to make this
+>> > related to the list of packages specifically.
+>> Just to be sure, here, you mean something like a non-versioned version.txt file,
+>> which would be automatically generated and included in manual.txt?
+>
+> Yes, something like that.
 
-It might help to see what Arnout is up to with his grub2 patch which is also
-looking at providing a bootloader with host and target tools.  See
-http://patchwork.ozlabs.org/patch/191813/
+Can I suggest something like adding this line at the beginning of the manual:
 
-> 
-> >
-> >          -dp
-> >
-> 
-> 
+Manual generated from git revision {sys:git rev-parse HEAD} on
+{docdate} {doctime}.
+
+This avoids an extra file generation, asciidoc can do it by itself.
+
+Lionel
+
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
