@@ -1,31 +1,31 @@
 From: Jesper Baekdahl <jbb@gamblify.com>
 Date: Wed, 20 Mar 2013 15:11:00 +0100
-Subject: [Buildroot] [git commit] xkeyboard-config: bump revision to X11R7.7
-Message-ID: <20130324225146.C626E9B20D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] xlib_libICE: bump revision to X11R7.7
+Message-ID: <20130324225147.313A29B1CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e2f4e4b059d3e5a78d1297e91ccbf89c6075ec6
+commit: http://git.buildroot.net/buildroot/commit/?id=8fc86a48afca20062fd1161065f6ea7df158b098
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Will Wagner <will_wagner@carallon.com>
 ---
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    2 +-
+ package/x11r7/xlib_libICE/xlib_libICE.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index c619da9..bd3314c 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -3,7 +3,7 @@
- # xkeyboard-config
+diff --git a/package/x11r7/xlib_libICE/xlib_libICE.mk b/package/x11r7/xlib_libICE/xlib_libICE.mk
+index c9eda7e..77fc310 100644
+--- a/package/x11r7/xlib_libICE/xlib_libICE.mk
++++ b/package/x11r7/xlib_libICE/xlib_libICE.mk
+@@ -4,7 +4,7 @@
  #
- #############################################################
--XKEYBOARD_CONFIG_VERSION = 2.0
-+XKEYBOARD_CONFIG_VERSION = 2.6
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config/
- XKEYBOARD_CONFIG_DEPENDENCIES = host-intltool host-xapp_xkbcomp
+ ################################################################################
+ 
+-XLIB_LIBICE_VERSION = 1.0.7
++XLIB_LIBICE_VERSION = 1.0.8
+ XLIB_LIBICE_SOURCE = libICE-$(XLIB_LIBICE_VERSION).tar.bz2
+ XLIB_LIBICE_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBICE_INSTALL_STAGING = YES
