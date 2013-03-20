@@ -1,53 +1,44 @@
-From: Daniel Price <daniel.price@gmail.com>
-Date: Tue, 19 Mar 2013 15:21:38 -0700
-Subject: [Buildroot] [PATCH] syslinux: bump to version 4.06
-Message-ID: <1363731698-15414-1-git-send-email-daniel.price@gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Tue, 19 Mar 2013 21:22:35 -0700
+Subject: [Buildroot] [PATCH] quota: util-linux libmount is needed to build
+	mount
+In-Reply-To: <y>
+References: <y>
+Message-ID: <1363753355-27054-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Daniel Price <daniel.price@gmail.com>
----
- boot/syslinux/syslinux-build-fix-for-uuid.patch |   15 ---------------
- boot/syslinux/syslinux.mk                       |    2 +-
- 2 files changed, 1 insertions(+), 16 deletions(-)
- delete mode 100644 boot/syslinux/syslinux-build-fix-for-uuid.patch
+quota configuration explicitly selects util-linux mount package,
+but mount requires libmount to build.
 
-diff --git a/boot/syslinux/syslinux-build-fix-for-uuid.patch b/boot/syslinux/syslinux-build-fix-for-uuid.patch
-deleted file mode 100644
-index 04ff562..0000000
---- a/boot/syslinux/syslinux-build-fix-for-uuid.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Author: Micah Gersten <micahg@ubuntu.com>
--Description: Fix build failure with --as-needed (Closes: #654838).
--
--diff -Naurp syslinux.orig/utils/Makefile syslinux/utils/Makefile
----- syslinux.orig/utils/Makefile       2011-12-23 14:53:26.653571511 +0100
--+++ syslinux/utils/Makefile    2012-01-22 18:55:03.849466924 +0100
--@@ -51,7 +51,7 @@ isohdpfx.c: $(ISOHDPFX) isohdpfxarray.pl
-- 	$(PERL) isohdpfxarray.pl $(ISOHDPFX) > $@
--
-- isohybrid: isohybrid.o isohdpfx.o
---	$(CC) $(LDFLAGS) -luuid -o $@ $^
--+	$(CC) $(LDFLAGS) -o $@ $^ -luuid
--
-- gethostip: gethostip.o
-- 	$(CC) $(LDFLAGS) -o $@ $^
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index f63f2e0..046bdc3 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SYSLINUX_VERSION = 4.05
-+SYSLINUX_VERSION = 4.06
- SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.bz2
- SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/4.xx/
- 
+Explicitly select libmount to fix this.
+
+Fixes autobuild errors like:
+http://autobuild.buildroot.org/results/2d2f37c292178f746a9a397146719e94f18c022b
+
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ package/quota/Config.in |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/quota/Config.in b/package/quota/Config.in
+index f6341d3..25614f8 100644
+--- a/package/quota/Config.in
++++ b/package/quota/Config.in
+@@ -3,8 +3,11 @@ config BR2_PACKAGE_QUOTA
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU # fork()
++	# libc lacks UTIME_NOW & UTIME_COMMIT for libmount
++	depends on !(BR2_microblazeel || BR2_microblazebe)
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
++	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
 -- 
-1.7.6.5
+1.7.10.4
