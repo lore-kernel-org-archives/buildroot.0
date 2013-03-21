@@ -1,83 +1,93 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Thu, 21 Mar 2013 13:01:25 +0000
-Subject: [Buildroot] [PATCH] czmq: new package
-Message-ID: <1363870885-27916-1-git-send-email-spdawson@gmail.com>
+From: Will Moore <will.moore@beraninstruments.com>
+Date: Thu, 21 Mar 2013 14:14:18 -0000
+Subject: [Buildroot] dosfstools build failure
+In-Reply-To: <3BFE71B30B4443209F36B91169D3F5ED@beraninstruments.com.local>
+References: <3BFE71B30B4443209F36B91169D3F5ED@beraninstruments.com.local>
+Message-ID: <D9D85E8464CD4C59B4A615AC68F77046@beraninstruments.com.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/Config.in      |    1 +
- package/czmq/Config.in |   14 ++++++++++++++
- package/czmq/czmq.mk   |   22 ++++++++++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 package/czmq/Config.in
- create mode 100644 package/czmq/czmq.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 94e279b..84bfdbf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -494,6 +494,7 @@ source "package/mediastreamer/Config.in"
- endmenu
- 
- menu "Networking"
-+source "package/czmq/Config.in"
- source "package/glib-networking/Config.in"
- source "package/libcgi/Config.in"
- source "package/libcgicc/Config.in"
-diff --git a/package/czmq/Config.in b/package/czmq/Config.in
-new file mode 100644
-index 0000000..20d9285
---- /dev/null
-+++ b/package/czmq/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_CZMQ
-+	bool "czmq"
-+	select BR2_PACKAGE_ZEROMQ
-+	depends on BR2_INSTALL_LIBSTDCPP # zeromq
-+	depends on BR2_INET_IPV6 # zeromq
-+	depends on BR2_LARGEFILE # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	help
-+	  High-level C Binding for 0MQ
-+
-+	  http://czmq.zeromq.org/
-+
-+comment "czmq requires a toolchain with C++, LARGEFILE and WCHAR support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE && BR2_USE_WCHAR)
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-new file mode 100644
-index 0000000..98991fe
---- /dev/null
-+++ b/package/czmq/czmq.mk
-@@ -0,0 +1,22 @@
-+#############################################################
-+#
-+# czmq
-+#
-+#############################################################
-+
-+CZMQ_VERSION = cb9839cf90
-+CZMQ_SITE = git://github.com/zeromq/czmq.git
-+
-+CZMQ_AUTORECONF = YES
-+CZMQ_INSTALL_STAGING = YES
-+CZMQ_DEPENDENCIES = zeromq
-+CZMQ_LICENSE = LGPLv3+ with exceptions
-+CZMQ_LICENSE_FILES = COPYING COPYING.LESSER
-+
-+define CZMQ_CREATE_CONFIG_DIR
-+	mkdir -p $(@D)/config
-+endef
-+
-+CZMQ_PRE_CONFIGURE_HOOKS += CZMQ_CREATE_CONFIG_DIR
-+
-+$(eval $(autotools-package))
--- 
-1.7.10.4
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] On
+> Behalf Of Will Moore
+> Sent: 21 March 2013 11:09
+> 
+> Working in buildroot 2013.02, I get the following build failure with
+> dosfstools
+> selected:
+
+Sorry for the noise, this is already fixed in master - thanks Gustavo!
+
+> 
+> make[1]: Entering directory
+> `/home/apmdev/buildroot-2013.02/output/build/dosfstools-3.0.12'
+> /home/apmdev/buildroot-2013.02/output/host/usr/bin/i486-linux-gcc
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os
+> -c -o charconv.o src/charconv.c
+> /home/apmdev/buildroot-2013.02/output/host/usr/bin/i486-linux-gcc
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os
+> -c -o dosfslabel.o src/dosfslabel.c
+> src/charconv.c:2:19: fatal error: iconv.h: No such file or directory
+> compilation terminated.
+> /home/apmdev/buildroot-2013.02/output/host/usr/bin/i486-linux-gcc
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os
+> -c -o mkdosfs.o src/mkdosfs.c
+> 
+> I built a buildroot internal toolchain out of tree with the following
+> configuration extracted by:
+> 
+> make savedefconfig O=/home/apmdev/toolchain/buildroot-2013.02
+> 
+> BR2_x86_i486=y
+> BR2_STRIP_none=y
+> BR2_PACKAGE_GDB_SERVER=y
+> BR2_PACKAGE_GDB_HOST=y
+> BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> 
+> And built dosfstools with the above toolchain included as an external
+> toolchain
+> with the following configuration extracted by:
+> 
+> make savedefconfig
+> 
+> BR2_x86_i486=y
+> BR2_STRIP_none=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_PATH="/home/apmdev/toolchain/buildroot-
+> 2013.02/host/usr"
+> BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
+> BR2_TOOLCHAIN_EXTERNAL_WCHAR=y
+> # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+> BR2_PACKAGE_DOSFSTOOLS=y
+> BR2_PACKAGE_DOSFSTOOLS_MKDOSFS=y
+> 
+> I can see that the dosfstools.mk has:
+> 
+> ifneq ($(BR2_ENABLE_LOCALE),y)
+> DOSFSTOOLS_DEPENDENCIES += libiconv
+> DOSFSTOOLS_LDFLAGS += -liconv
+> endif
+> 
+> I am sure I could fiddle about and fix my build but also quite sure that I
+> could
+> break it for somebody else in my ignorance ... so suggestions as to how to fix
+> this correctly would be appreciated.
+> 
+> TIA,
+> 
+> 
+> 
+> Will
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
