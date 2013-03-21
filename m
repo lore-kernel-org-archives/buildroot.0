@@ -1,112 +1,51 @@
-From: Will Moore <will.moore@beraninstruments.com>
-Date: Thu, 21 Mar 2013 16:33:30 -0000
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 Mar 2013 17:39:30 +0100
 Subject: [Buildroot] Release 1.0.0 of the Buildroot/Eclipse integration
-In-Reply-To: <1358088734-23460-1-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <FBD7AD37A6A74823A8DFAD6AFE92493D@beraninstruments.com.local>
 References: <1358088734-23460-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <FBD7AD37A6A74823A8DFAD6AFE92493D@beraninstruments.com.local>
+ <FBD7AD37A6A74823A8DFAD6AFE92493D@beraninstruments.com.local>
+Message-ID: <20130321173930.7f91d0ba@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Will Moore,
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] On
-> Behalf Of Thomas Petazzoni
-> Sent: 13 January 2013 14:52
-> 
-> Hello,
-> 
-> We are proud to announce today the first release of the
-> Buildroot/Eclipse integration. This integration will make it easier
-> for Eclipse users to develop, build, and debug applications in the
-> context of embedded Linux systems generated with Buildroot.
-> 
-> This integration allows Eclipse to:
-> 
->  * Automatically discover the toolchain made available by each of the
->    Buildroot project on your machine.
-> 
->  * Automatically build your application or library in Eclipse using
->    the cross-compiler of a given Buildroot project. Eclipse also
->    automatically recognizes all the cross-compiled libraries that are
->    exposed through pkg-config, so that linking your application
->    against one or several of those libraries is just a matter of
->    selecting them in a list.
+On Thu, 21 Mar 2013 16:33:30 -0000, Will Moore wrote:
 
-So far so good, I have eclipse integration working up to this point, this saves
-a lot of messing about that was previously required to configure a project to
-pick up the cross tools and libraries - thanks!
+> So far so good, I have eclipse integration working up to this point, this saves
+> a lot of messing about that was previously required to configure a project to
+> pick up the cross tools and libraries - thanks!
 
-The only thing I have noticed so far: there is a slight feature around the
-pkg-config automatic inclusion of libraries. If I select then unselect a library
-in the project properties "Pkg-config" tab in eclipse, then look at the "Tool
-Settings", "Libraries" I find that the library is still in the list.  Actually
-there are multiple inclusions of the same library in the libraries list. Then
-when I do a build, the linker command line has e.g. "... -luuid -lz -luuid -lz
-..." on it.  It doesn't stop it working but it is untidy ... and when I have
-deselected the library I don't think I should find the linker still linking
-against it.
+Thanks a lot for your feedback, really appreciated!
 
-I hope to explore more later ...
+> The only thing I have noticed so far: there is a slight feature around the
+> pkg-config automatic inclusion of libraries. If I select then unselect a library
+> in the project properties "Pkg-config" tab in eclipse, then look at the "Tool
+> Settings", "Libraries" I find that the library is still in the list.  Actually
+> there are multiple inclusions of the same library in the libraries list. Then
+> when I do a build, the linker command line has e.g. "... -luuid -lz -luuid -lz
+> ..." on it.  It doesn't stop it working but it is untidy ... and when I have
+> deselected the library I don't think I should find the linker still linking
+> against it.
 
-> 
->  * Automatically copy your compiled application to the target and
->    execute it, directly from Eclipse, with just one click on the "Run"
->    button.
-> 
->  * Automatically start a remote debugging session, directly from
->    Eclipse, with just one click on the "Debug" button.
-> 
->  * Explore the target filesystem from Eclipse, get access to a shell
->    on the target (using SSH).
-> 
-> In order to help interested users, we are providing a detailed set of
-> tutorials, with numerous screenshots at:
-> 
->   https://github.com/mbats/eclipse-buildroot-bundle/wiki
-> 
-> The first tutorial details the installation, which is very simple:
-> 
->  * Download and install Eclipse for C/C++ developers
->  * Enable an update site, hosted at
->    http://buildroot.org/downloads/eclipse/. It will automatically pull
->    all the necessary Eclipse plugins to provide the features mentioned
->    above.
-> 
-> A video of a conference given on this topic at EclipseCon Europe 2012
-> is also available at https://www.youtube.com/watch?v=CNl784ws8F0,
-> providing a demonstration of Eclipse usage in a Buildroot
-> context. Note that a second presentation of this project will be done
-> at EclipseCon US 2013 in March in Boston.
-> 
-> We are attaching to this e-mail two patches for Buildroot:
-> 
->  * The first patch is mandatory to make the Buildroot/Eclipse
->    integration work. It registers the toolchain generated by each
->    Buildroot project in a hidden file located in the user's home
->    directory, which is then read by Eclipse to automatically find the
->    available toolchains.
-> 
->  * The second patch updates the manual to mention the
->    Eclipse/Buildroot integration, and a reference to the site for more
->    details.
-> 
-> We are very interested in receiving feedback from users, either
-> concerning bugs in the existing features, or suggestion of new
-> features. The Wiki of the project already mentions a number of
-> features that we would like to work on in the future, but having
-> feedback would definitely be appreciated.
-> 
-> All the Eclipse development and integration work has been done by
-> M?lanie Bats <melanie.bats@obeo.fr>.
-> 
-> Best regards,
-> 
-> M?lanie and Thomas
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Yes, we also noticed this problem and we intend to work on fixing it.
+
+It's worth noting that we will soon be releasing a new version of the
+Eclipse integration, which includes support for Autotools projects and
+Makefile-based projects.
+
+Also, this work will be presented next week at EclipseCon US in Boston,
+see
+http://www.eclipsecon.org/2013/sessions/buildroot-eclipse-bundle-powerful-ide-embedded-linux-developers.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
