@@ -1,107 +1,65 @@
-From: Vinicius Tinti <viniciustinti@gmail.com>
-Date: Thu, 21 Mar 2013 06:59:20 -0300
-Subject: [Buildroot] [PATCH v4 1/1] python-thrift: new package
-In-Reply-To: <5146BAD8.90208@mind.be>
-References: <5146BAD8.90208@mind.be>
-Message-ID: <1363859960-4131-1-git-send-email-viniciustinti@gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Thu, 21 Mar 2013 10:20:22 +0000
+Subject: [Buildroot] [PATCH] new patch model improvements
+Message-ID: <1363861222-6940-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add Python bindings for the Apache Thrift RPC.
+From: Simon Dawson <spdawson@gmail.com>
 
-Thrift is an interface definition language that is used to define and create
-services for numerous languages using remote procedure calls (RPC).
+Following the patch model rework, Arnout Vandecappelle has suggested a few
+simplifications and improvements to the documentation; this patch incorporates
+these suggested simplifications and improvements.
 
-This patch does not include the Thrift code generator. It only includes the
-Thrift libraries used at runtime.
-
-Signed-off-by: Tiago Maluta <tiagomaluta@gmail.com>
-Signed-off-by: Vinicius Tinti <viniciustinti@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
-Changes since v2:
-1. Remove empty line in Config.in
-2. Change to Apache-2.0
-3. Solve python-thrift, python-protobuf and python-netifaces conflict
-Changes since v3:
-1. Add workaround comment. Suggested by Arnout
-2. Fix extra / and https in package URL
-3. Change indentation
-4. Acked by Arnout
-5. Tested by Arnout
----
----
- package/Config.in                      |    1 +
- package/python-thrift/Config.in        |    7 +++++++
- package/python-thrift/python-thrift.mk |   30 ++++++++++++++++++++++++++++++
- 3 files changed, 38 insertions(+)
- create mode 100644 package/python-thrift/Config.in
- create mode 100644 package/python-thrift/python-thrift.mk
+ docs/manual/customize-packages.txt |    5 +++++
+ package/pkg-generic.mk             |   11 +++++------
+ 2 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 94e279b..69ab06e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -332,6 +332,7 @@ source "package/python-pygame/Config.in"
- source "package/python-pyparsing/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
-+source "package/python-thrift/Config.in"
- endmenu
- endif
- source "package/ruby/Config.in"
-diff --git a/package/python-thrift/Config.in b/package/python-thrift/Config.in
-new file mode 100644
-index 0000000..94a7590
---- /dev/null
-+++ b/package/python-thrift/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_THRIFT
-+	bool "python-thrift"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  python-thrift is a Python bindings for the Apache Thrift RPC system.
+diff --git a/docs/manual/customize-packages.txt b/docs/manual/customize-packages.txt
+index 1820c54..1e5acfa 100644
+--- a/docs/manual/customize-packages.txt
++++ b/docs/manual/customize-packages.txt
+@@ -21,3 +21,8 @@ exists, then all +*.patch+ files in the directory will be applied.
+ 
+ Otherwise, if the directory +$(BR2_GLOBAL_PATCH_DIR)/<packagename>+
+ exists, then all +*.patch+ files in the directory will be applied.
 +
-+	  http://thrift.apache.org/
-diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
-new file mode 100644
-index 0000000..c2fc752
---- /dev/null
-+++ b/package/python-thrift/python-thrift.mk
-@@ -0,0 +1,30 @@
-+#############################################################
-+#
-+# python-thrift
-+#
-+#############################################################
-+
-+PYTHON_THRIFT_VERSION = 0.9.0
-+PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
-+PYTHON_THRIFT_SITE = http://pypi.python.org/packages/source/t/thrift
-+PYTHON_THRIFT_LICENSE = Apache-2.0
-+PYTHON_THRIFT_LICENSE_FILES = README
-+
-+PYTHON_THRIFT_DEPENDENCIES = python
-+
-+define PYTHON_THRIFT_BUILD_CMDS
-+	(cd $(@D); \
-+		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
-+		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
-+		$(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+# host-distutilscross, if it has been installed before, will check that
-+# the installation directory is in python's load path. For host-python,
-+# it is not, so add it explicitly while installing to target.
-+define PYTHON_THRIFT_INSTALL_TARGET_CMDS
-+	(cd $(@D); PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-+		$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
++Note that, within a given directory, patches are applied in alphabetical
++order. Therefore, it is advisable to name patches
+++<packagename>-<number>-<description>.patch+, where +<number>+ is a
++numerical value that enforces the patch application order.
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index afb90bf..23c79f5 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -82,18 +82,17 @@ endif
+ # find the package directory (typically package/<pkgname>) and the
+ # prefix of the patches
+ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+-$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
+ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
+ 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+ 	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(p)$(sep))
+ 	$(Q)( \
+-	for D in $(PATCH_BASE_DIRS); do \
+-	  if test -d $${D}; then \
+-	    if test -d $${D}/$($(PKG)_VERSION); then \
+-	      support/scripts/apply-patches.sh $(@D) $${D}/$($(PKG)_VERSION) \*.patch \*.patch.$(ARCH) || exit 1; \
++	for D in $($(PKG)_DIR_PREFIX) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR)); do \
++	  if test -d $${D}/$(RAWNAME); then \
++	    if test -d $${D}/$(RAWNAME)/$($(PKG)_VERSION); then \
++	      support/scripts/apply-patches.sh $(@D) $${D}/$(RAWNAME)/$($(PKG)_VERSION) \*.patch \*.patch.$(ARCH) || exit 1; \
+ 	    else \
+-	      support/scripts/apply-patches.sh $(@D) $${D} \*.patch \*.patch.$(ARCH) || exit 1; \
++	      support/scripts/apply-patches.sh $(@D) $${D}/$(RAWNAME) \*.patch \*.patch.$(ARCH) || exit 1; \
+ 	    fi; \
+ 	  fi; \
+ 	done; \
 -- 
-1.7.9.5
+1.7.10.4
