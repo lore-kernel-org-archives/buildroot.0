@@ -1,52 +1,71 @@
-From: Alexander Varnin <fenixk19@mail.ru>
-Date: Thu, 21 Mar 2013 14:32:02 +0400
-Subject: [Buildroot] segfault of test on buildroot system
-In-Reply-To: <20130315110303.507c9f8a@skate>
-References: <5141FFBD.6050206@mail.ru> <20130315110303.507c9f8a@skate>
-Message-ID: <514AE1A2.8020407@mail.ru>
+From: Will Moore <will.moore@beraninstruments.com>
+Date: Thu, 21 Mar 2013 11:08:57 -0000
+Subject: [Buildroot] dosfstools build failure
+Message-ID: <3BFE71B30B4443209F36B91169D3F5ED@beraninstruments.com.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-15.03.2013 14:03, Thomas Petazzoni ?????:
-> Dear Alexander Varnin,
->
-> On Thu, 14 Mar 2013 20:50:05 +0400, Alexander Varnin wrote:
->
->> I'm using buildroot based system with ARM samsung processor (s3c2443).
->> I've found a case, when i get segfault in my application. Using x86
->> debian compilers doesn't reproduce error.
->> Attaching test program to this letter. There is an exception getting
->> throw from constructor of child-class (DisplayPassDevice). At that time
->> parent destructor (~PassageDevice) getting called. When exiting from
->> parent destructor i got segfault.
->> # ./throw
->> ~PassageDevice
->> Aborted (core dumped)
->>
->> One more necessary condition. The bug appears only when i compile my
->> code with pthread:
->> ../minipos-OS-build/host/usr/bin/arm-linux-g++ throw.cpp -o throw -lpthread
->>
->> When i compile without -lpthread flag, program works OK.
->> # ./throw
->> ~PassageDevice
->> catched
->>
->> I don't know what does this problem belongs to, so i write there for
->> help. Probably you'll just point me, where to report it.
->> Software i use is following: gcc 4.5.4, uClibc 0.9.33.2, linux 3.6.
->> Just in case, i'll attach buildroot config
-> I personally don't have much clue for the moment, so the only
-> suggestion I can do is to rebuild your system with BR2_ENABLE_DEBUG,
-> and then use gdbserver + cross-gdb to figure out where the segmentation
-> fault happens (or getting a core file generated and use cross-gdb to
-> inspect it).
->
-> Best regards,
->
-> Thomas
+Working in buildroot 2013.02, I get the following build failure with dosfstools
+selected:
 
-There seems to be stack corruption, so i can't see where fault happens.
+make[1]: Entering directory
+`/home/apmdev/buildroot-2013.02/output/build/dosfstools-3.0.12'
+/home/apmdev/buildroot-2013.02/output/host/usr/bin/i486-linux-gcc
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os
+-c -o charconv.o src/charconv.c
+/home/apmdev/buildroot-2013.02/output/host/usr/bin/i486-linux-gcc
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os
+-c -o dosfslabel.o src/dosfslabel.c
+src/charconv.c:2:19: fatal error: iconv.h: No such file or directory
+compilation terminated.
+/home/apmdev/buildroot-2013.02/output/host/usr/bin/i486-linux-gcc
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os
+-c -o mkdosfs.o src/mkdosfs.c
+
+I built a buildroot internal toolchain out of tree with the following
+configuration extracted by:
+
+make savedefconfig O=/home/apmdev/toolchain/buildroot-2013.02
+
+BR2_x86_i486=y
+BR2_STRIP_none=y
+BR2_PACKAGE_GDB_SERVER=y
+BR2_PACKAGE_GDB_HOST=y
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+
+And built dosfstools with the above toolchain included as an external toolchain
+with the following configuration extracted by:
+
+make savedefconfig
+
+BR2_x86_i486=y
+BR2_STRIP_none=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_PATH="/home/apmdev/toolchain/buildroot-2013.02/host/usr"
+BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
+BR2_TOOLCHAIN_EXTERNAL_WCHAR=y
+# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+BR2_PACKAGE_DOSFSTOOLS=y
+BR2_PACKAGE_DOSFSTOOLS_MKDOSFS=y
+
+I can see that the dosfstools.mk has:
+
+ifneq ($(BR2_ENABLE_LOCALE),y)
+DOSFSTOOLS_DEPENDENCIES += libiconv
+DOSFSTOOLS_LDFLAGS += -liconv
+endif
+
+I am sure I could fiddle about and fix my build but also quite sure that I could
+break it for somebody else in my ignorance ... so suggestions as to how to fix
+this correctly would be appreciated.
+
+TIA,
+
+
+
+Will
