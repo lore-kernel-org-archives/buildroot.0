@@ -1,63 +1,36 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 21 Mar 2013 22:04:35 +0100
-Subject: [Buildroot] [PATCH 4/7] manual: cleanup appendix.txt
+Date: Thu, 21 Mar 2013 22:04:37 +0100
+Subject: [Buildroot] [PATCH 6/7] Makefile: add to the release target a
+	warning about the manual updates.
 In-Reply-To: <cover.1363899518.git.s.martin49@gmail.com>
 References: <cover.1363899518.git.s.martin49@gmail.com>
-Message-ID: <f9fe4f723532fbfe58c42c1ce08e776018ed6983.1363899518.git.s.martin49@gmail.com>
+Message-ID: <91d8c3e54dbd91424ad55fd0e254da76e8b6ea8f.1363899518.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The manual-update-lists target is not added to the dependencies of the
+release target to allow editing the generated files.
+
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
 ---
-Changes since v1:
-* move the surrounding text of the list back in appendix.txt (Arnout)
----
- docs/manual/appendix.txt | 29 ++++++++++++++++++++---------
- 1 file changed, 20 insertions(+), 9 deletions(-)
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
-index ef34169..ce54b99 100644
---- a/docs/manual/appendix.txt
-+++ b/docs/manual/appendix.txt
-@@ -6,15 +6,26 @@ Appendix
- 
- include::makedev-syntax.txt[]
- 
-+
-+// Automatically generated lists:
-+
- [[package-list]]
--Available packages
--------------------
--// docs/manaual/pkg-list.txt is generated using the following command:
--// $ git grep -E '\((autotools|cmake|generic)-package\)' package/ |  \
--//     cut -d':' -f1 | grep '\.mk$' | \
--//     sed -e 's;.*\?/\(.*\?\).mk;* \1;' | \
--//     sort > docs/manual/pkg-list.txt
--
--include::pkg-list.txt[]
-+Package Selection for the target
-+--------------------------------
-+
-+include::package-list.txt[]
-+
-+[[host-package-list]]
-+Host utilities
-+--------------
-+
-+include::host-package-list.txt[]
-+
-+[[deprecated-list]]
-+Deprecated stuff
-+----------------
-+
-+The following stuff are marked as _deprecated_ in Buildroot due to
-+their status either too old or unmaintained.
- 
- include::deprecated-list.txt[]
+diff --git a/Makefile b/Makefile
+index c462bb1..2b25059 100644
+--- a/Makefile
++++ b/Makefile
+@@ -817,6 +817,8 @@ release: OUT=buildroot-$(BR2_VERSION)
+ # Create release tarballs. We need to fiddle a bit to add the generated
+ # documentation to the git output
+ release:
++	$(warning Make sure the manual is up-to-date. To update the manual, run:)
++	$(warning $$ make manual-update-lists)
+ 	git archive --format=tar --prefix=$(OUT)/ master > $(OUT).tar
+ 	$(MAKE) O=$(OUT) manual-html manual-txt manual-pdf
+ 	tar rf $(OUT).tar $(OUT)
 -- 
 1.8.2
