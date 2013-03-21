@@ -1,9 +1,9 @@
 From: Will Moore <will.moore@beraninstruments.com>
-Date: Thu, 21 Mar 2013 15:01:35 -0000
-Subject: [Buildroot] [PATCH] syslinux: bump to version 4.06
-In-Reply-To: <1363731698-15414-1-git-send-email-daniel.price@gmail.com>
-References: <1363731698-15414-1-git-send-email-daniel.price@gmail.com>
-Message-ID: <4D3103DF8A414EB78AF7BDE86406EF78@beraninstruments.com.local>
+Date: Thu, 21 Mar 2013 16:33:30 -0000
+Subject: [Buildroot] Release 1.0.0 of the Buildroot/Eclipse integration
+In-Reply-To: <1358088734-23460-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1358088734-23460-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <FBD7AD37A6A74823A8DFAD6AFE92493D@beraninstruments.com.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,61 +11,100 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-
 > -----Original Message-----
 > From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] On
-> Behalf Of Daniel Price
-> Sent: 19 March 2013 22:22
+> Behalf Of Thomas Petazzoni
+> Sent: 13 January 2013 14:52
 > 
-> Signed-off-by: Daniel Price <daniel.price@gmail.com>
+> Hello,
+> 
+> We are proud to announce today the first release of the
+> Buildroot/Eclipse integration. This integration will make it easier
+> for Eclipse users to develop, build, and debug applications in the
+> context of embedded Linux systems generated with Buildroot.
+> 
+> This integration allows Eclipse to:
+> 
+>  * Automatically discover the toolchain made available by each of the
+>    Buildroot project on your machine.
+> 
+>  * Automatically build your application or library in Eclipse using
+>    the cross-compiler of a given Buildroot project. Eclipse also
+>    automatically recognizes all the cross-compiled libraries that are
+>    exposed through pkg-config, so that linking your application
+>    against one or several of those libraries is just a matter of
+>    selecting them in a list.
 
-Tested-by: Will Moore <will.moore@beraninstruments.com>
+So far so good, I have eclipse integration working up to this point, this saves
+a lot of messing about that was previously required to configure a project to
+pick up the cross tools and libraries - thanks!
 
-Works for me to boot a vortex86dx 32 bit x86 clone from a USB flash drive.
+The only thing I have noticed so far: there is a slight feature around the
+pkg-config automatic inclusion of libraries. If I select then unselect a library
+in the project properties "Pkg-config" tab in eclipse, then look at the "Tool
+Settings", "Libraries" I find that the library is still in the list.  Actually
+there are multiple inclusions of the same library in the libraries list. Then
+when I do a build, the linker command line has e.g. "... -luuid -lz -luuid -lz
+..." on it.  It doesn't stop it working but it is untidy ... and when I have
+deselected the library I don't think I should find the linker still linking
+against it.
 
-> ---
->  boot/syslinux/syslinux-build-fix-for-uuid.patch |   15 ---------------
->  boot/syslinux/syslinux.mk                       |    2 +-
->  2 files changed, 1 insertions(+), 16 deletions(-)
->  delete mode 100644 boot/syslinux/syslinux-build-fix-for-uuid.patch
+I hope to explore more later ...
+
 > 
-> diff --git a/boot/syslinux/syslinux-build-fix-for-uuid.patch
-> b/boot/syslinux/syslinux-build-fix-for-uuid.patch
-> deleted file mode 100644
-> index 04ff562..0000000
-> --- a/boot/syslinux/syslinux-build-fix-for-uuid.patch
-> +++ /dev/null
-> @@ -1,15 +0,0 @@
-> -Author: Micah Gersten <micahg@ubuntu.com>
-> -Description: Fix build failure with --as-needed (Closes: #654838).
-> -
-> -diff -Naurp syslinux.orig/utils/Makefile syslinux/utils/Makefile
-> ---- syslinux.orig/utils/Makefile       2011-12-23 14:53:26.653571511 +0100
-> -+++ syslinux/utils/Makefile    2012-01-22 18:55:03.849466924 +0100
-> -@@ -51,7 +51,7 @@ isohdpfx.c: $(ISOHDPFX) isohdpfxarray.pl
-> - 	$(PERL) isohdpfxarray.pl $(ISOHDPFX) > $@
-> -
-> - isohybrid: isohybrid.o isohdpfx.o
-> --	$(CC) $(LDFLAGS) -luuid -o $@ $^
-> -+	$(CC) $(LDFLAGS) -o $@ $^ -luuid
-> -
-> - gethostip: gethostip.o
-> - 	$(CC) $(LDFLAGS) -o $@ $^
-> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-> index f63f2e0..046bdc3 100644
-> --- a/boot/syslinux/syslinux.mk
-> +++ b/boot/syslinux/syslinux.mk
-> @@ -4,7 +4,7 @@
->  #
->  #############################################################
+>  * Automatically copy your compiled application to the target and
+>    execute it, directly from Eclipse, with just one click on the "Run"
+>    button.
 > 
-> -SYSLINUX_VERSION = 4.05
-> +SYSLINUX_VERSION = 4.06
->  SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.bz2
->  SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/4.xx/
+>  * Automatically start a remote debugging session, directly from
+>    Eclipse, with just one click on the "Debug" button.
 > 
-> --
-> 1.7.6.5
+>  * Explore the target filesystem from Eclipse, get access to a shell
+>    on the target (using SSH).
+> 
+> In order to help interested users, we are providing a detailed set of
+> tutorials, with numerous screenshots at:
+> 
+>   https://github.com/mbats/eclipse-buildroot-bundle/wiki
+> 
+> The first tutorial details the installation, which is very simple:
+> 
+>  * Download and install Eclipse for C/C++ developers
+>  * Enable an update site, hosted at
+>    http://buildroot.org/downloads/eclipse/. It will automatically pull
+>    all the necessary Eclipse plugins to provide the features mentioned
+>    above.
+> 
+> A video of a conference given on this topic at EclipseCon Europe 2012
+> is also available at https://www.youtube.com/watch?v=CNl784ws8F0,
+> providing a demonstration of Eclipse usage in a Buildroot
+> context. Note that a second presentation of this project will be done
+> at EclipseCon US 2013 in March in Boston.
+> 
+> We are attaching to this e-mail two patches for Buildroot:
+> 
+>  * The first patch is mandatory to make the Buildroot/Eclipse
+>    integration work. It registers the toolchain generated by each
+>    Buildroot project in a hidden file located in the user's home
+>    directory, which is then read by Eclipse to automatically find the
+>    available toolchains.
+> 
+>  * The second patch updates the manual to mention the
+>    Eclipse/Buildroot integration, and a reference to the site for more
+>    details.
+> 
+> We are very interested in receiving feedback from users, either
+> concerning bugs in the existing features, or suggestion of new
+> features. The Wiki of the project already mentions a number of
+> features that we would like to work on in the future, but having
+> feedback would definitely be appreciated.
+> 
+> All the Eclipse development and integration work has been done by
+> M?lanie Bats <melanie.bats@obeo.fr>.
+> 
+> Best regards,
+> 
+> M?lanie and Thomas
 > 
 > _______________________________________________
 > buildroot mailing list
