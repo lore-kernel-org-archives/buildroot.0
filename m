@@ -1,55 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Mar 2013 00:16:46 +0100
-Subject: [Buildroot] [git commit] package/connman: bump version to 1.11
-In-Reply-To: <201303202358.23129.yann.morin.1998@free.fr>
-References: <20130301101142.D5D809ADCE@busybox.osuosl.org>
- <20130320222341.5e947d69@skate> <201303202358.23129.yann.morin.1998@free.fr>
-Message-ID: <201303210016.46336.yann.morin.1998@free.fr>
+From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
+Date: Thu, 21 Mar 2013 16:51:47 +1100
+Subject: [Buildroot] Autoreconf not compatible with
+	python-clean-for-reconfigure (BUG)
+Message-ID: <EE5E77B503DE9A478B63A89AAD2585EDB66A72@vpane.excalyptech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi,
 
-On Wednesday 20 March 2013 Yann E. MORIN wrote:
-> On Wednesday 20 March 2013 Thomas Petazzoni wrote:
-> > Seems like Connman 1.11 is not happy with some IPv6 issues:
-> > http://autobuild.buildroot.org/results/f99ae7af46c70f7c356b7771321511a42eb3694d/build-end.log.
-> > 
-> > Interestingly, the toolchain used here has IPv6 support. The toolchain
-> > is an internal toolchain, using 3.8 kernel headers, so pretty recent.
-> 
-> I tried building bridge-utils against this toolchain, and it fails with
-> the exact same error:
-> 
-> ---8<---
-> In file included from ../libbridge/libbridge.h:24:0,
->                  from brctl.c:25:
-> /home/ymorin/dev/buildroot/autobuild.tests/test/f99ae7af46c70f7c356b777132151
-> 1a42eb3694d/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/inc
-> lude/linux/if_bridge.h:172:20: error: field 'ip6' has incomplete type
-> ---8<---
-> 
-> So, it seems the UAPI split-up broke a few things... :-(
-> 
-> I'll dig to see if the upstreams have a fix (either as a new release, or
-> as a commit in their trees).
+I've noticed that when python-clean-for-reconfigure is called, python
+will subsequently fail to build.
 
-bridge-utils has not (yet?) been released with a fix, but it has been
-committed in their tree with a very explicit commit message:
-    https://git.kernel.org/cgit/linux/kernel/git/shemminger/bridge-utils.git/commit/?id=5eebb7f9288b7881ffb929b1fd494fe3ac3be27d
+Steps to reproduce:
+    $ make python
+    $ make python-clean-for-reconfigure
+    $ make python
 
-I'll see to apply a similar fix to connman later in the week.
+I've tried this on some other packages with <PKG>_AUTORECONF = YES,
+using libtool v2.2, but so far I've only gotten the error with python.
 
-Regards,
-Yann E. MORIN.
+Here's what the failure looks like:
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+    >>> python 2.7.3 Autoreconfiguring
+    
+    Applying buildroot-libtool-v2.2.patch using patch:
+    patching file ltmain.sh
+    Reversed (or previously applied) patch detected!  Assume -R? [n]
+    Apply anyway? [n]
+    Skipping patch.
+    5 out of 5 hunks ignored -- saving rejects to file ltmain.sh.rej
+    Patch failed!  Please fix buildroot-libtool-v2.2.patch!
+    make: ***
+[/home/przemyslaw/work/cassini/output/build/python-2.7.3/.stamp_configur
+ed] Error 1
+
+This doesn't seem to affect other packages with autoreconf though.
+
+I'm not sure what a good way to fix this is. Perhaps a way to only do
+the patching once using the LIBTOOL_PATCH_HOOK, since the autoreconf
+doesn't seem to touch the ltmain.sh file there.
+
+Cheers,
+Przemyslaw Wrzos
