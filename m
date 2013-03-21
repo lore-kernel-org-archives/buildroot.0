@@ -1,97 +1,59 @@
-From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Fri, 22 Mar 2013 16:53:34 +0800
-Subject: [Buildroot] [PATCH v2 1/2] package: Makefile.in: Add target
-	compilation flags for NOMMU architecture.
-Message-ID: <1363942415-31379-1-git-send-email-sonic.adi@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 21 Mar 2013 18:45:40 +0100
+Subject: [Buildroot] [PATCH 116/120] xutil_util-macros: bump revision to
+ X11R7.7
+In-Reply-To: <1363611926-27105-57-git-send-email-jbb@gamblify.com>
+References: <1363611926-27105-1-git-send-email-jbb@gamblify.com>
+ <1363611926-27105-57-git-send-email-jbb@gamblify.com>
+Message-ID: <514B4744.7030100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sonic Zhang <sonic.zhang@analog.com>
+On 18/03/13 14:05, Jesper Baekdahl wrote:
+> From: Will Wagner <will_wagner@carallon.com>
+>
+> Signed-off-by: Will Wagner <will_wagner@carallon.com>
+> Signed-off-by: Jesper Baekdahl <jbb@gamblify.com>
+> ---
+>   package/x11r7/xutil_util-macros/xutil_util-macros-1.17.patch |    9 +++++++++
+>   1 file changed, 9 insertions(+)
+>   create mode 100644 package/x11r7/xutil_util-macros/xutil_util-macros-1.17.patch
+>
+> diff --git a/package/x11r7/xutil_util-macros/xutil_util-macros-1.17.patch b/package/x11r7/xutil_util-macros/xutil_util-macros-1.17.patch
+> new file mode 100644
+> index 0000000..167229d
+> --- /dev/null
+> +++ b/package/x11r7/xutil_util-macros/xutil_util-macros-1.17.patch
+> @@ -0,0 +1,9 @@
+> +--- xutil_util-macros-1.8.0/xorg-macros.m4.in.orig	2010-05-27 14:03:30.000000000 +0100
+> ++++ xutil_util-macros-1.8.0/xorg-macros.m4.in	2011-11-09 11:57:41.000000000 +0000
+> +@@ -1064,3 +1064,6 @@ mv \$(top_srcdir)/.INSTALL.tmp \$(top_sr
+> + echo 'util-macros \"pkgdatadir\" from xorg-macros.pc not found: installing possibly empty INSTALL.' >&2)"
+> + AC_SUBST([INSTALL_CMD])
+> + ]) # XORG_INSTALL
+> ++
+> ++# Buildroot stuff
+> ++AC_SUBST(STAGING_DIR)
 
-v2-changes:
-- Use double-dollar to cite ($(2)_FLAT_STACKSIZE)
 
-v1-changes:
-- Add BR2_TARGET_ABI_FLAT option
-- Add NOMMU compiling macro
-- Add FLAT ABI specific link flags
-- Add stack size to FLAT link flags if macro <PKG>_FLAT_STACKSIZE is defined.
+  This does not make sense... It's not a version bump, first of all, and 
+in addition the STAGING_DIR variable isn't used anywhere so substituting 
+it won't do much good... Or am I missing something? In addition, it's 
+very strange that a patch for version 1.17 would refer to the -1.8.0 
+directory. And finally: patch filenames shouldn't contain a version 
+number, and the patch should have an explanatory comment and a 
+Signed-off-by line.
 
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
----
- arch/Config.in           |    3 +++
- package/Makefile.in      |    8 ++++++++
- package/pkg-autotools.mk |    5 +++++
- package/pkg-generic.mk   |    5 +++++
- 4 files changed, 21 insertions(+), 0 deletions(-)
+  Regards,
+  Arnout
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 472b10c..120c67e 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -174,6 +174,9 @@ config BR2_GCC_TARGET_ABI
- config BR2_GCC_TARGET_CPU
- 	string
- 
-+config BR2_TARGET_ABI_FLAT
-+	bool
-+
- if BR2_arm || BR2_armeb
- source "arch/Config.in.arm"
- endif
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a8bf36b..acfd9c8 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -103,6 +103,14 @@ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET
- TARGET_CXXFLAGS = $(TARGET_CFLAGS)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
-+ifeq ($(BR2_TARGET_ABI_FLAT),y)
-+TARGET_LDFLAGS += -Wl,-elf2flt
-+endif
-+
-+ifneq ($(BR2_USE_MMU), y)
-+TARGET_CFLAGS += -D__NOMMU__
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
- TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
- else
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 890506b..09bdc7b 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -82,6 +82,11 @@ $(2)_CLEAN_OPT			?= clean
- $(2)_UNINSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) uninstall
- $(2)_UNINSTALL_TARGET_OPT	?= DESTDIR=$$(TARGET_DIR)  uninstall
- 
-+ifeq ($(BR2_TARGET_ABI_FLAT),y)
-+ ifneq ($$($(2)_FLAT_STACKSIZE),)
-+  $(2)_CONF_ENV			+= LDFLAGS="$(TARGET_LDFLAGS) -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)"
-+ endif
-+endif
- 
- #
- # Configure step. Only define it if not already defined by the package
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 57b0fd0..5ce32f9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -303,6 +303,11 @@ endif
- 
- $(2)_REDISTRIBUTE		?= YES
- 
-+ifeq ($(BR2_TARGET_ABI_FLAT),y)
-+ ifneq ($$($(2)_FLAT_STACKSIZE),)
-+  $(2)_FLAT_LDFLAGS = -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)
-+ endif
-+endif
- 
- $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
- 
 -- 
-1.7.0.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
