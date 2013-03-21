@@ -1,51 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Mar 2013 17:39:30 +0100
-Subject: [Buildroot] Release 1.0.0 of the Buildroot/Eclipse integration
-In-Reply-To: <FBD7AD37A6A74823A8DFAD6AFE92493D@beraninstruments.com.local>
-References: <1358088734-23460-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <FBD7AD37A6A74823A8DFAD6AFE92493D@beraninstruments.com.local>
-Message-ID: <20130321173930.7f91d0ba@skate>
+From: Shawn J. Goff <shawn7400@gmail.com>
+Date: Thu, 21 Mar 2013 13:01:08 -0400
+Subject: [Buildroot] Trouble linking libroxml
+In-Reply-To: <CAGiDA6+wP_PEqQ0SvLO6EUng0fkH2FH-hFvPyBYcNLa1yaTHXg@mail.gmail.com>
+References: <CAGiDA6+wP_PEqQ0SvLO6EUng0fkH2FH-hFvPyBYcNLa1yaTHXg@mail.gmail.com>
+Message-ID: <CAGiDA6J3Ncm8=i6Gp+BEDcoHrXXjEQGQwD4aSLdbeJjexVVeRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Moore,
+On Tue, Mar 19, 2013 at 6:21 PM, Shawn J. Goff <shawn7400@gmail.com> wrote:
+> I'm trying to link use libroxml, but I'm getting errors like this:
+>
+>     undefined reference to `roxml_load_buf(char*)'
+>
+> The compiler line looks like this:
+>
+>     arm-unknown-linux-gnueabi-g++   main.o debug.o modem.o mutex.o
+> qmodem.o serial.o util.o -lusb -lrt -lpthread -lm -lcurl -lroxml -o
+> modem-monitor
+>
+> libroxml.so is built and in the target and the sysroot, and
+> arm-unknown-linux-gnueabi-nm shows the symbol is present.
+>
+>
+> Is there anything else I might be missing?
 
-On Thu, 21 Mar 2013 16:33:30 -0000, Will Moore wrote:
-
-> So far so good, I have eclipse integration working up to this point, this saves
-> a lot of messing about that was previously required to configure a project to
-> pick up the cross tools and libraries - thanks!
-
-Thanks a lot for your feedback, really appreciated!
-
-> The only thing I have noticed so far: there is a slight feature around the
-> pkg-config automatic inclusion of libraries. If I select then unselect a library
-> in the project properties "Pkg-config" tab in eclipse, then look at the "Tool
-> Settings", "Libraries" I find that the library is still in the list.  Actually
-> there are multiple inclusions of the same library in the libraries list. Then
-> when I do a build, the linker command line has e.g. "... -luuid -lz -luuid -lz
-> ..." on it.  It doesn't stop it working but it is untidy ... and when I have
-> deselected the library I don't think I should find the linker still linking
-> against it.
-
-Yes, we also noticed this problem and we intend to work on fixing it.
-
-It's worth noting that we will soon be releasing a new version of the
-Eclipse integration, which includes support for Autotools projects and
-Makefile-based projects.
-
-Also, this work will be presented next week at EclipseCon US in Boston,
-see
-http://www.eclipsecon.org/2013/sessions/buildroot-eclipse-bundle-powerful-ide-embedded-linux-developers.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+kos_tom helped me in the chat room. g++ mangles its symbol names, so
+when you link a C library, you have to tell the compiler to treat the
+symbols as C symbols instead of c++ symobls. More details are here:
+http://stackoverflow.com/questions/67894/why-do-we-need-extern-c-include-foo-h-in-c
+.
