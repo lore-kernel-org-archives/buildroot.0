@@ -1,71 +1,47 @@
-From: Will Moore <will.moore@beraninstruments.com>
-Date: Thu, 21 Mar 2013 11:08:57 -0000
-Subject: [Buildroot] dosfstools build failure
-Message-ID: <3BFE71B30B4443209F36B91169D3F5ED@beraninstruments.com.local>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 21 Mar 2013 08:53:47 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 2, 4,
+	8}.x stable version
+Message-ID: <1363866828-11768-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Working in buildroot 2013.02, I get the following build failure with dosfstools
-selected:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                                | 8 ++++----
+ ...70-headers_install-fix-__packed-in-exported-kernel-head.patch} | 0
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.69-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.70-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-make[1]: Entering directory
-`/home/apmdev/buildroot-2013.02/output/build/dosfstools-3.0.12'
-/home/apmdev/buildroot-2013.02/output/host/usr/bin/i486-linux-gcc
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os
--c -o charconv.o src/charconv.c
-/home/apmdev/buildroot-2013.02/output/host/usr/bin/i486-linux-gcc
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os
--c -o dosfslabel.o src/dosfslabel.c
-src/charconv.c:2:19: fatal error: iconv.h: No such file or directory
-compilation terminated.
-/home/apmdev/buildroot-2013.02/output/host/usr/bin/i486-linux-gcc
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os
--c -o mkdosfs.o src/mkdosfs.c
-
-I built a buildroot internal toolchain out of tree with the following
-configuration extracted by:
-
-make savedefconfig O=/home/apmdev/toolchain/buildroot-2013.02
-
-BR2_x86_i486=y
-BR2_STRIP_none=y
-BR2_PACKAGE_GDB_SERVER=y
-BR2_PACKAGE_GDB_HOST=y
-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-
-And built dosfstools with the above toolchain included as an external toolchain
-with the following configuration extracted by:
-
-make savedefconfig
-
-BR2_x86_i486=y
-BR2_STRIP_none=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_PATH="/home/apmdev/toolchain/buildroot-2013.02/host/usr"
-BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
-BR2_TOOLCHAIN_EXTERNAL_WCHAR=y
-# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-BR2_PACKAGE_DOSFSTOOLS=y
-BR2_PACKAGE_DOSFSTOOLS_MKDOSFS=y
-
-I can see that the dosfstools.mk has:
-
-ifneq ($(BR2_ENABLE_LOCALE),y)
-DOSFSTOOLS_DEPENDENCIES += libiconv
-DOSFSTOOLS_LDFLAGS += -liconv
-endif
-
-I am sure I could fiddle about and fix my build but also quite sure that I could
-break it for somebody else in my ignorance ... so suggestions as to how to fix
-this correctly would be appreciated.
-
-TIA,
-
-
-
-Will
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 91d3b23..4900aef 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -62,14 +62,14 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.69"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.70"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.40"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.41"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.36"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.37"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+-	default "3.8.3"		if BR2_KERNEL_HEADERS_3_8
++	default "3.8.4"		if BR2_KERNEL_HEADERS_3_8
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.69-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.70-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.69-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.70-headers_install-fix-__packed-in-exported-kernel-head.patch
+-- 
+1.8.1.5
