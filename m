@@ -1,51 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Mar 2013 18:45:40 +0100
-Subject: [Buildroot] [PATCH 116/120] xutil_util-macros: bump revision to
- X11R7.7
-In-Reply-To: <1363611926-27105-57-git-send-email-jbb@gamblify.com>
-References: <1363611926-27105-1-git-send-email-jbb@gamblify.com>
- <1363611926-27105-57-git-send-email-jbb@gamblify.com>
-Message-ID: <514B4744.7030100@mind.be>
+Date: Thu, 21 Mar 2013 18:25:54 +0100
+Subject: [Buildroot] Creating JFFS2 rootfs to SPI flash,
+ and mounting it from kernel
+In-Reply-To: <CAF-Ht3xbVBXzdjL5Jc9eC6XrswaA8MjQ2Jy9apFG29tMJNEs_w@mail.gmail.com>
+References: <CAF-Ht3xbVBXzdjL5Jc9eC6XrswaA8MjQ2Jy9apFG29tMJNEs_w@mail.gmail.com>
+Message-ID: <514B42A2.6090808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/03/13 14:05, Jesper Baekdahl wrote:
-> From: Will Wagner <will_wagner@carallon.com>
+On 18/03/13 07:45, Juha Lumme wrote:
+> 1) My board is described in dtb file, so is it correct to assume that I
+> should also describe my flash layout there under the SPI section for the
+> flash ?
+
+  It's either in the DTB or you can pass it along as boot arguments, 
+something like:
+mtdparts=dataflash0:128k(u-boot),4m(kernel),12m(rootfs),-(home)
+
+> My planned layout is something like this (please ignore the addresses
+> themselves):
+> 0x0 - 0x9 u-boot
+> 0x10 - 0x19 kernel
+> 0x20 - 0x29 root fs
+> 0x30 - 0x39 /home
 >
-> Signed-off-by: Will Wagner <will_wagner@carallon.com>
-> Signed-off-by: Jesper Baekdahl <jbb@gamblify.com>
-> ---
->   package/x11r7/xutil_util-macros/xutil_util-macros-1.17.patch |    9 +++++++++
->   1 file changed, 9 insertions(+)
->   create mode 100644 package/x11r7/xutil_util-macros/xutil_util-macros-1.17.patch
->
-> diff --git a/package/x11r7/xutil_util-macros/xutil_util-macros-1.17.patch b/package/x11r7/xutil_util-macros/xutil_util-macros-1.17.patch
-> new file mode 100644
-> index 0000000..167229d
-> --- /dev/null
-> +++ b/package/x11r7/xutil_util-macros/xutil_util-macros-1.17.patch
-> @@ -0,0 +1,9 @@
-> +--- xutil_util-macros-1.8.0/xorg-macros.m4.in.orig	2010-05-27 14:03:30.000000000 +0100
-> ++++ xutil_util-macros-1.8.0/xorg-macros.m4.in	2011-11-09 11:57:41.000000000 +0000
-> +@@ -1064,3 +1064,6 @@ mv \$(top_srcdir)/.INSTALL.tmp \$(top_sr
-> + echo 'util-macros \"pkgdatadir\" from xorg-macros.pc not found: installing possibly empty INSTALL.' >&2)"
-> + AC_SUBST([INSTALL_CMD])
-> + ]) # XORG_INSTALL
-> ++
-> ++# Buildroot stuff
-> ++AC_SUBST(STAGING_DIR)
+> 2) Currently I am passing the partition info on the memory card to the
+> kernel from u-boot (noinitrd console=ttyAMA0,115200 root=/dev/mmcblk0p2
+> rw rootwait).
+> Can I now change this to: "noinitrd console=ttyAMA0,115200
+> root=/dev/mtdblock2 rootfstype=jffs2 ro rootwait" ?
+> I'm thinking the block2 is since block 0 is u-boot and 1 would be kernel
+> ? ro instead of rw since I don't want to write to root fs.
+> Or does that make any sense ? What would you recommend me to do ? Is
+> JFFS2 a good idea ? Should I consider RAMFS for root file system ?
+
+  JFFS2 as a read-only rootfs works perfectly. If you want to explore 
+alternatives, consider UBI/UBIFS, but that's a bit more complex to set up.
 
 
-  This does not make sense... It's not a version bump, first of all, and 
-in addition the STAGING_DIR variable isn't used anywhere so substituting 
-it won't do much good... Or am I missing something? In addition, it's 
-very strange that a patch for version 1.17 would refer to the -1.8.0 
-directory. And finally: patch filenames shouldn't contain a version 
-number, and the patch should have an explanatory comment and a 
-Signed-off-by line.
+> 3) Where can I tell my kernel to mount /home as a separate file system ?
+> I would like that one to be read write, but I only rarely need to save
+> configuration files there... What would be a good idea with this ?
+
+  In /etc/fstab. Create a target rootfs overlay with a custom fstab that 
+specifies to mount /dev/mtdblok3 on /home.
+
+  Note that you'll have to manually create a (supposedly empty) jffs2 
+filesystem on /dev/mtdblock3.
+
 
   Regards,
   Arnout
