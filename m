@@ -1,34 +1,59 @@
-From: Shawn J. Goff <shawn7400@gmail.com>
-Date: Thu, 21 Mar 2013 13:01:08 -0400
-Subject: [Buildroot] Trouble linking libroxml
-In-Reply-To: <CAGiDA6+wP_PEqQ0SvLO6EUng0fkH2FH-hFvPyBYcNLa1yaTHXg@mail.gmail.com>
-References: <CAGiDA6+wP_PEqQ0SvLO6EUng0fkH2FH-hFvPyBYcNLa1yaTHXg@mail.gmail.com>
-Message-ID: <CAGiDA6J3Ncm8=i6Gp+BEDcoHrXXjEQGQwD4aSLdbeJjexVVeRA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 21 Mar 2013 15:02:23 -0300
+Subject: [Buildroot] [PATCH] dropbear: bump to version 2013.56
+Message-ID: <1363888943-843-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 19, 2013 at 6:21 PM, Shawn J. Goff <shawn7400@gmail.com> wrote:
-> I'm trying to link use libroxml, but I'm getting errors like this:
->
->     undefined reference to `roxml_load_buf(char*)'
->
-> The compiler line looks like this:
->
->     arm-unknown-linux-gnueabi-g++   main.o debug.o modem.o mutex.o
-> qmodem.o serial.o util.o -lusb -lrt -lpthread -lm -lcurl -lroxml -o
-> modem-monitor
->
-> libroxml.so is built and in the target and the sysroot, and
-> arm-unknown-linux-gnueabi-nm shows the symbol is present.
->
->
-> Is there anything else I might be missing?
+Switch ECHOs to SEDs to avoid issues with defines changing after
+sysoptions.h was included - and it's cleaner.
+Enable hmac-sha2-256 and hmac-sha2-512 support for the full featured.
 
-kos_tom helped me in the chat room. g++ mangles its symbol names, so
-when you link a C library, you have to tell the compiler to treat the
-symbols as C symbols instead of c++ symobls. More details are here:
-http://stackoverflow.com/questions/67894/why-do-we-need-extern-c-include-foo-h-in-c
-.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dropbear/dropbear.mk | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index bd45221..cec57db 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,8 +4,9 @@
+ #
+ #############################################################
+ 
+-DROPBEAR_VERSION = 2012.55
++DROPBEAR_VERSION = 2013.56
+ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
++DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
+ DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
+ 		PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp"
+@@ -24,16 +25,18 @@ endef
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_FIX_XAUTH
+ 
+ define DROPBEAR_DISABLE_REVERSE_DNS
+-	$(SED) 's,^#define DO_HOST_LOOKUP.*,/* #define DO_HOST_LOOKUP */,' $(@D)/options.h
++	$(SED) 's:\(#define DO_HOST_LOOKUP\):/*\1 */:' $(@D)/options.h
+ endef
+ 
+ define DROPBEAR_BUILD_SMALL
+-	echo "#define DROPBEAR_SMALL_CODE" >>$(@D)/options.h
+-	echo "#define NO_FAST_EXPTMOD" >>$(@D)/options.h
++	$(SED) 's:.*\(#define DROPBEAR_SMALL_CODE\).*:\1:' $(@D)/options.h
++	$(SED) 's:.*\(#define NO_FAST_EXPTMOD\).*:\1:' $(@D)/options.h
+ endef
+ 
+ define DROPBEAR_BUILD_FEATURED
+-	echo "#define DROPBEAR_BLOWFISH" >>$(@D)/options.h
++	$(SED) 's:.*\(#define DROPBEAR_BLOWFISH\).*:\1:' $(@D)/options.h
++	$(SED) 's:.*\(#define DROPBEAR_SHA2_256_HMAC\).*:\1:' $(@D)/options.h
++	$(SED) 's:.*\(#define DROPBEAR_SHA2_512_HMAC\).*:\1:' $(@D)/options.h
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),y)
+-- 
+1.8.1.5
