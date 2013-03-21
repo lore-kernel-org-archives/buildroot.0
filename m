@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Mar 2013 09:25:27 +0100
-Subject: [Buildroot] [git commit] package/connman: bump version to 1.11
-In-Reply-To: <201303210016.46336.yann.morin.1998@free.fr>
-References: <20130301101142.D5D809ADCE@busybox.osuosl.org>
- <20130320222341.5e947d69@skate>
- <201303202358.23129.yann.morin.1998@free.fr>
- <201303210016.46336.yann.morin.1998@free.fr>
-Message-ID: <20130321092527.3ae1e3e0@skate>
+Date: Thu, 21 Mar 2013 09:26:09 +0100
+Subject: [Buildroot] [PATCH] Fix external toolchain gdbserver copy path
+ for using buildroot-generated toolchain
+In-Reply-To: <B5EF724456FFB24A8C8AE88E26CE8F4B6D7F0889@G9W0753.americas.hpqcorp.net>
+References: <B5EF724456FFB24A8C8AE88E26CE8F4B6D7EAEA9@G9W0753.americas.hpqcorp.net>
+ <20130320215447.0d7c272f@skate>
+ <B5EF724456FFB24A8C8AE88E26CE8F4B6D7F0889@G9W0753.americas.hpqcorp.net>
+Message-ID: <20130321092609.2f9e9aeb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Worth, Kevin,
 
-On Thu, 21 Mar 2013 00:16:46 +0100, Yann E. MORIN wrote:
-> > So, it seems the UAPI split-up broke a few things... :-(
-> > 
-> > I'll dig to see if the upstreams have a fix (either as a new release, or
-> > as a commit in their trees).
-> 
-> bridge-utils has not (yet?) been released with a fix, but it has been
-> committed in their tree with a very explicit commit message:
->     https://git.kernel.org/cgit/linux/kernel/git/shemminger/bridge-utils.git/commit/?id=5eebb7f9288b7881ffb929b1fd494fe3ac3be27d
-> 
-> I'll see to apply a similar fix to connman later in the week.
+On Wed, 20 Mar 2013 22:27:08 +0000, Worth, Kevin wrote:
 
-Great, thanks for the investigation!
+> Thanks- I figured I could at least offer some approach to fix it, even if it wasn't ideal. :)
+
+Sure, your investigation was very nice, it clearly showed where the
+problem was.
+
+> This approach saves me a lot of time not having to rebuild toolchains, and is relatively easy to manage.
+
+Of course.
+
+I'll try to remember to Cc you when I come up with a patch that fixes
+this.
+
+Thanks!
 
 Thomas
 -- 
