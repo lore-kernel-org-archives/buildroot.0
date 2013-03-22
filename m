@@ -1,102 +1,76 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 22 Mar 2013 11:08:23 +0100
-Subject: [Buildroot] [PATCH 4/5] Enable ccache for cmake packages
-In-Reply-To: <514C271D.7010207@lucaceresoli.net>
-References: <1362590066-5448-1-git-send-email-luca@lucaceresoli.net>
- <1362590066-5448-5-git-send-email-luca@lucaceresoli.net>
- <CAHXCMMKpKo_jagngfJFDHPKfiMeUb3+zx5wZ++tg81OjwQ_8iA@mail.gmail.com>
- <5149EEA6.1010702@lucaceresoli.net> <514B89E1.4000206@lucaceresoli.net>
- <CAHXCMMJmuv42YoAPmo=c5G-mdOMU6dkLdPxG=ftvQvS+vXuDGA@mail.gmail.com>
- <514C271D.7010207@lucaceresoli.net>
-Message-ID: <CAHXCMMJcUDVKP38GZ_-roGCfuTrCLyxUJRqGh1HC-Fe5yRakkQ@mail.gmail.com>
+From: Jesper Baekdahl <jbb@gamblify.com>
+Date: Fri, 22 Mar 2013 12:38:15 +0100
+Subject: [Buildroot] [PATCH 116/120] xutil_util-macros: bump revision to
+	X11R7.7
+In-Reply-To: <514B4744.7030100@mind.be>
+References: <1363611926-27105-1-git-send-email-jbb@gamblify.com>
+ <1363611926-27105-57-git-send-email-jbb@gamblify.com>
+ <514B4744.7030100@mind.be>
+Message-ID: <CALnvph25-kzzbNtgkBjzx99OxjFx41g4OaPK6UezbzCfUPzArQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lucas,
+Hi Arnout Vandecappelle
 
-2013/3/22 Luca Ceresoli <luca@lucaceresoli.net>:
-> Samuel Martin wrote:
->>
->> Hi Lucas,
->>
->> 2013/3/21 Luca Ceresoli <luca@lucaceresoli.net>:
-[...]
->> AFAIK, ccache only supports C, C++, Objective-C and Objective-C++.
->> So, I think, it is useless to set it for anything else.
->
->
-> Ouch, right!
-> The fix is as easy as:
->>     set(CMAKE_ASM_COMPILER $(TARGET_CC_NOCCACHE))\n\
->
-> Now when ccache is enabled it all works OK.
->
->
->> BTW, I also use to set most of the binutils/gcc binaries in my CMake
->> toolchain files,
->> this includes setting the following variables:
->> CMAKE_{LINKER,AR,RANDLIB,NM,OBJCOPY,OBJDUMP,STRIP}.
->>
->> So, IMHO, it is not stupid to set CMAKE_ASM_COMPILER as well, though I
->> never need it so far.
->>
->> [...]
->>>
->>> Now it compiles correctly but with two bad side effects.
->>>
->>> First, when building without ccache, CMake detects /usr/bin/cc as the
->>> (supposedly cross-) compiler, leading to an obvious link failure.
->>> Ok, this can be worked around by generating a different
->>> toolchainfile.cmake for the ccache and non-ccache cases, although it
->>> is annoying.
->>
->> Well, here I use to conditionnaly enable ccache if found using
->> something like this:
->>
->> --
->> find_program(CCACHE "ccache")
->> if (CCACHE)
->>    message( STATUS "Using ccache")
->> endif(CCACHE)
->>
->> if (CCACHE AND NOT FORCE_NO_CCACHE)
->>    set(CMAKE_C_COMPILER "${CCACHE}" CACHE FILEPATH "" FORCE)
->>    set(CMAKE_CXX_COMPILER "${CCACHE}" CACHE FILEPATH "" FORCE)
->>    set(CMAKE_C_COMPILER_ARG1 "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-gcc")
->>    set(CMAKE_CXX_COMPILER_ARG1 "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-g++")
->> else(CCACHE AND NOT FORCE_NO_CCACHE)
->>    set(CMAKE_C_COMPILER "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-gcc")
->>    set(CMAKE_CXX_COMPILER "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-g++")
->> endif(CCACHE AND NOT FORCE_NO_CCACHE)
->> --
->
->
-> I'm not following you here. This would require patching the
-> CMakeLists.txt file for every CMake package, right?
-Nope, just the toolchainfile.cmake.
-And when ccache is disabled, we can just force it by setting
-FORCE_NO_CCACHE in the CMake infra.
+Thank you for taking a look.
 
+On Thu, Mar 21, 2013 at 6:45 PM, Arnout Vandecappelle <arnout@mind.be>wrote:
+
+> On 18/03/13 14:05, Jesper Baekdahl wrote:
 >
-> If we want to solve this cleanly, it should be in the BR infrastructure.
-Agree
+>> From: Will Wagner <will_wagner@carallon.com>
+>>
+>> Signed-off-by: Will Wagner <will_wagner@carallon.com>
+>> Signed-off-by: Jesper Baekdahl <jbb@gamblify.com>
+>> ---
+>>   package/x11r7/xutil_util-**macros/xutil_util-macros-1.17.**patch |
+>>  9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>   create mode 100644 package/x11r7/xutil_util-**
+>> macros/xutil_util-macros-1.17.**patch
+>>
+>> diff --git a/package/x11r7/xutil_util-**macros/xutil_util-macros-1.17.**patch
+>> b/package/x11r7/xutil_util-**macros/xutil_util-macros-1.17.**patch
+>> new file mode 100644
+>> index 0000000..167229d
+>> --- /dev/null
+>> +++ b/package/x11r7/xutil_util-**macros/xutil_util-macros-1.17.**patch
+>> @@ -0,0 +1,9 @@
+>> +--- xutil_util-macros-1.8.0/xorg-**macros.m4.in.orig     2010-05-27
+>> 14:03:30.000000000 +0100
+>> ++++ xutil_util-macros-1.8.0/xorg-**macros.m4.in<http://xorg-macros.m4.in> 2011-11-09 11:57:41.000000000 +0000
+>> +@@ -1064,3 +1064,6 @@ mv \$(top_srcdir)/.INSTALL.tmp \$(top_sr
+>> + echo 'util-macros \"pkgdatadir\" from xorg-macros.pc not found:
+>> installing possibly empty INSTALL.' >&2)"
+>> + AC_SUBST([INSTALL_CMD])
+>> + ]) # XORG_INSTALL
+>> ++
+>> ++# Buildroot stuff
+>> ++AC_SUBST(STAGING_DIR)
+>>
+>
+>
+>  This does not make sense... It's not a version bump, first of all, and in
+> addition the STAGING_DIR variable isn't used anywhere so substituting it
+> won't do much good... Or am I missing something? In addition, it's very
+> strange that a patch for version 1.17 would refer to the -1.8.0 directory.
+> And finally: patch filenames shouldn't contain a version number, and the
+> patch should have an explanatory comment and a Signed-off-by line.
 
-> I think we shouldgenerate the toolchainfile.cmakefile with a different
-> content for the two cases (ccache/no-ccache). But we also should generate
-> it unconditionally at every build, in case the user changes the BR2_CCACHE
-> setting.
-I'm not sure I follow you here...
 
-If we are able to generate one toolchain.cmake file that handle both case
-(even enabling/disabling ccache from one run to another), we don't need
-anything else, nor regenerate the toolchainfile.cmake file at each build start.
+You are absolutely right. I have removed this patch and also been through
+the whole patchset, correcting things, after a discussion with Thomas
+Petazzoni here:
+http://lists.busybox.net/pipermail/buildroot/2013-March/069149.html
 
-Anyway, there are few things to check and test, I'll look into this. :)
+My new version can be found as a branch here:
+https://bitbucket.org/baekdahl/buildroot/src/96182fac0691/?at=x11r77_v2
 
-Regards,
 
--- 
-Samuel
+Regards, Jesper
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130322/798e7b3e/attachment-0001.html>
