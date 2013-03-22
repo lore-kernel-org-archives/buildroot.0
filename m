@@ -1,41 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 22 Mar 2013 09:23:01 +0100
-Subject: [Buildroot] [PATCH 7/7] manual: update generated lists
-In-Reply-To: <8be5fe492147513305626d9665d4119c548be11e.1363899518.git.s.martin49@gmail.com>
-References: <cover.1363899518.git.s.martin49@gmail.com>
- <8be5fe492147513305626d9665d4119c548be11e.1363899518.git.s.martin49@gmail.com>
-Message-ID: <20130322092301.6d7ef04e@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 22 Mar 2013 09:24:24 +0100
+Subject: [Buildroot] [PATCH] <pkg>-rsync: Reincluding core files and
+ folders, which got kicked out by --cvs-exclude option.
+In-Reply-To: <EE4E4767751A8B40949306E403F4DDD802D6D365@sv03ultra002.ultratronik.de>
+References: <EE4E4767751A8B40949306E403F4DDD802D6D365@sv03ultra002.ultratronik.de>
+Message-ID: <CAAXf6LXRx==TDAA-tKwaY=HKC3b0dd6Kq=Gs3eEiC6QA_srnmg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+On Fri, Mar 22, 2013 at 8:53 AM, Naumann Andreas <ANaumann@ultratronik.de>wrote:
 
-On Thu, 21 Mar 2013 22:04:38 +0100, Samuel Martin wrote:
+> The --cvs-exclude option also excludes 'core', which when rsyncing e.g.
+> a linux tree is less than optimal..
+>
+>
 
->  docs/manual/deprecated-list.txt   |  77 ++-
->  docs/manual/host-package-list.txt |  22 +
->  docs/manual/package-list.txt      | 950 ++++++++++++++++++++++++++++++++++++++
->  docs/manual/pkg-list.txt          | 870 ----------------------------------
+You'll need to put a Signed-off-by line here.
 
-Didn't we say that the package list should *not* be committed, but
-instead dynamically generated when doing "make manual" ?
+You can also immediately add:
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-So:
 
->  docs/manual/pkg-list.txt          | 870 ----------------------------------
 
-is OK. But not:
-
->  docs/manual/package-list.txt      | 950 ++++++++++++++++++++++++++++++++++++++
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+---
+>  package/pkg-generic.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 8d964a1..595ad1b 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -62,7 +62,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
+>  $(BUILD_DIR)/%/.stamp_rsynced:
+>         @$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+>         @test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ;
+> exit 1)
+> -       rsync -au --cvs-exclude $(SRCDIR)/ $(@D)
+> +       rsync -au --cvs-exclude --include core $(SRCDIR)/ $(@D)
+>         $(Q)touch $@
+>
+>  # Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
+> --
+> 1.8.1.1
+>
+>
+> end
+>
+>
+> ------------------------------------------------------------------------------
+> Dipl.-Ing. (FH)
+> Andreas Naumann
+> Embedded Software
+> T +49 8105 77839-363
+> F +49 8105 77839-850
+> ANaumann at ultratronik.de
+> www.ultratronik.de
+> Dornierstra?e 9
+> 82205 Gilching
+> ULTRATRONIK
+> L?SUNGEN F?R IHREN ERFOLG - SOLUTIONS FOR YOUR SUCCESS
+>
+>
+> ------------------------------------------------------------------------------
+> Gesch?ftsf?hrer: Dipl.-Ing. Wolfgang Sorg, Dipl.-Kfm. Alexander Sorg
+> Sitz der Gesellschaft: Gilching
+> Registergericht M?nchen HRB 49567 (Ultratronik Vertriebs GmbH)
+> Registergericht M?nchen HRB 55584 (Ultratronik GmbH)
+>
+>
+> ------------------------------------------------------------------------------
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130322/a3187f37/attachment.html>
