@@ -1,178 +1,270 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 22 Mar 2013 09:33:00 +0100
-Subject: [Buildroot] [PATCH 4/5] Enable ccache for cmake packages
-In-Reply-To: <514B89E1.4000206@lucaceresoli.net>
-References: <1362590066-5448-1-git-send-email-luca@lucaceresoli.net>
- <1362590066-5448-5-git-send-email-luca@lucaceresoli.net>
- <CAHXCMMKpKo_jagngfJFDHPKfiMeUb3+zx5wZ++tg81OjwQ_8iA@mail.gmail.com>
- <5149EEA6.1010702@lucaceresoli.net> <514B89E1.4000206@lucaceresoli.net>
-Message-ID: <CAHXCMMJmuv42YoAPmo=c5G-mdOMU6dkLdPxG=ftvQvS+vXuDGA@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 22 Mar 2013 09:42:36 +0100
+Subject: [Buildroot] [PATCH 2/2] buildroot: target: Add Blackfin
+	architecture support.
+In-Reply-To: <1363847908-5662-2-git-send-email-sonic.adi@gmail.com>
+References: <1363847908-5662-1-git-send-email-sonic.adi@gmail.com>
+ <1363847908-5662-2-git-send-email-sonic.adi@gmail.com>
+Message-ID: <CAAXf6LVoge7+VURG5AKCrxO9NYSD4RvHC1vy=maEH8tBQ=jyzQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Lucas,
+Hi Sonic,
 
-2013/3/21 Luca Ceresoli <luca@lucaceresoli.net>:
-> Luca Ceresoli wrote:
-[...]
-> Oh, now I see, this happens when trying to assemble a .s file.
-> With -DCMAKE_VERBOSE_MAKEFILE=ON you can see it does the wrong thing:
->
->> >>> rpi-userland 5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108 Configuring
->> (cd
->> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108/
->> && rm -f CMakeCache.txt &&
->> /home/murray/devel/buildroot/output/host/usr/bin/cmake
->> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108/
->> -DCMAKE_TOOLCHAIN_FILE="/home/murray/devel/buildroot/output/host/usr/share/buildroot/toolchainfile.cmake"
->> -DCMAKE_INSTALL_PREFIX="/usr" -DVMCS_INSTALL_PREFIX=/usr )
->> Re-run cmake no build system arguments
->> -- The C compiler identification is GNU 4.7.3
->> -- The CXX compiler identification is GNU 4.7.3
->> -- Check for working C compiler:
->> /home/murray/devel/buildroot/output/host/usr/bin/ccache
->> -- Check for working C compiler:
->> /home/murray/devel/buildroot/output/host/usr/bin/ccache -- works
->> -- Detecting C compiler ABI info
->> -- Detecting C compiler ABI info - done
->> -- Check for working CXX compiler:
->> /home/murray/devel/buildroot/output/host/usr/bin/ccache
->> -- Check for working CXX compiler:
->> /home/murray/devel/buildroot/output/host/usr/bin/ccache -- works
->> -- Detecting CXX compiler ABI info
->> -- Detecting CXX compiler ABI info - done
->> -- Looking for execinfo.h
->> -- Looking for execinfo.h - found
->> -- The ASM compiler identification is GNU
->> -- Found assembler:
->> /home/murray/devel/buildroot/output/host/usr/bin/ccache
->> CMake Warning at interface/usbdk/CMakeLists.txt:2 (message):
->>   usbdk: using stubbed out hostreq, HDMI buttons and gestures code
->>
->>
->> -- Configuring done
->> -- Generating done
->> -- Build files have been written to:
->> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108
->> touch
->> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108/.stamp_configured
->> >>> rpi-userland 5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108 Building
->
-> ...
->>
->> [  1%] Building C object
->> interface/vcos/pthreads/CMakeFiles/vcos.dir/vcos_pthreads.c.o
->> cd
->> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108/interface/vcos/pthreads
->> && /home/murray/devel/buildroot/output/host/usr/bin/ccache
->> /home/murray/devel/buildroot/output/host/usr/bin/arm-linux-gnueabihf-gcc
->> <blah blah>
->
-> ...
->>
->>
->> [ 17%] Building ASM object
->> interface/khronos/CMakeFiles/khrn_client.dir/common/khrn_int_hash_asm.s.o
->> cd
->> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108/interface/khronos
->> && /home/murray/devel/buildroot/output/host/usr/bin/ccache
->> -DEGL_SERVER_DISPMANX -DHAVE_CMAKE_CONFIG <blah blah>
->
->
-> Note in the above line the assembler executable is missing.
-> Apparently CMake automagically set CMAKE_ASM_COMPILER equal to
-> CMAKE_C_COMPILER or so, but it looks like CMAKE_ASM_COMPILER_ARG1 is empty.
->
-> So I set CMAKE_ASM_COMPILER{,_ARG1}just like I did for C and CXX:
-AFAIK, ccache only supports C, C++, Objective-C and Objective-C++.
-So, I think, it is useless to set it for anything else.
+On Thu, Mar 21, 2013 at 7:38 AM, Sonic Zhang <sonic.adi@gmail.com> wrote:
 
-BTW, I also use to set most of the binutils/gcc binaries in my CMake
-toolchain files,
-this includes setting the following variables:
-CMAKE_{LINKER,AR,RANDLIB,NM,OBJCOPY,OBJDUMP,STRIP}.
-
-So, IMHO, it is not stupid to set CMAKE_ASM_COMPILER as well, though I
-never need it so far.
-
-[...]
+> From: Sonic Zhang <sonic.zhang@analog.com>
 >
-> Now it compiles correctly but with two bad side effects.
+> - Create blackfin architecture makefile.
+> - Add blackfin target ABI options.
+> - Add blackfin cpu options and shared library installation options.
+> - Add blackfin cpu revision options and mcpu link flags
+> - Add blackfin FLAT specific makefile flags.
+> - Add shared library installation options and makefile targets to
+> install shared libraries into rootfs image.
+> - Copy extra blackfin toolchain FDPIC shared libraries to target fs
 >
-> First, when building without ccache, CMake detects /usr/bin/cc as the
-> (supposedly cross-) compiler, leading to an obvious link failure.
-> Ok, this can be worked around by generating a different
-> toolchainfile.cmake for the ccache and non-ccache cases, although it
-> is annoying.
-Well, here I use to conditionnaly enable ccache if found using
-something like this:
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+> ---
+>  Makefile              |    2 +
+>  arch/Config.in.bfin   |  117
+> +++++++++++++++++++++++++++++++++++++++++++++++++
+>  arch/Makefile.in.bfin |   50 +++++++++++++++++++++
+>  3 files changed, 169 insertions(+), 0 deletions(-)
+>  create mode 100644 arch/Makefile.in.bfin
+>
 
---
-find_program(CCACHE "ccache")
-if (CCACHE)
-  message( STATUS "Using ccache")
-endif(CCACHE)
+I can't give good technical feedback on this patch, but if you're making a
+v2 anyway, there are some small comments below.
 
-if (CCACHE AND NOT FORCE_NO_CCACHE)
-  set(CMAKE_C_COMPILER "${CCACHE}" CACHE FILEPATH "" FORCE)
-  set(CMAKE_CXX_COMPILER "${CCACHE}" CACHE FILEPATH "" FORCE)
-  set(CMAKE_C_COMPILER_ARG1 "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-gcc")
-  set(CMAKE_CXX_COMPILER_ARG1 "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-g++")
-else(CCACHE AND NOT FORCE_NO_CCACHE)
-  set(CMAKE_C_COMPILER "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-gcc")
-  set(CMAKE_CXX_COMPILER "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-g++")
-endif(CCACHE AND NOT FORCE_NO_CCACHE)
---
-
-But I have to check that find program will actually look in
-${HOST_DIR}/usr/bin, not in the system...
-
-About the /usr/bin/cc issue, I think it will vanish by correctly
-handling the ccache presence;
-if not, ccache seems to use a number of environment variables, so...
-our salute might eventually be there ;)
 
 >
-> Second, during both the staging install and the target install phases,
-> it complains saying:
+> diff --git a/Makefile b/Makefile
+> index 7f0822f..32478e6 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -329,6 +329,8 @@ ifneq ($(PACKAGE_OVERRIDE_FILE),)
+>  -include $(PACKAGE_OVERRIDE_FILE)
+>  endif
 >
->> Re-run cmake: build system dependency is missing
->> -- The ASM compiler identification is unknown
->> -- Found assembler:
->> /home/murray/devel/buildroot/output/host/usr/bin/ccache
->> -- Warning: Did not find file Compiler/-ASM
->> CMake Warning at interface/usbdk/CMakeLists.txt:2 (message):
->>   usbdk: using stubbed out hostreq, HDMI buttons and gestures code
->>
->>
->> -- Configuring done
->> -- Generating done
->> -- Build files have been written to:
->> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108
-hum... here I think it is because ccache with the assembler is
-misleading CMake...
-
+> +include arch/Makefile.in.*
+> +
+>  include package/*/*.mk
 >
-> and recompiles the whole package again. These amount to three
-> compilations! And they are ccached separately, so the first compilation
-> actually takes an unreasonably long time. Well, during subsequent
-> compilations with a full ccache the time loss is not more than 15
-> seconds on a dual core i5, but this clearly shows something is not
-> working properly.
+>  include boot/common.mk
+> diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+> index 0b137ae..0750b86 100644
+> --- a/arch/Config.in.bfin
+> +++ b/arch/Config.in.bfin
+> @@ -7,10 +7,127 @@ config BR2_BFIN_FDPIC
+>  config BR2_BFIN_FLAT
+>         bool "FLAT"
+>         select BR2_PREFER_STATIC_LIB
+> +config BR2_BFIN_FLAT_SEP_DATA
+> +       bool "FLAT (Separate data)"
+> +       select BR2_PREFER_STATIC_LIB
+> +config BR2_BFIN_SHARED_FLAT
+> +       bool "Shared FLAT"
+> +       select BR2_PREFER_STATIC_LIB
+> +endchoice
+> +
+> +choice
+> +       prompt "Target CPU"
+> +       depends on BR2_bfin
+> +       default BR2_bf609
+> +       help
+> +         Specify target CPU
+> +config BR2_bf606
+> +       bool "bf606"
+> +config BR2_bf607
+> +       bool "bf607"
+> +config BR2_bf608
+> +       bool "bf608"
+> +config BR2_bf609
+> +       bool "bf609"
+> +config BR2_bf512
+> +       bool "bf512"
+> +config BR2_bf514
+> +       bool "bf514"
+> +config BR2_bf516
+> +       bool "bf516"
+> +config BR2_bf518
+> +       bool "bf518"
+> +config BR2_bf522
+> +       bool "bf522"
+> +config BR2_bf523
+> +       bool "bf523"
+> +config BR2_bf524
+> +       bool "bf524"
+> +config BR2_bf525
+> +       bool "bf525"
+> +config BR2_bf526
+> +       bool "bf526"
+> +config BR2_bf527
+> +       bool "bf527"
+> +config BR2_bf531
+> +       bool "bf531"
+> +config BR2_bf532
+> +       bool "bf532"
+> +config BR2_bf533
+> +       bool "bf533"
+> +config BR2_bf534
+> +       bool "bf534"
+> +config BR2_bf536
+> +       bool "bf536"
+> +config BR2_bf537
+> +       bool "bf537"
+> +config BR2_bf538
+> +       bool "bf538"
+> +config BR2_bf539
+> +       bool "bf539"
+> +config BR2_bf542
+> +       bool "bf542"
+> +config BR2_bf544
+> +       bool "bf544"
+> +config BR2_bf547
+> +       bool "bf547"
+> +config BR2_bf548
+> +       bool "bf548"
+> +config BR2_bf549
+> +       bool "bf549"
+> +config BR2_bf561
+> +       bool "bf561"
+>  endchoice
 >
-> Samuel, your idea was certainly good, but I think CMake is thinking
-> too much instead of just doing what it should... the result is a mess
-> I have no time to dig into. I guess I'll stay with my stupid (but
-> working) shell wrappers for the moment. :-(
+> +config BR2_TARGET_CPU_REVISION
+> +       string "Target CPU revision"
+> +
+> +config BR2_BFIN_INSTALL_ELF_SHARED
+> +       depends on BR2_bfin && !BR2_BFIN_FDPIC
+> +       bool "Install ELF shared libraries"
+> +       default y
+> +
+> +config BR2_BFIN_INSTALL_FLAT_SHARED
+> +       depends on BR2_bfin
+> +       bool "Install FLAT shared libraries" if !BR2_BFIN_SHARED_FLAT
+> +       default y
+> +
+>  config BR2_ARCH
+>         default "bfin"
+>
+>  config BR2_ENDIAN
+>          default "LITTLE"
+> +
+> +config BR2_GCC_TARGET_CPU
+> +       default bf606           if BR2_bf606
+> +       default bf607           if BR2_bf607
+> +       default bf608           if BR2_bf608
+> +       default bf609           if BR2_bf609
+> +       default bf512           if BR2_bf512
+> +       default bf514           if BR2_bf514
+> +       default bf516           if BR2_bf516
+> +       default bf518           if BR2_bf518
+> +       default bf522           if BR2_bf522
+> +       default bf523           if BR2_bf523
+> +       default bf524           if BR2_bf524
+> +       default bf525           if BR2_bf525
+> +       default bf526           if BR2_bf526
+> +       default bf527           if BR2_bf527
+> +       default bf531           if BR2_bf531
+> +       default bf532           if BR2_bf532
+> +       default bf533           if BR2_bf533
+> +       default bf534           if BR2_bf534
+> +       default bf536           if BR2_bf536
+> +       default bf537           if BR2_bf537
+> +       default bf538           if BR2_bf538
+> +       default bf539           if BR2_bf539
+> +       default bf542           if BR2_bf542
+> +       default bf544           if BR2_bf544
+> +       default bf547           if BR2_bf547
+> +       default bf548           if BR2_bf548
+> +       default bf549           if BR2_bf549
+> +       default bf561           if BR2_bf561
+> +
+> +config BR2_TARGET_ABI_FLAT
+> +       default n               if BR2_BFIN_FDPIC
+> +       default y
+> diff --git a/arch/Makefile.in.bfin b/arch/Makefile.in.bfin
+> new file mode 100644
+> index 0000000..cef9374
+> --- /dev/null
+> +++ b/arch/Makefile.in.bfin
+> @@ -0,0 +1,50 @@
+> +TARGETS-y =
+> +TARGETS-$(BR2_BFIN_INSTALL_ELF_SHARED) += romfs.shared.libs.elf
+> +TARGETS-$(BR2_BFIN_INSTALL_FLAT_SHARED) += romfs.shared.libs.flat
+> +TARGETS += $(TARGETS-y)
+> +
+> +ifeq ($(BR2_BFIN_FDPIC),y)
+> +USR_LIB_EXTERNAL_LIBS+=libgfortran.so libgomp.so libmudflap.so
+> libmudflapth.so libobjc.so
+> +endif
+> +
+>
 
-Ok, I'll try to find some time to play with the toolchainfile.cmake
-generation reusing what you've already done.
+We generally put spaces around variable assignments, as you did in most
+places, but not here.
 
 
-Regards,
+> +CROSS_COMPILE_SHARED_ELF ?= bfin-linux-uclibc-
+> +romfs.shared.libs.elf:
+> +       set -e; \
+> +       t=`$(CROSS_COMPILE_SHARED_ELF)gcc $(CPUFLAGS)
+> -print-file-name=libc.a`; \
+> +       t=`dirname $$t`/../..; \
+> +       for i in $$t/lib/*so*; do \
+> +               i=`readlink -f "$$i"`; \
+> +               soname=`$(CROSS_COMPILE_SHARED_ELF)readelf -d "$$i" | sed
+> -n '/(SONAME)/s:.*[[]\(.*\)[]].*:\1:p'`; \
+> +               $(INSTALL) -D $$i $(TARGET_DIR)/lib/$$soname; \
+> +       done
+> +
+> +CROSS_COMPILE_SHARED_FLAT ?= bfin-uclinux-
+> +romfs.shared.libs.flat:
+> +       set -e; \
+> +       t=`$(CROSS_COMPILE_SHARED_FLAT)gcc $(CPUFLAGS) -mid-shared-library
+> -print-file-name=libc`; \
+> +       if [ -f $$t -a ! -h $$t ] ; then \
+> +               $(INSTALL) -D $$t $(TARGET_DIR)/lib/lib1.so; \
+> +       fi
+> +
+> +ifeq ($(BR2_TARGET_CPU_REVISION),)
+> +TARGET_CPU=-mcpu=$(BR2_GCC_TARGET_CPU)
+> +else
+> +TARGET_CPU=-mcpu=$(BR2_GCC_TARGET_CPU)-$(BR2_TARGET_CPU_REVISION)
+> +endif
+>
 
--- 
-Samuel
+Same here (x2)
+
+
+> +TARGET_CFLAGS += $(call qstrip,$(TARGET_CPU))
+> +
+> +ifneq ($(BR2_USE_MMU), y)
+> +TARGET_CFLAGS += -D__uClinux__
+> +endif
+> +
+> +ifeq ($(BR2_BFIN_FLAT_SEP_DATA),y)
+> +TARGET_LDFLAGS += -msep-data
+> +TARGET_CFLAGS += -msep-data
+> +TARGET_CXXFLAGS += -msep-data
+> +endif
+> +
+> +ifeq ($(BR2_BFIN_SHARED_FLAT), y)
+> +TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
+> +TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
+> +TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
+> +endif
+> --
+> 1.7.0.4
+>
+>
+>
+Best regards,
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130322/b840c4b1/attachment-0001.html>
