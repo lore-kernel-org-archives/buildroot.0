@@ -1,41 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 22 Mar 2013 13:58:25 +0100
-Subject: [Buildroot] [PATCH 2/2] configs: add RaspberryPi defconfig
-In-Reply-To: <1358087034-2706-2-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1358087034-2706-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1358087034-2706-2-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20130322135825.1d097827@skate>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Fri, 22 Mar 2013 15:19:58 +0200
+Subject: [Buildroot] Understanding the automake beast better
+In-Reply-To: <CALdGskKtui_YbLOmjxF8nMKFL0AeJJVE9FsTDgTSFALiWxYm+g@mail.gmail.com>
+References: <CALdGskKtui_YbLOmjxF8nMKFL0AeJJVE9FsTDgTSFALiWxYm+g@mail.gmail.com>
+Message-ID: <CALdGskLvjBdSL+QbXaPrq_03poVKR=wG_RhOFbyMsB4NGHte2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Hi
 
-On Sun, 13 Jan 2013 15:23:54 +0100, Maxime Hadjinlian wrote:
-> diff --git a/configs/rpi_defconfig b/configs/rpi_defconfig
-> new file mode 100644
-> index 0000000..8c73d0e
-> --- /dev/null
-> +++ b/configs/rpi_defconfig
-> @@ -0,0 +1,19 @@
-> +BR2_arm=y
-> +BR2_arm1176jzf_s=y
-> +
-> +BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
+I'm currently working on gutenprint(fornerly gimp-print) for buildroot.  I
+can get the drivers and filters to build by splitting the build process
+into a host and target component, and copying files generated for the host
+part during build time to the target. (xml files - thus not architecture
+dependant)
+This seems like a sub-optimal solution to me.
 
-Please add:
+Question: Is there an elegant way to force automake to add an auxiliary
+compiler to the make process, and use this for certain
+parts of the package that need to be run during build time (editing
+Makefile.ac files etc.)?  For example.  The drivers are being compiled for
+an arm processor, but to be able to run the
+program that generates ppd files, that program has to be compiled for the
+host architecture and not the target architecture.  It seems that automake
+configures the compiler in the package root directory, and then building
+the programs in subdirectories according to a list, I just can't figure
+out how to tell it to compile the subdirectories with a different compiler
+such as the host machine compiler.
 
-# Lock to 3.8 headers to avoid breaking with newer kernels
-BR2_KERNEL_HEADERS_3_8=y
+I know cross-compiling is not an exact science, but maybe someone has run
+into the same issues before, and can shed a little more light on it for me.
 
-Thanks,
+Thanks and regards
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Olivier Schonken
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130322/0b397062/attachment.html>
