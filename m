@@ -1,86 +1,111 @@
-From: Luca Ceresoli <list@lucaceresoli.net>
-Date: Fri, 22 Mar 2013 23:41:34 +0100
-Subject: [Buildroot] [PATCH 4/5] Enable ccache for cmake packages
-In-Reply-To: <CAHXCMMJcUDVKP38GZ_-roGCfuTrCLyxUJRqGh1HC-Fe5yRakkQ@mail.gmail.com>
-References: <1362590066-5448-1-git-send-email-luca@lucaceresoli.net>
- <1362590066-5448-5-git-send-email-luca@lucaceresoli.net>
- <CAHXCMMKpKo_jagngfJFDHPKfiMeUb3+zx5wZ++tg81OjwQ_8iA@mail.gmail.com>
- <5149EEA6.1010702@lucaceresoli.net> <514B89E1.4000206@lucaceresoli.net>
- <CAHXCMMJmuv42YoAPmo=c5G-mdOMU6dkLdPxG=ftvQvS+vXuDGA@mail.gmail.com>
- <514C271D.7010207@lucaceresoli.net>
- <CAHXCMMJcUDVKP38GZ_-roGCfuTrCLyxUJRqGh1HC-Fe5yRakkQ@mail.gmail.com>
-Message-ID: <514CDE1E.8040107@lucaceresoli.net>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 22 Mar 2013 23:55:47 +0100
+Subject: [Buildroot] [PATCH v2] Enable ccache for cmake packages
+In-Reply-To: <514CDE1E.8040107@lucaceresoli.net>
+References: <514CDE1E.8040107@lucaceresoli.net>
+Message-ID: <1363992947-21417-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel Martin wrote:
-> Lucas,
->
-> 2013/3/22 Luca Ceresoli <luca@lucaceresoli.net>:
->> Samuel Martin wrote:
->>> Hi Lucas,
->>>
->>> 2013/3/21 Luca Ceresoli <luca@lucaceresoli.net>:
-> [...]
->>> AFAIK, ccache only supports C, C++, Objective-C and Objective-C++.
->>> So, I think, it is useless to set it for anything else.
->>
->> Ouch, right!
->> The fix is as easy as:
->>>      set(CMAKE_ASM_COMPILER $(TARGET_CC_NOCCACHE))\n\
->> Now when ccache is enabled it all works OK.
->>
->>
->>> BTW, I also use to set most of the binutils/gcc binaries in my CMake
->>> toolchain files,
->>> this includes setting the following variables:
->>> CMAKE_{LINKER,AR,RANDLIB,NM,OBJCOPY,OBJDUMP,STRIP}.
->>>
->>> So, IMHO, it is not stupid to set CMAKE_ASM_COMPILER as well, though I
->>> never need it so far.
->>>
->>> [...]
->>>> Now it compiles correctly but with two bad side effects.
->>>>
->>>> First, when building without ccache, CMake detects /usr/bin/cc as the
->>>> (supposedly cross-) compiler, leading to an obvious link failure.
->>>> Ok, this can be worked around by generating a different
->>>> toolchainfile.cmake for the ccache and non-ccache cases, although it
->>>> is annoying.
->>> Well, here I use to conditionnaly enable ccache if found using
->>> something like this:
->>>
->>> --
->>> find_program(CCACHE "ccache")
->>> if (CCACHE)
->>>     message( STATUS "Using ccache")
->>> endif(CCACHE)
->>>
->>> if (CCACHE AND NOT FORCE_NO_CCACHE)
->>>     set(CMAKE_C_COMPILER "${CCACHE}" CACHE FILEPATH "" FORCE)
->>>     set(CMAKE_CXX_COMPILER "${CCACHE}" CACHE FILEPATH "" FORCE)
->>>     set(CMAKE_C_COMPILER_ARG1 "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-gcc")
->>>     set(CMAKE_CXX_COMPILER_ARG1 "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-g++")
->>> else(CCACHE AND NOT FORCE_NO_CCACHE)
->>>     set(CMAKE_C_COMPILER "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-gcc")
->>>     set(CMAKE_CXX_COMPILER "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-g++")
->>> endif(CCACHE AND NOT FORCE_NO_CCACHE)
->>> --
->>
->> I'm not following you here. This would require patching the
->> CMakeLists.txt file for every CMake package, right?
-> Nope, just the toolchainfile.cmake.
-> And when ccache is disabled, we can just force it by setting
-> FORCE_NO_CCACHE in the CMake infra.
+Use the *_ARG1 CMake variables to let CMake use ccache without failing
+in detecting the compiler.
 
-Ahh, now I got you idea! Thanks!
+Implementation based on an idea suggested by Samuel Martin.
 
-I worked on it, and although it was a bit tricky (probably because of my
-limited experience with CMake) it seems to be working.
-Even if it is not yet fully tested, I'm submitting a v2 patch now to let you
-have a preliminary look at this work.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
 
-Luca
+NOTE! This patch is not yet well tested and may be largely non-optimal.
+Commit with care!
+
+It was a bit tricky to implement, because the CMake-generated Makefiles
+do call cmake without supplying the same commandline arguments that we
+passed to the top-level cmake invocation.
+The solution that I implemented for this issue is to use a tristate
+variable, named USE_CCACHE, that Buildroot passes to cmake:
+ - if set to ON, it triggers the configuration for ccache to be saved
+   in the CMake cache;
+ - if set to OFF, it triggers the no-ccache configuration to be saved
+   in the CMake cache;
+ - if it is not set, this means cmake is not being called directly by
+   Buildroot; in this case it does not set any of the compiler CMake
+   variables, thus using those previously cached.
+
+Changed in v2:
+ - totally reimplemented based on Samuel's suggestion;
+ - added dependency on host-ccache for cmake packages if ccache is
+   enabled.
+
+ package/pkg-cmake.mk |   26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index b2fcd67..3d37502 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -20,6 +20,13 @@
+ #
+ ################################################################################
+ 
++# Options to CMake that are equal for all packages
++ifeq ($(BR2_CCACHE),y)
++CMAKE_EXTRA_OPT += -DUSE_CCACHE=ON
++else
++CMAKE_EXTRA_OPT += -DUSE_CCACHE=OFF
++endif
++
+ ################################################################################
+ # inner-cmake-package -- defines how the configuration, compilation and
+ # installation of a CMake package should be done, implements a few hooks to
+@@ -65,6 +72,7 @@ define $(2)_CONFIGURE_CMDS
+ 	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
++		$(CMAKE_EXTRA_OPT) \
+ 		-DCMAKE_VERBOSE_MAKEFILE=ON \
+ 		$$($$(PKG)_CONF_OPT) \
+ 	)
+@@ -82,6 +90,7 @@ define $(2)_CONFIGURE_CMDS
+ 		-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" \
+ 		-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" \
+ 		-DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)/usr" \
++		$(CMAKE_EXTRA_OPT) \
+ 		$$($$(PKG)_CONF_OPT) \
+ 	)
+ endef
+@@ -94,6 +103,10 @@ $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix
+ 
+ $(2)_DEPENDENCIES += host-cmake
+ 
++ifeq ($(BR2_CCACHE),y)
++$(2)_DEPENDENCIES += host-ccache
++endif
++
+ #
+ # Build step. Only define it if not already defined by the package .mk
+ # file.
+@@ -191,8 +204,17 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+ 	@mkdir -p $(@D)
+ 	@echo -en "\
+ 	set(CMAKE_SYSTEM_NAME Linux)\n\
+-	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
+-	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
++	if(DEFINED USE_CCACHE AND USE_CCACHE)\n\
++		set(CMAKE_ASM_COMPILER $(TARGET_CC_NOCCACHE))\n\
++		set(CMAKE_C_COMPILER $(CCACHE))\n\
++		set(CMAKE_CXX_COMPILER $(CCACHE))\n\
++		set(CMAKE_C_COMPILER_ARG1 $(TARGET_CC_NOCCACHE) CACHE STRING \"\" FORCE)\n\
++		set(CMAKE_CXX_COMPILER_ARG1 $(TARGET_CXX_NOCCACHE) CACHE STRING \"\" FORCE)\n\
++	endif(DEFINED USE_CCACHE AND USE_CCACHE)\n\
++	if(DEFINED USE_CCACHE AND NOT USE_CCACHE)\n\
++		set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
++		set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
++	endif(DEFINED USE_CCACHE AND NOT USE_CCACHE)\n\
+ 	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
+ 	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
+ 	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
+-- 
+1.7.10.4
