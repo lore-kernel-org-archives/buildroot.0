@@ -1,76 +1,48 @@
-From: Jesper Baekdahl <jbb@gamblify.com>
-Date: Fri, 22 Mar 2013 12:38:15 +0100
-Subject: [Buildroot] [PATCH 116/120] xutil_util-macros: bump revision to
-	X11R7.7
-In-Reply-To: <514B4744.7030100@mind.be>
-References: <1363611926-27105-1-git-send-email-jbb@gamblify.com>
- <1363611926-27105-57-git-send-email-jbb@gamblify.com>
- <514B4744.7030100@mind.be>
-Message-ID: <CALnvph25-kzzbNtgkBjzx99OxjFx41g4OaPK6UezbzCfUPzArQ@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Fri, 22 Mar 2013 13:05:29 +0100
+Subject: [Buildroot] [PATCH 1/2] rpi-firmware: Fixup config.txt
+In-Reply-To: <1358087034-2706-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1358087034-2706-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <CAGduivyOfFJ=mu8Y-_O_saXTBXPsn58N8YCZ6RZDFAGaskhWcg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout Vandecappelle
+ping ?
 
-Thank you for taking a look.
-
-On Thu, Mar 21, 2013 at 6:45 PM, Arnout Vandecappelle <arnout@mind.be>wrote:
-
-> On 18/03/13 14:05, Jesper Baekdahl wrote:
+On Sun, Jan 13, 2013 at 3:23 PM, Maxime Hadjinlian
+<maxime.hadjinlian@gmail.com> wrote:
+> The default name of the kernel binary for the RaspberryPi is kernel.img, it's a
+> only a zImage kernel renamed.
+> Since Buildroot will build a zImage, the default config uses that should use it
+> instead of forcing the user to rename a file.
 >
->> From: Will Wagner <will_wagner@carallon.com>
->>
->> Signed-off-by: Will Wagner <will_wagner@carallon.com>
->> Signed-off-by: Jesper Baekdahl <jbb@gamblify.com>
->> ---
->>   package/x11r7/xutil_util-**macros/xutil_util-macros-1.17.**patch |
->>  9 +++++++++
->>   1 file changed, 9 insertions(+)
->>   create mode 100644 package/x11r7/xutil_util-**
->> macros/xutil_util-macros-1.17.**patch
->>
->> diff --git a/package/x11r7/xutil_util-**macros/xutil_util-macros-1.17.**patch
->> b/package/x11r7/xutil_util-**macros/xutil_util-macros-1.17.**patch
->> new file mode 100644
->> index 0000000..167229d
->> --- /dev/null
->> +++ b/package/x11r7/xutil_util-**macros/xutil_util-macros-1.17.**patch
->> @@ -0,0 +1,9 @@
->> +--- xutil_util-macros-1.8.0/xorg-**macros.m4.in.orig     2010-05-27
->> 14:03:30.000000000 +0100
->> ++++ xutil_util-macros-1.8.0/xorg-**macros.m4.in<http://xorg-macros.m4.in> 2011-11-09 11:57:41.000000000 +0000
->> +@@ -1064,3 +1064,6 @@ mv \$(top_srcdir)/.INSTALL.tmp \$(top_sr
->> + echo 'util-macros \"pkgdatadir\" from xorg-macros.pc not found:
->> installing possibly empty INSTALL.' >&2)"
->> + AC_SUBST([INSTALL_CMD])
->> + ]) # XORG_INSTALL
->> ++
->> ++# Buildroot stuff
->> ++AC_SUBST(STAGING_DIR)
->>
+> Also, remove the cmdline argument rootfstype, as ext4 is a builtin driver,
+> there is no need to specify it on the cmdline.
 >
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/rpi-firmware/config.txt |    3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
->  This does not make sense... It's not a version bump, first of all, and in
-> addition the STAGING_DIR variable isn't used anywhere so substituting it
-> won't do much good... Or am I missing something? In addition, it's very
-> strange that a patch for version 1.17 would refer to the -1.8.0 directory.
-> And finally: patch filenames shouldn't contain a version number, and the
-> patch should have an explanatory comment and a Signed-off-by line.
-
-
-You are absolutely right. I have removed this patch and also been through
-the whole patchset, correcting things, after a discussion with Thomas
-Petazzoni here:
-http://lists.busybox.net/pipermail/buildroot/2013-March/069149.html
-
-My new version can be found as a branch here:
-https://bitbucket.org/baekdahl/buildroot/src/96182fac0691/?at=x11r77_v2
-
-
-Regards, Jesper
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130322/798e7b3e/attachment-0001.html>
+> diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
+> index 2cabd68..a818762 100644
+> --- a/package/rpi-firmware/config.txt
+> +++ b/package/rpi-firmware/config.txt
+> @@ -6,9 +6,10 @@
+>
+>  arm_freq=700
+>  core_freq=250
+> +kernel=zImage
+>  disable_overscan=1
+>  gpu_mem_256=100
+>  gpu_mem_512=100
+>  sdram_freq=400
+>  over_voltage=0
+> -cmdline="dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait"
+> +cmdline="dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootwait"
+> --
+> 1.7.10.4
+>
