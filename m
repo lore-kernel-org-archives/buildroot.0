@@ -1,100 +1,178 @@
-From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Fri, 22 Mar 2013 16:26:06 +0800
-Subject: [Buildroot] [PATCH 1/2] package: Makefile.in: Add target
- compilation flags for NOMMU architecture.
-In-Reply-To: <CAAXf6LW7+vsAHNijostpwFNqf0QGVaL3ZosyRXEsj0tYptxisg@mail.gmail.com>
-References: <1363847908-5662-1-git-send-email-sonic.adi@gmail.com>
- <CAAXf6LW7+vsAHNijostpwFNqf0QGVaL3ZosyRXEsj0tYptxisg@mail.gmail.com>
-Message-ID: <CAJxxZ0OXwD-bvvoCfHt61Ky+EiWV=MEUmK8hOyx3nPLyuntrMQ@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 22 Mar 2013 09:33:00 +0100
+Subject: [Buildroot] [PATCH 4/5] Enable ccache for cmake packages
+In-Reply-To: <514B89E1.4000206@lucaceresoli.net>
+References: <1362590066-5448-1-git-send-email-luca@lucaceresoli.net>
+ <1362590066-5448-5-git-send-email-luca@lucaceresoli.net>
+ <CAHXCMMKpKo_jagngfJFDHPKfiMeUb3+zx5wZ++tg81OjwQ_8iA@mail.gmail.com>
+ <5149EEA6.1010702@lucaceresoli.net> <514B89E1.4000206@lucaceresoli.net>
+Message-ID: <CAHXCMMJmuv42YoAPmo=c5G-mdOMU6dkLdPxG=ftvQvS+vXuDGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Lucas,
 
-On Fri, Mar 22, 2013 at 2:52 PM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> Hi Sonic,
+2013/3/21 Luca Ceresoli <luca@lucaceresoli.net>:
+> Luca Ceresoli wrote:
+[...]
+> Oh, now I see, this happens when trying to assemble a .s file.
+> With -DCMAKE_VERBOSE_MAKEFILE=ON you can see it does the wrong thing:
+>
+>> >>> rpi-userland 5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108 Configuring
+>> (cd
+>> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108/
+>> && rm -f CMakeCache.txt &&
+>> /home/murray/devel/buildroot/output/host/usr/bin/cmake
+>> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108/
+>> -DCMAKE_TOOLCHAIN_FILE="/home/murray/devel/buildroot/output/host/usr/share/buildroot/toolchainfile.cmake"
+>> -DCMAKE_INSTALL_PREFIX="/usr" -DVMCS_INSTALL_PREFIX=/usr )
+>> Re-run cmake no build system arguments
+>> -- The C compiler identification is GNU 4.7.3
+>> -- The CXX compiler identification is GNU 4.7.3
+>> -- Check for working C compiler:
+>> /home/murray/devel/buildroot/output/host/usr/bin/ccache
+>> -- Check for working C compiler:
+>> /home/murray/devel/buildroot/output/host/usr/bin/ccache -- works
+>> -- Detecting C compiler ABI info
+>> -- Detecting C compiler ABI info - done
+>> -- Check for working CXX compiler:
+>> /home/murray/devel/buildroot/output/host/usr/bin/ccache
+>> -- Check for working CXX compiler:
+>> /home/murray/devel/buildroot/output/host/usr/bin/ccache -- works
+>> -- Detecting CXX compiler ABI info
+>> -- Detecting CXX compiler ABI info - done
+>> -- Looking for execinfo.h
+>> -- Looking for execinfo.h - found
+>> -- The ASM compiler identification is GNU
+>> -- Found assembler:
+>> /home/murray/devel/buildroot/output/host/usr/bin/ccache
+>> CMake Warning at interface/usbdk/CMakeLists.txt:2 (message):
+>>   usbdk: using stubbed out hostreq, HDMI buttons and gestures code
+>>
+>>
+>> -- Configuring done
+>> -- Generating done
+>> -- Build files have been written to:
+>> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108
+>> touch
+>> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108/.stamp_configured
+>> >>> rpi-userland 5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108 Building
+>
+> ...
+>>
+>> [  1%] Building C object
+>> interface/vcos/pthreads/CMakeFiles/vcos.dir/vcos_pthreads.c.o
+>> cd
+>> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108/interface/vcos/pthreads
+>> && /home/murray/devel/buildroot/output/host/usr/bin/ccache
+>> /home/murray/devel/buildroot/output/host/usr/bin/arm-linux-gnueabihf-gcc
+>> <blah blah>
+>
+> ...
+>>
+>>
+>> [ 17%] Building ASM object
+>> interface/khronos/CMakeFiles/khrn_client.dir/common/khrn_int_hash_asm.s.o
+>> cd
+>> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108/interface/khronos
+>> && /home/murray/devel/buildroot/output/host/usr/bin/ccache
+>> -DEGL_SERVER_DISPMANX -DHAVE_CMAKE_CONFIG <blah blah>
 >
 >
-> On Thu, Mar 21, 2013 at 7:38 AM, Sonic Zhang <sonic.adi@gmail.com> wrote:
->>
->> From: Sonic Zhang <sonic.zhang@analog.com>
->>
->> - Add BR2_TARGET_ABI_FLAT option
->> - Add NOMMU compiling macro
->> - Add FLAT ABI specific link flags
->> - Add stack size to FLAT link flags if macro <PKG>_FLAT_STACKSIZE is
->> defined.
->>
->> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
->> ---
->>  arch/Config.in           |    3 +++
->>  package/Makefile.in      |    8 ++++++++
->>  package/pkg-autotools.mk |    5 +++++
->>  package/pkg-generic.mk   |    5 +++++
->>  4 files changed, 21 insertions(+), 0 deletions(-)
->>
->> diff --git a/arch/Config.in b/arch/Config.in
->> index 472b10c..120c67e 100644
->> --- a/arch/Config.in
->> +++ b/arch/Config.in
->> @@ -174,6 +174,9 @@ config BR2_GCC_TARGET_ABI
->>  config BR2_GCC_TARGET_CPU
->>         string
->>
->> +config BR2_TARGET_ABI_FLAT
->> +       bool
->> +
->>  if BR2_arm || BR2_armeb
->>  source "arch/Config.in.arm"
->>  endif
->> diff --git a/package/Makefile.in b/package/Makefile.in
->> index a8bf36b..acfd9c8 100644
->> --- a/package/Makefile.in
->> +++ b/package/Makefile.in
->> @@ -103,6 +103,14 @@ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI)
->> $(TARGET_OPTIMIZATION) $(TARGET
->>  TARGET_CXXFLAGS = $(TARGET_CFLAGS)
->>  TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
->>
->> +ifeq ($(BR2_TARGET_ABI_FLAT),y)
->> +TARGET_LDFLAGS += -Wl,-elf2flt
->> +endif
->> +
->> +ifneq ($(BR2_USE_MMU), y)
->> +TARGET_CFLAGS += -D__NOMMU__
->> +endif
->> +
->>  ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
->>  TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
->>  else
->> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
->> index 890506b..b23feec 100644
->> --- a/package/pkg-autotools.mk
->> +++ b/package/pkg-autotools.mk
->> @@ -82,6 +82,11 @@ $(2)_CLEAN_OPT                       ?= clean
->>  $(2)_UNINSTALL_STAGING_OPT     ?= DESTDIR=$$(STAGING_DIR) uninstall
->>  $(2)_UNINSTALL_TARGET_OPT      ?= DESTDIR=$$(TARGET_DIR)  uninstall
->>
->> +ifeq ($(BR2_TARGET_ABI_FLAT),y)
->> + ifneq ($$($(2)_FLAT_STACKSIZE),)
->> +  $(2)_CONF_ENV                        += LDFLAGS="$(TARGET_LDFLAGS)
->> -Wl,-elf2flt=-s$($(2)_FLAT_STACKSIZE)"
->> + endif
->> +endif
+> Note in the above line the assembler executable is missing.
+> Apparently CMake automagically set CMAKE_ASM_COMPILER equal to
+> CMAKE_C_COMPILER or so, but it looks like CMAKE_ASM_COMPILER_ARG1 is empty.
 >
->
-> I'm not that familiar with these double $$, but is it intentional that
-> you're using double-dollar AND single-dollar for the same variable
-> <PKG>_FLAT_STACKSIZE in the above snippet?
->
+> So I set CMAKE_ASM_COMPILER{,_ARG1}just like I did for C and CXX:
+AFAIK, ccache only supports C, C++, Objective-C and Objective-C++.
+So, I think, it is useless to set it for anything else.
 
-Good catch. Should be double-dollar as well.
-Will be fixed in v2.
+BTW, I also use to set most of the binutils/gcc binaries in my CMake
+toolchain files,
+this includes setting the following variables:
+CMAKE_{LINKER,AR,RANDLIB,NM,OBJCOPY,OBJDUMP,STRIP}.
+
+So, IMHO, it is not stupid to set CMAKE_ASM_COMPILER as well, though I
+never need it so far.
+
+[...]
+>
+> Now it compiles correctly but with two bad side effects.
+>
+> First, when building without ccache, CMake detects /usr/bin/cc as the
+> (supposedly cross-) compiler, leading to an obvious link failure.
+> Ok, this can be worked around by generating a different
+> toolchainfile.cmake for the ccache and non-ccache cases, although it
+> is annoying.
+Well, here I use to conditionnaly enable ccache if found using
+something like this:
+
+--
+find_program(CCACHE "ccache")
+if (CCACHE)
+  message( STATUS "Using ccache")
+endif(CCACHE)
+
+if (CCACHE AND NOT FORCE_NO_CCACHE)
+  set(CMAKE_C_COMPILER "${CCACHE}" CACHE FILEPATH "" FORCE)
+  set(CMAKE_CXX_COMPILER "${CCACHE}" CACHE FILEPATH "" FORCE)
+  set(CMAKE_C_COMPILER_ARG1 "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-gcc")
+  set(CMAKE_CXX_COMPILER_ARG1 "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-g++")
+else(CCACHE AND NOT FORCE_NO_CCACHE)
+  set(CMAKE_C_COMPILER "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-gcc")
+  set(CMAKE_CXX_COMPILER "${HOST_DIR}/usr/bin/${TARGET_TUPLE}-g++")
+endif(CCACHE AND NOT FORCE_NO_CCACHE)
+--
+
+But I have to check that find program will actually look in
+${HOST_DIR}/usr/bin, not in the system...
+
+About the /usr/bin/cc issue, I think it will vanish by correctly
+handling the ccache presence;
+if not, ccache seems to use a number of environment variables, so...
+our salute might eventually be there ;)
+
+>
+> Second, during both the staging install and the target install phases,
+> it complains saying:
+>
+>> Re-run cmake: build system dependency is missing
+>> -- The ASM compiler identification is unknown
+>> -- Found assembler:
+>> /home/murray/devel/buildroot/output/host/usr/bin/ccache
+>> -- Warning: Did not find file Compiler/-ASM
+>> CMake Warning at interface/usbdk/CMakeLists.txt:2 (message):
+>>   usbdk: using stubbed out hostreq, HDMI buttons and gestures code
+>>
+>>
+>> -- Configuring done
+>> -- Generating done
+>> -- Build files have been written to:
+>> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108
+hum... here I think it is because ccache with the assembler is
+misleading CMake...
+
+>
+> and recompiles the whole package again. These amount to three
+> compilations! And they are ccached separately, so the first compilation
+> actually takes an unreasonably long time. Well, during subsequent
+> compilations with a full ccache the time loss is not more than 15
+> seconds on a dual core i5, but this clearly shows something is not
+> working properly.
+>
+> Samuel, your idea was certainly good, but I think CMake is thinking
+> too much instead of just doing what it should... the result is a mess
+> I have no time to dig into. I guess I'll stay with my stupid (but
+> working) shell wrappers for the moment. :-(
+
+Ok, I'll try to find some time to play with the toolchainfile.cmake
+generation reusing what you've already done.
+
 
 Regards,
 
-Sonic
+-- 
+Samuel
