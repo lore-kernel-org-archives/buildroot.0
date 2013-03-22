@@ -1,35 +1,41 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri, 22 Mar 2013 13:06:01 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 22 Mar 2013 13:58:25 +0100
 Subject: [Buildroot] [PATCH 2/2] configs: add RaspberryPi defconfig
-In-Reply-To: <CAHXCMMJjAZTJm1FbuVzurYa-bm6+orJv6BTtc8v1AP239OoOHg@mail.gmail.com>
+In-Reply-To: <1358087034-2706-2-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1358087034-2706-1-git-send-email-maxime.hadjinlian@gmail.com>
  <1358087034-2706-2-git-send-email-maxime.hadjinlian@gmail.com>
- <CAHXCMMJjAZTJm1FbuVzurYa-bm6+orJv6BTtc8v1AP239OoOHg@mail.gmail.com>
-Message-ID: <CAGduivwkHfZbCE=78q6zZGJjtRG8s8JWY5xogRmc5-w4C+cmoQ@mail.gmail.com>
+Message-ID: <20130322135825.1d097827@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ping ?
+Dear Maxime Hadjinlian,
 
-On Sun, Jan 13, 2013 at 5:17 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> Hi maxime, all,
->
-> 2013/1/13 Maxime Hadjinlian <maxime.hadjinlian@gmail.com>:
->> This is a default configuration for the RaspberryPi, tested and functionnal.
->>
->> The kernel used is the one developped by the RaspberryPi foundation as it's not
->> fully supported currently in mainline kernel.
->> The configuration used for the kernel is the default bcmrpi.
->>
->> For more info, please find board/raspberrypi/README.txt
->>
->> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Acked-by: Samuel Martin <s.martin49@gmail.com>
->
-> Regards,
->
-> --
-> Samuel
+On Sun, 13 Jan 2013 15:23:54 +0100, Maxime Hadjinlian wrote:
+> diff --git a/configs/rpi_defconfig b/configs/rpi_defconfig
+> new file mode 100644
+> index 0000000..8c73d0e
+> --- /dev/null
+> +++ b/configs/rpi_defconfig
+> @@ -0,0 +1,19 @@
+> +BR2_arm=y
+> +BR2_arm1176jzf_s=y
+> +
+> +BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
+
+Please add:
+
+# Lock to 3.8 headers to avoid breaking with newer kernels
+BR2_KERNEL_HEADERS_3_8=y
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
