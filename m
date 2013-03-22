@@ -1,83 +1,100 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 22 Mar 2013 09:24:24 +0100
-Subject: [Buildroot] [PATCH] <pkg>-rsync: Reincluding core files and
- folders, which got kicked out by --cvs-exclude option.
-In-Reply-To: <EE4E4767751A8B40949306E403F4DDD802D6D365@sv03ultra002.ultratronik.de>
-References: <EE4E4767751A8B40949306E403F4DDD802D6D365@sv03ultra002.ultratronik.de>
-Message-ID: <CAAXf6LXRx==TDAA-tKwaY=HKC3b0dd6Kq=Gs3eEiC6QA_srnmg@mail.gmail.com>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Fri, 22 Mar 2013 16:26:06 +0800
+Subject: [Buildroot] [PATCH 1/2] package: Makefile.in: Add target
+ compilation flags for NOMMU architecture.
+In-Reply-To: <CAAXf6LW7+vsAHNijostpwFNqf0QGVaL3ZosyRXEsj0tYptxisg@mail.gmail.com>
+References: <1363847908-5662-1-git-send-email-sonic.adi@gmail.com>
+ <CAAXf6LW7+vsAHNijostpwFNqf0QGVaL3ZosyRXEsj0tYptxisg@mail.gmail.com>
+Message-ID: <CAJxxZ0OXwD-bvvoCfHt61Ky+EiWV=MEUmK8hOyx3nPLyuntrMQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 22, 2013 at 8:53 AM, Naumann Andreas <ANaumann@ultratronik.de>wrote:
+Hi Thomas,
 
-> The --cvs-exclude option also excludes 'core', which when rsyncing e.g.
-> a linux tree is less than optimal..
+On Fri, Mar 22, 2013 at 2:52 PM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> Hi Sonic,
 >
+>
+> On Thu, Mar 21, 2013 at 7:38 AM, Sonic Zhang <sonic.adi@gmail.com> wrote:
+>>
+>> From: Sonic Zhang <sonic.zhang@analog.com>
+>>
+>> - Add BR2_TARGET_ABI_FLAT option
+>> - Add NOMMU compiling macro
+>> - Add FLAT ABI specific link flags
+>> - Add stack size to FLAT link flags if macro <PKG>_FLAT_STACKSIZE is
+>> defined.
+>>
+>> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+>> ---
+>>  arch/Config.in           |    3 +++
+>>  package/Makefile.in      |    8 ++++++++
+>>  package/pkg-autotools.mk |    5 +++++
+>>  package/pkg-generic.mk   |    5 +++++
+>>  4 files changed, 21 insertions(+), 0 deletions(-)
+>>
+>> diff --git a/arch/Config.in b/arch/Config.in
+>> index 472b10c..120c67e 100644
+>> --- a/arch/Config.in
+>> +++ b/arch/Config.in
+>> @@ -174,6 +174,9 @@ config BR2_GCC_TARGET_ABI
+>>  config BR2_GCC_TARGET_CPU
+>>         string
+>>
+>> +config BR2_TARGET_ABI_FLAT
+>> +       bool
+>> +
+>>  if BR2_arm || BR2_armeb
+>>  source "arch/Config.in.arm"
+>>  endif
+>> diff --git a/package/Makefile.in b/package/Makefile.in
+>> index a8bf36b..acfd9c8 100644
+>> --- a/package/Makefile.in
+>> +++ b/package/Makefile.in
+>> @@ -103,6 +103,14 @@ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI)
+>> $(TARGET_OPTIMIZATION) $(TARGET
+>>  TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+>>  TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+>>
+>> +ifeq ($(BR2_TARGET_ABI_FLAT),y)
+>> +TARGET_LDFLAGS += -Wl,-elf2flt
+>> +endif
+>> +
+>> +ifneq ($(BR2_USE_MMU), y)
+>> +TARGET_CFLAGS += -D__NOMMU__
+>> +endif
+>> +
+>>  ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
+>>  TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
+>>  else
+>> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+>> index 890506b..b23feec 100644
+>> --- a/package/pkg-autotools.mk
+>> +++ b/package/pkg-autotools.mk
+>> @@ -82,6 +82,11 @@ $(2)_CLEAN_OPT                       ?= clean
+>>  $(2)_UNINSTALL_STAGING_OPT     ?= DESTDIR=$$(STAGING_DIR) uninstall
+>>  $(2)_UNINSTALL_TARGET_OPT      ?= DESTDIR=$$(TARGET_DIR)  uninstall
+>>
+>> +ifeq ($(BR2_TARGET_ABI_FLAT),y)
+>> + ifneq ($$($(2)_FLAT_STACKSIZE),)
+>> +  $(2)_CONF_ENV                        += LDFLAGS="$(TARGET_LDFLAGS)
+>> -Wl,-elf2flt=-s$($(2)_FLAT_STACKSIZE)"
+>> + endif
+>> +endif
+>
+>
+> I'm not that familiar with these double $$, but is it intentional that
+> you're using double-dollar AND single-dollar for the same variable
+> <PKG>_FLAT_STACKSIZE in the above snippet?
 >
 
-You'll need to put a Signed-off-by line here.
+Good catch. Should be double-dollar as well.
+Will be fixed in v2.
 
-You can also immediately add:
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Regards,
 
-
-
----
->  package/pkg-generic.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 8d964a1..595ad1b 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -62,7 +62,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
->  $(BUILD_DIR)/%/.stamp_rsynced:
->         @$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
->         @test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ;
-> exit 1)
-> -       rsync -au --cvs-exclude $(SRCDIR)/ $(@D)
-> +       rsync -au --cvs-exclude --include core $(SRCDIR)/ $(@D)
->         $(Q)touch $@
->
->  # Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
-> --
-> 1.8.1.1
->
->
-> end
->
->
-> ------------------------------------------------------------------------------
-> Dipl.-Ing. (FH)
-> Andreas Naumann
-> Embedded Software
-> T +49 8105 77839-363
-> F +49 8105 77839-850
-> ANaumann at ultratronik.de
-> www.ultratronik.de
-> Dornierstra?e 9
-> 82205 Gilching
-> ULTRATRONIK
-> L?SUNGEN F?R IHREN ERFOLG - SOLUTIONS FOR YOUR SUCCESS
->
->
-> ------------------------------------------------------------------------------
-> Gesch?ftsf?hrer: Dipl.-Ing. Wolfgang Sorg, Dipl.-Kfm. Alexander Sorg
-> Sitz der Gesellschaft: Gilching
-> Registergericht M?nchen HRB 49567 (Ultratronik Vertriebs GmbH)
-> Registergericht M?nchen HRB 55584 (Ultratronik GmbH)
->
->
-> ------------------------------------------------------------------------------
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130322/a3187f37/attachment.html>
+Sonic
