@@ -1,85 +1,58 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri, 22 Mar 2013 07:44:11 +0000
-Subject: [Buildroot] [PATCH v2] czmq: new package
-Message-ID: <1363938251-2961-1-git-send-email-spdawson@gmail.com>
+From: Naumann Andreas <ANaumann@ultratronik.de>
+Date: Fri, 22 Mar 2013 08:53:51 +0100
+Subject: [Buildroot] [PATCH] <pkg>-rsync: Reincluding core files and folders,
+	which got kicked out by --cvs-exclude option.
+Message-ID: <EE4E4767751A8B40949306E403F4DDD802D6D365@sv03ultra002.ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+The --cvs-exclude option also excludes 'core', which when rsyncing e.g.
+a linux tree is less than optimal..
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- v2: Fix comment in czmq Config.in, as suggested by Alexander Lukichev.
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- package/Config.in      |    1 +
- package/czmq/Config.in |   14 ++++++++++++++
- package/czmq/czmq.mk   |   22 ++++++++++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 package/czmq/Config.in
- create mode 100644 package/czmq/czmq.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 94e279b..84bfdbf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -494,6 +494,7 @@ source "package/mediastreamer/Config.in"
- endmenu
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 8d964a1..595ad1b 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -62,7 +62,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
+ $(BUILD_DIR)/%/.stamp_rsynced:
+ 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+ 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ;
+exit 1)
+-	rsync -au --cvs-exclude $(SRCDIR)/ $(@D)
++	rsync -au --cvs-exclude --include core $(SRCDIR)/ $(@D)
+ 	$(Q)touch $@
  
- menu "Networking"
-+source "package/czmq/Config.in"
- source "package/glib-networking/Config.in"
- source "package/libcgi/Config.in"
- source "package/libcgicc/Config.in"
-diff --git a/package/czmq/Config.in b/package/czmq/Config.in
-new file mode 100644
-index 0000000..9fd8e86
---- /dev/null
-+++ b/package/czmq/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_CZMQ
-+	bool "czmq"
-+	select BR2_PACKAGE_ZEROMQ
-+	depends on BR2_INSTALL_LIBSTDCPP # zeromq
-+	depends on BR2_INET_IPV6 # zeromq
-+	depends on BR2_LARGEFILE # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	help
-+	  High-level C Binding for 0MQ
-+
-+	  http://czmq.zeromq.org/
-+
-+comment "czmq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE && BR2_USE_WCHAR)
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-new file mode 100644
-index 0000000..98991fe
---- /dev/null
-+++ b/package/czmq/czmq.mk
-@@ -0,0 +1,22 @@
-+#############################################################
-+#
-+# czmq
-+#
-+#############################################################
-+
-+CZMQ_VERSION = cb9839cf90
-+CZMQ_SITE = git://github.com/zeromq/czmq.git
-+
-+CZMQ_AUTORECONF = YES
-+CZMQ_INSTALL_STAGING = YES
-+CZMQ_DEPENDENCIES = zeromq
-+CZMQ_LICENSE = LGPLv3+ with exceptions
-+CZMQ_LICENSE_FILES = COPYING COPYING.LESSER
-+
-+define CZMQ_CREATE_CONFIG_DIR
-+	mkdir -p $(@D)/config
-+endef
-+
-+CZMQ_PRE_CONFIGURE_HOOKS += CZMQ_CREATE_CONFIG_DIR
-+
-+$(eval $(autotools-package))
+ # Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
 -- 
-1.7.10.4
+1.8.1.1
+
+
+end
+
+------------------------------------------------------------------------------
+Dipl.-Ing. (FH)
+Andreas Naumann
+Embedded Software
+T +49 8105 77839-363
+F +49 8105 77839-850
+ANaumann at ultratronik.de
+www.ultratronik.de
+Dornierstra?e 9
+82205 Gilching
+ULTRATRONIK
+L?SUNGEN F?R IHREN ERFOLG - SOLUTIONS FOR YOUR SUCCESS
+
+------------------------------------------------------------------------------ 
+Gesch?ftsf?hrer: Dipl.-Ing. Wolfgang Sorg, Dipl.-Kfm. Alexander Sorg
+Sitz der Gesellschaft: Gilching
+Registergericht M?nchen HRB 49567 (Ultratronik Vertriebs GmbH)
+Registergericht M?nchen HRB 55584 (Ultratronik GmbH)
+
+------------------------------------------------------------------------------
