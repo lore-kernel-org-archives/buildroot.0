@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Mar 2013 16:29:31 +0100
-Subject: [Buildroot] [PATCH v2] Enable ccache for cmake packages
-In-Reply-To: <CAHXCMMKF9BPbNG38LtDMuFD47uBUKYGbQzFNjVmsyR9BCqP4=Q@mail.gmail.com>
-References: <514CDE1E.8040107@lucaceresoli.net>
- <1363992947-21417-1-git-send-email-luca@lucaceresoli.net>
- <CAHXCMMKF9BPbNG38LtDMuFD47uBUKYGbQzFNjVmsyR9BCqP4=Q@mail.gmail.com>
-Message-ID: <20130323162931.31f5b59c@skate>
+Date: Sat, 23 Mar 2013 18:03:41 +0100
+Subject: [Buildroot] [pull request v5] Pull request for branch
+ for-master/doc
+In-Reply-To: <cover.1363899518.git.s.martin49@gmail.com>
+References: <cover.1363899518.git.s.martin49@gmail.com>
+Message-ID: <20130323180341.238aeeef@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,52 +13,43 @@ To: buildroot@busybox.net
 
 Dear Samuel Martin,
 
-On Sat, 23 Mar 2013 01:03:09 +0100, Samuel Martin wrote:
-> >  ################################################################################
-> >  # inner-cmake-package -- defines how the configuration, compilation and
-> >  # installation of a CMake package should be done, implements a few hooks to
-> > @@ -65,6 +72,7 @@ define $(2)_CONFIGURE_CMDS
-> >         $$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
-> >                 -DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
-> >                 -DCMAKE_INSTALL_PREFIX="/usr" \
-> > +               $(CMAKE_EXTRA_OPT) \
-> Or the inlined if works as well ;)
+On Thu, 21 Mar 2013 22:04:31 +0100, Samuel Martin wrote:
+
+> The following changes since commit 1f721a2f009393c29c6554f643f15f80a8dc5443:
 > 
-> >                 -DCMAKE_VERBOSE_MAKEFILE=ON \
-> Ahem... I think this belongs to some debug remains ;)
+>   xinetd: follow the convention for patch location (2013-03-20 23:28:27 +0100)
+> 
+> are available in the git repository at:
+> 
+>   git://github.com/tSed/buildroot.git for-master/doc
+> 
+> for you to fetch changes up to 8be5fe492147513305626d9665d4119c548be11e:
+> 
+>   manual: update generated lists (2013-03-21 21:33:12 +0100)
 
-But it hasn't been added by this patch from Luca.
+I tested the current version of your branch (top commit
+a368f70b7cee5ebba4d2cf6f09db08799b685af5), which contains the PATCH 6/6
+that replaces the previous 6/7 and 7/7.
 
+For the version of your branch:
 
-> > +ifeq ($(BR2_CCACHE),y)
-> > +$(2)_DEPENDENCIES += host-ccache
-> > +endif
-> I don't think this is need since host-ccache is one of the first
-> target add to the list in the topdir Makefile.
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Correct. 
+I think there are still a few things that could be improved, but this
+series has already been around for some time, and I'd like to see it
+committed even though additional improvements may be brought to it.
 
-> > +               set(CMAKE_C_COMPILER $(CCACHE))\n\
-> > +               set(CMAKE_CXX_COMPILER $(CCACHE))\n\
-> > +               set(CMAKE_C_COMPILER_ARG1 $(TARGET_CC_NOCCACHE) CACHE STRING \"\" FORCE)\n\
-> > +               set(CMAKE_CXX_COMPILER_ARG1 $(TARGET_CXX_NOCCACHE) CACHE STRING \"\" FORCE)\n\
-> > +       endif(DEFINED USE_CCACHE AND USE_CCACHE)\n\
-> > +       if(DEFINED USE_CCACHE AND NOT USE_CCACHE)\n\
-> You can replace the 2 above lines by:
-> else ()
+Amongst the possible improvements:
 
-I don't think so. See the explanation in Luca's commit log. He needs to
-differentiate three cases:
+ * Generate the package list files in $(O) in order to avoid having a
+   compilation process that requires writing to the Buildroot source
+   tree.
 
- * USE_CCACHE is defined and set to ON
- * USE_CCACHE is defined and set to OFF
- * USE_CCACHE is not defined
+ * Don't use the word "stuff" for deprecated features, but instead use
+   "Deprecated features".
 
-Luca, I think a portion of the message you've added below the '---'
-should be added either in the commit log, or maybe as a comment in
-pkg-cmake.mk.
-
-Thanks,
+ * Add a .gitignore entry to ignore the kconfiglib.pyc file generated
+   in support/scripts/.
 
 Thomas
 -- 
