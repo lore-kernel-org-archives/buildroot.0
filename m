@@ -1,32 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Mar 2013 14:06:41 +0100
-Subject: [Buildroot] [git commit] toolchain: update crosstool-NG project URL
-Message-ID: <20130324131004.6AFA69B26A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 24 Mar 2013 14:11:30 +0100
+Subject: [Buildroot] [PATCH] tcl: add license information
+In-Reply-To: <514EF9DD.2030000@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Sun, 24 Mar 2013 10:04:29 -0300")
+References: <1354914901-4480-1-git-send-email-zinosat@tiscali.it>
+ <1354914901-4480-2-git-send-email-zinosat@tiscali.it>
+ <50C4A742.3080707@mind.be> <514EF9DD.2030000@zacarias.com.ar>
+Message-ID: <87li9dj62l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9c1eefa3986d19ffc93b3b9f3367fb2f68562b30
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Gustavo> On 12/09/2012 11:59 AM, Arnout Vandecappelle wrote:
+ >> On 07/12/12 22:15, Davide Viti wrote:
+ >>> 
+ >>> Signed-off-by: Davide Viti<zinosat@tiscali.it>
+ >> 
+ >> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 7edf82b..f1cca14 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -28,7 +28,7 @@ config BR2_TOOLCHAIN_CTNG
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG_IF_NEEDED
- 	help
- 	  Say 'y' if you want to generate the toolchain with crosstool-NG
--	  ( http://ymorin.is-a-geek.org/projects/crosstool )
-+	  (http://crosstool-ng.org).
- 
- 	  This is considered experimental, and you can expect some breakage.
- 
+ Gustavo> Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
