@@ -1,52 +1,72 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 Mar 2013 14:00:22 +0100
-Subject: [Buildroot] [PATCH 22/22] dependencies: check that SSL
-	certificates are installed
-In-Reply-To: <1364113606-20836-23-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 24 Mar 2013 09:26:46 +0100")
-References: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1364113606-20836-23-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <877gkxkl5l.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 24 Mar 2013 12:42:01 +0100
+Subject: [Buildroot] [git commit] package/connman: version bump to 1.12,
+	and fix build with newer kernels headers
+Message-ID: <20130324130048.73BA999860@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3f251aa5b93be64ba61edeea93e5822962cebf39
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Some packages are hosted on https:// servers, and wget only works on
- Thomas> these if the SSL certificates are installed. For example, downloading
- Thomas> the kernel sources from kernel.org requires those SSL certificates to
- Thomas> be installed.
+... while keeping compatibility with older ones.
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  support/dependencies/dependencies.sh |    9 +++++++++
- Thomas>  1 file changed, 9 insertions(+)
+Fixes autobuild failure:
+http://autobuild.buildroot.org/results/f99ae7af46c70f7c356b7771321511a42eb3694d/
 
- Thomas> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
- Thomas> index 5fb4c19..9ee63b5 100755
- Thomas> --- a/support/dependencies/dependencies.sh
- Thomas> +++ b/support/dependencies/dependencies.sh
- Thomas> @@ -199,4 +199,13 @@ if ! perl  -e "require Data::Dumper" > /dev/null 2>&1 ; then
- Thomas>      /bin/echo -e "Your Perl installation is not complete enough, at least Data::Dumper is missing."
- Thomas>      /bin/echo -e "On Debian/Ubuntu distributions, install the 'perl' package."
- Thomas>      exit 1
- Thomas> +fi
- Thomas> +
- Thomas> +# Check that we have the SSL certificates to make https:// downloads
- Thomas> +# work.
- Thomas> +if ! test -d /etc/ssl/certs; then
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ...ce.patch => connman-000-uclibc-backtrace.patch} |    0
+ .../connman-001-fix-for-latest-headers-3.8+.patch  |   19 +++++++++++++++++++
+ package/connman/connman.mk                         |    2 +-
+ 3 files changed, 20 insertions(+), 1 deletions(-)
 
-I don't know if all distributions install them here, hopefully they do.
-
- Thomas> +    /bin/echo -e "Your system lacks Common CA certificates for SSL."
- Thomas> +    /bin/echo -e "This prevents https:// downloads from suceeding."
-
-s/suceeding/succeeding/
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/connman/connman-uclibc-backtrace.patch b/package/connman/connman-000-uclibc-backtrace.patch
+similarity index 100%
+rename from package/connman/connman-uclibc-backtrace.patch
+rename to package/connman/connman-000-uclibc-backtrace.patch
+diff --git a/package/connman/connman-001-fix-for-latest-headers-3.8+.patch b/package/connman/connman-001-fix-for-latest-headers-3.8+.patch
+new file mode 100644
+index 0000000..ef1fabc
+--- /dev/null
++++ b/package/connman/connman-001-fix-for-latest-headers-3.8+.patch
+@@ -0,0 +1,19 @@
++tethering: fix build with kernel headers 3.8+
++
++Highly inspired by:
++    package/bridge-utils/bridge-utils-001-fix-for-kernel-headers-3.8+.patch
++    http://www.redhat.com/archives/libvir-list/2013-January/msg01253.html
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN connman-1.11.orig/src/tethering.c connman-1.11/src/tethering.c
++--- connman-1.11.orig/src/tethering.c	2012-12-22 22:52:47.000000000 +0100
+++++ connman-1.11/src/tethering.c	2013-03-21 19:39:17.036029270 +0100
++@@ -35,6 +35,7 @@
++ #include <string.h>
++ #include <fcntl.h>
++ #include <linux/if_tun.h>
+++#include <netinet/in.h>
++ #include <linux/if_bridge.h>
++ 
++ #include "connman.h"
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index bb528b4..f29ff3b 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ #######################################################
+ 
+-CONNMAN_VERSION = 1.11
++CONNMAN_VERSION = 1.12
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
+ CONNMAN_INSTALL_STAGING = YES
