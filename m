@@ -1,28 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Mar 2013 09:51:06 +0100
-Subject: [Buildroot] [PATCH] dosfstools: fix host variant dependencies
-In-Reply-To: <1363867954-28937-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1363867954-28937-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130324095106.103e7414@skate>
+Date: Sun, 24 Mar 2013 10:33:40 +0100
+Subject: [Buildroot] [PATCH v2] toolchain: update crosstool-NG project URL
+Message-ID: <1364117620-6181-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/Config.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, 21 Mar 2013 09:12:34 -0300, Gustavo Zacarias wrote:
-> host-dosfstools shouldn't pull host-libiconv in since that's for
-> uClibc-based toolchains and we don't have that package anyway.
-> Fixes:
-> http://autobuild.buildroot.net/results/7637985bfb0afdd9217c297e9b0ac5de797c137d/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 7edf82b..f1cca14 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -28,7 +28,7 @@ config BR2_TOOLCHAIN_CTNG
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG_IF_NEEDED
+ 	help
+ 	  Say 'y' if you want to generate the toolchain with crosstool-NG
+-	  ( http://ymorin.is-a-geek.org/projects/crosstool )
++	  (http://crosstool-ng.org).
+ 
+ 	  This is considered experimental, and you can expect some breakage.
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
