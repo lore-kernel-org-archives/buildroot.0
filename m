@@ -1,22 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 24 Mar 2013 10:40:27 -0300
-Subject: [Buildroot] [PATCH 1/1] netsnmp: configurable MIB modules
-In-Reply-To: <1359512084-17343-1-git-send-email-przemyslaw.wrzos@calyptech.com>
-References: <1359512084-17343-1-git-send-email-przemyslaw.wrzos@calyptech.com>
-Message-ID: <514F024B.4010206@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 24 Mar 2013 14:43:31 +0100
+Subject: [Buildroot] [PATCH v4 09/21] qt5: factor Qt5 version
+In-Reply-To: <1363721394-14973-10-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 19 Mar 2013 20:29:42 +0100")
+References: <1363721394-14973-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1363721394-14973-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <874ng0kj5o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/29/2013 11:14 PM, Przemyslaw Wrzos wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> From: przemyslaw <przemyslaw.wrzos@calyptech.com>
-> 
-> Make the MIB modules, which are included/excluded in the build, to be
-> configurable instead of being hard coded.
-> 
-> Signed-off-by: przemyslaw <przemyslaw.wrzos@calyptech.com>
+ Thomas> Since the Qt5 version will be the same for all Qt5 modules, factor it
+ Thomas> in qt5/qt5.mk as QT5_VERSION.
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
