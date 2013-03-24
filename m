@@ -1,26 +1,18 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 Mar 2013 14:34:26 +0100
-Subject: [Buildroot] [PATCH] unexport TERMINFO to correct ncurses
-	behavior
-In-Reply-To: <514EE683.6080509@zacarias.com.ar> (Gustavo Zacarias's message of
- "Sun, 24 Mar 2013 08:41:55 -0300")
-References: <1341941842-22303-1-git-send-email-ntl@pobox.com>
- <514EE683.6080509@zacarias.com.ar>
-Message-ID: <878v5ckjkt.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 24 Mar 2013 10:36:13 -0300
+Subject: [Buildroot] [PATCH] openssh: add linux-pam support [v2]
+In-Reply-To: <1347755273-32240-1-git-send-email-danomimanchego123@gmail.com>
+References: <1347755273-32240-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <514F014D.4080003@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+On 09/15/2012 09:27 PM, Danomi Manchego wrote:
 
- Gustavo> On 07/10/2012 02:37 PM, Nathan Lynch wrote:
- >> Signed-off-by: Nathan Lynch <ntl@pobox.com>
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
- Gustavo> Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
