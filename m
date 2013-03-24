@@ -1,45 +1,73 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Mar 2013 14:42:39 +0100
-Subject: [Buildroot] [git commit] qt5: factor Qt5 version
-Message-ID: <20130324134632.7098E9B26F@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 24 Mar 2013 11:31:07 -0300
+Subject: [Buildroot] [PATCH v4 1/2] strongswan: new package
+In-Reply-To: <1360854606-13787-1-git-send-email-jezz@sysmic.org>
+References: <20130214143957.1095407a@skate>
+ <1360854606-13787-1-git-send-email-jezz@sysmic.org>
+Message-ID: <514F0E2B.6010207@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=22c4c4b9491fc509af42d300bfa8cb6f727e1f66
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 02/14/2013 12:10 PM, J?r?me Pouiller wrote:
 
-Since the Qt5 version will be the same for all Qt5 modules, factor it
-in qt5/qt5.mk as QT5_VERSION.
+> diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+> new file mode 100644
+> index 0000000..24b30ad
+> --- /dev/null
+> +++ b/package/strongswan/Config.in
+> @@ -0,0 +1,105 @@
+> +menuconfig BR2_PACKAGE_STRONGSWAN
+> +	bool "strongswan"
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt5/qt5.mk             |    1 +
- package/qt5/qt5base/qt5base.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+depends on BR2_USE_MMU # fork()
+Strongswan uses fork() so it won't build on nommu architectures like
+blackfin.
 
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index f220508..83cc0e1 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -1,3 +1,4 @@
-+QT5_VERSION = 5.0.1
- include package/qt5/*/*.mk
- 
- define QT5_LA_PRL_FILES_FIXUP
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 83ce999..d22ab66 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--QT5BASE_VERSION = 5.0.1
-+QT5BASE_VERSION = $(QT5_VERSION)
- QT5BASE_SITE = http://releases.qt-project.org/qt5/$(QT5BASE_VERSION)/submodules_tar/
- QT5BASE_SOURCE = qtbase-opensource-src-$(QT5BASE_VERSION).tar.xz
- 
+> +if BR2_PACKAGE_STRONGSWAN
+> +
+> +config BR2_PACKAGE_STRONGSWAN_OPENSSL
+> +	bool "Enables OpenSSL based crypto backends"
+> +	select BR2_PACKAGE_OPENSSL
+> +
+> +config BR2_PACKAGE_STRONGSWAN_GCRYPT
+> +	bool "Enables libgcrypt based crypto backends"
+> +	select BR2_PACKAGE_LIBGCRYPT
+> +	
+
+> +config BR2_PACKAGE_STRONGSWAN_GMP
+> +	bool "Enable GNU MP (libgmp) based crypto backends"
+> +	select BR2_PACKAGE_GMP
+> +	default y
+
+See section 2 of the INSTALL file, one of OPENSSL/GCRYPT/GMP is required
+with GMP being the default if nothing is specified.
+These three should be folded into a choice so that a user isn't allowed
+to N the three of them and cause build breakage.
+
+> +config BR2_PACKAGE_STRONGSWAN_SQL
+> +	bool "Enable SQL database configuration backend"
+> +
+> +endif
+
+You need at least one SQL backend (mysql/sqlite) for this to be of any use.
+You could probably do something like...
+
+ifeq ($(BR2_PACKAGE_SQLITE),y)
+STRONGSWAN_DEPENEDNCIES += sqlite
+STRONGSWAN_CONF_OPT += --enable-sql=yes
+endef
+ifeq ($(BR2_PACKAGE_MYSQL_CLIENT),y)
+STRONGSWAN_DEPENDENCIES += mysql_client
+STRONGSWAN_CONF_OPT += --enable-sql=yes
+endif
+
+> +STRONGSWAN_VERSION = 5.0.1
+
+Bump to 5.0.2 now that it's out?
+
+Other than what i've mentioned it's looking pretty good now.
+Care to send another one?
+Thanks!
