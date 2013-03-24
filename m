@@ -1,43 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Mar 2013 14:00:31 +0100
-Subject: [Buildroot] [git commit] dependencies: check that SSL certificates
-	are installed
-Message-ID: <20130324130053.A74A19B258@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 24 Mar 2013 14:03:14 +0100
+Subject: [Buildroot] [PATCHv2] quota: select
+	BR2_PACKAGE_UTIL_LINUX_BINARIES
+In-Reply-To: <1364127607-29027-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 24 Mar 2013 09:20:07 -0300")
+References: <1364127607-29027-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8738vlkl0t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d66cd067f3dc3d5e2479e1e8c05f24fd82329f7a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Some packages are hosted on https:// servers, and wget only works on
-these if the SSL certificates are installed. For example, downloading
-the kernel sources from kernel.org requires those SSL certificates to
-be installed.
+ Gustavo> All of the util-linux tools options depend on
+ Gustavo> BR2_PACKAGE_UTIL_LINUX_BINARIES that select all the required util-linux
+ Gustavo> libraries and enable the tools build process.
+ Gustavo> So basically quota is selecting a hidden/unavailable option and
+ Gustavo> triggering a util-linux build failure. Fixes:
+ Gustavo> http://autobuild.buildroot.net/results/bc3c75e7c60fe6db54ea56dd7c398ba7878bff83/
 
-[Peter: fix typo]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- support/dependencies/dependencies.sh |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+Committed, thanks.
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 0b44c5a..ce4d9e1 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -200,3 +200,12 @@ if ! perl  -e "require Data::Dumper" > /dev/null 2>&1 ; then
-     /bin/echo -e "On Debian/Ubuntu distributions, install the 'perl' package."
-     exit 1
- fi
-+
-+# Check that we have the SSL certificates to make https:// downloads
-+# work.
-+if ! test -d /etc/ssl/certs; then
-+    /bin/echo -e "Your system lacks Common CA certificates for SSL."
-+    /bin/echo -e "This prevents https:// downloads from succeeding."
-+    /bin/echo -e "On Debian/Ubuntu distributions, install 'ca-certificates' package."
-+    exit 1
-+fi
+-- 
+Bye, Peter Korsgaard
