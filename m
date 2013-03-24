@@ -1,44 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Mar 2013 09:26:46 +0100
-Subject: [Buildroot] [PATCH 22/22] dependencies: check that SSL certificates
-	are installed
+Date: Sun, 24 Mar 2013 09:26:35 +0100
+Subject: [Buildroot] [PATCH 11/22] libpcap: add missing flex/bison
+	dependencies
 In-Reply-To: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1364113606-20836-23-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1364113606-20836-12-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages are hosted on https:// servers, and wget only works on
-these if the SSL certificates are installed. For example, downloading
-the kernel sources from kernel.org requires those SSL certificates to
-be installed.
+In preparation for the removal of the flex/bison mandatory
+dependencies, make sure libpcap builds host-flex/host-bison.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/dependencies/dependencies.sh |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/libpcap/libpcap.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 5fb4c19..9ee63b5 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -199,4 +199,13 @@ if ! perl  -e "require Data::Dumper" > /dev/null 2>&1 ; then
-     /bin/echo -e "Your Perl installation is not complete enough, at least Data::Dumper is missing."
-     /bin/echo -e "On Debian/Ubuntu distributions, install the 'perl' package."
-     exit 1
-+fi
-+
-+# Check that we have the SSL certificates to make https:// downloads
-+# work.
-+if ! test -d /etc/ssl/certs; then
-+    /bin/echo -e "Your system lacks Common CA certificates for SSL."
-+    /bin/echo -e "This prevents https:// downloads from suceeding."
-+    /bin/echo -e "On Debian/Ubuntu distributions, install 'ca-certificates' package."
-+    exit 1
- fi
-\ No newline at end of file
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 06aec0f..5e077a2 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -20,7 +20,7 @@ LIBPCAP_INSTALL_STAGING = YES
+ # configure script correctly handles --enable-shared/--disable-shared.
+ LIBPCAP_AUTORECONF = YES
+ 
+-LIBPCAP_DEPENDENCIES = zlib
++LIBPCAP_DEPENDENCIES = zlib host-flex host-bison
+ LIBPCAP_CONF_ENV = ac_cv_linux_vers=2 \
+ 		ac_cv_header_linux_wireless_h=yes # configure misdetects this
+ LIBPCAP_CONF_OPT = --disable-yydebug --with-pcap=linux
 -- 
 1.7.9.5
