@@ -1,35 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Mar 2013 16:15:56 +0100
-Subject: [Buildroot] [git commit] iproute2: add missing host-flex dependency
-Message-ID: <20130324151610.5B8839B26D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Mar 2013 16:42:41 +0100
+Subject: [Buildroot] [PATCH] libnl: add missing dependency on host-flex
+Message-ID: <1364139761-22345-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87827beff7f26fd3cee64a4952d973e207332469
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
 Fixes
-http://autobuild.buildroot.org/results/0931e622a0e80fc7321f0e26c96ae4607eaadd00/build-end.log.
+http://autobuild.buildroot.org/results/9c496031fef011b86113e342a8ca4a36ae360bb1/build-end.log.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/iproute2/iproute2.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libnl/libnl.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 98a7da0..a83133b 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -10,7 +10,7 @@ IPROUTE2_TARGET_SBINS = ctstat genl ifstat ip lnstat nstat routef routel rtacct
- IPROUTE2_LICENSE = GPLv2
- IPROUTE2_LICENSE_FILES = COPYING
- 
--IPROUTE2_DEPENDENCIES += host-bison
-+IPROUTE2_DEPENDENCIES += host-bison host-flex
- 
- # If both iproute2 and busybox are selected, make certain we win
- # the fight over who gets to have their utils actually installed.
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 7620cf7..2a9f5a9 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -9,7 +9,7 @@ LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files
+ LIBNL_LICENSE = LGPLv2.1+
+ LIBNL_LICENSE_FILES = COPYING
+ LIBNL_INSTALL_STAGING = YES
+-LIBNL_DEPENDENCIES = host-bison
++LIBNL_DEPENDENCIES = host-bison host-flex
+ LIBNL_MAKE = $(MAKE1)
+ LIBNL_BINARIES = class-add class-delete class-list classid-lookup cls-add \
+ 	cls-delete cls-list link-list pktloc-lookup qdisc-add qdisc-delete \
+-- 
+1.7.9.5
