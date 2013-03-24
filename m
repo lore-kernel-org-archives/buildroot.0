@@ -1,10 +1,11 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 24 Mar 2013 10:23:22 -0300
-Subject: [Buildroot] [PATCH 3 1/9] diffutils: only needs gettext if
- locale is selected
-In-Reply-To: <20121101143539.8550.70150.stgit@localhost>
+Date: Sun, 24 Mar 2013 10:23:47 -0300
+Subject: [Buildroot] [PATCH 3 2/9] flex: only needs gettext if locale is
+ selected
+In-Reply-To: <20121101143544.8550.20909.stgit@localhost>
 References: <20121101143539.8550.70150.stgit@localhost>
-Message-ID: <514EFE4A.5020406@zacarias.com.ar>
+ <20121101143544.8550.20909.stgit@localhost>
+Message-ID: <514EFE63.2090508@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
