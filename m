@@ -1,30 +1,24 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 24 Mar 2013 09:48:06 -0300
-Subject: [Buildroot] [PATCH] file: bump to version 5.14
-Message-ID: <1364129286-3863-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 24 Mar 2013 13:49:29 +0100
+Subject: [Buildroot] [PATCH 14/22] gettext: provide a host variant
+In-Reply-To: <1364113606-20836-15-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 24 Mar 2013 09:26:38 +0100")
+References: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1364113606-20836-15-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87620hm086.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/file/file.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 7206705..5422e2f 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--FILE_VERSION = 5.13
-+FILE_VERSION = 5.14
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- FILE_INSTALL_STAGING = YES
+ Thomas> In preparation for the removal of gettext as a hard dependency,
+ Thomas> we need to be able to provide a host variant of gettext for the
+ Thomas> few packages that require msgfmt.
+
+Committed, thanks.
+
 -- 
-1.8.1.5
+Bye, Peter Korsgaard
