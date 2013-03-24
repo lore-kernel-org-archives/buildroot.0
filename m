@@ -1,32 +1,21 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Mar 2013 14:02:40 +0100
-Subject: [Buildroot] [git commit] squid: bump to version 3.3.3
-Message-ID: <20130324130311.1F5519B269@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 24 Mar 2013 14:03:37 +0100
+Subject: [Buildroot] [PATCH] file: bump to version 5.14
+In-Reply-To: <1364129286-3863-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 24 Mar 2013 09:48:06 -0300")
+References: <1364129286-3863-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87txo1j6fq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9a82b0f95d915bdf88b156b00249a73c83f87f7d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/squid/squid.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index a4093f4..5832aa7 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SQUID_VERSION = 3.3.2
-+SQUID_VERSION = 3.3.3
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.3
- SQUID_LICENSE = GPLv2+
- SQUID_LICENSE_FILES = COPYING
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
