@@ -1,58 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Mar 2013 12:45:41 +0100
-Subject: [Buildroot] [PATCH] Add cortex-a8 cpu spec to ffmpeg neon
- config.
-In-Reply-To: <1335136731-4509-1-git-send-email-d_mo1234@yahoo.com>
-References: <1335136731-4509-1-git-send-email-d_mo1234@yahoo.com>
-Message-ID: <20130324124541.28f79c87@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 24 Mar 2013 09:20:07 -0300
+Subject: [Buildroot] [PATCHv2] quota: select BR2_PACKAGE_UTIL_LINUX_BINARIES
+Message-ID: <1364127607-29027-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+All of the util-linux tools options depend on
+BR2_PACKAGE_UTIL_LINUX_BINARIES that select all the required util-linux
+libraries and enable the tools build process.
+So basically quota is selecting a hidden/unavailable option and
+triggering a util-linux build failure. Fixes:
+http://autobuild.buildroot.net/results/bc3c75e7c60fe6db54ea56dd7c398ba7878bff83/
 
-On Sun, 22 Apr 2012 19:18:51 -0400, Danomi Manchego wrote:
-> Since neon support is specific to Arm Cortex-A8, and buildroot
-> recognizes this by having a specific Cortex-A8 clause in ffmpeg.mk,
-> let's add the --cpu needed to make the ffmpeg configuration actually
-> report the arch as "arm (cortex-a8)", instead of just "arm (generic)".
-> 
-> Signed-off-by: Danomi Manchego <d_mo1234@yahoo.com>
-> ---
->  package/multimedia/ffmpeg/ffmpeg.mk |    2 +-
->  1 files changed, 1 insertions(+), 1 deletions(-)
-> 
-> diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
-> index 4cc29ee..633ec9e 100644
-> --- a/package/multimedia/ffmpeg/ffmpeg.mk
-> +++ b/package/multimedia/ffmpeg/ffmpeg.mk
-> @@ -145,7 +145,7 @@ FFMPEG_CONF_OPT += --enable-armvfp
->  endif
->  # NEON is optional for A9
->  ifeq ($(BR2_cortex_a8),y)
-> -FFMPEG_CONF_OPT += --enable-neon
-> +FFMPEG_CONF_OPT += --enable-neon --cpu=cortex-a8
->  endif
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+v2: Better explain why, and also add microblaze depend from util-linux
 
-I believe this patch is not useful, because the only effect of
---cpu=<foo> options in ffmpeg configure is to add the relevant -march,
--mcpu and al. gcc options. But Buildroot is already passing them: in
-the internal and Crosstool-NG toolchain backends, the toolchain is
-built to automatically generate code for the selected CPU, and for the
-external toolchain backend, a wrapper automatically passes
--mcpu/-march/-mtune to the compiler.
+ package/quota/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Therefore, this patch is not needed IMO, and I've removed it from the
-patch work. If you don't agree, do not hesitate to send an updated
-version that includes more details as to why it is needed.
-
-Thanks!
-
-Thomas
+diff --git a/package/quota/Config.in b/package/quota/Config.in
+index f6341d3..5127a9a 100644
+--- a/package/quota/Config.in
++++ b/package/quota/Config.in
+@@ -3,7 +3,9 @@ config BR2_PACKAGE_QUOTA
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU # fork()
++	depends on !(BR2_microblazeel || BR2_microblazebe) # util-linux
+ 	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_BINARIES
+ 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.5
