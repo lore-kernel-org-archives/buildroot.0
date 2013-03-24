@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Mar 2013 22:34:05 +0100
-Subject: [Buildroot] [PATCH 1/4] libpthsem: new package
+Date: Sun, 24 Mar 2013 22:34:07 +0100
+Subject: [Buildroot] [PATCH 3/4] linknx: new package
 In-Reply-To: <1364160848-15168-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1364160848-15168-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1364160848-15168-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1364160848-15168-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,99 +16,75 @@ From: Gregory Hermant <gregory.hermant@calao-systems.com>
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |    1 +
- package/libpthsem/Config.in                        |    9 +++++++
- ...bpthsem-2.0.8-fix-build-on-linux-3.x-host.patch |   28 ++++++++++++++++++++
- package/libpthsem/libpthsem.mk                     |   18 +++++++++++++
- 4 files changed, 56 insertions(+)
- create mode 100644 package/libpthsem/Config.in
- create mode 100644 package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch
- create mode 100644 package/libpthsem/libpthsem.mk
+ package/Config.in        |    1 +
+ package/linknx/Config.in |    8 ++++++++
+ package/linknx/linknx.mk |   31 +++++++++++++++++++++++++++++++
+ 3 files changed, 40 insertions(+)
+ create mode 100644 package/linknx/Config.in
+ create mode 100644 package/linknx/linknx.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index bdfc0f2..1ba356c 100644
+index be1aa99..97aab31 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -562,6 +562,7 @@ source "package/libglib2/Config.in"
- source "package/libical/Config.in"
- source "package/libnspr/Config.in"
- source "package/libpfm4/Config.in"
-+source "package/libpthsem/Config.in"
- source "package/libsigc/Config.in"
- source "package/libtasn1/Config.in"
- source "package/libtpl/Config.in"
-diff --git a/package/libpthsem/Config.in b/package/libpthsem/Config.in
+@@ -672,6 +672,7 @@ source "package/iptables/Config.in"
+ source "package/iw/Config.in"
+ source "package/kismet/Config.in"
+ source "package/lighttpd/Config.in"
++source "package/linknx/Config.in"
+ source "package/links/Config.in"
+ source "package/linphone/Config.in"
+ source "package/lrzsz/Config.in"
+diff --git a/package/linknx/Config.in b/package/linknx/Config.in
 new file mode 100644
-index 0000000..f818ee0
+index 0000000..70942fc
 --- /dev/null
-+++ b/package/libpthsem/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBPTHSEM
-+	bool "libpthsem"
-+	select BR2_PACKAGE_ARGP_STANDALONE
++++ b/package/linknx/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LINKNX
++	bool "linknx"
++	select BR2_PACKAGE_LIBPTHSEM
 +	help
-+	  GNU pth is a user mode multi threading library. pthsem is an extend
-+	  version, with support for semaphores added.
++	  Linknx is an automation platform providing high level functionalities
++	  to EIB/KNX installation.
 +
-+	  http://www.auto.tuwien.ac.at/~mkoegler/pth/
-+
-diff --git a/package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch b/package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch
++	  http://linknx.sourceforge.net/
+diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
 new file mode 100644
-index 0000000..21fff4e
+index 0000000..2520382
 --- /dev/null
-+++ b/package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch
-@@ -0,0 +1,28 @@
-+From 2d0450bfa3fb7003098da1a7fe24c3ae140912dc Mon Sep 17 00:00:00 2001
-+From: Gregory Hermant <gregory.hermant@calao-systems.com>
-+Date: Mon, 22 Oct 2012 15:11:53 +0200
-+Subject: [PATCH] pthsem build on Linux 3.x host
-+
-+
-+Signed-off-by: Michael Markstaller <mm@elabnet.de>
-+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-+---
-+ acinclude.m4 |    2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index 03b42de..fea9bc8 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -892,6 +892,8 @@ case $PLATFORM in
-+         case "x`uname -r`" in
-+ changequote(, )dnl
-+             x2.[23456789]* ) ;;
-++changequote(, )dnl
-++            x3.* ) ;;
-+ changequote([, ])
-+             * ) braindead=yes ;;
-+         esac
-+-- 
-+1.7.9.5
-+
-diff --git a/package/libpthsem/libpthsem.mk b/package/libpthsem/libpthsem.mk
-new file mode 100644
-index 0000000..f035fa8
---- /dev/null
-+++ b/package/libpthsem/libpthsem.mk
-@@ -0,0 +1,18 @@
++++ b/package/linknx/linknx.mk
+@@ -0,0 +1,31 @@
 +#############################################################
 +#
-+# libpthsem
++# linknx
 +#
 +#############################################################
 +
-+LIBPTHSEM_VERSION = 2.0.8
-+LIBPTHSEM_SOURCE = pthsem_$(LIBPTHSEM_VERSION).tar.gz
-+LIBPTHSEM_SITE = http://www.auto.tuwien.ac.at/~mkoegler/pth/
-+LIBPTHSEM_LICENSE = LGPLv2.1+
-+LIBPTHSEM_LICENSE_FILES = COPYING
-+LIBPTHSEM_AUTORECONF = YES
-+LIBPTHSEM_INSTALL_STAGING = YES
-+LIBPTHSEM_DEPENDENCIES = argp-standalone
-+LIBPTHSEM_CONFIG_SCRIPTS = pthsem-config
++LINKNX_VERSION = 0.0.1.30
++LINKNX_SOURCE = linknx-${LINKNX_VERSION}.tar.gz
++LINKNX_SITE = http://downloads.sourceforge.net/project/linknx/linknx/linknx-$(LINKNX_VERSION)
++LINKNX_LICENSE = GPLv2+
++LINKNX_INSTALL_STAGING = YES
++LINKNX_CONF_OPT = --without-lua --without-log4cpp --without-pth-test \
++		  --with-pth=$(STAGING_DIR)/usr
++
++LINKNX_DEPENDENCIES = libpthsem
++
++ifeq ($(BR2_PACKAGE_MYSQL_CLIENT),y)
++LINKNX_CONF_OPT += --with-mysql=$(STAGING_DIR)/usr/bin/mysql_config
++LINKNX_DEPENDENCIES = mysql_client
++else
++LINKNX_CONF_OPT += --without-mysql
++endif
++
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++LINKNX_CONF_OPT += --with-libcurl=$(STAGING_DIR)/usr/bin/curl-config
++LINKNX_DEPENDENCIES += libcurl
++else
++LINKNX_CONF_OPT += --without-libcurl
++endif
 +
 +$(eval $(autotools-package))
-+
 -- 
 1.7.9.5
