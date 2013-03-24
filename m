@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Mar 2013 10:58:59 +0100
-Subject: [Buildroot] [PATCH 1/3] sunxi-tools: new host/taget package
-In-Reply-To: <1363289498-20993-1-git-send-email-carlo.caione@gmail.com>
+Date: Sun, 24 Mar 2013 11:02:58 +0100
+Subject: [Buildroot] [PATCH 2/3] sunxi-boards: new package
+In-Reply-To: <1363289498-20993-2-git-send-email-carlo.caione@gmail.com>
 References: <1363289498-20993-1-git-send-email-carlo.caione@gmail.com>
-Message-ID: <20130324105859.3e488934@skate>
+ <1363289498-20993-2-git-send-email-carlo.caione@gmail.com>
+Message-ID: <20130324110258.346e8fd6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,122 +13,257 @@ To: buildroot@busybox.net
 
 Dear Carlo Caione,
 
-Typo in the title: taget -> target.
+On Thu, 14 Mar 2013 20:31:37 +0100, Carlo Caione wrote:
 
-On Thu, 14 Mar 2013 20:31:36 +0100, Carlo Caione wrote:
+> Sunxi-boards requires a compiled .fex files for hardware description, used by
+> kernel during boot for hardware initialization.
 
-> diff --git a/package/sunxi-tools/Config.in b/package/sunxi-tools/Config.in
+Please copy this text into the package help text. And mention that it
+applies only to the linux-sunxi kernel and not the mainline kernel.
+
+> Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
+> ---
+>  package/Config.in                    |   1 +
+>  package/sunxi-boards/Config.in       | 170 +++++++++++++++++++++++++++++++++++
+>  package/sunxi-boards/sunxi-boards.mk |  17 ++++
+>  3 files changed, 188 insertions(+)
+>  create mode 100644 package/sunxi-boards/Config.in
+>  create mode 100644 package/sunxi-boards/sunxi-boards.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 4bb8c77..72db358 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -214,6 +214,7 @@ source "package/b43-firmware/Config.in"
+>  source "package/firmware-imx/Config.in"
+>  source "package/linux-firmware/Config.in"
+>  source "package/rpi-firmware/Config.in"
+> +source "package/sunxi-boards/Config.in"
+>  source "package/ux500-firmware/Config.in"
+>  source "package/zd1211-firmware/Config.in"
+>  endmenu
+> diff --git a/package/sunxi-boards/Config.in b/package/sunxi-boards/Config.in
 > new file mode 100644
-> index 0000000..d151a74
+> index 0000000..7d5db53
 > --- /dev/null
-> +++ b/package/sunxi-tools/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_SUNXI_TOOLS
-> +	bool "sunxi nand-part"
-
-On hardware specific packages, we generally try to restrict them to the
-architecture on which they make sense, so you could add a:
-
-	depends on BR2_arm
-
-here.
-
+> +++ b/package/sunxi-boards/Config.in
+> @@ -0,0 +1,170 @@
+> +config BR2_PACKAGE_SUNXI_BOARDS
+> +	bool "sunxi script.bin board file"
+> +	select BR2_PACKAGE_HOST_SUNXI_TOOLS
 > +	help
-> +	  nand-part is a tool to repartition the internal NAND on sunxi
-> +	  devices
-
-It would be good to copy a bit more text from the host-sunxi package
-description. Something that at least mentions Allwinner A10 and A13.
-
-> +	  http://linux-sunxi.org/Sunxi-tools
+> +	  Compiled '.fex' file used by the sun4i kernel
 > +
-> diff --git a/package/sunxi-tools/Config.in.host b/package/sunxi-tools/Config.in.host
-> new file mode 100644
-> index 0000000..0208adb
-> --- /dev/null
-> +++ b/package/sunxi-tools/Config.in.host
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_HOST_SUNXI_TOOLS
-> +	bool "host sunxi-tools"
-
-depends on BR2_arm
-
+> +	  https://github.com/linux-sunxi/sunxi-boards
+> +
+> +choice
+> +	prompt "sunxi board"
+> +	default BR2_PACKAGE_SUNXI_BOARDS_CUBIEBOARD
+> +	depends on BR2_PACKAGE_SUNXI_BOARDS
 > +	help
-> +	  Tools for Allwinner A10 (aka sun4i) and A13 (aka sun5i) based devices.
-> +	  This includes fexc which can be used to compile .fex board definition files to
-> +	  the binary script.bin format required by the linux-sunxi kernel.
+> +	  Select the sunxi board
 > +
-> +	  http://linux-sunxi.org/Sunxi-tools
+> +config BR2_PACKAGE_SUNXI_BOARDS_CUBIEBOARD
+> +	bool "Cubieboard"
+> +	help
+> +	  Cubieboard
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_A10_MID_1GB
+> +	bool "A10_mid_1GB"
+> +	help
+> +	  A10_mid_1GB
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_BA10_TV_BOX
+> +	bool "A10_tv_box"
+> +	help
+> +	  A10_tv_box
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_COBY_MID7042
+> +	bool "coby_mid7042"
+> +	help
+> +	  coby_mid7042
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_COBY_MID8042
+> +	bool "coby_mid8042"
+> +	help
+> +	  coby_mid8042
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_COBY_MID9742
+> +	bool "coby_mid9742"
+> +	help
+> +	  coby_mid9742
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_CUBIEBOARD_512
+> +	bool "Cubieboard_512"
+> +	help
+> +	  Cubieboard_512
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_GOOSEBERRY_A721
+> +	bool "Gooseberry_a721"
+> +	help
+> +	  Gooseberry_a721
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_H6
+> +	bool "h6"
+> +	help
+> +	  h6
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_HACKBERRY
+> +	bool "Hackberry"
+> +	help
+> +	  Hackberry
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_HYUNDAI_A7HD
+> +	bool "hyundai_a7hd"
+> +	help
+> +	  hyundai_a7hd
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_INET97F_II
+> +	bool "inet97f-ii"
+> +	help
+> +	  inet97f-ii
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_MELE_A1000
+> +	bool "mele_a1000"
+> +	help
+> +	  mele_a1000
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_MELE_A1000G
+> +	bool "mele_a1000G"
+> +	help
+> +	  mele_a1000g
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_MINI_X_1GB
+> +	bool "mini-x-1gb"
+> +	help
+> +	  mini-x-1gb
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_MINI_X
+> +	bool "mini-x"
+> +	help
+> +	  mini-x
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_MK802_1GB
+> +	bool "mk802-1gb"
+> +	help
+> +	  mk802-1gb
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_MK802
+> +	bool "mk802"
+> +	help
+> +	  mk802
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_MK802II
+> +	bool "mk802ii"
+> +	help
+> +	  mk802ii
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_POV_PROTAB2_IPS_3G
+> +	bool "pov_protab2_ips_3g"
+> +	help
+> +	  pov_protab2_ips_3g
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_POV_PROTAB2_IPS9
+> +	bool "pov_protab2_ips9"
+> +	help
+> +	  pov_protab2_ips9
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_UHOST_U1A
+> +	bool "uhost_u1a"
+> +	help
+> +	  uhost_u1a
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_ZATAB
+> +	bool "zatab"
+> +	help
+> +	  zatab
+> +
+> +endchoice
+> +
+> +config BR2_PACKAGE_SUNXI_BOARDS_FILE
+> +	string
+> +	default "cubieboard"		if BR2_PACKAGE_SUNXI_BOARDS_CUBIEBOARD
+> +	default "a10_mid_1gb"		if BR2_PACKAGE_SUNXI_BOARDS_A10_MID_1GB
+> +	default "ba10_tv_box"		if BR2_PACKAGE_SUNXI_BOARDS_BA10_TV_BOX
+> +	default "coby_mid7042"		if BR2_PACKAGE_SUNXI_BOARDS_COBY_MID7042
+> +	default "coby_mid8042"		if BR2_PACKAGE_SUNXI_BOARDS_COBY_MID8042
+> +	default "coby_mid9742"		if BR2_PACKAGE_SUNXI_BOARDS_COBY_MID9742
+> +	default "cubieboard_512"	if BR2_PACKAGE_SUNXI_BOARDS_CUBIEBOARD_512
+> +	default "gooseberry_a721"	if BR2_PACKAGE_SUNXI_BOARDS_GOOSEBERRY_A721
+> +	default "h6"			if BR2_PACKAGE_SUNXI_BOARDS_H6
+> +	default "hackberry"		if BR2_PACKAGE_SUNXI_BOARDS_HACKBERRY
+> +	default "hyundai_a7hd"		if BR2_PACKAGE_SUNXI_BOARDS_HYUNDAI_A7HD
+> +	default "inet97f-ii"		if BR2_PACKAGE_SUNXI_BOARDS_INET97F_II
+> +	default "mele_a1000"		if BR2_PACKAGE_SUNXI_BOARDS_MELE_A1000
+> +	default "mele_a1000g"		if BR2_PACKAGE_SUNXI_BOARDS_MELE_A1000G
+> +	default "mini-x-1gb"		if BR2_PACKAGE_SUNXI_BOARDS_MINI_X_1GB
+> +	default "mini-x"		if BR2_PACKAGE_SUNXI_BOARDS_MINI_X
+> +	default "mk802-1gb"		if BR2_PACKAGE_SUNXI_BOARDS_MK802_1GB
+> +	default "mk802"			if BR2_PACKAGE_SUNXI_BOARDS_MK802
+> +	default "mk802ii"		if BR2_PACKAGE_SUNXI_BOARDS_MK802II
+> +	default "pov_protab2_ips_3g"	if BR2_PACKAGE_SUNXI_BOARDS_POV_PROTAB2_IPS_3g
+> +	default "pov_protab2_ips9"	if BR2_PACKAGE_SUNXI_BOARDS_POV_PROTAB2_IPS9
+> +	default "uhost_u1a"		if BR2_PACKAGE_SUNXI_BOARDS_UHOST_U1A
+> +	default "zatab"			if BR2_PACKAGE_SUNXI_BOARDS_ZATAB
 
-It would be good to mention explicitly that those tools don't apply to
-the mainline Linux kernel version.
+Just like we do for the kernel or U-Boot, I think listing all possible
+configurations here is not really realistic. What about a single:
+
+config BR2_PACKAGE_SUNXI_BOARDS_BOARD_NAME
+	string "Board name"
+	help
+	  This field defines the name of the board for which the .fex
+	  files should be generated. See ... to see the list of valid
+	  board names.
 
 > +
-> diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+> +
+> +
+> +
+> +
+> +
+> +
+> +
+> +
+> +	
+> +
+> +
+> +
+
+There shouldn't be all those empty new lines here.
+
+> diff --git a/package/sunxi-boards/sunxi-boards.mk b/package/sunxi-boards/sunxi-boards.mk
 > new file mode 100644
-> index 0000000..cfb88d7
+> index 0000000..dbbc063
 > --- /dev/null
-> +++ b/package/sunxi-tools/sunxi-tools.mk
-> @@ -0,0 +1,42 @@
+> +++ b/package/sunxi-boards/sunxi-boards.mk
+> @@ -0,0 +1,17 @@
 > +#############################################################
 > +#
-> +# sunxi-tools
+> +# sunxi-boards
 > +#
 > +#############################################################
 > +
-> +SUNXI_TOOLS_VERSION = 3a94e721dd8d1e13d0b25da0a83463891e8e9ee0
-> +SUNXI_TOOLS_SITE = http://github.com/linux-sunxi/sunxi-tools/tarball/master
-> +SUNXI_TOOLS_LICENSE = GPLv2+
-> +SUNXI_TOOLS_LICENSE_FILES = COPYING
-> +HOST_SUNXI_TOOLS_DEPENDENCIES = host-libusb
+> +SUNXI_BOARDS_VERSION = 88d663db44f65b73ef65c4148a28c6fa3665d2b6
+> +SUNXI_BOARDS_SITE = https://github.com/linux-sunxi/sunxi-boards/tarball/master
+> +SUNXI_BOARDS_DEPENDENCIES = host-sunxi-tools
 > +
-> +define HOST_SUNXI_TOOLS_BUILD_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) CFLAGS="$(HOST_CFLAGS) -std=c99 \
-> +	  -D_POSIX_C_SOURCE=200112L -Iinclude/" LDFLAGS="$(HOST_LDFLAGS)" -C $(@D)
+> +FEX2BIN = $(HOST_DIR)/usr/bin/fex2bin
 
-Maybe:
-	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
-		CFLAGS="$(HOST_CFLAGS) ..." -C $(@D)
+This one should be defined by sunxi-tools (i.e patch 1/3).
 
-we prefer using $(HOST_CONFIGURE_OPTS), which will pass the right CC,
-LD, LDFLAGS and so on. You only need to override CFLAGS here.
-
+> +define SUNXI_BOARDS_INSTALL_TARGET_CMDS
+> +	$(FEX2BIN) $(@D)/sys_config/a10/$(BR2_PACKAGE_SUNXI_BOARDS_FILE).fex $(BINARIES_DIR)/script.bin
 > +endef
-> +
-> +define HOST_SUNXI_TOOLS_INSTALL_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/fexc $(HOST_DIR)/usr/bin/fexc
-> +	$(INSTALL) -D -m 0755 $(@D)/bin2fex $(HOST_DIR)/usr/bin/bin2fex
-> +	$(INSTALL) -D -m 0755 $(@D)/fex2bin $(HOST_DIR)/usr/bin/fex2bin
-> +	$(INSTALL) -D -m 0755 $(@D)/bootinfo $(HOST_DIR)/usr/bin/bootinfo
-> +	$(INSTALL) -D -m 0755 $(@D)/fel $(HOST_DIR)/usr/bin/fel
-> +	$(INSTALL) -D -m 0755 $(@D)/pio $(HOST_DIR)/usr/bin/pio
-> +	$(INSTALL) -D -m 0755 $(@D)/nand-part $(HOST_DIR)/usr/bin/nand-part
 
-This could be changed to:
+This should be:
 
-	for i in fexc bin2fex fex2bin bootinfo fel pio nand-part; do \
-		$(INSTALL) -D -m 0755 $(@D)/$$i $(HOST_DIR)/usr/bin/$$i ; \
-	done
+define SUNXI_BOARDS_INSTALL_IMAGES_CMDS
 
-also, isn't nand-part useful only on the target?
+endef
 
-> +endef
-> +
-> +define SUNXI_TOOLS_BUILD_CMDS
-> +	$(MAKE) CC="$(TARGET_CC)"                               \
-> +		LDFLAGS="$(TARGET_LDFLAGS)"                     \
-> +		CFLAGS="$(TARGET_CFLAGS)                        \
-> +		 -std=c99 -D_POSIX_C_SOURCE=200112L -Iinclude/" \
-> +		 -C $(@D)					\
-> +		nand-part
-
-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) ..." -C $(@D) nand-part
-
-TARGET_CONFIGURE_OPTS already defines CC, LDFLAGS, CFLAGS for you. You
-only have to override the CFLAGS definition.
-
-Thanks!
+and don't forget to SUNXI_BOARDS_INSTALL_IMAGES = YES and
+SUNXI_BOARDS_INSTALL_TARGET = NO.
 
 Thomas
 -- 
