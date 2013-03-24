@@ -1,174 +1,315 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Mar 2013 09:26:25 +0100
-Subject: [Buildroot] [PATCH 01/22] package/connman: version bump to 1.12,
-	and fix build with newer kernels headers
+Date: Sun, 24 Mar 2013 09:26:26 +0100
+Subject: [Buildroot] [PATCH 02/22] gettext: fix tools build failure for
+	uClibc toolchain with C++
 In-Reply-To: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1364113606-20836-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1364113606-20836-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-... while keeping compatibility with older ones.
+Fixes:
+http://autobuild.buildroot.net/results/e5777d754653edef9d8c8558f04c2836734f2c25/
 
-Fixes autobuild failure:
-http://autobuild.buildroot.org/results/f99ae7af46c70f7c356b7771321511a42eb3694d/
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/connman/connman-000-uclibc-backtrace.patch |   44 ++++++++++++++++++++
- .../connman-001-fix-for-latest-headers-3.8+.patch  |   19 +++++++++
- package/connman/connman-uclibc-backtrace.patch     |   44 --------------------
- package/connman/connman.mk                         |    2 +-
- 4 files changed, 64 insertions(+), 45 deletions(-)
- create mode 100644 package/connman/connman-000-uclibc-backtrace.patch
- create mode 100644 package/connman/connman-001-fix-for-latest-headers-3.8+.patch
- delete mode 100644 package/connman/connman-uclibc-backtrace.patch
+ package/gettext/gettext-fix_rpl_gettimeofday.patch |  282 ++++++++++++++++++++
+ 1 file changed, 282 insertions(+)
+ create mode 100644 package/gettext/gettext-fix_rpl_gettimeofday.patch
 
-diff --git a/package/connman/connman-000-uclibc-backtrace.patch b/package/connman/connman-000-uclibc-backtrace.patch
+diff --git a/package/gettext/gettext-fix_rpl_gettimeofday.patch b/package/gettext/gettext-fix_rpl_gettimeofday.patch
 new file mode 100644
-index 0000000..4b806c6
+index 0000000..e97ceb2
 --- /dev/null
-+++ b/package/connman/connman-000-uclibc-backtrace.patch
-@@ -0,0 +1,44 @@
-+[PATCH] fix build on uClibc without UCLIBC_HAS_BACKTRACE
++++ b/package/gettext/gettext-fix_rpl_gettimeofday.patch
+@@ -0,0 +1,282 @@
++Newer sys_time.in.h from gnulib breaks on uClibc with C++ so roll back
++to a previous version that's known to work.
 +
-+Backtrace support is only used for logging on signal errors, which
-+isn't really critical, so simply remove backtrace info if not
-+available in uClibc.
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ src/log.c |    7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+Index: connman-0.78/src/log.c
-+===================================================================
-+--- connman-0.78.orig/src/log.c
-++++ connman-0.78/src/log.c
-+@@ -30,7 +30,12 @@
-+ #include <stdlib.h>
-+ #include <string.h>
-+ #include <syslog.h>
-++#include <features.h>
-++/* backtrace support is optional on uClibc */
-++#if !(defined(__UCLIBC__) && !defined (__UCLIBC_HAS_BACKTRACE__))
-++#define HAVE_BACKTRACE
-+ #include <execinfo.h>
-++#endif
-+ #include <dlfcn.h>
++diff -Nura gettext-0.18.2.1.orig/gettext-tools/gnulib-lib/sys_time.in.h gettext-0.18.2.1/gettext-tools/gnulib-lib/sys_time.in.h
++--- gettext-0.18.2.1.orig/gettext-tools/gnulib-lib/sys_time.in.h	2013-03-12 09:17:10.530475932 -0300
+++++ gettext-0.18.2.1/gettext-tools/gnulib-lib/sys_time.in.h	2013-03-19 12:00:17.557958255 -0300
++@@ -1,6 +1,6 @@
++ /* Provide a more complete sys/time.h.
 + 
-+ #include "connman.h"
-+@@ -112,6 +117,7 @@
++-   Copyright (C) 2007-2013 Free Software Foundation, Inc.
+++   Copyright (C) 2007-2012 Free Software Foundation, Inc.
 + 
-+ static void print_backtrace(unsigned int offset)
++    This program is free software; you can redistribute it and/or modify
++    it under the terms of the GNU General Public License as published by
++@@ -17,34 +17,37 @@
++ 
++ /* Written by Paul Eggert.  */
++ 
++-#ifndef _ at GUARD_PREFIX@_SYS_TIME_H
++-
++ #if __GNUC__ >= 3
++ @PRAGMA_SYSTEM_HEADER@
++ #endif
++ @PRAGMA_COLUMNS@
++ 
++-/* The include_next requires a split double-inclusion guard.  */
++-#if @HAVE_SYS_TIME_H@
++-# @INCLUDE_NEXT@ @NEXT_SYS_TIME_H@
++-#endif
+++#if defined _ at GUARD_PREFIX@_SYS_TIME_H
++ 
++-#ifndef _ at GUARD_PREFIX@_SYS_TIME_H
++-#define _ at GUARD_PREFIX@_SYS_TIME_H
+++/* Simply delegate to the system's header, without adding anything.  */
+++# if @HAVE_SYS_TIME_H@
+++#  @INCLUDE_NEXT@ @NEXT_SYS_TIME_H@
+++# endif
++ 
++-#if ! @HAVE_SYS_TIME_H@
++-# include <time.h>
++-#endif
+++#else
+++
+++# define _ at GUARD_PREFIX@_SYS_TIME_H
+++
+++# if @HAVE_SYS_TIME_H@
+++#  @INCLUDE_NEXT@ @NEXT_SYS_TIME_H@
+++# else
+++#  include <time.h>
+++# endif
++ 
++ /* On native Windows with MSVC, get the 'struct timeval' type.
++    Also, on native Windows with a 64-bit time_t, where we are overriding the
++    'struct timeval' type, get all declarations of system functions whose
++    signature contains 'struct timeval'.  */
++-#if (defined _MSC_VER || @REPLACE_STRUCT_TIMEVAL@) && @HAVE_WINSOCK2_H@ && !defined _GL_INCLUDING_WINSOCK2_H
++-# define _GL_INCLUDING_WINSOCK2_H
++-# include <winsock2.h>
++-# undef _GL_INCLUDING_WINSOCK2_H
++-#endif
+++# if (defined _MSC_VER || @REPLACE_STRUCT_TIMEVAL@) && @HAVE_WINSOCK2_H@ && !defined _GL_INCLUDING_WINSOCK2_H
+++#  define _GL_INCLUDING_WINSOCK2_H
+++#  include <winsock2.h>
+++#  undef _GL_INCLUDING_WINSOCK2_H
+++# endif
++ 
++ /* The definitions of _GL_FUNCDECL_RPL etc. are copied here.  */
++ 
++@@ -52,112 +55,112 @@
++ 
++ /* The definition of _GL_WARN_ON_USE is copied here.  */
++ 
++-#ifdef __cplusplus
+++# ifdef __cplusplus
++ extern "C" {
++-#endif
+++# endif
++ 
++-#if !@HAVE_STRUCT_TIMEVAL@ || @REPLACE_STRUCT_TIMEVAL@
+++# if !@HAVE_STRUCT_TIMEVAL@ || @REPLACE_STRUCT_TIMEVAL@
++ 
++-# if @REPLACE_STRUCT_TIMEVAL@
++-#  define timeval rpl_timeval
++-# endif
+++#  if @REPLACE_STRUCT_TIMEVAL@
+++#   define timeval rpl_timeval
+++#  endif
++ 
++-# if !GNULIB_defined_struct_timeval
+++#  if !GNULIB_defined_struct_timeval
++ struct timeval
 + {
-++#ifdef HAVE_BACKTRACE
-+ 	void *frames[99];
-+ 	size_t n_ptrs;
-+ 	unsigned int i;
-+@@ -210,6 +216,7 @@
++   time_t tv_sec;
++   long int tv_usec;
++ };
++-#  define GNULIB_defined_struct_timeval 1
++-# endif
+++#   define GNULIB_defined_struct_timeval 1
+++#  endif
 + 
-+ 	close(outfd[1]);
-+ 	close(infd[0]);
-++#endif /* HAVE_BACKTRACE */
++-#endif
+++# endif
++ 
++-#ifdef __cplusplus
+++# ifdef __cplusplus
 + }
++-#endif
+++# endif
 + 
-+ static void signal_handler(int signo)
-diff --git a/package/connman/connman-001-fix-for-latest-headers-3.8+.patch b/package/connman/connman-001-fix-for-latest-headers-3.8+.patch
-new file mode 100644
-index 0000000..ef1fabc
---- /dev/null
-+++ b/package/connman/connman-001-fix-for-latest-headers-3.8+.patch
-@@ -0,0 +1,19 @@
-+tethering: fix build with kernel headers 3.8+
-+
-+Highly inspired by:
-+    package/bridge-utils/bridge-utils-001-fix-for-kernel-headers-3.8+.patch
-+    http://www.redhat.com/archives/libvir-list/2013-January/msg01253.html
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN connman-1.11.orig/src/tethering.c connman-1.11/src/tethering.c
-+--- connman-1.11.orig/src/tethering.c	2012-12-22 22:52:47.000000000 +0100
-++++ connman-1.11/src/tethering.c	2013-03-21 19:39:17.036029270 +0100
-+@@ -35,6 +35,7 @@
-+ #include <string.h>
-+ #include <fcntl.h>
-+ #include <linux/if_tun.h>
-++#include <netinet/in.h>
-+ #include <linux/if_bridge.h>
++-#if @GNULIB_GETTIMEOFDAY@
++-# if @REPLACE_GETTIMEOFDAY@
++-#  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
++-#   undef gettimeofday
++-#   define gettimeofday rpl_gettimeofday
++-#  endif
+++# if @GNULIB_GETTIMEOFDAY@
+++#  if @REPLACE_GETTIMEOFDAY@
+++#   if !(defined __cplusplus && defined GNULIB_NAMESPACE)
+++#    undef gettimeofday
+++#    define gettimeofday rpl_gettimeofday
+++#   endif
++ _GL_FUNCDECL_RPL (gettimeofday, int,
++-                  (struct timeval *restrict, void *restrict)
+++                  (struct timeval *__restrict, void *__restrict)
++                   _GL_ARG_NONNULL ((1)));
++ _GL_CXXALIAS_RPL (gettimeofday, int,
++-                  (struct timeval *restrict, void *restrict));
++-# else
++-#  if !@HAVE_GETTIMEOFDAY@
+++                  (struct timeval *__restrict, void *__restrict));
+++#  else
+++#   if !@HAVE_GETTIMEOFDAY@
++ _GL_FUNCDECL_SYS (gettimeofday, int,
++-                  (struct timeval *restrict, void *restrict)
+++                  (struct timeval *__restrict, void *__restrict)
++                   _GL_ARG_NONNULL ((1)));
++-#  endif
+++#   endif
++ /* Need to cast, because on glibc systems, by default, the second argument is
++                                                   struct timezone *.  */
++ _GL_CXXALIAS_SYS_CAST (gettimeofday, int,
++-                       (struct timeval *restrict, void *restrict));
++-# endif
+++                       (struct timeval *__restrict, void *__restrict));
+++#  endif
++ _GL_CXXALIASWARN (gettimeofday);
++-#elif defined GNULIB_POSIXCHECK
++-# undef gettimeofday
++-# if HAVE_RAW_DECL_GETTIMEOFDAY
+++# elif defined GNULIB_POSIXCHECK
+++#  undef gettimeofday
+++#  if HAVE_RAW_DECL_GETTIMEOFDAY
++ _GL_WARN_ON_USE (gettimeofday, "gettimeofday is unportable - "
++                  "use gnulib module gettimeofday for portability");
+++#  endif
++ # endif
++-#endif
 + 
-+ #include "connman.h"
-diff --git a/package/connman/connman-uclibc-backtrace.patch b/package/connman/connman-uclibc-backtrace.patch
-deleted file mode 100644
-index 4b806c6..0000000
---- a/package/connman/connman-uclibc-backtrace.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--[PATCH] fix build on uClibc without UCLIBC_HAS_BACKTRACE
--
--Backtrace support is only used for logging on signal errors, which
--isn't really critical, so simply remove backtrace info if not
--available in uClibc.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- src/log.c |    7 +++++++
-- 1 file changed, 7 insertions(+)
--
--Index: connman-0.78/src/log.c
--===================================================================
----- connman-0.78.orig/src/log.c
--+++ connman-0.78/src/log.c
--@@ -30,7 +30,12 @@
-- #include <stdlib.h>
-- #include <string.h>
-- #include <syslog.h>
--+#include <features.h>
--+/* backtrace support is optional on uClibc */
--+#if !(defined(__UCLIBC__) && !defined (__UCLIBC_HAS_BACKTRACE__))
--+#define HAVE_BACKTRACE
-- #include <execinfo.h>
--+#endif
-- #include <dlfcn.h>
-- 
-- #include "connman.h"
--@@ -112,6 +117,7 @@
-- 
-- static void print_backtrace(unsigned int offset)
-- {
--+#ifdef HAVE_BACKTRACE
-- 	void *frames[99];
-- 	size_t n_ptrs;
-- 	unsigned int i;
--@@ -210,6 +216,7 @@
-- 
-- 	close(outfd[1]);
-- 	close(infd[0]);
--+#endif /* HAVE_BACKTRACE */
-- }
-- 
-- static void signal_handler(int signo)
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index bb528b4..f29ff3b 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- #######################################################
- 
--CONNMAN_VERSION = 1.11
-+CONNMAN_VERSION = 1.12
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
- CONNMAN_INSTALL_STAGING = YES
++ /* Hide some function declarations from <winsock2.h>.  */
++ 
++-#if defined _MSC_VER && @HAVE_WINSOCK2_H@
++-# if !defined _ at GUARD_PREFIX@_UNISTD_H
++-#  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
++-#   undef close
++-#   define close close_used_without_including_unistd_h
++-#  else
+++# if defined _MSC_VER && @HAVE_WINSOCK2_H@
+++#  if !defined _ at GUARD_PREFIX@_UNISTD_H
+++#   if !(defined __cplusplus && defined GNULIB_NAMESPACE)
+++#    undef close
+++#    define close close_used_without_including_unistd_h
+++#   else
++      _GL_WARN_ON_USE (close,
++                       "close() used without including <unistd.h>");
++-#  endif
++-#  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
++-#   undef gethostname
++-#   define gethostname gethostname_used_without_including_unistd_h
++-#  else
+++#   endif
+++#   if !(defined __cplusplus && defined GNULIB_NAMESPACE)
+++#    undef gethostname
+++#    define gethostname gethostname_used_without_including_unistd_h
+++#   else
++      _GL_WARN_ON_USE (gethostname,
++                       "gethostname() used without including <unistd.h>");
+++#   endif
++ #  endif
++-# endif
++-# if !defined _ at GUARD_PREFIX@_SYS_SOCKET_H
++-#  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
++-#   undef socket
++-#   define socket              socket_used_without_including_sys_socket_h
++-#   undef connect
++-#   define connect             connect_used_without_including_sys_socket_h
++-#   undef accept
++-#   define accept              accept_used_without_including_sys_socket_h
++-#   undef bind
++-#   define bind                bind_used_without_including_sys_socket_h
++-#   undef getpeername
++-#   define getpeername         getpeername_used_without_including_sys_socket_h
++-#   undef getsockname
++-#   define getsockname         getsockname_used_without_including_sys_socket_h
++-#   undef getsockopt
++-#   define getsockopt          getsockopt_used_without_including_sys_socket_h
++-#   undef listen
++-#   define listen              listen_used_without_including_sys_socket_h
++-#   undef recv
++-#   define recv                recv_used_without_including_sys_socket_h
++-#   undef send
++-#   define send                send_used_without_including_sys_socket_h
++-#   undef recvfrom
++-#   define recvfrom            recvfrom_used_without_including_sys_socket_h
++-#   undef sendto
++-#   define sendto              sendto_used_without_including_sys_socket_h
++-#   undef setsockopt
++-#   define setsockopt          setsockopt_used_without_including_sys_socket_h
++-#   undef shutdown
++-#   define shutdown            shutdown_used_without_including_sys_socket_h
++-#  else
+++#  if !defined _ at GUARD_PREFIX@_SYS_SOCKET_H
+++#   if !(defined __cplusplus && defined GNULIB_NAMESPACE)
+++#    undef socket
+++#    define socket              socket_used_without_including_sys_socket_h
+++#    undef connect
+++#    define connect             connect_used_without_including_sys_socket_h
+++#    undef accept
+++#    define accept              accept_used_without_including_sys_socket_h
+++#    undef bind
+++#    define bind                bind_used_without_including_sys_socket_h
+++#    undef getpeername
+++#    define getpeername         getpeername_used_without_including_sys_socket_h
+++#    undef getsockname
+++#    define getsockname         getsockname_used_without_including_sys_socket_h
+++#    undef getsockopt
+++#    define getsockopt          getsockopt_used_without_including_sys_socket_h
+++#    undef listen
+++#    define listen              listen_used_without_including_sys_socket_h
+++#    undef recv
+++#    define recv                recv_used_without_including_sys_socket_h
+++#    undef send
+++#    define send                send_used_without_including_sys_socket_h
+++#    undef recvfrom
+++#    define recvfrom            recvfrom_used_without_including_sys_socket_h
+++#    undef sendto
+++#    define sendto              sendto_used_without_including_sys_socket_h
+++#    undef setsockopt
+++#    define setsockopt          setsockopt_used_without_including_sys_socket_h
+++#    undef shutdown
+++#    define shutdown            shutdown_used_without_including_sys_socket_h
+++#   else
++      _GL_WARN_ON_USE (socket,
++                       "socket() used without including <sys/socket.h>");
++      _GL_WARN_ON_USE (connect,
++@@ -186,18 +189,17 @@
++                       "setsockopt() used without including <sys/socket.h>");
++      _GL_WARN_ON_USE (shutdown,
++                       "shutdown() used without including <sys/socket.h>");
+++#   endif
++ #  endif
++-# endif
++-# if !defined _ at GUARD_PREFIX@_SYS_SELECT_H
++-#  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
++-#   undef select
++-#   define select select_used_without_including_sys_select_h
++-#  else
+++#  if !defined _ at GUARD_PREFIX@_SYS_SELECT_H
+++#   if !(defined __cplusplus && defined GNULIB_NAMESPACE)
+++#    undef select
+++#    define select select_used_without_including_sys_select_h
+++#   else
++      _GL_WARN_ON_USE (select,
++                       "select() used without including <sys/select.h>");
+++#   endif
++ #  endif
++ # endif
++-#endif
++ 
++ #endif /* _ at GUARD_PREFIX@_SYS_TIME_H */
++-#endif /* _ at GUARD_PREFIX@_SYS_TIME_H */
 -- 
 1.7.9.5
