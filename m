@@ -1,37 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Mar 2013 13:51:32 +0100
-Subject: [Buildroot] [git commit] dependencies: remove useless newlines
-Message-ID: <20130324130052.AA9BD9B258@busybox.osuosl.org>
+Date: Sun, 24 Mar 2013 13:48:56 +0100
+Subject: [Buildroot] [git commit] gettext: provide a host variant
+Message-ID: <20130324130051.EA7E89B258@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3a8dbba84d39ac20dc61ce3bc9180cfb164e4cc2
+commit: http://git.buildroot.net/buildroot/commit/?id=3a188b578e490f2a8b5922329b7abfae57122e3b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+In preparation for the removal of gettext as a hard dependency, we
+need to be able to provide a host variant of gettext for the few
+packages that require msgfmt.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- support/dependencies/dependencies.sh |    6 ++----
- 1 files changed, 2 insertions(+), 4 deletions(-)
+ package/gettext/gettext.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index cd3c839..9d06a0d 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -133,11 +133,9 @@ fi;
- # Check that a few mandatory programs are installed
- for prog in patch perl tar wget cpio python unzip rsync ${DL_TOOLS} ; do
-     if ! which $prog > /dev/null ; then
--	/bin/echo -e "\nYou must install '$prog' on your build machine";
-+	/bin/echo -e "You must install '$prog' on your build machine";
- 	if test $prog = "svn" ; then
--	    /bin/echo -e "svn is usually part of the subversion package in your distribution\n"
--	else
--	    /bin/echo -e "\n"
-+	    /bin/echo -e "svn is usually part of the subversion package in your distribution"
- 	fi
- 	exit 1;
-     fi
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index d374050..4757cf8 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -56,3 +56,4 @@ GETTEXT_POST_PATCH_HOOKS += GETTEXT_DISABLE_TOOLS
+ GETTEXT_POST_PATCH_HOOKS += GETTEXT_DISABLE_TESTS
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
