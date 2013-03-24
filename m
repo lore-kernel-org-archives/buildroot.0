@@ -1,47 +1,88 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Mar 2013 23:50:46 +0100
-Subject: [Buildroot] [PATCH 11/14] apply-patches.sh: applying xz-ed patches
+Date: Sun, 24 Mar 2013 23:50:47 +0100
+Subject: [Buildroot] [PATCH 12/14] czmq: new package
 In-Reply-To: <cover.1364165310.git.yann.morin.1998@free.fr>
 References: <cover.1364165310.git.yann.morin.1998@free.fr>
-Message-ID: <96bf04321c5e4c983e0960e1c24df18572a7534c.1364165310.git.yann.morin.1998@free.fr>
+Message-ID: <037c4148af68b0e9308bd249935048fc80a8ec9f.1364165310.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-[yann.morin.1998 at free.fr: space-damage]
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+[yann.morin.1998 at free.fr: create dir as post-patch, not pre-configure]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- support/scripts/apply-patches.sh |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/Config.in      |    1 +
+ package/czmq/Config.in |   14 ++++++++++++++
+ package/czmq/czmq.mk   |   23 +++++++++++++++++++++++
+ 3 files changed, 38 insertions(+), 0 deletions(-)
+ create mode 100644 package/czmq/Config.in
+ create mode 100644 package/czmq/czmq.mk
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 7a6c1fa..7d5856c 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -23,8 +23,8 @@
- # files than series file and archives are considered as a patch.
- #
- # Once a patch is found, the script will try to apply it. If its name doesn't
--# end with '.gz', '.bz', '.bz2', '.zip', '.Z', '.diff*' or '.patch*', it will
--# be skipped. If necessary, the patch will be uncompressed before being
-+# end with '.gz', '.bz', '.bz2', '.xz', '.zip', '.Z', '.diff*' or '.patch*',
-+# it will be skipped. If necessary, the patch will be uncompressed before being
- # applied. The list of the patches applied is stored in '.applied_patches_list'
- # file in the build directory.
+diff --git a/package/Config.in b/package/Config.in
+index 5d8f4f6..d3901b4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -496,6 +496,7 @@ source "package/mediastreamer/Config.in"
+ endmenu
  
-@@ -59,6 +59,8 @@ function apply_patch {
- 	type="bzip"; uncomp="bunzip -dc"; ;; 
- 	*.bz2)
- 	type="bzip2"; uncomp="bunzip2 -dc"; ;; 
-+	*.xz)
-+	type="xz"; uncomp="unxz -dc"; ;;
- 	*.zip)
- 	type="zip"; uncomp="unzip -d"; ;; 
- 	*.Z)
+ menu "Networking"
++source "package/czmq/Config.in"
+ source "package/glib-networking/Config.in"
+ source "package/libcgi/Config.in"
+ source "package/libcgicc/Config.in"
+diff --git a/package/czmq/Config.in b/package/czmq/Config.in
+new file mode 100644
+index 0000000..9fd8e86
+--- /dev/null
++++ b/package/czmq/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_CZMQ
++	bool "czmq"
++	select BR2_PACKAGE_ZEROMQ
++	depends on BR2_INSTALL_LIBSTDCPP # zeromq
++	depends on BR2_INET_IPV6 # zeromq
++	depends on BR2_LARGEFILE # util-linux
++	depends on BR2_USE_WCHAR # util-linux
++	help
++	  High-level C Binding for 0MQ
++
++	  http://czmq.zeromq.org/
++
++comment "czmq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE && BR2_USE_WCHAR)
+diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
+new file mode 100644
+index 0000000..2b34654
+--- /dev/null
++++ b/package/czmq/czmq.mk
+@@ -0,0 +1,23 @@
++#############################################################
++#
++# czmq
++#
++#############################################################
++
++CZMQ_VERSION = cb9839cf90
++CZMQ_SITE = git://github.com/zeromq/czmq.git
++
++# Autoreconf required as we use the git tree
++CZMQ_AUTORECONF = YES
++CZMQ_INSTALL_STAGING = YES
++CZMQ_DEPENDENCIES = zeromq
++CZMQ_LICENSE = LGPLv3+ with exceptions
++CZMQ_LICENSE_FILES = COPYING COPYING.LESSER
++
++define CZMQ_CREATE_CONFIG_DIR
++	mkdir -p $(@D)/config
++endef
++
++CZMQ_POST_PATCH_HOOKS += CZMQ_CREATE_CONFIG_DIR
++
++$(eval $(autotools-package))
 -- 
 1.7.2.5
