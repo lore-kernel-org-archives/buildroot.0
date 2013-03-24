@@ -1,32 +1,23 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Mar 2013 14:02:45 +0100
-Subject: [Buildroot] [git commit] file: bump to version 5.14
-Message-ID: <20130324130312.824C69B26A@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 24 Mar 2013 10:04:29 -0300
+Subject: [Buildroot] [PATCH] tcl: add license information
+In-Reply-To: <50C4A742.3080707@mind.be>
+References: <1354914901-4480-1-git-send-email-zinosat@tiscali.it>
+ <1354914901-4480-2-git-send-email-zinosat@tiscali.it>
+ <50C4A742.3080707@mind.be>
+Message-ID: <514EF9DD.2030000@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=11b9e21ee628893fa0bdbd65f1b55f5aa05f6636
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/09/2012 11:59 AM, Arnout Vandecappelle wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/file/file.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> On 07/12/12 22:15, Davide Viti wrote:
+>>
+>> Signed-off-by: Davide Viti<zinosat@tiscali.it>
+> 
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 7206705..5422e2f 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--FILE_VERSION = 5.13
-+FILE_VERSION = 5.14
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- FILE_INSTALL_STAGING = YES
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
