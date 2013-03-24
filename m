@@ -1,24 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 24 Mar 2013 16:35:28 -0300
-Subject: [Buildroot] [PATCH 2/2] uboot: integrate mkenvimage.
-In-Reply-To: <1356007638-18476-2-git-send-email-rebillout@syscom.ch>
-References: <1356007638-18476-1-git-send-email-rebillout@syscom.ch>
- <1356007638-18476-2-git-send-email-rebillout@syscom.ch>
-Message-ID: <514F5580.7030302@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 24 Mar 2013 20:40:02 +0100
+Subject: [Buildroot] Misc set of patches, from Patchwork Day
+In-Reply-To: <1364149170-5521-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 24 Mar 2013 19:19:21 +0100")
+References: <1364149170-5521-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87ip4gio31.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/20/2012 09:47 AM, Arnaud R?billout wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> This commit provides configuration options to automatically generate a
-> binary environment image for U-Boot.
-> Two options are available (and mandatory):
->  * the location of a text file describing U-Boot environment.
->  * the size of the environment.
-> 
-> Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
+ Thomas> Hello,
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Thomas> Here is a set of misc patches, accumulated during this
+ Thomas> Patchwork Day. I took patches from the patchwork, updated them,
+ Thomas> fixed them, and I'm now submitting them for inclusion.
+
+Committed series, thanks.
+
+-- 
+Bye, Peter Korsgaard
