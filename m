@@ -1,394 +1,347 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Mar 2013 12:46:08 +0100
-Subject: [Buildroot] [git commit] gcc: add support for gcc 4.8
-Message-ID: <20130324130049.836249B258@busybox.osuosl.org>
+Date: Sun, 24 Mar 2013 12:44:50 +0100
+Subject: [Buildroot] [git commit] libgtk2: use non-host specific patch
+Message-ID: <20130324130049.17D339B258@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b8103112ea8d9d03647a60f45768494dc14eaa1b
+commit: http://git.buildroot.net/buildroot/commit/?id=dd1848bc73ee9dfe211ca3ed3a233707e3bc5955
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds support for the recently released gcc 4.8. We re-add
-the same patch series as the one used for 4.7.x, after refreshing the
-patches.
+The libgtk2 package was using a host-<foo>.patch that should be
+applied only on the host variant of the package. Unfortunately, with
+the patch model rework, this doesn't work anymore: Buildroot tries to
+apply the patch twice, for some reason.
+
+But instead of fixing the patch model, it is probably a lot better to
+fix this patch itself, which is the only usage of host-only patch in
+Buildroot.
+
+So instead of simply removing code that detects dependencies in gtk2's
+configure.in script, we use a condition based on the value of
+gdktarget. And it turns out that it makes the patch shorter.
+
+However, it requires autoreconfiguring the libgtk2 target package,
+because we are now modifying its configure.in.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gcc/4.8.0/100-uclibc-conf.patch          |   37 ++++++
- toolchain/gcc/4.8.0/301-missing-execinfo_h.patch   |   13 ++
- toolchain/gcc/4.8.0/302-c99-snprintf.patch         |   13 ++
- .../gcc/4.8.0/305-libmudflap-susv3-legacy.patch    |   49 ++++++++
- toolchain/gcc/4.8.0/810-arm-softfloat-libgcc.patch |   30 +++++
- toolchain/gcc/4.8.0/830-arm_unbreak_armv4t.patch   |   13 ++
- .../powerpc-link-with-math-lib.patch.conditional   |  122 ++++++++++++++++++++
- toolchain/gcc/Config.in                            |    5 +
- toolchain/gcc/gcc-uclibc-4.x.mk                    |   10 ++
- 9 files changed, 292 insertions(+), 0 deletions(-)
+ .../libgtk2/host-libgtk2-reduce-dependencies.patch |  168 --------------------
+ package/libgtk2/libgtk2-reduce-dependencies.patch  |  117 ++++++++++++++
+ package/libgtk2/libgtk2.mk                         |    2 +
+ 3 files changed, 119 insertions(+), 168 deletions(-)
 
-diff --git a/toolchain/gcc/4.8.0/100-uclibc-conf.patch b/toolchain/gcc/4.8.0/100-uclibc-conf.patch
+diff --git a/package/libgtk2/host-libgtk2-reduce-dependencies.patch b/package/libgtk2/host-libgtk2-reduce-dependencies.patch
+deleted file mode 100644
+index 091eeb0..0000000
+--- a/package/libgtk2/host-libgtk2-reduce-dependencies.patch
++++ /dev/null
+@@ -1,168 +0,0 @@
+-Hack the configure.in file to add a "none" gdktarget which removes
+-dependencies on graphic backends such as X.org or DirectFB. Gtk does
+-not fully build in this mode, but it builds sufficiently to build the
+-host tools that are needed to build the target Gtk.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- configure.in |  101 ++---------------------------------------------------------
+- 1 file changed, 4 insertions(+), 97 deletions(-)
+-
+-Index: gtk+-2.24.8/configure.in
+-===================================================================
+---- gtk+-2.24.8.orig/configure.in
+-+++ gtk+-2.24.8/configure.in
+-@@ -259,12 +259,12 @@
+-   gdktarget=x11
+- fi
+- 
+--AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/win32/quartz/directfb]] select non-default GDK target],
+-+AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/win32/quartz/directfb/none]] select non-default GDK target],
+- 	gdktarget=$with_gdktarget)
+- 
+- AC_SUBST(gdktarget)
+- case $gdktarget in
+--  x11|win32|quartz|directfb) ;;
+-+  x11|win32|quartz|directfb|none) ;;
+-   *) AC_MSG_ERROR([Invalid target for GDK: use x11, quartz, directfb or win32.]);;
+- esac
+- 
+-@@ -374,9 +374,6 @@
+- ## annoying to construct
+- PKG_CHECK_MODULES(BASE_DEPENDENCIES,
+-   [glib-2.0 >= glib_required_version dnl
+--   atk >= atk_required_version dnl
+--   pango >= pango_required_version dnl
+--   cairo >= cairo_required_version dnl
+-    gdk-pixbuf-2.0 >= gdk_pixbuf_required_version])
+- 
+- ## In addition to checking that cairo is present, we also need to
+-@@ -389,8 +386,6 @@
+- if test "x$cairo_backend" = "xx11"; then
+-    cairo_backend=xlib
+- fi
+--PKG_CHECK_MODULES(CAIRO_BACKEND,
+--  [cairo-$cairo_backend >= cairo_required_version])
+- 
+- if test "$os_win32" != yes; then
+-     # libtool option to control which symbols are exported
+-@@ -1280,50 +1275,6 @@
+- fi
+- 
+- 
+--# Check for Pango flags
+--
+--if test "x$gdktarget" = "xwin32"; then
+--	PANGO_PACKAGES="pangowin32 pangocairo"
+--else
+--	PANGO_PACKAGES="pango pangocairo"
+--fi
+--
+--AC_MSG_CHECKING(Pango flags)
+--if $PKG_CONFIG --exists $PANGO_PACKAGES ; then
+--        PANGO_CFLAGS=`$PKG_CONFIG --cflags $PANGO_PACKAGES`
+--        PANGO_LIBS=`$PKG_CONFIG --libs $PANGO_PACKAGES`
+--
+--        AC_MSG_RESULT($PANGO_CFLAGS $PANGO_LIBS)
+--else
+--        AC_MSG_ERROR([
+--*** Pango not found. Pango built with Cairo support is required
+--*** to build GTK+. See http://www.pango.org for Pango information.
+--])
+--fi
+--
+--CFLAGS="$CFLAGS $PANGO_CFLAGS"
+--
+--if $PKG_CONFIG --uninstalled $PANGO_PACKAGES; then
+--        :
+--else
+--	gtk_save_LIBS="$LIBS"
+--        LIBS="$PANGO_LIBS $LIBS"
+--        AC_TRY_LINK_FUNC(pango_context_new, :, AC_MSG_ERROR([
+--*** Can't link to Pango. Pango is required to build
+--*** GTK+. For more information see http://www.pango.org]))
+--        LIBS="$gtk_save_LIBS"
+--fi
+--
+--CFLAGS="$saved_cflags"
+--LDFLAGS="$saved_ldflags"
+--
+--# Pull in gio-unix for GDesktopAppInfo usage, see at least gdkapplaunchcontext-x11.c
+--if test "x$gdktarget" = "xx11"; then
+--  GDK_PACKAGES="$PANGO_PACKAGES gio-unix-2.0 $X_PACKAGES gdk-pixbuf-2.0 cairo-$cairo_backend"
+--else
+--  GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 gdk-pixbuf-2.0 cairo-$cairo_backend"
+--fi
+--
+- GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES` $MATH_LIB"
+- GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES` $GDK_EXTRA_CFLAGS"
+- #
+-@@ -1331,7 +1282,7 @@
+- # into the pkg-config files
+- #
+- if test $enable_explicit_deps != yes ; then
+--  GDK_PACKAGES="$PANGO_PACKAGES gdk-pixbuf-2.0"
+-+  GDK_PACKAGES="gdk-pixbuf-2.0"
+-   GDK_EXTRA_LIBS=
+- fi
+- 
+-@@ -1341,37 +1292,7 @@
+- AC_SUBST(GDK_DEP_LIBS)
+- AC_SUBST(GDK_DEP_CFLAGS)
+- 
+--
+--########################################
+--# Check for Accessibility Toolkit flags
+--########################################
+--
+--ATK_PACKAGES=atk
+--AC_MSG_CHECKING(ATK flags)
+--if $PKG_CONFIG --exists $ATK_PACKAGES ; then
+--        ATK_CFLAGS=`$PKG_CONFIG --cflags $ATK_PACKAGES`
+--        ATK_LIBS=`$PKG_CONFIG --libs $ATK_PACKAGES`
+--
+--        AC_MSG_RESULT($ATK_CFLAGS $ATK_LIBS)
+--else
+--        AC_MSG_ERROR([
+--*** Accessibility Toolkit not found. Accessibility Toolkit is required
+--*** to build GTK+.
+--])
+--fi
+--
+--if $PKG_CONFIG --uninstalled $ATK_PACKAGES; then
+--        :
+--else
+--	gtk_save_LIBS="$LIBS"
+--        LIBS="$ATK_LIBS $LIBS"
+--        AC_TRY_LINK_FUNC(atk_object_get_type, : , AC_MSG_ERROR([
+--                *** Cannot link to Accessibility Toolkit. Accessibility Toolkit is required
+--                *** to build GTK+]))
+--        LIBS="$gtk_save_LIBS"
+--fi
+--
+--GTK_PACKAGES="atk cairo gdk-pixbuf-2.0 gio-2.0"
+-+GTK_PACKAGES="gdk-pixbuf-2.0"
+- if test "x$gdktarget" = "xx11"; then
+-   GTK_PACKAGES="$GTK_PACKAGES pangoft2"
+- fi
+-@@ -1527,20 +1448,6 @@
+- gtk_save_cppflags="$CPPFLAGS"
+- CPPFLAGS="$CPPFLAGS $GTK_DEP_CFLAGS $GDK_DEP_CFLAGS"
+- 
+--AC_CHECK_HEADER(cairo-pdf.h,,AC_MSG_ERROR([
+--*** Can't find cairo-pdf.h. You must build Cairo with the pdf
+--*** backend enabled.]))
+--
+--if test "$os_win32" != "yes"; then
+--  AC_CHECK_HEADER(cairo-ps.h,,AC_MSG_ERROR([
+--*** Can't find cairo-ps.h. You must build Cairo with the 
+--*** postscript backend enabled.]))
+--
+--  AC_CHECK_HEADER(cairo-svg.h,,AC_MSG_ERROR([
+--*** Can't find cairo-svg.h. You must build Cairo with the
+--*** svg backend enabled.]))
+--fi   
+--
+- CPPFLAGS="$gtk_save_cppflags"
+-      
+- 			  	
+diff --git a/package/libgtk2/libgtk2-reduce-dependencies.patch b/package/libgtk2/libgtk2-reduce-dependencies.patch
 new file mode 100644
-index 0000000..d855b30
+index 0000000..5bb9db9
 --- /dev/null
-+++ b/toolchain/gcc/4.8.0/100-uclibc-conf.patch
-@@ -0,0 +1,37 @@
-+Index: gcc-4.8.0/contrib/regression/objs-gcc.sh
++++ b/package/libgtk2/libgtk2-reduce-dependencies.patch
+@@ -0,0 +1,117 @@
++Hack the configure.in file to add a "none" gdktarget which removes
++dependencies on graphic backends such as X.org or DirectFB. Gtk does
++not fully build in this mode, but it builds sufficiently to build the
++host tools that are needed to build the target Gtk.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.in |   34 +++++++++++++++++++++++++++-------
++ 1 file changed, 27 insertions(+), 7 deletions(-)
++
++Index: b/configure.in
 +===================================================================
-+--- gcc-4.8.0.orig/contrib/regression/objs-gcc.sh	2009-04-09 17:00:19.000000000 +0200
-++++ gcc-4.8.0/contrib/regression/objs-gcc.sh	2013-03-23 17:39:04.000000000 +0100
-+@@ -106,6 +106,10 @@
-+  then
-+   make all-gdb all-dejagnu all-ld || exit 1
-+   make install-gdb install-dejagnu install-ld || exit 1
-++elif [ $H_REAL_TARGET = $H_REAL_HOST -a $H_REAL_TARGET = i686-pc-linux-uclibc ]
-++ then
-++  make all-gdb all-dejagnu all-ld || exit 1
-++  make install-gdb install-dejagnu install-ld || exit 1
-+ elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
-+   make bootstrap || exit 1
-+   make install || exit 1
-+Index: gcc-4.8.0/libjava/classpath/ltconfig
-+===================================================================
-+--- gcc-4.8.0.orig/libjava/classpath/ltconfig	2011-02-13 12:45:53.000000000 +0100
-++++ gcc-4.8.0/libjava/classpath/ltconfig	2013-03-23 17:39:04.000000000 +0100
-+@@ -603,7 +603,7 @@
++--- a/configure.in
+++++ b/configure.in
++@@ -259,12 +259,12 @@
++   gdktarget=x11
++ fi
 + 
-+ # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
-+ case $host_os in
-+-linux-gnu*) ;;
-++linux-gnu*|linux-uclibc*) ;;
-+ linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
++-AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/win32/quartz/directfb]] select non-default GDK target],
+++AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/win32/quartz/directfb/none]] select non-default GDK target],
++ 	gdktarget=$with_gdktarget)
++ 
++ AC_SUBST(gdktarget)
++ case $gdktarget in
++-  x11|win32|quartz|directfb) ;;
+++  x11|win32|quartz|directfb|none) ;;
++   *) AC_MSG_ERROR([Invalid target for GDK: use x11, quartz, directfb or win32.]);;
 + esac
 + 
-+@@ -1247,7 +1247,7 @@
-+   ;;
++@@ -374,11 +374,15 @@
++ ## annoying to construct
++ PKG_CHECK_MODULES(BASE_DEPENDENCIES,
++   [glib-2.0 >= glib_required_version dnl
++-   atk >= atk_required_version dnl
++-   pango >= pango_required_version dnl
++-   cairo >= cairo_required_version dnl
++    gdk-pixbuf-2.0 >= gdk_pixbuf_required_version])
 + 
-+ # This must be Linux ELF.
-+-linux-gnu*)
-++linux*)
-+   version_type=linux
-+   need_lib_prefix=no
-+   need_version=no
-diff --git a/toolchain/gcc/4.8.0/301-missing-execinfo_h.patch b/toolchain/gcc/4.8.0/301-missing-execinfo_h.patch
-new file mode 100644
-index 0000000..00efda2
---- /dev/null
-+++ b/toolchain/gcc/4.8.0/301-missing-execinfo_h.patch
-@@ -0,0 +1,13 @@
-+Index: gcc-4.8.0/boehm-gc/include/gc.h
-+===================================================================
-+--- gcc-4.8.0.orig/boehm-gc/include/gc.h	2007-04-23 23:10:09.000000000 +0200
-++++ gcc-4.8.0/boehm-gc/include/gc.h	2013-03-23 17:39:20.000000000 +0100
-+@@ -503,7 +503,7 @@
-+ #if defined(__linux__) || defined(__GLIBC__)
-+ # include <features.h>
-+ # if (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1 || __GLIBC__ > 2) \
-+-     && !defined(__ia64__)
-++     && !defined(__ia64__) && !defined(__UCLIBC__)
-+ #   ifndef GC_HAVE_BUILTIN_BACKTRACE
-+ #     define GC_HAVE_BUILTIN_BACKTRACE
-+ #   endif
-diff --git a/toolchain/gcc/4.8.0/302-c99-snprintf.patch b/toolchain/gcc/4.8.0/302-c99-snprintf.patch
-new file mode 100644
-index 0000000..cd4d2cc
---- /dev/null
-+++ b/toolchain/gcc/4.8.0/302-c99-snprintf.patch
-@@ -0,0 +1,13 @@
-+Index: gcc-4.8.0/libstdc++-v3/include/c_global/cstdio
-+===================================================================
-+--- gcc-4.8.0.orig/libstdc++-v3/include/c_global/cstdio	2013-02-03 18:54:05.000000000 +0100
-++++ gcc-4.8.0/libstdc++-v3/include/c_global/cstdio	2013-03-23 17:39:32.000000000 +0100
-+@@ -138,7 +138,7 @@
-+   using ::vsprintf;
-+ } // namespace
-+ 
-+-#if _GLIBCXX_USE_C99
-++#if _GLIBCXX_USE_C99 || defined __UCLIBC__
-+ 
-+ #undef snprintf
-+ #undef vfscanf
-diff --git a/toolchain/gcc/4.8.0/305-libmudflap-susv3-legacy.patch b/toolchain/gcc/4.8.0/305-libmudflap-susv3-legacy.patch
-new file mode 100644
-index 0000000..35d5f50
---- /dev/null
-+++ b/toolchain/gcc/4.8.0/305-libmudflap-susv3-legacy.patch
-@@ -0,0 +1,49 @@
-+Index: gcc-4.8.0/libmudflap/mf-hooks2.c
-+===================================================================
-+--- gcc-4.8.0.orig/libmudflap/mf-hooks2.c	2013-02-03 18:48:05.000000000 +0100
-++++ gcc-4.8.0/libmudflap/mf-hooks2.c	2013-03-23 17:39:43.000000000 +0100
-+@@ -424,7 +424,7 @@
-+ {
-+   TRACE ("%s\n", __PRETTY_FUNCTION__);
-+   MF_VALIDATE_EXTENT(s, n, __MF_CHECK_WRITE, "bzero region");
-+-  bzero (s, n);
-++  memset (s, 0, n);
-+ }
-+ 
-+ 
-+@@ -434,7 +434,7 @@
-+   TRACE ("%s\n", __PRETTY_FUNCTION__);
-+   MF_VALIDATE_EXTENT(src, n, __MF_CHECK_READ, "bcopy src");
-+   MF_VALIDATE_EXTENT(dest, n, __MF_CHECK_WRITE, "bcopy dest");
-+-  bcopy (src, dest, n);
-++  memmove (dest, src, n);
-+ }
-+ 
-+ 
-+@@ -444,7 +444,7 @@
-+   TRACE ("%s\n", __PRETTY_FUNCTION__);
-+   MF_VALIDATE_EXTENT(s1, n, __MF_CHECK_READ, "bcmp 1st arg");
-+   MF_VALIDATE_EXTENT(s2, n, __MF_CHECK_READ, "bcmp 2nd arg");
-+-  return bcmp (s1, s2, n);
-++  return n == 0 ? 0 : memcmp (s1, s2, n);
-+ }
-+ 
-+ 
-+@@ -453,7 +453,7 @@
-+   size_t n = strlen (s);
-+   TRACE ("%s\n", __PRETTY_FUNCTION__);
-+   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "index region");
-+-  return index (s, c);
-++  return strchr (s, c);
-+ }
-+ 
-+ 
-+@@ -462,7 +462,7 @@
-+   size_t n = strlen (s);
-+   TRACE ("%s\n", __PRETTY_FUNCTION__);
-+   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "rindex region");
-+-  return rindex (s, c);
-++  return strrchr (s, c);
-+ }
-+ 
-+ /* XXX:  stpcpy, memccpy */
-diff --git a/toolchain/gcc/4.8.0/810-arm-softfloat-libgcc.patch b/toolchain/gcc/4.8.0/810-arm-softfloat-libgcc.patch
-new file mode 100644
-index 0000000..c8cb377
---- /dev/null
-+++ b/toolchain/gcc/4.8.0/810-arm-softfloat-libgcc.patch
-@@ -0,0 +1,30 @@
-+Index: gcc-4.8.0/gcc/config/arm/linux-elf.h
-+===================================================================
-+--- gcc-4.8.0.orig/gcc/config/arm/linux-elf.h	2013-01-10 21:38:27.000000000 +0100
-++++ gcc-4.8.0/gcc/config/arm/linux-elf.h	2013-03-23 17:40:00.000000000 +0100
-+@@ -55,7 +55,7 @@
-+    %{shared:-lc} \
-+    %{!shared:%{profile:-lc_p}%{!profile:-lc}}"
-+ 
-+-#define LIBGCC_SPEC "%{mfloat-abi=soft*:-lfloat} -lgcc"
-++#define LIBGCC_SPEC "-lgcc"
-+ 
-+ #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
-+ 
-+Index: gcc-4.8.0/libgcc/config/arm/t-linux
-+===================================================================
-+--- gcc-4.8.0.orig/libgcc/config/arm/t-linux	2012-03-22 16:14:46.000000000 +0100
-++++ gcc-4.8.0/libgcc/config/arm/t-linux	2013-03-23 17:40:54.000000000 +0100
-+@@ -1,6 +1,11 @@
-+ LIB1ASMSRC = arm/lib1funcs.S
-+ LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx _clzsi2 _clzdi2 \
-+-	_ctzsi2 _arm_addsubdf3 _arm_addsubsf3
-++	_ctzsi2 _arm_addsubdf3 _arm_addsubsf3 \
-++	_arm_addsubdf3 _arm_addsubsf3 \
-++	_arm_negdf2 _arm_muldivdf3 _arm_cmpdf2 _arm_unorddf2 \
-++	_arm_fixdfsi _arm_fixunsdfsi _arm_truncdfsf2 \
-++	_arm_negsf2 _arm_muldivsf3 _arm_cmpsf2 _arm_unordsf2 \
-++	_arm_fixsfsi _arm_fixunssfsi
-+ 
-+ # Just for these, we omit the frame pointer since it makes such a big
-+ # difference.
-diff --git a/toolchain/gcc/4.8.0/830-arm_unbreak_armv4t.patch b/toolchain/gcc/4.8.0/830-arm_unbreak_armv4t.patch
-new file mode 100644
-index 0000000..37f8f2a
---- /dev/null
-+++ b/toolchain/gcc/4.8.0/830-arm_unbreak_armv4t.patch
-@@ -0,0 +1,13 @@
-+http://sourceware.org/ml/crossgcc/2008-05/msg00009.html
-+
-+--- a/gcc/config/arm/linux-eabi.h
-++++ b/gcc/config/arm/linux-eabi.h
-+@@ -45,7 +45,7 @@
-+    The ARM10TDMI core is the default for armv5t, so set
-+    SUBTARGET_CPU_DEFAULT to achieve this.  */
-+ #undef  SUBTARGET_CPU_DEFAULT
-+-#define SUBTARGET_CPU_DEFAULT TARGET_CPU_arm10tdmi
-++#define SUBTARGET_CPU_DEFAULT TARGET_CPU_arm9tdmi
-+ 
-+ /* TARGET_BIG_ENDIAN_DEFAULT is set in
-+    config.gcc for big endian configurations.  */
-diff --git a/toolchain/gcc/4.8.0/powerpc-link-with-math-lib.patch.conditional b/toolchain/gcc/4.8.0/powerpc-link-with-math-lib.patch.conditional
-new file mode 100644
-index 0000000..b7094fe
---- /dev/null
-+++ b/toolchain/gcc/4.8.0/powerpc-link-with-math-lib.patch.conditional
-@@ -0,0 +1,122 @@
-+http://gcc.gnu.org/ml/gcc-patches/2008-10/msg00269.html
-+
-+On glibc the libc.so carries a copy of the math function copysignl() but
-+on uClibc math functions like copysignl() live in libm. Since libgcc_s
-+contains unresolved symbols, any attempt to link against libgcc_s
-+without explicitely specifying -lm fails, resulting in a broken
-+bootstrap of the compiler.
-+
-+Forward port to gcc 4.5.1 by Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+---
-+ libgcc/Makefile.in  |    4 +++-
-+ libgcc/configure    |   32 ++++++++++++++++++++++++++++++++
-+ libgcc/configure.ac |   21 +++++++++++++++++++++
-+ 3 files changed, 56 insertions(+), 1 deletion(-)
-+
-+Index: gcc-4.8.0/libgcc/Makefile.in
-+===================================================================
-+--- gcc-4.8.0.orig/libgcc/Makefile.in	2013-02-04 20:06:20.000000000 +0100
-++++ gcc-4.8.0/libgcc/Makefile.in	2013-03-24 09:12:43.000000000 +0100
-+@@ -41,6 +41,7 @@
-+ decimal_float = @decimal_float@
-+ enable_decimal_float = @enable_decimal_float@
-+ fixed_point = @fixed_point@
-++LIBGCC_LIBM = @LIBGCC_LIBM@
-+ 
-+ host_noncanonical = @host_noncanonical@
-+ target_noncanonical = @target_noncanonical@
-+@@ -927,9 +928,10 @@
-+ 		@multilib_dir@,$(MULTIDIR),$(subst \
-+ 		@shlib_objs@,$(objects) libgcc.a,$(subst \
-+ 		@shlib_base_name@,libgcc_s,$(subst \
-++		@libgcc_libm@,$(LIBGCC_LIBM),$(subst \
-+ 		@shlib_map_file@,$(mapfile),$(subst \
-+ 		@shlib_slibdir_qual@,$(MULTIOSSUBDIR),$(subst \
-+-		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK))))))))
-++		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK)))))))))
-+ 
-+ libunwind$(SHLIB_EXT): $(libunwind-s-objects) $(extra-parts)
-+ 	# @multilib_flags@ is still needed because this may use
-+Index: gcc-4.8.0/libgcc/configure
-+===================================================================
-+--- gcc-4.8.0.orig/libgcc/configure	2012-11-05 00:08:42.000000000 +0100
-++++ gcc-4.8.0/libgcc/configure	2013-03-24 09:12:43.000000000 +0100
-+@@ -564,6 +564,7 @@
-+ tmake_file
-+ sfp_machine_header
-+ set_use_emutls
-++LIBGCC_LIBM
-+ set_have_cc_tls
-+ vis_hide
-+ fixed_point
-+@@ -4481,6 +4482,37 @@
-+ 	fi
-+ fi
-+ 
-++# On powerpc libgcc_s references copysignl which is a libm function but
-++# glibc apparently also provides it via libc as opposed to uClibc where
-++# it lives in libm.
-++echo "$as_me:$LINENO: checking for library containing copysignl" >&5
-++echo $ECHO_N "checking for library containing copysignl... $ECHO_C" >&6
-++if test "${libgcc_cv_copysignl_lib+set}" = set; then
-++  echo $ECHO_N "(cached) $ECHO_C" >&6
-++else
-++
-++    echo '#include <features.h>' > conftest.c
-++    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
-++    libgcc_cv_copysignl_lib="-lc"
-++    if { ac_try='${CC-cc} -S conftest.c -o conftest.s 1>&5'
-++  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-++  (eval $ac_try) 2>&5
-++  ac_status=$?
-++  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-++  (exit $ac_status); }; }
-++    then
-++       libgcc_cv_copysignl_lib="-lm"
-++    fi
-++    rm -f conftest.*
-++
+++if test "x$gdktarget" != "xnone"; then
+++   PKG_CHECK_MODULES(BASE_DEPENDENCIES,
+++	[atk >= atk_required_version dnl
+++	 pango >= pango_required_version dnl
+++	 cairo >= cairo_required_version])
 ++fi
-++echo "$as_me:$LINENO: result: $libgcc_cv_copysignl_lib" >&5
-++echo "${ECHO_T}$libgcc_cv_copysignl_lib" >&6
 ++
-++case /${libgcc_cv_copysignl_lib}/ in
-++  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
-++  *) LIBGCC_LIBM= ;;
-++esac
-+ 
-+ # Conditionalize the makefile for this target machine.
-+ tmake_file_=
-+Index: gcc-4.8.0/libgcc/configure.ac
-+===================================================================
-+--- gcc-4.8.0.orig/libgcc/configure.ac	2012-10-15 15:10:30.000000000 +0200
-++++ gcc-4.8.0/libgcc/configure.ac	2013-03-24 09:12:43.000000000 +0100
-+@@ -326,6 +326,27 @@
++ ## In addition to checking that cairo is present, we also need to
++ ## check that the correct cairo backend is there. E.g. if the GDK
++ ## target is win32 we need the cairo-win32 backend and so on.
++@@ -389,8 +393,11 @@
++ if test "x$cairo_backend" = "xx11"; then
++    cairo_backend=xlib
 + fi
-+ AC_SUBST(set_have_cc_tls)
++-PKG_CHECK_MODULES(CAIRO_BACKEND,
++-  [cairo-$cairo_backend >= cairo_required_version])
+++
+++if test "x$gdktarget" != "xnone"; then
+++   PKG_CHECK_MODULES(CAIRO_BACKEND,
+++	[cairo-$cairo_backend >= cairo_required_version])
+++fi
 + 
-++# On powerpc libgcc_s references copysignl which is a libm function but
-++# glibc apparently also provides it via libc as opposed to uClibc where
-++# it lives in libm.
-++AC_CACHE_CHECK
-++  libgcc_cv_copysignl_lib,
-++    echo '#include <features.h>' > conftest.c
-++    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
-++    libgcc_cv_copysignl_lib="-lc"
-++    if AC_TRY_COMMAND(${CC-cc} -S conftest.c -o conftest.s 1>&AS_MESSAGE_LOG_FD)
-++    then
-++       libgcc_cv_copysignl_lib="-lm"
-++    fi
-++    rm -f conftest.*
-++  ])
++ PKG_CHECK_MODULES(GMODULE, [gmodule-2.0])
++ 
++@@ -1281,6 +1288,7 @@
++   AM_CONDITIONAL(USE_DIRECTFB, false)
++ fi
++ 
+++if test "x$gdktarget" != "xnone"; then
++ 
++ # Check for Pango flags
++ 
++@@ -1326,6 +1334,8 @@
++   GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 gdk-pixbuf-2.0 cairo-$cairo_backend"
++ fi
++ 
+++fi # gdktarget != none
 ++
-++case /${libgcc_cv_copysignl_lib}/ in
-++  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
-++  *) LIBGCC_LIBM= ;;
-++esac
-++AC_SUBST(LIBGCC_LIBM)
++ GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES` $MATH_LIB"
++ GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES` $GDK_EXTRA_CFLAGS"
++ #
++@@ -1344,6 +1354,8 @@
++ AC_SUBST(GDK_DEP_CFLAGS)
++ 
++ 
+++if test "x$gdktarget" != "xnone"; then
 ++
-+ # See if we have emulated thread-local storage.
-+ GCC_CHECK_EMUTLS
-+ set_use_emutls=
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index d16e7b0..1499c05 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -34,6 +34,10 @@ choice
- 		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		bool "gcc 4.7.x"
++ ########################################
++ # Check for Accessibility Toolkit flags
++ ########################################
++@@ -1374,6 +1386,10 @@
++ fi
++ 
++ GTK_PACKAGES="atk cairo gdk-pixbuf-2.0 gio-2.0"
+++else # gdktarget != none
+++GTK_PACKAGES="gdk-pixbuf-2.0"
+++fi # gdktarget != none
+++
++ if test "x$gdktarget" = "xx11"; then
++   GTK_PACKAGES="$GTK_PACKAGES pangoft2"
++ fi
++@@ -1529,6 +1545,8 @@
++ gtk_save_cppflags="$CPPFLAGS"
++ CPPFLAGS="$CPPFLAGS $GTK_DEP_CFLAGS $GDK_DEP_CFLAGS"
++ 
+++if test "x$gdktarget" != "xnone"; then
+++
++ AC_CHECK_HEADER(cairo-pdf.h,,AC_MSG_ERROR([
++ *** Can't find cairo-pdf.h. You must build Cairo with the pdf
++ *** backend enabled.]))
++@@ -1543,6 +1561,8 @@
++ *** svg backend enabled.]))
++ fi   
++ 
+++fi # gdktarget != none
+++
++ CPPFLAGS="$gtk_save_cppflags"
++      
++ 			  	
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index e6a9d84..b1ce99a 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -12,6 +12,8 @@ LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJ
+ LIBGTK2_INSTALL_STAGING = YES
+ LIBGTK2_INSTALL_TARGET = YES
  
-+	config BR2_GCC_VERSION_4_8_X
-+		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		bool "gcc 4.8.x"
++LIBGTK2_AUTORECONF = YES
 +
- 	config BR2_GCC_VERSION_SNAP
- 		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		bool "gcc snapshot"
-@@ -65,6 +69,7 @@ config BR2_GCC_VERSION
- 	default "4.5.4"     if BR2_GCC_VERSION_4_5_X
- 	default "4.6.3"     if BR2_GCC_VERSION_4_6_X
- 	default "4.7.2"     if BR2_GCC_VERSION_4_7_X
-+	default "4.8.0"     if BR2_GCC_VERSION_4_8_X
- 	default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
- 
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 3bfa13b..4f1bb49 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -191,6 +191,16 @@ endif
- GCC_HOST_PREREQ += host-mpc
- endif
- 
-+# GCC 4.8.x prerequisites
-+ifeq ($(findstring x4.8.,x$(GCC_VERSION)),x4.8.)
-+GCC_WITH_HOST_MPC = --with-mpc=$(HOST_DIR)/usr
-+GCC_TARGET_PREREQ += mpc
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-+HOST_SOURCE += host-mpc-source
-+endif
-+GCC_HOST_PREREQ += host-mpc
-+endif
-+
- # GCC snapshot prerequisites
- # Since we don't know and it can be quite new just ask for everything known
- ifneq ($(GCC_SNAP_DATE),)
+ LIBGTK2_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
+ 		glib_cv_uscore=no \
+ 		ac_cv_func_strtod=yes \
