@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Mar 2013 19:19:27 +0100
-Subject: [Buildroot] [PATCH 6/9] apr: various improvements
+Date: Sun, 24 Mar 2013 19:19:28 +0100
+Subject: [Buildroot] [PATCH 7/9] apr-util: various improvements
 In-Reply-To: <1364149170-5521-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1364149170-5521-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1364149170-5521-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1364149170-5521-8-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,51 +11,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 This commit:
- * Adds licensing informations
- * Ensures the apr-1-config script gets fixed appropriately
- * Remove the usr/build-1/ directory from the target, since it is only
-   used during the compilation of packages that rely on APR.
- * Fix up a few paths in usr/build-1/ so that the compilation of
-   apr-util works properly on top of this apr package.
+ * Adds licensing informations.
+ * Uses the apr-1-config script instead of pointing apr-util to the
+   apr build directory.
+ * Ensures apu-1-config gets fixed properly using the
+   <pkg>_CONFIG_SCRIPTS mechanism.
+ * Ensures that libiconv gets built before apr-util if available, so
+   that character set conversion features of apr-util can be enabled.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/apr/apr.mk |   18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ package/apr-util/apr-util.mk |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index e502490..a9dcb40 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -5,6 +5,8 @@
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+index b9ff904..94b1817 100644
+--- a/package/apr-util/apr-util.mk
++++ b/package/apr-util/apr-util.mk
+@@ -5,9 +5,16 @@
  #############################################################
- APR_VERSION = 1.4.6
- APR_SITE = http://archive.apache.org/dist/apr
-+APR_LICENSE = Apache-2.0
-+APR_LICENSE_FILES = LICENSE
- APR_INSTALL_STAGING = YES
- APR_CONF_ENV = \
- 	ac_cv_file__dev_zero=yes \
-@@ -14,5 +16,21 @@ APR_CONF_ENV = \
- 	apr_cv_tcp_nodelay_with_cork=yes \
- 	ac_cv_sizeof_struct_iovec=8 \
- 	apr_cv_mutex_recursive=yes
-+APR_CONFIG_SCRIPTS = apr-1-config
+ APR_UTIL_VERSION = 1.4.1
+ APR_UTIL_SITE = http://archive.apache.org/dist/apr
++APR_UTIL_LICENSE = Apache-2.0
++APR_UTIL_LICENSE_FILES = LICENSE
+ APR_UTIL_INSTALL_STAGING = YES
+ APR_UTIL_DEPENDENCIES = apr sqlite neon zlib
+ APR_UTIL_CONF_OPT = \
+-	--with-apr=$(BUILD_DIR)/apr-$(APR_VERSION) \
++	--with-apr=$(STAGING_DIR)/usr/bin/apr-1-config
++APR_UTIL_CONFIG_SCRIPTS = apu-1-config
 +
-+define APR_CLEANUP_UNNEEDED_FILES
-+	$(RM) -rf $(TARGET_DIR)/usr/build-1/
-+endef
-+
-+APR_POST_INSTALL_TARGET_HOOKS += APR_CLEANUP_UNNEEDED_FILES
-+
-+define APR_FIXUP_RULES_MK
-+	$(SED) 's%apr_builddir=%apr_builddir=$(STAGING_DIR)%' \
-+		$(STAGING_DIR)/usr/build-1/apr_rules.mk
-+	$(SED) 's%apr_builders=%apr_builders=$(STAGING_DIR)%' \
-+		$(STAGING_DIR)/usr/build-1/apr_rules.mk
-+endef
-+
-+APR_POST_INSTALL_STAGING_HOOKS += APR_FIXUP_RULES_MK
++# When iconv is available, then use it to provide charset conversion
++# features.
++APR_UTIL_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
  
  $(eval $(autotools-package))
 -- 
