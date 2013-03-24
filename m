@@ -1,40 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Mar 2013 11:54:13 +0100
-Subject: [Buildroot] [git commit] dosfstools: fix host variant dependencies
-Message-ID: <20130324105605.B52509B259@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Mar 2013 12:41:42 +0100
+Subject: [Buildroot] [PATCH 1/2] udev: replace UDEV_ALL_EXTRAS with more
+ fine-grained options
+In-Reply-To: <1334657953-29113-1-git-send-email-s.neumann@raumfeld.com>
+References: <1334657953-29113-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <20130324124142.2aa5541c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fc53ebdca51a88aae44a4d33aa143916450873dc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Sven Neumann,
 
-host-dosfstools shouldn't pull host-libiconv in since that's for
-uClibc-based toolchains and we don't have that package anyway.
-Fixes:
-http://autobuild.buildroot.net/results/7637985bfb0afdd9217c297e9b0ac5de797c137d/
+On Tue, 17 Apr 2012 12:19:12 +0200, Sven Neumann wrote:
+> Replace the BR2_PACKAGE_UDEV_ALL_EXTRAS options with a bunch of
+> configuration choices that allow more fine-grainded control over
+> the features that should be built into udev.
+> 
+> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/dosfstools/dosfstools.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+This patch is rather old, and with the movement around systemd/udev, I
+don't think there is really too much incentive to put efforts into the
+legacy udev package. Therefore, I've removed this patch, as well as
+your PATCH 2/2 that depended on this one, from the patchwork.
 
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index 332f2ee..79d1c7a 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -10,6 +10,9 @@ DOSFSTOOLS_LICENSE = GPLv3+
- DOSFSTOOLS_LICENSE_FILES = COPYING
- DOSFSTOOLS_LDFLAGS = $(TARGET_LDFLAGS)
- 
-+# Avoid target dosfstools dependencies, no host-libiconv
-+HOST_DOSFSTOOLS_DEPENDENCIES =
-+
- ifneq ($(BR2_ENABLE_LOCALE),y)
- DOSFSTOOLS_DEPENDENCIES += libiconv
- DOSFSTOOLS_LDFLAGS += -liconv
+If you're still interested by this feature, do not hesitate to come
+back with updated versions of those patches, taking into account the
+comments that were raised during the review.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
