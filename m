@@ -1,11 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 Mar 2013 13:47:09 +0100
-Subject: [Buildroot] [PATCH 12/22] iproute2: add dependency on host-bison
-In-Reply-To: <1364113606-20836-13-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 24 Mar 2013 09:26:36 +0100")
+Date: Sun, 24 Mar 2013 13:48:13 +0100
+Subject: [Buildroot] [PATCH 13/22] ncurses: enable shared library build
+	on the host
+In-Reply-To: <1364113606-20836-14-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 24 Mar 2013 09:26:37 +0100")
 References: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1364113606-20836-13-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87ehf5m0c2.fsf@dell.be.48ers.dk>
+ <1364113606-20836-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87a9ptm0aa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,9 +15,12 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> iproute2 requires bison, so we add the necessary dependency. In
- Thomas> addition, in order for iproute2 to find bison, we need to pass
- Thomas> $(TARGET_MAKE_ENV).
+ Thomas> On the host, we generally build and install a shared library
+ Thomas> rather than a static version of libraries. In this specific
+ Thomas> case, we will want to build host-gettext, which builds a shared
+ Thomas> library that depends on ncurses. And this doesn't work well if
+ Thomas> ncurses is static because it hasn't been built with
+ Thomas> -fPIC. Therefore, let's build ncurses as shared on the host.
 
 Committed, thanks.
 
