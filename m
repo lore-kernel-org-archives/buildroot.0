@@ -1,40 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Mar 2013 09:26:37 +0100
-Subject: [Buildroot] [PATCH 13/22] ncurses: enable shared library build on
-	the host
+Date: Sun, 24 Mar 2013 09:26:38 +0100
+Subject: [Buildroot] [PATCH 14/22] gettext: provide a host variant
 In-Reply-To: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1364113606-20836-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1364113606-20836-15-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On the host, we generally build and install a shared library rather
-than a static version of libraries. In this specific case, we will
-want to build host-gettext, which builds a shared library that depends
-on ncurses. And this doesn't work well if ncurses is static because it
-hasn't been built with -fPIC. Therefore, let's build ncurses as shared
-on the host.
+In preparation for the removal of gettext as a hard dependency, we
+need to be able to provide a host variant of gettext for the few
+packages that require msgfmt.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ncurses/ncurses.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gettext/gettext.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index c01dfbc..eb47c36 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -116,7 +116,7 @@ define HOST_NCURSES_BUILD_CMDS
- endef
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index d374050..fe42c42 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -56,3 +56,4 @@ GETTEXT_POST_PATCH_HOOKS += GETTEXT_DISABLE_TOOLS
+ GETTEXT_POST_PATCH_HOOKS += GETTEXT_DISABLE_TESTS
  
- HOST_NCURSES_CONF_OPT = \
--	--without-shared --without-gpm \
-+	--with-shared --without-gpm \
- 	--without-manpages \
- 	--without-cxx \
- 	--without-cxx-binding \
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+\ No newline at end of file
 -- 
 1.7.9.5
