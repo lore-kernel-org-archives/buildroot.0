@@ -1,35 +1,312 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Mar 2013 13:41:22 +0100
-Subject: [Buildroot] [git commit] kernel-headers: add missing $(Q)
-Message-ID: <20130324130050.2254E9B258@busybox.osuosl.org>
+Date: Sun, 24 Mar 2013 12:42:51 +0100
+Subject: [Buildroot] [git commit] gettext: fix tools build failure for
+	uClibc toolchain with C++
+Message-ID: <20130324130048.B712199860@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f05104dc62d940b15c6c998840a44d46b3371274
+commit: http://git.buildroot.net/buildroot/commit/?id=a452db1d822e88f0fe00bf6e65d5979a2f221d72
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a missing $(Q) in front of a MESSAGE call, which leads to the
-message being displayed but also the command that shows the message.
+Fixes:
+http://autobuild.buildroot.net/results/e5777d754653edef9d8c8558f04c2836734f2c25/
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/kernel-headers.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/gettext/gettext-fix_rpl_gettimeofday.patch |  282 ++++++++++++++++++++
+ 1 files changed, 282 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
-index 073d609..7ce6264 100644
---- a/toolchain/kernel-headers/kernel-headers.mk
-+++ b/toolchain/kernel-headers/kernel-headers.mk
-@@ -70,7 +70,7 @@ $(DL_DIR)/$(LINUX_HEADERS_SOURCE):
- ifeq ($(BR2_KERNEL_HEADERS_SNAP),y)
- 	$(error No local $@ found, cannot continue. Are you sure you wanted to enable BR2_KERNEL_HEADERS_SNAP?)
- endif
--	$(call MESSAGE,"Downloading kernel headers")
-+	$(Q)$(call MESSAGE,"Downloading kernel headers")
- 	$(call DOWNLOAD,$(LINUX_HEADERS_SITE)/$(LINUX_HEADERS_SOURCE))
- 
- kernel-headers: $(LINUX_HEADERS_DIR)/.configured
+diff --git a/package/gettext/gettext-fix_rpl_gettimeofday.patch b/package/gettext/gettext-fix_rpl_gettimeofday.patch
+new file mode 100644
+index 0000000..e97ceb2
+--- /dev/null
++++ b/package/gettext/gettext-fix_rpl_gettimeofday.patch
+@@ -0,0 +1,282 @@
++Newer sys_time.in.h from gnulib breaks on uClibc with C++ so roll back
++to a previous version that's known to work.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura gettext-0.18.2.1.orig/gettext-tools/gnulib-lib/sys_time.in.h gettext-0.18.2.1/gettext-tools/gnulib-lib/sys_time.in.h
++--- gettext-0.18.2.1.orig/gettext-tools/gnulib-lib/sys_time.in.h	2013-03-12 09:17:10.530475932 -0300
+++++ gettext-0.18.2.1/gettext-tools/gnulib-lib/sys_time.in.h	2013-03-19 12:00:17.557958255 -0300
++@@ -1,6 +1,6 @@
++ /* Provide a more complete sys/time.h.
++ 
++-   Copyright (C) 2007-2013 Free Software Foundation, Inc.
+++   Copyright (C) 2007-2012 Free Software Foundation, Inc.
++ 
++    This program is free software; you can redistribute it and/or modify
++    it under the terms of the GNU General Public License as published by
++@@ -17,34 +17,37 @@
++ 
++ /* Written by Paul Eggert.  */
++ 
++-#ifndef _ at GUARD_PREFIX@_SYS_TIME_H
++-
++ #if __GNUC__ >= 3
++ @PRAGMA_SYSTEM_HEADER@
++ #endif
++ @PRAGMA_COLUMNS@
++ 
++-/* The include_next requires a split double-inclusion guard.  */
++-#if @HAVE_SYS_TIME_H@
++-# @INCLUDE_NEXT@ @NEXT_SYS_TIME_H@
++-#endif
+++#if defined _ at GUARD_PREFIX@_SYS_TIME_H
++ 
++-#ifndef _ at GUARD_PREFIX@_SYS_TIME_H
++-#define _ at GUARD_PREFIX@_SYS_TIME_H
+++/* Simply delegate to the system's header, without adding anything.  */
+++# if @HAVE_SYS_TIME_H@
+++#  @INCLUDE_NEXT@ @NEXT_SYS_TIME_H@
+++# endif
++ 
++-#if ! @HAVE_SYS_TIME_H@
++-# include <time.h>
++-#endif
+++#else
+++
+++# define _ at GUARD_PREFIX@_SYS_TIME_H
+++
+++# if @HAVE_SYS_TIME_H@
+++#  @INCLUDE_NEXT@ @NEXT_SYS_TIME_H@
+++# else
+++#  include <time.h>
+++# endif
++ 
++ /* On native Windows with MSVC, get the 'struct timeval' type.
++    Also, on native Windows with a 64-bit time_t, where we are overriding the
++    'struct timeval' type, get all declarations of system functions whose
++    signature contains 'struct timeval'.  */
++-#if (defined _MSC_VER || @REPLACE_STRUCT_TIMEVAL@) && @HAVE_WINSOCK2_H@ && !defined _GL_INCLUDING_WINSOCK2_H
++-# define _GL_INCLUDING_WINSOCK2_H
++-# include <winsock2.h>
++-# undef _GL_INCLUDING_WINSOCK2_H
++-#endif
+++# if (defined _MSC_VER || @REPLACE_STRUCT_TIMEVAL@) && @HAVE_WINSOCK2_H@ && !defined _GL_INCLUDING_WINSOCK2_H
+++#  define _GL_INCLUDING_WINSOCK2_H
+++#  include <winsock2.h>
+++#  undef _GL_INCLUDING_WINSOCK2_H
+++# endif
++ 
++ /* The definitions of _GL_FUNCDECL_RPL etc. are copied here.  */
++ 
++@@ -52,112 +55,112 @@
++ 
++ /* The definition of _GL_WARN_ON_USE is copied here.  */
++ 
++-#ifdef __cplusplus
+++# ifdef __cplusplus
++ extern "C" {
++-#endif
+++# endif
++ 
++-#if !@HAVE_STRUCT_TIMEVAL@ || @REPLACE_STRUCT_TIMEVAL@
+++# if !@HAVE_STRUCT_TIMEVAL@ || @REPLACE_STRUCT_TIMEVAL@
++ 
++-# if @REPLACE_STRUCT_TIMEVAL@
++-#  define timeval rpl_timeval
++-# endif
+++#  if @REPLACE_STRUCT_TIMEVAL@
+++#   define timeval rpl_timeval
+++#  endif
++ 
++-# if !GNULIB_defined_struct_timeval
+++#  if !GNULIB_defined_struct_timeval
++ struct timeval
++ {
++   time_t tv_sec;
++   long int tv_usec;
++ };
++-#  define GNULIB_defined_struct_timeval 1
++-# endif
+++#   define GNULIB_defined_struct_timeval 1
+++#  endif
++ 
++-#endif
+++# endif
++ 
++-#ifdef __cplusplus
+++# ifdef __cplusplus
++ }
++-#endif
+++# endif
++ 
++-#if @GNULIB_GETTIMEOFDAY@
++-# if @REPLACE_GETTIMEOFDAY@
++-#  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
++-#   undef gettimeofday
++-#   define gettimeofday rpl_gettimeofday
++-#  endif
+++# if @GNULIB_GETTIMEOFDAY@
+++#  if @REPLACE_GETTIMEOFDAY@
+++#   if !(defined __cplusplus && defined GNULIB_NAMESPACE)
+++#    undef gettimeofday
+++#    define gettimeofday rpl_gettimeofday
+++#   endif
++ _GL_FUNCDECL_RPL (gettimeofday, int,
++-                  (struct timeval *restrict, void *restrict)
+++                  (struct timeval *__restrict, void *__restrict)
++                   _GL_ARG_NONNULL ((1)));
++ _GL_CXXALIAS_RPL (gettimeofday, int,
++-                  (struct timeval *restrict, void *restrict));
++-# else
++-#  if !@HAVE_GETTIMEOFDAY@
+++                  (struct timeval *__restrict, void *__restrict));
+++#  else
+++#   if !@HAVE_GETTIMEOFDAY@
++ _GL_FUNCDECL_SYS (gettimeofday, int,
++-                  (struct timeval *restrict, void *restrict)
+++                  (struct timeval *__restrict, void *__restrict)
++                   _GL_ARG_NONNULL ((1)));
++-#  endif
+++#   endif
++ /* Need to cast, because on glibc systems, by default, the second argument is
++                                                   struct timezone *.  */
++ _GL_CXXALIAS_SYS_CAST (gettimeofday, int,
++-                       (struct timeval *restrict, void *restrict));
++-# endif
+++                       (struct timeval *__restrict, void *__restrict));
+++#  endif
++ _GL_CXXALIASWARN (gettimeofday);
++-#elif defined GNULIB_POSIXCHECK
++-# undef gettimeofday
++-# if HAVE_RAW_DECL_GETTIMEOFDAY
+++# elif defined GNULIB_POSIXCHECK
+++#  undef gettimeofday
+++#  if HAVE_RAW_DECL_GETTIMEOFDAY
++ _GL_WARN_ON_USE (gettimeofday, "gettimeofday is unportable - "
++                  "use gnulib module gettimeofday for portability");
+++#  endif
++ # endif
++-#endif
++ 
++ /* Hide some function declarations from <winsock2.h>.  */
++ 
++-#if defined _MSC_VER && @HAVE_WINSOCK2_H@
++-# if !defined _ at GUARD_PREFIX@_UNISTD_H
++-#  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
++-#   undef close
++-#   define close close_used_without_including_unistd_h
++-#  else
+++# if defined _MSC_VER && @HAVE_WINSOCK2_H@
+++#  if !defined _ at GUARD_PREFIX@_UNISTD_H
+++#   if !(defined __cplusplus && defined GNULIB_NAMESPACE)
+++#    undef close
+++#    define close close_used_without_including_unistd_h
+++#   else
++      _GL_WARN_ON_USE (close,
++                       "close() used without including <unistd.h>");
++-#  endif
++-#  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
++-#   undef gethostname
++-#   define gethostname gethostname_used_without_including_unistd_h
++-#  else
+++#   endif
+++#   if !(defined __cplusplus && defined GNULIB_NAMESPACE)
+++#    undef gethostname
+++#    define gethostname gethostname_used_without_including_unistd_h
+++#   else
++      _GL_WARN_ON_USE (gethostname,
++                       "gethostname() used without including <unistd.h>");
+++#   endif
++ #  endif
++-# endif
++-# if !defined _ at GUARD_PREFIX@_SYS_SOCKET_H
++-#  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
++-#   undef socket
++-#   define socket              socket_used_without_including_sys_socket_h
++-#   undef connect
++-#   define connect             connect_used_without_including_sys_socket_h
++-#   undef accept
++-#   define accept              accept_used_without_including_sys_socket_h
++-#   undef bind
++-#   define bind                bind_used_without_including_sys_socket_h
++-#   undef getpeername
++-#   define getpeername         getpeername_used_without_including_sys_socket_h
++-#   undef getsockname
++-#   define getsockname         getsockname_used_without_including_sys_socket_h
++-#   undef getsockopt
++-#   define getsockopt          getsockopt_used_without_including_sys_socket_h
++-#   undef listen
++-#   define listen              listen_used_without_including_sys_socket_h
++-#   undef recv
++-#   define recv                recv_used_without_including_sys_socket_h
++-#   undef send
++-#   define send                send_used_without_including_sys_socket_h
++-#   undef recvfrom
++-#   define recvfrom            recvfrom_used_without_including_sys_socket_h
++-#   undef sendto
++-#   define sendto              sendto_used_without_including_sys_socket_h
++-#   undef setsockopt
++-#   define setsockopt          setsockopt_used_without_including_sys_socket_h
++-#   undef shutdown
++-#   define shutdown            shutdown_used_without_including_sys_socket_h
++-#  else
+++#  if !defined _ at GUARD_PREFIX@_SYS_SOCKET_H
+++#   if !(defined __cplusplus && defined GNULIB_NAMESPACE)
+++#    undef socket
+++#    define socket              socket_used_without_including_sys_socket_h
+++#    undef connect
+++#    define connect             connect_used_without_including_sys_socket_h
+++#    undef accept
+++#    define accept              accept_used_without_including_sys_socket_h
+++#    undef bind
+++#    define bind                bind_used_without_including_sys_socket_h
+++#    undef getpeername
+++#    define getpeername         getpeername_used_without_including_sys_socket_h
+++#    undef getsockname
+++#    define getsockname         getsockname_used_without_including_sys_socket_h
+++#    undef getsockopt
+++#    define getsockopt          getsockopt_used_without_including_sys_socket_h
+++#    undef listen
+++#    define listen              listen_used_without_including_sys_socket_h
+++#    undef recv
+++#    define recv                recv_used_without_including_sys_socket_h
+++#    undef send
+++#    define send                send_used_without_including_sys_socket_h
+++#    undef recvfrom
+++#    define recvfrom            recvfrom_used_without_including_sys_socket_h
+++#    undef sendto
+++#    define sendto              sendto_used_without_including_sys_socket_h
+++#    undef setsockopt
+++#    define setsockopt          setsockopt_used_without_including_sys_socket_h
+++#    undef shutdown
+++#    define shutdown            shutdown_used_without_including_sys_socket_h
+++#   else
++      _GL_WARN_ON_USE (socket,
++                       "socket() used without including <sys/socket.h>");
++      _GL_WARN_ON_USE (connect,
++@@ -186,18 +189,17 @@
++                       "setsockopt() used without including <sys/socket.h>");
++      _GL_WARN_ON_USE (shutdown,
++                       "shutdown() used without including <sys/socket.h>");
+++#   endif
++ #  endif
++-# endif
++-# if !defined _ at GUARD_PREFIX@_SYS_SELECT_H
++-#  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
++-#   undef select
++-#   define select select_used_without_including_sys_select_h
++-#  else
+++#  if !defined _ at GUARD_PREFIX@_SYS_SELECT_H
+++#   if !(defined __cplusplus && defined GNULIB_NAMESPACE)
+++#    undef select
+++#    define select select_used_without_including_sys_select_h
+++#   else
++      _GL_WARN_ON_USE (select,
++                       "select() used without including <sys/select.h>");
+++#   endif
++ #  endif
++ # endif
++-#endif
++ 
++ #endif /* _ at GUARD_PREFIX@_SYS_TIME_H */
++-#endif /* _ at GUARD_PREFIX@_SYS_TIME_H */
