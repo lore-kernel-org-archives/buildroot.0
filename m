@@ -1,56 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Mar 2013 00:37:18 +0100
-Subject: [Buildroot] [PATCH 10/14] Added package Gutenprint
-In-Reply-To: <639aebbbbadcf25a5e814763c5bef25ae68d1485.1364165310.git.yann.morin.1998@free.fr>
-References: <cover.1364165310.git.yann.morin.1998@free.fr>
- <639aebbbbadcf25a5e814763c5bef25ae68d1485.1364165310.git.yann.morin.1998@free.fr>
-Message-ID: <20130325003718.2b239943@skate>
+Date: Mon, 25 Mar 2013 00:42:59 +0100
+Subject: [Buildroot] [PATCH] gstreamer: add missing dependencies on
+	host-flex and host-bison
+Message-ID: <1364168579-8326-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Fixes:
+http://autobuild.buildroot.org/results/f9f32bfd44a3f74ec30fc61594bf6eb04f80f872/build-end.log.
 
-On Sun, 24 Mar 2013 23:50:45 +0100, Yann E. MORIN wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/multimedia/gstreamer/gstreamer.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +#############################################################
-> +#
-> +# gutenprint
-> +#
-> +#############################################################
-> +
-> +GUTENPRINT_VERSION = 5.2.9
-> +GUTENPRINT_SITE = http://downloads.sourceforge.net/gimp-print/gutenprint-5.2/$(GUTENPRINT_VERSION)
-> +GUTENPRINT_SOURCE = gutenprint-$(GUTENPRINT_VERSION).tar.bz2
-
-LICENSE, LICENSE_FILES ?
-
-> +GUTENPRINT_LIBTOOL_PATCH = YES
-
-Not needed, that's done automatically.
-
-> +# host-gutenprint is needed to generate XML as part of compilation
-> +# the program that generates the xml also links against libgutenprint
-> +# so we ened to build both a host package and a target package
-
-           need
-
-> +GUTENPRINT_DEPENDENCIES += host-gutenprint
-> +
-> +GUTENPRINT_CONF_OPT = --disable-libgutenprintui2 \
-> +                      --disable-samples \
-> +                      --without-gimp2 \
-> +                      --without-foomatic \
-> +                      --without-foomatic3 \
-> +                      --prefix=/usr \
-
-Not needed, prefix set automatically.
-
-Thomas
+diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
+index 3fb913e..5abce53 100644
+--- a/package/multimedia/gstreamer/gstreamer.mk
++++ b/package/multimedia/gstreamer/gstreamer.mk
+@@ -27,6 +27,6 @@ GSTREAMER_CONF_OPT = \
+ 		$(if $(BR2_PACKAGE_GSTREAMER_GST_DEBUG),,--disable-gst-debug) \
+ 		$(if $(BR2_PACKAGE_GSTREAMER_PLUGIN_REGISTRY),,--disable-registry)
+ 
+-GSTREAMER_DEPENDENCIES = libglib2 host-pkgconf
++GSTREAMER_DEPENDENCIES = libglib2 host-pkgconf host-bison host-flex
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
