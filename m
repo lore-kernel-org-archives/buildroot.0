@@ -1,33 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Mar 2013 16:42:41 +0100
-Subject: [Buildroot] [PATCH] libnl: add missing dependency on host-flex
-Message-ID: <1364139761-22345-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 24 Mar 2013 16:42:43 +0100
+Subject: [Buildroot] [PATCH] openssh: add linux-pam support [v2]
+In-Reply-To: <514F014D.4080003@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Sun, 24 Mar 2013 10:36:13 -0300")
+References: <1347755273-32240-1-git-send-email-danomimanchego123@gmail.com>
+ <514F014D.4080003@zacarias.com.ar>
+Message-ID: <87r4j4iz2k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.org/results/9c496031fef011b86113e342a8ca4a36ae360bb1/build-end.log.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libnl/libnl.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Gustavo> On 09/15/2012 09:27 PM, Danomi Manchego wrote:
+ >> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
-index 7620cf7..2a9f5a9 100644
---- a/package/libnl/libnl.mk
-+++ b/package/libnl/libnl.mk
-@@ -9,7 +9,7 @@ LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files
- LIBNL_LICENSE = LGPLv2.1+
- LIBNL_LICENSE_FILES = COPYING
- LIBNL_INSTALL_STAGING = YES
--LIBNL_DEPENDENCIES = host-bison
-+LIBNL_DEPENDENCIES = host-bison host-flex
- LIBNL_MAKE = $(MAKE1)
- LIBNL_BINARIES = class-add class-delete class-list classid-lookup cls-add \
- 	cls-delete cls-list link-list pktloc-lookup qdisc-add qdisc-delete \
+ Gustavo> Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
