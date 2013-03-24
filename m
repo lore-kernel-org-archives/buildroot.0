@@ -1,44 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Mar 2013 19:19:22 +0100
-Subject: [Buildroot] [PATCH 1/9] rt-tests: mention that NPTL thread
-	implementation is needed
+Date: Sun, 24 Mar 2013 19:19:23 +0100
+Subject: [Buildroot] [PATCH 2/9] dtach: new package
 In-Reply-To: <1364149170-5521-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1364149170-5521-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1364149170-5521-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1364149170-5521-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch superseds http://patchwork.ozlabs.org/patch/150161/, but
-does it in a different way. Since we don't have a way of selecting the
-thread implementation for external toolchains, and it sounds a bit too
-heavy to add new config options just for the sake of rt-tests, we
-instead simply add some help text to the rt-tests package explaining
-that NPTL thread implementation is needed.
+From: Justin Maggard <jmaggard@netgear.com>
 
+Signed-off-by: Justin Maggard <jmaggard@netgear.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rt-tests/Config.in |    6 ++++++
- 1 file changed, 6 insertions(+)
+Changes from v1 to v2:
+ * Remove scrollback feature patch. We don't take feature patches in
+   Buildroot.
+ * Fixup commit title.
+ * Fixed the site URL to use downloads.sourceforge.net
+ * Use $(eval autotools-package)
+---
+ package/Config.in       |    1 +
+ package/dtach/Config.in |    8 ++++++++
+ package/dtach/dtach.mk  |   17 +++++++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/dtach/Config.in
+ create mode 100644 package/dtach/dtach.mk
 
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index 0999ebf..a040139 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -14,6 +14,12 @@ config BR2_PACKAGE_RT_TESTS
- 	  installed if a Python interpreter has been selected in the
- 	  Buildroot configuration.
- 
-+	  Note that this package requires a toolchain built with the
-+	  NPTL implementation of the pthread API (this is always the
-+	  case with glibc/eglibc toolchains, but may not necessarily
-+	  be the case with uClibc toolchains, since the thread
-+	  implementation is configurable).
+diff --git a/package/Config.in b/package/Config.in
+index 94e279b..c66e139 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -774,6 +774,7 @@ source "package/bash/Config.in"
+ source "package/dash/Config.in"
+ endif
+ source "package/dialog/Config.in"
++source "package/dtach/Config.in"
+ source "package/file/Config.in"
+ source "package/gnupg/Config.in"
+ source "package/inotify-tools/Config.in"
+diff --git a/package/dtach/Config.in b/package/dtach/Config.in
+new file mode 100644
+index 0000000..033536b
+--- /dev/null
++++ b/package/dtach/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_DTACH
++	bool "dtach"
++	help
++	  dtach is a tiny program that emulates the detach feature of screen,
++	  allowing you to run a program in an environment that is protected
++	  from the controlling terminal and attach to it later.
 +
- 	  http://rt.wiki.kernel.org
- 
- comment "rt-tests requires a toolchain with threads support"
++	  http://dtach.sourceforge.net/
+diff --git a/package/dtach/dtach.mk b/package/dtach/dtach.mk
+new file mode 100644
+index 0000000..77ad7c0
+--- /dev/null
++++ b/package/dtach/dtach.mk
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# dtach
++#
++#############################################################
++
++DTACH_VERSION = 0.8
++DTACH_SITE = http://downloads.sourceforge.net/project/dtach/dtach/$(DTACH_VERSION)
++DTACH_LICENSE = GPLv2+
++DTACH_LICENSE_FILES = COPYING
++
++# The Makefile does not have an install target.
++define DTACH_INSTALL_TARGET_CMDS
++        $(INSTALL) -D -m 0755 $(@D)/dtach $(TARGET_DIR)/usr/bin/dtach
++endef
++
++$(eval $(autotools-package))
 -- 
 1.7.9.5
