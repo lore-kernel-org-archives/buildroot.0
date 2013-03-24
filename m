@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 24 Mar 2013 09:47:50 -0300
-Subject: [Buildroot] [PATCH] squid: bump to version 3.3.3
-Message-ID: <1364129270-32501-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 24 Mar 2013 09:48:06 -0300
+Subject: [Buildroot] [PATCH] file: bump to version 5.14
+Message-ID: <1364129286-3863-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/squid/squid.mk | 2 +-
+ package/file/file.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index a4093f4..5832aa7 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 7206705..5422e2f 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--SQUID_VERSION = 3.3.2
-+SQUID_VERSION = 3.3.3
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.3
- SQUID_LICENSE = GPLv2+
- SQUID_LICENSE_FILES = COPYING
+-FILE_VERSION = 5.13
++FILE_VERSION = 5.14
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ FILE_INSTALL_STAGING = YES
 -- 
 1.8.1.5
