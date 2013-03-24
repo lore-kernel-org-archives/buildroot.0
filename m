@@ -1,29 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Mar 2013 20:11:45 +0100
-Subject: [Buildroot] [PATCH v2] wireless-regdb: new package
-In-Reply-To: <514F4C03.4000009@siganos.org>
-References: <514F4C03.4000009@siganos.org>
-Message-ID: <20130324201145.1b607e90@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 24 Mar 2013 16:35:04 -0300
+Subject: [Buildroot] [PATCH 1/2] uboot-tools: install mkenvimage.
+In-Reply-To: <1356007638-18476-1-git-send-email-rebillout@syscom.ch>
+References: <1356007638-18476-1-git-send-email-rebillout@syscom.ch>
+Message-ID: <514F5568.2040404@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Dimitrios Siganos,
+On 12/20/2012 09:47 AM, Arnaud R?billout wrote:
 
-On Sun, 24 Mar 2013 18:54:59 +0000, Dimitrios Siganos wrote:
-> Changes from v1:
-> * Replaced ':=' with '='.
+> The tool mkenvimage generates a valid binary environment image from
+> a text file describing the key=value pairs of the environment.
+> This commit allows installation on target and host.
+> 
+> Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
 
-Please send your patches with git send-email, otherwise they can't be
-easily applied and reviewed.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
