@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Mar 2013 09:26:38 +0100
-Subject: [Buildroot] [PATCH 14/22] gettext: provide a host variant
+Date: Sun, 24 Mar 2013 09:26:32 +0100
+Subject: [Buildroot] [PATCH 08/22] kernel-headers: add missing $(Q)
 In-Reply-To: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1364113606-20836-15-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1364113606-20836-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In preparation for the removal of gettext as a hard dependency, we
-need to be able to provide a host variant of gettext for the few
-packages that require msgfmt.
+Add a missing $(Q) in front of a MESSAGE call, which leads to the
+message being displayed but also the command that shows the message.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gettext/gettext.mk |    1 +
- 1 file changed, 1 insertion(+)
+ toolchain/kernel-headers/kernel-headers.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index d374050..fe42c42 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -56,3 +56,4 @@ GETTEXT_POST_PATCH_HOOKS += GETTEXT_DISABLE_TOOLS
- GETTEXT_POST_PATCH_HOOKS += GETTEXT_DISABLE_TESTS
+diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
+index 073d609..7ce6264 100644
+--- a/toolchain/kernel-headers/kernel-headers.mk
++++ b/toolchain/kernel-headers/kernel-headers.mk
+@@ -70,7 +70,7 @@ $(DL_DIR)/$(LINUX_HEADERS_SOURCE):
+ ifeq ($(BR2_KERNEL_HEADERS_SNAP),y)
+ 	$(error No local $@ found, cannot continue. Are you sure you wanted to enable BR2_KERNEL_HEADERS_SNAP?)
+ endif
+-	$(call MESSAGE,"Downloading kernel headers")
++	$(Q)$(call MESSAGE,"Downloading kernel headers")
+ 	$(call DOWNLOAD,$(LINUX_HEADERS_SITE)/$(LINUX_HEADERS_SOURCE))
  
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-\ No newline at end of file
+ kernel-headers: $(LINUX_HEADERS_DIR)/.configured
 -- 
 1.7.9.5
