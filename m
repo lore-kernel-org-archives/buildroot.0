@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Mar 2013 23:50:40 +0100
-Subject: [Buildroot] [PATCH 05/14] manual: cleanup appendix.txt
+Date: Sun, 24 Mar 2013 23:50:41 +0100
+Subject: [Buildroot] [PATCH 06/14] manual: add a make target
+	'manual-update-lists'
 In-Reply-To: <cover.1364165310.git.yann.morin.1998@free.fr>
 References: <cover.1364165310.git.yann.morin.1998@free.fr>
-Message-ID: <3f85b7775fafbc4f89ec517e31138f9a384df8bf.1364165310.git.yann.morin.1998@free.fr>
+Message-ID: <6aacb071d888e9f5768a0a1ec6b62476dc7e1d13.1364165310.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,50 +13,46 @@ To: buildroot@busybox.net
 
 From: Samuel Martin <s.martin49@gmail.com>
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- docs/manual/appendix.txt |   29 ++++++++++++++++++++---------
- 1 files changed, 20 insertions(+), 9 deletions(-)
+The generated lists are automatically updated when building the manual.
 
-diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
-index ef34169..ce54b99 100644
---- a/docs/manual/appendix.txt
-+++ b/docs/manual/appendix.txt
-@@ -6,15 +6,26 @@ Appendix
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+[yann.morin.1998 at free.fr: fix indentation]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ docs/manual/manual.mk |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index aa20534..52a7de0 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -1,3 +1,8 @@
++manual-update-lists:
++	@$(call MESSAGE,"Updating the manual lists...")
++	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) \
++		$(TOPDIR)/support/scripts/gen-manual-lists.py
++
+ ################################################################################
+ # GENDOC -- generates the make targets needed to build a specific type of
+ #           asciidoc documentation.
+@@ -17,7 +22,8 @@ $(1): $(1)-$(3)
+ .PHONY: $(1)-$(3)
+ $(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
  
- include::makedev-syntax.txt[]
+-$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES)
++$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES) \
++			   manual-update-lists
+ 	@$(call MESSAGE,"Generating $(5) $(1)...")
+ 	$(Q)mkdir -p $$(@D)
+ 	$(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
+@@ -41,7 +47,7 @@ $(call GENDOC_INNER,$(1),epub,epub,epub,EPUB)
+ clean: $(1)-clean
+ $(1)-clean:
+ 	$(Q)$(RM) -rf $(O)/docs/$(1)
+-.PHONY: $(1) $(1)-clean
++.PHONY: $(1) $(1)-clean manual-update-lists
+ endef
  
-+
-+// Automatically generated lists:
-+
- [[package-list]]
--Available packages
--------------------
--// docs/manaual/pkg-list.txt is generated using the following command:
--// $ git grep -E '\((autotools|cmake|generic)-package\)' package/ |  \
--//     cut -d':' -f1 | grep '\.mk$' | \
--//     sed -e 's;.*\?/\(.*\?\).mk;* \1;' | \
--//     sort > docs/manual/pkg-list.txt
--
--include::pkg-list.txt[]
-+Package Selection for the target
-+--------------------------------
-+
-+include::package-list.txt[]
-+
-+[[host-package-list]]
-+Host utilities
-+--------------
-+
-+include::host-package-list.txt[]
-+
-+[[deprecated-list]]
-+Deprecated stuff
-+----------------
-+
-+The following stuff are marked as _deprecated_ in Buildroot due to
-+their status either too old or unmaintained.
- 
- include::deprecated-list.txt[]
+ MANUAL_SOURCES = $(wildcard docs/manual/*.txt) $(wildcard docs/images/*)
 -- 
 1.7.2.5
