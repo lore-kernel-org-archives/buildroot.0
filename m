@@ -1,32 +1,50 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Mar 2013 20:36:02 +0100
-Subject: [Buildroot] [git commit] neon: add license informations
-Message-ID: <20130324194036.BAFD19B28F@busybox.osuosl.org>
+Date: Sun, 24 Mar 2013 20:36:50 +0100
+Subject: [Buildroot] [git commit] apr-util: various improvements
+Message-ID: <20130324194037.583A29B28F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff0865a94694dd964278585c85c4401598b5a6aa
+commit: http://git.buildroot.net/buildroot/commit/?id=a00fc22779983440d0bec2b996b55f4064079e55
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This commit:
+ * Adds licensing informations.
+ * Uses the apr-1-config script instead of pointing apr-util to the
+   apr build directory.
+ * Ensures apu-1-config gets fixed properly using the
+   <pkg>_CONFIG_SCRIPTS mechanism.
+ * Ensures that libiconv gets built before apr-util if available, so
+   that character set conversion features of apr-util can be enabled.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/neon/neon.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/apr-util/apr-util.mk |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index cec72f8..58e01e1 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -5,6 +5,8 @@
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+index b9ff904..94b1817 100644
+--- a/package/apr-util/apr-util.mk
++++ b/package/apr-util/apr-util.mk
+@@ -5,9 +5,16 @@
  #############################################################
- NEON_VERSION = 0.29.6
- NEON_SITE = http://www.webdav.org/neon/
-+NEON_LICENSE = LGPLv2+ (library), GPLv2+ (manual and tests)
-+NEON_LICENSE_FILES = src/COPYING.LIB src/COPYING README
- NEON_INSTALL_STAGING = YES
- NEON_CONF_OPT = --without-gssapi --disable-rpath
- NEON_CONFIG_SCRIPTS = neon-config
+ APR_UTIL_VERSION = 1.4.1
+ APR_UTIL_SITE = http://archive.apache.org/dist/apr
++APR_UTIL_LICENSE = Apache-2.0
++APR_UTIL_LICENSE_FILES = LICENSE
+ APR_UTIL_INSTALL_STAGING = YES
+ APR_UTIL_DEPENDENCIES = apr sqlite neon zlib
+ APR_UTIL_CONF_OPT = \
+-	--with-apr=$(BUILD_DIR)/apr-$(APR_VERSION) \
++	--with-apr=$(STAGING_DIR)/usr/bin/apr-1-config
++APR_UTIL_CONFIG_SCRIPTS = apu-1-config
++
++# When iconv is available, then use it to provide charset conversion
++# features.
++APR_UTIL_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ 
+ $(eval $(autotools-package))
