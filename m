@@ -1,40 +1,23 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 24 Mar 2013 09:20:07 -0300
-Subject: [Buildroot] [PATCHv2] quota: select BR2_PACKAGE_UTIL_LINUX_BINARIES
-Message-ID: <1364127607-29027-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 24 Mar 2013 09:30:15 -0300
+Subject: [Buildroot] [PATCH 1/2] Added support for hashlib in the target
+ Python
+In-Reply-To: <1344867578-12784-1-git-send-email-avishorp@gmail.com>
+References: <1344867578-12784-1-git-send-email-avishorp@gmail.com>
+Message-ID: <514EF1D7.6080003@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All of the util-linux tools options depend on
-BR2_PACKAGE_UTIL_LINUX_BINARIES that select all the required util-linux
-libraries and enable the tools build process.
-So basically quota is selecting a hidden/unavailable option and
-triggering a util-linux build failure. Fixes:
-http://autobuild.buildroot.net/results/bc3c75e7c60fe6db54ea56dd7c398ba7878bff83/
+On 08/13/2012 11:19 AM, Avishay Orpaz wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
-v2: Better explain why, and also add microblaze depend from util-linux
+> ---
+>  package/python/Config.in |    6 ++++++
+>  package/python/python.mk |    4 ++++
+>  2 files changed, 10 insertions(+), 0 deletions(-)
 
- package/quota/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-index f6341d3..5127a9a 100644
---- a/package/quota/Config.in
-+++ b/package/quota/Config.in
-@@ -3,7 +3,9 @@ config BR2_PACKAGE_QUOTA
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU # fork()
-+	depends on !(BR2_microblazeel || BR2_microblazebe) # util-linux
- 	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_BINARIES
- 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
--- 
-1.8.1.5
+Acked-By: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Can you resend it with a proper SoB line please?
+Thanks.
