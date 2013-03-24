@@ -1,22 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 Mar 2013 11:56:36 +0100
-Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 2, 4,
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 24 Mar 2013 11:56:18 +0100
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 2, 4,
 	8}.x stable version
-In-Reply-To: <1363866828-11768-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 21 Mar 2013 08:53:47 -0300")
-References: <1363866828-11768-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87txo1nk0r.fsf@dell.be.48ers.dk>
+Message-ID: <20130324105605.DE9F09B21A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3d86e2f0ae5c4e1cbcb5d552779622dd1acaee82
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in                 |    8 ++++----
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 91d3b23..4900aef 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -62,14 +62,14 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.69"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.70"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.40"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.41"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.36"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.37"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+-	default "3.8.3"		if BR2_KERNEL_HEADERS_3_8
++	default "3.8.4"		if BR2_KERNEL_HEADERS_3_8
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.69-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.70-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.69-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.70-headers_install-fix-__packed-in-exported-kernel-head.patch
