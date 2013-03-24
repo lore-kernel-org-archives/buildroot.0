@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Mar 2013 09:26:33 +0100
-Subject: [Buildroot] [PATCH 09/22] uClibc: add missing $(Q)
+Date: Sun, 24 Mar 2013 09:26:34 +0100
+Subject: [Buildroot] [PATCH 10/22] gmp: requires host-m4
 In-Reply-To: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1364113606-20836-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1364113606-20836-11-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a missing $(Q) in front of a MESSAGE call, which leads to the
-message being displayed but also the command that shows the message.
+On a system where m4 is not installed, gmp does not build due to the
+lack of m4. Add the missing host-m4 dependency.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/uClibc/uclibc.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gmp/gmp.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 1b49a8d..e8b2bb4 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -62,7 +62,7 @@ UCLIBC_LOCALES = $(foreach locale,$(GENERATE_LOCALE),\
- endif
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index 093d60c..24fbb3d 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -11,6 +11,8 @@ GMP_INSTALL_STAGING = YES
+ GMP_LICENSE = LGPLv3+
+ GMP_LICENSE_FILES = COPYING.LIB
  
- $(DL_DIR)/$(UCLIBC_SOURCE):
--	$(call MESSAGE,"Downloading uClibc")
-+	$(Q)$(call MESSAGE,"Downloading uClibc")
- 	$(call DOWNLOAD,$(UCLIBC_SITE)/$(UCLIBC_SOURCE))
- 
- uclibc-unpacked: $(UCLIBC_DIR)/.unpacked
++GMP_DEPENDENCIES = host-m4
++
+ # Bad ARM assembly breaks on pure thumb
+ ifeq ($(ARCH),arm)
+ GMP_MAKE_OPT += CFLAGS="$(TARGET_CFLAGS) -marm"
 -- 
 1.7.9.5
