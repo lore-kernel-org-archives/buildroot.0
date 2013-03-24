@@ -1,32 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Mar 2013 13:50:31 +0100
-Subject: [Buildroot] [git commit] at: needs host-flex and host-bison
-Message-ID: <20130324130052.57E8E9B258@busybox.osuosl.org>
+Date: Sun, 24 Mar 2013 13:43:44 +0100
+Subject: [Buildroot] [git commit] libpcap: add missing flex/bison
+	dependencies
+Message-ID: <20130324130051.5F8949B258@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a0b497b062bada5d05adfb3555ea9f99e973b8f2
+commit: http://git.buildroot.net/buildroot/commit/?id=2f55f8e440ea6040ec7fc9ba0692dd0980a36bd9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+In preparation for the removal of the flex/bison mandatory
+dependencies, make sure libpcap builds host-flex/host-bison.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/at/at.mk |    2 +-
+ package/libpcap/libpcap.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/at/at.mk b/package/at/at.mk
-index 1cea39b..6432ae3 100644
---- a/package/at/at.mk
-+++ b/package/at/at.mk
-@@ -9,7 +9,7 @@ AT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/a/at
- # missing deps for parsetime.l
- AT_MAKE = $(MAKE1)
- AT_AUTORECONF = YES
--AT_DEPENDENCIES = $(if $(BR2_PACKAGE_FLEX),flex)
-+AT_DEPENDENCIES = $(if $(BR2_PACKAGE_FLEX),flex) host-bison host-flex
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 06aec0f..5e077a2 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -20,7 +20,7 @@ LIBPCAP_INSTALL_STAGING = YES
+ # configure script correctly handles --enable-shared/--disable-shared.
+ LIBPCAP_AUTORECONF = YES
  
- AT_CONF_OPT = \
-         --with-jobdir=/var/spool/cron/atjobs \
+-LIBPCAP_DEPENDENCIES = zlib
++LIBPCAP_DEPENDENCIES = zlib host-flex host-bison
+ LIBPCAP_CONF_ENV = ac_cv_linux_vers=2 \
+ 		ac_cv_header_linux_wireless_h=yes # configure misdetects this
+ LIBPCAP_CONF_OPT = --disable-yydebug --with-pcap=linux
