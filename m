@@ -1,23 +1,24 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 24 Mar 2013 09:30:15 -0300
-Subject: [Buildroot] [PATCH 1/2] Added support for hashlib in the target
- Python
-In-Reply-To: <1344867578-12784-1-git-send-email-avishorp@gmail.com>
-References: <1344867578-12784-1-git-send-email-avishorp@gmail.com>
-Message-ID: <514EF1D7.6080003@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 24 Mar 2013 13:39:46 +0100
+Subject: [Buildroot] [PATCH 05/22] gcc: add support for gcc 4.8
+In-Reply-To: <1364113606-20836-6-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 24 Mar 2013 09:26:29 +0100")
+References: <1364113606-20836-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1364113606-20836-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <878v5dnf8t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/13/2012 11:19 AM, Avishay Orpaz wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> ---
->  package/python/Config.in |    6 ++++++
->  package/python/python.mk |    4 ++++
->  2 files changed, 10 insertions(+), 0 deletions(-)
+ Thomas> This commit adds support for the recently released gcc 4.8. We re-add
+ Thomas> the same patch series as the one used for 4.7.x, after refreshing the
+ Thomas> patches.
 
-Acked-By: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Can you resend it with a proper SoB line please?
-Thanks.
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
