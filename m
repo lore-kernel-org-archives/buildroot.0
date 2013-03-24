@@ -1,26 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 Mar 2013 23:47:25 +0100
-Subject: [Buildroot] X.org bump to 7.7
-In-Reply-To: <20130324104904.2e980f14@skate> (Thomas Petazzoni's message of
- "Sun, 24 Mar 2013 10:49:04 +0100")
-References: <20130324104904.2e980f14@skate>
-Message-ID: <87mwtsfm9u.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Mar 2013 23:48:38 +0100
+Subject: [Buildroot] [PATCH] apr-util: fix incorrect operator leading to
+	missing dependencies
+Message-ID: <1364165318-6603-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Fixes
+http://autobuild.buildroot.org/results/490a07cc161391b98193ab2c225458effc030ce7/build-end.log.
 
- Thomas> Hello Peter,
- Thomas> I think you can pull the x11r77_v2 branch from
- Thomas> https://bitbucket.org/baekdahl/buildroot. Notice that this is a
- Thomas> slightly more recent version than the one posted on the list, so you
- Thomas> shouldn't use patchwork to apply it. Considering the number of patches,
- Thomas> I think pulling Jesper's branch is the easiest solution.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/apr-util/apr-util.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ok, thanks - Will do so.
-
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+index 94b1817..cc90f9e 100644
+--- a/package/apr-util/apr-util.mk
++++ b/package/apr-util/apr-util.mk
+@@ -15,6 +15,6 @@ APR_UTIL_CONFIG_SCRIPTS = apu-1-config
+ 
+ # When iconv is available, then use it to provide charset conversion
+ # features.
+-APR_UTIL_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++APR_UTIL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ 
+ $(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+1.7.9.5
