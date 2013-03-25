@@ -1,114 +1,197 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Mar 2013 00:27:55 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch yem-patchwork
-Message-ID: <cover.1364253936.git.yann.morin.1998@free.fr>
+Date: Tue, 26 Mar 2013 00:27:56 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_01/15=5D_configs=3A_add_RaspberryP?=
+	=?utf-8?q?i_defconfig?=
+In-Reply-To: <cover.1364253936.git.yann.morin.1998@free.fr>
+References: <cover.1364253936.git.yann.morin.1998@free.fr>
+Message-ID: <9ac29744b5477393a3b0b2340c9eafd402179205.1364253936.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter, All!
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-This series is the collection of patches I've been working on during
-the Patchwork Bashing Day. Details bellow.
+This is a default configuration for the RaspberryPi, tested and functionnal.
 
+The kernel used is the one developped by the RaspberryPi foundation as it's not
+fully supported currently in mainline kernel.
+The configuration used for the kernel is the default bcmrpi.
 
-Changes v1 -> v2:
-  - foomatic-filters: inherit libusb deps  (Thomas)
-  - gutenprint: licensing terms  (Thomas)
-  - manual: tweak host-utilities list, misc fixes
+For more info, please find board/raspberrypi/README.txt
 
-
-The following changes since commit 1cd3f992fb3659aacbb0cdd3ed64347a37569891:
-
-  Support .dotfiles in / being copied to the TARGET (2013-03-25 23:38:26 +0100)
-
-are available in the git repository at:
-  git://gitorious.org/buildroot/buildroot.git yem-patchwork
-
-Jerzy Grzegorek (1):
-      apply-patches.sh: applying xz-ed patches
-
-Maxime Hadjinlian (1):
-      configs: add RaspberryPi defconfig
-
-Olivier Schonken (3):
-      Added package enscript
-      Added package foomatic-filters
-      Added package Gutenprint
-
-Samuel Martin (7):
-      manual: add manual generation date/git revision in the manual text
-      support: add kconfiglib python module
-      support/scripts: add gen-manual-lists.py
-      manual: cleanup appendix.txt
-      manual: add a make target 'manual-update-lists'
-      update gitignore
-      manual: do not track generated files
-
-Simon Dawson (3):
-      czmq: new package
-      cppzmq: new package
-      zmqpp: new package
-
- .gitignore                                         |    1 +
- board/raspberrypi/README.txt                       |  127 +
- configs/rpi_defconfig                              |   23 +
- docs/manual/appendix.txt                           |   31 +-
- docs/manual/deprecated-list.txt                    |   46 -
- docs/manual/manual.mk                              |   19 +-
- docs/manual/manual.txt                             |    3 +
- docs/manual/pkg-list.txt                           |  870 -----
- package/Config.in                                  |    6 +
- package/cppzmq/Config.in                           |   15 +
- package/cppzmq/cppzmq.mk                           |   23 +
- package/czmq/Config.in                             |   14 +
- package/czmq/czmq.mk                               |   23 +
- package/enscript/Config.in                         |   11 +
- package/enscript/enscript.mk                       |   19 +
- package/foomatic-filters/Config.in                 |   18 +
- package/foomatic-filters/foomatic-filters.mk       |   20 +
- package/gutenprint/Config.in                       |   14 +
- .../gutenprint-000-use-pregen-xmli18n-header.patch |   48 +
- package/gutenprint/gutenprint.mk                   |   73 +
- package/zmqpp/Config.in                            |   32 +
- package/zmqpp/zmqpp-fix-typos-in-code.patch        |   46 +
- package/zmqpp/zmqpp.mk                             |   54 +
- support/scripts/apply-patches.sh                   |    6 +-
- support/scripts/gen-manual-lists.py                |  379 ++
- support/scripts/kconfiglib.py                      | 3772 ++++++++++++++++++++
- support/scripts/readme.kconfiglib                  |   30 +
- 27 files changed, 4791 insertions(+), 932 deletions(-)
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+[yann.morin.1998 at free.fr: use correct kernel headers, update kernel cset]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ board/raspberrypi/README.txt |  127 ++++++++++++++++++++++++++++++++++++++++++
+ configs/rpi_defconfig        |   23 ++++++++
+ 2 files changed, 150 insertions(+), 0 deletions(-)
  create mode 100644 board/raspberrypi/README.txt
  create mode 100644 configs/rpi_defconfig
- delete mode 100644 docs/manual/deprecated-list.txt
- delete mode 100644 docs/manual/pkg-list.txt
- create mode 100644 package/cppzmq/Config.in
- create mode 100644 package/cppzmq/cppzmq.mk
- create mode 100644 package/czmq/Config.in
- create mode 100644 package/czmq/czmq.mk
- create mode 100644 package/enscript/Config.in
- create mode 100644 package/enscript/enscript.mk
- create mode 100644 package/foomatic-filters/Config.in
- create mode 100644 package/foomatic-filters/foomatic-filters.mk
- create mode 100644 package/gutenprint/Config.in
- create mode 100644 package/gutenprint/gutenprint-000-use-pregen-xmli18n-header.patch
- create mode 100644 package/gutenprint/gutenprint.mk
- create mode 100644 package/zmqpp/Config.in
- create mode 100644 package/zmqpp/zmqpp-fix-typos-in-code.patch
- create mode 100644 package/zmqpp/zmqpp.mk
- create mode 100755 support/scripts/gen-manual-lists.py
- create mode 100644 support/scripts/kconfiglib.py
- create mode 100644 support/scripts/readme.kconfiglib
 
-Regards,
-Yann E. MORIN
-
+diff --git a/board/raspberrypi/README.txt b/board/raspberrypi/README.txt
+new file mode 100644
+index 0000000..9825d92
+--- /dev/null
++++ b/board/raspberrypi/README.txt
+@@ -0,0 +1,127 @@
++##RaspberryPi
++
++Intro
++=====
++
++To be able to use your RaspberryPi board with the images generated by
++Buildroot, you have a prior choice to make, will you use:
++    - Volatile rootfs in RAM (The rootfs is an initramfs)
++    - Persistent rootfs on the SDCard
++
++Also, a good source of information is http://elinux.org/R-Pi_Hub
++
++Volatile rootfs
++===============
++
++How to build it
++---------------
++
++You need to use the rpi_defconfig, to do so:
++ * make rpi_defconfig
++
++Then, you need to select the kind of images you want:
++ * make menuconfig
++ * Select "Filesystem images"
++ * Select "initial RAM filesystem linked into linux kernel"
++
++What is generated
++-----------------
++
++After building, you should obtain this tree:
++
++    output/images/
++    +-- rootfs.tar
++    +-- rpi-firmware
++    |?? +-- bootcode.bin
++    |?? +-- config.txt
++    |?? +-- fixup_cd.dat
++    |?? +-- fixup.dat
++    |?? +-- start_cd.elf
++    |?? `-- start.elf
++    `-- zImage
++
++Note : rootfs.tar will only be there if you kept "tar the root filesystem"
++option selected in "Filesystem images".
++
++Where should the binaries be copied on the SDCard
++-------------------------------------------------
++
++Your SDCard must have its first partition using fat32 and with bootable flags.
++
++At the root of the partition, the RaspberryPi must find the following files:
++
++ * bootcode.bin
++ * config.txt
++ * fixup_cd.dat
++ * fixup.dat
++ * start_cd.elf
++ * start.elf
++ * zImage
++
++So you should, copy the entire content of output/images/rpi-firmware along with
++zImage.
++
++Note : You can create any number of partitions you desire, the only requirement
++is that the first partition must be using fat32.
++
++Persistent rootfs
++==================
++
++How to build it
++---------------
++
++You only need to use the rpi_defconfig, to do so:
++ * make rpi_defconfig
++
++What is generated
++-----------------
++
++After building, you should obtain this tree:
++
++    output/images/
++    +-- rootfs.tar
++    +-- rpi-firmware
++    |?? +-- bootcode.bin
++    |?? +-- config.txt
++    |?? +-- fixup_cd.dat
++    |?? +-- fixup.dat
++    |?? +-- start_cd.elf
++    |?? `-- start.elf
++    `-- zImage
++
++Where should the binaries be copied on the SDCard
++-------------------------------------------------
++
++Your SDCard must have its first partition using fat32 and with bootable flags.
++It should also have another partition which will contain your rootfs, it should
++be partitioned as ext4.
++
++Boot partition
++~~~~~~~~~~~~
++
++The first partition will contain everything used to boot the RaspberryPi.
++You must copy theses files at the root of partition:
++
++ * bootcode.bin
++ * config.txt
++ * fixup_cd.dat
++ * fixup.dat
++ * start_cd.elf
++ * start.elf
++ * zImage
++
++So you should, copy the entire content of output/images/rpi-firmware along with
++zImage.
++
++Rootfs partition
++~~~~~~~~~~~~~~
++
++The second partition, will contain your rootfs.
++Simply extract (as root!) the contents of the rootfs.tar archive
++into this partition.
++
++For example: (Assuming mountpoint is a directory and exist)
++
++ $ sudo mount /dev/sdXY /mnt/mountpoint
++ $ sudo tar xf rootfs.tar -C /mnt/mountpoint
++
+diff --git a/configs/rpi_defconfig b/configs/rpi_defconfig
+new file mode 100644
+index 0000000..96f63ba
+--- /dev/null
++++ b/configs/rpi_defconfig
+@@ -0,0 +1,23 @@
++BR2_arm=y
++BR2_arm1176jzf_s=y
++
++BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++
++BR2_TARGET_GENERIC_GETTY_PORT="tty1"
++
++BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_USERLAND=y
++BR2_PACKAGE_LIBCOFI=y
++
++# Lock to 3.6 headers as the RPi kernel is based off the 3.6 branch
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.6.11"
++
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/raspberrypi/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="e959a8e"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
++BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.2.5
