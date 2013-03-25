@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Mar 2013 00:28:01 +0100
-Subject: [Buildroot] [PATCH 06/15] czmq: new package
+Date: Tue, 26 Mar 2013 00:28:03 +0100
+Subject: [Buildroot] [PATCH 08/15] zmqpp: new package
 In-Reply-To: <cover.1364253936.git.yann.morin.1998@free.fr>
 References: <cover.1364253936.git.yann.morin.1998@free.fr>
-Message-ID: <0d8cd9499a99514dc2105bbf0d8abf6f7f82edfd.1364253936.git.yann.morin.1998@free.fr>
+Message-ID: <26ed8c4c6914e5a014235a2ffcd0fbf32eaee80d.1364253936.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,77 +12,182 @@ To: buildroot@busybox.net
 
 From: Simon Dawson <spdawson@gmail.com>
 
+Now that zeromq has been bumped to version 3.2.2, we need to provide the
+C++ binding using a separate package. The zmqpp package provides a high-level
+C++ wrapper library around the zeromq C API.
+
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
-[yann.morin.1998 at free.fr: create dir as post-patch, not pre-configure]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in      |    1 +
- package/czmq/Config.in |   14 ++++++++++++++
- package/czmq/czmq.mk   |   23 +++++++++++++++++++++++
- 3 files changed, 38 insertions(+), 0 deletions(-)
- create mode 100644 package/czmq/Config.in
- create mode 100644 package/czmq/czmq.mk
+ package/Config.in                           |    1 +
+ package/zmqpp/Config.in                     |   32 ++++++++++++++++
+ package/zmqpp/zmqpp-fix-typos-in-code.patch |   46 +++++++++++++++++++++++
+ package/zmqpp/zmqpp.mk                      |   54 +++++++++++++++++++++++++++
+ 4 files changed, 133 insertions(+), 0 deletions(-)
+ create mode 100644 package/zmqpp/Config.in
+ create mode 100644 package/zmqpp/zmqpp-fix-typos-in-code.patch
+ create mode 100644 package/zmqpp/zmqpp.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 5d8f4f6..d3901b4 100644
+index 23c9bb3..77dc0d3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -496,6 +496,7 @@ source "package/mediastreamer/Config.in"
+@@ -538,6 +538,7 @@ source "package/ortp/Config.in"
+ source "package/slirp/Config.in"
+ source "package/usbredir/Config.in"
+ source "package/zeromq/Config.in"
++source "package/zmqpp/Config.in"
  endmenu
  
- menu "Networking"
-+source "package/czmq/Config.in"
- source "package/glib-networking/Config.in"
- source "package/libcgi/Config.in"
- source "package/libcgicc/Config.in"
-diff --git a/package/czmq/Config.in b/package/czmq/Config.in
+ menu "Other"
+diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
 new file mode 100644
-index 0000000..9fd8e86
+index 0000000..7a12462
 --- /dev/null
-+++ b/package/czmq/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_CZMQ
-+	bool "czmq"
-+	select BR2_PACKAGE_ZEROMQ
-+	depends on BR2_INSTALL_LIBSTDCPP # zeromq
++++ b/package/zmqpp/Config.in
+@@ -0,0 +1,32 @@
++config BR2_PACKAGE_ZMQPP
++	bool "zmqpp"
++	depends on !BR2_avr32 # compiler needs c++0x support
++	depends on BR2_INSTALL_LIBSTDCPP
 +	depends on BR2_INET_IPV6 # zeromq
 +	depends on BR2_LARGEFILE # util-linux
 +	depends on BR2_USE_WCHAR # util-linux
++	select BR2_PACKAGE_ZEROMQ
 +	help
-+	  High-level C Binding for 0MQ
++	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
 +
-+	  http://czmq.zeromq.org/
++	  This C++ binding is a 'high-level' library that hides most of the
++	  C-style interface core zeromq provides.
 +
-+comment "czmq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE && BR2_USE_WCHAR)
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
++	  http://github.com/benjamg/zmqpp
++
++comment "zmqpp requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
++		&& BR2_USE_WCHAR)
++
++config BR2_PACKAGE_ZMQPP_CLIENT
++	bool "zmqpp client"
++	depends on BR2_PACKAGE_ZMQPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
++	help
++	  Build and install the zmqpp client, a command line tool that can be
++	  used to listen or send to zeromq sockets.
++
++comment "zmqpp client requires a toolchain with thread support"
++	depends on BR2_PACKAGE_ZMQPP && !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/zmqpp/zmqpp-fix-typos-in-code.patch b/package/zmqpp/zmqpp-fix-typos-in-code.patch
 new file mode 100644
-index 0000000..2b34654
+index 0000000..a873de9
 --- /dev/null
-+++ b/package/czmq/czmq.mk
-@@ -0,0 +1,23 @@
++++ b/package/zmqpp/zmqpp-fix-typos-in-code.patch
+@@ -0,0 +1,46 @@
++Fix a couple of typos in the zmqpp source code.
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++
++diff -Nurp a/src/zmqpp/socket.cpp b/src/zmqpp/socket.cpp
++--- a/src/zmqpp/socket.cpp	2012-12-11 11:06:23.000000000 +0000
+++++ b/src/zmqpp/socket.cpp	2013-03-18 17:32:01.464761776 +0000
++@@ -587,7 +587,7 @@ void socket::get(socket_option const& op
++ 	}
++ }
++ 
++-socket::socket(socket&& source) noexcept
+++socket::socket(socket& source) noexcept
++ 	: _socket(source._socket)
++ 	, _type(source._type)
++ 	, _recv_buffer()
++@@ -601,7 +601,7 @@ socket::socket(socket&& source) noexcept
++ 	source._socket = nullptr;
++ }
++ 
++-socket& socket::operator=(socket&& source) noexcept
+++socket& socket::operator=(socket& source) noexcept
++ {
++ 	_socket = source._socket;
++ 	source._socket = nullptr;
++diff -Nurp a/src/zmqpp/socket.hpp b/src/zmqpp/socket.hpp
++--- a/src/zmqpp/socket.hpp	2012-12-11 11:06:23.000000000 +0000
+++++ b/src/zmqpp/socket.hpp	2013-03-18 17:31:53.556790457 +0000
++@@ -400,7 +400,7 @@ public:
++ 	 *
++ 	 * \param source target socket to steal internals from
++ 	 */
++-	socket(socket&& source) noexcept;
+++	socket(socket& source) noexcept;
++ 
++ 	/*!
++ 	 * Move operator
++@@ -413,7 +413,7 @@ public:
++ 	 * \param source target socket to steal internals from
++ 	 * \return socket reference to this
++ 	 */
++-	socket& operator=(socket&& source) noexcept;
+++	socket& operator=(socket& source) noexcept;
++ 
++ 	/*!
++ 	 * Check the socket is still valid
+diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
+new file mode 100644
+index 0000000..c64b256
+--- /dev/null
++++ b/package/zmqpp/zmqpp.mk
+@@ -0,0 +1,54 @@
 +#############################################################
 +#
-+# czmq
++# zmqpp
 +#
 +#############################################################
 +
-+CZMQ_VERSION = cb9839cf90
-+CZMQ_SITE = git://github.com/zeromq/czmq.git
++ZMQPP_VERSION = 31220ca
++ZMQPP_SITE = git://github.com/benjamg/zmqpp.git
++ZMQPP_INSTALL_STAGING = YES
++ZMQPP_DEPENDENCIES = zeromq
++ZMQPP_LICENSE = MIT
++ZMQPP_LICENSE_FILES = LICENSE
 +
-+# Autoreconf required as we use the git tree
-+CZMQ_AUTORECONF = YES
-+CZMQ_INSTALL_STAGING = YES
-+CZMQ_DEPENDENCIES = zeromq
-+CZMQ_LICENSE = LGPLv3+ with exceptions
-+CZMQ_LICENSE_FILES = COPYING COPYING.LESSER
++ZMQPP_MAKE_OPT = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
 +
-+define CZMQ_CREATE_CONFIG_DIR
-+	mkdir -p $(@D)/config
++ifeq ($(BR2_PACKAGE_ZMQPP_CLIENT),y)
++ZMQPP_DEPENDENCIES += boost
++endif
++
++define ZMQPP_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		$(ZMQPP_MAKE_OPT) $(if $(BR2_PACKAGE_ZMQPP_CLIENT),all) -C $(@D)
 +endef
 +
-+CZMQ_POST_PATCH_HOOKS += CZMQ_CREATE_CONFIG_DIR
++define ZMQPP_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/include/zmqpp
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		$(ZMQPP_MAKE_OPT) DESTDIR=$(TARGET_DIR) install -C $(@D)
++endef
 +
-+$(eval $(autotools-package))
++define ZMQPP_UNINSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		$(ZMQPP_MAKE_OPT) DESTDIR=$(TARGET_DIR) uninstall -C $(@D)
++	$(RM) $(TARGET_DIR)/usr/include/zmqpp
++endef
++
++define ZMQPP_INSTALL_STAGING_CMDS
++	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/zmqpp
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		$(ZMQPP_MAKE_OPT) DESTDIR=$(STAGING_DIR) install -C $(@D)
++endef
++
++define ZMQPP_UNINSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		$(ZMQPP_MAKE_OPT) DESTDIR=$(STAGING_DIR) uninstall -C $(@D)
++	$(RM) $(STAGING_DIR)/usr/include/zmqpp
++endef
++
++define ZMQPP_CLEAN_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) $(ZMQPP_MAKE_OPT) \
++		clean -C $(@D)
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.2.5
