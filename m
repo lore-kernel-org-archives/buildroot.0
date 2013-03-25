@@ -1,39 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 25 Mar 2013 23:44:30 +0100
-Subject: [Buildroot] [PATCH 2/4] Support .dotfiles in / being copied to
-	the TARGET
-In-Reply-To: <1364222893-23858-2-git-send-email-arved@arved.at>
- (arved@arved.at's message of "Mon, 25 Mar 2013 15:48:11 +0100")
-References: <1364222893-23858-1-git-send-email-arved@arved.at>
- <1364222893-23858-2-git-send-email-arved@arved.at>
-Message-ID: <87ppyn9k1d.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 25 Mar 2013 23:36:31 +0100
+Subject: [Buildroot] [git commit] vala: deprecate target package
+Message-ID: <20130325225558.1186D9B2E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "arved" == arved  <arved@arved.at> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d26c729845a9e04e871f88878fa3916c7ab272b0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- arved> From: Tilman Keskin?z <arved@arved.at>
- arved> An example is .init_enable_core, to enable coredumps in busybox
- arved> Signed-off-by: Tilman Keskin?z <arved@arved.at>
- arved> ---
- arved>  Makefile |    2 +-
- arved>  1 file changed, 1 insertion(+), 1 deletion(-)
+Vala generates C code from Vala code, and therefore requires a
+compiler. Since we are deprecating the native compiler support on the
+target, having vala on the target doesn't make sense.
 
- arved> diff --git a/Makefile b/Makefile
- arved> index f1c98aa..62311ed 100644
- arved> --- a/Makefile
- arved> +++ b/Makefile
- arved> @@ -431,7 +431,7 @@ $(BUILD_DIR)/.root:
- arved>  	mkdir -p $(TARGET_DIR)
- arved>  	if ! [ -d "$(TARGET_DIR)/bin" ]; then \
- arved>  		if [ -d "$(TARGET_SKELETON)" ]; then \
- arved> -			cp -fa $(TARGET_SKELETON)/* $(TARGET_DIR)/; \
- arved> +			rsync -au $(TARGET_SKELETON)/ $(TARGET_DIR)/; \
+Of course, we keep vala for the host, where compilation happens.
 
-Committed, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/vala/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/vala/Config.in b/package/vala/Config.in
+index e0d665c..805c770 100644
+--- a/package/vala/Config.in
++++ b/package/vala/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_VALA
+ 	bool "vala"
++	# We no longer support a toolchain on the target
++	depends on BR2_DEPRECATED
+ 	depends on BR2_USE_WCHAR # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
