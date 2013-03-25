@@ -1,67 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Mar 2013 11:02:42 +0100
-Subject: [Buildroot] Quick summary of the Patchwork Day #1
-Message-ID: <20130325110242.0b741196@skate>
+From: =?UTF-8?B?VGlsbWFuIEtlc2tpbsO2eg==?= <arved@arved.at>
+Date: Mon, 25 Mar 2013 12:09:00 +0100
+Subject: [Buildroot] [Bug 6128] [patch] Fix S01logging pidfile handling
+In-Reply-To: <20130320142936.6D2CF9B1DD@busybox.osuosl.org>
+References: <bug-6128-163@https.bugs.busybox.net/>
+ <20130320142936.6D2CF9B1DD@busybox.osuosl.org>
+Message-ID: <5150304C.1080708@arved.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+* bugzilla [Wed, 20 Mar 2013 14:29:36 +0000 (UTC)]:
+> https://bugs.busybox.net/show_bug.cgi?id=6128
+> 
+> --- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-03-20 14:30:20 UTC ---
+> Thanks. Can you send this as two proper separate patches on the Buildroot
+> mailing list?
+> 
 
-Yesterday took place the first Patchwork Day, as we announced
-previously on this list. Samuel, Yann, Peter, Gustavo and myself were
-present more or less throughout the day, with Thomas De Schampheleire
-making an apparition at some point in the day. Thanks to the
-participants!
 
-At the beginning of the day, we had a bit more than 500 patches pending
-in patchwork, and we're now at 305 patches. But on those 305 patches,
-some of them are new patches that have been reworked from previous
-versions, so hopefully they should be more easily applied by Peter.
 
-http://lite.framapad.org/p/Buildroot_Patchwork_Day_March_2013 is a
-rough summary of the topics worked on. In short:
 
- * The oprofile 0.9.8 PowerPC build fix from Thomas De S. was committed.
+-------------- next part --------------
+--- S01logging.orig	2013-03-20 14:42:18.313615967 +0100
++++ S01logging	2013-03-20 14:42:35.373615539 +0100
+@@ -6,13 +6,13 @@
+ case "$1" in
+   start)
+ 	echo -n "Starting logging: "
+-	start-stop-daemon -S -q -p /var/run/syslog.pid --exec /sbin/syslogd -- -m 0
++	start-stop-daemon -S -q -p /var/run/syslogd.pid --exec /sbin/syslogd -- -m 0
+ 	start-stop-daemon -S -q -p /var/run/klogd.pid --exec /sbin/klogd
+ 	echo "OK"
+ 	;;
+   stop)
+ 	echo -n "Stopping logging: "
+-	start-stop-daemon -K -q -p /var/run/syslog.pid
++	start-stop-daemon -K -q -p /var/run/syslogd.pid
+ 	start-stop-daemon -K -q -p /var/run/klogd.pid
+ 	echo "OK"
+ 	;;
 
- * There has been discussions and iterations on Samuel's patches about
-   the manual and its list of packages. At the end of the day, Yann has
-   pulled Samuel's patches, and sent a pull request for them to Peter.
+-------------- next part --------------
+--- busybox-1.20.x.config.orig	2013-03-20 14:42:31.297615642 +0100
++++ busybox-1.20.x.config	2013-03-20 14:42:51.045615146 +0100
+@@ -41,7 +41,7 @@
+ CONFIG_FEATURE_CLEAN_UP=y
+ CONFIG_FEATURE_UTMP=y
+ CONFIG_FEATURE_WTMP=y
+-# CONFIG_FEATURE_PIDFILE is not set
++CONFIG_FEATURE_PIDFILE=y
+ CONFIG_FEATURE_SUID=y
+ # CONFIG_FEATURE_SUID_CONFIG is not set
+ # CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
 
- * The big X.org bump was tested by me, and later pulled by Peter. On
-   its own, it accounts for more than 100 patches removed from the
-   patchwork.
-
- * The gcc 4.8 support has been merged.
-
- * The set of mandatory dependencies to run Buildroot has been changed.
-   We no longer require bison, flex or gettext to be installed. A
-   number of follow-up patches have been submitted to fix issues caused
-   by this change: the Free Electrons autobuilders no longer have
-   those packages installed, so errors started to show up pretty
-   quickly.
-
- * A big number of other patches/packages were worked on or cleaned up:
-   zeromq bindings, gutenprint, enscript, log4cxx,
-   xcursor-transparent-theme, libpthsem, bcusdk, linknx, dtach, etc.
-
- * A number of patches were reviewed and Acked, or discussed on the IRC
-   channel and rejected or marked as Superseded when a fix has already
-   been committed for the same problem.
-
-All in all, I think it was a very useful day, and the fact that we
-could very quickly discuss patches on the IRC channel and take a
-decision about them certainly helped.
-
-Would there be some interest to renew the experience some other day?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130325/3d5bb88f/attachment-0001.asc>
