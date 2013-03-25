@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Mar 2013 00:27:58 +0100
-Subject: [Buildroot] [PATCH 03/15] Added package foomatic-filters
+Date: Tue, 26 Mar 2013 00:27:57 +0100
+Subject: [Buildroot] [PATCH 02/15] Added package enscript
 In-Reply-To: <cover.1364253936.git.yann.morin.1998@free.fr>
 References: <cover.1364253936.git.yann.morin.1998@free.fr>
-Message-ID: <3359770667ec6a95c04f69dd8b5222acd63a8495.1364253936.git.yann.morin.1998@free.fr>
+Message-ID: <36d1f763f161ef74ae1e2a936d824658b2df6e10.1364253936.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,87 +12,74 @@ To: buildroot@busybox.net
 
 From: Olivier Schonken <olivier.schonken@gmail.com>
 
-Foomatic is a database-driven system for integrating free software
-printer drivers with common spoolers under Unix. It supports CUPS,
-LPRng, LPD, GNUlpr, Solaris LP, PPR, PDQ, CPS, and direct printing
-with every free software printer driver known to us and every
-printer known to work with these drivers.
+GNU Enscript is a free replacement for Adobe's enscript program.
+GNU Enscript converts ASCII files to PostScript, HTML, or RTF and
+stores generated output to a file or sends it directly to the
+printer. It includes features for `pretty-printing' (language-
+sensitive code highlighting) in several programming languages.
 
 Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-[yann.morin.1998 at free.fr: space-damage, licensing terms, unneeded vars]
+[yann.morin.1998 at free.fr: space-damage, unneeded variables, licensing terms]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
 ---
-Changes v1 -> v2:
-  - propagate libusb dependency  (Thomas)
----
- package/Config.in                            |    1 +
- package/foomatic-filters/Config.in           |   18 ++++++++++++++++++
- package/foomatic-filters/foomatic-filters.mk |   20 ++++++++++++++++++++
- 3 files changed, 39 insertions(+), 0 deletions(-)
- create mode 100644 package/foomatic-filters/Config.in
- create mode 100644 package/foomatic-filters/foomatic-filters.mk
+ package/Config.in            |    1 +
+ package/enscript/Config.in   |   11 +++++++++++
+ package/enscript/enscript.mk |   19 +++++++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
+ create mode 100644 package/enscript/Config.in
+ create mode 100644 package/enscript/enscript.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 82e6c5c..74537e4 100644
+index be1aa99..82e6c5c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -645,6 +645,7 @@ source "package/connman/Config.in"
- source "package/ctorrent/Config.in"
- source "package/conntrack-tools/Config.in"
- source "package/cups/Config.in"
-+source "package/foomatic-filters/Config.in"
- source "package/hplip/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/dhcp/Config.in"
-diff --git a/package/foomatic-filters/Config.in b/package/foomatic-filters/Config.in
+@@ -290,6 +290,7 @@ endmenu
+ 
+ menu "Interpreter languages and scripting"
+ source "package/erlang/Config.in"
++source "package/enscript/Config.in"
+ source "package/haserl/Config.in"
+ source "package/jamvm/Config.in"
+ source "package/lua/Config.in"
+diff --git a/package/enscript/Config.in b/package/enscript/Config.in
 new file mode 100644
-index 0000000..aa056b9
+index 0000000..f101397
 --- /dev/null
-+++ b/package/foomatic-filters/Config.in
-@@ -0,0 +1,18 @@
-+comment "foomatic-filters requires a toolchain with support for THREADS"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_FOOMATIC_FILTERS
-+	bool "foomatic_filters"
-+	depends on BR2_PACKAGE_CUPS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_ENSCRIPT
++++ b/package/enscript/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_ENSCRIPT
++	bool "enscript"
 +	help
-+	  Foomatic Filters
-+	  Foomatic is a database-driven system for integrating free software
-+	  printer drivers with common spoolers under Unix. It supports CUPS,
-+	  LPRng, LPD, GNUlpr, Solaris LP, PPR, PDQ, CPS, and direct printing
-+	  with every free software printer driver known to us and every
-+	  printer known to work with these drivers.
++	  GNU Enscript is a free replacement for Adobe's enscript program.
 +
-+	  http://www.linuxfoundation.org/collaborate/workgroups/openprinting/database/foomatic
-diff --git a/package/foomatic-filters/foomatic-filters.mk b/package/foomatic-filters/foomatic-filters.mk
++	  GNU Enscript converts ASCII files to PostScript, HTML, or RTF and
++	  stores generated output to a file or sends it directly to the
++	  printer. It includes features for `pretty-printing' (language-
++	  sensitive code highlighting) in several programming languages.
++
++	   http://www.gnu.org/software/enscript
+diff --git a/package/enscript/enscript.mk b/package/enscript/enscript.mk
 new file mode 100644
-index 0000000..b62951b
+index 0000000..93e4d6d
 --- /dev/null
-+++ b/package/foomatic-filters/foomatic-filters.mk
-@@ -0,0 +1,20 @@
++++ b/package/enscript/enscript.mk
+@@ -0,0 +1,19 @@
 +#############################################################
 +#
-+# foomatic_filters
++# enscript
 +#
 +#############################################################
-+FOOMATIC_FILTERS_VERSION = 4.0.17
-+FOOMATIC_FILTERS_SITE = http://www.openprinting.org/download/foomatic
-+FOOMATIC_FILTERS_LICENSE = GPLv2+
-+FOOMATIC_FILTERS_LICENSE_FILES = COPYING
-+FOOMATIC_FILTERS_DEPENDENCIES = cups libusb enscript
 +
-+FOOMATIC_FILTERS_CONF_OPT = --with-file-converter=enscript
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+FOOMATIC_FILTERS_CONF_OPT += --enable-dbus
-+FOOMATIC_FILTERS_DEPENDENCIES += dbus
++ENSCRIPT_VERSION = 1.6.6
++ENSCRIPT_SITE = $(BR2_GNU_MIRROR)/enscript/
++ENSCRIPT_LICENSE = GPLv3+
++ENSCRIPT_LICENSE_FILES = COPYING
++
++# Enable pthread threads if toolchain supports threads
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++	ENSCRIPT_CONF_OPT += --enable-threads=pth
 +else
-+FOOMATIC_FILTERS_CONF_OPT += --disable-dbus
++	ENSCRIPT_CONF_OPT += --disable-threads
 +endif
 +
 +$(eval $(autotools-package))
