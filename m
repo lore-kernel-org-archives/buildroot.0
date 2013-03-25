@@ -1,55 +1,55 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 25 Mar 2013 08:57:15 +0100
-Subject: [Buildroot] [git commit] openswan: add missing TARGET_MAKE_ENV
-Message-ID: <20130325075723.B4AA29B2A4@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 25 Mar 2013 08:11:24 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package: Makefile.in: Add target
+ compilation flags for NOMMU architecture.
+In-Reply-To: <20130322152920.59b74891@skate>
+References: <1363942902-6045-1-git-send-email-sonic.adi@gmail.com>
+ <20130322152920.59b74891@skate>
+Message-ID: <514FF89C.3060408@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cdae2b24f01281c830ac74bc3818fa1773a59ea8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 22/03/13 15:29, Thomas Petazzoni wrote:
+> Dear Sonic Zhang,
+>
+> On Fri, 22 Mar 2013 17:01:41 +0800, Sonic Zhang wrote:
+[snip]
+>> +ifneq ($(BR2_USE_MMU), y)
+>> +TARGET_CFLAGS += -D__NOMMU__
+>> +endif
+>
+> I'm still not entirely happy with that. This define is completely
+> non-standard, I am not sure we want to have this at the global level.
+> autotools-based packages should be fixed to check if fork() is
+> available or not. For other packages, this special flag can be
+> introduced on a per-package basis. But it's true that maybe a good
+> number of packages will need that. Not sure here. What do others think?
 
-openswan needs host-bison. The dependency was already there, but the
-build was not executed with $(TARGET_MAKE_ENV) in the environment, and
-therefore $(HOST_DIR)/usr/bin was not in the PATH.
+  Since this is a non-standard flag, it would go together with some patch 
+that adds the possibility of NOMMU builds. I would say that it's a good 
+idea to have an explicit extra -DNOMMU in those .mk files.
 
-While we're at it, add licensing informations to openswan.
+  As to the large number of packages using it: it should anyway only be 
+used for make-based packages (autotools and cmake should have different 
+ways to detect NOMMU). So the number of packages using it wouldn't be 
+that large.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/openswan/openswan.mk |    9 +++++++--
- 1 files changed, 7 insertions(+), 2 deletions(-)
+  And finally, that do this that we have already (irda-utils and portmap) 
+call it NO_FORK.
 
-diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
-index 781dc00..153d659 100644
---- a/package/openswan/openswan.mk
-+++ b/package/openswan/openswan.mk
-@@ -6,6 +6,9 @@
- 
- OPENSWAN_VERSION = 2.6.38
- OPENSWAN_SITE = http://download.openswan.org/openswan
-+OPENSWAN_LICENSE = GPLv2+, BSD-3c
-+OPENSWAN_LICENSE_FILES = COPYING LICENSE
-+
- OPENSWAN_DEPENDENCIES = host-bison gmp iproute2
- OPENSWAN_MAKE_OPT = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
- 	USERCOMPILE="$(TARGET_CFLAGS)" INC_USRLOCAL=/usr \
-@@ -25,11 +28,13 @@ endif
- endif
- 
- define OPENSWAN_BUILD_CMDS
--	$(MAKE) -C $(@D) $(OPENSWAN_MAKE_OPT) programs
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(OPENSWAN_MAKE_OPT) programs
- endef
- 
- define OPENSWAN_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) $(OPENSWAN_MAKE_OPT) DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(OPENSWAN_MAKE_OPT) DESTDIR=$(TARGET_DIR) install
- endef
- 
- $(eval $(generic-package))
+  Regards,
+  Arnout
+
+[snip]
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
