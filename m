@@ -1,48 +1,103 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Mar 2013 20:19:57 +0100
-Subject: [Buildroot] [PATCH] xapp_xinput: add missing dependencies
-Message-ID: <1364239197-29192-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Mon, 25 Mar 2013 12:26:05 -0700
+Subject: [Buildroot] [PATCH v2] IOzone: new package
+In-Reply-To: <y>
+References: <y>
+Message-ID: <1364239565-22135-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following the big X.org bump, a few dependencies were missing in the
-xapp_xinput package.
-
-Fixes:
-http://autobuild.buildroot.org/results/7e4ebd4dd47f49bcd4d225b17fbbc8b211e5201a/build-end.log.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/x11r7/xapp_xinput/Config.in      |    2 ++
- package/x11r7/xapp_xinput/xapp_xinput.mk |    2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+Changes since V1:
+* Removed erroneous use of IA64 build target
+* Used generic build target for uClibc-based toolchains
+* Factorized linux-arm and linux build targets
 
-diff --git a/package/x11r7/xapp_xinput/Config.in b/package/x11r7/xapp_xinput/Config.in
-index 2505dd3..e438a45 100644
---- a/package/x11r7/xapp_xinput/Config.in
-+++ b/package/x11r7/xapp_xinput/Config.in
-@@ -2,5 +2,7 @@ config BR2_PACKAGE_XAPP_XINPUT
- 	bool "xinput"
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXI
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXINERAMA
- 	help
- 	  xinput
-diff --git a/package/x11r7/xapp_xinput/xapp_xinput.mk b/package/x11r7/xapp_xinput/xapp_xinput.mk
-index 0eaa50c..fea939e 100644
---- a/package/x11r7/xapp_xinput/xapp_xinput.mk
-+++ b/package/x11r7/xapp_xinput/xapp_xinput.mk
-@@ -7,6 +7,6 @@
- XAPP_XINPUT_VERSION = 1.6.0
- XAPP_XINPUT_SOURCE = xinput-$(XAPP_XINPUT_VERSION).tar.bz2
- XAPP_XINPUT_SITE = http://xorg.freedesktop.org/releases/individual/app
--XAPP_XINPUT_DEPENDENCIES = xlib_libX11 xlib_libXi
-+XAPP_XINPUT_DEPENDENCIES = xlib_libX11 xlib_libXi xlib_libXrandr xlib_libXinerama
- 
- $(eval $(autotools-package))
+ package/Config.in        |    1 +
+ package/iozone/Config.in |   13 +++++++++++++
+ package/iozone/iozone.mk |   38 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 52 insertions(+), 0 deletions(-)
+ create mode 100644 package/iozone/Config.in
+ create mode 100644 package/iozone/iozone.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index be1aa99..766b9ae 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -22,6 +22,7 @@ source "package/cache-calibrator/Config.in"
+ source "package/dhrystone/Config.in"
+ source "package/dstat/Config.in"
+ source "package/dmalloc/Config.in"
++source "package/iozone/Config.in"
+ source "package/kexec/Config.in"
+ source "package/latencytop/Config.in"
+ source "package/lmbench/Config.in"
+diff --git a/package/iozone/Config.in b/package/iozone/Config.in
+new file mode 100644
+index 0000000..b6dfb18
+--- /dev/null
++++ b/package/iozone/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_IOZONE
++	bool "IOzone"
++	depends on BR2_LARGEFILE
++	depends on BR2_USE_MMU # fork()
++	help
++	  IOzone is a filesystem benchmark tool.
++	  The benchmark generates and measures a variety of file operations
++
++	  http://www.iozone.org/
++
++comment "IOzone requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
++
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+new file mode 100644
+index 0000000..24ba515
+--- /dev/null
++++ b/package/iozone/iozone.mk
+@@ -0,0 +1,38 @@
++#############################################################
++#
++# IOZONE
++#
++#############################################################
++
++IOZONE_VERSION = 3_414
++IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
++IOZONE_SITE = http://www.iozone.org/src/current
++IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
++# IOzone license details can be found at:
++# http://www.iozone.org/docs/Iozone_License.txt
++
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
++# aio.h is not available on uClibc. Select "generic" target that does not use it.
++IOZONE_TARGET = generic
++else ifeq ($(BR2_powerpc),y)
++IOZONE_TARGET = linux-powerpc
++else ifeq ($(BR2_sparc),y)
++IOZONE_TARGET = linux-sparc
++else
++IOZONE_TARGET = linux
++endif
++
++define IOZONE_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(IOZONE_TARGET) -C $(@D)/src/current
++endef
++
++define IOZONE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/src/current/iozone \
++		$(TARGET_DIR)/usr/bin/iozone
++endef
++
++define IOZONE_CLEAN_CMDS
++       $(MAKE) -C $(@D)/src/current clean
++endef
++
++$(eval $(generic-package))
 -- 
-1.7.9.5
+1.7.4.1
