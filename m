@@ -1,43 +1,109 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 25 Mar 2013 07:38:18 +0100
-Subject: [Buildroot] Interest in upgrading syslinux to 5.x?
-In-Reply-To: <EBADBC9F10F448F49B067CB7A90C908C@beraninstruments.com.local>
-References: <CAKduhSuJ_-2B7i7YOKyuErfhve_CXi1UvmNX_U7iQUXYt3c7hw@mail.gmail.com><ECCCCA15FFC640AAA891EA6FC4BB8F28@beraninstruments.com.local>
- <CAKduhSt3Vkpc+bLP4UM8On472BZqZ7aRVRmFZsG0kOKEm4XtEg@mail.gmail.com>
- <2F83768108B8464BAD971EB5BCDBE1E5@beraninstruments.com.local>
- <EBADBC9F10F448F49B067CB7A90C908C@beraninstruments.com.local>
-Message-ID: <514FF0DA.4030105@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Mar 2013 08:58:31 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package: Makefile.in: Add target
+ compilation flags for NOMMU architecture.
+In-Reply-To: <CAJxxZ0PCJ6X==pGsDajmDoD8mkcimZD58rfwQZyxCFSNTx=Uqg@mail.gmail.com>
+References: <1363942902-6045-1-git-send-email-sonic.adi@gmail.com>
+ <20130322152920.59b74891@skate>
+ <CAJxxZ0PCJ6X==pGsDajmDoD8mkcimZD58rfwQZyxCFSNTx=Uqg@mail.gmail.com>
+Message-ID: <20130325085831.36ff0afe@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/03/13 13:29, Will Moore wrote:
-> It might help to see what Arnout is up to with his grub2 patch which is also
-> looking at providing a bootloader with host and target tools.  See
-> http://patchwork.ozlabs.org/patch/191813/
+Dear Sonic Zhang,
 
-  That patch has been sitting in the freezer :-)
+Thanks for following up on this discussion!
 
-  As you can see from the corresponding mail thread, there is no 
-convergence about what to call the two variants of a bootloader. It's a 
-bit like gcc: the normal variant builds an installer running on the host, 
-but it includes binary code for the target; the other variant is 
-completely running on the target.
+On Mon, 25 Mar 2013 15:50:49 +0800, Sonic Zhang wrote:
 
-  Note that for u-boot, the chosen solution is to create a completely 
-separate package uboot-tools for the target. But it's a bit a special 
-case, because mkimage is not an installer.
+> > For example, on ARM, you can have ELF or FLAT binaries, that follow
+> > either the OABI or EABI. True, OABI is deprecated, but it still clearly
+> > points the fact that FLAT is *not* an ABI, but a binary format.
+> >
+> > Therefore, I think we should introduce config options like:
+> >
+> > config BR2_BINFMT_ELF
+> >         bool
+> >
+> > config BR2_BINFMT_FDPIC
+> >         bool
+> >
+> > config BR2_BINFMT_FLAT
+> >         bool
+> >
+> > probably with a choice list or something.
+> >
+> 
+> OK.
 
+It would be good if this BR2_BINFMT_<foo> thing was introduced as a
+separate patch. It can be part of the same patch series, but it would
+be could to see it introduced separately from the Blackfin additions.
 
-  Regards,
-  Arnout
+> >> +ifneq ($(BR2_USE_MMU), y)
+> >> +TARGET_CFLAGS += -D__NOMMU__
+> >> +endif
+> >
+> > I'm still not entirely happy with that. This define is completely
+> > non-standard, I am not sure we want to have this at the global level.
+> > autotools-based packages should be fixed to check if fork() is
+> > available or not. For other packages, this special flag can be
+> > introduced on a per-package basis. But it's true that maybe a good
+> > number of packages will need that. Not sure here. What do others think?
+> >
+> 
+> Macro __NOMMU__ is not used only for fork/vfork. There are some
+> difference between MMU and NOMMU application. For example:
+> - exit(n) should be replaced by _exit(n) in child process.
+> - Large buffer or array shouldn't be defined on stack.
+> - calloc() should be replaced by malloc().
+> 
+> All these changes to MMU application should be protected by macro __NOMMU__
 
+The issue I have is that this __NOMMU__ define is, as far as I know,
+entirely non-standard. So whenever you will send a patch for a package
+that introduces some #ifdef __NOMMU__ ... #endif clause, we'll have no
+way of pushing it upstream.
+
+Have you managed to pushed upstream noMMU related changes that are
+guarded using __NOMMU__ ?
+
+> >>  # Configure step. Only define it if not already defined by the package
+> >> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> >> index 57b0fd0..5ce32f9 100644
+> >> --- a/package/pkg-generic.mk
+> >> +++ b/package/pkg-generic.mk
+> >> @@ -303,6 +303,11 @@ endif
+> >>
+> >>  $(2)_REDISTRIBUTE            ?= YES
+> >>
+> >> +ifeq ($(BR2_TARGET_ABI_FLAT),y)
+> >> + ifneq ($$($(2)_FLAT_STACKSIZE),)
+> >> +  $(2)_FLAT_LDFLAGS = -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)
+> >> + endif
+> >> +endif
+> >
+> > How is this one supposed to work? Who will use <pkg>_FLAT_LDFLAGS?
+> 
+> If the generic package wants to be built into FLAT binary, it should
+> append this package specific link flag <pkg>_FLAT_LDFLAGS to the build
+> command line in its makefile. This flag can't be added to
+> TARGET_LDFLAGS, because it is package specific.
+
+Hum, right, but then it means that we should modify *all* our packages
+so that they add $(<pkg>_FLAT_LDFLAGS) to their LDFLAGS ? Having to
+change the recipe of all packages doesn't seem easy to do. Maybe with
+enough $ signs we can delay the expansion of TARGET_LDFLAGS so that we
+can use a package specific variable in it. Makefile experts? Arnout? :-)
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
