@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Mar 2013 00:28:08 +0100
-Subject: [Buildroot] [PATCH 13/15] manual: add a make target
-	'manual-update-lists'
+Date: Tue, 26 Mar 2013 00:28:07 +0100
+Subject: [Buildroot] [PATCH 12/15] manual: cleanup appendix.txt
 In-Reply-To: <cover.1364253936.git.yann.morin.1998@free.fr>
 References: <cover.1364253936.git.yann.morin.1998@free.fr>
-Message-ID: <329066ec07dfd91785b949d8f96cca81c2743f0c.1364253936.git.yann.morin.1998@free.fr>
+Message-ID: <368b4a518e2bc606b6936cc3ff05002f4eadd9e2.1364253936.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,85 +12,73 @@ To: buildroot@busybox.net
 
 From: Samuel Martin <s.martin49@gmail.com>
 
-The generated lists are automatically updated when building the manual.
-
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[yann.morin.1998 at free.fr: indentation, remove temp dir, intro to host utils]
+[yann.morin.1998 at free.fr: one more stuff->feature fixup]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
 Changes since v5:
-* Generate lists in $(O)
-
-Changes since v4:
-* systematically update the generated lists when building the manual
-
-Changes since v2:
-* remove PYTHONPATH stuff since the kconfiglib module is next to
-  gen-manual-lists.py (Arnout)
+* s/stuff/features/ (Thomas P.)
 
 Changes since v1:
-* add manual-update-lists target to the .PHONY one (Arnout)
-* misc. fixes/updates
+* move the surrounding text of the list back in appendix.txt (Arnout)
 ---
- docs/manual/appendix.txt |    2 ++
- docs/manual/manual.mk    |   19 ++++++++++++++-----
- 2 files changed, 16 insertions(+), 5 deletions(-)
+ docs/manual/appendix.txt        |   29 ++++++++++++++++++++---------
+ docs/manual/deprecated-list.txt |    2 +-
+ 2 files changed, 21 insertions(+), 10 deletions(-)
 
 diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
-index ffde7e4..779fd2e 100644
+index ef34169..ffde7e4 100644
 --- a/docs/manual/appendix.txt
 +++ b/docs/manual/appendix.txt
-@@ -19,6 +19,8 @@ include::package-list.txt[]
- Host utilities
- --------------
+@@ -6,15 +6,26 @@ Appendix
  
-+The folowing packages are all availabel in the menu +Host utilities+.
+ include::makedev-syntax.txt[]
+ 
 +
- include::host-package-list.txt[]
- 
- [[deprecated-list]]
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index aa20534..4906bc8 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -1,3 +1,8 @@
-+manual-update-lists:
-+	$(Q)$(call MESSAGE,"Updating the manual lists...")
-+	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
-+		$(TOPDIR)/support/scripts/gen-manual-lists.py
++// Automatically generated lists:
 +
- ################################################################################
- # GENDOC -- generates the make targets needed to build a specific type of
- #           asciidoc documentation.
-@@ -17,11 +22,15 @@ $(1): $(1)-$(3)
- .PHONY: $(1)-$(3)
- $(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
+ [[package-list]]
+-Available packages
+-------------------
+-// docs/manaual/pkg-list.txt is generated using the following command:
+-// $ git grep -E '\((autotools|cmake|generic)-package\)' package/ |  \
+-//     cut -d':' -f1 | grep '\.mk$' | \
+-//     sed -e 's;.*\?/\(.*\?\).mk;* \1;' | \
+-//     sort > docs/manual/pkg-list.txt
+-
+-include::pkg-list.txt[]
++Package Selection for the target
++--------------------------------
++
++include::package-list.txt[]
++
++[[host-package-list]]
++Host utilities
++--------------
++
++include::host-package-list.txt[]
++
++[[deprecated-list]]
++Deprecated features
++-------------------
++
++The following features are marked as _deprecated_ in Buildroot due to
++their status either too old or unmaintained.
  
--$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES)
--	@$(call MESSAGE,"Generating $(5) $(1)...")
--	$(Q)mkdir -p $$(@D)
-+$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
-+			   $$($(call UPPERCASE,$(1))_SOURCES) \
-+			   manual-update-lists
-+	$(Q)$(call MESSAGE,"Generating $(5) $(1)...")
-+	$(Q)mkdir -p $$(@D)/.build
-+	$(Q)rsync -au docs/$(1)/*.txt $$(@D)/.build
- 	$(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
--	  -D $$(@D) $$<
-+	        -D $$(@D) $$(@D)/.build/$(1).txt
-+	-$(Q)rm -rf $$(@D)/.build
- endef
+ include::deprecated-list.txt[]
+diff --git a/docs/manual/deprecated-list.txt b/docs/manual/deprecated-list.txt
+index 6dc87a4..9c8f105 100644
+--- a/docs/manual/deprecated-list.txt
++++ b/docs/manual/deprecated-list.txt
+@@ -4,7 +4,7 @@
+ Deprecated list
+ ---------------
  
- ################################################################################
-@@ -41,7 +50,7 @@ $(call GENDOC_INNER,$(1),epub,epub,epub,EPUB)
- clean: $(1)-clean
- $(1)-clean:
- 	$(Q)$(RM) -rf $(O)/docs/$(1)
--.PHONY: $(1) $(1)-clean
-+.PHONY: $(1) $(1)-clean manual-update-lists
- endef
+-The following stuff are marked as _deprecated_ in Buildroot due to
++The following features are marked as _deprecated_ in Buildroot due to
+ their status either too old or unmaintained.
  
- MANUAL_SOURCES = $(wildcard docs/manual/*.txt) $(wildcard docs/images/*)
+ // list generated using the followings command:
 -- 
 1.7.2.5
