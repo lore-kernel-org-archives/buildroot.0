@@ -1,193 +1,97 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Mar 2013 00:28:03 +0100
-Subject: [Buildroot] [PATCH 08/15] zmqpp: new package
+Date: Tue, 26 Mar 2013 00:28:08 +0100
+Subject: [Buildroot] [PATCH 13/15] manual: add a make target
+	'manual-update-lists'
 In-Reply-To: <cover.1364253936.git.yann.morin.1998@free.fr>
 References: <cover.1364253936.git.yann.morin.1998@free.fr>
-Message-ID: <26ed8c4c6914e5a014235a2ffcd0fbf32eaee80d.1364253936.git.yann.morin.1998@free.fr>
+Message-ID: <329066ec07dfd91785b949d8f96cca81c2743f0c.1364253936.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
 
-Now that zeromq has been bumped to version 3.2.2, we need to provide the
-C++ binding using a separate package. The zmqpp package provides a high-level
-C++ wrapper library around the zeromq C API.
+The generated lists are automatically updated when building the manual.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+[yann.morin.1998 at free.fr: indentation, remove temp dir, intro to host utils]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
 ---
- package/Config.in                           |    1 +
- package/zmqpp/Config.in                     |   32 ++++++++++++++++
- package/zmqpp/zmqpp-fix-typos-in-code.patch |   46 +++++++++++++++++++++++
- package/zmqpp/zmqpp.mk                      |   54 +++++++++++++++++++++++++++
- 4 files changed, 133 insertions(+), 0 deletions(-)
- create mode 100644 package/zmqpp/Config.in
- create mode 100644 package/zmqpp/zmqpp-fix-typos-in-code.patch
- create mode 100644 package/zmqpp/zmqpp.mk
+Changes since v5:
+* Generate lists in $(O)
 
-diff --git a/package/Config.in b/package/Config.in
-index 23c9bb3..77dc0d3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -538,6 +538,7 @@ source "package/ortp/Config.in"
- source "package/slirp/Config.in"
- source "package/usbredir/Config.in"
- source "package/zeromq/Config.in"
-+source "package/zmqpp/Config.in"
- endmenu
+Changes since v4:
+* systematically update the generated lists when building the manual
+
+Changes since v2:
+* remove PYTHONPATH stuff since the kconfiglib module is next to
+  gen-manual-lists.py (Arnout)
+
+Changes since v1:
+* add manual-update-lists target to the .PHONY one (Arnout)
+* misc. fixes/updates
+---
+ docs/manual/appendix.txt |    2 ++
+ docs/manual/manual.mk    |   19 ++++++++++++++-----
+ 2 files changed, 16 insertions(+), 5 deletions(-)
+
+diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
+index ffde7e4..779fd2e 100644
+--- a/docs/manual/appendix.txt
++++ b/docs/manual/appendix.txt
+@@ -19,6 +19,8 @@ include::package-list.txt[]
+ Host utilities
+ --------------
  
- menu "Other"
-diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
-new file mode 100644
-index 0000000..7a12462
---- /dev/null
-+++ b/package/zmqpp/Config.in
-@@ -0,0 +1,32 @@
-+config BR2_PACKAGE_ZMQPP
-+	bool "zmqpp"
-+	depends on !BR2_avr32 # compiler needs c++0x support
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_INET_IPV6 # zeromq
-+	depends on BR2_LARGEFILE # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	select BR2_PACKAGE_ZEROMQ
-+	help
-+	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
++The folowing packages are all availabel in the menu +Host utilities+.
 +
-+	  This C++ binding is a 'high-level' library that hides most of the
-+	  C-style interface core zeromq provides.
+ include::host-package-list.txt[]
+ 
+ [[deprecated-list]]
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index aa20534..4906bc8 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -1,3 +1,8 @@
++manual-update-lists:
++	$(Q)$(call MESSAGE,"Updating the manual lists...")
++	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
++		$(TOPDIR)/support/scripts/gen-manual-lists.py
 +
-+	  http://github.com/benjamg/zmqpp
-+
-+comment "zmqpp requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
-+		&& BR2_USE_WCHAR)
-+
-+config BR2_PACKAGE_ZMQPP_CLIENT
-+	bool "zmqpp client"
-+	depends on BR2_PACKAGE_ZMQPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	help
-+	  Build and install the zmqpp client, a command line tool that can be
-+	  used to listen or send to zeromq sockets.
-+
-+comment "zmqpp client requires a toolchain with thread support"
-+	depends on BR2_PACKAGE_ZMQPP && !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/zmqpp/zmqpp-fix-typos-in-code.patch b/package/zmqpp/zmqpp-fix-typos-in-code.patch
-new file mode 100644
-index 0000000..a873de9
---- /dev/null
-+++ b/package/zmqpp/zmqpp-fix-typos-in-code.patch
-@@ -0,0 +1,46 @@
-+Fix a couple of typos in the zmqpp source code.
-+
-+Signed-off-by: Simon Dawson <spdawson@gmail.com>
-+
-+diff -Nurp a/src/zmqpp/socket.cpp b/src/zmqpp/socket.cpp
-+--- a/src/zmqpp/socket.cpp	2012-12-11 11:06:23.000000000 +0000
-++++ b/src/zmqpp/socket.cpp	2013-03-18 17:32:01.464761776 +0000
-+@@ -587,7 +587,7 @@ void socket::get(socket_option const& op
-+ 	}
-+ }
-+ 
-+-socket::socket(socket&& source) noexcept
-++socket::socket(socket& source) noexcept
-+ 	: _socket(source._socket)
-+ 	, _type(source._type)
-+ 	, _recv_buffer()
-+@@ -601,7 +601,7 @@ socket::socket(socket&& source) noexcept
-+ 	source._socket = nullptr;
-+ }
-+ 
-+-socket& socket::operator=(socket&& source) noexcept
-++socket& socket::operator=(socket& source) noexcept
-+ {
-+ 	_socket = source._socket;
-+ 	source._socket = nullptr;
-+diff -Nurp a/src/zmqpp/socket.hpp b/src/zmqpp/socket.hpp
-+--- a/src/zmqpp/socket.hpp	2012-12-11 11:06:23.000000000 +0000
-++++ b/src/zmqpp/socket.hpp	2013-03-18 17:31:53.556790457 +0000
-+@@ -400,7 +400,7 @@ public:
-+ 	 *
-+ 	 * \param source target socket to steal internals from
-+ 	 */
-+-	socket(socket&& source) noexcept;
-++	socket(socket& source) noexcept;
-+ 
-+ 	/*!
-+ 	 * Move operator
-+@@ -413,7 +413,7 @@ public:
-+ 	 * \param source target socket to steal internals from
-+ 	 * \return socket reference to this
-+ 	 */
-+-	socket& operator=(socket&& source) noexcept;
-++	socket& operator=(socket& source) noexcept;
-+ 
-+ 	/*!
-+ 	 * Check the socket is still valid
-diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-new file mode 100644
-index 0000000..c64b256
---- /dev/null
-+++ b/package/zmqpp/zmqpp.mk
-@@ -0,0 +1,54 @@
-+#############################################################
-+#
-+# zmqpp
-+#
-+#############################################################
-+
-+ZMQPP_VERSION = 31220ca
-+ZMQPP_SITE = git://github.com/benjamg/zmqpp.git
-+ZMQPP_INSTALL_STAGING = YES
-+ZMQPP_DEPENDENCIES = zeromq
-+ZMQPP_LICENSE = MIT
-+ZMQPP_LICENSE_FILES = LICENSE
-+
-+ZMQPP_MAKE_OPT = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
-+
-+ifeq ($(BR2_PACKAGE_ZMQPP_CLIENT),y)
-+ZMQPP_DEPENDENCIES += boost
-+endif
-+
-+define ZMQPP_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		$(ZMQPP_MAKE_OPT) $(if $(BR2_PACKAGE_ZMQPP_CLIENT),all) -C $(@D)
-+endef
-+
-+define ZMQPP_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/include/zmqpp
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		$(ZMQPP_MAKE_OPT) DESTDIR=$(TARGET_DIR) install -C $(@D)
-+endef
-+
-+define ZMQPP_UNINSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		$(ZMQPP_MAKE_OPT) DESTDIR=$(TARGET_DIR) uninstall -C $(@D)
-+	$(RM) $(TARGET_DIR)/usr/include/zmqpp
-+endef
-+
-+define ZMQPP_INSTALL_STAGING_CMDS
-+	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/zmqpp
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		$(ZMQPP_MAKE_OPT) DESTDIR=$(STAGING_DIR) install -C $(@D)
-+endef
-+
-+define ZMQPP_UNINSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		$(ZMQPP_MAKE_OPT) DESTDIR=$(STAGING_DIR) uninstall -C $(@D)
-+	$(RM) $(STAGING_DIR)/usr/include/zmqpp
-+endef
-+
-+define ZMQPP_CLEAN_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) $(ZMQPP_MAKE_OPT) \
-+		clean -C $(@D)
-+endef
-+
-+$(eval $(generic-package))
+ ################################################################################
+ # GENDOC -- generates the make targets needed to build a specific type of
+ #           asciidoc documentation.
+@@ -17,11 +22,15 @@ $(1): $(1)-$(3)
+ .PHONY: $(1)-$(3)
+ $(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
+ 
+-$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES)
+-	@$(call MESSAGE,"Generating $(5) $(1)...")
+-	$(Q)mkdir -p $$(@D)
++$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
++			   $$($(call UPPERCASE,$(1))_SOURCES) \
++			   manual-update-lists
++	$(Q)$(call MESSAGE,"Generating $(5) $(1)...")
++	$(Q)mkdir -p $$(@D)/.build
++	$(Q)rsync -au docs/$(1)/*.txt $$(@D)/.build
+ 	$(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
+-	  -D $$(@D) $$<
++	        -D $$(@D) $$(@D)/.build/$(1).txt
++	-$(Q)rm -rf $$(@D)/.build
+ endef
+ 
+ ################################################################################
+@@ -41,7 +50,7 @@ $(call GENDOC_INNER,$(1),epub,epub,epub,EPUB)
+ clean: $(1)-clean
+ $(1)-clean:
+ 	$(Q)$(RM) -rf $(O)/docs/$(1)
+-.PHONY: $(1) $(1)-clean
++.PHONY: $(1) $(1)-clean manual-update-lists
+ endef
+ 
+ MANUAL_SOURCES = $(wildcard docs/manual/*.txt) $(wildcard docs/images/*)
 -- 
 1.7.2.5
