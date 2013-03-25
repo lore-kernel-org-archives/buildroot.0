@@ -1,33 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Mar 2013 22:42:35 +0100
-Subject: [Buildroot] [PATCH 1/2] vala: add missing host-bison dependency
-Message-ID: <1364247756-31480-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 25 Mar 2013 23:36:53 +0100
+Subject: [Buildroot] [PATCH] redis: build fix and minor improvement
+In-Reply-To: <1364246134-30923-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 25 Mar 2013 22:15:34 +0100")
+References: <1364246134-30923-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87y5db9ke2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.org/results/a59cceb695298c212c91d2e32b381a096f875274/build-end.log.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vala/vala.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Thomas> The redis-001-uclibc.patch was properly adding conditionals to ensure
+ Thomas> HAVE_BACKTRACE is not defined when uClibc is used. However, __unix
+ Thomas> doesn't seem to be define with the toolchain Peter uses on gcc14, so
+ Thomas> the <features.h> doesn't get included, therefore __UCLIBC isn't
+ Thomas> defined, and the code believes that backtrace support is available. We
+ Thomas> fix this by including <features.h> when __linux__ is defined.
 
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 6abcdd8..8cf616f 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -10,7 +10,7 @@ VALA_VERSION = $(VALA_VERSION_MAJOR).$(VALA_VERSION_MINOR)
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- 
--VALA_DEPENDENCIES = host-flex libglib2 \
-+VALA_DEPENDENCIES = host-flex host-bison libglib2 \
- 		$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- 
- # If we want the documentation, then xsltproc is needed. If we don't
+ Thomas> Fixes:
+ Thomas> http://autobuild.buildroot.org/results/4ba818f877af145a547a1fede0bb738192c2f181/build-end.log.
+
+Committed, thanks.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
