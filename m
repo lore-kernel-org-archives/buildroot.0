@@ -1,49 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 25 Mar 2013 22:15:45 +0100
-Subject: [Buildroot] [git commit] mediastreamer: add missing host-gettext
-	dependencies and other fixes
-Message-ID: <20130325211614.39BAD9B05E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Mar 2013 22:42:36 +0100
+Subject: [Buildroot] [PATCH 2/2] vala: deprecate target package
+In-Reply-To: <1364247756-31480-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1364247756-31480-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1364247756-31480-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bbce7505232614e2ad8638bd20c5057e2fa7764d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Vala generates C code from Vala code, and therefore requires a
+compiler. Since we are deprecating the native compiler support on the
+target, having vala on the target doesn't make sense.
 
-Fixes:
-http://autobuild.buildroot.org/results/5e6c465c56f85a3017900613facc6e54c85d32da/build-end.log.
-
-While we're at it, add the usual comment header block at the beginning
-of the file, as well as licensing informations.
+Of course, we keep vala for the host, where compilation happens.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mediastreamer/mediastreamer.mk |   10 +++++++++-
- 1 files changed, 9 insertions(+), 1 deletions(-)
+ package/vala/Config.in |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-index b324126..6a0664e 100644
---- a/package/mediastreamer/mediastreamer.mk
-+++ b/package/mediastreamer/mediastreamer.mk
-@@ -1,9 +1,17 @@
-+#############################################################
-+#
-+# mediastreamer
-+#
-+#############################################################
-+
- MEDIASTREAMER_VERSION = 2.8.2
- MEDIASTREAMER_SITE = http://download.savannah.nongnu.org/releases/linphone/mediastreamer
- MEDIASTREAMER_INSTALL_STAGING = YES
--MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkgconf ortp
-+MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkgconf ortp host-gettext
- # tests fail linking on some architectures, so disable them
- MEDIASTREAMER_CONF_OPT = --disable-tests
-+MEDIASTREAMER_LICENSE = GPLv2+
-+MEDIASTREAMER_LICENSE_FILES = COPYING
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yy)
- MEDIASTREAMER_CONF_OPT += --enable-alsa
+diff --git a/package/vala/Config.in b/package/vala/Config.in
+index e0d665c..805c770 100644
+--- a/package/vala/Config.in
++++ b/package/vala/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_VALA
+ 	bool "vala"
++	# We no longer support a toolchain on the target
++	depends on BR2_DEPRECATED
+ 	depends on BR2_USE_WCHAR # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+-- 
+1.7.9.5
