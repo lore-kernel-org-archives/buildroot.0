@@ -1,49 +1,67 @@
-From: Magnus Edenhill <magnus@edenhill.se>
-Date: Mon, 25 Mar 2013 10:31:29 +0100
-Subject: [Buildroot] git sourced packages with submodules
-Message-ID: <CAHCQUcDjKiUyFrnTotjuOEUBgCHFr2BR5w_hRJgZXTnLx5=Rmg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Mar 2013 11:02:42 +0100
+Subject: [Buildroot] Quick summary of the Patchwork Day #1
+Message-ID: <20130325110242.0b741196@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-I have a bunch of git sourced packages that utilise submodules.
-The submodules (and autoconf* stuff) are set up by calling a ./autogen.sh
-script (typically from .._PRE_CONFIGURE_HOOKS).
-But this unfortunately does not work since the 'git submodule *'-commands
-rely on residing in a functional git repository, but the git downloader
-(DOWNLOAD_GIT) uses 'git archive' to move the cloned repository to
-output/build/..., and 'git archive' strips the .git/ repo.
+Yesterday took place the first Patchwork Day, as we announced
+previously on this list. Samuel, Yann, Peter, Gustavo and myself were
+present more or less throughout the day, with Thomas De Schampheleire
+making an apparition at some point in the day. Thanks to the
+participants!
 
-The current workaround is to use ..._EXTRACT_CMDS:
+At the beginning of the day, we had a bit more than 500 patches pending
+in patchwork, and we're now at 305 patches. But on those 305 patches,
+some of them are new patches that have been reworked from previous
+versions, so hopefully they should be more easily applied by Peter.
 
-define GSTREAMER_EXTRACT_CMDS
-rm -rf $(@D)
-(git clone --depth 1 $(GSTREAMER_SITE) $(@D) && \
-  cd $(@D) && \
-git submodule init && \
-git submodule update)
- touch $(@D)/.stamp_downloaded
-endef
+http://lite.framapad.org/p/Buildroot_Patchwork_Day_March_2013 is a
+rough summary of the topics worked on. In short:
 
+ * The oprofile 0.9.8 PowerPC build fix from Thomas De S. was committed.
 
-But its a bit intrusive since 'git clone' refuses to clone into a non-empty
-directory, so the dest directory needs to be cleaned up (remove
-.stamp_downloaded) and then re-setup (create .stamp_downloaded again), and
-this relies on the package knowing buildroot internals which is less than
-optimal.
+ * There has been discussions and iterations on Samuel's patches about
+   the manual and its list of packages. At the end of the day, Yann has
+   pulled Samuel's patches, and sent a pull request for them to Peter.
 
-A more convenient method would be if there was a ...._PRE_ARCHIVE_HOOKS
-that was run just before the 'git archive' in DOWNLOAD_GIT, that would let
-the package set up submodules and whatnot.
+ * The big X.org bump was tested by me, and later pulled by Peter. On
+   its own, it accounts for more than 100 patches removed from the
+   patchwork.
 
-The other vcs downloaders look similar (svn export...)
+ * The gcc 4.8 support has been merged.
 
-Regards,
-Magnus
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130325/35fcaa11/attachment.html>
+ * The set of mandatory dependencies to run Buildroot has been changed.
+   We no longer require bison, flex or gettext to be installed. A
+   number of follow-up patches have been submitted to fix issues caused
+   by this change: the Free Electrons autobuilders no longer have
+   those packages installed, so errors started to show up pretty
+   quickly.
+
+ * A big number of other patches/packages were worked on or cleaned up:
+   zeromq bindings, gutenprint, enscript, log4cxx,
+   xcursor-transparent-theme, libpthsem, bcusdk, linknx, dtach, etc.
+
+ * A number of patches were reviewed and Acked, or discussed on the IRC
+   channel and rejected or marked as Superseded when a fix has already
+   been committed for the same problem.
+
+All in all, I think it was a very useful day, and the fact that we
+could very quickly discuss patches on the IRC channel and take a
+decision about them certainly helped.
+
+Would there be some interest to renew the experience some other day?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
