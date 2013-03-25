@@ -1,35 +1,58 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 25 Mar 2013 08:37:01 +0100
-Subject: [Buildroot] [git commit] mrouted: add missing dependency on
-	host-bison
-Message-ID: <20130325073638.5B9A99B2A1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Mar 2013 08:42:30 +0100
+Subject: [Buildroot] [PATCH] gnuchess: add missing dependencies on flex and
+	host-flex
+Message-ID: <1364197350-10614-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94dad5d0351c1577237ecc77421cfb74a976c068
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+And also add a missing newline and licensing informations while we're
+at it.
 
-Fixes
-http://autobuild.buildroot.org/results/10d875724388034369e7673a6c08ecad3863ba06/build-end.log.
+Fixes:
+http://autobuild.buildroot.org/results/2851f23990c9f6642b1e706a94b1afc15a24b6f7/build-end.log.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mrouted/mrouted.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/gnuchess/Config.in   |    1 +
+ package/gnuchess/gnuchess.mk |    6 +++++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
-index 90f2f59..56aa7e1 100644
---- a/package/mrouted/mrouted.mk
-+++ b/package/mrouted/mrouted.mk
-@@ -7,6 +7,7 @@
- MROUTED_VERSION = 3.9.6
- MROUTED_SOURCE = mrouted-$(MROUTED_VERSION).tar.bz2
- MROUTED_SITE = http://cloud.github.com/downloads/troglobit/mrouted
-+MROUTED_DEPENDENCIES = host-bison
+diff --git a/package/gnuchess/Config.in b/package/gnuchess/Config.in
+index c79c52d..105fbbc 100644
+--- a/package/gnuchess/Config.in
++++ b/package/gnuchess/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_GNUCHESS
+ 	bool "gnuchess"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_FLEX
+ 	help
+ 	  GNU Chess lets most modern computers play a full game of chess.
  
- define MROUTED_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+diff --git a/package/gnuchess/gnuchess.mk b/package/gnuchess/gnuchess.mk
+index 3e0b724..90d2274 100644
+--- a/package/gnuchess/gnuchess.mk
++++ b/package/gnuchess/gnuchess.mk
+@@ -3,11 +3,15 @@
+ # gnuchess
+ #
+ #############################################################
++
+ GNUCHESS_VERSION = 5.07
+ GNUCHESS_SOURCE = gnuchess-$(GNUCHESS_VERSION).tar.gz
+ GNUCHESS_SITE = $(BR2_GNU_MIRROR)/chess
++GNUCHESS_LICENSE = GPLv2+
++GNUCHESS_LICENSE_FILES = COPYING
+ 
+-GNUCHESS_DEPENDENCIES = $(if $(BR2_PACKAGE_READLINE),readline)
++GNUCHESS_DEPENDENCIES = host-flex flex
++GNUCHESS_DEPENDENCIES += $(if $(BR2_PACKAGE_READLINE),readline)
+ 
+ $(eval $(autotools-package))
+ 
+-- 
+1.7.9.5
