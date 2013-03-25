@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Mar 2013 00:28:06 +0100
-Subject: [Buildroot] [PATCH 11/15] support/scripts: add gen-manual-lists.py
+Date: Tue, 26 Mar 2013 00:28:10 +0100
+Subject: [Buildroot] [PATCH 15/15] manual: do not track generated files
 In-Reply-To: <cover.1364253936.git.yann.morin.1998@free.fr>
 References: <cover.1364253936.git.yann.morin.1998@free.fr>
-Message-ID: <318477b8af17091558da91d4932337b25ce4b942.1364253936.git.yann.morin.1998@free.fr>
+Message-ID: <7a6bf7c222f8dbe69680a6ac431af90398bec9ab.1364253936.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,422 +12,945 @@ To: buildroot@busybox.net
 
 From: Samuel Martin <s.martin49@gmail.com>
 
-Script generating the target and host package tables, and the deprecated
-stuff list as well. These tables and lists are generated parsing the
-Config.in files.
+Since there is no need to edit the generated list, we don't need
+to keep the files under git control, so remove the existing lists.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[yann.morin.1998 at free.fr: no leading dot, no menu path for host-utils]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
 ---
-Changes since v5:
-* fix shebang (Yann)
-* generate files in $(O) (Thomas P.)
-* minor fixes
+ docs/manual/deprecated-list.txt |   46 --
+ docs/manual/pkg-list.txt        |  870 ---------------------------------------
+ 2 files changed, 0 insertions(+), 916 deletions(-)
+ delete mode 100644 docs/manual/deprecated-list.txt
+ delete mode 100644 docs/manual/pkg-list.txt
 
-Changes since v4:
-* remove date in the generated lists
-
-Chagnes since v3:
-* Re-introduce try/except on the kconfiglib import. This is mandatory
-  because the kconfiglib module is no longer embedded in the Buildroot
-  source tree because of undefined license (the author wants to keep
-  the authorship of his work of course, but he does not seem inclined
-  to define any license on his project which would allow 3rd parties
-  to re-use this project without any legal issues).
-
-Changes since v1:
-* many improvements, fixes, refactoring and cleanup (Arnout)
----
- support/scripts/gen-manual-lists.py |  379 +++++++++++++++++++++++++++++++++++
- 1 files changed, 379 insertions(+), 0 deletions(-)
- create mode 100755 support/scripts/gen-manual-lists.py
-
-diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-new file mode 100755
-index 0000000..ae1d4ff
---- /dev/null
-+++ b/support/scripts/gen-manual-lists.py
-@@ -0,0 +1,379 @@
-+#!/usr/bin/env python
-+##
-+## gen-manual-lists.py
-+##
-+## This script generates the following Buildroot manual appendices:
-+##  - the package tables (one for the target, the other for host tools);
-+##  - the deprecated items.
-+##
-+## Author(s):
-+##  - Samuel Martin <s.martin49@gmail.com>
-+##
-+## Copyright (C) 2013 Samuel Martin
-+##
-+## This program is free software; you can redistribute it and/or modify
-+## it under the terms of the GNU General Public License as published by
-+## the Free Software Foundation; either version 2 of the License, or
-+## (at your option) any later version.
-+##
-+## This program is distributed in the hope that it will be useful,
-+## but WITHOUT ANY WARRANTY; without even the implied warranty of
-+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+## GNU General Public License for more details.
-+##
-+## You should have received a copy of the GNU General Public License
-+## along with this program; if not, write to the Free Software
-+## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-+##
-+
-+## Note about python2.
-+##
-+## This script can currently only be run using python2 interpreter due to
-+## its kconfiglib dependency (which is not yet python3 friendly).
-+
-+from __future__ import print_function
-+from __future__ import unicode_literals
-+
-+import os
-+import re
-+import sys
-+import datetime
-+from argparse import ArgumentParser
-+
-+try:
-+    import kconfiglib
-+except ImportError:
-+    message = """
-+Could not find the module 'kconfiglib' in the PYTHONPATH:
-+"""
-+    message += "\n".join(["  {0}".format(path) for path in sys.path])
-+    message += """
-+
-+Make sure the Kconfiglib directory is in the PYTHONPATH, then relaunch the
-+script.
-+
-+You can get kconfiglib from:
-+  https://github.com/ulfalizer/Kconfiglib
-+
-+
-+"""
-+    sys.stderr.write(message)
-+    raise
-+
-+
-+def get_symbol_subset(root, filter_func):
-+    """ Return a generator of kconfig items.
-+
-+    :param root_item:   Root item of the generated subset of items
-+    :param filter_func: Filter function
-+
-+    """
-+    if hasattr(root, "get_items"):
-+        get_items = root.get_items
-+    elif hasattr(root, "get_top_level_items"):
-+        get_items = root.get_top_level_items
-+    else:
-+        message = "The symbol does not contain any subset of symbols"
-+        raise Exception(message)
-+    for item in get_items():
-+        if item.is_symbol():
-+            if not item.prompts:
-+                continue
-+            if not filter_func(item):
-+                continue
-+            yield item
-+        elif item.is_menu() or item.is_choice():
-+            for i in get_symbol_subset(item, filter_func):
-+                yield i
-+
-+
-+def get_symbol_parents(item, root=None, enable_choice=False):
-+    """ Return the list of the item's parents. The lasst item of the list is
-+    the closest parent, the first the furthest.
-+
-+    :param item:          Item from which the the parent list is generated
-+    :param root:          Root item stopping the search (not included in the
-+                          parent list)
-+    :param enable_choice: Flag enabling choices to appear in the parent list
-+
-+    """
-+    parent = item.get_parent()
-+    parents = []
-+    while parent and parent != root:
-+        if parent.is_menu():
-+            parents.append(parent.get_title())
-+        elif enable_choice and parent.is_choice():
-+            parents.append(parent.prompts[0][0])
-+        parent = parent.get_parent()
-+    if isinstance(root, kconfiglib.Menu) or \
-+            (enable_choice and isinstance(root, kconfiglib.Choice)):
-+        parents.append("") # Dummy empty parrent to get a leading arrow ->
-+    parents.reverse()
-+    return parents
-+
-+
-+def format_asciidoc_table(root, get_label_func, filter_func=lambda x: True,
-+                          enable_choice=False, sorted=True, sub_menu=True,
-+                          item_label=None):
-+    """ Return the asciidoc formatted table of the items and their location.
-+
-+    :param root:           Root item of the item subset
-+    :param get_label_func: Item's label getter function
-+    :param filter_func:    Filter function to apply on the item subset
-+    :param enable_choice:  Enable choices to appear as part of the item's
-+                           location
-+    :param sorted:         Flag to alphabetically sort the table
-+    :param sub_menu:       Output the column with the sub-menu path
-+
-+    """
-+    def _format_entry(label, parents, sub_menu):
-+        """ Format an asciidoc table entry.
-+
-+        """
-+        if sub_menu:
-+            return "| {0:<40} <| {1}\n".format(label, " -> ".join(parents))
-+        else:
-+            return "| {0:<40}\n".format(label)
-+
-+    lines = []
-+    for item in get_symbol_subset(root, filter_func):
-+        if not item.is_symbol() or not item.prompts:
-+            continue
-+        loc = get_symbol_parents(item, root, enable_choice=enable_choice)
-+        lines.append(_format_entry(get_label_func(item), loc, sub_menu))
-+    if sorted:
-+        lines.sort(key=lambda x: x.lower())
-+    if hasattr(root, "get_title"):
-+        loc_label = get_symbol_parents(root, None, enable_choice=enable_choice)
-+        loc_label += [root.get_title(), "..."]
-+    else:
-+        loc_label = ["Location"]
-+    if not item_label:
-+        item_label = "Items"
-+    table = ":halign: center\n\n"
-+    if sub_menu:
-+        width = "100%"
-+        columns = "^1,4"
-+    else:
-+        width = "30%"
-+        columns = "^1"
-+    table = "[width=\"{0}\",cols=\"{1}\",options=\"header\"]\n".format(width, columns)
-+    table += "|===================================================\n"
-+    table += _format_entry(item_label, loc_label, sub_menu)
-+    table += "\n" + "".join(lines) + "\n"
-+    table += "|===================================================\n"
-+    return table
-+
-+
-+class Buildroot:
-+    """ Buildroot configuration object.
-+
-+    """
-+    root_config = "Config.in"
-+    package_dirname = "package"
-+    package_prefixes = ["BR2_PACKAGE_", "BR2_PACKAGE_HOST_"]
-+    re_pkg_prefix = re.compile(r"^(" + "|".join(package_prefixes) + ").*")
-+    deprecated_symbol = "BR2_DEPRECATED"
-+    list_in = """\
-+//
-+// Automatically generated list for Buildroot manual.
-+//
-+
-+{table}
-+"""
-+
-+    list_info = {
-+        'target-packages': {
-+            'filename': "package-list",
-+            'root_menu': "Package Selection for the target",
-+            'filter': "_is_package",
-+            'sorted': True,
-+            'sub_menu': True,
-+        },
-+        'host-packages': {
-+            'filename': "host-package-list",
-+            'root_menu': "Host utilities",
-+            'filter': "_is_package",
-+            'sorted': True,
-+            'sub_menu': False,
-+        },
-+        'deprecated': {
-+            'filename': "deprecated-list",
-+            'root_menu': None,
-+            'filter': "_is_deprecated",
-+            'sorted': False,
-+            'sub_menu': True,
-+        },
-+    }
-+
-+    def __init__(self):
-+        self.base_dir = os.environ.get("TOPDIR")
-+        self.output_dir = os.environ.get("O")
-+        self.package_dir = os.path.join(self.base_dir, self.package_dirname)
-+        # The kconfiglib requires an environment variable named "srctree" to
-+        # load the configuration, so set it.
-+        os.environ.update({'srctree': self.base_dir})
-+        self.config = kconfiglib.Config(os.path.join(self.base_dir,
-+                                                     self.root_config))
-+        self._deprecated = self.config.get_symbol(self.deprecated_symbol)
-+
-+        self.gen_date = datetime.datetime.utcnow()
-+        self.br_version_full = os.environ.get("BR2_VERSION_FULL")
-+        if self.br_version_full and self.br_version_full.endswith("-git"):
-+            self.br_version_full = self.br_version_full[:-4]
-+        if not self.br_version_full:
-+            self.br_version_full = "undefined"
-+
-+    def _get_package_symbols(self, package_name):
-+        """ Return a tuple containing the target and host package symbol.
-+
-+        """
-+        symbols = re.sub("[-+.]", "_", package_name)
-+        symbols = symbols.upper()
-+        symbols = tuple([prefix + symbols for prefix in self.package_prefixes])
-+        return symbols
-+
-+    def _is_deprecated(self, symbol):
-+        """ Return True if the symbol is marked as deprecated, otherwise False.
-+
-+        """
-+        return self._deprecated in symbol.get_referenced_symbols()
-+
-+    def _is_package(self, symbol):
-+        """ Return True if the symbol is a package or a host package, otherwise
-+        False.
-+
-+        """
-+        if not self.re_pkg_prefix.match(symbol.get_name()):
-+            return False
-+        pkg_name = re.sub("BR2_PACKAGE_(HOST_)?(.*)", r"\2", symbol.get_name())
-+
-+        pattern = "^(HOST_)?" + pkg_name + "$"
-+        pattern = re.sub("_", ".", pattern)
-+        pattern = re.compile(pattern, re.IGNORECASE)
-+        # Here, we cannot just check for the location of the Config.in because
-+        # of the "virtual" package.
-+        #
-+        # So, to check that a symbol is a package (not a package option or
-+        # anything else), we check for the existence of the package *.mk file.
-+        #
-+        # By the way, to actually check for a package, we should grep all *.mk
-+        # files for the following regex:
-+        # "\$\(eval \$\((host-)?(generic|autotools|cmake)-package\)\)"
-+        #
-+        # Implementation details:
-+        #
-+        # * The package list is generated from the *.mk file existence, the
-+        #   first time this function is called. Despite the memory consumtion,
-+        #   this list is stored because the execution time of this script is
-+        #   noticebly shorter than re-scannig the package sub-tree for each
-+        #   symbol.
-+        if not hasattr(self, "_package_list"):
-+            pkg_list = []
-+            for _, _, files in os.walk(self.package_dir):
-+                for file_ in (f for f in files if f.endswith(".mk")):
-+                    pkg_list.append(re.sub(r"(.*?)\.mk", r"\1", file_))
-+            setattr(self, "_package_list", pkg_list)
-+        for pkg in getattr(self, "_package_list"):
-+            if pattern.match(pkg):
-+                return True
-+        return False
-+
-+    def _get_symbol_label(self, symbol, mark_deprecated=True):
-+        """ Return the label (a.k.a. prompt text) of the symbol.
-+
-+        :param symbol:          The symbol
-+        :param mark_deprecated: Append a 'deprecated' to the label
-+
-+        """
-+        label = symbol.prompts[0][0]
-+        if self._is_deprecated(symbol) and mark_deprecated:
-+            label += " *(deprecated)*"
-+        return label
-+
-+    def print_list(self, list_type, enable_choice=True, enable_deprecated=True,
-+                   dry_run=False, output=None):
-+        """ Print the requested list. If not dry run, then the list is
-+        automatically written in its own file.
-+
-+        :param list_type:         The list type to be generated
-+        :param enable_choice:     Flag enabling choices to appear in the list
-+        :param enable_deprecated: Flag enabling deprecated items to appear in
-+                                  the package lists
-+        :param dry_run:           Dry run (print the list in stdout instead of
-+                                  writing the list file
-+
-+        """
-+        def _get_menu(title):
-+            """ Return the first symbol menu matching the given title.
-+
-+            """
-+            menus = self.config.get_menus()
-+            menu = [m for m in menus if m.get_title().lower() == title.lower()]
-+            if not menu:
-+                message = "No such menu: '{0}'".format(title)
-+                raise Exception(message)
-+            return menu[0]
-+
-+        list_config = self.list_info[list_type]
-+        root_title = list_config.get('root_menu')
-+        if root_title:
-+            root_item = _get_menu(root_title)
-+        else:
-+            root_item = self.config
-+        filter_ = getattr(self, list_config.get('filter'))
-+        filter_func = lambda x: filter_(x)
-+        if not enable_deprecated and list_type != "deprecated":
-+            filter_func = lambda x: filter_(x) and not self._is_deprecated(x)
-+        mark_depr = list_type != "deprecated"
-+        get_label = lambda x: self._get_symbol_label(x, mark_depr)
-+        item_label = "Features" if list_type == "deprecated" else "Packages"
-+
-+        table = format_asciidoc_table(root_item, get_label,
-+                                      filter_func=filter_func,
-+                                      enable_choice=enable_choice,
-+                                      sorted=list_config.get('sorted'),
-+                                      sub_menu=list_config.get('sub_menu'),
-+                                      item_label=item_label)
-+
-+        content = self.list_in.format(table=table)
-+
-+        if dry_run:
-+            print(content)
-+            return
-+
-+        if not output:
-+            output_dir = self.output_dir
-+            if not output_dir:
-+                print("Warning: Undefined output directory.")
-+                print("\tUse source directory as output location.")
-+                output_dir = self.base_dir
-+            output = os.path.join(output_dir,
-+                                  list_config.get('filename') + ".txt")
-+        if not os.path.exists(os.path.dirname(output)):
-+            os.makedirs(os.path.dirname(output))
-+        print("Writing the {0} list in:\n\t{1}".format(list_type, output))
-+        with open(output, 'w') as fout:
-+            fout.write(content)
-+
-+
-+if __name__ == '__main__':
-+    list_types = ['target-packages', 'host-packages', 'deprecated']
-+    parser = ArgumentParser()
-+    parser.add_argument("list_type", nargs="?", choices=list_types,
-+                        help="""\
-+Generate the given list (generate all lists if unspecified)""")
-+    parser.add_argument("-n", "--dry-run", dest="dry_run", action='store_true',
-+                        help="Output the generated list to stdout")
-+    parser.add_argument("--output-target", dest="output_target",
-+                        help="Output target package file")
-+    parser.add_argument("--output-host", dest="output_host",
-+                        help="Output host package file")
-+    parser.add_argument("--output-deprecated", dest="output_deprecated",
-+                        help="Output deprecated file")
-+    args = parser.parse_args()
-+    lists = [args.list_type] if args.list_type else list_types
-+    buildroot = Buildroot()
-+    for list_name in lists:
-+        output = getattr(args, "output_" + list_name.split("-", 1)[0])
-+        buildroot.print_list(list_name, dry_run=args.dry_run, output=output)
+diff --git a/docs/manual/deprecated-list.txt b/docs/manual/deprecated-list.txt
+deleted file mode 100644
+index 9c8f105..0000000
+--- a/docs/manual/deprecated-list.txt
++++ /dev/null
+@@ -1,46 +0,0 @@
+-// -*- mode:doc -*- ;
+-
+-[[deprecated]]
+-Deprecated list
+----------------
+-
+-The following features are marked as _deprecated_ in Buildroot due to
+-their status either too old or unmaintained.
+-
+-// list generated using the followings command:
+-// $ git grep -EB4 'depends on BR2_DEPRECATED'
+-// and
+-// $ git grep -EB4 'depends on BR2_DEPRECATED' | \
+-//     grep -Eo '(:|-).*?(config|comment) BR2_.*'
+-//
+-// Need manual checks and sorting.
+-
+-* Packages:
+-
+-** +busybox+ 1.18.x
+-** +customize+
+-** +lzma+
+-** +microperl+
+-** +netkitbase+
+-** +netkittelnet+
+-** +pkg-config+
+-** +squashfs3+
+-** +ttcp+
+-
+-* Toolchain:
+-
+-** +gdb+ 6.8
+-** +gdb+ 7.0.1
+-** +gdb+ 7.1
+-** +kernel headers+ 2.6.37
+-** +kernel headers+ 2.6.38
+-** +kernel headers+ 2.6.39
+-
+-* Bootloaders:
+-
+-** +u-boot+ 2011-06
+-** +u-boot+ 2011-09
+-
+-* Output images:
+-
+-** squashfs3 image
+diff --git a/docs/manual/pkg-list.txt b/docs/manual/pkg-list.txt
+deleted file mode 100644
+index 5d9b54f..0000000
+--- a/docs/manual/pkg-list.txt
++++ /dev/null
+@@ -1,870 +0,0 @@
+-* acl
+-* acpid
+-* alsa-lib
+-* alsamixergui
+-* alsa-utils
+-* apr
+-* apr-util
+-* argp-standalone
+-* argus
+-* arptables
+-* at
+-* atk
+-* attr
+-* audiofile
+-* aumix
+-* autoconf
+-* automake
+-* avahi
+-* axel
+-* bash
+-* beecrypt
+-* bellagio
+-* berkeleydb
+-* bind
+-* binutils
+-* bison
+-* blackbox
+-* bluez_utils
+-* bmon
+-* boa
+-* bonnie
+-* boost
+-* bootutils
+-* bridge-utils
+-* bsdiff
+-* busybox
+-* bwm-ng
+-* bzip2
+-* cairo
+-* can-utils
+-* ccache
+-* ccid
+-* cdrkit
+-* cgilua
+-* cifs-utils
+-* cjson
+-* cloop
+-* cmake
+-* collectd
+-* connman
+-* conntrack-tools
+-* copas
+-* coreutils
+-* coxpcall
+-* cpanminus
+-* cpuload
+-* cramfs
+-* ctorrent
+-* cups
+-* cvs
+-* dash
+-* dbus
+-* dbus-glib
+-* dbus-python
+-* devmem2
+-* dhcp
+-* dhcpdump
+-* dhrystone
+-* dialog
+-* diffutils
+-* directfb
+-* directfb-examples
+-* distcc
+-* divine
+-* dmalloc
+-* dmidecode
+-* dmraid
+-* dnsmasq
+-* docker
+-* doom-wad
+-* dosfstools
+-* dropbear
+-* dsp-tools
+-* dstat
+-* e2fsprogs
+-* ebtables
+-* ed
+-* eeprog
+-* empty
+-* enchant
+-* erlang
+-* ethtool
+-* evtest
+-* expat
+-* expedite
+-* explorercanvas
+-* ezxml
+-* faad2
+-* fbdump
+-* fbgrab
+-* fbset
+-* fbterm
+-* fb-test-app
+-* fbv
+-* fconfig
+-* feh
+-* ffmpeg
+-* fftw
+-* file
+-* findutils
+-* fis
+-* flac
+-* flashrom
+-* flex
+-* flot
+-* fltk
+-* fluxbox
+-* fmtools
+-* fontconfig
+-* freerdp
+-* freetype
+-* fxload
+-* gadgetfs-test
+-* gamin
+-* gawk
+-* gdbm
+-* gdisk
+-* gdk-pixbuf
+-* genext2fs
+-* genromfs
+-* gettext
+-* giblib
+-* glib-networking
+-* gmp
+-* gmpc
+-* gnuchess
+-* gnupg
+-* gnutls
+-* gob2
+-* googlefontdirectory
+-* gperf
+-* gpsd
+-* gqview
+-* grantlee
+-* grep
+-* gsl
+-* gst-dsp
+-* gst-ffmpeg
+-* gst-omapfb
+-* gst-plugins-bad
+-* gst-plugins-base
+-* gst-plugins-good
+-* gst-plugins-ugly
+-* gstreamer
+-* gtk2-engines
+-* gtk2-theme-hicolor
+-* gtkperf
+-* gvfs
+-* gzip
+-* haserl
+-* hdparm
+-* heirloom-mailx
+-* hiawatha
+-* hostapd
+-* htop
+-* hwdata
+-* i2c-tools
+-* icu
+-* ifplugd
+-* igh-ethercat
+-* imagemagick
+-* imlib2
+-* inadyn
+-* inotify-tools
+-* input-event-daemon
+-* input-tools
+-* intltool
+-* iostat
+-* iperf
+-* ipkg
+-* iproute2
+-* ipsec-tools
+-* ipset
+-* iptables
+-* irda-utils
+-* iw
+-* jpeg
+-* jquery
+-* jquery-sparkline
+-* jquery-validation
+-* jsmin
+-* json-c
+-* kbd
+-* kexec
+-* kismet
+-* kmod
+-* lame
+-* latencytop
+-* lcdapi
+-* lcdproc
+-* leafpad
+-* less
+-* libaio
+-* libao
+-* libarchive
+-* libargtable2
+-* libart
+-* libatomic_ops
+-* libcap
+-* libcap-ng
+-* libcdaudio
+-* libcgi
+-* libcgicc
+-* libconfig
+-* libconfuse
+-* libcue
+-* libcuefile
+-* libcurl
+-* libdaemon
+-* libdmtx
+-* libdnet
+-* libdrm
+-* libdvdnav
+-* libdvdread
+-* libecore
+-* libedbus
+-* libedje
+-* libeet
+-* libefreet
+-* libeina
+-* libelementary
+-* libelf
+-* libembryo
+-* liberation
+-* libesmtp
+-* libethumb
+-* libev
+-* libevas
+-* libevent
+-* libexif
+-* libeXosip2
+-* libfcgi
+-* libffi
+-* libfreefare
+-* libftdi
+-* libfuse
+-* libgail
+-* libgcrypt
+-* libgeotiff
+-* libglade
+-* libglib2
+-* libgpg-error
+-* libgtk2
+-* libhid
+-* libical
+-* libiconv
+-* libid3tag
+-* libidn
+-* libiqrf
+-* liblo
+-* liblockfile
+-* liblog4c-localtime
+-* libmad
+-* libmbus
+-* libmicrohttpd
+-* libmms
+-* libmnl
+-* libmodbus
+-* libmpd
+-* libmpeg2
+-* libnetfilter-acct
+-* libnetfilter-conntrack
+-* libnetfilter-cthelper
+-* libnetfilter-cttimeout
+-* libnetfilter-log
+-* libnetfilter-queue
+-* libnfc
+-* libnfc-llcp
+-* libnfnetlink
+-* libnl
+-* libnspr
+-* libnss
+-* liboauth
+-* libogg
+-* liboping
+-* libosip2
+-* libpcap
+-* libplayer
+-* libpng
+-* libraw
+-* libraw1394
+-* libreplaygain
+-* libroxml
+-* librsvg
+-* librsync
+-* libsamplerate
+-* libsexy
+-* libsigc
+-* libsndfile
+-* libsoup
+-* libsvgtiny
+-* libsysfs
+-* libtheora
+-* libtirpc
+-* libtool
+-* libtorrent
+-* libtpl
+-* libungif
+-* libupnp
+-* liburcu
+-* libusb
+-* libusb-compat
+-* libv4l
+-* libvncserver
+-* libvorbis
+-* libxcb
+-* libxml2
+-* libxml-parser-perl
+-* libxslt
+-* libyaml
+-* lighttpd
+-* links
+-* linphone
+-* linux-firmware
+-* linux-fusion
+-* linux-pam
+-* lite
+-* live555
+-* lmbench
+-* lm-sensors
+-* lockfile-progs
+-* logrotate
+-* logsurfer
+-* lrzsz
+-* lshw
+-* lsof
+-* lsuio
+-* ltp-testsuite
+-* ltrace
+-* lttng-babeltrace
+-* lttng-libust
+-* lttng-modules
+-* lttng-tools
+-* lua
+-* luacjson
+-* luaexpat
+-* luafilesystem
+-* luajit
+-* luasocket
+-* lvm2
+-* lzma
+-* lzo
+-* lzop
+-* m4
+-* macchanger
+-* madplay
+-* make
+-* makedevs
+-* matchbox-common
+-* matchbox-desktop
+-* matchbox-fakekey
+-* matchbox-keyboard
+-* matchbox-lib
+-* matchbox-panel
+-* matchbox-startup-monitor
+-* matchbox-wm
+-* mcookie
+-* mdadm
+-* mediastreamer
+-* memstat
+-* memtester
+-* mesa3d
+-* metacity
+-* microperl
+-* midori
+-* mii-diag
+-* minicom
+-* mobile_broadband_provider_info
+-* module-init-tools
+-* monit
+-* mpc
+-* mpd
+-* mpfr
+-* mpg123
+-* mplayer
+-* mrouted
+-* msmtp
+-* mtd
+-* mtdev
+-* mtdev2tuio
+-* musepack
+-* mutt
+-* mxml
+-* mysql_client
+-* nano
+-* nanocom
+-* nasm
+-* nbd
+-* ncftp
+-* ncurses
+-* ndisc6
+-* neon
+-* netatalk
+-* netcat
+-* netkitbase
+-* netkittelnet
+-* netperf
+-* netplug
+-* netsnmp
+-* netstat-nat
+-* network-manager
+-* newt
+-* nfacct
+-* nfs-utils
+-* ngircd
+-* ngrep
+-* noip
+-* nss-mdns
+-* ntfs-3g
+-* ntp
+-* nuttcp
+-* ocf-linux
+-* ofono
+-* olsr
+-* open2300
+-* opencv
+-* openntpd
+-* openocd
+-* openssh
+-* openssl
+-* openswan
+-* openvpn
+-* opkg
+-* oprofile
+-* opus
+-* opus-tools
+-* orc
+-* ortp
+-* owl-linux
+-* pango
+-* parted
+-* patch
+-* pciutils
+-* pcmanfm
+-* pcre
+-* pcsc-lite
+-* perl
+-* php
+-* picocom
+-* pixman
+-* pkgconf
+-* pkg-config
+-* poco
+-* polarssl
+-* popt
+-* portaudio
+-* portmap
+-* pppd
+-* pptp-linux
+-* prboom
+-* procps
+-* proftpd
+-* protobuf
+-* psmisc
+-* pthread-stubs
+-* pulseaudio
+-* pv
+-* python
+-* python3
+-* python-dpkt
+-* python-id3
+-* python-mad
+-* python-meld3
+-* python-netifaces
+-* python-nfc
+-* python-protobuf
+-* python-pygame
+-* python-serial
+-* python-setuptools
+-* qextserialport
+-* qt
+-* qtuio
+-* quagga
+-* quota
+-* radvd
+-* ramspeed
+-* rdesktop
+-* read-edid
+-* readline
+-* rings
+-* rng-tools
+-* rpcbind
+-* rpm
+-* rp-pppoe
+-* rrdtool
+-* rsh-redone
+-* rsync
+-* rsyslog
+-* rtai
+-* rtorrent
+-* rt-tests
+-* rubix
+-* ruby
+-* samba
+-* sane-backends
+-* sawman
+-* schifra
+-* sconeserver
+-* screen
+-* sdl
+-* sdl_gfx
+-* sdl_image
+-* sdl_mixer
+-* sdl_net
+-* sdl_sound
+-* sdl_ttf
+-* sdparm
+-* sed
+-* ser2net
+-* setserial
+-* shared-mime-info
+-* slang
+-* smartmontools
+-* socat
+-* socketcand
+-* sound-theme-borealis
+-* sound-theme-freedesktop
+-* spawn-fcgi
+-* speex
+-* sqlcipher
+-* sqlite
+-* squashfs
+-* squashfs3
+-* squid
+-* sredird
+-* sshfs
+-* sstrip
+-* startup-notification
+-* statserial
+-* strace
+-* stress
+-* stunnel
+-* sudo
+-* supervisor
+-* sylpheed
+-* synergy
+-* sysklogd
+-* sysprof
+-* sysstat
+-* systemd
+-* sysvinit
+-* taglib
+-* tar
+-* tcl
+-* tcpdump
+-* tcpreplay
+-* tftpd
+-* thttpd
+-* tidsp-binaries
+-* tiff
+-* time
+-* tinyhttpd
+-* ti-utils
+-* tn5250
+-* torsmo
+-* transmission
+-* tremor
+-* tslib
+-* ttcp
+-* uboot-tools
+-* udev
+-* udpcast
+-* uemacs
+-* ulogd
+-* unionfs
+-* usb_modeswitch
+-* usb_modeswitch_data
+-* usbmount
+-* usbutils
+-* ushare
+-* util-linux
+-* vala
+-* valgrind
+-* vim
+-* vorbis-tools
+-* vpnc
+-* vsftpd
+-* vtun
+-* wavpack
+-* webkit
+-* webrtc-audio-processing
+-* wget
+-* whetstone
+-* which
+-* wipe
+-* wireless_tools
+-* wpa_supplicant
+-* wsapi
+-* x11vnc
+-* xapp_appres
+-* xapp_bdftopcf
+-* xapp_beforelight
+-* xapp_bitmap
+-* xapp_editres
+-* xapp_fonttosfnt
+-* xapp_fslsfonts
+-* xapp_fstobdf
+-* xapp_iceauth
+-* xapp_ico
+-* xapp_listres
+-* xapp_luit
+-* xapp_mkfontdir
+-* xapp_mkfontscale
+-* xapp_oclock
+-* xapp_rgb
+-* xapp_rstart
+-* xapp_scripts
+-* xapp_sessreg
+-* xapp_setxkbmap
+-* xapp_showfont
+-* xapp_smproxy
+-* xapp_twm
+-* xapp_viewres
+-* xapp_x11perf
+-* xapp_xauth
+-* xapp_xbacklight
+-* xapp_xbiff
+-* xapp_xcalc
+-* xapp_xclipboard
+-* xapp_xclock
+-* xapp_xcmsdb
+-* xapp_xcursorgen
+-* xapp_xdbedizzy
+-* xapp_xditview
+-* xapp_xdm
+-* xapp_xdpyinfo
+-* xapp_xdriinfo
+-* xapp_xedit
+-* xapp_xev
+-* xapp_xeyes
+-* xapp_xf86dga
+-* xapp_xfd
+-* xapp_xfontsel
+-* xapp_xfs
+-* xapp_xfsinfo
+-* xapp_xgamma
+-* xapp_xgc
+-* xapp_xhost
+-* xapp_xinit
+-* xapp_xinput
+-* xapp_xinput-calibrator
+-* xapp_xkbcomp
+-* xapp_xkbevd
+-* xapp_xkbprint
+-* xapp_xkbutils
+-* xapp_xkill
+-* xapp_xload
+-* xapp_xlogo
+-* xapp_xlsatoms
+-* xapp_xlsclients
+-* xapp_xlsfonts
+-* xapp_xmag
+-* xapp_xman
+-* xapp_xmessage
+-* xapp_xmh
+-* xapp_xmodmap
+-* xapp_xmore
+-* xapp_xplsprinters
+-* xapp_xpr
+-* xapp_xprehashprinterlist
+-* xapp_xprop
+-* xapp_xrandr
+-* xapp_xrdb
+-* xapp_xrefresh
+-* xapp_xset
+-* xapp_xsetmode
+-* xapp_xsetpointer
+-* xapp_xsetroot
+-* xapp_xsm
+-* xapp_xstdcmap
+-* xapp_xvidtune
+-* xapp_xvinfo
+-* xapp_xwd
+-* xapp_xwininfo
+-* xapp_xwud
+-* xavante
+-* xcb-proto
+-* xcb-util
+-* xdata_xbitmaps
+-* xdata_xcursor-themes
+-* xdriver_xf86-input-acecad
+-* xdriver_xf86-input-aiptek
+-* xdriver_xf86-input-evdev
+-* xdriver_xf86-input-joystick
+-* xdriver_xf86-input-keyboard
+-* xdriver_xf86-input-mouse
+-* xdriver_xf86-input-synaptics
+-* xdriver_xf86-input-tslib
+-* xdriver_xf86-input-vmmouse
+-* xdriver_xf86-input-void
+-* xdriver_xf86-video-apm
+-* xdriver_xf86-video-ark
+-* xdriver_xf86-video-ast
+-* xdriver_xf86-video-ati
+-* xdriver_xf86-video-chips
+-* xdriver_xf86-video-cirrus
+-* xdriver_xf86-video-dummy
+-* xdriver_xf86-video-fbdev
+-* xdriver_xf86-video-geode
+-* xdriver_xf86-video-glide
+-* xdriver_xf86-video-glint
+-* xdriver_xf86-video-i128
+-* xdriver_xf86-video-i740
+-* xdriver_xf86-video-intel
+-* xdriver_xf86-video-mach64
+-* xdriver_xf86-video-mga
+-* xdriver_xf86-video-neomagic
+-* xdriver_xf86-video-newport
+-* xdriver_xf86-video-nv
+-* xdriver_xf86-video-openchrome
+-* xdriver_xf86-video-r128
+-* xdriver_xf86-video-rendition
+-* xdriver_xf86-video-s3
+-* xdriver_xf86-video-s3virge
+-* xdriver_xf86-video-savage
+-* xdriver_xf86-video-siliconmotion
+-* xdriver_xf86-video-sis
+-* xdriver_xf86-video-sisusb
+-* xdriver_xf86-video-suncg14
+-* xdriver_xf86-video-suncg3
+-* xdriver_xf86-video-suncg6
+-* xdriver_xf86-video-sunffb
+-* xdriver_xf86-video-sunleo
+-* xdriver_xf86-video-suntcx
+-* xdriver_xf86-video-tdfx
+-* xdriver_xf86-video-tga
+-* xdriver_xf86-video-trident
+-* xdriver_xf86-video-tseng
+-* xdriver_xf86-video-v4l
+-* xdriver_xf86-video-vesa
+-* xdriver_xf86-video-vmware
+-* xdriver_xf86-video-voodoo
+-* xdriver_xf86-video-wsfb
+-* xdriver_xf86-video-xgi
+-* xdriver_xf86-video-xgixp
+-* xenomai
+-* xerces
+-* xfont_encodings
+-* xfont_font-adobe-100dpi
+-* xfont_font-adobe-75dpi
+-* xfont_font-adobe-utopia-100dpi
+-* xfont_font-adobe-utopia-75dpi
+-* xfont_font-adobe-utopia-type1
+-* xfont_font-alias
+-* xfont_font-arabic-misc
+-* xfont_font-bh-100dpi
+-* xfont_font-bh-75dpi
+-* xfont_font-bh-lucidatypewriter-100dpi
+-* xfont_font-bh-lucidatypewriter-75dpi
+-* xfont_font-bh-ttf
+-* xfont_font-bh-type1
+-* xfont_font-bitstream-100dpi
+-* xfont_font-bitstream-75dpi
+-* xfont_font-bitstream-speedo
+-* xfont_font-bitstream-type1
+-* xfont_font-cronyx-cyrillic
+-* xfont_font-cursor-misc
+-* xfont_font-daewoo-misc
+-* xfont_font-dec-misc
+-* xfont_font-ibm-type1
+-* xfont_font-isas-misc
+-* xfont_font-jis-misc
+-* xfont_font-micro-misc
+-* xfont_font-misc-cyrillic
+-* xfont_font-misc-ethiopic
+-* xfont_font-misc-meltho
+-* xfont_font-misc-misc
+-* xfont_font-mutt-misc
+-* xfont_font-schumacher-misc
+-* xfont_font-screen-cyrillic
+-* xfont_font-sony-misc
+-* xfont_font-sun-misc
+-* xfont_font-util
+-* xfont_font-winitzki-cyrillic
+-* xfont_font-xfree86-type1
+-* xfsprogs
+-* xinetd
+-* xkeyboard-config
+-* xl2tp
+-* xlib_libdmx
+-* xlib_libfontenc
+-* xlib_libFS
+-* xlib_libICE
+-* xlib_liboldX
+-* xlib_libpciaccess
+-* xlib_libSM
+-* xlib_libX11
+-* xlib_libXau
+-* xlib_libXaw
+-* xlib_libXcomposite
+-* xlib_libXcursor
+-* xlib_libXdamage
+-* xlib_libXdmcp
+-* xlib_libXext
+-* xlib_libXfixes
+-* xlib_libXfont
+-* xlib_libXfontcache
+-* xlib_libXft
+-* xlib_libXi
+-* xlib_libXinerama
+-* xlib_libxkbfile
+-* xlib_libxkbui
+-* xlib_libXmu
+-* xlib_libXp
+-* xlib_libXpm
+-* xlib_libXprintAppUtil
+-* xlib_libXprintUtil
+-* xlib_libXrandr
+-* xlib_libXrender
+-* xlib_libXres
+-* xlib_libXScrnSaver
+-* xlib_libXt
+-* xlib_libXtst
+-* xlib_libXv
+-* xlib_libXvMC
+-* xlib_libXxf86dga
+-* xlib_libXxf86vm
+-* xlib_xtrans
+-* xmlstarlet
+-* xproto_applewmproto
+-* xproto_bigreqsproto
+-* xproto_compositeproto
+-* xproto_damageproto
+-* xproto_dmxproto
+-* xproto_dri2proto
+-* xproto_fixesproto
+-* xproto_fontcacheproto
+-* xproto_fontsproto
+-* xproto_glproto
+-* xproto_inputproto
+-* xproto_kbproto
+-* xproto_printproto
+-* xproto_randrproto
+-* xproto_recordproto
+-* xproto_renderproto
+-* xproto_resourceproto
+-* xproto_scrnsaverproto
+-* xproto_videoproto
+-* xproto_windowswmproto
+-* xproto_xcmiscproto
+-* xproto_xextproto
+-* xproto_xf86bigfontproto
+-* xproto_xf86dgaproto
+-* xproto_xf86driproto
+-* xproto_xf86rushproto
+-* xproto_xf86vidmodeproto
+-* xproto_xineramaproto
+-* xproto_xproto
+-* xserver_xorg-server
+-* xstroke
+-* xterm
+-* xutil_makedepend
+-* xutil_util-macros
+-* xvkbd
+-* xz
+-* yajl
+-* yasm
+-* zeromq
+-* zlib
+-* zxing
 -- 
 1.7.2.5
