@@ -1,27 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 Mar 2013 23:36:29 +0100
-Subject: [Buildroot] [PATCH 05/15] apply-patches.sh: applying xz-ed
-	patches
-In-Reply-To: <300459ef0167d8eac9379537780afc8d282a62ea.1364253936.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Tue, 26 Mar 2013 00:28:00 +0100")
-References: <cover.1364253936.git.yann.morin.1998@free.fr>
- <cover.1364253936.git.yann.morin.1998@free.fr>
- <300459ef0167d8eac9379537780afc8d282a62ea.1364253936.git.yann.morin.1998@free.fr>
-Message-ID: <87mwtp7pqq.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 27 Mar 2013 00:38:03 +0100
+Subject: [Buildroot] [git commit] webkit: select jpeg
+Message-ID: <20130326234032.488969B31B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=653bfd0b913f5bea69737c6ae10d765e10595b62
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann> From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
- Yann> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
- Yann> [yann.morin.1998 at free.fr: space-damage]
- Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fixes http://autobuild.buildroot.net/results/fc6ca5d72aefcb2d2276c34663579d0633dc900c/
 
-Committed, thanks.
+Webkit has jpeg as a dependency, so ensure it also gets selected in
+Config.in
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/webkit/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index 34071e4..c6711b8 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_WEBKIT
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_ENCHANT
+ 	select BR2_PACKAGE_LIBSOUP
++	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_CAIRO_PNG
+ 	select BR2_PACKAGE_LIBGAIL
+ 	select BR2_PACKAGE_XLIB_LIBXT if BR2_PACKAGE_XORG7
