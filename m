@@ -1,48 +1,95 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 Mar 2013 23:10:25 +0100
-Subject: [Buildroot] [PATCH 04/15] Added package Gutenprint
-In-Reply-To: <ba8ccd1c57b7707b1d8be160e941d456e0a4656b.1364253936.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Tue, 26 Mar 2013 00:27:59 +0100")
-References: <cover.1364253936.git.yann.morin.1998@free.fr>
- <cover.1364253936.git.yann.morin.1998@free.fr>
- <ba8ccd1c57b7707b1d8be160e941d456e0a4656b.1364253936.git.yann.morin.1998@free.fr>
-Message-ID: <87sj3h7qy6.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 26 Mar 2013 22:53:10 +0100
+Subject: [Buildroot] [git commit] package: add foomatic-filters
+Message-ID: <20130326221004.B6BB09B314@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2320f6a309c405124aa3958948c3577378d07968
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann> From: Olivier Schonken <olivier.schonken@gmail.com>
- Yann> Gutenprint, formerly named Gimp-Print, is a suite of printer
- Yann> drivers that may be used with most common UNIX print spooling
- Yann> systems, including CUPS, lpr, LPRng, or others
+Foomatic is a database-driven system for integrating free software
+printer drivers with common spoolers under Unix. It supports CUPS,
+LPRng, LPD, GNUlpr, Solaris LP, PPR, PDQ, CPS, and direct printing
+with every free software printer driver known to us and every
+printer known to work with these drivers.
 
- Yann> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
- Yann> [yann.morin.1998 at free.fr: needs libiconv, cleanup]
- Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Peter: minor whitespace fixes]
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+[yann.morin.1998 at free.fr: space-damage, licensing terms, unneeded vars]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in                            |    1 +
+ package/foomatic-filters/Config.in           |   18 ++++++++++++++++++
+ package/foomatic-filters/foomatic-filters.mk |   22 ++++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 0 deletions(-)
 
-It needs host-pkgconf, otherwise it fails at configure time because of
-the PKG_* checks:
-
-checking whether to build foomatic data files... no
-checking for foomatic-ppdfile... /usr/bin/foomatic-ppdfile
-checking whether to make use of foomatic 3 extra features... no
-checking for ijs-config... no
-checking whether to build Ghostscript driver... no
-checking whether to enable loadable modules... (automatic)
-checking whether to turn on debugging in build... no
-checking whether to turn on profiling in build... no
-checking whether to use readline... yes
-checking for gimptool-2.0... no
-checking for gimptool... no
-./configure: 13604: ./configure.lineno: Syntax error: word unexpected (expecting ")")
-make: *** [/home/peko/source/buildroot/output/build/gutenprint-5.2.9/.stamp_configured] Error 2
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index 82e6c5c..74537e4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -645,6 +645,7 @@ source "package/connman/Config.in"
+ source "package/ctorrent/Config.in"
+ source "package/conntrack-tools/Config.in"
+ source "package/cups/Config.in"
++source "package/foomatic-filters/Config.in"
+ source "package/hplip/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/dhcp/Config.in"
+diff --git a/package/foomatic-filters/Config.in b/package/foomatic-filters/Config.in
+new file mode 100644
+index 0000000..aa056b9
+--- /dev/null
++++ b/package/foomatic-filters/Config.in
+@@ -0,0 +1,18 @@
++comment "foomatic-filters requires a toolchain with support for THREADS"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_FOOMATIC_FILTERS
++	bool "foomatic_filters"
++	depends on BR2_PACKAGE_CUPS
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_ENSCRIPT
++	help
++	  Foomatic Filters
++	  Foomatic is a database-driven system for integrating free software
++	  printer drivers with common spoolers under Unix. It supports CUPS,
++	  LPRng, LPD, GNUlpr, Solaris LP, PPR, PDQ, CPS, and direct printing
++	  with every free software printer driver known to us and every
++	  printer known to work with these drivers.
++
++	  http://www.linuxfoundation.org/collaborate/workgroups/openprinting/database/foomatic
+diff --git a/package/foomatic-filters/foomatic-filters.mk b/package/foomatic-filters/foomatic-filters.mk
+new file mode 100644
+index 0000000..ad7ab7a
+--- /dev/null
++++ b/package/foomatic-filters/foomatic-filters.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# foomatic_filters
++#
++#############################################################
++
++FOOMATIC_FILTERS_VERSION = 4.0.17
++FOOMATIC_FILTERS_SITE = http://www.openprinting.org/download/foomatic
++FOOMATIC_FILTERS_LICENSE = GPLv2+
++FOOMATIC_FILTERS_LICENSE_FILES = COPYING
++FOOMATIC_FILTERS_DEPENDENCIES = cups libusb enscript
++
++FOOMATIC_FILTERS_CONF_OPT = --with-file-converter=enscript
++
++ifeq ($(BR2_PACKAGE_DBUS),y)
++FOOMATIC_FILTERS_CONF_OPT += --enable-dbus
++FOOMATIC_FILTERS_DEPENDENCIES += dbus
++else
++FOOMATIC_FILTERS_CONF_OPT += --disable-dbus
++endif
++
++$(eval $(autotools-package))
