@@ -1,53 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Mar 2013 09:41:02 +0100
-Subject: [Buildroot] [PATCH v3 2/2] buildroot: target: Add Blackfin
- architecture support.
-In-Reply-To: <CAJxxZ0OOj=vi5xuCp79vU0_kX_KNx+UX+CSRkLkr4_xsfNtS2Q@mail.gmail.com>
-References: <1363942902-6045-1-git-send-email-sonic.adi@gmail.com>
- <1363942902-6045-2-git-send-email-sonic.adi@gmail.com>
- <20130322155400.410ec78e@skate>
- <CAJxxZ0NLV==GLHFP627kk_BiaDst+a8qp71k_gnv0y=Sqj5=qA@mail.gmail.com>
- <CAAXf6LUBQhxB60Tt9OsA0kW9JZs3vmZMc7_Qyr7SY1yQodzgzw@mail.gmail.com>
- <CAJxxZ0OOj=vi5xuCp79vU0_kX_KNx+UX+CSRkLkr4_xsfNtS2Q@mail.gmail.com>
-Message-ID: <20130326094102.094def3d@skate>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Tue, 26 Mar 2013 17:33:54 +0800
+Subject: [Buildroot] [PATCH 3/7] arch: toolchain: Introduce binary formats
+	BINFMT_*.
+In-Reply-To: <1364290438-13987-1-git-send-email-sonic.adi@gmail.com>
+References: <1364290438-13987-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1364290438-13987-3-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sonic Zhang,
+From: Sonic Zhang <sonic.zhang@analog.com>
 
-On Tue, 26 Mar 2013 16:16:07 +0800, Sonic Zhang wrote:
+Just introduce the symbol and options in arch generic Config.in.
+Append FLAT format link flags to external toolchain wrapper.
 
-> > If you need to have different prefixes, isn't it possible to hook into one
-> > of these variables, instead of creating a new variable
-> > CROSS_COMPILE_SHARED_ELF/FLAT ?
-> > Depending on the elf/flat choice, you would then for example set
-> > BR2_TOOLCHAIN_EXTERNAL_PREFIX (possible from kconfig directly) (but this
-> > would work only for external toolchains), or override TARGET_CROSS.
-> > With such a change, you can reuse TARGET_CC and TARGET_READELF.
-> 
-> I do set BR2_TOOLCHAIN_EXTERNAL_PREFIX to bfin-uclinux via kconfig to
-> build the complete packages in buildroot. Meanwhile, I would like to
-> install FDPIC libraries as well from the bfin-linux-uclibc toolchain
-> folder, which is different from the bfin-uclinux I set to
-> BR2_TOOLCHAIN_EXTERNAL_PREFIX.
-> 
-> Blackfin toolchain bfin-linux-uclibc and bfin-uclinux are located in
-> different path.
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+---
+ arch/Config.in                                     |   13 +++++++++++++
+ toolchain/toolchain-external/ext-tool.mk           |    4 ++++
+ .../toolchain-external/ext-toolchain-wrapper.c     |    3 +++
+ 3 files changed, 20 insertions(+), 0 deletions(-)
 
-But the current external toolchain logic in
-toolchain/toolchain-external/ext-tool.mk only extracts either the
-bfin-uclinux sysroot *or* the bfin-linux-uclibc sysroot, so you in
-practice don't have both at the same time, at least with the current
-Buildroot. So presumably this would also need to be changed, right?
-
-Thanks,
-
-Thomas
+diff --git a/arch/Config.in b/arch/Config.in
+index c341848..be475c0 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -177,6 +177,19 @@ config BR2_GCC_TARGET_CPU
+ config BR2_GCC_TARGET_CPU_REVISION
+ 	string
+ 
++# Set up target binary format
++choice
++	prompt "Target Binary Format"
++	default BR2_BINFMT_ELF
++config BR2_BINFMT_ELF
++	bool "ELF"
++config BR2_BINFMT_FDPIC
++	bool "FDPIC"
++config BR2_BINFMT_FLAT
++	bool "FLAT"
++	select BR2_PREFER_STATIC_LIB
++endchoice
++
+ if BR2_arm || BR2_armeb
+ source "arch/Config.in.arm"
+ endif
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 407e1ad..27fd296 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -164,6 +164,10 @@ ifneq ($(CC_TARGET_ABI_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
+ endif
++ifeq ($(BR2_BINFMT_FLAT),y)
++TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
++TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_BINFMT_FLAT
++endif
+ 
+ ifneq ($(BR2_TARGET_OPTIMIZATION),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index a92bada..9a2fc70 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -47,6 +47,9 @@ static char *predef_args[] = {
+ #ifdef BR_64
+ 	"-m64",
+ #endif
++#ifdef BR_BINFMT_FLAT
++	"-Wl,-elf2flt",
++#endif
+ #ifdef BR_ADDITIONAL_CFLAGS
+ 	BR_ADDITIONAL_CFLAGS
+ #endif
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.0.4
