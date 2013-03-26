@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Mar 2013 08:49:51 +0100
-Subject: [Buildroot] [PATCH] gpsd: nmea2000 requires aivdm support
-Message-ID: <1364284191-4431-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Mar 2013 09:12:26 +0100
+Subject: [Buildroot] [PATCH] avahi: add missing dependency on host-gettext
+Message-ID: <1364285546-4565-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,25 +9,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
-http://autobuild.buildroot.org/results/853cac5becf9d071c6ec1181e1e951bc8e7d80d5/build-end.log
-and tons of identical build failures.
+http://autobuild.buildroot.org/results/1dd5993d2ead9a92e2eb73227b19697728950b86/build-end.log.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gpsd/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+ package/avahi/avahi.mk |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index b26cf07..337f8e7 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -169,6 +169,7 @@ config BR2_PACKAGE_GPSD_NMEA
- config BR2_PACKAGE_GPSD_NMEA2000
- 	bool "NMEA2000"
- 	select BR2_PACKAGE_GPSD_NAVCOM
-+	select BR2_PACKAGE_GPSD_AIVDM
- 	help
- 	  NMEA2000/CAN support
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 5f07a2f..e8ca560 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -85,7 +85,8 @@ AVAHI_CONF_OPT = --localstatedir=/var \
+ 		--with-autoipd-user=default \
+ 		--with-autoipd-group=default
  
+-AVAHI_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-intltool host-pkgconf
++AVAHI_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-intltool \
++       host-pkgconf host-gettext
+ 
+ ifneq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_AVAHI_AUTOIPD),)
+ AVAHI_DEPENDENCIES += libdaemon
 -- 
 1.7.9.5
