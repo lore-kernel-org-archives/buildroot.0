@@ -1,9 +1,10 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Tue, 26 Mar 2013 17:33:58 +0800
-Subject: [Buildroot] [PATCH 7/7] package: Introduce NOMMU symbol
+Date: Tue, 26 Mar 2013 17:33:53 +0800
+Subject: [Buildroot] [PATCH 2/7] arch: toolchain: Introduce target CPU
+	revision.
 In-Reply-To: <1364290438-13987-1-git-send-email-sonic.adi@gmail.com>
 References: <1364290438-13987-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1364290438-13987-7-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1364290438-13987-2-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +13,58 @@ To: buildroot@busybox.net
 
 From: Sonic Zhang <sonic.zhang@analog.com>
 
+Adds the possibility to have a free-form CPU revision string and append it
+to the target CPU. Only Blackfin actually uses this option.
+
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
- package/Makefile.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ arch/Config.in                           |    3 +++
+ arch/Config.in.bfin                      |    5 +++++
+ toolchain/toolchain-external/ext-tool.mk |    4 ++++
+ 3 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a8bf36b..3a26b09 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -103,6 +103,10 @@ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET
- TARGET_CXXFLAGS = $(TARGET_CFLAGS)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+diff --git a/arch/Config.in b/arch/Config.in
+index 472b10c..c341848 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -174,6 +174,9 @@ config BR2_GCC_TARGET_ABI
+ config BR2_GCC_TARGET_CPU
+ 	string
  
-+ifneq ($(BR2_USE_MMU), y)
-+TARGET_CFLAGS += -D__NOMMU__
-+endif
++config BR2_GCC_TARGET_CPU_REVISION
++	string
 +
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
- TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
- else
+ if BR2_arm || BR2_armeb
+ source "arch/Config.in.arm"
+ endif
+diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+index ac96620..021f5fe 100644
+--- a/arch/Config.in.bfin
++++ b/arch/Config.in.bfin
+@@ -97,3 +97,8 @@ config BR2_GCC_TARGET_CPU
+ 	default bf548		if BR2_bf548
+ 	default bf549		if BR2_bf549
+ 	default bf561		if BR2_bf561
++
++config BR2_GCC_TARGET_CPU_REVISION
++	string "Target CPU revision"
++	help
++	  Specify target cpu revision which is passed to compiler as a parameter.
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index b477bc0..407e1ad 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -134,7 +134,11 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
+ endif
+ 
+ CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
++ifeq ($(BR2_GCC_TARGET_CPU_REVISION),)
+ CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
++else
++CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
++endif
+ CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
+ CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
+ 
 -- 
 1.7.0.4
