@@ -1,10 +1,9 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Tue, 26 Mar 2013 17:33:56 +0800
-Subject: [Buildroot] [PATCH 5/7] package: Introduce package-specific
-	BINFMT_FLAT options.
+Date: Tue, 26 Mar 2013 17:33:57 +0800
+Subject: [Buildroot] [PATCH 6/7] arch: Introduce blackfin-specific Makefile
 In-Reply-To: <1364290438-13987-1-git-send-email-sonic.adi@gmail.com>
 References: <1364290438-13987-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1364290438-13987-5-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1364290438-13987-6-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,45 +12,124 @@ To: buildroot@busybox.net
 
 From: Sonic Zhang <sonic.zhang@analog.com>
 
-Add new option <PKG>_FLAT_STACKSIZE. The document needs to be updated.
+- Create arch makefile.
+- Create blackfin makefile.
+- Add FDPIC and FLAT library options and makefile targets to install
+libraries for different binary formats into the same rootfs image.
+- update the TARGET_EXCEPTIONS variable in support/scripts/graph-depends for
+new custom targets
 
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
- package/pkg-autotools.mk |    5 +++++
- package/pkg-generic.mk   |    5 +++++
- 2 files changed, 10 insertions(+), 0 deletions(-)
+ Makefile                      |    2 ++
+ arch/Config.in.bfin           |   21 +++++++++++++++++++++
+ arch/Makefile.in              |    5 +++++
+ arch/Makefile.in.bfin         |   26 ++++++++++++++++++++++++++
+ support/scripts/graph-depends |    2 ++
+ 5 files changed, 56 insertions(+), 0 deletions(-)
+ create mode 100644 arch/Makefile.in
+ create mode 100644 arch/Makefile.in.bfin
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 890506b..09bdc7b 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -82,6 +82,11 @@ $(2)_CLEAN_OPT			?= clean
- $(2)_UNINSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) uninstall
- $(2)_UNINSTALL_TARGET_OPT	?= DESTDIR=$$(TARGET_DIR)  uninstall
+diff --git a/Makefile b/Makefile
+index 7f0822f..c2f43a4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -329,6 +329,8 @@ ifneq ($(PACKAGE_OVERRIDE_FILE),)
+ -include $(PACKAGE_OVERRIDE_FILE)
+ endif
  
-+ifeq ($(BR2_TARGET_ABI_FLAT),y)
-+ ifneq ($$($(2)_FLAT_STACKSIZE),)
-+  $(2)_CONF_ENV			+= LDFLAGS="$(TARGET_LDFLAGS) -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)"
-+ endif
++include arch/Makefile.in
++
+ include package/*/*.mk
+ 
+ include boot/common.mk
+diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+index 021f5fe..f59c672 100644
+--- a/arch/Config.in.bfin
++++ b/arch/Config.in.bfin
+@@ -62,6 +62,27 @@ config BR2_bf561
+ 	bool "bf561"
+ endchoice
+ 
++config BR2_BFIN_INSTALL_FDPIC_SHARED
++	depends on BR2_bfin && !BR2_BINFMT_FDPIC
++	bool "Install FDPIC shared libraries"
++	default y
++	help
++	  Blackfin Linux kernel supports running both FDPIC and FLAT applications
++	  concurrently if the binary format specific libraries installed properly.
++	  This option allow developer to install FDPIC libraries into a buildroot
++	  rootfs image built with binary format macro other than BR2_BINFMT_FDPIC.
++
++config BR2_BFIN_INSTALL_FLAT_SHARED
++	depends on BR2_bfin && && !BR2_BINFMT_FLAT_SHARED
++	bool "Install FLAT shared libraries"
++	default y
++	help
++	  Blackfin Linux kernel supports running both FDPIC and FLAT applications
++	  concurrently if the binary format specific libraries installed properly.
++	  This option allow developer to install FLAT libraries into a buildroot
++	  rootfs image built with binary format macro other than
++	  BR2_BINFMT_FLAT_SHARED.
++
+ config BR2_ARCH
+ 	default "bfin"
+ 
+diff --git a/arch/Makefile.in b/arch/Makefile.in
+new file mode 100644
+index 0000000..d791118
+--- /dev/null
++++ b/arch/Makefile.in
+@@ -0,0 +1,5 @@
++# The architecture specific Makefile.in.$ARCH should be included only
++# when the arch macro is selected.
++ifeq ($(BR2_bfin),y)
++include arch/Makefile.in.bfin
 +endif
- 
- #
- # Configure step. Only define it if not already defined by the package
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 57b0fd0..5ce32f9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -303,6 +303,11 @@ endif
- 
- $(2)_REDISTRIBUTE		?= YES
- 
-+ifeq ($(BR2_TARGET_ABI_FLAT),y)
-+ ifneq ($$($(2)_FLAT_STACKSIZE),)
-+  $(2)_FLAT_LDFLAGS = -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)
-+ endif
+diff --git a/arch/Makefile.in.bfin b/arch/Makefile.in.bfin
+new file mode 100644
+index 0000000..3ad8d09
+--- /dev/null
++++ b/arch/Makefile.in.bfin
+@@ -0,0 +1,26 @@
++TARGETS_BFIN-$(BR2_BFIN_INSTALL_FDPIC_SHARED) += target-shared-libs-fdpic
++TARGETS_BFIN-$(BR2_BFIN_INSTALL_FLAT_SHARED) += target-shared-libs-flat
++TARGETS += $(TARGETS_BFIN-y)
++
++CROSS_COMPILE_SHARED_FDPIC ?= bfin-linux-uclibc-
++target-shared-libs-fdpic:
++	set -e; \
++	t=`$(CROSS_COMPILE_SHARED_FDPIC)gcc $(CPUFLAGS) -print-file-name=libc.a`; \
++	t=`dirname $$t`/../..; \
++	for i in $$t/lib/*so*; do \
++		i=`readlink -f "$$i"`; \
++		soname=`$(CROSS_COMPILE_SHARED_FDPIC)readelf -d "$$i" | sed -n '/(SONAME)/s:.*[[]\(.*\)[]].*:\1:p'`; \
++		$(INSTALL) -D $$i $(TARGET_DIR)/lib/$$soname; \
++	done
++
++CROSS_COMPILE_SHARED_FLAT ?= bfin-uclinux-
++target-shared-libs-flat:
++	set -e; \
++	t=`$(CROSS_COMPILE_SHARED_FLAT)gcc $(CPUFLAGS) -mid-shared-library -print-file-name=libc`; \
++	if [ -f $$t -a ! -h $$t ] ; then \
++		$(INSTALL) -D $$t $(TARGET_DIR)/lib/lib1.so; \
++	fi
++
++ifneq ($(BR2_USE_MMU), y)
++TARGET_CFLAGS += -D__uClinux__
 +endif
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 1163d79..227d085 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -168,6 +168,8 @@ TARGET_EXCEPTIONS = [
+     "erase-fakeroots",
+     "target-generic-hostname",
+     "target-root-passwd",
++    "target-shared-libs-fdpic",
++    "target-shared-libs-flat",
+ ]
  
- $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
- 
+ # In full mode, start with the result of get_targets() to get the main
 -- 
 1.7.0.4
