@@ -1,70 +1,56 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Tue, 26 Mar 2013 17:33:53 +0800
-Subject: [Buildroot] [PATCH 2/7] arch: toolchain: Introduce target CPU
-	revision.
-In-Reply-To: <1364290438-13987-1-git-send-email-sonic.adi@gmail.com>
-References: <1364290438-13987-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1364290438-13987-2-git-send-email-sonic.adi@gmail.com>
+Date: Tue, 26 Mar 2013 17:36:24 +0800
+Subject: [Buildroot] [PATCH v3 2/2] buildroot: target: Add Blackfin
+ architecture support.
+In-Reply-To: <20130326094102.094def3d@skate>
+References: <1363942902-6045-1-git-send-email-sonic.adi@gmail.com>
+ <1363942902-6045-2-git-send-email-sonic.adi@gmail.com>
+ <20130322155400.410ec78e@skate>
+ <CAJxxZ0NLV==GLHFP627kk_BiaDst+a8qp71k_gnv0y=Sqj5=qA@mail.gmail.com>
+ <CAAXf6LUBQhxB60Tt9OsA0kW9JZs3vmZMc7_Qyr7SY1yQodzgzw@mail.gmail.com>
+ <CAJxxZ0OOj=vi5xuCp79vU0_kX_KNx+UX+CSRkLkr4_xsfNtS2Q@mail.gmail.com>
+ <20130326094102.094def3d@skate>
+Message-ID: <CAJxxZ0Nz4AuHuTToa4W=U9TE3jFD0JTXRAJV5oFHn4J66yuY3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sonic Zhang <sonic.zhang@analog.com>
+Ho Thomas,
 
-Adds the possibility to have a free-form CPU revision string and append it
-to the target CPU. Only Blackfin actually uses this option.
+On Tue, Mar 26, 2013 at 4:41 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Sonic Zhang,
+>
+> On Tue, 26 Mar 2013 16:16:07 +0800, Sonic Zhang wrote:
+>
+>> > If you need to have different prefixes, isn't it possible to hook into one
+>> > of these variables, instead of creating a new variable
+>> > CROSS_COMPILE_SHARED_ELF/FLAT ?
+>> > Depending on the elf/flat choice, you would then for example set
+>> > BR2_TOOLCHAIN_EXTERNAL_PREFIX (possible from kconfig directly) (but this
+>> > would work only for external toolchains), or override TARGET_CROSS.
+>> > With such a change, you can reuse TARGET_CC and TARGET_READELF.
+>>
+>> I do set BR2_TOOLCHAIN_EXTERNAL_PREFIX to bfin-uclinux via kconfig to
+>> build the complete packages in buildroot. Meanwhile, I would like to
+>> install FDPIC libraries as well from the bfin-linux-uclibc toolchain
+>> folder, which is different from the bfin-uclinux I set to
+>> BR2_TOOLCHAIN_EXTERNAL_PREFIX.
+>>
+>> Blackfin toolchain bfin-linux-uclibc and bfin-uclinux are located in
+>> different path.
+>
+> But the current external toolchain logic in
+> toolchain/toolchain-external/ext-tool.mk only extracts either the
+> bfin-uclinux sysroot *or* the bfin-linux-uclibc sysroot, so you in
+> practice don't have both at the same time, at least with the current
+> Buildroot. So presumably this would also need to be changed, right?
 
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
----
- arch/Config.in                           |    3 +++
- arch/Config.in.bfin                      |    5 +++++
- toolchain/toolchain-external/ext-tool.mk |    4 ++++
- 3 files changed, 12 insertions(+), 0 deletions(-)
+Yes, that's why the installation target copy library files from the
+original toolchain folder other than the sysroot.
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 472b10c..c341848 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -174,6 +174,9 @@ config BR2_GCC_TARGET_ABI
- config BR2_GCC_TARGET_CPU
- 	string
- 
-+config BR2_GCC_TARGET_CPU_REVISION
-+	string
-+
- if BR2_arm || BR2_armeb
- source "arch/Config.in.arm"
- endif
-diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-index ac96620..021f5fe 100644
---- a/arch/Config.in.bfin
-+++ b/arch/Config.in.bfin
-@@ -97,3 +97,8 @@ config BR2_GCC_TARGET_CPU
- 	default bf548		if BR2_bf548
- 	default bf549		if BR2_bf549
- 	default bf561		if BR2_bf561
-+
-+config BR2_GCC_TARGET_CPU_REVISION
-+	string "Target CPU revision"
-+	help
-+	  Specify target cpu revision which is passed to compiler as a parameter.
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index b477bc0..407e1ad 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -134,7 +134,11 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
- endif
- 
- CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
-+ifeq ($(BR2_GCC_TARGET_CPU_REVISION),)
- CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
-+else
-+CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
-+endif
- CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
- CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
- 
--- 
-1.7.0.4
+Regards,
+
+Sonic
