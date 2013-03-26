@@ -1,33 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Mar 2013 08:38:29 +0100
-Subject: [Buildroot] [PATCH] bash: add missing dependency on host-bison
-Message-ID: <1364283509-4231-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 26 Mar 2013 08:33:18 +0100
+Subject: [Buildroot] [git commit] Makefile: simplify target skeleton copying
+Message-ID: <20130326074214.D6DFF9B2CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.org/results/dfedb4377a95e36e590c9a5a5853e3ed0ecbc247/build-end.log
+commit: http://git.buildroot.net/buildroot/commit/?id=13c07c79a401a8821b3224bc00c60c097f011add
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+We already use the .root stamp file to remember if we have copied the
+skeleton, so we can remove the /bin check.
+
+Likewise, we should always have a TARGET_SKELETON (or explicitly error
+out otherwise), so remove that check as well.
+
+Finally, now that we're using rsync to do the copy, we might as well
+use its exclude support instead of cleaning up unwanted files afterwards.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/bash/bash.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Makefile |    9 ++-------
+ 1 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index d28c615..fff0604 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -6,7 +6,7 @@
+diff --git a/Makefile b/Makefile
+index 62311ed..c95bb1e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -429,14 +429,9 @@ endif
  
- BASH_VERSION = 4.2
- BASH_SITE = $(BR2_GNU_MIRROR)/bash
--BASH_DEPENDENCIES = ncurses
-+BASH_DEPENDENCIES = ncurses host-bison
- BASH_LICENSE = GPLv3+
- BASH_LICENSE_FILES = COPYING
+ $(BUILD_DIR)/.root:
+ 	mkdir -p $(TARGET_DIR)
+-	if ! [ -d "$(TARGET_DIR)/bin" ]; then \
+-		if [ -d "$(TARGET_SKELETON)" ]; then \
+-			rsync -au $(TARGET_SKELETON)/ $(TARGET_DIR)/; \
+-		fi; \
+-	fi
++	rsync -au --exclude=.empty --exclude=CVS --exclude=.svn --exclude='*~' \
++		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+ 	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+-	-find $(TARGET_DIR) -type d -name CVS -print0 -o -name .svn -print0 | xargs -0 rm -rf
+-	-find $(TARGET_DIR) -type f \( -name .empty -o -name '*~' \) -print0 | xargs -0 rm -rf
+ 	touch $@
  
--- 
-1.7.9.5
+ $(TARGET_DIR): $(BUILD_DIR)/.root
