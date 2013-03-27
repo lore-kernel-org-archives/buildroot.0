@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 27 Mar 2013 19:55:01 +0100
-Subject: [Buildroot] [PATCH] libsigc: needs host-m4
-In-Reply-To: <1364396819-1340-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 27 Mar 2013 12:06:59 -0300")
-References: <1364396819-1340-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ppyk65bu.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Mar 2013 20:31:20 +0100
+Subject: [Buildroot] [PATCH 1/2] xkeyboard-config: needs libX11 and
+	xproto_xproto
+In-Reply-To: <1364401953-21809-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 27 Mar 2013 13:32:32 -0300")
+References: <1364401953-21809-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87hajw63nb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +14,10 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> Fixes
- Gustavo> http://autobuild.buildroot.net/results/e0e5ec38208ac6cc163b6ca882690de177cb8c51/
+ Gustavo> Fixes a build failure i've found while debugging another one :)
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
