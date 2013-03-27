@@ -1,8 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 27 Mar 2013 14:22:31 +0000 (UTC)
-Subject: [Buildroot] [Bug 6140] New: --enable-fileinfo not applied for php
-	package
-Message-ID: <bug-6140-163@https.bugs.busybox.net/>
+Date: Wed, 27 Mar 2013 14:24:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 6140] --enable-fileinfo not applied for php package
+In-Reply-To: <bug-6140-163@https.bugs.busybox.net/>
+References: <bug-6140-163@https.bugs.busybox.net/>
+Message-ID: <20130327142400.A68509B338@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,33 +12,16 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=6140
 
-           Summary: --enable-fileinfo not applied for php package
-           Product: buildroot
-           Version: unspecified
-          Platform: All
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: aleksandar.zivkovic at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Aleksandar <aleksandar.zivkovic@gmail.com> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-Overview: php package options typing error
-
-Steps to Reproduce: Build php package with option: --enable-fileinfo
-(BR2_PACKAGE_PHP_EXT_FILEINFO)
-
-Actual Results: ./configure script will not include --enable-fileinfo even if
-BR2_PACKAGE_PHP_EXT_FILEINFO is selected.
-
-Expected Results: ./configure script should include --enable-fileinfo when
-BR2_PACKAGE_PHP_EXT_FILEINFO is selected in menuconfig
-
-Build Date & Platform: BR 2013.02
+--- Comment #1 from Aleksandar <aleksandar.zivkovic@gmail.com> 2013-03-27 14:24:45 UTC ---
+Issue is in http://git.buildroot.net/buildroot/tree/package/php/php.mk:60:
+-        $(if $(BR2_PACKAGE_PHP_EXT_FILENIFO),--enable-fileinfo) \
++        $(if $(BR2_PACKAGE_PHP_EXT_FILEINFO),--enable-fileinfo) \
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
