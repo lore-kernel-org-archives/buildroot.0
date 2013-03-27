@@ -1,34 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 27 Mar 2013 15:54:14 +0100
-Subject: [Buildroot] [git commit] php: fix typo for fileinfo extension
-Message-ID: <20130327145352.2578E9B34D@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 27 Mar 2013 12:06:59 -0300
+Subject: [Buildroot] [PATCH] libsigc: needs host-m4
+Message-ID: <1364396819-1340-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff2038924fee4fbf6b2459a491138c337bdb8ace
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-As reported by Aleksandar <aleksandar.zivkovic@gmail.com> in bug #6140
+Fixes
+http://autobuild.buildroot.net/results/e0e5ec38208ac6cc163b6ca882690de177cb8c51/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/php/php.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libsigc/libsigc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 692ceb8..515244d 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -57,7 +57,7 @@ PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_CTYPE),--enable-ctype) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_FILTER),--enable-filter) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_CALENDAR),--enable-calendar) \
--		$(if $(BR2_PACKAGE_PHP_EXT_FILENIFO),--enable-fileinfo) \
-+		$(if $(BR2_PACKAGE_PHP_EXT_FILEINFO),--enable-fileinfo) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_BCMATH),--enable-bcmath)
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_OPENSSL),y)
+diff --git a/package/libsigc/libsigc.mk b/package/libsigc/libsigc.mk
+index 3f58686..c0a0835 100644
+--- a/package/libsigc/libsigc.mk
++++ b/package/libsigc/libsigc.mk
+@@ -7,6 +7,7 @@
+ LIBSIGC_VERSION = 2.2.11
+ LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.xz
+ LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.2
++LIBSIGC_DEPENDENCIES = host-m4
+ LIBSIGC_INSTALL_STAGING = YES
+ LIBSIGC_LICENSE = LGPLv2.1+
+ LIBSIGC_LICENSE_FILES = COPYING
+-- 
+1.8.1.5
