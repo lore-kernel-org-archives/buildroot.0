@@ -1,32 +1,25 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 27 Mar 2013 11:43:07 -0300
-Subject: [Buildroot] [PATCH] php: fix typo for fileinfo extension
-Message-ID: <1364395387-29580-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 27 Mar 2013 11:53:56 -0300
+Subject: [Buildroot] [PATCH 5/5] Update libarchive to 3.0.4
+In-Reply-To: <1364308865-18786-1-git-send-email-arved@arved.at>
+References: <1364308865-18786-1-git-send-email-arved@arved.at>
+Message-ID: <51530804.7010507@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported by Aleksandar <aleksandar.zivkovic@gmail.com> in bug #6140
+On 03/26/2013 11:41 AM, arved at arved.at wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/php/php.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> -LIBARCHIVE_VERSION = 2.8.5
+> -LIBARCHIVE_SITE = http://libarchive.googlecode.com/files/
+> +LIBARCHIVE_VERSION = 3.0.4
+> +LIBARCHIVE_SITE = https://github.com/downloads/libarchive/libarchive
+>  LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.gz
+>  LIBARCHIVE_INSTALL_STAGING = YES
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 692ceb8..515244d 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -57,7 +57,7 @@ PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_CTYPE),--enable-ctype) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_FILTER),--enable-filter) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_CALENDAR),--enable-calendar) \
--		$(if $(BR2_PACKAGE_PHP_EXT_FILENIFO),--enable-fileinfo) \
-+		$(if $(BR2_PACKAGE_PHP_EXT_FILEINFO),--enable-fileinfo) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_BCMATH),--enable-bcmath)
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_OPENSSL),y)
--- 
-1.8.1.5
+Can you resend changing the homepage in Config.in to the new site?
+And also use the non-https URL since it's available? For example
+http://www.libarchive.org/downloads/libarchive-3.1.2.tar.gz
+Thanks!
