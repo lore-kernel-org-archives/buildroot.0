@@ -1,26 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 27 Mar 2013 09:54:48 +0100
-Subject: [Buildroot] [PATCH 08/15] zmqpp: new package
-In-Reply-To: <26ed8c4c6914e5a014235a2ffcd0fbf32eaee80d.1364253936.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Tue, 26 Mar 2013 00:28:03 +0100")
-References: <cover.1364253936.git.yann.morin.1998@free.fr>
- <cover.1364253936.git.yann.morin.1998@free.fr>
- <26ed8c4c6914e5a014235a2ffcd0fbf32eaee80d.1364253936.git.yann.morin.1998@free.fr>
-Message-ID: <87obe56x47.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 27 Mar 2013 10:34:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 5966] bison unnecessarily required as build
+	dependency
+In-Reply-To: <bug-5966-163@https.bugs.busybox.net/>
+References: <bug-5966-163@https.bugs.busybox.net/>
+Message-ID: <20130327103412.7355A9B331@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+https://bugs.busybox.net/show_bug.cgi?id=5966
 
- Yann> From: Simon Dawson <spdawson@gmail.com>
- Yann> Now that zeromq has been bumped to version 3.2.2, we need to provide the
- Yann> C++ binding using a separate package. The zmqpp package provides a high-level
- Yann> C++ wrapper library around the zeromq C API.
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-Committed, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #2 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-03-27 10:34:56 UTC ---
+Done by Thomas during the patchwork day #1.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
