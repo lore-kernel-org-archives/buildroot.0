@@ -1,100 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 27 Mar 2013 14:03:59 -0300
-Subject: [Buildroot] [PATCHv2] jhead: new package
-Message-ID: <1364403839-7487-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 27 Mar 2013 18:47:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 5636] agetty - cannot get controlling tty error -
+ need updated util-linux
+In-Reply-To: <bug-5636-163@https.bugs.busybox.net/>
+References: <bug-5636-163@https.bugs.busybox.net/>
+Message-ID: <20130327184733.83D609B34F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in                     |  1 +
- package/jhead/Config.in               | 11 +++++++++++
- package/jhead/jhead-use-ldflags.patch | 16 ++++++++++++++++
- package/jhead/jhead.mk                | 20 ++++++++++++++++++++
- 4 files changed, 48 insertions(+)
- create mode 100644 package/jhead/Config.in
- create mode 100644 package/jhead/jhead-use-ldflags.patch
- create mode 100644 package/jhead/jhead.mk
+https://bugs.busybox.net/show_bug.cgi?id=5636
 
-diff --git a/package/Config.in b/package/Config.in
-index 4f524eb..ee1753c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -107,6 +107,7 @@ menu "Graphic libraries and applications (graphic/text)"
- 
- comment "Graphic applications"
- source "package/gnuplot/Config.in"
-+source "package/jhead/Config.in"
- source "package/rrdtool/Config.in"
- 
- comment "graphic libraries"
-diff --git a/package/jhead/Config.in b/package/jhead/Config.in
-new file mode 100644
-index 0000000..247ac53
---- /dev/null
-+++ b/package/jhead/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_JHEAD
-+	bool "jhead"
-+	depends on BR2_USE_WCHAR
-+	help
-+	  Jhead is a program for manipulating settings and thumbnails
-+	  in Exif jpeg headers used by most Digital Cameras.
-+
-+	  http://www.sentex.net/~mwandel/jhead/
-+
-+comment "jhead requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/jhead/jhead-use-ldflags.patch b/package/jhead/jhead-use-ldflags.patch
-new file mode 100644
-index 0000000..a1d8185
---- /dev/null
-+++ b/package/jhead/jhead-use-ldflags.patch
-@@ -0,0 +1,16 @@
-+Make jhead use LDFLAGS for the final link.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura jhead-2.97.orig/makefile jhead-2.97/makefile
-+--- jhead-2.97.orig/makefile	2013-03-27 09:22:38.759966389 -0300
-++++ jhead-2.97/makefile	2013-03-27 09:25:06.290691745 -0300
-+@@ -14,7 +14,7 @@
-+ 	${CC} $(CFLAGS) -c $< -o $@
-+ 
-+ jhead: $(objs) jhead.h
-+-	${CC} -o jhead $(objs) -lm
-++	${CC} $(LDFLAGS) -o jhead $(objs) -lm
-+ 
-+ clean:
-+ 	rm -f $(objs) jhead
-diff --git a/package/jhead/jhead.mk b/package/jhead/jhead.mk
-new file mode 100644
-index 0000000..e9843ae
---- /dev/null
-+++ b/package/jhead/jhead.mk
-@@ -0,0 +1,20 @@
-+#############################################################
-+#
-+# jhead
-+#
-+#############################################################
-+
-+JHEAD_VERSION = 2.97
-+JHEAD_SITE = http://www.sentex.net/~mwandel/jhead
-+JHEAD_LICENSE = Public Domain
-+JHEAD_LICENSE_FILES = readme.txt
-+
-+define JHEAD_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define JHEAD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/jhead $(TARGET_DIR)/usr/bin/jhead
-+endef
-+
-+$(eval $(generic-package))
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-03-27 18:48:17 UTC ---
+util-linux bumped to version 2.22.2 by commit
+442aa88f95d6c4a921aa3d4de91f54d50bd0cd35
+
 -- 
-1.8.1.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
