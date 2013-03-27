@@ -1,84 +1,89 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 27 Mar 2013 09:42:35 +0100
-Subject: [Buildroot] [git commit] czmq: new package
-Message-ID: <20130327134625.E655E9B341@busybox.osuosl.org>
+Date: Wed, 27 Mar 2013 09:49:41 +0100
+Subject: [Buildroot] [git commit] cppzmq: new package
+Message-ID: <20130327134626.2F2EF9B341@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=34c6fc10342ffc1da2e4151b539832e17ce6c47c
+commit: http://git.buildroot.net/buildroot/commit/?id=5514b7a520dea993e05d6fcddc40e4d55f467b7c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Now that zeromq has been bumped to version 3.2.2, we need to provide the
+C++ binding using a separate package. The cppzmq package provides a simple
+single-header C++ binding.
+
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
-[yann.morin.1998 at free.fr: create dir as post-patch, not pre-configure]
+[yann.morin.1998 at free.fr: add comment about no license file]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in      |    1 +
- package/czmq/Config.in |   14 ++++++++++++++
- package/czmq/czmq.mk   |   23 +++++++++++++++++++++++
- 3 files changed, 38 insertions(+), 0 deletions(-)
+ package/Config.in        |    1 +
+ package/cppzmq/Config.in |   15 +++++++++++++++
+ package/cppzmq/cppzmq.mk |   23 +++++++++++++++++++++++
+ 3 files changed, 39 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 5d8f4f6..d3901b4 100644
+index d3901b4..23c9bb3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -496,6 +496,7 @@ source "package/mediastreamer/Config.in"
- endmenu
+@@ -497,6 +497,7 @@ endmenu
  
  menu "Networking"
-+source "package/czmq/Config.in"
+ source "package/czmq/Config.in"
++source "package/cppzmq/Config.in"
  source "package/glib-networking/Config.in"
  source "package/libcgi/Config.in"
  source "package/libcgicc/Config.in"
-diff --git a/package/czmq/Config.in b/package/czmq/Config.in
+diff --git a/package/cppzmq/Config.in b/package/cppzmq/Config.in
 new file mode 100644
-index 0000000..9fd8e86
+index 0000000..ea632d1
 --- /dev/null
-+++ b/package/czmq/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_CZMQ
-+	bool "czmq"
-+	select BR2_PACKAGE_ZEROMQ
-+	depends on BR2_INSTALL_LIBSTDCPP # zeromq
++++ b/package/cppzmq/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_CPPZMQ
++	bool "cppzmq"
++	depends on BR2_INSTALL_LIBSTDCPP
 +	depends on BR2_INET_IPV6 # zeromq
 +	depends on BR2_LARGEFILE # util-linux
 +	depends on BR2_USE_WCHAR # util-linux
++	select BR2_PACKAGE_ZEROMQ
 +	help
-+	  High-level C Binding for 0MQ
++	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
 +
-+	  http://czmq.zeromq.org/
++	  http://github.com/zeromq/cppzmq
 +
-+comment "czmq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE && BR2_USE_WCHAR)
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
++comment "cppzmq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
++		&& BR2_USE_WCHAR)
+diff --git a/package/cppzmq/cppzmq.mk b/package/cppzmq/cppzmq.mk
 new file mode 100644
-index 0000000..2b34654
+index 0000000..d4609bf
 --- /dev/null
-+++ b/package/czmq/czmq.mk
++++ b/package/cppzmq/cppzmq.mk
 @@ -0,0 +1,23 @@
 +#############################################################
 +#
-+# czmq
++# cppzmq
 +#
 +#############################################################
 +
-+CZMQ_VERSION = cb9839cf90
-+CZMQ_SITE = git://github.com/zeromq/czmq.git
++CPPZMQ_VERSION = b232978
++CPPZMQ_SITE = git://github.com/zeromq/cppzmq.git
++CPPZMQ_INSTALL_STAGING = YES
++CPPZMQ_DEPENDENCIES = zeromq
++CPPZMQ_LICENSE = MIT
++# No license file, the license is in the installed header
++CPPZMQ_LICENSE_FILES = zmq.hpp
 +
-+# Autoreconf required as we use the git tree
-+CZMQ_AUTORECONF = YES
-+CZMQ_INSTALL_STAGING = YES
-+CZMQ_DEPENDENCIES = zeromq
-+CZMQ_LICENSE = LGPLv3+ with exceptions
-+CZMQ_LICENSE_FILES = COPYING COPYING.LESSER
-+
-+define CZMQ_CREATE_CONFIG_DIR
-+	mkdir -p $(@D)/config
++define CPPZMQ_INSTALL_STAGING_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/zmq.hpp $(STAGING_DIR)/usr/include/zmq.hpp
 +endef
 +
-+CZMQ_POST_PATCH_HOOKS += CZMQ_CREATE_CONFIG_DIR
++define CPPZMQ_UNINSTALL_STAGING_CMDS
++	$(RM) $(STAGING_DIR)/usr/include/zmq.hpp
++endef
 +
-+$(eval $(autotools-package))
++$(eval $(generic-package))
