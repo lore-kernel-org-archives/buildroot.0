@@ -1,81 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 27 Mar 2013 23:16:39 +0100
-Subject: [Buildroot] [PATCH v3 1/3] gdb: convert to the package
-	infrastructure
-In-Reply-To: <20130327231101.6278e160@skate> (Thomas Petazzoni's message of
- "Wed, 27 Mar 2013 23:11:01 +0100")
-References: <1364117858-6626-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1364117858-6626-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <87vc8c4ibx.fsf@dell.be.48ers.dk> <20130327231101.6278e160@skate>
-Message-ID: <87r4j04hfc.fsf@dell.be.48ers.dk>
+From: Reuben Dowle <reuben.dowle@4rf.com>
+Date: Wed, 27 Mar 2013 23:01:15 +0000
+Subject: [Buildroot] [PATCH] Install DTB as part of images install command
+Message-ID: <069B5A25F9844945B625ADE7258AC94C06204FCC@4rf-nz-orion.local.4rf.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+From: Reuben Dowle <reuben.dowle@4rf.com>
 
- >> Thanks, I like it - Unfortunately there's some issues (see below)
+When installing DTB to the images directory, do this as part of the image
+install commands rather than the target install commands.
 
- Thomas> Goodness doesn't come without a little bit of effort :-)
+Signed-off-by: Reuben Dowle <reuben.dowle@4rf.com.az>
+---
+ linux/linux.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-;)
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 8a73767..f0d793b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -261,11 +261,11 @@ endef
 
- >> Rename detection would have made this significantly easier to review :/
+ define LINUX_INSTALL_IMAGES_CMDS
+        cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
++       $(LINUX_INSTALL_DTB)
+ endef
 
- Thomas> Yes I should really find out how to tell git send-email to *always* use
- Thomas> -M. I don't even understand why this isn't the default.
+ define LINUX_INSTALL_TARGET_CMDS
+        $(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
+-       $(LINUX_INSTALL_DTB)
+        # Install modules and remove symbolic links pointing to build
+        # directories, not relevant on the target
+        @if grep -q "CONFIG_MODULES=y" $(@D)/.config; then      \
+--
+1.7.10.4
 
- Thomas> Does anyone knows what the right ~/.gitconfig invocation to tell git
- Thomas> send-email/format-patch to always enable rename detection?
-
-I believe it's simply:
-
-git config --global diff.renames copy
-
-
- Thomas> +config BR2_PACKAGE_GDB_DEBUGGER
- Thomas> +	bool "full debugger"
- Thomas> +	select BR2_PACKAGE_NCURSES
- Thomas> +	depends on BR2_USE_WCHAR
- Thomas> +	depends on BR2_TOOLCHAIN_HAS_THREADS
- Thomas> +	depends on BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- Thomas> +	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze && !BR2_bfin && !BR2_aarch64
- Thomas> +
- Thomas> +comment "full gdb on target needs WCHAR, thread and thread debugging support in toolchain"
- Thomas> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- Thomas> +		!BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- Thomas> +
- Thomas> +endif
- >> 
- >> This is afaik not correct (and now how it was before). Both gdbserver
- >> and full gdb need thread / thread debugging support for gdb 7.x.
-
- Thomas> Right, I'll add that.
-
-Great!
-
-
- >> It becomes a bit complicated as we only have the version selection if
- >> we're building gdb for the host though ..
-
- Thomas> For most architectures, 7.x is available, so I think we can decide to
- Thomas> just assume that threads debug support is needed, if thread support is
- Thomas> enabled.
-
-Indeed, possibly with an exception for avr32/bfin.
-
-
- >> From a usability POV, it's also a bit less handy when using the internal
- >> toolchain that you now need to go and enable the _HAS_THREADS_DEBUG
- >> option, but ok.
-
- Thomas> Yes, but there isn't much choice: now that gdb is a package, it
- Thomas> has to comply with the policy we apply for all packages. "You
- Thomas> don't select toolchain options, you depend on them".
-
-Indeed, hence my "ok".
-
--- 
-Bye, Peter Korsgaard
+The information in this email communication (inclusive of attachments) is confidential to 4RF Limited and the intended recipient(s). If you are not the intended recipient(s), please note that any use, disclosure, distribution or copying of this information or any part thereof is strictly prohibited and that the author accepts no liability for the consequences of any action taken on the basis of the information provided. If you have received this email in error, please notify the sender immediately by return email and then delete all instances of this email from your system. 4RF Limited will not accept responsibility for any consequences associated with the use of this email (including, but not limited to, damages sustained as a result of any viruses and/or any action or lack of action taken in reliance on it).
