@@ -1,22 +1,57 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 28 Mar 2013 07:54:35 +0100
-Subject: [Buildroot] Quick summary of the Patchwork Day #1
-In-Reply-To: <20130325110242.0b741196@skate>
-References: <20130325110242.0b741196@skate>
-Message-ID: <5153E92B.7000304@mind.be>
+Date: Thu, 28 Mar 2013 08:12:38 +0100
+Subject: [Buildroot] [PATCH 4/4] Enable feature CONFIG_FEATURE_PIDFILE
+ so that the syslog initscript actually works
+In-Reply-To: <1364222893-23858-4-git-send-email-arved@arved.at>
+References: <1364222893-23858-1-git-send-email-arved@arved.at>
+ <1364222893-23858-4-git-send-email-arved@arved.at>
+Message-ID: <5153ED66.3090001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/03/13 11:02, Thomas Petazzoni wrote:
-> Would there be some interest to renew the experience some other day?
+  Hi Tilman,
 
-  Yes, and hopefully I can attend that time!
+
+On 25/03/13 15:48, arved at arved.at wrote:
+> From: Tilman Keskin?z <arved@arved.at>
+>
+>
+> Signed-off-by: Tilman Keskin?z <arved@arved.at>
+> ---
+>   package/busybox/busybox-1.20.x.config |    2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/busybox/busybox-1.20.x.config b/package/busybox/busybox-1.20.x.config
+> index 5525434..d199996 100644
+> --- a/package/busybox/busybox-1.20.x.config
+> +++ b/package/busybox/busybox-1.20.x.config
+> @@ -41,7 +41,7 @@ CONFIG_FEATURE_DEVPTS=y
+>   CONFIG_FEATURE_CLEAN_UP=y
+>   CONFIG_FEATURE_UTMP=y
+>   CONFIG_FEATURE_WTMP=y
+> -# CONFIG_FEATURE_PIDFILE is not set
+> +CONFIG_FEATURE_PIDFILE=y
+
+  Since we care very much about the size of busybox, could you evaluate 
+what the size difference is before and after this change?  One smallish 
+architecture (e.g. ARM) is enough.
+
+  Could you also make this change to the other busybox versions as well? 
+The different busybox configs should only differ because of features 
+added/removed in that particular version.
+
 
   Regards,
   Arnout
+
+>   CONFIG_FEATURE_SUID=y
+>   # CONFIG_FEATURE_SUID_CONFIG is not set
+>   # CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
