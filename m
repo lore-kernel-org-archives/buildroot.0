@@ -1,52 +1,22 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Mar 2013 18:27:56 +0100
-Subject: [Buildroot] [PATCH v4 21/21] qt5: disallow the selection of Qt4
- and Qt5
-In-Reply-To: <1363721394-14973-22-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1363721394-14973-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1363721394-14973-22-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <51532C1C.4030902@mind.be>
+Date: Thu, 28 Mar 2013 07:54:35 +0100
+Subject: [Buildroot] Quick summary of the Patchwork Day #1
+In-Reply-To: <20130325110242.0b741196@skate>
+References: <20130325110242.0b741196@skate>
+Message-ID: <5153E92B.7000304@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/03/13 20:29, Thomas Petazzoni wrote:
-> As noticed by Arnout, Qt4 and Qt5 cannot be installed together,
-> because for example the qt.conf installed by one version cannot be
-> understood by the qmake of another version. We therefore make them
-> mutually exclusive, which sounds reasonable for the embedded systems
-> targeted by Buildroot.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On 25/03/13 11:02, Thomas Petazzoni wrote:
+> Would there be some interest to renew the experience some other day?
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-  Given that this may expose hard to understand problems when compiling 
-Qt applications, I'd like to see this committed rather soon.
+  Yes, and hopefully I can attend that time!
 
   Regards,
   Arnout
-
-> ---
->   package/qt5/Config.in |    1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-> index 5662f55..2945d96 100644
-> --- a/package/qt5/Config.in
-> +++ b/package/qt5/Config.in
-> @@ -7,6 +7,7 @@ menuconfig BR2_PACKAGE_QT5
->   	depends on BR2_USE_WCHAR
->   	depends on BR2_INET_IPV6
->   	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_PACKAGE_QT
->   	help
->   	  This option enables the Qt5 framework. Sub-options allow to
->   	  select which modules should be built.
->
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
