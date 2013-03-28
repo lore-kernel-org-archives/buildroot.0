@@ -1,10 +1,9 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Thu, 28 Mar 2013 13:26:07 +0000
-Subject: [Buildroot] [PATCH] rapidjson: new package
-In-Reply-To: <20130328141527.0061ef53@skate>
-References: <1364472920-11835-1-git-send-email-spdawson@gmail.com>
- <20130328141527.0061ef53@skate>
-Message-ID: <CAHt8ZCOgUZq-WjNt=gFo+_f4Bmdu6KJHtXi25yzpDxShRYc-cQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 28 Mar 2013 15:33:16 +0200
+Subject: [Buildroot] [PATCHv2] linknx: new package
+In-Reply-To: <1364476686-12850-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1364476686-12850-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20130328133316.GA4180@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +12,29 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On 28 March 2013 13:15, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Simon,
->
->> +RAPIDJSON_INSTALL_TARGET = NO
->> +RAPIDJSON_INSTALL_STAGING = YES
->
-> How does this thing work if you install only things in staging? Is it a
-> code generator that runs on the host? And if so, shouldn't some stuff
-> be installed in $(HOST_DIR) ?
+On Thu, Mar 28, 2013 at 02:18:05PM +0100, Thomas Petazzoni wrote:
+> From: Gregory Hermant <gregory.hermant@calao-systems.com>
+> 
+> [Thomas: various fixes/improvements]
+> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> Changes v1 -> v2:
+>  * Add dependency on C++ support, as noted by Peter.
+>  * The support of log4cxx is not added, because linknx requires
+>    log4cxx >= 1.0 and we only have 0.10 has a package.
+> ---
 
-Thanks for looking at this. It is a header-only library. That being
-the case, should the headers also be installed under $(HOST_DIR)?
+[...]
 
-Simon.
+> +LINKNX_VERSION = 0.0.1.30
+> +LINKNX_SOURCE = linknx-${LINKNX_VERSION}.tar.gz
+
+Curly braces? Besides, isn't this the default already?
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
