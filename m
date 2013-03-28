@@ -1,42 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Mar 2013 09:53:08 +0100
-Subject: [Buildroot] media-ctl build failure (autobuild)
-In-Reply-To: <CAAXf6LUxBkO6-g-dHs8_2cagNFiBYAWCE3KAEcuT=zWEsJdZMA@mail.gmail.com>
-References: <CAAXf6LUxBkO6-g-dHs8_2cagNFiBYAWCE3KAEcuT=zWEsJdZMA@mail.gmail.com>
-Message-ID: <20130328095308.4fac9fcf@skate>
+Date: Thu, 28 Mar 2013 09:56:26 +0100
+Subject: [Buildroot] [PATCH v3 2/2] buildroot: target: Add Blackfin
+ architecture support.
+In-Reply-To: <CAJxxZ0OQac0FDzjq3i3dFpu1unOYAsE5w2e_Vy9rsH261oOY7Q@mail.gmail.com>
+References: <1363942902-6045-1-git-send-email-sonic.adi@gmail.com>
+ <1363942902-6045-2-git-send-email-sonic.adi@gmail.com>
+ <51514D57.1090907@mind.be> <20130326091516.36a042d2@skate>
+ <CAJxxZ0OQac0FDzjq3i3dFpu1unOYAsE5w2e_Vy9rsH261oOY7Q@mail.gmail.com>
+Message-ID: <20130328095626.17c29ddb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Sonic Zhang,
 
-On Thu, 28 Mar 2013 08:44:54 +0100, Thomas De Schampheleire wrote:
+On Thu, 28 Mar 2013 16:20:14 +0800, Sonic Zhang wrote:
 
-> What is the appropriate action here:
-> 1. remove the old toolchains?
-> 2. add some kind of fragile dependency between media-ctl and specific
-> toolchain config variables
-> 3. introduce a way to specify which kernel header versions are used for
-> external toolchains, and check this for packages that need it
-> 4. don't bother, let the package fail for these old toolchains
+> > Sonic, would you mind reworking your patch set to split it as Arnout is
+> > suggesting?
+> 
+> Could you comment on the reworked patch set?
 
-5. Do what I've done for neard, i.e
-package/neard/neard-fix-missing-linux-nfc-header.patch: we add a
-patch to the package that integrates directly into the package the
-required kernel headers, and adjust the autoconf script to either use
-the header from the toolchain if it's available, or the bundled header
-if not. Over time, toolchains will be updated to more recent kernel
-header versions, and we should be able to get rid of such patches.
+Yes, sure. I've already looked at it. It looks a lot better, but I (of
+course) still have some comments. Will try to send some review soon,
+but I'll be on vacation until next Wednesday, with very limited time to
+do any sort of coding/reviewing.
 
-Even though it's not really nice, I believe it's the least painful way.
-
-Of course, it has the drawback that if the user happens to use a kernel
-version that does not have the NFC functionality of the media-ctl
-functionality, it will simply not work.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
