@@ -1,101 +1,154 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 28 Mar 2013 21:21:08 +0100
-Subject: [Buildroot] [PATCH 1/1] manual: add patch revision and
-	versioning section
-In-Reply-To: <1364477521-2231-1-git-send-email-viniciustinti@gmail.com>
-References: <1364477521-2231-1-git-send-email-viniciustinti@gmail.com>
-Message-ID: <CAHXCMML5s9AGLcpWOAFrUsrKhXgc0gM49P-tS=VdUm_0yaqP8Q@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 28 Mar 2013 23:21:26 +0100
+Subject: [Buildroot] [PATCH v2] Enable ccache for cmake packages
+In-Reply-To: <CAHXCMMKpvUuqbDRgOcmAS6R1jHo=FNV6P3jOJhSDDi0-axJ0pw@mail.gmail.com>
+References: <514CDE1E.8040107@lucaceresoli.net>
+ <1363992947-21417-1-git-send-email-luca@lucaceresoli.net>
+ <CAHXCMMKF9BPbNG38LtDMuFD47uBUKYGbQzFNjVmsyR9BCqP4=Q@mail.gmail.com>
+ <20130323162931.31f5b59c@skate>
+ <CAHXCMMKpvUuqbDRgOcmAS6R1jHo=FNV6P3jOJhSDDi0-axJ0pw@mail.gmail.com>
+Message-ID: <5154C266.3060304@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vinicius,
+Samuel Martin wrote:
+> [...]
+>>>>                  -DCMAKE_VERBOSE_MAKEFILE=ON \
+>>> Ahem... I think this belongs to some debug remains ;)
+>> But it hasn't been added by this patch from Luca.
+> Not this patch, but for sure, it's not on master ;)
 
-2013/3/28 Vinicius Tinti <viniciustinti@gmail.com>:
-> Improve the contribute manual section by adding an explanation about patch
-> review and version.
+Sorry, my mistake! :)
+
+[...]
+>>>> +               set(CMAKE_C_COMPILER $(CCACHE))\n\
+>>>> +               set(CMAKE_CXX_COMPILER $(CCACHE))\n\
+>>>> +               set(CMAKE_C_COMPILER_ARG1 $(TARGET_CC_NOCCACHE) CACHE STRING \"\" FORCE)\n\
+>>>> +               set(CMAKE_CXX_COMPILER_ARG1 $(TARGET_CXX_NOCCACHE) CACHE STRING \"\" FORCE)\n\
+>>>> +       endif(DEFINED USE_CCACHE AND USE_CCACHE)\n\
+>>>> +       if(DEFINED USE_CCACHE AND NOT USE_CCACHE)\n\
+>>> You can replace the 2 above lines by:
+>>> else ()
+>> I don't think so. See the explanation in Luca's commit log. He needs to
+>> differentiate three cases:
+>>
+>>   * USE_CCACHE is defined and set to ON
+>>   * USE_CCACHE is defined and set to OFF
+>>   * USE_CCACHE is not defined
+> Well, I didn't really pay enough/that much attention to the tristate
+> thing because I didn't really get the point...
+
+If you add at the beginning of toolchainfile.cmake the line:
+message("USE_CCACHE=${USE_CCACHE}")
+and then run `make rpi-userland{-dirclean,}` you'll see:
+
+> >>> rpi-userland 5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108 Configuring
+> (cd 
+> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108/ 
+> && rm -f CMakeCache.txt && 
+> /home/murray/devel/buildroot/output/host/usr/bin/cmake 
+> /home/murray/devel/buildroot/output/build/rpi-userland-5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108/ 
+> -DCMAKE_TOOLCHAIN_FILE="/home/murray/devel/buildroot/output/host/usr/share/buildroot/toolchainfile.cmake" 
+> -DCMAKE_INSTALL_PREFIX="/usr" -DUSE_CCACHE=ON -DVMCS_INSTALL_PREFIX=/usr )
+> Re-run cmake no build system arguments
+> USE_CCACHE=ON
+> USE_CCACHE=ON
+> -- The C compiler identification is GNU 4.7.3
+> -- The CXX compiler identification is GNU 4.7.3
+> -- Check for working C compiler: 
+> /home/murray/devel/buildroot/output/host/usr/bin/ccache
+> USE_CCACHE=
+> -- Check for working C compiler: 
+> /home/murray/devel/buildroot/output/host/usr/bin/ccache -- works
+> -- Detecting C compiler ABI info
+> USE_CCACHE=
+> -- Detecting C compiler ABI info - done
+> -- Check for working CXX compiler: 
+> /home/murray/devel/buildroot/output/host/usr/bin/ccache
+> USE_CCACHE=
+> -- Check for working CXX compiler: 
+> /home/murray/devel/buildroot/output/host/usr/bin/ccache -- works
+> -- Detecting CXX compiler ABI info
+> USE_CCACHE=
+> -- Detecting CXX compiler ABI info - done
+> USE_CCACHE=
+> -- Looking for execinfo.h
+> USE_CCACHE=
+> -- Looking for execinfo.h - found
+> -- The ASM compiler identification is GNU
+> -- Found assembler: 
+> /home/murray/devel/buildroot/output/host/usr/bin/arm-linux-gnueabihf-gcc
+
+Apparently CMake interprets multiple times the toolchainfile.cmake,
+and it does not always pass the original parameters, so USE_CCACHE is
+sometimes undefined. Hence my idea to handle that variable as a
+tristate.
+
+> Now, I got it, but I'm really dubious about behavior in the last case.
 >
-> The section now provides advices in how to respond mantainers requests and how
-> to proceed on replying them.
+> I mean: the goal of this toolchainfile.cmake is, among other thing, to
+> be able to reuse the Buildroot toolchain
+> to build a projects outside Buildroot because CMake is good at this.
 >
-> Signed-off-by: Vinicius Tinti <viniciustinti@gmail.com>
-> ---
->  docs/manual/contribute.txt |   51 ++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 51 insertions(+)
+> So, in that case, we want to be sure we correctly export the toolchain
+> properties.
 >
-> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> index 0106df0..2bdfc37 100644
-> --- a/docs/manual/contribute.txt
-> +++ b/docs/manual/contribute.txt
-> @@ -62,6 +62,57 @@ Make sure posted *patches are not line-wrapped*, otherwise they cannot
->  easily be applied. In such a case, fix your e-mail client, or better,
->  use +git send-email+ to send your patches.
+> If we don't set any compiler in the case USE_CCACHE is undefined, then
+> we totally miss this goal,
+> and IMHO, it does not make sense because the toolchainfile.cmake file
+> is generated by Buildroot,
+> for the Buildroot toolchain and nothing else.
+
+I actually overlookedthe need to make the whole thing usable from
+outside Buildroot. It should be made working indeed.
+
+> Maybe the logic is a bit more complex... something like that:
 >
-> +Patch revision
-> +^^^^^^^^^^^^^^
-> +
-> +Hardly ever some revisions will be requested to your patch. Whenever
-> +it happens make sure to always reply in the same thread and include
-> +the changes that have made.
-> +
-> +Revisions must describe which changes they include. When editing your
-> +commit, below the +signed-off-by+ section, add +---+ and your changes.
-> ++git+ will automatically ignore lines below +---+ which will not be merged
-> +on upstream but will be present for reviewers. For longer series, the
-> +changelog should be placed in each commit and the cover letter must contain
-> +a summary of these changes. The following suggested layout example
-> +is not mandatory.
-> +
-> +---------------
-> +<topic on one line of less than ~80 characters>
-> +<empty newline>
-> +<more paragraphs describing what it is doing and why>
-> +<empty newline>
-> +Signed-off-by John Doe <john.doe@noname.org>
-> +---
-> +Changes v2 -> v3:
-> +  - foo bar  (Jane)
-> +  - bar buz
-> +Changes v1 -> v2:
-> +  - alpha bravo  (John)
-> +  - charly delta
-> +---------------
-> +
-> +Any patch revision must include the version number. The version number
-> +is simply composed by the letter +v+ followed by an +integer+ greater or
-> +equal 2 (two) (i.e. PATCH v2, PATCH v3 ...).
-> +
-> +This can be easly handle in +git-format-patch+ command by using the option
-> ++--subject-prefix+:
-> +
-> +---------------------
-> + $ git format-patch --subject-prefix "PATCH v4" -M -n -s -o outgoing origin/master
-> +---------------------
-> +
-> +Mail clients will handle this automatically reply in the same thread but
-> ++git+ won't. Hence the +--in-reply-to+ option in +git-send-email+ must
-> +be used. Get the last +Message-ID+ (it can be found your mail client by
-> +accessing the raw mail). Then use this message id to send your revision
-> +patch:
-About the "--in-reply-to" thing (ie. keeping successive revisions of a patch
-in the same thread), IMHO, it is more a _nice to have_ than a mandatory
-especially when posting patches one by one, but not easily manageable
-with pull-requests.
+> set(FIND_PROGRAM_PATH "$(HOST_DIR)/usr/bin")
+> find_program(CCACHE "ccache")
+> if (DEFINED USE_CCACHE)
+>    if (USE_CCACHE AND CCACHE)
+>      # set the compiler variables with ccache support
+>    else ()
+>      # set the compiler variables without ccache support
+>    endif ()
+> else ()
+>    message("To enable ccache usage, add -DUSE_CACHE=ON on the command line")
+>    # fallback: set only the compiler variables (with no ccache support)
+> endif ()
 
-In the latter case (ie. pull-request), it may be good to mark the cover letter
-"--in-reply-to" the one of the previous submission...
+I don't like very much automagic things, such as using a tool
+transparently when it'sfound. We have a BR2_CCACHE config knob, that
+should rule IMO.
 
+Still, yours is an interesting proposal. The only alternative is
+probably to put the ccachelogic in the wrappers as Thomas proposed in
+reply to my v1 patch.
 
-Another thing that hurts me a bit, is the use of "must".
-IMHO, it can be understood that any submission that does not meet these
-requirements will be automatically rejected; I hope we are not so rude ;-) ...
-but IANA native English speaker, so if no-one else thinks this might be
-misunderstood, I can live with it. :)
+But I see a problem here: Buildroot exports BUILDROOT_CACHE_DIR, and
+$(HOST_DIR)/usr/bin/ccacheuses that environment variable to locate its
+cache directory. If the same ccache executable is executed standalone
+it does won't find that environment variable and default to ~/.ccache.
 
+Anyway, thinking more about how to implement this feature, I think
+maybe Thomas' proposal can avoid the mentioned issues, as the call to
+ccache (as well as the ccache directory path) can be coded inside a
+(C?) wrapper if the wrapper has been built with BR2_CCACHE=y.
+But we would need to regenerate the wrapper whenever the user changes
+the BR2_CCACHE...
 
-Regards,
+Also, the BR-built ccache would be used transparently even when
+calling ${HOST_DIR}/usr/bin/*-gcc. This shows clearly an advantage,
+although the user might not understand well that he's using ccache
+under the hood (maybe not a problem).
 
--- 
-Samuel
+But I'd like to understand better your idea, Thomas. The ccache
+usage is independent from the toolchain type (Buildroot/ct-NG/
+external).  Would you implement a unique wrapper to be used for
+all three toolchain types, and replace the current
+ext-toolchain-wrapper.c?
+
+Luca
