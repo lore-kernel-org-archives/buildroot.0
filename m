@@ -1,93 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 28 Mar 2013 09:20:35 +0100
-Subject: [Buildroot] [git commit] Makefile: simplify target skeleton
-	copying
-In-Reply-To: <CAAXf6LWWJMrJBvkf_jwMrrHT73dOy85_iQJpcZVbhF4SKcjjSw@mail.gmail.com>
-References: <20130326074214.D6DFF9B2CA@busybox.osuosl.org>
- <5153EE16.8070207@mind.be> <87ip4c3q30.fsf@dell.be.48ers.dk>
- <CAAXf6LWWJMrJBvkf_jwMrrHT73dOy85_iQJpcZVbhF4SKcjjSw@mail.gmail.com>
-Message-ID: <5153FD53.3050701@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Mar 2013 09:53:08 +0100
+Subject: [Buildroot] media-ctl build failure (autobuild)
+In-Reply-To: <CAAXf6LUxBkO6-g-dHs8_2cagNFiBYAWCE3KAEcuT=zWEsJdZMA@mail.gmail.com>
+References: <CAAXf6LUxBkO6-g-dHs8_2cagNFiBYAWCE3KAEcuT=zWEsJdZMA@mail.gmail.com>
+Message-ID: <20130328095308.4fac9fcf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/03/13 09:13, Thomas De Schampheleire wrote:
-> Hi,
->
->
-> On Thu, Mar 28, 2013 at 9:07 AM, Peter Korsgaard <jacmet@sunsite.dk
-> <mailto:jacmet@sunsite.dk>> wrote:
->
->      >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be
->     <mailto:arnout@mind.be>> writes:
->
->       Arnout> On 26/03/13 08:33, Peter Korsgaard wrote:
->       >> +   rsync -au --exclude=.empty --exclude=CVS --exclude=.svn
->     --exclude='*~' \
->       >> +           $(TARGET_SKELETON)/ $(TARGET_DIR)/
->
->       Arnout>  Since TARGET_SKELETON can be configured to point to a git- or
->       Arnout> mercurial-controlled directory, I'd want to exclude those
->     as well. How
->       Arnout> about the --cvs-exclude --include core that ThomasDS
->     introduced?
->
->     We can do that as well. I was a bit afraid of excluding files people
->     wanted to keep, so I kept it how it was - But yes, like likelyhood is
->     quite small.
->
->     Care to send a patch to do this?
+Dear Thomas De Schampheleire,
 
+On Thu, 28 Mar 2013 08:44:54 +0100, Thomas De Schampheleire wrote:
 
-  Yes, I care to send a patch, but if you look at my track record for 
-submitting infrastructural patches in the last couple of months, don't 
-hold your breath.
+> What is the appropriate action here:
+> 1. remove the old toolchains?
+> 2. add some kind of fragile dependency between media-ctl and specific
+> toolchain config variables
+> 3. introduce a way to specify which kernel header versions are used for
+> external toolchains, and check this for packages that need it
+> 4. don't bother, let the package fail for these old toolchains
 
+5. Do what I've done for neard, i.e
+package/neard/neard-fix-missing-linux-nfc-header.patch: we add a
+patch to the package that integrates directly into the package the
+required kernel headers, and adjust the autoconf script to either use
+the header from the toolchain if it's available, or the bundled header
+if not. Over time, toolchains will be updated to more recent kernel
+header versions, and we should be able to get rid of such patches.
 
+Even though it's not really nice, I believe it's the least painful way.
 
-> Is this really needed?
-> I was thinking about this as well, but later had the following reasoning
-> (which could be wrong): for svn, if I recall correctly, there is a .svn
-> in each subdirectory. This is not the case for .git or .hg (which only
-> exist in the root of the repository). If one can assume that no-one puts
-> the skeleton in a repository, the exclusion of .svn is enough.
+Of course, it has the drawback that if the user happens to use a kernel
+version that does not have the NFC functionality of the media-ctl
+functionality, it will simply not work.
 
-  I had one customer who put their overlay in a separate repository. (OK 
-in that particular case it was a subversion repository, but it _could_ 
-have been a git/hg repository as well).
+Best regards,
 
-
-> Moreover, the --cvs-exclude option cannot be used in this case, as it
-> also removes object files. In my version of rsync, this is the exclusion
-> list used by --cvs-exclude:
->
-> RCS SCCS CVS CVS.adm RCSLOG cvslog.* tags TAGS .make.state .nse_depinfo
-> *~ #* .#* ,* _$* *$ *.old *.bak *.BAK *.orig *.rej .del-* *.a *.olb *.o
-> *.obj *.so *.exe *.Z *.elc *.ln core .svn/ .git/ .hg/ .bzr/
-
-  Ouch, that sucks.
-
-  How about:
-
-- Create an rsync-filter file in the support directory;
-
-- Create an RSYNC variable that has the option to use that file;
-
-- Use the RSYNC variable everywhere instead of rsync;
-
-- Document this;
-
-- (optionally) add a Kconfig option to specify additional rsync filters.
-
-
-  Regards,
-  Arnout
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
