@@ -1,32 +1,27 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 28 Mar 2013 08:05:54 -0300
-Subject: [Buildroot] [PATCH] fbset: needs host-flex
-Message-ID: <1364468754-638-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 28 Mar 2013 08:34:06 -0300
+Subject: [Buildroot] [PATCH 1/2] hiawatha: bump to version 9.0
+Message-ID: <1364470447-12146-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/08d6d70f7c89617c20e727e77e0f6be09974dfc1/
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/fbset/fbset.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/hiawatha/hiawatha.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
-index b8a8f43..7163456 100644
---- a/package/fbset/fbset.mk
-+++ b/package/fbset/fbset.mk
-@@ -7,6 +7,7 @@
- FBSET_VERSION = 2.1
- FBSET_SOURCE = fbset-$(FBSET_VERSION).tar.gz
- FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
-+FBSET_DEPENDENCIES = host-flex
- FBSET_LICENSE = GPLv2
- 
- # Make sure full fbset wins over busybox fbset
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index 5c328bf..1cd700a 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
+@@ -1,4 +1,4 @@
+-HIAWATHA_VERSION = 8.8
++HIAWATHA_VERSION = 9.0
+ HIAWATHA_SITE = http://www.hiawatha-webserver.org/files
+ HIAWATHA_LICENSE = GPLv2
+ HIAWATHA_LICENSE_FILES = LICENSE
 -- 
 1.8.1.5
