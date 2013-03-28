@@ -1,87 +1,67 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Thu, 28 Mar 2013 12:15:19 +0000
-Subject: [Buildroot] [PATCH] rapidjson: new package
-Message-ID: <1364472920-11835-1-git-send-email-spdawson@gmail.com>
+From: =?ISO-8859-15?Q?Markus_K=F6nigshaus?= <m.koenigshaus@wut.de>
+Date: Thu, 28 Mar 2013 13:58:46 +0100
+Subject: [Buildroot] Bug in uClibc-0.9.33.2 resolv.c
+Message-ID: <51543E86.9000706@wut.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Hello,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/Config.in              |    1 +
- package/rapidjson/Config.in    |    6 ++++++
- package/rapidjson/rapidjson.mk |   34 ++++++++++++++++++++++++++++++++++
- 3 files changed, 41 insertions(+)
- create mode 100644 package/rapidjson/Config.in
- create mode 100644 package/rapidjson/rapidjson.mk
+I have found a bug in resolv.c in conjunction with the function 
+res_init: res_init sets __ res_sync to res_sync_func and then calls 
+__res_vinit.
+-> __res_vinit calls __ open_nameservers.
+In __open_nameservers __nameserver and __nameservers are set by the 
+contents of resolv.conf. So far so good.
+-> __open_nameserver calls res_sync_func
+         In res_sync_func__nameservers is set to rp->nscount, what is 0.
+Backin _res_vinit rp->nscount is set to __nameservers then, what is 0. 
+So the cat bites its own tail.
 
-diff --git a/package/Config.in b/package/Config.in
-index 463d1b9..3bd7844 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -615,6 +615,7 @@ source "package/libxml2/Config.in"
- source "package/libxslt/Config.in"
- source "package/libyaml/Config.in"
- source "package/mxml/Config.in"
-+source "package/rapidjson/Config.in"
- source "package/xerces/Config.in"
- source "package/yajl/Config.in"
- endmenu
-diff --git a/package/rapidjson/Config.in b/package/rapidjson/Config.in
-new file mode 100644
-index 0000000..d442797
---- /dev/null
-+++ b/package/rapidjson/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_RAPIDJSON
-+	bool "rapidjson"
-+	help
-+	  A fast JSON parser/generator for C++ with both SAX/DOM style API.
-+
-+	  https://code.google.com/p/rapidjson/
-diff --git a/package/rapidjson/rapidjson.mk b/package/rapidjson/rapidjson.mk
-new file mode 100644
-index 0000000..cc260e9
---- /dev/null
-+++ b/package/rapidjson/rapidjson.mk
-@@ -0,0 +1,34 @@
-+#############################################################
-+#
-+# rapidjson
-+#
-+#############################################################
-+
-+RAPIDJSON_VERSION = 0.11
-+RAPIDJSON_SOURCE = rapidjson-$(RAPIDJSON_VERSION).zip
-+RAPIDJSON_SITE = http://rapidjson.googlecode.com/files
-+RAPIDJSON_LICENSE = MIT
-+RAPIDJSON_LICENSE_FILES = license.txt
-+RAPIDJSON_INSTALL_TARGET = NO
-+RAPIDJSON_INSTALL_STAGING = YES
-+
-+define RAPIDJSON_EXTRACT_CMDS
-+	unzip -d $(@D) $(DL_DIR)/$(RAPIDJSON_SOURCE)
-+	mv $(@D)/rapidjson/* $(@D)
-+	$(RM) -r $(@D)/rapidjson
-+endef
-+
-+define RAPIDJSON_INSTALL_STAGING_CMDS
-+	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson
-+	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/internal
-+	$(INSTALL) -m 0644 $(@D)/include/rapidjson/*.h \
-+		$(STAGING_DIR)/usr/include/rapidjson
-+	$(INSTALL) -m 0644 $(@D)/include/rapidjson/internal/*.h \
-+		$(STAGING_DIR)/usr/include/rapidjson/internal
-+endef
-+
-+define RAPIDJSON_UNINSTALL_STAGING_CMDS
-+	$(RM) -r $(STAGING_DIR)/usr/include/rapidjson
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.10.4
+Attached is a simple patch, that fixes the problemby setting __res_sync 
+after calling __res_vinit.
+
+Before this patch with busybox "nslookup www.google.de" ->
+
+nslookup: can not resolve '(null)': Name or service not known
+
+Name: www.google.de
+Address 1: 2a00: 1450:4016:800 :: 101f muc03s01-in-x1f.1e100.net
+Address 2: 173.194.35.151 muc03s01-in-f23.1e100.net
+Address 3: 173.194.35.159 muc03s01-in-f31.1e100.net
+Address 4: 173.194.35.152 muc03s01-in-f24.1e100.net
+
+After the patch "nslookup www.google.de" ->
+
+nslookup www.google.de
+Server: 8.8.8.8
+Address 1: 8.8.8.8 google-public-dns-a.google.com
+
+Name: www.google.de
+Address 1: 2a00: 1450:4016:803 :: 1018 muc03s08-in-x18.1e100.net
+Address 2: 173.194.44.56 muc03s08-in-f24.1e100.net
+Address 3: 173.194.44.55 muc03s08-in-f23.1e100.net
+Address 4: 173.194.44.63 muc03s08-in-f31.1e100.net
+
+This patch ist tested with buildroot-02.13.
+
+Regards, Markus
+
+
+-- Unsere Aussagen koennen Irrtuemer und Missverstaendnisse enthalten.
+Bitte pruefen Sie die Aussagen fuer Ihren Fall, bevor Sie Entscheidungen 
+auf Grundlage dieser Aussagen treffen.
+Wiesemann & Theis GmbH, Porschestr. 12, D-42279 Wuppertal
+Geschaeftsfuehrer: Dipl.-Ing. Ruediger Theis
+Registergericht: Amtsgericht Wuppertal, HRB 6377 
+Tel. +49-202/2680-0, Fax +49-202/2680-265, http://www.wut.de
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: uClibc-0.9.33.2-resolv_c.patch
+Type: text/x-patch
+Size: 559 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130328/5f80aa6c/attachment.bin>
