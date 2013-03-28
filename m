@@ -1,39 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Mar 2013 14:14:07 +0100
-Subject: [Buildroot] Bug in uClibc-0.9.33.2 resolv.c
-In-Reply-To: <51543E86.9000706@wut.de>
-References: <51543E86.9000706@wut.de>
-Message-ID: <20130328141407.2b625501@skate>
+Date: Thu, 28 Mar 2013 14:15:27 +0100
+Subject: [Buildroot] [PATCH] rapidjson: new package
+In-Reply-To: <1364472920-11835-1-git-send-email-spdawson@gmail.com>
+References: <1364472920-11835-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20130328141527.0061ef53@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markus K?nigshaus,
+Simon,
 
-On Thu, 28 Mar 2013 13:58:46 +0100, Markus K?nigshaus wrote:
+On Thu, 28 Mar 2013 12:15:19 +0000, spdawson at gmail.com wrote:
 
-> I have found a bug in resolv.c in conjunction with the function 
-> res_init: res_init sets __ res_sync to res_sync_func and then calls 
-> __res_vinit.
-> -> __res_vinit calls __ open_nameservers.
-> In __open_nameservers __nameserver and __nameservers are set by the 
-> contents of resolv.conf. So far so good.
-> -> __open_nameserver calls res_sync_func
->          In res_sync_func__nameservers is set to rp->nscount, what is 0.
-> Backin _res_vinit rp->nscount is set to __nameservers then, what is 0. 
-> So the cat bites its own tail.
-> 
-> Attached is a simple patch, that fixes the problemby setting __res_sync 
-> after calling __res_vinit.
+> diff --git a/package/rapidjson/rapidjson.mk b/package/rapidjson/rapidjson.mk
+> new file mode 100644
+> index 0000000..cc260e9
+> --- /dev/null
+> +++ b/package/rapidjson/rapidjson.mk
+> @@ -0,0 +1,34 @@
+> +#############################################################
+> +#
+> +# rapidjson
+> +#
+> +#############################################################
+> +
+> +RAPIDJSON_VERSION = 0.11
+> +RAPIDJSON_SOURCE = rapidjson-$(RAPIDJSON_VERSION).zip
+> +RAPIDJSON_SITE = http://rapidjson.googlecode.com/files
+> +RAPIDJSON_LICENSE = MIT
+> +RAPIDJSON_LICENSE_FILES = license.txt
+> +RAPIDJSON_INSTALL_TARGET = NO
+> +RAPIDJSON_INSTALL_STAGING = YES
 
-Thanks Markus for this patch. However, this is the mailing list for
-Buildroot, so we're not the one responsible for taking such patches.
-You should instead get in touch with the uClibc community, that has its
-own mailing list: http://uclibc.org/lists.html.
+How does this thing work if you install only things in staging? Is it a
+code generator that runs on the host? And if so, shouldn't some stuff
+be installed in $(HOST_DIR) ?
 
-Best regards,
+Thanks,
 
 Thomas
 -- 
