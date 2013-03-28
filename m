@@ -1,49 +1,111 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Mar 2013 18:19:10 +0100
-Subject: [Buildroot] [PATCH v4 05/21] qt5base: add glib support
-In-Reply-To: <20130320093556.197f9966@skate>
-References: <1363721394-14973-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1363721394-14973-6-git-send-email-thomas.petazzoni@free-electrons.com>
- <871ubbt7l8.fsf@dell.be.48ers.dk> <20130320093556.197f9966@skate>
-Message-ID: <51532A0E.10805@mind.be>
+Date: Thu, 28 Mar 2013 07:52:57 +0100
+Subject: [Buildroot] git sourced packages with submodules
+In-Reply-To: <CAHCQUcDjKiUyFrnTotjuOEUBgCHFr2BR5w_hRJgZXTnLx5=Rmg@mail.gmail.com>
+References: <CAHCQUcDjKiUyFrnTotjuOEUBgCHFr2BR5w_hRJgZXTnLx5=Rmg@mail.gmail.com>
+Message-ID: <5153E8C9.2050401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/03/13 09:35, Thomas Petazzoni wrote:
-> But admittedly, the boundary between automatic enabling/disabling
-> support and explicit suboptions is a bit fuzzy. It's sometimes a bit
-> strange to have a suboption for something very small, and automatic
-> enabling/disabling for something rather "big". I don't really have a
-> good idea on how to clearly draw the line between the two solutions.
-> One radical solution is: whenever it can be automatic, it should be.
-> Don't know if it's reasonable, though. I'm open to suggestions on this,
-> and we should probably update the documentation with details on this
-> topic.
+On 25/03/13 10:31, Magnus Edenhill wrote:
+> Hi,
+>
+> I have a bunch of git sourced packages that utilise submodules.
+> The submodules (and autoconf* stuff) are set up by calling a ./autogen.sh
+> script (typically from .._PRE_CONFIGURE_HOOKS).
 
-  For me, the default is to have automatic  enable/disable, with the 
-following exceptions:
+  The "buildroot way" is to:
 
-- the "wrapper library" is rather large, so you want to be able to build 
-without the wrapper library. I can't actually find an example of this. 
-Even the QtDbus example: the QtDbus+QtXml libraries total 650K 
-(stripped), which is not that much compared to 3M for QtCore.
+- create separate packages rather than using submodules (as is the case 
+for gstreamer, for instance);
 
-- it's not obvious to the user that the dependency should be selected. 
-BR2_PACKAGE_DIRECTFB_MULTI is a good example: you wouldn't have the idea 
-that you have to select linux-fusion in order to get multi-application 
-support on DirectFB.
+- even better, use a release tarball and add custom patches on top of 
+that; during development, you can have GSTREAMER_OVERRIDE_SRCDIR point to 
+a git checkout;
+
+- not use an autogen.sh sript, but use our own reconfigure (which will 
+also fixup libtool).
 
 
-  That said, I don't think it every hurts to have a Config.in option when 
-it is not strictly required. It increases our code size, but there's no 
-important maintenance effort (at least if it's a simple bool option). So 
-I would say it's mostly up to the contributors.
+  I admit that it doesn't work perfectly. In the specific case of 
+gstreamer, the submodule is used to instantiate the common/ subdirectory 
+which is not released as a separate tarball and which has to be present 
+before you can do an autoreconf.
 
-  Regards,
-  Arnout
+  But then, I think it's better to create the common/ directory in a 
+post-extract hook. Something like:
+
+define GSTREAMER_COMMON_DOWNLOAD
+	$(call DOWNLOAD,$(GSTREAMER_COMMON_SITE))
+endef
+GSTREAMER_POST_DOWNLOAD_HOOKS += GSTREAMER_COMMON_DOWNLOAD
+
+define GSTREAMER_COMMON_EXTRACT
+	$(INFLATE.gz) $(DL_DIR)/$(GSTREAMER_COMMON_SOURCE) | \
+         $(TAR) $(TAR_STRIP_COMPONENTS)=1 \
+		-C $(GSTREAMER_DIR)/common $(TAR_OPTIONS) -
+endef
+GSTREAMER_POST_EXTRACT_HOOKS += GSTREAMER_COMMON_EXTRACT
+
+
+  Alternatively, you can define a new gstreamer-common package and 
+symlink to it from the gstreamer directory:
+
+define GSTREAMER_LINK_COMMON
+	ln -s -f $(GSTREAMER_COMMON_DIR) $(@D)/common
+endef
+GSTREAMER_POST_EXTRACT_HOOKS += GSTREAMER_LINK_COMMON
+
+
+> But this unfortunately does not work since the 'git submodule *'-commands
+> rely on residing in a functional git repository, but the git downloader
+> (DOWNLOAD_GIT) uses 'git archive' to move the cloned repository to
+> output/build/..., and 'git archive' strips the .git/ repo.
+>
+> The current workaround is to use ..._EXTRACT_CMDS:
+>
+> define GSTREAMER_EXTRACT_CMDS
+> rm -rf $(@D)
+> (git clone --depth 1 $(GSTREAMER_SITE) $(@D) && \
+>   cd $(@D) && \
+> git submodule init && \
+> git submodule update)
+> touch $(@D)/.stamp_downloaded
+> endef
+>
+>
+> But its a bit intrusive since 'git clone' refuses to clone into a
+> non-empty directory, so the dest directory needs to be cleaned up (remove
+> .stamp_downloaded) and then re-setup (create .stamp_downloaded again),
+> and this relies on the package knowing buildroot internals which is less
+> than optimal.
+>
+> A more convenient method would be if there was a ...._PRE_ARCHIVE_HOOKS
+> that was run just before the 'git archive' in DOWNLOAD_GIT, that would
+> let the package set up submodules and whatnot.
+
+  The download methods are already very complex and kludgy. I wouldn't 
+like adding a feature there for such a corner case.
+
+  If some feature is added to the infrastructure, I would prefer it to be 
+that you can specify additional sources to download and extract. That's 
+also a non-trivial modification, but it's less intrusive I think.
+
+> The other vcs downloaders look similar (svn export...)
+>
+> Regards,
+> Magnus
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
