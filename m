@@ -1,40 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 28 Mar 2013 15:33:16 +0200
-Subject: [Buildroot] [PATCHv2] linknx: new package
-In-Reply-To: <1364476686-12850-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1364476686-12850-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20130328133316.GA4180@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Mar 2013 14:33:31 +0100
+Subject: [Buildroot] [PATCH] rapidjson: new package
+In-Reply-To: <CAHt8ZCOgUZq-WjNt=gFo+_f4Bmdu6KJHtXi25yzpDxShRYc-cQ@mail.gmail.com>
+References: <1364472920-11835-1-git-send-email-spdawson@gmail.com>
+ <20130328141527.0061ef53@skate>
+ <CAHt8ZCOgUZq-WjNt=gFo+_f4Bmdu6KJHtXi25yzpDxShRYc-cQ@mail.gmail.com>
+Message-ID: <20130328143331.5d73caa3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Simon Dawson,
 
-On Thu, Mar 28, 2013 at 02:18:05PM +0100, Thomas Petazzoni wrote:
-> From: Gregory Hermant <gregory.hermant@calao-systems.com>
+On Thu, 28 Mar 2013 13:26:07 +0000, Simon Dawson wrote:
+
+> > How does this thing work if you install only things in staging? Is
+> > it a code generator that runs on the host? And if so, shouldn't
+> > some stuff be installed in $(HOST_DIR) ?
 > 
-> [Thomas: various fixes/improvements]
-> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> Changes v1 -> v2:
->  * Add dependency on C++ support, as noted by Peter.
->  * The support of log4cxx is not added, because linknx requires
->    log4cxx >= 1.0 and we only have 0.10 has a package.
-> ---
+> Thanks for looking at this. It is a header-only library. That being
+> the case, should the headers also be installed under $(HOST_DIR)?
 
-[...]
+No, if it's a header only library, then what you've done is correct.
+Thanks for the explanation!
 
-> +LINKNX_VERSION = 0.0.1.30
-> +LINKNX_SOURCE = linknx-${LINKNX_VERSION}.tar.gz
-
-Curly braces? Besides, isn't this the default already?
-
-baruch
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
