@@ -1,58 +1,67 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 28 Mar 2013 09:13:06 +0100
-Subject: [Buildroot] [git commit] Makefile: simplify target skeleton
-	copying
-In-Reply-To: <87ip4c3q30.fsf@dell.be.48ers.dk>
-References: <20130326074214.D6DFF9B2CA@busybox.osuosl.org>
- <5153EE16.8070207@mind.be> <87ip4c3q30.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LWWJMrJBvkf_jwMrrHT73dOy85_iQJpcZVbhF4SKcjjSw@mail.gmail.com>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Thu, 28 Mar 2013 16:20:14 +0800
+Subject: [Buildroot] [PATCH v3 2/2] buildroot: target: Add Blackfin
+ architecture support.
+In-Reply-To: <20130326091516.36a042d2@skate>
+References: <1363942902-6045-1-git-send-email-sonic.adi@gmail.com>
+ <1363942902-6045-2-git-send-email-sonic.adi@gmail.com>
+ <51514D57.1090907@mind.be> <20130326091516.36a042d2@skate>
+Message-ID: <CAJxxZ0OQac0FDzjq3i3dFpu1unOYAsE5w2e_Vy9rsH261oOY7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Thomas and Arnout,
 
-
-On Thu, Mar 28, 2013 at 9:07 AM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
-
-> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+On Tue, Mar 26, 2013 at 4:15 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Arnout Vandecappelle,
 >
->  Arnout> On 26/03/13 08:33, Peter Korsgaard wrote:
->  >> +   rsync -au --exclude=.empty --exclude=CVS --exclude=.svn
-> --exclude='*~' \
->  >> +           $(TARGET_SKELETON)/ $(TARGET_DIR)/
+> On Tue, 26 Mar 2013 08:25:11 +0100, Arnout Vandecappelle wrote:
 >
->  Arnout>  Since TARGET_SKELETON can be configured to point to a git- or
->  Arnout> mercurial-controlled directory, I'd want to exclude those as
-> well. How
->  Arnout> about the --cvs-exclude --include core that ThomasDS introduced?
+>>   Looks like you again choose a difficult patch set to try to upstream...
+>>
+>>   After reading all the comments in this thread, I propose to split up
+>> the patch set as follows in order to get some progress on it.
+>>
+>> 1. Add blackfin CPU choice.
+>> This patch adds a Target CPU configuration option and uses it to select a
+>> -m option for gcc.
+>>
+>> 2. Introduce target CPU revision.
+>> Adds the possibility (in the general infrastructure, not
+>> blackfin-specific) to have a free-form CPU revision string and append it
+>> to the target CPU. Only Blackfin actually uses this option.
+>>
+>> 3. Introduce BINFMT_FLAT.
+>> Just introduce the symbol and add options in blackfin to select it.
 >
-> We can do that as well. I was a bit afraid of excluding files people
-> wanted to keep, so I kept it how it was - But yes, like likelyhood is
-> quite small.
+> I don't think we should introduce just BINFMT_FLAT, but also
+> BINFMT_FDPIC (we already have a FDPIC symbol) and BINFMT_ELF, for
+> completeness. So I would rephrase this item into "Introduce BINFMT_*
+> symbols and refactor the existing usage to use BINFMT_FDPIC/BINFMT_ELF".
 >
-> Care to send a patch to do this?
+>> 4. Introduce package-specific BINFMT_FLAT options.
+>> I.e. <PKG>_FLAT_STACKSIZE
+>>
+>> 5. Introduce blackfin-specific Makefile
+>> Probably needs more work.
+>>
+>> 6. Introduce NOMMU symbol
+>> Probably needs more work.
+>
+> I fully agree with Arnout's proposal here. Let's do it step by step, so
+> that we discuss one issue after the other, and gets things merged
+> progressively.
+>
+> Sonic, would you mind reworking your patch set to split it as Arnout is
+> suggesting?
 >
 
-Is this really needed?
-I was thinking about this as well, but later had the following reasoning
-(which could be wrong): for svn, if I recall correctly, there is a .svn in
-each subdirectory. This is not the case for .git or .hg (which only exist
-in the root of the repository). If one can assume that no-one puts the
-skeleton in a repository, the exclusion of .svn is enough.
+Could you comment on the reworked patch set?
 
-Moreover, the --cvs-exclude option cannot be used in this case, as it also
-removes object files. In my version of rsync, this is the exclusion list
-used by --cvs-exclude:
+Regards,
 
-RCS SCCS CVS CVS.adm RCSLOG cvslog.* tags TAGS .make.state .nse_depinfo *~
-#* .#* ,* _$* *$ *.old *.bak *.BAK *.orig *.rej .del-* *.a *.olb *.o *.obj
-*.so *.exe *.Z *.elc *.ln core .svn/ .git/ .hg/ .bzr/
-
-Best regards,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130328/6750a2f0/attachment.html>
+Sonic
