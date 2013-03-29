@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 29 Mar 2013 08:19:53 -0300
-Subject: [Buildroot] [PATCH 4/6] genimage: needs host-pkgconf
+Date: Fri, 29 Mar 2013 08:19:54 -0300
+Subject: [Buildroot] [PATCH 5/6] socat: needs threads
 In-Reply-To: <1364555995-32259-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1364555995-32259-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1364555995-32259-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1364555995-32259-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,25 +11,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
-http://autobuild.buildroot.net/results/1561c26e45d0604f058eb0c7a8bebf08d4abe756/
+http://autobuild.buildroot.net/results/d2231d0db9cebfa77739a229513035ed6814f34c/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/genimage/genimage.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/socat/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
-index 6ed44a4..2c45a8d 100644
---- a/package/genimage/genimage.mk
-+++ b/package/genimage/genimage.mk
-@@ -7,7 +7,7 @@
- GENIMAGE_VERSION        = 4
- GENIMAGE_SOURCE         = genimage-$(GENIMAGE_VERSION).tar.xz
- GENIMAGE_SITE           = http://www.pengutronix.de/software/genimage/download/
--GENIMAGE_DEPENDENCIES   = libconfuse
-+GENIMAGE_DEPENDENCIES   = host-pkgconf libconfuse
- GENIMAGE_LICENSE        = GPLv2
+diff --git a/package/socat/Config.in b/package/socat/Config.in
+index ae88be9..c478282 100644
+--- a/package/socat/Config.in
++++ b/package/socat/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_SOCAT
+ 	bool "socat"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Multipurpose socket relay program.
  
- $(eval $(host-autotools-package))
+ 	  http://www.dest-unreach.org/socat/
++
++comment "socat requires a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 1.8.1.5
