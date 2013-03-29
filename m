@@ -1,10 +1,10 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Fri, 29 Mar 2013 17:50:42 +0800
-Subject: [Buildroot] [PATCH v2 6/7] arch: Introduce blackfin-specific
-	Makefile
+Date: Fri, 29 Mar 2013 17:50:40 +0800
+Subject: [Buildroot] [PATCH v2 4/7] arch: toolchain: Introduce binary format
+	FLAT types.
 In-Reply-To: <1364550643-11793-1-git-send-email-sonic.adi@gmail.com>
 References: <1364550643-11793-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1364550643-11793-6-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1364550643-11793-4-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,123 +14,78 @@ To: buildroot@busybox.net
 From: Sonic Zhang <sonic.zhang@analog.com>
 
 v2-changes:
-- Remove useless Macro __uClinux__
+none
 
 v1-changes:
-- Create arch makefile.
-- Create blackfin makefile.
-- Add FDPIC and FLAT library options and makefile targets to install
-libraries for different binary formats into the same rootfs image.
-- update the TARGET_EXCEPTIONS variable in support/scripts/graph-depends for
-new custom targets
+- Just introduce the symbol and options in arch generic Config.in.
+Append FLAT types specific link flags into external toolchain wrapper.
 
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
- Makefile                      |    2 ++
- arch/Config.in.bfin           |   21 +++++++++++++++++++++
- arch/Makefile.in              |    5 +++++
- arch/Makefile.in.bfin         |   22 ++++++++++++++++++++++
- support/scripts/graph-depends |    2 ++
- 5 files changed, 52 insertions(+), 0 deletions(-)
- create mode 100644 arch/Makefile.in
- create mode 100644 arch/Makefile.in.bfin
+ arch/Config.in                                     |   13 +++++++++++++
+ toolchain/toolchain-external/ext-tool.mk           |    8 ++++++++
+ .../toolchain-external/ext-toolchain-wrapper.c     |    6 ++++++
+ 3 files changed, 27 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 7f0822f..c2f43a4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -329,6 +329,8 @@ ifneq ($(PACKAGE_OVERRIDE_FILE),)
- -include $(PACKAGE_OVERRIDE_FILE)
- endif
- 
-+include arch/Makefile.in
-+
- include package/*/*.mk
- 
- include boot/common.mk
-diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-index 021f5fe..038da4a 100644
---- a/arch/Config.in.bfin
-+++ b/arch/Config.in.bfin
-@@ -62,6 +62,27 @@ config BR2_bf561
- 	bool "bf561"
+diff --git a/arch/Config.in b/arch/Config.in
+index be475c0..cf081a3 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -190,6 +190,19 @@ config BR2_BINFMT_FLAT
+ 	select BR2_PREFER_STATIC_LIB
  endchoice
  
-+config BR2_BFIN_INSTALL_FDPIC_SHARED
-+	depends on BR2_bfin && !BR2_BINFMT_FDPIC
-+	bool "Install FDPIC shared libraries"
-+	default y
-+	help
-+	  Blackfin Linux kernel supports running both FDPIC and FLAT applications
-+	  concurrently if the binary format specific libraries installed properly.
-+	  This option allow developer to install FDPIC libraries into a buildroot
-+	  rootfs image built with binary format macro other than BR2_BINFMT_FDPIC.
++# Set up flat binary type
++choice
++	prompt "FLAT Binary type"
++	depends on BR2_BINFMT_FLAT
++	default BR2_BINFMT_FLAT_ONE
++config BR2_BINFMT_FLAT_ONE
++	bool "One binary"
++config BR2_BINFMT_FLAT_SEP_DATA
++	bool "Separate data and code"
++config BR2_BINFMT_FLAT_SHARED
++	bool "Shared binary"
++endchoice
 +
-+config BR2_BFIN_INSTALL_FLAT_SHARED
-+	depends on BR2_bfin && !BR2_BINFMT_FLAT_SHARED
-+	bool "Install FLAT shared libraries"
-+	default y
-+	help
-+	  Blackfin Linux kernel supports running both FDPIC and FLAT applications
-+	  concurrently if the binary format specific libraries installed properly.
-+	  This option allow developer to install FLAT libraries into a buildroot
-+	  rootfs image built with binary format macro other than
-+	  BR2_BINFMT_FLAT_SHARED.
-+
- config BR2_ARCH
- 	default "bfin"
- 
-diff --git a/arch/Makefile.in b/arch/Makefile.in
-new file mode 100644
-index 0000000..d791118
---- /dev/null
-+++ b/arch/Makefile.in
-@@ -0,0 +1,5 @@
-+# The architecture specific Makefile.in.$ARCH should be included only
-+# when the arch macro is selected.
-+ifeq ($(BR2_bfin),y)
-+include arch/Makefile.in.bfin
+ if BR2_arm || BR2_armeb
+ source "arch/Config.in.arm"
+ endif
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 27fd296..0ca1307 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -168,6 +168,14 @@ ifeq ($(BR2_BINFMT_FLAT),y)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_BINFMT_FLAT
+ endif
++ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
++TOOLCHAIN_EXTERNAL_CFLAGS += -msep-data
++TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_BINFMT_FLAT_SEP_DATA
 +endif
-diff --git a/arch/Makefile.in.bfin b/arch/Makefile.in.bfin
-new file mode 100644
-index 0000000..9089bc5
---- /dev/null
-+++ b/arch/Makefile.in.bfin
-@@ -0,0 +1,22 @@
-+TARGETS_BFIN-$(BR2_BFIN_INSTALL_FDPIC_SHARED) += target-shared-libs-fdpic
-+TARGETS_BFIN-$(BR2_BFIN_INSTALL_FLAT_SHARED) += target-shared-libs-flat
-+TARGETS += $(TARGETS_BFIN-y)
-+
-+CROSS_COMPILE_SHARED_FDPIC ?= bfin-linux-uclibc-
-+target-shared-libs-fdpic:
-+	set -e; \
-+	t=`$(CROSS_COMPILE_SHARED_FDPIC)gcc $(CPUFLAGS) -print-file-name=libc.a`; \
-+	t=`dirname $$t`/../..; \
-+	for i in $$t/lib/*so*; do \
-+		i=`readlink -f "$$i"`; \
-+		soname=`$(CROSS_COMPILE_SHARED_FDPIC)readelf -d "$$i" | sed -n '/(SONAME)/s:.*[[]\(.*\)[]].*:\1:p'`; \
-+		$(INSTALL) -D $$i $(TARGET_DIR)/lib/$$soname; \
-+	done
-+
-+CROSS_COMPILE_SHARED_FLAT ?= bfin-uclinux-
-+target-shared-libs-flat:
-+	set -e; \
-+	t=`$(CROSS_COMPILE_SHARED_FLAT)gcc $(CPUFLAGS) -mid-shared-library -print-file-name=libc`; \
-+	if [ -f $$t -a ! -h $$t ] ; then \
-+		$(INSTALL) -D $$t $(TARGET_DIR)/lib/lib1.so; \
-+	fi
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 1163d79..227d085 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -168,6 +168,8 @@ TARGET_EXCEPTIONS = [
-     "erase-fakeroots",
-     "target-generic-hostname",
-     "target-root-passwd",
-+    "target-shared-libs-fdpic",
-+    "target-shared-libs-flat",
- ]
++ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mid-shared-library -mshared-library-id=0
++TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_BINFMT_FLAT_SHARED
++endif
  
- # In full mode, start with the result of get_targets() to get the main
+ ifneq ($(BR2_TARGET_OPTIMIZATION),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index 9a2fc70..c0eb2db 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -50,6 +50,12 @@ static char *predef_args[] = {
+ #ifdef BR_BINFMT_FLAT
+ 	"-Wl,-elf2flt",
+ #endif
++#ifdef BR_BINFMT_FLAT_SEP_DATA
++	"-msep-data",
++#endif
++#ifdef BR_BINFMT_FLAT_SHARED
++	"-mid-shared-library -mshared-library-id=0",
++#endif
+ #ifdef BR_ADDITIONAL_CFLAGS
+ 	BR_ADDITIONAL_CFLAGS
+ #endif
 -- 
 1.7.0.4
