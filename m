@@ -1,27 +1,26 @@
-From: Patrick Boettcher <pboettcher@kernellabs.com>
-Date: Fri, 29 Mar 2013 14:51:10 +0100
-Subject: [Buildroot] [PATCH] pkg-download with git and not VERSION set in
-	package
-Message-ID: <1364565071-29173-1-git-send-email-Patrick.Boettcher@parrot.com>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Fri, 29 Mar 2013 15:49:18 +0100 (CET)
+Subject: [Buildroot] [PATCH 1/2] packages: add ability for packages
+	to	create users
+In-Reply-To: <201303081809.45387.yann.morin.1998@free.fr>
+Message-ID: <1446827286.1045443.1364568558687.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm new to buildroot and was playing with a local git-tree. I noticed
-that things weren't working when VERSION is not set in the package.
 
-The following patch is trivial but solves the problem with the current
-implemenation.
+just a quick ping on this particular patch....
 
-Please copy me on replies as I'm not yet subscribed.
+it's usefull at least for pulseaudio in system mode, which needs its own user and group.
 
-Patrick Boettcher (1):
-  pkg-download: take some more care of <PKG_>VERSION when METHOD is git
+Note that the pulseaudio documentation recommends never using pulseaudio as a system daemon except for headless embedded system.
 
- package/pkg-download.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+So I think it's legitimate to handle this use case for buildroot :)
 
---
-1.7.10.4
+There are probably other daemons that can use their own user if that feature is available.
+
+Regards
+
+J?r?my Rosen
