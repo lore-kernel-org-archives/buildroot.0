@@ -1,10 +1,10 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Fri, 29 Mar 2013 17:50:38 +0800
-Subject: [Buildroot] [PATCH v2 2/7] arch: toolchain: Introduce target CPU
-	revision.
+Date: Fri, 29 Mar 2013 17:50:41 +0800
+Subject: [Buildroot] [PATCH v2 5/7] package: Introduce package-specific
+	BINFMT_FLAT options.
 In-Reply-To: <1364550643-11793-1-git-send-email-sonic.adi@gmail.com>
 References: <1364550643-11793-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1364550643-11793-2-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1364550643-11793-5-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,61 +14,48 @@ To: buildroot@busybox.net
 From: Sonic Zhang <sonic.zhang@analog.com>
 
 v2-changes:
-none
+- Fix typo error in macro BINFMT_FLAT
 
 v1-changes:
-- Adds the possibility to have a free-form CPU revision string and append it
-to the target CPU. Only Blackfin actually uses this option.
+- Add new option <PKG>_FLAT_STACKSIZE. The document needs to be updated.
 
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
- arch/Config.in                           |    3 +++
- arch/Config.in.bfin                      |    5 +++++
- toolchain/toolchain-external/ext-tool.mk |    4 ++++
- 3 files changed, 12 insertions(+), 0 deletions(-)
+ package/pkg-autotools.mk |    5 +++++
+ package/pkg-generic.mk   |    5 +++++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 472b10c..c341848 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -174,6 +174,9 @@ config BR2_GCC_TARGET_ABI
- config BR2_GCC_TARGET_CPU
- 	string
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 890506b..bdfea20 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -82,6 +82,11 @@ $(2)_CLEAN_OPT			?= clean
+ $(2)_UNINSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) uninstall
+ $(2)_UNINSTALL_TARGET_OPT	?= DESTDIR=$$(TARGET_DIR)  uninstall
  
-+config BR2_GCC_TARGET_CPU_REVISION
-+	string
-+
- if BR2_arm || BR2_armeb
- source "arch/Config.in.arm"
- endif
-diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-index ac96620..021f5fe 100644
---- a/arch/Config.in.bfin
-+++ b/arch/Config.in.bfin
-@@ -97,3 +97,8 @@ config BR2_GCC_TARGET_CPU
- 	default bf548		if BR2_bf548
- 	default bf549		if BR2_bf549
- 	default bf561		if BR2_bf561
-+
-+config BR2_GCC_TARGET_CPU_REVISION
-+	string "Target CPU revision"
-+	help
-+	  Specify target cpu revision which is passed to compiler as a parameter.
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index b477bc0..407e1ad 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -134,7 +134,11 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
- endif
- 
- CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
-+ifeq ($(BR2_GCC_TARGET_CPU_REVISION),)
- CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
-+else
-+CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
++ifeq ($(BR2_BINFMT_FLAT),y)
++ ifneq ($$($(2)_FLAT_STACKSIZE),)
++  $(2)_CONF_ENV			+= LDFLAGS="$(TARGET_LDFLAGS) -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)"
++ endif
 +endif
- CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
- CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
+ 
+ #
+ # Configure step. Only define it if not already defined by the package
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 57b0fd0..8ee2b20 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -303,6 +303,11 @@ endif
+ 
+ $(2)_REDISTRIBUTE		?= YES
+ 
++ifeq ($(BR2_BINFMT_FLAT),y)
++ ifneq ($$($(2)_FLAT_STACKSIZE),)
++  $(2)_FLAT_LDFLAGS = -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)
++ endif
++endif
+ 
+ $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
  
 -- 
 1.7.0.4
