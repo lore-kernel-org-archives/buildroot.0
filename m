@@ -1,23 +1,28 @@
-From: Ruud Commandeur <RCommandeur@clb.nl>
-Date: Fri, 29 Mar 2013 16:56:51 +0100
-Subject: [Buildroot] elftosb package
-Message-ID: <15AE5A936F5E3A42A9144E66875A0A89308AC8@server1-derijp.CLB-Benelux.lokaal>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Fri, 29 Mar 2013 20:16:32 +0000
+Subject: [Buildroot] TOP_SRCDIR:  Where is it defined?
+Message-ID: <F9C551623D2CBB4C9488801D14F864C610C1A21F@ex-mb1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
- 
-For the imx28 I need the elftosb tool to generate the u-boot.sb file. At
-the moment I use the version from an earlier installed ltib
-configuration, but I would like to install this as be part of the
-buildroot toolchain. This seems to be possile, since there is an elftosb
-package directory. However: it is not added to the package configuration
-to select it and it lacks a Config.in file. Can anyone tell me how I can
-add this package?
+Within the pkg-generic file, TOP_SRCDIR is used to define
+$(PKG)_DIR_PREFIX:
 
-Thanks,
+buildroot-2013.02$ grep -R "TOP_SRCDIR" .
+grep: ./system/skeleton/dev/log: No such file or directory
+grep: ./system/skeleton/etc/resolv.conf: No such file or directory
+./package/pkg-generic.mk:$(2)_DIR_PREFIX                        = $(if $(4),$(4),$(TOP_SRCDIR)/package)
 
-Ruud
+This would be a problem only for some entity (which didn't set $4 to
+$(call pkgparentdir)) directly calling inner-generic-package as
+generic-package does do the call to pkgparentdir.
+
+I'm just thinking this should be changed, however, I'm clueless about
+the vision the developer who added this had in mind for TOP_SRCDIR, so
+I have no suggestion how to change it.
+
+FWIW,
+Andy
