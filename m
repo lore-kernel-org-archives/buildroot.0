@@ -1,293 +1,141 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Fri, 29 Mar 2013 09:50:08 +0100
-Subject: [Buildroot] [PATCH] Add Armadeus systems APF27 SOM basic support
-Message-ID: <1364547008-23068-1-git-send-email-julien.boibessot@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 29 Mar 2013 10:30:22 +0100
+Subject: [Buildroot] [PATCH 1/1] manual: add patch revision and
+	versioning section
+In-Reply-To: <1364477521-2231-1-git-send-email-viniciustinti@gmail.com>
+References: <1364477521-2231-1-git-send-email-viniciustinti@gmail.com>
+Message-ID: <CAAXf6LUMhwh+pdfubNef2Y0SX0Qp6qEHwWzU4ga6_bEDYhhCfw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+Hi Vinicius,
 
-Buildroot toolchain, UBIFS rootfs, Linux kernel (board is mainlined since 3.8).
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
----
- board/armadeus/apf27/linux-3.8.config |  229 +++++++++++++++++++++++++++++++++
- configs/armadeus_apf27_defconfig      |   28 ++++
- 2 files changed, 257 insertions(+), 0 deletions(-)
- create mode 100644 board/armadeus/apf27/linux-3.8.config
- create mode 100644 configs/armadeus_apf27_defconfig
+On Thu, Mar 28, 2013 at 2:32 PM, Vinicius Tinti <viniciustinti@gmail.com>wrote:
 
-diff --git a/board/armadeus/apf27/linux-3.8.config b/board/armadeus/apf27/linux-3.8.config
-new file mode 100644
-index 0000000..cff947b
---- /dev/null
-+++ b/board/armadeus/apf27/linux-3.8.config
-@@ -0,0 +1,229 @@
-+CONFIG_EXPERIMENTAL=y
-+# CONFIG_SWAP is not set
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_LOG_BUF_SHIFT=14
-+CONFIG_CGROUPS=y
-+CONFIG_EMBEDDED=y
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_SLAB=y
-+CONFIG_PROFILING=y
-+CONFIG_OPROFILE=m
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+# CONFIG_BLK_DEV_BSG is not set
-+# CONFIG_IOSCHED_DEADLINE is not set
-+# CONFIG_IOSCHED_CFQ is not set
-+# CONFIG_ARCH_MULTI_V7 is not set
-+CONFIG_ARCH_MXC=y
-+CONFIG_MXC_IRQ_PRIOR=y
-+CONFIG_MACH_IMX27_DT=y
-+CONFIG_PREEMPT=y
-+CONFIG_AEABI=y
-+CONFIG_ZBOOT_ROM_TEXT=0x0
-+CONFIG_ZBOOT_ROM_BSS=0x0
-+CONFIG_FPE_NWFPE=y
-+CONFIG_FPE_NWFPE_XP=y
-+CONFIG_PM_DEBUG=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-+# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-+# CONFIG_INET_XFRM_MODE_BEET is not set
-+# CONFIG_INET_LRO is not set
-+# CONFIG_INET_DIAG is not set
-+CONFIG_IPV6=y
-+CONFIG_CAN=m
-+CONFIG_CAN_RAW=m
-+CONFIG_CAN_BCM=m
-+CONFIG_CAN_VCAN=m
-+CONFIG_CAN_MCP251X=m
-+CONFIG_BT=m
-+CONFIG_BT_RFCOMM=m
-+CONFIG_BT_RFCOMM_TTY=y
-+CONFIG_BT_BNEP=m
-+CONFIG_BT_HIDP=m
-+CONFIG_BT_HCIBTUSB=m
-+CONFIG_BT_HCIUART=m
-+CONFIG_BT_HCIUART_H4=y
-+CONFIG_BT_HCIUART_BCSP=y
-+CONFIG_CFG80211=m
-+CONFIG_MAC80211=m
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_MTD=y
-+CONFIG_MTD_CMDLINE_PARTS=y
-+CONFIG_MTD_CHAR=y
-+CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_CFI=y
-+CONFIG_MTD_CFI_ADV_OPTIONS=y
-+CONFIG_MTD_CFI_GEOMETRY=y
-+# CONFIG_MTD_MAP_BANK_WIDTH_1 is not set
-+# CONFIG_MTD_CFI_I2 is not set
-+CONFIG_MTD_CFI_INTELEXT=y
-+CONFIG_MTD_PHYSMAP=y
-+CONFIG_MTD_NAND=y
-+CONFIG_MTD_NAND_MXC=y
-+CONFIG_MTD_UBI=y
-+CONFIG_PROC_DEVICETREE=y
-+CONFIG_EEPROM_AT24=y
-+CONFIG_EEPROM_AT25=y
-+CONFIG_SCSI=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_NETDEVICES=y
-+CONFIG_MII=y
-+# CONFIG_NET_VENDOR_BROADCOM is not set
-+# CONFIG_NET_VENDOR_CIRRUS is not set
-+# CONFIG_NET_VENDOR_FARADAY is not set
-+# CONFIG_NET_VENDOR_INTEL is not set
-+# CONFIG_NET_VENDOR_MARVELL is not set
-+# CONFIG_NET_VENDOR_MICREL is not set
-+# CONFIG_NET_VENDOR_MICROCHIP is not set
-+# CONFIG_NET_VENDOR_NATSEMI is not set
-+# CONFIG_NET_VENDOR_SEEQ is not set
-+# CONFIG_NET_VENDOR_SMSC is not set
-+# CONFIG_NET_VENDOR_STMICRO is not set
-+# CONFIG_NET_VENDOR_WIZNET is not set
-+CONFIG_SMSC_PHY=y
-+CONFIG_RTL8187=m
-+CONFIG_LIBERTAS=m
-+CONFIG_LIBERTAS_SDIO=m
-+CONFIG_RT2X00=m
-+CONFIG_RT2500USB=m
-+CONFIG_RT73USB=m
-+CONFIG_RT2800USB=m
-+CONFIG_RTL8192CU=m
-+CONFIG_ZD1211RW=m
-+CONFIG_INPUT_JOYDEV=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_KEYBOARD_GPIO=y
-+CONFIG_KEYBOARD_IMX=m
-+# CONFIG_INPUT_MOUSE is not set
-+CONFIG_INPUT_JOYSTICK=y
-+CONFIG_INPUT_TOUCHSCREEN=y
-+# CONFIG_LEGACY_PTYS is not set
-+CONFIG_SERIAL_IMX=y
-+CONFIG_SERIAL_IMX_CONSOLE=y
-+# CONFIG_HW_RANDOM is not set
-+CONFIG_I2C=y
-+CONFIG_I2C_CHARDEV=y
-+CONFIG_I2C_IMX=y
-+CONFIG_SPI=y
-+CONFIG_SPI_IMX=y
-+CONFIG_SPI_SPIDEV=m
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_W1=y
-+CONFIG_W1_MASTER_MXC=y
-+CONFIG_W1_SLAVE_THERM=y
-+CONFIG_WATCHDOG=y
-+CONFIG_IMX2_WDT=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_MEDIA_SUPPORT=m
-+CONFIG_MEDIA_CAMERA_SUPPORT=y
-+CONFIG_MEDIA_USB_SUPPORT=y
-+CONFIG_USB_VIDEO_CLASS=m
-+CONFIG_USB_PWC=m
-+CONFIG_V4L_PLATFORM_DRIVERS=y
-+CONFIG_SOC_CAMERA=m
-+CONFIG_VIDEO_MX2=m
-+# CONFIG_MEDIA_SUBDRV_AUTOSELECT is not set
-+# CONFIG_DVB_AU8522_V4L is not set
-+# CONFIG_DVB_TUNER_DIB0070 is not set
-+# CONFIG_DVB_TUNER_DIB0090 is not set
-+CONFIG_FB=y
-+# CONFIG_FB_MX3 is not set
-+CONFIG_BACKLIGHT_LCD_SUPPORT=y
-+# CONFIG_LCD_CLASS_DEVICE is not set
-+CONFIG_BACKLIGHT_CLASS_DEVICE=y
-+CONFIG_FRAMEBUFFER_CONSOLE=y
-+CONFIG_FONTS=y
-+CONFIG_FONT_8x8=y
-+CONFIG_LOGO=y
-+# CONFIG_LOGO_LINUX_MONO is not set
-+# CONFIG_LOGO_LINUX_VGA16 is not set
-+CONFIG_SOUND=m
-+CONFIG_SND=m
-+CONFIG_SND_MIXER_OSS=m
-+CONFIG_SND_PCM_OSS=m
-+# CONFIG_SND_DRIVERS is not set
-+# CONFIG_SND_ARM is not set
-+# CONFIG_SND_SPI is not set
-+# CONFIG_SND_USB is not set
-+CONFIG_SND_SOC=m
-+CONFIG_SND_IMX_SOC=m
-+CONFIG_USB=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_EHCI_MXC=y
-+CONFIG_USB_CHIPIDEA=y
-+CONFIG_USB_CHIPIDEA_HOST=y
-+CONFIG_USB_CHIPIDEA_DEBUG=y
-+CONFIG_USB_ACM=y
-+CONFIG_USB_PRINTER=y
-+CONFIG_USB_STORAGE=y
-+CONFIG_USB_SERIAL=y
-+CONFIG_USB_SERIAL_FTDI_SIO=y
-+CONFIG_USB_SERIAL_PL2303=y
-+CONFIG_USB_GADGET=y
-+CONFIG_USB_ETH=m
-+CONFIG_USB_GADGETFS=m
-+CONFIG_USB_MASS_STORAGE=m
-+CONFIG_USB_G_HID=m
-+CONFIG_USB_ULPI=y
-+CONFIG_MMC=y
-+CONFIG_MMC_MXC=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_TIMER=y
-+CONFIG_LEDS_TRIGGER_ONESHOT=y
-+CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-+CONFIG_LEDS_TRIGGER_BACKLIGHT=y
-+CONFIG_LEDS_TRIGGER_CPU=y
-+CONFIG_LEDS_TRIGGER_GPIO=y
-+CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
-+CONFIG_LEDS_TRIGGER_TRANSIENT=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_DS1374=y
-+CONFIG_RTC_DRV_MXC=m
-+CONFIG_DMADEVICES=y
-+CONFIG_IMX_SDMA=y
-+CONFIG_IMX_DMA=y
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_IIO=m
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT3_FS=y
-+CONFIG_EXT3_FS_POSIX_ACL=y
-+CONFIG_EXT3_FS_SECURITY=y
-+# CONFIG_DNOTIFY is not set
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+# CONFIG_PROC_PAGE_MONITOR is not set
-+CONFIG_TMPFS=y
-+CONFIG_JFFS2_FS=y
-+CONFIG_UBIFS_FS=y
-+CONFIG_NFS_FS=y
-+CONFIG_NFS_V4=y
-+CONFIG_ROOT_NFS=y
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_CODEPAGE_850=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_ISO8859_15=m
-+CONFIG_PRINTK_TIME=y
-+CONFIG_DEBUG_FS=y
-+# CONFIG_SCHED_DEBUG is not set
-+# CONFIG_DEBUG_PREEMPT is not set
-+CONFIG_DEBUG_INFO=y
-+# CONFIG_FTRACE is not set
-+CONFIG_DEBUG_LL=y
-+CONFIG_EARLY_PRINTK=y
-+# CONFIG_CRYPTO_ANSI_CPRNG is not set
-diff --git a/configs/armadeus_apf27_defconfig b/configs/armadeus_apf27_defconfig
-new file mode 100644
-index 0000000..09d491c
---- /dev/null
-+++ b/configs/armadeus_apf27_defconfig
-@@ -0,0 +1,28 @@
-+# Architecture
-+BR2_arm=y
-+BR2_arm926t=y
-+
-+# Lock down headers to avoid breaking with new defaults
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.8.4"
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="apf27"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2047
-+BR2_TARGET_ROOTFS_UBI=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.4"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf27/linux-3.8.config"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0xA0008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx27-apf27"
--- 
-1.7.5.4
+> Improve the contribute manual section by adding an explanation about patch
+> review and version.
+>
+> The section now provides advices in how to respond mantainers requests and
+> how
+> to proceed on replying them.
+>
+> Signed-off-by: Vinicius Tinti <viniciustinti@gmail.com>
+> ---
+>  docs/manual/contribute.txt |   51
+> ++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>
+> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+> index 0106df0..2bdfc37 100644
+> --- a/docs/manual/contribute.txt
+> +++ b/docs/manual/contribute.txt
+> @@ -62,6 +62,57 @@ Make sure posted *patches are not line-wrapped*,
+> otherwise they cannot
+>  easily be applied. In such a case, fix your e-mail client, or better,
+>  use +git send-email+ to send your patches.
+>
+> +Patch revision
+> +^^^^^^^^^^^^^^
+> +
+> +Hardly ever some revisions will be requested to your patch. Whenever
+>
+
+The phrase 'hardly ever' means 'almost never'. I think you mean:
+Often some revisions will be requested to your patch.
+or even:
+Typically, you will receive review comments on your patch. After
+discussion, these
+comments should be taken into account in a new patch revision.
+
+
+
+> +it happens make sure to always reply in the same thread and include
+> +the changes that have made.
+>
+
+Typically one sends a new patch with git format-patch or in my case 'hg
+email'. Are people actually specifying the original mail identification, or
+rephrased: Is this a rule we should try to follow?
+
+
+> +
+> +Revisions must describe which changes they include. When editing your
+> +commit, below the +signed-off-by+ section, add +---+ and your changes.
+> ++git+ will automatically ignore lines below +---+ which will not be merged
+> +on upstream but will be present for reviewers. For longer series, the
+> +changelog should be placed in each commit and the cover letter must
+> contain
+> +a summary of these changes. The following suggested layout example
+> +is not mandatory.
+> +
+> +---------------
+> +<topic on one line of less than ~80 characters>
+> +<empty newline>
+> +<more paragraphs describing what it is doing and why>
+> +<empty newline>
+> +Signed-off-by John Doe <john.doe@noname.org>
+> +---
+> +Changes v2 -> v3:
+> +  - foo bar  (Jane)
+> +  - bar buz
+> +Changes v1 -> v2:
+> +  - alpha bravo  (John)
+> +  - charly delta
+> +---------------
+> +
+> +Any patch revision must include the version number. The version number
+> +is simply composed by the letter +v+ followed by an +integer+ greater or
+> +equal 2 (two) (i.e. PATCH v2, PATCH v3 ...).
+> +
+> +This can be easly handle in +git-format-patch+ command by using the option
+>
+
+This can be easily handled with the +git-format-patch+ ...
+
+
+> ++--subject-prefix+:
+> +
+> +---------------------
+> + $ git format-patch --subject-prefix "PATCH v4" -M -n -s -o outgoing
+> origin/master
+> +---------------------
+> +
+> +Mail clients will handle this automatically reply in the same thread but
+> ++git+ won't. Hence the +--in-reply-to+ option in +git-send-email+ must
+> +be used. Get the last +Message-ID+ (it can be found your mail client by
+> +accessing the raw mail). Then use this message id to send your revision
+> +patch:
+>
+
+I would suggest:
+Without extra information, +git+ cannot know to which thread to reply to.
+However,
+you can use the +--in-reply-to+ option to +git-send-email+, which takes the
+unique
++Message-ID+ of the thread as parameter. This value is present in the mail
+headers,
+which you can view with your mail client using the 'Message source' or
+similar option.
+Then use this message id to send your revised patch:
+
+
+
+> +
+> +---------------------
+> + $ git send-email --to buildroot at busybox.net --in-reply-to
+> mymsgid at noname.org outgoing/*
+> +---------------------
+> +
+>  Reviewing/Testing patches
+>  -------------------------
+>
+>
+Best regards,
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130329/5bba0cb7/attachment.html>
