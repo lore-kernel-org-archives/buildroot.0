@@ -1,22 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 29 Mar 2013 10:15:19 -0300
-Subject: [Buildroot] [PATCH 1/1] Update libarchive to 3.0.4 Update
-	Homepage URL
-In-Reply-To: <1364484564-23862-1-git-send-email-arved@arved.at>
-References: <1364484564-23862-1-git-send-email-arved@arved.at>
-Message-ID: <515593E7.3050102@zacarias.com.ar>
+From: Patrick Boettcher <pboettcher@kernellabs.com>
+Date: Fri, 29 Mar 2013 15:07:57 +0100
+Subject: [Buildroot] [PATCH] pkg-download with git and not VERSION set in
+	package
+Message-ID: <1364566078-29535-1-git-send-email-Patrick.Boettcher@parrot.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/28/2013 12:29 PM, arved at arved.at wrote:
+I'm new to buildroot and was playing with a local git-tree. I noticed
+that things weren't working when VERSION is not set in the package.
 
-> From: Tilman Keskin?z <arved@arved.at>
-> 
-> 
-> Signed-off-by: Tilman Keskin?z <arved@arved.at>
+The following patch is trivial but solves the problem with the current
+implemenation.
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Please copy me on replies as I'm not yet subscribed.
+
+Patrick Boettcher (1):
+  pkg-download: take some more care of <PKG_>VERSION when METHOD is git
+
+ package/pkg-download.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--
+1.7.10.4
