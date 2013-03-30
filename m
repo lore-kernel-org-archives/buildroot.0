@@ -1,41 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 30 Mar 2013 20:46:18 +0100
-Subject: [Buildroot] [git commit] linux: bump 3.8.x stable version
-Message-ID: <20130330194754.DC4489B3BF@busybox.osuosl.org>
+Date: Sat, 30 Mar 2013 20:47:34 +0100
+Subject: [Buildroot] [git commit] socat: needs threads
+Message-ID: <20130330194755.D5D459B3BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=56e14a6bc0077ce8e234fc50548caae538749683
+commit: http://git.buildroot.net/buildroot/commit/?id=294ac7ef0af50fb38492eaf1800772ac8411fee8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+http://autobuild.buildroot.net/results/d2231d0db9cebfa77739a229513035ed6814f34c/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/socat/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e37a971..df718c3 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/socat/Config.in b/package/socat/Config.in
+index ae88be9..c478282 100644
+--- a/package/socat/Config.in
++++ b/package/socat/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_SOCAT
+ 	bool "socat"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Multipurpose socket relay program.
  
- config BR2_LINUX_KERNEL_3_8
--	bool "3.8.4"
-+	bool "3.8.5"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.8.4" if BR2_LINUX_KERNEL_3_8
-+	default "3.8.5" if BR2_LINUX_KERNEL_3_8
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 	  http://www.dest-unreach.org/socat/
++
++comment "socat requires a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
