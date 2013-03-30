@@ -1,46 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 30 Mar 2013 20:47:44 +0100
-Subject: [Buildroot] [git commit] libpthsem: needs mmu
-Message-ID: <20130330194756.0AC119B3BF@busybox.osuosl.org>
+Date: Sat, 30 Mar 2013 20:47:24 +0100
+Subject: [Buildroot] [git commit] genimage: needs host-pkgconf
+Message-ID: <20130330194755.AB6FE9B3BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3a1037bb62a2ab877e9443fbb15ec66a0adfef8
+commit: http://git.buildroot.net/buildroot/commit/?id=9f2b3f9605c92f6a9fa2247b12d11985c1688f17
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The need can be patched out by disabling the tests, however the only
-package that uses libpthsem (bcusdk) needs a fork-enabled libpthsem so
-there's not much point. Fixes:
+Fixes:
+http://autobuild.buildroot.net/results/1561c26e45d0604f058eb0c7a8bebf08d4abe756/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/bcusdk/Config.in    |    1 +
- package/libpthsem/Config.in |    1 +
- 2 files changed, 2 insertions(+), 0 deletions(-)
+ package/genimage/genimage.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/bcusdk/Config.in b/package/bcusdk/Config.in
-index cf082e7..c9a1947 100644
---- a/package/bcusdk/Config.in
-+++ b/package/bcusdk/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_BCUSDK
- 	bool "bcusdk"
-+	depends on BR2_USE_MMU # libpthsem
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBPTHSEM
- 	help
-diff --git a/package/libpthsem/Config.in b/package/libpthsem/Config.in
-index 9ab13c3..ae1c78f 100644
---- a/package/libpthsem/Config.in
-+++ b/package/libpthsem/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBPTHSEM
- 	bool "libpthsem"
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_ARGP_STANDALONE
- 	help
- 	  GNU pth is a user mode multi threading library. pthsem is an extend
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 6ed44a4..2c45a8d 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -7,7 +7,7 @@
+ GENIMAGE_VERSION        = 4
+ GENIMAGE_SOURCE         = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE           = http://www.pengutronix.de/software/genimage/download/
+-GENIMAGE_DEPENDENCIES   = libconfuse
++GENIMAGE_DEPENDENCIES   = host-pkgconf libconfuse
+ GENIMAGE_LICENSE        = GPLv2
+ 
+ $(eval $(host-autotools-package))
