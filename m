@@ -1,37 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 30 Mar 2013 20:47:07 +0100
-Subject: [Buildroot] [git commit] intltool: host variant needs host-gettext
-Message-ID: <20130330194755.703D69B3BF@busybox.osuosl.org>
+Date: Sat, 30 Mar 2013 20:46:54 +0100
+Subject: [Buildroot] [git commit] gtest: needs mmu
+Message-ID: <20130330194755.1D9799B3BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=421d9d636271e5872d10a521922b06683ab967b5
+commit: http://git.buildroot.net/buildroot/commit/?id=f19928597b8e1c71b6546e69e76ec3896849c4be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes issues like:
-http://autobuild.buildroot.net/results/1c7d2e50b622179aff469fddedaa4dc2015fb496/
-http://autobuild.buildroot.net/results/7d85ff51b339f1da720bb079eb05e7fba179f101/
-and probably a lot more.
+Fixes:
+http://autobuild.buildroot.net/results/ed2026b98d0cdded8d8ee4d5c86823142a5bdab9/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/intltool/intltool.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/gtest/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
-index 19b5238..1a32a79 100644
---- a/package/intltool/intltool.mk
-+++ b/package/intltool/intltool.mk
-@@ -8,7 +8,7 @@ INTLTOOL_VERSION = 0.40.6
- INTLTOOL_SOURCE = intltool-$(INTLTOOL_VERSION).tar.bz2
- INTLTOOL_SITE = http://ftp.acc.umu.se/pub/GNOME/sources/intltool/0.40/
- 
--HOST_INTLTOOL_DEPENDENCIES = host-libxml-parser-perl
-+HOST_INTLTOOL_DEPENDENCIES = host-gettext host-libxml-parser-perl
- HOST_INTLTOOL_CONF_OPT = \
-   PERLLIB=$(HOST_DIR)/usr/lib/perl
- 
+diff --git a/package/gtest/Config.in b/package/gtest/Config.in
+index c50b5f7..5c065d6 100644
+--- a/package/gtest/Config.in
++++ b/package/gtest/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_GTEST
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Google's framework for writing C++ tests on a variety of
+ 	  platforms (Linux, Mac OS X, Windows, Cygwin, Windows CE, and
