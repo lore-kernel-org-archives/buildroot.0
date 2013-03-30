@@ -1,37 +1,30 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Sat, 30 Mar 2013 17:55:19 +0100
-Subject: [Buildroot] [PATCH] qtuio: depends on QT4
-Message-ID: <1364662519-2385-1-git-send-email-sho@relinux.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 30 Mar 2013 20:45:32 +0100
+Subject: [Buildroot] [PATCH 1/1] Update libarchive to 3.0.4 Update
+	Homepage URL
+In-Reply-To: <515593E7.3050102@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Fri, 29 Mar 2013 10:15:19 -0300")
+References: <1364484564-23862-1-git-send-email-arved@arved.at>
+ <515593E7.3050102@zacarias.com.ar>
+Message-ID: <87mwtk1xk3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes: http://autobuild.buildroot.net/results/e6501a7a487ec3a02463ad0f3aa60168883fa369/
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
----
- package/qtuio/Config.in |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ Gustavo> On 03/28/2013 12:29 PM, arved at arved.at wrote:
+ >> From: Tilman Keskin?z <arved@arved.at>
+ >> 
+ >> 
+ >> Signed-off-by: Tilman Keskin?z <arved@arved.at>
 
-diff --git a/package/qtuio/Config.in b/package/qtuio/Config.in
-index 19499fd..590b2de 100644
---- a/package/qtuio/Config.in
-+++ b/package/qtuio/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_QTUIO
- 	bool "qtuio"
--	depends on BR2_PACKAGE_QT_GUI_MODULE
-+	depends on BR2_PACKAGE_QT_GUI_MODULE && !BR2_PACKAGE_QT5
- 	help
- 	  Implementation of an interface connecting TUIO messages
- 	  and QT events
-@@ -16,3 +16,5 @@ config BR2_QTUIO_EXAMPLES
- comment "qtuio depends on QT gui module"
- 	depends on !BR2_PACKAGE_QT_GUI_MODULE
- 
-+comment "qtuio requires QT4"
-+	depends on BR2_PACKAGE_QT5
+ Gustavo> Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-1.7.0.4
+Bye, Peter Korsgaard
