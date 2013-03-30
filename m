@@ -1,37 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 30 Mar 2013 20:47:34 +0100
-Subject: [Buildroot] [git commit] socat: needs threads
-Message-ID: <20130330194755.D5D459B3BF@busybox.osuosl.org>
+Date: Sat, 30 Mar 2013 20:47:07 +0100
+Subject: [Buildroot] [git commit] intltool: host variant needs host-gettext
+Message-ID: <20130330194755.703D69B3BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=294ac7ef0af50fb38492eaf1800772ac8411fee8
+commit: http://git.buildroot.net/buildroot/commit/?id=421d9d636271e5872d10a521922b06683ab967b5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/d2231d0db9cebfa77739a229513035ed6814f34c/
+Fixes issues like:
+http://autobuild.buildroot.net/results/1c7d2e50b622179aff469fddedaa4dc2015fb496/
+http://autobuild.buildroot.net/results/7d85ff51b339f1da720bb079eb05e7fba179f101/
+and probably a lot more.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/socat/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/intltool/intltool.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/socat/Config.in b/package/socat/Config.in
-index ae88be9..c478282 100644
---- a/package/socat/Config.in
-+++ b/package/socat/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_SOCAT
- 	bool "socat"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Multipurpose socket relay program.
+diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
+index 19b5238..1a32a79 100644
+--- a/package/intltool/intltool.mk
++++ b/package/intltool/intltool.mk
+@@ -8,7 +8,7 @@ INTLTOOL_VERSION = 0.40.6
+ INTLTOOL_SOURCE = intltool-$(INTLTOOL_VERSION).tar.bz2
+ INTLTOOL_SITE = http://ftp.acc.umu.se/pub/GNOME/sources/intltool/0.40/
  
- 	  http://www.dest-unreach.org/socat/
-+
-+comment "socat requires a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-HOST_INTLTOOL_DEPENDENCIES = host-libxml-parser-perl
++HOST_INTLTOOL_DEPENDENCIES = host-gettext host-libxml-parser-perl
+ HOST_INTLTOOL_CONF_OPT = \
+   PERLLIB=$(HOST_DIR)/usr/lib/perl
+ 
