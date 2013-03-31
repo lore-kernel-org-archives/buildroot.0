@@ -1,38 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 30 Mar 2013 20:46:56 +0100
-Subject: [Buildroot] [git commit] orc: needs threads
-Message-ID: <20130330194755.4B9B29B3BF@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 31 Mar 2013 07:23:40 +0300
+Subject: [Buildroot] elftosb package
+In-Reply-To: <15AE5A936F5E3A42A9144E66875A0A89308AC8@server1-derijp.CLB-Benelux.lokaal>
+References: <15AE5A936F5E3A42A9144E66875A0A89308AC8@server1-derijp.CLB-Benelux.lokaal>
+Message-ID: <20130331042340.GA4076@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5ec152a6f04c1a97f484bc2383564dba6cb12071
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Ruud,
 
-Fixes:
-http://autobuild.buildroot.net/results/b44c09c7ca81b16267ad653e65f52c4e5ec7b36f/
+On Fri, Mar 29, 2013 at 04:56:51PM +0100, Ruud Commandeur wrote:
+> For the imx28 I need the elftosb tool to generate the u-boot.sb file. At
+> the moment I use the version from an earlier installed ltib
+> configuration, but I would like to install this as be part of the
+> buildroot toolchain. This seems to be possile, since there is an elftosb
+> package directory. However: it is not added to the package configuration
+> to select it and it lacks a Config.in file. Can anyone tell me how I can
+> add this package?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/orc/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+Select mxs-bootlets from the Bootloaders menu. The elftosb utility should 
+build and run automatically.
 
-diff --git a/package/orc/Config.in b/package/orc/Config.in
-index 1de0f23..022c455 100644
---- a/package/orc/Config.in
-+++ b/package/orc/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_ORC
- 	bool "orc"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Orc is a library and set of tools for compiling and executing
- 	  very simple programs that operate on arrays of data.
- 
- 	  http://code.entropywave.com/projects/orc/
-+
-+comment "orc requires a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
