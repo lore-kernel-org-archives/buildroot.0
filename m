@@ -1,43 +1,23 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 2 Apr 2013 20:05:58 +0400
-Subject: [Buildroot]  [PATCH] vlc: new package
-Message-ID: <515B01E6.4060608@synopsys.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  2 Apr 2013 19:36:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 4538] main() not exited normally then using
+	pthreads
+In-Reply-To: <bug-4538-163@https.bugs.busybox.net/>
+References: <bug-4538-163@https.bugs.busybox.net/>
+Message-ID: <20130402193605.8133A9B42D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/2013 09:08 AM, Bernd Kuhls wrote:
- > Hi,
- >
- > Alexey Brodkin <Alexey.Brodkin-HKixBCOQz3hWk0Htik3J/w@public.gmane.org>
- > wrote in 
-news:1363687526-8469-1-git-send-email-abrodkin-HKixBCOQz3hWk0Htik3J/w at public.gmane.org:
- >
- >> +ifeq ($(BR2_PACKAGE_AVCODEC),y)
- >
- > shouldn?t this be called BR2_PACKAGE_VLC_AVCODEC?
- >
- >> +ifeq ($(BR2_PACKAGE_LUA),y)
- >
- > and this BR2_PACKAGE_VLC_LUA?
- >
- > Regards, Bernd
+https://bugs.busybox.net/show_bug.cgi?id=4538
 
-Hi Bernd,
+--- Comment #6 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-04-02 19:36:49 UTC ---
+And may i ask why don't you report this to the uClibc developers instead of
+Buildroot ones?
 
-The idea is to check if "avcodec" and "lua" packages were selected in 
-configuration utility (menuconfig/xconfig etc).
-
-Indeed we may rely on VLC's symbols BR2_PACKAGE_AVCODEC and 
-BR2_PACKAGE_LUA that select BR2_PACKAGE_FFMPEG and BR2_PACKAGE_LUA 
-accordingly.
-
-So initial proposal is to sort of double check if we do have "avcodec" 
-and "lua" selected.
-
-Even though you believe it's better to check VLC's own symbols I may do 
-a re-spin.
-
--Alexey
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
