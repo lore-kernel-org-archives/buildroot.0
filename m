@@ -1,34 +1,43 @@
-From: Anthony Viallard <viallard@syscom-instruments.com>
-Date: Tue,  2 Apr 2013 17:37:44 +0200
-Subject: [Buildroot] [PATCH] mobile-broadband-provider-info: bump to version
-	20120614
-Message-ID: <1364917064-1213-1-git-send-email-viallard@syscom-instruments.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 2 Apr 2013 20:05:58 +0400
+Subject: [Buildroot]  [PATCH] vlc: new package
+Message-ID: <515B01E6.4060608@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 04/02/2013 09:08 AM, Bernd Kuhls wrote:
+ > Hi,
+ >
+ > Alexey Brodkin <Alexey.Brodkin-HKixBCOQz3hWk0Htik3J/w@public.gmane.org>
+ > wrote in 
+news:1363687526-8469-1-git-send-email-abrodkin-HKixBCOQz3hWk0Htik3J/w at public.gmane.org:
+ >
+ >> +ifeq ($(BR2_PACKAGE_AVCODEC),y)
+ >
+ > shouldn?t this be called BR2_PACKAGE_VLC_AVCODEC?
+ >
+ >> +ifeq ($(BR2_PACKAGE_LUA),y)
+ >
+ > and this BR2_PACKAGE_VLC_LUA?
+ >
+ > Regards, Bernd
 
-Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
----
- .../mobile_broadband_provider_info.mk                               |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Hi Bernd,
 
-diff --git a/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk b/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
-index 8623297..e7c4510 100644
---- a/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
-+++ b/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
-@@ -3,8 +3,9 @@
- # mobile broadband provider info
- #
- #############################################################
--MOBILE_BROADBAND_PROVIDER_INFO_VERSION = 20110511
-+MOBILE_BROADBAND_PROVIDER_INFO_VERSION = 20120614
- MOBILE_BROADBAND_PROVIDER_INFO_SITE = http://ftp.gnome.org/pub/GNOME/sources/mobile-broadband-provider-info/$(MOBILE_BROADBAND_PROVIDER_INFO_VERSION)
-+MOBILE_BROADBAND_PROVIDER_INFO_SOURCE = mobile-broadband-provider-info-$(MOBILE_BROADBAND_PROVIDER_INFO_VERSION).tar.xz
- MOBILE_BROADBAND_PROVIDER_INFO_INSTALL_STAGING = YES
- MOBILE_BROADBAND_PROVIDER_INFO_DEPENDENCIES = host-pkgconf
- 
--- 
-1.7.10.4
+The idea is to check if "avcodec" and "lua" packages were selected in 
+configuration utility (menuconfig/xconfig etc).
+
+Indeed we may rely on VLC's symbols BR2_PACKAGE_AVCODEC and 
+BR2_PACKAGE_LUA that select BR2_PACKAGE_FFMPEG and BR2_PACKAGE_LUA 
+accordingly.
+
+So initial proposal is to sort of double check if we do have "avcodec" 
+and "lua" selected.
+
+Even though you believe it's better to check VLC's own symbols I may do 
+a re-spin.
+
+-Alexey
