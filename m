@@ -1,70 +1,58 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 2 Apr 2013 21:44:59 +0200
-Subject: [Buildroot] media-ctl build failure (autobuild)
-In-Reply-To: <20130328095308.4fac9fcf@skate>
-References: <CAAXf6LUxBkO6-g-dHs8_2cagNFiBYAWCE3KAEcuT=zWEsJdZMA@mail.gmail.com>
- <20130328095308.4fac9fcf@skate>
-Message-ID: <CAAXf6LVy1FYLMzdjBTs+ewF_mdUgOQs00WvackwitQSWWLyb9g@mail.gmail.com>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Tue, 02 Apr 2013 23:56:28 +0200
+Subject: [Buildroot] [PATCH 1/4] directfb: bumping version to 1.6.3
+In-Reply-To: <20130321201352.6b9455c2@skate>
+References: <1362908858-6340-1-git-send-email-c.schoenert@gmail.com>
+ <1362908858-6340-2-git-send-email-c.schoenert@gmail.com>
+ <20130310113224.4e3dbb2a@skate> <513C7DF2.9090005@googlemail.com>
+ <5145CC2D.5020103@googlemail.com> <514AAF05.80104@mind.be>
+ <514B4C15.7080702@googlemail.com> <20130321201352.6b9455c2@skate>
+Message-ID: <515B540C.6070905@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Thomas, Hello Arnout,
 
+Am 21.03.2013 20:13, schrieb Thomas Petazzoni:
+> No, I think Arnout means that we should leave as few options
+> "automatically" detected as possible.
+> 
+> For example, we really like to have:
+> 
+> ifeq ($(BR2_PACKAGE_FOO_FEATURE_BAR),y)
+> FOO_CONF_OPT += --enable-bar
+> else
+> FOO_CONF_OPT += --disable-bar
+> endif
+> 
+> and for all options that are not explicitly --enable-<bleh> somewhere,
+> have a global:
+> 
+> FOO_CONF_OPT += \
+> 	--disable-<bleh> \
+> 	--disable-<blah>
+> 
+> this avoids the configure script from automatically detecting things on
+> the host machine that we don't want it to detect.
 
-On Thu, Mar 28, 2013 at 9:53 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+some little status info on that.
+The last days I worked on the "new" Config.in and the directfb.mk
+Makefile with your suggestions. Until now I would say the most options
+are implemented and I can also build the most of them.
+But I found some issues inside the directfb archive (missing headers :)
+and some code errors). I found one patch to fix the code errors and cook
+one other to fix a configure problem, but the missing headers are just
+to fix if the package would switch to a git checkout.
 
-> Dear Thomas De Schampheleire,
->
-> On Thu, 28 Mar 2013 08:44:54 +0100, Thomas De Schampheleire wrote:
->
-> > What is the appropriate action here:
-> > 1. remove the old toolchains?
-> > 2. add some kind of fragile dependency between media-ctl and specific
-> > toolchain config variables
-> > 3. introduce a way to specify which kernel header versions are used for
-> > external toolchains, and check this for packages that need it
-> > 4. don't bother, let the package fail for these old toolchains
->
-> 5. Do what I've done for neard, i.e
-> package/neard/neard-fix-missing-linux-nfc-header.patch: we add a
-> patch to the package that integrates directly into the package the
-> required kernel headers, and adjust the autoconf script to either use
-> the header from the toolchain if it's available, or the bundled header
-> if not. Over time, toolchains will be updated to more recent kernel
-> header versions, and we should be able to get rid of such patches.
->
-> Even though it's not really nice, I believe it's the least painful way.
->
-> Of course, it has the drawback that if the user happens to use a kernel
-> version that does not have the NFC functionality of the media-ctl
-> functionality, it will simply not work.
->
+I wrote up to upstream to fix the header and the code error. I will wait
+for response and in the between time I will more clean up my current
+work. Some of the new options have new dependencies like libsvg-cairo,
+linotyp, mng or jasper for jpeg2000. The libsvg-cairo package I will try
+to implement if I find some free time for it, the other dependencies
+have to find some other person. ;)
 
-Thanks for your input.
-I'm planning to do it like this, but currently have some time
-insufficiency. I hope to get to it soon.
-
-It seems that for some v4l kernel header files, the media-ctl package
-already has local copies, but for some reason I do not understand they
-still forcibly check for these files in the configure script. Moreover,
-even if the user does have the necessary kernel headers installed, the
-local copies will be used.
-
-I hope to be able to improve on this, with the following algorithm:
-- either the user has all necessary files, and we use them
-- or at least one file is missing, and we use local copies for all of the
-checked files (even though only some are missing).
-
-While this strategy is very coarse-grained, as it's basically all or
-nothing, I think it would be sufficient for buildroot, and already an
-improvement of the upstream media-ctl package.
-
-Best regards,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130402/85220a21/attachment-0001.html>
+Regards
+Carsten
