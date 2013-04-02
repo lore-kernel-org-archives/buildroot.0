@@ -1,66 +1,34 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Tue,  2 Apr 2013 15:42:18 +0100
-Subject: [Buildroot] [PATCH] libsigsegv: new package
-Message-ID: <1364913738-13306-1-git-send-email-spdawson@gmail.com>
+From: Anthony Viallard <viallard@syscom-instruments.com>
+Date: Tue,  2 Apr 2013 17:37:44 +0200
+Subject: [Buildroot] [PATCH] mobile-broadband-provider-info: bump to version
+	20120614
+Message-ID: <1364917064-1213-1-git-send-email-viallard@syscom-instruments.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
 ---
- package/Config.in                |    1 +
- package/libsigsegv/Config.in     |    6 ++++++
- package/libsigsegv/libsigsegv.mk |   13 +++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/libsigsegv/Config.in
- create mode 100644 package/libsigsegv/libsigsegv.mk
+ .../mobile_broadband_provider_info.mk                               |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 69d87f0..9fec8ca 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -570,6 +570,7 @@ source "package/libnspr/Config.in"
- source "package/libpfm4/Config.in"
- source "package/libpthsem/Config.in"
- source "package/libsigc/Config.in"
-+source "package/libsigsegv/Config.in"
- source "package/libtasn1/Config.in"
- source "package/libtpl/Config.in"
- source "package/libseccomp/Config.in"
-diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
-new file mode 100644
-index 0000000..c46bb92
---- /dev/null
-+++ b/package/libsigsegv/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBSIGSEGV
-+	bool "libsigsegv"
-+	help
-+	  Library for handling page faults in user mode.
-+
-+	  http://libsigsegv.sourceforge.net/
-diff --git a/package/libsigsegv/libsigsegv.mk b/package/libsigsegv/libsigsegv.mk
-new file mode 100644
-index 0000000..73a81bd
---- /dev/null
-+++ b/package/libsigsegv/libsigsegv.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# libsigsegv
-+#
-+#############################################################
-+
-+LIBSIGSEGV_VERSION = 2.6
-+LIBSIGSEGV_SITE = http://ftp.gnu.org/gnu/libsigsegv
-+LIBSIGSEGV_INSTALL_STAGING = YES
-+LIBSIGSEGV_LICENSE = GPLv2+
-+LIBSIGSEGV_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+diff --git a/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk b/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
+index 8623297..e7c4510 100644
+--- a/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
++++ b/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
+@@ -3,8 +3,9 @@
+ # mobile broadband provider info
+ #
+ #############################################################
+-MOBILE_BROADBAND_PROVIDER_INFO_VERSION = 20110511
++MOBILE_BROADBAND_PROVIDER_INFO_VERSION = 20120614
+ MOBILE_BROADBAND_PROVIDER_INFO_SITE = http://ftp.gnome.org/pub/GNOME/sources/mobile-broadband-provider-info/$(MOBILE_BROADBAND_PROVIDER_INFO_VERSION)
++MOBILE_BROADBAND_PROVIDER_INFO_SOURCE = mobile-broadband-provider-info-$(MOBILE_BROADBAND_PROVIDER_INFO_VERSION).tar.xz
+ MOBILE_BROADBAND_PROVIDER_INFO_INSTALL_STAGING = YES
+ MOBILE_BROADBAND_PROVIDER_INFO_DEPENDENCIES = host-pkgconf
+ 
 -- 
 1.7.10.4
