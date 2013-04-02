@@ -1,23 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  2 Apr 2013 19:36:05 +0000 (UTC)
-Subject: [Buildroot] [Bug 4538] main() not exited normally then using
-	pthreads
-In-Reply-To: <bug-4538-163@https.bugs.busybox.net/>
-References: <bug-4538-163@https.bugs.busybox.net/>
-Message-ID: <20130402193605.8133A9B42D@busybox.osuosl.org>
+From: Patrick Boettcher <pboettcher@kernellabs.com>
+Date: Tue,  2 Apr 2013 21:40:08 +0200
+Subject: [Buildroot] [PATCH v2] pkg-download: take some more care of
+	<PKG_>VERSION with git
+Message-ID: <1364931609-2459-1-git-send-email-Patrick.Boettcher@parrot.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4538
+This replaces the one-liner patch I made last week after a comment by
+Thomas De Schampheleire. (it is now a 5-liner)
 
---- Comment #6 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-04-02 19:36:49 UTC ---
-And may i ask why don't you report this to the uClibc developers instead of
-Buildroot ones?
+I added comment to explain why using HEAD is better in the current
+situation. I did not change the hg-part as it is different to git -
+after a quick read it won't work at all when VERSION is not set in a
+packge.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Please apply if appropriate and helpful (it is for me).
+
+Patrick Boettcher (1):
+  pkg-download: take some more care of <PKG_>VERSION when METHOD is git
+
+ package/pkg-download.mk |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+--
+1.7.10.4
