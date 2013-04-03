@@ -1,41 +1,32 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  3 Apr 2013 07:27:58 -0300
-Subject: [Buildroot] [PATCH] linknx: forcilbly disable smtp support
-Message-ID: <1364984878-829-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  3 Apr 2013 07:31:58 -0300
+Subject: [Buildroot] [PATCH] aumix: needs host-gettext
+Message-ID: <1364985118-29571-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-linknx has support for SMTP via libesmtp, however there's no clean way
-to specify where libesmtp-config lives.
-So when libesmtp is built it finds it via the headers and is
-automatically enabled, but it fails to get the appropiate link line from
-libesmtp-config because it's not found.
-Fix it by forcibly disabling it. If someone is interested in working
-with upstream about this an option like --with-libcurl should be
-implemented in configure.
-Solves:
-http://autobuild.buildroot.net/results/90ebb383d7a2d7bdf09ffac65e2504da7b6d19f5/
+Fixes:
+http://autobuild.buildroot.net/results/fff0ddfd7cebe6535f506be41d09c6e64290f93a/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linknx/linknx.mk | 2 +-
+ package/multimedia/aumix/aumix.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
-index 42700a7..54e0426 100644
---- a/package/linknx/linknx.mk
-+++ b/package/linknx/linknx.mk
-@@ -9,7 +9,7 @@ LINKNX_SITE = http://downloads.sourceforge.net/project/linknx/linknx/linknx-$(LI
- LINKNX_LICENSE = GPLv2+
- LINKNX_INSTALL_STAGING = YES
- LINKNX_CONF_OPT = --without-lua --without-log4cpp --without-pth-test \
--		  --with-pth=$(STAGING_DIR)/usr
-+		  --with-pth=$(STAGING_DIR)/usr --disable-smtp
+diff --git a/package/multimedia/aumix/aumix.mk b/package/multimedia/aumix/aumix.mk
+index 130bda0..da42bba 100644
+--- a/package/multimedia/aumix/aumix.mk
++++ b/package/multimedia/aumix/aumix.mk
+@@ -16,6 +16,6 @@ AUMIX_CONF_OPT = \
+ 	--without-gpm \
+ 	--without-sysmouse
  
- LINKNX_DEPENDENCIES = libpthsem
+-AUMIX_DEPENDENCIES = ncurses
++AUMIX_DEPENDENCIES = host-gettext ncurses
  
+ $(eval $(autotools-package))
 -- 
 1.8.1.5
