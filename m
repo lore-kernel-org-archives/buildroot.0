@@ -1,19 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 03 Apr 2013 17:48:38 -0300
-Subject: [Buildroot] [PATCH] dropbear: add vfork fix
-In-Reply-To: <87zjxf5ol0.fsf@dell.be.48ers.dk>
-References: <1364941788-15890-1-git-send-email-gustavo@zacarias.com.ar>
- <87zjxf5ol0.fsf@dell.be.48ers.dk>
-Message-ID: <515C95A6.7090203@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 3 Apr 2013 22:40:15 +0200
+Subject: [Buildroot] [git commit] vtun: requires host-bison and host-flex
+Message-ID: <20130403204840.89B179B467@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/03/2013 05:47 PM, Peter Korsgaard wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=9172282710605f355e21510107a6a87f24317f09
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Do we need the /dev/urandom write fix as well?
+Fixes:
+http://autobuild.buildroot.net/results/f321700d2b060d11e3f98ff37be24c647a77a405/
 
-I don't think so, we default to 0666 for it in the device table...
-Regards.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/vtun/vtun.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/vtun/vtun.mk b/package/vtun/vtun.mk
+index 2affa2e..6aeca65 100644
+--- a/package/vtun/vtun.mk
++++ b/package/vtun/vtun.mk
+@@ -10,7 +10,7 @@
+ VTUN_VERSION = 3.0.3
+ VTUN_SOURCE = vtun-$(VTUN_VERSION).tar.gz
+ VTUN_SITE = http://downloads.sourceforge.net/project/vtun/vtun/$(VTUN_VERSION)
+-VTUN_DEPENDENCIES = zlib lzo openssl
++VTUN_DEPENDENCIES = host-bison host-flex zlib lzo openssl
+ VTUN_AUTORECONF = YES
+ 
+ VTUN_CONF_OPT = \
