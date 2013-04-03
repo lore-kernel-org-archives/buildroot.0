@@ -1,34 +1,31 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  3 Apr 2013 08:04:23 -0300
-Subject: [Buildroot] [PATCH] gnuplot: gd support needs libpng
-Message-ID: <1364987063-6252-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  3 Apr 2013 08:11:53 -0300
+Subject: [Buildroot] [PATCH] linknx: needs mmu
+Message-ID: <1364987513-11433-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GD support in gnuplot needs PNG support in GD.
-So make sure we are getting the full package to enable it, fixes:
-http://autobuild.buildroot.net/results/678bd3babfcb3535e3a9ed1e111f741c3d3101f3/
+Inherited from libpthsem which uses fork()
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gnuplot/gnuplot.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linknx/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
-index a68c7ae..25ba90d 100644
---- a/package/gnuplot/gnuplot.mk
-+++ b/package/gnuplot/gnuplot.mk
-@@ -24,7 +24,7 @@ GNUPLOT_CONF_OPT = --without-x \
- 		--without-latex \
- 	        --without-cairo
- 
--ifeq ($(BR2_PACKAGE_GD),y)
-+ifeq ($(BR2_PACKAGE_GD)$(BR2_PACKAGE_LIBPNG),yy)
- GNUPLOT_CONF_OPT += --with-gd
- GNUPLOT_DEPENDENCIES += gd
- GNUPLOT_CONF_ENV += \
+diff --git a/package/linknx/Config.in b/package/linknx/Config.in
+index 18e9867..f35351e 100644
+--- a/package/linknx/Config.in
++++ b/package/linknx/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LINKNX
+ 	bool "linknx"
+ 	select BR2_PACKAGE_LIBPTHSEM
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # libpthsem
+ 	help
+ 	  Linknx is an automation platform providing high level functionalities
+ 	  to EIB/KNX installation.
 -- 
 1.8.1.5
