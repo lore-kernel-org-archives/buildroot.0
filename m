@@ -1,41 +1,33 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed,  3 Apr 2013 10:28:48 +0200
-Subject: [Buildroot] [PATCH] post-build: reimplement using a for loop and
-	make verbose
-Message-ID: <1364977729-27519-1-git-send-email-luca@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 3 Apr 2013 10:32:26 +0200
+Subject: [Buildroot] [PATCH] post-build: reimplement using a for loop
+ and make verbose
+In-Reply-To: <1364977729-27519-1-git-send-email-luca@lucaceresoli.net>
+References: <1364977729-27519-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20130403103226.36c1e0be@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make the post-build system similar to the rootfs overlay system. This allows to
-show each script filename before execution.
+Dear Luca Ceresoli,
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- Makefile |    9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+On Wed,  3 Apr 2013 10:28:48 +0200, Luca Ceresoli wrote:
+> Make the post-build system similar to the rootfs overlay system. This allows to
+> show each script filename before execution.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-diff --git a/Makefile b/Makefile
-index c95bb1e..69996bc 100644
---- a/Makefile
-+++ b/Makefile
-@@ -509,11 +509,10 @@ endif
- 			$${dir}/ $(TARGET_DIR); \
- 	done
- 
--ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
--	@$(call MESSAGE,"Executing post-build script\(s\)")
--	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
--		$(s) $(TARGET_DIR)$(sep))
--endif
-+	@for scr in $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)); do \
-+		$(call MESSAGE,"Executing post-build script $${scr}"); \
-+		$${scr} $(TARGET_DIR); \
-+	done
- 
- ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
- LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
+I don't have a strong opinion on whether this is useful or not, but if
+it gets applied, I'd like the same to be done for post-image scripts,
+in order to keep the consistency.
+
+Thanks!
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
