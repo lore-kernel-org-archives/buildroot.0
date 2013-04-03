@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  3 Apr 2013 07:50:26 -0300
-Subject: [Buildroot] [PATCH] dtach: needs mmu
-Message-ID: <1364986226-12800-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  3 Apr 2013 07:50:41 -0300
+Subject: [Buildroot] [PATCH] quota: needs host-gettext
+Message-ID: <1364986241-12838-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,23 +9,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
-http://autobuild.buildroot.net/results/b07f6f05552aa9c8850ec8d9f67b2aa666dffbf4/
+http://autobuild.buildroot.net/results/ce1016e38e3e629dec8a54fa2d1436252831e0bf/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/dtach/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/quota/quota.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dtach/Config.in b/package/dtach/Config.in
-index 033536b..bea112b 100644
---- a/package/dtach/Config.in
-+++ b/package/dtach/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_DTACH
- 	bool "dtach"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  dtach is a tiny program that emulates the detach feature of screen,
- 	  allowing you to run a program in an environment that is protected
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index 899dfdd..c89ed9b 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -7,7 +7,7 @@
+ QUOTA_VERSION = 4.00
+ QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
+ QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
+-
++QUOTA_DEPENDENCIES = host-gettext
+ QUOTA_AUTORECONF = YES
+ 
+ QUOTA_CFLAGS = $(TARGET_CFLAGS)
 -- 
 1.8.1.5
