@@ -1,36 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 3 Apr 2013 22:42:38 +0200
-Subject: [Buildroot] [git commit] gnuplot: gd support needs libpng
-Message-ID: <20130403204841.B9F899B467@busybox.osuosl.org>
+Date: Wed, 3 Apr 2013 22:41:45 +0200
+Subject: [Buildroot] [git commit] aumix: needs host-gettext
+Message-ID: <20130403204840.DF8959B467@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=18ff7e0503651aa5b76bc5ccb9c75ba6b85da2c5
+commit: http://git.buildroot.net/buildroot/commit/?id=1087713131132f2db92865a730a326f8b6e7a39a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-GD support in gnuplot needs PNG support in GD.
-So make sure we are getting the full package to enable it, fixes:
-http://autobuild.buildroot.net/results/678bd3babfcb3535e3a9ed1e111f741c3d3101f3/
+Fixes:
+http://autobuild.buildroot.net/results/fff0ddfd7cebe6535f506be41d09c6e64290f93a/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gnuplot/gnuplot.mk |    2 +-
+ package/multimedia/aumix/aumix.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
-index a68c7ae..25ba90d 100644
---- a/package/gnuplot/gnuplot.mk
-+++ b/package/gnuplot/gnuplot.mk
-@@ -24,7 +24,7 @@ GNUPLOT_CONF_OPT = --without-x \
- 		--without-latex \
- 	        --without-cairo
+diff --git a/package/multimedia/aumix/aumix.mk b/package/multimedia/aumix/aumix.mk
+index 130bda0..da42bba 100644
+--- a/package/multimedia/aumix/aumix.mk
++++ b/package/multimedia/aumix/aumix.mk
+@@ -16,6 +16,6 @@ AUMIX_CONF_OPT = \
+ 	--without-gpm \
+ 	--without-sysmouse
  
--ifeq ($(BR2_PACKAGE_GD),y)
-+ifeq ($(BR2_PACKAGE_GD)$(BR2_PACKAGE_LIBPNG),yy)
- GNUPLOT_CONF_OPT += --with-gd
- GNUPLOT_DEPENDENCIES += gd
- GNUPLOT_CONF_ENV += \
+-AUMIX_DEPENDENCIES = ncurses
++AUMIX_DEPENDENCIES = host-gettext ncurses
+ 
+ $(eval $(autotools-package))
