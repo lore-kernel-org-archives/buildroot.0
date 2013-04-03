@@ -1,35 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 3 Apr 2013 22:42:28 +0200
-Subject: [Buildroot] [git commit] quota: needs host-gettext
-Message-ID: <20130403204841.7EEEC9B467@busybox.osuosl.org>
+Date: Wed, 3 Apr 2013 22:40:55 +0200
+Subject: [Buildroot] [git commit] linknx: forcilbly disable smtp support
+Message-ID: <20130403204840.AE9E79B467@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=05c73a95718908b8223a37e6c3e6d36b7eded565
+commit: http://git.buildroot.net/buildroot/commit/?id=09d0f1d338132f8117edfb56691a917812808234
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/ce1016e38e3e629dec8a54fa2d1436252831e0bf/
+linknx has support for SMTP via libesmtp, however there's no clean way
+to specify where libesmtp-config lives.
+So when libesmtp is built it finds it via the headers and is
+automatically enabled, but it fails to get the appropiate link line from
+libesmtp-config because it's not found.
+Fix it by forcibly disabling it. If someone is interested in working
+with upstream about this an option like --with-libcurl should be
+implemented in configure.
+Solves:
+http://autobuild.buildroot.net/results/90ebb383d7a2d7bdf09ffac65e2504da7b6d19f5/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/quota/quota.mk |    2 +-
+ package/linknx/linknx.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index 899dfdd..c89ed9b 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -7,7 +7,7 @@
- QUOTA_VERSION = 4.00
- QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
- QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
--
-+QUOTA_DEPENDENCIES = host-gettext
- QUOTA_AUTORECONF = YES
+diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
+index 42700a7..54e0426 100644
+--- a/package/linknx/linknx.mk
++++ b/package/linknx/linknx.mk
+@@ -9,7 +9,7 @@ LINKNX_SITE = http://downloads.sourceforge.net/project/linknx/linknx/linknx-$(LI
+ LINKNX_LICENSE = GPLv2+
+ LINKNX_INSTALL_STAGING = YES
+ LINKNX_CONF_OPT = --without-lua --without-log4cpp --without-pth-test \
+-		  --with-pth=$(STAGING_DIR)/usr
++		  --with-pth=$(STAGING_DIR)/usr --disable-smtp
  
- QUOTA_CFLAGS = $(TARGET_CFLAGS)
+ LINKNX_DEPENDENCIES = libpthsem
+ 
