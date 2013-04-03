@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 03 Apr 2013 22:44:22 +0200
-Subject: [Buildroot] [PATCH] vtun: requires host-bison and host-flex
-In-Reply-To: <1364983865-26684-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 3 Apr 2013 07:11:05 -0300")
-References: <1364983865-26684-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874nfn73a1.fsf@dell.be.48ers.dk>
+Date: Wed, 03 Apr 2013 22:47:07 +0200
+Subject: [Buildroot] [PATCH] dropbear: add vfork fix
+In-Reply-To: <1364941788-15890-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 2 Apr 2013 19:29:48 -0300")
+References: <1364941788-15890-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zjxf5ol0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> Fixes:
- Gustavo> http://autobuild.buildroot.net/results/f321700d2b060d11e3f98ff37be24c647a77a405/
+ Gustavo> Causes scp to fail badly.
 
 Committed, thanks.
+
+Do we need the /dev/urandom write fix as well?
 
 -- 
 Bye, Peter Korsgaard
