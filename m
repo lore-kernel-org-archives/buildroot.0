@@ -1,44 +1,71 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  4 Apr 2013 07:55:01 -0300
-Subject: [Buildroot] [PATCH] foomatic-filters: make location of enscript
-	very clear
-Message-ID: <1365072901-11719-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 04 Apr 2013 13:12:09 +0200
+Subject: [Buildroot] [PATCH] Install DTB as part of images install
+	command
+In-Reply-To: <069B5A25F9844945B625ADE7258AC94C06204FCC@4rf-nz-orion.local.4rf.com>
+References: <069B5A25F9844945B625ADE7258AC94C06204FCC@4rf-nz-orion.local.4rf.com>
+Message-ID: <515D6009.5010306@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Passing --with-file-converter=enscript isn't enough since the build
-system will try the fallback options (a2ps, mpage, texttops) if it's not
-found.
-This has two bad effects: one of the tools leaking from the distribution
-making foomatic-filters think everything will be the same on the target
-(and failing when that's not the case), and failed builds when none is
-found (enscript is installed in the target directory, the build system
-doesn't look there).
-So just avoid the test by stating explicitly where enscript will live in
-the target. Fixes:
-http://autobuild.buildroot.net/results/37ad3d2c5c35f00c644a2c572f1429bafa4b7cf4/
+On 28/03/13 00:01, Reuben Dowle wrote:
+> From: Reuben Dowle <reuben.dowle@4rf.com>
+>
+> When installing DTB to the images directory, do this as part of the image
+> install commands rather than the target install commands.
+>
+> Signed-off-by: Reuben Dowle <reuben.dowle@4rf.com.az>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/foomatic-filters/foomatic-filters.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(untested)
 
-diff --git a/package/foomatic-filters/foomatic-filters.mk b/package/foomatic-filters/foomatic-filters.mk
-index ad7ab7a..6e13486 100644
---- a/package/foomatic-filters/foomatic-filters.mk
-+++ b/package/foomatic-filters/foomatic-filters.mk
-@@ -9,8 +9,8 @@ FOOMATIC_FILTERS_SITE = http://www.openprinting.org/download/foomatic
- FOOMATIC_FILTERS_LICENSE = GPLv2+
- FOOMATIC_FILTERS_LICENSE_FILES = COPYING
- FOOMATIC_FILTERS_DEPENDENCIES = cups libusb enscript
--
- FOOMATIC_FILTERS_CONF_OPT = --with-file-converter=enscript
-+FOOMATIC_FILTERS_CONF_ENV = ac_cv_path_ENSCRIPT="/usr/bin/enscript"
- 
- ifeq ($(BR2_PACKAGE_DBUS),y)
- FOOMATIC_FILTERS_CONF_OPT += --enable-dbus
+> ---
+>   linux/linux.mk |    2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 8a73767..f0d793b 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -261,11 +261,11 @@ endef
+>
+>   define LINUX_INSTALL_IMAGES_CMDS
+>          cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
+> +       $(LINUX_INSTALL_DTB)
+
+  I prefer the indentation to be with a tab, but since the original has 
+spaces it's OK.
+
+
+  Regards,
+  Arnout
+
+>   endef
+>
+>   define LINUX_INSTALL_TARGET_CMDS
+>          $(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
+> -       $(LINUX_INSTALL_DTB)
+>          # Install modules and remove symbolic links pointing to build
+>          # directories, not relevant on the target
+>          @if grep -q "CONFIG_MODULES=y" $(@D)/.config; then      \
+> --
+> 1.7.10.4
+>
+> The information in this email communication (inclusive of attachments) is confidential to 4RF Limited and the intended recipient(s). If you are not the intended recipient(s), please note that any use, disclosure, distribution or copying of this information or any part thereof is strictly prohibited and that the author accepts no liability for the consequences of any action taken on the basis of the information provided. If you have received this email in error, please notify the sender immediately by return email and then delete all instances of this email from your system. 4RF Limited will not accept responsibility for any consequences associated with the use of this email (including, but not limited to, damages sustained as a result of any viruses and/or any action or lack of action taken in reliance on it).
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
 -- 
-1.8.1.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
