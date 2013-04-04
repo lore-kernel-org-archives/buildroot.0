@@ -1,26 +1,22 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 03 Apr 2013 23:00:31 +0200
-Subject: [Buildroot] [PATCH] dropbear: add vfork fix
-In-Reply-To: <515C95A6.7090203@zacarias.com.ar> (Gustavo Zacarias's message of
- "Wed, 03 Apr 2013 17:48:38 -0300")
-References: <1364941788-15890-1-git-send-email-gustavo@zacarias.com.ar>
- <87zjxf5ol0.fsf@dell.be.48ers.dk> <515C95A6.7090203@zacarias.com.ar>
-Message-ID: <871uar5nyo.fsf@dell.be.48ers.dk>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 3 Apr 2013 21:35:55 -0400
+Subject: [Buildroot] [PATCH] post-build: reimplement using a for loop
+ and make verbose
+In-Reply-To: <1364977729-27519-1-git-send-email-luca@lucaceresoli.net>
+References: <1364977729-27519-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <CANxTyt5nMrA3a7qq3sCmavGmnydBS_h3bCXufGqa8aFE+7xXyg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Alternatively, you could just move the MESSAGE into the loop instead
+of relying on shell loops.  That would keep things more in make, if
+that's desired.
 
- Gustavo> On 04/03/2013 05:47 PM, Peter Korsgaard wrote:
- >> Do we need the /dev/urandom write fix as well?
+	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+		$(call MESSAGE,"Executing $(s)"); \
+		$(s) $(TARGET_DIR)$(sep))
 
- Gustavo> I don't think so, we default to 0666 for it in the device table...
- Gustavo> Regards.
-
-Ok, great.
-
--- 
-Bye, Peter Korsgaard
+Danomi -
