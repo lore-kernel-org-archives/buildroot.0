@@ -1,50 +1,54 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 04 Apr 2013 13:49:30 +0200
-Subject: [Buildroot] TOP_SRCDIR:  Where is it defined?
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C610C1A21F@ex-mb1.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C610C1A21F@ex-mb1.corp.adtran.com>
-Message-ID: <515D68CA.5080602@mind.be>
+Date: Thu, 04 Apr 2013 13:52:11 +0200
+Subject: [Buildroot] [PATCH] qtuio: depends on QT4
+In-Reply-To: <1364662519-2385-1-git-send-email-sho@relinux.de>
+References: <1364662519-2385-1-git-send-email-sho@relinux.de>
+Message-ID: <515D696B.9080608@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/03/13 21:16, ANDY KENNEDY wrote:
-> Within the pkg-generic file, TOP_SRCDIR is used to define
-> $(PKG)_DIR_PREFIX:
+On 30/03/13 17:55, Stephan Hoffmann wrote:
+> Fixes: http://autobuild.buildroot.net/results/e6501a7a487ec3a02463ad0f3aa60168883fa369/
 >
-> buildroot-2013.02$ grep -R "TOP_SRCDIR" .
-> grep: ./system/skeleton/dev/log: No such file or directory
-> grep: ./system/skeleton/etc/resolv.conf: No such file or directory
-> ./package/pkg-generic.mk:$(2)_DIR_PREFIX                        = $(if $(4),$(4),$(TOP_SRCDIR)/package)
+> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+> ---
+>   package/qtuio/Config.in |    4 +++-
+>   1 files changed, 3 insertions(+), 1 deletions(-)
+>
+> diff --git a/package/qtuio/Config.in b/package/qtuio/Config.in
+> index 19499fd..590b2de 100644
+> --- a/package/qtuio/Config.in
+> +++ b/package/qtuio/Config.in
+> @@ -1,6 +1,6 @@
+>   config BR2_PACKAGE_QTUIO
+>   	bool "qtuio"
+> -	depends on BR2_PACKAGE_QT_GUI_MODULE
+> +	depends on BR2_PACKAGE_QT_GUI_MODULE && !BR2_PACKAGE_QT5
 
-  You're right, TOP_SRCDIR is never defined, and never has been. The 
-whole condition can be removed.
+  Thomas has a patch pending which makes qt4 and qt5 mutually exclusive 
+(because any qt package will fail if both are installed, because of 
+inconsistencies in the qmake configurations). So this change should be 
+redundant.
 
+>   	help
+>   	  Implementation of an interface connecting TUIO messages
+>   	  and QT events
+> @@ -16,3 +16,5 @@ config BR2_QTUIO_EXAMPLES
+>   comment "qtuio depends on QT gui module"
+>   	depends on !BR2_PACKAGE_QT_GUI_MODULE
+>
+> +comment "qtuio requires QT4"
+> +	depends on BR2_PACKAGE_QT5
 
-> This would be a problem only for some entity (which didn't set $4 to
-> $(call pkgparentdir)) directly calling inner-generic-package as
-> generic-package does do the call to pkgparentdir.
-
-  But since nobody should be calling the inner- macros, this shouldn't be 
-a problem :-)
+  This one may still be useful though.
 
 
   Regards,
   Arnout
 
-
-> I'm just thinking this should be changed, however, I'm clueless about
-> the vision the developer who added this had in mind for TOP_SRCDIR, so
-> I have no suggestion how to change it.
->
-> FWIW,
-> Andy
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 
 
