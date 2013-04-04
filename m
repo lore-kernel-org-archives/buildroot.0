@@ -1,55 +1,50 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 04 Apr 2013 13:41:06 +0200
-Subject: [Buildroot] [PATCH] pkg-download: take some more care of
- <PKG_>VERSION when METHOD is git
-In-Reply-To: <1364566078-29535-2-git-send-email-Patrick.Boettcher@parrot.com>
-References: <1364566078-29535-1-git-send-email-Patrick.Boettcher@parrot.com>
- <1364566078-29535-2-git-send-email-Patrick.Boettcher@parrot.com>
-Message-ID: <515D66D2.5050204@mind.be>
+Date: Thu, 04 Apr 2013 13:49:30 +0200
+Subject: [Buildroot] TOP_SRCDIR:  Where is it defined?
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C610C1A21F@ex-mb1.corp.adtran.com>
+References: <F9C551623D2CBB4C9488801D14F864C610C1A21F@ex-mb1.corp.adtran.com>
+Message-ID: <515D68CA.5080602@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/03/13 15:07, Patrick Boettcher wrote:
-> If a package's SITE_METHOD is set to git, but the VERSION is not set
-> it fails to create a tar-ball, this patch is fixes this by always using
-> HEAD as git-archive reference.
+On 29/03/13 21:16, ANDY KENNEDY wrote:
+> Within the pkg-generic file, TOP_SRCDIR is used to define
+> $(PKG)_DIR_PREFIX:
 >
-> HEAD will work in both cases:
-> 1) if VERSION is set the clone's HEAD is VERSION,
-> 2) if VERSION is not set the clone's HEAD is the default branch.
+> buildroot-2013.02$ grep -R "TOP_SRCDIR" .
+> grep: ./system/skeleton/dev/log: No such file or directory
+> grep: ./system/skeleton/etc/resolv.conf: No such file or directory
+> ./package/pkg-generic.mk:$(2)_DIR_PREFIX                        = $(if $(4),$(4),$(TOP_SRCDIR)/package)
 
-  This doesn't work if the version is an unnamed sha1. In that case, a 
-full clone will be done so HEAD does not point to the requested version.
+  You're right, TOP_SRCDIR is never defined, and never has been. The 
+whole condition can be removed.
 
-  A better solution is probably to have <PKG>_VERSION default to HEAD if 
-the site-method is one of the revision control systems.
+
+> This would be a problem only for some entity (which didn't set $4 to
+> $(call pkgparentdir)) directly calling inner-generic-package as
+> generic-package does do the call to pkgparentdir.
+
+  But since nobody should be calling the inner- macros, this shouldn't be 
+a problem :-)
 
 
   Regards,
   Arnout
 
+
+> I'm just thinking this should be changed, however, I'm clueless about
+> the vision the developer who added this had in mind for TOP_SRCDIR, so
+> I have no suggestion how to change it.
 >
-> Signed-off-by: Patrick Boettcher <Patrick.Boettcher@parrot.com>
-> ---
->   package/pkg-download.mk |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 1705fcd..d21605a 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -88,7 +88,7 @@ define DOWNLOAD_GIT
->   	  (echo "Doing full clone" && \
->   	   $(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME))) && \
->   	pushd $($(PKG)_BASE_NAME) > /dev/null && \
-> -	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
-> +	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ HEAD | \
->   		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
->   	popd > /dev/null && \
->   	rm -rf $($(PKG)_DL_DIR) && \
+> FWIW,
+> Andy
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 
 
