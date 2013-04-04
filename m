@@ -1,24 +1,29 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 04 Apr 2013 18:33:32 -0300
-Subject: [Buildroot] [PATCH] openvpn: adjust iproute2 logic
-In-Reply-To: <878v4y3tp2.fsf@dell.be.48ers.dk>
-References: <1365094499-21046-1-git-send-email-gustavo@zacarias.com.ar>
- <878v4y3tp2.fsf@dell.be.48ers.dk>
-Message-ID: <515DF1AC.8060506@zacarias.com.ar>
+Date: Thu, 04 Apr 2013 19:01:28 -0300
+Subject: [Buildroot] [PATCH 1/2] support/kconfig: upgrade to 3.9-rc2
+In-Reply-To: <1365110666-3080-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1365110666-3080-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1365110666-3080-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <515DF838.3000805@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/04/2013 05:51 PM, Peter Korsgaard wrote:
+On 04/04/2013 06:24 PM, Thomas Petazzoni wrote:
 
-> We'll most likely forget to update this next time we bump the busybox
-> version, and not notice it as it's a runtime issue.
+> Our kconfig code is updated to the version of kernel 3.9-rc2. No major
+> issues during the migration, except:
 > 
-> Could you invert the logic so you explicitly check for the old busybox
-> versions instead?
+>  * Some conflicts when applying 03-change-config-option-prefix.patch
+>    due to upstream kernel changes.
+> 
+>  * The need of adding a new patch, 15-fix-qconf-moc-rule.patch, to fix
+>    the make rule that generates the moc file for the Qt-based
+>    interface.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-True.
-We'll likely forget to remove dead code too later on, but it doesn't hurt :)
-Regards.
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
