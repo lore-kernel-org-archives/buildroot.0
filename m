@@ -1,50 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Apr 2013 22:51:53 +0200
-Subject: [Buildroot] [PATCH] openvpn: adjust iproute2 logic
-In-Reply-To: <1365094499-21046-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 4 Apr 2013 13:54:59 -0300")
-References: <1365094499-21046-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <878v4y3tp2.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 4 Apr 2013 22:48:17 +0200
+Subject: [Buildroot] [git commit] sysstat: needs host-gettext
+Message-ID: <20130404205334.875AF9B4BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c5fc984e15a292a61226142c8d1c18674d44a6ba
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> As reported in bug #6164 when using busybox iproute2 openvpn can fail to
- Gustavo> locate the 'ip' utility.
- Gustavo> This was correct until busybox 1.21.0 was released since it changed the
- Gustavo> location of /bin/ip to /sbin/ip (what iproute2 proper does).
- Gustavo> So adjust the ip path accordingly.
+Fixes:
+http://autobuild.buildroot.net/results/50182a661367af1a9c09f510c672fb3a144cd869/
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/openvpn/openvpn.mk | 10 +++++++---
- Gustavo>  1 file changed, 7 insertions(+), 3 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sysstat/sysstat.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- Gustavo> diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
- Gustavo> index c911465..28f7238 100644
- Gustavo> --- a/package/openvpn/openvpn.mk
- Gustavo> +++ b/package/openvpn/openvpn.mk
- Gustavo> @@ -17,10 +17,14 @@ OPENVPN_CONF_OPT += --enable-small --disable-plugins \
- Gustavo>  	--disable-debug --disable-eurephia
- Gustavo>  endif
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index 0513998..d211f9c 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -8,6 +8,7 @@ SYSSTAT_VERSION = 10.0.3
+ SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.bz2
+ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
+ SYSSTAT_CONF_OPT = --disable-man-group --disable-sensors
++SYSSTAT_DEPENDENCIES = host-gettext
  
- Gustavo> -ifeq ($(BR2_PACKAGE_IPROUTE2),y)
- Gustavo> -OPENVPN_CONF_ENV += IPROUTE=/sbin/ip
- Gustavo> -else
- Gustavo> +# Busybox 1.21+ places the ip applet in the "correct" place
- Gustavo> +# but previous versions didn't.
- Gustavo> +ifneq ($(BR2_PACKAGE_IPROUTE2),y)
- Gustavo> +ifneq ($(BR2_PACKAGE_BUSYBOX_VERSION_1_21_X),y)
-
-We'll most likely forget to update this next time we bump the busybox
-version, and not notice it as it's a runtime issue.
-
-Could you invert the logic so you explicitly check for the old busybox
-versions instead?
-
--- 
-Bye, Peter Korsgaard
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ SYSSTAT_DEPENDENCIES += gettext
