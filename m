@@ -1,40 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  4 Apr 2013 06:51:53 +0000 (UTC)
-Subject: [Buildroot] [Bug 4538] main() not exited normally then using
-	pthreads
-In-Reply-To: <bug-4538-163@https.bugs.busybox.net/>
-References: <bug-4538-163@https.bugs.busybox.net/>
-Message-ID: <20130404065153.F36929B4B6@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  4 Apr 2013 07:32:21 -0300
+Subject: [Buildroot] [PATCH] sysstat: needs host-gettext
+Message-ID: <1365071541-4122-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4538
+Fixes:
+http://autobuild.buildroot.net/results/50182a661367af1a9c09f510c672fb3a144cd869/
 
-Michael J. Wang <mjwang@broadcom.com> changed:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/sysstat/sysstat.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mjwang at broadcom.com,
-                   |                            |uclibc-cvs at uclibc.org
-          Component|Other                       |Threads
-            Version|2011.08                     |0.9.32
-         AssignedTo|unassigned at buildroot.uclibc |unassigned at uclibc.org
-                   |.org                        |
-            Product|buildroot                   |uClibc
-   Target Milestone|---                         |0.9.33.2
-
---- Comment #7 from Michael J. Wang <mjwang@broadcom.com> 2013-04-04 06:52:37 UTC ---
-(In reply to comment #6)
-
-Oh, I now see that "product" is set to "BuildRoot" instead of "uClibc".  
-Fixing it now and see if that will get the attention of the uClibc developers.
-
-Michael
-
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index 0513998..d211f9c 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -8,6 +8,7 @@ SYSSTAT_VERSION = 10.0.3
+ SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.bz2
+ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
+ SYSSTAT_CONF_OPT = --disable-man-group --disable-sensors
++SYSSTAT_DEPENDENCIES = host-gettext
+ 
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ SYSSTAT_DEPENDENCIES += gettext
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.1.5
