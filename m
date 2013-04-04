@@ -1,28 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 04 Apr 2013 19:01:59 -0300
-Subject: [Buildroot] [PATCH 2/2] support/kconfig: add support for
-	olddefconfig
-In-Reply-To: <1365110666-3080-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1365110666-3080-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1365110666-3080-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <515DF857.3020309@zacarias.com.ar>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Thu,  4 Apr 2013 16:09:19 -0700
+Subject: [Buildroot] [PATCH] aircrack-ng: needs toolchain with threads
+	support
+Message-ID: <1365116959-25148-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/04/2013 06:24 PM, Thomas Petazzoni wrote:
+Fixes:
+http://autobuild.buildroot.org/results/418c9385a9a5a5087a6790001560056d32cd9708
 
-> olddefconfig is a new target available in kconfig that allows to take
-> an old .config file, and update it to the latest version of the code,
-> without being asked for questions: it automatically assumes the
-> default value for options whose value was not defined.
-> 
-> It for example allows to take a minimal defconfig, copy it as .config,
-> and do 'make olddefconfig' to get the full .config.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ package/aircrack-ng/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
+index 319b7c4..daea48f 100644
+--- a/package/aircrack-ng/Config.in
++++ b/package/aircrack-ng/Config.in
+@@ -4,11 +4,12 @@ config BR2_PACKAGE_AIRCRACK_NG
+ 	depends on BR2_USE_MMU # uses fork()
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_IW # runtime
++	depends on BR2_TOOLCHAIN_HAS_THREADS # iw
+ 	help
+ 	  A set of tools for auditing wireless networks
+ 
+ 	  http://www.aircrack-ng.org/
+ 
+-comment "aircrack-ng needs a toolchain with largefile support"
+-	depends on !BR2_LARGEFILE
++comment "aircrack-ng needs a toolchain with largefile and threads support"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+-- 
+1.7.4.1
