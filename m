@@ -1,57 +1,32 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  5 Apr 2013 17:48:49 -0300
-Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
-	8}.x stable version and EOL 3.7.x series
-Message-ID: <1365194930-22775-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  5 Apr 2013 17:48:50 -0300
+Subject: [Buildroot] [PATCH 2/2] linux: bump 3.8.x stable version
+In-Reply-To: <1365194930-22775-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1365194930-22775-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1365194930-22775-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 3.7.x series is EOLed upstream so match that marking it as
-deprecated.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/kernel-headers/Config.in                                 | 7 ++++---
- ....72-headers_install-fix-__packed-in-exported-kernel-head.patch} | 0
- 2 files changed, 4 insertions(+), 3 deletions(-)
- rename toolchain/kernel-headers/{linux-3.0.71-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.72-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index fa5e779..0cfaab6 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -42,6 +42,7 @@ choice
+diff --git a/linux/Config.in b/linux/Config.in
+index df718c3..8208277 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
- 	config BR2_KERNEL_HEADERS_3_7
- 		bool "Linux 3.7.x kernel headers"
-+		depends on BR2_DEPRECATED
+ config BR2_LINUX_KERNEL_3_8
+-	bool "3.8.5"
++	bool "3.8.6"
  
- 	config BR2_KERNEL_HEADERS_3_8
- 		bool "Linux 3.8.x kernel headers"
-@@ -62,14 +63,14 @@ config BR2_DEFAULT_KERNEL_VERSION
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.0.71"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.72"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.42"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.38"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.39"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
--	default "3.8.5"		if BR2_KERNEL_HEADERS_3_8
-+	default "3.8.6"		if BR2_KERNEL_HEADERS_3_8
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.71-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.72-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.71-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.72-headers_install-fix-__packed-in-exported-kernel-head.patch
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
 -- 
 1.8.1.5
