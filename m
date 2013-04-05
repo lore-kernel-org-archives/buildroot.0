@@ -1,40 +1,27 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Fri,  5 Apr 2013 09:36:28 +0200
-Subject: [Buildroot] =?utf-8?q?=5BPATCH=5D_Documentation_HTML=2C_PDF=2C_AS?=
-	=?utf-8?q?CII=3A_fix_typos?=
-Message-ID: <1365147388-5142-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 05 Apr 2013 07:47:02 -0300
+Subject: [Buildroot] [PATCH] aircrack-ng: needs toolchain with threads
+ support
+In-Reply-To: <1365116959-25148-1-git-send-email-gilles.talis@gmail.com>
+References: <1365116959-25148-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <515EABA6.8000302@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- manual.text |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 04/04/2013 08:09 PM, Gilles Talis wrote:
 
-diff --git a/manual.text b/manual.text
-index ec533ae..81901da 100644
---- a/manual.text
-+++ b/manual.text
-@@ -69,7 +69,7 @@ Table of Contents
-     9.5. Buildroot wikipage
-     9.6. Events
- 
--10. Contibuting to Buildroot
-+10. Contributing to Buildroot
- 
-     10.1. Submitting patches
-     10.2. Reviewing/Testing patches
-@@ -3154,7 +3154,7 @@ Brussels)
- 
- ---------------------------------------------------------------------
- 
--Chapter?10.?Contibuting to Buildroot
-+Chapter?10.?Contributing to Buildroot
- 
- ---------------------------------------------------------------------
- 
--- 
-1.7.9.5
+> Fixes:
+> http://autobuild.buildroot.org/results/418c9385a9a5a5087a6790001560056d32cd9708
+> 
+> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # iw
+
+However it's not because of iw, it's because of aircrack itself
+(aircrack is failing to compile) :)
+Regards.
