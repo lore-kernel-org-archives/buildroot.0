@@ -1,32 +1,36 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  5 Apr 2013 07:47:31 -0300
-Subject: [Buildroot] [PATCH 1/2] lm_sensors: needs host-bison and host-flex
-Message-ID: <1365158852-3979-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  5 Apr 2013 07:47:32 -0300
+Subject: [Buildroot] [PATCH 2/2] libev: also fails for blackfin
+In-Reply-To: <1365158852-3979-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1365158852-3979-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1365158852-3979-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/f88461702cd2f249e5d28eeac26f5e4d9edece6d/
+Also fails for blackfin because of a lack of memory fences so disable
+it. Fixes:
+http://autobuild.buildroot.net/results/d895f0b0a5f4b6c173c2843a76277e6fe611627b/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/lm-sensors/lm-sensors.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libev/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
-index 3f95676..fcd278e 100644
---- a/package/lm-sensors/lm-sensors.mk
-+++ b/package/lm-sensors/lm-sensors.mk
-@@ -8,6 +8,7 @@ LM_SENSORS_VERSION = 3.3.3
- LM_SENSORS_SOURCE = lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
- LM_SENSORS_SITE = http://dl.lm-sensors.org/lm-sensors/releases
- LM_SENSORS_INSTALL_STAGING = YES
-+LM_SENSORS_DEPENDENCIES = host-bison host-flex
- LM_SENSORS_LICENSE = libsensors LGPLv2.1+, programs GPLv2+
- LM_SENSORS_LICENSE_FILES = COPYING.LGPL COPYING
+diff --git a/package/libev/Config.in b/package/libev/Config.in
+index fd74f55..3d10cd7 100644
+--- a/package/libev/Config.in
++++ b/package/libev/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_LIBEV
+ 	bool "libev"
+ 	# needs memory fences
+-	depends on !BR2_avr32
++	depends on !(BR2_avr32 || BR2_bfin)
+ 	help
+ 	  Userspace library for handling asynchronous notifications
  
 -- 
 1.8.1.5
