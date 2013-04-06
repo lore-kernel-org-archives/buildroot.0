@@ -1,53 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Apr 2013 15:26:19 +0200
-Subject: [Buildroot] Trying to configure the kernel
-In-Reply-To: <1365192366.30488.205.camel@station1.ormlab.com>
-References: <1365192366.30488.205.camel@station1.ormlab.com>
-Message-ID: <20130406152619.7d3f29c1@skate>
+Date: Sat, 6 Apr 2013 15:27:55 +0200
+Subject: [Buildroot] [PATCH] Add Armadeus systems APF27 SOM basic support
+In-Reply-To: <1364547008-23068-1-git-send-email-julien.boibessot@free.fr>
+References: <1364547008-23068-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20130406152755.5710db2f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ormund Williams,
+Dear julien.boibessot at free.fr,
 
-On Fri, 05 Apr 2013 16:06:06 -0400, Ormund Williams wrote:
-
-> I downloaded the latest stable release, 2013.02, then ran 'make
-> menuconfig' then 'make' and it built without errors, then I wanted to
-> build the kernel so did 'make menuconfig' again and turned on the kernel
-> but neither of the choices 'defconfig' or 'custom config file' works
-> when I try to run 'make linux-menuconfig' I get one of the 2 errors
-> bellow:
->   linux/linux.mk:321: *** No kernel defconfig name specified, check your BR2_LINUX_KERNEL_DEFCONFIG setting.  Stop.
-> or
->   linux/linux.mk:327: *** No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE setting.  Stop.
+On Fri, 29 Mar 2013 09:50:08 +0100, julien.boibessot at free.fr wrote:
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
 > 
-> I feel like I've missed a step. Have I?
+> Buildroot toolchain, UBIFS rootfs, Linux kernel (board is mainlined since 3.8).
+> 
+> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 
-Well, I thought the messages were clear enough, but it seems they are
-not.
-
- * If you chose to use a defconfig, then you must give the name of a
-   defconfig file, using the BR2_LINUX_KERNEL_DEFCONFIG option.
-
- * If you chose to use a kernel configuration file, then you must give
-   the path to this file in BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE.
-
-In short, there is no way to just "start the kernel configuration", you
-must first give it an initial existing configuration. Maybe we should
-add an option "Just run the kernel configuration with whatever defaults
-for the current architecture", so that you don't have to give an
-existing defconfig or an existing kernel configuration file.
-
-What architecture and hardware are you targeting? If you're targeting
-x86, then you can set BR2_LINUX_KERNEL_DEFCONFIG to 'i386', if you're
-targeting x86-64, then you can set BR2_LINUX_KERNEL_DEFCONFIG to
-'x86_64'. If you're targeting ARM, then you should look in the kernel
-sources which defconfig in arch/arm/configs/ matches your hardware.
-
-Best regards,
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ (visual inspection only, not tested)
 
 Thomas
 -- 
