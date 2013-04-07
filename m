@@ -1,46 +1,31 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 07 Apr 2013 15:58:00 +0200
-Subject: [Buildroot] [PATCH] post-build: reimplement using a for loop
- and make verbose
-In-Reply-To: <20130403103226.36c1e0be@skate>
-References: <1364977729-27519-1-git-send-email-luca@lucaceresoli.net>
- <20130403103226.36c1e0be@skate>
-Message-ID: <51617B68.9030706@lucaceresoli.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Apr 2013 17:43:37 +0200
+Subject: [Buildroot] Quick summary of the Patchwork Day #1
+In-Reply-To: <20130325110242.0b741196@skate>
+References: <20130325110242.0b741196@skate>
+Message-ID: <20130407154337.GA23941@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
-> Dear Luca Ceresoli,
->
-> On Wed,  3 Apr 2013 10:28:48 +0200, Luca Ceresoli wrote:
->> Make the post-build system similar to the rootfs overlay system. This allows to
->> show each script filename before execution.
->>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> I don't have a strong opinion on whether this is useful or not, but if
-> it gets applied, I'd like the same to be done for post-image scripts,
-> in order to keep the consistency.
+On Mon, Mar 25, 2013 at 11:02:42AM +0100, Thomas Petazzoni wrote:
+> Yesterday took place the first Patchwork Day, as we announced
+> previously on this list.
+[--SNIP--]
+> Would there be some interest to renew the experience some other day?
 
-To me it is useful each time multiple post-build scripts are used, 
-because is
-makes it easy to understand what's happening and which scripts you are 
-running
-(and which you are not running).
-E.g., I have multiple products with a common base, plus some "optional" 
-features.
-Some features needs a specific post-build script. Each product 
-implements a subset
-of the features, but these subsets overlap between different products.
-When a build a product's rootfs it is useful to see if I am running all 
-and only
-the correct post-build scripts: the "common base" script, plus the 
-scripts for the
-wanted features.
+Sorry for the late answer, but, yes, I would gladly participate in a
+future patchwork day! :-)
 
-Of course I agree this change should be done also in the post-image scripts.
-I will submit a patchset that does also this.
+Regards,
+Yann E. MORIN.
 
-Luca
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
