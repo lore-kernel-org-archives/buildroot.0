@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 07 Apr 2013 09:43:15 +0200
-Subject: [Buildroot] [PATCH] openvpn: adjust iproute2 logic
-In-Reply-To: <515DF1AC.8060506@zacarias.com.ar> (Gustavo Zacarias's message of
- "Thu, 04 Apr 2013 18:33:32 -0300")
-References: <1365094499-21046-1-git-send-email-gustavo@zacarias.com.ar>
- <878v4y3tp2.fsf@dell.be.48ers.dk> <515DF1AC.8060506@zacarias.com.ar>
-Message-ID: <87zjxa3hws.fsf@dell.be.48ers.dk>
+Date: Sun, 07 Apr 2013 09:45:20 +0200
+Subject: [Buildroot] [PATCHv2] openvpn: adjust iproute2 path logic
+In-Reply-To: <1365111173-29701-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 4 Apr 2013 18:32:53 -0300")
+References: <1365111173-29701-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87vc7y3htb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +13,13 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- >> Could you invert the logic so you explicitly check for the old busybox
- >> versions instead?
+ Gustavo> As reported in bug #6164 when using busybox iproute2 openvpn
+ Gustavo> can fail to locate the 'ip' utility.  This was correct until
+ Gustavo> busybox 1.21.0 was released since it changed the location of
+ Gustavo> /bin/ip to /sbin/ip (what iproute2 proper does).  So adjust
+ Gustavo> the ip path accordingly.
 
- Gustavo> True.
-
- Gustavo> We'll likely forget to remove dead code too later on, but it
- Gustavo> doesn't hurt :) Regards.
-
-Indeed, that's a lot less harmful.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
