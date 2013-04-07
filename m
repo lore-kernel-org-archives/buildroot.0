@@ -1,46 +1,32 @@
-From: Badoo <noreply+2971672728@badoo.com>
-Date: Sun,  7 Apr 2013 17:00:37 +0000
-Subject: [Buildroot] =?utf-8?b?4piFIEF2ZWMgcXVpLCBZdmFuIGEgw6l0w6kgZW4g?=
-	=?utf-8?q?contact_r=C3=A9cemment_=3F?=
-Message-ID: <20130407170042.2C3248A885@whitealder.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  7 Apr 2013 20:00:58 +0200
+Subject: [Buildroot] [PATCH 0/4] External toolchain updates
+Message-ID: <1365357662-25960-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Avec qui Yvan a ?t? en contact r?cemment ?
+Hello,
 
+Here are some traditional toolchain updates (for Linaro ARM and
+Aarch64 toolchains), a typo fix for a Blackfin toolchain, and the
+removal of the oldest Microblaze toolchain, since it is no longer
+possible to download just the toolchain tarball from the Git
+repository.
 
+Thanks.
 
+Thomas Petazzoni (4):
+  toolchain-external: update ARM Linaro toolchains
+  toolchain-external: update AArch64 Linaro toolchains
+  toolchain-external: fix typo in Blackfin toolchain config option
+  toolchain-external: remove older Microblaze toolchain
 
+ toolchain/toolchain-external/Config.in   |   62 ++++++++++--------------------
+ toolchain/toolchain-external/ext-tool.mk |   32 +++++++--------
+ 2 files changed, 33 insertions(+), 61 deletions(-)
 
-
-
-
-
-
-Voir maintenant
-
-
-
-
-
-
-
-
-
-http://eu1.badoo.com/0319111375/in/Yf9CGpQt6pU/?lang_id=6&g=57&m=6301&mid=5161a63400000000000600000172133400e1577d004c 
-
-Amuse-toi bien ! 
-L'?quipe Badoo 
-Amuse-toi bien !
-L'?quipe Badoo 
-
-Vous avez re?u cet email de Badoo Trading Limited (adresse postale ci-dessous). 
-http://eu1.badoo.com/impersonation.phtml?lang_id=6&email=buildroot%40busybox.net&block_code=1b528a&m=6301&mid=5161a63400000000000600000172133400e1577d004c
-
-Badoo Trading Limited, soci?t? enregistr?e en Angleterre et Pays de Galles, sous le No. CRN 7540255, bureaux enregistr?s sous l&#039;adresse  Media Village, 131 - 151 Great Titchfield Street, Londres, W1W 5BB.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130407/4858b892/attachment-0001.html>
+-- 
+1.7.9.5
