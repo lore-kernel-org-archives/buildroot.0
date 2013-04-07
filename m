@@ -1,55 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  7 Apr 2013 12:04:36 +0200
-Subject: [Buildroot] [PATCHv4 4/4] toolchain-external: support more
-	gdbserver locations
+Date: Sun,  7 Apr 2013 12:04:35 +0200
+Subject: [Buildroot] [PATCHv4 3/4] gdb: install gdbserver into the SDK
 In-Reply-To: <1365329076-19853-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1365329076-19853-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1365329076-19853-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1365329076-19853-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The x86/x86-64 CodeSourcery toolchains use some weird locations for
-the gdbserver binary:
-
-$ find . -name 'gdbserver'
-./i686-pc-linux-gnu/libc/atom/usr/bin/gdbserver
-./i686-pc-linux-gnu/libc/atom/usr/lib/bin/gdbserver
-./i686-pc-linux-gnu/libc/core2/usr/bin/gdbserver
-./i686-pc-linux-gnu/libc/core2/usr/lib64/bin/gdbserver
-./i686-pc-linux-gnu/libc/usr/lib/bin/gdbserver
-./i686-pc-linux-gnu/libc/usr/lib64/bin/gdbserver
-
-Notice that it's sometimes hidden in a usr/{lib,lib64}/bin
-directory. This patch changes the gdbserver logic to also try in this
-location.
-
-Originally based on work done by Daniel Nilsson, visible at
-http://patchwork.ozlabs.org/patch/155767/.
+In order for a Buildroot toolchain to be usable as an external
+toolchain, we should copy the target gdbserver somewhere into
+$(HOST_DIR). In order to match what Crosstool-NG does (and therefore
+to match something the external toolchain logic already understands),
+we install gdbserver in
+$(HOST_DIR)/usr/<tuple>/debug-root/usr/bin/gdbserver.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/ext-tool.mk |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This replaces http://patchwork.ozlabs.org/patch/229438/
+---
+ package/gdb/gdb.mk |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 5f467b7..911527c 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -444,9 +444,9 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
- 	if test x"$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" == x"y"; then \
- 		$(call MESSAGE,"Copying gdbserver") ; \
- 		gdbserver_found=0 ; \
--		for d in $${ARCH_SYSROOT_DIR} $${ARCH_SYSROOT_DIR}/../debug-root/ ; do \
--			if test -f $${d}/usr/bin/gdbserver ; then \
--				install -m 0755 -D $${d}/usr/bin/gdbserver $(TARGET_DIR)/usr/bin/gdbserver ; \
-+		for d in $${ARCH_SYSROOT_DIR}/usr $${ARCH_SYSROOT_DIR}/../debug-root/usr $${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} ; do \
-+			if test -f $${d}/bin/gdbserver ; then \
-+				install -m 0755 -D $${d}/bin/gdbserver $(TARGET_DIR)/usr/bin/gdbserver ; \
- 				gdbserver_found=1 ; \
- 				break ; \
- 			fi ; \
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 24ce9bf..cec64d5 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -78,6 +78,20 @@ endef
+ 
+ GDB_POST_INSTALL_TARGET_HOOKS += GDB_REMOVE_UNNEEDED_FILES
+ 
++# This installs the gdbserver somewhere into the $(HOST_DIR) so that
++# it becomes an integral part of the SDK, if the toolchain generated
++# by Buildroot is later used as an external toolchain. We install it
++# in debug-root/usr/bin/gdbserver so that it matches what Crosstool-NG
++# does.
++define GDB_SDK_INSTALL_GDBSERVER
++	$(INSTALL) -D -m 0755 $(TARGET_DIR)/usr/bin/gdbserver \
++		$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/debug-root/usr/bin/gdbserver
++endef
++
++ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
++GDB_POST_INSTALL_TARGET_HOOKS += GDB_SDK_INSTALL_GDBSERVER
++endif
++
+ # A few notes:
+ #  * --target, because we're doing a cross build rather than a real
+ #    host build.
 -- 
 1.7.9.5
