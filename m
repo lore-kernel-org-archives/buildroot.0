@@ -1,30 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  7 Apr 2013 10:39:56 -0300
-Subject: [Buildroot] [PATCH] mpg123: bump to version 1.15.3
-Message-ID: <1365341996-29446-1-git-send-email-gustavo@zacarias.com.ar>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 07 Apr 2013 15:58:00 +0200
+Subject: [Buildroot] [PATCH] post-build: reimplement using a for loop
+ and make verbose
+In-Reply-To: <20130403103226.36c1e0be@skate>
+References: <1364977729-27519-1-git-send-email-luca@lucaceresoli.net>
+ <20130403103226.36c1e0be@skate>
+Message-ID: <51617B68.9030706@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/multimedia/mpg123/mpg123.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thomas Petazzoni wrote:
+> Dear Luca Ceresoli,
+>
+> On Wed,  3 Apr 2013 10:28:48 +0200, Luca Ceresoli wrote:
+>> Make the post-build system similar to the rootfs overlay system. This allows to
+>> show each script filename before execution.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> I don't have a strong opinion on whether this is useful or not, but if
+> it gets applied, I'd like the same to be done for post-image scripts,
+> in order to keep the consistency.
 
-diff --git a/package/multimedia/mpg123/mpg123.mk b/package/multimedia/mpg123/mpg123.mk
-index 43a558a..c65920f 100644
---- a/package/multimedia/mpg123/mpg123.mk
-+++ b/package/multimedia/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--MPG123_VERSION = 1.15.1
-+MPG123_VERSION = 1.15.3
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPT = --with-optimization=0 --disable-lfs-alias
--- 
-1.8.1.5
+To me it is useful each time multiple post-build scripts are used, 
+because is
+makes it easy to understand what's happening and which scripts you are 
+running
+(and which you are not running).
+E.g., I have multiple products with a common base, plus some "optional" 
+features.
+Some features needs a specific post-build script. Each product 
+implements a subset
+of the features, but these subsets overlap between different products.
+When a build a product's rootfs it is useful to see if I am running all 
+and only
+the correct post-build scripts: the "common base" script, plus the 
+scripts for the
+wanted features.
+
+Of course I agree this change should be done also in the post-image scripts.
+I will submit a patchset that does also this.
+
+Luca
