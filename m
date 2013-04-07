@@ -1,134 +1,75 @@
-From: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
-Date: Sun, 7 Apr 2013 20:49:58 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Apr 2013 20:55:53 +0200
 Subject: [Buildroot] [PATCH 4/4] toolchain-external: remove older
  Microblaze toolchain
-In-Reply-To: <1365357662-25960-5-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <20130407204958.54b890fa@jvarch>
 References: <1365357662-25960-1-git-send-email-thomas.petazzoni@free-electrons.com>
  <1365357662-25960-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20130407204958.54b890fa@jvarch>
+ <20130407204958.54b890fa@jvarch>
+Message-ID: <20130407205553.65f5e32c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Jan Viktorin,
 
-there is an issue with the newer toolchain I'm not able to solve. I tried to
-google for a solution but I failed.
+I'm really happy to see that there are some Microblaze developers using
+Buildroot! Besides this toolchain problem, we would be really happy to
+get your reports and feedback about how Buildroot performs for
+Microblaze platforms.
 
-hidden symbol `__udivsi3' in buildroot/output/host/opt/ext-toolchain/bin/../lib/
-gcc/microblazeel-unknown-linux-gnu/4.6.2/libgcc.a(udivsi3.o) is referenced by DSO
+On Sun, 7 Apr 2013 20:49:58 +0200, Jan Viktorin wrote:
 
-With the older one, it is possible to set `LD_PRELOAD=/lib/libgcc_s.so.1` to
-solve (well, it is a hack...) that problem because it occurs during runtime.
-With the 14.3 toolchain, it occurs earlier - during compilation.
-
-Does anybody know how to solve that?
-
-Would it be possible to not delete the older toolchain? I think it is possible
-to do `git clone` and then just copy the archive to its place like this:
-
-$ git clone https://github.com/Xilinx/microblaze_v2.0_le.git
-Initialized empty Git repository in /home/user/microblaze_v2.0_le/.git/
-remote: Counting objects: 4, done.
-remote: Compressing objects: 100% (4/4), done.
-remote: Total 4 (delta 0), reused 4 (delta 0)
-Unpacking objects: 100% (4/4), done.
-$ cp microblaze_v2.0_le/microblazeel-unknown-linux-gnu.tgz SOMEWHERE
-$ rm -Rf microblaze_v2.0_le/
-
-Well, I don't know how to integrate this method with Buildroot and I guess it
-is probably the only reason to remove it, isn't it?
-
-Regards
-Jan Viktorin
-
-On Sun,  7 Apr 2013 20:01:02 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-
-> Our older Microblaze toolchain is no longer available: git.xilinx.com
-> has moved to Github, and Github doesn't allow to download such huge
-> binary blobs directly.
+> there is an issue with the newer toolchain I'm not able to solve. I
+> tried to google for a solution but I failed.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  toolchain/toolchain-external/Config.in   |   22 ----------------------
->  toolchain/toolchain-external/ext-tool.mk |    6 ------
->  2 files changed, 28 deletions(-)
+> hidden symbol `__udivsi3' in
+> buildroot/output/host/opt/ext-toolchain/bin/../lib/
+> gcc/microblazeel-unknown-linux-gnu/4.6.2/libgcc.a(udivsi3.o) is
+> referenced by DSO
+
+Argh. Do you have a way of reproducing this issue?
+
+
+> Would it be possible to not delete the older toolchain? I think it is
+> possible to do `git clone` and then just copy the archive to its
+> place like this:
 > 
-> diff --git a/toolchain/toolchain-external/Config.in
-> b/toolchain/toolchain-external/Config.in index 4e75d85..e09a122 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -643,16 +643,6 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
->  	  http://git.xilinx.com/?p=microblaze-gnu.git;a=tree;f=binaries. It
->  	  uses gcc 4.6.2, binutils 2.21.53, glibc 2.14 and gdb 7.4.50.
->  
-> -config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
-> -	bool "Xilinx Little Endian Microblaze GNU Tools"
-> -	depends on BR2_microblazeel
-> -	depends on BR2_HOSTARCH = "x86_64"
-> -	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-> -	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> -	help
-> -	  Toolchain for the Microblaze architecture, from
-> -	  http://wiki.xilinx.com/mb-gnu-tools
-> -
->  config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
->  	bool "Xilinx Big Endian Microblaze GNU Tools"
->  	depends on BR2_microblaze
-> @@ -665,16 +655,6 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
->  	  http://git.xilinx.com/?p=microblaze-gnu.git;a=tree;f=binaries. It
->  	  uses gcc 4.6.2, binutils 2.21.53, glibc 2.14 and gdb 7.4.50.
->  
-> -config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
-> -	bool "Xilinx Big Endian Microblaze GNU Tools"
-> -	depends on BR2_microblazebe
-> -	depends on BR2_HOSTARCH = "x86_64"
-> -	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-> -	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> -	help
-> -	  Toolchain for the Microblaze architecture, from
-> -	  http://wiki.xilinx.com/mb-gnu-tools
-> -
->  config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_03
->  	bool "Linaro AArch64 13.03"
->  	depends on BR2_aarch64
-> @@ -768,9 +748,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
->  	default "aarch64-linux-gnu"      if
-> BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_02 default "aarch64-linux-gnu"
-> if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_01 default
-> "microblazeel-unknown-linux-gnu" if
-> BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
-> -	default "microblazeel-unknown-linux-gnu" if
-> BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2 default
-> "microblaze-unknown-linux-gnu" if
-> BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
-> -	default "microblaze-unknown-linux-gnu" if
-> BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2 default
-> "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
-> default "mips-linux-gnu"         if
-> BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203 default
-> "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
-> diff --git a/toolchain/toolchain-external/ext-tool.mk
-> b/toolchain/toolchain-external/ext-tool.mk index d667b86..890d7d8 100644 ---
-> a/toolchain/toolchain-external/ext-tool.mk +++
-> b/toolchain/toolchain-external/ext-tool.mk @@ -261,15 +261,9 @@
-> TOOLCHAIN_EXTERNAL_SOURCE   = $(TOOLCHAIN_EXTERNAL_SOURCE_1)
-> $(TOOLCHAIN_EXTERNA else ifeq
-> ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3),y)
-> TOOLCHAIN_EXTERNAL_SITE=http://sources.buildroot.net/
-> TOOLCHAIN_EXTERNAL_SOURCE=lin32-microblazeel-unknown-linux-gnu_14.3_early.tar.xz
-> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2),y)
-> -TOOLCHAIN_EXTERNAL_SITE=http://git.xilinx.com/?p=xldk/microblaze_v2.0_le.git;a=blob;h=d7b493c5dbcc24ba9cc3be2e4c14d6d9701e6805;hb=00163583b771bb4e937632765dd0c5516b3e31c4;f=
-> -TOOLCHAIN_EXTERNAL_SOURCE=microblazeel-unknown-linux-gnu.tgz else ifeq
-> ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3),y)
-> TOOLCHAIN_EXTERNAL_SITE=http://sources.buildroot.net/
-> TOOLCHAIN_EXTERNAL_SOURCE=lin32-microblaze-unknown-linux-gnu_14.3_early.tar.xz
-> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
-> -TOOLCHAIN_EXTERNAL_SITE=http://git.xilinx.com/?p=xldk/microblaze_v2.0.git;a=blob;h=71e031ae990e063a5718f90d30cf97ad85e2f565;hb=569081301f0f1d8d3b24335a364e8ff1774190d4;f=
-> -TOOLCHAIN_EXTERNAL_SOURCE=microblaze-unknown-linux-gnu.tgz else ifeq
-> ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_01),y)
-> TOOLCHAIN_EXTERNAL_SITE=http://releases.linaro.org/13.01/components/toolchain/binaries/
-> TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-aarch64-linux-gnu-4.7-2013.01-20130125_linux.tar.xz
+> $ git clone https://github.com/Xilinx/microblaze_v2.0_le.git
+> Initialized empty Git repository
+> in /home/user/microblaze_v2.0_le/.git/ remote: Counting objects: 4,
+> done. remote: Compressing objects: 100% (4/4), done.
+> remote: Total 4 (delta 0), reused 4 (delta 0)
+> Unpacking objects: 100% (4/4), done.
+> $ cp microblaze_v2.0_le/microblazeel-unknown-linux-gnu.tgz SOMEWHERE
+> $ rm -Rf microblaze_v2.0_le/
+
+The problem is that the external toolchain logic is not able to
+download a Git repo and then take a single file from it... It could be
+extended to do that, but I'm not really a fan of doing that just for
+the beauty of Microblaze toolchains.
+
+Even the new Microblaze toolchain is problematic: it is available as a
+directory inside a Git repo with lots of other stuff. I've contacted
+Xilinx, but they don't seem to understand what the problem is. So the
+only solution we have found so far for the new Microblaze toolchain is
+to make ourselves a tarball of it, which we've stored in
+sources.buildroot.net.
+
+I can do the same for the older toolchain if you're interested.
+
+That said, the older toolchain uses a *very* old glibc, and was causing
+lots of problems in our autobuilders. I think it would be a lot better
+to see how to fix the build problem with the newer toolchain. Have you
+tried reporting it to the Xilinx people?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
