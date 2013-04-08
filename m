@@ -1,27 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 08 Apr 2013 13:54:58 -0300
-Subject: [Buildroot] syslog messages during boot not recorded?
-In-Reply-To: <CAKW0qihWyAonXk7=TB_Hq8q3E_pBuCv94D7eQ890ePx6b_CbMw@mail.gmail.com>
-References: <loom.20130408T181747-784@post.gmane.org>
- <5162F298.7060909@zacarias.com.ar>
- <CAKW0qihWyAonXk7=TB_Hq8q3E_pBuCv94D7eQ890ePx6b_CbMw@mail.gmail.com>
-Message-ID: <5162F662.1010608@zacarias.com.ar>
+From: Arunkumar Vijayakumar <arun.magzion@gmail.com>
+Date: Tue, 9 Apr 2013 01:19:42 +0530
+Subject: [Buildroot] Including wine package - Reg
+Message-ID: <CAGK4xy6eXjG7MzWS81uNmthwd5ODBB_ae+DQMSFfPkX6_GfQiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/08/2013 01:51 PM, Francesco wrote:
+Dear Team,
 
-> well, my buildroot is not the latest version... I'm using version
-> 10.11 and I cannot see anything similar to IPC_SYSLOG in its
-> .config... maybe this is a feature of newer buildroots?
-> 
-> Thanks!
-> FM
+I'm including wine package in buildroot to run my windows application. But
+after building and testing with Qemu, when i type the command wine, its says
 
-It's a feature of BUSYBOX, not buildroot, meant for syslogd to work in
-scenarios where your /var/log directory isn't writable for example.
-Which begs the question, is it writable?
-Regards.
+-sh: wine: not found, even though the wine binaries are in /usr/bin
+
+Can you please help me with the solution.
+
+
+Thanks
+Arun Kumar
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130409/f82c365a/attachment.html>
