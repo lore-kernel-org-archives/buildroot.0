@@ -1,39 +1,57 @@
-From: Francesco Montorsi <francesco.montorsi@gmail.com>
-Date: Mon, 8 Apr 2013 16:30:28 +0000 (UTC)
-Subject: [Buildroot] syslog messages during boot not recorded?
-Message-ID: <loom.20130408T181747-784@post.gmane.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 08 Apr 2013 13:31:30 -0300
+Subject: [Buildroot] Newbie questions on building images for EP405
+In-Reply-To: <CAADET=fm0cNPKvvRj6k9nOiGqXZqVGLM7fabj=y8X8sR197WUw@mail.gmail.com>
+References: <CAADET=fm0cNPKvvRj6k9nOiGqXZqVGLM7fabj=y8X8sR197WUw@mail.gmail.com>
+Message-ID: <5162F0E2.2030103@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-I'm using buildroot v10.11 on an embedded system running Linux kernel 
-2.6.32.2.
+On 04/08/2013 12:20 PM, David Li wrote:
 
-I installed some daemons wrote by me which are started at boot time by some 
-/etc/init.d scripts of mine. These daemons use many syslog() to provide 
-verbose debugging messages... however, for some reason, when I boot the 
-system and cat /var/log/messages, I do not see any message.
-If I start manually the daemons, the messages are correctly logged to 
-/var/log/messages... 
+> Hello,
+> 
+> I am new to using buildroot and I am learning this with an ep405 (ppc)
+>         board. My goal is to build an Linux image and boot it up. The
+>     board comes with u-boot loader on bootup.
+>         I did make menuconfig with minmal packages (busybox, devtmpfs,
+>     native buildroot tool chain etc).  After make, I got two image files
+>     in output/images: rootfs.tar and uImage.
+> 
+>         My questions are:
+>         1. There are two def kernel config files I used in
+>            output/build/linux-3.7.8/arch/
+>     powerpc/configs/. which one is really  for ep405? I tried both in make
+>     menuconfig and all of them built OK:
+> 
+>       ppc40x_defconfig
+>       40x/ep405_defconfig
 
-I think that this problem maybe because syslogd is startd AFTER all 
-/etc/init.d scripts have been processed.. is that right?
+Hi.
+The ppc40x_defconfig is the "common" config - useful if you're
+targetting different 40x-based boards.
+The ep405_defconfig is targetted towards the embedded planet ep405 board
+explicitly - the kernel will be somewhat smaller.
 
+>           2. There are two files in output/images/ - one kernel and the
+>     other a roof filesystem. Can they be combined into one image and boot
+>     up with ep405 uboot?
 
-I tried to comment the lines:
+Yes, you probably want to use an initramfs target for that. In the
+Filesystem images menu you've got "initial RAM filesystem linked into
+the linux kernel" option, that's what you'd want for a quick test.
+The uImage is the kernel prepared/formatted for u-boot to use.
+The tar is just a simple archive of the root filesystem, usable for
+example if you are NFS-booting the board or dumping it into some form of
+removable media (SD card and so on).
 
-null::respawn:/sbin/syslogd -n -m 0
-null::respawn:/sbin/klogd -n
+>           3. The ep405 board already boots up uboot. Do I need use  buildroot to
+>            build another uboot image?
 
-contained in /etc/inittab and then to add the S01logging script found in 
-this patch:
-http://lists.busybox.net/pipermail/buildroot/2011-July/043828.html
-
-but I obtained the same results... (of course my etc scripts start with S90, 
-S91, etc, so they should run AFTER S01logging...)
-
-Thanks for any hint!
-Francesco
+If it's already working like you want it too usually there's no need to
+upgrade the booatloader, specially since in many cases you'll need
+specialized hardware to recover from a botched upgrade.
+Regards.
