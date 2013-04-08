@@ -1,32 +1,40 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon,  8 Apr 2013 15:36:20 +0200
-Subject: [Buildroot] [PATCH] tslib: bump version
-Message-ID: <1365428180-13469-1-git-send-email-yegorslists@googlemail.com>
+From: David Li <w.david.li@gmail.com>
+Date: Mon, 8 Apr 2013 08:20:32 -0700
+Subject: [Buildroot] Newbie questions on building images for EP405
+Message-ID: <CAADET=fm0cNPKvvRj6k9nOiGqXZqVGLM7fabj=y8X8sR197WUw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/tslib/tslib.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I am new to using buildroot and I am learning this with an ep405 (ppc)
+        board. My goal is to build an Linux image and boot it up. The
+    board comes with u-boot loader on bootup.
+        I did make menuconfig with minmal packages (busybox, devtmpfs,
+    native buildroot tool chain etc).  After make, I got two image files
+    in output/images: rootfs.tar and uImage.
 
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 8533cf9..2c07272 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -3,7 +3,7 @@
- # tslib
- #
- #############################################################
--TSLIB_VERSION = 412d99d
-+TSLIB_VERSION = 158ee49b32f83cb7b02d5315f41c2e4cff38942d
- TSLIB_SITE = http://github.com/kergoth/tslib/tarball/master
- TSLIB_LICENSE = GPL, LGPL
- TSLIB_LICENSE_FILES = COPYING
--- 
-1.7.7
+        My questions are:
+        1. There are two def kernel config files I used in
+           output/build/linux-3.7.8/arch/
+    powerpc/configs/. which one is really  for ep405? I tried both in make
+    menuconfig and all of them built OK:
+
+      ppc40x_defconfig
+      40x/ep405_defconfig
+
+          2. There are two files in output/images/ - one kernel and the
+    other a roof filesystem. Can they be combined into one image and boot
+    up with ep405 uboot?
+
+           uImage
+           rootfs.tar
+
+          3. The ep405 board already boots up uboot. Do I need use  buildroot to
+           build another uboot image?
+
+
+        Thanks.
