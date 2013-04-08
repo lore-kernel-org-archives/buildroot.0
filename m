@@ -1,88 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Apr 2013 23:23:28 +0200
-Subject: [Buildroot] [PATCH v2 6/7] arch: Introduce blackfin-specific
- Makefile
-In-Reply-To: <CAJxxZ0MafRS7uggYwNVFRc6pHFNXwufsOtvq9=oxS8qJOZAcig@mail.gmail.com>
-References: <1364550643-11793-1-git-send-email-sonic.adi@gmail.com>
- <1364550643-11793-6-git-send-email-sonic.adi@gmail.com>
- <20130407234129.60c6ac9d@skate>
- <CAJxxZ0MafRS7uggYwNVFRc6pHFNXwufsOtvq9=oxS8qJOZAcig@mail.gmail.com>
-Message-ID: <20130408232328.0baf2b9e@skate>
+From: Arunkumar Vijayakumar <arun.magzion@gmail.com>
+Date: Tue, 9 Apr 2013 02:53:44 +0530
+Subject: [Buildroot] Including wine package - Reg
+In-Reply-To: <20130408231204.0b30b7df@skate>
+References: <CAGK4xy6eXjG7MzWS81uNmthwd5ODBB_ae+DQMSFfPkX6_GfQiw@mail.gmail.com>
+ <20130408231204.0b30b7df@skate>
+Message-ID: <CAGK4xy5fzi5F0C_CaAq0e2JJmdUhNKD3ZuBqE8cBw8dsV+HQrw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sonic Zhang,
+Hello Thomas
 
-On Mon, 8 Apr 2013 15:19:18 +0800, Sonic Zhang wrote:
-> > I am still not happy with this, because it simply doesn't work unless
-> > you have the Blackfin toolchain installed globally on your system,
-> > which simply isn't the case for normal users.
+Thanks for your quick reply.
+Im using i386 architecture and the variant to be i686 and creating a
+package wine with version 1.5.23. I also used the X Server package for GUI
+and followed steps as one in the below link
+http://agentoss.wordpress.com/2011/03/06/building-a-tiny-x-org-linux-system-using-buildroot/
+
+
+Please find the attachment for the config.in & wine.mk file for your
+reference.
+
+Let me know if you need any additional details ?
+Also let me know why i couldn't able to use file, ldd, readelf commands in
+the prompt.
+
+Thanks & Regards
+Arun Kumar
+
+
+
+On Tue, Apr 9, 2013 at 2:42 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Arunkumar Vijayakumar,
+>
+> On Tue, 9 Apr 2013 01:19:42 +0530, Arunkumar Vijayakumar wrote:
+>
+> > I'm including wine package in buildroot to run my windows
+> > application. But after building and testing with Qemu, when i type
+> > the command wine, its says
 > >
-> > So I believe we should extend the external toolchain logic to be able
-> > to use three variants of the Blackfin toolchain:
+> > -sh: wine: not found, even though the wine binaries are in /usr/bin
 > >
-> >         * Only FDPIC
-> >         * Only FLAT
-> >         * Both FLAT and FDPIC
-> >
-> > And then, this logic should be moved in the external toolchain logic,
-> > where we already do the process of copying libraries from the toolchain
-> > to the target, and from the toolchain to the staging directory.
-> 
-> Since FPDIC libraries are installed by default if BINFMT_FDPIC is
-> selected, how about making INSTALL_FDPIC_LIB option depend on
-> BINFMT_FLAT only? So do the INSTALL_FLAT_LIB option.
-
-Yes, this makes sense.
-
-> And no "Both FLAT and FDPIC" is needed in this case.
-
-In fact, I looked again at our support for Blackfin external
-toolchains, and I was wrong: we always install *both* the FDPIC and
-Flat shared libraries. So in fact, you don't need to handle the
-variants of the external toolchain.
-
-Just move your logic into the external toolchain logic that copies
-libraries, and that should be fine. I believe it belongs to the
-external toolchain logic, because it is highly specific to Analog
-Devices toolchains. If we ever support Blackfin in the internal
-backend, it will always either be FDPIC *or* FLAT, but not both at the
-same time.
-
-> >  * the logic to determine which .so files to copy should use the
-> >    $(LIB_EXTERNAL_LIBS) and $(USR_LIB_EXTERNAL_LIBS) that we already
-> >    use in ext-tool.mk.
-> 
-> This only applies to the FDPIC libraries. The FLAT libraries use a
-> different name policy.
-
-Yes, sure, but I was referring to the FDPIC libraries in this part
-(sorry if it wasn't clear).
-
-> >  * I don't quite understand the logic you're using for the shared flat
-> >    library copying. You use -print-file-name=libc, but then you copy it
-> >    under the name 'lib1.so'. I think a comment above this part would be
-> >    useful.
-> 
-> The flat libraries are found and linked according to the index in it
-> name "libN.so". Index 1 is reserved for the standard C library.
-> Customer libraries can use 4 and above. That's why the libc is renamed
-> to lib1.so in target rootfs.
-
-Oh, ok, interesting. Could you just copy/paste this explanation as a
-comment above the relevant part of the code?
-
-Thanks a lot Sonic for your very quick feedback in this discussion, I
-think we're making great progress!
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+> > Can you please help me with the solution.
+>
+> Could you submit your wine package so that we can try to reproduce the
+> problem?
+>
+> Which architecture are you targeting? What is the output of "file
+> output/target/usr/bin/wine" ?
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130409/eca589d6/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: wine.rar
+Type: application/rar
+Size: 627 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130409/eca589d6/attachment-0001.rar>
