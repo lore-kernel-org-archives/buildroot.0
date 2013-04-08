@@ -1,40 +1,39 @@
-From: David Li <w.david.li@gmail.com>
-Date: Mon, 8 Apr 2013 08:20:32 -0700
-Subject: [Buildroot] Newbie questions on building images for EP405
-Message-ID: <CAADET=fm0cNPKvvRj6k9nOiGqXZqVGLM7fabj=y8X8sR197WUw@mail.gmail.com>
+From: Francesco Montorsi <francesco.montorsi@gmail.com>
+Date: Mon, 8 Apr 2013 16:30:28 +0000 (UTC)
+Subject: [Buildroot] syslog messages during boot not recorded?
+Message-ID: <loom.20130408T181747-784@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi all,
+I'm using buildroot v10.11 on an embedded system running Linux kernel 
+2.6.32.2.
 
-I am new to using buildroot and I am learning this with an ep405 (ppc)
-        board. My goal is to build an Linux image and boot it up. The
-    board comes with u-boot loader on bootup.
-        I did make menuconfig with minmal packages (busybox, devtmpfs,
-    native buildroot tool chain etc).  After make, I got two image files
-    in output/images: rootfs.tar and uImage.
+I installed some daemons wrote by me which are started at boot time by some 
+/etc/init.d scripts of mine. These daemons use many syslog() to provide 
+verbose debugging messages... however, for some reason, when I boot the 
+system and cat /var/log/messages, I do not see any message.
+If I start manually the daemons, the messages are correctly logged to 
+/var/log/messages... 
 
-        My questions are:
-        1. There are two def kernel config files I used in
-           output/build/linux-3.7.8/arch/
-    powerpc/configs/. which one is really  for ep405? I tried both in make
-    menuconfig and all of them built OK:
-
-      ppc40x_defconfig
-      40x/ep405_defconfig
-
-          2. There are two files in output/images/ - one kernel and the
-    other a roof filesystem. Can they be combined into one image and boot
-    up with ep405 uboot?
-
-           uImage
-           rootfs.tar
-
-          3. The ep405 board already boots up uboot. Do I need use  buildroot to
-           build another uboot image?
+I think that this problem maybe because syslogd is startd AFTER all 
+/etc/init.d scripts have been processed.. is that right?
 
 
-        Thanks.
+I tried to comment the lines:
+
+null::respawn:/sbin/syslogd -n -m 0
+null::respawn:/sbin/klogd -n
+
+contained in /etc/inittab and then to add the S01logging script found in 
+this patch:
+http://lists.busybox.net/pipermail/buildroot/2011-July/043828.html
+
+but I obtained the same results... (of course my etc scripts start with S90, 
+S91, etc, so they should run AFTER S01logging...)
+
+Thanks for any hint!
+Francesco
