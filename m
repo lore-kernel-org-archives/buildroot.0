@@ -1,32 +1,75 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  7 Apr 2013 21:25:59 -0300
-Subject: [Buildroot] [PATCH] xdriver_xf86-video-geode: only available for
-	i386 and x86_64
-Message-ID: <1365380759-14946-1-git-send-email-gustavo@zacarias.com.ar>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Mon, 8 Apr 2013 11:28:15 +0800
+Subject: [Buildroot] [PATCH v2 1/7] arch: Add blackfin CPU choice.
+In-Reply-To: <20130407223911.7341dea8@skate>
+References: <1364550643-11793-1-git-send-email-sonic.adi@gmail.com>
+ <20130407223911.7341dea8@skate>
+Message-ID: <CAJxxZ0Oe26kESdd63-f9w48YZ_1Dcwtjjnpb5PEfp4s5_NTZxQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Builtin-video from NSC/AMD Geode x86 processors.
-Fixes build failures on other architectures.
+Hi Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/x11r7/xdriver_xf86-video-geode/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, Apr 8, 2013 at 4:39 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Sonic Zhang,
+>
+> Thanks for continuing the work on this!
+>
+> On Fri, 29 Mar 2013 17:50:37 +0800, Sonic Zhang wrote:
+>> From: Sonic Zhang <sonic.zhang@analog.com>
+>>
+>> v2-changes:
+>> none
+>>
+>> v1-changes:
+>> - is patch adds a Target CPU configuration option and uses it to select a -m
+>> option for gcc.
+>>
+>> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+>> ---
+>>  arch/Config.in.bfin |   97 +++++++++++++++++++++++++++++++++++++++++++++++----
+>>  1 files changed, 90 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+>> index 0b137ae..ac96620 100644
+>> --- a/arch/Config.in.bfin
+>> +++ b/arch/Config.in.bfin
+>> @@ -1,12 +1,65 @@
+>>  choice
+>> -     prompt "Target ABI"
+>> +     prompt "Target CPU"
+>>       depends on BR2_bfin
+>> -     default BR2_BFIN_FDPIC
+>> -config BR2_BFIN_FDPIC
+>> -     bool "FDPIC"
+>> -config BR2_BFIN_FLAT
+>> -     bool "FLAT"
+>> -     select BR2_PREFER_STATIC_LIB
+>
+> You can't just remove BR2_BFIN_FDPIC and BR2_BFIN_FLAT, they are used
+> in the external toolchain logic of Buildroot:
+>
+> $ git grep BR2_BFIN_FDPIC .
+> arch/Config.in.bfin:    default BR2_BFIN_FDPIC
+> arch/Config.in.bfin:config BR2_BFIN_FDPIC
+> toolchain/toolchain-external/Config.in: default "bfin-uclinux"           if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && !BR2_BFIN_FDPIC
+> toolchain/toolchain-external/Config.in: default "bfin-linux-uclibc"      if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && BR2_BFIN_FDPIC
+> toolchain/toolchain-external/Config.in: default "bfin-uclinux"           if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && !BR2_BFIN_FDPIC
+> toolchain/toolchain-external/Config.in: default "bfin-linux-uclibc"      if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BFIN_FDPIC
+> toolchain/toolchain-external/Config.in: default "bfin-uclinux"           if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && !BR2_BFIN_FDPIC
+> toolchain/toolchain-external/Config.in: default "bfin-linux-uclibc"      if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BFIN_FDPIC
+>
+> So, I think your patch 3/7 should be first in the series, and it should
+> be followed by a patch that removes BR2_BFIN_FDPIC and BR2_BFIN_FLAT
+> and use the new BR2_BINFMT_* symbols in the external toolchain logic.
+>
 
-diff --git a/package/x11r7/xdriver_xf86-video-geode/Config.in b/package/x11r7/xdriver_xf86-video-geode/Config.in
-index 2d2e5bc..2b868d0 100644
---- a/package/x11r7/xdriver_xf86-video-geode/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-geode/Config.in
-@@ -5,5 +5,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_GEODE
- 	select BR2_PACKAGE_XPROTO_RENDERPROTO
- 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
-+	depends on (BR2_i386 || BR2_x86_64)
- 	help
- 	  video driver for geode device
--- 
-1.8.1.5
+OK. I will move 3/7 ahead.
+
+Regards,
+
+Sonic
