@@ -1,29 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 08 Apr 2013 13:38:48 -0300
-Subject: [Buildroot] syslog messages during boot not recorded?
-In-Reply-To: <loom.20130408T181747-784@post.gmane.org>
-References: <loom.20130408T181747-784@post.gmane.org>
-Message-ID: <5162F298.7060909@zacarias.com.ar>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 08 Apr 2013 18:47:50 +0200
+Subject: [Buildroot] [PATCH] post-build: reimplement using a for loop
+ and make verbose
+In-Reply-To: <CANxTyt5nMrA3a7qq3sCmavGmnydBS_h3bCXufGqa8aFE+7xXyg@mail.gmail.com>
+References: <1364977729-27519-1-git-send-email-luca@lucaceresoli.net>
+ <CANxTyt5nMrA3a7qq3sCmavGmnydBS_h3bCXufGqa8aFE+7xXyg@mail.gmail.com>
+Message-ID: <5162F4B6.7070107@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/08/2013 01:30 PM, Francesco Montorsi wrote:
+Danomi Manchego wrote:
+> Alternatively, you could just move the MESSAGE into the loop instead
+> of relying on shell loops.  That would keep things more in make, if
+> that's desired.
+>
+> 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+> 		$(call MESSAGE,"Executing $(s)"); \
+> 		$(s) $(TARGET_DIR)$(sep))
 
-> I installed some daemons wrote by me which are started at boot time by some 
-> /etc/init.d scripts of mine. These daemons use many syslog() to provide 
-> verbose debugging messages... however, for some reason, when I boot the 
-> system and cat /var/log/messages, I do not see any message.
-> If I start manually the daemons, the messages are correctly logged to 
-> /var/log/messages... 
-> 
-> I think that this problem maybe because syslogd is startd AFTER all 
-> /etc/init.d scripts have been processed.. is that right?
+It is actually cleanerand should also be more efficient(FWIW).
 
-Hi.
-Or maybe your busybox is configured to use the circular buffer (in RAM)
-for logs (CONFIG_FEATURE_IPC_SYSLOG)... and you should just read your
-logs with "logread"...
-Regards.
+Sending a v2 patchset with this implementation.
+
+Luca
