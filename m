@@ -1,69 +1,74 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  9 Apr 2013 15:27:05 -0300
-Subject: [Buildroot] [PATCH 1/3] openssl: add host variant
-Message-ID: <1365532027-13639-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  9 Apr 2013 15:27:06 -0300
+Subject: [Buildroot] [PATCH 2/3] swig: new package
+In-Reply-To: <1365532027-13639-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1365532027-13639-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1365532027-13639-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Useful for the upcoming host-python-m2crypto package.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/openssl/openssl.mk | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ package/Config.in      |  1 +
+ package/swig/Config.in | 11 +++++++++++
+ package/swig/swig.mk   | 16 ++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/swig/Config.in
+ create mode 100644 package/swig/swig.mk
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 7701d51..8486c44 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -46,6 +46,18 @@ ifeq ($(BR2_x86_i386),y)
- 	OPENSSL_TARGET_ARCH = generic32 386
+diff --git a/package/Config.in b/package/Config.in
+index 2e7dc67..3c05794 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -89,6 +89,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/sed/Config.in"
  endif
- 
-+define HOST_OPENSSL_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		$(HOST_CONFIGURE_OPTS) \
-+		./config \
-+		--prefix=/usr \
-+		--openssldir=/etc/ssl \
-+		--libdir=/lib \
-+		shared \
-+		no-zlib \
-+	)
-+endef
+ source "package/sstrip/Config.in"
++source "package/swig/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/tar/Config.in"
+ endif
+diff --git a/package/swig/Config.in b/package/swig/Config.in
+new file mode 100644
+index 0000000..19d49f4
+--- /dev/null
++++ b/package/swig/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_SWIG
++	bool "swig"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  SWIG is a software development tool that connects programs written
++	  in C and C++ with a variety of high-level programming languages.
 +
- define OPENSSL_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_ARGS) \
-@@ -69,6 +81,10 @@ define OPENSSL_CONFIGURE_CMDS
- 	$(SED) "s:-O[0-9]:$(OPENSSL_CFLAGS):" $(@D)/Makefile
- endef
- 
-+define HOST_OPENSSL_BUILD_CMDS
-+	$(MAKE1) -C $(@D)
-+endef
++	  http://www.swig.org/
 +
- define OPENSSL_BUILD_CMDS
- 	$(MAKE1) -C $(@D)
- endef
-@@ -77,6 +93,10 @@ define OPENSSL_INSTALL_STAGING_CMDS
- 	$(MAKE1) -C $(@D) INSTALL_PREFIX=$(STAGING_DIR) install
- endef
- 
-+define HOST_OPENSSL_INSTALL_CMDS
-+	$(MAKE1) -C $(@D) INSTALL_PREFIX=$(HOST_DIR) install
-+endef
++comment "swig requires C++ support in toolchain"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+new file mode 100644
+index 0000000..fae4642
+--- /dev/null
++++ b/package/swig/swig.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# swig
++#
++#############################################################
 +
- define OPENSSL_INSTALL_TARGET_CMDS
- 	$(MAKE1) -C $(@D) INSTALL_PREFIX=$(TARGET_DIR) install
- endef
-@@ -124,3 +144,4 @@ define OPENSSL_UNINSTALL_CMDS
- endef
- 
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
++SWIG_VERSION = 2.0.9
++SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
++SWIG_DEPENDENCIES = host-bison
++SWIG_CONF_OPT = --without-pcre --disable-ccache
++HOST_SWIG_CONF_OPT = --without-pcre --disable-ccache
++SWIG_LICENSE = GPLv3+ BSD-2c BSD-3c
++SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 1.8.1.5
