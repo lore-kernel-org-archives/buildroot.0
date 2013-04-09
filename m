@@ -1,49 +1,49 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 09 Apr 2013 08:14:53 +0200
-Subject: [Buildroot] [PATCH 2/2] arch: remove support for SuperH 2 and
- SuperH 3
-In-Reply-To: <1365362725-30251-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1365362725-30251-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1365362725-30251-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <5163B1DD.3030401@mind.be>
+Date: Tue, 09 Apr 2013 08:15:39 +0200
+Subject: [Buildroot] [PATCHv5 01/14] qt5: disallow the selection of Qt4
+ and Qt5
+In-Reply-To: <1365364648-30568-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1365364648-30568-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1365364648-30568-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <5163B20B.6080708@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/04/13 21:25, Thomas Petazzoni wrote:
-> The SuperH 2 architecture is a noMMU architecture from Renesas, and
-> its Linux support is really poor. A number of packages fail to build,
-> the kernel support is almost inexistant, we have never heard of any
-> user of it.
+On 07/04/13 21:57, Thomas Petazzoni wrote:
+> As noticed by Arnout, Qt4 and Qt5 cannot be installed together,
+> because for example the qt.conf installed by one version cannot be
+> understood by the qmake of another version. We therefore make them
+> mutually exclusive, which sounds reasonable for the embedded systems
+> targeted by Buildroot.
 >
-> I was originally the one who introduced support for SuperH 2, but the
-> project switched to a different architecture due to the poor Linux
-> support for SuperH 2.
->
-> Regarding SuperH 3, I've never heard of Linux support for it that is
-> used in practice.
->
-> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
-> ---
->   arch/Config.in.sh                        |   18 ++------------
->   package/flashbench/flashbench.mk         |    4 +--
->   package/kexec/Config.in                  |    2 +-
->   package/multimedia/mplayer/Config.in     |    3 +--
->   toolchain/toolchain-external/Config.in   |   40 ------------------------------
->   toolchain/toolchain-external/ext-tool.mk |    6 -----
->   toolchain/uClibc/uclibc.mk               |   20 ---------------
->   7 files changed, 6 insertions(+), 87 deletions(-)
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-  git grep 'sh[23]' tells me:
-
-- some comments in qemu.mk can be removed;
-- package/binutils/binutils-*/120-sh-conf.patch can probably be removed 
-(I think the target name is always sh-x-y for sh4).
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
   Regards,
   Arnout
+
+> ---
+>   package/qt5/Config.in |    1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+> index 1c9f8a6..9e9104a 100644
+> --- a/package/qt5/Config.in
+> +++ b/package/qt5/Config.in
+> @@ -7,6 +7,7 @@ menuconfig BR2_PACKAGE_QT5
+>   	depends on BR2_USE_WCHAR
+>   	depends on BR2_INET_IPV6
+>   	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_PACKAGE_QT
+>   	help
+>   	  This option enables the Qt5 framework. Sub-options allow to
+>   	  select which modules should be built.
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
