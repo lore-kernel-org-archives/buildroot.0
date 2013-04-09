@@ -1,54 +1,85 @@
-From: Michael Trimarchi <trimarchimichael@yahoo.it>
-Date: Tue, 9 Apr 2013 22:16:55 +0100 (BST)
-Subject: [Buildroot] [PATCH] Linaro toolchain fix
-In-Reply-To: <20130409201350.339b8a9e@skate>
-References: <1365507007.19377.YahooMailNeo@web133106.mail.ir2.yahoo.com>
- <20130409201350.339b8a9e@skate>
-Message-ID: <1365542215.63682.YahooMailNeo@web133106.mail.ir2.yahoo.com>
+From: Arunkumar Vijayakumar <arun.magzion@gmail.com>
+Date: Wed, 10 Apr 2013 02:49:24 +0530
+Subject: [Buildroot] Including wine package - Reg
+In-Reply-To: <20130409201651.35dc862f@skate>
+References: <CAGK4xy6eXjG7MzWS81uNmthwd5ODBB_ae+DQMSFfPkX6_GfQiw@mail.gmail.com>
+ <20130408231204.0b30b7df@skate>
+ <CAGK4xy5fzi5F0C_CaAq0e2JJmdUhNKD3ZuBqE8cBw8dsV+HQrw@mail.gmail.com>
+ <20130408233156.0ab27a38@skate>
+ <CAGK4xy49Dm1G0J3w2CUzHZ2=2bObyd8i94e1mdYnzy8vTJg-KQ@mail.gmail.com>
+ <CAGK4xy4fnpOkmYJJ_+YoXJHG2Rf6BrxMyXTjjYHtDDp_R8zM8g@mail.gmail.com>
+ <20130409201651.35dc862f@skate>
+Message-ID: <CAGK4xy7fch-cGi66rLovOo8mRvRrif7Pzg_MF89vy46H5VH0SQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+Dear Thomas,
 
+I found the issue with the cross compiler and fixed it. Now when I tried
+executing wine package using
+$ make wine v=1 in buildroot
 
------ Messaggio originale -----
-> Da: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> A: Michael Trimarchi <trimarchimichael@yahoo.it>
-> Cc: buildroot <buildroot@uclibc.org>
-> Inviato: Marted? 9 Aprile 2013 20:13
-> Oggetto: Re: [Buildroot] [PATCH] Linaro toolchain fix
-> 
-> Dear Michael Trimarchi,
-> 
-> On Tue, 9 Apr 2013 12:30:07 +0100 (BST), Michael Trimarchi wrote:
-> 
->>  Sorry for not having the patch inline but I think that this is an error on 
-> the buildroot Makefile
+It throwed an error stating to use --with-wine-tools for cross compiling,
+hence I used
+WINE_CONF_OPT = --with-wine-tools=$(BUILD_DIR)/wine-$(WINE_VERSION)
 
-Webmail, again ;)
+Again I got an error of missing Xlib/Xfree86 package, though I have
+installed those using apt-get install xorg xorg-dev *libx*11-dev in my
+ubuntu 12.04 desktop system.
 
-> 
-> Indeed, this is a mistake in the current code.
-> 
-> However, I've sent a few days ago a patch that updates the Linaro
-> toolchains to newer versions, and that happens to fix this problem as a
-> side-effect. See
-> http://lists.busybox.net/pipermail/buildroot/2013-April/070204.html.
->?
+But it didnt work hence i forced to use the following line in .mk file and
+it got worked.
+WINE_CONF_OPT += --x-libraries=/usr/lib/X11
+WINE_CONF_OPT += --x-includes=/usr/include/X11
+WINE_CONF_OPT += --with-x
 
-I see, thank you
+My point is,
+1. Will including the path in .mk file (--x-libraries=/usr/lib/X11)  while
+compiling for embedded system require the same folders in the Initrd and
+binaries?
+2. Do I need to include xorg graphics package for the same and if so, will
+it be created in the same path like the above one ?
 
-Michael
+Thanks
+Arun Kumar
 
-> Thanks for your report!
-> 
+On Tue, Apr 9, 2013 at 11:46 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Arunkumar Vijayakumar,
+>
+> On Tue, 9 Apr 2013 04:10:04 +0530, Arunkumar Vijayakumar wrote:
+>
+> > I tried with the autotools options as per your suggestion and got the
+> > error, please find the attached config.log for your kind reference.
+> >
+> > Kindly advice me where Im making mistakes ?
+>
+> It doesn't find the cross-compiler, so something looks really wrong in
+> your Buildroot build.
+>
+> Can you do:
+>
+>         make clean
+>         make 2>&1 | tee build.log
+>
+> Put the contents of build.log on some pastebin site, and give us the
+> URL?
+>
+> Please also pastebin your Buildroot .config file.
+>
+> Thanks,
+>
 > Thomas
-> -- 
+> --
 > Thomas Petazzoni, Free Electrons
 > Kernel, drivers, real-time and embedded Linux
 > development, consulting, training and support.
 > http://free-electrons.com
-> 
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130410/5f64cbb8/attachment.html>
