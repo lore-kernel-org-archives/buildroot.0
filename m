@@ -1,74 +1,53 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  9 Apr 2013 15:27:06 -0300
-Subject: [Buildroot] [PATCH 2/3] swig: new package
+Date: Tue,  9 Apr 2013 15:27:07 -0300
+Subject: [Buildroot] [PATCH 3/3] python-m2crypto: new package
 In-Reply-To: <1365532027-13639-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1365532027-13639-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1365532027-13639-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1365532027-13639-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add the python-m2crypto, host-variant only, for CRDA.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in      |  1 +
- package/swig/Config.in | 11 +++++++++++
- package/swig/swig.mk   | 16 ++++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/swig/Config.in
- create mode 100644 package/swig/swig.mk
+ package/python-m2crypto/python-m2crypto.mk | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/python-m2crypto/python-m2crypto.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 2e7dc67..3c05794 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -89,6 +89,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/sed/Config.in"
- endif
- source "package/sstrip/Config.in"
-+source "package/swig/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/tar/Config.in"
- endif
-diff --git a/package/swig/Config.in b/package/swig/Config.in
+diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
 new file mode 100644
-index 0000000..19d49f4
+index 0000000..80523b8
 --- /dev/null
-+++ b/package/swig/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_SWIG
-+	bool "swig"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  SWIG is a software development tool that connects programs written
-+	  in C and C++ with a variety of high-level programming languages.
-+
-+	  http://www.swig.org/
-+
-+comment "swig requires C++ support in toolchain"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/swig/swig.mk b/package/swig/swig.mk
-new file mode 100644
-index 0000000..fae4642
---- /dev/null
-+++ b/package/swig/swig.mk
-@@ -0,0 +1,16 @@
++++ b/package/python-m2crypto/python-m2crypto.mk
+@@ -0,0 +1,25 @@
 +#############################################################
 +#
-+# swig
++# python-m2crypto
 +#
 +#############################################################
 +
-+SWIG_VERSION = 2.0.9
-+SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
-+SWIG_DEPENDENCIES = host-bison
-+SWIG_CONF_OPT = --without-pcre --disable-ccache
-+HOST_SWIG_CONF_OPT = --without-pcre --disable-ccache
-+SWIG_LICENSE = GPLv3+ BSD-2c BSD-3c
-+SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
++PYTHON_M2CRYPTO_VERSION = 0.21.1
++PYTHON_M2CRYPTO_SITE = http://pypi.python.org/packages/source/M/M2Crypto
++PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
++HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-python host-python-setuptools host-swig
 +
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++define HOST_PYTHON_M2CRYPTO_BUILD_CMDS
++	(cd $(@D); \
++		$(HOST_CONFIGURE_OPTS) \
++		PYTHONXCPREFIX="$(HOST_DIR)/usr/" \
++		LDFLAGS="-L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib" \
++	$(HOST_DIR)/usr/bin/python setup.py build_ext --openssl=$(HOST_DIR)/usr)
++endef
++
++define HOST_PYTHON_M2CRYPTO_INSTALL_CMDS
++	(cd $(@D); PYTHONPATH=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
++endef
++
++$(eval $(host-generic-package))
 -- 
 1.8.1.5
