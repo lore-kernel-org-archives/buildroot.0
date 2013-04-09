@@ -1,21 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 09 Apr 2013 23:41:28 +0200
-Subject: [Buildroot] [PATCH 3/3] python-m2crypto: new package
-In-Reply-To: <1365532027-13639-3-git-send-email-gustavo@zacarias.com.ar>
-References: <1365532027-13639-1-git-send-email-gustavo@zacarias.com.ar>
- <1365532027-13639-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <51648B08.4040102@mind.be>
+Date: Tue, 09 Apr 2013 23:58:34 +0200
+Subject: [Buildroot] Including wine package - Reg
+In-Reply-To: <20130409232231.0b261d1a@skate>
+References: <CAGK4xy6eXjG7MzWS81uNmthwd5ODBB_ae+DQMSFfPkX6_GfQiw@mail.gmail.com>
+ <20130408231204.0b30b7df@skate>
+ <CAGK4xy5fzi5F0C_CaAq0e2JJmdUhNKD3ZuBqE8cBw8dsV+HQrw@mail.gmail.com>
+ <20130408233156.0ab27a38@skate>
+ <CAGK4xy49Dm1G0J3w2CUzHZ2=2bObyd8i94e1mdYnzy8vTJg-KQ@mail.gmail.com>
+ <CAGK4xy4fnpOkmYJJ_+YoXJHG2Rf6BrxMyXTjjYHtDDp_R8zM8g@mail.gmail.com>
+ <20130409201651.35dc862f@skate>
+ <CAGK4xy7fch-cGi66rLovOo8mRvRrif7Pzg_MF89vy46H5VH0SQ@mail.gmail.com>
+ <20130409232231.0b261d1a@skate>
+Message-ID: <51648F0A.502@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/04/13 20:27, Gustavo Zacarias wrote:
-> Add the python-m2crypto, host-variant only, for CRDA.
+On 09/04/13 23:22, Thomas Petazzoni wrote:
+>> It throwed an error stating to use --with-wine-tools for cross compiling,
+>> >hence I used
+>> >WINE_CONF_OPT = --with-wine-tools=$(BUILD_DIR)/wine-$(WINE_VERSION)
+> This looks odd. Why would the wine package require a reference to its
+> own source directory? Doesn't sound correct.
+>
 
-  Is there a reason to make it host-only? Seems like this is potentially 
-useful on target as well... Or do you expect build difficulties?
+  wine-tools is a separate (host) package. Quick web search doesn't turn 
+up any archives, just git://source.winehq.org/git/tools.git
+
+
+  Arunkumar, I'm afraid integrating wine in buildroot will turn out to be 
+quite ambitious... I don't know what you are trying to do, but if it is 
+just a matter of building a very customized system and you don't really 
+care about cross-compilation, then you may be better off with e.g. Gentoo.
 
   Regards,
   Arnout
