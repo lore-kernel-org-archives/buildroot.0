@@ -1,29 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Apr 2013 20:13:50 +0200
-Subject: [Buildroot] [PATCH] Linaro toolchain fix
-In-Reply-To: <1365507007.19377.YahooMailNeo@web133106.mail.ir2.yahoo.com>
-References: <1365507007.19377.YahooMailNeo@web133106.mail.ir2.yahoo.com>
-Message-ID: <20130409201350.339b8a9e@skate>
+Date: Tue, 9 Apr 2013 20:15:34 +0200
+Subject: [Buildroot] Building Webkit 1.10.2 using buildroot hangs at
+ "Installing to staging Directory"
+In-Reply-To: <CAJsG2H5S=sm+a2f6m3d4W4A0EraQFu_5JR8J0CCZJ_zz_vKZrg@mail.gmail.com>
+References: <CAJsG2H5S=sm+a2f6m3d4W4A0EraQFu_5JR8J0CCZJ_zz_vKZrg@mail.gmail.com>
+Message-ID: <20130409201534.652f26f1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Michael Trimarchi,
+Dear Bhupal Singh,
 
-On Tue, 9 Apr 2013 12:30:07 +0100 (BST), Michael Trimarchi wrote:
+On Tue, 9 Apr 2013 18:02:31 +0530, Bhupal Singh wrote:
 
-> Sorry for not having the patch inline but I think that this is an error on the buildroot Makefile
+> I am in the procees of building webkit 1.10.2 using buildroot.
+> I use --disable-jit as config option.
+> Building goes fine till it reaches staging directory. Once it reaches
+> "Installing to  staging Directory", it hangs.
+> Please find the below logs
 
-Indeed, this is a mistake in the current code.
+Can you please share the modifications you made to Buildroot, and the
+Buildroot .config file you're using, so that we can reproduce the
+problem?
 
-However, I've sent a few days ago a patch that updates the Linaro
-toolchains to newer versions, and that happens to fix this problem as a
-side-effect. See
-http://lists.busybox.net/pipermail/buildroot/2013-April/070204.html.
-
-Thanks for your report!
+Thanks,
 
 Thomas
 -- 
