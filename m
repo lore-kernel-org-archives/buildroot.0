@@ -1,49 +1,28 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 09 Apr 2013 08:15:39 +0200
-Subject: [Buildroot] [PATCHv5 01/14] qt5: disallow the selection of Qt4
- and Qt5
-In-Reply-To: <1365364648-30568-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1365364648-30568-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1365364648-30568-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <5163B20B.6080708@mind.be>
+Date: Tue, 09 Apr 2013 07:46:38 +0200
+Subject: [Buildroot] Trying to configure the kernel
+In-Reply-To: <20130406152619.7d3f29c1@skate>
+References: <1365192366.30488.205.camel@station1.ormlab.com>
+ <20130406152619.7d3f29c1@skate>
+Message-ID: <5163AB3E.2040004@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/04/13 21:57, Thomas Petazzoni wrote:
-> As noticed by Arnout, Qt4 and Qt5 cannot be installed together,
-> because for example the qt.conf installed by one version cannot be
-> understood by the qmake of another version. We therefore make them
-> mutually exclusive, which sounds reasonable for the embedded systems
-> targeted by Buildroot.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On 06/04/13 15:26, Thomas Petazzoni wrote:
+> In short, there is no way to just "start the kernel configuration", you
+> must first give it an initial existing configuration. Maybe we should
+> add an option "Just run the kernel configuration with whatever defaults
+> for the current architecture", so that you don't have to give an
+> existing defconfig or an existing kernel configuration file.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  I posted a patch to do exactly that a long time ago. Don't have 
+internet access at the moment so can't look up the patchwork reference.
 
   Regards,
   Arnout
-
-> ---
->   package/qt5/Config.in |    1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-> index 1c9f8a6..9e9104a 100644
-> --- a/package/qt5/Config.in
-> +++ b/package/qt5/Config.in
-> @@ -7,6 +7,7 @@ menuconfig BR2_PACKAGE_QT5
->   	depends on BR2_USE_WCHAR
->   	depends on BR2_INET_IPV6
->   	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_PACKAGE_QT
->   	help
->   	  This option enables the Qt5 framework. Sub-options allow to
->   	  select which modules should be built.
->
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
