@@ -1,10 +1,10 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Tue, 9 Apr 2013 14:29:46 +0800
-Subject: [Buildroot] [PATCH v3 5/7] package: Introduce package-specific
-	BINFMT_FLAT options.
+Date: Tue, 9 Apr 2013 14:29:45 +0800
+Subject: [Buildroot] [PATCH v3 4/7] arch: toolchain: Introduce binary format
+	FLAT types.
 In-Reply-To: <1365488988-21604-1-git-send-email-sonic.adi@gmail.com>
 References: <1365488988-21604-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1365488988-21604-5-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1365488988-21604-4-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,51 +14,94 @@ To: buildroot@busybox.net
 From: Sonic Zhang <sonic.zhang@analog.com>
 
 v3-changes:
-None. Wait for more comments from Arnout.
+- Add dependancy to bfin and m68k
+- Add help text for FLAT binary types.
+- Split shared flat flags.
 
 v2-changes:
-- Fix typo error in macro BINFMT_FLAT
+none
 
 v1-changes:
-- Add new option <PKG>_FLAT_STACKSIZE. The document needs to be updated.
+- Just introduce the symbol and options in arch generic Config.in.
+Append FLAT types specific link flags into external toolchain wrapper.
 
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
- package/pkg-autotools.mk |    5 +++++
- package/pkg-generic.mk   |    5 +++++
- 2 files changed, 10 insertions(+), 0 deletions(-)
+ arch/Config.in                                     |   23 ++++++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk           |    8 +++++++
+ .../toolchain-external/ext-toolchain-wrapper.c     |    7 ++++++
+ 3 files changed, 38 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 890506b..bdfea20 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -82,6 +82,11 @@ $(2)_CLEAN_OPT			?= clean
- $(2)_UNINSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) uninstall
- $(2)_UNINSTALL_TARGET_OPT	?= DESTDIR=$$(TARGET_DIR)  uninstall
+diff --git a/arch/Config.in b/arch/Config.in
+index b4ee38b..9bc2d6e 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -206,6 +206,29 @@ config BR2_BINFMT_FLAT
+ 	  where no MMU is available.
+ endchoice
  
-+ifeq ($(BR2_BINFMT_FLAT),y)
-+ ifneq ($$($(2)_FLAT_STACKSIZE),)
-+  $(2)_CONF_ENV			+= LDFLAGS="$(TARGET_LDFLAGS) -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)"
-+ endif
++# Set up flat binary type
++choice
++	prompt "FLAT Binary type"
++	depends on BR2_BINFMT_FLAT
++	default BR2_BINFMT_FLAT_ONE
++config BR2_BINFMT_FLAT_ONE
++	bool "One memory region"
++	help
++	  All segments are linked into one memory region.
++config BR2_BINFMT_FLAT_SEP_DATA
++	bool "Separate data and code region"
++	depends on BR2_bfin || BR2_m68k
++	help
++	  Allow for the data and text segments to be separated and placed in
++	  different regions of memory.
++
++config BR2_BINFMT_FLAT_SHARED
++	bool "Shared binary"
++	depends on BR2_bfin || BR2_m68k
++	help
++	  Allow to load and link indiviual FLAT binaries at run time.
++endchoice
++
+ if BR2_arm || BR2_armeb
+ source "arch/Config.in.arm"
+ endif
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 27fd296..0ca1307 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -168,6 +168,14 @@ ifeq ($(BR2_BINFMT_FLAT),y)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_BINFMT_FLAT
+ endif
++ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
++TOOLCHAIN_EXTERNAL_CFLAGS += -msep-data
++TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_BINFMT_FLAT_SEP_DATA
++endif
++ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mid-shared-library -mshared-library-id=0
++TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_BINFMT_FLAT_SHARED
 +endif
  
- #
- # Configure step. Only define it if not already defined by the package
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 57b0fd0..8ee2b20 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -303,6 +303,11 @@ endif
- 
- $(2)_REDISTRIBUTE		?= YES
- 
-+ifeq ($(BR2_BINFMT_FLAT),y)
-+ ifneq ($$($(2)_FLAT_STACKSIZE),)
-+  $(2)_FLAT_LDFLAGS = -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)
-+ endif
-+endif
- 
- $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
- 
+ ifneq ($(BR2_TARGET_OPTIMIZATION),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index 9a2fc70..78f1152 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -50,6 +50,13 @@ static char *predef_args[] = {
+ #ifdef BR_BINFMT_FLAT
+ 	"-Wl,-elf2flt",
+ #endif
++#ifdef BR_BINFMT_FLAT_SEP_DATA
++	"-msep-data",
++#endif
++#ifdef BR_BINFMT_FLAT_SHARED
++	"-mid-shared-library",
++	"-mshared-library-id=0",
++#endif
+ #ifdef BR_ADDITIONAL_CFLAGS
+ 	BR_ADDITIONAL_CFLAGS
+ #endif
 -- 
 1.7.0.4
