@@ -1,33 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 09 Apr 2013 07:46:38 +0200
-Subject: [Buildroot] Trying to configure the kernel
-In-Reply-To: <20130406152619.7d3f29c1@skate>
-References: <1365192366.30488.205.camel@station1.ormlab.com>
- <20130406152619.7d3f29c1@skate>
-Message-ID: <5163AB3E.2040004@mind.be>
+From: Francesco <francesco.montorsi@gmail.com>
+Date: Tue, 9 Apr 2013 10:01:32 +0200
+Subject: [Buildroot] syslog messages during boot not recorded?
+In-Reply-To: <5162F662.1010608@zacarias.com.ar>
+References: <loom.20130408T181747-784@post.gmane.org>
+ <5162F298.7060909@zacarias.com.ar>
+ <CAKW0qihWyAonXk7=TB_Hq8q3E_pBuCv94D7eQ890ePx6b_CbMw@mail.gmail.com>
+ <5162F662.1010608@zacarias.com.ar>
+Message-ID: <CAKW0qiihqK3F7yCQm6X2F8mk3PjF1q3Noj+19xKm3AyYXdvNNQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/04/13 15:26, Thomas Petazzoni wrote:
-> In short, there is no way to just "start the kernel configuration", you
-> must first give it an initial existing configuration. Maybe we should
-> add an option "Just run the kernel configuration with whatever defaults
-> for the current architecture", so that you don't have to give an
-> existing defconfig or an existing kernel configuration file.
+2013/4/8 Gustavo Zacarias <gustavo@zacarias.com.ar>:
+> It's a feature of BUSYBOX, not buildroot, meant for syslogd to work in
+> scenarios where your /var/log directory isn't writable for example.
+> Which begs the question, is it writable?
+good point... my /var/log is a symbolic link to /tmp and "ls -l" shows
+that its permissions (after system boot) are "drwxrwxrwt".
+I think the problem may be due to /tmp being mounted AFTER/AT THE END
+of the system boot... in fact, /tmp is a tmpfs... the relevant line in
+/etc/fstab is:
 
-  I posted a patch to do exactly that a long time ago. Don't have 
-internet access at the moment so can't look up the patchwork reference.
+     tmpfs           /tmp           tmpfs    defaults          0      0
 
-  Regards,
-  Arnout
+now my question is: how do I ensure that /tmp is mounted before
+/etc/init.d scripts are run?
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thanks a lot!
+Francesco
