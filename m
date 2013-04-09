@@ -1,23 +1,34 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 09 Apr 2013 15:39:27 -0300
-Subject: [Buildroot] [PATCH 2/3] swig: new package
-In-Reply-To: <20130409203511.459ba1c4@skate>
-References: <1365532027-13639-1-git-send-email-gustavo@zacarias.com.ar>
- <1365532027-13639-2-git-send-email-gustavo@zacarias.com.ar>
- <20130409203511.459ba1c4@skate>
-Message-ID: <5164605F.1000800@zacarias.com.ar>
+Date: Tue, 09 Apr 2013 15:43:06 -0300
+Subject: [Buildroot] [PATCH v5] wireless-regdb: new package
+In-Reply-To: <1365513739-19763-1-git-send-email-dimitris@siganos.org>
+References: <1365513739-19763-1-git-send-email-dimitris@siganos.org>
+Message-ID: <5164613A.6010603@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/09/2013 03:35 PM, Thomas Petazzoni wrote:
+On 04/09/2013 10:22 AM, Dimitrios Siganos wrote:
+> Signed-off-by: Dimitrios Siganos <dimitris@siganos.org>
 
-> Does it make sense to support swig on the target if we are deprecating
-> the native toolchain on target and related development files?
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Maybe not.
-I can respin and also go on a deprecation spree for other packages that
-fit in the same scenario.
+> +++ b/package/wireless-regdb/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_WIRELESS_REGDB
+> +	bool "wireless-regdb"
+> +	help
+> +	  Wireless regulatory database.
+> +
+> +	  Wireless regulatory database for CRDA. The database lists the
+> +	  allowed radio frequencies for each local jurisdiction.
+> +
+> +	  http://linuxwireless.org/en/developers/Regulatory
+> +
+
+Stray newline here but Peter can fix that.
+Thanks for taking your time respining.
 Regards.
