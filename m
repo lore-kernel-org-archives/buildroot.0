@@ -1,10 +1,10 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Tue, 9 Apr 2013 14:29:47 +0800
-Subject: [Buildroot] [PATCH v3 6/7] arch: toolchain: Install blackfin FDPIC
-	and FLAT libraries in external toolchain makefile.
+Date: Tue, 9 Apr 2013 14:29:46 +0800
+Subject: [Buildroot] [PATCH v3 5/7] package: Introduce package-specific
+	BINFMT_FLAT options.
 In-Reply-To: <1365488988-21604-1-git-send-email-sonic.adi@gmail.com>
 References: <1365488988-21604-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1365488988-21604-6-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1365488988-21604-5-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,135 +14,51 @@ To: buildroot@busybox.net
 From: Sonic Zhang <sonic.zhang@analog.com>
 
 v3-changes:
-- Remove arch specific makefiles.
-- Reserve all 3 blackfin toolchain folders under the TOOLCHAIN_EXTERNAL_DIR.
-- Set current blackfin toolchain bin folder to the toolchain prefix subfolder.
-- Move FDPIC and FLAT library installation target from blackfin makefile to
-the ext-toolchain-installed target in external toolchain makefile.
+None. Wait for more comments from Arnout.
 
 v2-changes:
-- Remove useless Macro __uClinux__
+- Fix typo error in macro BINFMT_FLAT
 
 v1-changes:
-- Create arch makefile.
-- Create blackfin makefile.
-- Add FDPIC and FLAT library options and makefile targets to install
-libraries for different binary formats into the same rootfs image.
-- update the TARGET_EXCEPTIONS variable in support/scripts/graph-depends for
-new custom targets
+- Add new option <PKG>_FLAT_STACKSIZE. The document needs to be updated.
 
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
- arch/Config.in.bfin                      |   22 ++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |   47 +++++++++++++++++++++++-------
- 2 files changed, 58 insertions(+), 11 deletions(-)
+ package/pkg-autotools.mk |    5 +++++
+ package/pkg-generic.mk   |    5 +++++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-index f755c8d..917282d 100644
---- a/arch/Config.in.bfin
-+++ b/arch/Config.in.bfin
-@@ -62,6 +62,28 @@ config BR2_bf561
- 	bool "bf561"
- endchoice
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 890506b..bdfea20 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -82,6 +82,11 @@ $(2)_CLEAN_OPT			?= clean
+ $(2)_UNINSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) uninstall
+ $(2)_UNINSTALL_TARGET_OPT	?= DESTDIR=$$(TARGET_DIR)  uninstall
  
-+config BR2_BFIN_INSTALL_FDPIC_SHARED
-+	bool "Install FDPIC shared libraries"
-+	depends on !BR2_BINFMT_FDPIC
-+	help
-+	  The Linux kernel supports running both FDPIC and FLAT applications
-+	  concurrently if the binary format specific libraries are installed properly.
-+	  This option allows developer to install FDPIC libraries into a buildroot
-+	  rootfs image built with binary format that is not FDPIC.
-+
-+config BR2_BFIN_INSTALL_FLAT_SHARED
-+	depends on BR2_BINFMT_FLAT_SHARED
-+	default y
-+
-+config BR2_BFIN_INSTALL_FLAT_SHARED
-+	bool "Install FLAT shared libraries"
-+	depends on !BR2_BINFMT_FLAT_SHARED
-+	help
-+	  The Linux kernel supports running both FDPIC and FLAT applications
-+	  concurrently if the binary format specific libraries are installed properly.
-+	  This option allows developer to install FLAT libraries into a buildroot
-+	  rootfs image built with binary format that is not shared FLAT.
-+
- config BR2_ARCH
- 	default "bfin"
- 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 0ca1307..01578d2 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -115,8 +115,12 @@ ifeq ($(TOOLCHAIN_EXTERNAL_DIR),)
- # if no path set, figure it out from path
- TOOLCHAIN_EXTERNAL_BIN:=$(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
- else
-+ifeq ($(BR2_bfin,y)
-+TOOLCHAIN_EXTERNAL_BIN:=$(TOOLCHAIN_EXTERNAL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
-+else
- TOOLCHAIN_EXTERNAL_BIN:=$(TOOLCHAIN_EXTERNAL_DIR)/bin
- endif
++ifeq ($(BR2_BINFMT_FLAT),y)
++ ifneq ($$($(2)_FLAT_STACKSIZE),)
++  $(2)_CONF_ENV			+= LDFLAGS="$(TARGET_LDFLAGS) -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)"
++ endif
 +endif
  
- TOOLCHAIN_EXTERNAL_CROSS=$(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- TOOLCHAIN_EXTERNAL_CC=$(TOOLCHAIN_EXTERNAL_CROSS)gcc
-@@ -320,17 +324,6 @@ $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) $
- 		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
- 	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE_2))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2) | \
- 		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
--ifeq ($(TOOLCHAIN_EXTERNAL_PREFIX),bfin-uclinux)
--	rm -rf $(TOOLCHAIN_EXTERNAL_DIR)/bfin-linux-uclibc
--	mv $(TOOLCHAIN_EXTERNAL_DIR)/bfin-uclinux $(TOOLCHAIN_EXTERNAL_DIR)/tmp
--	mv $(TOOLCHAIN_EXTERNAL_DIR)/tmp/* $(TOOLCHAIN_EXTERNAL_DIR)/
--	rmdir $(TOOLCHAIN_EXTERNAL_DIR)/tmp
--else
--	rm -rf $(TOOLCHAIN_EXTERNAL_DIR)/bfin-uclinux
--	mv $(TOOLCHAIN_EXTERNAL_DIR)/bfin-linux-uclibc $(TOOLCHAIN_EXTERNAL_DIR)/tmp
--	mv $(TOOLCHAIN_EXTERNAL_DIR)/tmp/* $(TOOLCHAIN_EXTERNAL_DIR)/
--	rmdir $(TOOLCHAIN_EXTERNAL_DIR)/tmp
--endif
- 	$(Q)touch $@
- else
- # Download and extraction of a toolchain
-@@ -425,6 +418,38 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
- 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
- 		exit 1 ; \
- 	fi ; \
-+	if test x"$(BR2_BFIN_INSTALL_FDPIC_SHARED)" == x"y" ; then \
-+		$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
-+		FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
-+		FDPIC_LIBC_A_LOCATION=`readlink -f $$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
-+		FDPIC_SYSROOT_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
-+		FDPIC_LIB_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
-+		FDPIC_SUPPORT_LIB_DIR="" ; \
-+		if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
-+			FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
-+			if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
-+				FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
-+			fi ; \
-+		fi ; \
-+		for libs in $(LIB_EXTERNAL_LIBS); do \
-+			$(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs,/lib); \
-+		done ; \
-+		for libs in $(USR_LIB_EXTERNAL_LIBS); do \
-+			$(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs,/usr/lib); \
-+		done ; \
-+	fi ; \
-+	if test x"$(BR2_BFIN_INSTALL_FLAT_SHARED)" == x"y" ; then \
-+		$(call MESSAGE,"Install external toolchain FLAT libraries to target...") ; \
-+		FLAT_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))../../bfin-uclinux/bin/bfin-uclinux-gcc ; \
-+		FLAT_LIBC_A_LOCATION=`$${FLAT_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -mid-shared-library -print-file-name=libc`; \
-+		if [ -f $${FLAT_LIBC_A_LOCATION} -a ! -h $${FLAT_LIBC_A_LOCATION} ] ; then \
-+		/* The flat libraries are found and linked according to the index in \
-+		 * name "libN.so". Index 1 is reserved for the standard C library. \
-+		 * Customer libraries can use 4 and above. \
-+		 */ \
-+			$(INSTALL) -D $${FLAT_LIBC_A_LOCATION} $(TARGET_DIR)/lib/lib1.so; \
-+		fi ; \
-+	fi ; \
- 	ARCH_LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
- 	ARCH_SYSROOT_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
- 	ARCH_LIB_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
+ #
+ # Configure step. Only define it if not already defined by the package
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 57b0fd0..8ee2b20 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -303,6 +303,11 @@ endif
+ 
+ $(2)_REDISTRIBUTE		?= YES
+ 
++ifeq ($(BR2_BINFMT_FLAT),y)
++ ifneq ($$($(2)_FLAT_STACKSIZE),)
++  $(2)_FLAT_LDFLAGS = -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)
++ endif
++endif
+ 
+ $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+ 
 -- 
 1.7.0.4
