@@ -1,30 +1,76 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  9 Apr 2013 09:58:48 -0300
-Subject: [Buildroot] [PATCH] collectd: bump to version 5.1.3
-Message-ID: <1365512328-32388-1-git-send-email-gustavo@zacarias.com.ar>
+From: Dimitrios Siganos <dimitris@siganos.org>
+Date: Tue,  9 Apr 2013 14:22:19 +0100
+Subject: [Buildroot] [PATCH v5] wireless-regdb: new package
+Message-ID: <1365513739-19763-1-git-send-email-dimitris@siganos.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/collectd/collectd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 88f6737..6022ab3 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--COLLECTD_VERSION = 5.1.2
-+COLLECTD_VERSION = 5.1.3
- COLLECTD_SITE = http://collectd.org/files
- COLLECTD_MAKE_OPT = LDFLAGS="$(TARGET_LDFLAGS) -lm"
- COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+Signed-off-by: Dimitrios Siganos <dimitris@siganos.org>
+---
+ package/Config.in                        |    1 +
+ package/wireless-regdb/Config.in         |   10 ++++++++++
+ package/wireless-regdb/wireless-regdb.mk |   18 ++++++++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/wireless-regdb/Config.in
+ create mode 100644 package/wireless-regdb/wireless-regdb.mk
+
+ Placed linville.key.pub.pem to the default location /etc/wireless-regdb/pubkeys.
+
+diff --git a/package/Config.in b/package/Config.in
+index 69d87f0..2a3268e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -759,6 +759,7 @@ source "package/vtun/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/wget/Config.in"
+ endif
++source "package/wireless-regdb/Config.in"
+ source "package/wireless_tools/Config.in"
+ source "package/wireshark/Config.in"
+ source "package/wpa_supplicant/Config.in"
+diff --git a/package/wireless-regdb/Config.in b/package/wireless-regdb/Config.in
+new file mode 100644
+index 0000000..89a6147
+--- /dev/null
++++ b/package/wireless-regdb/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_WIRELESS_REGDB
++	bool "wireless-regdb"
++	help
++	  Wireless regulatory database.
++
++	  Wireless regulatory database for CRDA. The database lists the
++	  allowed radio frequencies for each local jurisdiction.
++
++	  http://linuxwireless.org/en/developers/Regulatory
++
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+new file mode 100644
+index 0000000..b4e038c
+--- /dev/null
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# wireless-regdb
++#
++#############################################################
++
++WIRELESS_REGDB_VERSION = 2013.01.11
++WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.bz2
++WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
++WIRELESS_REGDB_LICENSE = ISC
++WIRELESS_REGDB_LICENSE_FILES = LICENSE
++
++define WIRELESS_REGDB_INSTALL_TARGET_CMDS
++    install -m 644 -D -T $(@D)/regulatory.bin $(TARGET_DIR)/usr/lib/crda/regulatory.bin
++    install -m 644 -D -T $(@D)/linville.key.pub.pem $(TARGET_DIR)/etc/wireless-regdb/pubkeys/linville.key.pub.pem
++endef
++
++$(eval $(generic-package))
 -- 
-1.8.1.5
+1.7.9.5
