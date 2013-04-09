@@ -1,43 +1,54 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 09 Apr 2013 18:43:57 +0200
-Subject: [Buildroot] Newbie questions on building images for EP405
-In-Reply-To: <CAADET=cXud-Oyp5Fk5Ybox-_TcdVKpyharCh00am6+bJaXgUXQ@mail.gmail.com>
-References: <CAADET=fm0cNPKvvRj6k9nOiGqXZqVGLM7fabj=y8X8sR197WUw@mail.gmail.com>
- <5162F0E2.2030103@zacarias.com.ar>
- <CAADET=cXud-Oyp5Fk5Ybox-_TcdVKpyharCh00am6+bJaXgUXQ@mail.gmail.com>
-Message-ID: <5164454D.2040602@mind.be>
+From: Michael Trimarchi <trimarchimichael@yahoo.it>
+Date: Tue, 9 Apr 2013 22:16:55 +0100 (BST)
+Subject: [Buildroot] [PATCH] Linaro toolchain fix
+In-Reply-To: <20130409201350.339b8a9e@skate>
+References: <1365507007.19377.YahooMailNeo@web133106.mail.ir2.yahoo.com>
+ <20130409201350.339b8a9e@skate>
+Message-ID: <1365542215.63682.YahooMailNeo@web133106.mail.ir2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/04/13 17:13, David Li wrote:
-> => bootm 0x100000
-> ## Booting image at 00100000 ...
->     Image Name:   Linux-3.7.8
->     Image Type:   PowerPC Linux Kernel Image (gzip compressed)
->     Data Size:    2571933 Bytes =  2.5 MB
->     Load Address: 00000000
->     Entry Point:  00000000
->     Verifying Checksum ... OK
->     Uncompressing Kernel Image ... Error: inflate() returned -3
-> GUNZIP ERROR - must RESET board to recover
-
-  The uImage is stored at address 0x100000 (=1M) and then extracted at 
-0x00000000, and it's 2.5MB compressed... so you can imagine that the 
-extracted image may overwrite the compressed image.
-
-  Can you try tftpbooting at a higher address?
+Hi Thomas
 
 
-  Regards,
-  Arnout
+----- Messaggio originale -----
+> Da: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> A: Michael Trimarchi <trimarchimichael@yahoo.it>
+> Cc: buildroot <buildroot@uclibc.org>
+> Inviato: Marted? 9 Aprile 2013 20:13
+> Oggetto: Re: [Buildroot] [PATCH] Linaro toolchain fix
+> 
+> Dear Michael Trimarchi,
+> 
+> On Tue, 9 Apr 2013 12:30:07 +0100 (BST), Michael Trimarchi wrote:
+> 
+>>  Sorry for not having the patch inline but I think that this is an error on 
+> the buildroot Makefile
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Webmail, again ;)
+
+> 
+> Indeed, this is a mistake in the current code.
+> 
+> However, I've sent a few days ago a patch that updates the Linaro
+> toolchains to newer versions, and that happens to fix this problem as a
+> side-effect. See
+> http://lists.busybox.net/pipermail/buildroot/2013-April/070204.html.
+>?
+
+I see, thank you
+
+Michael
+
+> Thanks for your report!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> 
