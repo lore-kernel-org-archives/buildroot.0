@@ -1,26 +1,21 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 09 Apr 2013 18:03:45 +0200
-Subject: [Buildroot] [PATCH 3/3] opkg: Add gnupg signature checking
-	support.
-In-Reply-To: <52530026.WMUqvmoQpY@arawn>
-References: <20130301111856.4753d13b@skate>
- <1362145109-32509-1-git-send-email-claves@budelmann-elektronik.com>
- <1362145109-32509-3-git-send-email-claves@budelmann-elektronik.com>
- <52530026.WMUqvmoQpY@arawn>
-Message-ID: <51643BE1.3000701@mind.be>
+Date: Tue, 09 Apr 2013 23:41:28 +0200
+Subject: [Buildroot] [PATCH 3/3] python-m2crypto: new package
+In-Reply-To: <1365532027-13639-3-git-send-email-gustavo@zacarias.com.ar>
+References: <1365532027-13639-1-git-send-email-gustavo@zacarias.com.ar>
+ <1365532027-13639-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <51648B08.4040102@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/04/13 12:26, Philipp Claves wrote:
-> Any status update on merging this patchset?
+On 09/04/13 20:27, Gustavo Zacarias wrote:
+> Add the python-m2crypto, host-variant only, for CRDA.
 
-  Thomas sent comments about your patches and we assumed you would that 
-re-send them taking into account the review feedback. If you are not 
-planning to send updated patches, please tell us. Then somebody else may 
-pick up the patches (but don't count on it).
+  Is there a reason to make it host-only? Seems like this is potentially 
+useful on target as well... Or do you expect build difficulties?
 
   Regards,
   Arnout
