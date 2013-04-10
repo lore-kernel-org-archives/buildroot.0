@@ -1,126 +1,127 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 10 Apr 2013 11:46:11 +0200
-Subject: [Buildroot] [git commit] zeromq: needs threads
-Message-ID: <20130410095123.EFDA79B53B@busybox.osuosl.org>
+Date: Wed, 10 Apr 2013 11:48:33 +0200
+Subject: [Buildroot] [git commit] toolchain-external: update ARM Linaro
+	toolchains
+Message-ID: <20130410095125.015D69B53B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e37d235f94f4ff0514bd20456e8aa2465ba32b1
+commit: http://git.buildroot.net/buildroot/commit/?id=79828fc01d92cee84f8703d25f72121f52880ee9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/11a1c085e3f5c490cbf3fec8f26169ade29f7363/
+Add the ARM Linaro toolchains 2013.02 and 2013.03, remove 2012.11 and
+2012.12.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/cppzmq/Config.in |    3 ++-
- package/czmq/Config.in   |    4 +++-
- package/filemq/Config.in |    6 ++++--
- package/zeromq/Config.in |    6 ++++--
- package/zmqpp/Config.in  |    5 +++--
- 5 files changed, 16 insertions(+), 8 deletions(-)
+ toolchain/toolchain-external/Config.in   |   22 +++++++++++-----------
+ toolchain/toolchain-external/ext-tool.mk |   14 +++++++-------
+ 2 files changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/package/cppzmq/Config.in b/package/cppzmq/Config.in
-index ea632d1..72f0238 100644
---- a/package/cppzmq/Config.in
-+++ b/package/cppzmq/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_CPPZMQ
- 	depends on BR2_INET_IPV6 # zeromq
- 	depends on BR2_LARGEFILE # util-linux
- 	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
- 	select BR2_PACKAGE_ZEROMQ
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index d2f3926..8dcbc6d 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -3,8 +3,8 @@ if BR2_TOOLCHAIN_EXTERNAL
+ choice
+ 	prompt "Toolchain"
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
+-	bool "Linaro 2013.01"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
++	bool "Linaro 2013.03"
+ 	depends on BR2_arm
+ 	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -14,7 +14,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
  	help
- 	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
-@@ -12,4 +13,4 @@ config BR2_PACKAGE_CPPZMQ
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2013.01 (based on gcc 4.7), Linaro GDB 2012.12 (based on
++	  GCC 2013.03 (based on gcc 4.7), Linaro GDB 2012.12 (based on
+ 	  GDB 7.5), eglibc 2.15. It generates code that runs on all
+ 	  Cortex-A profile devices, but tuned for the Cortex-A9. The
+ 	  code generated is Thumb 2, with the hard floating point
+@@ -22,8 +22,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
  
- comment "cppzmq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
--		&& BR2_USE_WCHAR)
-+		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/czmq/Config.in b/package/czmq/Config.in
-index 9fd8e86..7e4205e 100644
---- a/package/czmq/Config.in
-+++ b/package/czmq/Config.in
-@@ -5,10 +5,12 @@ config BR2_PACKAGE_CZMQ
- 	depends on BR2_INET_IPV6 # zeromq
- 	depends on BR2_LARGEFILE # util-linux
- 	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+ 	  To use this toolchain, you must disable soft float usage.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_12
+-	bool "Linaro 2012.12"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02
++	bool "Linaro 2013.02"
+ 	depends on BR2_arm
+ 	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -33,7 +33,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_12
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
  	help
- 	  High-level C Binding for 0MQ
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2012.12 (based on gcc 4.7), Linaro GDB 2012.12 (based on
++	  GCC 2013.02 (based on gcc 4.7), Linaro GDB 2012.12 (based on
+ 	  GDB 7.5), eglibc 2.15. It generates code that runs on all
+ 	  Cortex-A profile devices, but tuned for the Cortex-A9. The
+ 	  code generated is Thumb 2, with the hard floating point
+@@ -41,8 +41,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_12
  
- 	  http://czmq.zeromq.org/
+ 	  To use this toolchain, you must disable soft float usage.
  
- comment "czmq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
--	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE && BR2_USE_WCHAR)
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
-+		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/filemq/Config.in b/package/filemq/Config.in
-index b8eb8bd..d25f03f 100644
---- a/package/filemq/Config.in
-+++ b/package/filemq/Config.in
-@@ -7,10 +7,12 @@ config BR2_PACKAGE_FILEMQ
- 	depends on BR2_INET_IPV6 # zeromq
- 	depends on BR2_LARGEFILE # util-linux
- 	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11
+-	bool "Linaro 2012.11"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
++	bool "Linaro 2013.01"
+ 	depends on BR2_arm
+ 	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -52,7 +52,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
  	help
- 	  FileMQ is a publish-subscribe file service based on 0MQ.
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2012.11 (based on gcc 4.7), Linaro GDB 2012.10 (based on
++	  GCC 2013.01 (based on gcc 4.7), Linaro GDB 2012.12 (based on
+ 	  GDB 7.5), eglibc 2.15. It generates code that runs on all
+ 	  Cortex-A profile devices, but tuned for the Cortex-A9. The
+ 	  code generated is Thumb 2, with the hard floating point
+@@ -758,9 +758,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
  
- 	  http://github.com/zeromq/filemq
- 
--comment "filemq requires a toolchain with C++, IPv6, LARGEFILE and WCHAR support"
--	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE && BR2_USE_WCHAR)
-+comment "filemq requires a toolchain with C++, IPv6, LARGEFILE, WCHAR & thread support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
-+		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-index f93ab5d..35704c3 100644
---- a/package/zeromq/Config.in
-+++ b/package/zeromq/Config.in
-@@ -1,5 +1,6 @@
--comment "zeromq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
--	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE && BR2_USE_WCHAR)
-+comment "zeromq requires a toolchain with C++, IPV6, LARGEFILE, WCHAR & thread support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
-+		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
- 
- config BR2_PACKAGE_ZEROMQ
- 	bool "zeromq"
-@@ -7,6 +8,7 @@ config BR2_PACKAGE_ZEROMQ
- 	depends on BR2_INET_IPV6
- 	depends on BR2_LARGEFILE # util-linux
- 	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	help
-diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
-index 7a12462..9afcca4 100644
---- a/package/zmqpp/Config.in
-+++ b/package/zmqpp/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_ZMQPP
- 	depends on BR2_INET_IPV6 # zeromq
- 	depends on BR2_LARGEFILE # util-linux
- 	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
- 	select BR2_PACKAGE_ZEROMQ
- 	help
- 	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
-@@ -14,9 +15,9 @@ config BR2_PACKAGE_ZMQPP
- 
- 	  http://github.com/benjamg/zmqpp
- 
--comment "zmqpp requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
-+comment "zmqpp requires a toolchain with C++, IPV6, LARGEFILE, WCHAR & thread support"
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
--		&& BR2_USE_WCHAR)
-+		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
- 
- config BR2_PACKAGE_ZMQPP_CLIENT
- 	bool "zmqpp client"
+ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	string
++	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
++	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02
+ 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
+-	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
+-	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 5f467b7..6d9a706 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -192,15 +192,15 @@ TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gn
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
+ TOOLCHAIN_EXTERNAL_SOURCE=arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11),y)
+-TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2012.11/+download/
+-TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2012.11-20121123_linux.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_12),y)
+-TOOLCHAIN_EXTERNAL_SITE=http://releases.linaro.org/12.12/components/toolchain/binaries/
+-TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2012.12-20121214_linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01),y)
+ TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2013.01/+download/
+-TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.01-20130125_linux.tar.bz2
++TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.01-20130125_linux.tar.bz
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02),y)
++TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.02/components/toolchain/binaries/
++TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.02-01-20130221_linux.tar.xz
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03),y)
++TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.03/components/toolchain/binaries/
++TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.03-20130313_linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.09-75-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
