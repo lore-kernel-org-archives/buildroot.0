@@ -1,51 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Apr 2013 19:28:45 +0200
-Subject: [Buildroot] Building Webkit 1.10.2 using buildroot hangs at
- "Installing to staging Directory"
-In-Reply-To: <CAJsG2H6+dJYSjL182RenpR4cArP_kuKj-QoOCBj+gZ8fzkX=2w@mail.gmail.com>
-References: <CAJsG2H5S=sm+a2f6m3d4W4A0EraQFu_5JR8J0CCZJ_zz_vKZrg@mail.gmail.com>
- <20130409201534.652f26f1@skate>
- <CAJsG2H6+dJYSjL182RenpR4cArP_kuKj-QoOCBj+gZ8fzkX=2w@mail.gmail.com>
-Message-ID: <20130410192845.26687829@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 10 Apr 2013 19:29:58 +0200
+Subject: [Buildroot] [PATCH 0/4] External toolchain updates
+In-Reply-To: <20130410192424.42ce585c@skate> (Thomas Petazzoni's message of
+ "Wed, 10 Apr 2013 19:24:24 +0200")
+References: <1365357662-25960-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <877gkazpax.fsf@dell.be.48ers.dk> <20130410192424.42ce585c@skate>
+Message-ID: <87y5cqxpih.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bhupal Singh,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, 10 Apr 2013 14:13:01 +0530, Bhupal Singh wrote:
+ >> I'm holding on to this for a little while longer until we figure out how
+ >> to solve the issues.
 
-> Thanks for immediate reply.
-> I am not in the position to share the buildroot.config file.
+ Thomas> I'm not sure what to do with the last patch: the older toolchain is
+ Thomas> simply no longer available from git.xilinx.com, and github.com doesn't
+ Thomas> allow to download such a big binary blob directly. The only solution
+ Thomas> that I can see to keep the old toolchain is to keep the tarballs in
+ Thomas> http://sources.buildroot.net (just like we happen to do for the new
+ Thomas> Microblaze toolchain). Would you be ok with that?
 
-Then unfortunately we are not in a position to help you.
+Sure, I'll put them on sources.buildroot.net tonight.
 
-Please at least create a minimal Buildroot configuration that
-reproduces the problem.
+ Thomas> That said, the old toolchain is not really great to promote to
+ Thomas> users either, because it uses a _very_ old glibc that causes a
+ Thomas> number of compilation issues with our packages.
 
-> I have attached webkit.mk file from package folder.
+Yes, I know :/ From the sound of it, there's issues with the newer
+toolchain as well though :/
 
-It's really unclear to me why you have:
-
-build_webkit:
-$(eval $(call AUTOTARGETS,package,webkit))
-
-webkit: build_webkit
-	cp -f $(WEBKIT_DIR)/Programs/$(WEBKIT_GTKLAUNCHER) $(TARGET_DIR)/usr/local/bin/
-
-So basically you're using an old version of Buildroot, that you have
-modified in bizarre ways (according to your webkit.mk), you can't share
-your Buildroot configuration with us, and you expect the community to
-help you? It looks like you seem to misunderstand how the open-source
-community works, no?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
