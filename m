@@ -1,247 +1,166 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Apr 2013 08:34:21 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-04-09
-Message-ID: <20130410063422.2C0A652C5DC@lolut.humanoidz.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 10 Apr 2013 08:20:20 +0200
+Subject: [Buildroot] [PATCH v3 2/7] arch: Add blackfin CPU choice.
+In-Reply-To: <1365488988-21604-2-git-send-email-sonic.adi@gmail.com>
+References: <1365488988-21604-1-git-send-email-sonic.adi@gmail.com>
+ <1365488988-21604-2-git-send-email-sonic.adi@gmail.com>
+Message-ID: <516504A4.1050306@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 09/04/13 08:29, Sonic Zhang wrote:
+> From: Sonic Zhang <sonic.zhang@analog.com>
+>
+> v3-changes:
+> none
+>
+> v2-changes:
+> none
+>
+> v1-changes:
+> - is patch adds a Target CPU configuration option and uses it to select a -m
+> option for gcc.
+>
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+> ---
+>   arch/Config.in.bfin |   97 +++++++++++++++++++++++++++++++++++++++++++++++----
+>   1 files changed, 90 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+> index 0b137ae..ac96620 100644
+> --- a/arch/Config.in.bfin
+> +++ b/arch/Config.in.bfin
+> @@ -1,12 +1,65 @@
+>   choice
+> -	prompt "Target ABI"
+> +	prompt "Target CPU"
+>   	depends on BR2_bfin
+> -	default BR2_BFIN_FDPIC
+> -config BR2_BFIN_FDPIC
+> -	bool "FDPIC"
+> -config BR2_BFIN_FLAT
+> -	bool "FLAT"
+> -	select BR2_PREFER_STATIC_LIB
 
-On 2013-04-09, 91 random build tests have been done and
-submitted on autobuild.buildroot.net.
- 75 builds have been successful
- 16 builds have failed
+  These should have been removed in the previous patch.
 
-Below the results of the failed builds. Successful builds are omitted.
+> +	default BR2_bf609
 
-Build 7e9cdc5af71110a5f33712b0c1b40720ae5006cf
-==============================================
+  I could be wrong, but wasn't bf60x introduced relatively recently? Do 
+all toolchains support it? If not, it would be better to default to 
+something more traditional. Also, the toolchains will need conditionals 
+to check if they support the selected architecture.
 
-Status         : NOK
-Failure reason : libglib2-2.30.3
-Architecture   : bfin
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 00:00:50
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/7e9cdc5af71110a5f33712b0c1b40720ae5006cf/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/7e9cdc5af71110a5f33712b0c1b40720ae5006cf/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/7e9cdc5af71110a5f33712b0c1b40720ae5006cf/config
-Defconfig      : http://autobuild.buildroot.net/results/7e9cdc5af71110a5f33712b0c1b40720ae5006cf/defconfig
 
-Build 3a9cedd8d7114debabe999828b69b22c40b281c6
-==============================================
+  Regards,
+  Arnout
 
-Status         : NOK
-Failure reason : gpsd-3.8
-Architecture   : x86_64
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 00:22:12
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/3a9cedd8d7114debabe999828b69b22c40b281c6/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/3a9cedd8d7114debabe999828b69b22c40b281c6/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/3a9cedd8d7114debabe999828b69b22c40b281c6/config
-Defconfig      : http://autobuild.buildroot.net/results/3a9cedd8d7114debabe999828b69b22c40b281c6/defconfig
 
-Build 917c24dabb9d51d80546597929a3cccc271de9dd
-==============================================
-
-Status         : NOK
-Failure reason : pixman-0.28.2
-Architecture   : mips
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 00:42:40
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/917c24dabb9d51d80546597929a3cccc271de9dd/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/917c24dabb9d51d80546597929a3cccc271de9dd/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/917c24dabb9d51d80546597929a3cccc271de9dd/config
-Defconfig      : http://autobuild.buildroot.net/results/917c24dabb9d51d80546597929a3cccc271de9dd/defconfig
-
-Build c608d6682d0693c40912744ae7e4e1a0db5a48e3
-==============================================
-
-Status         : NOK
-Failure reason : icu-4.8.1.1
-Architecture   : bfin
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 00:42:49
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/c608d6682d0693c40912744ae7e4e1a0db5a48e3/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c608d6682d0693c40912744ae7e4e1a0db5a48e3/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c608d6682d0693c40912744ae7e4e1a0db5a48e3/config
-Defconfig      : http://autobuild.buildroot.net/results/c608d6682d0693c40912744ae7e4e1a0db5a48e3/defconfig
-
-Build 4c856799e81ca6e72b432b2bac05c6532e11eb64
-==============================================
-
-Status         : NOK
-Failure reason : libglib2-2.30.3
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 00:49:40
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/4c856799e81ca6e72b432b2bac05c6532e11eb64/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/4c856799e81ca6e72b432b2bac05c6532e11eb64/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/4c856799e81ca6e72b432b2bac05c6532e11eb64/config
-Defconfig      : http://autobuild.buildroot.net/results/4c856799e81ca6e72b432b2bac05c6532e11eb64/defconfig
-
-Build 74759ba51a5e295e1e13957b28d0801689164558
-==============================================
-
-Status         : NOK
-Failure reason : pixman-0.28.2
-Architecture   : mips
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 01:01:52
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/74759ba51a5e295e1e13957b28d0801689164558/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/74759ba51a5e295e1e13957b28d0801689164558/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/74759ba51a5e295e1e13957b28d0801689164558/config
-Defconfig      : http://autobuild.buildroot.net/results/74759ba51a5e295e1e13957b28d0801689164558/defconfig
-
-Build c5df1f74aa735951014c7d4273d346748462bb93
-==============================================
-
-Status         : NOK
-Failure reason : lttng-libust-2.1.1
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 01:30:16
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/c5df1f74aa735951014c7d4273d346748462bb93/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c5df1f74aa735951014c7d4273d346748462bb93/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c5df1f74aa735951014c7d4273d346748462bb93/config
-Defconfig      : http://autobuild.buildroot.net/results/c5df1f74aa735951014c7d4273d346748462bb93/defconfig
-
-Build c51a09e210326dc8902b43bc6b75d89b40e9610c
-==============================================
-
-Status         : NOK
-Failure reason : popt-1.16
-Architecture   : bfin
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 02:19:36
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/c51a09e210326dc8902b43bc6b75d89b40e9610c/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c51a09e210326dc8902b43bc6b75d89b40e9610c/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c51a09e210326dc8902b43bc6b75d89b40e9610c/config
-Defconfig      : http://autobuild.buildroot.net/results/c51a09e210326dc8902b43bc6b75d89b40e9610c/defconfig
-
-Build 74b9496f9106ee2de926117ac37912649c65dedf
-==============================================
-
-Status         : NOK
-Failure reason : nettle-2.6
-Architecture   : microblaze
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 02:24:11
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/74b9496f9106ee2de926117ac37912649c65dedf/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/74b9496f9106ee2de926117ac37912649c65dedf/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/74b9496f9106ee2de926117ac37912649c65dedf/config
-Defconfig      : http://autobuild.buildroot.net/results/74b9496f9106ee2de926117ac37912649c65dedf/defconfig
-
-Build 43d21d48605b5487b2ca99622dbf7a6b94cc15b3
-==============================================
-
-Status         : NOK
-Failure reason : libiscsi-1.6.0
-Architecture   : mips64el
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 03:44:55
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/43d21d48605b5487b2ca99622dbf7a6b94cc15b3/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/43d21d48605b5487b2ca99622dbf7a6b94cc15b3/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/43d21d48605b5487b2ca99622dbf7a6b94cc15b3/config
-Defconfig      : http://autobuild.buildroot.net/results/43d21d48605b5487b2ca99622dbf7a6b94cc15b3/defconfig
-
-Build b21899f5897d014d960b92743c16b56f8f387cb4
-==============================================
-
-Status         : NOK
-Failure reason : gettext-0.18.2.1
-Architecture   : xtensa
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 04:50:03
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/b21899f5897d014d960b92743c16b56f8f387cb4/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/b21899f5897d014d960b92743c16b56f8f387cb4/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/b21899f5897d014d960b92743c16b56f8f387cb4/config
-Defconfig      : http://autobuild.buildroot.net/results/b21899f5897d014d960b92743c16b56f8f387cb4/defconfig
-
-Build e196a54d44bccf2f28be756a1cae54db48cc1acc
-==============================================
-
-Status         : NOK
-Failure reason : systemd-44
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 05:26:49
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/e196a54d44bccf2f28be756a1cae54db48cc1acc/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/e196a54d44bccf2f28be756a1cae54db48cc1acc/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/e196a54d44bccf2f28be756a1cae54db48cc1acc/config
-Defconfig      : http://autobuild.buildroot.net/results/e196a54d44bccf2f28be756a1cae54db48cc1acc/defconfig
-
-Build 9070a77d3fdb666c8b267ec761de6ba5f1b742fb
-==============================================
-
-Status         : NOK
-Failure reason : host-gutenprint-5.2.9
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2013-04-09 17:24:56
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/9070a77d3fdb666c8b267ec761de6ba5f1b742fb/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/9070a77d3fdb666c8b267ec761de6ba5f1b742fb/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/9070a77d3fdb666c8b267ec761de6ba5f1b742fb/config
-Defconfig      : http://autobuild.buildroot.net/results/9070a77d3fdb666c8b267ec761de6ba5f1b742fb/defconfig
-
-Build ef5ff1de96e0cf2960d268e3eec136eb3458cf8b
-==============================================
-
-Status         : NOK
-Failure reason : lm-sensors-3.3.3
-Architecture   : microblaze
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 20:32:32
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/ef5ff1de96e0cf2960d268e3eec136eb3458cf8b/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/ef5ff1de96e0cf2960d268e3eec136eb3458cf8b/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/ef5ff1de96e0cf2960d268e3eec136eb3458cf8b/config
-Defconfig      : http://autobuild.buildroot.net/results/ef5ff1de96e0cf2960d268e3eec136eb3458cf8b/defconfig
-
-Build 9ca8ac036390904e5bddf198ff3ddd2a02410a9b
-==============================================
-
-Status         : NOK
-Failure reason : libpfm4-4.3.0
-Architecture   : avr32
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 23:29:35
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/9ca8ac036390904e5bddf198ff3ddd2a02410a9b/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/9ca8ac036390904e5bddf198ff3ddd2a02410a9b/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/9ca8ac036390904e5bddf198ff3ddd2a02410a9b/config
-Defconfig      : http://autobuild.buildroot.net/results/9ca8ac036390904e5bddf198ff3ddd2a02410a9b/defconfig
-
-Build 2e099613e0692545efb57abfac8fd9fc2cf79afe
-==============================================
-
-Status         : NOK
-Failure reason : grantlee-0.2.0
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2013-04-09 23:44:22
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=1627fb54715406d6c76461d5104ee11dabbf5870
-End of log     : http://autobuild.buildroot.net/results/2e099613e0692545efb57abfac8fd9fc2cf79afe/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/2e099613e0692545efb57abfac8fd9fc2cf79afe/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/2e099613e0692545efb57abfac8fd9fc2cf79afe/config
-Defconfig      : http://autobuild.buildroot.net/results/2e099613e0692545efb57abfac8fd9fc2cf79afe/defconfig
-
+> +	help
+> +	  Specify target CPU
+> +config BR2_bf606
+> +	bool "bf606"
+> +config BR2_bf607
+> +	bool "bf607"
+> +config BR2_bf608
+> +	bool "bf608"
+> +config BR2_bf609
+> +	bool "bf609"
+> +config BR2_bf512
+> +	bool "bf512"
+> +config BR2_bf514
+> +	bool "bf514"
+> +config BR2_bf516
+> +	bool "bf516"
+> +config BR2_bf518
+> +	bool "bf518"
+> +config BR2_bf522
+> +	bool "bf522"
+> +config BR2_bf523
+> +	bool "bf523"
+> +config BR2_bf524
+> +	bool "bf524"
+> +config BR2_bf525
+> +	bool "bf525"
+> +config BR2_bf526
+> +	bool "bf526"
+> +config BR2_bf527
+> +	bool "bf527"
+> +config BR2_bf531
+> +	bool "bf531"
+> +config BR2_bf532
+> +	bool "bf532"
+> +config BR2_bf533
+> +	bool "bf533"
+> +config BR2_bf534
+> +	bool "bf534"
+> +config BR2_bf536
+> +	bool "bf536"
+> +config BR2_bf537
+> +	bool "bf537"
+> +config BR2_bf538
+> +	bool "bf538"
+> +config BR2_bf539
+> +	bool "bf539"
+> +config BR2_bf542
+> +	bool "bf542"
+> +config BR2_bf544
+> +	bool "bf544"
+> +config BR2_bf547
+> +	bool "bf547"
+> +config BR2_bf548
+> +	bool "bf548"
+> +config BR2_bf549
+> +	bool "bf549"
+> +config BR2_bf561
+> +	bool "bf561"
+>   endchoice
+>
+>   config BR2_ARCH
+> @@ -14,3 +67,33 @@ config BR2_ARCH
+>
+>   config BR2_ENDIAN
+>           default "LITTLE"
+> +
+> +config BR2_GCC_TARGET_CPU
+> +	default bf606		if BR2_bf606
+> +	default bf607		if BR2_bf607
+> +	default bf608		if BR2_bf608
+> +	default bf609		if BR2_bf609
+> +	default bf512		if BR2_bf512
+> +	default bf514		if BR2_bf514
+> +	default bf516		if BR2_bf516
+> +	default bf518		if BR2_bf518
+> +	default bf522		if BR2_bf522
+> +	default bf523		if BR2_bf523
+> +	default bf524		if BR2_bf524
+> +	default bf525		if BR2_bf525
+> +	default bf526		if BR2_bf526
+> +	default bf527		if BR2_bf527
+> +	default bf531		if BR2_bf531
+> +	default bf532		if BR2_bf532
+> +	default bf533		if BR2_bf533
+> +	default bf534		if BR2_bf534
+> +	default bf536		if BR2_bf536
+> +	default bf537		if BR2_bf537
+> +	default bf538		if BR2_bf538
+> +	default bf539		if BR2_bf539
+> +	default bf542		if BR2_bf542
+> +	default bf544		if BR2_bf544
+> +	default bf547		if BR2_bf547
+> +	default bf548		if BR2_bf548
+> +	default bf549		if BR2_bf549
+> +	default bf561		if BR2_bf561
+>
 
 
 -- 
-http://autobuild.buildroot.net
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
