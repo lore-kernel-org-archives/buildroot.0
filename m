@@ -1,54 +1,74 @@
-From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
-Date: Wed, 10 Apr 2013 17:16:36 +1000
-Subject: [Buildroot] Autoreconf not compatible
-	withpython-clean-for-reconfigure (BUG)
-Message-ID: <EE5E77B503DE9A478B63A89AAD2585EDB66A82@vpane.excalyptech.com>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Wed, 10 Apr 2013 15:19:23 +0800
+Subject: [Buildroot] [PATCH v3 2/7] arch: Add blackfin CPU choice.
+In-Reply-To: <516504A4.1050306@mind.be>
+References: <1365488988-21604-1-git-send-email-sonic.adi@gmail.com>
+ <1365488988-21604-2-git-send-email-sonic.adi@gmail.com>
+ <516504A4.1050306@mind.be>
+Message-ID: <CAJxxZ0Nk8BwY0Wefq3r7e7=7_kC6zktj_vgAHxkuqN_AHknBgQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Arnout,
 
-On Thu, 21 Mar 2013 at 16:51:47, Przemyslaw Wrzos wrote:
+On Wed, Apr 10, 2013 at 2:20 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 09/04/13 08:29, Sonic Zhang wrote:
+>>
+>> From: Sonic Zhang <sonic.zhang@analog.com>
+>>
+>> v3-changes:
+>> none
+>>
+>> v2-changes:
+>> none
+>>
+>> v1-changes:
+>> - is patch adds a Target CPU configuration option and uses it to select a
+>> -m
+>> option for gcc.
+>>
+>> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+>> ---
+>>   arch/Config.in.bfin |   97
+>> +++++++++++++++++++++++++++++++++++++++++++++++----
+>>   1 files changed, 90 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+>> index 0b137ae..ac96620 100644
+>> --- a/arch/Config.in.bfin
+>> +++ b/arch/Config.in.bfin
+>> @@ -1,12 +1,65 @@
+>>   choice
+>> -       prompt "Target ABI"
+>> +       prompt "Target CPU"
+>>         depends on BR2_bfin
+>> -       default BR2_BFIN_FDPIC
+>> -config BR2_BFIN_FDPIC
+>> -       bool "FDPIC"
+>> -config BR2_BFIN_FLAT
+>> -       bool "FLAT"
+>> -       select BR2_PREFER_STATIC_LIB
+>
+>
+>  These should have been removed in the previous patch.
+>
+>> +       default BR2_bf609
+>
+>
+>  I could be wrong, but wasn't bf60x introduced relatively recently? Do all
+> toolchains support it? If not, it would be better to default to something
+> more traditional. Also, the toolchains will need conditionals to check if
+> they support the selected architecture.
+>
 
-> Hi,
-> 
-> I've noticed that when python-clean-for-reconfigure is called, python
-> will subsequently fail to build.
-> 
-> Steps to reproduce:
->     $ make python
->     $ make python-clean-for-reconfigure
->     $ make python
-> I've tried this on some other packages with <PKG>_AUTORECONF = YES,
-> using libtool v2.2, but so far I've only gotten the error with python.
-> 
-> Here's what the failure looks like:
-> 
->>>> python 2.7.3 Autoreconfiguring
-> 
->     Applying buildroot-libtool-v2.2.patch using patch:
->     patching file ltmain.sh
->     Reversed (or previously applied) patch detected!  Assume -R? [n]
->     Apply anyway? [n]
->     Skipping patch.
->     5 out of 5 hunks ignored -- saving rejects to file ltmain.sh.rej
->     Patch failed!  Please fix buildroot-libtool-v2.2.patch!
->     make: ***
-> [/home/przemyslaw/work/cassini/output/build/python-
-> 2.7.3/.stamp_configur ed] Error 1
-> 
-> This doesn't seem to affect other packages with autoreconf though.
-> 
-> I'm not sure what a good way to fix this is. Perhaps a way to only do
-> the patching once using the LIBTOOL_PATCH_HOOK, since the autoreconf
-> doesn't seem to touch the ltmain.sh file there.
-> 
-> Cheers, Przemyslaw Wrzos
+The Blackfin toochain releases before 2012R1 should be removed from
+the buildroot toolchain makefile.
+ADI supports buildroot for blackfin only since the 2012R1 release and
+bf60x is enabled in the 2012R2 Blackfin toolchain release.
 
-Ping.
+Regards,
 
-Cheers,
-Przemyslaw Wrzos
+Sonic
