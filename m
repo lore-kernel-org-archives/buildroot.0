@@ -1,8 +1,8 @@
 From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
-Date: Wed, 10 Apr 2013 17:14:32 +1000
-Subject: [Buildroot] [PATCH 1/1] python: fix to ensure
-	libpythonisstripped
-Message-ID: <EE5E77B503DE9A478B63A89AAD2585EDB66A7F@vpane.excalyptech.com>
+Date: Wed, 10 Apr 2013 17:16:36 +1000
+Subject: [Buildroot] Autoreconf not compatible
+	withpython-clean-for-reconfigure (BUG)
+Message-ID: <EE5E77B503DE9A478B63A89AAD2585EDB66A82@vpane.excalyptech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,23 +11,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 13 Mar 2013 at 12:36:22, Przemyslaw Wrzos wrote:
+On Thu, 21 Mar 2013 at 16:51:47, Przemyslaw Wrzos wrote:
 
-> On Tue, 26 Feb 2013 at 18:21:15, Przemyslaw Wrzos wrote:
+> Hi,
 > 
->> Hi All,
->> 
->>> Subject: [PATCH 1/1] python: fix to ensure libpython is stripped
->>> 
->>> The python and python3 builds mark libpython as read-only which
->>> prevents it from being stripped out correctly for the target.
->> 
->> Is there any updates regarding this patch?
+> I've noticed that when python-clean-for-reconfigure is called, python
+> will subsequently fail to build.
 > 
-> Ping.
+> Steps to reproduce:
+>     $ make python
+>     $ make python-clean-for-reconfigure
+>     $ make python
+> I've tried this on some other packages with <PKG>_AUTORECONF = YES,
+> using libtool v2.2, but so far I've only gotten the error with python.
+> 
+> Here's what the failure looks like:
+> 
+>>>> python 2.7.3 Autoreconfiguring
+> 
+>     Applying buildroot-libtool-v2.2.patch using patch:
+>     patching file ltmain.sh
+>     Reversed (or previously applied) patch detected!  Assume -R? [n]
+>     Apply anyway? [n]
+>     Skipping patch.
+>     5 out of 5 hunks ignored -- saving rejects to file ltmain.sh.rej
+>     Patch failed!  Please fix buildroot-libtool-v2.2.patch!
+>     make: ***
+> [/home/przemyslaw/work/cassini/output/build/python-
+> 2.7.3/.stamp_configur ed] Error 1
+> 
+> This doesn't seem to affect other packages with autoreconf though.
+> 
+> I'm not sure what a good way to fix this is. Perhaps a way to only do
+> the patching once using the LIBTOOL_PATCH_HOOK, since the autoreconf
+> doesn't seem to touch the ltmain.sh file there.
+> 
+> Cheers, Przemyslaw Wrzos
 
-Not sure if I'm supposed to keep prodding this patch but would be great
-to get some feedback.
+Ping.
 
 Cheers,
 Przemyslaw Wrzos
