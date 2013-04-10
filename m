@@ -1,34 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 10 Apr 2013 22:35:17 +0200
-Subject: [Buildroot] Google Summer of Code
-In-Reply-To: <20130408233300.3b1902f8@skate>
-References: <20130328114356.76e7ee26@skate>
- <20130408233300.3b1902f8@skate>
-Message-ID: <20130410203517.GA10390@free.fr>
+From: Soren Brinkmann <soren.brinkmann@xilinx.com>
+Date: Wed, 10 Apr 2013 13:34:38 -0700
+Subject: [Buildroot] [PATCH] system/securetty: Add ttyPS[0-1]
+Message-ID: <635bc23d-f513-4e61-a517-a8781d456eba@CO9EHSMHS010.ehs.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Adding ttyPS0 and ttyPS1 to securetty for Zynq.
 
-On Mon, Apr 08, 2013 at 11:33:00PM +0200, Thomas Petazzoni wrote:
-> On Thu, 28 Mar 2013 11:43:56 +0100, Thomas Petazzoni wrote:
-> > Google will publish on April, 8th the list of accepted mentoring
-> > organizations.
-> A quick note to let you know that Buildroot has been accepted as an
-> organization for the Google Summer of Code 2013.
+Signed-off-by: Soren Brinkmann <soren.brinkmann@xilinx.com>
+---
+Zynq has two UARTs and the driver uses ttyPSX as device name.
 
-Great news! :-)
+	S?ren
 
-Regards,
-Yann E. MORIN.
+ system/skeleton/etc/securetty | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/system/skeleton/etc/securetty b/system/skeleton/etc/securetty
+index c96f2fb..5a3d0c6 100644
+--- a/system/skeleton/etc/securetty
++++ b/system/skeleton/etc/securetty
+@@ -22,6 +22,8 @@ ttyUL0
+ ttyUL1
+ ttyUL2
+ ttyUL3
++ttyPS0
++ttyPS1
+ ttyPSC0
+ ttyPSC1
+ ttyPSC2
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.2.1
