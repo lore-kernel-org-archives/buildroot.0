@@ -1,161 +1,131 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Apr 2013 08:20:20 +0200
-Subject: [Buildroot] [PATCH v3 2/7] arch: Add blackfin CPU choice.
-In-Reply-To: <1365488988-21604-2-git-send-email-sonic.adi@gmail.com>
-References: <1365488988-21604-1-git-send-email-sonic.adi@gmail.com>
- <1365488988-21604-2-git-send-email-sonic.adi@gmail.com>
-Message-ID: <516504A4.1050306@mind.be>
+Date: Wed, 10 Apr 2013 07:47:30 +0200
+Subject: [Buildroot] [PATCH v2 5/7] package: Introduce package-specific
+ BINFMT_FLAT options.
+In-Reply-To: <20130407232755.762a03b5@skate>
+References: <1364550643-11793-1-git-send-email-sonic.adi@gmail.com>
+ <1364550643-11793-5-git-send-email-sonic.adi@gmail.com>
+ <20130407232755.762a03b5@skate>
+Message-ID: <5164FCF2.1070200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/04/13 08:29, Sonic Zhang wrote:
-> From: Sonic Zhang <sonic.zhang@analog.com>
+On 07/04/13 23:27, Thomas Petazzoni wrote:
+> Dear Sonic Zhang,
 >
-> v3-changes:
-> none
+> On Fri, 29 Mar 2013 17:50:41 +0800, Sonic Zhang wrote:
 >
-> v2-changes:
-> none
+>> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+>> index 890506b..bdfea20 100644
+>> --- a/package/pkg-autotools.mk
+>> +++ b/package/pkg-autotools.mk
+>> @@ -82,6 +82,11 @@ $(2)_CLEAN_OPT			?= clean
+>>   $(2)_UNINSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) uninstall
+>>   $(2)_UNINSTALL_TARGET_OPT	?= DESTDIR=$$(TARGET_DIR)  uninstall
+>>
+>> +ifeq ($(BR2_BINFMT_FLAT),y)
+>> + ifneq ($$($(2)_FLAT_STACKSIZE),)
+>> +  $(2)_CONF_ENV			+= LDFLAGS="$(TARGET_LDFLAGS) -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)"
+>> + endif
+>> +endif
+>>
+>>   #
+>>   # Configure step. Only define it if not already defined by the package
+>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>> index 57b0fd0..8ee2b20 100644
+>> --- a/package/pkg-generic.mk
+>> +++ b/package/pkg-generic.mk
+>> @@ -303,6 +303,11 @@ endif
+>>
+>>   $(2)_REDISTRIBUTE		?= YES
+>>
+>> +ifeq ($(BR2_BINFMT_FLAT),y)
+>> + ifneq ($$($(2)_FLAT_STACKSIZE),)
+>> +  $(2)_FLAT_LDFLAGS = -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)
+>> + endif
+>> +endif
+>>
+>>   $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
 >
-> v1-changes:
-> - is patch adds a Target CPU configuration option and uses it to select a -m
-> option for gcc.
->
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-> ---
->   arch/Config.in.bfin |   97 +++++++++++++++++++++++++++++++++++++++++++++++----
->   1 files changed, 90 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-> index 0b137ae..ac96620 100644
-> --- a/arch/Config.in.bfin
-> +++ b/arch/Config.in.bfin
-> @@ -1,12 +1,65 @@
->   choice
-> -	prompt "Target ABI"
-> +	prompt "Target CPU"
->   	depends on BR2_bfin
-> -	default BR2_BFIN_FDPIC
-> -config BR2_BFIN_FDPIC
-> -	bool "FDPIC"
-> -config BR2_BFIN_FLAT
-> -	bool "FLAT"
-> -	select BR2_PREFER_STATIC_LIB
+> I understand the problem but I'm still not really happy with the
+> solution here. Maybe Arnout will have some suggestions.
 
-  These should have been removed in the previous patch.
+  I had exactly the same thoughts while reading the patch...
 
-> +	default BR2_bf609
+> The problem I see with the pkg-autotools change is that some packages
+> already override LDFLAGS in their <pkg>_CONF_ENV. For example:
+>
+> NDISC6_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
+>
+> Since your <pkg>_CONF_ENV += assignment will be done after the ones
+> coming from the package .mk file, you're going to remove the -lintl
+> that had been added by the package.
+>
+> For the pkg-generic change, I'm not entirely happy because it means
+> each and every package should use <pkg>_FLAT_LDFLAGS, while we have
+> told for a long time our packagers to just use $(TARGET_CONFIGURE_OPTS)
+> to get all the right compiler/linker flags.
+>
+> So I think it seems we somehow need to make $(TARGET_LDFLAGS) a
+> per-package variable? Arnout what do you think about this? Do you have
+> ideas?
 
-  I could be wrong, but wasn't bf60x introduced relatively recently? Do 
-all toolchains support it? If not, it would be better to default to 
-something more traditional. Also, the toolchains will need conditionals 
-to check if they support the selected architecture.
+  In fact, it can easily be made a per-package variable. In the 
+definition of TARGET_LDFLAGS, we can add:
 
+TARGET_LDFLAGS = ... \
+	$($(PKG)_LDFLAGS)
+
+  The $(PKG) is only evaluated when the TARGET_LDFLAGS variable is used.
+
+  Outside the scope of the generic rules, $(PKG) evaluates to nothing, 
+and _LDFLAGS is not defined, so the $($(PKG)_LDFLAGS) has no effect.
+
+  Inside the scope of the generic rules, $(PKG) is always defined. So we 
+just have to add the following to the pkg-generic macro:
+
+ifeq ($(BR2_BINFMT_FLAT),y)
+   $(2)_LDFLAGS += -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)
+endif
+
+
+  As far as I can see, that should work nicely. No need to change 
+anything in autotools. Unfortunately, it does require changing the 
+packages that have something like:
+
+DOSFSTOOLS_LDFLAGS = $(TARGET_LDFLAGS)
+
+  Also, it is not very intuitive, because in a non-autotools package 
+where you can't use the LDFLAGS environment variable, you'll have 
+something like:
+
+AXEL_LDFLAGS = -lpthread
+define AXEL_BUILD_CMDS
+         $(TARGET_CONFIGURE_OPTS) $(MAKE) \
+         LFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
+endef
+
+i.e. you're defining AXEL_LDFLAGS but using TARGET_LDFLAGS. Not a really 
+big issue, I think, but not very nice either.
+
+
+  For this patch list, however, I think changing the 15 uses of 
+FOO_LDFLAGS is going a bit too far. So I propose to make the following 
+change instead in package/Makefile.in:
+
+ifeq ($(BR2_BINFMT_FLAT),y)
+TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),\
+	-Wl,-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
+endif
+
+  AFAICS, that should work for any package without any further change. 
+But needs to be tested, of course...
 
   Regards,
   Arnout
-
-
-> +	help
-> +	  Specify target CPU
-> +config BR2_bf606
-> +	bool "bf606"
-> +config BR2_bf607
-> +	bool "bf607"
-> +config BR2_bf608
-> +	bool "bf608"
-> +config BR2_bf609
-> +	bool "bf609"
-> +config BR2_bf512
-> +	bool "bf512"
-> +config BR2_bf514
-> +	bool "bf514"
-> +config BR2_bf516
-> +	bool "bf516"
-> +config BR2_bf518
-> +	bool "bf518"
-> +config BR2_bf522
-> +	bool "bf522"
-> +config BR2_bf523
-> +	bool "bf523"
-> +config BR2_bf524
-> +	bool "bf524"
-> +config BR2_bf525
-> +	bool "bf525"
-> +config BR2_bf526
-> +	bool "bf526"
-> +config BR2_bf527
-> +	bool "bf527"
-> +config BR2_bf531
-> +	bool "bf531"
-> +config BR2_bf532
-> +	bool "bf532"
-> +config BR2_bf533
-> +	bool "bf533"
-> +config BR2_bf534
-> +	bool "bf534"
-> +config BR2_bf536
-> +	bool "bf536"
-> +config BR2_bf537
-> +	bool "bf537"
-> +config BR2_bf538
-> +	bool "bf538"
-> +config BR2_bf539
-> +	bool "bf539"
-> +config BR2_bf542
-> +	bool "bf542"
-> +config BR2_bf544
-> +	bool "bf544"
-> +config BR2_bf547
-> +	bool "bf547"
-> +config BR2_bf548
-> +	bool "bf548"
-> +config BR2_bf549
-> +	bool "bf549"
-> +config BR2_bf561
-> +	bool "bf561"
->   endchoice
->
->   config BR2_ARCH
-> @@ -14,3 +67,33 @@ config BR2_ARCH
->
->   config BR2_ENDIAN
->           default "LITTLE"
-> +
-> +config BR2_GCC_TARGET_CPU
-> +	default bf606		if BR2_bf606
-> +	default bf607		if BR2_bf607
-> +	default bf608		if BR2_bf608
-> +	default bf609		if BR2_bf609
-> +	default bf512		if BR2_bf512
-> +	default bf514		if BR2_bf514
-> +	default bf516		if BR2_bf516
-> +	default bf518		if BR2_bf518
-> +	default bf522		if BR2_bf522
-> +	default bf523		if BR2_bf523
-> +	default bf524		if BR2_bf524
-> +	default bf525		if BR2_bf525
-> +	default bf526		if BR2_bf526
-> +	default bf527		if BR2_bf527
-> +	default bf531		if BR2_bf531
-> +	default bf532		if BR2_bf532
-> +	default bf533		if BR2_bf533
-> +	default bf534		if BR2_bf534
-> +	default bf536		if BR2_bf536
-> +	default bf537		if BR2_bf537
-> +	default bf538		if BR2_bf538
-> +	default bf539		if BR2_bf539
-> +	default bf542		if BR2_bf542
-> +	default bf544		if BR2_bf544
-> +	default bf547		if BR2_bf547
-> +	default bf548		if BR2_bf548
-> +	default bf549		if BR2_bf549
-> +	default bf561		if BR2_bf561
->
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
