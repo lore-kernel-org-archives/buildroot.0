@@ -1,32 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 10 Apr 2013 11:47:46 +0200
-Subject: [Buildroot] [git commit] mpg123: bump to version 1.15.3
-Message-ID: <20130410095124.AE4779B53E@busybox.osuosl.org>
+Date: Wed, 10 Apr 2013 11:49:15 +0200
+Subject: [Buildroot] [git commit] toolchain-external: fix typo in Blackfin
+	toolchain config option
+Message-ID: <20130410095125.7AC259B53B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=868d0e0599964ee0f084b9c00bdc0f153b4427f6
+commit: http://git.buildroot.net/buildroot/commit/?id=8d8a73fae1ea250ec13a5db1d8bc5847413f508d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/mpg123/mpg123.mk |    2 +-
+ toolchain/toolchain-external/Config.in |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/mpg123/mpg123.mk b/package/multimedia/mpg123/mpg123.mk
-index 43a558a..c65920f 100644
---- a/package/multimedia/mpg123/mpg123.mk
-+++ b/package/multimedia/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 433df4b..4e75d85 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -597,7 +597,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
  
--MPG123_VERSION = 1.15.1
-+MPG123_VERSION = 1.15.3
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPT = --with-optimization=0 --disable-lfs-alias
+-config BR2_TOOLCHAIN_EXTERNAL_BLACKFI_UCLINUX_2012R1
++config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
+ 	bool "Blackfin.uclinux.org 2012R1-RC2"
+ 	depends on BR2_bfin
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
