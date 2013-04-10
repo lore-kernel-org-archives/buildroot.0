@@ -1,131 +1,115 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Apr 2013 07:47:30 +0200
-Subject: [Buildroot] [PATCH v2 5/7] package: Introduce package-specific
- BINFMT_FLAT options.
-In-Reply-To: <20130407232755.762a03b5@skate>
-References: <1364550643-11793-1-git-send-email-sonic.adi@gmail.com>
- <1364550643-11793-5-git-send-email-sonic.adi@gmail.com>
- <20130407232755.762a03b5@skate>
-Message-ID: <5164FCF2.1070200@mind.be>
+Date: Wed, 10 Apr 2013 08:11:57 +0200
+Subject: [Buildroot] [PATCH v3 1/7] arch: toolchain: Introduce binary
+	formats BINFMT_*.
+In-Reply-To: <1365488988-21604-1-git-send-email-sonic.adi@gmail.com>
+References: <1365488988-21604-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <516502AD.5080104@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/04/13 23:27, Thomas Petazzoni wrote:
-> Dear Sonic Zhang,
+  Hi Sonic,
+
+On 09/04/13 08:29, Sonic Zhang wrote:
+> From: Sonic Zhang <sonic.zhang@analog.com>
 >
-> On Fri, 29 Mar 2013 17:50:41 +0800, Sonic Zhang wrote:
+> v3-changes:
+
+  Please put your changelog below the Signed-off-by line, separated by ---
+This way, the changelog doesn't appear in the final git commit log (it's 
+anyway not relevant anymore).
+
+> - Rename the BINFMT dependency names in external toolchain config file.
+> - Add some help text to BINFMT macros.
 >
->> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
->> index 890506b..bdfea20 100644
->> --- a/package/pkg-autotools.mk
->> +++ b/package/pkg-autotools.mk
->> @@ -82,6 +82,11 @@ $(2)_CLEAN_OPT			?= clean
->>   $(2)_UNINSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) uninstall
->>   $(2)_UNINSTALL_TARGET_OPT	?= DESTDIR=$$(TARGET_DIR)  uninstall
->>
->> +ifeq ($(BR2_BINFMT_FLAT),y)
->> + ifneq ($$($(2)_FLAT_STACKSIZE),)
->> +  $(2)_CONF_ENV			+= LDFLAGS="$(TARGET_LDFLAGS) -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)"
->> + endif
->> +endif
->>
->>   #
->>   # Configure step. Only define it if not already defined by the package
->> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->> index 57b0fd0..8ee2b20 100644
->> --- a/package/pkg-generic.mk
->> +++ b/package/pkg-generic.mk
->> @@ -303,6 +303,11 @@ endif
->>
->>   $(2)_REDISTRIBUTE		?= YES
->>
->> +ifeq ($(BR2_BINFMT_FLAT),y)
->> + ifneq ($$($(2)_FLAT_STACKSIZE),)
->> +  $(2)_FLAT_LDFLAGS = -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)
->> + endif
->> +endif
->>
->>   $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+> v2-changes:
+> none
 >
-> I understand the problem but I'm still not really happy with the
-> solution here. Maybe Arnout will have some suggestions.
-
-  I had exactly the same thoughts while reading the patch...
-
-> The problem I see with the pkg-autotools change is that some packages
-> already override LDFLAGS in their <pkg>_CONF_ENV. For example:
+> v1-changes:
+> - Just introduce the symbol and options in arch generic Config.in.
+> Append FLAT format link flags to external toolchain wrapper.
 >
-> NDISC6_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+> ---
+>   arch/Config.in                                     |   29 ++++++++++++++++++++
+>   toolchain/toolchain-external/Config.in             |   12 ++++----
+>   toolchain/toolchain-external/ext-tool.mk           |    4 +++
+>   .../toolchain-external/ext-toolchain-wrapper.c     |    3 ++
+>   4 files changed, 42 insertions(+), 6 deletions(-)
 >
-> Since your <pkg>_CONF_ENV += assignment will be done after the ones
-> coming from the package .mk file, you're going to remove the -lintl
-> that had been added by the package.
+> diff --git a/arch/Config.in b/arch/Config.in
+> index 472b10c..5dd6467 100644
+> --- a/arch/Config.in
+> +++ b/arch/Config.in
+> @@ -174,6 +174,35 @@ config BR2_GCC_TARGET_ABI
+>   config BR2_GCC_TARGET_CPU
+>   	string
 >
-> For the pkg-generic change, I'm not entirely happy because it means
-> each and every package should use <pkg>_FLAT_LDFLAGS, while we have
-> told for a long time our packagers to just use $(TARGET_CONFIGURE_OPTS)
-> to get all the right compiler/linker flags.
->
-> So I think it seems we somehow need to make $(TARGET_LDFLAGS) a
-> per-package variable? Arnout what do you think about this? Do you have
-> ideas?
+> +# Set up target binary format
+> +choice
+> +	prompt "Target Binary Format"
 
-  In fact, it can easily be made a per-package variable. In the 
-definition of TARGET_LDFLAGS, we can add:
+  I don't really like to have this choice-which-isn't-really-a-choice for 
+all platforms. I think the following should work:
 
-TARGET_LDFLAGS = ... \
-	$($(PKG)_LDFLAGS)
+	prompt "Target Binary Format" if BR2_bfin
 
-  The $(PKG) is only evaluated when the TARGET_LDFLAGS variable is used.
+> +	default BR2_BINFMT_ELF
 
-  Outside the scope of the generic rules, $(PKG) evaluates to nothing, 
-and _LDFLAGS is not defined, so the $($(PKG)_LDFLAGS) has no effect.
+  There should be a default for blackfin as well. So either put
 
-  Inside the scope of the generic rules, $(PKG) is always defined. So we 
-just have to add the following to the pkg-generic macro:
+	default BR2_BINFMT_FDPIC if BR2_bfin
+	default BR2_BINFMT_ELF
 
-ifeq ($(BR2_BINFMT_FLAT),y)
-   $(2)_LDFLAGS += -Wl,-elf2flt=-s$$($(2)_FLAT_STACKSIZE)
-endif
+  or alternatively you can put a 'default y' at the appropriate places below.
 
 
-  As far as I can see, that should work nicely. No need to change 
-anything in autotools. Unfortunately, it does require changing the 
-packages that have something like:
+> +config BR2_BINFMT_ELF
 
-DOSFSTOOLS_LDFLAGS = $(TARGET_LDFLAGS)
+  This symbol isn't used anywhere. Does it make sense to have it? We only 
+need a binfmt choice on platforms that offer the choice, right?
 
-  Also, it is not very intuitive, because in a non-autotools package 
-where you can't use the LDFLAGS environment variable, you'll have 
-something like:
+> +	bool "ELF"
+> +	depends on !BR2_bfin
+> +	help
+> +	  ELF (Executable and Linkable Format) is a format for libraries and
+> +	  executables used across different architectures and operating
+> +	  systems.
 
-AXEL_LDFLAGS = -lpthread
-define AXEL_BUILD_CMDS
-         $(TARGET_CONFIGURE_OPTS) $(MAKE) \
-         LFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
-endef
+  An empty line between the config options would be nice.
 
-i.e. you're defining AXEL_LDFLAGS but using TARGET_LDFLAGS. Not a really 
-big issue, I think, but not very nice either.
+> +config BR2_BINFMT_FDPIC
+> +	bool "FDPIC"
+> +	depends on BR2_bfin
+> +	help
+> +	  ELF FDPIC binaries are based on ELF, but allow the individual load
+> +	  segments of a binary to be located in memory independently of each
+> +	  other. This makes this format ideal for use in environments where no
+> +	  MMU is available.
 
-
-  For this patch list, however, I think changing the 15 uses of 
-FOO_LDFLAGS is going a bit too far. So I propose to make the following 
-change instead in package/Makefile.in:
-
-ifeq ($(BR2_BINFMT_FLAT),y)
-TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),\
-	-Wl,-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
-endif
-
-  AFAICS, that should work for any package without any further change. 
-But needs to be tested, of course...
+  I like this help text! It's very clear.
 
   Regards,
   Arnout
+
+> +config BR2_BINFMT_FLAT
+> +	bool "FLAT"
+> +	depends on BR2_bfin
+> +	select BR2_PREFER_STATIC_LIB
+> +	help
+> +	  FLAT binary is a relatively simple and lightweight executable format
+> +	  based on the original a.out format. It is widely used in environment
+> +	  where no MMU is available.
+> +endchoice
+> +
+>   if BR2_arm || BR2_armeb
+>   source "arch/Config.in.arm"
+>   endif
+[snip]
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
