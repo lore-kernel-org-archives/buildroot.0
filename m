@@ -1,78 +1,86 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Wed, 10 Apr 2013 15:20:14 +0800
-Subject: [Buildroot] [PATCH v3 2/7] arch: Add blackfin CPU choice.
-In-Reply-To: <CAJxxZ0Nk8BwY0Wefq3r7e7=7_kC6zktj_vgAHxkuqN_AHknBgQ@mail.gmail.com>
-References: <1365488988-21604-1-git-send-email-sonic.adi@gmail.com>
- <1365488988-21604-2-git-send-email-sonic.adi@gmail.com>
- <516504A4.1050306@mind.be>
- <CAJxxZ0Nk8BwY0Wefq3r7e7=7_kC6zktj_vgAHxkuqN_AHknBgQ@mail.gmail.com>
-Message-ID: <CAJxxZ0NiU72fFsO2Q-Po0LaB4as0SKBdon7N0KkuSsyvMa1kyg@mail.gmail.com>
+Date: Wed, 10 Apr 2013 15:50:12 +0800
+Subject: [Buildroot] [PATCH] toolchain: blackfin: Remove Blackfin toolchain
+	2011R1 release.
+Message-ID: <1365580213-23039-1-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 10, 2013 at 3:19 PM, Sonic Zhang <sonic.adi@gmail.com> wrote:
-> Hi Arnout,
->
-> On Wed, Apr 10, 2013 at 2:20 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 09/04/13 08:29, Sonic Zhang wrote:
->>>
->>> From: Sonic Zhang <sonic.zhang@analog.com>
->>>
->>> v3-changes:
->>> none
->>>
->>> v2-changes:
->>> none
->>>
->>> v1-changes:
->>> - is patch adds a Target CPU configuration option and uses it to select a
->>> -m
->>> option for gcc.
->>>
->>> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
->>> ---
->>>   arch/Config.in.bfin |   97
->>> +++++++++++++++++++++++++++++++++++++++++++++++----
->>>   1 files changed, 90 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
->>> index 0b137ae..ac96620 100644
->>> --- a/arch/Config.in.bfin
->>> +++ b/arch/Config.in.bfin
->>> @@ -1,12 +1,65 @@
->>>   choice
->>> -       prompt "Target ABI"
->>> +       prompt "Target CPU"
->>>         depends on BR2_bfin
->>> -       default BR2_BFIN_FDPIC
->>> -config BR2_BFIN_FDPIC
->>> -       bool "FDPIC"
->>> -config BR2_BFIN_FLAT
->>> -       bool "FLAT"
->>> -       select BR2_PREFER_STATIC_LIB
->>
->>
->>  These should have been removed in the previous patch.
->>
->>> +       default BR2_bf609
->>
->>
->>  I could be wrong, but wasn't bf60x introduced relatively recently? Do all
->> toolchains support it? If not, it would be better to default to something
->> more traditional. Also, the toolchains will need conditionals to check if
->> they support the selected architecture.
->>
->
-> The Blackfin toochain releases before 2012R1 should be removed from
-> the buildroot toolchain makefile.
-> ADI supports buildroot for blackfin only since the 2012R1 release and
-> bf60x is enabled in the 2012R2 Blackfin toolchain release.
->
-Sorry, should be "bf60x is enabled in the 2012R1 Blackfin toolchain release".
+From: Sonic Zhang <sonic.zhang@analog.com>
 
-Regards,
+Blackfin is supported in buildroot since 2012R1 release.
 
-Sonic
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+---
+ toolchain/toolchain-external/Config.in   |   19 -------------------
+ toolchain/toolchain-external/ext-tool.mk |    8 +-------
+ 2 files changed, 1 insertions(+), 26 deletions(-)
+
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 6cf29aa..3c6766c 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -614,23 +614,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFI_UCLINUX_2012R1
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1
+-	bool "Blackfin.uclinux.org 2011R1-RC4"
+-	depends on BR2_bfin
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_LARGEFILE
+-	select BR2_INET_IPV6
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_USE_WCHAR
+-	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	help
+-	  Toolchain for the Blackfin architecture, from
+-	  http://blackfin.uclinux.org.
+-
+ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ 	bool "Xilinx Little Endian Microblaze GNU Tools"
+ 	depends on BR2_microblazeel
+@@ -758,8 +741,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
+-	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && BR2_BINFMT_FLAT
+-	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && BR2_BINFMT_FDPIC
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FLAT
+ 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FDPIC
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FLAT
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 01578d2..b69d9bb 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -260,12 +260,6 @@ TOOLCHAIN_EXTERNAL_SOURCE=ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209),y)
+ TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1),y)
+-TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/531/9509/
+-TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2011R1-RC4.i386.tar.bz2
+-TOOLCHAIN_EXTERNAL_SITE_2   = http://blackfin.uclinux.org/gf/download/frsrelease/531/9517/
+-TOOLCHAIN_EXTERNAL_SOURCE_2 = blackfin-toolchain-uclibc-full-2011R1-RC4.i386.tar.bz2
+-TOOLCHAIN_EXTERNAL_SOURCE   = $(TOOLCHAIN_EXTERNAL_SOURCE_1) $(TOOLCHAIN_EXTERNAL_SOURCE_2)
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1),y)
+ TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/559/9858/
+ TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2012R1-RC2.i386.tar.bz2
+@@ -311,7 +305,7 @@ endif
+ # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
+ # which themselves contain the toolchain. This is why we strip more
+ # components than usual.
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
+ $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1):
+ 	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_1)/$(TOOLCHAIN_EXTERNAL_SOURCE_1))
+ 
+-- 
+1.7.0.4
