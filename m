@@ -1,31 +1,105 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 16:07:34 +0200
-Subject: [Buildroot] [git commit] tslib: correct option text
-Message-ID: <20130411140828.9AF499B586@busybox.osuosl.org>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Thu, 11 Apr 2013 09:20:09 -0500
+Subject: [Buildroot] [PATCH 1/1] fs: add uimage support w/ example for
+	cpio
+In-Reply-To: <1365654219-15272-2-git-send-email-spenser@gillilanding.com>
+References: <1365654219-15272-1-git-send-email-spenser@gillilanding.com>
+ <1365654219-15272-2-git-send-email-spenser@gillilanding.com>
+Message-ID: <CAEBucnBdfg37+nmmu-YU9vGigs_tAE19LRSndBbh9=vr42y16w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62c92adb5cfd46eca8b806da816a906faf4465bb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Please Ignore this patch.  One will be coming soon that actually works.
 
-Option text should only be the package name, descriptions go in help text.
+Spenser
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/tslib/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Wed, Apr 10, 2013 at 11:23 PM, Spenser Gilliland
+<spenser@gillilanding.com> wrote:
+> From: Spenser Gilliland <Spenser309@gmail.com>
+>
+> Adds uimage support for various root filesystems.  Uimage support is needed
+> when using the bootm command in uboot.  This provides both a simple infrastructure
+> similar to the current BR2_TARGET_ROOTFS_$(2)_GZ for adding compression. To define the a rootfs should have a UIMAGE wrapper simply create the BR2_TARGET_ROOTFS_$(2)_UIMAGE symbol.
+>
+> Signed-off-by: Spenser Gilliland <Spenser309@gmail.com>
+> ---
+>  fs/common.mk      |   20 ++++++++++++++++++--
+>  fs/cpio/Config.in |    7 +++++++
+>  2 files changed, 25 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/common.mk b/fs/common.mk
+> index a0b7b39..8f55a40 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -31,6 +31,8 @@
+>  # BR2_TARGET_ROOTFS_$(FSTYPE)_LZMA exist and are enabled, then the
+>  # macro will automatically generate a compressed filesystem image.
+>
+> +MKIMAGE_RAMDISK = $(HOST_DIR)/usr/bin/mkimage -A $(BR2_ARCH) -T ramdisk -C $(1) -d $(2) u$(2)
+> +
+>  FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
+>  FULL_DEVICE_TABLE = $(BUILD_DIR)/_device_table.txt
+>  ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+> @@ -39,7 +41,7 @@ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+>  define ROOTFS_TARGET_INTERNAL
+>
+>  # extra deps
+> -ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma)
+> +ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma) $$(if $$(BR2_TARGET_ROOTFS_$(2)_UIMAGE,host-uboot-tools)
+>
+>  $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+>         @$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+> @@ -70,7 +72,21 @@ endif
+>  ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZMA),y)
+>         $$(LZMA) -9 -c $$@ > $$@.lzma
+>  endif
+> -
+> +ifeq ($$(BR2_TARGET_ROOTFS_$(2)_UIMAGE),y)
+> +ifeq($$(BR2_TARGET_ROOTFS_NONE),y)
+> +       $$(call MKIMAGE_RAMDISK,none,$$@)
+> +endif
+> +ifeq($$(BR2_TARGET_ROOTFS_$(2)_GZIP,y)
+> +       $$(call MKIMAGE_RAMDISK,gzip,$$@.gz)
+> +endif
+> +ifeq($$(BR2_TARGET_ROOTFS_$(2)_BZIP2,y)
+> +       $$(call MKIMAGE_RAMDISK,bzip2,$$@.bz2)
+> +endif
+> +ifeq($$(BR2_TARGET_ROOTFS_$(2)_LZMA),y)
+> +       $$(call MKIMAGE_RAMDISK,lzma,$$@.lzma)
+> +endif
+> +endif
+> +
+>  rootfs-$(1)-show-depends:
+>         @echo $$(ROOTFS_$(2)_DEPENDENCIES)
+>
+> diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+> index 0669a44..b0c0210 100644
+> --- a/fs/cpio/Config.in
+> +++ b/fs/cpio/Config.in
+> @@ -5,6 +5,13 @@ config BR2_TARGET_ROOTFS_CPIO
+>           used for an initial RAM filesystem that is passed to the kernel
+>           by the bootloader.
+>
+> +config BR2_TARGET_ROOTFS_CPIO_UIMAGE
+> +       bool "Add U-Boot header to the root filesystem"
+> +       depends on BR2_TARGET_ROOTFS_CPIO
+> +        help
+> +         Add a u-boot header to the cpio root filesystem.  This allows
+> +         the image to be booted by the bootm command in uboot.
+> +
+>  choice
+>          prompt "Compression method"
+>          default BR2_TARGET_ROOTFS_CPIO_NONE
+> --
+> 1.7.9.5
+>
 
-diff --git a/package/tslib/Config.in b/package/tslib/Config.in
-index 76f1349..73b35df 100644
---- a/package/tslib/Config.in
-+++ b/package/tslib/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_TSLIB
--	bool "libts - The Touchscreen tslib Library"
-+	bool "tslib"
- 	help
- 	    http://tslib.berlios.de/
- 
+
+
+-- 
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
