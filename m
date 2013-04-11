@@ -1,21 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 11 Apr 2013 15:53:48 +0200
-Subject: [Buildroot] [PATCH] barebox: add 2013.04.0, remove 2012.12.1
-In-Reply-To: <1365411363-10796-1-git-send-email-fabio.porcedda@gmail.com>
- (Fabio Porcedda's message of "Mon, 8 Apr 2013 10:56:03 +0200")
-References: <1365411363-10796-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <87ip3tw4ur.fsf@dell.be.48ers.dk>
+Date: Thu, 11 Apr 2013 15:56:54 +0200
+Subject: [Buildroot] [PATCH] xdriver_xf86-video-geode: only available
+	for i386 and x86_64
+In-Reply-To: <1365380759-14946-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 7 Apr 2013 21:25:59 -0300")
+References: <1365380759-14946-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a9p5w4pl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Fabio> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+ Gustavo> Builtin-video from NSC/AMD Geode x86 processors.
+ Gustavo> Fixes build failures on other architectures.
 
-Committed, thanks.
+Committed this and the intel one, thanks.
 
 -- 
 Bye, Peter Korsgaard
