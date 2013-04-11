@@ -1,96 +1,101 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 16:57:06 +0200
-Subject: [Buildroot] [git commit] qt5/qt5imageformats: new package
-Message-ID: <20130411151208.48A269B59C@busybox.osuosl.org>
+Date: Thu, 11 Apr 2013 17:08:23 +0200
+Subject: [Buildroot] [git commit] qt5/qt5webkit: new package
+Message-ID: <20130411151209.940A39B59C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3923924b60507d245fd3e946a0a5c89beee9595f
+commit: http://git.buildroot.net/buildroot/commit/?id=4948aa5e65212223ac755f5a3417b47c3d966bf1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt5/Config.in                          |    1 +
- package/qt5/qt5imageformats/Config.in          |   10 ++++++
- package/qt5/qt5imageformats/qt5imageformats.mk |   41 ++++++++++++++++++++++++
- 3 files changed, 52 insertions(+), 0 deletions(-)
+ package/qt5/Config.in              |    1 +
+ package/qt5/qt5webkit/Config.in    |   14 +++++++++++
+ package/qt5/qt5webkit/qt5webkit.mk |   43 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 58 insertions(+), 0 deletions(-)
 
 diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 01bedfd..b90c6e8 100644
+index 7dff33f..e328b0e 100644
 --- a/package/qt5/Config.in
 +++ b/package/qt5/Config.in
-@@ -16,6 +16,7 @@ menuconfig BR2_PACKAGE_QT5
- 
- if BR2_PACKAGE_QT5
- source "package/qt5/qt5base/Config.in"
-+source "package/qt5/qt5imageformats/Config.in"
+@@ -23,5 +23,6 @@ source "package/qt5/qt5jsbackend/Config.in"
+ source "package/qt5/qt5multimedia/Config.in"
  source "package/qt5/qt5script/Config.in"
  source "package/qt5/qt5svg/Config.in"
++source "package/qt5/qt5webkit/Config.in"
+ source "package/qt5/qt5xmlpatterns/Config.in"
  endif
-diff --git a/package/qt5/qt5imageformats/Config.in b/package/qt5/qt5imageformats/Config.in
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
 new file mode 100644
-index 0000000..d37e08f
+index 0000000..319d84a
 --- /dev/null
-+++ b/package/qt5/qt5imageformats/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_QT5IMAGEFORMATS
-+	bool "qt5imageformats"
++++ b/package/qt5/qt5webkit/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_QT5WEBKIT
++	bool "qt5webkit"
 +	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_ICU
++	select BR2_PACKAGE_SQLITE
++	# This module does not support static linking
++	depends on !BR2_PREFER_STATIC_LIB
 +	help
 +	  Qt is a cross-platform application and UI framework for
 +	  developers using C++.
 +
-+	  This package corresponds to the qt5imageformats module.
++	  This package corresponds to the qt5webkit module.
 +
 +	  http://qt-project.org
-diff --git a/package/qt5/qt5imageformats/qt5imageformats.mk b/package/qt5/qt5imageformats/qt5imageformats.mk
+diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
 new file mode 100644
-index 0000000..5130cfb
+index 0000000..d577cf8
 --- /dev/null
-+++ b/package/qt5/qt5imageformats/qt5imageformats.mk
-@@ -0,0 +1,41 @@
++++ b/package/qt5/qt5webkit/qt5webkit.mk
+@@ -0,0 +1,43 @@
 +#############################################################
 +#
-+# qt5imageformats
++# qt5webkit
 +#
 +#############################################################
 +
-+QT5IMAGEFORMATS_VERSION = $(QT5_VERSION)
-+QT5IMAGEFORMATS_SITE = http://releases.qt-project.org/qt5/$(QT5IMAGEFORMATS_VERSION)/submodules_tar/
-+QT5IMAGEFORMATS_SOURCE = qtimageformats-opensource-src-$(QT5IMAGEFORMATS_VERSION).tar.xz
-+QT5IMAGEFORMATS_DEPENDENCIES = qt5base
-+QT5IMAGEFORMATS_INSTALL_STAGING = YES
++QT5WEBKIT_VERSION = $(QT5_VERSION)
++QT5WEBKIT_SITE = http://releases.qt-project.org/qt5/$(QT5WEBKIT_VERSION)/submodules_tar/
++QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
++QT5WEBKIT_DEPENDENCIES = qt5base sqlite host-ruby host-gperf
++QT5WEBKIT_INSTALL_STAGING = YES
 +
 +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5IMAGEFORMATS_CONFIGURE_OPTS += -opensource -confirm-license
-+QT5IMAGEFORMATS_LICENSE = LGPLv2.1 or GPLv3.0
++QT5WEBKIT_CONFIGURE_OPTS += -opensource -confirm-license
++QT5WEBKIT_LICENSE = LGPLv2.1 or GPLv3.0
 +# Here we would like to get license files from qt5base, but qt5base
-+# may not be extracted at the time we get the legal-info for qt5svg.
++# may not be extracted at the time we get the legal-info for
++# qt5script.
 +else
-+QT5IMAGEFORMATS_LICENSE = Commercial license
-+QT5IMAGEFORMATS_REDISTRIBUTE = NO
++QT5WEBKIT_LICENSE = Commercial license
++QT5WEBKIT_REDISTRIBUTE = NO
 +endif
 +
-+define QT5IMAGEFORMATS_CONFIGURE_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
++define QT5WEBKIT_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
 +endef
 +
-+define QT5IMAGEFORMATS_BUILD_CMDS
++define QT5WEBKIT_BUILD_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 +endef
 +
-+define QT5IMAGEFORMATS_INSTALL_STAGING_CMDS
++define QT5WEBKIT_INSTALL_STAGING_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(QT5_LA_PRL_FILES_FIXUP)
 +endef
 +
-+ifeq ($(BR2_PREFER_STATIC_LIB),)
-+define QT5IMAGEFORMATS_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/qt/plugins/imageformats/*.so $(TARGET_DIR)/usr/lib/qt/plugins/imageformats/
++define QT5WEBKIT_INSTALL_TARGET_CMDS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebKit*.so.* $(TARGET_DIR)/usr/lib
++	cp -dpf $(@D)/bin/* $(TARGET_DIR)/usr/bin/
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebKit $(TARGET_DIR)/usr/qml/
 +endef
-+endif
 +
 +$(eval $(generic-package))
