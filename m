@@ -1,110 +1,66 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 17:06:53 +0200
-Subject: [Buildroot] [git commit] qt5/qt5multimedia: new package
-Message-ID: <20130411151209.59F949B59C@busybox.osuosl.org>
+Date: Thu, 11 Apr 2013 17:11:06 +0200
+Subject: [Buildroot] [git commit] qt5webkit: add EGL dir to includepath
+Message-ID: <20130411151209.B62F29B59C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1eb15de182484261538f815dcc8f59e84ba3b2fd
+commit: http://git.buildroot.net/buildroot/commit/?id=58b8a19f985f6f2037c5659a81ba724f0216ec42
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt5/Config.in                      |    1 +
- package/qt5/qt5multimedia/Config.in        |   16 +++++++++
- package/qt5/qt5multimedia/qt5multimedia.mk |   49 ++++++++++++++++++++++++++++
- 3 files changed, 66 insertions(+), 0 deletions(-)
+ .../qt5/qt5webkit/qt5webkit-egl-includepath.patch  |   40 ++++++++++++++++++++
+ 1 files changed, 40 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index fe85ee6..7dff33f 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -20,6 +20,7 @@ source "package/qt5/qt5declarative/Config.in"
- source "package/qt5/qt5graphicaleffects/Config.in"
- source "package/qt5/qt5imageformats/Config.in"
- source "package/qt5/qt5jsbackend/Config.in"
-+source "package/qt5/qt5multimedia/Config.in"
- source "package/qt5/qt5script/Config.in"
- source "package/qt5/qt5svg/Config.in"
- source "package/qt5/qt5xmlpatterns/Config.in"
-diff --git a/package/qt5/qt5multimedia/Config.in b/package/qt5/qt5multimedia/Config.in
+diff --git a/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch b/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch
 new file mode 100644
-index 0000000..fd36672
+index 0000000..de5bcff
 --- /dev/null
-+++ b/package/qt5/qt5multimedia/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_QT5MULTIMEDIA
-+	bool "qt5multimedia"
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5DECLARATIVE
-+	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+	depends on BR2_PACKAGE_HAS_OPENGL_ES
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
++++ b/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch
+@@ -0,0 +1,40 @@
++From d6b1b33a12c0cf6c52667afafe34e58a7b00d0d8 Mon Sep 17 00:00:00 2001
++From: Floris Bos <bos@je-eigen-domein.nl>
++Date: Thu, 7 Mar 2013 19:25:17 +0100
++Subject: [PATCH] Webcore: add EGL and OpenGL (ES) INCDIR to INCLUDEPATH
 +
-+	  This package corresponds to the qt5multimedia module.
++When building with 3D graphics support enabled, add the
++OpenGL (ES) and EGL include directories to the include path.
 +
-+	  http://qt-project.org
++Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
++---
++ Source/WebCore/Target.pri |    4 ++++
++ 1 file changed, 4 insertions(+)
 +
-+comment "qt5multimedia requires an OpenGL-capable backend"
-+	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-new file mode 100644
-index 0000000..6725701
---- /dev/null
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -0,0 +1,49 @@
-+#############################################################
-+#
-+# qt5multimedia
-+#
-+#############################################################
++diff --git a/Source/WebCore/Target.pri b/Source/WebCore/Target.pri
++index 2669748..421a849 100644
++--- a/Source/WebCore/Target.pri
+++++ b/Source/WebCore/Target.pri
++@@ -3992,15 +3992,19 @@ use?(3D_GRAPHICS) {
++ 
++     contains(QT_CONFIG, opengl) | contains(QT_CONFIG, opengles2) {
++         !contains(QT_CONFIG, opengles2) {
+++            INCLUDEPATH += $$QMAKE_INCDIR_OPENGL
++             SOURCES += \
++                platform/graphics/opengl/GraphicsContext3DOpenGL.cpp \
++                platform/graphics/opengl/Extensions3DOpenGL.cpp
++         } else {
+++            INCLUDEPATH += $$QMAKE_INCDIR_OPENGL_ES2
++             SOURCES += \
++                platform/graphics/opengl/GraphicsContext3DOpenGLES.cpp \
++                platform/graphics/opengl/Extensions3DOpenGLES.cpp
++         }
++ 
+++        !isEmpty(QMAKE_INCDIR_EGL): INCLUDEPATH += $$QMAKE_INCDIR_EGL
+++
++         HEADERS += platform/graphics/opengl/Extensions3DOpenGL.h
++ 
++         SOURCES += \
++-- 
++1.7.10.4
 +
-+QT5MULTIMEDIA_VERSION = $(QT5_VERSION)
-+QT5MULTIMEDIA_SITE = http://releases.qt-project.org/qt5/$(QT5MULTIMEDIA_VERSION)/submodules_tar/
-+QT5MULTIMEDIA_SOURCE = qtmultimedia-opensource-src-$(QT5MULTIMEDIA_VERSION).tar.xz
-+QT5MULTIMEDIA_DEPENDENCIES = qt5base qt5declarative
-+QT5MULTIMEDIA_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5MULTIMEDIA_CONFIGURE_OPTS += -opensource -confirm-license
-+QT5MULTIMEDIA_LICENSE = LGPLv2.1 or GPLv3.0
-+# Here we would like to get license files from qt5base, but qt5base
-+# may not be extracted at the time we get the legal-info for
-+# qt5script.
-+else
-+QT5MULTIMEDIA_LICENSE = Commercial license
-+QT5MULTIMEDIA_REDISTRIBUTE = NO
-+endif
-+
-+define QT5MULTIMEDIA_CONFIGURE_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+endef
-+
-+define QT5MULTIMEDIA_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT5MULTIMEDIA_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),)
-+define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Multimedia*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/* $(TARGET_DIR)/usr/lib/qt/plugins
-+endef
-+endif
-+
-+define QT5MULTIMEDIA_INSTALL_TARGET_CMDS
-+	cp -dpfr $(STAGING_DIR)/usr/qml/* $(TARGET_DIR)/usr/qml
-+	$(QT5MULTIMEDIA_INSTALL_TARGET_LIBS)
-+endef
-+
-+$(eval $(generic-package))
