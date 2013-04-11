@@ -1,29 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 10:10:05 +0200
-Subject: [Buildroot] [PATCH 2/2] support/kconfig: add support for
-	olddefconfig
-In-Reply-To: <1365110666-3080-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1365110666-3080-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1365110666-3080-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CACXmViYv0iNPVcxLsg-NYVTb0iAf9P446PG8o3PyhS62Z_=BbQ@mail.gmail.com>
+Date: Thu, 11 Apr 2013 09:25:51 +0200
+Subject: [Buildroot] [git commit] openssl: adjust ARM optimizations
+Message-ID: <20130411081132.05A8D9B561@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 4, 2013 at 11:24 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> olddefconfig is a new target available in kconfig that allows to take
-> an old .config file, and update it to the latest version of the code,
-> without being asked for questions: it automatically assumes the
-> default value for options whose value was not defined.
->
-> It for example allows to take a minimal defconfig, copy it as .config,
-> and do 'make olddefconfig' to get the full .config.
+commit: http://git.buildroot.net/buildroot/commit/?id=1b7f398dbbc5d11e0c795f1644ccbdfbd12491ad
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+We no longer support ARM less than v4 so just kill dead code that we had
+for those cases.
 
---
-Bye, Peter Korsgaard
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/openssl/openssl.mk |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
+
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 96f817d..7701d51 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -29,14 +29,8 @@ endif
+ 
+ # Some architectures are optimized in OpenSSL
+ ifeq ($(ARCH),arm)
+-ifneq ($(BR2_generic_arm),y)
+-ifneq ($(BR2_arm610),y)
+-ifneq ($(BR2_arm710),y)
+ 	OPENSSL_TARGET_ARCH = armv4
+ endif
+-endif
+-endif
+-endif
+ ifeq ($(ARCH),powerpc)
+ # 4xx cores seem to have trouble with openssl's ASM optimizations
+ ifeq ($(BR2_powerpc_401)$(BR2_powerpc_403)$(BR2_powerpc_405)$(BR2_powerpc_405fp)$(BR2_powerpc_440)$(BR2_powerpc_440fp),)
