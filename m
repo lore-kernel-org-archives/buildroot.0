@@ -1,66 +1,96 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 17:11:06 +0200
-Subject: [Buildroot] [git commit] qt5webkit: add EGL dir to includepath
-Message-ID: <20130411151209.B62F29B59C@busybox.osuosl.org>
+Date: Thu, 11 Apr 2013 16:57:06 +0200
+Subject: [Buildroot] [git commit] qt5/qt5imageformats: new package
+Message-ID: <20130411151208.48A269B59C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58b8a19f985f6f2037c5659a81ba724f0216ec42
+commit: http://git.buildroot.net/buildroot/commit/?id=3923924b60507d245fd3e946a0a5c89beee9595f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../qt5/qt5webkit/qt5webkit-egl-includepath.patch  |   40 ++++++++++++++++++++
- 1 files changed, 40 insertions(+), 0 deletions(-)
+ package/qt5/Config.in                          |    1 +
+ package/qt5/qt5imageformats/Config.in          |   10 ++++++
+ package/qt5/qt5imageformats/qt5imageformats.mk |   41 ++++++++++++++++++++++++
+ 3 files changed, 52 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch b/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 01bedfd..b90c6e8 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -16,6 +16,7 @@ menuconfig BR2_PACKAGE_QT5
+ 
+ if BR2_PACKAGE_QT5
+ source "package/qt5/qt5base/Config.in"
++source "package/qt5/qt5imageformats/Config.in"
+ source "package/qt5/qt5script/Config.in"
+ source "package/qt5/qt5svg/Config.in"
+ endif
+diff --git a/package/qt5/qt5imageformats/Config.in b/package/qt5/qt5imageformats/Config.in
 new file mode 100644
-index 0000000..de5bcff
+index 0000000..d37e08f
 --- /dev/null
-+++ b/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch
-@@ -0,0 +1,40 @@
-+From d6b1b33a12c0cf6c52667afafe34e58a7b00d0d8 Mon Sep 17 00:00:00 2001
-+From: Floris Bos <bos@je-eigen-domein.nl>
-+Date: Thu, 7 Mar 2013 19:25:17 +0100
-+Subject: [PATCH] Webcore: add EGL and OpenGL (ES) INCDIR to INCLUDEPATH
++++ b/package/qt5/qt5imageformats/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_QT5IMAGEFORMATS
++	bool "qt5imageformats"
++	select BR2_PACKAGE_QT5BASE
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
 +
-+When building with 3D graphics support enabled, add the
-+OpenGL (ES) and EGL include directories to the include path.
++	  This package corresponds to the qt5imageformats module.
 +
-+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-+---
-+ Source/WebCore/Target.pri |    4 ++++
-+ 1 file changed, 4 insertions(+)
++	  http://qt-project.org
+diff --git a/package/qt5/qt5imageformats/qt5imageformats.mk b/package/qt5/qt5imageformats/qt5imageformats.mk
+new file mode 100644
+index 0000000..5130cfb
+--- /dev/null
++++ b/package/qt5/qt5imageformats/qt5imageformats.mk
+@@ -0,0 +1,41 @@
++#############################################################
++#
++# qt5imageformats
++#
++#############################################################
 +
-+diff --git a/Source/WebCore/Target.pri b/Source/WebCore/Target.pri
-+index 2669748..421a849 100644
-+--- a/Source/WebCore/Target.pri
-++++ b/Source/WebCore/Target.pri
-+@@ -3992,15 +3992,19 @@ use?(3D_GRAPHICS) {
-+ 
-+     contains(QT_CONFIG, opengl) | contains(QT_CONFIG, opengles2) {
-+         !contains(QT_CONFIG, opengles2) {
-++            INCLUDEPATH += $$QMAKE_INCDIR_OPENGL
-+             SOURCES += \
-+                platform/graphics/opengl/GraphicsContext3DOpenGL.cpp \
-+                platform/graphics/opengl/Extensions3DOpenGL.cpp
-+         } else {
-++            INCLUDEPATH += $$QMAKE_INCDIR_OPENGL_ES2
-+             SOURCES += \
-+                platform/graphics/opengl/GraphicsContext3DOpenGLES.cpp \
-+                platform/graphics/opengl/Extensions3DOpenGLES.cpp
-+         }
-+ 
-++        !isEmpty(QMAKE_INCDIR_EGL): INCLUDEPATH += $$QMAKE_INCDIR_EGL
-++
-+         HEADERS += platform/graphics/opengl/Extensions3DOpenGL.h
-+ 
-+         SOURCES += \
-+-- 
-+1.7.10.4
++QT5IMAGEFORMATS_VERSION = $(QT5_VERSION)
++QT5IMAGEFORMATS_SITE = http://releases.qt-project.org/qt5/$(QT5IMAGEFORMATS_VERSION)/submodules_tar/
++QT5IMAGEFORMATS_SOURCE = qtimageformats-opensource-src-$(QT5IMAGEFORMATS_VERSION).tar.xz
++QT5IMAGEFORMATS_DEPENDENCIES = qt5base
++QT5IMAGEFORMATS_INSTALL_STAGING = YES
 +
++ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
++QT5IMAGEFORMATS_CONFIGURE_OPTS += -opensource -confirm-license
++QT5IMAGEFORMATS_LICENSE = LGPLv2.1 or GPLv3.0
++# Here we would like to get license files from qt5base, but qt5base
++# may not be extracted at the time we get the legal-info for qt5svg.
++else
++QT5IMAGEFORMATS_LICENSE = Commercial license
++QT5IMAGEFORMATS_REDISTRIBUTE = NO
++endif
++
++define QT5IMAGEFORMATS_CONFIGURE_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
++endef
++
++define QT5IMAGEFORMATS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT5IMAGEFORMATS_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++endef
++
++ifeq ($(BR2_PREFER_STATIC_LIB),)
++define QT5IMAGEFORMATS_INSTALL_TARGET_CMDS
++	cp -dpf $(STAGING_DIR)/usr/lib/qt/plugins/imageformats/*.so $(TARGET_DIR)/usr/lib/qt/plugins/imageformats/
++endef
++endif
++
++$(eval $(generic-package))
