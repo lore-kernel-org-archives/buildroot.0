@@ -1,32 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 16:02:45 +0200
-Subject: [Buildroot] [git commit] tslib: bump version
-Message-ID: <20130411140828.5632A9B586@busybox.osuosl.org>
+Date: Thu, 11 Apr 2013 15:54:39 +0200
+Subject: [Buildroot] [git commit] qt5: disallow the selection of Qt4 and Qt5
+Message-ID: <20130411140826.032439B586@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=741ceb80a44112bf5e07b50b56bf5729c6f33638
+commit: http://git.buildroot.net/buildroot/commit/?id=76d9abd810a9739b78b818e982fd6f11ff4dbe67
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+As noticed by Arnout, Qt4 and Qt5 cannot be installed together,
+because for example the qt.conf installed by one version cannot be
+understood by the qmake of another version. We therefore make them
+mutually exclusive, which sounds reasonable for the embedded systems
+targeted by Buildroot.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/tslib/tslib.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/qt5/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 8533cf9..2c07272 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -3,7 +3,7 @@
- # tslib
- #
- #############################################################
--TSLIB_VERSION = 412d99d
-+TSLIB_VERSION = 158ee49b32f83cb7b02d5315f41c2e4cff38942d
- TSLIB_SITE = http://github.com/kergoth/tslib/tarball/master
- TSLIB_LICENSE = GPL, LGPL
- TSLIB_LICENSE_FILES = COPYING
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 1c9f8a6..9e9104a 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -7,6 +7,7 @@ menuconfig BR2_PACKAGE_QT5
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PACKAGE_QT
+ 	help
+ 	  This option enables the Qt5 framework. Sub-options allow to
+ 	  select which modules should be built.
