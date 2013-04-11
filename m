@@ -1,174 +1,112 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 17:02:58 +0200
-Subject: [Buildroot] [git commit] qt5/qt5jsbackend: new package
-Message-ID: <20130411151208.9E5359B59C@busybox.osuosl.org>
+Date: Thu, 11 Apr 2013 17:11:27 +0200
+Subject: [Buildroot] [git commit] qt5/qt5quick1: new package
+Message-ID: <20130411151209.ED4949B59C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=130a48356b79f1a78b3d25b14ae07a32bb4437e5
+commit: http://git.buildroot.net/buildroot/commit/?id=998ebc98b54bbfde52e1789a29492e38a2719b12
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt5/Config.in                              |    1 +
- package/qt5/qt5jsbackend/Config.in                 |   10 +++++
- ...t5jsbackend-dont-import-bz2-python-module.patch |   29 +++++++++++++
- .../qt5/qt5jsbackend/qt5jsbackend-fix-uclibc.patch |   33 +++++++++++++++
- package/qt5/qt5jsbackend/qt5jsbackend.mk           |   43 ++++++++++++++++++++
- 5 files changed, 116 insertions(+), 0 deletions(-)
+ package/qt5/Config.in              |    1 +
+ package/qt5/qt5quick1/Config.in    |   22 +++++++++++++++++
+ package/qt5/qt5quick1/qt5quick1.mk |   45 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 68 insertions(+), 0 deletions(-)
 
 diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 84efa89..e149706 100644
+index e328b0e..2945d96 100644
 --- a/package/qt5/Config.in
 +++ b/package/qt5/Config.in
-@@ -17,6 +17,7 @@ menuconfig BR2_PACKAGE_QT5
- if BR2_PACKAGE_QT5
- source "package/qt5/qt5base/Config.in"
+@@ -21,6 +21,7 @@ source "package/qt5/qt5graphicaleffects/Config.in"
  source "package/qt5/qt5imageformats/Config.in"
-+source "package/qt5/qt5jsbackend/Config.in"
+ source "package/qt5/qt5jsbackend/Config.in"
+ source "package/qt5/qt5multimedia/Config.in"
++source "package/qt5/qt5quick1/Config.in"
  source "package/qt5/qt5script/Config.in"
  source "package/qt5/qt5svg/Config.in"
- source "package/qt5/qt5xmlpatterns/Config.in"
-diff --git a/package/qt5/qt5jsbackend/Config.in b/package/qt5/qt5jsbackend/Config.in
+ source "package/qt5/qt5webkit/Config.in"
+diff --git a/package/qt5/qt5quick1/Config.in b/package/qt5/qt5quick1/Config.in
 new file mode 100644
-index 0000000..89d5067
+index 0000000..99fd5a4
 --- /dev/null
-+++ b/package/qt5/qt5jsbackend/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_QT5JSBACKEND
-+	bool "qt5jsbackend"
++++ b/package/qt5/qt5quick1/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_QT5QUICK1
++	bool "qt5quick1"
 +	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5SCRIPT
++	select BR2_PACKAGE_QT5XMLPATTERNS
++	select BR2_PACKAGE_QT5DECLARATIVE
++	select BR2_PACKAGE_QT5JSBACKEND
++	select BR2_PACKAGE_QT5WEBKIT
++	# This module does not support static linking
++	depends on !BR2_PREFER_STATIC_LIB
++	depends on BR2_PACKAGE_HAS_OPENGL_EGL
++	depends on BR2_PACKAGE_HAS_OPENGL_ES
 +	help
 +	  Qt is a cross-platform application and UI framework for
 +	  developers using C++.
 +
-+	  This package corresponds to the qt5jsbackend module.
++	  This package corresponds to the qt5quick1 module.
 +
 +	  http://qt-project.org
-diff --git a/package/qt5/qt5jsbackend/qt5jsbackend-dont-import-bz2-python-module.patch b/package/qt5/qt5jsbackend/qt5jsbackend-dont-import-bz2-python-module.patch
++
++comment "qt5quick1 requires an OpenGL-capable backend"
++	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
+diff --git a/package/qt5/qt5quick1/qt5quick1.mk b/package/qt5/qt5quick1/qt5quick1.mk
 new file mode 100644
-index 0000000..08f343e
+index 0000000..42b5895
 --- /dev/null
-+++ b/package/qt5/qt5jsbackend/qt5jsbackend-dont-import-bz2-python-module.patch
-@@ -0,0 +1,29 @@
-+Only import bz2 python module when needed
-+
-+The js2c.py script imports the bz2 module unconditionnally, which
-+would require us to build the bzip2 support in host-python. Since in
-+fact bzip2 support is not technically used when building this package,
-+we ensure that the bz2 module is only imported when needed.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/src/3rdparty/v8/tools/js2c.py
-+===================================================================
-+--- a/src/3rdparty/v8/tools/js2c.py
-++++ b/src/3rdparty/v8/tools/js2c.py
-+@@ -33,7 +33,6 @@
-+ 
-+ import os, re, sys, string
-+ import jsmin
-+-import bz2
-+ 
-+ 
-+ def ToCAsciiArray(lines):
-+@@ -344,6 +343,7 @@
-+   else:
-+     raw_sources_declaration = RAW_SOURCES_COMPRESSION_DECLARATION
-+     if env['COMPRESSION'] == 'bz2':
-++      import bz2
-+       all_sources = bz2.compress("".join(all_sources))
-+     total_length = len(all_sources)
-+     sources_data = ToCArray(all_sources)
-diff --git a/package/qt5/qt5jsbackend/qt5jsbackend-fix-uclibc.patch b/package/qt5/qt5jsbackend/qt5jsbackend-fix-uclibc.patch
-new file mode 100644
-index 0000000..50a6dbc
---- /dev/null
-+++ b/package/qt5/qt5jsbackend/qt5jsbackend-fix-uclibc.patch
-@@ -0,0 +1,33 @@
-+Fix build on uClibc
-+
-+Patch taken from https://code.google.com/p/v8/source/detail?r=12094.
-+
-+Review URL: https://chromiumcodereview.appspot.com/10784012
-+Patch from Remi Duraffort <remi.duraffort@st.com>.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: qt5jsbackend-5.0.0/src/3rdparty/v8/src/platform-linux.cc
-+===================================================================
-+--- qt5jsbackend-5.0.0.orig/src/3rdparty/v8/src/platform-linux.cc	2012-12-18 20:04:01.000000000 +0100
-++++ qt5jsbackend-5.0.0/src/3rdparty/v8/src/platform-linux.cc	2013-03-03 20:31:46.000000000 +0100
-+@@ -1030,7 +1030,8 @@
-+   sample->fp = reinterpret_cast<Address>(mcontext.gregs[REG_RBP]);
-+ #elif V8_HOST_ARCH_ARM
-+ // An undefined macro evaluates to 0, so this applies to Android's Bionic also.
-+-#if (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
-++#if (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3) && \
-++     !defined(__UCLIBC__))
-+   sample->pc = reinterpret_cast<Address>(mcontext.gregs[R15]);
-+   sample->sp = reinterpret_cast<Address>(mcontext.gregs[R13]);
-+   sample->fp = reinterpret_cast<Address>(mcontext.gregs[R11]);
-+@@ -1038,7 +1039,8 @@
-+   sample->pc = reinterpret_cast<Address>(mcontext.arm_pc);
-+   sample->sp = reinterpret_cast<Address>(mcontext.arm_sp);
-+   sample->fp = reinterpret_cast<Address>(mcontext.arm_fp);
-+-#endif  // (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
-++#endif  // (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3) &&
-++        // !defined(__UCLIBC__))
-+ #elif V8_HOST_ARCH_MIPS
-+   sample->pc = reinterpret_cast<Address>(mcontext.pc);
-+   sample->sp = reinterpret_cast<Address>(mcontext.gregs[29]);
-diff --git a/package/qt5/qt5jsbackend/qt5jsbackend.mk b/package/qt5/qt5jsbackend/qt5jsbackend.mk
-new file mode 100644
-index 0000000..bc6a53a
---- /dev/null
-+++ b/package/qt5/qt5jsbackend/qt5jsbackend.mk
-@@ -0,0 +1,43 @@
++++ b/package/qt5/qt5quick1/qt5quick1.mk
+@@ -0,0 +1,45 @@
 +#############################################################
 +#
-+# qt5jsbackend
++# qt5quick1
 +#
 +#############################################################
 +
-+QT5JSBACKEND_VERSION = $(QT5_VERSION)
-+QT5JSBACKEND_SITE = http://releases.qt-project.org/qt5/$(QT5JSBACKEND_VERSION)/submodules_tar/
-+QT5JSBACKEND_SOURCE = qtjsbackend-opensource-src-$(QT5JSBACKEND_VERSION).tar.xz
-+QT5JSBACKEND_DEPENDENCIES = qt5base
-+QT5JSBACKEND_INSTALL_STAGING = YES
++QT5QUICK1_VERSION = $(QT5_VERSION)
++QT5QUICK1_SITE = http://releases.qt-project.org/qt5/$(QT5QUICK1_VERSION)/submodules_tar/
++QT5QUICK1_SOURCE = qtquick1-opensource-src-$(QT5QUICK1_VERSION).tar.xz
++QT5QUICK1_DEPENDENCIES = qt5base qt5xmlpatterns qt5script qt5declarative qt5jsbackend qt5webkit
++QT5QUICK1_INSTALL_STAGING = YES
 +
 +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5JSBACKEND_CONFIGURE_OPTS += -opensource -confirm-license
-+QT5JSBACKEND_LICENSE = LGPLv2.1 or GPLv3.0
++QT5QUICK1_CONFIGURE_OPTS += -opensource -confirm-license
++QT5QUICK1_LICENSE = LGPLv2.1 or GPLv3.0
 +# Here we would like to get license files from qt5base, but qt5base
 +# may not be extracted at the time we get the legal-info for
 +# qt5script.
 +else
-+QT5JSBACKEND_LICENSE = Commercial license
-+QT5JSBACKEND_REDISTRIBUTE = NO
++QT5QUICK1_LICENSE = Commercial license
++QT5QUICK1_REDISTRIBUTE = NO
 +endif
 +
-+define QT5JSBACKEND_CONFIGURE_CMDS
++define QT5QUICK1_CONFIGURE_CMDS
 +	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
 +endef
 +
-+define QT5JSBACKEND_BUILD_CMDS
++define QT5QUICK1_BUILD_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 +endef
 +
-+define QT5JSBACKEND_INSTALL_STAGING_CMDS
++define QT5QUICK1_INSTALL_STAGING_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
 +	$(QT5_LA_PRL_FILES_FIXUP)
 +endef
 +
-+ifeq ($(BR2_PREFER_STATIC_LIB),)
-+define QT5JSBACKEND_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5V8*.so.* $(TARGET_DIR)/usr/lib
++define QT5QUICK1_INSTALL_TARGET_CMDS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Declarative.so.* $(TARGET_DIR)/usr/lib
++	cp -dpf $(STAGING_DIR)/usr/lib/qt/plugins/qmltooling/libqmldbg_inspector.so $(TARGET_DIR)/usr/lib/qt/plugins/qmltooling/
++	cp -dpf $(STAGING_DIR)/usr/lib/qt/plugins/qmltooling/libqmldbg_tcp_qtdeclarative.so $(TARGET_DIR)/usr/lib/qt/plugins/qmltooling/
++	cp -dpf $(STAGING_DIR)/usr/bin/qmlviewer $(TARGET_DIR)/usr/bin
++	cp -dpfr $(STAGING_DIR)/usr/imports $(TARGET_DIR)/usr
 +endef
-+endif
 +
 +$(eval $(generic-package))
