@@ -1,34 +1,60 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 16:01:08 +0200
-Subject: [Buildroot] [git commit] lm_sensors: needs host-bison and host-flex
-Message-ID: <20130411140827.506EE9B586@busybox.osuosl.org>
+Date: Thu, 11 Apr 2013 15:52:16 +0200
+Subject: [Buildroot] [git commit] barebox: add 2013.04.0, remove 2012.12.1
+Message-ID: <20130411140825.A1F899B586@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=316aaf97575b226bbd86560fa097841d4805b032
+commit: http://git.buildroot.net/buildroot/commit/?id=099b41b91dc83692460006a6973af0a8bb91f879
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/f88461702cd2f249e5d28eeac26f5e4d9edece6d/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/lm-sensors/lm-sensors.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ boot/barebox/Config.in |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
-index 3f95676..fcd278e 100644
---- a/package/lm-sensors/lm-sensors.mk
-+++ b/package/lm-sensors/lm-sensors.mk
-@@ -8,6 +8,7 @@ LM_SENSORS_VERSION = 3.3.3
- LM_SENSORS_SOURCE = lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
- LM_SENSORS_SITE = http://dl.lm-sensors.org/lm-sensors/releases
- LM_SENSORS_INSTALL_STAGING = YES
-+LM_SENSORS_DEPENDENCIES = host-bison host-flex
- LM_SENSORS_LICENSE = libsensors LGPLv2.1+, programs GPLv2+
- LM_SENSORS_LICENSE_FILES = COPYING.LGPL COPYING
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index f111c04..581cc52 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -8,13 +8,10 @@ config BR2_TARGET_BAREBOX
+ if BR2_TARGET_BAREBOX
+ choice
+ 	prompt "version"
+-	default BR2_TARGET_BAREBOX_2013_03
++	default BR2_TARGET_BAREBOX_2013_04
+ 	help
+ 	  Select the specific Barebox version you want to use
+ 
+-config BR2_TARGET_BAREBOX_2012_12
+-	bool "2012.12.1"
+-
+ config BR2_TARGET_BAREBOX_2013_01
+ 	bool "2013.01.0"
+ 
+@@ -24,6 +21,9 @@ config BR2_TARGET_BAREBOX_2013_02
+ config BR2_TARGET_BAREBOX_2013_03
+ 	bool "2013.03.0"
+ 
++config BR2_TARGET_BAREBOX_2013_04
++	bool "2013.04.0"
++
+ config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+ 
+@@ -41,10 +41,10 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2012.12.1"	if BR2_TARGET_BAREBOX_2012_12
+ 	default "2013.01.0"	if BR2_TARGET_BAREBOX_2013_01
+ 	default "2013.02.0"	if BR2_TARGET_BAREBOX_2013_02
+ 	default "2013.03.0"	if BR2_TARGET_BAREBOX_2013_03
++	default "2013.04.0"	if BR2_TARGET_BAREBOX_2013_04
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
  
