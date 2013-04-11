@@ -1,46 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 09:29:25 +0200
-Subject: [Buildroot] [git commit] speex: adjust ARM optimizations
-Message-ID: <20130411081132.A8B6D9B561@busybox.osuosl.org>
+Date: Thu, 11 Apr 2013 10:10:48 +0200
+Subject: [Buildroot] [git commit] nitrogen6x_defconfig: drop double linux
+	tarball location
+Message-ID: <20130411081134.EEF9D9A809@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d6a4227bd83e619385ad12c31ae124a55dbe7a61
+commit: http://git.buildroot.net/buildroot/commit/?id=2f43a9105dac6760ea1f6456e5cf29b956bc4fe7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We no longer support ARM less than v4 so drop the generic asm option.
+Somehow the old setting wasn't dropped in 184850a42 (bump u-boot /
+linux versions to current stable).
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/speex/Config.in |    9 ++-------
- 1 files changed, 2 insertions(+), 7 deletions(-)
+ configs/nitrogen6x_defconfig |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/speex/Config.in b/package/speex/Config.in
-index 424a830..7e87566 100644
---- a/package/speex/Config.in
-+++ b/package/speex/Config.in
-@@ -8,18 +8,13 @@ config BR2_PACKAGE_SPEEX
- 
- 	  http://www.speex.org/
- 
--config BR2_PACKAGE_SPEEX_ARM_GENERIC
--       bool
--       default y
--       depends on BR2_PACKAGE_SPEEX && (BR2_generic_arm || BR2_arm610 || BR2_arm710)
--
- config BR2_PACKAGE_SPEEX_ARM4
-        bool
-        default y
--       depends on BR2_PACKAGE_SPEEX && (BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_sa110 || BR2_sa1100)
-+       depends on BR2_PACKAGE_SPEEX && (BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_strongarm || BR2_fa526)
- 
- config BR2_PACKAGE_SPEEX_ARM5E
- 	default y
- 	bool
--	depends on BR2_PACKAGE_SPEEX && BR2_arm && !(BR2_PACKAGE_SPEEX_ARM_GENERIC || BR2_PACKAGE_SPEEX_ARM4)
-+	depends on BR2_PACKAGE_SPEEX && BR2_arm && !BR2_PACKAGE_SPEEX_ARM4
- 
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 9828c8e..9b4d473 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -19,7 +19,6 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/linux-imx6/tarball/5f84e92/linux-imx6-5f84e92.tar.gz"
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/linux-imx6/tarball/2dc5560/linux-imx6-2dc5560.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
