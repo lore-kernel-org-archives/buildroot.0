@@ -1,35 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 17:29:15 +0200
-Subject: [Buildroot] [git commit] alsa-utils: needs host-gettext
-Message-ID: <20130411152856.CDE2A9B59E@busybox.osuosl.org>
+From: =?utf-8?B?U8O2cmVu?= Brinkmann <soren.brinkmann@xilinx.com>
+Date: Thu, 11 Apr 2013 09:41:08 -0700
+Subject: [Buildroot] [PATCH] fs: add uimage support w/ example for cpio
+In-Reply-To: <1365691684-30663-2-git-send-email-spenser@gillilanding.com>
+References: <1365691684-30663-1-git-send-email-spenser@gillilanding.com>
+ <1365691684-30663-2-git-send-email-spenser@gillilanding.com>
+Message-ID: <49d6e462-47fd-4a31-b59f-8e509747b9bf@VA3EHSMHS012.ehs.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=36f13ad186f5d7dbfc6a95280f4d16893ef72669
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, Apr 11, 2013 at 09:48:04AM -0500, Spenser Gilliland wrote:
+> From: Spenser Gilliland <Spenser309@gmail.com>
+> 
+> Adds uimage support for various root filesystems.  Uimage support is needed
+> when using the bootm command in uboot.  This provides both a simple infrastructure
+> similar to the current BR2_TARGET_ROOTFS_$(2)_GZ for adding compression. To define the a rootfs should have a UIMAGE wrapper simply create the BR2_TARGET_ROOTFS_$(2)_UIMAGE symbol.
+> 
+> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+Tested-by: Soren Brinkmann <soren.brinkmann@xilinx.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/31ca7306ca345bf057a844eab5b5d711e6c82842/
+I successfully created a lzma compressed initramfs with u-boot header.
+With this and my patch from yesterday I can directly create working root file
+systems for Zynq w/o any further interaction.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/alsa-utils/alsa-utils.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+This patch though, adds two lines with trailing white spaces.
 
-diff --git a/package/multimedia/alsa-utils/alsa-utils.mk b/package/multimedia/alsa-utils/alsa-utils.mk
-index 6228574..84082d1 100644
---- a/package/multimedia/alsa-utils/alsa-utils.mk
-+++ b/package/multimedia/alsa-utils/alsa-utils.mk
-@@ -10,7 +10,7 @@ ALSA_UTILS_SITE = http://alsa.cybermirror.org/utils
- ALSA_UTILS_LICENSE = GPLv2
- ALSA_UTILS_LICENSE_FILES = COPYING
- ALSA_UTILS_INSTALL_STAGING = YES
--ALSA_UTILS_DEPENDENCIES = alsa-lib \
-+ALSA_UTILS_DEPENDENCIES = host-gettext alsa-lib \
- 	$(if $(BR2_PACKAGE_NCURSES),ncurses)
- 
- ALSA_UTILS_CONF_ENV = \
+	S?ren
