@@ -1,34 +1,63 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 09:29:36 +0200
-Subject: [Buildroot] [git commit] ffmpeg: adjust ARM optimizations
-Message-ID: <20130411081132.F318D9AE56@busybox.osuosl.org>
+Date: Thu, 11 Apr 2013 09:58:12 +0200
+Subject: [Buildroot] [git commit] support/kconfig: add support for
+	olddefconfig
+Message-ID: <20130411081134.718968F2AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=383932277e91f87bbcf473758452a5b5dec68c4d
+commit: http://git.buildroot.net/buildroot/commit/?id=9db3b47ea1b37b1ac52561f94ca39fa9cf4ae74c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We no longer support ARM less than v3 so kill dead code.
+olddefconfig is a new target available in kconfig that allows to take
+an old .config file, and update it to the latest version of the code,
+without being asked for questions: it automatically assumes the
+default value for options whose value was not defined.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+It for example allows to take a minimal defconfig, copy it as .config,
+and do 'make olddefconfig' to get the full .config.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/ffmpeg/ffmpeg.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Makefile |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
-index b018ea0..2e88b6b 100644
---- a/package/multimedia/ffmpeg/ffmpeg.mk
-+++ b/package/multimedia/ffmpeg/ffmpeg.mk
-@@ -136,7 +136,7 @@ endif
- # Explicitly disable everything that doesn't match for ARM
- # FFMPEG "autodetects" by compiling an extended instruction via AS
- # This works on compilers that aren't built for generic by default
--ifeq ($(BR2_generic_arm)$(BR2_arm7tdmi)$(BR2_arm610)$(BR2_arm710)$(BR2_arm720t)$(BR2_arm920t)$(BR2_arm922t),y)
-+ifeq ($(BR2_arm7tdmi)$(BR2_arm720t)$(BR2_arm920t)$(BR2_arm922t)$(BR2_strongarm)$(BR2_fa526),y)
- FFMPEG_CONF_OPT += --disable-armv5te
- endif
- ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf-s),y)
+diff --git a/Makefile b/Makefile
+index c95bb1e..0a91658 100644
+--- a/Makefile
++++ b/Makefile
+@@ -58,7 +58,7 @@ export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setloca
+ noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+ 	%_defconfig allyesconfig allnoconfig silentoldconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+-	source-check print-version
++	source-check print-version olddefconfig
+ 
+ # Strip quotes and then whitespaces
+ qstrip=$(strip $(subst ",,$(1)))
+@@ -693,6 +693,10 @@ silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	$(COMMON_CONFIG_ENV) $< --silentoldconfig $(CONFIG_CONFIG_IN)
+ 
++olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++	@mkdir -p $(BUILD_DIR)/buildroot-config
++	$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN)
++
+ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
+@@ -758,6 +762,8 @@ help:
+ 	@echo '  xconfig                - interactive Qt-based configurator'
+ 	@echo '  gconfig                - interactive GTK-based configurator'
+ 	@echo '  oldconfig              - resolve any unresolved symbols in .config'
++	@echo '  silentoldconfig        - Same as oldconfig, but quietly, additionally update deps'
++	@echo '  olddefconfig           - Same as silentoldconfig but sets new symbols to their default value'
+ 	@echo '  randconfig             - New config with random answer to all options'
+ 	@echo '  defconfig              - New config with default answer to all options'
+ 	@echo '                             BR2_DEFCONFIG, if set, is used as input'
