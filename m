@@ -1,36 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 16:01:18 +0200
-Subject: [Buildroot] [git commit] libev: also fails for blackfin
-Message-ID: <20130411140827.9152F9B586@busybox.osuosl.org>
+Date: Thu, 11 Apr 2013 15:56:39 +0200
+Subject: [Buildroot] [git commit] xdriver_xf86-video-geode: only available
+	for i386 and x86_64
+Message-ID: <20130411140826.8C1819B586@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=52763c16bec40fcf007122d355aeab6f3412e24f
+commit: http://git.buildroot.net/buildroot/commit/?id=1413447256167c27364217a905ee2a4fce77df4f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also fails for blackfin because of a lack of memory fences so disable
-it. Fixes:
-http://autobuild.buildroot.net/results/d895f0b0a5f4b6c173c2843a76277e6fe611627b/
+Builtin-video from NSC/AMD Geode x86 processors.
+Fixes build failures on other architectures.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libev/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/x11r7/xdriver_xf86-video-geode/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libev/Config.in b/package/libev/Config.in
-index fd74f55..3d10cd7 100644
---- a/package/libev/Config.in
-+++ b/package/libev/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_LIBEV
- 	bool "libev"
- 	# needs memory fences
--	depends on !BR2_avr32
-+	depends on !(BR2_avr32 || BR2_bfin)
+diff --git a/package/x11r7/xdriver_xf86-video-geode/Config.in b/package/x11r7/xdriver_xf86-video-geode/Config.in
+index 2d2e5bc..2b868d0 100644
+--- a/package/x11r7/xdriver_xf86-video-geode/Config.in
++++ b/package/x11r7/xdriver_xf86-video-geode/Config.in
+@@ -5,5 +5,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_GEODE
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on (BR2_i386 || BR2_x86_64)
  	help
- 	  Userspace library for handling asynchronous notifications
- 
+ 	  video driver for geode device
