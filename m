@@ -1,38 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 15:54:39 +0200
-Subject: [Buildroot] [git commit] qt5: disallow the selection of Qt4 and Qt5
-Message-ID: <20130411140826.032439B586@busybox.osuosl.org>
+Date: Thu, 11 Apr 2013 16:01:08 +0200
+Subject: [Buildroot] [git commit] lm_sensors: needs host-bison and host-flex
+Message-ID: <20130411140827.506EE9B586@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=76d9abd810a9739b78b818e982fd6f11ff4dbe67
+commit: http://git.buildroot.net/buildroot/commit/?id=316aaf97575b226bbd86560fa097841d4805b032
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As noticed by Arnout, Qt4 and Qt5 cannot be installed together,
-because for example the qt.conf installed by one version cannot be
-understood by the qmake of another version. We therefore make them
-mutually exclusive, which sounds reasonable for the embedded systems
-targeted by Buildroot.
+Fixes:
+http://autobuild.buildroot.net/results/f88461702cd2f249e5d28eeac26f5e4d9edece6d/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt5/Config.in |    1 +
+ package/lm-sensors/lm-sensors.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 1c9f8a6..9e9104a 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -7,6 +7,7 @@ menuconfig BR2_PACKAGE_QT5
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_INET_IPV6
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_PACKAGE_QT
- 	help
- 	  This option enables the Qt5 framework. Sub-options allow to
- 	  select which modules should be built.
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index 3f95676..fcd278e 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -8,6 +8,7 @@ LM_SENSORS_VERSION = 3.3.3
+ LM_SENSORS_SOURCE = lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
+ LM_SENSORS_SITE = http://dl.lm-sensors.org/lm-sensors/releases
+ LM_SENSORS_INSTALL_STAGING = YES
++LM_SENSORS_DEPENDENCIES = host-bison host-flex
+ LM_SENSORS_LICENSE = libsensors LGPLv2.1+, programs GPLv2+
+ LM_SENSORS_LICENSE_FILES = COPYING.LGPL COPYING
+ 
