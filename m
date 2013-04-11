@@ -1,34 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 23:32:11 +0200
-Subject: [Buildroot] [git commit] system/securetty: Add ttyPS[0-1]
-Message-ID: <20130411213453.D48C79B560@busybox.osuosl.org>
+Date: Thu, 11 Apr 2013 23:57:07 +0200
+Subject: [Buildroot] [git commit] kismet: fix license files info
+Message-ID: <20130411215658.5D90B9B59D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c4ff68e08e063152245d0a1b211df7a4360f925
+commit: http://git.buildroot.net/buildroot/commit/?id=e968ebee7efb85d22a1953c032201c1d9982df20
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adding ttyPS0 and ttyPS1 to securetty for Zynq.
+Fixes http://autobuild.buildroot.net/results/9a0ebe157438a07e145026e61c3031e5bf2283b9
 
-Signed-off-by: Soren Brinkmann <soren.brinkmann@xilinx.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- system/skeleton/etc/securetty |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/kismet/kismet.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/system/skeleton/etc/securetty b/system/skeleton/etc/securetty
-index c96f2fb..5a3d0c6 100644
---- a/system/skeleton/etc/securetty
-+++ b/system/skeleton/etc/securetty
-@@ -22,6 +22,8 @@ ttyUL0
- ttyUL1
- ttyUL2
- ttyUL3
-+ttyPS0
-+ttyPS1
- ttyPSC0
- ttyPSC1
- ttyPSC2
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 845df6b..5abc92c 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -8,7 +8,7 @@ KISMET_VERSION = 2013-03-R1a
+ KISMET_SITE = http://www.kismetwireless.net/code
+ KISMET_DEPENDENCIES = host-pkgconf libpcap ncurses
+ KISMET_LICENSE = GPLv2+
+-KISMET_LICENSE_FILES = GPL
++KISMET_LICENSE_FILES = debian/copyright
+ 
+ ifeq ($(BR2_PACKAGE_LIBNL),y)
+ 	KISMET_DEPENDENCIES += libnl
