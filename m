@@ -1,101 +1,80 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 11 Apr 2013 13:07:03 -0500
-Subject: [Buildroot] [PATCH 1/1] fs: add uimage support w/ example for
-	cpio
-In-Reply-To: <1365703381-9560-1-git-send-email-spenser@gillilanding.com>
-References: <1365703381-9560-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <CAEBucnDkrqauUwvLfH-4ea82M3ei4u3ityCO+jDiQdFJmvKUhw@mail.gmail.com>
+Date: Thu, 11 Apr 2013 13:17:25 -0500
+Subject: [Buildroot] [PATCH] fftwf: Add fftwf package for single
+	precision fft
+In-Reply-To: <20130411193330.37ecd3ac@skate>
+References: <1365691684-30663-1-git-send-email-spenser@gillilanding.com>
+ <20130411193330.37ecd3ac@skate>
+Message-ID: <CAEBucnDk_wJBT26bt5o4wVLCsOMFyxuT3dma62jUxpUJUwBiFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I do not know if uimage is used for any other rfs types. However, this
-seemed like the easiest way to add support.
+The problem is that the FFTW program cannot build both the single and
+double precision libraries at the same time.
 
-On Thu, Apr 11, 2013 at 1:03 PM, Spenser Gilliland
-<spenser@gillilanding.com> wrote:
-> From: Spenser Gilliland <Spenser309@gmail.com>
+so the following must be done.
+
+./configure
+make
+make install
+./configure --enable-single --enable-neon
+make
+make install
+
+The first run through installs the fftw library and pkg-config file.
+The second run through only installs the fftwf library (no pkg-config
+file).
+
+Because the pkg-config is only installed from the double precision
+(1st install). The fftwf library must depend on the fftw library for
+proper operation.
+
+Let me know if any changes should be made.
+
+Spenser
+
+On Thu, Apr 11, 2013 at 12:33 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Spenser Gilliland,
 >
-> Adds uimage support for various root filesystems.  Uimage support is needed when
-> using the bootm command in uboot.  This provides both a simple infrastructure
-> similar to the current BR2_TARGET_ROOTFS_$(2)_GZ for adding compression. To
-> define the a rootfs should have a UIMAGE wrapper simply create the
-> BR2_TARGET_ROOTFS_$(2)_UIMAGE symbol.
+> On Thu, 11 Apr 2013 09:48:03 -0500, Spenser Gilliland wrote:
 >
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> ---
->  fs/common.mk      |   20 +++++++++++++++++++-
->  fs/cpio/Config.in |    7 +++++++
->  2 files changed, 26 insertions(+), 1 deletion(-)
+>> +FFTWF_VERSION = 3.3.2
+>> +FFTWF_SITE = http://www.fftw.org
+>> +FFTWF_SOURCE = fftw-$(FFTWF_VERSION).tar.gz
+>> +FFTWF_INSTALL_STAGING = YES
 >
-> diff --git a/fs/common.mk b/fs/common.mk
-> index a0b7b39..10520bc 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -31,6 +31,8 @@
->  # BR2_TARGET_ROOTFS_$(FSTYPE)_LZMA exist and are enabled, then the
->  # macro will automatically generate a compressed filesystem image.
+> package/fftw/ that already exists in Buildroot builds the exact same
+> source code. Why do you think a different package is needed?
 >
-> +MKIMAGE_RAMDISK = $(HOST_DIR)/usr/bin/mkimage -A $(BR2_ARCH) -T ramdisk -C $(1) -d $(2) $(2).uboot
-> +
->  FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
->  FULL_DEVICE_TABLE = $(BUILD_DIR)/_device_table.txt
->  ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
-> @@ -39,7 +41,9 @@ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
->  define ROOTFS_TARGET_INTERNAL
+> Why don't you just add the:
 >
->  # extra deps
-> -ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma)
-> +ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
-> +   $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma) \
-> +   $$(if $$(BR2_TARGET_ROOTFS_$(2)_UIMAGE),host-uboot-tools)
->
->  $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
->         @$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
-> @@ -70,6 +74,20 @@ endif
->  ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZMA),y)
->         $$(LZMA) -9 -c $$@ > $$@.lzma
->  endif
-> +ifeq ($$(BR2_TARGET_ROOTFS_$(2)_UIMAGE),y)
-> +ifeq ($$(BR2_TARGET_ROOTFS_$(2)_NONE),y)
-> +       $$(call MKIMAGE_RAMDISK,none,$$@)
-> +endif
-> +ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
-> +       $$(call MKIMAGE_RAMDISK,gzip,$$@.gz)
-> +endif
-> +ifeq ($$(BR2_TARGET_ROOTFS_$(2)_BZIP2),y)
-> +       $$(call MKIMAGE_RAMDISK,bzip2,$$@.bz2)
-> +endif
-> +ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZMA),y)
-> +       $$(call MKIMAGE_RAMDISK,lzma,$$@.lzma)
-> +endif
+> +ifeq ($(BR2_ARM_ENABLE_NEON),y)
+> +FFTWF_CONF_OPT = --enable-single --enable-neon
+> +FFTWF_CONF_ENV += \
+> +       CFLAGS="$(TARGET_CFLAGS) -mfpu=neon -mfloat-abi=softfp"
+> +else
+> +FFTWF_CONF_OPT = --enable-single
 > +endif
 >
->  rootfs-$(1)-show-depends:
->         @echo $$(ROOTFS_$(2)_DEPENDENCIES)
-> diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
-> index 0669a44..d2d2702 100644
-> --- a/fs/cpio/Config.in
-> +++ b/fs/cpio/Config.in
-> @@ -5,6 +5,13 @@ config BR2_TARGET_ROOTFS_CPIO
->           used for an initial RAM filesystem that is passed to the kernel
->           by the bootloader.
+> block of code into package/fftw/fftw.mk ?
 >
-> +config BR2_TARGET_ROOTFS_CPIO_UIMAGE
-> +       bool "Add U-Boot header to the root filesystem"
-> +       depends on BR2_TARGET_ROOTFS_CPIO
-> +       help
-> +         Add a u-boot header to the cpio root filesystem.  This allows
-> +         the image to be booted by the bootm command in uboot.
-> +
->  choice
->          prompt "Compression method"
->          default BR2_TARGET_ROOTFS_CPIO_NONE
+> In Buildroot, we generally have one package for each source tarball.
+> But this package may provide different configuration options to adapt
+> to the specificities of the platform, or to provide different kind of
+> features.
+>
+> Best regards,
+>
+> Thomas
 > --
-> 1.7.9.5
->
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
 
 
