@@ -1,159 +1,87 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 11 Apr 2013 11:41:36 -0300
-Subject: [Buildroot] [PATCH 2/2] collectd: bump to version 5.3.0
-In-Reply-To: <1365691296-16042-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1365691296-16042-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1365691296-16042-2-git-send-email-gustavo@zacarias.com.ar>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Thu, 11 Apr 2013 09:48:03 -0500
+Subject: [Buildroot] [PATCH] fftwf: Add fftwf package for single precision
+	fft
+Message-ID: <1365691684-30663-1-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/collectd/Config.in   | 33 +++++++++++++++++++++++++++++++--
- package/collectd/collectd.mk | 10 ++++++++--
- 2 files changed, 39 insertions(+), 4 deletions(-)
+From: Spenser Gilliland <Spenser309@gmail.com>
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 74419f6..a1d50a4 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_COLLECTD
- 	bool "collectd"
- 	# Uses fork()
- 	depends on BR2_USE_MMU
-+	depends on BR2_INET_IPV6
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  collectd is a daemon which collects system performance
-@@ -42,12 +43,27 @@ endmenu
- 
- menu "misc plugins"
- 
-+config BR2_PACKAGE_COLLECTD_AGGREGATION
-+	bool "aggregation"
+The current fftw package only produces double precision floating point
+libraries.  This package recompiles the library for single precision and
+uses the neon extensions if available.
+
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+---
+ package/Config.in       |    1 +
+ package/fftwf/Config.in |   14 ++++++++++++++
+ package/fftwf/fftwf.mk  |   21 +++++++++++++++++++++
+ 3 files changed, 36 insertions(+)
+ create mode 100644 package/fftwf/Config.in
+ create mode 100644 package/fftwf/fftwf.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 69d87f0..b1bbfea 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -550,6 +550,7 @@ source "package/libcofi/Config.in"
+ source "package/classpath/Config.in"
+ source "package/elfutils/Config.in"
+ source "package/fftw/Config.in"
++source "package/fftw/Config.in"
+ source "package/libargtable2/Config.in"
+ source "package/argp-standalone/Config.in"
+ source "package/boost/Config.in"
+diff --git a/package/fftwf/Config.in b/package/fftwf/Config.in
+new file mode 100644
+index 0000000..243be02
+--- /dev/null
++++ b/package/fftwf/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_FFTWF
++	bool "fftwf"
++	depends on BR2_PACKAGE_FFTW
 +	help
-+	  The Aggregate plugin allows to aggregate multiple values into
-+	  a single value using one or several consolidation functions,
-+	  e.g. summation and average.
++	  Library for computing Fast Fourier Transforms using the ARM Neon
++	  instruction set.
 +
- config BR2_PACKAGE_COLLECTD_LOGFILE
- 	bool "logfile"
- 	default y
- 	help
- 	  Writes log messages to a file or STDOUT/STDERR.
- 
-+config BR2_PACKAGE_COLLECTD_NOTIFY_EMAIL
-+	bool "notify_email"
-+	select BR2_PACKAGE_LIBESMTP
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Send an E-mail with the notification message to the
-+	  configured recipients.
++	  This library computes Fast Fourier Transforms (FFT) in one 
++	  or more dimensions.  It is extremely fast. This package 
++	  contains the shared library version of the fftw libraries in 
++	  single precision.
++	
++	  http://www.fftw.org
++           
+diff --git a/package/fftwf/fftwf.mk b/package/fftwf/fftwf.mk
+new file mode 100644
+index 0000000..90fb80e
+--- /dev/null
++++ b/package/fftwf/fftwf.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# fftwf
++#
++################################################################################
 +
- config BR2_PACKAGE_COLLECTD_SYSLOG
- 	bool "syslog"
- 	default y
-@@ -282,6 +298,12 @@ config BR2_PACKAGE_COLLECTD_TAIL
- 	  Tails log files and each line is given to one or more matches
- 	  which test if the line is relevant for any statistics.
- 
-+config BR2_PACKAGE_COLLECTD_TAIL_CSV
-+	bool "tail csv"
-+	help
-+	  Follows (tails) files in CSV format, parses each line and submits
-+	  extracted values.
++FFTWF_VERSION = 3.3.2
++FFTWF_SITE = http://www.fftw.org
++FFTWF_SOURCE = fftw-$(FFTWF_VERSION).tar.gz
++FFTWF_INSTALL_STAGING = YES
 +
- config BR2_PACKAGE_COLLECTD_TCPCONNS
- 	bool "tcpconns"
- 	help
-@@ -373,6 +395,13 @@ config BR2_PACKAGE_COLLECTD_RRDTOOL
- comment "rrdtool support requires a toolchain with WCHAR support"
- 	depends on !BR2_USE_WCHAR
- 
-+config BR2_PACKAGE_COLLECTD_RIEMANN
-+	bool "riemann"
-+	depends on BR2_INSTALL_LIBSTDCPP # protobuf
-+	select BR2_PACKAGE_PROTOBUF_C
-+	help
-+	  Sends data to Riemann, a stream processing and monitoring system.
++ifeq ($(BR2_ARM_ENABLE_NEON),y)
++FFTWF_CONF_OPT = --enable-single --enable-neon
++FFTWF_CONF_ENV += \
++	CFLAGS="$(TARGET_CFLAGS) -mfpu=neon -mfloat-abi=softfp"
++else
++FFTWF_CONF_OPT = --enable-single
++endif
 +
- config BR2_PACKAGE_COLLECTD_UNIXSOCK
- 	bool "unixsock"
- 	help
-@@ -389,5 +418,5 @@ endmenu
- 
- endif
- 
--comment "collectd needs a toolchain with thread support"
--        depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "collectd needs a toolchain with IPv6 and thread support"
-+        depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 6022ab3..4dfa1d1 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--COLLECTD_VERSION = 5.1.3
-+COLLECTD_VERSION = 5.3.0
- COLLECTD_SITE = http://collectd.org/files
- COLLECTD_MAKE_OPT = LDFLAGS="$(TARGET_LDFLAGS) -lm"
- COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
-@@ -16,7 +16,7 @@ COLLECTD_LICENSE_FILES = COPYING
- COLLECTD_PLUGINS_DISABLE = amqp apple_sensors ascent dbi email \
- 		gmond hddtemp ipmi ipvs java libvirt lpar madwifi mbmon \
- 		memcachec modbus multimeter netapp netlink nginx \
--		notify_desktop notify_email numa nut onewire oracle perl \
-+		notify_desktop notify_email numa nut onewire oracle perl pf \
- 		pinba postgresql powerdns python redis routeros rrdcached \
- 		sensors tape target_v5upgrade teamspeak2 ted tokyotyrant \
- 		uuid varnish vserver write_mongodb write_redis xmms zfs_arc
-@@ -24,6 +24,7 @@ COLLECTD_PLUGINS_DISABLE = amqp apple_sensors ascent dbi email \
- COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
- 	--localstatedir=/var --with-perl-bindings=no \
- 	$(foreach p, $(COLLECTD_PLUGINS_DISABLE), --disable-$(p)) \
-+	$(if $(BR2_PACKAGE_COLLECTD_AGGREGATION),--enable-aggregation,--disable-aggregation) \
- 	$(if $(BR2_PACKAGE_COLLECTD_APACHE),--enable-apache,--disable-apache) \
- 	$(if $(BR2_PACKAGE_COLLECTD_APCUPS),--enable-apcups,--disable-apcups) \
- 	$(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
-@@ -59,6 +60,7 @@ COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
- 	$(if $(BR2_PACKAGE_COLLECTD_NETWORK),--enable-network,--disable-network) \
- 	$(if $(BR2_PACKAGE_COLLECTD_NFS),--enable-nfs,--disable-nfs) \
- 	$(if $(BR2_PACKAGE_COLLECTD_NOTIFICATION),--enable-target_notification,--disable-target_notification) \
-+	$(if $(BR2_PACKAGE_COLLECTD_NOTIFY_EMAIL),--enable-notify_email,--disable-notify_email) \
- 	$(if $(BR2_PACKAGE_COLLECTD_NTPD),--enable-ntpd,--disable-ntpd) \
- 	$(if $(BR2_PACKAGE_COLLECTD_OLSRD),--enable-olsrd,--disable-olsrd) \
- 	$(if $(BR2_PACKAGE_COLLECTD_OPENVPN),--enable-openvpn,--disable-openvpn) \
-@@ -67,6 +69,7 @@ COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
- 	$(if $(BR2_PACKAGE_COLLECTD_PROTOCOLS),--enable-protocols,--disable-protocols) \
- 	$(if $(BR2_PACKAGE_COLLECTD_REGEX),--enable-match_regex,--disable-match-regex) \
- 	$(if $(BR2_PACKAGE_COLLECTD_REPLACE),--enable-target_replace,--disable-target_replace) \
-+	$(if $(BR2_PACKAGE_COLLECTD_RIEMANN),--enable-write_riemann,--disable-write_riemann) \
- 	$(if $(BR2_PACKAGE_COLLECTD_RRDTOOL),--enable-rrdtool,--disable-rrdtool) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SCALE),--enable-target_scale,--disable-target_scale) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SERIAL),--enable-serial,--disable-serial) \
-@@ -76,6 +79,7 @@ COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
- 	$(if $(BR2_PACKAGE_COLLECTD_SYSLOG),--enable-syslog,--disable-syslog) \
- 	$(if $(BR2_PACKAGE_COLLECTD_TABLE),--enable-table,--disable-table) \
- 	$(if $(BR2_PACKAGE_COLLECTD_TAIL),--enable-tail,--disable-tail) \
-+	$(if $(BR2_PACKAGE_COLLECTD_TAIL_CSV),--enable-tail_csv,--disable-tail_csv) \
- 	$(if $(BR2_PACKAGE_COLLECTD_TCPCONNS),--enable-tcpconns,--disable-tcpconns) \
- 	$(if $(BR2_PACKAGE_COLLECTD_THERMAL),--enable-thermal,--disable-thermal) \
- 	$(if $(BR2_PACKAGE_COLLECTD_THRESHOLD),--enable-threshold,--disable-threshold) \
-@@ -97,7 +101,9 @@ COLLECTD_DEPENDENCIES = host-pkgconf \
- 	$(if $(BR2_PACKAGE_COLLECTD_DNS),libpcap) \
- 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MYSQL),mysql_client) \
-+	$(if $(BR2_PACKAGE_COLLECTD_NOTIFY_EMAIL),libesmtp) \
- 	$(if $(BR2_PACKAGE_COLLECTD_PING),liboping) \
-+	$(if $(BR2_PACKAGE_COLLECTD_RIEMANN),protobuf-c) \
- 	$(if $(BR2_PACKAGE_COLLECTD_RRDTOOL),rrdtool) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SNMP),netsnmp) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WRITEHTTP),libcurl)
++$(eval $(autotools-package))
++
 -- 
-1.8.1.5
+1.7.9.5
