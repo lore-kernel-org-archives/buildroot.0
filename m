@@ -1,32 +1,29 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Apr 2013 09:59:10 +0200
-Subject: [Buildroot] [PATCH 1/2] support/kconfig: upgrade to 3.9-rc2
-In-Reply-To: <1365110666-3080-2-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 4 Apr 2013 23:24:24 +0200")
+Date: Thu, 11 Apr 2013 10:10:05 +0200
+Subject: [Buildroot] [PATCH 2/2] support/kconfig: add support for
+	olddefconfig
+In-Reply-To: <1365110666-3080-3-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1365110666-3080-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1365110666-3080-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87vc7twl9t.fsf@dell.be.48ers.dk>
+ <1365110666-3080-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CACXmViYv0iNPVcxLsg-NYVTb0iAf9P446PG8o3PyhS62Z_=BbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-
- Thomas> Our kconfig code is updated to the version of kernel 3.9-rc2. No major
- Thomas> issues during the migration, except:
-
- Thomas>  * Some conflicts when applying 03-change-config-option-prefix.patch
- Thomas>    due to upstream kernel changes.
-
- Thomas>  * The need of adding a new patch, 15-fix-qconf-moc-rule.patch, to fix
- Thomas>    the make rule that generates the moc file for the Qt-based
- Thomas>    interface.
-
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Thu, Apr 4, 2013 at 11:24 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> olddefconfig is a new target available in kconfig that allows to take
+> an old .config file, and update it to the latest version of the code,
+> without being asked for questions: it automatically assumes the
+> default value for options whose value was not defined.
+>
+> It for example allows to take a minimal defconfig, copy it as .config,
+> and do 'make olddefconfig' to get the full .config.
 
 Committed, thanks.
 
--- 
+--
 Bye, Peter Korsgaard
