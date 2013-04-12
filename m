@@ -1,10 +1,10 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Fri, 12 Apr 2013 18:18:25 +0800
-Subject: [Buildroot] [PATCH v5 3/7] arch: toolchain: Introduce target CPU
-	revision.
+Date: Fri, 12 Apr 2013 18:18:27 +0800
+Subject: [Buildroot] [PATCH v5 5/7] package: Introduce package-specific
+	BINFMT_FLAT options.
 In-Reply-To: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
 References: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1365761909-15305-3-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1365761909-15305-5-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,66 +13,36 @@ To: buildroot@busybox.net
 
 From: Sonic Zhang <sonic.zhang@analog.com>
 
-Adds the possibility to have a free-form CPU revision string and append it
-to the target CPU. Only Blackfin actually uses this option.
+Add new option <PKG>_FLAT_STACKSIZE. The document needs to be updated.
 
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 
 ---
 
-v3-changes:
-- Detail the help text and fix the line length.
----
- arch/Config.in                           |    3 +++
- arch/Config.in.bfin                      |    8 ++++++++
- toolchain/toolchain-external/ext-tool.mk |    4 ++++
- 3 files changed, 15 insertions(+), 0 deletions(-)
+v4-change:
+- Use late binding in make to expand package specific flat stack size
+to TARGET_LDFLAGS.
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 2a14c29..047abc1 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -174,6 +174,9 @@ config BR2_GCC_TARGET_ABI
- config BR2_GCC_TARGET_CPU
- 	string
+v2-changes:
+- Fix typo error in macro BINFMT_FLAT
+---
+ package/Makefile.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index dd3bc7d..a449089 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -103,6 +103,10 @@ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET
+ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
  
-+config BR2_GCC_TARGET_CPU_REVISION
-+	string
-+
- # Set up target binary format
- choice
- 	prompt "Target Binary Format"
-diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-index ac96620..f755c8d 100644
---- a/arch/Config.in.bfin
-+++ b/arch/Config.in.bfin
-@@ -97,3 +97,11 @@ config BR2_GCC_TARGET_CPU
- 	default bf548		if BR2_bf548
- 	default bf549		if BR2_bf549
- 	default bf561		if BR2_bf561
-+
-+config BR2_GCC_TARGET_CPU_REVISION
-+	string "Target CPU revision"
-+	help
-+	  Specify a target CPU revision, which will be appended to the
-+	  value of the -mcpu option. For example, if the selected CPU is
-+	  bf609, and then selected CPU revision is "0.0", then gcc will
-+	  receive the -mcpu=bf609-0.0 option.
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 92183a4..27fd296 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -134,7 +134,11 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
- endif
- 
- CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
-+ifeq ($(BR2_GCC_TARGET_CPU_REVISION),)
- CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
-+else
-+CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
++ifeq ($(BR2_BINFMT_FLAT),y)
++TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
 +endif
- CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
- CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
- 
++
+ ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
+ TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
+ TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
 -- 
 1.7.0.4
