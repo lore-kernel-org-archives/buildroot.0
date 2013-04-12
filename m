@@ -1,10 +1,10 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Fri, 12 Apr 2013 18:18:26 +0800
-Subject: [Buildroot] [PATCH v5 4/7] arch: toolchain: Introduce binary format
-	FLAT types.
+Date: Fri, 12 Apr 2013 18:18:25 +0800
+Subject: [Buildroot] [PATCH v5 3/7] arch: toolchain: Introduce target CPU
+	revision.
 In-Reply-To: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
 References: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1365761909-15305-4-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1365761909-15305-3-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,84 +13,66 @@ To: buildroot@busybox.net
 
 From: Sonic Zhang <sonic.zhang@analog.com>
 
-Just introduce the symbol and options in arch generic Config.in.
-Add FLAT types specific compiling flags into package makefile.
+Adds the possibility to have a free-form CPU revision string and append it
+to the target CPU. Only Blackfin actually uses this option.
 
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 
 ---
 
-v5-change:
-- Move FLAT types specific compiling flags back to package makefile.
-The flags can't be set to compile Linux kernel.
-
 v3-changes:
-- Add dependancy to bfin and m68k
-- Add help text for FLAT binary types.
-- Split shared flat flags.
+- Detail the help text and fix the line length.
 ---
- arch/Config.in      |   26 ++++++++++++++++++++++++++
- package/Makefile.in |   11 +++++++++++
- 2 files changed, 37 insertions(+), 0 deletions(-)
+ arch/Config.in                           |    3 +++
+ arch/Config.in.bfin                      |    8 ++++++++
+ toolchain/toolchain-external/ext-tool.mk |    4 ++++
+ 3 files changed, 15 insertions(+), 0 deletions(-)
 
 diff --git a/arch/Config.in b/arch/Config.in
-index 047abc1..255b8b0 100644
+index 2a14c29..047abc1 100644
 --- a/arch/Config.in
 +++ b/arch/Config.in
-@@ -211,6 +211,32 @@ config BR2_BINFMT_FLAT
+@@ -174,6 +174,9 @@ config BR2_GCC_TARGET_ABI
+ config BR2_GCC_TARGET_CPU
+ 	string
  
- endchoice
- 
-+# Set up flat binary type
-+choice
-+	prompt "FLAT Binary type"
-+	depends on BR2_BINFMT_FLAT
-+	default BR2_BINFMT_FLAT_ONE
++config BR2_GCC_TARGET_CPU_REVISION
++	string
 +
-+config BR2_BINFMT_FLAT_ONE
-+	bool "One memory region"
+ # Set up target binary format
+ choice
+ 	prompt "Target Binary Format"
+diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+index ac96620..f755c8d 100644
+--- a/arch/Config.in.bfin
++++ b/arch/Config.in.bfin
+@@ -97,3 +97,11 @@ config BR2_GCC_TARGET_CPU
+ 	default bf548		if BR2_bf548
+ 	default bf549		if BR2_bf549
+ 	default bf561		if BR2_bf561
++
++config BR2_GCC_TARGET_CPU_REVISION
++	string "Target CPU revision"
 +	help
-+	  All segments are linked into one memory region.
-+
-+config BR2_BINFMT_FLAT_SEP_DATA
-+	bool "Separate data and code region"
-+	depends on BR2_bfin || BR2_m68k
-+	help
-+	  Allow for the data and text segments to be separated and placed in
-+	  different regions of memory.
-+
-+config BR2_BINFMT_FLAT_SHARED
-+	bool "Shared binary"
-+	depends on BR2_bfin || BR2_m68k
-+	help
-+	  Allow to load and link indiviual FLAT binaries at run time.
-+
-+endchoice
-+
- if BR2_arm || BR2_armeb
- source "arch/Config.in.arm"
++	  Specify a target CPU revision, which will be appended to the
++	  value of the -mcpu option. For example, if the selected CPU is
++	  bf609, and then selected CPU revision is "0.0", then gcc will
++	  receive the -mcpu=bf609-0.0 option.
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 92183a4..27fd296 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -134,7 +134,11 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
  endif
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a8bf36b..dd3bc7d 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -103,6 +103,17 @@ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET
- TARGET_CXXFLAGS = $(TARGET_CFLAGS)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
  
-+ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
-+TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
-+TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
-+TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
+ CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
++ifeq ($(BR2_GCC_TARGET_CPU_REVISION),)
+ CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
++else
++CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
 +endif
-+ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
-+TARGET_LDFLAGS += -msep-data
-+TARGET_CFLAGS += -msep-data
-+TARGET_CXXFLAGS += -msep-data
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
- TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
- else
+ CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
+ CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
+ 
 -- 
 1.7.0.4
