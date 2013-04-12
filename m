@@ -1,34 +1,61 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 12 Apr 2013 14:36:52 +0200
-Subject: [Buildroot] [git commit] mpd: bump to version 0.17.4
-Message-ID: <20130412130252.B8DC69B5D9@busybox.osuosl.org>
+Date: Fri, 12 Apr 2013 14:37:04 +0200
+Subject: [Buildroot] [git commit] flot: bump to version 0.8
+Message-ID: <20130412130252.ED5739B5CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=21cbd13c3d194b6883585a1e7cabcdeaa5cedd5e
+commit: http://git.buildroot.net/buildroot/commit/?id=7a3c9cfdbae96fc6760ac6b57af005ba29ffd556
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also change upstream website and download URL and add new Canvas option.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/mpd/mpd.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/flot/Config.in |    7 ++++++-
+ package/flot/flot.mk   |    7 +++++--
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/package/multimedia/mpd/mpd.mk b/package/multimedia/mpd/mpd.mk
-index 5fbc8f6..e098c3d 100644
---- a/package/multimedia/mpd/mpd.mk
-+++ b/package/multimedia/mpd/mpd.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
+diff --git a/package/flot/Config.in b/package/flot/Config.in
+index 0bd6b14..90a4278 100644
+--- a/package/flot/Config.in
++++ b/package/flot/Config.in
+@@ -14,12 +14,17 @@ config BR2_PACKAGE_FLOT
+ 	  Safari 3.0+, Opera 9.5+ and Konqueror 4.x+ with the HTML
+ 	  canvas tag.
  
--MPD_VERSION = 0.17.3
--MPD_SITE = http://downloads.sourceforge.net/project/musicpd/mpd/$(MPD_VERSION)
-+MPD_VERSION = 0.17.4
-+MPD_SITE = http://www.musicpd.org/download/mpd/stable
- MPD_DEPENDENCIES = host-pkgconf libglib2
- MPD_LICENSE = GPLv2
- MPD_LICENSE_FILES = COPYING
+-	  https://code.google.com/p/flot/
++	  http://www.flotcharts.org/
+ 
+ if BR2_PACKAGE_FLOT
+ 
+ comment "flot plugins"
+ 
++config BR2_PACKAGE_FLOT_CANVAS
++	bool "canvas"
++	help
++	  Flot plugin to render axis tick labels directly to the canvas
++
+ config BR2_PACKAGE_FLOT_FILLBETWEEN
+ 	bool "fillbetween"
+ 	help
+diff --git a/package/flot/flot.mk b/package/flot/flot.mk
+index 41f5a42..97110bc 100644
+--- a/package/flot/flot.mk
++++ b/package/flot/flot.mk
+@@ -1,6 +1,9 @@
+-FLOT_VERSION = 0.7
+-FLOT_SITE = http://flot.googlecode.com/files
++FLOT_VERSION = 0.8.0
++FLOT_SITE = http://www.flotcharts.org/downloads
++FLOT_LICENSE = MIT
++FLOT_LICENSE_FILES = LICENSE.txt
+ FLOT_FILES = jquery.flot $(addprefix jquery.flot.,\
++	$(if $(BR2_PACKAGE_FLOT_CANVAS),canvas) \
+ 	$(if $(BR2_PACKAGE_FLOT_FILLBETWEEN),fillbetween) \
+ 	$(if $(BR2_PACKAGE_FLOT_NAVIGATE),navigate) \
+ 	$(if $(BR2_PACKAGE_FLOT_PIE),pie) \
