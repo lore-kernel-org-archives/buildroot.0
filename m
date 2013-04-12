@@ -1,62 +1,54 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 12 Apr 2013 14:39:04 +0200
-Subject: [Buildroot] [git commit] fs/ext2: enclose the ext2 options in
-	if...endif
-Message-ID: <20130412130254.1D1789B5D9@busybox.osuosl.org>
+Date: Fri, 12 Apr 2013 14:57:36 +0200
+Subject: [Buildroot] [git commit] fs/ext2: bump journal overhead to 1300
+	blocks
+Message-ID: <20130412130255.5121A9B5D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5fbef614802d4de658a387e9306b52f31356db26
+commit: http://git.buildroot.net/buildroot/commit/?id=0fab0a4afdff2f27fce49e7b38179e781e7b64ed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use a 'if...endif' construct instead of repeating the
-'depends on' for each symbols.
+A quick test with a ~3.5MB ext4 filesystem shows that 1081 blocks isn't
+enough:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle <arnout@mind.be>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+tune2fs 1.42.7 (21-Jan-2013)
+
+Please run e2fsck on the filesystem.
+
+Creating journal inode:
+Journal size too big for filesystem.
+
+So bump it a bit. Overestimating the journal size is probably not really
+a big deal for the kind of systems using ext3/4 anyway.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- fs/ext2/Config.in |    7 +++----
- 1 files changed, 3 insertions(+), 4 deletions(-)
+ fs/ext2/genext2fs.sh |    9 +++------
+ 1 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index 2af44a8..cb4beed 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -3,25 +3,23 @@ config BR2_TARGET_ROOTFS_EXT2
- 	help
- 	  Build an ext2 root filesystem
- 
-+if BR2_TARGET_ROOTFS_EXT2
-+
- config BR2_TARGET_ROOTFS_EXT2_BLOCKS
- 	int "size in blocks (leave at 0 for auto calculation)"
--	depends on BR2_TARGET_ROOTFS_EXT2
- 	default 0
- 
- config BR2_TARGET_ROOTFS_EXT2_INODES
- 	int "inodes (leave at 0 for auto calculation)"
--	depends on BR2_TARGET_ROOTFS_EXT2
- 	default 0
- 
- config BR2_TARGET_ROOTFS_EXT2_RESBLKS
- 	int "reserved blocks percentage"
--	depends on BR2_TARGET_ROOTFS_EXT2
- 	default 0
- 
- choice
- 	prompt "Compression method"
- 	default BR2_TARGET_ROOTFS_EXT2_NONE
--	depends on BR2_TARGET_ROOTFS_EXT2
- 	help
- 	  Select compressor for ext2 filesystem of the root filesystem
- 
-@@ -47,3 +45,4 @@ config BR2_TARGET_ROOTFS_EXT2_LZMA
- 
- endchoice
- 
-+endif # BR2_TARGET_ROOTFS_EXT2
+diff --git a/fs/ext2/genext2fs.sh b/fs/ext2/genext2fs.sh
+index a4eb351..f7f8d33 100755
+--- a/fs/ext2/genext2fs.sh
++++ b/fs/ext2/genext2fs.sh
+@@ -34,14 +34,11 @@ then
+     # we scale inodes / blocks with 10% to compensate for bitmaps size + slack
+     BLOCKS=$(du -s -c -k $TARGET_DIR | grep total | sed -e "s/total//")
+     BLOCKS=$(expr 500 + \( $BLOCKS + $INODES / 8 \) \* 11 / 10)
+-    # we add 1081 blocks (a bit more than 1 MiB, assuming 1KiB blocks) for
++    # we add 1300 blocks (a bit more than 1 MiB, assuming 1KiB blocks) for
+     # the journal if ext3/4
+-    # Note: I came to 1081 blocks after trial-and-error checks. With 1080 or
+-    # less additional blocks, and tune2fs would refuse to add the journal;
+-    # with 1081 additional blocks or above, tune2fs wil happily add a journal.
+-    # YMMV.
++    # Note: I came to 1300 blocks after trial-and-error checks. YMMV.
+     if [ ${GEN} -ge 3 ]; then
+-        BLOCKS=$(expr 1081 + $BLOCKS )
++        BLOCKS=$(expr 1300 + $BLOCKS )
+     fi
+     set -- $@ -b $BLOCKS
+ fi
