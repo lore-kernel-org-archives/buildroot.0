@@ -1,43 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Apr 2013 00:17:54 +0200
-Subject: [Buildroot] [PATCH 5/5] fs/ext2: remove count- and time-based fsck
-In-Reply-To: <cover.1365718555.git.yann.morin.1998@free.fr>
-References: <cover.1365718555.git.yann.morin.1998@free.fr>
-Message-ID: <fb90bbc7a47d08cbf920c4d9e401a6abf30cb639.1365718555.git.yann.morin.1998@free.fr>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Fri, 12 Apr 2013 11:39:41 +0800
+Subject: [Buildroot] [PATCH v2 4/7] arch: toolchain: Introduce binary
+ format FLAT types.
+In-Reply-To: <20130407225132.38a9471c@skate>
+References: <1364550643-11793-1-git-send-email-sonic.adi@gmail.com>
+ <1364550643-11793-4-git-send-email-sonic.adi@gmail.com>
+ <20130407225132.38a9471c@skate>
+Message-ID: <CAJxxZ0P=w5Bv44jO6TMPnRC6e-tU6oWpV1zpsNnMAjBkofQpdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set the count- and time-based checks intervals to 0, thus effectively
-disabling automatic checks at boot (after a suggestion by Arnout).
+Hi Thomas,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- fs/ext2/genext2fs.sh |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
+Just figure out the compiling flags for BINFMT_FLAT_SHARED and
+BINFMT_FLAT_SEP can't be put into the toolchain wrapper, because these
+flags are for application only, they can't be used to build Linux
+kernel.
 
-diff --git a/fs/ext2/genext2fs.sh b/fs/ext2/genext2fs.sh
-index 76f454c..a4eb351 100755
---- a/fs/ext2/genext2fs.sh
-+++ b/fs/ext2/genext2fs.sh
-@@ -73,8 +73,11 @@ e2tunefsck() {
-            "${IMG##*/}" "${GEN}"
- 
-     # e2fsck will force a *random* UUID, which is bad
--    # for reproducibility, so we do not want it
--    tune2fs -U clear "${IMG}"
-+    # for reproducibility, so we do not want it.
-+    # Remove count- and time-based checks, they are not welcome
-+    # on embedded devices, where they can cause serious boot-time
-+    # issues by tremendously slowing down the boot.
-+    tune2fs -U clear -c 0 -i 0 "${IMG}"
- }
- 
- # Check we know what generation to generate
--- 
-1.7.2.5
+-mid-shared-library -mshared-library-id=0
+-msep-data
+
+So, I have to move them back to file package/Makefile.in .
+
+Regards,
+
+Sonic
