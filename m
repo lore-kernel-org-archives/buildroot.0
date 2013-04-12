@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 12 Apr 2013 14:37:43 +0200
-Subject: [Buildroot] [git commit] jquery-validation: bump to version 1.11.1
-Message-ID: <20130412130253.A9B7D9B5D9@busybox.osuosl.org>
+Date: Fri, 12 Apr 2013 14:37:54 +0200
+Subject: [Buildroot] [git commit] jquery: bump to version 1.9.1
+Message-ID: <20130412130253.E71219B5D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f310ee90af3ae1fc9e62b944abf240039b6779df
+commit: http://git.buildroot.net/buildroot/commit/?id=39ce56afde956ceaff7134448df759be6e2aae36
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/jquery-validation/jquery-validation.mk |    3 ++-
+ package/jquery/jquery.mk |    3 ++-
  1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
-index 746b534..423d7f1 100644
---- a/package/jquery-validation/jquery-validation.mk
-+++ b/package/jquery-validation/jquery-validation.mk
+diff --git a/package/jquery/jquery.mk b/package/jquery/jquery.mk
+index 871f7a0..4df2801 100644
+--- a/package/jquery/jquery.mk
++++ b/package/jquery/jquery.mk
 @@ -1,6 +1,7 @@
--JQUERY_VALIDATION_VERSION = 1.10.0
-+JQUERY_VALIDATION_VERSION = 1.11.1
- JQUERY_VALIDATION_SITE = http://jquery.bassistance.de/validate
- JQUERY_VALIDATION_SOURCE = jquery-validation-$(JQUERY_VALIDATION_VERSION).zip
-+JQUERY_VALIDATION_LICENSE = MIT
+-JQUERY_VERSION = 1.8.3
++JQUERY_VERSION = 1.9.1
+ JQUERY_SITE = http://code.jquery.com
+ JQUERY_SOURCE = jquery-$(JQUERY_VERSION).min.js
++JQUERY_LICENSE = MIT
  
- define JQUERY_VALIDATION_EXTRACT_CMDS
- 	unzip -d $(@D) $(DL_DIR)/$(JQUERY_VALIDATION_SOURCE)
+ define JQUERY_EXTRACT_CMDS
+ 	cp $(DL_DIR)/$(JQUERY_SOURCE) $(@D)
