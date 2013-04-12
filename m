@@ -1,61 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 12 Apr 2013 14:37:04 +0200
-Subject: [Buildroot] [git commit] flot: bump to version 0.8
-Message-ID: <20130412130252.ED5739B5CD@busybox.osuosl.org>
+Date: Fri, 12 Apr 2013 14:37:34 +0200
+Subject: [Buildroot] [git commit] jquery-sparkline: bump to version 2.1.1
+Message-ID: <20130412130253.427309B5D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7a3c9cfdbae96fc6760ac6b57af005ba29ffd556
+commit: http://git.buildroot.net/buildroot/commit/?id=7b8ecc73468b117d7d83fd7231a58b5c612f9df4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also change upstream website and download URL and add new Canvas option.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/flot/Config.in |    7 ++++++-
- package/flot/flot.mk   |    7 +++++--
- 2 files changed, 11 insertions(+), 3 deletions(-)
+ package/jquery-sparkline/jquery-sparkline.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/flot/Config.in b/package/flot/Config.in
-index 0bd6b14..90a4278 100644
---- a/package/flot/Config.in
-+++ b/package/flot/Config.in
-@@ -14,12 +14,17 @@ config BR2_PACKAGE_FLOT
- 	  Safari 3.0+, Opera 9.5+ and Konqueror 4.x+ with the HTML
- 	  canvas tag.
+diff --git a/package/jquery-sparkline/jquery-sparkline.mk b/package/jquery-sparkline/jquery-sparkline.mk
+index 76adad6..aa6395c 100644
+--- a/package/jquery-sparkline/jquery-sparkline.mk
++++ b/package/jquery-sparkline/jquery-sparkline.mk
+@@ -1,6 +1,7 @@
+-JQUERY_SPARKLINE_VERSION = 2.1
++JQUERY_SPARKLINE_VERSION = 2.1.1
+ JQUERY_SPARKLINE_SITE = http://www.omnipotent.net/jquery.sparkline/$(JQUERY_SPARKLINE_VERSION)
+ JQUERY_SPARKLINE_SOURCE = jquery.sparkline.min.js
++JQUERY_SPARKLINE_LICENSE = BSD-3c
  
--	  https://code.google.com/p/flot/
-+	  http://www.flotcharts.org/
- 
- if BR2_PACKAGE_FLOT
- 
- comment "flot plugins"
- 
-+config BR2_PACKAGE_FLOT_CANVAS
-+	bool "canvas"
-+	help
-+	  Flot plugin to render axis tick labels directly to the canvas
-+
- config BR2_PACKAGE_FLOT_FILLBETWEEN
- 	bool "fillbetween"
- 	help
-diff --git a/package/flot/flot.mk b/package/flot/flot.mk
-index 41f5a42..97110bc 100644
---- a/package/flot/flot.mk
-+++ b/package/flot/flot.mk
-@@ -1,6 +1,9 @@
--FLOT_VERSION = 0.7
--FLOT_SITE = http://flot.googlecode.com/files
-+FLOT_VERSION = 0.8.0
-+FLOT_SITE = http://www.flotcharts.org/downloads
-+FLOT_LICENSE = MIT
-+FLOT_LICENSE_FILES = LICENSE.txt
- FLOT_FILES = jquery.flot $(addprefix jquery.flot.,\
-+	$(if $(BR2_PACKAGE_FLOT_CANVAS),canvas) \
- 	$(if $(BR2_PACKAGE_FLOT_FILLBETWEEN),fillbetween) \
- 	$(if $(BR2_PACKAGE_FLOT_NAVIGATE),navigate) \
- 	$(if $(BR2_PACKAGE_FLOT_PIE),pie) \
+ define JQUERY_SPARKLINE_EXTRACT_CMDS
+ 	cp $(DL_DIR)/$(JQUERY_SPARKLINE_SOURCE) $(@D)
