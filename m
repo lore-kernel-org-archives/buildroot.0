@@ -1,106 +1,156 @@
-From: universeII at gmx.de <universeII@gmx.de>
-Date: Fri, 12 Apr 2013 12:18:49 +0200 (CEST)
-Subject: [Buildroot] Extending buildroot functionality for creating
- board support packages (BSP) out of buildroot tree
-In-Reply-To: <1463068659.1518019.1365760690328.JavaMail.root@openwide.fr>
-References: <1463068659.1518019.1365760690328.JavaMail.root@openwide.fr>
-Message-ID: <trinity-fb9dabe2-fdca-4333-b79a-0d5257710847-1365761929883@3capp-gmx-bs44>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Fri, 12 Apr 2013 18:18:28 +0800
+Subject: [Buildroot] [PATCH v5 6/7] arch: toolchain: Install blackfin FDPIC
+	and FLAT libraries in external toolchain makefile.
+In-Reply-To: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
+References: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1365761909-15305-6-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Sonic Zhang <sonic.zhang@analog.com>
 
-Jeremy,
-If I understand you correctly this means that I have to hold a complete copy of the kernel tree where I do the modifications?
-The requirement for me is that I have to store only the modified and new files in a different directory tree (under version control). So rsync does not work for me and I have to write a small script which is invoked by buildroot and copies my local files to the right directories in the kernel tree.
+Reserve all 3 blackfin toolchain folders under the TOOLCHAIN_EXTERNAL_DIR.
+Set current blackfin toolchain bin folder to the toolchain prefix subfolder.
+Install FDPIC and FLAT library in target ext-toolchain-installed.
 
-Regards,
-Andreas
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 
-?
+---
 
-Gesendet:?Freitag, 12. April 2013 um 11:58 Uhr
-Von:?"Jeremy Rosen" <jeremy.rosen@openwide.fr>
-An:?"universe II" <universeii@gmx.de>
-Cc:?buildroot at busybox.net
-Betreff:?Re: [Buildroot] Extending buildroot functionality for creating board support packages (BSP) out of buildroot tree
-hello
+v5-change:
+- Update comments.
 
-I had a similar problem, but more generic. the simplest way is to use
-the OVERRIDE_SRCDIR feature
+v3-changes:
+- Remove arch specific makefiles.
+- Reserve all 3 blackfin toolchain folders under the TOOLCHAIN_EXTERNAL_DIR.
+- Set current blackfin toolchain bin folder to the toolchain prefix subfolder.
+- Move FDPIC and FLAT library installation target from blackfin makefile to
+the ext-toolchain-installed target in external toolchain makefile.
 
-* create a file called local.mk at the $(TOPDIR) of your buildroot install
-* add a single line inside
+v2-changes:
+- Remove useless Macro __uClinux__
 
-LINUX_OVERRIDE_SRCDIR=<path to the linux kernel tree>
+v1-changes:
+- Create arch makefile.
+- Create blackfin makefile.
+- Add FDPIC and FLAT library options and makefile targets to install
+libraries for different binary formats into the same rootfs image.
+- update the TARGET_EXCEPTIONS variable in support/scripts/graph-depends for
+new custom targets
+---
+ arch/Config.in.bfin                      |   22 ++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |   46 ++++++++++++++++++++++-------
+ 2 files changed, 57 insertions(+), 11 deletions(-)
 
-and you should be good.
-
-Note that this command will rsync the tree into the buildroot tree,
-(which should be fine, rsync is very fast once the initial sync is done)
-
-
-Cordialement
-
-J?r?my Rosen
-
-fight key loggers : write some perl using vim
-
------ Mail original -----
-> Dear all,
-> we are using buildroot for porting an existing embedded PowerPC board
-> to
-> linux. For this purpose we have to make modifications to the kernel
-> (adding and changing files to support custom hardware). This can
-> easily
-> be done by enabling custom patches in the menuconfig.
-> This is a wonderful solution when the development of the kernel
-> modifications is done and the patches are existing but during
-> development this could be time consuming. The reason is that we can
-> not
-> do the kernel modifcations in the kernel tree itself but in a
-> completely
-> separated directory structure. This is caused by our existing version
-> control system and by project development requirements.
->
-> Imagine that you made a small modification to one of the custom files
-> (e.g. changing a printk() statement) and you want to re-build the
-> kernel. You have to develop a script which takes a virgin kernel,
-> extracts the gz file, makes a copy of the tree, modifies the files in
-> the copy and then creates the patch and copies this patch to the
-> buildroot tree. Even on a fast hardware this takes some time and you
-> have to do it for every change.
->
-> I spent some time this morning to evaluate if there could be a more
-> elegant solution. Here is what I've done:
-> 1) In linux/Config.in: Add a new entry to the kernel menuconfig which
-> allows to enter a script name or a directory name (similar to the
-> custom
-> patch option)
-> 2) In linux/linux.mk: After unpacking the kernel and applying the
-> patches (if any) the given script or all scripts in the given
-> directory
-> are executed.
->
-> This allows me to make modification to the unpacked kernel tree
-> without
-> the need to create patch files but also opens up flexibility for
-> other
-> functionality which may arise in the future.
->
-> Let me know what you think about this. If you are interested in
-> incorporating these changes into the official buildroot suite, l can
-> provide the changes I made.
->
-> Regards,
-> Andreas
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-?
-?
+diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+index f755c8d..917282d 100644
+--- a/arch/Config.in.bfin
++++ b/arch/Config.in.bfin
+@@ -62,6 +62,28 @@ config BR2_bf561
+ 	bool "bf561"
+ endchoice
+ 
++config BR2_BFIN_INSTALL_FDPIC_SHARED
++	bool "Install FDPIC shared libraries"
++	depends on !BR2_BINFMT_FDPIC
++	help
++	  The Linux kernel supports running both FDPIC and FLAT applications
++	  concurrently if the binary format specific libraries are installed properly.
++	  This option allows developer to install FDPIC libraries into a buildroot
++	  rootfs image built with binary format that is not FDPIC.
++
++config BR2_BFIN_INSTALL_FLAT_SHARED
++	depends on BR2_BINFMT_FLAT_SHARED
++	default y
++
++config BR2_BFIN_INSTALL_FLAT_SHARED
++	bool "Install FLAT shared libraries"
++	depends on !BR2_BINFMT_FLAT_SHARED
++	help
++	  The Linux kernel supports running both FDPIC and FLAT applications
++	  concurrently if the binary format specific libraries are installed properly.
++	  This option allows developer to install FLAT libraries into a buildroot
++	  rootfs image built with binary format that is not shared FLAT.
++
+ config BR2_ARCH
+ 	default "bfin"
+ 
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 27fd296..23824ab 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -115,8 +115,12 @@ ifeq ($(TOOLCHAIN_EXTERNAL_DIR),)
+ # if no path set, figure it out from path
+ TOOLCHAIN_EXTERNAL_BIN:=$(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+ else
++ifeq ($(BR2_bfin,y)
++TOOLCHAIN_EXTERNAL_BIN:=$(TOOLCHAIN_EXTERNAL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
++else
+ TOOLCHAIN_EXTERNAL_BIN:=$(TOOLCHAIN_EXTERNAL_DIR)/bin
+ endif
++endif
+ 
+ TOOLCHAIN_EXTERNAL_CROSS=$(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
+ TOOLCHAIN_EXTERNAL_CC=$(TOOLCHAIN_EXTERNAL_CROSS)gcc
+@@ -312,17 +316,6 @@ $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) $
+ 		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
+ 	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE_2))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2) | \
+ 		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
+-ifeq ($(TOOLCHAIN_EXTERNAL_PREFIX),bfin-uclinux)
+-	rm -rf $(TOOLCHAIN_EXTERNAL_DIR)/bfin-linux-uclibc
+-	mv $(TOOLCHAIN_EXTERNAL_DIR)/bfin-uclinux $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+-	mv $(TOOLCHAIN_EXTERNAL_DIR)/tmp/* $(TOOLCHAIN_EXTERNAL_DIR)/
+-	rmdir $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+-else
+-	rm -rf $(TOOLCHAIN_EXTERNAL_DIR)/bfin-uclinux
+-	mv $(TOOLCHAIN_EXTERNAL_DIR)/bfin-linux-uclibc $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+-	mv $(TOOLCHAIN_EXTERNAL_DIR)/tmp/* $(TOOLCHAIN_EXTERNAL_DIR)/
+-	rmdir $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+-endif
+ 	$(Q)touch $@
+ else
+ # Download and extraction of a toolchain
+@@ -417,6 +410,37 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
+ 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+ 		exit 1 ; \
+ 	fi ; \
++	if test x"$(BR2_BFIN_INSTALL_FDPIC_SHARED)" == x"y" ; then \
++		$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
++		FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
++		FDPIC_LIBC_A_LOCATION=`readlink -f $$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
++		FDPIC_SYSROOT_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
++		FDPIC_LIB_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
++		FDPIC_SUPPORT_LIB_DIR="" ; \
++		if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
++			FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
++			if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
++				FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
++			fi ; \
++		fi ; \
++		for libs in $(LIB_EXTERNAL_LIBS); do \
++			$(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs,/lib); \
++		done ; \
++		for libs in $(USR_LIB_EXTERNAL_LIBS); do \
++			$(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs,/usr/lib); \
++		done ; \
++	fi ; \
++	if test x"$(BR2_BFIN_INSTALL_FLAT_SHARED)" == x"y" ; then \
++		$(call MESSAGE,"Install external toolchain FLAT libraries to target...") ; \
++		FLAT_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))../../bfin-uclinux/bin/bfin-uclinux-gcc ; \
++		FLAT_LIBC_A_LOCATION=`$${FLAT_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -mid-shared-library -print-file-name=libc`; \
++		if [ -f $${FLAT_LIBC_A_LOCATION} -a ! -h $${FLAT_LIBC_A_LOCATION} ] ; then \
++# The flat libraries are found and linked according to the index in \
++# name "libN.so". Index 1 is reserved for the standard C library. \
++# Customer libraries can use 4 and above. \
++			$(INSTALL) -D $${FLAT_LIBC_A_LOCATION} $(TARGET_DIR)/lib/lib1.so; \
++		fi ; \
++	fi ; \
+ 	ARCH_LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
+ 	ARCH_SYSROOT_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
+ 	ARCH_LIB_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
+-- 
+1.7.0.4
