@@ -1,30 +1,26 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Fri, 12 Apr 2013 11:39:41 +0800
-Subject: [Buildroot] [PATCH v2 4/7] arch: toolchain: Introduce binary
- format FLAT types.
-In-Reply-To: <20130407225132.38a9471c@skate>
-References: <1364550643-11793-1-git-send-email-sonic.adi@gmail.com>
- <1364550643-11793-4-git-send-email-sonic.adi@gmail.com>
- <20130407225132.38a9471c@skate>
-Message-ID: <CAJxxZ0P=w5Bv44jO6TMPnRC6e-tU6oWpV1zpsNnMAjBkofQpdw@mail.gmail.com>
+Date: Fri, 12 Apr 2013 13:01:02 +0800
+Subject: [Buildroot] [PATCH v3 1/7] arch: toolchain: Introduce binary
+	formats BINFMT_*.
+In-Reply-To: <CAJxxZ0OgXiikacroFj-fbe=wvNR5npxX9f0q13jnMdeNkOTURA@mail.gmail.com>
+References: <1365488988-21604-1-git-send-email-sonic.adi@gmail.com>
+ <516502AD.5080104@mind.be>
+ <CAJxxZ0OgXiikacroFj-fbe=wvNR5npxX9f0q13jnMdeNkOTURA@mail.gmail.com>
+Message-ID: <CAJxxZ0OSPXhD-trQLXadrA-kcGhe=jnz-=3Gsmfg+3SwupfgtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Arnout and Thomas,
 
-Just figure out the compiling flags for BINFMT_FLAT_SHARED and
-BINFMT_FLAT_SEP can't be put into the toolchain wrapper, because these
-flags are for application only, they can't be used to build Linux
-kernel.
 
--mid-shared-library -mshared-library-id=0
--msep-data
+Could you give me a conclusion on which way do you prefer to define
+the macro BINFMT_XXX? Generic for all architectures or depend on
+BR2_bfin and BR2_m68k only?
 
-So, I have to move them back to file package/Makefile.in .
 
-Regards,
+Thanks
 
 Sonic
