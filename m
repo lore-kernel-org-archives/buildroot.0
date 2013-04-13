@@ -1,41 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 13 Apr 2013 13:56:50 -0300
-Subject: [Buildroot] [PATCH 3/3] python-serial: fix shebang
-In-Reply-To: <1365872210-20167-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1365872210-20167-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1365872210-20167-3-git-send-email-gustavo@zacarias.com.ar>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Sat, 13 Apr 2013 18:42:14 +0100
+Subject: [Buildroot] [PATCH] ofono: bump to version 1.12
+In-Reply-To: <87vc7qq0cv.fsf@dell.be.48ers.dk>
+References: <1365839373-19783-1-git-send-email-spdawson@gmail.com>
+ <87vc7qq0cv.fsf@dell.be.48ers.dk>
+Message-ID: <CAHt8ZCNmGkT79qtf-O3m8KzmOJPHrtzgTpFdR3eQA+kVDC2jWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the --executable shebang fixup option to the build phase so that the
-script ends with a proper #!/usr/bin/python interpeter line set.
+Hi Peter; thanks for the feedback.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/python-serial/python-serial.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 13 April 2013 09:52, Peter Korsgaard <jacmet@uclibc.org> wrote:
+> It does actually, but it's only visible if you define _GNU_SOURCE:
 
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-index fb6b31c..4bfc355 100644
---- a/package/python-serial/python-serial.mk
-+++ b/package/python-serial/python-serial.mk
-@@ -6,12 +6,12 @@
- 
- PYTHON_SERIAL_VERSION = 2.6
- PYTHON_SERIAL_SOURCE  = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
--PYTHON_SERIAL_SITE    = http://pypi.python.org/packages/source/p/pyserial/
-+PYTHON_SERIAL_SITE    = http://pypi.python.org/packages/source/p/pyserial
- 
- PYTHON_SERIAL_DEPENDENCIES = python
- 
- define PYTHON_SERIAL_BUILD_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build --executable=/usr/bin/python)
- endef
- 
- define PYTHON_SERIAL_INSTALL_TARGET_CMDS
--- 
-1.8.1.5
+Ah; I had actually noticed that #ifdef block in the fcntl header, but
+had failed to glean the significance. Thanks for the tip; I'll rework
+my patch.
+
+Simon.
