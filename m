@@ -1,188 +1,139 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Sat, 13 Apr 2013 19:27:58 +0100
-Subject: [Buildroot]
-	=?buildroot@busybox.net?q?=5BPATCH=20v3=5D=20zeromq=3A=20remove=20libuuid=20dependency?=
-Message-ID: <1365877678-14072-1-git-send-email-spdawson@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 13 Apr 2013 20:54:22 +0200
+Subject: [Buildroot] [RFCv2] Per-package out-of-tree build
+Message-ID: <20130413205422.7eb87375@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Hello,
 
-Since version 3.1.0, zeromq no longer depends on libuuid.
+Here comes the second version of the per-package out of tree
+prototype. The first version was posted as RFCv1 on January, 21st
+2013. I am not posting the patches, because the series contains 43
+patches and this is only a RFC.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- v3: Reinstate WCHAR dependency for czmq and filemq, as reported by
-     Alexander Lukichev
- v2: Updated for recent addition of zeromq thread dependency
+The patches should be considered as a prototype, I haven't tested all
+packages (of course), and there are quite certainly some corner case
+issues that haven't been solved. However, I think it's a good time to
+get more testing in order to find, and solve those issues.
 
- package/cppzmq/Config.in |   10 ++++------
- package/czmq/Config.in   |    9 ++++-----
- package/filemq/Config.in |   14 ++++++--------
- package/filemq/filemq.mk |    2 +-
- package/zeromq/Config.in |   10 +++-------
- package/zeromq/zeromq.mk |    1 -
- package/zmqpp/Config.in  |   10 ++++------
- 7 files changed, 22 insertions(+), 34 deletions(-)
+It should also not be considered yet that we want this feature in
+Buildroot. It is again only a prototype, which aims at solving the
+remaining problems, and see if we think it is a good idea to have this
+in Buildroot or not.
 
-diff --git a/package/cppzmq/Config.in b/package/cppzmq/Config.in
-index 72f0238..121a346 100644
---- a/package/cppzmq/Config.in
-+++ b/package/cppzmq/Config.in
-@@ -1,9 +1,7 @@
- config BR2_PACKAGE_CPPZMQ
- 	bool "cppzmq"
--	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_INSTALL_LIBSTDCPP # zeromq
- 	depends on BR2_INET_IPV6 # zeromq
--	depends on BR2_LARGEFILE # util-linux
--	depends on BR2_USE_WCHAR # util-linux
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
- 	select BR2_PACKAGE_ZEROMQ
- 	help
-@@ -11,6 +9,6 @@ config BR2_PACKAGE_CPPZMQ
- 
- 	  http://github.com/zeromq/cppzmq
- 
--comment "cppzmq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
--	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
--		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-+comment "cppzmq requires a toolchain with C++, IPV6 and thread support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 \
-+		&& BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/czmq/Config.in b/package/czmq/Config.in
-index 7e4205e..5f79aae 100644
---- a/package/czmq/Config.in
-+++ b/package/czmq/Config.in
-@@ -1,16 +1,15 @@
- config BR2_PACKAGE_CZMQ
- 	bool "czmq"
--	select BR2_PACKAGE_ZEROMQ
- 	depends on BR2_INSTALL_LIBSTDCPP # zeromq
- 	depends on BR2_INET_IPV6 # zeromq
--	depends on BR2_LARGEFILE # util-linux
--	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-+	select BR2_PACKAGE_ZEROMQ
- 	help
- 	  High-level C Binding for 0MQ
- 
- 	  http://czmq.zeromq.org/
- 
--comment "czmq requires a toolchain with C++, IPV6, LARGEFILE and WCHAR support"
--	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
-+comment "czmq requires a toolchain with C++, IPV6, WCHAR and thread support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 \
- 		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/filemq/Config.in b/package/filemq/Config.in
-index d25f03f..372d5bd 100644
---- a/package/filemq/Config.in
-+++ b/package/filemq/Config.in
-@@ -2,17 +2,15 @@ config BR2_PACKAGE_FILEMQ
- 	bool "filemq"
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_CZMQ
--	select BR2_PACKAGE_ZEROMQ
--	depends on BR2_INSTALL_LIBSTDCPP # zeromq
--	depends on BR2_INET_IPV6 # zeromq
--	depends on BR2_LARGEFILE # util-linux
--	depends on BR2_USE_WCHAR # util-linux
--	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-+	depends on BR2_INSTALL_LIBSTDCPP # czmq
-+	depends on BR2_INET_IPV6 # czmq
-+	depends on BR2_USE_WCHAR # czmq
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # czmq
- 	help
- 	  FileMQ is a publish-subscribe file service based on 0MQ.
- 
- 	  http://github.com/zeromq/filemq
- 
--comment "filemq requires a toolchain with C++, IPv6, LARGEFILE, WCHAR & thread support"
--	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
-+comment "filemq requires a toolchain with C++, IPv6, WCHAR and thread support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 \
- 		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
-index 0ea7a9d..6c760d4 100644
---- a/package/filemq/filemq.mk
-+++ b/package/filemq/filemq.mk
-@@ -9,7 +9,7 @@ FILEMQ_SITE = git://github.com/zeromq/filemq.git
- 
- FILEMQ_AUTORECONF = YES
- FILEMQ_INSTALL_STAGING = YES
--FILEMQ_DEPENDENCIES = czmq openssl zeromq
-+FILEMQ_DEPENDENCIES = czmq openssl
- FILEMQ_LICENSE = LGPLv3+ with exceptions
- FILEMQ_LICENSE_FILES = COPYING COPYING.LESSER
- 
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-index 35704c3..2046c66 100644
---- a/package/zeromq/Config.in
-+++ b/package/zeromq/Config.in
-@@ -1,16 +1,12 @@
--comment "zeromq requires a toolchain with C++, IPV6, LARGEFILE, WCHAR & thread support"
--	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
--		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-+comment "zeromq requires a toolchain with C++, IPV6 and thread support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 \
-+		&& BR2_TOOLCHAIN_HAS_THREADS)
- 
- config BR2_PACKAGE_ZEROMQ
- 	bool "zeromq"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_INET_IPV6
--	depends on BR2_LARGEFILE # util-linux
--	depends on BR2_USE_WCHAR # util-linux
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_UTIL_LINUX
--	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	help
- 	  ??MQ (ZeroMQ, 0MQ, zmq) looks like an embeddable networking
- 	  library but acts like a concurrency framework. It gives you
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index ba585d9..3cd607b 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -7,7 +7,6 @@
- ZEROMQ_VERSION = 3.2.2
- ZEROMQ_SITE = http://download.zeromq.org/
- ZEROMQ_INSTALL_STAGING = YES
--ZEROMQ_DEPENDENCIES = util-linux
- ZEROMQ_LICENSE = LGPLv3+ with exceptions
- ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
- 
-diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
-index 9afcca4..f3e4478 100644
---- a/package/zmqpp/Config.in
-+++ b/package/zmqpp/Config.in
-@@ -1,10 +1,8 @@
- config BR2_PACKAGE_ZMQPP
- 	bool "zmqpp"
- 	depends on !BR2_avr32 # compiler needs c++0x support
--	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_INSTALL_LIBSTDCPP # zeromq
- 	depends on BR2_INET_IPV6 # zeromq
--	depends on BR2_LARGEFILE # util-linux
--	depends on BR2_USE_WCHAR # util-linux
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
- 	select BR2_PACKAGE_ZEROMQ
- 	help
-@@ -15,9 +13,9 @@ config BR2_PACKAGE_ZMQPP
- 
- 	  http://github.com/benjamg/zmqpp
- 
--comment "zmqpp requires a toolchain with C++, IPV6, LARGEFILE, WCHAR & thread support"
--	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
--		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-+comment "zmqpp requires a toolchain with C++, IPV6 and thread support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 \
-+		&& BR2_TOOLCHAIN_HAS_THREADS)
- 
- config BR2_PACKAGE_ZMQPP_CLIENT
- 	bool "zmqpp client"
+For those who want to test, the 'out-of-tree-v2' branch is available at:
+
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git
+
+Here is a quick summary of what this patch set does:
+
+ * The tarballs are now extracted in $(O)/src/<pkg>-<version>
+
+ * Each tarball is extracted and patched only once, even if there is
+   both a target build and a host build. Once a package has been
+   extracted and patched, its source code is changed to not have write
+   permissions, in order to catch misbehaving packages in terms of out
+   of tree build.
+
+ * The builds continue to be done in $(O)/build/<pkg>-<version> for
+   target packages and $(O)/build/host-<pkg>-<version> for host
+   packages.
+
+ * A <pkg>_SUPPORTS_OUT_OF_TREE variable defines whether the package
+   supports out of tree build or not. By default, it's set to NO, in
+   which case the package source code is rsynced from its source
+   directory to the build directory at the beginning of the configure
+   step. It is set to YES by both the autotools and cmake package
+   infrastructures (which have been modified to do out of tree build),
+   and by some packages that use the generic infrastructure but
+   nonetheless support out of tree build.
+
+ * The override source directory mechanism is updated to take
+   advantage of this out of tree support. Now, if you override a
+   package that supports out of tree build, the source code is no
+   longer rsynced to the build directory. This makes the override
+   source directory mechanism a lot more usable for big packages such
+   as the Linux kernel.
+
+We can roughly divide the patch set in the following sets of patches:
+
+ * Patches 1 to 23 have the goal of getting rid of the <pkg>_DIR and
+   replace it by <pkg>_BUILDDIR and <pkg>_SRCDIR. Throughout all those
+   patches, <pkg>_SRCDIR continues to be equal to <pkg>_BUILDDIR:
+   out-of-tree build is not introduced. But this preparation work is
+   needed to get out of tree support.
+
+ * Patches 24 to 27 fix some other misc issues that would prevent some
+   packages to build in out-of-tree builds, especially autotools-based
+   packages that are known to have issues.
+
+ * Patch 28 is where all the magic happens: from this point on, we use
+   out of tree build for all autotools and cmake packages, and for the
+   generic packages that explicitly declare their wish to use out of
+   tree build.
+
+ * Patches 29 to 42 modify various generic packages to have them
+   implement the support for out of tree build.
+
+ * Patch 43 is a minor cleanup.
+
+Comments, ideas, suggestions are welcome.
+
+Best regards,
+
+Thomas
+
+----------------------------------------------------------------
+Thomas Petazzoni (43):
+      packages: Use @D where possible
+      package: fix <pkg>_SRCDIR and <pkg>_BUILDDIR values
+      Introduce a global SRC_DIR variable
+      package: prepare removal of <pkg>_DIR
+      iw: fix to use <pkg>_BUILDDIR and <pkg>_SRCDIR instead of <pkg>_DIR
+      owl-linux: fix to use <pkg>_BUILDDIR and <pkg>_SRCDIR instead of <pkg>_DIR
+      linux-fusion: fix to use <pkg>_BUILDDIR and <pkg>_SRCDIR instead of <pkg>_DIR
+      hostapd: fix to use <pkg>_BUILDDIR instead of <pkg>_DIR
+      gst-fsl-plugins: use <pkg>_SRCDIR instead of <pkg>_DIR
+      wpa_supplicant: use <pkg>_BUILDDIR instead of <pkg>_DIR
+      busybox: use <pkg>_BUILDDIR instead of <pkg>_DIR
+      python3:use <pkg>_BUILDDIR and <pkg>_SRCDIR instead of <pkg>_DIR
+      rp-pppoe:use <pkg>_BUILDDIR and <pkg>_SRCDIR instead of <pkg>_DIR
+      python: use <pkg>_BUILDDIR and <pkg>_SRCDIR instead of <pkg>_DIR
+      dbus: use <pkg>_BUILDDIR and <pkg>_SRCDIR instead of <pkg>_DIR
+      rtai: use <pkg>_BUILDDIR and <pkg>_SRCDIR instead of <pkg>_DIR
+      perf: use <pkg>_BUILDDIR and <pkg>_SRCDIR instead of <pkg>_DIR
+      lttng-modules: use <pkg>_BUILDDIR and <pkg>_SRCDIR instead of <pkg>_DIR
+      icu: use <pkg>_BUILDDIR and <pkg>_SRCDIR instead of <pkg>_DIR
+      imx-lib: use <pkg>_BUILDDIR and <pkg>_SRCDIR instead of <pkg>_DIR
+      igh-ethercat: use <pkg>_BUILDDIR and <pkg>_SRCDIR instead of <pkg>_DIR
+      urg: fix to use <pkg>_SRCDIR instead of <pkg>_DIR
+      package: kill the <pkg>_DIR variable
+      autoconf: fix out-of-tree build
+      pkgconf: doesn't support out of tree build
+      python: fix out of tree build issues
+      busybox: don't copy .config file in a post-extract hook
+      package: switch to out-of-tree build
+      busybox: support out of tree build
+      mtd: support out of tree build
+      barebox: support out of tree build
+      uboot: support out of tree build
+      cmake: support out of tree build
+      makedevs: support out of tree build
+      qt: add out of tree build support
+      pkg-stats: generate stats for out of tree support
+      jquery: support out of tree
+      jquery-validation: support out of tree
+      jquery-sparkline: support out of tree
+      liberation: support out of tree
+      linux-firmware: support out of tree
+      linux: support out of tree build
+      speex: remove useless BUILD_CMDS
 -- 
-1.7.10.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
