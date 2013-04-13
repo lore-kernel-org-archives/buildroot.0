@@ -1,61 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 13 Apr 2013 10:52:00 +0200
-Subject: [Buildroot] [PATCH] ofono: bump to version 1.12
-In-Reply-To: <1365839373-19783-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Sat, 13 Apr 2013 08:49:32 +0100")
-References: <1365839373-19783-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87vc7qq0cv.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 13 Apr 2013 16:09:10 +0200
+Subject: [Buildroot] [PATCH 1/2] gdb: properly set the gdb site in all cases
+Message-ID: <1365862152-24325-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+Until now, the gdb site for AVR32 was adjusted only when GDB_VERSION
+was not set, i.e only when the cross-gdb is *not* built. We should in
+fact also set the site when the cross-gdb is built, so when
+GDB_VERSION is defined through package/gdb/Config.in.host.
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
- spdawson> ---
- spdawson>  package/ofono/ofono.mk |    8 +++++++-
- spdawson>  1 file changed, 7 insertions(+), 1 deletion(-)
+So, instead, we now have something like:
 
- spdawson> diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
- spdawson> index e552eac..47228b5 100644
- spdawson> --- a/package/ofono/ofono.mk
- spdawson> +++ b/package/ofono/ofono.mk
- spdawson> @@ -3,7 +3,7 @@
- spdawson>  # ofono
- spdawson>  #
- spdawson>  #############################################################
- spdawson> -OFONO_VERSION = 1.7
- spdawson> +OFONO_VERSION = 1.12
- spdawson>  OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- spdawson>  OFONO_DEPENDENCIES = \
- spdawson>  	host-pkgconf \
- spdawson> @@ -14,6 +14,12 @@ OFONO_DEPENDENCIES = \
+ifeq ($(GDB_VERSION),)
+ # we define here a default version that is used when the cross-gdb is
+ # not built and only the target gdb is selected.
+endif
+
+ifeq ($(GDB_VERSION),something-special)
+GDB_SITE = some-special-site-for-some-special-gdb-version
+endif
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gdb/gdb.mk |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 73ff7a4..398ef7b 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -16,12 +16,15 @@ ifeq ($(BR2_bfin),y)
+ GDB_VERSION = 6.6a
+ else ifeq ($(BR2_avr32),y)
+ GDB_VERSION = 6.7.1-avr32-2.1.5
+-GDB_SITE    = ftp://www.at91.com/pub/buildroot/
+ else
+ GDB_VERSION = 7.5.1
+ endif
+ endif
  
- spdawson>  OFONO_CONF_OPT = --disable-test
- 
- spdawson> +# N.B. Qualcomm QMI modem support requires O_CLOEXEC, which
- spdawson> +# is not available on uClibc.
- spdawson> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
- spdawson> +	OFONO_CONF_OPT += --disable-qmimodem
- spdawson> +endif
-
-It does actually, but it's only visible if you define _GNU_SOURCE:
-
-E.G. the following works:
-
-#define _GNU_SOURCE
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
-int main(void)
-{
-  int fd = open("blah", O_RDWR | O_CLOEXEC);
-  return 0;
-}
-
++ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
++GDB_SITE = ftp://www.at91.com/pub/buildroot/
++endif
++
+ GDB_SOURCE = gdb-$(GDB_VERSION).tar.bz2
+ GDB_LICENSE = GPLv2+ LGPLv2+ GPLv3+ LGPLv3+
+ GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
 -- 
-Bye, Peter Korsgaard
+1.7.9.5
