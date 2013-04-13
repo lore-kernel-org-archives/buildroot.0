@@ -1,38 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Apr 2013 16:25:05 +0200
-Subject: [Buildroot] Extending buildroot functionality for creating
- board support packages (BSP) out of buildroot tree
-In-Reply-To: <trinity-fb9dabe2-fdca-4333-b79a-0d5257710847-1365761929883@3capp-gmx-bs44>
-References: <1463068659.1518019.1365760690328.JavaMail.root@openwide.fr>
- <trinity-fb9dabe2-fdca-4333-b79a-0d5257710847-1365761929883@3capp-gmx-bs44>
-Message-ID: <20130413162505.635dec45@skate>
+Date: Sat, 13 Apr 2013 16:31:26 +0200
+Subject: [Buildroot] [PATCH v2 4/7] arch: toolchain: Introduce binary
+ format FLAT types.
+In-Reply-To: <CAJxxZ0P=w5Bv44jO6TMPnRC6e-tU6oWpV1zpsNnMAjBkofQpdw@mail.gmail.com>
+References: <1364550643-11793-1-git-send-email-sonic.adi@gmail.com>
+ <1364550643-11793-4-git-send-email-sonic.adi@gmail.com>
+ <20130407225132.38a9471c@skate>
+ <CAJxxZ0P=w5Bv44jO6TMPnRC6e-tU6oWpV1zpsNnMAjBkofQpdw@mail.gmail.com>
+Message-ID: <20130413163126.0726a238@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andreas,
+Dear Sonic Zhang,
 
-On Fri, 12 Apr 2013 12:18:49 +0200 (CEST), universeII at gmx.de wrote:
+On Fri, 12 Apr 2013 11:39:41 +0800, Sonic Zhang wrote:
 
-> If I understand you correctly this means that I have to hold a
-> complete copy of the kernel tree where I do the modifications? The
-> requirement for me is that I have to store only the modified and new
-> files in a different directory tree (under version control). So rsync
-> does not work for me and I have to write a small script which is
-> invoked by buildroot and copies my local files to the right
-> directories in the kernel tree.
+> Just figure out the compiling flags for BINFMT_FLAT_SHARED and
+> BINFMT_FLAT_SEP can't be put into the toolchain wrapper, because these
+> flags are for application only, they can't be used to build Linux
+> kernel.
+> 
+> -mid-shared-library -mshared-library-id=0
+> -msep-data
+> 
+> So, I have to move them back to file package/Makefile.in .
 
-While we certainly aim at supporting a custom external tree for the
-Linux kernel sources to help using Buildroot during kernel development,
-we will certainly never support your use case of a partial kernel tree
-that contains only the modified and new files. This is just a very
-uncommon (and in my opinion completely wrong) way of handling source
-code changes. You should instead be using a git tree to do your kernel
-developments, and point LINUX_OVERRIDE_SRCDIR to it.
+Hum, that is not really nice, because the idea of the external
+toolchain wrapper is to ensure that when the user will use
+output/host/usr/bin/<arch>-gcc, he will get binaries that are built for
+the same architecture/flags than the binaries built by Buildroot.
+That's more or less the whole idea of the external toolchain wrapper
+thing.
 
-Best regards,
+One option is to have something like:
+
+ifeq ($(BR2_bfin),y)
+LINUX_MAKE_FLAGS =
+	KBUILD_CFLAGS = "$(TARGET_CFLAGS) -mno-id-shared-library ..."
+endif
+
+Not sure exactly if that's the right solution or not. Peter, you're the
+one who did the external toolchain wrapper originally. Could you
+comment on this specific issue?
+
+Thanks!
 
 Thomas
 -- 
