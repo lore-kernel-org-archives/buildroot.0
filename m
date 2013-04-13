@@ -1,61 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Apr 2013 16:09:11 +0200
-Subject: [Buildroot] [PATCH 2/2] gdb: disable on AArch64
-In-Reply-To: <1365862152-24325-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1365862152-24325-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1365862152-24325-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 13 Apr 2013 16:19:54 +0200
+Subject: [Buildroot] [PATCH 1/2] at: rename patches version in the
+ filename
+In-Reply-To: <1365782482-7417-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1365782482-7417-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20130413161954.081e4c90@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mainline gdb does not yet have AArch64 support at all, so let's
-disable it for this platform. The external toolchain provided by
-Linaro has gdbserver + cross-gdb, so it already provides what's
-necessary to do some debugging.
+Dear Jerzy Grzegorek,
 
-Fixes
-http://autobuild.buildroot.org/results/c330eb75bd2d3e2f002e7a362dd5b08c4fc7fafc/build-end.log.
+Thanks Jerzy for your patch.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gdb/Config.in      |    3 ++-
- package/gdb/Config.in.host |    1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+On Fri, 12 Apr 2013 18:01:21 +0200, Jerzy Grzegorek wrote:
+> at: rename patches version in the filename regarding - 
+> bump to version 3.1.13
+> 
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+>  ...-remove-manual-compiler-check-with-AC_TR.patch} |    0
+>  ...-convert-AC_TRY_COMPILE-AC_COMPILE_IFELS.patch} |    0
+>  ...Makefile.in-add-LDFLAGS-to-linking-stage.patch} |    0
+>  ...005-Makefile.in-replace-IROOT-by-DESTDIR.patch} |    0
+>  ...3.1.13-0006-Makefile.in-make-install-fix.patch} |    0
+>  ...x.patch => at-3.1.13-0007-getloadavg-fix.patch} |    0
+>  ...patch => at-3.1.13-0007-include-config-h.patch} |    0
+>  7 files changed, 0 insertions(+), 0 deletions(-)
+>  rename package/at/{at-3.1.12-0001-configure.ac-remove-manual-compiler-check-with-AC_TR.patch => at-3.1.13-0001-configure.ac-remove-manual-compiler-check-with-AC_TR.patch} (100%)
+>  rename package/at/{at-3.1.12-0002-configure.ac-convert-AC_TRY_COMPILE-AC_COMPILE_IFELS.patch => at-3.1.13-0002-configure.ac-convert-AC_TRY_COMPILE-AC_COMPILE_IFELS.patch} (100%)
 
-diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-index 38f4564..631fdd7 100644
---- a/package/gdb/Config.in
-+++ b/package/gdb/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_GDB
- 	select BR2_PACKAGE_GDB_SERVER if \
- 	       (!BR2_PACKAGE_GDB_DEBUGGER && !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)
- 	depends on BR2_TOOLCHAIN_HAS_THREADS && BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	depends on !BR2_aarch64
- 	help
- 	  GDB, the GNU Project debugger, allows you to see what is
- 	  going on `inside' another program while it executes -- or
-@@ -38,7 +39,7 @@ config BR2_PACKAGE_GDB_DEBUGGER
- 	bool "full debugger"
- 	select BR2_PACKAGE_NCURSES
- 	depends on BR2_USE_WCHAR
--	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze && !BR2_bfin && !BR2_aarch64
-+	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze && !BR2_bfin
- 
- comment "full gdb on target needs WCHAR support in toolchain"
- 	depends on !BR2_USE_WCHAR
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 1e09263..a791f09 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_HOST_GDB
- 	# allow to build a cross-gdb, as the one of the external
- 	# toolchain should be used.
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
-+	depends on !BR2_aarch64
- 	help
- 	  Build a cross gdb that runs on the host machine and debugs
- 	  programs running on the target. It requires 'gdbserver'
+Nowadays, we want the patches to not have any version number in their
+name. So please rename the patches to
+at-0001-configure.ac-blabla.patch, etc.
+
+Thanks!
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
