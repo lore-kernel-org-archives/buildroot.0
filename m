@@ -1,54 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Apr 2013 16:09:10 +0200
-Subject: [Buildroot] [PATCH 1/2] gdb: properly set the gdb site in all cases
-Message-ID: <1365862152-24325-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 13 Apr 2013 16:09:11 +0200
+Subject: [Buildroot] [PATCH 2/2] gdb: disable on AArch64
+In-Reply-To: <1365862152-24325-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1365862152-24325-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1365862152-24325-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, the gdb site for AVR32 was adjusted only when GDB_VERSION
-was not set, i.e only when the cross-gdb is *not* built. We should in
-fact also set the site when the cross-gdb is built, so when
-GDB_VERSION is defined through package/gdb/Config.in.host.
+The mainline gdb does not yet have AArch64 support at all, so let's
+disable it for this platform. The external toolchain provided by
+Linaro has gdbserver + cross-gdb, so it already provides what's
+necessary to do some debugging.
 
-So, instead, we now have something like:
-
-ifeq ($(GDB_VERSION),)
- # we define here a default version that is used when the cross-gdb is
- # not built and only the target gdb is selected.
-endif
-
-ifeq ($(GDB_VERSION),something-special)
-GDB_SITE = some-special-site-for-some-special-gdb-version
-endif
+Fixes
+http://autobuild.buildroot.org/results/c330eb75bd2d3e2f002e7a362dd5b08c4fc7fafc/build-end.log.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gdb/gdb.mk |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/gdb/Config.in      |    3 ++-
+ package/gdb/Config.in.host |    1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 73ff7a4..398ef7b 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -16,12 +16,15 @@ ifeq ($(BR2_bfin),y)
- GDB_VERSION = 6.6a
- else ifeq ($(BR2_avr32),y)
- GDB_VERSION = 6.7.1-avr32-2.1.5
--GDB_SITE    = ftp://www.at91.com/pub/buildroot/
- else
- GDB_VERSION = 7.5.1
- endif
- endif
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 38f4564..631fdd7 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_GDB
+ 	select BR2_PACKAGE_GDB_SERVER if \
+ 	       (!BR2_PACKAGE_GDB_DEBUGGER && !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS && BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	depends on !BR2_aarch64
+ 	help
+ 	  GDB, the GNU Project debugger, allows you to see what is
+ 	  going on `inside' another program while it executes -- or
+@@ -38,7 +39,7 @@ config BR2_PACKAGE_GDB_DEBUGGER
+ 	bool "full debugger"
+ 	select BR2_PACKAGE_NCURSES
+ 	depends on BR2_USE_WCHAR
+-	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze && !BR2_bfin && !BR2_aarch64
++	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze && !BR2_bfin
  
-+ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
-+GDB_SITE = ftp://www.at91.com/pub/buildroot/
-+endif
-+
- GDB_SOURCE = gdb-$(GDB_VERSION).tar.bz2
- GDB_LICENSE = GPLv2+ LGPLv2+ GPLv3+ LGPLv3+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+ comment "full gdb on target needs WCHAR support in toolchain"
+ 	depends on !BR2_USE_WCHAR
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 1e09263..a791f09 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_HOST_GDB
+ 	# allow to build a cross-gdb, as the one of the external
+ 	# toolchain should be used.
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
++	depends on !BR2_aarch64
+ 	help
+ 	  Build a cross gdb that runs on the host machine and debugs
+ 	  programs running on the target. It requires 'gdbserver'
 -- 
 1.7.9.5
