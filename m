@@ -1,31 +1,31 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Sun, 14 Apr 2013 16:06:23 +0200
-Subject: [Buildroot] [PATCH] Add Armadeus systems APF27 SOM basic support
-In-Reply-To: <20130406152755.5710db2f@skate>
-References: <1364547008-23068-1-git-send-email-julien.boibessot@free.fr>
- <20130406152755.5710db2f@skate>
-Message-ID: <516AB7DF.9030401@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 14 Apr 2013 19:31:03 +0200
+Subject: [Buildroot] Failure at: linux 3.7.8 Installing to target
+In-Reply-To: <1365886506.4087.37.camel@station1> (Ormund Williams's message of
+ "Sat, 13 Apr 2013 16:55:06 -0400")
+References: <1365886506.4087.37.camel@station1>
+Message-ID: <87ip3pow88.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Ormund" == Ormund Williams <ormundw@panix.com> writes:
 
-On 04/06/2013 03:27 PM, Thomas Petazzoni wrote:
-> Dear julien.boibessot at free.fr,
->
-> On Fri, 29 Mar 2013 09:50:08 +0100, julien.boibessot at free.fr wrote:
->> From: Julien Boibessot <julien.boibessot@armadeus.com>
->>
->> Buildroot toolchain, UBIFS rootfs, Linux kernel (board is mainlined since 3.8).
->>
->> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  (visual inspection only, not tested)
+ Ormund> I seem to be getting a similar error one that was reported a few months
+ Ormund> ago but instead of failing at kernel build time it now fails at the
+ Ormund> install stage:
 
-Should I do any modifications so that it get included in BR ?
+ >>>> linux 3.7.8 Installing to target
+ Ormund> # dtbs moved from arch/RCH/boot to arch/RCH/boot/dts since 3.8-rc1
+ Ormund> cp  /home/ormund/projects/atlantic/buildroot-2013.02/output/images/
+ Ormund> cp: missing destination file operand after `/home/ormund/projects/atlantic/buildroot-2013.02/output/images/'
+ Ormund> Try `cp --help' for more information.
+ Ormund> make: *** [/home/ormund/projects/atlantic/buildroot-2013.02/output/build/linux-3.7.8/.stamp_target_installed] Error 1
 
-Regards,
-Julien
+Probably you misspelled the dtb filename. Verify that the name you
+selected in BR2_LINUX_KERNEL_INTREE_DTS_NAME exists under arch/<ARCH>/boot/.
+
+-- 
+Bye, Peter Korsgaard
