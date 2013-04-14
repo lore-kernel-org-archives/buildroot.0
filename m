@@ -1,44 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 14 Apr 2013 20:40:29 +0200
-Subject: [Buildroot] [PATCH 1/4] radvd: bump to version 1.9.3
-In-Reply-To: <1365899021-7675-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 13 Apr 2013 21:23:38 -0300")
-References: <1365899021-7675-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ehedot0i.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 14 Apr 2013 19:31:30 +0200
+Subject: [Buildroot] [git commit] linux: don't use $ in dtb comment as the
+	shell tries to expand them
+Message-ID: <20130414184110.7B0109B62E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3cab8aaeb77128a9c93815e3db9953f5153e8ea8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/radvd/radvd.mk | 2 +-
- Gustavo>  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/linux.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- Gustavo> diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
- Gustavo> index 95bfe07..9d1d683 100644
- Gustavo> --- a/package/radvd/radvd.mk
- Gustavo> +++ b/package/radvd/radvd.mk
- Gustavo> @@ -4,7 +4,7 @@
- Gustavo>  #
- Gustavo>  #############################################################
- 
- Gustavo> -RADVD_VERSION = 1.9.2
- Gustavo> +RADVD_VERSION = 1.9.3
-
-Committed all 4, thanks.
-
-It would be good if you could also add license tags while you're at it.
-
- Gustavo>  RADVD_SITE = http://www.litech.org/radvd/dist
- Gustavo>  RADVD_DEPENDENCIES = host-bison flex libdaemon host-flex host-pkgconf
- Gustavo>  RADVD_AUTORECONF = YES
-
-I believe we can drop AUTORECONF here (should have been done with the
-1.9.2 bump). I'll fix it here.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 8a73767..2fff2e9 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -197,14 +197,14 @@ define LINUX_BUILD_DTB
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTBS)
+ endef
+ define LINUX_INSTALL_DTB
+-	# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
++	# dtbs moved from arch/<ARCH>/boot to arch/<ARCH>/boot/dts since 3.8-rc1
+ 	cp $(addprefix \
+ 		$(KERNEL_ARCH_PATH)/boot/$(if $(wildcard \
+ 		$(addprefix $(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
+ 		$(BINARIES_DIR)/
+ endef
+ define LINUX_INSTALL_DTB_TARGET
+-	# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
++	# dtbs moved from arch/<ARCH>/boot to arch/<ARCH>/boot/dts since 3.8-rc1
+ 	cp $(addprefix \
+ 		$(KERNEL_ARCH_PATH)/boot/$(if $(wildcard \
+ 		$(addprefix $(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
