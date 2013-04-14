@@ -1,70 +1,65 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 14 Apr 2013 21:35:10 +0200
-Subject: [Buildroot] [git commit] package: add libwebsockets
-Message-ID: <20130414193550.D82F69B078@busybox.osuosl.org>
+Date: Sun, 14 Apr 2013 21:17:05 +0200
+Subject: [Buildroot] [git commit] boost: bump version to 1.53.0
+Message-ID: <20130414193550.AD0229B6A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=381c4646c5078cb2f31437598e1e353fb1bdb587
+commit: http://git.buildroot.net/buildroot/commit/?id=e5434583badf1abf4a4620efa76452638ad9e177
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: add missing zlib select to Config.in]
-Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
+and re-enable boost context library since its compilation with
+uClibc is fixed. Disable new atomic library because it can not
+compile with uClibc (fixed in upstream version).
+
+Signed-off-by: Victor Hiairrassary <victor.hiairrassary.ml@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                      |    1 +
- package/libwebsockets/Config.in        |    9 +++++++++
- package/libwebsockets/libwebsockets.mk |   15 +++++++++++++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
+ package/boost/Config.in |    3 +++
+ package/boost/boost.mk  |    7 +++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 97ba790..322e005 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -535,6 +535,7 @@ source "package/libtirpc/Config.in"
- source "package/libtorrent/Config.in"
- source "package/libupnp/Config.in"
- source "package/libvncserver/Config.in"
-+source "package/libwebsockets/Config.in"
- source "package/nss-mdns/Config.in"
- source "package/openpgm/Config.in"
- source "package/ortp/Config.in"
-diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
-new file mode 100644
-index 0000000..1d927bb
---- /dev/null
-+++ b/package/libwebsockets/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBWEBSOCKETS
-+	bool "libwebsockets"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Libwebsockets is a lightweight pure C library built to use
-+	  minimal CPU and memory resources, and provide fast throughput
-+	  in both directions.
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 19dcc60..e36e7d3 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -21,6 +21,9 @@ if BR2_PACKAGE_BOOST
+ config BR2_PACKAGE_BOOST_CHRONO
+ 	bool "boost-chrono"
+ 
++config BR2_PACKAGE_BOOST_CONTEXT
++	bool "boost-context"
 +
-+	  http://libwebsockets.org/
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-new file mode 100644
-index 0000000..a3d8936
---- /dev/null
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libwebsockets
-+#
-+################################################################################
+ config BR2_PACKAGE_BOOST_DATE_TIME
+ 	bool "boost-date_time"
+ 
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index a202848..68b6316 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-BOOST_VERSION = 1.52.0
++BOOST_VERSION = 1.53.0
+ BOOST_FILE_VERSION = $(subst .,_,$(BOOST_VERSION))
+ BOOST_SOURCE = boost_$(BOOST_FILE_VERSION).tar.bz2
+ BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
+@@ -15,9 +15,12 @@ TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
+ BOOST_DEPENDENCIES = bzip2 zlib
+ 
+ BOOST_FLAGS =
+-BOOST_WITHOUT_FLAGS = python context
 +
-+LIBWEBSOCKETS_VERSION = v1.1-chrome26-firefox18
-+LIBWEBSOCKETS_SITE = http://git.libwebsockets.org/cgi-bin/cgit/libwebsockets/snapshot
-+LIBWEBSOCKETS_LICENSE = LGPLv2.1
-+LIBWEBSOCKETS_LICENSE_FILES = COPYING
-+LIBWEBSOCKETS_DEPENDENCIES = zlib
-+LIBWEBSOCKETS_AUTORECONF = YES
-+LIBWEBSOCKETS_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
++# atomic library compile only with upstream version, wait for next release
++BOOST_WITHOUT_FLAGS = python atomic
+ 
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,context)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
