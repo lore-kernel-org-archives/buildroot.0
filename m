@@ -1,22 +1,17 @@
-From: Ormund Williams <ormundw@panix.com>
-Date: Sun, 14 Apr 2013 18:53:48 -0400
-Subject: [Buildroot] Failure at: linux 3.7.8 Installing to target
-In-Reply-To: <87ip3pow88.fsf@dell.be.48ers.dk>
-References: <1365886506.4087.37.camel@station1>
- <87ip3pow88.fsf@dell.be.48ers.dk>
-Message-ID: <1365980028.4087.41.camel@station1>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 14 Apr 2013 20:20:15 -0300
+Subject: [Buildroot] [PATCH 1/2] protobuf-c: new package
+In-Reply-To: <877gk4ojsq.fsf@dell.be.48ers.dk>
+References: <1365691296-16042-1-git-send-email-gustavo@zacarias.com.ar>
+ <877gk4ojsq.fsf@dell.be.48ers.dk>
+Message-ID: <516B39AF.4070408@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2013-04-14 at 19:31 +0200, Peter Korsgaard wrote:
-> Probably you misspelled the dtb filename. Verify that the name you
-> selected in BR2_LINUX_KERNEL_INTREE_DTS_NAME exists under arch/<ARCH>/boot/.
-> 
-Never mind entirely my error, selected device tree support in error.
-Thanks for the clue.
+On 04/14/2013 06:59 PM, Peter Korsgaard wrote:
+> A bit stupid for a 'pure C' library, but ok - Committed both, thanks.
 
--- 
-Ormund
+Heh, yes, the problem is that it depends on protobuf which is C++
