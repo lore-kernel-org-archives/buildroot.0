@@ -1,46 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 13 Apr 2013 21:23:41 -0300
-Subject: [Buildroot] [PATCH 4/4] nbd: bump to version 3.3
-In-Reply-To: <1365899021-7675-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1365899021-7675-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1365899021-7675-4-git-send-email-gustavo@zacarias.com.ar>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Sun, 14 Apr 2013 08:55:01 +0300
+Subject: [Buildroot] [RFCv2] Per-package out-of-tree build
+In-Reply-To: <20130413205422.7eb87375@skate>
+References: <20130413205422.7eb87375@skate>
+Message-ID: <CALR4fELqcE9HsOp+CoPzv-O0UrcH-iPii1CFVOr0z8zAb87tSg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nbd/Config.in | 2 --
- package/nbd/nbd.mk    | 2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
+On Sat, Apr 13, 2013 at 9:54 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>  * Each tarball is extracted and patched only once, even if there is
+>    both a target build and a host build. Once a package has been
+>    extracted and patched, its source code is changed to not have write
+>    permissions, in order to catch misbehaving packages in terms of out
+>    of tree build.
+Nice
 
-diff --git a/package/nbd/Config.in b/package/nbd/Config.in
-index 6e92f93..79b34de 100644
---- a/package/nbd/Config.in
-+++ b/package/nbd/Config.in
-@@ -6,8 +6,6 @@ config BR2_PACKAGE_NBD
- 	  NBD is a set of utilities to configure network block devices,
- 	  allowing access to remote block devices over TCP/IP network.
- 
--	  Depends on glib.
--
- 	  http://nbd.sf.net/
- 
- comment "nbd requires a toolchain with WCHAR support"
-diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-index 7733d7b..8a129f3 100644
---- a/package/nbd/nbd.mk
-+++ b/package/nbd/nbd.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--NBD_VERSION = 3.2
-+NBD_VERSION = 3.3
- NBD_SOURCE = nbd-$(NBD_VERSION).tar.bz2
- NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
- NBD_CONF_OPT = $(if $(BR2_LARGEFILE),--enable-lfs,--disable-lfs)
--- 
-1.8.1.5
+>  * A <pkg>_SUPPORTS_OUT_OF_TREE variable defines whether the package
+>    supports out of tree build or not. By default, it's set to NO, in
+>    which case the package source code is rsynced from its source
+>    directory to the build directory at the beginning of the configure
+>    step. It is set to YES by both the autotools and cmake package
+>    infrastructures (which have been modified to do out of tree build),
+>    and by some packages that use the generic infrastructure but
+>    nonetheless support out of tree build.
+Does buildroot support also qmake? qmake has also out of source build support.
