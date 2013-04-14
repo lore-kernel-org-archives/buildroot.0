@@ -1,110 +1,82 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 14 Apr 2013 21:49:40 +0200
-Subject: [Buildroot] [git commit] Add Gnublin board support with fixed
-	kernel header version
-Message-ID: <20130414194940.E9E669B6A1@busybox.osuosl.org>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Sun, 14 Apr 2013 21:33:01 +0100
+Subject: [Buildroot] [PATCH] zyre: new package
+Message-ID: <1365971582-19802-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=19a537fef77fad50d946d8e87375c67f005471dd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Simon Dawson <spdawson@gmail.com>
 
-[Peter: misc white space fixup]
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- board/gnublin/README      |   48 +++++++++++++++++++++++++++++++++++++++++++++
- configs/gnublin_defconfig |   27 +++++++++++++++++++++++++
- 2 files changed, 75 insertions(+), 0 deletions(-)
+ package/Config.in      |    1 +
+ package/zyre/Config.in |   13 +++++++++++++
+ package/zyre/zyre.mk   |   22 ++++++++++++++++++++++
+ 3 files changed, 36 insertions(+)
+ create mode 100644 package/zyre/Config.in
+ create mode 100644 package/zyre/zyre.mk
 
-diff --git a/board/gnublin/README b/board/gnublin/README
+diff --git a/package/Config.in b/package/Config.in
+index 322e005..342e92e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -543,6 +543,7 @@ source "package/slirp/Config.in"
+ source "package/usbredir/Config.in"
+ source "package/zeromq/Config.in"
+ source "package/zmqpp/Config.in"
++source "package/zyre/Config.in"
+ endmenu
+ 
+ menu "Other"
+diff --git a/package/zyre/Config.in b/package/zyre/Config.in
 new file mode 100644
-index 0000000..8f6a9f0
+index 0000000..f839a5d
 --- /dev/null
-+++ b/board/gnublin/README
-@@ -0,0 +1,48 @@
-+This the Buildroot support for the LPC3131 based Gnublin board (see here:
-+http://en.gnublin.org/) and to the Elektor Linux board
-+(http://www.elektor.com/news/elektor-presents-embedded-linux-made-easy.2147294.
-+lynkx)
++++ b/package/zyre/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_ZYRE
++	bool "zyre"
++	depends on BR2_INSTALL_LIBSTDCPP # filemq
++	depends on BR2_INET_IPV6 # filemq
++	depends on BR2_LARGEFILE # filemq
++	depends on BR2_USE_WCHAR # filemq
++	depends on BR2_TOOLCHAIN_HAS_THREADS # filemq
++	select BR2_PACKAGE_FILEMQ
++	help
++	  An open-source framework for proximity-based peer-to-peer
++	  applications.
 +
-+Unfortunately currently the AD and the pwm modules are not supported, i'm about
-+to add also those drivers as well to the current kernel later.
-+
-+Base kernel version: 3.7 (available here:
-+https://gitorious.org/linux-3-7-gnublin/linux-3-7-gnublin/commits/gnublin-
-+support)
-+
-+U-boot version: 2009.11 (available here:
-+https://gitorious.org/u-boot-gnublin-support/u-boot-gnublin-support)
-+
-+
-+Steps to create a bootable SD card (with the given config you need an at least
-+500 MB SD card):
-+
-+1.Config buildroot with the gnublin_defconfig:
-+
-+$ make gnublin_defconfig
-+
-+2.Tweak the config for your needs:
-+
-+$ make menuconfig
-+
-+3.Build:
-+
-+$ make
-+
-+4.Create two partitions on your SD card, one with type of BootIt (fdisk ID: df),
-+the size should be around 1M, and another partition with all of the left space
-+on the card, and with the type of normal DOS partition.
-+
-+5.From the output/images directory dump the u-boot image to the BootIt partition
-+(probably you have to modify the output /dev files according to your system):
-+
-+$ dd if=output/images/u-boot.bin of=/dev/sdc1
-+
-+6.Dump the root fs image as well:
-+
-+$ dd if=output/images/rootfs.ext2 of=/dev/sdc2
-+
-+7.Insert the SD card into the board's slot, and your board should boot up with
-+your newly created system.
-+
-+Any feedback/report is welcome on the mr.zoltan.gyarmati[at]gmail.com
-diff --git a/configs/gnublin_defconfig b/configs/gnublin_defconfig
++	  http://zyre.org
+diff --git a/package/zyre/zyre.mk b/package/zyre/zyre.mk
 new file mode 100644
-index 0000000..efafe06
+index 0000000..6e295df
 --- /dev/null
-+++ b/configs/gnublin_defconfig
-@@ -0,0 +1,27 @@
-+# Architecture
-+BR2_arm=y
-+BR2_arm926t=y
++++ b/package/zyre/zyre.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# zyre
++#
++#############################################################
 +
-+# System
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.7"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Gnublin"
++ZYRE_VERSION = 44a57a449a
++ZYRE_SITE = git://github.com/zeromq/zyre.git
++ZYRE_LICENSE = LGPLv3
++ZYRE_LICENSE_FILES = COPYING COPYING.LESSER
++ZYRE_INSTALL_STAGING = YES
++ZYRE_DEPENDENCIES = filemq
++ZYRE_AUTORECONF = YES
++ZYRE_AUTORECONF_OPT = --install --force --verbose
 +
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_BLOCKS=475000
++define ZYRE_CREATE_CONFIG_DIR
++	mkdir -p $(@D)/config
++endef
 +
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="GNUBLIN"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://gitorious.org/u-boot-gnublin-support/u-boot-gnublin-support.git"
-+BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="2009.11_gnublin_support_v2"
++ZYRE_POST_PATCH_HOOKS += ZYRE_CREATE_CONFIG_DIR
 +
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://gitorious.org/linux-3-7-gnublin/linux-3-7-gnublin.git"
-+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="v3.7-gnublin-2"
-+BR2_LINUX_KERNEL_DEFCONFIG="gnublin"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
++$(eval $(autotools-package))
+-- 
+1.7.10.4
