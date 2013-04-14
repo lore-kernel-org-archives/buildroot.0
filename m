@@ -1,31 +1,44 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 14 Apr 2013 19:31:03 +0200
-Subject: [Buildroot] Failure at: linux 3.7.8 Installing to target
-In-Reply-To: <1365886506.4087.37.camel@station1> (Ormund Williams's message of
- "Sat, 13 Apr 2013 16:55:06 -0400")
-References: <1365886506.4087.37.camel@station1>
-Message-ID: <87ip3pow88.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Apr 2013 20:40:29 +0200
+Subject: [Buildroot] [PATCH 1/4] radvd: bump to version 1.9.3
+In-Reply-To: <1365899021-7675-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 13 Apr 2013 21:23:38 -0300")
+References: <1365899021-7675-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ehedot0i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ormund" == Ormund Williams <ormundw@panix.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Ormund> I seem to be getting a similar error one that was reported a few months
- Ormund> ago but instead of failing at kernel build time it now fails at the
- Ormund> install stage:
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  package/radvd/radvd.mk | 2 +-
+ Gustavo>  1 file changed, 1 insertion(+), 1 deletion(-)
 
- >>>> linux 3.7.8 Installing to target
- Ormund> # dtbs moved from arch/RCH/boot to arch/RCH/boot/dts since 3.8-rc1
- Ormund> cp  /home/ormund/projects/atlantic/buildroot-2013.02/output/images/
- Ormund> cp: missing destination file operand after `/home/ormund/projects/atlantic/buildroot-2013.02/output/images/'
- Ormund> Try `cp --help' for more information.
- Ormund> make: *** [/home/ormund/projects/atlantic/buildroot-2013.02/output/build/linux-3.7.8/.stamp_target_installed] Error 1
+ Gustavo> diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+ Gustavo> index 95bfe07..9d1d683 100644
+ Gustavo> --- a/package/radvd/radvd.mk
+ Gustavo> +++ b/package/radvd/radvd.mk
+ Gustavo> @@ -4,7 +4,7 @@
+ Gustavo>  #
+ Gustavo>  #############################################################
+ 
+ Gustavo> -RADVD_VERSION = 1.9.2
+ Gustavo> +RADVD_VERSION = 1.9.3
 
-Probably you misspelled the dtb filename. Verify that the name you
-selected in BR2_LINUX_KERNEL_INTREE_DTS_NAME exists under arch/<ARCH>/boot/.
+Committed all 4, thanks.
+
+It would be good if you could also add license tags while you're at it.
+
+ Gustavo>  RADVD_SITE = http://www.litech.org/radvd/dist
+ Gustavo>  RADVD_DEPENDENCIES = host-bison flex libdaemon host-flex host-pkgconf
+ Gustavo>  RADVD_AUTORECONF = YES
+
+I believe we can drop AUTORECONF here (should have been done with the
+1.9.2 bump). I'll fix it here.
 
 -- 
 Bye, Peter Korsgaard
