@@ -1,46 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 14 Apr 2013 20:38:36 +0200
-Subject: [Buildroot] [git commit] nbd: bump to version 3.3
-Message-ID: <20130414184111.D5B729B62E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 14 Apr 2013 21:02:25 +0200
+Subject: [Buildroot] [PATCH] Add Armadeus systems APF27 SOM basic support
+In-Reply-To: <516AB7DF.9030401@free.fr> (Julien Boibessot's message of "Sun,
+ 14 Apr 2013 16:06:23 +0200")
+References: <1364547008-23068-1-git-send-email-julien.boibessot@free.fr>
+ <20130406152755.5710db2f@skate> <516AB7DF.9030401@free.fr>
+Message-ID: <87a9p1orzy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=586ddf1a9383c3deda90920adeaed5d63183ff38
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Julien" == Julien Boibessot <julien.boibessot@free.fr> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/nbd/Config.in |    2 --
- package/nbd/nbd.mk    |    2 +-
- 2 files changed, 1 insertions(+), 3 deletions(-)
+ Julien> Hello,
+ Julien> On 04/06/2013 03:27 PM, Thomas Petazzoni wrote:
+ >> Dear julien.boibessot at free.fr,
+ >> 
+ >> On Fri, 29 Mar 2013 09:50:08 +0100, julien.boibessot at free.fr wrote:
+ >>> From: Julien Boibessot <julien.boibessot@armadeus.com>
+ >>> 
+ >>> Buildroot toolchain, UBIFS rootfs, Linux kernel (board is mainlined since 3.8).
+ >>> 
+ >>> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+ >> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ >> (visual inspection only, not tested)
 
-diff --git a/package/nbd/Config.in b/package/nbd/Config.in
-index 6e92f93..79b34de 100644
---- a/package/nbd/Config.in
-+++ b/package/nbd/Config.in
-@@ -6,8 +6,6 @@ config BR2_PACKAGE_NBD
- 	  NBD is a set of utilities to configure network block devices,
- 	  allowing access to remote block devices over TCP/IP network.
- 
--	  Depends on glib.
--
- 	  http://nbd.sf.net/
- 
- comment "nbd requires a toolchain with WCHAR support"
-diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-index 7733d7b..8a129f3 100644
---- a/package/nbd/nbd.mk
-+++ b/package/nbd/nbd.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--NBD_VERSION = 3.2
-+NBD_VERSION = 3.3
- NBD_SOURCE = nbd-$(NBD_VERSION).tar.bz2
- NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
- NBD_CONF_OPT = $(if $(BR2_LARGEFILE),--enable-lfs,--disable-lfs)
+ Julien> Should I do any modifications so that it get included in BR ?
+
+No, it looks fine - Committed, thanks!
+
+-- 
+Bye, Peter Korsgaard
