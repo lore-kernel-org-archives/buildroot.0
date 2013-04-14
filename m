@@ -1,65 +1,74 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 14 Apr 2013 21:17:05 +0200
-Subject: [Buildroot] [git commit] boost: bump version to 1.53.0
-Message-ID: <20130414193550.AD0229B6A1@busybox.osuosl.org>
+From: universe II <universeii@gmx.de>
+Date: Sun, 14 Apr 2013 21:42:56 +0200
+Subject: [Buildroot] Extending buildroot functionality for creating
+ board support packages (BSP) out of buildroot tree
+In-Reply-To: <5167D90B.3020601@gmx.de>
+References: <5167D90B.3020601@gmx.de>
+Message-ID: <516B06C0.9030207@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5434583badf1abf4a4620efa76452638ad9e177
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Is there interest in incorporating this feature into buildroot?
+I prepared a patch for it, please see attachment.
 
-and re-enable boost context library since its compilation with
-uClibc is fixed. Disable new atomic library because it can not
-compile with uClibc (fixed in upstream version).
+Regards,
+Andreas
 
-Signed-off-by: Victor Hiairrassary <victor.hiairrassary.ml@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/boost/Config.in |    3 +++
- package/boost/boost.mk  |    7 +++++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 19dcc60..e36e7d3 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -21,6 +21,9 @@ if BR2_PACKAGE_BOOST
- config BR2_PACKAGE_BOOST_CHRONO
- 	bool "boost-chrono"
- 
-+config BR2_PACKAGE_BOOST_CONTEXT
-+	bool "boost-context"
-+
- config BR2_PACKAGE_BOOST_DATE_TIME
- 	bool "boost-date_time"
- 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index a202848..68b6316 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--BOOST_VERSION = 1.52.0
-+BOOST_VERSION = 1.53.0
- BOOST_FILE_VERSION = $(subst .,_,$(BOOST_VERSION))
- BOOST_SOURCE = boost_$(BOOST_FILE_VERSION).tar.bz2
- BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
-@@ -15,9 +15,12 @@ TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
- BOOST_DEPENDENCIES = bzip2 zlib
- 
- BOOST_FLAGS =
--BOOST_WITHOUT_FLAGS = python context
-+
-+# atomic library compile only with upstream version, wait for next release
-+BOOST_WITHOUT_FLAGS = python atomic
- 
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
-+BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,context)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
+
+On 04/12/2013 11:51 AM, universe II wrote:
+> Dear all,
+> we are using buildroot for porting an existing embedded PowerPC board 
+> to linux. For this purpose we have to make modifications to the kernel 
+> (adding and changing files to support custom hardware). This can 
+> easily be done by enabling custom patches in the menuconfig.
+> This is a wonderful solution when the development of the kernel 
+> modifications is done and the patches are existing but during 
+> development this could be time consuming. The reason is that we can 
+> not do the kernel modifcations in the kernel tree itself but in a 
+> completely separated directory structure. This is caused by our 
+> existing version control system and by project development requirements.
+>
+> Imagine that you made a small modification to one of the custom files  
+> (e.g. changing a printk() statement) and you want to re-build the 
+> kernel. You have to develop a script which takes a virgin kernel, 
+> extracts the gz file, makes a copy of the tree, modifies the files in 
+> the copy and then creates the patch and copies this patch to the 
+> buildroot tree. Even on a fast hardware this takes some time and you 
+> have to do it for every change.
+>
+> I spent some time this morning to evaluate if there could be a more 
+> elegant solution. Here is what I've done:
+> 1) In linux/Config.in: Add a new entry to the kernel menuconfig which 
+> allows to enter a script name or a directory name (similar to the 
+> custom patch option)
+> 2) In linux/linux.mk: After unpacking the kernel and applying the 
+> patches (if any) the given script or all scripts in the given 
+> directory are executed.
+>
+> This allows me to make modification to the unpacked kernel tree 
+> without the need to create patch files but also opens up flexibility 
+> for other functionality which may arise in the future.
+>
+> Let me know what you think about this. If you are interested in 
+> incorporating these changes into the official buildroot suite, l can 
+> provide the changes I made.
+>
+> Regards,
+> Andreas
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Add_Pre_Compile_Script_Option_to_buildroot.patch
+Type: text/x-patch
+Size: 1580 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130414/24d59b34/attachment.bin>
