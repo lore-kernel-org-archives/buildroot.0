@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 15 Apr 2013 08:54:15 +0100
-Subject: [Buildroot] [PATCH] madplay: add license information
-Message-ID: <1366012456-507-1-git-send-email-spdawson@gmail.com>
+Date: Mon, 15 Apr 2013 08:51:40 +0100
+Subject: [Buildroot] [PATCH] libid3tag: add license information
+Message-ID: <1366012300-32665-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ From: Simon Dawson <spdawson@gmail.com>
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/multimedia/madplay/madplay.mk |    2 ++
+ package/libid3tag/libid3tag.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/multimedia/madplay/madplay.mk b/package/multimedia/madplay/madplay.mk
-index e80726c..d68c86b 100644
---- a/package/multimedia/madplay/madplay.mk
-+++ b/package/multimedia/madplay/madplay.mk
+diff --git a/package/libid3tag/libid3tag.mk b/package/libid3tag/libid3tag.mk
+index fc22976..fff8d8b 100644
+--- a/package/libid3tag/libid3tag.mk
++++ b/package/libid3tag/libid3tag.mk
 @@ -7,6 +7,8 @@
- MADPLAY_VERSION = 0.15.2b
- MADPLAY_SOURCE = madplay-$(MADPLAY_VERSION).tar.gz
- MADPLAY_SITE = http://downloads.sourceforge.net/project/mad/madplay/$(MADPLAY_VERSION)
-+MADPLAY_LICENSE = GPLv2+
-+MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
- MADPLAY_LIBTOOL_PATCH = NO
- MADPLAY_DEPENDENCIES = libmad libid3tag
- 
+ LIBID3TAG_VERSION = 0.15.1b
+ LIBID3TAG_SOURCE = libid3tag-$(LIBID3TAG_VERSION).tar.gz
+ LIBID3TAG_SITE = http://downloads.sourceforge.net/project/mad/libid3tag/$(LIBID3TAG_VERSION)
++LIBID3TAG_LICENSE = GPLv2+
++LIBID3TAG_LICENSE_FILES = COPYING COPYRIGHT
+ LIBID3TAG_INSTALL_STAGING = YES
+ LIBID3TAG_DEPENDENCIES = zlib
+ LIBID3TAG_LIBTOOL_PATCH = NO
 -- 
 1.7.10.4
