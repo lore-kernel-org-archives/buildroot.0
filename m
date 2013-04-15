@@ -1,71 +1,37 @@
 From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
-Date: Mon, 15 Apr 2013 11:09:51 +0200
-Subject: [Buildroot] [PATCH] crosstool-ng: bump to version 1.18.0
-Message-ID: <516BC3DF.201@fh-kl.de>
+Date: Mon, 15 Apr 2013 11:09:16 +0200
+Subject: [Buildroot] [PATCH] busybox: don't disable static option
+Message-ID: <516BC3BC.5040100@fh-kl.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Don't change the busybox STATIC option if buildroots PREFER_STATIC_LIB option
+is not set. Not to prefer static linking doesn't imply prefer dynamic linking
+for all packages.
+
 Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
 ---
- .../crosstool-ng-001-fix-showtuple-stdout.patch    |   35 --------------------
- package/crosstool-ng/crosstool-ng.mk               |    2 +-
- 2 files changed, 1 insertion(+), 36 deletions(-)
- delete mode 100644 package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
+ package/busybox/busybox.mk |    4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch b/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
-deleted file mode 100644
-index 416ef76..0000000
---- a/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--changeset:   3141:d8bd17248789
--tag:         tip
--user:        "Yann E. MORIN" <yann.morin.1998@free.fr>
--date:        Sun Jan 06 12:08:33 2013 +0100
--files:       scripts/showTuple.sh.in
--description:
--scripts/showTuple: fix stdout
--
--Since we've had the debug shell feature, fd #7 is now used to
--redirect stderr, while it was previously unused.
--
--Use fd #9 to redirect stdout.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--
--diff --git a/scripts/showTuple.sh.in b/scripts/showTuple.sh.in
----- a/scripts/showTuple.sh.in
--+++ b/scripts/showTuple.sh.in
--@@ -7,7 +7,7 @@
-- . "${CT_LIB_DIR}/paths.sh"
-- 
-- # We'll need the stdout later, save it
---exec 7>&1
--+exec 9>&1
-- 
-- # Parse the common functions
-- . "${CT_LIB_DIR}/scripts/functions"
--@@ -27,4 +27,4 @@
-- CT_DoBuildTargetTuple
-- 
-- # All this for this single echo... :-( Sigh, I'll have to re-arrange things...
---echo "${CT_TARGET}" >&7
--+echo "${CT_TARGET}" >&9
--
-diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
-index 2d93f90..b533396 100644
---- a/package/crosstool-ng/crosstool-ng.mk
-+++ b/package/crosstool-ng/crosstool-ng.mk
-@@ -1,4 +1,4 @@
--CROSSTOOL_NG_VERSION           = 1.17.0
-+CROSSTOOL_NG_VERSION           = 1.18.0
- CROSSTOOL_NG_SOURCE            = crosstool-ng-$(CROSSTOOL_NG_VERSION).tar.bz2
- CROSSTOOL_NG_SITE              = http://crosstool-ng.org/download/crosstool-ng/
- CROSSTOOL_NG_INSTALL_TARGET    = NO
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 900896f..985203c 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -106,10 +106,6 @@ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ define BUSYBOX_PREFER_STATIC
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC,$(BUSYBOX_BUILD_CONFIG))
+ endef
+-else
+-define BUSYBOX_PREFER_STATIC
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_STATIC,$(BUSYBOX_BUILD_CONFIG))
+-endef
+ endif
+ 
+ # Disable usage of inetd if netkit-base package is selected
 -- 
 1.7.10.4
 
