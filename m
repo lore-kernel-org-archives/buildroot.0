@@ -1,38 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 15 Apr 2013 09:09:15 +0200
-Subject: [Buildroot] [git commit] ne10: Use http instead of git method for
-	package fetching.
-Message-ID: <20130415070952.351A59B560@busybox.osuosl.org>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon, 15 Apr 2013 08:19:00 +0100
+Subject: [Buildroot] [PATCH] sam-ba: add license information
+Message-ID: <1366010340-10833-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c24e66a3ee4d8933d21fe0e6207a6a9aec12ba81
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Simon Dawson <spdawson@gmail.com>
 
-Rework package fetching according official documentation:
-http://buildroot.uclibc.org/downloads/manual/manual.html#github-download-url
-
-Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/ne10/ne10.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/sam-ba/sam-ba.mk |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
-index 184f0f8..64cd1a9 100644
---- a/package/ne10/ne10.mk
-+++ b/package/ne10/ne10.mk
-@@ -6,8 +6,8 @@
+diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+index 067bdf1..da41897 100644
+--- a/package/sam-ba/sam-ba.mk
++++ b/package/sam-ba/sam-ba.mk
+@@ -1,6 +1,14 @@
++#############################################################
++#
++# sam-ba
++#
++#############################################################
++
+ SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
+ SAM_BA_VERSION = 2.12
+ SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
++SAM_BA_LICENSE = BSD-like
++SAM_BA_LICENSE_FILES = doc/readme.txt
  
- # We use a Git commit ID because the last tagged version is more than
- # one year old.
--NE10_VERSION = 88c18f02199947b2c8b57796f5a3ca53160aff96
--NE10_SITE = git://github.com/projectNe10/Ne10.git
-+NE10_VERSION = 88c18f0
-+NE10_SITE = http://github.com/projectNe10/Ne10/tarball/master
- NE10_LICENSE = BSD-3c or Apache 2.0
- NE10_LICENSE_FILES = doc/LICENSE
- 
+ define HOST_SAM_BA_EXTRACT_CMDS
+         unzip -d $(BUILD_DIR) $(DL_DIR)/$(SAM_BA_SOURCE)
+-- 
+1.7.10.4
