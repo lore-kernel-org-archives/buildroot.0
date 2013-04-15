@@ -1,48 +1,40 @@
-From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
-Date: Mon, 15 Apr 2013 11:10:31 +0200
-Subject: [Buildroot] [PATCH] boost: fix build of context library
-Message-ID: <516BC407.9020509@fh-kl.de>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Mon, 15 Apr 2013 13:26:37 +0300
+Subject: [Buildroot]
+	=?buildroot@busybox.net?q?=5BPATCH=20v3=5D=20zeromq=3A=20remove=20libuuid=20dependency?=
+In-Reply-To: <1365877678-14072-1-git-send-email-spdawson@gmail.com>
+References: <1365877678-14072-1-git-send-email-spdawson@gmail.com>
+Message-ID: <CAAHaz6EqiqX1VhrtRryFbid3yRV0OsbgYwXgBfRYwSiciUYhKg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
----
- package/boost/boost.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi, Simon!
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 68b6316..d11f378 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -20,7 +20,7 @@ BOOST_FLAGS =
- BOOST_WITHOUT_FLAGS = python atomic
- 
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,context)
-+BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
--- 
-1.7.10.4
+2013/4/13 <spdawson@gmail.com>
+> From: Simon Dawson <spdawson@gmail.com>
+>
+> Since version 3.1.0, zeromq no longer depends on libuuid.
+>
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+
+Could headers in your mail message be fixed? My thunderbird
+saves .eml with:
+
+Content-Type: text/plain; charset=buildroot at busybox.net
+Content-Transfer-Encoding: 8bit
+
+and that is not well understood by git am :)
 
 
--- 
-Dipl.-Inf. (FH) Patrick Ziegler
+Tested-by: Alexander Lukichev <alexander.lukichev@gmail.com>
+    Compile-tested on ARM and i386.
 
-University Of Applied Sciences
-Kaiserslautern
-
-Amerikastrasse 1
-D-66482 Zweibruecken
-Germany
-
-Phone:  +49 631 3724 5526
-Mail:   patrick.ziegler at fh-kl.de
-PGP KeyID 0xB4796B8C
-
-http://www.fh-kl.de
-http://www.fh-kl.de/fachbereiche/imst/iuk-knowhow.html
+--
+Best regards,
+  Alexander Lukichev
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130415/73c4627f/attachment.html>
