@@ -1,35 +1,36 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 15 Apr 2013 07:29:10 +0100
-Subject: [Buildroot] [PATCH] ofono: add license information
-Message-ID: <1366007350-2884-1-git-send-email-spdawson@gmail.com>
+From: Marek Belisko <marek.belisko@open-nandra.com>
+Date: Mon, 15 Apr 2013 08:33:48 +0200
+Subject: [Buildroot] [PATCH] ne10: Use http instead of git method for
+	package fetching.
+Message-ID: <1366007628-25585-1-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Rework package fetching according official documentation:
+http://buildroot.uclibc.org/downloads/manual/manual.html#github-download-url
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 ---
- package/ofono/ofono.mk |    3 +++
- 1 file changed, 3 insertions(+)
+ package/ne10/ne10.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 5410c98..9b1181a 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -3,8 +3,11 @@
- # ofono
- #
- #############################################################
-+
- OFONO_VERSION = 1.12
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
-+OFONO_LICENSE = GPLv2
-+OFONO_LICENSE_FILES = COPYING
- OFONO_DEPENDENCIES = \
- 	host-pkgconf \
- 	dbus \
+diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
+index 184f0f8..64cd1a9 100644
+--- a/package/ne10/ne10.mk
++++ b/package/ne10/ne10.mk
+@@ -6,8 +6,8 @@
+ 
+ # We use a Git commit ID because the last tagged version is more than
+ # one year old.
+-NE10_VERSION = 88c18f02199947b2c8b57796f5a3ca53160aff96
+-NE10_SITE = git://github.com/projectNe10/Ne10.git
++NE10_VERSION = 88c18f0
++NE10_SITE = http://github.com/projectNe10/Ne10/tarball/master
+ NE10_LICENSE = BSD-3c or Apache 2.0
+ NE10_LICENSE_FILES = doc/LICENSE
+ 
 -- 
-1.7.10.4
+1.7.9.5
