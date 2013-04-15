@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 15 Apr 2013 08:40:07 +0100
-Subject: [Buildroot] [PATCH] monit: add license information
-Message-ID: <1366011607-31433-1-git-send-email-spdawson@gmail.com>
+Date: Mon, 15 Apr 2013 08:48:56 +0100
+Subject: [Buildroot] [PATCH] kbd: add license information
+Message-ID: <1366012136-32387-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,27 @@ From: Simon Dawson <spdawson@gmail.com>
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/monit/monit.mk |    2 ++
- 1 file changed, 2 insertions(+)
+ package/kbd/kbd.mk |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/monit/monit.mk b/package/monit/monit.mk
-index a8b6447..0d24e05 100644
---- a/package/monit/monit.mk
-+++ b/package/monit/monit.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
+index 325978e..08cb077 100644
+--- a/package/kbd/kbd.mk
++++ b/package/kbd/kbd.mk
+@@ -1,6 +1,14 @@
++#############################################################
++#
++# kbd
++#
++#############################################################
++
+ KBD_VERSION = 1.15.2
+ KBD_SOURCE = kbd-$(KBD_VERSION).tar.gz
+ KBD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kbd
++KBD_LICENSE = GPLv2+
++KBD_LICENSE_FILES = COPYING
  
- MONIT_VERSION = 5.4
- MONIT_SITE = http://mmonit.com/monit/dist/
-+MONIT_LICENSE = AGPLv3+
-+MONIT_LICENSE_FILES = COPYING
+ KBD_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
  
- MONIT_CONF_ENV = \
- 	libmonit_cv_setjmp_available=yes \
 -- 
 1.7.10.4
