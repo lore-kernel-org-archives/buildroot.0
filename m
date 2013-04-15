@@ -1,66 +1,89 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Mon, 15 Apr 2013 09:40:39 +0100
-Subject: [Buildroot] [PATCH] sam-ba: add license information
-In-Reply-To: <20130415103252.26d79960@skate>
-References: <1366010340-10833-1-git-send-email-spdawson@gmail.com>
- <20130415103252.26d79960@skate>
-Message-ID: <CAHt8ZCM50Px59NfArH=xeOeGH1mvnmtN7tS8m01Euv5rQo87oQ@mail.gmail.com>
+From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
+Date: Mon, 15 Apr 2013 11:09:51 +0200
+Subject: [Buildroot] [PATCH] crosstool-ng: bump to version 1.18.0
+Message-ID: <516BC3DF.201@fh-kl.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, thanks for looking at this.
+Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
+---
+ .../crosstool-ng-001-fix-showtuple-stdout.patch    |   35 --------------------
+ package/crosstool-ng/crosstool-ng.mk               |    2 +-
+ 2 files changed, 1 insertion(+), 36 deletions(-)
+ delete mode 100644 package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
 
-On 15 April 2013 09:32, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Simon,
->
-> On Mon, 15 Apr 2013 08:19:00 +0100, spdawson at gmail.com wrote:
->
->> +SAM_BA_LICENSE = BSD-like
->> +SAM_BA_LICENSE_FILES = doc/readme.txt
->
-> Hum, is this really the case? I thought the source code for it was not
-> available? Well, it's true that a binary-only program can carry a BSD
-> license... but to me, having 'BSD-like' license on a binary-only
-> program sounds a bit odd.
+diff --git a/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch b/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
+deleted file mode 100644
+index 416ef76..0000000
+--- a/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-changeset:   3141:d8bd17248789
+-tag:         tip
+-user:        "Yann E. MORIN" <yann.morin.1998@free.fr>
+-date:        Sun Jan 06 12:08:33 2013 +0100
+-files:       scripts/showTuple.sh.in
+-description:
+-scripts/showTuple: fix stdout
+-
+-Since we've had the debug shell feature, fd #7 is now used to
+-redirect stderr, while it was previously unused.
+-
+-Use fd #9 to redirect stdout.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-
+-diff --git a/scripts/showTuple.sh.in b/scripts/showTuple.sh.in
+---- a/scripts/showTuple.sh.in
+-+++ b/scripts/showTuple.sh.in
+-@@ -7,7 +7,7 @@
+- . "${CT_LIB_DIR}/paths.sh"
+- 
+- # We'll need the stdout later, save it
+--exec 7>&1
+-+exec 9>&1
+- 
+- # Parse the common functions
+- . "${CT_LIB_DIR}/scripts/functions"
+-@@ -27,4 +27,4 @@
+- CT_DoBuildTargetTuple
+- 
+- # All this for this single echo... :-( Sigh, I'll have to re-arrange things...
+--echo "${CT_TARGET}" >&7
+-+echo "${CT_TARGET}" >&9
+-
+diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
+index 2d93f90..b533396 100644
+--- a/package/crosstool-ng/crosstool-ng.mk
++++ b/package/crosstool-ng/crosstool-ng.mk
+@@ -1,4 +1,4 @@
+-CROSSTOOL_NG_VERSION           = 1.17.0
++CROSSTOOL_NG_VERSION           = 1.18.0
+ CROSSTOOL_NG_SOURCE            = crosstool-ng-$(CROSSTOOL_NG_VERSION).tar.bz2
+ CROSSTOOL_NG_SITE              = http://crosstool-ng.org/download/crosstool-ng/
+ CROSSTOOL_NG_INSTALL_TARGET    = NO
+-- 
+1.7.10.4
 
-Yes, agreed. I'm not sure what the right approach is, given that
-sam-ba as distributed is a mixture of pre-built binaries, and (C and
-Tcl) source code. Perhaps we just say "sam-ba license", which may be
-less contentious...?
 
-I'm pasting the contents of the doc/readme.txt file below for your information.
 
-Simon.
+-- 
+Dipl.-Inf. (FH) Patrick Ziegler
 
-/* ----------------------------------------------------------------------------
- *         ATMEL Microcontroller Software Support
- * ----------------------------------------------------------------------------
- * Copyright (c) 2012, Atmel Corporation
- *
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * - Redistributions of source code must retain the above copyright notice,
- * this list of conditions and the disclaimer below.
- *
- * Atmel's name may not be used to endorse or promote products derived from
- * this software without specific prior written permission.
- *
- * DISCLAIMER: THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
- * DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
- * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * ----------------------------------------------------------------------------
- */
+University Of Applied Sciences
+Kaiserslautern
+
+Amerikastrasse 1
+D-66482 Zweibruecken
+Germany
+
+Phone:  +49 631 3724 5526
+Mail:   patrick.ziegler at fh-kl.de
+PGP KeyID 0xB4796B8C
+
+http://www.fh-kl.de
+http://www.fh-kl.de/fachbereiche/imst/iuk-knowhow.html
