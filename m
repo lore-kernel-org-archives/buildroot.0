@@ -1,32 +1,84 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 15 Apr 2013 23:58:01 +0200
-Subject: [Buildroot] [git commit] libid3tag: add license information
-Message-ID: <20130415215908.477989B6DD@busybox.osuosl.org>
+Date: Mon, 15 Apr 2013 23:39:41 +0200
+Subject: [Buildroot] [git commit] package: add fan-ctrl
+Message-ID: <20130415215905.E32CC9AC01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f8a82b28597f98dad5d5add037e167666fcf3bdf
+commit: http://git.buildroot.net/buildroot/commit/?id=e35c700ca0395146d69605a219a8d1f2b19aaedc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libid3tag/libid3tag.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/Config.in            |    1 +
+ package/fan-ctrl/Config.in   |   10 ++++++++++
+ package/fan-ctrl/fan-ctrl.mk |   30 ++++++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 0 deletions(-)
 
-diff --git a/package/libid3tag/libid3tag.mk b/package/libid3tag/libid3tag.mk
-index fc22976..fff8d8b 100644
---- a/package/libid3tag/libid3tag.mk
-+++ b/package/libid3tag/libid3tag.mk
-@@ -7,6 +7,8 @@
- LIBID3TAG_VERSION = 0.15.1b
- LIBID3TAG_SOURCE = libid3tag-$(LIBID3TAG_VERSION).tar.gz
- LIBID3TAG_SITE = http://downloads.sourceforge.net/project/mad/libid3tag/$(LIBID3TAG_VERSION)
-+LIBID3TAG_LICENSE = GPLv2+
-+LIBID3TAG_LICENSE_FILES = COPYING COPYRIGHT
- LIBID3TAG_INSTALL_STAGING = YES
- LIBID3TAG_DEPENDENCIES = zlib
- LIBID3TAG_LIBTOOL_PATCH = NO
+diff --git a/package/Config.in b/package/Config.in
+index 566d941..f28cedd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -230,6 +230,7 @@ source "package/dvb-apps/Config.in"
+ source "package/dvbsnoop/Config.in"
+ source "package/eeprog/Config.in"
+ source "package/evtest/Config.in"
++source "package/fan-ctrl/Config.in"
+ source "package/flashrom/Config.in"
+ source "package/fconfig/Config.in"
+ source "package/fis/Config.in"
+diff --git a/package/fan-ctrl/Config.in b/package/fan-ctrl/Config.in
+new file mode 100644
+index 0000000..392904c
+--- /dev/null
++++ b/package/fan-ctrl/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_FAN_CTRL
++	bool "fan-ctrl"
++	help
++	  Fan-ctrl is a little daemon that controls the speed of one
++	  or more system or CPU fans. It does so by monitoring
++	  temperature inputs and selecting a fan speed from an array
++	  of available speeds based on a set of temperature
++	  thresholds.
++
++	  http://fan-ctrl.sourceforge.net/
+diff --git a/package/fan-ctrl/fan-ctrl.mk b/package/fan-ctrl/fan-ctrl.mk
+new file mode 100644
+index 0000000..b7bfa79
+--- /dev/null
++++ b/package/fan-ctrl/fan-ctrl.mk
+@@ -0,0 +1,30 @@
++#############################################################
++#
++# fan-ctrl
++#
++#############################################################
++
++# no release, so grab .c file directly from viewvc
++FAN_CTRL_VERSION = 1.3
++FAN_CTRL_SOURCE = fan-ctrl.c?revision=$(FAN_CTRL_VERSION)
++FAN_CTRL_SITE = http://fan-ctrl.cvs.sourceforge.net/viewvc/fan-ctrl/fan-ctrl/
++FAN_CTRL_LICENSE = GPLv2+
++
++define FAN_CTRL_EXTRACT_CMDS
++	cp $(DL_DIR)/$(FAN_CTRL_SOURCE) $(@D)/fan-ctrl.c
++endef
++
++define FAN_CTRL_BUILD_CMDS
++	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
++		$(@D)/fan-ctrl.c -o $(@D)/fan-ctrl
++endef
++
++define FAN_CTRL_INSTALL_TARGET_CMDS
++	install -D -m 755 $(@D)/fan-ctrl $(TARGET_DIR)/usr/sbin/fan-ctrl
++endef
++
++define FAN_CTRL_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/sbin/fan-ctrl
++endef
++
++$(eval $(generic-package))
