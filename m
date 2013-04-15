@@ -1,33 +1,32 @@
-From: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
-Date: Mon, 15 Apr 2013 10:31:25 +0200
-Subject: [Buildroot] [PATCH 2/2] libwebsockets: do not build/install
-	testapps to target
-In-Reply-To: <1366014685-31187-1-git-send-email-andreas.wetzel@nanotronic.ch>
-References: <1366014685-31187-1-git-send-email-andreas.wetzel@nanotronic.ch>
-Message-ID: <1366014685-31187-2-git-send-email-andreas.wetzel@nanotronic.ch>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 Apr 2013 10:32:52 +0200
+Subject: [Buildroot] [PATCH] sam-ba: add license information
+In-Reply-To: <1366010340-10833-1-git-send-email-spdawson@gmail.com>
+References: <1366010340-10833-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20130415103252.26d79960@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Simon,
 
-Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
----
- package/libwebsockets/libwebsockets.mk |    1 +
- 1 file changed, 1 insertion(+)
+On Mon, 15 Apr 2013 08:19:00 +0100, spdawson at gmail.com wrote:
 
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index e1f1efa..6672dbe 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -10,6 +10,7 @@ LIBWEBSOCKETS_LICENSE = LGPLv2.1
- LIBWEBSOCKETS_LICENSE_FILES = COPYING
- LIBWEBSOCKETS_DEPENDENCIES = zlib
- LIBWEBSOCKETS_AUTORECONF = YES
-+LIBWEBSOCKETS_CONF_OPT = --without-testapps
- LIBWEBSOCKETS_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+> +SAM_BA_LICENSE = BSD-like
+> +SAM_BA_LICENSE_FILES = doc/readme.txt
+
+Hum, is this really the case? I thought the source code for it was not
+available? Well, it's true that a binary-only program can carry a BSD
+license... but to me, having 'BSD-like' license on a binary-only
+program sounds a bit odd.
+
+Best regards,
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
