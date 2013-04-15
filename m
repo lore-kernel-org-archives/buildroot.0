@@ -1,40 +1,33 @@
 From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
-Date: Mon, 15 Apr 2013 11:09:16 +0200
-Subject: [Buildroot] [PATCH] busybox: don't disable static option
-Message-ID: <516BC3BC.5040100@fh-kl.de>
+Date: Mon, 15 Apr 2013 11:10:31 +0200
+Subject: [Buildroot] [PATCH] boost: fix build of context library
+Message-ID: <516BC407.9020509@fh-kl.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't change the busybox STATIC option if buildroots PREFER_STATIC_LIB option
-is not set. Not to prefer static linking doesn't imply prefer dynamic linking
-for all packages.
-
 Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
 ---
- package/busybox/busybox.mk |    4 ----
- 1 file changed, 4 deletions(-)
+ package/boost/boost.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 900896f..985203c 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -106,10 +106,6 @@ ifeq ($(BR2_PREFER_STATIC_LIB),y)
- define BUSYBOX_PREFER_STATIC
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC,$(BUSYBOX_BUILD_CONFIG))
- endef
--else
--define BUSYBOX_PREFER_STATIC
--	$(call KCONFIG_DISABLE_OPT,CONFIG_STATIC,$(BUSYBOX_BUILD_CONFIG))
--endef
- endif
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 68b6316..d11f378 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -20,7 +20,7 @@ BOOST_FLAGS =
+ BOOST_WITHOUT_FLAGS = python atomic
  
- # Disable usage of inetd if netkit-base package is selected
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,context)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
 -- 
 1.7.10.4
-
 
 
 -- 
