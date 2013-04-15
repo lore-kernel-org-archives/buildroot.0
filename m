@@ -1,23 +1,30 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 15 Apr 2013 09:50:20 -0300
-Subject: [Buildroot] [PATCH 1/2] netperf: add license information
-In-Reply-To: <20130415144524.668e1063@skate>
-References: <1366029730-15371-1-git-send-email-gustavo@zacarias.com.ar>
- <20130415144524.668e1063@skate>
-Message-ID: <516BF78C.8010306@zacarias.com.ar>
+Date: Mon, 15 Apr 2013 09:50:47 -0300
+Subject: [Buildroot] [PATCHv2] netperf: add license information
+Message-ID: <1366030247-16787-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/15/2013 09:45 AM, Thomas Petazzoni wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/netperf/netperf.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
->> +NETPERF_LICENSE = netperf
-> 
-> 'netperf license' if it's indeed a specific license.
-
-It's some Hewlett Packard license thingy, but who knows if it's only for
-netperf and how it's called if it's used for anything else, so "netperf
-license" fits best.
-Regards.
+diff --git a/package/netperf/netperf.mk b/package/netperf/netperf.mk
+index 06758b9..653dc7a 100644
+--- a/package/netperf/netperf.mk
++++ b/package/netperf/netperf.mk
+@@ -7,6 +7,8 @@
+ NETPERF_VERSION = 2.6.0
+ NETPERF_SITE = ftp://ftp.netperf.org/netperf
+ NETPERF_CONF_ENV = ac_cv_func_setpgrp_void=set
++NETPERF_LICENSE = netperf license
++NETPERF_LICENSE_FILES = COPYING
+ 
+ define NETPERF_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 $(@D)/src/netperf \
+-- 
+1.8.1.5
