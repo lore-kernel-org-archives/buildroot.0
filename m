@@ -1,17 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 14 Apr 2013 20:20:15 -0300
-Subject: [Buildroot] [PATCH 1/2] protobuf-c: new package
-In-Reply-To: <877gk4ojsq.fsf@dell.be.48ers.dk>
-References: <1365691296-16042-1-git-send-email-gustavo@zacarias.com.ar>
- <877gk4ojsq.fsf@dell.be.48ers.dk>
-Message-ID: <516B39AF.4070408@zacarias.com.ar>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon, 15 Apr 2013 07:29:10 +0100
+Subject: [Buildroot] [PATCH] ofono: add license information
+Message-ID: <1366007350-2884-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/14/2013 06:59 PM, Peter Korsgaard wrote:
-> A bit stupid for a 'pure C' library, but ok - Committed both, thanks.
+From: Simon Dawson <spdawson@gmail.com>
 
-Heh, yes, the problem is that it depends on protobuf which is C++
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/ofono/ofono.mk |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
+index 5410c98..9b1181a 100644
+--- a/package/ofono/ofono.mk
++++ b/package/ofono/ofono.mk
+@@ -3,8 +3,11 @@
+ # ofono
+ #
+ #############################################################
++
+ OFONO_VERSION = 1.12
+ OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
++OFONO_LICENSE = GPLv2
++OFONO_LICENSE_FILES = COPYING
+ OFONO_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	dbus \
+-- 
+1.7.10.4
