@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Apr 2013 23:20:59 +0200
-Subject: [Buildroot] [PATCH v5 3/7] arch: toolchain: Introduce target
- CPU revision.
-In-Reply-To: <1365761909-15305-3-git-send-email-sonic.adi@gmail.com>
+Date: Tue, 16 Apr 2013 23:29:25 +0200
+Subject: [Buildroot] [PATCH v5 6/7] arch: toolchain: Install blackfin
+ FDPIC and FLAT libraries in external toolchain makefile.
+In-Reply-To: <1365761909-15305-6-git-send-email-sonic.adi@gmail.com>
 References: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
- <1365761909-15305-3-git-send-email-sonic.adi@gmail.com>
-Message-ID: <20130416232059.0a04d086@skate>
+ <1365761909-15305-6-git-send-email-sonic.adi@gmail.com>
+Message-ID: <20130416232925.759eb9df@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,46 +14,119 @@ To: buildroot@busybox.net
 
 Dear Sonic Zhang,
 
-On Fri, 12 Apr 2013 18:18:25 +0800, Sonic Zhang wrote:
-> From: Sonic Zhang <sonic.zhang@analog.com>
-
-> diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-> index 92183a4..27fd296 100644
-> --- a/toolchain/toolchain-external/ext-tool.mk
-> +++ b/toolchain/toolchain-external/ext-tool.mk
-> @@ -134,7 +134,11 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
->  endif
+On Fri, 12 Apr 2013 18:18:28 +0800, Sonic Zhang wrote:
+> diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+> index f755c8d..917282d 100644
+> --- a/arch/Config.in.bfin
+> +++ b/arch/Config.in.bfin
+> @@ -62,6 +62,28 @@ config BR2_bf561
+>  	bool "bf561"
+>  endchoice
 >  
->  CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
-> +ifeq ($(BR2_GCC_TARGET_CPU_REVISION),)
+> +config BR2_BFIN_INSTALL_FDPIC_SHARED
+> +	bool "Install FDPIC shared libraries"
+> +	depends on !BR2_BINFMT_FDPIC
+> +	help
+> +	  The Linux kernel supports running both FDPIC and FLAT applications
+> +	  concurrently if the binary format specific libraries are installed properly.
+> +	  This option allows developer to install FDPIC libraries into a buildroot
+> +	  rootfs image built with binary format that is not FDPIC.
+> +
+> +config BR2_BFIN_INSTALL_FLAT_SHARED
+> +	depends on BR2_BINFMT_FLAT_SHARED
+> +	default y
+> +
+> +config BR2_BFIN_INSTALL_FLAT_SHARED
+> +	bool "Install FLAT shared libraries"
 
-I think this test should have a $(call qstrip) to be effective.
+Same name as the previous option.
 
->  CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
+> +	depends on !BR2_BINFMT_FLAT_SHARED
+> +	help
+> +	  The Linux kernel supports running both FDPIC and FLAT applications
+> +	  concurrently if the binary format specific libraries are installed properly.
+> +	  This option allows developer to install FLAT libraries into a buildroot
+> +	  rootfs image built with binary format that is not shared FLAT.
+
+I think those options should be preference of the external toolchain,
+so in toolchain/toolchain-external/Config.in. Because if we ever
+support internal toolchain for Blackfin, they won't be multilib
+toolchains, so it won't make sense to have those options.
+
+> +ifeq ($(BR2_bfin,y)
+
+Do you actually test the patches you're posting?
+
+> +TOOLCHAIN_EXTERNAL_BIN:=$(TOOLCHAIN_EXTERNAL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
 > +else
-> +CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
+>  TOOLCHAIN_EXTERNAL_BIN:=$(TOOLCHAIN_EXTERNAL_DIR)/bin
+>  endif
 > +endif
->  CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
->  CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
+>  
+>  TOOLCHAIN_EXTERNAL_CROSS=$(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
+>  TOOLCHAIN_EXTERNAL_CC=$(TOOLCHAIN_EXTERNAL_CROSS)gcc
+> @@ -312,17 +316,6 @@ $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) $
+>  		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
+>  	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE_2))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2) | \
+>  		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
+> -ifeq ($(TOOLCHAIN_EXTERNAL_PREFIX),bfin-uclinux)
+> -	rm -rf $(TOOLCHAIN_EXTERNAL_DIR)/bfin-linux-uclibc
+> -	mv $(TOOLCHAIN_EXTERNAL_DIR)/bfin-uclinux $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+> -	mv $(TOOLCHAIN_EXTERNAL_DIR)/tmp/* $(TOOLCHAIN_EXTERNAL_DIR)/
+> -	rmdir $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+> -else
+> -	rm -rf $(TOOLCHAIN_EXTERNAL_DIR)/bfin-uclinux
+> -	mv $(TOOLCHAIN_EXTERNAL_DIR)/bfin-linux-uclibc $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+> -	mv $(TOOLCHAIN_EXTERNAL_DIR)/tmp/* $(TOOLCHAIN_EXTERNAL_DIR)/
+> -	rmdir $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+> -endif
+>  	$(Q)touch $@
+>  else
+>  # Download and extraction of a toolchain
+> @@ -417,6 +410,37 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
+>  		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+>  		exit 1 ; \
+>  	fi ; \
+> +	if test x"$(BR2_BFIN_INSTALL_FDPIC_SHARED)" == x"y" ; then \
+> +		$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
+> +		FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
+> +		FDPIC_LIBC_A_LOCATION=`readlink -f $$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
+> +		FDPIC_SYSROOT_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
+> +		FDPIC_LIB_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
+> +		FDPIC_SUPPORT_LIB_DIR="" ; \
+> +		if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
+> +			FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
+> +			if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
+> +				FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
+> +			fi ; \
+> +		fi ; \
+> +		for libs in $(LIB_EXTERNAL_LIBS); do \
+> +			$(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs,/lib); \
+> +		done ; \
+> +		for libs in $(USR_LIB_EXTERNAL_LIBS); do \
+> +			$(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs,/usr/lib); \
+> +		done ; \
+> +	fi ; \
+> +	if test x"$(BR2_BFIN_INSTALL_FLAT_SHARED)" == x"y" ; then \
+> +		$(call MESSAGE,"Install external toolchain FLAT libraries to target...") ; \
+> +		FLAT_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))../../bfin-uclinux/bin/bfin-uclinux-gcc ; \
+> +		FLAT_LIBC_A_LOCATION=`$${FLAT_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -mid-shared-library -print-file-name=libc`; \
+> +		if [ -f $${FLAT_LIBC_A_LOCATION} -a ! -h $${FLAT_LIBC_A_LOCATION} ] ; then \
+> +# The flat libraries are found and linked according to the index in \
+> +# name "libN.so". Index 1 is reserved for the standard C library. \
+> +# Customer libraries can use 4 and above. \
+> +			$(INSTALL) -D $${FLAT_LIBC_A_LOCATION} $(TARGET_DIR)/lib/lib1.so; \
+> +		fi ; \
+> +	fi ; \
+>  	ARCH_LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
+>  	ARCH_SYSROOT_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
+>  	ARCH_LIB_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
 
-It should also be changed in toolchain/gcc/gcc-uclibc-4.x.mk in a
-similar way. Code is currently:
+This external toolchain installation starts to be complicated, and
+should probably be split in sub-functions. But that can be done as a
+followup improvement, you don't have to do it right now.
 
-ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
-GCC_WITH_CPU:=--with-cpu=$(BR2_GCC_TARGET_CPU)
-endif
-
-It should be:
-
-ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
-ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
-GCC_WITH_CPU:=--with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
-else
-GCC_WITH_CPU:=--with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
-endif
-endif
-
-Once this is one, I think the patch is OK.
+Thanks,
 
 Thomas
 -- 
