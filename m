@@ -1,38 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Apr 2013 23:06:25 +0200
-Subject: [Buildroot] [PATCH] support/kconfig: use kconfig-provided way
- of setting the CONFIG_ prefix
-In-Reply-To: <1365943997-23601-1-git-send-email-yann.morin.1998@free.fr>
-References: <1365943997-23601-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20130416230625.1656d877@skate>
+Date: Tue, 16 Apr 2013 23:20:59 +0200
+Subject: [Buildroot] [PATCH v5 3/7] arch: toolchain: Introduce target
+ CPU revision.
+In-Reply-To: <1365761909-15305-3-git-send-email-sonic.adi@gmail.com>
+References: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
+ <1365761909-15305-3-git-send-email-sonic.adi@gmail.com>
+Message-ID: <20130416232059.0a04d086@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Sonic Zhang,
 
-On Sun, 14 Apr 2013 14:53:17 +0200, Yann E. MORIN wrote:
-> It's now been a while since it has been possible to build the kconfig
-> parser to understand a prefix other than CONFIG_, and even no prefix
-> at all, by setting the CONFIG_ macro (#define) at biuld time.
-> 
-> Just use that, insted of patching, it will make it easier for us in the
-> future.
+On Fri, 12 Apr 2013 18:18:25 +0800, Sonic Zhang wrote:
+> From: Sonic Zhang <sonic.zhang@analog.com>
 
-I haven't tested your patch nor looked at it carefully. However, I know
-there is a difference between what the kernel does and what Buildroot
-does in terms of Kconfig options.
+> diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+> index 92183a4..27fd296 100644
+> --- a/toolchain/toolchain-external/ext-tool.mk
+> +++ b/toolchain/toolchain-external/ext-tool.mk
+> @@ -134,7 +134,11 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
+>  endif
+>  
+>  CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
+> +ifeq ($(BR2_GCC_TARGET_CPU_REVISION),)
 
-In a kernel Kconfig file, the option names are not prefixed by
-'CONFIG_', but when used in Makefiles, they are.
+I think this test should have a $(call qstrip) to be effective.
 
-In Buildroot, option names are prefixed with 'BR2_' in both the
-Config.in files and in the Makefiles. Does your change takes this into
-account?
+>  CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
+> +else
+> +CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
+> +endif
+>  CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
+>  CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
 
-Thanks!
+It should also be changed in toolchain/gcc/gcc-uclibc-4.x.mk in a
+similar way. Code is currently:
+
+ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
+GCC_WITH_CPU:=--with-cpu=$(BR2_GCC_TARGET_CPU)
+endif
+
+It should be:
+
+ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
+ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
+GCC_WITH_CPU:=--with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
+else
+GCC_WITH_CPU:=--with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
+endif
+endif
+
+Once this is one, I think the patch is OK.
 
 Thomas
 -- 
