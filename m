@@ -1,112 +1,102 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Tue, 16 Apr 2013 09:49:32 +0100
-Subject: [Buildroot] [PATCH v2] libserial: new package
-Message-ID: <1366102172-10308-1-git-send-email-spdawson@gmail.com>
+From: Lars Dunemark <ladu@hms.se>
+Date: Tue, 16 Apr 2013 09:51:13 +0000
+Subject: [Buildroot] Problem with external toolchain sysroot and eclipse
+In-Reply-To: <20130416093325.57cfc00e@skate>
+References: <6119D107D82B0940B389FAED3F2DDE66158823C4@Ansuz.hms.se>
+ <20130416093325.57cfc00e@skate>
+Message-ID: <6119D107D82B0940B389FAED3F2DDE6615882406@Ansuz.hms.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Hi Thomas
 
-Note that the Python binding is disabled; we can't build this in Buildroot
-without the sipconfig Python module for the host.
+> Dear Lars Dunemark,
+> 
+> On Tue, 16 Apr 2013 07:24:51 +0000, Lars Dunemark wrote:
+> 
+> > Recently, we discovered that it has become something strange with our
+> external toolchain builds.
+> >
+> > We discovered this when we wanted to start using Eclipse integration for
+> buildroot and build applications outside buildroot.
+> >
+> > After some investigation we discovered that the ext-toolchain-wrapper had
+> changed and received support for relative paths.
+> > After adding some debug prints:
+> > toolchain/toolchain-external/ext-toolchain-wrapper.c
+> > 122         printf("path: %s, sysroot: %s\n", path, sysroot);
+> >
+> > I got the the following result:
+> >
+> > $ pwd
+> > /media/build/source
+> > $ arm-cortex_a8-linux-gnueabi-gcc
+> > path:
+> > /media/build/source/toolchain/bin/arm-cortex_a8-linux-gnueabi-gcc,
+> > sysroot: /media/usr/arm-buildroot-linux-gnueabi/sysroot
+> > arm-cortex_a8-linux-gnueabi-gcc: no input files
+> >
+> >
+> > $ ./buildroot/output/host/usr/bin/arm-cortex_a8-linux-gnueabi-gcc
+> > path:
+> > /media/build/source/toolchain/bin/arm-cortex_a8-linux-gnueabi-gcc,
+> > sysroot:
+> > /media/build/source/buildroot/output/host/usr/arm-buildroot-linux-gnue
+> > abi/sysroot
+> > arm-cortex_a8-linux-gnueabi-gcc: no input files
+> 
+> What is /media/build/source/toolchain/ ? How did you install things in there ?
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- v2: Fix Sourceforge mirror and patch numbering, as suggested by
- Thomas Petazzoni; use upstream version 0.6.0rc1, which requires less
- patching; disable build of Python bindings, which require the sipconfig
- Python module.
+The toolchain I'm using is created with crosstool-ng outside of buildroot.
 
- package/Config.in                                  |    1 +
- package/libserial/Config.in                        |   11 +++++++++
- .../libserial-0001-disable-python-bindings.patch   |   25 ++++++++++++++++++++
- package/libserial/libserial.mk                     |   13 ++++++++++
- 4 files changed, 50 insertions(+)
- create mode 100644 package/libserial/Config.in
- create mode 100644 package/libserial/libserial-0001-disable-python-bindings.patch
- create mode 100644 package/libserial/libserial.mk
+In buildroot menuconfig I have set 
+# BR2_TOOLCHAIN_BUILDROOT is not set
+BR2_TOOLCHAIN_EXTERNAL=y
+# BR2_TOOLCHAIN_CTNG is not set
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+# BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD is not set
+BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED=y
+BR2_TOOLCHAIN_EXTERNAL_PATH="/media/build/source/toolchain/"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="arm-cortex_a8-linux-gnueabi"
+BR2_TOOLCHAIN_EXTERNAL_PREFIX="arm-cortex_a8-linux-gnueabi"
+BR2_TOOLCHAIN_EXTERNAL_GLIBC=y
+# BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC is not set
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS=""
 
-diff --git a/package/Config.in b/package/Config.in
-index f28cedd..6f87a6d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -463,6 +463,7 @@ source "package/libhid/Config.in"
- source "package/libiqrf/Config.in"
- source "package/libnfc/Config.in"
- source "package/libnfc-llcp/Config.in"
-+source "package/libserial/Config.in"
- source "package/libusb/Config.in"
- source "package/libusb-compat/Config.in"
- source "package/libv4l/Config.in"
-diff --git a/package/libserial/Config.in b/package/libserial/Config.in
-new file mode 100644
-index 0000000..f098e28
---- /dev/null
-+++ b/package/libserial/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBSERIAL
-+	bool "libserial"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Simplified serial port programming in C++ under POSIX operating
-+	  systems.
-+
-+	  http://libserial.sourceforge.net/
-+
-+comment "libserial requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libserial/libserial-0001-disable-python-bindings.patch b/package/libserial/libserial-0001-disable-python-bindings.patch
-new file mode 100644
-index 0000000..54b5cb6
---- /dev/null
-+++ b/package/libserial/libserial-0001-disable-python-bindings.patch
-@@ -0,0 +1,25 @@
-+Disable build of Python bindings, which requires the sipconfig module.
-+
-+Signed-off-by: Simon Dawson <spdawson@gmail.com>
-+
-+diff -Nurp a/Makefile.am b/Makefile.am
-+--- a/Makefile.am	2008-11-12 01:27:31.000000000 +0000
-++++ b/Makefile.am	2013-04-16 09:41:13.476002178 +0100
-+@@ -1,4 +1,4 @@
-+-SUBDIRS=src doc examples sip
-++SUBDIRS=src doc examples
-+ 
-+ EXTRA_DIST = doxygen.conf.in Makefile.dist libserial.spec libserial.pc
-+ 
-+diff -Nurp a/Makefile.in b/Makefile.in
-+--- a/Makefile.in	2008-11-12 01:28:14.000000000 +0000
-++++ b/Makefile.in	2013-04-16 09:41:05.628013626 +0100
-+@@ -197,7 +197,7 @@ sysconfdir = @sysconfdir@
-+ target_alias = @target_alias@
-+ top_builddir = @top_builddir@
-+ top_srcdir = @top_srcdir@
-+-SUBDIRS = src doc examples sip
-++SUBDIRS = src doc examples
-+ EXTRA_DIST = doxygen.conf.in Makefile.dist libserial.spec libserial.pc
-+ pkgconfigdir = $(libdir)/pkgconfig
-+ pkgconfig_DATA = libserial.pc
-diff --git a/package/libserial/libserial.mk b/package/libserial/libserial.mk
-new file mode 100644
-index 0000000..a835439
---- /dev/null
-+++ b/package/libserial/libserial.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# libserial
-+#
-+#############################################################
-+
-+LIBSERIAL_VERSION = 0.6.0rc1
-+LIBSERIAL_SITE = http://downloads.sourceforge.net/libserial
-+LIBSERIAL_INSTALL_STAGING = YES
-+LIBSERIAL_LICENSE = GPLv2+
-+LIBSERIAL_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
--- 
-1.7.10.4
+
+The intention with this is to have one toolchain build as base so we don't need to rebuild it every time.
+
+I attach our config file for ct-ng.
+
+> 
+> The toolchain that you must use with Buildroot is the one in
+> output/host/usr/bin/. Using something else will most likely not work properly.
+> 
+> Can you give details about your /media/build/source/toolchain/ directory so that
+> we can understand what is your configuration? It doesn't look a standard way of
+> using Buildroot.
+> 
+> Thanks,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux development, consulting, training
+> and support.
+> http://free-electrons.com
+
+Best regards
+Lars Dunemark
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: toolchain.config
+Type: application/octet-stream
+Size: 10281 bytes
+Desc: toolchain.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130416/ed521a76/attachment.obj>
