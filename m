@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 16 Apr 2013 23:50:44 +0200
-Subject: [Buildroot] [PATCH v2 2/3] post-image: show each script
- filename before execution
-In-Reply-To: <1365439816-6935-3-git-send-email-luca@lucaceresoli.net>
+Date: Tue, 16 Apr 2013 23:55:05 +0200
+Subject: [Buildroot] [PATCH v2 3/3] rootfs-overlay: use a make foreach
+ instead of a shell for
+In-Reply-To: <1365439816-6935-4-git-send-email-luca@lucaceresoli.net>
 References: <1365439816-6935-1-git-send-email-luca@lucaceresoli.net>
- <1365439816-6935-3-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20130416215044.GB16443@free.fr>
+ <1365439816-6935-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20130416215505.GC16443@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +14,15 @@ To: buildroot@busybox.net
 
 Luca, All,
 
-On Mon, Apr 08, 2013 at 06:50:15PM +0200, Luca Ceresoli wrote:
-> This also simplifies code by removing the ifneq/endif clauses.
+On Mon, Apr 08, 2013 at 06:50:16PM +0200, Luca Ceresoli wrote:
+> Makes the code uniform with the post-build and post-image implementation
+> (which is slightly simpler and, presumably, more efficient).
 > 
 > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+(not tested, I don't have rootfs overlays).
 
 Regards,
 Yann E. MORIN.
