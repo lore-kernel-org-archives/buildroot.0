@@ -1,55 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Apr 2013 20:52:41 +0200
-Subject: [Buildroot] [PATCH v5 2/7] arch: Add blackfin CPU choice.
-In-Reply-To: <1365761909-15305-2-git-send-email-sonic.adi@gmail.com>
-References: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
- <1365761909-15305-2-git-send-email-sonic.adi@gmail.com>
-Message-ID: <20130416205241.602cc24c@skate>
+From: Lars Dunemark <ladu@hms.se>
+Date: Tue, 16 Apr 2013 19:02:22 +0000
+Subject: [Buildroot] Problem with external toolchain sysroot and eclipse
+In-Reply-To: <BF980CD5635D994FA25831A4A9C113BF132BF1CE39@THHS2E12BE9X.hostedservice2.net>
+References: <6119D107D82B0940B389FAED3F2DDE66158823C4@Ansuz.hms.se>
+ <20130416093325.57cfc00e@skate>
+ <6119D107D82B0940B389FAED3F2DDE6615882483@Ansuz.hms.se>
+ <BF980CD5635D994FA25831A4A9C113BF132BF1CE39@THHS2E12BE9X.hostedservice2.net>
+Message-ID: <6119D107D82B0940B389FAED3F2DDE6615882794@Ansuz.hms.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sonic Zhang,
+Hi Greg Beresford,
 
-On Fri, 12 Apr 2013 18:18:24 +0800, Sonic Zhang wrote:
-> From: Sonic Zhang <sonic.zhang@analog.com>
+Thanks for your replay, I have tested your patch and it solves my problem.
+Is there anything more that needs to be done with this patch before it can be integrated into master?
+
+> It looks like making the external toolchain wrapper relocatable has broken it for
+> use outside of buildroot. If you add the wrapper directory to your path and
+> invoke the wrapper as arm-linux-gcc (for example), execution will enter the
+> 'else' on line 76 of ext-toolchain-wrapper.c. This sets basename to arm-linux-
+> gcc, which is fine, but it also sets absbasedir to whatever $(pwd)/../.. resolves to
+> which then gets used when calculating the sysroot directory, resulting in gcc not
+> having the real sysroot in its search paths.
 > 
-> is patch adds a Target CPU configuration option and uses it to select a -m
-> option for gcc.
+> The above all works fine if the wrapper is invoked with an absolute path. (I've
+> not tried with a relative path with slashes in.)
 > 
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-> ---
->  arch/Config.in.bfin |   97 +++++++++++++++++++++++++++++++++++++++++++++++----
->  1 files changed, 90 insertions(+), 7 deletions(-)
+> I've got a patch with a fix which calculates absbasedir from /proc/self/exe. (I
+> don't know of any other way of reliably getting the path to the current
+> executable.) My C is rusty though, so it might need to be fixed up before it's
+> applied. Also, I don't know if there was there a reason for avoiding the
+> basename and dirname functions from libgen.h. I've not sent a properly git
+> formatted patch before, (and I can't send email from my development
+> machine), so it'll be a day or so before I can put a properly formatted patch
+> together, or you can just pull it from the badly formatted patch in this email:
+> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/54942
 > 
-> diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-> index 0b137ae..ac96620 100644
-> --- a/arch/Config.in.bfin
-> +++ b/arch/Config.in.bfin
-> @@ -1,12 +1,65 @@
->  choice
-> -	prompt "Target ABI"
-> +	prompt "Target CPU"
->  	depends on BR2_bfin
-> -	default BR2_BFIN_FDPIC
-> -config BR2_BFIN_FDPIC
-> -	bool "FDPIC"
-> -config BR2_BFIN_FLAT
-> -	bool "FLAT"
-> -	select BR2_PREFER_STATIC_LIB
-
-Those options (BR2_BFIN_FPIC, BR2_BFIN_FLAT) should have been removed
-in PATCH 1, and added in Config.in.legacy (main Buildroot directory) to
-ensure that users experience a smooth transition from the old options
-to the new ones.
-
-Once this is fixed, you have my Acked-by for this patch.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Best regards
+Lars Dunemark
