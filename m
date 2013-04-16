@@ -1,31 +1,48 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Tue, 16 Apr 2013 14:48:46 +0100
-Subject: [Buildroot] [PATCH] monit: add license information
-In-Reply-To: <87eheblas9.fsf@dell.be.48ers.dk>
-References: <1366011607-31433-1-git-send-email-spdawson@gmail.com>
- <87eheblas9.fsf@dell.be.48ers.dk>
-Message-ID: <CAHt8ZCOAKON3x0ac35oWttaUcvoAv2GQm_yMwNjaDaA1G3D4_A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Apr 2013 20:51:03 +0200
+Subject: [Buildroot] [PATCH v5 1/7] arch: toolchain: Introduce binary
+ formats BINFMT_*.
+In-Reply-To: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
+References: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <20130416205103.6ecd9bd9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter; thanks for looking at this.
+Dear Sonic Zhang,
 
-On 15 April 2013 22:54, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> Hmm, I see very few files mentioning the 'any later version':
+On Fri, 12 Apr 2013 18:18:23 +0800, Sonic Zhang wrote:
 
-Yes, okay; it should be AGPLv3.
+> +# Set up target binary format
+> +choice
+> +	prompt "Target Binary Format"
+> +	default BR2_BINFMT_FDPIC if BR2_bfin
+> +	default BR2_BINFMT_ELF
+> +
+> +config BR2_BINFMT_ELF
+> +	bool "ELF"
+> +	depends on !BR2_bfin
+> +	help
+> +	  ELF (Executable and Linkable Format) is a format for libraries and
+> +	  executables used across different architectures and operating
+> +	  systems.
 
-> src/monit.c also talks about a special openssl exception.
->
-> How should we handle this?
+I do agree with Arnout on one point here: we can hide this choice
+when !BR2_bfin. However, contrary to Arnout, I'd like to keep this
+BR2_BINFMT_ELF choice as an invisible option, that is always selected
+on !BR2_bfin. Yes it's useless, but I think it makes the binfmt options
+clearer.
 
-Awkward. I wonder if it's simply a case of saying
+Sonic, once this is changed, you have my Acked-by: Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> on this patch.
 
-MONIT_LICENSE = AGPLv3 OpenSSL
+Thanks!
 
-?
-
-Simon
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
