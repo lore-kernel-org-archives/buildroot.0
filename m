@@ -1,142 +1,133 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Apr 2013 08:27:08 +0200
-Subject: [Buildroot] [PATCH 1/3] python-setuptools: forkbump and add
- workaround for shebang
-In-Reply-To: <1365872210-20167-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1365872210-20167-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <516CEF3C.6070505@mind.be>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Tue, 16 Apr 2013 08:20:04 +0100
+Subject: [Buildroot] [PATCH] libserial: new package
+Message-ID: <1366096804-2032-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Gustavo,
+From: Simon Dawson <spdawson@gmail.com>
 
-  I usually don't bother reviewing your patches, but now I found something:
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/Config.in                                  |    1 +
+ package/libserial/Config.in                        |   11 ++++
+ .../libserial-0000-missing-includes.patch          |   54 ++++++++++++++++++++
+ package/libserial/libserial.mk                     |   13 +++++
+ 4 files changed, 79 insertions(+)
+ create mode 100644 package/libserial/Config.in
+ create mode 100644 package/libserial/libserial-0000-missing-includes.patch
+ create mode 100644 package/libserial/libserial.mk
 
-On 13/04/13 18:56, Gustavo Zacarias wrote:
-> Switch to distribute fork since it's maintained and fixes a few issues
-> while bumping to version 0.6.36.
-> There's work upstream in re-merging with setuptools which is now
-> supposedly maintained, see
-> http://mail.python.org/pipermail/distutils-sig/2013-March/020126.html
->
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->   .../python-setuptools-add-executable.patch         | 50 ++++++++++++++++++++++
->   package/python-setuptools/python-setuptools.mk     |  8 ++--
->   2 files changed, 54 insertions(+), 4 deletions(-)
->   create mode 100644 package/python-setuptools/python-setuptools-add-executable.patch
->
-> diff --git a/package/python-setuptools/python-setuptools-add-executable.patch b/package/python-setuptools/python-setuptools-add-executable.patch
-> new file mode 100644
-> index 0000000..a14a3ed
-> --- /dev/null
-> +++ b/package/python-setuptools/python-setuptools-add-executable.patch
-> @@ -0,0 +1,50 @@
-> +Add a new --executable option to distribute so that we can
-> +force the shebang line in installed python scripts.
-> +
-> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> +
-> +diff -Nura distribute-0.6.36.orig/setuptools/command/install.py distribute-0.6.36/setuptools/command/install.py
-> +--- distribute-0.6.36.orig/setuptools/command/install.py	2013-04-13 09:46:23.160823598 -0300
-> ++++ distribute-0.6.36/setuptools/command/install.py	2013-04-13 11:17:28.418841986 -0300
-> +@@ -6,6 +6,7 @@
-> +     """Use easy_install to install the package, w/dependencies"""
-> +
-> +     user_options = _install.user_options + [
-> ++        ('executable=', 'e', "specify final destination interpreter path"),
-> +         ('old-and-unmanageable', None, "Try not to use this!"),
-> +         ('single-version-externally-managed', None,
-> +             "used by system package builders to create 'flat' eggs"),
-> +@@ -21,6 +22,7 @@
-> +
-> +     def initialize_options(self):
-> +         _install.initialize_options(self)
-> ++	self.executable = None
-
-  Mixing tabs with spaces... Also a few other instances in the rest of 
-this patch.
-
-> +         self.old_and_unmanageable = None
-> +         self.single_version_externally_managed = None
-> +         self.no_compile = None  # make DISTUTILS_DEBUG work right!
-> +diff -Nura distribute-0.6.36.orig/setuptools/command/install_scripts.py distribute-0.6.36/setuptools/command/install_scripts.py
-> +--- distribute-0.6.36.orig/setuptools/command/install_scripts.py	2013-04-13 09:46:23.160823598 -0300
-> ++++ distribute-0.6.36/setuptools/command/install_scripts.py	2013-04-13 11:24:32.305416400 -0300
-> +@@ -10,6 +10,13 @@
-> +     def initialize_options(self):
-> +         _install_scripts.initialize_options(self)
-> +         self.no_ep = False
-> ++	self.executable = None
-> ++
-> ++    def finalize_options(self):
-> ++        _install_scripts.finalize_options(self)
-> ++        self.set_undefined_options('install',
-> ++	    ('executable','executable')
-> ++	)
-> +
-> +     def run(self):
-> +         from setuptools.command.easy_install import get_script_args
-> +@@ -31,6 +38,8 @@
-> +         )
-> +         bs_cmd = self.get_finalized_command('build_scripts')
-> +         executable = getattr(bs_cmd,'executable',sys_executable)
-> ++	if self.executable is not None:
-> ++	    executable = self.executable
-> +         is_wininst = getattr(
-> +             self.get_finalized_command("bdist_wininst"), '_is_running', False
-> +         )
-> diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-> index 25fddb9..64f6ded 100644
-> --- a/package/python-setuptools/python-setuptools.mk
-> +++ b/package/python-setuptools/python-setuptools.mk
-> @@ -4,9 +4,9 @@
->   #
->   #############################################################
->
-> -PYTHON_SETUPTOOLS_VERSION = 0.6c11
-> -PYTHON_SETUPTOOLS_SOURCE  = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
-> -PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/s/setuptools
-> +PYTHON_SETUPTOOLS_VERSION = 0.6.36
-> +PYTHON_SETUPTOOLS_SOURCE  = distribute-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
-
-  I would add a comment here, e.g.
-
-# "distribute" is a fork of the unmaintained setuptools package. There
-# are plans to re-merge it into setuptools; if this happens, we can
-# switch back to http://pypi.python.org/packages/source/s/setuptools
-
-> +PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/d/distribute
->   PYTHON_SETUPTOOLS_DEPENDENCIES = python
->
->   define HOST_PYTHON_SETUPTOOLS_BUILD_CMDS
-> @@ -24,7 +24,7 @@ endef
->
->   define PYTHON_SETUPTOOLS_INSTALL_TARGET_CMDS
->   	(cd $(@D); PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"\
-> -	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-> +	$(HOST_DIR)/usr/bin/python setup.py install --executable=/usr/bin/python --single-version-externally-managed --root=/ --prefix=$(TARGET_DIR)/usr)
-
-  Please split this long line. Also, maybe it's worth explaining why we 
-want --single-version-externally-managed?
-
-
-  Regards,
-  Arnout
-
->   endef
->
->   $(eval $(generic-package))
->
-
-
+diff --git a/package/Config.in b/package/Config.in
+index f28cedd..6f87a6d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -463,6 +463,7 @@ source "package/libhid/Config.in"
+ source "package/libiqrf/Config.in"
+ source "package/libnfc/Config.in"
+ source "package/libnfc-llcp/Config.in"
++source "package/libserial/Config.in"
+ source "package/libusb/Config.in"
+ source "package/libusb-compat/Config.in"
+ source "package/libv4l/Config.in"
+diff --git a/package/libserial/Config.in b/package/libserial/Config.in
+new file mode 100644
+index 0000000..f098e28
+--- /dev/null
++++ b/package/libserial/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBSERIAL
++	bool "libserial"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Simplified serial port programming in C++ under POSIX operating
++	  systems.
++
++	  http://libserial.sourceforge.net/
++
++comment "libserial requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/libserial/libserial-0000-missing-includes.patch b/package/libserial/libserial-0000-missing-includes.patch
+new file mode 100644
+index 0000000..ddff4c4
+--- /dev/null
++++ b/package/libserial/libserial-0000-missing-includes.patch
+@@ -0,0 +1,54 @@
++Add missing header includes.
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++
++diff -Nurp a/examples/read_port.cpp b/examples/read_port.cpp
++--- a/examples/read_port.cpp	2005-09-27 05:34:18.000000000 +0100
+++++ b/examples/read_port.cpp	2013-04-16 08:02:55.408457114 +0100
++@@ -1,3 +1,4 @@
+++#include <cstdlib>
++ #include <iostream>
++ #include <SerialStream.h>
++ 
++diff -Nurp a/examples/write_port.cpp b/examples/write_port.cpp
++--- a/examples/write_port.cpp	2005-09-27 05:44:36.000000000 +0100
+++++ b/examples/write_port.cpp	2013-04-16 08:03:34.088439743 +0100
++@@ -1,3 +1,4 @@
+++#include <cstdlib>
++ #include <iostream>
++ #include <fstream>
++ #include <SerialStream.h>
++diff -Nurp a/src/PosixSignalDispatcher.cpp b/src/PosixSignalDispatcher.cpp
++--- a/src/PosixSignalDispatcher.cpp	2005-10-09 10:06:54.000000000 +0100
+++++ b/src/PosixSignalDispatcher.cpp	2013-04-16 07:58:16.784610979 +0100
++@@ -12,6 +12,7 @@
++ #include "PosixSignalDispatcher.h"
++ #include "PosixSignalHandler.h"
++ #include <map>
+++#include <cstring>
++ #include <errno.h>
++ #include <signal.h>
++ 
++diff -Nurp a/src/SerialPort.cpp b/src/SerialPort.cpp
++--- a/src/SerialPort.cpp	2005-09-19 08:11:46.000000000 +0100
+++++ b/src/SerialPort.cpp	2013-04-16 07:59:28.596606012 +0100
++@@ -25,6 +25,8 @@
++ #include <map>
++ #include <cerrno>
++ #include <cassert>
+++#include <cstdlib>
+++#include <cstring>
++ #include <termios.h>
++ #include <fcntl.h>
++ #include <sys/ioctl.h>
++diff -Nurp a/src/SerialStreamBuf.cc b/src/SerialStreamBuf.cc
++--- a/src/SerialStreamBuf.cc	2005-10-17 01:12:52.000000000 +0100
+++++ b/src/SerialStreamBuf.cc	2013-04-16 08:01:13.680519020 +0100
++@@ -6,6 +6,7 @@
++ #include <cassert>
++ #include <fstream>
++ #include <limits.h>
+++#include <strings.h>
++ #include "SerialStreamBuf.h"
++ 
++ using namespace std ;
+diff --git a/package/libserial/libserial.mk b/package/libserial/libserial.mk
+new file mode 100644
+index 0000000..5f6ec72
+--- /dev/null
++++ b/package/libserial/libserial.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# libserial
++#
++#############################################################
++
++LIBSERIAL_VERSION = 0.5.2
++LIBSERIAL_SITE = http://prdownloads.sourceforge.net/libserial
++LIBSERIAL_INSTALL_STAGING = YES
++LIBSERIAL_LICENSE = GPLv2+
++LIBSERIAL_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
