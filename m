@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 16 Apr 2013 23:49:36 +0200
-Subject: [Buildroot] [PATCH v2 1/3] post-build: show each script
+Date: Tue, 16 Apr 2013 23:50:44 +0200
+Subject: [Buildroot] [PATCH v2 2/3] post-image: show each script
  filename before execution
-In-Reply-To: <1365439816-6935-2-git-send-email-luca@lucaceresoli.net>
+In-Reply-To: <1365439816-6935-3-git-send-email-luca@lucaceresoli.net>
 References: <1365439816-6935-1-git-send-email-luca@lucaceresoli.net>
- <1365439816-6935-2-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20130416214936.GA16443@free.fr>
+ <1365439816-6935-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20130416215044.GB16443@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +14,16 @@ To: buildroot@busybox.net
 
 Luca, All,
 
-On Mon, Apr 08, 2013 at 06:50:14PM +0200, Luca Ceresoli wrote:
+On Mon, Apr 08, 2013 at 06:50:15PM +0200, Luca Ceresoli wrote:
 > This also simplifies code by removing the ifneq/endif clauses.
 > 
 > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-
-Very usefull, indeed.
 
 Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
-Yann E. MORIN
+Yann E. MORIN.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
