@@ -1,32 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 15 Apr 2013 23:57:16 +0200
-Subject: [Buildroot] [git commit] madplay: add license information
-Message-ID: <20130415215908.18E149B6DD@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 15 Apr 2013 21:39:42 -0300
+Subject: [Buildroot] [PATCH 1/2] netsnmp: enable agentx support by default
+Message-ID: <1366072783-28319-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eed1d7f00cdd2b91b3ccdc1a8f911638d2147e4a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Enable agentx support by default, it's required for newer versions of
+quagga.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/multimedia/madplay/madplay.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/netsnmp/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/multimedia/madplay/madplay.mk b/package/multimedia/madplay/madplay.mk
-index e80726c..d68c86b 100644
---- a/package/multimedia/madplay/madplay.mk
-+++ b/package/multimedia/madplay/madplay.mk
-@@ -7,6 +7,8 @@
- MADPLAY_VERSION = 0.15.2b
- MADPLAY_SOURCE = madplay-$(MADPLAY_VERSION).tar.gz
- MADPLAY_SITE = http://downloads.sourceforge.net/project/mad/madplay/$(MADPLAY_VERSION)
-+MADPLAY_LICENSE = GPLv2+
-+MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
- MADPLAY_LIBTOOL_PATCH = NO
- MADPLAY_DEPENDENCIES = libmad libid3tag
+diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
+index d5056f9..d94abb7 100644
+--- a/package/netsnmp/Config.in
++++ b/package/netsnmp/Config.in
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_NETSNMP_ENABLE_MIBS
  
+ config BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES
+ 	string "Build with these MIB modules"
+-	default "host ucd-snmp/dlmod"
++	default "host ucd-snmp/dlmod agentx"
+ 	depends on BR2_PACKAGE_NETSNMP
+ 	help
+ 	  Specify which MIB modules to include.
+-- 
+1.8.1.5
