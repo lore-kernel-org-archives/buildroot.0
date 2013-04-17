@@ -1,46 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 17 Apr 2013 08:07:47 +0200
-Subject: [Buildroot] [PATCH] busybox: don't disable static option
-In-Reply-To: <516BC3BC.5040100@fh-kl.de>
-References: <516BC3BC.5040100@fh-kl.de>
-Message-ID: <516E3C33.6050505@mind.be>
+Date: Wed, 17 Apr 2013 08:23:22 +0200
+Subject: [Buildroot] modifying buildroot for non- linux freertos
+In-Reply-To: <516C76DC.3000607@gmail.com>
+References: <516C76DC.3000607@gmail.com>
+Message-ID: <516E3FDA.6040109@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/04/13 11:09, Patrick Ziegler wrote:
-> Don't change the busybox STATIC option if buildroots PREFER_STATIC_LIB option
-> is not set. Not to prefer static linking doesn't imply prefer dynamic linking
-> for all packages.
->
-> Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
+  Hi Peter,
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On 15/04/13 23:53, Peter Saunderson wrote:
+[snip]
+> The problem originates because newlib (http://sourceware.org/newlib/) has
+> a different build style to uClibc but using uclibc.mk as a starting point
+> for newlib.mk and making major mods I can get most things working.  I
+> have built all the output/host/usr/bin tools but
+> $(GCC_BUILD_DIR3)/.installed target has not been run so there is no
+> $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc but my newlib build is trying
+> to use it.  So what I think I need to do is delay the build of newlib and
+> I am not sure how to do that yet.  So I am puzzling over
+> $(GCC_BUILD_DIR1)/.configured:, $(GCC_BUILD_DIR2)/.configured: and
+> $(GCC_BUILD_DIR3)/.configured: targets and wondering to myself what bit
+> in buildroot sequences these and how can I fit my new newlib targets into
+> the right place in the build sequence.  If you have read up to this point
+> you may have a view or some tips. Perhaps there is a good guide that I
+> have missed that could help?  I did a search of the archive but did not
+> find anything that was of immediate assistance.  Perhaps there is a
+> better place to ask this question?  Perhaps is such an interesting
+> problem that you would like to see me create a new git project for it?
 
-> ---
->   package/busybox/busybox.mk |    4 ----
->   1 file changed, 4 deletions(-)
->
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 900896f..985203c 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -106,10 +106,6 @@ ifeq ($(BR2_PREFER_STATIC_LIB),y)
->   define BUSYBOX_PREFER_STATIC
->   	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC,$(BUSYBOX_BUILD_CONFIG))
->   endef
-> -else
-> -define BUSYBOX_PREFER_STATIC
-> -	$(call KCONFIG_DISABLE_OPT,CONFIG_STATIC,$(BUSYBOX_BUILD_CONFIG))
-> -endef
->   endif
->
->   # Disable usage of inetd if netkit-base package is selected
->
+  I'm afraid that the expertise on the internal buildroot toolchain build 
+process is not here anymore. Some buildroot developers understand how the 
+.mk file works, but not really why things were done in that particular way...
 
+  But anyway, I don't think you really need buildroot for this. Buildroot 
+is meant for building packages for the target, and just builds some host 
+packages that are needed for building some of these packages. I think 
+crosstool-NG is a much better fit for your purpose. It's build system is 
+pretty complex, but I think it's still easier to understand than the 
+buildroot system. Also, crosstool-NG might be interested in adding 
+support for newlib (as an alternative to uClibc) in its core infrastructure.
 
+  BTW, you could also consider looking at musl instead of newlib.
+
+  Regards,
+  Arnout
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
