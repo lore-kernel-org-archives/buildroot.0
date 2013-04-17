@@ -1,39 +1,46 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 17 Apr 2013 21:51:11 +0200
-Subject: [Buildroot] [git commit] busybox: don't disable static option
-Message-ID: <20130417195410.38EE69B71F@busybox.osuosl.org>
+Date: Wed, 17 Apr 2013 21:54:36 +0200
+Subject: [Buildroot] [git commit] quagga: bump to version 0.99.22.1
+Message-ID: <20130417195410.693DC9B71F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=79154f49f5c6fa15e5500df048ff829f25e6d3f7
+commit: http://git.buildroot.net/buildroot/commit/?id=14dcb32ee45ccc8861365086d3d6c502458edae7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Don't change the busybox STATIC option if buildroots PREFER_STATIC_LIB option
-is not set. Not to prefer static linking doesn't imply prefer dynamic linking
-for all packages.
-
-Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/busybox/busybox.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ package/quagga/quagga.mk |    7 ++-----
+ 1 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 900896f..985203c 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -106,10 +106,6 @@ ifeq ($(BR2_PREFER_STATIC_LIB),y)
- define BUSYBOX_PREFER_STATIC
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC,$(BUSYBOX_BUILD_CONFIG))
- endef
--else
--define BUSYBOX_PREFER_STATIC
--	$(call KCONFIG_DISABLE_OPT,CONFIG_STATIC,$(BUSYBOX_BUILD_CONFIG))
--endef
- endif
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index fb060ef..42f8506 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- # Disable usage of inetd if netkit-base package is selected
+-QUAGGA_VERSION = 0.99.21
++QUAGGA_VERSION = 0.99.22.1
+ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+ QUAGGA_DEPENDENCIES = host-gawk
+ QUAGGA_LICENSE = GPLv2+
+@@ -25,12 +25,9 @@ QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_TCP_ZERBRA),--enable-tcp-zebra,--di
+ QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_OPAQUE_LSA),--enable-opaque-lsa,--disable-opaque-lsa)
+ 
+ ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
++QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
+ QUAGGA_CONF_OPT += --enable-snmp
+ QUAGGA_DEPENDENCIES += netsnmp
+-# SNMP support tries -lcrypto by default, disable it if we ain't got openssl
+-ifneq ($(BR2_PACKAGE_OPENSSL),y)
+-QUAGGA_CONF_OPT +=--without-crypto
+-endif
+ else
+ QUAGGA_CONF_OPT +=--disable-snmp
+ endif
