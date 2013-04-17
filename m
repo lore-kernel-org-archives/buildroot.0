@@ -1,37 +1,38 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 17 Apr 2013 13:32:07 -0500
-Subject: [Buildroot] RFC: "make emu" build and start QEMU target
-Message-ID: <CAEBucnDgqjO+3RpdXOgqJzkitSG6P-L=cbOEJws09WZXnnD5kQ@mail.gmail.com>
+From: Shawn J. Goff <shawn7400@gmail.com>
+Date: Wed, 17 Apr 2013 14:38:01 -0400
+Subject: [Buildroot] [PATCH] libcurl: specify capath
+Message-ID: <1366223881-6367-1-git-send-email-shawn7400@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: "Shawn J. Goff" <shawn7400@gmail.com>
 
-I'm proposing a project where a "make emu" target would be added to
-Buildroot in order to start a virtualized version of the target.  This
-would provide developers with the ability to quickly test and validate
-their configuration.
+Since openssl's path is '/etc/ssl/' (specified in our openssl package),
+we should also make sure that's what curl is using.
 
-To configure the emu target a new top-level menu, "Target Emulation,"
-would be added.  This menu would contain the following options.
+Previously, it's hasn't been specified, which means it changes depending
+on the host system where it's compiled.
 
-Emulation Method -> QEMU
-QEMU Version -> Custom Git Tree | Custom tarball | Custom Version | X.Y.Z
-... Source Configuration similar to Kernel ...
-Machine -> list of machines
-Memory -> Memory in Megabytes
-Additional QEMU Options -> (additional options for command line)
+Signed-off-by: Shawn J. Goff <shawn7400@gmail.com>
+---
+ package/libcurl/libcurl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This will start the qemu-system-$(ARCH) version of QEMU with the
-appropriate configuration.
-
-Thanks,
-Spenser
-
---
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index a631953..75c9601 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -16,7 +16,7 @@ LIBCURL_INSTALL_STAGING = YES
+ # probably almost never used. See
+ # http://curl.haxx.se/docs/manpage.html#--ntlm.
+ LIBCURL_CONF_OPT = --disable-verbose --disable-manual \
+-	--enable-hidden-symbols --disable-ntlm-wb
++	--enable-hidden-symbols --disable-ntlm-wb --with-ca-path=/etc/ssl/certs
+ LIBCURL_CONFIG_SCRIPTS = curl-config
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-- 
+1.8.1.5
