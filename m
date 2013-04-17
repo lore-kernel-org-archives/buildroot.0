@@ -1,29 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Apr 2013 09:46:32 +0200
-Subject: [Buildroot] [PATCH] ne10: new package
-In-Reply-To: <516E462B.20309@mind.be>
-References: <1365876586-7824-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <516E462B.20309@mind.be>
-Message-ID: <20130417094632.35f60b6e@skate>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Wed, 17 Apr 2013 15:50:01 +0800
+Subject: [Buildroot] [PATCH v5 6/7] arch: toolchain: Install blackfin
+ FDPIC and FLAT libraries in external toolchain makefile.
+In-Reply-To: <20130416232925.759eb9df@skate>
+References: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
+ <1365761909-15305-6-git-send-email-sonic.adi@gmail.com>
+ <20130416232925.759eb9df@skate>
+Message-ID: <CAJxxZ0PoEysfHc23PHfqkVktvoGiQoDBNd+-z3PTOL40=Zfwhg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Hi Thomas,
 
-On Wed, 17 Apr 2013 08:50:19 +0200, Arnout Vandecappelle wrote:
+On Wed, Apr 17, 2013 at 5:29 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Sonic Zhang,
+>
+> On Fri, 12 Apr 2013 18:18:28 +0800, Sonic Zhang wrote:
+>> diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+>> index f755c8d..917282d 100644
+>> --- a/arch/Config.in.bfin
+>> +++ b/arch/Config.in.bfin
+>> @@ -62,6 +62,28 @@ config BR2_bf561
+>>       bool "bf561"
+>>  endchoice
+>>
+>> +config BR2_BFIN_INSTALL_FDPIC_SHARED
+>> +     bool "Install FDPIC shared libraries"
+>> +     depends on !BR2_BINFMT_FDPIC
+>> +     help
+>> +       The Linux kernel supports running both FDPIC and FLAT applications
+>> +       concurrently if the binary format specific libraries are installed properly.
+>> +       This option allows developer to install FDPIC libraries into a buildroot
+>> +       rootfs image built with binary format that is not FDPIC.
+>> +
+>> +config BR2_BFIN_INSTALL_FLAT_SHARED
+>> +     depends on BR2_BINFMT_FLAT_SHARED
+>> +     default y
+>> +
+>> +config BR2_BFIN_INSTALL_FLAT_SHARED
+>> +     bool "Install FLAT shared libraries"
+>
+> Same name as the previous option.
 
->   Shouldn't the latter one be inside an ifeq ($(BR2_PREFER_STATIC_LIB),) 
-> as well? But then you probably need an else part as well to override the 
-> default commands.
+This is intended. When option BINFMT_FLAT_SHARED is selected option
+BR2_BFIN_INSTALL_FLAT_SHARED should always be set to y. While other
+BINFMT is selected, BR2_BFIN_INSTALL_FLAT_SHARED is optional for
+developer to decide.
 
-Yes, you're right. I'll send a followup patch. Thanks for noticing!
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+>
+>> +     depends on !BR2_BINFMT_FLAT_SHARED
+>> +     help
+>> +       The Linux kernel supports running both FDPIC and FLAT applications
+>> +       concurrently if the binary format specific libraries are installed properly.
+>> +       This option allows developer to install FLAT libraries into a buildroot
+>> +       rootfs image built with binary format that is not shared FLAT.
+>
+> I think those options should be preference of the external toolchain,
+> so in toolchain/toolchain-external/Config.in. Because if we ever
+> support internal toolchain for Blackfin, they won't be multilib
+> toolchains, so it won't make sense to have those options.
+>
+>> +ifeq ($(BR2_bfin,y)
+>
+> Do you actually test the patches you're posting?
+
+Yes, but when I prepare patches for upstream, I apply to a different
+branch, and sometimes make typo error.
+
+Regards,
+
+Sonic
