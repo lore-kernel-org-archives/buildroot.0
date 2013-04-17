@@ -1,45 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Apr 2013 22:06:32 +0200
-Subject: [Buildroot] [PATCH] libcurl: specify capath
-In-Reply-To: <1366223881-6367-1-git-send-email-shawn7400@gmail.com> (Shawn
- J. Goff's message of "Wed, 17 Apr 2013 14:38:01 -0400")
-References: <1366223881-6367-1-git-send-email-shawn7400@gmail.com>
-Message-ID: <87ehe8j513.fsf@dell.be.48ers.dk>
+From: =?utf-8?B?U8O2cmVu?= Brinkmann <soren.brinkmann@xilinx.com>
+Date: Wed, 17 Apr 2013 13:06:42 -0700
+Subject: [Buildroot] [PATCH 1/1] fs: add uimage support w/ example for
+ cpio
+In-Reply-To: <CAEBucnBALqQYs+GM5siAXwrnZLU54j1n5zTZFQwhTZPofVVM6Q@mail.gmail.com>
+References: <1366225654-11562-1-git-send-email-spenser@gillilanding.com>
+ <CAEBucnBALqQYs+GM5siAXwrnZLU54j1n5zTZFQwhTZPofVVM6Q@mail.gmail.com>
+Message-ID: <9dadaaac-d8cd-4050-bf0b-39c63bdee154@CO9EHSMHS011.ehs.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Shawn" == Shawn J Goff <shawn7400@gmail.com> writes:
+On Wed, Apr 17, 2013 at 02:08:40PM -0500, Spenser Gilliland wrote:
+> This fixes the white space errors.
+Did you sent out the correct version? I still get:
+	Applying: fs: add uimage support w/ example for cpio
+	/workspaces/sorenb/buildroot.git/.git/rebase-apply/patch:63: trailing whitespace.
+	          Add a u-boot header to the cpio root filesystem.  This allows 
+	/workspaces/sorenb/buildroot.git/.git/rebase-apply/patch:65: trailing whitespace.
+	 
+	warning: 2 lines add whitespace errors.
 
- Shawn> From: "Shawn J. Goff" <shawn7400@gmail.com>
- Shawn> Since openssl's path is '/etc/ssl/' (specified in our openssl package),
- Shawn> we should also make sure that's what curl is using.
+When I apply the patch.
 
- Shawn> Previously, it's hasn't been specified, which means it changes depending
- Shawn> on the host system where it's compiled.
-
-Out of interest, how does it get this info?
-
- Shawn> Signed-off-by: Shawn J. Goff <shawn7400@gmail.com>
- Shawn> ---
- Shawn>  package/libcurl/libcurl.mk | 2 +-
- Shawn>  1 file changed, 1 insertion(+), 1 deletion(-)
-
- Shawn> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
- Shawn> index a631953..75c9601 100644
- Shawn> --- a/package/libcurl/libcurl.mk
- Shawn> +++ b/package/libcurl/libcurl.mk
- Shawn> @@ -16,7 +16,7 @@ LIBCURL_INSTALL_STAGING = YES
- Shawn>  # probably almost never used. See
- Shawn>  # http://curl.haxx.se/docs/manpage.html#--ntlm.
- Shawn>  LIBCURL_CONF_OPT = --disable-verbose --disable-manual \
- Shawn> -	--enable-hidden-symbols --disable-ntlm-wb
- Shawn> +	--enable-hidden-symbols --disable-ntlm-wb --with-ca-path=/etc/ssl/certs
-
-It would make more sense to move this under the BR2_PACKAGE_OPENSSL
-conditional.
-
--- 
-Bye, Peter Korsgaard
+	S?ren
