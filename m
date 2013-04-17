@@ -1,56 +1,71 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 21 Apr 2013 22:33:27 +0200
-Subject: [Buildroot] [git commit] quagga: fix build breakage without snmp
-Message-ID: <20130421211401.7302B9B783@busybox.osuosl.org>
+Date: Wed, 17 Apr 2013 23:00:21 +0200
+Subject: [Buildroot] [git commit] openssl: add host variant
+Message-ID: <20130421211400.986289B783@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=05554f1747bbc2b358819ced2b9d674be6d21db7
+commit: http://git.buildroot.net/buildroot/commit/?id=7842789cb539b6b64d61b03f5c8dbe6813f01da7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Quagga no longer supports explicitly disabling snmp, and what's worse,
-it interprets --disable-snmp as --enable-snmp.
-Remove the disable configure option.
-While at it add a comment about net-snmp requiring AgentX support for
-quagga to build properly as suggested by Arnout.
-Fixes:
-http://autobuild.buildroot.net/results/a9bce6dd8065ddb1850a4e14f0e4eb257ee89286/
+Useful for the upcoming host-python-m2crypto package.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/quagga/Config.in |    3 +++
- package/quagga/quagga.mk |    4 +---
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/openssl/openssl.mk |   21 +++++++++++++++++++++
+ 1 files changed, 21 insertions(+), 0 deletions(-)
 
-diff --git a/package/quagga/Config.in b/package/quagga/Config.in
-index 0834201..c364ae1 100644
---- a/package/quagga/Config.in
-+++ b/package/quagga/Config.in
-@@ -84,4 +84,7 @@ config BR2_PACKAGE_QUAGGA_SNMP
- 	help
- 	  Make quagga information available via SNMP SMUX.
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 7701d51..8486c44 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -46,6 +46,18 @@ ifeq ($(BR2_x86_i386),y)
+ 	OPENSSL_TARGET_ARCH = generic32 386
+ endif
  
-+comment "AgentX support must be enabled in net-snmp or the build will break"
-+	depends on BR2_PACKAGE_QUAGGA_SNMP
++define HOST_OPENSSL_CONFIGURE_CMDS
++	(cd $(@D); \
++		$(HOST_CONFIGURE_OPTS) \
++		./config \
++		--prefix=/usr \
++		--openssldir=/etc/ssl \
++		--libdir=/lib \
++		shared \
++		no-zlib \
++	)
++endef
 +
- endif
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 42f8506..347ec4d 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -26,10 +26,8 @@ QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_OPAQUE_LSA),--enable-opaque-lsa,--d
+ define OPENSSL_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_ARGS) \
+@@ -69,6 +81,10 @@ define OPENSSL_CONFIGURE_CMDS
+ 	$(SED) "s:-O[0-9]:$(OPENSSL_CFLAGS):" $(@D)/Makefile
+ endef
  
- ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
- QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
--QUAGGA_CONF_OPT += --enable-snmp
-+QUAGGA_CONF_OPT += --enable-snmp=agentx
- QUAGGA_DEPENDENCIES += netsnmp
--else
--QUAGGA_CONF_OPT +=--disable-snmp
- endif
++define HOST_OPENSSL_BUILD_CMDS
++	$(MAKE1) -C $(@D)
++endef
++
+ define OPENSSL_BUILD_CMDS
+ 	$(MAKE1) -C $(@D)
+ endef
+@@ -77,6 +93,10 @@ define OPENSSL_INSTALL_STAGING_CMDS
+ 	$(MAKE1) -C $(@D) INSTALL_PREFIX=$(STAGING_DIR) install
+ endef
  
- $(eval $(autotools-package))
++define HOST_OPENSSL_INSTALL_CMDS
++	$(MAKE1) -C $(@D) INSTALL_PREFIX=$(HOST_DIR) install
++endef
++
+ define OPENSSL_INSTALL_TARGET_CMDS
+ 	$(MAKE1) -C $(@D) INSTALL_PREFIX=$(TARGET_DIR) install
+ endef
+@@ -124,3 +144,4 @@ define OPENSSL_UNINSTALL_CMDS
+ endef
+ 
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
