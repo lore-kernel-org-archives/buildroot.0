@@ -1,49 +1,43 @@
 From: Shawn J. Goff <shawn7400@gmail.com>
-Date: Wed, 17 Apr 2013 17:30:40 -0400
-Subject: [Buildroot] [PATCH] libcurl: specify capath
-In-Reply-To: <87ehe8j513.fsf@dell.be.48ers.dk>
-References: <1366223881-6367-1-git-send-email-shawn7400@gmail.com>
- <87ehe8j513.fsf@dell.be.48ers.dk>
-Message-ID: <CAGiDA6KghsuQ1JiY61ThiDVqnCWFDbeKu7Jea3SsBxYAw2ctBQ@mail.gmail.com>
+Date: Wed, 17 Apr 2013 17:31:27 -0400
+Subject: [Buildroot] [PATCH v2] libcurl: specify capath
+Message-ID: <1366234287-8062-1-git-send-email-shawn7400@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 17, 2013 at 4:06 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Shawn" == Shawn J Goff <shawn7400@gmail.com> writes:
->
->  Shawn> From: "Shawn J. Goff" <shawn7400@gmail.com>
->  Shawn> Since openssl's path is '/etc/ssl/' (specified in our openssl package),
->  Shawn> we should also make sure that's what curl is using.
->
->  Shawn> Previously, it's hasn't been specified, which means it changes depending
->  Shawn> on the host system where it's compiled.
->
-> Out of interest, how does it get this info?
->
+From: "Shawn J. Goff" <shawn7400@gmail.com>
 
-"...it checks a few known paths to see where it might find the default
-ca-cert for that system."
-from http://curl.haxx.se/mail/lib-2009-08/0223.html
+Since openssl's path is '/etc/ssl/' (specified in our openssl package),
+we should also make sure that's what curl is using.
 
->  Shawn> Signed-off-by: Shawn J. Goff <shawn7400@gmail.com>
->  Shawn> ---
->  Shawn>  package/libcurl/libcurl.mk | 2 +-
->  Shawn>  1 file changed, 1 insertion(+), 1 deletion(-)
->
->  Shawn> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
->  Shawn> index a631953..75c9601 100644
->  Shawn> --- a/package/libcurl/libcurl.mk
->  Shawn> +++ b/package/libcurl/libcurl.mk
->  Shawn> @@ -16,7 +16,7 @@ LIBCURL_INSTALL_STAGING = YES
->  Shawn>  # probably almost never used. See
->  Shawn>  # http://curl.haxx.se/docs/manpage.html#--ntlm.
->  Shawn>  LIBCURL_CONF_OPT = --disable-verbose --disable-manual \
->  Shawn> -       --enable-hidden-symbols --disable-ntlm-wb
->  Shawn> +       --enable-hidden-symbols --disable-ntlm-wb --with-ca-path=/etc/ssl/certs
->
-> It would make more sense to move this under the BR2_PACKAGE_OPENSSL
-> conditional.
-It would. Another patch is coming.
+Previously, it's hasn't been specified, which means it changes depending
+on the host system where it's compiled.
+
+Signed-off-by: Shawn J. Goff <shawn7400@gmail.com>
+---
+
+Moved the option inside the BR2_PACKAGE_OPENSSL conditional.
+
+ package/libcurl/libcurl.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index a631953..f0236d9 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -27,7 +27,9 @@ LIBCURL_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
+ # Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
+ # are found first.
+ LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/lib:/usr/lib
+-LIBCURL_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr --with-random=/dev/urandom
++LIBCURL_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr \
++	--with-random=/dev/urandom \
++	--with-ca-path=/etc/ssl/certs
+ else
+ LIBCURL_CONF_OPT += --without-ssl
+ endif
+-- 
+1.8.1.5
