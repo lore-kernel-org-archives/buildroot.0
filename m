@@ -1,32 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 17 Apr 2013 18:33:54 +0200
-Subject: [Buildroot] [RFCv2] Per-package out-of-tree build
-In-Reply-To: <20130413205422.7eb87375@skate>
-References: <20130413205422.7eb87375@skate>
-Message-ID: <516ECEF2.70307@mind.be>
+Date: Wed, 17 Apr 2013 18:42:24 +0200
+Subject: [Buildroot] [PATCH v5 1/7] arch: toolchain: Introduce binary
+ formats BINFMT_*.
+In-Reply-To: <20130416205103.6ecd9bd9@skate>
+References: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
+ <20130416205103.6ecd9bd9@skate>
+Message-ID: <516ED0F0.6070804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/04/13 20:54, Thomas Petazzoni wrote:
->   * A <pkg>_SUPPORTS_OUT_OF_TREE variable defines whether the package
->     supports out of tree build or not. By default, it's set to NO, in
->     which case the package source code is rsynced from its source
->     directory to the build directory at the beginning of the configure
->     step. It is set to YES by both the autotools and cmake package
->     infrastructures (which have been modified to do out of tree build),
->     and by some packages that use the generic infrastructure but
->     nonetheless support out of tree build.
+On 16/04/13 20:51, Thomas Petazzoni wrote:
+> Dear Sonic Zhang,
+>
+> On Fri, 12 Apr 2013 18:18:23 +0800, Sonic Zhang wrote:
+>
+>> +# Set up target binary format
+>> +choice
+>> +	prompt "Target Binary Format"
+>> +	default BR2_BINFMT_FDPIC if BR2_bfin
+>> +	default BR2_BINFMT_ELF
+>> +
+>> +config BR2_BINFMT_ELF
+>> +	bool "ELF"
+>> +	depends on !BR2_bfin
+>> +	help
+>> +	  ELF (Executable and Linkable Format) is a format for libraries and
+>> +	  executables used across different architectures and operating
+>> +	  systems.
+>
+> I do agree with Arnout on one point here: we can hide this choice
+> when !BR2_bfin. However, contrary to Arnout, I'd like to keep this
+> BR2_BINFMT_ELF choice as an invisible option, that is always selected
+> on !BR2_bfin. Yes it's useless, but I think it makes the binfmt options
+> clearer.
 
-  It may have been discussed before, but wouldn't it be more convenient 
-to insert an extra rsync step explicitly? Similar to how it's currently 
-done for OVERRIDE_SRCDIR.
-
+  OK for me. Most important is that the choice is hidden when empty.
 
   Regards,
   Arnout
+
+>
+> Sonic, once this is changed, you have my Acked-by: Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> on this patch.
+>
+> Thanks!
+>
+> Thomas
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
