@@ -1,42 +1,48 @@
-From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Wed, 17 Apr 2013 15:27:23 +0800
-Subject: [Buildroot] [PATCH v5 7/7] package: Introduce NOMMU symbol
-In-Reply-To: <20130416233021.30c4486c@skate>
-References: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
- <1365761909-15305-7-git-send-email-sonic.adi@gmail.com>
- <20130416233021.30c4486c@skate>
-Message-ID: <CAJxxZ0M=C+HiKcgEHtuzTS7Pmw_e6-j_MVTHyty81QvaFEtKGQ@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 17 Apr 2013 09:41:40 +0200
+Subject: [Buildroot] [PATCH v2 0/3] barebox new option and new boards
+Message-ID: <1366184503-16875-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi all,
+this patch set is for adding to barebox a custom version option
+and use this new option to add suppport for two new boards.
 
-On Wed, Apr 17, 2013 at 5:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Sonic Zhang,
->
-> On Fri, 12 Apr 2013 18:18:29 +0800, Sonic Zhang wrote:
->
->>  ifeq ($(BR2_BINFMT_FLAT),y)
->>  TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
->> +
->> +ifneq ($(BR2_USE_MMU), y)
->
-> There shouldn't be any space between the comma and the y.
->
->> +TARGET_CFLAGS += -D__NOMMU__
->>  endif
->>
->>  ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
->
-> And you're adding a ifneq condition without adding any endif. Smells
-> like untested code :)
->
-That's an error when I rebase this patch automatically. Should be fixed soon.
+v2:
+  - Telit EVK-PRO3: use barebox custom version option
 
-Regards,
+Best regards
+Fabio Porcedda (3):
+  barebox: add custom version option
+  configs: add defconfig for Telit EVK-PRO3
+  configs: add defconfig for Atmel AT91SAM9260-EK Nand Flash Boot
 
-Sonic
+ .../linux-ARM-at91-enable-nand-ubifs-boot.patch    |  44 ++++
+ ...04.0-0001-watchdog-add-keep-alive-support.patch |  88 ++++++++
+ ...02-watchdog-add-at91sam9-watchdog-support.patch | 228 +++++++++++++++++++++
+ ...0003-at91sam9260-9g20-add-wathdog-support.patch |  40 ++++
+ ...0004-at91sam9260-9g20-fix-wathdog-support.patch |  26 +++
+ ...13.04.0-0005-watchdog-enable-for-evk-pro3.patch |  26 +++
+ ...t91-at91_dt_defconfig-update-for-evk-pro3.patch |  44 ++++
+ board/telit/evk-pro3/readme.txt                    |  28 +++
+ boot/barebox/Config.in                             |  26 ++-
+ configs/at91sam9260eknf_defconfig                  |  15 ++
+ configs/telit_evk_pro3_defconfig                   |  16 ++
+ 11 files changed, 567 insertions(+), 14 deletions(-)
+ create mode 100644 board/atmel/at91sam9260ek/linux-ARM-at91-enable-nand-ubifs-boot.patch
+ create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0001-watchdog-add-keep-alive-support.patch
+ create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0002-watchdog-add-at91sam9-watchdog-support.patch
+ create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0003-at91sam9260-9g20-add-wathdog-support.patch
+ create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0004-at91sam9260-9g20-fix-wathdog-support.patch
+ create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0005-watchdog-enable-for-evk-pro3.patch
+ create mode 100644 board/telit/evk-pro3/linux-0001-ARM-at91-at91_dt_defconfig-update-for-evk-pro3.patch
+ create mode 100644 board/telit/evk-pro3/readme.txt
+ create mode 100644 configs/at91sam9260eknf_defconfig
+ create mode 100644 configs/telit_evk_pro3_defconfig
+
+-- 
+1.8.1.4
