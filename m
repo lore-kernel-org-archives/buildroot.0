@@ -1,40 +1,28 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Tue, 16 Apr 2013 17:39:27 -0700
-Subject: [Buildroot] [PATCH] ntfs-3g: needs toolchain with threads support
-Message-ID: <1366159167-347-1-git-send-email-gilles.talis@gmail.com>
+From: =?utf-8?B?U8O2cmVu?= Brinkmann <soren.brinkmann@xilinx.com>
+Date: Tue, 16 Apr 2013 17:47:26 -0700
+Subject: [Buildroot] [PATCH 1/1] fs: add uimage support w/ example for
+ cpio
+In-Reply-To: <1365703381-9560-1-git-send-email-spenser@gillilanding.com>
+References: <1365703381-9560-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <922402b4-3117-4093-ad58-f48bd49b4ad2@DB8EHSMHS023.ehs.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.org/results/ff10a72ac5836749155396e87f0cd32cd89f94c7
+On Thu, Apr 11, 2013 at 01:03:01PM -0500, Spenser Gilliland wrote:
+> From: Spenser Gilliland <Spenser309@gmail.com>
+> 
+> Adds uimage support for various root filesystems.  Uimage support is needed when
+> using the bootm command in uboot.  This provides both a simple infrastructure
+> similar to the current BR2_TARGET_ROOTFS_$(2)_GZ for adding compression. To
+> define the a rootfs should have a UIMAGE wrapper simply create the
+> BR2_TARGET_ROOTFS_$(2)_UIMAGE symbol.
+> 
+> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/ntfs-3g/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+It still has the white space errors. Other than that, it's still
+working. Feel free to add my Tested-by.
 
-diff --git a/package/ntfs-3g/Config.in b/package/ntfs-3g/Config.in
-index be19a57..10db8a3 100644
---- a/package/ntfs-3g/Config.in
-+++ b/package/ntfs-3g/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_NTFS_3G
- 	bool "ntfs-3g"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
- 	help
- 	  The NTFS-3G driver is an open source, freely available
-@@ -29,5 +30,5 @@ config BR2_PACKAGE_NTFS_3G_NTFSPROGS
- 
- endif
- 
--comment "ntfs-3g requires a toolchain with LARGEFILE and WCHAR support"
--	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
-+comment "ntfs-3g requires a toolchain with LARGEFILE, WCHAR and threads support"
-+	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
--- 
-1.7.4.1
+	S?ren
