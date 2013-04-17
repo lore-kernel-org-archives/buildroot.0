@@ -1,19 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Apr 2013 21:44:23 +0200
-Subject: [Buildroot] [PATCHv2] dropbear: bump to version 2013.57
-In-Reply-To: <1366219884-19669-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 17 Apr 2013 14:31:24 -0300")
-References: <1366219884-19669-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87haj5j620.fsf@dell.be.48ers.dk>
+Date: Wed, 17 Apr 2013 21:46:07 +0200
+Subject: [Buildroot] [PATCH] ntfs-3g: needs toolchain with threads
+	support
+In-Reply-To: <1366159167-347-1-git-send-email-gilles.talis@gmail.com> (Gilles
+ Talis's message of "Tue, 16 Apr 2013 17:39:27 -0700")
+References: <1366159167-347-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <87d2ttj5z4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gilles> Fixes:
+ Gilles> http://autobuild.buildroot.org/results/ff10a72ac5836749155396e87f0cd32cd89f94c7
 
 Committed, thanks.
 
