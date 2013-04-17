@@ -1,43 +1,38 @@
-From: Shawn J. Goff <shawn7400@gmail.com>
-Date: Wed, 17 Apr 2013 17:31:27 -0400
-Subject: [Buildroot] [PATCH v2] libcurl: specify capath
-Message-ID: <1366234287-8062-1-git-send-email-shawn7400@gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Wed, 17 Apr 2013 15:10:35 -0700
+Subject: [Buildroot] [PATCH] dnsmasq: build with MAKE1
+Message-ID: <1366236635-6353-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Shawn J. Goff" <shawn7400@gmail.com>
+dnsmasq build breaks with parallel builds.
+By the time final target needs to be linked, some object files are missing.
 
-Since openssl's path is '/etc/ssl/' (specified in our openssl package),
-we should also make sure that's what curl is using.
+Fix it by using MAKE1 instead.
 
-Previously, it's hasn't been specified, which means it changes depending
-on the host system where it's compiled.
+Fixes:
+http://autobuild.buildroot.org/results/7a68e2f64105013c1040c01c0e55fb5d910ef8d8
 
-Signed-off-by: Shawn J. Goff <shawn7400@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
+ package/dnsmasq/dnsmasq.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Moved the option inside the BR2_PACKAGE_OPENSSL conditional.
-
- package/libcurl/libcurl.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index a631953..f0236d9 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -27,7 +27,9 @@ LIBCURL_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
- # Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
- # are found first.
- LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/lib:/usr/lib
--LIBCURL_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr --with-random=/dev/urandom
-+LIBCURL_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr \
-+	--with-random=/dev/urandom \
-+	--with-ca-path=/etc/ssl/certs
- else
- LIBCURL_CONF_OPT += --without-ssl
- endif
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 285f06e..8fb1fb1 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -84,7 +84,7 @@ define DNSMASQ_BUILD_CMDS
+ 	$(DNSMASQ_ENABLE_DBUS)
+ 	$(DNSMASQ_ENABLE_LUA)
+ 	$(DNSMASQ_ENABLE_CONNTRACK)
+-	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPT) all$(DNSMASQ_I18N)
++	$(DNSMASQ_MAKE_ENV) $(MAKE1) -C $(@D) $(DNSMASQ_MAKE_OPT) all$(DNSMASQ_I18N)
+ endef
+ 
+ define DNSMASQ_INSTALL_TARGET_CMDS
 -- 
-1.8.1.5
+1.7.4.1
