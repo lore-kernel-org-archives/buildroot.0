@@ -1,21 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Apr 2013 21:46:07 +0200
-Subject: [Buildroot] [PATCH] ntfs-3g: needs toolchain with threads
-	support
-In-Reply-To: <1366159167-347-1-git-send-email-gilles.talis@gmail.com> (Gilles
- Talis's message of "Tue, 16 Apr 2013 17:39:27 -0700")
-References: <1366159167-347-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87d2ttj5z4.fsf@dell.be.48ers.dk>
+Date: Wed, 17 Apr 2013 21:48:08 +0200
+Subject: [Buildroot] [PATCH 1/2] netsnmp: enable agentx support by
+	default
+In-Reply-To: <1366072783-28319-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 15 Apr 2013 21:39:42 -0300")
+References: <1366072783-28319-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878v4hj5vr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gilles> Fixes:
- Gilles> http://autobuild.buildroot.org/results/ff10a72ac5836749155396e87f0cd32cd89f94c7
+ Gustavo> Enable agentx support by default, it's required for newer versions of
+ Gustavo> quagga.
 
 Committed, thanks.
 
