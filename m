@@ -1,56 +1,76 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 17 Apr 2013 18:42:24 +0200
-Subject: [Buildroot] [PATCH v5 1/7] arch: toolchain: Introduce binary
- formats BINFMT_*.
-In-Reply-To: <20130416205103.6ecd9bd9@skate>
+Date: Wed, 17 Apr 2013 18:41:02 +0200
+Subject: [Buildroot] [PATCH v5 6/7] arch: toolchain: Install blackfin
+ FDPIC and FLAT libraries in external toolchain makefile.
+In-Reply-To: <CAJxxZ0MFoAf1YrKfbjUt5BW8Pd=uX1NxTN9EgYvfHiM-g1uZgA@mail.gmail.com>
 References: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
- <20130416205103.6ecd9bd9@skate>
-Message-ID: <516ED0F0.6070804@mind.be>
+ <1365761909-15305-6-git-send-email-sonic.adi@gmail.com>
+ <20130416232925.759eb9df@skate>
+ <CAJxxZ0PoEysfHc23PHfqkVktvoGiQoDBNd+-z3PTOL40=Zfwhg@mail.gmail.com>
+ <20130417100512.5433f4c6@skate>
+ <CAJxxZ0NHZM75Nctd6fy-9K8t1jf1hdKiTXn+0aR9E2qB=R+LVA@mail.gmail.com>
+ <20130417105615.7af600cd@skate>
+ <CAJxxZ0MFoAf1YrKfbjUt5BW8Pd=uX1NxTN9EgYvfHiM-g1uZgA@mail.gmail.com>
+Message-ID: <516ED09E.2030608@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/04/13 20:51, Thomas Petazzoni wrote:
-> Dear Sonic Zhang,
+On 17/04/13 11:40, Sonic Zhang wrote:
+> Hi Thomas,
 >
-> On Fri, 12 Apr 2013 18:18:23 +0800, Sonic Zhang wrote:
 >
->> +# Set up target binary format
->> +choice
->> +	prompt "Target Binary Format"
->> +	default BR2_BINFMT_FDPIC if BR2_bfin
->> +	default BR2_BINFMT_ELF
->> +
->> +config BR2_BINFMT_ELF
->> +	bool "ELF"
->> +	depends on !BR2_bfin
->> +	help
->> +	  ELF (Executable and Linkable Format) is a format for libraries and
->> +	  executables used across different architectures and operating
->> +	  systems.
+> On Wed, Apr 17, 2013 at 4:56 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com
+> <mailto:thomas.petazzoni@free-electrons.com>> wrote:
 >
-> I do agree with Arnout on one point here: we can hide this choice
-> when !BR2_bfin. However, contrary to Arnout, I'd like to keep this
-> BR2_BINFMT_ELF choice as an invisible option, that is always selected
-> on !BR2_bfin. Yes it's useless, but I think it makes the binfmt options
-> clearer.
+>     Dear Sonic Zhang,
+>
+>     On Wed, 17 Apr 2013 16:16:21 +0800, Sonic Zhang wrote:
+>
+>      > > # When the FDPIC binary format is used, we force the installation
+>      > > # of the corresponding libraries. When a different binary format is
+>      > > # used, we offer the option of installing the FDPIC shared libraries
+>      > > # (typically in addition to the FLAT shared ones).
+>      > > config BR2_BFIN_INSTALL_FDPIC_SHARED
+>      > >         bool "Install FDPIC shared libraries" if !BR2_BINFMT_FDPIC
+>      > >         default y if BR2_BINFMT_FDPIC
+>      > >         help
+>      > >           ...
+>      >
+>      > Because current library installation scripts in
+>      > toolchain-external/ext-tool.mk <http://ext-tool.mk> always install
+>     FDPIC libraries when
+>      > BINFMT_FDPIC is selected. No necessary to set
+>      > BR2_BFIN_INSTALL_FDPIC_SHARED y in this case.
+>
+>     Ok. But then why do we have to duplicate this code in ext-tool.mk
+>     <http://ext-tool.mk>. If
+>     it already has the code to copy the FDPIC libraries when FDPIC is
+>     selected as the primary binary format, we should be able to re-use this
+>     code when FLAT shared is used as the primary binary format, but we want
+>     the FDPIC libraries to be installed in addition.
+>
+>
+> Yes, I do reuse the function copy_toolchain_lib_root() in the code to
+> install shared FDPIC libraries when FLAT format is selected. But, rest
+> part of the library installation code depends on current
+> TOOLCHAIN_EXTERNAL_CC, which is different from the FDPIC one in this
+> case. And the following sysroot to staging installation code depends on
+> macro SYSROOT_DIR, ARCH_SYSROOT_DIR, ARCH_SUBDIR, ARCH_LIB_DIR and
+> SUPPORT_LIB_DIR, which are based on current TOOLCHAIN_EXTERNAL_CC as well.
+>
+> I feel the individual FDPIC installation code for FLAT format is a simple
+> and clear solution.
 
-  OK for me. Most important is that the choice is hidden when empty.
+  And anyway it can be refactored away later (e.g. when moving the 
+ext-toolchain stuff to a script or to functions).
+
 
   Regards,
   Arnout
-
->
-> Sonic, once this is changed, you have my Acked-by: Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> on this patch.
->
-> Thanks!
->
-> Thomas
->
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
