@@ -1,44 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 17 Apr 2013 08:50:19 +0200
-Subject: [Buildroot] [PATCH] ne10: new package
-In-Reply-To: <1365876586-7824-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1365876586-7824-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <516E462B.20309@mind.be>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Wed, 17 Apr 2013 15:27:23 +0800
+Subject: [Buildroot] [PATCH v5 7/7] package: Introduce NOMMU symbol
+In-Reply-To: <20130416233021.30c4486c@skate>
+References: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
+ <1365761909-15305-7-git-send-email-sonic.adi@gmail.com>
+ <20130416233021.30c4486c@skate>
+Message-ID: <CAJxxZ0M=C+HiKcgEHtuzTS7Pmw_e6-j_MVTHyty81QvaFEtKGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/04/13 20:09, Thomas Petazzoni wrote:
-> +ifeq ($(BR2_PREFER_STATIC_LIB),)
-> +define NE10_INSTALL_STAGING_SHARED_LIB
-> +	cp -dpf $(@D)/modules/libNE10*.so* $(STAGING_DIR)/usr/lib/
-> +endef
-> +endif
-> +
-> +define NE10_INSTALL_STAGING_CMDS
-> +	cp -dpf $(@D)/inc/NE10*h $(STAGING_DIR)/usr/include/
-> +	cp -dpf $(@D)/modules/libNE10.a $(STAGING_DIR)/usr/lib/
-> +	$(NE10_INSTALL_STAGING_SHARED_LIB)
-> +endef
-> +
-> +
-> +define NE10_INSTALL_TARGET_CMDS
-> +	cp -dpf $(@D)/modules/libNE10*.so* $(TARGET_DIR)/usr/lib/
-> +endef
+Hi Thomas,
 
-  Shouldn't the latter one be inside an ifeq ($(BR2_PREFER_STATIC_LIB),) 
-as well? But then you probably need an else part as well to override the 
-default commands.
+On Wed, Apr 17, 2013 at 5:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Sonic Zhang,
+>
+> On Fri, 12 Apr 2013 18:18:29 +0800, Sonic Zhang wrote:
+>
+>>  ifeq ($(BR2_BINFMT_FLAT),y)
+>>  TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
+>> +
+>> +ifneq ($(BR2_USE_MMU), y)
+>
+> There shouldn't be any space between the comma and the y.
+>
+>> +TARGET_CFLAGS += -D__NOMMU__
+>>  endif
+>>
+>>  ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
+>
+> And you're adding a ifneq condition without adding any endif. Smells
+> like untested code :)
+>
+That's an error when I rebase this patch automatically. Should be fixed soon.
 
-  Regards,
-  Arnout
+Regards,
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Sonic
