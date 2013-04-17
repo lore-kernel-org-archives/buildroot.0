@@ -1,101 +1,62 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 17 Apr 2013 09:41:43 +0200
-Subject: [Buildroot] [PATCH v2 3/3] configs: add defconfig for Atmel
-	AT91SAM9260-EK Nand Flash Boot
-In-Reply-To: <1366184503-16875-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1366184503-16875-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1366184503-16875-4-git-send-email-fabio.porcedda@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Apr 2013 09:45:53 +0200
+Subject: [Buildroot] [PATCH] support/kconfig: use kconfig-provided way
+ of setting the CONFIG_ prefix
+In-Reply-To: <20130416213424.GA14974@free.fr>
+References: <1365943997-23601-1-git-send-email-yann.morin.1998@free.fr>
+ <20130416230625.1656d877@skate> <20130416213424.GA14974@free.fr>
+Message-ID: <20130417094553.3a47343b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a configuration that provides a basic setup for generating
-bootable nandflash images:
-- at91bootstrap
-- barebox
-- kernel
-- rootfs
+Dear Yann E. MORIN,
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- .../linux-ARM-at91-enable-nand-ubifs-boot.patch    | 44 ++++++++++++++++++++++
- configs/at91sam9260eknf_defconfig                  | 15 ++++++++
- 2 files changed, 59 insertions(+)
- create mode 100644 board/atmel/at91sam9260ek/linux-ARM-at91-enable-nand-ubifs-boot.patch
- create mode 100644 configs/at91sam9260eknf_defconfig
+On Tue, 16 Apr 2013 23:34:24 +0200, Yann E. MORIN wrote:
 
-diff --git a/board/atmel/at91sam9260ek/linux-ARM-at91-enable-nand-ubifs-boot.patch b/board/atmel/at91sam9260ek/linux-ARM-at91-enable-nand-ubifs-boot.patch
-new file mode 100644
-index 0000000..e71a487
---- /dev/null
-+++ b/board/atmel/at91sam9260ek/linux-ARM-at91-enable-nand-ubifs-boot.patch
-@@ -0,0 +1,44 @@
-+From 17f439282c3fc92587e60935ff9efd13ea78e353 Mon Sep 17 00:00:00 2001
-+From: Fabio Porcedda <fabio.porcedda@gmail.com>
-+Date: Tue, 15 Jan 2013 11:17:42 +0100
-+Subject: [PATCH] ARM: at91: enable nand ubifs boot
-+
-+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-+---
-+ arch/arm/configs/at91sam9260_defconfig | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/arch/arm/configs/at91sam9260_defconfig b/arch/arm/configs/at91sam9260_defconfig
-+index 505b376..a438192 100644
-+--- a/arch/arm/configs/at91sam9260_defconfig
-++++ b/arch/arm/configs/at91sam9260_defconfig
-+@@ -1,5 +1,6 @@
-+ CONFIG_EXPERIMENTAL=y
-+ # CONFIG_LOCALVERSION_AUTO is not set
-++CONFIG_KERNEL_LZO=y
-+ # CONFIG_SWAP is not set
-+ CONFIG_SYSVIPC=y
-+ CONFIG_LOG_BUF_SHIFT=14
-+@@ -43,6 +44,11 @@ CONFIG_IP_PNP_BOOTP=y
-+ # CONFIG_INET_LRO is not set
-+ # CONFIG_IPV6 is not set
-+ CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-++CONFIG_MTD=y
-++CONFIG_MTD_CMDLINE_PARTS=y
-++CONFIG_MTD_NAND=y
-++CONFIG_MTD_NAND_ATMEL=y
-++CONFIG_MTD_UBI=y
-+ CONFIG_BLK_DEV_RAM=y
-+ CONFIG_BLK_DEV_RAM_SIZE=8192
-+ CONFIG_SCSI=y
-+@@ -82,6 +88,7 @@ CONFIG_RTC_DRV_AT91SAM9=y
-+ CONFIG_EXT2_FS=y
-+ CONFIG_VFAT_FS=y
-+ CONFIG_TMPFS=y
-++CONFIG_UBIFS_FS=y
-+ CONFIG_CRAMFS=y
-+ CONFIG_NLS_CODEPAGE_437=y
-+ CONFIG_NLS_CODEPAGE_850=y
-+-- 
-+1.8.0.3
-+
-diff --git a/configs/at91sam9260eknf_defconfig b/configs/at91sam9260eknf_defconfig
-new file mode 100644
-index 0000000..5d26798
---- /dev/null
-+++ b/configs/at91sam9260eknf_defconfig
-@@ -0,0 +1,15 @@
-+BR2_arm=y
-+BR2_PREFER_STATIC_LIB=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-+BR2_PACKAGE_HOST_SAM_BA=y
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBI=y
-+BR2_TARGET_AT91BOOTSTRAP=y
-+BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9260ek"
-+BR2_TARGET_AT91BOOTSTRAP_NANDFLASH=y
-+BR2_TARGET_BAREBOX=y
-+BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="at91sam9260ek"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_PATCH="board/atmel/at91sam9260ek"
-+BR2_LINUX_KERNEL_DEFCONFIG="at91sam9260"
-+BR2_LINUX_KERNEL_ZIMAGE=y
+> That's the whole point of this patch: use Kconfig ability to understand
+> any prefix other than the default 'CONFIG_', and even an empty prefix:
+> 
+> -HOST_EXTRACFLAGS += -I$(obj)
+> +HOST_EXTRACFLAGS += -I$(obj) -DCONFIG_=\"\"
+>                               ^^^^^^^^^^^^^^
+> 
+> This tells that the option prefix is empty, so:
+>     Config.in               .config
+>     --------------------------------------------
+>     config FOO              FOO=y
+>     config BR2_BAR          # BR2_BAR is not set
+> 
+> 
+> If I did use:  -DCONFIG_=\"YEM\" , then that would give:
+>     Config.in               .config
+>     --------------------------------------------
+>     config FOO              YEM_FOO=y
+>     config BR2_BAR          # YEM_BR2_BAR is not set
+> 
+> 
+> So yes, this patch maintains our do-not-add-a-prefix-to-options policy. ;-)
+
+Aah, ok. That explains why I wasn't seeing our 'BR2_' prefix anywhere
+in your change. It's because we tell kconfig "We don't have a prefix",
+and in fact our prefix is hardcoded directly into each and every
+Config.in option. Makes sense.
+
+So I haven't tested your patch, but on the principle, it definitely
+looks great.
+
+> PS. It is even possible to override that prefix at runtime, too, but
+>     that's not the path I choose in this patch.
+
+I think the compile time choice you made is fine.
+
+Best regards,
+
+Thomas
 -- 
-1.8.1.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
