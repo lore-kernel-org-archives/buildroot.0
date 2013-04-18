@@ -1,50 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Apr 2013 14:29:54 +0200
-Subject: [Buildroot] configure error while trying to add package git
-In-Reply-To: <9BAF5BF9BE8F4D08B0E74E8595853989@JohanW7>
-References: <9BAF5BF9BE8F4D08B0E74E8595853989@JohanW7>
-Message-ID: <20130418142954.6cb3b00a@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 18 Apr 2013 10:13:05 -0300
+Subject: [Buildroot] [PATCH] qemu/arm-versatile: update to use kernel 3.8.8
+Message-ID: <1366290785-14346-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+The IRQ mapping failures have been fixed in 3.8.8 so update it to the
+latest kernel series.
 
-On Thu, 18 Apr 2013 14:21:06 +0200, Sagaert Johan wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ board/qemu/arm-versatile/{linux-3.7.config => linux-3.8.config} | 0
+ configs/qemu_arm_versatile_defconfig                            | 6 +++---
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename board/qemu/arm-versatile/{linux-3.7.config => linux-3.8.config} (100%)
 
-> The configure script throws :
->  
-> configure: error: cannot run test program while cross compiling
-
-This happens when a configure.ac script has a AC_RUN_IFELSE() test. It
-tries to run programs, which is not possible when cross-compiling. So
-you need to tell the configure script what is the result of those
-tests, so that it doesn't execute them. In the case of Git, it should
-be:
-
-GIT_CONF_ENV = \
-	ac_cv_fread_reads_directories=<yes or no> \
-	ac_cv_snprintf_returns_bogus=<yes or no>
-
-Of course, you still have to figure out what's the right value to put.
-
-> #resolves to tag 1.8.2.1 
-> GIT_VERSION         = 5bda18c186e455f8e65f976d3bf333ab1f4b5b53
-
-Then just use GIT_VERSION = 1.8.2.1
-
-Just curious, why are you packaging Git? Remember that we are
-deprecating the support for the toolchain on the target, so if what you
-want to achieve is build C/C++ code on the target, you're probably not
-on the right track.
-
-Best regards,
-
-Thomas
+diff --git a/board/qemu/arm-versatile/linux-3.7.config b/board/qemu/arm-versatile/linux-3.8.config
+similarity index 100%
+rename from board/qemu/arm-versatile/linux-3.7.config
+rename to board/qemu/arm-versatile/linux-3.8.config
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index ff264c7..db18d5b 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -11,12 +11,12 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+ # Lock to 3.7 headers to avoid breaking with newer kernels
+-BR2_KERNEL_HEADERS_3_7=y
++BR2_KERNEL_HEADERS_3_8=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.10"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.8"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.7.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.8.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.5
