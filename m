@@ -1,69 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 18 Apr 2013 09:14:31 +0200
-Subject: [Buildroot] [PATCH v2 1/3] post-build: show each script
-	filename before execution
-In-Reply-To: <516ECA2D.6070303@mind.be>
-References: <1365439816-6935-1-git-send-email-luca@lucaceresoli.net>
- <1365439816-6935-2-git-send-email-luca@lucaceresoli.net>
- <516ECA2D.6070303@mind.be>
-Message-ID: <201304180914.31419.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 Apr 2013 09:25:04 +0200
+Subject: [Buildroot] [PATCH v5 6/7] arch: toolchain: Install blackfin
+ FDPIC and FLAT libraries in external toolchain makefile.
+In-Reply-To: <516ED09E.2030608@mind.be>
+References: <1365761909-15305-1-git-send-email-sonic.adi@gmail.com>
+ <1365761909-15305-6-git-send-email-sonic.adi@gmail.com>
+ <20130416232925.759eb9df@skate>
+ <CAJxxZ0PoEysfHc23PHfqkVktvoGiQoDBNd+-z3PTOL40=Zfwhg@mail.gmail.com>
+ <20130417100512.5433f4c6@skate>
+ <CAJxxZ0NHZM75Nctd6fy-9K8t1jf1hdKiTXn+0aR9E2qB=R+LVA@mail.gmail.com>
+ <20130417105615.7af600cd@skate>
+ <CAJxxZ0MFoAf1YrKfbjUt5BW8Pd=uX1NxTN9EgYvfHiM-g1uZgA@mail.gmail.com>
+ <516ED09E.2030608@mind.be>
+Message-ID: <20130418092504.0ae932f0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Luca, All,
+Dear Arnout Vandecappelle,
 
-On Wednesday 17 April 2013 18:13:33 Arnout Vandecappelle wrote:
-> On 08/04/13 18:50, Luca Ceresoli wrote:
-> > This also simplifies code by removing the ifneq/endif clauses.
+On Wed, 17 Apr 2013 18:41:02 +0200, Arnout Vandecappelle wrote:
+
+> > Yes, I do reuse the function copy_toolchain_lib_root() in the code to
+> > install shared FDPIC libraries when FLAT format is selected. But, rest
+> > part of the library installation code depends on current
+> > TOOLCHAIN_EXTERNAL_CC, which is different from the FDPIC one in this
+> > case. And the following sysroot to staging installation code depends on
+> > macro SYSROOT_DIR, ARCH_SYSROOT_DIR, ARCH_SUBDIR, ARCH_LIB_DIR and
+> > SUPPORT_LIB_DIR, which are based on current TOOLCHAIN_EXTERNAL_CC as well.
 > >
-> > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> > ---
-> >   Makefile |    4 +---
-> >   1 file changed, 1 insertion(+), 3 deletions(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index c95bb1e..75f0f0c 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -509,11 +509,9 @@ endif
-> >   			$${dir}/ $(TARGET_DIR); \
-> >   	done
-> >
-> > -ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
-> > -	@$(call MESSAGE,"Executing post-build script\(s\)")
-> >   	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
-> > +		$(call MESSAGE,"Executing  post-build script $(s)"); \
-> >   		$(s) $(TARGET_DIR)$(sep))
-> > -endif
+> > I feel the individual FDPIC installation code for FLAT format is a simple
+> > and clear solution.
 > 
->   I wonder, if there are multiple scripts, won't the second MESSAGE be 
-> echoed by make? I had expected that the @ would only apply to the first 
-> line when they are separated with $(sep), and that each invocation would 
-> run in a separate shell.
+>   And anyway it can be refactored away later (e.g. when moving the 
+> ext-toolchain stuff to a script or to functions).
 
-Well, it does work as expected: the two scripts I have are
-properly echoed with:
->>> Executing  post-build script /blabla/script-1
-[traces for script-1]
->>> Executing  post-build script /blabla/script-2
-[traces for script-2]
+Yes, I agree. Let's keep Sonic code as is for now, and as we get a
+better understanding of the potential similarities with the existing
+code, we can refactor if it makes sense.
 
->   By the way, a very simple alternative would be to remove the @ in front 
-> of the foreach, then each script invocation will be echoed by make.
-
-Indeed, but I also like the highlighted trace. It makes it easier to spot
-the scripts traces.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
