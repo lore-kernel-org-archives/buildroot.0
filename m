@@ -1,10 +1,10 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Thu, 18 Apr 2013 18:06:28 +0800
-Subject: [Buildroot] [PATCH v6 3/7] arch: toolchain: Introduce target CPU
-	revision.
+Date: Thu, 18 Apr 2013 18:06:31 +0800
+Subject: [Buildroot] [PATCH v6 6/7] arch: toolchain: Install blackfin FDPIC
+	and FLAT libraries in external toolchain makefile.
 In-Reply-To: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
 References: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1366279592-9055-3-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1366279592-9055-6-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,89 +13,152 @@ To: buildroot@busybox.net
 
 From: Sonic Zhang <sonic.zhang@analog.com>
 
-Adds the possibility to have a free-form CPU revision string and append it
-to the target CPU. Only Blackfin actually uses this option.
+Reserve all 3 blackfin toolchain folders under the TOOLCHAIN_EXTERNAL_DIR.
+Set current blackfin toolchain bin folder to the toolchain prefix subfolder.
+Install FDPIC and FLAT library in target ext-toolchain-installed.
 
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 ---
 
 v6-changes:
-- The cpu revision test should have a $(call qstrip) to be effective.
-- Add cpu revision to toolchain/gcc/gcc-uclibc-4.x.mk as well.
+- Move options of installing blackfin toolchain libraries into external
+toolchain Config.in.
+- Fix typo error.
+- Merge the options of the same name and add descriptions.
+
+v5-changes:
+- Update comments.
 
 v3-changes:
-- Detail the help text and fix the line length.
----
- arch/Config.in                           |    3 +++
- arch/Config.in.bfin                      |    8 ++++++++
- toolchain/gcc/gcc-uclibc-4.x.mk          |    6 +++++-
- toolchain/toolchain-external/ext-tool.mk |    4 ++++
- 4 files changed, 20 insertions(+), 1 deletions(-)
+- Remove arch specific makefiles.
+- Reserve all 3 blackfin toolchain folders under the TOOLCHAIN_EXTERNAL_DIR.
+- Set current blackfin toolchain bin folder to the toolchain prefix subfolder.
+- Move FDPIC and FLAT library installation target from blackfin makefile to
+the ext-toolchain-installed target in external toolchain makefile.
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 27a29c6..175add5 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -174,6 +174,9 @@ config BR2_GCC_TARGET_ABI
- config BR2_GCC_TARGET_CPU
- 	string
+v2-changes:
+- Remove useless Macro __uClinux__
+
+v1-changes:
+- Create arch makefile.
+- Create blackfin makefile.
+- Add FDPIC and FLAT library options and makefile targets to install
+libraries for different binary formats into the same rootfs image.
+- update the TARGET_EXCEPTIONS variable in support/scripts/graph-depends for
+new custom targets
+---
+ toolchain/toolchain-external/Config.in   |   25 ++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |   46 ++++++++++++++++++++++-------
+ 2 files changed, 60 insertions(+), 11 deletions(-)
+
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 6cf29aa..c4d17e0 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -887,5 +887,30 @@ config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
  
-+config BR2_GCC_TARGET_CPU_REVISION
-+	string
-+
- # Set up target binary format
- choice
- 	prompt "Target Binary Format"
-diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-index ac96620..f755c8d 100644
---- a/arch/Config.in.bfin
-+++ b/arch/Config.in.bfin
-@@ -97,3 +97,11 @@ config BR2_GCC_TARGET_CPU
- 	default bf548		if BR2_bf548
- 	default bf549		if BR2_bf549
- 	default bf561		if BR2_bf561
-+
-+config BR2_GCC_TARGET_CPU_REVISION
-+	string "Target CPU revision"
+ endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ 
++# When the FDPIC shared binary format is used, the corresponding libraries are
++# always installed. When a different binary format is used, we offer the option
++# of installing the FDPIC shared libraries.
++config BR2_BFIN_INSTALL_FDPIC_SHARED
++	bool "Install FDPIC shared libraries"
++	depends on BR2_bfin && !BR2_BINFMT_FDPIC
 +	help
-+	  Specify a target CPU revision, which will be appended to the
-+	  value of the -mcpu option. For example, if the selected CPU is
-+	  bf609, and then selected CPU revision is "0.0", then gcc will
-+	  receive the -mcpu=bf609-0.0 option.
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index bdc38cd..7fd7bdb 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -85,7 +85,11 @@ ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
- GCC_WITH_ABI:=--with-abi=$(BR2_GCC_TARGET_ABI)
- endif
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
--GCC_WITH_CPU:=--with-cpu=$(BR2_GCC_TARGET_CPU)
-+ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
-+GCC_WITH_CPU:=--with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
-+else
-+GCC_WITH_CPU:=--with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
-+endif
- endif
++	  The Linux kernel supports running both FDPIC and FLAT applications
++	  concurrently if the binary format specific libraries are installed properly.
++	  This option allows developer to install FDPIC libraries into a buildroot
++	  rootfs image built with binary format that is not FDPIC.
++
++# When the FLAT shared binary format is used, we force the installation
++# of the corresponding libraries. When a different binary format is
++# used, we offer the option of installing the FLAT shared libraries.
++config BR2_BFIN_INSTALL_FLAT_SHARED
++	bool "Install FLAT shared libraries"
++	depends on BR2_bfin && !BR2_BINFMT_FLAT_SHARED
++	default y if BR2_BINFMT_FLAT_SHARED
++	help
++	  The Linux kernel supports running both FDPIC and FLAT applications
++	  concurrently if the binary format specific libraries are installed properly.
++	  This option allows developer to install FLAT libraries into a buildroot
++	  rootfs image built with binary format that is not shared FLAT.
++
+ endif # BR2_TOOLCHAIN_EXTERNAL
  
- # AVR32 GCC special configuration
 diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 92183a4..57ea266 100644
+index 57ea266..dbada0e 100644
 --- a/toolchain/toolchain-external/ext-tool.mk
 +++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -134,7 +134,11 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
- endif
- 
- CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
-+ifeq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
- CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
+@@ -115,8 +115,12 @@ ifeq ($(TOOLCHAIN_EXTERNAL_DIR),)
+ # if no path set, figure it out from path
+ TOOLCHAIN_EXTERNAL_BIN:=$(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+ else
++ifeq ($(BR2_bfin),y)
++TOOLCHAIN_EXTERNAL_BIN:=$(TOOLCHAIN_EXTERNAL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
 +else
-+CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
+ TOOLCHAIN_EXTERNAL_BIN:=$(TOOLCHAIN_EXTERNAL_DIR)/bin
+ endif
 +endif
- CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
- CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
  
+ TOOLCHAIN_EXTERNAL_CROSS=$(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
+ TOOLCHAIN_EXTERNAL_CC=$(TOOLCHAIN_EXTERNAL_CROSS)gcc
+@@ -312,17 +316,6 @@ $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) $
+ 		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
+ 	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE_2))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2) | \
+ 		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
+-ifeq ($(TOOLCHAIN_EXTERNAL_PREFIX),bfin-uclinux)
+-	rm -rf $(TOOLCHAIN_EXTERNAL_DIR)/bfin-linux-uclibc
+-	mv $(TOOLCHAIN_EXTERNAL_DIR)/bfin-uclinux $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+-	mv $(TOOLCHAIN_EXTERNAL_DIR)/tmp/* $(TOOLCHAIN_EXTERNAL_DIR)/
+-	rmdir $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+-else
+-	rm -rf $(TOOLCHAIN_EXTERNAL_DIR)/bfin-uclinux
+-	mv $(TOOLCHAIN_EXTERNAL_DIR)/bfin-linux-uclibc $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+-	mv $(TOOLCHAIN_EXTERNAL_DIR)/tmp/* $(TOOLCHAIN_EXTERNAL_DIR)/
+-	rmdir $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+-endif
+ 	$(Q)touch $@
+ else
+ # Download and extraction of a toolchain
+@@ -417,6 +410,37 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
+ 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+ 		exit 1 ; \
+ 	fi ; \
++	if test x"$(BR2_BFIN_INSTALL_FDPIC_SHARED)" == x"y" ; then \
++		$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
++		FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
++		FDPIC_LIBC_A_LOCATION=`readlink -f $$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
++		FDPIC_SYSROOT_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
++		FDPIC_LIB_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
++		FDPIC_SUPPORT_LIB_DIR="" ; \
++		if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
++			FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
++			if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
++				FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
++			fi ; \
++		fi ; \
++		for libs in $(LIB_EXTERNAL_LIBS); do \
++			$(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs,/lib); \
++		done ; \
++		for libs in $(USR_LIB_EXTERNAL_LIBS); do \
++			$(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs,/usr/lib); \
++		done ; \
++	fi ; \
++	if test x"$(BR2_BFIN_INSTALL_FLAT_SHARED)" == x"y" ; then \
++		$(call MESSAGE,"Install external toolchain FLAT libraries to target...") ; \
++		FLAT_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))../../bfin-uclinux/bin/bfin-uclinux-gcc ; \
++		FLAT_LIBC_A_LOCATION=`$${FLAT_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -mid-shared-library -print-file-name=libc`; \
++		if [ -f $${FLAT_LIBC_A_LOCATION} -a ! -h $${FLAT_LIBC_A_LOCATION} ] ; then \
++# The flat libraries are found and linked according to the index in \
++# name "libN.so". Index 1 is reserved for the standard C library. \
++# Customer libraries can use 4 and above. \
++			$(INSTALL) -D $${FLAT_LIBC_A_LOCATION} $(TARGET_DIR)/lib/lib1.so; \
++		fi ; \
++	fi ; \
+ 	ARCH_LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
+ 	ARCH_SYSROOT_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
+ 	ARCH_LIB_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
 -- 
 1.7.0.4
