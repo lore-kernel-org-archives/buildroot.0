@@ -1,9 +1,10 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Thu, 18 Apr 2013 18:06:27 +0800
-Subject: [Buildroot] [PATCH v6 2/7] arch: Add blackfin CPU choice.
+Date: Thu, 18 Apr 2013 18:06:29 +0800
+Subject: [Buildroot] [PATCH v6 4/7] arch: toolchain: Introduce binary format
+	FLAT types.
 In-Reply-To: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
 References: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1366279592-9055-2-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1366279592-9055-4-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,118 +13,84 @@ To: buildroot@busybox.net
 
 From: Sonic Zhang <sonic.zhang@analog.com>
 
-is patch adds a Target CPU configuration option and uses it to select a -m
-option for gcc.
+Just introduce the symbol and options in arch generic Config.in.
+Add FLAT types specific compiling flags into package makefile.
 
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- arch/Config.in.bfin |   94 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 files changed, 94 insertions(+), 0 deletions(-)
 
-diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-index 2a7ff54..ac96620 100644
---- a/arch/Config.in.bfin
-+++ b/arch/Config.in.bfin
-@@ -1,5 +1,99 @@
+---
+
+v5-change:
+- Move FLAT types specific compiling flags back to package makefile.
+The flags can't be set to compile Linux kernel.
+
+v3-changes:
+- Add dependancy to bfin and m68k
+- Add help text for FLAT binary types.
+- Split shared flat flags.
+---
+ arch/Config.in      |   26 ++++++++++++++++++++++++++
+ package/Makefile.in |   11 +++++++++++
+ 2 files changed, 37 insertions(+), 0 deletions(-)
+
+diff --git a/arch/Config.in b/arch/Config.in
+index 175add5..3ffe82e 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -211,6 +211,32 @@ config BR2_BINFMT_FLAT
+ 
+ endchoice
+ 
++# Set up flat binary type
 +choice
-+	prompt "Target CPU"
-+	depends on BR2_bfin
-+	default BR2_bf609
++	prompt "FLAT Binary type"
++	depends on BR2_BINFMT_FLAT
++	default BR2_BINFMT_FLAT_ONE
++
++config BR2_BINFMT_FLAT_ONE
++	bool "One memory region"
 +	help
-+	  Specify target CPU
-+config BR2_bf606
-+	bool "bf606"
-+config BR2_bf607
-+	bool "bf607"
-+config BR2_bf608
-+	bool "bf608"
-+config BR2_bf609
-+	bool "bf609"
-+config BR2_bf512
-+	bool "bf512"
-+config BR2_bf514
-+	bool "bf514"
-+config BR2_bf516
-+	bool "bf516"
-+config BR2_bf518
-+	bool "bf518"
-+config BR2_bf522
-+	bool "bf522"
-+config BR2_bf523
-+	bool "bf523"
-+config BR2_bf524
-+	bool "bf524"
-+config BR2_bf525
-+	bool "bf525"
-+config BR2_bf526
-+	bool "bf526"
-+config BR2_bf527
-+	bool "bf527"
-+config BR2_bf531
-+	bool "bf531"
-+config BR2_bf532
-+	bool "bf532"
-+config BR2_bf533
-+	bool "bf533"
-+config BR2_bf534
-+	bool "bf534"
-+config BR2_bf536
-+	bool "bf536"
-+config BR2_bf537
-+	bool "bf537"
-+config BR2_bf538
-+	bool "bf538"
-+config BR2_bf539
-+	bool "bf539"
-+config BR2_bf542
-+	bool "bf542"
-+config BR2_bf544
-+	bool "bf544"
-+config BR2_bf547
-+	bool "bf547"
-+config BR2_bf548
-+	bool "bf548"
-+config BR2_bf549
-+	bool "bf549"
-+config BR2_bf561
-+	bool "bf561"
++	  All segments are linked into one memory region.
++
++config BR2_BINFMT_FLAT_SEP_DATA
++	bool "Separate data and code region"
++	depends on BR2_bfin || BR2_m68k
++	help
++	  Allow for the data and text segments to be separated and placed in
++	  different regions of memory.
++
++config BR2_BINFMT_FLAT_SHARED
++	bool "Shared binary"
++	depends on BR2_bfin || BR2_m68k
++	help
++	  Allow to load and link indiviual FLAT binaries at run time.
++
 +endchoice
 +
- config BR2_ARCH
- 	default "bfin"
+ if BR2_arm || BR2_armeb
+ source "arch/Config.in.arm"
+ endif
+diff --git a/package/Makefile.in b/package/Makefile.in
+index a8bf36b..dd3bc7d 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -103,6 +103,17 @@ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET
+ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
  
- config BR2_ENDIAN
-         default "LITTLE"
++ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
++TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
++TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
++TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
++endif
++ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
++TARGET_LDFLAGS += -msep-data
++TARGET_CFLAGS += -msep-data
++TARGET_CXXFLAGS += -msep-data
++endif
 +
-+config BR2_GCC_TARGET_CPU
-+	default bf606		if BR2_bf606
-+	default bf607		if BR2_bf607
-+	default bf608		if BR2_bf608
-+	default bf609		if BR2_bf609
-+	default bf512		if BR2_bf512
-+	default bf514		if BR2_bf514
-+	default bf516		if BR2_bf516
-+	default bf518		if BR2_bf518
-+	default bf522		if BR2_bf522
-+	default bf523		if BR2_bf523
-+	default bf524		if BR2_bf524
-+	default bf525		if BR2_bf525
-+	default bf526		if BR2_bf526
-+	default bf527		if BR2_bf527
-+	default bf531		if BR2_bf531
-+	default bf532		if BR2_bf532
-+	default bf533		if BR2_bf533
-+	default bf534		if BR2_bf534
-+	default bf536		if BR2_bf536
-+	default bf537		if BR2_bf537
-+	default bf538		if BR2_bf538
-+	default bf539		if BR2_bf539
-+	default bf542		if BR2_bf542
-+	default bf544		if BR2_bf544
-+	default bf547		if BR2_bf547
-+	default bf548		if BR2_bf548
-+	default bf549		if BR2_bf549
-+	default bf561		if BR2_bf561
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
+ TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
+ else
 -- 
 1.7.0.4
