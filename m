@@ -1,67 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 18 Apr 2013 22:09:10 +0200
-Subject: [Buildroot] [PATCHv2 3/3] python-m2crypto: new package
-In-Reply-To: <1365625766-11256-3-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 10 Apr 2013 17:29:26 -0300")
-References: <1365625766-11256-1-git-send-email-gustavo@zacarias.com.ar>
- <1365625766-11256-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87a9oviot5.fsf@dell.be.48ers.dk>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Thu, 18 Apr 2013 20:45:42 +0000
+Subject: [Buildroot]
+ =?windows-1252?q?=91=5F=5Fctype=5Ftouplow=5Ft=92_and_?=
+ =?windows-1252?q?=91=5F=5Fctype=5Fmask=5Ft=92_does_not_name_a_type?=
+In-Reply-To: <20130315160702.7a6a9f7c@skate>
+References: <CAJEG_NdqCrS=ny=BMgF4n8ui5kavmOxtWyzMvxe-_97e=wRPTg@mail.gmail.com>
+ <20130315105421.675ecf61@skate>
+ <CAJEG_NfYFc782e3iy+z_gwitxQT60BPJkX-2R0Ho5CAu9pxL6w@mail.gmail.com>
+ <20130315160702.7a6a9f7c@skate>
+Message-ID: <F9C551623D2CBB4C9488801D14F864C620953DBA@ex-mb1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Thomas,
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/Config.in                          |  1 +
- Gustavo>  package/python-m2crypto/Config.in          | 10 ++++++++
- Gustavo>  package/python-m2crypto/python-m2crypto.mk | 40 ++++++++++++++++++++++++++++++
- Gustavo>  3 files changed, 51 insertions(+)
- Gustavo>  create mode 100644 package/python-m2crypto/Config.in
- Gustavo>  create mode 100644 package/python-m2crypto/python-m2crypto.mk
+What was the resolution to this issue?  I'm experiencing the same thing
+right now.  The easy trick to fix this (as I see it) is to throw a 
 
- Gustavo> diff --git a/package/Config.in b/package/Config.in
- Gustavo> index 2e7dc67..0537ffa 100644
- Gustavo> --- a/package/Config.in
- Gustavo> +++ b/package/Config.in
- Gustavo> @@ -327,6 +327,7 @@ menu "external python modules"
- Gustavo>  source "package/python-bottle/Config.in"
- Gustavo>  source "package/python-dpkt/Config.in"
- Gustavo>  source "package/python-id3/Config.in"
- Gustavo> +source "package/python-m2crypto/Config.in"
- Gustavo>  source "package/python-mad/Config.in"
- Gustavo>  source "package/python-meld3/Config.in"
- Gustavo>  source "package/python-netifaces/Config.in"
- Gustavo> diff --git a/package/python-m2crypto/Config.in b/package/python-m2crypto/Config.in
- Gustavo> new file mode 100644
- Gustavo> index 0000000..2ee4ab1
- Gustavo> --- /dev/null
- Gustavo> +++ b/package/python-m2crypto/Config.in
- Gustavo> @@ -0,0 +1,10 @@
- Gustavo> +config BR2_PACKAGE_PYTHON_M2CRYPTO
- Gustavo> +	bool "python-m2crypto"
- Gustavo> +	depends on BR2_PACKAGE_PYTHON
- Gustavo> +	select BR2_PACKAGE_OPENSSL
- Gustavo> +	select BR2_PACKAGE_PYTHON_ZLIB
- Gustavo> +	select BR2_PACKAGE_PYTHON_SETUPTOOLS
- Gustavo> +	help
- Gustavo> +	  M2Crypto is the most complete Python wrapper for OpenSSL.
- Gustavo> +
- Gustavo> +	  http://chandlerproject.org/Projects/MeTooCrypto
+#include <bits/uClibc_touplow.h>
 
-Thanks, but it doesn't seem to build here (arma8, internal toolchain):
+into the top of <bits/ctype_base.h>, though I'm guessing that is a
+rather nasty hack.
 
-creating build/temp.linux-x86_64-2.7/SWIG
-/home/peko/source/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -Os -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -fPIC -I/home/peko/source/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/python2.7 -I/usr/include -I/home/peko/source/buildroot/output/build/python-m2crypto-0.21.1/SWIG -c SWIG/_m2crypto_wrap.c -o build/temp.linux-x86_64-2.7/SWIG/_m2crypto_wrap.o -DTHREADING
-In file included from /usr/include/limits.h:27:0,
-                 from /home/peko/source/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/python2.7/Python.h:19,
-                 from SWIG/_m2crypto_wrap.c:126:
-/usr/include/features.h:323:26: fatal error: bits/predefs.h: No such file or directory
+Anyone working with this on the uclibc list?  On that list I saw some
+chatter about it throughout a while, but didn't find anything about a
+real resolution.
 
-It ends up using host includes.
+If no one else is looking at it I'll give it a shot at fixing it down
+deep in the uclibc code (assuming that is the correct place to fix
+this).
 
--- 
-Bye, Peter Korsgaard
+Andy
