@@ -1,96 +1,54 @@
-From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Thu, 18 Apr 2013 18:06:29 +0800
-Subject: [Buildroot] [PATCH v6 4/7] arch: toolchain: Introduce binary format
-	FLAT types.
-In-Reply-To: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
-References: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1366279592-9055-4-git-send-email-sonic.adi@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 18 Apr 2013 08:47:21 -0300
+Subject: [Buildroot] [PATCH] quagga: fix build breakage without snmp
+Message-ID: <1366285641-7018-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sonic Zhang <sonic.zhang@analog.com>
+Quagga no longer supports explicitly disabling snmp, and what's worse,
+it interprets --disable-snmp as --enable-snmp.
+Remove the disable configure option.
+While at it add a comment about net-snmp requiring AgentX support for
+quagga to build properly as suggested by Arnout.
+Fixes:
+http://autobuild.buildroot.net/results/a9bce6dd8065ddb1850a4e14f0e4eb257ee89286/
 
-Just introduce the symbol and options in arch generic Config.in.
-Add FLAT types specific compiling flags into package makefile.
-
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
+ package/quagga/Config.in | 3 +++
+ package/quagga/quagga.mk | 4 +---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-v5-change:
-- Move FLAT types specific compiling flags back to package makefile.
-The flags can't be set to compile Linux kernel.
-
-v3-changes:
-- Add dependancy to bfin and m68k
-- Add help text for FLAT binary types.
-- Split shared flat flags.
----
- arch/Config.in      |   26 ++++++++++++++++++++++++++
- package/Makefile.in |   11 +++++++++++
- 2 files changed, 37 insertions(+), 0 deletions(-)
-
-diff --git a/arch/Config.in b/arch/Config.in
-index 175add5..3ffe82e 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -211,6 +211,32 @@ config BR2_BINFMT_FLAT
+diff --git a/package/quagga/Config.in b/package/quagga/Config.in
+index 0834201..c364ae1 100644
+--- a/package/quagga/Config.in
++++ b/package/quagga/Config.in
+@@ -84,4 +84,7 @@ config BR2_PACKAGE_QUAGGA_SNMP
+ 	help
+ 	  Make quagga information available via SNMP SMUX.
  
- endchoice
- 
-+# Set up flat binary type
-+choice
-+	prompt "FLAT Binary type"
-+	depends on BR2_BINFMT_FLAT
-+	default BR2_BINFMT_FLAT_ONE
++comment "AgentX support must be enabled in net-snmp or the build will break"
++	depends on BR2_PACKAGE_QUAGGA_SNMP
 +
-+config BR2_BINFMT_FLAT_ONE
-+	bool "One memory region"
-+	help
-+	  All segments are linked into one memory region.
-+
-+config BR2_BINFMT_FLAT_SEP_DATA
-+	bool "Separate data and code region"
-+	depends on BR2_bfin || BR2_m68k
-+	help
-+	  Allow for the data and text segments to be separated and placed in
-+	  different regions of memory.
-+
-+config BR2_BINFMT_FLAT_SHARED
-+	bool "Shared binary"
-+	depends on BR2_bfin || BR2_m68k
-+	help
-+	  Allow to load and link indiviual FLAT binaries at run time.
-+
-+endchoice
-+
- if BR2_arm || BR2_armeb
- source "arch/Config.in.arm"
  endif
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a8bf36b..dd3bc7d 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -103,6 +103,17 @@ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET
- TARGET_CXXFLAGS = $(TARGET_CFLAGS)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 42f8506..347ec4d 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -26,10 +26,8 @@ QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_OPAQUE_LSA),--enable-opaque-lsa,--d
  
-+ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
-+TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
-+TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
-+TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
-+endif
-+ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
-+TARGET_LDFLAGS += -msep-data
-+TARGET_CFLAGS += -msep-data
-+TARGET_CXXFLAGS += -msep-data
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
- TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
- else
+ ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
+ QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
+-QUAGGA_CONF_OPT += --enable-snmp
++QUAGGA_CONF_OPT += --enable-snmp=agentx
+ QUAGGA_DEPENDENCIES += netsnmp
+-else
+-QUAGGA_CONF_OPT +=--disable-snmp
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-1.7.0.4
+1.8.1.5
