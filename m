@@ -1,58 +1,62 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 19 Apr 2013 22:54:51 +0200
-Subject: [Buildroot] ccache problem when compiling with different
- toolchains in different projects
-In-Reply-To: <CADzL+YjA_Zx0BCmWESKYnna=dGyf=3BY9pd00m-BhAbw-HG9TQ@mail.gmail.com>
-References: <CANxTyt7OWfG1U7yoTtRomKm2ECpC_cnxrGFbD8KVXFty==j7ig@mail.gmail.com>
- <CADzL+YjA_Zx0BCmWESKYnna=dGyf=3BY9pd00m-BhAbw-HG9TQ@mail.gmail.com>
-Message-ID: <5171AF1B.4010806@mind.be>
+Date: Fri, 19 Apr 2013 23:20:27 +0200
+Subject: [Buildroot] RFC: "make emu" build and start QEMU target
+In-Reply-To: <CAEBucnDgqjO+3RpdXOgqJzkitSG6P-L=cbOEJws09WZXnnD5kQ@mail.gmail.com>
+References: <CAEBucnDgqjO+3RpdXOgqJzkitSG6P-L=cbOEJws09WZXnnD5kQ@mail.gmail.com>
+Message-ID: <5171B51B.2070805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/04/13 13:41, Mathias De Mar? wrote:
+On 17/04/13 20:32, Spenser Gilliland wrote:
+> Hi,
 >
-> wouldn't an alternative possibility be to change the CCACHE_COMPILERCHECK to:
-> export CCACHE_COMPILERCHECK=%compiler% -v
->
-> You don't rely on the timestamp that way, but you still have a check. I
-> believe this resolves the clearing of ccache also (see also
-> http://lists.busybox.net/pipermail/buildroot/2012-March/051187.html ).
+> I'm proposing a project where a "make emu" target would be added to
+> Buildroot in order to start a virtualized version of the target.  This
+> would provide developers with the ability to quickly test and validate
+> their configuration.
 
-  That sounds like a very good idea!
+  Great idea!
 
-  It still has a few shortcomings, but it's definitely better than the 
-current situation. At least the following are not solved yet.
+> To configure the emu target a new top-level menu, "Target Emulation,"
+> would be added.  This menu would contain the following options.
 
-- Options included in the external toolchain wrapper are not included. 
-For instance, if you switch to Thumb on the Sourcery ARM toolchain, that 
-will be recorded in the additional cflags in the wrapper and won't be 
-visible to ccache.
+  I think  a single 'QEMU emulation of target' menu is sufficient. Can 
+you think of another emulator?
 
-- The output of gcc -v contains the absolute path, so if you change the 
-output directory (or share the ccache between several developers) it 
-won't work. But it would be feasible to strip off the $(O) part.
+  And maybe it belongs in the host-tools menu, rather than top-level.
 
-- For internal/crosstool-NG toolchains, when toolchain parameters are 
-changed this is still not detected. For instance, some configure script 
-checks for wchar, it fails, you change your configuration to include 
-WCHAR and rebuild, and it still fails because the cached test is used...
+> Emulation Method -> QEMU
+> QEMU Version -> Custom Git Tree | Custom tarball | Custom Version | X.Y.Z
+> ... Source Configuration similar to Kernel ...
+> Machine -> list of machines
+
+  I think the number of machines is a bit too large to list them. Just 
+specify a string, like a kernel defconfig or a u-boot config.
+
+> Memory -> Memory in Megabytes
+> Additional QEMU Options -> (additional options for command line)
+
+  Probably more options (devices, graphics output, #CPUs) should be 
+configurable, but that can be added in later steps.
+
+> This will start the qemu-system-$(ARCH) version of QEMU with the
+> appropriate configuration.
+
+  I'm not a big fan of starting tools like qemu or a debugger or whatever 
+from the buildroot 'make' command. I would prefer to generate a script 
+that runs qemu with the correct arguments. You can easily start that 
+script either with 'make && output/images/run_qemu.sh' or from a 
+post-build script. But others may disagree with me.
 
 
-  The ideal is still what I mentioned a year ago [1]: make a hash of the 
-toolchain configuration part of the buildroot config. Too complex, unless 
-we do a big rename of the relevant options into BR2_TOOLCHAIN_...
-and grep them out of the config.
-
+  Would you generate the correct -drive option automatically from the 
+selected rootfs, or select the rootfs automatically?
 
   Regards,
   Arnout
-
-
-[1]
-    http://lists.busybox.net/pipermail/buildroot/2012-February/049998.html
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
