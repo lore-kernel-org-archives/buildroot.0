@@ -1,54 +1,56 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Fri, 19 Apr 2013 09:08:39 +0200 (CEST)
-Subject: [Buildroot] RFC: "make emu" build and start QEMU target
-In-Reply-To: <CAEBucnBMtJ-_E0bwkAZ_anhShJD8cz6TVrs9JSuBkqVSMMRYkA@mail.gmail.com>
-Message-ID: <503878220.1752654.1366355319386.JavaMail.root@openwide.fr>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 19 Apr 2013 11:20:29 +0200
+Subject: [Buildroot] [PATCH] package: add toolchain dependency to
+	inner-generic-package
+Message-ID: <1366363229-17937-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This commit makes the dependency from the target toolchain explicit.
+This way we can buid from command line a package that use
+innger-generic-package right after the configuration phase.
 
+This is a step forward top-level parallel make.
 
-    Cordialement
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ package/pkg-autotools.mk | 2 +-
+ package/pkg-generic.mk   | 7 ++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-    J?r?my Rosen
-
-fight key loggers : write some perl using vim
-
------ Mail original -----
-> Jeremy,
-> 
-> Thanks for responding.
-> 
-> > I'd be interested in that, I have a few patch for qemu flying
-> > around
-> > and having a quick way to test them would help
-> >
-> > (I know testing qemu is not the point of your patch, but it would
-> > be usefull for that)
-> 
-> Very much so this is a good use case.  I looked in patchwork but
-> couldn't find any patches related to QEMU.  Can you point me to them?
-> 
-
-they are not in patchwork we work on QEMU and submit upstream stuff that is 
-not buildroot specific and shouldn't be a buildroot patch
-
-> > hmm... not sure if target emulation makes sense as a separate entry
-> > or if the qemu targets should be simply different machines.
-> 
-> I'm not sure what you mean by this can you explain further?
-> 
-
-
-I was commenting on the idea of having an emulation sub-menu
-
-> Spenser
-> 
-> --
-> Spenser Gilliland
-> Computer Engineer
-> Doctoral Candidate
-> 
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index d8d7e6d..032f86c 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -201,7 +201,7 @@ endef
+ # This must be repeated from inner-generic-package, otherwise we get an empty
+ # _DEPENDENCIES if _AUTORECONF is YES.  Also filter the result of _AUTORECONF
+ # away from the non-host rule
+-$(2)_DEPENDENCIES ?= $(filter-out host-automake host-autoconf host-libtool $(1),\
++$(2)_DEPENDENCIES ?= $(filter-out host-automake host-autoconf host-libtool host-toolchain $(1),\
+     $(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+ 
+ 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index e6bc955..2460384 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -304,7 +304,12 @@ endif
+ $(2)_REDISTRIBUTE		?= YES
+ 
+ 
+-$(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
++$(2)_DEPENDENCIES ?= $(filter-out host-toolchain $(1),\
++	$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
++ifeq ($$($(2)_TYPE),target)
++$(2)_DEPENDENCIES += toolchain
++endif
++
+ 
+ $(2)_INSTALL_STAGING		?= NO
+ $(2)_INSTALL_IMAGES		?= NO
+-- 
+1.8.1.4
