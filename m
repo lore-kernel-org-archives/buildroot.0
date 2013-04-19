@@ -1,29 +1,25 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Fri, 19 Apr 2013 19:05:38 -0400
-Subject: [Buildroot] ccache problem when compiling with different
- toolchains in different projects
-In-Reply-To: <CANxTyt7N+cKyvksZLSgUADMmgmhdfLBqYd=oRSxCVpKaWYEH1w@mail.gmail.com>
-References: <CANxTyt7OWfG1U7yoTtRomKm2ECpC_cnxrGFbD8KVXFty==j7ig@mail.gmail.com>
- <CADzL+YjA_Zx0BCmWESKYnna=dGyf=3BY9pd00m-BhAbw-HG9TQ@mail.gmail.com>
- <5171AF1B.4010806@mind.be>
- <CANxTyt7N+cKyvksZLSgUADMmgmhdfLBqYd=oRSxCVpKaWYEH1w@mail.gmail.com>
-Message-ID: <CANxTyt631uqe2dVNvSjDemU_vYuiCYWLg=0EL6PEJ+pS_eq=jQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 19 Apr 2013 20:07:35 -0300
+Subject: [Buildroot] linux/videodev.h missing
+In-Reply-To: <BA6FC03EA0815D428FB8A3C279ED4992072B8ECF@mx.toyon.corp>
+References: <BA6FC03EA0815D428FB8A3C279ED4992072B8ECF@mx.toyon.corp>
+Message-ID: <5171CE37.5020505@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> and then set the CCACHE_COMPILERCHECK to "echo
-> $(STAMP_DIR)/toolchain-config-info.md5sum".  Then, the effects of all the
-> hidden variables are in some way accounted for without grepping for them in
-> the .config.\
->
+On 04/19/2013 06:47 PM, Richard Cagley wrote:
 
-Sorry, that should have been "cat", not "echo"  - as in 'set the
-CCACHE_COMPILERCHECK to "cat $(STAMP_DIR)/toolchain-config-info.md5sum" '.
+> Anyone else seen this error out of the current github trunk?
+> mxc_ipu_hl_lib.c:44:28: fatal error: linux/videodev.h: No such file or
+> directory
+> compilation terminated.
 
-Danomi -
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130419/391736e2/attachment.html>
+github trunk? Official buildroot isn't maintained in github.
+Also how about some context?
+Fails building what? With which options?
+You've gotta be more specific, there are gazillions of possible
+combinations in buildroot.
+Regards.
