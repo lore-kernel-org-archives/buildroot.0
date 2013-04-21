@@ -1,104 +1,75 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 21 Apr 2013 23:09:32 +0200
-Subject: [Buildroot] [git commit] qjson: new package
-Message-ID: <20130421211401.BB8B19B783@busybox.osuosl.org>
+Date: Sun, 21 Apr 2013 23:11:04 +0200
+Subject: [Buildroot] [git commit] wireless-regdb: new package
+Message-ID: <20130421211402.0C6649B783@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ecfee1073251147f3cbdcbaa531eb5e2b61f4824
+commit: http://git.buildroot.net/buildroot/commit/?id=3d9ce2f563b78ccc40af80f7d20b7a260a8ab3fd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: misc white space fixes]
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Signed-off-by: Dimitrios Siganos <dimitris@siganos.org>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                                  |    1 +
- package/qjson/Config.in                            |    7 +++++
- ...qjson-fix-qt4-package-error-in-cmakelists.patch |   29 ++++++++++++++++++++
- package/qjson/qjson.mk                             |   15 ++++++++++
- 4 files changed, 52 insertions(+), 0 deletions(-)
+ package/Config.in                        |    1 +
+ package/wireless-regdb/Config.in         |   10 ++++++++++
+ package/wireless-regdb/wireless-regdb.mk |   18 ++++++++++++++++++
+ 3 files changed, 29 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index f28cedd..54a9a2b 100644
+index 54a9a2b..b9fe726 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -144,6 +144,7 @@ if BR2_PACKAGE_QT
- comment "QT libraries and helper libraries"
- source "package/grantlee/Config.in"
- source "package/qextserialport/Config.in"
-+source "package/qjson/Config.in"
- source "package/qtuio/Config.in"
- source "package/qwt/Config.in"
+@@ -765,6 +765,7 @@ source "package/vtun/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/wget/Config.in"
  endif
-diff --git a/package/qjson/Config.in b/package/qjson/Config.in
++source "package/wireless-regdb/Config.in"
+ source "package/wireless_tools/Config.in"
+ source "package/wireshark/Config.in"
+ source "package/wpa_supplicant/Config.in"
+diff --git a/package/wireless-regdb/Config.in b/package/wireless-regdb/Config.in
 new file mode 100644
-index 0000000..c15b12f
+index 0000000..89a6147
 --- /dev/null
-+++ b/package/qjson/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_QJSON
-+	bool "qjson"
++++ b/package/wireless-regdb/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_WIRELESS_REGDB
++	bool "wireless-regdb"
 +	help
-+	  QJson is a Qt-based library that maps JSON data to
-+	  QVariant objects and vice versa.
++	  Wireless regulatory database.
 +
-+	  http://qjson.sourceforge.net
-diff --git a/package/qjson/qjson-fix-qt4-package-error-in-cmakelists.patch b/package/qjson/qjson-fix-qt4-package-error-in-cmakelists.patch
++	  Wireless regulatory database for CRDA. The database lists the
++	  allowed radio frequencies for each local jurisdiction.
++
++	  http://linuxwireless.org/en/developers/Regulatory
++
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
 new file mode 100644
-index 0000000..058973e
+index 0000000..b4e038c
 --- /dev/null
-+++ b/package/qjson/qjson-fix-qt4-package-error-in-cmakelists.patch
-@@ -0,0 +1,29 @@
-+From 529e50939316abc3c4190f89a482b17a4d4b3355 Mon Sep 17 00:00:00 2001
-+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-+Date: Sat, 6 Apr 2013 16:54:25 +0200
-+Subject: [PATCH] fix Qt4 package error in CMakeLists.txt
-+
-+Avoid checking for uic executable by cmake as it results configure
-+time error if QtGui isn't installed.
-+
-+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-+---
-+ CMakeLists.txt |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 13e65f1..447f209 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -32,7 +32,7 @@ SET(FRAMEWORK_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/Library/Frameworks"
-+ SET(QT_USE_IMPORTED_TARGETS TRUE)
-+ 
-+ # Find Qt4
-+-FIND_PACKAGE( Qt4 REQUIRED )
-++find_package(Qt4 COMPONENTS QtCore REQUIRED )
-+ 
-+ IF (NOT WIN32)
-+   SET( QT_DONT_USE_QTGUI TRUE )
-+-- 
-+1.7.10.4
-+
-diff --git a/package/qjson/qjson.mk b/package/qjson/qjson.mk
-new file mode 100644
-index 0000000..d203cd5
---- /dev/null
-+++ b/package/qjson/qjson.mk
-@@ -0,0 +1,15 @@
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -0,0 +1,18 @@
 +#############################################################
 +#
-+# qjson
++# wireless-regdb
 +#
 +#############################################################
 +
-+QJSON_VERSION = 0.8.1
++WIRELESS_REGDB_VERSION = 2013.01.11
++WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.bz2
++WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
++WIRELESS_REGDB_LICENSE = ISC
++WIRELESS_REGDB_LICENSE_FILES = LICENSE
 +
-+QJSON_SITE = http://github.com/flavio/qjson/tarball/$(QJSON_VERSION)
-+QJSON_INSTALL_STAGING = YES
-+QJSON_DEPENDENCIES =  qt
-+QJSON_LICENSE = LGPLv2.1
-+QJSON_LICENSE_FILES = COPYING.lib
++define WIRELESS_REGDB_INSTALL_TARGET_CMDS
++    install -m 644 -D -T $(@D)/regulatory.bin $(TARGET_DIR)/usr/lib/crda/regulatory.bin
++    install -m 644 -D -T $(@D)/linville.key.pub.pem $(TARGET_DIR)/etc/wireless-regdb/pubkeys/linville.key.pub.pem
++endef
 +
-+$(eval $(cmake-package))
++$(eval $(generic-package))
