@@ -1,19 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 21 Apr 2013 23:11:53 +0200
-Subject: [Buildroot] [PATCH v5] wireless-regdb: new package
-In-Reply-To: <1365513739-19763-1-git-send-email-dimitris@siganos.org>
- (Dimitrios Siganos's message of "Tue, 9 Apr 2013 14:22:19 +0100")
-References: <1365513739-19763-1-git-send-email-dimitris@siganos.org>
-Message-ID: <87li8bh9ly.fsf@dell.be.48ers.dk>
+Date: Sun, 21 Apr 2013 23:13:19 +0200
+Subject: [Buildroot] [PATCH v2] sam-ba: add license information
+In-Reply-To: <1366185855-15373-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Wed, 17 Apr 2013 09:04:15 +0100")
+References: <1366185855-15373-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87haizh9jk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dimitrios" == Dimitrios Siganos <dimitris@siganos.org> writes:
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
- Dimitrios> Signed-off-by: Dimitrios Siganos <dimitris@siganos.org>
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ spdawson> ---
+ spdawson>  v2: Change the license type, as suggested by Arnout
+ spdawson> Vandecappelle and Thomas Petazzoni.
 
 Committed, thanks.
 
