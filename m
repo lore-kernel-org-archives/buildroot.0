@@ -1,30 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 21 Apr 2013 23:16:59 +0200
-Subject: [Buildroot] [PATCH v2] libcurl: specify capath
-In-Reply-To: <1366234287-8062-1-git-send-email-shawn7400@gmail.com> (Shawn
- J. Goff's message of "Wed, 17 Apr 2013 17:31:27 -0400")
-References: <1366234287-8062-1-git-send-email-shawn7400@gmail.com>
-Message-ID: <87d2tnh9dg.fsf@dell.be.48ers.dk>
+Date: Sun, 21 Apr 2013 23:17:29 +0200
+Subject: [Buildroot] [PATCH] dnsmasq: build with MAKE1
+In-Reply-To: <1366236635-6353-1-git-send-email-gilles.talis@gmail.com> (Gilles
+ Talis's message of "Wed, 17 Apr 2013 15:10:35 -0700")
+References: <1366236635-6353-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <878v4bh9cm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Shawn" == Shawn J Goff <shawn7400@gmail.com> writes:
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
- Shawn> From: "Shawn J. Goff" <shawn7400@gmail.com>
+ Gilles> dnsmasq build breaks with parallel builds.  By the time final
+ Gilles> target needs to be linked, some object files are missing.
 
- Shawn> Since openssl's path is '/etc/ssl/' (specified in our openssl
- Shawn> package), we should also make sure that's what curl is using.
+ Gilles> Fix it by using MAKE1 instead.
 
- Shawn> Previously, it's hasn't been specified, which means it changes
- Shawn> depending on the host system where it's compiled.
-
- Shawn> Signed-off-by: Shawn J. Goff <shawn7400@gmail.com>
- Shawn> ---
-
- Shawn> Moved the option inside the BR2_PACKAGE_OPENSSL conditional.
+ Gilles> Fixes:
+ Gilles> http://autobuild.buildroot.org/results/7a68e2f64105013c1040c01c0e55fb5d910ef8d8
 
 Committed, thanks.
 
