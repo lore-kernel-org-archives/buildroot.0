@@ -1,23 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 21 Apr 2013 23:18:15 +0200
-Subject: [Buildroot] [PATCH v2] monit: add license information
-In-Reply-To: <1366277182-3380-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Thu, 18 Apr 2013 10:26:22 +0100")
-References: <1366277182-3380-1-git-send-email-spdawson@gmail.com>
-Message-ID: <874nezh9bc.fsf@dell.be.48ers.dk>
+Date: Sun, 21 Apr 2013 23:18:59 +0200
+Subject: [Buildroot] [PATCH] qemu/arm-versatile: update to use kernel
+	3.8.8
+In-Reply-To: <1366290785-14346-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 18 Apr 2013 10:13:05 -0300")
+References: <1366290785-14346-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zjwrfupo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
- spdawson> ---
- spdawson>  v2: Adjust license type in response to feedback from Peter Korsgaard
- spdawson>  and Arnout Vandecappelle.
+ Gustavo> The IRQ mapping failures have been fixed in 3.8.8 so update it to the
+ Gustavo> latest kernel series.
 
 Committed, thanks.
 
