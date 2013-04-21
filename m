@@ -1,32 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 21 Apr 2013 23:17:57 +0200
-Subject: [Buildroot] [git commit] monit: add license information
-Message-ID: <20130421212043.69CBC9B782@busybox.osuosl.org>
+Date: Sun, 21 Apr 2013 23:19:34 +0200
+Subject: [Buildroot] [git commit] libwebsockets: bump to version
+	1.22-chrome26-firefox18
+Message-ID: <20130421212043.BD6BD9B782@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=559e00b6308b60a51e1423b8b1192f11b32183f3
+commit: http://git.buildroot.net/buildroot/commit/?id=c8da02c3bf676cc4e193f93cbe4939ffeb3e413e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/monit/monit.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libwebsockets/libwebsockets.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/monit/monit.mk b/package/monit/monit.mk
-index a8b6447..657f0f1 100644
---- a/package/monit/monit.mk
-+++ b/package/monit/monit.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index a3d8936..e1f1efa 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- MONIT_VERSION = 5.4
- MONIT_SITE = http://mmonit.com/monit/dist/
-+MONIT_LICENSE = AGPLv3 with OpenSSL exception
-+MONIT_LICENSE_FILES = COPYING
- 
- MONIT_CONF_ENV = \
- 	libmonit_cv_setjmp_available=yes \
+-LIBWEBSOCKETS_VERSION = v1.1-chrome26-firefox18
++LIBWEBSOCKETS_VERSION = v1.22-chrome26-firefox18
+ LIBWEBSOCKETS_SITE = http://git.libwebsockets.org/cgi-bin/cgit/libwebsockets/snapshot
+ LIBWEBSOCKETS_LICENSE = LGPLv2.1
+ LIBWEBSOCKETS_LICENSE_FILES = COPYING
