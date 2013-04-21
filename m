@@ -1,25 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 21 Apr 2013 23:13:19 +0200
-Subject: [Buildroot] [PATCH v2] sam-ba: add license information
-In-Reply-To: <1366185855-15373-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Wed, 17 Apr 2013 09:04:15 +0100")
-References: <1366185855-15373-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87haizh9jk.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 21 Apr 2013 22:33:27 +0200
+Subject: [Buildroot] [git commit] quagga: fix build breakage without snmp
+Message-ID: <20130421211401.7302B9B783@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=05554f1747bbc2b358819ced2b9d674be6d21db7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
- spdawson> ---
- spdawson>  v2: Change the license type, as suggested by Arnout
- spdawson> Vandecappelle and Thomas Petazzoni.
+Quagga no longer supports explicitly disabling snmp, and what's worse,
+it interprets --disable-snmp as --enable-snmp.
+Remove the disable configure option.
+While at it add a comment about net-snmp requiring AgentX support for
+quagga to build properly as suggested by Arnout.
+Fixes:
+http://autobuild.buildroot.net/results/a9bce6dd8065ddb1850a4e14f0e4eb257ee89286/
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/quagga/Config.in |    3 +++
+ package/quagga/quagga.mk |    4 +---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/quagga/Config.in b/package/quagga/Config.in
+index 0834201..c364ae1 100644
+--- a/package/quagga/Config.in
++++ b/package/quagga/Config.in
+@@ -84,4 +84,7 @@ config BR2_PACKAGE_QUAGGA_SNMP
+ 	help
+ 	  Make quagga information available via SNMP SMUX.
+ 
++comment "AgentX support must be enabled in net-snmp or the build will break"
++	depends on BR2_PACKAGE_QUAGGA_SNMP
++
+ endif
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 42f8506..347ec4d 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -26,10 +26,8 @@ QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_OPAQUE_LSA),--enable-opaque-lsa,--d
+ 
+ ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
+ QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
+-QUAGGA_CONF_OPT += --enable-snmp
++QUAGGA_CONF_OPT += --enable-snmp=agentx
+ QUAGGA_DEPENDENCIES += netsnmp
+-else
+-QUAGGA_CONF_OPT +=--disable-snmp
+ endif
+ 
+ $(eval $(autotools-package))
