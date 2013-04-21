@@ -1,32 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 21 Apr 2013 22:32:01 +0200
-Subject: [Buildroot] [git commit] libconfig: bump to 1.4.9
-Message-ID: <20130421211401.368579B783@busybox.osuosl.org>
+Date: Sun, 21 Apr 2013 23:12:55 +0200
+Subject: [Buildroot] [git commit] sam-ba: add license information
+Message-ID: <20130421211402.4066F9B783@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=978e7c74aa3b54bf2d90c5d94594f649da2f45c3
+commit: http://git.buildroot.net/buildroot/commit/?id=f39b706b087865112e351503ee51c60e5c2453f5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libconfig/libconfig.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sam-ba/sam-ba.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/libconfig/libconfig.mk b/package/libconfig/libconfig.mk
-index b826c06..6d0abbb 100644
---- a/package/libconfig/libconfig.mk
-+++ b/package/libconfig/libconfig.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+index 067bdf1..dba653e 100644
+--- a/package/sam-ba/sam-ba.mk
++++ b/package/sam-ba/sam-ba.mk
+@@ -1,6 +1,14 @@
++#############################################################
++#
++# sam-ba
++#
++#############################################################
++
+ SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
+ SAM_BA_VERSION = 2.12
+ SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
++SAM_BA_LICENSE = BSD-like (partly binary-only)
++SAM_BA_LICENSE_FILES = doc/readme.txt
  
--LIBCONFIG_VERSION = 1.4.8
-+LIBCONFIG_VERSION = 1.4.9
- LIBCONFIG_SITE = http://www.hyperrealm.com/libconfig/
- LIBCONFIG_LICENSE = LGPLv2.1+
- LIBCONFIG_LICENSE_FILES = COPYING.LIB
+ define HOST_SAM_BA_EXTRACT_CMDS
+         unzip -d $(BUILD_DIR) $(DL_DIR)/$(SAM_BA_SOURCE)
