@@ -1,38 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 21 Apr 2013 23:12:55 +0200
-Subject: [Buildroot] [git commit] sam-ba: add license information
-Message-ID: <20130421211402.4066F9B783@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 21 Apr 2013 23:16:59 +0200
+Subject: [Buildroot] [PATCH v2] libcurl: specify capath
+In-Reply-To: <1366234287-8062-1-git-send-email-shawn7400@gmail.com> (Shawn
+ J. Goff's message of "Wed, 17 Apr 2013 17:31:27 -0400")
+References: <1366234287-8062-1-git-send-email-shawn7400@gmail.com>
+Message-ID: <87d2tnh9dg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f39b706b087865112e351503ee51c60e5c2453f5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Shawn" == Shawn J Goff <shawn7400@gmail.com> writes:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/sam-ba/sam-ba.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ Shawn> From: "Shawn J. Goff" <shawn7400@gmail.com>
 
-diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
-index 067bdf1..dba653e 100644
---- a/package/sam-ba/sam-ba.mk
-+++ b/package/sam-ba/sam-ba.mk
-@@ -1,6 +1,14 @@
-+#############################################################
-+#
-+# sam-ba
-+#
-+#############################################################
-+
- SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
- SAM_BA_VERSION = 2.12
- SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
-+SAM_BA_LICENSE = BSD-like (partly binary-only)
-+SAM_BA_LICENSE_FILES = doc/readme.txt
- 
- define HOST_SAM_BA_EXTRACT_CMDS
-         unzip -d $(BUILD_DIR) $(DL_DIR)/$(SAM_BA_SOURCE)
+ Shawn> Since openssl's path is '/etc/ssl/' (specified in our openssl
+ Shawn> package), we should also make sure that's what curl is using.
+
+ Shawn> Previously, it's hasn't been specified, which means it changes
+ Shawn> depending on the host system where it's compiled.
+
+ Shawn> Signed-off-by: Shawn J. Goff <shawn7400@gmail.com>
+ Shawn> ---
+
+ Shawn> Moved the option inside the BR2_PACKAGE_OPENSSL conditional.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
