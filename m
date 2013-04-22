@@ -1,50 +1,24 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 22 Apr 2013 23:26:30 +0200
-Subject: [Buildroot] ccache problem when compiling with different
- toolchains in different projects
-In-Reply-To: <CANxTyt7JzGaq0pirMDDUrEn_XTUxK-4CbaPP00Rn0O709eL50w@mail.gmail.com>
-References: <CANxTyt7OWfG1U7yoTtRomKm2ECpC_cnxrGFbD8KVXFty==j7ig@mail.gmail.com>
- <CADzL+YjA_Zx0BCmWESKYnna=dGyf=3BY9pd00m-BhAbw-HG9TQ@mail.gmail.com>
- <5171AF1B.4010806@mind.be>
- <CANxTyt7N+cKyvksZLSgUADMmgmhdfLBqYd=oRSxCVpKaWYEH1w@mail.gmail.com>
- <5171D63D.7050705@mind.be>
- <CANxTyt7EftWCmO25-reSsJJybTkzbB3srsrmZSwjKpadfQNt3w@mail.gmail.com>
- <5174D1DE.6000902@mind.be>
- <CANxTyt7JzGaq0pirMDDUrEn_XTUxK-4CbaPP00Rn0O709eL50w@mail.gmail.com>
-Message-ID: <5175AB06.8090101@mind.be>
+Date: Mon, 22 Apr 2013 23:33:44 +0200
+Subject: [Buildroot] [PATCH 0/4] Wayland/weston packages
+In-Reply-To: <1366646873-26196-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1366646873-26196-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <5175ACB8.4060405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/04/13 14:32, Danomi Manchego wrote:
-> On Mon, Apr 22, 2013 at 1:59 AM, Arnout Vandecappelle <arnout@mind.be
-> <mailto:arnout@mind.be>> wrote:
-[snip]
->       Actually, after thinking a bit harder about it: the following
->     should work:
->
->     sed -n '/^# Toolchain/,/^# System configuration/' $(BUILDROOT_CONFIG) \
->              | md5sum -
->
->       So there's no need to rename stuff or anything.
->
->
-> That would also use the GDB and ECLIPSE lines too.  But then, if it
-> accounts for everything outside of the "%compiler% -v" info (wrappers,
-> C-library), then it's worth it.
->
-> I suppose that we could drop the these lines with an inverse grep:
->
-> sed -n '/^# Toolchain/,/^# System configuration/p' .config | \
->      grep -v -e '^#' -e GDG -e ECLIPSE | \
->      md5sum
->
-> Too much?
+On 22/04/13 18:07, Thomas Petazzoni wrote:
+> Note that the first patch does something a little bit ugly: it moves
+> xkeyboard-config outside of the if BR2_PACKAGE_XORG7 ... endif clause,
+> because we also need it for Wayland/Weston. The consequence is that it
+> now appears "alone" right after the "X.org system" submenu in
+> menuconfig, which is not entirely nice. Suggestions welcome.
 
-  Too much, yes :-) But perhaps we could change the order of the 
-toolchain options.
+  Maybe moving it into "X libraries and helper libraries" is more 
+relevant? I expect that other packages (mesa3d?) may also move there.
 
   Regards,
   Arnout
