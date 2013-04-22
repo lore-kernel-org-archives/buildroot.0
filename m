@@ -1,56 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Apr 2013 18:07:49 +0200
-Subject: [Buildroot] [PATCH 0/4] Wayland/weston packages
-Message-ID: <1366646873-26196-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Apr 2013 18:07:50 +0200
+Subject: [Buildroot] [PATCH 1/4] xkeyboard-config: make available outside of
+	X.org, reduce dependencies
+In-Reply-To: <1366646873-26196-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1366646873-26196-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1366646873-26196-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+xkeyboard-connfig was selectable only if X.org was enabled. However,
+weston, the reference implementation of the Wayland protocol, also
+needs xkeyboard-config, so we have to make this package available
+outside of the if BR2_PACKAGE_XORG7 ... endif conditional.
 
-Here is a set of four patches that add support for Weston, the
-reference implementation of the Wayland protocol. So far, only the
-fbdev backend is supported, but it's in my plans to add support for
-the RPi compositor, and maybe the DRM one.
+In addition to this, the xkeyboard-config currently pulls in
+xapp_xkbcomp as a runtime dependency, but this dependency is only
+needed with X.org. And it also pulls in xlib_libX11 and xproto_proto
+has build-time dependencies. But in fact those ones are runtime
+dependencies, and they are only needed under X.org. This helps
+reducing the number of dependencies of xkeyboard-config in a
+weston/wayland configuration.
 
-Note that the first patch does something a little bit ugly: it moves
-xkeyboard-config outside of the if BR2_PACKAGE_XORG7 ... endif clause,
-because we also need it for Wayland/Weston. The consequence is that it
-now appears "alone" right after the "X.org system" submenu in
-menuconfig, which is not entirely nice. Suggestions welcome.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/Config.in                            |    3 ++-
+ package/x11r7/xkeyboard-config/Config.in           |    7 ++++---
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk |    7 ++++++-
+ 3 files changed, 12 insertions(+), 5 deletions(-)
 
-Best regards,
-
-Thomas
-
-Thomas Petazzoni (4):
-  xkeyboard-config: make available outside of X.org, reduce
-    dependencies
-  libxkbcommon: new package
-  wayland: new package
-  weston: new package
-
- package/Config.in                                  |    3 ++
- package/libxkbcommon/Config.in                     |    8 ++++
- package/libxkbcommon/libxkbcommon.mk               |   16 +++++++
- package/wayland/Config.in                          |   10 +++++
- package/wayland/wayland.mk                         |   30 +++++++++++++
- package/weston/Config.in                           |   29 ++++++++++++
- ...pendent-code-only-when-the-DRM-compositor.patch |   47 ++++++++++++++++++++
- package/weston/weston.mk                           |   32 +++++++++++++
- package/x11r7/Config.in                            |    3 +-
- package/x11r7/xkeyboard-config/Config.in           |    7 +--
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    7 ++-
- 11 files changed, 187 insertions(+), 5 deletions(-)
- create mode 100644 package/libxkbcommon/Config.in
- create mode 100644 package/libxkbcommon/libxkbcommon.mk
- create mode 100644 package/wayland/Config.in
- create mode 100644 package/wayland/wayland.mk
- create mode 100644 package/weston/Config.in
- create mode 100644 package/weston/weston-0001-Pull-DRM-dependent-code-only-when-the-DRM-compositor.patch
- create mode 100644 package/weston/weston.mk
-
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 971ef37..2be9ae0 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -257,9 +257,10 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/xdata_xbitmaps/Config.in
+ 		source package/x11r7/xdata_xcursor-themes/Config.in
+ 		source package/x11r7/xcursor-transparent-theme/Config.in
+-		source package/x11r7/xkeyboard-config/Config.in
+ 	endmenu
+ endif
+ 
+ comment "X.org requires a toolchain with WCHAR support"
+         depends on !BR2_USE_WCHAR
++
++source package/x11r7/xkeyboard-config/Config.in
+diff --git a/package/x11r7/xkeyboard-config/Config.in b/package/x11r7/xkeyboard-config/Config.in
+index 640bb1d..5d1d6a7 100644
+--- a/package/x11r7/xkeyboard-config/Config.in
++++ b/package/x11r7/xkeyboard-config/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_XKEYBOARD_CONFIG
+ 	bool "xkeyboard-config"
+-	select BR2_PACKAGE_XAPP_XKBCOMP
+-	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	# Runtime dependencies
++	select BR2_PACKAGE_XAPP_XKBCOMP if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XPROTO_XPROTO if BR2_PACKAGE_XORG7
+ 	help
+ 	  keyboard configuration database for X
+ 
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index 78ed1ee..cdddd95 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+@@ -3,10 +3,15 @@
+ # xkeyboard-config
+ #
+ #############################################################
++
+ XKEYBOARD_CONFIG_VERSION = 2.6
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
+ XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config/
+-XKEYBOARD_CONFIG_DEPENDENCIES = host-gettext host-intltool host-xapp_xkbcomp xlib_libX11 xproto_xproto
++XKEYBOARD_CONFIG_LICENSE = MIT
++XKEYBAORD_CONFIG_LICENSE_FILES = COPYING
++
++XKEYBOARD_CONFIG_DEPENDENCIES = host-gettext host-intltool host-xapp_xkbcomp
++XKEYBOARD_CONFIG_CONF_OPT += --disable-runtime-deps
+ 
+ $(eval $(autotools-package))
+ 
 -- 
 1.7.9.5
