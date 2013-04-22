@@ -1,66 +1,99 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 22 Apr 2013 08:15:02 +0200
-Subject: [Buildroot] iMX6Q prerequisite patches for Qt5
-In-Reply-To: <51034.217.149.209.147.1366471569.squirrel@webmail.internl.net>
-References: <51034.217.149.209.147.1366471569.squirrel@webmail.internl.net>
-Message-ID: <5174D566.7010403@mind.be>
+Date: Mon, 22 Apr 2013 08:19:48 +0200
+Subject: [Buildroot] elfutils 1.55 build fail - arm
+In-Reply-To: <51722958.9030700@ras.kells.com>
+References: <51722958.9030700@ras.kells.com>
+Message-ID: <5174D684.1060109@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Henk,
-
-On 20/04/13 17:26, H.Fijnvandraat at inter.nl.net wrote:
-> Hi All,
+On 20/04/13 07:36, Rob Schottland (buildroot) wrote:
+> We encountered a build failure in elftools 0.155 compiling bzip2.c
 >
-> I have been successfull in compiling Qt5 for the Freescale iMX6Q processor
-> using the contributions from Thomas Petazzoni.
+> Any insights would be appreciated.
 >
-> However, the iMX6Q uses a closed source Vivante GPU, which must be handled
-> by some libraries.
->
-> The attached patches are an attempt to incorporate these into Buildroot.
+> build.log,  .config  and  elfutils.mk
+> details follow:
+> = = = = = = = =
+> build.log
+> = = = = = = = =
+> --->>> elfutils 0.155 Building
+> PATH="/data1/Packages/buildroot-2013.02/output/host/bin:/data1/Packages/buildroot-2013.02/output/host/usr/bin:/data1/Packages/buildroot-2013.02/output/host/usr/sbin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+> PERLLIB="/data1/Packages/buildroot-2013.02/output/host/usr/lib/perl"
+> /usr/bin/make -j2  -C
+> /data1/Packages/buildroot-2013.02/output/build/elfutils-0.155/
+> make[1]: Entering directory
+> `/data1/Packages/buildroot-2013.02/output/build/elfutils-0.155'
+> /usr/bin/make  all-recursive
+> make[2]: Entering directory
+> `/data1/Packages/buildroot-2013.02/output/build/elfutils-0.155'
+> Making all in config
+> make[3]: Entering directory
+> `/data1/Packages/buildroot-2013.02/output/build/elfutils-0.155/config'
+> make[3]: Nothing to be done for `all'.
+> make[3]: Leaving directory
+> `/data1/Packages/buildroot-2013.02/output/build/elfutils-0.155/config'
+> Making all in m4
+> make[3]: Entering directory
+> `/data1/Packages/buildroot-2013.02/output/build/elfutils-0.155/m4'
+> make[3]: Nothing to be done for `all'.
+> make[3]: Leaving directory
+> `/data1/Packages/buildroot-2013.02/output/build/elfutils-0.155/m4'
+> Making all in lib
+> make[3]: Entering directory
+> `/data1/Packages/buildroot-2013.02/output/build/elfutils-0.155/lib'
+> make[3]: Nothing to be done for `all'.
+> make[3]: Leaving directory
+> `/data1/Packages/buildroot-2013.02/output/build/elfutils-0.155/lib'
+> Making all in libelf
+> make[3]: Entering directory
+> `/data1/Packages/buildroot-2013.02/output/build/elfutils-0.155/libelf'
+> make[3]: Nothing to be done for `all'.
+> make[3]: Leaving directory
+> `/data1/Packages/buildroot-2013.02/output/build/elfutils-0.155/libelf'
+> Making all in libebl
+> make[3]: Entering directory
+> `/data1/Packages/buildroot-2013.02/output/build/elfutils-0.155/libebl'
+> make[3]: Nothing to be done for `all'.
+> make[3]: Leaving directory
+> `/data1/Packages/buildroot-2013.02/output/build/elfutils-0.155/libebl'
+> Making all in libdwfl
+> make[3]: Entering directory
+> `/data1/Packages/buildroot-2013.02/output/build/elfutils-0.155/libdwfl'
+> /data1/Packages/buildroot-2013.02/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
+> -D_GNU_SOURCE -DHAVE_CONFIG_H -DLOCALEDIR='"/usr/share/locale"' -I. -I..
+> -I. -I. -I../lib -I.. -I. -I./../libelf -I./../libebl -I./../libdw
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -std=gnu99 -Wall -Wshadow
+> -Wunused -Wextra -fgnu89-inline -Wformat=2 -D_LARGEFILE_SOURCE
+> -D_LARGEFILE64_SOURCE -pipe -Os -MT bzip2.o -MD -MP -MF .deps/bzip2.Tpo
+> -c -o bzip2.o bzip2.c
+> if
+> /data1/Packages/buildroot-2013.02/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
+> -D_GNU_SOURCE -DHAVE_CONFIG_H -DLOCALEDIR='"/usr/share/locale"' -I. -I..
+> -I. -I. -I../lib -I.. -I. -I./../libelf -I./../libebl -I./../libdw
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -std=gnu99 -Wall -Wshadow
+> -Wunused -Wextra -fgnu89-inline -Wformat=2 -D_LARGEFILE_SOURCE
+> -D_LARGEFILE64_SOURCE -pipe -Os -c -o dwfl_begin.os -fpic -DPIC -DSHARED
+> -MT dwfl_begin.os -MD -MP \
+>        -MF ".deps/dwfl_begin.Tpo" `test -f 'dwfl_begin.c' || echo
+> './'`dwfl_begin.c; \
+>      then cat ".deps/dwfl_begin.Tpo" >> ".deps/dwfl_begin.Po"; \
+>           rm -f ".deps/dwfl_begin.Tpo"; \
+>      else rm -f ".deps/dwfl_begin.Tpo"; exit 1; \
+>      fi
+> In file included from bzip2.c:4:0:
+> gzip.c:49:20: fatal error: bzlib.h: No such file or directory
+> compilation terminated.
 
-  I had to make changes in Qt5 itself as well to make it work. Didn't you 
-need to?
-
-
-  I also have the following problem with the gpu-viv-bin-mx6q package. 
-It's a binary that is linked to a soft-float glibc library.  I had 
-already added
-
-         # Library binaries are linked against libc.so.6
-         depends on BR2_TOOLCHAIN_CTNG_glibc || \
-                 BR2_TOOLCHAIN_CTNG_eglibc || \
-                 BR2_TOOLCHAIN_EXTERNAL_GLIBC
-
-but that doesn't yet capture the softfloat aspect. The alternative is to 
-lock it on to a specific external toolchain version, but I don't like to 
-take away so much freedom from the user (plus it's really annoying when 
-deprecating old toolchains).
-
-
-  Finally, also some comments on the patch submitting process.
-
-- Please send patches in-line, with a single patch per e-mail. That makes 
-it easy to make reviews per e-mail. The preferred way of sending patches 
-is to use git send-email.
-
-- Please make separate patches for adding a new package and for updating 
-other packages to make use of it. Also make the version bump of imx-lib a 
-separate patch.
-
-- Please word-wrap all lines at 80 columns.
-
-
-  If you are not going to submit updated versions of your patch, please 
-let us know so somebody else can take over (we will make sure your 
-authorship information is retained).
+  Strange. Can you check if output/staging/usr/include/bzlib.h indeed 
+doesn't exist?
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
