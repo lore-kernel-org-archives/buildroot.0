@@ -1,90 +1,66 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 22 Apr 2013 07:59:58 +0200
-Subject: [Buildroot] ccache problem when compiling with different
- toolchains in different projects
-In-Reply-To: <CANxTyt7EftWCmO25-reSsJJybTkzbB3srsrmZSwjKpadfQNt3w@mail.gmail.com>
-References: <CANxTyt7OWfG1U7yoTtRomKm2ECpC_cnxrGFbD8KVXFty==j7ig@mail.gmail.com>
- <CADzL+YjA_Zx0BCmWESKYnna=dGyf=3BY9pd00m-BhAbw-HG9TQ@mail.gmail.com>
- <5171AF1B.4010806@mind.be>
- <CANxTyt7N+cKyvksZLSgUADMmgmhdfLBqYd=oRSxCVpKaWYEH1w@mail.gmail.com>
- <5171D63D.7050705@mind.be>
- <CANxTyt7EftWCmO25-reSsJJybTkzbB3srsrmZSwjKpadfQNt3w@mail.gmail.com>
-Message-ID: <5174D1DE.6000902@mind.be>
+Date: Mon, 22 Apr 2013 08:15:02 +0200
+Subject: [Buildroot] iMX6Q prerequisite patches for Qt5
+In-Reply-To: <51034.217.149.209.147.1366471569.squirrel@webmail.internl.net>
+References: <51034.217.149.209.147.1366471569.squirrel@webmail.internl.net>
+Message-ID: <5174D566.7010403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/04/13 18:08, Danomi Manchego wrote:
-> On Fri, Apr 19, 2013 at 7:41 PM, Arnout Vandecappelle <arnout@mind.be
-> <mailto:arnout@mind.be>> wrote:
+  Hi Henk,
+
+On 20/04/13 17:26, H.Fijnvandraat at inter.nl.net wrote:
+> Hi All,
 >
->         Then, the effects of all the
->         hidden variables are in some way accounted for without grepping
->         for them
->         in the .config.
+> I have been successfull in compiling Qt5 for the Freescale iMX6Q processor
+> using the contributions from Thomas Petazzoni.
 >
+> However, the iMX6Q uses a closed source Vivante GPU, which must be handled
+> by some libraries.
 >
->       Not entirely. Many toolchain options affect the C library, not the
->     compiler. A change in these options may not affect the gcc binary
->     itself. Even a gcc configuration option may not change the gcc
->     binary, because most of gcc is in cc1 and libgcc.a. But it's still an
->     improvement over previous proposals.
->
->
-> Arnout, I'm wavering on this.
->
-> At work, we only use external toolchains (downloaded or pre-installed),
-> so using the gcc -v output and the md5sum of the compiler/wrapper
-> provided to ccache is perfect for our projects, because
-> these discriminators capture everything.  But if toolchain configuration
-> options in the general case (for everyone else) cannot be simply captured
-> (without doing lots of variable renaming as you mentioned earlier),
+> The attached patches are an attempt to incorporate these into Buildroot.
 
-  Actually, after thinking a bit harder about it: the following should work:
+  I had to make changes in Qt5 itself as well to make it work. Didn't you 
+need to?
 
-sed -n '/^# Toolchain/,/^# System configuration/' $(BUILDROOT_CONFIG) \
-	| md5sum -
 
-  So there's no need to rename stuff or anything.
+  I also have the following problem with the gpu-viv-bin-mx6q package. 
+It's a binary that is linked to a soft-float glibc library.  I had 
+already added
 
-> then
-> it seems to me that buildroot's official position must remain that the
-> user must know when to flush the cache, and do it manually.
+         # Library binaries are linked against libc.so.6
+         depends on BR2_TOOLCHAIN_CTNG_glibc || \
+                 BR2_TOOLCHAIN_CTNG_eglibc || \
+                 BR2_TOOLCHAIN_EXTERNAL_GLIBC
 
-  I personally find that a very weak position, so anything we can do to 
-remove that limitation is not just good, but a must. Note BTW that the 
-documentation makes no mention of the need to clear ccache when you 
-change the toolchain.
+but that doesn't yet capture the softfloat aspect. The alternative is to 
+lock it on to a specific external toolchain version, but I don't like to 
+take away so much freedom from the user (plus it's really annoying when 
+deprecating old toolchains).
 
-> What was not
-> clear to me before is that I have to not only keep in mind my build
-> configuration, but also the configuration of every other buildroot build
-> on the machine, whether it's mine or somebody else's.
 
-  The 'somebody else's' is only true if you explicitly share your ccache 
-by setting BR2_CCACHE_DIR to a shared directory.
+  Finally, also some comments on the patch submitting process.
 
+- Please send patches in-line, with a single patch per e-mail. That makes 
+it easy to make reviews per e-mail. The preferred way of sending patches 
+is to use git send-email.
+
+- Please make separate patches for adding a new package and for updating 
+other packages to make use of it. Also make the version bump of imx-lib a 
+separate patch.
+
+- Please word-wrap all lines at 80 columns.
+
+
+  If you are not going to submit updated versions of your patch, please 
+let us know so somebody else can take over (we will make sure your 
+authorship information is retained).
 
   Regards,
   Arnout
-
->  In light of that,
-> would it not be better to limit the scope of self-policing to just the
-> area you are working in, by including absolute paths (in the
-> COMPILERCHECK, or HASHDIR) to disable sharing cached objects when you
-> change output directories, or between several developers?  It's bad
-> enough to have to remember to flush the cache based our our own
-> activities, but it truly stinks to have to defend against getting screwed
-> up by somebody else's build.
->
-> I'm just trying to think this through from a community perspective ...
->
-> Danomi -
->
-
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
