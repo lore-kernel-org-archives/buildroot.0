@@ -1,71 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Apr 2013 18:07:51 +0200
-Subject: [Buildroot] [PATCH 2/4] libxkbcommon: new package
-In-Reply-To: <1366646873-26196-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1366646873-26196-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1366646873-26196-3-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Richard Cagley <rcagley@toyon.com>
+Date: Mon, 22 Apr 2013 09:12:43 -0700
+Subject: [Buildroot] linux/videodev.h missing
+In-Reply-To: <5171D9E4.7090904@mind.be>
+References: <BA6FC03EA0815D428FB8A3C279ED4992072B8ECF@mx.toyon.corp>
+ <5171D9E4.7090904@mind.be>
+Message-ID: <BA6FC03EA0815D428FB8A3C279ED4992072B900D@mx.toyon.corp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                    |    1 +
- package/libxkbcommon/Config.in       |    8 ++++++++
- package/libxkbcommon/libxkbcommon.mk |   16 ++++++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 package/libxkbcommon/Config.in
- create mode 100644 package/libxkbcommon/libxkbcommon.mk
+Arnout,
+This is the information I needed. Sounds like I need to find a patched
+kernel tarball.
+-rich
 
-diff --git a/package/Config.in b/package/Config.in
-index f28cedd..f3be210 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -466,6 +466,7 @@ source "package/libnfc-llcp/Config.in"
- source "package/libusb/Config.in"
- source "package/libusb-compat/Config.in"
- source "package/libv4l/Config.in"
-+source "package/libxkbcommon/Config.in"
- source "package/mtdev/Config.in"
- source "package/ne10/Config.in"
- source "package/neardal/Config.in"
-diff --git a/package/libxkbcommon/Config.in b/package/libxkbcommon/Config.in
-new file mode 100644
-index 0000000..0a52c6f
---- /dev/null
-+++ b/package/libxkbcommon/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBXKBCOMMON
-+	bool "libxkbcommon"
-+	help
-+	  xkbcommon is a keymap compiler and support library which
-+	  processes a reduced subset of keymaps as defined by the XKB
-+	  specification.
-+
-+	  http://xkbcommon.org/
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-new file mode 100644
-index 0000000..1ff851b
---- /dev/null
-+++ b/package/libxkbcommon/libxkbcommon.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# libxkbcommon
-+#
-+#############################################################
-+
-+LIBXKBCOMMON_VERSION = 0.3.0
-+LIBXKBCOMMON_SITE = http://xkbcommon.org/download/
-+LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
-+LIBXKBCOMMON_LICENSE = MIT/X11
-+LIBXKBCOMMON_LICENSE_FILES = COPYING
-+
-+LIBXKBCOMMON_INSTALL_STAGING = YES
-+LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
-+
-+$(eval $(autotools-package))
--- 
-1.7.9.5
+> -----Original Message-----
+> From: Arnout Vandecappelle [mailto:arnout at mind.be]
+> Sent: Friday, April 19, 2013 4:57 PM
+> To: Richard Cagley
+> Cc: buildroot at busybox.net
+> Subject: Re: [Buildroot] linux/videodev.h missing
+> 
+> On 19/04/13 23:47, Richard Cagley wrote:
+> > Anyone else seen this error out of the current github trunk?
+> > mxc_ipu_hl_lib.c:44:28: fatal error: linux/videodev.h: No such file
+or
+> > directory compilation terminated.
+> 
+>   See the help text of imx-lib:
+> 
+> "It requires a kernel that includes the i.MX specific headers to be
+built."
+> 
+>   In this particular case it's the old Freescale kernel that still has
+the ancient
+> videodev.h header (it died in v2.6.38). Basically, Freescale assumes
+> everybody wants to use Freescale's own stuff.
+> 
+>   Regards,
+>   Arnout
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR
+Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
