@@ -1,89 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Apr 2013 18:07:50 +0200
-Subject: [Buildroot] [PATCH 1/4] xkeyboard-config: make available outside of
-	X.org, reduce dependencies
+Date: Mon, 22 Apr 2013 18:07:52 +0200
+Subject: [Buildroot] [PATCH 3/4] wayland: new package
 In-Reply-To: <1366646873-26196-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1366646873-26196-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1366646873-26196-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1366646873-26196-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xkeyboard-connfig was selectable only if X.org was enabled. However,
-weston, the reference implementation of the Wayland protocol, also
-needs xkeyboard-config, so we have to make this package available
-outside of the if BR2_PACKAGE_XORG7 ... endif conditional.
-
-In addition to this, the xkeyboard-config currently pulls in
-xapp_xkbcomp as a runtime dependency, but this dependency is only
-needed with X.org. And it also pulls in xlib_libX11 and xproto_proto
-has build-time dependencies. But in fact those ones are runtime
-dependencies, and they are only needed under X.org. This helps
-reducing the number of dependencies of xkeyboard-config in a
-weston/wayland configuration.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/Config.in                            |    3 ++-
- package/x11r7/xkeyboard-config/Config.in           |    7 ++++---
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    7 ++++++-
- 3 files changed, 12 insertions(+), 5 deletions(-)
+ package/Config.in          |    1 +
+ package/wayland/Config.in  |   10 ++++++++++
+ package/wayland/wayland.mk |   30 ++++++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+)
+ create mode 100644 package/wayland/Config.in
+ create mode 100644 package/wayland/wayland.mk
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 971ef37..2be9ae0 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -257,9 +257,10 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xdata_xbitmaps/Config.in
- 		source package/x11r7/xdata_xcursor-themes/Config.in
- 		source package/x11r7/xcursor-transparent-theme/Config.in
--		source package/x11r7/xkeyboard-config/Config.in
- 	endmenu
- endif
- 
- comment "X.org requires a toolchain with WCHAR support"
-         depends on !BR2_USE_WCHAR
+diff --git a/package/Config.in b/package/Config.in
+index f3be210..41989c7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -445,6 +445,7 @@ source "package/opengl/Config.in"
+ source "package/pango/Config.in"
+ source "package/pixman/Config.in"
+ source "package/tiff/Config.in"
++source "package/wayland/Config.in"
+ source "package/webkit/Config.in"
+ source "package/zxing/Config.in"
+ endmenu
+diff --git a/package/wayland/Config.in b/package/wayland/Config.in
+new file mode 100644
+index 0000000..e5d2649
+--- /dev/null
++++ b/package/wayland/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_WAYLAND
++	bool "wayland"
++	select BR2_PACKAGE_LIBFFI
++	select BR2_PACKAGE_EXPAT
++	help
++	  Wayland is a project to define a protocol for a compositor
++	  to talk to its clients as well as a library implementation
++	  of the protocol.
 +
-+source package/x11r7/xkeyboard-config/Config.in
-diff --git a/package/x11r7/xkeyboard-config/Config.in b/package/x11r7/xkeyboard-config/Config.in
-index 640bb1d..5d1d6a7 100644
---- a/package/x11r7/xkeyboard-config/Config.in
-+++ b/package/x11r7/xkeyboard-config/Config.in
-@@ -1,8 +1,9 @@
- config BR2_PACKAGE_XKEYBOARD_CONFIG
- 	bool "xkeyboard-config"
--	select BR2_PACKAGE_XAPP_XKBCOMP
--	select BR2_PACKAGE_XLIB_LIBX11
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	# Runtime dependencies
-+	select BR2_PACKAGE_XAPP_XKBCOMP if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XPROTO_XPROTO if BR2_PACKAGE_XORG7
- 	help
- 	  keyboard configuration database for X
- 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index 78ed1ee..cdddd95 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -3,10 +3,15 @@
- # xkeyboard-config
- #
- #############################################################
++	  http://wayland.freedesktop.org/
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+new file mode 100644
+index 0000000..65381ec
+--- /dev/null
++++ b/package/wayland/wayland.mk
+@@ -0,0 +1,30 @@
++#############################################################
++#
++# wayland
++#
++#############################################################
 +
- XKEYBOARD_CONFIG_VERSION = 2.6
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config/
--XKEYBOARD_CONFIG_DEPENDENCIES = host-gettext host-intltool host-xapp_xkbcomp xlib_libX11 xproto_xproto
-+XKEYBOARD_CONFIG_LICENSE = MIT
-+XKEYBAORD_CONFIG_LICENSE_FILES = COPYING
++WAYLAND_VERSION = 1.1.0
++WAYLAND_SITE = http://wayland.freedesktop.org/releases/
++WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
++WAYLAND_LICENSE = MIT
++WAYLAND_LICENSE_FILES = COPYING
 +
-+XKEYBOARD_CONFIG_DEPENDENCIES = host-gettext host-intltool host-xapp_xkbcomp
-+XKEYBOARD_CONFIG_CONF_OPT += --disable-runtime-deps
- 
- $(eval $(autotools-package))
- 
++WAYLAND_INSTALL_STAGING = YES
++WAYLAND_DEPENDENCIES = libffi host-pkgconf expat host-expat
++
++# wayland needs a wayland-scanner program to generate some of its
++# source code. By default, it builds it with CC, so it doesn't in
++# cross-compilation. Therefore, we build it manually, and tell wayland
++# that the tool is already available.
++WAYLAND_CONF_OPT = --disable-scanner
++
++define WAYLAND_BUILD_SCANNER
++	(cd $(@D)/src/; \
++		$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
++			-o wayland-scanner scanner.c wayland-util.c -lexpat)
++endef
++
++WAYLAND_POST_CONFIGURE_HOOKS += WAYLAND_BUILD_SCANNER
++
++$(eval $(autotools-package))
 -- 
 1.7.9.5
