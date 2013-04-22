@@ -1,71 +1,67 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 22 Apr 2013 08:32:23 -0400
-Subject: [Buildroot] ccache problem when compiling with different
- toolchains in different projects
-In-Reply-To: <5174D1DE.6000902@mind.be>
-References: <CANxTyt7OWfG1U7yoTtRomKm2ECpC_cnxrGFbD8KVXFty==j7ig@mail.gmail.com>
- <CADzL+YjA_Zx0BCmWESKYnna=dGyf=3BY9pd00m-BhAbw-HG9TQ@mail.gmail.com>
- <5171AF1B.4010806@mind.be>
- <CANxTyt7N+cKyvksZLSgUADMmgmhdfLBqYd=oRSxCVpKaWYEH1w@mail.gmail.com>
- <5171D63D.7050705@mind.be>
- <CANxTyt7EftWCmO25-reSsJJybTkzbB3srsrmZSwjKpadfQNt3w@mail.gmail.com>
- <5174D1DE.6000902@mind.be>
-Message-ID: <CANxTyt7JzGaq0pirMDDUrEn_XTUxK-4CbaPP00Rn0O709eL50w@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 22 Apr 2013 11:47:46 -0300
+Subject: [Buildroot] [PATCH 1/2] busybox: move patches to new model
+Message-ID: <1366642067-26447-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 22, 2013 at 1:59 AM, Arnout Vandecappelle <arnout@mind.be>wrote:
+On commit 5538e4766201aa0c1c23721cfc99cbbde595964b the versioned package
+patches changed the directory structure but the packages weren't fixed.
 
-> On 20/04/13 18:08, Danomi Manchego wrote:
->
->> On Fri, Apr 19, 2013 at 7:41 PM, Arnout Vandecappelle <arnout@mind.be
->> <mailto:arnout@mind.be>> wrote:
->>
->>         Then, the effects of all the
->>         hidden variables are in some way accounted for without grepping
->>         for them
->>         in the .config.
->>
->>
->>       Not entirely. Many toolchain options affect the C library, not the
->>     compiler. A change in these options may not affect the gcc binary
->>     itself. Even a gcc configuration option may not change the gcc
->>     binary, because most of gcc is in cc1 and libgcc.a. But it's still an
->>     improvement over previous proposals.
->>
->>
->> Arnout, I'm wavering on this.
->>
->> At work, we only use external toolchains (downloaded or pre-installed),
->> so using the gcc -v output and the md5sum of the compiler/wrapper
->> provided to ccache is perfect for our projects, because
->> these discriminators capture everything.  But if toolchain configuration
->> options in the general case (for everyone else) cannot be simply captured
->> (without doing lots of variable renaming as you mentioned earlier),
->>
->
->  Actually, after thinking a bit harder about it: the following should work:
->
-> sed -n '/^# Toolchain/,/^# System configuration/' $(BUILDROOT_CONFIG) \
->         | md5sum -
->
->  So there's no need to rename stuff or anything.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/busybox/{busybox-1.19.4 => 1.19.4}/busybox-1.19.4-udhcp.patch     | 0
+ .../busybox/{busybox-1.20.2 => 1.20.2}/busybox-1.20.2-kernel_ver.patch    | 0
+ package/busybox/{busybox-1.20.2 => 1.20.2}/busybox-1.20.2-ntpd.patch      | 0
+ .../{busybox-1.20.2 => 1.20.2}/busybox-1.20.2-pkg-config-selinux.patch    | 0
+ .../busybox/{busybox-1.20.2 => 1.20.2}/busybox-1.20.2-sys-resource.patch  | 0
+ package/busybox/{busybox-1.21.0 => 1.21.0}/busybox-1.21.0-mdev.patch      | 0
+ package/busybox/{busybox-1.21.0 => 1.21.0}/busybox-1.21.0-platform.patch  | 0
+ package/busybox/{busybox-1.21.0 => 1.21.0}/busybox-1.21.0-xz.patch        | 0
+ 8 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/busybox/{busybox-1.19.4 => 1.19.4}/busybox-1.19.4-udhcp.patch (100%)
+ rename package/busybox/{busybox-1.20.2 => 1.20.2}/busybox-1.20.2-kernel_ver.patch (100%)
+ rename package/busybox/{busybox-1.20.2 => 1.20.2}/busybox-1.20.2-ntpd.patch (100%)
+ rename package/busybox/{busybox-1.20.2 => 1.20.2}/busybox-1.20.2-pkg-config-selinux.patch (100%)
+ rename package/busybox/{busybox-1.20.2 => 1.20.2}/busybox-1.20.2-sys-resource.patch (100%)
+ rename package/busybox/{busybox-1.21.0 => 1.21.0}/busybox-1.21.0-mdev.patch (100%)
+ rename package/busybox/{busybox-1.21.0 => 1.21.0}/busybox-1.21.0-platform.patch (100%)
+ rename package/busybox/{busybox-1.21.0 => 1.21.0}/busybox-1.21.0-xz.patch (100%)
 
-
-That would also use the GDB and ECLIPSE lines too.  But then, if it
-accounts for everything outside of the "%compiler% -v" info (wrappers,
-C-library), then it's worth it.
-
-I suppose that we could drop the these lines with an inverse grep:
-
-sed -n '/^# Toolchain/,/^# System configuration/p' .config | \
-    grep -v -e '^#' -e GDG -e ECLIPSE | \
-    md5sum
-
-Too much?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130422/75eb3c53/attachment.html>
+diff --git a/package/busybox/busybox-1.19.4/busybox-1.19.4-udhcp.patch b/package/busybox/1.19.4/busybox-1.19.4-udhcp.patch
+similarity index 100%
+rename from package/busybox/busybox-1.19.4/busybox-1.19.4-udhcp.patch
+rename to package/busybox/1.19.4/busybox-1.19.4-udhcp.patch
+diff --git a/package/busybox/busybox-1.20.2/busybox-1.20.2-kernel_ver.patch b/package/busybox/1.20.2/busybox-1.20.2-kernel_ver.patch
+similarity index 100%
+rename from package/busybox/busybox-1.20.2/busybox-1.20.2-kernel_ver.patch
+rename to package/busybox/1.20.2/busybox-1.20.2-kernel_ver.patch
+diff --git a/package/busybox/busybox-1.20.2/busybox-1.20.2-ntpd.patch b/package/busybox/1.20.2/busybox-1.20.2-ntpd.patch
+similarity index 100%
+rename from package/busybox/busybox-1.20.2/busybox-1.20.2-ntpd.patch
+rename to package/busybox/1.20.2/busybox-1.20.2-ntpd.patch
+diff --git a/package/busybox/busybox-1.20.2/busybox-1.20.2-pkg-config-selinux.patch b/package/busybox/1.20.2/busybox-1.20.2-pkg-config-selinux.patch
+similarity index 100%
+rename from package/busybox/busybox-1.20.2/busybox-1.20.2-pkg-config-selinux.patch
+rename to package/busybox/1.20.2/busybox-1.20.2-pkg-config-selinux.patch
+diff --git a/package/busybox/busybox-1.20.2/busybox-1.20.2-sys-resource.patch b/package/busybox/1.20.2/busybox-1.20.2-sys-resource.patch
+similarity index 100%
+rename from package/busybox/busybox-1.20.2/busybox-1.20.2-sys-resource.patch
+rename to package/busybox/1.20.2/busybox-1.20.2-sys-resource.patch
+diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-mdev.patch b/package/busybox/1.21.0/busybox-1.21.0-mdev.patch
+similarity index 100%
+rename from package/busybox/busybox-1.21.0/busybox-1.21.0-mdev.patch
+rename to package/busybox/1.21.0/busybox-1.21.0-mdev.patch
+diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch b/package/busybox/1.21.0/busybox-1.21.0-platform.patch
+similarity index 100%
+rename from package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch
+rename to package/busybox/1.21.0/busybox-1.21.0-platform.patch
+diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-xz.patch b/package/busybox/1.21.0/busybox-1.21.0-xz.patch
+similarity index 100%
+rename from package/busybox/busybox-1.21.0/busybox-1.21.0-xz.patch
+rename to package/busybox/1.21.0/busybox-1.21.0-xz.patch
+-- 
+1.8.1.5
