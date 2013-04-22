@@ -1,50 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 22 Apr 2013 23:24:58 +0200
-Subject: [Buildroot] [RFC] permit menu customization
-In-Reply-To: <1366621622-7953-1-git-send-email-spdawson@gmail.com>
-References: <1366621622-7953-1-git-send-email-spdawson@gmail.com>
-Message-ID: <5175AAAA.5030503@mind.be>
+Date: Mon, 22 Apr 2013 23:26:30 +0200
+Subject: [Buildroot] ccache problem when compiling with different
+ toolchains in different projects
+In-Reply-To: <CANxTyt7JzGaq0pirMDDUrEn_XTUxK-4CbaPP00Rn0O709eL50w@mail.gmail.com>
+References: <CANxTyt7OWfG1U7yoTtRomKm2ECpC_cnxrGFbD8KVXFty==j7ig@mail.gmail.com>
+ <CADzL+YjA_Zx0BCmWESKYnna=dGyf=3BY9pd00m-BhAbw-HG9TQ@mail.gmail.com>
+ <5171AF1B.4010806@mind.be>
+ <CANxTyt7N+cKyvksZLSgUADMmgmhdfLBqYd=oRSxCVpKaWYEH1w@mail.gmail.com>
+ <5171D63D.7050705@mind.be>
+ <CANxTyt7EftWCmO25-reSsJJybTkzbB3srsrmZSwjKpadfQNt3w@mail.gmail.com>
+ <5174D1DE.6000902@mind.be>
+ <CANxTyt7JzGaq0pirMDDUrEn_XTUxK-4CbaPP00Rn0O709eL50w@mail.gmail.com>
+Message-ID: <5175AB06.8090101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Simon,
-
-
-On 22/04/13 11:07, spdawson at gmail.com wrote:
-> From: Simon Dawson<spdawson@gmail.com>
+On 22/04/13 14:32, Danomi Manchego wrote:
+> On Mon, Apr 22, 2013 at 1:59 AM, Arnout Vandecappelle <arnout@mind.be
+> <mailto:arnout@mind.be>> wrote:
+[snip]
+>       Actually, after thinking a bit harder about it: the following
+>     should work:
 >
-> This patch is a first attempt at providing a mechanism by which the user
-> can specify a local menu configuration file, for extending the Buildroot
-> menu system.
-
-  A couple of patches with a similar purpose have been posted in the last 
-year or so. However, at the last two buildroot developer meetings we've 
-decided that this approach is not the way we want to go. Instead, adding 
-custom packages should be done by including them directly at the top of 
-packages/Config.in.
-
-
-> The main use case I have in mind is the selection and configuration of
-> local packages.
+>     sed -n '/^# Toolchain/,/^# System configuration/' $(BUILDROOT_CONFIG) \
+>              | md5sum -
 >
-> One problem with what is proposed here is that it is necessary to
-> "bootstrap" the system by providing an empty Config.in.user file; ideally,
-> this file should be touched somewhere in the top-level Makefile, and added
-> to .gitignore, as it is really a build artefact.
+>       So there's no need to rename stuff or anything.
+>
+>
+> That would also use the GDB and ECLIPSE lines too.  But then, if it
+> accounts for everything outside of the "%compiler% -v" info (wrappers,
+> C-library), then it's worth it.
+>
+> I suppose that we could drop the these lines with an inverse grep:
+>
+> sed -n '/^# Toolchain/,/^# System configuration/p' .config | \
+>      grep -v -e '^#' -e GDG -e ECLIPSE | \
+>      md5sum
+>
+> Too much?
 
-  Another buildroot rule is that the build should never modify the 
-buildroot directory itself when O= is specified on the command line. So 
-the Config.in.user should at least be in the CONFIG_DIR rather than the 
-TOPDIR.
-
+  Too much, yes :-) But perhaps we could change the order of the 
+toolchain options.
 
   Regards,
   Arnout
-
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
