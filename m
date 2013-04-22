@@ -1,233 +1,126 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 22 Apr 2013 10:55:06 +0200
-Subject: [Buildroot] [git commit] xenomai: bump to version 2.6.2.1
-Message-ID: <20130422085551.B77229B7A7@busybox.osuosl.org>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon, 22 Apr 2013 10:07:02 +0100
+Subject: [Buildroot] [RFC] permit menu customization
+Message-ID: <1366621622-7953-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd528977f1dbe232bd1ca2a0bd9a37f9172d579a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Simon Dawson <spdawson@gmail.com>
 
-- remove BR2_PACKAGE_XENOMAI_SMP since xenomai 2.6.2 no more
-requires to pass the --enable-smp option : see release notes at
-http://www.xenomai.org/index.php/Xenomai:News#2012-12-26_Xenomai_2.6.2
+This patch is a first attempt at providing a mechanism by which the user
+can specify a local menu configuration file, for extending the Buildroot
+menu system.
 
-- remove xenomai-thumb-fix.patch since it was completely merged
-in xenomai 2.6.2
+The main use case I have in mind is the selection and configuration of
+local packages.
 
-Signed-off-by: Victor Hiairrassary <victor.hiairrassary.ml@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+One problem with what is proposed here is that it is necessary to
+"bootstrap" the system by providing an empty Config.in.user file; ideally,
+this file should be touched somewhere in the top-level Makefile, and added
+to .gitignore, as it is really a build artefact.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/xenomai/Config.in               |    7 --
- package/xenomai/xenomai-thumb-fix.patch |  157 -------------------------------
- package/xenomai/xenomai.mk              |    6 +-
- 3 files changed, 1 insertions(+), 169 deletions(-)
+ Config.in                      |    9 +++++++++
+ Makefile                       |   20 ++++++++++++++++++++
+ docs/manual/customize-menu.txt |   16 ++++++++++++++++
+ docs/manual/customize.txt      |    2 ++
+ 4 files changed, 47 insertions(+)
+ create mode 100644 Config.in.user
+ create mode 100644 docs/manual/customize-menu.txt
 
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index b09472d..767f622 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -39,13 +39,6 @@ config BR2_PACKAGE_XENOMAI_VERSION
- 	  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
- 	  Kernel -> Linux Kernel Extensions menu.
+diff --git a/Config.in b/Config.in
+index bbb9885..7b92d67 100644
+--- a/Config.in
++++ b/Config.in
+@@ -437,6 +437,13 @@ config BR2_PACKAGE_OVERRIDE_FILE
+ 	  as the source directory for a particular package. See the
+ 	  Buildroot documentation for more details on this feature.
  
--config BR2_PACKAGE_XENOMAI_SMP
--	bool "Enable SMP support"
--	depends on BR2_cortex_a9 || !BR2_arm # only A9 has SMP support
--	help
--	  This option allows to enable or disable SMP support. It has
--	  to match your kernel configuration.
--
- config BR2_PACKAGE_XENOMAI_TESTSUITE
-        bool "Install testsuite"
-        help
-diff --git a/package/xenomai/xenomai-thumb-fix.patch b/package/xenomai/xenomai-thumb-fix.patch
-deleted file mode 100644
-index 7c98c2e..0000000
---- a/package/xenomai/xenomai-thumb-fix.patch
-+++ /dev/null
-@@ -1,157 +0,0 @@
--From ad3714e925f5c6b4ae0e0d31c4bab7f8c5e659db Mon Sep 17 00:00:00 2001
--From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
--Date: Fri, 10 Aug 2012 21:55:41 +0200
--Subject: [PATCH] hal/arm: fix compilation for thumb
--
-----
-- include/asm-arm/atomic.h |    3 ++
-- ksrc/arch/arm/switch.S   |   84 +++++++++++++++++++++++++++------------------
-- 2 files changed, 53 insertions(+), 34 deletions(-)
--
--diff --git a/include/asm-arm/atomic.h b/include/asm-arm/atomic.h
--index 5d55ae8..ae96847 100644
----- a/include/asm-arm/atomic.h
--+++ b/include/asm-arm/atomic.h
--@@ -183,6 +183,9 @@ xnarch_atomic_cmpxchg(xnarch_atomic_t *ptr,
-- 		"ldrex	%1, [%3]\n"
-- 		"mov	%0, #0\n"
-- 		"teq	%1, %4\n"
--+#ifdef __thumb__
--+		"it	eq\n"
--+#endif
-- 		"strexeq %0, %5, [%3]\n"
-- 		    : "=&r" (res), "=&r" (curval), "+Qo" (ptr->counter)
-- 		    : "r" (&ptr->counter), "Ir" (oldval), "r" (newval)
--diff --git a/ksrc/arch/arm/switch.S b/ksrc/arch/arm/switch.S
--index 83f4746..95c355f 100644
----- a/ksrc/arch/arm/switch.S
--+++ b/ksrc/arch/arm/switch.S
--@@ -37,6 +37,11 @@
-- 	.endm
-- #endif
-- 
--+#if LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 31)
--+#define ARM(x...)	x
--+#define THUMB(x...)
--+#endif
--+
-- #if LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 37)
-- #ifdef CONFIG_MMU
-- #define USE_DOMAINS
--@@ -83,18 +88,19 @@
--  * r0 = pointer to union vfp_state, r1 = fpexc
--  */
-- ENTRY(rthal_vfp_save)
---    VFPFSTMIA	r0, r2			@ save the working registers
---    VFPFMRX	r2, FPSCR		@ current status
---    tst		r1, #FPEXC_EX		@ is there additional state to save?
---    beq 1f
---    VFPFMRX	r3, FPINST		@ FPINST (only if FPEXC.EX is set)
---    tst		r1, #FPEXC_FP2V		@ is there an FPINST2 to read?
---    beq 1f
---    VFPFMRX	r12, FPINST2	@ FPINST2 if needed (and present)
--+	VFPFSTMIA	r0, r2		@ save the working registers
--+	VFPFMRX		r2, FPSCR	@ current status
--+	tst		r1, #FPEXC_EX	@ is there additional state to save?
--+	beq		1f
--+	VFPFMRX		r3, FPINST	@ FPINST (only if FPEXC.EX is set)
--+	tst		r1, #FPEXC_FP2V	@ is there an FPINST2 to read?
--+	beq		1f
--+	VFPFMRX		r12, FPINST2	@ FPINST2 if needed (and present)
-- 1:
---    stmia	r0, {r1, r2, r3, r12}	@ save FPEXC, FPSCR, FPINST, FPINST2
---    mov		pc, lr
---
--+	stmia		r0, {r1, r2, r3, r12}	@ save FPEXC, FPSCR, FPINST, FPINST2
--+	mov		pc, lr
--+ENDPROC(rthal_vfp_save)
--+	
-- /* Copied from no_old_VFP_process in arch/arm/vfp/vfphw.S
--  * r0 = pointer to union vfp_state
--  * r1 = current cpu
--@@ -102,20 +108,21 @@ ENTRY(rthal_vfp_save)
-- ENTRY(rthal_vfp_load)
-- #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 2, 0) \
-- 	|| defined(CONFIG_VFP_3_2_BACKPORT)) && defined(CONFIG_SMP)
---    str 	r1, [r0, #VFP_CPU]
--+	str		r1, [r0, #VFP_CPU]
-- #endif
---    VFPFLDMIA	r0, r2			@ reload the working registers while
--+	VFPFLDMIA	r0, r2		@ reload the working registers while
-- 					@ FPEXC is in a safe state
---    ldmia	r0, {r1, r2, r3, r12}	@ load FPEXC, FPSCR, FPINST, FPINST2
---    tst		r1, #FPEXC_EX		@ is there additional state to restore?
---    beq		1f
---    VFPFMXR	FPINST, r3		@ restore FPINST (only if FPEXC.EX is set)
---    tst		r1, #FPEXC_FP2V		@ is there an FPINST2 to write?
---    beq		1f
---    VFPFMXR	FPINST2, r12	@ FPINST2 if needed (and present)
--+	ldmia		r0, {r1, r2, r3, r12}	@ load FPEXC, FPSCR, FPINST, FPINST2
--+	tst		r1, #FPEXC_EX	@ is there additional state to restore?
--+	beq		1f
--+	VFPFMXR		FPINST, r3	@ restore FPINST (only if FPEXC.EX is set)
--+	tst		r1, #FPEXC_FP2V	@ is there an FPINST2 to write?
--+	beq		1f
--+	VFPFMXR		FPINST2, r12	@ FPINST2 if needed (and present)
-- 1:
---    VFPFMXR	FPSCR, r2		@ restore status
---    mov		pc, lr
--+	VFPFMXR		FPSCR, r2	@ restore status
--+	mov		pc, lr
--+ENDPROC(rthal_vfp_load)
-- #endif
-- 
-- /*
--@@ -144,28 +151,37 @@ ENTRY(rthal_vfp_load)
--  * r0 = previous task_struct, r1 = previous thread_info, r2 = next thread_info
--  */
-- ENTRY(rthal_thread_switch)
---    add     ip, r1, #TI_CPU_SAVE
---    ldr     r3, [r2, #TI_TP_VALUE]
---    stmia   ip!, {r4 - sl, fp, sp, lr}      @ Store most regs on stack
--+	add     ip, r1, #TI_CPU_SAVE
--+	ldr     r3, [r2, #TI_TP_VALUE]
--+ ARM(	stmia	ip!, {r4 - sl, fp, sp, lr} )	@ Store most regs on stack
--+ THUMB(	stmia	ip!, {r4 - sl, fp}	   )	@ Store most regs on stack
--+ THUMB(	str	sp, [ip], #4		   )
--+ THUMB(	str	lr, [ip], #4		   )
-- #ifdef USE_DOMAINS
---    ldr     r6, [r2, #TI_CPU_DOMAIN]
--+	ldr     r6, [r2, #TI_CPU_DOMAIN]
-- #endif
-- 
---    clear_exclusive_monitor
---    set_tls r3, r4, r5
--+	clear_exclusive_monitor
--+	set_tls r3, r4, r5
-- #ifdef USE_DOMAINS
---    mcr     p15, 0, r6, c3, c0, 0           @ Set domain register
--+	mcr     p15, 0, r6, c3, c0, 0           @ Set domain register
-- #endif
---    fpu_switch r4
---    add	    r4, r2, #TI_CPU_SAVE
---    ldmia   r4, {r4 - sl, fp, sp, pc}       @ Load all regs saved previously
--+	fpu_switch r4
--+ ARM(	add	r4, r2, #TI_CPU_SAVE	   )
--+ ARM(	ldmia	r4, {r4 - sl, fp, sp, pc}  )	@ Load all regs saved previously
--+ THUMB(	add	ip, r2, #TI_CPU_SAVE	   )
--+ THUMB(	ldmia	ip!, {r4 - sl, fp}	   )	@ Load all regs saved previously
--+ THUMB(	ldr	sp, [ip], #4		   )
--+ THUMB(	ldr	pc, [ip]		   )
--+ENDPROC(rthal_thread_switch)
-- 
-- /*
--  * r4 = xnarch_thread_trampoline
--  * r5 = xnarchtcb_t *
--  */
-- ENTRY(rthal_thread_trampoline)
---    mov     r0, r5
---    mov     pc, r4
--+	mov	r0, r5
--+	mov	pc, r4
--+ENDPROC(rthal_thread_trampoline)
-- 
-- // vim: ts=4 et sw=4 sts=4
---- 
--1.7.2.5
--
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index f40cbdc..fbf20b5 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -7,7 +7,7 @@
++config BR2_LOCAL_MENUCONFIG_FILE
++	string "location of a local menu configuration file"
++	default "$(TOPDIR)/Config.in.local"
++	help
++	  A local menu configuration file can be used to add custom
++	  entries to the Buildroot configuration menu.
++
+ config BR2_GLOBAL_PATCH_DIR
+ 	string "global patch directory"
+ 	help
+@@ -469,3 +476,5 @@ source "boot/Config.in"
+ source "linux/Config.in"
  
- XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
- ifeq ($(XENOMAI_VERSION),)
--XENOMAI_VERSION = 2.6.1
-+XENOMAI_VERSION = 2.6.2.1
- endif
+ source "Config.in.legacy"
++
++source "Config.in.user"
+diff --git a/Config.in.user b/Config.in.user
+new file mode 100644
+index 0000000..e69de29
+diff --git a/Makefile b/Makefile
+index 0a91658..2235403 100644
+--- a/Makefile
++++ b/Makefile
+@@ -711,6 +711,26 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+ 		$(CONFIG_CONFIG_IN)
  
- XENOMAI_SITE = http://download.gna.org/xenomai/stable/
-@@ -18,10 +18,6 @@ XENOMAI_LICENSE_FILES = debian/copyright include/COPYING src/skins/native/COPYIN
++# Update the user menu configuration file
++.PHONY: update-user-config
++menuconfig nconfig gconfig xconfig config oldconfig randconfig allyesconfig allnoconfig silentoldconfig release randpackageconfig allyespackageconfig allnopackageconfig source-check print-version olddefconfig: update-user-config
++%_defconfig: update-user-config
++CONFIG_USER_IN=Config.in.user
++CONFIG_LOCAL_IN:=$(shell grep -E '^BR2_LOCAL_MENUCONFIG_FILE=' $(BUILDROOT_CONFIG) | sed -r -e 's/^BR2_LOCAL_MENUCONFIG_FILE=\"//' -e 's/\"$$//' -e 's,\$$\(TOPDIR\),$(TOPDIR),g')
++update-user-config: $(CONFIG_USER_IN)
++	@echo "# Buildroot auto-generated file: DO NOT EDIT" >$<
++ifeq ($(CONFIG_LOCAL_IN),)
++	@echo "# No user menu configuration file specified" >>$<
++else
++	$(call MESSAGE,"Updating user configuration file")
++	@if test -e $(CONFIG_LOCAL_IN); then \
++		echo "# User menu configuration" >>$< ; \
++		echo "source \"$(CONFIG_LOCAL_IN)\"" >>$< ; \
++	else \
++		echo "# User menu configuration file does not exist: $(CONFIG_LOCAL_IN)" >>$<; \
++	fi
++endif
++
+ # check if download URLs are outdated
+ source-check:
+ 	$(MAKE) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
+diff --git a/docs/manual/customize-menu.txt b/docs/manual/customize-menu.txt
+new file mode 100644
+index 0000000..f4825b7
+--- /dev/null
++++ b/docs/manual/customize-menu.txt
+@@ -0,0 +1,16 @@
++// -*- mode:doc -*- ;
++
++[[menu-custom]]
++Customizing the menu
++~~~~~~~~~~~~~~~~~~~~
++
++A local menu configuration file can be used to add custom entries to the
++Buildroot configuration menu.
++
++The +BR2_LOCAL_MENUCONFIG_FILE+ configuration file option can be
++used to specify the location of a local menu configuration file.
++
++A knowledge of the Kconfig configuration language syntax will be required
++in order to write a local menu configuration file. The documentation for this
++syntax is available at
++http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt[]
+diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
+index 0456ef1..61cb9fa 100644
+--- a/docs/manual/customize.txt
++++ b/docs/manual/customize.txt
+@@ -17,3 +17,5 @@ include::customize-toolchain.txt[]
+ include::customize-store.txt[]
  
- XENOMAI_INSTALL_STAGING = YES
- 
--ifeq ($(BR2_PACKAGE_XENOMAI_SMP),y)
--XENOMAI_CONF_OPT += --enable-smp
--endif
--
- XENOMAI_CONF_OPT += --includedir=/usr/include/xenomai/
- 
- ifeq ($(BR2_HAVE_DEVFILES),)
+ include::customize-packages.txt[]
++
++include::customize-menu.txt[]
+-- 
+1.7.10.4
