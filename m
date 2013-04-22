@@ -1,118 +1,341 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Mon, 22 Apr 2013 13:37:28 +0200
-Subject: [Buildroot] [PATCH 4/7] arc: Add ARC specific kernel headers
+Date: Mon, 22 Apr 2013 13:37:30 +0200
+Subject: [Buildroot] [PATCH 6/7] arc: Add support for ARC-specific uClibc
 In-Reply-To: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
 References: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1366630651-6857-5-git-send-email-mjonker@synopsys.com>
+Message-ID: <1366630651-6857-7-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ARC architecture will be on kernel.org from 3.9 onwards. For now
-we still need to use a out-of-tree kernel tarball.
-
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 ---
- Makefile                                   |    1 +
- toolchain/kernel-headers/Config.in         |   19 ++++++++++++++-----
- toolchain/kernel-headers/kernel-headers.mk |    4 +++-
- 3 files changed, 18 insertions(+), 6 deletions(-)
+ toolchain/uClibc/Config.in                |   12 +-
+ toolchain/uClibc/uClibc-0.9.33-arc.config |  251 +++++++++++++++++++++++++++++
+ toolchain/uClibc/uclibc.mk                |    4 +
+ 3 files changed, 264 insertions(+), 3 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.33-arc.config
 
-diff --git a/Makefile b/Makefile
-index 0a91658..8fef492 100644
---- a/Makefile
-+++ b/Makefile
-@@ -238,6 +238,7 @@ ARCH:=$(call qstrip,$(BR2_ARCH))
+diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
+index b98e2e8..6e85fdd 100644
+--- a/toolchain/uClibc/Config.in
++++ b/toolchain/uClibc/Config.in
+@@ -16,12 +16,16 @@ choice
  
- KERNEL_ARCH:=$(shell echo "$(ARCH)" | sed -e "s/-.*//" \
- 	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
-+	-e s/arc.*/arc/ \
- 	-e s/arm.*/arm/ -e s/sa110/arm/ \
- 	-e s/aarch64/arm64/ \
- 	-e s/bfin/blackfin/ \
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index ec75c34..7db815b 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -7,6 +7,7 @@ comment "Kernel Header Options"
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_3_8
-+	default BR2_KERNEL_HEADERS_3_8_ARC	if (BR2_arc || BR2_arceb)
- 	help
- 	  Select the version of kernel header files you wish to use.
- 	  You must select the correct set of header files to match
-@@ -17,35 +18,42 @@ choice
+ 	config BR2_UCLIBC_VERSION_0_9_32
+ 		bool "uClibc 0.9.32.x"
+-		depends on !(BR2_avr32 || BR2_sh || BR2_xtensa)
++		depends on !(BR2_arc || BR2_arceb || BR2_avr32 || BR2_sh || BR2_xtensa)
  
- 	config BR2_KERNEL_HEADERS_3_0
- 		bool "Linux 3.0.x kernel headers"
-+		depends on !(BR2_arc || BR2_arceb)
- 
- 	config BR2_KERNEL_HEADERS_3_1
- 		bool "Linux 3.1.x kernel headers"
--		depends on BR2_DEPRECATED
-+		depends on BR2_DEPRECATED && !(BR2_arc || BR2_arceb)
- 
- 	config BR2_KERNEL_HEADERS_3_2
- 		bool "Linux 3.2.x kernel headers"
-+		depends on !(BR2_arc || BR2_arceb)
- 
- 	config BR2_KERNEL_HEADERS_3_3
- 		bool "Linux 3.3.x kernel headers"
--		depends on BR2_DEPRECATED
-+		depends on BR2_DEPRECATED && !(BR2_arc || BR2_arceb)
- 
- 	config BR2_KERNEL_HEADERS_3_4
- 		bool "Linux 3.4.x kernel headers"
-+		depends on !(BR2_arc || BR2_arceb)
- 
- 	config BR2_KERNEL_HEADERS_3_5
- 		bool "Linux 3.5.x kernel headers"
--		depends on BR2_DEPRECATED
-+		depends on BR2_DEPRECATED && !(BR2_arc || BR2_arceb)
- 
- 	config BR2_KERNEL_HEADERS_3_6
- 		bool "Linux 3.6.x kernel headers"
--		depends on BR2_DEPRECATED
-+		depends on BR2_DEPRECATED && !(BR2_arc || BR2_arceb)
- 
- 	config BR2_KERNEL_HEADERS_3_7
- 		bool "Linux 3.7.x kernel headers"
--		depends on BR2_DEPRECATED
-+		depends on BR2_DEPRECATED && !(BR2_arc || BR2_arceb)
- 
- 	config BR2_KERNEL_HEADERS_3_8
- 		bool "Linux 3.8.x kernel headers"
-+		depends on !(BR2_arc || BR2_arceb)
+ 	config BR2_UCLIBC_VERSION_0_9_33
+ 		bool "uClibc 0.9.33.x"
+-		depends on !BR2_xtensa
+-
++		depends on !(BR2_arc || BR2_arceb || BR2_xtensa)
 +	
-+	config BR2_KERNEL_HEADERS_3_8_ARC
-+		bool "Linux 3.8-arc kernel headers"
++	config BR2_UCLIBC_VERSION_0_9_33_ARC
++		bool "uClibc 0.9.33.x-arc"
++		depends on (BR2_arc || BR2_arceb)
++	
+ 	config BR2_UCLIBC_VERSION_SNAPSHOT
+ 		bool "daily snapshot"
  
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
-@@ -72,5 +80,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.8"		if BR2_KERNEL_HEADERS_3_8
-+	default "3.8-arc"	if BR2_KERNEL_HEADERS_3_8_ARC
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
-index adf7bc4..7c4910f 100644
---- a/toolchain/kernel-headers/kernel-headers.mk
-+++ b/toolchain/kernel-headers/kernel-headers.mk
-@@ -26,7 +26,9 @@ SUBLEVEL:=$(if $(SUBLEVEL),.$(SUBLEVEL),)
- EXTRAVERSION:=$(if $(EXTRAVERSION),.$(EXTRAVERSION),)
+@@ -39,6 +43,7 @@ config BR2_UCLIBC_VERSION_STRING
+ 	default 0.9.31.1	if BR2_UCLIBC_VERSION_0_9_31
+ 	default 0.9.32.1	if BR2_UCLIBC_VERSION_0_9_32
+ 	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
++	default 0.9.33-arc	if BR2_UCLIBC_VERSION_0_9_33_ARC
+ 	default $BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
  
- LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL)$(SUBLEVEL)$(EXTRAVERSION)
--ifeq ($(findstring x2.6.,x$(DEFAULT_KERNEL_HEADERS)),x2.6.)
-+ifeq ($(findstring arc,x$(DEFAULT_KERNEL_HEADERS)),arc)
-+LINUX_HEADERS_SITE:=$(BR2_ARC_SITE)
-+else ifeq ($(findstring x2.6.,x$(DEFAULT_KERNEL_HEADERS)),x2.6.)
- LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v2.6/
+ config BR2_UCLIBC_CONFIG
+@@ -46,6 +51,7 @@ config BR2_UCLIBC_CONFIG
+ 	default "toolchain/uClibc/uClibc-0.9.31.config" if BR2_UCLIBC_VERSION_0_9_31
+ 	default "toolchain/uClibc/uClibc-0.9.32.config" if BR2_UCLIBC_VERSION_0_9_32
+ 	default "toolchain/uClibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
++	default "toolchain/uClibc/uClibc-0.9.33-arc.config" if BR2_UCLIBC_VERSION_0_9_33_ARC
+ 	default "toolchain/uClibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
+ 	help
+ 	  Some people may wish to use their own modified uClibc configuration
+diff --git a/toolchain/uClibc/uClibc-0.9.33-arc.config b/toolchain/uClibc/uClibc-0.9.33-arc.config
+new file mode 100644
+index 0000000..d1317d3
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.33-arc.config
+@@ -0,0 +1,251 @@
++#
++# Automatically generated make config: don't edit
++# Version: 0.9.34-git
++# Fri Apr 19 17:34:07 2013
++#
++# TARGET_alpha is not set
++TARGET_arc=y
++# TARGET_arm is not set
++# TARGET_avr32 is not set
++# TARGET_bfin is not set
++# TARGET_c6x is not set
++# TARGET_cris is not set
++# TARGET_e1 is not set
++# TARGET_frv is not set
++# TARGET_h8300 is not set
++# TARGET_hppa is not set
++# TARGET_i386 is not set
++# TARGET_i960 is not set
++# TARGET_ia64 is not set
++# TARGET_m68k is not set
++# TARGET_metag is not set
++# TARGET_microblaze is not set
++# TARGET_mips is not set
++# TARGET_nios is not set
++# TARGET_nios2 is not set
++# TARGET_powerpc is not set
++# TARGET_sh is not set
++# TARGET_sh64 is not set
++# TARGET_sparc is not set
++# TARGET_v850 is not set
++# TARGET_vax is not set
++# TARGET_x86_64 is not set
++# TARGET_xtensa is not set
++
++#
++# Target Architecture Features and Options
++#
++TARGET_ARCH="arc"
++FORCE_OPTIONS_FOR_ARCH=y
++CONFIG_ARC_CPU_700=y
++TARGET_SUBARCH=""
++
++#
++# Using ELF file format
++#
++ARCH_ANY_ENDIAN=y
++ARCH_LITTLE_ENDIAN=y
++# ARCH_WANTS_BIG_ENDIAN is not set
++ARCH_WANTS_LITTLE_ENDIAN=y
++ARCH_HAS_MMU=y
++ARCH_USE_MMU=y
++UCLIBC_HAS_FLOATS=y
++UCLIBC_HAS_FPU=y
++DO_C99_MATH=y
++# DO_XSI_MATH is not set
++# UCLIBC_HAS_FENV is not set
++KERNEL_HEADERS="/slowfs/nl20dwt2p001/mjonker/src/buildroot/output/toolchain/linux/include"
++HAVE_DOT_CONFIG=y
++
++#
++# General Library Settings
++#
++DOPIC=y
++HAVE_SHARED=y
++# FORCE_SHAREABLE_TEXT_SEGMENTS is not set
++LDSO_LDD_SUPPORT=y
++# LDSO_CACHE_SUPPORT is not set
++LDSO_PRELOAD_ENV_SUPPORT=y
++# LDSO_PRELOAD_FILE_SUPPORT is not set
++# LDSO_STANDALONE_SUPPORT is not set
++# LDSO_PRELINK_SUPPORT is not set
++# UCLIBC_STATIC_LDCONFIG is not set
++LDSO_RUNPATH=y
++LDSO_SAFE_RUNPATH=y
++LDSO_SEARCH_INTERP_PATH=y
++LDSO_LD_LIBRARY_PATH=y
++# LDSO_NO_CLEANUP is not set
++UCLIBC_CTOR_DTOR=y
++# LDSO_GNU_HASH_SUPPORT is not set
++# HAS_NO_THREADS is not set
++LINUXTHREADS_OLD=y
++# LINUXTHREADS_NEW is not set
++# UCLIBC_HAS_THREADS_NATIVE is not set
++UCLIBC_HAS_THREADS=y
++# PTHREADS_DEBUG_SUPPORT is not set
++UCLIBC_HAS_SYSLOG=y
++UCLIBC_HAS_LFS=y
++# MALLOC is not set
++# MALLOC_SIMPLE is not set
++MALLOC_STANDARD=y
++MALLOC_GLIBC_COMPAT=y
++UCLIBC_DYNAMIC_ATEXIT=y
++# COMPAT_ATEXIT is not set
++UCLIBC_SUSV3_LEGACY=y
++# UCLIBC_SUSV3_LEGACY_MACROS is not set
++UCLIBC_SUSV4_LEGACY=y
++# UCLIBC_STRICT_HEADERS is not set
++# UCLIBC_HAS_STUBS is not set
++UCLIBC_HAS_SHADOW=y
++UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y
++UCLIBC_HAS___PROGNAME=y
++UCLIBC_HAS_PTY=y
++ASSUME_DEVPTS=y
++UNIX98PTY_ONLY=y
++UCLIBC_HAS_GETPT=y
++UCLIBC_HAS_LIBUTIL=y
++UCLIBC_HAS_TM_EXTENSIONS=y
++UCLIBC_HAS_TZ_CACHING=y
++UCLIBC_HAS_TZ_FILE=y
++UCLIBC_HAS_TZ_FILE_READ_MANY=y
++UCLIBC_TZ_FILE_PATH="/etc/TZ"
++UCLIBC_FALLBACK_TO_ETC_LOCALTIME=y
++
++#
++# Advanced Library Settings
++#
++UCLIBC_PWD_BUFFER_SIZE=256
++UCLIBC_GRP_BUFFER_SIZE=256
++
++#
++# Support various families of functions
++#
++UCLIBC_LINUX_MODULE_26=y
++# UCLIBC_LINUX_MODULE_24 is not set
++UCLIBC_LINUX_SPECIFIC=y
++UCLIBC_HAS_GNU_ERROR=y
++UCLIBC_BSD_SPECIFIC=y
++UCLIBC_HAS_BSD_ERR=y
++# UCLIBC_HAS_OBSOLETE_BSD_SIGNAL is not set
++# UCLIBC_HAS_OBSOLETE_SYSV_SIGNAL is not set
++# UCLIBC_NTP_LEGACY is not set
++# UCLIBC_SV4_DEPRECATED is not set
++UCLIBC_HAS_REALTIME=y
++UCLIBC_HAS_ADVANCED_REALTIME=y
++UCLIBC_HAS_EPOLL=y
++UCLIBC_HAS_XATTR=y
++UCLIBC_HAS_PROFILING=y
++UCLIBC_HAS_CRYPT_IMPL=y
++# UCLIBC_HAS_SHA256_CRYPT_IMPL is not set
++# UCLIBC_HAS_SHA512_CRYPT_IMPL is not set
++UCLIBC_HAS_CRYPT=y
++UCLIBC_HAS_NETWORK_SUPPORT=y
++UCLIBC_HAS_SOCKET=y
++UCLIBC_HAS_IPV4=y
++# UCLIBC_HAS_IPV6 is not set
++# UCLIBC_HAS_RPC is not set
++UCLIBC_USE_NETLINK=y
++UCLIBC_SUPPORT_AI_ADDRCONFIG=y
++# UCLIBC_HAS_BSD_RES_CLOSE is not set
++UCLIBC_HAS_COMPAT_RES_STATE=y
++# UCLIBC_HAS_EXTRA_COMPAT_RES_STATE is not set
++UCLIBC_HAS_RESOLVER_SUPPORT=y
++UCLIBC_HAS_LIBRESOLV_STUB=y
++UCLIBC_HAS_LIBNSL_STUB=y
++
++#
++# String and Stdio Support
++#
++# UCLIBC_HAS_STRING_GENERIC_OPT is not set
++UCLIBC_HAS_STRING_ARCH_OPT=y
++UCLIBC_HAS_CTYPE_TABLES=y
++UCLIBC_HAS_CTYPE_SIGNED=y
++# UCLIBC_HAS_CTYPE_UNSAFE is not set
++UCLIBC_HAS_CTYPE_CHECKED=y
++# UCLIBC_HAS_CTYPE_ENFORCED is not set
++UCLIBC_HAS_WCHAR=y
++UCLIBC_HAS_LOCALE=y
++# UCLIBC_BUILD_ALL_LOCALE is not set
++UCLIBC_BUILD_MINIMAL_LOCALE=y
++# UCLIBC_PREGENERATED_LOCALE_DATA is not set
++UCLIBC_BUILD_MINIMAL_LOCALES="en_US"
++UCLIBC_HAS_XLOCALE=y
++UCLIBC_HAS_HEXADECIMAL_FLOATS=y
++# UCLIBC_HAS_GLIBC_DIGIT_GROUPING is not set
++UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
++UCLIBC_PRINTF_SCANF_POSITIONAL_ARGS=9
++# UCLIBC_HAS_STDIO_BUFSIZ_NONE is not set
++# UCLIBC_HAS_STDIO_BUFSIZ_256 is not set
++# UCLIBC_HAS_STDIO_BUFSIZ_512 is not set
++# UCLIBC_HAS_STDIO_BUFSIZ_1024 is not set
++# UCLIBC_HAS_STDIO_BUFSIZ_2048 is not set
++UCLIBC_HAS_STDIO_BUFSIZ_4096=y
++# UCLIBC_HAS_STDIO_BUFSIZ_8192 is not set
++UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
++# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_4 is not set
++# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_8 is not set
++# UCLIBC_HAS_STDIO_SHUTDOWN_ON_ABORT is not set
++# UCLIBC_HAS_STDIO_GETC_MACRO is not set
++# UCLIBC_HAS_STDIO_PUTC_MACRO is not set
++UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
++# UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set
++UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
++# UCLIBC_HAS_FOPEN_CLOSEEXEC_MODE is not set
++UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
++UCLIBC_HAS_PRINTF_M_SPEC=y
++UCLIBC_HAS_ERRNO_MESSAGES=y
++# UCLIBC_HAS_SYS_ERRLIST is not set
++UCLIBC_HAS_SIGNUM_MESSAGES=y
++# UCLIBC_HAS_SYS_SIGLIST is not set
++UCLIBC_HAS_GNU_GETOPT=y
++# UCLIBC_HAS_GNU_GETSUBOPT is not set
++
++#
++# Big and Tall
++#
++UCLIBC_HAS_REGEX=y
++# UCLIBC_HAS_REGEX_OLD is not set
++UCLIBC_HAS_FNMATCH=y
++# UCLIBC_HAS_FNMATCH_OLD is not set
++# UCLIBC_HAS_WORDEXP is not set
++UCLIBC_HAS_NFTW=y
++UCLIBC_HAS_FTW=y
++# UCLIBC_HAS_FTS is not set
++UCLIBC_HAS_GLOB=y
++UCLIBC_HAS_GNU_GLOB=y
++UCLIBC_HAS_UTMPX=y
++
++#
++# Library Installation Options
++#
++RUNTIME_PREFIX="/"
++DEVEL_PREFIX="/usr/"
++MULTILIB_DIR="lib"
++HARDWIRED_ABSPATH=y
++
++#
++# Security options
++#
++# UCLIBC_HAS_ARC4RANDOM is not set
++# UCLIBC_HAS_SSP is not set
++UCLIBC_BUILD_RELRO=y
++UCLIBC_BUILD_NOW=y
++UCLIBC_BUILD_NOEXECSTACK=y
++
++#
++# Development/debugging options
++#
++CROSS_COMPILER_PREFIX="/slowfs/nl20dwt2p001/mjonker/src/buildroot/output/host/usr/bin/arc-buildroot-linux-uclibc-"
++UCLIBC_EXTRA_CFLAGS=""
++# DODEBUG is not set
++# DODEBUG_PT is not set
++DOSTRIP=y
++# DOASSERTS is not set
++# SUPPORT_LD_DEBUG is not set
++# SUPPORT_LD_DEBUG_EARLY is not set
++# UCLIBC_MALLOC_DEBUGGING is not set
++# UCLIBC_HAS_BACKTRACE is not set
++WARNINGS="-Wall"
++# EXTRA_WARNINGS is not set
++# DOMULTI is not set
++# UCLIBC_MJN3_ONLY is not set
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index 2249651..1629e76 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -17,6 +17,9 @@ UCLIBC_VERSION:=$(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
+ ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+ UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
+ UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc
++else ifeq ($(findstring arc,$(UCLIBC_VERSION)),arc)
++UCLIBC_SITE:=$(BR2_ARC_SITE)
++UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_VERSION)
  else
- LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v3.x/
+ UCLIBC_SITE:=http://www.uclibc.org/downloads
+ UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_VERSION)
+@@ -31,6 +34,7 @@ UCLIBC_TARGET_ARCH:=$(shell $(SHELL) -c "echo $(ARCH) | sed \
+ 		-e 's/-.*//' \
+ 		-e 's/i.86/i386/' \
+ 		-e 's/sparc.*/sparc/' \
++		-e 's/arc.*/arc/g' \
+ 		-e 's/arm.*/arm/g' \
+ 		-e 's/m68k.*/m68k/' \
+ 		-e 's/ppc/powerpc/g' \
 -- 
 1.7.0.4
