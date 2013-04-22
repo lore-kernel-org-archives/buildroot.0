@@ -1,67 +1,76 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Mon, 22 Apr 2013 13:37:24 +0200
-Subject: [Buildroot] [PATCH 0/7] RFC: ARC port
-Message-ID: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
+Date: Mon, 22 Apr 2013 13:37:25 +0200
+Subject: [Buildroot] [PATCH 1/7] arc: Add ARC and ARC BE architecture
+In-Reply-To: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
+References: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <1366630651-6857-2-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi BuildRoot developers,
+Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs that
+can be used from deeply embedded to high performance host applications.
 
-In the following patch series I've added ARC support to the "master" tree
-of BuildRoot. As ARC support is not yet in all upstream open source packages,
-I've taken the freedom to add an option for an additional download site, from
-which ARC-specific versions of gcc, binutils, etc. can be downloaded.
-
-ARC will be in Linux 3.9, so that would be the first package that can be
-removed from this ARC-specific download site.
-
-The below patchset builds the toolchain, and a working root file system. Most
-simple packages build OK, but mplayer for instance does not have ARC support,
-and there are probably others as well.
-
-Could you please have a look at the patches and let me know what to do to
-make them BuildRoot-worthy?
-
-Thanks,
-
-Mischa
-
-Mischa Jonker (7):
-  arc: Add ARC and ARC BE architecture
-  arc: Add option for ARC-specific download site
-  arc: Add support for ARC-specific binutils
-  arc: Add ARC specific kernel headers
-  arc: Add support for ARC-specific GCC
-  arc: Add support for ARC-specific uClibc
-  arc: Make sure that libgcc doesn't get included when it doesn't exist
-    yet
-
- Config.in                                          |    9 +
- Makefile                                           |    1 +
- arch/Config.in                                     |   18 ++
- arch/Config.in.arc                                 |   10 +
- package/binutils/Config.in.host                    |   17 +-
- .../300-001_ld_makefile_patch.patch                |   24 ++
- .../300-012_check_ldrunpath_length.patch           |   21 ++
- .../binutils/binutils-2.19-arc/500-sysroot.patch   |   36 +++
- package/binutils/binutils.mk                       |    3 +
- support/gnuconfig/config.sub                       |    4 +-
- toolchain/Config.in                                |    3 +-
- .../gcc/4.4.7-arc/fix_branch_out_of_range.patch    |   22 ++
- toolchain/gcc/Config.in                            |   22 +-
- toolchain/gcc/gcc-uclibc-4.x.mk                    |    4 +
- toolchain/kernel-headers/Config.in                 |   19 +-
- toolchain/kernel-headers/kernel-headers.mk         |    4 +-
- toolchain/uClibc/Config.in                         |   12 +-
- toolchain/uClibc/uClibc-0.9.33-arc.config          |  251 ++++++++++++++++++++
- toolchain/uClibc/uclibc.mk                         |   14 +-
- 19 files changed, 466 insertions(+), 28 deletions(-)
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+---
+ arch/Config.in     |   18 ++++++++++++++++++
+ arch/Config.in.arc |   10 ++++++++++
+ 2 files changed, 28 insertions(+), 0 deletions(-)
  create mode 100644 arch/Config.in.arc
- create mode 100644 package/binutils/binutils-2.19-arc/300-001_ld_makefile_patch.patch
- create mode 100644 package/binutils/binutils-2.19-arc/300-012_check_ldrunpath_length.patch
- create mode 100644 package/binutils/binutils-2.19-arc/500-sysroot.patch
- create mode 100644 toolchain/gcc/4.4.7-arc/fix_branch_out_of_range.patch
- create mode 100644 toolchain/uClibc/uClibc-0.9.33-arc.config
+
+diff --git a/arch/Config.in b/arch/Config.in
+index 795f24f..46edbab 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -7,6 +7,20 @@ choice
+ 	help
+ 	  Select the target architecture family to build for.
+ 
++config BR2_arc
++	bool "ARC (little endian)"
++	help
++	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
++	  that can be used from deeply embedded to high performance host
++	  applications. Little endian.
++
++config BR2_arceb
++	bool "ARC (big endian)"
++	help
++	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
++	  that can be used from deeply embedded to high performance host
++	  applications. Big endian.
++
+ config BR2_arm
+ 	bool "ARM (little endian)"
+ 	help
+@@ -175,6 +189,10 @@ config BR2_GCC_TARGET_ABI
+ config BR2_GCC_TARGET_CPU
+ 	string
+ 
++if BR2_arc || BR2_arceb
++source "arch/Config.in.arc"
++endif
++
+ if BR2_arm || BR2_armeb
+ source "arch/Config.in.arm"
+ endif
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+new file mode 100644
+index 0000000..80b2dc4
+--- /dev/null
++++ b/arch/Config.in.arc
+@@ -0,0 +1,10 @@
++config BR2_ARCH
++	default "arc"	if BR2_arc
++	default "arceb"	if BR2_arceb
++
++config BR2_ENDIAN
++	default "LITTLE" if BR2_arc
++	default "BIG"	 if BR2_arceb
++
++config BR2_GCC_TARGET_CPU
++	default "arc700"
+-- 
+1.7.0.4
