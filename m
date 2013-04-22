@@ -1,341 +1,190 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Mon, 22 Apr 2013 13:37:30 +0200
-Subject: [Buildroot] [PATCH 6/7] arc: Add support for ARC-specific uClibc
+Date: Mon, 22 Apr 2013 13:37:29 +0200
+Subject: [Buildroot] [PATCH 5/7] arc: Add support for ARC-specific GCC
 In-Reply-To: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
 References: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1366630651-6857-7-git-send-email-mjonker@synopsys.com>
+Message-ID: <1366630651-6857-6-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ARC support in GCC is not upstream yet...
+
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 ---
- toolchain/uClibc/Config.in                |   12 +-
- toolchain/uClibc/uClibc-0.9.33-arc.config |  251 +++++++++++++++++++++++++++++
- toolchain/uClibc/uclibc.mk                |    4 +
- 3 files changed, 264 insertions(+), 3 deletions(-)
- create mode 100644 toolchain/uClibc/uClibc-0.9.33-arc.config
+ support/gnuconfig/config.sub                       |    4 +-
+ toolchain/Config.in                                |    3 +-
+ .../gcc/4.4.7-arc/fix_branch_out_of_range.patch    |   22 ++++++++++++++++++++
+ toolchain/gcc/Config.in                            |   22 ++++++++++++-------
+ toolchain/gcc/gcc-uclibc-4.x.mk                    |    4 +++
+ 5 files changed, 44 insertions(+), 11 deletions(-)
+ create mode 100644 toolchain/gcc/4.4.7-arc/fix_branch_out_of_range.patch
 
-diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
-index b98e2e8..6e85fdd 100644
---- a/toolchain/uClibc/Config.in
-+++ b/toolchain/uClibc/Config.in
-@@ -16,12 +16,16 @@ choice
+diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
+index 8509813..b2958ad 100755
+--- a/support/gnuconfig/config.sub
++++ b/support/gnuconfig/config.sub
+@@ -259,7 +259,7 @@ case $basic_machine in
+ 	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
+ 	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
+ 	| am33_2.0 \
+-	| arc \
++	| arc | arceb \
+ 	| arm | arm[bl]e | arme[lb] | armv[2-8] | armv[3-8][lb] | armv7[arm] \
+ 	| avr | avr32 \
+ 	| be32 | be64 \
+@@ -372,7 +372,7 @@ case $basic_machine in
+ 	| aarch64-* | aarch64_be-* \
+ 	| alpha-* | alphaev[4-8]-* | alphaev56-* | alphaev6[78]-* \
+ 	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
+-	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* \
++	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* | arceb-* \
+ 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
+ 	| avr-* | avr32-* \
+ 	| be32-* | be64-* \
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index fa78cf4..5d1c592 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -22,7 +22,8 @@ config BR2_TOOLCHAIN_EXTERNAL
  
- 	config BR2_UCLIBC_VERSION_0_9_32
- 		bool "uClibc 0.9.32.x"
--		depends on !(BR2_avr32 || BR2_sh || BR2_xtensa)
-+		depends on !(BR2_arc || BR2_arceb || BR2_avr32 || BR2_sh || BR2_xtensa)
- 
- 	config BR2_UCLIBC_VERSION_0_9_33
- 		bool "uClibc 0.9.33.x"
--		depends on !BR2_xtensa
--
-+		depends on !(BR2_arc || BR2_arceb || BR2_xtensa)
-+	
-+	config BR2_UCLIBC_VERSION_0_9_33_ARC
-+		bool "uClibc 0.9.33.x-arc"
-+		depends on (BR2_arc || BR2_arceb)
-+	
- 	config BR2_UCLIBC_VERSION_SNAPSHOT
- 		bool "daily snapshot"
- 
-@@ -39,6 +43,7 @@ config BR2_UCLIBC_VERSION_STRING
- 	default 0.9.31.1	if BR2_UCLIBC_VERSION_0_9_31
- 	default 0.9.32.1	if BR2_UCLIBC_VERSION_0_9_32
- 	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
-+	default 0.9.33-arc	if BR2_UCLIBC_VERSION_0_9_33_ARC
- 	default $BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
- 
- config BR2_UCLIBC_CONFIG
-@@ -46,6 +51,7 @@ config BR2_UCLIBC_CONFIG
- 	default "toolchain/uClibc/uClibc-0.9.31.config" if BR2_UCLIBC_VERSION_0_9_31
- 	default "toolchain/uClibc/uClibc-0.9.32.config" if BR2_UCLIBC_VERSION_0_9_32
- 	default "toolchain/uClibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
-+	default "toolchain/uClibc/uClibc-0.9.33-arc.config" if BR2_UCLIBC_VERSION_0_9_33_ARC
- 	default "toolchain/uClibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
+ config BR2_TOOLCHAIN_CTNG
+ 	bool "Crosstool-NG toolchain"
+-	depends on !BR2_microblaze && !BR2_aarch64 && !BR2_xtensa
++	depends on !BR2_microblaze && !BR2_aarch64 && !BR2_xtensa && \
++		   !BR2_arc && !BR2_arceb
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
  	help
- 	  Some people may wish to use their own modified uClibc configuration
-diff --git a/toolchain/uClibc/uClibc-0.9.33-arc.config b/toolchain/uClibc/uClibc-0.9.33-arc.config
+ 	  Say 'y' if you want to generate the toolchain with crosstool-NG
+diff --git a/toolchain/gcc/4.4.7-arc/fix_branch_out_of_range.patch b/toolchain/gcc/4.4.7-arc/fix_branch_out_of_range.patch
 new file mode 100644
-index 0000000..d1317d3
+index 0000000..f042a71
 --- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.33-arc.config
-@@ -0,0 +1,251 @@
-+#
-+# Automatically generated make config: don't edit
-+# Version: 0.9.34-git
-+# Fri Apr 19 17:34:07 2013
-+#
-+# TARGET_alpha is not set
-+TARGET_arc=y
-+# TARGET_arm is not set
-+# TARGET_avr32 is not set
-+# TARGET_bfin is not set
-+# TARGET_c6x is not set
-+# TARGET_cris is not set
-+# TARGET_e1 is not set
-+# TARGET_frv is not set
-+# TARGET_h8300 is not set
-+# TARGET_hppa is not set
-+# TARGET_i386 is not set
-+# TARGET_i960 is not set
-+# TARGET_ia64 is not set
-+# TARGET_m68k is not set
-+# TARGET_metag is not set
-+# TARGET_microblaze is not set
-+# TARGET_mips is not set
-+# TARGET_nios is not set
-+# TARGET_nios2 is not set
-+# TARGET_powerpc is not set
-+# TARGET_sh is not set
-+# TARGET_sh64 is not set
-+# TARGET_sparc is not set
-+# TARGET_v850 is not set
-+# TARGET_vax is not set
-+# TARGET_x86_64 is not set
-+# TARGET_xtensa is not set
++++ b/toolchain/gcc/4.4.7-arc/fix_branch_out_of_range.patch
+@@ -0,0 +1,22 @@
++diff --git a/gcc/config/arc/arc.c b/gcc/config/arc/arc.c
++index ff602c0..b3ca4c4 100644
++--- a/gcc/config/arc/arc.c
+++++ b/gcc/config/arc/arc.c
++@@ -6565,7 +6565,7 @@ estimate required size increase).
++ 	      rtx *ccp = &XEXP (XVECEXP (pat, 0, 1), 0);
++ 
++ 	      offset = branch_dest (insn) - INSN_ADDRESSES (INSN_UID (insn));
++-	      if ((offset >= -140 && offset < 140)
+++	      if ((offset >= -120 && offset < 120)
++ 		  && rtx_equal_p (XEXP (op, 1), const0_rtx)
++  		  && compact_register_operand (XEXP (op, 0), VOIDmode)
++ 		  && equality_comparison_operator (op, VOIDmode))
++@@ -6687,7 +6687,7 @@ estimate required size increase).
++ 
++ 		  if (op0 != cmp0)
++  		    cc_clob_rtx = gen_rtx_REG (CC_ZNmode, CC_REG);
++- 		  else if ((offset >= -140 && offset < 140)
+++ 		  else if ((offset >= -120 && offset < 120)
++ 			   && rtx_equal_p (op1, const0_rtx)
++ 			   && compact_register_operand (op0, VOIDmode)
++ 			   && (GET_CODE (op) == EQ
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index d7e8715..2396e8e 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -9,44 +9,49 @@ choice
+ 	prompt "GCC compiler Version"
+ 	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
+ 	default BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 if BR2_avr32
++	default BR2_GCC_VERSION_4_4_7_ARC if BR2_arc || BR2_arceb
+ 	default BR2_GCC_VERSION_4_7_X
+ 	help
+ 	  Select the version of gcc you wish to use.
+ 
++	config BR2_GCC_VERSION_4_4_7_ARC
++		depends on BR2_arc || BR2_arceb
++		bool "gcc 4.4.7-arc"
 +
-+#
-+# Target Architecture Features and Options
-+#
-+TARGET_ARCH="arc"
-+FORCE_OPTIONS_FOR_ARCH=y
-+CONFIG_ARC_CPU_700=y
-+TARGET_SUBARCH=""
-+
-+#
-+# Using ELF file format
-+#
-+ARCH_ANY_ENDIAN=y
-+ARCH_LITTLE_ENDIAN=y
-+# ARCH_WANTS_BIG_ENDIAN is not set
-+ARCH_WANTS_LITTLE_ENDIAN=y
-+ARCH_HAS_MMU=y
-+ARCH_USE_MMU=y
-+UCLIBC_HAS_FLOATS=y
-+UCLIBC_HAS_FPU=y
-+DO_C99_MATH=y
-+# DO_XSI_MATH is not set
-+# UCLIBC_HAS_FENV is not set
-+KERNEL_HEADERS="/slowfs/nl20dwt2p001/mjonker/src/buildroot/output/toolchain/linux/include"
-+HAVE_DOT_CONFIG=y
-+
-+#
-+# General Library Settings
-+#
-+DOPIC=y
-+HAVE_SHARED=y
-+# FORCE_SHAREABLE_TEXT_SEGMENTS is not set
-+LDSO_LDD_SUPPORT=y
-+# LDSO_CACHE_SUPPORT is not set
-+LDSO_PRELOAD_ENV_SUPPORT=y
-+# LDSO_PRELOAD_FILE_SUPPORT is not set
-+# LDSO_STANDALONE_SUPPORT is not set
-+# LDSO_PRELINK_SUPPORT is not set
-+# UCLIBC_STATIC_LDCONFIG is not set
-+LDSO_RUNPATH=y
-+LDSO_SAFE_RUNPATH=y
-+LDSO_SEARCH_INTERP_PATH=y
-+LDSO_LD_LIBRARY_PATH=y
-+# LDSO_NO_CLEANUP is not set
-+UCLIBC_CTOR_DTOR=y
-+# LDSO_GNU_HASH_SUPPORT is not set
-+# HAS_NO_THREADS is not set
-+LINUXTHREADS_OLD=y
-+# LINUXTHREADS_NEW is not set
-+# UCLIBC_HAS_THREADS_NATIVE is not set
-+UCLIBC_HAS_THREADS=y
-+# PTHREADS_DEBUG_SUPPORT is not set
-+UCLIBC_HAS_SYSLOG=y
-+UCLIBC_HAS_LFS=y
-+# MALLOC is not set
-+# MALLOC_SIMPLE is not set
-+MALLOC_STANDARD=y
-+MALLOC_GLIBC_COMPAT=y
-+UCLIBC_DYNAMIC_ATEXIT=y
-+# COMPAT_ATEXIT is not set
-+UCLIBC_SUSV3_LEGACY=y
-+# UCLIBC_SUSV3_LEGACY_MACROS is not set
-+UCLIBC_SUSV4_LEGACY=y
-+# UCLIBC_STRICT_HEADERS is not set
-+# UCLIBC_HAS_STUBS is not set
-+UCLIBC_HAS_SHADOW=y
-+UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y
-+UCLIBC_HAS___PROGNAME=y
-+UCLIBC_HAS_PTY=y
-+ASSUME_DEVPTS=y
-+UNIX98PTY_ONLY=y
-+UCLIBC_HAS_GETPT=y
-+UCLIBC_HAS_LIBUTIL=y
-+UCLIBC_HAS_TM_EXTENSIONS=y
-+UCLIBC_HAS_TZ_CACHING=y
-+UCLIBC_HAS_TZ_FILE=y
-+UCLIBC_HAS_TZ_FILE_READ_MANY=y
-+UCLIBC_TZ_FILE_PATH="/etc/TZ"
-+UCLIBC_FALLBACK_TO_ETC_LOCALTIME=y
-+
-+#
-+# Advanced Library Settings
-+#
-+UCLIBC_PWD_BUFFER_SIZE=256
-+UCLIBC_GRP_BUFFER_SIZE=256
-+
-+#
-+# Support various families of functions
-+#
-+UCLIBC_LINUX_MODULE_26=y
-+# UCLIBC_LINUX_MODULE_24 is not set
-+UCLIBC_LINUX_SPECIFIC=y
-+UCLIBC_HAS_GNU_ERROR=y
-+UCLIBC_BSD_SPECIFIC=y
-+UCLIBC_HAS_BSD_ERR=y
-+# UCLIBC_HAS_OBSOLETE_BSD_SIGNAL is not set
-+# UCLIBC_HAS_OBSOLETE_SYSV_SIGNAL is not set
-+# UCLIBC_NTP_LEGACY is not set
-+# UCLIBC_SV4_DEPRECATED is not set
-+UCLIBC_HAS_REALTIME=y
-+UCLIBC_HAS_ADVANCED_REALTIME=y
-+UCLIBC_HAS_EPOLL=y
-+UCLIBC_HAS_XATTR=y
-+UCLIBC_HAS_PROFILING=y
-+UCLIBC_HAS_CRYPT_IMPL=y
-+# UCLIBC_HAS_SHA256_CRYPT_IMPL is not set
-+# UCLIBC_HAS_SHA512_CRYPT_IMPL is not set
-+UCLIBC_HAS_CRYPT=y
-+UCLIBC_HAS_NETWORK_SUPPORT=y
-+UCLIBC_HAS_SOCKET=y
-+UCLIBC_HAS_IPV4=y
-+# UCLIBC_HAS_IPV6 is not set
-+# UCLIBC_HAS_RPC is not set
-+UCLIBC_USE_NETLINK=y
-+UCLIBC_SUPPORT_AI_ADDRCONFIG=y
-+# UCLIBC_HAS_BSD_RES_CLOSE is not set
-+UCLIBC_HAS_COMPAT_RES_STATE=y
-+# UCLIBC_HAS_EXTRA_COMPAT_RES_STATE is not set
-+UCLIBC_HAS_RESOLVER_SUPPORT=y
-+UCLIBC_HAS_LIBRESOLV_STUB=y
-+UCLIBC_HAS_LIBNSL_STUB=y
-+
-+#
-+# String and Stdio Support
-+#
-+# UCLIBC_HAS_STRING_GENERIC_OPT is not set
-+UCLIBC_HAS_STRING_ARCH_OPT=y
-+UCLIBC_HAS_CTYPE_TABLES=y
-+UCLIBC_HAS_CTYPE_SIGNED=y
-+# UCLIBC_HAS_CTYPE_UNSAFE is not set
-+UCLIBC_HAS_CTYPE_CHECKED=y
-+# UCLIBC_HAS_CTYPE_ENFORCED is not set
-+UCLIBC_HAS_WCHAR=y
-+UCLIBC_HAS_LOCALE=y
-+# UCLIBC_BUILD_ALL_LOCALE is not set
-+UCLIBC_BUILD_MINIMAL_LOCALE=y
-+# UCLIBC_PREGENERATED_LOCALE_DATA is not set
-+UCLIBC_BUILD_MINIMAL_LOCALES="en_US"
-+UCLIBC_HAS_XLOCALE=y
-+UCLIBC_HAS_HEXADECIMAL_FLOATS=y
-+# UCLIBC_HAS_GLIBC_DIGIT_GROUPING is not set
-+UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
-+UCLIBC_PRINTF_SCANF_POSITIONAL_ARGS=9
-+# UCLIBC_HAS_STDIO_BUFSIZ_NONE is not set
-+# UCLIBC_HAS_STDIO_BUFSIZ_256 is not set
-+# UCLIBC_HAS_STDIO_BUFSIZ_512 is not set
-+# UCLIBC_HAS_STDIO_BUFSIZ_1024 is not set
-+# UCLIBC_HAS_STDIO_BUFSIZ_2048 is not set
-+UCLIBC_HAS_STDIO_BUFSIZ_4096=y
-+# UCLIBC_HAS_STDIO_BUFSIZ_8192 is not set
-+UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
-+# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_4 is not set
-+# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_8 is not set
-+# UCLIBC_HAS_STDIO_SHUTDOWN_ON_ABORT is not set
-+# UCLIBC_HAS_STDIO_GETC_MACRO is not set
-+# UCLIBC_HAS_STDIO_PUTC_MACRO is not set
-+UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
-+# UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set
-+UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
-+# UCLIBC_HAS_FOPEN_CLOSEEXEC_MODE is not set
-+UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
-+UCLIBC_HAS_PRINTF_M_SPEC=y
-+UCLIBC_HAS_ERRNO_MESSAGES=y
-+# UCLIBC_HAS_SYS_ERRLIST is not set
-+UCLIBC_HAS_SIGNUM_MESSAGES=y
-+# UCLIBC_HAS_SYS_SIGLIST is not set
-+UCLIBC_HAS_GNU_GETOPT=y
-+# UCLIBC_HAS_GNU_GETSUBOPT is not set
-+
-+#
-+# Big and Tall
-+#
-+UCLIBC_HAS_REGEX=y
-+# UCLIBC_HAS_REGEX_OLD is not set
-+UCLIBC_HAS_FNMATCH=y
-+# UCLIBC_HAS_FNMATCH_OLD is not set
-+# UCLIBC_HAS_WORDEXP is not set
-+UCLIBC_HAS_NFTW=y
-+UCLIBC_HAS_FTW=y
-+# UCLIBC_HAS_FTS is not set
-+UCLIBC_HAS_GLOB=y
-+UCLIBC_HAS_GNU_GLOB=y
-+UCLIBC_HAS_UTMPX=y
-+
-+#
-+# Library Installation Options
-+#
-+RUNTIME_PREFIX="/"
-+DEVEL_PREFIX="/usr/"
-+MULTILIB_DIR="lib"
-+HARDWIRED_ABSPATH=y
-+
-+#
-+# Security options
-+#
-+# UCLIBC_HAS_ARC4RANDOM is not set
-+# UCLIBC_HAS_SSP is not set
-+UCLIBC_BUILD_RELRO=y
-+UCLIBC_BUILD_NOW=y
-+UCLIBC_BUILD_NOEXECSTACK=y
-+
-+#
-+# Development/debugging options
-+#
-+CROSS_COMPILER_PREFIX="/slowfs/nl20dwt2p001/mjonker/src/buildroot/output/host/usr/bin/arc-buildroot-linux-uclibc-"
-+UCLIBC_EXTRA_CFLAGS=""
-+# DODEBUG is not set
-+# DODEBUG_PT is not set
-+DOSTRIP=y
-+# DOASSERTS is not set
-+# SUPPORT_LD_DEBUG is not set
-+# SUPPORT_LD_DEBUG_EARLY is not set
-+# UCLIBC_MALLOC_DEBUGGING is not set
-+# UCLIBC_HAS_BACKTRACE is not set
-+WARNINGS="-Wall"
-+# EXTRA_WARNINGS is not set
-+# DOMULTI is not set
-+# UCLIBC_MJN3_ONLY is not set
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 2249651..1629e76 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -17,6 +17,9 @@ UCLIBC_VERSION:=$(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
- ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
- UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
- UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc
-+else ifeq ($(findstring arc,$(UCLIBC_VERSION)),arc)
-+UCLIBC_SITE:=$(BR2_ARC_SITE)
-+UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_VERSION)
+ 	config BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
+ 	       depends on BR2_avr32
+ 	       bool "gcc 4.2.2-avr32-2.1.5"
+ 
+ 	config BR2_GCC_VERSION_4_3_X
+-		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526
++		depends on !BR2_arc && !BR2_arceb && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526
+ 		bool "gcc 4.3.x"
+ 
+ 	config BR2_GCC_VERSION_4_4_X
+-		depends on !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526
++		depends on !BR2_arc && !BR2_arceb && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526
+ 		bool "gcc 4.4.x"
+ 
+ 	config BR2_GCC_VERSION_4_5_X
+-		depends on !BR2_avr32 && !BR2_cortex_a15 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526
++		depends on !BR2_arc && !BR2_arceb && !BR2_avr32 && !BR2_cortex_a15 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.5.x"
+ 
+ 	config BR2_GCC_VERSION_4_6_X
+-		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		depends on !BR2_arc && !BR2_arceb && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.6.x"
+ 
+ 	config BR2_GCC_VERSION_4_7_X
+-		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		depends on !BR2_arc && !BR2_arceb && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.7.x"
+ 
+ 	config BR2_GCC_VERSION_4_8_X
+-		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		depends on !BR2_arc && !BR2_arceb && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.8.x"
+ 
+ 	config BR2_GCC_VERSION_SNAP
+-		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		depends on !BR2_arc && !BR2_arceb && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc snapshot"
+ endchoice
+@@ -74,6 +79,7 @@ config BR2_GCC_VERSION
+ 	default "4.2.2-avr32-2.1.5" if BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
+ 	default "4.3.6"     if BR2_GCC_VERSION_4_3_X
+ 	default "4.4.7"     if BR2_GCC_VERSION_4_4_X
++	default "4.4.7-arc" if BR2_GCC_VERSION_4_4_7_ARC
+ 	default "4.5.4"     if BR2_GCC_VERSION_4_5_X
+ 	default "4.6.4"     if BR2_GCC_VERSION_4_6_X
+ 	default "4.7.3"     if BR2_GCC_VERSION_4_7_X
+@@ -119,6 +125,6 @@ config BR2_GCC_ENABLE_TLS
+ 
+ config BR2_GCC_ENABLE_OPENMP
+ 	bool "Enable compiler OpenMP support"
+-	depends on !BR2_PTHREADS_NONE && !BR2_avr32
++	depends on !BR2_PTHREADS_NONE && !BR2_avr32 && !BR2_arc && !BR2_arceb
+ 	help
+ 	  Enable OpenMP support for the compiler
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index fc11ad4..31afd48 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -29,6 +29,8 @@ ifneq ($(GCC_SNAP_DATE),)
+  GCC_SITE:=ftp://gcc.gnu.org/pub/gcc/snapshots/$(GCC_SNAP_DATE)/
+ else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
+  GCC_SITE:=ftp://www.at91.com/pub/buildroot/
++else ifeq ($(findstring arc,$(GCC_VERSION)),arc)
++ GCC_SITE:=$(BR2_ARC_SITE)
  else
- UCLIBC_SITE:=http://www.uclibc.org/downloads
- UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_VERSION)
-@@ -31,6 +34,7 @@ UCLIBC_TARGET_ARCH:=$(shell $(SHELL) -c "echo $(ARCH) | sed \
- 		-e 's/-.*//' \
- 		-e 's/i.86/i386/' \
- 		-e 's/sparc.*/sparc/' \
-+		-e 's/arc.*/arc/g' \
- 		-e 's/arm.*/arm/g' \
- 		-e 's/m68k.*/m68k/' \
- 		-e 's/ppc/powerpc/g' \
+  GCC_SITE:=$(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
+ endif
+@@ -63,7 +65,9 @@ endif
+ 
+ # Determine soft-float options
+ ifeq ($(BR2_SOFT_FLOAT),y)
++ifeq ($(BR2_arc)$(BR2_arceb),)
+ SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
++endif
+ ifeq ($(BR2_arm)$(BR2_armeb),y) # only set float-abi for arm
+ TARGET_SOFT_FLOAT:=-mfloat-abi=soft
+ else
 -- 
 1.7.0.4
