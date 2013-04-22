@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Apr 2013 17:48:12 +0200
-Subject: [Buildroot] [PATCH 2/7] arc: Add option for ARC-specific
- download site
-In-Reply-To: <1366630651-6857-3-git-send-email-mjonker@synopsys.com>
+Date: Mon, 22 Apr 2013 17:49:45 +0200
+Subject: [Buildroot] [PATCH 3/7] arc: Add support for ARC-specific
+ binutils
+In-Reply-To: <1366630651-6857-4-git-send-email-mjonker@synopsys.com>
 References: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
- <1366630651-6857-3-git-send-email-mjonker@synopsys.com>
-Message-ID: <20130422174812.621ec3c4@skate>
+ <1366630651-6857-4-git-send-email-mjonker@synopsys.com>
+Message-ID: <20130422174945.1c8ba842@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +14,29 @@ To: buildroot@busybox.net
 
 Dear Mischa Jonker,
 
-On Mon, 22 Apr 2013 13:37:26 +0200, Mischa Jonker wrote:
+On Mon, 22 Apr 2013 13:37:27 +0200, Mischa Jonker wrote:
+> ARC support is not upstream yet...
+> 
+> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 
-> +config BR2_ARC_SITE
-> +	string "Download site for ARC specific packages"
-> +	default "http://www.synopsys.com/apps/arc-developer/"
-> +	depends on BR2_arc || BR2_arceb
-> +	help
-> +	  This download site is used for packages that require specific
-> +	  support for ARC, while this support is not yet pushed to the
-> +	  respective open source project.
+This looks good, but it doesn't build here: it fails because 'makeinfo'
+is not available.
 
-Is there some realistic case for which this URL would need to be
-changed by the user? I think I'd prefer to hardcode the URL in the
-binutils/gcc/uClibc recipes, just like we do a special casing for
-AVR32, unless of course there is some compelling reason for making this
-configurable.
+WARNING: `makeinfo' is missing on your system.  You should only need it if
+         you modified a `.texi' or `.texinfo' file, or any other file
+         indirectly affecting the aspect of the manual.  The spurious
+         call might also be the consequence of using a buggy `make' (AIX,
+         DU, IRIX).  You might want to install the `Texinfo' package or
+         the `GNU make' package.  Grab either from any GNU archive site.
+[...]
+make[2]: *** [all] Error 2
+make[1]: *** [/home/test/outputs/arc/build/host-binutils-2.19-arc/.stamp_built] Error 2
+make: *** [all] Error 2
 
-Best regards,
+makeinfo is no longer a mandatory dependency of Buildroot, and
+therefore we've removed it from our autobuilder chroots. binutils 2.22
+builds fine without it, it seems like binutils 2.19 will need a few
+more tricks.
 
 Thomas
 -- 
