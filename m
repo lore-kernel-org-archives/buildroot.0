@@ -1,34 +1,50 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 22 Apr 2013 23:19:22 +0200
-Subject: [Buildroot] [PATCH 1/2] busybox: move patches to new model
-In-Reply-To: <51758AD3.9040207@zacarias.com.ar>
-References: <1366642067-26447-1-git-send-email-gustavo@zacarias.com.ar>
- <51757EF2.3060000@mind.be> <51758AD3.9040207@zacarias.com.ar>
-Message-ID: <5175A95A.90006@mind.be>
+Date: Mon, 22 Apr 2013 23:24:58 +0200
+Subject: [Buildroot] [RFC] permit menu customization
+In-Reply-To: <1366621622-7953-1-git-send-email-spdawson@gmail.com>
+References: <1366621622-7953-1-git-send-email-spdawson@gmail.com>
+Message-ID: <5175AAAA.5030503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/04/13 21:09, Gustavo Zacarias wrote:
-> On 04/22/2013 03:18 PM, Arnout Vandecappelle wrote:
->>   I believe the idea was to have plain NNNN-xxxx.patch files (without
->> package or version number) in the patch directories - like is the case
->> already for gcc and gdb. But check the developer day report to be sure.
->>
->>   And while you're at it, numbering the patches would be nice.
->
-> Historically the busybox patches were left untouched (simple wget, no
-> SoB and such).
-> If Peter is OK with following the standard i couldn't agree more and
-> send a V2 :)
+  Hi Simon,
 
-  I'm just talking about the filename, not the contents of the patches.
+
+On 22/04/13 11:07, spdawson at gmail.com wrote:
+> From: Simon Dawson<spdawson@gmail.com>
+>
+> This patch is a first attempt at providing a mechanism by which the user
+> can specify a local menu configuration file, for extending the Buildroot
+> menu system.
+
+  A couple of patches with a similar purpose have been posted in the last 
+year or so. However, at the last two buildroot developer meetings we've 
+decided that this approach is not the way we want to go. Instead, adding 
+custom packages should be done by including them directly at the top of 
+packages/Config.in.
+
+
+> The main use case I have in mind is the selection and configuration of
+> local packages.
+>
+> One problem with what is proposed here is that it is necessary to
+> "bootstrap" the system by providing an empty Config.in.user file; ideally,
+> this file should be touched somewhere in the top-level Makefile, and added
+> to .gitignore, as it is really a build artefact.
+
+  Another buildroot rule is that the build should never modify the 
+buildroot directory itself when O= is specified on the command line. So 
+the Config.in.user should at least be in the CONFIG_DIR rather than the 
+TOPDIR.
+
 
   Regards,
   Arnout
 
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
