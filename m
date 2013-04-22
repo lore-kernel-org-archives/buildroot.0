@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Apr 2013 17:49:45 +0200
-Subject: [Buildroot] [PATCH 3/7] arc: Add support for ARC-specific
- binutils
-In-Reply-To: <1366630651-6857-4-git-send-email-mjonker@synopsys.com>
+Date: Mon, 22 Apr 2013 17:52:15 +0200
+Subject: [Buildroot] [PATCH 4/7] arc: Add ARC specific kernel headers
+In-Reply-To: <1366630651-6857-5-git-send-email-mjonker@synopsys.com>
 References: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
- <1366630651-6857-4-git-send-email-mjonker@synopsys.com>
-Message-ID: <20130422174945.1c8ba842@skate>
+ <1366630651-6857-5-git-send-email-mjonker@synopsys.com>
+Message-ID: <20130422175215.184b3550@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,29 +13,19 @@ To: buildroot@busybox.net
 
 Dear Mischa Jonker,
 
-On Mon, 22 Apr 2013 13:37:27 +0200, Mischa Jonker wrote:
-> ARC support is not upstream yet...
+On Mon, 22 Apr 2013 13:37:28 +0200, Mischa Jonker wrote:
+> ARC architecture will be on kernel.org from 3.9 onwards. For now
+> we still need to use a out-of-tree kernel tarball.
 > 
 > Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 
-This looks good, but it doesn't build here: it fails because 'makeinfo'
-is not available.
+We managed to avoid architecture-specific versions of the kernel until
+now, but seems like in this case it's unavoidable until 3.9 is
+released... which should happen next week. Maybe we could already
+replace this by a patch that adds 3.9, currently pointing to 3.9-rc8,
+and that we would change once the final 3.9 is out?
 
-WARNING: `makeinfo' is missing on your system.  You should only need it if
-         you modified a `.texi' or `.texinfo' file, or any other file
-         indirectly affecting the aspect of the manual.  The spurious
-         call might also be the consequence of using a buggy `make' (AIX,
-         DU, IRIX).  You might want to install the `Texinfo' package or
-         the `GNU make' package.  Grab either from any GNU archive site.
-[...]
-make[2]: *** [all] Error 2
-make[1]: *** [/home/test/outputs/arc/build/host-binutils-2.19-arc/.stamp_built] Error 2
-make: *** [all] Error 2
-
-makeinfo is no longer a mandatory dependency of Buildroot, and
-therefore we've removed it from our autobuilder chroots. binutils 2.22
-builds fine without it, it seems like binutils 2.19 will need a few
-more tricks.
+Best regards,
 
 Thomas
 -- 
