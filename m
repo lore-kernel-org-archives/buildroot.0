@@ -1,192 +1,118 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Mon, 22 Apr 2013 13:37:27 +0200
-Subject: [Buildroot] [PATCH 3/7] arc: Add support for ARC-specific binutils
+Date: Mon, 22 Apr 2013 13:37:28 +0200
+Subject: [Buildroot] [PATCH 4/7] arc: Add ARC specific kernel headers
 In-Reply-To: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
 References: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1366630651-6857-4-git-send-email-mjonker@synopsys.com>
+Message-ID: <1366630651-6857-5-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ARC support is not upstream yet...
+ARC architecture will be on kernel.org from 3.9 onwards. For now
+we still need to use a out-of-tree kernel tarball.
 
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 ---
- package/binutils/Config.in.host                    |   17 ++++++---
- .../300-001_ld_makefile_patch.patch                |   24 +++++++++++++
- .../300-012_check_ldrunpath_length.patch           |   21 +++++++++++
- .../binutils/binutils-2.19-arc/500-sysroot.patch   |   36 ++++++++++++++++++++
- package/binutils/binutils.mk                       |    3 ++
- 5 files changed, 95 insertions(+), 6 deletions(-)
- create mode 100644 package/binutils/binutils-2.19-arc/300-001_ld_makefile_patch.patch
- create mode 100644 package/binutils/binutils-2.19-arc/300-012_check_ldrunpath_length.patch
- create mode 100644 package/binutils/binutils-2.19-arc/500-sysroot.patch
+ Makefile                                   |    1 +
+ toolchain/kernel-headers/Config.in         |   19 ++++++++++++++-----
+ toolchain/kernel-headers/kernel-headers.mk |    4 +++-
+ 3 files changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index a61a503..b634796 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -12,28 +12,32 @@ choice
- 	       depends on BR2_avr32
- 	       bool "binutils 2.18-avr32-1.0.1"
+diff --git a/Makefile b/Makefile
+index 0a91658..8fef492 100644
+--- a/Makefile
++++ b/Makefile
+@@ -238,6 +238,7 @@ ARCH:=$(call qstrip,$(BR2_ARCH))
  
-+	config BR2_BINUTILS_VERSION_2_19_ARC
-+		depends on BR2_arc || BR2_arceb
-+		bool "binutils 2.19-arc"
-+
- 	config BR2_BINUTILS_VERSION_2_20_1
--		depends on !BR2_avr32
-+		depends on !(BR2_arc || BR2_arceb || BR2_avr32)
- 		bool "binutils 2.20.1"
+ KERNEL_ARCH:=$(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+ 	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
++	-e s/arc.*/arc/ \
+ 	-e s/arm.*/arm/ -e s/sa110/arm/ \
+ 	-e s/aarch64/arm64/ \
+ 	-e s/bfin/blackfin/ \
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index ec75c34..7db815b 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -7,6 +7,7 @@ comment "Kernel Header Options"
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_3_8
++	default BR2_KERNEL_HEADERS_3_8_ARC	if (BR2_arc || BR2_arceb)
+ 	help
+ 	  Select the version of kernel header files you wish to use.
+ 	  You must select the correct set of header files to match
+@@ -17,35 +18,42 @@ choice
  
- 	config BR2_BINUTILS_VERSION_2_21
--		depends on !BR2_avr32
-+		depends on !(BR2_arc || BR2_arceb || BR2_avr32)
- 		bool "binutils 2.21"
+ 	config BR2_KERNEL_HEADERS_3_0
+ 		bool "Linux 3.0.x kernel headers"
++		depends on !(BR2_arc || BR2_arceb)
  
- 	config BR2_BINUTILS_VERSION_2_21_1
--		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
-+		depends on !(BR2_arc || BR2_arceb || BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
- 		bool "binutils 2.21.1"
+ 	config BR2_KERNEL_HEADERS_3_1
+ 		bool "Linux 3.1.x kernel headers"
+-		depends on BR2_DEPRECATED
++		depends on BR2_DEPRECATED && !(BR2_arc || BR2_arceb)
  
- 	config BR2_BINUTILS_VERSION_2_22
--		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
-+		depends on !(BR2_arc || BR2_arceb || BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
- 		bool "binutils 2.22"
+ 	config BR2_KERNEL_HEADERS_3_2
+ 		bool "Linux 3.2.x kernel headers"
++		depends on !(BR2_arc || BR2_arceb)
  
- 	config BR2_BINUTILS_VERSION_2_23_1
--		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
-+		depends on !(BR2_arc || BR2_arceb || BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
- 		bool "binutils 2.23.1"
+ 	config BR2_KERNEL_HEADERS_3_3
+ 		bool "Linux 3.3.x kernel headers"
+-		depends on BR2_DEPRECATED
++		depends on BR2_DEPRECATED && !(BR2_arc || BR2_arceb)
  
- 	config BR2_BINUTILS_VERSION_2_23_2
--		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
-+		depends on !(BR2_arc || BR2_arceb || BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
- 		bool "binutils 2.23.2"
+ 	config BR2_KERNEL_HEADERS_3_4
+ 		bool "Linux 3.4.x kernel headers"
++		depends on !(BR2_arc || BR2_arceb)
  
- endchoice
-@@ -41,6 +45,7 @@ endchoice
- config BR2_BINUTILS_VERSION
- 	string
- 	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
-+	default "2.19-arc"	if BR2_BINUTILS_VERSION_2_19_ARC
- 	default "2.20.1"	if BR2_BINUTILS_VERSION_2_20_1
- 	default "2.21"		if BR2_BINUTILS_VERSION_2_21
- 	default "2.21.1"	if BR2_BINUTILS_VERSION_2_21_1
-diff --git a/package/binutils/binutils-2.19-arc/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.19-arc/300-001_ld_makefile_patch.patch
-new file mode 100644
-index 0000000..5cb0f61
---- /dev/null
-+++ b/package/binutils/binutils-2.19-arc/300-001_ld_makefile_patch.patch
-@@ -0,0 +1,24 @@
-+diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
-+--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
-++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
-+@@ -18,7 +18,7 @@
-+ # We put the scripts in the directory $(scriptdir)/ldscripts.
-+ # We can't put the scripts in $(datadir) because the SEARCH_DIR
-+ # directives need to be different for native and cross linkers.
-+-scriptdir = $(tooldir)/lib
-++scriptdir = $(libdir)
-+ 
-+ EMUL = @EMUL@
-+ EMULATION_OFILES = @EMULATION_OFILES@
-+diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
-+--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
-++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
-+@@ -287,7 +287,7 @@
-+ # We put the scripts in the directory $(scriptdir)/ldscripts.
-+ # We can't put the scripts in $(datadir) because the SEARCH_DIR
-+ # directives need to be different for native and cross linkers.
-+-scriptdir = $(tooldir)/lib
-++scriptdir = $(libdir)
-+ BASEDIR = $(srcdir)/..
-+ BFDDIR = $(BASEDIR)/bfd
-+ INCDIR = $(BASEDIR)/include
-diff --git a/package/binutils/binutils-2.19-arc/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.19-arc/300-012_check_ldrunpath_length.patch
-new file mode 100644
-index 0000000..6e80921
---- /dev/null
-+++ b/package/binutils/binutils-2.19-arc/300-012_check_ldrunpath_length.patch
-@@ -0,0 +1,21 @@
-+diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
-+--- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
-++++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
-+@@ -1007,6 +1007,8 @@
-+ 	      && command_line.rpath == NULL)
-+ 	    {
-+ 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
-++	      if ((lib_path) && (strlen (lib_path) == 0))
-++		  lib_path = NULL;
-+ 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
-+ 						      force))
-+ 		break;
-+@@ -1191,6 +1193,8 @@
-+   rpath = command_line.rpath;
-+   if (rpath == NULL)
-+     rpath = (const char *) getenv ("LD_RUN_PATH");
-++  if ((rpath) && (strlen (rpath) == 0))
-++      rpath = NULL;
-+   if (! (bfd_elf_size_dynamic_sections
-+ 	 (output_bfd, command_line.soname, rpath,
-+ 	  command_line.filter_shlib,
-diff --git a/package/binutils/binutils-2.19-arc/500-sysroot.patch b/package/binutils/binutils-2.19-arc/500-sysroot.patch
-new file mode 100644
-index 0000000..d21e4cb
---- /dev/null
-+++ b/package/binutils/binutils-2.19-arc/500-sysroot.patch
-@@ -0,0 +1,36 @@
-+Signed-off-by: Sven Rebhan <odinshorse@googlemail.com>
-+
-+Always try to prepend the sysroot prefix to absolute filenames first.
-+
-+http://bugs.gentoo.org/275666
-+http://sourceware.org/bugzilla/show_bug.cgi?id=10340
-+
-+--- a/ld/ldfile.c
-++++ b/ld/ldfile.c
-+@@ -308,18 +308,24 @@
-+      directory first.  */
-+   if (! entry->is_archive)
-+     {
-+-      if (entry->sysrooted && IS_ABSOLUTE_PATH (entry->filename))
-++      /* For absolute pathnames, try to always open the file in the
-++	 sysroot first. If this fails, try to open the file at the
-++	 given location. */
-++      entry->sysrooted = is_sysrooted_pathname(entry->filename, FALSE);
-++      if (IS_ABSOLUTE_PATH (entry->filename) && ld_sysroot && ! entry->sysrooted)
-+ 	{
-+ 	  char *name = concat (ld_sysroot, entry->filename,
-+ 			       (const char *) NULL);
-+ 	  if (ldfile_try_open_bfd (name, entry))
-+ 	    {
-+ 	      entry->filename = name;
-++	      entry->sysrooted = TRUE;
-+ 	      return TRUE;
-+ 	    }
-+ 	  free (name);
-+ 	}
-+-      else if (ldfile_try_open_bfd (entry->filename, entry))
-++
-++      if (ldfile_try_open_bfd (entry->filename, entry))
-+ 	{
-+ 	  entry->sysrooted = IS_ABSOLUTE_PATH (entry->filename)
-+ 	    && is_sysrooted_pathname (entry->filename, TRUE);
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 92e0a74..d387c27 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -26,6 +26,9 @@ BINUTILS_SITE = $(BR2_GNU_MIRROR)/binutils
- ifeq ($(ARCH),avr32)
- BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
- endif
-+ifeq ($(ARCH),arc)
-+BINUTILS_SITE = $(BR2_ARC_SITE)
-+endif
- BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
- BINUTILS_INSTALL_STAGING = YES
- BINUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ 	config BR2_KERNEL_HEADERS_3_5
+ 		bool "Linux 3.5.x kernel headers"
+-		depends on BR2_DEPRECATED
++		depends on BR2_DEPRECATED && !(BR2_arc || BR2_arceb)
+ 
+ 	config BR2_KERNEL_HEADERS_3_6
+ 		bool "Linux 3.6.x kernel headers"
+-		depends on BR2_DEPRECATED
++		depends on BR2_DEPRECATED && !(BR2_arc || BR2_arceb)
+ 
+ 	config BR2_KERNEL_HEADERS_3_7
+ 		bool "Linux 3.7.x kernel headers"
+-		depends on BR2_DEPRECATED
++		depends on BR2_DEPRECATED && !(BR2_arc || BR2_arceb)
+ 
+ 	config BR2_KERNEL_HEADERS_3_8
+ 		bool "Linux 3.8.x kernel headers"
++		depends on !(BR2_arc || BR2_arceb)
++	
++	config BR2_KERNEL_HEADERS_3_8_ARC
++		bool "Linux 3.8-arc kernel headers"
+ 
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+@@ -72,5 +80,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.8"		if BR2_KERNEL_HEADERS_3_8
++	default "3.8-arc"	if BR2_KERNEL_HEADERS_3_8_ARC
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
+index adf7bc4..7c4910f 100644
+--- a/toolchain/kernel-headers/kernel-headers.mk
++++ b/toolchain/kernel-headers/kernel-headers.mk
+@@ -26,7 +26,9 @@ SUBLEVEL:=$(if $(SUBLEVEL),.$(SUBLEVEL),)
+ EXTRAVERSION:=$(if $(EXTRAVERSION),.$(EXTRAVERSION),)
+ 
+ LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL)$(SUBLEVEL)$(EXTRAVERSION)
+-ifeq ($(findstring x2.6.,x$(DEFAULT_KERNEL_HEADERS)),x2.6.)
++ifeq ($(findstring arc,x$(DEFAULT_KERNEL_HEADERS)),arc)
++LINUX_HEADERS_SITE:=$(BR2_ARC_SITE)
++else ifeq ($(findstring x2.6.,x$(DEFAULT_KERNEL_HEADERS)),x2.6.)
+ LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v2.6/
+ else
+ LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v3.x/
 -- 
 1.7.0.4
