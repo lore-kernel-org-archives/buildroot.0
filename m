@@ -1,53 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Apr 2013 18:01:04 +0200
-Subject: [Buildroot] Plan of libffi support?
-In-Reply-To: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
-References: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <20130422180104.2fd1513d@skate>
+Date: Mon, 22 Apr 2013 18:07:49 +0200
+Subject: [Buildroot] [PATCH 0/4] Wayland/weston packages
+Message-ID: <1366646873-26196-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mischa Jonker,
+Hello,
 
-On Mon, 22 Apr 2013 13:37:24 +0200, Mischa Jonker wrote:
+Here is a set of four patches that add support for Weston, the
+reference implementation of the Wayland protocol. So far, only the
+fbdev backend is supported, but it's in my plans to add support for
+the RPi compositor, and maybe the DRM one.
 
-> In the following patch series I've added ARC support to the "master" tree
-> of BuildRoot. As ARC support is not yet in all upstream open source packages,
-> I've taken the freedom to add an option for an additional download site, from
-> which ARC-specific versions of gcc, binutils, etc. can be downloaded.
-> 
-> ARC will be in Linux 3.9, so that would be the first package that can be
-> removed from this ARC-specific download site.
-> 
-> The below patchset builds the toolchain, and a working root file system. Most
-> simple packages build OK, but mplayer for instance does not have ARC support,
-> and there are probably others as well.
-> 
-> Could you please have a look at the patches and let me know what to do to
-> make them BuildRoot-worthy?
+Note that the first patch does something a little bit ugly: it moves
+xkeyboard-config outside of the if BR2_PACKAGE_XORG7 ... endif clause,
+because we also need it for Wayland/Weston. The consequence is that it
+now appears "alone" right after the "X.org system" submenu in
+menuconfig, which is not entirely nice. Suggestions welcome.
 
-Do you have plans to get ARC support in libffi
-<http://sourceware.org/libffi/> ? This library requires some
-architecture-specific bits, and is used as a dependency for the Python
-interpreter, but also more importantly for the glib library from the
-Gtk world. And this glib library is used as a dependency in gazillions
-of packages: Gtk+, GStreamer, Bluez-utils, Connman, and many, many more
-things. For this reason, having an architecture supported in Buildroot
-that doesn't have libffi support is a big pain, because we have to add
-the "depends on !BR2_arc && !BR2_arceb" on all the packages that have
-Glib as a dependency in their dependency chain.
-
-So, we can live for a while without libffi support, but it would be
-good to know if libffi support is somewhere in your plans in the future.
-
-Thanks!
+Best regards,
 
 Thomas
+
+Thomas Petazzoni (4):
+  xkeyboard-config: make available outside of X.org, reduce
+    dependencies
+  libxkbcommon: new package
+  wayland: new package
+  weston: new package
+
+ package/Config.in                                  |    3 ++
+ package/libxkbcommon/Config.in                     |    8 ++++
+ package/libxkbcommon/libxkbcommon.mk               |   16 +++++++
+ package/wayland/Config.in                          |   10 +++++
+ package/wayland/wayland.mk                         |   30 +++++++++++++
+ package/weston/Config.in                           |   29 ++++++++++++
+ ...pendent-code-only-when-the-DRM-compositor.patch |   47 ++++++++++++++++++++
+ package/weston/weston.mk                           |   32 +++++++++++++
+ package/x11r7/Config.in                            |    3 +-
+ package/x11r7/xkeyboard-config/Config.in           |    7 +--
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk |    7 ++-
+ 11 files changed, 187 insertions(+), 5 deletions(-)
+ create mode 100644 package/libxkbcommon/Config.in
+ create mode 100644 package/libxkbcommon/libxkbcommon.mk
+ create mode 100644 package/wayland/Config.in
+ create mode 100644 package/wayland/wayland.mk
+ create mode 100644 package/weston/Config.in
+ create mode 100644 package/weston/weston-0001-Pull-DRM-dependent-code-only-when-the-DRM-compositor.patch
+ create mode 100644 package/weston/weston.mk
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
