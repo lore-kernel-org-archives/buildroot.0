@@ -1,85 +1,45 @@
-From: Mark Jackson <mpfj-list@newflow.co.uk>
-Date: Tue, 23 Apr 2013 16:47:37 +0100
-Subject: [Buildroot] [PATCH] fs/ubifs: allow extra options to be passed to
- ubifs creation tools
-Message-ID: <5176AD19.1050002@newflow.co.uk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 23 Apr 2013 13:52:49 -0300
+Subject: [Buildroot] [PATCH] libgcrypt: bump to version 1.5.2
+Message-ID: <1366735969-28236-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow extra options to be passed to ubifs creation tools.
+Also work around a build failure for ARM thumb mode which was also
+present in the previous versions.
 
-Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Changes in v2:
-- Minor changes as suggested by Thomas Petazzoni
+ package/libgcrypt/libgcrypt.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
- fs/ubifs/Config.in |   12 ++++++++++++
- fs/ubifs/ubi.mk    |    2 ++
- fs/ubifs/ubifs.mk  |    4 +++-
- 3 files changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
-index a5ef5f2..f17c7dc 100644
---- a/fs/ubifs/Config.in
-+++ b/fs/ubifs/Config.in
-@@ -77,6 +77,12 @@ config BR2_TARGET_ROOTFS_UBIFS_LZMA
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index b7c2742..6a3bc7c 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- endchoice
+-LIBGCRYPT_VERSION = 1.5.0
++LIBGCRYPT_VERSION = 1.5.2
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPLv2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+@@ -19,6 +19,11 @@ LIBGCRYPT_CONF_OPT = \
+ 	--disable-optimization \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
  
-+config BR2_TARGET_ROOTFS_UBIFS_OPTS
-+	string "Additional mkfs.ubifs options"
-+	depends on BR2_TARGET_ROOTFS_UBIFS
-+	help
-+	  Any additional mkfs.ubifs options you may want to include.
++# Code doesn't build in thumb mode
++ifeq ($(BR2_arm),y)
++	LIBGCRYPT_CONF_ENV += CFLAGS="$(patsubst -mthumb,,$(TARGET_CFLAGS))"
++endif
 +
- config BR2_TARGET_ROOTFS_UBI
- 	depends on BR2_TARGET_ROOTFS_UBIFS
- 	bool "Embed into an UBI image"
-@@ -98,3 +104,9 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
- 	help
- 	  Tells ubinize that the flash supports sub-pages and the sub-page
- 	  size. Use 0 if subpages are not supported on flash chip.
-+
-+config BR2_TARGET_ROOTFS_UBI_OPTS
-+	string "Additional ubinize options"
-+	depends on BR2_TARGET_ROOTFS_UBI
-+	help
-+	  Any additional ubinize options you may want to include.
-diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
-index 51ab42d..e9033e8 100644
---- a/fs/ubifs/ubi.mk
-+++ b/fs/ubifs/ubi.mk
-@@ -10,6 +10,8 @@ ifneq ($(BR2_TARGET_ROOTFS_UBI_SUBSIZE),0)
- UBI_UBINIZE_OPTS += -s $(BR2_TARGET_ROOTFS_UBI_SUBSIZE)
- endif
- 
-+UBI_UBINIZE_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_OPTS))
-+
- ROOTFS_UBI_DEPENDENCIES = rootfs-ubifs
- 
- define ROOTFS_UBI_CMD
-diff --git a/fs/ubifs/ubifs.mk b/fs/ubifs/ubifs.mk
-index 8506dbd..dca2e04 100644
---- a/fs/ubifs/ubifs.mk
-+++ b/fs/ubifs/ubifs.mk
-@@ -16,10 +16,12 @@ ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_NONE),y)
- UBIFS_OPTS += -x none
- endif
- 
-+UBIFS_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBIFS_OPTS))
-+
- ROOTFS_UBIFS_DEPENDENCIES = host-mtd
- 
- define ROOTFS_UBIFS_CMD
- 	$(HOST_DIR)/usr/sbin/mkfs.ubifs -d $(TARGET_DIR) $(UBIFS_OPTS) -o $@
- endef
- 
--$(eval $(call ROOTFS_TARGET,ubifs))
-\ No newline at end of file
-+$(eval $(call ROOTFS_TARGET,ubifs))
+ # Tests use fork()
+ define LIBGCRYPT_DISABLE_TESTS
+ 	$(SED) 's/ tests//' $(@D)/Makefile.in
 -- 
-1.7.9.5
+1.8.1.5
