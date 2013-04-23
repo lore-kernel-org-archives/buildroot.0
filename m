@@ -1,41 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 23 Apr 2013 12:25:49 +0200
-Subject: [Buildroot] [PATCH v2] libserial: new package
-In-Reply-To: <1366102172-10308-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Tue, 16 Apr 2013 09:49:32 +0100")
-References: <1366102172-10308-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87haixee6q.fsf@dell.be.48ers.dk>
+From: Daiane Angolini <daiane.angolini@freescale.com>
+Date: Tue, 23 Apr 2013 10:03:46 -0300
+Subject: [Buildroot] linux/videodev.h missing
+In-Reply-To: <BA6FC03EA0815D428FB8A3C279ED4992072B9210@mx.toyon.corp>
+References: <BA6FC03EA0815D428FB8A3C279ED4992072B8ECF@mx.toyon.corp>
+ <5171D9E4.7090904@mind.be>
+ <BA6FC03EA0815D428FB8A3C279ED4992072B900D@mx.toyon.corp>
+ <5175A1C6.1050106@mind.be>
+ <BA6FC03EA0815D428FB8A3C279ED4992072B9210@mx.toyon.corp>
+Message-ID: <517686B2.407@freescale.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+On 04/22/2013 07:28 PM, Richard Cagley wrote:
+> Sadly, even freescale seems to have dropped videodev.h
+> http://git.freescale.com/git/cgit.cgi/imx/linux-2.6-imx.git/tree/include
+> /linux
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
+Which kernel version and imx-lib version are you using?
 
- spdawson> Note that the Python binding is disabled; we can't build this
- spdawson> in Buildroot without the sipconfig Python module for the
- spdawson> host.
+When I worked with kernel and imx-lib 11.09.01 I patched imx-lib in 
+order to avoid this videodev.h include.
 
-Thanks, looks good - But it doesn't compile :/
+I don't remember exactly what I used, it should be something like 
+videodev2.h or video2dev.h
 
-(default internal 4.7.3 arm toolchain):
 
-SerialPort.cpp: In member function 'void SerialPort::SerialPortImpl::Open()':
-SerialPort.cpp:643:24: error: 'getpid' was not declared in this scope
-SerialPort.cpp: In member function 'void SerialPort::SerialPortImpl::Close()':
-SerialPort.cpp:748:26: error: 'close' was not declared in this scope
-SerialPort.cpp: In member function 'unsigned char SerialPort::SerialPortImpl::ReadByte(unsigned int)':
-SerialPort.cpp:1246:37: error: 'usleep' was not declared in this scope
-SerialPort.cpp: In member function 'void SerialPort::SerialPortImpl::Write(const unsigned char*, unsigned int)':
-SerialPort.cpp:1427:50: error: 'write' was not declared in this scope
-SerialPort.cpp: In member function 'virtual void SerialPort::SerialPortImpl::HandlePosixSignal(int)':
-
-Looks like it's missing a #include <unistd.h>
-
-Care to fix that with a patch (and send upstream) and resubmit?
-
--- 
-Bye, Peter Korsgaard
+Daiane
