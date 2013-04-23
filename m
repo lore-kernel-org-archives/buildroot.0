@@ -1,52 +1,83 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 23 Apr 2013 11:20:39 -0300
-Subject: [Buildroot] [PATCH 1/2] glibmm: new package
-In-Reply-To: <1366726167-3396-1-git-send-email-nicolas.menegale@openwide.fr>
-References: <1366726167-3396-1-git-send-email-nicolas.menegale@openwide.fr>
-Message-ID: <517698B7.1050405@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Apr 2013 16:29:13 +0200
+Subject: [Buildroot] [PATCH] Allow extra options to be passed to ubifs
+ creation tools
+In-Reply-To: <5134BD81.1070406@mimc.co.uk>
+References: <5134BD81.1070406@mimc.co.uk>
+Message-ID: <20130423162913.7f42ef7f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/23/2013 11:09 AM, nmenegale wrote:
+Dear Mark Jackson,
 
-> +++ b/package/glibmm/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_GLIBMM
-> +	bool "glibmm"
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_PACKAGE_LIBSIGC
+It would be good if the commit title was:
+
+	fs/ubifs: allow extra options to be passed to ubifs creation tools
+
+On Mon, 04 Mar 2013 15:28:01 +0000, Mark Jackson wrote:
+> Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
+> ---
+>  fs/ubifs/Config.in |   14 ++++++++++++++
+>  fs/ubifs/ubi.mk    |    2 ++
+>  fs/ubifs/ubifs.mk  |    4 +++-
+>  3 files changed, 19 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
+> index a5ef5f2..f707737 100644
+> --- a/fs/ubifs/Config.in
+> +++ b/fs/ubifs/Config.in
+> @@ -77,6 +77,13 @@ config BR2_TARGET_ROOTFS_UBIFS_LZMA
+>  
+>  endchoice
+>  
+> +config BR2_TARGET_ROOTFS_UBIFS_OPTS
+> +	string "Additional mkfs.ubifs options"
+> +	default ""
+
+I believe that the default "" is not needed, since this is the default
+(empty value).
+
+> +	depends on BR2_TARGET_ROOTFS_UBIFS
+
+If you have some time, you could send a follow-up patch that factorizes
+all the "depends on BR2_TARGET_ROOTFS_UBIFS" by enclosing the UBI
+options in a "if BR2_TARGET_ROOTFS_UBIFS .. endif" block. But if you do
+it, do it as a separate patch.
+
 > +	help
-> +	  The GLibmm package is a set of C++ bindings for GLib. 
-> +	  	
-> +	  http://www.gtkmm.org/
-
-This should depend on BR2_INSTALL_LIBSTDCPP since it requires a
-toolchain with C++ support, with a comment otherwise like other packages
-do (look at package/protobuf/Config.in for an example).
-Same case with libxml++.
-
-> +++ b/package/glibmm/glibmm.mk
-> @@ -0,0 +1,13 @@
-> +#############################################################
-> +#
-> +# Glibmm
-> +#
-> +#############################################################
-> +GLIBMM_VERSION = 2.30.1
-> +GLIBMM_LICENSE = LGPLv2.1
-> +GLIBMM_SOURCE = glibmm-$(GLIBMM_VERSION).tar.bz2
-> +GLIBMM_SITE = http://ftp.gnome.org/pub/gnome/sources/glibmm/2.30
-> +GLIBMM_INSTALL_STAGING = YES
-> +GLIBMM_DEPENDENCIES = libglib2 libsigc host-pkgconf
+> +	  Any additional mkfs.ubifs options you may want to include.
 > +
-> +$(eval $(autotools-package))
+>  config BR2_TARGET_ROOTFS_UBI
+>  	depends on BR2_TARGET_ROOTFS_UBIFS
+>  	bool "Embed into an UBI image"
+> @@ -98,3 +105,10 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
+>  	help
+>  	  Tells ubinize that the flash supports sub-pages and the sub-page
+>  	  size. Use 0 if subpages are not supported on flash chip.
+> +
+> +config BR2_TARGET_ROOTFS_UBI_OPTS
+> +	string "Additional ubinize options"
+> +	default ""
 
-You define GLIBMM_LICENSE but no GLIBMM_LICENSE_FILES, could you fix
-that since glibmm ships them?
-libglib2 depends on BR2_USE_WCHAR, you should add that too as a depend
-in Config.in
-Otherwise it's looking good, thanks.
-Regards.
+Ditto for default.
+
+> +	depends on BR2_TARGET_ROOTFS_UBI
+
+... and for the separate patch to factor out the depends on here.
+
+Once the minor details above (title and removal of default "") are
+fixed, you can resend a v2 with my:
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
