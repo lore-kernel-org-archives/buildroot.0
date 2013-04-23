@@ -1,45 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 23 Apr 2013 21:36:15 +0200
-Subject: [Buildroot] [git commit] wireless-regdb: bump to version 2013.02.13
-	and style fixes
-Message-ID: <20130423201911.17C519B7F1@busybox.osuosl.org>
+From: Daiane Angolini <daiane.angolini@freescale.com>
+Date: Tue, 23 Apr 2013 17:38:05 -0300
+Subject: [Buildroot] linux/videodev.h missing
+In-Reply-To: <BA6FC03EA0815D428FB8A3C279ED49920526E37C@mx.toyon.corp>
+References: <BA6FC03EA0815D428FB8A3C279ED49920526E37C@mx.toyon.corp>
+Message-ID: <5176F12D.6050401@freescale.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28431c2c0ee33dd192933954ca2e667624882503
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 04/23/2013 04:57 PM, Richard Cagley wrote:
+> I need imx-lib for the gstreamer fsl plugins. If you know of a different
+> way to get the gstreamer hardware acclerated plugins I'd love to not
+> deal with imx-lib.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/wireless-regdb/wireless-regdb.mk |    8 +++++---
- 1 files changed, 5 insertions(+), 3 deletions(-)
+Try to use any version, configure it for imx5 and don't care if you have 
+any error outside libvpu.
 
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index b4e038c..2d5b86a 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,15 +4,17 @@
- #
- #############################################################
- 
--WIRELESS_REGDB_VERSION = 2013.01.11
-+WIRELESS_REGDB_VERSION = 2013.02.13
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.bz2
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
- WIRELESS_REGDB_LICENSE_FILES = LICENSE
- 
- define WIRELESS_REGDB_INSTALL_TARGET_CMDS
--    install -m 644 -D -T $(@D)/regulatory.bin $(TARGET_DIR)/usr/lib/crda/regulatory.bin
--    install -m 644 -D -T $(@D)/linville.key.pub.pem $(TARGET_DIR)/etc/wireless-regdb/pubkeys/linville.key.pub.pem
-+	$(INSTALL) -m 644 -D -T $(@D)/regulatory.bin \
-+		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
-+	$(INSTALL) -m 644 -D -T $(@D)/linville.key.pub.pem \
-+		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/linville.key.pub.pem
- endef
- 
- $(eval $(generic-package))
+For example, a lot of issues is for libipu
+
+I don't have the buildroot source code yet downloaded, and I have no 
+idea how to include a new package, but I can try to help you on that 
+one, let's talk offline
+
+Daiane
