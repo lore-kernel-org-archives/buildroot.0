@@ -1,29 +1,20 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Apr 2013 16:31:35 +0200
-Subject: [Buildroot] [PATCH 1/2] glibmm: new package
-In-Reply-To: <517698B7.1050405@zacarias.com.ar>
-References: <1366726167-3396-1-git-send-email-nicolas.menegale@openwide.fr>
- <517698B7.1050405@zacarias.com.ar>
-Message-ID: <20130423163135.171132f7@skate>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Tue, 23 Apr 2013 15:52:19 +0100
+Subject: [Buildroot] [PATCH v2] libserial: new package
+In-Reply-To: <87haixee6q.fsf@dell.be.48ers.dk>
+References: <1366102172-10308-1-git-send-email-spdawson@gmail.com>
+ <87haixee6q.fsf@dell.be.48ers.dk>
+Message-ID: <CAHt8ZCP_GymnrKxXq06+PjqqyGe1CX84Uwjo_tYc8p-AZPvyfQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 23 April 2013 11:25, Peter Korsgaard <jacmet@uclibc.org> wrote:
+> Care to fix that with a patch (and send upstream) and resubmit?
 
-On Tue, 23 Apr 2013 11:20:39 -0300, Gustavo Zacarias wrote:
+Have submitted a patch upstream; will rework my patch and resubmit.
+Thanks for your help with this Peter.
 
-> libglib2 depends on BR2_USE_WCHAR, you should add that too as a depend
-> in Config.in
-
-And therefore the libxml++ should also carry this dependency as a
-consequence.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Simon.
