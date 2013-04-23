@@ -1,20 +1,137 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Tue, 23 Apr 2013 15:52:19 +0100
-Subject: [Buildroot] [PATCH v2] libserial: new package
-In-Reply-To: <87haixee6q.fsf@dell.be.48ers.dk>
-References: <1366102172-10308-1-git-send-email-spdawson@gmail.com>
- <87haixee6q.fsf@dell.be.48ers.dk>
-Message-ID: <CAHt8ZCP_GymnrKxXq06+PjqqyGe1CX84Uwjo_tYc8p-AZPvyfQ@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Tue, 23 Apr 2013 15:52:39 +0100
+Subject: [Buildroot] [PATCH v3] libserial: new package
+Message-ID: <1366728759-3522-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23 April 2013 11:25, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> Care to fix that with a patch (and send upstream) and resubmit?
+From: Simon Dawson <spdawson@gmail.com>
 
-Have submitted a patch upstream; will rework my patch and resubmit.
-Thanks for your help with this Peter.
+Note that the Python binding is disabled; we can't build this in Buildroot
+without the sipconfig Python module for the host.
 
-Simon.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ v3: Add a patch (sent upstream) to fix a build error found by
+ Peter Korsgaard.
+ v2: Fix Sourceforge mirror and patch numbering, as suggested by
+ Thomas Petazzoni; use upstream version 0.6.0rc1, which requires less
+ patching; disable build of Python bindings, which require the sipconfig
+ Python module.
+
+ package/Config.in                                  |    1 +
+ package/libserial/Config.in                        |   11 +++++++++
+ .../libserial-0001-disable-python-bindings.patch   |   25 ++++++++++++++++++++
+ ...libserial-0002-add-missing-header-include.patch |   15 ++++++++++++
+ package/libserial/libserial.mk                     |   13 ++++++++++
+ 5 files changed, 65 insertions(+)
+ create mode 100644 package/libserial/Config.in
+ create mode 100644 package/libserial/libserial-0001-disable-python-bindings.patch
+ create mode 100644 package/libserial/libserial-0002-add-missing-header-include.patch
+ create mode 100644 package/libserial/libserial.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 06bcdef..ad070f4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -464,6 +464,7 @@ source "package/libhid/Config.in"
+ source "package/libiqrf/Config.in"
+ source "package/libnfc/Config.in"
+ source "package/libnfc-llcp/Config.in"
++source "package/libserial/Config.in"
+ source "package/libusb/Config.in"
+ source "package/libusb-compat/Config.in"
+ source "package/libv4l/Config.in"
+diff --git a/package/libserial/Config.in b/package/libserial/Config.in
+new file mode 100644
+index 0000000..f098e28
+--- /dev/null
++++ b/package/libserial/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBSERIAL
++	bool "libserial"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Simplified serial port programming in C++ under POSIX operating
++	  systems.
++
++	  http://libserial.sourceforge.net/
++
++comment "libserial requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/libserial/libserial-0001-disable-python-bindings.patch b/package/libserial/libserial-0001-disable-python-bindings.patch
+new file mode 100644
+index 0000000..54b5cb6
+--- /dev/null
++++ b/package/libserial/libserial-0001-disable-python-bindings.patch
+@@ -0,0 +1,25 @@
++Disable build of Python bindings, which requires the sipconfig module.
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++
++diff -Nurp a/Makefile.am b/Makefile.am
++--- a/Makefile.am	2008-11-12 01:27:31.000000000 +0000
+++++ b/Makefile.am	2013-04-16 09:41:13.476002178 +0100
++@@ -1,4 +1,4 @@
++-SUBDIRS=src doc examples sip
+++SUBDIRS=src doc examples
++ 
++ EXTRA_DIST = doxygen.conf.in Makefile.dist libserial.spec libserial.pc
++ 
++diff -Nurp a/Makefile.in b/Makefile.in
++--- a/Makefile.in	2008-11-12 01:28:14.000000000 +0000
+++++ b/Makefile.in	2013-04-16 09:41:05.628013626 +0100
++@@ -197,7 +197,7 @@ sysconfdir = @sysconfdir@
++ target_alias = @target_alias@
++ top_builddir = @top_builddir@
++ top_srcdir = @top_srcdir@
++-SUBDIRS = src doc examples sip
+++SUBDIRS = src doc examples
++ EXTRA_DIST = doxygen.conf.in Makefile.dist libserial.spec libserial.pc
++ pkgconfigdir = $(libdir)/pkgconfig
++ pkgconfig_DATA = libserial.pc
+diff --git a/package/libserial/libserial-0002-add-missing-header-include.patch b/package/libserial/libserial-0002-add-missing-header-include.patch
+new file mode 100644
+index 0000000..a022637
+--- /dev/null
++++ b/package/libserial/libserial-0002-add-missing-header-include.patch
+@@ -0,0 +1,15 @@
++Add a missing header include, to fix a build error.
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++
++diff -Nurp a/src/SerialPort.cpp b/src/SerialPort.cpp
++--- a/src/SerialPort.cpp	2008-11-12 01:27:30.000000000 +0000
+++++ b/src/SerialPort.cpp	2013-04-23 15:43:41.537495852 +0100
++@@ -27,6 +27,7 @@
++ #include <cassert>
++ #include <termios.h>
++ #include <fcntl.h>
+++#include <unistd.h>
++ #include <sys/ioctl.h>
++ #include <sys/time.h>
++ #include <signal.h>
+diff --git a/package/libserial/libserial.mk b/package/libserial/libserial.mk
+new file mode 100644
+index 0000000..a835439
+--- /dev/null
++++ b/package/libserial/libserial.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# libserial
++#
++#############################################################
++
++LIBSERIAL_VERSION = 0.6.0rc1
++LIBSERIAL_SITE = http://downloads.sourceforge.net/libserial
++LIBSERIAL_INSTALL_STAGING = YES
++LIBSERIAL_LICENSE = GPLv2+
++LIBSERIAL_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
+-- 
+1.7.10.4
