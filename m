@@ -1,127 +1,108 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Tue, 23 Apr 2013 13:53:37 +0800
-Subject: [Buildroot] [PATCH v6 3/7] arch: toolchain: Introduce target
-	CPU revision.
-In-Reply-To: <1366279592-9055-3-git-send-email-sonic.adi@gmail.com>
-References: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
- <1366279592-9055-3-git-send-email-sonic.adi@gmail.com>
-Message-ID: <CAJxxZ0NSQXBFDcVR__P-8Pe2nuSYrvnX-A+04bZ2aZcsUf0ckA@mail.gmail.com>
+Date: Tue, 23 Apr 2013 13:57:50 +0800
+Subject: [Buildroot] [PATCH v2 4/7] arch: toolchain: Introduce binary
+ format FLAT types.
+In-Reply-To: <CAJxxZ0Opexp7+cKMiO4EixmZ57CRJXW_QQ9rUbXrkdnNTxbsvQ@mail.gmail.com>
+References: <1364550643-11793-1-git-send-email-sonic.adi@gmail.com>
+ <1364550643-11793-4-git-send-email-sonic.adi@gmail.com>
+ <20130407225132.38a9471c@skate>
+ <CAJxxZ0P=w5Bv44jO6TMPnRC6e-tU6oWpV1zpsNnMAjBkofQpdw@mail.gmail.com>
+ <20130413163126.0726a238@skate>
+ <CAJxxZ0MehskGrHv15LenF25SV4YB32od+mLJAwn0WJfZbSh9Og@mail.gmail.com>
+ <20130416124648.6370bda6@skate>
+ <CAJxxZ0Opexp7+cKMiO4EixmZ57CRJXW_QQ9rUbXrkdnNTxbsvQ@mail.gmail.com>
+Message-ID: <CAJxxZ0OTLgDJkctuB_5qz+bq0pF3k9Cp4hTYyDnqAvPtMEeR7g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Peter and Thomas,
 
-Can this patch be merge to upstream? Who is responsible for the merge?
+Any further suggestion on how can I push forward this patch?
 
-Thanks
+Compiler parameter -mno-xxx is not an option for blackfin specific flag
+id-shared-library=0.
+
+Regards,
 
 Sonic
 
 
-On Thu, Apr 18, 2013 at 6:06 PM, Sonic Zhang <sonic.adi@gmail.com> wrote:
+On Wed, Apr 17, 2013 at 5:02 PM, Sonic Zhang <sonic.adi@gmail.com> wrote:
 
-> From: Sonic Zhang <sonic.zhang@analog.com>
->
-> Adds the possibility to have a free-form CPU revision string and append it
-> to the target CPU. Only Blackfin actually uses this option.
->
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-> ---
->
-> v6-changes:
-> - The cpu revision test should have a $(call qstrip) to be effective.
-> - Add cpu revision to toolchain/gcc/gcc-uclibc-4.x.mk as well.
->
-> v3-changes:
-> - Detail the help text and fix the line length.
-> ---
->  arch/Config.in                           |    3 +++
->  arch/Config.in.bfin                      |    8 ++++++++
->  toolchain/gcc/gcc-uclibc-4.x.mk          |    6 +++++-
->  toolchain/toolchain-external/ext-tool.mk |    4 ++++
->  4 files changed, 20 insertions(+), 1 deletions(-)
->
-> diff --git a/arch/Config.in b/arch/Config.in
-> index 27a29c6..175add5 100644
-> --- a/arch/Config.in
-> +++ b/arch/Config.in
-> @@ -174,6 +174,9 @@ config BR2_GCC_TARGET_ABI
->  config BR2_GCC_TARGET_CPU
->         string
->
-> +config BR2_GCC_TARGET_CPU_REVISION
-> +       string
-> +
->  # Set up target binary format
->  choice
->         prompt "Target Binary Format"
-> diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-> index ac96620..f755c8d 100644
-> --- a/arch/Config.in.bfin
-> +++ b/arch/Config.in.bfin
-> @@ -97,3 +97,11 @@ config BR2_GCC_TARGET_CPU
->         default bf548           if BR2_bf548
->         default bf549           if BR2_bf549
->         default bf561           if BR2_bf561
-> +
-> +config BR2_GCC_TARGET_CPU_REVISION
-> +       string "Target CPU revision"
-> +       help
-> +         Specify a target CPU revision, which will be appended to the
-> +         value of the -mcpu option. For example, if the selected CPU is
-> +         bf609, and then selected CPU revision is "0.0", then gcc will
-> +         receive the -mcpu=bf609-0.0 option.
-> diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/
-> gcc-uclibc-4.x.mk
-> index bdc38cd..7fd7bdb 100644
-> --- a/toolchain/gcc/gcc-uclibc-4.x.mk
-> +++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-> @@ -85,7 +85,11 @@ ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
->  GCC_WITH_ABI:=--with-abi=$(BR2_GCC_TARGET_ABI)
->  endif
->  ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
-> -GCC_WITH_CPU:=--with-cpu=$(BR2_GCC_TARGET_CPU)
-> +ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
-> +GCC_WITH_CPU:=--with-cpu=$(call
-> qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
-> +else
-> +GCC_WITH_CPU:=--with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
-> +endif
->  endif
->
->  # AVR32 GCC special configuration
-> diff --git a/toolchain/toolchain-external/ext-tool.mkb/toolchain/toolchain-external/
-> ext-tool.mk
-> index 92183a4..57ea266 100644
-> --- a/toolchain/toolchain-external/ext-tool.mk
-> +++ b/toolchain/toolchain-external/ext-tool.mk
-> @@ -134,7 +134,11 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
->  endif
->
->  CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
-> +ifeq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
->  CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
-> +else
-> +CC_TARGET_CPU_:=$(call
-> qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
-> +endif
->  CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
->  CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
->
-> --
-> 1.7.0.4
+> Hi Thomas,
 >
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> On Tue, Apr 16, 2013 at 6:46 PM, Thomas Petazzoni <
+> thomas.petazzoni at free-electrons.com> wrote:
+>
+>> Dear Sonic Zhang,
+>>
+>> On Tue, 16 Apr 2013 18:26:22 +0800, Sonic Zhang wrote:
+>>
+>> > > Not sure exactly if that's the right solution or not. Peter, you're
+>> the
+>> > > one who did the external toolchain wrapper originally. Could you
+>> > > comment on this specific issue?
+>> > >
+>> > The LINUX_MAKE_FLAGS should not include the shared flat specific flags
+>> > "-mno-id-shared-library ...". Your suggestion doesn't work when
+>> > building Linux kernel. We need some ways to remove flags
+>> > "-mno-id-shared-library ..." from the gcc wrapper for the shared flat
+>> > binary format when building Linux kernel.
+>>
+>> Hm? If you pass -mno-id-shared-library after -mid-shared-library, it
+>> will be just as if you hadn't passed the option at all. So if the
+>> external toolchain wrapper passes -mid-shared-library, but then the
+>> CFLAGS passed to the kernel override that by passing
+>> -mno-id-shared-library, it will be just as if the external wrapper
+>> hadn't passed -mid-shared-library.
+>>
+>>
+> The blackfin GNU toolchain doesn't understand flag
+> "-mno-shared-library-id", "-mno-shared-library-id=" and
+> "-mno-shared-library-id=0". Flag "-mshared-library-id=0" set in wrapper
+> can't be canceled by passing "-mno-shared-library-id" later in linux.mk.
+>
+>
+> ifeq ($(BR2_bfin),y)
+> LINUX_MAKE_FLAGS += KBUILD_CFLAGS="$(TARGET_CFLAGS) -mno-id-shared-library
+> -mno-shared-library-id -mno-sep-data"
+> endif
+>
+>
+> PATH="/home/sonic/projects/buildroot/output/host/bin:/home/sonic/projects/buildroot/output/host/usr/bin:/home/sonic/projects/buildroot/output/host/usr/sbin/:/opt/arm/bin:/opt/uclinux/bfin-elf/bin/:/opt/uclinux/bfin-uclinux/bin/:/opt/uclinux/bfin-linux-uclibc/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+> PERLLIB="/home/sonic/projects/buildroot/output/host/usr/lib/perl"
+> /usr/bin/make -j4
+> O="/home/sonic/projects/buildroot/output/build/linux-custom"
+> HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=blackfin
+> INSTALL_MOD_PATH=/home/sonic/projects/buildroot/output/target
+> CROSS_COMPILE="
+> /home/sonic/projects/buildroot/output/host/usr/bin/bfin-uclinux-"
+> DEPMOD=/home/sonic/projects/buildroot/output/host/usr/sbin/depmod
+> KBUILD_CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> -D_FILE_OFFSET_BITS=64  -pipe -Os  -D__NOMMU__ -D__uClinux__
+> -mno-id-shared-library -mno-shared-library-id -mno-sep-data" -C
+> "linux/linux-kernel"/ uImage
+> make[1]: Entering directory
+> `/home/sonic/projects/buildroot/linux/linux-kernel'
+>   GEN     /home/sonic/projects/buildroot/output/build/linux-custom/Makefile
+>   CHK     include/generated/uapi/linux/version.h
+>   CC      scripts/mod/empty.o
+> cc1: error: unrecognized command line option "-mno-shared-library-id"
+> /home/sonic/projects/buildroot/linux/linux-kernel/scripts/mod/empty.c:1:
+> error: -mshared-library-id= specified without -mid-shared-library
+> make[4]: *** [scripts/mod/empty.o] Error 1
+> make[3]: *** [scripts/mod] Error 2
+> make[2]: *** [scripts] Error 2
+>
+>
+> Regards,
+>
+> Sonic
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130423/088861b4/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130423/d5499318/attachment-0001.html>
