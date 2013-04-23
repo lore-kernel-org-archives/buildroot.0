@@ -1,41 +1,90 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Apr 2013 23:10:14 +0200
-Subject: [Buildroot] [PATCH] busybox: rename patches as per the new
- standard and update 1.21.0 mdev
-In-Reply-To: <8761zde433.fsf@dell.be.48ers.dk>
-References: <1366723305-14386-1-git-send-email-gustavo@zacarias.com.ar>
- <8761zde433.fsf@dell.be.48ers.dk>
-Message-ID: <5176F8B6.8020204@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 23 Apr 2013 23:33:19 +0200
+Subject: [Buildroot] [PATCH 1/1] poppler: new package
+In-Reply-To: <1366145284-29557-1-git-send-email-olivier.schonken@gmail.com>
+ (Olivier Schonken's message of "Tue, 16 Apr 2013 22:48:04 +0200")
+References: <1366145284-29557-1-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <87fvyhc4ps.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/04/13 16:04, Peter Korsgaard wrote:
->>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
->
->   Gustavo> Rename patches as per the patch naming policy and update the
->   Gustavo> mdev fix patch for 1.21.0 which reinstates subsystem matching
->   Gustavo> functionality.
->
-> Sorry, I disagree with this rename. I know this is what we discussed at
-> the dev day, but it imho makes more sense to use the upstream naming
-> convention for busybox:
->
-> http://busybox.net/downloads/fixes-1.21.0/
+>>>>> "Olivier" == Olivier Schonken <olivier.schonken@gmail.com> writes:
 
-  Actually, if upstream has the patches available for download, they 
-should be downloaded instead of of included in buildroot, no?
+ Olivier> Poppler is a PDF rendering library based on the xpdf-3.0 code base.
+ Olivier> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+ Olivier> ---
+ Olivier>  package/Config.in          |    1 +
+ Olivier>  package/poppler/Config.in  |   46 ++++++++++++++++++++++++++++++++
+ Olivier>  package/poppler/poppler.mk |   63 ++++++++++++++++++++++++++++++++++++++++++++
+ Olivier>  3 files changed, 110 insertions(+)
+ Olivier>  create mode 100644 package/poppler/Config.in
+ Olivier>  create mode 100644 package/poppler/poppler.mk
 
+ Olivier> diff --git a/package/Config.in b/package/Config.in
+ Olivier> index f28cedd..a52705a 100644
+ Olivier> --- a/package/Config.in
+ Olivier> +++ b/package/Config.in
+ Olivier> @@ -444,6 +444,7 @@ source "package/opencv/Config.in"
+ Olivier>  source "package/opengl/Config.in"
+ Olivier>  source "package/pango/Config.in"
+ Olivier>  source "package/pixman/Config.in"
+ Olivier> +source "package/poppler/Config.in"
+ Olivier>  source "package/tiff/Config.in"
+ Olivier>  source "package/webkit/Config.in"
+ Olivier>  source "package/zxing/Config.in"
+ Olivier> diff --git a/package/poppler/Config.in b/package/poppler/Config.in
+ Olivier> new file mode 100644
+ Olivier> index 0000000..ce31651
+ Olivier> --- /dev/null
+ Olivier> +++ b/package/poppler/Config.in
+ Olivier> @@ -0,0 +1,46 @@
+ Olivier> +config BR2_PACKAGE_POPPLER
+ Olivier> +	bool "poppler"
+ Olivier> +	depends on BR2_INSTALL_LIBSTDCPP
+ Olivier> +	select BR2_PACKAGE_FONTCONFIG
+ Olivier> +	help
+ Olivier> +	   Poppler is a PDF rendering library based on the xpdf-3.0 code base.
+ Olivier> +
+ Olivier> +	   http://poppler.freedesktop.org/
+ Olivier> +
+ Olivier> +comment "qpdf requires a toolchain with C++ support enabled"
+ Olivier> +	depends on !BR2_INSTALL_LIBSTDCPP
 
-  Regards,
-  Arnout
+poppler, not qpdf.
+
+ Olivier> +
+ Olivier> +if BR2_PACKAGE_POPPLER
+ Olivier> +menu "Poppler Options"
+
+Because of the comment, this is no longer considered a suboption of
+BR2_PACKAGE_POPPLER, so it doesn't get indented.
+
+ Olivier> +config BR2_PACKAGE_POPPLER_CMS
+ Olivier> +	bool "Color Management System support"
+ Olivier> +	select BR2_PACKAGE_LCMS2
+ Olivier> +
+
+For most packages, we normally automatically enable library support if
+those libraries are enabled, so all of these explicit options can go.
+
+ Olivier> +#############################################################
+ Olivier> +#
+ Olivier> +# poppler
+ Olivier> +#
+ Olivier> +#############################################################
+ Olivier> +
+ Olivier> +POPPLER_VERSION = 0.22.3
+ Olivier> +POPPLER_SITE = http://poppler.freedesktop.org
+ Olivier> +POPPLER_DEPENDENCIES = fontconfig
+ Olivier> +POPPLER_LICENSE = GPLv2
+
+There's a bunch of 'any later version' references, so this should be
+GPLv2+
+
+Committed with those changes, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
