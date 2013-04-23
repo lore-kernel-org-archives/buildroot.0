@@ -1,90 +1,67 @@
-From: Mark Jackson <mpfj-list@newflow.co.uk>
-Date: Tue, 23 Apr 2013 09:08:35 +0100
-Subject: [Buildroot] [PATCH] Allow extra options to be passed to ubifs
- creation tools
-In-Reply-To: <5134BD81.1070406@mimc.co.uk>
-References: <5134BD81.1070406@mimc.co.uk>
-Message-ID: <51764183.8000808@newflow.co.uk>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Tue, 23 Apr 2013 17:17:31 +0800
+Subject: [Buildroot] [PATCH v6 5/7] package: Introduce package-specific
+ BINFMT_FLAT options.
+In-Reply-To: <1366279592-9055-5-git-send-email-sonic.adi@gmail.com>
+References: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
+ <1366279592-9055-5-git-send-email-sonic.adi@gmail.com>
+Message-ID: <CAJxxZ0OsCsQnaqFi0_gnN+BFu7o6UrTyJ2BF17f3KB5bLtwEQA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/03/13 15:28, Mark Jackson wrote:
-> Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
+Hi Thomas,
+
+
+On Thu, Apr 18, 2013 at 6:06 PM, Sonic Zhang <sonic.adi@gmail.com> wrote:
+> From: Sonic Zhang <sonic.zhang@analog.com>
+>
+> Add new option <PKG>_FLAT_STACKSIZE. The document needs to be updated.
+>
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+> Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
 > ---
->  fs/ubifs/Config.in |   14 ++++++++++++++
->  fs/ubifs/ubi.mk    |    2 ++
->  fs/ubifs/ubifs.mk  |    4 +++-
->  3 files changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
-> index a5ef5f2..f707737 100644
-> --- a/fs/ubifs/Config.in
-> +++ b/fs/ubifs/Config.in
-> @@ -77,6 +77,13 @@ config BR2_TARGET_ROOTFS_UBIFS_LZMA
->  
->  endchoice
->  
-> +config BR2_TARGET_ROOTFS_UBIFS_OPTS
-> +	string "Additional mkfs.ubifs options"
-> +	default ""
-> +	depends on BR2_TARGET_ROOTFS_UBIFS
-> +	help
-> +	  Any additional mkfs.ubifs options you may want to include.
+>
+> v4-change:
+> - Use late binding in make to expand package specific flat stack size
+> to TARGET_LDFLAGS.
+>
+> v2-changes:
+> - Fix typo error in macro BINFMT_FLAT
+> ---
+>  package/Makefile.in |    4 ++++
+>  1 files changed, 4 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index dd3bc7d..a449089 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -103,6 +103,10 @@ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET
+>  TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+>  TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+>
+> +ifeq ($(BR2_BINFMT_FLAT),y)
+> +TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
+> +endif
 > +
->  config BR2_TARGET_ROOTFS_UBI
->  	depends on BR2_TARGET_ROOTFS_UBIFS
->  	bool "Embed into an UBI image"
-> @@ -98,3 +105,10 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
->  	help
->  	  Tells ubinize that the flash supports sub-pages and the sub-page
->  	  size. Use 0 if subpages are not supported on flash chip.
-> +
-> +config BR2_TARGET_ROOTFS_UBI_OPTS
-> +	string "Additional ubinize options"
-> +	default ""
-> +	depends on BR2_TARGET_ROOTFS_UBI
-> +	help
-> +	  Any additional ubinize options you may want to include.
-> diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
-> index 51ab42d..e9033e8 100644
-> --- a/fs/ubifs/ubi.mk
-> +++ b/fs/ubifs/ubi.mk
-> @@ -10,6 +10,8 @@ ifneq ($(BR2_TARGET_ROOTFS_UBI_SUBSIZE),0)
->  UBI_UBINIZE_OPTS += -s $(BR2_TARGET_ROOTFS_UBI_SUBSIZE)
->  endif
->  
-> +UBI_UBINIZE_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_OPTS))
-> +
->  ROOTFS_UBI_DEPENDENCIES = rootfs-ubifs
->  
->  define ROOTFS_UBI_CMD
-> diff --git a/fs/ubifs/ubifs.mk b/fs/ubifs/ubifs.mk
-> index 8506dbd..dca2e04 100644
-> --- a/fs/ubifs/ubifs.mk
-> +++ b/fs/ubifs/ubifs.mk
-> @@ -16,10 +16,12 @@ ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_NONE),y)
->  UBIFS_OPTS += -x none
->  endif
->  
-> +UBIFS_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBIFS_OPTS))
-> +
->  ROOTFS_UBIFS_DEPENDENCIES = host-mtd
->  
->  define ROOTFS_UBIFS_CMD
->  	$(HOST_DIR)/usr/sbin/mkfs.ubifs -d $(TARGET_DIR) $(UBIFS_OPTS) -o $@
->  endef
->  
-> -$(eval $(call ROOTFS_TARGET,ubifs))
-> \ No newline at end of file
-> +$(eval $(call ROOTFS_TARGET,ubifs))
-> 
+>  ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
+>  TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
+>  TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
+> --
+> 1.7.0.4
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Does anyone have any comments on this ?
 
-Can it be added ?
+Can this patch be merge to upstream? Who is responsible for the merge?
 
-Cheers
-Mark J.
+Thanks
+
+Sonic Zhang
