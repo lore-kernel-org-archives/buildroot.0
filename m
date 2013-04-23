@@ -1,10 +1,11 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Tue, 23 Apr 2013 13:53:10 +0800
-Subject: [Buildroot] [PATCH v6 2/7] arch: Add blackfin CPU choice.
-In-Reply-To: <1366279592-9055-2-git-send-email-sonic.adi@gmail.com>
+Date: Tue, 23 Apr 2013 13:53:37 +0800
+Subject: [Buildroot] [PATCH v6 3/7] arch: toolchain: Introduce target
+	CPU revision.
+In-Reply-To: <1366279592-9055-3-git-send-email-sonic.adi@gmail.com>
 References: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
- <1366279592-9055-2-git-send-email-sonic.adi@gmail.com>
-Message-ID: <CAJxxZ0NLPtrCAUq8QtdDpjHBqLrcyyPtGxX5-s_XOJk5_Lz7vA@mail.gmail.com>
+ <1366279592-9055-3-git-send-email-sonic.adi@gmail.com>
+Message-ID: <CAJxxZ0NSQXBFDcVR__P-8Pe2nuSYrvnX-A+04bZ2aZcsUf0ckA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,120 +25,94 @@ On Thu, Apr 18, 2013 at 6:06 PM, Sonic Zhang <sonic.adi@gmail.com> wrote:
 
 > From: Sonic Zhang <sonic.zhang@analog.com>
 >
-> is patch adds a Target CPU configuration option and uses it to select a -m
-> option for gcc.
+> Adds the possibility to have a free-form CPU revision string and append it
+> to the target CPU. Only Blackfin actually uses this option.
 >
 > Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 > Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  arch/Config.in.bfin |   94
-> +++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 files changed, 94 insertions(+), 0 deletions(-)
 >
+> ---
+>
+> v6-changes:
+> - The cpu revision test should have a $(call qstrip) to be effective.
+> - Add cpu revision to toolchain/gcc/gcc-uclibc-4.x.mk as well.
+>
+> v3-changes:
+> - Detail the help text and fix the line length.
+> ---
+>  arch/Config.in                           |    3 +++
+>  arch/Config.in.bfin                      |    8 ++++++++
+>  toolchain/gcc/gcc-uclibc-4.x.mk          |    6 +++++-
+>  toolchain/toolchain-external/ext-tool.mk |    4 ++++
+>  4 files changed, 20 insertions(+), 1 deletions(-)
+>
+> diff --git a/arch/Config.in b/arch/Config.in
+> index 27a29c6..175add5 100644
+> --- a/arch/Config.in
+> +++ b/arch/Config.in
+> @@ -174,6 +174,9 @@ config BR2_GCC_TARGET_ABI
+>  config BR2_GCC_TARGET_CPU
+>         string
+>
+> +config BR2_GCC_TARGET_CPU_REVISION
+> +       string
+> +
+>  # Set up target binary format
+>  choice
+>         prompt "Target Binary Format"
 > diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-> index 2a7ff54..ac96620 100644
+> index ac96620..f755c8d 100644
 > --- a/arch/Config.in.bfin
 > +++ b/arch/Config.in.bfin
-> @@ -1,5 +1,99 @@
-> +choice
-> +       prompt "Target CPU"
-> +       depends on BR2_bfin
-> +       default BR2_bf609
+> @@ -97,3 +97,11 @@ config BR2_GCC_TARGET_CPU
+>         default bf548           if BR2_bf548
+>         default bf549           if BR2_bf549
+>         default bf561           if BR2_bf561
+> +
+> +config BR2_GCC_TARGET_CPU_REVISION
+> +       string "Target CPU revision"
 > +       help
-> +         Specify target CPU
-> +config BR2_bf606
-> +       bool "bf606"
-> +config BR2_bf607
-> +       bool "bf607"
-> +config BR2_bf608
-> +       bool "bf608"
-> +config BR2_bf609
-> +       bool "bf609"
-> +config BR2_bf512
-> +       bool "bf512"
-> +config BR2_bf514
-> +       bool "bf514"
-> +config BR2_bf516
-> +       bool "bf516"
-> +config BR2_bf518
-> +       bool "bf518"
-> +config BR2_bf522
-> +       bool "bf522"
-> +config BR2_bf523
-> +       bool "bf523"
-> +config BR2_bf524
-> +       bool "bf524"
-> +config BR2_bf525
-> +       bool "bf525"
-> +config BR2_bf526
-> +       bool "bf526"
-> +config BR2_bf527
-> +       bool "bf527"
-> +config BR2_bf531
-> +       bool "bf531"
-> +config BR2_bf532
-> +       bool "bf532"
-> +config BR2_bf533
-> +       bool "bf533"
-> +config BR2_bf534
-> +       bool "bf534"
-> +config BR2_bf536
-> +       bool "bf536"
-> +config BR2_bf537
-> +       bool "bf537"
-> +config BR2_bf538
-> +       bool "bf538"
-> +config BR2_bf539
-> +       bool "bf539"
-> +config BR2_bf542
-> +       bool "bf542"
-> +config BR2_bf544
-> +       bool "bf544"
-> +config BR2_bf547
-> +       bool "bf547"
-> +config BR2_bf548
-> +       bool "bf548"
-> +config BR2_bf549
-> +       bool "bf549"
-> +config BR2_bf561
-> +       bool "bf561"
-> +endchoice
-> +
->  config BR2_ARCH
->         default "bfin"
+> +         Specify a target CPU revision, which will be appended to the
+> +         value of the -mcpu option. For example, if the selected CPU is
+> +         bf609, and then selected CPU revision is "0.0", then gcc will
+> +         receive the -mcpu=bf609-0.0 option.
+> diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/
+> gcc-uclibc-4.x.mk
+> index bdc38cd..7fd7bdb 100644
+> --- a/toolchain/gcc/gcc-uclibc-4.x.mk
+> +++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+> @@ -85,7 +85,11 @@ ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
+>  GCC_WITH_ABI:=--with-abi=$(BR2_GCC_TARGET_ABI)
+>  endif
+>  ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
+> -GCC_WITH_CPU:=--with-cpu=$(BR2_GCC_TARGET_CPU)
+> +ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
+> +GCC_WITH_CPU:=--with-cpu=$(call
+> qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
+> +else
+> +GCC_WITH_CPU:=--with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
+> +endif
+>  endif
 >
->  config BR2_ENDIAN
->          default "LITTLE"
-> +
-> +config BR2_GCC_TARGET_CPU
-> +       default bf606           if BR2_bf606
-> +       default bf607           if BR2_bf607
-> +       default bf608           if BR2_bf608
-> +       default bf609           if BR2_bf609
-> +       default bf512           if BR2_bf512
-> +       default bf514           if BR2_bf514
-> +       default bf516           if BR2_bf516
-> +       default bf518           if BR2_bf518
-> +       default bf522           if BR2_bf522
-> +       default bf523           if BR2_bf523
-> +       default bf524           if BR2_bf524
-> +       default bf525           if BR2_bf525
-> +       default bf526           if BR2_bf526
-> +       default bf527           if BR2_bf527
-> +       default bf531           if BR2_bf531
-> +       default bf532           if BR2_bf532
-> +       default bf533           if BR2_bf533
-> +       default bf534           if BR2_bf534
-> +       default bf536           if BR2_bf536
-> +       default bf537           if BR2_bf537
-> +       default bf538           if BR2_bf538
-> +       default bf539           if BR2_bf539
-> +       default bf542           if BR2_bf542
-> +       default bf544           if BR2_bf544
-> +       default bf547           if BR2_bf547
-> +       default bf548           if BR2_bf548
-> +       default bf549           if BR2_bf549
-> +       default bf561           if BR2_bf561
+>  # AVR32 GCC special configuration
+> diff --git a/toolchain/toolchain-external/ext-tool.mkb/toolchain/toolchain-external/
+> ext-tool.mk
+> index 92183a4..57ea266 100644
+> --- a/toolchain/toolchain-external/ext-tool.mk
+> +++ b/toolchain/toolchain-external/ext-tool.mk
+> @@ -134,7 +134,11 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
+>  endif
+>
+>  CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
+> +ifeq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
+>  CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
+> +else
+> +CC_TARGET_CPU_:=$(call
+> qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
+> +endif
+>  CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
+>  CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
+>
 > --
 > 1.7.0.4
 >
@@ -149,4 +124,4 @@ On Thu, Apr 18, 2013 at 6:06 PM, Sonic Zhang <sonic.adi@gmail.com> wrote:
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130423/e5a0ab57/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130423/088861b4/attachment.html>
