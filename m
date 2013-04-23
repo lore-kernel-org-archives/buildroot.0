@@ -1,31 +1,52 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 23 Apr 2013 11:15:06 -0300
-Subject: [Buildroot] [PATCH] busybox: rename patches as per the new
- standard and update 1.21.0 mdev
-In-Reply-To: <8761zde433.fsf@dell.be.48ers.dk>
-References: <1366723305-14386-1-git-send-email-gustavo@zacarias.com.ar>
- <8761zde433.fsf@dell.be.48ers.dk>
-Message-ID: <5176976A.3090001@zacarias.com.ar>
+Date: Tue, 23 Apr 2013 11:20:39 -0300
+Subject: [Buildroot] [PATCH 1/2] glibmm: new package
+In-Reply-To: <1366726167-3396-1-git-send-email-nicolas.menegale@openwide.fr>
+References: <1366726167-3396-1-git-send-email-nicolas.menegale@openwide.fr>
+Message-ID: <517698B7.1050405@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/23/2013 11:04 AM, Peter Korsgaard wrote:
+On 04/23/2013 11:09 AM, nmenegale wrote:
 
-> Sorry, I disagree with this rename. I know this is what we discussed at
-> the dev day, but it imho makes more sense to use the upstream naming
-> convention for busybox:
-> 
-> http://busybox.net/downloads/fixes-1.21.0/
-> 
-> Could you send a patch that only updates the mdev bugfix instead?
+> +++ b/package/glibmm/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_GLIBMM
+> +	bool "glibmm"
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_LIBSIGC
+> +	help
+> +	  The GLibmm package is a set of C++ bindings for GLib. 
+> +	  	
+> +	  http://www.gtkmm.org/
 
-Sure, i just wanted the official "go" or "no go" as discussed with
-Arnout so i went with the renaming to get a definitive answer to the
-dilemma.
-Maybe an update to the docs is in order to reflect this?
-For instance "if upstream has versioned patches then it should be
-respected" or something like that?
+This should depend on BR2_INSTALL_LIBSTDCPP since it requires a
+toolchain with C++ support, with a comment otherwise like other packages
+do (look at package/protobuf/Config.in for an example).
+Same case with libxml++.
+
+> +++ b/package/glibmm/glibmm.mk
+> @@ -0,0 +1,13 @@
+> +#############################################################
+> +#
+> +# Glibmm
+> +#
+> +#############################################################
+> +GLIBMM_VERSION = 2.30.1
+> +GLIBMM_LICENSE = LGPLv2.1
+> +GLIBMM_SOURCE = glibmm-$(GLIBMM_VERSION).tar.bz2
+> +GLIBMM_SITE = http://ftp.gnome.org/pub/gnome/sources/glibmm/2.30
+> +GLIBMM_INSTALL_STAGING = YES
+> +GLIBMM_DEPENDENCIES = libglib2 libsigc host-pkgconf
+> +
+> +$(eval $(autotools-package))
+
+You define GLIBMM_LICENSE but no GLIBMM_LICENSE_FILES, could you fix
+that since glibmm ships them?
+libglib2 depends on BR2_USE_WCHAR, you should add that too as a depend
+in Config.in
+Otherwise it's looking good, thanks.
 Regards.
