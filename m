@@ -1,61 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 23 Apr 2013 08:59:23 +0200
-Subject: [Buildroot] [git commit] busybox: move patches to new model
-Message-ID: <20130423070519.A8B6D9B7E7@busybox.osuosl.org>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Tue, 23 Apr 2013 08:14:42 +0100
+Subject: [Buildroot] [RFC] permit menu customization
+In-Reply-To: <5175AAAA.5030503@mind.be>
+References: <1366621622-7953-1-git-send-email-spdawson@gmail.com>
+ <5175AAAA.5030503@mind.be>
+Message-ID: <CAHt8ZCPx7bOGYKtJTemFh3NngjVOndP2Lv9ECjPdhET0r6=_bA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=246d12b5b49c045b6c74ea18ebb53778692a7e3f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Arnout; thanks for taking the time to look at this.
 
-On commit 5538e4766201aa0c1c23721cfc99cbbde595964b the versioned package
-patches changed the directory structure but the packages weren't fixed.
+On 22 April 2013 22:24, Arnout Vandecappelle <arnout@mind.be> wrote:
+>  A couple of patches with a similar purpose have been posted in the last
+> year or so. However, at the last two buildroot developer meetings we've
+> decided that this approach is not the way we want to go. Instead, adding
+> custom packages should be done by including them directly at the top of
+> packages/Config.in.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../busybox-1.19.4-udhcp.patch                     |    0
- .../busybox-1.20.2-kernel_ver.patch                |    0
- .../busybox-1.20.2-ntpd.patch                      |    0
- .../busybox-1.20.2-pkg-config-selinux.patch        |    0
- .../busybox-1.20.2-sys-resource.patch              |    0
- .../busybox-1.21.0-mdev.patch                      |    0
- .../busybox-1.21.0-platform.patch                  |    0
- .../busybox-1.21.0-xz.patch                        |    0
- 8 files changed, 0 insertions(+), 0 deletions(-)
+This seems like a missed opportunity to me --- especially when we can so easily
+hook the configuration menu for user customization. It would be nice if local
+packages could be added without having to edit buildroot itself. Do you --- or
+others --- think that there is any point in pursuing this idea? The
+fact that similar
+patches have been proposed before would seem to suggest that this is something
+that users would benefit from.
 
-diff --git a/package/busybox/busybox-1.19.4/busybox-1.19.4-udhcp.patch b/package/busybox/1.19.4/busybox-1.19.4-udhcp.patch
-similarity index 100%
-rename from package/busybox/busybox-1.19.4/busybox-1.19.4-udhcp.patch
-rename to package/busybox/1.19.4/busybox-1.19.4-udhcp.patch
-diff --git a/package/busybox/busybox-1.20.2/busybox-1.20.2-kernel_ver.patch b/package/busybox/1.20.2/busybox-1.20.2-kernel_ver.patch
-similarity index 100%
-rename from package/busybox/busybox-1.20.2/busybox-1.20.2-kernel_ver.patch
-rename to package/busybox/1.20.2/busybox-1.20.2-kernel_ver.patch
-diff --git a/package/busybox/busybox-1.20.2/busybox-1.20.2-ntpd.patch b/package/busybox/1.20.2/busybox-1.20.2-ntpd.patch
-similarity index 100%
-rename from package/busybox/busybox-1.20.2/busybox-1.20.2-ntpd.patch
-rename to package/busybox/1.20.2/busybox-1.20.2-ntpd.patch
-diff --git a/package/busybox/busybox-1.20.2/busybox-1.20.2-pkg-config-selinux.patch b/package/busybox/1.20.2/busybox-1.20.2-pkg-config-selinux.patch
-similarity index 100%
-rename from package/busybox/busybox-1.20.2/busybox-1.20.2-pkg-config-selinux.patch
-rename to package/busybox/1.20.2/busybox-1.20.2-pkg-config-selinux.patch
-diff --git a/package/busybox/busybox-1.20.2/busybox-1.20.2-sys-resource.patch b/package/busybox/1.20.2/busybox-1.20.2-sys-resource.patch
-similarity index 100%
-rename from package/busybox/busybox-1.20.2/busybox-1.20.2-sys-resource.patch
-rename to package/busybox/1.20.2/busybox-1.20.2-sys-resource.patch
-diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-mdev.patch b/package/busybox/1.21.0/busybox-1.21.0-mdev.patch
-similarity index 100%
-rename from package/busybox/busybox-1.21.0/busybox-1.21.0-mdev.patch
-rename to package/busybox/1.21.0/busybox-1.21.0-mdev.patch
-diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch b/package/busybox/1.21.0/busybox-1.21.0-platform.patch
-similarity index 100%
-rename from package/busybox/busybox-1.21.0/busybox-1.21.0-platform.patch
-rename to package/busybox/1.21.0/busybox-1.21.0-platform.patch
-diff --git a/package/busybox/busybox-1.21.0/busybox-1.21.0-xz.patch b/package/busybox/1.21.0/busybox-1.21.0-xz.patch
-similarity index 100%
-rename from package/busybox/busybox-1.21.0/busybox-1.21.0-xz.patch
-rename to package/busybox/1.21.0/busybox-1.21.0-xz.patch
+>  Another buildroot rule is that the build should never modify the buildroot
+> directory itself when O= is specified on the command line. So the
+> Config.in.user should at least be in the CONFIG_DIR rather than the TOPDIR.
+
+Okay; thanks for the tip. I'll fix it if this patch survives into
+another iteration.
+
+Simon.
