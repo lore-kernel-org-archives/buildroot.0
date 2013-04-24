@@ -1,30 +1,35 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 24 Apr 2013 08:09:31 +0200
-Subject: [Buildroot] [PATCH 0/2] Download patches for Busybox
-In-Reply-To: <1366770167-22834-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 24 Apr 2013 04:22:45 +0200")
-References: <1366770167-22834-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8738ugcvdw.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Apr 2013 08:11:01 +0200
+Subject: [Buildroot] [PATCH] busybox: rename patches as per the new
+	standard and update 1.21.0 mdev
+In-Reply-To: <51777691.2020702@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Wed, 24 Apr 2013 03:07:13 -0300")
+References: <1366723305-14386-1-git-send-email-gustavo@zacarias.com.ar>
+ <8761zde433.fsf@dell.be.48ers.dk> <5176F8B6.8020204@mind.be>
+ <87bo94divm.fsf@dell.be.48ers.dk> <51777691.2020702@zacarias.com.ar>
+Message-ID: <87y5c8bgqy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Thomas> Hello,
- Thomas> As recently discussed on the list, here are two patches that
- Thomas> let the busybox package download its patches, instead of
- Thomas> storing them in Buildroot's source tree.
+Hi,
 
-Thanks. There's one big problem with busybox though. Denys tends to
-update the patches without renaming them if more problems are found in
-those applets - So we end up with different results depending on when
-you build.
+ Gustavo> The problem with downloading busybox patches directly is that
+ Gustavo> upstream kind of sucks regarding naming and updates.  For
+ Gustavo> instance the mdev patch changed without being reflected in the
+ Gustavo> filename, and so did other patches in the past.  This could
+ Gustavo> cause unexpected behaviour depending on which patch each user
+ Gustavo> got, specially when they're being early adopters of new
+ Gustavo> versions and using a common download directory.  Telling
+ Gustavo> people to "remove your patches to force a new download and try
+ Gustavo> again" would just be adding unnecessary noise/bugs.
 
-Perhaps we can convince him to do otherwise, but until then I would
-prefer to keep it like it is.
+Indeed. I think the only sane option is to bundle the busybox patches in
+BR until upstream changes their ways.
 
 -- 
 Bye, Peter Korsgaard
