@@ -1,45 +1,1248 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Apr 2013 04:22:46 +0200
-Subject: [Buildroot] [PATCH 1/2] package: use only the patch file name when
-	applying patches
+Date: Wed, 24 Apr 2013 04:22:47 +0200
+Subject: [Buildroot] [PATCH 2/2] busybox: download patches instead of
+	storing them in the source tree
 In-Reply-To: <1366770167-22834-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1366770167-22834-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1366770167-22834-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1366770167-22834-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the <pkg>_PATCH variable assumes that the patches listed
-are in the same directory as the downloaded tarball. This prevents to
-get patches in other locations on the same site, like is the case with
-Busybox patches: the tarball is at /downloads/, the patches are at
-/downloads/fixes-<version>/. So if you put BUSYBOX_PATCH =
-fixes-<version>/foobar.patch, the current logic downloads
-foobar.patch, but tries to apply fixes-<version>/foobar.patch, which
-doesn't make sense.
-
-Therefore, we add a call to $(notdir ...) to get just the patch file
-name.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/busybox/1.19.4/busybox-1.19.4-udhcp.patch  |  164 -----
+ .../busybox/1.20.2/busybox-1.20.2-kernel_ver.patch |   25 -
+ package/busybox/1.20.2/busybox-1.20.2-ntpd.patch   |   11 -
+ .../1.20.2/busybox-1.20.2-pkg-config-selinux.patch |   67 --
+ .../1.20.2/busybox-1.20.2-sys-resource.patch       |  123 ----
+ package/busybox/1.21.0/busybox-1.21.0-mdev.patch   |  643 --------------------
+ .../busybox/1.21.0/busybox-1.21.0-platform.patch   |   24 -
+ package/busybox/1.21.0/busybox-1.21.0-xz.patch     |   84 ---
+ package/busybox/busybox.mk                         |   12 +
+ 9 files changed, 12 insertions(+), 1141 deletions(-)
+ delete mode 100644 package/busybox/1.19.4/busybox-1.19.4-udhcp.patch
+ delete mode 100644 package/busybox/1.20.2/busybox-1.20.2-kernel_ver.patch
+ delete mode 100644 package/busybox/1.20.2/busybox-1.20.2-ntpd.patch
+ delete mode 100644 package/busybox/1.20.2/busybox-1.20.2-pkg-config-selinux.patch
+ delete mode 100644 package/busybox/1.20.2/busybox-1.20.2-sys-resource.patch
+ delete mode 100644 package/busybox/1.21.0/busybox-1.21.0-mdev.patch
+ delete mode 100644 package/busybox/1.21.0/busybox-1.21.0-platform.patch
+ delete mode 100644 package/busybox/1.21.0/busybox-1.21.0-xz.patch
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index e6bc955..5dcfc8d 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -86,7 +86,7 @@ $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME)
- $(BUILD_DIR)/%/.stamp_patched:
- 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
- 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
--	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(p)$(sep))
-+	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(notdir $(p))$(sep))
- 	$(Q)( \
- 	for D in $(PATCH_BASE_DIRS); do \
- 	  if test -d $${D}; then \
+diff --git a/package/busybox/1.19.4/busybox-1.19.4-udhcp.patch b/package/busybox/1.19.4/busybox-1.19.4-udhcp.patch
+deleted file mode 100644
+index 94d5f34..0000000
+--- a/package/busybox/1.19.4/busybox-1.19.4-udhcp.patch
++++ /dev/null
+@@ -1,164 +0,0 @@
+---- busybox-1.19.4/networking/udhcp/common.c
+-+++ busybox-1.19.4-udhcp/networking/udhcp/common.c
+-@@ -29,16 +29,16 @@ const struct dhcp_optflag dhcp_optflags[
+- //	{ OPTION_IP | OPTION_LIST                 , 0x07 }, /* DHCP_LOG_SERVER    */
+- //	{ OPTION_IP | OPTION_LIST                 , 0x08 }, /* DHCP_COOKIE_SERVER */
+- 	{ OPTION_IP | OPTION_LIST                 , 0x09 }, /* DHCP_LPR_SERVER    */
+--	{ OPTION_STRING               | OPTION_REQ, 0x0c }, /* DHCP_HOST_NAME     */
+-+	{ OPTION_STRING_HOST          | OPTION_REQ, 0x0c }, /* DHCP_HOST_NAME     */
+- 	{ OPTION_U16                              , 0x0d }, /* DHCP_BOOT_SIZE     */
+--	{ OPTION_STRING               | OPTION_REQ, 0x0f }, /* DHCP_DOMAIN_NAME   */
+-+	{ OPTION_STRING_HOST          | OPTION_REQ, 0x0f }, /* DHCP_DOMAIN_NAME   */
+- 	{ OPTION_IP                               , 0x10 }, /* DHCP_SWAP_SERVER   */
+- 	{ OPTION_STRING                           , 0x11 }, /* DHCP_ROOT_PATH     */
+- 	{ OPTION_U8                               , 0x17 }, /* DHCP_IP_TTL        */
+- 	{ OPTION_U16                              , 0x1a }, /* DHCP_MTU           */
+- 	{ OPTION_IP                   | OPTION_REQ, 0x1c }, /* DHCP_BROADCAST     */
+- 	{ OPTION_IP_PAIR | OPTION_LIST            , 0x21 }, /* DHCP_ROUTES        */
+--	{ OPTION_STRING                           , 0x28 }, /* DHCP_NIS_DOMAIN    */
+-+	{ OPTION_STRING_HOST                      , 0x28 }, /* DHCP_NIS_DOMAIN    */
+- 	{ OPTION_IP | OPTION_LIST                 , 0x29 }, /* DHCP_NIS_SERVER    */
+- 	{ OPTION_IP | OPTION_LIST     | OPTION_REQ, 0x2a }, /* DHCP_NTP_SERVER    */
+- 	{ OPTION_IP | OPTION_LIST                 , 0x2c }, /* DHCP_WINS_SERVER   */
+-@@ -46,7 +46,7 @@ const struct dhcp_optflag dhcp_optflags[
+- 	{ OPTION_IP                               , 0x36 }, /* DHCP_SERVER_ID     */
+- 	{ OPTION_STRING                           , 0x38 }, /* DHCP_ERR_MESSAGE   */
+- //TODO: must be combined with 'sname' and 'file' handling:
+--	{ OPTION_STRING                           , 0x42 }, /* DHCP_TFTP_SERVER_NAME */
+-+	{ OPTION_STRING_HOST                      , 0x42 }, /* DHCP_TFTP_SERVER_NAME */
+- 	{ OPTION_STRING                           , 0x43 }, /* DHCP_BOOT_FILE     */
+- //TODO: not a string, but a set of LASCII strings:
+- //	{ OPTION_STRING                           , 0x4D }, /* DHCP_USER_CLASS    */
+-@@ -143,6 +143,7 @@ const uint8_t dhcp_option_lengths[] ALIG
+- 	[OPTION_IP_PAIR] = 8,
+- //	[OPTION_BOOLEAN] = 1,
+- 	[OPTION_STRING] =  1,  /* ignored by udhcp_str2optset */
+-+	[OPTION_STRING_HOST] = 1,  /* ignored by udhcp_str2optset */
+- #if ENABLE_FEATURE_UDHCP_RFC3397
+- 	[OPTION_DNS_STRING] = 1,  /* ignored by both udhcp_str2optset and xmalloc_optname_optval */
+- 	[OPTION_SIP_SERVERS] = 1,
+-@@ -411,7 +412,9 @@ static NOINLINE void attach_option(
+- 			/* actually 255 is ok too, but adding a space can overlow it */
+- 
+- 			existing->data = xrealloc(existing->data, OPT_DATA + 1 + old_len + length);
+--			if ((optflag->flags & OPTION_TYPE_MASK) == OPTION_STRING) {
+-+			if ((optflag->flags & OPTION_TYPE_MASK) == OPTION_STRING
+-+			 || (optflag->flags & OPTION_TYPE_MASK) == OPTION_STRING_HOST
+-+			) {
+- 				/* add space separator between STRING options in a list */
+- 				existing->data[OPT_DATA + old_len] = ' ';
+- 				old_len++;
+-@@ -475,6 +478,7 @@ int FAST_FUNC udhcp_str2optset(const cha
+- 				retval = udhcp_str2nip(val, buffer + 4);
+- 			break;
+- 		case OPTION_STRING:
+-+		case OPTION_STRING_HOST:
+- #if ENABLE_FEATURE_UDHCP_RFC3397
+- 		case OPTION_DNS_STRING:
+- #endif
+---- busybox-1.19.4/networking/udhcp/common.h
+-+++ busybox-1.19.4-udhcp/networking/udhcp/common.h
+-@@ -80,6 +80,9 @@ enum {
+- 	OPTION_IP = 1,
+- 	OPTION_IP_PAIR,
+- 	OPTION_STRING,
+-+	/* Opts of STRING_HOST type will be sanitized before they are passed
+-+	 * to udhcpc script's environment: */
+-+	OPTION_STRING_HOST,
+- //	OPTION_BOOLEAN,
+- 	OPTION_U8,
+- 	OPTION_U16,
+---- busybox-1.19.4/networking/udhcp/dhcpc.c
+-+++ busybox-1.19.4-udhcp/networking/udhcp/dhcpc.c
+-@@ -101,6 +101,7 @@ static const uint8_t len_of_option_as_st
+- 	[OPTION_IP_PAIR         ] = sizeof("255.255.255.255 ") * 2,
+- 	[OPTION_STATIC_ROUTES   ] = sizeof("255.255.255.255/32 255.255.255.255 "),
+- 	[OPTION_STRING          ] = 1,
+-+	[OPTION_STRING_HOST     ] = 1,
+- #if ENABLE_FEATURE_UDHCP_RFC3397
+- 	[OPTION_DNS_STRING      ] = 1, /* unused */
+- 	/* Hmmm, this severely overestimates size if SIP_SERVERS option
+-@@ -135,6 +136,63 @@ static int mton(uint32_t mask)
+- 	return i;
+- }
+- 
+-+/* Check if a given label represents a valid DNS label
+-+ * Return pointer to the first character after the label upon success,
+-+ * NULL otherwise.
+-+ * See RFC1035, 2.3.1
+-+ */
+-+/* We don't need to be particularly anal. For example, allowing _, hyphen
+-+ * at the end, or leading and trailing dots would be ok, since it
+-+ * can't be used for attacks. (Leading hyphen can be, if someone uses
+-+ * cmd "$hostname"
+-+ * in the script: then hostname may be treated as an option)
+-+ */
+-+static const char *valid_domain_label(const char *label)
+-+{
+-+	unsigned char ch;
+-+	unsigned pos = 0;
+-+
+-+	for (;;) {
+-+		ch = *label;
+-+		if ((ch|0x20) < 'a' || (ch|0x20) > 'z') {
+-+			if (pos == 0) {
+-+				/* label must begin with letter */
+-+				return NULL;
+-+			}
+-+			if (ch < '0' || ch > '9') {
+-+				if (ch == '\0' || ch == '.')
+-+					return label;
+-+				/* DNS allows only '-', but we are more permissive */
+-+				if (ch != '-' && ch != '_')
+-+					return NULL;
+-+			}
+-+		}
+-+		label++;
+-+		pos++;
+-+		//Do we want this?
+-+		//if (pos > 63) /* NS_MAXLABEL; labels must be 63 chars or less */
+-+		//	return NULL;
+-+	}
+-+}
+-+
+-+/* Check if a given name represents a valid DNS name */
+-+/* See RFC1035, 2.3.1 */
+-+static int good_hostname(const char *name)
+-+{
+-+	//const char *start = name;
+-+
+-+	for (;;) {
+-+		name = valid_domain_label(name);
+-+		if (!name)
+-+			return 0;
+-+		if (!name[0])
+-+			return 1;
+-+			//Do we want this?
+-+			//return ((name - start) < 1025); /* NS_MAXDNAME */
+-+		name++;
+-+	}
+-+}
+-+
+- /* Create "opt_name=opt_value" string */
+- static NOINLINE char *xmalloc_optname_optval(uint8_t *option, const struct dhcp_optflag *optflag, const char *opt_name)
+- {
+-@@ -185,8 +243,11 @@ static NOINLINE char *xmalloc_optname_op
+- 			break;
+- 		}
+- 		case OPTION_STRING:
+-+		case OPTION_STRING_HOST:
+- 			memcpy(dest, option, len);
+- 			dest[len] = '\0';
+-+			if (type == OPTION_STRING_HOST && !good_hostname(dest))
+-+				safe_strncpy(dest, "bad", len);
+- 			return ret;	 /* Short circuit this case */
+- 		case OPTION_STATIC_ROUTES: {
+- 			/* Option binary format:
+-@@ -314,6 +375,7 @@ static char **fill_envp(struct dhcp_pack
+- 	/* +1 element for each option, +2 for subnet option: */
+- 	if (packet) {
+- 		/* note: do not search for "pad" (0) and "end" (255) options */
+-+//TODO: change logic to scan packet _once_
+- 		for (i = 1; i < 255; i++) {
+- 			temp = udhcp_get_option(packet, i);
+- 			if (temp) {
+diff --git a/package/busybox/1.20.2/busybox-1.20.2-kernel_ver.patch b/package/busybox/1.20.2/busybox-1.20.2-kernel_ver.patch
+deleted file mode 100644
+index 456fb08..0000000
+--- a/package/busybox/1.20.2/busybox-1.20.2-kernel_ver.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+---- busybox-1.20.2/libbb/kernel_version.c
+-+++ busybox-1.20.2-kernel_ver/libbb/kernel_version.c
+-@@ -20,18 +20,15 @@
+- int FAST_FUNC get_linux_version_code(void)
+- {
+- 	struct utsname name;
+--	char *s;
+-+	char *s, *t;
+- 	int i, r;
+- 
+--	if (uname(&name) == -1) {
+--		bb_perror_msg("can't get system information");
+--		return 0;
+--	}
+--
+-+	uname(&name); /* never fails */
+- 	s = name.release;
+- 	r = 0;
+- 	for (i = 0; i < 3; i++) {
+--		r = r * 256 + atoi(strtok(s, "."));
+-+		t = strtok(s, ".");
+-+		r = r * 256 + (t ? atoi(t) : 0);
+- 		s = NULL;
+- 	}
+- 	return r;
+diff --git a/package/busybox/1.20.2/busybox-1.20.2-ntpd.patch b/package/busybox/1.20.2/busybox-1.20.2-ntpd.patch
+deleted file mode 100644
+index 17fc0b1..0000000
+--- a/package/busybox/1.20.2/busybox-1.20.2-ntpd.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- busybox-1.20.2/networking/ntpd.c
+-+++ busybox-1.20.2-ntpd/networking/ntpd.c
+-@@ -1840,7 +1840,7 @@ recv_and_process_client_pkt(void /*int f
+- 
+- 	/* Build a reply packet */
+- 	memset(&msg, 0, sizeof(msg));
+--	msg.m_status = G.stratum < MAXSTRAT ? G.ntp_status : LI_ALARM;
+-+	msg.m_status = G.stratum < MAXSTRAT ? (G.ntp_status & LI_MASK) : LI_ALARM;
+- 	msg.m_status |= (query_status & VERSION_MASK);
+- 	msg.m_status |= ((query_status & MODE_MASK) == MODE_CLIENT) ?
+- 			 MODE_SERVER : MODE_SYM_PAS;
+diff --git a/package/busybox/1.20.2/busybox-1.20.2-pkg-config-selinux.patch b/package/busybox/1.20.2/busybox-1.20.2-pkg-config-selinux.patch
+deleted file mode 100644
+index f39250c..0000000
+--- a/package/busybox/1.20.2/busybox-1.20.2-pkg-config-selinux.patch
++++ /dev/null
+@@ -1,67 +0,0 @@
+-From b1cec5003b73080a8aa7ea277621bf1c71c3e8d6 Mon Sep 17 00:00:00 2001
+-From: Mike Frysinger <vapier@gentoo.org>
+-Date: Sat, 20 Oct 2012 15:01:26 -0400
+-Subject: [PATCH] build system: use pkg-config to look up selinux libs
+-
+-Newer versions of libselinux has started linking against more libs.
+-Rather than continuing hardcoding things, switch to using pkg-config
+-to query for its dependencies.
+-
+-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+----
+- Makefile       |  1 +
+- Makefile.flags | 12 +++++++++++-
+- 2 files changed, 12 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile b/Makefile
+-index fccde4a..3a0a5e1 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -297,6 +297,7 @@ NM		= $(CROSS_COMPILE)nm
+- STRIP		= $(CROSS_COMPILE)strip
+- OBJCOPY		= $(CROSS_COMPILE)objcopy
+- OBJDUMP		= $(CROSS_COMPILE)objdump
+-+PKG_CONFIG	?= $(CROSS_COMPILE)pkg-config
+- AWK		= awk
+- GENKSYMS	= scripts/genksyms/genksyms
+- DEPMOD		= /sbin/depmod
+-diff --git a/Makefile.flags b/Makefile.flags
+-index c43c8dc..15dcc1f 100644
+---- a/Makefile.flags
+-+++ b/Makefile.flags
+-@@ -74,6 +74,12 @@ ARCH_FPIC ?= -fpic
+- ARCH_FPIE ?= -fpie
+- ARCH_PIE ?= -pie
+- 
+-+# Usage: $(eval $(call pkg_check_modules,VARIABLE-PREFIX,MODULES))
+-+define pkg_check_modules
+-+$(1)_CFLAGS := $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --cflags $(2))
+-+$(1)_LIBS := $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --libs $(2))
+-+endef
+-+
+- ifeq ($(CONFIG_BUILD_LIBBUSYBOX),y)
+- # on i386: 14% smaller libbusybox.so
+- # (code itself is 9% bigger, we save on relocs/PLT/GOT)
+-@@ -85,6 +91,7 @@ endif
+- 
+- ifeq ($(CONFIG_STATIC),y)
+- CFLAGS_busybox += -static
+-+PKG_CONFIG_FLAGS += --static
+- endif
+- 
+- ifeq ($(CONFIG_PIE),y)
+-@@ -127,7 +134,10 @@ LDLIBS += pam pam_misc pthread
+- endif
+- 
+- ifeq ($(CONFIG_SELINUX),y)
+--LDLIBS += selinux sepol
+-+SELINUX_PC_MODULES = libselinux libsepol
+-+$(eval $(call pkg_check_modules,SELINUX,$(SELINUX_PC_MODULES)))
+-+CPPFLAGS += $(SELINUX_CFLAGS)
+-+LDLIBS += $(if $(SELINUX_LIBS),$(SELINUX_LIBS:-l%=%),$(SELINUX_PC_MODULES:lib%=%))
+- endif
+- 
+- ifeq ($(CONFIG_EFENCE),y)
+--- 
+-1.7.12
+-
+diff --git a/package/busybox/1.20.2/busybox-1.20.2-sys-resource.patch b/package/busybox/1.20.2/busybox-1.20.2-sys-resource.patch
+deleted file mode 100644
+index 7b18500..0000000
+--- a/package/busybox/1.20.2/busybox-1.20.2-sys-resource.patch
++++ /dev/null
+@@ -1,123 +0,0 @@
+-From 5a5dfcad6ba96d12d68bd7b39279215a8fee70d3 Mon Sep 17 00:00:00 2001
+-From: Tias Guns <tias@ulyssis.org>
+-Date: Sun, 10 Jun 2012 14:19:01 +0200
+-Subject: [PATCH] inetd: fix build failure in Android
+-
+-Signed-off-by: Tias Guns <tias@ulyssis.org>
+-Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+-(cherry picked from commit 64f763b42a43cbf36e401690ff6767c25575e520)
+----
+- networking/inetd.c | 1 +
+- 1 file changed, 1 insertion(+)
+--- 
+-1.7.12
+-
+-From 246ea72843d5b7e9d4cd902dc5e9d71359196303 Mon Sep 17 00:00:00 2001
+-From: Mike Frysinger <vapier@gentoo.org>
+-Date: Thu, 5 Jul 2012 23:19:09 -0400
+-Subject: [PATCH] include sys/resource.h where needed
+-
+-We use functions from sys/resource.h in misc applets, but don't include
+-the header.  This breaks building with newer glibc versions, so add the
+-include where needed.
+-
+-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+-(cherry picked from commit c5fe9f7b723f949457263ef8e22ab807d5b549ce)
+----
+- loginutils/passwd.c      | 1 +
+- miscutils/time.c         | 1 +
+- networking/inetd.c       | 1 +
+- networking/ntpd.c        | 1 +
+- networking/ntpd_simple.c | 1 +
+- runit/chpst.c            | 1 +
+- shell/shell_common.c     | 1 +
+- 7 files changed, 7 insertions(+)
+-
+-diff --git a/loginutils/passwd.c b/loginutils/passwd.c
+-index b83db00..a7006f0 100644
+---- a/loginutils/passwd.c
+-+++ b/loginutils/passwd.c
+-@@ -15,6 +15,7 @@
+- 
+- #include "libbb.h"
+- #include <syslog.h>
+-+#include <sys/resource.h> /* setrlimit */
+- 
+- static void nuke_str(char *str)
+- {
+-diff --git a/miscutils/time.c b/miscutils/time.c
+-index 945f15f..ffed386 100644
+---- a/miscutils/time.c
+-+++ b/miscutils/time.c
+-@@ -16,6 +16,7 @@
+- //usage:     "\n	-v	Verbose"
+- 
+- #include "libbb.h"
+-+#include <sys/resource.h> /* getrusage */
+- 
+- /* Information on the resources used by a child process.  */
+- typedef struct {
+-diff --git a/networking/inetd.c b/networking/inetd.c
+-index 1308d74..00baf69 100644
+---- a/networking/inetd.c
+-+++ b/networking/inetd.c
+-@@ -165,6 +165,8 @@
+- //usage:     "\n		(default: 0 - disabled)"
+- 
+- #include <syslog.h>
+-+#include <sys/resource.h> /* setrlimit */
+-+#include <sys/socket.h> /* un.h may need this */
+- #include <sys/un.h>
+- 
+- #include "libbb.h"
+-diff --git a/networking/ntpd.c b/networking/ntpd.c
+-index 603801e..b885215 100644
+---- a/networking/ntpd.c
+-+++ b/networking/ntpd.c
+-@@ -46,6 +46,7 @@
+- #include "libbb.h"
+- #include <math.h>
+- #include <netinet/ip.h> /* For IPTOS_LOWDELAY definition */
+-+#include <sys/resource.h> /* setpriority */
+- #include <sys/timex.h>
+- #ifndef IPTOS_LOWDELAY
+- # define IPTOS_LOWDELAY 0x10
+-diff --git a/networking/ntpd_simple.c b/networking/ntpd_simple.c
+-index 4ad44e4..1b7c66b 100644
+---- a/networking/ntpd_simple.c
+-+++ b/networking/ntpd_simple.c
+-@@ -7,6 +7,7 @@
+-  */
+- #include "libbb.h"
+- #include <netinet/ip.h> /* For IPTOS_LOWDELAY definition */
+-+#include <sys/resource.h> /* setpriority */
+- #ifndef IPTOS_LOWDELAY
+- # define IPTOS_LOWDELAY 0x10
+- #endif
+-diff --git a/runit/chpst.c b/runit/chpst.c
+-index ac296ba..ed72c8b 100644
+---- a/runit/chpst.c
+-+++ b/runit/chpst.c
+-@@ -91,6 +91,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- //usage:     "\n			a SIGXCPU after N seconds"
+- 
+- #include "libbb.h"
+-+#include <sys/resource.h> /* getrlimit */
+- 
+- /*
+- Five applets here: chpst, envdir, envuidgid, setuidgid, softlimit.
+-diff --git a/shell/shell_common.c b/shell/shell_common.c
+-index 51c92d6..780e27e 100644
+---- a/shell/shell_common.c
+-+++ b/shell/shell_common.c
+-@@ -18,6 +18,7 @@
+-  */
+- #include "libbb.h"
+- #include "shell_common.h"
+-+#include <sys/resource.h> /* getrlimit */
+- 
+- const char defifsvar[] ALIGN1 = "IFS= \t\n";
+- 
+--- 
+-1.7.12
+-
+diff --git a/package/busybox/1.21.0/busybox-1.21.0-mdev.patch b/package/busybox/1.21.0/busybox-1.21.0-mdev.patch
+deleted file mode 100644
+index 8f6c8d8..0000000
+--- a/package/busybox/1.21.0/busybox-1.21.0-mdev.patch
++++ /dev/null
+@@ -1,643 +0,0 @@
+---- busybox-1.21.0/util-linux/mdev.c
+-+++ busybox-1.21.0-mdev/util-linux/mdev.c
+-@@ -80,7 +80,7 @@
+- //usage:	IF_FEATURE_MDEV_CONF(
+- //usage:       "\n"
+- //usage:       "It uses /etc/mdev.conf with lines\n"
+--//usage:       "	[-]DEVNAME UID:GID PERM"
+-+//usage:       "	[-][ENV=regex;]...DEVNAME UID:GID PERM"
+- //usage:			IF_FEATURE_MDEV_RENAME(" [>|=PATH]|[!]")
+- //usage:			IF_FEATURE_MDEV_EXEC(" [@|$|*PROG]")
+- //usage:       "\n"
+-@@ -230,9 +230,34 @@
+-  * SUBSYSTEM=block
+-  */
+- 
+--static const char keywords[] ALIGN1 = "add\0remove\0change\0";
+-+#define DEBUG_LVL 2
+-+
+-+#if DEBUG_LVL >= 1
+-+# define dbg1(...) do { if (G.verbose) bb_error_msg(__VA_ARGS__); } while(0)
+-+#else
+-+# define dbg1(...) ((void)0)
+-+#endif
+-+#if DEBUG_LVL >= 2
+-+# define dbg2(...) do { if (G.verbose >= 2) bb_error_msg(__VA_ARGS__); } while(0)
+-+#else
+-+# define dbg2(...) ((void)0)
+-+#endif
+-+#if DEBUG_LVL >= 3
+-+# define dbg3(...) do { if (G.verbose >= 3) bb_error_msg(__VA_ARGS__); } while(0)
+-+#else
+-+# define dbg3(...) ((void)0)
+-+#endif
+-+
+-+
+-+static const char keywords[] ALIGN1 = "add\0remove\0"; // "change\0"
+- enum { OP_add, OP_remove };
+- 
+-+struct envmatch {
+-+	struct envmatch *next;
+-+	char *envname;
+-+	regex_t match;
+-+};
+-+
+- struct rule {
+- 	bool keep_matching;
+- 	bool regex_compiled;
+-@@ -243,12 +268,14 @@ struct rule {
+- 	char *ren_mov;
+- 	IF_FEATURE_MDEV_EXEC(char *r_cmd;)
+- 	regex_t match;
+-+	struct envmatch *envmatch;
+- };
+- 
+- struct globals {
+- 	int root_major, root_minor;
+- 	smallint verbose;
+- 	char *subsystem;
+-+	char *subsys_env; /* for putenv("SUBSYSTEM=subsystem") */
+- #if ENABLE_FEATURE_MDEV_CONF
+- 	const char *filename;
+- 	parser_t *parser;
+-@@ -256,6 +283,7 @@ struct globals {
+- 	unsigned rule_idx;
+- #endif
+- 	struct rule cur_rule;
+-+	char timestr[sizeof("60.123456")];
+- } FIX_ALIASING;
+- #define G (*(struct globals*)&bb_common_bufsiz1)
+- #define INIT_G() do { \
+-@@ -270,13 +298,6 @@ struct globals {
+- /* We use additional 64+ bytes in make_device() */
+- #define SCRATCH_SIZE 80
+- 
+--#if 0
+--# define dbg(...) bb_error_msg(__VA_ARGS__)
+--#else
+--# define dbg(...) ((void)0)
+--#endif
+--
+--
+- #if ENABLE_FEATURE_MDEV_CONF
+- 
+- static void make_default_cur_rule(void)
+-@@ -288,14 +309,65 @@ static void make_default_cur_rule(void)
+- 
+- static void clean_up_cur_rule(void)
+- {
+-+	struct envmatch *e;
+-+
+- 	free(G.cur_rule.envvar);
+-+	free(G.cur_rule.ren_mov);
+- 	if (G.cur_rule.regex_compiled)
+- 		regfree(&G.cur_rule.match);
+--	free(G.cur_rule.ren_mov);
+- 	IF_FEATURE_MDEV_EXEC(free(G.cur_rule.r_cmd);)
+-+	e = G.cur_rule.envmatch;
+-+	while (e) {
+-+		free(e->envname);
+-+		regfree(&e->match);
+-+		e = e->next;
+-+	}
+- 	make_default_cur_rule();
+- }
+- 
+-+/* In later versions, endofname is in libbb */
+-+#define endofname mdev_endofname
+-+static
+-+const char* FAST_FUNC
+-+endofname(const char *name)
+-+{
+-+#define is_name(c)      ((c) == '_' || isalpha((unsigned char)(c)))
+-+#define is_in_name(c)   ((c) == '_' || isalnum((unsigned char)(c)))
+-+	if (!is_name(*name))
+-+		return name;
+-+	while (*++name) {
+-+		if (!is_in_name(*name))
+-+			break;
+-+	}
+-+	return name;
+-+}
+-+
+-+static char *parse_envmatch_pfx(char *val)
+-+{
+-+	struct envmatch **nextp = &G.cur_rule.envmatch;
+-+
+-+	for (;;) {
+-+		struct envmatch *e;
+-+		char *semicolon;
+-+		char *eq = strchr(val, '=');
+-+		if (!eq /* || eq == val? */)
+-+			return val;
+-+		if (endofname(val) != eq)
+-+			return val;
+-+		semicolon = strchr(eq, ';');
+-+		if (!semicolon)
+-+			return val;
+-+		/* ENVVAR=regex;... */
+-+		*nextp = e = xzalloc(sizeof(*e));
+-+		nextp = &e->next;
+-+		e->envname = xstrndup(val, eq - val);
+-+		*semicolon = '\0';
+-+		xregcomp(&e->match, eq + 1, REG_EXTENDED);
+-+		*semicolon = ';';
+-+		val = semicolon + 1;
+-+	}
+-+}
+-+
+- static void parse_next_rule(void)
+- {
+- 	/* Note: on entry, G.cur_rule is set to default */
+-@@ -308,12 +380,13 @@ static void parse_next_rule(void)
+- 			break;
+- 
+- 		/* Fields: [-]regex uid:gid mode [alias] [cmd] */
+--		dbg("token1:'%s'", tokens[1]);
+-+		dbg3("token1:'%s'", tokens[1]);
+- 
+- 		/* 1st field */
+- 		val = tokens[0];
+- 		G.cur_rule.keep_matching = ('-' == val[0]);
+- 		val += G.cur_rule.keep_matching; /* swallow leading dash */
+-+		val = parse_envmatch_pfx(val);
+- 		if (val[0] == '@') {
+- 			/* @major,minor[-minor2] */
+- 			/* (useful when name is ambiguous:
+-@@ -328,8 +401,10 @@ static void parse_next_rule(void)
+- 			if (sc == 2)
+- 				G.cur_rule.min1 = G.cur_rule.min0;
+- 		} else {
+-+			char *eq = strchr(val, '=');
+- 			if (val[0] == '$') {
+--				char *eq = strchr(++val, '=');
+-+				/* $ENVVAR=regex ... */
+-+				val++;
+- 				if (!eq) {
+- 					bb_error_msg("bad $envvar=regex on line %d", G.parser->lineno);
+- 					goto next_rule;
+-@@ -373,7 +448,7 @@ static void parse_next_rule(void)
+- 		clean_up_cur_rule();
+- 	} /* while (config_read) */
+- 
+--	dbg("config_close(G.parser)");
+-+	dbg3("config_close(G.parser)");
+- 	config_close(G.parser);
+- 	G.parser = NULL;
+- 
+-@@ -390,7 +465,7 @@ static const struct rule *next_rule(void
+- 
+- 	/* Open conf file if we didn't do it yet */
+- 	if (!G.parser && G.filename) {
+--		dbg("config_open('%s')", G.filename);
+-+		dbg3("config_open('%s')", G.filename);
+- 		G.parser = config_open2(G.filename, fopen_for_read);
+- 		G.filename = NULL;
+- 	}
+-@@ -399,7 +474,7 @@ static const struct rule *next_rule(void
+- 		/* mdev -s */
+- 		/* Do we have rule parsed already? */
+- 		if (G.rule_vec[G.rule_idx]) {
+--			dbg("< G.rule_vec[G.rule_idx:%d]=%p", G.rule_idx, G.rule_vec[G.rule_idx]);
+-+			dbg3("< G.rule_vec[G.rule_idx:%d]=%p", G.rule_idx, G.rule_vec[G.rule_idx]);
+- 			return G.rule_vec[G.rule_idx++];
+- 		}
+- 		make_default_cur_rule();
+-@@ -416,13 +491,28 @@ static const struct rule *next_rule(void
+- 			rule = memcpy(xmalloc(sizeof(G.cur_rule)), &G.cur_rule, sizeof(G.cur_rule));
+- 			G.rule_vec = xrealloc_vector(G.rule_vec, 4, G.rule_idx);
+- 			G.rule_vec[G.rule_idx++] = rule;
+--			dbg("> G.rule_vec[G.rule_idx:%d]=%p", G.rule_idx, G.rule_vec[G.rule_idx]);
+-+			dbg3("> G.rule_vec[G.rule_idx:%d]=%p", G.rule_idx, G.rule_vec[G.rule_idx]);
+- 		}
+- 	}
+- 
+- 	return rule;
+- }
+- 
+-+static int env_matches(struct envmatch *e)
+-+{
+-+	while (e) {
+-+		int r;
+-+		char *val = getenv(e->envname);
+-+		if (!val)
+-+			return 0;
+-+		r = regexec(&e->match, val, /*size*/ 0, /*range[]*/ NULL, /*eflags*/ 0);
+-+		if (r != 0) /* no match */
+-+			return 0;
+-+		e = e->next;
+-+	}
+-+	return 1;
+-+}
+-+
+- #else
+- 
+- # define next_rule() (&G.cur_rule)
+-@@ -479,9 +569,6 @@ static void make_device(char *device_nam
+- {
+- 	int major, minor, type, len;
+- 
+--	if (G.verbose)
+--		bb_error_msg("device: %s, %s", device_name, path);
+--
+- 	/* Try to read major/minor string.  Note that the kernel puts \n after
+- 	 * the data, so we don't need to worry about null terminating the string
+- 	 * because sscanf() will stop at the first nondigit, which \n is.
+-@@ -500,8 +587,7 @@ static void make_device(char *device_nam
+- 			/* no "dev" file, but we can still run scripts
+- 			 * based on device name */
+- 		} else if (sscanf(++dev_maj_min, "%u:%u", &major, &minor) == 2) {
+--			if (G.verbose)
+--				bb_error_msg("maj,min: %u,%u", major, minor);
+-+			dbg1("dev %u,%u", major, minor);
+- 		} else {
+- 			major = -1;
+- 		}
+-@@ -511,7 +597,8 @@ static void make_device(char *device_nam
+- 	/* Determine device name, type, major and minor */
+- 	if (!device_name)
+- 		device_name = (char*) bb_basename(path);
+--	/* http://kernel.org/doc/pending/hotplug.txt says that only
+-+	/*
+-+	 * http://kernel.org/doc/pending/hotplug.txt says that only
+- 	 * "/sys/block/..." is for block devices. "/sys/bus" etc is not.
+- 	 * But since 2.6.25 block devices are also in /sys/class/block.
+- 	 * We use strstr("/block/") to forestall future surprises.
+-@@ -537,6 +624,8 @@ static void make_device(char *device_nam
+- 		rule = next_rule();
+- 
+- #if ENABLE_FEATURE_MDEV_CONF
+-+		if (!env_matches(rule->envmatch))
+-+			continue;
+- 		if (rule->maj >= 0) {  /* @maj,min rule */
+- 			if (major != rule->maj)
+- 				continue;
+-@@ -547,7 +636,7 @@ static void make_device(char *device_nam
+- 		}
+- 		if (rule->envvar) { /* $envvar=regex rule */
+- 			str_to_match = getenv(rule->envvar);
+--			dbg("getenv('%s'):'%s'", rule->envvar, str_to_match);
+-+			dbg3("getenv('%s'):'%s'", rule->envvar, str_to_match);
+- 			if (!str_to_match)
+- 				continue;
+- 		}
+-@@ -555,7 +644,7 @@ static void make_device(char *device_nam
+- 
+- 		if (rule->regex_compiled) {
+- 			int regex_match = regexec(&rule->match, str_to_match, ARRAY_SIZE(off), off, 0);
+--			dbg("regex_match for '%s':%d", str_to_match, regex_match);
+-+			dbg3("regex_match for '%s':%d", str_to_match, regex_match);
+- 			//bb_error_msg("matches:");
+- 			//for (int i = 0; i < ARRAY_SIZE(off); i++) {
+- 			//	if (off[i].rm_so < 0) continue;
+-@@ -574,9 +663,8 @@ static void make_device(char *device_nam
+- 		}
+- 		/* else: it's final implicit "match-all" rule */
+-  rule_matches:
+-+		dbg2("rule matched, line %d", G.parser ? G.parser->lineno : -1);
+- #endif
+--		dbg("rule matched");
+--
+- 		/* Build alias name */
+- 		alias = NULL;
+- 		if (ENABLE_FEATURE_MDEV_RENAME && rule->ren_mov) {
+-@@ -619,34 +707,30 @@ static void make_device(char *device_nam
+- 				}
+- 			}
+- 		}
+--		dbg("alias:'%s'", alias);
+-+		dbg3("alias:'%s'", alias);
+- 
+- 		command = NULL;
+- 		IF_FEATURE_MDEV_EXEC(command = rule->r_cmd;)
+- 		if (command) {
+--			const char *s = "$@*";
+--			const char *s2 = strchr(s, command[0]);
+--
+- 			/* Are we running this command now?
+--			 * Run $cmd on delete, @cmd on create, *cmd on both
+-+			 * Run @cmd on create, $cmd on delete, *cmd on any
+- 			 */
+--			if (s2 - s != (operation == OP_remove) || *s2 == '*') {
+--				/* We are here if: '*',
+--				 * or: '@' and delete = 0,
+--				 * or: '$' and delete = 1
+--				 */
+-+			if ((command[0] == '@' && operation == OP_add)
+-+			 || (command[0] == '$' && operation == OP_remove)
+-+			 || (command[0] == '*')
+-+			) {
+- 				command++;
+- 			} else {
+- 				command = NULL;
+- 			}
+- 		}
+--		dbg("command:'%s'", command);
+-+		dbg3("command:'%s'", command);
+- 
+- 		/* "Execute" the line we found */
+- 		node_name = device_name;
+- 		if (ENABLE_FEATURE_MDEV_RENAME && alias) {
+- 			node_name = alias = build_alias(alias, device_name);
+--			dbg("alias2:'%s'", alias);
+-+			dbg3("alias2:'%s'", alias);
+- 		}
+- 
+- 		if (operation == OP_add && major >= 0) {
+-@@ -656,8 +740,17 @@ static void make_device(char *device_nam
+- 				mkdir_recursive(node_name);
+- 				*slash = '/';
+- 			}
+--			if (G.verbose)
+--				bb_error_msg("mknod: %s (%d,%d) %o", node_name, major, minor, rule->mode | type);
+-+			if (ENABLE_FEATURE_MDEV_CONF) {
+-+				dbg1("mknod %s (%d,%d) %o"
+-+					" %u:%u",
+-+					node_name, major, minor, rule->mode | type,
+-+					rule->ugid.uid, rule->ugid.gid
+-+				);
+-+			} else {
+-+				dbg1("mknod %s (%d,%d) %o",
+-+					node_name, major, minor, rule->mode | type
+-+				);
+-+			}
+- 			if (mknod(node_name, rule->mode | type, makedev(major, minor)) && errno != EEXIST)
+- 				bb_perror_msg("can't create '%s'", node_name);
+- 			if (ENABLE_FEATURE_MDEV_CONF) {
+-@@ -671,8 +764,7 @@ static void make_device(char *device_nam
+- //TODO: on devtmpfs, device_name already exists and symlink() fails.
+- //End result is that instead of symlink, we have two nodes.
+- //What should be done?
+--					if (G.verbose)
+--						bb_error_msg("symlink: %s", device_name);
+-+					dbg1("symlink: %s", device_name);
+- 					symlink(node_name, device_name);
+- 				}
+- 			}
+-@@ -681,27 +773,21 @@ static void make_device(char *device_nam
+- 		if (ENABLE_FEATURE_MDEV_EXEC && command) {
+- 			/* setenv will leak memory, use putenv/unsetenv/free */
+- 			char *s = xasprintf("%s=%s", "MDEV", node_name);
+--			char *s1 = xasprintf("%s=%s", "SUBSYSTEM", G.subsystem);
+- 			putenv(s);
+--			putenv(s1);
+--			if (G.verbose)
+--				bb_error_msg("running: %s", command);
+-+			dbg1("running: %s", command);
+- 			if (system(command) == -1)
+- 				bb_perror_msg("can't run '%s'", command);
+--			bb_unsetenv_and_free(s1);
+- 			bb_unsetenv_and_free(s);
+- 		}
+- 
+- 		if (operation == OP_remove && major >= -1) {
+- 			if (ENABLE_FEATURE_MDEV_RENAME && alias) {
+- 				if (aliaslink == '>') {
+--					if (G.verbose)
+--						bb_error_msg("unlink: %s", device_name);
+-+					dbg1("unlink: %s", device_name);
+- 					unlink(device_name);
+- 				}
+- 			}
+--			if (G.verbose)
+--				bb_error_msg("unlink: %s", node_name);
+-+			dbg1("unlink: %s", node_name);
+- 			unlink(node_name);
+- 		}
+- 
+-@@ -746,9 +832,16 @@ static int FAST_FUNC dirAction(const cha
+- 	 * under /sys/class/ */
+- 	if (1 == depth) {
+- 		free(G.subsystem);
+-+		if (G.subsys_env) {
+-+			bb_unsetenv_and_free(G.subsys_env);
+-+			G.subsys_env = NULL;
+-+		}
+- 		G.subsystem = strrchr(fileName, '/');
+--		if (G.subsystem)
+-+		if (G.subsystem) {
+- 			G.subsystem = xstrdup(G.subsystem + 1);
+-+			G.subsys_env = xasprintf("%s=%s", "SUBSYSTEM", G.subsystem);
+-+			putenv(G.subsys_env);
+-+		}
+- 	}
+- 
+- 	return (depth >= MAX_SYSFS_DEPTH ? SKIP : TRUE);
+-@@ -813,12 +906,107 @@ static void load_firmware(const char *fi
+- 		full_write(loading_fd, "-1", 2);
+- 
+-  out:
+-+	xchdir("/dev");
+- 	if (ENABLE_FEATURE_CLEAN_UP) {
+- 		close(firmware_fd);
+- 		close(loading_fd);
+- 	}
+- }
+- 
+-+static char *curtime(void)
+-+{
+-+	struct timeval tv;
+-+	gettimeofday(&tv, NULL);
+-+	sprintf(G.timestr, "%u.%06u", (unsigned)tv.tv_sec % 60, (unsigned)tv.tv_usec);
+-+	return G.timestr;
+-+}
+-+
+-+static void open_mdev_log(const char *seq, unsigned my_pid)
+-+{
+-+	int logfd = open("mdev.log", O_WRONLY | O_APPEND);
+-+	if (logfd >= 0) {
+-+		xmove_fd(logfd, STDERR_FILENO);
+-+		G.verbose = 2;
+-+		applet_name = xasprintf("%s[%s]", applet_name, seq ? seq : utoa(my_pid));
+-+	}
+-+}
+-+
+-+/* If it exists, does /dev/mdev.seq match $SEQNUM?
+-+ * If it does not match, earlier mdev is running
+-+ * in parallel, and we need to wait.
+-+ * Active mdev pokes us with SIGCHLD to check the new file.
+-+ */
+-+static int
+-+wait_for_seqfile(const char *seq)
+-+{
+-+	/* We time out after 2 sec */
+-+	static const struct timespec ts = { 0, 32*1000*1000 };
+-+	int timeout = 2000 / 32;
+-+	int seq_fd = -1;
+-+	int do_once = 1;
+-+	sigset_t set_CHLD;
+-+
+-+	sigemptyset(&set_CHLD);
+-+	sigaddset(&set_CHLD, SIGCHLD);
+-+	sigprocmask(SIG_BLOCK, &set_CHLD, NULL);
+-+
+-+	for (;;) {
+-+		int seqlen;
+-+		char seqbuf[sizeof(int)*3 + 2];
+-+
+-+		if (seq_fd < 0) {
+-+			seq_fd = open("mdev.seq", O_RDWR);
+-+			if (seq_fd < 0)
+-+				break;
+-+		}
+-+		seqlen = pread(seq_fd, seqbuf, sizeof(seqbuf) - 1, 0);
+-+		if (seqlen < 0) {
+-+			close(seq_fd);
+-+			seq_fd = -1;
+-+			break;
+-+		}
+-+		seqbuf[seqlen] = '\0';
+-+		if (seqbuf[0] == '\n') {
+-+			/* seed file: write out seq ASAP */
+-+			xwrite_str(seq_fd, seq);
+-+			xlseek(seq_fd, 0, SEEK_SET);
+-+			dbg2("first seq written");
+-+			break;
+-+		}
+-+		if (strcmp(seq, seqbuf) == 0) {
+-+			/* correct idx */
+-+			break;
+-+		}
+-+		if (do_once) {
+-+			dbg2("%s waiting for '%s'", curtime(), seqbuf);
+-+			do_once = 0;
+-+		}
+-+		if (sigtimedwait(&set_CHLD, NULL, &ts) >= 0) {
+-+			dbg3("woken up");
+-+			continue; /* don't decrement timeout! */
+-+		}
+-+		if (--timeout == 0) {
+-+			dbg1("%s waiting for '%s'", "timed out", seqbuf);
+-+			break;
+-+		}
+-+	}
+-+	sigprocmask(SIG_UNBLOCK, &set_CHLD, NULL);
+-+	return seq_fd;
+-+}
+-+
+-+static void signal_mdevs(unsigned my_pid)
+-+{
+-+	procps_status_t* p = NULL;
+-+	while ((p = procps_scan(p, PSSCAN_ARGV0)) != NULL) {
+-+		if (p->pid != my_pid
+-+		 && p->argv0
+-+		 && strcmp(bb_basename(p->argv0), "mdev") == 0
+-+		) {
+-+			kill(p->pid, SIGCHLD);
+-+		}
+-+	}
+-+}
+-+
+- int mdev_main(int argc, char **argv) MAIN_EXTERNALLY_VISIBLE;
+- int mdev_main(int argc UNUSED_PARAM, char **argv)
+- {
+-@@ -840,8 +1028,8 @@ int mdev_main(int argc UNUSED_PARAM, cha
+- 	xchdir("/dev");
+- 
+- 	if (argv[1] && strcmp(argv[1], "-s") == 0) {
+--		/* Scan:
+--		 * mdev -s
+-+		/*
+-+		 * Scan: mdev -s
+- 		 */
+- 		struct stat st;
+- 
+-@@ -853,6 +1041,8 @@ int mdev_main(int argc UNUSED_PARAM, cha
+- 		G.root_major = major(st.st_dev);
+- 		G.root_minor = minor(st.st_dev);
+- 
+-+		putenv((char*)"ACTION=add");
+-+
+- 		/* ACTION_FOLLOWLINKS is needed since in newer kernels
+- 		 * /sys/block/loop* (for example) are symlinks to dirs,
+- 		 * not real directories.
+-@@ -878,11 +1068,13 @@ int mdev_main(int argc UNUSED_PARAM, cha
+- 		char *action;
+- 		char *env_devname;
+- 		char *env_devpath;
+-+		unsigned my_pid;
+-+		int seq_fd;
+- 		smalluint op;
+- 
+- 		/* Hotplug:
+- 		 * env ACTION=... DEVPATH=... SUBSYSTEM=... [SEQNUM=...] mdev
+--		 * ACTION can be "add" or "remove"
+-+		 * ACTION can be "add", "remove", "change"
+- 		 * DEVPATH is like "/block/sda" or "/class/input/mice"
+- 		 */
+- 		action = getenv("ACTION");
+-@@ -893,39 +1085,20 @@ int mdev_main(int argc UNUSED_PARAM, cha
+- 		if (!action || !env_devpath /*|| !G.subsystem*/)
+- 			bb_show_usage();
+- 		fw = getenv("FIRMWARE");
+--		/* If it exists, does /dev/mdev.seq match $SEQNUM?
+--		 * If it does not match, earlier mdev is running
+--		 * in parallel, and we need to wait */
+- 		seq = getenv("SEQNUM");
+--		if (seq) {
+--			int timeout = 2000 / 32; /* 2000 msec */
+--			do {
+--				int seqlen;
+--				char seqbuf[sizeof(int)*3 + 2];
+--
+--				seqlen = open_read_close("mdev.seq", seqbuf, sizeof(seqbuf) - 1);
+--				if (seqlen < 0) {
+--					seq = NULL;
+--					break;
+--				}
+--				seqbuf[seqlen] = '\0';
+--				if (seqbuf[0] == '\n' /* seed file? */
+--				 || strcmp(seq, seqbuf) == 0 /* correct idx? */
+--				) {
+--					break;
+--				}
+--				usleep(32*1000);
+--			} while (--timeout);
+--		}
+- 
+--		{
+--			int logfd = open("/dev/mdev.log", O_WRONLY | O_APPEND);
+--			if (logfd >= 0) {
+--				xmove_fd(logfd, STDERR_FILENO);
+--				G.verbose = 1;
+--				bb_error_msg("seq: %s action: %s", seq, action);
+--			}
+--		}
+-+		my_pid = getpid();
+-+		open_mdev_log(seq, my_pid);
+-+
+-+		seq_fd = seq ? wait_for_seqfile(seq) : -1;
+-+
+-+		dbg1("%s "
+-+			"ACTION:%s SUBSYSTEM:%s DEVNAME:%s DEVPATH:%s"
+-+			"%s%s",
+-+			curtime(),
+-+			action, G.subsystem, env_devname, env_devpath,
+-+			fw ? " FW:" : "", fw ? fw : ""
+-+		);
+- 
+- 		snprintf(temp, PATH_MAX, "/sys%s", env_devpath);
+- 		if (op == OP_remove) {
+-@@ -935,16 +1108,18 @@ int mdev_main(int argc UNUSED_PARAM, cha
+- 			if (!fw)
+- 				make_device(env_devname, temp, op);
+- 		}
+--		else if (op == OP_add) {
+-+		else {
+- 			make_device(env_devname, temp, op);
+- 			if (ENABLE_FEATURE_MDEV_LOAD_FIRMWARE) {
+--				if (fw)
+-+				if (op == OP_add && fw)
+- 					load_firmware(fw, temp);
+- 			}
+- 		}
+- 
+--		if (seq) {
+--			xopen_xwrite_close("mdev.seq", utoa(xatou(seq) + 1));
+-+		dbg1("%s exiting", curtime());
+-+		if (seq_fd >= 0) {
+-+			xwrite_str(seq_fd, utoa(xatou(seq) + 1));
+-+			signal_mdevs(my_pid);
+- 		}
+- 	}
+- 
+diff --git a/package/busybox/1.21.0/busybox-1.21.0-platform.patch b/package/busybox/1.21.0/busybox-1.21.0-platform.patch
+deleted file mode 100644
+index 9be6cb8..0000000
+--- a/package/busybox/1.21.0/busybox-1.21.0-platform.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+---- busybox-1.21.0/archival/libarchive/decompress_unxz.c
+-+++ busybox-1.21.0-platform/archival/libarchive/decompress_unxz.c
+-@@ -30,8 +30,8 @@ static uint32_t xz_crc32(const uint8_t *
+- /* We use arch-optimized unaligned accessors */
+- #define get_unaligned_le32(buf) ({ uint32_t v; move_from_unaligned32(v, buf); SWAP_LE32(v); })
+- #define get_unaligned_be32(buf) ({ uint32_t v; move_from_unaligned32(v, buf); SWAP_BE32(v); })
+--#define put_unaligned_le32(val, buf) move_to_unaligned16(buf, SWAP_LE32(val))
+--#define put_unaligned_be32(val, buf) move_to_unaligned16(buf, SWAP_BE32(val))
+-+#define put_unaligned_le32(val, buf) move_to_unaligned32(buf, SWAP_LE32(val))
+-+#define put_unaligned_be32(val, buf) move_to_unaligned32(buf, SWAP_BE32(val))
+- 
+- #include "unxz/xz_dec_bcj.c"
+- #include "unxz/xz_dec_lzma2.c"
+---- busybox-1.21.0/include/platform.h
+-+++ busybox-1.21.0-platform/include/platform.h
+-@@ -228,7 +228,7 @@ typedef uint32_t bb__aliased_uint32_t FI
+- # define move_from_unaligned32(v, u32p) (memcpy(&(v), (u32p), 4))
+- # define move_to_unaligned16(u16p, v) do { \
+- 	uint16_t __t = (v); \
+--	memcpy((u16p), &__t, 4); \
+-+	memcpy((u16p), &__t, 2); \
+- } while (0)
+- # define move_to_unaligned32(u32p, v) do { \
+- 	uint32_t __t = (v); \
+diff --git a/package/busybox/1.21.0/busybox-1.21.0-xz.patch b/package/busybox/1.21.0/busybox-1.21.0-xz.patch
+deleted file mode 100644
+index 56ba1a2..0000000
+--- a/package/busybox/1.21.0/busybox-1.21.0-xz.patch
++++ /dev/null
+@@ -1,84 +0,0 @@
+---- busybox-1.21.0/archival/libarchive/decompress_unxz.c
+-+++ busybox-1.21.0-xz/archival/libarchive/decompress_unxz.c
+-@@ -40,6 +40,7 @@ static uint32_t xz_crc32(const uint8_t *
+- IF_DESKTOP(long long) int FAST_FUNC
+- unpack_xz_stream(transformer_aux_data_t *aux, int src_fd, int dst_fd)
+- {
+-+	enum xz_ret xz_result;
+- 	struct xz_buf iobuf;
+- 	struct xz_dec *state;
+- 	unsigned char *membuf;
+-@@ -63,9 +64,8 @@ unpack_xz_stream(transformer_aux_data_t
+- 	/* Limit memory usage to about 64 MiB. */
+- 	state = xz_dec_init(XZ_DYNALLOC, 64*1024*1024);
+- 
+-+	xz_result = X_OK;
+- 	while (1) {
+--		enum xz_ret r;
+--
+- 		if (iobuf.in_pos == iobuf.in_size) {
+- 			int rd = safe_read(src_fd, membuf, BUFSIZ);
+- 			if (rd < 0) {
+-@@ -73,28 +73,57 @@ unpack_xz_stream(transformer_aux_data_t
+- 				total = -1;
+- 				break;
+- 			}
+-+			if (rd == 0 && xz_result == XZ_STREAM_END)
+-+				break;
+- 			iobuf.in_size = rd;
+- 			iobuf.in_pos = 0;
+- 		}
+-+		if (xz_result == XZ_STREAM_END) {
+-+			/*
+-+			 * Try to start decoding next concatenated stream.
+-+			 * Stream padding must always be a multiple of four
+-+			 * bytes to preserve four-byte alignment. To keep the
+-+			 * code slightly smaller, we aren't as strict here as
+-+			 * the .xz spec requires. We just skip all zero-bytes
+-+			 * without checking the alignment and thus can accept
+-+			 * files that aren't valid, e.g. the XZ utils test
+-+			 * files bad-0pad-empty.xz and bad-0catpad-empty.xz.
+-+			 */
+-+			do {
+-+				if (membuf[iobuf.in_pos] != 0) {
+-+					xz_dec_reset(state);
+-+					goto do_run;
+-+				}
+-+				iobuf.in_pos++;
+-+			} while (iobuf.in_pos < iobuf.in_size);
+-+		}
+-+ do_run:
+- //		bb_error_msg(">in pos:%d size:%d out pos:%d size:%d",
+- //				iobuf.in_pos, iobuf.in_size, iobuf.out_pos, iobuf.out_size);
+--		r = xz_dec_run(state, &iobuf);
+-+		xz_result = xz_dec_run(state, &iobuf);
+- //		bb_error_msg("<in pos:%d size:%d out pos:%d size:%d r:%d",
+--//				iobuf.in_pos, iobuf.in_size, iobuf.out_pos, iobuf.out_size, r);
+-+//				iobuf.in_pos, iobuf.in_size, iobuf.out_pos, iobuf.out_size, xz_result);
+- 		if (iobuf.out_pos) {
+- 			xwrite(dst_fd, iobuf.out, iobuf.out_pos);
+- 			IF_DESKTOP(total += iobuf.out_pos;)
+- 			iobuf.out_pos = 0;
+- 		}
+--		if (r == XZ_STREAM_END) {
+--			break;
+-+		if (xz_result == XZ_STREAM_END) {
+-+			/*
+-+			 * Can just "break;" here, if not for concatenated
+-+			 * .xz streams.
+-+			 * Checking for padding may require buffer
+-+			 * replenishment. Can't do it here.
+-+			 */
+-+			continue;
+- 		}
+--		if (r != XZ_OK && r != XZ_UNSUPPORTED_CHECK) {
+-+		if (xz_result != XZ_OK && xz_result != XZ_UNSUPPORTED_CHECK) {
+- 			bb_error_msg("corrupted data");
+- 			total = -1;
+- 			break;
+- 		}
+- 	}
+-+
+- 	xz_dec_end(state);
+- 	free(membuf);
+- 
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 985203c..bb82074 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -15,6 +15,18 @@ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPLv2
+ BUSYBOX_LICENSE_FILES = LICENSE
+ 
++ifeq ($(BUSYBOX_VERSION),1.21.0)
++BUSYBOX_PATCHES = mdev platform xz
++else ifeq ($(BUSYBOX_VERSION),1.20.2)
++BUSYBOX_PATCHES = kernel_ver ntpd pkg-config-selinux sys-resource
++else ifeq ($(BUSYBOX_VERSION),1.19.4)
++BUSYBOX_PATCHES = udhcp
++endif
++
++BUSYBOX_PATCH = \
++	$(foreach p,$(BUSYBOX_PATCHES),\
++		fixes-$(BUSYBOX_VERSION)/busybox-$(BUSYBOX_VERSION)-$(p).patch)
++
+ BUSYBOX_CFLAGS = \
+ 	$(TARGET_CFLAGS) \
+ 	-I$(LINUX_HEADERS_DIR)/include
 -- 
 1.7.9.5
