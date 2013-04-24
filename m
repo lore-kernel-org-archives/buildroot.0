@@ -1,32 +1,95 @@
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Wed, 24 Apr 2013 15:19:14 +0000
-Subject: [Buildroot] [PATCH 5/7] arc: Add support for ARC-specific GCC
-In-Reply-To: <20130424162751.6500c3df@skate>
-References: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
- <1366630651-6857-6-git-send-email-mjonker@synopsys.com>
- <20130422175605.135d02f5@skate>
- <E6BF041E97966E4DB955F0DF883AD2D6339FA04F@de02wembxa.internal.synopsys.com>
- <20130424162751.6500c3df@skate>
-Message-ID: <E6BF041E97966E4DB955F0DF883AD2D6339FA09B@de02wembxa.internal.synopsys.com>
+From: nmenegale <nicolas.menegale@openwide.fr>
+Date: Wed, 24 Apr 2013 17:35:32 +0200
+Subject: [Buildroot] [PATCH 1/1] cppcms: new package
+Message-ID: <1366817732-27616-1-git-send-email-nicolas.menegale@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Nicolas M?n?gale <nicolas.menegale@openwide.fr>
+---
+v0: initial commit
+CppCMS is a C++ web framework. The cppcms.mk also copy into the host after staging install two
+scripts needed when you compile an application using the web framework (cppcms_tmpl_cc and cppcms_run)
+As discussed on IRC it's not worth creating an host-cppcms package for two script.
+Signed-off-by: nmenegale <nicolas.menegale@openwide.fr>
+---
+ package/Config.in        |  1 +
+ package/cppcms/Config.in | 21 +++++++++++++++++++++
+ package/cppcms/cppcms.mk | 23 +++++++++++++++++++++++
+ 3 files changed, 45 insertions(+)
+ create mode 100644 package/cppcms/Config.in
+ create mode 100644 package/cppcms/cppcms.mk
 
-> > The change is in the upstream project now. Would you like me to change 
-> > the gnuconfig patch in BuildRoot from 'add ARC to gnuconfig'
-> > to 'update gnuconfig from upstream'?
-
-> Yes, that'd be great.
-
-There are some patches with your name on it in support/gnuconfig/patches. 
-These patches seem to be applied already on support/gnuconfig/*. I have 
-updated these patches so that they apply cleanly on top of the new gnuconfig
-(+small ARC-specific addition), but they still have your Signed-off-by tag. 
-
-What's the proper procedure for signing off patches within a patch? 
-
-Mischa
+diff --git a/package/Config.in b/package/Config.in
+index ab514c7..3ade087 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -556,6 +556,7 @@ source "package/apr/Config.in"
+ source "package/apr-util/Config.in"
+ source "package/libcofi/Config.in"
+ source "package/classpath/Config.in"
++source "package/cppcms/Config.in"
+ source "package/elfutils/Config.in"
+ source "package/fftw/Config.in"
+ source "package/libargtable2/Config.in"
+diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
+new file mode 100644
+index 0000000..b53ba18
+--- /dev/null
++++ b/package/cppcms/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_CPPCMS
++	bool "cppcms"
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_ICU
++	select BR2_PACKAGE_LIBGCRYPT
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
++	help
++	  CppCMS is a Free High Performance Web Development Framework
++	  (not a CMS) aimed for Rapid Web Application Development. 
++	  It differs from most of other web development frameworks 
++	  like: Python Django, Java Servlets in following:	  
++	  It is designed and tuned to handle extremely high loads.
++	  It uses modern C++ as primary development language in order to achieve first goal.
++	  It is aimed on development of both Web Sites and Web Services.
++
++	  http://cppcms.com
++
++comment "cppcms requires a toolchain with C++ & WCHAR support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
+new file mode 100644
+index 0000000..b3319c2
+--- /dev/null
++++ b/package/cppcms/cppcms.mk
+@@ -0,0 +1,23 @@
++#############################################################
++#
++# CppCMS
++#
++#############################################################
++
++CPPCMS_VERSION = 1.0.3
++CPPCMS_SOURCE = cppcms-$(CPPCMS_VERSION).tar.bz2
++CPPCMS_LICENSE = LGPLv3
++CPPCMS_LICENSE_FILE = COPYING.TXT
++CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
++CPPCMS_INSTALL_STAGING = YES
++CPPCMS_INSTALL_TARGET = YES
++CPPCMS_CONF_OPT = -DDISABLE_ICONV=ON
++CPPCMS_DEPENDENCIES = zlib pcre icu libgcrypt
++
++define CPPCMS_INSTALL_HOST_TOOLS
++	cp $(STAGING_DIR)/usr/bin/cppcms_tmpl_cc $(HOST_DIR)/usr/bin/cppcms_tmpl_cc
++	cp $(STAGING_DIR)/usr/bin/cppcms_run $(HOST_DIR)/usr/bin/cppcms_run
++endef
++CPPCMS_POST_INSTALL_STAGING_HOOKS += CPPCMS_INSTALL_HOST_TOOLS
++
++$(eval $(cmake-package))
+-- 
+1.8.1.2
