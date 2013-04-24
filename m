@@ -1,38 +1,281 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Wed, 24 Apr 2013 12:13:22 +0200
-Subject: [Buildroot] [PATCH v2 11/12] toolchain/gcc: Only enable
-	--with-float when it makes sense
+Date: Wed, 24 Apr 2013 12:13:23 +0200
+Subject: [Buildroot] [PATCH v2 12/12] toolchain/gcc: Introduce
+	BR2_ARCH_HAS_NO_GCC_x_y
 In-Reply-To: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
 References: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1366798403-6984-12-git-send-email-mjonker@synopsys.com>
+Message-ID: <1366798403-6984-13-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to gcc/config.gcc, only ARM, MIPS and SPARC have the
-"--with-float" option when configuring gcc.
+This patch eliminates the long "depends on" lines in
+toolchain/gcc/Config.in by letting architectures specify
+which GCC versions they do not support.
 
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 ---
- toolchain/gcc/gcc-uclibc-4.x.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ arch/Config.in          |   11 +++++++++++
+ arch/Config.in.arc      |    7 +++++++
+ arch/Config.in.arm      |   10 ++++++++++
+ arch/Config.in.powerpc  |    9 +++++++++
+ arch/Config.in.sparc    |   24 ++++++++++++++++++++++++
+ arch/Config.in.x86      |    2 ++
+ toolchain/gcc/Config.in |   42 +++++++++++++++++++++++++++++++++++-------
+ 7 files changed, 98 insertions(+), 7 deletions(-)
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 4c77c5c..f4dbcae 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -65,7 +65,10 @@ endif
+diff --git a/arch/Config.in b/arch/Config.in
+index 2006f1e..c73dded 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -40,6 +40,10 @@ config BR2_armeb
+ config BR2_aarch64
+ 	bool "AArch64"
+ 	select BR2_ARCH_IS_64
++	select BR2_ARCH_HAS_NO_GCC_4_3
++	select BR2_ARCH_HAS_NO_GCC_4_4
++	select BR2_ARCH_HAS_NO_GCC_4_5
++	select BR2_ARCH_HAS_NO_GCC_4_6
+ 	help
+ 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
+ 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
+@@ -48,6 +52,13 @@ config BR2_aarch64
+ config BR2_avr32
+ 	bool "AVR32"
+ 	select BR2_SOFT_FLOAT
++	select BR2_ARCH_HAS_NO_GCC_4_3
++	select BR2_ARCH_HAS_NO_GCC_4_4
++	select BR2_ARCH_HAS_NO_GCC_4_5
++	select BR2_ARCH_HAS_NO_GCC_4_6
++	select BR2_ARCH_HAS_NO_GCC_4_7
++	select BR2_ARCH_HAS_NO_GCC_4_8
++	select BR2_ARCH_HAS_NO_GCC_SNAP
+ 	help
+ 	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
+ 	  Atmel.
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 9f68b46..2bde0bf 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -5,6 +5,13 @@ config BR2_ARCH
+ config BR2_arc
+ 	bool
+ 	default y if BR2_arcle || BR2_arceb
++	select BR2_ARCH_HAS_NO_GCC_4_3
++	select BR2_ARCH_HAS_NO_GCC_4_4
++	select BR2_ARCH_HAS_NO_GCC_4_5
++	select BR2_ARCH_HAS_NO_GCC_4_6
++	select BR2_ARCH_HAS_NO_GCC_4_7
++	select BR2_ARCH_HAS_NO_GCC_4_8
++	select BR2_ARCH_HAS_NO_GCC_SNAP
  
- # Determine soft-float options
- ifeq ($(BR2_SOFT_FLOAT),y)
-+# only mips*-*-*, arm*-*-* and sparc*-*-* accept --with-float
-+ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_mips)$(BR2_mipsel)$(BR2_sparc)$(BR2_mips64)$(BR2_mips64el),y)
- SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
-+endif
- ifeq ($(BR2_arm)$(BR2_armeb),y) # only set float-abi for arm
- TARGET_SOFT_FLOAT:=-mfloat-abi=soft
- else
+ config BR2_ENDIAN
+ 	default "LITTLE" if BR2_arcle
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index f706dcc..d9a2cef 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -36,17 +36,27 @@ config BR2_arm1176jzf_s
+ config BR2_cortex_a5
+ 	bool "cortex-A5"
+ 	select BR2_ARM_CPU_MAYBE_HAS_NEON
++	select BR2_ARCH_HAS_NO_GCC_4_3
++	select BR2_ARCH_HAS_NO_GCC_4_4
+ config BR2_cortex_a8
+ 	bool "cortex-A8"
+ 	select BR2_ARM_CPU_HAS_NEON
++	select BR2_ARCH_HAS_NO_GCC_4_3
+ config BR2_cortex_a9
+ 	bool "cortex-A9"
+ 	select BR2_ARM_CPU_MAYBE_HAS_NEON
++	select BR2_ARCH_HAS_NO_GCC_4_3
+ config BR2_cortex_a15
+ 	bool "cortex-A15"
+ 	select BR2_ARM_CPU_HAS_NEON
++	select BR2_ARCH_HAS_NO_GCC_4_3
++	select BR2_ARCH_HAS_NO_GCC_4_4
++	select BR2_ARCH_HAS_NO_GCC_4_5
+ config BR2_fa526
+ 	bool "fa526/626"
++	select BR2_ARCH_HAS_NO_GCC_4_3
++	select BR2_ARCH_HAS_NO_GCC_4_4
++	select BR2_ARCH_HAS_NO_GCC_4_5
+ config BR2_strongarm
+ 	bool "strongarm sa110/sa1100"
+ config BR2_xscale
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index 8643efc..6cd6f17 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -20,12 +20,18 @@ config BR2_powerpc_440fp
+ 	bool "440 with FPU"
+ config BR2_powerpc_464
+ 	bool "464"
++	select BR2_ARCH_HAS_NO_GCC_4_3
+ config BR2_powerpc_464fp
+ 	bool "464 with FPU"
++	select BR2_ARCH_HAS_NO_GCC_4_3
+ config BR2_powerpc_476
+ 	bool "476"
++	select BR2_ARCH_HAS_NO_GCC_4_3
++	select BR2_ARCH_HAS_NO_GCC_4_4
+ config BR2_powerpc_476fp
+ 	bool "476 with FPU"
++	select BR2_ARCH_HAS_NO_GCC_4_3
++	select BR2_ARCH_HAS_NO_GCC_4_4
+ config BR2_powerpc_505
+ 	bool "505"
+ config BR2_powerpc_601
+@@ -66,10 +72,13 @@ config BR2_powerpc_8548
+ 	bool "8548 / e500v2"
+ config BR2_powerpc_e300c2
+ 	bool "e300c2"
++	select BR2_ARCH_HAS_NO_GCC_4_3
+ config BR2_powerpc_e300c3
+ 	bool "e300c3"
++	select BR2_ARCH_HAS_NO_GCC_4_3
+ config BR2_powerpc_e500mc
+ 	bool "e500mc"
++	select BR2_ARCH_HAS_NO_GCC_4_3
+ endchoice
+ 
+ choice
+diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
+index 33204a2..c2e6077 100644
+--- a/arch/Config.in.sparc
++++ b/arch/Config.in.sparc
+@@ -9,12 +9,36 @@ config BR2_sparc_v8
+ 	bool "v8"
+ config BR2_sparc_sparchfleon
+ 	bool "hfleon"
++	select BR2_ARCH_HAS_NO_GCC_4_3
++	select BR2_ARCH_HAS_NO_GCC_4_5
++	select BR2_ARCH_HAS_NO_GCC_4_6
++	select BR2_ARCH_HAS_NO_GCC_4_7
++	select BR2_ARCH_HAS_NO_GCC_4_8
++	select BR2_ARCH_HAS_NO_GCC_SNAP
+ config BR2_sparc_sparchfleonv8
+ 	bool "hfleonv8"
++	select BR2_ARCH_HAS_NO_GCC_4_3
++	select BR2_ARCH_HAS_NO_GCC_4_5
++	select BR2_ARCH_HAS_NO_GCC_4_6
++	select BR2_ARCH_HAS_NO_GCC_4_7
++	select BR2_ARCH_HAS_NO_GCC_4_8
++	select BR2_ARCH_HAS_NO_GCC_SNAP
+ config BR2_sparc_sparcsfleon
+ 	bool "sfleon"
++	select BR2_ARCH_HAS_NO_GCC_4_3
++	select BR2_ARCH_HAS_NO_GCC_4_5
++	select BR2_ARCH_HAS_NO_GCC_4_6
++	select BR2_ARCH_HAS_NO_GCC_4_7
++	select BR2_ARCH_HAS_NO_GCC_4_8
++	select BR2_ARCH_HAS_NO_GCC_SNAP
+ config BR2_sparc_sparcsfleonv8
+ 	bool "sfleonv8"
++	select BR2_ARCH_HAS_NO_GCC_4_3
++	select BR2_ARCH_HAS_NO_GCC_4_5
++	select BR2_ARCH_HAS_NO_GCC_4_6
++	select BR2_ARCH_HAS_NO_GCC_4_7
++	select BR2_ARCH_HAS_NO_GCC_4_8
++	select BR2_ARCH_HAS_NO_GCC_SNAP
+ endchoice
+ 
+ config BR2_ARCH
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index ce30605..ce4fd11 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -86,6 +86,8 @@ config BR2_x86_atom
+ 	select BR2_X86_CPU_HAS_SSE2
+ 	select BR2_X86_CPU_HAS_SSE3
+ 	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_ARCH_HAS_NO_GCC_4_3
++	select BR2_ARCH_HAS_NO_GCC_4_4
+ config BR2_x86_k6
+ 	bool "k6"
+ 	select BR2_X86_CPU_HAS_MMX
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index 851afa7..ae8aab4 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -1,5 +1,33 @@
+ # Choose gcc version.
+ 
++config BR2_ARCH_HAS_NO_GCC_4_3
++	bool
++	default n
++
++config BR2_ARCH_HAS_NO_GCC_4_4
++	bool
++	default n
++
++config BR2_ARCH_HAS_NO_GCC_4_5
++	bool
++	default n
++
++config BR2_ARCH_HAS_NO_GCC_4_6
++	bool
++	default n
++
++config BR2_ARCH_HAS_NO_GCC_4_7
++	bool
++	default n
++
++config BR2_ARCH_HAS_NO_GCC_4_8
++	bool
++	default n
++
++config BR2_ARCH_HAS_NO_GCC_SNAP
++	bool
++	default n
++
+ comment "GCC Options"
+ 
+ config BR2_GCC_NEEDS_MPC
+@@ -23,35 +51,35 @@ choice
+ 	       bool "gcc 4.2.2-avr32-2.1.5"
+ 
+ 	config BR2_GCC_VERSION_4_3_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526
++		depends on !BR2_ARCH_HAS_NO_GCC_4_3
+ 		bool "gcc 4.3.x"
+ 
+ 	config BR2_GCC_VERSION_4_4_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526
++		depends on !BR2_ARCH_HAS_NO_GCC_4_4
+ 		bool "gcc 4.4.x"
+ 
+ 	config BR2_GCC_VERSION_4_5_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a15 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526
++		depends on !BR2_ARCH_HAS_NO_GCC_4_5
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.5.x"
+ 
+ 	config BR2_GCC_VERSION_4_6_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		depends on !BR2_ARCH_HAS_NO_GCC_4_6
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.6.x"
+ 
+ 	config BR2_GCC_VERSION_4_7_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		depends on !BR2_ARCH_HAS_NO_GCC_4_7
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.7.x"
+ 
+ 	config BR2_GCC_VERSION_4_8_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		depends on !BR2_ARCH_HAS_NO_GCC_4_8
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.8.x"
+ 
+ 	config BR2_GCC_VERSION_SNAP
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		depends on !BR2_ARCH_HAS_NO_GCC_SNAP
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc snapshot"
+ endchoice
 -- 
 1.7.0.4
