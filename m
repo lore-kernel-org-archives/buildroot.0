@@ -1,71 +1,71 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 23 Apr 2013 23:44:02 +0200
-Subject: [Buildroot] [git commit] crosstool-ng: bump to version 1.18.0
-Message-ID: <20130424071928.3F14D9B800@busybox.osuosl.org>
+Date: Wed, 24 Apr 2013 09:14:53 +0200
+Subject: [Buildroot] [git commit] u-boot: add 2013.04,
+	deprecate 2011.12 / 2012.04, drop 2011.06 / 2011.09
+Message-ID: <20130424071928.9FBBF9B7F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8f0d32b7355213ff9753d2e3909d4610abf45f7
+commit: http://git.buildroot.net/buildroot/commit/?id=3510d8b4af396106e315e21440bc63c2cdf534b1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../crosstool-ng-001-fix-showtuple-stdout.patch    |   35 --------------------
- package/crosstool-ng/crosstool-ng.mk               |    2 +-
- 2 files changed, 1 insertions(+), 36 deletions(-)
+ boot/uboot/Config.in |   16 ++++++----------
+ 1 files changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch b/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
-deleted file mode 100644
-index 416ef76..0000000
---- a/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--changeset:   3141:d8bd17248789
--tag:         tip
--user:        "Yann E. MORIN" <yann.morin.1998@free.fr>
--date:        Sun Jan 06 12:08:33 2013 +0100
--files:       scripts/showTuple.sh.in
--description:
--scripts/showTuple: fix stdout
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index d377fd1..2e95f76 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -14,10 +14,13 @@ config BR2_TARGET_UBOOT_BOARDNAME
+ 
+ choice
+ 	prompt "U-Boot Version"
+-	default BR2_TARGET_UBOOT_2013_01
++	default BR2_TARGET_UBOOT_2013_04
+ 	help
+ 	  Select the specific U-Boot version you want to use
+ 
++config BR2_TARGET_UBOOT_2013_04
++	bool "2013.04"
++
+ config BR2_TARGET_UBOOT_2013_01
+ 	bool "2013.01.01"
+ 
+@@ -29,16 +32,10 @@ config BR2_TARGET_UBOOT_2012_07
+ 
+ config BR2_TARGET_UBOOT_2012_04
+ 	bool "2012.04.01"
++	depends on BR2_DEPRECATED
+ 
+ config BR2_TARGET_UBOOT_2011_12
+ 	bool "2011.12"
 -
--Since we've had the debug shell feature, fd #7 is now used to
--redirect stderr, while it was previously unused.
+-config BR2_TARGET_UBOOT_2011_09
+-	bool "2011.09"
+-	depends on BR2_DEPRECATED
 -
--Use fd #9 to redirect stdout.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--
--diff --git a/scripts/showTuple.sh.in b/scripts/showTuple.sh.in
----- a/scripts/showTuple.sh.in
--+++ b/scripts/showTuple.sh.in
--@@ -7,7 +7,7 @@
-- . "${CT_LIB_DIR}/paths.sh"
-- 
-- # We'll need the stdout later, save it
---exec 7>&1
--+exec 9>&1
-- 
-- # Parse the common functions
-- . "${CT_LIB_DIR}/scripts/functions"
--@@ -27,4 +27,4 @@
-- CT_DoBuildTargetTuple
-- 
-- # All this for this single echo... :-( Sigh, I'll have to re-arrange things...
---echo "${CT_TARGET}" >&7
--+echo "${CT_TARGET}" >&9
--
-diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
-index 2d93f90..b533396 100644
---- a/package/crosstool-ng/crosstool-ng.mk
-+++ b/package/crosstool-ng/crosstool-ng.mk
-@@ -1,4 +1,4 @@
--CROSSTOOL_NG_VERSION           = 1.17.0
-+CROSSTOOL_NG_VERSION           = 1.18.0
- CROSSTOOL_NG_SOURCE            = crosstool-ng-$(CROSSTOOL_NG_VERSION).tar.bz2
- CROSSTOOL_NG_SITE              = http://crosstool-ng.org/download/crosstool-ng/
- CROSSTOOL_NG_INSTALL_TARGET    = NO
+-config BR2_TARGET_UBOOT_2011_06
+-	bool "2011.06"
+ 	depends on BR2_DEPRECATED
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_TARBALL
+@@ -58,13 +55,12 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
++	default "2013.04"	if BR2_TARGET_UBOOT_2013_04
+ 	default "2013.01.01"	if BR2_TARGET_UBOOT_2013_01
+ 	default "2012.10"	if BR2_TARGET_UBOOT_2012_10
+ 	default "2012.07"	if BR2_TARGET_UBOOT_2012_07
+ 	default "2012.04.01"	if BR2_TARGET_UBOOT_2012_04
+ 	default "2011.12"	if BR2_TARGET_UBOOT_2011_12
+-	default "2011.09"	if BR2_TARGET_UBOOT_2011_09
+-	default "2011.06"	if BR2_TARGET_UBOOT_2011_06
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 	default $BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION if BR2_TARGET_UBOOT_CUSTOM_GIT
+ 
