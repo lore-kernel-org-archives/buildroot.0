@@ -1,67 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Apr 2013 16:11:53 +0200
-Subject: [Buildroot] [RFC 2/4] package: fix generic configure for
- top-level parallel make
-In-Reply-To: <1366798138-30722-3-git-send-email-fabio.porcedda@gmail.com>
-References: <1366798138-30722-1-git-send-email-fabio.porcedda@gmail.com>
- <1366798138-30722-3-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20130424161153.3b3587f0@skate>
+Date: Wed, 24 Apr 2013 16:23:16 +0200
+Subject: [Buildroot] [PATCH 0/4] Wayland/weston packages
+In-Reply-To: <5177D3C8.8020309@mind.be>
+References: <1366646873-26196-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <5175ACB8.4060405@mind.be> <20130424042732.2cbfdc43@skate>
+ <5177D3C8.8020309@mind.be>
+Message-ID: <20130424162316.223da5b4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear Arnout Vandecappelle,
 
-Could you add a detailed commit description for patches 2, 3 and 4 ?
-Those patches are touching core infrastructure, so they should be
-explained in detail. Thanks!
+On Wed, 24 Apr 2013 14:44:56 +0200, Arnout Vandecappelle wrote:
+
+> > Does it matter, or should I also move the xkeyboard-config directory
+> > outside of package/x11r7/ ?
+> 
+>   If it no longer depends on xorg7, I would vote to move it out.
+
+It still depends on host-xapp_xkbcomp, but since it's a host package,
+it can be used even if BR2_PACKAGE_XORG7 is not enabled, which is why I
+could move the xkeyboard-config/Config.in inclusion outside of the
+BR2_PACKAGE_XORG7. The other dependencies are runtime dependencies that
+are only needed in a X.org context.
+
+Best regards,
 
 Thomas
-
-On Wed, 24 Apr 2013 12:08:56 +0200, Fabio Porcedda wrote:
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
->  package/pkg-generic.mk | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 2460384..455d0ef 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -386,6 +386,8 @@ $(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
->  $(1)-build:		$(1)-configure \
->  			$$($(2)_TARGET_BUILD)
->  
-> +$$($(2)_TARGET_CONFIGURE): $(1)-depends
-> +$(1)-configure:		$$($(2)_TARGET_CONFIGURE)
->  ifeq ($$($(2)_OVERRIDE_SRCDIR),)
->  # In the normal case (no package override), the sequence of steps is
->  #  source, by downloading
-> @@ -393,8 +395,7 @@ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
->  #  extract
->  #  patch
->  #  configure
-> -$(1)-configure:		$(1)-patch $(1)-depends \
-> -			$$($(2)_TARGET_CONFIGURE)
-> +$$($(2)_TARGET_CONFIGURE): $(1)-patch
->  
->  $(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
->  
-> @@ -409,9 +410,6 @@ else
->  #  source, by rsyncing
->  #  depends
->  #  configure
-> -$(1)-configure:		$(1)-depends \
-> -			$$($(2)_TARGET_CONFIGURE)
-> -
->  $(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
->  
->  $(1)-patch:		$(1)-rsync
-
-
-
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
