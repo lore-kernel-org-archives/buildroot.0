@@ -1,35 +1,80 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 24 Apr 2013 12:08:57 +0200
-Subject: [Buildroot] [RFC 3/4] package: fix generic build for top-level
-	parallel make
-In-Reply-To: <1366798138-30722-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1366798138-30722-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1366798138-30722-4-git-send-email-fabio.porcedda@gmail.com>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Wed, 24 Apr 2013 12:13:12 +0200
+Subject: [Buildroot] [PATCH v2 01/12] arc: Add ARC and ARC BE architecture
+In-Reply-To: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
+References: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <1366798403-6984-2-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/pkg-generic.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs that
+can be used from deeply embedded to high performance host applications.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 455d0ef..09ddd81 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -383,8 +383,8 @@ endif
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+---
+ arch/Config.in     |   18 ++++++++++++++++++
+ arch/Config.in.arc |   14 ++++++++++++++
+ 2 files changed, 32 insertions(+), 0 deletions(-)
+ create mode 100644 arch/Config.in.arc
+
+diff --git a/arch/Config.in b/arch/Config.in
+index 795f24f..2006f1e 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -7,6 +7,20 @@ choice
+ 	help
+ 	  Select the target architecture family to build for.
  
- $(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
++config BR2_arcle
++	bool "ARC (little endian)"
++	help
++	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
++	  that can be used from deeply embedded to high performance host
++	  applications. Little endian.
++
++config BR2_arceb
++	bool "ARC (big endian)"
++	help
++	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
++	  that can be used from deeply embedded to high performance host
++	  applications. Big endian.
++
+ config BR2_arm
+ 	bool "ARM (little endian)"
+ 	help
+@@ -175,6 +189,10 @@ config BR2_GCC_TARGET_ABI
+ config BR2_GCC_TARGET_CPU
+ 	string
  
--$(1)-build:		$(1)-configure \
--			$$($(2)_TARGET_BUILD)
-+$$($(2)_TARGET_BUILD): $(1)-configure
-+$(1)-build:		$$($(2)_TARGET_BUILD)
- 
- $$($(2)_TARGET_CONFIGURE): $(1)-depends
- $(1)-configure:		$$($(2)_TARGET_CONFIGURE)
++if BR2_arcle || BR2_arceb
++source "arch/Config.in.arc"
++endif
++
+ if BR2_arm || BR2_armeb
+ source "arch/Config.in.arm"
+ endif
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+new file mode 100644
+index 0000000..60b59f0
+--- /dev/null
++++ b/arch/Config.in.arc
+@@ -0,0 +1,14 @@
++config BR2_ARCH
++	default "arc"	if BR2_arcle
++	default "arceb"	if BR2_arceb
++
++config BR2_arc
++	bool
++	default y if BR2_arcle || BR2_arceb
++
++config BR2_ENDIAN
++	default "LITTLE" if BR2_arcle
++	default "BIG"	 if BR2_arceb
++
++config BR2_GCC_TARGET_CPU
++	default "arc700"
 -- 
-1.8.1.4
+1.7.0.4
