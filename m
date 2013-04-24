@@ -1,35 +1,30 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 24 Apr 2013 22:08:36 +0200
-Subject: [Buildroot] buildroot with vwdial and vwstreams
-In-Reply-To: <1366832937.23813.YahooMailNeo@web133202.mail.ir2.yahoo.com>
- (P. Aus's message of "Wed, 24 Apr 2013 20:48:57 +0100 (BST)")
-References: <1933FF812CF8714890A209D3BC03BA0A45BF15360D@SI-MBX03.de.bosch.com>
- <1366832937.23813.YahooMailNeo@web133202.mail.ir2.yahoo.com>
-Message-ID: <878v47bsjf.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Apr 2013 22:09:34 +0200
+Subject: [Buildroot] [PATCH 0/4] Wayland/weston packages
+In-Reply-To: <20130424162316.223da5b4@skate> (Thomas Petazzoni's message of
+ "Wed, 24 Apr 2013 16:23:16 +0200")
+References: <1366646873-26196-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <5175ACB8.4060405@mind.be> <20130424042732.2cbfdc43@skate>
+ <5177D3C8.8020309@mind.be> <20130424162316.223da5b4@skate>
+Message-ID: <874nevbsht.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "P" == P Aus stuttgart <handwerkundmehr@yahoo.de> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi Pascal,
+ >> If it no longer depends on xorg7, I would vote to move it out.
 
- P> according http://buildroot.uclibc.org/ you are the maintener of
- P> buildroot.  Is it possible to include wvdial and wvstreams in it?
- P> We are making an embedded system with an attached USB Modem
- P> GPRS/HDSPA/UMTS and we would like to simplyfing the system
- P> construction.  Thanks a lot.  Pascal
+ Thomas> It still depends on host-xapp_xkbcomp, but since it's a host
+ Thomas> package, it can be used even if BR2_PACKAGE_XORG7 is not
+ Thomas> enabled, which is why I could move the
+ Thomas> xkeyboard-config/Config.in inclusion outside of the
+ Thomas> BR2_PACKAGE_XORG7. The other dependencies are runtime
+ Thomas> dependencies that are only needed in a X.org context.
 
-Yes it is possible, but nobody has submitted patches adding vwdial /
-vwstreams yet. Perhaps you could do it?
-
-See http://buildroot.net/downloads/manual/manual.html#adding-packages
-for documentation about how to do this.
-
-Feel free to submit the packages here on the mailing list once you're
-done, so we can review and integrate them into future releases.
+Ok, sounds good.
 
 -- 
 Bye, Peter Korsgaard
