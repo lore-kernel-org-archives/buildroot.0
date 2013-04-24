@@ -1,30 +1,41 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 24 Apr 2013 22:09:34 +0200
-Subject: [Buildroot] [PATCH 0/4] Wayland/weston packages
-In-Reply-To: <20130424162316.223da5b4@skate> (Thomas Petazzoni's message of
- "Wed, 24 Apr 2013 16:23:16 +0200")
-References: <1366646873-26196-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <5175ACB8.4060405@mind.be> <20130424042732.2cbfdc43@skate>
- <5177D3C8.8020309@mind.be> <20130424162316.223da5b4@skate>
-Message-ID: <874nevbsht.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Apr 2013 22:15:48 +0200
+Subject: [Buildroot] [PATCH v2 1/3] post-build: show each script
+	filename before execution
+In-Reply-To: <1365439816-6935-2-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Mon, 8 Apr 2013 18:50:14 +0200")
+References: <1365439816-6935-1-git-send-email-luca@lucaceresoli.net>
+ <1365439816-6935-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87zjwnadmz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- >> If it no longer depends on xorg7, I would vote to move it out.
+ Luca> This also simplifies code by removing the ifneq/endif clauses.
+ Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ Luca> ---
+ Luca>  Makefile |    4 +---
+ Luca>  1 file changed, 1 insertion(+), 3 deletions(-)
 
- Thomas> It still depends on host-xapp_xkbcomp, but since it's a host
- Thomas> package, it can be used even if BR2_PACKAGE_XORG7 is not
- Thomas> enabled, which is why I could move the
- Thomas> xkeyboard-config/Config.in inclusion outside of the
- Thomas> BR2_PACKAGE_XORG7. The other dependencies are runtime
- Thomas> dependencies that are only needed in a X.org context.
+ Luca> diff --git a/Makefile b/Makefile
+ Luca> index c95bb1e..75f0f0c 100644
+ Luca> --- a/Makefile
+ Luca> +++ b/Makefile
+ Luca> @@ -509,11 +509,9 @@ endif
+ Luca>  			$${dir}/ $(TARGET_DIR); \
+ Luca>  	done
+ 
+ Luca> -ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
+ Luca> -	@$(call MESSAGE,"Executing post-build script\(s\)")
+ Luca>  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+ Luca> +		$(call MESSAGE,"Executing  post-build script $(s)"); \
+ Luca>  		$(s) $(TARGET_DIR)$(sep))
 
-Ok, sounds good.
+Double space after 'executing'. Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
