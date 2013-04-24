@@ -1,281 +1,85 @@
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Wed, 24 Apr 2013 12:13:23 +0200
-Subject: [Buildroot] [PATCH v2 12/12] toolchain/gcc: Introduce
-	BR2_ARCH_HAS_NO_GCC_x_y
-In-Reply-To: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
-References: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1366798403-6984-13-git-send-email-mjonker@synopsys.com>
+From: Mark Jackson <mpfj-list@newflow.co.uk>
+Date: Wed, 24 Apr 2013 13:29:19 +0100
+Subject: [Buildroot] [PATCH v2] fs/ubifs: allow extra options to be passed
+ to ubifs creation tools
+Message-ID: <5177D01F.6010802@newflow.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch eliminates the long "depends on" lines in
-toolchain/gcc/Config.in by letting architectures specify
-which GCC versions they do not support.
+Allow extra options to be passed to ubifs creation tools.
 
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in          |   11 +++++++++++
- arch/Config.in.arc      |    7 +++++++
- arch/Config.in.arm      |   10 ++++++++++
- arch/Config.in.powerpc  |    9 +++++++++
- arch/Config.in.sparc    |   24 ++++++++++++++++++++++++
- arch/Config.in.x86      |    2 ++
- toolchain/gcc/Config.in |   42 +++++++++++++++++++++++++++++++++++-------
- 7 files changed, 98 insertions(+), 7 deletions(-)
+Changes in v2:
+- Minor changes as suggested by Thomas Petazzoni
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 2006f1e..c73dded 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -40,6 +40,10 @@ config BR2_armeb
- config BR2_aarch64
- 	bool "AArch64"
- 	select BR2_ARCH_IS_64
-+	select BR2_ARCH_HAS_NO_GCC_4_3
-+	select BR2_ARCH_HAS_NO_GCC_4_4
-+	select BR2_ARCH_HAS_NO_GCC_4_5
-+	select BR2_ARCH_HAS_NO_GCC_4_6
+ fs/ubifs/Config.in |   12 ++++++++++++
+ fs/ubifs/ubi.mk    |    2 ++
+ fs/ubifs/ubifs.mk  |    4 +++-
+ 3 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
+index a5ef5f2..f17c7dc 100644
+--- a/fs/ubifs/Config.in
++++ b/fs/ubifs/Config.in
+@@ -77,6 +77,12 @@ config BR2_TARGET_ROOTFS_UBIFS_LZMA
+ 
+ endchoice
+ 
++config BR2_TARGET_ROOTFS_UBIFS_OPTS
++	string "Additional mkfs.ubifs options"
++	depends on BR2_TARGET_ROOTFS_UBIFS
++	help
++	  Any additional mkfs.ubifs options you may want to include.
++
+ config BR2_TARGET_ROOTFS_UBI
+ 	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	bool "Embed into an UBI image"
+@@ -98,3 +104,9 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
  	help
- 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
- 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
-@@ -48,6 +52,13 @@ config BR2_aarch64
- config BR2_avr32
- 	bool "AVR32"
- 	select BR2_SOFT_FLOAT
-+	select BR2_ARCH_HAS_NO_GCC_4_3
-+	select BR2_ARCH_HAS_NO_GCC_4_4
-+	select BR2_ARCH_HAS_NO_GCC_4_5
-+	select BR2_ARCH_HAS_NO_GCC_4_6
-+	select BR2_ARCH_HAS_NO_GCC_4_7
-+	select BR2_ARCH_HAS_NO_GCC_4_8
-+	select BR2_ARCH_HAS_NO_GCC_SNAP
- 	help
- 	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
- 	  Atmel.
-diff --git a/arch/Config.in.arc b/arch/Config.in.arc
-index 9f68b46..2bde0bf 100644
---- a/arch/Config.in.arc
-+++ b/arch/Config.in.arc
-@@ -5,6 +5,13 @@ config BR2_ARCH
- config BR2_arc
- 	bool
- 	default y if BR2_arcle || BR2_arceb
-+	select BR2_ARCH_HAS_NO_GCC_4_3
-+	select BR2_ARCH_HAS_NO_GCC_4_4
-+	select BR2_ARCH_HAS_NO_GCC_4_5
-+	select BR2_ARCH_HAS_NO_GCC_4_6
-+	select BR2_ARCH_HAS_NO_GCC_4_7
-+	select BR2_ARCH_HAS_NO_GCC_4_8
-+	select BR2_ARCH_HAS_NO_GCC_SNAP
- 
- config BR2_ENDIAN
- 	default "LITTLE" if BR2_arcle
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index f706dcc..d9a2cef 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -36,17 +36,27 @@ config BR2_arm1176jzf_s
- config BR2_cortex_a5
- 	bool "cortex-A5"
- 	select BR2_ARM_CPU_MAYBE_HAS_NEON
-+	select BR2_ARCH_HAS_NO_GCC_4_3
-+	select BR2_ARCH_HAS_NO_GCC_4_4
- config BR2_cortex_a8
- 	bool "cortex-A8"
- 	select BR2_ARM_CPU_HAS_NEON
-+	select BR2_ARCH_HAS_NO_GCC_4_3
- config BR2_cortex_a9
- 	bool "cortex-A9"
- 	select BR2_ARM_CPU_MAYBE_HAS_NEON
-+	select BR2_ARCH_HAS_NO_GCC_4_3
- config BR2_cortex_a15
- 	bool "cortex-A15"
- 	select BR2_ARM_CPU_HAS_NEON
-+	select BR2_ARCH_HAS_NO_GCC_4_3
-+	select BR2_ARCH_HAS_NO_GCC_4_4
-+	select BR2_ARCH_HAS_NO_GCC_4_5
- config BR2_fa526
- 	bool "fa526/626"
-+	select BR2_ARCH_HAS_NO_GCC_4_3
-+	select BR2_ARCH_HAS_NO_GCC_4_4
-+	select BR2_ARCH_HAS_NO_GCC_4_5
- config BR2_strongarm
- 	bool "strongarm sa110/sa1100"
- config BR2_xscale
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 8643efc..6cd6f17 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -20,12 +20,18 @@ config BR2_powerpc_440fp
- 	bool "440 with FPU"
- config BR2_powerpc_464
- 	bool "464"
-+	select BR2_ARCH_HAS_NO_GCC_4_3
- config BR2_powerpc_464fp
- 	bool "464 with FPU"
-+	select BR2_ARCH_HAS_NO_GCC_4_3
- config BR2_powerpc_476
- 	bool "476"
-+	select BR2_ARCH_HAS_NO_GCC_4_3
-+	select BR2_ARCH_HAS_NO_GCC_4_4
- config BR2_powerpc_476fp
- 	bool "476 with FPU"
-+	select BR2_ARCH_HAS_NO_GCC_4_3
-+	select BR2_ARCH_HAS_NO_GCC_4_4
- config BR2_powerpc_505
- 	bool "505"
- config BR2_powerpc_601
-@@ -66,10 +72,13 @@ config BR2_powerpc_8548
- 	bool "8548 / e500v2"
- config BR2_powerpc_e300c2
- 	bool "e300c2"
-+	select BR2_ARCH_HAS_NO_GCC_4_3
- config BR2_powerpc_e300c3
- 	bool "e300c3"
-+	select BR2_ARCH_HAS_NO_GCC_4_3
- config BR2_powerpc_e500mc
- 	bool "e500mc"
-+	select BR2_ARCH_HAS_NO_GCC_4_3
- endchoice
- 
- choice
-diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
-index 33204a2..c2e6077 100644
---- a/arch/Config.in.sparc
-+++ b/arch/Config.in.sparc
-@@ -9,12 +9,36 @@ config BR2_sparc_v8
- 	bool "v8"
- config BR2_sparc_sparchfleon
- 	bool "hfleon"
-+	select BR2_ARCH_HAS_NO_GCC_4_3
-+	select BR2_ARCH_HAS_NO_GCC_4_5
-+	select BR2_ARCH_HAS_NO_GCC_4_6
-+	select BR2_ARCH_HAS_NO_GCC_4_7
-+	select BR2_ARCH_HAS_NO_GCC_4_8
-+	select BR2_ARCH_HAS_NO_GCC_SNAP
- config BR2_sparc_sparchfleonv8
- 	bool "hfleonv8"
-+	select BR2_ARCH_HAS_NO_GCC_4_3
-+	select BR2_ARCH_HAS_NO_GCC_4_5
-+	select BR2_ARCH_HAS_NO_GCC_4_6
-+	select BR2_ARCH_HAS_NO_GCC_4_7
-+	select BR2_ARCH_HAS_NO_GCC_4_8
-+	select BR2_ARCH_HAS_NO_GCC_SNAP
- config BR2_sparc_sparcsfleon
- 	bool "sfleon"
-+	select BR2_ARCH_HAS_NO_GCC_4_3
-+	select BR2_ARCH_HAS_NO_GCC_4_5
-+	select BR2_ARCH_HAS_NO_GCC_4_6
-+	select BR2_ARCH_HAS_NO_GCC_4_7
-+	select BR2_ARCH_HAS_NO_GCC_4_8
-+	select BR2_ARCH_HAS_NO_GCC_SNAP
- config BR2_sparc_sparcsfleonv8
- 	bool "sfleonv8"
-+	select BR2_ARCH_HAS_NO_GCC_4_3
-+	select BR2_ARCH_HAS_NO_GCC_4_5
-+	select BR2_ARCH_HAS_NO_GCC_4_6
-+	select BR2_ARCH_HAS_NO_GCC_4_7
-+	select BR2_ARCH_HAS_NO_GCC_4_8
-+	select BR2_ARCH_HAS_NO_GCC_SNAP
- endchoice
- 
- config BR2_ARCH
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index ce30605..ce4fd11 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -86,6 +86,8 @@ config BR2_x86_atom
- 	select BR2_X86_CPU_HAS_SSE2
- 	select BR2_X86_CPU_HAS_SSE3
- 	select BR2_X86_CPU_HAS_SSSE3
-+	select BR2_ARCH_HAS_NO_GCC_4_3
-+	select BR2_ARCH_HAS_NO_GCC_4_4
- config BR2_x86_k6
- 	bool "k6"
- 	select BR2_X86_CPU_HAS_MMX
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index 851afa7..ae8aab4 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -1,5 +1,33 @@
- # Choose gcc version.
- 
-+config BR2_ARCH_HAS_NO_GCC_4_3
-+	bool
-+	default n
+ 	  Tells ubinize that the flash supports sub-pages and the sub-page
+ 	  size. Use 0 if subpages are not supported on flash chip.
 +
-+config BR2_ARCH_HAS_NO_GCC_4_4
-+	bool
-+	default n
++config BR2_TARGET_ROOTFS_UBI_OPTS
++	string "Additional ubinize options"
++	depends on BR2_TARGET_ROOTFS_UBI
++	help
++	  Any additional ubinize options you may want to include.
+diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
+index 51ab42d..e9033e8 100644
+--- a/fs/ubifs/ubi.mk
++++ b/fs/ubifs/ubi.mk
+@@ -10,6 +10,8 @@ ifneq ($(BR2_TARGET_ROOTFS_UBI_SUBSIZE),0)
+ UBI_UBINIZE_OPTS += -s $(BR2_TARGET_ROOTFS_UBI_SUBSIZE)
+ endif
+ 
++UBI_UBINIZE_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_OPTS))
 +
-+config BR2_ARCH_HAS_NO_GCC_4_5
-+	bool
-+	default n
+ ROOTFS_UBI_DEPENDENCIES = rootfs-ubifs
+ 
+ define ROOTFS_UBI_CMD
+diff --git a/fs/ubifs/ubifs.mk b/fs/ubifs/ubifs.mk
+index 8506dbd..dca2e04 100644
+--- a/fs/ubifs/ubifs.mk
++++ b/fs/ubifs/ubifs.mk
+@@ -16,10 +16,12 @@ ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_NONE),y)
+ UBIFS_OPTS += -x none
+ endif
+ 
++UBIFS_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBIFS_OPTS))
 +
-+config BR2_ARCH_HAS_NO_GCC_4_6
-+	bool
-+	default n
-+
-+config BR2_ARCH_HAS_NO_GCC_4_7
-+	bool
-+	default n
-+
-+config BR2_ARCH_HAS_NO_GCC_4_8
-+	bool
-+	default n
-+
-+config BR2_ARCH_HAS_NO_GCC_SNAP
-+	bool
-+	default n
-+
- comment "GCC Options"
+ ROOTFS_UBIFS_DEPENDENCIES = host-mtd
  
- config BR2_GCC_NEEDS_MPC
-@@ -23,35 +51,35 @@ choice
- 	       bool "gcc 4.2.2-avr32-2.1.5"
+ define ROOTFS_UBIFS_CMD
+ 	$(HOST_DIR)/usr/sbin/mkfs.ubifs -d $(TARGET_DIR) $(UBIFS_OPTS) -o $@
+ endef
  
- 	config BR2_GCC_VERSION_4_3_X
--		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526
-+		depends on !BR2_ARCH_HAS_NO_GCC_4_3
- 		bool "gcc 4.3.x"
- 
- 	config BR2_GCC_VERSION_4_4_X
--		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526
-+		depends on !BR2_ARCH_HAS_NO_GCC_4_4
- 		bool "gcc 4.4.x"
- 
- 	config BR2_GCC_VERSION_4_5_X
--		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a15 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526
-+		depends on !BR2_ARCH_HAS_NO_GCC_4_5
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.5.x"
- 
- 	config BR2_GCC_VERSION_4_6_X
--		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		depends on !BR2_ARCH_HAS_NO_GCC_4_6
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.6.x"
- 
- 	config BR2_GCC_VERSION_4_7_X
--		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		depends on !BR2_ARCH_HAS_NO_GCC_4_7
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.7.x"
- 
- 	config BR2_GCC_VERSION_4_8_X
--		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		depends on !BR2_ARCH_HAS_NO_GCC_4_8
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.8.x"
- 
- 	config BR2_GCC_VERSION_SNAP
--		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		depends on !BR2_ARCH_HAS_NO_GCC_SNAP
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc snapshot"
- endchoice
+-$(eval $(call ROOTFS_TARGET,ubifs))
+\ No newline at end of file
++$(eval $(call ROOTFS_TARGET,ubifs))
 -- 
-1.7.0.4
+1.7.9.5
