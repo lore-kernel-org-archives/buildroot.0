@@ -1,95 +1,89 @@
-From: nmenegale <nicolas.menegale@openwide.fr>
-Date: Wed, 24 Apr 2013 17:35:32 +0200
-Subject: [Buildroot] [PATCH 1/1] cppcms: new package
-Message-ID: <1366817732-27616-1-git-send-email-nicolas.menegale@openwide.fr>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 24 Apr 2013 18:25:01 +0200
+Subject: [Buildroot] [RFC 2/4] package: fix generic configure for
+ top-level parallel make
+In-Reply-To: <20130424161153.3b3587f0@skate>
+References: <1366798138-30722-1-git-send-email-fabio.porcedda@gmail.com>
+ <1366798138-30722-3-git-send-email-fabio.porcedda@gmail.com>
+ <20130424161153.3b3587f0@skate>
+Message-ID: <CAHkwnC8WiE6+1k5YGqevHxe3kaEf4M41D4snUMLJK7B+B60EqQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nicolas M?n?gale <nicolas.menegale@openwide.fr>
----
-v0: initial commit
-CppCMS is a C++ web framework. The cppcms.mk also copy into the host after staging install two
-scripts needed when you compile an application using the web framework (cppcms_tmpl_cc and cppcms_run)
-As discussed on IRC it's not worth creating an host-cppcms package for two script.
-Signed-off-by: nmenegale <nicolas.menegale@openwide.fr>
----
- package/Config.in        |  1 +
- package/cppcms/Config.in | 21 +++++++++++++++++++++
- package/cppcms/cppcms.mk | 23 +++++++++++++++++++++++
- 3 files changed, 45 insertions(+)
- create mode 100644 package/cppcms/Config.in
- create mode 100644 package/cppcms/cppcms.mk
+On Wed, Apr 24, 2013 at 4:11 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Fabio Porcedda,
+>
+> Could you add a detailed commit description for patches 2, 3 and 4 ?
+> Those patches are touching core infrastructure, so they should be
+> explained in detail. Thanks!
 
-diff --git a/package/Config.in b/package/Config.in
-index ab514c7..3ade087 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -556,6 +556,7 @@ source "package/apr/Config.in"
- source "package/apr-util/Config.in"
- source "package/libcofi/Config.in"
- source "package/classpath/Config.in"
-+source "package/cppcms/Config.in"
- source "package/elfutils/Config.in"
- source "package/fftw/Config.in"
- source "package/libargtable2/Config.in"
-diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
-new file mode 100644
-index 0000000..b53ba18
---- /dev/null
-+++ b/package/cppcms/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_CPPCMS
-+	bool "cppcms"
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_ICU
-+	select BR2_PACKAGE_LIBGCRYPT
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
-+	help
-+	  CppCMS is a Free High Performance Web Development Framework
-+	  (not a CMS) aimed for Rapid Web Application Development. 
-+	  It differs from most of other web development frameworks 
-+	  like: Python Django, Java Servlets in following:	  
-+	  It is designed and tuned to handle extremely high loads.
-+	  It uses modern C++ as primary development language in order to achieve first goal.
-+	  It is aimed on development of both Web Sites and Web Services.
-+
-+	  http://cppcms.com
-+
-+comment "cppcms requires a toolchain with C++ & WCHAR support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
-new file mode 100644
-index 0000000..b3319c2
---- /dev/null
-+++ b/package/cppcms/cppcms.mk
-@@ -0,0 +1,23 @@
-+#############################################################
-+#
-+# CppCMS
-+#
-+#############################################################
-+
-+CPPCMS_VERSION = 1.0.3
-+CPPCMS_SOURCE = cppcms-$(CPPCMS_VERSION).tar.bz2
-+CPPCMS_LICENSE = LGPLv3
-+CPPCMS_LICENSE_FILE = COPYING.TXT
-+CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
-+CPPCMS_INSTALL_STAGING = YES
-+CPPCMS_INSTALL_TARGET = YES
-+CPPCMS_CONF_OPT = -DDISABLE_ICONV=ON
-+CPPCMS_DEPENDENCIES = zlib pcre icu libgcrypt
-+
-+define CPPCMS_INSTALL_HOST_TOOLS
-+	cp $(STAGING_DIR)/usr/bin/cppcms_tmpl_cc $(HOST_DIR)/usr/bin/cppcms_tmpl_cc
-+	cp $(STAGING_DIR)/usr/bin/cppcms_run $(HOST_DIR)/usr/bin/cppcms_run
-+endef
-+CPPCMS_POST_INSTALL_STAGING_HOOKS += CPPCMS_INSTALL_HOST_TOOLS
-+
-+$(eval $(cmake-package))
--- 
-1.8.1.2
+Hi Thomas,
+Thanks for reviewing.
+
+I will do that in the next iteration.
+
+Something like:
+
+Some rules depends on the left-to-right evaluation order of prerequisites,
+but that works only in non-parallel makefiles.
+To fix that it must use instead a new rule to clarify that dependency.
+
+Best regards
+Fabio Porcedda
+
+> Thomas
+>
+> On Wed, 24 Apr 2013 12:08:56 +0200, Fabio Porcedda wrote:
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>> ---
+>>  package/pkg-generic.mk | 8 +++-----
+>>  1 file changed, 3 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>> index 2460384..455d0ef 100644
+>> --- a/package/pkg-generic.mk
+>> +++ b/package/pkg-generic.mk
+>> @@ -386,6 +386,8 @@ $(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
+>>  $(1)-build:          $(1)-configure \
+>>                       $$($(2)_TARGET_BUILD)
+>>
+>> +$$($(2)_TARGET_CONFIGURE): $(1)-depends
+>> +$(1)-configure:              $$($(2)_TARGET_CONFIGURE)
+>>  ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+>>  # In the normal case (no package override), the sequence of steps is
+>>  #  source, by downloading
+>> @@ -393,8 +395,7 @@ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+>>  #  extract
+>>  #  patch
+>>  #  configure
+>> -$(1)-configure:              $(1)-patch $(1)-depends \
+>> -                     $$($(2)_TARGET_CONFIGURE)
+>> +$$($(2)_TARGET_CONFIGURE): $(1)-patch
+>>
+>>  $(1)-patch:          $(1)-extract $$($(2)_TARGET_PATCH)
+>>
+>> @@ -409,9 +410,6 @@ else
+>>  #  source, by rsyncing
+>>  #  depends
+>>  #  configure
+>> -$(1)-configure:              $(1)-depends \
+>> -                     $$($(2)_TARGET_CONFIGURE)
+>> -
+>>  $(1)-depends:                $(1)-rsync $$($(2)_DEPENDENCIES)
+>>
+>>  $(1)-patch:          $(1)-rsync
+>
+>
+>
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+
+--
+Fabio Porcedda
