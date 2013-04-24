@@ -1,41 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 24 Apr 2013 22:15:48 +0200
-Subject: [Buildroot] [PATCH v2 1/3] post-build: show each script
-	filename before execution
-In-Reply-To: <1365439816-6935-2-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Mon, 8 Apr 2013 18:50:14 +0200")
-References: <1365439816-6935-1-git-send-email-luca@lucaceresoli.net>
- <1365439816-6935-2-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87zjwnadmz.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 24 Apr 2013 22:13:44 +0200
+Subject: [Buildroot] [git commit] post-image: show each script filename
+	before execution
+Message-ID: <20130424201555.3E9059B765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6d90a69f6c58caff17c1de2f000b65f9bc5a9077
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Luca> This also simplifies code by removing the ifneq/endif clauses.
- Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
- Luca> ---
- Luca>  Makefile |    4 +---
- Luca>  1 file changed, 1 insertion(+), 3 deletions(-)
+This also simplifies code by removing the ifneq/endif clauses.
 
- Luca> diff --git a/Makefile b/Makefile
- Luca> index c95bb1e..75f0f0c 100644
- Luca> --- a/Makefile
- Luca> +++ b/Makefile
- Luca> @@ -509,11 +509,9 @@ endif
- Luca>  			$${dir}/ $(TARGET_DIR); \
- Luca>  	done
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index e825bcd..840aa1f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -555,11 +555,9 @@ target-generatelocales: host-localedef
+ endif
  
- Luca> -ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
- Luca> -	@$(call MESSAGE,"Executing post-build script\(s\)")
- Luca>  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
- Luca> +		$(call MESSAGE,"Executing  post-build script $(s)"); \
- Luca>  		$(s) $(TARGET_DIR)$(sep))
-
-Double space after 'executing'. Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ target-post-image:
+-ifneq ($(BR2_ROOTFS_POST_IMAGE_SCRIPT),"")
+-	@$(call MESSAGE,"Executing post-image script\(s\)")
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
++		$(call MESSAGE,"Executing post-image script $(s)"); \
+ 		$(s) $(BINARIES_DIR)$(sep))
+-endif
+ 
+ toolchain-eclipse-register:
+ 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
