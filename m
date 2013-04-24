@@ -1,9 +1,9 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Wed, 24 Apr 2013 12:13:15 +0200
-Subject: [Buildroot] [PATCH v2 04/12] arc: Add arc, arcbe to gnuconfig
+Date: Wed, 24 Apr 2013 12:13:16 +0200
+Subject: [Buildroot] [PATCH v2 05/12] arc: disable Crosstool-NG for ARC
 In-Reply-To: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
 References: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1366798403-6984-5-git-send-email-mjonker@synopsys.com>
+Message-ID: <1366798403-6984-6-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 ---
- support/gnuconfig/config.sub |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
-index 8509813..b2958ad 100755
---- a/support/gnuconfig/config.sub
-+++ b/support/gnuconfig/config.sub
-@@ -259,7 +259,7 @@ case $basic_machine in
- 	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
- 	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
- 	| am33_2.0 \
--	| arc \
-+	| arc | arceb \
- 	| arm | arm[bl]e | arme[lb] | armv[2-8] | armv[3-8][lb] | armv7[arm] \
- 	| avr | avr32 \
- 	| be32 | be64 \
-@@ -372,7 +372,7 @@ case $basic_machine in
- 	| aarch64-* | aarch64_be-* \
- 	| alpha-* | alphaev[4-8]-* | alphaev56-* | alphaev6[78]-* \
- 	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
--	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* \
-+	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* | arceb-* \
- 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
- 	| avr-* | avr32-* \
- 	| be32-* | be64-* \
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index fa78cf4..e6a3b25 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -22,7 +22,7 @@ config BR2_TOOLCHAIN_EXTERNAL
+ 
+ config BR2_TOOLCHAIN_CTNG
+ 	bool "Crosstool-NG toolchain"
+-	depends on !BR2_microblaze && !BR2_aarch64 && !BR2_xtensa
++	depends on !BR2_microblaze && !BR2_aarch64 && !BR2_xtensa && !BR2_arc
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ 	help
+ 	  Say 'y' if you want to generate the toolchain with crosstool-NG
 -- 
 1.7.0.4
