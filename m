@@ -1,36 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Apr 2013 15:54:23 +0200
-Subject: [Buildroot] [PATCH 0/2] Download patches for Busybox
-In-Reply-To: <8738ugcvdw.fsf@dell.be.48ers.dk>
-References: <1366770167-22834-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <8738ugcvdw.fsf@dell.be.48ers.dk>
-Message-ID: <20130424155423.382dc054@skate>
+Date: Wed, 24 Apr 2013 16:02:17 +0200
+Subject: [Buildroot] [PATCH 1/2] glibmm: new package
+In-Reply-To: <1366791236-22718-1-git-send-email-nicolas.menegale@openwide.fr>
+References: <1366791236-22718-1-git-send-email-nicolas.menegale@openwide.fr>
+Message-ID: <20130424160217.4d8624de@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear nmenegale,
 
-On Wed, 24 Apr 2013 08:09:31 +0200, Peter Korsgaard wrote:
+On Wed, 24 Apr 2013 10:13:55 +0200, nmenegale wrote:
 
->  Thomas> Hello,
->  Thomas> As recently discussed on the list, here are two patches that
->  Thomas> let the busybox package download its patches, instead of
->  Thomas> storing them in Buildroot's source tree.
-> 
-> Thanks. There's one big problem with busybox though. Denys tends to
-> update the patches without renaming them if more problems are found in
-> those applets - So we end up with different results depending on when
-> you build.
+> diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
+> new file mode 100644
+> index 0000000..f7f49bd
+> --- /dev/null
+> +++ b/package/glibmm/glibmm.mk
+> @@ -0,0 +1,13 @@
+> +#############################################################
+> +#
+> +# Glibmm
+> +#
+> +#############################################################
+> +GLIBMM_VERSION = 2.30.1
+> +GLIBMM_LICENSE = LGPLv2.1
+> +GLIBMM_SOURCE = glibmm-$(GLIBMM_VERSION).tar.bz2
+> +GLIBMM_SITE = http://ftp.gnome.org/pub/gnome/sources/glibmm/2.30
+> +GLIBMM_INSTALL_STAGING = YES
+> +GLIBMM_DEPENDENCIES = libglib2 libsigc host-pkgconf
+> +
+> +$(eval $(autotools-package))
 
-Yerk, this is ugly.
+A few minor comments:
 
-> Perhaps we can convince him to do otherwise, but until then I would
-> prefer to keep it like it is.
+ * Please add an empty new line between  the header and the the first
+   variable.
 
-Indeed, in this case, we don't have much choice.
+ * Maybe you should split the version number in two variables in order
+   to re-use it for the site:
+
+GLIBMM_VERSION_MAJOR = 2.30
+GLIBMM_VERSION_MINOR = 1
+GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).$(GLIBMM_VERSION_MINOR)
+GLIBMM_SITE = http://ftp.gnome.org/pub/gnome/sources/glibmm/$(GLIBMM_VERSION_MAJOR)
+
+ * The licensing informations is not entirely correct. I think it
+   should be:
+
+GLIBMM_LICENSE = LGPLv2.1+ (library), GPLv2+ (tools)
+GLIBMM_LICENSE_FILES = COPYING COPYING.tools
 
 Best regards,
 
