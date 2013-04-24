@@ -1,112 +1,61 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 24 Apr 2013 21:41:58 +0200
-Subject: [Buildroot] [PATCH v2 10/12] kernel-headers: Add 3.9-rc8
-	headers to make ARC work
-In-Reply-To: <1366798403-6984-11-git-send-email-mjonker@synopsys.com> (Mischa
- Jonker's message of "Wed, 24 Apr 2013 12:13:21 +0200")
-References: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
- <1366798403-6984-11-git-send-email-mjonker@synopsys.com>
-Message-ID: <87txmvbtrt.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Apr 2013 21:43:52 +0200
+Subject: [Buildroot] [PATCH 1/2] glibmm: new package
+In-Reply-To: <1366791236-22718-1-git-send-email-nicolas.menegale@openwide.fr>
+ (nmenegale's message of "Wed, 24 Apr 2013 10:13:55 +0200")
+References: <1366791236-22718-1-git-send-email-nicolas.menegale@openwide.fr>
+Message-ID: <87ppxjbton.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mischa" == Mischa Jonker <Mischa.Jonker@synopsys.com> writes:
+>>>>> "nmenegale" == nmenegale  <nicolas.menegale@openwide.fr> writes:
 
- Mischa> Add 3.9 release candidate kernel, so that the ARC architecture builds.
- Mischa> Also make sure that older kernels are not selected for ARC.
+ nmenegale> Signed-off-by: Nicolas M?n?gale  <nicolas.menegale@openwide.fr>
+ nmenegale> ---
+ nmenegale> v1: added BR2_INSTALL_LIBSTDCPP and BR2_USE_WCHAR
+ nmenegale> glibmm is also a dependency of libxml++ (the libxml2 c++ wrapper)
+ nmenegale> Signed-off-by: nmenegale <nicolas.menegale@openwide.fr>
+ nmenegale> ---
+ nmenegale>  package/Config.in        |  1 +
+ nmenegale>  package/glibmm/Config.in | 13 +++++++++++++
+ nmenegale>  package/glibmm/glibmm.mk | 13 +++++++++++++
+ nmenegale>  3 files changed, 27 insertions(+)
+ nmenegale>  create mode 100644 package/glibmm/Config.in
+ nmenegale>  create mode 100644 package/glibmm/glibmm.mk
 
-The final 3.9 is supposed to be released by the end of the week, so I
-would prefer to not add -rc8.
+ nmenegale> diff --git a/package/Config.in b/package/Config.in
+ nmenegale> index 06bcdef..c75c3ec 100644
+ nmenegale> --- a/package/Config.in
+ nmenegale> +++ b/package/Config.in
+ nmenegale> @@ -558,6 +558,7 @@ source "package/fftw/Config.in"
+ nmenegale>  source "package/libargtable2/Config.in"
+ nmenegale>  source "package/argp-standalone/Config.in"
+ nmenegale>  source "package/boost/Config.in"
+ nmenegale> +source "package/glibmm/Config.in"
+ nmenegale>  source "package/gmp/Config.in"
+ nmenegale>  source "package/gsl/Config.in"
+ nmenegale>  source "package/gtest/Config.in"
+ nmenegale> diff --git a/package/glibmm/Config.in b/package/glibmm/Config.in
+ nmenegale> new file mode 100644
+ nmenegale> index 0000000..012b681
+ nmenegale> --- /dev/null
+ nmenegale> +++ b/package/glibmm/Config.in
+ nmenegale> @@ -0,0 +1,13 @@
+ nmenegale> +config BR2_PACKAGE_GLIBMM
+ nmenegale> +	bool "glibmm"
+ nmenegale> +	select BR2_PACKAGE_LIBGLIB2
+ nmenegale> +	select BR2_PACKAGE_LIBSIGC
+ nmenegale> +	depends on BR2_INSTALL_LIBSTDCPP
+ nmenegale> +	depends on BR2_USE_WCHAR
+ nmenegale> +	help
+ nmenegale> +	  The GLibmm package is a set of C++ bindings for GLib. 
+ nmenegale> +	  	
 
-
- Mischa> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
- Mischa> ---
- Mischa>  Makefile                           |    1 +
- Mischa>  toolchain/kernel-headers/Config.in |   18 +++++++++++++-----
- Mischa>  2 files changed, 14 insertions(+), 5 deletions(-)
-
- Mischa> diff --git a/Makefile b/Makefile
- Mischa> index 0a91658..8fef492 100644
- Mischa> --- a/Makefile
- Mischa> +++ b/Makefile
- Mischa> @@ -238,6 +238,7 @@ ARCH:=$(call qstrip,$(BR2_ARCH))
- 
- Mischa>  KERNEL_ARCH:=$(shell echo "$(ARCH)" | sed -e "s/-.*//" \
- Mischa>  	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
- Mischa> +	-e s/arc.*/arc/ \
- Mischa>  	-e s/arm.*/arm/ -e s/sa110/arm/ \
- Mischa>  	-e s/aarch64/arm64/ \
- Mischa>  	-e s/bfin/blackfin/ \
- Mischa> diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
- Mischa> index ec75c34..1c972f3 100644
- Mischa> --- a/toolchain/kernel-headers/Config.in
- Mischa> +++ b/toolchain/kernel-headers/Config.in
- Mischa> @@ -17,35 +17,42 @@ choice
- 
- Mischa>  	config BR2_KERNEL_HEADERS_3_0
- Mischa>  		bool "Linux 3.0.x kernel headers"
- Mischa> +		depends on !BR2_arc
- 
- Mischa>  	config BR2_KERNEL_HEADERS_3_1
- Mischa>  		bool "Linux 3.1.x kernel headers"
- Mischa> -		depends on BR2_DEPRECATED
- Mischa> +		depends on BR2_DEPRECATED && !BR2_arc
- 
- Mischa>  	config BR2_KERNEL_HEADERS_3_2
- Mischa>  		bool "Linux 3.2.x kernel headers"
- Mischa> +		depends on !BR2_arc
- 
- Mischa>  	config BR2_KERNEL_HEADERS_3_3
- Mischa>  		bool "Linux 3.3.x kernel headers"
- Mischa> -		depends on BR2_DEPRECATED
- Mischa> +		depends on BR2_DEPRECATED && !BR2_arc
- 
- Mischa>  	config BR2_KERNEL_HEADERS_3_4
- Mischa>  		bool "Linux 3.4.x kernel headers"
- Mischa> +		depends on !BR2_arc
- 
- Mischa>  	config BR2_KERNEL_HEADERS_3_5
- Mischa>  		bool "Linux 3.5.x kernel headers"
- Mischa> -		depends on BR2_DEPRECATED
- Mischa> +		depends on BR2_DEPRECATED && !BR2_arc
- 
- Mischa>  	config BR2_KERNEL_HEADERS_3_6
- Mischa>  		bool "Linux 3.6.x kernel headers"
- Mischa> -		depends on BR2_DEPRECATED
- Mischa> +		depends on BR2_DEPRECATED && !BR2_arc
- 
- Mischa>  	config BR2_KERNEL_HEADERS_3_7
- Mischa>  		bool "Linux 3.7.x kernel headers"
- Mischa> -		depends on BR2_DEPRECATED
- Mischa> +		depends on BR2_DEPRECATED && !BR2_arc
- 
- Mischa>  	config BR2_KERNEL_HEADERS_3_8
- Mischa>  		bool "Linux 3.8.x kernel headers"
- Mischa> +		depends on !BR2_arc
- Mischa> +	
- Mischa> +	config BR2_KERNEL_HEADERS_3_9
- Mischa> +		bool "Linux 3.9.x kernel headers"
- 
- Mischa>  	config BR2_KERNEL_HEADERS_VERSION
- Mischa>  		bool "Manually specified Linux version"
- Mischa> @@ -72,5 +79,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- Mischa>  	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- Mischa>  	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- Mischa>  	default "3.8.8"		if BR2_KERNEL_HEADERS_3_8
- Mischa> +	default "3.9-rc8"	if BR2_KERNEL_HEADERS_3_9
- Mischa>  	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- Mischa>  	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- Mischa> -- 
- Mischa> 1.7.0.4
-
- Mischa> _______________________________________________
- Mischa> buildroot mailing list
- Mischa> buildroot at busybox.net
- Mischa> http://lists.busybox.net/mailman/listinfo/buildroot
-
+There's some stray trailing spaces here. Committed with that fixed,
+thanks.
 
 -- 
 Bye, Peter Korsgaard
