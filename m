@@ -1,137 +1,41 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Wed, 24 Apr 2013 12:13:14 +0200
-Subject: [Buildroot] [PATCH v2 03/12] arc: Add support for ARC-specific
-	binutils
+Date: Wed, 24 Apr 2013 12:13:15 +0200
+Subject: [Buildroot] [PATCH v2 04/12] arc: Add arc, arcbe to gnuconfig
 In-Reply-To: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
 References: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1366798403-6984-4-git-send-email-mjonker@synopsys.com>
+Message-ID: <1366798403-6984-5-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ARC support is not upstream yet...
-
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 ---
- .../binutils/2.19-arc/add-empty-info-files.patch   |   72 ++++++++++++++++++++
- package/binutils/Config.in.host                    |    2 +
- package/binutils/binutils.mk                       |    3 +
- 3 files changed, 77 insertions(+), 0 deletions(-)
- create mode 100644 package/binutils/2.19-arc/add-empty-info-files.patch
+ support/gnuconfig/config.sub |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/2.19-arc/add-empty-info-files.patch b/package/binutils/2.19-arc/add-empty-info-files.patch
-new file mode 100644
-index 0000000..90de429
---- /dev/null
-+++ b/package/binutils/2.19-arc/add-empty-info-files.patch
-@@ -0,0 +1,72 @@
-+binutils: add empty info files to remove makeinfo dependency
-+
-+Signed-off-by: Mischa jonker <mjonker@synopsys.com>
-+---
-+ bfd/doc/bfd.info           |    1 +
-+ binutils/doc/binutils.info |    1 +
-+ etc/configure.info         |    1 +
-+ etc/standards.info         |    1 +
-+ gas/doc/as.info            |    1 +
-+ gprof/gprof.info           |    1 +
-+ ld/ld.info                 |    1 +
-+ 7 files changed, 7 insertions(+), 0 deletions(-)
-+ create mode 100644 bfd/doc/bfd.info
-+ create mode 100644 binutils/doc/binutils.info
-+ create mode 100644 etc/configure.info
-+ create mode 100644 etc/standards.info
-+ create mode 100644 gas/doc/as.info
-+ create mode 100644 gprof/gprof.info
-+ create mode 100644 ld/ld.info
-+
-+diff --git a/bfd/doc/bfd.info b/bfd/doc/bfd.info
-+new file mode 100644
-+index 0000000..8b13789
-+--- /dev/null
-++++ b/bfd/doc/bfd.info
-+@@ -0,0 +1 @@
-++
-+diff --git a/binutils/doc/binutils.info b/binutils/doc/binutils.info
-+new file mode 100644
-+index 0000000..8b13789
-+--- /dev/null
-++++ b/binutils/doc/binutils.info
-+@@ -0,0 +1 @@
-++
-+diff --git a/etc/configure.info b/etc/configure.info
-+new file mode 100644
-+index 0000000..8b13789
-+--- /dev/null
-++++ b/etc/configure.info
-+@@ -0,0 +1 @@
-++
-+diff --git a/etc/standards.info b/etc/standards.info
-+new file mode 100644
-+index 0000000..8b13789
-+--- /dev/null
-++++ b/etc/standards.info
-+@@ -0,0 +1 @@
-++
-+diff --git a/gas/doc/as.info b/gas/doc/as.info
-+new file mode 100644
-+index 0000000..8b13789
-+--- /dev/null
-++++ b/gas/doc/as.info
-+@@ -0,0 +1 @@
-++
-+diff --git a/gprof/gprof.info b/gprof/gprof.info
-+new file mode 100644
-+index 0000000..8b13789
-+--- /dev/null
-++++ b/gprof/gprof.info
-+@@ -0,0 +1 @@
-++
-+diff --git a/ld/ld.info b/ld/ld.info
-+new file mode 100644
-+index 0000000..8b13789
-+--- /dev/null
-++++ b/ld/ld.info
-+@@ -0,0 +1 @@
-++
-+-- 
-+1.7.0.4
-+
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index a61a503..d9bab44 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -2,6 +2,7 @@ comment "Binutils Options"
- 
- choice
- 	prompt "Binutils Version"
-+	depends on !BR2_arc
- 	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
- 	default BR2_BINUTILS_VERSION_2_21_1 if (!BR2_UCLIBC_VERSION_0_9_31)
- 	default BR2_BINUTILS_VERSION_2_21
-@@ -41,6 +42,7 @@ endchoice
- config BR2_BINUTILS_VERSION
- 	string
- 	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
-+	default "2.19-arc"	if BR2_arc
- 	default "2.20.1"	if BR2_BINUTILS_VERSION_2_20_1
- 	default "2.21"		if BR2_BINUTILS_VERSION_2_21
- 	default "2.21.1"	if BR2_BINUTILS_VERSION_2_21_1
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 92e0a74..4aaa08b 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -26,6 +26,9 @@ BINUTILS_SITE = $(BR2_GNU_MIRROR)/binutils
- ifeq ($(ARCH),avr32)
- BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
- endif
-+ifeq ($(BR2_arc),y)
-+BINUTILS_SITE = $(BR2_ARC_SITE)
-+endif
- BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
- BINUTILS_INSTALL_STAGING = YES
- BINUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
+index 8509813..b2958ad 100755
+--- a/support/gnuconfig/config.sub
++++ b/support/gnuconfig/config.sub
+@@ -259,7 +259,7 @@ case $basic_machine in
+ 	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
+ 	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
+ 	| am33_2.0 \
+-	| arc \
++	| arc | arceb \
+ 	| arm | arm[bl]e | arme[lb] | armv[2-8] | armv[3-8][lb] | armv7[arm] \
+ 	| avr | avr32 \
+ 	| be32 | be64 \
+@@ -372,7 +372,7 @@ case $basic_machine in
+ 	| aarch64-* | aarch64_be-* \
+ 	| alpha-* | alphaev[4-8]-* | alphaev56-* | alphaev6[78]-* \
+ 	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
+-	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* \
++	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* | arceb-* \
+ 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
+ 	| avr-* | avr32-* \
+ 	| be32-* | be64-* \
 -- 
 1.7.0.4
