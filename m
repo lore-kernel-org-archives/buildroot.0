@@ -1,109 +1,24 @@
-From: Mark Jackson <mpfj-list@newflow.co.uk>
-Date: Wed, 24 Apr 2013 13:30:25 +0100
-Subject: [Buildroot] [PATCH] fs/ubifs: factorize all the "depends on" into
- "if...endif" blocks
-Message-ID: <5177D061.6020905@newflow.co.uk>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Wed, 24 Apr 2013 12:44:20 +0000
+Subject: [Buildroot] [PATCH 5/7] arc: Add support for ARC-specific GCC
+In-Reply-To: <20130422175605.135d02f5@skate>
+References: <1366630651-6857-1-git-send-email-mjonker@synopsys.com>
+ <1366630651-6857-6-git-send-email-mjonker@synopsys.com>
+ <20130422175605.135d02f5@skate>
+Message-ID: <E6BF041E97966E4DB955F0DF883AD2D6339FA04F@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All the UBIFS options use "depends on BR2_TARGET_ROOTFS_UBIFS" but
-we can simplify the config file by enclosing them in an "if..endif"
-block.
+>> diff --git a/support/gnuconfig/config.sub 
+>> b/support/gnuconfig/config.sub index 8509813..b2958ad 100755
+>> -	| arc \
+>> +	| arc | arceb \
 
-We also do the same for the "depends on BR2_TARGET_ROOTFS_UBI".
+> This should be in a separate patch. Is this change upstream in the gnuconfig project. We from time to time sync up with the upstream variant, so if you want those changes to be preserved over time, they need to be upstreamed.
 
-Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
----
- fs/ubifs/Config.in |   18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+The change is in the upstream project now. Would you like me to change the gnuconfig patch in BuildRoot from 'add ARC to gnuconfig' to 'update gnuconfig from upstream'?
 
-diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
-index f17c7dc..c1d2ce7 100644
---- a/fs/ubifs/Config.in
-+++ b/fs/ubifs/Config.in
-@@ -3,21 +3,20 @@ config BR2_TARGET_ROOTFS_UBIFS
- 	help
- 	  Build a ubifs root filesystem
- 
-+if BR2_TARGET_ROOTFS_UBIFS
-+
- config BR2_TARGET_ROOTFS_UBIFS_LEBSIZE
- 	hex "UBI logical erase block size"
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	default 0x1f800
- 
- config BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE
- 	hex "UBI minimum I/O size"
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	default 0x800
- 	help
- 	  Some comment required here
- 
- config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
- 	int "Maximum LEB count"
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	default 2048
- 	help
- 	  Some comment required here
-@@ -25,7 +24,6 @@ config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
- choice
- 	prompt "ubifs runtime compression"
- 	default BR2_TARGET_ROOTFS_UBIFS_RT_LZO
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	help
- 	  Select which compression format to use at run-time within
- 	  the ubifs file system.
-@@ -50,7 +48,6 @@ endchoice
- choice
- 	prompt "Compression method"
- 	default BR2_TARGET_ROOTFS_UBIFS_NONE
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	help
- 	  Select which compression format to compress the final image
- 	  into.
-@@ -79,19 +76,18 @@ endchoice
- 
- config BR2_TARGET_ROOTFS_UBIFS_OPTS
- 	string "Additional mkfs.ubifs options"
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	help
- 	  Any additional mkfs.ubifs options you may want to include.
- 
- config BR2_TARGET_ROOTFS_UBI
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	bool "Embed into an UBI image"
- 	help
- 	  Build an ubi image from the ubifs one (with ubinize).
- 
-+if BR2_TARGET_ROOTFS_UBI
-+
- config BR2_TARGET_ROOTFS_UBI_PEBSIZE
- 	hex "UBI physical erase block size"
--	depends on BR2_TARGET_ROOTFS_UBI
- 	default 0x20000
- 	help
- 	  Tells ubinize the physical eraseblock size of the flash chip
-@@ -99,7 +95,6 @@ config BR2_TARGET_ROOTFS_UBI_PEBSIZE
- 
- config BR2_TARGET_ROOTFS_UBI_SUBSIZE
- 	int "UBI sub-page size"
--	depends on BR2_TARGET_ROOTFS_UBI
- 	default 512
- 	help
- 	  Tells ubinize that the flash supports sub-pages and the sub-page
-@@ -107,6 +102,9 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
- 
- config BR2_TARGET_ROOTFS_UBI_OPTS
- 	string "Additional ubinize options"
--	depends on BR2_TARGET_ROOTFS_UBI
- 	help
- 	  Any additional ubinize options you may want to include.
-+
-+endif
-+
-+endif
--- 
-1.7.9.5
+Mischa
