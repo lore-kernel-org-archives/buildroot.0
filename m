@@ -1,10 +1,10 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 24 Apr 2013 12:08:56 +0200
-Subject: [Buildroot] [RFC 2/4] package: fix generic configure for top-level
+Date: Wed, 24 Apr 2013 12:08:58 +0200
+Subject: [Buildroot] [RFC 4/4] package: fix generic install for top-level
 	parallel make
 In-Reply-To: <1366798138-30722-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1366798138-30722-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1366798138-30722-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1366798138-30722-5-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +13,48 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/pkg-generic.mk | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ package/pkg-generic.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 2460384..455d0ef 100644
+index 09ddd81..c4ef0fb 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -386,6 +386,8 @@ $(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
- $(1)-build:		$(1)-configure \
- 			$$($(2)_TARGET_BUILD)
+@@ -360,28 +360,28 @@ else
+ $(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
+ endif
  
-+$$($(2)_TARGET_CONFIGURE): $(1)-depends
-+$(1)-configure:		$$($(2)_TARGET_CONFIGURE)
- ifeq ($$($(2)_OVERRIDE_SRCDIR),)
- # In the normal case (no package override), the sequence of steps is
- #  source, by downloading
-@@ -393,8 +395,7 @@ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
- #  extract
- #  patch
- #  configure
--$(1)-configure:		$(1)-patch $(1)-depends \
--			$$($(2)_TARGET_CONFIGURE)
-+$$($(2)_TARGET_CONFIGURE): $(1)-patch
++$$($(2)_TARGET_INSTALL_TARGET) $$($(2)_TARGET_INSTALL_STAGING) \
++	$$($(2)_TARGET_INSTALL_IMAGES) $$($(2)_TARGET_INSTALL_HOST): $(1)-build
++
+ ifeq ($$($(2)_INSTALL_TARGET),YES)
+-$(1)-install-target:	$(1)-build \
+-			$$($(2)_TARGET_INSTALL_TARGET)
++$(1)-install-target:	$$($(2)_TARGET_INSTALL_TARGET)
+ else
+ $(1)-install-target:
+ endif
  
- $(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
+ ifeq ($$($(2)_INSTALL_STAGING),YES)
+-$(1)-install-staging:	$(1)-build \
+-			$$($(2)_TARGET_INSTALL_STAGING)
++$(1)-install-staging:	$$($(2)_TARGET_INSTALL_STAGING)
+ else
+ $(1)-install-staging:
+ endif
  
-@@ -409,9 +410,6 @@ else
- #  source, by rsyncing
- #  depends
- #  configure
--$(1)-configure:		$(1)-depends \
--			$$($(2)_TARGET_CONFIGURE)
--
- $(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
+ ifeq ($$($(2)_INSTALL_IMAGES),YES)
+-$(1)-install-images:	$(1)-build \
+-			$$($(2)_TARGET_INSTALL_IMAGES)
++$(1)-install-images:	$$($(2)_TARGET_INSTALL_IMAGES)
+ else
+ $(1)-install-images:
+ endif
  
- $(1)-patch:		$(1)-rsync
+-$(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
++$(1)-install-host:      $$($(2)_TARGET_INSTALL_HOST)
+ 
+ $$($(2)_TARGET_BUILD): $(1)-configure
+ $(1)-build:		$$($(2)_TARGET_BUILD)
 -- 
 1.8.1.4
