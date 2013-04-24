@@ -1,85 +1,109 @@
 From: Mark Jackson <mpfj-list@newflow.co.uk>
-Date: Wed, 24 Apr 2013 13:29:19 +0100
-Subject: [Buildroot] [PATCH v2] fs/ubifs: allow extra options to be passed
- to ubifs creation tools
-Message-ID: <5177D01F.6010802@newflow.co.uk>
+Date: Wed, 24 Apr 2013 13:30:25 +0100
+Subject: [Buildroot] [PATCH] fs/ubifs: factorize all the "depends on" into
+ "if...endif" blocks
+Message-ID: <5177D061.6020905@newflow.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow extra options to be passed to ubifs creation tools.
+All the UBIFS options use "depends on BR2_TARGET_ROOTFS_UBIFS" but
+we can simplify the config file by enclosing them in an "if..endif"
+block.
+
+We also do the same for the "depends on BR2_TARGET_ROOTFS_UBI".
 
 Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes in v2:
-- Minor changes as suggested by Thomas Petazzoni
-
- fs/ubifs/Config.in |   12 ++++++++++++
- fs/ubifs/ubi.mk    |    2 ++
- fs/ubifs/ubifs.mk  |    4 +++-
- 3 files changed, 17 insertions(+), 1 deletion(-)
+ fs/ubifs/Config.in |   18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
 diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
-index a5ef5f2..f17c7dc 100644
+index f17c7dc..c1d2ce7 100644
 --- a/fs/ubifs/Config.in
 +++ b/fs/ubifs/Config.in
-@@ -77,6 +77,12 @@ config BR2_TARGET_ROOTFS_UBIFS_LZMA
+@@ -3,21 +3,20 @@ config BR2_TARGET_ROOTFS_UBIFS
+ 	help
+ 	  Build a ubifs root filesystem
  
- endchoice
- 
-+config BR2_TARGET_ROOTFS_UBIFS_OPTS
-+	string "Additional mkfs.ubifs options"
-+	depends on BR2_TARGET_ROOTFS_UBIFS
-+	help
-+	  Any additional mkfs.ubifs options you may want to include.
++if BR2_TARGET_ROOTFS_UBIFS
 +
+ config BR2_TARGET_ROOTFS_UBIFS_LEBSIZE
+ 	hex "UBI logical erase block size"
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	default 0x1f800
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE
+ 	hex "UBI minimum I/O size"
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	default 0x800
+ 	help
+ 	  Some comment required here
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
+ 	int "Maximum LEB count"
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	default 2048
+ 	help
+ 	  Some comment required here
+@@ -25,7 +24,6 @@ config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
+ choice
+ 	prompt "ubifs runtime compression"
+ 	default BR2_TARGET_ROOTFS_UBIFS_RT_LZO
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	help
+ 	  Select which compression format to use at run-time within
+ 	  the ubifs file system.
+@@ -50,7 +48,6 @@ endchoice
+ choice
+ 	prompt "Compression method"
+ 	default BR2_TARGET_ROOTFS_UBIFS_NONE
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	help
+ 	  Select which compression format to compress the final image
+ 	  into.
+@@ -79,19 +76,18 @@ endchoice
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_OPTS
+ 	string "Additional mkfs.ubifs options"
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	help
+ 	  Any additional mkfs.ubifs options you may want to include.
+ 
  config BR2_TARGET_ROOTFS_UBI
- 	depends on BR2_TARGET_ROOTFS_UBIFS
+-	depends on BR2_TARGET_ROOTFS_UBIFS
  	bool "Embed into an UBI image"
-@@ -98,3 +104,9 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
+ 	help
+ 	  Build an ubi image from the ubifs one (with ubinize).
+ 
++if BR2_TARGET_ROOTFS_UBI
++
+ config BR2_TARGET_ROOTFS_UBI_PEBSIZE
+ 	hex "UBI physical erase block size"
+-	depends on BR2_TARGET_ROOTFS_UBI
+ 	default 0x20000
+ 	help
+ 	  Tells ubinize the physical eraseblock size of the flash chip
+@@ -99,7 +95,6 @@ config BR2_TARGET_ROOTFS_UBI_PEBSIZE
+ 
+ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
+ 	int "UBI sub-page size"
+-	depends on BR2_TARGET_ROOTFS_UBI
+ 	default 512
  	help
  	  Tells ubinize that the flash supports sub-pages and the sub-page
- 	  size. Use 0 if subpages are not supported on flash chip.
+@@ -107,6 +102,9 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
+ 
+ config BR2_TARGET_ROOTFS_UBI_OPTS
+ 	string "Additional ubinize options"
+-	depends on BR2_TARGET_ROOTFS_UBI
+ 	help
+ 	  Any additional ubinize options you may want to include.
 +
-+config BR2_TARGET_ROOTFS_UBI_OPTS
-+	string "Additional ubinize options"
-+	depends on BR2_TARGET_ROOTFS_UBI
-+	help
-+	  Any additional ubinize options you may want to include.
-diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
-index 51ab42d..e9033e8 100644
---- a/fs/ubifs/ubi.mk
-+++ b/fs/ubifs/ubi.mk
-@@ -10,6 +10,8 @@ ifneq ($(BR2_TARGET_ROOTFS_UBI_SUBSIZE),0)
- UBI_UBINIZE_OPTS += -s $(BR2_TARGET_ROOTFS_UBI_SUBSIZE)
- endif
- 
-+UBI_UBINIZE_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_OPTS))
++endif
 +
- ROOTFS_UBI_DEPENDENCIES = rootfs-ubifs
- 
- define ROOTFS_UBI_CMD
-diff --git a/fs/ubifs/ubifs.mk b/fs/ubifs/ubifs.mk
-index 8506dbd..dca2e04 100644
---- a/fs/ubifs/ubifs.mk
-+++ b/fs/ubifs/ubifs.mk
-@@ -16,10 +16,12 @@ ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_NONE),y)
- UBIFS_OPTS += -x none
- endif
- 
-+UBIFS_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBIFS_OPTS))
-+
- ROOTFS_UBIFS_DEPENDENCIES = host-mtd
- 
- define ROOTFS_UBIFS_CMD
- 	$(HOST_DIR)/usr/sbin/mkfs.ubifs -d $(TARGET_DIR) $(UBIFS_OPTS) -o $@
- endef
- 
--$(eval $(call ROOTFS_TARGET,ubifs))
-\ No newline at end of file
-+$(eval $(call ROOTFS_TARGET,ubifs))
++endif
 -- 
 1.7.9.5
