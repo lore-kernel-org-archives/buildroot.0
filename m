@@ -1,113 +1,54 @@
-From: Mark Jackson <mpfj-list@newflow.co.uk>
-Date: Thu, 25 Apr 2013 08:55:35 +0100
-Subject: [Buildroot] [PATCH v2] fs/ubifs: factorize all the "depends on"
- into "if...endif" blocks
-Message-ID: <5178E177.8060508@newflow.co.uk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 25 Apr 2013 10:06:51 +0200
+Subject: [Buildroot] [PATCH] fs/ubifs: factorize all the "depends on"
+	into "if...endif" blocks
+In-Reply-To: <5178E020.4050605@newflow.co.uk>
+References: <5177D061.6020905@newflow.co.uk> <20130424212620.GC24710@free.fr>
+ <5178E020.4050605@newflow.co.uk>
+Message-ID: <201304251006.51436.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Factorize all the "depends on" into "if...endif" blocks
+Mark, All,
 
-All the UBIFS options use "depends on BR2_TARGET_ROOTFS_UBIFS" but
-we can simplify the config file by enclosing them in an "if..endif"
-block.
+On Thursday 25 April 2013 09:49:52 Mark Jackson wrote:
+> On 24/04/13 22:26, Yann E. MORIN wrote:
+> > Comment the endif-s so we know at a glance to which if they belong to:
+> > 
+> > +endif # BR2_TARGET_ROOTFS_UBI
+> > +
+> > +endif # BR2_TARGET_ROOTFS_UBIFS
+> 
+> I *very* nearly put those in anyway, but checked with a few other Config.in files
+> and none of them had such closing comments.
 
-Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
-Changes in v2:
-- Comment the #endif-s so we know which they belong to
+Yes, probably. Old code did not always follow this, especially when the
+enclosed code blocks are small, or were small but later grew (which is very
+often the case), and people going like "Oh I don't need to put a comment on
+this closing conditional, it's just a few lines above. Oh, but now I added
+three more lines. Oh, and now someone else added twenty more lines. And now
+there is a new nested conditional block. Oh, and now the entire conditional
+block no longer fits on a screen. Oh, now I'm lost...". ;-)
 
- fs/ubifs/Config.in |   18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+Which we should just avoid in the first place.
 
-diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
-index d716fc0..4cf5d13 100644
---- a/fs/ubifs/Config.in
-+++ b/fs/ubifs/Config.in
-@@ -3,21 +3,20 @@ config BR2_TARGET_ROOTFS_UBIFS
- 	help
- 	  Build a ubifs root filesystem
- 
-+if BR2_TARGET_ROOTFS_UBIFS
-+
- config BR2_TARGET_ROOTFS_UBIFS_LEBSIZE
- 	hex "UBI logical erase block size"
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	default 0x1f800
- 
- config BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE
- 	hex "UBI minimum I/O size"
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	default 0x800
- 	help
- 	  Some comment required here
- 
- config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
- 	int "Maximum LEB count"
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	default 2048
- 	help
- 	  Some comment required here
-@@ -25,7 +24,6 @@ config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
- choice
- 	prompt "ubifs runtime compression"
- 	default BR2_TARGET_ROOTFS_UBIFS_RT_LZO
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	help
- 	  Select which compression format to use at run-time within
- 	  the ubifs file system.
-@@ -50,7 +48,6 @@ endchoice
- choice
- 	prompt "Compression method"
- 	default BR2_TARGET_ROOTFS_UBIFS_NONE
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	help
- 	  Select which compression format to compress the final image
- 	  into.
-@@ -89,19 +86,18 @@ endchoice
- 
- config BR2_TARGET_ROOTFS_UBIFS_OPTS
- 	string "Additional mkfs.ubifs options"
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	help
- 	  Any additional mkfs.ubifs options you may want to include.
- 
- config BR2_TARGET_ROOTFS_UBI
--	depends on BR2_TARGET_ROOTFS_UBIFS
- 	bool "Embed into an UBI image"
- 	help
- 	  Build an ubi image from the ubifs one (with ubinize).
- 
-+if BR2_TARGET_ROOTFS_UBI
-+
- config BR2_TARGET_ROOTFS_UBI_PEBSIZE
- 	hex "UBI physical erase block size"
--	depends on BR2_TARGET_ROOTFS_UBI
- 	default 0x20000
- 	help
- 	  Tells ubinize the physical eraseblock size of the flash chip
-@@ -109,7 +105,6 @@ config BR2_TARGET_ROOTFS_UBI_PEBSIZE
- 
- config BR2_TARGET_ROOTFS_UBI_SUBSIZE
- 	int "UBI sub-page size"
--	depends on BR2_TARGET_ROOTFS_UBI
- 	default 512
- 	help
- 	  Tells ubinize that the flash supports sub-pages and the sub-page
-@@ -117,6 +112,9 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
- 
- config BR2_TARGET_ROOTFS_UBI_OPTS
- 	string "Additional ubinize options"
--	depends on BR2_TARGET_ROOTFS_UBI
- 	help
- 	  Any additional ubinize options you may want to include.
-+
-+endif # BR2_TARGET_ROOTFS_UBI
-+
-+endif # BR2_TARGET_ROOTFS_UBIFS
+> > With that fixed:
+> > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> I'll post a v2.
+
+Thank you! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.9.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+'------------------------------'-------'------------------'--------------------'
