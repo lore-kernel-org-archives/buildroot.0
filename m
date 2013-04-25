@@ -1,37 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Apr 2013 16:30:12 +0200
-Subject: [Buildroot] [PATCH v6 5/7] package: Introduce package-specific
- BINFMT_FLAT options.
-In-Reply-To: <1366279592-9055-5-git-send-email-sonic.adi@gmail.com>
-References: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
- <1366279592-9055-5-git-send-email-sonic.adi@gmail.com>
-Message-ID: <20130425163012.7bf66d6c@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 25 Apr 2013 12:52:54 -0300
+Subject: [Buildroot] ruby2 buildroot packaging
+In-Reply-To: <CA+pfegGAmGc24BoFVh5SJ4VO8tZCE5DitQobfjj=EGF4UFj6vA@mail.gmail.com>
+References: <CA+pfegGAmGc24BoFVh5SJ4VO8tZCE5DitQobfjj=EGF4UFj6vA@mail.gmail.com>
+Message-ID: <51795156.3050309@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sonic Zhang,
+On 04/25/2013 10:45 AM, Murat Demirten wrote:
 
-On Thu, 18 Apr 2013 18:06:30 +0800, Sonic Zhang wrote:
-> From: Sonic Zhang <sonic.zhang@analog.com>
+> Hi Gustavo,
 > 
-> Add new option <PKG>_FLAT_STACKSIZE. The document needs to be updated.
+> Do you have any plans or any free time to package ruby2 for buildroot?
+> 
+> If not and if I can find a time for this, I want to prepare package for
+> ruby2 
+> 
+> I think there must be two independent package like ruby and ruby2 for
+> version 1.9.X and version 2.
+> 
+> Do you agree that? What is your opinions?
+> 
+> Regards,
 
-The documentation still hasn't been updated.
-
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Again, having just my name doesn't make any sense. But now, you can add
-my:
-
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Hi.
+I'm copying the list since someone else might be interested as well.
+At the moment i have no time to package ruby2, and yes, doing a separate
+package is probably wise given the differences.
+So feel free to work on it unless someone else has already done so and
+didn't send a patch yet.
+Regards.
