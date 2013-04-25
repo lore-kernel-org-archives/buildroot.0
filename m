@@ -1,44 +1,64 @@
 From: Simon Dawson <spdawson@gmail.com>
-Date: Thu, 25 Apr 2013 20:30:19 +0100
-Subject: [Buildroot] [PATCH 1/2] wvstreams: new package
-In-Reply-To: <20130425155024.7142922d@skate>
+Date: Thu, 25 Apr 2013 20:38:32 +0100
+Subject: [Buildroot] [PATCH 2/2] wvdial: new package
+In-Reply-To: <20130425155700.3e0d867f@skate>
 References: <1366881542-15350-1-git-send-email-spdawson@gmail.com>
- <1366881542-15350-2-git-send-email-spdawson@gmail.com>
- <20130425155024.7142922d@skate>
-Message-ID: <CAHt8ZCO3J_=xgj5FX-s8Dc4rXcxuO2tEVzvBCDTyUiTcqmrPZQ@mail.gmail.com>
+ <1366881542-15350-3-git-send-email-spdawson@gmail.com>
+ <20130425155700.3e0d867f@skate>
+Message-ID: <CAHt8ZCPC9+vMjPkG=Cz8dezkbqsL=_mVTFAXNcP8P2DXYCiSsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas; thanks for taking the time to look at this.
+Hi Thomas; thanks for the feedback.
 
-On 25 April 2013 14:50, Thomas Petazzoni
+On 25 April 2013 14:57, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
->> +WVSTREAMS_DEPENDENCIES = openssl zlib
+>> + BINDIR=${prefix}/bin
+>> + MANDIR=${prefix}/share/man
+>> +-PPPDIR=/etc/ppp/peers
+>> ++PPPDIR=${prefix}/etc/ppp/peers
 >
-> openssl/zlib dependencies are mandatory here...
->
->> +WVSTREAMS_INSTALL_STAGING = YES
->> +
->> +WVSTREAMS_LICENSE = LGPLv2+
->> +WVSTREAMS_LICENSE_FILES = LICENSE
->> +
->> +# N.B. parallel make fails
->> +WVSTREAMS_MAKE = $(MAKE1)
->> +
->> +# Needed to work around problem with wvassert.h
->> +WVSTREAMS_CONF_OPT += CPPFLAGS=-DNDEBUG
->> +
->> +WVSTREAMS_CONF_OPT += --with-openssl --with-zlib --without-pam
->
-> but this seems to suggest that openssl/zlib support is not mandatory.
-> Can we make this optional if it's possible?
+> This one looks suspicious: /etc is usually not in the prefix, other it
+> would be in /usr/etc/ppp/peers. Could you explain what's going on here?
 
-Unfortunately, the configure script errors out unless both openssl and
-zlib are present --- they are really unconditional dependencies of
-wvstreams. So the configure switches to enable/disable these features
-are somewhat redundant.
+You're right --- this needs fixing.
+
+>> +WVDIAL_VERSION = 1.61
+>> +WVDIAL_SITE = http://wvdial.googlecode.com/files
+>> +WVDIAL_SOURCE = wvdial-$(WVDIAL_VERSION).tar.bz2
+>> +WVDIAL_DEPENDENCIES = wvstreams
+>> +
+>> +WVDIAL_LICENSE = LGPLv2
+>
+> I haven't checked the code, is it really LGPLv2, and not LGPLv2.1 ? No
+> "+" ?
+
+Yes, and it's even titled "GNU LIBRARY GENERAL PUBLIC LICENSE Version
+2" in the COPYING.LIB file; I think the codebase is just quite old and
+unloved.
+
+>> +WVDIAL_MAKE_ENV += \
+>> +     CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" WVSTREAMS="$(WVSTREAMS_DIR)"
+>
+> Use $(TARGET_CONFIGURE_OPTS) instead of CC/CXX. I don't really like to
+> see the wvdial build process poke into the wvstreams build directory.
+> Each component should normally build even if the build directories of
+> its dependencies have been removed. Is it possible to point it to the
+> headers+libraries installed in $(STAGING_DIR) instead?
+
+Okay; understood.
+
+>> +WVDIAL_INSTALL_TARGET_OPT += prefix="$(TARGET_DIR)/usr" install
+>> +WVDIAL_UNINSTALL_TARGET_OPT += prefix="$(TARGET_DIR)/usr" uninstall
+>
+> Those are used only once, so I would rather put them directly into the
+> install/uninstall commands below.
+
+Okay.
+
+I'll fix the patch, and resubmit.
 
 Simon.
