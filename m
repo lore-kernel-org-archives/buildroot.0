@@ -1,50 +1,63 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 25 Apr 2013 22:55:48 +0200
-Subject: [Buildroot] [git commit] integrator926: Update the defconfig
-Message-ID: <20130425214004.25E319B843@busybox.osuosl.org>
+Date: Thu, 25 Apr 2013 22:57:00 +0200
+Subject: [Buildroot] [git commit] package/tvheadend: use a non-root user to
+	run the daemon
+Message-ID: <20130425214004.D37929B83B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74bdc4b9ddf6d4d2ecdd238715dcbf14292b8829
+commit: http://git.buildroot.net/buildroot/commit/?id=5c1f1536d6fd947069338a47669eabdb8f8dcee7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-the integrator926 defconfig has not been updated for quite some time,
-and is still asking for very old linux and u-boot releases. Now that
-these versions aren't present in Buildroot anymore, they default to a
-newer release, where, in the u-boot case, the defconfig name has
-changed, leading to a build failure.
-
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/integrator926_defconfig |   11 +++++++----
- 1 files changed, 7 insertions(+), 4 deletions(-)
+ package/tvheadend/etc.default.tvheadend |    5 ++---
+ package/tvheadend/tvheadend.mk          |   10 ++++++++--
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/configs/integrator926_defconfig b/configs/integrator926_defconfig
-index e596d33..e63f455 100644
---- a/configs/integrator926_defconfig
-+++ b/configs/integrator926_defconfig
-@@ -4,13 +4,16 @@ BR2_arm926t=y
+diff --git a/package/tvheadend/etc.default.tvheadend b/package/tvheadend/etc.default.tvheadend
+index c769055..253f832 100644
+--- a/package/tvheadend/etc.default.tvheadend
++++ b/package/tvheadend/etc.default.tvheadend
+@@ -1,6 +1,5 @@
+-# Once we have a real user, we'll use it
+-TVH_USER=root
+-TVH_GROUP=root
++TVH_USER=tvheadend
++TVH_GROUP=tvheadend
+ #TVH_ADAPTERS=
+ #TVH_HTTP_PORT=9981
+ #TVH_HTSP_PORT=9982
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 5a971b8..58965d6 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -26,9 +26,11 @@ TVHEADEND_DEPENDENCIES     += dvb-apps
+ # To run tvheadend, we need:
+ #  - a startup script, and its config file
+ #  - a default DB with a tvheadend admin
++#  - a non-root user to run as
+ define TVHEADEND_INSTALL_DB
+-	$(INSTALL) -D package/tvheadend/accesscontrol.1     \
+-	              $(TARGET_DIR)/root/.hts/tvheadend/accesscontrol/1
++	$(INSTALL) -D -m 0600 package/tvheadend/accesscontrol.1     \
++	              $(TARGET_DIR)/home/tvheadend/.hts/tvheadend/accesscontrol/1
++	chmod -R go-rwx $(TARGET_DIR)/home/tvheadend
+ endef
+ TVHEADEND_POST_INSTALL_TARGET_HOOKS  = TVHEADEND_INSTALL_DB
  
- # Bootloader
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="cp926ejs"
--BR2_TARGET_UBOOT_2010_06=y
-+BR2_TARGET_UBOOT_BOARDNAME="integratorcp_cm926ejs"
+@@ -37,6 +39,10 @@ define TVHEADEND_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D package/tvheadend/S99tvheadend          $(TARGET_DIR)/etc/init.d/S99tvheadend
+ endef
+ 
++define TVHEADEND_USERS
++tvheadend -1 tvheadend -1 * /home/tvheadend - video TVHeadend daemon
++endef
 +
-+# Lock down headers to avoid breaking with new defaults
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="2.6.35"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_2_6_35=
--BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.35"
- BR2_LINUX_KERNEL_DEFCONFIG="integrator"
- 
- # Filesystem
+ #----------------------------------------------------------------------------
+ # tvheadend is not an autotools-based package, but it is possible to
+ # call its ./configure script as if it were an autotools one.
