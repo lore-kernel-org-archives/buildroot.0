@@ -1,74 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Apr 2013 15:57:00 +0200
-Subject: [Buildroot] [PATCH 2/2] wvdial: new package
-In-Reply-To: <1366881542-15350-3-git-send-email-spdawson@gmail.com>
-References: <1366881542-15350-1-git-send-email-spdawson@gmail.com>
- <1366881542-15350-3-git-send-email-spdawson@gmail.com>
-Message-ID: <20130425155700.3e0d867f@skate>
+Date: Thu, 25 Apr 2013 16:22:09 +0200
+Subject: [Buildroot] [PATCH v6 1/7] arch: toolchain: Introduce binary
+ formats BINFMT_*.
+In-Reply-To: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
+References: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <20130425162209.49fb4ec9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon, Pascal,
+Dear Sonic Zhang,
 
-On Thu, 25 Apr 2013 10:19:02 +0100, spdawson at gmail.com wrote:
+On Thu, 18 Apr 2013 18:06:26 +0800, Sonic Zhang wrote:
 
-> diff --git a/package/wvdial/wvdial-0001-ppp-install-prefix.patch b/package/wvdial/wvdial-0001-ppp-install-prefix.patch
-> new file mode 100644
-> index 0000000..5db9648
-> --- /dev/null
-> +++ b/package/wvdial/wvdial-0001-ppp-install-prefix.patch
-> @@ -0,0 +1,16 @@
-> +Fix install prefix for PPP configuration files.
+
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index d90132c..6867ff3 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -104,4 +104,18 @@ config BR2_PACKAGE_INPUT_TOOLS_EVTEST
+>  	help
+>  	  The evtest program from input-tools is now a separate package.
+>  
+> +choice
+> +	prompt "Target ABI"
+> +	depends on BR2_bfin
+> +	default BR2_BFIN_FDPIC
 > +
-> +Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> +config BR2_BFIN_FDPIC
+> +	bool "FDPIC"
 > +
-> +diff -Nurp a/Makefile b/Makefile
-> +--- a/Makefile	2011-08-04 20:30:52.000000000 +0100
-> ++++ b/Makefile	2013-04-25 09:11:36.916376367 +0100
-> +@@ -23,7 +23,7 @@ LIBS+=$(PC_LIBS)
-> + 
-> + BINDIR=${prefix}/bin
-> + MANDIR=${prefix}/share/man
-> +-PPPDIR=/etc/ppp/peers
-> ++PPPDIR=${prefix}/etc/ppp/peers
-
-This one looks suspicious: /etc is usually not in the prefix, other it
-would be in /usr/etc/ppp/peers. Could you explain what's going on here?
-
-> +WVDIAL_VERSION = 1.61
-> +WVDIAL_SITE = http://wvdial.googlecode.com/files
-> +WVDIAL_SOURCE = wvdial-$(WVDIAL_VERSION).tar.bz2
-> +WVDIAL_DEPENDENCIES = wvstreams
+> +config BR2_BFIN_FLAT
+> +	bool "FLAT"
+> +	select BR2_PREFER_STATIC_LIB
 > +
-> +WVDIAL_LICENSE = LGPLv2
+> +endchoice
 
-I haven't checked the code, is it really LGPLv2, and not LGPLv2.1 ? No
-"+" ?
+Hum, that's not how the legacy stuff works. You don't have to duplicate
+the choice, but instead do something like:
 
-> +WVDIAL_LICENSE_FILES = COPYING.LIB
-> +
-> +# N.B. parallel make fails
-> +WVDIAL_MAKE = $(MAKE1)
-> +
-> +WVDIAL_MAKE_ENV += \
-> +	CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" WVSTREAMS="$(WVSTREAMS_DIR)"
+config BR2_BFIN_FDPIC
+	bool "BR2_BFIN_FDPIC is now BR2_BINFMT_FDPIC"
+	select BR2_BINFMT_FDPIC
+	select BR2_LEGACY
 
-Use $(TARGET_CONFIGURE_OPTS) instead of CC/CXX. I don't really like to
-see the wvdial build process poke into the wvstreams build directory.
-Each component should normally build even if the build directories of
-its dependencies have been removed. Is it possible to point it to the
-headers+libraries installed in $(STAGING_DIR) instead?
+config BR2_BFIN_FLAT
+	bool "BR2_BFIN_FLAT is now BR2_BINFMT_FLAT"
+	select BR2_BINFMT_FLAT
+	select BR2_LEGACY
 
-> +WVDIAL_INSTALL_TARGET_OPT += prefix="$(TARGET_DIR)/usr" install
-> +WVDIAL_UNINSTALL_TARGET_OPT += prefix="$(TARGET_DIR)/usr" uninstall
-
-Those are used only once, so I would rather put them directly into the
-install/uninstall commands below.
-
-Other than that, looks good.
+Once this is fixed, you'll have my Acked-by on this patch, the rest
+looks ok to me.
 
 Thanks!
 
