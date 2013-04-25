@@ -1,62 +1,113 @@
 From: Mark Jackson <mpfj-list@newflow.co.uk>
-Date: Thu, 25 Apr 2013 08:49:52 +0100
-Subject: [Buildroot] [PATCH] fs/ubifs: factorize all the "depends on"
+Date: Thu, 25 Apr 2013 08:55:35 +0100
+Subject: [Buildroot] [PATCH v2] fs/ubifs: factorize all the "depends on"
  into "if...endif" blocks
-In-Reply-To: <20130424212620.GC24710@free.fr>
-References: <5177D061.6020905@newflow.co.uk> <20130424212620.GC24710@free.fr>
-Message-ID: <5178E020.4050605@newflow.co.uk>
+Message-ID: <5178E177.8060508@newflow.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/04/13 22:26, Yann E. MORIN wrote:
-> Mark, All,
-> 
-> On Wed, Apr 24, 2013 at 01:30:25PM +0100, Mark Jackson wrote:
->> All the UBIFS options use "depends on BR2_TARGET_ROOTFS_UBIFS" but
->> we can simplify the config file by enclosing them in an "if..endif"
->> block.
->>
->> We also do the same for the "depends on BR2_TARGET_ROOTFS_UBI".
-> 
-> A few comments below (mostly nitpicking, but hey! ;-) )
-> 
->> Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
->> ---
->>  fs/ubifs/Config.in |   18 ++++++++----------
->>  1 file changed, 8 insertions(+), 10 deletions(-)
->>
->> diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
->> index f17c7dc..c1d2ce7 100644
->> --- a/fs/ubifs/Config.in
->> +++ b/fs/ubifs/Config.in
->> @@ -3,21 +3,20 @@ config BR2_TARGET_ROOTFS_UBIFS
->>  	help
->>  	  Build a ubifs root filesystem
->>  
->> +if BR2_TARGET_ROOTFS_UBIFS
-> [--SNIP--]
->> +if BR2_TARGET_ROOTFS_UBI
-> [--SNIP--]
->> +endif
->> +
->> +endif
-> 
-> Comment the endif-s so we know at a glance to which if they belong to:
-> 
-> +endif # BR2_TARGET_ROOTFS_UBI
-> +
-> +endif # BR2_TARGET_ROOTFS_UBIFS
+Factorize all the "depends on" into "if...endif" blocks
 
-I *very* nearly put those in anyway, but checked with a few other Config.in files
-and none of them had such closing comments.
+All the UBIFS options use "depends on BR2_TARGET_ROOTFS_UBIFS" but
+we can simplify the config file by enclosing them in an "if..endif"
+block.
 
-> With that fixed:
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+Changes in v2:
+- Comment the #endif-s so we know which they belong to
 
-I'll post a v2.
+ fs/ubifs/Config.in |   18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-Cheers
-Mark J.
+diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
+index d716fc0..4cf5d13 100644
+--- a/fs/ubifs/Config.in
++++ b/fs/ubifs/Config.in
+@@ -3,21 +3,20 @@ config BR2_TARGET_ROOTFS_UBIFS
+ 	help
+ 	  Build a ubifs root filesystem
+ 
++if BR2_TARGET_ROOTFS_UBIFS
++
+ config BR2_TARGET_ROOTFS_UBIFS_LEBSIZE
+ 	hex "UBI logical erase block size"
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	default 0x1f800
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE
+ 	hex "UBI minimum I/O size"
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	default 0x800
+ 	help
+ 	  Some comment required here
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
+ 	int "Maximum LEB count"
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	default 2048
+ 	help
+ 	  Some comment required here
+@@ -25,7 +24,6 @@ config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
+ choice
+ 	prompt "ubifs runtime compression"
+ 	default BR2_TARGET_ROOTFS_UBIFS_RT_LZO
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	help
+ 	  Select which compression format to use at run-time within
+ 	  the ubifs file system.
+@@ -50,7 +48,6 @@ endchoice
+ choice
+ 	prompt "Compression method"
+ 	default BR2_TARGET_ROOTFS_UBIFS_NONE
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	help
+ 	  Select which compression format to compress the final image
+ 	  into.
+@@ -89,19 +86,18 @@ endchoice
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_OPTS
+ 	string "Additional mkfs.ubifs options"
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	help
+ 	  Any additional mkfs.ubifs options you may want to include.
+ 
+ config BR2_TARGET_ROOTFS_UBI
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	bool "Embed into an UBI image"
+ 	help
+ 	  Build an ubi image from the ubifs one (with ubinize).
+ 
++if BR2_TARGET_ROOTFS_UBI
++
+ config BR2_TARGET_ROOTFS_UBI_PEBSIZE
+ 	hex "UBI physical erase block size"
+-	depends on BR2_TARGET_ROOTFS_UBI
+ 	default 0x20000
+ 	help
+ 	  Tells ubinize the physical eraseblock size of the flash chip
+@@ -109,7 +105,6 @@ config BR2_TARGET_ROOTFS_UBI_PEBSIZE
+ 
+ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
+ 	int "UBI sub-page size"
+-	depends on BR2_TARGET_ROOTFS_UBI
+ 	default 512
+ 	help
+ 	  Tells ubinize that the flash supports sub-pages and the sub-page
+@@ -117,6 +112,9 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
+ 
+ config BR2_TARGET_ROOTFS_UBI_OPTS
+ 	string "Additional ubinize options"
+-	depends on BR2_TARGET_ROOTFS_UBI
+ 	help
+ 	  Any additional ubinize options you may want to include.
++
++endif # BR2_TARGET_ROOTFS_UBI
++
++endif # BR2_TARGET_ROOTFS_UBIFS
+-- 
+1.7.9.5
