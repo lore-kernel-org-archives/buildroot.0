@@ -1,36 +1,44 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Thu, 25 Apr 2013 10:12:31 +0100
-Subject: [Buildroot] buildroot with vwdial and vwstreams
-In-Reply-To: <878v47bsjf.fsf@dell.be.48ers.dk>
-References: <1933FF812CF8714890A209D3BC03BA0A45BF15360D@SI-MBX03.de.bosch.com>
- <1366832937.23813.YahooMailNeo@web133202.mail.ir2.yahoo.com>
- <878v47bsjf.fsf@dell.be.48ers.dk>
-Message-ID: <CAHt8ZCMV_wYfcHFcDvBe4qpFiKm3BPZkYtVCvwRRaYfv57QN3A@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Thu, 25 Apr 2013 10:19:00 +0100
+Subject: [Buildroot] [PATCH 0/2] Add wvstreams and wvdial packages
+Message-ID: <1366881542-15350-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24 April 2013 21:08, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "P" == P Aus stuttgart <handwerkundmehr@yahoo.de> writes:
->
-> Hi Pascal,
->
->  P> according http://buildroot.uclibc.org/ you are the maintener of
->  P> buildroot.  Is it possible to include wvdial and wvstreams in it?
->  P> We are making an embedded system with an attached USB Modem
->  P> GPRS/HDSPA/UMTS and we would like to simplyfing the system
->  P> construction.  Thanks a lot.  Pascal
->
-> Yes it is possible, but nobody has submitted patches adding vwdial /
-> vwstreams yet. Perhaps you could do it?
+From: Simon Dawson <spdawson@gmail.com>
 
-I have some old patches knocking about somewhere to add wvstreams and
-wvdial to buildroot; I'll post them to the mailing list. But I don't
-have much interest in wvstreams/wvdial for my own use, so doubt I'll
-be able to find much time to get the patches ship-shape. Pascal: if
-you want to pick up these patches as a starting point for your own
-work, then feel free.
+Add packages for wvstreams and wvdial to buildroot. Note that wvstreams
+requires quite heavy patching to get it to build for uClibc. Both projects
+look to be long dead, so I don't hold out much hope of getting the patches
+upstreamed.
 
-Simon.
+Simon Dawson (2):
+  wvstreams: new package
+  wvdial: new package
+
+ package/Config.in                                  |    2 +
+ package/wvdial/Config.in                           |    9 +
+ .../wvdial/wvdial-0001-ppp-install-prefix.patch    |   16 ++
+ package/wvdial/wvdial-0002-uClibc-scandir.patch    |   23 ++
+ package/wvdial/wvdial.mk                           |   41 +++
+ package/wvstreams/Config.in                        |   13 +
+ ...treams-0001-fix-uClibc-compile-getcontext.patch |  273 ++++++++++++++++++++
+ ...002-fix-uClibc-compile-execinfo-backtrace.patch |   31 +++
+ .../wvstreams-0003-fix-uClibc-compile-misc.patch   |   16 ++
+ package/wvstreams/wvstreams.mk                     |   51 ++++
+ 10 files changed, 475 insertions(+)
+ create mode 100644 package/wvdial/Config.in
+ create mode 100644 package/wvdial/wvdial-0001-ppp-install-prefix.patch
+ create mode 100644 package/wvdial/wvdial-0002-uClibc-scandir.patch
+ create mode 100644 package/wvdial/wvdial.mk
+ create mode 100644 package/wvstreams/Config.in
+ create mode 100644 package/wvstreams/wvstreams-0001-fix-uClibc-compile-getcontext.patch
+ create mode 100644 package/wvstreams/wvstreams-0002-fix-uClibc-compile-execinfo-backtrace.patch
+ create mode 100644 package/wvstreams/wvstreams-0003-fix-uClibc-compile-misc.patch
+ create mode 100644 package/wvstreams/wvstreams.mk
+
+-- 
+1.7.10.4
