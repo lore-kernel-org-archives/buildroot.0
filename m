@@ -1,64 +1,39 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Thu, 25 Apr 2013 20:38:32 +0100
-Subject: [Buildroot] [PATCH 2/2] wvdial: new package
-In-Reply-To: <20130425155700.3e0d867f@skate>
-References: <1366881542-15350-1-git-send-email-spdawson@gmail.com>
- <1366881542-15350-3-git-send-email-spdawson@gmail.com>
- <20130425155700.3e0d867f@skate>
-Message-ID: <CAHt8ZCPC9+vMjPkG=Cz8dezkbqsL=_mVTFAXNcP8P2DXYCiSsQ@mail.gmail.com>
+From: thomas <thomas.spitz@gmail.com>
+Date: Thu, 25 Apr 2013 12:41:34 -0700 (PDT)
+Subject: [Buildroot] Dropbear/SFTP
+In-Reply-To: <20130108130618.4991dff7@skate>
+References: <002401cded96$e8b13fa0$ba13bee0$@co.uk>
+ <20130108130618.4991dff7@skate>
+Message-ID: <1366918894609-44233.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas; thanks for the feedback.
+Dear Thomas Petazzoni,
 
-On 25 April 2013 14:57, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->> + BINDIR=${prefix}/bin
->> + MANDIR=${prefix}/share/man
->> +-PPPDIR=/etc/ppp/peers
->> ++PPPDIR=${prefix}/etc/ppp/peers
->
-> This one looks suspicious: /etc is usually not in the prefix, other it
-> would be in /usr/etc/ppp/peers. Could you explain what's going on here?
+I am in the same case as Ted Wood that is to say I can login using ssh from
+a console ("ssh root at 192.168.1.5") however I am not able to connect to SFTP
+server:("sftp root at 192.168.1.5" asks for a password but I got the following
+error : sh: /usr/libexec/sftp-server: not found
+Connection closed)
 
-You're right --- this needs fixing.
+I am not using dropbear anymore (as it doesn't implement sftp) and enabled
+openssh only. I would also want to use Buildroot/Eclipse integration (sounds
+perfect) but I don't know which file the patch described here
+"https://github.com/mbats/eclipse-buildroot-toolchain-plugin/blob/master/buildroot.patches/Integration-with-Buildroot-Toolchain-Eclipse-plugin.patch"
+should apply to? Moreover I have a buildroot 201204 instead 201211 as
+recommanded for the patch.
 
->> +WVDIAL_VERSION = 1.61
->> +WVDIAL_SITE = http://wvdial.googlecode.com/files
->> +WVDIAL_SOURCE = wvdial-$(WVDIAL_VERSION).tar.bz2
->> +WVDIAL_DEPENDENCIES = wvstreams
->> +
->> +WVDIAL_LICENSE = LGPLv2
->
-> I haven't checked the code, is it really LGPLv2, and not LGPLv2.1 ? No
-> "+" ?
+Hope you could help me
 
-Yes, and it's even titled "GNU LIBRARY GENERAL PUBLIC LICENSE Version
-2" in the COPYING.LIB file; I think the codebase is just quite old and
-unloved.
+Best regards,
+Thomas
 
->> +WVDIAL_MAKE_ENV += \
->> +     CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" WVSTREAMS="$(WVSTREAMS_DIR)"
->
-> Use $(TARGET_CONFIGURE_OPTS) instead of CC/CXX. I don't really like to
-> see the wvdial build process poke into the wvstreams build directory.
-> Each component should normally build even if the build directories of
-> its dependencies have been removed. Is it possible to point it to the
-> headers+libraries installed in $(STAGING_DIR) instead?
 
-Okay; understood.
 
->> +WVDIAL_INSTALL_TARGET_OPT += prefix="$(TARGET_DIR)/usr" install
->> +WVDIAL_UNINSTALL_TARGET_OPT += prefix="$(TARGET_DIR)/usr" uninstall
->
-> Those are used only once, so I would rather put them directly into the
-> install/uninstall commands below.
 
-Okay.
-
-I'll fix the patch, and resubmit.
-
-Simon.
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Dropbear-SFTP-tp38207p44233.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
