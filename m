@@ -1,35 +1,25 @@
-From: thomas <thomas.spitz@gmail.com>
-Date: Fri, 26 Apr 2013 00:46:42 -0700 (PDT)
-Subject: [Buildroot] Dropbear/SFTP
-In-Reply-To: <1366960345226-44260.post@n4.nabble.com>
-References: <002401cded96$e8b13fa0$ba13bee0$@co.uk>
- <20130108130618.4991dff7@skate> <1366918894609-44233.post@n4.nabble.com>
- <87ip3a9yzi.fsf@dell.be.48ers.dk> <1366919482310-44235.post@n4.nabble.com>
- <871u9y9vqd.fsf@dell.be.48ers.dk>
- <CA+QJksJKDeogdcxtJz8PNwmv-nDQuMpdoLHG55Kq54shV5wWFw@mail.gmail.com>
- <87obd28e73.fsf@dell.be.48ers.dk> <1366960345226-44260.post@n4.nabble.com>
-Message-ID: <1366962402005-44264.post@n4.nabble.com>
+From: Lars Dunemark <ladu@hms.se>
+Date: Fri, 26 Apr 2013 08:48:37 +0000
+Subject: [Buildroot] Adding local file system overlay
+In-Reply-To: <1768202256.1976834.1366961616672.JavaMail.root@openwide.fr>
+References: <6119D107D82B0940B389FAED3F2DDE6616222D57@Ansuz.hms.se>
+ <1768202256.1976834.1366961616672.JavaMail.root@openwide.fr>
+Message-ID: <6119D107D82B0940B389FAED3F2DDE6616222E08@Ansuz.hms.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+> doesn't buildroot already do that ?
+> 
+> system configuration => overlay directory
+> 
+> or is your patch doing something different
+Currect Buildroot has this functionality but this requires me to update the configuration for my build target.
 
-I finally moved sftp-server from /usr/lib to /usr/libexec manually on my
-target.
-
-According to me, it seems that there is still a problem with the install
-script.
-
-Thanks again for your support
-
-Best regards,
-Thomas
+My suggestion is to allow this without configuration changes, making it possible to alternate a build on your local machine without risking getting it in the default configuration for that target when doing make savedefconfig.
 
 
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Dropbear-SFTP-tp38207p44264.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Best regards
+Lars Dunemark
