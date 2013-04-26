@@ -1,42 +1,50 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 26 Apr 2013 09:25:33 +0200
-Subject: [Buildroot] [PATCH v2 1/3] post-build: show each script
- filename before execution
-In-Reply-To: <87zjwnadmz.fsf@dell.be.48ers.dk>
-References: <1365439816-6935-1-git-send-email-luca@lucaceresoli.net>
- <1365439816-6935-2-git-send-email-luca@lucaceresoli.net>
- <87zjwnadmz.fsf@dell.be.48ers.dk>
-Message-ID: <517A2BED.1010304@lucaceresoli.net>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Fri, 26 Apr 2013 09:33:36 +0200 (CEST)
+Subject: [Buildroot] Adding local file system overlay
+In-Reply-To: <6119D107D82B0940B389FAED3F2DDE6616222D57@Ansuz.hms.se>
+Message-ID: <1768202256.1976834.1366961616672.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
->>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
->   Luca> This also simplifies code by removing the ifneq/endif clauses.
->   Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->   Luca> ---
->   Luca>  Makefile |    4 +---
->   Luca>  1 file changed, 1 insertion(+), 3 deletions(-)
->
->   Luca> diff --git a/Makefile b/Makefile
->   Luca> index c95bb1e..75f0f0c 100644
->   Luca> --- a/Makefile
->   Luca> +++ b/Makefile
->   Luca> @@ -509,11 +509,9 @@ endif
->   Luca>  			$${dir}/ $(TARGET_DIR); \
->   Luca>  	done
->   
->   Luca> -ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
->   Luca> -	@$(call MESSAGE,"Executing post-build script\(s\)")
->   Luca>  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
->   Luca> +		$(call MESSAGE,"Executing  post-build script $(s)"); \
->   Luca>  		$(s) $(TARGET_DIR)$(sep))
->
-> Double space after 'executing'. Committed with that fixed, thanks.
 
-Ouch, thanks.
+----- Mail original -----
+> Hi Buildroot mailinglist!
+> 
+> During development of a new platform I sometimes find it useful to
+> bundle my test builds with my own script/configuration files.
+> Example: SSH keys
+> 
+> This is not something that we want to include in default
+> configuration for a board or by any way get in a final build so
+> instead I added a second step to local file system overlay checking
+> a local variable and if it is set us it as a roofs overlay.
+> 
+> Is this something that is of interests for the upstream project?
+> 
+> Example:
+> export  LOCAL_ROOTFS_OVERLAY=/local-rootfs-overlay
+> make
+> 
 
-Luca
+
+doesn't buildroot already do that ?
+
+system configuration => overlay directory
+
+or is your patch doing something different
+
+on a semi-related note, I run the following post-build script for 
+ssh keys :
+
+#!/bin/sh
+mkdir -p $1/root/.ssh/
+chmod 0700 $1/root/.ssh/
+chmod 0700 $1/root
+cp -p ~/.ssh/id_rsa.pub $1/root/.ssh/authorized_keys
+chmod 0600 $1/root/.ssh/authorized_keys
+
+
+that will copy my public key as an authorized key on the built system
