@@ -1,49 +1,52 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri, 26 Apr 2013 12:25:48 +0100
-Subject: [Buildroot] [PATCH] neard: add support for tools
-Message-ID: <1366975548-23606-1-git-send-email-spdawson@gmail.com>
+From: Philipp Claves <claves@budelmann-elektronik.com>
+Date: Fri, 26 Apr 2013 13:41:20 +0200
+Subject: [Buildroot] [PATCH 3/3] opkg: Add gnupg signature checking
+	support.
+In-Reply-To: <20130410194036.3adbe75f@skate>
+References: <20130301111856.4753d13b@skate> <51643BE1.3000701@mind.be>
+ <20130410194036.3adbe75f@skate>
+Message-ID: <2105360.S76LOvFfN0@arawn>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Knock Knock
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/neard/Config.in |    6 ++++++
- package/neard/neard.mk  |    4 ++++
- 2 files changed, 10 insertions(+)
-
-diff --git a/package/neard/Config.in b/package/neard/Config.in
-index bcf6171..ec1fcb3 100644
---- a/package/neard/Config.in
-+++ b/package/neard/Config.in
-@@ -14,5 +14,11 @@ config BR2_PACKAGE_NEARD
- 
- 	  https://01.org/linux-nfc/documentation/how-start-linux-nfc-code...
- 
-+config BR2_PACKAGE_NEARD_TOOLS
-+	bool "neard tools"
-+	depends on BR2_PACKAGE_NEARD
-+	help
-+	  Build and install neard tools.
-+
- comment "neard requires a toolchain with WCHAR and threads support"
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/neard/neard.mk b/package/neard/neard.mk
-index 056875c..cc6aeac 100644
---- a/package/neard/neard.mk
-+++ b/package/neard/neard.mk
-@@ -13,4 +13,8 @@ NEARD_AUTORECONF = YES
- NEARD_DEPENDENCIES = host-pkgconf dbus libglib2 libnl
- NEARD_CONF_OPT = --disable-traces
- 
-+ifeq ($(BR2_PACKAGE_NEARD_TOOLS),y)
-+	NEARD_CONF_OPT += --enable-tools
-+endif
-+
- $(eval $(autotools-package))
+Am Mittwoch, 10. April 2013, 19:40:36 schrieb Thomas Petazzoni:
+> Dear Arnout Vandecappelle,
+> 
+> On Tue, 09 Apr 2013 18:03:45 +0200, Arnout Vandecappelle wrote:
+> > On 08/04/13 12:26, Philipp Claves wrote:
+> > > Any status update on merging this patchset?
+> > > 
+> >   Thomas sent comments about your patches and we assumed you would that
+> > 
+> > re-send them taking into account the review feedback. If you are not
+> > planning to send updated patches, please tell us. Then somebody else may
+> > pick up the patches (but don't count on it).
+> 
+> I sent some comments on March, 1st at 11 AM, and at 2 PM on the same
+> day, Philipp resubmitted updated versions of his patches. I haven't
+> reviewed the latest version from Philipp. So I think that the ball is
+> on our side (Buildroot reviewers) and not on Philipp side.
+> 
+> Thomas
 -- 
-1.7.10.4
+Budelmann Elektronik GmbH
+Von-Renesse-Weg 60
+48163 M?nster
+Germany
+
+Tel.  +49 (0)2501 9208440
+Fax   +49 (0)2501 5887024
+claves at budelmann-elektronik.com
+www.budelmann-elektronik.com
+
+General Managers: Dipl.-Kffr. Jeannine Budelmann,
+Dipl.-Ing. Christoph Budelmann, Ing?nieur diplom? de
+l'Ecole nationale d'Electronique et de ses Applications
+Registered Office: M?nster, Germany
+Registered Court: M?nster HRB 12729     
+VAT Identification Number: DE 272 067 273
