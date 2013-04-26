@@ -1,40 +1,68 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 26 Apr 2013 07:58:54 +0200
-Subject: [Buildroot] [PATCH 0/2] Download patches for Busybox
-In-Reply-To: <8738ugcvdw.fsf@dell.be.48ers.dk>
-References: <1366770167-22834-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <8738ugcvdw.fsf@dell.be.48ers.dk>
-Message-ID: <517A179E.4000305@mind.be>
+Date: Fri, 26 Apr 2013 08:00:01 +0200
+Subject: [Buildroot] [PATCH 1/2] Add support for plain URL in
+ $(PKG)_PATCH variable
+In-Reply-To: <1359620310-13640-1-git-send-email-jezz@sysmic.org>
+References: <8398960.ALrh5xOxZ9@sagittae>
+ <1359620310-13640-1-git-send-email-jezz@sysmic.org>
+Message-ID: <517A17E1.4060206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/04/13 08:09, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 31/01/13 09:18, J?r?me Pouiller wrote:
+> Until now, $(PKG)_PATCH allow only to download patches from same URL than tarball.
+> This patch allow to detect when plain URL are used in $(PKG)_PATCH and correctly
+> handle them.
 >
->   Thomas> Hello,
->   Thomas> As recently discussed on the list, here are two patches that
->   Thomas> let the busybox package download its patches, instead of
->   Thomas> storing them in Buildroot's source tree.
->
-> Thanks. There's one big problem with busybox though. Denys tends to
-> update the patches without renaming them if more problems are found in
-> those applets - So we end up with different results depending on when
-> you build.
->
-> Perhaps we can convince him to do otherwise, but until then I would
-> prefer to keep it like it is.
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-  I'd still include patch 1/2, though.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-  Or actually, there's another patch still pending that allows a full URL 
-as the patch name; that would be even more interesting. I'll quickly ack 
-that patch.
+  (untested but it's pretty obvious that the current packages won't break).
+
+
+> ---
+>   package/pkg-generic.mk |    9 +++++++--
+>   1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index b0eca0a..fbc2bb9 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -40,7 +40,12 @@ ifeq ($(DL_MODE),DOWNLOAD)
+>   	fi
+>   endif
+>   	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE)/$($(PKG)_SOURCE)))
+> -	$(foreach p,$($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE)/$(p))$(sep))
+> +	$(foreach p,$($(PKG)_PATCH),\
+> +		$(if $(findstring ://,$(p)),\
+> +			$(call DOWNLOAD,$(p)),\
+> +			$(call DOWNLOAD,$($(PKG)_SITE)/$(p))\
+
+  I would have put the condition inside the DOWNLOAD call, even though 
+that's a bit less efficient. But I guess it's just a matter of taste.
 
   Regards,
   Arnout
+
+> +		)\
+> +	$(sep))
+>   	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+>   ifeq ($(DL_MODE),DOWNLOAD)
+>   	$(Q)mkdir -p $(@D)
+> @@ -85,7 +90,7 @@ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+>   $(BUILD_DIR)/%/.stamp_patched:
+>   	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
+>   	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+> -	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(p)$(sep))
+> +	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(notdir $(p))$(sep))
+>   	$(Q)( \
+>   	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
+>   	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
+>
 
 
 -- 
