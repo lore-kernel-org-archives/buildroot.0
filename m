@@ -1,41 +1,49 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 26 Apr 2013 12:58:59 +0200
-Subject: [Buildroot] [git commit] linux: bump 3.8.x stable version
-Message-ID: <20130426105902.056699B1F6@busybox.osuosl.org>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 26 Apr 2013 12:25:48 +0100
+Subject: [Buildroot] [PATCH] neard: add support for tools
+Message-ID: <1366975548-23606-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=01bc22aa03bfe3e623b37c76b21e63596b6c2298
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/neard/Config.in |    6 ++++++
+ package/neard/neard.mk  |    4 ++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 22f03ef..ec1a636 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/neard/Config.in b/package/neard/Config.in
+index bcf6171..ec1fcb3 100644
+--- a/package/neard/Config.in
++++ b/package/neard/Config.in
+@@ -14,5 +14,11 @@ config BR2_PACKAGE_NEARD
  
- config BR2_LINUX_KERNEL_3_8
--	bool "3.8.8"
-+	bool "3.8.9"
+ 	  https://01.org/linux-nfc/documentation/how-start-linux-nfc-code...
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
++config BR2_PACKAGE_NEARD_TOOLS
++	bool "neard tools"
++	depends on BR2_PACKAGE_NEARD
++	help
++	  Build and install neard tools.
++
+ comment "neard requires a toolchain with WCHAR and threads support"
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/neard/neard.mk b/package/neard/neard.mk
+index 056875c..cc6aeac 100644
+--- a/package/neard/neard.mk
++++ b/package/neard/neard.mk
+@@ -13,4 +13,8 @@ NEARD_AUTORECONF = YES
+ NEARD_DEPENDENCIES = host-pkgconf dbus libglib2 libnl
+ NEARD_CONF_OPT = --disable-traces
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.8.8" if BR2_LINUX_KERNEL_3_8
-+	default "3.8.9" if BR2_LINUX_KERNEL_3_8
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
++ifeq ($(BR2_PACKAGE_NEARD_TOOLS),y)
++	NEARD_CONF_OPT += --enable-tools
++endif
++
+ $(eval $(autotools-package))
+-- 
+1.7.10.4
