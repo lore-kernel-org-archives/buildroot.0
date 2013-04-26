@@ -1,84 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 26 Apr 2013 08:18:37 +0200
-Subject: [Buildroot] [PATCH 2/2] Add $(PKG_NAME) in name of downloaded
- patches
-In-Reply-To: <1359620310-13640-2-git-send-email-jezz@sysmic.org>
-References: <8398960.ALrh5xOxZ9@sagittae>
- <1359620310-13640-1-git-send-email-jezz@sysmic.org>
- <1359620310-13640-2-git-send-email-jezz@sysmic.org>
-Message-ID: <517A1C3D.1010009@mind.be>
+From: thomas <thomas.spitz@gmail.com>
+Date: Fri, 26 Apr 2013 00:12:25 -0700 (PDT)
+Subject: [Buildroot] Dropbear/SFTP
+In-Reply-To: <87obd28e73.fsf@dell.be.48ers.dk>
+References: <002401cded96$e8b13fa0$ba13bee0$@co.uk>
+ <20130108130618.4991dff7@skate> <1366918894609-44233.post@n4.nabble.com>
+ <87ip3a9yzi.fsf@dell.be.48ers.dk> <1366919482310-44235.post@n4.nabble.com>
+ <871u9y9vqd.fsf@dell.be.48ers.dk>
+ <CA+QJksJKDeogdcxtJz8PNwmv-nDQuMpdoLHG55Kq54shV5wWFw@mail.gmail.com>
+ <87obd28e73.fsf@dell.be.48ers.dk>
+Message-ID: <1366960345226-44260.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31/01/13 09:18, J?r?me Pouiller wrote:
-> Until now, patch was downloaded without be renamed. $(DL_DIR) quickly become a
-> mess.
+Hello Peter,
 
-  Not really... There is just a chance that the patch isn't named 
-according to the package name, which could lead to conflicts between 
-patch names. But currently there is not a single patch for which the 
-patch name differs from the archive name.
+I didn't use the patch but I directly modified
+/home/thomas/Armadeus/armadeus-5.2/buildroot/package/openssh/openssh.mk as
+follows : 
 
-> Downloaded patches are now named
-> $(PKG_NAME)-$(PKG_VERSION)-$(PKG_PATCH_FILENAME).
+/#############################################################
+#
+# openssh
+#
+#############################################################
 
-  How about adding a new function, CLEAN_DOWNLOAD_NAME, that does
+OPENSSH_VERSION = 5.9p1
+OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
+OPENSSH_CONF_OPT = --disable-lastlog --disable-utmp \
+		--disable-utmpx --disable-wtmp --disable-wtmpx --disable-strip
 
-$($(PKG)_NAME)-$($(PKG)_VERSION)-$(patsubst \
-   $($(PKG)_VERSION)-%,%,$(patsubst $($(PKG)_NAME)-%,%,$(1)))
+OPENSSH_DEPENDENCIES = zlib openssl
 
-  so that the names don't get too long in the usual case?
+define OPENSSH_INSTALL_INITSCRIPT
+	$(INSTALL) -D -m 755 package/openssh/S50sshd
+$(TARGET_DIR)/etc/init.d/S50sshd
+endef
 
-  The same could also be applied to the package archives.
+OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_INITSCRIPT
 
-  But really I think it's making things more complex without being 
-necessary in practice. I don't expect this situation of conflicting names 
-is likely to occur.
+$(eval $(call AUTOTARGETS))/
 
-  Regards,
-  Arnout
+I also resinstalled openssh to be sure It take account of the modified file.
+Nothing changes. sftp-server is still installed in /usr/lib whereas sftp
+root at 192.168.1.5 is looking for sftp service on the target in /usr/libexec
 
->
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->   package/pkg-generic.mk |    7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index fbc2bb9..f2bf40a 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -42,8 +42,8 @@ endif
->   	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE)/$($(PKG)_SOURCE)))
->   	$(foreach p,$($(PKG)_PATCH),\
->   		$(if $(findstring ://,$(p)),\
-> -			$(call DOWNLOAD,$(p)),\
-> -			$(call DOWNLOAD,$($(PKG)_SITE)/$(p))\
-> +			$(call DOWNLOAD,$(p),$($(PKG)_NAME)-$($(PKG)_VERSION)-$(notdir $(p))),\
-> +			$(call DOWNLOAD,$($(PKG)_SITE)/$(p),$($(PKG)_NAME)-$($(PKG)_VERSION)-$(notdir $(p)))\
->   		)\
->   	$(sep))
->   	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
-> @@ -90,7 +90,8 @@ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
->   $(BUILD_DIR)/%/.stamp_patched:
->   	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
->   	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
-> -	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(notdir $(p))$(sep))
-> +	$(foreach p,$($(PKG)_PATCH),\
-> +	  support/scripts/apply-patches.sh $(@D) $(DL_DIR) $($(PKG)_NAME)-$($(PKG)_VERSION)-$(notdir $(p))$(sep))
->   	$(Q)( \
->   	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
->   	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
->
+Here below a ls from my Armadeus target :
+# ls /usr
+bin    lib    sbin   share
+# ls /usr/lib
+libas_devices.so     libncurses.so        libts-1.0.so.0.0.0
+libcrypto.so         libncurses.so.5      libts.so
+libcrypto.so.1.0.0   libncurses.so.5.7    libz.so
+libform.so           libpanel.so          libz.so.1
+libform.so.5         libpanel.so.5        libz.so.1.2.5
+libform.so.5.7       libpanel.so.5.7      sftp-server
+liblzo2.so           libssl.so            ssh-keysign
+liblzo2.so.2         libssl.so.1.0.0      ssh-pkcs11-helper
+liblzo2.so.2.0.0     libstdc++.so         tc
+libmenu.so           libstdc++.so.6       terminfo
+libmenu.so.5         libstdc++.so.6.0.13  ts
+libmenu.so.5.7       libts-1.0.so.0
+# 
+
+Best regards,
+Thomas
 
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Dropbear-SFTP-tp38207p44260.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
