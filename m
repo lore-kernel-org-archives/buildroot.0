@@ -1,59 +1,25 @@
-From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Fri, 26 Apr 2013 11:22:33 +0800
-Subject: [Buildroot] [PATCH v6 7/7] package: Introduce NOMMU symbol
-In-Reply-To: <1366279592-9055-7-git-send-email-sonic.adi@gmail.com>
-References: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
- <1366279592-9055-7-git-send-email-sonic.adi@gmail.com>
-Message-ID: <CAJxxZ0N5HbLdbcfq5SQzBhsniyKkxpSi6BgGLzOdurDi19cn-w@mail.gmail.com>
+From: Lars Dunemark <ladu@hms.se>
+Date: Fri, 26 Apr 2013 06:10:08 +0000
+Subject: [Buildroot] Adding local file system overlay
+Message-ID: <6119D107D82B0940B389FAED3F2DDE6616222D57@Ansuz.hms.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Buildroot mailinglist!
 
-On Thu, Apr 18, 2013 at 6:06 PM, Sonic Zhang <sonic.adi@gmail.com> wrote:
-> From: Sonic Zhang <sonic.zhang@analog.com>
->
-> Introduce NOMMU symbol __NOMMU__
->
-> ---
-> v6-changes:
-> - Remove space between comma and y.
-> - Restore endif after rebase.
->
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-> ---
->  package/Makefile.in |    4 ++++
->  1 files changed, 4 insertions(+), 0 deletions(-)
->
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index a449089..55d725d 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -107,6 +107,10 @@ ifeq ($(BR2_BINFMT_FLAT),y)
->  TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
->  endif
->
-> +ifneq ($(BR2_USE_MMU),y)
-> +TARGET_CFLAGS += -D__NOMMU__
-> +endif
-> +
->  ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
->  TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
->  TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
-> --
-> 1.7.0.4
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+During development of a new platform I sometimes find it useful to bundle my test builds with my own script/configuration files. 
+Example: SSH keys
 
-May I have your Acked-by against this patch?
+This is not something that we want to include in default configuration for a board or by any way get in a final build so instead I added a second step to local file system overlay checking a local variable and if it is set us it as a roofs overlay.
 
-Thanks
+Is this something that is of interests for the upstream project?
 
-Sonic Zhang
+Example: 
+export  LOCAL_ROOTFS_OVERLAY=/local-rootfs-overlay
+make
+
+Best regards,
+Lars Dunemark
