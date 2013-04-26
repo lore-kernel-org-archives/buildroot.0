@@ -1,81 +1,68 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 26 Apr 2013 16:49:20 -0300
-Subject: [Buildroot] [PATCH] xserver_xorg-server: bump to version 1.12.4 and
-	add security patch
-Message-ID: <1367005760-10474-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 26 Apr 2013 22:17:57 +0200
+Subject: [Buildroot] [PATCH] jansson: new package
+In-Reply-To: <1364380437-28214-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Wed, 27 Mar 2013 10:33:57 +0000")
+References: <1364380437-28214-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87r4hx6o7e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to version 1.12.4 and add a security patch for CVE-2013-1940.
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...> xserver_xorg-server-01-aarch64-support.patch} |  0
- .../xserver_xorg-server-02-cve-2013-1940.patch     | 34 ++++++++++++++++++++++
- .../xserver_xorg-server/xserver_xorg-server.mk     |  2 +-
- 3 files changed, 35 insertions(+), 1 deletion(-)
- rename package/x11r7/xserver_xorg-server/{xserver_xorg-server-aarch64-support.patch => xserver_xorg-server-01-aarch64-support.patch} (100%)
- create mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-02-cve-2013-1940.patch
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ spdawson> ---
+ spdawson>  package/Config.in          |    1 +
+ spdawson>  package/jansson/Config.in  |    7 +++++++
+ spdawson>  package/jansson/jansson.mk |   12 ++++++++++++
+ spdawson>  3 files changed, 20 insertions(+)
+ spdawson>  create mode 100644 package/jansson/Config.in
+ spdawson>  create mode 100644 package/jansson/jansson.mk
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-aarch64-support.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-01-aarch64-support.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/xserver_xorg-server-aarch64-support.patch
-rename to package/x11r7/xserver_xorg-server/xserver_xorg-server-01-aarch64-support.patch
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-02-cve-2013-1940.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-02-cve-2013-1940.patch
-new file mode 100644
-index 0000000..d85494f
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server-02-cve-2013-1940.patch
-@@ -0,0 +1,34 @@
-+From 6ca03b9161d33b1d2b55a3a1a913cf88deb2343f Mon Sep 17 00:00:00 2001
-+From: Dave Airlie <airlied@gmail.com>
-+Date: Wed, 10 Apr 2013 06:09:01 +0000
-+Subject: xf86: fix flush input to work with Linux evdev devices.
-+
-+So when we VT switch back and attempt to flush the input devices,
-+we don't succeed because evdev won't return part of an event,
-+since we were only asking for 4 bytes, we'd only get -EINVAL back.
-+
-+This could later cause events to be flushed that we shouldn't have
-+gotten.
-+
-+This is a fix for CVE-2013-1940.
-+
-+Signed-off-by: Dave Airlie <airlied@redhat.com>
-+Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
-+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
-+---
-+diff --git a/hw/xfree86/os-support/shared/posix_tty.c b/hw/xfree86/os-support/shared/posix_tty.c
-+index ab3757a..4d08c1e 100644
-+--- a/hw/xfree86/os-support/shared/posix_tty.c
-++++ b/hw/xfree86/os-support/shared/posix_tty.c
-+@@ -421,7 +421,8 @@ xf86FlushInput(int fd)
-+ {
-+     fd_set fds;
-+     struct timeval timeout;
-+-    char c[4];
-++    /* this needs to be big enough to flush an evdev event. */
-++    char c[256];
-+ 
-+     DebugF("FlushingSerial\n");
-+     if (tcflush(fd, TCIFLUSH) == 0)
-+--
-+cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index f0b19aa..1c51456 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 1.12.2
-+XSERVER_XORG_SERVER_VERSION = 1.12.4
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
- XSERVER_XORG_SERVER_MAKE = $(MAKE1) # make install fails with parallel make
+ spdawson> diff --git a/package/Config.in b/package/Config.in
+ spdawson> index 5d8f4f6..35a6c5a 100644
+ spdawson> --- a/package/Config.in
+ spdawson> +++ b/package/Config.in
+ spdawson> @@ -602,6 +602,7 @@ menu "JSON/XML"
+ spdawson>  source "package/cjson/Config.in"
+ spdawson>  source "package/expat/Config.in"
+ spdawson>  source "package/ezxml/Config.in"
+ spdawson> +source "package/jansson/Config.in"
+ spdawson>  source "package/json-c/Config.in"
+ spdawson>  source "package/json-glib/Config.in"
+ spdawson>  source "package/libroxml/Config.in"
+ spdawson> diff --git a/package/jansson/Config.in b/package/jansson/Config.in
+ spdawson> new file mode 100644
+ spdawson> index 0000000..960a7c4
+ spdawson> --- /dev/null
+ spdawson> +++ b/package/jansson/Config.in
+ spdawson> @@ -0,0 +1,7 @@
+ spdawson> +config BR2_PACKAGE_JANSSON
+ spdawson> +	bool "jansson"
+ spdawson> +	help
+ spdawson> +	  Jansson is a C library for encoding, decoding and manipulating JSON
+ spdawson> +	  data.
+ spdawson> +
+ spdawson> +	  http://www.digip.org/jansson/
+ spdawson> diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
+ spdawson> new file mode 100644
+ spdawson> index 0000000..c7183df
+ spdawson> --- /dev/null
+ spdawson> +++ b/package/jansson/jansson.mk
+ spdawson> @@ -0,0 +1,12 @@
+ spdawson> +#############################################################
+ spdawson> +#
+ spdawson> +# jansson
+ spdawson> +#
+ spdawson> +#############################################################
+ spdawson> +JANSSON_VERSION = 2.4
+
+We normally have an empty line between the header and the JANSSON_*
+variables. Committed with that fixed, thanks.
+
 -- 
-1.8.1.5
+Bye, Peter Korsgaard
