@@ -1,46 +1,35 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 26 Apr 2013 11:33:32 +0400
-Subject: [Buildroot] [PATCH] vlc: new package
-In-Reply-To: <64pdjk.r2d.ln@ID-313208.user.individual.net>
-References: <1363687526-8469-1-git-send-email-abrodkin@synopsys.com>
- <64pdjk.r2d.ln@ID-313208.user.individual.net>
-Message-ID: <517A2DCC.9060708@synopsys.com>
+From: thomas <thomas.spitz@gmail.com>
+Date: Fri, 26 Apr 2013 00:46:42 -0700 (PDT)
+Subject: [Buildroot] Dropbear/SFTP
+In-Reply-To: <1366960345226-44260.post@n4.nabble.com>
+References: <002401cded96$e8b13fa0$ba13bee0$@co.uk>
+ <20130108130618.4991dff7@skate> <1366918894609-44233.post@n4.nabble.com>
+ <87ip3a9yzi.fsf@dell.be.48ers.dk> <1366919482310-44235.post@n4.nabble.com>
+ <871u9y9vqd.fsf@dell.be.48ers.dk>
+ <CA+QJksJKDeogdcxtJz8PNwmv-nDQuMpdoLHG55Kq54shV5wWFw@mail.gmail.com>
+ <87obd28e73.fsf@dell.be.48ers.dk> <1366960345226-44260.post@n4.nabble.com>
+Message-ID: <1366962402005-44264.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/2013 09:08 AM, Bernd Kuhls wrote:
- > Hi,
- >
- > Alexey Brodkin <Alexey.Brodkin-HKixBCOQz3hWk0Htik3J/w@public.gmane.org>
- > wrote in 
-news:1363687526-8469-1-git-send-email-abrodkin-HKixBCOQz3hWk0Htik3J/w at public.gmane.org:
- >
- >> +ifeq ($(BR2_PACKAGE_AVCODEC),y)
- >
- > shouldn?t this be called BR2_PACKAGE_VLC_AVCODEC?
- >
- >> +ifeq ($(BR2_PACKAGE_LUA),y)
- >
- > and this BR2_PACKAGE_VLC_LUA?
- >
- > Regards, Bernd
+Hello Peter,
 
-Hi Bernd,
+I finally moved sftp-server from /usr/lib to /usr/libexec manually on my
+target.
 
-The idea is to check if "avcodec" and "lua" packages were selected in 
-configuration utility (menuconfig/xconfig etc).
+According to me, it seems that there is still a problem with the install
+script.
 
-Indeed we may rely on VLC's symbols BR2_PACKAGE_AVCODEC and 
-BR2_PACKAGE_LUA that select BR2_PACKAGE_FFMPEG and BR2_PACKAGE_LUA 
-accordingly.
+Thanks again for your support
 
-So initial proposal is to sort of double check if we do have "avcodec" 
-and "lua" selected.
+Best regards,
+Thomas
 
-Even though you believe it's better to check VLC's own symbols I may do 
-a re-spin.
 
--Alexey
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Dropbear-SFTP-tp38207p44264.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
