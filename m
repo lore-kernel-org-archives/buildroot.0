@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 27 Apr 2013 20:07:08 +0200
-Subject: [Buildroot] [PATCH] squid: bump to version 3.3.4
-In-Reply-To: <1367075727-1948-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 27 Apr 2013 12:15:27 -0300")
-References: <1367075727-1948-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8738ub7sqb.fsf@dell.be.48ers.dk>
+Date: Sat, 27 Apr 2013 20:06:57 +0200
+Subject: [Buildroot] [PATCH] pciutils: bump to version 3.2.0
+In-Reply-To: <1367022257-10770-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 26 Apr 2013 21:24:17 -0300")
+References: <1367022257-10770-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877gjn7sqm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
