@@ -1,30 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 27 Apr 2013 12:15:27 -0300
-Subject: [Buildroot] [PATCH] squid: bump to version 3.3.4
-Message-ID: <1367075727-1948-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 27 Apr 2013 19:34:07 +0200
+Subject: [Buildroot] initramfs doesn't get linked into kernel
+In-Reply-To: <klg76d$b42$1@ger.gmane.org>
+References: <klf34k$81s$1@ger.gmane.org> <20130427031758.363b222f@skate>
+ <klg76d$b42$1@ger.gmane.org>
+Message-ID: <20130427193407.0e7423c6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/squid/squid.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Dear Adam Nielsen,
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 5832aa7..45a0b2c 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SQUID_VERSION = 3.3.3
-+SQUID_VERSION = 3.3.4
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.3
- SQUID_LICENSE = GPLv2+
- SQUID_LICENSE_FILES = COPYING
+On Sat, 27 Apr 2013 19:53:20 +1000, Adam Nielsen wrote:
+
+> Ahh ok, so what I did should have worked then.  Since then I have added 
+> Ethernet support for my board and tried booting with a root filesystem on NFS. 
+>   This worked (it mounted the filesystem) but it doesn't seem to be able to 
+> run the init binary (in this case Busybox built by buildroot.)  Looking at 
+> tcpdump it correctly follows the symlinks and appears to download the busybox 
+> binary, but then fails saying it couldn't find init.
+> 
+> I'm not quite sure what the problem is (I'm wondering whether it's a 
+> compatibility issue like OABI vs EABI or something) but it's possible this is 
+> what was causing the apparent initramfs failure, since it's the same 
+> filesystem (I just unzipped the .tar of the root filesystem that buildroot 
+> generated, into the NFS share.)  I built the kernel with and without EABI 
+> support though and there was no difference, so I'm not really sure what it 
+> might be.
+
+Again, please post your Buildroot .config and kernel .config. Another
+issue you might be having if you're building your kernel outside of
+Buildroot is that you may have enabled the usage of devtmpfs as
+the /dev strategy, but forgot to enable CONFIG_DEVTMPFS and
+CONFIG_DEVTMPFS_MOUNT in your kernel configuration. See
+http://buildroot.org/downloads/manual/manual.html#_dev_management for
+more details.
+
+Best regards,
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
