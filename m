@@ -1,51 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Apr 2013 22:22:35 +0200
-Subject: [Buildroot] xconfig "Save As" behavior
-In-Reply-To: <874neq5ukn.fsf@dell.be.48ers.dk>
-References: <517C387B.80205@ras.kells.com>
- <874neq5ukn.fsf@dell.be.48ers.dk>
-Message-ID: <20130428202235.GB4571@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 28 Apr 2013 22:36:13 +0200
+Subject: [Buildroot] [PATCH 00/10] [reworked] Updating directfb and
+	divine
+In-Reply-To: <1362940371-25899-1-git-send-email-c.schoenert@gmail.com>
+ (Carsten Schoenert's message of "Sun, 10 Mar 2013 19:32:41 +0100")
+References: <1362940371-25899-1-git-send-email-c.schoenert@gmail.com>
+Message-ID: <87zjwi4cle.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Rob, All,
+>>>>> "Carsten" == Carsten Schoenert <c.schoenert@gmail.com> writes:
 
-On Sun, Apr 28, 2013 at 09:22:32PM +0200, Peter Korsgaard wrote:
-> >>>>> "Rob" == Rob Schottland (buildroot) <arm@ras.kells.com> writes:
-> 
->  Rob> In buildroot-2013.02 "make xconfig", I have found that the "Save As"
->  Rob> option from the File menu ignores the filename and directory entered
->  Rob> and saves instead to the original .config file, reporting
->  Rob> #
->  Rob> # configuration written to  {buildroot install directory}/.config
->  Rob> #
-> 
->  Rob> Has this been reported previously?
-> 
-> Not that I'm aware of.
-> 
-> I just checked, and it is still behaving like that in current git. As
-> you might know, we're using kconfig from the Linux kernel, so I checked
-> there (3.9-rc8), and it also behaves like that.
-> 
-> With other words, the bug is not caused by the buildroot integration.
-> 
-> Yann, any ideas how to fix this?
+ Carsten> From: Carsten Schoenert <c.schoenert@gmail.com>
+ Carsten> Hello,
 
-NOOOOoooo! Not yet another kconfig issue, please! :-]
+ Carsten> after the reviewing of my previous patches by Thomas I have reworked
+ Carsten> those patches. After some tests related to the dependencies of other
+ Carsten> packages on directfb I expanded my patch series because of broken
+ Carsten> dependencies by the newer directfb version.
 
-I never ever tried xconfig so far. I'll have a look when time permits.
+ Carsten> The packages directfb-exambles and sawman are bumped to
+ Carsten> current versions so the packages are buildable against the
+ Carsten> newer directfb version.  The Qt package I doesn't have tested.
 
-Regards,
-Yann E. MORIN.
+ Carsten> I added new entrys into Config.in.legacy for the renamed BR2
+ Carsten> variables.  Hopefully in the correct format.
+
+ Carsten> If something is still wrong please let me know.
+
+Committed series, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
