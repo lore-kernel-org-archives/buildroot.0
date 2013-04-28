@@ -1,28 +1,38 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 28 Apr 2013 21:00:05 +0200
-Subject: [Buildroot] [PATCH 2/2] Add HW decoding support for Hantro x170
-In-Reply-To: <1360016773-8691-2-git-send-email-alexandre.belloni@piout.net>
- (Alexandre Belloni's message of "Mon, 4 Feb 2013 23:26:13 +0100")
-References: <1360016773-8691-1-git-send-email-alexandre.belloni@piout.net>
- <1360016773-8691-2-git-send-email-alexandre.belloni@piout.net>
-Message-ID: <878v425vm2.fsf@dell.be.48ers.dk>
+Date: Sun, 28 Apr 2013 21:22:32 +0200
+Subject: [Buildroot] xconfig "Save As" behavior
+In-Reply-To: <517C387B.80205@ras.kells.com> (Rob Schottland's message of "Sat, 
+ 27 Apr 2013 13:43:39 -0700")
+References: <517C387B.80205@ras.kells.com>
+Message-ID: <874neq5ukn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@piout.net> writes:
+>>>>> "Rob" == Rob Schottland (buildroot) <arm@ras.kells.com> writes:
 
- Alexandre> Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
+ Rob> In buildroot-2013.02 "make xconfig", I have found that the "Save As"
+ Rob> option from the File menu ignores the filename and directory entered
+ Rob> and saves instead to the original .config file, reporting
+ Rob> #
+ Rob> # configuration written to  {buildroot install directory}/.config
+ Rob> #
 
-Hi,
+ Rob> Has this been reported previously?
 
-Will you send a v2 fixing the comments Thomas had?
+Not that I'm aware of.
 
-For the on2-8170-libs package, do you know what toolchain the binaries
-have been built with? Do we need to limit the C library / arch variant
-to ensure it is only available on compatible configs?
+I just checked, and it is still behaving like that in current git. As
+you might know, we're using kconfig from the Linux kernel, so I checked
+there (3.9-rc8), and it also behaves like that.
+
+With other words, the bug is not caused by the buildroot integration.
+
+Yann, any ideas how to fix this?
+
+ Rob> in "make menuconfig" the "save as" feature works as it should.
 
 -- 
 Bye, Peter Korsgaard
