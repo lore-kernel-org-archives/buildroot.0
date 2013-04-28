@@ -1,11 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 28 Apr 2013 22:36:13 +0200
-Subject: [Buildroot] [PATCH 00/10] [reworked] Updating directfb and
-	divine
-In-Reply-To: <1362940371-25899-1-git-send-email-c.schoenert@gmail.com>
- (Carsten Schoenert's message of "Sun, 10 Mar 2013 19:32:41 +0100")
+Date: Sun, 28 Apr 2013 22:36:47 +0200
+Subject: [Buildroot] [PATCH 05/10] Config.in.legacy: adding renamed BR2
+	Options
+In-Reply-To: <1362940371-25899-6-git-send-email-c.schoenert@gmail.com>
+ (Carsten Schoenert's message of "Sun, 10 Mar 2013 19:32:46 +0100")
 References: <1362940371-25899-1-git-send-email-c.schoenert@gmail.com>
-Message-ID: <87zjwi4cle.fsf@dell.be.48ers.dk>
+ <1362940371-25899-6-git-send-email-c.schoenert@gmail.com>
+Message-ID: <87vc764ckg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,23 +16,46 @@ To: buildroot@busybox.net
 >>>>> "Carsten" == Carsten Schoenert <c.schoenert@gmail.com> writes:
 
  Carsten> From: Carsten Schoenert <c.schoenert@gmail.com>
- Carsten> Hello,
+ Carsten> Related to the changed directfb variables for
+ Carsten> BR2_PACKAGE_DIRECTFB_DITHER_RGB16 and
+ Carsten> BR2_PACKAGE_DIRECTFB_TESTS
+ Carsten> adding a legacy check.
 
- Carsten> after the reviewing of my previous patches by Thomas I have reworked
- Carsten> those patches. After some tests related to the dependencies of other
- Carsten> packages on directfb I expanded my patch series because of broken
- Carsten> dependencies by the newer directfb version.
+ Carsten> Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+ Carsten> ---
+ Carsten>  Config.in.legacy |   18 ++++++++++++++++++
+ Carsten>  1 file changed, 18 insertions(+)
 
- Carsten> The packages directfb-exambles and sawman are bumped to
- Carsten> current versions so the packages are buildable against the
- Carsten> newer directfb version.  The Qt package I doesn't have tested.
+ Carsten> diff --git a/Config.in.legacy b/Config.in.legacy
+ Carsten> index d90132c..838e7fc 100644
+ Carsten> --- a/Config.in.legacy
+ Carsten> +++ b/Config.in.legacy
+ Carsten> @@ -40,6 +40,24 @@ comment "As long as these options stay selected, the build   "
+ Carsten>  comment "will fail.                                          "
+ Carsten>  endif
+ 
+ Carsten> +#
+ Carsten> +# Legacy options since 2013.02
+ Carsten> +#
+ Carsten> +config BR2_PACKAGE_DIRECTB_DITHER_RGB16
+ Carsten> +	bool "DirectFB RGB16 dithering option has been renamed"
+ Carsten> +	select BR2_PACKAGE_DIRECTFB_DITHER_RGB16
+ Carsten> +	select BR2_LEGACY
+ Carsten> +	help
+ Carsten> +	  The option has been renamed
+ Carsten> +	  BR2_PACKAGE_DIRECTFB_DITHER_RGB16.
+ Carsten> +
+ Carsten> +config BR2_PACKAGE_DIRECTFB_TESTS
 
- Carsten> I added new entrys into Config.in.legacy for the renamed BR2
- Carsten> variables.  Hopefully in the correct format.
+This should be BR2_PACKAGE_DIRECTB_TESTS. Fixed while committing.
 
- Carsten> If something is still wrong please let me know.
-
-Committed series, thanks.
+ Carsten> +	bool "DirectFB Tests option has been renamed"
+ Carsten> +	select BR2_PACKAGE_DIRECTFB_TESTS
+ Carsten> +	select BR2_LEGACY
+ Carsten> +	help
+ Carsten> +	  The option has been renamed
+ Carsten> +	  BR2_PACKAGE_DIRECTFB_TESTS.
+ 
 
 -- 
 Bye, Peter Korsgaard
