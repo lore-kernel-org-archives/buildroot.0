@@ -1,246 +1,57 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 28 Apr 2013 21:52:11 +0200
-Subject: [Buildroot] [git commit] directfb-examples: correct indentation and
-	expand help text
-Message-ID: <20130428205745.88E899B8AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] directfb-exambles: adding new examples to
+	the menu
+Message-ID: <20130428205745.E63C29B8AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9677b779e7b0a7908b90ec1d24b56f69634554cf
+commit: http://git.buildroot.net/buildroot/commit/?id=7a6f1927031d80bce111617b84e7d80e44f101c8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: drop trailing newline]
 Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/directfb-examples/Config.in |  173 +++++++++++++++++++++++++----------
- 1 files changed, 123 insertions(+), 50 deletions(-)
+ package/directfb-examples/Config.in            |   12 ++++++++++++
+ package/directfb-examples/directfb-examples.mk |    2 ++
+ 2 files changed, 14 insertions(+), 0 deletions(-)
 
 diff --git a/package/directfb-examples/Config.in b/package/directfb-examples/Config.in
-index c463784..be5ba86 100644
+index be5ba86..afd6d6d 100644
 --- a/package/directfb-examples/Config.in
 +++ b/package/directfb-examples/Config.in
-@@ -1,97 +1,170 @@
- config BR2_PACKAGE_DIRECTFB_EXAMPLES
--       bool "directfb examples"
--       depends on BR2_PACKAGE_DIRECTFB
-+	bool "directfb examples"
-+	depends on BR2_PACKAGE_DIRECTFB
+@@ -99,6 +99,18 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_LAYER
+ 	help
+ 	  Simple videoplayer with layers.
+ 
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_MATRIX
++	bool "usr/bin/df_matrix"
++	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
 +	help
-+	  The DirectFB-examples package contains a set of simple DirectFB
-+	  applications that can be used to test and demonstrate various
-+	  DirectFB features.
++	  Testing SetMatrix() for free transforms.
 +
-+	  http://directfb.org/downloads/Extras/README.DirectFB-examples
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_ANDI
--       bool "usr/bin/df_andi"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_andi"
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_MATRIX_WATER
++	bool "usr/bin/df_matrix_water"
 +	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
 +	help
-+	  Penguin demo, press 'space' to form convergence logo,
-+	  's'/'d' to spawn/destroy 'a' penguin, 'r' to revive penguin
-+	  after space was pressed, 'c' tests clipping.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_BLTLOAD
--       bool "usr/bin/df_bltload"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_bltload"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Reads information from /proc/bltstat.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_CPULOAD
--       bool "usr/bin/df_cpuload"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_cpuload"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  CPU Load with data from /proc/stat.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_DATABUFFER
--       bool "usr/bin/df_databuffer"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_databuffer"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Simple test application for data buffers.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_DIOLOAD
--       bool "usr/bin/df_dioload"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_dioload"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Disk IO with data from /proc/stat.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_DOK
--       bool "usr/bin/df_dok"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_dok"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  DirectFB benchmark application, runs some tests and
-+	  displays benchmark results afterwards.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_DRIVERTEST
--       bool "usr/bin/df_drivertest"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_drivertest"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Tool to check drivers for bugs and accuracy.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_FIRE
--       bool "usr/bin/df_fire"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_fire"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  The famous fire effect ported to DirectFB (16 bpp only).
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_FLIP
--       bool "usr/bin/df_flip"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_flip"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Raw Flip() benchmark.
++	  Same as df_matrix, but using new Water API.
 +
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_FONTS
--       bool "usr/bin/df_fonts"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_fonts"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Takes a list of font files and shows character tables.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_INPUT
--       bool "usr/bin/df_input"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_input"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Test application for input devices.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_JOYSTICK
--       bool "usr/bin/df_joystick"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_joystick"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  A colored version of df_particle, fointain can be moved with
-+	  joystick. The particles of different colors can be spawned
-+	  with different joystick buttons (1-4).
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_KNUCKLES
--       bool "usr/bin/df_knuckles"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_knuckles"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  3D skull drawn using triangles that can be rotated using
-+	  the mouse. 'Space' switches to wireframe, 'b' toggles
-+	  backface culling.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_LAYER
--       bool "usr/bin/df_layer"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_layer"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Simple videoplayer with layers.
- 
  config BR2_PACKAGE_DIRECTFB_EXAMPLES_NEO
--       bool "usr/bin/df_neo"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_neo"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Port from a gdk-pixbuf demo to DirectFB, uses scaling,
-+	  alpha blending and color modulation, use cursor keys and
-+	  space to change parameters.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_NETLOAD
--       bool "usr/bin/df_netload"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_netload"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Network statistica from /proc/net/dev.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_PALETTE
--       bool "usr/bin/df_palette"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_palette"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  A example blitting from a surface with a
-+	  rotating/morphing palette.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_PARTICLE
--       bool "usr/bin/df_particle"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_particle"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  A moving fountain consisting of alphablended rectangles,
-+	  nice and fast if hardware accelerated.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_PORTER
--       bool "usr/bin/df_porter"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_porter"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Shows porter/duff blending rules.
-+
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_STRESS
--       bool "usr/bin/df_stress"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_stress"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Stress tests surface manager, for debugging purposes only.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_TEXTURE
--       bool "usr/bin/df_texture"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_texture"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  A simple texture example. The 3d windows can be rotated
-+	  with the mouse.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO
--       bool "usr/bin/df_video"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_video"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Shows window stack with alpha blending and video playback
-+	  in a moving window.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO_PARTICLE
--       bool "usr/bin/df_video_particle"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_video_particle"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Same as df_particle, but the rectangles have been
-+	  replaced by a video (via video4linux). Nice color effects.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_WINDOW
--       bool "usr/bin/df_window"
--       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	bool "usr/bin/df_window"
-+	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
-+	help
-+	  Simple demonstration of the DirectFB window stack, follow
-+	  the instructions in the upper left corner. Pass a video
-+	  device file or a movie file on the command-line to enable
-+	  video playback in one of the windows.
+ 	bool "usr/bin/df_neo"
+ 	depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
+diff --git a/package/directfb-examples/directfb-examples.mk b/package/directfb-examples/directfb-examples.mk
+index c7235d6..1342047 100644
+--- a/package/directfb-examples/directfb-examples.mk
++++ b/package/directfb-examples/directfb-examples.mk
+@@ -27,6 +27,8 @@ DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_INPUT) += usr/bin/df_i
+ DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_JOYSTICK) += usr/bin/df_joystick
+ DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_KNUCKLES) += usr/bin/df_knuckles
+ DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_LAYER) += usr/bin/df_layer
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_MATRIX) += usr/bin/df_matrix
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_MATRIX_WATER) += usr/bin/df_matrix_water
+ DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_NEO) += usr/bin/df_neo
+ DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_NETLOAD) += usr/bin/df_netload
+ DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_PALETTE) += usr/bin/df_palette
