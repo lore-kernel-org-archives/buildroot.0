@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Apr 2013 22:26:04 +0200
-Subject: [Buildroot] [PATCH v2 3/4] wayland: new package
+Date: Mon, 29 Apr 2013 22:26:03 +0200
+Subject: [Buildroot] [PATCH v2 2/4] libxkbcommon: new package
 In-Reply-To: <1367267165-6873-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1367267165-6873-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1367267165-6873-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1367267165-6873-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,75 +12,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in          |    1 +
- package/wayland/Config.in  |   10 ++++++++++
- package/wayland/wayland.mk |   30 ++++++++++++++++++++++++++++++
- 3 files changed, 41 insertions(+)
- create mode 100644 package/wayland/Config.in
- create mode 100644 package/wayland/wayland.mk
+ package/Config.in                    |    1 +
+ package/libxkbcommon/Config.in       |    8 ++++++++
+ package/libxkbcommon/libxkbcommon.mk |   16 ++++++++++++++++
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/libxkbcommon/Config.in
+ create mode 100644 package/libxkbcommon/libxkbcommon.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e359306..76feb7d 100644
+index 24dfe9c..e359306 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -448,6 +448,7 @@ source "package/pango/Config.in"
- source "package/pixman/Config.in"
- source "package/poppler/Config.in"
- source "package/tiff/Config.in"
-+source "package/wayland/Config.in"
- source "package/webkit/Config.in"
- source "package/zxing/Config.in"
- endmenu
-diff --git a/package/wayland/Config.in b/package/wayland/Config.in
+@@ -470,6 +470,7 @@ source "package/libserial/Config.in"
+ source "package/libusb/Config.in"
+ source "package/libusb-compat/Config.in"
+ source "package/libv4l/Config.in"
++source "package/libxkbcommon/Config.in"
+ source "package/mtdev/Config.in"
+ source "package/ne10/Config.in"
+ source "package/neardal/Config.in"
+diff --git a/package/libxkbcommon/Config.in b/package/libxkbcommon/Config.in
 new file mode 100644
-index 0000000..e5d2649
+index 0000000..0a52c6f
 --- /dev/null
-+++ b/package/wayland/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_WAYLAND
-+	bool "wayland"
-+	select BR2_PACKAGE_LIBFFI
-+	select BR2_PACKAGE_EXPAT
++++ b/package/libxkbcommon/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBXKBCOMMON
++	bool "libxkbcommon"
 +	help
-+	  Wayland is a project to define a protocol for a compositor
-+	  to talk to its clients as well as a library implementation
-+	  of the protocol.
++	  xkbcommon is a keymap compiler and support library which
++	  processes a reduced subset of keymaps as defined by the XKB
++	  specification.
 +
-+	  http://wayland.freedesktop.org/
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
++	  http://xkbcommon.org/
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
 new file mode 100644
-index 0000000..65381ec
+index 0000000..1ff851b
 --- /dev/null
-+++ b/package/wayland/wayland.mk
-@@ -0,0 +1,30 @@
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -0,0 +1,16 @@
 +#############################################################
 +#
-+# wayland
++# libxkbcommon
 +#
 +#############################################################
 +
-+WAYLAND_VERSION = 1.1.0
-+WAYLAND_SITE = http://wayland.freedesktop.org/releases/
-+WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
-+WAYLAND_LICENSE = MIT
-+WAYLAND_LICENSE_FILES = COPYING
++LIBXKBCOMMON_VERSION = 0.3.0
++LIBXKBCOMMON_SITE = http://xkbcommon.org/download/
++LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
++LIBXKBCOMMON_LICENSE = MIT/X11
++LIBXKBCOMMON_LICENSE_FILES = COPYING
 +
-+WAYLAND_INSTALL_STAGING = YES
-+WAYLAND_DEPENDENCIES = libffi host-pkgconf expat host-expat
-+
-+# wayland needs a wayland-scanner program to generate some of its
-+# source code. By default, it builds it with CC, so it doesn't in
-+# cross-compilation. Therefore, we build it manually, and tell wayland
-+# that the tool is already available.
-+WAYLAND_CONF_OPT = --disable-scanner
-+
-+define WAYLAND_BUILD_SCANNER
-+	(cd $(@D)/src/; \
-+		$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
-+			-o wayland-scanner scanner.c wayland-util.c -lexpat)
-+endef
-+
-+WAYLAND_POST_CONFIGURE_HOOKS += WAYLAND_BUILD_SCANNER
++LIBXKBCOMMON_INSTALL_STAGING = YES
++LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
 +
 +$(eval $(autotools-package))
 -- 
