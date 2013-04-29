@@ -1,374 +1,93 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 29 Apr 2013 22:21:26 +0200
-Subject: [Buildroot] [git commit] configs/qemu: bump relevant configs to
-	kernel version 3.9.x
-Message-ID: <20130429203427.DB26B9B8E4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Apr 2013 22:45:41 +0200
+Subject: [Buildroot] [PATCH v2 00/12] RFC: ARC port
+In-Reply-To: <E6BF041E97966E4DB955F0DF883AD2D6339FA392@de02wembxa.internal.synopsys.com>
+References: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
+ <20130425050221.4846d873@skate>
+ <E6BF041E97966E4DB955F0DF883AD2D6339FA392@de02wembxa.internal.synopsys.com>
+Message-ID: <20130429224541.6f46b3b4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4b4d0f2f1b6528c0ffd347b3946c0916aec8667b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Mischa Jonker,
 
-Problematic configurations not bumped:
+On Thu, 25 Apr 2013 11:01:15 +0000, Mischa Jonker wrote:
 
-powerpc-g3beige: Kernel oops on boot
-sh4-r2d - Qemu doesn't emulate advanced features from the console UART
-sparc-ss10 - Illegal instruction
+> > (host-flex/host-bison)
+> Thanks for the patches! I have integrated them and added version
+> checks. I'm not 100% certain from which version onwards the
+> dependency has been removed, but my colleague says that he didn't
+> encounter these dependencies with GCC 4.5, so I made it depend on
+> 4.2,4.3,4.4.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../{linux-3.8.config => linux-3.9.config}         |    0
- .../{linux-3.8.config => linux-3.9.config}         |    0
- .../{linux-3.8.config => linux-3.9.config}         |    0
- .../{linux-3.8.config => linux-3.9.config}         |    0
- .../{linux-3.8.config => linux-3.9.config}         |    0
- .../{linux-3.8.config => linux-3.9.config}         |    0
- .../x86/{linux-3.8.config => linux-3.9.config}     |    0
- .../x86_64/{linux-3.8.config => linux-3.9.config}  |    0
- configs/qemu_arm_nuri_defconfig                    |    6 +++---
- configs/qemu_arm_versatile_defconfig               |    8 ++++----
- configs/qemu_arm_vexpress_defconfig                |    6 +++---
- configs/qemu_microblazebe_mmu_defconfig            |    4 ++--
- configs/qemu_microblazeel_mmu_defconfig            |    4 ++--
- configs/qemu_mips64_malta_defconfig                |    8 ++++----
- configs/qemu_mips_malta_defconfig                  |    8 ++++----
- configs/qemu_mipsel_malta_defconfig                |    8 ++++----
- configs/qemu_ppc_g3beige_defconfig                 |    2 +-
- configs/qemu_ppc_mpc8544ds_defconfig               |    6 +++---
- configs/qemu_ppc_virtex_ml507_defconfig            |    6 +++---
- configs/qemu_sh4_r2d_defconfig                     |    2 +-
- configs/qemu_sparc_ss10_defconfig                  |    4 ++--
- configs/qemu_x86_64_defconfig                      |    8 ++++----
- configs/qemu_x86_defconfig                         |    8 ++++----
- 23 files changed, 44 insertions(+), 44 deletions(-)
+Ok.
 
-diff --git a/board/qemu/arm-versatile/linux-3.8.config b/board/qemu/arm-versatile/linux-3.9.config
-similarity index 100%
-rename from board/qemu/arm-versatile/linux-3.8.config
-rename to board/qemu/arm-versatile/linux-3.9.config
-diff --git a/board/qemu/microblazebe-mmu/linux-3.8.config b/board/qemu/microblazebe-mmu/linux-3.9.config
-similarity index 100%
-rename from board/qemu/microblazebe-mmu/linux-3.8.config
-rename to board/qemu/microblazebe-mmu/linux-3.9.config
-diff --git a/board/qemu/microblazeel-mmu/linux-3.8.config b/board/qemu/microblazeel-mmu/linux-3.9.config
-similarity index 100%
-rename from board/qemu/microblazeel-mmu/linux-3.8.config
-rename to board/qemu/microblazeel-mmu/linux-3.9.config
-diff --git a/board/qemu/mips-malta/linux-3.8.config b/board/qemu/mips-malta/linux-3.9.config
-similarity index 100%
-rename from board/qemu/mips-malta/linux-3.8.config
-rename to board/qemu/mips-malta/linux-3.9.config
-diff --git a/board/qemu/mips64-malta/linux-3.8.config b/board/qemu/mips64-malta/linux-3.9.config
-similarity index 100%
-rename from board/qemu/mips64-malta/linux-3.8.config
-rename to board/qemu/mips64-malta/linux-3.9.config
-diff --git a/board/qemu/mipsel-malta/linux-3.8.config b/board/qemu/mipsel-malta/linux-3.9.config
-similarity index 100%
-rename from board/qemu/mipsel-malta/linux-3.8.config
-rename to board/qemu/mipsel-malta/linux-3.9.config
-diff --git a/board/qemu/x86/linux-3.8.config b/board/qemu/x86/linux-3.9.config
-similarity index 100%
-rename from board/qemu/x86/linux-3.8.config
-rename to board/qemu/x86/linux-3.9.config
-diff --git a/board/qemu/x86_64/linux-3.8.config b/board/qemu/x86_64/linux-3.9.config
-similarity index 100%
-rename from board/qemu/x86_64/linux-3.8.config
-rename to board/qemu/x86_64/linux-3.9.config
-diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
-index b2493eb..f83e53d 100644
---- a/configs/qemu_arm_nuri_defconfig
-+++ b/configs/qemu_arm_nuri_defconfig
-@@ -14,12 +14,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttySAC1"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Lock to 3.8 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_8=y
-+# Lock to 3.9 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_9=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9"
- BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index db18d5b..dcfd0ad 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -10,13 +10,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.7 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_8=y
-+# Lock to 3.9 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_9=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.8.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.9.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index 6b2e5ab..d48c0aa 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -14,12 +14,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.8 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_8=y
-+# Lock to 3.9 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_9=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index 5eeb31e..d79fc1d 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -19,9 +19,9 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.8.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.9.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
- BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/qemu/microblazebe-mmu/system.dts"
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index 2a14c07..9a25072 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -19,9 +19,9 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.8.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.9.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
- BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/qemu/microblazeel-mmu/system.dts"
-diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
-index e69cb56..751ce5b 100644
---- a/configs/qemu_mips64_malta_defconfig
-+++ b/configs/qemu_mips64_malta_defconfig
-@@ -10,15 +10,15 @@ BR2_PREFER_STATIC_LIB=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.8 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_8=y
-+# Lock to 3.9 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_9=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.8.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.9.config"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
- # Serial port config
-diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
-index 6134cb4..7049de6 100644
---- a/configs/qemu_mips_malta_defconfig
-+++ b/configs/qemu_mips_malta_defconfig
-@@ -6,15 +6,15 @@ BR2_mips_32r2=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.8 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_8=y
-+# Lock to 3.9 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_9=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.8.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.9.config"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
- # Serial port config
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index 81723f6..4936df1 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -6,15 +6,15 @@ BR2_mips_32r2=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.8 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_8=y
-+# Lock to 3.9 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_9=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.8.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.9.config"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
- # Serial port config
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index 10701cd..884291d 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -12,7 +12,7 @@ BR2_KERNEL_HEADERS_3_8=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.10"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.8.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index 07b9ae9..0440904 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -6,13 +6,13 @@ BR2_powerpc_8548=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Lock to 3.8 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_8=y
-+# Lock to 3.9 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_9=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9"
- BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
-diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
-index 4fd2eb8..909448d 100644
---- a/configs/qemu_ppc_virtex_ml507_defconfig
-+++ b/configs/qemu_ppc_virtex_ml507_defconfig
-@@ -6,8 +6,8 @@ BR2_powerpc_440=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Lock to 3.8 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_8=y
-+# Lock to 3.9 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_9=y
- 
- # Use soft float
- BR2_SOFT_FLOAT=y
-@@ -15,7 +15,7 @@ BR2_SOFT_FLOAT=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9"
- BR2_LINUX_KERNEL_DEFCONFIG="44x/virtex5"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index c04f6e8..469ab28 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -20,7 +20,7 @@ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.39"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.44"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.2.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index eb21c31..7e58a0f 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -6,8 +6,8 @@ BR2_sparc_v8=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.7 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_7=y
-+# Lock to 3.4 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_4=y
- 
- # Linux kernel
- BR2_LINUX_KERNEL=y
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index e22da44..0843062 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -9,12 +9,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.8 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_8=y
-+# Lock to 3.9 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_9=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.8.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.9.config"
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index 55b0f53..9c2f050 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -10,12 +10,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.8 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_8=y
-+# Lock to 3.9 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_9=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.8.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.9.config"
+> > Do you have an idea for this pthread_mutex_t issue? Maybe ARC
+> > doesn't support NPTL or something?
+> Correct, we don't have NPTL support yet. It was the initial planning
+> to have this finished before we went out with the BuildRoot patches,
+> but priorities shifted, and I hadn't disabled it yet. Added a patch
+> for that.
+
+Good.
+
+> > Also, do you have a public repo to push your changes to? Since your
+> > patch series has become quite long, it would make it easier for us
+> > to test it as a whole.
+> Our github site has a BuildRoot repository:
+> https://github.com/foss-for-synopsys-dwc-arc-processors/buildroot
+> 
+> I'm regularly rebasing & updating patches, and pushing them to this
+> repo. Right now, there are two branches/tags that are relevant:
+> * master_arc_20130425
+> * master_3.9_arc_20130425
+> 
+> The only difference between the two is that the first relies on
+> 3.9-rc8, and the second on 3.9. So the second branch doesn't build
+> right now, but should build after this weekend.
+
+3.9 has been released now, so that should solve your problem. Could you
+rebase your patch series on top of master, Peter has added 3.9 as a
+supported kernel.
+
+I tested your branch, and it built fine for me on the autobuilders, so
+in terms of basic buildability, we're good.
+
+> BTW: would you like to repost the new set of patches on the mailing
+> list, or would you rather have a look at it on github? BTW2: I
+> noticed that GNU config went from GPLv2 to GPLv3, I'm not sure what
+> the impact would be for BuildRoot, as it is really part of BuildRoot
+> (not downloaded).
+
+Yes, they should be reposted, but I have a number of comments on them:
+
+ * 'toolchain/gcc: Add host-{flex,bison} dependencies for GCC
+   4.2,4.3,4.4' should be earlier in the series, i.e before 'arc: add
+   gcc for ARC'.
+
+ * 'package/binutils: add host-{flex,bison} dependencies for 2.19-arc'
+   should probably be squashed into 'arc: Add support for ARC-specific
+   binutils'.
+
+ * I am not entirely happy with 'toolchain/gcc: Introduce
+   BR2_ARCH_HAS_NO_GCC_x_y' using a reverted logic. I haven't thought
+   too much about it, but wouldn't it be possible to instead do
+   something like BR2_ARCH_NEEDS_GCC_4_6_PLUS, and then do something
+   like depends !BR2_ARCH_NEEDS_GCC_4_6_PLUS on all gcc versions <
+   4.6 ? Hum, the problem is that it works with architecture that are
+   supported starting from a given upstream gcc version, but not
+   architecture that are supported only in 4.2-avr, or in 4.4-arc, etc.
+
+   Maybe others will have a suggestion on this point?
+
+Other than that, it looks good to me.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
