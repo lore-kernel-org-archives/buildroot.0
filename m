@@ -1,60 +1,76 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 29 Apr 2013 12:31:39 +0400
-Subject: [Buildroot] [PATCH 1/2] rpi-firmware: Fixup config.txt
-In-Reply-To: <CAGduivyOfFJ=mu8Y-_O_saXTBXPsn58N8YCZ6RZDFAGaskhWcg@mail.gmail.com>
-References: <1358087034-2706-1-git-send-email-maxime.hadjinlian@gmail.com>
- <CAGduivyOfFJ=mu8Y-_O_saXTBXPsn58N8YCZ6RZDFAGaskhWcg@mail.gmail.com>
-Message-ID: <517E2FEB.2080009@synopsys.com>
+From: Rico Bachmann <bachmann@tofwerk.com>
+Date: Mon, 29 Apr 2013 12:35:46 +0200
+Subject: [Buildroot] [PATCH] Add package subversion
+Message-ID: <1367231746-30319-1-git-send-email-bachmann@tofwerk.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/22/2013 04:05 PM, Maxime Hadjinlian wrote:
-> ping ?
+Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
+---
+ package/Config.in                |    1 +
+ package/subversion/Config.in     |    9 +++++++++
+ package/subversion/subversion.mk |   22 ++++++++++++++++++++++
+ 3 files changed, 32 insertions(+), 0 deletions(-)
+ create mode 100644 package/subversion/Config.in
+ create mode 100644 package/subversion/subversion.mk
 
-Seems like this patch has never been even reviewed since last January.
-Even though it helps to use buildroot-built projects on RPi.
-
-Is there a chance to get it reviewed/accepted?
-
-Or is it supposed to be re-sent together with modifications in "[PATCH 
-2/2] configs: add RaspberryPi defconfig"?
-
--Alexey
-
-> On Sun, Jan 13, 2013 at 3:23 PM, Maxime Hadjinlian
-> <maxime.hadjinlian-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org> wrote:
->> The default name of the kernel binary for the RaspberryPi is kernel.img, it's a
->> only a zImage kernel renamed.
->> Since Buildroot will build a zImage, the default config uses that should use it
->> instead of forcing the user to rename a file.
->>
->> Also, remove the cmdline argument rootfstype, as ext4 is a builtin driver,
->> there is no need to specify it on the cmdline.
->>
->> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
->> ---
->>   package/rpi-firmware/config.txt |    3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
->> index 2cabd68..a818762 100644
->> --- a/package/rpi-firmware/config.txt
->> +++ b/package/rpi-firmware/config.txt
->> @@ -6,9 +6,10 @@
->>
->>   arm_freq=700
->>   core_freq=250
->> +kernel=zImage
->>   disable_overscan=1
->>   gpu_mem_256=100
->>   gpu_mem_512=100
->>   sdram_freq=400
->>   over_voltage=0
->> -cmdline="dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait"
->> +cmdline="dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootwait"
->> --
->> 1.7.10.4
->>
+diff --git a/package/Config.in b/package/Config.in
+index bcd3d8d..13196e4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -90,6 +90,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/sed/Config.in"
+ endif
+ source "package/sstrip/Config.in"
++source "package/subversion/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/tar/Config.in"
+ endif
+diff --git a/package/subversion/Config.in b/package/subversion/Config.in
+new file mode 100644
+index 0000000..4e5c4ae
+--- /dev/null
++++ b/package/subversion/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_SUBVERSION
++	bool "subversion"
++	select BR2_PACKAGE_APR_UTIL
++	# apr really needs shared library support
++	depends on !BR2_PREFER_STATIC_LIB
++	help
++	  Subversion is an open source version control system
++	  
++	  http://subversion.apache.org/
+diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
+new file mode 100644
+index 0000000..7a91842
+--- /dev/null
++++ b/package/subversion/subversion.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# subversion
++#
++#############################################################
++SUBVERSION_VERSION = 1.7.9
++SUBVERSION_SITE = http://archive.apache.org/dist/subversion
++SUBVERSION_DEPENDENCIES = apr apr-util expat
++SUBVERSION_CONF_OPT = \
++	--with-expat=$(STAGING_DIR)/usr:$(STAGING_DIR)/usr:expat \
++	--with-apr=$(BUILD_DIR)/apr-$(APR_VERSION) \
++	--with-apr-util=$(BUILD_DIR)/apr-util-$(APR_UTIL_VERSION)
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++SUBVERSION_CONF_OPT += \
++	--with-zlib=$(STAGING_DIR)/usr
++endif
++ifeq ($(BR2_PACKAGE_NEON),y)	
++SUBVERSION_CONF_OPT += \
++	--with-neon=$(STAGING_DIR)/usr
++endif
++
++$(eval $(autotools-package))
+-- 
+1.7.2.5
