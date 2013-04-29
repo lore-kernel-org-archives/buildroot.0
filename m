@@ -1,50 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Apr 2013 22:26:01 +0200
-Subject: [Buildroot] [PATCH v2 0/4] Wayland packaging
-Message-ID: <1367267165-6873-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Apr 2013 22:26:04 +0200
+Subject: [Buildroot] [PATCH v2 3/4] wayland: new package
+In-Reply-To: <1367267165-6873-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1367267165-6873-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1367267165-6873-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Here comes a second version of the Wayland packages. The only change
-since the first version is that the xkeyboard-config package now
-appears under "X libraries and helper libraries", as suggested by
-Arnout.
-
-Best regards,
-
-Thomas
-
-Thomas Petazzoni (4):
-  xkeyboard-config: make available outside of X.org, reduce
-    dependencies
-  libxkbcommon: new package
-  wayland: new package
-  weston: new package
-
- package/Config.in                                  |    4 ++
- package/libxkbcommon/Config.in                     |    8 ++++
- package/libxkbcommon/libxkbcommon.mk               |   16 +++++++
- package/wayland/Config.in                          |   10 +++++
- package/wayland/wayland.mk                         |   30 +++++++++++++
- package/weston/Config.in                           |   29 ++++++++++++
- ...pendent-code-only-when-the-DRM-compositor.patch |   47 ++++++++++++++++++++
- package/weston/weston.mk                           |   32 +++++++++++++
- package/x11r7/Config.in                            |    1 -
- package/x11r7/xkeyboard-config/Config.in           |    7 +--
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    7 ++-
- 11 files changed, 186 insertions(+), 5 deletions(-)
- create mode 100644 package/libxkbcommon/Config.in
- create mode 100644 package/libxkbcommon/libxkbcommon.mk
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in          |    1 +
+ package/wayland/Config.in  |   10 ++++++++++
+ package/wayland/wayland.mk |   30 ++++++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+)
  create mode 100644 package/wayland/Config.in
  create mode 100644 package/wayland/wayland.mk
- create mode 100644 package/weston/Config.in
- create mode 100644 package/weston/weston-0001-Pull-DRM-dependent-code-only-when-the-DRM-compositor.patch
- create mode 100644 package/weston/weston.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index e359306..76feb7d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -448,6 +448,7 @@ source "package/pango/Config.in"
+ source "package/pixman/Config.in"
+ source "package/poppler/Config.in"
+ source "package/tiff/Config.in"
++source "package/wayland/Config.in"
+ source "package/webkit/Config.in"
+ source "package/zxing/Config.in"
+ endmenu
+diff --git a/package/wayland/Config.in b/package/wayland/Config.in
+new file mode 100644
+index 0000000..e5d2649
+--- /dev/null
++++ b/package/wayland/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_WAYLAND
++	bool "wayland"
++	select BR2_PACKAGE_LIBFFI
++	select BR2_PACKAGE_EXPAT
++	help
++	  Wayland is a project to define a protocol for a compositor
++	  to talk to its clients as well as a library implementation
++	  of the protocol.
++
++	  http://wayland.freedesktop.org/
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+new file mode 100644
+index 0000000..65381ec
+--- /dev/null
++++ b/package/wayland/wayland.mk
+@@ -0,0 +1,30 @@
++#############################################################
++#
++# wayland
++#
++#############################################################
++
++WAYLAND_VERSION = 1.1.0
++WAYLAND_SITE = http://wayland.freedesktop.org/releases/
++WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
++WAYLAND_LICENSE = MIT
++WAYLAND_LICENSE_FILES = COPYING
++
++WAYLAND_INSTALL_STAGING = YES
++WAYLAND_DEPENDENCIES = libffi host-pkgconf expat host-expat
++
++# wayland needs a wayland-scanner program to generate some of its
++# source code. By default, it builds it with CC, so it doesn't in
++# cross-compilation. Therefore, we build it manually, and tell wayland
++# that the tool is already available.
++WAYLAND_CONF_OPT = --disable-scanner
++
++define WAYLAND_BUILD_SCANNER
++	(cd $(@D)/src/; \
++		$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
++			-o wayland-scanner scanner.c wayland-util.c -lexpat)
++endef
++
++WAYLAND_POST_CONFIGURE_HOOKS += WAYLAND_BUILD_SCANNER
++
++$(eval $(autotools-package))
 -- 
 1.7.9.5
