@@ -1,39 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 29 Apr 2013 22:23:27 +0200
-Subject: [Buildroot] [PATCH 1/2] rpi-firmware: Fixup config.txt
-In-Reply-To: <517E2FEB.2080009@synopsys.com>
-References: <1358087034-2706-1-git-send-email-maxime.hadjinlian@gmail.com>
- <CAGduivyOfFJ=mu8Y-_O_saXTBXPsn58N8YCZ6RZDFAGaskhWcg@mail.gmail.com>
- <517E2FEB.2080009@synopsys.com>
-Message-ID: <517ED6BF.1030304@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Apr 2013 22:26:01 +0200
+Subject: [Buildroot] [PATCH v2 0/4] Wayland packaging
+Message-ID: <1367267165-6873-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/04/13 10:31, Alexey Brodkin wrote:
-> Seems like this patch has never been even reviewed since last January.
-> Even though it helps to use buildroot-built projects on RPi.
->
-> Is there a chance to get it reviewed/accepted?
->
-> Or is it supposed to be re-sent together with modifications in "[PATCH
-> 2/2] configs: add RaspberryPi defconfig"?
+Hello,
 
-  Hi Alexey,
+Here comes a second version of the Wayland packages. The only change
+since the first version is that the xkeyboard-config package now
+appears under "X libraries and helper libraries", as suggested by
+Arnout.
 
-  Feel free to test these patches and add your
-Tested-by: ...
-tag. Or to review them and add an Acked-by.
+Best regards,
 
-  Regards,
-  Arnout
+Thomas
+
+Thomas Petazzoni (4):
+  xkeyboard-config: make available outside of X.org, reduce
+    dependencies
+  libxkbcommon: new package
+  wayland: new package
+  weston: new package
+
+ package/Config.in                                  |    4 ++
+ package/libxkbcommon/Config.in                     |    8 ++++
+ package/libxkbcommon/libxkbcommon.mk               |   16 +++++++
+ package/wayland/Config.in                          |   10 +++++
+ package/wayland/wayland.mk                         |   30 +++++++++++++
+ package/weston/Config.in                           |   29 ++++++++++++
+ ...pendent-code-only-when-the-DRM-compositor.patch |   47 ++++++++++++++++++++
+ package/weston/weston.mk                           |   32 +++++++++++++
+ package/x11r7/Config.in                            |    1 -
+ package/x11r7/xkeyboard-config/Config.in           |    7 +--
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk |    7 ++-
+ 11 files changed, 186 insertions(+), 5 deletions(-)
+ create mode 100644 package/libxkbcommon/Config.in
+ create mode 100644 package/libxkbcommon/libxkbcommon.mk
+ create mode 100644 package/wayland/Config.in
+ create mode 100644 package/wayland/wayland.mk
+ create mode 100644 package/weston/Config.in
+ create mode 100644 package/weston/weston-0001-Pull-DRM-dependent-code-only-when-the-DRM-compositor.patch
+ create mode 100644 package/weston/weston.mk
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.9.5
