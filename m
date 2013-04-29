@@ -1,89 +1,65 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 29 Apr 2013 22:56:57 +0200
-Subject: [Buildroot] [git commit] system: remove trailing tabs in Config.in
-	file
-Message-ID: <20130429205839.010A29B8E3@busybox.osuosl.org>
+Date: Mon, 29 Apr 2013 22:56:13 +0200
+Subject: [Buildroot] [git commit] qt,
+	php: selecting mysql requires depending on MMU
+Message-ID: <20130429205838.9C4CD9B8E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=beea18a4d8d3569b4034246f3ce5bc9d95fc5641
+commit: http://git.buildroot.net/buildroot/commit/?id=331b14a2aede9259e5b0db20336a371ec223aff2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The mysql_client package is only available on architectures having a
+MMU, so all packages that are selecting mysql_client should depend on
+BR2_USE_MMU.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- system/Config.in |   16 ++++++++--------
- 1 files changed, 8 insertions(+), 8 deletions(-)
+ package/php/Config.ext   |    3 +++
+ package/qt/Config.sql.in |    1 +
+ 2 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index 1e4fff3..c0e4f4a 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -18,14 +18,14 @@ choice
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 2cf71d3..006d7dd 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -105,6 +105,7 @@ config BR2_PACKAGE_PHP_EXT_SQLITE_UTF8
+ config BR2_PACKAGE_PHP_EXT_MYSQL
+ 	bool "Mysql"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # mysql
+ 	select BR2_PACKAGE_MYSQL_CLIENT
  	help
- 	  Choose the password encoding scheme to use when Buildroot
- 	  needs to encode a password (eg. the root password, below).
--	  
-+
- 	  Note: this is used at build-time, and *not* at runtime.
- 
- config BR2_TARGET_GENERIC_PASSWD_DES
- 	bool "des"
+ 	  MySQL support
+@@ -112,6 +113,7 @@ config BR2_PACKAGE_PHP_EXT_MYSQL
+ config BR2_PACKAGE_PHP_EXT_MYSQLI
+ 	bool "Mysqli"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # mysql
+ 	select BR2_PACKAGE_MYSQL_CLIENT
+ 	select BR2_PACKAGE_PHP_EXT_MYSQL
  	help
- 	  Use standard 56-bit DES-based crypt(3) to encode passwords.
--	  
-+
- 	  Old, wildly available, but also the weakest, very susceptible to
- 	  brute-force attacks.
- 
-@@ -33,7 +33,7 @@ config BR2_TARGET_GENERIC_PASSWD_MD5
- 	bool "md5"
+@@ -127,6 +129,7 @@ if BR2_PACKAGE_PHP_EXT_PDO
+ config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
+ 	bool "MySQL"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # mysql
+ 	select BR2_PACKAGE_MYSQL_CLIENT
  	help
- 	  Use MD5 to encode passwords.
--	  
-+
- 	  The default. Wildly available, and pretty good.
- 	  Although pretty strong, MD5 is now an old hash function, and
- 	  suffers from some weaknesses, which makes it susceptible to
-@@ -43,7 +43,7 @@ config BR2_TARGET_GENERIC_PASSWD_SHA256
- 	bool "sha-256"
+ 	  PDO driver for MySQL
+diff --git a/package/qt/Config.sql.in b/package/qt/Config.sql.in
+index eceb15d..04489c7 100644
+--- a/package/qt/Config.sql.in
++++ b/package/qt/Config.sql.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_QT_MYSQL
+ 	select BR2_PACKAGE_MYSQL_CLIENT
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_READLINE
++	depends on BR2_USE_MMU # mysql
  	help
- 	  Use SHA256 to encode passwords.
--	  
-+
- 	  Very strong, but not ubiquitous, although available in glibc
- 	  for some time now. Choose only if you are sure your C library
- 	  understands SHA256 passwords.
-@@ -52,7 +52,7 @@ config BR2_TARGET_GENERIC_PASSWD_SHA512
- 	bool "sha-512"
- 	help
- 	  Use SHA512 to encode passwords.
--	  
-+
- 	  Extremely strong, but not ubiquitous, although available in glibc
- 	  for some time now. Choose only if you are sure your C library
- 	  understands SHA512 passwords.
-@@ -178,17 +178,17 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	default ""
- 	help
- 	  Set the initial root password (in clear). It will be md5-encrypted.
--	  
-+
- 	  If set to empty (the default), then no root password will be set,
- 	  and root will need no password to log in.
--	  
-+
- 	  WARNING! WARNING!
- 	  Although pretty strong, MD5 is now an old hash function, and
- 	  suffers from some weaknesses, which makes it susceptible to attacks.
- 	  It is showing its age, so this root password should not be trusted
- 	  to properly secure any product that can be shipped to the wide,
- 	  hostile world.
--	  
-+
- 	  WARNING! WARNING!
- 	  The password appears in clear in the .config file, and may appear
- 	  in the build log! Avoid using a valuable password if either the
+ 	  Build MySQL driver
+ 	  If unsure, say n.
