@@ -1,38 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Apr 2013 22:48:59 +0200
-Subject: [Buildroot] [PATCH 1/2] rpi-firmware: Fixup config.txt
-In-Reply-To: <1358087034-2706-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1358087034-2706-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20130429224859.484e28f9@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 29 Apr 2013 22:55:15 +0200
+Subject: [Buildroot] [PATCH] libjson: new package
+In-Reply-To: <1364416080-10797-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Wed, 27 Mar 2013 20:28:00 +0000")
+References: <1364416080-10797-1-git-send-email-spdawson@gmail.com>
+Message-ID: <8761z53vm4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-On Sun, 13 Jan 2013 15:23:53 +0100, Maxime Hadjinlian wrote:
-> The default name of the kernel binary for the RaspberryPi is kernel.img, it's a
-> only a zImage kernel renamed.
-> Since Buildroot will build a zImage, the default config uses that should use it
-> instead of forcing the user to rename a file.
-> 
-> Also, remove the cmdline argument rootfstype, as ext4 is a builtin driver,
-> there is no need to specify it on the cmdline.
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ spdawson> ---
+ spdawson>  package/Config.in                                  |    1 +
+ spdawson>  package/libjson/Config.in                          |   11 ++++
+ spdawson>  .../libjson/libjson-0001-fix-broken-makefile.patch |   16 ++++++
+ spdawson>  package/libjson/libjson.mk                         |   53 ++++++++++++++++++++
+ spdawson>  4 files changed, 81 insertions(+)
+ spdawson>  create mode 100644 package/libjson/Config.in
+ spdawson>  create mode 100644 package/libjson/libjson-0001-fix-broken-makefile.patch
+ spdawson>  create mode 100644 package/libjson/libjson.mk
 
-I don't think this justification is correct. If ext4 is a module, then
-rootfstype=ext4 doesn't make it work better. Specifying rootfstype=
-tells the kernel what is the root filesystem, so that it doesn't have
-to test the different available filesystem drivers.
+Committed with some modifications (see below) - Thanks.
 
-I'm ok with the change, but I think the commit log is not correct.
+ spdawson> +LIBJSON_LICENSE_FILES = License.txt
+ spdawson> +
+ spdawson> +LIBJSON_MAKE_OPT = BUILD_TYPE= SHARED=1
 
-Thanks,
+ spdawson> +
+ spdawson> +define LIBJSON_EXTRACT_CMDS
+ spdawson> +	unzip -d $(@D) $(DL_DIR)/$(LIBJSON_SOURCE)
+ spdawson> +	mv $(@D)/libjson/* $(@D)
+ spdawson> +	$(RM) -r $(@D)/libjson
+ spdawson> +endef
+ spdawson> +
+ spdawson> +define LIBJSON_BUILD_CMDS
+ spdawson> +	mkdir -p $(@D)/Objects_shared $(@D)/_internal/Source/Dependencies
 
-Thomas
+It should be built statically if BR2_PREFER_STATIC_LIB is enabled, so
+SHARED=0 and Objects_static.
+
+It complains loudly that the assert checks are still enabled, so I've
+changed it to pass -NDEBUG in CXXFLAGS, like the makefile normally does.
+
+ spdawson> +define LIBJSON_INSTALL_TARGET_CMDS
+ spdawson> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ spdawson> +		$(LIBJSON_MAKE_OPT) prefix=$(TARGET_DIR)/usr install -C $(@D)
+ spdawson> +endef
+
+It runs ldconfig after installation, which doesn't make sense for cross
+compilation, and the host version is normally not in the path, so I've
+stripped that.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
