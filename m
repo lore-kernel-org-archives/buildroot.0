@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 30 Apr 2013 18:57:57 +0200
-Subject: [Buildroot] [PATCH v2 1/3] post-build: show each script
+Date: Tue, 30 Apr 2013 18:58:09 +0200
+Subject: [Buildroot] [PATCH v2 2/3] post-image: show each script
  filename before execution
-In-Reply-To: <1365439816-6935-2-git-send-email-luca@lucaceresoli.net>
+In-Reply-To: <1365439816-6935-3-git-send-email-luca@lucaceresoli.net>
 References: <1365439816-6935-1-git-send-email-luca@lucaceresoli.net>
- <1365439816-6935-2-git-send-email-luca@lucaceresoli.net>
-Message-ID: <517FF815.2080505@mind.be>
+ <1365439816-6935-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <517FF821.8090508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,22 +24,22 @@ Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 >   1 file changed, 1 insertion(+), 3 deletions(-)
 >
 > diff --git a/Makefile b/Makefile
-> index c95bb1e..75f0f0c 100644
+> index 75f0f0c..f475d1b 100644
 > --- a/Makefile
 > +++ b/Makefile
-> @@ -509,11 +509,9 @@ endif
->   			$${dir}/ $(TARGET_DIR); \
->   	done
+> @@ -555,11 +555,9 @@ target-generatelocales: host-localedef
+>   endif
 >
-> -ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
-> -	@$(call MESSAGE,"Executing post-build script\(s\)")
->   	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
-> +		$(call MESSAGE,"Executing  post-build script $(s)"); \
->   		$(s) $(TARGET_DIR)$(sep))
+>   target-post-image:
+> -ifneq ($(BR2_ROOTFS_POST_IMAGE_SCRIPT),"")
+> -	@$(call MESSAGE,"Executing post-image script\(s\)")
+>   	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+> +		$(call MESSAGE,"Executing post-image script $(s)"); \
+>   		$(s) $(BINARIES_DIR)$(sep))
 > -endif
 >
->   ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
->   LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
+>   toolchain-eclipse-register:
+>   	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
 >
 
 
