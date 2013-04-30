@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 30 Apr 2013 10:06:36 +0200
-Subject: [Buildroot] [PATCH v2 3/4] wayland: new package
-In-Reply-To: <1367267165-6873-4-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 29 Apr 2013 22:26:04 +0200")
+Date: Tue, 30 Apr 2013 10:11:33 +0200
+Subject: [Buildroot] [PATCH v2 4/4] weston: new package
+In-Reply-To: <1367267165-6873-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 29 Apr 2013 22:26:05 +0200")
 References: <1367267165-6873-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1367267165-6873-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87obcw30j7.fsf@dell.be.48ers.dk>
+ <1367267165-6873-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87k3nk30ay.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,68 +16,63 @@ To: buildroot@busybox.net
 
  Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  Thomas> ---
- Thomas>  package/Config.in          |    1 +
- Thomas>  package/wayland/Config.in  |   10 ++++++++++
- Thomas>  package/wayland/wayland.mk |   30 ++++++++++++++++++++++++++++++
- Thomas>  3 files changed, 41 insertions(+)
- Thomas>  create mode 100644 package/wayland/Config.in
- Thomas>  create mode 100644 package/wayland/wayland.mk
+ Thomas>  package/Config.in                                  |    1 +
+ Thomas>  package/weston/Config.in                           |   29 ++++++++++++
+ Thomas>  ...pendent-code-only-when-the-DRM-compositor.patch |   47 ++++++++++++++++++++
+ Thomas>  package/weston/weston.mk                           |   32 +++++++++++++
+ Thomas>  4 files changed, 109 insertions(+)
+ Thomas>  create mode 100644 package/weston/Config.in
+ Thomas>  create mode 100644 package/weston/weston-0001-Pull-DRM-dependent-code-only-when-the-DRM-compositor.patch
+ Thomas>  create mode 100644 package/weston/weston.mk
 
  Thomas> diff --git a/package/Config.in b/package/Config.in
- Thomas> index e359306..76feb7d 100644
+ Thomas> index 76feb7d..3c1c504 100644
  Thomas> --- a/package/Config.in
  Thomas> +++ b/package/Config.in
- Thomas> @@ -448,6 +448,7 @@ source "package/pango/Config.in"
- Thomas>  source "package/pixman/Config.in"
- Thomas>  source "package/poppler/Config.in"
- Thomas>  source "package/tiff/Config.in"
- Thomas> +source "package/wayland/Config.in"
- Thomas>  source "package/webkit/Config.in"
- Thomas>  source "package/zxing/Config.in"
- Thomas>  endmenu
- Thomas> diff --git a/package/wayland/Config.in b/package/wayland/Config.in
+ Thomas> @@ -151,6 +151,7 @@ endif
+ 
+ Thomas>  source "package/qt5/Config.in"
+ Thomas>  source "package/x11r7/Config.in"
+ Thomas> +source "package/weston/Config.in"
+ 
+ Thomas>  comment "X libraries and helper libraries"
+ Thomas>  source "package/liberation/Config.in"
+ Thomas> diff --git a/package/weston/Config.in b/package/weston/Config.in
  Thomas> new file mode 100644
- Thomas> index 0000000..e5d2649
+ Thomas> index 0000000..15cc9e8
  Thomas> --- /dev/null
- Thomas> +++ b/package/wayland/Config.in
- Thomas> @@ -0,0 +1,10 @@
- Thomas> +config BR2_PACKAGE_WAYLAND
- Thomas> +	bool "wayland"
- Thomas> +	select BR2_PACKAGE_LIBFFI
- Thomas> +	select BR2_PACKAGE_EXPAT
+ Thomas> +++ b/package/weston/Config.in
+ Thomas> @@ -0,0 +1,29 @@
+ Thomas> +comment "weston requires udev"
+ Thomas> +	depends on BR2_PACKAGE_UDEV
+
+It should be NOT (!) BR2_PACKAGE_UDEV
+
+ Thomas> +
+ Thomas> +config BR2_PACKAGE_WESTON
+ Thomas> +	bool "weston"
+ Thomas> +	select BR2_PACKAGE_WAYLAND
+ Thomas> +	select BR2_PACKAGE_LIBXKBCOMMON
+ Thomas> +	select BR2_PACKAGE_CAIRO
+ Thomas> +	select BR2_PACKAGE_CAIRO_PNG
+ Thomas> +	select BR2_PACKAGE_LIBPNG
+ Thomas> +	select BR2_PACKAGE_JPEG
+ Thomas> +	select BR2_PACKAGE_MTDEV
+ Thomas> +	depends on BR2_PACKAGE_UDEV
+ Thomas> +	# Runtime dependency
+ Thomas> +	select BR2_PACKAGE_XKEYBOARD_CONFIG
+ Thomas> +	# Make sure at least one backend is selected
+ Thomas> +	select BR2_PACKAGE_WESTON_FBDEV
  Thomas> +	help
- Thomas> +	  Wayland is a project to define a protocol for a compositor
- Thomas> +	  to talk to its clients as well as a library implementation
- Thomas> +	  of the protocol.
+ Thomas> +	  Weston is the reference implementation of a Wayland
+ Thomas> +	  compositor, and a useful compositor in its own right.
+ Thomas> +	  Weston has various backends that lets it run on Linux kernel
+ Thomas> +	  modesetting and evdev input as well as under X11.
  Thomas> +
- Thomas> +	  http://wayland.freedesktop.org/
- Thomas> diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
- Thomas> new file mode 100644
- Thomas> index 0000000..65381ec
- Thomas> --- /dev/null
- Thomas> +++ b/package/wayland/wayland.mk
- Thomas> @@ -0,0 +1,30 @@
- Thomas> +#############################################################
- Thomas> +#
- Thomas> +# wayland
- Thomas> +#
- Thomas> +#############################################################
- Thomas> +
- Thomas> +WAYLAND_VERSION = 1.1.0
- Thomas> +WAYLAND_SITE = http://wayland.freedesktop.org/releases/
- Thomas> +WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- Thomas> +WAYLAND_LICENSE = MIT
- Thomas> +WAYLAND_LICENSE_FILES = COPYING
- Thomas> +
- Thomas> +WAYLAND_INSTALL_STAGING = YES
- Thomas> +WAYLAND_DEPENDENCIES = libffi host-pkgconf expat host-expat
- Thomas> +
- Thomas> +# wayland needs a wayland-scanner program to generate some of its
- Thomas> +# source code. By default, it builds it with CC, so it doesn't in
 
-s/doesn't in/doesn't work with/
+Upstream URL missing.
 
-Committed with that fixed, thanks.
+Committed with those fixes, thanks.
 
 -- 
 Bye, Peter Korsgaard
