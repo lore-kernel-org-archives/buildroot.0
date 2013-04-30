@@ -1,45 +1,73 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 30 Apr 2013 00:00:27 +0200
-Subject: [Buildroot] [PATCH 1/2] rpi-firmware: Fixup config.txt
-In-Reply-To: <20130429224859.484e28f9@skate>
-References: <1358087034-2706-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20130429224859.484e28f9@skate>
-Message-ID: <CAGduivyNLKwRuKgrk6DfpL193D-60P6RxboLFBECNPWWJs55Sw@mail.gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Mon, 29 Apr 2013 17:39:47 -0700
+Subject: [Buildroot] [PATCH] fdk-aac: new package
+In-Reply-To: <y>
+References: <y>
+Message-ID: <1367282387-8011-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ package/Config.in          |    1 +
+ package/fdk-aac/Config.in  |   12 ++++++++++++
+ package/fdk-aac/fdk-aac.mk |   14 ++++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/fdk-aac/Config.in
+ create mode 100644 package/fdk-aac/fdk-aac.mk
 
-On Mon, Apr 29, 2013 at 10:48 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Maxime Hadjinlian,
->
-> On Sun, 13 Jan 2013 15:23:53 +0100, Maxime Hadjinlian wrote:
->> The default name of the kernel binary for the RaspberryPi is kernel.img, it's a
->> only a zImage kernel renamed.
->> Since Buildroot will build a zImage, the default config uses that should use it
->> instead of forcing the user to rename a file.
->>
->> Also, remove the cmdline argument rootfstype, as ext4 is a builtin driver,
->> there is no need to specify it on the cmdline.
->
-> I don't think this justification is correct. If ext4 is a module, then
-> rootfstype=ext4 doesn't make it work better. Specifying rootfstype=
-> tells the kernel what is the root filesystem, so that it doesn't have
-> to test the different available filesystem drivers.
->
-> I'm ok with the change, but I think the commit log is not correct.
->
-You're right, the commit log is not accurate. I will rewrite it and
-resend the patch.
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 56fdd2f..9a06284 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -350,6 +350,7 @@ menu "Audio/Sound"
+ source "package/alsa-lib/Config.in"
+ source "package/audiofile/Config.in"
+ source "package/celt051/Config.in"
++source "package/fdk-aac/Config.in"
+ source "package/libao/Config.in"
+ source "package/libcdaudio/Config.in"
+ source "package/libcue/Config.in"
+diff --git a/package/fdk-aac/Config.in b/package/fdk-aac/Config.in
+new file mode 100644
+index 0000000..4fba357
+--- /dev/null
++++ b/package/fdk-aac/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_FDK_AAC
++	bool "fdk-aac"
++	# These architectures are not supported by FDK AAC
++	depends on !(BR2_bfin || BR2_avr32 || BR2_sparc || BR2_xtensa \
++			|| BR2_microblaze)
++	help
++	  The Fraunhofer FDK AAC Codec Library for Android ("FDK AAC Codec")
++	  is software that implements the MPEG Advanced Audio Coding ("AAC")
++	  encoding and decoding scheme for digital audio
++
++	  http://sourceforge.net/projects/opencore-amr/files/fdk-aac/
++
+diff --git a/package/fdk-aac/fdk-aac.mk b/package/fdk-aac/fdk-aac.mk
+new file mode 100644
+index 0000000..b36f144
+--- /dev/null
++++ b/package/fdk-aac/fdk-aac.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# fdk-aac
++#
++#############################################################
++
++FDK_AAC_VERSION = 0.1.1
++FDK_AAC_SITE = http://downloads.sourceforge.net/project/opencore-amr/fdk-aac
++FDK_AAC_LICENSE = fdk-aac license
++FDK_AAC_LICENSE_FILES = NOTICE
++
++FDK_AAC_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+-- 
+1.7.10.4
