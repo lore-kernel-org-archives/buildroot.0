@@ -1,57 +1,47 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 30 Apr 2013 18:06:27 +0200
-Subject: [Buildroot] [PATCH v2 00/12] RFC: ARC port
-In-Reply-To: <20130429224541.6f46b3b4@skate>
-References: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
- <20130425050221.4846d873@skate>
- <E6BF041E97966E4DB955F0DF883AD2D6339FA392@de02wembxa.internal.synopsys.com>
- <20130429224541.6f46b3b4@skate>
-Message-ID: <517FEC03.1010709@mind.be>
+Date: Tue, 30 Apr 2013 18:57:57 +0200
+Subject: [Buildroot] [PATCH v2 1/3] post-build: show each script
+ filename before execution
+In-Reply-To: <1365439816-6935-2-git-send-email-luca@lucaceresoli.net>
+References: <1365439816-6935-1-git-send-email-luca@lucaceresoli.net>
+ <1365439816-6935-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <517FF815.2080505@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/04/13 22:45, Thomas Petazzoni wrote:
->   * I am not entirely happy with 'toolchain/gcc: Introduce
->     BR2_ARCH_HAS_NO_GCC_x_y' using a reverted logic. I haven't thought
->     too much about it, but wouldn't it be possible to instead do
->     something like BR2_ARCH_NEEDS_GCC_4_6_PLUS, and then do something
->     like depends !BR2_ARCH_NEEDS_GCC_4_6_PLUS on all gcc versions <
->     4.6 ? Hum, the problem is that it works with architecture that are
->     supported starting from a given upstream gcc version, but not
->     architecture that are supported only in 4.2-avr, or in 4.4-arc, etc.
+On 08/04/13 18:50, Luca Ceresoli wrote:
+> This also simplifies code by removing the ifneq/endif clauses.
 >
->     Maybe others will have a suggestion on this point?
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-  Not entirely clean either, but what about the following:
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-[toolchain/gcc/Config.in]
-config BR2_ARCH_HAS_ALL_GCC
-	bool
+> ---
+>   Makefile |    4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index c95bb1e..75f0f0c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -509,11 +509,9 @@ endif
+>   			$${dir}/ $(TARGET_DIR); \
+>   	done
+>
+> -ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
+> -	@$(call MESSAGE,"Executing post-build script\(s\)")
+>   	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+> +		$(call MESSAGE,"Executing  post-build script $(s)"); \
+>   		$(s) $(TARGET_DIR)$(sep))
+> -endif
+>
+>   ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+>   LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
+>
 
-config BR2_ARCH_HAS_GCC_4_4
-	bool
-	default y if BR2_ARCH_HAS_ALL_GCC
-
-[arch/Config.in]
-config BR2_mips
-	select BR2_ARCH_HAS_ALL_GCC
-...
-
-[arch/Config.in.arm]
-config BR2_arm1176jzf_s
-	select BR2_ARCH_HAS_ALL_GCC
-...
-config BR2_cortex_a8
-	select BR2_ARCH_HAS_GCC_4_4
-...
-
-
-
-  Regards,
-  Arnout
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
