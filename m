@@ -1,45 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 30 Apr 2013 22:37:18 +0200
-Subject: [Buildroot] [git commit] rootfs-overlay: use a make foreach instead
-	of a shell for
-Message-ID: <20130430203700.7BB3F994DA@busybox.osuosl.org>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Tue, 30 Apr 2013 16:23:50 -0700
+Subject: [Buildroot] [PATCH] socketcand: needs toolchain with threads support
+Message-ID: <1367364230-29266-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e9b771283765e74792df6a05775383f6d4da2636
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+http://autobuild.buildroot.org/results/1d35f22a25e8641106f3c070f360cf4b4a02a461
 
-Makes the code uniform with the post-build and post-image implementation
-(which is slightly simpler and, presumably, more efficient).
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- Makefile |    7 +++----
- 1 files changed, 3 insertions(+), 4 deletions(-)
+ package/socketcand/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 840aa1f..97804ff 100644
---- a/Makefile
-+++ b/Makefile
-@@ -501,13 +501,12 @@ endif
- 		echo "PRETTY_NAME=\"Buildroot $(BR2_VERSION)\"" \
- 	) >  $(TARGET_DIR)/etc/os-release
+diff --git a/package/socketcand/Config.in b/package/socketcand/Config.in
+index 0d1d983..d5d02de 100644
+--- a/package/socketcand/Config.in
++++ b/package/socketcand/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_SOCKETCAND
+ 	bool "socketcand"
+ 	select BR2_PACKAGE_LIBCONFIG
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Socketcand is a daemon that provides access to CAN interfaces
+ 	  on a machine via a network interface.
  
--	@for dir in $(call qstrip,$(BR2_ROOTFS_OVERLAY)); do \
--		$(call MESSAGE,"Copying overlay $${dir}"); \
-+	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
-+		$(call MESSAGE,"Copying overlay $(d)"); \
- 		rsync -a \
- 			--exclude .empty --exclude .svn --exclude .git \
- 			--exclude .hg --exclude '*~' \
--			$${dir}/ $(TARGET_DIR); \
--	done
-+			$(d)/ $(TARGET_DIR)$(sep))
- 
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-build script $(s)"); \
+ 	  https://github.com/dschanoeh/socketcand
++
++comment "socketcand requires a toolchain with threads support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+1.7.4.1
