@@ -1,14 +1,14 @@
 From: Alexander Varnin <fenixk19@mail.ru>
-Date: Tue, 30 Apr 2013 20:20:31 +0400
-Subject: [Buildroot] [PATCH] libgcrypt: bump to version 1.5.2 Signed-off-by:
-	Alexander Varnin <fenixk19@mail.ru>
-Message-ID: <1367338831-17139-1-git-send-email-fenixk19@mail.ru>
+Date: Tue, 30 Apr 2013 20:21:53 +0400
+Subject: [Buildroot] [PATCH] libgcrypt: bump to version 1.5.2
+Message-ID: <1367338913-18810-1-git-send-email-fenixk19@mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Alexander Varnin <fenixk19@mail.ru>
 ---
  package/libgcrypt/libgcrypt.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
