@@ -1,108 +1,62 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 30 Apr 2013 22:00:47 +0200
-Subject: [Buildroot] [PATCH 1/1] new package : git
-Message-ID: <1367352047-8940-1-git-send-email-sagaert.johan@skynet.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 30 Apr 2013 18:06:27 +0200
+Subject: [Buildroot] [PATCH v2 00/12] RFC: ARC port
+In-Reply-To: <20130429224541.6f46b3b4@skate>
+References: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
+ <20130425050221.4846d873@skate>
+ <E6BF041E97966E4DB955F0DF883AD2D6339FA392@de02wembxa.internal.synopsys.com>
+ <20130429224541.6f46b3b4@skate>
+Message-ID: <517FEC03.1010709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 29/04/13 22:45, Thomas Petazzoni wrote:
+>   * I am not entirely happy with 'toolchain/gcc: Introduce
+>     BR2_ARCH_HAS_NO_GCC_x_y' using a reverted logic. I haven't thought
+>     too much about it, but wouldn't it be possible to instead do
+>     something like BR2_ARCH_NEEDS_GCC_4_6_PLUS, and then do something
+>     like depends !BR2_ARCH_NEEDS_GCC_4_6_PLUS on all gcc versions <
+>     4.6 ? Hum, the problem is that it works with architecture that are
+>     supported starting from a given upstream gcc version, but not
+>     architecture that are supported only in 4.2-avr, or in 4.4-arc, etc.
+>
+>     Maybe others will have a suggestion on this point?
 
-new package : git
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- package/Config.in     |  1 +
- package/git/Config.in |  7 +++++++
- package/git/git.mk    | 54 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 62 insertions(+)
- create mode 100644 package/git/Config.in
- create mode 100644 package/git/git.mk
+  Not entirely clean either, but what about the following:
 
-diff --git a/package/Config.in b/package/Config.in
-index a530afc..4a02f6f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -73,6 +73,7 @@ source "package/gawk/Config.in"
- endif
- source "toolchain/gcc/Config.in.2"
- source "package/gettext/Config.in"
-+source "package/git/Config.in"
- source "package/gperf/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/grep/Config.in"
-diff --git a/package/git/Config.in b/package/git/Config.in
-new file mode 100644
-index 0000000..c3c060e
---- /dev/null
-+++ b/package/git/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_GIT
-+	bool "git"
-+	help
-+	  Git is a free and open source distributed version control system
-+	  designed to handle everything from small to very large projects.
-+	  
-+	  http://git-scm.com
-diff --git a/package/git/git.mk b/package/git/git.mk
-new file mode 100644
-index 0000000..da58b11
---- /dev/null
-+++ b/package/git/git.mk
-@@ -0,0 +1,54 @@
-+#############################################################
-+#
-+# git
-+#
-+#############################################################
-+#                     resolves tag 1.8.2.1
-+GIT_VERSION         = 5bda18c186e455f8e65f976d3bf333ab1f4b5b53
-+GIT_SITE            = https://github.com/git/git.git
-+GIT_SITE_METHOD     = git
-+GIT_LICENSE         = LGPLv2.1+
-+GIT_LICENSE_FILES   = COPYING
-+
-+GIT_AUTORECONF      = YES
-+
-+GIT_DEPENDENCIES +=  $(if $(BR2_PACKAGE_ZLIB),zlib)
-+GIT_DEPENDENCIES +=  $(if $(BR2_PACKAGE_OPENSSL),openssl)
-+GIT_DEPENDENCIES +=  $(if $(BR2_PACKAGE_PERL),perl)
-+GIT_DEPENDENCIES +=  $(if $(BR2_PACKAGE_CURL),curl)
-+GIT_DEPENDENCIES +=  $(if $(BR2_PACKAGE_EXPAT),expat)
-+GIT_DEPENDENCIES +=  $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+GIT_DEPENDENCIES +=  $(if $(BR2_PACKAGE_TCL),tcl)
-+  
-+ifeq ($(BR2_PACKAGE_OPENSSL),n)
-+	GIT_CONF_OPT += --without-openssl
-+endif      
-+
-+ifeq ($(BR2_PACKAGE_PERL),y)
-+	GIT_CONF_OPT += --with-libpcre
-+endif  
-+ 
-+ifeq ($(BR2_PACKAGE_CURL),n)
-+	GIT_CONF_OPT += --without-curl
-+endif 
-+
-+ifeq ($(BR2_PACKAGE_EXPAT),n)
-+	GIT_CONF_OPT += --without-expat
-+endif 
-+
-+ifeq ($(BR2_PACKAGE_LIBICONV),n)
-+	GIT_CONF_OPT += --without-iconv
-+else
-+	GIT_CONF_OPT += --with-iconv=/usr/lib
-+endif 
-+
-+ifeq ($(BR2_PACKAGE_TCL),n)
-+	GIT_CONF_OPT += --without-tcltk
-+endif 
-+     
-+# assume yes for these tests, configure will bail out otherwise
-+# saying error: cannot run test program while cross compiling
-+GIT_CONF_ENV = 	ac_cv_fread_reads_directories=yes \
-+				ac_cv_snprintf_returns_bogus=yes
-+				
-+$(eval $(autotools-package))
+[toolchain/gcc/Config.in]
+config BR2_ARCH_HAS_ALL_GCC
+	bool
+
+config BR2_ARCH_HAS_GCC_4_4
+	bool
+	default y if BR2_ARCH_HAS_ALL_GCC
+
+[arch/Config.in]
+config BR2_mips
+	select BR2_ARCH_HAS_ALL_GCC
+...
+
+[arch/Config.in.arm]
+config BR2_arm1176jzf_s
+	select BR2_ARCH_HAS_ALL_GCC
+...
+config BR2_cortex_a8
+	select BR2_ARCH_HAS_GCC_4_4
+...
+
+
+
+  Regards,
+  Arnout
+
 -- 
-1.8.2.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
