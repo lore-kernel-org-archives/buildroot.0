@@ -1,33 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 30 Apr 2013 10:50:41 +0200
-Subject: [Buildroot] [git commit] xkeyboard-config: fix license files typo
-Message-ID: <20130430085128.E1142972B0@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Tue, 30 Apr 2013 11:08:08 +0200
+Subject: [Buildroot] [PATCH] rpi-firmware: Fixup config.txt
+Message-ID: <1367312888-22216-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=92625d742e5eb0eae2094f7890b475aadff9d03e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The default name of the kernel binary for the RaspberryPi is kernel.img, it's
+only a zImage kernel renamed.
+Since Buildroot will build a zImage, the default config should use the zImage
+name instead of forcing the user to rename a file.
 
-As noticed by Thomas.
+This patch also remove the cmdline argument rootfstype. There is no point
+forcing the user to use ext4 for its root partition.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/rpi-firmware/config.txt |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index cdddd95..275ceef 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -8,7 +8,7 @@ XKEYBOARD_CONFIG_VERSION = 2.6
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config/
- XKEYBOARD_CONFIG_LICENSE = MIT
--XKEYBAORD_CONFIG_LICENSE_FILES = COPYING
-+XKEYBOARD_CONFIG_LICENSE_FILES = COPYING
+diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
+index 2cabd68..a818762 100644
+--- a/package/rpi-firmware/config.txt
++++ b/package/rpi-firmware/config.txt
+@@ -6,9 +6,10 @@
  
- XKEYBOARD_CONFIG_DEPENDENCIES = host-gettext host-intltool host-xapp_xkbcomp
- XKEYBOARD_CONFIG_CONF_OPT += --disable-runtime-deps
+ arm_freq=700
+ core_freq=250
++kernel=zImage
+ disable_overscan=1
+ gpu_mem_256=100
+ gpu_mem_512=100
+ sdram_freq=400
+ over_voltage=0
+-cmdline="dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait"
++cmdline="dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootwait"
+-- 
+1.7.10.4
