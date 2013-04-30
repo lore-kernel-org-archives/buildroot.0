@@ -1,30 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 30 Apr 2013 22:33:52 +0200
-Subject: [Buildroot] [PATCH v2 3/3] rootfs-overlay: use a make foreach
-	instead of a shell for
-In-Reply-To: <517FF854.9090903@mind.be> (Arnout Vandecappelle's message of
- "Tue, 30 Apr 2013 18:59:00 +0200")
-References: <1365439816-6935-1-git-send-email-luca@lucaceresoli.net>
- <1365439816-6935-4-git-send-email-luca@lucaceresoli.net>
- <517FF854.9090903@mind.be>
-Message-ID: <87ppxb21xr.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 30 Apr 2013 22:37:18 +0200
+Subject: [Buildroot] [git commit] rootfs-overlay: use a make foreach instead
+	of a shell for
+Message-ID: <20130430203700.7BB3F994DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e9b771283765e74792df6a05775383f6d4da2636
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arnout> On 08/04/13 18:50, Luca Ceresoli wrote:
- >> Makes the code uniform with the post-build and post-image implementation
- >> (which is slightly simpler and, presumably, more efficient).
- >> 
- >> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Makes the code uniform with the post-build and post-image implementation
+(which is slightly simpler and, presumably, more efficient).
 
- Arnout> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Makefile |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Makefile b/Makefile
+index 840aa1f..97804ff 100644
+--- a/Makefile
++++ b/Makefile
+@@ -501,13 +501,12 @@ endif
+ 		echo "PRETTY_NAME=\"Buildroot $(BR2_VERSION)\"" \
+ 	) >  $(TARGET_DIR)/etc/os-release
+ 
+-	@for dir in $(call qstrip,$(BR2_ROOTFS_OVERLAY)); do \
+-		$(call MESSAGE,"Copying overlay $${dir}"); \
++	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
++		$(call MESSAGE,"Copying overlay $(d)"); \
+ 		rsync -a \
+ 			--exclude .empty --exclude .svn --exclude .git \
+ 			--exclude .hg --exclude '*~' \
+-			$${dir}/ $(TARGET_DIR); \
+-	done
++			$(d)/ $(TARGET_DIR)$(sep))
+ 
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-build script $(s)"); \
