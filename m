@@ -1,83 +1,85 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 2 May 2013 00:04:41 +0200
-Subject: [Buildroot] [PATCH v2 3/3] configs: add defconfig for Atmel
- AT91SAM9260-EK Nand Flash Boot
-In-Reply-To: <20130501231452.2151618f@skate>
+Date: Thu, 2 May 2013 00:14:49 +0200
+Subject: [Buildroot] [PATCH v2 2/3] configs: add defconfig for Telit
+	EVK-PRO3
+In-Reply-To: <20130501231316.35d6652f@skate>
 References: <1366184503-16875-1-git-send-email-fabio.porcedda@gmail.com>
- <1366184503-16875-4-git-send-email-fabio.porcedda@gmail.com>
- <20130501231452.2151618f@skate>
-Message-ID: <CAHkwnC9rJ+hnqeb+NGGKB-zbzybFtU6_QHHf0Pxp50qAJv1azA@mail.gmail.com>
+ <1366184503-16875-3-git-send-email-fabio.porcedda@gmail.com>
+ <20130501231316.35d6652f@skate>
+Message-ID: <CAHkwnC8SPRb-3DTAx=V5a1WJN+XXr4prJsYQRebFRh3tmmObbw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 1, 2013 at 11:14 PM, Thomas Petazzoni
+On Wed, May 1, 2013 at 11:13 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Dear Fabio Porcedda,
+>
 
 Hi Thomas,
 thanks for reviewing.
 
-> On Wed, 17 Apr 2013 09:41:43 +0200, Fabio Porcedda wrote:
->> This is a configuration that provides a basic setup for generating
->> bootable nandflash images:
->> - at91bootstrap
->> - barebox
->> - kernel
->> - rootfs
+> On Wed, 17 Apr 2013 09:41:42 +0200, Fabio Porcedda wrote:
+>> For more info, please find board/telit/evk-pro3/readme.txt
 >>
 >> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 >> ---
->>  .../linux-ARM-at91-enable-nand-ubifs-boot.patch    | 44 ++++++++++++++++++++++
+>>  ...04.0-0001-watchdog-add-keep-alive-support.patch |  88 ++++++++
+>>  ...02-watchdog-add-at91sam9-watchdog-support.patch | 228 +++++++++++++++++++++
+>>  ...0003-at91sam9260-9g20-add-wathdog-support.patch |  40 ++++
+>>  ...0004-at91sam9260-9g20-fix-wathdog-support.patch |  26 +++
+>>  ...13.04.0-0005-watchdog-enable-for-evk-pro3.patch |  26 +++
+>>  ...t91-at91_dt_defconfig-update-for-evk-pro3.patch |  44 ++++
 >
-> I think we generally prefer to store a kernel defconfig, rather than a
-> patch against one of the intree kernel defconfigs.
+> That's quite a number of patches. I suppose they are all already
+> upstream, correct? If so, then maybe using a Git version would allow to
+> get rid of those patches in Buildroot, and then you could later on
+> submit a patch to update Barebox to the next stable version that
+> contains those patches? Maybe even Barebox 2013.05 will be released
+> soon with those patches?
 
-I prefer to modify the defconfig intree kernel to be able to use newer
-versions of
-the kernel smoothly with little effort if not any effort.
+Unfortunately they are not upstream, the original author is still working on it.
+If possible I will try to help the original author, but i don't know
+when those patches will be
+included upstream.
+Anyway If using a git version is the preferred solution,
+I will create and use a git repostiory on github.com.
 
-IMHO if i store a custom defconfig i need to change it more often
-(maybe for every new kernel version),
-instead patching the intree kernel defconfig is less work for me and
-for the buildroot maintainers.
-
-IMHO storing a kernel defconfig is better when someone want to use a
-specific kernel version
-and not the latest upstream version with little modifications.
-
->
->> diff --git a/configs/at91sam9260eknf_defconfig b/configs/at91sam9260eknf_defconfig
+>> diff --git a/configs/telit_evk_pro3_defconfig b/configs/telit_evk_pro3_defconfig
 >> new file mode 100644
->> index 0000000..5d26798
+>> index 0000000..f7df1e4
 >> --- /dev/null
->> +++ b/configs/at91sam9260eknf_defconfig
->> @@ -0,0 +1,15 @@
+>> +++ b/configs/telit_evk_pro3_defconfig
+>> @@ -0,0 +1,16 @@
 >> +BR2_arm=y
 >> +BR2_PREFER_STATIC_LIB=y
 >
-> This shouldn't be in a defconfig.
+> This choice shouldn't be part of the defconfig.
 
-Ok i will send a corrected version without it.
+Ok.
 
->
 >> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
->> +BR2_PACKAGE_HOST_SAM_BA=y
+>
+> This one generally isn't either, but I think we can be flexible on this
+> one.
+>
+>> +BR2_PACKAGE_BUSYBOX_WATCHDOG=y
 >> +BR2_TARGET_ROOTFS_UBIFS=y
 >> +BR2_TARGET_ROOTFS_UBI=y
->> +BR2_TARGET_AT91BOOTSTRAP=y
->> +BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9260ek"
->> +BR2_TARGET_AT91BOOTSTRAP_NANDFLASH=y
 >> +BR2_TARGET_BAREBOX=y
->> +BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="at91sam9260ek"
+>> +BR2_TARGET_BAREBOX_CUSTOM_VERSION=y
+>> +BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE="2013.04.0"
+>> +BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR="board/telit/evk-pro3"
+>> +BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="telit_evk_pro3"
 >> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_PATCH="board/atmel/at91sam9260ek"
->> +BR2_LINUX_KERNEL_DEFCONFIG="at91sam9260"
->> +BR2_LINUX_KERNEL_ZIMAGE=y
+>> +BR2_LINUX_KERNEL_PATCH="board/telit/evk-pro3"
+>> +BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
+>> +BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y
+>> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="evk-pro3"
 >
-> Thanks!
+> Thanks,
 >
 > Thomas
 > --
