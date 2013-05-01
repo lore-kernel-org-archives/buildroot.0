@@ -1,48 +1,55 @@
-From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Wed, 01 May 2013 11:08:59 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-04-30
-In-Reply-To: <20130501063541.96C6052C5E5@lolut.humanoidz.org>
-References: <20130501063541.96C6052C5E5@lolut.humanoidz.org>
-Message-ID: <5180DBAB.1050408@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 May 2013 23:10:09 +0200
+Subject: [Buildroot] [PATCH v2 1/3] barebox: add custom version option
+In-Reply-To: <1366184503-16875-2-git-send-email-fabio.porcedda@gmail.com>
+References: <1366184503-16875-1-git-send-email-fabio.porcedda@gmail.com>
+ <1366184503-16875-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20130501231009.787484f5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello *,
+Dear Fabio Porcedda,
 
-Am 01.05.2013 08:35, schrieb Thomas Petazzoni:
-> Status         : NOK
-> Failure reason : directfb-1.6.3
-> Architecture   : i686
-> Submitted by   : Thomas Petazzoni (Free Electrons build server)
-> Submitted at   : 2013-04-30 09:27:43
-> Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=7d97a09497174cbf6bd67894c361a17c61cbd41e
-> End of log     : http://autobuild.buildroot.net/results/03465f0e14accc8d8f8fc2640b7a0dd8bec594e4/build-end.log
-> Complete log   : http://autobuild.buildroot.net/results/03465f0e14accc8d8f8fc2640b7a0dd8bec594e4/build.log.bz2
-> Configuration  : http://autobuild.buildroot.net/results/03465f0e14accc8d8f8fc2640b7a0dd8bec594e4/config
-> Defconfig      : http://autobuild.buildroot.net/results/03465f0e14accc8d8f8fc2640b7a0dd8bec594e4/defconfig
+On Wed, 17 Apr 2013 09:41:41 +0200, Fabio Porcedda wrote:
 
-this error happen in various files:
+> -config BR2_TARGET_BAREBOX_2013_01
+> -	bool "2013.01.0"
+> -
+> -config BR2_TARGET_BAREBOX_2013_02
+> -	bool "2013.02.0"
+> -
+> -config BR2_TARGET_BAREBOX_2013_03
+> -	bool "2013.03.0"
+> -
+> -config BR2_TARGET_BAREBOX_2013_04
+> +config BR2_TARGET_BAREBOX_LATEST_VERSION
+>  	bool "2013.04.0"
+>  
+> +config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+> +	bool "Custom version"
+> +	help
+> +	  This option allows to use a specific official versions
+> +
 
-gfxdrivers/cyber5k/cyber5k.c
-gfxdrivers/radeon/radeon_crtc1.c
-gfxdrivers/cle266/uc_primary.c
-gfxdrivers/unichrome/uc_primary.c
+We need to have something that is consistent between U-Boot, Barebox
+and the kernel. Currently U-Boot has a version selection, the Linux
+kernel allows to chose the latest version (but with an option named
+after the version itself, so the name of the option changes when the
+version changes) or a custom version, and now for Barebox you're
+proposing yet another solution: select the latest version (with an
+option name that never changes) or a custom version.
 
-This error is triggered by --with-gfxdrivers or --with-inputdrivers.
+So, I'm fine doing changes on this, but they should be consistent
+across packages.
 
-There are some more little issues that can happen because of three
-missing header files in the archive and a wrong usage of the
-imlib2-config file. The errors are written to upstream, until now
-without any response.
+Best regards,
 
-Locally I prepared a patch for some times for the visible errors by the
-autobuilders (originally from Gentoo) an two more patches to fix the
-other issues. For now I haven't much time to prepare a Buildroot patch,
-hopefully I can send them at the weekend.
-
-Regards
-Carsten
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
