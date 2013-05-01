@@ -1,59 +1,110 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 1 May 2013 08:57:11 +0200
-Subject: [Buildroot] [PATCH v2 0/3] barebox new option and new boards
-In-Reply-To: <1366184503-16875-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1366184503-16875-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <CAHkwnC99e2ow4EK=duNQ3NhiTM450x0gEVRdAa2HqMLTK014tA@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed,  1 May 2013 08:08:54 +0100
+Subject: [Buildroot] [PATCH] gpsd: bump version to 3.9
+Message-ID: <1367392134-23089-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 17, 2013 at 9:41 AM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> Hi all,
-> this patch set is for adding to barebox a custom version option
-> and use this new option to add suppport for two new boards.
->
-> v2:
->   - Telit EVK-PRO3: use barebox custom version option
->
-> Best regards
-> Fabio Porcedda (3):
->   barebox: add custom version option
->   configs: add defconfig for Telit EVK-PRO3
->   configs: add defconfig for Atmel AT91SAM9260-EK Nand Flash Boot
->
->  .../linux-ARM-at91-enable-nand-ubifs-boot.patch    |  44 ++++
->  ...04.0-0001-watchdog-add-keep-alive-support.patch |  88 ++++++++
->  ...02-watchdog-add-at91sam9-watchdog-support.patch | 228 +++++++++++++++++++++
->  ...0003-at91sam9260-9g20-add-wathdog-support.patch |  40 ++++
->  ...0004-at91sam9260-9g20-fix-wathdog-support.patch |  26 +++
->  ...13.04.0-0005-watchdog-enable-for-evk-pro3.patch |  26 +++
->  ...t91-at91_dt_defconfig-update-for-evk-pro3.patch |  44 ++++
->  board/telit/evk-pro3/readme.txt                    |  28 +++
->  boot/barebox/Config.in                             |  26 ++-
->  configs/at91sam9260eknf_defconfig                  |  15 ++
->  configs/telit_evk_pro3_defconfig                   |  16 ++
->  11 files changed, 567 insertions(+), 14 deletions(-)
->  create mode 100644 board/atmel/at91sam9260ek/linux-ARM-at91-enable-nand-ubifs-boot.patch
->  create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0001-watchdog-add-keep-alive-support.patch
->  create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0002-watchdog-add-at91sam9-watchdog-support.patch
->  create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0003-at91sam9260-9g20-add-wathdog-support.patch
->  create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0004-at91sam9260-9g20-fix-wathdog-support.patch
->  create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0005-watchdog-enable-for-evk-pro3.patch
->  create mode 100644 board/telit/evk-pro3/linux-0001-ARM-at91-at91_dt_defconfig-update-for-evk-pro3.patch
->  create mode 100644 board/telit/evk-pro3/readme.txt
->  create mode 100644 configs/at91sam9260eknf_defconfig
->  create mode 100644 configs/telit_evk_pro3_defconfig
->
-> --
-> 1.8.1.4
->
+From: Simon Dawson <spdawson@gmail.com>
 
-Ping
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/gpsd/gpsd-03-upstream-dbus.patch | 31 -------------------------------
+ package/gpsd/gpsd-04-upstream-udev.patch | 31 -------------------------------
+ package/gpsd/gpsd.mk                     |  2 +-
+ 3 files changed, 1 insertion(+), 63 deletions(-)
+ delete mode 100644 package/gpsd/gpsd-03-upstream-dbus.patch
+ delete mode 100644 package/gpsd/gpsd-04-upstream-udev.patch
 
-Best regards
---
-Fabio Porcedda
+diff --git a/package/gpsd/gpsd-03-upstream-dbus.patch b/package/gpsd/gpsd-03-upstream-dbus.patch
+deleted file mode 100644
+index 2345484..0000000
+--- a/package/gpsd/gpsd-03-upstream-dbus.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-The current libgps.a logic doesn't pass down pkg-config output from
+-dbus and such which breaks building when compiling:
+-
+-gcc -o libgps_dbus.o -c -D_GNU_SOURCE -Wextra -Wall -Wno-uninitialized \
+-	-Wno-missing-field-initializers -Wcast-align -Wmissing-declarations \
+-	-Wmissing-prototypes -Wstrict-prototypes -Wpointer-arith -Wreturn-type \
+-	-O2 libgps_dbus.c
+-libgps_dbus.c:26:23: fatal error: dbus/dbus.h: No such file or directory
+-compilation terminated.
+-
+-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+----
+- SConstruct | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/SConstruct b/SConstruct
+-index e5d1f54..a56fa9b 100644
+---- a/SConstruct
+-+++ b/SConstruct
+-@@ -886,7 +886,9 @@ gpsdlibs = ["-lgpsd"] + usblibs + bluezlibs + gpslibs + caplibs
+- #          linking
+- # The final executable will build but not be portable.
+- 
+--env.StaticLibrary(target = 'libgps.a', source = libgps_sources)
+-+env.StaticLibrary(target='libgps.a',
+-+                  source=libgps_sources,
+-+                  parse_flags=dbus_libs + rtlibs)
+- 
+- # Source groups
+- 
+diff --git a/package/gpsd/gpsd-04-upstream-udev.patch b/package/gpsd/gpsd-04-upstream-udev.patch
+deleted file mode 100644
+index 6de058d..0000000
+--- a/package/gpsd/gpsd-04-upstream-udev.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-Commit 102e29d16c3fd9b414eeac53c794302f902ae8da reverted the DESTDIR
+-logic when upgrading the udev path handling.
+-
+-It also slightly broke the mkdir setup by not creating the rules.d
+-subdir under the udev path.
+-
+-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+----
+- SConstruct | 8 ++++----
+- 1 file changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/SConstruct b/SConstruct
+-index a56fa9b..1c187f3 100644
+---- a/SConstruct
+-+++ b/SConstruct
+-@@ -1662,10 +1662,10 @@ if env['python']:
+- # is plugged in.
+- 
+- Utility('udev-install', 'install', [
+--    'mkdir -p ' + env['udevdir'],
+--    'cp $SRCDIR/gpsd.rules ' + env['udevdir'] + '/rules.d/25-gpsd.rules',
+--    'cp $SRCDIR/gpsd.hotplug ' + env['udevdir'],
+--    'chmod a+x ' + env['udevdir'] + '/gpsd.hotplug',
+-+    'mkdir -p ' + DESTDIR + env['udevdir'] + '/rules.d',
+-+    'cp $SRCDIR/gpsd.rules ' + DESTDIR + env['udevdir'] + '/rules.d/25-gpsd.rules',
+-+    'cp $SRCDIR/gpsd.hotplug ' + DESTDIR + env['udevdir'],
+-+    'chmod a+x ' + DESTDIR + env['udevdir'] + '/gpsd.hotplug',
+-         ])
+- 
+- Utility('udev-uninstall', '', [
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index ccf99ca..384726d 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-GPSD_VERSION = 3.8
++GPSD_VERSION = 3.9
+ GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd/
+ GPSD_LICENSE = BSD-3c
+ GPSD_LICENSE_FILES = COPYING
+-- 
+1.8.1.2
