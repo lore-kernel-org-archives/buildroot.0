@@ -1,21 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 02 May 2013 23:54:33 +0200
-Subject: [Buildroot] [PATCH v2 1/4] ffmpeg: define license
-In-Reply-To: <1360270956-8896-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Thu, 7 Feb 2013 22:02:33 +0100")
-References: <1360270956-8896-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87a9odyrmu.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 2 May 2013 23:52:47 +0200
+Subject: [Buildroot] [git commit] ffmpeg: define license
+Message-ID: <20130502215429.734A299A15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a17d8942a4b7247822421946a21584b460ac1650
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/ffmpeg/ffmpeg.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
+index 2e88b6b..fd7a256 100644
+--- a/package/multimedia/ffmpeg/ffmpeg.mk
++++ b/package/multimedia/ffmpeg/ffmpeg.mk
+@@ -9,6 +9,13 @@ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+ 
++FFMPEG_LICENSE = LGPLv2.1+, libjpeg license
++FFMPEG_LICENSE_FILES = LICENSE COPYING.LGPLv2.1
++ifeq ($(BR2_PACKAGE_FFMPEG_GPL),y)
++FFMPEG_LICENSE += and GPLv2+
++FFMPEG_LICENSE_FILES += COPYING.GPLv2
++endif
++
+ FFMPEG_CONF_OPT = \
+ 	--prefix=/usr		\
+ 	--disable-avfilter	\
