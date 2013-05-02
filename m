@@ -1,34 +1,41 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Thu,  2 May 2013 15:00:48 +0200
-Subject: [Buildroot] [PATCH v3 09/11] toolchain/toolchain-buildroot: Disable
-	NPTL for ARC
+Date: Thu,  2 May 2013 15:00:49 +0200
+Subject: [Buildroot] [PATCH v3 10/11] arc: Add arc, arcbe to gnuconfig
 In-Reply-To: <1367499650-29869-1-git-send-email-mjonker@synopsys.com>
 References: <1367499650-29869-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1367499650-29869-10-git-send-email-mjonker@synopsys.com>
+Message-ID: <1367499650-29869-11-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NPTL is not yet supported for ARC.
-
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 ---
- toolchain/toolchain-buildroot/Config.in.2 |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ support/gnuconfig/config.sub |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
-index 7f19b09..35d6db2 100644
---- a/toolchain/toolchain-buildroot/Config.in.2
-+++ b/toolchain/toolchain-buildroot/Config.in.2
-@@ -97,6 +97,7 @@ choice
- 		depends on !BR2_x86_i386
- 		depends on !BR2_avr32
- 		depends on !BR2_xtensa
-+		depends on !BR2_arc
- endchoice
- 
- config BR2_PTHREAD_DEBUG
+diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
+index 8509813..b2958ad 100755
+--- a/support/gnuconfig/config.sub
++++ b/support/gnuconfig/config.sub
+@@ -259,7 +259,7 @@ case $basic_machine in
+ 	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
+ 	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
+ 	| am33_2.0 \
+-	| arc \
++	| arc | arceb \
+ 	| arm | arm[bl]e | arme[lb] | armv[2-8] | armv[3-8][lb] | armv7[arm] \
+ 	| avr | avr32 \
+ 	| be32 | be64 \
+@@ -372,7 +372,7 @@ case $basic_machine in
+ 	| aarch64-* | aarch64_be-* \
+ 	| alpha-* | alphaev[4-8]-* | alphaev56-* | alphaev6[78]-* \
+ 	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
+-	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* \
++	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* | arceb-* \
+ 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
+ 	| avr-* | avr32-* \
+ 	| be32-* | be64-* \
 -- 
 1.7.0.4
