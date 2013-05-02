@@ -1,38 +1,41 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Thu,  2 May 2013 21:51:30 +0200
-Subject: [Buildroot] [PATCH v4 09/12] toolchain/gcc: Only enable
-	--with-float when it makes sense
+Date: Thu,  2 May 2013 21:51:32 +0200
+Subject: [Buildroot] [PATCH v4 11/12] arc: Add arc, arcbe to gnuconfig
 In-Reply-To: <1367524293-32081-1-git-send-email-mjonker@synopsys.com>
 References: <1367524293-32081-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1367524293-32081-10-git-send-email-mjonker@synopsys.com>
+Message-ID: <1367524293-32081-12-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to gcc/config.gcc, only ARM, MIPS and SPARC have the
-"--with-float" option when configuring gcc.
-
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 ---
- toolchain/gcc/gcc-uclibc-4.x.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ support/gnuconfig/config.sub |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 2993697..7b77fb0 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -65,7 +65,10 @@ endif
- 
- # Determine soft-float options
- ifeq ($(BR2_SOFT_FLOAT),y)
-+# only mips*-*-*, arm*-*-* and sparc*-*-* accept --with-float
-+ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_mips)$(BR2_mipsel)$(BR2_sparc)$(BR2_mips64)$(BR2_mips64el),y)
- SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
-+endif
- ifeq ($(BR2_arm)$(BR2_armeb),y) # only set float-abi for arm
- TARGET_SOFT_FLOAT:=-mfloat-abi=soft
- else
+diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
+index 8509813..b2958ad 100755
+--- a/support/gnuconfig/config.sub
++++ b/support/gnuconfig/config.sub
+@@ -259,7 +259,7 @@ case $basic_machine in
+ 	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
+ 	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
+ 	| am33_2.0 \
+-	| arc \
++	| arc | arceb \
+ 	| arm | arm[bl]e | arme[lb] | armv[2-8] | armv[3-8][lb] | armv7[arm] \
+ 	| avr | avr32 \
+ 	| be32 | be64 \
+@@ -372,7 +372,7 @@ case $basic_machine in
+ 	| aarch64-* | aarch64_be-* \
+ 	| alpha-* | alphaev[4-8]-* | alphaev56-* | alphaev6[78]-* \
+ 	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
+-	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* \
++	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* | arceb-* \
+ 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
+ 	| avr-* | avr32-* \
+ 	| be32-* | be64-* \
 -- 
 1.7.0.4
