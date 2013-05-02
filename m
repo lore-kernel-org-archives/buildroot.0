@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 02 May 2013 23:09:49 +0200
-Subject: [Buildroot] [PATCHv2] iw: bump to version 3.10
-In-Reply-To: <1367511355-24174-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 2 May 2013 13:15:55 -0300")
-References: <1367511355-24174-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87d2t9142q.fsf@dell.be.48ers.dk>
+Date: Thu, 02 May 2013 23:10:12 +0200
+Subject: [Buildroot] [PATCH] samba: bump to version 3.6.14
+In-Reply-To: <1367504777-27146-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 2 May 2013 11:26:17 -0300")
+References: <1367504777-27146-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878v3x1423.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
