@@ -1,30 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 02 May 2013 23:19:48 +0200
-Subject: [Buildroot] [PATCH] directfb: fix error in *SetRegion* datatypes
-In-Reply-To: <1367524449-6403-1-git-send-email-c.schoenert@gmail.com> (Carsten
- Schoenert's message of "Thu, 2 May 2013 21:54:08 +0200")
-References: <1367524449-6403-1-git-send-email-c.schoenert@gmail.com>
-Message-ID: <87zjwdyt8r.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 2 May 2013 23:10:04 +0200
+Subject: [Buildroot] [git commit] samba: bump to version 3.6.14
+Message-ID: <20130502212329.417589997C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carsten" == Carsten Schoenert <c.schoenert@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1516f8bcdf3dbd7238fe8e7a663f9afc41c5d38c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Carsten> From: Carsten Schoenert <c.schoenert@gmail.com>
- Carsten> DirectFB comes with incorrect declarations for *SetRegion* datatypes,
- Carsten> this breaks the build for some GFX Drivers. Also there are some headers
- Carsten> missend in the archive, this breaks some other modules of directfb that
- Carsten> not covered yet by the autobuilders.
- Carsten> And at least the configure script doesn't use a variable for the
- Carsten> imlib2-config script. That breaks crossbuilds of directfb in most cases.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/samba/samba.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Carsten> Fixes:
- Carsten> http://autobuild.buildroot.net/results/03465f0e14accc8d8f8fc2640b7a0dd8bec594e4
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 7f9b918..3a004e1 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SAMBA_VERSION = 3.6.13
++SAMBA_VERSION = 3.6.14
+ SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA_SUBDIR = source3
+ SAMBA_INSTALL_STAGING = YES
