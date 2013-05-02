@@ -1,119 +1,64 @@
-From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Thu, 2 May 2013 15:36:11 +0800
-Subject: [Buildroot] [PATCH v6 6/7] arch: toolchain: Install blackfin
- FDPIC and FLAT libraries in external toolchain makefile.
-In-Reply-To: <1366279592-9055-6-git-send-email-sonic.adi@gmail.com>
-References: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
- <1366279592-9055-6-git-send-email-sonic.adi@gmail.com>
-Message-ID: <CAJxxZ0M4jZccZF3i3OM8-B7bWT1NzEXf62qsKEg4-wfAJqjnJA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 May 2013 11:57:32 +0200
+Subject: [Buildroot] Smallish rootfs for wm8505 netbook
+In-Reply-To: <3759295.eBGGfacrkH@nc10>
+References: <82bbf577-2fa7-4161-aa47-e18b223fc7be@CO9EHSMHS011.ehs.local>
+ <3759295.eBGGfacrkH@nc10>
+Message-ID: <20130502115732.547b8eb2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Peter Faasse,
 
-On Thu, Apr 18, 2013 at 6:06 PM, Sonic Zhang <sonic.adi@gmail.com> wrote:
-> From: Sonic Zhang <sonic.zhang@analog.com>
->
-> Reserve all 3 blackfin toolchain folders under the TOOLCHAIN_EXTERNAL_DIR.
-> Set current blackfin toolchain bin folder to the toolchain prefix subfolder.
-> Install FDPIC and FLAT library in target ext-toolchain-installed.
->
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
->
-> ---
->
-> v6-changes:
-> - Move options of installing blackfin toolchain libraries into external
-> toolchain Config.in.
-> - Fix typo error.
-> - Merge the options of the same name and add descriptions.
->
-> v5-changes:
-> - Update comments.
->
-> v3-changes:
-> - Remove arch specific makefiles.
-> - Reserve all 3 blackfin toolchain folders under the TOOLCHAIN_EXTERNAL_DIR.
-> - Set current blackfin toolchain bin folder to the toolchain prefix subfolder.
-> - Move FDPIC and FLAT library installation target from blackfin makefile to
-> the ext-toolchain-installed target in external toolchain makefile.
->
-> v2-changes:
-> - Remove useless Macro __uClinux__
->
-> v1-changes:
-> - Create arch makefile.
-> - Create blackfin makefile.
-> - Add FDPIC and FLAT library options and makefile targets to install
-> libraries for different binary formats into the same rootfs image.
-> - update the TARGET_EXCEPTIONS variable in support/scripts/graph-depends for
-> new custom targets
-> ---
->  toolchain/toolchain-external/Config.in   |   25 ++++++++++++++++
->  toolchain/toolchain-external/ext-tool.mk |   46 ++++++++++++++++++++++-------
->  2 files changed, 60 insertions(+), 11 deletions(-)
->
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 6cf29aa..c4d17e0 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -887,5 +887,30 @@ config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
->
->  endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
->
-> +# When the FDPIC shared binary format is used, the corresponding libraries are
-> +# always installed. When a different binary format is used, we offer the option
-> +# of installing the FDPIC shared libraries.
-> +config BR2_BFIN_INSTALL_FDPIC_SHARED
-> +       bool "Install FDPIC shared libraries"
-> +       depends on BR2_bfin && !BR2_BINFMT_FDPIC
-> +       help
-> +         The Linux kernel supports running both FDPIC and FLAT applications
-> +         concurrently if the binary format specific libraries are installed properly.
-> +         This option allows developer to install FDPIC libraries into a buildroot
-> +         rootfs image built with binary format that is not FDPIC.
-> +
-> +# When the FLAT shared binary format is used, we force the installation
-> +# of the corresponding libraries. When a different binary format is
-> +# used, we offer the option of installing the FLAT shared libraries.
-> +config BR2_BFIN_INSTALL_FLAT_SHARED
-> +       bool "Install FLAT shared libraries"
-> +       depends on BR2_bfin && !BR2_BINFMT_FLAT_SHARED
-> +       default y if BR2_BINFMT_FLAT_SHARED
-> +       help
-> +         The Linux kernel supports running both FDPIC and FLAT applications
-> +         concurrently if the binary format specific libraries are installed properly.
-> +         This option allows developer to install FLAT libraries into a buildroot
-> +         rootfs image built with binary format that is not shared FLAT.
-> +
+Please do not reply to an e-mail on the list to start a new thread.
+Just send a new mail to buildroot at uclibc.org. Thanks.
 
-Your former suggestion to merge 2 options
+On Thu, 02 May 2013 09:00:49 +0200, Peter Faasse wrote:
 
----------------------------------
-config BR2_BFIN_INSTALL_FLAT_SHARED
-       default y if BR2_BINFMT_FLAT_SHARED
+> With varying degrees of success, i've been building buildroot based
+> rootfs-s, toolchains and kernel images. All part of a hacking project
+> with a few wm8505 (armv5) based netbooks.
+> 
+> I'm attempting to use buildroot to build a rootfs & kernel that i can
+> use to do some native development on the machines.
 
-config BR2_BFIN_INSTALL_FLAT_SHARED
-       bool "Install FLAT shared libraries"
-       depends on BR2_bfin && !BR2_BINFMT_FLAT_SHARED
----------------------------------
-into one
----------------------------------
-config BR2_BFIN_INSTALL_FLAT_SHARED
-       bool "Install FLAT shared libraries"
-       depends on BR2_bfin && !BR2_BINFMT_FLAT_SHARED
-       default y if BR2_BINFMT_FLAT_SHARED
----------------------------------
+We decided to no longer support native development on the target
+platform. If you're looking at a full-featured distribution that
+provides development tools, installing a Debian armel distribution is
+probably a wiser choice.
 
-doesn't work. In the later case, if BR2_BINFMT_FLAT_SHARED is
-selected, option BR2_BFIN_INSTALL_FLAT_SHARED is not set to y by
-default. Only the former case works correctly.
 
-So, I have to revert the options back.
+> 1) If i enable c++ support the toolchain, the build of the rootfs
+> will fail because of a lack of UCLIBC_HAS_FENV (fenv.h not found).
+> This can easily be remedied using make uclibc-menuconfig after
+> configuring buildroot ('Target Architecture Features and
+> Options'-->'Enable C99 Floating-point environment'), but i think it
+> would make sense if that option is -if possible- automatically
+> enabled by activating this uclibc option when c++ support is enabled
+> in buildroot itself. 
 
-Regards,
+Strange. Did you do a 'make clean; make' cycle? Can you share a
+Buildroot .config that exhibits the problem?
 
-Sonic Zhang
+> 2) I do include the obsolete 'toolchain on the target'. The resulting
+> gcc on- target is by default not usable because glibc.so (a linker
+> script it seems) is not copied to the on-target directory. This can
+> be remedied by adding *.so to the support/scripts/copy.sh, but i'm
+> not quite sure if that has any side- effects. 
+
+Yes, we know the support for toolchain on the target is broken, and
+since no-one every sent patches to fix this, and because we think it's
+a bit outside of the scope of the Buildroot project, we decided to
+deprecate it.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
