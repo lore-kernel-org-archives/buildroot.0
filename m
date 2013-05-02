@@ -1,47 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  2 May 2013 11:26:32 -0300
-Subject: [Buildroot] [PATCH] kernel-headers: bump 3.{0, 4,
-	8}.x stable version
-Message-ID: <1367504792-27185-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 May 2013 17:12:45 +0200
+Subject: [Buildroot] [PATCH v2 00/12] RFC: ARC port
+In-Reply-To: <E6BF041E97966E4DB955F0DF883AD2D6339FE6A5@de02wembxa.internal.synopsys.com>
+References: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
+ <20130425050221.4846d873@skate>
+ <E6BF041E97966E4DB955F0DF883AD2D6339FA392@de02wembxa.internal.synopsys.com>
+ <20130429224541.6f46b3b4@skate> <517FEC03.1010709@mind.be>
+ <20130501000905.609d0ced@skate>
+ <E6BF041E97966E4DB955F0DF883AD2D6339FE6A5@de02wembxa.internal.synopsys.com>
+Message-ID: <20130502171245.5f3f7f02@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/kernel-headers/Config.in                                  | 6 +++---
- ...0.76-headers_install-fix-__packed-in-exported-kernel-head.patch} | 0
- 2 files changed, 3 insertions(+), 3 deletions(-)
- rename toolchain/kernel-headers/{linux-3.0.75-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.76-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
+Dear Mischa Jonker,
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 12c53d8..6ec39c0 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -66,15 +66,15 @@ config BR2_DEFAULT_KERNEL_VERSION
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.0.75"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.76"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.44"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.42"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.43"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
--	default "3.8.10"	if BR2_KERNEL_HEADERS_3_8
-+	default "3.8.11"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9"		if BR2_KERNEL_HEADERS_3_9
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.75-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.76-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.75-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.76-headers_install-fix-__packed-in-exported-kernel-head.patch
+On Thu, 2 May 2013 14:03:53 +0000, Mischa Jonker wrote:
+
+[...]
+
+> But this doesn't work for several architectures, such as
+> BR2_sparc_sparcsfleon, that do have GCC 4.4, but no 4.5 for instance.
+> 
+> The reverse logic helps in the sense that the BR2_HAS_NO_GCC_x_y
+> lines will go away over time when old GCC versions get deprecated.
+> 
+> I will send both variants later today.
+
+As I suggested in an earlier e-mail, I think you should just not care
+about this problem for now, and add the multiple 'depends on !BR2_arc'
+as you were doing in your first version of the patch set. Your patch
+set already has a good number of patches, so let's merge it, and
+improve on top of that.
+
+Thanks!
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
