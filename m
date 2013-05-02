@@ -1,41 +1,84 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Thu,  2 May 2013 21:51:32 +0200
-Subject: [Buildroot] [PATCH v4 11/12] arc: Add arc, arcbe to gnuconfig
+Date: Thu,  2 May 2013 21:51:33 +0200
+Subject: [Buildroot] [PATCH v4 12/12] kernel-headers: Add support for ARC
+	kernel headers
 In-Reply-To: <1367524293-32081-1-git-send-email-mjonker@synopsys.com>
 References: <1367524293-32081-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1367524293-32081-12-git-send-email-mjonker@synopsys.com>
+Message-ID: <1367524293-32081-13-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also make sure that older kernels are not selected for ARC.
+
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 ---
- support/gnuconfig/config.sub |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ Makefile                           |    1 +
+ toolchain/kernel-headers/Config.in |   14 +++++++++-----
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
-index 8509813..b2958ad 100755
---- a/support/gnuconfig/config.sub
-+++ b/support/gnuconfig/config.sub
-@@ -259,7 +259,7 @@ case $basic_machine in
- 	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
- 	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
- 	| am33_2.0 \
--	| arc \
-+	| arc | arceb \
- 	| arm | arm[bl]e | arme[lb] | armv[2-8] | armv[3-8][lb] | armv7[arm] \
- 	| avr | avr32 \
- 	| be32 | be64 \
-@@ -372,7 +372,7 @@ case $basic_machine in
- 	| aarch64-* | aarch64_be-* \
- 	| alpha-* | alphaev[4-8]-* | alphaev56-* | alphaev6[78]-* \
- 	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
--	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* \
-+	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* | arceb-* \
- 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
- 	| avr-* | avr32-* \
- 	| be32-* | be64-* \
+diff --git a/Makefile b/Makefile
+index 97804ff..ce7530f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -238,6 +238,7 @@ ARCH:=$(call qstrip,$(BR2_ARCH))
+ 
+ KERNEL_ARCH:=$(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+ 	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
++	-e s/arc.*/arc/ \
+ 	-e s/arm.*/arm/ -e s/sa110/arm/ \
+ 	-e s/aarch64/arm64/ \
+ 	-e s/bfin/blackfin/ \
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 12c53d8..aff69d9 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -17,35 +17,39 @@ choice
+ 
+ 	config BR2_KERNEL_HEADERS_3_0
+ 		bool "Linux 3.0.x kernel headers"
++		depends on !BR2_arc
+ 
+ 	config BR2_KERNEL_HEADERS_3_1
+ 		bool "Linux 3.1.x kernel headers"
+-		depends on BR2_DEPRECATED
++		depends on BR2_DEPRECATED && !BR2_arc
+ 
+ 	config BR2_KERNEL_HEADERS_3_2
+ 		bool "Linux 3.2.x kernel headers"
++		depends on !BR2_arc
+ 
+ 	config BR2_KERNEL_HEADERS_3_3
+ 		bool "Linux 3.3.x kernel headers"
+-		depends on BR2_DEPRECATED
++		depends on BR2_DEPRECATED && !BR2_arc
+ 
+ 	config BR2_KERNEL_HEADERS_3_4
+ 		bool "Linux 3.4.x kernel headers"
++		depends on !BR2_arc
+ 
+ 	config BR2_KERNEL_HEADERS_3_5
+ 		bool "Linux 3.5.x kernel headers"
+-		depends on BR2_DEPRECATED
++		depends on BR2_DEPRECATED && !BR2_arc
+ 
+ 	config BR2_KERNEL_HEADERS_3_6
+ 		bool "Linux 3.6.x kernel headers"
+-		depends on BR2_DEPRECATED
++		depends on BR2_DEPRECATED && !BR2_arc
+ 
+ 	config BR2_KERNEL_HEADERS_3_7
+ 		bool "Linux 3.7.x kernel headers"
+-		depends on BR2_DEPRECATED
++		depends on BR2_DEPRECATED && !BR2_arc
+ 
+ 	config BR2_KERNEL_HEADERS_3_8
+ 		bool "Linux 3.8.x kernel headers"
++		depends on !BR2_arc
+ 
+ 	config BR2_KERNEL_HEADERS_3_9
+ 		bool "Linux 3.9.x kernel headers"
 -- 
 1.7.0.4
