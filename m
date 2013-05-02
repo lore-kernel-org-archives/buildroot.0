@@ -1,55 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 2 May 2013 23:33:08 +0200
-Subject: [Buildroot] [git commit] Makefile: make skeleton rsync options
-	consistent
-Message-ID: <20130502213333.9D50799A15@busybox.osuosl.org>
+Date: Thu, 2 May 2013 23:29:11 +0200
+Subject: [Buildroot] [git commit] socketcand: needs toolchain with threads
+	support
+Message-ID: <20130502213333.3930399A15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e97376a0fc018970f7a166f183d3817a6b1bfaf1
+commit: http://git.buildroot.net/buildroot/commit/?id=2cd00fcf9c800b2a031fd21c13fbf5985be8fb97
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Initially, a "cp" was used for the one-time target skeleton
-installation, and an "rsync" was used for the every-time overlay
-skeleton installations.  Then, the target skeleton install was
-changed to also use rsync (1cd3f992fb3659aacbb0cdd3ed64347a37569891).
-Now there are two rsyncs, but with different filter specs, which
-seems odd.
+Fixes:
+http://autobuild.buildroot.org/results/1d35f22a25e8641106f3c070f360cf4b4a02a461
 
-This patch adds --excludes to both invocations of rsync to make them
-consistent, and removes the -u option from the initial target skeleton
-installation.
-
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/socketcand/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 97804ff..5b690f0 100644
---- a/Makefile
-+++ b/Makefile
-@@ -429,7 +429,9 @@ endif
+diff --git a/package/socketcand/Config.in b/package/socketcand/Config.in
+index 0d1d983..d5d02de 100644
+--- a/package/socketcand/Config.in
++++ b/package/socketcand/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_SOCKETCAND
+ 	bool "socketcand"
+ 	select BR2_PACKAGE_LIBCONFIG
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Socketcand is a daemon that provides access to CAN interfaces
+ 	  on a machine via a network interface.
  
- $(BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
--	rsync -au --exclude=.empty --exclude=CVS --exclude=.svn --exclude='*~' \
-+	rsync -a \
-+		--exclude .empty --exclude .svn --exclude .git \
-+		--exclude .hg --exclude=CVS --exclude '*~' \
- 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
- 	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
- 	touch $@
-@@ -505,7 +507,7 @@ endif
- 		$(call MESSAGE,"Copying overlay $(d)"); \
- 		rsync -a \
- 			--exclude .empty --exclude .svn --exclude .git \
--			--exclude .hg --exclude '*~' \
-+			--exclude .hg --exclude=CVS --exclude '*~' \
- 			$(d)/ $(TARGET_DIR)$(sep))
- 
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+ 	  https://github.com/dschanoeh/socketcand
++
++comment "socketcand requires a toolchain with threads support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
