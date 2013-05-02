@@ -1,7 +1,8 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  2 May 2013 11:26:17 -0300
-Subject: [Buildroot] [PATCH] samba: bump to version 3.6.14
-Message-ID: <1367504777-27146-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu,  2 May 2013 11:26:32 -0300
+Subject: [Buildroot] [PATCH] kernel-headers: bump 3.{0, 4,
+	8}.x stable version
+Message-ID: <1367504792-27185-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +11,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/samba/samba.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ toolchain/kernel-headers/Config.in                                  | 6 +++---
+ ...0.76-headers_install-fix-__packed-in-exported-kernel-head.patch} | 0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.75-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.76-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 7f9b918..3a004e1 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 12c53d8..6ec39c0 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -66,15 +66,15 @@ config BR2_DEFAULT_KERNEL_VERSION
  
--SAMBA_VERSION = 3.6.13
-+SAMBA_VERSION = 3.6.14
- SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA_SUBDIR = source3
- SAMBA_INSTALL_STAGING = YES
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.75"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.76"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.44"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.42"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.43"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+-	default "3.8.10"	if BR2_KERNEL_HEADERS_3_8
++	default "3.8.11"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9"		if BR2_KERNEL_HEADERS_3_9
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.75-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.76-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.75-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.76-headers_install-fix-__packed-in-exported-kernel-head.patch
 -- 
 1.8.1.5
