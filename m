@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 May 2013 11:59:22 +0200
-Subject: [Buildroot] [PATCH v2 3/3] configs: add defconfig for Atmel
- AT91SAM9260-EK Nand Flash Boot
-In-Reply-To: <CAHkwnC9rJ+hnqeb+NGGKB-zbzybFtU6_QHHf0Pxp50qAJv1azA@mail.gmail.com>
-References: <1366184503-16875-1-git-send-email-fabio.porcedda@gmail.com>
- <1366184503-16875-4-git-send-email-fabio.porcedda@gmail.com>
- <20130501231452.2151618f@skate>
- <CAHkwnC9rJ+hnqeb+NGGKB-zbzybFtU6_QHHf0Pxp50qAJv1azA@mail.gmail.com>
-Message-ID: <20130502115922.4b82e8c2@skate>
+Date: Thu, 2 May 2013 12:01:20 +0200
+Subject: [Buildroot] [PATCH v6 6/7] arch: toolchain: Install blackfin
+ FDPIC and FLAT libraries in external toolchain makefile.
+In-Reply-To: <CAJxxZ0M4jZccZF3i3OM8-B7bWT1NzEXf62qsKEg4-wfAJqjnJA@mail.gmail.com>
+References: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
+ <1366279592-9055-6-git-send-email-sonic.adi@gmail.com>
+ <CAJxxZ0M4jZccZF3i3OM8-B7bWT1NzEXf62qsKEg4-wfAJqjnJA@mail.gmail.com>
+Message-ID: <20130502120120.5fd9b4e0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear Sonic Zhang,
 
-On Thu, 2 May 2013 00:04:41 +0200, Fabio Porcedda wrote:
+On Thu, 2 May 2013 15:36:11 +0800, Sonic Zhang wrote:
 
-> > I think we generally prefer to store a kernel defconfig, rather
-> > than a patch against one of the intree kernel defconfigs.
+> ---------------------------------
+> config BR2_BFIN_INSTALL_FLAT_SHARED
+>        bool "Install FLAT shared libraries"
+>        depends on BR2_bfin && !BR2_BINFMT_FLAT_SHARED
+>        default y if BR2_BINFMT_FLAT_SHARED
+> ---------------------------------
 > 
-> I prefer to modify the defconfig intree kernel to be able to use newer
-> versions of
-> the kernel smoothly with little effort if not any effort.
-> 
-> IMHO if i store a custom defconfig i need to change it more often
-> (maybe for every new kernel version),
-> instead patching the intree kernel defconfig is less work for me and
-> for the buildroot maintainers.
-> 
-> IMHO storing a kernel defconfig is better when someone want to use a
-> specific kernel version
-> and not the latest upstream version with little modifications.
+> doesn't work. In the later case, if BR2_BINFMT_FLAT_SHARED is
+> selected, option BR2_BFIN_INSTALL_FLAT_SHARED is not set to y by
+> default. Only the former case works correctly.
 
-Well, fair enough. I'm not sure it's really easier to maintain, but I
-don't have a strong opinion on this.
+Wasn't my suggestion:
 
-Thanks,
+config BR2_BFIN_INSTALL_FLAT_SHARED
+        bool "Install FLAT shared libraries" if !BR2_BINFMT_FLAT_SHARED
+        depends on BR2_bfin
+        default y if BR2_BINFMT_FLAT_SHARED
+
+So: option enabled by default when BR2_BINFMT_FLAT_SHARED, and the
+prompt is shown to optionally enable/disable it when
+BR2_BINFMT_FLAT_SHARED is not selected.
 
 Thomas
 -- 
