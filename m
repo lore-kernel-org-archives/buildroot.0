@@ -1,54 +1,72 @@
-From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Thu, 2 May 2013 18:11:40 +0800
-Subject: [Buildroot] [PATCH v6 6/7] arch: toolchain: Install blackfin
- FDPIC and FLAT libraries in external toolchain makefile.
-In-Reply-To: <20130502120120.5fd9b4e0@skate>
-References: <1366279592-9055-1-git-send-email-sonic.adi@gmail.com>
- <1366279592-9055-6-git-send-email-sonic.adi@gmail.com>
- <CAJxxZ0M4jZccZF3i3OM8-B7bWT1NzEXf62qsKEg4-wfAJqjnJA@mail.gmail.com>
- <20130502120120.5fd9b4e0@skate>
-Message-ID: <CAJxxZ0NC2O2D5m4COx-r=-cT_TJoyGkXRxqNYXt-=7ze5+xcmg@mail.gmail.com>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Thu,  2 May 2013 15:00:39 +0200
+Subject: [Buildroot] [PATCH v3 00/11] ARC port
+Message-ID: <1367499650-29869-1-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi all,
 
-On Thu, May 2, 2013 at 6:01 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Sonic Zhang,
->
-> On Thu, 2 May 2013 15:36:11 +0800, Sonic Zhang wrote:
->
->> ---------------------------------
->> config BR2_BFIN_INSTALL_FLAT_SHARED
->>        bool "Install FLAT shared libraries"
->>        depends on BR2_bfin && !BR2_BINFMT_FLAT_SHARED
->>        default y if BR2_BINFMT_FLAT_SHARED
->> ---------------------------------
->>
->> doesn't work. In the later case, if BR2_BINFMT_FLAT_SHARED is
->> selected, option BR2_BFIN_INSTALL_FLAT_SHARED is not set to y by
->> default. Only the former case works correctly.
->
-> Wasn't my suggestion:
->
-> config BR2_BFIN_INSTALL_FLAT_SHARED
->         bool "Install FLAT shared libraries" if !BR2_BINFMT_FLAT_SHARED
->         depends on BR2_bfin
->         default y if BR2_BINFMT_FLAT_SHARED
->
-> So: option enabled by default when BR2_BINFMT_FLAT_SHARED, and the
-> prompt is shown to optionally enable/disable it when
-> BR2_BINFMT_FLAT_SHARED is not selected.
+Now that 3.9 has been released, ARC doesn't depend on its own kernel anymore.
+This is reflected in the patch set, furthermore, bison/flex host dependencies
+have been removed (thanks to Thomas for his input).
 
-In this way, the developer can disable the option
-BR2_BFIN_INSTALL_FLAT_SHARED in share flat binary mode. This is
-incorrect. My solution ensures the developer have no way to disable
-BR2_BFIN_INSTALL_FLAT_SHARED when BR2_BINFMT_FLAT_SHARED is selected.
+The GCC version architecture dependency cleanup patch is not really related to
+ARC, and I will come with a proposal as a separate patch.
 
-Regards,
+The patch set is also published on our github site: 
+https://github.com/foss-for-synopsys-dwc-arc-processors/buildroot
 
-Sonic
+Changes in v3:
+ * removed GCC arch-dependency cleanup patch (should be discussed separately)
+ * 3.9-rc8-->3.9 kernel headers
+ * Added bison/flex host dependencies
+
+Changes in v2:
+ * BR2_ARC_SITE hardcoded now, and moved to Config.in.arc
+ * makeinfo dependency removed from binutils
+ * Added 3.9-rc8 kernel headers
+ * Patches split where suggested
+ * Removed ARC-specific uClibc config
+ * Moved ARC-specific binutils out of the choice menu
+ * Introduced explicit BR2_arcel, BR2_arceb symbols a la microblaze
+ * Added a patch that cleans up GCC architecture dependencies
+ * Fixed patches for binutils, gcc
+
+Mischa Jonker (11):
+  arc: Add ARC and ARC BE architecture
+  arc: Add option for ARC-specific download site
+  arc: Add support for ARC-specific binutils
+  arc: disable Crosstool-NG for ARC
+  arc: add gcc for ARC
+  arc: Add support for ARC-specific uClibc
+  arc: Make sure that libgcc doesn't get included when it doesn't exist
+    yet
+  toolchain/gcc: Only enable --with-float when it makes sense
+  toolchain/toolchain-buildroot: Disable NPTL for ARC
+  arc: Add arc, arcbe to gnuconfig
+  kernel-headers: Add support for ARC kernel headers
+
+ Makefile                                           |    1 +
+ arch/Config.in                                     |   18 +++++
+ arch/Config.in.arc                                 |   18 +++++
+ .../binutils/2.19-arc/add-empty-info-files.patch   |   72 ++++++++++++++++++++
+ package/binutils/Config.in.host                    |    2 +
+ package/binutils/binutils.mk                       |    7 ++
+ support/gnuconfig/config.sub                       |    4 +-
+ toolchain/Config.in                                |    2 +-
+ .../gcc/4.4.7-arc/fix_branch_out_of_range.patch    |   30 ++++++++
+ toolchain/gcc/Config.in                            |   22 ++++--
+ toolchain/gcc/gcc-uclibc-4.x.mk                    |    5 ++
+ toolchain/kernel-headers/Config.in                 |   14 +++--
+ toolchain/toolchain-buildroot/Config.in.2          |    1 +
+ toolchain/uClibc/Config.in                         |   10 ++-
+ toolchain/uClibc/uClibc-snapshot.config            |    2 +
+ toolchain/uClibc/uclibc.mk                         |   19 +++++-
+ 16 files changed, 207 insertions(+), 20 deletions(-)
+ create mode 100644 arch/Config.in.arc
+ create mode 100644 package/binutils/2.19-arc/add-empty-info-files.patch
+ create mode 100644 toolchain/gcc/4.4.7-arc/fix_branch_out_of_range.patch
