@@ -1,40 +1,30 @@
-From: Worth, Kevin <kevin.worth@hp.com>
-Date: Thu, 2 May 2013 21:14:45 +0000
-Subject: [Buildroot] [PATCH] linux: Fix User-Mode Linux build failures
-Message-ID: <B5EF724456FFB24A8C8AE88E26CE8F4B6D841F80@G9W0753.americas.hpqcorp.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 02 May 2013 23:19:48 +0200
+Subject: [Buildroot] [PATCH] directfb: fix error in *SetRegion* datatypes
+In-Reply-To: <1367524449-6403-1-git-send-email-c.schoenert@gmail.com> (Carsten
+ Schoenert's message of "Thu, 2 May 2013 21:54:08 +0200")
+References: <1367524449-6403-1-git-send-email-c.schoenert@gmail.com>
+Message-ID: <87zjwdyt8r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pass KERNEL_SUBARCH environment variable needed for User Mode Linux builds
- e.g. build with 'make KERNEL_ARCH=um KERNEL_SUBARCH=i386'
-Create $(KERNEL_ARCH_PATH)/configs/ if it doesn't exist (for arches like uml)
- Otherwise build fails trying to cp to non-existent directory
+>>>>> "Carsten" == Carsten Schoenert <c.schoenert@gmail.com> writes:
 
-Signed-off-by: Kevin Worth <kevin.worth@hp.com>
----
- linux/linux.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ Carsten> From: Carsten Schoenert <c.schoenert@gmail.com>
+ Carsten> DirectFB comes with incorrect declarations for *SetRegion* datatypes,
+ Carsten> this breaks the build for some GFX Drivers. Also there are some headers
+ Carsten> missend in the archive, this breaks some other modules of directfb that
+ Carsten> not covered yet by the autobuilders.
+ Carsten> And at least the configure script doesn't use a variable for the
+ Carsten> imlib2-config script. That breaks crossbuilds of directfb in most cases.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 0352acd..db26fc6 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -44,6 +44,7 @@ LINUX_MAKE_FLAGS = \
- 	HOSTCC="$(HOSTCC)" \
- 	HOSTCFLAGS="$(HOSTCFLAGS)" \
- 	ARCH=$(KERNEL_ARCH) \
-+	SUBARCH=$(KERNEL_SUBARCH) \
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
- 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
- 	DEPMOD=$(HOST_DIR)/usr/sbin/depmod
-@@ -156,6 +157,7 @@ KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
- endif
- 
- define LINUX_CONFIGURE_CMDS
-+	mkdir -p $(KERNEL_ARCH_PATH)/configs/
- 	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
- 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ Carsten> Fixes:
+ Carsten> http://autobuild.buildroot.net/results/03465f0e14accc8d8f8fc2640b7a0dd8bec594e4
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
