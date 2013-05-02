@@ -1,84 +1,57 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Thu,  2 May 2013 15:00:50 +0200
-Subject: [Buildroot] [PATCH v3 11/11] kernel-headers: Add support for ARC
-	kernel headers
-In-Reply-To: <1367499650-29869-1-git-send-email-mjonker@synopsys.com>
-References: <1367499650-29869-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1367499650-29869-12-git-send-email-mjonker@synopsys.com>
+Date: Thu, 2 May 2013 14:03:53 +0000
+Subject: [Buildroot] [PATCH v2 00/12] RFC: ARC port
+In-Reply-To: <20130501000905.609d0ced@skate>
+References: <1366798403-6984-1-git-send-email-mjonker@synopsys.com>
+ <20130425050221.4846d873@skate>
+ <E6BF041E97966E4DB955F0DF883AD2D6339FA392@de02wembxa.internal.synopsys.com>
+ <20130429224541.6f46b3b4@skate>	<517FEC03.1010709@mind.be>
+ <20130501000905.609d0ced@skate>
+Message-ID: <E6BF041E97966E4DB955F0DF883AD2D6339FE6A5@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also make sure that older kernels are not selected for ARC.
+> >     Maybe others will have a suggestion on this point?
+> 
+>   Not entirely clean either, but what about the following:
+> 
+> [toolchain/gcc/Config.in]
+> config BR2_ARCH_HAS_ALL_GCC
+> 	bool
+> 
+> config BR2_ARCH_HAS_GCC_4_4
+> 	bool
+> 	default y if BR2_ARCH_HAS_ALL_GCC
+> 
+> [arch/Config.in]
+> config BR2_mips
+> 	select BR2_ARCH_HAS_ALL_GCC
+> ...
+> 
+> [arch/Config.in.arm]
+> config BR2_arm1176jzf_s
+> 	select BR2_ARCH_HAS_ALL_GCC
+> ...
+> config BR2_cortex_a8
+> 	select BR2_ARCH_HAS_GCC_4_4
+> ...
 
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
----
- Makefile                           |    1 +
- toolchain/kernel-headers/Config.in |   14 +++++++++-----
- 2 files changed, 10 insertions(+), 5 deletions(-)
+The problem with this is that you end up in Config.in.arm with a lot of "select BR2_ARCH_HAS_ALL_GCC" lines. It is more logical, but it adds a lot of clutter IMHO. 
 
-diff --git a/Makefile b/Makefile
-index 97804ff..ce7530f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -238,6 +238,7 @@ ARCH:=$(call qstrip,$(BR2_ARCH))
- 
- KERNEL_ARCH:=$(shell echo "$(ARCH)" | sed -e "s/-.*//" \
- 	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
-+	-e s/arc.*/arc/ \
- 	-e s/arm.*/arm/ -e s/sa110/arm/ \
- 	-e s/aarch64/arm64/ \
- 	-e s/bfin/blackfin/ \
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 12c53d8..aff69d9 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -17,35 +17,39 @@ choice
- 
- 	config BR2_KERNEL_HEADERS_3_0
- 		bool "Linux 3.0.x kernel headers"
-+		depends on !BR2_arc
- 
- 	config BR2_KERNEL_HEADERS_3_1
- 		bool "Linux 3.1.x kernel headers"
--		depends on BR2_DEPRECATED
-+		depends on BR2_DEPRECATED && !BR2_arc
- 
- 	config BR2_KERNEL_HEADERS_3_2
- 		bool "Linux 3.2.x kernel headers"
-+		depends on !BR2_arc
- 
- 	config BR2_KERNEL_HEADERS_3_3
- 		bool "Linux 3.3.x kernel headers"
--		depends on BR2_DEPRECATED
-+		depends on BR2_DEPRECATED && !BR2_arc
- 
- 	config BR2_KERNEL_HEADERS_3_4
- 		bool "Linux 3.4.x kernel headers"
-+		depends on !BR2_arc
- 
- 	config BR2_KERNEL_HEADERS_3_5
- 		bool "Linux 3.5.x kernel headers"
--		depends on BR2_DEPRECATED
-+		depends on BR2_DEPRECATED && !BR2_arc
- 
- 	config BR2_KERNEL_HEADERS_3_6
- 		bool "Linux 3.6.x kernel headers"
--		depends on BR2_DEPRECATED
-+		depends on BR2_DEPRECATED && !BR2_arc
- 
- 	config BR2_KERNEL_HEADERS_3_7
- 		bool "Linux 3.7.x kernel headers"
--		depends on BR2_DEPRECATED
-+		depends on BR2_DEPRECATED && !BR2_arc
- 
- 	config BR2_KERNEL_HEADERS_3_8
- 		bool "Linux 3.8.x kernel headers"
-+		depends on !BR2_arc
- 
- 	config BR2_KERNEL_HEADERS_3_9
- 		bool "Linux 3.9.x kernel headers"
--- 
-1.7.0.4
+Unfortunately, we cannot make "BR2_ARCH_HAS_ALL_GCC" default y, because we don't have the 'deselect' keyword, so we need to add it everywhere. For ARM and x86, the architectures that aren't supported by all GCC versions are the exception, so instead of adding additional lines for just the exceptions, we end up with extra code everywhere.
+
+I also tried to let default values depend on earlier versions:
+config BR2_ARCH_HAS_GCC_4_5
+	bool
+	default y if BR2_ARCH_HAS_GCC_4_4
+
+But this doesn't work for several architectures, such as BR2_sparc_sparcsfleon, that do have GCC 4.4, but no 4.5 for instance.
+
+The reverse logic helps in the sense that the BR2_HAS_NO_GCC_x_y lines will go away over time when old GCC versions get deprecated.
+
+I will send both variants later today.
+
+Mischa
