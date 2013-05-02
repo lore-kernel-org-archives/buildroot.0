@@ -1,94 +1,52 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 2 May 2013 00:14:49 +0200
-Subject: [Buildroot] [PATCH v2 2/3] configs: add defconfig for Telit
-	EVK-PRO3
-In-Reply-To: <20130501231316.35d6652f@skate>
-References: <1366184503-16875-1-git-send-email-fabio.porcedda@gmail.com>
- <1366184503-16875-3-git-send-email-fabio.porcedda@gmail.com>
- <20130501231316.35d6652f@skate>
-Message-ID: <CAHkwnC8SPRb-3DTAx=V5a1WJN+XXr4prJsYQRebFRh3tmmObbw@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed,  1 May 2013 23:15:26 -0400
+Subject: [Buildroot] [PATCH] Makefile: make skeleton rsync options consistent
+Message-ID: <1367464526-3028-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 1, 2013 at 11:13 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
+Initially, a "cp" was used for the one-time target skeleton
+installation, and an "rsync" was used for the every-time overlay
+skeleton installations.  Then, the target skeleton install was
+changed to also use rsync (1cd3f992fb3659aacbb0cdd3ed64347a37569891).
+Now there are two rsyncs, but with different filter specs, which
+seems odd.
 
-Hi Thomas,
-thanks for reviewing.
+This patch adds --excludes to both invocations of rsync to make them
+consistent, and removes the -u option from the initial target skeleton
+installation.
 
-> On Wed, 17 Apr 2013 09:41:42 +0200, Fabio Porcedda wrote:
->> For more info, please find board/telit/evk-pro3/readme.txt
->>
->> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->> ---
->>  ...04.0-0001-watchdog-add-keep-alive-support.patch |  88 ++++++++
->>  ...02-watchdog-add-at91sam9-watchdog-support.patch | 228 +++++++++++++++++++++
->>  ...0003-at91sam9260-9g20-add-wathdog-support.patch |  40 ++++
->>  ...0004-at91sam9260-9g20-fix-wathdog-support.patch |  26 +++
->>  ...13.04.0-0005-watchdog-enable-for-evk-pro3.patch |  26 +++
->>  ...t91-at91_dt_defconfig-update-for-evk-pro3.patch |  44 ++++
->
-> That's quite a number of patches. I suppose they are all already
-> upstream, correct? If so, then maybe using a Git version would allow to
-> get rid of those patches in Buildroot, and then you could later on
-> submit a patch to update Barebox to the next stable version that
-> contains those patches? Maybe even Barebox 2013.05 will be released
-> soon with those patches?
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ Makefile |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Unfortunately they are not upstream, the original author is still working on it.
-If possible I will try to help the original author, but i don't know
-when those patches will be
-included upstream.
-Anyway If using a git version is the preferred solution,
-I will create and use a git repostiory on github.com.
-
->> diff --git a/configs/telit_evk_pro3_defconfig b/configs/telit_evk_pro3_defconfig
->> new file mode 100644
->> index 0000000..f7df1e4
->> --- /dev/null
->> +++ b/configs/telit_evk_pro3_defconfig
->> @@ -0,0 +1,16 @@
->> +BR2_arm=y
->> +BR2_PREFER_STATIC_LIB=y
->
-> This choice shouldn't be part of the defconfig.
-
-Ok.
-
->> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
->
-> This one generally isn't either, but I think we can be flexible on this
-> one.
->
->> +BR2_PACKAGE_BUSYBOX_WATCHDOG=y
->> +BR2_TARGET_ROOTFS_UBIFS=y
->> +BR2_TARGET_ROOTFS_UBI=y
->> +BR2_TARGET_BAREBOX=y
->> +BR2_TARGET_BAREBOX_CUSTOM_VERSION=y
->> +BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE="2013.04.0"
->> +BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR="board/telit/evk-pro3"
->> +BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="telit_evk_pro3"
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_PATCH="board/telit/evk-pro3"
->> +BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
->> +BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y
->> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="evk-pro3"
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-
-
-Best regards
---
-Fabio Porcedda
+diff --git a/Makefile b/Makefile
+index 97804ff..5b690f0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -429,7 +429,9 @@ endif
+ 
+ $(BUILD_DIR)/.root:
+ 	mkdir -p $(TARGET_DIR)
+-	rsync -au --exclude=.empty --exclude=CVS --exclude=.svn --exclude='*~' \
++	rsync -a \
++		--exclude .empty --exclude .svn --exclude .git \
++		--exclude .hg --exclude=CVS --exclude '*~' \
+ 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+ 	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+ 	touch $@
+@@ -505,7 +507,7 @@ endif
+ 		$(call MESSAGE,"Copying overlay $(d)"); \
+ 		rsync -a \
+ 			--exclude .empty --exclude .svn --exclude .git \
+-			--exclude .hg --exclude '*~' \
++			--exclude .hg --exclude=CVS --exclude '*~' \
+ 			$(d)/ $(TARGET_DIR)$(sep))
+ 
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+-- 
+1.7.9.5
