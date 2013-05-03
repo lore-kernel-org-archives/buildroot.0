@@ -1,10 +1,9 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Fri, 3 May 2013 18:39:38 +0800
-Subject: [Buildroot] [PATCH v7 5/7] package: Introduce package-specific
-	BINFMT_FLAT options.
+Date: Fri, 3 May 2013 18:39:40 +0800
+Subject: [Buildroot] [PATCH v7 7/7] package: Introduce NOMMU symbol
 In-Reply-To: <1367577580-3518-1-git-send-email-sonic.adi@gmail.com>
 References: <1367577580-3518-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1367577580-3518-5-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1367577580-3518-7-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +12,28 @@ To: buildroot@busybox.net
 
 From: Sonic Zhang <sonic.zhang@analog.com>
 
-Add new option <PKG>_FLAT_STACKSIZE. The document needs to be updated.
-
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Introduce NOMMU symbol __NOMMU__
 
 ---
+v6-changes:
+- Remove space between comma and y.
+- Restore endif after rebase.
 
-v4-change:
-- Use late binding in make to expand package specific flat stack size
-to TARGET_LDFLAGS.
-
-v2-changes:
-- Fix typo error in macro BINFMT_FLAT
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
  package/Makefile.in |    4 ++++
  1 files changed, 4 insertions(+), 0 deletions(-)
 
 diff --git a/package/Makefile.in b/package/Makefile.in
-index dd3bc7d..a449089 100644
+index a449089..55d725d 100644
 --- a/package/Makefile.in
 +++ b/package/Makefile.in
-@@ -103,6 +103,10 @@ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET
- TARGET_CXXFLAGS = $(TARGET_CFLAGS)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+@@ -107,6 +107,10 @@ ifeq ($(BR2_BINFMT_FLAT),y)
+ TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
+ endif
  
-+ifeq ($(BR2_BINFMT_FLAT),y)
-+TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
++ifneq ($(BR2_USE_MMU),y)
++TARGET_CFLAGS += -D__NOMMU__
 +endif
 +
  ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
