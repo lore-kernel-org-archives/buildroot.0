@@ -1,74 +1,90 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 3 May 2013 08:49:04 +0200
+Date: Fri, 3 May 2013 09:57:57 +0200
 Subject: [Buildroot] [PATCH v2 1/3] barebox: add custom version option
-In-Reply-To: <20130501231009.787484f5@skate>
+In-Reply-To: <CAHkwnC9xHJAHNauNewEGRof4u6YUsLyCsjm5PQgPhCKPwM53rg@mail.gmail.com>
 References: <1366184503-16875-1-git-send-email-fabio.porcedda@gmail.com>
  <1366184503-16875-2-git-send-email-fabio.porcedda@gmail.com>
  <20130501231009.787484f5@skate>
-Message-ID: <CAHkwnC9xHJAHNauNewEGRof4u6YUsLyCsjm5PQgPhCKPwM53rg@mail.gmail.com>
+ <CAHkwnC9xHJAHNauNewEGRof4u6YUsLyCsjm5PQgPhCKPwM53rg@mail.gmail.com>
+Message-ID: <CAHkwnC9hGhWdS=_q65umcXVW9oN6kUjaeE_hD4VRUFUxLd=Hfw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 1, 2013 at 11:10 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
-
-Hi Thomas,
-thanks for reviewing.
-
-> On Wed, 17 Apr 2013 09:41:41 +0200, Fabio Porcedda wrote:
+On Fri, May 3, 2013 at 8:49 AM, Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
+> On Wed, May 1, 2013 at 11:10 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Fabio Porcedda,
 >
->> -config BR2_TARGET_BAREBOX_2013_01
->> -     bool "2013.01.0"
->> -
->> -config BR2_TARGET_BAREBOX_2013_02
->> -     bool "2013.02.0"
->> -
->> -config BR2_TARGET_BAREBOX_2013_03
->> -     bool "2013.03.0"
->> -
->> -config BR2_TARGET_BAREBOX_2013_04
->> +config BR2_TARGET_BAREBOX_LATEST_VERSION
->>       bool "2013.04.0"
+> Hi Thomas,
+> thanks for reviewing.
+>
+>> On Wed, 17 Apr 2013 09:41:41 +0200, Fabio Porcedda wrote:
 >>
->> +config BR2_TARGET_BAREBOX_CUSTOM_VERSION
->> +     bool "Custom version"
->> +     help
->> +       This option allows to use a specific official versions
->> +
+>>> -config BR2_TARGET_BAREBOX_2013_01
+>>> -     bool "2013.01.0"
+>>> -
+>>> -config BR2_TARGET_BAREBOX_2013_02
+>>> -     bool "2013.02.0"
+>>> -
+>>> -config BR2_TARGET_BAREBOX_2013_03
+>>> -     bool "2013.03.0"
+>>> -
+>>> -config BR2_TARGET_BAREBOX_2013_04
+>>> +config BR2_TARGET_BAREBOX_LATEST_VERSION
+>>>       bool "2013.04.0"
+>>>
+>>> +config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+>>> +     bool "Custom version"
+>>> +     help
+>>> +       This option allows to use a specific official versions
+>>> +
+>>
+>> We need to have something that is consistent between U-Boot, Barebox
+>> and the kernel. Currently U-Boot has a version selection, the Linux
+>> kernel allows to chose the latest version (but with an option named
+>> after the version itself, so the name of the option changes when the
+>> version changes) or a custom version, and now for Barebox you're
+>> proposing yet another solution: select the latest version (with an
+>> option name that never changes) or a custom version.
 >
-> We need to have something that is consistent between U-Boot, Barebox
-> and the kernel. Currently U-Boot has a version selection, the Linux
-> kernel allows to chose the latest version (but with an option named
-> after the version itself, so the name of the option changes when the
-> version changes) or a custom version, and now for Barebox you're
-> proposing yet another solution: select the latest version (with an
-> option name that never changes) or a custom version.
+> I think it's easier to have a option name that doesn't change.
+> If there isn't a specific reason to have a option name that changes then
+> I will send a patch to change the linux kernel option name.
+>
+> BR2_LINUX_KERNEL_3_9 -> BR2_LINUX_KERNEL_LATEST_VERSION
 
-I think it's easier to have a option name that doesn't change.
-If there isn't a specific reason to have a option name that changes then
-I will send a patch to change the linux kernel option name.
+In the toolchain/kernel-headers/Config.in
+there are many BR2_KERNEL_HEADERS_3_X options,
+for headers is impossible to change the option names and use only one.
 
-BR2_LINUX_KERNEL_3_9 -> BR2_LINUX_KERNEL_LATEST_VERSION
+So I must use BR2_TARGET_BAREBOX_2013_04 for barebox?
 
 Best regards
 Fabio Porcedda
 
+> Best regards
+> Fabio Porcedda
 >
-> So, I'm fine doing changes on this, but they should be consistent
-> across packages.
+>>
+>> So, I'm fine doing changes on this, but they should be consistent
+>> across packages.
+>>
+>> Best regards,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, Free Electrons
+>> Kernel, drivers, real-time and embedded Linux
+>> development, consulting, training and support.
+>> http://free-electrons.com
 >
-> Best regards,
 >
-> Thomas
+>
 > --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+> Fabio Porcedda
 
 
 
