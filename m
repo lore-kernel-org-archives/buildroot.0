@@ -1,54 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 3 May 2013 12:47:54 +0200
-Subject: [Buildroot] [git commit] gstreamer: needs threads support in
-	toolchain
-Message-ID: <20130503104822.3400499A4D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 03 May 2013 12:50:57 +0200
+Subject: [Buildroot] [PATCH v2 1/3] barebox: add custom version option
+In-Reply-To: <CAHkwnC9xHJAHNauNewEGRof4u6YUsLyCsjm5PQgPhCKPwM53rg@mail.gmail.com>
+ (Fabio Porcedda's message of "Fri, 3 May 2013 08:49:04 +0200")
+References: <1366184503-16875-1-git-send-email-fabio.porcedda@gmail.com>
+ <1366184503-16875-2-git-send-email-fabio.porcedda@gmail.com>
+ <20130501231009.787484f5@skate>
+ <CAHkwnC9xHJAHNauNewEGRof4u6YUsLyCsjm5PQgPhCKPwM53rg@mail.gmail.com>
+Message-ID: <87vc70xrou.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97387cda09e234c6584f7edfd9ae4c504a0304b5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-Indirectly fixes http://autobuild.buildroot.net/results/453ac64daf384702512ac68f1779f375e337332d/build-end.log
+Hi,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/gstreamer/Config.in |    5 +++--
- package/opencv/Config.in               |    1 +
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ Fabio> I think it's easier to have a option name that doesn't change.
+ Fabio> If there isn't a specific reason to have a option name that
+ Fabio> changes then I will send a patch to change the linux kernel
+ Fabio> option name.
 
-diff --git a/package/multimedia/gstreamer/Config.in b/package/multimedia/gstreamer/Config.in
-index 9a67481..4b4d80f 100644
---- a/package/multimedia/gstreamer/Config.in
-+++ b/package/multimedia/gstreamer/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_GSTREAMER
- 	bool "gstreamer"
- 	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
- 	  GStreamer is an open source multimedia framework.
-@@ -24,5 +25,5 @@ config BR2_PACKAGE_GSTREAMER_PLUGIN_REGISTRY
- 	  Enable support for the GStreamer plugin registry. This may increase
- 	  the launch-time for a GStreamer application.
- 
--comment "gstreamer requires a toolchain with WCHAR support"
--	depends on !BR2_USE_WCHAR
-+comment "gstreamer requires a toolchain with WCHAR and threads support"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 3e9ead6..55b86a0 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -140,6 +140,7 @@ comment "ffmpeg support requires a toolchain with LARGEFILE and IPV6 support"
- config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
- 	bool "gstreamer support"
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
- 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
+ Fabio> BR2_LINUX_KERNEL_3_9 -> BR2_LINUX_KERNEL_LATEST_VERSION
+
+Agreed. With the _3_9 option people often don't realize that it will
+only exist for a few months, and that they should use the CUSTOM_VERSION
+stuff to really fix the version.
+
+-- 
+Bye, Peter Korsgaard
