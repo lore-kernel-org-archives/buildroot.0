@@ -1,92 +1,42 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Fri, 3 May 2013 15:34:37 +0100
-Subject: [Buildroot] [PATCH] jquery-keyboard: new package
-In-Reply-To: <1367582973-20541-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1367582973-20541-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <CAHt8ZCPphnQSCLHitdwGd=pSnN2eL6qgnGHYpst-wuzohXKw1A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 May 2013 19:29:09 +0200
+Subject: [Buildroot] [PATCH 1/2] Refactoring Freescale's iMX software
+ revision levels
+In-Reply-To: <42565.217.149.209.147.1367582464.squirrel@webmail.internl.net>
+References: <1367569664-3307-1-git-send-email-h.fijnvandraat@inter.nl.net>
+ <42565.217.149.209.147.1367582464.squirrel@webmail.internl.net>
+Message-ID: <20130503192909.716e75a3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 3 May 2013 13:09, Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
-> Add the jquery-keyboard package based on Simon Dawson's patch with a
-> newer version and improvements (license, select jquery, install
-> layouts).
->
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/Config.in                          |  1 +
->  package/jquery-keyboard/Config.in          |  7 +++++++
->  package/jquery-keyboard/jquery-keyboard.mk | 26 ++++++++++++++++++++++++++
->  3 files changed, 34 insertions(+)
->  create mode 100644 package/jquery-keyboard/Config.in
->  create mode 100644 package/jquery-keyboard/jquery-keyboard.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index cb1e8e1..14630a7 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -485,6 +485,7 @@ menu "Javascript"
->  source "package/explorercanvas/Config.in"
->  source "package/flot/Config.in"
->  source "package/jquery/Config.in"
-> +source "package/jquery-keyboard/Config.in"
->  source "package/jquery-sparkline/Config.in"
->  source "package/jquery-validation/Config.in"
->  source "package/jsmin/Config.in"
-> diff --git a/package/jquery-keyboard/Config.in b/package/jquery-keyboard/Config.in
-> new file mode 100644
-> index 0000000..ee97662
-> --- /dev/null
-> +++ b/package/jquery-keyboard/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_JQUERY_KEYBOARD
-> +       bool "jQuery keyboard"
-> +       select BR2_PACKAGE_JQUERY
-> +       help
-> +         Virtual Keyboard using jQuery UI
-> +
-> +         https://github.com/Mottie/Keyboard
-> diff --git a/package/jquery-keyboard/jquery-keyboard.mk b/package/jquery-keyboard/jquery-keyboard.mk
-> new file mode 100644
-> index 0000000..81764ee
-> --- /dev/null
-> +++ b/package/jquery-keyboard/jquery-keyboard.mk
-> @@ -0,0 +1,26 @@
-> +#############################################################
-> +#
-> +# jquery-keyboard
-> +#
-> +#############################################################
-> +
-> +JQUERY_KEYBOARD_VERSION = 1.17.4
-> +JQUERY_KEYBOARD_SITE = \
-> +       http://github.com/Mottie/Keyboard/tarball/v$(JQUERY_KEYBOARD_VERSION)
-> +JQUERY_KEYBOARD_LICENSE = MIT WTFPL
-> +JQUERY_KEYBOARD_LICENSE_FILES = README.markdown
-> +
-> +define JQUERY_KEYBOARD_INSTALL_TARGET_CMDS
-> +       $(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/css
-> +       $(INSTALL) -m 0644 -D $(@D)/css/keyboard.css \
-> +               $(TARGET_DIR)/var/www/css/keyboard.css
-> +       $(INSTALL) -m 0644 -D $(@D)/js/jquery.keyboard*.js \
-> +               $(TARGET_DIR)/var/www
-> +       $(INSTALL) -m 0644 -D $(@D)/js/jquery.mousewheel.js \
-> +               $(TARGET_DIR)/var/www/jquery.mousewheel.js
-> +       $(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/layouts
-> +       $(INSTALL) -m 0644 -D $(@D)/layouts/*.js \
-> +               $(TARGET_DIR)/var/www/layouts
-> +endef
-> +
-> +$(eval $(call generic-package))
-> --
-> 1.8.1.5
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Dear H.Fijnvandraat at inter.nl.net,
 
-Acked-by: Simon Dawson <spdawson@gmail.com>
+On Fri, 3 May 2013 14:01:04 +0200 (CEST), H.Fijnvandraat at inter.nl.net
+wrote:
+
+> But I have to withdraw these patches.
+> 
+> Due to the sequence in which the .mk files are included
+> IMX_VERSION_LEVEL is defined when imx-lib.mk is processed, while it
+> is already needed for firmware-imx (and  gpu-viv-bin-mx6q if it would
+> be introduced)
+> 
+> Placing it in firmware-imx would do for now, but then no dependencies
+> can be placed alphabetically before it later.
+> 
+> It appears we need some other mechanism to rule them all.
+
+This shouldn't matter because we're using '=' everywhere, so they are
+recursively expanded, which means that the values are expanded only
+when the value is actually needed. So the inclusion order shouldn't
+matter.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
