@@ -1,75 +1,51 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 4 May 2013 12:34:29 +0200
-Subject: [Buildroot] [git commit] manual: cleanup appendix.txt
-Message-ID: <20130504112538.70B6799AA8@busybox.osuosl.org>
+Date: Fri, 3 May 2013 14:38:55 +0200
+Subject: [Buildroot] [git commit] diffutils: only needs gettext if locale is
+	selected
+Message-ID: <20130504112537.9FAC499AA9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=88f2b4360ab4f98d16252f511eb305ca26c75189
+commit: http://git.buildroot.net/buildroot/commit/?id=92358271b9eede8cb284fb42ea24cff48ec9c322
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[yann.morin.1998 at free.fr: one more stuff->feature fixup]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Also add missing select in Config.in.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/appendix.txt        |   29 ++++++++++++++++++++---------
- docs/manual/deprecated-list.txt |    2 +-
- 2 files changed, 21 insertions(+), 10 deletions(-)
+ package/diffutils/Config.in    |    1 +
+ package/diffutils/diffutils.mk |    3 +--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
-index c48c3b1..486d82f 100644
---- a/docs/manual/appendix.txt
-+++ b/docs/manual/appendix.txt
-@@ -7,15 +7,26 @@ Appendix
- include::makedev-syntax.txt[]
- include::makeusers-syntax.txt[]
+diff --git a/package/diffutils/Config.in b/package/diffutils/Config.in
+index 86da5d3..4cc16e2 100644
+--- a/package/diffutils/Config.in
++++ b/package/diffutils/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_DIFFUTILS
+ 	bool"diffutils"
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  GNU diff. Compare files per line.
  
-+
-+// Automatically generated lists:
-+
- [[package-list]]
--Available packages
--------------------
--// docs/manaual/pkg-list.txt is generated using the following command:
--// $ git grep -E '\((autotools|cmake|generic)-package\)' package/ |  \
--//     cut -d':' -f1 | grep '\.mk$' | \
--//     sed -e 's;.*\?/\(.*\?\).mk;* \1;' | \
--//     sort > docs/manual/pkg-list.txt
--
--include::pkg-list.txt[]
-+Package Selection for the target
-+--------------------------------
-+
-+include::package-list.txt[]
-+
-+[[host-package-list]]
-+Host utilities
-+--------------
-+
-+include::host-package-list.txt[]
-+
-+[[deprecated-list]]
-+Deprecated features
-+-------------------
-+
-+The following features are marked as _deprecated_ in Buildroot due to
-+their status either too old or unmaintained.
+diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+index 168d040..2530763 100644
+--- a/package/diffutils/diffutils.mk
++++ b/package/diffutils/diffutils.mk
+@@ -6,8 +6,7 @@
  
- include::deprecated-list.txt[]
-diff --git a/docs/manual/deprecated-list.txt b/docs/manual/deprecated-list.txt
-index 6dc87a4..9c8f105 100644
---- a/docs/manual/deprecated-list.txt
-+++ b/docs/manual/deprecated-list.txt
-@@ -4,7 +4,7 @@
- Deprecated list
- ---------------
+ DIFFUTILS_VERSION = 3.2
+ DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
+-DIFFUTILS_DEPENDENCIES = \
+-	$(if $(BR2_PACKAGE_GETTEXT),gettext)
++DIFFUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
  
--The following stuff are marked as _deprecated_ in Buildroot due to
-+The following features are marked as _deprecated_ in Buildroot due to
- their status either too old or unmaintained.
- 
- // list generated using the followings command:
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ DIFFUTILS_DEPENDENCIES += busybox
