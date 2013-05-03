@@ -1,38 +1,36 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri,  3 May 2013 18:49:02 +0100
-Subject: [Buildroot] [PATCH] inotify-tools: install to staging
-Message-ID: <1367603342-19774-1-git-send-email-spdawson@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 May 2013 20:41:01 +0200
+Subject: [Buildroot] [PATCH v4 00/12] ARC port
+In-Reply-To: <1367524293-32081-1-git-send-email-mjonker@synopsys.com>
+References: <1367524293-32081-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <20130503204101.45bbc604@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Dear Mischa Jonker,
 
-inotify-tools includes a shared library, which should be installed in the
-staging directory
+On Thu,  2 May 2013 21:51:21 +0200, Mischa Jonker wrote:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/inotify-tools/inotify-tools.mk | 2 ++
- 1 file changed, 2 insertions(+)
+> Accidentally the first patch of the series was missing in v3 (wrong usage
+> of git format-patch command on my side...). So this is a resend of v3, but
+> now with an extra patch!
+> 
+> The patch set is also published on our github site: 
+> https://github.com/foss-for-synopsys-dwc-arc-processors/buildroot
+> 
+> Thanks, Mischa
 
-diff --git a/package/inotify-tools/inotify-tools.mk b/package/inotify-tools/inotify-tools.mk
-index deb8a8c..a5668a3 100644
---- a/package/inotify-tools/inotify-tools.mk
-+++ b/package/inotify-tools/inotify-tools.mk
-@@ -3,9 +3,11 @@
- # inotify-utils
- #
- #############################################################
-+
- INOTIFY_TOOLS_VERSION = 3.14
- INOTIFY_TOOLS_SITE = http://github.com/downloads/rvoicilas/inotify-tools/
- INOTIFY_TOOLS_LICENSE = GPL
- INOTIFY_TOOLS_LICENSE_FILES = COPYING
-+INOTIFY_TOOLS_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+This all looks good to me. Peter, can you pull/apply the 12 patches from
+Mischa so that we get this in -rc1 ?
+
+Thanks,
+
+Thomas
 -- 
-1.8.1.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
