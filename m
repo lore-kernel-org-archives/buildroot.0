@@ -1,38 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 May 2013 20:59:38 +0200
-Subject: [Buildroot] [PATCH 1/3] sunxi-tools: new host/taget package
-In-Reply-To: <1363289498-20993-1-git-send-email-carlo.caione@gmail.com>
-References: <1363289498-20993-1-git-send-email-carlo.caione@gmail.com>
-Message-ID: <20130503205938.42d61eb7@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 03 May 2013 18:31:56 +0200
+Subject: [Buildroot] [PATCH] toolchain/gcc: Introduce
+	BR2_ARCH_HAS_GCC_x_y_PLUS
+In-Reply-To: <1367570270-2242-1-git-send-email-mjonker@synopsys.com>
+References: <1367570270-2242-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <5183E67C.9040202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Carlo Caione,
-
-On Thu, 14 Mar 2013 20:31:36 +0100, Carlo Caione wrote:
-> Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
+On 03/05/13 10:37, Mischa Jonker wrote:
+> This patch eliminates the long "depends on" lines in
+> toolchain/gcc/Config.in by letting architectures specify
+> from which GCC version the architecture is supported.
+>
+> Architectures that support only one specific version of GCC
+> should bypass the GCC version selection mechanism.
+>
+> Signed-off-by: Mischa Jonker<mjonker@synopsys.com>
 > ---
->  package/Config.in                  |  1 +
->  package/Config.in.host             |  1 +
->  package/sunxi-tools/Config.in      |  8 ++++++++
->  package/sunxi-tools/Config.in.host |  9 ++++++++
->  package/sunxi-tools/sunxi-tools.mk | 42 ++++++++++++++++++++++++++++++++++++++
->  5 files changed, 61 insertions(+)
->  create mode 100644 package/sunxi-tools/Config.in
->  create mode 100644 package/sunxi-tools/Config.in.host
->  create mode 100644 package/sunxi-tools/sunxi-tools.mk
+>   arch/Config.in.arm      |    6 ++++
+>   arch/Config.in.powerpc  |    7 ++++
+>   arch/Config.in.x86      |    1 +
+>   toolchain/gcc/Config.in |   73 +++++++++++++++++++++++++++++++++-------------
+>   4 files changed, 66 insertions(+), 21 deletions(-)
 
-Do you think you'll have the time to rework your patch series about
-Sunxi platform support? It would be great to have this in BR.
+  Now this looks good! If the 'depends on' statements had been split up 
+into one line per architecture, the - would have been bigger than the +! 
+So this gets my
 
-Thanks!
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Thomas
+
+  I'm not very excited about the sparcleon situation. But perhaps that 
+architecture can be deprecated? It's not even in our autobuilders AFAIK.
+
+  Regards,
+  Arnout
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
