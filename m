@@ -1,81 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  3 May 2013 17:11:05 -0300
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 03 May 2013 22:47:13 +0200
 Subject: [Buildroot] [PATCHv2] jquery-keyboard: new package
-Message-ID: <1367611865-29442-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <1367611865-29442-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1367611865-29442-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <51842251.30108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the jquery-keyboard package based on Simon Dawson's patch with a
-newer version and improvements (license, select jquery, install
-layouts).
+On 03/05/13 22:11, Gustavo Zacarias wrote:
+> Add the jquery-keyboard package based on Simon Dawson's patch with a
+> newer version and improvements (license, select jquery, install
+> layouts).
+>
+> Signed-off-by: Gustavo Zacarias<gustavo@zacarias.com.ar>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in                          |  1 +
- package/jquery-keyboard/Config.in          |  7 +++++++
- package/jquery-keyboard/jquery-keyboard.mk | 25 +++++++++++++++++++++++++
- 3 files changed, 33 insertions(+)
- create mode 100644 package/jquery-keyboard/Config.in
- create mode 100644 package/jquery-keyboard/jquery-keyboard.mk
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/Config.in b/package/Config.in
-index cb1e8e1..14630a7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -485,6 +485,7 @@ menu "Javascript"
- source "package/explorercanvas/Config.in"
- source "package/flot/Config.in"
- source "package/jquery/Config.in"
-+source "package/jquery-keyboard/Config.in"
- source "package/jquery-sparkline/Config.in"
- source "package/jquery-validation/Config.in"
- source "package/jsmin/Config.in"
-diff --git a/package/jquery-keyboard/Config.in b/package/jquery-keyboard/Config.in
-new file mode 100644
-index 0000000..ee97662
---- /dev/null
-+++ b/package/jquery-keyboard/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_JQUERY_KEYBOARD
-+	bool "jQuery keyboard"
-+	select BR2_PACKAGE_JQUERY
-+	help
-+	  Virtual Keyboard using jQuery UI
-+
-+	  https://github.com/Mottie/Keyboard
-diff --git a/package/jquery-keyboard/jquery-keyboard.mk b/package/jquery-keyboard/jquery-keyboard.mk
-new file mode 100644
-index 0000000..8432a48
---- /dev/null
-+++ b/package/jquery-keyboard/jquery-keyboard.mk
-@@ -0,0 +1,25 @@
-+#############################################################
-+#
-+# jquery-keyboard
-+#
-+#############################################################
-+
-+JQUERY_KEYBOARD_VERSION = 1.17.4
-+JQUERY_KEYBOARD_SITE = \
-+	http://github.com/Mottie/Keyboard/tarball/v$(JQUERY_KEYBOARD_VERSION)
-+JQUERY_KEYBOARD_LICENSE = MIT WTFPL
-+JQUERY_KEYBOARD_LICENSE_FILES = README.markdown
-+
-+define JQUERY_KEYBOARD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0644 -D $(@D)/css/keyboard.css \
-+		$(TARGET_DIR)/var/www/css/keyboard.css
-+	$(INSTALL) -m 0644 -D $(@D)/js/jquery.keyboard*.js \
-+		$(TARGET_DIR)/var/www
-+	$(INSTALL) -m 0644 -D $(@D)/js/jquery.mousewheel.js \
-+		$(TARGET_DIR)/var/www/jquery.mousewheel.js
-+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/layouts
-+	$(INSTALL) -m 0644 -D $(@D)/layouts/*.js \
-+		$(TARGET_DIR)/var/www/layouts
-+endef
-+
-+$(eval $(call generic-package))
 -- 
-1.8.1.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
