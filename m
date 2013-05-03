@@ -1,86 +1,75 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 03 May 2013 18:46:37 +0200
-Subject: [Buildroot] [PATCH v2 1/3] barebox: add custom version option
-In-Reply-To: <CAHkwnC-ZiO0Fyd2=QaE8RPuWFfzsf4o_6VUpzVo5tOFLPxMLkA@mail.gmail.com>
-References: <1366184503-16875-1-git-send-email-fabio.porcedda@gmail.com>
- <1366184503-16875-2-git-send-email-fabio.porcedda@gmail.com>
- <20130501231009.787484f5@skate>
- <CAHkwnC9xHJAHNauNewEGRof4u6YUsLyCsjm5PQgPhCKPwM53rg@mail.gmail.com>
- <20130503105531.1b38a88e@skate>
- <CAHkwnC-ZiO0Fyd2=QaE8RPuWFfzsf4o_6VUpzVo5tOFLPxMLkA@mail.gmail.com>
-Message-ID: <5183E9ED.4080604@mind.be>
+Date: Fri, 03 May 2013 21:50:17 +0200
+Subject: [Buildroot] [PATCH] jquery-keyboard: new package
+In-Reply-To: <1367582973-20541-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1367582973-20541-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <518414F9.4030506@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/05/13 11:17, Fabio Porcedda wrote:
-> On Fri, May 3, 2013 at 10:55 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
+On 03/05/13 14:09, Gustavo Zacarias wrote:
+> Add the jquery-keyboard package based on Simon Dawson's patch with a
+> newer version and improvements (license, select jquery, install
+> layouts).
+>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 [snip]
->> I don't really have a strong opinion about this thing, probably Peter
->> and Arnout have more ideas than I do on this.
+> diff --git a/package/jquery-keyboard/jquery-keyboard.mk b/package/jquery-keyboard/jquery-keyboard.mk
+> new file mode 100644
+> index 0000000..81764ee
+> --- /dev/null
+> +++ b/package/jquery-keyboard/jquery-keyboard.mk
+> @@ -0,0 +1,26 @@
+> +#############################################################
+> +#
+> +# jquery-keyboard
+> +#
+> +#############################################################
+> +
+> +JQUERY_KEYBOARD_VERSION = 1.17.4
+> +JQUERY_KEYBOARD_SITE = \
+> +	http://github.com/Mottie/Keyboard/tarball/v$(JQUERY_KEYBOARD_VERSION)
+> +JQUERY_KEYBOARD_LICENSE = MIT WTFPL
 
-  I don't. I started to reply this morning, then realized that I couldn't 
-formulate it consistently, so I gave up.
+  I prefer
 
-  The _LATEST symbol name has the disadvantage that your build is not 
-reproducible when you update buildroot, because the meaning of "latest" 
-will have changed. However, this is already the case for all other 
-packages (which don't allow choosing the version).
+JQUERY_KEYBOARD_LICENSE = MIT (code), WTFPL (layouts)
 
-  With the version number in the symbol name, at least you are warned by 
-make oldconfig when the version has changed, because it will offer the 
-choice again.
+> +JQUERY_KEYBOARD_LICENSE_FILES = README.markdown
 
-  That said, I find this disadvantage so minor that it is not worth the 
-effort of changing the symbol name all the time. So either option is fine 
-for me.
+  That file does nothing more than refer to the websites with the license 
+text... Not sure how to deal with that.
 
+> +
+> +define JQUERY_KEYBOARD_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/css
 
->> The only thing I care about is to not make modifications specifically
->> on Barebox that are inconsistent with what is done on U-Boot, the
->> kernel, or other version-selectable components. For example, U-Boot
->> still allows to chose between several recent versions, which would make
->> it inconsistent with the patches you're proposing, and that's the thing
->> I don't like.
->
-> In the patch set v3 barebox is consistent with the kernel.
->
-> If you are speaking just about consistency, I can send a patch for U-Boot too.
-> IMHO the kernel way is more flexible, so if we must choose only one method,
-> the kernel way is better.
->
-> A problem with having only the latest three version available
-> is that barebox and u-boot release frequency are very different.
-> Barebox have 12 release per year, U-Boot only 4.
-> The latest three release of U-Boot cover nine months but the latest
-> three release of barebox cover only three months.
-> So if a defconfig use a specific barebox version, that defconfig can
-> be used only for three months.
-> I think that three months is not enough.
+  With the -D arguments below, the line above is redundant.
 
-  I agree with that one.  In fact, I don't think it makes much sense to 
-have the option to go for an earlier version, also for U-Boot. If you 
-need an earlier version (e.g. because you have patches that won't apply 
-to the current version), chances are that it is not one of the few that 
-are offered by buildroot. BTW, a nice addition would be to require 
-_CUSTOM_VERSION before you can specify a patch directory, so that this 
-consistency is guaranteed to some extent.
+> +	$(INSTALL) -m 0644 -D $(@D)/css/keyboard.css \
+> +		$(TARGET_DIR)/var/www/css/keyboard.css
+> +	$(INSTALL) -m 0644 -D $(@D)/js/jquery.keyboard*.js \
+> +		$(TARGET_DIR)/var/www
+> +	$(INSTALL) -m 0644 -D $(@D)/js/jquery.mousewheel.js \
+> +		$(TARGET_DIR)/var/www/jquery.mousewheel.js
+> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/layouts
+> +	$(INSTALL) -m 0644 -D $(@D)/layouts/*.js \
+> +		$(TARGET_DIR)/var/www/layouts
 
-  So I think that Fabio's basic approach (offer only the latest version, 
-but also have the option to specify the version) is the best one.
+  But why not just cp -r $(@D)/{css,js,layouts} $(TARGET_DIR)/var/www ?
 
-> It's better if i send patch for U-Boot too?
-
-  I would say yes, that would be nice.
-
-
-  But let's hear what Peter has to say as well.
 
   Regards,
   Arnout
+
+> +endef
+> +
+> +$(eval $(call generic-package))
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
