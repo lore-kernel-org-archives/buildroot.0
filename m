@@ -1,75 +1,82 @@
-From: H.Fijnvandraat at inter.nl.net <H.Fijnvandraat@inter.nl.net>
-Date: Fri, 3 May 2013 14:01:04 +0200 (CEST)
-Subject: [Buildroot] [PATCH 1/2] Refactoring Freescale's iMX software
- revision levels
-In-Reply-To: <1367569664-3307-1-git-send-email-h.fijnvandraat@inter.nl.net>
-References: <1367569664-3307-1-git-send-email-h.fijnvandraat@inter.nl.net>
-Message-ID: <42565.217.149.209.147.1367582464.squirrel@webmail.internl.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  3 May 2013 09:09:33 -0300
+Subject: [Buildroot] [PATCH] jquery-keyboard: new package
+Message-ID: <1367582973-20541-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry,
+Add the jquery-keyboard package based on Simon Dawson's patch with a
+newer version and improvements (license, select jquery, install
+layouts).
 
-But I have to withdraw these patches.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/Config.in                          |  1 +
+ package/jquery-keyboard/Config.in          |  7 +++++++
+ package/jquery-keyboard/jquery-keyboard.mk | 26 ++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 package/jquery-keyboard/Config.in
+ create mode 100644 package/jquery-keyboard/jquery-keyboard.mk
 
-Due to the sequence in which the .mk files are included IMX_VERSION_LEVEL
-is defined when imx-lib.mk is processed, while it is already needed for
-firmware-imx (and  gpu-viv-bin-mx6q if it would be introduced)
-
-Placing it in firmware-imx would do for now, but then no dependencies can
-be placed alphabetically before it later.
-
-It appears we need some other mechanism to rule them all.
-
-Henk
-
-
-Op Vr, 3 mei, 2013 10:27 am schreef Henk Fijnvandraat:
-> imx-lib: bump to version 1.1.0
->
->
-> Signed-off-by: Henk Fijnvandraat <h.fijnvandraat@inter.nl.net>
-> ---
-> package/imx-lib/imx-lib.mk |   14 +++++++++++++- 1 file changed, 13
-> insertions(+), 1 deletion(-)
->
-> diff --git a/package/imx-lib/imx-lib.mk b/package/imx-lib/imx-lib.mk index
-> c168c80..c398568 100644 --- a/package/imx-lib/imx-lib.mk
-> +++ b/package/imx-lib/imx-lib.mk
-> @@ -1,10 +1,22 @@
-> #############################################################
-> #
-> +# freescale's imx-version-level
-> +#
-> +#############################################################
-> +
-> +# Current version level for a number of freescale software packages
-> +#
-> +# firmware-imx, imx-lib and gpu-viv-bin-mx6q
-> +
-> +IMX_VERSION_LEVEL = 1.1.0
-> +
-> +#############################################################
-> +#
-> # imx-lib
-> #
-> #############################################################
->
->
-> -IMX_LIB_VERSION = 12.09.01
-> +IMX_LIB_VERSION = $(IMX_VERSION_LEVEL)
-> # No official download site from freescale, just this mirror
-> IMX_LIB_SITE    = http://download.ossystems.com.br/bsp/freescale/source
-> IMX_LIB_LICENSE = LGPLv2.1+
-> --
-> 1.7.10.4
->
->
-> _______________________________________________
-> buildroot mailing list buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
+diff --git a/package/Config.in b/package/Config.in
+index cb1e8e1..14630a7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -485,6 +485,7 @@ menu "Javascript"
+ source "package/explorercanvas/Config.in"
+ source "package/flot/Config.in"
+ source "package/jquery/Config.in"
++source "package/jquery-keyboard/Config.in"
+ source "package/jquery-sparkline/Config.in"
+ source "package/jquery-validation/Config.in"
+ source "package/jsmin/Config.in"
+diff --git a/package/jquery-keyboard/Config.in b/package/jquery-keyboard/Config.in
+new file mode 100644
+index 0000000..ee97662
+--- /dev/null
++++ b/package/jquery-keyboard/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_JQUERY_KEYBOARD
++	bool "jQuery keyboard"
++	select BR2_PACKAGE_JQUERY
++	help
++	  Virtual Keyboard using jQuery UI
++
++	  https://github.com/Mottie/Keyboard
+diff --git a/package/jquery-keyboard/jquery-keyboard.mk b/package/jquery-keyboard/jquery-keyboard.mk
+new file mode 100644
+index 0000000..81764ee
+--- /dev/null
++++ b/package/jquery-keyboard/jquery-keyboard.mk
+@@ -0,0 +1,26 @@
++#############################################################
++#
++# jquery-keyboard
++#
++#############################################################
++
++JQUERY_KEYBOARD_VERSION = 1.17.4
++JQUERY_KEYBOARD_SITE = \
++	http://github.com/Mottie/Keyboard/tarball/v$(JQUERY_KEYBOARD_VERSION)
++JQUERY_KEYBOARD_LICENSE = MIT WTFPL
++JQUERY_KEYBOARD_LICENSE_FILES = README.markdown
++
++define JQUERY_KEYBOARD_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/css
++	$(INSTALL) -m 0644 -D $(@D)/css/keyboard.css \
++		$(TARGET_DIR)/var/www/css/keyboard.css
++	$(INSTALL) -m 0644 -D $(@D)/js/jquery.keyboard*.js \
++		$(TARGET_DIR)/var/www
++	$(INSTALL) -m 0644 -D $(@D)/js/jquery.mousewheel.js \
++		$(TARGET_DIR)/var/www/jquery.mousewheel.js
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/layouts
++	$(INSTALL) -m 0644 -D $(@D)/layouts/*.js \
++		$(TARGET_DIR)/var/www/layouts
++endef
++
++$(eval $(call generic-package))
+-- 
+1.8.1.5
