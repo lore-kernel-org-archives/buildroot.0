@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 May 2013 20:48:19 +0200
-Subject: [Buildroot] [PATCH v7 6/7] arch: toolchain: Install blackfin
- FDPIC and FLAT libraries in external toolchain makefile.
-In-Reply-To: <1367577580-3518-6-git-send-email-sonic.adi@gmail.com>
-References: <1367577580-3518-1-git-send-email-sonic.adi@gmail.com>
- <1367577580-3518-6-git-send-email-sonic.adi@gmail.com>
-Message-ID: <20130503204819.40b01da9@skate>
+Date: Fri, 3 May 2013 20:59:38 +0200
+Subject: [Buildroot] [PATCH 1/3] sunxi-tools: new host/taget package
+In-Reply-To: <1363289498-20993-1-git-send-email-carlo.caione@gmail.com>
+References: <1363289498-20993-1-git-send-email-carlo.caione@gmail.com>
+Message-ID: <20130503205938.42d61eb7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sonic Zhang,
+Dear Carlo Caione,
 
-On Fri, 3 May 2013 18:39:39 +0800, Sonic Zhang wrote:
-> From: Sonic Zhang <sonic.zhang@analog.com>
-> 
-> Reserve all 3 blackfin toolchain folders under the TOOLCHAIN_EXTERNAL_DIR.
-> Set current blackfin toolchain bin folder to the toolchain prefix subfolder.
-> Install FDPIC and FLAT library in target ext-toolchain-installed.
-> 
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+On Thu, 14 Mar 2013 20:31:36 +0100, Carlo Caione wrote:
+> Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
+> ---
+>  package/Config.in                  |  1 +
+>  package/Config.in.host             |  1 +
+>  package/sunxi-tools/Config.in      |  8 ++++++++
+>  package/sunxi-tools/Config.in.host |  9 ++++++++
+>  package/sunxi-tools/sunxi-tools.mk | 42 ++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 61 insertions(+)
+>  create mode 100644 package/sunxi-tools/Config.in
+>  create mode 100644 package/sunxi-tools/Config.in.host
+>  create mode 100644 package/sunxi-tools/sunxi-tools.mk
 
-Something strange is going in this patch, I can't apply it. git
-complains that it lacks some repository informations.
+Do you think you'll have the time to rework your patch series about
+Sunxi platform support? It would be great to have this in BR.
 
-Is your branch containing those 7 patches really based on Buildroot
-master?
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
