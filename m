@@ -1,44 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 3 May 2013 13:10:23 +0200
-Subject: [Buildroot] [git commit] libjson: ensure shared lib is built with
-	-fPIC
-Message-ID: <20130503111042.6C51A99A4E@busybox.osuosl.org>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 3 May 2013 13:26:05 +0200
+Subject: [Buildroot] [PATCH v2 1/3] barebox: add custom version option
+In-Reply-To: <87vc70xrou.fsf@dell.be.48ers.dk>
+References: <1366184503-16875-1-git-send-email-fabio.porcedda@gmail.com>
+ <1366184503-16875-2-git-send-email-fabio.porcedda@gmail.com>
+ <20130501231009.787484f5@skate>
+ <CAHkwnC9xHJAHNauNewEGRof4u6YUsLyCsjm5PQgPhCKPwM53rg@mail.gmail.com>
+ <87vc70xrou.fsf@dell.be.48ers.dk>
+Message-ID: <CAHkwnC9yjz114OxeMcMLcfreF8ni79Gu+KMpCgSumWWgpfhdmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=80e7419680d5eb57da0b0b34248e49dcd81619a8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, May 3, 2013 at 12:50 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+>
+> Hi,
+>
+>  Fabio> I think it's easier to have a option name that doesn't change.
+>  Fabio> If there isn't a specific reason to have a option name that
+>  Fabio> changes then I will send a patch to change the linux kernel
+>  Fabio> option name.
+>
+>  Fabio> BR2_LINUX_KERNEL_3_9 -> BR2_LINUX_KERNEL_LATEST_VERSION
+>
+> Agreed. With the _3_9 option people often don't realize that it will
+> only exist for a few months, and that they should use the CUSTOM_VERSION
+> stuff to really fix the version.
+>
+> --
+> Bye, Peter Korsgaard
 
-Fixes http://autobuild.buildroot.net/results/72e6c260c9028dd636965b8bf76bb7ba216aa1a4/build-end.log
+Ok good, I will send a v4 adding that patch.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libjson/libjson.mk |   12 ++++++++++--
- 1 files changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/package/libjson/libjson.mk b/package/libjson/libjson.mk
-index deca0f8..9b1aca3 100644
---- a/package/libjson/libjson.mk
-+++ b/package/libjson/libjson.mk
-@@ -11,8 +11,16 @@ LIBJSON_INSTALL_STAGING = YES
- LIBJSON_LICENSE = BSD-2c
- LIBJSON_LICENSE_FILES = License.txt
- 
--LIBJSON_MAKE_OPT = BUILD_TYPE= SHARED=$(if $(BR2_PREFER_STATIC_LIB),0,1) \
--	CXXFLAGS="$(TARGET_CXXFLAGS) -DNDEBUG"
-+LIBJSON_CXXFLAGS = $(TARGET_CFLAGS) -DNDEBUG
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+LIBJSON_MAKE_OPT += SHARED=0
-+else
-+LIBJSON_MAKE_OPT += SHARED=1
-+LIBJSON_CXXFLAGS += -fPIC
-+endif
-+
-+LIBJSON_MAKE_OPT += BUILD_TYPE= CXXFLAGS="$(LIBJSON_CXXFLAGS)"
- 
- define LIBJSON_EXTRACT_CMDS
- 	unzip -d $(@D) $(DL_DIR)/$(LIBJSON_SOURCE)
+Best regards
+--
+Fabio Porcedda
