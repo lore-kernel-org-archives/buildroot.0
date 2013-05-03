@@ -1,48 +1,79 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri,  3 May 2013 10:22:02 +0200
-Subject: [Buildroot] [PATCH 0/3]  barebox new option and new boards
-Message-ID: <1367569325-30867-1-git-send-email-fabio.porcedda@gmail.com>
+Date: Fri,  3 May 2013 10:22:03 +0200
+Subject: [Buildroot] [PATCH 1/3] barebox: add custom version option
+In-Reply-To: <1367569325-30867-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1367569325-30867-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1367569325-30867-2-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-v3:
-  - removed BR2_PREFER_STATIC_LIB=y from boards defconfigs
-    as asked by Thoms
-  - renamed BR2_TARGET_BAREBOX_LATEST_VERSION -> BR2_TARGET_BAREBOX_2013_04
-    as asked by Thoms
-v2:
-  - Telit EVK-PRO3: use barebox custom version option
+Add custom version option as used in the linux kernel.
+This way we can easily specify newer and older version.
+Remove the list of the older versions because is obsoleted
+by the new custom version option that is more flexible.
 
-Fabio Porcedda (3):
-  barebox: add custom version option
-  configs: add defconfig for Telit EVK-PRO3
-  configs: add defconfig for Atmel AT91SAM9260-EK Nand Flash Boot
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ boot/barebox/Config.in | 23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
 
- .../linux-ARM-at91-enable-nand-ubifs-boot.patch    |  44 ++++
- ...04.0-0001-watchdog-add-keep-alive-support.patch |  88 ++++++++
- ...02-watchdog-add-at91sam9-watchdog-support.patch | 228 +++++++++++++++++++++
- ...0003-at91sam9260-9g20-add-wathdog-support.patch |  40 ++++
- ...0004-at91sam9260-9g20-fix-wathdog-support.patch |  26 +++
- ...13.04.0-0005-watchdog-enable-for-evk-pro3.patch |  26 +++
- ...t91-at91_dt_defconfig-update-for-evk-pro3.patch |  44 ++++
- board/telit/evk-pro3/readme.txt                    |  28 +++
- boot/barebox/Config.in                             |  23 +--
- configs/at91sam9260eknf_defconfig                  |  14 ++
- configs/telit_evk_pro3_defconfig                   |  15 ++
- 11 files changed, 563 insertions(+), 13 deletions(-)
- create mode 100644 board/atmel/at91sam9260ek/linux-ARM-at91-enable-nand-ubifs-boot.patch
- create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0001-watchdog-add-keep-alive-support.patch
- create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0002-watchdog-add-at91sam9-watchdog-support.patch
- create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0003-at91sam9260-9g20-add-wathdog-support.patch
- create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0004-at91sam9260-9g20-fix-wathdog-support.patch
- create mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0005-watchdog-enable-for-evk-pro3.patch
- create mode 100644 board/telit/evk-pro3/linux-0001-ARM-at91-at91_dt_defconfig-update-for-evk-pro3.patch
- create mode 100644 board/telit/evk-pro3/readme.txt
- create mode 100644 configs/at91sam9260eknf_defconfig
- create mode 100644 configs/telit_evk_pro3_defconfig
-
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 581cc52..5e03913 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -8,22 +8,17 @@ config BR2_TARGET_BAREBOX
+ if BR2_TARGET_BAREBOX
+ choice
+ 	prompt "version"
+-	default BR2_TARGET_BAREBOX_2013_04
+ 	help
+ 	  Select the specific Barebox version you want to use
+ 
+-config BR2_TARGET_BAREBOX_2013_01
+-	bool "2013.01.0"
+-
+-config BR2_TARGET_BAREBOX_2013_02
+-	bool "2013.02.0"
+-
+-config BR2_TARGET_BAREBOX_2013_03
+-	bool "2013.03.0"
+-
+ config BR2_TARGET_BAREBOX_2013_04
+ 	bool "2013.04.0"
+ 
++config BR2_TARGET_BAREBOX_CUSTOM_VERSION
++	bool "Custom version"
++	help
++	  This option allows to use a specific official versions
++
+ config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+ 
+@@ -32,6 +27,10 @@ config BR2_TARGET_BAREBOX_CUSTOM_GIT
+ 
+ endchoice
+ 
++config BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE
++	string "Barebox version"
++	depends on BR2_TARGET_BAREBOX_CUSTOM_VERSION
++
+ if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION
+@@ -41,10 +40,8 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2013.01.0"	if BR2_TARGET_BAREBOX_2013_01
+-	default "2013.02.0"	if BR2_TARGET_BAREBOX_2013_02
+-	default "2013.03.0"	if BR2_TARGET_BAREBOX_2013_03
+ 	default "2013.04.0"	if BR2_TARGET_BAREBOX_2013_04
++	default $BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+ 
 -- 
 1.8.1.4
