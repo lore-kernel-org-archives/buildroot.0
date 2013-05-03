@@ -1,41 +1,38 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 03 May 2013 18:31:56 +0200
-Subject: [Buildroot] [PATCH] toolchain/gcc: Introduce
-	BR2_ARCH_HAS_GCC_x_y_PLUS
-In-Reply-To: <1367570270-2242-1-git-send-email-mjonker@synopsys.com>
-References: <1367570270-2242-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <5183E67C.9040202@mind.be>
+Date: Fri, 03 May 2013 19:13:13 +0200
+Subject: [Buildroot] [PATCH 1/2] Refactoring Freescale's iMX software
+ revision levels
+In-Reply-To: <42565.217.149.209.147.1367582464.squirrel@webmail.internl.net>
+References: <1367569664-3307-1-git-send-email-h.fijnvandraat@inter.nl.net>
+ <42565.217.149.209.147.1367582464.squirrel@webmail.internl.net>
+Message-ID: <5183F029.1000907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/05/13 10:37, Mischa Jonker wrote:
-> This patch eliminates the long "depends on" lines in
-> toolchain/gcc/Config.in by letting architectures specify
-> from which GCC version the architecture is supported.
+On 03/05/13 14:01, H.Fijnvandraat at inter.nl.net wrote:
+> Sorry,
 >
-> Architectures that support only one specific version of GCC
-> should bypass the GCC version selection mechanism.
+> But I have to withdraw these patches.
 >
-> Signed-off-by: Mischa Jonker<mjonker@synopsys.com>
-> ---
->   arch/Config.in.arm      |    6 ++++
->   arch/Config.in.powerpc  |    7 ++++
->   arch/Config.in.x86      |    1 +
->   toolchain/gcc/Config.in |   73 +++++++++++++++++++++++++++++++++-------------
->   4 files changed, 66 insertions(+), 21 deletions(-)
+> Due to the sequence in which the .mk files are included IMX_VERSION_LEVEL
+> is defined when imx-lib.mk is processed, while it is already needed for
+> firmware-imx (and  gpu-viv-bin-mx6q if it would be introduced)
+>
+> Placing it in firmware-imx would do for now, but then no dependencies can
+> be placed alphabetically before it later.
+>
+> It appears we need some other mechanism to rule them all.
 
-  Now this looks good! If the 'depends on' statements had been split up 
-into one line per architecture, the - would have been bigger than the +! 
-So this gets my
+  Ah, yes stupid of me. Normally the order of assignments doesn't matter, 
+but the generic-target contains an 'ifndef $(2)_VERSION'.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
-  I'm not very excited about the sparcleon situation. But perhaps that 
-architecture can be deprecated? It's not even in our autobuilders AFAIK.
+  So the only solution is to collect the imx packages in an imx 
+subdirectory, like qt5. I've told Henk earlier that we try to avoid 
+creating subdirectories in the package directory, but perhaps this is a 
+good reason to do it. What do the others think?
 
   Regards,
   Arnout
