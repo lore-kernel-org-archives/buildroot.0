@@ -1,25 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 04 May 2013 23:24:22 +0200
-Subject: [Buildroot] [PATCH v4 12/12] kernel-headers: Add support for
-	ARC kernel headers
-In-Reply-To: <1367524293-32081-13-git-send-email-mjonker@synopsys.com> (Mischa
- Jonker's message of "Thu, 2 May 2013 21:51:33 +0200")
-References: <1367524293-32081-1-git-send-email-mjonker@synopsys.com>
- <1367524293-32081-13-git-send-email-mjonker@synopsys.com>
-Message-ID: <87li7uphfd.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 4 May 2013 23:03:38 +0200
+Subject: [Buildroot] [git commit] arc: Add option for ARC-specific download
+	site
+Message-ID: <20130504212450.CF818972A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mischa" == Mischa Jonker <Mischa.Jonker@synopsys.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1445b7fd2e46db5d39ad5e2f5cc262574399f5f3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Mischa> Also make sure that older kernels are not selected for ARC.
+As ARC support is not yet in all upstream packages, a different location is
+required to download the packages from. This adds an option to specify a
+site for ARC-specific versions of packages such as binutils, gcc.
 
- Mischa> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+When ARC support has been upstreamed for all packages, this option can be
+removed again.
 
-Committed, thanks.
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ arch/Config.in.arc |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 60b59f0..9f68b46 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -12,3 +12,7 @@ config BR2_ENDIAN
+ 
+ config BR2_GCC_TARGET_CPU
+ 	default "arc700"
++
++config BR2_ARC_SITE
++	string
++	default "http://www.synopsys.com/apps/arc-developer/"
