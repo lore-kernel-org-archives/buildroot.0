@@ -1,26 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 04 May 2013 13:30:41 +0200
-Subject: [Buildroot] [PATCH] inotify-tools: install to staging
-In-Reply-To: <1367603342-19774-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Fri, 3 May 2013 18:49:02 +0100")
-References: <1367603342-19774-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87zjwbugm6.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 4 May 2013 13:28:02 +0200
+Subject: [Buildroot] [git commit] inotify-tools: install to staging
+Message-ID: <20130504113318.1A2A899AA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ae47deffa16d5a78e790696a189bfb023c3754cb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
+inotify-tools includes a shared library, which should be installed in the
+staging directory
 
- spdawson> inotify-tools includes a shared library, which should be
- spdawson> installed in the staging directory
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/inotify-tools/inotify-tools.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/inotify-tools/inotify-tools.mk b/package/inotify-tools/inotify-tools.mk
+index deb8a8c..a5668a3 100644
+--- a/package/inotify-tools/inotify-tools.mk
++++ b/package/inotify-tools/inotify-tools.mk
+@@ -3,9 +3,11 @@
+ # inotify-utils
+ #
+ #############################################################
++
+ INOTIFY_TOOLS_VERSION = 3.14
+ INOTIFY_TOOLS_SITE = http://github.com/downloads/rvoicilas/inotify-tools/
+ INOTIFY_TOOLS_LICENSE = GPL
+ INOTIFY_TOOLS_LICENSE_FILES = COPYING
++INOTIFY_TOOLS_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
