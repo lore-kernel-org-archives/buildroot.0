@@ -1,56 +1,49 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  4 May 2013 09:06:45 -0300
-Subject: [Buildroot] [PATCH] samba: add option for built-in debug messages
-Message-ID: <1367669205-1745-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat,  4 May 2013 09:22:27 -0300
+Subject: [Buildroot] [PATCH] nettle: fix ARM NEON build breakage
+Message-ID: <1367670147-3436-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This option allows users to specify the maximum level for compiled-in
-debug messages with -1 being none.
-In a typical scenario of nmbd+smbd+smbpasswd this can save a full
-megabyte of target space.
+Nettle's ARM NEON optimizations use some assembly constructs that aren't
+friendly with binutils < 2.21 and since we can't know for sure which
+binutils version we've got when using an external toolchain just disable
+NEON optimizations for now. Fixes:
+http://autobuild.buildroot.net/results/3c6f91379f90d438b4da3dd330cf89e1dd746aaf/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/samba/Config.in | 8 ++++++++
- package/samba/samba.mk  | 3 +++
- 2 files changed, 11 insertions(+)
+ package/nettle/nettle.mk | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/samba/Config.in b/package/samba/Config.in
-index fedbccd..0ab67ed 100644
---- a/package/samba/Config.in
-+++ b/package/samba/Config.in
-@@ -13,6 +13,14 @@ config BR2_PACKAGE_SAMBA
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index b3d2730..9405ff7 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
+@@ -4,19 +4,14 @@ NETTLE_DEPENDENCIES = gmp
+ NETTLE_INSTALL_STAGING = YES
+ NETTLE_LICENSE = LGPLv2.1+
+ NETTLE_LICENSE_FILES = COPYING.LIB
++# NEON support breaks with binutils < 2.21
++NETTLE_CONF_OPT = --disable-arm-neon
  
- if BR2_PACKAGE_SAMBA
- 
-+config BR2_PACKAGE_SAMBA_MAX_DEBUGLEVEL
-+	int "Maximum level of compiled-in debug messages"
-+	range -1 10000
-+	default -1
-+	help
-+	  Define the level of compiled-in debug messages.
-+	  This allows for big space savings, -1 being the lowest (none).
-+
- config BR2_PACKAGE_SAMBA_LIBICONV
- 	bool "extended encodings (libiconv)"
- 	depends on !BR2_ENABLE_LOCALE
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 3a004e1..683c7b2 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -158,6 +158,9 @@ else
- SAMBA_CONF_OPT += --with-libiconv=""
+ # ARM assembly requires v6+ ISA
+ ifeq ($(BR2_arm7tdmi)$(BR2_arm720t)$(BR2_arm920t)$(BR2_arm922t)$(BR2_arm926t)$(BR2_arm10t)$(BR2_fa526)$(BR2_strongarm)$(BR2_xscale)$(BR2_iwmmxt),y)
+ NETTLE_CONF_OPT += --disable-assembler
  endif
  
-+# Compiled debug messages by level
-+SAMBA_CONF_OPT += CFLAGS="$(TARGET_CFLAGS) -DMAX_DEBUG_LEVEL=$(BR2_PACKAGE_SAMBA_MAX_DEBUGLEVEL)"
-+
- ifeq ($(BR2_PACKAGE_SAMBA_SWAT),y)
- ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_SWAT_DOCUMENTATION
+-# ARM NEON
+-ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+-NETTLE_CONF_OPT += --enable-arm-neon
+-else
+-NETTLE_CONF_OPT += --disable-arm-neon
+-endif
+-
+ define NETTLE_DITCH_DEBUGGING_CFLAGS
+ 	$(SED) '/CFLAGS/ s/ -ggdb3//' $(@D)/configure
+ endef
 -- 
 1.8.1.5
