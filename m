@@ -1,44 +1,56 @@
-From: Adam Nielsen <a.nielsen@shikadi.net>
-Date: Sat, 04 May 2013 21:35:09 +1000
-Subject: [Buildroot] initramfs doesn't get linked into kernel
-In-Reply-To: <20130504102552.03b360ae@skate>
-References: <klf34k$81s$1@ger.gmane.org> <20130427031758.363b222f@skate>
- <klg76d$b42$1@ger.gmane.org> <20130427193407.0e7423c6@skate>
- <klhkoe$dak$1@ger.gmane.org> <km1kpr$t5l$1@ger.gmane.org>
- <20130504102552.03b360ae@skate>
-Message-ID: <km2rp9$jgd$1@ger.gmane.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat,  4 May 2013 09:06:45 -0300
+Subject: [Buildroot] [PATCH] samba: add option for built-in debug messages
+Message-ID: <1367669205-1745-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I think the elf2flt stuff hasn't been used in a while, so it isn't very
-> surprising that it is broken. Your patches are definitely welcome to
-> fix it, and once it's fixed, I'll add a new toolchain configuration in
-> our autobuilders to test this configuration on a regular basis.
+This option allows users to specify the maximum level for compiled-in
+debug messages with -1 being none.
+In a typical scenario of nmbd+smbd+smbpasswd this can save a full
+megabyte of target space.
 
-I'm happy to do my best to try to fix this, but I'm afraid I might need a 
-little help as I'm not too familiar with buildroot.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/samba/Config.in | 8 ++++++++
+ package/samba/samba.mk  | 3 +++
+ 2 files changed, 11 insertions(+)
 
-I have worked out this so far:
-
-  - In order to enable FLAT binaries, you need to disable MMU support in 
-uClibc.  Deselecting the buildroot option BR2_USE_MMU does not change the 
-uClibc option.  I am guessing this should happen automatically, but not quite 
-sure how to achieve it.
-
-  - Disabling MMU support in uClibc stops the thread components from 
-compiling.  Apparently this is a bug in uClibc? (something about fork() being 
-called vfork() instead)
-
-  - Disabling threads entirely in both uClibc and buildroot gets past that 
-previous problem, but gcc-final then does not compile as some components 
-(libitm and libatomic) need thread support.  I am not sure how to tell 
-buildroot to ask GCC to skip compiling libitm and libatomic when thread 
-support has been disabled.
-
-Any tips on this would be much appreciated!
-
-Many thanks,
-Adam.
+diff --git a/package/samba/Config.in b/package/samba/Config.in
+index fedbccd..0ab67ed 100644
+--- a/package/samba/Config.in
++++ b/package/samba/Config.in
+@@ -13,6 +13,14 @@ config BR2_PACKAGE_SAMBA
+ 
+ if BR2_PACKAGE_SAMBA
+ 
++config BR2_PACKAGE_SAMBA_MAX_DEBUGLEVEL
++	int "Maximum level of compiled-in debug messages"
++	range -1 10000
++	default -1
++	help
++	  Define the level of compiled-in debug messages.
++	  This allows for big space savings, -1 being the lowest (none).
++
+ config BR2_PACKAGE_SAMBA_LIBICONV
+ 	bool "extended encodings (libiconv)"
+ 	depends on !BR2_ENABLE_LOCALE
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 3a004e1..683c7b2 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -158,6 +158,9 @@ else
+ SAMBA_CONF_OPT += --with-libiconv=""
+ endif
+ 
++# Compiled debug messages by level
++SAMBA_CONF_OPT += CFLAGS="$(TARGET_CFLAGS) -DMAX_DEBUG_LEVEL=$(BR2_PACKAGE_SAMBA_MAX_DEBUGLEVEL)"
++
+ ifeq ($(BR2_PACKAGE_SAMBA_SWAT),y)
+ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+ SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_SWAT_DOCUMENTATION
+-- 
+1.8.1.5
