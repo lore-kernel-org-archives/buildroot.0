@@ -1,110 +1,56 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 4 May 2013 17:16:20 +0200
-Subject: [Buildroot] [git commit] add daemon mode support to pulseaudio
-Message-ID: <20130504151908.6F59F99A96@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 4 May 2013 19:36:18 +0200
+Subject: [Buildroot] initramfs doesn't get linked into kernel
+In-Reply-To: <km2rp9$jgd$1@ger.gmane.org>
+References: <klf34k$81s$1@ger.gmane.org> <20130427031758.363b222f@skate>
+ <klg76d$b42$1@ger.gmane.org> <20130427193407.0e7423c6@skate>
+ <klhkoe$dak$1@ger.gmane.org> <km1kpr$t5l$1@ger.gmane.org>
+ <20130504102552.03b360ae@skate> <km2rp9$jgd$1@ger.gmane.org>
+Message-ID: <20130504193618.729e01cb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d26b5a26b9cb8179df76c930130a165f4cc188b6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Adam Nielsen,
 
-pulseaudio documentation recommends not using the daemon mode unless you
-are on a headless system, but since that is the common case for a
-buildroot installation, install the related user and groups
+On Sat, 04 May 2013 21:35:09 +1000, Adam Nielsen wrote:
 
-[Peter: fix typos, ifeq check, unconditionally install into target]
-Signed-off-by: J??r??my Rosen <jeremy.rosen@openwide.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/pulseaudio/Config.in     |    8 +++++
- package/multimedia/pulseaudio/S50pulseaudio |   39 +++++++++++++++++++++++++++
- package/multimedia/pulseaudio/pulseaudio.mk |   12 ++++++++
- 3 files changed, 59 insertions(+), 0 deletions(-)
+> I'm happy to do my best to try to fix this, but I'm afraid I might need a 
+> little help as I'm not too familiar with buildroot.
+> 
+> I have worked out this so far:
+> 
+>   - In order to enable FLAT binaries, you need to disable MMU support in 
+> uClibc.  Deselecting the buildroot option BR2_USE_MMU does not change the 
+> uClibc option.  I am guessing this should happen automatically, but not quite 
+> sure how to achieve it.
 
-diff --git a/package/multimedia/pulseaudio/Config.in b/package/multimedia/pulseaudio/Config.in
-index 03c2613..9a6911e 100644
---- a/package/multimedia/pulseaudio/Config.in
-+++ b/package/multimedia/pulseaudio/Config.in
-@@ -19,5 +19,13 @@ config BR2_PACKAGE_PULSEAUDIO
- 
- 	  http://pulseaudio.org
- 
-+config BR2_PACKAGE_PULSEAUDIO_DAEMON
-+	bool "start as a system daemon"
-+	depends on BR2_PACKAGE_PULSEAUDIO
-+	help
-+	  PulseAudio can be started as a system daemon. This is not the
-+	  recommended way of using PulseAudio unless you are building a
-+	  headless system.
-+
- comment "pulseaudio requires a toolchain with WCHAR, LARGEFILE and threads support"
- 	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/multimedia/pulseaudio/S50pulseaudio b/package/multimedia/pulseaudio/S50pulseaudio
-new file mode 100755
-index 0000000..4c6877e
---- /dev/null
-+++ b/package/multimedia/pulseaudio/S50pulseaudio
-@@ -0,0 +1,39 @@
-+#!/bin/sh
-+#
-+# Starts pulseaudio.
-+#
-+
-+
-+start() {
-+	echo -n "Starting pulseaudio: "
-+	umask 077
-+	/usr/bin/pulseaudio --system --daemonize
-+	echo "OK"
-+}
-+stop() {
-+	echo -n "Stopping pulseaudio: "
-+	pulseaudio --kill
-+	echo "OK"
-+}
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+  start)
-+	start
-+	;;
-+  stop)
-+	stop
-+	;;
-+  restart|reload)
-+	restart
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-+
-diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
-index e78eb42..16df855 100644
---- a/package/multimedia/pulseaudio/pulseaudio.mk
-+++ b/package/multimedia/pulseaudio/pulseaudio.mk
-@@ -84,4 +84,16 @@ endef
- PULSEAUDIO_POST_INSTALL_TARGET_HOOKS += PULSEAUDIO_REMOVE_VALA
- endif
- 
-+ifeq ($(BR2_PACKAGE_PULSEAUDIO_DAEMON),y)
-+define PULSEAUDIO_USERS
-+	pulse -1 pulse -1 * /var/run/pulse - audio,pulse-access
-+endef
-+
-+define PULSEAUDIO_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/multimedia/pulseaudio/S50pulseaudio \
-+		$(TARGET_DIR)/etc/init.d/S50pulseaudio
-+endef
-+
-+endif
-+
- $(eval $(autotools-package))
+Most likely should be done in toolchain/uClibc/uclibc.mk.
+
+>   - Disabling MMU support in uClibc stops the thread components from 
+> compiling.  Apparently this is a bug in uClibc? (something about fork() being 
+> called vfork() instead)
+
+If uClibc doesn't build for a given configuration, it's definitely
+something that can be reported to the uClibc developers.
+
+>   - Disabling threads entirely in both uClibc and buildroot gets past that 
+> previous problem, but gcc-final then does not compile as some components 
+> (libitm and libatomic) need thread support.  I am not sure how to tell 
+> buildroot to ask GCC to skip compiling libitm and libatomic when thread 
+> support has been disabled.
+
+Hum, this is strange, because we do regularly test no-thread
+toolchains, but not for all gcc versions. Which gcc versions have you
+tried?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
