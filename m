@@ -1,55 +1,70 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 5 May 2013 21:08:27 +0200
-Subject: [Buildroot] [git commit] aircrack-ng: fix build failure and install
-	path
-Message-ID: <20130505191201.D5E7F99B4C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 05 May 2013 21:34:04 +0200
+Subject: [Buildroot] [PATCH v2] IOzone: new package
+In-Reply-To: <1364239565-22135-1-git-send-email-gilles.talis@gmail.com>
+ (Gilles Talis's message of "Mon, 25 Mar 2013 12:26:05 -0700")
+References: <1364239565-22135-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <87vc6xnrv7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ed86a07910dbd969390a23625d064256c4a694f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
-aircrack-ng doesn't account that openssl needs zlib so fix it.
-Fixes:
-http://autobuild.buildroot.net/results/97f4f90a7d60a0e3ea81c77f6986f1c1bae8d575/
+ Gilles> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+ Gilles> ---
+ Gilles> Changes since V1:
+ Gilles> * Removed erroneous use of IA64 build target
+ Gilles> * Used generic build target for uClibc-based toolchains
+ Gilles> * Factorized linux-arm and linux build targets
 
-Also fix the install prefix since it was getting installed to /usr/local
+ Gilles>  package/Config.in        |    1 +
+ Gilles>  package/iozone/Config.in |   13 +++++++++++++
+ Gilles>  package/iozone/iozone.mk |   38 ++++++++++++++++++++++++++++++++++++++
+ Gilles>  3 files changed, 52 insertions(+), 0 deletions(-)
+ Gilles>  create mode 100644 package/iozone/Config.in
+ Gilles>  create mode 100644 package/iozone/iozone.mk
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/aircrack-ng/aircrack-ng.mk |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
+ Gilles> diff --git a/package/Config.in b/package/Config.in
+ Gilles> index be1aa99..766b9ae 100644
+ Gilles> --- a/package/Config.in
+ Gilles> +++ b/package/Config.in
+ Gilles> @@ -22,6 +22,7 @@ source "package/cache-calibrator/Config.in"
+ Gilles>  source "package/dhrystone/Config.in"
+ Gilles>  source "package/dstat/Config.in"
+ Gilles>  source "package/dmalloc/Config.in"
+ Gilles> +source "package/iozone/Config.in"
+ Gilles>  source "package/kexec/Config.in"
+ Gilles>  source "package/latencytop/Config.in"
+ Gilles>  source "package/lmbench/Config.in"
+ Gilles> diff --git a/package/iozone/Config.in b/package/iozone/Config.in
+ Gilles> new file mode 100644
+ Gilles> index 0000000..b6dfb18
+ Gilles> --- /dev/null
+ Gilles> +++ b/package/iozone/Config.in
+ Gilles> @@ -0,0 +1,13 @@
+ Gilles> +config BR2_PACKAGE_IOZONE
+ Gilles> +	bool "IOzone"
 
-diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
-index 48897da..c6574f1 100644
---- a/package/aircrack-ng/aircrack-ng.mk
-+++ b/package/aircrack-ng/aircrack-ng.mk
-@@ -21,18 +21,19 @@ else
- endif
- 
- define AIRCRACK_NG_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)\
--		$(AIRCRACK_NG_MAKE_OPTS) all
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_LD)" \
-+		LDFLAGS="$(TARGET_LDFLAGS) -lz" \
-+		-C $(@D) $(AIRCRACK_NG_MAKE_OPTS) all
- endef
- 
- define AIRCRACK_NG_CLEAN_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)\
--		$(AIRCRACK_NG_MAKE_OPTS) clean
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_LD)" \
-+		-C $(@D) $(AIRCRACK_NG_MAKE_OPTS) clean
- endef
- 
- define AIRCRACK_NG_INSTALL_TARGET_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) \
--		$(AIRCRACK_NG_MAKE_OPTS) install
-+		prefix=/usr $(AIRCRACK_NG_MAKE_OPTS) install
- endef
- 
- define AIRCRACK_NG_UNINSTALL_TARGET_CMDS
+We normally use lower case for the package name.
+
+ Gilles> +	depends on BR2_LARGEFILE
+ Gilles> +	depends on BR2_USE_MMU # fork()
+ Gilles> +	help
+ Gilles> +	  IOzone is a filesystem benchmark tool.
+ Gilles> +	  The benchmark generates and measures a variety of file operations
+ Gilles> +
+ Gilles> +	  http://www.iozone.org/
+ Gilles> +
+ Gilles> +comment "IOzone requires a toolchain with LARGEFILE support"
+ Gilles> +	depends on !BR2_LARGEFILE
+ Gilles> +
+
+Extra empty line at the end.
+
+Otherwise it looks good, committed with these minor fixes.
+
+-- 
+Bye, Peter Korsgaard
