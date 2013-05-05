@@ -1,39 +1,49 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 5 May 2013 16:35:06 +0200
-Subject: [Buildroot] [git commit] nettle: fix ARM NEON breakage
-Message-ID: <20130505191201.2B6E599ABA@busybox.osuosl.org>
+Date: Sun, 5 May 2013 21:01:30 +0200
+Subject: [Buildroot] [git commit] ltp-testsuite: fix build breakage with
+	libcap
+Message-ID: <20130505191201.61B3199ABA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=59c360bdae993908ec1a2fa4a8a19c173aed8427
+commit: http://git.buildroot.net/buildroot/commit/?id=b51099dc91b49e4a26cc616620974d0cd0fdd97d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Nettle's ARM NEON optimizations use some assembly constructs that aren't
-friendly with binutils < 2.21, so just disable it for external
-toolchains or internal with an unsupported version.
-http://autobuild.buildroot.net/results/3c6f91379f90d438b4da3dd330cf89e1dd746aaf/
+ltp-testsuite needs libcap with file attributes which in turn needs
+attr.
+Only libcap is checked for so if it lacks file attr support it breaks.
+Disable libcap support unless it's got attr support, fixes:
+http://autobuild.buildroot.net/results/b16b20963c7cb17d8e220a5baa1356372ebf85a6/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/nettle/nettle.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/ltp-testsuite/ltp-testsuite.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-index b3d2730..131826e 100644
---- a/package/nettle/nettle.mk
-+++ b/package/nettle/nettle.mk
-@@ -10,8 +10,8 @@ ifeq ($(BR2_arm7tdmi)$(BR2_arm720t)$(BR2_arm920t)$(BR2_arm922t)$(BR2_arm926t)$(B
- NETTLE_CONF_OPT += --disable-assembler
- endif
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index caed4b3..093c2c3 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -3,10 +3,18 @@
+ # ltp-testsuite
+ #
+ #############################################################
++
+ LTP_TESTSUITE_VERSION = 20130109
+ LTP_TESTSUITE_SOURCE  = ltp-full-$(LTP_TESTSUITE_VERSION).bz2
+ LTP_TESTSUITE_SITE    = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
+ LTP_TESTSUITE_LICENSE_FILES = COPYING
  
--# ARM NEON
--ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-+# ARM NEON, requires binutils 2.21+
-+ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_TOOLCHAIN_BUILDROOT)$(BR2_BINUTILS_VERSION_2_20_1),yy)
- NETTLE_CONF_OPT += --enable-arm-neon
- else
- NETTLE_CONF_OPT += --disable-arm-neon
++# Needs libcap with file attrs which needs attr, so both required
++ifeq ($(BR2_PACKAGE_LIBCAP)$(BR2_PACKAGE_ATTR),yy)
++LTP_TESTSUITE_DEPENDENCIES += libcap
++else
++LTP_TESTSUITE_CONF_ENV += ac_cv_lib_cap_cap_compare=no
++endif
++
+ $(eval $(autotools-package))
