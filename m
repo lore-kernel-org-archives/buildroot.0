@@ -1,46 +1,131 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  5 May 2013 10:14:35 -0300
-Subject: [Buildroot] [PATCH] ltp-testsuite: fix build breakage with libcap
-Message-ID: <1367759675-26734-1-git-send-email-gustavo@zacarias.com.ar>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Sun,  5 May 2013 14:43:05 +0200
+Subject: [Buildroot] [PATCH 1/1] ser2net: add default init script
+Message-ID: <1367757785-5850-1-git-send-email-plagnioj@jcrosoft.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ltp-testsuite needs libcap with file attributes which in turn needs
-attr.
-Only libcap is checked for so if it lacks file attr support it breaks.
-Disable libcap support unless it's got attr support, fixes:
-http://autobuild.buildroot.net/results/b16b20963c7cb17d8e220a5baa1356372ebf85a6/
+add option to specify the configuration file
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
 ---
- package/ltp-testsuite/ltp-testsuite.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/ser2net/Config.in  |    9 +++++++++
+ package/ser2net/S50ser2net |   48 ++++++++++++++++++++++++++++++++++++++++++++
+ package/ser2net/ser2net.mk |   27 +++++++++++++++++++++++++
+ 3 files changed, 84 insertions(+)
+ create mode 100644 package/ser2net/S50ser2net
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index caed4b3..093c2c3 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -3,10 +3,18 @@
- # ltp-testsuite
- #
- #############################################################
-+
- LTP_TESTSUITE_VERSION = 20130109
- LTP_TESTSUITE_SOURCE  = ltp-full-$(LTP_TESTSUITE_VERSION).bz2
- LTP_TESTSUITE_SITE    = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
- LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
- LTP_TESTSUITE_LICENSE_FILES = COPYING
+diff --git a/package/ser2net/Config.in b/package/ser2net/Config.in
+index e3b8870..3480d85 100644
+--- a/package/ser2net/Config.in
++++ b/package/ser2net/Config.in
+@@ -8,5 +8,14 @@ config BR2_PACKAGE_SER2NET
  
-+# Needs libcap with file attrs which needs attr, so both required
-+ifeq ($(BR2_PACKAGE_LIBCAP)$(BR2_PACKAGE_ATTR),yy)
-+LTP_TESTSUITE_DEPENDENCIES += libcap
-+else
-+LTP_TESTSUITE_CONF_ENV += ac_cv_lib_cap_cap_compare=no
+ 	  http://ser2net.sourceforge.net
+ 
++if BR2_PACKAGE_SER2NET
++
++config BR2_PACKAGE_SER2NET_CONF
++	string "Configuration file"
++	help
++	  Configuration file.
++
 +endif
++
+ comment "ser2net requires a toolchain with IPV6 support"
+ 	depends on !BR2_INET_IPV6
+diff --git a/package/ser2net/S50ser2net b/package/ser2net/S50ser2net
+new file mode 100644
+index 0000000..90b6af1
+--- /dev/null
++++ b/package/ser2net/S50ser2net
+@@ -0,0 +1,48 @@
++#!/bin/sh 
++
++NAME=ser2net
++DAEMON=/usr/sbin/${NAME}
++CONFIG_FILE=/etc/${NAME}.conf
++PIDFILE=/var/run/$NAME.pid
++trap "" 1
++trap "" 15
++test -f $DAEMON || exit 0
++
++start() {
++	echo -n "Starting Ser2Net: "
++	$DAEMON -c $CONFIG_FILE -P ${PIDFILE}
++	if [ $? != 0 ]; then
++		echo "FAILED"
++		exit 1
++	else
++		echo "done"
++	fi
++}
++
++stop() {
++	echo -n "Stopping Ser2Net: "
++	kill -9 `cat ${PIDFILE}`
++	echo "done"
++}
++
++case "$1" in
++    start)
++	start
++	;;
++
++    stop)
++	stop
++	;;
++
++    restart)
++	stop
++	start
++	;;
++
++    *)
++	echo "Usage: /etc/init.d/S50ser2net {start|stop|restart}"
++	exit 1
++	;;
++esac
++
++exit 0
+diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
+index 378dc06..5a2539e 100644
+--- a/package/ser2net/ser2net.mk
++++ b/package/ser2net/ser2net.mk
+@@ -9,4 +9,31 @@ SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ SER2NET_LICENSE = GPLv2+
+ SER2NET_LICENSE_FILES = COPYING
+ 
++define SER2NET_INIT_SCRIPT_INSTALL
++	$(INSTALL) -m 0755 package/ser2net/S50ser2net $(TARGET_DIR)/etc/init.d
++endef
++
++SER2NET_POST_INSTALL_TARGET_HOOKS += SER2NET_INIT_SCRIPT_INSTALL
++
++define SER2NET_INIT_SCRIPT_UNINSTALL
++	rm -f $(TARGET_DIR)/etc/init.d/S50ser2net
++endef
++
++SER2NET_POST_UNINSTALL_TARGET_HOOKS += SER2NET_INIT_SCRIPT_UNINSTALL
++
++define SER2NET_CONF_INSTALL
++	if [ "$(BR2_PACKAGE_SER2NET_CONF)" != "" ] ; then \
++		$(INSTALL) -m 0644 $(BR2_PACKAGE_SER2NET_CONF) \
++			$(TARGET_DIR)/etc/ser2net.conf ; \
++	fi
++endef
++
++SER2NET_POST_INSTALL_TARGET_HOOKS += SER2NET_CONF_INSTALL
++
++define SER2NET_CONFIG_UNINSTALL
++	rm -f $(TARGET_DIR)/etc/ser2net.conf
++endef
++
++SER2NET_POST_UNINSTALL_TARGET_HOOKS += SER2NET_CONFIG_UNINSTALL
 +
  $(eval $(autotools-package))
 -- 
-1.8.1.5
+1.7.10.4
