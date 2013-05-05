@@ -1,38 +1,25 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 5 May 2013 22:55:50 +0200
-Subject: [Buildroot] [git commit] package: Introduce package-specific
-	BINFMT_FLAT options.
-Message-ID: <20130505205713.954F699B59@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 05 May 2013 22:58:26 +0200
+Subject: [Buildroot] [PATCH] bind: fix build failure for static+openssl
+In-Reply-To: <1367787251-725-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 5 May 2013 17:54:11 -0300")
+References: <1367787251-725-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87sj21kutp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9edf482d6b210d16a22fdf561da2a2f0fb84824d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Add new option <PKG>_FLAT_STACKSIZE. The document needs to be updated.
+ Gustavo> Bind just links to openssl libraries without checking it's
+ Gustavo> dependencies.  This works when doing shared builds since the
+ Gustavo> linker picks the deps up, but fails badly on static builds.
+ Gustavo> So just define LIBS="-lz" when openssl is enabled. Fixes:
+ Gustavo> http://autobuild.buildroot.net/results/a9a166f932e0b6727ae8e470ce748418797875b9/
 
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Makefile.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+Committed, thanks.
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index dd3bc7d..a449089 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -103,6 +103,10 @@ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET
- TARGET_CXXFLAGS = $(TARGET_CFLAGS)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
-+ifeq ($(BR2_BINFMT_FLAT),y)
-+TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
-+endif
-+
- ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
- TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
- TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
+-- 
+Bye, Peter Korsgaard
