@@ -1,70 +1,98 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 05 May 2013 21:34:04 +0200
-Subject: [Buildroot] [PATCH v2] IOzone: new package
-In-Reply-To: <1364239565-22135-1-git-send-email-gilles.talis@gmail.com>
- (Gilles Talis's message of "Mon, 25 Mar 2013 12:26:05 -0700")
-References: <1364239565-22135-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87vc6xnrv7.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 5 May 2013 21:31:19 +0200
+Subject: [Buildroot] [git commit] IOzone: new package
+Message-ID: <20130505193418.DFE5A99B4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=baebf863ea11dbbcfea55a5877f4be0e85c1f37b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gilles> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
- Gilles> ---
- Gilles> Changes since V1:
- Gilles> * Removed erroneous use of IA64 build target
- Gilles> * Used generic build target for uClibc-based toolchains
- Gilles> * Factorized linux-arm and linux build targets
+[Peter: lower case package name, strip trailing newline]
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in        |    1 +
+ package/iozone/Config.in |   12 ++++++++++++
+ package/iozone/iozone.mk |   38 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 51 insertions(+), 0 deletions(-)
 
- Gilles>  package/Config.in        |    1 +
- Gilles>  package/iozone/Config.in |   13 +++++++++++++
- Gilles>  package/iozone/iozone.mk |   38 ++++++++++++++++++++++++++++++++++++++
- Gilles>  3 files changed, 52 insertions(+), 0 deletions(-)
- Gilles>  create mode 100644 package/iozone/Config.in
- Gilles>  create mode 100644 package/iozone/iozone.mk
-
- Gilles> diff --git a/package/Config.in b/package/Config.in
- Gilles> index be1aa99..766b9ae 100644
- Gilles> --- a/package/Config.in
- Gilles> +++ b/package/Config.in
- Gilles> @@ -22,6 +22,7 @@ source "package/cache-calibrator/Config.in"
- Gilles>  source "package/dhrystone/Config.in"
- Gilles>  source "package/dstat/Config.in"
- Gilles>  source "package/dmalloc/Config.in"
- Gilles> +source "package/iozone/Config.in"
- Gilles>  source "package/kexec/Config.in"
- Gilles>  source "package/latencytop/Config.in"
- Gilles>  source "package/lmbench/Config.in"
- Gilles> diff --git a/package/iozone/Config.in b/package/iozone/Config.in
- Gilles> new file mode 100644
- Gilles> index 0000000..b6dfb18
- Gilles> --- /dev/null
- Gilles> +++ b/package/iozone/Config.in
- Gilles> @@ -0,0 +1,13 @@
- Gilles> +config BR2_PACKAGE_IOZONE
- Gilles> +	bool "IOzone"
-
-We normally use lower case for the package name.
-
- Gilles> +	depends on BR2_LARGEFILE
- Gilles> +	depends on BR2_USE_MMU # fork()
- Gilles> +	help
- Gilles> +	  IOzone is a filesystem benchmark tool.
- Gilles> +	  The benchmark generates and measures a variety of file operations
- Gilles> +
- Gilles> +	  http://www.iozone.org/
- Gilles> +
- Gilles> +comment "IOzone requires a toolchain with LARGEFILE support"
- Gilles> +	depends on !BR2_LARGEFILE
- Gilles> +
-
-Extra empty line at the end.
-
-Otherwise it looks good, committed with these minor fixes.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index 3537de1..79b6b8f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -23,6 +23,7 @@ source "package/dhrystone/Config.in"
+ source "package/dstat/Config.in"
+ source "package/dmalloc/Config.in"
+ source "package/gdb/Config.in"
++source "package/iozone/Config.in"
+ source "package/kexec/Config.in"
+ source "package/latencytop/Config.in"
+ source "package/lmbench/Config.in"
+diff --git a/package/iozone/Config.in b/package/iozone/Config.in
+new file mode 100644
+index 0000000..5481ca1
+--- /dev/null
++++ b/package/iozone/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_IOZONE
++	bool "iozone"
++	depends on BR2_LARGEFILE
++	depends on BR2_USE_MMU # fork()
++	help
++	  IOzone is a filesystem benchmark tool.
++	  The benchmark generates and measures a variety of file operations
++
++	  http://www.iozone.org/
++
++comment "IOzone requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+new file mode 100644
+index 0000000..71c6840
+--- /dev/null
++++ b/package/iozone/iozone.mk
+@@ -0,0 +1,38 @@
++#############################################################
++#
++# IOZONE
++#
++#############################################################
++
++IOZONE_VERSION = 3_414
++IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
++IOZONE_SITE = http://www.iozone.org/src/current
++IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
++# IOzone license details can be found at:
++# http://www.iozone.org/docs/Iozone_License.txt
++
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
++# aio.h is not available on uClibc. Select "generic" target that does not use it.
++IOZONE_TARGET = generic
++else ifeq ($(BR2_powerpc),y)
++IOZONE_TARGET = linux-powerpc
++else ifeq ($(BR2_sparc),y)
++IOZONE_TARGET = linux-sparc
++else
++IOZONE_TARGET = linux
++endif
++
++define IOZONE_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(IOZONE_TARGET) -C $(@D)/src/current
++endef
++
++define IOZONE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/src/current/iozone \
++		$(TARGET_DIR)/usr/bin/iozone
++endef
++
++define IOZONE_CLEAN_CMDS
++       $(MAKE) -C $(@D)/src/current clean
++endef
++
++$(eval $(generic-package))
