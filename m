@@ -1,25 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 05 May 2013 22:58:26 +0200
-Subject: [Buildroot] [PATCH] bind: fix build failure for static+openssl
-In-Reply-To: <1367787251-725-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 5 May 2013 17:54:11 -0300")
-References: <1367787251-725-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87sj21kutp.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 5 May 2013 22:57:54 +0200
+Subject: [Buildroot] [git commit] bind: fix build failure for static+openssl
+Message-ID: <20130505205838.BD18F99B59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=80ebf12906afc3a1e5f4e5682d4c5dc0779a556a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Bind just links to openssl libraries without checking it's
- Gustavo> dependencies.  This works when doing shared builds since the
- Gustavo> linker picks the deps up, but fails badly on static builds.
- Gustavo> So just define LIBS="-lz" when openssl is enabled. Fixes:
- Gustavo> http://autobuild.buildroot.net/results/a9a166f932e0b6727ae8e470ce748418797875b9/
+Bind just links to openssl libraries without checking it's dependencies.
+This works when doing shared builds since the linker picks the deps up,
+but fails badly on static builds.
+So just define LIBS="-lz" when openssl is enabled. Fixes:
+http://autobuild.buildroot.net/results/a9a166f932e0b6727ae8e470ce748418797875b9/
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/bind/bind.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 8a66534..f689594 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -30,7 +30,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ 	BIND_DEPENDENCIES += openssl
+-	BIND_CONF_OPT += --with-openssl=$(STAGING_DIR)/usr
++	BIND_CONF_OPT += --with-openssl=$(STAGING_DIR)/usr LIBS="-lz"
+ else
+ 	BIND_CONF_OPT += --with-openssl=no
+ endif
