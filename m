@@ -1,106 +1,67 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 5 May 2013 22:59:47 +0200
-Subject: [Buildroot] [git commit] cryptodev: add new virtual
-Message-ID: <20130505210147.B4D9499B60@busybox.osuosl.org>
+Date: Sun, 5 May 2013 23:00:12 +0200
+Subject: [Buildroot] [git commit] openssl: integrate variable cryptodev
+	support
+Message-ID: <20130505210147.DA59C99B60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6235f6822274fa1d7989de258587074b101cdafe
+commit: http://git.buildroot.net/buildroot/commit/?id=c714dba57778d0d4129b5db755f1799233da698f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Allow openssl to use cryptodev-linux hardware crypto support besides
+OCF.
+To do this we remove the OCF option from openssl and automatically use
+any of the available implementations when available.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in              |    1 +
- package/cryptodev/Config.in    |   37 +++++++++++++++++++++++++++++++++++++
- package/cryptodev/cryptodev.mk |   24 ++++++++++++++++++++++++
- 3 files changed, 62 insertions(+), 0 deletions(-)
+ package/openssl/Config.in  |   15 ---------------
+ package/openssl/openssl.mk |    7 ++++++-
+ 2 files changed, 6 insertions(+), 16 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 62a97b4..3c01ce8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -386,6 +386,7 @@ endmenu
+diff --git a/package/openssl/Config.in b/package/openssl/Config.in
+index 2187023..d1ed520 100644
+--- a/package/openssl/Config.in
++++ b/package/openssl/Config.in
+@@ -23,18 +23,3 @@ config BR2_PACKAGE_OPENSSL_ENGINES
+ 	depends on BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Install additional encryption engine libraries.
+-
+-config BR2_PACKAGE_OPENSSL_OCF
+-	bool "openssl ocf support"
+-	depends on BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_OCF_LINUX
+-	help
+-	  Enable openssl cryptodev (OCF) hardware acceleration support.
+-	  This requires the ocf linux kernel extension or you to provide a
+-	  pre-patched kernel that includes it.
+-	  If kernel support isn't available it'll just make the libraries
+-	  a tiny bit larger with a small CPU overhead when starting up and
+-	  checking for the required kernel-side support, and then falling
+-	  back to regular builtin support.
+-
+-	  http://ocf-linux.sourceforge.net/
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 8486c44..2e04789 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -22,7 +22,12 @@ endif
  
- menu "Crypto"
- source "package/beecrypt/Config.in"
-+source "package/cryptodev/Config.in"
- source "package/gnutls/Config.in"
- source "package/libgcrypt/Config.in"
- source "package/libgpg-error/Config.in"
-diff --git a/package/cryptodev/Config.in b/package/cryptodev/Config.in
-new file mode 100644
-index 0000000..3f08e9e
---- /dev/null
-+++ b/package/cryptodev/Config.in
-@@ -0,0 +1,37 @@
-+config BR2_PACKAGE_CRYPTODEV
-+	bool "cryptodev support"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Select the desired cryptodev implementation.
-+
-+if BR2_PACKAGE_CRYPTODEV
-+
-+choice
-+	prompt "cryptodev variant"
-+	default BR2_PACKAGE_CRYPTODEV_LINUX if !BR2_microblaze
-+	help
-+	  Select the cryptodev implementation.
-+
-+config BR2_PACKAGE_CRYPTODEV_LINUX
-+	bool "cryptodev-linux"
-+	depends on !BR2_microblaze
-+	help
-+	  Cryptodev-linux is a device that allows access to Linux kernel
-+	  cryptographic drivers; thus allowing userspace applications
-+	  to take advantage of hardware accelerators.
-+
-+	  http://cryptodev-linux.org/index.html
-+
-+config BR2_PACKAGE_OCF_LINUX
-+	bool "ocf-linux"
-+	help
-+	  OCF-Linux is a Linux port of the OpenBSD/FreeBSD Cryptographic
-+	  Framework (OCF). This port aims to bring full asynchronous HW/SW
-+	  crypto acceleration to the Linux kernel and applications
-+	  running under Linux.
-+
-+	  http://ocf-linux.sourceforge.net/
-+
-+endchoice
-+
-+endif
-diff --git a/package/cryptodev/cryptodev.mk b/package/cryptodev/cryptodev.mk
-new file mode 100644
-index 0000000..b6f4a42
---- /dev/null
-+++ b/package/cryptodev/cryptodev.mk
-@@ -0,0 +1,24 @@
-+#############################################################
-+#
-+# Virtual cryptodev package
-+#
-+#############################################################
-+
-+CRYPTODEV_SOURCE =
-+
+ OPENSSL_PRE_CONFIGURE_HOOKS += OPENSSL_DISABLE_APPS
+ 
+-ifeq ($(BR2_PACKAGE_OPENSSL_OCF),y)
 +ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
-+CRYPTODEV_DEPENDENCIES += cryptodev-linux
++	OPENSSL_CFLAGS += -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
++	OPENSSL_DEPENDENCIES += cryptodev-linux
 +endif
 +
 +ifeq ($(BR2_PACKAGE_OCF_LINUX),y)
-+CRYPTODEV_DEPENDENCIES += ocf-linux
-+endif
-+
-+ifeq ($(CRYPTODEV_DEPENDENCIES),)
-+define CRYPTODEV_CONFIGURE_CMDS
-+	echo "No CRYPTODEV implementation defined. Configuration error"
-+	exit 1
-+endef
-+endif
-+
-+$(eval $(generic-package))
+ 	OPENSSL_CFLAGS += -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
+ 	OPENSSL_DEPENDENCIES += ocf-linux
+ endif
