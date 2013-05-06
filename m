@@ -1,32 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 May 2013 00:19:59 +0200
-Subject: [Buildroot] [PATCH 1/1] libcec: add the libcec for HDMI device
-	Control
-In-Reply-To: <20130506231529.4a7b2b57@skate> (Thomas Petazzoni's message of
- "Mon, 6 May 2013 23:15:29 +0200")
-References: <1367618887-25757-1-git-send-email-spenser@gillilanding.com>
- <20130506231529.4a7b2b57@skate>
-Message-ID: <87d2t34upc.fsf@dell.be.48ers.dk>
+Date: Tue, 07 May 2013 00:20:34 +0200
+Subject: [Buildroot] [PATCH] python-netifaces: use single version
+	externally managed
+In-Reply-To: <1367846012-26041-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 6 May 2013 10:13:32 -0300")
+References: <1367846012-26041-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878v3r4uod.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Hi,
+ Gustavo> We want --single-version-externally-managed (and --root=/) to make
+ Gustavo> python packages uncompressed (python eggs are zip files) since
+ Gustavo> compression should be a target filesystem responsibility.
+ Gustavo> And we don't need/want multiple versions of the same package in the
+ Gustavo> target since packages should be handled by buildroot on any sane
+ Gustavo> embedded system.
 
- >> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE),y)
- >> +LIBCEC_CONF_OPT = --enable-rpi \
- >> +   --with-rpi-include-path=$(STAGING_DIR)/usr/include
- >> +endif
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- Thomas> So the package builds and works fine without the RPi libraries, and
- Thomas> those are just adding some optional features?
-
-It afaik enables the driver to use the cec interface on the rpi next to
-the driver for the pulse-eight usb dongle.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
