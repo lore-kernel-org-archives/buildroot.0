@@ -1,33 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 6 May 2013 23:54:40 +0200
-Subject: [Buildroot] [git commit] erlang: needs mmu
-Message-ID: <20130506221622.C9A1C99C79@busybox.osuosl.org>
+Date: Mon, 6 May 2013 23:57:07 +0200
+Subject: [Buildroot] [git commit] Update webkit download URL
+Message-ID: <20130506221623.285E499C79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9c177b2c107a59f1f457c2dce9c5276ed7e17b98
+commit: http://git.buildroot.net/buildroot/commit/?id=498ddd195a42978f25855f09525012c26101b711
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/5b3411008ddf89aef55c8dd8682b894cf9860d13/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Michael J. Hammel <mjhammel@graphics-muse.org>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/erlang/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/webkit/webkit.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/erlang/Config.in b/package/erlang/Config.in
-index 6dd5a39..6920db6 100644
---- a/package/erlang/Config.in
-+++ b/package/erlang/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ERLANG
- 	bool "erlang"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Erlang is a programming language used to build massively scalable
- 	  soft real-time systems with requirements on high availability.
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+index d37601f..264bcad 100644
+--- a/package/webkit/webkit.mk
++++ b/package/webkit/webkit.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ 
+ WEBKIT_VERSION = 1.2.7
+-WEBKIT_SITE = http://www.webkitgtk.org
++WEBKIT_SITE = http://www.webkitgtk.org/releases
+ WEBKIT_INSTALL_STAGING = YES
+ WEBKIT_DEPENDENCIES = host-flex host-bison host-gperf icu libcurl libxml2 \
+ 	libxslt libgtk2 sqlite enchant libsoup jpeg libgail
