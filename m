@@ -1,48 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  7 May 2013 00:47:02 +0200
-Subject: [Buildroot] [PATCH] toolchain/crostool-NG: mark as deprecated
-Message-ID: <1367880422-12739-1-git-send-email-yann.morin.1998@free.fr>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Mon, 6 May 2013 17:51:00 -0500
+Subject: [Buildroot] [PATCH 1/1] libcec: add the libcec for HDMI device
+	Control
+In-Reply-To: <87d2t34upc.fsf@dell.be.48ers.dk>
+References: <1367618887-25757-1-git-send-email-spenser@gillilanding.com>
+ <20130506231529.4a7b2b57@skate> <87d2t34upc.fsf@dell.be.48ers.dk>
+Message-ID: <CAEBucnD2WAXSOUD9fs7Qvk7_wpzJ7MBBxLQ+Rqt9nccToFNcTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Mon, May 6, 2013 at 5:19 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>
+> Hi,
+>
+>  >> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE),y)
+>  >> +LIBCEC_CONF_OPT = --enable-rpi \
+>  >> +   --with-rpi-include-path=$(STAGING_DIR)/usr/include
+>  >> +endif
+>
+>  Thomas> So the package builds and works fine without the RPi libraries, and
+>  Thomas> those are just adding some optional features?
+>
+> It afaik enables the driver to use the cec interface on the rpi next to
+> the driver for the pulse-eight usb dongle.
 
-For the following reasons:
-  - it used to be broken without anyone noticing for a long time,
-  - it is still not fully integrated within the Buildroot set of options,
-  - it has not gained much traction (not even I use it),
-  - I've always argued that sustained development should use an external
-    toolchain, and not rely on building one with Buildroot,
-  - I did not submit any of the enhancements requested during the last
-    developpers' day in Brussels,
-  - I have neither the incentive nor the time to maintain and enhance it,
+Thomas: Peter's explanation is correct.
+Thomas: I am addressing the above issues in a new patch.
 
-it is time to deprecate the crosstool-NG backend for the 2013.05 release.
+Spenser
 
-Then, it will be entirely removed early in the 2013.08 cycle, to let some
-time for those that rely on it to voice their opinions. ;-)
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index e6a3b25..665618c 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -22,6 +22,7 @@ config BR2_TOOLCHAIN_EXTERNAL
- 
- config BR2_TOOLCHAIN_CTNG
- 	bool "Crosstool-NG toolchain"
-+	depends on BR2_DEPRECATED
- 	depends on !BR2_microblaze && !BR2_aarch64 && !BR2_xtensa && !BR2_arc
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 	help
--- 
-1.8.1.2
+--
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
