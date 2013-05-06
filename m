@@ -1,39 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 06 May 2013 23:58:12 +0200
-Subject: [Buildroot] [PATCH] Update webkit download URL
-In-Reply-To: <1367857179.4665.19.camel@feynman.coloradoengineeringinc.com>
- (Michael J. Hammel's message of "Mon, 06 May 2013 10:19:39 -0600")
-References: <1367857179.4665.19.camel@feynman.coloradoengineeringinc.com>
-Message-ID: <87a9o76aa3.fsf@dell.be.48ers.dk>
+Date: Mon, 06 May 2013 23:59:25 +0200
+Subject: [Buildroot] [PATCH] ebtables: fix static build
+In-Reply-To: <1367859777-25470-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 6 May 2013 14:02:57 -0300")
+References: <1367859777-25470-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8761yv6a82.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael J Hammel <buildroot@graphics-muse.org> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Michael> Signed-off-by: Michael J. Hammel <mjhammel@graphics-muse.org>
- Michael> ---
- Michael>  package/webkit/webkit.mk |    2 +-
- Michael>  1 files changed, 1 insertions(+), 1 deletions(-)
+ Gustavo> ebtables has a funky way of building the static version.
+ Gustavo> Fixes:
+ Gustavo> http://autobuild.buildroot.net/results/f5916d84194b6aa02d8eca7cbbb4e7867bb6afd4/
 
- Michael> diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
- Michael> index d37601f..264bcad 100644
- Michael> --- a/package/webkit/webkit.mk
- Michael> +++ b/package/webkit/webkit.mk
- Michael> @@ -5,7 +5,7 @@
- Michael>  #############################################################
- 
- Michael>  WEBKIT_VERSION = 1.2.7
- Michael> -WEBKIT_SITE = http://www.webkitgtk.org
- Michael> +WEBKIT_SITE = http://www.webkitgtk.org/releases
- Michael>  WEBKIT_INSTALL_STAGING = YES
- Michael>  WEBKIT_DEPENDENCIES = host-flex host-bison host-gperf icu libcurl
- Michael> libxml2 \
-
-Your mailer has word wrapped the patch, so I had to fix it up
-manually. Please consider using 'git send-email' in the future.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
