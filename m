@@ -1,41 +1,171 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 6 May 2013 09:30:14 +0200
-Subject: [Buildroot] [git commit] python-serial: fix shebang
-Message-ID: <20130506073609.D9E4D99C35@busybox.osuosl.org>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Mon, 6 May 2013 15:35:39 +0800
+Subject: [Buildroot] [PATCH v8 6/7] arch: toolchain: Install blackfin FDPIC
+	and FLAT libraries in external toolchain makefile.
+Message-ID: <1367825740-9408-1-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2f40b6ae2b27486af2deb999385e3d7f034e4bd5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Sonic Zhang <sonic.zhang@analog.com>
 
-Add the --executable shebang fixup option to the build phase so that the
-script ends with a proper #!/usr/bin/python interpeter line set.
+Reserve all 3 blackfin toolchain folders under the TOOLCHAIN_EXTERNAL_DIR.
+Set current blackfin toolchain bin folder to the toolchain prefix subfolder.
+Install FDPIC and FLAT library in target ext-toolchain-installed.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+
 ---
- package/python-serial/python-serial.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+v8-changes:
+- Append the if condition to the bool line other than the depends line.
+In this case, 2 options of the same name are not necessary.
 
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-index fb6b31c..4bfc355 100644
---- a/package/python-serial/python-serial.mk
-+++ b/package/python-serial/python-serial.mk
-@@ -6,12 +6,12 @@
+v7-changes:
+- Revert merging the options of the same name and add descriptions. Only
+2 options work in SHARED flat binary format case.
+
+v6-changes:
+- Move options of installing blackfin toolchain libraries into external
+toolchain Config.in.
+- Fix typo error.
+- Merge the options of the same name and add descriptions.
+
+v5-changes:
+- Update comments.
+
+v3-changes:
+- Remove arch specific makefiles.
+- Reserve all 3 blackfin toolchain folders under the TOOLCHAIN_EXTERNAL_DIR.
+- Set current blackfin toolchain bin folder to the toolchain prefix subfolder.
+- Move FDPIC and FLAT library installation target from blackfin makefile to
+the ext-toolchain-installed target in external toolchain makefile.
+
+v2-changes:
+- Remove useless Macro __uClinux__
+
+v1-changes:
+- Create arch makefile.
+- Create blackfin makefile.
+- Add FDPIC and FLAT library options and makefile targets to install
+libraries for different binary formats into the same rootfs image.
+- update the TARGET_EXCEPTIONS variable in support/scripts/graph-depends for
+new custom targets
+---
+ toolchain/toolchain-external/Config.in   |   27 +++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |   46 ++++++++++++++++++++++-------
+ 2 files changed, 62 insertions(+), 11 deletions(-)
+
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index a93ada3..1386ae7 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -920,5 +920,32 @@ config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+ 	  Copy the gdbserver provided by the external toolchain to the
+ 	  target.
  
- PYTHON_SERIAL_VERSION = 2.6
- PYTHON_SERIAL_SOURCE  = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
--PYTHON_SERIAL_SITE    = http://pypi.python.org/packages/source/p/pyserial/
-+PYTHON_SERIAL_SITE    = http://pypi.python.org/packages/source/p/pyserial
++# When the FDPIC shared binary format is used, the corresponding libraries are
++# always installed. When a different binary format is used, we offer the option
++# of installing the FDPIC shared libraries.
++config BR2_BFIN_INSTALL_FDPIC_SHARED
++	bool "Install FDPIC shared libraries"
++	depends on BR2_bfin && !BR2_BINFMT_FDPIC
++	help
++	  The Linux kernel supports running both FDPIC and FLAT applications
++	  concurrently if the binary format specific libraries are installed
++	  properly. This option allows developer to install FDPIC libraries
++	  into a buildroot rootfs image built with binary format that is not
++	  FDPIC.
++
++# When the FLAT shared binary format is used, we force the installation
++# of the corresponding libraries. When a different binary format is
++# used, we offer the option of installing the FLAT shared libraries.
++config BR2_BFIN_INSTALL_FLAT_SHARED
++	bool "Install FLAT shared libraries" if !BR2_BINFMT_FLAT_SHARED
++	depends on BR2_bfin
++	default y if BR2_BINFMT_FLAT_SHARED
++	help
++	  The Linux kernel supports running both FDPIC and FLAT applications
++	  concurrently if the binary format specific libraries are installed
++	  properly. This option allows developer to install FLAT libraries
++	  into a buildroot rootfs image built with binary format that is not
++	  shared FLAT.
++
+ endif # BR2_TOOLCHAIN_EXTERNAL
  
- PYTHON_SERIAL_DEPENDENCIES = python
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index bf2bee8..6f1fbe0 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -115,8 +115,12 @@ ifeq ($(TOOLCHAIN_EXTERNAL_DIR),)
+ # if no path set, figure it out from path
+ TOOLCHAIN_EXTERNAL_BIN:=$(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+ else
++ifeq ($(BR2_bfin),y)
++TOOLCHAIN_EXTERNAL_BIN:=$(TOOLCHAIN_EXTERNAL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
++else
+ TOOLCHAIN_EXTERNAL_BIN:=$(TOOLCHAIN_EXTERNAL_DIR)/bin
+ endif
++endif
  
- define PYTHON_SERIAL_BUILD_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build --executable=/usr/bin/python)
- endef
- 
- define PYTHON_SERIAL_INSTALL_TARGET_CMDS
+ TOOLCHAIN_EXTERNAL_CROSS=$(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
+ TOOLCHAIN_EXTERNAL_CC=$(TOOLCHAIN_EXTERNAL_CROSS)gcc
+@@ -318,17 +322,6 @@ $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) $
+ 		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
+ 	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE_2))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2) | \
+ 		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
+-ifeq ($(TOOLCHAIN_EXTERNAL_PREFIX),bfin-uclinux)
+-	rm -rf $(TOOLCHAIN_EXTERNAL_DIR)/bfin-linux-uclibc
+-	mv $(TOOLCHAIN_EXTERNAL_DIR)/bfin-uclinux $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+-	mv $(TOOLCHAIN_EXTERNAL_DIR)/tmp/* $(TOOLCHAIN_EXTERNAL_DIR)/
+-	rmdir $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+-else
+-	rm -rf $(TOOLCHAIN_EXTERNAL_DIR)/bfin-uclinux
+-	mv $(TOOLCHAIN_EXTERNAL_DIR)/bfin-linux-uclibc $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+-	mv $(TOOLCHAIN_EXTERNAL_DIR)/tmp/* $(TOOLCHAIN_EXTERNAL_DIR)/
+-	rmdir $(TOOLCHAIN_EXTERNAL_DIR)/tmp
+-endif
+ 	$(Q)touch $@
+ else
+ # Download and extraction of a toolchain
+@@ -423,6 +416,37 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
+ 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+ 		exit 1 ; \
+ 	fi ; \
++	if test x"$(BR2_BFIN_INSTALL_FDPIC_SHARED)" == x"y" ; then \
++		$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
++		FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
++		FDPIC_LIBC_A_LOCATION=`readlink -f $$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
++		FDPIC_SYSROOT_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
++		FDPIC_LIB_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
++		FDPIC_SUPPORT_LIB_DIR="" ; \
++		if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
++			FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
++			if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
++				FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
++			fi ; \
++		fi ; \
++		for libs in $(LIB_EXTERNAL_LIBS); do \
++			$(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs,/lib); \
++		done ; \
++		for libs in $(USR_LIB_EXTERNAL_LIBS); do \
++			$(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs,/usr/lib); \
++		done ; \
++	fi ; \
++	if test x"$(BR2_BFIN_INSTALL_FLAT_SHARED)" == x"y" ; then \
++		$(call MESSAGE,"Install external toolchain FLAT libraries to target...") ; \
++		FLAT_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))../../bfin-uclinux/bin/bfin-uclinux-gcc ; \
++		FLAT_LIBC_A_LOCATION=`$${FLAT_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -mid-shared-library -print-file-name=libc`; \
++		if [ -f $${FLAT_LIBC_A_LOCATION} -a ! -h $${FLAT_LIBC_A_LOCATION} ] ; then \
++# The flat libraries are found and linked according to the index in \
++# name "libN.so". Index 1 is reserved for the standard C library. \
++# Customer libraries can use 4 and above. \
++			$(INSTALL) -D $${FLAT_LIBC_A_LOCATION} $(TARGET_DIR)/lib/lib1.so; \
++		fi ; \
++	fi ; \
+ 	ARCH_LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
+ 	ARCH_SYSROOT_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
+ 	ARCH_LIB_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
+-- 
+1.7.0.4
