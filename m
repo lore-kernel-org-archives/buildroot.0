@@ -1,12 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 06 May 2013 13:27:41 +0200
-Subject: [Buildroot] [PATCH 3/3] python-serial: fix shebang
-In-Reply-To: <51878F3D.9020102@zacarias.com.ar> (Gustavo Zacarias's message of
- "Mon, 06 May 2013 08:08:45 -0300")
+Date: Mon, 06 May 2013 13:30:58 +0200
+Subject: [Buildroot] [PATCH 1/3] python-setuptools: forkbump and add
+	workaround for shebang
+In-Reply-To: <51878F08.2030804@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Mon, 06 May 2013 08:07:52 -0300")
 References: <1365872210-20167-1-git-send-email-gustavo@zacarias.com.ar>
- <1365872210-20167-3-git-send-email-gustavo@zacarias.com.ar>
- <871u9klfw3.fsf@dell.be.48ers.dk> <51878F3D.9020102@zacarias.com.ar>
-Message-ID: <87obcojqky.fsf@dell.be.48ers.dk>
+ <516CEF3C.6070505@mind.be> <516D254A.4010707@zacarias.com.ar>
+ <87a9o8lfy6.fsf@dell.be.48ers.dk> <51878F08.2030804@zacarias.com.ar>
+Message-ID: <87k3ncjqfh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,18 +16,37 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> On 05/06/2013 04:35 AM, Peter Korsgaard wrote:
- >> I see we have the same issue with usr/bin/smtpd.py from python itself,
- >> but I'm not sure how to fix that (besides running sed after
- >> installation).
- >> 
- >> Any idea?
+ Gustavo> On 05/06/2013 04:34 AM, Peter Korsgaard wrote:
+ >> Did this ever get tested? Thomas, could you send your ack / Gustavo,
+ >> could you send a v2 fixing the issues pointed out by Arnout?
 
- Gustavo> Some (all?) distributions just remove it, it's a smtp proxy,
- Gustavo> kind of a sample program, not something we want lingering on
- Gustavo> the target filesystem
+ Gustavo> It's partially solved for lava-test since it's pulling other
+ Gustavo> dependencies by itself - that should probably be solved via new
+ Gustavo> buildroot python packages since it's doing so because they're not found,
+ Gustavo> and it's not nice when a package starts downloading stuff at
+ Gustavo> build/install time.
+ Gustavo> Yes, a V2 is forthcoming addressing Arnout's comments and a few more
+ Gustavo> fixes/improvements.
 
-Ok, thanks. Care to send a patch doing that?
+Ok, great.
+
+ Gustavo> You shouldn't have committed the fixes to python-bottle and
+ Gustavo> python-serial since they both depend on the patch to this package,
+ Gustavo> they'll probably fail now.
+
+Hmm, odd - They built fine here:
+
+>>> python-bottle 0.11.6 Building
+(cd /home/peko/source/buildroot/output/build/python-bottle-0.11.6; /home/peko/source/buildroot/output/host/usr/bin/python setup.py build --executable=/usr/bin/python)
+running build
+running build_py
+creating build
+creating build/lib
+copying bottle.py -> build/lib
+running build_scripts
+creating build/scripts-2.7
+copying and adjusting bottle.py -> build/scripts-2.7
+changing mode of build/scripts-2.7/bottle.py from 644 to 755
 
 -- 
 Bye, Peter Korsgaard
