@@ -1,32 +1,48 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 7 May 2013 00:38:25 +0200
-Subject: [Buildroot] [PATCH v4 1/1] python-thrift: new package
-In-Reply-To: <1363859960-4131-1-git-send-email-viniciustinti@gmail.com>
-References: <5146BAD8.90208@mind.be>
- <1363859960-4131-1-git-send-email-viniciustinti@gmail.com>
-Message-ID: <CACXmViZSBKY1izbf4LutGWXC+Q+Q79fkMBG3cw-vDFKBavsU2A@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  7 May 2013 00:47:02 +0200
+Subject: [Buildroot] [PATCH] toolchain/crostool-NG: mark as deprecated
+Message-ID: <1367880422-12739-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 21, 2013 at 10:59 AM, Vinicius Tinti
-<viniciustinti@gmail.com> wrote:
-> Add Python bindings for the Apache Thrift RPC.
->
-> Thrift is an interface definition language that is used to define and create
-> services for numerous languages using remote procedure calls (RPC).
->
-> This patch does not include the Thrift code generator. It only includes the
-> Thrift libraries used at runtime.
->
-> Signed-off-by: Tiago Maluta <tiagomaluta@gmail.com>
-> Signed-off-by: Vinicius Tinti <viniciustinti@gmail.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Committed, thanks.
+For the following reasons:
+  - it used to be broken without anyone noticing for a long time,
+  - it is still not fully integrated within the Buildroot set of options,
+  - it has not gained much traction (not even I use it),
+  - I've always argued that sustained development should use an external
+    toolchain, and not rely on building one with Buildroot,
+  - I did not submit any of the enhancements requested during the last
+    developpers' day in Brussels,
+  - I have neither the incentive nor the time to maintain and enhance it,
 
---
-Bye, Peter Korsgaard
+it is time to deprecate the crosstool-NG backend for the 2013.05 release.
+
+Then, it will be entirely removed early in the 2013.08 cycle, to let some
+time for those that rely on it to voice their opinions. ;-)
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index e6a3b25..665618c 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -22,6 +22,7 @@ config BR2_TOOLCHAIN_EXTERNAL
+ 
+ config BR2_TOOLCHAIN_CTNG
+ 	bool "Crosstool-NG toolchain"
++	depends on BR2_DEPRECATED
+ 	depends on !BR2_microblaze && !BR2_aarch64 && !BR2_xtensa && !BR2_arc
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ 	help
+-- 
+1.8.1.2
