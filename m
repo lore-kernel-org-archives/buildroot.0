@@ -1,45 +1,81 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 6 May 2013 16:28:39 +0200
-Subject: [Buildroot] [git commit] linux: use BR2_LINUX_KERNEL_LATEST_VERSION
-	as option name
-Message-ID: <20130506143834.3742E99C41@busybox.osuosl.org>
+Date: Mon, 6 May 2013 16:27:04 +0200
+Subject: [Buildroot] [git commit] barebox: add custom version option
+Message-ID: <20130506143833.E9DDD99C46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c719ded2b94e2d53988d592c9229ad3544e5168e
+commit: http://git.buildroot.net/buildroot/commit/?id=05d7edbedc2664b4b1fd8d25c6e2f35620886b01
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use a option name that doesn't change for every new 3.x version.
-It's easier to maintain and consistent with barebox.
+Add custom version option as used in the linux kernel.
+This way we can easily specify newer and older version.
+Remove the list of the older versions because is obsoleted
+by the new custom version option that is more flexible.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ boot/barebox/Config.in |   27 ++++++++++++---------------
+ 1 files changed, 12 insertions(+), 15 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 3ec687f..586db47 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -20,7 +20,7 @@ if BR2_LINUX_KERNEL
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 581cc52..47926cb 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -8,22 +8,17 @@ config BR2_TARGET_BAREBOX
+ if BR2_TARGET_BAREBOX
  choice
- 	prompt "Kernel version"
+ 	prompt "version"
+-	default BR2_TARGET_BAREBOX_2013_04
+ 	help
+ 	  Select the specific Barebox version you want to use
  
--config BR2_LINUX_KERNEL_3_9
-+config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "3.9"
+-config BR2_TARGET_BAREBOX_2013_01
+-	bool "2013.01.0"
+-
+-config BR2_TARGET_BAREBOX_2013_02
+-	bool "2013.02.0"
+-
+-config BR2_TARGET_BAREBOX_2013_03
+-	bool "2013.03.0"
+-
+-config BR2_TARGET_BAREBOX_2013_04
++config BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	bool "2013.04.0"
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
++config BR2_TARGET_BAREBOX_CUSTOM_VERSION
++	bool "Custom version"
++	help
++	  This option allows to use a specific official versions
++
+ config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	bool "Custom tarball"
  
- config BR2_LINUX_KERNEL_VERSION
+@@ -32,6 +27,10 @@ config BR2_TARGET_BAREBOX_CUSTOM_GIT
+ 
+ endchoice
+ 
++config BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE
++	string "Barebox version"
++	depends on BR2_TARGET_BAREBOX_CUSTOM_VERSION
++
+ if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION
+@@ -41,10 +40,8 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
  	string
--	default "3.9" if BR2_LINUX_KERNEL_3_9
-+	default "3.9" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-	default "2013.01.0"	if BR2_TARGET_BAREBOX_2013_01
+-	default "2013.02.0"	if BR2_TARGET_BAREBOX_2013_02
+-	default "2013.03.0"	if BR2_TARGET_BAREBOX_2013_03
+-	default "2013.04.0"	if BR2_TARGET_BAREBOX_2013_04
++	default "2013.04.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default $BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+ 
