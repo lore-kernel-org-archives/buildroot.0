@@ -1,48 +1,40 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon,  6 May 2013 12:14:56 +0200
-Subject: [Buildroot] [PATCH 2/3] pandaboard: Fix defconfig build
+Date: Mon,  6 May 2013 12:14:57 +0200
+Subject: [Buildroot] [PATCH 3/3] toolchain/gcc: Enable --with-float for
+	powerpc
 In-Reply-To: <1367835297-6560-1-git-send-email-maxime.ripard@free-electrons.com>
 References: <1367835297-6560-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <1367835297-6560-3-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <1367835297-6560-4-git-send-email-maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 75b7dc68 ("linux: default to 3.9, remove 3.8") made 3.9 the
-default kernel version.
+Commit 8d929f4b ("toolchain/gcc: Only enable --with-float when it makes
+sense") restricted the --with-float use to only MIPS, ARM and SPARC,
+while it seems that powerpc needs it as well.
 
-The omap kernel switched to multiplatform kernel during the 3.9 kernel
-development cycle. Obviously, the uImage generation doesn't work anymore
-with multiplatform kernels, since you have to provide the kernel load
-address, resulting in a build error.
-
-Lock down the kernel version to 3.8 to keep the old behaviour until
-someone submits a patch to switch to multiplatform kernel.
+Fixes the qemu_ppc_virtex_ml507_defconfig build.
 
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 ---
- configs/pandaboard_defconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+ toolchain/gcc/gcc-uclibc-4.x.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
-index 9496b7f..95cfdd6 100644
---- a/configs/pandaboard_defconfig
-+++ b/configs/pandaboard_defconfig
-@@ -11,8 +11,13 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
-+# Lock to 3.8 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_8=y
-+
- # Kernel
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.11"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- 
- # GCC
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 128b7ab..959568f 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -66,7 +66,8 @@ endif
+ # Determine soft-float options
+ ifeq ($(BR2_SOFT_FLOAT),y)
+ # only mips*-*-*, arm*-*-* and sparc*-*-* accept --with-float
+-ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_sparc),y)
++# powerpc seems to be needing it as well
++ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),y)
+ SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
+ endif
+ ifeq ($(BR2_arm)$(BR2_armeb),y) # only set float-abi for arm
 -- 
 1.8.1.2
