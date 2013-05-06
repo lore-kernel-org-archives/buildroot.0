@@ -1,79 +1,78 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 May 2013 00:09:58 +0200
-Subject: [Buildroot] [PATCH v2] chrony: new package
-In-Reply-To: <1367866876-5339-1-git-send-email-ntl@pobox.com> (Nathan Lynch's
- message of "Mon, 6 May 2013 14:01:16 -0500")
-References: <1367866876-5339-1-git-send-email-ntl@pobox.com>
-Message-ID: <87wqrb4v61.fsf@dell.be.48ers.dk>
+Date: Tue, 07 May 2013 00:13:37 +0200
+Subject: [Buildroot] [PATCH 1/2] jquery-ui: new package
+In-Reply-To: <1339704133-11220-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Thu, 14 Jun 2012 21:02:11 +0100")
+References: <1339704133-11220-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87li7r4uzy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nathan" == Nathan Lynch <ntl@pobox.com> writes:
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
- Nathan> Signed-off-by: Nathan Lynch <ntl@pobox.com>
- Nathan> ---
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
- Nathan>  v2: Add upstream URL to help text
- Nathan>      Add dependency on BR2_USE_MMU (fork)
- Nathan>      Add header to chrony.mk
- Nathan>      Checked build with br-arm-basic, br-arm-full-nothread; no changes needed
+Committed with minor changes, thanks.
 
-Thanks, but:
+ spdawson> ---
+ spdawson>  package/Config.in              |    1 +
+ spdawson>  package/jquery-ui/Config.in    |   23 +++++++++++++++++++++++
+ spdawson>  package/jquery-ui/jquery-ui.mk |   36 ++++++++++++++++++++++++++++++++++++
+ spdawson>  3 files changed, 60 insertions(+)
+ spdawson>  create mode 100644 package/jquery-ui/Config.in
+ spdawson>  create mode 100644 package/jquery-ui/jquery-ui.mk
 
-Unrecognized option :  --target=arm-buildroot-linux-uclibcgnueabi
-Unrecognized option :  --host=arm-buildroot-linux-uclibcgnueabi
-Unrecognized option :  --build=x86_64-unknown-linux-gnu
-Unrecognized option :  --program-prefix=
-Unrecognized option :  --disable-gtk-doc
-Unrecognized option :  --disable-doc
-Unrecognized option :  --disable-docs
-Unrecognized option :  --disable-documentation
-Unrecognized option :  --with-xmlto=no
-Unrecognized option :  --with-fop=no
-Unrecognized option :  --enable-ipv6
-Unrecognized option :  --enable-static
-Unrecognized option :  --enable-shared
-Configuring for  Linux-x86_64
-Checking for math : No
-Checking for math in -lm : Yes
-Checking for <stdint.h> : Yes
-Checking for <inttypes.h> : Yes
-Checking for IPv6 support : Yes
-Checking for in6_pktinfo : No
-Checking for in6_pktinfo with _GNU_SOURCE : Yes
-Checking for <sys/timepps.h> : No
-Checking for <timepps.h> : No
-Checking for linuxcaps : No
-Checking for <linux/rtc.h> : Yes
-Checking for sched_setscheduler() : Yes
-Checking for mlockall() : Yes
-Checking for editline : No
-Checking for readline : No
-Package nss was not found in the pkg-config search path.
-Perhaps you should add the directory containing `nss.pc'
-to the PKG_CONFIG_PATH environment variable
-No package 'nss' found
-Package nss was not found in the pkg-config search path.
-Perhaps you should add the directory containing `nss.pc'
-to the PKG_CONFIG_PATH environment variable
-No package 'nss' found
-Checking for NSS : No
-Checking for tomcrypt : No
+ spdawson> diff --git a/package/Config.in b/package/Config.in
+ spdawson> index d047ce8..2f20617 100644
+ spdawson> --- a/package/Config.in
+ spdawson> +++ b/package/Config.in
+ spdawson> @@ -381,6 +381,7 @@ source "package/explorercanvas/Config.in"
+ spdawson>  source "package/flot/Config.in"
+ spdawson>  source "package/jquery/Config.in"
+ spdawson>  source "package/jquery-sparkline/Config.in"
+ spdawson> +source "package/jquery-ui/Config.in"
+ spdawson>  source "package/jquery-validation/Config.in"
+ spdawson>  source "package/jsmin/Config.in"
+ spdawson>  endmenu
+ spdawson> diff --git a/package/jquery-ui/Config.in b/package/jquery-ui/Config.in
+ spdawson> new file mode 100644
+ spdawson> index 0000000..073a40a
+ spdawson> --- /dev/null
+ spdawson> +++ b/package/jquery-ui/Config.in
+ spdawson> @@ -0,0 +1,23 @@
+ spdawson> +config BR2_PACKAGE_JQUERY_UI
+ spdawson> +	bool "jQuery UI"
 
+It should select BR2_PACKAGE_JQUERY
 
-So apparently it isn't using autotools, but a handwritten
-configure. This could make it troublesome to use the autotools-package
-support (I haven't looked in detail to see if it's a problem though).
+ spdawson> +	help
+ spdawson> +	  jQuery UI provides abstractions for low-level interaction and
+ spdawson> +	  animation, advanced effects and high-level, themeable widgets,
+ spdawson> +	  built on top of the jQuery JavaScript Library, that you can use
+ spdawson> +	  to build highly interactive web applications.
+ spdawson> +
+ spdawson> +	  http://jqueryui.com/
+ spdawson> +
+ spdawson> +config BR2_PACKAGE_JQUERY_UI_JAVASCRIPT_PATH
+ spdawson> +	string "Target install path for JavaScript"
+ spdawson> +	default "/var/www/javascripts"
+ spdawson> +	depends on BR2_PACKAGE_JQUERY_UI
+ spdawson> +	help
+ spdawson> +	  Specify a target install path for JavaScript files
+ spdawson> +
+ spdawson> +config BR2_PACKAGE_JQUERY_UI_CSS_PATH
+ spdawson> +	string "Target install path for CSS"
+ spdawson> +	default "/var/www/stylesheets"
+ spdawson> +	depends on BR2_PACKAGE_JQUERY_UI
+ spdawson> +	help
+ spdawson> +	  Specify a target install path for CSS files
 
-The 'Configuring for  Linux-x86_64' is a bit worrysome as I'm building
-for ARM.
-
-The PKG_CONFIG_PATH warnings is an indication that you should depend on
-host-pkgconf. We also have a libnss package so you could add optional
-support for it.
+We afaik discussed these options some time ago. I dislike them, so I've
+dropped them for now atleast.
 
 -- 
 Bye, Peter Korsgaard
