@@ -1,38 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 06 May 2013 13:52:35 +0200
-Subject: [Buildroot] [PATCH] python: remove smtpd.py
-In-Reply-To: <1367840923-19121-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 6 May 2013 08:48:43 -0300")
-References: <1367840923-19121-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87txmgiav0.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 6 May 2013 13:44:35 +0200
+Subject: [Buildroot] [git commit] python-m2crypto: new package
+Message-ID: <20130506115310.B3DEA99C41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b099bb199e5819c1b15b9a623a4e5d9d6423ada4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> It's mostly sample code, normally not used, and has a bad shebang line.
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/python/python.mk | 11 +++++++----
- Gustavo>  1 file changed, 7 insertions(+), 4 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/python-m2crypto/python-m2crypto.mk |   26 ++++++++++++++++++++++++++
+ 1 files changed, 26 insertions(+), 0 deletions(-)
 
- Gustavo> diff --git a/package/python/python.mk b/package/python/python.mk
- Gustavo> index 4876dd8..265b7d0 100644
- Gustavo> --- a/package/python/python.mk
- Gustavo> +++ b/package/python/python.mk
- Gustavo> @@ -108,10 +108,6 @@ else
- Gustavo>  PYTHON_CONF_OPT += --disable-zlib
- Gustavo>  endif
- 
- Gustavo> -ifeq ($(BR2_PACKAGE_PYTHON_HASHLIB),y)
- Gustavo> -PYTHON_DEPENDENCIES += openssl
- Gustavo> -endif
- Gustavo> -
-
-I guess this shouldn't get dropped?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
+new file mode 100644
+index 0000000..2429b24
+--- /dev/null
++++ b/package/python-m2crypto/python-m2crypto.mk
+@@ -0,0 +1,26 @@
++#############################################################
++#
++# python-m2crypto
++#
++#############################################################
++
++PYTHON_M2CRYPTO_VERSION = 0.21.1
++PYTHON_M2CRYPTO_SITE = http://pypi.python.org/packages/source/M/M2Crypto
++PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
++HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-python host-python-setuptools host-swig
++
++define HOST_PYTHON_M2CRYPTO_BUILD_CMDS
++	(cd $(@D); \
++	$(HOST_CONFIGURE_OPTS) \
++	PYTHONXCPREFIX="$(HOST_DIR)/usr/" \
++	LDFLAGS="-L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib" \
++	$(HOST_DIR)/usr/bin/python setup.py build_ext --openssl=$(HOST_DIR)/usr)
++endef
++
++define HOST_PYTHON_M2CRYPTO_INSTALL_CMDS
++	(cd $(@D); \
++	PYTHONPATH=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
++endef
++
++$(eval $(host-generic-package))
