@@ -1,71 +1,49 @@
 From: Nathan Lynch <ntl@pobox.com>
-Date: Mon,  6 May 2013 14:01:16 -0500
-Subject: [Buildroot] [PATCH v2] chrony: new package
-Message-ID: <1367866876-5339-1-git-send-email-ntl@pobox.com>
+Date: Mon, 06 May 2013 14:01:52 -0500
+Subject: [Buildroot] [PATCH] chrony: new package
+In-Reply-To: <20130506194935.6340c5a8@skate>
+References: <1367856775-4502-1-git-send-email-ntl@pobox.com>
+ <20130506192044.398293f1@skate>
+ <1367862156.2177.8.camel@doorstop.aus.2wire.com>
+ <20130506194935.6340c5a8@skate>
+Message-ID: <1367866912.2177.14.camel@doorstop.aus.2wire.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nathan Lynch <ntl@pobox.com>
----
+On Mon, 2013-05-06 at 19:49 +0200, Thomas Petazzoni wrote:
+> Dear Nathan Lynch,
+> 
+> On Mon, 06 May 2013 12:42:36 -0500, Nathan Lynch wrote:
+> 
+> > > Also, did you check that this program indeed builds with a minimal
+> > > uClibc toolchain (no thread, no wchar, no locale, no nothing) ?
+> > 
+> > Sorry, no, that was sloppy of me.  I will do so for v2 and try to
+> > better specify the package's needs and dependencies.  I'd be happy to
+> > try any configs you'd care to point out...
+> 
+> You can try a very minimal build: no thread, no wchar, no locale, no
+> C++, no nothing. If it builds, you're all set. If your package doesn't
+> build, then something is missing.
+> 
+> If you don't want to spend too much time building toolchains, you can
+> use:
+> 
+>  http://autobuild.buildroot.org/toolchains/tarballs/br-arm-basic.tar.bz2
+>  as an external toolchain that is minimal (no C++, no wchar, no locale,
+>  no largefile, etc. but it has thread support)
+> 
+>  http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-nothread.tar.bz2
+>  as an external that has everything (C++, wchar, locale, largefile,
+>  etc.), but doesn't has thread support.
+> 
+> If your package builds with both, then normally you should be all set.
 
- v2: Add upstream URL to help text
-     Add dependency on BR2_USE_MMU (fork)
-     Add header to chrony.mk
-     Checked build with br-arm-basic, br-arm-full-nothread; no changes needed
+Thank you for this guidance.  I verified that the package builds with
+both of these and found no issues (I did realize it needs MMU, however).
+I will do similarly for future package submissions.
 
- package/Config.in        |  1 +
- package/chrony/Config.in |  8 ++++++++
- package/chrony/chrony.mk | 12 ++++++++++++
- 3 files changed, 21 insertions(+)
- create mode 100644 package/chrony/Config.in
- create mode 100644 package/chrony/chrony.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index fe4f56b..d5719a8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -670,6 +670,7 @@ source "package/bind/Config.in"
- source "package/bmon/Config.in"
- source "package/bridge-utils/Config.in"
- source "package/can-utils/Config.in"
-+source "package/chrony/Config.in"
- source "package/connman/Config.in"
- source "package/crda/Config.in"
- source "package/ctorrent/Config.in"
-diff --git a/package/chrony/Config.in b/package/chrony/Config.in
-new file mode 100644
-index 0000000..05d6fc1
---- /dev/null
-+++ b/package/chrony/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_CHRONY
-+	bool "chrony"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Chrony is a pair of programs which are used to maintain the
-+	  accuracy of the system clock.
-+
-+	  http://chrony.tuxfamily.org/
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-new file mode 100644
-index 0000000..e8f121d
---- /dev/null
-+++ b/package/chrony/chrony.mk
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# chrony
-+#
-+#############################################################
-+
-+CHRONY_VERSION = 1.27
-+CHRONY_SITE = http://download.tuxfamily.org/chrony/
-+CHRONY_LICENSE = GPLv2
-+CHRONY_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
--- 
-1.8.1.4
+v2 with the rest of your feedback addressed on its way.
