@@ -1,40 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 6 May 2013 12:29:34 +0200
-Subject: [Buildroot] [git commit] toolchain/gcc: Enable --with-float for
-	powerpc
-Message-ID: <20130506103014.E04C399C40@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 06 May 2013 08:07:52 -0300
+Subject: [Buildroot] [PATCH 1/3] python-setuptools: forkbump and add
+ workaround for shebang
+In-Reply-To: <87a9o8lfy6.fsf@dell.be.48ers.dk>
+References: <1365872210-20167-1-git-send-email-gustavo@zacarias.com.ar>
+ <516CEF3C.6070505@mind.be> <516D254A.4010707@zacarias.com.ar>
+ <87a9o8lfy6.fsf@dell.be.48ers.dk>
+Message-ID: <51878F08.2030804@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cccb01bf5947a7ea3a80cb14d680259e3a20d428
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 05/06/2013 04:34 AM, Peter Korsgaard wrote:
 
-Commit 8d929f4b ("toolchain/gcc: Only enable --with-float when it makes
-sense") restricted the --with-float use to only MIPS, ARM and SPARC,
-while it seems that powerpc needs it as well.
+> Did this ever get tested? Thomas, could you send your ack / Gustavo,
+> could you send a v2 fixing the issues pointed out by Arnout?
 
-Fixes the qemu_ppc_virtex_ml507_defconfig build.
-
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/gcc/gcc-uclibc-4.x.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
-
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 128b7ab..959568f 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -66,7 +66,8 @@ endif
- # Determine soft-float options
- ifeq ($(BR2_SOFT_FLOAT),y)
- # only mips*-*-*, arm*-*-* and sparc*-*-* accept --with-float
--ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_sparc),y)
-+# powerpc seems to be needing it as well
-+ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),y)
- SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
- endif
- ifeq ($(BR2_arm)$(BR2_armeb),y) # only set float-abi for arm
+It's partially solved for lava-test since it's pulling other
+dependencies by itself - that should probably be solved via new
+buildroot python packages since it's doing so because they're not found,
+and it's not nice when a package starts downloading stuff at
+build/install time.
+Yes, a V2 is forthcoming addressing Arnout's comments and a few more
+fixes/improvements.
+You shouldn't have committed the fixes to python-bottle and
+python-serial since they both depend on the patch to this package,
+they'll probably fail now.
+Regards.
