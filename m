@@ -1,38 +1,45 @@
-From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Mon, 6 May 2013 15:35:59 +0800
-Subject: [Buildroot] [PATCH v7 6/7] arch: toolchain: Install blackfin
- FDPIC and FLAT libraries in external toolchain makefile.
-In-Reply-To: <20130503204819.40b01da9@skate>
-References: <1367577580-3518-1-git-send-email-sonic.adi@gmail.com>
- <1367577580-3518-6-git-send-email-sonic.adi@gmail.com>
- <20130503204819.40b01da9@skate>
-Message-ID: <CAJxxZ0OGox-00E09a1S_Sj7-BhGHjzaTzDDff0t3Aw0s705rOw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 6 May 2013 09:30:08 +0200
+Subject: [Buildroot] [git commit] python-bottle: bump version and fix shebang
+Message-ID: <20130506073609.9654A99C35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=378ceef8c9ad36a93cc835e617ce3583affba06b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, May 4, 2013 at 2:48 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Sonic Zhang,
->
-> On Fri, 3 May 2013 18:39:39 +0800, Sonic Zhang wrote:
->> From: Sonic Zhang <sonic.zhang@analog.com>
->>
->> Reserve all 3 blackfin toolchain folders under the TOOLCHAIN_EXTERNAL_DIR.
->> Set current blackfin toolchain bin folder to the toolchain prefix subfolder.
->> Install FDPIC and FLAT library in target ext-toolchain-installed.
->>
->> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
->
-> Something strange is going in this patch, I can't apply it. git
-> complains that it lacks some repository informations.
->
-> Is your branch containing those 7 patches really based on Buildroot
-> master?
->
-They are against 2013.02 release tag.
-I will send out v8 against the master head.
+Bump to version 0.11.6
+Add the --executable shebang fixup option to the build phase so that the
+script ends with a proper #!/usr/bin/python interpeter line set.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/python-bottle/python-bottle.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
+index 370b31b..9df359f 100644
+--- a/package/python-bottle/python-bottle.mk
++++ b/package/python-bottle/python-bottle.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-PYTHON_BOTTLE_VERSION = 0.11.4
++PYTHON_BOTTLE_VERSION = 0.11.6
+ PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
+ PYTHON_BOTTLE_SITE = http://pypi.python.org/packages/source/b/bottle
+ PYTHON_BOTTLE_DEPENDENCIES = python
+@@ -12,7 +12,7 @@ PYTHON_BOTTLE_LICENSE = MIT
+ # README.rst refers to the file "LICENSE" but it's not included
+ 
+ define PYTHON_BOTTLE_BUILD_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build --executable=/usr/bin/python)
+ endef
+ 
+ define PYTHON_BOTTLE_INSTALL_TARGET_CMDS
