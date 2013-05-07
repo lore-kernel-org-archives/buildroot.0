@@ -1,62 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 May 2013 09:54:48 +0200
-Subject: [Buildroot] [PATCH v4 01/12] toolchain/gcc: Add host-{flex,
- bison} dependencies for GCC 4.2, 4.3, 4.4
-In-Reply-To: <87wqreqx77.fsf@dell.be.48ers.dk>
-References: <1367524293-32081-1-git-send-email-mjonker@synopsys.com>
- <1367524293-32081-2-git-send-email-mjonker@synopsys.com>
- <87wqreqx77.fsf@dell.be.48ers.dk>
-Message-ID: <20130507095448.765b8cc4@skate>
+Date: Tue, 7 May 2013 10:02:37 +0200
+Subject: [Buildroot] [PATCH] toolchain/crostool-NG: mark as deprecated
+In-Reply-To: <1367880422-12739-1-git-send-email-yann.morin.1998@free.fr>
+References: <1367880422-12739-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20130507100237.3888a716@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Yann E. MORIN,
 
-On Sat, 04 May 2013 22:58:20 +0200, Peter Korsgaard wrote:
-
->  Mischa> +ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
->  Mischa> +ifneq ($(findstring x4.3.,x$(GCC_VERSION)),x4.3.)
->  Mischa> +ifneq ($(findstring x4.4.,x$(GCC_VERSION)),x4.4.)
->  Mischa> +GCC_HOST_PREREQ = host-flex host-bison
+On Tue,  7 May 2013 00:47:02 +0200, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> Ehh, two things:
+> For the following reasons:
+>   - it used to be broken without anyone noticing for a long time,
+>   - it is still not fully integrated within the Buildroot set of options,
+>   - it has not gained much traction (not even I use it),
+>   - I've always argued that sustained development should use an external
+>     toolchain, and not rely on building one with Buildroot,
+>   - I did not submit any of the enhancements requested during the last
+>     developpers' day in Brussels,
+>   - I have neither the incentive nor the time to maintain and enhance it,
 > 
-> - This implements the opposite logic of what the commit message says
->   (E.G. adds flex/bison if the version ISN'T 4.2/4.3/4.4)
+> it is time to deprecate the crosstool-NG backend for the 2013.05 release.
 > 
-> - It overrides GCC_HOST_PREREQ instead of appending to it even though
->   the line just above already appends something.
+> Then, it will be entirely removed early in the 2013.08 cycle, to let some
+> time for those that rely on it to voice their opinions. ;-)
 
-Hum, right. Mischa, could you fix those and submit a patch? I've added
-a ARC configuration to the autobuilders, and it is now failing since
-Peter didn't commit this patch.
+I don't have real comments about the proposal to deprecate the
+Crosstool-NG support, but I'd like to take this opportunity to unveil
+my plans about the internal toolchain support (I hate unveiling plans
+before the code is ready, but it seems like a good idea in this
+particular case) :
 
-> It isn't clear to me what the gcc version logic should be, and if it is
-> somehow related to ARC - I don't recall any autobuilder failures
-> regarding missing flex/bison.
+ (1) I am currently converting the existing internal toolchain logic to
+     use the package infrastructure. I've already done it for
+     'gdb' (merged for 2013.05), I have patches that seem to work for
+     elf2flt and linux-headers, and I've started working on converting
+     gcc (which is the most complicated piece of the puzzle).
 
-The problem is that those old gcc versions require flex/bison to build
-properly. The issue was not seen on the autobuilders, because so far the
-only architectures that are using those old versions are AVR32 (4.2)
-and SPARC/Leon (4.4).
+ (2) Once this conversion is done, I intend to work on adding (e)glibc
+     support to the internal toolchain backend, so that regardless of
+     what happens with the Crosstool-NG backend, Buildroot will
+     continue to have the possibility to build a (e)glibc toolchain.
 
-For AVR32, the autobuilder uses a an external toolchain which was built
-with a previous version of Buildroot, at a time where the autobuilder
-chroot had bison and flex installed system-wide.
-
-For SPARC, there is no autobuilder configuration (maybe I should add
-one?).
-
-So this bug already exists today, independently of the ARC support: I
-think that if you try to build the AVR32 internal toolchain on a system
-where bison and flex are not installed, the build is going to fail.
-
-See
-http://autobuild.buildroot.org/results/cc6c6f8036ee2a35c3eec36cf3f4338e76c19d68/build-end.log
-for an autobuilder failure that exhibits the problem.
+(1) and (2) represent a significant amount of work, so don't expect
+those things to be ready overnight.
 
 Best regards,
 
