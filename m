@@ -1,38 +1,89 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 7 May 2013 20:43:12 +0300
-Subject: [Buildroot] [PATCH 2/2] ptpd2: new package
-In-Reply-To: <1367944785-27159-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1367944785-27159-1-git-send-email-gustavo@zacarias.com.ar>
- <1367944785-27159-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130507174311.GM5202@tarshish>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Tue,  7 May 2013 15:46:59 -0500
+Subject: [Buildroot] [PATCH v2 1/2] libcec: add libcec for HDMI device
+	Control
+In-Reply-To: <1367618887-25757-1-git-send-email-spenser@gillilanding.com>
+References: <1367618887-25757-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <1367959620-17176-1-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+This patch adds libcec for HDMI device control.  It enables Raspberry Pi
+support if the rpi-userland package is installed.
 
-On Tue, May 07, 2013 at 01:39:45PM -0300, Gustavo Zacarias wrote:
-> Add the ptpd2 package, handles the IEEE 1588-2008 spec which is not
-> backward compatible to IEEE 1588-2002.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+---
+ package/Config.in        |    1 +
+ package/libcec/Config.in |    8 ++++++++
+ package/libcec/libcec.mk |   30 ++++++++++++++++++++++++++++++
+ 3 files changed, 39 insertions(+)
+ create mode 100644 package/libcec/Config.in
+ create mode 100644 package/libcec/libcec.mk
 
-[snip]
-
-> +config BR2_PACKAGE_PTPD2
-> +	bool "ptpd2"
-> +	help
-> +	  The PTP daemon (PTPd) implements the Precision Time protocol
-> +	  (PTP) as defined by the IEEE-1588-2008.
-
-Please mention here also that this package is not compatible with IEEE 
-1588-2002, and that the ptpd should be used instead.
-
-baurch
-
+diff --git a/package/Config.in b/package/Config.in
+index 81a3f76..23af3f5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -463,6 +463,7 @@ source "package/imx-lib/Config.in"
+ source "package/lcdapi/Config.in"
+ source "package/libaio/Config.in"
+ source "package/libatasmart/Config.in"
++source "package/libcec/Config.in"
+ source "package/libraw1394/Config.in"
+ source "package/tslib/Config.in"
+ source "package/libfreefare/Config.in"
+diff --git a/package/libcec/Config.in b/package/libcec/Config.in
+new file mode 100644
+index 0000000..1cacd4a
+--- /dev/null
++++ b/package/libcec/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBCEC
++	bool "libcec"
++	help
++	  libcec allows you in combination with the right hardware to control your
++	  home theater devices with your TV remote control utilizing existing HDMI
++	  cabling.
++
++	  http://libcec.pulse-eight.com
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+new file mode 100644
+index 0000000..cc2fbed
+--- /dev/null
++++ b/package/libcec/libcec.mk
+@@ -0,0 +1,30 @@
++#############################################################
++#
++# libcec
++#
++#############################################################
++
++LIBCEC_VERSION = libcec-2.1.1
++LIBCEC_SITE = http://github.com/Pulse-Eight/libcec/tarball/$(LIBCEC_VERSION)
++LIBCEC_LICENSE = GPLv2+
++LIBCEC_LICENSE_FILE = COPYING
++
++LIBCEC_AUTORECONF = YES
++LIBCEC_INSTALL_STAGING = YES
++LIBCEC_DEPENDENCIES = host-pkgconf
++
++ifeq ($(BR2_PACKAGE_LOCKDEV),y)
++LIBCEC_DEPENDENCIES += lockdev
++endif
++
++ifeq ($(BR2_PACKAGE_UDEV),y)
++LIBCEC_DEPENDENCIES += udev
++endif
++
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++LIBCEC_CONF_OPT = --enable-rpi \
++   --with-rpi-include-path=$(STAGING_DIR)/usr/include
++LIBCEC_DEPENDENCIES += rpi-userland
++endif
++
++$(eval $(autotools-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.7.9.5
