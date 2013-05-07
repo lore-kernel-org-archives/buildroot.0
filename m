@@ -1,24 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 May 2013 14:00:43 +0200
-Subject: [Buildroot] [PATCH] configs: update boards to u-boot custom
-	version option
-In-Reply-To: <1367922889-3984-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 7 May 2013 07:34:49 -0300")
-References: <1367922889-3984-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87y5br0zkk.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  7 May 2013 09:39:59 -0300
+Subject: [Buildroot] [PATCH] dropbear: disable standalone mode for nommu
+Message-ID: <1367930399-28232-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+dropbear for nommu targets must disable the standalone (non-inetd) mode
+since the platform lacks fork(), fixes:
+http://autobuild.buildroot.net/results/ecbdfab10f54bec75c112bbf005bba9ae2b18dc8/
 
- Gustavo> Some board configs where left out of the u-boot custom version
- Gustavo> migration, so do it otherwise they'll just pull the latest
- Gustavo> version which might not work and brick the device.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dropbear/dropbear.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Committed, thanks.
-
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index d5dfe6d..50f6100 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -39,6 +39,14 @@ define DROPBEAR_BUILD_FEATURED
+ 	$(SED) 's:.*\(#define DROPBEAR_SHA2_512_HMAC\).*:\1:' $(@D)/options.h
+ endef
+ 
++define DROPBEAR_DISABLE_STANDALONE
++	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
++endef
++
++ifeq ($(BR2_USE_MMU),)
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_STANDALONE
++endif
++
+ ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),y)
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_REVERSE_DNS
+ endif
 -- 
-Bye, Peter Korsgaard
+1.8.1.5
