@@ -1,74 +1,61 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 7 May 2013 14:00:17 +0200
-Subject: [Buildroot] [git commit] configs: update boards to u-boot custom
-	version option
-Message-ID: <20130507133102.D286299AD7@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  7 May 2013 10:45:50 -0300
+Subject: [Buildroot] [PATCHv2] dropbear: disable standalone mode for nommu
+Message-ID: <1367934350-31167-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f273ae0406f6f309f4e750e680c936afc443ea2f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Some board configs where left out of the u-boot custom version
-migration, so do it otherwise they'll just pull the latest version which
-might not work and brick the device.
+dropbear for nommu targets must disable the standalone (non-inetd) mode
+since the platform lacks fork(), fixes:
+http://autobuild.buildroot.net/results/ecbdfab10f54bec75c112bbf005bba9ae2b18dc8/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/at91rm9200df_defconfig |    3 ++-
- configs/atngw100_defconfig     |    3 ++-
- configs/atstk100x_defconfig    |    5 ++---
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ package/dropbear/dropbear.mk | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
-index 74b5a6f..5994f43 100644
---- a/configs/at91rm9200df_defconfig
-+++ b/configs/at91rm9200df_defconfig
-@@ -18,7 +18,8 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.38.8"
- # Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="at91rm9200ek"
--BR2_TARGET_UBOOT_2010_06=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2010.06"
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index d5dfe6d..e00890e 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -39,6 +39,19 @@ define DROPBEAR_BUILD_FEATURED
+ 	$(SED) 's:.*\(#define DROPBEAR_SHA2_512_HMAC\).*:\1:' $(@D)/options.h
+ endef
  
- # Kernel
- BR2_LINUX_KERNEL=y
-diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
-index 9ab6c03..4a779e1 100644
---- a/configs/atngw100_defconfig
-+++ b/configs/atngw100_defconfig
-@@ -14,7 +14,8 @@ BR2_TARGET_ROOTFS_TAR_NONE=y
- # Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="atngw100"
--BR2_TARGET_UBOOT_2010_09=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2010.09"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
-diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
-index 1af5001..fe7e498 100644
---- a/configs/atstk100x_defconfig
-+++ b/configs/atstk100x_defconfig
-@@ -4,7 +4,8 @@ BR2_avr32=y
- # U-Boot
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="atstk1002"
--BR2_TARGET_UBOOT_2010_09=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2010.09"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
-@@ -15,5 +16,3 @@ BR2_LINUX_KERNEL_DEFCONFIG="atstk1002"
- 
- # Filesystem
- BR2_TARGET_ROOTFS_TAR=y
++define DROPBEAR_DISABLE_STANDALONE
++	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
++endef
++
++ifeq ($(BR2_USE_MMU),y)
++define DROPBEAR_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/dropbear/S50dropbear \
++		$(TARGET_DIR)/etc/init.d/S50dropbear
++endef
++else
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_STANDALONE
++endif
++
+ ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),y)
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_REVERSE_DNS
+ endif
+@@ -64,15 +77,6 @@ define DROPBEAR_INSTALL_TARGET_CMDS
+ 	for f in $(DROPBEAR_TARGET_BINS); do \
+ 		ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/$$f ; \
+ 	done
+-	if [ ! -f $(TARGET_DIR)/etc/init.d/S50dropbear ]; then \
+-		$(INSTALL) -m 0755 -D package/dropbear/S50dropbear $(TARGET_DIR)/etc/init.d/S50dropbear; \
+-	fi
+-endef
 -
--
+-define DROPBEAR_UNINSTALL_TARGET_CMDS
+-	rm -f $(TARGET_DIR)/usr/sbin/dropbear
+-	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(DROPBEAR_TARGET_BINS))
+-	rm -f $(TARGET_DIR)/etc/init.d/S50dropbear
+ endef
+ 
+ $(eval $(autotools-package))
+-- 
+1.8.1.5
