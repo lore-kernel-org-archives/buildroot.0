@@ -1,61 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  7 May 2013 10:45:50 -0300
-Subject: [Buildroot] [PATCHv2] dropbear: disable standalone mode for nommu
-Message-ID: <1367934350-31167-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 May 2013 16:18:35 +0200
+Subject: [Buildroot] Buildroot Patchwork Day May 2013
+Message-ID: <20130507161835.1a16b5af@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dropbear for nommu targets must disable the standalone (non-inetd) mode
-since the platform lacks fork(), fixes:
-http://autobuild.buildroot.net/results/ecbdfab10f54bec75c112bbf005bba9ae2b18dc8/
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/dropbear/dropbear.mk | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+Since the first Patchwork Day was useful, let's try to set up a second
+one. I've created a Doodle poll to find a date that would work for
+several developers: http://www.doodle.com/nrdyzesxknv8gavx.
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index d5dfe6d..e00890e 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -39,6 +39,19 @@ define DROPBEAR_BUILD_FEATURED
- 	$(SED) 's:.*\(#define DROPBEAR_SHA2_512_HMAC\).*:\1:' $(@D)/options.h
- endef
- 
-+define DROPBEAR_DISABLE_STANDALONE
-+	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
-+endef
-+
-+ifeq ($(BR2_USE_MMU),y)
-+define DROPBEAR_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/dropbear/S50dropbear \
-+		$(TARGET_DIR)/etc/init.d/S50dropbear
-+endef
-+else
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_STANDALONE
-+endif
-+
- ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),y)
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_REVERSE_DNS
- endif
-@@ -64,15 +77,6 @@ define DROPBEAR_INSTALL_TARGET_CMDS
- 	for f in $(DROPBEAR_TARGET_BINS); do \
- 		ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/$$f ; \
- 	done
--	if [ ! -f $(TARGET_DIR)/etc/init.d/S50dropbear ]; then \
--		$(INSTALL) -m 0755 -D package/dropbear/S50dropbear $(TARGET_DIR)/etc/init.d/S50dropbear; \
--	fi
--endef
--
--define DROPBEAR_UNINSTALL_TARGET_CMDS
--	rm -f $(TARGET_DIR)/usr/sbin/dropbear
--	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(DROPBEAR_TARGET_BINS))
--	rm -f $(TARGET_DIR)/etc/init.d/S50dropbear
- endef
- 
- $(eval $(autotools-package))
+For those who don't know, the goal of a Patchwork Day is to go through
+patches sitting in Patchwork, or bugs waiting in the Bugzilla, a find
+a solution for those. Either rework the patch and submit an updated
+version, or do some review to encourage the submitter to send a new
+version, or discuss is the patch should be rejected or not, etc.
+
+Contributors welcome.
+
+Best regards,
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
