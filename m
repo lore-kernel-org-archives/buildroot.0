@@ -1,35 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 May 2013 23:02:16 +0200
-Subject: [Buildroot] [PATCH] toolchain/crostool-NG: mark as deprecated
-In-Reply-To: <1367880422-12739-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Tue, 7 May 2013 00:47:02 +0200")
-References: <1367880422-12739-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87zjw6zep3.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 7 May 2013 23:01:09 +0200
+Subject: [Buildroot] [git commit] toolchain/crostool-NG: mark as deprecated
+Message-ID: <20130507210348.55E1197236@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8fda9b78133ae97b373489c3d5fd088ae2b39484
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> For the following reasons:
- Yann>   - it used to be broken without anyone noticing for a long time,
- Yann>   - it is still not fully integrated within the Buildroot set of options,
- Yann>   - it has not gained much traction (not even I use it),
- Yann>   - I've always argued that sustained development should use an external
- Yann>     toolchain, and not rely on building one with Buildroot,
- Yann>   - I did not submit any of the enhancements requested during the last
- Yann>     developpers' day in Brussels,
- Yann>   - I have neither the incentive nor the time to maintain and enhance it,
+For the following reasons:
+  - it used to be broken without anyone noticing for a long time,
+  - it is still not fully integrated within the Buildroot set of options,
+  - it has not gained much traction (not even I use it),
+  - I've always argued that sustained development should use an external
+    toolchain, and not rely on building one with Buildroot,
+  - I did not submit any of the enhancements requested during the last
+    developpers' day in Brussels,
+  - I have neither the incentive nor the time to maintain and enhance it,
 
- Yann> it is time to deprecate the crosstool-NG backend for the 2013.05 release.
+it is time to deprecate the crosstool-NG backend for the 2013.05 release.
 
- Yann> Then, it will be entirely removed early in the 2013.08 cycle, to let some
- Yann> time for those that rely on it to voice their opinions. ;-)
+Then, it will be entirely removed early in the 2013.08 cycle, to let some
+time for those that rely on it to voice their opinions. ;-)
 
-Committed, thanks.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index e6a3b25..665618c 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -22,6 +22,7 @@ config BR2_TOOLCHAIN_EXTERNAL
+ 
+ config BR2_TOOLCHAIN_CTNG
+ 	bool "Crosstool-NG toolchain"
++	depends on BR2_DEPRECATED
+ 	depends on !BR2_microblaze && !BR2_aarch64 && !BR2_xtensa && !BR2_arc
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ 	help
