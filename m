@@ -1,63 +1,117 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 7 May 2013 16:30:30 +0200
-Subject: [Buildroot] [git commit] dropbear: disable standalone mode for nommu
-Message-ID: <20130507143455.809ED99CC3@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  7 May 2013 13:39:44 -0300
+Subject: [Buildroot] [PATCH 1/2] ptpd: new package
+Message-ID: <1367944785-27159-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=494d5c9665fd707dc8586478158ed1814ade44c1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-dropbear for nommu targets must disable the standalone (non-inetd) mode
-since the platform lacks fork(), fixes:
-http://autobuild.buildroot.net/results/ecbdfab10f54bec75c112bbf005bba9ae2b18dc8/
+Add the new ptpd package, loosely based on the one from bug #2305.
+This one handles the IEEE 1588-2002 spec.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dropbear/dropbear.mk |   22 +++++++++++++---------
- 1 files changed, 13 insertions(+), 9 deletions(-)
+ package/Config.in      |  1 +
+ package/ptpd/Config.in |  7 +++++++
+ package/ptpd/S65ptpd   | 29 +++++++++++++++++++++++++++++
+ package/ptpd/ptpd.mk   | 25 +++++++++++++++++++++++++
+ 4 files changed, 62 insertions(+)
+ create mode 100644 package/ptpd/Config.in
+ create mode 100644 package/ptpd/S65ptpd
+ create mode 100644 package/ptpd/ptpd.mk
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index d5dfe6d..e00890e 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -39,6 +39,19 @@ define DROPBEAR_BUILD_FEATURED
- 	$(SED) 's:.*\(#define DROPBEAR_SHA2_512_HMAC\).*:\1:' $(@D)/options.h
- endef
- 
-+define DROPBEAR_DISABLE_STANDALONE
-+	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
+diff --git a/package/Config.in b/package/Config.in
+index 2cf2443..7546d51 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -753,6 +753,7 @@ source "package/pppd/Config.in"
+ source "package/pptp-linux/Config.in"
+ source "package/proftpd/Config.in"
+ source "package/proxychains-ng/Config.in"
++source "package/ptpd/Config.in"
+ source "package/quagga/Config.in"
+ source "package/radvd/Config.in"
+ source "package/rp-pppoe/Config.in"
+diff --git a/package/ptpd/Config.in b/package/ptpd/Config.in
+new file mode 100644
+index 0000000..2d87ca3
+--- /dev/null
++++ b/package/ptpd/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PTPD
++	bool "ptpd"
++	help
++	  The PTP daemon (PTPd) implements the Precision Time protocol
++	  (PTP) as defined by the IEEE-1588-2002.
++
++	  http://ptpd.sourceforge.net/
+diff --git a/package/ptpd/S65ptpd b/package/ptpd/S65ptpd
+new file mode 100644
+index 0000000..4206c5e
+--- /dev/null
++++ b/package/ptpd/S65ptpd
+@@ -0,0 +1,29 @@
++#!/bin/sh
++#
++# Start ptpd
++#
++
++case "$1" in
++  start)
++	echo -n "Starting ptpd: "
++	start-stop-daemon -S -q -x /usr/sbin/ptpd -- -S
++	if [ $? != 0 ]; then
++		echo "FAILED"
++		exit 1
++	else
++		echo "OK"
++	fi
++	;;
++  stop)
++	echo -n "Stopping ptpd: "
++	start-stop-daemon -K -q -x /usr/sbin/ptpd
++	echo "OK"
++	;;
++  restart|reload)
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/ptpd/ptpd.mk b/package/ptpd/ptpd.mk
+new file mode 100644
+index 0000000..481a64e
+--- /dev/null
++++ b/package/ptpd/ptpd.mk
+@@ -0,0 +1,25 @@
++#############################################################
++#
++# ptpd
++#
++#############################################################
++
++PTPD_VERSION = 1.1.0
++PTPD_SITE = http://downloads.sourceforge.net/project/ptpd/ptpd/$(PTPD_VERSION)
++PTPD_LICENSE = BSD
++PTPD_LICENSE_FILES = COPYRIGHT
++
++define PTPD_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/src
 +endef
 +
-+ifeq ($(BR2_USE_MMU),y)
-+define DROPBEAR_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/dropbear/S50dropbear \
-+		$(TARGET_DIR)/etc/init.d/S50dropbear
++define PTPD_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 755 -D $(@D)/src/ptpd $(TARGET_DIR)/usr/sbin/ptpd
 +endef
-+else
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_STANDALONE
-+endif
 +
- ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),y)
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_REVERSE_DNS
- endif
-@@ -64,15 +77,6 @@ define DROPBEAR_INSTALL_TARGET_CMDS
- 	for f in $(DROPBEAR_TARGET_BINS); do \
- 		ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/$$f ; \
- 	done
--	if [ ! -f $(TARGET_DIR)/etc/init.d/S50dropbear ]; then \
--		$(INSTALL) -m 0755 -D package/dropbear/S50dropbear $(TARGET_DIR)/etc/init.d/S50dropbear; \
--	fi
--endef
--
--define DROPBEAR_UNINSTALL_TARGET_CMDS
--	rm -f $(TARGET_DIR)/usr/sbin/dropbear
--	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(DROPBEAR_TARGET_BINS))
--	rm -f $(TARGET_DIR)/etc/init.d/S50dropbear
- endef
- 
- $(eval $(autotools-package))
++define PTPD_INSTALL_INIT_SYSV
++	$(INSTALL) -m 755 -D package/ptpd/S65ptpd \
++		$(TARGET_DIR)/etc/init.d/S65ptpd
++endef
++
++$(eval $(generic-package))
+-- 
+1.8.1.5
