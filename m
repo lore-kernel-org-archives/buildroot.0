@@ -1,32 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 7 May 2013 09:20:48 +0200
-Subject: [Buildroot] [git commit] libmicrohttpd: bump to version 0.9.27
-Message-ID: <20130507072213.0432499C9F@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 07 May 2013 09:30:57 +0200
+Subject: [Buildroot] [PATCH 1/2] uboot: add custom version option
+In-Reply-To: <1367910467-21515-1-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Tue, 7 May 2013 09:07:46 +0200")
+References: <1367910467-21515-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <8738tz2qmm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9d240560eb21df15004683981ed364928effbf2e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libmicrohttpd/libmicrohttpd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Fabio> Add custom version option as used in the linux kernel and barebox.
+ Fabio> This way we can easily specify newer and older version.
+ Fabio> Remove the list of the older versions because is obsoleted
+ Fabio> by the new custom version option that is more flexible.
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index b1bee53..2fb79c5 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LIBMICROHTTPD_VERSION = 0.9.26
-+LIBMICROHTTPD_VERSION = 0.9.27
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_INSTALL_STAGING = YES
- 
+ Fabio> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+
+Committed both, thanks.
+
+-- 
+Bye, Peter Korsgaard
