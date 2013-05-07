@@ -1,59 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 May 2013 15:30:04 +0200
-Subject: [Buildroot] [PATCH] dropbear: disable standalone mode for nommu
-In-Reply-To: <1367930399-28232-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 7 May 2013 09:39:59 -0300")
-References: <1367930399-28232-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87li7q2a03.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 7 May 2013 15:17:52 +0200
+Subject: [Buildroot] [git commit] jquery-ui-themes: strip theme name
+Message-ID: <20130507133103.0B0C599AD7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b2c8569f04f36a545c9e63e1372495e8e502efa6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> dropbear for nommu targets must disable the standalone (non-inetd) mode
- Gustavo> since the platform lacks fork(), fixes:
- Gustavo> http://autobuild.buildroot.net/results/ecbdfab10f54bec75c112bbf005bba9ae2b18dc8/
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/jquery-ui-themes/jquery-ui-themes.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Then we should probably also not install the initscript. It would also be
-good to move the initscript handling to DROPBEAR_INSTALL_INIT_SYSV while
-we're at it.
-
-
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/dropbear/dropbear.mk | 8 ++++++++
- Gustavo>  1 file changed, 8 insertions(+)
-
- Gustavo> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
- Gustavo> index d5dfe6d..50f6100 100644
- Gustavo> --- a/package/dropbear/dropbear.mk
- Gustavo> +++ b/package/dropbear/dropbear.mk
- Gustavo> @@ -39,6 +39,14 @@ define DROPBEAR_BUILD_FEATURED
- Gustavo>  	$(SED) 's:.*\(#define DROPBEAR_SHA2_512_HMAC\).*:\1:' $(@D)/options.h
- Gustavo>  endef
+diff --git a/package/jquery-ui-themes/jquery-ui-themes.mk b/package/jquery-ui-themes/jquery-ui-themes.mk
+index 3c51b89..c410b64 100644
+--- a/package/jquery-ui-themes/jquery-ui-themes.mk
++++ b/package/jquery-ui-themes/jquery-ui-themes.mk
+@@ -19,10 +19,10 @@ endef
  
- Gustavo> +define DROPBEAR_DISABLE_STANDALONE
- Gustavo> +	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
- Gustavo> +endef
- Gustavo> +
- Gustavo> +ifeq ($(BR2_USE_MMU),)
- Gustavo> +DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_STANDALONE
- Gustavo> +endif
- Gustavo> +
- Gustavo>  ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),y)
- Gustavo>  DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_REVERSE_DNS
- Gustavo>  endif
- Gustavo> -- 
- Gustavo> 1.8.1.5
-
- Gustavo> _______________________________________________
- Gustavo> buildroot mailing list
- Gustavo> buildroot at busybox.net
- Gustavo> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
--- 
-Bye, Peter Korsgaard
+ define JQUERY_UI_THEMES_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0644 -D \
+-		$(@D)/themes/$(BR2_PACKAGE_JQUERY_UI_THEMES_THEME)/jquery-ui.css \
++		$(@D)/themes/$(call qstrip,$(BR2_PACKAGE_JQUERY_UI_THEMES_THEME))/jquery-ui.css \
+ 		$(TARGET_DIR)/var/www/jquery-ui.css
+ 	$(INSTALL) -d $(TARGET_DIR)/var/www/images
+-	cp -a $(@D)/themes/$(BR2_PACKAGE_JQUERY_UI_THEMES_THEME)/images/*.png \
++	cp -a $(@D)/themes/$(call qstrip,$(BR2_PACKAGE_JQUERY_UI_THEMES_THEME))/images/*.png \
+ 		$(TARGET_DIR)/var/www/images
+ 	chmod 0644 $(TARGET_DIR)/var/www/images/*.png
+ endef
