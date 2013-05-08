@@ -1,32 +1,49 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 08 May 2013 13:22:11 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-In-Reply-To: <20130508130654.5a566fc9@skate> (Thomas Petazzoni's message of
- "Wed, 8 May 2013 13:06:54 +0200")
-References: <20130507210347.EA3EB99CCB@busybox.osuosl.org>
- <20130508130654.5a566fc9@skate>
-Message-ID: <8761ytzpgc.fsf@dell.be.48ers.dk>
+Date: Wed, 8 May 2013 12:47:43 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 4, 8,
+	9}.x stable version
+Message-ID: <20130508112313.C4D7B99E6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7953826e8dd1ea103630dac74cb2fc1537d66b55
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> +2013.05, Not released yet:
- >> +
- >> +        Architectures: ARC support, Blackfin support, FLAT binary
- >> +        format, ARM: Drop old CPU variants, add fa526/626, Marvell PJ4
- >> +
- >> +	Toolchains: Add new Microblaze external toolchains, Linaro
- >> +	ARM/Aarch64 updates, GCC 4.6.4 / 4.7.3 / 4.8.0 added to
- >> +	internal toolchain, default to GCC 4.7.x.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in                 |    8 ++++----
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- Thomas> Minor nit: the first paragraph is indented with spaces, and the other
- Thomas> ones with one tab.
-
-Ups, will fix - Thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index a6135e3..fd52e82 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -70,15 +70,15 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.76"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.77"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.44"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.43"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.44"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+-	default "3.8.11"	if BR2_KERNEL_HEADERS_3_8
+-	default "3.9"		if BR2_KERNEL_HEADERS_3_9
++	default "3.8.12"	if BR2_KERNEL_HEADERS_3_8
++	default "3.9.1"		if BR2_KERNEL_HEADERS_3_9
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.76-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.77-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.76-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.77-headers_install-fix-__packed-in-exported-kernel-head.patch
