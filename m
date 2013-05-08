@@ -1,127 +1,85 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Tue, 7 May 2013 17:55:33 -0500
-Subject: [Buildroot] [PATCH v3 2/2] libcec: add libcec for HDMI device
-	Control
-In-Reply-To: <1367964142-23036-2-git-send-email-spenser@gillilanding.com>
-References: <1367959620-17176-1-git-send-email-spenser@gillilanding.com>
- <1367964142-23036-1-git-send-email-spenser@gillilanding.com>
- <1367964142-23036-2-git-send-email-spenser@gillilanding.com>
-Message-ID: <CAEBucnCYnwAjAtnfbQR_zfz9Yg0EauaWBBxV1WV10xDy5cEM9w@mail.gmail.com>
+From: Nathan Lynch <ntl@pobox.com>
+Date: Tue, 07 May 2013 21:09:15 -0500
+Subject: [Buildroot] [PATCH 2/6] package/libbsd: new package
+In-Reply-To: <76440f71466575498fd576fc04cbbdc7cda8d6f3.1360433324.git.yann.morin.1998@free.fr>
+References: <cover.1360433324.git.yann.morin.1998@free.fr>
+ <76440f71466575498fd576fc04cbbdc7cda8d6f3.1360433324.git.yann.morin.1998@free.fr>
+Message-ID: <1367978955.3081.49.camel@orca.stoopid.dyndns.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-here's a snippet which shows both a RPI and USB-CEC adapter operating
-concurrently.
+Hello Yann,
 
-# modprobe cdc-acm
-# cec-client -l
-Found devices: 2
-
-device:              1
-com port:            /dev/ttyACM0
-vendor id:           2548
-product id:          1001
-firmware version:    2
-firmware build date: Fri Jul 20 23:58:27 2012 +0000
-type:                Pulse-Eight USB-CEC Adapter
-
-device:              2
-com port:            RPI
-vendor id:           2708
-product id:          1001
-firmware version:    1
-type:                Raspberry Pi
-
-Spenser
-
-On Tue, May 7, 2013 at 5:02 PM, Spenser Gilliland
-<spenser@gillilanding.com> wrote:
-> This patch adds libcec for HDMI device control.  It enables Raspberry Pi
-> support if the rpi-userland package is installed.
->
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+On Sat, 2013-02-09 at 19:09 +0100, Yann E. MORIN wrote:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
 >  package/Config.in        |    1 +
->  package/libcec/Config.in |    8 ++++++++
->  package/libcec/libcec.mk |   32 ++++++++++++++++++++++++++++++++
->  3 files changed, 41 insertions(+)
->  create mode 100644 package/libcec/Config.in
->  create mode 100644 package/libcec/libcec.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 05e2d45..df1e88e 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -464,6 +464,7 @@ source "package/imx-lib/Config.in"
->  source "package/lcdapi/Config.in"
->  source "package/libaio/Config.in"
->  source "package/libatasmart/Config.in"
-> +source "package/libcec/Config.in"
->  source "package/libraw1394/Config.in"
->  source "package/tslib/Config.in"
->  source "package/libfreefare/Config.in"
-> diff --git a/package/libcec/Config.in b/package/libcec/Config.in
-> new file mode 100644
-> index 0000000..1cacd4a
-> --- /dev/null
-> +++ b/package/libcec/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_LIBCEC
-> +       bool "libcec"
-> +       help
-> +         libcec allows you in combination with the right hardware to control your
-> +         home theater devices with your TV remote control utilizing existing HDMI
-> +         cabling.
-> +
-> +         http://libcec.pulse-eight.com
-> diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-> new file mode 100644
-> index 0000000..3ca1338
-> --- /dev/null
-> +++ b/package/libcec/libcec.mk
-> @@ -0,0 +1,32 @@
-> +#############################################################
-> +#
-> +# libcec
-> +#
-> +#############################################################
-> +
-> +LIBCEC_VERSION = libcec-2.1.1
-> +LIBCEC_SITE = http://github.com/Pulse-Eight/libcec/tarball/$(LIBCEC_VERSION)
-> +LIBCEC_LICENSE = GPLv2+
-> +LIBCEC_LICENSE_FILE = COPYING
-> +
-> +LIBCEC_AUTORECONF = YES
-> +LIBCEC_INSTALL_STAGING = YES
-> +LIBCEC_DEPENDENCIES = host-pkgconf
-> +
-> +ifeq ($(BR2_PACKAGE_LOCKDEV),y)
-> +LIBCEC_DEPENDENCIES += lockdev
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_UDEV),y)
-> +LIBCEC_DEPENDENCIES += udev
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-> +LIBCEC_CONF_OPT = --enable-rpi \
-> +   --with-rpi-include-path=$(STAGING_DIR)/usr/include
-> +LIBCEC_DEPENDENCIES += rpi-userland
-> +else
-> +LIBCEC_CONF_OPT = --disable-rpi
-> +endif
-> +
-> +$(eval $(autotools-package))
-> --
-> 1.7.9.5
->
+>  package/libbsd/Config.in |   10 ++++++++++
+>  package/libbsd/libbsd.mk |   21 +++++++++++++++++++++
+>  3 files changed, 32 insertions(+), 0 deletions(-)
+>  create mode 100644 package/libbsd/Config.in
+>  create mode 100644 package/libbsd/libbsd.mk
 
+This is a few months old by now, but for what it's worth:
 
+Acked-by: Nathan Lynch <ntl@pobox.com>
 
--- 
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+I happen to use libbsd for a mips target but hadn't gotten around to
+submitting it myself.
+
+I see you've posted patches adding libbsd a few times over the last few
+months; it looks like it was related to your qemu efforts but not
+committed so far.  Are you still working on having it included?
+
+Any ideas on this libbsd build error with mips (which seems to lack an
+a.out.h)?  I've hacked around it locally by just hacking nlist.c out of
+the build, but that's not exactly satisfactory.  The error can be
+recreated by using the following config and setting BR2_PACKAGE_LIBBSD=y
+on current master with your patch applied:
+
+http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-mipsel-o32-full.config
+
+libbsd 0.4.2 Building
+PATH="/home/nathanl/devel/buildroot.git/output/host/bin:/home/nathanl/devel/buildroot.git/output/host/usr/bin:/home/nathanl/devel/buildroot.git/output/host/usr/sbin/:/usr/lib64/qt-3.3/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/home/nathanl/.local/bin:/home/nathanl/bin" PERLLIB="/home/nathanl/devel/buildroot.git/output/host/usr/lib/perl"  /usr/bin/make -j16  -C /home/nathanl/devel/buildroot.git/output/build/libbsd-0.4.2/
+make[1]: Entering directory `/home/nathanl/devel/buildroot.git/output/build/libbsd-0.4.2'
+/usr/bin/make  all-recursive
+make[2]: Entering directory `/home/nathanl/devel/buildroot.git/output/build/libbsd-0.4.2'
+Making all in include
+make[3]: Entering directory `/home/nathanl/devel/buildroot.git/output/build/libbsd-0.4.2/include'
+make[3]: Nothing to be done for `all'.
+make[3]: Leaving directory `/home/nathanl/devel/buildroot.git/output/build/libbsd-0.4.2/include'
+Making all in man
+make[3]: Entering directory `/home/nathanl/devel/buildroot.git/output/build/libbsd-0.4.2/man'
+make[3]: Nothing to be done for `all'.
+make[3]: Leaving directory `/home/nathanl/devel/buildroot.git/output/build/libbsd-0.4.2/man'
+Making all in src
+make[3]: Entering directory `/home/nathanl/devel/buildroot.git/output/build/libbsd-0.4.2/src'
+  CC     arc4random.lo
+  CC     bsd_getopt.lo
+  CC     closefrom.lo
+  CC     dehumanize_number.lo
+  CC     err.lo
+  CC     expand_number.lo
+  CC     fgetln.lo
+  CC     flopen.lo
+  CC     fmtcheck.lo
+  CC     getpeereid.lo
+  CC     fpurge.lo
+  CC     md5.lo
+  CC     md5hl.lo
+  CC     humanize_number.lo
+  CC     heapsort.lo
+  CC     inet_net_pton.lo
+  CC     merge.lo
+  CC     nlist.lo
+  CC     pidfile.lo
+  CC     progname.lo
+  CC     radixsort.lo
+  CC     readpassphrase.lo
+In file included from nlist.c:42:0:
+/home/nathanl/devel/buildroot.git/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/include/a.out.h:1:25: fatal error: linux/a.out.h: No such file or directory
+compilation terminated.
