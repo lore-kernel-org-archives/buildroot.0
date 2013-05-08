@@ -1,94 +1,47 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed,  8 May 2013 13:55:26 -0500
-Subject: [Buildroot] [PATCH v4 1/2] lockdev: add lockdev
-In-Reply-To: <1367964142-23036-1-git-send-email-spenser@gillilanding.com>
-References: <1367964142-23036-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1368039327-10007-1-git-send-email-spenser@gillilanding.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Thu, 09 May 2013 00:32:43 +0200
+Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: do not depend on
+	the top-level Buildroot's .config
+In-Reply-To: <1363644183-29242-1-git-send-email-yann.morin.1998@free.fr>
+References: <1363644183-29242-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <8003334.zUx8i8rUNE@sagittae>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add lockdev a package for locking devices.
+Hello Yann,
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
----
- package/Config.in          |    1 +
- package/lockdev/Config.in  |    4 ++++
- package/lockdev/lockdev.mk |   41 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 46 insertions(+)
- create mode 100644 package/lockdev/Config.in
- create mode 100644 package/lockdev/lockdev.mk
+On Monday 18 March 2013 23:03:03 Yann E. MORIN wrote:
+> Previously, the crosstool-NG backend did depend on the top-level
+> Buildroot's .config to detect changes in the toolchain options,
+> using a tentatively-clever heuristic, which also included the full
+> Buildroot's version string to push down to set the components' versions
+> strings.
+> 
+> In doing so, any commit in the Buildroot tree would imply a complete
+> rebuild of the toolchain, even in the case the toolchain options did
+> not change, thus being a large annoyance (to say the least).
+> 
+> As Buildroot never guaranteed that toolchain options would be detected,
+> even less handled, and that the internal backend does neither detect nor
+> act on toolchain options changes, and delegate that to the user, there
+> is no point in individualising the crosstool-NG backend's behaviour.
+> 
+> This reasoning also applies to the depdency on the crosstool-NG's bundled
+> .config file, too.
+> 
+> So, just drop the not-so-clever heuristic, and just build the toolchain
+> once, leaving to the user the responsibility to explictly ask Buildroot
+> to rebuild the toolchain.
+Hmmm... I didn't followed all debate, and I am sorry if this suggestion has 
+already been submitted but, why not depend on 
+build/buildroot-config/br2/toolchain/ctng* ?
 
-diff --git a/package/Config.in b/package/Config.in
-index 81a3f76..05e2d45 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -256,6 +256,7 @@ source "package/irda-utils/Config.in"
- source "package/kbd/Config.in"
- source "package/lcdproc/Config.in"
- source "package/lm-sensors/Config.in"
-+source "package/lockdev/Config.in"
- source "package/lshw/Config.in"
- source "package/lsuio/Config.in"
- source "package/lvm2/Config.in"
-diff --git a/package/lockdev/Config.in b/package/lockdev/Config.in
-new file mode 100644
-index 0000000..2bd75d1
---- /dev/null
-+++ b/package/lockdev/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_LOCKDEV
-+	bool "lockdev"
-+	help
-+	  library for locking devices
-diff --git a/package/lockdev/lockdev.mk b/package/lockdev/lockdev.mk
-new file mode 100644
-index 0000000..9b6efa8
---- /dev/null
-+++ b/package/lockdev/lockdev.mk
-@@ -0,0 +1,41 @@
-+#############################################################
-+#
-+# lockdev
-+#
-+#############################################################
-+
-+LOCKDEV_VERSION = 1.0.3
-+LOCKDEV_SOURCE = lockdev_$(LOCKDEV_VERSION).orig.tar.gz
-+LOCKDEV_SITE = http://snapshot.debian.org/archive/debian/20130508T154517Z/pool/main/l/lockdev/ 
-+LOCKDEV_LICENSE = LGPLv2.1
-+LOCKDEV_LICENSE_FILES = LICENSE
-+LOCKDEV_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+define LOCKDEV_BUILD_CMDS
-+	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) static
-+endef
-+
-+define LOCKDEV_INSTALL_STAGING_CMDS
-+	$(MAKE1) basedir=$(STAGING_DIR)/usr -C $(@D) install_dev
-+endef
-+
-+else # BR2_PREFER_STATIC_LIB
-+
-+define LOCKDEV_BUILD_CMDS
-+	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) static shared
-+endef
-+
-+define LOCKDEV_INSTALL_STAGING_CMDS
-+	$(MAKE1) basedir=$(STAGING_DIR)/usr -C $(@D) install_dev install_run
-+	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so
-+	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.1
-+endef
-+
-+define LOCKDEV_INSTALL_TARGET_CMDS
-+	$(MAKE1) basedir=$(TARGET_DIR)/usr -C $(@D) install_run
-+	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.1
-+endef
-+endif # BR2_PREFER_STATIC_LIB
-+
-+$(eval $(generic-package))
+BR,
+
 -- 
-1.7.9.5
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
