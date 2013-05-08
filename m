@@ -1,83 +1,94 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 8 May 2013 15:49:08 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20130508135430.CAF5699FB0@busybox.osuosl.org>
+Date: Wed, 8 May 2013 15:51:45 +0200
+Subject: [Buildroot] [git commit] Update for 2013.05-rc1
+Message-ID: <20130508135431.0A30F99A80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7f4923e8efa047433fdda563b3bb7af8f17a9d5
+commit: http://git.buildroot.net/buildroot/commit/?id=92651931e72afad0f829d651ad3d0286b5a14e06
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |   40 ++++++++++++++++++++--------------------
- 1 files changed, 20 insertions(+), 20 deletions(-)
+ CHANGES            |    2 +-
+ Makefile           |    2 +-
+ docs/download.html |   10 +++++-----
+ docs/news.html     |   13 +++++++++++++
+ 4 files changed, 20 insertions(+), 7 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index 6d1c21f..1b35017 100644
+index 1b35017..1686aa6 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -9,8 +9,8 @@
- 	Crosstool-ng backend deprecated.
+@@ -1,4 +1,4 @@
+-2013.05, Not released yet:
++2013.05-rc1, Released May 8th, 2013:
  
- 	Defconfigs: Add Atmel at91sam9g45m10ek, freescale mpc8315erdb
--	& p1010rdb, Armadeus apf27 / apf28, Raspberry pi, gnublin
--	board.
-+	& p1010rdb, Armadeus apf27 / apf28, Openblocks A6, Raspberry
-+	pi, gnublin board.
+ 	Architectures: ARC support, Blackfin support, FLAT binary
+ 	format, ARM: Drop old CPU variants, add fa526/626, Marvell PJ4
+diff --git a/Makefile b/Makefile
+index 9128c75..a57975e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,7 @@
+ #--------------------------------------------------------------
  
- 	FS: LZO and XZ compression methods, extra ubifs options,
- 	ext2 rev 0/1 and ext3/4 support.
-@@ -36,19 +36,19 @@
- 	busybox, ccache, cifs-utils, cmake, collectd, connman,
- 	conntrack-tools, cpanminus, crosstool-ng, diffutils, directfb,
- 	directfb-examples, divine, dmalloc, dnsmasq, dosfstools,
--	dropbear, e2fsprogs, ebtables, eeprog, erlang, ethtool, fbset,
--	feh, ffmpeg, file, flex, flot, foomatic, gd, gdb, gdisk,
--	genimage, gettext, gmp, gnuchess, gnutls, gob2, gperf, gpsd,
--	gstreamer, haserl, hiawatha, htop, httping, icu,
--	inotify-tools, intltool, iproute2, ipset, iptables, iw, jpeg,
--	jquery, jquery-{sparkline,validation}, json-c, kbd, kexec,
--	kismet, kmod, lcdproc, libarchive, libcap, libconfig,
--	libconfuse, libcurl, libdrm, libeet, libev, libevas,
--	libeXosip2, libffi, libfribi, libfuse, libgcrypt, libglib2,
--	libgtk2, libid3tag, libmicrohttpd, libnetfilter_acct,
--	libnetfilter_conntrack, libnl, libpcap, libplayer, libsigc,
--	libv4l, libxcb, linenoise, linux-pam, lm_sensors,
--	ltp-testsuite, luajit, lzop, madplay, make, mdadm,
-+	dropbear, e2fsprogs, ebtables, eeprog, erlang, ethtool,
-+	fb-test-app, fbset, feh, ffmpeg, file, flex, flot, foomatic,
-+	fxload, gd, gdb, gdisk, genimage, gettext, gmp, gnuchess,
-+	gnutls, gob2, gperf, gpsd, gstreamer, haserl, hiawatha, htop,
-+	httping, icu, inotify-tools, intltool, iproute2, ipset,
-+	iptables, iw, jpeg, jquery, jquery-{sparkline,validation},
-+	json-c, kbd, kexec, kismet, kmod, lcdproc, libarchive,
-+	libatasmart, libcap, libconfig, libconfuse, libcurl, libdrm,
-+	libeet, libev, libevas, libeXosip2, libffi, libfribi, libfuse,
-+	libgcrypt, libglib2, libgtk2, libid3tag, libmicrohttpd,
-+	libnetfilter_acct, libnetfilter_conntrack, libnl, libpcap,
-+	libplayer, libsigc, libv4l, libxcb, linenoise, linux-pam,
-+	lm_sensors, ltp-testsuite, luajit, lzop, madplay, make, mdadm,
- 	mediastreamer, memtester, mesa3d,
- 	mobile-broadband-provider-info, monit, mpd, mpfr, mpg123,
- 	mrouted, msmtp, nbd, ncurses, ndisc6, neard, neardal, neon,
-@@ -57,11 +57,11 @@
- 	oprofile, orc, patch, pciutils, pcre, perl, php, poco,
- 	polarssl, proftpd, psmisc, pulseaudio, python,
- 	python-{bottle,netifaces,serial,setuptools}, qt, quagga,
--	quota, radvd, rpi-userland, rt-tests, sam-ba, samba, sawman,
--	sdl, ser2net, smartmontools, socat, socketcand, speex, squid,
--	stress, stunnel, sudo, syslinux, sysstat, sysvinit, tcl,
--	tcprelay, tinyhttpd, tslib, tvheadend, uboot-tools, ulogd,
--	util-linux, vala, vtun, webkit,
-+	quota, radvd, rpi-firmware, rpi-userland, rt-tests, sam-ba,
-+	samba, sawman, sdl, ser2net, smartmontools, socat, socketcand,
-+	speex, squid, stress, stunnel, sudo, syslinux, sysstat,
-+	sysvinit, tcl, tcprelay, tinyhttpd, tslib, tvheadend,
-+	uboot-tools, udev, ulogd, util-linux, vala, vtun, webkit,
- 	xapp_{iceauth,luit,makefontscale,sessreg,setxkbmap,smproxy},
- 	xapp_{xauth,xcmsdb,xdpyinfo,xev,xgamma,xhost,xinput,xkbcomp},
- 	xapp_{xkbevd,xlsatoms,xlsclients,xmodmap,xpr,xprop,xrandr,xrdb},
+ # Set and export the version string
+-export BR2_VERSION:=2013.05-git
++export BR2_VERSION:=2013.05-rc1
+ 
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION=3.81
+diff --git a/docs/download.html b/docs/download.html
+index 10bf5d8..d199fdf 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -12,16 +12,16 @@ here:<p>
+ <a href="/downloads/buildroot-2013.02.tar.gz">buildroot-2013.02.tar.gz</a>
+ or
+ <a href="/downloads/buildroot-2013.02.tar.bz2">buildroot-2013.02.tar.bz2</a>.
+-<!--
++
+ <p>
+-The latest release candidate is <b>2013.02-rc3</b>, which can be
++The latest release candidate is <b>2013.05-rc1</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2013.02-rc3.tar.gz">buildroot-2013.02-rc3.tar.gz</a>
++<a href="/downloads/buildroot-2013.05-rc1.tar.gz">buildroot-2013.05-rc1.tar.gz</a>
+ or
+-<a href="/downloads/buildroot-2013.02-rc3.tar.bz2">buildroot-2013.02-rc3.tar.bz2</a>.
++<a href="/downloads/buildroot-2013.05-rc1.tar.bz2">buildroot-2013.05-rc1.tar.bz2</a>.
+ <p>
+--->
++
+ This and earlier releases can always be downloaded from
+ <a href="/downloads/">http://buildroot.net/downloads/</a>.
+ 
+diff --git a/docs/news.html b/docs/news.html
+index db203ac..665b3bf 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,19 @@
+ <p>
+ 
+ <ul>
++  <li><b>8 May 2013 -- 2013.05-rc1 released</b>
++
++    <p>We have a new release candidate! Lots of changes all over the
++    tree, see the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.05_rc1">CHANGES</a>
++    file for details.</p>
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2013.05-rc1.tar.bz2">2013.05-rc1
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>28 February 2013 -- 2013.02 released</b>
+ 
+     <p>The stable 2013.02 release is out - Thanks to everyone
