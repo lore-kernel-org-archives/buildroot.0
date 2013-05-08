@@ -1,36 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 8 May 2013 15:09:57 +0200
-Subject: [Buildroot] [git commit] udev: add license information
-Message-ID: <20130508131702.3667799F4C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 May 2013 15:16:05 +0200
+Subject: [Buildroot] [PATCH] udev: add license information
+In-Reply-To: <1368017865-15481-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Wed, 8 May 2013 13:57:45 +0100")
+References: <1368017865-15481-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87wqr9y5m2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5696a87376928651762aea01cd32f3fb3ff2d8aa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/udev/udev.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
-diff --git a/package/udev/udev.mk b/package/udev/udev.mk
-index c55db71..1c97288 100644
---- a/package/udev/udev.mk
-+++ b/package/udev/udev.mk
-@@ -3,9 +3,12 @@
- # udev
- #
- #############################################################
-+
- UDEV_VERSION = 182
- UDEV_SOURCE = udev-$(UDEV_VERSION).tar.bz2
- UDEV_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
-+UDEV_LICENSE = GPLv2+
-+UDEV_LICENSE_FILES = COPYING
- UDEV_INSTALL_STAGING = YES
- 
- # mq_getattr is in librt
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
