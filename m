@@ -1,92 +1,76 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 8 May 2013 13:21:16 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20130508112314.3FDC499ED6@busybox.osuosl.org>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed,  8 May 2013 13:34:11 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain-external: add support for
+	'Sourcery CodeBench ARM 2013.05'
+Message-ID: <1368012852-24520-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fa3463d64bd43895a8e9eec80d80dcc3e904c665
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-And also fixup tabs/spaces mix as pointed out by Thomas.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- CHANGES |   37 +++++++++++++++++++------------------
- 1 files changed, 19 insertions(+), 18 deletions(-)
+ toolchain/toolchain-external/Config.in   | 25 +++++++++++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |  3 +++
+ 2 files changed, 28 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index ba91242..6d1c21f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,11 +1,12 @@
- 2013.05, Not released yet:
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index a93ada3..5fdd27b 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -64,6 +64,30 @@ comment "Linaro toolchains available for Cortex-A{5,8,9,15}"
+ 	depends on BR2_arm
+ 	depends on !BR2_cortex_a5 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15
  
--        Architectures: ARC support, Blackfin support, FLAT binary
--        format, ARM: Drop old CPU variants, add fa526/626, Marvell PJ4
-+	Architectures: ARC support, Blackfin support, FLAT binary
-+	format, ARM: Drop old CPU variants, add fa526/626, Marvell PJ4
- 
- 	Toolchains: Add new Microblaze external toolchains, Linaro
- 	ARM/Aarch64 updates, GCC 4.6.4 / 4.7.3 / 4.8.0 added to
--	internal toolchain, default to GCC 4.7.x.
-+	internal toolchain, default to GCC 4.7.x. Internal
-+	Crosstool-ng backend deprecated.
- 
- 	Defconfigs: Add Atmel at91sam9g45m10ek, freescale mpc8315erdb
- 	& p1010rdb, Armadeus apf27 / apf28, Raspberry pi, gnublin
-@@ -37,7 +38,7 @@
- 	directfb-examples, divine, dmalloc, dnsmasq, dosfstools,
- 	dropbear, e2fsprogs, ebtables, eeprog, erlang, ethtool, fbset,
- 	feh, ffmpeg, file, flex, flot, foomatic, gd, gdb, gdisk,
--	genimage, gettext, gmp, gnuchess, gnutls, gob2, gpsd,
-+	genimage, gettext, gmp, gnuchess, gnutls, gob2, gperf, gpsd,
- 	gstreamer, haserl, hiawatha, htop, httping, icu,
- 	inotify-tools, intltool, iproute2, ipset, iptables, iw, jpeg,
- 	jquery, jquery-{sparkline,validation}, json-c, kbd, kexec,
-@@ -50,11 +51,11 @@
- 	ltp-testsuite, luajit, lzop, madplay, make, mdadm,
- 	mediastreamer, memtester, mesa3d,
- 	mobile-broadband-provider-info, monit, mpd, mpfr, mpg123,
--	mrouted, nbd, ncurses, ndisc6, neard, neardal, neon, netperf,
--	netsnmp, nettle, nfacct, ntfs-3g, ofono, olsr,
-+	mrouted, msmtp, nbd, ncurses, ndisc6, neard, neardal, neon,
-+	netperf, netsnmp, nettle, nfacct, ntfs-3g, ofono, olsr,
- 	omap-u-boot-utils, openssh, openssl, openswan, openvpn,
--	oprofile, orc, pciutils, pcre, perl, php, poco, polarssl,
--	proftpd, psmisc, pulseaudio, python,
-+	oprofile, orc, patch, pciutils, pcre, perl, php, poco,
-+	polarssl, proftpd, psmisc, pulseaudio, python,
- 	python-{bottle,netifaces,serial,setuptools}, qt, quagga,
- 	quota, radvd, rpi-userland, rt-tests, sam-ba, samba, sawman,
- 	sdl, ser2net, smartmontools, socat, socketcand, speex, squid,
-@@ -79,16 +80,16 @@
- 	xproto_{resource,scrnsaver,xcmisc,xext,x}proto,
- 	xserver_xorg-server, xutil_makedepend, xz, zeromq
- 
--	New packages: aircrack-ng, bcusdk, crda, cryptodev-linux,
--	cppzmq, czmq, dtach, enscript, exfat, exfat-utils, f2fs-tools,
--	fan-ctrl, filemq, foomatic-filters, genimage, genpart, glibmm,
--	gnuplot, gtest, gutenprint, hplip, iozone, jansson, jhead,
--	jquery-keyboard, jquery-ui, jquery-ui-themes, json-glib,
--	json-javascript, lcms2, libpfm4, libpthsem, libserial,
--	libsigsegv, libtasn1, libwebsockets, libxkbcommon, libxml++,
--	linknx, log4cxx, mongoose, mongrel2, mtools, ne10, nmap,
--	nodejs, openobex, openpgm, poppler, protobuf-c,
--	python-m2crypto, python-thrift, qjson, qt5base,
-+	New packages: aircrack-ng, bcusdk, chrony, crda,
-+	cryptodev-linux, cppzmq, czmq, dtach, enscript, exfat,
-+	exfat-utils, f2fs-tools, fan-ctrl, filemq, foomatic-filters,
-+	genimage, genpart, glibmm, gnuplot, gtest, gutenprint, hplip,
-+	iozone, jansson, jhead, jquery-keyboard, jquery-ui,
-+	jquery-ui-themes, json-glib, json-javascript, lcms2, libpfm4,
-+	libpthsem, libserial, libsigsegv, libtasn1, libwebsockets,
-+	libxkbcommon, libxml++, linknx, log4cxx, mongoose, mongrel2,
-+	mtools, ne10, nmap, nodejs, openobex, openpgm, poppler,
-+	protobuf-c, python-m2crypto, python-thrift, qjson, qt5base,
- 	qt5declarative, qt5graphicaleffects, qt5imageformats,
- 	qt5jsbackend, qt5multimedia, qt5quick1, qt5script, qt5svg,
- 	qt5webkit qt5xmlpatterns, rapidjson, redis, swig, texinfo,
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
++	bool "Sourcery CodeBench ARM 2013.05"
++	depends on BR2_arm
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	help
++	  Sourcery CodeBench toolchain for the ARM architecture, from
++	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
++	  2.17 and gdb 7.4.50, kernel headers 3.8.2. It has support
++	  for the following variants:
++	    - ARMv5TE, little endian, soft-float, glibc
++	      Select ARM926T, ARM10T, XScale or another ARMv5 core
++	      Select BR2_SOFT_FLOAT
++	    - ARMv4T, little endian, soft-float, glibc
++	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
++	      Select BR2_SOFT_FLOAT
++	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
++	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -mthumb
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
+ 	bool "Sourcery CodeBench ARM 2012.03"
+ 	depends on BR2_arm
+@@ -764,6 +788,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
++	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_03
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_02
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_01
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index bf2bee8..b6532fc 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -200,6 +200,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gn
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
+ TOOLCHAIN_EXTERNAL_SOURCE=arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
++TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
++TOOLCHAIN_EXTERNAL_SOURCE=arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01),y)
+ TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2013.01/+download/
+ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.01-20130125_linux.tar.bz2
+-- 
+1.8.1.4
