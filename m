@@ -1,83 +1,52 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Thu, 9 May 2013 10:55:59 -0700
-Subject: [Buildroot] [PATCH] socketcand: add license information
-In-Reply-To: <CAKcgs2z9ZfK6yNBG5oRJ5nq7jJ6SKaiqkuCmMV-+8xu2c0gWxA@mail.gmail.com>
-References: <1368120627-26385-1-git-send-email-gilles.talis@gmail.com>
- <20130509194055.19207a4f@skate>
- <CAKcgs2z9ZfK6yNBG5oRJ5nq7jJ6SKaiqkuCmMV-+8xu2c0gWxA@mail.gmail.com>
-Message-ID: <CAKcgs2wGcsJ0+yH5Czv93bCH_6+DKeBiq15Y7RwWw-GVJkzRiQ@mail.gmail.com>
+From: H.Fijnvandraat at inter.nl.net <H.Fijnvandraat@inter.nl.net>
+Date: Thu, 9 May 2013 21:03:30 +0200 (CEST)
+Subject: [Buildroot] gpu-viv-bin-mx6q
+In-Reply-To: <BA6FC03EA0815D428FB8A3C279ED4992074AE1FA@mx.toyon.corp>
+References: <BA6FC03EA0815D428FB8A3C279ED4992074AE1FA@mx.toyon.corp>
+Message-ID: <35247.217.149.209.147.1368126210.squirrel@webmail.internl.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni and all,
+Op Do, 9 mei, 2013 7:52 pm schreef Richard Cagley:
+> Is there a way to integrate the gpu-viv-bin-mx6q package in buildroot?
+>
+Unfortunately: Not as source
+This software for the on-chip Vivante GPU is closed source....
+I am working on incorporating them as libraries into buildroot at the moment.
+>
+> I can only extract these binaries over the root filesystem. But, they
+> seem to be built with a compiler that I can't seem to find. I did try the
+> one included with ltib with no luck.
+>
+It requires a compiler with both -mfloat-abi=softfp and -mfpu=neon options
+available. The first seems to indicate the way fpu parameters are
+transferred, the second indicates the underlying fpu hardware.
+(a toolchain with hf in it's name will probably not work)
 
-2013/5/9 Gilles Talis <gilles.talis@gmail.com>
->
-> Dear Thomas Petazzoni,
->
-> No, I am not sure. And I agree with you, the license information for this package is scarce and confusing. Arch-linux distribution tagged it as GPLv2 [1], and the package maintainer did not seem to disagree. This is why I went with GPLv2. Would you prefer we did not add license information at all?
->
-> Thanks
-> Gilles
->
-> [1] https://aur.archlinux.org/packages/socketcand-git/
->
->
-> 2013/5/9 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>
->> Dear Gilles Talis,
->>
->> On Thu,  9 May 2013 10:30:27 -0700, Gilles Talis wrote:
->>
->> > +SOCKETCAND_LICENSE = GPLv2
->>
->> Are you sure? The only licensing information I can find is in
->> socketcand.c, and it says:
->>
->>  * Authors:
->>  * Andre Naujoks (the socket server stuff)
->>  * Oliver Hartkopp (the rest)
->>  * Jan-Niklas Meier (extensions for use with kayak)
->>  *
->>  * Copyright (c) 2002-2009 Volkswagen Group Electronic Research
->>  * All rights reserved.
->>  *
->>  * Redistribution and use in source and binary forms, with or without
->>  * modification, are permitted provided that the following conditions
->>  * are met:
->>  * 1. Redistributions of source code must retain the above copyright
->>  *    notice, this list of conditions and the following disclaimer.
->>  * 2. Redistributions in binary form must reproduce the above copyright
->>  *    notice, this list of conditions and the following disclaimer in the
->>  *    documentation and/or other materials provided with the distribution.
->>  * 3. Neither the name of Volkswagen nor the names of its contributors
->>  *    may be used to endorse or promote products derived from this software
->>  *    without specific prior written permission.
->>  *
->>  * Alternatively, provided that this notice is retained in full, this
->>  * software may be distributed under the terms of the GNU General
->>  * Public License ("GPL") version 2, in which case the provisions of the
->>  * GPL apply INSTEAD OF those given above.
->>  *
->>  * The provided data structures and external interfaces from this code
->>  * are not restricted to be used by modules with a GPL compatible license.
->>
->> So the license is either GPLv2 or BSD-3c.
->>
->> Thomas
->> --
->> Thomas Petazzoni, Free Electrons
->> Kernel, drivers, real-time and embedded Linux
->> development, consulting, training and support.
->> http://free-electrons.com
+Furthermore glib-2.13 was used to generate these libraries and you need
+the freescale patched 3.0.35-1.1.0 kernel sources.
+(and the real catch is that these sources build the graphics accelerator
+code as module, so you have to modprobe galcore.ko after bootup to make
+anything work at all)(which reminds me to to create a Sxxscript in
+/etc/init.d for install-target somehow)
 
-All apologies for top-posting and HTML format. My gmail parameters
-changed against my will :-(. I am fixing it now.
-Hope this is better :-)
+Until very recent, i used the crosstool-ng external toolchain from within
+buildroot to generate a good compiler,
+but that has been removed very recently :-((, without an immediate
+replacement
 
-Gilles.
+(and I got Qt5 5.0.1 working with that setup, if that's what you're aiming
+for...)
+
+> The binaries themselves I can only find here.
+> http://repository.timesys.com/buildsources/g/gpu-viv-bin-mx6q/
 >
->
+http://download.ossystems.com.br/bsp/freescale/source
+is another
+
+Hope this helps at least a bit in the right direction,
+
+Henk
