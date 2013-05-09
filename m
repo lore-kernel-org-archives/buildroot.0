@@ -1,47 +1,116 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  9 May 2013 17:53:05 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain/gcc: the ARC version of gcc needs
-	host-flex/host-bison
-In-Reply-To: <1368114785-14666-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1368114785-14666-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1368114785-14666-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu,  9 May 2013 17:53:04 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain/gcc: make sure to pass
+	$(HOST_DIR)/usr/bin in the PATH
+Message-ID: <1368114785-14666-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some reason (probably because the ARC changes modify some lex/yacc
-files without updating their pre-generated variants, or because the
-date/time of the pre-generated files is not correct), building the ARC
-gcc requires host-flex and host-bison.
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
 
-We have tested 4.2 for AVR, 4.3 and 4.4 for ARM, and none of those
-need host-flex or host-bison to be installed, so only the 4.4 for ARC
-seems to be affected.
+Since gcc doesn't use the package infrastructure, it doesn't get all
+the good generic environment variables, and forgets to get
+$(HOST_DIR)/usr/bin in its PATH. This prevents gcc from finding and
+using host tools built by Buildroot.
 
-Fixes the build failure visible at
-http://autobuild.buildroot.org/results/673c6262e3dde8ee8dd28204d814097e6ba8f8e9/build-end.log.
+This patch therefore ensures that $(HOST_MAKE_ENV) or
+$(TARGET_MAKE_ENV) are passed at the appropriate locations. It will be
+useful for a later patch that makes gcc depend on host-flex/host-bison
+in some situations.
 
+Original patch by Thomas Petazzoni.
+
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/gcc/gcc-uclibc-4.x.mk |    4 ++++
- 1 file changed, 4 insertions(+)
+ toolchain/gcc/gcc-uclibc-4.x.mk |   24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
 diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 8cacc32..21679ef 100644
+index 959568f..8cacc32 100644
 --- a/toolchain/gcc/gcc-uclibc-4.x.mk
 +++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -180,6 +180,10 @@ endif
- GCC_HOST_PREREQ += host-mpc
- endif
- 
-+ifeq ($(BR2_GCC_VERSION_4_4_7_ARC),y)
-+GCC_HOST_PREREQ += host-flex host-bison
-+endif
-+
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- GCC_SHARED_LIBGCC:=--enable-shared
+@@ -299,16 +299,16 @@ $(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
+ $(GCC_BUILD_DIR1)/.compiled: $(GCC_BUILD_DIR1)/.configured
+ 	$(Q)$(call MESSAGE,"Building gcc pass-1")
+ ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+-	$(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
++	$(GCC_CONF_ENV) $(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
  else
+-	$(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
++	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
+ endif
+ 	touch $@
+ 
+ gcc_initial=$(GCC_BUILD_DIR1)/.installed
+ $(gcc_initial) $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc: $(GCC_BUILD_DIR1)/.compiled
+ 	$(Q)$(call MESSAGE,"Installing gcc pass-1")
+-	PATH=$(TARGET_PATH) $(MAKE) -C $(GCC_BUILD_DIR1) install-gcc
++	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) install-gcc
+ 	touch $(gcc_initial)
+ 
+ gcc_initial: $(GCC_HOST_PREREQ) host-binutils $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc
+@@ -370,9 +370,9 @@ $(GCC_BUILD_DIR2)/.compiled: $(GCC_BUILD_DIR2)/.configured
+ 	$(Q)$(call MESSAGE,"Building gcc pass-2")
+ 	# gcc >= 4.3.0 have to also build all-target-libgcc
+ ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+-	$(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) all-gcc all-target-libgcc
++	$(GCC_CONF_ENV) $(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) all-gcc all-target-libgcc
+ else
+-	$(MAKE) -C $(GCC_BUILD_DIR2) all-gcc
++	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) all-gcc
+ endif
+ 	touch $@
+ 
+@@ -381,9 +381,9 @@ $(gcc_intermediate): $(GCC_BUILD_DIR2)/.compiled
+ 	$(Q)$(call MESSAGE,"Installing gcc pass-2")
+ 	# gcc >= 4.3.0 have to also install install-target-libgcc
+ ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+-	PATH=$(TARGET_PATH) $(MAKE) -C $(GCC_BUILD_DIR2) install-gcc install-target-libgcc
++	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) install-gcc install-target-libgcc
+ else
+-	PATH=$(TARGET_PATH) $(MAKE) -C $(GCC_BUILD_DIR2) install-gcc
++	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) install-gcc
+ endif
+ 	touch $(gcc_intermediate)
+ 
+@@ -449,12 +449,12 @@ $(GCC_BUILD_DIR3)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
+ 
+ $(GCC_BUILD_DIR3)/.compiled: $(GCC_BUILD_DIR3)/.configured
+ 	$(Q)$(call MESSAGE,"Building gcc final")
+-	$(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR3) all
++	$(GCC_CONF_ENV) $(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR3) all
+ 	touch $@
+ 
+ $(GCC_BUILD_DIR3)/.installed: $(GCC_BUILD_DIR3)/.compiled
+ 	$(Q)$(call MESSAGE,"Installing gcc final")
+-	PATH=$(TARGET_PATH) $(MAKE) \
++	$(HOST_MAKE_ENV) $(MAKE) \
+ 		-C $(GCC_BUILD_DIR3) install
+ 	if [ -d "$(STAGING_DIR)/lib64" ]; then \
+ 		if [ ! -e "$(STAGING_DIR)/lib" ]; then \
+@@ -582,8 +582,8 @@ $(GCC_BUILD_DIR4)/.configured: $(GCC_BUILD_DIR4)/.prepared
+ 
+ $(GCC_BUILD_DIR4)/.compiled: $(GCC_BUILD_DIR4)/.configured
+ 	$(Q)$(call MESSAGE,"Building gcc on target")
+-	PATH=$(TARGET_PATH) \
+-	$(MAKE) -C $(GCC_BUILD_DIR4) all
++	$(TARGET_MAKE_ENV) \
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR4) all
+ 	touch $@
+ 
+ GCC_LIB_SUBDIR=lib/gcc/$(GNU_TARGET_NAME)/$(GCC_VERSION)
+@@ -595,7 +595,7 @@ endif
+ 
+ $(TARGET_DIR)/usr/bin/gcc: $(GCC_BUILD_DIR4)/.compiled
+ 	$(Q)$(call MESSAGE,"Installing gcc on target")
+-	PATH=$(TARGET_PATH) DESTDIR=$(TARGET_DIR) \
++	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) \
+ 		$(MAKE1) -C $(GCC_BUILD_DIR4) install
+ 	# Remove broken specs file (cross compile flag is set).
+ 	rm -f $(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR)/specs
 -- 
 1.7.9.5
