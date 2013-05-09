@@ -1,116 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  9 May 2013 17:53:04 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/gcc: make sure to pass
-	$(HOST_DIR)/usr/bin in the PATH
-Message-ID: <1368114785-14666-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 May 2013 17:54:33 +0200
+Subject: [Buildroot] [PATCH 1/2] gstreamer1: Add gstreamer version 1.0.7
+ package
+In-Reply-To: <CAEBucnDh1x+5=-XYB1Q9aeG4JLi9vObvfR5gpeL6BkyTMeH6tw@mail.gmail.com>
+References: <1368057893-20874-1-git-send-email-spenser@gillilanding.com>
+ <20130509110839.684d4037@skate>
+ <CAEBucnDh1x+5=-XYB1Q9aeG4JLi9vObvfR5gpeL6BkyTMeH6tw@mail.gmail.com>
+Message-ID: <20130509175433.4b5d3ce4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Dear Spenser Gilliland,
 
-Since gcc doesn't use the package infrastructure, it doesn't get all
-the good generic environment variables, and forgets to get
-$(HOST_DIR)/usr/bin in its PATH. This prevents gcc from finding and
-using host tools built by Buildroot.
+On Thu, 9 May 2013 08:52:12 -0500, Spenser Gilliland wrote:
 
-This patch therefore ensures that $(HOST_MAKE_ENV) or
-$(TARGET_MAKE_ENV) are passed at the appropriate locations. It will be
-useful for a later patch that makes gcc depend on host-flex/host-bison
-in some situations.
+> > Is it possible to build/install gstreamer and gstreamer1 side by side?
+> > I.e, I'm wondering if we should make those two mutually exclusive
+> > choices, or if we can let the user select both if needed.
+> 
+> From the limited testing I have done, the answer is yes and it may not
+> require any patches.  Looks like everything neatly installs into a
+> /usr/lib/gstreamer-1.0 folder or a /usr/lib/<name>-1.0.so; the pc
+> files end up with <name>-1.0 postfixes;  all include files are in
+> /usr/lib/gstreamer-1.0; and the executables all have a -1.0 postfix.
 
-Original patch by Thomas Petazzoni.
+Sounds good then, thanks!
 
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/gcc/gcc-uclibc-4.x.mk |   24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 959568f..8cacc32 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -299,16 +299,16 @@ $(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
- $(GCC_BUILD_DIR1)/.compiled: $(GCC_BUILD_DIR1)/.configured
- 	$(Q)$(call MESSAGE,"Building gcc pass-1")
- ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
--	$(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
-+	$(GCC_CONF_ENV) $(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
- else
--	$(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
- endif
- 	touch $@
- 
- gcc_initial=$(GCC_BUILD_DIR1)/.installed
- $(gcc_initial) $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc: $(GCC_BUILD_DIR1)/.compiled
- 	$(Q)$(call MESSAGE,"Installing gcc pass-1")
--	PATH=$(TARGET_PATH) $(MAKE) -C $(GCC_BUILD_DIR1) install-gcc
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) install-gcc
- 	touch $(gcc_initial)
- 
- gcc_initial: $(GCC_HOST_PREREQ) host-binutils $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc
-@@ -370,9 +370,9 @@ $(GCC_BUILD_DIR2)/.compiled: $(GCC_BUILD_DIR2)/.configured
- 	$(Q)$(call MESSAGE,"Building gcc pass-2")
- 	# gcc >= 4.3.0 have to also build all-target-libgcc
- ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
--	$(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) all-gcc all-target-libgcc
-+	$(GCC_CONF_ENV) $(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) all-gcc all-target-libgcc
- else
--	$(MAKE) -C $(GCC_BUILD_DIR2) all-gcc
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) all-gcc
- endif
- 	touch $@
- 
-@@ -381,9 +381,9 @@ $(gcc_intermediate): $(GCC_BUILD_DIR2)/.compiled
- 	$(Q)$(call MESSAGE,"Installing gcc pass-2")
- 	# gcc >= 4.3.0 have to also install install-target-libgcc
- ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
--	PATH=$(TARGET_PATH) $(MAKE) -C $(GCC_BUILD_DIR2) install-gcc install-target-libgcc
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) install-gcc install-target-libgcc
- else
--	PATH=$(TARGET_PATH) $(MAKE) -C $(GCC_BUILD_DIR2) install-gcc
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) install-gcc
- endif
- 	touch $(gcc_intermediate)
- 
-@@ -449,12 +449,12 @@ $(GCC_BUILD_DIR3)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
- 
- $(GCC_BUILD_DIR3)/.compiled: $(GCC_BUILD_DIR3)/.configured
- 	$(Q)$(call MESSAGE,"Building gcc final")
--	$(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR3) all
-+	$(GCC_CONF_ENV) $(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR3) all
- 	touch $@
- 
- $(GCC_BUILD_DIR3)/.installed: $(GCC_BUILD_DIR3)/.compiled
- 	$(Q)$(call MESSAGE,"Installing gcc final")
--	PATH=$(TARGET_PATH) $(MAKE) \
-+	$(HOST_MAKE_ENV) $(MAKE) \
- 		-C $(GCC_BUILD_DIR3) install
- 	if [ -d "$(STAGING_DIR)/lib64" ]; then \
- 		if [ ! -e "$(STAGING_DIR)/lib" ]; then \
-@@ -582,8 +582,8 @@ $(GCC_BUILD_DIR4)/.configured: $(GCC_BUILD_DIR4)/.prepared
- 
- $(GCC_BUILD_DIR4)/.compiled: $(GCC_BUILD_DIR4)/.configured
- 	$(Q)$(call MESSAGE,"Building gcc on target")
--	PATH=$(TARGET_PATH) \
--	$(MAKE) -C $(GCC_BUILD_DIR4) all
-+	$(TARGET_MAKE_ENV) \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR4) all
- 	touch $@
- 
- GCC_LIB_SUBDIR=lib/gcc/$(GNU_TARGET_NAME)/$(GCC_VERSION)
-@@ -595,7 +595,7 @@ endif
- 
- $(TARGET_DIR)/usr/bin/gcc: $(GCC_BUILD_DIR4)/.compiled
- 	$(Q)$(call MESSAGE,"Installing gcc on target")
--	PATH=$(TARGET_PATH) DESTDIR=$(TARGET_DIR) \
-+	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) \
- 		$(MAKE1) -C $(GCC_BUILD_DIR4) install
- 	# Remove broken specs file (cross compile flag is set).
- 	rm -f $(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR)/specs
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
