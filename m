@@ -1,37 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 May 2013 17:54:33 +0200
-Subject: [Buildroot] [PATCH 1/2] gstreamer1: Add gstreamer version 1.0.7
- package
-In-Reply-To: <CAEBucnDh1x+5=-XYB1Q9aeG4JLi9vObvfR5gpeL6BkyTMeH6tw@mail.gmail.com>
-References: <1368057893-20874-1-git-send-email-spenser@gillilanding.com>
- <20130509110839.684d4037@skate>
- <CAEBucnDh1x+5=-XYB1Q9aeG4JLi9vObvfR5gpeL6BkyTMeH6tw@mail.gmail.com>
-Message-ID: <20130509175433.4b5d3ce4@skate>
+Date: Thu,  9 May 2013 19:14:23 +0200
+Subject: [Buildroot] [PATCH 0/2] Fix build problem of pulseaudio
+Message-ID: <1368119665-917-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Hello,
 
-On Thu, 9 May 2013 08:52:12 -0500, Spenser Gilliland wrote:
+Here is a set of two patches that fix the pulseaudio link problem. It
+turns out that the problem was that json-c and libjson both install a
+library with the same name, /usr/lib/libjson.so, even though they have
+a different API and language. So, when libjson was built and installed
+after json-c, it was overriding json-c libjson.so link with a link to
+its own library, and Pulseaudio was failing to build.
 
-> > Is it possible to build/install gstreamer and gstreamer1 side by side?
-> > I.e, I'm wondering if we should make those two mutually exclusive
-> > choices, or if we can let the user select both if needed.
-> 
-> From the limited testing I have done, the answer is yes and it may not
-> require any patches.  Looks like everything neatly installs into a
-> /usr/lib/gstreamer-1.0 folder or a /usr/lib/<name>-1.0.so; the pc
-> files end up with <name>-1.0 postfixes;  all include files are in
-> /usr/lib/gstreamer-1.0; and the executables all have a -1.0 postfix.
+The solution is to bump json-c to 0.11, which changes its name to
+libjson-c.so, and apply an upstream pulseaudio patch that makes
+pulseaudio use json-c instead of json when available.
 
-Sounds good then, thanks!
+Best regards,
 
 Thomas
+
+Thomas Petazzoni (2):
+  json-c: bump to version 0.11
+  pulseaudio: link against json-c
+
+ ...n-c-add-missing-file-to-installed-headers.patch |   43 --------------------
+ package/json-c/json-c-no-reentrant.patch           |   25 +++++++++---
+ package/json-c/json-c.mk                           |    6 ++-
+ .../pulseaudio-compat-with-json-c-0.11.patch       |   26 ++++++++++++
+ package/multimedia/pulseaudio/pulseaudio.mk        |    6 +++
+ 5 files changed, 55 insertions(+), 51 deletions(-)
+ delete mode 100644 package/json-c/json-c-add-missing-file-to-installed-headers.patch
+ create mode 100644 package/multimedia/pulseaudio/pulseaudio-compat-with-json-c-0.11.patch
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
