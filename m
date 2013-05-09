@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 May 2013 23:49:08 +0200
-Subject: [Buildroot] [PATCH v2 6/6] libvpx: new package libvpx
-In-Reply-To: <1368132677-1261-6-git-send-email-spenser@gillilanding.com>
-References: <1368132677-1261-1-git-send-email-spenser@gillilanding.com>
- <1368132677-1261-6-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130509234908.797dfc45@skate>
+Date: Thu, 9 May 2013 23:51:57 +0200
+Subject: [Buildroot] gpu-viv-bin-mx6q
+In-Reply-To: <35247.217.149.209.147.1368126210.squirrel@webmail.internl.net>
+References: <BA6FC03EA0815D428FB8A3C279ED4992074AE1FA@mx.toyon.corp>
+ <35247.217.149.209.147.1368126210.squirrel@webmail.internl.net>
+Message-ID: <20130509235157.72d87793@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Henk,
 
-On Thu,  9 May 2013 15:51:17 -0500, Spenser Gilliland wrote:
+On Thu, 9 May 2013 21:03:30 +0200 (CEST), H.Fijnvandraat at inter.nl.net
+wrote:
 
->  package/multimedia/Config.in                       |    1 +
->  package/multimedia/gst-plugins-good1/Config.in     |    4 ++
->  .../gst-plugins-good1/gst-plugins-good1.mk         |   10 +++-
+> Until very recent, i used the crosstool-ng external toolchain from within
+> buildroot to generate a good compiler,
+> but that has been removed very recently :-((, without an immediate
+> replacement
 
-The gst-plugins-good1 changes should be in a separate patch from the
-patch...
+You might be making some confusions here regarding the Crosstool-NG
+support. What has been marked deprecated (and not removed!) is the
+integration of Crosstool-NG with Buildroot, what we call the
+"Crosstool-NG backend". This backend allows Buildroot to automatically
+call Crosstool-NG to get a toolchain compiled.
 
->  package/multimedia/libvpx/Config.in                |    6 +++
->  package/multimedia/libvpx/libvpx.mk                |   52 ++++++++++++++++++++
-
-...introducing the libvpx package.
-
-So, first a patch introducing libvpx, and then a patch adding support
-for it in gst-plugins-good1.
+The deprecation (and possible future removal) of this backend is
+completely unrelated to the external toolchain backend, which will
+remain in place, and will continue to allow the usage of Crosstool-NG
+toolchains that have been built outside of Buildroot.
 
 Best regards,
 
