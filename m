@@ -1,79 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  9 May 2013 19:14:25 +0200
-Subject: [Buildroot] [PATCH 2/2] pulseaudio: link against json-c
-In-Reply-To: <1368119665-917-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1368119665-917-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1368119665-917-3-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Thu,  9 May 2013 10:30:27 -0700
+Subject: [Buildroot] [PATCH] socketcand: add license information
+Message-ID: <1368120627-26385-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an upstream patch that makes Pulseaudio link against json-c
-instead of json, so that it works with json-c 0.11, and doesn't cause
-problems with libjson has been also installed in the system. Note that
-this fix has been merged in Pulseaudio after the 3.0 release, so we
-will have to keep this patch around when bumping to 3.0.
-
-Fixes
-http://autobuild.buildroot.org/results/91ffd3196092c48b88f59adb12741b3f93064dea/build-end.log
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- .../pulseaudio-compat-with-json-c-0.11.patch       |   26 ++++++++++++++++++++
- package/multimedia/pulseaudio/pulseaudio.mk        |    6 +++++
- 2 files changed, 32 insertions(+)
- create mode 100644 package/multimedia/pulseaudio/pulseaudio-compat-with-json-c-0.11.patch
+ package/socketcand/socketcand.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/pulseaudio/pulseaudio-compat-with-json-c-0.11.patch b/package/multimedia/pulseaudio/pulseaudio-compat-with-json-c-0.11.patch
-new file mode 100644
-index 0000000..86efdfd
---- /dev/null
-+++ b/package/multimedia/pulseaudio/pulseaudio-compat-with-json-c-0.11.patch
-@@ -0,0 +1,26 @@
-+From 759c0bc6f990240287a14fa6dec029ecea581463 Mon Sep 17 00:00:00 2001
-+From: Arun Raghavan <arun.raghavan@collabora.co.uk>
-+Date: Sat, 27 Apr 2013 03:27:05 +0000
-+Subject: build-sys: json-c changed everything :(
-+
-+json-c 0.11 ships a pkg-config file with a different name, and changes
-+the name of its library as well.
-+---
-+(limited to 'configure.ac')
-+
-+diff --git a/configure.ac b/configure.ac
-+index c8161a4..b1bd21a 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -624,7 +624,8 @@ AM_CONDITIONAL([HAVE_TESTS], [test "x$HAVE_LIBCHECK" = x1])
-+ 
-+ #### json parsing ####
-+ 
-+-PKG_CHECK_MODULES(LIBJSON, [ json >= 0.9 ])
-++PKG_CHECK_MODULES(LIBJSON, [ json-c >= 0.11 ], [],
-++		  [PKG_CHECK_MODULES(LIBJSON, [ json >= 0.9 ])])
-+ AC_SUBST(LIBJSON_CFLAGS)
-+ AC_SUBST(LIBJSON_LIBS)
-+ 
-+--
-+cgit v0.9.0.2-2-gbebe
-diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
-index 16df855..aa67592 100644
---- a/package/multimedia/pulseaudio/pulseaudio.mk
-+++ b/package/multimedia/pulseaudio/pulseaudio.mk
-@@ -32,6 +32,12 @@ PULSEAUDIO_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),webrtc-audio-processing) \
- 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
+diff --git a/package/socketcand/socketcand.mk b/package/socketcand/socketcand.mk
+index efade31..0826579 100644
+--- a/package/socketcand/socketcand.mk
++++ b/package/socketcand/socketcand.mk
+@@ -7,5 +7,6 @@ SOCKETCAND_VERSION = 7d06986
+ SOCKETCAND_SITE = http://github.com/dschanoeh/socketcand/tarball/master
+ SOCKETCAND_AUTORECONF = YES
+ SOCKETCAND_DEPENDENCIES = libconfig
++SOCKETCAND_LICENSE = GPLv2
  
-+# One patch touches configure.ac. We unconditionnally need libglib2
-+# because configure.ac uses AM_GLIB_GNU_GETTEXT. This unconditionnal
-+# dependency can be removed once the patch is removed.
-+PULSEAUDIO_AUTORECONF = YES
-+PULSEAUDIO_DEPENDENCIES += libglib2
-+
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
- # The optional webrtc echo canceller is written in C++, causing auto* to want
- # to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
+ $(eval $(autotools-package))
 -- 
-1.7.9.5
+1.7.4.1
