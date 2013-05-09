@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 10 May 2013 00:22:58 +0200
-Subject: [Buildroot] [PATCH 5/6] package/dtc: new package
+Date: Fri, 10 May 2013 00:22:59 +0200
+Subject: [Buildroot] [PATCH 6/6] package/dtc: add option to install programs
 In-Reply-To: <cover.1368137904.git.yann.morin.1998@free.fr>
 References: <cover.1368137904.git.yann.morin.1998@free.fr>
-Message-ID: <7b313ca8f99c6624c3f364c143d24c07590b0510.1368137905.git.yann.morin.1998@free.fr>
+Message-ID: <073a879f6e3aeb6c0fab9d4cae4de39f566fb70a.1368137905.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,160 +12,128 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-dtc is the Device Tree Compiler, and manipulates device trees.
+By default, we only install the libfdt library.
+
+As suggested by Arnout, add an option that also
+installs the few dtc programs.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 
 ---
-Although Arnout suggested to move it out of the libraries sub-menu,
-I kept it there, as by default, only the library is installed, like
-it is done for, eg., libcurl.
----
- package/Config.in                          |  1 +
- package/dtc/Config.in                      |  9 ++++++++
- package/dtc/dtc-extra_cflags.patch         | 28 +++++++++++++++++++++++++
- package/dtc/dtc-separate-lib-install.patch | 28 +++++++++++++++++++++++++
- package/dtc/dtc.mk                         | 33 ++++++++++++++++++++++++++++++
- 5 files changed, 99 insertions(+)
- create mode 100644 package/dtc/Config.in
- create mode 100644 package/dtc/dtc-extra_cflags.patch
- create mode 100644 package/dtc/dtc-separate-lib-install.patch
- create mode 100644 package/dtc/dtc.mk
+dtdiff, a diff for device trees, requires bash.
 
-diff --git a/package/Config.in b/package/Config.in
-index f55801e..82bd224 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -459,6 +459,7 @@ endmenu
- 
- menu "Hardware handling"
- source "package/ccid/Config.in"
-+source "package/dtc/Config.in"
- source "package/imx-lib/Config.in"
- source "package/lcdapi/Config.in"
- source "package/libaio/Config.in"
+I did not add a 'depends on bash' (or a 'select' either), because
+requiring bash just for that is a bit far-fetched.
+
+Instead, at dtc install time, if bash is selected, dtdiff is installed
+as usual to the target rootfs; if bash is not selected, dtdiff is
+removed from the target rootfs.
+---
+ package/dtc/Config.in | 28 ++++++++++++++++++++++++++--
+ package/dtc/dtc.mk    | 35 +++++++++++++++++++++++++++++------
+ 2 files changed, 55 insertions(+), 8 deletions(-)
+
 diff --git a/package/dtc/Config.in b/package/dtc/Config.in
-new file mode 100644
-index 0000000..96225e3
---- /dev/null
+index 96225e3..4b10556 100644
+--- a/package/dtc/Config.in
 +++ b/package/dtc/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_DTC
-+	bool "dtc"
+@@ -1,9 +1,33 @@
+ config BR2_PACKAGE_DTC
+-	bool "dtc"
++	bool "dtc (libfdt)"
+ 	help
+ 	  The Device Tree Compiler, dtc, takes as input a device-tree in
+ 	  a given format and outputs a device-tree in another format.
+ 	  
+-	  Note that only the library is installed for now.
++	  Note that only the library is installed.
++	  If you want the programs, say 'y' here, and to "dtc programs", below.
+ 	  
+ 	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
++
++if BR2_PACKAGE_DTC
++
++config BR2_PACKAGE_DTC_PROGRAMS
++	bool "dtc programs"
 +	help
-+	  The Device Tree Compiler, dtc, takes as input a device-tree in
-+	  a given format and outputs a device-tree in another format.
++	  Say 'y' here if you also want the programs on the target:
++	    - convert-dtsv0     convert from version 0 to version 1
++	    - dtc               the device tree compiler
++	    - dtdiff            compare two device trees (needs bash)
++	    - fdtdump           print a readable version of a flat device tree
++	    - fdtget            read values from device tree
++	    - fdtput            write a property value to a device tree
 +	  
-+	  Note that only the library is installed for now.
-+	  
-+	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
-diff --git a/package/dtc/dtc-extra_cflags.patch b/package/dtc/dtc-extra_cflags.patch
-new file mode 100644
-index 0000000..3ce699b
---- /dev/null
-+++ b/package/dtc/dtc-extra_cflags.patch
-@@ -0,0 +1,28 @@
-+Makefile: append the CFLAGS to existing ones
++	  Note: dtdiff requires bash, so if bash is not selected, dtdiff will
++	        be removed from the target file system. Enable bash if you
++	        need dtdiff on the target.
 +
-+Allow the user to pass custom CFLAGS (eg. optimisation flags).
++comment "dtdiff will not be installed: it requires bash"
++	depends on BR2_PACKAGE_DTC_PROGRAMS
++	depends on !BR2_PACKAGE_BASH
 +
-+Do not use EXTRA_CFLAGS, append to existing CFLAGS with +=  (Arnout)
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Cc: Arnout Vandecappelle <arnout@mind.be>
-+
-+---
-+Patch not sent upstream.
-+
-+Although not specific to buildroot, I am not sure this is the best
-+way to handle user-supplied CFLAGS.
-+
-+diff -durN dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile
-+--- dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile	2012-10-22 22:02:47.541240846 +0200
-++++ dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile	2012-10-22 22:03:21.151047833 +0200
-+@@ -18,7 +18,8 @@
-+ CPPFLAGS = -I libfdt -I .
-+ WARNINGS = -Werror -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
-+ 	-Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls
-+-CFLAGS = -g -Os -fPIC -Werror $(WARNINGS)
-++CFLAGS ?= -g -Os
-++CFLAGS += -fPIC $(WARNINGS)
-+ 
-+ BISON = bison
-+ LEX = flex
-diff --git a/package/dtc/dtc-separate-lib-install.patch b/package/dtc/dtc-separate-lib-install.patch
-new file mode 100644
-index 0000000..c86d587
---- /dev/null
-+++ b/package/dtc/dtc-separate-lib-install.patch
-@@ -0,0 +1,28 @@
-+Makefile: add a rule to only install libfdt
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Patch not sent upstream.
-+
-+It's really specific to buildroot, and is probably not
-+good (aka generic) enough to be pushed upstream.
-+
-+diff --git a/Makefile b/Makefile
-+index 1169e6c..39e7190 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -160,10 +160,12 @@ endif
-+ # intermediate target and building them again "for real"
-+ .SECONDARY: $(DTC_GEN_SRCS) $(CONVERT_GEN_SRCS)
-+ 
-+-install: all $(SCRIPTS)
-++install: all $(SCRIPTS) libfdt_install
-+ 	@$(VECHO) INSTALL
-+ 	$(INSTALL) -d $(DESTDIR)$(BINDIR)
-+ 	$(INSTALL) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
-++
-++libfdt_install: libfdt
-+ 	$(INSTALL) -d $(DESTDIR)$(LIBDIR)
-+ 	$(INSTALL) $(LIBFDT_lib) $(DESTDIR)$(LIBDIR)
-+ 	ln -sf $(notdir $(LIBFDT_lib)) $(DESTDIR)$(LIBDIR)/$(LIBFDT_soname)
++endif
 diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-new file mode 100644
-index 0000000..f05b09d
---- /dev/null
+index f05b09d..76ff361 100644
+--- a/package/dtc/dtc.mk
 +++ b/package/dtc/dtc.mk
-@@ -0,0 +1,33 @@
-+#############################################################
-+#
-+# dtc
-+#
-+#############################################################
-+
-+DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
-+DTC_SITE            = git://git.jdl.com/software/dtc.git
-+DTC_LICENSE         = GPLv2+/BSD-2c
-+DTC_LICENSE_FILES   = README.license GPL
-+# Note: the dual-license only applies to the library.
-+#       The DT compiler (dtc) is GPLv2+, but we do not install it.
-+DTC_INSTALL_STAGING = YES
-+
-+define DTC_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS)    \
-+	$(MAKE) -C $(@D) PREFIX=/usr libfdt
+@@ -8,26 +8,49 @@ DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
+ DTC_SITE            = git://git.jdl.com/software/dtc.git
+ DTC_LICENSE         = GPLv2+/BSD-2c
+ DTC_LICENSE_FILES   = README.license GPL
+-# Note: the dual-license only applies to the library.
+-#       The DT compiler (dtc) is GPLv2+, but we do not install it.
+ DTC_INSTALL_STAGING = YES
+ 
++define DTC_POST_INSTALL_TARGET_RM_DTDIFF
++	rm -f $(TARGET_DIR)/usr/bin/dtdiff
 +endef
 +
++ifeq ($(BR2_PACKAGE_DTC_PROGRAMS),y)
++
++DTC_LICENSE        += (for the library), GPLv2+ (for the executables)
++# Use default goal to build everything
++DTC_BUILD_GOAL      =
++DTC_INSTALL_GOAL    = install
++DTC_CLEAN_GOAL      = clean
++ifeq ($(BR2_PACKAGE_BASH),)
++DTC_POST_INSTALL_TARGET_HOOKS += DTC_POST_INSTALL_TARGET_RM_DTDIFF
++endif
++
++else # $(BR2_PACKAGE_DTC_PROGRAMS) != y
++
++DTC_BUILD_GOAL      = libfdt
 +#?libfdt_install is our own install rule added by our patch
-+define DTC_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
-+endef
++DTC_INSTALL_GOAL    = libfdt_install
++DTC_CLEAN_GOAL      = libfdt_clean
 +
-+define DTC_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr libfdt_install
-+endef
++endif # $(BR2_PACKAGE_DTC_PROGRAMS) != y
 +
-+define DTC_CLEAN_CMDS
-+	$(MAKE) -C $(@D) libfdt_clean
-+endef
-+
-+$(eval $(generic-package))
+ define DTC_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS)    \
+-	$(MAKE) -C $(@D) PREFIX=/usr libfdt
++	CFLAGS="$(TARGET_CFLAGS)"   \
++	$(MAKE) -C $(@D) PREFIX=/usr $(DTC_BUILD_GOAL)
+ endef
+ 
+-#?libfdt_install is our own install rule added by our patch
++# For staging, only the library is needed
+ define DTC_INSTALL_STAGING_CMDS
+ 	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
+ endef
+ 
+ define DTC_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr libfdt_install
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr $(DTC_INSTALL_GOAL)
+ endef
+ 
+ define DTC_CLEAN_CMDS
+-	$(MAKE) -C $(@D) libfdt_clean
++	$(MAKE) -C $(@D) $(DTC_CLEAN_GOAL)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 1.8.1.2
