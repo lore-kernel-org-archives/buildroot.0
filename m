@@ -1,44 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 May 2013 23:56:57 +0200
-Subject: [Buildroot] [PATCH 2/4] Move firmware-imx and imx-lib to
- freescale-imx and refactor them
-In-Reply-To: <1368121316-3645-3-git-send-email-h.fijnvandraat@inter.nl.net>
-References: <1368121316-3645-1-git-send-email-h.fijnvandraat@inter.nl.net>
- <1368121316-3645-3-git-send-email-h.fijnvandraat@inter.nl.net>
-Message-ID: <20130509235657.2b5f1a77@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 10 May 2013 00:03:20 +0200
+Subject: [Buildroot] [PATCH] package-infra: limit the number of // jobs
+Message-ID: <1368137000-2766-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Henk Fijnvandraat,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Thu,  9 May 2013 19:41:54 +0200, Henk Fijnvandraat wrote:
-> Signed-off-by: Henk Fijnvandraat <h.fijnvandraat@inter.nl.net>
-> ---
->  package/freescale-imx/firmware-imx/Config.in       |   13 +++++
->  package/freescale-imx/firmware-imx/firmware-imx.mk |   38 ++++++++++++++
->  package/freescale-imx/imx-lib/Config.in            |   53 ++++++++++++++++++++
->  package/freescale-imx/imx-lib/imx-lib.mk           |   40 +++++++++++++++
->  4 files changed, 144 insertions(+)
->  create mode 100644 package/freescale-imx/firmware-imx/Config.in
->  create mode 100644 package/freescale-imx/firmware-imx/firmware-imx.mk
->  create mode 100644 package/freescale-imx/imx-lib/Config.in
->  create mode 100644 package/freescale-imx/imx-lib/imx-lib.mk
+The current code spawns as many jobs as up to twice the number of CPUs.
 
-No. If you're moving a package from one directory to another, the
-addition and removal should be done in the same patch. Thanks to git
-format-patch -M, git will detect the move and will show it in the
-generated patch.
+On small-class machines like laptops, with a limitted amount of memory,
+but still a few CPUs (real or hyperthreads), the HDD becomes a bottleneck,
+and it becomes almost impossible to do anythiong else while there is a
+build in progress.
 
-See my suggestion to organize the patches in my comments on PATCH 1.
+Limit the number of jobs to the number of CPUs plus one.
 
-Thanks!
+Even on fast machines with fast HDDs, this settings keeps the machine
+fully busy (for those packages that can build in parallel, of course).
 
-Thomas
+For example, building qemu or the linux kernel kept my hyperthreaded
+hexa Core i7 with 18GiB of RAM, busy at 99% (I never ever managed to
+get 100% even with more jobs, not even 200); while on my hyperthreaded
+dual Core i5 with only 4GiB and a slow HDD, I still topped at 100% CPU,
+while still able to do some work involving the HDD.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index a449089..a575f17 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -11,7 +11,7 @@ HOSTMAKE :=$(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
+ # while waiting on I/O.
+ ifeq ($(BR2_JLEVEL),0)
+ PARALLEL_JOBS:=$(shell echo \
+-	$$((2 * `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
++	$$((2 + `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 0`)))
+ else
+ PARALLEL_JOBS:=$(BR2_JLEVEL)
+ endif
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.2
