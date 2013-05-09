@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  9 May 2013 17:51:06 +0200
-Subject: [Buildroot] [PATCH 11/12] libsha1: add license informations
+Date: Thu,  9 May 2013 17:51:07 +0200
+Subject: [Buildroot] [PATCH 12/12] pixman: add license informations
 In-Reply-To: <1368114667-14476-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1368114667-14476-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1368114667-14476-12-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1368114667-14476-13-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +12,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsha1/libsha1.mk |    3 +++
+ package/pixman/pixman.mk |    3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/libsha1/libsha1.mk b/package/libsha1/libsha1.mk
-index e9658af..da6a7b2 100644
---- a/package/libsha1/libsha1.mk
-+++ b/package/libsha1/libsha1.mk
-@@ -6,6 +6,9 @@
- 
- LIBSHA1_VERSION = 0.3
- LIBSHA1_SITE = http://github.com/dottedmag/libsha1/tarball/$(LIBSHA1_VERSION)
-+LIBSHA1_LICENSE = BSD-3c or GPL
-+LIBSHA1_LICENSE_FILES = COPYING
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 607f82e..c2ee035 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -5,6 +5,9 @@
+ ################################################################################
+ PIXMAN_VERSION = 0.28.2
+ PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
++PIXMAN_LICENSE = MIT
++PIXMAN_LICENSE_FILES = COPYING
 +
- LIBSHA1_INSTALL_STAGING = YES
- 
- # We're getting the source code from Github, so there is no generated
+ PIXMAN_INSTALL_STAGING = YES
+ PIXMAN_DEPENDENCIES = host-pkgconf
+ # don't build gtk based demos
 -- 
 1.7.9.5
