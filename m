@@ -1,334 +1,103 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed,  8 May 2013 19:04:53 -0500
-Subject: [Buildroot] [PATCH 2/2] gst-plugins-base1: add gstreamer1 base
-	plugins
-In-Reply-To: <1368057893-20874-1-git-send-email-spenser@gillilanding.com>
-References: <1368057893-20874-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1368057893-20874-2-git-send-email-spenser@gillilanding.com>
+From: Nathan Lynch <ntl@pobox.com>
+Date: Wed, 08 May 2013 22:55:16 -0500
+Subject: [Buildroot] [PATCH 2/6] package/libbsd: new package
+In-Reply-To: <20130508110837.GC3413@free.fr>
+References: <cover.1360433324.git.yann.morin.1998@free.fr>
+ <76440f71466575498fd576fc04cbbdc7cda8d6f3.1360433324.git.yann.morin.1998@free.fr>
+ <1367978955.3081.49.camel@orca.stoopid.dyndns.org>
+ <20130508110837.GC3413@free.fr>
+Message-ID: <1368071716.3081.81.camel@orca.stoopid.dyndns.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds gstreamer 1.X base plugins.
+On Wed, 2013-05-08 at 13:08 +0200, Yann E. MORIN wrote:
+> On Tue, May 07, 2013 at 09:09:15PM -0500, Nathan Lynch wrote:
+> 
+> > I happen to use libbsd for a mips target but hadn't gotten around to
+> > submitting it myself.
+> > 
+> > I see you've posted patches adding libbsd a few times over the last few
+> > months; it looks like it was related to your qemu efforts but not
+> > committed so far.  Are you still working on having it included?
+> 
+> Well, it's been two Buildroot Developpers' Day that we said this stuff
+> would be added upstream, so yes, it will eventually get upstreamed.
+> 
+> But I need to rework all the QEMU patches first, since there has been
+> two new versions released since I first started working on it.
+> 
+> As for the preliminary packages, I'll resubmit them shortly, but I'm
+> afraid they won't make it in this cycle, it's a bit too late. But if
+> people are interested (like you are), they can help poke Peter to speed
+> up inclusion when the next window opens (start of June, after 2013.05 is
+> released). ;-)
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
----
- package/multimedia/Config.in                       |    1 +
- package/multimedia/gst-plugins-base1/Config.in     |  103 +++++++++++
- .../gst-plugins-base1/gst-plugins-base1.mk         |  181 ++++++++++++++++++++
- 3 files changed, 285 insertions(+)
- create mode 100644 package/multimedia/gst-plugins-base1/Config.in
- create mode 100644 package/multimedia/gst-plugins-base1/gst-plugins-base1.mk
+Sure :-)
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index f6a5fd7..eba230a 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -12,6 +12,7 @@ source "package/multimedia/gst-dsp/Config.in"
- source "package/multimedia/gst-fsl-plugins/Config.in"
- source "package/multimedia/gst-omapfb/Config.in"
- source "package/multimedia/gst-plugins-base/Config.in"
-+source "package/multimedia/gst-plugins-base1/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
-diff --git a/package/multimedia/gst-plugins-base1/Config.in b/package/multimedia/gst-plugins-base1/Config.in
-new file mode 100644
-index 0000000..562737b
---- /dev/null
-+++ b/package/multimedia/gst-plugins-base1/Config.in
-@@ -0,0 +1,103 @@
-+menuconfig BR2_PACKAGE_GST_PLUGINS_BASE1
-+	bool "gst-plugins-base1"
-+	depends on BR2_PACKAGE_GSTREAMER1
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXV if BR2_PACKAGE_XORG7
-+	help
-+	  A basic set of well-supported plug-ins for GStreamer.
-+
-+	  http://gstreamer.freedesktop.org/
-+
-+if BR2_PACKAGE_GST_PLUGINS_BASE1
-+
-+comment "dependency-less plugins"
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_ADDER
-+	bool "adder"
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_APP
-+	bool "app"
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_AUDIOCONVERT
-+	bool "audioconvert (mandatory for audio playback)"
-+	default y
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_AUDIORATE
-+	bool "audiorate"
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_AUDIORESAMPLE
-+	bool "audioresample (mandatory for audio playback)"
-+	default y
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_AUDIOTESTSRC
-+	bool "audiotestsrc"
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_ENCODING
-+	bool "encoding"
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_PLAYBACK
-+	bool "playback (mandatory)"
-+	default y
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_SUBPARSE
-+	bool "subparse"
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_TCP
-+	bool "tcp"
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_TYPEFIND
-+	bool "typefind (mandatory)"
-+	default y
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_VIDEOCONVERT
-+	bool "videoconvert"
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_VIDEOTESTSRC
-+	bool "videotestsrc"
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_VIDEORATE
-+	bool "videorate"
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_VIDEOSCALE
-+	bool "videoscale (mandatory for video playback)"
-+	default y
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_VOLUME
-+	bool "volume (mandatory for audio playback)"
-+	default y
-+
-+comment "plugins with external dependencies (there may be more available)"
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_ALSA
-+	bool "alsa (mandatory for audio playback)"
-+	select BR2_PACKAGE_ALSA_LIB
-+	select BR2_PACKAGE_ALSA_LIB_MIXER
-+	select BR2_PACKAGE_ALSA_LIB_PCM
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_OGG
-+	bool "ogg (*.ogg audio/video)"
-+	select BR2_PACKAGE_LIBOGG
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_PANGO
-+	bool "pango font renderer"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_PANGO
-+
-+comment "pango plugin requires a toolchain with C++ support"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_THEORA
-+	bool "theora (*.ogg video)"
-+	select BR2_PACKAGE_LIBTHEORA
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_TREMOR
-+	bool "tremor"
-+	select BR2_PACKAGE_TREMOR
-+
-+config BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_VORBIS
-+	bool "vorbis (*.ogg audio)"
-+	select BR2_PACKAGE_LIBVORBIS
-+
-+endif
-+
-diff --git a/package/multimedia/gst-plugins-base1/gst-plugins-base1.mk b/package/multimedia/gst-plugins-base1/gst-plugins-base1.mk
-new file mode 100644
-index 0000000..49b2e15
---- /dev/null
-+++ b/package/multimedia/gst-plugins-base1/gst-plugins-base1.mk
-@@ -0,0 +1,181 @@
-+#############################################################
-+#
-+# gst-plugins-base1
-+#
-+#############################################################
-+GST_PLUGINS_BASE1_VERSION = 1.0.7
-+GST_PLUGINS_BASE1_SOURCE = gst-plugins-base-$(GST_PLUGINS_BASE1_VERSION).tar.xz
-+GST_PLUGINS_BASE1_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
-+GST_PLUGINS_BASE1_INSTALL_STAGING = YES
-+
-+# freetype is only used by examples, but if it is not found
-+# and the host has a freetype-config script, then the host
-+# include dirs are added to the search path causing trouble
-+GST_PLUGINS_BASE1_CONF_ENV =
-+		FT2_CONFIG=/bin/false \
-+		ac_cv_header_stdint_t="stdint.h"
-+
-+GST_PLUGINS_BASE1_CONF_OPT = \
-+		--disable-examples \
-+		--disable-oggtest \
-+		--disable-vorbistest \
-+		--disable-freetypetest
-+
-+GST_PLUGINS_BASE1_DEPENDENCIES = gstreamer1
-+
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+GST_PLUGINS_BASE1_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXv
-+GST_PLUGINS_BASE1_CONF_OPT += \
-+	--enable-x \
-+	--enable-xshm \
-+	--enable-xvideo
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += \
-+	--disable-x \
-+	--disable-xshm \
-+	--disable-xvideo
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ORC),y)
-+GST_PLUGINS_BASE1_DEPENDENCIES += orc
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-orc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_ALSA),y)
-+GST_PLUGINS_BASE1_DEPENDENCIES += alsa-lib
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-alsa
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_ADDER),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-adder
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-adder
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_APP),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-app
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-app
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_AUDIOCONVERT),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-audioconvert
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-audioconvert
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_AUDIORATE),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-audiorate
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-audiorate
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_AUDIORESAMPLE),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-audioresample
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-audioresample
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_AUDIOTESTSRC),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-audiotestsrc
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-audiotestsrc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_ENCODING),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-encoding
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-encoding
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_PLAYBACK),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-playback
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-playback
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_SUBPARSE),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-subparse
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-subparse
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_TCP),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-tcp
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-tcp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_TYPEFIND),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-typefind
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-typefind
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_VIDEOTESTSRC),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-videotestsrc
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-videotestsrc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_VIDEORATE),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-videorate
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-videorate
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_VIDEOSCALE),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-videoscale
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-videoscale
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_VOLUME),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-volume
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-volume
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_OGG),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-ogg
-+GST_PLUGINS_BASE1_DEPENDENCIES += libogg
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-ogg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_PANGO),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-pango
-+GST_PLUGINS_BASE1_DEPENDENCIES += pango
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-pango
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_THEORA),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-theora
-+GST_PLUGINS_BASE1_DEPENDENCIES += libtheora
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-theora
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_TREMOR),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-ivorbis
-+GST_PLUGINS_BASE1_DEPENDENCIES += tremor
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-ivorbis
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE1_PLUGIN_VORBIS),y)
-+GST_PLUGINS_BASE1_CONF_OPT += --enable-vorbis
-+GST_PLUGINS_BASE1_DEPENDENCIES += libvorbis
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-vorbis
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+GST_PLUGINS_BASE1_DEPENDENCIES += zlib
-+else
-+GST_PLUGINS_BASE1_CONF_OPT += --disable-zlib
-+endif
-+
-+$(eval $(autotools-package))
--- 
-1.7.9.5
+
+> > Any ideas on this libbsd build error with mips (which seems to lack an
+> > a.out.h)?
+> 
+> No, sorry, never ever tried on MIPS. And indeed, MIPS does not install
+> a.out.h THere's only 4 archs exporting the a.out.h header: alpha, arm,
+> m68k and x86; all other archs supsedly do not support running a.out
+> executables, so there is no reason to export a.out.h for those archs.
+> 
+> > I've hacked around it locally by just hacking nlist.c out of
+> > the build, but that's not exactly satisfactory.
+> 
+> I've looked at how Debian builds libbsd, but they have strictly 0 patch
+> on libbsd, and yet they have a MIPS package. Weird...
+
+I think it's a uClibc vs [e]glibc thing.  Looks like the valgrind
+package has had a similar issue; see: 
+
+package/valgrind/valgrind-dont-include-a-out-header.patch
+
+and
+
+http://lists.uclibc.org/pipermail/uclibc/2011-November/045920.html
+
+
+> Can you try to just remove the a.out.h include and see if it still
+> compiles?
+
+It does not, it apparently needs the definition of struct nlist, struct
+exec, and some constants:
+
+nlist.c:58:39: warning: 'struct nlist' declared inside parameter list [enabled by default]
+nlist.c:58:39: warning: its scope is only this definition or declaration, which is probably not what you want [enabled by default]
+nlist.c:58:12: error: prototype declaration
+nlist.c:129:51: error: invalid application of 'sizeof' to incomplete type 'struct exec' 
+nlist.c:154:15: error: dereferencing pointer to incomplete type
+nlist.c:193:38: error: 'N_STAB' undeclared (first use in this function)
+nlist.c:398:16: error: 'N_UNDF' undeclared (first use in this function)
+nlist.c:402:7: error: 'N_FN' undeclared (first use in this function)
+nlist.c:402:14: error: 'N_ABS' undeclared (first use in this function)
+nlist.c:411:36: error: 'N_DATA' undeclared (first use in this function)
+nlist.c:411:45: error: 'N_TEXT' undeclared (first use in this function)
+nlist.c:412:37: error: 'N_BSS' undeclared (first use in this function)
+nlist.c:419:17: error: 'N_EXT' undeclared (first use in this function)
+
+
+>  If not, then maybe we should patch configure.ac to check for
+> a.out.h, and src/Makefile.am to not add nlist.c to the build if a.out.h
+> is not found.
+> 
+> But I'm afraid nlist.c contains important functions that would be missed
+> by other packages, so the best is to somehow getrid of including a.out.h
+> in the first place.
+
+I agree.  Perhaps a patch like the one valgrind uses could be an interim
+solution.
+
+
+> Also, has libbsd upstream done something about it yet?
+
+AFAIK this has not been addressed (or reported) upstream.
+
+I'll see what I can figure out on this but it will probably be the
+weekend before I have more to report.
