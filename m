@@ -1,67 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  9 May 2013 14:28:37 +0200
-Subject: [Buildroot] [PATCH 1/2] wvstreams: fix build failures
-Message-ID: <1368102518-14826-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Thu,  9 May 2013 08:21:47 -0500
+Subject: [Buildroot] [PATCH v2 2/3] glibmm: Bump to version 2.36.1
+In-Reply-To: <1368105708-4754-1-git-send-email-spenser@gillilanding.com>
+References: <1368056050-19285-1-git-send-email-spenser@gillilanding.com>
+ <1368105708-4754-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <1368105708-4754-2-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to fix wvstreams build failures such as
-http://autobuild.buildroot.org/results/8cb2904113a5e63d6170c085f77a8040d50a0138/build-end.log.
+This upgrades glibmm to version 2.36.1
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/wvstreams/wvstreams-0004-build-fixes.patch |   40 ++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/wvstreams/wvstreams-0004-build-fixes.patch
+ package/glibmm/glibmm.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wvstreams/wvstreams-0004-build-fixes.patch b/package/wvstreams/wvstreams-0004-build-fixes.patch
-new file mode 100644
-index 0000000..21792d7
---- /dev/null
-+++ b/package/wvstreams/wvstreams-0004-build-fixes.patch
-@@ -0,0 +1,40 @@
-+Add missing includes for proper build on Linux/glibc
-+
-+The current wvstreams code doesn't build on Linux/glibc, with error
-+about chmod() not being available (for wvunixdgsocket.cc) or umask()
-+not being available (for wvatomicfile.cc). Those errors turn out to be
-+missing includes. Those includes were in fact already done, but
-+conditionally for MacOS. We make them unconditional (it probably
-+breaks other platforms, but since Buildroot is Linux only, we don't
-+care).
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/ipstreams/wvunixdgsocket.cc
-+===================================================================
-+--- a/ipstreams/wvunixdgsocket.cc
-++++ b/ipstreams/wvunixdgsocket.cc
-+@@ -1,8 +1,6 @@
-+ #include "wvunixdgsocket.h"
-+-#ifdef MACOS
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+-#endif
-+ 
-+ WvUnixDGSocket::WvUnixDGSocket(WvStringParm filename, bool _server, int perms)
-+     : socketfile(filename)
-+Index: b/streams/wvatomicfile.cc
-+===================================================================
-+--- a/streams/wvatomicfile.cc
-++++ b/streams/wvatomicfile.cc
-+@@ -10,10 +10,7 @@
-+ #include "wvatomicfile.h"
-+ #include "wvfileutils.h"
-+ #include "wvstrutils.h"
-+-
-+-#ifdef MACOS
-+ #include <sys/stat.h>
-+-#endif
-+ 
-+ WvAtomicFile::WvAtomicFile(WvStringParm filename, int flags, mode_t create_mode)
-+     : tmp_file(WvString::null)
+diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
+index abd8b6c..d8f6239 100644
+--- a/package/glibmm/glibmm.mk
++++ b/package/glibmm/glibmm.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-GLIBMM_VERSION_MAJOR = 2.30
++GLIBMM_VERSION_MAJOR = 2.36
+ GLIBMM_VERSION_MINOR = 1
+ GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).$(GLIBMM_VERSION_MINOR)
+ GLIBMM_LICENSE = LGPLv2.1+ (library), GPLv2+ (tools)
 -- 
 1.7.9.5
