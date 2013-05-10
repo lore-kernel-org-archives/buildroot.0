@@ -1,99 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 May 2013 00:56:44 +0200
-Subject: [Buildroot] [PATCH 3/5] am33x-cm3: add FW for suspend/resume
-In-Reply-To: <1368131491-14115-4-git-send-email-anders.darander@gmail.com>
-References: <1368131491-14115-1-git-send-email-anders.darander@gmail.com>
- <1368131491-14115-4-git-send-email-anders.darander@gmail.com>
-Message-ID: <518D7B2C.20206@mind.be>
+From: =?utf-8?q?Ra=C3=BAl_S=C3=A1nchez_Siles?= <rasasi78@gmail.com>
+Date: Sat, 11 May 2013 01:04:51 +0200
+Subject: [Buildroot] [PATCH] Choose xz compressed tarball for linux kernel.
+Message-ID: <201305110104.51488.rasasi78@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/05/13 22:31, Anders Darander wrote:
-> From: Anders Darander <anders@chargestorm.se>
->
-> Without this firmware, the beaglebone won't be able to reboot correctly.
->
-> Signed-off-by: Anders Darander <anders@chargestorm.se>
-[snip]
-> diff --git a/package/am33x-cm3/am33x-cm3.mk b/package/am33x-cm3/am33x-cm3.mk
-> new file mode 100644
-> index 0000000..6180157
-> --- /dev/null
-> +++ b/package/am33x-cm3/am33x-cm3.mk
-> @@ -0,0 +1,26 @@
-> +#############################################################
-> +#
-> +# am33x-cm3
-> +#
-> +#############################################################
-> +
-> +# SHA1 corresponds to tag "AM335xPSP_04.06.00.10-rc1"
-> +AM33X_CM3_VERSION = 27ca4643e422245a95723de1df0247a00eada45b
+  Hi:
 
-  If it is a tag, then use the tag, not the sha1.
+  This is a retry of previous patch, now inlined as requested. Patch is the same 
+as before so no patch version increased.
 
-> +AM33X_CM3_SITE = git://arago-project.org/git/projects/am33x-cm3.git
-> +AM33X_CM3_METHOD = git
-
-  Since the site starts with git://, the method is git by default. 
-However, if the site supports http, we prefer to use that. Some company 
-firewalls block git.
-
-> +AM33X_CM3_LICENSE = TI-BSD
-
-  I don't really like this license name. Either it's BSD (then it should 
-specify 2-, 3- or 4-clause), or it is not. In the latter case, it would 
-be something like "TI Open Source license (BSD-like)".
-
-> +AM33X_CM3_LICENSE_FILES = License.txt
-> +
-> +define AM33X_CM3_BUILD_CMDS
-> +	$(MAKE) CC="$(TARGET_CC)" CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
-
-  Does it work with $(TARGET_CONFIGURE_OPTS) instead of CC=? If not, then 
-please also pass the CFLAGS and LDFLAGS - they may be important.
-
-  However, now I think about it - this is abusing the cross-compiler for 
-the Cortex-A8 to generate code for the Cortex-M3, correct? In that case, 
-passing CFLAGS and LDFLAGS is probably not a good idea. But it would also 
-be good to add a note about what is happening here.
-
-> +endef
-> +
-> +# Not all of the firmware files are used
-> +define AM33X_CM3_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib/firmware/
-> +	$(INSTALL) -m 0644 $(@D)/bin/am335x-pm-firmware.bin $(TARGET_DIR)/lib/firmware
-
-  We normally create directories with the -D option to install, so:
-
-	$(INSTALL) -m 0644 -D  $(@D)/bin/am335x-pm-firmware.bin \
-		$(TARGET_DIR)/lib/firmware/am335x-pm-firmware.bin
-
-> +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/init.d
-> +	$(INSTALL) -m 0755 package/am33x-cm3/am335x-pm-firmware-load $(TARGET_DIR)/etc/init.d/S93-am335x-pm-firwmare-load
-
-  init scripts are installed by a separate variable, 
-AM33X_CM3_INSTALL_INIT_SYSV. And of course, the same remark about the -D 
-option applies.
-
+  I wanted to apologize to Jerzy for my abrupt appearance: I had this patch 
+working some time ago and it was standing in my "to send" queue. I was also 
+willing to contribute buildroot somehow.
 
   Regards,
-  Arnout
 
-> +endef
-> +
-> +$(eval $(generic-package))
->
+Signed-off-by: Ra?l S?nchez Siles <rasasi78@gmail.com>
+---
+ linux/linux.mk                             |    2 +-
+ toolchain/kernel-headers/kernel-headers.mk |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-
+diff --git a/linux/linux.mk b/linux/linux.mk
+index d375cf0..3115564 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -16,7 +16,7 @@ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
+ LINUX_SITE_METHOD = git
+ else
+-LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
++LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
+ # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+ # to use the $(word) function. We support versions such as 3.1,
+ # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
+diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-
+headers/kernel-headers.mk
+index adf7bc4..b5ae322 100644
+--- a/toolchain/kernel-headers/kernel-headers.mk
++++ b/toolchain/kernel-headers/kernel-headers.mk
+@@ -31,8 +31,8 @@ LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v2.6/
+ else
+ LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v3.x/
+ endif
+-LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
+-LINUX_HEADERS_CAT:=$(BZCAT)
++LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.xz
++LINUX_HEADERS_CAT:=$(XZCAT)
+ LINUX_HEADERS_UNPACK_DIR:=$(TOOLCHAIN_DIR)/linux-$(LINUX_HEADERS_VERSION)
+ LINUX_HEADERS_DIR:=$(TOOLCHAIN_DIR)/linux
+ 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
