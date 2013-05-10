@@ -1,75 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 10 May 2013 15:24:55 +0200
-Subject: [Buildroot] [PATCH] package-infra: limit the number of // jobs
-In-Reply-To: <1368191351.17778.19.camel@orca.stoopid.dyndns.org>
-References: <1368137000-2766-1-git-send-email-yann.morin.1998@free.fr>
- <1368191351.17778.19.camel@orca.stoopid.dyndns.org>
-Message-ID: <20130510132455.GC3302@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 May 2013 15:48:21 +0200
+Subject: [Buildroot] [PATCH] Correct path error in
+ package/freescale-imx/Config.in
+In-Reply-To: <1368177210-3899-1-git-send-email-h.fijnvandraat@inter.nl.net>
+References: <1368177210-3899-1-git-send-email-h.fijnvandraat@inter.nl.net>
+Message-ID: <20130510154821.49afc23a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nathan, All,
+Dear Henk Fijnvandraat,
 
-On Fri, May 10, 2013 at 08:09:11AM -0500, Nathan Lynch wrote:
-> On Fri, 2013-05-10 at 00:03 +0200, Yann E. MORIN wrote:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > 
-> > The current code spawns as many jobs as up to twice the number of CPUs.
-> > 
-> > On small-class machines like laptops, with a limitted amount of memory,
-> > but still a few CPUs (real or hyperthreads), the HDD becomes a bottleneck,
-> > and it becomes almost impossible to do anythiong else while there is a
-> > build in progress.
-> > 
-> > Limit the number of jobs to the number of CPUs plus one.
-> > 
-> > Even on fast machines with fast HDDs, this settings keeps the machine
-> > fully busy (for those packages that can build in parallel, of course).
-> > 
-> > For example, building qemu or the linux kernel kept my hyperthreaded
-> > hexa Core i7 with 18GiB of RAM, busy at 99% (I never ever managed to
-> > get 100% even with more jobs, not even 200); while on my hyperthreaded
-> > dual Core i5 with only 4GiB and a slow HDD, I still topped at 100% CPU,
-> > while still able to do some work involving the HDD.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  package/Makefile.in | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/package/Makefile.in b/package/Makefile.in
-> > index a449089..a575f17 100644
-> > --- a/package/Makefile.in
-> > +++ b/package/Makefile.in
-> > @@ -11,7 +11,7 @@ HOSTMAKE :=$(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
-> >  # while waiting on I/O.
-> >  ifeq ($(BR2_JLEVEL),0)
-> >  PARALLEL_JOBS:=$(shell echo \
-> > -	$$((2 * `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
-> > +	$$((2 + `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 0`)))
+On Fri, 10 May 2013 11:13:30 +0200, Henk Fijnvandraat wrote:
+> Signed-off-by: Henk Fijnvandraat <h.fijnvandraat@inter.nl.net>
+> ---
+>  package/freescale-imx/Config.in |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> You'll need to update/remove the comment preceding this code too...
+> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+> index 1f60192..8d0e347 100644
+> --- a/package/freescale-imx/Config.in
+> +++ b/package/freescale-imx/Config.in
+> @@ -11,6 +11,6 @@ menuconfig BR2_PACKAGE_IMX
+>  
+>  
+>  if BR2_PACKAGE_IMX
+> -source "package/imx-lib/Config.in"
+> +source "package/freescale-imx/imx-lib/Config.in"
+>  source "package/freescale-imx/firmware-imx/Config.in"
+>  endif
 
-Right, good catch. I'll send an updated patch soonish.
+You shouldn't send just a fixup patch like this. When you make a
+mistake in a patch series, you have to send a new version of the entire
+patch series. Alternatively, you can reply to your own patches, say
+that you made a mistake and explain which one, and say that you'll
+resend the patch series a little bit later, once people will have had
+the time to review your patches, so that you can resend with more
+comments taken into account.
 
-> When I submitted this feature there was some discussion of what the
-> heuristic should be here.  Given your experience I am fine with making
-> it more conservative, especially since this is the default behavior.
+Also, when you send the same patch series multiple times, there should
+be a version number in the patch titles, and a small changelog in the
+cover letter. To generate your patches:
 
-Yes. In the Good Old Times (TM), it was customary to set jobs=2*CPU,
-because disks (or network) was very slow, and IO did not catch up with
-CPU bandwidth; this is not much true these days.
+	git format-patch --cover --subject-prefix="PATCH vX"
 
-Regards,
-Yann E. MORIN.
+where X will be replaced by the version of your patches.
 
+Then, edit 0000-cover-letter.patch to include a global description of
+your patch series, and the list of changes from one revision to
+another. To do this, I generally keep a file called
+<branch>-cover-letter.txt for each branch I'm currently working on, in
+which I keep the cover letter that I update before sending a new
+version. This way, I don't have to rewrite the entire cover letter
+everytime.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
