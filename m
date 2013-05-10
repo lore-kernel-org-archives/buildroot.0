@@ -1,78 +1,141 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 10 May 2013 20:42:02 +0200
-Subject: [Buildroot] [git commit] pulseaudio: link against json-c
-Message-ID: <20130510184445.11A2499C3E@busybox.osuosl.org>
+Date: Fri, 10 May 2013 20:41:39 +0200
+Subject: [Buildroot] [git commit] json-c: bump to version 0.11
+Message-ID: <20130510184444.DE2E099C3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c1a1bb1cd9fd2bd46f2d32f98a8ffc6b536b983
+commit: http://git.buildroot.net/buildroot/commit/?id=ecd0f65af92c224d9d17450ffdef00bd929bcfdf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an upstream patch that makes Pulseaudio link against json-c
-instead of json, so that it works with json-c 0.11, and doesn't cause
-problems with libjson has been also installed in the system. Note that
-this fix has been merged in Pulseaudio after the 3.0 release, so we
-will have to keep this patch around when bumping to 3.0.
+Bumping this package is needed, because json-c 0.10 has a major
+defect: it installs a library named libjson.so, which conflicts with
+the library installed by the libjson package.
 
-Fixes
-http://autobuild.buildroot.org/results/91ffd3196092c48b88f59adb12741b3f93064dea/build-end.log
+This has been changed in the upstream json-c 0.11 version, which now
+installs libjson-c and json-c.pc.
+
+It allows to solve the Pulseaudio link problem, which wants to link
+against json-c but happens to link against libjson when libjson has
+been compiled and installed after json-c.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../pulseaudio-compat-with-json-c-0.11.patch       |   26 ++++++++++++++++++++
- package/multimedia/pulseaudio/pulseaudio.mk        |    6 ++++
- 2 files changed, 32 insertions(+), 0 deletions(-)
+ ...n-c-add-missing-file-to-installed-headers.patch |   43 --------------------
+ package/json-c/json-c-no-reentrant.patch           |   25 +++++++++---
+ package/json-c/json-c.mk                           |    6 ++-
+ 3 files changed, 23 insertions(+), 51 deletions(-)
 
-diff --git a/package/multimedia/pulseaudio/pulseaudio-compat-with-json-c-0.11.patch b/package/multimedia/pulseaudio/pulseaudio-compat-with-json-c-0.11.patch
-new file mode 100644
-index 0000000..86efdfd
---- /dev/null
-+++ b/package/multimedia/pulseaudio/pulseaudio-compat-with-json-c-0.11.patch
-@@ -0,0 +1,26 @@
-+From 759c0bc6f990240287a14fa6dec029ecea581463 Mon Sep 17 00:00:00 2001
-+From: Arun Raghavan <arun.raghavan@collabora.co.uk>
-+Date: Sat, 27 Apr 2013 03:27:05 +0000
-+Subject: build-sys: json-c changed everything :(
-+
-+json-c 0.11 ships a pkg-config file with a different name, and changes
-+the name of its library as well.
-+---
-+(limited to 'configure.ac')
-+
-+diff --git a/configure.ac b/configure.ac
-+index c8161a4..b1bd21a 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -624,7 +624,8 @@ AM_CONDITIONAL([HAVE_TESTS], [test "x$HAVE_LIBCHECK" = x1])
-+ 
-+ #### json parsing ####
-+ 
-+-PKG_CHECK_MODULES(LIBJSON, [ json >= 0.9 ])
-++PKG_CHECK_MODULES(LIBJSON, [ json-c >= 0.11 ], [],
-++		  [PKG_CHECK_MODULES(LIBJSON, [ json >= 0.9 ])])
-+ AC_SUBST(LIBJSON_CFLAGS)
-+ AC_SUBST(LIBJSON_LIBS)
-+ 
-+--
-+cgit v0.9.0.2-2-gbebe
-diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
-index 16df855..aa67592 100644
---- a/package/multimedia/pulseaudio/pulseaudio.mk
-+++ b/package/multimedia/pulseaudio/pulseaudio.mk
-@@ -32,6 +32,12 @@ PULSEAUDIO_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),webrtc-audio-processing) \
- 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
+diff --git a/package/json-c/json-c-add-missing-file-to-installed-headers.patch b/package/json-c/json-c-add-missing-file-to-installed-headers.patch
+deleted file mode 100644
+index 12ef855..0000000
+--- a/package/json-c/json-c-add-missing-file-to-installed-headers.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 2ab6524ca0cfaab7feb42f7c328db8fca7b111fc Mon Sep 17 00:00:00 2001
+-From: Gilles Talis <gilles.talis@gmail.com>
+-Date: Tue, 5 Mar 2013 21:59:11 -0800
+-Subject: [PATCH] Add json_object_iterator.h to installed headers
+-
+-Backported from: 4154c55edae6f6b34d6ef4fcc331055fdf8e1a23
+-
+-In addition to original patch, applied the same change to Makefile.in
+-to avoid having the package to be autoreconfigured.
+-
+-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+----
+- Makefile.am |    1 +
+- Makefile.in |    1 +
+- 2 files changed, 2 insertions(+)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index d4a7bbb..8f09ca8 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -17,6 +17,7 @@ libjsoninclude_HEADERS = \
+- 	json_config.h \
+- 	json_inttypes.h \
+- 	json_object.h \
+-+	json_object_iterator.h \
+- 	json_object_private.h \
+- 	json_tokener.h \
+- 	json_util.h \
+-diff --git a/Makefile.in b/Makefile.in
+-index c06db3e..9d924cd 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -278,6 +278,7 @@ libjsoninclude_HEADERS = \
+- 	json_config.h \
+- 	json_inttypes.h \
+- 	json_object.h \
+-+	json_object_iterator.h \
+- 	json_object_private.h \
+- 	json_tokener.h \
+- 	json_util.h \
+--- 
+-1.7.10.4
+-
+diff --git a/package/json-c/json-c-no-reentrant.patch b/package/json-c/json-c-no-reentrant.patch
+index 31343c0..b8ae6bb 100644
+--- a/package/json-c/json-c-no-reentrant.patch
++++ b/package/json-c/json-c-no-reentrant.patch
+@@ -13,19 +13,32 @@ Index: b/Makefile.am.inc
+ --- a/Makefile.am.inc
+ +++ b/Makefile.am.inc
+ @@ -1,2 +1,2 @@
+--AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
+-+AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE
++-AM_CFLAGS = -Wall -Werror -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
+++AM_CFLAGS = -Wall -Werror -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE
+  
+ Index: b/Makefile.in
+ ===================================================================
+ --- a/Makefile.in
+ +++ b/Makefile.in
+-@@ -263,7 +263,7 @@
++@@ -274,7 +274,7 @@
+  top_build_prefix = @top_build_prefix@
+  top_builddir = @top_builddir@
+  top_srcdir = @top_srcdir@
+--AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
+-+AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE
++-AM_CFLAGS = -Wall -Werror -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
+++AM_CFLAGS = -Wall -Werror -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE
+  EXTRA_DIST = README.html README-WIN32.html config.h.win32 doc json-c.vcproj
+  SUBDIRS = . tests
+- lib_LTLIBRARIES = libjson.la
++ lib_LTLIBRARIES = libjson-c.la $(am__append_1)
++Index: b/tests/Makefile.in
++===================================================================
++--- a/tests/Makefile.in
+++++ b/tests/Makefile.in
++@@ -228,7 +228,7 @@
++ top_build_prefix = @top_build_prefix@
++ top_builddir = @top_builddir@
++ top_srcdir = @top_srcdir@
++-AM_CFLAGS = -Wall -Werror -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
+++AM_CFLAGS = -Wall -Werror -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE
++ LIBJSON_LA = $(top_builddir)/libjson-c.la
++ test1_LDADD = $(LIBJSON_LA)
++ test1Formatted_LDADD = $(LIBJSON_LA)
+diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
+index a0b5cae..031b541 100644
+--- a/package/json-c/json-c.mk
++++ b/package/json-c/json-c.mk
+@@ -4,8 +4,10 @@
+ #
+ ################################################################################
  
-+# One patch touches configure.ac. We unconditionnally need libglib2
-+# because configure.ac uses AM_GLIB_GNU_GETTEXT. This unconditionnal
-+# dependency can be removed once the patch is removed.
-+PULSEAUDIO_AUTORECONF = YES
-+PULSEAUDIO_DEPENDENCIES += libglib2
-+
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
- # The optional webrtc echo canceller is written in C++, causing auto* to want
- # to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
+-JSON_C_VERSION = 0.10
+-JSON_C_SITE = https://github.com/downloads/json-c/json-c
++JSON_C_VERSION = 0.11
++JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases/
+ JSON_C_INSTALL_STAGING = YES
++JSON_C_MAKE = $(MAKE1)
++JSON_C_CONF_OPT = --disable-oldname-compat
+ 
+ $(eval $(autotools-package))
