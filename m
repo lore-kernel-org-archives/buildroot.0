@@ -1,73 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 May 2013 16:04:14 +0200
-Subject: [Buildroot] [PATCH] linux.mk: change linux tarball compression
- to xz
-In-Reply-To: <1368175909-17855-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1368175909-17855-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20130510160414.4adf7583@skate>
+Date: Fri, 10 May 2013 16:07:46 +0200
+Subject: [Buildroot] [PATCH v2] package-infra: limit the number of //
+ jobs
+In-Reply-To: <1368194161-27851-1-git-send-email-yann.morin.1998@free.fr>
+References: <1368194161-27851-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20130510160746.5e890d0f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+Dear Yann E. MORIN,
 
-On Fri, 10 May 2013 10:51:48 +0200, Jerzy Grzegorek wrote:
+On Fri, 10 May 2013 15:56:01 +0200, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> The current code spawns as many jobs as up to twice the number of CPUs.
+> 
+> On small-class machines like laptops, with a limitted amount of memory,
+> but still a few CPUs (real or hyperthreads), the HDD becomes a bottleneck,
+> and it becomes almost impossible to do anythiong else while there is a
+> build in progress.
+> 
+> Limit the number of jobs to the number of CPUs plus one.
+> 
+> Even on fast machines with fast HDDs, this settings keeps the machine
+> fully busy (for those packages that can build in parallel, of course).
+> 
+> For example, building qemu or the linux kernel kept my hyperthreaded
+> hexa Core i7 with 18GiB of RAM, busy at 99% (I never ever managed to
+> get 100% even with more jobs, not even 200); while on my hyperthreaded
+> dual Core i5 with only 4GiB and a slow HDD, I still topped at 100% CPU,
+> while still able to do some work involving the HDD.
+> 
+> If the number of processors is not available, assume one.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Nathan Lynch <ntl@pobox.com>
 
-> +# If any of linux tarball locally exists it used should be
-> +else ifneq ($(wildcard $(call qstrip,$(BR2_DL_DIR))/linux-$(LINUX_VERSION).tar.xz),)
-> +LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
-> +else ifneq ($(wildcard $(call qstrip,$(BR2_DL_DIR))/linux-$(LINUX_VERSION).tar.bz2),)
->  LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
-> +else ifneq ($(wildcard $(call qstrip,$(BR2_DL_DIR))/linux-$(LINUX_VERSION).tar.gz),)
-> +LINUX_SOURCE = linux-$(LINUX_VERSION).tar.gz
-> +else
-> +LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
->  # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
->  # to use the $(word) function. We support versions such as 3.1,
->  # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
-
-Unfortunately, this doesn't work. First $(BR2_DL_DIR) is not the good
-variable, as it doesn't take into account the fact that it can be
-overridden by the BUILDROOT_DL_DIR environment variable.
-
-Also, I believe this is a kind of "layering" violation. Packages should
-not be directly poking into the Buildroot download directory. Managing
-the Buildroot directory is the business of package/pkg-download.mk.
-
-So either we decide that we use .tar.xz tarballs (which I think we
-could do for all kernels >= 3.0), or we need to improve the package
-infrastructure to support a list of possible files to download in
-<pkg>_SOURCE, so that we can list the .xz and .bz2.
-
-But for the case of Linux, I believe the easiest way is probably:
-
-diff --git a/linux/linux.mk b/linux/linux.mk
-index d375cf0..3611a6d 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -16,14 +16,15 @@ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
- LINUX_SITE_METHOD = git
- else
--LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
- # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
- # to use the $(word) function. We support versions such as 3.1,
- # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
- ifeq ($(findstring x2.6.,x$(LINUX_VERSION)),x2.6.)
- LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
-+LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
- else
- LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x/
-+LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
- endif
- # release candidates are in testing/ subdir
- ifneq ($(findstring -rc,$(LINUX_VERSION)),)
-
-Best regards,
-
-Thomas
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
