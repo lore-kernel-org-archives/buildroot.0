@@ -1,37 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 May 2013 17:53:31 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain/gcc: the ARC version of gcc
- needs host-flex/host-bison
-In-Reply-To: <E6BF041E97966E4DB955F0DF883AD2D6339FF18A@de02wembxa.internal.synopsys.com>
-References: <1368114785-14666-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1368114785-14666-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <E6BF041E97966E4DB955F0DF883AD2D6339FF18A@de02wembxa.internal.synopsys.com>
-Message-ID: <20130510175331.0e6917aa@skate>
+From: =?iso-8859-1?Q?Ra=FAl_S=E1nchez?= Siles <rasasi78@gmail.com>
+Date: Fri, 10 May 2013 18:22:39 +0200
+Subject: [Buildroot] [PATCH] linux.mk: change linux tarball compression
+ to xz
+In-Reply-To: <1368175909-17855-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1368175909-17855-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20130510162239.GA8882@trismegisto.universo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mischa Jonker,
+  Hi:
 
-On Fri, 10 May 2013 14:47:56 +0000, Mischa Jonker wrote:
+On Fri, May 10, 2013 at 10:51:48AM +0200, Jerzy Grzegorek wrote:
+> After selecting BR2_LINUX_KERNEL or BR2_LINUX_KERNEL_CUSTOM_VERSION 
+> configuration item, if any of linux tarball linux-$(LINUX_VERSION).tar.xx
+> in local download tarball directory $(BR2_DL_DIR) exists, it used should be,
+> otherwise *we* set the compression of linux tarball to download to xz.
 
-> Thank you for fixing this. Is there any way I can sort the autobuilder results so that I can see specific build problems for ARC?
+  What about the one I'm attaching?
 
-Not as of today, you can't filter the results. I'm working on doing
-this. I started doing something in Python/Django, but had some issues,
-so I guess I'll continue with the PHP stuff we're already using, and
-improve it to be able to sort things.
-
-In the mean time, I often monitor the autobuilder results, so if
-there's anything ARC related, I'll notify you.
-
-Best regards,
-
-Thomas
+  Regards,
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Ra?l S?nchez Siles
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Choose-xz-compressed-tarball-for-linux-kernel.patch
+Type: text/x-diff
+Size: 1517 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130510/83639513/attachment.bin>
