@@ -1,97 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 May 2013 15:17:40 +0200
-Subject: [Buildroot] Results of allyespackageconfig on ARM
-Message-ID: <20130510151740.21155224@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 10 May 2013 15:24:55 +0200
+Subject: [Buildroot] [PATCH] package-infra: limit the number of // jobs
+In-Reply-To: <1368191351.17778.19.camel@orca.stoopid.dyndns.org>
+References: <1368137000-2766-1-git-send-email-yann.morin.1998@free.fr>
+ <1368191351.17778.19.camel@orca.stoopid.dyndns.org>
+Message-ID: <20130510132455.GC3302@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Nathan, All,
 
-I've done a allyespackageconfig build on ARM with a Linaro toolchain.
-The build is done after disabling jamvm and classpath, because I don't
-have a Java compiler installed in the chroot where the build takes
-place.
+On Fri, May 10, 2013 at 08:09:11AM -0500, Nathan Lynch wrote:
+> On Fri, 2013-05-10 at 00:03 +0200, Yann E. MORIN wrote:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > The current code spawns as many jobs as up to twice the number of CPUs.
+> > 
+> > On small-class machines like laptops, with a limitted amount of memory,
+> > but still a few CPUs (real or hyperthreads), the HDD becomes a bottleneck,
+> > and it becomes almost impossible to do anythiong else while there is a
+> > build in progress.
+> > 
+> > Limit the number of jobs to the number of CPUs plus one.
+> > 
+> > Even on fast machines with fast HDDs, this settings keeps the machine
+> > fully busy (for those packages that can build in parallel, of course).
+> > 
+> > For example, building qemu or the linux kernel kept my hyperthreaded
+> > hexa Core i7 with 18GiB of RAM, busy at 99% (I never ever managed to
+> > get 100% even with more jobs, not even 200); while on my hyperthreaded
+> > dual Core i5 with only 4GiB and a slow HDD, I still topped at 100% CPU,
+> > while still able to do some work involving the HDD.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/Makefile.in | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/package/Makefile.in b/package/Makefile.in
+> > index a449089..a575f17 100644
+> > --- a/package/Makefile.in
+> > +++ b/package/Makefile.in
+> > @@ -11,7 +11,7 @@ HOSTMAKE :=$(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
+> >  # while waiting on I/O.
+> >  ifeq ($(BR2_JLEVEL),0)
+> >  PARALLEL_JOBS:=$(shell echo \
+> > -	$$((2 * `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
+> > +	$$((2 + `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 0`)))
+> 
+> You'll need to update/remove the comment preceding this code too...
 
-There were four build issues before I could proceed with a complete
-build, described below.
+Right, good catch. I'll send an updated patch soonish.
 
-mplayer fails to build with:
-============================
+> When I submitted this feature there was some discussion of what the
+> heuristic should be here.  Given your experience I am fine with making
+> it more conservative, especially since this is the default behavior.
 
-{standard input}: Assembler messages:
-{standard input}:2857: Error: selected FPU does not support instruction -- `vmul.f32 q0,q0,q1'
-{standard input}:2951: Error: selected processor does not support ARM mode `veor q0,q0,q2'
-{standard input}:2952: Error: selected FPU does not support instruction -- `vmul.f32 q0,q0,q1'
-{standard input}:3023: Error: selected FPU does not support instruction -- `vmul.f32 d0,d0,d1'
-{standard input}:3106: Error: selected processor does not support ARM mode `veor d0,d0,d2'
-{standard input}:3107: Error: selected FPU does not support instruction -- `vmul.f32 d0,d0,d1'
+Yes. In the Good Old Times (TM), it was customary to set jobs=2*CPU,
+because disks (or network) was very slow, and IO did not catch up with
+CPU bandwidth; this is not much true these days.
 
-This was solved by disabling mplayer, and therefore the mplayer backend
-of libplayer.
+Regards,
+Yann E. MORIN.
 
-gst-plugins-bad-0.10.23 fails to build with:
-============================================
-
-/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/directfb/direct/os/waitqueue.h:47:25: warning: redundant redeclaration of 'direct_waitqueue_deinit' [-Wredundant-decls]
-In file included from /home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/directfb/direct/os/types.h:59:0,
-                 from /home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/directfb/direct/os/waitqueue.h:32,
-                 from /home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/directfb/direct/thread.h:34,
-                 from /home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/directfb/direct/debug.h:39,
-                 from /home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/directfb/direct/interface.h:32,
-                 from /home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/directfb/directfb.h:43,
-                 from dfb-example.c:2:
-/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/directfb/direct/os/linux/glibc/waitqueue.h:108:1: note: previous definition of 'direct_waitqueue_deinit' was here
-  CC     libgstcog_la-cogvirtframe.lo
-In file included from /home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/gstreamer-0.10/gst/gst.h:49:0,
-                 from dfb-example.c:4:
-/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/gstreamer-0.10/gst/gstinfo.h:274:48: error: expected ')' before '__attribute__'
-/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/gstreamer-0.10/gst/gstinfo.h:274:48: error: expected ',' or ';' before ')' token
-/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/gstreamer-0.10/gst/gstinfo.h:296:68: error: expected ')' before '__attribute__'
-/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/gstreamer-0.10/gst/gstinfo.h:296:68: error: expected ',' or ';' before ')' token
-/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/gstreamer-0.10/gst/gstinfo.h:321:51: error: expected ')' before '__attribute__'
-/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/gstreamer-0.10/gst/gstinfo.h:321:51: error: expected ',' or ';' before ')' token
-/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/gstreamer-0.10/gst/gstinfo.h:333:70: error: expected ')' before '__attribute__'
-/home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/gstreamer-0.10/gst/gstinfo.h:333:70: error: expected ',' or ';' before ')' token
-make[5]: *** [dfb_example-dfb-example.o] Error 1
-make[5]: *** Waiting for unfinished jobs....
-/usr/bin/make -C rsvg
-
-This was solved by disabling the DirectFB plugin of gst-plugins-bad.
-
-sconeserver fails to build with:
-================================
-
-checking for InitializeMagick in -lMagick++... no
-configure: error: library 'Magick++' is required for Sconesite:image
-make[1]: *** [/home/test/outputs/allpkg/build/sconeserver-183/.stamp_configured] Error 1
-make: *** [all] Error 2
-
-This was solved by disabling sconeserver.
-
-wvstreams fails to build with:
-==============================
-
-./CXX -c utils/wvuid
-utils/wvuid.cc: In function 'wvuid_t wvgetuid()':
-utils/wvuid.cc:63:19: error: 'getuid' was not declared in this scope
-utils/wvuid.cc:64:1: warning: control reaches end of non-void function [-Wreturn-type]
-make[2]: *** [utils/wvuid.o] Error 1
-make[1]: *** [/home/test/outputs/allpkg/build/wvstreams-4.6.1/.stamp_built] Error 2
-make: *** [all] Error 2
-
-This was solved by disabling wvstreams and wvdial.
-
-The output/build/ directory weights 19 GB. The output/target/ directory
-weights 1.1 GB.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
