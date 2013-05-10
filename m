@@ -1,32 +1,110 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 May 2013 00:36:21 +0200
-Subject: [Buildroot] [PATCH 3/3] Move and refactor package firmware-imx
- to the freescale-imx directory
-In-Reply-To: <1368174613-3427-4-git-send-email-h.fijnvandraat@inter.nl.net>
-References: <1368174613-3427-1-git-send-email-h.fijnvandraat@inter.nl.net>
- <1368174613-3427-4-git-send-email-h.fijnvandraat@inter.nl.net>
-Message-ID: <518D7665.5020602@mind.be>
+Date: Sat, 11 May 2013 00:44:09 +0200
+Subject: [Buildroot] [PATCH 1/5] beaglebone: update to linux 3.8
+In-Reply-To: <1368131491-14115-2-git-send-email-anders.darander@gmail.com>
+References: <1368131491-14115-1-git-send-email-anders.darander@gmail.com>
+ <1368131491-14115-2-git-send-email-anders.darander@gmail.com>
+Message-ID: <518D7839.70709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/05/13 10:30, Henk Fijnvandraat wrote:
-> When moved, the version and download site are set to those specified in the
-> freescale-imx.mk file.
-> This means that the version is bumped from 12.09.01 to 1.1.0
+  Hi Anders,
+
+On 09/05/13 22:31, Anders Darander wrote:
+> From: Anders Darander <anders@chargestorm.se>
 >
-> Signed-off-by: Henk Fijnvandraat<h.fijnvandraat@inter.nl.net>
+> The kernel config here, is basically the default one from the TI kernel.
+> Thus, it's omap2plus_defconfig, which is rather generic.
 
-  Same comment as for imx-lib, and also my
+  So why include a config in buildroot? If it's just the defconfig that 
+is already in the kernel tree, you can use it.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+> As the beaglebone support is mainlined, there's no support for the old
+> board setup files, and the only supported run-time configuration is through
+> the device tree.
+>
+> We're also setting the kernel headers to follow the 3.8 series.
+>
+> Signed-off-by: Anders Darander <anders@chargestorm.se>
+> ---
+>   board/beaglebone/linux-3.2.9.config |  252 ----------------------------
+>   board/beaglebone/linux-3.8.config   |  315 +++++++++++++++++++++++++++++++++++
 
-(after changing variable names).
+  Please create your patches with the -M option to send-email or 
+format-patch, so that we can actually see the diff crossing the rename. 
+Otherwise it's pretty hard to review.
+
+>   configs/beaglebone_defconfig        |   22 +--
+>   3 files changed, 321 insertions(+), 268 deletions(-)
+>   delete mode 100644 board/beaglebone/linux-3.2.9.config
+>   create mode 100644 board/beaglebone/linux-3.8.config
+>
+[snip]
+> diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+> index 2177068..f80dd79 100644
+> --- a/configs/beaglebone_defconfig
+> +++ b/configs/beaglebone_defconfig
+> @@ -1,24 +1,14 @@
+> -# architecture
+>   BR2_arm=y
+>   BR2_cortex_a8=y
+> +BR2_KERNEL_HEADERS_3_8=y
+>   BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-fpu=vfpv3 --with-float=hard"
+>   # BR2_SOFT_FLOAT is not set
+> -
+> -# system
+
+  Please don't remove these comments, they're useful. You can selectively 
+undo changes with 'git checkout -p configs/beaglebone_defconfig'.
+
+>   BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
+>   BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
+>   BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
+>   # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+> -
+> -# filesystem
+>   BR2_TARGET_ROOTFS_EXT2=y
+>   # BR2_TARGET_ROOTFS_TAR is not set
+> -
+> -# lock down headers to avoid breaking with new defaults
+> -BR2_KERNEL_HEADERS_VERSION=y
+> -BR2_DEFAULT_KERNEL_VERSION="3.2.9"
+> -
+> -# bootloader
+>   BR2_TARGET_UBOOT=y
+>   BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
+>   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> @@ -26,11 +16,11 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.04"
+>   BR2_TARGET_UBOOT_FORMAT_IMG=y
+>   BR2_TARGET_UBOOT_SPL=y
+>   BR2_TARGET_UBOOT_SPL_NAME="MLO"
+> -
+> -# kernel
+>   BR2_LINUX_KERNEL=y
+>   BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> -BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/koenkooi/linux.git"
+> -BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="linux-ti33x-psp-3.2-r5a+gitr09e9651bcf2ee8d86685f2a8075bc6557b1d3b91"
+> +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git"
+> +BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="935f6c2f82056d538b528272e2bdbb5c08d69a58"
+
+  Isn't there a tag you can clone from? That's much faster, because then 
+we can (usually) do a shallow clone.
+
 
   Regards,
   Arnout
+
+>   BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> -BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.2.9.config"
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.8.config"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-bone"
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
