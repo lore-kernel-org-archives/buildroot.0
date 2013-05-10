@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 May 2013 18:29:27 +0200
-Subject: [Buildroot] [PATCH 05/16] libart: handle libart2-config script
+Date: Fri, 10 May 2013 18:29:29 +0200
+Subject: [Buildroot] [PATCH 07/16] libesmtp: handle libesmtp-config script
 In-Reply-To: <1368203379-3385-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1368203379-3385-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1368203379-3385-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1368203379-3385-8-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libart/libart.mk |    1 +
- 1 file changed, 1 insertion(+)
+ package/libesmtp/libesmtp.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libart/libart.mk b/package/libart/libart.mk
-index 0505ff5..822dbf1 100644
---- a/package/libart/libart.mk
-+++ b/package/libart/libart.mk
-@@ -9,5 +9,6 @@ LIBART_SOURCE = libart_lgpl-$(LIBART_VERSION).tar.gz
- LIBART_SITE = http://ftp.gnome.org/pub/gnome/sources/libart_lgpl/2.3/
- LIBART_AUTORECONF = YES
- LIBART_INSTALL_STAGING = YES
-+LIBART_CONFIG_SCRIPTS = libart2-config
+diff --git a/package/libesmtp/libesmtp.mk b/package/libesmtp/libesmtp.mk
+index 078a729..baa0d64 100644
+--- a/package/libesmtp/libesmtp.mk
++++ b/package/libesmtp/libesmtp.mk
+@@ -7,7 +7,7 @@ LIBESMTP_VERSION = 1.0.6
+ LIBESMTP_SOURCE = libesmtp-$(LIBESMTP_VERSION).tar.bz2
+ LIBESMTP_SITE = http://www.stafford.uklinux.net/libesmtp
+ LIBESMTP_INSTALL_STAGING = YES
+-
++LIBESMTP_CONFIG_SCRIPTS = libesmtp-config
+ LIBESMTP_DEPENDENCIES = $(if $(BR2_PACKAGE_OPENSSL),openssl)
  
  $(eval $(autotools-package))
 -- 
