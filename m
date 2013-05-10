@@ -1,24 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 10 May 2013 20:37:55 +0200
-Subject: [Buildroot] [PATCH] hplip: needs threads
-In-Reply-To: <1368180880-9843-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 10 May 2013 07:14:40 -0300")
-References: <1368180880-9843-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <871u9e4r5o.fsf@dell.be.48ers.dk>
+Date: Fri, 10 May 2013 20:39:59 +0200
+Subject: [Buildroot] [PATCH 1/2] hplip: needs toolchain with threads
+	support
+In-Reply-To: <1368138122-5950-1-git-send-email-gilles.talis@gmail.com> (Gilles
+ Talis's message of "Thu, 9 May 2013 15:22:01 -0700")
+References: <1368138122-5950-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <87wqr63chs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
- Gustavo> Hplip needs threads because libusb needs them. Fixes:
- Gustavo> http://autobuild.buildroot.net/results/12fb9bb8c93c1cc1f93ba8e15558d1630f2e7c3d/
+ Gilles> hplip uses libusb that requires a toolchain with threads support
+ Gilles> Fixes:
+ Gilles> http://autobuild.buildroot.org/results/12fb9bb8c93c1cc1f93ba8e15558d1630f2e7c3d
 
-Committed, thanks.
-
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Sorry, I've already applied Gustavo's patch fixing the same issue.
 
 -- 
 Bye, Peter Korsgaard
