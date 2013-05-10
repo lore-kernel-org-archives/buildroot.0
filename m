@@ -1,33 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 May 2013 15:55:54 +0200
-Subject: [Buildroot] [PATCH 2/3] Move and refactor package imx-lib to
- the freescale-imx directory
-In-Reply-To: <1368174613-3427-3-git-send-email-h.fijnvandraat@inter.nl.net>
-References: <1368174613-3427-1-git-send-email-h.fijnvandraat@inter.nl.net>
- <1368174613-3427-3-git-send-email-h.fijnvandraat@inter.nl.net>
-Message-ID: <20130510155554.604e309e@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 10 May 2013 15:56:01 +0200
+Subject: [Buildroot] [PATCH v2] package-infra: limit the number of // jobs
+Message-ID: <1368194161-27851-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Henk Fijnvandraat,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Fri, 10 May 2013 10:30:12 +0200, Henk Fijnvandraat wrote:
-> -IMX_LIB_VERSION = 12.09.01
-> -# No official download site from freescale, just this mirror
-> -IMX_LIB_SITE    = http://download.ossystems.com.br/bsp/freescale/source
-> +FIRMWARE_IMX_VERSION = $(IMX_VERSION_LEVEL)
-> +FIRMWARE_IMX_SITE    = $(IMX_MIRROR_SITE)
+The current code spawns as many jobs as up to twice the number of CPUs.
 
-This is wrong, it should be IMX_LIB_VERSION and IMX_LIB_SITE.
+On small-class machines like laptops, with a limitted amount of memory,
+but still a few CPUs (real or hyperthreads), the HDD becomes a bottleneck,
+and it becomes almost impossible to do anythiong else while there is a
+build in progress.
 
-Best regards,
+Limit the number of jobs to the number of CPUs plus one.
 
-Thomas
+Even on fast machines with fast HDDs, this settings keeps the machine
+fully busy (for those packages that can build in parallel, of course).
+
+For example, building qemu or the linux kernel kept my hyperthreaded
+hexa Core i7 with 18GiB of RAM, busy at 99% (I never ever managed to
+get 100% even with more jobs, not even 200); while on my hyperthreaded
+dual Core i5 with only 4GiB and a slow HDD, I still topped at 100% CPU,
+while still able to do some work involving the HDD.
+
+If the number of processors is not available, assume one.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Nathan Lynch <ntl@pobox.com>
+
+---
+Changes v1 -> v2:
+  - fix the code to actually reflect the commit log
+  - fix the comment (Nathan)
+---
+ package/Makefile.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index a449089..9ba6e8c 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -7,11 +7,12 @@ endif
+ HOSTMAKE :=$(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
+ 
+ # If BR2_LEVEL is 0, scale the maximum concurrency with the number of
+-# CPUs.  A coefficient of 2 is used in order to keep processors busy
++# CPUs. An additional job is used in order to keep processors busy
+ # while waiting on I/O.
++# If the number of processors is not available, assume one.
+ ifeq ($(BR2_JLEVEL),0)
+ PARALLEL_JOBS:=$(shell echo \
+-	$$((2 * `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
++	$$((1 + `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
+ else
+ PARALLEL_JOBS:=$(BR2_JLEVEL)
+ endif
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.2
