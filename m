@@ -1,19 +1,17 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 May 2013 16:07:46 +0200
+From: Nathan Lynch <ntl@pobox.com>
+Date: Fri, 10 May 2013 09:12:53 -0500
 Subject: [Buildroot] [PATCH v2] package-infra: limit the number of //
- jobs
+	jobs
 In-Reply-To: <1368194161-27851-1-git-send-email-yann.morin.1998@free.fr>
 References: <1368194161-27851-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20130510160746.5e890d0f@skate>
+Message-ID: <1368195173.17778.21.camel@orca.stoopid.dyndns.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
-
-On Fri, 10 May 2013 15:56:01 +0200, Yann E. MORIN wrote:
+On Fri, 2013-05-10 at 15:56 +0200, Yann E. MORIN wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
 > The current code spawns as many jobs as up to twice the number of CPUs.
@@ -39,9 +37,6 @@ On Fri, 10 May 2013 15:56:01 +0200, Yann E. MORIN wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Nathan Lynch <ntl@pobox.com>
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Reviewed-by: Nathan Lynch <ntl@pobox.com>
+
+Thanks Yann.
