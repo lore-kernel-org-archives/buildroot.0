@@ -1,33 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 10 May 2013 20:43:41 +0200
-Subject: [Buildroot] [PATCH 0/2] Fix build problem of pulseaudio
-In-Reply-To: <1368119665-917-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 9 May 2013 19:14:23 +0200")
-References: <1368119665-917-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87obci3cbm.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 10 May 2013 20:40:15 +0200
+Subject: [Buildroot] [git commit] python-nfc: needs toolchain with threads
+	support
+Message-ID: <20130510184444.7D02399C3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ee377acd8713330e54ef62babbc0b4a5c040446a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Hello,
- Thomas> Here is a set of two patches that fix the pulseaudio link problem. It
- Thomas> turns out that the problem was that json-c and libjson both install a
- Thomas> library with the same name, /usr/lib/libjson.so, even though they have
- Thomas> a different API and language. So, when libjson was built and installed
- Thomas> after json-c, it was overriding json-c libjson.so link with a link to
- Thomas> its own library, and Pulseaudio was failing to build.
+python-nfc uses libusb that requires a toolchain with threads support
 
- Thomas> The solution is to bump json-c to 0.11, which changes its name to
- Thomas> libjson-c.so, and apply an upstream pulseaudio patch that makes
- Thomas> pulseaudio use json-c instead of json when available.
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/python-nfc/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
- Thomas> Best regards,
-
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-nfc/Config.in b/package/python-nfc/Config.in
+index c928ba1..dc46d6c 100644
+--- a/package/python-nfc/Config.in
++++ b/package/python-nfc/Config.in
+@@ -1,9 +1,13 @@
+ config BR2_PACKAGE_PYTHON_NFC
+ 	bool "python-nfc"
+ 	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	help
+ 	  Python module for near field communication.
+ 
+ 	  https://launchpad.net/nfcpy
++
++comment "python-nfc requires a toolchain with threads support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
