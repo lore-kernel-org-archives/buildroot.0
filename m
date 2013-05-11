@@ -1,53 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 11 May 2013 22:43:58 +0200
-Subject: [Buildroot] [git commit branch/next] Choose xz compressed tarball
-	for linux kernel.
-Message-ID: <20130511204540.DC9239A0DC@busybox.osuosl.org>
+Date: Sat, 11 May 2013 22:42:15 +0200
+Subject: [Buildroot] [git commit branch/next] python3: remove another config
+	script
+Message-ID: <20130511204540.993389A0DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=98b5cc3eb4d4103b2149325b98a5e93e68c68dd8
+commit: http://git.buildroot.net/buildroot/commit/?id=fd8f39653a9939a5d5e1043c874e4b26f412c388
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Prefer xz compressed tarball so some bandwidth is saved for kernel headers
-and kernel itself downloads.
-
-Signed-off-by: Ra??l S??nchez Siles <rasasi78@gmail.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/linux.mk                             |    2 +-
- toolchain/kernel-headers/kernel-headers.mk |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python3/python3.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index d375cf0..3115564 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -16,7 +16,7 @@ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
- LINUX_SITE_METHOD = git
- else
--LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
-+LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
- # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
- # to use the $(word) function. We support versions such as 3.1,
- # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
-diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
-index adf7bc4..b5ae322 100644
---- a/toolchain/kernel-headers/kernel-headers.mk
-+++ b/toolchain/kernel-headers/kernel-headers.mk
-@@ -31,8 +31,8 @@ LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v2.6/
- else
- LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v3.x/
- endif
--LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.xz
-+LINUX_HEADERS_CAT:=$(XZCAT)
- LINUX_HEADERS_UNPACK_DIR:=$(TOOLCHAIN_DIR)/linux-$(LINUX_HEADERS_VERSION)
- LINUX_HEADERS_DIR:=$(TOOLCHAIN_DIR)/linux
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 7551a7b..239ac8f 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -130,6 +130,7 @@ PYTHON3_POST_INSTALL_STAGING_HOOKS += PYTHON3_FIXUP_LIBDIR
+ #
+ define PYTHON3_REMOVE_DEVFILES
+ 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
++	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
+ 	rm -f $(TARGET_DIR)/usr/bin/python3-config
+ endef
  
