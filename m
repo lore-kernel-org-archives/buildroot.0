@@ -1,37 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 11 May 2013 09:52:55 +0200
-Subject: [Buildroot] [git commit] atk: add license information
-Message-ID: <20130511075917.37BDA9A091@busybox.osuosl.org>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Sat, 11 May 2013 10:59:01 +0200
+Subject: [Buildroot] [PATCH 1/1] Unhide lttng-tools and lttng-modules
+Message-ID: <1368262741-24215-1-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9988d3f7800097cd62439b380ccf039790712f58
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When using lttng-tools for userland tracing with lttng-libust lttng-modules is
+not required, thus a dependency on building lttng-modules and a kernel is
+overkill for lttng-tools.  It also hides it from a user not wanting to build
+a kernel.  A comment has been added to lttng-modules to show a user that
+lttng-modules is dependent on a kernel build.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- package/atk/atk.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/lttng-modules/Config.in |    3 +++
+ package/lttng-tools/Config.in   |    1 -
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/atk/atk.mk b/package/atk/atk.mk
-index 2a85edd..f5b2e91 100644
---- a/package/atk/atk.mk
-+++ b/package/atk/atk.mk
-@@ -3,10 +3,13 @@
- # atk
- #
- #############################################################
-+
- ATK_VERSION_MAJOR = 1.33
- ATK_VERSION = $(ATK_VERSION_MAJOR).6
- ATK_SOURCE = atk-$(ATK_VERSION).tar.bz2
- ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)/
-+ATK_LICENSE = LGPLv2+
-+ATK_LICENSE_FILES = COPYING
- ATK_INSTALL_STAGING = YES
- ATK_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+diff --git a/package/lttng-modules/Config.in b/package/lttng-modules/Config.in
+index 2a0f938..fb5947f 100644
+--- a/package/lttng-modules/Config.in
++++ b/package/lttng-modules/Config.in
+@@ -16,3 +16,6 @@ config BR2_PACKAGE_LTTNG_MODULES
+ 	  http://lttng.org/files/bundles/20111214/README.compatible.kernels.txt
  
+ 	  http://lttng.org
++
++comment "lttng-modules requires a linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
+index 3d95eeb..4f86e77 100644
+--- a/package/lttng-tools/Config.in
++++ b/package/lttng-tools/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LTTNG_TOOLS
+ 	bool "lttng-tools"
+-	depends on BR2_PACKAGE_LTTNG_MODULES
+ 	select BR2_PACKAGE_LIBURCU
+ 	select BR2_PACKAGE_POPT
+ 	# liburcu only works on some architectures and requires thread support
+-- 
+1.7.10.4
