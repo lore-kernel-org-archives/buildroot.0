@@ -1,53 +1,53 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 11 May 2013 21:22:14 +0200
-Subject: [Buildroot] [PATCH v2 1/1] Disable building of cups driver in
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 11 May 2013 21:13:38 +0200
+Subject: [Buildroot] [git commit] Disable building of cups driver in
 	host-gutenprint
-In-Reply-To: <1368267696-5839-1-git-send-email-olivier.schonken@gmail.com>
- (Olivier Schonken's message of "Sat, 11 May 2013 12:21:35 +0200")
-References: <1368265366-24526-1-git-send-email-olivier.schonken@gmail.com>
- <1368267696-5839-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <87y5bl1fvd.fsf@dell.be.48ers.dk>
+Message-ID: <20130511192253.9C09F9A094@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Olivier" == Olivier Schonken <olivier.schonken@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e074805b5c1c96788e001869936d8fcc8b9b9edb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Olivier> This should fix http://autobuild.buildroot.org/results/d2e386b50744aeda7257a0b78aafe90ba4da697c/
- Olivier> Because there is no host-cups package, host-gutenprint cant build the
- Olivier> host-cups drivers - missing includes and libs.  Host gutenprint only
- Olivier> built to get the xml. Thus not a loss.
+This should fix http://autobuild.buildroot.org/results/d2e386b50744aeda7257a0b78aafe90ba4da697c/
+Because there is no host-cups package, host-gutenprint cant build the
+host-cups drivers - missing includes and libs.  Host gutenprint only
+built to get the xml. Thus not a loss.
 
- Olivier> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/gutenprint/gutenprint.mk |   10 +++++++++-
+ 1 files changed, 9 insertions(+), 1 deletions(-)
 
- Olivier> ---
-
- Olivier> Corrected absent minded mistake. Thanks Thomas
-
- Olivier>  package/gutenprint/gutenprint.mk |    3 ++-
- Olivier>  1 file changed, 2 insertions(+), 1 deletion(-)
-
- Olivier> diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
- Olivier> index 0463771..072fada 100644
- Olivier> --- a/package/gutenprint/gutenprint.mk
- Olivier> +++ b/package/gutenprint/gutenprint.mk
- Olivier> @@ -51,7 +51,8 @@ HOST_GUTENPRINT_CONF_OPT = --disable-libgutenprintui2 \
- Olivier>                             --without-foomatic3 \
- Olivier>                             --disable-escputil \
- Olivier>                             --disable-test \
- Olivier> -                           --disable-testpattern
- Olivier> +                           --disable-testpattern \
- Olivier> +			   --without-cups
-
-Indentation is off compared to the other lines, but I've fixed that.
-
-After some more testing I've found out that I also have to set an
-explicit ac_cv_path_CUPS_CONFIG, otherwise the output of the (host)
-cups-config is still added to CFLAGS/LDFLAGS.
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
+index 0463771..a598ea9 100644
+--- a/package/gutenprint/gutenprint.mk
++++ b/package/gutenprint/gutenprint.mk
+@@ -41,6 +41,13 @@ HOST_GUTENPRINT_DEPENDENCIES =
+ # The host-gutenprint shall create the required header
+ HOST_GUTENPRINT_MAKE_ENV =
+ 
++# Even with --without-cups, gutenprint will still add the output of
++# cups-config --cflags / --ldflags to it's compiler/linker flags if
++# available on host.
++# Notice: Because of the configure logic, it needs to be set to the
++# empty string to to disable this, not just to /bin/false like elsewhere.
++HOST_GUTENPRINT_CONF_ENV = ac_cv_path_CUPS_CONFIG=''
++
+ HOST_GUTENPRINT_CONF_OPT = --disable-libgutenprintui2 \
+                            --disable-samples \
+                            --without-gimp2 \
+@@ -51,7 +58,8 @@ HOST_GUTENPRINT_CONF_OPT = --disable-libgutenprintui2 \
+                            --without-foomatic3 \
+                            --disable-escputil \
+                            --disable-test \
+-                           --disable-testpattern
++                           --disable-testpattern \
++                           --without-cups
+ 
+ # Needed by autoreconf
+ define GUTENPRINT_CREATE_M4_DIR
