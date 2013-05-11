@@ -1,32 +1,53 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 11 May 2013 22:41:33 +0200
-Subject: [Buildroot] [git commit branch/next] liblog4c-localtime: handle
-	log4c-config script
-Message-ID: <20130511204540.1708F9A0DC@busybox.osuosl.org>
+Date: Sat, 11 May 2013 22:43:58 +0200
+Subject: [Buildroot] [git commit branch/next] Choose xz compressed tarball
+	for linux kernel.
+Message-ID: <20130511204540.DC9239A0DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4af6818109bf94ea809c0cb7f39f86527bb907d7
+commit: http://git.buildroot.net/buildroot/commit/?id=98b5cc3eb4d4103b2149325b98a5e93e68c68dd8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Prefer xz compressed tarball so some bandwidth is saved for kernel headers
+and kernel itself downloads.
+
+Signed-off-by: Ra??l S??nchez Siles <rasasi78@gmail.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/liblog4c-localtime/liblog4c-localtime.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ linux/linux.mk                             |    2 +-
+ toolchain/kernel-headers/kernel-headers.mk |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/liblog4c-localtime/liblog4c-localtime.mk b/package/liblog4c-localtime/liblog4c-localtime.mk
-index 492c6ef..3701cca 100644
---- a/package/liblog4c-localtime/liblog4c-localtime.mk
-+++ b/package/liblog4c-localtime/liblog4c-localtime.mk
-@@ -8,6 +8,7 @@ LIBLOG4C_LOCALTIME_SITE    = https://github.com/rcmadruga/log4c-localtime/tarbal
- LIBLOG4C_LOCALTIME_INSTALL_STAGING = YES
- LIBLOG4C_LOCALTIME_CONF_OPT = --disable-expattest
- LIBLOG4C_LOCALTIME_DEPENDENCIES = expat
-+LIBLOG4C_LOCALTIME_CONFIG_SCRIPTS = log4c-config
+diff --git a/linux/linux.mk b/linux/linux.mk
+index d375cf0..3115564 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -16,7 +16,7 @@ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
+ LINUX_SITE_METHOD = git
+ else
+-LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
++LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
+ # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+ # to use the $(word) function. We support versions such as 3.1,
+ # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
+diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
+index adf7bc4..b5ae322 100644
+--- a/toolchain/kernel-headers/kernel-headers.mk
++++ b/toolchain/kernel-headers/kernel-headers.mk
+@@ -31,8 +31,8 @@ LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v2.6/
+ else
+ LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v3.x/
+ endif
+-LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
+-LINUX_HEADERS_CAT:=$(BZCAT)
++LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.xz
++LINUX_HEADERS_CAT:=$(XZCAT)
+ LINUX_HEADERS_UNPACK_DIR:=$(TOOLCHAIN_DIR)/linux-$(LINUX_HEADERS_VERSION)
+ LINUX_HEADERS_DIR:=$(TOOLCHAIN_DIR)/linux
  
- define LIBLOG4C_LOCALTIME_FIX_CONFIGURE_PERMS
- 	chmod +x $(@D)/configure
