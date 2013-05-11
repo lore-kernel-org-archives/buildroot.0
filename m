@@ -1,36 +1,22 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Sat, 11 May 2013 09:57:29 +0200
-Subject: [Buildroot] [PATCH 1/1] Disable building of cups driver in
-	host-gutenprint
-Message-ID: <1368259049-27252-1-git-send-email-olivier.schonken@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 11 May 2013 09:58:33 +0200
+Subject: [Buildroot] [PATCH] dbus: add license information
+In-Reply-To: <1368029558-30788-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Wed, 8 May 2013 17:12:38 +0100")
+References: <1368029558-30788-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87bo8i2biu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This should fix http://autobuild.buildroot.org/results/d2e386b50744aeda7257a0b78aafe90ba4da697c/
-Because there is no host-cups package, host-gutenprint cant build the
-host-cups drivers - missing includes and libs.  Host gutenprint only
-built to get the xml. Thus not a loss.
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
----
- package/gutenprint/gutenprint.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
-diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
-index 0463771..49816f6 100644
---- a/package/gutenprint/gutenprint.mk
-+++ b/package/gutenprint/gutenprint.mk
-@@ -29,7 +29,7 @@ GUTENPRINT_CONF_OPT = --disable-libgutenprintui2 \
-                       --disable-escputil \
-                       --disable-test \
-                       --disable-testpattern \
--                      --with-cups="/usr" \
-+                      --without-cups \
-                       --with-sysroot="$(STAGING_DIR)" \
-                       --disable-cups-ppds
- 
+Committed, thanks.
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
