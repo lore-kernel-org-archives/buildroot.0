@@ -1,50 +1,29 @@
-From: =?utf-8?q?Ra=C3=BAl_S=C3=A1nchez_Siles?= <rasasi78@gmail.com>
-Date: Sat, 11 May 2013 13:40:36 +0200
-Subject: [Buildroot] [PATCH] Choose xz compressed tarball for linux kernel.
-Message-ID: <201305111340.38788.rasasi78@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 May 2013 14:02:24 +0200
+Subject: [Buildroot] [PATCH] Choose xz compressed tarball for linux
+ kernel.
+In-Reply-To: <201305111340.38788.rasasi78@gmail.com>
+References: <201305111340.38788.rasasi78@gmail.com>
+Message-ID: <20130511140224.4b2397ab@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Prefer xz compressed tarball so some bandwidth is saved for kernel headers and 
-kernel itself downloads.
+Dear Ra?l S?nchez Siles,
 
-Signed-off-by: Ra?l S?nchez Siles <rasasi78@gmail.com>
----
- linux/linux.mk                             |    2 +-
- toolchain/kernel-headers/kernel-headers.mk |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Sat, 11 May 2013 13:40:36 +0200, Ra?l S?nchez Siles wrote:
+> Prefer xz compressed tarball so some bandwidth is saved for kernel headers and 
+> kernel itself downloads.
+> 
+> Signed-off-by: Ra?l S?nchez Siles <rasasi78@gmail.com>
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index d375cf0..3115564 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -16,7 +16,7 @@ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
- LINUX_SITE_METHOD = git
- else
--LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
-+LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
- # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
- # to use the $(word) function. We support versions such as 3.1,
- # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
-diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-
-headers/kernel-headers.mk
-index adf7bc4..b5ae322 100644
---- a/toolchain/kernel-headers/kernel-headers.mk
-+++ b/toolchain/kernel-headers/kernel-headers.mk
-@@ -31,8 +31,8 @@ LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v2.6/
- else
- LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v3.x/
- endif
--LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.xz
-+LINUX_HEADERS_CAT:=$(XZCAT)
- LINUX_HEADERS_UNPACK_DIR:=$(TOOLCHAIN_DIR)/linux-$(LINUX_HEADERS_VERSION)
- LINUX_HEADERS_DIR:=$(TOOLCHAIN_DIR)/linux
- 
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  
+
+Thanks!
 -- 
-1.7.10.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
