@@ -1,30 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 11 May 2013 22:39:28 +0200
-Subject: [Buildroot] [git commit branch/next] fltk: handle fltk-config script
-Message-ID: <20130511204538.15D9B9A09C@busybox.osuosl.org>
+Date: Sat, 11 May 2013 22:39:34 +0200
+Subject: [Buildroot] [git commit branch/next] gsl: handle gsl-config script
+Message-ID: <20130511204538.3B8519A09C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7a47372789ee50b5edb7073fe88af1432701af8b
+commit: http://git.buildroot.net/buildroot/commit/?id=3a91b976b7c12a46536f12b430b3af4335556a09
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/fltk/fltk.mk |    1 +
+ package/gsl/gsl.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/fltk/fltk.mk b/package/fltk/fltk.mk
-index 3f192cd..697eb91 100644
---- a/package/fltk/fltk.mk
-+++ b/package/fltk/fltk.mk
-@@ -12,5 +12,6 @@ FLTK_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) STRIP=$(TARGET_STRIP) install
- FLTK_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) STRIP=$(TARGET_STRIP) install
- FLTK_CONF_OPT = --enable-threads --with-x
- FLTK_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt
-+FLTK_CONFIG_SCRIPTS = fltk-config
+diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
+index 6591591..ef426cf 100644
+--- a/package/gsl/gsl.mk
++++ b/package/gsl/gsl.mk
+@@ -9,6 +9,7 @@ GSL_SITE = $(BR2_GNU_MIRROR)/gsl
+ GSL_INSTALL_STAGING = YES
+ GSL_LICENSE = GPLv3
+ GSL_LICENSE_FILES = COPYING
++GSL_CONFIG_SCRIPTS = gsl-config
  
- $(eval $(autotools-package))
+ # uClibc pretends to have fenv support as it installs <fenv.h>, but in
+ # practice, it only implements it for i386. Problem reported upstream
