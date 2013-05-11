@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 May 2013 12:10:53 +0200
-Subject: [Buildroot] [PATCH 1/1] Disable building of cups driver in
- host-gutenprint
-In-Reply-To: <1368265366-24526-1-git-send-email-olivier.schonken@gmail.com>
-References: <1368259049-27252-1-git-send-email-olivier.schonken@gmail.com>
- <1368265366-24526-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <20130511121053.53f32058@skate>
+Date: Sat, 11 May 2013 12:11:55 +0200
+Subject: [Buildroot] [PATCH] Choose xz compressed tarball for linux
+ kernel.
+In-Reply-To: <201305110104.51488.rasasi78@gmail.com>
+References: <201305110104.51488.rasasi78@gmail.com>
+Message-ID: <20130511121155.0377f81f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Olivier Schonken,
+Dear Ra?l S?nchez Siles,
 
-On Sat, 11 May 2013 11:42:46 +0200, Olivier Schonken wrote:
-> This should fix http://autobuild.buildroot.org/results/d2e386b50744aeda7257a0b78aafe90ba4da697c/
-> Because there is no host-cups package, host-gutenprint cant build the
-> host-cups drivers - missing includes and libs.  Host gutenprint only
-> built to get the xml. Thus not a loss.
+On Sat, 11 May 2013 01:04:51 +0200, Ra?l S?nchez Siles wrote:
+>   Hi:
 > 
-> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+>   This is a retry of previous patch, now inlined as requested. Patch is the same 
+> as before so no patch version increased.
 > 
-> Corrected absent minded mistake. Thanks Thomas
+>   I wanted to apologize to Jerzy for my abrupt appearance: I had this patch 
+> working some time ago and it was standing in my "to send" queue. I was also 
+> willing to contribute buildroot somehow.
+> 
+>   Regards,
+> 
+> Signed-off-by: Ra?l S?nchez Siles <rasasi78@gmail.com>
 > ---
->  package/gutenprint/gutenprint.mk |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  linux/linux.mk                             |    2 +-
+>  toolchain/kernel-headers/kernel-headers.mk |    4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks, but the "Corrected absent minded mistake..." sentence should be
-below the "---" sign, otherwise, it will remain part of the commit
-history forever.
+Thanks, but your commit log shouldn't contain "personal messages". It
+should contain a description of what the patch is. Basically, anything
+that's before the "---" remains forever in the Git history of
+Buildroot. If you want to put "personal" messages, or a changelog, or
+anything like that, please put it after the "---", or in a separate
+e-mail that serves as a cover letter.
 
-Also, when you send a new version of a patch, please make sure to
-change the title from PATCH 1/1 to PATCH v2 1/1. This can be achieved
-by doing git format-patch --subject-prefix="PATCH v2". --subject-prefix
-also works directly with git send-email.
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
