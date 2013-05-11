@@ -1,41 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 11 May 2013 22:41:44 +0200
-Subject: [Buildroot] [git commit branch/next] python: remove stale
-	python2-config symbolic link
-Message-ID: <20130511204540.53F339A0DC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 11 May 2013 22:51:46 +0200
+Subject: [Buildroot] [PATCH v2] package-infra: limit the number of //
+	jobs
+In-Reply-To: <1368194161-27851-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Fri, 10 May 2013 15:56:01 +0200")
+References: <1368194161-27851-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87vc6pz1ct.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=85c798b88b56dbf79caba55226e0ebf12817caf2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-We already remove python2.7-config and the symbolic link
-python-config, but we forgot to remove the python2-config symbolic
-link.
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Note that we can't use the <pkg>_CONFIG_SCRIPTS mechanism here because
-python2.7-config is written in... Python, and doesn't follow the usual
-syntax of <pkg>-config scripts. It takes the paths directly from
-distutils.sysconfig.
+ Yann> The current code spawns as many jobs as up to twice the number of
+ Yann> CPUs.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/python/python.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ Yann> On small-class machines like laptops, with a limitted amount of
+ Yann> memory, but still a few CPUs (real or hyperthreads), the HDD
+ Yann> becomes a bottleneck, and it becomes almost impossible to do
+ Yann> anythiong else while there is a build in progress.
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index b942854..801c669 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -154,6 +154,7 @@ PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_SMTPD
- #
- define PYTHON_REMOVE_DEVFILES
- 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)-config
-+	rm -f $(TARGET_DIR)/usr/bin/python2-config
- 	rm -f $(TARGET_DIR)/usr/bin/python-config
- endef
- 
+ Yann> Limit the number of jobs to the number of CPUs plus one.
+
+ Yann> Even on fast machines with fast HDDs, this settings keeps the
+ Yann> machine fully busy (for those packages that can build in
+ Yann> parallel, of course).
+
+ Yann> For example, building qemu or the linux kernel kept my
+ Yann> hyperthreaded hexa Core i7 with 18GiB of RAM, busy at 99% (I
+ Yann> never ever managed to get 100% even with more jobs, not even
+ Yann> 200); while on my hyperthreaded dual Core i5 with only 4GiB and a
+ Yann> slow HDD, I still topped at 100% CPU, while still able to do some
+ Yann> work involving the HDD.
+
+Yes, I remember the old default being pretty hard on my old laptop with
+spinning rust. With a SSD I don't really notice it much.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
