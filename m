@@ -1,33 +1,50 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 11 May 2013 12:39:57 +0200
-Subject: [Buildroot] [git commit] qt5imageformats: needs gui support in
-	qt5base
-Message-ID: <20130511104052.5BF9C9A090@busybox.osuosl.org>
+From: =?utf-8?q?Ra=C3=BAl_S=C3=A1nchez_Siles?= <rasasi78@gmail.com>
+Date: Sat, 11 May 2013 13:40:36 +0200
+Subject: [Buildroot] [PATCH] Choose xz compressed tarball for linux kernel.
+Message-ID: <201305111340.38788.rasasi78@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=88587d5b146cc644d8ef7135142dd6e107290ac0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Prefer xz compressed tarball so some bandwidth is saved for kernel headers and 
+kernel itself downloads.
 
-Fixes http://autobuild.buildroot.net/results/8843619e91958766c66c0955f363bbfc733b31e6/build-end.log
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Ra?l S?nchez Siles <rasasi78@gmail.com>
 ---
- package/qt5/qt5imageformats/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ linux/linux.mk                             |    2 +-
+ toolchain/kernel-headers/kernel-headers.mk |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5imageformats/Config.in b/package/qt5/qt5imageformats/Config.in
-index d37e08f..f976caf 100644
---- a/package/qt5/qt5imageformats/Config.in
-+++ b/package/qt5/qt5imageformats/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_QT5IMAGEFORMATS
- 	bool "qt5imageformats"
- 	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_GUI
- 	help
- 	  Qt is a cross-platform application and UI framework for
- 	  developers using C++.
+diff --git a/linux/linux.mk b/linux/linux.mk
+index d375cf0..3115564 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -16,7 +16,7 @@ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
+ LINUX_SITE_METHOD = git
+ else
+-LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
++LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
+ # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+ # to use the $(word) function. We support versions such as 3.1,
+ # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
+diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-
+headers/kernel-headers.mk
+index adf7bc4..b5ae322 100644
+--- a/toolchain/kernel-headers/kernel-headers.mk
++++ b/toolchain/kernel-headers/kernel-headers.mk
+@@ -31,8 +31,8 @@ LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v2.6/
+ else
+ LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v3.x/
+ endif
+-LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
+-LINUX_HEADERS_CAT:=$(BZCAT)
++LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.xz
++LINUX_HEADERS_CAT:=$(XZCAT)
+ LINUX_HEADERS_UNPACK_DIR:=$(TOOLCHAIN_DIR)/linux-$(LINUX_HEADERS_VERSION)
+ LINUX_HEADERS_DIR:=$(TOOLCHAIN_DIR)/linux
+ 
+-- 
+1.7.10.4
