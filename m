@@ -1,29 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 May 2013 14:02:24 +0200
-Subject: [Buildroot] [PATCH] Choose xz compressed tarball for linux
- kernel.
-In-Reply-To: <201305111340.38788.rasasi78@gmail.com>
-References: <201305111340.38788.rasasi78@gmail.com>
-Message-ID: <20130511140224.4b2397ab@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 11 May 2013 09:18:19 -0300
+Subject: [Buildroot] [PATCH] strace: unavailable for AArch64 and ARC
+Message-ID: <1368274699-417-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ra?l S?nchez Siles,
+strace isn't available for the AArch64 and ARC architectures.
+The patchset for AArch64 is somewhat big and complicated (needs updates
+to other bits) so it'd probably be better to use a git version of strace
+or wait for a new release.
+http://autobuild.buildroot.net/results/506f4adec348f0b616ad09bddbcbc242e38253b8/
 
-On Sat, 11 May 2013 13:40:36 +0200, Ra?l S?nchez Siles wrote:
-> Prefer xz compressed tarball so some bandwidth is saved for kernel headers and 
-> kernel itself downloads.
-> 
-> Signed-off-by: Ra?l S?nchez Siles <rasasi78@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/strace/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  
-
-Thanks!
+diff --git a/package/strace/Config.in b/package/strace/Config.in
+index 4b20377..153bcf6 100644
+--- a/package/strace/Config.in
++++ b/package/strace/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_STRACE
+ 	bool "strace"
+-	depends on !BR2_xtensa
++	depends on !(BR2_xtensa || BR2_aarch64 || BR2_arc)
+ 	help
+ 	  A useful diagnostic, instructional, and debugging tool.
+ 	  Allows you to track what system calls a program makes
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.5
