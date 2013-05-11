@@ -1,95 +1,389 @@
 From: Anders Darander <anders@chargestorm.se>
-Date: Sat, 11 May 2013 14:57:26 +0200
-Subject: [Buildroot] [PATCH v2 2/4] am33x-cm3: add FW for suspend/resume
+Date: Sat, 11 May 2013 14:57:25 +0200
+Subject: [Buildroot] [PATCH v2 1/4] beaglebone: update to linux 3.8
 In-Reply-To: <1368277048-17340-1-git-send-email-anders@chargestorm.se>
 References: <1368277048-17340-1-git-send-email-anders@chargestorm.se>
-Message-ID: <1368277048-17340-3-git-send-email-anders@chargestorm.se>
+Message-ID: <1368277048-17340-2-git-send-email-anders@chargestorm.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without this firmware, the beaglebone won't be able to reboot correctly.
+As the beaglebone support is mainlined, there's no support for the old
+board setup files, and the only supported run-time configuration is through
+the device tree.
+
+We're also setting the kernel headers to follow the 3.8 series.
 
 Signed-off-by: Anders Darander <anders@chargestorm.se>
 ---
- package/Config.in                         |    1 +
- package/am33x-cm3/Config.in               |    4 ++++
- package/am33x-cm3/am335x-pm-firmware-load |    6 ++++++
- package/am33x-cm3/am33x-cm3.mk            |   28 ++++++++++++++++++++++++++++
- 4 files changed, 39 insertions(+)
- create mode 100644 package/am33x-cm3/Config.in
- create mode 100755 package/am33x-cm3/am335x-pm-firmware-load
- create mode 100644 package/am33x-cm3/am33x-cm3.mk
+ .../{linux-3.2.9.config => linux-3.8.config}       |  217 ++++++++------------
+ configs/beaglebone_defconfig                       |   10 +-
+ 2 files changed, 89 insertions(+), 138 deletions(-)
+ rename board/beaglebone/{linux-3.2.9.config => linux-3.8.config} (44%)
 
-diff --git a/package/Config.in b/package/Config.in
-index d980871..329d734 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -213,6 +213,7 @@ endmenu
+diff --git a/board/beaglebone/linux-3.2.9.config b/board/beaglebone/linux-3.8.config
+similarity index 44%
+rename from board/beaglebone/linux-3.2.9.config
+rename to board/beaglebone/linux-3.8.config
+index 4052f6e..c083c70 100644
+--- a/board/beaglebone/linux-3.2.9.config
++++ b/board/beaglebone/linux-3.8.config
+@@ -1,112 +1,83 @@
+ CONFIG_EXPERIMENTAL=y
+-# CONFIG_LOCALVERSION_AUTO is not set
+ CONFIG_DEFAULT_HOSTNAME="beaglebone"
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_BSD_PROCESS_ACCT=y
+-CONFIG_BSD_PROCESS_ACCT_V3=y
+-CONFIG_FHANDLE=y
+-CONFIG_SPARSE_IRQ=y
+ CONFIG_IKCONFIG=y
+ CONFIG_IKCONFIG_PROC=y
+-CONFIG_NAMESPACES=y
++CONFIG_LOG_BUF_SHIFT=16
+ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+-CONFIG_SYSCTL_SYSCALL=y
+-CONFIG_KALLSYMS_ALL=y
+ CONFIG_EMBEDDED=y
+ CONFIG_SLAB=y
+ CONFIG_PROFILING=y
+ CONFIG_OPROFILE=m
++CONFIG_KPROBES=y
+ CONFIG_MODULES=y
+ CONFIG_MODULE_FORCE_LOAD=y
+ CONFIG_MODULE_UNLOAD=y
+ CONFIG_MODULE_FORCE_UNLOAD=y
+ CONFIG_MODVERSIONS=y
+-CONFIG_BLK_DEV_INTEGRITY=y
++# CONFIG_BLK_DEV_BSG is not set
+ CONFIG_ARCH_OMAP=y
++CONFIG_OMAP_RESET_CLOCKS=y
+ CONFIG_OMAP_MUX_DEBUG=y
+-CONFIG_OMAP_MBOX_FWK=y
+-# CONFIG_OMAP_32K_TIMER is not set
+-# CONFIG_MACH_OMAP_GENERIC is not set
+ # CONFIG_ARCH_OMAP2 is not set
++# CONFIG_ARCH_OMAP3 is not set
+ # CONFIG_ARCH_OMAP4 is not set
+-# CONFIG_SOC_OMAP3430 is not set
+-# CONFIG_MACH_OMAP3_BEAGLE is not set
+-# CONFIG_MACH_DEVKIT8000 is not set
+-# CONFIG_MACH_OMAP_LDP is not set
+-# CONFIG_MACH_OMAP3530_LV_SOM is not set
+-# CONFIG_MACH_OMAP3_TORPEDO is not set
+-# CONFIG_MACH_ENCORE is not set
+-# CONFIG_MACH_OVERO is not set
+-# CONFIG_MACH_OMAP3EVM is not set
+-# CONFIG_MACH_OMAP3517EVM is not set
+-# CONFIG_MACH_OMAP3_PANDORA is not set
+-# CONFIG_MACH_OMAP3_TOUCHBOOK is not set
+-# CONFIG_MACH_OMAP_3430SDP is not set
+-# CONFIG_MACH_NOKIA_RM680 is not set
+-# CONFIG_MACH_NOKIA_RX51 is not set
+-# CONFIG_MACH_OMAP_ZOOM2 is not set
+-# CONFIG_MACH_OMAP_ZOOM3 is not set
+-# CONFIG_MACH_CM_T35 is not set
+-# CONFIG_MACH_CM_T3517 is not set
+-# CONFIG_MACH_IGEP0020 is not set
+-# CONFIG_MACH_IGEP0030 is not set
+-# CONFIG_MACH_SBC3530 is not set
+-# CONFIG_MACH_OMAP_3630SDP is not set
+-# CONFIG_MACH_TI8168EVM is not set
+-# CONFIG_MACH_TI8148EVM is not set
+-# CONFIG_MACH_AM335XIAEVM is not set
+-CONFIG_OMAP3_EDMA=y
+ CONFIG_ARM_THUMBEE=y
+-CONFIG_ARM_ERRATA_430973=y
+-CONFIG_NO_HZ=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_THUMB2_KERNEL=y
++CONFIG_ARM_ERRATA_720789=y
++CONFIG_ARM_ARCH_TIMER=y
+ CONFIG_ZBOOT_ROM_TEXT=0x0
+ CONFIG_ZBOOT_ROM_BSS=0x0
+-CONFIG_CMDLINE=" debug "
++CONFIG_CMDLINE="root=/dev/mmcblk0p2 rootwait console=ttyO2,115200"
++CONFIG_KEXEC=y
+ CONFIG_AUTO_ZRELADDR=y
+ CONFIG_CPU_FREQ=y
+-CONFIG_CPU_FREQ_STAT_DETAILS=y
+-CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE=y
++CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
+ CONFIG_CPU_FREQ_GOV_POWERSAVE=y
+-CONFIG_CPU_FREQ_GOV_ONDEMAND=y
++CONFIG_CPU_FREQ_GOV_USERSPACE=y
+ CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
++CONFIG_NEON=y
+ CONFIG_BINFMT_MISC=y
+-# CONFIG_SUSPEND is not set
+ CONFIG_PM_DEBUG=y
+ CONFIG_NET=y
+ CONFIG_PACKET=y
+ CONFIG_UNIX=y
+ CONFIG_XFRM_USER=y
+ CONFIG_NET_KEY=y
++CONFIG_NET_KEY_MIGRATE=y
+ CONFIG_INET=y
+ CONFIG_IP_MULTICAST=y
+-# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET_XFRM_MODE_BEET is not set
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++CONFIG_IP_PNP_BOOTP=y
++CONFIG_IP_PNP_RARP=y
+ # CONFIG_INET_LRO is not set
+-# CONFIG_INET_DIAG is not set
+ # CONFIG_IPV6 is not set
+ # CONFIG_WIRELESS is not set
+-CONFIG_RFKILL_REGULATOR=m
+ CONFIG_DEVTMPFS=y
+ CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_OMAP_OCP2SCP=y
++CONFIG_OMAP_INTERCONNECT=y
+ CONFIG_CONNECTOR=y
+ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_RAM=y
+-CONFIG_BLK_DEV_RAM_COUNT=2
+-CONFIG_BLK_DEV_RAM_SIZE=65536
+-CONFIG_MISC_DEVICES=y
+-CONFIG_BMP085=m
+-CONFIG_EEPROM_AT24=y
+-CONFIG_EEPROM_93CX6=m
+-CONFIG_SENSORS_LIS3_I2C=y
++CONFIG_BLK_DEV_RAM_SIZE=16384
++CONFIG_EEPROM_93CX6=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_SCSI_MULTI_LUN=y
++CONFIG_SCSI_SCAN_ASYNC=y
++CONFIG_ATA=y
++# CONFIG_SATA_PMP is not set
++CONFIG_SATA_AHCI_PLATFORM=m
++# CONFIG_ATA_SFF is not set
+ CONFIG_NETDEVICES=y
+ CONFIG_MII=y
+ # CONFIG_NET_VENDOR_BROADCOM is not set
+-# CONFIG_NET_VENDOR_CHELSIO is not set
++# CONFIG_NET_VENDOR_CIRRUS is not set
+ # CONFIG_NET_VENDOR_FARADAY is not set
+ # CONFIG_NET_VENDOR_INTEL is not set
+ # CONFIG_NET_VENDOR_MARVELL is not set
+@@ -117,34 +88,14 @@ CONFIG_MII=y
+ # CONFIG_NET_VENDOR_SMSC is not set
+ # CONFIG_NET_VENDOR_STMICRO is not set
+ CONFIG_TI_CPSW=y
++# CONFIG_NET_VENDOR_WIZNET is not set
+ CONFIG_SMSC_PHY=y
+ # CONFIG_WLAN is not set
++CONFIG_INPUT_POLLDEV=m
+ # CONFIG_INPUT_MOUSEDEV is not set
+-CONFIG_INPUT_EVDEV=y
+-# CONFIG_KEYBOARD_ATKBD is not set
+-CONFIG_KEYBOARD_GPIO=y
+-# CONFIG_MOUSE_PS2 is not set
++# CONFIG_INPUT_KEYBOARD is not set
++# CONFIG_INPUT_MOUSE is not set
+ CONFIG_INPUT_MISC=y
+-CONFIG_INPUT_AD714X=m
+-CONFIG_INPUT_BMA150=m
+-CONFIG_INPUT_MMA8450=m
+-CONFIG_INPUT_MPU3050=m
+-CONFIG_INPUT_ATI_REMOTE2=m
+-CONFIG_INPUT_KEYSPAN_REMOTE=m
+-CONFIG_INPUT_KXTJ9=m
+-CONFIG_INPUT_POWERMATE=m
+-CONFIG_INPUT_YEALINK=m
+-CONFIG_INPUT_CM109=m
+-CONFIG_INPUT_TWL4030_PWRBUTTON=y
+-CONFIG_INPUT_TWL4030_VIBRA=m
+-CONFIG_INPUT_TWL6040_VIBRA=m
+-CONFIG_INPUT_UINPUT=m
+-CONFIG_INPUT_PCF8574=m
+-CONFIG_INPUT_GPIO_ROTARY_ENCODER=m
+-CONFIG_INPUT_ADXL34X=m
+-CONFIG_INPUT_CMA3000=m
+-CONFIG_INPUT_CMA3000_I2C=m
+-# CONFIG_SERIO is not set
+ CONFIG_VT_HW_CONSOLE_BINDING=y
+ # CONFIG_LEGACY_PTYS is not set
+ CONFIG_SERIAL_8250=y
+@@ -156,97 +107,95 @@ CONFIG_SERIAL_8250_SHARE_IRQ=y
+ CONFIG_SERIAL_8250_DETECT_IRQ=y
+ CONFIG_SERIAL_8250_RSA=y
+ CONFIG_HW_RANDOM=y
+-CONFIG_RAW_DRIVER=m
+ CONFIG_I2C_CHARDEV=y
+ CONFIG_SPI=y
+-CONFIG_SPI_GPIO=m
+ CONFIG_SPI_OMAP24XX=y
+-CONFIG_SPI_SPIDEV=m
++CONFIG_DEBUG_PINCTRL=y
++CONFIG_PINCTRL_SINGLE=y
+ CONFIG_DEBUG_GPIO=y
+ CONFIG_GPIO_SYSFS=y
+-CONFIG_GPIO_TWL4030=y
+-CONFIG_GENERIC_PWM=y
+-CONFIG_DAVINCI_EHRPWM=y
+-CONFIG_ECAP_PWM=y
++CONFIG_W1=y
+ CONFIG_POWER_SUPPLY=y
+-# CONFIG_HWMON is not set
++CONFIG_THERMAL=y
++CONFIG_THERMAL_GOV_FAIR_SHARE=y
++CONFIG_THERMAL_GOV_USER_SPACE=y
++CONFIG_CPU_THERMAL=y
+ CONFIG_WATCHDOG=y
+ CONFIG_OMAP_WATCHDOG=y
+-CONFIG_TWL4030_WATCHDOG=y
+ CONFIG_MFD_TPS65217=y
+-CONFIG_REGULATOR_DUMMY=y
+ CONFIG_REGULATOR_FIXED_VOLTAGE=y
+-CONFIG_REGULATOR_VIRTUAL_CONSUMER=y
+-CONFIG_REGULATOR_USERSPACE_CONSUMER=y
+-CONFIG_REGULATOR_GPIO=y
+-CONFIG_REGULATOR_TWL4030=y
+ CONFIG_REGULATOR_TPS65023=y
+ CONFIG_REGULATOR_TPS6507X=y
+ CONFIG_REGULATOR_TPS65217=y
+-CONFIG_DISPLAY_SUPPORT=y
+-CONFIG_HIDRAW=y
+ CONFIG_USB=y
+ CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+-CONFIG_USB_DEVICEFS=y
+-CONFIG_USB_MUSB_HDRC=y
+-CONFIG_USB_MUSB_TI81XX_GLUE=y
+-CONFIG_USB_TI_CPPI41_DMA_HW=y
+-CONFIG_USB_ACM=y
+-CONFIG_USB_LIBUSUAL=y
++CONFIG_USB_SUSPEND=y
++CONFIG_USB_MON=y
++CONFIG_USB_MUSB_HDRC=m
++CONFIG_USB_MUSB_AM35X=m
++CONFIG_USB_STORAGE=y
++CONFIG_USB_TEST=y
++CONFIG_OMAP_USB2=m
++CONFIG_OMAP_USB3=m
++CONFIG_OMAP_CONTROL_USB=y
+ CONFIG_USB_GADGET=y
+-CONFIG_USB_GADGET_MUSB_HDRC=y
++CONFIG_USB_GADGET_DEBUG=y
++CONFIG_USB_GADGET_DEBUG_FILES=y
++CONFIG_USB_GADGET_DEBUG_FS=y
++CONFIG_USB_ZERO=m
+ CONFIG_USB_ETH=m
++CONFIG_USB_ETH_EEM=y
+ CONFIG_USB_MASS_STORAGE=m
+-CONFIG_USB_G_SERIAL=m
+-CONFIG_USB_CDC_COMPOSITE=m
+ CONFIG_USB_G_MULTI=m
+-CONFIG_USB_G_HID=m
++CONFIG_USB_G_MULTI_CDC=y
+ CONFIG_MMC=y
+ CONFIG_MMC_UNSAFE_RESUME=y
+-CONFIG_MMC_OMAP_HS=y
++CONFIG_SDIO_UART=y
++CONFIG_MMC_OMAP=y
+ CONFIG_NEW_LEDS=y
+ CONFIG_LEDS_CLASS=y
+ CONFIG_LEDS_GPIO=y
+ CONFIG_LEDS_TRIGGERS=y
+ CONFIG_LEDS_TRIGGER_TIMER=y
++CONFIG_LEDS_TRIGGER_ONESHOT=y
+ CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+ CONFIG_LEDS_TRIGGER_BACKLIGHT=y
++CONFIG_LEDS_TRIGGER_CPU=y
+ CONFIG_LEDS_TRIGGER_GPIO=y
+ CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
+-CONFIG_UIO=m
+-CONFIG_UIO_PDRV=m
+-CONFIG_UIO_PDRV_GENIRQ=m
+-CONFIG_UIO_PRUSS=m
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_OMAP=y
++CONFIG_DMADEVICES=y
++CONFIG_TI_EDMA=y
++CONFIG_DMA_OMAP=y
+ CONFIG_STAGING=y
+-CONFIG_IIO=y
+-CONFIG_IIO_BUFFER=y
+-CONFIG_IIO_SW_RING=y
+-CONFIG_IIO_KFIFO_BUF=y
+-# CONFIG_IOMMU_SUPPORT is not set
+-CONFIG_PM_DEVFREQ=y
+-CONFIG_DEVFREQ_GOV_USERSPACE=y
+ CONFIG_EXT2_FS=y
++CONFIG_EXT3_FS=y
++# CONFIG_EXT3_FS_XATTR is not set
+ CONFIG_EXT4_FS=y
+-CONFIG_EXT4_FS_POSIX_ACL=y
+-CONFIG_FANOTIFY=y
++CONFIG_QUOTA=y
++CONFIG_QFMT_V2=y
+ CONFIG_MSDOS_FS=y
+ CONFIG_VFAT_FS=y
+ CONFIG_TMPFS=y
+-CONFIG_TMPFS_POSIX_ACL=y
+-# CONFIG_NETWORK_FILESYSTEMS is not set
++# CONFIG_MISC_FILESYSTEMS is not set
+ CONFIG_NLS_CODEPAGE_437=y
+ CONFIG_NLS_ISO8859_1=y
+-CONFIG_NLS_UTF8=y
+ CONFIG_PRINTK_TIME=y
+ CONFIG_MAGIC_SYSRQ=y
+-CONFIG_DEBUG_FS=y
+-CONFIG_DETECT_HUNG_TASK=y
+ CONFIG_SCHEDSTATS=y
+ CONFIG_TIMER_STATS=y
++CONFIG_PROVE_LOCKING=y
+ # CONFIG_DEBUG_BUGVERBOSE is not set
+-# CONFIG_FTRACE is not set
+-CONFIG_DEBUG_LL=y
+-CONFIG_EARLY_PRINTK=y
+-CONFIG_DEBUG_JTAG_ENABLE=y
++CONFIG_DEBUG_INFO=y
++CONFIG_CRYPTO_MANAGER=m
++CONFIG_CRYPTO_SHA256=m
++CONFIG_CRYPTO_DEFLATE=y
++CONFIG_CRYPTO_LZO=y
+ # CONFIG_CRYPTO_ANSI_CPRNG is not set
+-# CONFIG_CRYPTO_HW is not set
++CONFIG_CRC_CCITT=y
++CONFIG_CRC_T10DIF=y
++CONFIG_CRC_ITU_T=y
++CONFIG_CRC7=y
++CONFIG_LIBCRC32C=y
++CONFIG_AVERAGE=y
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 2177068..38a63a1 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_EXT2=y
  
- menu "Hardware handling"
- menu "Misc devices firmwares"
-+source "package/am33x-cm3/Config.in"
- source "package/b43-firmware/Config.in"
- source "package/firmware-imx/Config.in"
- source "package/linux-firmware/Config.in"
-diff --git a/package/am33x-cm3/Config.in b/package/am33x-cm3/Config.in
-new file mode 100644
-index 0000000..ee39f7d
---- /dev/null
-+++ b/package/am33x-cm3/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_AM33X_CM3
-+	bool "am33x-cm3"
-+	help
-+	  Cortex-M3 binary blob for suspend-resume
-diff --git a/package/am33x-cm3/am335x-pm-firmware-load b/package/am33x-cm3/am335x-pm-firmware-load
-new file mode 100755
-index 0000000..56c17b3
---- /dev/null
-+++ b/package/am33x-cm3/am335x-pm-firmware-load
-@@ -0,0 +1,6 @@
-+#!/bin/sh
-+
-+# Load the PM CM3 firmware
-+echo 1 > /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/loading
-+cat /lib/firmware/am335x-pm-firmware.bin > /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/data
-+echo 0 > /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/loading
-diff --git a/package/am33x-cm3/am33x-cm3.mk b/package/am33x-cm3/am33x-cm3.mk
-new file mode 100644
-index 0000000..91884e5
---- /dev/null
-+++ b/package/am33x-cm3/am33x-cm3.mk
-@@ -0,0 +1,28 @@
-+#############################################################
-+#
-+# am33x-cm3
-+#
-+#############################################################
-+
-+AM33X_CM3_VERSION = AM335xPSP_04.06.00.10-rc1
-+AM33X_CM3_SITE = http://arago-project.org/git/projects/am33x-cm3.git
-+AM33X_CM3_SITE_METHOD = git
-+AM33X_CM3_LICENSE = TI Publicly Available Software License
-+AM33X_CM3_LICENSE_FILES = License.txt
-+
-+# The build command below will use the standard cross-compiler (normally
-+# build for Cortex-A8, to build the FW for the Cortex-M3.
-+define AM33X_CM3_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
-+endef
-+
-+# Not all of the firmware files are used
-+define AM33X_CM3_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0644 -D $(@D)/bin/am335x-pm-firmware.bin $(TARGET_DIR)/lib/firmware/am335x-pm-firwmare.bin
-+endef
-+
-+define AM33X_CM3_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/am33x-cm3/am335x-pm-firmware-load $(TARGET_DIR)/etc/init.d/S93-am335x-pm-firwmare-load
-+endef
-+
-+$(eval $(generic-package))
+ # lock down headers to avoid breaking with new defaults
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.2.9"
++BR2_DEFAULT_KERNEL_VERSION="3.8.12"
+ 
+ # bootloader
+ BR2_TARGET_UBOOT=y
+@@ -30,7 +30,9 @@ BR2_TARGET_UBOOT_SPL_NAME="MLO"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/koenkooi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="linux-ti33x-psp-3.2-r5a+gitr09e9651bcf2ee8d86685f2a8075bc6557b1d3b91"
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="935f6c2f82056d538b528272e2bdbb5c08d69a58"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.2.9.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.8.config"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-bone"
 -- 
 1.7.10.4
