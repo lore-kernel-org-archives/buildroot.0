@@ -1,62 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 11 May 2013 23:31:12 +0200
-Subject: [Buildroot] [PATCH v3 1/7] gstreamer1: Add gstreamer version
-	1.0.7 package
-In-Reply-To: <518D8507.3060909@mind.be> (Arnout Vandecappelle's message of
- "Sat, 11 May 2013 01:38:47 +0200")
-References: <1368158558-6069-1-git-send-email-spenser@gillilanding.com>
- <1368158558-6069-2-git-send-email-spenser@gillilanding.com>
- <518D8507.3060909@mind.be>
-Message-ID: <87k3n5yzj3.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 11 May 2013 20:09:35 -0300
+Subject: [Buildroot] [PATCH] libnss/libnspr: unavailable comment should be
+	OR and not AND
+Message-ID: <1368313775-23313-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Otherwise the comment would only show up when both conditions are true
+instead of any of them.
 
- Arnout>  Hi Spenser,
- Arnout>  Very quick first review...
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libnspr/Config.in | 2 +-
+ package/libnss/Config.in  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Arnout>  First of all, a comment that is not so much directed at you but at
- Arnout> the rest of the BR developers: the naming issue.
-
- Arnout>  We have a tendency to make a copy of a package when there is a major
- Arnout> version change, cfr. python3 and qt5. However, in this case, I don't
- Arnout> think it's a good idea. At this time, many (most?) gstreamer
- Arnout> downstreams have already moved to 1.x. Also, no more patches will be
- Arnout> made the the 0.10 series (though distro's may still make patches). So
- Arnout> we can expect the old gstreamer stuff to die out relatively
- Arnout> quickly. But if we call the new thing gstreamer1 now, we're
- Arnout> essentially stuck with that name for all eternity.
-
-I'm not so sure. If you look at the other recent major version upgrades
-(python/qt/gtk), it seems to me like people aren't jumping on the new
-version right away. I had several people asking me if qt4 would still be
-available once qt5 got added.
-
-I think the nicest thing we can do for our users is just to add the new
-package next to the existing when these incompatible major version
-upgrades happen, so they can chose themselves when/if they want to
-upgrade. I agree that gstreamer1 perhaps isn't the nicest name, but it
-isn't too bad either, and for python/qt/gtk the names are commonly used.
-
-
- Arnout>  So instead I'd try to make 0.10 or 1.0 a choice in the gstreamer
- Arnout> package itself.  For me it's fine if inside the Config.in and the .mk
- Arnout> files we basically have the two versions in a big ifeq() construct,
- Arnout> but at least we can keep on using the BR2_PACKAGE_GST* symbols.
-
-What would the advantage be? Just that people could move from gstreamer
-0.10 to 1.0 without adjusting their config?
-
-
- Arnout>  Obviously, there will be some packages that break down when
- Arnout> gstreamer 1.0 is used, but we'll have to discover that at some
- Arnout> point anyway.
-
-Like the closed source imx stuff.
-
+diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
+index f4f24d4..f87b10c 100644
+--- a/package/libnspr/Config.in
++++ b/package/libnspr/Config.in
+@@ -11,4 +11,4 @@ config BR2_PACKAGE_LIBNSPR
+ 	  http://www.mozilla.org/projects/nspr/
+ 
+ comment "libnspr requires a toolchain with LARGEFILE and threads support"
+-	depends on !BR2_LARGEFILE && !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+index a070ffb..e8eec77 100644
+--- a/package/libnss/Config.in
++++ b/package/libnss/Config.in
+@@ -15,5 +15,5 @@ config BR2_PACKAGE_LIBNSS
+ 	  http://www.mozilla.org/projects/security/pki/nss/
+ 
+ comment "libnss requires a toolchain with LARGEFILE and thread support"
+-	depends on !BR2_LARGEFILE && !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+ 
 -- 
-Bye, Peter Korsgaard
+1.8.1.5
