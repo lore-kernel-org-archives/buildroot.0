@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 May 2013 11:08:24 +0200
-Subject: [Buildroot] [PATCH 1/1] Unhide lttng-tools and lttng-modules
-In-Reply-To: <1368262741-24215-1-git-send-email-olivier.schonken@gmail.com>
-References: <1368262741-24215-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <20130511110824.29f73ed6@skate>
+Date: Sat, 11 May 2013 11:07:35 +0200
+Subject: [Buildroot] [PATCH 1/1] Disable building of cups driver in
+ host-gutenprint
+In-Reply-To: <1368259049-27252-1-git-send-email-olivier.schonken@gmail.com>
+References: <1368259049-27252-1-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <20130511110735.36112d4f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +13,40 @@ To: buildroot@busybox.net
 
 Dear Olivier Schonken,
 
-On Sat, 11 May 2013 10:59:01 +0200, Olivier Schonken wrote:
-> When using lttng-tools for userland tracing with lttng-libust lttng-modules is
-> not required, thus a dependency on building lttng-modules and a kernel is
-> overkill for lttng-tools.  It also hides it from a user not wanting to build
-> a kernel.  A comment has been added to lttng-modules to show a user that
-> lttng-modules is dependent on a kernel build.
+On Sat, 11 May 2013 09:57:29 +0200, Olivier Schonken wrote:
+> This should fix http://autobuild.buildroot.org/results/d2e386b50744aeda7257a0b78aafe90ba4da697c/
+> Because there is no host-cups package, host-gutenprint cant build the
+> host-cups drivers - missing includes and libs.  Host gutenprint only
+> built to get the xml. Thus not a loss.
 > 
 > Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+> ---
+>  package/gutenprint/gutenprint.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
+> index 0463771..49816f6 100644
+> --- a/package/gutenprint/gutenprint.mk
+> +++ b/package/gutenprint/gutenprint.mk
+> @@ -29,7 +29,7 @@ GUTENPRINT_CONF_OPT = --disable-libgutenprintui2 \
+>                        --disable-escputil \
+>                        --disable-test \
+>                        --disable-testpattern \
+> -                      --with-cups="/usr" \
+> +                      --without-cups \
+>                        --with-sysroot="$(STAGING_DIR)" \
+>                        --disable-cups-ppds
+>  
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Hum, in your commit description, you're mentionning "host-cups" does
+not exist, so host-gutenprint shouldn't try to build with CUPS support.
+But in your patch, you're changing GUTENPRINT_CONF_OPT, i.e the
+configuration option of gutenprint for the target.
 
-Peter, I believe this can go in 2013.05-rc.
+Could you explain in a few more details the relation between your
+commit log and the patch itself?
 
-Thanks,
+Thanks a lot!
 
 Thomas
 -- 
