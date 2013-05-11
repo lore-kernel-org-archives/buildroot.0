@@ -1,35 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 11 May 2013 21:52:44 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix bug #5054
-In-Reply-To: <1368283774-19848-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 11 May 2013 11:49:34 -0300")
-References: <1368283774-19848-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87li7l1egj.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 11 May 2013 19:53:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 5054] amd64: cannot find init - due to missing
+	/lib64 folder
+In-Reply-To: <bug-5054-163@https.bugs.busybox.net/>
+References: <bug-5054-163@https.bugs.busybox.net/>
+Message-ID: <20130511195321.4AC4C9A096@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+https://bugs.busybox.net/show_bug.cgi?id=5054
 
- Gustavo> The external toolchain logic checks (and finds) the proper
- Gustavo> ARCH_LIB_DIR and forcibly copies it to */lib even if it's in
- Gustavo> */lib64 This is all well until the check is done for
- Gustavo> create_lib64_symlinks which only verifies if
- Gustavo> ARCH_SYSROOT_DIR/lib64 is a symlink, which in some toolchain
- Gustavo> it's a real directory (like sourcery x86_64 2012.09) and thus
- Gustavo> doesn't make the symlink in the target.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- Gustavo> Fix this by also checking for a real directory.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
- Gustavo> Easily reproducible by running "make qemu_x86_64_defconfig",
- Gustavo> switching to an external toolchain before build, building and
- Gustavo> then trying to run the resulting image.
-
- Gustavo> Closes bug #5054
-
-Committed, thanks.
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2013-05-11 19:53:05 UTC ---
+Fixed by GUstavo in git (603293f5ff8e), thanks.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
