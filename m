@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 11 May 2013 22:42:15 +0200
-Subject: [Buildroot] [git commit branch/next] python3: remove another config
-	script
-Message-ID: <20130511204540.993389A0DC@busybox.osuosl.org>
+Date: Sat, 11 May 2013 22:40:32 +0200
+Subject: [Buildroot] [git commit branch/next] libvncserver: handle
+	libvncserver-config script
+Message-ID: <20130511204539.722639A0DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd8f39653a9939a5d5e1043c874e4b26f412c388
+commit: http://git.buildroot.net/buildroot/commit/?id=726413103b8f5023b3035640f19fcdfc61f823c7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/python3/python3.mk |    1 +
+ package/libvncserver/libvncserver.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 7551a7b..239ac8f 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -130,6 +130,7 @@ PYTHON3_POST_INSTALL_STAGING_HOOKS += PYTHON3_FIXUP_LIBDIR
- #
- define PYTHON3_REMOVE_DEVFILES
- 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
-+	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
- 	rm -f $(TARGET_DIR)/usr/bin/python3-config
- endef
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+index 550abc4..a450632 100644
+--- a/package/libvncserver/libvncserver.mk
++++ b/package/libvncserver/libvncserver.mk
+@@ -10,6 +10,7 @@ LIBVNCSERVER_SITE = http://downloads.sourceforge.net/project/libvncserver/libvnc
+ LIBVNCSERVER_LICENSE = GPLv2+
+ LIBVNCSERVER_LICENSE_FILES = COPYING
+ LIBVNCSERVER_INSTALL_STAGING = YES
++LIBVNCSERVER_CONFIG_SCRIPTS = libvncserver-config
  
+ # only used for examples
+ LIBVNCSERVER_CONF_OPT += --with-sdl-config=/bin/false
