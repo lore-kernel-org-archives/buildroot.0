@@ -1,45 +1,53 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 11 May 2013 11:49:34 -0300
-Subject: [Buildroot] [PATCH] toolchain-external: fix bug #5054
-Message-ID: <1368283774-19848-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 11 May 2013 21:22:14 +0200
+Subject: [Buildroot] [PATCH v2 1/1] Disable building of cups driver in
+	host-gutenprint
+In-Reply-To: <1368267696-5839-1-git-send-email-olivier.schonken@gmail.com>
+ (Olivier Schonken's message of "Sat, 11 May 2013 12:21:35 +0200")
+References: <1368265366-24526-1-git-send-email-olivier.schonken@gmail.com>
+ <1368267696-5839-1-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <87y5bl1fvd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The external toolchain logic checks (and finds) the proper ARCH_LIB_DIR
-and forcibly copies it to */lib even if it's in */lib64
-This is all well until the check is done for create_lib64_symlinks which
-only verifies if ARCH_SYSROOT_DIR/lib64 is a symlink, which in some
-toolchain it's a real directory (like sourcery x86_64 2012.09) and thus
-doesn't make the symlink in the target.
+>>>>> "Olivier" == Olivier Schonken <olivier.schonken@gmail.com> writes:
 
-Fix this by also checking for a real directory.
+ Olivier> This should fix http://autobuild.buildroot.org/results/d2e386b50744aeda7257a0b78aafe90ba4da697c/
+ Olivier> Because there is no host-cups package, host-gutenprint cant build the
+ Olivier> host-cups drivers - missing includes and libs.  Host gutenprint only
+ Olivier> built to get the xml. Thus not a loss.
 
-Easily reproducible by running "make qemu_x86_64_defconfig", switching
-to an external toolchain before build, building and then trying to run
-the resulting image.
+ Olivier> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 
-Closes bug #5054
+ Olivier> ---
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/toolchain-external/ext-tool.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Olivier> Corrected absent minded mistake. Thanks Thomas
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index bf2bee8..a87bc3b 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -446,7 +446,7 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
- 	fi ; \
- 	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
- 	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR}) ; \
--	if [ -L $${ARCH_SYSROOT_DIR}/lib64 ] ; then \
-+	if [ -L $${ARCH_SYSROOT_DIR}/lib64 -o -d $${ARCH_SYSROOT_DIR}/lib64 ] ; then \
- 		$(call create_lib64_symlinks) ; \
- 	fi ; \
- 	if test x"$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" == x"y"; then \
+ Olivier>  package/gutenprint/gutenprint.mk |    3 ++-
+ Olivier>  1 file changed, 2 insertions(+), 1 deletion(-)
+
+ Olivier> diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
+ Olivier> index 0463771..072fada 100644
+ Olivier> --- a/package/gutenprint/gutenprint.mk
+ Olivier> +++ b/package/gutenprint/gutenprint.mk
+ Olivier> @@ -51,7 +51,8 @@ HOST_GUTENPRINT_CONF_OPT = --disable-libgutenprintui2 \
+ Olivier>                             --without-foomatic3 \
+ Olivier>                             --disable-escputil \
+ Olivier>                             --disable-test \
+ Olivier> -                           --disable-testpattern
+ Olivier> +                           --disable-testpattern \
+ Olivier> +			   --without-cups
+
+Indentation is off compared to the other lines, but I've fixed that.
+
+After some more testing I've found out that I also have to set an
+explicit ac_cv_path_CUPS_CONFIG, otherwise the output of the (host)
+cups-config is still added to CFLAGS/LDFLAGS.
+
+Committed, thanks.
+
 -- 
-1.8.1.5
+Bye, Peter Korsgaard
