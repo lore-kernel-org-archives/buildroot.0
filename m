@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 12 May 2013 10:55:23 -0300
-Subject: [Buildroot] [PATCH 2/3] dnsmasq: bump to version 2.66
+Date: Sun, 12 May 2013 10:55:24 -0300
+Subject: [Buildroot] [PATCH 3/3] gawk: bump to version 4.1.0
 In-Reply-To: <1368366924-11330-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1368366924-11330-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1368366924-11330-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1368366924-11330-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,207 +12,74 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../dnsmasq-01-fix-wrong-size-in-memset-call.patch |  27 ++++
- ...-number-zero-in-encapsulated-dhcp-options.patch | 143 +++++++++++++++++++++
- package/dnsmasq/dnsmasq.mk                         |   2 +-
- 3 files changed, 171 insertions(+), 1 deletion(-)
- create mode 100644 package/dnsmasq/dnsmasq-01-fix-wrong-size-in-memset-call.patch
- create mode 100644 package/dnsmasq/dnsmasq-02-allow-option-number-zero-in-encapsulated-dhcp-options.patch
+ package/gawk/Config.in                               |  1 +
+ ...no-versioned.patch => gawk-01-no-versioned.patch} |  0
+ package/gawk/gawk.mk                                 | 20 ++++++++++----------
+ 3 files changed, 11 insertions(+), 10 deletions(-)
+ rename package/gawk/{gawk-no-versioned.patch => gawk-01-no-versioned.patch} (100%)
 
-diff --git a/package/dnsmasq/dnsmasq-01-fix-wrong-size-in-memset-call.patch b/package/dnsmasq/dnsmasq-01-fix-wrong-size-in-memset-call.patch
-new file mode 100644
-index 0000000..536552a
---- /dev/null
-+++ b/package/dnsmasq/dnsmasq-01-fix-wrong-size-in-memset-call.patch
-@@ -0,0 +1,27 @@
-+From 4582c0efe7d7af93517b1f3bcc7af67685ab3e5c Mon Sep 17 00:00:00 2001
-+From: Dave Reisner <d@falconindy.com>
-+Date: Thu, 18 Apr 2013 09:47:49 +0100
-+Subject: [PATCH] Fix wrong size in memset() call.
-+
-+Thanks to Dave Reisner.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ src/ipset.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/ipset.c b/src/ipset.c
-+index a34ed96..f175fa4 100644
-+--- a/src/ipset.c
-++++ b/src/ipset.c
-+@@ -110,7 +110,7 @@ static int new_add_to_ipset(const char *setname, const struct all_addr *ipaddr,
-+       return -1;
-+     }
-+   
-+-  memset(buffer, 0, sizeof(buffer));
-++  memset(buffer, 0, BUFF_SZ);
-+ 
-+   nlh = (struct nlmsghdr *)buffer;
-+   nlh->nlmsg_len = NL_ALIGN(sizeof(struct nlmsghdr));
-+--
-+1.8.1.5
-diff --git a/package/dnsmasq/dnsmasq-02-allow-option-number-zero-in-encapsulated-dhcp-options.patch b/package/dnsmasq/dnsmasq-02-allow-option-number-zero-in-encapsulated-dhcp-options.patch
-new file mode 100644
-index 0000000..79f57bf
---- /dev/null
-+++ b/package/dnsmasq/dnsmasq-02-allow-option-number-zero-in-encapsulated-dhcp-options.patch
-@@ -0,0 +1,143 @@
-+From bd08ae67f9a0cae2ce15be885254cad9449d4551 Mon Sep 17 00:00:00 2001
-+From: Simon Kelley <simon@thekelleys.org.uk>
-+Date: Fri, 19 Apr 2013 10:22:06 +0100
-+Subject: [PATCH] Allow option number zero in encapsulated DHCP options.
-+
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ src/dhcp-common.c |  6 +++---
-+ src/dnsmasq.h     |  4 ++--
-+ src/option.c      | 33 ++++++++++++++++++++-------------
-+ 3 files changed, 25 insertions(+), 18 deletions(-)
-+
-+diff --git a/src/dhcp-common.c b/src/dhcp-common.c
-+index f4fd088..8de4268 100644
-+--- a/src/dhcp-common.c
-++++ b/src/dhcp-common.c
-+@@ -512,7 +512,7 @@ void display_opts6(void)
-+ }
-+ #endif
-+ 
-+-u16 lookup_dhcp_opt(int prot, char *name)
-++int lookup_dhcp_opt(int prot, char *name)
-+ {
-+   const struct opttab_t *t;
-+   int i;
-+@@ -528,10 +528,10 @@ u16 lookup_dhcp_opt(int prot, char *name)
-+     if (strcasecmp(t[i].name, name) == 0)
-+       return t[i].val;
-+   
-+-  return 0;
-++  return -1;
-+ }
-+ 
-+-u16 lookup_dhcp_len(int prot, u16 val)
-++int lookup_dhcp_len(int prot, int val)
-+ {
-+   const struct opttab_t *t;
-+   int i;
-+diff --git a/src/dnsmasq.h b/src/dnsmasq.h
-+index 69ae7a7..41e2798 100644
-+--- a/src/dnsmasq.h
-++++ b/src/dnsmasq.h
-+@@ -1216,8 +1216,8 @@ void log_tags(struct dhcp_netid *netid, u32 xid);
-+ int match_bytes(struct dhcp_opt *o, unsigned char *p, int len);
-+ void dhcp_update_configs(struct dhcp_config *configs);
-+ void display_opts(void);
-+-u16 lookup_dhcp_opt(int prot, char *name);
-+-u16 lookup_dhcp_len(int prot, u16 val);
-++int lookup_dhcp_opt(int prot, char *name);
-++int lookup_dhcp_len(int prot, int val);
-+ char *option_string(int prot, unsigned int opt, unsigned char *val, 
-+ 		    int opt_len, char *buf, int buf_len);
-+ #ifdef HAVE_LINUX_NETWORK
-+diff --git a/src/option.c b/src/option.c
-+index b2596ec..2a61017 100644
-+--- a/src/option.c
-++++ b/src/option.c
-+@@ -750,6 +750,7 @@ static int parse_dhcp_opt(char *errstr, char *arg, int flags)
-+   struct dhcp_netid *np = NULL;
-+   u16 opt_len = 0;
-+   int is6 = 0;
-++  int option_ok = 0;
-+ 
-+   new->len = 0;
-+   new->flags = flags;
-+@@ -769,16 +770,19 @@ static int parse_dhcp_opt(char *errstr, char *arg, int flags)
-+ 	{
-+ 	  new->opt = atoi(arg);
-+ 	  opt_len = 0;
-++	  option_ok = 1;
-+ 	  break;
-+ 	}
-+       
-+       if (strstr(arg, "option:") == arg)
-+ 	{
-+-	  new->opt = lookup_dhcp_opt(AF_INET, arg+7);
-+-	  opt_len = lookup_dhcp_len(AF_INET, new->opt);
-+-	  /* option:<optname> must follow tag and vendor string. */
-+-	  if ((opt_len & OT_INTERNAL) && flags != DHOPT_MATCH)
-+-	    new->opt = 0;
-++	  if ((new->opt = lookup_dhcp_opt(AF_INET, arg+7)) != -1)
-++	    {
-++	      opt_len = lookup_dhcp_len(AF_INET, new->opt);
-++	      /* option:<optname> must follow tag and vendor string. */
-++	      if (!(opt_len & OT_INTERNAL) || flags == DHOPT_MATCH)
-++		option_ok = 1;
-++	    }
-+ 	  break;
-+ 	}
-+ #ifdef HAVE_DHCP6
-+@@ -792,13 +796,16 @@ static int parse_dhcp_opt(char *errstr, char *arg, int flags)
-+ 	    {
-+ 	      new->opt = atoi(arg+8);
-+ 	      opt_len = 0;
-++	      option_ok = 1;
-+ 	    }
-+ 	  else
-+ 	    {
-+-	      new->opt = lookup_dhcp_opt(AF_INET6, arg+8);
-+-	      opt_len = lookup_dhcp_len(AF_INET6, new->opt);
-+-	      if ((opt_len & OT_INTERNAL) && flags != DHOPT_MATCH)
-+-		new->opt = 0;
-++	      if ((new->opt = lookup_dhcp_opt(AF_INET6, arg+8)) != -1)
-++		{
-++		  opt_len = lookup_dhcp_len(AF_INET6, new->opt);
-++		  if (!(opt_len & OT_INTERNAL) || flags == DHOPT_MATCH)
-++		    option_ok = 1;
-++		}
-+ 	    }
-+ 	  /* option6:<opt>|<optname> must follow tag and vendor string. */
-+ 	  is6 = 1;
-+@@ -821,7 +828,7 @@ static int parse_dhcp_opt(char *errstr, char *arg, int flags)
-+ 	  new->flags |= DHOPT_RFC3925;
-+ 	  if (flags == DHOPT_MATCH)
-+ 	    {
-+-	      new->opt = 1; /* avoid error below */
-++	      option_ok = 1;
-+ 	      break;
-+ 	    }
-+ 	}
-+@@ -848,16 +855,16 @@ static int parse_dhcp_opt(char *errstr, char *arg, int flags)
-+       
-+       if (opt_len == 0 &&
-+ 	  !(new->flags & DHOPT_RFC3925))
-+-	opt_len = lookup_dhcp_len(AF_INET6 ,new->opt);
-++	opt_len = lookup_dhcp_len(AF_INET6, new->opt);
-+     }
-+   else
-+ #endif
-+     if (opt_len == 0 &&
-+ 	!(new->flags & (DHOPT_VENDOR | DHOPT_ENCAPSULATE | DHOPT_RFC3925)))
-+-      opt_len = lookup_dhcp_len(AF_INET ,new->opt);
-++      opt_len = lookup_dhcp_len(AF_INET, new->opt);
-+   
-+   /* option may be missing with rfc3925 match */
-+-  if (new->opt == 0)
-++  if (!option_ok)
-+     ret_err(_("bad dhcp-option"));
-+   
-+   if (comma)
-+--
-+1.8.1.5
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 8fb1fb1..04e3630 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/gawk/Config.in b/package/gawk/Config.in
+index 82c970f..7b49667 100644
+--- a/package/gawk/Config.in
++++ b/package/gawk/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_GAWK
+ 	bool "gawk"
+ 	depends on BR2_USE_WCHAR
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  A special-purpose programming language which is data driven
+ 	  rather than procedural.  Allows for simple data-reformatting jobs
+diff --git a/package/gawk/gawk-no-versioned.patch b/package/gawk/gawk-01-no-versioned.patch
+similarity index 100%
+rename from package/gawk/gawk-no-versioned.patch
+rename to package/gawk/gawk-01-no-versioned.patch
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index 366dea7..b26430e 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -4,10 +4,10 @@
  #
  #############################################################
  
--DNSMASQ_VERSION = 2.65
-+DNSMASQ_VERSION = 2.66
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
- DNSMASQ_MAKE_OPT = COPTS="$(DNSMASQ_COPTS)" PREFIX=/usr CFLAGS="$(TARGET_CFLAGS)"
+-GAWK_VERSION = 4.0.1
++GAWK_VERSION = 4.1.0
+ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
+-GAWK_TARGET_BINS = awk gawk igawk pgawk
+-GAWK_LICENSE = GPLv3
++GAWK_DEPENDENCIES = host-gawk $(if $(BR2_PACKAGE_MPFR),mpfr)
++GAWK_LICENSE = GPLv3+
+ GAWK_LICENSE_FILES = COPYING
+ 
+ # Prefer full-blown gawk over busybox awk
+@@ -15,7 +15,7 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ GAWK_DEPENDENCIES += busybox
+ endif
+ 
+-# we don't have a host-busybox
++# We don't have a host-busybox
+ HOST_GAWK_DEPENDENCIES =
+ 
+ define GAWK_CREATE_SYMLINK
+@@ -24,13 +24,13 @@ endef
+ 
+ GAWK_POST_INSTALL_TARGET_HOOKS += GAWK_CREATE_SYMLINK
+ 
+-define GAWK_UNINSTALL_TARGET_CMDS
+-	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(GAWK_TARGET_BINS))
+-	rm -f $(TARGET_DIR)/usr/share/info/gawk*.info
+-	rm -f $(TARGET_DIR)/usr/share/man/man*/*gawk.1
+-	rm -rf $(TARGET_DIR)/usr/libexec/awk
+-	rm -rf $(TARGET_DIR)/usr/share/awk
++# Assume we support shared libs
++# The check isn't cross-compile friendly and it's mandatory anyway
++define GAWK_DISABLE_SHARED_CHECK
++	$(SED) 's/ check-for-shared-lib-support//' $(@D)/extension/Makefile.in
+ endef
+ 
++GAWK_POST_PATCH_HOOKS += GAWK_DISABLE_SHARED_CHECK
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 1.8.1.5
