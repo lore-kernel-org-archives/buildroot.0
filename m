@@ -1,36 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 May 2013 20:42:34 +0200
-Subject: [Buildroot] [git commit] gutenprint: ensure staging version of
-	cups-config is used
-Message-ID: <20130512184648.94FD99A120@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 12 May 2013 20:56:15 +0200
+Subject: [Buildroot] [PATCH] openssl: fix host-openssl dependencies
+Message-ID: <1368384975-20193-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c27b71bccb390b5bc8a1775516efa6628f1690b9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-And not whatever is available on the host.
+Support for ocf-linux or cryptodev-linux added a dependency of host-openssl
+on host-ocf-linux / host-cryptodev-linux, which we don't have and the
+dependency is anyway not needed.
 
-Fixes http://autobuild.buildroot.net/results/dd202d9be79e00ecab622bd7427542b16e962916/
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gutenprint/gutenprint.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/openssl/openssl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
-index b469843..834d967 100644
---- a/package/gutenprint/gutenprint.mk
-+++ b/package/gutenprint/gutenprint.mk
-@@ -21,6 +21,8 @@ GUTENPRINT_DEPENDENCIES = cups host-pkgconf \
- # so we need to build both a host package and a target package
- GUTENPRINT_DEPENDENCIES += host-gutenprint
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 2e04789..081fc90 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -10,6 +10,7 @@ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
+ OPENSSL_INSTALL_STAGING = YES
+ OPENSSL_DEPENDENCIES = zlib
++HOST_OPENSSL_DEPENDENCIES = host-zlib
+ OPENSSL_TARGET_ARCH = generic32
+ OPENSSL_CFLAGS = $(TARGET_CFLAGS)
  
-+GUTENPRINT_CONF_ENV = ac_cv_path_CUPS_CONFIG=$(STAGING_DIR)/usr/bin/cups-config
-+
- GUTENPRINT_CONF_OPT = --disable-libgutenprintui2 \
-                       --disable-samples \
-                       --without-doc \
+-- 
+1.8.2.1
