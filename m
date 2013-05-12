@@ -1,84 +1,92 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 12 May 2013 11:01:41 -0300
-Subject: [Buildroot] [PATCHv2] gawk: bump to version 4.1.0
-Message-ID: <1368367301-9231-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 12 May 2013 18:59:39 +0200
+Subject: [Buildroot] [PATCH 3/5] am33x-cm3: add FW for suspend/resume
+In-Reply-To: <CAE4k239iOG9ywuyHt+-eKzVZOnuDQ1y+E5h0PQh+YVC6jL2Rnw@mail.gmail.com>
+References: <CAE4k239uzqJGVwGSsP7AtrQrbcKqNbe3f1P5ix33U8rpge96EA@mail.gmail.com>
+ <518DE6DE.2070101@mind.be>
+ <CAE4k239iOG9ywuyHt+-eKzVZOnuDQ1y+E5h0PQh+YVC6jL2Rnw@mail.gmail.com>
+Message-ID: <518FCA7B.1000106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gawk/Config.in                               |  2 ++
- ...no-versioned.patch => gawk-01-no-versioned.patch} |  0
- package/gawk/gawk.mk                                 | 20 ++++++++++----------
- 3 files changed, 12 insertions(+), 10 deletions(-)
- rename package/gawk/{gawk-no-versioned.patch => gawk-01-no-versioned.patch} (100%)
+On 11/05/13 14:25, Anders Darander wrote:
+>
+>
+>
+> On 11 May 2013 08:36, Arnout Vandecappelle <arnout@mind.be
+> <mailto:arnout@mind.be>> wrote:
+[snip]
+>       I get a lot of
+>
+>     warning: switch -mcpu=cortex-m3 conflicts with -march=armv7-a switch
+>     [enabled by default]
+>
+>     but I guess these are harmless.
+>
+>     (the -march=armv7-a is added by the toolchain wrapper).
+>
+>
+> Using what toolchain?
 
-diff --git a/package/gawk/Config.in b/package/gawk/Config.in
-index 82c970f..6889777 100644
---- a/package/gawk/Config.in
-+++ b/package/gawk/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_GAWK
- 	bool "gawk"
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  A special-purpose programming language which is data driven
- 	  rather than procedural.  Allows for simple data-reformatting jobs
-diff --git a/package/gawk/gawk-no-versioned.patch b/package/gawk/gawk-01-no-versioned.patch
-similarity index 100%
-rename from package/gawk/gawk-no-versioned.patch
-rename to package/gawk/gawk-01-no-versioned.patch
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 366dea7..b26430e 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -4,10 +4,10 @@
- #
- #############################################################
+  Sourcery external toolchain.
 
--GAWK_VERSION = 4.0.1
-+GAWK_VERSION = 4.1.0
- GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
--GAWK_TARGET_BINS = awk gawk igawk pgawk
--GAWK_LICENSE = GPLv3
-+GAWK_DEPENDENCIES = host-gawk $(if $(BR2_PACKAGE_MPFR),mpfr)
-+GAWK_LICENSE = GPLv3+
- GAWK_LICENSE_FILES = COPYING
+ > I'm not seeing these warning (and neither am I
+> seeing any -march=armv7-a) in my test builds. I'm using the buildroot
+> toolchain generated with this patch series applied to the 2013.05-rc1 tag.
 
- # Prefer full-blown gawk over busybox awk
-@@ -15,7 +15,7 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- GAWK_DEPENDENCIES += busybox
- endif
+  OK, that answers my question if you had tested it with an internal 
+toolchain :-)
 
--# we don't have a host-busybox
-+# We don't have a host-busybox
- HOST_GAWK_DEPENDENCIES =
 
- define GAWK_CREATE_SYMLINK
-@@ -24,13 +24,13 @@ endef
+>
+>       But I'm not 100% sure if a custom toolchain will actually build for
+>     the correct architecture. Could you try if the result of something
+>     built with the buildroot toolchain works correctly? If you want, I
+>     can send you the .bin file so you don't have to wait an hour for the
+>     whole toolchain to compile. Or, if you have actually tested it with a
+>     buildroot toolchain, could you try if it also works with an external
+>     Sourcery and/or Linaro toolchain?
+>
+>           >  init scripts are installed by a separate variable,
+>           >AM33X_CM3_INSTALL_INIT_SYSV. And of course, the same remark
+>         about the
+>           >-D
+>           >option applies.
+>
+>         Thanks, I'm fox that too.
+>
+>         Does that make it install when using busybox init also?
+>
+>
+>       Yes it does.
+>
+>       Only when systemd is selected, it doesn't install anything. So
+>     ideally you should also add a systemd unit file.
+>
+>
+> As I'm not building systemd in any buildroot / beaglebone project, I
+> think I'll wait with adding the systemd unit file until I can test it
+> more. Or if someone beats me to it.
 
- GAWK_POST_INSTALL_TARGET_HOOKS += GAWK_CREATE_SYMLINK
+  Fair enough.
 
--define GAWK_UNINSTALL_TARGET_CMDS
--	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(GAWK_TARGET_BINS))
--	rm -f $(TARGET_DIR)/usr/share/info/gawk*.info
--	rm -f $(TARGET_DIR)/usr/share/man/man*/*gawk.1
--	rm -rf $(TARGET_DIR)/usr/libexec/awk
--	rm -rf $(TARGET_DIR)/usr/share/awk
-+# Assume we support shared libs
-+# The check isn't cross-compile friendly and it's mandatory anyway
-+define GAWK_DISABLE_SHARED_CHECK
-+	$(SED) 's/ check-for-shared-lib-support//' $(@D)/extension/Makefile.in
- endef
+  Regards,
+  Arnout
 
-+GAWK_POST_PATCH_HOOKS += GAWK_DISABLE_SHARED_CHECK
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
---
-1.8.1.5
+>
+> Version 2 of the patch series on it's way...
+>
+> Cheers,
+> Anders
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
