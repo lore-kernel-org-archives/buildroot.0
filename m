@@ -1,51 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 May 2013 21:03:40 +0200
-Subject: [Buildroot] [git commit] classpath: remove qt support
-Message-ID: <20130512191127.9FD419A128@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 12 May 2013 21:15:52 +0200
+Subject: [Buildroot] [PATCH] czmq: disable asciidoc documentation generation
+Message-ID: <1368386152-27165-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4624567df1c5e05963ecc0f2a36299a89068ca41
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-classpath doesn't work with Qt in buildroot. It assumes qt will run on X11,
-but we don't have qt-x11 support on buildroot.
+czmq uses asciidoc for its documentation. asciidoc uses python and import
+the unicodedata module, which is not in host-python. So disable asciidoc
+entirely.
+
+This doesn't get hit by the autobuilders because they don't have asciidoc
+installed in their chroot.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/classpath/classpath.mk |   11 ++++-------
- 1 files changed, 4 insertions(+), 7 deletions(-)
+ package/czmq/czmq.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/classpath/classpath.mk b/package/classpath/classpath.mk
-index 2d12552..61a1034 100644
---- a/package/classpath/classpath.mk
-+++ b/package/classpath/classpath.mk
-@@ -8,6 +8,10 @@ CLASSPATH_CONF_OPT = \
- 	--disable-gconf-peer \
- 	--disable-tools
+diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
+index 2b34654..d63fb78 100644
+--- a/package/czmq/czmq.mk
++++ b/package/czmq/czmq.mk
+@@ -14,6 +14,10 @@ CZMQ_DEPENDENCIES = zeromq
+ CZMQ_LICENSE = LGPLv3+ with exceptions
+ CZMQ_LICENSE_FILES = COPYING COPYING.LESSER
  
-+# classpath assumes qt runs on top of X11, but we
-+# don't support qt4 on X11
-+CLASSPATH_CONF_OPT += --disable-qt-peer
++# asciidoc is a python script that imports unicodedata, which is not in
++# host-python, so disable asciidoc entirely.
++CZMQ_CONF_ENV = ac_cv_prog_czmq_have_asciidoc=no
 +
- CLASSPATH_DEPENDENCIES = host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-@@ -39,13 +43,6 @@ else
- CLASSPATH_CONF_OPT += --disable-gtk-peer --disable-gstreamer-peer
- endif
- 
--ifeq ($(BR2_PACKAGE_QT),y)
--CLASSPATH_CONF_OPT += --enable-qt-peer
--CLASSPATH_DEPENDENCIES += qt
--else
--CLASSPATH_CONF_OPT += --disable-qt-peer
--endif
--
- ifeq ($(BR2_PACKAGE_LIBXML2)$(BR2_PACKAGE_LIBXSLT),yy)
- CLASSPATH_CONF_OPT += --enable-xmlj
- CLASSPATH_DEPENDENCIES += libxml2 libxslt
+ define CZMQ_CREATE_CONFIG_DIR
+ 	mkdir -p $(@D)/config
+ endef
+-- 
+1.8.2.1
