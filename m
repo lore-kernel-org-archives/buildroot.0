@@ -1,55 +1,35 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 12 May 2013 22:05:22 +0200
-Subject: [Buildroot] [PATCH] pulseaudio: fix build with orc
-Message-ID: <1368389122-23651-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 May 2013 22:07:10 +0200
+Subject: [Buildroot] [PATCH 1/6] package/pmake: add host pmake
+In-Reply-To: <2d595758f38c257f4efb7ad18eee25888b192fd5.1368137904.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Fri, 10 May 2013 00:22:54 +0200")
+References: <cover.1368137904.git.yann.morin.1998@free.fr>
+ <cover.1368137904.git.yann.morin.1998@free.fr>
+ <2d595758f38c257f4efb7ad18eee25888b192fd5.1368137904.git.yann.morin.1998@free.fr>
+Message-ID: <87r4hcvu6p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-The configure script gets orcc from pkg-config, which sets it to /usr/bin/orcc
-instead of $(HOST_DIR)/usr/bin/orcc. So set the path explicitly instead of
-relying on pkg-config.
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> pmake is the make command used by the BSD.
+ Yann> It will used to build BSD-related packages, coming later.
 
-While we're at it, also add an explicit enable/disable to configure.
+Committed to next, thanks.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Ideally, this should be fixed in orc-0.4.pc, but I'm not sure what would
-be the best way.
----
- package/multimedia/pulseaudio/pulseaudio.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ Yann> +# The generated file is named bmake, but we want pmake; but:
+ Yann> +#  - pmake uses support files (in  mk/)
+ Yann> +#  - it's not possible to tell pmake, at build-time, where to expect
+ Yann> +#    these support files, and pmake expects them in /usr/share/mk/
+ Yann> +#  - but pmake has an option to override that search path at runtime
+ Yann> +#  - so we install bmake as bmake
+ Yann> +#  - and we install a wraper named pmake that calls pmake with the
 
-diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
-index aa67592..b39d99e 100644
---- a/package/multimedia/pulseaudio/pulseaudio.mk
-+++ b/package/multimedia/pulseaudio/pulseaudio.mk
-@@ -28,7 +28,6 @@ PULSEAUDIO_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_UDEV),udev) \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
- 	$(if $(BR2_PACKAGE_FFTW),fftw) \
--	$(if $(BR2_PACKAGE_ORC),orc) \
- 	$(if $(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),webrtc-audio-processing) \
- 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
- 
-@@ -38,6 +37,14 @@ PULSEAUDIO_DEPENDENCIES = \
- PULSEAUDIO_AUTORECONF = YES
- PULSEAUDIO_DEPENDENCIES += libglib2
- 
-+ifeq ($(BR2_PACKAGE_ORC),y)
-+PULSEAUDIO_DEPENDENCIES += orc
-+PULSEAUDIO_CONF_ENV += ORCC=$(HOST_DIR)/usr/bin/orcc
-+PULSEAUDIO_CONF_OPT += --enable-orc
-+else
-+PULSEAUDIO_CONF_OPT += --disable-orc
-+endif
-+
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
- # The optional webrtc echo canceller is written in C++, causing auto* to want
- # to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
+s/wraper/wrapper/
+
 -- 
-1.8.2.1
+Bye, Peter Korsgaard
