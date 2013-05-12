@@ -1,78 +1,77 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 May 2013 22:06:56 +0200
-Subject: [Buildroot] [git commit branch/next] package/libbsd: new package
-Message-ID: <20130512201213.915BB9A163@busybox.osuosl.org>
+Date: Sun, 12 May 2013 22:06:51 +0200
+Subject: [Buildroot] [git commit branch/next] package/pmake: add host pmake
+Message-ID: <20130512201213.5A00D9A163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4ae47d82649d38de6896270a6b6945d2467b7047
+commit: http://git.buildroot.net/buildroot/commit/?id=0af22c755b45d8b04ca148ff0b58e460c835e337
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+pmake is the make command used by the BSD.
+It will used to build BSD-related packages, coming later.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Nathan Lynch <ntl@pobox.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in        |    1 +
- package/libbsd/Config.in |   10 ++++++++++
- package/libbsd/libbsd.mk |   21 +++++++++++++++++++++
- 3 files changed, 32 insertions(+), 0 deletions(-)
+ package/pmake/pmake.mk |   47 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 47 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index bbacd5c..55a38b9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -578,6 +578,7 @@ source "package/gmp/Config.in"
- source "package/gsl/Config.in"
- source "package/gtest/Config.in"
- source "package/libatomic_ops/Config.in"
-+source "package/libbsd/Config.in"
- source "package/libcap/Config.in"
- source "package/libcap-ng/Config.in"
- source "package/libdaemon/Config.in"
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+diff --git a/package/pmake/pmake.mk b/package/pmake/pmake.mk
 new file mode 100644
-index 0000000..0ed9dac
+index 0000000..7b2e5a6
 --- /dev/null
-+++ b/package/libbsd/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBBSD
-+	bool "libbsd"
-+	help
-+	  This library provides useful functions commonly found on BSD
-+	  systems, and lacking on others like GNU systems, thus making
-+	  it easier to port projects with strong BSD origins, without
-+	  needing to embed the same code over and over again on each
-+	  project.
-+
-+	  http://libbsd.freedesktop.org/
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
-new file mode 100644
-index 0000000..3af1002
---- /dev/null
-+++ b/package/libbsd/libbsd.mk
-@@ -0,0 +1,21 @@
++++ b/package/pmake/pmake.mk
+@@ -0,0 +1,47 @@
 +#############################################################
 +#
-+# libbsd
++# pmake
 +#
-+#############################################################
++##############################################################
 +
-+LIBBSD_VERSION         = 0.4.2
-+LIBBSD_SOURCE          = libbsd-$(LIBBSD_VERSION).tar.gz
-+LIBBSD_SITE            = http://libbsd.freedesktop.org/releases
-+LIBBSD_LICENSE         = BSD-3c MIT
-+LIBBSD_LICENSE_FILES   = LICENSE
++PMAKE_VERSION       = 1.111
++PMAKE_SOURCE        = pmake_$(PMAKE_VERSION).orig.tar.gz
++PMAKE_SITE          = http://snapshot.debian.org/archive/debian/20120601T033558Z/pool/main/p/pmake
++PMAKE_LICENSE       = BSD-3c BSD-4c
++# No license file. License texts are spread in the boilerplates
++# of each individual source files; some are BSD-3c, some BSD-4c.
 +
-+# man-pages are BSD-4c, so that license only matters
-+# if doc is kept in the target rootfs
-+ifeq ($(BR2_HAVE_DOCUMENTATION),y)
-+LIBBSD_LICENSE        += (libraries), BSD-4c (documentation)
-+endif
++# Vampirise patches from Debian
++PMAKE_PATCH = pmake_1.111-3.2.debian.tar.gz
 +
-+LIBBSD_INSTALL_STAGING = YES
++# CFLAGS vampirised from Debian's rules, adapted to buildroot variables
++HOST_PMAKE_CFLAGS = -O2 -g -Wall -D__COPYRIGHT\(x\)= -D__RCSID\(x\)= -I.    \
++                -DMACHINE=\\\"buildroot\\\"                                 \
++                -DMACHINE_ARCH=\\\"$(ARCH)\\\" -DMACHINE_MULTIARCH=\\\"\\\" \
++                -DHAVE_SETENV -DHAVE_STRERROR -DHAVE_STRDUP -DHAVE_STRFTIME \
++                -DHAVE_VSNPRINTF -D_GNU_SOURCE -Wno-unused
 +
-+$(eval $(autotools-package))
++define HOST_PMAKE_BUILD_CMDS
++	$(MAKE) -C $(@D) -f Makefile.boot CFLAGS="$(HOST_PMAKE_CFLAGS)"
++endef
++
++# The generated file is named bmake, but we want pmake; but:
++#  - pmake uses support files (in  mk/)
++#  - it's not possible to tell pmake, at build-time, where to expect
++#    these support files, and pmake expects them in /usr/share/mk/
++#  - but pmake has an option to override that search path at runtime
++#  - so we install bmake as bmake
++#  - and we install a wrapper named pmake that calls pmake with the
++#    appropriate search path
++define HOST_PMAKE_INSTALL_CMDS
++	$(INSTALL) -m 0755 $(@D)/bmake $(HOST_DIR)/usr/bin/bmake
++	$(INSTALL) -d -m 0755 $(HOST_DIR)/usr/share/pmake/mk
++	for mk in $(@D)/mk/*; do                                        \
++	    $(INSTALL) -m 0644 $${mk} $(HOST_DIR)/usr/share/pmake/mk;   \
++	done
++	printf '#!/bin/sh\nexec $${0%%/*}/bmake -m $${0%%/pmake}/../../usr/share/pmake/mk "$$@"\n'  \
++	       >$(HOST_DIR)/usr/bin/pmake
++	chmod 0755 $(HOST_DIR)/usr/bin/pmake
++endef
++
++$(eval $(host-generic-package))
