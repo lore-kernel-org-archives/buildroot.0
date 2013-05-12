@@ -1,55 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 12 May 2013 19:16:49 +0200
-Subject: [Buildroot] [PATCH v3 1/7] gstreamer1: Add gstreamer version
- 1.0.7 package
-In-Reply-To: <20130512112313.12a809e3@skate>
-References: <1368158558-6069-1-git-send-email-spenser@gillilanding.com>
- <1368158558-6069-2-git-send-email-spenser@gillilanding.com>
- <518D8507.3060909@mind.be> <87k3n5yzj3.fsf@dell.be.48ers.dk>
- <20130512112313.12a809e3@skate>
-Message-ID: <518FCE81.3070002@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 May 2013 19:29:16 +0200
+Subject: [Buildroot] Bizarre things on the allyespackageconfig build
+In-Reply-To: <20130511123144.1d18b9e5@skate>
+References: <20130510175133.13d3fc6f@skate> <20130510165356.GA19822@free.fr>
+ <20130510225844.4f750b00@skate> <20130510222739.GB19822@free.fr>
+ <20130511123144.1d18b9e5@skate>
+Message-ID: <20130512172916.GC2976@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/05/13 11:23, Thomas Petazzoni wrote:
-> On Sat, 11 May 2013 23:31:12 +0200, Peter Korsgaard wrote:
->
->> >  Arnout>  We have a tendency to make a copy of a package when there is a major
->> >  Arnout> version change, cfr. python3 and qt5. However, in this case, I don't
->> >  Arnout> think it's a good idea. At this time, many (most?) gstreamer
->> >  Arnout> downstreams have already moved to 1.x. Also, no more patches will be
->> >  Arnout> made the the 0.10 series (though distro's may still make patches). So
->> >  Arnout> we can expect the old gstreamer stuff to die out relatively
->> >  Arnout> quickly. But if we call the new thing gstreamer1 now, we're
->> >  Arnout> essentially stuck with that name for all eternity.
->> >
->> >I'm not so sure. If you look at the other recent major version upgrades
->> >(python/qt/gtk), it seems to me like people aren't jumping on the new
->> >version right away. I had several people asking me if qt4 would still be
->> >available once qt5 got added.
-> I agree. I recently had a customer using Buildroot, with a fairly
-> important stack of custom/proprietary software written on top of
-> gstreamer 0.10. Having the possibility to continue to use gstreamer
-> 0.10 is very important to allow such users to migrate to newer
-> Buildroot versions. The migration to gstreamer 1.x will not happen
-> overnight for such users who have a large body of software written
-> against gstreamer 0.10.
->
-> Similarly for Qt4 vs. Qt5, as Peter mentioned.
+Thomas, All,
 
-  Fair enough. I guess Peter's right, having the 1 in the name doesn't hurt.
+On 2013-05-11 12:31 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 11 May 2013 00:27:39 +0200, Yann E. MORIN wrote:
+> > Yep, I like my filesystems to be tidy, too! :-)
+> Me too. I also noticed some variations on the permissions of
+> executables. Most of them have the write permissions, but some do not.
 
-  Regards,
-  Arnout
+I'm not sure whether we should "clean up" this situation. Although I
+agree this is not "clean", it's the same problem as with +x/-x shared
+libs.
 
+At the last DevDay, we discussed about having target generated from
+staging just before the filesystem images are created. When we come to
+implement this, then maybe we can clean that situation a bit. And at the
+same time, also take care of the shared lib SONAME "issue"...
+
+> Interesting, those libdvb*.so libraries don't have a SONAME:
+> 
+> $ readelf -d libdvb*.so | grep SONAME
+> $
+> 
+> Seems like they might be dlopen()ed plugins and not directly shared
+> libraries per se.
+
+Yep, most probably dlopn()ed plugins.
+
+> However, some of those non-executables libraries do have a SONAME:
+> 
+> target/usr/lib$ ls -l libproxychains4.so 
+> -rw-r--r-- 1 thomas thomas 85619 May  9 17:18 libproxychains4.so
+> target/usr/lib$ readelf -d libproxychains4.so | grep SONAME
+>  0x0000000e (SONAME)                     Library soname: [libproxychains4.so]
+> 
+> I'm not sure I like the renaming of libraries to their SONAME, but it's
+> really a matter of perception. Technically speaking, I agree that it
+> works.
+
+I see at least one reason to rename to the SONAME: get rid of the
+symlinks to reduce the number of inodes required on the filesystem.
+
+Granted, we do not gain much, but it is still interesting on a small FS.
+
+> > I've done a preliminary build with that and no /usr/var symlink, and it
+[--SNIP--]
+> Ok. Beware that having /var/run, /var/spool and /var/cache point
+> to /tmp is a feature that allows the root filesystem to be mounted
+> read-only, and still have the services working. That's something we
+> should try to keep working, I believe.
+
+Yes, I know. But currently, those packages are already broken, since
+they point to /usr/var which might be read-only.
+
+So I wonder what the best situation would be to fully solve the issue. I
+can see at least two options:
+  - package provides an init script (or systemd unit) that creates the
+    required dirs/files at startup;
+  - infra creates a tarball of everyting in /tmp and install a startup
+    script that extracts that tarball at startup.
+
+Needless to say that I prefer the first solution, although it will
+require a bit more work (eg. currently, cups bundles and installs its
+startup script (which BTW is largely more complex than it needs to be),
+so we'd have to replace that startup script with our own, which is not
+really trivial).
+
+OTOH, the second solution is relatively easy to do, and is systematic,
+although it may entice developpers to lazyness.
+
+Regards,
+Yann E. MORIN.
+
+PS. I again have some mail delivery issues this WE, and although it seems
+    to settle down, I'm not sure I'm receiving mails on-time (this one
+    arrived about an hour ago... :-( ). Looks like time for me to roll
+    out my own server... :-(
+YEM.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
