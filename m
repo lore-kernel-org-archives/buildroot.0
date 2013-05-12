@@ -1,32 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 May 2013 21:39:10 +0200
-Subject: [Buildroot] [git commit branch/next] ipset: bump to version 6.19
-Message-ID: <20130512194313.964849A0CF@busybox.osuosl.org>
+Date: Sun, 12 May 2013 21:39:14 +0200
+Subject: [Buildroot] [git commit branch/next] fftw: bump to version 3.3.3
+Message-ID: <20130512194314.1301C9A0CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2db1e84e28b308c85b0919bd015c36ed4fc3590d
+commit: http://git.buildroot.net/buildroot/commit/?id=7893840d16419e5795bd6b8cbc3adf5a99d9298f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ipset/ipset.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/fftw/fftw.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index 50915ef..daadc9e 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+index 74a5e11..d0af752 100644
+--- a/package/fftw/fftw.mk
++++ b/package/fftw/fftw.mk
+@@ -4,8 +4,10 @@
  #
- #############################################################
+ ################################################################################
  
--IPSET_VERSION = 6.18
-+IPSET_VERSION = 6.19
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
+-FFTW_VERSION = 3.3.2
++FFTW_VERSION = 3.3.3
+ FFTW_SITE = http://www.fftw.org
+ FFTW_INSTALL_STAGING = YES
++FFTW_LICENSE = GPLv2+
++FFTW_LICENSE_FILES = COPYING
+ 
+ $(eval $(autotools-package))
