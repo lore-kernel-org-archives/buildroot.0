@@ -1,7 +1,8 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 12 May 2013 21:23:57 +0200
-Subject: [Buildroot] [PATCH] f2fs-tools: fix version
-Message-ID: <1368386637-31727-1-git-send-email-arnout@mind.be>
+Date: Sun, 12 May 2013 21:25:01 +0200
+Subject: [Buildroot] [PATCH] filemq: disable asciidoc documentation
+	generation
+Message-ID: <1368386701-5188-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +11,29 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-The commit e3eadd doesn't (no longer?) exists in the upstream git, so
-replace it with the latest commit to date.
+filemq uses asciidoc for its documentation. asciidoc uses python and import
+the unicodedata module, which is not in host-python. So disable asciidoc
+entirely.
+
+This doesn't get hit by the autobuilders because they don't have asciidoc
+installed in their chroot.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/f2fs-tools/f2fs-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/filemq/filemq.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-index f217bf4..aa0c103 100644
---- a/package/f2fs-tools/f2fs-tools.mk
-+++ b/package/f2fs-tools/f2fs-tools.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
+index 0ea7a9d..c715292 100644
+--- a/package/filemq/filemq.mk
++++ b/package/filemq/filemq.mk
+@@ -8,6 +8,7 @@ FILEMQ_VERSION = 8fac5140dd
+ FILEMQ_SITE = git://github.com/zeromq/filemq.git
  
--F2FS_TOOLS_VERSION = e3eadd686ed1da1828f32977a36b694bc0090f4e
-+F2FS_TOOLS_VERSION = fef98ebdf3a7728017cb3d0ae4ffedc5405e531d
- F2FS_TOOLS_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
- F2FS_TOOLS_SITE_METHOD = git
- F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
+ FILEMQ_AUTORECONF = YES
++FILEMQ_CONF_ENV = fmq_have_asciidoc=no
+ FILEMQ_INSTALL_STAGING = YES
+ FILEMQ_DEPENDENCIES = czmq openssl zeromq
+ FILEMQ_LICENSE = LGPLv3+ with exceptions
 -- 
 1.8.2.1
