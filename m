@@ -1,48 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 May 2013 22:12:59 +0200
-Subject: [Buildroot] [git commit] package/x11r7: add license informations to
-	xutil_* packages
-Message-ID: <20130512202408.AF5FA9A164@busybox.osuosl.org>
+Date: Sun, 12 May 2013 22:17:24 +0200
+Subject: [Buildroot] [git commit] libsha1: add license informations
+Message-ID: <20130512202410.1E24F9A164@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0a7ea9465cd6a0a37e6ed924549c555ba8ed10b2
+commit: http://git.buildroot.net/buildroot/commit/?id=48ac24985c0dcf37c1951da9f7f4d4ae18ee1266
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/xutil_makedepend/xutil_makedepend.mk |    2 ++
- .../x11r7/xutil_util-macros/xutil_util-macros.mk   |    3 +++
- 2 files changed, 5 insertions(+), 0 deletions(-)
+ package/libsha1/libsha1.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-index ff4d9bd..4f0e23f 100644
---- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-+++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-@@ -7,6 +7,8 @@
- XUTIL_MAKEDEPEND_VERSION = 1.0.4
- XUTIL_MAKEDEPEND_SOURCE = makedepend-$(XUTIL_MAKEDEPEND_VERSION).tar.bz2
- XUTIL_MAKEDEPEND_SITE = http://xorg.freedesktop.org/releases/individual/util
-+XUTIL_MAKEDEPEND_LICENSE = MIT
-+XUTIL_MAKEDEPEND_LICENSE_FILES = COPYING
+diff --git a/package/libsha1/libsha1.mk b/package/libsha1/libsha1.mk
+index e9658af..da6a7b2 100644
+--- a/package/libsha1/libsha1.mk
++++ b/package/libsha1/libsha1.mk
+@@ -6,6 +6,9 @@
  
- XUTIL_MAKEDEPEND_DEPENDENCIES = xproto_xproto
- 
-diff --git a/package/x11r7/xutil_util-macros/xutil_util-macros.mk b/package/x11r7/xutil_util-macros/xutil_util-macros.mk
-index 6171c39..08b823a 100644
---- a/package/x11r7/xutil_util-macros/xutil_util-macros.mk
-+++ b/package/x11r7/xutil_util-macros/xutil_util-macros.mk
-@@ -7,6 +7,9 @@
- XUTIL_UTIL_MACROS_VERSION = 1.17
- XUTIL_UTIL_MACROS_SOURCE = util-macros-$(XUTIL_UTIL_MACROS_VERSION).tar.bz2
- XUTIL_UTIL_MACROS_SITE = http://xorg.freedesktop.org/releases/individual/util
-+XUTIL_UTIL_MACROS_LICENSE = MIT
-+XUTIL_UTIL_MACROS_LICENSE_FILES = COPYING
+ LIBSHA1_VERSION = 0.3
+ LIBSHA1_SITE = http://github.com/dottedmag/libsha1/tarball/$(LIBSHA1_VERSION)
++LIBSHA1_LICENSE = BSD-3c or GPL
++LIBSHA1_LICENSE_FILES = COPYING
 +
- XUTIL_UTIL_MACROS_INSTALL_STAGING = YES
- XUTIL_UTIL_MACROS_INSTALL_TARGET = NO
+ LIBSHA1_INSTALL_STAGING = YES
  
+ # We're getting the source code from Github, so there is no generated
