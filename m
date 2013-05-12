@@ -1,83 +1,88 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 12 May 2013 18:59:39 +0200
-Subject: [Buildroot] [PATCH 3/5] am33x-cm3: add FW for suspend/resume
-In-Reply-To: <CAE4k239iOG9ywuyHt+-eKzVZOnuDQ1y+E5h0PQh+YVC6jL2Rnw@mail.gmail.com>
-References: <CAE4k239uzqJGVwGSsP7AtrQrbcKqNbe3f1P5ix33U8rpge96EA@mail.gmail.com>
- <518DE6DE.2070101@mind.be>
- <CAE4k239iOG9ywuyHt+-eKzVZOnuDQ1y+E5h0PQh+YVC6jL2Rnw@mail.gmail.com>
-Message-ID: <518FCA7B.1000106@mind.be>
+Date: Sun, 12 May 2013 19:15:25 +0200
+Subject: [Buildroot] [PATCH 1/5] beaglebone: update to linux 3.8
+In-Reply-To: <CAE4k238zVSi9eW5Ctfb9LWCt8r9xYv5cSZ=FfJVg1NT0tjGpoA@mail.gmail.com>
+References: <CAE4k2391Ku1Oi+2ACCetmvr5dO8JBygv_hNTM18BchAbdBA3DA@mail.gmail.com>
+ <518DE0EF.8060500@mind.be>
+ <CAE4k238zVSi9eW5Ctfb9LWCt8r9xYv5cSZ=FfJVg1NT0tjGpoA@mail.gmail.com>
+Message-ID: <518FCE2D.9090308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/05/13 14:25, Anders Darander wrote:
->
->
->
-> On 11 May 2013 08:36, Arnout Vandecappelle <arnout@mind.be
+On 11/05/13 14:41, Anders Darander wrote:
+> On 11 May 2013 08:10, Arnout Vandecappelle <arnout@mind.be
 > <mailto:arnout@mind.be>> wrote:
 [snip]
->       I get a lot of
->
->     warning: switch -mcpu=cortex-m3 conflicts with -march=armv7-a switch
->     [enabled by default]
->
->     but I guess these are harmless.
->
->     (the -march=armv7-a is added by the toolchain wrapper).
+>       No, the new ordering is good - I do prefer to see things in the
+>     'make savedefconfig' order.
 >
 >
-> Using what toolchain?
+> Ok, good to know. Though I decided to keep the old version of those line,
+> and  lock the kernel headers. Though, I'd also prefer to keep the
+> savedefconfig ordering.
+>
+> Adding those comments automatically might be a good exercise for a rainy
+> day...
 
-  Sourcery external toolchain.
-
- > I'm not seeing these warning (and neither am I
-> seeing any -march=armv7-a) in my test builds. I'm using the buildroot
-> toolchain generated with this patch series applied to the 2013.05-rc1 tag.
-
-  OK, that answers my question if you had tested it with an internal 
-toolchain :-)
-
+  Seems a pretty difficult task - savedefconfig strips everything that is 
+default, so how can it know which comments to keep and which to remove?
 
 >
->       But I'm not 100% sure if a custom toolchain will actually build for
->     the correct architecture. Could you try if the result of something
->     built with the buildroot toolchain works correctly? If you want, I
->     can send you the .bin file so you don't have to wait an hour for the
->     whole toolchain to compile. Or, if you have actually tested it with a
->     buildroot toolchain, could you try if it also works with an external
->     Sourcery and/or Linaro toolchain?
 >
->           >  init scripts are installed by a separate variable,
->           >AM33X_CM3_INSTALL_INIT_SYSV. And of course, the same remark
->         about the
->           >-D
->           >option applies.
+>           >undo changes with 'git checkout -p configs/beaglebone_defconfig'.
+>           >
 >
->         Thanks, I'm fox that too.
+>           >>   BR2_LINUX_KERNEL=y
+>           >>   BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>           >>
+>           >-BR2_LINUX_KERNEL_CUSTOM_GIT___REPO_URL="git://github.com/__koenkooi/linux.git <http://github.com/koenkooi/linux.git> <http://github.com/koenkooi/__linux.git <http://github.com/koenkooi/linux.git>>"
+>           >>
+>           >-BR2_LINUX_KERNEL_CUSTOM_GIT___VERSION="linux-ti33x-psp-3.2-__r5a+__gitr09e9651bcf2ee8d86685f2a807__5bc6557b1d3b91"
+>           >>
+>           >+BR2_LINUX_KERNEL_CUSTOM_GIT___REPO_URL="git://git.ti.com/ti-__linux-kernel/ti-linux-kernel.__git <http://git.ti.com/ti-linux-kernel/ti-linux-kernel.git> <http://git.ti.com/ti-linux-__kernel/ti-linux-kernel.git <http://git.ti.com/ti-linux-kernel/ti-linux-kernel.git>>"
 >
->         Does that make it install when using busybox init also?
+>           >>
+>           >+BR2_LINUX_KERNEL_CUSTOM_GIT___VERSION="__935f6c2f82056d538b528272e2bdbb__5c08d69a58"
+>           >
+>           >Isn't there a tag you can clone from? That's much faster,
+>         because then
+>           >we can (usually) do a shallow clone.
 >
->
->       Yes it does.
->
->       Only when systemd is selected, it doesn't install anything. So
->     ideally you should also add a systemd unit file.
+>         I'm not sure if there's a tag available in this case.
 >
 >
-> As I'm not building systemd in any buildroot / beaglebone project, I
-> think I'll wait with adding the systemd unit file until I can test it
-> more. Or if someone beats me to it.
+> Unfortunsately no tags exists...
 
-  Fair enough.
+  How about using the ti2013.04.00 tag? It's based on 3.8.8 instead of 
+3.8.11, though.
+
+
+>         Ok, so tags preferred if they exists... Good to know, I'll check
+>         it and
+>         change it if there's a tag.
+>
+>         The list few years I've mainly been working with another build
+>         system,
+>         where SHA1's are preferred over tags for network-less building.
+>
+>
+>       Do you know if there's a specific reason for that? The
+>     'network-less' doesn't make a difference because the tags are always
+>     equally available, unless you clone/fetch with --no-tags.
+>
+>
+> Well, I just looked into it, and it seems that they (openmbedded and thus
+> Yocto Project) uses `git ls-remote` to resolve the tag name. I'm not
+> quite sure of the rationaly for that, though...
+
+  Weird... Anyway, we don't have that issue in buildroot.
 
   Regards,
   Arnout
 
->
-> Version 2 of the patch series on it's way...
 >
 > Cheers,
 > Anders
