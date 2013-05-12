@@ -1,35 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 May 2013 21:28:30 +0200
-Subject: [Buildroot] [git commit] f2fs-tools: fix version
-Message-ID: <20130512193211.124549A094@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 May 2013 21:38:34 +0200
+Subject: [Buildroot] Bizarre things on the allyespackageconfig build
+In-Reply-To: <20130512172916.GC2976@free.fr> (Yann E. MORIN's message of "Sun, 
+ 12 May 2013 19:29:16 +0200")
+References: <20130510175133.13d3fc6f@skate> <20130510165356.GA19822@free.fr>
+ <20130510225844.4f750b00@skate> <20130510222739.GB19822@free.fr>
+ <20130511123144.1d18b9e5@skate> <20130512172916.GC2976@free.fr>
+Message-ID: <87hai8xa2t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd234bebae9bd1aa2bf78eb1734a5c0af6a32023
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-The commit e3eadd doesn't (no longer?) exists in the upstream git, so
-replace it with the latest commit to date.
+Hi,
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/f2fs-tools/f2fs-tools.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Yann> Yes, I know. But currently, those packages are already broken, since
+ Yann> they point to /usr/var which might be read-only.
 
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-index f217bf4..aa0c103 100644
---- a/package/f2fs-tools/f2fs-tools.mk
-+++ b/package/f2fs-tools/f2fs-tools.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--F2FS_TOOLS_VERSION = e3eadd686ed1da1828f32977a36b694bc0090f4e
-+F2FS_TOOLS_VERSION = fef98ebdf3a7728017cb3d0ae4ffedc5405e531d
- F2FS_TOOLS_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
- F2FS_TOOLS_SITE_METHOD = git
- F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
+ Yann> So I wonder what the best situation would be to fully solve the issue. I
+ Yann> can see at least two options:
+ Yann>   - package provides an init script (or systemd unit) that creates the
+ Yann>     required dirs/files at startup;
+ Yann>   - infra creates a tarball of everyting in /tmp and install a startup
+ Yann>     script that extracts that tarball at startup.
+
+ Yann> Needless to say that I prefer the first solution, although it
+ Yann> will require a bit more work (eg. currently, cups bundles and
+ Yann> installs its startup script (which BTW is largely more complex
+ Yann> than it needs to be), so we'd have to replace that startup script
+ Yann> with our own, which is not really trivial).
+
+Yes, I believe we do something similar for some of the packages in the
+gtk stack (gdk-pixbuf or pango or so).
+
+-- 
+Bye, Peter Korsgaard
