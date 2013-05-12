@@ -1,33 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 May 2013 22:27:56 +0200
-Subject: [Buildroot] [PATCH 07/12] package/x11r7: add license
- informations to misc other packages
-In-Reply-To: <87a9o0vtso.fsf@dell.be.48ers.dk>
-References: <1368114667-14476-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1368114667-14476-8-git-send-email-thomas.petazzoni@free-electrons.com>
- <87a9o0vtso.fsf@dell.be.48ers.dk>
-Message-ID: <20130512222756.03b67a07@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 May 2013 23:52:03 +0200
+Subject: [Buildroot] [PATCH 5/6] package/dtc: new package
+In-Reply-To: <7b313ca8f99c6624c3f364c143d24c07590b0510.1368137905.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Fri, 10 May 2013 00:22:58 +0200")
+References: <cover.1368137904.git.yann.morin.1998@free.fr>
+ <cover.1368137904.git.yann.morin.1998@free.fr>
+ <7b313ca8f99c6624c3f364c143d24c07590b0510.1368137905.git.yann.morin.1998@free.fr>
+Message-ID: <87bo8fvpbw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Sun, 12 May 2013 22:15:35 +0200, Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
-> You forgot to sign off on this, but I've added it myself - Hopefully
-> that's OK?
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> dtc is the Device Tree Compiler, and manipulates device trees.
 
-Yes, sure! I probably forgot to git commit -s.
+ Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> Cc: Arnout Vandecappelle <arnout@mind.be>
 
-Sorry for the mess,
+Committed to next, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
