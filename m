@@ -1,45 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 May 2013 09:23:25 +0200
-Subject: [Buildroot] [git commit] libnss/libnspr: unavailable comment should
-	be OR and not AND
-Message-ID: <20130512072420.47AB09A0F6@busybox.osuosl.org>
+Date: Sun, 12 May 2013 10:53:38 +0200
+Subject: [Buildroot] [git commit] matchbox-lib: pango backend needs Xft
+	support in pango
+Message-ID: <20130512085504.A6C269A10F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=13cdffe529684402dacd4c5438b5f46bba9cc170
+commit: http://git.buildroot.net/buildroot/commit/?id=e8008c961c8db3a8b3b922f7222072f3dad9587b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Otherwise the comment would only show up when both conditions are true
-instead of any of them.
+Fixes http://autobuild.buildroot.net/results/7f5e56790028b96626e6f0a69ddce08667b712eb/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libnspr/Config.in |    2 +-
- package/libnss/Config.in  |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/matchbox/matchbox-lib/matchbox-lib.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
-index f4f24d4..f87b10c 100644
---- a/package/libnspr/Config.in
-+++ b/package/libnspr/Config.in
-@@ -11,4 +11,4 @@ config BR2_PACKAGE_LIBNSPR
- 	  http://www.mozilla.org/projects/nspr/
+diff --git a/package/matchbox/matchbox-lib/matchbox-lib.mk b/package/matchbox/matchbox-lib/matchbox-lib.mk
+index d18df6b..9855c8a 100644
+--- a/package/matchbox/matchbox-lib/matchbox-lib.mk
++++ b/package/matchbox/matchbox-lib/matchbox-lib.mk
+@@ -42,7 +42,7 @@ else
+   MATCHBOX_LIB_CONF_OPT+=--disable-png
+ endif
  
- comment "libnspr requires a toolchain with LARGEFILE and threads support"
--	depends on !BR2_LARGEFILE && !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libnss/Config.in b/package/libnss/Config.in
-index a070ffb..e8eec77 100644
---- a/package/libnss/Config.in
-+++ b/package/libnss/Config.in
-@@ -15,5 +15,5 @@ config BR2_PACKAGE_LIBNSS
- 	  http://www.mozilla.org/projects/security/pki/nss/
- 
- comment "libnss requires a toolchain with LARGEFILE and thread support"
--	depends on !BR2_LARGEFILE && !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
- 
+-ifeq ($(BR2_PACKAGE_PANGO),y)
++ifeq ($(BR2_PACKAGE_PANGO)$(BR2_PACKAGE_XLIB_LIBXFT)$(BR2_PACKAGE_XLIB_LIBXRENDER),yyy)
+   MATCHBOX_LIB_CONF_OPT+=--enable-pango
+   MATCHBOX_LIB_DEPENDENCIES+=pango
+ else
