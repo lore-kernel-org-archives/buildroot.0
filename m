@@ -1,7 +1,7 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 12 May 2013 21:15:52 +0200
-Subject: [Buildroot] [PATCH] czmq: disable asciidoc documentation generation
-Message-ID: <1368386152-27165-1-git-send-email-arnout@mind.be>
+Date: Sun, 12 May 2013 21:23:57 +0200
+Subject: [Buildroot] [PATCH] f2fs-tools: fix version
+Message-ID: <1368386637-31727-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,26 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-czmq uses asciidoc for its documentation. asciidoc uses python and import
-the unicodedata module, which is not in host-python. So disable asciidoc
-entirely.
-
-This doesn't get hit by the autobuilders because they don't have asciidoc
-installed in their chroot.
+The commit e3eadd doesn't (no longer?) exists in the upstream git, so
+replace it with the latest commit to date.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/czmq/czmq.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/f2fs-tools/f2fs-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-index 2b34654..d63fb78 100644
---- a/package/czmq/czmq.mk
-+++ b/package/czmq/czmq.mk
-@@ -14,6 +14,10 @@ CZMQ_DEPENDENCIES = zeromq
- CZMQ_LICENSE = LGPLv3+ with exceptions
- CZMQ_LICENSE_FILES = COPYING COPYING.LESSER
+diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+index f217bf4..aa0c103 100644
+--- a/package/f2fs-tools/f2fs-tools.mk
++++ b/package/f2fs-tools/f2fs-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
-+# asciidoc is a python script that imports unicodedata, which is not in
-+# host-python, so disable asciidoc entirely.
-+CZMQ_CONF_ENV = ac_cv_prog_czmq_have_asciidoc=no
-+
- define CZMQ_CREATE_CONFIG_DIR
- 	mkdir -p $(@D)/config
- endef
+-F2FS_TOOLS_VERSION = e3eadd686ed1da1828f32977a36b694bc0090f4e
++F2FS_TOOLS_VERSION = fef98ebdf3a7728017cb3d0ae4ffedc5405e531d
+ F2FS_TOOLS_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
+ F2FS_TOOLS_SITE_METHOD = git
+ F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
 -- 
 1.8.2.1
