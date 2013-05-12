@@ -1,128 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 May 2013 23:49:04 +0200
-Subject: [Buildroot] [git commit branch/next] package/dtc: add option to
-	install programs
-Message-ID: <20130512215308.81DC39A16C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 May 2013 23:52:22 +0200
+Subject: [Buildroot] [PATCH 6/6] package/dtc: add option to install
+	programs
+In-Reply-To: <073a879f6e3aeb6c0fab9d4cae4de39f566fb70a.1368137905.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Fri, 10 May 2013 00:22:59 +0200")
+References: <cover.1368137904.git.yann.morin.1998@free.fr>
+ <cover.1368137904.git.yann.morin.1998@free.fr>
+ <073a879f6e3aeb6c0fab9d4cae4de39f566fb70a.1368137905.git.yann.morin.1998@free.fr>
+Message-ID: <877gj3vpbd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=257e1f4f4388b9cdb734dc55b35e70ff731d0492
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-By default, we only install the libfdt library.
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> By default, we only install the libfdt library.
 
-As suggested by Arnout, add an option that also
-installs the few dtc programs.
+ Yann> As suggested by Arnout, add an option that also
+ Yann> installs the few dtc programs.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/dtc/Config.in |   28 ++++++++++++++++++++++++++--
- package/dtc/dtc.mk    |   35 +++++++++++++++++++++++++++++------
- 2 files changed, 55 insertions(+), 8 deletions(-)
+ Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Yann> Cc: Arnout Vandecappelle <arnout@mind.be>
 
-diff --git a/package/dtc/Config.in b/package/dtc/Config.in
-index e1f6e86..fac6ab2 100644
---- a/package/dtc/Config.in
-+++ b/package/dtc/Config.in
-@@ -1,9 +1,33 @@
- config BR2_PACKAGE_DTC
--	bool "dtc"
-+	bool "dtc (libfdt)"
- 	help
- 	  The Device Tree Compiler, dtc, takes as input a device-tree in
- 	  a given format and outputs a device-tree in another format.
- 
--	  Note that only the library is installed for now.
-+	  Note that only the library is installed.
-+	  If you want the programs, say 'y' here, and to "dtc programs", below.
- 
- 	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
-+
-+if BR2_PACKAGE_DTC
-+
-+config BR2_PACKAGE_DTC_PROGRAMS
-+	bool "dtc programs"
-+	help
-+	  Say 'y' here if you also want the programs on the target:
-+	    - convert-dtsv0     convert from version 0 to version 1
-+	    - dtc               the device tree compiler
-+	    - dtdiff            compare two device trees (needs bash)
-+	    - fdtdump           print a readable version of a flat device tree
-+	    - fdtget            read values from device tree
-+	    - fdtput            write a property value to a device tree
-+
-+	  Note: dtdiff requires bash, so if bash is not selected, dtdiff will
-+	        be removed from the target file system. Enable bash if you
-+	        need dtdiff on the target.
-+
-+comment "dtdiff will not be installed: it requires bash"
-+	depends on BR2_PACKAGE_DTC_PROGRAMS
-+	depends on !BR2_PACKAGE_BASH
-+
-+endif
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index f05b09d..76ff361 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -8,26 +8,49 @@ DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
- DTC_SITE            = git://git.jdl.com/software/dtc.git
- DTC_LICENSE         = GPLv2+/BSD-2c
- DTC_LICENSE_FILES   = README.license GPL
--# Note: the dual-license only applies to the library.
--#       The DT compiler (dtc) is GPLv2+, but we do not install it.
- DTC_INSTALL_STAGING = YES
- 
-+define DTC_POST_INSTALL_TARGET_RM_DTDIFF
-+	rm -f $(TARGET_DIR)/usr/bin/dtdiff
-+endef
-+
-+ifeq ($(BR2_PACKAGE_DTC_PROGRAMS),y)
-+
-+DTC_LICENSE        += (for the library), GPLv2+ (for the executables)
-+# Use default goal to build everything
-+DTC_BUILD_GOAL      =
-+DTC_INSTALL_GOAL    = install
-+DTC_CLEAN_GOAL      = clean
-+ifeq ($(BR2_PACKAGE_BASH),)
-+DTC_POST_INSTALL_TARGET_HOOKS += DTC_POST_INSTALL_TARGET_RM_DTDIFF
-+endif
-+
-+else # $(BR2_PACKAGE_DTC_PROGRAMS) != y
-+
-+DTC_BUILD_GOAL      = libfdt
-+#??libfdt_install is our own install rule added by our patch
-+DTC_INSTALL_GOAL    = libfdt_install
-+DTC_CLEAN_GOAL      = libfdt_clean
-+
-+endif # $(BR2_PACKAGE_DTC_PROGRAMS) != y
-+
- define DTC_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS)    \
--	$(MAKE) -C $(@D) PREFIX=/usr libfdt
-+	CFLAGS="$(TARGET_CFLAGS)"   \
-+	$(MAKE) -C $(@D) PREFIX=/usr $(DTC_BUILD_GOAL)
- endef
- 
--#??libfdt_install is our own install rule added by our patch
-+# For staging, only the library is needed
- define DTC_INSTALL_STAGING_CMDS
- 	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
- endef
- 
- define DTC_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr libfdt_install
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr $(DTC_INSTALL_GOAL)
- endef
- 
- define DTC_CLEAN_CMDS
--	$(MAKE) -C $(@D) libfdt_clean
-+	$(MAKE) -C $(@D) $(DTC_CLEAN_GOAL)
- endef
- 
- $(eval $(generic-package))
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
