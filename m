@@ -1,41 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 May 2013 21:26:44 +0200
-Subject: [Buildroot] [git commit] lttng-tools: needs largefile support
-Message-ID: <20130512192744.13C489A089@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 May 2013 21:30:31 +0200
+Subject: [Buildroot] [PATCH] czmq: disable asciidoc documentation
+	generation
+In-Reply-To: <1368386152-27165-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 12 May 2013 21:15:52 +0200")
+References: <1368386152-27165-1-git-send-email-arnout@mind.be>
+Message-ID: <87txm8xag8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5726eb4986f33a1c6af276973efeaa35980097c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Fixes http://autobuild.buildroot.net/results/ba2674c2f5bb33304dbbdf2f0ad0ca5ecfdc11aa/
+ Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/lttng-tools/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ Arnout> czmq uses asciidoc for its documentation. asciidoc uses python
+ Arnout> and import the unicodedata module, which is not in
+ Arnout> host-python. So disable asciidoc entirely.
 
-diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
-index 4f86e77..6773475 100644
---- a/package/lttng-tools/Config.in
-+++ b/package/lttng-tools/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	select BR2_PACKAGE_POPT
- 	# liburcu only works on some architectures and requires thread support
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Userspace utilities for the LTTng 2.0 tracing
-@@ -23,6 +24,6 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 
- 	  http://lttng.org
- 
--comment "lttng-tools needs threads support"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "lttng-tools needs LARGEFILE and threads support"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
- 
+ Arnout> This doesn't get hit by the autobuilders because they don't
+ Arnout> have asciidoc installed in their chroot.
+
+ Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
