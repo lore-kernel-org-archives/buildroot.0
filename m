@@ -1,52 +1,78 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 May 2013 22:10:28 +0200
-Subject: [Buildroot] [git commit] pulseaudio: fix build with orc
-Message-ID: <20130512201212.070049A163@busybox.osuosl.org>
+Date: Sun, 12 May 2013 22:06:56 +0200
+Subject: [Buildroot] [git commit branch/next] package/libbsd: new package
+Message-ID: <20130512201213.915BB9A163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c0d1949c69f24518de63921b00130e9ae1082c0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: http://git.buildroot.net/buildroot/commit/?id=4ae47d82649d38de6896270a6b6945d2467b7047
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The configure script gets orcc from pkg-config, which sets it to /usr/bin/orcc
-instead of $(HOST_DIR)/usr/bin/orcc. So set the path explicitly instead of
-relying on pkg-config.
-
-While we're at it, also add an explicit enable/disable to configure.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Nathan Lynch <ntl@pobox.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/pulseaudio/pulseaudio.mk |    9 ++++++++-
- 1 files changed, 8 insertions(+), 1 deletions(-)
+ package/Config.in        |    1 +
+ package/libbsd/Config.in |   10 ++++++++++
+ package/libbsd/libbsd.mk |   21 +++++++++++++++++++++
+ 3 files changed, 32 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
-index aa67592..b39d99e 100644
---- a/package/multimedia/pulseaudio/pulseaudio.mk
-+++ b/package/multimedia/pulseaudio/pulseaudio.mk
-@@ -28,7 +28,6 @@ PULSEAUDIO_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_UDEV),udev) \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
- 	$(if $(BR2_PACKAGE_FFTW),fftw) \
--	$(if $(BR2_PACKAGE_ORC),orc) \
- 	$(if $(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),webrtc-audio-processing) \
- 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
- 
-@@ -38,6 +37,14 @@ PULSEAUDIO_DEPENDENCIES = \
- PULSEAUDIO_AUTORECONF = YES
- PULSEAUDIO_DEPENDENCIES += libglib2
- 
-+ifeq ($(BR2_PACKAGE_ORC),y)
-+PULSEAUDIO_DEPENDENCIES += orc
-+PULSEAUDIO_CONF_ENV += ORCC=$(HOST_DIR)/usr/bin/orcc
-+PULSEAUDIO_CONF_OPT += --enable-orc
-+else
-+PULSEAUDIO_CONF_OPT += --disable-orc
+diff --git a/package/Config.in b/package/Config.in
+index bbacd5c..55a38b9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -578,6 +578,7 @@ source "package/gmp/Config.in"
+ source "package/gsl/Config.in"
+ source "package/gtest/Config.in"
+ source "package/libatomic_ops/Config.in"
++source "package/libbsd/Config.in"
+ source "package/libcap/Config.in"
+ source "package/libcap-ng/Config.in"
+ source "package/libdaemon/Config.in"
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+new file mode 100644
+index 0000000..0ed9dac
+--- /dev/null
++++ b/package/libbsd/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBBSD
++	bool "libbsd"
++	help
++	  This library provides useful functions commonly found on BSD
++	  systems, and lacking on others like GNU systems, thus making
++	  it easier to port projects with strong BSD origins, without
++	  needing to embed the same code over and over again on each
++	  project.
++
++	  http://libbsd.freedesktop.org/
+diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
+new file mode 100644
+index 0000000..3af1002
+--- /dev/null
++++ b/package/libbsd/libbsd.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# libbsd
++#
++#############################################################
++
++LIBBSD_VERSION         = 0.4.2
++LIBBSD_SOURCE          = libbsd-$(LIBBSD_VERSION).tar.gz
++LIBBSD_SITE            = http://libbsd.freedesktop.org/releases
++LIBBSD_LICENSE         = BSD-3c MIT
++LIBBSD_LICENSE_FILES   = LICENSE
++
++# man-pages are BSD-4c, so that license only matters
++# if doc is kept in the target rootfs
++ifeq ($(BR2_HAVE_DOCUMENTATION),y)
++LIBBSD_LICENSE        += (libraries), BSD-4c (documentation)
 +endif
 +
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
- # The optional webrtc echo canceller is written in C++, causing auto* to want
- # to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
++LIBBSD_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
