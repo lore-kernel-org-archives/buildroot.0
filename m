@@ -1,39 +1,41 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 12 May 2013 21:25:01 +0200
-Subject: [Buildroot] [PATCH] filemq: disable asciidoc documentation
-	generation
-Message-ID: <1368386701-5188-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 12 May 2013 21:26:44 +0200
+Subject: [Buildroot] [git commit] lttng-tools: needs largefile support
+Message-ID: <20130512192744.13C489A089@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+commit: http://git.buildroot.net/buildroot/commit/?id=e5726eb4986f33a1c6af276973efeaa35980097c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-filemq uses asciidoc for its documentation. asciidoc uses python and import
-the unicodedata module, which is not in host-python. So disable asciidoc
-entirely.
+Fixes http://autobuild.buildroot.net/results/ba2674c2f5bb33304dbbdf2f0ad0ca5ecfdc11aa/
 
-This doesn't get hit by the autobuilders because they don't have asciidoc
-installed in their chroot.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/filemq/filemq.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/lttng-tools/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
-index 0ea7a9d..c715292 100644
---- a/package/filemq/filemq.mk
-+++ b/package/filemq/filemq.mk
-@@ -8,6 +8,7 @@ FILEMQ_VERSION = 8fac5140dd
- FILEMQ_SITE = git://github.com/zeromq/filemq.git
+diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
+index 4f86e77..6773475 100644
+--- a/package/lttng-tools/Config.in
++++ b/package/lttng-tools/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
+ 	select BR2_PACKAGE_POPT
+ 	# liburcu only works on some architectures and requires thread support
+ 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
++	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Userspace utilities for the LTTng 2.0 tracing
+@@ -23,6 +24,6 @@ config BR2_PACKAGE_LTTNG_TOOLS
  
- FILEMQ_AUTORECONF = YES
-+FILEMQ_CONF_ENV = fmq_have_asciidoc=no
- FILEMQ_INSTALL_STAGING = YES
- FILEMQ_DEPENDENCIES = czmq openssl zeromq
- FILEMQ_LICENSE = LGPLv3+ with exceptions
--- 
-1.8.2.1
+ 	  http://lttng.org
+ 
+-comment "lttng-tools needs threads support"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "lttng-tools needs LARGEFILE and threads support"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+ 
