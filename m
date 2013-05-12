@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 12 May 2013 10:53:49 -0300
-Subject: [Buildroot] [PATCH 1/4] samba: bump to version 3.6.15
-Message-ID: <1368366832-30354-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 12 May 2013 10:53:50 -0300
+Subject: [Buildroot] [PATCH 2/4] ipset: bump to version 6.19
+In-Reply-To: <1368366832-30354-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1368366832-30354-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1368366832-30354-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/samba/samba.mk | 2 +-
+ package/ipset/ipset.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 87caace..7b5fb8d 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+index 50915ef..daadc9e 100644
+--- a/package/ipset/ipset.mk
++++ b/package/ipset/ipset.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--SAMBA_VERSION = 3.6.14
-+SAMBA_VERSION = 3.6.15
- SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA_SUBDIR = source3
- SAMBA_INSTALL_STAGING = YES
+-IPSET_VERSION = 6.18
++IPSET_VERSION = 6.19
+ IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
+ IPSET_SITE = http://ipset.netfilter.org
+ IPSET_DEPENDENCIES = libmnl host-pkgconf
 -- 
 1.8.1.5
