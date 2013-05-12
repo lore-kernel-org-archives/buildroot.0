@@ -1,33 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 May 2013 22:17:24 +0200
-Subject: [Buildroot] [git commit] libsha1: add license informations
-Message-ID: <20130512202410.1E24F9A164@busybox.osuosl.org>
+Date: Sun, 12 May 2013 22:14:17 +0200
+Subject: [Buildroot] [git commit] xserver_xorg-server: add license
+	informations
+Message-ID: <20130512202409.5A9869A166@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48ac24985c0dcf37c1951da9f7f4d4ae18ee1266
+commit: http://git.buildroot.net/buildroot/commit/?id=3dfbf657604ecf132b7b848d664c45dbac88a455
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libsha1/libsha1.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libsha1/libsha1.mk b/package/libsha1/libsha1.mk
-index e9658af..da6a7b2 100644
---- a/package/libsha1/libsha1.mk
-+++ b/package/libsha1/libsha1.mk
-@@ -6,6 +6,9 @@
- 
- LIBSHA1_VERSION = 0.3
- LIBSHA1_SITE = http://github.com/dottedmag/libsha1/tarball/$(LIBSHA1_VERSION)
-+LIBSHA1_LICENSE = BSD-3c or GPL
-+LIBSHA1_LICENSE_FILES = COPYING
-+
- LIBSHA1_INSTALL_STAGING = YES
- 
- # We're getting the source code from Github, so there is no generated
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 1c51456..a2bc056 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -7,6 +7,8 @@
+ XSERVER_XORG_SERVER_VERSION = 1.12.4
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
+ XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
++XSERVER_XORG_SERVER_LICENSE = MIT
++XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
+ XSERVER_XORG_SERVER_MAKE = $(MAKE1) # make install fails with parallel make
+ XSERVER_XORG_SERVER_INSTALL_STAGING = YES
+ XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install-data
