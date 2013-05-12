@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 May 2013 21:04:05 +0200
-Subject: [Buildroot] [PATCH] classpath: remove qt support
-In-Reply-To: <1368383504-13355-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sun, 12 May 2013 20:31:44 +0200")
-References: <1368383504-13355-1-git-send-email-arnout@mind.be>
-Message-ID: <8738tsyq8q.fsf@dell.be.48ers.dk>
+Date: Sun, 12 May 2013 21:10:38 +0200
+Subject: [Buildroot] [PATCH] openssl: fix host-openssl dependencies
+In-Reply-To: <1368384975-20193-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 12 May 2013 20:56:15 +0200")
+References: <1368384975-20193-1-git-send-email-arnout@mind.be>
+Message-ID: <87y5bkxbdd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +15,9 @@ To: buildroot@busybox.net
 
  Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
- Arnout> classpath doesn't work with Qt in buildroot. It assumes qt will
- Arnout> run on X11, but we don't have qt-x11 support on buildroot.
-
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Arnout> Support for ocf-linux or cryptodev-linux added a dependency of
+ Arnout> host-openssl on host-ocf-linux / host-cryptodev-linux, which we
+ Arnout> don't have and the dependency is anyway not needed.
 
 Committed, thanks.
 
