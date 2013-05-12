@@ -1,77 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 May 2013 22:06:51 +0200
-Subject: [Buildroot] [git commit branch/next] package/pmake: add host pmake
-Message-ID: <20130512201213.5A00D9A163@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 May 2013 22:15:35 +0200
+Subject: [Buildroot] [PATCH 07/12] package/x11r7: add license
+	informations to misc other packages
+In-Reply-To: <1368114667-14476-8-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 9 May 2013 17:51:02 +0200")
+References: <1368114667-14476-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1368114667-14476-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87a9o0vtso.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0af22c755b45d8b04ca148ff0b58e460c835e337
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-pmake is the make command used by the BSD.
-It will used to build BSD-related packages, coming later.
+You forgot to sign off on this, but I've added it myself - Hopefully
+that's OK?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/pmake/pmake.mk |   47 +++++++++++++++++++++++++++++++++++++++++++++++
- 1 files changed, 47 insertions(+), 0 deletions(-)
+ Thomas> ---
+ Thomas>  package/x11r7/libxcb/libxcb.mk                     |    2 ++
+ Thomas>  package/x11r7/mcookie/mcookie.mk                   |    1 +
+ Thomas>  package/x11r7/mesa3d/mesa3d.mk                     |    3 +++
+ Thomas>  package/x11r7/xcb-proto/xcb-proto.mk               |    2 ++
+ Thomas>  package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk |    4 ++++
+ Thomas>  package/x11r7/xcb-util/xcb-util.mk                 |    4 ++++
+ Thomas>  .../xcursor-transparent-theme.mk                   |    2 ++
+ Thomas>  package/x11r7/xdata_xbitmaps/xdata_xbitmaps.mk     |    3 +++
+ Thomas>  .../xdata_xcursor-themes/xdata_xcursor-themes.mk   |    3 +++
+ Thomas>  9 files changed, 24 insertions(+)
 
-diff --git a/package/pmake/pmake.mk b/package/pmake/pmake.mk
-new file mode 100644
-index 0000000..7b2e5a6
---- /dev/null
-+++ b/package/pmake/pmake.mk
-@@ -0,0 +1,47 @@
-+#############################################################
-+#
-+# pmake
-+#
-+##############################################################
-+
-+PMAKE_VERSION       = 1.111
-+PMAKE_SOURCE        = pmake_$(PMAKE_VERSION).orig.tar.gz
-+PMAKE_SITE          = http://snapshot.debian.org/archive/debian/20120601T033558Z/pool/main/p/pmake
-+PMAKE_LICENSE       = BSD-3c BSD-4c
-+# No license file. License texts are spread in the boilerplates
-+# of each individual source files; some are BSD-3c, some BSD-4c.
-+
-+# Vampirise patches from Debian
-+PMAKE_PATCH = pmake_1.111-3.2.debian.tar.gz
-+
-+# CFLAGS vampirised from Debian's rules, adapted to buildroot variables
-+HOST_PMAKE_CFLAGS = -O2 -g -Wall -D__COPYRIGHT\(x\)= -D__RCSID\(x\)= -I.    \
-+                -DMACHINE=\\\"buildroot\\\"                                 \
-+                -DMACHINE_ARCH=\\\"$(ARCH)\\\" -DMACHINE_MULTIARCH=\\\"\\\" \
-+                -DHAVE_SETENV -DHAVE_STRERROR -DHAVE_STRDUP -DHAVE_STRFTIME \
-+                -DHAVE_VSNPRINTF -D_GNU_SOURCE -Wno-unused
-+
-+define HOST_PMAKE_BUILD_CMDS
-+	$(MAKE) -C $(@D) -f Makefile.boot CFLAGS="$(HOST_PMAKE_CFLAGS)"
-+endef
-+
-+# The generated file is named bmake, but we want pmake; but:
-+#  - pmake uses support files (in  mk/)
-+#  - it's not possible to tell pmake, at build-time, where to expect
-+#    these support files, and pmake expects them in /usr/share/mk/
-+#  - but pmake has an option to override that search path at runtime
-+#  - so we install bmake as bmake
-+#  - and we install a wrapper named pmake that calls pmake with the
-+#    appropriate search path
-+define HOST_PMAKE_INSTALL_CMDS
-+	$(INSTALL) -m 0755 $(@D)/bmake $(HOST_DIR)/usr/bin/bmake
-+	$(INSTALL) -d -m 0755 $(HOST_DIR)/usr/share/pmake/mk
-+	for mk in $(@D)/mk/*; do                                        \
-+	    $(INSTALL) -m 0644 $${mk} $(HOST_DIR)/usr/share/pmake/mk;   \
-+	done
-+	printf '#!/bin/sh\nexec $${0%%/*}/bmake -m $${0%%/pmake}/../../usr/share/pmake/mk "$$@"\n'  \
-+	       >$(HOST_DIR)/usr/bin/pmake
-+	chmod 0755 $(HOST_DIR)/usr/bin/pmake
-+endef
-+
-+$(eval $(host-generic-package))
+-- 
+Bye, Peter Korsgaard
