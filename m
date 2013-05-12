@@ -1,32 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 May 2013 23:52:22 +0200
-Subject: [Buildroot] [PATCH 6/6] package/dtc: add option to install
-	programs
-In-Reply-To: <073a879f6e3aeb6c0fab9d4cae4de39f566fb70a.1368137905.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Fri, 10 May 2013 00:22:59 +0200")
-References: <cover.1368137904.git.yann.morin.1998@free.fr>
- <cover.1368137904.git.yann.morin.1998@free.fr>
- <073a879f6e3aeb6c0fab9d4cae4de39f566fb70a.1368137905.git.yann.morin.1998@free.fr>
-Message-ID: <877gj3vpbd.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 13 May 2013 00:20:57 +0200
+Subject: [Buildroot] [PATCH] libsigsegv: fix build on x86_64 (probably
+	others too)
+Message-ID: <1368397257-3061-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
- Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> By default, we only install the libfdt library.
+The configure script doesn't detect that the target is posix-compliant
+and tries to use a custom version of segfault analysis that actually
+doesn't build. Most likely, it's because the configure script doesn't
+support linux-3.x. Anyway, we can just tell configure that we're
+posix-compliant.
 
- Yann> As suggested by Arnout, add an option that also
- Yann> installs the few dtc programs.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/libsigsegv/libsigsegv.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Yann> Cc: Arnout Vandecappelle <arnout@mind.be>
-
-Committed to next, thanks.
-
+diff --git a/package/libsigsegv/libsigsegv.mk b/package/libsigsegv/libsigsegv.mk
+index b8f84da..a1b4f13 100644
+--- a/package/libsigsegv/libsigsegv.mk
++++ b/package/libsigsegv/libsigsegv.mk
+@@ -7,6 +7,7 @@
+ LIBSIGSEGV_VERSION = 2.6
+ LIBSIGSEGV_SITE = $(BR2_GNU_MIRROR)/libsigsegv
+ LIBSIGSEGV_INSTALL_STAGING = YES
++LIGSIGSEGV_CONF_ENV = sv_cv_fault_posix=yes
+ LIBSIGSEGV_LICENSE = GPLv2+
+ LIBSIGSEGV_LICENSE_FILES = COPYING
+ 
 -- 
-Bye, Peter Korsgaard
+1.8.2.1
