@@ -1,44 +1,42 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Mon, 13 May 2013 18:19:39 +0200 (CEST)
-Subject: [Buildroot] [PATCH 1/2] libtool : bump to version 2.4.2
-In-Reply-To: <20130513173823.7b5b5186@skate>
-Message-ID: <442737690.2370432.1368461979251.JavaMail.root@openwide.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 13 May 2013 13:22:46 -0300
+Subject: [Buildroot] [PATCH] sylpheed: disable gpgme support
+Message-ID: <1368462166-30562-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Dear Jeremy Rosen,
-> 
-[...]
-> 
-> Version bumps are no longer going to master anyway, not even the
-> pulseaudio version bump. At this point, master is only about bug
-> fixes,
-> so it's certainly not the time to bump packages!
-> 
+Fixes a build failure when the build host has gpgme installed.
 
-fair enough... the bump is not urgent anyway...
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/sylpheed/sylpheed.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-> > I'll do the allyesconfig test and reply with the results when
-> > done...
-> 
-> If you want, I can test the patch here on an allyespackageconfig
-> build.
-> 
-
-
-that would save me a lot of time, thx.
-
-
-
-> Best regards,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> 
+diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
+index 12fc18b..1da63de 100644
+--- a/package/sylpheed/sylpheed.mk
++++ b/package/sylpheed/sylpheed.mk
+@@ -3,6 +3,7 @@
+ # sylpheed
+ #
+ #############################################################
++
+ SYLPHEED_VERSION_MAJOR = 3.2
+ SYLPHEED_VERSION_MINOR = 0
+ SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).$(SYLPHEED_VERSION_MINOR)
+@@ -10,9 +11,7 @@ SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
+ SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
+ SYLPHEED_LICENSE = GPLv2+ (executables), LGPLv2.1+ (library, attachment plugin)
+ SYLPHEED_LICENSE_FILES = COPYING COPYING.LIB
+-
+-SYLPHEED_CONF_OPT = --disable-gtkspell
+-
++SYLPHEED_CONF_OPT = --disable-gtkspell --disable-gpgme
+ SYLPHEED_DEPENDENCIES = host-pkgconf libgtk2
+ 
+ # Remove the -I$(includedir) from the Makefiles
+-- 
+1.8.1.5
