@@ -1,30 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 May 2013 23:42:08 +0200
-Subject: [Buildroot] A new version of http://autobuild.buildroot.org
-In-Reply-To: <20130513232154.477c6c7b@skate>
-References: <20130513232154.477c6c7b@skate>
-Message-ID: <20130513214208.GC29762@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 13 May 2013 19:09:03 -0300
+Subject: [Buildroot] [PATCH 1/6] package infra: remove CPPFLAGS from
+	CFLAGS
+In-Reply-To: <20130513202047.6bd6da1b@skate>
+References: <1368463259-18958-1-git-send-email-gustavo@zacarias.com.ar>
+ <20130513191016.15f0a3f4@skate> <51912140.8030901@zacarias.com.ar>
+ <20130513202047.6bd6da1b@skate>
+Message-ID: <5191647F.6010408@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On 05/13/2013 03:20 PM, Thomas Petazzoni wrote:
+> I believe there should be first an audit of where TARGET_CFLAGS is
+> used. Then, wherever needed, fixes to ensure both TARGET_CFLAGS and
+> TARGET_CPPFLAGS are used (or, if possible, usage of
+> TARGET_CONFIGURE_OPTS). Once those fixes are made, your patch that
+> separates TARGET_CPPFLAGS from TARGET_CFLAGS can go in.
+> 
+> A quick "grep TARGET_CFLAGS" in package/ gives 110 packages using it.
+> In most cases, it's probably $(TARGET_CONFIGURE_OPTS) being passed +
+> CFLAGS="$(TARGET_CFLAGS) -bleh", which is already correct seems
+> CPPFLAGS is passed. But of course there might be packages that use a
+> custom Makefile that obeys to CFLAGS but not CPPFLAGS. Not sure what we
+> can do about these except slowly figuring out that they need fixing.
 
-On 2013-05-13 23:21 +0200, Thomas Petazzoni spake thusly:
-> I promised it since a looong time, and finally got around to do it.
-> There is a new version of http://autobuild.buildroot.org online.
-
-Great, good job! Thank you!
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Looking into generic packages which are the most likely to have
+differences because of custom Makefiles the general majority don't seem
+to understand CPPFLAGS, so other than doing
+SOMETHING="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS)" there doesn't seem to be
+much to do about it.
+We could define a TARGET_GENERIC_CFLAGS == TARGET_CPPFLAGS +
+TARGET_CFLAGS (like now) or something like that and make those package
+use that, after all it's the auto* packages that have issues with that.
+On the other hand it's a nice opportunity for some miscellaneous
+cleanups like using $(INSTALL) instead of install, removing redundant
+*_SOURCE definitions and stuff like that.
+Regards.
