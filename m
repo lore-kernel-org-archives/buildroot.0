@@ -1,41 +1,53 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Mon, 13 May 2013 17:25:41 +0200
-Subject: [Buildroot] [PATCH] Fix bug with dependencies of *-rebuild and
-	*-reconfigure
-Message-ID: <1368458741-8838-1-git-send-email-jezz@sysmic.org>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Mon, 13 May 2013 17:29:42 +0200 (CEST)
+Subject: [Buildroot] [PATCH 1/2] libtool : bump to version 2.4.2
+In-Reply-To: <20130513112730.5ad21c4d@skate>
+Message-ID: <1570358723.2368493.1368458982853.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If targets $PKG-rebuild or $PKG-reconfigure are launched on a not fully built
-directory, Buildroot finish build of all packages instead of only build asked
-package.
+I needed to bump libtool because pulseaudio needed it.
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/pkg-generic.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I built my system (including pulseaudio) and tested it, but I didn't 
+give it further (enough) thought.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b55b5f0..d25797c 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -437,12 +437,12 @@ endif
- 			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
- 			rm -f $$($(2)_TARGET_INSTALL_HOST)
- 
--$(1)-rebuild:		$(1)-clean-for-rebuild all
-+$(1)-rebuild:		$(1)-clean-for-rebuild $(1)
- 
- $(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
- 			rm -f $$($(2)_TARGET_CONFIGURE)
- 
--$(1)-reconfigure:	$(1)-clean-for-reconfigure all
-+$(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
- 
- # define the PKG variable for all targets, containing the
- # uppercase package variable prefix
--- 
-1.7.9.5
+This prbably means that this patch should not go in master but in 
+next... It's probably way too late to bump libtool.
+
+I'll do the allyesconfig test and reply with the results when done...
+
+    Cordialement
+
+    J?r?my Rosen
+
+fight key loggers : write some perl using vim
+
+----- Mail original -----
+> Dear J?r?my Rosen,
+> 
+> On Mon, 13 May 2013 10:57:45 +0200, J?r?my Rosen wrote:
+> > Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+> > ---
+> >  package/libtool/libtool.mk |    2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> How much testing did you do? Bumping libtool is a very sensitive
+> thing,
+> because it used for all packages that we autoreconfigure. Therefore,
+> I
+> believe such a bump should come with results of an
+> allyespackageconfig
+> build before and after the bump.
+> 
+> Best regards,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> 
