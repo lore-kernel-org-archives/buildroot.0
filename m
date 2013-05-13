@@ -1,42 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 13 May 2013 13:40:54 -0300
-Subject: [Buildroot] [PATCH 1/6] package infra: remove CPPFLAGS from CFLAGS
-Message-ID: <1368463259-18958-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 13 May 2013 13:40:55 -0300
+Subject: [Buildroot] [PATCH 2/6] libnspr: bump to version 4.9.6
+In-Reply-To: <1368463259-18958-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1368463259-18958-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1368463259-18958-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CPPFLAGS don't belong in CFLAGS, and newer autoconf versions just error
-out when it's used that way.
-This is required for the libcurl bump to 7.30.0
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Makefile.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/libnspr/libnspr.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 9ba6e8c..8ba7d70 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -100,7 +100,7 @@ ifeq ($(BR2_LARGEFILE),y)
- TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
- endif
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 5b1333d..f5682f6 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -3,12 +3,14 @@
+ # libnspr
+ #
+ #############################################################
+-LIBNSPR_VERSION = 4.9.2
++
++LIBNSPR_VERSION = 4.9.6
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+-LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src/
++LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = mozilla/nsprpub
+ LIBNSPR_INSTALL_STAGING = YES
+ LIBNSPR_CONFIG_SCRIPTS = nspr-config
++LIBNSPR_LICENSE = MPLv2.0
  
--TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
-+TARGET_CFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
- TARGET_CXXFLAGS = $(TARGET_CFLAGS)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
-@@ -179,7 +179,6 @@ SED:=$(shell which sed || type -p sed) -i -e
- 
- HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
- HOST_CFLAGS   ?= -O2
--HOST_CFLAGS   += $(HOST_CPPFLAGS)
- HOST_CXXFLAGS += $(HOST_CFLAGS)
- HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
- HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
+ # Set the host CFLAGS and LDFLAGS so NSPR does not guess wrongly
+ LIBNSPR_CONF_ENV = HOST_CFLAGS="-g -O2" \
 -- 
 1.8.1.5
