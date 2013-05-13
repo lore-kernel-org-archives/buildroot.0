@@ -1,34 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 May 2013 20:29:00 +0200
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Mon, 13 May 2013 13:59:16 -0500
 Subject: [Buildroot] [PATCH v4 0/7] Gstreamer 1.X patch series
-In-Reply-To: <1368468241-23319-1-git-send-email-spenser@gillilanding.com>
+In-Reply-To: <20130513202900.5ffa3bd2@skate>
 References: <1368468241-23319-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130513202900.5ffa3bd2@skate>
+ <20130513202900.5ffa3bd2@skate>
+Message-ID: <CAEBucnCLJSpcC4QNnc4=qKJz7_hcVodAjkmiNdHucQW7B3_GTg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+> It would be good if your e-mail (including cover letters) were wrapped
+> at ~80 columns.
 
-On Mon, 13 May 2013 13:03:54 -0500, Spenser Gilliland wrote:
-> The subsequent patches add Gstreamer 1.X to Buildroot. Gstreamer has many dependencies which can be disabled or enabled as plugins. For an example fo adding a plugin which requires a dependent library, see patches 6 and 7 of the series.
+I'll fix this, if another patch re-roll is required.
 
-It would be good if your e-mail (including cover letters) were wrapped
-at ~80 columns.
+> Is it just a sed s/GSTREAMER/GSTREAMER1/ everywhere, or have you made
+> some more extensive changes?
 
-For patches 1 to 5, could you summarize the difference between those
-gstreamer1 packages compared to the corresponding gstreamer packages?
+As many configure options have changed (added/removed), I went through
+each of the packages and compared the available configure options to
+the options listed in <blah>.mk and Config.in. Any options which
+required additional libraries which were currently not included in
+Buildroot are explicitly disabled.  Additionally, patch 6 & 7 give an
+example of how to add gstreamer1 support for a newly added library
+(libvpx/webm).
 
-Is it just a sed s/GSTREAMER/GSTREAMER1/ everywhere, or have you made
-some more extensive changes?
+In addition, the glib patches I have made are a requirement for
+building gstreamer 1.0.7.  The minimum glib version to support
+gstreamer 1.0.X is 2.32.0. The patch i made is for 2.36.1 (latest
+stable).
 
-Thanks!
+Thanks,
+Spenser
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+--
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
