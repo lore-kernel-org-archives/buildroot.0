@@ -1,33 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 May 2013 11:27:30 +0200
-Subject: [Buildroot] [PATCH 1/2] libtool : bump to version 2.4.2
-In-Reply-To: <1368435466-8189-1-git-send-email-jeremy.rosen@openwide.fr>
-References: <1368435466-8189-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <20130513112730.5ad21c4d@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 13 May 2013 12:24:27 +0200
+Subject: [Buildroot] [PATCH] gst-plugins-bad: fix build of directfb
+	plugin
+In-Reply-To: <87y5bjtmer.fsf@dell.be.48ers.dk>
+References: <1368398587-21415-1-git-send-email-arnout@mind.be>
+ <87y5bjtmer.fsf@dell.be.48ers.dk>
+Message-ID: <5190BF5B.7050104@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?my Rosen,
+On 13/05/13 08:38, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>
+>   Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+>   Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>   Arnout> ---
+>   Arnout>  .../gst-plugins-bad-0002-fix-dfb-example.patch     | 22 ++++++++++++++++++++++
+>   Arnout>  1 file changed, 22 insertions(+)
+>   Arnout>  create mode 100644 package/multimedia/gst-plugins-bad/gst-plugins-bad-0002-fix-dfb-example.patch
+>
+>   Arnout> diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad-0002-fix-dfb-example.patch b/package/multimedia/gst-plugins-bad/gst-plugins-bad-0002-fix-dfb-example.patch
+>   Arnout> new file mode 100644
+>   Arnout> index 0000000..b205748
+>   Arnout> --- /dev/null
+>   Arnout> +++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad-0002-fix-dfb-example.patch
+>   Arnout> @@ -0,0 +1,22 @@
+>   Arnout> +Fix dfb-example
+>   Arnout> +
+>
+> That's an odd title. Did you mean somtehing like 'Fix directfb plugin
+> with dfb 1.6.x'?
 
-On Mon, 13 May 2013 10:57:45 +0200, J?r?my Rosen wrote:
-> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
-> ---
->  package/libtool/libtool.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+  It's not actually the plugin that fails to compile, it's the 
+dfb-example program that is built but not installed. So perhaps a simpler 
+solution would have been to remove it from Makefile.am and autoreconfigure.
 
-How much testing did you do? Bumping libtool is a very sensitive thing,
-because it used for all packages that we autoreconfigure. Therefore, I
-believe such a bump should come with results of an allyespackageconfig
-build before and after the bump.
+  I'm probably not going to have time to resubmit in the coming days, so 
+if you're willing to take over, please do.
 
-Best regards,
+  Regards,
+  Arnout
 
-Thomas
+>
+> Other than that it looks good. Thanks for looking into it, it was still
+> on my todo.
+>
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
