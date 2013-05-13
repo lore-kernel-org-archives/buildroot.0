@@ -1,61 +1,44 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 13 May 2013 18:13:17 +0200
-Subject: [Buildroot] [PATCH 1/1] cppcms: new package
-In-Reply-To: <20130513174608.4af180cf@skate>
-References: <1366817732-27616-1-git-send-email-nicolas.menegale@openwide.fr>
- <CAHXCMMKk_9+Dkf5N1-6vESLEb1K6dT+UOc1qD_jkh5CKn-K9Kw@mail.gmail.com>
- <20130513174608.4af180cf@skate>
-Message-ID: <CAHXCMMKdiYYAinE4p1fupLpu1VURjQEchUu-+JiU5s4mXC3MHg@mail.gmail.com>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Mon, 13 May 2013 18:19:39 +0200 (CEST)
+Subject: [Buildroot] [PATCH 1/2] libtool : bump to version 2.4.2
+In-Reply-To: <20130513173823.7b5b5186@skate>
+Message-ID: <442737690.2370432.1368461979251.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/5/13 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Samuel Martin,
->
-> On Mon, 13 May 2013 17:21:28 +0200, Samuel Martin wrote:
->
->> 2013/4/24 nmenegale <nicolas.menegale@openwide.fr>:
->> > Signed-off-by: Nicolas M?n?gale <nicolas.menegale@openwide.fr>
->> > ---
->> > v0: initial commit
->> > CppCMS is a C++ web framework. The cppcms.mk also copy into the host after staging install two
->> > scripts needed when you compile an application using the web framework (cppcms_tmpl_cc and cppcms_run)
->> > As discussed on IRC it's not worth creating an host-cppcms package for two script.
->
-> [...]
->
->> > +define CPPCMS_INSTALL_HOST_TOOLS
->> > +       cp $(STAGING_DIR)/usr/bin/cppcms_tmpl_cc $(HOST_DIR)/usr/bin/cppcms_tmpl_cc
->> > +       cp $(STAGING_DIR)/usr/bin/cppcms_run $(HOST_DIR)/usr/bin/cppcms_run
->> Dubious...
->> This means the host-cppcms package should depend on the cppcms one;
->> usually that's the other way!
->>
->> Also, if cppcms_{run,tmpl_cc} are binaries, this may only be valid if
->> the target system is compatible
->> with the host one... which is usually not the case.
->> However, if they're just bash or python scripts, it's ok; though I'd
->> prefer you copy them from the package
->> build directory rather than from the staging tree.
->
-> Did you read the commit log?
-My bad! I missed it.
+> Dear Jeremy Rosen,
+> 
+[...]
+> 
+> Version bumps are no longer going to master anyway, not even the
+> pulseaudio version bump. At this point, master is only about bug
+> fixes,
+> so it's certainly not the time to bump packages!
+> 
 
->
-> Nicolas:
->
->  *) Your commit log lines are too long. Please wrap at ~80 columns.
->
->  *) Your should add a comment in the .mk file to explain what you're
->     doing with those cppcms_tmpl_cc and cppcms_run scripts, so that we
->     remember why the funky thing you're doing works. You can just
->     copy/paste parts of your commit log.
-Agree; in the current state, it is/could be a bit confusing...
+fair enough... the bump is not urgent anyway...
 
-Regards,
+> > I'll do the allyesconfig test and reply with the results when
+> > done...
+> 
+> If you want, I can test the patch here on an allyespackageconfig
+> build.
+> 
 
--- 
-Samuel
+
+that would save me a lot of time, thx.
+
+
+
+> Best regards,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> 
