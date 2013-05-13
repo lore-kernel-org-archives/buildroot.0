@@ -1,30 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 13 May 2013 08:01:07 -0300
-Subject: [Buildroot] [PATCH] quota: fix dependencies
-Message-ID: <1368442867-11405-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 13 May 2013 13:23:37 +0200
+Subject: [Buildroot] [PATCH] gst-plugins-bad: fix build of directfb
+	plugin
+In-Reply-To: <5190BF5B.7050104@mind.be> (Arnout Vandecappelle's message of
+ "Mon, 13 May 2013 12:24:27 +0200")
+References: <1368398587-21415-1-git-send-email-arnout@mind.be>
+ <87y5bjtmer.fsf@dell.be.48ers.dk> <5190BF5B.7050104@mind.be>
+Message-ID: <87ppwvt96u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/quota/quota.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index c89ed9b..9afc9e3 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -14,7 +14,7 @@ QUOTA_CFLAGS = $(TARGET_CFLAGS)
- QUOTA_LDFLAGS = $(TARGET_LDFLAGS)
- 
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--QUOTA_DEPENDENCIES = gettext
-+QUOTA_DEPENDENCIES += gettext
- QUOTA_LDFLAGS += -lintl
- endif
- 
+ >> That's an odd title. Did you mean somtehing like 'Fix directfb plugin
+ >> with dfb 1.6.x'?
+
+ Arnout>  It's not actually the plugin that fails to compile, it's the
+ Arnout> dfb-example program that is built but not installed. So perhaps a
+ Arnout> simpler solution would have been to remove it from Makefile.am and
+ Arnout> autoreconfigure.
+
+Ahh, ok - Then it's fine. Committed, thanks.
+
 -- 
-1.8.1.5
+Bye, Peter Korsgaard
