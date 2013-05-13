@@ -1,41 +1,33 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
-Date: Mon, 13 May 2013 10:57:46 +0200
-Subject: [Buildroot] [PATCH 2/2] pulseaudio : bump to version 3.0
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 May 2013 11:27:30 +0200
+Subject: [Buildroot] [PATCH 1/2] libtool : bump to version 2.4.2
 In-Reply-To: <1368435466-8189-1-git-send-email-jeremy.rosen@openwide.fr>
 References: <1368435466-8189-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <1368435466-8189-2-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <20130513112730.5ad21c4d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
----
- package/multimedia/pulseaudio/pulseaudio.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Dear J?r?my Rosen,
 
-diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
-index b39d99e..529f5dd 100644
---- a/package/multimedia/pulseaudio/pulseaudio.mk
-+++ b/package/multimedia/pulseaudio/pulseaudio.mk
-@@ -3,8 +3,7 @@
- # pulseaudio
- #
- ################################################################################
--
--PULSEAUDIO_VERSION = 2.1
-+PULSEAUDIO_VERSION = 3.0
- PULSEAUDIO_SITE = http://freedesktop.org/software/pulseaudio/releases/
- PULSEAUDIO_INSTALL_STAGING = YES
- PULSEAUDIO_CONF_OPT = \
-@@ -60,6 +59,7 @@ endef
- PULSEAUDIO_POST_PATCH_HOOKS += PULSEAUDIO_FORCE_CC
- endif
- 
-+PULSEAUDIO_CONF_OPT += $(if $(BR2_ARM_ENABLE_NEON),--enable-neon-opt=yes,--enable-neon-opt=no)
- # pulseaudio alsa backend needs pcm/mixer apis
- ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
- PULSEAUDIO_CONF_OPT += --disable-alsa
+On Mon, 13 May 2013 10:57:45 +0200, J?r?my Rosen wrote:
+> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+> ---
+>  package/libtool/libtool.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+How much testing did you do? Bumping libtool is a very sensitive thing,
+because it used for all packages that we autoreconfigure. Therefore, I
+believe such a bump should come with results of an allyespackageconfig
+build before and after the bump.
+
+Best regards,
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
