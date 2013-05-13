@@ -1,7 +1,9 @@
 From: Carlo Caione <carlo.caione@gmail.com>
-Date: Mon, 13 May 2013 07:52:26 +0200
-Subject: [Buildroot] [PATCH 1/3] sunxi-tools: new host/target package
-Message-ID: <1368424348-9853-1-git-send-email-carlo.caione@gmail.com>
+Date: Mon, 13 May 2013 07:52:27 +0200
+Subject: [Buildroot] [PATCH 2/3] sunxi-boards: new package
+In-Reply-To: <1368424348-9853-1-git-send-email-carlo.caione@gmail.com>
+References: <1368424348-9853-1-git-send-email-carlo.caione@gmail.com>
+Message-ID: <1368424348-9853-2-git-send-email-carlo.caione@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,120 +13,76 @@ To: buildroot@busybox.net
 Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
 ---
 Changelog:
-	- Fix typos
-	- FIx package description
-	- Several changes to .mk file
+	- Improved package description
+	- Config.in rewritten
+	- Makefile rewritten
 ---
- package/Config.in                  |  1 +
- package/Config.in.host             |  1 +
- package/sunxi-tools/Config.in      | 10 ++++++++++
- package/sunxi-tools/Config.in.host | 12 ++++++++++++
- package/sunxi-tools/sunxi-tools.mk | 37 +++++++++++++++++++++++++++++++++++++
- 5 files changed, 61 insertions(+)
- create mode 100644 package/sunxi-tools/Config.in
- create mode 100644 package/sunxi-tools/Config.in.host
- create mode 100644 package/sunxi-tools/sunxi-tools.mk
+ package/Config.in                    |  1 +
+ package/sunxi-boards/Config.in       | 19 +++++++++++++++++++
+ package/sunxi-boards/sunxi-boards.mk | 17 +++++++++++++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 package/sunxi-boards/Config.in
+ create mode 100644 package/sunxi-boards/sunxi-boards.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d980871..26440a5 100644
+index 26440a5..7868c32 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -207,6 +207,7 @@ source "package/ntfs-3g/Config.in"
- source "package/squashfs/Config.in"
- source "package/squashfs3/Config.in"
- source "package/sshfs/Config.in"
-+source "package/sunxi-tools/Config.in"
- source "package/unionfs/Config.in"
- source "package/xfsprogs/Config.in"
+@@ -218,6 +218,7 @@ source "package/b43-firmware/Config.in"
+ source "package/firmware-imx/Config.in"
+ source "package/linux-firmware/Config.in"
+ source "package/rpi-firmware/Config.in"
++source "package/sunxi-boards/Config.in"
+ source "package/ux500-firmware/Config.in"
+ source "package/zd1211-firmware/Config.in"
  endmenu
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 7c0dd20..54178ea 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -10,6 +10,7 @@ source "package/mtools/Config.in.host"
- source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
- source "package/sam-ba/Config.in.host"
-+source "package/sunxi-tools/Config.in.host"
- source "package/uboot-tools/Config.in.host"
- 
- endmenu
-diff --git a/package/sunxi-tools/Config.in b/package/sunxi-tools/Config.in
+diff --git a/package/sunxi-boards/Config.in b/package/sunxi-boards/Config.in
 new file mode 100644
-index 0000000..a085aeb
+index 0000000..27ee8fc
 --- /dev/null
-+++ b/package/sunxi-tools/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_SUNXI_TOOLS
-+	bool "sunxi nand-part"
-+	depends on BR2_arm
++++ b/package/sunxi-boards/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_SUNXI_BOARDS
++	bool "sunxi script.bin board file"
++	select BR2_PACKAGE_HOST_SUNXI_TOOLS
 +	help
-+	  nand-part is part of sunxi-tools for Allwinner A10 (aka sun4i) and
-+	  A13 (aka sun5i) based devices. It is a tool to repartition the
-+	  internal NAND on sunxi devices.
++	  Sunxi-boards requires a compiled .fex files for hardware description,
++	  used by kernel during boot for hardware initialization. This package
++	  is specific for linux-sunxi kernel and it is useless for mainline
++	  kernel versions.
 +
-+	  http://linux-sunxi.org/Sunxi-tools
++	  https://github.com/linux-sunxi/sunxi-boards
 +
-diff --git a/package/sunxi-tools/Config.in.host b/package/sunxi-tools/Config.in.host
-new file mode 100644
-index 0000000..b5e4193
---- /dev/null
-+++ b/package/sunxi-tools/Config.in.host
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_HOST_SUNXI_TOOLS
-+	bool "host sunxi-tools"
-+	depends on BR2_arm
++if BR2_PACKAGE_SUNXI_BOARDS
++config BR2_PACKAGE_SUNXI_BOARDS_BOARD_NAME
++	string "Board name"
 +	help
-+	  Tools for Allwinner A10 (aka sun4i) and A13 (aka sun5i) based devices.
-+	  This includes fex2bin  which can be used to compile .fex board definition
-+	  files to the binary script.bin format required by the linux-sunxi kernel.
-+	  These tools are specific for linux-sunxi kernel and do not apply to
-+	  the mainline Linux kernel version.
-+
-+	  http://linux-sunxi.org/Sunxi-tools
-+
-diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
++	  This field defines the name of the board for which the .bin
++	  files should be generated. See inside sys_config/a10 directory in
++	  sunxi-boards source code to see the list of valid board names.
++endif
+diff --git a/package/sunxi-boards/sunxi-boards.mk b/package/sunxi-boards/sunxi-boards.mk
 new file mode 100644
-index 0000000..a97dfcb
+index 0000000..1f52110
 --- /dev/null
-+++ b/package/sunxi-tools/sunxi-tools.mk
-@@ -0,0 +1,37 @@
++++ b/package/sunxi-boards/sunxi-boards.mk
+@@ -0,0 +1,17 @@
 +#############################################################
 +#
-+# sunxi-tools
++# sunxi-boards
 +#
 +#############################################################
 +
-+SUNXI_TOOLS_VERSION = 3a94e721dd8d1e13d0b25da0a83463891e8e9ee0
-+SUNXI_TOOLS_SITE = http://github.com/linux-sunxi/sunxi-tools/tarball/master
-+SUNXI_TOOLS_LICENSE = GPLv2+
-+SUNXI_TOOLS_LICENSE_FILES = COPYING
-+HOST_SUNXI_TOOLS_DEPENDENCIES = host-libusb
-+FEX2BIN = $(HOST_DIR)/usr/bin/fex2bin
++SUNXI_BOARDS_VERSION = 88d663db44f65b73ef65c4148a28c6fa3665d2b6
++SUNXI_BOARDS_SITE = https://github.com/linux-sunxi/sunxi-boards/tarball/master
++SUNXI_BOARDS_DEPENDENCIES = host-sunxi-tools
++SUNXI_BOARDS_INSTALL_IMAGES = YES
++SUNXI_BOARDS_INSTALL_TARGET = NO
 +
-+define HOST_SUNXI_TOOLS_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
-+		CFLAGS="$(HOST_CFLAGS) -std=c99 -D_POSIX_C_SOURCE=200112L -Iinclude/" \
-+		-C $(@D)
-+endef
-+
-+define HOST_SUNXI_TOOLS_INSTALL_CMDS
-+	for i in fexc bin2fex fex2bin bootinfo fel pio; do \
-+		$(INSTALL) -D -m 0755 $(@D)/$$i $(HOST_DIR)/usr/bin/$$i ; \
-+	done
-+endef
-+
-+define SUNXI_TOOLS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -std=c99 -D_POSIX_C_SOURCE=200112L -Iinclude/" \
-+		-C $(@D) nand-part
-+endef
-+
-+define SUNXI_TOOLS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/nand-part $(TARGET_DIR)/usr/bin/nand-part
++define SUNXI_BOARDS_INSTALL_IMAGES_CMDS
++	$(FEX2BIN) $(@D)/sys_config/a10/$(BR2_PACKAGE_SUNXI_BOARDS_BOARD_NAME).fex $(BINARIES_DIR)/script.bin
 +endef
 +
 +$(eval $(generic-package))
-+$(eval $(host-generic-package))
 -- 
 1.8.2.3
