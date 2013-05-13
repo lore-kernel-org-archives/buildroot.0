@@ -1,38 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 13 May 2013 08:38:17 +0200
-Subject: [Buildroot] [git commit] libsigsegv: fix build on x86_64 (probably
-	others too)
-Message-ID: <20130513063941.8DE7E9A19D@busybox.osuosl.org>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 13 May 2013 09:58:40 +0200
+Subject: [Buildroot] [PATCH] linux: CONFIG_KERNEL_LZO option requires
+	host-lzop
+Message-ID: <1368431920-22020-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7c58258e212c45fadf6d01ea969798210f767557
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When the LZO compression mode is chosen the linux kernel requires
+lzop host utility at build time.
 
-The configure script doesn't detect that the target is posix-compliant
-and tries to use a custom version of segfault analysis that actually
-doesn't build. Most likely, it's because the configure script doesn't
-support linux-3.x. Anyway, we can just tell configure that we're
-posix-compliant.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/libsigsegv/libsigsegv.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ linux/linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libsigsegv/libsigsegv.mk b/package/libsigsegv/libsigsegv.mk
-index b8f84da..ac72c6d 100644
---- a/package/libsigsegv/libsigsegv.mk
-+++ b/package/libsigsegv/libsigsegv.mk
-@@ -7,6 +7,7 @@
- LIBSIGSEGV_VERSION = 2.6
- LIBSIGSEGV_SITE = $(BR2_GNU_MIRROR)/libsigsegv
- LIBSIGSEGV_INSTALL_STAGING = YES
-+LIBSIGSEGV_CONF_ENV = sv_cv_fault_posix=yes
- LIBSIGSEGV_LICENSE = GPLv2+
- LIBSIGSEGV_LICENSE_FILES = COPYING
+diff --git a/linux/linux.mk b/linux/linux.mk
+index d375cf0..3877c35 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -34,7 +34,7 @@ endif
+ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
  
+ LINUX_INSTALL_IMAGES = YES
+-LINUX_DEPENDENCIES  += host-module-init-tools
++LINUX_DEPENDENCIES  += host-module-init-tools host-lzop
+ 
+ ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
+ 	LINUX_DEPENDENCIES += host-uboot-tools
+-- 
+1.8.1.4
