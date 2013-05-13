@@ -1,188 +1,109 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 13 May 2013 13:03:59 -0500
-Subject: [Buildroot] [PATCH v4 5/7] gst1-plugins-ugly: add gstreamer1 ugly
-	plugins
+Date: Mon, 13 May 2013 13:04:00 -0500
+Subject: [Buildroot] [PATCH v4 6/7] libvpx: new package libvpx
 In-Reply-To: <1368468241-23319-1-git-send-email-spenser@gillilanding.com>
 References: <1368468241-23319-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1368468241-23319-6-git-send-email-spenser@gillilanding.com>
+Message-ID: <1368468241-23319-7-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds gstreamer 1.X ugly plugins
+adds webm multimedia support and the VP8 encoder/decoder library.
+
+http://www.webmproject.org/
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/multimedia/Config.in                       |    1 +
- package/multimedia/gst1-plugins-ugly/Config.in     |   49 +++++++++++
- .../gst1-plugins-ugly/gst1-plugins-ugly.mk         |   89 ++++++++++++++++++++
- 3 files changed, 139 insertions(+)
- create mode 100644 package/multimedia/gst1-plugins-ugly/Config.in
- create mode 100644 package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
+ package/multimedia/Config.in        |    1 +
+ package/multimedia/libvpx/Config.in |    6 ++++
+ package/multimedia/libvpx/libvpx.mk |   52 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+)
+ create mode 100644 package/multimedia/libvpx/Config.in
+ create mode 100644 package/multimedia/libvpx/libvpx.mk
 
 diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index ecdef5c..d0594b9 100644
+index d0594b9..a0927e9 100644
 --- a/package/multimedia/Config.in
 +++ b/package/multimedia/Config.in
-@@ -18,6 +18,7 @@ source "package/multimedia/gst1-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
- source "package/multimedia/gst1-plugins-bad/Config.in"
+@@ -20,6 +20,7 @@ source "package/multimedia/gst1-plugins-bad/Config.in"
  source "package/multimedia/gst-plugins-ugly/Config.in"
-+source "package/multimedia/gst1-plugins-ugly/Config.in"
+ source "package/multimedia/gst1-plugins-ugly/Config.in"
  source "package/multimedia/lame/Config.in"
++source "package/multimedia/libvpx/Config.in"
  source "package/multimedia/madplay/Config.in"
  source "package/multimedia/mpd/Config.in"
-diff --git a/package/multimedia/gst1-plugins-ugly/Config.in b/package/multimedia/gst1-plugins-ugly/Config.in
+ source "package/multimedia/mpg123/Config.in"
+diff --git a/package/multimedia/libvpx/Config.in b/package/multimedia/libvpx/Config.in
 new file mode 100644
-index 0000000..c4a3c87
+index 0000000..2327971
 --- /dev/null
-+++ b/package/multimedia/gst1-plugins-ugly/Config.in
-@@ -0,0 +1,49 @@
-+menuconfig BR2_PACKAGE_GST1_PLUGINS_UGLY
-+	bool "gst1-plugins-ugly"
-+	depends on BR2_PACKAGE_GSTREAMER1
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
++++ b/package/multimedia/libvpx/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBVPX
++	bool "libvpx"
 +	help
-+	  A set of well-supported plug-ins for GStreamer, but might pose
-+	  problems for distributors.
++	  a high-quality, open video format that's freely available to everyone.
 +
-+	  http://gstreamer.freedesktop.org/
-+
-+if BR2_PACKAGE_GST1_PLUGINS_UGLY
-+
-+comment "dependency-less plugins"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_ASFDEMUX
-+	bool "asfdemux"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDLPCMDEC
-+	bool "dvdlpcmdec"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDSUB
-+	bool "dvdsub"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX
-+	bool "xingmux"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_REALMEDIA
-+	bool "realmedia"
-+
-+comment "plugins with external dependencies (there may be more available)"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME
-+	bool "lame (*.mp3 audio encoder)"
-+	select BR2_PACKAGE_LAME
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD
-+	bool "dvdread"
-+	select BR2_PACKAGE_LIBDVDREAD
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD
-+	bool "mad (*.mp3 audio)"
-+	select BR2_PACKAGE_LIBID3TAG
-+	select BR2_PACKAGE_LIBMAD
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC
-+	bool "mpeg2dec"
-+	select BR2_PACKAGE_LIBMPEG2
-+
-+endif
-diff --git a/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
++	  http://webmproject.org
+diff --git a/package/multimedia/libvpx/libvpx.mk b/package/multimedia/libvpx/libvpx.mk
 new file mode 100644
-index 0000000..1bafdc6
+index 0000000..879a531
 --- /dev/null
-+++ b/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
-@@ -0,0 +1,89 @@
++++ b/package/multimedia/libvpx/libvpx.mk
+@@ -0,0 +1,52 @@
 +#############################################################
 +#
-+# gst1-plugins-ugly
++# libvpx
 +#
 +#############################################################
-+GST1_PLUGINS_UGLY_VERSION = 1.0.7
-+GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
-+GST1_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
 +
-+GST1_PLUGINS_UGLY_CONF_OPT = \
-+		--disable-examples \
-+		--disable-debug \
-+		--disable-valgrind
++LIBVPX_VERSION = v1.2.0
++LIBVPX_SITE = http://git.chromium.org/webm/libvpx.git
++LIBVPX_SITE_METHOD = git
 +
-+GST_PLUGINS_BAD1_CONF_OPT += \
-+		--disable-a52dec \
-+		--disable-amrnb \
-+		--disable-amrwb \
-+		--disable-cdio \
-+		--disable-sidplay \
-+		--disable-twolame \
-+		--disable-x264
++LIBVPX_INSTALL_STAGING = YES
++LIBVPX_LICENSE = BSD-3c 
++LIBVPX_LICENSE_FILES = LICENSE PATENTS 
 +
-+GST1_PLUGINS_UGLY_DEPENDENCIES = gstreamer1 gst1-plugins-base
++LIBVPX_INSTALL_STAGING = YES
 +
-+ifeq ($(BR2_PACKAGE_ORC),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-orc
-+GST1_PLUGINS_UGLY_DEPENDENCIES += orc
-+endif
++LIBVPX_CONF_ENV = \
++	LD=$$CC \
++	CROSS=$(GNU_TARGET_NAME)
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_ASFDEMUX),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-asfdemux
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-asfdemux
-+endif
++LIBVPX_CONF_OPT = \
++	--disable-examples \
++	--disable-docs \
++	--disable-unit-tests
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDLPCMDEC),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-dvdlpcmdec
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-dvdlpcmdec
-+endif
++define LIBVPX_CONFIGURE_CMDS
++	(cd $(LIBVPX_SRCDIR) && rm -rf config.cache && \
++	$(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_ARGS) \
++	$(LIBVPX_CONF_ENV) \
++	./configure \
++		--target=generic-gnu \
++		--enable-pic \
++		--prefix=/usr \
++		$(SHARED_STATIC_LIBS_OPTS) \
++		$(LIBVPX_CONF_OPT) \
++	)
++endef
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDSUB),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-dvdsub
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-dvdsub
-+endif
++define LIBVPX_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) all
++endef
 +
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_UGL1_PLUGIN_XINGMUX),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-xingmux
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-xingmux
-+endif
++define LIBVPX_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D) install
++endef
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_REALMEDIA),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-realmedia
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-realmedia
-+endif
++define LIBVPX_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
++endef
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-lame
-+GST1_PLUGINS_UGLY_DEPENDENCIES += lame
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-lame
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-dvdread
-+GST1_PLUGINS_UGLY_DEPENDENCIES += libdvdread
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-dvdread
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-mad
-+GST1_PLUGINS_UGLY_DEPENDENCIES += libid3tag libmad
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-mad
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-mpeg2dec
-+GST1_PLUGINS_UGLY_DEPENDENCIES += libmpeg2
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-mpeg2dec
-+endif
-+
-+$(eval $(autotools-package))
++$(eval $(generic-package))
 -- 
 1.7.9.5
