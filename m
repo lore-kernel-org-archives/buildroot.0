@@ -1,57 +1,62 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 13 May 2013 12:43:02 -0500
-Subject: [Buildroot] [PATCH v3 1/7] gstreamer1: Add gstreamer version
- 1.0.7 package
-In-Reply-To: <518D8507.3060909@mind.be>
-References: <1368158558-6069-1-git-send-email-spenser@gillilanding.com>
- <1368158558-6069-2-git-send-email-spenser@gillilanding.com>
- <518D8507.3060909@mind.be>
-Message-ID: <CAEBucnDjbCd_D4zeijdh1fq57YdyJhbGH6qnGqc68uZqLnH8Lg@mail.gmail.com>
+Date: Mon, 13 May 2013 13:03:54 -0500
+Subject: [Buildroot] [PATCH v4 0/7] Gstreamer 1.X patch series
+Message-ID: <1368468241-23319-1-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, May 10, 2013 at 6:38 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Hi Spenser,
->
->  Very quick first review...
->
->  First of all, a comment that is not so much directed at you but at the rest
-> of the BR developers: the naming issue.
->
->  We have a tendency to make a copy of a package when there is a major
-> version change, cfr. python3 and qt5. However, in this case, I don't think
-> it's a good idea. At this time, many (most?) gstreamer downstreams have
-> already moved to 1.x. Also, no more patches will be made the the 0.10 series
-> (though distro's may still make patches). So we can expect the old gstreamer
-> stuff to die out relatively quickly. But if we call the new thing gstreamer1
-> now, we're essentially stuck with that name for all eternity.
->
->  So instead I'd try to make 0.10 or 1.0 a choice in the gstreamer package
-> itself.  For me it's fine if inside the Config.in and the .mk files we
-> basically have the two versions in a big ifeq() construct, but at least we
-> can keep on using the BR2_PACKAGE_GST* symbols.
->
->  Obviously, there will be some packages that break down when gstreamer 1.0
-> is used, but we'll have to discover that at some point anyway.
->
+The subsequent patches add Gstreamer 1.X to Buildroot. Gstreamer has many dependencies which can be disabled or enabled as plugins. For an example fo adding a plugin which requires a dependent library, see patches 6 and 7 of the series.
 
-Per discussion will leave as gstreamer1.
+v3 -> v4:
+	- uses new style if/endif and removes depends properties on config elements
+	in gstreamer1
 
->  We nowadays prefer to put sub-options inside an if...endif construct
-> instead of with 'depends on'.
+v2 -> v3:
+	- fixes issues found after running a build with all/none plugins enabled
+	- changed naming from gst-plugins-<blah>1 to gst1-plugins-<blah>
+	- options which require currently unpackaged libraries are disabled
 
-Will fix.
+v1 -> v2:
+	- completed patch series by adding good, bad, and ugly plugins.
 
-Please continue to review these patches and let me know of any
-additional issues.
+Spenser Gilliland (7):
+  gstreamer1: Add gstreamer version 1.0.7 package
+  gst1-plugins-base: add gstreamer1 base plugins
+  gst1-plugins-good: add gstreamer1 good plugins
+  gst1-plugins-bad: add gstreamer1 bad plugins
+  gst1-plugins-ugly: add gstreamer1 ugly plugins
+  libvpx: new package libvpx
+  gst1-plugins-good: add libvpx support
 
-Regards,
-Spenser
+ package/multimedia/Config.in                       |    6 +
+ package/multimedia/gst1-plugins-bad/Config.in      |  325 ++++++++++
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |  654 ++++++++++++++++++++
+ package/multimedia/gst1-plugins-base/Config.in     |  106 ++++
+ .../gst1-plugins-base/gst1-plugins-base.mk         |  201 ++++++
+ package/multimedia/gst1-plugins-good/Config.in     |  217 +++++++
+ .../gst1-plugins-good/gst1-plugins-good.mk         |  406 ++++++++++++
+ package/multimedia/gst1-plugins-ugly/Config.in     |   49 ++
+ .../gst1-plugins-ugly/gst1-plugins-ugly.mk         |   89 +++
+ package/multimedia/gstreamer1/Config.in            |   38 ++
+ package/multimedia/gstreamer1/gstreamer1.mk        |   36 ++
+ package/multimedia/libvpx/Config.in                |    6 +
+ package/multimedia/libvpx/libvpx.mk                |   52 ++
+ 13 files changed, 2185 insertions(+)
+ create mode 100644 package/multimedia/gst1-plugins-bad/Config.in
+ create mode 100644 package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
+ create mode 100644 package/multimedia/gst1-plugins-base/Config.in
+ create mode 100644 package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
+ create mode 100644 package/multimedia/gst1-plugins-good/Config.in
+ create mode 100644 package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
+ create mode 100644 package/multimedia/gst1-plugins-ugly/Config.in
+ create mode 100644 package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
+ create mode 100644 package/multimedia/gstreamer1/Config.in
+ create mode 100644 package/multimedia/gstreamer1/gstreamer1.mk
+ create mode 100644 package/multimedia/libvpx/Config.in
+ create mode 100644 package/multimedia/libvpx/libvpx.mk
 
---
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+-- 
+1.7.9.5
