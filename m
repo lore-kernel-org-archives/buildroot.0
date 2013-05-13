@@ -1,28 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 13 May 2013 08:38:45 +0200
-Subject: [Buildroot] [PATCH v2] libsigsegv: fix build on x86_64
-	(probably others too)
-In-Reply-To: <1368398765-21744-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Mon, 13 May 2013 00:46:05 +0200")
-References: <1368397257-3061-1-git-send-email-arnout@mind.be>
- <1368398765-21744-1-git-send-email-arnout@mind.be>
-Message-ID: <87txm7tmdm.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 13 May 2013 08:38:17 +0200
+Subject: [Buildroot] [git commit] libsigsegv: fix build on x86_64 (probably
+	others too)
+Message-ID: <20130513063941.8DE7E9A19D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7c58258e212c45fadf6d01ea969798210f767557
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Arnout> The configure script doesn't detect that the target is posix-compliant
- Arnout> and tries to use a custom version of segfault analysis that actually
- Arnout> doesn't build. Most likely, it's because the configure script doesn't
- Arnout> support linux-3.x. Anyway, we can just tell configure that we're
- Arnout> posix-compliant.
+The configure script doesn't detect that the target is posix-compliant
+and tries to use a custom version of segfault analysis that actually
+doesn't build. Most likely, it's because the configure script doesn't
+support linux-3.x. Anyway, we can just tell configure that we're
+posix-compliant.
 
-Committed, thanks.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libsigsegv/libsigsegv.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libsigsegv/libsigsegv.mk b/package/libsigsegv/libsigsegv.mk
+index b8f84da..ac72c6d 100644
+--- a/package/libsigsegv/libsigsegv.mk
++++ b/package/libsigsegv/libsigsegv.mk
+@@ -7,6 +7,7 @@
+ LIBSIGSEGV_VERSION = 2.6
+ LIBSIGSEGV_SITE = $(BR2_GNU_MIRROR)/libsigsegv
+ LIBSIGSEGV_INSTALL_STAGING = YES
++LIBSIGSEGV_CONF_ENV = sv_cv_fault_posix=yes
+ LIBSIGSEGV_LICENSE = GPLv2+
+ LIBSIGSEGV_LICENSE_FILES = COPYING
+ 
