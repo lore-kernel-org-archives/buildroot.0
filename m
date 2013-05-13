@@ -1,60 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 May 2013 17:46:08 +0200
-Subject: [Buildroot] [PATCH 1/1] cppcms: new package
-In-Reply-To: <CAHXCMMKk_9+Dkf5N1-6vESLEb1K6dT+UOc1qD_jkh5CKn-K9Kw@mail.gmail.com>
-References: <1366817732-27616-1-git-send-email-nicolas.menegale@openwide.fr>
- <CAHXCMMKk_9+Dkf5N1-6vESLEb1K6dT+UOc1qD_jkh5CKn-K9Kw@mail.gmail.com>
-Message-ID: <20130513174608.4af180cf@skate>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Mon, 13 May 2013 17:51:52 +0200
+Subject: [Buildroot] [PATCH v2] Add support for plain URL in $(PKG)_PATCH
+	variable
+In-Reply-To: <517A1C3D.1010009@mind.be>
+References: <517A1C3D.1010009@mind.be>
+Message-ID: <1368460312-9566-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Until now, $(PKG)_PATCH allow only to download patches from same URL than tarball.
+This patch allow to detect when plain URL are used in $(PKG)_PATCH and correctly
+handle them.
 
-On Mon, 13 May 2013 17:21:28 +0200, Samuel Martin wrote:
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-> 2013/4/24 nmenegale <nicolas.menegale@openwide.fr>:
-> > Signed-off-by: Nicolas M?n?gale <nicolas.menegale@openwide.fr>
-> > ---
-> > v0: initial commit
-> > CppCMS is a C++ web framework. The cppcms.mk also copy into the host after staging install two
-> > scripts needed when you compile an application using the web framework (cppcms_tmpl_cc and cppcms_run)
-> > As discussed on IRC it's not worth creating an host-cppcms package for two script.
+---
+v2: 
+  - Rebase to apply to HEAD
+  - Drop patch called "Add $(PKG_NAME) in name of downloaded patches" since I am
+    not personally convinced of its usefulness
 
-[...]
+---
+ package/pkg-generic.mk |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-> > +define CPPCMS_INSTALL_HOST_TOOLS
-> > +       cp $(STAGING_DIR)/usr/bin/cppcms_tmpl_cc $(HOST_DIR)/usr/bin/cppcms_tmpl_cc
-> > +       cp $(STAGING_DIR)/usr/bin/cppcms_run $(HOST_DIR)/usr/bin/cppcms_run
-> Dubious...
-> This means the host-cppcms package should depend on the cppcms one;
-> usually that's the other way!
-> 
-> Also, if cppcms_{run,tmpl_cc} are binaries, this may only be valid if
-> the target system is compatible
-> with the host one... which is usually not the case.
-> However, if they're just bash or python scripts, it's ok; though I'd
-> prefer you copy them from the package
-> build directory rather than from the staging tree.
-
-Did you read the commit log?
-
-Nicolas:
-
- *) Your commit log lines are too long. Please wrap at ~80 columns.
-
- *) Your should add a comment in the .mk file to explain what you're
-    doing with those cppcms_tmpl_cc and cppcms_run scripts, so that we
-    remember why the funky thing you're doing works. You can just
-    copy/paste parts of your commit log.
-
-Thanks,
-
-Thomas
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index d25797c..db34c13 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -40,7 +40,12 @@ ifeq ($(DL_MODE),DOWNLOAD)
+ 	fi
+ endif
+ 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
+-	$(foreach p,$($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
++	$(foreach p,$($(PKG)_PATCH),\
++		$(if $(findstring ://,$(p)),\
++			$(call DOWNLOAD,$(p)),\
++			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
++		)\
++	$(sep))
+ 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ ifeq ($(DL_MODE),DOWNLOAD)
+ 	$(Q)mkdir -p $(@D)
+@@ -86,7 +91,7 @@ $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME)
+ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
+ 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+-	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(p)$(sep))
++	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(notdir $(p))$(sep))
+ 	$(Q)( \
+ 	for D in $(PATCH_BASE_DIRS); do \
+ 	  if test -d $${D}; then \
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
