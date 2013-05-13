@@ -1,44 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 13 May 2013 21:36:39 +0200
-Subject: [Buildroot] [git commit] sylpheed: disable gpgme support
-Message-ID: <20130513193839.3AF7E9A172@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 May 2013 22:40:27 +0200
+Subject: [Buildroot] Buildroot Patchwork Day May 2013
+In-Reply-To: <20130507161835.1a16b5af@skate>
+References: <20130507161835.1a16b5af@skate>
+Message-ID: <20130513204027.GA29762@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9947ee9fbb94af800b8b054262734e0f81f32250
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Fixes a build failure when the build host has gpgme installed.
+On 2013-05-07 16:18 +0200, Thomas Petazzoni spake thusly:
+> Since the first Patchwork Day was useful, let's try to set up a second
+> one. I've created a Doodle poll to find a date that would work for
+> several developers: http://www.doodle.com/nrdyzesxknv8gavx.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/sylpheed/sylpheed.mk |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+There are currently three of us listed for participation, and the
+consensus looks to be like Sunday the 26th.
 
-diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
-index 12fc18b..1da63de 100644
---- a/package/sylpheed/sylpheed.mk
-+++ b/package/sylpheed/sylpheed.mk
-@@ -3,6 +3,7 @@
- # sylpheed
- #
- #############################################################
-+
- SYLPHEED_VERSION_MAJOR = 3.2
- SYLPHEED_VERSION_MINOR = 0
- SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).$(SYLPHEED_VERSION_MINOR)
-@@ -10,9 +11,7 @@ SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
- SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
- SYLPHEED_LICENSE = GPLv2+ (executables), LGPLv2.1+ (library, attachment plugin)
- SYLPHEED_LICENSE_FILES = COPYING COPYING.LIB
--
--SYLPHEED_CONF_OPT = --disable-gtkspell
--
-+SYLPHEED_CONF_OPT = --disable-gtkspell --disable-gpgme
- SYLPHEED_DEPENDENCIES = host-pkgconf libgtk2
- 
- # Remove the -I$(includedir) from the Makefiles
+I would suggest that the interested parties register soon, so all
+participants can officially book the day.
+
+Thank you! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
