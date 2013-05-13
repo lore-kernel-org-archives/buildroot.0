@@ -1,32 +1,30 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 13 May 2013 07:52:29 -0300
-Subject: [Buildroot] [PATCH] linknx: fix dependencies
-Message-ID: <1368442349-10496-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 13 May 2013 08:01:07 -0300
+Subject: [Buildroot] [PATCH] quota: fix dependencies
+Message-ID: <1368442867-11405-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mysql_client is set instead of added, thus eliminating libpthsem.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linknx/linknx.mk | 2 +-
+ package/quota/quota.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
-index 54e0426..701eabf 100644
---- a/package/linknx/linknx.mk
-+++ b/package/linknx/linknx.mk
-@@ -15,7 +15,7 @@ LINKNX_DEPENDENCIES = libpthsem
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index c89ed9b..9afc9e3 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -14,7 +14,7 @@ QUOTA_CFLAGS = $(TARGET_CFLAGS)
+ QUOTA_LDFLAGS = $(TARGET_LDFLAGS)
  
- ifeq ($(BR2_PACKAGE_MYSQL_CLIENT),y)
- LINKNX_CONF_OPT += --with-mysql=$(STAGING_DIR)/usr/bin/mysql_config
--LINKNX_DEPENDENCIES = mysql_client
-+LINKNX_DEPENDENCIES += mysql_client
- else
- LINKNX_CONF_OPT += --without-mysql
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-QUOTA_DEPENDENCIES = gettext
++QUOTA_DEPENDENCIES += gettext
+ QUOTA_LDFLAGS += -lintl
  endif
+ 
 -- 
 1.8.1.5
