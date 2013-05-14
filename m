@@ -1,33 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 14 May 2013 17:18:18 +0200
-Subject: [Buildroot] [git commit] neon: fix license files
-Message-ID: <20130514151956.1EE0F9A1DA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 14 May 2013 17:20:49 +0200
+Subject: [Buildroot] [PATCH] busybox 1.21.0: update mdev patch and add
+	ntfs volume patch
+In-Reply-To: <1368483642-1637-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 13 May 2013 19:20:42 -0300")
+References: <1368483642-1637-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ehd9si3y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f8a6a1b94a22d3ed4ce450cfec9c40cce0a447c3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-GPL license is under test/, not src/.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/neon/neon.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Committed, thanks.
 
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index 58e01e1..3bff302 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -6,7 +6,7 @@
- NEON_VERSION = 0.29.6
- NEON_SITE = http://www.webdav.org/neon/
- NEON_LICENSE = LGPLv2+ (library), GPLv2+ (manual and tests)
--NEON_LICENSE_FILES = src/COPYING.LIB src/COPYING README
-+NEON_LICENSE_FILES = src/COPYING.LIB test/COPYING README
- NEON_INSTALL_STAGING = YES
- NEON_CONF_OPT = --without-gssapi --disable-rpath
- NEON_CONFIG_SCRIPTS = neon-config
+-- 
+Bye, Peter Korsgaard
