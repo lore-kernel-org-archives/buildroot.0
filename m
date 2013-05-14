@@ -1,59 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 14 May 2013 22:13:16 +0200
-Subject: [Buildroot] [PATCH] libxml2: depend on zlib and libiconv if
-	appropriate
-In-Reply-To: <1368520183-8049-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Tue, 14 May 2013 09:29:43 +0100")
-References: <1368520183-8049-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87obcdqq03.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 14 May 2013 22:03:52 +0200
+Subject: [Buildroot] [git commit] cairo: fix build when toolchain has no
+	thread support
+Message-ID: <20130514201714.C97BC9A1E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=5fa49a6c0f916d0b98cfdc8c09db25982f34f373
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
- spdawson> ---
- spdawson>  package/libxml2/libxml2.mk | 14 ++++++++++++++
- spdawson>  1 file changed, 14 insertions(+)
+Fixes the build failure visible at
+http://autobuild.buildroot.net/results/d49/d491de5a774592929a59f3bfd0b1fd8cbc089ac0
 
- spdawson> diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
- spdawson> index 6a974ef..1a98cdd 100644
- spdawson> --- a/package/libxml2/libxml2.mk
- spdawson> +++ b/package/libxml2/libxml2.mk
- spdawson> @@ -34,6 +34,20 @@ else
- spdawson>  HOST_LIBXML2_CONF_OPT += --without-python
- spdawson>  endif
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/cairo/cairo.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 83c82c0..203dbbe 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -36,6 +36,10 @@ CAIRO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
+ 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
+ 		ac_use_included_regex=no gl_cv_c_restrict=no
  
- spdawson> +ifeq ($(BR2_PACKAGE_ZLIB),y)
- spdawson> +LIBXML2_DEPENDENCIES += zlib
- spdawson> +LIBXML2_CONF_OPT += --with-zlib
- spdawson> +else
- spdawson> +LIBXML2_CONF_OPT += --without-zlib
- spdawson> +endif
- spdawson> +
- spdawson> +ifeq ($(BR2_PACKAGE_LIBICONV),y)
- spdawson> +LIBXML2_DEPENDENCIES += libiconv
- spdawson> +LIBXML2_CONF_OPT += --with-iconv
- spdawson> +else
- spdawson> +LIBXML2_CONF_OPT += --without-iconv
- spdawson> +endif
-
-Hmm, that seems wrong. If the toolchain has locale support, then it has
-iconv(), so we shouldn't disable iconv support.
-
-Something like:
-
-LIBXML2_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-
-ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
-LIBXML2_CONF_OPT += --with-iconv
-else
-LIBXML2_CONF_OPT += --without-iconv
-endif
-
--- 
-Bye, Peter Korsgaard
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++	CAIRO_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DCAIRO_NO_MUTEX=1"
++endif
++
+ CAIRO_CONF_OPT = \
+ 	--enable-trace=no \
+ 	--enable-interpreter=no
