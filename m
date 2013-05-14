@@ -1,41 +1,83 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 14 May 2013 14:46:03 +0200
-Subject: [Buildroot] [PATCH] legal-info: fail trying to copy a non-existent
-	license file
-Message-ID: <1368535563-10393-1-git-send-email-luca@lucaceresoli.net>
+From: john <john.osullivan@cloudiumsystems.com>
+Date: Tue, 14 May 2013 13:50:13 +0100
+Subject: [Buildroot] Using Buildroot tool chain as external Toolchain
+In-Reply-To: <20130514115449.34d3cc76@skate>
+References: <1368522484.2434.45.camel@john-ubu>
+ <20130514112516.7ed42f44@skate> <1368525117.2434.50.camel@john-ubu>
+ <20130514115449.34d3cc76@skate>
+Message-ID: <1368535813.2434.51.camel@john-ubu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If a package's _LICENSE_FILES contains the name of a non-existent file,
-the make process would continue and return true, unless the
-non-existent file is the last listed.
+Thanks Thomas,
 
-Fix this wrong beaviour by failing with an error when any of the listed
-files is missing.
+That fixed my problem, I appreciate your help
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/pkg-generic.mk |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b55b5f0..56fca6b 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -508,9 +508,7 @@ ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
- 	@$(call legal-license-nofiles,$$($(2)_RAWNAME))
- 	@$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
- else
--	@for F in $$($(2)_LICENSE_FILES); do \
--		$(call legal-license-file,$$($(2)_RAWNAME),$$$${F},$$($(2)_DIR)/$$$${F}); \
--		done
-+	@$(foreach F,$($(2)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F))$$(sep))
- endif
- ifeq ($$($(2)_REDISTRIBUTE),YES)
- # Copy the source tarball (just hardlink if possible)
--- 
-1.7.10.4
+On Tue, 2013-05-14 at 11:54 +0200, Thomas Petazzoni wrote:
+> Dear john,
+> 
+> On Tue, 14 May 2013 10:51:57 +0100, john wrote:
+> > Hi Thomas,
+> > 
+> > Thank you for the reply.
+> > I have attached the config.log
+> 
+> So indeed the problem is:
+> 
+> /apps/buildroot_toolchain/usr/bin/../libexec/gcc/arm-unknown-linux-uclibcgnueabi/4.5.3/cc1:
+> error while loading shared libraries: libmpc.so.2: cannot open shared
+> object file: No such file or directory
+> 
+> Which is what I was referring to.
+> 
+> You can apply the below patch as a workaround:
+> 
+> commit b18bb4667fa5773c55e084c8b2d2df68735d3130
+> Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Date:   Fri Aug 24 20:39:52 2012 +0000
+> 
+>     mpc, mpfr, gmp: build statically for the host
+>     
+>     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+> index 5bcc6c1..9746150 100644
+> --- a/package/gmp/gmp.mk
+> +++ b/package/gmp/gmp.mk
+> @@ -14,5 +14,7 @@ ifeq ($(ARCH),arm)
+>  GMP_MAKE_OPT += CFLAGS="$(TARGET_CFLAGS) -marm"
+>  endif
+>  
+> +HOST_GMP_CONF_OPT += --enable-static --disable-shared
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk
+> index a366db7..4723220 100644
+> --- a/package/mpc/mpc.mk
+> +++ b/package/mpc/mpc.mk
+> @@ -12,6 +12,7 @@ MPC_INSTALL_STAGING = YES
+>  MPC_DEPENDENCIES = gmp mpfr
+>  MPC_AUTORECONF = YES
+>  HOST_MPC_AUTORECONF = YES
+> +HOST_MPC_CONF_OPT += --disable-shared --enable-static
+>  
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
+> index 9caf3ac..fd8ff08 100644
+> --- a/package/mpfr/mpfr.mk
+> +++ b/package/mpfr/mpfr.mk
+> @@ -11,5 +11,7 @@ MPFR_INSTALL_STAGING = YES
+>  MPFR_DEPENDENCIES = gmp
+>  MPFR_MAKE_OPT = RANLIB=$(TARGET_RANLIB)
+>  
+> +HOST_MPFR_CONF_OPT += --enable-static --disable-shared
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> 
+> Thomas
