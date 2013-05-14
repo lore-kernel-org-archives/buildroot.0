@@ -1,83 +1,60 @@
-From: john <john.osullivan@cloudiumsystems.com>
-Date: Tue, 14 May 2013 13:50:13 +0100
-Subject: [Buildroot] Using Buildroot tool chain as external Toolchain
-In-Reply-To: <20130514115449.34d3cc76@skate>
-References: <1368522484.2434.45.camel@john-ubu>
- <20130514112516.7ed42f44@skate> <1368525117.2434.50.camel@john-ubu>
- <20130514115449.34d3cc76@skate>
-Message-ID: <1368535813.2434.51.camel@john-ubu>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 14 May 2013 14:50:48 +0200
+Subject: [Buildroot] legal-info too permissive?
+In-Reply-To: <51921A1A.3070009@lucaceresoli.net>
+References: <20130514114131.0b73cee0@skate> <51921A1A.3070009@lucaceresoli.net>
+Message-ID: <51923328.6090707@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Thomas,
+Luca Ceresoli wrote:
+> Thomas Petazzoni wrote:
+>> Hello Luca,
+>>
+>> Looking at
+>> http://autobuild.buildroot.org/results/183/183d0af8c692b8c90b5b136999a0661fc7893b3a/build-end.log, 
+>>
+>> one can see:
+>>
+>> cat: /home/test/test/2/output/build/neon-0.29.6/src/COPYING: No such 
+>> file or directory
+>>
+>> so it seems like the neon legal informations are not correct (or no
+>> longer correct). This should be fixed of course, but the thing that
+>> surprises me here is that the 'make legal-info' apparently didn't
+>> return with an error. So the overall build was considered successful,
+>> even though some license information is obviously wrong in this neon
+>> package.
+>>
+>> In this intentional? Shouldn't 'make legal-info' be more restrictive,
+>> and bail out with an error if some license file cannot be found in the
+>> source code? At least the latter would be the most useful behavior for
+>> the autobuilders.
+>
+> This is not intentional, it is a bug in the legal-info infrastructure.
+> Thanks for reporting!
+>
+> The problem lies in the loopthat iterates over license files:
+>
+> >        @for F in $$($(2)_LICENSE_FILES); do \
+> >                $(call 
+> legal-license-file,$$($(2)_RAWNAME),$$$${F},$$($(2)_DIR)/$$$${F}); \
+> >                done
+>
+> The loop errors out only if the last file is missing. If a preceding
+> file is missing, it goes on carelessly.
+>
+> In the case of neon:
+> > NEON_LICENSE_FILES = src/COPYING.LIB src/COPYING README
+> the missing file is the second out of three.
+>
+> I am looking into fixing this.
 
-That fixed my problem, I appreciate your help
+I just sent a patch to fix this.
 
-On Tue, 2013-05-14 at 11:54 +0200, Thomas Petazzoni wrote:
-> Dear john,
-> 
-> On Tue, 14 May 2013 10:51:57 +0100, john wrote:
-> > Hi Thomas,
-> > 
-> > Thank you for the reply.
-> > I have attached the config.log
-> 
-> So indeed the problem is:
-> 
-> /apps/buildroot_toolchain/usr/bin/../libexec/gcc/arm-unknown-linux-uclibcgnueabi/4.5.3/cc1:
-> error while loading shared libraries: libmpc.so.2: cannot open shared
-> object file: No such file or directory
-> 
-> Which is what I was referring to.
-> 
-> You can apply the below patch as a workaround:
-> 
-> commit b18bb4667fa5773c55e084c8b2d2df68735d3130
-> Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Date:   Fri Aug 24 20:39:52 2012 +0000
-> 
->     mpc, mpfr, gmp: build statically for the host
->     
->     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-> index 5bcc6c1..9746150 100644
-> --- a/package/gmp/gmp.mk
-> +++ b/package/gmp/gmp.mk
-> @@ -14,5 +14,7 @@ ifeq ($(ARCH),arm)
->  GMP_MAKE_OPT += CFLAGS="$(TARGET_CFLAGS) -marm"
->  endif
->  
-> +HOST_GMP_CONF_OPT += --enable-static --disable-shared
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk
-> index a366db7..4723220 100644
-> --- a/package/mpc/mpc.mk
-> +++ b/package/mpc/mpc.mk
-> @@ -12,6 +12,7 @@ MPC_INSTALL_STAGING = YES
->  MPC_DEPENDENCIES = gmp mpfr
->  MPC_AUTORECONF = YES
->  HOST_MPC_AUTORECONF = YES
-> +HOST_MPC_CONF_OPT += --disable-shared --enable-static
->  
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
-> index 9caf3ac..fd8ff08 100644
-> --- a/package/mpfr/mpfr.mk
-> +++ b/package/mpfr/mpfr.mk
-> @@ -11,5 +11,7 @@ MPFR_INSTALL_STAGING = YES
->  MPFR_DEPENDENCIES = gmp
->  MPFR_MAKE_OPT = RANLIB=$(TARGET_RANLIB)
->  
-> +HOST_MPFR_CONF_OPT += --enable-static --disable-shared
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> 
-> Thomas
+The neon package still needs to be fixed.
+
+Luca
