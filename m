@@ -1,33 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 14 May 2013 17:22:01 +0200
-Subject: [Buildroot] [PATCH] toolchain: blackfin: Remove Blackfin
-	toolchain 2011R1 release.
-In-Reply-To: <CAJxxZ0M+SDkyQeadhvmmMXgM9R=dqJU3Pdhq8b1Qef2nDDhLKQ@mail.gmail.com>
- (Sonic Zhang's message of "Tue, 14 May 2013 15:57:49 +0800")
-References: <1365580213-23039-1-git-send-email-sonic.adi@gmail.com>
- <CAJxxZ0MT5top5C8-jMMrqeSOiSpeMvLDVXx5f3EmU4gZSX6kPQ@mail.gmail.com>
- <20130514094214.1414d216@skate>
- <CAJxxZ0M+SDkyQeadhvmmMXgM9R=dqJU3Pdhq8b1Qef2nDDhLKQ@mail.gmail.com>
-Message-ID: <87a9nxsi1y.fsf@dell.be.48ers.dk>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Tue, 14 May 2013 17:27:39 +0200
+Subject: [Buildroot] [PATCH] Standardisation of $(BUILD)/.root name
+In-Reply-To: <20130514170721.622fc086@skate>
+References: <50FACA8F.1040503@mind.be>
+ <1368541851-31089-1-git-send-email-jezz@sysmic.org>
+ <20130514170721.622fc086@skate>
+Message-ID: <2999958.1S5Q3eWKd9@sagittae>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sonic" == Sonic Zhang <sonic.adi@gmail.com> writes:
+On Tuesday 14 May 2013 17:07:21 Thomas Petazzoni wrote:
+> Dear J?r?me Pouiller,
+> 
+> On Tue, 14 May 2013 16:30:50 +0200, J?r?me Pouiller wrote:
+> > -$(BUILD_DIR)/.root:
+> > 
+> > +$(STAMP_DIR)/skeleton-target-installed:
+> >  	mkdir -p $(TARGET_DIR)
+> >  	rsync -a \
+> >  	
+> >  		--exclude .empty --exclude .svn --exclude .git \
+> >  		--exclude .hg --exclude=CVS --exclude '*~' \
+> >  		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+> >  	
+> >  	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+> > 
+> > +	mkdir -p $(STAMP_DIR)
+> > 
+> >  	touch $@
+> 
+> I'm generally ok with the idea, but I don't like this mkdir. There is
+> already a mkdir that creates the stamp file directory, in the main
+> Makefile.
+I also dislike this mkdir. My problem is to be sure $(STAMP_DIR) is created 
+before $(STAMP_DIR)/skeleton-target-installed. 
 
- >> Could you point to specific problems with this toolchain, or give a
- >> more precise commit log?
- >> 
+I can change order of dependencies in dirs target but this solution is too 
+fragile.
 
- Sonic> ADI officially supports the buildroot and related GNU toolchain for
- Sonic> Blackfin since ADI's 2012R1 release only. In order to avoid confusion,
- Sonic> it is better to remove the 2011R1 GNU toolchain for Blackfin. In
- Sonic> addition, the 2011R1 GNU toolchain for Blackfin doesn't support the
- Sonic> BF60x processors.
+I cannot just add a dependency between $(STAMP_DIR)/skeleton-target-installed 
+and  $(STAMP_DIR).
 
-Thanks. Could you add that info to the commit message, please?
+I can add a stampfile for $(STAMP_DIR) but it looks a little complicated. 
+
+I can also use an intermediate phony target (like dirs target) but it also 
+looks complicated.
+
+
+Any better idea?
 
 -- 
-Bye, Peter Korsgaard
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
