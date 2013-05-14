@@ -1,68 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 May 2013 14:07:01 +0200
-Subject: [Buildroot] [PATCH 2/3] libglib2: fix build when toolchain has
- no thread support
-In-Reply-To: <1368532631-12983-2-git-send-email-s.martin49@gmail.com>
-References: <1368532631-12983-1-git-send-email-s.martin49@gmail.com>
- <1368532631-12983-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20130514140701.2ff7178d@skate>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 14 May 2013 14:46:03 +0200
+Subject: [Buildroot] [PATCH] legal-info: fail trying to copy a non-existent
+	license file
+Message-ID: <1368535563-10393-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+If a package's _LICENSE_FILES contains the name of a non-existent file,
+the make process would continue and return true, unless the
+non-existent file is the last listed.
 
-On Tue, 14 May 2013 13:57:10 +0200, Samuel Martin wrote:
+Fix this wrong beaviour by failing with an error when any of the listed
+files is missing.
 
-> +---
-> +--- a/gio/gcancellable.c	2013-05-14 10:49:10.656384566 +0200
-> ++++ b/gio/gcancellable.c	2013-05-14 12:38:46.339432786 +0200
-> +@@ -263,6 +263,7 @@ g_cancellable_reset (GCancellable *cance
-> + 
-> +   g_return_if_fail (G_IS_CANCELLABLE (cancellable));
-> + 
-> ++#ifdef G_THREADS_ENABLED
-> +   G_LOCK(cancellable);
-> + 
-> +   priv = cancellable->priv;
-> +@@ -282,6 +283,7 @@ g_cancellable_reset (GCancellable *cance
-> +       priv->cancelled = FALSE;
-> +     }
-> +   G_UNLOCK(cancellable);
-> ++#endif
-> + }
-> + 
-> + /**
-> +@@ -612,6 +614,9 @@ g_cancellable_disconnect (GCancellable
-> +   if (handler_id == 0 ||  cancellable == NULL)
-> +     return;
-> + 
-> ++  g_return_if_fail (G_IS_CANCELLABLE (cancellable));
-> ++
-> ++#ifdef G_THREADS_ENABLED
-> +   G_LOCK (cancellable);
-> + 
-> +   priv = cancellable->priv;
-> +@@ -625,6 +630,7 @@ g_cancellable_disconnect (GCancellable
-> + 
-> +   g_signal_handler_disconnect (cancellable, handler_id);
-> +   G_UNLOCK (cancellable);
-> ++#endif
-> + }
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/pkg-generic.mk |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-
-Are you sure about this patch? It completely removes the behavior of
-the cancellation functions of glib, which may be used even if there are
-no threads.
-
-Are you sure that what needs to be removed is not just the G_LOCK() and
-G_UNLOCK() calls ?
-
-Thomas
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b55b5f0..56fca6b 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -508,9 +508,7 @@ ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
+ 	@$(call legal-license-nofiles,$$($(2)_RAWNAME))
+ 	@$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
+ else
+-	@for F in $$($(2)_LICENSE_FILES); do \
+-		$(call legal-license-file,$$($(2)_RAWNAME),$$$${F},$$($(2)_DIR)/$$$${F}); \
+-		done
++	@$(foreach F,$($(2)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F))$$(sep))
+ endif
+ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ # Copy the source tarball (just hardlink if possible)
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10.4
