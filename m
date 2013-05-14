@@ -1,53 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 May 2013 11:25:16 +0200
-Subject: [Buildroot] Using Buildroot tool chain as external Toolchain
-In-Reply-To: <1368522484.2434.45.camel@john-ubu>
-References: <1368522484.2434.45.camel@john-ubu>
-Message-ID: <20130514112516.7ed42f44@skate>
+Date: Tue, 14 May 2013 11:41:31 +0200
+Subject: [Buildroot] legal-info too permissive?
+Message-ID: <20130514114131.0b73cee0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear john,
+Hello Luca,
 
-On Tue, 14 May 2013 10:08:04 +0100, john wrote:
+Looking at
+http://autobuild.buildroot.org/results/183/183d0af8c692b8c90b5b136999a0661fc7893b3a/build-end.log,
+one can see:
 
-> I followed this process:
-> 1. I downloaded a copy of buildroot-2012.05
-> 2. Configured it and built it for my system
-> 3. Confirmed that everything built and ran sucessfully
-> 4. Copied the contents of buildroot-2012.05/output/host/usr
-> to /apps/buildroot_toolchain/usr
+cat: /home/test/test/2/output/build/neon-0.29.6/src/COPYING: No such file or directory
 
-This doesn't work. By default, gcc is linked dynamically against mpc,
-mpfr and al, and that doesn't work nicely if you move things around.
+so it seems like the neon legal informations are not correct (or no
+longer correct). This should be fixed of course, but the thing that
+surprises me here is that the 'make legal-info' apparently didn't
+return with an error. So the overall build was considered successful,
+even though some license information is obviously wrong in this neon
+package.
 
-Two choices:
-
- *) Build mpc and mpfr statically, so that gcc is linked statically
-    against them. Ideally, we should allow them to be built
-    dynamically, but gcc/binutils have binaries in multiple locations
-    in the tree, so we can't use the $ORIGIN/../lib trick to support a
-    relocatable rpath.
-
- *) Set BR2_HOST_DIR directly to /apps/buildroot_toolchain/ so that
-    your toolchain gets built and installed directly in this location.
-
-> arm-linux-gcc... /home/xxx/xxx/xxx/buildroot-2012.05/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
-> checking whether the C compiler works... no
-> configure: error: in
-> `/home/xxx/xxx/xxx/buildroot-2012.05/output/build/alsa-lib-1.0.25':
-> configure: error: C compiler cannot create executables
-> See `config.log' for more details
-> make: ***
-> [/home/xxx/xxx/xxx/buildroot-2012.05/output/build/alsa-lib-1.0.25/.stamp_configured]
-> Error 77
-
-See output/build/alsa-lib-1.0.25/config.log for the details of the
-error; Would be useful to have this information to confirm that my
-analysis above is correct.
+In this intentional? Shouldn't 'make legal-info' be more restrictive,
+and bail out with an error if some license file cannot be found in the
+source code? At least the latter would be the most useful behavior for
+the autobuilders.
 
 Thanks,
 
