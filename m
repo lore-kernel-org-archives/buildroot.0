@@ -1,31 +1,53 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 14 May 2013 12:34:20 +0200
-Subject: [Buildroot] [git commit] fan-ctrl: needs MMU support
-Message-ID: <20130514103519.DF7A89A1D4@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 14 May 2013 13:03:54 +0200
+Subject: [Buildroot] legal-info too permissive?
+In-Reply-To: <20130514114131.0b73cee0@skate>
+References: <20130514114131.0b73cee0@skate>
+Message-ID: <51921A1A.3070009@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=569144696126610d83237bcf63c90dbc49aee0ec
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas Petazzoni wrote:
+> Hello Luca,
+>
+> Looking at
+> http://autobuild.buildroot.org/results/183/183d0af8c692b8c90b5b136999a0661fc7893b3a/build-end.log,
+> one can see:
+>
+> cat: /home/test/test/2/output/build/neon-0.29.6/src/COPYING: No such file or directory
+>
+> so it seems like the neon legal informations are not correct (or no
+> longer correct). This should be fixed of course, but the thing that
+> surprises me here is that the 'make legal-info' apparently didn't
+> return with an error. So the overall build was considered successful,
+> even though some license information is obviously wrong in this neon
+> package.
+>
+> In this intentional? Shouldn't 'make legal-info' be more restrictive,
+> and bail out with an error if some license file cannot be found in the
+> source code? At least the latter would be the most useful behavior for
+> the autobuilders.
 
-Fixes http://autobuild.buildroot.org/results/333/333b6caa6b8a9a04495d82d02b2c0fb7755667ed/
+This is not intentional, it is a bug in the legal-info infrastructure.
+Thanks for reporting!
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/fan-ctrl/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+The problem lies in the loopthat iterates over license files:
 
-diff --git a/package/fan-ctrl/Config.in b/package/fan-ctrl/Config.in
-index 392904c..8696316 100644
---- a/package/fan-ctrl/Config.in
-+++ b/package/fan-ctrl/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_FAN_CTRL
- 	bool "fan-ctrl"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Fan-ctrl is a little daemon that controls the speed of one
- 	  or more system or CPU fans. It does so by monitoring
+ >        @for F in $$($(2)_LICENSE_FILES); do \
+ >                $(call 
+legal-license-file,$$($(2)_RAWNAME),$$$${F},$$($(2)_DIR)/$$$${F}); \
+ >                done
+
+The loop errors out only if the last file is missing. If a preceding
+file is missing, it goes on carelessly.
+
+In the case of neon:
+ > NEON_LICENSE_FILES = src/COPYING.LIB src/COPYING README
+the missing file is the second out of three.
+
+I am looking into fixing this.
+
+Luca
