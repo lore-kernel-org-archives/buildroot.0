@@ -1,12 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 14 May 2013 22:50:40 +0200
-Subject: [Buildroot] [PATCH v4 3/4] beaglebone: add am33x-cm3 to the
-	build
-In-Reply-To: <1368562193-26149-4-git-send-email-anders@chargestorm.se> (Anders
- Darander's message of "Tue, 14 May 2013 22:09:52 +0200")
+Date: Tue, 14 May 2013 22:51:31 +0200
+Subject: [Buildroot] [PATCH v4 4/4] beaglebone: enable NFS root
+In-Reply-To: <1368562193-26149-5-git-send-email-anders@chargestorm.se> (Anders
+ Darander's message of "Tue, 14 May 2013 22:09:53 +0200")
 References: <1368562193-26149-1-git-send-email-anders@chargestorm.se>
- <1368562193-26149-4-git-send-email-anders@chargestorm.se>
-Message-ID: <87bo8dqo9r.fsf@dell.be.48ers.dk>
+ <1368562193-26149-5-git-send-email-anders@chargestorm.se>
+Message-ID: <877gj1qo8c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +14,7 @@ To: buildroot@busybox.net
 
 >>>>> "Anders" == Anders Darander <anders@chargestorm.se> writes:
 
- Anders> Add the FW needed for the Cortex M3 on the beaglebone. This is required for
- Anders> a working power management.
+ Anders> Signed-off-by: Anders Darander <anders@chargestorm.se>
 
 Committed to next, thanks.
 
