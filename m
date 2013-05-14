@@ -1,53 +1,30 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 14 May 2013 13:03:54 +0200
-Subject: [Buildroot] legal-info too permissive?
-In-Reply-To: <20130514114131.0b73cee0@skate>
-References: <20130514114131.0b73cee0@skate>
-Message-ID: <51921A1A.3070009@lucaceresoli.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 14 May 2013 13:09:50 +0200
+Subject: [Buildroot] [PATCH] sconeserver: fix autobuild failures
+In-Reply-To: <1368527672-17411-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Tue, 14 May 2013 11:34:32 +0100")
+References: <1368527672-17411-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87mwrxstq9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
-> Hello Luca,
->
-> Looking at
-> http://autobuild.buildroot.org/results/183/183d0af8c692b8c90b5b136999a0661fc7893b3a/build-end.log,
-> one can see:
->
-> cat: /home/test/test/2/output/build/neon-0.29.6/src/COPYING: No such file or directory
->
-> so it seems like the neon legal informations are not correct (or no
-> longer correct). This should be fixed of course, but the thing that
-> surprises me here is that the 'make legal-info' apparently didn't
-> return with an error. So the overall build was considered successful,
-> even though some license information is obviously wrong in this neon
-> package.
->
-> In this intentional? Shouldn't 'make legal-info' be more restrictive,
-> and bail out with an error if some license file cannot be found in the
-> source code? At least the latter would be the most useful behavior for
-> the autobuilders.
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-This is not intentional, it is a bug in the legal-info infrastructure.
-Thanks for reporting!
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Fix sconeserver autobuild failures such as the following.
 
-The problem lies in the loopthat iterates over license files:
+ spdawson>   http://autobuild.buildroot.net/results/58e/58e4886a6ff41e49ac86cbf497bb509fd37f0d68/
 
- >        @for F in $$($(2)_LICENSE_FILES); do \
- >                $(call 
-legal-license-file,$$($(2)_RAWNAME),$$$${F},$$($(2)_DIR)/$$$${F}); \
- >                done
+ spdawson> The sconeserver version is bumped to a recent revision in
+ spdawson> which it is possible to pass the paths to Magick++-config,
+ spdawson> mysql_config and xml2-config to the configure script.
 
-The loop errors out only if the last file is missing. If a preceding
-file is missing, it goes on carelessly.
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
-In the case of neon:
- > NEON_LICENSE_FILES = src/COPYING.LIB src/COPYING README
-the missing file is the second out of three.
+Committed, thanks.
 
-I am looking into fixing this.
-
-Luca
+-- 
+Bye, Peter Korsgaard
