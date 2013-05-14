@@ -1,38 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 May 2013 17:07:21 +0200
-Subject: [Buildroot] [PATCH] Standardisation of $(BUILD)/.root name
-In-Reply-To: <1368541851-31089-1-git-send-email-jezz@sysmic.org>
-References: <50FACA8F.1040503@mind.be>
- <1368541851-31089-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20130514170721.622fc086@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 14 May 2013 17:18:54 +0200
+Subject: [Buildroot] [PATCH] legal-info: fail trying to copy a
+	non-existent license file
+In-Reply-To: <1368535563-10393-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Tue, 14 May 2013 14:46:03 +0200")
+References: <1368535563-10393-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87ip2lsi75.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-On Tue, 14 May 2013 16:30:50 +0200, J?r?me Pouiller wrote:
+ Luca> If a package's _LICENSE_FILES contains the name of a non-existent file,
+ Luca> the make process would continue and return true, unless the
+ Luca> non-existent file is the last listed.
 
-> -$(BUILD_DIR)/.root:
-> +$(STAMP_DIR)/skeleton-target-installed:
->  	mkdir -p $(TARGET_DIR)
->  	rsync -a \
->  		--exclude .empty --exclude .svn --exclude .git \
->  		--exclude .hg --exclude=CVS --exclude '*~' \
->  		$(TARGET_SKELETON)/ $(TARGET_DIR)/
->  	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
-> +	mkdir -p $(STAMP_DIR)
->  	touch $@
+ Luca> Fix this wrong beaviour by failing with an error when any of the listed
+ Luca> files is missing.
 
-I'm generally ok with the idea, but I don't like this mkdir. There is
-already a mkdir that creates the stamp file directory, in the main
-Makefile.
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
