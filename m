@@ -1,71 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 May 2013 23:45:59 +0200
-Subject: [Buildroot] [PATCH 3/3] package/snappy: new package
-In-Reply-To: <cover.1368567696.git.yann.morin.1998@free.fr>
-References: <cover.1368567696.git.yann.morin.1998@free.fr>
-Message-ID: <593d227bcb531b484e9a613baee53d3acaf9370b.1368567696.git.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 14 May 2013 23:52:58 +0200
+Subject: [Buildroot] [PATCH] Standardisation of $(BUILD)/.root name
+In-Reply-To: <20130514170721.622fc086@skate>
+References: <50FACA8F.1040503@mind.be>
+ <1368541851-31089-1-git-send-email-jezz@sysmic.org>
+ <20130514170721.622fc086@skate>
+Message-ID: <5192B23A.1050508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 14/05/13 17:07, Thomas Petazzoni wrote:
+> Dear J?r?me Pouiller,
+>
+> On Tue, 14 May 2013 16:30:50 +0200, J?r?me Pouiller wrote:
+>
+>> -$(BUILD_DIR)/.root:
+>> +$(STAMP_DIR)/skeleton-target-installed:
+>>   	mkdir -p $(TARGET_DIR)
+>>   	rsync -a \
+>>   		--exclude .empty --exclude .svn --exclude .git \
+>>   		--exclude .hg --exclude=CVS --exclude '*~' \
+>>   		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+>>   	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+>> +	mkdir -p $(STAMP_DIR)
+>>   	touch $@
+>
+> I'm generally ok with the idea, but I don't like this mkdir. There is
+> already a mkdir that creates the stamp file directory, in the main
+> Makefile.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/Config.in        |  1 +
- package/snappy/Config.in |  9 +++++++++
- package/snappy/snappy.mk | 13 +++++++++++++
- 3 files changed, 23 insertions(+)
- create mode 100644 package/snappy/Config.in
- create mode 100644 package/snappy/snappy.mk
+  I don't have an issue with a few redundant mkdir -p calls.
 
-diff --git a/package/Config.in b/package/Config.in
-index 828b5b5..51e9f93 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -383,6 +383,7 @@ endmenu
- menu "Compression and decompression"
- source "package/libarchive/Config.in"
- source "package/lzo/Config.in"
-+source "package/snappy/Config.in"
- source "package/zlib/Config.in"
- endmenu
- 
-diff --git a/package/snappy/Config.in b/package/snappy/Config.in
-new file mode 100644
-index 0000000..62136ca
---- /dev/null
-+++ b/package/snappy/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_SNAPPY
-+	bool "snappy"
-+	help
-+	  Snappy is a compression/decompression library. It does not aim for
-+	  maximum compression, or compatibility with any other compression
-+	  library; instead, it aims for very high speeds and reasonable
-+	  compression.
-+
-+	  http://code.google.com/p/snappy/
-diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
-new file mode 100644
-index 0000000..2704b97
---- /dev/null
-+++ b/package/snappy/snappy.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# snappy
-+#
-+#############################################################
-+
-+SNAPPY_VERSION		= 1.1.0
-+SNAPPY_SITE		= http://snappy.googlecode.com/files/
-+SNAPPY_LICENSE		= BSD-3c
-+SNAPPY_LICENSE_FILES	= COPYING
-+SNAPPY_INSTALL_STAGING	= YES
-+
-+$(eval $(autotools-package))
+  I would like to see a $(Q) in front of it though - but then it should 
+be in front of the rest as well, and with a $(MESSAGE) call.
+
+  Regards,
+  Arnout
+
+
 -- 
-1.8.1.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
