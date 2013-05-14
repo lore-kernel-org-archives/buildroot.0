@@ -1,40 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 May 2013 11:16:51 +0200
-Subject: [Buildroot] [PATCH] linux: CONFIG_KERNEL_LZO option requires
- host-lzop
-In-Reply-To: <CAHkwnC_KQ30thPqy3WA3wGpOipMfmf6rk-HY78sf=Dus8F9ExQ@mail.gmail.com>
-References: <1368431920-22020-1-git-send-email-fabio.porcedda@gmail.com>
- <20130513100421.4a84d09f@skate>
- <CAHkwnC_KQ30thPqy3WA3wGpOipMfmf6rk-HY78sf=Dus8F9ExQ@mail.gmail.com>
-Message-ID: <20130514111651.0c61cb24@skate>
+Date: Tue, 14 May 2013 11:25:16 +0200
+Subject: [Buildroot] Using Buildroot tool chain as external Toolchain
+In-Reply-To: <1368522484.2434.45.camel@john-ubu>
+References: <1368522484.2434.45.camel@john-ubu>
+Message-ID: <20130514112516.7ed42f44@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear john,
 
-On Tue, 14 May 2013 11:02:32 +0200, Fabio Porcedda wrote:
+On Tue, 14 May 2013 10:08:04 +0100, john wrote:
 
-> I know that the best solution is to depend on the linux kernel
-> configuration, but I don't know a way to do that cleanly.
-> Maybe some clever idea?
-> 
-> Adding mandatory dependency is the simplest and always works but as
-> you pointed it always builds host-lzop even when is not used.
-> 
-> Choosing the compression within buildroot doesn't wok when using a
-> defconfig or linux-xconfig target but at least does build host-lzop
-> only when is used.
+> I followed this process:
+> 1. I downloaded a copy of buildroot-2012.05
+> 2. Configured it and built it for my system
+> 3. Confirmed that everything built and ran sucessfully
+> 4. Copied the contents of buildroot-2012.05/output/host/usr
+> to /apps/buildroot_toolchain/usr
 
-It does work, as long as the compression type is enforced by Buildroot,
-regardless of what was selected by linux-xconfig or the defconfig.
-That's what we do today for DEVTMPFS/DEVTMPFS_MOUNT/INITRAMFS_SOURCE
-for example.
+This doesn't work. By default, gcc is linked dynamically against mpc,
+mpfr and al, and that doesn't work nicely if you move things around.
 
-However, before going ahead and implementing that, I'd like to have the
-opinion of Peter and maybe others.
+Two choices:
+
+ *) Build mpc and mpfr statically, so that gcc is linked statically
+    against them. Ideally, we should allow them to be built
+    dynamically, but gcc/binutils have binaries in multiple locations
+    in the tree, so we can't use the $ORIGIN/../lib trick to support a
+    relocatable rpath.
+
+ *) Set BR2_HOST_DIR directly to /apps/buildroot_toolchain/ so that
+    your toolchain gets built and installed directly in this location.
+
+> arm-linux-gcc... /home/xxx/xxx/xxx/buildroot-2012.05/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
+> checking whether the C compiler works... no
+> configure: error: in
+> `/home/xxx/xxx/xxx/buildroot-2012.05/output/build/alsa-lib-1.0.25':
+> configure: error: C compiler cannot create executables
+> See `config.log' for more details
+> make: ***
+> [/home/xxx/xxx/xxx/buildroot-2012.05/output/build/alsa-lib-1.0.25/.stamp_configured]
+> Error 77
+
+See output/build/alsa-lib-1.0.25/config.log for the details of the
+error; Would be useful to have this information to confirm that my
+analysis above is correct.
+
+Thanks,
 
 Thomas
 -- 
