@@ -1,62 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 May 2013 10:54:50 +0200
-Subject: [Buildroot] [PATCH 1/6] package infra: remove CPPFLAGS from
-	CFLAGS
-In-Reply-To: <20130514091727.18efb29e@skate>
-References: <1368463259-18958-1-git-send-email-gustavo@zacarias.com.ar>
- <20130513191016.15f0a3f4@skate> <51912140.8030901@zacarias.com.ar>
- <20130513202047.6bd6da1b@skate> <5191647F.6010408@zacarias.com.ar>
- <51917115.7090501@mind.be> <20130514091727.18efb29e@skate>
-Message-ID: <5191FBDA.5090805@mind.be>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Tue, 14 May 2013 11:02:32 +0200
+Subject: [Buildroot] [PATCH] linux: CONFIG_KERNEL_LZO option requires
+	host-lzop
+In-Reply-To: <20130513100421.4a84d09f@skate>
+References: <1368431920-22020-1-git-send-email-fabio.porcedda@gmail.com>
+ <20130513100421.4a84d09f@skate>
+Message-ID: <CAHkwnC_KQ30thPqy3WA3wGpOipMfmf6rk-HY78sf=Dus8F9ExQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/05/13 09:17, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
+On Mon, May 13, 2013 at 10:04 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Fabio Porcedda,
 >
-> On Tue, 14 May 2013 01:02:45 +0200, Arnout Vandecappelle wrote:
->
->>    TARGET_CPPFLAGS is _only_ used to set the largefile defines. So I think
->> it's much easier to leave it out entirely, and pass those defines in
->> CFLAGS. There may be one or two packages that break because they rely on
->> correct CPPFLAGS, but for these we can send the largefile defines explicitly.
+> On Mon, 13 May 2013 09:58:40 +0200, Fabio Porcedda wrote:
+>> When the LZO compression mode is chosen the linux kernel requires
+>> lzop host utility at build time.
 >>
->>    So:
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>> ---
+>>  linux/linux.mk | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
 >>
->> TARGET_LARGEFILE_CFLAGS = -D_LARGEFILE_SOURCE ...
+>> diff --git a/linux/linux.mk b/linux/linux.mk
+>> index d375cf0..3877c35 100644
+>> --- a/linux/linux.mk
+>> +++ b/linux/linux.mk
+>> @@ -34,7 +34,7 @@ endif
+>>  LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
 >>
->> TARGET_CFLAGS = $(TARGET_LARGEFILE_CFLAGS) ...
->>
->> Remove the CPPFLAGS="$(TARGET_CPPFLAGS)" from TARGET_CONFIGURE_OPTS
+>>  LINUX_INSTALL_IMAGES = YES
+>> -LINUX_DEPENDENCIES  += host-module-init-tools
+>> +LINUX_DEPENDENCIES  += host-module-init-tools host-lzop
 >
-> No, that's precisely the problem Gustavo had: newer autotools version
-> do *NOT* want to have -D_BLABLA in CFLAGS, they only accept it in
-> CPPFLAGS.
+> Yeah, I know about this problem, but I'm not entirely happy with this
+> solution. Since we can't have dependencies that depend on the kernel
+> configuration (because at the time make parses linux.mk, the kernel
+> configuration hasn't been created yet), we have to make host-lzop a
+> mandatory dependency. Then, later on, someone will came up with the
+> same problem for the LZMA compression. And then the kernel, in some
+> special case will need yet another tool installed on the host machine.
 >
-> See the original patch from Gustavo:
+> I agree that host-lzop is not huge, but it's a pain to have things
+> being built that will not be used.
 >
-> """
-> CPPFLAGS don't belong in CFLAGS, and newer autoconf versions just error
-> out when it's used that way.
-> """
+> The only alternative that I see is that the kernel compression should
+> be selected in Buildroot, which will then enforce this selection into
+> the kernel configuration. Therefore, Buildroot will have the knowledge
+> of which compression tools will be needed.
 >
-> So the whole purpose of the discussion is precisely that we can't any
-> longer pass the -D_LARGEFILE_SOURCE in TARGET_CFLAGS :)
+> Now, whether this alternative really scales if the kernel starts to
+> have more and more host dependencies, I don't know.
+>
+> Thoughts? Ideas? Maybe I'm just nitpicking here?
 
-  Okay my bad. I thought the issue was that CPPFLAGS were duplicated in 
-CFLAGS.
+Hi Thomas,
+thanks for reviewing.
 
-  Regards,
-  Arnout
+I know that the best solution is to depend on the linux kernel
+configuration, but I don't know a way to do that cleanly.
+Maybe some clever idea?
 
+Adding mandatory dependency is the simplest and always works but as
+you pointed it always builds host-lzop even when is not used.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Choosing the compression within buildroot doesn't wok when using a
+defconfig or linux-xconfig target but at least does build host-lzop
+only when is used.
+
+Nevertheless I'm fine with both solutions, i just want to fix this problem.
+
+Best regards
+--
+Fabio Porcedda
