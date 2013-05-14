@@ -1,69 +1,97 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 May 2013 09:30:54 +0200
-Subject: [Buildroot] [PATCH v8 7/7] package: Introduce NOMMU symbol
-In-Reply-To: <CAJxxZ0OzT8DLQ+jmPCEE3+ybk+DmBMwtC2EXLbV9s1R_EN8Qhg@mail.gmail.com>
-References: <1367825740-9408-1-git-send-email-sonic.adi@gmail.com>
- <1367825740-9408-2-git-send-email-sonic.adi@gmail.com>
- <CAJxxZ0NJSpGMN+38KoHinvhNEsC4X1qXOSyqbuLv-Yps20mN0g@mail.gmail.com>
- <20130514091525.19e4e820@skate>
- <CAJxxZ0OzT8DLQ+jmPCEE3+ybk+DmBMwtC2EXLbV9s1R_EN8Qhg@mail.gmail.com>
-Message-ID: <20130514093054.0ef4e5fd@skate>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Tue, 14 May 2013 15:32:05 +0800
+Subject: [Buildroot] [PATCH] toolchain: blackfin: Remove Blackfin
+ toolchain 2011R1 release.
+In-Reply-To: <1365580213-23039-1-git-send-email-sonic.adi@gmail.com>
+References: <1365580213-23039-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <CAJxxZ0MT5top5C8-jMMrqeSOiSpeMvLDVXx5f3EmU4gZSX6kPQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sonic Zhang,
+Hi Thomas,
 
-On Tue, 14 May 2013 15:28:23 +0800, Sonic Zhang wrote:
+On Wed, Apr 10, 2013 at 3:50 PM, Sonic Zhang <sonic.adi@gmail.com> wrote:
+> From: Sonic Zhang <sonic.zhang@analog.com>
+>
+> Blackfin is supported in buildroot since 2012R1 release.
+>
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+> ---
+>  toolchain/toolchain-external/Config.in   |   19 -------------------
+>  toolchain/toolchain-external/ext-tool.mk |    8 +-------
+>  2 files changed, 1 insertions(+), 26 deletions(-)
+>
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index 6cf29aa..3c6766c 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -614,23 +614,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFI_UCLINUX_2012R1
+>           Toolchain for the Blackfin architecture, from
+>           http://blackfin.uclinux.org.
+>
+> -config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1
+> -       bool "Blackfin.uclinux.org 2011R1-RC4"
+> -       depends on BR2_bfin
+> -       depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> -       select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> -       select BR2_INSTALL_LIBSTDCPP
+> -       select BR2_LARGEFILE
+> -       select BR2_INET_IPV6
+> -       select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> -       select BR2_USE_WCHAR
+> -       select BR2_TOOLCHAIN_HAS_THREADS
+> -       select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+> -       select BR2_HOSTARCH_NEEDS_IA32_LIBS
+> -       help
+> -         Toolchain for the Blackfin architecture, from
+> -         http://blackfin.uclinux.org.
+> -
+>  config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+>         bool "Xilinx Little Endian Microblaze GNU Tools"
+>         depends on BR2_microblazeel
+> @@ -758,8 +741,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+>         default "i686-pc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+>         default "i686-pc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
+>         default "i686-pc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
+> -       default "bfin-uclinux"           if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && BR2_BINFMT_FLAT
+> -       default "bfin-linux-uclibc"      if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && BR2_BINFMT_FDPIC
+>         default "bfin-uclinux"           if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FLAT
+>         default "bfin-linux-uclibc"      if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FDPIC
+>         default "bfin-uclinux"           if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FLAT
+> diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+> index 01578d2..b69d9bb 100644
+> --- a/toolchain/toolchain-external/ext-tool.mk
+> +++ b/toolchain/toolchain-external/ext-tool.mk
+> @@ -260,12 +260,6 @@ TOOLCHAIN_EXTERNAL_SOURCE=ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209),y)
+>  TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu/
+>  TOOLCHAIN_EXTERNAL_SOURCE=ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
+> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1),y)
+> -TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/531/9509/
+> -TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2011R1-RC4.i386.tar.bz2
+> -TOOLCHAIN_EXTERNAL_SITE_2   = http://blackfin.uclinux.org/gf/download/frsrelease/531/9517/
+> -TOOLCHAIN_EXTERNAL_SOURCE_2 = blackfin-toolchain-uclibc-full-2011R1-RC4.i386.tar.bz2
+> -TOOLCHAIN_EXTERNAL_SOURCE   = $(TOOLCHAIN_EXTERNAL_SOURCE_1) $(TOOLCHAIN_EXTERNAL_SOURCE_2)
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1),y)
+>  TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/559/9858/
+>  TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2012R1-RC2.i386.tar.bz2
+> @@ -311,7 +305,7 @@ endif
+>  # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
+>  # which themselves contain the toolchain. This is why we strip more
+>  # components than usual.
+> -ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
+> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
+>  $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1):
+>         $(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_1)/$(TOOLCHAIN_EXTERNAL_SOURCE_1))
+>
+> --
 
-> > For the 2013.05 cycle, it is now too late to get functional patches in,
-> > Peter is now only taking fixes. Though we can continue the work and get
-> > them merged in -next.
-> >
-> > Regarding this patch specifically (PATCH 7/7), I have never been happy
-> > with it, because I don't like the idea of passing globally this
-> > -D__NOMMU__ symbol all around, while it's not a standard symbol.
-> >
-> > I've asked Peter, and he agrees with this position. Therefore, what we
-> > would like to see is -D__NOMMU__ added only to those packages that
-> > actually need it.
-> 
-> OK. This is fine to me.
 
-Thanks. Of course, this is our current position. Depending on how many
-packages are affected, and how things turn out to work, we may decide
-otherwise in the future. But for now, we'd prefer to have it on a
-per-package basis to really understand which packages are affected by
-that.
+Could you Acked-by this patch at least for -next tree?
 
-> > Regarding PATCH 6/7, since the 2013.05 cycle is over for new patches, I
-> > was hoping to find some time to look and it and refactor it. But I
-> > believe I'll just test it once again, give my Acked-by: so it gets
-> > merged, and then later on find the time to refactor it.
-> >
-> > Would this be ok for you?
-> 
-> Yes, having your Acked-by for -next tree is good enough.
+Regards,
 
-Ok, so I'll work on testing your patch as is.
-
-> > Also, while we're at it, I've just launched a new version of our
-> > autobuilders infrastructure (see
-> > http://lists.busybox.net/pipermail/buildroot/2013-May/072143.html).
-> > Would you be interested in receiving a daily e-mail that contains only
-> > the list of Blackfin related build failures?
-> 
-> I am find to receive these notify email by my gmail account.
-
-Ok, will do so.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Sonic
