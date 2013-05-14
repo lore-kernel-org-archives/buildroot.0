@@ -1,35 +1,100 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 14 May 2013 22:50:17 +0200
-Subject: [Buildroot] [git commit branch/next] beaglebone: add am33x-cm3 to
-	the build
-Message-ID: <20130514205254.B70709A1F2@busybox.osuosl.org>
+Date: Tue, 14 May 2013 22:49:11 +0200
+Subject: [Buildroot] [git commit branch/next] am33x-cm3: add FW for
+	suspend/resume
+Message-ID: <20130514205254.7B3069A1F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0399249b76bc02e4cb1cad2edc3812f4f992ce7a
+commit: http://git.buildroot.net/buildroot/commit/?id=97fbd80efe6dd29b5d8d5393ea0a4cbc314dcfc6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add the FW needed for the Cortex M3 on the beaglebone. This is required
-for working power management.
+Without this firmware, the beaglebone won't be able to suspend/resume
+correctly.
 
+[Peter: tweak Config.in, rename init script, wrap long lines]
 Signed-off-by: Anders Darander <anders@chargestorm.se>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/beaglebone_defconfig |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/Config.in                             |    1 +
+ package/am33x-cm3/Config.in                   |    7 +++++
+ package/am33x-cm3/S93-am335x-pm-firmware-load |    6 +++++
+ package/am33x-cm3/am33x-cm3.mk                |   30 +++++++++++++++++++++++++
+ 4 files changed, 44 insertions(+), 0 deletions(-)
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 38a63a1..a141320 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -11,6 +11,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
- # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+diff --git a/package/Config.in b/package/Config.in
+index 1dee2ab..6b6ce9d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -213,6 +213,7 @@ endmenu
  
- # filesystem
-+BR2_PACKAGE_AM33X_CM3=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
+ menu "Hardware handling"
+ menu "Misc devices firmwares"
++source "package/am33x-cm3/Config.in"
+ source "package/b43-firmware/Config.in"
+ source "package/firmware-imx/Config.in"
+ source "package/linux-firmware/Config.in"
+diff --git a/package/am33x-cm3/Config.in b/package/am33x-cm3/Config.in
+new file mode 100644
+index 0000000..060d0ef
+--- /dev/null
++++ b/package/am33x-cm3/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_AM33X_CM3
++	bool "am33x-cm3"
++	depends on BR2_arm # only relevant for TI am335x
++	help
++	  Cortex-M3 binary blob for suspend-resume on am335x
++
++	  http://arago-project.org/git/projects/am33x-cm3.git
+diff --git a/package/am33x-cm3/S93-am335x-pm-firmware-load b/package/am33x-cm3/S93-am335x-pm-firmware-load
+new file mode 100755
+index 0000000..56c17b3
+--- /dev/null
++++ b/package/am33x-cm3/S93-am335x-pm-firmware-load
+@@ -0,0 +1,6 @@
++#!/bin/sh
++
++# Load the PM CM3 firmware
++echo 1 > /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/loading
++cat /lib/firmware/am335x-pm-firmware.bin > /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/data
++echo 0 > /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/loading
+diff --git a/package/am33x-cm3/am33x-cm3.mk b/package/am33x-cm3/am33x-cm3.mk
+new file mode 100644
+index 0000000..3805c80
+--- /dev/null
++++ b/package/am33x-cm3/am33x-cm3.mk
+@@ -0,0 +1,30 @@
++#############################################################
++#
++# am33x-cm3
++#
++#############################################################
++
++AM33X_CM3_VERSION = AM335xPSP_04.06.00.10-rc1
++AM33X_CM3_SITE = http://arago-project.org/git/projects/am33x-cm3.git
++AM33X_CM3_SITE_METHOD = git
++AM33X_CM3_LICENSE = TI Publicly Available Software License
++AM33X_CM3_LICENSE_FILES = License.txt
++
++# The build command below will use the standard cross-compiler (normally
++# build for Cortex-A8, to build the FW for the Cortex-M3.
++define AM33X_CM3_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
++endef
++
++# Not all of the firmware files are used
++define AM33X_CM3_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/bin/am335x-pm-firmware.bin \
++		$(TARGET_DIR)/lib/firmware/am335x-pm-firmware.bin
++endef
++
++define AM33X_CM3_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/am33x-cm3/S93-am335x-pm-firmware-load \
++		$(TARGET_DIR)/etc/init.d/S93-am335x-pm-firmware-load
++endef
++
++$(eval $(generic-package))
