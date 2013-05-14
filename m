@@ -1,63 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 15 May 2013 00:06:23 +0200
+Date: Wed, 15 May 2013 00:23:24 +0200
 Subject: [Buildroot] [PATCH] Standardisation of $(BUILD)/.root name
-In-Reply-To: <5192B23A.1050508@mind.be>
-References: <50FACA8F.1040503@mind.be>
- <1368541851-31089-1-git-send-email-jezz@sysmic.org>
- <20130514170721.622fc086@skate> <5192B23A.1050508@mind.be>
-Message-ID: <20130514220623.GA3140@free.fr>
+In-Reply-To: <2999958.1S5Q3eWKd9@sagittae>
+References: <1368541851-31089-1-git-send-email-jezz@sysmic.org>
+ <20130514170721.622fc086@skate> <2999958.1S5Q3eWKd9@sagittae>
+Message-ID: <20130514222324.GA8043@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+J?r?me, All,
 
-On 2013-05-14 23:52 +0200, Arnout Vandecappelle spake thusly:
-> On 14/05/13 17:07, Thomas Petazzoni wrote:
-> >Dear J?r?me Pouiller,
-> >
-> >On Tue, 14 May 2013 16:30:50 +0200, J?r?me Pouiller wrote:
-> >
-> >>-$(BUILD_DIR)/.root:
-> >>+$(STAMP_DIR)/skeleton-target-installed:
-> >>  	mkdir -p $(TARGET_DIR)
-> >>  	rsync -a \
-> >>  		--exclude .empty --exclude .svn --exclude .git \
-> >>  		--exclude .hg --exclude=CVS --exclude '*~' \
-> >>  		$(TARGET_SKELETON)/ $(TARGET_DIR)/
-> >>  	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
-> >>+	mkdir -p $(STAMP_DIR)
-> >>  	touch $@
-> >
-> >I'm generally ok with the idea, but I don't like this mkdir. There is
-> >already a mkdir that creates the stamp file directory, in the main
-> >Makefile.
+On 2013-05-14 17:27 +0200, J?r?me Pouiller spake thusly:
+> On Tuesday 14 May 2013 17:07:21 Thomas Petazzoni wrote:
+> > Dear J?r?me Pouiller,
+> > 
+> > On Tue, 14 May 2013 16:30:50 +0200, J?r?me Pouiller wrote:
+> > > -$(BUILD_DIR)/.root:
+> > > 
+> > > +$(STAMP_DIR)/skeleton-target-installed:
+> > >  	mkdir -p $(TARGET_DIR)
+> > >  	rsync -a \
+> > >  	
+> > >  		--exclude .empty --exclude .svn --exclude .git \
+> > >  		--exclude .hg --exclude=CVS --exclude '*~' \
+> > >  		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+> > >  	
+> > >  	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+> > > 
+> > > +	mkdir -p $(STAMP_DIR)
+> > > 
+> > >  	touch $@
+> > 
+> > I'm generally ok with the idea, but I don't like this mkdir. There is
+> > already a mkdir that creates the stamp file directory, in the main
+> > Makefile.
+> I also dislike this mkdir. My problem is to be sure $(STAMP_DIR) is created 
+> before $(STAMP_DIR)/skeleton-target-installed. 
 > 
->  I don't have an issue with a few redundant mkdir -p calls.
+> I can change order of dependencies in dirs target but this solution is too 
+> fragile.
 
-I concur with Thomas: we should ensure the stamp-dir is already created
-in a generic way, it's kind of an internal stuff, which should not be
-visible to users (I mean: packages, and stuff like that, not actual
-persons).
+Agreed, this is not-so-nice.
 
-That we need to sprinkle the code with a few 'mkdir' here and ther "just
-in case" is an indication we do not fully masterise the chain of events,
-and is really not nice.
+> I cannot just add a dependency between $(STAMP_DIR)/skeleton-target-installed 
+> and  $(STAMP_DIR).
 
-The fact that the 'mkdir' is needed in the first place is because of this
-rulle in the top-level Makefile:
+Why not? Like:
+    $(STAMP_DIR)/skeleton-target-installed: $(STAMP_DIR)
 
-    dirs: [...] $(TARGET_DIR) [...] $(STAMP_DIR)
-
-which will have 'make' run the $(TARGET_DIR) goal before the
-$(STAMP_DIR) goal.
-
-This can be solved in two ways: the nice one, and the not-so-nice one:
-  - have an additional rule:
-        $(TARGET_DIR): $(STAMP_DIR)                 <- the nice way
-  - invert the order of goals in the 'dirs' rule    <- the not-so-nice way
+which to me looks like the sane solution (and not what I previosuly
+answered Arnout about $(TARGET_DIR))
 
 Regards,
 Yann E. MORIN.
