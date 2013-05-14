@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 May 2013 23:45:58 +0200
-Subject: [Buildroot] [PATCH 2/3] package/libedit2: new package
+Date: Tue, 14 May 2013 23:45:59 +0200
+Subject: [Buildroot] [PATCH 3/3] package/snappy: new package
 In-Reply-To: <cover.1368567696.git.yann.morin.1998@free.fr>
 References: <cover.1368567696.git.yann.morin.1998@free.fr>
-Message-ID: <527cc033d0024e5562a9e5984423088bf343921a.1368567696.git.yann.morin.1998@free.fr>
+Message-ID: <593d227bcb531b484e9a613baee53d3acaf9370b.1368567696.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,144 +13,59 @@ To: buildroot@busybox.net
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/Config.in            |  1 +
- package/libedit2/Config.in   |  9 ++++++
- package/libedit2/libedit2.mk | 76 ++++++++++++++++++++++++++++++++++++++++++++
- package/libedit2/libedit2.pc | 13 ++++++++
- 4 files changed, 99 insertions(+)
- create mode 100644 package/libedit2/Config.in
- create mode 100644 package/libedit2/libedit2.mk
- create mode 100644 package/libedit2/libedit2.pc
+ package/Config.in        |  1 +
+ package/snappy/Config.in |  9 +++++++++
+ package/snappy/snappy.mk | 13 +++++++++++++
+ 3 files changed, 23 insertions(+)
+ create mode 100644 package/snappy/Config.in
+ create mode 100644 package/snappy/snappy.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 6b6ce9d..828b5b5 100644
+index 828b5b5..51e9f93 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -619,6 +619,7 @@ menu "Text and terminal handling"
- source "package/enchant/Config.in"
- source "package/libfribidi/Config.in"
- source "package/icu/Config.in"
-+source "package/libedit2/Config.in"
- source "package/libiconv/Config.in"
- source "package/linenoise/Config.in"
- source "package/ncurses/Config.in"
-diff --git a/package/libedit2/Config.in b/package/libedit2/Config.in
+@@ -383,6 +383,7 @@ endmenu
+ menu "Compression and decompression"
+ source "package/libarchive/Config.in"
+ source "package/lzo/Config.in"
++source "package/snappy/Config.in"
+ source "package/zlib/Config.in"
+ endmenu
+ 
+diff --git a/package/snappy/Config.in b/package/snappy/Config.in
 new file mode 100644
-index 0000000..1e7b95d
+index 0000000..62136ca
 --- /dev/null
-+++ b/package/libedit2/Config.in
++++ b/package/snappy/Config.in
 @@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBEDIT2
-+	bool "libedit2"
-+	select BR2_PACKAGE_LIBBSD
-+	select BR2_PACKAGE_NCURSES
++config BR2_PACKAGE_SNAPPY
++	bool "snappy"
 +	help
-+	  The editline library (from BSD) provides generic line editing
-+	  and history functions. It slightly resembles GNU readline.
-+	  
-+	  http://ftp.netbsd.org/pub/NetBSD/NetBSD-release-5-0/src/lib/libedit/
-diff --git a/package/libedit2/libedit2.mk b/package/libedit2/libedit2.mk
++	  Snappy is a compression/decompression library. It does not aim for
++	  maximum compression, or compatibility with any other compression
++	  library; instead, it aims for very high speeds and reasonable
++	  compression.
++
++	  http://code.google.com/p/snappy/
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
 new file mode 100644
-index 0000000..0916c2e
+index 0000000..2704b97
 --- /dev/null
-+++ b/package/libedit2/libedit2.mk
-@@ -0,0 +1,76 @@
-+#############################################################
-+#
-+# libedit2
-+#
-+#############################################################
-+
-+# Note: libedit2 does not have a regular homepage, and it seems
-+# there is no place where to download a tarball from. That's
-+# why we use the Debian way-back machine.
-+LIBEDIT2_VERSION_MAJOR   = 2
-+LIBEDIT2_VERSION_MINOR   = 11
-+LIBEDIT2_VERSION_EXTRA   = -20080614
-+LIBEDIT2_VERSION         = $(LIBEDIT2_VERSION_MAJOR).$(LIBEDIT2_VERSION_MINOR)
-+LIBEDIT2_SOURCE          = libedit_$(LIBEDIT2_VERSION)$(LIBEDIT2_VERSION_EXTRA).orig.tar.bz2
-+LIBEDIT2_SITE            = http://snapshot.debian.org/archive/debian/20120601T033558Z/pool/main/libe/libedit
-+LIBEDIT2_SUBDIR          = libedit
-+LIBEDIT2_PATCH           = libedit_2.11-20080614-5.debian.tar.bz2
-+LIBEDIT2_INSTALL_STAGING = YES
-+LIBEDIT2_DEPENDENCIES    = host-pmake libbsd ncurses
-+
-+define LIBEDIT2_POST_PATCH_PERMISSIONS
-+	chmod +x $(@D)/libedit/makelist
-+endef
-+
-+LIBEDIT2_POST_PATCH_HOOKS += LIBEDIT2_POST_PATCH_PERMISSIONS
-+
-+define LIBEDIT2_FIX_VIS_H_INCLUDE
-+	$(SED) 's,^#include <vis\.h>$$,#include <bsd/vis\.h>,;' \
-+	       $(@D)/libedit/filecomplete.c                     \
-+	       $(@D)/libedit/history.c                          \
-+	       $(@D)/libedit/readline.c
-+endef
-+LIBEDIT2_POST_PATCH_HOOKS += LIBEDIT2_FIX_VIS_H_INCLUDE
-+
-+LIBEDIT2_PMAKE_OPTS = MKPROFILE=no MKCATPAGES=no MLINKS= MANPAGES= NOGCCERROR=1         \
-+                      SHLIB_SHFLAGS="-Wl,-soname,libedit.so.${LIBEDIT2_VERSION_MAJOR}"  \
-+
-+define LIBEDIT2_BUILD_CMDS
-+	cd $(@D)/$(LIBEDIT2_SUBDIR); \
-+	$(TARGET_CONFIGURE_OPTS) LDADD="-lbsd -lcurses" pmake $(LIBEDIT2_PMAKE_OPTS)
-+endef
-+
-+LIBEDIT2_MAN_LINKS = el_init el_end el_reset el_gets el_getc el_push el_parse   \
-+                     el_set el_get el_source el_resize el_line el_insertstr     \
-+                     el_deletestr history_init history_end history
-+
-+# $1: DESTDIR to install into
-+# Can't use pmake to install, it wants to be root. sigh... :-(
-+# We need to create the .so links, otherwise we can't link; and waiting for
-+# ldconfig is too late as it's done just before building the images.
-+define LIBEDIT2_INSTALL_CMDS
-+	$(INSTALL) -D -m 0644 package/libedit2/libedit2.pc $(1)/usr/lib/pkgconfig/libedit2.pc
-+	ln -sf libedit2.pc $(1)/usr/lib/pkgconfig/libedit.pc
-+	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.a $(1)/usr/lib/libedit.a
-+	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit_pic.a $(1)/usr/lib/libedit_pic.a
-+	$(INSTALL) -D -m 0644 $(@D)/libedit/libedit.so.2.11 $(1)/usr/lib/libedit.so.2.11
-+	$(INSTALL) -D -m 0644 $(@D)/libedit/histedit.h $(1)/usr/include/histedit.h
-+	ln -sf libedit.so.$(LIBEDIT2_VERSION) $(1)/usr/lib/libedit.so.$(LIBEDIT2_VERSION_MAJOR)
-+	ln -sf libedit.so.$(LIBEDIT2_VERSION_MAJOR) $(1)/usr/lib/libedit.so
-+	$(INSTALL) -D -m 0644 $(@D)/libedit/readline/readline.h $(1)/usr/include/editline/readline.h
-+	$(INSTALL) -v -D -m 0644 $(@D)/libedit/editline.3 $(1)/usr/share/man/man3/editline.3el
-+	$(INSTALL) -v -D -m 0644 $(@D)/libedit/editrc.5 $(1)/usr/share/man/man5/editrc.5el
-+	for lnk in $(LIBEDIT2_MAN_LINKS); do                            \
-+	    ln -sfv editline.3el $(1)/usr/share/man/man3/$${lnk}.3el;   \
-+	done
-+endef
-+
-+define LIBEDIT2_INSTALL_STAGING_CMDS
-+	$(call LIBEDIT2_INSTALL_CMDS,$(STAGING_DIR))
-+endef
-+
-+define LIBEDIT2_INSTALL_TARGET_CMDS
-+	$(call LIBEDIT2_INSTALL_CMDS,$(TARGET_DIR))
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/libedit2/libedit2.pc b/package/libedit2/libedit2.pc
-new file mode 100644
-index 0000000..47ac871
---- /dev/null
-+++ b/package/libedit2/libedit2.pc
++++ b/package/snappy/snappy.mk
 @@ -0,0 +1,13 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
++#############################################################
++#
++# snappy
++#
++#############################################################
 +
-+Name: libedit
-+Description: Not just a replacement library for libreadline and libhistory.
-+Version: 2.11
-+Requires: libbsd ncurses
-+Requires.private:
-+Libs: -L${libdir} -ledit
-+Libs.private:
-+Cflags: -I${includedir}
++SNAPPY_VERSION		= 1.1.0
++SNAPPY_SITE		= http://snappy.googlecode.com/files/
++SNAPPY_LICENSE		= BSD-3c
++SNAPPY_LICENSE_FILES	= COPYING
++SNAPPY_INSTALL_STAGING	= YES
++
++$(eval $(autotools-package))
 -- 
 1.8.1.2
