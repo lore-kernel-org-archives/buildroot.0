@@ -1,78 +1,59 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 14 May 2013 11:02:32 +0200
-Subject: [Buildroot] [PATCH] linux: CONFIG_KERNEL_LZO option requires
-	host-lzop
-In-Reply-To: <20130513100421.4a84d09f@skate>
-References: <1368431920-22020-1-git-send-email-fabio.porcedda@gmail.com>
- <20130513100421.4a84d09f@skate>
-Message-ID: <CAHkwnC_KQ30thPqy3WA3wGpOipMfmf6rk-HY78sf=Dus8F9ExQ@mail.gmail.com>
+From: john <john.osullivan@cloudiumsystems.com>
+Date: Tue, 14 May 2013 10:08:04 +0100
+Subject: [Buildroot] Using Buildroot tool chain as external Toolchain
+Message-ID: <1368522484.2434.45.camel@john-ubu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 13, 2013 at 10:04 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Mon, 13 May 2013 09:58:40 +0200, Fabio Porcedda wrote:
->> When the LZO compression mode is chosen the linux kernel requires
->> lzop host utility at build time.
->>
->> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->> ---
->>  linux/linux.mk | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/linux/linux.mk b/linux/linux.mk
->> index d375cf0..3877c35 100644
->> --- a/linux/linux.mk
->> +++ b/linux/linux.mk
->> @@ -34,7 +34,7 @@ endif
->>  LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
->>
->>  LINUX_INSTALL_IMAGES = YES
->> -LINUX_DEPENDENCIES  += host-module-init-tools
->> +LINUX_DEPENDENCIES  += host-module-init-tools host-lzop
->
-> Yeah, I know about this problem, but I'm not entirely happy with this
-> solution. Since we can't have dependencies that depend on the kernel
-> configuration (because at the time make parses linux.mk, the kernel
-> configuration hasn't been created yet), we have to make host-lzop a
-> mandatory dependency. Then, later on, someone will came up with the
-> same problem for the LZMA compression. And then the kernel, in some
-> special case will need yet another tool installed on the host machine.
->
-> I agree that host-lzop is not huge, but it's a pain to have things
-> being built that will not be used.
->
-> The only alternative that I see is that the kernel compression should
-> be selected in Buildroot, which will then enforce this selection into
-> the kernel configuration. Therefore, Buildroot will have the knowledge
-> of which compression tools will be needed.
->
-> Now, whether this alternative really scales if the kernel starts to
-> have more and more host dependencies, I don't know.
->
-> Thoughts? Ideas? Maybe I'm just nitpicking here?
+Hi,
 
-Hi Thomas,
-thanks for reviewing.
+I have been following various archived mails on this issue in an effort
+to get this working. The most useful was
+http://buildroot-busybox.2317881.n4.nabble.com/Can-I-use-the-toolchain-build-with-buildroot-as-an-external-toolchain-td26855.html
 
-I know that the best solution is to depend on the linux kernel
-configuration, but I don't know a way to do that cleanly.
-Maybe some clever idea?
+I followed this process:
+1. I downloaded a copy of buildroot-2012.05
+2. Configured it and built it for my system
+3. Confirmed that everything built and ran sucessfully
+4. Copied the contents of buildroot-2012.05/output/host/usr
+to /apps/buildroot_toolchain/usr
+5. In toolchain->options I set type to external toolchain
+6. Selected toolchain-> custom toolchain
+7. Set Toolchain path to /apps/buildroot_toolchain/usr
+8. Set prefix to $(ARCH)-unknown-linux-uclibcgnueabi
+9. Ensured that the options largefile support,RPC,WCHAR etc all matched
+my previous settings when building the original toolchain
+10. Saved my config and ran make clean 
 
-Adding mandatory dependency is the simplest and always works but as
-you pointed it always builds host-lzop even when is not used.
+But after following this process I have a problem, after doing a make
+clean I get:
 
-Choosing the compression within buildroot doesn't wok when using a
-defconfig or linux-xconfig target but at least does build host-lzop
-only when is used.
 
-Nevertheless I'm fine with both solutions, i just want to fix this problem.
+checking whether build environment is sane... yes
+checking for
+arm-linux-strip... /home/xxx/xxx/xxx/buildroot-2012.05/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-strip
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking for
+arm-linux-gcc... /home/xxx/xxx/xxx/buildroot-2012.05/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
+checking whether the C compiler works... no
+configure: error: in
+`/home/xxx/xxx/xxx/buildroot-2012.05/output/build/alsa-lib-1.0.25':
+configure: error: C compiler cannot create executables
+See `config.log' for more details
+make: ***
+[/home/xxx/xxx/xxx/buildroot-2012.05/output/build/alsa-lib-1.0.25/.stamp_configured]
+Error 77
 
-Best regards
---
-Fabio Porcedda
+Should the above process work? Is it a possible permissions issue, I
+have tried changing the permissions on /apps/buildroot_toolchain/usr but
+to no avail.
+In the link I posted above Thomas has suggested that the tool chain
+location be initially configured for In Build options, set the host dir
+to /opt/your-toolchain-name etc
+Is this necessary to make this work or should the process I use also
+work?
