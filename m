@@ -1,64 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 May 2013 09:15:25 +0200
-Subject: [Buildroot] [PATCH v8 7/7] package: Introduce NOMMU symbol
-In-Reply-To: <CAJxxZ0NJSpGMN+38KoHinvhNEsC4X1qXOSyqbuLv-Yps20mN0g@mail.gmail.com>
-References: <1367825740-9408-1-git-send-email-sonic.adi@gmail.com>
- <1367825740-9408-2-git-send-email-sonic.adi@gmail.com>
- <CAJxxZ0NJSpGMN+38KoHinvhNEsC4X1qXOSyqbuLv-Yps20mN0g@mail.gmail.com>
-Message-ID: <20130514091525.19e4e820@skate>
+Date: Tue, 14 May 2013 09:17:27 +0200
+Subject: [Buildroot] [PATCH 1/6] package infra: remove CPPFLAGS from
+ CFLAGS
+In-Reply-To: <51917115.7090501@mind.be>
+References: <1368463259-18958-1-git-send-email-gustavo@zacarias.com.ar>
+ <20130513191016.15f0a3f4@skate> <51912140.8030901@zacarias.com.ar>
+ <20130513202047.6bd6da1b@skate> <5191647F.6010408@zacarias.com.ar>
+ <51917115.7090501@mind.be>
+Message-ID: <20130514091727.18efb29e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sonic Zhang,
+Dear Arnout Vandecappelle,
 
-On Tue, 14 May 2013 14:23:11 +0800, Sonic Zhang wrote:
+On Tue, 14 May 2013 01:02:45 +0200, Arnout Vandecappelle wrote:
 
-> > diff --git a/package/Makefile.in b/package/Makefile.in
-> > index a449089..55d725d 100644
-> > --- a/package/Makefile.in
-> > +++ b/package/Makefile.in
-> > @@ -107,6 +107,10 @@ ifeq ($(BR2_BINFMT_FLAT),y)
-> >  TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
-> >  endif
-> >
-> > +ifneq ($(BR2_USE_MMU),y)
-> > +TARGET_CFLAGS += -D__NOMMU__
-> > +endif
-> > +
-> >  ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
-> >  TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
-> >  TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
-> > --
+>   TARGET_CPPFLAGS is _only_ used to set the largefile defines. So I think 
+> it's much easier to leave it out entirely, and pass those defines in 
+> CFLAGS. There may be one or two packages that break because they rely on 
+> correct CPPFLAGS, but for these we can send the largefile defines explicitly.
 > 
-> May I have your Acked-by for the last 2 bfin arch support patches?
+>   So:
+> 
+> TARGET_LARGEFILE_CFLAGS = -D_LARGEFILE_SOURCE ...
+> 
+> TARGET_CFLAGS = $(TARGET_LARGEFILE_CFLAGS) ...
+> 
+> Remove the CPPFLAGS="$(TARGET_CPPFLAGS)" from TARGET_CONFIGURE_OPTS
 
-For the 2013.05 cycle, it is now too late to get functional patches in,
-Peter is now only taking fixes. Though we can continue the work and get
-them merged in -next.
+No, that's precisely the problem Gustavo had: newer autotools version
+do *NOT* want to have -D_BLABLA in CFLAGS, they only accept it in
+CPPFLAGS.
 
-Regarding this patch specifically (PATCH 7/7), I have never been happy
-with it, because I don't like the idea of passing globally this
--D__NOMMU__ symbol all around, while it's not a standard symbol.
+See the original patch from Gustavo:
 
-I've asked Peter, and he agrees with this position. Therefore, what we
-would like to see is -D__NOMMU__ added only to those packages that
-actually need it.
+"""
+CPPFLAGS don't belong in CFLAGS, and newer autoconf versions just error
+out when it's used that way.
+"""
 
-Regarding PATCH 6/7, since the 2013.05 cycle is over for new patches, I
-was hoping to find some time to look and it and refactor it. But I
-believe I'll just test it once again, give my Acked-by: so it gets
-merged, and then later on find the time to refactor it.
-
-Would this be ok for you?
-
-Also, while we're at it, I've just launched a new version of our
-autobuilders infrastructure (see
-http://lists.busybox.net/pipermail/buildroot/2013-May/072143.html).
-Would you be interested in receiving a daily e-mail that contains only
-the list of Blackfin related build failures?
+So the whole purpose of the discussion is precisely that we can't any
+longer pass the -D_LARGEFILE_SOURCE in TARGET_CFLAGS :)
 
 Best regards,
 
