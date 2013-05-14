@@ -1,97 +1,101 @@
-From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Tue, 14 May 2013 15:32:05 +0800
-Subject: [Buildroot] [PATCH] toolchain: blackfin: Remove Blackfin
- toolchain 2011R1 release.
-In-Reply-To: <1365580213-23039-1-git-send-email-sonic.adi@gmail.com>
-References: <1365580213-23039-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <CAJxxZ0MT5top5C8-jMMrqeSOiSpeMvLDVXx5f3EmU4gZSX6kPQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 May 2013 09:39:47 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-05-13
+In-Reply-To: <87vc6mrpv4.fsf@dell.be.48ers.dk>
+References: <20130514063004.8012052C105@lolut.humanoidz.org>
+ <87vc6mrpv4.fsf@dell.be.48ers.dk>
+Message-ID: <20130514093947.747a41d3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Peter Korsgaard,
 
-On Wed, Apr 10, 2013 at 3:50 PM, Sonic Zhang <sonic.adi@gmail.com> wrote:
-> From: Sonic Zhang <sonic.zhang@analog.com>
->
-> Blackfin is supported in buildroot since 2012R1 release.
->
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-> ---
->  toolchain/toolchain-external/Config.in   |   19 -------------------
->  toolchain/toolchain-external/ext-tool.mk |    8 +-------
->  2 files changed, 1 insertions(+), 26 deletions(-)
->
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 6cf29aa..3c6766c 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -614,23 +614,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFI_UCLINUX_2012R1
->           Toolchain for the Blackfin architecture, from
->           http://blackfin.uclinux.org.
->
-> -config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1
-> -       bool "Blackfin.uclinux.org 2011R1-RC4"
-> -       depends on BR2_bfin
-> -       depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> -       select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-> -       select BR2_INSTALL_LIBSTDCPP
-> -       select BR2_LARGEFILE
-> -       select BR2_INET_IPV6
-> -       select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> -       select BR2_USE_WCHAR
-> -       select BR2_TOOLCHAIN_HAS_THREADS
-> -       select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-> -       select BR2_HOSTARCH_NEEDS_IA32_LIBS
-> -       help
-> -         Toolchain for the Blackfin architecture, from
-> -         http://blackfin.uclinux.org.
-> -
->  config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
->         bool "Xilinx Little Endian Microblaze GNU Tools"
->         depends on BR2_microblazeel
-> @@ -758,8 +741,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
->         default "i686-pc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
->         default "i686-pc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
->         default "i686-pc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
-> -       default "bfin-uclinux"           if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && BR2_BINFMT_FLAT
-> -       default "bfin-linux-uclibc"      if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && BR2_BINFMT_FDPIC
->         default "bfin-uclinux"           if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FLAT
->         default "bfin-linux-uclibc"      if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FDPIC
->         default "bfin-uclinux"           if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FLAT
-> diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-> index 01578d2..b69d9bb 100644
-> --- a/toolchain/toolchain-external/ext-tool.mk
-> +++ b/toolchain/toolchain-external/ext-tool.mk
-> @@ -260,12 +260,6 @@ TOOLCHAIN_EXTERNAL_SOURCE=ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209),y)
->  TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu/
->  TOOLCHAIN_EXTERNAL_SOURCE=ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
-> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1),y)
-> -TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/531/9509/
-> -TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2011R1-RC4.i386.tar.bz2
-> -TOOLCHAIN_EXTERNAL_SITE_2   = http://blackfin.uclinux.org/gf/download/frsrelease/531/9517/
-> -TOOLCHAIN_EXTERNAL_SOURCE_2 = blackfin-toolchain-uclibc-full-2011R1-RC4.i386.tar.bz2
-> -TOOLCHAIN_EXTERNAL_SOURCE   = $(TOOLCHAIN_EXTERNAL_SOURCE_1) $(TOOLCHAIN_EXTERNAL_SOURCE_2)
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1),y)
->  TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/559/9858/
->  TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2012R1-RC2.i386.tar.bz2
-> @@ -311,7 +305,7 @@ endif
->  # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
->  # which themselves contain the toolchain. This is why we strip more
->  # components than usual.
-> -ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
->  $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1):
->         $(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_1)/$(TOOLCHAIN_EXTERNAL_SOURCE_1))
->
-> --
+On Tue, 14 May 2013 09:18:39 +0200, Peter Korsgaard wrote:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> 
+>  Thomas> Build statistics for 2013-05-13
+>  Thomas> ===============================
+> 
+>  Thomas>         success : 89 
+>  Thomas>        failures : 35 
+>  Thomas>        timeouts : 35 
+>  Thomas>           TOTAL : 124
+> 
+> What are the timeouts?
 
+On my autobuilder, I run the Buildroot build within a "timeout" command
+that errors out when the build takes more than 2 hours.
 
-Could you Acked-by this patch at least for -next tree?
+Originally, I introduced this because once particular PowerPC external
+toolchain had a 'ld' bug that got triggered on some packages, and was
+causing 'ld' to enter an infinite loop, which was basically halting the
+autobuilder. So this timeout thing was introduced, and I've kept it
+until now.
 
-Regards,
+I'm rather surprised by the number of timeouts for yesterday, I'll need
+to investigate. They also don't seem to show up on the web interface. I
+suspect something might be wrong in just the e-mail generation script,
+I'll have a look into that.
 
-Sonic
+>  Thomas> Classification of failures by reason
+>  Thomas> ====================================
+> 
+>  Thomas>                   ne10-88c18f0 | 3 
+>  Thomas>                  cairo-1.12.10 | 3 
+>  Thomas>           host-protobuf-c-0.15 | 2 
+>  Thomas>                  binutils-2.21 | 2 
+>  Thomas>                  rt-tests-0.83 | 2 
+>  Thomas>                  pixman-0.28.2 | 2 
+>  Thomas>                czmq-cb9839cf90 | 1 
+>  Thomas>                 libtirpc-0.2.2 | 1 
+>  Thomas>                     systemd-44 | 1 
+>  Thomas>                libglib2-2.30.3 | 1 
+>  Thomas>    host-lttng-babeltrace-1.0.2 | 1 
+>  Thomas>                 directfb-1.6.3 | 1 
+>  Thomas>                 mongrel2-1.8.0 | 1 
+>  Thomas>                aircrack-ng-1.1 | 1 
+>  Thomas>                     acl-2.2.51 | 1 
+>  Thomas>              util-linux-2.22.2 | 1 
+>  Thomas>               matchbox-lib-1.9 | 1 
+>  Thomas>                       qt-4.8.4 | 1 
+>  Thomas>                 lmbench-3.0-a9 | 1 
+>  Thomas>                linux-pam-1.1.4 | 1 
+>  Thomas>                wvstreams-4.6.1 | 1 
+>  Thomas>                madplay-0.15.2b | 1 
+>  Thomas>                  libiconv-1.14 | 1 
+>  Thomas>                   libv4l-0.8.9 | 1 
+>  Thomas> media-ctl-ac40b79f002a2315f... | 1 
+>  Thomas>          host-gutenprint-5.2.9 | 1 
+>  Thomas>                 libsigsegv-2.6 | 1 
+> 
+> Nice overview!
+
+Yeah, it allows to clearly see which packages are the most problematic
+ones. Maybe I should also have a summary over the last week or so,
+because for example, the media-ctl build failure has been here for a
+very long time.
+
+I will reply later on your analysis of the failures, I have a few
+comments.
+
+However, please beware that the Git commit id from the build results
+coming from my autobuilders are wrong since about a day or so. I was
+using the same Git clone for the two builds, each doing a git pull on
+its own at the start of a build. And I think I finally hit the case
+where the two git pull were done in parallel: the Git repository
+contained some spurious merge commits over the history of the last day.
+I've halted my autobuilders, and I'll be fixing the script to have one
+Git clone for each instance of the build.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
