@@ -1,9 +1,9 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Tue, 14 May 2013 21:21:55 +0200
-Subject: [Buildroot] [PATCH 1/1] external-toolchain: add Sourcery CodeBench
-	ARM 201305 Signed-off-by: Olivier Schonken
+Date: Tue, 14 May 2013 21:37:29 +0200
+Subject: [Buildroot] [PATCHv2 1/1] external-toolchain: add Sourcery
+	CodeBench ARM 201305 Signed-off-by: Olivier Schonken
 	<olivier.schonken@gmail.com>
-Message-ID: <1368559315-5397-1-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <1368560249-6484-1-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,12 +11,14 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ---
+Changelog:
+   Fixed kernel headers version
  toolchain/toolchain-external/Config.in   | 25 +++++++++++++++++++++++++
  toolchain/toolchain-external/ext-tool.mk |  3 +++
  2 files changed, 28 insertions(+)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index a93ada3..ec0f028 100644
+index a93ada3..5fdd27b 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
 @@ -64,6 +64,30 @@ comment "Linaro toolchains available for Cortex-A{5,8,9,15}"
@@ -34,7 +36,7 @@ index a93ada3..ec0f028 100644
 +	help
 +	  Sourcery CodeBench toolchain for the ARM architecture, from
 +	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
-+	  2.17 and gdb 7.4.50, kernel headers 3.2.10. It has support
++	  2.17 and gdb 7.4.50, kernel headers 3.8.2. It has support
 +	  for the following variants:
 +	    - ARMv5TE, little endian, soft-float, glibc
 +	      Select ARM926T, ARM10T, XScale or another ARMv5 core
