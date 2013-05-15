@@ -1,26 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 15 May 2013 16:05:54 +0200
-Subject: [Buildroot] [PATCH 1/2] graph-depends: ignore the
-	'target-generic-dont-remount-rw' target
-In-Reply-To: <1368605463-20677-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Wed, 15 May 2013 10:11:02 +0200")
-References: <1368605463-20677-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87li7gpccd.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 15 May 2013 15:00:26 +0200
+Subject: [Buildroot] [git commit] aircrack-ng: fix statically linked build
+Message-ID: <20130515140651.682AC9A1B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=bed1490d0f58dc963d2144f2fe6b705f9f36d848
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Luca> The graph-depends script tries to call 'make
- Luca> target-generic-dont-remount-rw', which doesn't exist since
- Luca> 'target-generic-dont-remount-rw' is not a package.
+Fixe the build failure visible at
+http://autobuild.buildroot.net/results/2441d8b62323a00f32f2edb7cb781dda71ff7f68
 
- Luca> See also the comments for commit 72bd61e5b8c2094378.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/aircrack-ng/aircrack-ng.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
+index c6574f1..a36cf34 100644
+--- a/package/aircrack-ng/aircrack-ng.mk
++++ b/package/aircrack-ng/aircrack-ng.mk
+@@ -20,9 +20,12 @@ else
+ 	AIRCRACK_NG_MAKE_OPTS = sqlite=false
+ endif
+ 
++AIRCRACK_NG_LDFLAGS = -lz \
++	$(if $(BR2_PREFER_STATIC_LIB),-ldl -lpthread)
++
+ define AIRCRACK_NG_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_LD)" \
+-		LDFLAGS="$(TARGET_LDFLAGS) -lz" \
++		LDFLAGS="$(AIRCRACK_NG_LDFLAGS)" \
+ 		-C $(@D) $(AIRCRACK_NG_MAKE_OPTS) all
+ endef
+ 
