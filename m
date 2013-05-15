@@ -1,19 +1,25 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 15 May 2013 19:24:04 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain-external: add support for
- 'Sourcery CodeBench ARM 2013.05'
-In-Reply-To: <1368012852-24520-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1368012852-24520-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <CAHkwnC-CzrXTOuUnRoQ5G2dqMwkvamVc=+Q4AL=XPe9Z_EywVg@mail.gmail.com>
+Date: Wed, 15 May 2013 19:26:33 +0200
+Subject: [Buildroot] [PATCHv3 1/2] external-toolchain: add Sourcery
+ CodeBench ARM 2013.05
+In-Reply-To: <1368562588-1641-1-git-send-email-olivier.schonken@gmail.com>
+References: <1368562588-1641-1-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <CAHkwnC-wRyxQjHQsNYRCq4Z6MRr6PnOtEJtqt1m9_FK46mYFbw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 8, 2013 at 1:34 PM, Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+On Tue, May 14, 2013 at 10:16 PM, Olivier Schonken
+<olivier.schonken@gmail.com> wrote:
+> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 > ---
+> Changelog:
+>    Fixed kernel headers version
+>    Added newline in commit message
+>    Added extra patch to remove oldest CodeSourcery ARM compiler
+>
 >  toolchain/toolchain-external/Config.in   | 25 +++++++++++++++++++++++++
 >  toolchain/toolchain-external/ext-tool.mk |  3 +++
 >  2 files changed, 28 insertions(+)
@@ -62,7 +68,7 @@ On Wed, May 8, 2013 at 1:34 PM, Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
 >         default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_02
 >         default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_01
 > diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-> index bf2bee8..b6532fc 100644
+> index a87bc3b..e993fe8 100644
 > --- a/toolchain/toolchain-external/ext-tool.mk
 > +++ b/toolchain/toolchain-external/ext-tool.mk
 > @@ -200,6 +200,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gn
@@ -76,10 +82,16 @@ On Wed, May 8, 2013 at 1:34 PM, Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
 >  TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2013.01/+download/
 >  TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.01-20130125_linux.tar.bz2
 > --
-> 1.8.1.4
+> 1.8.1.2
 >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-ping
+I've already sent a patch for that:
+http://lists.busybox.net/pipermail/buildroot/2013-May/071726.html
 
+Best regards
 --
 Fabio Porcedda
