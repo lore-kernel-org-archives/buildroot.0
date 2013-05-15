@@ -1,37 +1,32 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 15 May 2013 22:56:18 +0200
-Subject: [Buildroot] [PATCH 2/3] package/libedit2: new package
-In-Reply-To: <519332C6.9080509@mind.be>
-References: <cover.1368567696.git.yann.morin.1998@free.fr>
- <527cc033d0024e5562a9e5984423088bf343921a.1368567696.git.yann.morin.1998@free.fr>
- <5192BA45.6010401@mind.be> <20130514224214.GB8043@free.fr>
- <519332C6.9080509@mind.be>
-Message-ID: <20130515205617.GA3265@free.fr>
+Date: Wed, 15 May 2013 22:59:27 +0200
+Subject: [Buildroot] [PATCH] Standardisation of $(BUILD)/.root name
+In-Reply-To: <19013645.b0LZFaBj4B@sagittae>
+References: <1368541851-31089-1-git-send-email-jezz@sysmic.org>
+ <2999958.1S5Q3eWKd9@sagittae> <20130514222324.GA8043@free.fr>
+ <19013645.b0LZFaBj4B@sagittae>
+Message-ID: <20130515205927.GB3265@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+On 2013-05-15 08:19 +0200, J?r?me Pouiller spake thusly:
+> On Wednesday 15 May 2013 00:23:24 Yann E. MORIN wrote:
+> [...]
+> > > I cannot just add a dependency between
+> > > $(STAMP_DIR)/skeleton-target-installed and  $(STAMP_DIR).
+> > 
+> > Why not? Like:
+> >     $(STAMP_DIR)/skeleton-target-installed: $(STAMP_DIR)
+> > 
+> > which to me looks like the sane solution (and not what I previosuly
+> > answered Arnout about $(TARGET_DIR))
+> Because, $(STAMP_DIR)/skeleton-target-installed will be rebuilt each time a 
+> file is added or removed from $(STAMP_DIR).
 
-On 2013-05-15 09:01 +0200, Arnout Vandecappelle spake thusly:
-> On 15/05/13 00:42, Yann E. MORIN wrote:
-> >Arnout, All,
-> >
-> >On 2013-05-15 00:27 +0200, Arnout Vandecappelle spake thusly:
-> >>  Why is it called libedit2? Both NetBSD and Debian call it libedit...
-> >
-> >Debian actually calls it:
-> >     libedit2
-> >     libedit-dev
-> >See: http://packages.debian.org/search?keywords=libedit
-> 
->  The digit after the libxxx binary is the library soname, which isn't
-> relevant for us. You should consider the source package name as the upstream
-> name.
-
-Fair enough. Will rename. Thanks! :-)
+Indeed. Sigh. Too short-sighted I was...
 
 Regards,
 Yann E. MORIN.
