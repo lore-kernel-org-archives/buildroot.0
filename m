@@ -1,14 +1,14 @@
 From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
-Date: Wed, 15 May 2013 12:39:13 +0200
-Subject: [Buildroot] [PATCH] aespipe: new package
-Message-ID: <519365D1.7090705@fh-kl.de>
+Date: Wed, 15 May 2013 12:43:51 +0200
+Subject: [Buildroot] [PATCH v2] aespipe: new package
+Message-ID: <519366E7.6090507@fh-kl.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Patrick Ziegler <ziggo@zaebos.net>
+Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
 ---
  package/Config.in          |  1 +
  package/aespipe/Config.in  |  9 +++++++++
