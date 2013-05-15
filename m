@@ -1,71 +1,40 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 15 May 2013 10:26:49 +0200
-Subject: [Buildroot] [PATCH 1/2] libglib2: fix build when toolchain has no
-	thread support
-Message-ID: <1368606410-24783-1-git-send-email-s.martin49@gmail.com>
+Date: Wed, 15 May 2013 10:26:50 +0200
+Subject: [Buildroot] [PATCH 2/2] aircrack-ng: fix statically linked build
+In-Reply-To: <1368606410-24783-1-git-send-email-s.martin49@gmail.com>
+References: <1368606410-24783-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1368606410-24783-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the build failure visible at
-http://autobuild.buildroot.net/results/3d3/3d3f4f0044a4b58ce3d0a3449a5f012d953d59bb
+Fixe the build failure visible at
+http://autobuild.buildroot.net/results/2441d8b62323a00f32f2edb7cb781dda71ff7f68
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- ...ib2-0004-fix-build-when-no-thread-support.patch | 28 ++++++++++++++++++++++
- package/libglib2/libglib2.mk                       |  3 +++
- 2 files changed, 31 insertions(+)
- create mode 100644 package/libglib2/libglib2-0004-fix-build-when-no-thread-support.patch
+ package/aircrack-ng/aircrack-ng.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/libglib2/libglib2-0004-fix-build-when-no-thread-support.patch b/package/libglib2/libglib2-0004-fix-build-when-no-thread-support.patch
-new file mode 100644
-index 0000000..5563544
---- /dev/null
-+++ b/package/libglib2/libglib2-0004-fix-build-when-no-thread-support.patch
-@@ -0,0 +1,28 @@
-+Fix gio/gcancellable.c build when thread support is disabled
+diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
+index c6574f1..a36cf34 100644
+--- a/package/aircrack-ng/aircrack-ng.mk
++++ b/package/aircrack-ng/aircrack-ng.mk
+@@ -20,9 +20,12 @@ else
+ 	AIRCRACK_NG_MAKE_OPTS = sqlite=false
+ endif
+ 
++AIRCRACK_NG_LDFLAGS = -lz \
++	$(if $(BR2_PREFER_STATIC_LIB),-ldl -lpthread)
 +
-+Signed-off-by: "Samuel Martin" <s.martin49@gmail.com>
-+---
-+--- a/gio/gcancellable.c	2013-05-14 23:08:25.514461348 +0200
-++++ b/gio/gcancellable.c	2013-05-14 23:10:23.347789625 +0200
-+@@ -270,8 +270,10 @@ g_cancellable_reset (GCancellable *cance
-+   while (priv->cancelled_running)
-+     {
-+       priv->cancelled_running_waiting = TRUE;
-++#if defined(G_THREADS_ENABLED)
-+       g_cond_wait (cancellable_cond,
-+                    g_static_mutex_get_mutex (& G_LOCK_NAME (cancellable)));
-++#endif
-+     }
-+ 
-+   if (priv->cancelled)
-+@@ -619,8 +621,10 @@ g_cancellable_disconnect (GCancellable
-+   while (priv->cancelled_running)
-+     {
-+       priv->cancelled_running_waiting = TRUE;
-++#if defined(G_THREADS_ENABLED)
-+       g_cond_wait (cancellable_cond,
-+                    g_static_mutex_get_mutex (& G_LOCK_NAME (cancellable)));
-++#endif
-+     }
-+ 
-+   g_signal_handler_disconnect (cancellable, handler_id);
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index d78e8ec..3ac78ba 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -67,6 +67,9 @@ HOST_LIBGLIB2_CONF_OPT = \
- 		--disable-tests
- 
- LIBGLIB2_CONF_OPT += --disable-tests
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-+	LIBGLIB2_CONF_OPT += --with-threads=none --disable-threads
-+endif
- 
- LIBGLIB2_DEPENDENCIES = host-pkgconf host-libglib2 libffi zlib $(if $(BR2_NEEDS_GETTEXT),gettext) host-gettext
+ define AIRCRACK_NG_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_LD)" \
+-		LDFLAGS="$(TARGET_LDFLAGS) -lz" \
++		LDFLAGS="$(AIRCRACK_NG_LDFLAGS)" \
+ 		-C $(@D) $(AIRCRACK_NG_MAKE_OPTS) all
+ endef
  
 -- 
 1.8.2.3
