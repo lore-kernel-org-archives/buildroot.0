@@ -1,69 +1,109 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 15 May 2013 14:52:55 -0500
-Subject: [Buildroot] [PATCH v5 11/11] gst-omx: add gst-omx package
+Date: Wed, 15 May 2013 14:52:53 -0500
+Subject: [Buildroot] [PATCH v5 09/11] libvpx: new package libvpx
 In-Reply-To: <1368647575-14377-1-git-send-email-spenser@gillilanding.com>
 References: <1368647575-14377-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1368647575-14377-12-git-send-email-spenser@gillilanding.com>
+Message-ID: <1368647575-14377-10-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gst-omx enables OpenMAX based accelerated video decode.
+adds webm multimedia support and the VP8 encoder/decoder library.
+
+http://www.webmproject.org/
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/multimedia/Config.in          |    1 +
- package/multimedia/gst-omx/Config.in  |   11 +++++++++++
- package/multimedia/gst-omx/gst-omx.mk |    9 +++++++++
- 3 files changed, 21 insertions(+)
- create mode 100644 package/multimedia/gst-omx/Config.in
- create mode 100644 package/multimedia/gst-omx/gst-omx.mk
+ package/multimedia/Config.in        |    1 +
+ package/multimedia/libvpx/Config.in |    6 ++++
+ package/multimedia/libvpx/libvpx.mk |   52 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+)
+ create mode 100644 package/multimedia/libvpx/Config.in
+ create mode 100644 package/multimedia/libvpx/libvpx.mk
 
 diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index a0927e9..68dfa13 100644
+index d0594b9..a0927e9 100644
 --- a/package/multimedia/Config.in
 +++ b/package/multimedia/Config.in
-@@ -11,6 +11,7 @@ source "package/multimedia/gst-ffmpeg/Config.in"
- source "package/multimedia/gst-dsp/Config.in"
- source "package/multimedia/gst-fsl-plugins/Config.in"
- source "package/multimedia/gst-omapfb/Config.in"
-+source "package/multimedia/gst-omx/Config.in"
- source "package/multimedia/gst-plugins-base/Config.in"
- source "package/multimedia/gst1-plugins-base/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
-diff --git a/package/multimedia/gst-omx/Config.in b/package/multimedia/gst-omx/Config.in
+@@ -20,6 +20,7 @@ source "package/multimedia/gst1-plugins-bad/Config.in"
+ source "package/multimedia/gst-plugins-ugly/Config.in"
+ source "package/multimedia/gst1-plugins-ugly/Config.in"
+ source "package/multimedia/lame/Config.in"
++source "package/multimedia/libvpx/Config.in"
+ source "package/multimedia/madplay/Config.in"
+ source "package/multimedia/mpd/Config.in"
+ source "package/multimedia/mpg123/Config.in"
+diff --git a/package/multimedia/libvpx/Config.in b/package/multimedia/libvpx/Config.in
 new file mode 100644
-index 0000000..822ebe0
+index 0000000..2327971
 --- /dev/null
-+++ b/package/multimedia/gst-omx/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_GST_OMX
-+	bool "gst-omx"
-+	depends on BR2_PACKAGE_GSTREAMER1 && (BR2_PACKAGE_BELLAGIO || BR2_PACKAGE_RPI_USERLAND)
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
++++ b/package/multimedia/libvpx/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBVPX
++	bool "libvpx"
 +	help
-+	  GStreamer plug-in to use OpenMAX API.
++	  a high-quality, open video format that's freely available to everyone.
 +
-+	  http://cgit.freedesktop.org/gstreamer/gst-omx
-+
-+comment "gst-omx requires a OpenMAX implementation please select rpi-userland or bellagio"
-+	depends on BR2_PACKAGE_GSTREAMER1 && !(BR2_PACKAGE_BELLAGIO || BR2_PACKAGE_RPI_USERLAND)
-diff --git a/package/multimedia/gst-omx/gst-omx.mk b/package/multimedia/gst-omx/gst-omx.mk
++	  http://webmproject.org
+diff --git a/package/multimedia/libvpx/libvpx.mk b/package/multimedia/libvpx/libvpx.mk
 new file mode 100644
-index 0000000..29d1c55
+index 0000000..879a531
 --- /dev/null
-+++ b/package/multimedia/gst-omx/gst-omx.mk
-@@ -0,0 +1,9 @@
-+GST_OMX_VERSION=1.0.0
-+GST_OMX_SOURCE=gst-omx-$(GST_OMX_VERSION).tar.xz
-+GST_OMX_SITE=http://gstreamer.freedesktop.org/src/gst-omx/
-+GST_OMX_DEPENDENCIES = gstreamer1 gst1-plugins-base
-+GST_OMX_LICENSE = LGPLv2.1
-+GST_OMX_LICENSE_FILE = COPYING
-+GST_OMX_INSTALL_STAGING = YES
++++ b/package/multimedia/libvpx/libvpx.mk
+@@ -0,0 +1,52 @@
++#############################################################
++#
++# libvpx
++#
++#############################################################
 +
-+$(eval $(autotools-package))
++LIBVPX_VERSION = v1.2.0
++LIBVPX_SITE = http://git.chromium.org/webm/libvpx.git
++LIBVPX_SITE_METHOD = git
++
++LIBVPX_INSTALL_STAGING = YES
++LIBVPX_LICENSE = BSD-3c 
++LIBVPX_LICENSE_FILES = LICENSE PATENTS 
++
++LIBVPX_INSTALL_STAGING = YES
++
++LIBVPX_CONF_ENV = \
++	LD=$$CC \
++	CROSS=$(GNU_TARGET_NAME)
++
++LIBVPX_CONF_OPT = \
++	--disable-examples \
++	--disable-docs \
++	--disable-unit-tests
++
++define LIBVPX_CONFIGURE_CMDS
++	(cd $(LIBVPX_SRCDIR) && rm -rf config.cache && \
++	$(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_ARGS) \
++	$(LIBVPX_CONF_ENV) \
++	./configure \
++		--target=generic-gnu \
++		--enable-pic \
++		--prefix=/usr \
++		$(SHARED_STATIC_LIBS_OPTS) \
++		$(LIBVPX_CONF_OPT) \
++	)
++endef
++
++define LIBVPX_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) all
++endef
++
++define LIBVPX_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D) install
++endef
++
++define LIBVPX_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.9.5
