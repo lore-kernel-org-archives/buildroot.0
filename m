@@ -1,40 +1,50 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 15 May 2013 10:26:50 +0200
-Subject: [Buildroot] [PATCH 2/2] aircrack-ng: fix statically linked build
-In-Reply-To: <1368606410-24783-1-git-send-email-s.martin49@gmail.com>
-References: <1368606410-24783-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1368606410-24783-2-git-send-email-s.martin49@gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 15 May 2013 11:01:51 +0200
+Subject: [Buildroot] [PATCH 1/2] graph-depends: ignore the
+ 'target-generic-dont-remount-rw' target
+In-Reply-To: <20130515101604.59629ace@skate>
+References: <1368605463-20677-1-git-send-email-luca@lucaceresoli.net>
+ <20130515101604.59629ace@skate>
+Message-ID: <51934EFF.9080304@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixe the build failure visible at
-http://autobuild.buildroot.net/results/2441d8b62323a00f32f2edb7cb781dda71ff7f68
+Thomas Petazzoni wrote:
+> Dear Luca Ceresoli,
+>
+> On Wed, 15 May 2013 10:11:02 +0200, Luca Ceresoli wrote:
+>> The graph-depends script tries to call 'make target-generic-dont-remount-rw',
+>> which doesn't exist since 'target-generic-dont-remount-rw' is not a package.
+>>
+>> See also the comments for commit 72bd61e5b8c2094378.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+>> I guess we could compute the TARGET_EXCEPTIONS automatically and avoid the
+>> need to update it every time. But it would be a longer work, so for now I
+>> would just fix it manually.
+> I agree. For example, target-generic-getty-sysvinit is still missing
+> from the list.
+>
+> I see two ways to handle that automatically:
+>
+>   * Have all those special targets starting with "target-" and have
+>     graph-depends exclude them automatically. Simple, but not nice if we
+>     have a real package named "target-<something>".
+>
+>   * Instead of registering all packages into the make variable called
+>     TARGETS, register them into a variable called PACKAGES, which will
+>     get appended (at the right place) to the TARGETS variable. This way,
+>     the 'show-targets' thing can be turned into a 'show-packages' that
+>     will only display the value of the PACKAGES variable. This solution
+>     is probably cleaner than the previous one.
+>
+> What do you think?
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/aircrack-ng/aircrack-ng.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+The second option looks much better to me, too.
 
-diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
-index c6574f1..a36cf34 100644
---- a/package/aircrack-ng/aircrack-ng.mk
-+++ b/package/aircrack-ng/aircrack-ng.mk
-@@ -20,9 +20,12 @@ else
- 	AIRCRACK_NG_MAKE_OPTS = sqlite=false
- endif
- 
-+AIRCRACK_NG_LDFLAGS = -lz \
-+	$(if $(BR2_PREFER_STATIC_LIB),-ldl -lpthread)
-+
- define AIRCRACK_NG_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_LD)" \
--		LDFLAGS="$(TARGET_LDFLAGS) -lz" \
-+		LDFLAGS="$(AIRCRACK_NG_LDFLAGS)" \
- 		-C $(@D) $(AIRCRACK_NG_MAKE_OPTS) all
- endef
- 
--- 
-1.8.2.3
+Luca
