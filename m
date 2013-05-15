@@ -1,32 +1,53 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 15 May 2013 20:45:05 +0200
-Subject: [Buildroot] [git commit] news.html: add 2013.05-rc1 annoucement link
-Message-ID: <20130515184616.27A189A204@busybox.osuosl.org>
+Date: Wed, 15 May 2013 20:48:41 +0200
+Subject: [Buildroot] [git commit] CHANGES: update with recent changes
+Message-ID: <20130515191807.AA3B69A1B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=867aa7f987c6f32d4b191bdeb73c44c693992acb
+commit: http://git.buildroot.net/buildroot/commit/?id=a517092fa3205af65935bb1c7b395b54778ee68f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/news.html |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ CHANGES |   17 ++++++++++-------
+ 1 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/docs/news.html b/docs/news.html
-index 665b3bf..c66757c 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -10,7 +10,8 @@
-     <p>We have a new release candidate! Lots of changes all over the
-     tree, see the <a
-     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.05_rc1">CHANGES</a>
--    file for details.</p>
-+    file for details, and read the
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2013-May/071737.html">announcement</a>.</p>
+diff --git a/CHANGES b/CHANGES
+index 3009071..e2f3f3b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -6,13 +6,14 @@
  
-     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-     <a href="/downloads/buildroot-2013.05-rc1.tar.bz2">2013.05-rc1
+ 	Defconfigs: Add Telit EVK-PRO3, AT91SAM9260-EK Nand flash.
+ 
+-	Updated/fixed packages: busybox, cairo, classpath, curlftpfs,
+-	czmq, dbus, f2fs-tools, fan-ctrl, filemq, gst-plugin-bad,
+-	gutenprint, hplip, json-c, libatomic_ops, libcurl, libdrm,
+-	libnspr, libnss, libsha1, libsigsegv, libxcb, linknx,
+-	linux-pam, lttng-modules, lttng-tools, matchbox-lib, mcookie,
+-	mesa3d, neon, pixman, pulseaudio, python-nfc, qt5imageformats,
+-	quota, openssl, sconeserver, strace, sylpheed, wvstreams,
++	Updated/fixed packages: aircrack-ng, busybox, cairo,
++	classpath, curlftpfs, czmq, dbus, f2fs-tools, fan-ctrl,
++	filemq, gst-plugin-bad, gutenprint, hplip, json-c,
++	libatomic_ops, libcurl, libdrm, libglib2, libnspr, libnss,
++	libsha1, libsigsegv, libxcb, linknx, linux-pam, lttng-modules,
++	lttng-tools, matchbox-lib, mcookie, mesa3d, neon, pixman,
++	pulseaudio, python-nfc, qt5imageformats, quota, openssl,
++	sconeserver, strace, sylpheed, wvstreams,
+ 	xapp_{appres,bdftopcf,beforelight,bitmap,edires,fonttosfnt},
+ 	xapp_{fslsfonts,fstobdf,iceauth,ico,listres,luit,mkfontdir},
+ 	xapp_{mkfontscale,oclock,rgb,rstart,scripts,sessreg,setxkbmap},
+@@ -51,6 +52,8 @@
+ 	xproto_{xf86bigfont,xf86dga,xf86dri,xf86vidmode,xinerama,x}proto,
+ 	xserver_xorg-server, xutil_{makedepend,util-macros}
+ 
++	Readded Packages: xapp_xinit
++
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+ 	#5054: amd64: cannot find init - due to missing /lib64 folder
