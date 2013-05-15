@@ -1,33 +1,118 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 15 May 2013 16:04:48 +0200
-Subject: [Buildroot] [git commit] graph-depends: fix program path in comment
-Message-ID: <20130515140652.1373D9A214@busybox.osuosl.org>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Wed, 15 May 2013 15:22:20 +0100
+Subject: [Buildroot] [PATCH] external-toolchain: Allow MIPS64 for
+	Codesourcery MIPS toolchains
+Message-ID: <1368627740-4094-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=13c367f827566c91e4a85fb5d050424904f404ed
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Markos Chandras <markos.chandras@imgtec.com>
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+The n64 ABI which is supported by the Codesourcery MIPS toolchains,
+is only available with MIPS64 so allow these cores to be selected
+and used with these toolchains.
+
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 ---
- support/scripts/graph-depends |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/toolchain-external/Config.in |   20 ++++++++++----------
+ 1 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 8d81969..790e24e 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -1,7 +1,7 @@
- #!/usr/bin/python
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index a93ada3..a13ee31 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -114,7 +114,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
  
- # Usage (the graphviz package must be installed in your distribution)
--#  ./scripts/graph-depends [package-name] > test.dot
-+#  ./support/scripts/graph-depends [package-name] > test.dot
- #  dot -Tpdf test.dot -o test.pdf
- #
- # With no arguments, graph-depends will draw a complete graph of
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	bool "Sourcery CodeBench MIPS 2012.09"
+-	depends on BR2_mips || BR2_mipsel
++	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+@@ -129,7 +129,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	      Select a MIPS generic core
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS64 big endian glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS32 O32 little endian glibc
+@@ -137,7 +137,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	      Disable BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -EL
+ 	    - MIPS64 little endian glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Disable BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -EL
+@@ -145,7 +145,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	      Select a MIPS generic core
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS64 big endian soft float glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS32 little endian soft float glibc
+@@ -153,7 +153,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	      Select BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -EL
+ 	    - MIPS64 little endian soft float glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Select BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -EL
+@@ -184,7 +184,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	bool "Sourcery CodeBench MIPS 2012.03"
+-	depends on BR2_mips || BR2_mipsel
++	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+@@ -199,7 +199,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	      Select a MIPS generic core
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS64 big endian glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS32 O32 little endian glibc
+@@ -207,7 +207,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	      Disable BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -EL
+ 	    - MIPS64 little endian glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Disable BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -EL
+@@ -215,7 +215,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	      Select a MIPS generic core
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS64 big endian soft float glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS32 little endian soft float glibc
+@@ -223,7 +223,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	      Select BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -EL
+ 	    - MIPS64 little endian soft float glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Select BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -EL
+-- 
+1.7.1
