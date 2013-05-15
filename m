@@ -1,41 +1,30 @@
-From: Anders Darander <anders.darander@gmail.com>
-Date: Wed, 15 May 2013 08:01:54 +0200
-Subject: [Buildroot] [PATCH v4 2/4] am33x-cm3: add FW for suspend/resume
-In-Reply-To: <87fvxpqoa1.fsf@dell.be.48ers.dk>
-References: <1368562193-26149-1-git-send-email-anders@chargestorm.se>
- <1368562193-26149-3-git-send-email-anders@chargestorm.se>
- <87fvxpqoa1.fsf@dell.be.48ers.dk>
-Message-ID: <CAE4k23-O2q4+qB4kE0uXAdDOnSvgAw=zVuQ+WXzJU0Rx-i1tKA@mail.gmail.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Wed, 15 May 2013 08:19:10 +0200
+Subject: [Buildroot] [PATCH] Standardisation of $(BUILD)/.root name
+In-Reply-To: <20130514222324.GA8043@free.fr>
+References: <1368541851-31089-1-git-send-email-jezz@sysmic.org>
+ <2999958.1S5Q3eWKd9@sagittae> <20130514222324.GA8043@free.fr>
+Message-ID: <19013645.b0LZFaBj4B@sagittae>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Wednesday 15 May 2013 00:23:24 Yann E. MORIN wrote:
+[...]
+> > I cannot just add a dependency between
+> > $(STAMP_DIR)/skeleton-target-installed and  $(STAMP_DIR).
+> 
+> Why not? Like:
+>     $(STAMP_DIR)/skeleton-target-installed: $(STAMP_DIR)
+> 
+> which to me looks like the sane solution (and not what I previosuly
+> answered Arnout about $(TARGET_DIR))
+Because, $(STAMP_DIR)/skeleton-target-installed will be rebuilt each time a 
+file is added or removed from $(STAMP_DIR).
 
-Thanks for the small fixes you made prior to committing.
-
-
-On 14 May 2013 22:50, Peter Korsgaard <jacmet@uclibc.org> wrote:
-
-> >>>>> "Anders" == Anders Darander <anders@chargestorm.se> writes:
->
->  Anders> Without this firmware, the beaglebone won't be able to reboot
->  Anders> correctly.
->
-> It's afaik only for suspend/resume handling (E.G. low power).
->
-
-Well, at least on my board will hang if I issue `reboot` without having
-loaded the FW...
-Though, from the descriptions in the repo, I'd also have assumed that it
-was only needed for the low power modes.
-
-But that's mostly nitpicking, I guess...
-
-Cheers,
-Anders
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130515/93a4fe83/attachment-0001.html>
+-- 
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
