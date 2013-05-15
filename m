@@ -1,56 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 15 May 2013 21:21:05 +0200
-Subject: [Buildroot] Buildroot 2013.05-rc2 released
-Message-ID: <87d2ssoxr2.fsf@dell.be.48ers.dk>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Wed, 15 May 2013 14:52:46 -0500
+Subject: [Buildroot] [PATCH v5 02/11] glibmm: Bump to version 2.36.1
+In-Reply-To: <1368647575-14377-1-git-send-email-spenser@gillilanding.com>
+References: <1368647575-14377-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <1368647575-14377-3-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This upgrades glibmm to version 2.36.1
 
-Buildroot 2013.05-rc2 is released - Go download it at:
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+---
+ package/glibmm/glibmm.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-http://buildroot.net/downloads/buildroot-2013.05-rc2.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2013.05-rc2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -s -n 2013.05_rc1..
-
-    17  Thomas Petazzoni
-    16  Gustavo Zacarias
-    13  Peter Korsgaard
-     9  Arnout Vandecappelle (Essensium/Mind)
-     3  Fabio Porcedda
-     3  Luca Ceresoli
-     3  Samuel Martin
-     3  Simon Dawson
-     2  Olivier Schonken
-     1  Mischa Jonker
-     1  Yann E. MORIN
-     1  gilles.talis at gmail.com
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.05_rc2
-
-I'll be away for a few days this coming weekend, and plan to collect any
-pending fixes when I get back and release -rc3 in around a weeks'
-time. Expect the final 2013.05 release at the end of the month.
-
-Enjoy!
-
+diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
+index abd8b6c..d8f6239 100644
+--- a/package/glibmm/glibmm.mk
++++ b/package/glibmm/glibmm.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-GLIBMM_VERSION_MAJOR = 2.30
++GLIBMM_VERSION_MAJOR = 2.36
+ GLIBMM_VERSION_MINOR = 1
+ GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).$(GLIBMM_VERSION_MINOR)
+ GLIBMM_LICENSE = LGPLv2.1+ (library), GPLv2+ (tools)
 -- 
-Bye, Peter Korsgaard
+1.7.9.5
