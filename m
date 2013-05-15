@@ -1,7 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 15 May 2013 18:12:02 -0500
-Subject: [Buildroot] [PATCH 1/3] uboot: Add ELF target
-Message-ID: <1368659524-21154-1-git-send-email-spenser@gillilanding.com>
+Date: Wed, 15 May 2013 18:12:03 -0500
+Subject: [Buildroot] [PATCH 2/3] fs: add uimage support w/ example for cpio
+In-Reply-To: <1368659524-21154-1-git-send-email-spenser@gillilanding.com>
+References: <1368659524-21154-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <1368659524-21154-2-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,42 +12,83 @@ To: buildroot@busybox.net
 
 From: Spenser Gilliland <Spenser309@gmail.com>
 
-adds ELF image option to uboot
+Adds uimage support for various root filesystems.  Uimage support is needed when
+using the bootm command in uboot.  This provides both a simple infrastructure
+similar to the current BR2_TARGET_ROOTFS_$(2)_GZ for adding compression. To
+define the a rootfs should have a UIMAGE wrapper simply create the
+BR2_TARGET_ROOTFS_$(2)_UIMAGE symbol.
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+Tested-by: Soren Brinkmann <soren.brinkmann@xilinx.com>
 ---
- boot/uboot/Config.in |    3 +++
- boot/uboot/uboot.mk  |    4 +++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ fs/common.mk      |   22 +++++++++++++++++++++-
+ fs/cpio/Config.in |    7 +++++++
+ 2 files changed, 28 insertions(+), 1 deletion(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index a1874a1..aadf757 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -98,6 +98,9 @@ config BR2_TARGET_UBOOT_FORMAT_LDR
- 	depends on BR2_bfin
- 	bool "u-boot.ldr"
+diff --git a/fs/common.mk b/fs/common.mk
+index 36da2dd..f456025 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -31,6 +31,8 @@
+ # BR2_TARGET_ROOTFS_$(FSTYPE)_LZMA exist and are enabled, then the
+ # macro will automatically generate a compressed filesystem image.
  
-+config BR2_TARGET_UBOOT_FORMAT_ELF
-+	bool "u-boot.elf"
++MKIMAGE_RAMDISK = $(HOST_DIR)/usr/bin/mkimage -A $(BR2_ARCH) -T ramdisk -C $(1) -d $(2) $(2).uboot
 +
- endchoice
+ FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
+ FULL_DEVICE_TABLE = $(BUILD_DIR)/_device_table.txt
+ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+@@ -40,7 +42,11 @@ USERS_TABLE = $(BUILD_DIR)/_users_table.txt
+ define ROOTFS_TARGET_INTERNAL
  
- config BR2_TARGET_UBOOT_OMAP_IFT
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 004bdf2..593bb29 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -25,7 +25,9 @@ UBOOT_SITE    = ftp://ftp.denx.de/pub/u-boot
- UBOOT_SOURCE  = u-boot-$(UBOOT_VERSION).tar.bz2
+ # extra deps
+-ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma) $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZO),host-lzop) $$(if $$(BR2_TARGET_ROOTFS_$(2)_XZ),host-xz)
++ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
++	$$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma) \
++	$$(if $$(BR2_TARGET_ROOTFS_$(2)_LZO),host-lzop) \
++	$$(if $$(BR2_TARGET_ROOTFS_$(2)_XZ),host-xz) \
++	$$(if $$(BR2_TARGET_ROOTFS_$(2)_UIMAGE),host-uboot-tools)
+ 
+ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+@@ -79,6 +85,20 @@ endif
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_XZ),y)
+ 	$(XZ) -9 -C crc32 -c $$@ > $$@.xz
  endif
++ifeq ($$(BR2_TARGET_ROOTFS_$(2)_UIMAGE),y)
++ifeq ($$(BR2_TARGET_ROOTFS_$(2)_NONE),y)
++	$$(call MKIMAGE_RAMDISK,none,$$@)
++endif
++ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
++	$$(call MKIMAGE_RAMDISK,gzip,$$@.gz)
++endif
++ifeq ($$(BR2_TARGET_ROOTFS_$(2)_BZIP2),y)
++	$$(call MKIMAGE_RAMDISK,bzip2,$$@.bz2)
++endif
++ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZMA),y)
++	$$(call MKIMAGE_RAMDISK,lzma,$$@.lzma)
++endif
++endif
  
--ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
-+UBOOT_BIN          = u-boot
-+else ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
- UBOOT_BIN          = u-boot.kwb
- UBOOT_MAKE_TARGET  = $(UBOOT_BIN)
- else ifeq ($(BR2_TARGET_UBOOT_FORMAT_AIS),y)
+ rootfs-$(1)-show-depends:
+ 	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
+diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+index 87dde64..3e82dc5 100644
+--- a/fs/cpio/Config.in
++++ b/fs/cpio/Config.in
+@@ -5,6 +5,13 @@ config BR2_TARGET_ROOTFS_CPIO
+ 	  used for an initial RAM filesystem that is passed to the kernel
+ 	  by the bootloader.
+ 
++config BR2_TARGET_ROOTFS_CPIO_UIMAGE
++	bool "Add U-Boot header to the root filesystem"
++	depends on BR2_TARGET_ROOTFS_CPIO
++	help
++	  Add a u-boot header to the cpio root filesystem.  This allows
++	  the image to be booted by the bootm command in uboot.
++
+ choice
+         prompt "Compression method"
+         default BR2_TARGET_ROOTFS_CPIO_NONE
 -- 
 1.7.9.5
