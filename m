@@ -1,36 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 May 2013 09:51:17 +0200
-Subject: [Buildroot] Fwd: graph-depends with jpeg?
-In-Reply-To: <CANxTyt7MqE-gbQ_htn50ooFqUR72Lo5CgNbhmYz6kRiHfASyEw@mail.gmail.com>
-References: <CANxTyt5xEi8MTpEwh_BGhtcUo6NVZK7-z1PenKCEu+QEosQPwg@mail.gmail.com>
- <CANxTyt7MqE-gbQ_htn50ooFqUR72Lo5CgNbhmYz6kRiHfASyEw@mail.gmail.com>
-Message-ID: <20130516095117.44ce660c@skate>
+Date: Thu, 16 May 2013 09:56:04 +0200
+Subject: [Buildroot] [PATCH v6 07/10] libvpx: new package libvpx
+In-Reply-To: <1368655178-19176-8-git-send-email-spenser@gillilanding.com>
+References: <1368655178-19176-1-git-send-email-spenser@gillilanding.com>
+ <1368655178-19176-8-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130516095604.3eda6a6e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+Dear Spenser Gilliland,
 
-On Wed, 15 May 2013 19:45:05 -0400, Danomi Manchego wrote:
+On Wed, 15 May 2013 16:59:35 -0500, Spenser Gilliland wrote:
+> --- /dev/null
+> +++ b/package/multimedia/libvpx/libvpx.mk
+> @@ -0,0 +1,52 @@
+> +#############################################################
+> +#
+> +# libvpx
+> +#
+> +#############################################################
+> +
+> +LIBVPX_VERSION = v1.2.0
+> +LIBVPX_SITE = http://git.chromium.org/webm/libvpx.git
+> +LIBVPX_SITE_METHOD = git
+> +
+> +LIBVPX_INSTALL_STAGING = YES
+> +LIBVPX_LICENSE = BSD-3c 
+> +LIBVPX_LICENSE_FILES = LICENSE PATENTS 
+> +
+> +LIBVPX_INSTALL_STAGING = YES
 
-> Sorry, just realized that the jpeg package has changed to have use the pkg
-> infrastructure, solving that one.  I still get stopped on target-purgelocales
-> though ...
+Already set a few lines above.
 
-Yeah, one of the reason the virtual jpeg was converted to the package
-infrastructure was to make the graph-depends script work. That said, I
-would have liked to have a way to find out that a package is virtual,
-so that it could be shown differently in the graph. Maybe we should
-have named all such packages virtual-<something> ? Not sure.
+> +
+> +LIBVPX_CONF_ENV = \
+> +	LD=$$CC \
 
-Regarding target-purgelocales, just add it to the TARGET_EXCEPTIONS
-array in the graph-depends script. I really need to find some time to
-separate TARGETS from a new PACKAGES variable to avoid this exception
-thing.
+This sounds strange. The target compiler is $(TARGET_CC), and should be
+used with quotes to be compiled with ccache, so, probably:
 
-Thanks for the report,
+	LD="$(TARGET_CC)"
+
+And an explanation above that says why it is needed (i.e, LD being used
+by the libvpx build system as a compiler).
+
+> +	CROSS=$(GNU_TARGET_NAME)
+> +
+> +LIBVPX_CONF_OPT = \
+> +	--disable-examples \
+> +	--disable-docs \
+> +	--disable-unit-tests
+> +
+> +define LIBVPX_CONFIGURE_CMDS
+> +	(cd $(LIBVPX_SRCDIR) && rm -rf config.cache && \
+> +	$(TARGET_CONFIGURE_OPTS) \
+> +	$(TARGET_CONFIGURE_ARGS) \
+> +	$(LIBVPX_CONF_ENV) \
+> +	./configure \
+> +		--target=generic-gnu \
+> +		--enable-pic \
+> +		--prefix=/usr \
+> +		$(SHARED_STATIC_LIBS_OPTS) \
+> +		$(LIBVPX_CONF_OPT) \
+> +	)
+> +endef
+
+Please add a comment somewhere that allows us to remember that you're
+not using autotools-package because this 'configure' script is not an
+autotools one, but some hand-written thing.
+
+Thanks!
 
 Thomas
 -- 
