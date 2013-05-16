@@ -1,41 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 May 2013 11:02:03 +0200
-Subject: [Buildroot] [PATCH] graph-depends: ignore the
- 'target-purgelocales' target (v2)
-In-Reply-To: <1368693964-5410-1-git-send-email-danomimanchego123@gmail.com>
-References: <1368693964-5410-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20130516110203.7be15bdc@skate>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 16 May 2013 06:07:02 -0400
+Subject: [Buildroot] [PATCH v3] graph-depends: ignore the
+	'target-purgelocales' target
+Message-ID: <1368698822-2112-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+Otherwise, graph-depends tries to call 'make target-purgelocales-show-depends',
+which does not exist, as 'target-purgelocales' is not an actual package.
 
-On Thu, 16 May 2013 04:46:04 -0400, Danomi Manchego wrote:
-> Otherwise, graph-depends tries to call 'make target-purgelocales-show-depends',
-> which does not exist, as 'target-purgelocales' is not an actual package.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> 
-> ---
-> v2: Fix misspelling in commit log
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-And this one cannot be applied, because you added (v2) in the title of
-the commit. The v2 should be in the [PATCH v2], so that it get
-discarded by git.
+---
+v2: Fix misspelling in commit log
+v3: Remove version from subject, and use --subject-prefix - learn something new every day
+---
+ support/scripts/graph-depends |    1 +
+ 1 file changed, 1 insertion(+)
 
- git send-email --subject-prefix="PATCH v2" HEAD^
-
-You can also use --subject-prefix with git format-patch if you
-separately format your patches and send them.
-
-Best regards,
-
-Thomas
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 790e24e..50b8670 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -170,6 +170,7 @@ TARGET_EXCEPTIONS = [
+     "target-generic-hostname",
+     "target-root-passwd",
+     "target-post-image",
++    "target-purgelocales",
+ ]
+ 
+ # In full mode, start with the result of get_targets() to get the main
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
