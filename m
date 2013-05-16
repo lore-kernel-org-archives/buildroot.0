@@ -1,50 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 May 2013 14:41:28 +0200
-Subject: [Buildroot] [PATCH] poco: not available for all architectures
-In-Reply-To: <5194D04F.7050406@zacarias.com.ar>
-References: <1368704401-1832-1-git-send-email-gustavo@zacarias.com.ar>
- <20130516115453.GF4709@tarshish> <5194CAB9.8020102@zacarias.com.ar>
- <20130516142325.5afc5306@skate> <5194D04F.7050406@zacarias.com.ar>
-Message-ID: <20130516144128.6735cb45@skate>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Thu, 16 May 2013 09:18:38 -0500
+Subject: [Buildroot] [PATCH v6 09/10] libopenmax: Add libopenmax virtual
+	package
+In-Reply-To: <20130516095842.78066d20@skate>
+References: <1368655178-19176-1-git-send-email-spenser@gillilanding.com>
+ <1368655178-19176-10-git-send-email-spenser@gillilanding.com>
+ <20130516095842.78066d20@skate>
+Message-ID: <CAEBucnBvGuHMM3cgGcaSyJ3M_ShpNuUKEW+8TRz4TQTmpDsh9Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Thomas,
 
-On Thu, 16 May 2013 09:25:51 -0300, Gustavo Zacarias wrote:
-> On 05/16/2013 09:23 AM, Thomas Petazzoni wrote:
-> 
-> >> I'm actually disabling the comment if it's not a supported architecture
-> >> with that line (same as the option itself).
-> > 
-> > I believe that what Baruch says is that the comment is useless when
-> > you're on an architecture that poco doesn't support.
-> > 
-> > So it should actually be:
-> > 
-> > 	depends on (BR2_aarch64 || BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel || BR2_xtensa)
-> > 
-> > No?
-> 
-> Maybe it's because i'm out of coffee, but i don't see that holding.
-> So comment "hey you lack toolchain X" when ARCH = aarch64 || arc .. ?
-> So it shows up if any of those arches == true ?
+> I'm starting to wonder if those virtual packages shouldn't be separated
+> from each other, and named virtual-<something>, i.e:
+>
+>         package/virtual-opengl/
+>         package/virtual-openvg/
+>         package/virtual-egl/
+>         package/virtual-openmax/
+>
+> but ok, that's certainly a different work. This current patch series is
+> already long enough.
 
-Doh, I must be the one needing more coffee it seems. Yeah, if the
-package is not available on some arches, we need to do "depends
-on !(some arches)" on both the package itself and the comment, which is
-what you did.
+I agree that a change like you suggested would be better but it's
+probably best left for another patch series due to the required
+changes being quite large.
 
-Got confused, sorry.
+>> +ifeq ($(BR2_PACKAGE_BELLAGIO),y)
+>> +LIBOPENMAX_DEPENDENCIES += bellagio
+>> +endif
+>
+> Unless I missed something, there is no bellagio package in Buildroot
+> for now, so this chunk should only be added once bellagio is added.
 
-Confusingly-acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+It's in package/multimedia/bellagio.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+
+Thanks,
+Spenser
+
+
+
+--
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
