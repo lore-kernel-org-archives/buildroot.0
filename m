@@ -1,49 +1,43 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 16 May 2013 08:17:43 +0200
-Subject: [Buildroot] Config options for optional dependencies [was: [PATCH
- 6/6] gnutls: bump to version 3.2.0]
-In-Reply-To: <5192BF6F.8000800@zacarias.com.ar>
-References: <1368463259-18958-1-git-send-email-gustavo@zacarias.com.ar>
- <1368463259-18958-6-git-send-email-gustavo@zacarias.com.ar>
- <5192BC67.2070600@mind.be> <5192BF6F.8000800@zacarias.com.ar>
-Message-ID: <51947A07.2080301@mind.be>
+Date: Thu, 16 May 2013 07:59:31 +0200
+Subject: [Buildroot] [PATCH] qt5 libQt5OpenGL.so library installation
+In-Reply-To: <1368650084-24427-1-git-send-email-wojciech.slenska@gmail.com>
+References: <1368650084-24427-1-git-send-email-wojciech.slenska@gmail.com>
+Message-ID: <519475C3.7040407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/05/13 00:49, Gustavo Zacarias wrote:
-> On 05/14/2013 07:36 PM, Arnout Vandecappelle wrote:
->>   Any reason why you want to add this config symbol, instead of just
->> checking for BR2_PACKAGE_P11_KIT in the .mk file?
+On 15/05/13 22:34, Wojciech Slenska wrote:
+> When qt5 is build with EGLFS support, libQt5OpenGL library should be copied to target.
 >
-> Other than it's usually an obscure option (probably not easy to infer
-> for people), not really.
+> Signed-off-by: Wojciech Slenska <wojciech.slenska@gmail.com>
+> ---
+>   package/qt5/qt5base/qt5base.mk | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index bfc6c91..7c6a093 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -118,6 +118,7 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_CONCURRENT) += Qt5Concurrent
+>   QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_SQL)        += Qt5Sql
+>   QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_TEST)       += Qt5Test
+>   QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XML)        += Qt5Xml
+> +QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_EGLFS)      += Qt5OpenGL
 
-  I think it is time that we formalize a bit the rules for optional 
-dependencies.
-
-  To be honest, I would prefer explicit config options for optional 
-dependencies, because it's not easy for users to realize they can select 
-the additional library. However, that buts an unrealistic (maintenance) 
-overhead on the Config.in files.
-
-  So as a second-best option, I would say that the optional dependencies 
-should be mentioned in the package help text. It's still not easy on the 
-user, because s/he needs to know how to read the help text and how to 
-search for the relevant package. It's also still a bit of a maintenance 
-burden because the help text has to be updated when optional dependencies 
-are added/removed. But I guess it's a reasonable compromise.
-
-  With that, I think our informal guideline of adding config options only 
-for obscure libraries becomes less of a necessity, and we can make it a 
-rule to never add config options for optional dependencies.
-
-  What do you think?
+  eglfs works fine for me without this library...
 
   Regards,
   Arnout
+
+>
+>   QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_GUI)          += Qt5Gui
+>   QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_WIDGETS)      += Qt5Widgets
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
