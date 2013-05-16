@@ -1,60 +1,211 @@
 From: Carlo Caione <carlo.caione@gmail.com>
-Date: Thu, 16 May 2013 07:34:26 +0200
-Subject: [Buildroot] [PATCH 1/2] cubieboard: defconfig for mainline kernel
+Date: Thu, 16 May 2013 07:34:27 +0200
+Subject: [Buildroot] [PATCH 2/2] cubieboard: board specific files and script
 In-Reply-To: <1368682467-12228-1-git-send-email-carlo.caione@gmail.com>
 References: <1368682467-12228-1-git-send-email-carlo.caione@gmail.com>
-Message-ID: <1368682467-12228-2-git-send-email-carlo.caione@gmail.com>
+Message-ID: <1368682467-12228-3-git-send-email-carlo.caione@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a new defconfig supporting the cubieboard. Differently from the
-previous defconfig (cubieboard_defconfig) using kernel and tools directly
-taken from the linux-sunxi repository, this defconfig uses the mainline kernel
-that already partially supports the board.
-The only sunxi-specific package is sunxi-uboot that will be replaced as soon
-as a mainline version is released.
+This set of files contains:
+ - readme.txt
+ - mksdcard.sh: scritp to create the SD card for cubieboard
+ - uEnv*.txt: different uEnv for u-boot (to boot using TFTP or using the SD
+   card to host uImage and DTB)
 
 Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
 ---
- configs/cubieboard_mainline_defconfig | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 configs/cubieboard_mainline_defconfig
+ board/cubietech/cubieboard_mainline/mksdcard.sh   | 73 +++++++++++++++++++++
+ board/cubietech/cubieboard_mainline/readme.txt    | 77 +++++++++++++++++++++++
+ board/cubietech/cubieboard_mainline/uEnv-tftp.txt |  4 ++
+ board/cubietech/cubieboard_mainline/uEnv.txt      |  1 +
+ 4 files changed, 155 insertions(+)
+ create mode 100755 board/cubietech/cubieboard_mainline/mksdcard.sh
+ create mode 100644 board/cubietech/cubieboard_mainline/readme.txt
+ create mode 100644 board/cubietech/cubieboard_mainline/uEnv-tftp.txt
+ create mode 100644 board/cubietech/cubieboard_mainline/uEnv.txt
 
-diff --git a/configs/cubieboard_mainline_defconfig b/configs/cubieboard_mainline_defconfig
-new file mode 100644
-index 0000000..169fdb0
+diff --git a/board/cubietech/cubieboard_mainline/mksdcard.sh b/board/cubietech/cubieboard_mainline/mksdcard.sh
+new file mode 100755
+index 0000000..28d48bd
 --- /dev/null
-+++ b/configs/cubieboard_mainline_defconfig
-@@ -0,0 +1,27 @@
-+BR2_arm=y
-+BR2_cortex_a8=y
++++ b/board/cubietech/cubieboard_mainline/mksdcard.sh
+@@ -0,0 +1,73 @@
++#! /bin/sh
++# 2013, Carlo Caione <carlo.caione@gmail.com>
 +
-+# Bootloaders
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="cubieboard"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_VERSION="sunxi-current"
-+BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="https://github.com/linux-sunxi/u-boot-sunxi.git"
-+BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="3b3cb912783a51cae12b09a5c0f42c076c555c91"
-+BR2_TARGET_UBOOT_FORMAT_BIN=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
++IMAGES_DIR=$1
++UENV=$2
++SPL_IMG=$IMAGES_DIR/sunxi-spl.bin
++UBOOT_IMG=$IMAGES_DIR/u-boot.bin
++UIMAGE=$IMAGES_DIR/uImage
++DTB=$IMAGES_DIR/sun4i-a10-cubieboard.dtb
 +
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
-+BR2_LINUX_KERNEL_UBOOT_IMAGE=y
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_USE_INTREE_DTS=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-cubieboard"
++export LC_ALL=C
 +
-+# Filesystem images
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_CPIO_NONE=y
-+BR2_TARGET_ROOTFS_INITRAMFS=y
++if [ $# -ne 3 ]; then
++	echo "Usage: $0 <images_dir> <uEnv> <drive>"
++	exit 1;
++fi
++
++if [ $EUID -ne 0 ]; then
++	echo "This script must be run as root" 1>&2
++	exit 1
++fi
++
++if [ ! -f $SPL_IMG ] ||
++   [ ! -f $UBOOT_IMG ] ||
++   [ ! -f $UENV ] ||
++   [ ! -f $UIMAGE ] ||
++   [ ! -f $DTB ]; then
++	echo "File(s) missing."
++	exit 1
++fi
++
++DRIVE=$3
++PART1=`mktemp -d`
++
++dd if=/dev/zero of=$DRIVE bs=1M count=3
++
++# ~2048, 16MB, FAT, bootable
++# ~rest of drive, Ext4
++{
++echo 32,,0x0C,-
++} | sfdisk -D $DRIVE
++
++sleep 1
++
++if [ -b ${DRIVE}1 ]; then
++	D1=${DRIVE}1
++	umount ${DRIVE}1
++	mkfs.vfat -n "boot" ${DRIVE}1
++else
++	if [ -b ${DRIVE}p1 ]; then
++		D1=${DRIVE}p1
++		umount ${DRIVE}p1
++		mkfs.vfat -n "boot" ${DRIVE}p1
++	else
++		echo "Cant find boot partition in /dev"
++		exit 1
++	fi
++fi
++
++mount $D1 $PART1
++
++cp -v $UENV $PART1/uEnv.txt
++cp -v $UIMAGE $PART1
++cp -v $DTB $PART1
++
++sync
++
++umount $D1
++
++rm -fr $P1
++
++dd if=$SPL_IMG of=$DRIVE bs=1024 seek=8
++dd if=$UBOOT_IMG of=$DRIVE bs=1024 seek=32
+diff --git a/board/cubietech/cubieboard_mainline/readme.txt b/board/cubietech/cubieboard_mainline/readme.txt
+new file mode 100644
+index 0000000..ab88197
+--- /dev/null
++++ b/board/cubietech/cubieboard_mainline/readme.txt
+@@ -0,0 +1,77 @@
++Cubieboard - mainline kernel
++
++-----
++Intro
++-----
++
++This is the buildroot board support for the Cubieboard using the mainline
++kernel.
++
++---------------
++How to build it
++---------------
++
++You need to use the cubieboard_mainline_defconfig, to do so:
++ * make cubieboard_mainline_defconfig
++
++And to compile:
++ * make
++
++-----------------
++What is generated
++-----------------
++
++After building, you should have this tree:
++
++    output/images/
++    +-- ...
++    +-- sun4i-a10-cubieboard.dtb
++    +-- sunxi-spl.bin
++    +-- u-boot.bin
++    `-- uImage
++
++-----------
++How to boot 
++-----------
++
++To boot the cubieboard with the file generated by buildroot you have to
++choices:
++
++- using TFTP to load uImage and DTB
++- load uImage and DTB on the SD card
++
++In both cases you need a SD card to host u-boot, SPL and uEnv.txt
++
++In case you choose to boot using TFTP, be sure to modify the file
++uEnv-tftp.txt with the correct parameters for your network.
++
++--------------------------
++How setting up the SD card
++--------------------------
++
++To be able to use your cubieboard board with the images generated by
++Buildroot you have to correctly setup the SD card.
++
++For more information, please see http://linux-sunxi.org/FirstSteps
++
++Depending on the rootfs size, you might want to use a 2GB or larger SD-card.
++The script mksdcard.sh will take care of partitioning and formatting
++the SD-card.
++
++BEWARE! This process will erase your SD card.
++
++Use dmesg to find out where the SD card is attached in the /dev tree
++(<device>) and then:
++
++# sudo./mksdcard.sh <images_dir> <uEnv> <drive>
++
++where:
++ - <images_dir> is the directory containing the generated files (usually
++   output/images)
++ - <device> is the device file of the SD card (usually /dev/sdX)
++ - <uEnv> can be: 
++ 	- uEnv-tftp.txt to boot over TFTP
++	- uEnv.txt to boot using files on SD
++
++--
++Carlo Caione <carlo.caione@gmail.com>
+diff --git a/board/cubietech/cubieboard_mainline/uEnv-tftp.txt b/board/cubietech/cubieboard_mainline/uEnv-tftp.txt
+new file mode 100644
+index 0000000..27bd417
+--- /dev/null
++++ b/board/cubietech/cubieboard_mainline/uEnv-tftp.txt
+@@ -0,0 +1,4 @@
++ethaddr=12:34:56:78:99:aa
++autoload=no
++serverip=10.0.0.1
++uenvcmd=dhcp; tftpboot 0x40000000 sun4i-a10-cubieboard.dtb; tftpboot 0x48000000 uImage; bootm 0x48000000 - 0x40000000 
+diff --git a/board/cubietech/cubieboard_mainline/uEnv.txt b/board/cubietech/cubieboard_mainline/uEnv.txt
+new file mode 100644
+index 0000000..3a50ec0
+--- /dev/null
++++ b/board/cubietech/cubieboard_mainline/uEnv.txt
+@@ -0,0 +1 @@
++uenvcmd=fatload mmc 0 0x48000000 uImage; fatload mmc 0 0x40000000 sun4i-a10-cubieboard.dtb; bootm 0x48000000 - 0x40000000
 -- 
 1.8.2.3
