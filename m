@@ -1,43 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 16 May 2013 10:21:25 +0200
-Subject: [Buildroot] [git commit] libeXosip2: disable multi-thread support
-	for toolchains without threads
-Message-ID: <20130516082742.EFA1B99A40@busybox.osuosl.org>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 16 May 2013 04:34:03 -0400
+Subject: [Buildroot] [PATCH] graph-depends: ignore the 'target-purgelocales'
+	target
+Message-ID: <1368693243-4774-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fb1ba5dff1748226c13cb92320f5171c026a47ca
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Otherwsie, graph-depends tries to call 'make target-purgelocales-show-depends',
+which does not exist, as 'target-purgelocales' is not an actual package.
 
-Also added license information
-
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/libeXosip2/libeXosip2.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ support/scripts/graph-depends |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
-index d72ab61..7fef1a6 100644
---- a/package/libeXosip2/libeXosip2.mk
-+++ b/package/libeXosip2/libeXosip2.mk
-@@ -7,6 +7,8 @@
- LIBEXOSIP2_VERSION = 3.6.0
- LIBEXOSIP2_SITE = http://download.savannah.gnu.org/releases/exosip/
- LIBEXOSIP2_INSTALL_STAGING = YES
-+LIBEXOSIP2_LICENSE = GPLv2+
-+LIBEXOSIP2_LICENSE_FILES = COPYING
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 790e24e..50b8670 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -170,6 +170,7 @@ TARGET_EXCEPTIONS = [
+     "target-generic-hostname",
+     "target-root-passwd",
+     "target-post-image",
++    "target-purgelocales",
+ ]
  
- LIBEXOSIP2_DEPENDENCIES = host-pkgconf libosip2
- 
-@@ -17,4 +19,7 @@ else
- LIBEXOSIP2_CONF_OPT += --disable-openssl
- endif
- 
-+LIBEXOSIP2_CONF_OPT += \
-+	--enable-mt=$(if $(BR2_TOOLCHAIN_HAS_THREADS),yes,no)
-+
- $(eval $(autotools-package))
+ # In full mode, start with the result of get_targets() to get the main
+-- 
+1.7.9.5
