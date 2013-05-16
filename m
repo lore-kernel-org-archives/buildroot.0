@@ -1,23 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 May 2013 09:47:27 +0200
-Subject: [Buildroot] [PATCH 1/2] libosip2: disable multi-thread support
- for toolchains without threads
-In-Reply-To: <1368654452-16294-1-git-send-email-gilles.talis@gmail.com>
-References: <1368654452-16294-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <20130516094727.154da02d@skate>
+Date: Thu, 16 May 2013 09:51:17 +0200
+Subject: [Buildroot] Fwd: graph-depends with jpeg?
+In-Reply-To: <CANxTyt7MqE-gbQ_htn50ooFqUR72Lo5CgNbhmYz6kRiHfASyEw@mail.gmail.com>
+References: <CANxTyt5xEi8MTpEwh_BGhtcUo6NVZK7-z1PenKCEu+QEosQPwg@mail.gmail.com>
+ <CANxTyt7MqE-gbQ_htn50ooFqUR72Lo5CgNbhmYz6kRiHfASyEw@mail.gmail.com>
+Message-ID: <20130516095117.44ce660c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gilles Talis,
+Dear Danomi Manchego,
 
-On Wed, 15 May 2013 14:47:31 -0700, Gilles Talis wrote:
+On Wed, 15 May 2013 19:45:05 -0400, Danomi Manchego wrote:
 
-> +LIBOSIP2_LICENSE = LGPL
+> Sorry, just realized that the jpeg package has changed to have use the pkg
+> infrastructure, solving that one.  I still get stopped on target-purgelocales
+> though ...
 
-Which version?
+Yeah, one of the reason the virtual jpeg was converted to the package
+infrastructure was to make the graph-depends script work. That said, I
+would have liked to have a way to find out that a package is virtual,
+so that it could be shown differently in the graph. Maybe we should
+have named all such packages virtual-<something> ? Not sure.
+
+Regarding target-purgelocales, just add it to the TARGET_EXCEPTIONS
+array in the graph-depends script. I really need to find some time to
+separate TARGETS from a new PACKAGES variable to avoid this exception
+thing.
+
+Thanks for the report,
 
 Thomas
 -- 
