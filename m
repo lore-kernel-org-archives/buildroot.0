@@ -1,37 +1,38 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Thu, 16 May 2013 06:07:02 -0400
-Subject: [Buildroot] [PATCH v3] graph-depends: ignore the
-	'target-purgelocales' target
-Message-ID: <1368698822-2112-1-git-send-email-danomimanchego123@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 16 May 2013 07:40:01 -0300
+Subject: [Buildroot] [PATCH] crda: needs threads
+Message-ID: <1368700801-18262-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Otherwise, graph-depends tries to call 'make target-purgelocales-show-depends',
-which does not exist, as 'target-purgelocales' is not an actual package.
+Because libnl needs threads, fixes:
+http://autobuild.buildroot.net/results/8e32f222ddeba262ee2471d22e1c6a8afbf241c2/
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-v2: Fix misspelling in commit log
-v3: Remove version from subject, and use --subject-prefix - learn something new every day
----
- support/scripts/graph-depends |    1 +
- 1 file changed, 1 insertion(+)
+ package/crda/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 790e24e..50b8670 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -170,6 +170,7 @@ TARGET_EXCEPTIONS = [
-     "target-generic-hostname",
-     "target-root-passwd",
-     "target-post-image",
-+    "target-purgelocales",
- ]
+diff --git a/package/crda/Config.in b/package/crda/Config.in
+index 66baf14..539a5c7 100644
+--- a/package/crda/Config.in
++++ b/package/crda/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_CRDA
+ 	bool "crda"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBNL
+ 	# regdb is a runtime dependency
+@@ -13,3 +14,6 @@ config BR2_PACKAGE_CRDA
+ 	  may operate within for a given location.
  
- # In full mode, start with the result of get_targets() to get the main
+ 	  http://linuxwireless.org/en/developers/Regulatory/CRDA
++
++comment "crda requires a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-1.7.9.5
+1.8.1.5
