@@ -1,18 +1,21 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Thu, 16 May 2013 04:34:03 -0400
+Date: Thu, 16 May 2013 04:46:04 -0400
 Subject: [Buildroot] [PATCH] graph-depends: ignore the 'target-purgelocales'
-	target
-Message-ID: <1368693243-4774-1-git-send-email-danomimanchego123@gmail.com>
+	target (v2)
+Message-ID: <1368693964-5410-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Otherwsie, graph-depends tries to call 'make target-purgelocales-show-depends',
+Otherwise, graph-depends tries to call 'make target-purgelocales-show-depends',
 which does not exist, as 'target-purgelocales' is not an actual package.
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+
+---
+v2: Fix misspelling in commit log
 ---
  support/scripts/graph-depends |    1 +
  1 file changed, 1 insertion(+)
