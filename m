@@ -1,55 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 May 2013 16:22:16 +0200
-Subject: [Buildroot] [PATCH v6 09/10] libopenmax: Add libopenmax virtual
- package
-In-Reply-To: <CAEBucnBvGuHMM3cgGcaSyJ3M_ShpNuUKEW+8TRz4TQTmpDsh9Q@mail.gmail.com>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Thu, 16 May 2013 09:29:53 -0500
+Subject: [Buildroot] [PATCH v6 10/10] gst-omx: add gst-omx package
+In-Reply-To: <20130516101052.737192f2@skate>
 References: <1368655178-19176-1-git-send-email-spenser@gillilanding.com>
- <1368655178-19176-10-git-send-email-spenser@gillilanding.com>
- <20130516095842.78066d20@skate>
- <CAEBucnBvGuHMM3cgGcaSyJ3M_ShpNuUKEW+8TRz4TQTmpDsh9Q@mail.gmail.com>
-Message-ID: <20130516162216.299938c4@skate>
+ <1368655178-19176-11-git-send-email-spenser@gillilanding.com>
+ <20130516101052.737192f2@skate>
+Message-ID: <CAEBucnCt0ed=iKRhMR1b4Dc2+wFWe27KxPHJ8Dx1_1E5uyjwdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Thomas,
 
-On Thu, 16 May 2013 09:18:38 -0500, Spenser Gilliland wrote:
+> One question: it would be good to mention, in your cover letter, on
+> which platform this was tested. Was it tested on RPi? With what command
+> line/tool?
 
-> > but ok, that's certainly a different work. This current patch series is
-> > already long enough.
-> 
-> I agree that a change like you suggested would be better but it's
-> probably best left for another patch series due to the required
-> changes being quite large.
+I'll add this info to the cover letter.  It was tested with gst-launch.
 
-Agreed, I'm fine with getting this part of your patch as is, and later
-on, do some followup improvements. Especially since all those packages
-and options have no effect on the configurations people may be
-creating, some it doesn't cause any compatibility issue if we move
-things around or rename those hidden kconfig options.
+>> +comment "gst-omx requires a OpenMAX implementation please select rpi-userland or bellagio"
+>> +     depends on BR2_PACKAGE_GSTREAMER1 && ! BR2_PACKAGE_HAS_OPENMAX
+>
+> I'm not sure it's reasonable to list the available OpenMAX
+> implementations. So I'd just stick with "gst-omx requires an OpenMAX
+> implementation".
+>
+> No space between ! and BR2_PACKAGE_HAS_OPENMAX.
 
-> >> +ifeq ($(BR2_PACKAGE_BELLAGIO),y)
-> >> +LIBOPENMAX_DEPENDENCIES += bellagio
-> >> +endif
-> >
-> > Unless I missed something, there is no bellagio package in Buildroot
-> > for now, so this chunk should only be added once bellagio is added.
-> 
-> It's in package/multimedia/bellagio.
+Fixed.
 
-Argh, my bad. Stupid packages in subdirectories. I didn't remember
-having bellagio, so I checked by doing package/bell<tab><tab>, and
-nothing showed up, making me -incorrectly- conclude that this package
-didn't exist.
+>> diff --git a/package/multimedia/gst-omx/gst-omx.mk b/package/multimedia/gst-omx/gst-omx.mk
+>> new file mode 100644
+>> index 0000000..7f54900
+>> --- /dev/null
+>> +++ b/package/multimedia/gst-omx/gst-omx.mk
+>> @@ -0,0 +1,9 @@
+>
+> The usual (and useless, but conventional) comment header is missing.
+>
+>> +GST_OMX_VERSION=1.0.0
+>> +GST_OMX_SOURCE=gst-omx-$(GST_OMX_VERSION).tar.xz
+>> +GST_OMX_SITE=http://gstreamer.freedesktop.org/src/gst-omx/
+>
+> Spaces before and after =.
 
-Sorry for the noise on this one.
+Fixed.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+>> +GST_OMX_DEPENDENCIES = gstreamer1 gst1-plugins-base libopenmax
+>> +GST_OMX_LICENSE = LGPLv2.1
+>> +GST_OMX_LICENSE_FILE = COPYING
+>> +GST_OMX_INSTALL_STAGING = YES
+>> +
+>> +$(eval $(autotools-package))
+>
+> Not sure here: do we have a reason to install this to the staging/
+> space? I thought it was only installing a plugin, and not a library
+> against which other things would be linked with.
+
+Not required in staging dir.  I've removed the line from the latest version.
+
+I'm going to wait another couple days before I sent another version
+just in case more reviews come in.  If you want to see the changes in
+the meantime take a look at the rpi branch on my github buildroot
+clone at https://github.com/Spenser309/buildroot/commits/rpi .
+
+Thanks,
+Spenser
+
+--
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
