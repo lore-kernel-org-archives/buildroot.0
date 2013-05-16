@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 May 2013 09:56:04 +0200
-Subject: [Buildroot] [PATCH v6 07/10] libvpx: new package libvpx
-In-Reply-To: <1368655178-19176-8-git-send-email-spenser@gillilanding.com>
+Date: Thu, 16 May 2013 09:58:42 +0200
+Subject: [Buildroot] [PATCH v6 09/10] libopenmax: Add libopenmax virtual
+ package
+In-Reply-To: <1368655178-19176-10-git-send-email-spenser@gillilanding.com>
 References: <1368655178-19176-1-git-send-email-spenser@gillilanding.com>
- <1368655178-19176-8-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130516095604.3eda6a6e@skate>
+ <1368655178-19176-10-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130516095842.78066d20@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,66 +14,39 @@ To: buildroot@busybox.net
 
 Dear Spenser Gilliland,
 
-On Wed, 15 May 2013 16:59:35 -0500, Spenser Gilliland wrote:
-> --- /dev/null
-> +++ b/package/multimedia/libvpx/libvpx.mk
-> @@ -0,0 +1,52 @@
-> +#############################################################
-> +#
-> +# libvpx
-> +#
-> +#############################################################
+On Wed, 15 May 2013 16:59:37 -0500, Spenser Gilliland wrote:
+
+> diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+> index 81616f9..1636807 100644
+> --- a/package/opengl/Config.in
+> +++ b/package/opengl/Config.in
+> @@ -6,3 +6,6 @@ config BR2_PACKAGE_HAS_OPENGL_ES
+>  
+>  config BR2_PACKAGE_HAS_OPENVG
+>  	bool
 > +
-> +LIBVPX_VERSION = v1.2.0
-> +LIBVPX_SITE = http://git.chromium.org/webm/libvpx.git
-> +LIBVPX_SITE_METHOD = git
-> +
-> +LIBVPX_INSTALL_STAGING = YES
-> +LIBVPX_LICENSE = BSD-3c 
-> +LIBVPX_LICENSE_FILES = LICENSE PATENTS 
-> +
-> +LIBVPX_INSTALL_STAGING = YES
+> +config BR2_PACKAGE_HAS_OPENMAX
+> +	bool
 
-Already set a few lines above.
+I'm starting to wonder if those virtual packages shouldn't be separated
+from each other, and named virtual-<something>, i.e:
 
-> +
-> +LIBVPX_CONF_ENV = \
-> +	LD=$$CC \
+	package/virtual-opengl/
+	package/virtual-openvg/
+	package/virtual-egl/
+	package/virtual-openmax/
 
-This sounds strange. The target compiler is $(TARGET_CC), and should be
-used with quotes to be compiled with ccache, so, probably:
+but ok, that's certainly a different work. This current patch series is
+already long enough.
 
-	LD="$(TARGET_CC)"
+> +ifeq ($(BR2_PACKAGE_BELLAGIO),y)
+> +LIBOPENMAX_DEPENDENCIES += bellagio
+> +endif
 
-And an explanation above that says why it is needed (i.e, LD being used
-by the libvpx build system as a compiler).
+Unless I missed something, there is no bellagio package in Buildroot
+for now, so this chunk should only be added once bellagio is added.
 
-> +	CROSS=$(GNU_TARGET_NAME)
-> +
-> +LIBVPX_CONF_OPT = \
-> +	--disable-examples \
-> +	--disable-docs \
-> +	--disable-unit-tests
-> +
-> +define LIBVPX_CONFIGURE_CMDS
-> +	(cd $(LIBVPX_SRCDIR) && rm -rf config.cache && \
-> +	$(TARGET_CONFIGURE_OPTS) \
-> +	$(TARGET_CONFIGURE_ARGS) \
-> +	$(LIBVPX_CONF_ENV) \
-> +	./configure \
-> +		--target=generic-gnu \
-> +		--enable-pic \
-> +		--prefix=/usr \
-> +		$(SHARED_STATIC_LIBS_OPTS) \
-> +		$(LIBVPX_CONF_OPT) \
-> +	)
-> +endef
-
-Please add a comment somewhere that allows us to remember that you're
-not using autotools-package because this 'configure' script is not an
-autotools one, but some hand-written thing.
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
