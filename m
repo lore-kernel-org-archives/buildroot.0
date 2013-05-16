@@ -1,41 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 16 May 2013 07:59:31 +0200
-Subject: [Buildroot] [PATCH] qt5 libQt5OpenGL.so library installation
-In-Reply-To: <1368650084-24427-1-git-send-email-wojciech.slenska@gmail.com>
-References: <1368650084-24427-1-git-send-email-wojciech.slenska@gmail.com>
-Message-ID: <519475C3.7040407@mind.be>
+Date: Thu, 16 May 2013 07:52:55 +0200
+Subject: [Buildroot] [git commit] aircrack-ng: fix statically linked
+	build
+In-Reply-To: <20130515140651.682AC9A1B8@busybox.osuosl.org>
+References: <20130515140651.682AC9A1B8@busybox.osuosl.org>
+Message-ID: <51947437.7010602@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/05/13 22:34, Wojciech Slenska wrote:
-> When qt5 is build with EGLFS support, libQt5OpenGL library should be copied to target.
+On 15/05/13 15:00, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=bed1490d0f58dc963d2144f2fe6b705f9f36d848
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 >
-> Signed-off-by: Wojciech Slenska <wojciech.slenska@gmail.com>
+> Fixe the build failure visible at
+> http://autobuild.buildroot.net/results/2441d8b62323a00f32f2edb7cb781dda71ff7f68
+>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 > ---
->   package/qt5/qt5base/qt5base.mk | 1 +
->   1 file changed, 1 insertion(+)
+>   package/aircrack-ng/aircrack-ng.mk |    5 ++++-
+>   1 files changed, 4 insertions(+), 1 deletions(-)
 >
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index bfc6c91..7c6a093 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -118,6 +118,7 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_CONCURRENT) += Qt5Concurrent
->   QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_SQL)        += Qt5Sql
->   QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_TEST)       += Qt5Test
->   QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XML)        += Qt5Xml
-> +QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_EGLFS)      += Qt5OpenGL
+> diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
+> index c6574f1..a36cf34 100644
+> --- a/package/aircrack-ng/aircrack-ng.mk
+> +++ b/package/aircrack-ng/aircrack-ng.mk
+> @@ -20,9 +20,12 @@ else
+>   	AIRCRACK_NG_MAKE_OPTS = sqlite=false
+>   endif
+>
+> +AIRCRACK_NG_LDFLAGS = -lz \
+> +	$(if $(BR2_PREFER_STATIC_LIB),-ldl -lpthread)
 
-  eglfs works fine for me without this library...
+  You're missing $(TARGET_LDFLAGS) here.
+
 
   Regards,
   Arnout
 
+> +
+>   define AIRCRACK_NG_BUILD_CMDS
+>   	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_LD)" \
+> -		LDFLAGS="$(TARGET_LDFLAGS) -lz" \
+> +		LDFLAGS="$(AIRCRACK_NG_LDFLAGS)" \
+>   		-C $(@D) $(AIRCRACK_NG_MAKE_OPTS) all
+>   endef
 >
->   QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_GUI)          += Qt5Gui
->   QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_WIDGETS)      += Qt5Widgets
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 
 
