@@ -1,71 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 May 2013 10:10:52 +0200
-Subject: [Buildroot] [PATCH v6 10/10] gst-omx: add gst-omx package
-In-Reply-To: <1368655178-19176-11-git-send-email-spenser@gillilanding.com>
-References: <1368655178-19176-1-git-send-email-spenser@gillilanding.com>
- <1368655178-19176-11-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130516101052.737192f2@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 16 May 2013 10:20:01 +0200
+Subject: [Buildroot] [PATCH 1/2] libosip2: disable multi-thread support
+	for toolchains without threads
+In-Reply-To: <20130516094727.154da02d@skate> (Thomas Petazzoni's message of
+ "Thu, 16 May 2013 09:47:27 +0200")
+References: <1368654452-16294-1-git-send-email-gilles.talis@gmail.com>
+ <20130516094727.154da02d@skate>
+Message-ID: <87k3mznxou.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, 15 May 2013 16:59:38 -0500, Spenser Gilliland wrote:
-> gst-omx enables OpenMAX based accelerated video decode.
-> 
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+ Thomas> Dear Gilles Talis,
+ Thomas> On Wed, 15 May 2013 14:47:31 -0700, Gilles Talis wrote:
 
-One question: it would be good to mention, in your cover letter, on
-which platform this was tested. Was it tested on RPi? With what command
-line/tool?
+ >> +LIBOSIP2_LICENSE = LGPL
 
-> +comment "gst-omx requires a OpenMAX implementation please select rpi-userland or bellagio"
-> +	depends on BR2_PACKAGE_GSTREAMER1 && ! BR2_PACKAGE_HAS_OPENMAX
+ Thomas> Which version?
 
-I'm not sure it's reasonable to list the available OpenMAX
-implementations. So I'd just stick with "gst-omx requires an OpenMAX
-implementation".
+It's LGPLv2.1+:
 
-No space between ! and BR2_PACKAGE_HAS_OPENMAX.
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
 
-> diff --git a/package/multimedia/gst-omx/gst-omx.mk b/package/multimedia/gst-omx/gst-omx.mk
-> new file mode 100644
-> index 0000000..7f54900
-> --- /dev/null
-> +++ b/package/multimedia/gst-omx/gst-omx.mk
-> @@ -0,0 +1,9 @@
+I'll fix that up when I commit.
 
-The usual (and useless, but conventional) comment header is missing.
-
-> +GST_OMX_VERSION=1.0.0
-> +GST_OMX_SOURCE=gst-omx-$(GST_OMX_VERSION).tar.xz
-> +GST_OMX_SITE=http://gstreamer.freedesktop.org/src/gst-omx/
-
-Spaces before and after =.
-
-> +GST_OMX_DEPENDENCIES = gstreamer1 gst1-plugins-base libopenmax
-> +GST_OMX_LICENSE = LGPLv2.1
-> +GST_OMX_LICENSE_FILE = COPYING
-> +GST_OMX_INSTALL_STAGING = YES
-> +
-> +$(eval $(autotools-package))
-
-Not sure here: do we have a reason to install this to the staging/
-space? I thought it was only installing a plugin, and not a library
-against which other things would be linked with.
-
-Apparently, the other gst1-plugins-* packages that you submitted don't
-install to staging, unless I missed it (which may very be possible, I
-only had a quick look).
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
