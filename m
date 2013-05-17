@@ -1,46 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 17 May 2013 11:58:34 +0200
-Subject: [Buildroot] [git commit] libxml2: depend on zlib and libiconv if
-	appropriate
-Message-ID: <20130517100436.EDFC69A1ED@busybox.osuosl.org>
+Date: Fri, 17 May 2013 12:01:50 +0200
+Subject: [Buildroot] [git commit] bellagio: needs toolchain with threads
+	support
+Message-ID: <20130517100437.5B35B9A2C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5b1da184625d25fe0618ab0a0d5549207f3a64c
+commit: http://git.buildroot.net/buildroot/commit/?id=f4985ca55acc5452f4eee022d60b066da27a7866
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Fixes:
+http://autobuild.buildroot.org/results/a4b/a4b7e19f4eee1de8d8722c2ade673fcb816a811e
+
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libxml2/libxml2.mk |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
+ package/multimedia/bellagio/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 6a974ef..7800d94 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -34,6 +34,21 @@ else
- HOST_LIBXML2_CONF_OPT += --without-python
- endif
+diff --git a/package/multimedia/bellagio/Config.in b/package/multimedia/bellagio/Config.in
+index 1458f63..4be3aee 100644
+--- a/package/multimedia/bellagio/Config.in
++++ b/package/multimedia/bellagio/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_BELLAGIO
+ 	bool "bellagio"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Bellagio is an opensource implementation of the
+ 	  OpenMAX IL API.
+@@ -14,5 +15,5 @@ config BR2_PACKAGE_BELLAGIO
  
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+LIBXML2_DEPENDENCIES += zlib
-+LIBXML2_CONF_OPT += --with-zlib
-+else
-+LIBXML2_CONF_OPT += --without-zlib
-+endif
-+
-+LIBXML2_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+
-+ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
-+LIBXML2_CONF_OPT += --with-iconv
-+else
-+LIBXML2_CONF_OPT += --without-iconv
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ 	  http://omxil.sourceforge.net/
  
+-comment "bellagio requires a toolchain with C++ support enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "bellagio requires a toolchain with C++ and threads support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
