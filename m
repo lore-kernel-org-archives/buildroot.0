@@ -1,31 +1,41 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Thu, 16 May 2013 15:20:54 -0700
-Subject: [Buildroot] [PATCH 1/2] libosip2: disable multi-thread support
- for toolchains without threads
-In-Reply-To: <87k3mznxou.fsf@dell.be.48ers.dk>
-References: <1368654452-16294-1-git-send-email-gilles.talis@gmail.com>
- <20130516094727.154da02d@skate> <87k3mznxou.fsf@dell.be.48ers.dk>
-Message-ID: <CAKcgs2wHX5s6zwF+0ewDC7DEKnY9DhHAOsNpnGurUELoot2RTw@mail.gmail.com>
+Date: Thu, 16 May 2013 17:02:35 -0700
+Subject: [Buildroot] [PATCH 1/2] bellagio: needs toolchain with threads
+	support
+Message-ID: <1368748956-15255-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
+Fixes:
+http://autobuild.buildroot.org/results/a4b/a4b7e19f4eee1de8d8722c2ade673fcb816a811e
 
-2013/5/16 Peter Korsgaard <jacmet@uclibc.org>:
->
-> It's LGPLv2.1+:
->
->   This library is free software; you can redistribute it and/or
->   modify it under the terms of the GNU Lesser General Public
->   License as published by the Free Software Foundation; either
->   version 2.1 of the License, or (at your option) any later version.
->
-> I'll fix that up when I commit.
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ package/multimedia/bellagio/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-Thanks for fixing and committing. For some unknown reason I missed
-that yesterday.
-
-Gilles
+diff --git a/package/multimedia/bellagio/Config.in b/package/multimedia/bellagio/Config.in
+index 1458f63..4be3aee 100644
+--- a/package/multimedia/bellagio/Config.in
++++ b/package/multimedia/bellagio/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_BELLAGIO
+ 	bool "bellagio"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Bellagio is an opensource implementation of the
+ 	  OpenMAX IL API.
+@@ -14,5 +15,5 @@ config BR2_PACKAGE_BELLAGIO
+ 
+ 	  http://omxil.sourceforge.net/
+ 
+-comment "bellagio requires a toolchain with C++ support enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "bellagio requires a toolchain with C++ and threads support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+1.7.4.1
