@@ -1,41 +1,31 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Thu, 16 May 2013 17:02:35 -0700
-Subject: [Buildroot] [PATCH 1/2] bellagio: needs toolchain with threads
-	support
-Message-ID: <1368748956-15255-1-git-send-email-gilles.talis@gmail.com>
+Date: Thu, 16 May 2013 17:02:36 -0700
+Subject: [Buildroot] [PATCH 2/2] bellagio: add license information
+In-Reply-To: <1368748956-15255-1-git-send-email-gilles.talis@gmail.com>
+References: <1368748956-15255-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <1368748956-15255-2-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.org/results/a4b/a4b7e19f4eee1de8d8722c2ade673fcb816a811e
-
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/multimedia/bellagio/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/multimedia/bellagio/bellagio.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/bellagio/Config.in b/package/multimedia/bellagio/Config.in
-index 1458f63..4be3aee 100644
---- a/package/multimedia/bellagio/Config.in
-+++ b/package/multimedia/bellagio/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_BELLAGIO
- 	bool "bellagio"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Bellagio is an opensource implementation of the
- 	  OpenMAX IL API.
-@@ -14,5 +15,5 @@ config BR2_PACKAGE_BELLAGIO
+diff --git a/package/multimedia/bellagio/bellagio.mk b/package/multimedia/bellagio/bellagio.mk
+index 6aadbbf..c612b95 100644
+--- a/package/multimedia/bellagio/bellagio.mk
++++ b/package/multimedia/bellagio/bellagio.mk
+@@ -8,5 +8,7 @@ BELLAGIO_SOURCE = libomxil-bellagio-$(BELLAGIO_VERSION).tar.gz
+ BELLAGIO_SITE = http://downloads.sourceforge.net/project/omxil/omxil/Bellagio%20$(BELLAGIO_VERSION)
+ BELLAGIO_AUTORECONF = YES
+ BELLAGIO_INSTALL_STAGING = YES
++BELLAGIO_LICENSE = LGPLv2.1+
++BELLAGIO_LICENSE_FILES = COPYING
  
- 	  http://omxil.sourceforge.net/
- 
--comment "bellagio requires a toolchain with C++ support enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "bellagio requires a toolchain with C++ and threads support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ $(eval $(autotools-package))
 -- 
 1.7.4.1
