@@ -1,31 +1,46 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 17 May 2013 12:02:02 +0200
-Subject: [Buildroot] [git commit] bellagio: add license information
-Message-ID: <20130517100437.169459A2BD@busybox.osuosl.org>
+Date: Fri, 17 May 2013 11:58:34 +0200
+Subject: [Buildroot] [git commit] libxml2: depend on zlib and libiconv if
+	appropriate
+Message-ID: <20130517100436.EDFC69A1ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ce774eba9cff7b193a8d395c91b23c703088f159
+commit: http://git.buildroot.net/buildroot/commit/?id=e5b1da184625d25fe0618ab0a0d5549207f3a64c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/bellagio/bellagio.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libxml2/libxml2.mk |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/bellagio/bellagio.mk b/package/multimedia/bellagio/bellagio.mk
-index 6aadbbf..c612b95 100644
---- a/package/multimedia/bellagio/bellagio.mk
-+++ b/package/multimedia/bellagio/bellagio.mk
-@@ -8,5 +8,7 @@ BELLAGIO_SOURCE = libomxil-bellagio-$(BELLAGIO_VERSION).tar.gz
- BELLAGIO_SITE = http://downloads.sourceforge.net/project/omxil/omxil/Bellagio%20$(BELLAGIO_VERSION)
- BELLAGIO_AUTORECONF = YES
- BELLAGIO_INSTALL_STAGING = YES
-+BELLAGIO_LICENSE = LGPLv2.1+
-+BELLAGIO_LICENSE_FILES = COPYING
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 6a974ef..7800d94 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -34,6 +34,21 @@ else
+ HOST_LIBXML2_CONF_OPT += --without-python
+ endif
  
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LIBXML2_DEPENDENCIES += zlib
++LIBXML2_CONF_OPT += --with-zlib
++else
++LIBXML2_CONF_OPT += --without-zlib
++endif
++
++LIBXML2_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++
++ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
++LIBXML2_CONF_OPT += --with-iconv
++else
++LIBXML2_CONF_OPT += --without-iconv
++endif
++
  $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
