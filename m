@@ -1,36 +1,89 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Fri, 17 May 2013 09:21:03 +0200
-Subject: [Buildroot] how to specify custom rsync options
-Message-ID: <CAKAx1cgACDFWgQqYUx9fCCqKKXpgbADeH9p_io-cbnHpjYMPTA@mail.gmail.com>
+From: Bornet Romain <romain.bornet@heig-vd.ch>
+Date: Fri, 17 May 2013 09:32:02 +0000
+Subject: [Buildroot] [PATCH 3/3] zedboard: add Avnet Zedboard support.
+In-Reply-To: <1368659524-21154-3-git-send-email-spenser@gillilanding.com>
+References: <1368659524-21154-1-git-send-email-spenser@gillilanding.com>
+ <1368659524-21154-3-git-send-email-spenser@gillilanding.com>
+Message-ID: <A9B38C44323C2B48A280336ED55F3F643D0E8FFE@EINTMBX01.einet.ad.eivd.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi,
 
-I have a custom package defined with the 'generic package'
-infrastructure. I copy the sources from a local folder using the
-'local' method.
+Rather new in buildroot but already fond of it. 
+As a Zedboard user I would really appreciate to have this patch merged in BR mainline.
 
-In this case, the rsync command-line to copy the contents is hardcoded to
+Good job!
 
-rsync -au --cvs-exclude --include core [...]
+-----Original Message-----
+From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of Spenser Gilliland
+Sent: jeudi 16 mai 2013 01:12
+To: buildroot at busybox.net
+Subject: [Buildroot] [PATCH 3/3] zedboard: add Avnet Zedboard support.
 
-as seen in the package/pkg-generic.mk file.
+add defconfig and board dir for Avnet Zedboard
 
-It looks like sensible options to me, but in my very specific source
-code I also store some static libraries (*.a files), and the
---cvs-exclude seems to exclude them, thus my package does not compile.
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+---
+ board/avnet/zedboard/readme.txt |   13 +++++++++++++
+ configs/zedboard_defconfig      |   21 +++++++++++++++++++++
+ 2 files changed, 34 insertions(+)
+ create mode 100644 board/avnet/zedboard/readme.txt
+ create mode 100644 configs/zedboard_defconfig
 
-I am searching for the best way to override this rsync command-line
-for my package, or maybe this is the opportunity to suggest having
-some kind of RSYNC_OPT variable to add options on a per-package
-basis... Else, should I create a rule named $(MYPKG_TARGET_RSYNC) to
-override the default one?
+diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
+new file mode 100644
+index 0000000..eaa2cb8
+--- /dev/null
++++ b/board/avnet/zedboard/readme.txt
+@@ -0,0 +1,13 @@
++This is the buildroot board support for the Avnet Zedboard. The Zedboard is
++a development board based on the Xilinx Zynq-7000 based All-Programmable 
++System-On-Chip.
++
++Zedboard information including schematics, reference designs, and manuals are
++available from http://www.zedboard.org .
++
++To boot the Zedboard using a buildroot generated image copy the following files
++to the sdcard:
++	zynq-zed.dtb -> devicetree.dtb
++	rootfs.cpio.gz.uboot -> uramdisk.image.gz
++	uImage -> uImage
++
+diff --git a/configs/zedboard_defconfig b/configs/zedboard_defconfig
+new file mode 100644
+index 0000000..0dfc581
+--- /dev/null
++++ b/configs/zedboard_defconfig
+@@ -0,0 +1,21 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
++BR2_TARGET_ROOTFS_CPIO_GZIP=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="zynq_zed"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
++BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="xilinx-v14.5"
++BR2_TARGET_UBOOT_FORMAT_ELF=y
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="xilinx-v14.5"
++BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zed"
+-- 
+1.7.9.5
 
-Any hints?
-
-Thanks,
-Lionel
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
