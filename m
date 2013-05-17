@@ -1,32 +1,23 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 17 May 2013 11:55:36 +0200
-Subject: [Buildroot] [git commit branch/next] pixman: Version bump to 0.30.0
-Message-ID: <20130517100451.51C609A2BD@busybox.osuosl.org>
+From: Suman Pandit <suman.p@nuevonetwork.com>
+Date: Fri, 17 May 2013 19:00:23 +0530
+Subject: [Buildroot] .mk file for compat-wireless package
+Message-ID: <397ef8d5$21444fd2$6beb31fa$@com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=686d4f433b4acb7846cd8d881a03803b911d418c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/pixman/pixman.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Hi all,
+Can aybody share the .mk file for compat-wireless package which is will be 
+cross compiled for PowerPc.Please its urgent.
+Thanks in advance.
 
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index 607f82e..326f9eb 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -3,7 +3,7 @@
- # pixman
- #
- ################################################################################
--PIXMAN_VERSION = 0.28.2
-+PIXMAN_VERSION = 0.30.0
- PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
- PIXMAN_INSTALL_STAGING = YES
- PIXMAN_DEPENDENCIES = host-pkgconf
+Regards
+Suman Pandit
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130517/931bca58/attachment.html>
