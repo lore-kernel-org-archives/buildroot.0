@@ -1,53 +1,57 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Sat, 18 May 2013 18:58:51 +0100
-Subject: [Buildroot] [PATCH] Makefile: Set default emulation for
- MIPS64/MIPS64el n64
-In-Reply-To: <20130518193129.47c18aba@skate>
-References: <1368819760-11931-1-git-send-email-markos.chandras@gmail.com>
- <20130518193129.47c18aba@skate>
-Message-ID: <5197C15B.6000601@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 18 May 2013 16:25:09 -0300
+Subject: [Buildroot] [PATCH 1/2] mxs-bootlets: add support for custom patches
+Message-ID: <1368905110-23303-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/18/2013 06:31 PM, Thomas Petazzoni wrote:
-> Dear Markos Chandras,
-> 
-> On Fri, 17 May 2013 20:42:40 +0100, Markos Chandras wrote:
->> From: Markos Chandras <markos.chandras@imgtec.com>
->>
->> binutils set the default emulation for MIPS64/MIPS64el to
->> elf32btsmipn32 and elf32ltsmipn3 respectively. This breaks
->> linking for programs calling the linker directly without passing
->> the appropriate emulation parameter (-m). Unfortunately,
->> binutils do not provide a way to set the default emulation when
->> building the linker therefore we export the LDEMULATION variable
->> to set the preferred emulation ourselves. This fixes
->>
->> http://autobuild.buildroot.net/results/0f2a760b94069ac915d856cd1ae1998e5483807a/
->>
->> and possibly other build failures as well.
-> 
-> I am not sure this is the right fix for the problem. I believe the
-> problem is that the external toolchain wrapper should also wrap "ld" in
-> order to pass the right arguments to select the correct emulation, just
-> like we have a wrapper for "gcc" to select the correct architecture,
-> ABI and so on.
-> 
-> No?
-> 
-> Thomas
-> 
-Hi Thomas,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ boot/mxs-bootlets/Config.in       | 9 +++++++++
+ boot/mxs-bootlets/mxs-bootlets.mk | 8 ++++++++
+ 2 files changed, 17 insertions(+)
 
-I am not sure what you mean by "external toolchain" here since this is a
-problem with the buildroot toolchain as well. I probably don't
-understand the solution you propose. This is a "quick and dirty" fix.
-The ideal solution to this problem would be to fix the build systems to
-use "gcc" instead of "ld" for linking.
-
+diff --git a/boot/mxs-bootlets/Config.in b/boot/mxs-bootlets/Config.in
+index 2222ff6..9dc2d37 100644
+--- a/boot/mxs-bootlets/Config.in
++++ b/boot/mxs-bootlets/Config.in
+@@ -37,6 +37,15 @@ config BR2_TARGET_MXS_BOOTLETS_CUSTOM_GIT_VERSION
+ 
+ endif
+ 
++config BR2_TARGET_MXS_BOOTLETS_CUSTOM_PATCH_DIR
++	string "custom patch dir"
++	help
++	  If your board requires custom patches, add the path to the
++	  directory containing the patches here. The patches must be
++	  named mxs-bootlets-<something>.patch.
++
++	  Most users may leave this empty
++
+ choice
+ 	prompt "Bootstream"
+ 	help
+diff --git a/boot/mxs-bootlets/mxs-bootlets.mk b/boot/mxs-bootlets/mxs-bootlets.mk
+index f93ff81..6b18fcc 100644
+--- a/boot/mxs-bootlets/mxs-bootlets.mk
++++ b/boot/mxs-bootlets/mxs-bootlets.mk
+@@ -4,6 +4,14 @@
+ #
+ #############################################################
+ 
++ifneq ($(call qstrip,$(BR2_TARGET_MXS_BOOTLETS_CUSTOM_PATCH_DIR)),)
++define MXS_BOOTLETS_APPLY_CUSTOM_PATCHES
++	support/scripts/apply-patches.sh $(@D) $(BR2_TARGET_MXS_BOOTLETS_CUSTOM_PATCH_DIR) \
++		mxs-bootlets-\*.patch
++endef
++MXS_BOOTLETS_POST_PATCH_HOOKS += MXS_BOOTLETS_APPLY_CUSTOM_PATCHES
++endif
++
+ ifeq ($(BR2_TARGET_MXS_BOOTLETS_CUSTOM_TARBALL),y)
+ 	MXS_BOOTLETS_TARBALL = $(call qstrip,$(BR2_TARGET_MXS_BOOTLETS_CUSTOM_TARBALL_URL))
+ 	MXS_BOOTLETS_SITE = $(patsubst %/,%,$(dir $(MXS_BOOTLETS_TARBALL)))
 -- 
-Regards,
-Markos Chandras
+1.8.1.5
