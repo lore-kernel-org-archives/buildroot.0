@@ -1,40 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 May 2013 19:31:29 +0200
-Subject: [Buildroot] [PATCH] Makefile: Set default emulation for
- MIPS64/MIPS64el n64
-In-Reply-To: <1368819760-11931-1-git-send-email-markos.chandras@gmail.com>
-References: <1368819760-11931-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <20130518193129.47c18aba@skate>
+Date: Sat, 18 May 2013 19:36:29 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-05-17
+In-Reply-To: <20130518063006.E936E52C0F6@lolut.humanoidz.org>
+References: <20130518063006.E936E52C0F6@lolut.humanoidz.org>
+Message-ID: <20130518193629.4367854c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Hello,
 
-On Fri, 17 May 2013 20:42:40 +0100, Markos Chandras wrote:
-> From: Markos Chandras <markos.chandras@imgtec.com>
+On Sat, 18 May 2013 08:30:06 +0200 (CEST), Thomas Petazzoni wrote:
+> Build statistics for 2013-05-17
+> ===============================
 > 
-> binutils set the default emulation for MIPS64/MIPS64el to
-> elf32btsmipn32 and elf32ltsmipn3 respectively. This breaks
-> linking for programs calling the linker directly without passing
-> the appropriate emulation parameter (-m). Unfortunately,
-> binutils do not provide a way to set the default emulation when
-> building the linker therefore we export the LDEMULATION variable
-> to set the preferred emulation ourselves. This fixes
-> 
-> http://autobuild.buildroot.net/results/0f2a760b94069ac915d856cd1ae1998e5483807a/
-> 
-> and possibly other build failures as well.
+>         success : 70 
+>        failures : 39 
+>        timeouts : 3  
+>           TOTAL : 112
 
-I am not sure this is the right fix for the problem. I believe the
-problem is that the external toolchain wrapper should also wrap "ld" in
-order to pass the right arguments to select the correct emulation, just
-like we have a wrapper for "gcc" to select the correct architecture,
-ABI and so on.
+Ok, I found the reason for the timeouts. The fact that they always
+happen on qt5base helped me to understand what's going on: my build
+script doesn't automatically enable
+BR2_PACKAGE_QT5BASE_LICENSE_APPROVED when Qt5 is selected. My build
+script does that for Qt4, but not yet for Qt5.
 
-No?
+This is now fixed, so hopefully it should make those timeouts disappear.
+
+Best regards,
 
 Thomas
 -- 
