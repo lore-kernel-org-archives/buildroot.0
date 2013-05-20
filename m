@@ -1,109 +1,44 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 20 May 2013 18:00:42 +0200
-Subject: [Buildroot] [PATCH 04/12] lbase64: New package
-In-Reply-To: <1369054604-26139-4-git-send-email-shmuelzon@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 20 May 2013 18:00:43 +0200
+Subject: [Buildroot] [PATCH 03/12] sqlite: Added host compilation support
+In-Reply-To: <8140659616798576915@unknownmsgid>
 References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
- <1369054604-26139-4-git-send-email-shmuelzon@gmail.com>
-Message-ID: <CAB0FRsvjB7MFkQ802sOa3tPxd2xc-rYXveNWRp1zjOKxj8Rwug@mail.gmail.com>
+ <1369054604-26139-3-git-send-email-shmuelzon@gmail.com>
+ <20130520132615.GA3164@free.fr> <8140659616798576915@unknownmsgid>
+Message-ID: <20130520160043.GF3164@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/5/20 Assaf Inbal <shmuelzon@gmail.com>
+Assaf, All,
 
-> This package adds base64 encode/decode functionality for Lua
->
-> Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
-> ---
->  package/Config.in          |  1 +
->  package/lbase64/Config.in  |  6 ++++++
->  package/lbase64/lbase64.mk | 30 ++++++++++++++++++++++++++++++
->  3 files changed, 37 insertions(+)
->  create mode 100644 package/lbase64/Config.in
->  create mode 100644 package/lbase64/lbase64.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index d980871..0845881 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -307,6 +307,7 @@ menu "LUA libraries/modules"
->  source "package/cgilua/Config.in"
->  source "package/copas/Config.in"
->  source "package/coxpcall/Config.in"
-> +source "package/lbase64/Config.in"
->  source "package/luacjson/Config.in"
->  source "package/luaexpat/Config.in"
->  source "package/luafilesystem/Config.in"
-> diff --git a/package/lbase64/Config.in b/package/lbase64/Config.in
-> new file mode 100644
-> index 0000000..bd8503a
-> --- /dev/null
-> +++ b/package/lbase64/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_LBASE64
-> +       bool "lbase64"
-> +       help
-> +         A base64 library for Lua
-> +
-> +         http://luaforge.net/projects/lbase64/
-> diff --git a/package/lbase64/lbase64.mk b/package/lbase64/lbase64.mk
-> new file mode 100644
-> index 0000000..e253f24
-> --- /dev/null
-> +++ b/package/lbase64/lbase64.mk
-> @@ -0,0 +1,30 @@
-> +#############################################################
-> +#
-> +# lbase64
-> +#
-> +#############################################################
-> +
-> +LBASE64_VERSION =
->
+Please, do not to-post. Reply in-place, as below:
 
-LBASE64_VERSION = 20100323
-use the same version as in LuaRocks, this is the date in the source
-lbase64.c
+On 2013-05-20 17:27 +0300, Assaf Inbal spake thusly:
+> You're correct, However, I have a personal package which relies on
+> sqlite as a part of the build process.
 
-Fran?ois
+OK, I understand.
 
-Note: the module mime in LuaSocket provides the same kind of features.
+> I figured that since I already spent the time to write those entire
+> two lines and made sure it works, I might as well send in the patch.
 
+It's not my take to decide, but I guess as no package in upstream
+Buildroot depends on host-sqlite, there is no reason we add it.
 
-+LBASE64_SITE = http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.1
-> +LBASE64_SOURCE = lbase64.tar.gz
-> +LBASE64_LICENSE = Public domain
-> +LBASE64_LICENSE_FILES = README
-> +LBASE64_DEPENDENCIES = lua
-> +
-> +define LBASE64_BUILD_CMDS
-> +       $(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -fPIC"
-> so
-> +endef
-> +
-> +define LBASE64_INSTALL_TARGET_CMDS
-> +       $(INSTALL) "$(@D)/base64.so" "$(TARGET_DIR)/usr/lib/lua"
-> +endef
-> +
-> +define LBASE64_UNINSTALL_TARGET_CMDS
-> +       rm -f "$(TARGET_DIR)/usr/lib/lua/base64.so"
-> +endef
-> +
-> +define LBASE64_CLEAN_CMDS
-> +       $(MAKE) -C $(@D) clean
-> +endef
-> +
-> +$(eval $(generic-package))
-> --
-> 1.8.1.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130520/f64b3901/attachment.html>
+Unless you can submit your package for inclusion, that is, in which
+case you should submit this host-sqlite package at the same time
+(but in a separate patch, of course).
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
