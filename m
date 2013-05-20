@@ -1,63 +1,40 @@
-From: Assaf Inbal <shmuelzon@gmail.com>
-Date: Mon, 20 May 2013 17:27:02 +0300
-Subject: [Buildroot] [PATCH 03/12] sqlite: Added host compilation support
-In-Reply-To: <20130520132615.GA3164@free.fr>
-References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
- <1369054604-26139-3-git-send-email-shmuelzon@gmail.com>
- <20130520132615.GA3164@free.fr>
-Message-ID: <8140659616798576915@unknownmsgid>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 May 2013 16:49:05 +0200
+Subject: [Buildroot] [PATCH] ed: Convert to generic package
+ infrastructure
+In-Reply-To: <1369056118-32503-1-git-send-email-markos.chandras@gmail.com>
+References: <1369056118-32503-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <20130520164905.1b5c9ac5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+Dear Markos Chandras,
 
-You're correct, However, I have a personal package which relies on
-sqlite as a part of the build process.
-I figured that since I already spent the time to write those entire
-two lines and made sure it works, I might as well send in the patch.
+On Mon, 20 May 2013 14:21:58 +0100, Markos Chandras wrote:
 
-On 20 ???? 2013, at 16:26, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> -$(eval $(autotools-package))
+> +define ED_CONFIGURE_CMDS
+> +	( cd $(@D); \
 
-> Assaf, All,
->
-> On 2013-05-20 15:56 +0300, Assaf Inbal spake thusly:
->>
->> Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
->> ---
->> package/sqlite/sqlite.mk | 2 ++
->> 1 file changed, 2 insertions(+)
->>
->> diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
->> index 8eb6b2f..39d5528 100644
->> --- a/package/sqlite/sqlite.mk
->> +++ b/package/sqlite/sqlite.mk
->> @@ -54,6 +54,7 @@ SQLITE_CONF_OPT += --with-readline-inc="-I$(STAGING_DIR)/usr/include"
->> else
->> SQLITE_CONF_OPT += --disable-readline
->> endif
->> +HOST_SQLITE_CONF_OPT += --disable-readline
->>
->> define SQLITE_UNINSTALL_TARGET_CMDS
->>    rm -f $(TARGET_DIR)/usr/bin/sqlite3
->> @@ -68,3 +69,4 @@ define SQLITE_UNINSTALL_STAGING_CMDS
->> endef
->>
->> $(eval $(autotools-package))
->> +$(eval $(host-autotools-package))
->
-> What do you need host-sqlite for? None of the packages you're adding in
-> your series depends on host-sqlite (AFAICS).
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Nitpick: we typically don't put a space here.
+
+> +		./configure \
+> +		--prefix=/usr \
+> +		CPPFLAGS="$(TARGET_CPPFLAGS)" \
+> +		CFLAGS="$(TARGET_CFLAGS)" \
+> +		LDFLAGS="$(TARGET_LDFLAGS)" \
+> +		CC="$(TARGET_CC)" \
+
+Maybe you could use $(TARGET_CONFIGURE_OPTS) here instead?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
