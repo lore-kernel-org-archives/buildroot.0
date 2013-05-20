@@ -1,46 +1,34 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 20 May 2013 09:27:27 +0300
-Subject: [Buildroot] [PATCH] Revert "dependencies: check that SSL
-	certificates are installed"
-Message-ID: <1369031247-2075-1-git-send-email-baruch@tkos.co.il>
+Date: Mon, 20 May 2013 11:22:07 +0300
+Subject: [Buildroot] [PATCH] wireshark: security bump to version 1.8.7
+In-Reply-To: <5199978C.3040702@zacarias.com.ar>
+References: <1369007247-27993-1-git-send-email-gustavo@zacarias.com.ar>
+ <20130520025525.GC7188@tarshish> <5199978C.3040702@zacarias.com.ar>
+Message-ID: <20130520082207.GE7188@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit d66cd067f3dc3d5e2479e1e8c05f24fd82329f7a.
+Hi Gustavo,
 
-SSL certificates are no always installed in /etc/ssl/certs. For example, on
-CentOS 5.6 the default OpenSSL certificates directory is /etc/pki/tls/certs,
-and wget can download using https without any problem.
+On Mon, May 20, 2013 at 12:25:00AM -0300, Gustavo Zacarias wrote:
+> On 05/19/2013 11:55 PM, Baruch Siach wrote:
+> > Have you seen an actual build failure caused by this missing dependency?
+> 
+> No, it's unreachable because glib2 is always failing before with it's
+> own fork()ing.
+> It's used in capture_sync.c which is mandatory even for tshark, so it
+> would fail even if glib2 worked.
 
-Moreover, the existence of /etc/ssl/certs does not guarantee the presence of a
-CA certificates bundle even on Debian. On my current Debian testing
-installation the openssl package itself creates an empty /etc/ssl/certs
-directory.
+OK, thanks. So, FWIW:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- support/dependencies/dependencies.sh |    9 ---------
- 1 file changed, 9 deletions(-)
+Acked-by: Baruch Siach <baruch@tkos.co.il>
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index ce4d9e1..0b44c5a 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -200,12 +200,3 @@ if ! perl  -e "require Data::Dumper" > /dev/null 2>&1 ; then
-     /bin/echo -e "On Debian/Ubuntu distributions, install the 'perl' package."
-     exit 1
- fi
--
--# Check that we have the SSL certificates to make https:// downloads
--# work.
--if ! test -d /etc/ssl/certs; then
--    /bin/echo -e "Your system lacks Common CA certificates for SSL."
--    /bin/echo -e "This prevents https:// downloads from succeeding."
--    /bin/echo -e "On Debian/Ubuntu distributions, install 'ca-certificates' package."
--    exit 1
--fi
+baruch
+
 -- 
-1.7.10.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
