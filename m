@@ -1,45 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 May 2013 16:52:04 +0200
-Subject: [Buildroot] [PATCH 04/12] lbase64: New package
-In-Reply-To: <1369054604-26139-4-git-send-email-shmuelzon@gmail.com>
-References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
- <1369054604-26139-4-git-send-email-shmuelzon@gmail.com>
-Message-ID: <20130520165204.0269d05a@skate>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Mon, 20 May 2013 15:52:14 +0100
+Subject: [Buildroot] [PATCH] ed: Convert to generic package
+	infrastructure
+In-Reply-To: <20130520164905.1b5c9ac5@skate>
+References: <1369056118-32503-1-git-send-email-markos.chandras@gmail.com>
+ <20130520164905.1b5c9ac5@skate>
+Message-ID: <CAG2jQ8gTjrdLOAmgkGifTG_fbUSubUybOJyrDHHVKq-rr0SJSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Assaf Inbal,
+Hi Thomas,
 
-On Mon, 20 May 2013 15:56:36 +0300, Assaf Inbal wrote:
+On 20 May 2013 15:49, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Markos Chandras,
+>
+> On Mon, 20 May 2013 14:21:58 +0100, Markos Chandras wrote:
+>
+>> -$(eval $(autotools-package))
+>> +define ED_CONFIGURE_CMDS
+>> +     ( cd $(@D); \
+>
+> Nitpick: we typically don't put a space here.
 
-> +define LBASE64_BUILD_CMDS
-> +	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -fPIC" so
-> +endef
+Do you mean after '(' or before '\' ?
 
-Using $(TARGET_CONFIGURE_OPTS) here would be better if possible.
+>
+>> +             ./configure \
+>> +             --prefix=/usr \
+>> +             CPPFLAGS="$(TARGET_CPPFLAGS)" \
+>> +             CFLAGS="$(TARGET_CFLAGS)" \
+>> +             LDFLAGS="$(TARGET_LDFLAGS)" \
+>> +             CC="$(TARGET_CC)" \
+>
+> Maybe you could use $(TARGET_CONFIGURE_OPTS) here instead?
+>
+> Thanks!
+>
 
-Also, we're normally supposed to handle both the shared library and
-static library build. Ideally, when BR2_PREFER_STATIC_LIB is disabled,
-build both the shared and the static library, and when
-BR2_PREFER_STATIC_LIB is enabled, build only the static library.
+Yeah sure I will do that.
 
-> +
-> +define LBASE64_INSTALL_TARGET_CMDS
-> +	$(INSTALL) "$(@D)/base64.so" "$(TARGET_DIR)/usr/lib/lua"
-> +endef
-
-We normally don't quote file paths, and we use the following syntax:
-
-	$(INSTALL) -D $(@D)/base64.so $(TARGET_DIR)/usr/lib/lua/base64.so
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+--
+Regards,
+Markos Chandras
