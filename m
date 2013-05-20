@@ -1,36 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 May 2013 16:49:05 +0200
-Subject: [Buildroot] [PATCH] ed: Convert to generic package
- infrastructure
-In-Reply-To: <1369056118-32503-1-git-send-email-markos.chandras@gmail.com>
-References: <1369056118-32503-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <20130520164905.1b5c9ac5@skate>
+Date: Mon, 20 May 2013 16:52:04 +0200
+Subject: [Buildroot] [PATCH 04/12] lbase64: New package
+In-Reply-To: <1369054604-26139-4-git-send-email-shmuelzon@gmail.com>
+References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
+ <1369054604-26139-4-git-send-email-shmuelzon@gmail.com>
+Message-ID: <20130520165204.0269d05a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Dear Assaf Inbal,
 
-On Mon, 20 May 2013 14:21:58 +0100, Markos Chandras wrote:
+On Mon, 20 May 2013 15:56:36 +0300, Assaf Inbal wrote:
 
-> -$(eval $(autotools-package))
-> +define ED_CONFIGURE_CMDS
-> +	( cd $(@D); \
+> +define LBASE64_BUILD_CMDS
+> +	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -fPIC" so
+> +endef
 
-Nitpick: we typically don't put a space here.
+Using $(TARGET_CONFIGURE_OPTS) here would be better if possible.
 
-> +		./configure \
-> +		--prefix=/usr \
-> +		CPPFLAGS="$(TARGET_CPPFLAGS)" \
-> +		CFLAGS="$(TARGET_CFLAGS)" \
-> +		LDFLAGS="$(TARGET_LDFLAGS)" \
-> +		CC="$(TARGET_CC)" \
+Also, we're normally supposed to handle both the shared library and
+static library build. Ideally, when BR2_PREFER_STATIC_LIB is disabled,
+build both the shared and the static library, and when
+BR2_PREFER_STATIC_LIB is enabled, build only the static library.
 
-Maybe you could use $(TARGET_CONFIGURE_OPTS) here instead?
+> +
+> +define LBASE64_INSTALL_TARGET_CMDS
+> +	$(INSTALL) "$(@D)/base64.so" "$(TARGET_DIR)/usr/lib/lua"
+> +endef
 
-Thanks!
+We normally don't quote file paths, and we use the following syntax:
+
+	$(INSTALL) -D $(@D)/base64.so $(TARGET_DIR)/usr/lib/lua/base64.so
+
+Thanks,
 
 Thomas
 -- 
