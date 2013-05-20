@@ -1,10 +1,10 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 20 May 2013 18:13:15 +0200
-Subject: [Buildroot] [PATCH 11/12] luasql: New package
-In-Reply-To: <1369054604-26139-11-git-send-email-shmuelzon@gmail.com>
+Date: Mon, 20 May 2013 18:07:51 +0200
+Subject: [Buildroot] [PATCH 07/12] luacrypto: New package
+In-Reply-To: <1369054604-26139-7-git-send-email-shmuelzon@gmail.com>
 References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
- <1369054604-26139-11-git-send-email-shmuelzon@gmail.com>
-Message-ID: <CAB0FRstcpv3G-cpaMkjT-AG8OvPG935HPYUu4uioKiz-+Ta+xg@mail.gmail.com>
+ <1369054604-26139-7-git-send-email-shmuelzon@gmail.com>
+Message-ID: <CAB0FRsuYNEGZdVwj3mKVBRp2uyfwY5EbOfZ=wuSMvO51iDZMFg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,111 +13,96 @@ To: buildroot@busybox.net
 
 2013/5/20 Assaf Inbal <shmuelzon@gmail.com>
 
-> Luasql is a uniform frontend for multiple DB backends.
+> LuaCrypto provides a Lua frontend to the OpenSSL cryptographic library.
 >
 > Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
 > ---
->  package/Config.in        |  1 +
->  package/luasql/Config.in | 21 +++++++++++++++++++++
->  package/luasql/luasql.mk | 36 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 58 insertions(+)
->  create mode 100644 package/luasql/Config.in
->  create mode 100644 package/luasql/luasql.mk
+>  package/Config.in              |  1 +
+>  package/luacrypto/Config.in    | 12 ++++++++++++
+>  package/luacrypto/luacrypto.mk | 15 +++++++++++++++
+>  3 files changed, 28 insertions(+)
+>  create mode 100644 package/luacrypto/Config.in
+>  create mode 100644 package/luacrypto/luacrypto.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 3a49e59..17fa1e7 100644
+> index 1089533..c11ff27 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -317,6 +317,7 @@ source "package/luafilesystem/Config.in"
->  source "package/luaposix/Config.in"
->  source "package/luasec/Config.in"
+> @@ -310,6 +310,7 @@ source "package/coxpcall/Config.in"
+>  source "package/lbase64/Config.in"
+>  source "package/luabitop/Config.in"
+>  source "package/luacjson/Config.in"
+> +source "package/luacrypto/Config.in"
+>  source "package/luaexpat/Config.in"
+>  source "package/luafilesystem/Config.in"
 >  source "package/luasocket/Config.in"
-> +source "package/luasql/Config.in"
->  source "package/lua-ev/Config.in"
->  source "package/lua-msgpack-native/Config.in"
->  source "package/rings/Config.in"
-> diff --git a/package/luasql/Config.in b/package/luasql/Config.in
+> diff --git a/package/luacrypto/Config.in b/package/luacrypto/Config.in
 > new file mode 100644
-> index 0000000..4dd011a
+> index 0000000..f4587c3
 > --- /dev/null
-> +++ b/package/luasql/Config.in
-> @@ -0,0 +1,21 @@
-> +config BR2_PACKAGE_LUASQL
-> +       bool "luasql"
+> +++ b/package/luacrypto/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_LUACRYPTO
+> +       bool "luacrypto"
+> +       select BR2_PACKAGE_OPENSSL
+> +       select BR2_PACKAGE_LUASOCKET
 > +       help
-> +         LuaSQL is a simple interface from Lua to a DBMS.
+> +         LuaCrypto provides a Lua frontend to the OpenSSL cryptographic
+> +         library.
+> +         The OpenSSL features that are currently exposed are digests (MD5,
+> +         SHA-1, HMAC, and more) and crypto-grade random number generators
+> +         communication.
 > +
-> +         http://www.keplerproject.org/luasql
-> +
-> +if BR2_PACKAGE_LUASQL
-> +choice
-> +       prompt "LuaSQL Driver"
-> +       help
-> +         Select backend driver for LuaSQL.
-> +
-> +config BR2_PACKAGE_LUASQL_DRIVER_SQLITE3
-> +       bool "SQLite3"
-> +       select BR2_PACKAGE_SQLITE
-> +       help
-> +         Select if you wish to use the SQLite3 LuaSQL driver.
-> +
-> +endchoice
-> +endif
-> diff --git a/package/luasql/luasql.mk b/package/luasql/luasql.mk
+> +         http://luacrypto.luaforge.net
+> diff --git a/package/luacrypto/luacrypto.mk b/package/luacrypto/
+> luacrypto.mk
 > new file mode 100644
-> index 0000000..3480741
+> index 0000000..b0cdfc3
 > --- /dev/null
-> +++ b/package/luasql/luasql.mk
-> @@ -0,0 +1,36 @@
+> +++ b/package/luacrypto/luacrypto.mk
+> @@ -0,0 +1,15 @@
 > +#############################################################
 > +#
-> +# luasql
-> +#
-> +#############################################################
-> +
-> +LUASQL_VERSION = 2.2.0
-> +LUASQL_SITE = http://github.com/downloads/keplerproject/luasql
+> +# lucrypto
 >
 
-a newest version is available
+typo : luacrypto
 
--LUASQL_VERSION = 2.2.0
--LUASQL_SITE = http://github.com/downloads/keplerproject/luasql
-+LUASQL_VERSION = v2.3.0
-+LUASQL_SOURCE = $(LUASQL_VERSION).tar.gz
-+LUASQL_SITE = https://github.com/keplerproject/luasql/archive
+
+> +#
+> +#############################################################
+> +
+> +LUACRYPTO_VERSION = master
+> +LUACRYPTO_SITE = git://github.com/mkottman/luacrypto.git
+> +LUACRYPTO_SITE_METHOD = git
+>
+
+master is not fixed reference.
+
+-LUACRYPTO_VERSION = master
+-LUACRYPTO_SITE = git://github.com/mkottman/luacrypto.git
+-LUACRYPTO_SITE_METHOD = git
++LUACRYPTO_VERSION = 0.3.2
++LUACRYPTO_SOURCE = $(LUACRYPTO_VERSION).tar.gz
++LUACRYPTO_SITE = https://github.com/mkottman/luacrypto/archive
+
+
+
+
+> +LUACRYPTO_LICENSE = MIT
+> +LUACRYPTO_LICENSE_FILES = COPYING
+> +LUACRYPTO_DEPENDENCIES = lua luasocket openssl
+>
+
+luasocket is not a built dependency.
 
 Fran?ois
 
 
-> +LUASQL_LICENSE = MIT
-> +LUASQL_LICENSE_FILES = README
-> +LUASQL_DEPENDENCIES = lua
+> +LUACRYPTO_CONF_OPT =
+> "-DLUA_LIBRARIES=\"$(STAGING_DIR)/usr/lib/liblua.so\""
 > +
-> +ifdef BR2_PACKAGE_LUASQL_DRIVER_SQLITE3
-> +LUASQL_DEPENDENCIES += sqlite
-> +define LUASQL_BUILD_PARAMS
-> +       T="sqlite3" \
-> +       DRIVER_LIBS="-L$(STAGING_DIR)/usr/lib -lsqlite3"
-> +endef
-> +endif
-> +
-> +define LUASQL_BUILD_CMDS
-> +       $(MAKE) -C $(@D) $(LUASQL_BUILD_PARAMS) CC="$(TARGET_CC)" \
-> +               LD="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -fPIC"
-> +endef
-> +
-> +define LUASQL_INSTALL_TARGET_CMDS
-> +       $(MAKE) -C $(@D) $(LUASQL_BUILD_PARAMS) PREFIX=/usr \
-> +               LUA_DIR="$(TARGET_DIR)/usr/share/lua" \
-> +               LUA_LIBDIR="$(TARGET_DIR)/usr/lib/lua" install
-> +endef
-> +
-> +define LUASQL_UNINSTALL_TARGET_CMDS
-> +       rm -rf "$(TARGET_DIR)/usr/lib/lua/luasql"
-> +endef
-> +
-> +$(eval $(generic-package))
+> +$(eval $(cmake-package))
 > --
 > 1.8.1.2
 >
@@ -128,4 +113,4 @@ Fran?ois
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130520/3990fddb/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130520/833ce13f/attachment.html>
