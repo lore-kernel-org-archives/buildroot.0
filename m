@@ -1,10 +1,10 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 20 May 2013 18:10:39 +0200
-Subject: [Buildroot] [PATCH 10/12] luasec: New package
-In-Reply-To: <1369054604-26139-10-git-send-email-shmuelzon@gmail.com>
+Date: Mon, 20 May 2013 18:13:15 +0200
+Subject: [Buildroot] [PATCH 11/12] luasql: New package
+In-Reply-To: <1369054604-26139-11-git-send-email-shmuelzon@gmail.com>
 References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
- <1369054604-26139-10-git-send-email-shmuelzon@gmail.com>
-Message-ID: <CAB0FRssYR7ZxFQ9naD5Yj7Y4k244G4kVY00i0p9mOt7z7132Zg@mail.gmail.com>
+ <1369054604-26139-11-git-send-email-shmuelzon@gmail.com>
+Message-ID: <CAB0FRstcpv3G-cpaMkjT-AG8OvPG935HPYUu4uioKiz-+Ta+xg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,86 +13,108 @@ To: buildroot@busybox.net
 
 2013/5/20 Assaf Inbal <shmuelzon@gmail.com>
 
-> LuaSec is a Lua binding for OpenSSL library to provide TLS/SSL
-> communication.
+> Luasql is a uniform frontend for multiple DB backends.
 >
 > Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
 > ---
 >  package/Config.in        |  1 +
->  package/luasec/Config.in |  9 +++++++++
->  package/luasec/luasec.mk | 31 +++++++++++++++++++++++++++++++
->  3 files changed, 41 insertions(+)
->  create mode 100644 package/luasec/Config.in
->  create mode 100644 package/luasec/luasec.mk
+>  package/luasql/Config.in | 21 +++++++++++++++++++++
+>  package/luasql/luasql.mk | 36 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 58 insertions(+)
+>  create mode 100644 package/luasql/Config.in
+>  create mode 100644 package/luasql/luasql.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 9c615b5..3a49e59 100644
+> index 3a49e59..17fa1e7 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -315,6 +315,7 @@ source "package/luaexpat/Config.in"
->  source "package/luaexpatutils/Config.in"
->  source "package/luafilesystem/Config.in"
+> @@ -317,6 +317,7 @@ source "package/luafilesystem/Config.in"
 >  source "package/luaposix/Config.in"
-> +source "package/luasec/Config.in"
+>  source "package/luasec/Config.in"
 >  source "package/luasocket/Config.in"
+> +source "package/luasql/Config.in"
 >  source "package/lua-ev/Config.in"
 >  source "package/lua-msgpack-native/Config.in"
-> diff --git a/package/luasec/Config.in b/package/luasec/Config.in
+>  source "package/rings/Config.in"
+> diff --git a/package/luasql/Config.in b/package/luasql/Config.in
 > new file mode 100644
-> index 0000000..2d303c1
+> index 0000000..4dd011a
 > --- /dev/null
-> +++ b/package/luasec/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_LUASEC
-> +       bool "luasec"
-> +       select BR2_PACKAGE_OPENSSL
-> +       select BR2_PACKAGE_LUASOCKET
+> +++ b/package/luasql/Config.in
+> @@ -0,0 +1,21 @@
+> +config BR2_PACKAGE_LUASQL
+> +       bool "luasql"
 > +       help
-> +         LuaSec is a binding for OpenSSL library to provide TLS/SSL
-> +         communication.
+> +         LuaSQL is a simple interface from Lua to a DBMS.
 > +
-> +         http://www.inf.puc-rio.br/~brunoos/luasec/
-> diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
+> +         http://www.keplerproject.org/luasql
+> +
+> +if BR2_PACKAGE_LUASQL
+> +choice
+> +       prompt "LuaSQL Driver"
+> +       help
+> +         Select backend driver for LuaSQL.
+> +
+> +config BR2_PACKAGE_LUASQL_DRIVER_SQLITE3
+> +       bool "SQLite3"
+> +       select BR2_PACKAGE_SQLITE
+> +       help
+> +         Select if you wish to use the SQLite3 LuaSQL driver.
+> +
+> +endchoice
+> +endif
+> diff --git a/package/luasql/luasql.mk b/package/luasql/luasql.mk
 > new file mode 100644
-> index 0000000..0fc8144
+> index 0000000..3480741
 > --- /dev/null
-> +++ b/package/luasec/luasec.mk
-> @@ -0,0 +1,31 @@
+> +++ b/package/luasql/luasql.mk
+> @@ -0,0 +1,36 @@
 > +#############################################################
 > +#
-> +# luasec
+> +# luasql
 > +#
 > +#############################################################
 > +
-> +LUASEC_VERSION = 0.4.1
-> +LUASEC_SITE = http://www.inf.puc-rio.br/~brunoos/luasec/download/
-> +LUASEC_LICENSE = MIT
-> +LUASEC_LICENSE_FILES = LICENSE
-> +LUASEC_DEPENDENCIES = lua luasocket openssl
+> +LUASQL_VERSION = 2.2.0
+> +LUASQL_SITE = http://github.com/downloads/keplerproject/luasql
 >
 
-luasocket is not a built dependency.
+a newest version is available
+
+-LUASQL_VERSION = 2.2.0
+-LUASQL_SITE = http://github.com/downloads/keplerproject/luasql
++LUASQL_VERSION = v2.3.0
++LUASQL_SOURCE = $(LUASQL_VERSION).tar.gz
++LUASQL_SITE = https://github.com/keplerproject/luasql/archive
 
 Fran?ois
 
 
+> +LUASQL_LICENSE = MIT
+> +LUASQL_LICENSE_FILES = README
+> +LUASQL_DEPENDENCIES = lua
 > +
-> +define LUASEC_BUILD_CMDS
-> +       $(MAKE) -C $(@D) CC="$(TARGET_CC)" LD="$(TARGET_CC)" \
-> +               CFLAGS="$(TARGET_CFLAGS) -fPIC" \
-> +               LDFLAGS="$(TARGET_LDFLAGS) -shared" linux
+> +ifdef BR2_PACKAGE_LUASQL_DRIVER_SQLITE3
+> +LUASQL_DEPENDENCIES += sqlite
+> +define LUASQL_BUILD_PARAMS
+> +       T="sqlite3" \
+> +       DRIVER_LIBS="-L$(STAGING_DIR)/usr/lib -lsqlite3"
+> +endef
+> +endif
+> +
+> +define LUASQL_BUILD_CMDS
+> +       $(MAKE) -C $(@D) $(LUASQL_BUILD_PARAMS) CC="$(TARGET_CC)" \
+> +               LD="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -fPIC"
 > +endef
 > +
-> +define LUASEC_INSTALL_TARGET_CMDS
-> +       $(MAKE) -C $(@D) \
-> +               LUAPATH="$(TARGET_DIR)/usr/share/lua" \
-> +               LUACPATH="$(TARGET_DIR)/usr/lib/lua" install
+> +define LUASQL_INSTALL_TARGET_CMDS
+> +       $(MAKE) -C $(@D) $(LUASQL_BUILD_PARAMS) PREFIX=/usr \
+> +               LUA_DIR="$(TARGET_DIR)/usr/share/lua" \
+> +               LUA_LIBDIR="$(TARGET_DIR)/usr/lib/lua" install
 > +endef
 > +
-> +define LUASEC_UNINSTALL_TARGET_CMDS
-> +       rm -f "$(TARGET_DIR)/usr/lib/lua/ssl.so"
-> +       rm -rf "$(TARGET_DIR)/usr/share/lua/ssl"
-> +       rm -f "$(TARGET_DIR)/usr/share/lua/ssl.lua"
+> +define LUASQL_UNINSTALL_TARGET_CMDS
+> +       rm -rf "$(TARGET_DIR)/usr/lib/lua/luasql"
 > +endef
 > +
 > +$(eval $(generic-package))
@@ -106,4 +128,4 @@ Fran?ois
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130520/6cb944a1/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130520/3990fddb/attachment-0001.html>
