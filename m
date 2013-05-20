@@ -1,83 +1,76 @@
 From: Assaf Inbal <shmuelzon@gmail.com>
-Date: Mon, 20 May 2013 15:56:38 +0300
-Subject: [Buildroot] [PATCH 06/12] luabitop: New package
+Date: Mon, 20 May 2013 15:56:39 +0300
+Subject: [Buildroot] [PATCH 07/12] luacrypto: New package
 In-Reply-To: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
 References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
-Message-ID: <1369054604-26139-6-git-send-email-shmuelzon@gmail.com>
+Message-ID: <1369054604-26139-7-git-send-email-shmuelzon@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lua library for binary operations
+LuaCrypto provides a Lua frontend to the OpenSSL cryptographic library.
 
 Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
 ---
- package/Config.in            |  1 +
- package/luabitop/Config.in   |  7 +++++++
- package/luabitop/luabitop.mk | 27 +++++++++++++++++++++++++++
- 3 files changed, 35 insertions(+)
- create mode 100644 package/luabitop/Config.in
- create mode 100644 package/luabitop/luabitop.mk
+ package/Config.in              |  1 +
+ package/luacrypto/Config.in    | 12 ++++++++++++
+ package/luacrypto/luacrypto.mk | 15 +++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/luacrypto/Config.in
+ create mode 100644 package/luacrypto/luacrypto.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e94cb39..1089533 100644
+index 1089533..c11ff27 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -308,6 +308,7 @@ source "package/cgilua/Config.in"
- source "package/copas/Config.in"
- source "package/coxpcall/Config.in"
+@@ -310,6 +310,7 @@ source "package/coxpcall/Config.in"
  source "package/lbase64/Config.in"
-+source "package/luabitop/Config.in"
+ source "package/luabitop/Config.in"
  source "package/luacjson/Config.in"
++source "package/luacrypto/Config.in"
  source "package/luaexpat/Config.in"
  source "package/luafilesystem/Config.in"
-diff --git a/package/luabitop/Config.in b/package/luabitop/Config.in
+ source "package/luasocket/Config.in"
+diff --git a/package/luacrypto/Config.in b/package/luacrypto/Config.in
 new file mode 100644
-index 0000000..83a85b1
+index 0000000..f4587c3
 --- /dev/null
-+++ b/package/luabitop/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LUABITOP
-+	bool "luabitop"
++++ b/package/luacrypto/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LUACRYPTO
++	bool "luacrypto"
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LUASOCKET
 +	help
-+	  Lua BitOp is a C extension module for Lua 5.1/5.2 which adds bitwise
-+	  operations on numbers.
++	  LuaCrypto provides a Lua frontend to the OpenSSL cryptographic
++	  library.
++	  The OpenSSL features that are currently exposed are digests (MD5,
++	  SHA-1, HMAC, and more) and crypto-grade random number generators
++	  communication.
 +
-+	  http://bitop.luajit.org
-diff --git a/package/luabitop/luabitop.mk b/package/luabitop/luabitop.mk
++	  http://luacrypto.luaforge.net
+diff --git a/package/luacrypto/luacrypto.mk b/package/luacrypto/luacrypto.mk
 new file mode 100644
-index 0000000..aaa01cd
+index 0000000..b0cdfc3
 --- /dev/null
-+++ b/package/luabitop/luabitop.mk
-@@ -0,0 +1,27 @@
++++ b/package/luacrypto/luacrypto.mk
+@@ -0,0 +1,15 @@
 +#############################################################
 +#
-+# luabitop
++# lucrypto
 +#
 +#############################################################
 +
-+LUABITOP_VERSION = 1.0.2
-+LUABITOP_SOURCE = LuaBitOp-$(LUABITOP_VERSION).tar.gz
-+LUABITOP_SITE = http://bitop.luajit.org/download
-+LUABITOP_LICENSE = MIT
-+LUABITOP_LICENSE_FILES = README
-+LUABITOP_DEPENDENCIES = lua
++LUACRYPTO_VERSION = master
++LUACRYPTO_SITE = git://github.com/mkottman/luacrypto.git
++LUACRYPTO_SITE_METHOD = git
++LUACRYPTO_LICENSE = MIT
++LUACRYPTO_LICENSE_FILES = COPYING
++LUACRYPTO_DEPENDENCIES = lua luasocket openssl
++LUACRYPTO_CONF_OPT = "-DLUA_LIBRARIES=\"$(STAGING_DIR)/usr/lib/liblua.so\""
 +
-+define LUABITOP_BUILD_CMDS
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
-+endef
-+
-+define LUABITOP_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/lib/lua
-+	$(INSTALL) -p $(@D)/bit.so $(TARGET_DIR)/usr/lib/lua
-+endef
-+
-+define LUABITOP_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(cmake-package))
 -- 
 1.8.1.2
