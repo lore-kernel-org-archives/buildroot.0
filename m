@@ -1,38 +1,82 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 20 May 2013 12:34:23 +0300
-Subject: [Buildroot] [PATCH] pixman: Apply upstream patch to fix
- compilation on MIPS
-In-Reply-To: <CAG2jQ8j3fye2s1T3fXytsm+0L+dAz1i3dgOxmt7e2jb9jT22-g@mail.gmail.com>
-References: <1369040459-17604-1-git-send-email-markos.chandras@gmail.com>
- <20130520092025.GF7188@tarshish>
- <CAG2jQ8j3fye2s1T3fXytsm+0L+dAz1i3dgOxmt7e2jb9jT22-g@mail.gmail.com>
-Message-ID: <20130520093423.GG7188@tarshish>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Mon, 20 May 2013 10:37:00 +0100
+Subject: [Buildroot] [PATCH v2 next] pixman: Apply upstream patch to fix
+	compilation on MIPS
+Message-ID: <1369042620-27058-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Markos,
+From: Markos Chandras <markos.chandras@imgtec.com>
 
-On Mon, May 20, 2013 at 10:24:32AM +0100, Markos Chandras wrote:
-> >>  PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
-> >>  PIXMAN_LICENSE = MIT
-> >>  PIXMAN_LICENSE_FILES = COPYING
-> >>
-> >> +PIXMAN_AUTORECONF = YES
-> >
-> > Please add a comment explaining why this is needed.
-> 
-> I thought it was obvious because the patch fixes the configure.ac
-> file. But ok, I will add a comment.
+Fixes:
+http://autobuild.buildroot.net/results/38aa4f2a2269b80226b910c46e0c9abe7dc38ff8/
 
-I missed that. In this case a comment is not needed I guess, unless others 
-have a different opinion.
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ package/pixman/pixman-loongson-cflags.patch | 38 +++++++++++++++++++++++++++++
+ package/pixman/pixman.mk                    |  2 ++
+ 2 files changed, 40 insertions(+)
+ create mode 100644 package/pixman/pixman-loongson-cflags.patch
 
-baruch
-
+diff --git a/package/pixman/pixman-loongson-cflags.patch b/package/pixman/pixman-loongson-cflags.patch
+new file mode 100644
+index 0000000..fc53be2
+--- /dev/null
++++ b/package/pixman/pixman-loongson-cflags.patch
+@@ -0,0 +1,38 @@
++configure.ac: Verify that the Loongson MMI code can link
++
++The Loongson MMI code modifies -march and as a result it breaks linking
++when the rest of the code is built with a different -match/-mtune.
++This patch fixes the problem by trying to link the code instead of just
++compiling it. This patch is already committed upstream.
++
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++
++From d77d75cc6e5de14d027d22b70389a4d0c71048b9 Mon Sep 17 00:00:00 2001
++From: Markos Chandras <markos.chandras@imgtec.com>
++Date: Wed, 15 May 2013 16:51:20 +0000
++Subject: Use AC_LINK_IFELSE to check if the Loongson MMI code can link
++
++The Loongson code is compiled with -march=loongson2f to enable the MMI
++instructions, but binutils refuses to link object code compiled with
++different -march settings, leading to link failures later in the
++compile. This avoids that problem by checking if we can link code
++compiled for Loongson.
++
++Reviewed-by: Matt Turner <mattst88@gmail.com>
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++---
++diff --git a/configure.ac b/configure.ac
++index c43a0d2..221179f 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -279,7 +279,7 @@ AC_MSG_CHECKING(whether to use Loongson MMI assembler)
++ 
++ xserver_save_CFLAGS=$CFLAGS
++ CFLAGS=" $LS_CFLAGS $CFLAGS -I$srcdir"
++-AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+++AC_LINK_IFELSE([AC_LANG_SOURCE([[
++ #ifndef __mips_loongson_vector_rev
++ #error "Loongson Multimedia Instructions are only available on Loongson"
++ #endif
++--
++cgit v0.9.0.2-2-gbebe
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 326f9eb..8b35ef1 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -7,6 +7,8 @@ PIXMAN_VERSION = 0.30.0
+ PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ PIXMAN_INSTALL_STAGING = YES
+ PIXMAN_DEPENDENCIES = host-pkgconf
++PIXMAN_AUTORECONF = YES
++
+ # don't build gtk based demos
+ PIXMAN_CONF_OPT = --disable-gtk
+ 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.8.2.1
