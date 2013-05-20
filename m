@@ -1,13 +1,9 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Mon, 20 May 2013 10:38:08 +0100
-Subject: [Buildroot] [PATCH] pixman: Apply upstream patch to fix
- compilation on MIPS
-In-Reply-To: <20130520093423.GG7188@tarshish>
-References: <1369040459-17604-1-git-send-email-markos.chandras@gmail.com>
- <20130520092025.GF7188@tarshish>
- <CAG2jQ8j3fye2s1T3fXytsm+0L+dAz1i3dgOxmt7e2jb9jT22-g@mail.gmail.com>
- <20130520093423.GG7188@tarshish>
-Message-ID: <CAG2jQ8gUYi6ajsxD=uMJpporO1McdF8ub85D9+JEu4JD3qWUuQ@mail.gmail.com>
+From: Markos Chandras <hwoarang@gentoo.org>
+Date: Mon, 20 May 2013 12:32:37 +0100
+Subject: [Buildroot] [PATCH] gitignore: remove the stale /dl entry
+In-Reply-To: <1369032032-3799-1-git-send-email-baruch@tkos.co.il>
+References: <1369032032-3799-1-git-send-email-baruch@tkos.co.il>
+Message-ID: <CAG2jQ8jDy7uppv6JhucO+5Z+PWqiOxF3zJJXqnXxf_p+YqJeNQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,32 +12,35 @@ To: buildroot@busybox.net
 
 Hi Baruch,
 
-On 20 May 2013 10:34, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Markos,
+On 20 May 2013 07:40, Baruch Siach <baruch@tkos.co.il> wrote:
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  .gitignore |    1 -
+>  1 file changed, 1 deletion(-)
 >
-> On Mon, May 20, 2013 at 10:24:32AM +0100, Markos Chandras wrote:
->> >>  PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
->> >>  PIXMAN_LICENSE = MIT
->> >>  PIXMAN_LICENSE_FILES = COPYING
->> >>
->> >> +PIXMAN_AUTORECONF = YES
->> >
->> > Please add a comment explaining why this is needed.
->>
->> I thought it was obvious because the patch fixes the configure.ac
->> file. But ok, I will add a comment.
+> diff --git a/.gitignore b/.gitignore
+> index bb02d9f..1c1f60e 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -1,5 +1,4 @@
+>  /output
+> -/dl
+>  /.auto.deps
+>  /.config.cmd
+>  /.config.old
+> --
+> 1.7.10.4
 >
-> I missed that. In this case a comment is not needed I guess, unless others
-> have a different opinion.
->
-> baruch
->
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-I sent v2. I didn't add a comment because I see that most of packages
-do not explain with AUTORECONF is needed.
-
-Thank you for your comments.
+Why is this change needed? The dl/ directory is still present for me
+and I see that
+BR2_DL_DIR is set to $(TOPDIR)/dl in the Config.in file.
 
 --
 Regards,
-Markos Chandras
+Markos Chandras - Gentoo Linux Developer
+http://dev.gentoo.org/~hwoarang
