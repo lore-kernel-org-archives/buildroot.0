@@ -1,104 +1,83 @@
 From: Assaf Inbal <shmuelzon@gmail.com>
-Date: Mon, 20 May 2013 15:56:43 +0300
-Subject: [Buildroot] [PATCH 11/12] luasql: New package
+Date: Mon, 20 May 2013 15:56:44 +0300
+Subject: [Buildroot] [PATCH 12/12] orbit: New package
 In-Reply-To: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
 References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
-Message-ID: <1369054604-26139-11-git-send-email-shmuelzon@gmail.com>
+Message-ID: <1369054604-26139-12-git-send-email-shmuelzon@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luasql is a uniform frontend for multiple DB backends.
+An MVC web framework for Lua
 
 Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
 ---
- package/Config.in        |  1 +
- package/luasql/Config.in | 21 +++++++++++++++++++++
- package/luasql/luasql.mk | 36 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 58 insertions(+)
- create mode 100644 package/luasql/Config.in
- create mode 100644 package/luasql/luasql.mk
+ package/Config.in       |  1 +
+ package/orbit/Config.in | 10 ++++++++++
+ package/orbit/orbit.mk  | 26 ++++++++++++++++++++++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 package/orbit/Config.in
+ create mode 100644 package/orbit/orbit.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 3a49e59..17fa1e7 100644
+index 17fa1e7..5e18e8f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -317,6 +317,7 @@ source "package/luafilesystem/Config.in"
- source "package/luaposix/Config.in"
- source "package/luasec/Config.in"
- source "package/luasocket/Config.in"
-+source "package/luasql/Config.in"
+@@ -320,6 +320,7 @@ source "package/luasocket/Config.in"
+ source "package/luasql/Config.in"
  source "package/lua-ev/Config.in"
  source "package/lua-msgpack-native/Config.in"
++source "package/orbit/Config.in"
  source "package/rings/Config.in"
-diff --git a/package/luasql/Config.in b/package/luasql/Config.in
+ source "package/wsapi/Config.in"
+ source "package/xavante/Config.in"
+diff --git a/package/orbit/Config.in b/package/orbit/Config.in
 new file mode 100644
-index 0000000..4dd011a
+index 0000000..959481f
 --- /dev/null
-+++ b/package/luasql/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_LUASQL
-+	bool "luasql"
++++ b/package/orbit/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_ORBIT
++	bool "orbit"
++	select BR2_PACKAGE_WSAPI
++	select BR2_PACKAGE_LUAFILESYSTEM
++	select BR2_PACKAGE_RINGS
 +	help
-+	  LuaSQL is a simple interface from Lua to a DBMS.
++	  An MVC web framework for Lua. The design is inspired by lightweight
++	  Ruby frameworks such as Camping
 +
-+	  http://www.keplerproject.org/luasql
-+
-+if BR2_PACKAGE_LUASQL
-+choice
-+	prompt "LuaSQL Driver"
-+	help
-+	  Select backend driver for LuaSQL.
-+
-+config BR2_PACKAGE_LUASQL_DRIVER_SQLITE3
-+	bool "SQLite3"
-+	select BR2_PACKAGE_SQLITE
-+	help
-+	  Select if you wish to use the SQLite3 LuaSQL driver.
-+
-+endchoice
-+endif
-diff --git a/package/luasql/luasql.mk b/package/luasql/luasql.mk
++	  http://keplerproject.github.com/orbit
+diff --git a/package/orbit/orbit.mk b/package/orbit/orbit.mk
 new file mode 100644
-index 0000000..3480741
+index 0000000..8eff332
 --- /dev/null
-+++ b/package/luasql/luasql.mk
-@@ -0,0 +1,36 @@
++++ b/package/orbit/orbit.mk
+@@ -0,0 +1,26 @@
 +#############################################################
 +#
-+# luasql
++# orbit
 +#
 +#############################################################
 +
-+LUASQL_VERSION = 2.2.0
-+LUASQL_SITE = http://github.com/downloads/keplerproject/luasql
-+LUASQL_LICENSE = MIT
-+LUASQL_LICENSE_FILES = README
-+LUASQL_DEPENDENCIES = lua
++ORBIT_VERSION = 2.2.0
++ORBIT_SITE = http://github.com/downloads/keplerproject/orbit
++ORBIT_LICENSE = MIT
++ORBIT_LICENSE_FILES = COPYRIGHT
++ORBIT_DEPENDENCIES = wsapi
 +
-+ifdef BR2_PACKAGE_LUASQL_DRIVER_SQLITE3
-+LUASQL_DEPENDENCIES += sqlite
-+define LUASQL_BUILD_PARAMS
-+	T="sqlite3" \
-+	DRIVER_LIBS="-L$(STAGING_DIR)/usr/lib -lsqlite3"
-+endef
-+endif
-+
-+define LUASQL_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(LUASQL_BUILD_PARAMS) CC="$(TARGET_CC)" \
-+		LD="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -fPIC"
++define ORBIT_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/src/orbit.lua \
++		$(TARGET_DIR)/usr/share/lua
++	mkdir $(TARGET_DIR)/usr/share/lua/orbit
++	$(INSTALL) -m 0644 -D $(@D)/src/orbit/*.lua \
++		$(TARGET_DIR)/usr/share/lua/orbit
 +endef
 +
-+define LUASQL_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) $(LUASQL_BUILD_PARAMS) PREFIX=/usr \
-+		LUA_DIR="$(TARGET_DIR)/usr/share/lua" \
-+		LUA_LIBDIR="$(TARGET_DIR)/usr/lib/lua" install
-+endef
-+
-+define LUASQL_UNINSTALL_TARGET_CMDS
-+	rm -rf "$(TARGET_DIR)/usr/lib/lua/luasql"
++define ORBIT_UNINSTALL_TARGET_CMDS
++	rm -rf "$(TARGET_DIR)/usr/share/lua/orbit"
++	rm -rf "$(TARGET_DIR)/usr/share/lua/orbit.lua"
 +endef
 +
 +$(eval $(generic-package))
