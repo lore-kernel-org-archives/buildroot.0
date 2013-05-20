@@ -1,32 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 May 2013 14:47:25 +0200
-Subject: [Buildroot] [PATCH] ed: Fix quiet building
-In-Reply-To: <1369053745-25578-1-git-send-email-markos.chandras@gmail.com>
-References: <1369053745-25578-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <20130520144725.2f57a5de@skate>
+From: Assaf Inbal <shmuelzon@gmail.com>
+Date: Mon, 20 May 2013 15:56:33 +0300
+Subject: [Buildroot] [PATCH 01/12] coxpcall: Updated source location
+Message-ID: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
 
-On Mon, 20 May 2013 13:42:25 +0100, Markos Chandras wrote:
+Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
+---
+ package/coxpcall/coxpcall.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> The configure script is a custom one, and '-q' is not supported.
-> It fixes the following problem when building using 'make -s'
-> 
-> configure: Unrecognized option: "-q"; use --help for usage.
-> 
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-
-If the configure script is not an autotools one, then we shouldn't be
-using the autotools-package infrastructure for this package.
-
-Thomas
+diff --git a/package/coxpcall/coxpcall.mk b/package/coxpcall/coxpcall.mk
+index e7fb76d..f260d72 100644
+--- a/package/coxpcall/coxpcall.mk
++++ b/package/coxpcall/coxpcall.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ 
+ COXPCALL_VERSION = 1.13.0
+-COXPCALL_SITE = http://luaforge.net/frs/download.php/3406
++COXPCALL_SITE = http://github.com/downloads/keplerproject/coxpcall
+ COXPCALL_DEPENDENCIES = lua
+ COXPCALL_LICENSE = MIT
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.2
