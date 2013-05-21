@@ -1,40 +1,22 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Tue, 21 May 2013 16:07:56 +0100
-Subject: [Buildroot] [PATCH] libnspr: Bump version to 4.9.6.
-Message-ID: <CAFbHwiSA_213BPUWeLKhLuXPcVXvyjSxHr7HR4j9gO+4Hv+DQg@mail.gmail.com>
+From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
+Date: Tue, 21 May 2013 21:31:02 +0200 (CEST)
+Subject: [Buildroot] Startup files numbering policy
+In-Reply-To: <1882993282.1023650.1369164262752.JavaMail.root@advansee.com>
+Message-ID: <430640706.1023684.1369164662782.JavaMail.root@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes the build for aarch64.
+Hi all,
 
-Signed-off-by: Will Newton <will.newton@linaro.org>
----
- package/libnspr/libnspr.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+So far, BuildRoot has always used arbitrary Sxx numbers for the startup files in
+/etc/init.d/, e.g. S91smb in the samba package. Depending on each board needs,
+these numbers might be more or less appropriate for the startup order. Do you
+plan to add a mechanism to choose non-default custom numbering for those
+scripts, or do you have a policy such as "It's up to each board to run
+post-build scripts for such adjustments."?
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 5b1333d..e934281 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -3,7 +3,7 @@
- # libnspr
- #
- #############################################################
--LIBNSPR_VERSION = 4.9.2
-+LIBNSPR_VERSION = 4.9.6
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE =
-https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src/
- LIBNSPR_SUBDIR = mozilla/nsprpub
---
-1.8.1.4
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-libnspr-Bump-version-to-4.9.6.patch
-Type: application/octet-stream
-Size: 875 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130521/1c09c4e9/attachment.obj>
+Best regards,
+Beno?t
