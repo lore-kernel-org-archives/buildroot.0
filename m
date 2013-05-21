@@ -1,65 +1,22 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Tue, 21 May 2013 18:11:02 -0500
-Subject: [Buildroot] [PATCH v7 08/10] gst1-plugins-good: add libvpx support
-In-Reply-To: <1369177864-6236-1-git-send-email-spenser@gillilanding.com>
-References: <1369177864-6236-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1369177864-6236-9-git-send-email-spenser@gillilanding.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 21 May 2013 23:17:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 5516] appended device tree blobs on uImage fails
+In-Reply-To: <bug-5516-163@https.bugs.busybox.net/>
+References: <bug-5516-163@https.bugs.busybox.net/>
+Message-ID: <20130521231747.D7EC79A1D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-adds libvpx support to gst1-plugins-good
+https://bugs.busybox.net/show_bug.cgi?id=5516
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
----
- package/multimedia/gst1-plugins-good/Config.in     |    4 ++++
- .../gst1-plugins-good/gst1-plugins-good.mk         |   10 ++++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+--- Comment #10 from Shawn J. Goff <shawn7400@gmail.com> 2013-05-21 23:16:40 UTC ---
+This patch was never committed. The issue is affecting me now on 2013.05_rc2
+with a 3.9 kernel. The linux.mk file has changed enough that this won't apply.
 
-diff --git a/package/multimedia/gst1-plugins-good/Config.in b/package/multimedia/gst1-plugins-good/Config.in
-index 2c27fe8..bdfe0b9 100644
---- a/package/multimedia/gst1-plugins-good/Config.in
-+++ b/package/multimedia/gst1-plugins-good/Config.in
-@@ -207,6 +207,10 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SPEEX
- 	bool "speex"
- 	select BR2_PACKAGE_SPEEX
- 
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
-+	bool "vpx (webm)"
-+	select BR2_PACKAGE_LIBVPX
-+
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVPACK
- 	bool "wavpack (*.wv audio)"
- 	select BR2_PACKAGE_WAVPACK
-diff --git a/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk b/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
-index 15e3b0e..297bb5e 100644
---- a/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
-@@ -27,8 +27,7 @@ GST1_PLUGINS_GOOD_CONF_OPT += \
- 		--disable-jack \
- 		--disable-libdv \
- 		--disable-dv1394 \
--		--disable-taglib \
--		--disable-vpx
-+		--disable-taglib
- 
- GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
- 
-@@ -390,6 +389,13 @@ else
- GST1_PLUGINS_GOOD_CONF_OPT += --disable-speex
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-vpx
-+GST1_PLUGINS_GOOD_DEPENDENCIES += libvpx
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-vpx
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVPACK),y)
- GST1_PLUGINS_GOOD_CONF_OPT += --enable-wavpack
- GST1_PLUGINS_GOOD_DEPENDENCIES += wavpack
 -- 
-1.7.9.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
