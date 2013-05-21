@@ -1,7 +1,7 @@
 From: Markos Chandras <markos.chandras@gmail.com>
-Date: Tue, 21 May 2013 09:52:04 +0100
-Subject: [Buildroot] [PATCH v2] ed: Convert to generic package infrastructure
-Message-ID: <1369126324-7581-1-git-send-email-markos.chandras@gmail.com>
+Date: Tue, 21 May 2013 10:29:40 +0100
+Subject: [Buildroot] [PATCH v2] directfb: Make imlib2 support optional
+Message-ID: <1369128580-15685-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,42 +10,49 @@ To: buildroot@busybox.net
 
 From: Markos Chandras <markos.chandras@imgtec.com>
 
-The package uses custom configure and Makefile files.
-
 Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 ---
 Changes since v1:
-- whitespace cleanup
-- Use $(TARGET_CONFIGURE_OPTS)
+- Make imlib2 support optional
 ---
- package/ed/ed.mk | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ package/directfb/Config.in   | 5 +++++
+ package/directfb/directfb.mk | 8 ++++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-index 2bb8e0e..52ae1f0 100644
---- a/package/ed/ed.mk
-+++ b/package/ed/ed.mk
-@@ -11,4 +11,20 @@ ED_CONF_OPT = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
- ED_LICENSE = GPLv3+
- ED_LICENSE_FILES = COPYING
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index b9ff5f9..a6bfb6b 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -100,6 +100,11 @@ config BR2_PACKAGE_DIRECTFB_GIF
+ 	bool "enable GIF support"
+ 	default y
  
--$(eval $(autotools-package))
-+define ED_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		./configure \
-+		--prefix=/usr \
-+		$(TARGET_CONFIGURE_OPTS) \
-+	)
-+endef
++config BR2_PACKAGE_DIRECTFB_IMLIB2
++	bool "enable IMLIB2 support"
++	default y
++	select BR2_PACKAGE_IMLIB2
 +
-+define ED_BUILD_CMDS
-+	$(MAKE)	-C $(@D)
-+endef
+ config BR2_PACKAGE_DIRECTFB_JPEG
+ 	bool "enable JPEG support"
+ 	default y
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 5ead084..e5a423d 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -108,6 +108,14 @@ else
+ DIRECTFB_CONF_OPT += --disable-jpeg
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DIRECTFB_IMLIB2),y)
++DIRECTFB_CONF_OPT += --enable-imlib2
++DIRECTFB_DEPENDENCIES += imlib2
++DIRECTFB_CONF_ENV += ac_cv_path_IMLIB2_CONFIG=$(STAGING_DIR)/usr/bin/imlib2-config
++else
++DIRECTFB_CONF_OPT += --disable-imlib2
++endif
 +
-+define ED_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+endef
-+
-+$(eval $(generic-package))
+ ifeq ($(BR2_PACKAGE_DIRECTFB_DITHER_RGB16),y)
+ DIRECTFB_CONF_OPT += --with-dither-rgb16=advanced
+ else
 -- 
 1.8.2.1
