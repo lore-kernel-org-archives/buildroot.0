@@ -1,39 +1,32 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Tue, 21 May 2013 10:30:30 +0100
-Subject: [Buildroot] [PATCH] directfb: Fix imlib2-config detection and
-	dependencies
-In-Reply-To: <20130520140902.45adcdbc@skate>
-References: <1369050951-26751-1-git-send-email-markos.chandras@gmail.com>
- <20130520140902.45adcdbc@skate>
-Message-ID: <CAG2jQ8hidHN85kBMMvr4e5P_v52cq5upvgwxy-V9d6a56xU5ug@mail.gmail.com>
+From: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Tue, 21 May 2013 17:56:12 +0800
+Subject: [Buildroot] [PATCH 1/1] <pkg>-rsync: support user custom cmds
+Message-ID: <1369130172-15455-1-git-send-email-tjlee@ambarella.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20 May 2013 13:09, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Markos Chandras,
->
-> On Mon, 20 May 2013 12:55:51 +0100, Markos Chandras wrote:
->
->> Another option would be to make the imlib2 support optional
->> (similar to png support)
->
-> I guess this would make sense, no?
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+---
+ package/pkg-generic.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Hi Thomas,
-
-I sent a new patch to make the imlib2 support optional.
-
---
-Regards,
-Markos Chandras
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 56fca6b..147e0de 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -311,6 +311,10 @@ $(2)_INSTALL_IMAGES		?= NO
+ $(2)_INSTALL_TARGET		?= YES
+ $(2)_DIR_PREFIX			= $(if $(4),$(4),$(TOP_SRCDIR)/package)
+ 
++# default rsync command
++$(2)_RSYNC_CMDS ?= \
++	rsync -au --cvs-exclude --include core $(SRCDIR)/ $(@D)
++
+ # define sub-target stamps
+ $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
+ $(2)_TARGET_INSTALL_STAGING =	$$($(2)_DIR)/.stamp_staging_installed
+-- 
+1.8.2.1
