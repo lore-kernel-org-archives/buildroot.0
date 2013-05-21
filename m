@@ -1,8 +1,8 @@
 From: Nicolas Menegale <nicolas.menegale@openwide.fr>
-Date: Tue, 21 May 2013 11:58:24 +0200 (CEST)
+Date: Tue, 21 May 2013 12:01:12 +0200 (CEST)
 Subject: [Buildroot] [PATCH 1/1] cppcms: new package
-In-Reply-To: <CAHXCMMKdiYYAinE4p1fupLpu1VURjQEchUu-+JiU5s4mXC3MHg@mail.gmail.com>
-Message-ID: <782598914.2595573.1369130304466.JavaMail.root@openwide.fr>
+In-Reply-To: <782598914.2595573.1369130304466.JavaMail.root@openwide.fr>
+Message-ID: <1366042009.2595624.1369130472040.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
