@@ -1,52 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 May 2013 17:54:51 +0200
-Subject: [Buildroot] Does buildroot toolchain support GNU EABI?
-In-Reply-To: <CAAsE_ufrpUoERp3h34xz6GRqNtikoxtZVa3h_-Zz676VrU6+ow@mail.gmail.com>
-References: <20130522092041.GA15526@zuhnb712.ap.bm.net>
- <CAGm1_kt83BK9b4vQqZpH+mjArK6SmbhdruUUEn4TSAUcS2JXXg@mail.gmail.com>
- <20130522135132.09bee9dc@skate>
- <CAAsE_ufrpUoERp3h34xz6GRqNtikoxtZVa3h_-Zz676VrU6+ow@mail.gmail.com>
-Message-ID: <20130522175451.4c16fa6b@skate>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Wed, 22 May 2013 16:56:32 +0100
+Subject: [Buildroot] [PATCH] mongrel2: Needs a glibc or a
+ uClibc-0.9.34-git based toolchain
+In-Reply-To: <20130522175259.6cfaad9c@skate>
+References: <1369231808-11185-1-git-send-email-markos.chandras@gmail.com>
+ <20130522164332.3a293c0d@skate>
+ <CAG2jQ8jBwG7odjAVHUfMYwP6_pzA90LiMkhmF6QhuK6b4eBw-w@mail.gmail.com>
+ <20130522175259.6cfaad9c@skate>
+Message-ID: <CAG2jQ8hefohp6JHZ+53PEGMMz40YYoRCqC2Wvd6FAfeRr6zAew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Woody Wu,
+On 22 May 2013 16:52, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Markos Chandras,
+>
+> On Wed, 22 May 2013 15:57:36 +0100, Markos Chandras wrote:
+>
+>> No problem. Although I can't find an option for external toolchain +
+>> eglibc. So what I have right now is this:
+>
+> Yes, in the external toolchain backend, we support eglibc and glibc
+> similarly, so there's just one single option for both.
+>
+> It is however not needed to put BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC in
+> your condition, because it already selects
+> BR2_TOOLCHAIN_EXTERNAL_GLIBC. So as far as external toolchains are
+> concerned, "depends on BR2_TOOLCHAIN_EXTERNAL_GLIBC" is enough.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
-On Wed, 22 May 2013 23:04:31 +0800, Woody Wu wrote:
+Hi Thomas,
 
-> > On Wed, 22 May 2013 11:33:56 +0200, Yegor Yefremov wrote:
-> >
-> > > BR toolchains are always EABI unless you specify it to generate OABI
-> > > binaries. See Wikipaedia for EABI info:
-> > > http://en.wikipedia.org/wiki/EABI#EABI
-> >
-> > The support for OABI has been deprecated in Buildroot since
-> > c4cfa85b798cb744954d35aa05fa41e7a6956abd. I even believe it has been
-> > deprecated or maybe removed from the latest version of gcc.
-> 
-> Did you mean the GNU EABI is the OABI?
+Thank you for the clarification. I will prepare a new patch.
 
-No. You have two ABIs:
-
- * OABI, Original ABI (or "Old" ?), which was used by the Linux world
-   on ARM platforms before ARM (the company) standardized an ABI. This
-   ABI is deprecated, both in Buildroot and upstream in gcc, if I
-   remember correctly.
-
- * EABI, Enhanced ABI, which is known in the Linux world as GNU EABI.
-   So when you have a arm-linux-gnueabi toolchain, or
-   arm-linux-uclibcgnueabi toolchains, those are using this EABI. This
-   ABI is standardized by ARM. And Buildroot always uses this ABI when
-   it generates a toolchain.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+--
+Regards,
+Markos Chandras
