@@ -1,40 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 May 2013 14:18:14 +0200
-Subject: [Buildroot] [PATCH] uClibc: Add upstream patch for context
- functions
-In-Reply-To: <1369224304-24734-1-git-send-email-markos.chandras@gmail.com>
-References: <1369224304-24734-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <20130522141814.0739c4de@skate>
+From: prabindh <prabu@ti.com>
+Date: Wed, 22 May 2013 05:21:01 -0700 (PDT)
+Subject: [Buildroot] Currently packaging Qt5
+In-Reply-To: <20130522141601.1fa68730@skate>
+References: <20130114105802.1199d10e@skate>
+ <CAHQn0kiUCGte++HwWEgW6=awTCZ0FNN7kxZ9LxVBnek2p2qZWA@mail.gmail.com>
+ <20130114120416.42b34d77@skate> <1361247529229-40702.post@n4.nabble.com>
+ <20130219162959.34295207@skate> <1369020695818-45544.post@n4.nabble.com>
+ <20130522141601.1fa68730@skate>
+Message-ID: <321768C95D21724485BCE784F1BE98473EB1DA29@DBDE04.ent.ti.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Hello Thomas,
 
-On Wed, 22 May 2013 13:05:04 +0100, Markos Chandras wrote:
-> From: Markos Chandras <markos.chandras@imgtec.com>
+Will check the below.
+
+>> Have you enable largefile support in your configuration?
+
+I am using "buildroot-2013.02",  the below was copied from another post that I found the same topic.
+
+>> BR2_GCC_CROSS_CXX option has been removed in december 2010. I would 
+_really_ recommend you to upgrade to a more recent Buildroot version. 
+
+
+regards,
+Prabindh
+
+From: Thomas Petazzoni-2 [via Buildroot (busybox)] [mailto:ml-node+s2317881n45655h8 at n4.nabble.com] 
+Sent: Wednesday, May 22, 2013 5:47 PM
+To: Sundareson, Prabindh
+Subject: Re: Currently packaging Qt5
+
+Dear prabindh, 
+
+On Sun, 19 May 2013 20:31:35 -0700 (PDT), prabindh wrote: 
+
+> Using default cross-compiled toolchain for the Beaglebone, some of the Xorg 
+> libraries are failing to link, with below errors: 
 > 
-> These functions are needed by some packages like mongrel2
-> and maybe others.
+> undefined reference to `pwrite64' 
+> undefined reference to `pread64' 
+
+Have you enable largefile support in your configuration? 
+
+> I need C++ toolchain as well, that does not seem to be built with buildroot 
+> by default. Are the below the right set of options to add to have this 
+> support ? 
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/8e132a2b03a7b5ae94199db7db86883c05dca700/build-end.log
-> 
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-> ---
-> Given this patch is quite big, another option would be for these
-> packages to depend on !BR2_TOOLCHAIN_BUILDROOT || BR2_UCLIBC_VERSION_SNAPSHOT
+> "BR2_GCC_CROSS_CXX=y BR2_INSTALL_LIBSTDCPP=y" 
 
-I believe this would be more reasonable, until this feature lands into
-a stable uClibc version.
+The first one is useless, because it enables C++ on the native compiler 
+on the target (which is a deprecated feature anyway). And also, this 
+BR2_GCC_CROSS_CXX option has been removed in december 2010. I would 
+_really_ recommend you to upgrade to a more recent Buildroot version. 
+We're clearly not going to support a Buildroot version that's 2 years 
+old, considering how many things have changed since then. 
 
-Thanks!
+BR2_INSTALL_LIBSTDCPP (despite its bizarre name) is the right option to 
+have C++ support in the cross-compiler. 
 
-Thomas
+Thomas 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
+Thomas Petazzoni, Free Electrons 
+Kernel, drivers, real-time and embedded Linux 
+development, consulting, training and support. 
 http://free-electrons.com
+_______________________________________________ 
+buildroot mailing list 
+[hidden email] 
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+________________________________________
+If you reply to this email, your message will be added to the discussion below:
+http://buildroot-busybox.2317881.n4.nabble.com/Currently-packaging-Qt5-tp38584p45655.html 
+To unsubscribe from Currently packaging Qt5, click here.
+NAML 
+
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Currently-packaging-Qt5-tp38584p45658.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130522/17248b7a/attachment.html>
