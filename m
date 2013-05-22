@@ -1,108 +1,119 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 22 May 2013 09:18:36 -0500
-Subject: [Buildroot] Currently packaging Qt5
-In-Reply-To: <20130522160405.3b37b060@skate>
-References: <1361247529229-40702.post@n4.nabble.com>
- <20130219162959.34295207@skate>
- <1369020695818-45544.post@n4.nabble.com>
- <321768C95D21724485BCE784F1BE98473EB1D960@DBDE04.ent.ti.com>
- <20130522141715.70be80c2@skate>
- <321768C95D21724485BCE784F1BE98473EB1DA3C@DBDE04.ent.ti.com>
- <20130522143117.02a92237@skate>
- <321768C95D21724485BCE784F1BE98473EB1DAA4@DBDE04.ent.ti.com>
- <20130522150653.611899a4@skate> <20130522153044.76f14e2d@skate>
- <321768C95D21724485BCE784F1BE98473EB1DCB9@DBDE04.ent.ti.com>
- <20130522160405.3b37b060@skate>
-Message-ID: <CAEBucnD611SuUDumeQXDWsZwxeWfZ4G-wnxULE4xxPV_T1qB4A@mail.gmail.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Wed, 22 May 2013 16:25:42 +0200
+Subject: [Buildroot] gst-fsl plugins imx53 build error
+In-Reply-To: <51ADF5A9C82CA04683FC48E400BD16523F0B72@039-SN2MPN1-011.039d.mgd.msft.net>
+References: <84A636242B704DF3A957F6A111BD4ACA@JohanW7>
+ <51ADF5A9C82CA04683FC48E400BD16523F0B72@039-SN2MPN1-011.039d.mgd.msft.net>
+Message-ID: <CB37095658C54EDB8D6AB2B9EB168DC9@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Prabu & Thomas,
+ 
+Hi
 
-I was actually working on this last night!  As a resource I am using
-the ti-meta overlay from
-http://git.yoctoproject.org/cgit/cgit.cgi/meta-ti/tree/recipes-bsp/powervr-drivers/omap3-sgx-modules_4.09.00.01.bb
-.  I can download and build the driver (kinda of messy), but I haven't
-tested it yet.  You can see the progress on my Github.
+No , kernel 3.4.44 with custom patches specific for the TX53 module.
+There seems to be an error 'unsupported platform' don't know if it is related to the used kernel or if something else is causing
+this.
 
-I've automated the license acceptance as well as the sgx driver build.
- Still working on the rest.
+Johan
 
-Spenser
+-----Oorspronkelijk bericht-----
+Van: Angolini Daiane-B19406 [mailto:B19406 at freescale.com] 
+Verzonden: woensdag 22 mei 2013 16:10
+Aan: Sagaert Johan
+Onderwerp: RE: [Buildroot] gst-fsl plugins imx53 build error
 
-On Wed, May 22, 2013 at 9:04 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear prabindh,
->
-> On Wed, 22 May 2013 06:35:55 -0700 (PDT), prabindh wrote:
->
->> Yes, I am talking about rebuilding the userspace libraries. I deliver
->> the Graphics drivers for SGX.
->
-> Ah, nice to have you on board then :-) We may certainly have questions
-> as we integrate those libraries in Buildroot.
->
->> The aspect of uclibc breaking compatibility was not clear to me
->> earlier. How do you plan to support "any" closed source packages
->> then ?
->
-> With (e)glibc libraries, that we support through the external toolchain
-> mechanism.
->
->> Why cant we have backward compatibility in uclibc ?
->
-> I am not sure how accurate
-> https://www.kernel.org/pub/linux/libs/uclibc/Glibc_vs_uClibc_Differences.txt
-> is, must it says:
->
-> """
-> 3) uClibc does not even attempt to ensure binary compatibility across
-> releases. When a new version of uClibc is released, you may or may not
-> need to recompile all your binaries.
-> """
->
-> That said, the uClibc web site, at http://www.uclibc.org/oldnews.html,
-> says:
->
-> """
-> Please be aware we will break binary compatibilty in the upcoming
-> 0.9.27 release to implement a few necessary changes we have been
-> postponing. That will hopefully be the last ABI change before we freeze
-> the ABI for the upcoming 1.0.x stable uClibc series.
-> """
->
-> So it looks like there was some intention about having a stable ABI at
-> some point. But this news was from 2004, and the 1.0.x stable uClibc
-> series still hasn't been released, 9 years later.
->
-> Maybe other people can comment? Or maybe we should bring the issue to
-> the uClibc developers and see what they say?
->
-> In the mean time, my expectation is that we will be using all those
-> binary-only libraries on top of glibc/eglibc only. If you're doing some
-> crazy OpenGL multimedia stuff, you can anyway afford the comparatively
-> small additional cost of using glibc/eglibc in your embedded Linux
-> system.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Are you using linux from git.freescale.com?
 
 
+Daiane
 
--- 
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+-----Original Message-----
+From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of Sagaert Johan
+Sent: Wednesday, May 22, 2013 11:06 AM
+To: buildroot at busybox.net
+Subject: [Buildroot] gst-fsl plugins imx53 build error
+
+ 
+Hi
+
+(Buildroot 2013-05rc git)
+
+I was trying to build this for a karo imx53 based som.
+Is it missing some dependency ?
+
+ gzip -d -c /home/johan/dl/imx-lib-12.09.01.tar.gz | tar --strip-components=1 -C /home/buildroot12git/output/build/imx-lib-12.09.01
+-xf -
+>>> imx-lib 12.09.01 Patching package//imx-lib imx-lib 12.09.01 
+>>> Configuring imx-lib 12.09.01 Building
+PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/host/usr/sbin/:/usr/
+local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/buildroot12git/output/host/usr/bin"
+PERLLIB="/home/buildroot12git/output/host/usr/lib/perl"
+PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/host/usr/sbin/:/usr/
+local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/buildroot12git/output/host/usr/bin"
+AR="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-ar"
+AS="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-as"
+LD="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-ld"
+NM="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-nm"
+CC="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc"
+GCC="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc"
+CPP="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-cpp"
+CXX="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-g++"
+FC="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gfortran"
+RANLIB="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-ranlib"
+READELF="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-readelf"
+STRIP="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-strip"
+OBJCOPY="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-objcopy"
+OBJDUMP="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-objdump" AR_FOR_BUILD="/usr/bin/ar"
+AS_FOR_BUILD="/usr/bin/as" CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc" CXX_FOR_BUILD="/usr/bin/g++"
+FC_FOR_BUILD="/usr/bin/ld" LD_FOR_BUILD="/usr/bin/ld" CPPFLAGS_FOR_BUILD="-I/home/buildroot12git/output/host/usr/include"
+CFLAGS_FOR_BUILD="-O2 -I/home/buildroot12git/output/host/usr/include" CXXFLAGS_FOR_BUILD="-O2
+-I/home/buildroot12git/output/host/usr/include" LDFLAGS_FOR_BUILD="-L/home/buildroot12git/output/host/lib
+-L/home/buildroot12git/output/host/usr/lib -Wl,-rpath,/home/buildroot12git/output/host/usr/lib" FCFLAGS_FOR_BUILD=""
+DEFAULT_ASSEMBLER="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-as"
+DEFAULT_LINKER="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-ld" CPPFLAGS="-D_LARGEFILE_SOURCE
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os "
+CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os " LDFLAGS="" FCFLAGS=""
+PKG_CONFIG="/home/buildroot12git/output/host/usr/bin/pkg-config" PERLLIB="/home/buildroot12git/output/host/usr/lib/perl"
+STAGING_DIR="/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot" CROSS_COMPILE="
+/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-" PLATFORM="IMX25_3STACK"
+INCLUDE="-I/home/buildroot12git/output/build/linux-3.4.44/drivers/mxc/security/rng/include
+-I/home/buildroot12git/output/build/linux-3.4.44/drivers/mxc/security/sahara2/include -idirafter
+/home/buildroot12git/output/build/linux-3.4.44/include" /usr/bin/make -j1 -C /home/buildroot12git/output/build/imx-lib-12.09.01
+make[1]: Entering directory `/home/buildroot12git/output/build/imx-lib-12.09.01'
+/usr/bin/make -C ipu all
+make[2]: Entering directory `/home/buildroot12git/output/build/imx-lib-12.09.01/ipu'
+Not support platform, will not complile
+make[2]: Leaving directory `/home/buildroot12git/output/build/imx-lib-12.09.01/ipu'
+/usr/bin/make -C pxp all
+make[2]: Entering directory `/home/buildroot12git/output/build/imx-lib-12.09.01/pxp'
+make[2]: Nothing to be done for `all'.
+make[2]: Leaving directory `/home/buildroot12git/output/build/imx-lib-12.09.01/pxp'
+/usr/bin/make -C rng all
+make[2]: Entering directory `/home/buildroot12git/output/build/imx-lib-12.09.01/rng'
+/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -pipe -Os  -g -Wall -W -Wmissing-prototypes -Wstrict-prototypes -Wdeclaration-after-statement -fPIC
+-DFSL_PLATFORM_OTHER -DFSL_HAVE_RNGC -I/home/buildroot12git/output/build/linux-3.4.44/drivers/mxc/security/rng/include
+-I/home/buildroot12git/output/build/linux-3.4.44/drivers/mxc/security/sahara2/include -idirafter
+/home/buildroot12git/output/build/linux-3.4.44/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -c -o
+fsl_shw_rand.o fsl_shw_rand.c
+fsl_shw_rand.c:46:24: fatal error: shw_driver.h: No such file or directory compilation terminated.
+make[2]: *** [fsl_shw_rand.o] Error 1
+make[2]: Leaving directory `/home/buildroot12git/output/build/imx-lib-12.09.01/rng'
+make[1]: *** [rng] Error 2
+make[1]: Leaving directory `/home/buildroot12git/output/build/imx-lib-12.09.01'
+make: *** [/home/buildroot12git/output/build/imx-lib-12.09.01/.stamp_built] Error 2
+
+What's missing ?
+
+Sagaert Johan
+
+
+
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
