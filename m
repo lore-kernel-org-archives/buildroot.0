@@ -1,59 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 May 2013 15:30:44 +0200
-Subject: [Buildroot] Currently packaging Qt5
-In-Reply-To: <321768C95D21724485BCE784F1BE98473EB1DC4F@DBDE04.ent.ti.com>
-References: <20130114105802.1199d10e@skate>
- <CAHQn0kiUCGte++HwWEgW6=awTCZ0FNN7kxZ9LxVBnek2p2qZWA@mail.gmail.com>
- <20130114120416.42b34d77@skate>
- <1361247529229-40702.post@n4.nabble.com>
- <20130219162959.34295207@skate>
- <1369020695818-45544.post@n4.nabble.com>
- <321768C95D21724485BCE784F1BE98473EB1D960@DBDE04.ent.ti.com>
- <20130522141715.70be80c2@skate>
- <321768C95D21724485BCE784F1BE98473EB1DA3C@DBDE04.ent.ti.com>
- <20130522143117.02a92237@skate>
- <321768C95D21724485BCE784F1BE98473EB1DAA4@DBDE04.ent.ti.com>
- <20130522150653.611899a4@skate>
- <321768C95D21724485BCE784F1BE98473EB1DC4F@DBDE04.ent.ti.com>
-Message-ID: <20130522153044.76f14e2d@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 22 May 2013 13:34:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 5516] appended device tree blobs on uImage fails
+In-Reply-To: <bug-5516-163@https.bugs.busybox.net/>
+References: <bug-5516-163@https.bugs.busybox.net/>
+Message-ID: <20130522133443.DCFCB9A20D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sundareson, Prabindh,
+https://bugs.busybox.net/show_bug.cgi?id=5516
 
-On Wed, 22 May 2013 13:26:53 +0000, Sundareson, Prabindh wrote:
+--- Comment #15 from richard.genoud at gmail.com 2013-05-22 13:33:35 UTC ---
+(In reply to comment #14)
+> No, as I said, it's happening to me now on 3.9. What's strange is that I had
+> been going along fine, then I changed some kernel options that I would not
+> expect to have anything to do with this, and now `make uImage` is clobbering my
+> zImage, so it's not as simple as that it always/never happens on specific
+> kernel versions.
+Could you try to isolate the config option that change the behavior ? (or give
+a .config that overwrite zImage, and another that doesn't)
 
-> Ok. What I really meant is - I am "rebuilding" the drivers with the
-> Buildroot toolchain (so, potentially there will be a newer binary
-> package exclusively for Buildroot). With these new drivers, will
-> Spenser be able to create the required recipe ?
-
-When you mean "drivers", do you mean the kernel drivers or the
-userspace libraries? As far as I know, the kernel drivers are
-open-source, so anyone can rebuild them.
-
-However, the userspace libraries are binary-only. Of course, it appears
-that you work at TI, so maybe you have access to the source code of
-those userspace libraries that are, for us mere mortals, binary-only.
-
-If it's the case, rebuilding them with the Buildroot toolchain and
-providing us with the resulting binary would not make much sense
-unfortunately: the uClibc library that Buildroot uses in its internal
-toolchain backend does not provide any kind of backward compatible ABI.
-So whenever the uClibc version or configuration is changed, the ABI
-might be broken. So using binary-only userspace libraries in an uClibc
-context is particularly difficult, I'm afraid.
-
-Or maybe you're talking about something else?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
