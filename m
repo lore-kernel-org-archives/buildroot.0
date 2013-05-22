@@ -1,45 +1,38 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Wed, 22 May 2013 23:12:29 +0800
-Subject: [Buildroot] Does buildroot toolchain support GNU EABI?
-In-Reply-To: <CAGm1_kt83BK9b4vQqZpH+mjArK6SmbhdruUUEn4TSAUcS2JXXg@mail.gmail.com>
-References: <20130522092041.GA15526@zuhnb712.ap.bm.net>
- <CAGm1_kt83BK9b4vQqZpH+mjArK6SmbhdruUUEn4TSAUcS2JXXg@mail.gmail.com>
-Message-ID: <CAAsE_uenmk7_qFshg+8z=T4x+oEso143z0r_u8zbKdH10Z2gGQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 May 2013 17:52:59 +0200
+Subject: [Buildroot] [PATCH] mongrel2: Needs a glibc or a
+ uClibc-0.9.34-git based toolchain
+In-Reply-To: <CAG2jQ8jBwG7odjAVHUfMYwP6_pzA90LiMkhmF6QhuK6b4eBw-w@mail.gmail.com>
+References: <1369231808-11185-1-git-send-email-markos.chandras@gmail.com>
+ <20130522164332.3a293c0d@skate>
+ <CAG2jQ8jBwG7odjAVHUfMYwP6_pzA90LiMkhmF6QhuK6b4eBw-w@mail.gmail.com>
+Message-ID: <20130522175259.6cfaad9c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-? 2013-5-22 PM5:34?"Yegor Yefremov" <yegorslists@googlemail.com>???
->
-> On Wed, May 22, 2013 at 11:20 AM, Woody Wu <narkewoody@gmail.com> wrote:
-> > Hi,
-> >
-> > I found my buildroot toolchain is using EABI version 5. But I want to
-> > create executable run an existed system that is using GNU EABI.
-> >
-> > Actuall, I don't know what GNU EABI is.  Can I configure buildroot to
-> > support this? And, how?
->
-> BR toolchains are always EABI unless you specify it to generate OABI
-> binaries. See Wikipaedia for EABI info:
-> http://en.wikipedia.org/wiki/EABI#EABI
->
-> Yegor
+Dear Markos Chandras,
 
-Hi, Yegor
+On Wed, 22 May 2013 15:57:36 +0100, Markos Chandras wrote:
 
-When I compile my new program using buildroot toolchain and link it to a
-old shared library buit from another uClibC toolchain, it reported EABI
-version mismatch. My new program is EABI version 5, and the expected to be
-linked (-lfoo) is EABI version 0. When using readelf to check the library
-file, it reported it's GNU EABI.  That why I thought I should try to make
-my buildroot to generate GNU EABI object.  If I messed some concept, could
-you please tell me what should I do?
+> No problem. Although I can't find an option for external toolchain +
+> eglibc. So what I have right now is this:
 
-Thanks!
--narke
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130522/e6bda25d/attachment.html>
+Yes, in the external toolchain backend, we support eglibc and glibc
+similarly, so there's just one single option for both.
+
+It is however not needed to put BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC in
+your condition, because it already selects
+BR2_TOOLCHAIN_EXTERNAL_GLIBC. So as far as external toolchains are
+concerned, "depends on BR2_TOOLCHAIN_EXTERNAL_GLIBC" is enough.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
