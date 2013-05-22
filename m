@@ -1,45 +1,117 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 May 2013 09:28:04 +0200
+From: Bryan Hundven <bryanhundven@gmail.com>
+Date: Wed, 22 May 2013 00:29:57 -0700
 Subject: [Buildroot] [PATCH 04/12] lbase64: New package
-In-Reply-To: <CADwac6DEuYjE2cnXVX9rqnQnckOdHSNz+h-CSYvTCQ9Y1U_A-w@mail.gmail.com>
+In-Reply-To: <519C6E91.3080905@mind.be>
 References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
  <1369054604-26139-4-git-send-email-shmuelzon@gmail.com>
  <20130520165204.0269d05a@skate>
  <CADwac6CnLFHP5=yDsnF5xfB4GOMSQsCi3=J2QVPukdy=kTS+QA@mail.gmail.com>
  <20130520192543.3b61d666@skate> <519C636D.9010805@mind.be>
- <CADwac6DEuYjE2cnXVX9rqnQnckOdHSNz+h-CSYvTCQ9Y1U_A-w@mail.gmail.com>
-Message-ID: <20130522092804.4ad6f332@skate>
+ <20130522090137.721cbaac@skate> <519C6E91.3080905@mind.be>
+Message-ID: <CAJ+oik3VTj=CwO9n1HH5uZmdtcd7aEuk_nsFKeZA2uD7ZzmWug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Assaf Inbal,
+On Wed, May 22, 2013 at 12:06 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 22/05/13 09:01, Thomas Petazzoni wrote:
+>>
+>> Dear Arnout Vandecappelle,
+>>
+>> On Wed, 22 May 2013 08:19:25 +0200, Arnout Vandecappelle wrote:
+>>>
+>>> On 20/05/13 19:25, Thomas Petazzoni wrote:
+>>>>>>
+>>>>>> Also, regarding the static library, the output of the package is
+>>>>>> always a
+>>>>>> shared object since it needs to be loaded dynamically by Lua scripts.
+>>>>>> The
+>>>>>> default target of the package is a test so I need to specifically
+>>>>>> specify
+>>>>>> the target.
+>>>>
+>>>> Ok. Then maybe your package needs to depend on !BR2_PREFER_STATIC_LIB.
+>>>> Or maybe more of the Lua stuff, if it requires shared libraries.
+>>>
+>>>
+>>>    We currently probably have many packages that generate .so files even
+>>> if PREFER_STATIC_LIB is true
+>>
+>>
+>> Correct, but...
+>>
+>>> - that's why it is "prefer", right?
+>>>
+>>>    That said, I'm certainly in favour of making the STATIC stuff more
+>>> strict.
+>>
+>>
+>> ... I dislike this idea of "prefer". I would like the
+>> BR2_PREFER_STATIC_LIB option be turned into something like "Fully
+>> static system", because this is also what is needed for non-MMU
+>> platforms that have no shared library support. I don't really see the
+>> point of having something that will "prefer static libraries" for some
+>> packages and not for some other, without control on which ones. Of
+>> course, if we could control on a per-package basis which library should
+>> be built static and which should be built shared, this would make some
+>> sense. But without such control, it really doesn't make any sense to me
+>> to have a random selection of packages being built shared, and the rest
+>> being built static, when you enable BR2_PREFER_STATIC_LIB=y.
+>
+>
+>  +1
+>
+>
+>
+>> So, to me, while this option is still named BR2_PREFER_STATIC_LIB, we
+>> should think of it as BR2_USE_ONLY_STATIC_LIB. Maybe someday we'll
+>> rename it? :-)
+>
+>
+>  Probably not :-)
+>
+>
+>
+>> Of course, that raises the question of whether we should disable all
+>> libraries/applications that use dlopen() libraries when this option is
+>> enabled.
+>
+>
+>  Hm. Does dlopen() still work when e.g. libc is linked statically? I guess
+> not, because the dlopen()en library  would probably need some symbols from
+> libc. Therefore, packages that dlopen() should depend on
+> !BR2_PREFER_STATIC_LIB.
+>
 
-On Wed, 22 May 2013 09:55:14 +0300, Assaf Inbal wrote:
+When implementing static toolchain support in crosstool-ng, I avoided
+building libc statically like the plague. But gcc and binutils being
+built statically for the host was a win. GDB also dislikes being built
+statically, because of dlopen().
 
-> >  We currently probably have many packages that generate .so files even if
-> > PREFER_STATIC_LIB is true - that's why it is "prefer", right?
-> >
-> >  That said, I'm certainly in favour of making the STATIC stuff more strict.
-> 
-> I think there is some misunderstanding regarding libraries in Lua. When Lua
-> libraries are created, they can either be Lua text files or C code that
-> uses Lua API so that the library's API can be called from Lua scripts. When
-> choosing the latter option, the output must be a shared object, when
-> calling the 'require' function in Lua to load an external file, Lua will
-> look for file names ending with either 'lua' or 'so'.
-> There is simply no way to 'statically link' a Lua library.
+-Bryan
 
-Ok. In this case, presumably all those Lua modules/libraries should
-have a 'depends on !BR2_PREFER_STATIC_LIB'.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+>
+>  Now, I would say that we require the "use only" logic only for new
+> packages, and we fix packages as we go. I don't think it's worth to spend a
+> lot of effort fixing all the existing packages (like lua libraries,
+> gst-plugins, who knows what).
+>
+>
+>
+>  Regards,
+>  Arnout
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
