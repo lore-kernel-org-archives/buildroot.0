@@ -1,54 +1,40 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Wed, 22 May 2013 13:30:03 +0100
-Subject: [Buildroot] [PATCH] uClibc: Add upstream patch for context
-	functions
-In-Reply-To: <20130522141814.0739c4de@skate>
-References: <1369224304-24734-1-git-send-email-markos.chandras@gmail.com>
- <20130522141814.0739c4de@skate>
-Message-ID: <CAG2jQ8gSz-q8PGJfoYbPMNfw_T74E3oFZduWniGHrsWMegL4AQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 May 2013 14:31:17 +0200
+Subject: [Buildroot] Currently packaging Qt5
+In-Reply-To: <321768C95D21724485BCE784F1BE98473EB1DA3C@DBDE04.ent.ti.com>
+References: <20130114105802.1199d10e@skate>
+ <CAHQn0kiUCGte++HwWEgW6=awTCZ0FNN7kxZ9LxVBnek2p2qZWA@mail.gmail.com>
+ <20130114120416.42b34d77@skate>
+ <1361247529229-40702.post@n4.nabble.com>
+ <20130219162959.34295207@skate>
+ <1369020695818-45544.post@n4.nabble.com>
+ <321768C95D21724485BCE784F1BE98473EB1D960@DBDE04.ent.ti.com>
+ <20130522141715.70be80c2@skate>
+ <321768C95D21724485BCE784F1BE98473EB1DA3C@DBDE04.ent.ti.com>
+Message-ID: <20130522143117.02a92237@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22 May 2013 13:18, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Markos Chandras,
->
-> On Wed, 22 May 2013 13:05:04 +0100, Markos Chandras wrote:
->> From: Markos Chandras <markos.chandras@imgtec.com>
->>
->> These functions are needed by some packages like mongrel2
->> and maybe others.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/8e132a2b03a7b5ae94199db7db86883c05dca700/build-end.log
->>
->> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
->> ---
->> Given this patch is quite big, another option would be for these
->> packages to depend on !BR2_TOOLCHAIN_BUILDROOT || BR2_UCLIBC_VERSION_SNAPSHOT
->
-> I believe this would be more reasonable, until this feature lands into
-> a stable uClibc version.
->
-> Thanks!
->
-> Thomas
+Dear prabindh,
 
-Hi Thomas,
+On Wed, 22 May 2013 05:23:08 -0700 (PDT), prabindh wrote:
 
-I was not sure about this to be honest. This patch alone, does not
-affect existing functionality so even though it's built in the c
-library,
-most packages will not use it. Moreover, it's unknown when the next
-major uClibc version will be so we may have a problem if more
-packages start using these functions in the future (a bit unlikely though).
-I believe it's safe to use !BR2_TOOLCHAIN_BUILDROOT ||
-BR2_UCLIBC_VERSION_SNAPSHOT for now, but we may have to
-reconsider applying this patch in the future.
+> So after the driver package is rebuilt (and hosted somewhere), he can
+> use this to create the recipe ? That would be good.
 
---
-Regards,
-Markos Chandras
+I'm not sure to follow you here. The necessary drivers and libraries to
+enable OpenGL on OMAP are already available. So what Spenser will work
+on is creating recipes for those software components, so that Buildroot
+users can easily get OpenGL support on OMAP platforms.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
