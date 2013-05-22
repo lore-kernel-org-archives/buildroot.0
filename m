@@ -1,33 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 May 2013 16:41:37 +0200
-Subject: [Buildroot] gst-fsl plugins imx53 build error
-In-Reply-To: <CB37095658C54EDB8D6AB2B9EB168DC9@JohanW7>
-References: <84A636242B704DF3A957F6A111BD4ACA@JohanW7>
- <51ADF5A9C82CA04683FC48E400BD16523F0B72@039-SN2MPN1-011.039d.mgd.msft.net>
- <CB37095658C54EDB8D6AB2B9EB168DC9@JohanW7>
-Message-ID: <20130522164137.46f92fa0@skate>
+Date: Wed, 22 May 2013 16:43:32 +0200
+Subject: [Buildroot] [PATCH] mongrel2: Needs a glibc or a
+ uClibc-0.9.34-git based toolchain
+In-Reply-To: <1369231808-11185-1-git-send-email-markos.chandras@gmail.com>
+References: <1369231808-11185-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <20130522164332.3a293c0d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+Dear Markos Chandras,
 
-On Wed, 22 May 2013 16:25:42 +0200, Sagaert Johan wrote:
+On Wed, 22 May 2013 15:10:08 +0100, Markos Chandras wrote:
 
-> No , kernel 3.4.44 with custom patches specific for the TX53 module.
-> There seems to be an error 'unsupported platform' don't know if it is
-> related to the used kernel or if something else is causing this.
+> +	# {get,make,swap}context functions present in
+> +	# glibc and in uClibc's master branch.
+> +	depends on BR2_UCLIBC_VERSION_SNAPSHOT || !BR2_TOOLCHAIN_BUILDROOT
+>  	help
+>  	  Mongrel2 is an application, language, and network architecture
+>  	  agnostic web server that focuses on web applications using
 
-As Angolini replied to you (without Cc'ing the list, unfortunately),
-you have to use a Freescale kernel for this gst-fsl plugin to work. The
-mainline kernel cannot work.
+An external toolchain can be uClibc based... but we don't know which
+version. However, since no uClibc stable release has been released with
+this feature, I don't expect any external toolchain today to have this
+feature enabled. So something like:
 
-menuconfig shows the following comment:
+	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
+		external toolchain uses glibc or eglibc || \
+		crosstool-ng backend has glibc or eglibc selected
 
-comment "gst-fsl-plugins requires an imx-specific kernel to be built"
-        depends on BR2_arm && BR2_PACKAGE_GSTREAMER && !BR2_LINUX_KERNEL
+Would probably be more appropriate.
 
 Best regards,
 
