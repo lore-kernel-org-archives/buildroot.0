@@ -1,25 +1,66 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 22 May 2013 10:37:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 5516] appended device tree blobs on uImage fails
-In-Reply-To: <bug-5516-163@https.bugs.busybox.net/>
-References: <bug-5516-163@https.bugs.busybox.net/>
-Message-ID: <20130522103745.B748C9A1DA@busybox.osuosl.org>
+From: Will Newton <will.newton@gmail.com>
+Date: Wed, 22 May 2013 11:49:30 +0100
+Subject: [Buildroot] [PATCH] poco: Add upstream patch to add support for
+	aarch64.
+Message-ID: <CAFbHwiTLP2KRtYo=wvG2EJdR=Uf7r1BeZb+S8=BFbJ1_8PyqEw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5516
+Signed-off-by: Will Newton <will.newton@linaro.org>
+---
+ package/poco/poco-aarch64.patch | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/poco/poco-aarch64.patch
 
---- Comment #14 from Shawn J. Goff <shawn7400@gmail.com> 2013-05-22 10:36:36 UTC ---
-No, as I said, it's happening to me now on 3.9. What's strange is that I had
-been going along fine, then I changed some kernel options that I would not
-expect to have anything to do with this, and now `make uImage` is clobbering my
-zImage, so it's not as simple as that it always/never happens on specific
-kernel versions.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/poco/poco-aarch64.patch b/package/poco/poco-aarch64.patch
+new file mode 100644
+index 0000000..f629f7b
+--- /dev/null
++++ b/package/poco/poco-aarch64.patch
+@@ -0,0 +1,39 @@
++From 37899eda9563d9134cb5864751b6432cabfaac3e Mon Sep 17 00:00:00 2001
++From: Will Newton <will.newton@linaro.org>
++Date: Tue, 21 May 2013 22:11:05 +0100
++Subject: [PATCH] Foundation/include/Poco/Platform.h: Add support for AArch64.
++
++Add support for big and little endian AArch64 preprocessor defines.
++---
++ Foundation/include/Poco/Platform.h | 8 +++++++-
++ 1 file changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/Foundation/include/Poco/Platform.h
+b/Foundation/include/Poco/Platform.h
++index f34f277..8ddb4cb 100644
++--- a/Foundation/include/Poco/Platform.h
+++++ b/Foundation/include/Poco/Platform.h
++@@ -145,6 +145,7 @@
++ #define POCO_ARCH_S390    0x0c
++ #define POCO_ARCH_SH      0x0d
++ #define POCO_ARCH_NIOS2   0x0e
+++#define POCO_ARCH_AARCH64 0x0f
++
++
++ #if defined(__ALPHA) || defined(__alpha) || defined(__alpha__) ||
+defined(_M_ALPHA)
++@@ -207,7 +208,12 @@
++     #else
++         #define POCO_ARCH_BIG_ENDIAN 1
++     #endif
++-
+++#elif defined(__AARCH64EL__)
+++    #define POCO_ARCH POCO_ARCH_AARCH64
+++    #define POCO_ARCH_LITTLE_ENDIAN 1
+++#elif defined(__AARCH64EB__)
+++    #define POCO_ARCH POCO_ARCH_AARCH64
+++    #define POCO_ARCH_BIG_ENDIAN 1
++ #endif
++
++
++--
++1.8.1.4
++
+--
+1.8.1.4
