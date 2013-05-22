@@ -1,63 +1,81 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 22 May 2013 09:01:56 +0200
-Subject: [Buildroot] [PATCH 1/2] mxs-bootlets: add support for custom
- patches
-In-Reply-To: <20130522085804.5dbbbf4b@skate>
-References: <1368905110-23303-1-git-send-email-gustavo@zacarias.com.ar>
- <519C60D6.5040207@mind.be> <20130522085804.5dbbbf4b@skate>
-Message-ID: <519C6D64.8040109@mind.be>
+Date: Wed, 22 May 2013 09:06:57 +0200
+Subject: [Buildroot] [PATCH 04/12] lbase64: New package
+In-Reply-To: <20130522090137.721cbaac@skate>
+References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
+ <1369054604-26139-4-git-send-email-shmuelzon@gmail.com>
+ <20130520165204.0269d05a@skate>
+ <CADwac6CnLFHP5=yDsnF5xfB4GOMSQsCi3=J2QVPukdy=kTS+QA@mail.gmail.com>
+ <20130520192543.3b61d666@skate> <519C636D.9010805@mind.be>
+ <20130522090137.721cbaac@skate>
+Message-ID: <519C6E91.3080905@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/05/13 08:58, Thomas Petazzoni wrote:
+On 22/05/13 09:01, Thomas Petazzoni wrote:
 > Dear Arnout Vandecappelle,
 >
-> On Wed, 22 May 2013 08:08:22 +0200, Arnout Vandecappelle wrote:
->
->>> +config BR2_TARGET_MXS_BOOTLETS_CUSTOM_PATCH_DIR
->>> +	string "custom patch dir"
->>> +	help
->>> +	  If your board requires custom patches, add the path to the
->>> +	  directory containing the patches here. The patches must be
->>> +	  named mxs-bootlets-<something>.patch.
->>> +
->>> +	  Most users may leave this empty
->>> +
+> On Wed, 22 May 2013 08:19:25 +0200, Arnout Vandecappelle wrote:
+>> On 20/05/13 19:25, Thomas Petazzoni wrote:
+>>>>> Also, regarding the static library, the output of the package is always a
+>>>>> shared object since it needs to be loaded dynamically by Lua scripts. The
+>>>>> default target of the package is a test so I need to specifically specify
+>>>>> the target.
+>>> Ok. Then maybe your package needs to depend on !BR2_PREFER_STATIC_LIB.
+>>> Or maybe more of the Lua stuff, if it requires shared libraries.
 >>
->>    Now that we have BR2_GLOBAL_PATCH_DIR, I would prefer to avoid adding
->> config options like this... Admittedly, for bootloaders it is more likely
->> that custom patches are needed than for any other package. But even so,
->> the global patch dir is sufficient, it is quite useable, and it reduces
->> complexity in the buildroot core.
+>>    We currently probably have many packages that generate .so files even
+>> if PREFER_STATIC_LIB is true
 >
-> This means that a defconfig would have to define a value for
-> BR2_GLOBAL_PATCH_DIR, in this particular case. Is this something we
-> really want?
+> Correct, but...
+>
+>> - that's why it is "prefer", right?
+>>
+>>    That said, I'm certainly in favour of making the STATIC stuff more strict.
+>
+> ... I dislike this idea of "prefer". I would like the
+> BR2_PREFER_STATIC_LIB option be turned into something like "Fully
+> static system", because this is also what is needed for non-MMU
+> platforms that have no shared library support. I don't really see the
+> point of having something that will "prefer static libraries" for some
+> packages and not for some other, without control on which ones. Of
+> course, if we could control on a per-package basis which library should
+> be built static and which should be built shared, this would make some
+> sense. But without such control, it really doesn't make any sense to me
+> to have a random selection of packages being built shared, and the rest
+> being built static, when you enable BR2_PREFER_STATIC_LIB=y.
 
-  I would say yes, I'd prefer that defconfigs define BR2_GLOBAL_PATCH_DIR 
-to point to board/xxx/yyy/patches. Then they come much closer to how you 
-would use buildroot in practice.
+  +1
 
 
-> Also, what about the existing *_CUSTOM_PATCH_DIR config options we have
-> for Linux, U-Boot, Barebox and a bunch of other boot/kernel packages?
+> So, to me, while this option is still named BR2_PREFER_STATIC_LIB, we
+> should think of it as BR2_USE_ONLY_STATIC_LIB. Maybe someday we'll
+> rename it? :-)
 
-  Here also I'm in favour of deprecating them.
+  Probably not :-)
 
-  But probably it's better to start using the global patch dir now, and 
-only start deprecating the old ways next year.
+
+> Of course, that raises the question of whether we should disable all
+> libraries/applications that use dlopen() libraries when this option is
+> enabled.
+
+  Hm. Does dlopen() still work when e.g. libc is linked statically? I 
+guess not, because the dlopen()en library  would probably need some 
+symbols from libc. Therefore, packages that dlopen() should depend on 
+!BR2_PREFER_STATIC_LIB.
+
+
+  Now, I would say that we require the "use only" logic only for new 
+packages, and we fix packages as we go. I don't think it's worth to spend 
+a lot of effort fixing all the existing packages (like lua libraries, 
+gst-plugins, who knows what).
 
 
   Regards,
   Arnout
-
-
->
-> Thomas
->
 
 
 -- 
