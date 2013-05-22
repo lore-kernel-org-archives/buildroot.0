@@ -1,176 +1,69 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 22 May 2013 12:33:51 -0500
-Subject: [Buildroot] Currently packaging Qt5
-In-Reply-To: <321768C95D21724485BCE784F1BE98473EB1DE73@DBDE04.ent.ti.com>
-References: <20130522141715.70be80c2@skate>
- <321768C95D21724485BCE784F1BE98473EB1DA3C@DBDE04.ent.ti.com>
- <20130522143117.02a92237@skate>
- <321768C95D21724485BCE784F1BE98473EB1DAA4@DBDE04.ent.ti.com>
- <20130522150653.611899a4@skate>
- <321768C95D21724485BCE784F1BE98473EB1DC4F@DBDE04.ent.ti.com>
- <20130522153044.76f14e2d@skate>
- <321768C95D21724485BCE784F1BE98473EB1DCB9@DBDE04.ent.ti.com>
- <20130522160405.3b37b060@skate>
- <CAEBucnD611SuUDumeQXDWsZwxeWfZ4G-wnxULE4xxPV_T1qB4A@mail.gmail.com>
- <321768C95D21724485BCE784F1BE98473EB1DE73@DBDE04.ent.ti.com>
-Message-ID: <CAEBucnBL4eaFwmVWjrdd1N8v+qwsQozJvq-tbsuhANc9sup6Dg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 May 2013 19:37:03 +0200
+Subject: [Buildroot] Does buildroot toolchain support GNU EABI?
+In-Reply-To: <CAAsE_uenmk7_qFshg+8z=T4x+oEso143z0r_u8zbKdH10Z2gGQ@mail.gmail.com>
+References: <20130522092041.GA15526@zuhnb712.ap.bm.net>
+ <CAGm1_kt83BK9b4vQqZpH+mjArK6SmbhdruUUEn4TSAUcS2JXXg@mail.gmail.com>
+ <CAAsE_uenmk7_qFshg+8z=T4x+oEso143z0r_u8zbKdH10Z2gGQ@mail.gmail.com>
+Message-ID: <20130522173703.GB14196@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks pointing me at these new patches.
+Woody, All,
 
-Spenser
+On 2013-05-22 23:12 +0800, Woody Wu spake thusly:
+> ? 2013-5-22 PM5:34?"Yegor Yefremov" <yegorslists@googlemail.com>???
+> >
+> > On Wed, May 22, 2013 at 11:20 AM, Woody Wu <narkewoody@gmail.com> wrote:
+> > > Hi,
+> > >
+> > > I found my buildroot toolchain is using EABI version 5. But I want to
+> > > create executable run an existed system that is using GNU EABI.
+> > >
+> > > Actuall, I don't know what GNU EABI is.  Can I configure buildroot to
+> > > support this? And, how?
+> >
+> > BR toolchains are always EABI unless you specify it to generate OABI
+> > binaries. See Wikipaedia for EABI info:
+> > http://en.wikipedia.org/wiki/EABI#EABI
+> >
+> > Yegor
+> 
+> Hi, Yegor
+> 
+> When I compile my new program using buildroot toolchain and link it to a
+> old shared library buit from another uClibC toolchain, it reported EABI
+> version mismatch. My new program is EABI version 5, and the expected to be
+> linked (-lfoo) is EABI version 0. When using readelf to check the library
+> file, it reported it's GNU EABI.  That why I thought I should try to make
+> my buildroot to generate GNU EABI object.  If I messed some concept, could
+> you please tell me what should I do?
 
-On Wed, May 22, 2013 at 10:57 AM, prabindh <prabu@ti.com> wrote:
-> The recipe will be upgraded to the below ? I just submitted revised
-> patchset:  So please keep that in mind when building your recipe. The new
-> recipe removes lot of unsupported old features, and generally cleans up the
-> rest.
->
->
->
-> http://comments.gmane.org/gmane.linux.embedded.yocto.meta-ti/1946
->
->
->
-> regards,
->
-> Prabu
->
->
->
-> From: Spenser Gilliland-2 [via Buildroot (busybox)] [mailto:ml-node+[hidden
-> email]]
-> Sent: Wednesday, May 22, 2013 8:10 PM
->
->
-> To: Sundareson, Prabindh
-> Subject: Re: Currently packaging Qt5
->
->
->
-> Prabu & Thomas,
->
->
-> I was actually working on this last night!  As a resource I am using
-> the ti-meta overlay from
-> http://git.yoctoproject.org/cgit/cgit.cgi/meta-ti/tree/recipes-bsp/powervr-drivers/omap3-sgx-modules_4.09.00.01.bb
-> .  I can download and build the driver (kinda of messy), but I haven't
-> tested it yet.  You can see the progress on my Github.
->
-> I've automated the license acceptance as well as the sgx driver build.
->  Still working on the rest.
->
-> Spenser
->
-> On Wed, May 22, 2013 at 9:04 AM, Thomas Petazzoni
-> <[hidden email]> wrote:
->
->
->> Dear prabindh,
->>
->> On Wed, 22 May 2013 06:35:55 -0700 (PDT), prabindh wrote:
->>
->>> Yes, I am talking about rebuilding the userspace libraries. I deliver
->>> the Graphics drivers for SGX.
->>
->> Ah, nice to have you on board then :-) We may certainly have questions
->> as we integrate those libraries in Buildroot.
->>
->>> The aspect of uclibc breaking compatibility was not clear to me
->>> earlier. How do you plan to support "any" closed source packages
->>> then ?
->>
->> With (e)glibc libraries, that we support through the external toolchain
->> mechanism.
->>
->>> Why cant we have backward compatibility in uclibc ?
->>
->> I am not sure how accurate
->>
->> https://www.kernel.org/pub/linux/libs/uclibc/Glibc_vs_uClibc_Differences.txt
->> is, must it says:
->>
->> """
->> 3) uClibc does not even attempt to ensure binary compatibility across
->> releases. When a new version of uClibc is released, you may or may not
->> need to recompile all your binaries.
->> """
->>
->> That said, the uClibc web site, at http://www.uclibc.org/oldnews.html,
->> says:
->>
->> """
->> Please be aware we will break binary compatibilty in the upcoming
->> 0.9.27 release to implement a few necessary changes we have been
->> postponing. That will hopefully be the last ABI change before we freeze
->> the ABI for the upcoming 1.0.x stable uClibc series.
->> """
->>
->> So it looks like there was some intention about having a stable ABI at
->> some point. But this news was from 2004, and the 1.0.x stable uClibc
->> series still hasn't been released, 9 years later.
->>
->> Maybe other people can comment? Or maybe we should bring the issue to
->> the uClibc developers and see what they say?
->>
->> In the mean time, my expectation is that we will be using all those
->> binary-only libraries on top of glibc/eglibc only. If you're doing some
->> crazy OpenGL multimedia stuff, you can anyway afford the comparatively
->> small additional cost of using glibc/eglibc in your embedded Linux
->> system.
->>
->> Best regards,
->>
->> Thomas
->> --
->> Thomas Petazzoni, Free Electrons
->> Kernel, drivers, real-time and embedded Linux
->> development, consulting, training and support.
->> http://free-electrons.com
->> _______________________________________________
->> buildroot mailing list
->> [hidden email]
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
->
-> --
-> Spenser Gilliland
-> Computer Engineer
-> Doctoral Candidate
-> _______________________________________________
-> buildroot mailing list
-> [hidden email]
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> ________________________________
->
-> If you reply to this email, your message will be added to the discussion
-> below:
->
-> http://buildroot-busybox.2317881.n4.nabble.com/Currently-packaging-Qt5-tp38584p45674.html
->
-> To unsubscribe from Currently packaging Qt5, click here.
-> NAML
->
->
-> ________________________________
-> View this message in context: RE: Currently packaging Qt5
-> Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I don't know the details but "GNU EABI" (aka "EABI v0") was following
+the draft EABI (there's also EABIv4 floating around with the same
+shortcomings), and was incompatible with the final EABI. That's more or
+less what I understood myself (but I may be wrong).
 
+So, today's toolchains do not produce EABIv0 (nor EABIv4) binaries, only
+EABIv5; this is the case for Buildroot-built toolchains.
 
+If you want to target these libraries, you have to use the same toolchain
+as was used to build your library. Buildroot won't be able to build one
+for you.
+
+Besides, if you wanted to build such a toolchain, you'd have to use the
+tools that were current at the time, not the latest versions.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
