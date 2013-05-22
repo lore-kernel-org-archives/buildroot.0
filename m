@@ -1,42 +1,36 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Wed, 22 May 2013 15:57:36 +0100
-Subject: [Buildroot] [PATCH] mongrel2: Needs a glibc or a
- uClibc-0.9.34-git based toolchain
-In-Reply-To: <20130522164332.3a293c0d@skate>
-References: <1369231808-11185-1-git-send-email-markos.chandras@gmail.com>
- <20130522164332.3a293c0d@skate>
-Message-ID: <CAG2jQ8jBwG7odjAVHUfMYwP6_pzA90LiMkhmF6QhuK6b4eBw-w@mail.gmail.com>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Wed, 22 May 2013 23:04:31 +0800
+Subject: [Buildroot] Does buildroot toolchain support GNU EABI?
+In-Reply-To: <20130522135132.09bee9dc@skate>
+References: <20130522092041.GA15526@zuhnb712.ap.bm.net>
+ <CAGm1_kt83BK9b4vQqZpH+mjArK6SmbhdruUUEn4TSAUcS2JXXg@mail.gmail.com>
+ <20130522135132.09bee9dc@skate>
+Message-ID: <CAAsE_ufrpUoERp3h34xz6GRqNtikoxtZVa3h_-Zz676VrU6+ow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22 May 2013 15:43, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Markos Chandras,
+? 2013-5-22 PM7:51?"Thomas Petazzoni" <thomas.petazzoni@free-electrons.com
+>???
 >
-> On Wed, 22 May 2013 15:10:08 +0100, Markos Chandras wrote:
+> Dear Yegor Yefremov,
 >
->> +     # {get,make,swap}context functions present in
->> +     # glibc and in uClibc's master branch.
->> +     depends on BR2_UCLIBC_VERSION_SNAPSHOT || !BR2_TOOLCHAIN_BUILDROOT
->>       help
->>         Mongrel2 is an application, language, and network architecture
->>         agnostic web server that focuses on web applications using
+> On Wed, 22 May 2013 11:33:56 +0200, Yegor Yefremov wrote:
 >
-> An external toolchain can be uClibc based... but we don't know which
-> version. However, since no uClibc stable release has been released with
-> this feature, I don't expect any external toolchain today to have this
-> feature enabled. So something like:
+> > BR toolchains are always EABI unless you specify it to generate OABI
+> > binaries. See Wikipaedia for EABI info:
+> > http://en.wikipedia.org/wiki/EABI#EABI
 >
->         depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
->                 external toolchain uses glibc or eglibc || \
->                 crosstool-ng backend has glibc or eglibc selected
->
-> Would probably be more appropriate.
->
-> Best regards,
+> The support for OABI has been deprecated in Buildroot since
+> c4cfa85b798cb744954d35aa05fa41e7a6956abd. I even believe it has been
+> deprecated or maybe removed from the latest version of gcc.
+
+Hi, Thomas
+
+Did you mean the GNU EABI is the OABI?
+
 >
 > Thomas
 > --
@@ -44,22 +38,6 @@ On 22 May 2013 15:43, Thomas Petazzoni
 > Kernel, drivers, real-time and embedded Linux
 > development, consulting, training and support.
 > http://free-electrons.com
-
-Hi Thomas,
-
-No problem. Although I can't find an option for external toolchain +
-eglibc. So what I have right now is this:
-
-        # {get,make,swap}context functions present in
-        # {e,}glibc and in uClibc's master branch.
-        depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
-                BR2_TOOLCHAIN_CTNG_eglibc || \
-                BR2_TOOLCHAIN_CTNG_glibc || \
-                BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC || \
-                BR2_TOOLCHAIN_EXTERNAL_GLIBC
-
-I believe this should cover all the cases. Thanks for the review
-
---
-Regards,
-Markos Chandras
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130522/31f4ae88/attachment.html>
