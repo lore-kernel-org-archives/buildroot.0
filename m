@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 May 2013 14:17:15 +0200
-Subject: [Buildroot] Currently packaging Qt5
-In-Reply-To: <321768C95D21724485BCE784F1BE98473EB1D960@DBDE04.ent.ti.com>
-References: <20130114105802.1199d10e@skate>
- <CAHQn0kiUCGte++HwWEgW6=awTCZ0FNN7kxZ9LxVBnek2p2qZWA@mail.gmail.com>
- <20130114120416.42b34d77@skate>
- <1361247529229-40702.post@n4.nabble.com>
- <20130219162959.34295207@skate>
- <1369020695818-45544.post@n4.nabble.com>
- <321768C95D21724485BCE784F1BE98473EB1D960@DBDE04.ent.ti.com>
-Message-ID: <20130522141715.70be80c2@skate>
+Date: Wed, 22 May 2013 14:18:14 +0200
+Subject: [Buildroot] [PATCH] uClibc: Add upstream patch for context
+ functions
+In-Reply-To: <1369224304-24734-1-git-send-email-markos.chandras@gmail.com>
+References: <1369224304-24734-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <20130522141814.0739c4de@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sundareson, Prabindh,
+Dear Markos Chandras,
 
-On Wed, 22 May 2013 11:55:33 +0000, Sundareson, Prabindh wrote:
+On Wed, 22 May 2013 13:05:04 +0100, Markos Chandras wrote:
+> From: Markos Chandras <markos.chandras@imgtec.com>
+> 
+> These functions are needed by some packages like mongrel2
+> and maybe others.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/8e132a2b03a7b5ae94199db7db86883c05dca700/build-end.log
+> 
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> ---
+> Given this patch is quite big, another option would be for these
+> packages to depend on !BR2_TOOLCHAIN_BUILDROOT || BR2_UCLIBC_VERSION_SNAPSHOT
 
-> Any advice on below post ?
+I believe this would be more reasonable, until this feature lands into
+a stable uClibc version.
 
-I've just replied to you, sorry for the delay.
-
-> This is for building the SGX Graphics drivers with BR. 
-
-Note that we have a GSoC student this year, Spenser Gilliland, who will
-work on adding support in Buildroot for OpenGL and other similar/related
-technologies for various ARM SoCs. So packaging the SGX stuff to
-support OpenGL on OMAP is part of this GSoC TODO list.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
