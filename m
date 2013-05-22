@@ -1,40 +1,108 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Wed, 22 May 2013 15:10:08 +0100
-Subject: [Buildroot] [PATCH] mongrel2: Needs a glibc or a uClibc-0.9.34-git
-	based toolchain
-Message-ID: <1369231808-11185-1-git-send-email-markos.chandras@gmail.com>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Wed, 22 May 2013 09:18:36 -0500
+Subject: [Buildroot] Currently packaging Qt5
+In-Reply-To: <20130522160405.3b37b060@skate>
+References: <1361247529229-40702.post@n4.nabble.com>
+ <20130219162959.34295207@skate>
+ <1369020695818-45544.post@n4.nabble.com>
+ <321768C95D21724485BCE784F1BE98473EB1D960@DBDE04.ent.ti.com>
+ <20130522141715.70be80c2@skate>
+ <321768C95D21724485BCE784F1BE98473EB1DA3C@DBDE04.ent.ti.com>
+ <20130522143117.02a92237@skate>
+ <321768C95D21724485BCE784F1BE98473EB1DAA4@DBDE04.ent.ti.com>
+ <20130522150653.611899a4@skate> <20130522153044.76f14e2d@skate>
+ <321768C95D21724485BCE784F1BE98473EB1DCB9@DBDE04.ent.ti.com>
+ <20130522160405.3b37b060@skate>
+Message-ID: <CAEBucnD611SuUDumeQXDWsZwxeWfZ4G-wnxULE4xxPV_T1qB4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Markos Chandras <markos.chandras@imgtec.com>
+Prabu & Thomas,
 
-mongrel2 needs the {get,make,swap}context functions which are
-present in glibc and in the uClibc's master branch.
+I was actually working on this last night!  As a resource I am using
+the ti-meta overlay from
+http://git.yoctoproject.org/cgit/cgit.cgi/meta-ti/tree/recipes-bsp/powervr-drivers/omap3-sgx-modules_4.09.00.01.bb
+.  I can download and build the driver (kinda of messy), but I haven't
+tested it yet.  You can see the progress on my Github.
 
-Fixes:
-http://autobuild.buildroot.net/results/8e132a2b03a7b5ae94199db7db86883c05dca700/build-end.log
+I've automated the license acceptance as well as the sgx driver build.
+ Still working on the rest.
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
----
- package/mongrel2/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+Spenser
 
-diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
-index 05d10d7..1cebcf0 100644
---- a/package/mongrel2/Config.in
-+++ b/package/mongrel2/Config.in
-@@ -6,6 +6,9 @@ config BR2_PACKAGE_MONGREL2
- 	depends on BR2_INET_IPV6 # zeromq
- 	depends on BR2_LARGEFILE # zeromq -> util-linux
- 	depends on BR2_USE_WCHAR # zeromq -> util-linux
-+	# {get,make,swap}context functions present in
-+	# glibc and in uClibc's master branch.
-+	depends on BR2_UCLIBC_VERSION_SNAPSHOT || !BR2_TOOLCHAIN_BUILDROOT
- 	help
- 	  Mongrel2 is an application, language, and network architecture
- 	  agnostic web server that focuses on web applications using
+On Wed, May 22, 2013 at 9:04 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear prabindh,
+>
+> On Wed, 22 May 2013 06:35:55 -0700 (PDT), prabindh wrote:
+>
+>> Yes, I am talking about rebuilding the userspace libraries. I deliver
+>> the Graphics drivers for SGX.
+>
+> Ah, nice to have you on board then :-) We may certainly have questions
+> as we integrate those libraries in Buildroot.
+>
+>> The aspect of uclibc breaking compatibility was not clear to me
+>> earlier. How do you plan to support "any" closed source packages
+>> then ?
+>
+> With (e)glibc libraries, that we support through the external toolchain
+> mechanism.
+>
+>> Why cant we have backward compatibility in uclibc ?
+>
+> I am not sure how accurate
+> https://www.kernel.org/pub/linux/libs/uclibc/Glibc_vs_uClibc_Differences.txt
+> is, must it says:
+>
+> """
+> 3) uClibc does not even attempt to ensure binary compatibility across
+> releases. When a new version of uClibc is released, you may or may not
+> need to recompile all your binaries.
+> """
+>
+> That said, the uClibc web site, at http://www.uclibc.org/oldnews.html,
+> says:
+>
+> """
+> Please be aware we will break binary compatibilty in the upcoming
+> 0.9.27 release to implement a few necessary changes we have been
+> postponing. That will hopefully be the last ABI change before we freeze
+> the ABI for the upcoming 1.0.x stable uClibc series.
+> """
+>
+> So it looks like there was some intention about having a stable ABI at
+> some point. But this news was from 2004, and the 1.0.x stable uClibc
+> series still hasn't been released, 9 years later.
+>
+> Maybe other people can comment? Or maybe we should bring the issue to
+> the uClibc developers and see what they say?
+>
+> In the mean time, my expectation is that we will be using all those
+> binary-only libraries on top of glibc/eglibc only. If you're doing some
+> crazy OpenGL multimedia stuff, you can anyway afford the comparatively
+> small additional cost of using glibc/eglibc in your embedded Linux
+> system.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-1.8.2.1
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
