@@ -1,63 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 May 2013 20:01:07 +0200
-Subject: [Buildroot] [PATCH v7 01/10] libglib2: Bump libglib2 to 2.36.1
-In-Reply-To: <20130522173035.GA14196@free.fr>
-References: <1369177864-6236-1-git-send-email-spenser@gillilanding.com>
- <1369177864-6236-2-git-send-email-spenser@gillilanding.com>
- <20130522085552.7079aae2@skate>
- <CAEBucnA3xso9se45tc7EYb1zsPYTQnLk7WHjiKrowJFm7uqkkw@mail.gmail.com>
- <20130522173035.GA14196@free.fr>
-Message-ID: <20130522200107.4cb83bfa@skate>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 23 May 2013 01:14:15 +0200
+Subject: [Buildroot] gst-fsl plugins imx53 build error
+In-Reply-To: <20130522164137.46f92fa0@skate>
+References: <84A636242B704DF3A957F6A111BD4ACA@JohanW7>
+ <51ADF5A9C82CA04683FC48E400BD16523F0B72@039-SN2MPN1-011.039d.mgd.msft.net>
+ <CB37095658C54EDB8D6AB2B9EB168DC9@JohanW7> <20130522164137.46f92fa0@skate>
+Message-ID: <EA49F85636214DB9BEB7E9DC825FA0DF@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
 
-On Wed, 22 May 2013 19:30:35 +0200, Yann E. MORIN wrote:
+Dear all, 
 
-> > Case 1 is correct.  I was trying to make the patch bisect-able.  It's
-> > possible that glibmm and glib-networking would fail to build if the
-> > version is not consistent.
-> 
-> Thomas, that was me pointing out that bumping glib2, glibmm and
-> glib-networking separately might be an error, and IIRC Spenser confirmed
-> that with a test build (discussed on IRC some days ago).
+Ok, I will have to do so work to apply the board patches to the freescale kernel required for the ipu support stuff.
 
-Ok, thanks.
+The binary firmware imx should be selected too I think when the fsl ipu firmware is build.
 
-> Spenser, to avoid confusion in the future:
->   - add the relevant commenter as Cc: in the commit log,
->   - and add a little history to your patch commit log, like:
-> 
->     blabla: do the foo
-> 
->     Some explanations
->     possibly on
->     multiple lines
-> 
->     Signed-off-by: you
->     Cc: someone
->     Cc: someone else
->     ---
->     v2 -> v3:
->       - fix this and that (someone else)
->     v1 -> v2:
->       - tweak this and that (someone)
-> 
-> So the reviewer know what has changed when you resend your patch(es).
+Can't this kind of situations be anticipated by the buildroot menu system ?
 
-Indeed. In this specific case, I believe a comment could be part of the
-commit log itself, because it can be useful to preserve in the Git
-history why the bump was made as a single commit.
+Regards 
+Johan
 
-Thanks,
+-----Oorspronkelijk bericht-----
+Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Thomas Petazzoni
+Verzonden: woensdag 22 mei 2013 16:42
+Aan: Sagaert Johan
+CC: buildroot at busybox.net; 'Angolini Daiane-B19406'
+Onderwerp: Re: [Buildroot] gst-fsl plugins imx53 build error
+
+Dear Sagaert Johan,
+
+On Wed, 22 May 2013 16:25:42 +0200, Sagaert Johan wrote:
+
+> No , kernel 3.4.44 with custom patches specific for the TX53 module.
+> There seems to be an error 'unsupported platform' don't know if it is 
+> related to the used kernel or if something else is causing this.
+
+As Angolini replied to you (without Cc'ing the list, unfortunately), you have to use a Freescale kernel for this gst-fsl plugin to
+work. The mainline kernel cannot work.
+
+menuconfig shows the following comment:
+
+comment "gst-fsl-plugins requires an imx-specific kernel to be built"
+        depends on BR2_arm && BR2_PACKAGE_GSTREAMER && !BR2_LINUX_KERNEL
+
+Best regards,
 
 Thomas
--- 
+--
 Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
+Kernel, drivers, real-time and embedded Linux development, consulting, training and support.
 http://free-electrons.com
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
