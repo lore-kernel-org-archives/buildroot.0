@@ -1,47 +1,61 @@
-From: Daiane Angolini <daiane.angolini@freescale.com>
-Date: Wed, 22 May 2013 13:52:17 -0300
-Subject: [Buildroot] gst-fsl plugins imx53 build error
-In-Reply-To: <20130522164137.46f92fa0@skate>
-References: <84A636242B704DF3A957F6A111BD4ACA@JohanW7>
- <51ADF5A9C82CA04683FC48E400BD16523F0B72@039-SN2MPN1-011.039d.mgd.msft.net>
- <CB37095658C54EDB8D6AB2B9EB168DC9@JohanW7> <20130522164137.46f92fa0@skate>
-Message-ID: <519CF7C1.90907@freescale.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 May 2013 19:30:35 +0200
+Subject: [Buildroot] [PATCH v7 01/10] libglib2: Bump libglib2 to 2.36.1
+In-Reply-To: <CAEBucnA3xso9se45tc7EYb1zsPYTQnLk7WHjiKrowJFm7uqkkw@mail.gmail.com>
+References: <1369177864-6236-1-git-send-email-spenser@gillilanding.com>
+ <1369177864-6236-2-git-send-email-spenser@gillilanding.com>
+ <20130522085552.7079aae2@skate>
+ <CAEBucnA3xso9se45tc7EYb1zsPYTQnLk7WHjiKrowJFm7uqkkw@mail.gmail.com>
+Message-ID: <20130522173035.GA14196@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/22/2013 11:41 AM, Thomas Petazzoni wrote:
-> Dear Sagaert Johan,
->
-> On Wed, 22 May 2013 16:25:42 +0200, Sagaert Johan wrote:
->
->> No , kernel 3.4.44 with custom patches specific for the TX53 module.
->> There seems to be an error 'unsupported platform' don't know if it is
->> related to the used kernel or if something else is causing this.
->
-> As Angolini replied to you (without Cc'ing the list, unfortunately),
-> you have to use a Freescale kernel for this gst-fsl plugin to work. The
-> mainline kernel cannot work.
+Spenser, Thomas, All,
 
-imx-lib 12.09 was not developed/tested to be used on imx53.  12.09 is 
-for imx6 only, although the imx53 source code was the base for 12.09.
+On 2013-05-22 10:57 -0500, Spenser Gilliland spake thusly:
+> > Is there any reason for bumping libglib2, glibmm and glib-networking in
+> > the same patch? I seem to recall in earlier versions of your patch
+> > series, you had separate patches for those bumps.
+> 
+> Case 1 is correct.  I was trying to make the patch bisect-able.  It's
+> possible that glibmm and glib-networking would fail to build if the
+> version is not consistent.
 
-The kernel you need to use is
+Thomas, that was me pointing out that bumping glib2, glibmm and
+glib-networking separately might be an error, and IIRC Spenser confirmed
+that with a test build (discussed on IRC some days ago).
 
-http://git.freescale.com/git/cgit.cgi/imx/linux-2.6-imx.git/log/?h=imx_2.6.35_11.09.01
+Spenser, to avoid confusion in the future:
+  - add the relevant commenter as Cc: in the commit log,
+  - and add a little history to your patch commit log, like:
 
-It would be better if you could use imx-lib from 11.09.01 as well.
+    blabla: do the foo
 
-And fsl multimedia package is 2.0.3 for imx53
+    Some explanations
+    possibly on
+    multiple lines
 
-But, I don't understand yet which version is included in buildroot tree, 
-so I'm not sure if this information can help you.
+    Signed-off-by: you
+    Cc: someone
+    Cc: someone else
+    ---
+    v2 -> v3:
+      - fix this and that (someone else)
+    v1 -> v2:
+      - tweak this and that (someone)
 
-Regarding unsupported platform you must use PLATFORM = "IMX51" during 
-configure/make process
+So the reviewer know what has changed when you resend your patch(es).
 
+Regards,
+Yann E. MORIN.
 
 -- 
-Daiane
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
