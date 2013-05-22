@@ -1,78 +1,45 @@
 From: Will Newton <will.newton@gmail.com>
-Date: Wed, 22 May 2013 11:50:55 +0100
-Subject: [Buildroot] [PATCH] poco: Add upstream patch to add support for
-	aarch64.
-In-Reply-To: <CAFbHwiTLP2KRtYo=wvG2EJdR=Uf7r1BeZb+S8=BFbJ1_8PyqEw@mail.gmail.com>
-References: <CAFbHwiTLP2KRtYo=wvG2EJdR=Uf7r1BeZb+S8=BFbJ1_8PyqEw@mail.gmail.com>
-Message-ID: <CAFbHwiRRMiNoZWmVtgxd+rE31xrrY80Bo0PWUBa5_hCatiRLBA@mail.gmail.com>
+Date: Wed, 22 May 2013 12:12:25 +0100
+Subject: [Buildroot] [PATCH] urg: Add urg-select-h.patch.
+In-Reply-To: <CAFbHwiSckZivoEYjZQPsp-oX9_t8hR5cviVkGvwGLvq=xYkPSw@mail.gmail.com>
+References: <CAFbHwiSckZivoEYjZQPsp-oX9_t8hR5cviVkGvwGLvq=xYkPSw@mail.gmail.com>
+Message-ID: <CAFbHwiSMBiazxWSdqiragq8eFvE37KKELg5dkTgNm=XyqE=JEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add attachment version of the patch to avoid whitespace damage.
-
-On Wed, May 22, 2013 at 11:49 AM, Will Newton <will.newton@gmail.com> wrote:
+On Tue, May 21, 2013 at 9:33 PM, Will Newton <will.newton@gmail.com> wrote:
+> This patch fixes a build failure on AArch64 (and potentially others).
+> Make sure sys/select.h is included before using select(2).
+>
 > Signed-off-by: Will Newton <will.newton@linaro.org>
 > ---
->  package/poco/poco-aarch64.patch | 39 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/poco/poco-aarch64.patch
+>  package/urg/urg-select-h.patch | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>  create mode 100644 package/urg/urg-select-h.patch
 >
-> diff --git a/package/poco/poco-aarch64.patch b/package/poco/poco-aarch64.patch
+> diff --git a/package/urg/urg-select-h.patch b/package/urg/urg-select-h.patch
 > new file mode 100644
-> index 0000000..f629f7b
+> index 0000000..09d1530
 > --- /dev/null
-> +++ b/package/poco/poco-aarch64.patch
-> @@ -0,0 +1,39 @@
-> +From 37899eda9563d9134cb5864751b6432cabfaac3e Mon Sep 17 00:00:00 2001
-> +From: Will Newton <will.newton@linaro.org>
-> +Date: Tue, 21 May 2013 22:11:05 +0100
-> +Subject: [PATCH] Foundation/include/Poco/Platform.h: Add support for AArch64.
-> +
-> +Add support for big and little endian AArch64 preprocessor defines.
-> +---
-> + Foundation/include/Poco/Platform.h | 8 +++++++-
-> + 1 file changed, 7 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Foundation/include/Poco/Platform.h
-> b/Foundation/include/Poco/Platform.h
-> +index f34f277..8ddb4cb 100644
-> +--- a/Foundation/include/Poco/Platform.h
-> ++++ b/Foundation/include/Poco/Platform.h
-> +@@ -145,6 +145,7 @@
-> + #define POCO_ARCH_S390    0x0c
-> + #define POCO_ARCH_SH      0x0d
-> + #define POCO_ARCH_NIOS2   0x0e
-> ++#define POCO_ARCH_AARCH64 0x0f
-> +
-> +
-> + #if defined(__ALPHA) || defined(__alpha) || defined(__alpha__) ||
-> defined(_M_ALPHA)
-> +@@ -207,7 +208,12 @@
-> +     #else
-> +         #define POCO_ARCH_BIG_ENDIAN 1
-> +     #endif
+> +++ b/package/urg/urg-select-h.patch
+> @@ -0,0 +1,11 @@
+> +--- urg-0.8.18/src/c/connection/serial_ctrl_lin.c    2010-11-22
+> 01:48:01.000000000 +0000
+> ++++ urg-0.8.18.mod/src/c/connection/serial_ctrl_lin.c    2013-05-21
+> 20:56:35.822025969 +0100
+> +@@ -17,7 +17,7 @@
+> + #include <fcntl.h>
+> + #include <errno.h>
+> + #include <string.h>
 > +-
-> ++#elif defined(__AARCH64EL__)
-> ++    #define POCO_ARCH POCO_ARCH_AARCH64
-> ++    #define POCO_ARCH_LITTLE_ENDIAN 1
-> ++#elif defined(__AARCH64EB__)
-> ++    #define POCO_ARCH POCO_ARCH_AARCH64
-> ++    #define POCO_ARCH_BIG_ENDIAN 1
-> + #endif
+> ++#include <sys/select.h>
+> + //#include <ctype.h>
 > +
-> +
-> +--
-> +1.8.1.4
-> +
+> + enum {
 > --
 > 1.8.1.4
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-poco-Add-upstream-patch-to-add-support-for-aarch64.patch
-Type: application/octet-stream
-Size: 1828 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130522/56123634/attachment.obj>
+
+This patch has now been accepted upstream also.
