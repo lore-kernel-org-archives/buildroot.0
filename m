@@ -1,5 +1,5 @@
-From: Bryan Hundven <bryanhundven@gmail.com>
-Date: Wed, 22 May 2013 00:29:57 -0700
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 May 2013 09:30:30 +0200
 Subject: [Buildroot] [PATCH 04/12] lbase64: New package
 In-Reply-To: <519C6E91.3080905@mind.be>
 References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
@@ -8,110 +8,55 @@ References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
  <CADwac6CnLFHP5=yDsnF5xfB4GOMSQsCi3=J2QVPukdy=kTS+QA@mail.gmail.com>
  <20130520192543.3b61d666@skate> <519C636D.9010805@mind.be>
  <20130522090137.721cbaac@skate> <519C6E91.3080905@mind.be>
-Message-ID: <CAJ+oik3VTj=CwO9n1HH5uZmdtcd7aEuk_nsFKeZA2uD7ZzmWug@mail.gmail.com>
+Message-ID: <20130522093030.23c820f5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 22, 2013 at 12:06 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 22/05/13 09:01, Thomas Petazzoni wrote:
->>
->> Dear Arnout Vandecappelle,
->>
->> On Wed, 22 May 2013 08:19:25 +0200, Arnout Vandecappelle wrote:
->>>
->>> On 20/05/13 19:25, Thomas Petazzoni wrote:
->>>>>>
->>>>>> Also, regarding the static library, the output of the package is
->>>>>> always a
->>>>>> shared object since it needs to be loaded dynamically by Lua scripts.
->>>>>> The
->>>>>> default target of the package is a test so I need to specifically
->>>>>> specify
->>>>>> the target.
->>>>
->>>> Ok. Then maybe your package needs to depend on !BR2_PREFER_STATIC_LIB.
->>>> Or maybe more of the Lua stuff, if it requires shared libraries.
->>>
->>>
->>>    We currently probably have many packages that generate .so files even
->>> if PREFER_STATIC_LIB is true
->>
->>
->> Correct, but...
->>
->>> - that's why it is "prefer", right?
->>>
->>>    That said, I'm certainly in favour of making the STATIC stuff more
->>> strict.
->>
->>
->> ... I dislike this idea of "prefer". I would like the
->> BR2_PREFER_STATIC_LIB option be turned into something like "Fully
->> static system", because this is also what is needed for non-MMU
->> platforms that have no shared library support. I don't really see the
->> point of having something that will "prefer static libraries" for some
->> packages and not for some other, without control on which ones. Of
->> course, if we could control on a per-package basis which library should
->> be built static and which should be built shared, this would make some
->> sense. But without such control, it really doesn't make any sense to me
->> to have a random selection of packages being built shared, and the rest
->> being built static, when you enable BR2_PREFER_STATIC_LIB=y.
->
->
->  +1
->
->
->
->> So, to me, while this option is still named BR2_PREFER_STATIC_LIB, we
->> should think of it as BR2_USE_ONLY_STATIC_LIB. Maybe someday we'll
->> rename it? :-)
->
->
->  Probably not :-)
->
->
->
->> Of course, that raises the question of whether we should disable all
->> libraries/applications that use dlopen() libraries when this option is
->> enabled.
->
->
->  Hm. Does dlopen() still work when e.g. libc is linked statically? I guess
-> not, because the dlopen()en library  would probably need some symbols from
-> libc. Therefore, packages that dlopen() should depend on
+Dear Arnout Vandecappelle,
+
+On Wed, 22 May 2013 09:06:57 +0200, Arnout Vandecappelle wrote:
+
+> > So, to me, while this option is still named BR2_PREFER_STATIC_LIB, we
+> > should think of it as BR2_USE_ONLY_STATIC_LIB. Maybe someday we'll
+> > rename it? :-)
+> 
+>   Probably not :-)
+
+Well, with the nice Config.in.legacy stuff you've done, you've opened
+new horizons to people like me who like to rename config options just
+for the sake of it :-)
+
+> > Of course, that raises the question of whether we should disable all
+> > libraries/applications that use dlopen() libraries when this option is
+> > enabled.
+> 
+>   Hm. Does dlopen() still work when e.g. libc is linked statically? I 
+> guess not, because the dlopen()en library  would probably need some 
+> symbols from libc. Therefore, packages that dlopen() should depend on 
 > !BR2_PREFER_STATIC_LIB.
->
 
-When implementing static toolchain support in crosstool-ng, I avoided
-building libc statically like the plague. But gcc and binutils being
-built statically for the host was a win. GDB also dislikes being built
-statically, because of dlopen().
+Yes, I believe so.
 
--Bryan
-
->
->  Now, I would say that we require the "use only" logic only for new
-> packages, and we fix packages as we go. I don't think it's worth to spend a
-> lot of effort fixing all the existing packages (like lua libraries,
+>   Now, I would say that we require the "use only" logic only for new 
+> packages, and we fix packages as we go. I don't think it's worth to spend 
+> a lot of effort fixing all the existing packages (like lua libraries, 
 > gst-plugins, who knows what).
->
->
->
->  Regards,
->  Arnout
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Yes, I agree. For now, the BR2_PREFER_STATIC_LIB=y configurations in
+the autobuilders are raising a sufficient number of issues, so let's
+try to solve those first. Once this settle down, I'll enable something
+that checks whether any shared library is installed in the
+BR2_PREFER_STATIC_LIB=y case, and which will make the build fail if
+it's the case.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
