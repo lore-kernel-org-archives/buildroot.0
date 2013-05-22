@@ -1,30 +1,18 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Wed, 22 May 2013 14:30:39 +0200
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Wed, 22 May 2013 13:30:03 +0100
 Subject: [Buildroot] [PATCH] uClibc: Add upstream patch for context
 	functions
 In-Reply-To: <20130522141814.0739c4de@skate>
 References: <1369224304-24734-1-git-send-email-markos.chandras@gmail.com>
  <20130522141814.0739c4de@skate>
-Message-ID: <CAKAx1chQcc_BTmKBYhN36-TARDnpApG6uCRsT5x8q4hmToUL-g@mail.gmail.com>
+Message-ID: <CAG2jQ8gSz-q8PGJfoYbPMNfw_T74E3oFZduWniGHrsWMegL4AQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Indeed, I've not heard about any testing of mongrel2 under uClibc yet,
-but that would be good news to know it works with it once uClibc has
-pushed a new stable version!
-
-For information, these calls are made by libtask
-(http://swtch.com/libtask/), which is embedded in mongrel2 source code
-to avoid real threads overhead.
-
-Regards,
-Lionel
-
-
-On Wed, May 22, 2013 at 2:18 PM, Thomas Petazzoni
+On 22 May 2013 13:18, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Dear Markos Chandras,
 >
@@ -48,12 +36,19 @@ On Wed, May 22, 2013 at 2:18 PM, Thomas Petazzoni
 > Thanks!
 >
 > Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Hi Thomas,
+
+I was not sure about this to be honest. This patch alone, does not
+affect existing functionality so even though it's built in the c
+library,
+most packages will not use it. Moreover, it's unknown when the next
+major uClibc version will be so we may have a problem if more
+packages start using these functions in the future (a bit unlikely though).
+I believe it's safe to use !BR2_TOOLCHAIN_BUILDROOT ||
+BR2_UCLIBC_VERSION_SNAPSHOT for now, but we may have to
+reconsider applying this patch in the future.
+
+--
+Regards,
+Markos Chandras
