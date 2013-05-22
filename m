@@ -1,13 +1,14 @@
 From: prabindh <prabu@ti.com>
-Date: Wed, 22 May 2013 05:21:01 -0700 (PDT)
+Date: Wed, 22 May 2013 05:23:08 -0700 (PDT)
 Subject: [Buildroot] Currently packaging Qt5
-In-Reply-To: <20130522141601.1fa68730@skate>
+In-Reply-To: <20130522141715.70be80c2@skate>
 References: <20130114105802.1199d10e@skate>
  <CAHQn0kiUCGte++HwWEgW6=awTCZ0FNN7kxZ9LxVBnek2p2qZWA@mail.gmail.com>
  <20130114120416.42b34d77@skate> <1361247529229-40702.post@n4.nabble.com>
  <20130219162959.34295207@skate> <1369020695818-45544.post@n4.nabble.com>
- <20130522141601.1fa68730@skate>
-Message-ID: <321768C95D21724485BCE784F1BE98473EB1DA29@DBDE04.ent.ti.com>
+ <321768C95D21724485BCE784F1BE98473EB1D960@DBDE04.ent.ti.com>
+ <20130522141715.70be80c2@skate>
+Message-ID: <321768C95D21724485BCE784F1BE98473EB1DA3C@DBDE04.ent.ti.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,51 +17,36 @@ To: buildroot@busybox.net
 
 Hello Thomas,
 
-Will check the below.
+So after the driver package is rebuilt (and hosted somewhere), he can use this to create the recipe ? That would be good.
 
->> Have you enable largefile support in your configuration?
-
-I am using "buildroot-2013.02",  the below was copied from another post that I found the same topic.
-
->> BR2_GCC_CROSS_CXX option has been removed in december 2010. I would 
-_really_ recommend you to upgrade to a more recent Buildroot version. 
-
+>> So packaging the SGX stuff to support OpenGL on OMAP is part of this GSoC TODO list.
 
 regards,
 Prabindh
 
-From: Thomas Petazzoni-2 [via Buildroot (busybox)] [mailto:ml-node+s2317881n45655h8 at n4.nabble.com] 
-Sent: Wednesday, May 22, 2013 5:47 PM
+
+
+From: Thomas Petazzoni-2 [via Buildroot (busybox)] [mailto:ml-node+s2317881n45656h39 at n4.nabble.com] 
+Sent: Wednesday, May 22, 2013 5:48 PM
 To: Sundareson, Prabindh
 Subject: Re: Currently packaging Qt5
 
-Dear prabindh, 
+Dear Sundareson, Prabindh, 
 
-On Sun, 19 May 2013 20:31:35 -0700 (PDT), prabindh wrote: 
+On Wed, 22 May 2013 11:55:33 +0000, Sundareson, Prabindh wrote: 
 
-> Using default cross-compiled toolchain for the Beaglebone, some of the Xorg 
-> libraries are failing to link, with below errors: 
-> 
-> undefined reference to `pwrite64' 
-> undefined reference to `pread64' 
+> Any advice on below post ? 
 
-Have you enable largefile support in your configuration? 
+I've just replied to you, sorry for the delay. 
 
-> I need C++ toolchain as well, that does not seem to be built with buildroot 
-> by default. Are the below the right set of options to add to have this 
-> support ? 
-> 
-> "BR2_GCC_CROSS_CXX=y BR2_INSTALL_LIBSTDCPP=y" 
+> This is for building the SGX Graphics drivers with BR. 
 
-The first one is useless, because it enables C++ on the native compiler 
-on the target (which is a deprecated feature anyway). And also, this 
-BR2_GCC_CROSS_CXX option has been removed in december 2010. I would 
-_really_ recommend you to upgrade to a more recent Buildroot version. 
-We're clearly not going to support a Buildroot version that's 2 years 
-old, considering how many things have changed since then. 
+Note that we have a GSoC student this year, Spenser Gilliland, who will 
+work on adding support in Buildroot for OpenGL and other similar/related 
+technologies for various ARM SoCs. So packaging the SGX stuff to 
+support OpenGL on OMAP is part of this GSoC TODO list. 
 
-BR2_INSTALL_LIBSTDCPP (despite its bizarre name) is the right option to 
-have C++ support in the cross-compiler. 
+Best regards, 
 
 Thomas 
 -- 
@@ -75,7 +61,7 @@ http://lists.busybox.net/mailman/listinfo/buildroot
 
 ________________________________________
 If you reply to this email, your message will be added to the discussion below:
-http://buildroot-busybox.2317881.n4.nabble.com/Currently-packaging-Qt5-tp38584p45655.html 
+http://buildroot-busybox.2317881.n4.nabble.com/Currently-packaging-Qt5-tp38584p45656.html 
 To unsubscribe from Currently packaging Qt5, click here.
 NAML 
 
@@ -83,8 +69,8 @@ NAML
 
 
 --
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Currently-packaging-Qt5-tp38584p45658.html
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Currently-packaging-Qt5-tp38584p45659.html
 Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130522/17248b7a/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130522/dc0fb291/attachment.html>
