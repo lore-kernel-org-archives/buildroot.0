@@ -1,46 +1,100 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Thu, 23 May 2013 14:20:09 +0100
-Subject: [Buildroot] [PATCH 2/2] udpcast: Add udpcast-select-h.patch.
-Message-ID: <CAFbHwiQ-Hk3+fh4yuSZk7zj27AgcYH4VfyQULPd_hn5e2E50pg@mail.gmail.com>
+From: Morten Kvistgaard <MK@pch-engineering.dk>
+Date: Thu, 23 May 2013 15:33:59 +0200
+Subject: [Buildroot] How to include Buildroot defines?
+In-Reply-To: <20130523150645.6efe2e15@skate>
+References: <0855BDD4CF82174A8BE362DE9F27C3BF01E3FEC82D23@pche-exchange>
+ <20130523150645.6efe2e15@skate>
+Message-ID: <0855BDD4CF82174A8BE362DE9F27C3BF01E3FEC82D28@pche-exchange>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes the build on AArch64 (and potentially others).
-The patch has been submitted upstream.
+Hello Thomas,
 
-Signed-off-by: Will Newton <will.newton@linaro.org>
----
- package/udpcast/udpcast-select-h.patch | 11 +++++++++++
- 1 file changed, 11 insertions(+)
- create mode 100644 package/udpcast/udpcast-select-h.patch
+> Nice. Which hardware platform are you working with?
 
-diff --git a/package/udpcast/udpcast-select-h.patch
-b/package/udpcast/udpcast-select-h.patch
-new file mode 100644
-index 0000000..9a8cfc9
---- /dev/null
-+++ b/package/udpcast/udpcast-select-h.patch
-@@ -0,0 +1,11 @@
-+--- udpcast-20120424/console.h    2005-12-22 22:59:18.000000000 +0000
-++++ udpcast-20120424.mod/console.h    2013-05-22 22:22:19.835474140 +0100
-+@@ -6,6 +6,8 @@
-+ #include <winbase.h>
-+ #endif /* __MINGW32__ */
-+
-++#include <sys/select.h>
-++
-+ #define prepareConsole udpc_prepareConsole
-+ #define getConsoleFd udpc_getConsoleFd
-+ #define restoreConsole udpc_restoreConsole
+I'm using several blackfin (Analog Devices) based platforms. 
+
+> Yes, I would say it's not how things should be done ...
+
+Yes, I thought that might be case. Takes a bit of work to convert the Config.mk options to ENV options though :-/
+
+Thanks for the YOURPROG_MAKE_ENV sample. Very useful. 
+
+Regards,
+Morten Kvistgaard
+
+
+-----Original Message-----
+From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
+Sent: 23. maj 2013 15:07
+To: Morten Kvistgaard
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] How to include Buildroot defines?
+
+Dear Morten Kvistgaard,
+
+On Thu, 23 May 2013 14:53:15 +0200, Morten Kvistgaard wrote:
+
+> I'm currently converting my uClinux to Buildroot.
+
+Nice. Which hardware platform are you working with?
+
+> In my uClinux I could include the "KConfig result" in my programs.
+> That way I could customize a program in the menuconfig. Eg. with extra 
+> options or by including apps etc. This could look something
+> like:
+> 
+> #include <config/autoconf.h>
+> 
+> #ifdef CONFIG_USER_MYAPP_OPTION
+>    //Menuconfig tells me to build featureX #endif
+> 
+> 
+> This was an easy way to handle static options.
+> I can see that Buildroot also has a autoconf.h. It's located in 
+> output/build/buildroot-config/.
+> 
+> How do I include this in a correct way? Or is this a bad way to do it?
+
+Yes, I would say it's not how things should be done. Instead, your package recipe maybe be passing different options to your program configure or build process, depending on Buildroot Kconfig options.
+That's what we do for all the packages.
+
+For example in package/yourprog/Config.in:
+
+config BR2_PACKAGE_YOURPROG
+	bool "yourprog"
+	help
+	  This option enables the build of your program.
+
+config BR2_PACKAGE_YOURPROG_OPTIONA
+	bool "feature A"
+	depends on BR2_PACKAGE_YOURPROG
+	help
+	  This option enables some feature A in your program
+
+and then, in package/yourprog/yourprog.mk:
+
+ifeq ($(BR2_PACKAGE_YOURPROG_OPTIONA),y)
+YOURPROG_CONF_OPT += --enable-featurea
+endif
+
+if your package is autotools based. Or, if it's just a simple Makefile that takes some environment variables:
+
+ifeq ($(BR2_PACKAGE_YOURPROG_OPTIONA),y)
+YOURPROG_MAKE_ENV += FEATUREA=YES
+endif
+
+define YOURPROG_BUILD_CMDS
+	$(YOURPROG_MAKE_ENV) $(MAKE) -C $(@D)
+endef
+
+And that's it.
+
+Thomas
 --
-1.8.1.4
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0002-udpcast-Add-udpcast-select-h.patch.patch
-Type: application/octet-stream
-Size: 1118 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130523/d0554794/attachment-0001.obj>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux development, consulting, training and support.
+http://free-electrons.com
