@@ -1,46 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 May 2013 08:54:06 +0200
-Subject: [Buildroot] [PATCH 2/5] tvheadend: needs threads
-In-Reply-To: <1369268647-13128-2-git-send-email-gilles.talis@gmail.com>
+Date: Thu, 23 May 2013 08:59:04 +0200
+Subject: [Buildroot] [PATCH 4/5] portaudio: add license information
+In-Reply-To: <1369268647-13128-4-git-send-email-gilles.talis@gmail.com>
 References: <1369268647-13128-1-git-send-email-gilles.talis@gmail.com>
- <1369268647-13128-2-git-send-email-gilles.talis@gmail.com>
-Message-ID: <20130523065406.GC3373@free.fr>
+ <1369268647-13128-4-git-send-email-gilles.talis@gmail.com>
+Message-ID: <20130523065904.GD3373@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gilles, All,
-
 On 2013-05-22 17:24 -0700, Gilles Talis spake thusly:
 > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 > ---
->  package/tvheadend/Config.in |    5 +++--
->  1 files changed, 3 insertions(+), 2 deletions(-)
+>  package/portaudio/portaudio.mk |    2 ++
+>  1 files changed, 2 insertions(+), 0 deletions(-)
 > 
-> diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-> index 19ab276..7083b01 100644
-> --- a/package/tvheadend/Config.in
-> +++ b/package/tvheadend/Config.in
-> @@ -1,9 +1,10 @@
-> -comment "tvheadend requires a toolchain with LARGEFILE and IPv6 support"
-> -    depends on !BR2_LARGEFILE || !BR2_INET_IPV6
-> +comment "tvheadend needs a toolchain with LARGEFILE, IPv6 and THREADS support"
-> +    depends on !BR2_LARGEFILE || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
->  
->  config BR2_PACKAGE_TVHEADEND
->  	bool "tvheadend"
->  	depends on BR2_LARGEFILE && BR2_INET_IPV6
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/portaudio/portaudio.mk b/package/portaudio/portaudio.mk
+> index 34b0bd9..917702e 100644
+> --- a/package/portaudio/portaudio.mk
+> +++ b/package/portaudio/portaudio.mk
+> @@ -9,6 +9,8 @@ PORTAUDIO_SITE = http://www.portaudio.com/archives
+>  PORTAUDIO_SOURCE = pa_stable_$(PORTAUDIO_VERSION).tgz
+>  PORTAUDIO_INSTALL_STAGING = YES
+>  PORTAUDIO_MAKE = $(MAKE1)
+> +PORTAUDIO_LICENSE = MIT
 
-Is it because tvheadend selects dvb-apps that it requires threads, or
-does it itself require threads?
+This is not really MIT, since there is additional text:
 
-If the former, then:
-	depends on BR2_TOOLCHAIN_HAS_THREADS # dvb-apps
+ ---8<---
+ * The text above constitutes the entire PortAudio license; however, 
+ * the PortAudio community also makes the following non-binding
+ * requests:
+ *
+ * Any person wishing to distribute modifications to the Software is
+ * requested to send the modifications to the original developer so that
+ * they can be incorporated into the canonical version. It is also 
+ * requested that these non-binding requests be included along with the 
+ * license above.
+ ---8<---
 
-If the latter, then OK.
+So I'd say:
+    PORTAUDIO_LICENSE = portaudio license (MIT-like plus special clause)
+
+(which by the way makes it non-free software.)
 
 Regards,
 Yann E. MORIN.
