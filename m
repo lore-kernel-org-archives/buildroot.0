@@ -1,81 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 May 2013 15:06:45 +0200
-Subject: [Buildroot] How to include Buildroot defines?
-In-Reply-To: <0855BDD4CF82174A8BE362DE9F27C3BF01E3FEC82D23@pche-exchange>
-References: <0855BDD4CF82174A8BE362DE9F27C3BF01E3FEC82D23@pche-exchange>
-Message-ID: <20130523150645.6efe2e15@skate>
+From: Will Newton <will.newton@gmail.com>
+Date: Thu, 23 May 2013 14:19:13 +0100
+Subject: [Buildroot] [PATCH 1/2] udpcast: Bump version to 20120424.
+Message-ID: <CAFbHwiSP74i6Qiid7uozxeKd5QPrf=5aD9+0=fUu6VZhZnwrJA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Morten Kvistgaard,
+Signed-off-by: Will Newton <will.newton@linaro.org>
+---
+ package/udpcast/udpcast.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, 23 May 2013 14:53:15 +0200, Morten Kvistgaard wrote:
+diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
+index f900b92..54051b9 100644
+--- a/package/udpcast/udpcast.mk
++++ b/package/udpcast/udpcast.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
 
-> I'm currently converting my uClinux to Buildroot.
-
-Nice. Which hardware platform are you working with?
-
-> In my uClinux I could include the "KConfig result" in my programs.
-> That way I could customize a program in the menuconfig. Eg. with
-> extra options or by including apps etc. This could look something
-> like:
-> 
-> #include <config/autoconf.h>
-> 
-> #ifdef CONFIG_USER_MYAPP_OPTION
->    //Menuconfig tells me to build featureX
-> #endif
-> 
-> 
-> This was an easy way to handle static options.
-> I can see that Buildroot also has a autoconf.h. It's located in
-> output/build/buildroot-config/.
-> 
-> How do I include this in a correct way? Or is this a bad way to do it?
-
-Yes, I would say it's not how things should be done. Instead, your
-package recipe maybe be passing different options to your program
-configure or build process, depending on Buildroot Kconfig options.
-That's what we do for all the packages.
-
-For example in package/yourprog/Config.in:
-
-config BR2_PACKAGE_YOURPROG
-	bool "yourprog"
-	help
-	  This option enables the build of your program.
-
-config BR2_PACKAGE_YOURPROG_OPTIONA
-	bool "feature A"
-	depends on BR2_PACKAGE_YOURPROG
-	help
-	  This option enables some feature A in your program
-
-and then, in package/yourprog/yourprog.mk:
-
-ifeq ($(BR2_PACKAGE_YOURPROG_OPTIONA),y)
-YOURPROG_CONF_OPT += --enable-featurea
-endif
-
-if your package is autotools based. Or, if it's just a simple Makefile
-that takes some environment variables:
-
-ifeq ($(BR2_PACKAGE_YOURPROG_OPTIONA),y)
-YOURPROG_MAKE_ENV += FEATUREA=YES
-endif
-
-define YOURPROG_BUILD_CMDS
-	$(YOURPROG_MAKE_ENV) $(MAKE) -C $(@D)
-endef
-
-And that's it.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+-UDPCAST_VERSION = 20071228
++UDPCAST_VERSION = 20120424
+ UDPCAST_SOURCE = udpcast-$(UDPCAST_VERSION).tar.gz
+ UDPCAST_SITE = http://www.udpcast.linux.lu/download
+ UDPCAST_CONF_ENV = $(if
+$(BR_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no)
+--
+1.8.1.4
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-udpcast-Bump-version-to-20120424.patch
+Type: application/octet-stream
+Size: 857 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130523/9724562f/attachment.obj>
