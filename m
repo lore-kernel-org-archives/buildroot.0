@@ -1,48 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 May 2013 18:39:21 +0200
-Subject: [Buildroot] Where do I place patches for my local buildroot?
-In-Reply-To: <0855BDD4CF82174A8BE362DE9F27C3BF01E3FEC82D33@pche-exchange>
-References: <0855BDD4CF82174A8BE362DE9F27C3BF01E3FEC82D33@pche-exchange>
-Message-ID: <20130523183921.6682d295@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 23 May 2013 19:41:31 +0200
+Subject: [Buildroot] [PATCH] package/attr: fix building out-of-tree
+In-Reply-To: <20130523132517.7b028641@skate>
+References: <1369304728-21798-1-git-send-email-yann.morin.1998@free.fr>
+ <20130523123208.57177273@skate> <20130523132517.7b028641@skate>
+Message-ID: <20130523174131.GA3250@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Morten Kvistgaard,
+Thomas, All,
 
-On Thu, 23 May 2013 17:05:03 +0200, Morten Kvistgaard wrote:
-
-> I'd like to follow this buildroot concept of "patches". Eg. if I have
-> a patch for a package, I place it in the package folder. If I have a
-> patch for my linux kernel, I place it in the folder specified by the
-> menuconfig. But suppose I have a patch for my Buildroot? Where do I
-> place that?
+On 2013-05-23 13:25 +0200, Thomas Petazzoni spake thusly:
+> On Thu, 23 May 2013 12:32:08 +0200, Thomas Petazzoni wrote:
+> > > This needs touching a m4 macro, so requires autoreconf.
+> > > 
+> > > But since this is not a true autotools-package, autoreconf whines
+> > > about missing macros. So we have to explicitly pass '-I m4'.
+> > > 
+> > > But since this is not a true autotools-package, the build then fails
+> > > with missing definition for _() as the configure scripts gets confused.
+> > > So, we just call autoconf, not autoreconf.
+> > 
+> > If it's not a true autotools-package, then it shouldn't be using the
+> > autotools-package infrastructure, I'd say.
+> > 
+> > And making a change to the source code at the configure step (such
+> > as autoconf or autoreconf) is fundamentally going into the wrong
+> > direction with regard to out-of-tree support. All steps until configure
+> > are done only once, on the source tree, and then all steps starting
+> > from the configure step are done for both the target build and the host
+> > build.
+> > 
+> > Therefore, autoreconf/autoconf should not be part of the configure
+> > step anymore. I'm sending an e-mail about that in a moment.
 > 
-> My current buildroot patch is for "packages/Config.in". (I'm adding
-> some of my local packages and so I need to modify the Config.in.) I
-> can also imagine other buildroot files, that I want to patch though.
-> And if I place them as separate "patches" it'll be easier to upgrade
-> ^^
+> Also, since this package doesn't use automake, most likely its
+> Makefiles are not out-of-tree capable, so in this case, there's no
+> point in fixing the configure script to be out-of-tree capable if the
+> rest of the build process isn't.
 
-The general recommendation is to create a git branch, and commit your
-changes in there.
+Indeed. I'll look at making it a generic-package instead, which will
+fix OOT at the same time (since generic-package will be not-OOT capable
+by default).
 
-When a new Buildroot version is released, either rebase your branch on
-top of the new Git tag, or merge the new Git tag into your branch.
+Regards,
+Yann E. MORIN.
 
-> Btw, I can see in the maillist that there's supposed to be a "Local
-> Packages" in the menuconfig? Is this so? I can't seem to find it.
-> (I'm using buildroot 2013.02.)
-
-Can you point the specific e-mail you're referring to?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
