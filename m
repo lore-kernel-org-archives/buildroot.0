@@ -1,100 +1,33 @@
-From: Morten Kvistgaard <MK@pch-engineering.dk>
-Date: Thu, 23 May 2013 15:33:59 +0200
-Subject: [Buildroot] How to include Buildroot defines?
-In-Reply-To: <20130523150645.6efe2e15@skate>
-References: <0855BDD4CF82174A8BE362DE9F27C3BF01E3FEC82D23@pche-exchange>
- <20130523150645.6efe2e15@skate>
-Message-ID: <0855BDD4CF82174A8BE362DE9F27C3BF01E3FEC82D28@pche-exchange>
+From: Arn R <arnerro@gmail.com>
+Date: Fri, 24 May 2013 00:29:13 +1000
+Subject: [Buildroot] [PATCH 1/1] logrotate: Bump version to 3.8.4
+Message-ID: <1369319353-5915-1-git-send-email-arnerro@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+The changelog for logrotate indicates some CVE's were fixed in 3.8.0.
+(changelog at http://svn.fedorahosted.org/svn/logrotate/tags/r3-8-4/CHANGES)
 
-> Nice. Which hardware platform are you working with?
+Signed-off-by: Arn R <arnerro@gmail.com>
+---
+ package/logrotate/logrotate.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm using several blackfin (Analog Devices) based platforms. 
-
-> Yes, I would say it's not how things should be done ...
-
-Yes, I thought that might be case. Takes a bit of work to convert the Config.mk options to ENV options though :-/
-
-Thanks for the YOURPROG_MAKE_ENV sample. Very useful. 
-
-Regards,
-Morten Kvistgaard
-
-
------Original Message-----
-From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
-Sent: 23. maj 2013 15:07
-To: Morten Kvistgaard
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] How to include Buildroot defines?
-
-Dear Morten Kvistgaard,
-
-On Thu, 23 May 2013 14:53:15 +0200, Morten Kvistgaard wrote:
-
-> I'm currently converting my uClinux to Buildroot.
-
-Nice. Which hardware platform are you working with?
-
-> In my uClinux I could include the "KConfig result" in my programs.
-> That way I could customize a program in the menuconfig. Eg. with extra 
-> options or by including apps etc. This could look something
-> like:
-> 
-> #include <config/autoconf.h>
-> 
-> #ifdef CONFIG_USER_MYAPP_OPTION
->    //Menuconfig tells me to build featureX #endif
-> 
-> 
-> This was an easy way to handle static options.
-> I can see that Buildroot also has a autoconf.h. It's located in 
-> output/build/buildroot-config/.
-> 
-> How do I include this in a correct way? Or is this a bad way to do it?
-
-Yes, I would say it's not how things should be done. Instead, your package recipe maybe be passing different options to your program configure or build process, depending on Buildroot Kconfig options.
-That's what we do for all the packages.
-
-For example in package/yourprog/Config.in:
-
-config BR2_PACKAGE_YOURPROG
-	bool "yourprog"
-	help
-	  This option enables the build of your program.
-
-config BR2_PACKAGE_YOURPROG_OPTIONA
-	bool "feature A"
-	depends on BR2_PACKAGE_YOURPROG
-	help
-	  This option enables some feature A in your program
-
-and then, in package/yourprog/yourprog.mk:
-
-ifeq ($(BR2_PACKAGE_YOURPROG_OPTIONA),y)
-YOURPROG_CONF_OPT += --enable-featurea
-endif
-
-if your package is autotools based. Or, if it's just a simple Makefile that takes some environment variables:
-
-ifeq ($(BR2_PACKAGE_YOURPROG_OPTIONA),y)
-YOURPROG_MAKE_ENV += FEATUREA=YES
-endif
-
-define YOURPROG_BUILD_CMDS
-	$(YOURPROG_MAKE_ENV) $(MAKE) -C $(@D)
-endef
-
-And that's it.
-
-Thomas
---
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index da8e4b3..c920b46 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -3,7 +3,7 @@
+ # logrotate
+ #
+ #############################################################
+-LOGROTATE_VERSION = 3.7.9
++LOGROTATE_VERSION = 3.8.4
+ LOGROTATE_SOURCE = logrotate-$(LOGROTATE_VERSION).tar.gz
+ LOGROTATE_SITE = https://fedorahosted.org/releases/l/o/logrotate/
+ LOGROTATE_LICENSE = GPLv2+
+-- 
+1.8.1.2
