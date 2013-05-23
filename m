@@ -1,54 +1,52 @@
-From: john <john.osullivan@cloudiumsystems.com>
-Date: Thu, 23 May 2013 13:26:33 +0100
-Subject: [Buildroot] Environment Variable and mk package file
-Message-ID: <1369311993.2814.44.camel@john-ubu>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Thu, 23 May 2013 13:43:24 +0100
+Subject: [Buildroot] Design issue with the out-of-tree support
+In-Reply-To: <20130523131251.2ffc509f@skate>
+References: <20130523131251.2ffc509f@skate>
+Message-ID: <519E0EEC.6070402@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 23/05/2013 12:12, Thomas Petazzoni wrote:
+>
+> So, what I've done in my prototype of out-of-tree support is something
+> like this:
+>
+> $(1)-patch:	$(filter host-autoconf host-automake host-libtool,$$($(2)_DEPENDENCIES)
+> 		...
+>
+> $(1)-configure:	$$($(2)_DEPENDENCIES)
+>
+> The idea is that if the package needs host-autoconf, or host-automake
+> or host-libtool in its dependencies, then we pull these dependencies
+> before the "patch" step, and all other dependencies are pulled before
+> the "configure" step.
+>
+> This works for most packages, but not all! Some packages, for their
+> autoreconf step, need more than host-autoconf, host-automake or
+> host-libtool. They might require host-pkgconf or host-gettext, to
+> install some .m4 macro files that are needed to make the autoreconf
+> work. So in fact, discriminating between dependencies that should be
+> pulled in before the "patch" step and the dependencies that can wait
+> until the "configure" step is not simple.
+>
+> Do you see solutions to this?
 
-I have a cmake based project which I am trying to incorporate into
-buildroot-2012.05
+Thomas, I might be missing something but it seems like all the needed 
+dependencies are host dependencies. Can we not make all host 
+dependencies be on the patch step and all others on the configure step. 
+I think that would work for rtai wouldn't it?
 
-As part of the configuration of the code I need to pass it an
-environment variable $(CLIENT_VER) which I generate at the time of
-building in the source directory (which I check out of SVN).
-I have tried various approaches without success.
-
-This is my mk file
-#I first tried this approach by generating the cmake configuration
-#command with a script and then executing that script
-#but the problem here was I would need to know the location of the
-#buildroot generated version of cmake and the toolchain file
-#I could figure these out in the script but I felt there must be a
-#simpler approach
-#define CLIENT_BARROW_CONFIGURE_CMDS
-#       (cd $(CLIENT_BARROW_SRCDIR) && source set_environment.sh \
-#       && ./cmake_run \
-#       )
-#endef
-
-
-#then I tried this
-define CLIENT_BARROW_SET_ENVIRONMENT
-        (source $(CLIENT_BARROW_SRCDIR)set_environment.sh  \
-        && echo "Running Pre Configure Hook "  \
-        )
-endef
-CLIENT_BARROW_PRE_CONFIGURE_HOOKS = CLIENT_BARROW_SET_ENVIRONMENT
-
-CLIENT_BARROW_VERSION = HEAD
-CLIENT_BARROW_SITE = svn://cloudiumserver3/topaz/trunk/client_barrow
-CLIENT_BARROW_INSTALL_STAGING = YES
-CLIENT_BARROW_CONF_OPT = -DWITH_XV=OFF -DCLIENT_VER_STR=$(CLIENT_VER) 
-$(eval $(call CMAKETARGETS))
-
-But I do not pick up the string associated with $(CLIENT_VER)
+Regards
+Will
 
 
-My basic question is this:
-Is there someway to pickup an environment variable in the process that
-processes the .mk file?
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7471 9224
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
