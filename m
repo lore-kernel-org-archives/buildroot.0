@@ -1,49 +1,72 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Thu, 23 May 2013 15:49:19 +0100
-Subject: [Buildroot] Design issue with the out-of-tree support
-In-Reply-To: <20130523145354.40106277@skate>
-References: <20130523131251.2ffc509f@skate> <519E0EEC.6070402@carallon.com>
- <20130523145354.40106277@skate>
-Message-ID: <CAG2jQ8gSWbhti1gvYd_RW1M_L=WJt5xt0cNeOCxCKTBpwMR3jw@mail.gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Thu, 23 May 2013 07:49:41 -0700
+Subject: [Buildroot] [PATCH 4/5] portaudio: add license information
+In-Reply-To: <20130523073314.GE3373@free.fr>
+References: <1369268647-13128-1-git-send-email-gilles.talis@gmail.com>
+ <1369268647-13128-4-git-send-email-gilles.talis@gmail.com>
+ <20130523065904.GD3373@free.fr> <20130523070918.GG25186@sapphire.tkos.co.il>
+ <20130523073314.GE3373@free.fr>
+Message-ID: <CAKcgs2xMftxoEre342YqJkmnRkgvuW=Prm=HYiyG2JiBCd9wJg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Yann, Baruch, all
 
-
-> While it solves the problem, the solution seems completely disconnected
-> from it. In a few years: "Why the heck do we have host dependencies
-> before patch, and other dependencies before configure, instead of
-> having all of them together before patch? Ah, yes, because there is
-> this crazy specific need for RTAI".
-
-In my opinion, having two kind of dependencies will create headaches
-and it will make the current
-packaging process more complicated.
-
+2013/5/23 Yann E. MORIN <yann.morin.1998@free.fr>:
+> Baruch, All,
 >
-> So certainly, what you're proposing solves the problem, it just doesn't
-> really feel like a nice and clean solution. I know it's a very
-> subjective opinion I'm giving here, so if others do agree with that
-> proposal, I'll be fine with it, but I'd be interested in hearing the
-> ideas and opinions of others to see if we can come up with something
-> cleaner.
+> On 2013-05-23 10:09 +0300, Baruch Siach spake thusly:
+>> On Thu, May 23, 2013 at 08:59:04AM +0200, Yann E. MORIN wrote:
+> [--SNIP--]
+>> > This is not really MIT, since there is additional text:
+>> >
+>> >  ---8<---
+>> >  * The text above constitutes the entire PortAudio license; however,
+>> >  * the PortAudio community also makes the following non-binding
+>> >  * requests:
+>> >  *
+>> >  * Any person wishing to distribute modifications to the Software is
+>> >  * requested to send the modifications to the original developer so that
+>> >  * they can be incorporated into the canonical version. It is also
+>> >  * requested that these non-binding requests be included along with the
+>> >  * license above.
+>> >  ---8<---
+>> >
+>> > So I'd say:
+>> >     PORTAUDIO_LICENSE = portaudio license (MIT-like plus special clause)
+>> >
+>> > (which by the way makes it non-free software.)
+>>
+>> Well, the text you cite says explicitly that these are "non-binding requests".
+>> Would you still consider this non-free?
 >
+> Well, I poundered that, yes. But the way it is phrased is dubious.
+>
+> First, it states that it is a non-binding clause. But then the clause
+> states "[a]ny person [doing changes] is requested to send modifications
+> [upstream]." The term "requested" is a bit strong for a non-binding
+> clause.
+>
+> So, let me rephrase:
+>     (which by the way *may* make it non-free software.)
+>
+> But the final word should come from a legal counsel, of course. :-)
+>
+> Anyway, this is not "MIT" per-se.
+>
+> Regards,
+> Yann E. MORIN.
 
-Like you said in your first e-mail, I am in favor of this approach:
+I actually had the same assumption as Baruch. I felt like the
+"non-binding requests" was the most important information in the text.
+Anyway, as you say, let's wait for a license expert to give final word
+on this.
+I'll send a patch later when we get confirmation that license type
+needs to be modified.
 
- * Make $(1)-patch depend on all dependencies. This will break RTAI, so
-   we can exclude 'linux' for the list of $(1)-patch dependencies. So
-   something like:
-
-   $(1)-patch: $(filter-out linux,$$($(2)_DEPENDENCIES))
-                ...
-
-   $(1)-configure: $(filter linux,$$($(2)_DEPENDENCIES))
-
---
+Thanks
 Regards,
-Markos Chandras
+Gilles.
