@@ -1,26 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 23 May 2013 22:48:41 +0200
-Subject: [Buildroot] [PATCH 5/5] libatomic_ops: fix build failure seen
-	with toolchain without threads support
-In-Reply-To: <1369268647-13128-5-git-send-email-gilles.talis@gmail.com>
- (Gilles Talis's message of "Wed, 22 May 2013 17:24:07 -0700")
-References: <1369268647-13128-1-git-send-email-gilles.talis@gmail.com>
- <1369268647-13128-5-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87li75ifrq.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 23 May 2013 22:27:53 +0200
+Subject: [Buildroot] [git commit] mongrel2: Needs a {e,
+	}glibc or a uClibc-0.9.34-git based toolchain
+Message-ID: <20130523205040.826219A4E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=faefecd7f6f911b9ccd4ca54a94e9962262e4c7e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gilles> Fixes:
- Gilles> http://autobuild.buildroot.net/results/58c188ad59c62c7897381e110fe3518ccc17867e
+mongrel2 needs the {get,make,swap}context functions which are
+present in {e,}glibc and in the uClibc's master branch.
 
-Committed, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/8e132a2b03a7b5ae94199db7db86883c05dca700/build-end.log
 
-Please don't forget to send patch upstream.
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mongrel2/Config.in |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
+index 05d10d7..034dbf9 100644
+--- a/package/mongrel2/Config.in
++++ b/package/mongrel2/Config.in
+@@ -6,6 +6,12 @@ config BR2_PACKAGE_MONGREL2
+ 	depends on BR2_INET_IPV6 # zeromq
+ 	depends on BR2_LARGEFILE # zeromq -> util-linux
+ 	depends on BR2_USE_WCHAR # zeromq -> util-linux
++	# {get,make,swap}context functions present in
++	# {e,}glibc and in uClibc's master branch.
++	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
++		BR2_TOOLCHAIN_EXTERNAL_GLIBC || \
++		BR2_TOOLCHAIN_CTNG_eglibc || \
++		BR2_TOOLCHAIN_CTNG_glibc
+ 	help
+ 	  Mongrel2 is an application, language, and network architecture
+ 	  agnostic web server that focuses on web applications using
