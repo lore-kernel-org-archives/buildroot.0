@@ -1,36 +1,62 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 23 May 2013 23:08:05 +0200
-Subject: [Buildroot] [git commit] boost: Limit architectures which can build
-	boost context library
-Message-ID: <20130523211146.26C939A4E3@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 23 May 2013 23:20:22 +0200
+Subject: [Buildroot] [PATCH] jamvm: Restrict MIPS BE and MIPS64 cores
+In-Reply-To: <1369142945-15964-1-git-send-email-markos.chandras@gmail.com>
+ (Markos Chandras's message of "Tue, 21 May 2013 14:29:05 +0100")
+References: <1369142945-15964-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <87d2shieax.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d624203238b2565ba180d5bad45ecc86c3cac620
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
 
-The boost context library needs porting to each new architecture
-and only a limited number of ports are currently available.
+ Markos> From: Markos Chandras <markos.chandras@imgtec.com>
+ Markos> The configure.ac script is only looking for mipsel-*-linux so restrict
+ Markos> unsupported MIPS cores.
 
-Signed-off-by: Will Newton <will.newton@linaro.org>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/boost/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ Markos> Fixes the following problem:
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index e36e7d3..5c65b2f 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -23,6 +23,8 @@ config BR2_PACKAGE_BOOST_CHRONO
- 
- config BR2_PACKAGE_BOOST_CONTEXT
- 	bool "boost-context"
-+	depends on (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel \
-+			|| BR2_powerpc || BR2_sparc || BR2_x86_64)
- 
- config BR2_PACKAGE_BOOST_DATE_TIME
- 	bool "boost-date_time"
+ Markos> configure: error: mips-buildroot-linux-uclibc not supported
+
+A quick look at configure.ac seems to show that it only supports:
+
+arm, armeb, i386, mipsel, powerpc and x86-64.
+
+Care to send a patch making it depend on those archs instead?
+
+
+ Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+ Markos> ---
+ Markos>  package/jamvm/Config.in | 2 +-
+ Markos>  1 file changed, 1 insertion(+), 1 deletion(-)
+ Markos>  mode change 100644 => 100755 package/jamvm/Config.in
+
+ Markos> diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
+ Markos> old mode 100644
+ Markos> new mode 100755
+ Markos> index 0287f80..955dcf6
+ Markos> --- a/package/jamvm/Config.in
+ Markos> +++ b/package/jamvm/Config.in
+ Markos> @@ -1,6 +1,6 @@
+ Markos>  config BR2_PACKAGE_JAMVM
+ Markos>  	bool "jamvm"
+ Markos> -	depends on BR2_INET_IPV6
+ Markos> +	depends on BR2_INET_IPV6 && !BR2_mips && !BR2_mips64 && !BR2_mips64el
+ Markos>  	select BR2_PACKAGE_ZLIB
+ Markos>  	select BR2_PACKAGE_CLASSPATH
+ Markos>  	help
+ Markos> -- 
+ Markos> 1.8.2.1
+
+
+ Markos> _______________________________________________
+ Markos> buildroot mailing list
+ Markos> buildroot at busybox.net
+ Markos> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+-- 
+Bye, Peter Korsgaard
