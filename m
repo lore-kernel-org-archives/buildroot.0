@@ -1,66 +1,88 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 May 2013 09:33:14 +0200
-Subject: [Buildroot] [PATCH 4/5] portaudio: add license information
-In-Reply-To: <20130523070918.GG25186@sapphire.tkos.co.il>
-References: <1369268647-13128-1-git-send-email-gilles.talis@gmail.com>
- <1369268647-13128-4-git-send-email-gilles.talis@gmail.com>
- <20130523065904.GD3373@free.fr>
- <20130523070918.GG25186@sapphire.tkos.co.il>
-Message-ID: <20130523073314.GE3373@free.fr>
+Date: Thu, 23 May 2013 12:25:28 +0200
+Subject: [Buildroot] [PATCH] package/attr: fix building out-of-tree
+Message-ID: <1369304728-21798-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2013-05-23 10:09 +0300, Baruch Siach spake thusly:
-> On Thu, May 23, 2013 at 08:59:04AM +0200, Yann E. MORIN wrote:
-[--SNIP--]
-> > This is not really MIT, since there is additional text:
-> > 
-> >  ---8<---
-> >  * The text above constitutes the entire PortAudio license; however, 
-> >  * the PortAudio community also makes the following non-binding
-> >  * requests:
-> >  *
-> >  * Any person wishing to distribute modifications to the Software is
-> >  * requested to send the modifications to the original developer so that
-> >  * they can be incorporated into the canonical version. It is also 
-> >  * requested that these non-binding requests be included along with the 
-> >  * license above.
-> >  ---8<---
-> > 
-> > So I'd say:
-> >     PORTAUDIO_LICENSE = portaudio license (MIT-like plus special clause)
-> > 
-> > (which by the way makes it non-free software.)
-> 
-> Well, the text you cite says explicitly that these are "non-binding requests".  
-> Would you still consider this non-free?
+This needs touching a m4 macro, so requires autoreconf.
 
-Well, I poundered that, yes. But the way it is phrased is dubious.
+But since this is not a true autotools-package, autoreconf whines
+about missing macros. So we have to explicitly pass '-I m4'.
 
-First, it states that it is a non-binding clause. But then the clause
-states "[a]ny person [doing changes] is requested to send modifications
-[upstream]." The term "requested" is a bit strong for a non-binding
-clause.
+But since this is not a true autotools-package, the build then fails
+with missing definition for _() as the configure scripts gets confused.
+So, we just call autoconf, not autoreconf.
 
-So, let me rephrase:
-    (which by the way *may* make it non-free software.)
+This means we have to provide our own hook. Ideally, this would be a
+post-patch hook, but post-patch hooks are run before dependencies,
+so host-autoconf is not built at that point. So this has to be a
+pre-configure hook.
 
-But the final word should come from a legal counsel, of course. :-)
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/attr/attr-002-fix-build-out-of-tree.patch | 19 +++++++++++++++++++
+ package/attr/attr.mk                              | 16 ++++++++++++++++
+ 2 files changed, 35 insertions(+)
+ create mode 100644 package/attr/attr-002-fix-build-out-of-tree.patch
 
-Anyway, this is not "MIT" per-se.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/attr/attr-002-fix-build-out-of-tree.patch b/package/attr/attr-002-fix-build-out-of-tree.patch
+new file mode 100644
+index 0000000..f21ed1a
+--- /dev/null
++++ b/package/attr/attr-002-fix-build-out-of-tree.patch
+@@ -0,0 +1,19 @@
++configure: fix building out of tree
++
++Do not expect that builddir == srcdir when scanning the VERSION file.
++
++Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN attr-2.4.46.old/m4/package_globals.m4 attr-2.4.46/m4/package_globals.m4
++--- attr-2.4.46.old/m4/package_globals.m4	2010-01-22 23:55:11.000000000 +0100
+++++ attr-2.4.46/m4/package_globals.m4	2013-05-23 00:15:30.124341001 +0200
++@@ -24,7 +24,7 @@
++ 
++     AC_PROG_CC
++ 
++-    . ./VERSION
+++    . "${srcdir}/VERSION"
++     pkg_version=${PKG_MAJOR}.${PKG_MINOR}.${PKG_REVISION}
++     AC_SUBST(pkg_version)
++     pkg_release=$PKG_BUILD
+diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+index 288052d..5933e6a 100644
+--- a/package/attr/attr.mk
++++ b/package/attr/attr.mk
+@@ -10,6 +10,22 @@ ATTR_SITE = http://download.savannah.gnu.org/releases/attr
+ ATTR_INSTALL_STAGING = YES
+ ATTR_CONF_OPT = --enable-gettext=no
+ 
++# Since we touch the m4 macros, we need to re-autoconf.
++# But since this is not a real autotools package, we can't use
++# AUTORECONF=YES, so we have to provide our own hook for that.
++# Also, there is no need to run that before all calls to
++# ./configure, but since post-patch hooks are run before
++# dependencies, this can't be a post-patch hook, and has to be
++# a pre-configure hook... :-(
++ATTR_DEPENDENCIES += host-autoconf
++define ATTR_REAUTOCONF
++	@$(call MESSAGE,"Re-autoconf")
++	( cd $(@D); \
++	  autoconf -I m4 -Wall --force -v \
++	)
++endef
++ATTR_PRE_CONFIGURE_HOOKS += ATTR_REAUTOCONF
++
+ # While the configuration system uses autoconf, the Makefiles are
+ # hand-written and do not use automake. Therefore, we have to hack
+ # around their deficiencies by passing installation paths.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
