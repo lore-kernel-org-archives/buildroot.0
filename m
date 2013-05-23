@@ -1,100 +1,81 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 May 2013 23:25:52 +0200
-Subject: [Buildroot] [git commit] sunxi-boards: new package
-Message-ID: <20130602212104.45C259A6D3@busybox.osuosl.org>
+Date: Thu, 23 May 2013 23:23:54 +0200
+Subject: [Buildroot] [git commit] pixman: Apply upstream patch to fix
+	compilation on MIPS
+Message-ID: <20130602212054.273189A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fc40219173997b87d46ef53f497f0496bbf60cac
+commit: http://git.buildroot.net/buildroot/commit/?id=1287492fd7d4b4fc61678e684c2adddde93a1bbc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: depend on arm, wrap help, change to _FEX_FILE option, error on empty]
-Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fixes:
+http://autobuild.buildroot.net/results/38aa4f2a2269b80226b910c46e0c9abe7dc38ff8/
+
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                    |    1 +
- package/sunxi-boards/Config.in       |   25 +++++++++++++++++++++++++
- package/sunxi-boards/sunxi-boards.mk |   28 ++++++++++++++++++++++++++++
- 3 files changed, 54 insertions(+), 0 deletions(-)
+ package/pixman/pixman-loongson-cflags.patch |   38 +++++++++++++++++++++++++++
+ package/pixman/pixman.mk                    |    2 +
+ 2 files changed, 40 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 28c2c5c..7bf7dd0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -220,6 +220,7 @@ source "package/b43-firmware/Config.in"
- source "package/firmware-imx/Config.in"
- source "package/linux-firmware/Config.in"
- source "package/rpi-firmware/Config.in"
-+source "package/sunxi-boards/Config.in"
- source "package/ux500-firmware/Config.in"
- source "package/zd1211-firmware/Config.in"
- endmenu
-diff --git a/package/sunxi-boards/Config.in b/package/sunxi-boards/Config.in
+diff --git a/package/pixman/pixman-loongson-cflags.patch b/package/pixman/pixman-loongson-cflags.patch
 new file mode 100644
-index 0000000..d9fd852
+index 0000000..fc53be2
 --- /dev/null
-+++ b/package/sunxi-boards/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_PACKAGE_SUNXI_BOARDS
-+	bool "sunxi script.bin board file"
-+	depends on BR2_arm
-+	select BR2_PACKAGE_HOST_SUNXI_TOOLS
-+	help
-+	  Sunxi-boards requires a compiled .fex files for hardware
-+	  description, used by the kernel during boot for hardware
-+	  initialization. This package is specific for linux-sunxi
-+	  kernel and it is useless for mainline kernel versions.
++++ b/package/pixman/pixman-loongson-cflags.patch
+@@ -0,0 +1,38 @@
++configure.ac: Verify that the Loongson MMI code can link
 +
-+	  https://github.com/linux-sunxi/sunxi-boards
++The Loongson MMI code modifies -march and as a result it breaks linking
++when the rest of the code is built with a different -match/-mtune.
++This patch fixes the problem by trying to link the code instead of just
++compiling it. This patch is already committed upstream.
 +
-+if BR2_PACKAGE_SUNXI_BOARDS
-+config BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE
-+	string ".fex file to compile"
-+	help
-+	  This field defines the name of the .fex file for which the
-+	  .bin file should be generated.
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 +
-+	  This should be the path of the .fex file relative to the
-+	  sys_config/ directory, and including the .fex extension.
++From d77d75cc6e5de14d027d22b70389a4d0c71048b9 Mon Sep 17 00:00:00 2001
++From: Markos Chandras <markos.chandras@imgtec.com>
++Date: Wed, 15 May 2013 16:51:20 +0000
++Subject: Use AC_LINK_IFELSE to check if the Loongson MMI code can link
 +
-+	  See inside sys_config/ directory in sunxi-boards source code
-+	  to see the list of valid .fex files.
-+endif
-diff --git a/package/sunxi-boards/sunxi-boards.mk b/package/sunxi-boards/sunxi-boards.mk
-new file mode 100644
-index 0000000..38fc3e1
---- /dev/null
-+++ b/package/sunxi-boards/sunxi-boards.mk
-@@ -0,0 +1,28 @@
-+#############################################################
-+#
-+# sunxi-boards
-+#
-+#############################################################
++The Loongson code is compiled with -march=loongson2f to enable the MMI
++instructions, but binutils refuses to link object code compiled with
++different -march settings, leading to link failures later in the
++compile. This avoids that problem by checking if we can link code
++compiled for Loongson.
 +
-+SUNXI_BOARDS_VERSION = 88d663db44f65b73ef65c4148a28c6fa3665d2b6
-+SUNXI_BOARDS_SITE = https://github.com/linux-sunxi/sunxi-boards/tarball/master
-+SUNXI_BOARDS_DEPENDENCIES = host-sunxi-tools
-+SUNXI_BOARDS_INSTALL_IMAGES = YES
-+SUNXI_BOARDS_INSTALL_TARGET = NO
-+SUNXI_BOARDS_FEX_FILE = $(call qstrip,$(BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE))
++Reviewed-by: Matt Turner <mattst88@gmail.com>
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++---
++diff --git a/configure.ac b/configure.ac
++index c43a0d2..221179f 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -279,7 +279,7 @@ AC_MSG_CHECKING(whether to use Loongson MMI assembler)
++ 
++ xserver_save_CFLAGS=$CFLAGS
++ CFLAGS=" $LS_CFLAGS $CFLAGS -I$srcdir"
++-AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+++AC_LINK_IFELSE([AC_LANG_SOURCE([[
++ #ifndef __mips_loongson_vector_rev
++ #error "Loongson Multimedia Instructions are only available on Loongson"
++ #endif
++--
++cgit v0.9.0.2-2-gbebe
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 326f9eb..8b35ef1 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -7,6 +7,8 @@ PIXMAN_VERSION = 0.30.0
+ PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ PIXMAN_INSTALL_STAGING = YES
+ PIXMAN_DEPENDENCIES = host-pkgconf
++PIXMAN_AUTORECONF = YES
 +
-+define SUNXI_BOARDS_INSTALL_IMAGES_CMDS
-+	$(FEX2BIN) $(@D)/sys_config/$(SUNXI_BOARDS_FEX_FILE) \
-+		$(BINARIES_DIR)/script.bin
-+endef
-+
-+ifeq ($(BR2_PACKAGE_SUNXI_BOARDS),y)
-+# we NEED a board name
-+ifeq ($(filter source,$(MAKECMDGOALS)),)
-+ifeq ($(SUNXI_BOARDS_FEX_FILE),)
-+$(error No sunxi .fex file specified. Check your BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE settings)
-+endif
-+endif
-+endif
-+
-+$(eval $(generic-package))
+ # don't build gtk based demos
+ PIXMAN_CONF_OPT = --disable-gtk
+ 
