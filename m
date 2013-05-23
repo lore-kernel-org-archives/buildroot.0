@@ -1,52 +1,52 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Thu, 23 May 2013 13:43:24 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 May 2013 14:53:54 +0200
 Subject: [Buildroot] Design issue with the out-of-tree support
-In-Reply-To: <20130523131251.2ffc509f@skate>
+In-Reply-To: <519E0EEC.6070402@carallon.com>
 References: <20130523131251.2ffc509f@skate>
-Message-ID: <519E0EEC.6070402@carallon.com>
+	<519E0EEC.6070402@carallon.com>
+Message-ID: <20130523145354.40106277@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/05/2013 12:12, Thomas Petazzoni wrote:
->
-> So, what I've done in my prototype of out-of-tree support is something
-> like this:
->
-> $(1)-patch:	$(filter host-autoconf host-automake host-libtool,$$($(2)_DEPENDENCIES)
-> 		...
->
-> $(1)-configure:	$$($(2)_DEPENDENCIES)
->
-> The idea is that if the package needs host-autoconf, or host-automake
-> or host-libtool in its dependencies, then we pull these dependencies
-> before the "patch" step, and all other dependencies are pulled before
-> the "configure" step.
->
-> This works for most packages, but not all! Some packages, for their
-> autoreconf step, need more than host-autoconf, host-automake or
-> host-libtool. They might require host-pkgconf or host-gettext, to
-> install some .m4 macro files that are needed to make the autoreconf
-> work. So in fact, discriminating between dependencies that should be
-> pulled in before the "patch" step and the dependencies that can wait
-> until the "configure" step is not simple.
->
-> Do you see solutions to this?
+Dear Will Wagner,
 
-Thomas, I might be missing something but it seems like all the needed 
-dependencies are host dependencies. Can we not make all host 
-dependencies be on the patch step and all others on the configure step. 
-I think that would work for rtai wouldn't it?
+On Thu, 23 May 2013 13:43:24 +0100, Will Wagner wrote:
 
-Regards
-Will
+> > Do you see solutions to this?
+> 
+> Thomas, I might be missing something but it seems like all the needed 
+> dependencies are host dependencies. Can we not make all host 
+> dependencies be on the patch step and all others on the configure step. 
+> I think that would work for rtai wouldn't it?
 
+Wow, thanks for taking the time to look into the problem, and enter the
+discussion!
 
+It seems like what you're proposing would work. It is not worst than the
+solution of filtering out linux on one side, and including linux on the
+other side that I was proposing, but I still don't find this very clean.
+
+While it solves the problem, the solution seems completely disconnected
+from it. In a few years: "Why the heck do we have host dependencies
+before patch, and other dependencies before configure, instead of
+having all of them together before patch? Ah, yes, because there is
+this crazy specific need for RTAI".
+
+So certainly, what you're proposing solves the problem, it just doesn't
+really feel like a nice and clean solution. I know it's a very
+subjective opinion I'm giving here, so if others do agree with that
+proposal, I'll be fine with it, but I'd be interested in hearing the
+ideas and opinions of others to see if we can come up with something
+cleaner.
+
+Thanks!
+
+Thomas
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7471 9224
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
