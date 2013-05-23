@@ -1,72 +1,57 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Thu, 23 May 2013 07:49:41 -0700
-Subject: [Buildroot] [PATCH 4/5] portaudio: add license information
-In-Reply-To: <20130523073314.GE3373@free.fr>
-References: <1369268647-13128-1-git-send-email-gilles.talis@gmail.com>
- <1369268647-13128-4-git-send-email-gilles.talis@gmail.com>
- <20130523065904.GD3373@free.fr> <20130523070918.GG25186@sapphire.tkos.co.il>
- <20130523073314.GE3373@free.fr>
-Message-ID: <CAKcgs2xMftxoEre342YqJkmnRkgvuW=Prm=HYiyG2JiBCd9wJg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 May 2013 16:56:01 +0200
+Subject: [Buildroot] [PATCH 1/1] gpsd: Add config options for USB,
+ Bluetooth, Qt.
+In-Reply-To: <1369320181-6069-1-git-send-email-arnerro@gmail.com>
+References: <1369320181-6069-1-git-send-email-arnerro@gmail.com>
+Message-ID: <20130523165601.5fc0fe15@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Baruch, all
+Dear Arn R,
 
-2013/5/23 Yann E. MORIN <yann.morin.1998@free.fr>:
-> Baruch, All,
->
-> On 2013-05-23 10:09 +0300, Baruch Siach spake thusly:
->> On Thu, May 23, 2013 at 08:59:04AM +0200, Yann E. MORIN wrote:
-> [--SNIP--]
->> > This is not really MIT, since there is additional text:
->> >
->> >  ---8<---
->> >  * The text above constitutes the entire PortAudio license; however,
->> >  * the PortAudio community also makes the following non-binding
->> >  * requests:
->> >  *
->> >  * Any person wishing to distribute modifications to the Software is
->> >  * requested to send the modifications to the original developer so that
->> >  * they can be incorporated into the canonical version. It is also
->> >  * requested that these non-binding requests be included along with the
->> >  * license above.
->> >  ---8<---
->> >
->> > So I'd say:
->> >     PORTAUDIO_LICENSE = portaudio license (MIT-like plus special clause)
->> >
->> > (which by the way makes it non-free software.)
->>
->> Well, the text you cite says explicitly that these are "non-binding requests".
->> Would you still consider this non-free?
->
-> Well, I poundered that, yes. But the way it is phrased is dubious.
->
-> First, it states that it is a non-binding clause. But then the clause
-> states "[a]ny person [doing changes] is requested to send modifications
-> [upstream]." The term "requested" is a bit strong for a non-binding
-> clause.
->
-> So, let me rephrase:
->     (which by the way *may* make it non-free software.)
->
-> But the final word should come from a legal counsel, of course. :-)
->
-> Anyway, this is not "MIT" per-se.
->
-> Regards,
-> Yann E. MORIN.
+On Fri, 24 May 2013 00:43:01 +1000, Arn R wrote:
+> These options can now be disabled individually.
+> Previously, these options were simply enabled if the package they
+> depended on was also enabled. By default they will still be enabled
+> if the packages they depend on are enabled.
 
-I actually had the same assumption as Baruch. I felt like the
-"non-binding requests" was the most important information in the text.
-Anyway, as you say, let's wait for a license expert to give final word
-on this.
-I'll send a patch later when we get confirmation that license type
-needs to be modified.
+Well, we have a fuzzy boundary on how to handle this, we've discussed
+that not long ago with Arnout. Which problem are you seeing with the
+current situation (i.e, without your patch) ?
 
-Thanks
-Regards,
-Gilles.
+When possible and when it makes we generally try to auto-detect when we
+can enable a particular feature, as you've seen in gpsd.mk.
+
+Anyway, some comments below:
+
+> +config BR2_PACKAGE_GPSD_BLUETOOTH_DEV
+> +	bool "allow GPS devices via Bluetooth"
+> +	default y
+
+This should not be enabled by default.
+
+> +	depends on BR2_PACKAGE_BLUEZ_UTILS
+
+This should be a select.
+
+And ditto for the other options.
+
+I see what you wanted to achieve: something that's automatically
+enabled when for example bluez-utils is enabled, so that the existing
+behavior is preserved. But for package sub-options, they are generally
+disabled by default and they select whichever dependency they need.
+
+Let's wait the opinion of others to see how to handle this.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
