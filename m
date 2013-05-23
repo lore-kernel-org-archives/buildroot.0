@@ -1,36 +1,89 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 23 May 2013 22:34:14 +0200
-Subject: [Buildroot] [git commit] tvheadend: needs threads
-Message-ID: <20130523205042.31E709A4E4@busybox.osuosl.org>
+From: Wojciech Slenska <wojciech.slenska@gmail.com>
+Date: Thu, 23 May 2013 23:04:44 +0200
+Subject: [Buildroot]  [PATCH] qt5: mysql and sqlite plugins
+Message-ID: <1369343084-1925-1-git-send-email-wojciech.slenska@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f937306ead7605c1c8a9360503d1a5f92202c229
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Added support for mysql and sqlite plugins. Configuration is based on qt package.
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Wojciech Slenska <wojciech.slenska@gmail.com>
 ---
- package/tvheadend/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/qt5/qt5base/Config.in  | 36 ++++++++++++++++++++++++++++++++++++
+ package/qt5/qt5base/qt5base.mk | 11 +++++++++++
+ 2 files changed, 47 insertions(+)
 
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index 19ab276..7083b01 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -1,9 +1,10 @@
--comment "tvheadend requires a toolchain with LARGEFILE and IPv6 support"
--    depends on !BR2_LARGEFILE || !BR2_INET_IPV6
-+comment "tvheadend needs a toolchain with LARGEFILE, IPv6 and THREADS support"
-+    depends on !BR2_LARGEFILE || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 7974357..9c7fd15 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -43,6 +43,42 @@ config BR2_PACKAGE_QT5BASE_SQL
+ 	help
+ 	  This options enables the Qt5Sql library.
  
- config BR2_PACKAGE_TVHEADEND
- 	bool "tvheadend"
- 	depends on BR2_LARGEFILE && BR2_INET_IPV6
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# tvheadend requires an atomic_add operation. Either you have
- 	# a gcc >= 4.3 toolchain and it uses the gcc intrinsics, or it
- 	# has special code for x86, x86-64, PPC and ARM. So in the
++if BR2_PACKAGE_QT5BASE_SQL
++config BR2_PACKAGE_QT5BASE_MYSQL
++	bool "MySQL Plugin"
++	select BR2_PACKAGE_MYSQL_CLIENT
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_READLINE
++	depends on BR2_USE_MMU # mysql
++	help
++	  Build MySQL plugin
++	  If unsure, say n.
++choice
++	prompt "SQLite 3 support"
++	default BR2_PACKAGE_QT5BASE_SQLITE_NONE
++	help
++	  Select SQLite support.
++
++config BR2_PACKAGE_QT5BASE_SQLITE_NONE
++	bool "No sqlite support"
++	help
++	  Do not compile any kind of SQLite support.
++
++config BR2_PACKAGE_QT5BASE_SQLITE_QT
++	bool "Qt SQLite"
++	help
++	  Use Qt bundled SQLite support.
++
++config BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM
++	bool "System SQLite"
++	select BR2_PACKAGE_SQLITE
++	help
++	  Use system SQLite.
++
++endchoice
++
++endif
++
+ config BR2_PACKAGE_QT5BASE_TEST
+ 	bool "test module"
+ 	help
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index bfc6c91..5b0596d 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -60,6 +60,17 @@ QT5BASE_LICENSE = Commercial license
+ QT5BASE_REDISTRIBUTE = NO
+ endif
+ 
++# Qt5 SQL Plugins
++ifeq ($(BR2_PACKAGE_QT5BASE_SQL),y)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_MYSQL),-plugin-sql-mysql -mysql_config $(STAGING_DIR)/usr/bin/mysql_config,-no-sql-mysql) 
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_MYSQL),mysql_client)
++
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_QT),-plugin-sql-sqlite) 
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),-system-sqlite) 
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),sqlite)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_NONE),-no-sql-sqlite)
++endif
++
+ # We have to use --enable-linuxfb, otherwise Qt thinks that -linuxfb
+ # is to add a link against the "inuxfb" library.
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-gui,-no-gui)
+-- 
+1.8.1.2
