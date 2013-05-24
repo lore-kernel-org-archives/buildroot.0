@@ -1,36 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 25 May 2013 00:13:06 +0200
-Subject: [Buildroot] [git commit] weston: Add make dependency on cairo
-Message-ID: <20130524221502.C180D9A509@busybox.osuosl.org>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Fri, 24 May 2013 16:43:02 -0700
+Subject: [Buildroot] [PATCH 2/2] pptp-linux: add license information
+In-Reply-To: <1369438982-1398-1-git-send-email-gilles.talis@gmail.com>
+References: <1369438982-1398-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <1369438982-1398-2-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8f2578d7b733301cfdd79af08d6b89f112c5ae66
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-There's already a config dependency, make sure we build it too.
-
-Signed-off-by: Will Newton <will.newton@linaro.org>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/weston/weston.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/pptp-linux/pptp-linux.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 4e7cada..b6827db 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -10,7 +10,8 @@ WESTON_SOURCE = weston-$(WAYLAND_VERSION).tar.xz
- WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
+diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
+index ded2a19..ef25c9a 100644
+--- a/package/pptp-linux/pptp-linux.mk
++++ b/package/pptp-linux/pptp-linux.mk
+@@ -8,6 +8,8 @@ PPTP_LINUX_VERSION = 1.7.2
+ PPTP_LINUX_SITE = http://downloads.sourceforge.net/project/pptpclient/pptp/pptp-$(PPTP_LINUX_VERSION)
+ PPTP_LINUX_SOURCE = pptp-$(PPTP_LINUX_VERSION).tar.gz
+ PPTP_LINUX_MAKE = $(MAKE1)
++PPTP_LINUX_LICENSE = GPLv2+
++PPTP_LINUX_LICENSE_FILES = COPYING
  
--WESTON_DEPENDENCIES = wayland libxkbcommon pixman libpng jpeg mtdev udev
-+WESTON_DEPENDENCIES = wayland libxkbcommon pixman libpng \
-+	jpeg mtdev udev cairo
- WESTON_CONF_OPT = \
- 	--disable-egl \
- 	--disable-xwayland \
+ define PPTP_LINUX_BUILD_CMDS
+ 	$(MAKE) -C $(@D) OPTIMIZE= DEBUG= \
+-- 
+1.7.4.1
