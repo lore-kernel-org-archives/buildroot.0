@@ -1,25 +1,17 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 May 2013 16:22:57 +0200
-Subject: [Buildroot] [PATCH] weston: Add make dependency on cairo.
-In-Reply-To: <CAFbHwiSv5n4gR-TgmcvFvEiRPdSy-PxeMb0k+nG3OQxWU16=9Q@mail.gmail.com>
-References: <CAFbHwiSv5n4gR-TgmcvFvEiRPdSy-PxeMb0k+nG3OQxWU16=9Q@mail.gmail.com>
-Message-ID: <20130524162257.5daf32ca@skate>
+From: Sabri Altunbas <sabri.altunbas@gmx.de>
+Date: Fri, 24 May 2013 19:36:52 +0200
+Subject: [Buildroot] buildroot needs a root pasword, why ??
+Message-ID: <2F3FBE81FE784B19BA37A3BE62C1FA7A@M58p>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Newton,
 
-On Fri, 24 May 2013 14:46:46 +0100, Will Newton wrote:
-> There's already a config dependency, make sure we build it too.
-> 
-> Signed-off-by: Will Newton <will.newton@linaro.org>
+Hi, 
+i installed buildroot-2013.02.tar.bz2 with sourcery codebench. I have not
+actually defined pass word. Regardless a password is required. Can some body
+give me some hints.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks in advance
