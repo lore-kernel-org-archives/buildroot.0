@@ -1,36 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 May 2013 11:58:44 +0000 (UTC)
-Subject: [Buildroot] [Bug 4796] apply-patches.sh reorders patches given on
- the command line
-In-Reply-To: <bug-4796-163@https.bugs.busybox.net/>
-References: <bug-4796-163@https.bugs.busybox.net/>
-Message-ID: <20130526115844.231979A56B@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 24 May 2013 18:51:47 +0200
+Subject: [Buildroot] Environment Variables and CMAKE
+In-Reply-To: <1369239715.2814.31.camel@john-ubu>
+References: <1369239715.2814.31.camel@john-ubu>
+Message-ID: <519F9AA3.8060600@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4796
+On 22/05/13 18:21, john wrote:
+> Hi,
+>
+> I have a cmake based project which I am trying to incorporate into
+> buildroot-2012.05
+>
+> As part of the configuration of the code I need to pass it an
+> environment variable $(CLIENT_VER) which I generate at the time of
+> building in the source directory (which I check out of SVN).
+> I have tried various approaches without success.
+[snip]
+> My basic question is this:
+> Is there someway to pickup an environment variable in the process that
+> processes the .mk file?
 
-Samuel Martin <s.martin49@gmail.com> changed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WONTFIX
+  Isn't this what you're looking for?
 
---- Comment #3 from Samuel Martin <s.martin49@gmail.com> 2013-05-26 11:57:34 UTC ---
-What are the packages affected by this bug?
+CLIENT_BARROW_CONF_ENV = `$(CLIENT_BARROW_SRCDIR)set_environment.sh`
 
-Note that using the latest patch policy (see the new patch naming convention):
-http://buildroot.org/downloads/manual/manual.html#patch-policy
+(and modify the script to echo the assignments rather than setting them).
 
-After fixing the culprit patch filenames, this bug should not occurs anymore.
+  Regards,
+  Arnout
 
-So, it's better to fix the packages themselves.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
