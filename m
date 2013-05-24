@@ -1,124 +1,290 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 May 2013 08:30:04 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-05-23
-Message-ID: <20130524063004.76C8152C0F3@lolut.humanoidz.org>
+From: Bhupal Singh <singhbhupal88@gmail.com>
+Date: Fri, 24 May 2013 12:06:00 +0530
+Subject: [Buildroot] Mp3 doesn't work
+Message-ID: <CAJsG2H7WyOH1AL_GPHVzavcMx-abUvj--+Hhd+Uqahk0oifGfA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2013-05-23
-===============================
+Hi,
 
-        success : 112
-       failures : 57 
-       timeouts : 0  
-          TOTAL : 169
+I have build webkitgtk1.10.2  using buildroot(older version of buildroot)
+for mipsel architecture. I am trying to play mp3 file on webkit browser
+basically HTML5 using audio tag,
+After I have enabled few plugins under "Audio and Video libraries and
+application-->" I can see the seek moving but cant hear any sound.
 
-Classification of failures by reason
-====================================
+PFA, The text file containing config under "Audio and Video libraries and
+application" menu.
 
-   host-lttng-babeltrace-1.0.2 | 5 
-                 pixman-0.28.2 | 4 
-                mongrel2-1.8.0 | 4 
-media-ctl-ac40b79f002a2315f... | 3 
-               wvstreams-4.6.1 | 2 
-                libtirpc-0.2.2 | 2 
-               sconeserver-211 | 2 
-                 qt5base-5.0.2 | 2 
-                 binutils-2.21 | 2 
-                  boost-1.53.0 | 2 
-                libcurl-7.28.1 | 2 
-      gst-plugins-good-0.10.31 | 1 
-                lmbench-3.0-a9 | 1 
-                   icu-4.8.1.1 | 1 
-                 libiconv-1.14 | 1 
-          qt5declarative-5.0.2 | 1 
-                 netsnmp-5.7.2 | 1 
-                  weston-1.1.0 | 1 
-                libsigsegv-2.6 | 1 
-                host-gdb-7.5.1 | 1 
-              pptp-linux-1.7.2 | 1 
-                  gamin-0.1.10 | 1 
-               libglib2-2.30.3 | 1 
-                busybox-1.21.0 | 1 
-                  ne10-88c18f0 | 1 
-             libatomic_ops-7.2 | 1 
-                   bzip2-1.0.6 | 1 
-         host-gutenprint-5.2.9 | 1 
-                  readline-6.2 | 1 
-                   hostapd-2.0 | 1 
-             bluez_utils-4.101 | 1 
-                 cdrkit-1.1.11 | 1 
-                 libnspr-4.9.2 | 1 
-                 rt-tests-0.83 | 1 
-                   dbus-1.4.24 | 1 
-               qt5webkit-5.0.2 | 1 
-                 libpfm4-4.3.0 | 1 
-                 cairo-1.12.10 | 1 
+To me the problem seems to be from gstreamer plugins, Or is there any thing
+that I need to enable, that I am missing out??
 
-Detail of failures
-===================
 
-   powerpc |                  binutils-2.21 | NOK | http://autobuild.buildroot.net/results/761acfe07de5b9a3d704b1277f1e31f07c662903/
-    x86_64 |                  binutils-2.21 | NOK | http://autobuild.buildroot.net/results/878adbd0017e253268fe53a4df7db2755a4a5f4e/
-microblaze |              bluez_utils-4.101 | NOK | http://autobuild.buildroot.net/results/3711bc7de451bc3a9066c930f8f3cddf555b57ef/
-    x86_64 |                   boost-1.53.0 | NOK | http://autobuild.buildroot.net/results/9a9c5e6ad23260795255e03835f7d448d3516516/
-      bfin |                   boost-1.53.0 | NOK | http://autobuild.buildroot.net/results/5280bba9529b4e673967905dbf6f92c2fb57cc5d/
-       arc |                 busybox-1.21.0 | NOK | http://autobuild.buildroot.net/results/9245edce29282c21092d08e026517aba9478182a/
-      bfin |                    bzip2-1.0.6 | NOK | http://autobuild.buildroot.net/results/3b82290d931d9adaa74be95aa2f83fc872578e04/
-      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/ededd73cc3de464be2545f1173649091eb2cf08c/
-       arm |                  cdrkit-1.1.11 | NOK | http://autobuild.buildroot.net/results/be4f75acebb7da35adef1a8b539d7f89bc2f1519/
-       arm |                    dbus-1.4.24 | NOK | http://autobuild.buildroot.net/results/12a1b855a19794020037475310e5221b78f880db/
-       arm |                   gamin-0.1.10 | NOK | http://autobuild.buildroot.net/results/60b03069c5ee1b5ae77dc2efb2bd0d1ffeedb9b4/
-       arm |       gst-plugins-good-0.10.31 | NOK | http://autobuild.buildroot.net/results/cfcdabbb56af544a40a188a88ace54505811acd6/
-       arc |                 host-gdb-7.5.1 | NOK | http://autobuild.buildroot.net/results/47ffd2d414f6a383dcf81d391999281c606323e8/
-   powerpc |          host-gutenprint-5.2.9 | NOK | http://autobuild.buildroot.net/results/097e431f5f33c3a86754e836ddf43b1d54e54850/
-   powerpc |    host-lttng-babeltrace-1.0.2 | NOK | http://autobuild.buildroot.net/results/fe5c73d13c7cac180c28a774ce500c2b16988555/
-   powerpc |    host-lttng-babeltrace-1.0.2 | NOK | http://autobuild.buildroot.net/results/71989beb9d242a5b196479c8377b368b63da37f9/
-   powerpc |    host-lttng-babeltrace-1.0.2 | NOK | http://autobuild.buildroot.net/results/b82436e1a1f37b2d06dff3121a18b3552876c7c5/
-   powerpc |    host-lttng-babeltrace-1.0.2 | NOK | http://autobuild.buildroot.net/results/16167a05f4d4ae0a90140de0ebe2ffef531be3ff/
-   powerpc |    host-lttng-babeltrace-1.0.2 | NOK | http://autobuild.buildroot.net/results/3674bd71fe28f95142c891c068f5fd8de056adfc/
-       arm |                    hostapd-2.0 | NOK | http://autobuild.buildroot.net/results/7c258064f4ea6b23ee79ba9a3807e5e688d5a57f/
-      bfin |                    icu-4.8.1.1 | NOK | http://autobuild.buildroot.net/results/cfb65d82bb3690499ae4be2bbd5f297580867b06/
-       arm |              libatomic_ops-7.2 | NOK | http://autobuild.buildroot.net/results/1d0aff836abf1b92648bb5fc01d4d8b289f8ba72/
-       arc |                 libcurl-7.28.1 | NOK | http://autobuild.buildroot.net/results/9ac5476aa2b27d386fa232dfc01596adddc2d027/
-  mips64el |                 libcurl-7.28.1 | NOK | http://autobuild.buildroot.net/results/da679136f2ed99eb3d40810b17285b0e5cd0d200/
-      bfin |                libglib2-2.30.3 | NOK | http://autobuild.buildroot.net/results/23f6ff66f94e5c9863937a19bfa7009eea5aa17b/
-      bfin |                  libiconv-1.14 | NOK | http://autobuild.buildroot.net/results/d1b143c0cd5943c59eacea7cd458fb5723a065e2/
-   aarch64 |                  libnspr-4.9.2 | NOK | http://autobuild.buildroot.net/results/ac098b7ccf921fdfe429a46699ae913860ef0c45/
-    xtensa |                  libpfm4-4.3.0 | NOK | http://autobuild.buildroot.net/results/a41d724bbd401f92331f5c48a844a6878c3a2593/
-   aarch64 |                 libsigsegv-2.6 | NOK | http://autobuild.buildroot.net/results/480b357663d73970ae4f515d8a0033e8746c241e/
-microblaze |                 libtirpc-0.2.2 | NOK | http://autobuild.buildroot.net/results/edea974e2f09d39366a652d40fecbfa3eb096327/
-       arm |                 libtirpc-0.2.2 | NOK | http://autobuild.buildroot.net/results/a5a37dc8a2b047ced865798bf1344d5eb3b3d6e7/
-    xtensa |                 lmbench-3.0-a9 | NOK | http://autobuild.buildroot.net/results/1bc6209efae2d05a63f68ffe1ef7d2065cfd9e00/
-   powerpc | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/de547db674a023083270a17a3673f36477fe2040/
-   powerpc | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/c9547fc7838472a0220cdbd1171616862c29bac2/
-   powerpc | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/4aaf2ba960d2190e57f3d1e8c74a61053199e4a8/
-   powerpc |                 mongrel2-1.8.0 | NOK | http://autobuild.buildroot.net/results/805a2b363546fe31582ffaa351152dddd2b4da3a/
-   powerpc |                 mongrel2-1.8.0 | NOK | http://autobuild.buildroot.net/results/483741647ac5c1715e4240b5979497d63f33cd42/
-    x86_64 |                 mongrel2-1.8.0 | NOK | http://autobuild.buildroot.net/results/4f68230d0b9c6414fe3b9496e609e32c8c0ffd55/
-   powerpc |                 mongrel2-1.8.0 | NOK | http://autobuild.buildroot.net/results/9c925f66638667eda7dd97b506e461bf4892d4e3/
-       arm |                   ne10-88c18f0 | NOK | http://autobuild.buildroot.net/results/7538f84b683e0756c138f71c8c715b6805dc287f/
-    xtensa |                  netsnmp-5.7.2 | NOK | http://autobuild.buildroot.net/results/c17fcf905ce8195a0a58e007301f6574f1bfa797/
-      mips |                  pixman-0.28.2 | NOK | http://autobuild.buildroot.net/results/26b34c042453c328480f6ca3bf5a4a28a12d18aa/
-      mips |                  pixman-0.28.2 | NOK | http://autobuild.buildroot.net/results/def3c39e9f53f4488340027c5d1300e5f4edba09/
-      mips |                  pixman-0.28.2 | NOK | http://autobuild.buildroot.net/results/450cab4a1b2b91d300afad7e7580ad0a08ea96b8/
-      mips |                  pixman-0.28.2 | NOK | http://autobuild.buildroot.net/results/971fc6d441f153a15ca91312ac93ce40899b398f/
-      bfin |               pptp-linux-1.7.2 | NOK | http://autobuild.buildroot.net/results/9b80537d0efb3fefab486abaecd128bd18e0efdb/
-   powerpc |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/8fe79a15b72f04ac01d4b5f330f5e2fde896fdaf/
-       arm |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/34df643ac3bd6c8928685b95e138ccebe4bca912/
-       arm |           qt5declarative-5.0.2 | NOK | http://autobuild.buildroot.net/results/1c5ddcb1e485633ee580bd669da33f6f669aae29/
-       arm |                qt5webkit-5.0.2 | NOK | http://autobuild.buildroot.net/results/a65a67c2d2887fc6930e300c646efbe61be0187b/
-       arm |                   readline-6.2 | NOK | http://autobuild.buildroot.net/results/af2a7908740276035786fe913aa5b185b6f4ff07/
-    mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/6fa6bd7860e8e4d6f37fc99dde4162dc4cefbbae/
-   powerpc |                sconeserver-211 | NOK | http://autobuild.buildroot.net/results/545ea7691fba47bc5ee4dd0765e8367326fb9679/
-       arm |                sconeserver-211 | NOK | http://autobuild.buildroot.net/results/884f1a3b4757fbe30ad6e20b2b7afd5e9942f806/
-   powerpc |                   weston-1.1.0 | NOK | http://autobuild.buildroot.net/results/49378f1c4ad4df99079c91961c7beb3e439578ab/
-    x86_64 |                wvstreams-4.6.1 | NOK | http://autobuild.buildroot.net/results/2fd073faf5f19b447d9373a6d3984af8f95d8087/
-   powerpc |                wvstreams-4.6.1 | NOK | http://autobuild.buildroot.net/results/dc76e134ae74ba693d1e7b63d834df5a7990026f/
+Thanks.
 
 
 -- 
-http://autobuild.buildroot.net
+Warm Regards,
+BS_Chauhan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130524/fdbf31f6/attachment-0001.html>
+-------------- next part --------------
+#
+# Audio and video libraries and applications
+#
+BR2_PACKAGE_ALSA_LIB=y
+BR2_PACKAGE_ALSA_LIB_PYTHON=y
+
+#
+# ALSA lib selection
+#
+BR2_PACKAGE_ALSA_LIB_DEVDIR="/dev/snd"
+BR2_PACKAGE_ALSA_LIB_PCM_PLUGINS="all"
+BR2_PACKAGE_ALSA_LIB_CTL_PLUGINS="all"
+BR2_PACKAGE_ALSA_LIB_ALOAD=y
+BR2_PACKAGE_ALSA_LIB_MIXER=y
+BR2_PACKAGE_ALSA_LIB_PCM=y
+BR2_PACKAGE_ALSA_LIB_RAWMIDI=y
+BR2_PACKAGE_ALSA_LIB_HWDEP=y
+BR2_PACKAGE_ALSA_LIB_SEQ=y
+BR2_PACKAGE_ALSA_LIB_ALISP=y
+BR2_PACKAGE_ALSA_LIB_OLD_SYMBOLS=y
+BR2_PACKAGE_ALSA_UTILS=y
+
+#
+# ALSA utils selection
+#
+# BR2_PACKAGE_ALSA_UTILS_ALSACONF is not set
+BR2_PACKAGE_ALSA_UTILS_ALSACTL=y
+BR2_PACKAGE_ALSA_UTILS_ALSAMIXER=y
+# BR2_PACKAGE_ALSA_UTILS_AMIDI is not set
+# BR2_PACKAGE_ALSA_UTILS_AMIXER is not set
+BR2_PACKAGE_ALSA_UTILS_APLAY=y
+# BR2_PACKAGE_ALSA_UTILS_ARECORD is not set
+# BR2_PACKAGE_ALSA_UTILS_IECSET is not set
+# BR2_PACKAGE_ALSA_UTILS_ACONNECT is not set
+# BR2_PACKAGE_ALSA_UTILS_APLAYMIDI is not set
+# BR2_PACKAGE_ALSA_UTILS_ARECORDMIDI is not set
+# BR2_PACKAGE_ALSA_UTILS_ASEQDUMP is not set
+# BR2_PACKAGE_ALSA_UTILS_ASEQNET is not set
+# BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST is not set
+# BR2_PACKAGE_AUMIX is not set
+# BR2_PACKAGE_FLAC is not set
+BR2_PACKAGE_FFMPEG=y
+# BR2_PACKAGE_FFMPEG_GPL is not set
+# BR2_PACKAGE_FFMPEG_NONFREE is not set
+# BR2_PACKAGE_FFMPEG_FFMPEG is not set
+# BR2_PACKAGE_FFMPEG_FFPLAY is not set
+# BR2_PACKAGE_FFMPEG_FFSERVER is not set
+# BR2_PACKAGE_FFMPEG_SWSCALE is not set
+BR2_PACKAGE_FFMPEG_ENCODERS=""
+BR2_PACKAGE_FFMPEG_DECODERS="mp3 mpeg4 h264 mpeg2video pcm_alaw pcm_bluray pcm_dvd pcm_f32be pcm_f32le pcm_f64be pcm_f64le pcm_lxf pcm_mulaw pcm_s16be pcm_s16le pcm_s16le_planar pcm_s24be pcm_s24daud pcm_s24le pcm_s32be pcm_s32le pcm_s8 pcm_u16be pcm_u16le pcm_u24be pcm_u24le pcm_u32be pcm_u32le pcm_u8 pcm_zork"
+BR2_PACKAGE_FFMPEG_MUXERS=""
+BR2_PACKAGE_FFMPEG_DEMUXERS="mp3 mov matroska mpegps mpegts mpegvideo wav"
+BR2_PACKAGE_FFMPEG_PARSERS="all"
+BR2_PACKAGE_FFMPEG_BSFS=""
+BR2_PACKAGE_FFMPEG_PROTOCOLS="file"
+BR2_PACKAGE_FFMPEG_FILTERS=""
+# BR2_PACKAGE_FFMPEG_INDEVS is not set
+# BR2_PACKAGE_FFMPEG_OUTDEVS is not set
+BR2_PACKAGE_FFMPEG_EXTRACONF=""
+BR2_PACKAGE_GSTREAMER=y
+BR2_PACKAGE_GSTREAMER_LIBXML2=y
+# BR2_PACKAGE_GST_FFMPEG is not set
+BR2_PACKAGE_GST_PLUGINS_BASE=y
+
+#
+# dependency-less plugins
+#
+# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ADDER is not set
+# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP is not set
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIOCONVERT=y
+# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIORATE is not set
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_FFMPEGCOLORSPACE=y
+# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_GDP is not set
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_PLAYBACK=y
+# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_SUBPARSE is not set
+# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_TCP is not set
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_TYPEFIND=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC=y
+# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEORATE is not set
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEOSCALE=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VOLUME=y
+
+#
+# plugins with external dependencies (there may be more available)
+#
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_OGG=y
+# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_PANGO is not set
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_THEORA=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VORBIS=y
+BR2_PACKAGE_GST_PLUGINS_GOOD=y
+# BR2_PACKAGE_GST_PLUGINS_GOOD_JPEG is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PNG is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_BZ2 is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_ZLIB is not set
+
+#
+# dependency-less plugins
+#
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOFILTER is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ALPHA is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_APETAG is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUDIOFX is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUPARSE is not set
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUTODETECT=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AVI=y
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_CUTTER is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUGUTILS is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEINTERLACE is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_EFFECTV is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_EQUALIZER is not set
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLV=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX=y
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ICYDEMUX is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_INTERLEAVE is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLX is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GOOM is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GOOM2K1 is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_LAW is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_LEVEL is not set
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MATROSKA=y
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MONOSCOPE is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MULTIFILE is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MULTIPART is not set
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_QTDEMUX=y
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_REPLAYGAIN is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTP is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTPMANAGER is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTSP is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SMPTE is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SPECTRUM is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_UDP is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOBOX is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOCROP is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOMIXER is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVENC is not set
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPARSE=y
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_Y4M is not set
+
+#
+# plugins with external dependencies
+#
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC is not set
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS is not set
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC=y
+# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SPEEX is not set
+BR2_PACKAGE_GST_PLUGINS_BAD=y
+
+#
+# dependency-less plugins
+#
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AACPARSE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AIFFPARSE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AMRPARSE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ASFMUX is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUTOCONVERT is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CAMERABIN is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LEGACYRESAMPLE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_BAYER is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CDAUDIO is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CDXAPARSE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DCCP is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DEBUGUTILS is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DTMF is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDNAV is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDSPU is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FESTIVAL is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREI0R is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_H264PARSE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_HDVPARSE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LIBRFB is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LIVEADDER is not set
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEGDEMUX=y
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEGTSMUX is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEG4VIDEOPARSE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEGVIDEOPARSE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MVE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MXF is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_NSF is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_NUVDEMUX is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_PCAPPARSE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_QTMUX is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RAWPARSE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_REAL is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RTPMANAGER is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RTPMUX is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SCALETEMPO is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SDP is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SELECTOR is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SHAPEWIPE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SIREN is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SPEED is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SUBENC is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_STEREO is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_TTA is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VALVE is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VIDEOSIGNAL is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VMNC is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_XDGMIME is not set
+
+#
+# plugins with external dependencies (there may be more available)
+#
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DIRECTFB is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVB is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FBDEV is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_NEON is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_OSS4 is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SDL is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_TREMOR is not set
+# BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VCD is not set
+BR2_PACKAGE_GST_PLUGINS_UGLY=y
+
+#
+# dependency-less plugins
+#
+BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_ASFDEMUX=y
+# BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_DVDLPCMDEC is not set
+# BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_DVDSUB is not set
+# BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_IEC958 is not set
+BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MPEGAUDIOPARSE=y
+# BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MPEGSTREAM is not set
+# BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_REALMEDIA is not set
+# BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_SYNAESTHESIA is not set
+
+#
+# plugins with external dependencies (there may be more available)
+#
+BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_ID3TAG=y
+BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MAD=y
+# BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MPEG2DEC is not set
+# BR2_PACKAGE_LIBCDAUDIO is not set
+# BR2_PACKAGE_LIBDVDREAD is not set
+# BR2_PACKAGE_LIBDVDNAV is not set
+BR2_PACKAGE_LIBID3TAG=y
+BR2_PACKAGE_LIBMAD=y
+# BR2_PACKAGE_LIBMMS is not set
+# BR2_PACKAGE_LIBMPD is not set
+# BR2_PACKAGE_LIBMPEG2 is not set
+BR2_PACKAGE_LIBOGG=y
+# BR2_PACKAGE_LIBSNDFILE is not set
+BR2_PACKAGE_LIBTHEORA=y
+BR2_PACKAGE_LIBVORBIS=y
+# BR2_PACKAGE_MADPLAY is not set
+BR2_PACKAGE_MPG123=y
+# BR2_PACKAGE_MPLAYER is not set
+# BR2_PACKAGE_SPEEX is not set
+# BR2_PACKAGE_SWFDEC is not set
+# BR2_PACKAGE_FESTIVAL is not set
+# BR2_PACKAGE_TAGLIB is not set
+# BR2_PACKAGE_TREMOR is not set
