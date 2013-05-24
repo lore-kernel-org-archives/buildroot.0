@@ -1,32 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 24 May 2013 09:50:46 -0300
-Subject: [Buildroot] AT91SAM9G20-EK and aplay
-In-Reply-To: <519F452D.4070505@scen.it>
-References: <519F186B.3060606@scen.it> <20130524100520.01c518fd@skate>
- <519F2CDB.8080805@scen.it> <20130524112355.70d1cc53@skate>
- <519F452D.4070505@scen.it>
-Message-ID: <519F6226.4060002@zacarias.com.ar>
+From: Will Newton <will.newton@gmail.com>
+Date: Fri, 24 May 2013 14:46:46 +0100
+Subject: [Buildroot] [PATCH] weston: Add make dependency on cairo.
+Message-ID: <CAFbHwiSv5n4gR-TgmcvFvEiRPdSy-PxeMb0k+nG3OQxWU16=9Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/24/2013 07:47 AM, Carlo Rajko wrote:
->>> I think the problem is not in aply because I have the same problem with
->>> mpg123.
->>> Could be the library alsa?
->>
->> It could. But at least gdb will tell us if it's an undefined
->> instruction, an invalid memory access, an unaligned access, or
->> something else.
+There's already a config dependency, make sure we build it too.
 
-Actually it's the toolchain, seems CS 2012.03 isn't emitting proper
-arm926ej-s code.
-I've managed to reproduce it with the qemu_arm_versatile sample
-configuration and adding a bunch of packages (mpg123, vorbis-tools, ...)
-It did strike me as odd that i've got the same failures as yours (aplay,
-mpg123) but ogg123 worked fine with alsa output.
-So switching to an internal toolchain or CS 2011.09 magically fixed the
-issues.
-Regards.
+Signed-off-by: Will Newton <will.newton@linaro.org>
+---
+ package/weston/weston.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 4e7cada..b6827db 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -10,7 +10,8 @@ WESTON_SOURCE = weston-$(WAYLAND_VERSION).tar.xz
+ WESTON_LICENSE = MIT
+ WESTON_LICENSE_FILES = COPYING
+
+-WESTON_DEPENDENCIES = wayland libxkbcommon pixman libpng jpeg mtdev udev
++WESTON_DEPENDENCIES = wayland libxkbcommon pixman libpng \
++    jpeg mtdev udev cairo
+ WESTON_CONF_OPT = \
+     --disable-egl \
+     --disable-xwayland \
+--
+1.8.1.4
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-weston-Add-make-dependency-on-cairo.patch
+Type: application/octet-stream
+Size: 925 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130524/b01d813e/attachment.obj>
