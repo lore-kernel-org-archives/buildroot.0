@@ -1,20 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 25 May 2013 13:28:43 +0200
-Subject: [Buildroot] [PATCH] urg: Add urg-select-h.patch.
-In-Reply-To: <CAFbHwiSckZivoEYjZQPsp-oX9_t8hR5cviVkGvwGLvq=xYkPSw@mail.gmail.com>
- (Will Newton's message of "Tue, 21 May 2013 21:33:29 +0100")
-References: <CAFbHwiSckZivoEYjZQPsp-oX9_t8hR5cviVkGvwGLvq=xYkPSw@mail.gmail.com>
-Message-ID: <877ginguxg.fsf@dell.be.48ers.dk>
+Date: Sat, 25 May 2013 13:56:38 +0200
+Subject: [Buildroot] [PATCH] wireshark: security bump to version 1.8.7
+In-Reply-To: <1369007247-27993-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 19 May 2013 20:47:27 -0300")
+References: <1369007247-27993-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8738tbgtmx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Will> This patch fixes a build failure on AArch64 (and potentially others).
- Will> Make sure sys/select.h is included before using select(2).
+ Gustavo> Fixes CVE-2013-2486, CVE-2013-2487 and several wnpa-sec (wireshark)
+ Gustavo> advisories.
 
 Committed, thanks.
 
