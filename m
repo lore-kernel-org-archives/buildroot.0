@@ -1,12 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 May 2013 15:18:30 +0200
-Subject: [Buildroot] buildroot needs a root pasword, why ??
-In-Reply-To: <20130524213049.GB3205@free.fr>
-References: <2F3FBE81FE784B19BA37A3BE62C1FA7A@M58p>
- <20130524174319.GA3205@free.fr>
- <B2E777BEED5E4FB9A7E403CE15ED3A4A@M58p>
- <20130524213049.GB3205@free.fr>
-Message-ID: <20130525151830.68bca681@skate>
+Date: Sat, 25 May 2013 16:08:46 +0200
+Subject: [Buildroot] Buildroot Patchwork Day, May, 26th
+Message-ID: <20130525160846.18ab28f5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +10,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 24 May 2013 23:30:49 +0200, Yann E. MORIN wrote:
+This is reminder regarding the upcoming Buildroot Patchwork Day, that
+will take place tomorrow, Sunday 26th May. We already have 5
+participants registered. Feel free to join on the #buildroot IRC
+channel tomorrow starting at 10 AM CEST. We should be there more or
+less all day long, potentially until late in the evening (so that
+people from the US, such as Spenser, can also participate).
 
-> On 2013-05-24 22:57 +0200, Sabri Altunbas spake thusly:
-> > If I press ENTER I get this error message
-> > 
-> > Welcome to Buildroot
-> > buildroot login: root
-> > Password: 
-> > Login incorrect
-> > buildroot login:
+I've set up an Etherpad to synchronize our work during the day:
 
-On what serial port device are you running the login prompt? Is this
-serial port listed in /etc/securetty?
+  http://lite.framapad.org/p/Buildroot_Patchwork_Day_May_2013
 
-Thanks,
+In case you don't know what the Patchwork Day is. The goal is to gather
+several Buildroot developers on IRC during one day, and try to clean up
+the patch queue (in http://patchwork.ozlabs.org/project/buildroot/list/)
+and the bug list
+(https://bugs.busybox.net/buglist.cgi?cmdtype=runnamed&namedcmd=buildroot).
+
+If you already have a some Buildroot experience and want to help, feel
+free to join.
+
+Best regards,
 
 Thomas
 -- 
