@@ -1,97 +1,67 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 25 May 2013 13:33:50 +0200
-Subject: [Buildroot] [git commit] wireshark: security bump to version 1.8.7
-Message-ID: <20130525142425.0ABB19A4D6@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 May 2013 22:15:41 +0200
+Subject: [Buildroot] Student for the Google Summer of Code,
+	hardware donations needed
+Message-ID: <20130525221541.0ef3ab27@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c17b0f0bda68b3adcc098d6b426e6448d0444c36
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello all,
 
-Fixes CVE-2013-2486, CVE-2013-2487 and several wnpa-sec (wireshark)
-advisories.
+As we have already discussed on this list, Buildroot was a candidate
+project for the Google Summer of Code and has been selected as an
+organization. We have then proposed one project idea (and only one for
+this first participation of Buildroot to GSoC).
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/wireshark/Config.in                        |    1 +
- .../wireshark/wireshark-dont-include-prefix.patch  |   41 --------------------
- package/wireshark/wireshark.mk                     |    2 +-
- 3 files changed, 2 insertions(+), 42 deletions(-)
+In total, we received 8 submissions. Three of them were completely
+out-of-topic, people not having read the project idea (just to give you
+an idea, the title of such submissions were things like "A PEN DRIVE
+WITH MALE AND FEMALE USB PORTS" or "working on linux ubuntu").
 
-diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
-index e6d4e72..d4c8b43 100644
---- a/package/wireshark/Config.in
-+++ b/package/wireshark/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_WIRESHARK
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBGLIB2
-+	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR # glib2
- 	help
- 	  Network traffic sniffer and protocol decoder. Currently only tshark,
-diff --git a/package/wireshark/wireshark-dont-include-prefix.patch b/package/wireshark/wireshark-dont-include-prefix.patch
-deleted file mode 100644
-index 567af9a..0000000
---- a/package/wireshark/wireshark-dont-include-prefix.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--configure.in: don't add the build host's /usr/include and /usr/lib to the 
--search path of include files and libraries. This is not what you want when 
--cross compiling.
--
--Sent upstream as https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=7926.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--diff -Nuar wireshark-1.8.3.orig/configure.in wireshark-1.8.3/configure.in
----- wireshark-1.8.3.orig/configure.in	2012-08-15 23:33:32.000000000 +0300
--+++ wireshark-1.8.3/configure.in	2012-10-28 10:07:54.864388531 +0200
--@@ -635,29 +635,6 @@
-- AC_SUBST(CORESERVICES_FRAMEWORKS)
-- AC_SUBST(LAUNCHSERVICES_FRAMEWORKS)
-- 
---#
---# If using $prefix we add "$prefix/include" to the include search path
---# and "$prefix/lib" to the library search path.
---#
---if test "x$prefix" != "x" ; then
---	AC_MSG_CHECKING(whether to use $prefix for headers and libraries)
---	if test -d $prefix/include ; then
---		AC_MSG_RESULT(yes)
---		#
---		# Arrange that we search for header files in "$prefix/include", as
---		# various packages we use may have been installed under "$prefix/include".
---		#
---		CPPFLAGS="$CPPFLAGS -I$prefix/include"
---
---		#
---		# Arrange that we search for libraries in "$prefix/lib".
---		#
---		AC_WIRESHARK_ADD_DASH_L(LDFLAGS, $prefix/lib)
---	else
---		AC_MSG_RESULT(no)
---	fi
---fi
---
-- dnl Look in /usr/local for header files and libraries ?
-- dnl XXX FIXME don't include /usr/local if it is already in the system
-- dnl search path as this causes gcc 3.2 on Linux to complain about a change
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 5a4d8b5..34d2708 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--WIRESHARK_VERSION = 1.8.6
-+WIRESHARK_VERSION = 1.8.7
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+Amongst the five remaining submissions, two of them originated from
+people really not having enough experience with Embebdded Linux, and
+absolutely no experience with Buildroot.
+
+We had three remaining submissions, from Alexander Varnin, Victor
+Hiairrassary and Spenser Gilliland. They had all already posted a few
+patches to Buildroot, so were interesting candidates. After reviewing
+their submissions, and having a few discussions, we (a group of core
+Buildroot developers, Peter Korsgaard, Arnout Vandecappelle, Gustavo
+Zacarias, Yann E. Morin, Thomas De Schampheleire and myself) decided to
+select Spenser Gilliland. As you've probably seen, even though the GSoC
+period has not started yet, Spenser has appeared on IRC, has already
+posted a number of interesting patches, and he will participate to
+tomorrow's Patchwork Day.
+
+However, the selection of Spenser and its participation to GSoC is not
+completely official yet. On May 27th, at 7 PM UTC, Google will
+officially announce the selected student.
+
+Throughout Spenser's GSoC, which will last until the end of September,
+you can keep track of the progress at
+http://elinux.org/Buildroot:GSoC2013_ARM_Multimedia (the page is mostly
+empty for now, it will soon be filled in).
+
+In order to allow Spenser to work on the support of ARM multimedia
+features (OpenGL, OpenVG, EGL, accelerated video encoding/decoding,
+etc.), we need a number of hardware platforms. He already has a
+Rasberry Pi, we have found sponsors to provide OMAP3/OMAP4/AM335x based
+platforms and i.MX5/i.MX6 platforms. We intend to buy him an Allwinner
+A1x based platform and an Exynos 4 based platforms.
+
+If you see other interesting platforms to support and/or if you (or
+your company) is willing to sponsor an hardware platform for this GSoC,
+we would definitely be interested. Do not hesitate to contact me about
+this.
+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
