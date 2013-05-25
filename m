@@ -1,68 +1,97 @@
-From: Sabri Altunbas <sabri.altunbas@gmx.de>
-Date: Sat, 25 May 2013 16:18:36 +0200
-Subject: [Buildroot] buildroot needs a root pasword, why ??
-In-Reply-To: <20130525151830.68bca681@skate>
-References: <2F3FBE81FE784B19BA37A3BE62C1FA7A@M58p><20130524174319.GA3205@free.fr><B2E777BEED5E4FB9A7E403CE15ED3A4A@M58p><20130524213049.GB3205@free.fr>
- <20130525151830.68bca681@skate>
-Message-ID: <2C98102DFACA44FEA5801B0188B74651@M58p>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 25 May 2013 13:33:50 +0200
+Subject: [Buildroot] [git commit] wireshark: security bump to version 1.8.7
+Message-ID: <20130525142425.0ABB19A4D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=c17b0f0bda68b3adcc098d6b426e6448d0444c36
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fixes CVE-2013-2486, CVE-2013-2487 and several wnpa-sec (wireshark)
+advisories.
 
-> Von: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
-> Gesendet: Samstag, 25. Mai 2013 15:19
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/wireshark/Config.in                        |    1 +
+ .../wireshark/wireshark-dont-include-prefix.patch  |   41 --------------------
+ package/wireshark/wireshark.mk                     |    2 +-
+ 3 files changed, 2 insertions(+), 42 deletions(-)
 
-
-Thomas, fein to meet you.
-
-> 
-> > On 2013-05-24 22:57 +0200, Sabri Altunbas spake thusly:
-> > > If I press ENTER I get this error message
-> > >
-> > > Welcome to Buildroot
-> > > buildroot login: root
-> > > Password:
-> > > Login incorrect
-> > > buildroot login:
-> 
-> On what serial port device are you running the login prompt? Is this
-> serial port listed in /etc/securetty?
-
-Inittab
-..
-..
-# Put a getty on the serial port
-ttyAMA0::respawn:/sbin/getty -L ttyAMA0 115200 vt100 # GENERIC_SERIAL
-..
-..
-
-securetty
-..
-..
-ttyS0
-ttyS1
-ttyS2
-ttyS3
-ttyAMA0
-ttyAMA1
-ttyAMA2
-ttyAMA3
-..
-..
-
-I selected sourcery toolchain. In attachement is my .config
-
-Regards, S.Altunbas
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/octet-stream
-Size: 24824 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130525/5e4c503b/attachment-0001.obj>
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+index e6d4e72..d4c8b43 100644
+--- a/package/wireshark/Config.in
++++ b/package/wireshark/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_WIRESHARK
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBGLIB2
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR # glib2
+ 	help
+ 	  Network traffic sniffer and protocol decoder. Currently only tshark,
+diff --git a/package/wireshark/wireshark-dont-include-prefix.patch b/package/wireshark/wireshark-dont-include-prefix.patch
+deleted file mode 100644
+index 567af9a..0000000
+--- a/package/wireshark/wireshark-dont-include-prefix.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-configure.in: don't add the build host's /usr/include and /usr/lib to the 
+-search path of include files and libraries. This is not what you want when 
+-cross compiling.
+-
+-Sent upstream as https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=7926.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-diff -Nuar wireshark-1.8.3.orig/configure.in wireshark-1.8.3/configure.in
+---- wireshark-1.8.3.orig/configure.in	2012-08-15 23:33:32.000000000 +0300
+-+++ wireshark-1.8.3/configure.in	2012-10-28 10:07:54.864388531 +0200
+-@@ -635,29 +635,6 @@
+- AC_SUBST(CORESERVICES_FRAMEWORKS)
+- AC_SUBST(LAUNCHSERVICES_FRAMEWORKS)
+- 
+--#
+--# If using $prefix we add "$prefix/include" to the include search path
+--# and "$prefix/lib" to the library search path.
+--#
+--if test "x$prefix" != "x" ; then
+--	AC_MSG_CHECKING(whether to use $prefix for headers and libraries)
+--	if test -d $prefix/include ; then
+--		AC_MSG_RESULT(yes)
+--		#
+--		# Arrange that we search for header files in "$prefix/include", as
+--		# various packages we use may have been installed under "$prefix/include".
+--		#
+--		CPPFLAGS="$CPPFLAGS -I$prefix/include"
+--
+--		#
+--		# Arrange that we search for libraries in "$prefix/lib".
+--		#
+--		AC_WIRESHARK_ADD_DASH_L(LDFLAGS, $prefix/lib)
+--	else
+--		AC_MSG_RESULT(no)
+--	fi
+--fi
+--
+- dnl Look in /usr/local for header files and libraries ?
+- dnl XXX FIXME don't include /usr/local if it is already in the system
+- dnl search path as this causes gcc 3.2 on Linux to complain about a change
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 5a4d8b5..34d2708 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-WIRESHARK_VERSION = 1.8.6
++WIRESHARK_VERSION = 1.8.7
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
