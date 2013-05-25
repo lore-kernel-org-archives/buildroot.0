@@ -1,22 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 25 May 2013 13:24:01 +0200
-Subject: [Buildroot] [PATCH 1/2] pptp-linux: needs MMU
-In-Reply-To: <1369438982-1398-1-git-send-email-gilles.talis@gmail.com> (Gilles
- Talis's message of "Fri, 24 May 2013 16:43:01 -0700")
-References: <1369438982-1398-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87bo7zgv5a.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 25 May 2013 13:23:20 +0200
+Subject: [Buildroot] [git commit] pptp-linux: add license information
+Message-ID: <20130525112531.F2FEC9A2CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9c1917ef5becad640c32fdbc0c795d30c9f13f6c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gilles> Fixes:
- Gilles> http://autobuild.buildroot.org/results/9b8/9b80537d0efb3fefab486abaecd128bd18e0efdb
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/pptp-linux/pptp-linux.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
+index ded2a19..ef25c9a 100644
+--- a/package/pptp-linux/pptp-linux.mk
++++ b/package/pptp-linux/pptp-linux.mk
+@@ -8,6 +8,8 @@ PPTP_LINUX_VERSION = 1.7.2
+ PPTP_LINUX_SITE = http://downloads.sourceforge.net/project/pptpclient/pptp/pptp-$(PPTP_LINUX_VERSION)
+ PPTP_LINUX_SOURCE = pptp-$(PPTP_LINUX_VERSION).tar.gz
+ PPTP_LINUX_MAKE = $(MAKE1)
++PPTP_LINUX_LICENSE = GPLv2+
++PPTP_LINUX_LICENSE_FILES = COPYING
+ 
+ define PPTP_LINUX_BUILD_CMDS
+ 	$(MAKE) -C $(@D) OPTIMIZE= DEBUG= \
