@@ -1,43 +1,66 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 May 2013 22:13:11 +0200
-Subject: [Buildroot] [git commit branch/next] libnss: bump to version 3.14.3
-Message-ID: <20130526205234.E42AF9A58B@busybox.osuosl.org>
+Date: Sun, 26 May 2013 22:42:37 +0200
+Subject: [Buildroot] [git commit branch/next] aespipe: new package
+Message-ID: <20130526205235.302DB9A58B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9d63d3dc3644ec65dbb0280af8d7a1854e5c4d33
+commit: http://git.buildroot.net/buildroot/commit/?id=a1b9256d376dd74ec7441d701510995cde3e0042
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libnss/libnss.mk |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
+ package/Config.in          |    1 +
+ package/aespipe/Config.in  |    9 +++++++++
+ package/aespipe/aespipe.mk |   12 ++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 96faf37..8bb46e2 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -3,14 +3,17 @@
- # libnss
- #
- #############################################################
--LIBNSS_VERSION = 3.12.9
-+
-+LIBNSS_VERSION = 3.14.3
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE_VERSION = $(subst .,_,$(LIBNSS_VERSION))
--LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(LIBNSS_SITE_VERSION)_RTM/src/
-+LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(LIBNSS_SITE_VERSION)_RTM/src
- LIBNSS_SUBDIR = mozilla/security
- LIBNSS_DISTDIR = mozilla/dist
- LIBNSS_INSTALL_STAGING = YES
- LIBNSS_DEPENDENCIES = libnspr sqlite zlib
-+LIBNSS_LICENSE = MPLv2.0
-+LIBNSS_LICENSE_FILES = mozilla/security/nss/COPYING
+diff --git a/package/Config.in b/package/Config.in
+index 6b6ce9d..de84d46 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -652,6 +652,7 @@ endmenu
+ endmenu
  
- LIBNSS_BUILD_VARS = MOZILLA_CLIENT=1 \
- 		NSPR_INCLUDE_DIR=$(STAGING_DIR)/usr/include/nspr \
+ menu "Miscellaneous"
++source "package/aespipe/Config.in"
+ source "package/collectd/Config.in"
+ source "package/empty/Config.in"
+ source "package/googlefontdirectory/Config.in"
+diff --git a/package/aespipe/Config.in b/package/aespipe/Config.in
+new file mode 100644
+index 0000000..ccc94c2
+--- /dev/null
++++ b/package/aespipe/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_AESPIPE
++	bool "aespipe"
++	help
++	  aespipe program is AES encrypting or decrypting pipe. It reads from
++	  standard input and writes to standard output. It can be used to
++	  create and restore encrypted tar or cpio archives. It can be used to
++	  encrypt and decrypt loop-AES compatible encrypted disk images.
++
++	  http://koti.tnnet.fi/jari.ruusu/linux/
+diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
+new file mode 100644
+index 0000000..c901708
+--- /dev/null
++++ b/package/aespipe/aespipe.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# aespipe
++#
++#############################################################
++
++AESPIPE_VERSION = 2.4c
++AESPIPE_SOURCE = aespipe-v$(AESPIPE_VERSION).tar.bz2
++AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe/
++AESPIPE_LICENSE = GPL
++
++$(eval $(autotools-package))
