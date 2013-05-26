@@ -1,23 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 26 May 2013 22:04:09 +0200
-Subject: [Buildroot] [PATCH v2] ed: Convert to generic package
-	infrastructure
-In-Reply-To: <1369126324-7581-1-git-send-email-markos.chandras@gmail.com>
- (Markos Chandras's message of "Tue, 21 May 2013 09:52:04 +0100")
-References: <1369126324-7581-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <874ndpfqyu.fsf@dell.be.48ers.dk>
+From: Victor Hiairrassary <victor.hiairrassary.ml@gmail.com>
+Date: Mon, 27 May 2013 00:08:41 +0200
+Subject: [Buildroot] f2fs support
+Message-ID: <51A287E9.2090308@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
+Hello all,
 
- Markos> From: Markos Chandras <markos.chandras@imgtec.com>
- Markos> The package uses custom configure and Makefile files.
+I am trying to add support for f2fs file system in buildroot.
+For now I have already added f2fs-tools for the host, i.e. mkfs.f2fs.
 
-Committed to next, thanks.
+But I cannot create a f2fs file system image since mkfs.f2fs takes
+a device as parameter (/dev/sda1 for example). This is different than
+jffs2's syntax : '$(MKFS_JFFS2) -d $(TARGET_DIR) -o $@' for example,
+which takes a directory as input.
 
--- 
-Bye, Peter Korsgaard
+Does anybody have an idea about this issue?
+
+Best regards,
+Victor Hiairrassary
