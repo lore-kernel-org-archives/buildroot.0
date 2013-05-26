@@ -1,31 +1,38 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 May 2013 14:13:59 +0000 (UTC)
-Subject: [Buildroot] [Bug 4988] flex and m4 problems
-In-Reply-To: <bug-4988-163@https.bugs.busybox.net/>
-References: <bug-4988-163@https.bugs.busybox.net/>
-Message-ID: <20130526141359.311B89A326@busybox.osuosl.org>
+Date: Sun, 26 May 2013 14:22:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 2929] genext2fs: couldn't allocate a block (no
+	free space)
+In-Reply-To: <bug-2929-163@https.bugs.busybox.net/>
+References: <bug-2929-163@https.bugs.busybox.net/>
+Message-ID: <20130526142221.488B89A586@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4988
+https://bugs.busybox.net/show_bug.cgi?id=2929
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+             Status|REOPENED                    |RESOLVED
+                 CC|                            |yann.morin.1998 at free.fr
+         Resolution|                            |INVALID
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-05-26 14:12:49 UTC ---
-Thanks, I've adapted your patches 1 and 2 to the latest Buildroot (after doing
-some minor improvements). However, your patch 3 was not necessary here. Maybe
-some other change in flex had fixed the problem.
+--- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> 2013-05-26 14:21:11 UTC ---
+Sean,
 
-I'm marking the bug as fixed, I will send the patch later today on the mailing
-list.
+Estimating the number of blocks is done with a call to: 'du -k' where '-k'
+means 'assume 1KiB blocks' (see: man du). So your issue is probably /slightly/
+different.
+
+If you manage to reproduce this issue, please reopen this bug and report back
+with a bit more information: buildroot's .config file, host file system...
+
+Regards,
+Yann E. MORIN.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
