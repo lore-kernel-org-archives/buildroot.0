@@ -1,34 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 May 2013 15:04:47 +0200
-Subject: [Buildroot] [PATCH v2] toolchain: blackfin: Remove Blackfin
- toolchain 2011R1 release.
-In-Reply-To: <1368595963-10671-1-git-send-email-sonic.adi@gmail.com>
-References: <1368595963-10671-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <20130526150447.73efde93@skate>
+Date: Sun, 26 May 2013 15:20:08 +0200
+Subject: [Buildroot] [PATCH] poco: Add upstream patch to add support for
+ aarch64.
+In-Reply-To: <CAFbHwiTLP2KRtYo=wvG2EJdR=Uf7r1BeZb+S8=BFbJ1_8PyqEw@mail.gmail.com>
+References: <CAFbHwiTLP2KRtYo=wvG2EJdR=Uf7r1BeZb+S8=BFbJ1_8PyqEw@mail.gmail.com>
+Message-ID: <20130526152008.79ce67ec@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sonic Zhang,
+Dear Will Newton,
 
-On Wed, 15 May 2013 13:32:43 +0800, Sonic Zhang wrote:
-> From: Sonic Zhang <sonic.zhang@analog.com>
-> 
-> ADI officially supports the buildroot and related GNU toolchain for
-> Blackfin since ADI's 2012R1 release only. In order to avoid confusion,
-> it is better to remove the 2011R1 GNU toolchain for Blackfin. In
-> addition, the 2011R1 GNU toolchain for Blackfin doesn't support the
-> BF60x processors.
-> 
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+On Wed, 22 May 2013 11:49:30 +0100, Will Newton wrote:
+> Signed-off-by: Will Newton <will.newton@linaro.org>
+> ---
+>  package/poco/poco-aarch64.patch | 39 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 package/poco/poco-aarch64.patch
 
-I've taken this patch in one of my branch, which I will submit to Peter
-soon.
+Thanks, I've applied and tested that one here, after making the
+necessary changes following 1c3afe4bc14a55aa491be270c24f31d1c5d4d8f1.
 
-Peter, no need to take this patch direclty, I'll send it to you with
-other changes.
+I will send the patch as part of a pull request to Peter later today.
 
 Thanks,
 
