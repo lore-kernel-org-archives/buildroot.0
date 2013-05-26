@@ -1,48 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 May 2013 21:59:28 +0200
-Subject: [Buildroot] [git commit branch/next] ed: Convert to generic package
-	infrastructure
-Message-ID: <20130526205234.825D99A58B@busybox.osuosl.org>
+Date: Sun, 26 May 2013 22:12:03 +0200
+Subject: [Buildroot] [git commit branch/next] libnspr: add license info
+Message-ID: <20130526205234.BB8E39A2C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2a37b625e2d89cf64674f320de39d743db080c03
+commit: http://git.buildroot.net/buildroot/commit/?id=14eb60e2912bc458c842d7d0110b05f0aacdc095
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The package uses custom configure and Makefile files.
-
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ed/ed.mk |   18 +++++++++++++++++-
- 1 files changed, 17 insertions(+), 1 deletions(-)
+ package/libnspr/libnspr.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-index 2bb8e0e..52ae1f0 100644
---- a/package/ed/ed.mk
-+++ b/package/ed/ed.mk
-@@ -11,4 +11,20 @@ ED_CONF_OPT = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
- ED_LICENSE = GPLv3+
- ED_LICENSE_FILES = COPYING
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index e934281..71b64b9 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -9,6 +9,8 @@ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_
+ LIBNSPR_SUBDIR = mozilla/nsprpub
+ LIBNSPR_INSTALL_STAGING = YES
+ LIBNSPR_CONFIG_SCRIPTS = nspr-config
++LIBNSPR_LICENSE = MPLv2.0
++LIBNSPR_LICENSE_FILES = mozilla/nsprpub/LICENSE
  
--$(eval $(autotools-package))
-+define ED_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		./configure \
-+		--prefix=/usr \
-+		$(TARGET_CONFIGURE_OPTS) \
-+	)
-+endef
-+
-+define ED_BUILD_CMDS
-+	$(MAKE)	-C $(@D)
-+endef
-+
-+define ED_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+endef
-+
-+$(eval $(generic-package))
+ # Set the host CFLAGS and LDFLAGS so NSPR does not guess wrongly
+ LIBNSPR_CONF_ENV = HOST_CFLAGS="-g -O2" \
