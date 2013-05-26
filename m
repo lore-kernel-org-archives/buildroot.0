@@ -1,40 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 May 2013 21:02:17 +0200
-Subject: [Buildroot] [git commit branch/next] udpcast: Add
-	udpcast-select-h.patch.
-Message-ID: <20130526194930.82FEE9A58B@busybox.osuosl.org>
+Date: Sun, 26 May 2013 21:06:13 +0200
+Subject: [Buildroot] [git commit branch/next] libsigsegv: Version bump to
+	2.10
+Message-ID: <20130526194930.CB8DE9A58A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c096b5985ab5f29a051da3645eda5aa43231bdc0
+commit: http://git.buildroot.net/buildroot/commit/?id=b4e7acbfdfae3c454ab8f87e630fe19d591f8a45
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch fixes the build on AArch64 (and potentially others).
-The patch has been submitted upstream.
-
-Signed-off-by: Will Newton <will.newton@linaro.org>
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/udpcast/udpcast-select-h.patch |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
+ package/libsigsegv/libsigsegv.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/udpcast/udpcast-select-h.patch b/package/udpcast/udpcast-select-h.patch
-new file mode 100644
-index 0000000..9a8cfc9
---- /dev/null
-+++ b/package/udpcast/udpcast-select-h.patch
-@@ -0,0 +1,11 @@
-+--- udpcast-20120424/console.h	2005-12-22 22:59:18.000000000 +0000
-++++ udpcast-20120424.mod/console.h	2013-05-22 22:22:19.835474140 +0100
-+@@ -6,6 +6,8 @@
-+ #include <winbase.h>
-+ #endif /* __MINGW32__ */
-+ 
-++#include <sys/select.h>
-++
-+ #define prepareConsole udpc_prepareConsole
-+ #define getConsoleFd udpc_getConsoleFd
-+ #define restoreConsole udpc_restoreConsole
+diff --git a/package/libsigsegv/libsigsegv.mk b/package/libsigsegv/libsigsegv.mk
+index b8f84da..a4be0b6 100644
+--- a/package/libsigsegv/libsigsegv.mk
++++ b/package/libsigsegv/libsigsegv.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBSIGSEGV_VERSION = 2.6
++LIBSIGSEGV_VERSION = 2.10
+ LIBSIGSEGV_SITE = $(BR2_GNU_MIRROR)/libsigsegv
+ LIBSIGSEGV_INSTALL_STAGING = YES
+ LIBSIGSEGV_LICENSE = GPLv2+
