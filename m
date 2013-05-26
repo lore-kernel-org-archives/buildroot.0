@@ -1,83 +1,134 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 May 2013 00:08:20 +0200
-Subject: [Buildroot] [PATCH 10/20] toolchain-external: remove support for
-	'Sourcery CodeBench ARM 2011.03'
+Date: Mon, 27 May 2013 00:08:30 +0200
+Subject: [Buildroot] [PATCH 20/20] network-manager: bump to 0.9.8.0
 In-Reply-To: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1369606110-8088-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1369606110-8088-21-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
+This upstream version (the latest available at the time of this
+writing) contains
+http://cgit.freedesktop.org/NetworkManager/NetworkManager/commit/?id=6b64e4db2f3c9cfc0e0e240cf0bc58f3b3e90c1f
+which fixes a build issue of network-manager against recent kernel
+headers.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+We also remove our patch against network-manager, because it has been
+merged upstream as commit cbf72aeb34a6f1fd1bcd7f78ae88985154dc85af.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in   |   25 -------------------------
- toolchain/toolchain-external/ext-tool.mk |    5 +----
- 2 files changed, 1 insertion(+), 29 deletions(-)
+ .../network-manager/network-manager-execinfo.patch |   31 ------------------
+ package/network-manager/network-manager.mk         |   33 ++++++++------------
+ 2 files changed, 13 insertions(+), 51 deletions(-)
+ delete mode 100644 package/network-manager/network-manager-execinfo.patch
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 9d29509..47b2bf5 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -276,30 +276,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
- 	    - MIPS32 little endian soft float uclibc
- 	      Not usable in Buildroot yet.
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
--	bool "Sourcery CodeBench ARM 2011.03"
--	depends on BR2_arm
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	help
--	  Sourcery CodeBench toolchain for the ARM architecture, from
--	  Mentor Graphics. It uses gcc 4.5.2, binutils 2.20.51, glibc
--	  2.13 and gdb 7.2.50, kernel headers 2.6.38. It has support
--	  for the following variants:
--	    - ARMv5TE, little endian, soft-float, glibc
--	      Select ARM926T, ARM10T, XScale or another ARMv5 core
--	      Select BR2_SOFT_FLOAT
--	    - ARMv4T, little endian, soft-float, glibc
--	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
--	      Select BR2_SOFT_FLOAT
--	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
--	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
--	      Select BR2_SOFT_FLOAT
--	      Set BR2_TARGET_OPTIMIZATION to -mthumb
+diff --git a/package/network-manager/network-manager-execinfo.patch b/package/network-manager/network-manager-execinfo.patch
+deleted file mode 100644
+index 8dc83f0..0000000
+--- a/package/network-manager/network-manager-execinfo.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From ff9471b7d83545614100a270e2d85b7b272abe97 Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <jacmet@sunsite.dk>
+-Date: Mon, 2 Jan 2012 14:45:16 +0100
+-Subject: [PATCH] [PATCH] only include execinfo.h if crashtrace support is
+- enabled
 -
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
- 	bool "Sourcery CodeBench MIPS 2011.09"
- 	depends on BR2_mips || BR2_mipsel
-@@ -768,7 +744,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
--	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 182d689..93b3b15 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -191,10 +191,7 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
- TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(TOOLCHAIN_EXTERNAL_DIR)/.extracted
+-On systems without backtrace suport (E.G. uClibc depending on config),
+-execinfo.h might not be available, breaking the build.
+-
+-Fix it by only including it if enabled.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- src/logging/nm-logging.c |    1 -
+- 1 files changed, 0 insertions(+), 1 deletions(-)
+-
+-diff --git a/src/logging/nm-logging.c b/src/logging/nm-logging.c
+-index ca6a709..26c8670 100644
+---- a/src/logging/nm-logging.c
+-+++ b/src/logging/nm-logging.c
+-@@ -23,7 +23,6 @@
+- 
+- #include <dlfcn.h>
+- #include <syslog.h>
+--#include <execinfo.h>
+- #include <stdio.h>
+- #include <stdlib.h>
+- #include <unistd.h>
+--- 
+-1.7.7.1
+-
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 261f2d3..9be624c 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -5,49 +5,42 @@
+ #############################################################
+ 
+ NETWORK_MANAGER_VERSION_MAJOR = 0.9
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2.0
+-NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.bz2
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).8.0
++NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
+ 	libgcrypt wireless_tools util-linux host-intltool
+ 
+ NETWORK_MANAGER_CONF_ENV = \
+-	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
++	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
++	ac_cv_file__etc_fedora_release=no \
++	ac_cv_file__etc_mandriva_release=no \
++	ac_cv_file__etc_debian_version=no \
++	ac_cv_file__etc_redhat_release=no \
++	ac_cv_file__etc_SuSE_release=no
++
+ 
+ NETWORK_MANAGER_CONF_OPT = \
+ 		--mandir=$(STAGING_DIR)/usr/man/ \
+-		--with-dbus-user=dbus \
+ 		--disable-tests \
+ 		--disable-more-warnings \
+ 		--without-docs \
+ 		--disable-gtk-doc \
+-		--disable-asserts \
+-		--enable-abstract-sockets \
+-		--disable-selinux \
+-		--disable-xml-docs \
+-		--disable-doxygen-docs \
+-		--disable-static \
+-		--enable-dnotify \
+ 		--localstatedir=/var \
+ 		--with-crypto=gnutls \
+-		--with-distro=arch \
+ 		--disable-ppp \
+-		--with-iptables=/usr/sbin/iptables
++		--with-iptables=/usr/sbin/iptables \
++		--disable-ifupdown \
++		--disable-ifnet
+ 
+ # uClibc by default doesn't have backtrace support, so don't use it
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
+ NETWORK_MANAGER_CONF_OPT += --disable-crashtrace
  endif
  
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103),y)
--TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
--TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.03-41-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
+-# The target was built for the archlinux distribution, so we need
+-# to move around things after installation
+-define NETWORK_MANAGER_INSTALL_INITSCRIPT
++define NETWORK_MANAGER_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/network-manager/S45network-manager $(TARGET_DIR)/etc/init.d/S45network-manager
+-	rm -f $(TARGET_DIR)/etc/rc.d/networkmanager
+-	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/etc/rc.d
+ endef
+ 
+-NETWORK_MANAGER_POST_INSTALL_TARGET_HOOKS += NETWORK_MANAGER_INSTALL_INITSCRIPT
+-
+ $(eval $(autotools-package))
 -- 
 1.7.9.5
