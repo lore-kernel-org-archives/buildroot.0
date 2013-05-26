@@ -1,135 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 May 2013 00:08:10 +0200
-Subject: [Buildroot] [PATCH 00/20] Patches from the Patchwork Day
-Message-ID: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 May 2013 00:08:11 +0200
+Subject: [Buildroot] [PATCH 01/20] numactl: new package
+In-Reply-To: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1369606110-8088-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Will Newton <will.newton@imgtec.com>
 
-Here is a set of patches that I collected/reworked during the
-Patchwork Day. In summary:
+[Thomas: updated to 2.0.8, restricted to supported architectures,
+added licensing informations, updated to latest Buildroot package
+infrastructure]
 
- * Carlo Caione patches adding some Allwinner sunxi related packages
-   and a defconfig for the cubieboard (based on the sunxi-specific
-   kernel and not the mainline one).
-
- * Updates of external toolchains by Fabio Porcedda (ARM) and Sonic
-   Zhang (Blackfin).
-
- * Rework + bump of Freescale i.MX stuff, addition of
-   OpenGL/OpenVG/EGL implementation by Henk Fijnvandraat.
-
- * Some random stuff from me.
-
-Best regards,
-
-Thomas
-
-Carlo Caione (3):
-  sunxi-tools: new host/target package
-  sunxi-boards: new package
-  cubieboard: add support
-
-Fabio Porcedda (2):
-  toolchain-external: add support for 'Sourcery CodeBench ARM 2013.05'
-  toolchain-external: remove support for 'Sourcery CodeBench ARM
-    2011.03'
-
-Henk Fijnvandraat (5):
-  freescale-imx: new package directory
-  imx-lib: move to the freescale-imx directory
-  firmware-imx: move to the freescale-imx directory
-  freescale-imx: bump to 1.1.0
-  gpu-viv-bin-mx6q: new package
-
-Sonic Zhang (1):
-  toolchain: blackfin: Remove Blackfin toolchain 2011R1 release.
-
-Thomas Petazzoni (7):
-  dropbear: factorize the 'depends on BR2_PACKAGE_DROPBEAR'
-  elf2flt: fix build when zlib is not installed on the host
-  gcc: fix gcc 4.8 build when thread support is disabled
-  flex: needs M4 at runtime
-  Remove useless CVS related files
-  network-manager: use a <pkg>_VERSION_MAJOR variable
-  network-manager: bump to 0.9.8.0
-
-Will Newton (2):
-  numactl: new package
-  poco: Add upstream patch to add support for aarch64.
-
- board/cubietech/cubieboard/boot.cmd                |    4 +
- board/cubietech/cubieboard/mkcubiecard.sh          |  119 ++++++++++++++++++++
- board/cubietech/cubieboard/post-build.sh           |   15 +++
- board/cubietech/cubieboard/readme.txt              |   59 ++++++++++
- configs/cubieboard_defconfig                       |   39 +++++++
- package/Config.in                                  |    6 +-
- package/Config.in.host                             |    1 +
- package/dropbear/Config.in                         |    8 +-
- package/flex/Config.in                             |    2 +
- package/flex/flex.mk                               |    1 +
- package/freescale-imx/Config.in                    |    8 ++
- package/{ => freescale-imx}/firmware-imx/Config.in |    0
- .../firmware-imx/firmware-imx.mk                   |    7 +-
- package/freescale-imx/freescale-imx.mk             |   13 +++
- package/freescale-imx/gpu-viv-bin-mx6q/Config.in   |   30 +++++
- ...gpu-viv-bin-mx6q-0001-correct-HAL-include.patch |   16 +++
- .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |   79 +++++++++++++
- package/{ => freescale-imx}/imx-lib/Config.in      |    0
- package/{ => freescale-imx}/imx-lib/imx-lib.mk     |    5 +-
- .../network-manager/network-manager-execinfo.patch |   31 -----
- package/network-manager/network-manager.mk         |   37 +++---
- package/numactl/Config.in                          |   12 ++
- package/numactl/numactl.mk                         |   21 ++++
- package/poco/Config.in                             |    4 +-
- package/poco/poco-aarch64.patch                    |   39 +++++++
- package/sunxi-boards/Config.in                     |   19 ++++
- package/sunxi-boards/sunxi-boards.mk               |   17 +++
- package/sunxi-tools/Config.in                      |   10 ++
- package/sunxi-tools/Config.in.host                 |   12 ++
- package/sunxi-tools/sunxi-tools.mk                 |   37 ++++++
- support/gnuconfig/.cvsignore                       |    5 -
- toolchain/elf2flt/elf2flt.mk                       |    4 +-
- toolchain/elf2flt/elf2flt/.cvsignore               |    3 -
- toolchain/elf2flt/elf2flt/CVS/Entries              |   17 ---
- toolchain/elf2flt/elf2flt/CVS/Repository           |    1 -
- toolchain/elf2flt/elf2flt/CVS/Root                 |    1 -
- toolchain/gcc/gcc-uclibc-4.x.mk                    |    2 +-
- toolchain/toolchain-external/Config.in             |   69 ++++--------
- toolchain/toolchain-external/ext-tool.mk           |   16 +--
- 39 files changed, 617 insertions(+), 152 deletions(-)
- create mode 100644 board/cubietech/cubieboard/boot.cmd
- create mode 100755 board/cubietech/cubieboard/mkcubiecard.sh
- create mode 100755 board/cubietech/cubieboard/post-build.sh
- create mode 100644 board/cubietech/cubieboard/readme.txt
- create mode 100644 configs/cubieboard_defconfig
- create mode 100644 package/freescale-imx/Config.in
- rename package/{ => freescale-imx}/firmware-imx/Config.in (100%)
- rename package/{ => freescale-imx}/firmware-imx/firmware-imx.mk (85%)
- create mode 100644 package/freescale-imx/freescale-imx.mk
- create mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/Config.in
- create mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q-0001-correct-HAL-include.patch
- create mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
- rename package/{ => freescale-imx}/imx-lib/Config.in (100%)
- rename package/{ => freescale-imx}/imx-lib/imx-lib.mk (86%)
- delete mode 100644 package/network-manager/network-manager-execinfo.patch
+Signed-off-by: Will Newton <will.newton@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in          |    1 +
+ package/numactl/Config.in  |   12 ++++++++++++
+ package/numactl/numactl.mk |   21 +++++++++++++++++++++
+ 3 files changed, 34 insertions(+)
  create mode 100644 package/numactl/Config.in
  create mode 100644 package/numactl/numactl.mk
- create mode 100644 package/poco/poco-aarch64.patch
- create mode 100644 package/sunxi-boards/Config.in
- create mode 100644 package/sunxi-boards/sunxi-boards.mk
- create mode 100644 package/sunxi-tools/Config.in
- create mode 100644 package/sunxi-tools/Config.in.host
- create mode 100644 package/sunxi-tools/sunxi-tools.mk
- delete mode 100644 support/gnuconfig/.cvsignore
- delete mode 100644 toolchain/elf2flt/elf2flt/.cvsignore
- delete mode 100644 toolchain/elf2flt/elf2flt/CVS/Entries
- delete mode 100644 toolchain/elf2flt/elf2flt/CVS/Repository
- delete mode 100644 toolchain/elf2flt/elf2flt/CVS/Root
 
+diff --git a/package/Config.in b/package/Config.in
+index d980871..6094c1b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -852,6 +852,7 @@ source "package/module-init-tools/Config.in"
+ endif
+ source "package/monit/Config.in"
+ source "package/ncdu/Config.in"
++source "package/numactl/Config.in"
+ source "package/polkit/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/procps/Config.in"
+diff --git a/package/numactl/Config.in b/package/numactl/Config.in
+new file mode 100644
+index 0000000..d39a733
+--- /dev/null
++++ b/package/numactl/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_NUMACTL
++	bool "numactl"
++	# numactl uses some system calls that are not available on all
++	# architectures.
++	depends on BR2_i386 || BR2_mips || BR2_mipsel || \
++		   BR2_mips64 || BR2_mips64el || BR2_powerpc || BR2_x86_64
++	help
++	  numactl allows you to run your application on specific cpus
++	  and memory nodes. It does this by supplying a NUMA memory
++	  policy to the operating system before running your program.
++
++	  http://oss.sgi.com/projects/libnuma/
+diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
+new file mode 100644
+index 0000000..440847c
+--- /dev/null
++++ b/package/numactl/numactl.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# numactl
++#
++#############################################################
++
++NUMACTL_VERSION = 2.0.8
++NUMACTL_SOURCE = numactl-$(NUMACTL_VERSION).tar.gz
++NUMACTL_SITE = ftp://oss.sgi.com/www/projects/libnuma/download/
++NUMACTL_LICENSE = LGPLv2.1 (libnuma), GPLv2 (programs)
++NUMCTL_LICENSE_FILES = README
++
++define NUMACTL_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define NUMACTL_INSTALL_TARGET_CMDS
++	$(MAKE) prefix=$(TARGET_DIR) libdir=$(TARGET_DIR)/lib -C $(@D) install
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.9.5
