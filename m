@@ -1,74 +1,52 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Sun, 26 May 2013 15:14:29 -0500
-Subject: [Buildroot] [PATCH 1/1] skeleton: add default login port to
-	/etc/securetty
-In-Reply-To: <1342149545-10417-1-git-send-email-roylee17@gmail.com>
-References: <1342149545-10417-1-git-send-email-roylee17@gmail.com>
-Message-ID: <1369599269-18876-1-git-send-email-spenser@gillilanding.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 May 2013 22:24:33 +0200
+Subject: [Buildroot] f2fs support
+In-Reply-To: <51A287E9.2090308@gmail.com>
+References: <51A287E9.2090308@gmail.com>
+Message-ID: <20130526202433.GE3380@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Tzu-Jung Lee <tjlee@ambarella.com>
+Victor, All,
 
-We ran into a "Login incorrect" problem when running the same rootfs
-image across platforms with different loging ports ttyS0/1/2/3.
+On 2013-05-27 00:08 +0200, Victor Hiairrassary spake thusly:
+> I am trying to add support for f2fs file system in buildroot.
+> For now I have already added f2fs-tools for the host, i.e. mkfs.f2fs.
+> 
+> But I cannot create a f2fs file system image since mkfs.f2fs takes
+> a device as parameter (/dev/sda1 for example). This is different than
+> jffs2's syntax : '$(MKFS_JFFS2) -d $(TARGET_DIR) -o $@' for example,
+> which takes a directory as input.
+> 
+> Does anybody have an idea about this issue?
 
-Simply assignning "console" to BR2_TARGET_GENERIC_GETTY_PORT, which in
-turn modifies the /etc/inittab, is not enough because the "console" device
-was missing in the /etc/securetty.
+Yes, I encountered the same issue when I tried. Since I did not really
+need it, I skipped it.
 
-While current securetty has enumerated a lot of ttys, this patch should save
-some efforts to enumerate more.
+AFAIK, there is currently no way to generate f2fs images like we do for
+the other filesystems, like ext2, squashfs or jffs2.
 
-Change-Id: Ifb1239c80eb86528345b24eb8d04b52b67aa1209
-Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- support/scripts/graph-depends |    1 +
- system/system.mk              |    8 ++++++++
- 2 files changed, 9 insertions(+)
+The only solution would be to use a post-image script that would
+basically do something like:
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 50b8670..ac24086 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -161,6 +161,7 @@ def remove_redundant_deps(deps):
-     return newdeps
- 
- TARGET_EXCEPTIONS = [
-+    "target-generic-securetty",
-     "target-generic-issue",
-     "target-generic-getty-busybox",
-     "target-generic-do-remount-rw",
-diff --git a/system/system.mk b/system/system.mk
-index 44a33ae..04ad12d 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -9,6 +9,10 @@ TARGET_GENERIC_GETTY:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
- TARGET_GENERIC_GETTY_BAUDRATE:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
- TARGET_GENERIC_GETTY_TERM:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
- 
-+target-generic-securetty:
-+	grep -q ^$(TARGET_GENERIC_GETTY)$ $(TARGET_DIR)/etc/securetty || \
-+		echo $(TARGET_GENERIC_GETTY) >> $(TARGET_DIR)/etc/securetty
-+
- target-generic-hostname:
- 	mkdir -p $(TARGET_DIR)/etc
- 	echo "$(TARGET_GENERIC_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
-@@ -40,6 +44,10 @@ target-generic-do-remount-rw:
- target-generic-dont-remount-rw:
- 	$(SED) '/^[^#].*# REMOUNT_ROOTFS_RW$$/s~^~#~' $(TARGET_DIR)/etc/inittab
- 
-+ifneq ($(TARGET_GENERIC_GETTY), )
-+TARGETS += target-generic-securetty
-+endif
-+
- ifneq ($(TARGET_GENERIC_HOSTNAME),)
- TARGETS += target-generic-hostname
- endif
+  - dd if=/dev/zero of=image.f2fs bs=1M count=0 seek=${size_in_MiB}
+  - mkfs.f2fs image.f2fs
+  - sudo mount -o loop image.f2fs /somewhere
+  - cp foo bar /somewhere
+  - sudo umount /somewhere
+
+Otherwise, no idea, except do your own genf2fs util.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.9.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
