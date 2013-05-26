@@ -1,72 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 May 2013 23:00:30 +0200
-Subject: [Buildroot] [git commit branch/next] skeleton: add default login
-	port to /etc/securetty
-Message-ID: <20130526210220.636259A58D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 26 May 2013 23:00:25 +0200
+Subject: [Buildroot] [PATCH 1/1] skeleton: add default login port to
+	/etc/securetty
+In-Reply-To: <1369600825-19785-1-git-send-email-spenser@gillilanding.com>
+ (Spenser Gilliland's message of "Sun, 26 May 2013 15:40:25 -0500")
+References: <1369599269-18876-1-git-send-email-spenser@gillilanding.com>
+ <1369600825-19785-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <87ip25e9sm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d67b3a54af65ab4818a891458d2d59f91f239f99
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
 
-We ran into a "Login incorrect" problem when running the same rootfs
-image across platforms with different loging ports ttyS0/1/2/3.
+ Spenser> From: Tzu-Jung Lee <tjlee@ambarella.com>
 
-Simply assignning "console" to BR2_TARGET_GENERIC_GETTY_PORT, which in
-turn modifies the /etc/inittab, is not enough because the "console" device
-was missing in the /etc/securetty.
+ Spenser> We ran into a "Login incorrect" problem when running the same
+ Spenser> rootfs image across platforms with different loging ports
+ Spenser> ttyS0/1/2/3.
 
-While current securetty has enumerated a lot of ttys, this patch should save
-some efforts to enumerate more.
+ Spenser> Simply assignning "console" to BR2_TARGET_GENERIC_GETTY_PORT,
+ Spenser> which in turn modifies the /etc/inittab, is not enough because
+ Spenser> the "console" device was missing in the /etc/securetty.
 
-[Peter: guard with single quotes]
-Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- support/scripts/graph-depends |    1 +
- system/system.mk              |    8 ++++++++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+ Spenser> While current securetty has enumerated a lot of ttys, this
+ Spenser> patch should save some efforts to enumerate more.
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 180c81d..3bab725 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -161,6 +161,7 @@ def remove_redundant_deps(deps):
-     return newdeps
+ Spenser> Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+ Spenser> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+ Spenser> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Spenser> ---
  
- TARGET_EXCEPTIONS = [
-+    "target-generic-securetty",
-     "target-generic-issue",
-     "target-generic-getty-busybox",
-     "target-generic-do-remount-rw",
-diff --git a/system/system.mk b/system/system.mk
-index 44a33ae..50c86ad 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -9,6 +9,10 @@ TARGET_GENERIC_GETTY:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
- TARGET_GENERIC_GETTY_BAUDRATE:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
- TARGET_GENERIC_GETTY_TERM:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
- 
-+target-generic-securetty:
-+	grep -q '^$(TARGET_GENERIC_GETTY)$$' $(TARGET_DIR)/etc/securetty || \
-+		echo '$(TARGET_GENERIC_GETTY)' >> $(TARGET_DIR)/etc/securetty
-+
- target-generic-hostname:
- 	mkdir -p $(TARGET_DIR)/etc
- 	echo "$(TARGET_GENERIC_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
-@@ -40,6 +44,10 @@ target-generic-do-remount-rw:
- target-generic-dont-remount-rw:
- 	$(SED) '/^[^#].*# REMOUNT_ROOTFS_RW$$/s~^~#~' $(TARGET_DIR)/etc/inittab
- 
-+ifneq ($(TARGET_GENERIC_GETTY),)
-+TARGETS += target-generic-securetty
-+endif
-+
- ifneq ($(TARGET_GENERIC_HOSTNAME),)
- TARGETS += target-generic-hostname
- endif
+ Spenser> +target-generic-securetty:
+ Spenser> +	grep -q ^$(TARGET_GENERIC_GETTY)$$ $(TARGET_DIR)/etc/securetty || \
+ Spenser> +		echo $(TARGET_GENERIC_GETTY) >> $(TARGET_DIR)/etc/securetty
+
+I prefer to stick the TARGET_GENERIC_GETTY value inside single quotes to
+ensure the shell won't get confused.
+
+Committed to next with that corrected, thanks.
+
+-- 
+Bye, Peter Korsgaard
