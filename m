@@ -1,34 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 May 2013 09:12:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 2137] Support rc versions of kernel headers
-In-Reply-To: <bug-2137-163@https.bugs.busybox.net/>
-References: <bug-2137-163@https.bugs.busybox.net/>
-Message-ID: <20130526091245.392239A331@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 26 May 2013 11:14:58 +0200
+Subject: [Buildroot] [PATCH] Revert "dependencies: check that SSL
+	certificates are installed"
+In-Reply-To: <1369031247-2075-1-git-send-email-baruch@tkos.co.il> (Baruch
+ Siach's message of "Mon, 20 May 2013 09:27:27 +0300")
+References: <1369031247-2075-1-git-send-email-baruch@tkos.co.il>
+Message-ID: <87txlqf6gd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2137
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+ Baruch> This reverts commit d66cd067f3dc3d5e2479e1e8c05f24fd82329f7a.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WONTFIX
+ Baruch> SSL certificates are no always installed in /etc/ssl/certs. For
+ Baruch> example, on CentOS 5.6 the default OpenSSL certificates
+ Baruch> directory is /etc/pki/tls/certs, and wget can download using
+ Baruch> https without any problem.
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-05-26 09:11:35 UTC ---
-Will, are you still interested by this? You never attached any patch to this
-bug. Since the bug is three years old and I know you've been active in
-Buildroot since that time, I suppose you're no longer that much interested in
-this feature, so I'm marking this as "won't fix". However, if you're interested
-in reviving this, do not hesitate to send a patch (I believe if we need such a
-feature, we should simply allow to specify a custom tarball location of kernel
-sources for the kernel headers).
+ Baruch> Moreover, the existence of /etc/ssl/certs does not guarantee
+ Baruch> the presence of a CA certificates bundle even on Debian. On my
+ Baruch> current Debian testing installation the openssl package itself
+ Baruch> creates an empty /etc/ssl/certs directory.
+
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
