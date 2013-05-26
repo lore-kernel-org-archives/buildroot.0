@@ -1,31 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 May 2013 15:20:08 +0200
-Subject: [Buildroot] [PATCH] poco: Add upstream patch to add support for
- aarch64.
-In-Reply-To: <CAFbHwiTLP2KRtYo=wvG2EJdR=Uf7r1BeZb+S8=BFbJ1_8PyqEw@mail.gmail.com>
-References: <CAFbHwiTLP2KRtYo=wvG2EJdR=Uf7r1BeZb+S8=BFbJ1_8PyqEw@mail.gmail.com>
-Message-ID: <20130526152008.79ce67ec@skate>
+Date: Sun, 26 May 2013 15:29:10 +0200
+Subject: [Buildroot] [PATCH] external-toolchain: Allow MIPS64 for
+ Codesourcery MIPS toolchains
+In-Reply-To: <1368627740-4094-1-git-send-email-markos.chandras@gmail.com>
+References: <1368627740-4094-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <20130526152910.2a32ecbb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Newton,
+Dear Markos Chandras,
 
-On Wed, 22 May 2013 11:49:30 +0100, Will Newton wrote:
-> Signed-off-by: Will Newton <will.newton@linaro.org>
+On Wed, 15 May 2013 15:22:20 +0100, Markos Chandras wrote:
+> From: Markos Chandras <markos.chandras@imgtec.com>
+> 
+> The n64 ABI which is supported by the Codesourcery MIPS toolchains,
+> is only available with MIPS64 so allow these cores to be selected
+> and used with these toolchains.
+> 
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 > ---
->  package/poco/poco-aarch64.patch | 39 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/poco/poco-aarch64.patch
+>  toolchain/toolchain-external/Config.in |   20 ++++++++++----------
+>  1 files changed, 10 insertions(+), 10 deletions(-)
 
-Thanks, I've applied and tested that one here, after making the
-necessary changes following 1c3afe4bc14a55aa491be270c24f31d1c5d4d8f1.
+I've just tested this one, and with the following defconfig:
 
-I will send the patch as part of a pull request to Peter later today.
+BR2_mips64el=y
+BR2_MIPS_NABI64=y
+BR2_TOOLCHAIN_EXTERNAL=y
 
-Thanks,
+the Busybox compilation fails with:
+
+In file included from libbb/pw_encrypt.c:89:0:
+libbb/pw_encrypt_des.c: In function 'pw_encrypt':
+libbb/pw_encrypt_des.c:289:27: internal compiler error: in gen_rtx_SUBREG, at emit-rtl.c:769
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <https://support.codesourcery.com/GNUToolchain/> for instructions.
+make[2]: *** [libbb/pw_encrypt.o] Erreur 1
+
+It does not appear with the same toolchain in MIPS32 mode. I agree it's
+a toolchain bug, but I'm just wondering in which conditions you tested
+your patch and/or if something can be done to avoid the toolchain
+breakage.
+
+Best regards,
 
 Thomas
 -- 
