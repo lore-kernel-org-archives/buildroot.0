@@ -1,29 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 May 2013 20:11:31 +0200
-Subject: [Buildroot] iMX6Q package proposals for Qt5
-In-Reply-To: <25308.194.123.5.106.1366629274.squirrel@webmail.internl.net>
-References: <51034.217.149.209.147.1366471569.squirrel@webmail.internl.net>
- <5174D566.7010403@mind.be>
- <25308.194.123.5.106.1366629274.squirrel@webmail.internl.net>
-Message-ID: <20130526201131.4f4243c5@skate>
+Date: Sun, 26 May 2013 20:34:17 +0200
+Subject: [Buildroot] [PATCH 1/3] sunxi-tools: new host/target package
+In-Reply-To: <1368424348-9853-1-git-send-email-carlo.caione@gmail.com>
+References: <1368424348-9853-1-git-send-email-carlo.caione@gmail.com>
+Message-ID: <20130526203417.395f1fe1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear H.Fijnvandraat at inter.nl.net,
+Dear Carlo Caione,
 
-On Mon, 22 Apr 2013 13:14:34 +0200 (CEST), H.Fijnvandraat at inter.nl.net
-wrote:
+On Mon, 13 May 2013 07:52:26 +0200, Carlo Caione wrote:
+> Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
 
-> With this email I inline the changes I made in package/qt5/qt5base
-> directory files.
+I've taken your 3 patches:
 
-Could you please instead send patches against Buildroot? Copy/pasting
-your modified files is not very helpful unfortunately :/
+ [PATCH 1/3] sunxi-tools: new host/target package
+ [PATCH 2/3] sunxi-boards: new package
+ [PATCH 3/3] cubieboard: add support
 
-Thanks!
+and applied them to my tree. I will post a pull request to Peter later
+today with those patches.
+
+Best regards,
 
 Thomas
 -- 
