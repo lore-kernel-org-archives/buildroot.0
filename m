@@ -1,49 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 May 2013 11:14:00 +0200
-Subject: [Buildroot] [git commit] Revert "dependencies: check that SSL
-	certificates are installed"
-Message-ID: <20130526091653.35BD79A56B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 May 2013 11:26:36 +0200
+Subject: [Buildroot] [PATCH v7 01/10] libglib2: Bump libglib2 to 2.36.1
+In-Reply-To: <1369177864-6236-2-git-send-email-spenser@gillilanding.com>
+References: <1369177864-6236-1-git-send-email-spenser@gillilanding.com>
+ <1369177864-6236-2-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130526112636.62707643@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1e7f40ebb5cfc58010faf5e8d751de9207dc6a5d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Spenser Gilliland,
 
-This reverts commit d66cd067f3dc3d5e2479e1e8c05f24fd82329f7a.
+On Tue, 21 May 2013 18:10:55 -0500, Spenser Gilliland wrote:
+> This patch bumps libglib2 to version 2.36.1. In addition this bumps glibmm and glib-networking to 2.36.1.
 
-SSL certificates are no always installed in /etc/ssl/certs. For example, on
-CentOS 5.6 the default OpenSSL certificates directory is /etc/pki/tls/certs,
-and wget can download using https without any problem.
+Due to cf81029c01650bc00b713e06dc7581f3f43767a0 libglib2: fix build
+when toolchain has no thread support, this patch no longer applies
+properly to the current master.
 
-Moreover, the existence of /etc/ssl/certs does not guarantee the presence of a
-CA certificates bundle even on Debian. On my current Debian testing
-installation the openssl package itself creates an empty /etc/ssl/certs
-directory.
+Also, this commit has added a new patch that ensures libglib2 builds
+properly in a !thread environment, but this patch no longer applies to
+the libglib2 sources.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- support/dependencies/dependencies.sh |    9 ---------
- 1 files changed, 0 insertions(+), 9 deletions(-)
+Thanks!
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index ce4d9e1..0b44c5a 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -200,12 +200,3 @@ if ! perl  -e "require Data::Dumper" > /dev/null 2>&1 ; then
-     /bin/echo -e "On Debian/Ubuntu distributions, install the 'perl' package."
-     exit 1
- fi
--
--# Check that we have the SSL certificates to make https:// downloads
--# work.
--if ! test -d /etc/ssl/certs; then
--    /bin/echo -e "Your system lacks Common CA certificates for SSL."
--    /bin/echo -e "This prevents https:// downloads from succeeding."
--    /bin/echo -e "On Debian/Ubuntu distributions, install 'ca-certificates' package."
--    exit 1
--fi
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
