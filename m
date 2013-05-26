@@ -1,46 +1,29 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 26 May 2013 17:12:16 +0200
-Subject: [Buildroot] [PATCH] Depend autotools targets on host-ccache
- when BR2_CCACHE is enabled.
-In-Reply-To: <201209061737.32826.rasasi78@gmail.com>
-References: <201209061737.32826.rasasi78@gmail.com>
-Message-ID: <CAHXCMM+ho8PGrmePj9jU6vMurz1HeQXv1N99ZbLPusFJQxv4sw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 26 May 2013 15:17:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 5006] make performs library lookup in the build
+ and host library directores and not in the staging area
+In-Reply-To: <bug-5006-163@https.bugs.busybox.net/>
+References: <bug-5006-163@https.bugs.busybox.net/>
+Message-ID: <20130526151714.275EE9A579@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Raul,
+https://bugs.busybox.net/show_bug.cgi?id=5006
 
-2012/9/6 Ra?l S?nchez Siles <rasasi78@gmail.com>:
-> In this case, autotools targets rely on $(TARGET_CONFIGURE_OPTS) which includes
-> ccached compiler.
->
-> Signed-off-by: Ra?l S?nchez Siles <rasasi78@gmail.com>
-> ---
->  package/pkg-autotools.mk |    4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-> index 785daab..e858ffc 100644
-> --- a/package/pkg-autotools.mk
-> +++ b/package/pkg-autotools.mk
-> @@ -200,6 +200,10 @@ $(2)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
->  $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
->  endif
->
-> +ifeq ($(BR2_CCACHE),y)
-> +$(2)_DEPENDENCIES += host-ccache
-> +endif
-> +
+Bug 5006 depends on bug 4922, which changed state.
 
-This should not be necessary since host-ccache is added to the
-BASE_TARGETS list in the Makefile at the root of buildroot.
+Bug 4922 Summary: Please consider introducing host-make for building software packages within the buildroot
+https://bugs.busybox.net/show_bug.cgi?id=4922
 
-Anyway, what was the issue and the 'make ...' call sequence that lead to it?
-
-Regards,
+           What    |Old Value                   |New Value
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
 
 -- 
-Samuel
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
