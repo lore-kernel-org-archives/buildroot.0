@@ -1,110 +1,228 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Sun, 26 May 2013 12:12:20 -0500
-Subject: [Buildroot] [PATCH v8 07/10] libvpx: new package libvpx
+Date: Sun, 26 May 2013 12:12:23 -0500
+Subject: [Buildroot] [PATCH v8 10/10] gst-omx: add gst-omx package
 In-Reply-To: <1369588343-13950-1-git-send-email-spenser@gillilanding.com>
 References: <1369588343-13950-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1369588343-13950-8-git-send-email-spenser@gillilanding.com>
+Message-ID: <1369588343-13950-11-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-adds webm multimedia support and the VP8 encoder/decoder library.
-
-http://www.webmproject.org/
+gst-omx enables OpenMAX based accelerated video decode.
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/multimedia/Config.in        |    1 +
- package/multimedia/libvpx/Config.in |    6 ++++
- package/multimedia/libvpx/libvpx.mk |   53 +++++++++++++++++++++++++++++++++++
- 3 files changed, 60 insertions(+)
- create mode 100644 package/multimedia/libvpx/Config.in
- create mode 100644 package/multimedia/libvpx/libvpx.mk
+ package/multimedia/Config.in                       |    1 +
+ package/multimedia/gst-omx/Config.in               |   11 ++
+ .../multimedia/gst-omx/gst-omx-config-files.patch  |  123 ++++++++++++++++++++
+ package/multimedia/gst-omx/gst-omx.mk              |   37 ++++++
+ 4 files changed, 172 insertions(+)
+ create mode 100644 package/multimedia/gst-omx/Config.in
+ create mode 100644 package/multimedia/gst-omx/gst-omx-config-files.patch
+ create mode 100644 package/multimedia/gst-omx/gst-omx.mk
 
 diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index d0594b9..a0927e9 100644
+index a0927e9..68dfa13 100644
 --- a/package/multimedia/Config.in
 +++ b/package/multimedia/Config.in
-@@ -20,6 +20,7 @@ source "package/multimedia/gst1-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
- source "package/multimedia/gst1-plugins-ugly/Config.in"
- source "package/multimedia/lame/Config.in"
-+source "package/multimedia/libvpx/Config.in"
- source "package/multimedia/madplay/Config.in"
- source "package/multimedia/mpd/Config.in"
- source "package/multimedia/mpg123/Config.in"
-diff --git a/package/multimedia/libvpx/Config.in b/package/multimedia/libvpx/Config.in
+@@ -11,6 +11,7 @@ source "package/multimedia/gst-ffmpeg/Config.in"
+ source "package/multimedia/gst-dsp/Config.in"
+ source "package/multimedia/gst-fsl-plugins/Config.in"
+ source "package/multimedia/gst-omapfb/Config.in"
++source "package/multimedia/gst-omx/Config.in"
+ source "package/multimedia/gst-plugins-base/Config.in"
+ source "package/multimedia/gst1-plugins-base/Config.in"
+ source "package/multimedia/gst-plugins-good/Config.in"
+diff --git a/package/multimedia/gst-omx/Config.in b/package/multimedia/gst-omx/Config.in
 new file mode 100644
-index 0000000..2327971
+index 0000000..b6ea116
 --- /dev/null
-+++ b/package/multimedia/libvpx/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBVPX
-+	bool "libvpx"
++++ b/package/multimedia/gst-omx/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_GST_OMX
++	bool "gst-omx"
++	depends on BR2_PACKAGE_GSTREAMER1 && BR2_PACKAGE_HAS_OPENMAX
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
 +	help
-+	  a high-quality, open video format that's freely available to everyone.
++	  GStreamer plug-in to use OpenMAX API.
 +
-+	  http://webmproject.org
-diff --git a/package/multimedia/libvpx/libvpx.mk b/package/multimedia/libvpx/libvpx.mk
++	  http://cgit.freedesktop.org/gstreamer/gst-omx
++
++comment "gst-omx requires a OpenMAX implementation"
++	depends on BR2_PACKAGE_GSTREAMER1 && !BR2_PACKAGE_HAS_OPENMAX
+diff --git a/package/multimedia/gst-omx/gst-omx-config-files.patch b/package/multimedia/gst-omx/gst-omx-config-files.patch
 new file mode 100644
-index 0000000..964d98a
+index 0000000..74c247b
 --- /dev/null
-+++ b/package/multimedia/libvpx/libvpx.mk
-@@ -0,0 +1,53 @@
++++ b/package/multimedia/gst-omx/gst-omx-config-files.patch
+@@ -0,0 +1,123 @@
++Index: gst-omx-1.0.0/config/bellagio/gstomx.conf
++===================================================================
++--- gst-omx-1.0.0.orig/config/bellagio/gstomx.conf	2013-03-12 04:12:09.000000000 -0500
+++++ gst-omx-1.0.0/config/bellagio/gstomx.conf	2013-05-21 17:50:14.545692908 -0500
++@@ -1,6 +1,6 @@
++ [omxmpeg4videodec]
++ type-name=GstOMXMPEG4VideoDec
++-core-name=/usr/local/lib/libomxil-bellagio.so.0
+++core-name=/usr/lib/libomxil-bellagio.so.0
++ component-name=OMX.st.video_decoder.mpeg4
++ rank=256
++ in-port-index=0
++@@ -9,7 +9,7 @@
++ 
++ [omxh264dec]
++ type-name=GstOMXH264Dec
++-core-name=/usr/local/lib/libomxil-bellagio.so.0
+++core-name=/usr/lib/libomxil-bellagio.so.0
++ component-name=OMX.st.video_decoder.avc
++ rank=256
++ in-port-index=0
++@@ -18,7 +18,7 @@
++ 
++ [omxmpeg4videoenc]
++ type-name=GstOMXMPEG4VideoEnc
++-core-name=/usr/local/lib/libomxil-bellagio.so.0
+++core-name=/usr/lib/libomxil-bellagio.so.0
++ component-name=OMX.st.video_encoder.mpeg4
++ rank=0
++ in-port-index=0
++@@ -27,7 +27,7 @@
++ 
++ [omxaacenc]
++ type-name=GstOMXAACEnc
++-core-name=/usr/local/lib/libomxil-bellagio.so.0
+++core-name=/usr/lib/libomxil-bellagio.so.0
++ component-name=OMX.st.audio_encoder.aac
++ rank=0
++ in-port-index=0
++Index: gst-omx-1.0.0/config/rpi/gstomx.conf
++===================================================================
++--- gst-omx-1.0.0.orig/config/rpi/gstomx.conf	2013-05-21 17:51:39.965693635 -0500
+++++ gst-omx-1.0.0/config/rpi/gstomx.conf	2013-05-21 17:52:07.781693871 -0500
++@@ -1,6 +1,6 @@
++ [omxmpeg2videodec]
++ type-name=GstOMXMPEG2VideoDec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -9,7 +9,7 @@
++ 
++ [omxmpeg4videodec]
++ type-name=GstOMXMPEG4VideoDec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -18,7 +18,7 @@
++ 
++ [omxh263dec]
++ type-name=GstOMXH263Dec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -27,7 +27,7 @@
++ 
++ [omxh264dec]
++ type-name=GstOMXH264Dec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -36,7 +36,7 @@
++ 
++ [omxtheoradec]
++ type-name=GstOMXTheoraDec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -45,7 +45,7 @@
++ 
++ [omxvp8dec]
++ type-name=GstOMXVP8Dec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -54,7 +54,7 @@
++ 
++ [omxmjpegdec]
++ type-name=GstOMXMJPEGDec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -63,7 +63,7 @@
++ 
++ [omxvc1dec]
++ type-name=GstOMXWMVDec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_encode
++ rank=256
++ in-port-index=130
++@@ -73,7 +73,7 @@
++ 
++ [omxh264enc]
++ type-name=GstOMXH264Enc
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_encode
++ rank=256
++ in-port-index=200
+diff --git a/package/multimedia/gst-omx/gst-omx.mk b/package/multimedia/gst-omx/gst-omx.mk
+new file mode 100644
+index 0000000..00abecb
+--- /dev/null
++++ b/package/multimedia/gst-omx/gst-omx.mk
+@@ -0,0 +1,37 @@
 +#############################################################
 +#
-+# libvpx
++# gst-omx
 +#
 +#############################################################
 +
-+LIBVPX_VERSION = v1.2.0
-+LIBVPX_SITE = http://git.chromium.org/webm/libvpx.git
-+LIBVPX_SITE_METHOD = git
++GST_OMX_VERSION = 1.0.0
++GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
++GST_OMX_SITE = http://gstreamer.freedesktop.org/src/gst-omx/
 +
-+LIBVPX_LICENSE = BSD-3c 
-+LIBVPX_LICENSE_FILES = LICENSE PATENTS 
++GST_OMX_LICENSE = LGPLv2.1
++GST_OMX_LICENSE_FILE = COPYING
 +
-+LIBVPX_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++GST_OMX_CONF_OPT = \
++	--with-omx-target=rpi
++GST_OMX_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) \
++		-I$(STAGING_DIR)/usr/include/IL \
++		-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
++		-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
++endif
 +
-+# ld is being used with cc options. therefore, pretend ld is cc.
-+LIBVPX_CONF_ENV = \
-+	LD="$(TARGET_CC)" \
-+	CROSS=$(GNU_TARGET_NAME)
++ifeq ($(BR2_PACKAGE_BELLAGIO),y)
++GST_OMX_CONF_OPT = \
++	--with-omx-target=bellagio
++GST_OMX_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) \
++		-DOMX_VERSION_MAJOR=1 \
++		-DOMX_VERSION_MINOR=1 \
++		-DOMX_VERSION_REVISION=2 \
++		-DOMX_VERSION_STEP=0"
++endif
 +
-+LIBVPX_CONF_OPT = \
-+	--disable-examples \
-+	--disable-docs \
-+	--disable-unit-tests
++GST_OMX_DEPENDENCIES = gstreamer1 gst1-plugins-base libopenmax
 +
-+# This is not a true autotools package.  It is based on the ffmpeg build system
-+define LIBVPX_CONFIGURE_CMDS
-+	(cd $(LIBVPX_SRCDIR) && rm -rf config.cache && \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_CONFIGURE_ARGS) \
-+	$(LIBVPX_CONF_ENV) \
-+	./configure \
-+		--target=generic-gnu \
-+		--enable-pic \
-+		--prefix=/usr \
-+		$(SHARED_STATIC_LIBS_OPTS) \
-+		$(LIBVPX_CONF_OPT) \
-+	)
-+endef
-+
-+define LIBVPX_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) all
-+endef
-+
-+define LIBVPX_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D) install
-+endef
-+
-+define LIBVPX_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.9.5
