@@ -1,87 +1,130 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 May 2013 00:08:18 +0200
-Subject: [Buildroot] [PATCH 08/20] Remove useless CVS related files
+Date: Mon, 27 May 2013 00:08:21 +0200
+Subject: [Buildroot] [PATCH 11/20] sunxi-tools: new host/target package
 In-Reply-To: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1369606110-8088-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1369606110-8088-12-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes bug #5912.
+From: Carlo Caione <carlo.caione@gmail.com>
 
+Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/gnuconfig/.cvsignore             |    5 -----
- toolchain/elf2flt/elf2flt/.cvsignore     |    3 ---
- toolchain/elf2flt/elf2flt/CVS/Entries    |   17 -----------------
- toolchain/elf2flt/elf2flt/CVS/Repository |    1 -
- toolchain/elf2flt/elf2flt/CVS/Root       |    1 -
- 5 files changed, 27 deletions(-)
- delete mode 100644 support/gnuconfig/.cvsignore
- delete mode 100644 toolchain/elf2flt/elf2flt/.cvsignore
- delete mode 100644 toolchain/elf2flt/elf2flt/CVS/Entries
- delete mode 100644 toolchain/elf2flt/elf2flt/CVS/Repository
- delete mode 100644 toolchain/elf2flt/elf2flt/CVS/Root
+ package/Config.in                  |    1 +
+ package/Config.in.host             |    1 +
+ package/sunxi-tools/Config.in      |   10 ++++++++++
+ package/sunxi-tools/Config.in.host |   12 ++++++++++++
+ package/sunxi-tools/sunxi-tools.mk |   37 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 61 insertions(+)
+ create mode 100644 package/sunxi-tools/Config.in
+ create mode 100644 package/sunxi-tools/Config.in.host
+ create mode 100644 package/sunxi-tools/sunxi-tools.mk
 
-diff --git a/support/gnuconfig/.cvsignore b/support/gnuconfig/.cvsignore
-deleted file mode 100644
-index 669c89f..0000000
---- a/support/gnuconfig/.cvsignore
-+++ /dev/null
-@@ -1,5 +0,0 @@
--.cvsignore
--README.buildroot
--gnuconfig.mk
--patches
--.svn
-diff --git a/toolchain/elf2flt/elf2flt/.cvsignore b/toolchain/elf2flt/elf2flt/.cvsignore
-deleted file mode 100644
-index 18cff9a..0000000
---- a/toolchain/elf2flt/elf2flt/.cvsignore
-+++ /dev/null
-@@ -1,3 +0,0 @@
--.cvsignore
--.svn
--maketarball.sh
-diff --git a/toolchain/elf2flt/elf2flt/CVS/Entries b/toolchain/elf2flt/elf2flt/CVS/Entries
-deleted file mode 100644
-index 1b3750f..0000000
---- a/toolchain/elf2flt/elf2flt/CVS/Entries
-+++ /dev/null
-@@ -1,17 +0,0 @@
--/LICENSE.TXT/1.1/Tue Jan 10 04:34:09 2006//
--/README/1.5/Tue Jan 10 04:34:09 2006/-ko/
--/config.guess/1.2/Tue Jan 10 04:34:08 2006/-ko/
--/e1-elf2flt.ld/1.1/Tue Jan 10 04:34:09 2006//
--/flat.h/1.6/Tue Jan 10 04:34:08 2006/-ko/
--/install-sh/1.1.1.1/Tue Jan 10 04:34:08 2006/-ko/
--/stubs.c/1.1/Tue Jan 10 04:34:08 2006//
--/config.sub/1.8/Wed Jan 11 13:36:39 2006/-ko/
--/cygwin-elf.h/1.4/Wed Jan 11 13:36:39 2006//
--/Makefile.in/1.17/Result of merge/-ko/
--/configure/1.12/Sun Jan 28 05:27:28 2007/-ko/
--/configure.in/1.10/Sun Jan 28 05:27:28 2007/-ko/
--/elf2flt.c/1.46/Result of merge/-ko/
--/elf2flt.ld/1.15/Sun Jan 28 05:27:28 2007/-ko/
--/flthdr.c/1.10/Sun Jan 28 05:27:28 2007/-ko/
--/ld-elf2flt.in/1.15/Sun Jan 28 05:27:28 2007//
--D
-diff --git a/toolchain/elf2flt/elf2flt/CVS/Repository b/toolchain/elf2flt/elf2flt/CVS/Repository
-deleted file mode 100644
-index 61a695f..0000000
---- a/toolchain/elf2flt/elf2flt/CVS/Repository
-+++ /dev/null
-@@ -1 +0,0 @@
--elf2flt
-diff --git a/toolchain/elf2flt/elf2flt/CVS/Root b/toolchain/elf2flt/elf2flt/CVS/Root
-deleted file mode 100644
-index 0b9f527..0000000
---- a/toolchain/elf2flt/elf2flt/CVS/Root
-+++ /dev/null
-@@ -1 +0,0 @@
--:pserver:anonymous at cvs.uclinux.org:/var/cvs
+diff --git a/package/Config.in b/package/Config.in
+index 6094c1b..1bd9309 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -207,6 +207,7 @@ source "package/ntfs-3g/Config.in"
+ source "package/squashfs/Config.in"
+ source "package/squashfs3/Config.in"
+ source "package/sshfs/Config.in"
++source "package/sunxi-tools/Config.in"
+ source "package/unionfs/Config.in"
+ source "package/xfsprogs/Config.in"
+ endmenu
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 7c0dd20..54178ea 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -10,6 +10,7 @@ source "package/mtools/Config.in.host"
+ source "package/omap-u-boot-utils/Config.in.host"
+ source "package/openocd/Config.in.host"
+ source "package/sam-ba/Config.in.host"
++source "package/sunxi-tools/Config.in.host"
+ source "package/uboot-tools/Config.in.host"
+ 
+ endmenu
+diff --git a/package/sunxi-tools/Config.in b/package/sunxi-tools/Config.in
+new file mode 100644
+index 0000000..a085aeb
+--- /dev/null
++++ b/package/sunxi-tools/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_SUNXI_TOOLS
++	bool "sunxi nand-part"
++	depends on BR2_arm
++	help
++	  nand-part is part of sunxi-tools for Allwinner A10 (aka sun4i) and
++	  A13 (aka sun5i) based devices. It is a tool to repartition the
++	  internal NAND on sunxi devices.
++
++	  http://linux-sunxi.org/Sunxi-tools
++
+diff --git a/package/sunxi-tools/Config.in.host b/package/sunxi-tools/Config.in.host
+new file mode 100644
+index 0000000..b5e4193
+--- /dev/null
++++ b/package/sunxi-tools/Config.in.host
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_HOST_SUNXI_TOOLS
++	bool "host sunxi-tools"
++	depends on BR2_arm
++	help
++	  Tools for Allwinner A10 (aka sun4i) and A13 (aka sun5i) based devices.
++	  This includes fex2bin  which can be used to compile .fex board definition
++	  files to the binary script.bin format required by the linux-sunxi kernel.
++	  These tools are specific for linux-sunxi kernel and do not apply to
++	  the mainline Linux kernel version.
++
++	  http://linux-sunxi.org/Sunxi-tools
++
+diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+new file mode 100644
+index 0000000..a97dfcb
+--- /dev/null
++++ b/package/sunxi-tools/sunxi-tools.mk
+@@ -0,0 +1,37 @@
++#############################################################
++#
++# sunxi-tools
++#
++#############################################################
++
++SUNXI_TOOLS_VERSION = 3a94e721dd8d1e13d0b25da0a83463891e8e9ee0
++SUNXI_TOOLS_SITE = http://github.com/linux-sunxi/sunxi-tools/tarball/master
++SUNXI_TOOLS_LICENSE = GPLv2+
++SUNXI_TOOLS_LICENSE_FILES = COPYING
++HOST_SUNXI_TOOLS_DEPENDENCIES = host-libusb
++FEX2BIN = $(HOST_DIR)/usr/bin/fex2bin
++
++define HOST_SUNXI_TOOLS_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
++		CFLAGS="$(HOST_CFLAGS) -std=c99 -D_POSIX_C_SOURCE=200112L -Iinclude/" \
++		-C $(@D)
++endef
++
++define HOST_SUNXI_TOOLS_INSTALL_CMDS
++	for i in fexc bin2fex fex2bin bootinfo fel pio; do \
++		$(INSTALL) -D -m 0755 $(@D)/$$i $(HOST_DIR)/usr/bin/$$i ; \
++	done
++endef
++
++define SUNXI_TOOLS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS) -std=c99 -D_POSIX_C_SOURCE=200112L -Iinclude/" \
++		-C $(@D) nand-part
++endef
++
++define SUNXI_TOOLS_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/nand-part $(TARGET_DIR)/usr/bin/nand-part
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 1.7.9.5
