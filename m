@@ -1,43 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 May 2013 22:30:51 +0200
-Subject: [Buildroot] [PATCH 1/1] skeleton: add default login port to
- /etc/securetty
-In-Reply-To: <1369599269-18876-1-git-send-email-spenser@gillilanding.com>
-References: <1342149545-10417-1-git-send-email-roylee17@gmail.com>
- <1369599269-18876-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130526223051.4c440f36@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 26 May 2013 22:37:35 +0200
+Subject: [Buildroot] [PATCH] Depend autotools targets on host-ccache
+ when BR2_CCACHE is enabled.
+In-Reply-To: <20130526194813.51f8e9bb@skate>
+References: <201209061737.32826.rasasi78@gmail.com>
+ <CAHXCMM+ho8PGrmePj9jU6vMurz1HeQXv1N99ZbLPusFJQxv4sw@mail.gmail.com>
+ <20130526174406.30da6ad8@skate> <20130526190051.2fcbee44@skate>
+ <CAHXCMMKHE+quVdK=HncViWGO=B38ncFKnBwvgn2AVLsW40KHFQ@mail.gmail.com>
+ <20130526194813.51f8e9bb@skate>
+Message-ID: <CAHXCMM+FgoVy61Nkr6QxGzT+pX4yNY4RTVuVa=JPM3kMBvJb-w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Thomas,
 
-On Sun, 26 May 2013 15:14:29 -0500, Spenser Gilliland wrote:
+2013/5/26 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Samuel Martin,
+>
+> On Sun, 26 May 2013 19:44:33 +0200, Samuel Martin wrote:
+>
+>> In these cases, I rather suggest to build either a whole "small"
+>> config, or at least the toolchain
+>> before tweaking anything (packages, kernel or bootloader).
+>>
+>> Note that if we want to allow this use case, it may require adding BASE_TARGETS
+>> to all *-menuconfig and packages' targets.
+>>
+>> I think we don't want to go this way.
+>
+> Being able to do "make linux-menuconfig" right after "make menuconfig"
+> is a quite important use case, IMO. We should support that I believe.
+>
+> linux-menuconfig already depends on "dirs" so that it can work properly
+> when ran after "make menuconfig" (when ccache is not enabled). But I
+> see that it also depends on linux-configure. Maybe we just need to make
+> the *-extract of all packages depend on $(BASE_TARGETS) or something
+> like that?
+>
+Indeed, something like that seems doing the tricks :)
 
-> Change-Id: Ifb1239c80eb86528345b24eb8d04b52b67aa1209
+I'll cook a patch and submit it.
 
-Please remove this.
+Regards,
 
-> +target-generic-securetty:
-> +	grep -q ^$(TARGET_GENERIC_GETTY)$ $(TARGET_DIR)/etc/securetty || \
-> +		echo $(TARGET_GENERIC_GETTY) >> $(TARGET_DIR)/etc/securetty
-
-I'm not a make/shell expansion guru. Does the ^ and $ propagate all the
-well to the shell and into the regexp matched by grep?
-
-> +ifneq ($(TARGET_GENERIC_GETTY), )
-
-No space for the test:
-
-ifneq ($(TARGET_GENERIC_GETTY),)
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Samuel
