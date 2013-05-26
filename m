@@ -1,29 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 May 2013 19:50:19 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain-external: add support for
- 'Sourcery CodeBench ARM 2013.05'
-In-Reply-To: <1368012852-24520-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1368012852-24520-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20130526195019.09d7d8b7@skate>
+Date: Sun, 26 May 2013 19:52:26 +0200
+Subject: [Buildroot] [PATCH v8 10/10] gst-omx: add gst-omx package
+In-Reply-To: <1369588343-13950-11-git-send-email-spenser@gillilanding.com>
+References: <1369588343-13950-1-git-send-email-spenser@gillilanding.com>
+ <1369588343-13950-11-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130526195226.266ad882@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear Spenser Gilliland,
 
-On Wed,  8 May 2013 13:34:11 +0200, Fabio Porcedda wrote:
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
->  toolchain/toolchain-external/Config.in   | 25 +++++++++++++++++++++++++
->  toolchain/toolchain-external/ext-tool.mk |  3 +++
->  2 files changed, 28 insertions(+)
+On Sun, 26 May 2013 12:12:23 -0500, Spenser Gilliland wrote:
 
-I've applied (and tested) both of your patches in one of my local
-branch, for which I'll send a pull request to Peter soon.
+> diff --git a/package/multimedia/gst-omx/gst-omx-config-files.patch b/package/multimedia/gst-omx/gst-omx-config-files.patch
+> new file mode 100644
+> index 0000000..74c247b
+> --- /dev/null
+> +++ b/package/multimedia/gst-omx/gst-omx-config-files.patch
+> @@ -0,0 +1,123 @@
+> +Index: gst-omx-1.0.0/config/bellagio/gstomx.conf
+> +===================================================================
 
-Thanks,
+We want all patches to have a description + signed-off-by line. See all
+other package patches in Buildroot.
 
 Thomas
 -- 
