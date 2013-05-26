@@ -1,65 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 May 2013 00:08:12 +0200
-Subject: [Buildroot] [PATCH 02/20] dropbear: factorize the 'depends on
-	BR2_PACKAGE_DROPBEAR'
+Date: Mon, 27 May 2013 00:08:14 +0200
+Subject: [Buildroot] [PATCH 04/20] gcc: fix gcc 4.8 build when thread
+	support is disabled
 In-Reply-To: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1369606110-8088-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1369606110-8088-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enclose all dropbear sub-options into a 'if BR2_PACKAGE_DROPBEAR'
-... 'endif' block rather than having 'depends on BR2_PACKAGE_DROPBEAR'
-for each option.
+When thread support is disabled, the libitm and libatomic libraries
+from gcc should be disabled, otherwise, the build of gcc fails.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dropbear/Config.in |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ toolchain/gcc/gcc-uclibc-4.x.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
-index 0903ad1..68c3b71 100644
---- a/package/dropbear/Config.in
-+++ b/package/dropbear/Config.in
-@@ -6,9 +6,10 @@ config BR2_PACKAGE_DROPBEAR
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 21679ef..5be26c4 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -203,7 +203,7 @@ GCC_TLS:=--disable-tls
+ endif
  
- 	  http://matt.ucc.asn.au/dropbear/dropbear.html
- 
-+if BR2_PACKAGE_DROPBEAR
-+
- config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
- 	bool "disable reverse DNS lookups"
--	depends on BR2_PACKAGE_DROPBEAR
- 	help
- 	  Disable reverse DNS lookups on connection. This can be handy
- 	  on systems without working DNS, as connections otherwise
-@@ -17,7 +18,6 @@ config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
- config BR2_PACKAGE_DROPBEAR_SMALL
- 	bool "optimize for size"
- 	default y
--	depends on BR2_PACKAGE_DROPBEAR
- 	help
- 	  Compile dropbear for the smallest possible binary size.
- 
-@@ -26,14 +26,14 @@ config BR2_PACKAGE_DROPBEAR_SMALL
- 
- config BR2_PACKAGE_DROPBEAR_WTMP
- 	bool "log dropbear access to wtmp"
--	depends on BR2_PACKAGE_DROPBEAR
- 	help
- 	  Enable logging of dropbear access to wtmp. Notice that
- 	  Buildroot does not generate wtmp by default.
- 
- config BR2_PACKAGE_DROPBEAR_LASTLOG
- 	bool "log dropbear access to lastlog"
--	depends on BR2_PACKAGE_DROPBEAR
- 	help
- 	  Enable logging of dropbear access to lastlog. Notice that
- 	  Buildroot does not generate lastlog by default.
-+
-+endif
+ ifeq ($(BR2_PTHREADS_NONE),y)
+-THREADS:=--disable-threads
++THREADS:=--disable-threads --disable-libitm --disable-libatomic
+ else
+ THREADS:=--enable-threads
+ endif
 -- 
 1.7.9.5
