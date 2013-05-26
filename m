@@ -1,40 +1,54 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 May 2013 21:00:40 +0200
-Subject: [Buildroot] [git commit] udpcast: needs threads support in toolchain
-Message-ID: <20130526194928.1BC139A58A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 May 2013 21:48:15 +0200
+Subject: [Buildroot] [PATCH 0/1] Makefile: add variable print
+	capabilities
+In-Reply-To: <20130526214445.03abd9d3@skate>
+References: <1342724478-21701-1-git-send-email-emeric.vigier@savoirfairelinux.com>
+ <20120719220825.584bfb03@skate> <20130526194014.GC3380@free.fr>
+ <20130526214445.03abd9d3@skate>
+Message-ID: <20130526194815.GD3380@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0170b420c4d72daf6dc08b49b856bdb3e88e4a2a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/udpcast/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+On 2013-05-26 21:44 +0200, Thomas Petazzoni spake thusly:
+> Dear Yann E. MORIN,
+> 
+> On Sun, 26 May 2013 21:40:14 +0200, Yann E. MORIN wrote:
+> 
+> > > Hum, is this really useful? What are the use cases? What do other
+> > > thinks about this?
+> > 
+> > I like the overall idea, but only for printing all variables.
+> > It's then possible to grep the result to find the one variable one is
+> > interested in.
+> > 
+> > I've taken that patch in my tree (dropped the per-variable print, and
+> > adapted the printvars a bit), and will send a pull request to Peter
+> > later tonight.
+> 
+> I would suggest to not send patches touching the core infrastructure as
+> part of a pull request that also has many usually uncontroversial
+> package changes/updates.
 
-diff --git a/package/udpcast/Config.in b/package/udpcast/Config.in
-index d7ccfb4..cb817a9 100644
---- a/package/udpcast/Config.in
-+++ b/package/udpcast/Config.in
-@@ -1,14 +1,15 @@
- config BR2_PACKAGE_UDPCAST
- 	bool "udpcast"
- 	depends on BR2_LARGEFILE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  A multicast protocol implementation which happens to
- 	  be very handy for imaging drives over the network.
- 
- 	  http://www.udpcast.linux.lu/
- 
--comment "udpcast requires a toolchain with LARGEFILE support"
--	depends on !BR2_LARGEFILE
-+comment "udpcast requires a toolchain with LARGEFILE and threads support"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
- 
- menu "udpcast tools selection"
- depends on BR2_PACKAGE_UDPCAST
+Yes, it's in a separate branch. I have three branches:
+  - fixes
+  - features
+  - tentative
+
+That one is on the tentative branch.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
