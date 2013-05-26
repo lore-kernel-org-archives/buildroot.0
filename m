@@ -1,65 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 27 May 2013 13:10:26 +0200
-Subject: [Buildroot] [git commit] dropbear: factorize the 'depends on
-	BR2_PACKAGE_DROPBEAR'
-Message-ID: <20130602212058.318B99A6A7@busybox.osuosl.org>
+Date: Sun, 26 May 2013 21:02:17 +0200
+Subject: [Buildroot] [git commit] udpcast: Add udpcast-select-h.patch.
+Message-ID: <20130602212054.C21389A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a5ee03b252906f4a3533566dad170a16d9d6125f
+commit: http://git.buildroot.net/buildroot/commit/?id=c096b5985ab5f29a051da3645eda5aa43231bdc0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Enclose all dropbear sub-options into a 'if BR2_PACKAGE_DROPBEAR'
-... 'endif' block rather than having 'depends on BR2_PACKAGE_DROPBEAR'
-for each option.
+This patch fixes the build on AArch64 (and potentially others).
+The patch has been submitted upstream.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Will Newton <will.newton@linaro.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dropbear/Config.in |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/udpcast/udpcast-select-h.patch |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
-index 0903ad1..68c3b71 100644
---- a/package/dropbear/Config.in
-+++ b/package/dropbear/Config.in
-@@ -6,9 +6,10 @@ config BR2_PACKAGE_DROPBEAR
- 
- 	  http://matt.ucc.asn.au/dropbear/dropbear.html
- 
-+if BR2_PACKAGE_DROPBEAR
-+
- config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
- 	bool "disable reverse DNS lookups"
--	depends on BR2_PACKAGE_DROPBEAR
- 	help
- 	  Disable reverse DNS lookups on connection. This can be handy
- 	  on systems without working DNS, as connections otherwise
-@@ -17,7 +18,6 @@ config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
- config BR2_PACKAGE_DROPBEAR_SMALL
- 	bool "optimize for size"
- 	default y
--	depends on BR2_PACKAGE_DROPBEAR
- 	help
- 	  Compile dropbear for the smallest possible binary size.
- 
-@@ -26,14 +26,14 @@ config BR2_PACKAGE_DROPBEAR_SMALL
- 
- config BR2_PACKAGE_DROPBEAR_WTMP
- 	bool "log dropbear access to wtmp"
--	depends on BR2_PACKAGE_DROPBEAR
- 	help
- 	  Enable logging of dropbear access to wtmp. Notice that
- 	  Buildroot does not generate wtmp by default.
- 
- config BR2_PACKAGE_DROPBEAR_LASTLOG
- 	bool "log dropbear access to lastlog"
--	depends on BR2_PACKAGE_DROPBEAR
- 	help
- 	  Enable logging of dropbear access to lastlog. Notice that
- 	  Buildroot does not generate lastlog by default.
-+
-+endif
+diff --git a/package/udpcast/udpcast-select-h.patch b/package/udpcast/udpcast-select-h.patch
+new file mode 100644
+index 0000000..9a8cfc9
+--- /dev/null
++++ b/package/udpcast/udpcast-select-h.patch
+@@ -0,0 +1,11 @@
++--- udpcast-20120424/console.h	2005-12-22 22:59:18.000000000 +0000
+++++ udpcast-20120424.mod/console.h	2013-05-22 22:22:19.835474140 +0100
++@@ -6,6 +6,8 @@
++ #include <winbase.h>
++ #endif /* __MINGW32__ */
++ 
+++#include <sys/select.h>
+++
++ #define prepareConsole udpc_prepareConsole
++ #define getConsoleFd udpc_getConsoleFd
++ #define restoreConsole udpc_restoreConsole
