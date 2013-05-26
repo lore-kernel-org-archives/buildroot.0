@@ -1,48 +1,33 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Sun, 26 May 2013 13:07:46 -0500
-Subject: [Buildroot] [PATCH v8 10/10] gst-omx: add gst-omx package
-In-Reply-To: <20130526195226.266ad882@skate>
-References: <1369588343-13950-1-git-send-email-spenser@gillilanding.com>
- <1369588343-13950-11-git-send-email-spenser@gillilanding.com>
- <20130526195226.266ad882@skate>
-Message-ID: <CAEBucnCkeAYjPtDH-xeHJPj9sawiOLQ=dVShY6Y+d57yBetz4g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 May 2013 20:11:31 +0200
+Subject: [Buildroot] iMX6Q package proposals for Qt5
+In-Reply-To: <25308.194.123.5.106.1366629274.squirrel@webmail.internl.net>
+References: <51034.217.149.209.147.1366471569.squirrel@webmail.internl.net>
+ <5174D566.7010403@mind.be>
+ <25308.194.123.5.106.1366629274.squirrel@webmail.internl.net>
+Message-ID: <20130526201131.4f4243c5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, May 26, 2013 at 12:52 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Spenser Gilliland,
->
-> On Sun, 26 May 2013 12:12:23 -0500, Spenser Gilliland wrote:
->
->> diff --git a/package/multimedia/gst-omx/gst-omx-config-files.patch b/package/multimedia/gst-omx/gst-omx-config-files.patch
->> new file mode 100644
->> index 0000000..74c247b
->> --- /dev/null
->> +++ b/package/multimedia/gst-omx/gst-omx-config-files.patch
->> @@ -0,0 +1,123 @@
->> +Index: gst-omx-1.0.0/config/bellagio/gstomx.conf
->> +===================================================================
->
-> We want all patches to have a description + signed-off-by line. See all
-> other package patches in Buildroot.
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+Dear H.Fijnvandraat at inter.nl.net,
 
-Fixed in rpi branch of git://github.com/Spenser309/buildroot.git .
-Will resubmit after further review.
+On Mon, 22 Apr 2013 13:14:34 +0200 (CEST), H.Fijnvandraat at inter.nl.net
+wrote:
 
-Spenser
+> With this email I inline the changes I made in package/qt5/qt5base
+> directory files.
 
---
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+Could you please instead send patches against Buildroot? Copy/pasting
+your modified files is not very helpful unfortunately :/
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
