@@ -1,50 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 May 2013 16:45:40 +0200
-Subject: [Buildroot] [RFC/PATCH 0/4] support building from read-only
- source tree
-In-Reply-To: <1340031743-29694-1-git-send-email-ntl@pobox.com>
-References: <1340031743-29694-1-git-send-email-ntl@pobox.com>
-Message-ID: <20130526144540.GA3380@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 26 May 2013 15:09:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 5252] udev 182 build failed 2012.05
+In-Reply-To: <bug-5252-163@https.bugs.busybox.net/>
+References: <bug-5252-163@https.bugs.busybox.net/>
+Message-ID: <20130526150925.ECAAC9A2A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nathan, All,
+https://bugs.busybox.net/show_bug.cgi?id=5252
 
-On 2012-06-18 10:02 -0500, Nathan Lynch spake thusly:
-> There are several places in Buildroot where files are copied from the
-> source tree to the output directory and then modified.  The most
-> obvious case is copying a .config or equivalent to the build
-> directory and then modifying it with sed, as with uClibc or busybox.
-> 
-> This works fine when the source file has write permissions; this is
-> preserved in the destination copy.  This is the behavior in the common
-> case of running from a git repository or a release tarball.
-> 
-> However, when the source file is read-only, the destination copy is
-> also not writable and such fixups fail.  This occurs when the the
-> Buildroot source tree is being hosted in a Perforce repository.
-> Perforce uses local file permissions to track whether a file is being
-> edited and checks out all regular files read-only by design.
-> 
-> The following changes were enough to get qemu_mips_malta_defconfig to
-> build and run successfully.  I submit these patches for discussion and
-> illustration of the effort required to support this use case.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Unfortunately, those patches mostly no longer apply, since there have
-been some code churn (reoridering) in the meantime.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-I'll take whatever I can, and adapt the remaining.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-05-26 15:08:16 UTC ---
+I'm not able to reproduce here with the latest Buildroot.
 
-Regards,
-Yann E. MORIN. 
+The build failure is apparently due to blkid_probe not being defined in
+<blkid/blkid.h>, which is installed by util-linux. util-linux has been updated
+in Buildroot to 2.22.2 in the mean time, maybe it's what caused the problem to
+disappear.
+
+I'll mark the bug as fixed. If it still doesn't work for you with the last
+Buildroot release, do not hesitate to reopen the bug and provide more details
+(Buildroot .config especially).
+
+Also, beware that building from a directory in /usr is not supported.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
