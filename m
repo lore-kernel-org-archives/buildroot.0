@@ -1,32 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 May 2013 14:39:31 +0200
-Subject: [Buildroot] Student for the Google Summer of Code,
- hardware donations needed
-In-Reply-To: <20130526115256.GI17847@lukather>
-References: <20130525221541.0ef3ab27@skate> <20130526115256.GI17847@lukather>
-Message-ID: <20130526143931.08e6bcd3@skate>
+Date: Sun, 26 May 2013 15:02:08 +0200
+Subject: [Buildroot] [PATCH] package/lttng-tools: Improve dependencies
+ for lttng-tools.
+In-Reply-To: <CAFbHwiTEaoQYetScU5VwARHfiufxmr5z06Ce_ZaeLCJXmAceSA@mail.gmail.com>
+References: <CAFbHwiQRgb_f14t+V+y=HFt9Xr9D7xLitkYkHo1h_EfLT_VYOA@mail.gmail.com>
+ <CAFbHwiTEaoQYetScU5VwARHfiufxmr5z06Ce_ZaeLCJXmAceSA@mail.gmail.com>
+Message-ID: <20130526150208.7749e263@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Ripard,
+Dear Will Newton,
 
-On Sun, 26 May 2013 13:52:56 +0200, Maxime Ripard wrote:
+On Tue, 23 Oct 2012 15:14:21 +0100, Will Newton wrote:
+> Ping?
 
-> On Sat, May 25, 2013 at 10:15:41PM +0200, Thomas Petazzoni wrote:
-> > In order to allow Spenser to work on the support of ARM multimedia
-> > features (OpenGL, OpenVG, EGL, accelerated video encoding/decoding,
-> > etc.), we need a number of hardware platforms. He already has a
-> > Rasberry Pi, we have found sponsors to provide OMAP3/OMAP4/AM335x based
-> > platforms and i.MX5/i.MX6 platforms. We intend to buy him an Allwinner
-> > A1x based platform and an Exynos 4 based platforms.
-> 
-> I have a few Allwinner A10 boards here that I don't use, so I can give
-> one away if it's needed.
+I have marked your patch as Superseded in the patch tracker, because
+the two issues your patch were fixing have been fixed by:
 
-Nice, thanks!
+e5726eb4986f33a1c6af276973efeaa35980097c lttng-tools: needs largefile support
+e5ef6f7f71c0773af1f35b8a4e78669a8c3c8bf0 Unhide lttng-tools and lttng-modules
+
+Best regards,
 
 Thomas
 -- 
