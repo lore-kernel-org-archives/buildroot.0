@@ -1,54 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 May 2013 21:48:15 +0200
-Subject: [Buildroot] [PATCH 0/1] Makefile: add variable print
-	capabilities
-In-Reply-To: <20130526214445.03abd9d3@skate>
-References: <1342724478-21701-1-git-send-email-emeric.vigier@savoirfairelinux.com>
- <20120719220825.584bfb03@skate> <20130526194014.GC3380@free.fr>
- <20130526214445.03abd9d3@skate>
-Message-ID: <20130526194815.GD3380@free.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 26 May 2013 21:02:17 +0200
+Subject: [Buildroot] [git commit branch/next] udpcast: Add
+	udpcast-select-h.patch.
+Message-ID: <20130526194930.82FEE9A58B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=c096b5985ab5f29a051da3645eda5aa43231bdc0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2013-05-26 21:44 +0200, Thomas Petazzoni spake thusly:
-> Dear Yann E. MORIN,
-> 
-> On Sun, 26 May 2013 21:40:14 +0200, Yann E. MORIN wrote:
-> 
-> > > Hum, is this really useful? What are the use cases? What do other
-> > > thinks about this?
-> > 
-> > I like the overall idea, but only for printing all variables.
-> > It's then possible to grep the result to find the one variable one is
-> > interested in.
-> > 
-> > I've taken that patch in my tree (dropped the per-variable print, and
-> > adapted the printvars a bit), and will send a pull request to Peter
-> > later tonight.
-> 
-> I would suggest to not send patches touching the core infrastructure as
-> part of a pull request that also has many usually uncontroversial
-> package changes/updates.
+This patch fixes the build on AArch64 (and potentially others).
+The patch has been submitted upstream.
 
-Yes, it's in a separate branch. I have three branches:
-  - fixes
-  - features
-  - tentative
+Signed-off-by: Will Newton <will.newton@linaro.org>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/udpcast/udpcast-select-h.patch |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
 
-That one is on the tentative branch.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/udpcast/udpcast-select-h.patch b/package/udpcast/udpcast-select-h.patch
+new file mode 100644
+index 0000000..9a8cfc9
+--- /dev/null
++++ b/package/udpcast/udpcast-select-h.patch
+@@ -0,0 +1,11 @@
++--- udpcast-20120424/console.h	2005-12-22 22:59:18.000000000 +0000
+++++ udpcast-20120424.mod/console.h	2013-05-22 22:22:19.835474140 +0100
++@@ -6,6 +6,8 @@
++ #include <winbase.h>
++ #endif /* __MINGW32__ */
++ 
+++#include <sys/select.h>
+++
++ #define prepareConsole udpc_prepareConsole
++ #define getConsoleFd udpc_getConsoleFd
++ #define restoreConsole udpc_restoreConsole
