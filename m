@@ -1,40 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 May 2013 19:48:13 +0200
-Subject: [Buildroot] [PATCH] Depend autotools targets on host-ccache
- when BR2_CCACHE is enabled.
-In-Reply-To: <CAHXCMMKHE+quVdK=HncViWGO=B38ncFKnBwvgn2AVLsW40KHFQ@mail.gmail.com>
-References: <201209061737.32826.rasasi78@gmail.com>
- <CAHXCMM+ho8PGrmePj9jU6vMurz1HeQXv1N99ZbLPusFJQxv4sw@mail.gmail.com>
- <20130526174406.30da6ad8@skate> <20130526190051.2fcbee44@skate>
- <CAHXCMMKHE+quVdK=HncViWGO=B38ncFKnBwvgn2AVLsW40KHFQ@mail.gmail.com>
-Message-ID: <20130526194813.51f8e9bb@skate>
+Date: Sun, 26 May 2013 19:50:19 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain-external: add support for
+ 'Sourcery CodeBench ARM 2013.05'
+In-Reply-To: <1368012852-24520-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1368012852-24520-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20130526195019.09d7d8b7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Fabio Porcedda,
 
-On Sun, 26 May 2013 19:44:33 +0200, Samuel Martin wrote:
+On Wed,  8 May 2013 13:34:11 +0200, Fabio Porcedda wrote:
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> ---
+>  toolchain/toolchain-external/Config.in   | 25 +++++++++++++++++++++++++
+>  toolchain/toolchain-external/ext-tool.mk |  3 +++
+>  2 files changed, 28 insertions(+)
 
-> In these cases, I rather suggest to build either a whole "small"
-> config, or at least the toolchain
-> before tweaking anything (packages, kernel or bootloader).
-> 
-> Note that if we want to allow this use case, it may require adding BASE_TARGETS
-> to all *-menuconfig and packages' targets.
-> 
-> I think we don't want to go this way.
+I've applied (and tested) both of your patches in one of my local
+branch, for which I'll send a pull request to Peter soon.
 
-Being able to do "make linux-menuconfig" right after "make menuconfig"
-is a quite important use case, IMO. We should support that I believe.
-
-linux-menuconfig already depends on "dirs" so that it can work properly
-when ran after "make menuconfig" (when ccache is not enabled). But I
-see that it also depends on linux-configure. Maybe we just need to make
-the *-extract of all packages depend on $(BASE_TARGETS) or something
-like that?
+Thanks,
 
 Thomas
 -- 
