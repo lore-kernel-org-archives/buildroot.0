@@ -1,48 +1,47 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 26 May 2013 14:16:24 +0200
-Subject: [Buildroot] Environment Variables and CMAKE
-In-Reply-To: <1369239715.2814.31.camel@john-ubu>
-References: <1369239715.2814.31.camel@john-ubu>
-Message-ID: <CAHXCMMLF5OcqGrYpxuAH=-9+By7CfLTCzc1C9yha5Jn+S4JgQw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 26 May 2013 12:31:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 4796] apply-patches.sh reorders patches given on
+ the command line
+In-Reply-To: <bug-4796-163@https.bugs.busybox.net/>
+References: <bug-4796-163@https.bugs.busybox.net/>
+Message-ID: <20130526123114.411139A56B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi John,
+https://bugs.busybox.net/show_bug.cgi?id=4796
 
-2013/5/22 john <john.osullivan@cloudiumsystems.com>:
-> Hi,
->
-> I have a cmake based project which I am trying to incorporate into
-> buildroot-2012.05
->
-> As part of the configuration of the code I need to pass it an
-> environment variable $(CLIENT_VER) which I generate at the time of
-> building in the source directory (which I check out of SVN).
-> I have tried various approaches without success.
->
-> This is my mk file
-> #I first tried this approach by generating the cmake configuration
-> #command with a script and then executing that script
-> #but the problem here was I would need to know the location of the
-> #buildroot generated version of cmake and the toolchain file
-> #I could figure these out in the script but I felt there must be a
-> #simpler approach
-> #define CLIENT_BARROW_CONFIGURE_CMDS
-> #       (cd $(CLIENT_BARROW_SRCDIR) && source set_environment.sh \
-> #       && ./cmake_run \
-> #       )
-> #endef
+--- Comment #4 from Christoph Schulz <develop@kristov.de> 2013-05-26 12:30:04 UTC ---
+(In reply to comment #3)
+> What are the packages affected by this bug?
+> 
+> Note that using the latest patch policy (see the new patch naming convention):
+> http://buildroot.org/downloads/manual/manual.html#patch-policy
+> 
+> After fixing the culprit patch filenames, this bug should not occurs anymore.
 
-Does the set_environment.sh script do anything else than setting the
-CLIENT_VER env. var.?
-If this version number is stored in its own file, then another way is:
-CLIENT_BARROW_CONF_OPT += -DCLIENT_VER_STR="$(shell cat
-version_file.txt 2>/dev/null)"
+We have extended the uClibc buildroot by many additional packages which
+sometimes contain patches in debian/patches/. These patches are not ordered by
+name, rather there is a file debian/patches/series which contains the patches
+to be applied line by line. These are _not_ patches that lie in
+buildroot/package/<name>/.
 
-Regards,
+You should not assume that users of the uClibc buildroot only use packages that
+are contained therein. This is a mistake. Typically, the buildroot is extended
+by other self-made or customized packages in order to provide additional,
+target-specific functionality. In our case, we e.g. provide packages for the
+various ISDN-related tools coming with the isdnutils package. We take the
+isdnutils sources from Debian which distributes them in two archives: the
+original sources and separate patches, structured as described above.
+
+
+Best regards,
+
+Christoph
 
 -- 
-Samuel
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
