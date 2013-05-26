@@ -1,32 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 May 2013 20:56:43 +0200
-Subject: [Buildroot] [git commit] udpcast: Bump version to 20120424.
-Message-ID: <20130602212054.69B789A6A7@busybox.osuosl.org>
+Date: Sun, 26 May 2013 22:12:03 +0200
+Subject: [Buildroot] [git commit] libnspr: add license info
+Message-ID: <20130602212056.1D6809A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67f4c10ce36b1a3e50d8ff8c83c72b87bd1ed683
+commit: http://git.buildroot.net/buildroot/commit/?id=14eb60e2912bc458c842d7d0110b05f0aacdc095
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Will Newton <will.newton@linaro.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/udpcast/udpcast.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libnspr/libnspr.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
-index f900b92..54051b9 100644
---- a/package/udpcast/udpcast.mk
-+++ b/package/udpcast/udpcast.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index e934281..71b64b9 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -9,6 +9,8 @@ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_
+ LIBNSPR_SUBDIR = mozilla/nsprpub
+ LIBNSPR_INSTALL_STAGING = YES
+ LIBNSPR_CONFIG_SCRIPTS = nspr-config
++LIBNSPR_LICENSE = MPLv2.0
++LIBNSPR_LICENSE_FILES = mozilla/nsprpub/LICENSE
  
--UDPCAST_VERSION = 20071228
-+UDPCAST_VERSION = 20120424
- UDPCAST_SOURCE = udpcast-$(UDPCAST_VERSION).tar.gz
- UDPCAST_SITE = http://www.udpcast.linux.lu/download
- UDPCAST_CONF_ENV = $(if $(BR_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no)
+ # Set the host CFLAGS and LDFLAGS so NSPR does not guess wrongly
+ LIBNSPR_CONF_ENV = HOST_CFLAGS="-g -O2" \
