@@ -1,35 +1,28 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 May 2013 08:52:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 5180] External toolchain path should accept
-	relative paths
-In-Reply-To: <bug-5180-163@https.bugs.busybox.net/>
-References: <bug-5180-163@https.bugs.busybox.net/>
-Message-ID: <20130526085211.229469A56B@busybox.osuosl.org>
+Date: Sun, 26 May 2013 08:55:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 4772] Add uClibc configuration file option to
+ crosstool-ng toolchain support
+In-Reply-To: <bug-4772-163@https.bugs.busybox.net/>
+References: <bug-4772-163@https.bugs.busybox.net/>
+Message-ID: <20130526085554.E51E99A56B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5180
+https://bugs.busybox.net/show_bug.cgi?id=4772
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
              Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
+         Resolution|                            |WONTFIX
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-05-26 08:51:00 UTC ---
-This is something you can already do today:
-
-BR2_TOOLCHAIN_EXTERNAL_PATH="$(TOPDIR)/../../x-tools/linaro-2012.09/"
-
-Just tested, it works.
-
-I'm marking this bug as "works for me", but if you believe the proposed
-solution is not appropriate, do not hesitate to re-open the bug and add more
-details.
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-05-26 08:54:44 UTC ---
+The feature already exists, and the Crosstool-NG backend has been marked
+deprecated. I believe it's not really worth fixing this particular bug.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
