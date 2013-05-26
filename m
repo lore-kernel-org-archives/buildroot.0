@@ -1,66 +1,72 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 May 2013 22:42:37 +0200
-Subject: [Buildroot] [git commit branch/next] aespipe: new package
-Message-ID: <20130526205235.302DB9A58B@busybox.osuosl.org>
+Date: Sun, 26 May 2013 23:00:30 +0200
+Subject: [Buildroot] [git commit branch/next] skeleton: add default login
+	port to /etc/securetty
+Message-ID: <20130526210220.636259A58D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a1b9256d376dd74ec7441d701510995cde3e0042
+commit: http://git.buildroot.net/buildroot/commit/?id=d67b3a54af65ab4818a891458d2d59f91f239f99
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
+We ran into a "Login incorrect" problem when running the same rootfs
+image across platforms with different loging ports ttyS0/1/2/3.
+
+Simply assignning "console" to BR2_TARGET_GENERIC_GETTY_PORT, which in
+turn modifies the /etc/inittab, is not enough because the "console" device
+was missing in the /etc/securetty.
+
+While current securetty has enumerated a lot of ttys, this patch should save
+some efforts to enumerate more.
+
+[Peter: guard with single quotes]
+Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in          |    1 +
- package/aespipe/Config.in  |    9 +++++++++
- package/aespipe/aespipe.mk |   12 ++++++++++++
- 3 files changed, 22 insertions(+), 0 deletions(-)
+ support/scripts/graph-depends |    1 +
+ system/system.mk              |    8 ++++++++
+ 2 files changed, 9 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 6b6ce9d..de84d46 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -652,6 +652,7 @@ endmenu
- endmenu
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 180c81d..3bab725 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -161,6 +161,7 @@ def remove_redundant_deps(deps):
+     return newdeps
  
- menu "Miscellaneous"
-+source "package/aespipe/Config.in"
- source "package/collectd/Config.in"
- source "package/empty/Config.in"
- source "package/googlefontdirectory/Config.in"
-diff --git a/package/aespipe/Config.in b/package/aespipe/Config.in
-new file mode 100644
-index 0000000..ccc94c2
---- /dev/null
-+++ b/package/aespipe/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_AESPIPE
-+	bool "aespipe"
-+	help
-+	  aespipe program is AES encrypting or decrypting pipe. It reads from
-+	  standard input and writes to standard output. It can be used to
-+	  create and restore encrypted tar or cpio archives. It can be used to
-+	  encrypt and decrypt loop-AES compatible encrypted disk images.
+ TARGET_EXCEPTIONS = [
++    "target-generic-securetty",
+     "target-generic-issue",
+     "target-generic-getty-busybox",
+     "target-generic-do-remount-rw",
+diff --git a/system/system.mk b/system/system.mk
+index 44a33ae..50c86ad 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -9,6 +9,10 @@ TARGET_GENERIC_GETTY:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
+ TARGET_GENERIC_GETTY_BAUDRATE:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
+ TARGET_GENERIC_GETTY_TERM:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
+ 
++target-generic-securetty:
++	grep -q '^$(TARGET_GENERIC_GETTY)$$' $(TARGET_DIR)/etc/securetty || \
++		echo '$(TARGET_GENERIC_GETTY)' >> $(TARGET_DIR)/etc/securetty
 +
-+	  http://koti.tnnet.fi/jari.ruusu/linux/
-diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
-new file mode 100644
-index 0000000..c901708
---- /dev/null
-+++ b/package/aespipe/aespipe.mk
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# aespipe
-+#
-+#############################################################
+ target-generic-hostname:
+ 	mkdir -p $(TARGET_DIR)/etc
+ 	echo "$(TARGET_GENERIC_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
+@@ -40,6 +44,10 @@ target-generic-do-remount-rw:
+ target-generic-dont-remount-rw:
+ 	$(SED) '/^[^#].*# REMOUNT_ROOTFS_RW$$/s~^~#~' $(TARGET_DIR)/etc/inittab
+ 
++ifneq ($(TARGET_GENERIC_GETTY),)
++TARGETS += target-generic-securetty
++endif
 +
-+AESPIPE_VERSION = 2.4c
-+AESPIPE_SOURCE = aespipe-v$(AESPIPE_VERSION).tar.bz2
-+AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe/
-+AESPIPE_LICENSE = GPL
-+
-+$(eval $(autotools-package))
+ ifneq ($(TARGET_GENERIC_HOSTNAME),)
+ TARGETS += target-generic-hostname
+ endif
