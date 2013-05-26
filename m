@@ -1,42 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 May 2013 17:49:02 +0000 (UTC)
-Subject: [Buildroot] [Bug 5678] linux.mk: linux-menuconfig fails
-In-Reply-To: <bug-5678-163@https.bugs.busybox.net/>
-References: <bug-5678-163@https.bugs.busybox.net/>
-Message-ID: <20130526174902.B7CF79A56B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 May 2013 19:48:13 +0200
+Subject: [Buildroot] [PATCH] Depend autotools targets on host-ccache
+ when BR2_CCACHE is enabled.
+In-Reply-To: <CAHXCMMKHE+quVdK=HncViWGO=B38ncFKnBwvgn2AVLsW40KHFQ@mail.gmail.com>
+References: <201209061737.32826.rasasi78@gmail.com>
+ <CAHXCMM+ho8PGrmePj9jU6vMurz1HeQXv1N99ZbLPusFJQxv4sw@mail.gmail.com>
+ <20130526174406.30da6ad8@skate> <20130526190051.2fcbee44@skate>
+ <CAHXCMMKHE+quVdK=HncViWGO=B38ncFKnBwvgn2AVLsW40KHFQ@mail.gmail.com>
+Message-ID: <20130526194813.51f8e9bb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5678
+Dear Samuel Martin,
 
-Samuel Martin <s.martin49@gmail.com> changed:
+On Sun, 26 May 2013 19:44:33 +0200, Samuel Martin wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WONTFIX
-
---- Comment #1 from Samuel Martin <s.martin49@gmail.com> 2013-05-26 17:47:53 UTC ---
-(In reply to comment #0)
-> make linux-menuconfig fails after make clean if using c cache
+> In these cases, I rather suggest to build either a whole "small"
+> config, or at least the toolchain
+> before tweaking anything (packages, kernel or bootloader).
 > 
-> This was caused by the missing dep hostcc.
+> Note that if we want to allow this use case, it may require adding BASE_TARGETS
+> to all *-menuconfig and packages' targets.
+> 
+> I think we don't want to go this way.
 
-Right, host-ccache is part of the BASE_TARGETS list, which is built when
-calling:
-$ make all
-or:
-$ make toolchain
+Being able to do "make linux-menuconfig" right after "make menuconfig"
+is a quite important use case, IMO. We should support that I believe.
 
-I rather suggest to build either a whole small config or just the toolchain,
-before starting tweaking the linux config.
+linux-menuconfig already depends on "dirs" so that it can work properly
+when ran after "make menuconfig" (when ccache is not enabled). But I
+see that it also depends on linux-configure. Maybe we just need to make
+the *-extract of all packages depend on $(BASE_TARGETS) or something
+like that?
 
-Regards,
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
