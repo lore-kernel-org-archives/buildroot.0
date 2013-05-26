@@ -1,29 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 May 2013 15:02:08 +0200
-Subject: [Buildroot] [PATCH] package/lttng-tools: Improve dependencies
- for lttng-tools.
-In-Reply-To: <CAFbHwiTEaoQYetScU5VwARHfiufxmr5z06Ce_ZaeLCJXmAceSA@mail.gmail.com>
-References: <CAFbHwiQRgb_f14t+V+y=HFt9Xr9D7xLitkYkHo1h_EfLT_VYOA@mail.gmail.com>
- <CAFbHwiTEaoQYetScU5VwARHfiufxmr5z06Ce_ZaeLCJXmAceSA@mail.gmail.com>
-Message-ID: <20130526150208.7749e263@skate>
+Date: Sun, 26 May 2013 15:04:47 +0200
+Subject: [Buildroot] [PATCH v2] toolchain: blackfin: Remove Blackfin
+ toolchain 2011R1 release.
+In-Reply-To: <1368595963-10671-1-git-send-email-sonic.adi@gmail.com>
+References: <1368595963-10671-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <20130526150447.73efde93@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Newton,
+Dear Sonic Zhang,
 
-On Tue, 23 Oct 2012 15:14:21 +0100, Will Newton wrote:
-> Ping?
+On Wed, 15 May 2013 13:32:43 +0800, Sonic Zhang wrote:
+> From: Sonic Zhang <sonic.zhang@analog.com>
+> 
+> ADI officially supports the buildroot and related GNU toolchain for
+> Blackfin since ADI's 2012R1 release only. In order to avoid confusion,
+> it is better to remove the 2011R1 GNU toolchain for Blackfin. In
+> addition, the 2011R1 GNU toolchain for Blackfin doesn't support the
+> BF60x processors.
+> 
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 
-I have marked your patch as Superseded in the patch tracker, because
-the two issues your patch were fixing have been fixed by:
+I've taken this patch in one of my branch, which I will submit to Peter
+soon.
 
-e5726eb4986f33a1c6af276973efeaa35980097c lttng-tools: needs largefile support
-e5ef6f7f71c0773af1f35b8a4e78669a8c3c8bf0 Unhide lttng-tools and lttng-modules
+Peter, no need to take this patch direclty, I'll send it to you with
+other changes.
 
-Best regards,
+Thanks,
 
 Thomas
 -- 
