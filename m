@@ -1,33 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 May 2013 20:56:43 +0200
-Subject: [Buildroot] [git commit branch/next] udpcast: Bump version to
-	20120424.
-Message-ID: <20130526194930.588DD9A58A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 May 2013 22:03:11 +0200
+Subject: [Buildroot] [PATCH 0/1] Makefile: add variable print
+ capabilities
+In-Reply-To: <20130526194815.GD3380@free.fr>
+References: <1342724478-21701-1-git-send-email-emeric.vigier@savoirfairelinux.com>
+ <20120719220825.584bfb03@skate> <20130526194014.GC3380@free.fr>
+ <20130526214445.03abd9d3@skate> <20130526194815.GD3380@free.fr>
+Message-ID: <20130526220311.35a780f8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67f4c10ce36b1a3e50d8ff8c83c72b87bd1ed683
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Yann E. MORIN,
 
-Signed-off-by: Will Newton <will.newton@linaro.org>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/udpcast/udpcast.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Sun, 26 May 2013 21:48:15 +0200, Yann E. MORIN wrote:
 
-diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
-index f900b92..54051b9 100644
---- a/package/udpcast/udpcast.mk
-+++ b/package/udpcast/udpcast.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--UDPCAST_VERSION = 20071228
-+UDPCAST_VERSION = 20120424
- UDPCAST_SOURCE = udpcast-$(UDPCAST_VERSION).tar.gz
- UDPCAST_SITE = http://www.udpcast.linux.lu/download
- UDPCAST_CONF_ENV = $(if $(BR_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no)
+> Yes, it's in a separate branch. I have three branches:
+>   - fixes
+>   - features
+>   - tentative
+> 
+> That one is on the tentative branch.
+
+Excellent, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
