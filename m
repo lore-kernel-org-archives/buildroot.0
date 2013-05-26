@@ -1,31 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 May 2013 22:12:03 +0200
-Subject: [Buildroot] [git commit] libnspr: add license info
-Message-ID: <20130602212056.1D6809A6A7@busybox.osuosl.org>
+Date: Sun, 26 May 2013 22:13:11 +0200
+Subject: [Buildroot] [git commit] libnss: bump to version 3.14.3
+Message-ID: <20130602212056.6435D9A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=14eb60e2912bc458c842d7d0110b05f0aacdc095
+commit: http://git.buildroot.net/buildroot/commit/?id=9d63d3dc3644ec65dbb0280af8d7a1854e5c4d33
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libnspr/libnspr.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libnss/libnss.mk |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index e934281..71b64b9 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -9,6 +9,8 @@ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_
- LIBNSPR_SUBDIR = mozilla/nsprpub
- LIBNSPR_INSTALL_STAGING = YES
- LIBNSPR_CONFIG_SCRIPTS = nspr-config
-+LIBNSPR_LICENSE = MPLv2.0
-+LIBNSPR_LICENSE_FILES = mozilla/nsprpub/LICENSE
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 96faf37..8bb46e2 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -3,14 +3,17 @@
+ # libnss
+ #
+ #############################################################
+-LIBNSS_VERSION = 3.12.9
++
++LIBNSS_VERSION = 3.14.3
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE_VERSION = $(subst .,_,$(LIBNSS_VERSION))
+-LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(LIBNSS_SITE_VERSION)_RTM/src/
++LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(LIBNSS_SITE_VERSION)_RTM/src
+ LIBNSS_SUBDIR = mozilla/security
+ LIBNSS_DISTDIR = mozilla/dist
+ LIBNSS_INSTALL_STAGING = YES
+ LIBNSS_DEPENDENCIES = libnspr sqlite zlib
++LIBNSS_LICENSE = MPLv2.0
++LIBNSS_LICENSE_FILES = mozilla/security/nss/COPYING
  
- # Set the host CFLAGS and LDFLAGS so NSPR does not guess wrongly
- LIBNSPR_CONF_ENV = HOST_CFLAGS="-g -O2" \
+ LIBNSS_BUILD_VARS = MOZILLA_CLIENT=1 \
+ 		NSPR_INCLUDE_DIR=$(STAGING_DIR)/usr/include/nspr \
