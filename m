@@ -1,41 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 May 2013 00:08:29 +0200
-Subject: [Buildroot] [PATCH 19/20] network-manager: use a
-	<pkg>_VERSION_MAJOR variable
+Date: Mon, 27 May 2013 00:08:27 +0200
+Subject: [Buildroot] [PATCH 17/20] freescale-imx: bump to 1.1.0
 In-Reply-To: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1369606110-8088-20-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1369606110-8088-18-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Just like we do for many other GNOME-hosted tarballs, use a
-<pkg>_VERSION_MAJOR variable for network-manager.
+From: Henk Fijnvandraat <h.fijnvandraat@inter.nl.net>
 
+This commit bumps both imx-lib and firmware-imx to version 1.1.0.
+
+Signed-off-by: Henk Fijnvandraat <h.fijnvandraat@inter.nl.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/network-manager/network-manager.mk |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/freescale-imx/freescale-imx.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index b3715d8..261f2d3 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -3,9 +3,11 @@
- # NetworkManager
+diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+index 0d5400b..2553f67 100644
+--- a/package/freescale-imx/freescale-imx.mk
++++ b/package/freescale-imx/freescale-imx.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
--NETWORK_MANAGER_VERSION = 0.9.2.0
-+
-+NETWORK_MANAGER_VERSION_MAJOR = 0.9
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2.0
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.bz2
--NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.9/
-+NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
- NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
- 	libgcrypt wireless_tools util-linux host-intltool
+ 
+-FREESCALE_IMX_VERSION = 12.09.01
++FREESCALE_IMX_VERSION = 1.1.0
+ 
+ # No official download site from freescale, just this mirror
+ FREESCALE_IMX_MIRROR_SITE   = http://download.ossystems.com.br/bsp/freescale/source
 -- 
 1.7.9.5
