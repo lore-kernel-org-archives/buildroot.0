@@ -1,24 +1,22 @@
-From: Victor Hiairrassary <victor.hiairrassary.ml@gmail.com>
-Date: Mon, 27 May 2013 00:08:41 +0200
-Subject: [Buildroot] f2fs support
-Message-ID: <51A287E9.2090308@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 26 May 2013 22:14:28 +0200
+Subject: [Buildroot] [PATCH 3/6] libnss: bump to version 3.14.3
+In-Reply-To: <1368463259-18958-3-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 13 May 2013 13:40:56 -0300")
+References: <1368463259-18958-1-git-send-email-gustavo@zacarias.com.ar>
+ <1368463259-18958-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zjvhebx7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-I am trying to add support for f2fs file system in buildroot.
-For now I have already added f2fs-tools for the host, i.e. mkfs.f2fs.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-But I cannot create a f2fs file system image since mkfs.f2fs takes
-a device as parameter (/dev/sda1 for example). This is different than
-jffs2's syntax : '$(MKFS_JFFS2) -d $(TARGET_DIR) -o $@' for example,
-which takes a directory as input.
+Committed to next, thanks.
 
-Does anybody have an idea about this issue?
-
-Best regards,
-Victor Hiairrassary
+-- 
+Bye, Peter Korsgaard
