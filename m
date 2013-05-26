@@ -1,25 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 May 2013 20:49:49 +0000 (UTC)
-Subject: [Buildroot] [Bug 5678] linux.mk: linux-menuconfig fails
-In-Reply-To: <bug-5678-163@https.bugs.busybox.net/>
-References: <bug-5678-163@https.bugs.busybox.net/>
-Message-ID: <20130526204949.22F399A58B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 26 May 2013 22:50:05 +0200
+Subject: [Buildroot] [PATCH] Remove spurious POST_UNINSTALL hook usage
+In-Reply-To: <1368993492-7353-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Sun, 19 May 2013 20:58:12 +0100")
+References: <1368993492-7353-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87mwrhea9u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5678
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-Samuel Martin <s.martin49@gmail.com> changed:
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|WONTFIX                     |
+ spdawson> A couple of patches make use of
+ spdawson> XXX_POST_UNINSTALL_TARGET_HOOKS, which is not a hook set that
+ spdawson> Buildroot actually supports.
+
+Committed to next, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
