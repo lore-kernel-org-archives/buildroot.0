@@ -1,39 +1,188 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 May 2013 17:15:24 +0000 (UTC)
-Subject: [Buildroot] [Bug 5510] Buildroot fails "host-mtd 1.4.4"
-In-Reply-To: <bug-5510-163@https.bugs.busybox.net/>
-References: <bug-5510-163@https.bugs.busybox.net/>
-Message-ID: <20130526171524.E55459A56B@busybox.osuosl.org>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Sun, 26 May 2013 12:12:19 -0500
+Subject: [Buildroot] [PATCH v8 06/10] gst1-plugins-ugly: add gstreamer1 ugly
+	plugins
+In-Reply-To: <1369588343-13950-1-git-send-email-spenser@gillilanding.com>
+References: <1369588343-13950-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <1369588343-13950-7-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5510
+Adds gstreamer 1.X ugly plugins
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+---
+ package/multimedia/Config.in                       |    1 +
+ package/multimedia/gst1-plugins-ugly/Config.in     |   49 +++++++++++
+ .../gst1-plugins-ugly/gst1-plugins-ugly.mk         |   89 ++++++++++++++++++++
+ 3 files changed, 139 insertions(+)
+ create mode 100644 package/multimedia/gst1-plugins-ugly/Config.in
+ create mode 100644 package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
-
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-05-26 17:14:15 UTC ---
-Buildroot 2011.05 is way too far in the past for me to remember exactly what
-could have fixed that, but it seems like the command that links mkfs.ubifs was
-lacking a reference to $(HOST_DIR)/usr/lib for libraries. This is the reason
-why lzo2 wasn't found.
-
-I've just tested with a recent Buildroot (latest master, but 2013.02 should
-work fine), and host-mtd 1.5.0 builds fine. The lzo2 library is properly built
-and installed in $(HOST_DIR)/usr/lib, and mkfs.ubifs is linked against it.
-
-I'm therefore marking this bug as closed. If you are still having this issue
-with a more recent version of Buildroot, do not hesitate to reopen it, and
-attach a minimal Buildroot configuration that exhibits the problem. Thanks!
-
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index ecdef5c..d0594b9 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -18,6 +18,7 @@ source "package/multimedia/gst1-plugins-good/Config.in"
+ source "package/multimedia/gst-plugins-bad/Config.in"
+ source "package/multimedia/gst1-plugins-bad/Config.in"
+ source "package/multimedia/gst-plugins-ugly/Config.in"
++source "package/multimedia/gst1-plugins-ugly/Config.in"
+ source "package/multimedia/lame/Config.in"
+ source "package/multimedia/madplay/Config.in"
+ source "package/multimedia/mpd/Config.in"
+diff --git a/package/multimedia/gst1-plugins-ugly/Config.in b/package/multimedia/gst1-plugins-ugly/Config.in
+new file mode 100644
+index 0000000..c4a3c87
+--- /dev/null
++++ b/package/multimedia/gst1-plugins-ugly/Config.in
+@@ -0,0 +1,49 @@
++menuconfig BR2_PACKAGE_GST1_PLUGINS_UGLY
++	bool "gst1-plugins-ugly"
++	depends on BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	help
++	  A set of well-supported plug-ins for GStreamer, but might pose
++	  problems for distributors.
++
++	  http://gstreamer.freedesktop.org/
++
++if BR2_PACKAGE_GST1_PLUGINS_UGLY
++
++comment "dependency-less plugins"
++
++config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_ASFDEMUX
++	bool "asfdemux"
++
++config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDLPCMDEC
++	bool "dvdlpcmdec"
++
++config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDSUB
++	bool "dvdsub"
++
++config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX
++	bool "xingmux"
++
++config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_REALMEDIA
++	bool "realmedia"
++
++comment "plugins with external dependencies (there may be more available)"
++
++config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME
++	bool "lame (*.mp3 audio encoder)"
++	select BR2_PACKAGE_LAME
++
++config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD
++	bool "dvdread"
++	select BR2_PACKAGE_LIBDVDREAD
++
++config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD
++	bool "mad (*.mp3 audio)"
++	select BR2_PACKAGE_LIBID3TAG
++	select BR2_PACKAGE_LIBMAD
++
++config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC
++	bool "mpeg2dec"
++	select BR2_PACKAGE_LIBMPEG2
++
++endif
+diff --git a/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
+new file mode 100644
+index 0000000..1bafdc6
+--- /dev/null
++++ b/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
+@@ -0,0 +1,89 @@
++#############################################################
++#
++# gst1-plugins-ugly
++#
++#############################################################
++GST1_PLUGINS_UGLY_VERSION = 1.0.7
++GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
++GST1_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
++
++GST1_PLUGINS_UGLY_CONF_OPT = \
++		--disable-examples \
++		--disable-debug \
++		--disable-valgrind
++
++GST_PLUGINS_BAD1_CONF_OPT += \
++		--disable-a52dec \
++		--disable-amrnb \
++		--disable-amrwb \
++		--disable-cdio \
++		--disable-sidplay \
++		--disable-twolame \
++		--disable-x264
++
++GST1_PLUGINS_UGLY_DEPENDENCIES = gstreamer1 gst1-plugins-base
++
++ifeq ($(BR2_PACKAGE_ORC),y)
++GST1_PLUGINS_UGLY_CONF_OPT += --enable-orc
++GST1_PLUGINS_UGLY_DEPENDENCIES += orc
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_ASFDEMUX),y)
++GST1_PLUGINS_UGLY_CONF_OPT += --enable-asfdemux
++else
++GST1_PLUGINS_UGLY_CONF_OPT += --disable-asfdemux
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDLPCMDEC),y)
++GST1_PLUGINS_UGLY_CONF_OPT += --enable-dvdlpcmdec
++else
++GST1_PLUGINS_UGLY_CONF_OPT += --disable-dvdlpcmdec
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDSUB),y)
++GST1_PLUGINS_UGLY_CONF_OPT += --enable-dvdsub
++else
++GST1_PLUGINS_UGLY_CONF_OPT += --disable-dvdsub
++endif
++
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_UGL1_PLUGIN_XINGMUX),y)
++GST1_PLUGINS_UGLY_CONF_OPT += --enable-xingmux
++else
++GST1_PLUGINS_UGLY_CONF_OPT += --disable-xingmux
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_REALMEDIA),y)
++GST1_PLUGINS_UGLY_CONF_OPT += --enable-realmedia
++else
++GST1_PLUGINS_UGLY_CONF_OPT += --disable-realmedia
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME),y)
++GST1_PLUGINS_UGLY_CONF_OPT += --enable-lame
++GST1_PLUGINS_UGLY_DEPENDENCIES += lame
++else
++GST1_PLUGINS_UGLY_CONF_OPT += --disable-lame
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD),y)
++GST1_PLUGINS_UGLY_CONF_OPT += --enable-dvdread
++GST1_PLUGINS_UGLY_DEPENDENCIES += libdvdread
++else
++GST1_PLUGINS_UGLY_CONF_OPT += --disable-dvdread
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD),y)
++GST1_PLUGINS_UGLY_CONF_OPT += --enable-mad
++GST1_PLUGINS_UGLY_DEPENDENCIES += libid3tag libmad
++else
++GST1_PLUGINS_UGLY_CONF_OPT += --disable-mad
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC),y)
++GST1_PLUGINS_UGLY_CONF_OPT += --enable-mpeg2dec
++GST1_PLUGINS_UGLY_DEPENDENCIES += libmpeg2
++else
++GST1_PLUGINS_UGLY_CONF_OPT += --disable-mpeg2dec
++endif
++
++$(eval $(autotools-package))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.9.5
