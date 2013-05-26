@@ -1,54 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 May 2013 00:08:13 +0200
-Subject: [Buildroot] [PATCH 03/20] elf2flt: fix build when zlib is not
-	installed on the host
+Date: Mon, 27 May 2013 00:08:12 +0200
+Subject: [Buildroot] [PATCH 02/20] dropbear: factorize the 'depends on
+	BR2_PACKAGE_DROPBEAR'
 In-Reply-To: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1369606110-8088-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1369606110-8088-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For a reason that's fairly unclear to me, Peter added a '-lz' link
-flag to the elf2flt.mk build in d5664ee99 ("elf2flt: fix link").
-
-However, the zlib library may not necessarily be installed on the host
-machine, so we should depend on host-zlib, and pass the appropriate
-LDFLAGS. This is what this patch does.
+Enclose all dropbear sub-options into a 'if BR2_PACKAGE_DROPBEAR'
+... 'endif' block rather than having 'depends on BR2_PACKAGE_DROPBEAR'
+for each option.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Note: I already have a patch that converts elf2flt to the package
-infrastructure, but I am waiting to have the patches to make the
-entire internal toolchain logic use the package infrastructure to send
-them.
----
- toolchain/elf2flt/elf2flt.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/dropbear/Config.in |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/elf2flt/elf2flt.mk b/toolchain/elf2flt/elf2flt.mk
-index 134034b..52e199c 100644
---- a/toolchain/elf2flt/elf2flt.mk
-+++ b/toolchain/elf2flt/elf2flt.mk
-@@ -19,7 +19,7 @@ $(ELF2FLT_DIR)/.patched: $(ELF2FLT_DIR)/.unpacked
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index 0903ad1..68c3b71 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -6,9 +6,10 @@ config BR2_PACKAGE_DROPBEAR
  
- $(ELF2FLT_DIR)/.configured: $(ELF2FLT_DIR)/.patched
- 	(cd $(ELF2FLT_DIR); rm -rf config.cache; \
--		LDFLAGS=-lz \
-+		LDFLAGS="$(HOST_LDFLAGS) -lz" \
- 		$(ELF2FLT_DIR)/configure $(QUIET) \
- 		--with-bfd-include-dir=$(HOST_BINUTILS_DIR)/bfd/ \
- 		--with-binutils-include-dir=$(HOST_BINUTILS_DIR)/include/ \
-@@ -33,7 +33,7 @@ $(ELF2FLT_DIR)/$(ELF2FLT_BINARY): $(ELF2FLT_DIR)/.configured
- 	$(MAKE) -C $(ELF2FLT_DIR) all
- 	$(MAKE) -C $(ELF2FLT_DIR) install
+ 	  http://matt.ucc.asn.au/dropbear/dropbear.html
  
--elf2flt: uclibc_target uclibc-configured binutils gcc $(ELF2FLT_DIR)/$(ELF2FLT_BINARY)
-+elf2flt: uclibc_target uclibc-configured binutils gcc host-zlib $(ELF2FLT_DIR)/$(ELF2FLT_BINARY)
++if BR2_PACKAGE_DROPBEAR
++
+ config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
+ 	bool "disable reverse DNS lookups"
+-	depends on BR2_PACKAGE_DROPBEAR
+ 	help
+ 	  Disable reverse DNS lookups on connection. This can be handy
+ 	  on systems without working DNS, as connections otherwise
+@@ -17,7 +18,6 @@ config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
+ config BR2_PACKAGE_DROPBEAR_SMALL
+ 	bool "optimize for size"
+ 	default y
+-	depends on BR2_PACKAGE_DROPBEAR
+ 	help
+ 	  Compile dropbear for the smallest possible binary size.
  
- elf2flt-clean:
- 	rm -rf $(ELF2FLT_SOURCE)
+@@ -26,14 +26,14 @@ config BR2_PACKAGE_DROPBEAR_SMALL
+ 
+ config BR2_PACKAGE_DROPBEAR_WTMP
+ 	bool "log dropbear access to wtmp"
+-	depends on BR2_PACKAGE_DROPBEAR
+ 	help
+ 	  Enable logging of dropbear access to wtmp. Notice that
+ 	  Buildroot does not generate wtmp by default.
+ 
+ config BR2_PACKAGE_DROPBEAR_LASTLOG
+ 	bool "log dropbear access to lastlog"
+-	depends on BR2_PACKAGE_DROPBEAR
+ 	help
+ 	  Enable logging of dropbear access to lastlog. Notice that
+ 	  Buildroot does not generate lastlog by default.
++
++endif
 -- 
 1.7.9.5
