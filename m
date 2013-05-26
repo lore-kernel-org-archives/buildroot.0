@@ -1,52 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 May 2013 22:24:33 +0200
-Subject: [Buildroot] f2fs support
-In-Reply-To: <51A287E9.2090308@gmail.com>
-References: <51A287E9.2090308@gmail.com>
-Message-ID: <20130526202433.GE3380@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 May 2013 22:30:51 +0200
+Subject: [Buildroot] [PATCH 1/1] skeleton: add default login port to
+ /etc/securetty
+In-Reply-To: <1369599269-18876-1-git-send-email-spenser@gillilanding.com>
+References: <1342149545-10417-1-git-send-email-roylee17@gmail.com>
+ <1369599269-18876-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130526223051.4c440f36@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Victor, All,
+Dear Spenser Gilliland,
 
-On 2013-05-27 00:08 +0200, Victor Hiairrassary spake thusly:
-> I am trying to add support for f2fs file system in buildroot.
-> For now I have already added f2fs-tools for the host, i.e. mkfs.f2fs.
-> 
-> But I cannot create a f2fs file system image since mkfs.f2fs takes
-> a device as parameter (/dev/sda1 for example). This is different than
-> jffs2's syntax : '$(MKFS_JFFS2) -d $(TARGET_DIR) -o $@' for example,
-> which takes a directory as input.
-> 
-> Does anybody have an idea about this issue?
+On Sun, 26 May 2013 15:14:29 -0500, Spenser Gilliland wrote:
 
-Yes, I encountered the same issue when I tried. Since I did not really
-need it, I skipped it.
+> Change-Id: Ifb1239c80eb86528345b24eb8d04b52b67aa1209
 
-AFAIK, there is currently no way to generate f2fs images like we do for
-the other filesystems, like ext2, squashfs or jffs2.
+Please remove this.
 
-The only solution would be to use a post-image script that would
-basically do something like:
+> +target-generic-securetty:
+> +	grep -q ^$(TARGET_GENERIC_GETTY)$ $(TARGET_DIR)/etc/securetty || \
+> +		echo $(TARGET_GENERIC_GETTY) >> $(TARGET_DIR)/etc/securetty
 
-  - dd if=/dev/zero of=image.f2fs bs=1M count=0 seek=${size_in_MiB}
-  - mkfs.f2fs image.f2fs
-  - sudo mount -o loop image.f2fs /somewhere
-  - cp foo bar /somewhere
-  - sudo umount /somewhere
+I'm not a make/shell expansion guru. Does the ^ and $ propagate all the
+well to the shell and into the regexp matched by grep?
 
-Otherwise, no idea, except do your own genf2fs util.
+> +ifneq ($(TARGET_GENERIC_GETTY), )
 
-Regards,
-Yann E. MORIN.
+No space for the test:
 
+ifneq ($(TARGET_GENERIC_GETTY),)
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
