@@ -1,52 +1,22 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 May 2013 21:40:14 +0200
-Subject: [Buildroot] [PATCH 0/1] Makefile: add variable print
-	capabilities
-In-Reply-To: <20120719220825.584bfb03@skate>
-References: <1342724478-21701-1-git-send-email-emeric.vigier@savoirfairelinux.com>
- <20120719220825.584bfb03@skate>
-Message-ID: <20130526194014.GC3380@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 26 May 2013 21:41:41 +0200
+Subject: [Buildroot] [PATCH] libnspr: Bump version to 4.9.6.
+In-Reply-To: <CAFbHwiSA_213BPUWeLKhLuXPcVXvyjSxHr7HR4j9gO+4Hv+DQg@mail.gmail.com>
+ (Will Newton's message of "Tue, 21 May 2013 16:07:56 +0100")
+References: <CAFbHwiSA_213BPUWeLKhLuXPcVXvyjSxHr7HR4j9gO+4Hv+DQg@mail.gmail.com>
+Message-ID: <878v31fs0a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Emeric, All,
+>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
 
-On 2012-07-19 22:08 +0200, Thomas Petazzoni spake thusly:
-> Le Thu, 19 Jul 2012 15:01:17 -0400,
-> Emeric Vigier <emeric.vigier@savoirfairelinux.com> a ?crit :
-> 
-> > I just got started with buildroot yesterday, and like it :-).
-> > I am no Makefile expert, then often I turn into wanting to check Makefile variables.
-> > This patch adds a capability to do so by issuing:
-> > 
-> > $ make print-<myvariable>
-> > 
-> > e.g.
-> > 
-> > $ make print-DL_DIR
-> > DL_DIR = /home/evigier/buildroot/dl
-> 
-> Hum, is this really useful? What are the use cases? What do other
-> thinks about this?
+ Will> This fixes the build for aarch64.
+ Will> Signed-off-by: Will Newton <will.newton@linaro.org>
 
-I like the overall idea, but only for printing all variables.
-It's then possible to grep the result to find the one variable one is
-interested in.
-
-I've taken that patch in my tree (dropped the per-variable print, and
-adapted the printvars a bit), and will send a pull request to Peter
-later tonight.
-
-Regards,
-Yann E. MORIN.
+Committed to next, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
