@@ -1,29 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 May 2013 20:58:42 +0200
-Subject: [Buildroot] freescale-imx directory patches
-In-Reply-To: <1368174613-3427-1-git-send-email-h.fijnvandraat@inter.nl.net>
-References: <1368174613-3427-1-git-send-email-h.fijnvandraat@inter.nl.net>
-Message-ID: <20130526205842.097af6ea@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 26 May 2013 21:01:10 +0200
+Subject: [Buildroot] [PATCH 1/2] udpcast: Bump version to 20120424.
+In-Reply-To: <CAFbHwiSP74i6Qiid7uozxeKd5QPrf=5aD9+0=fUu6VZhZnwrJA@mail.gmail.com>
+ (Will Newton's message of "Thu, 23 May 2013 14:19:13 +0100")
+References: <CAFbHwiSP74i6Qiid7uozxeKd5QPrf=5aD9+0=fUu6VZhZnwrJA@mail.gmail.com>
+Message-ID: <87ppwdftvt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Henk Fijnvandraat,
+>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
 
-On Fri, 10 May 2013 10:30:10 +0200, Henk Fijnvandraat wrote:
-> Ok, next attempt at getting this right ;-)
+ Will> Signed-off-by: Will Newton <will.newton@linaro.org>
 
-I've taken your patches, made a few minor modifications, built-tested
-them against a Freescale i.MX6 kernel. They are now part of a branch
-that I will push to Peter at the end of the day.
+Committed to next, thanks.
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
