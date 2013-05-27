@@ -1,50 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 May 2013 21:53:54 +0200
-Subject: [Buildroot] Design issue with the out-of-tree support
-In-Reply-To: <51A3B793.6050409@mind.be>
-References: <20130523131251.2ffc509f@skate> <51A38EEE.7000406@mind.be>
- <20130527211200.735491c7@skate> <51A3B793.6050409@mind.be>
-Message-ID: <20130527215354.133444a6@skate>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Mon, 27 May 2013 14:58:46 -0500
+Subject: [Buildroot] [PATCH v7 00/10] add Gstreamer 1.X for gst-omx
+	support
+In-Reply-To: <20130527202508.662f74ab@skate>
+References: <1369588343-13950-1-git-send-email-spenser@gillilanding.com>
+ <20130527202508.662f74ab@skate>
+Message-ID: <CAEBucnAfh3MsG9itFTxmb53cnTyFT7XAhewGQS3zXCoLigN3qw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+On May 27, 2013 1:25 PM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
+>
+> Dear Spenser Gilliland,
+>
+> On Sun, 26 May 2013 12:12:13 -0500, Spenser Gilliland wrote:
+> > This patch adds gst-omx support to buildroot. Thus, making it possible
+to use
+> > gstreamer applications which utilize hardware acceleration on OpenMAX
+supported
+> > systems.
+> >
+> > To add gst-omx, libglib2 is bumped to 2.36.1 and gstreamer1 is added.
+>
+> As explained on IRC, bumping libglib2 to 2.36.1 breaks the build of
+> webkit. Besides that, I've built a number of packages that use
+> libglib2, and I've built gstreamer1 itself, and it was fine here.
+>
+> So, the webkit problem needs to be fixed, either by adding a patch to
+> the current version of webkit, or by bumping webkit. In the end,
+> bumping webkit is certainly the nicest solution, but it may turn this
+> patch series into a much larger one.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
-On Mon, 27 May 2013 21:44:19 +0200, Arnout Vandecappelle wrote:
+Thomas,
 
-> > For now, I consider doing the prepare step even on OVERRIDE_SRCDIR
-> > package, even if that means that we are modifying the source directory.
-> 
->   Given that we've recently accepted some patches that solve problems of 
-> non-writeable source directories, I don't think this is appropriate. I 
-> think it's a valid use case to use OVERRIDE_SRCDIR to define the custom 
-> source of a package, which is located in some shared directory. Having 
-> random builds modifying that source is not appropriate.
-> 
->   And now is the time to define this behaviour - changing it later can be 
-> considered "ABI breakage".
+Im working on the bump to webkit 1.9.6.  So far, this requires a libsoup
+and libgtk2 bump as well.
 
-Right.
+Due to the tight dependencies between libglib2/webkit, the patch will not
+be bisectable unless the webkit and libglib2 bump occur atomically. (the
+libgtk2 and libsoup bumps may or may not be required to occur atomically.)
+This makes this single patch quite large; therefore, im unsure if I should
+make this a monolithic patch or a series of non bisectable patches (there
+may also be a no-ff merge option.)
 
-What about packages that are using the "local" site method (which
-basically, are equivalent to doing OVERRIDE_SRCDIR) ?
+Im currently working on narrowing down a couple remaining issues but should
+be able to send out the patches by end of tomm.
 
-I know some people (or, said otherwise, customers) that use the local
-SITE_METHOD for autotools-based components. Those are version
-controlled, and of course, only configure.ac + Makefile.am are version
-controlled. So, when the build starts, "something" should do the
-autoreconf.
-
-If Buildroot doesn't do it, who will do it? The user manually, when
-there are 30+ software components? Doesn't seem really practical and
-realistic.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks,
+Spenser
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130527/a211bb86/attachment.html>
