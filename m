@@ -1,78 +1,47 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 27 May 2013 10:16:55 +0100
-Subject: [Buildroot] [PATCH] neard: add init script
-Message-ID: <1369646215-16116-1-git-send-email-spdawson@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 May 2013 11:18:29 +0200
+Subject: [Buildroot] [PATCH] external-toolchain: Allow MIPS64 for
+ Codesourcery MIPS toolchains
+In-Reply-To: <CAG2jQ8hK4nY2mL4PQEX8miQyCZLbvV=H9scJu8ZaQPNZnnruNw@mail.gmail.com>
+References: <1368627740-4094-1-git-send-email-markos.chandras@gmail.com>
+ <20130526152910.2a32ecbb@skate>
+ <CAG2jQ8hK4nY2mL4PQEX8miQyCZLbvV=H9scJu8ZaQPNZnnruNw@mail.gmail.com>
+Message-ID: <20130527111829.42368807@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Dear Markos Chandras,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/neard/S53neard | 33 +++++++++++++++++++++++++++++++++
- package/neard/neard.mk |  9 +++++++++
- 2 files changed, 42 insertions(+)
- create mode 100755 package/neard/S53neard
+On Mon, 27 May 2013 10:05:10 +0100, Markos Chandras wrote:
 
-diff --git a/package/neard/S53neard b/package/neard/S53neard
-new file mode 100755
-index 0000000..0a75941
---- /dev/null
-+++ b/package/neard/S53neard
-@@ -0,0 +1,33 @@
-+#!/bin/sh
-+#
-+# Starts neard
-+#
-+
-+NAME=neard
-+DAEMON=/usr/libexec/nfc/$NAME
-+
-+# Exit gracefully if the package has been removed
-+[ -x $DAEMON ] || exit 0
-+
-+case "$1" in
-+  start)
-+    echo -n "Starting $NAME: "
-+    start-stop-daemon -S -q -p /var/run/${NAME}.pid -x $DAEMON -- -d '*'
-+    echo "OK"
-+    ;;
-+  stop)
-+    echo -n "Stopping $NAME: "
-+    start-stop-daemon -K -q -p /var/run/${NAME}.pid
-+    echo "OK"
-+    ;;
-+  restart|reload)
-+    $0 stop
-+    sleep 1
-+    $0 start
-+    ;;
-+  *)
-+    echo "Usage: $0 {start|stop|restart}"
-+    exit 1
-+esac
-+
-+exit $?
-diff --git a/package/neard/neard.mk b/package/neard/neard.mk
-index cc6aeac..57a434d 100644
---- a/package/neard/neard.mk
-+++ b/package/neard/neard.mk
-@@ -17,4 +17,13 @@ ifeq ($(BR2_PACKAGE_NEARD_TOOLS),y)
- 	NEARD_CONF_OPT += --enable-tools
- endif
- 
-+define NEARD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/neard/S53neard \
-+		$(TARGET_DIR)/etc/init.d/S53neard
-+endef
-+
-+define NEARD_UNINSTALL_INIT_SYSV
-+	$(RM) $(TARGET_DIR)/etc/init.d/S53neard
-+endef
-+
- $(eval $(autotools-package))
+> I did limited testing and I haven't seen this problem but I haven't
+> build busybox to be honest.
+> However, on the release notes they say they support MIPS64/n64
+> https://sourcery.mentor.com/GNUToolchain/release2358?@template=datasheet
+> 
+> so I just allowed buildroot to select this combination as well.
+> 
+> My understanding is that the compilation problem is orthogonal to
+> mip64/n64 patch in the sense
+> that forbidding the combination just hides the problem for now :)
+
+I agree that the problem is orthogonal, but having an external
+toolchain that isn't even capable of building Busybox worries me a
+little bit. This means that an user selecting mips64 and external
+toolchain, and keep all the other options as default, will see a
+failing build. Not really nice.
+
+We have various issues with the toolchain from Mentor Graphics. It
+would be nice if we could have some contact to help solve those issues.
+
+Best regards,
+
+Thomas
 -- 
-1.8.1.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
