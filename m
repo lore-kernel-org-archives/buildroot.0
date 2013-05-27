@@ -1,44 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 May 2013 01:01:03 +0200
-Subject: [Buildroot] [PATCH 5/6] libgtk2: remove useless post-patch hook
+Date: Tue, 28 May 2013 01:01:02 +0200
+Subject: [Buildroot] [PATCH 4/6] gutenprint: ensure target and host variant
+	have the same patch hooks
 In-Reply-To: <1369695664-5670-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1369695664-5670-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1369695664-5670-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1369695664-5670-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There used to be a post-patch hook to apply a patch only on the host
-variant of libgtk2. However, after the reorganization of the patch
-naming policy, this was no longer working properly, so
-dd1848bc73ee9dfe211ca3ed3a233707e3bc5955 changed this by a patch that
-works on both the target and host variants.
+In preparation for the out-of-tree support, it is important that all
+packages have the same patch hooks for the host variant and the target
+variant (because the source tree will be shared between host and
+target variants when doing out-of-tree build).
 
-We can therefore get rid of the useless post-patch hook.
+In the case of gutenprint, the patch hook executed for the target just
+creates one directory which is needed for autoreconf to work, and the
+host variant is not autoreconf'ed. So there is no harm in also
+applying this patch hook to the host variant.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgtk2/libgtk2.mk |    6 ------
- 1 file changed, 6 deletions(-)
+ package/gutenprint/gutenprint.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index b1ce99a..5881ea7 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -175,12 +175,6 @@ HOST_LIBGTK2_CONF_OPT = \
- 		--disable-cups \
- 		--disable-debug
- 
--define HOST_LIBGTK2_PATCH_REDUCE_DEPENDENCIES_HOOK
-- support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) host-*.patch
--endef
--
--HOST_LIBGTK2_POST_PATCH_HOOKS += HOST_LIBGTK2_PATCH_REDUCE_DEPENDENCIES_HOOK
--
- define HOST_LIBGTK2_BUILD_CMDS
-  $(HOST_MAKE_ENV) make -C $(@D)/gtk gtk-update-icon-cache
+diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
+index 834d967..2431a54 100644
+--- a/package/gutenprint/gutenprint.mk
++++ b/package/gutenprint/gutenprint.mk
+@@ -69,6 +69,7 @@ define GUTENPRINT_CREATE_M4_DIR
+ 	mkdir -p $(@D)/m4local
  endef
+ GUTENPRINT_POST_PATCH_HOOKS += GUTENPRINT_CREATE_M4_DIR
++HOST_GUTENPRINT_POST_PATCH_HOOKS += GUTENPRINT_CREATE_M4_DIR
+ 
+ define HOST_GUTENPRINT_POST_BUILD_INSTAL_TMP_HEADER
+ 	cp $(@D)/src/xml/xmli18n-tmp.h $(HOST_DIR)/usr/include
 -- 
 1.7.9.5
