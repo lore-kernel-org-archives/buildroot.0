@@ -1,41 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 27 May 2013 08:43:36 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump 3.9.x stable version
-In-Reply-To: <1369655016-28855-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1369655016-28855-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1369655016-28855-2-git-send-email-gustavo@zacarias.com.ar>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Mon, 27 May 2013 16:11:22 +0100
+Subject: [Buildroot] [PATCH] external-toolchain: Allow MIPS64 for
+ Codesourcery MIPS toolchains
+In-Reply-To: <20130527111829.42368807@skate>
+References: <1368627740-4094-1-git-send-email-markos.chandras@gmail.com>
+ <20130526152910.2a32ecbb@skate>
+ <CAG2jQ8hK4nY2mL4PQEX8miQyCZLbvV=H9scJu8ZaQPNZnnruNw@mail.gmail.com>
+ <20130527111829.42368807@skate>
+Message-ID: <CAG2jQ8gFdXRE9SF4m-5C0-oW=LHfUgZWkvVsZNLv3=T_=3+Lrw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 27 May 2013 10:18, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Markos Chandras,
+>
+> On Mon, 27 May 2013 10:05:10 +0100, Markos Chandras wrote:
+>
+>> I did limited testing and I haven't seen this problem but I haven't
+>> build busybox to be honest.
+>> However, on the release notes they say they support MIPS64/n64
+>> https://sourcery.mentor.com/GNUToolchain/release2358?@template=datasheet
+>>
+>> so I just allowed buildroot to select this combination as well.
+>>
+>> My understanding is that the compilation problem is orthogonal to
+>> mip64/n64 patch in the sense
+>> that forbidding the combination just hides the problem for now :)
+>
+> I agree that the problem is orthogonal, but having an external
+> toolchain that isn't even capable of building Busybox worries me a
+> little bit. This means that an user selecting mips64 and external
+> toolchain, and keep all the other options as default, will see a
+> failing build. Not really nice.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index b2d7850..1bbb574 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.9.2"
-+	bool "3.9.4"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.9.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.9.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
--- 
-1.8.1.5
+Ok I agree. I will try an out-of-buildroot build for busybox using
+this toolchain just to rule out specific buildroot problems. If that
+fails too then I will see if there is a way to report this problem.
+
+--
+Regards,
+Markos Chandras
