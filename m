@@ -1,81 +1,126 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 May 2013 00:00:30 +0200
-Subject: [Buildroot] [git commit branch/next] toolchain-external: remove
-	support for 'Sourcery CodeBench ARM 2011.03'
-Message-ID: <20130527221105.917B69A5E8@busybox.osuosl.org>
+Date: Tue, 28 May 2013 00:09:22 +0200
+Subject: [Buildroot] [git commit branch/next] sunxi-tools: new host/target
+	package
+Message-ID: <20130527221105.C20399A5E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9af20485d4f91263f2197fa9e3cac05d67ccdf92
+commit: http://git.buildroot.net/buildroot/commit/?id=e76dadc86ef9b7c80ae763d26d62e0bd42a24bd2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+[Peter: Fix Config.in wordwrap and trailing lines]
+Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/Config.in   |   25 -------------------------
- toolchain/toolchain-external/ext-tool.mk |    5 +----
- 2 files changed, 1 insertions(+), 29 deletions(-)
+ package/Config.in                  |    1 +
+ package/Config.in.host             |    1 +
+ package/sunxi-tools/Config.in      |    9 ++++++++
+ package/sunxi-tools/Config.in.host |   12 +++++++++++
+ package/sunxi-tools/sunxi-tools.mk |   37 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 60 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 5fdd27b..515c086 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -276,30 +276,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
- 	    - MIPS32 little endian soft float uclibc
- 	      Not usable in Buildroot yet.
+diff --git a/package/Config.in b/package/Config.in
+index 8bf1652..28c2c5c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -208,6 +208,7 @@ source "package/ntfs-3g/Config.in"
+ source "package/squashfs/Config.in"
+ source "package/squashfs3/Config.in"
+ source "package/sshfs/Config.in"
++source "package/sunxi-tools/Config.in"
+ source "package/unionfs/Config.in"
+ source "package/xfsprogs/Config.in"
+ endmenu
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 7c0dd20..54178ea 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -10,6 +10,7 @@ source "package/mtools/Config.in.host"
+ source "package/omap-u-boot-utils/Config.in.host"
+ source "package/openocd/Config.in.host"
+ source "package/sam-ba/Config.in.host"
++source "package/sunxi-tools/Config.in.host"
+ source "package/uboot-tools/Config.in.host"
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
--	bool "Sourcery CodeBench ARM 2011.03"
--	depends on BR2_arm
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	help
--	  Sourcery CodeBench toolchain for the ARM architecture, from
--	  Mentor Graphics. It uses gcc 4.5.2, binutils 2.20.51, glibc
--	  2.13 and gdb 7.2.50, kernel headers 2.6.38. It has support
--	  for the following variants:
--	    - ARMv5TE, little endian, soft-float, glibc
--	      Select ARM926T, ARM10T, XScale or another ARMv5 core
--	      Select BR2_SOFT_FLOAT
--	    - ARMv4T, little endian, soft-float, glibc
--	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
--	      Select BR2_SOFT_FLOAT
--	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
--	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
--	      Select BR2_SOFT_FLOAT
--	      Set BR2_TARGET_OPTIMIZATION to -mthumb
--
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
- 	bool "Sourcery CodeBench MIPS 2011.09"
- 	depends on BR2_mips || BR2_mipsel
-@@ -785,7 +761,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
--	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index b6532fc..b18f9ad 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -191,10 +191,7 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
- TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(TOOLCHAIN_EXTERNAL_DIR)/.extracted
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103),y)
--TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
--TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.03-41-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
+ endmenu
+diff --git a/package/sunxi-tools/Config.in b/package/sunxi-tools/Config.in
+new file mode 100644
+index 0000000..16bf2dc
+--- /dev/null
++++ b/package/sunxi-tools/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_SUNXI_TOOLS
++	bool "sunxi nand-part"
++	depends on BR2_arm
++	help
++	  nand-part is part of sunxi-tools for Allwinner A10 (aka sun4i) and
++	  A13 (aka sun5i) based devices. It is a tool to repartition the
++	  internal NAND on sunxi devices.
++
++	  http://linux-sunxi.org/Sunxi-tools
+diff --git a/package/sunxi-tools/Config.in.host b/package/sunxi-tools/Config.in.host
+new file mode 100644
+index 0000000..5fab5e6
+--- /dev/null
++++ b/package/sunxi-tools/Config.in.host
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_HOST_SUNXI_TOOLS
++	bool "host sunxi-tools"
++	depends on BR2_arm
++	help
++	  Tools for Allwinner A10 (aka sun4i) and A13 (aka sun5i)
++	  based devices. This includes fex2bin which can be used to
++	  compile .fex board definition files to the binary script.bin
++	  format required by the linux-sunxi kernel. These tools are
++	  specific for linux-sunxi kernel and do not apply to the
++	  mainline Linux kernel version.
++
++	  http://linux-sunxi.org/Sunxi-tools
+diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+new file mode 100644
+index 0000000..a97dfcb
+--- /dev/null
++++ b/package/sunxi-tools/sunxi-tools.mk
+@@ -0,0 +1,37 @@
++#############################################################
++#
++# sunxi-tools
++#
++#############################################################
++
++SUNXI_TOOLS_VERSION = 3a94e721dd8d1e13d0b25da0a83463891e8e9ee0
++SUNXI_TOOLS_SITE = http://github.com/linux-sunxi/sunxi-tools/tarball/master
++SUNXI_TOOLS_LICENSE = GPLv2+
++SUNXI_TOOLS_LICENSE_FILES = COPYING
++HOST_SUNXI_TOOLS_DEPENDENCIES = host-libusb
++FEX2BIN = $(HOST_DIR)/usr/bin/fex2bin
++
++define HOST_SUNXI_TOOLS_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
++		CFLAGS="$(HOST_CFLAGS) -std=c99 -D_POSIX_C_SOURCE=200112L -Iinclude/" \
++		-C $(@D)
++endef
++
++define HOST_SUNXI_TOOLS_INSTALL_CMDS
++	for i in fexc bin2fex fex2bin bootinfo fel pio; do \
++		$(INSTALL) -D -m 0755 $(@D)/$$i $(HOST_DIR)/usr/bin/$$i ; \
++	done
++endef
++
++define SUNXI_TOOLS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS) -std=c99 -D_POSIX_C_SOURCE=200112L -Iinclude/" \
++		-C $(@D) nand-part
++endef
++
++define SUNXI_TOOLS_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/nand-part $(TARGET_DIR)/usr/bin/nand-part
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
