@@ -1,54 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 May 2013 12:36:40 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	yem-patchwork-fixes
-Message-ID: <cover.1369650924.git.yann.morin.1998@free.fr>
+Date: Mon, 27 May 2013 12:36:41 +0200
+Subject: [Buildroot] [PATCH 1/4] toolchain/uClibc: ensure .oldconfig is
+	writable
+In-Reply-To: <cover.1369650924.git.yann.morin.1998@free.fr>
+References: <cover.1369650924.git.yann.morin.1998@free.fr>
+Message-ID: <397196f0d6de13364834eae4659d79249deadf29.1369650924.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From: Nathan Lynch <ntl@pobox.com>
 
-Hello All!
+If $(UCLIBC_CONFIG_FILE) is read-only (eg. because Buildroot's
+source dir is), the sed fixups to .oldconfig fail.
 
-Here are four patches from Nathan Lynch to fix building out-of-tree
-when the Buildroot source tree is readonly (eg. shared via NFS between
-multiple developers).
-
-Regards,
-Yann E. MORIN
-
-
-The following changes since commit 1e7f40ebb5cfc58010faf5e8d751de9207dc6a5d:
-
-  Revert "dependencies: check that SSL certificates are installed" (2013-05-26 11:14:00 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem-patchwork-fixes
-
-for you to fetch changes up to 73b5281a6c6d7cf1ba5d2c6340e39e9ebc2d36d0:
-
-  linux: ensure buildroot_defconfig is writable (2013-05-27 12:34:40 +0200)
-
-----------------------------------------------------------------
-Nathan Lynch (4):
-      toolchain/uClibc: ensure .oldconfig is writable
-      target: ensure target/ dir is writable
-      busybox: ensure $(BUSYBOX_BUILD_CONFIG) is writable
-      linux: ensure buildroot_defconfig is writable
-
- Makefile                   | 4 ++--
- linux/linux.mk             | 4 ++--
- package/busybox/busybox.mk | 2 +-
+Signed-off-by: Nathan Lynch <ntl@pobox.com>
+[yann.morin.1998 at free.fr: use $(INSTALL) instead of cp]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
  toolchain/uClibc/uclibc.mk | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index d4f1d4c..1a9934d 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -94,7 +94,7 @@ endif
+ # Some targets may wish to provide their own UCLIBC_CONFIG_FILE...
+ $(UCLIBC_DIR)/.oldconfig: $(UCLIBC_DIR)/.patched $(UCLIBC_CONFIG_FILE)
+ 	$(Q)$(call MESSAGE,"Pre-configuring uClibc")
+-	cp -f $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.oldconfig
++	$(INSTALL) -D -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.oldconfig
+ 	$(SED) 's,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="$(TARGET_CROSS)",g' \
+ 		-e 's,# TARGET_$(UCLIBC_TARGET_ARCH) is not set,TARGET_$(UCLIBC_TARGET_ARCH)=y,g' \
+ 		-e 's,^TARGET_ARCH=".*",TARGET_ARCH=\"$(UCLIBC_TARGET_ARCH)\",g' \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
