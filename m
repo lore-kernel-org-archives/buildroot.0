@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 May 2013 00:03:06 +0200
-Subject: [Buildroot] [PATCH 09/20] toolchain-external: add support for
-	'Sourcery CodeBench ARM 2013.05'
-In-Reply-To: <1369606110-8088-10-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 27 May 2013 00:08:19 +0200")
+Date: Tue, 28 May 2013 00:03:26 +0200
+Subject: [Buildroot] [PATCH 10/20] toolchain-external: remove support
+	for 'Sourcery CodeBench ARM 2011.03'
+In-Reply-To: <1369606110-8088-11-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 27 May 2013 00:08:20 +0200")
 References: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1369606110-8088-10-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878v30cc85.fsf@dell.be.48ers.dk>
+ <1369606110-8088-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <874ndocc7l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
