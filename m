@@ -1,76 +1,43 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Mon, 27 May 2013 10:05:10 +0100
-Subject: [Buildroot] [PATCH] external-toolchain: Allow MIPS64 for
- Codesourcery MIPS toolchains
-In-Reply-To: <20130526152910.2a32ecbb@skate>
-References: <1368627740-4094-1-git-send-email-markos.chandras@gmail.com>
- <20130526152910.2a32ecbb@skate>
-Message-ID: <CAG2jQ8hK4nY2mL4PQEX8miQyCZLbvV=H9scJu8ZaQPNZnnruNw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 May 2013 11:16:02 +0200
+Subject: [Buildroot] AT91SAM9G20-EK and aplay
+In-Reply-To: <51A31366.4060405@scen.it>
+References: <519F186B.3060606@scen.it> <20130524100520.01c518fd@skate>
+ <519F2CDB.8080805@scen.it> <20130524112355.70d1cc53@skate>
+ <519F452D.4070505@scen.it> <519F6226.4060002@zacarias.com.ar>
+ <51A31366.4060405@scen.it>
+Message-ID: <20130527111602.6a8150b7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26 May 2013 14:29, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Markos Chandras,
->
-> On Wed, 15 May 2013 15:22:20 +0100, Markos Chandras wrote:
->> From: Markos Chandras <markos.chandras@imgtec.com>
->>
->> The n64 ABI which is supported by the Codesourcery MIPS toolchains,
->> is only available with MIPS64 so allow these cores to be selected
->> and used with these toolchains.
->>
->> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
->> ---
->>  toolchain/toolchain-external/Config.in |   20 ++++++++++----------
->>  1 files changed, 10 insertions(+), 10 deletions(-)
->
-> I've just tested this one, and with the following defconfig:
->
-> BR2_mips64el=y
-> BR2_MIPS_NABI64=y
-> BR2_TOOLCHAIN_EXTERNAL=y
->
-> the Busybox compilation fails with:
->
-> In file included from libbb/pw_encrypt.c:89:0:
-> libbb/pw_encrypt_des.c: In function 'pw_encrypt':
-> libbb/pw_encrypt_des.c:289:27: internal compiler error: in gen_rtx_SUBREG, at emit-rtl.c:769
-> Please submit a full bug report,
-> with preprocessed source if appropriate.
-> See <https://support.codesourcery.com/GNUToolchain/> for instructions.
-> make[2]: *** [libbb/pw_encrypt.o] Erreur 1
->
-> It does not appear with the same toolchain in MIPS32 mode. I agree it's
-> a toolchain bug, but I'm just wondering in which conditions you tested
-> your patch and/or if something can be done to avoid the toolchain
-> breakage.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+Dear Carlo Rajko,
 
-Hi Thomas,
+On Mon, 27 May 2013 10:03:50 +0200, Carlo Rajko wrote:
 
-I did limited testing and I haven't seen this problem but I haven't
-build busybox to be honest.
-However, on the release notes they say they support MIPS64/n64
-https://sourcery.mentor.com/GNUToolchain/release2358?@template=datasheet
+> > Actually it's the toolchain, seems CS 2012.03 isn't emitting proper
+> > arm926ej-s code.
+> > I've managed to reproduce it with the qemu_arm_versatile sample
+> > configuration and adding a bunch of packages (mpg123, vorbis-tools, ...)
+> > It did strike me as odd that i've got the same failures as yours (aplay,
+> > mpg123) but ogg123 worked fine with alsa output.
+> > So switching to an internal toolchain or CS 2011.09 magically fixed the
+> > issues.
+> 
+> I switch to CS 2011.09 and now is ok, thanks.
 
-so I just allowed buildroot to select this combination as well.
+It's a problem worth reporting to Mentor Graphics, IMO.
 
-My understanding is that the compilation problem is orthogonal to
-mip64/n64 patch in the sense
-that forbidding the combination just hides the problem for now :)
+Even though I doubt anything will happen, last time I reported a bug,
+nothing really happened, unfortunately.
 
---
-Regards,
-Markos Chandras
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
