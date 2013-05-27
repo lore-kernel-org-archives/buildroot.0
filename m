@@ -1,48 +1,65 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 May 2013 21:59:28 +0200
-Subject: [Buildroot] [git commit] ed: Convert to generic package
-	infrastructure
-Message-ID: <20130602212055.D10789A6D3@busybox.osuosl.org>
+Date: Mon, 27 May 2013 13:10:26 +0200
+Subject: [Buildroot] [git commit] dropbear: factorize the 'depends on
+	BR2_PACKAGE_DROPBEAR'
+Message-ID: <20130602212058.318B99A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2a37b625e2d89cf64674f320de39d743db080c03
+commit: http://git.buildroot.net/buildroot/commit/?id=a5ee03b252906f4a3533566dad170a16d9d6125f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The package uses custom configure and Makefile files.
+Enclose all dropbear sub-options into a 'if BR2_PACKAGE_DROPBEAR'
+... 'endif' block rather than having 'depends on BR2_PACKAGE_DROPBEAR'
+for each option.
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ed/ed.mk |   18 +++++++++++++++++-
- 1 files changed, 17 insertions(+), 1 deletions(-)
+ package/dropbear/Config.in |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-index 2bb8e0e..52ae1f0 100644
---- a/package/ed/ed.mk
-+++ b/package/ed/ed.mk
-@@ -11,4 +11,20 @@ ED_CONF_OPT = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
- ED_LICENSE = GPLv3+
- ED_LICENSE_FILES = COPYING
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index 0903ad1..68c3b71 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -6,9 +6,10 @@ config BR2_PACKAGE_DROPBEAR
  
--$(eval $(autotools-package))
-+define ED_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		./configure \
-+		--prefix=/usr \
-+		$(TARGET_CONFIGURE_OPTS) \
-+	)
-+endef
+ 	  http://matt.ucc.asn.au/dropbear/dropbear.html
+ 
++if BR2_PACKAGE_DROPBEAR
 +
-+define ED_BUILD_CMDS
-+	$(MAKE)	-C $(@D)
-+endef
+ config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
+ 	bool "disable reverse DNS lookups"
+-	depends on BR2_PACKAGE_DROPBEAR
+ 	help
+ 	  Disable reverse DNS lookups on connection. This can be handy
+ 	  on systems without working DNS, as connections otherwise
+@@ -17,7 +18,6 @@ config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
+ config BR2_PACKAGE_DROPBEAR_SMALL
+ 	bool "optimize for size"
+ 	default y
+-	depends on BR2_PACKAGE_DROPBEAR
+ 	help
+ 	  Compile dropbear for the smallest possible binary size.
+ 
+@@ -26,14 +26,14 @@ config BR2_PACKAGE_DROPBEAR_SMALL
+ 
+ config BR2_PACKAGE_DROPBEAR_WTMP
+ 	bool "log dropbear access to wtmp"
+-	depends on BR2_PACKAGE_DROPBEAR
+ 	help
+ 	  Enable logging of dropbear access to wtmp. Notice that
+ 	  Buildroot does not generate wtmp by default.
+ 
+ config BR2_PACKAGE_DROPBEAR_LASTLOG
+ 	bool "log dropbear access to lastlog"
+-	depends on BR2_PACKAGE_DROPBEAR
+ 	help
+ 	  Enable logging of dropbear access to lastlog. Notice that
+ 	  Buildroot does not generate lastlog by default.
 +
-+define ED_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+endef
-+
-+$(eval $(generic-package))
++endif
