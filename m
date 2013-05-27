@@ -1,83 +1,76 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 27 May 2013 11:02:32 +0200
-Subject: [Buildroot] [PATCH 1/1] infra: allow running 'make clean menuconfig
-	; make *-menuconfig'
-Message-ID: <1369645352-11942-1-git-send-email-s.martin49@gmail.com>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Mon, 27 May 2013 10:05:10 +0100
+Subject: [Buildroot] [PATCH] external-toolchain: Allow MIPS64 for
+ Codesourcery MIPS toolchains
+In-Reply-To: <20130526152910.2a32ecbb@skate>
+References: <1368627740-4094-1-git-send-email-markos.chandras@gmail.com>
+ <20130526152910.2a32ecbb@skate>
+Message-ID: <CAG2jQ8hK4nY2mL4PQEX8miQyCZLbvV=H9scJu8ZaQPNZnnruNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds host-ccache to the dependency list of any package if
-BR2_CCACHE is enable.
+On 26 May 2013 14:29, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Markos Chandras,
+>
+> On Wed, 15 May 2013 15:22:20 +0100, Markos Chandras wrote:
+>> From: Markos Chandras <markos.chandras@imgtec.com>
+>>
+>> The n64 ABI which is supported by the Codesourcery MIPS toolchains,
+>> is only available with MIPS64 so allow these cores to be selected
+>> and used with these toolchains.
+>>
+>> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+>> ---
+>>  toolchain/toolchain-external/Config.in |   20 ++++++++++----------
+>>  1 files changed, 10 insertions(+), 10 deletions(-)
+>
+> I've just tested this one, and with the following defconfig:
+>
+> BR2_mips64el=y
+> BR2_MIPS_NABI64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+>
+> the Busybox compilation fails with:
+>
+> In file included from libbb/pw_encrypt.c:89:0:
+> libbb/pw_encrypt_des.c: In function 'pw_encrypt':
+> libbb/pw_encrypt_des.c:289:27: internal compiler error: in gen_rtx_SUBREG, at emit-rtl.c:769
+> Please submit a full bug report,
+> with preprocessed source if appropriate.
+> See <https://support.codesourcery.com/GNUToolchain/> for instructions.
+> make[2]: *** [libbb/pw_encrypt.o] Erreur 1
+>
+> It does not appear with the same toolchain in MIPS32 mode. I agree it's
+> a toolchain bug, but I'm just wondering in which conditions you tested
+> your patch and/or if something can be done to avoid the toolchain
+> breakage.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
-Fixes bug #5678
+Hi Thomas,
 
-Also, drop some explicit redundant host-ccache dependencies that
-intend to fix this kind of issue.
+I did limited testing and I haven't seen this problem but I haven't
+build busybox to be honest.
+However, on the release notes they say they support MIPS64/n64
+https://sourcery.mentor.com/GNUToolchain/release2358?@template=datasheet
 
-Note that, only the uClibc dependency on host-ccache remains since
-uClibc does not use any of the Buildroot package infrastructure yet.
+so I just allowed buildroot to select this combination as well.
 
-Signed-off-by: "Samuel Martin" <s.martin49@gmail.com>
----
- package/crosstool-ng/crosstool-ng.mk |  2 +-
- package/pkg-generic.mk               | 12 ++++++++++++
- package/sstrip/sstrip.mk             |  5 -----
- 3 files changed, 13 insertions(+), 6 deletions(-)
+My understanding is that the compilation problem is orthogonal to
+mip64/n64 patch in the sense
+that forbidding the combination just hides the problem for now :)
 
-diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
-index b533396..0b96b50 100644
---- a/package/crosstool-ng/crosstool-ng.mk
-+++ b/package/crosstool-ng/crosstool-ng.mk
-@@ -5,7 +5,7 @@ CROSSTOOL_NG_INSTALL_TARGET    = NO
- CROSSTOOL_NG_MAKE              = $(MAKE1)
- 
- HOST_CROSSTOOL_NG_DEPENDENCIES = \
--	$(if $(BR2_CCACHE),host-ccache) host-gawk \
-+	host-gawk \
- 	host-automake host-gperf host-bison host-flex \
- 	host-texinfo
- 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 56fca6b..1c8d182 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -306,6 +306,18 @@ $(2)_REDISTRIBUTE		?= YES
- 
- $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
- 
-+# Inconditionnaly add host-ccache dependency when BR2_CCACHE is enabled.
-+# This allows to run the following without failing on test the compiler
-+# because the ccache binary is not yet built:
-+#
-+# $ make clean menuconfig
-+# $ make [linux|ctng|uclibc|barebox|busybox]-menuconfig
-+ifeq ($(BR2_CCACHE),y)
-+ifneq ($(1),host-ccache)
-+$(2)_DEPENDENCIES += host-ccache
-+endif
-+endif
-+
- $(2)_INSTALL_STAGING		?= NO
- $(2)_INSTALL_IMAGES		?= NO
- $(2)_INSTALL_TARGET		?= YES
-diff --git a/package/sstrip/sstrip.mk b/package/sstrip/sstrip.mk
-index e078b2c..3c29c52 100644
---- a/package/sstrip/sstrip.mk
-+++ b/package/sstrip/sstrip.mk
-@@ -8,11 +8,6 @@ SSTRIP_SITE = svn://dev.openwrt.org/openwrt/trunk/tools/sstrip
- SSTRIP_VERSION = 20154
- HOST_SSTRIP_BINARY = $(GNU_TARGET_NAME)-sstrip
- 
--# This is a kludge to get host-ccache built before us or it fails
--ifeq ($(BR2_CCACHE),y)
--HOST_SSTRIP_DEPENDENCIES = host-ccache
--endif
--
- define SSTRIP_BUILD_CMDS
- 	cd $(@D) ; \
- 	$(TARGET_CC) $(TARGET_CFLAGS) -include endian.h -include byteswap.h \
--- 
-1.8.3
+--
+Regards,
+Markos Chandras
