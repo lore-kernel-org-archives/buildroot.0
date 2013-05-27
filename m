@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 May 2013 12:36:42 +0200
-Subject: [Buildroot] [PATCH 2/4] target: ensure target/ dir is writable
+Date: Mon, 27 May 2013 12:36:43 +0200
+Subject: [Buildroot] [PATCH 3/4] busybox: ensure $(BUSYBOX_BUILD_CONFIG) is
+	writable
 In-Reply-To: <cover.1369650924.git.yann.morin.1998@free.fr>
 References: <cover.1369650924.git.yann.morin.1998@free.fr>
-Message-ID: <5bc29f5d47813a98ecd0213cd1312761056e713c.1369650924.git.yann.morin.1998@free.fr>
+Message-ID: <12f893c8c318d2068e46ddfd1e1e0270f8839b1a.1369650924.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +13,29 @@ To: buildroot@busybox.net
 
 From: Nathan Lynch <ntl@pobox.com>
 
-If the source target skeleton is read-only (eg. because Buildroot's
-source dir is), modifications to the output target (such as creating
-/etc/hostname and /etc/issue) fail.
+If $(BUSYBOX_CONFIG_FILE) is read-only (eg. because Buildroot's
+source dir is), the sed fixups to $(BUSYBOX_BUILD_CONFIG) fail.
 
 Signed-off-by: Nathan Lynch <ntl@pobox.com>
-[yann.morin.1998 at free.fr: we use rsync now, not cp; --chmod=Du+w
- suggested by Arnout; clarify commit log]
+[yann.morin.1998 at free.fr: use $(INSTALL) instead of cp]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/busybox/busybox.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index e8647d1..2a62a65 100644
---- a/Makefile
-+++ b/Makefile
-@@ -431,7 +431,7 @@ endif
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 985203c..0b6c18f 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -123,7 +123,7 @@ endef
+ endif
  
- $(BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
--	rsync -a \
-+	rsync -a --chmod=Du+w \
- 		--exclude .empty --exclude .svn --exclude .git \
- 		--exclude .hg --exclude=CVS --exclude '*~' \
- 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
-@@ -507,7 +507,7 @@ endif
+ define BUSYBOX_COPY_CONFIG
+-	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
++	$(INSTALL) -D -m 0644 $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
+ endef
  
- 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- 		$(call MESSAGE,"Copying overlay $(d)"); \
--		rsync -a \
-+		rsync -a --chmod=Du+w \
- 			--exclude .empty --exclude .svn --exclude .git \
- 			--exclude .hg --exclude=CVS --exclude '*~' \
- 			$(d)/ $(TARGET_DIR)$(sep))
+ # Disable shadow passwords support if unsupported by the C library
 -- 
 1.8.1.2
