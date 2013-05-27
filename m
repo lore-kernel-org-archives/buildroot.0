@@ -1,35 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 May 2013 22:06:03 +0200
-Subject: [Buildroot] Student for the Google Summer of Code,
- hardware donations needed
-In-Reply-To: <20130525221541.0ef3ab27@skate>
-References: <20130525221541.0ef3ab27@skate>
-Message-ID: <20130527220603.46b17e2a@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 27 May 2013 20:43:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 5978] Erlang does not build for arm in 2013.02-rc3
+In-Reply-To: <bug-5978-163@https.bugs.busybox.net/>
+References: <bug-5978-163@https.bugs.busybox.net/>
+Message-ID: <20130527204342.E9AC19A5CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+https://bugs.busybox.net/show_bug.cgi?id=5978
 
-On Sat, 25 May 2013 22:15:41 +0200, Thomas Petazzoni wrote:
+--- Comment #6 from Arnout Vandecappelle <arnout@mind.be> 2013-05-27 20:42:37 UTC ---
+Looks to me like host-erlang should either depend on host-zlib, or set the
+--disable-shared-zlib option.
 
-> However, the selection of Spenser and its participation to GSoC is not
-> completely official yet. On May 27th, at 7 PM UTC, Google will
-> officially announce the selected student.
-
-I'm pleased to let you know that Spenser has been accepted for this
-GSoC, so he will be working with us during this summer to improve the
-state of ARM multimedia support in Buildroot.
-
-I'm looking forward to working with Spenser in this direction!
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
