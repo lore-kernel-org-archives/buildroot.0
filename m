@@ -1,46 +1,28 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Mon, 27 May 2013 16:11:22 +0100
-Subject: [Buildroot] [PATCH] external-toolchain: Allow MIPS64 for
- Codesourcery MIPS toolchains
-In-Reply-To: <20130527111829.42368807@skate>
-References: <1368627740-4094-1-git-send-email-markos.chandras@gmail.com>
- <20130526152910.2a32ecbb@skate>
- <CAG2jQ8hK4nY2mL4PQEX8miQyCZLbvV=H9scJu8ZaQPNZnnruNw@mail.gmail.com>
- <20130527111829.42368807@skate>
-Message-ID: <CAG2jQ8gFdXRE9SF4m-5C0-oW=LHfUgZWkvVsZNLv3=T_=3+Lrw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 27 May 2013 15:14:16 +0000 (UTC)
+Subject: [Buildroot] [Bug 5516] appended device tree blobs on uImage fails
+In-Reply-To: <bug-5516-163@https.bugs.busybox.net/>
+References: <bug-5516-163@https.bugs.busybox.net/>
+Message-ID: <20130527151416.8F7D29A3B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27 May 2013 10:18, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Markos Chandras,
->
-> On Mon, 27 May 2013 10:05:10 +0100, Markos Chandras wrote:
->
->> I did limited testing and I haven't seen this problem but I haven't
->> build busybox to be honest.
->> However, on the release notes they say they support MIPS64/n64
->> https://sourcery.mentor.com/GNUToolchain/release2358?@template=datasheet
->>
->> so I just allowed buildroot to select this combination as well.
->>
->> My understanding is that the compilation problem is orthogonal to
->> mip64/n64 patch in the sense
->> that forbidding the combination just hides the problem for now :)
->
-> I agree that the problem is orthogonal, but having an external
-> toolchain that isn't even capable of building Busybox worries me a
-> little bit. This means that an user selecting mips64 and external
-> toolchain, and keep all the other options as default, will see a
-> failing build. Not really nice.
+https://bugs.busybox.net/show_bug.cgi?id=5516
 
-Ok I agree. I will try an out-of-buildroot build for busybox using
-this toolchain just to rule out specific buildroot problems. If that
-fails too then I will see if there is a way to report this problem.
+--- Comment #17 from Maxime Ripard <maxime.ripard@free-electrons.com> 2013-05-27 15:13:10 UTC ---
+(In reply to comment #16)
+> I was hoping to spend some time to get a minimal example, but I haven't gotten
+> to it yet, but I wanted to get something up in case anyone else is looking into
+> this at the same time. This config does have the problem.
 
---
-Regards,
-Markos Chandras
+I couldn't reproduce the problem here with 3.9 and the config you were pointing
+to. Anyway, since 3.7 is quite recent anyway, we can always merge the patch, it
+does no harm, and fixes things for some users.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
