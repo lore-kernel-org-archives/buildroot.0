@@ -1,51 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 May 2013 11:23:45 +0200
-Subject: [Buildroot] [PATCH 1/1] infra: allow running 'make clean
- menuconfig ; make *-menuconfig'
-In-Reply-To: <1369645352-11942-1-git-send-email-s.martin49@gmail.com>
-References: <1369645352-11942-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20130527112345.1741b563@skate>
+From: john <john.osullivan@cloudiumsystems.com>
+Date: Mon, 27 May 2013 10:49:33 +0100
+Subject: [Buildroot] Environment Variables and CMAKE
+In-Reply-To: <CAHXCMMLF5OcqGrYpxuAH=-9+By7CfLTCzc1C9yha5Jn+S4JgQw@mail.gmail.com>
+References: <1369239715.2814.31.camel@john-ubu>
+ <CAHXCMMLF5OcqGrYpxuAH=-9+By7CfLTCzc1C9yha5Jn+S4JgQw@mail.gmail.com>
+Message-ID: <1369648173.2814.53.camel@john-ubu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
-
-On Mon, 27 May 2013 11:02:32 +0200, Samuel Martin wrote:
-
-> +# Inconditionnaly add host-ccache dependency when BR2_CCACHE is enabled.
-> +# This allows to run the following without failing on test the compiler
-> +# because the ccache binary is not yet built:
-> +#
-> +# $ make clean menuconfig
-> +# $ make [linux|ctng|uclibc|barebox|busybox]-menuconfig
-> +ifeq ($(BR2_CCACHE),y)
-> +ifneq ($(1),host-ccache)
-> +$(2)_DEPENDENCIES += host-ccache
-> +endif
-> +endif
-
-I am not sure we want to make this specific to the ccache problem. The
-linux-menuconfig target also needs to depend on "dirs" so that the base
-directories need to be created.
-
-Shouldn't we depend on something like $(BASE_TARGETS) instead, which
-will then contain "host-ccache dirs", and everything that's needed?
-Also, all packages depend on the toolchain (but beware, binutils is
-also a package, and is part of the toolchain).
-
-So just like everything in the core infrastructure: I don't want a
-patch that just fixes the particular problem of this bug by adding more
-crap. I want something that clarifies the dependency of packages on
-"base" things, and makes it work properly.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks Samuel and Arnout, I have gotten something working now using your
+suggestions
+On Sun, 2013-05-26 at 14:16 +0200, Samuel Martin wrote:
+> Hi John,
+> 
+> 2013/5/22 john <john.osullivan@cloudiumsystems.com>:
+> > Hi,
+> >
+> > I have a cmake based project which I am trying to incorporate into
+> > buildroot-2012.05
+> >
+> > As part of the configuration of the code I need to pass it an
+> > environment variable $(CLIENT_VER) which I generate at the time of
+> > building in the source directory (which I check out of SVN).
+> > I have tried various approaches without success.
+> >
+> > This is my mk file
+> > #I first tried this approach by generating the cmake configuration
+> > #command with a script and then executing that script
+> > #but the problem here was I would need to know the location of the
+> > #buildroot generated version of cmake and the toolchain file
+> > #I could figure these out in the script but I felt there must be a
+> > #simpler approach
+> > #define CLIENT_BARROW_CONFIGURE_CMDS
+> > #       (cd $(CLIENT_BARROW_SRCDIR) && source set_environment.sh \
+> > #       && ./cmake_run \
+> > #       )
+> > #endef
+> 
+> Does the set_environment.sh script do anything else than setting the
+> CLIENT_VER env. var.?
+> If this version number is stored in its own file, then another way is:
+> CLIENT_BARROW_CONF_OPT += -DCLIENT_VER_STR="$(shell cat
+> version_file.txt 2>/dev/null)"
+> 
+> Regards,
+> 
