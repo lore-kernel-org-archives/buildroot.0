@@ -1,50 +1,41 @@
-From: john <john.osullivan@cloudiumsystems.com>
-Date: Mon, 27 May 2013 10:49:33 +0100
-Subject: [Buildroot] Environment Variables and CMAKE
-In-Reply-To: <CAHXCMMLF5OcqGrYpxuAH=-9+By7CfLTCzc1C9yha5Jn+S4JgQw@mail.gmail.com>
-References: <1369239715.2814.31.camel@john-ubu>
- <CAHXCMMLF5OcqGrYpxuAH=-9+By7CfLTCzc1C9yha5Jn+S4JgQw@mail.gmail.com>
-Message-ID: <1369648173.2814.53.camel@john-ubu>
+From: Carlo Rajko <carlo.rajko@scen.it>
+Date: Mon, 27 May 2013 12:28:45 +0200
+Subject: [Buildroot] AT91SAM9G20-EK and aplay
+In-Reply-To: <20130527111602.6a8150b7@skate>
+References: <519F186B.3060606@scen.it> <20130524100520.01c518fd@skate>
+ <519F2CDB.8080805@scen.it> <20130524112355.70d1cc53@skate>
+ <519F452D.4070505@scen.it> <519F6226.4060002@zacarias.com.ar>
+ <51A31366.4060405@scen.it> <20130527111602.6a8150b7@skate>
+Message-ID: <51A3355D.3070209@scen.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Samuel and Arnout, I have gotten something working now using your
-suggestions
-On Sun, 2013-05-26 at 14:16 +0200, Samuel Martin wrote:
-> Hi John,
+Il 27/05/2013 11:16, Thomas Petazzoni ha scritto:
+> Dear Carlo Rajko,
 > 
-> 2013/5/22 john <john.osullivan@cloudiumsystems.com>:
-> > Hi,
-> >
-> > I have a cmake based project which I am trying to incorporate into
-> > buildroot-2012.05
-> >
-> > As part of the configuration of the code I need to pass it an
-> > environment variable $(CLIENT_VER) which I generate at the time of
-> > building in the source directory (which I check out of SVN).
-> > I have tried various approaches without success.
-> >
-> > This is my mk file
-> > #I first tried this approach by generating the cmake configuration
-> > #command with a script and then executing that script
-> > #but the problem here was I would need to know the location of the
-> > #buildroot generated version of cmake and the toolchain file
-> > #I could figure these out in the script but I felt there must be a
-> > #simpler approach
-> > #define CLIENT_BARROW_CONFIGURE_CMDS
-> > #       (cd $(CLIENT_BARROW_SRCDIR) && source set_environment.sh \
-> > #       && ./cmake_run \
-> > #       )
-> > #endef
+> On Mon, 27 May 2013 10:03:50 +0200, Carlo Rajko wrote:
 > 
-> Does the set_environment.sh script do anything else than setting the
-> CLIENT_VER env. var.?
-> If this version number is stored in its own file, then another way is:
-> CLIENT_BARROW_CONF_OPT += -DCLIENT_VER_STR="$(shell cat
-> version_file.txt 2>/dev/null)"
+>>> Actually it's the toolchain, seems CS 2012.03 isn't emitting proper
+>>> arm926ej-s code.
+>>> I've managed to reproduce it with the qemu_arm_versatile sample
+>>> configuration and adding a bunch of packages (mpg123, vorbis-tools, ...)
+>>> It did strike me as odd that i've got the same failures as yours (aplay,
+>>> mpg123) but ogg123 worked fine with alsa output.
+>>> So switching to an internal toolchain or CS 2011.09 magically fixed the
+>>> issues.
+>>
+>> I switch to CS 2011.09 and now is ok, thanks.
 > 
-> Regards,
+> It's a problem worth reporting to Mentor Graphics, IMO.
 > 
+> Even though I doubt anything will happen, last time I reported a bug,
+> nothing really happened, unfortunately.
+
+I'll try with the new version 2013.05, just available in the package
+buildroot, maybe the problem is already solved.
+
+Regards,
+Carlo
