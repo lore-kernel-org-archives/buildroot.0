@@ -1,79 +1,88 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 27 May 2013 23:59:54 +0200
-Subject: [Buildroot] [git commit] toolchain-external: add support for
-	'Sourcery CodeBench ARM 2013.05'
-Message-ID: <20130602212058.A41929A6D3@busybox.osuosl.org>
+Date: Mon, 27 May 2013 10:41:16 +0200
+Subject: [Buildroot] [git commit] numactl: new package
+Message-ID: <20130602212057.DBEF79A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=786700eebea40147b88a4d96bd56504bf51241b2
+commit: http://git.buildroot.net/buildroot/commit/?id=b05e74ff92b6728369e1540fc0a2bd60025f2146
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+[Thomas: updated to 2.0.8, restricted to supported architectures,
+added licensing informations, updated to latest Buildroot package
+infrastructure]
+
+[Peter: Fix LICENSE_FILES typo, needs largefile support in toolchain]
+Signed-off-by: Will Newton <will.newton@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/Config.in   |   25 +++++++++++++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |    3 +++
- 2 files changed, 28 insertions(+), 0 deletions(-)
+ package/Config.in          |    1 +
+ package/numactl/Config.in  |   16 ++++++++++++++++
+ package/numactl/numactl.mk |   21 +++++++++++++++++++++
+ 3 files changed, 38 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index a93ada3..5fdd27b 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -64,6 +64,30 @@ comment "Linaro toolchains available for Cortex-A{5,8,9,15}"
- 	depends on BR2_arm
- 	depends on !BR2_cortex_a5 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15
- 
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
-+	bool "Sourcery CodeBench ARM 2013.05"
-+	depends on BR2_arm
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+diff --git a/package/Config.in b/package/Config.in
+index 52a0735..8bf1652 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -859,6 +859,7 @@ source "package/module-init-tools/Config.in"
+ endif
+ source "package/monit/Config.in"
+ source "package/ncdu/Config.in"
++source "package/numactl/Config.in"
+ source "package/polkit/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/procps/Config.in"
+diff --git a/package/numactl/Config.in b/package/numactl/Config.in
+new file mode 100644
+index 0000000..21e76fb
+--- /dev/null
++++ b/package/numactl/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_NUMACTL
++	bool "numactl"
++	# numactl uses some system calls that are not available on all
++	# architectures.
++	depends on BR2_LARGEFILE
++	depends on BR2_i386 || BR2_mips || BR2_mipsel || \
++		   BR2_mips64 || BR2_mips64el || BR2_powerpc || BR2_x86_64
 +	help
-+	  Sourcery CodeBench toolchain for the ARM architecture, from
-+	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
-+	  2.17 and gdb 7.4.50, kernel headers 3.8.2. It has support
-+	  for the following variants:
-+	    - ARMv5TE, little endian, soft-float, glibc
-+	      Select ARM926T, ARM10T, XScale or another ARMv5 core
-+	      Select BR2_SOFT_FLOAT
-+	    - ARMv4T, little endian, soft-float, glibc
-+	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
-+	      Select BR2_SOFT_FLOAT
-+	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
-+	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
-+	      Select BR2_SOFT_FLOAT
-+	      Set BR2_TARGET_OPTIMIZATION to -mthumb
++	  numactl allows you to run your application on specific cpus
++	  and memory nodes. It does this by supplying a NUMA memory
++	  policy to the operating system before running your program.
 +
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	bool "Sourcery CodeBench ARM 2012.03"
- 	depends on BR2_arm
-@@ -764,6 +788,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
-+	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_03
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_02
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_01
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index bf2bee8..b6532fc 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -200,6 +200,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gn
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE=arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
-+TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
-+TOOLCHAIN_EXTERNAL_SOURCE=arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01),y)
- TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2013.01/+download/
- TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.01-20130125_linux.tar.bz2
++	  http://oss.sgi.com/projects/libnuma/
++
++comment "numactl requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
+diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
+new file mode 100644
+index 0000000..fe6f23f
+--- /dev/null
++++ b/package/numactl/numactl.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# numactl
++#
++#############################################################
++
++NUMACTL_VERSION = 2.0.8
++NUMACTL_SOURCE = numactl-$(NUMACTL_VERSION).tar.gz
++NUMACTL_SITE = ftp://oss.sgi.com/www/projects/libnuma/download/
++NUMACTL_LICENSE = LGPLv2.1 (libnuma), GPLv2 (programs)
++NUMACTL_LICENSE_FILES = README
++
++define NUMACTL_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define NUMACTL_INSTALL_TARGET_CMDS
++	$(MAKE) prefix=$(TARGET_DIR) libdir=$(TARGET_DIR)/lib -C $(@D) install
++endef
++
++$(eval $(generic-package))
