@@ -1,31 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 27 May 2013 13:42:49 -0300
-Subject: [Buildroot] [PATCH 1/2] mxs-bootlets: add support for custom
- patches
-In-Reply-To: <519C6D64.8040109@mind.be>
-References: <1368905110-23303-1-git-send-email-gustavo@zacarias.com.ar>
- <519C60D6.5040207@mind.be> <20130522085804.5dbbbf4b@skate>
- <519C6D64.8040109@mind.be>
-Message-ID: <51A38D09.3040201@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 May 2013 20:25:08 +0200
+Subject: [Buildroot] [PATCH v7 00/10] add Gstreamer 1.X for gst-omx
+ support
+In-Reply-To: <1369588343-13950-1-git-send-email-spenser@gillilanding.com>
+References: <1369588343-13950-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130527202508.662f74ab@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/22/2013 04:01 AM, Arnout Vandecappelle wrote:
+Dear Spenser Gilliland,
 
->> Also, what about the existing *_CUSTOM_PATCH_DIR config options we have
->> for Linux, U-Boot, Barebox and a bunch of other boot/kernel packages?
+On Sun, 26 May 2013 12:12:13 -0500, Spenser Gilliland wrote:
+> This patch adds gst-omx support to buildroot. Thus, making it possible to use
+> gstreamer applications which utilize hardware acceleration on OpenMAX supported
+> systems.
 > 
->  Here also I'm in favour of deprecating them.
-> 
->  But probably it's better to start using the global patch dir now, and
-> only start deprecating the old ways next year.
-> 
-> 
->  Regards,
->  Arnout
+> To add gst-omx, libglib2 is bumped to 2.36.1 and gstreamer1 is added.
 
-Ok, let's go for BR2_GLOBAL_PATCH_DIR, sent a V2 respinned.
-Regards.
+As explained on IRC, bumping libglib2 to 2.36.1 breaks the build of
+webkit. Besides that, I've built a number of packages that use
+libglib2, and I've built gstreamer1 itself, and it was fine here.
+
+So, the webkit problem needs to be fixed, either by adding a patch to
+the current version of webkit, or by bumping webkit. In the end,
+bumping webkit is certainly the nicest solution, but it may turn this
+patch series into a much larger one.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
