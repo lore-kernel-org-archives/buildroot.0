@@ -1,43 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 May 2013 11:18:29 +0200
-Subject: [Buildroot] [PATCH] external-toolchain: Allow MIPS64 for
- Codesourcery MIPS toolchains
-In-Reply-To: <CAG2jQ8hK4nY2mL4PQEX8miQyCZLbvV=H9scJu8ZaQPNZnnruNw@mail.gmail.com>
-References: <1368627740-4094-1-git-send-email-markos.chandras@gmail.com>
- <20130526152910.2a32ecbb@skate>
- <CAG2jQ8hK4nY2mL4PQEX8miQyCZLbvV=H9scJu8ZaQPNZnnruNw@mail.gmail.com>
-Message-ID: <20130527111829.42368807@skate>
+Date: Mon, 27 May 2013 11:23:45 +0200
+Subject: [Buildroot] [PATCH 1/1] infra: allow running 'make clean
+ menuconfig ; make *-menuconfig'
+In-Reply-To: <1369645352-11942-1-git-send-email-s.martin49@gmail.com>
+References: <1369645352-11942-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20130527112345.1741b563@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Dear Samuel Martin,
 
-On Mon, 27 May 2013 10:05:10 +0100, Markos Chandras wrote:
+On Mon, 27 May 2013 11:02:32 +0200, Samuel Martin wrote:
 
-> I did limited testing and I haven't seen this problem but I haven't
-> build busybox to be honest.
-> However, on the release notes they say they support MIPS64/n64
-> https://sourcery.mentor.com/GNUToolchain/release2358?@template=datasheet
-> 
-> so I just allowed buildroot to select this combination as well.
-> 
-> My understanding is that the compilation problem is orthogonal to
-> mip64/n64 patch in the sense
-> that forbidding the combination just hides the problem for now :)
+> +# Inconditionnaly add host-ccache dependency when BR2_CCACHE is enabled.
+> +# This allows to run the following without failing on test the compiler
+> +# because the ccache binary is not yet built:
+> +#
+> +# $ make clean menuconfig
+> +# $ make [linux|ctng|uclibc|barebox|busybox]-menuconfig
+> +ifeq ($(BR2_CCACHE),y)
+> +ifneq ($(1),host-ccache)
+> +$(2)_DEPENDENCIES += host-ccache
+> +endif
+> +endif
 
-I agree that the problem is orthogonal, but having an external
-toolchain that isn't even capable of building Busybox worries me a
-little bit. This means that an user selecting mips64 and external
-toolchain, and keep all the other options as default, will see a
-failing build. Not really nice.
+I am not sure we want to make this specific to the ccache problem. The
+linux-menuconfig target also needs to depend on "dirs" so that the base
+directories need to be created.
 
-We have various issues with the toolchain from Mentor Graphics. It
-would be nice if we could have some contact to help solve those issues.
+Shouldn't we depend on something like $(BASE_TARGETS) instead, which
+will then contain "host-ccache dirs", and everything that's needed?
+Also, all packages depend on the toolchain (but beware, binutils is
+also a package, and is part of the toolchain).
 
-Best regards,
+So just like everything in the core infrastructure: I don't want a
+patch that just fixes the particular problem of this bug by adding more
+crap. I want something that clarifies the dependency of packages on
+"base" things, and makes it work properly.
+
+Thanks,
 
 Thomas
 -- 
