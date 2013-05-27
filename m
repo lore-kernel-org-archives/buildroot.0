@@ -1,88 +1,83 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 27 May 2013 10:41:16 +0200
-Subject: [Buildroot] [git commit branch/next] numactl: new package
-Message-ID: <20130527084352.6CEAD9A3CA@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 27 May 2013 11:02:32 +0200
+Subject: [Buildroot] [PATCH 1/1] infra: allow running 'make clean menuconfig
+	; make *-menuconfig'
+Message-ID: <1369645352-11942-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b05e74ff92b6728369e1540fc0a2bd60025f2146
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+This patch adds host-ccache to the dependency list of any package if
+BR2_CCACHE is enable.
 
-[Thomas: updated to 2.0.8, restricted to supported architectures,
-added licensing informations, updated to latest Buildroot package
-infrastructure]
+Fixes bug #5678
 
-[Peter: Fix LICENSE_FILES typo, needs largefile support in toolchain]
-Signed-off-by: Will Newton <will.newton@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Also, drop some explicit redundant host-ccache dependencies that
+intend to fix this kind of issue.
+
+Note that, only the uClibc dependency on host-ccache remains since
+uClibc does not use any of the Buildroot package infrastructure yet.
+
+Signed-off-by: "Samuel Martin" <s.martin49@gmail.com>
 ---
- package/Config.in          |    1 +
- package/numactl/Config.in  |   16 ++++++++++++++++
- package/numactl/numactl.mk |   21 +++++++++++++++++++++
- 3 files changed, 38 insertions(+), 0 deletions(-)
+ package/crosstool-ng/crosstool-ng.mk |  2 +-
+ package/pkg-generic.mk               | 12 ++++++++++++
+ package/sstrip/sstrip.mk             |  5 -----
+ 3 files changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 52a0735..8bf1652 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -859,6 +859,7 @@ source "package/module-init-tools/Config.in"
- endif
- source "package/monit/Config.in"
- source "package/ncdu/Config.in"
-+source "package/numactl/Config.in"
- source "package/polkit/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/procps/Config.in"
-diff --git a/package/numactl/Config.in b/package/numactl/Config.in
-new file mode 100644
-index 0000000..21e76fb
---- /dev/null
-+++ b/package/numactl/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_NUMACTL
-+	bool "numactl"
-+	# numactl uses some system calls that are not available on all
-+	# architectures.
-+	depends on BR2_LARGEFILE
-+	depends on BR2_i386 || BR2_mips || BR2_mipsel || \
-+		   BR2_mips64 || BR2_mips64el || BR2_powerpc || BR2_x86_64
-+	help
-+	  numactl allows you to run your application on specific cpus
-+	  and memory nodes. It does this by supplying a NUMA memory
-+	  policy to the operating system before running your program.
-+
-+	  http://oss.sgi.com/projects/libnuma/
-+
-+comment "numactl requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
-diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-new file mode 100644
-index 0000000..fe6f23f
---- /dev/null
-+++ b/package/numactl/numactl.mk
-@@ -0,0 +1,21 @@
-+#############################################################
+diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
+index b533396..0b96b50 100644
+--- a/package/crosstool-ng/crosstool-ng.mk
++++ b/package/crosstool-ng/crosstool-ng.mk
+@@ -5,7 +5,7 @@ CROSSTOOL_NG_INSTALL_TARGET    = NO
+ CROSSTOOL_NG_MAKE              = $(MAKE1)
+ 
+ HOST_CROSSTOOL_NG_DEPENDENCIES = \
+-	$(if $(BR2_CCACHE),host-ccache) host-gawk \
++	host-gawk \
+ 	host-automake host-gperf host-bison host-flex \
+ 	host-texinfo
+ 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 56fca6b..1c8d182 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -306,6 +306,18 @@ $(2)_REDISTRIBUTE		?= YES
+ 
+ $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+ 
++# Inconditionnaly add host-ccache dependency when BR2_CCACHE is enabled.
++# This allows to run the following without failing on test the compiler
++# because the ccache binary is not yet built:
 +#
-+# numactl
-+#
-+#############################################################
++# $ make clean menuconfig
++# $ make [linux|ctng|uclibc|barebox|busybox]-menuconfig
++ifeq ($(BR2_CCACHE),y)
++ifneq ($(1),host-ccache)
++$(2)_DEPENDENCIES += host-ccache
++endif
++endif
 +
-+NUMACTL_VERSION = 2.0.8
-+NUMACTL_SOURCE = numactl-$(NUMACTL_VERSION).tar.gz
-+NUMACTL_SITE = ftp://oss.sgi.com/www/projects/libnuma/download/
-+NUMACTL_LICENSE = LGPLv2.1 (libnuma), GPLv2 (programs)
-+NUMACTL_LICENSE_FILES = README
-+
-+define NUMACTL_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define NUMACTL_INSTALL_TARGET_CMDS
-+	$(MAKE) prefix=$(TARGET_DIR) libdir=$(TARGET_DIR)/lib -C $(@D) install
-+endef
-+
-+$(eval $(generic-package))
+ $(2)_INSTALL_STAGING		?= NO
+ $(2)_INSTALL_IMAGES		?= NO
+ $(2)_INSTALL_TARGET		?= YES
+diff --git a/package/sstrip/sstrip.mk b/package/sstrip/sstrip.mk
+index e078b2c..3c29c52 100644
+--- a/package/sstrip/sstrip.mk
++++ b/package/sstrip/sstrip.mk
+@@ -8,11 +8,6 @@ SSTRIP_SITE = svn://dev.openwrt.org/openwrt/trunk/tools/sstrip
+ SSTRIP_VERSION = 20154
+ HOST_SSTRIP_BINARY = $(GNU_TARGET_NAME)-sstrip
+ 
+-# This is a kludge to get host-ccache built before us or it fails
+-ifeq ($(BR2_CCACHE),y)
+-HOST_SSTRIP_DEPENDENCIES = host-ccache
+-endif
+-
+ define SSTRIP_BUILD_CMDS
+ 	cd $(@D) ; \
+ 	$(TARGET_CC) $(TARGET_CFLAGS) -include endian.h -include byteswap.h \
+-- 
+1.8.3
