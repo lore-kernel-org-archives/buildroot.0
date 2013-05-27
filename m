@@ -1,38 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 May 2013 13:13:01 +0200
-Subject: [Buildroot] [PATCH 03/20] elf2flt: fix build when zlib is not
-	installed on the host
-In-Reply-To: <1369606110-8088-4-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 27 May 2013 00:08:13 +0200")
-References: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1369606110-8088-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87y5b0d6bm.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 May 2013 13:24:55 +0200
+Subject: [Buildroot] kernel panic on VIA C3 Samuel2
+In-Reply-To: <51A3368F.4010607@gmail.com>
+References: <51A3368F.4010607@gmail.com>
+Message-ID: <20130527132455.43298317@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- Thomas> For a reason that's fairly unclear to me, Peter added a '-lz' link
- Thomas> flag to the elf2flt.mk build in d5664ee99 ("elf2flt: fix link").
+On Mon, 27 May 2013 12:33:51 +0200, area234 at gmail.com wrote:
 
-I also don't recall the details anymore.
+> a root fs built with buildroot-2013.05-rc2 and defconfig BR2_x86_c3=y 
+> BR2_TOOLCHAIN_EXTERNAL=y, terminates booting with a kernel panic at init 
+> start, when run on a VIA EPIA PD board with Eden 600+256MB.
+> The same root fs works fine on qemu and on a netbook (atom n570+1GB). 
+> This happens with different types of linux kernels and different boot 
+> loaders.
 
- Thomas> However, the zlib library may not necessarily be installed on the host
- Thomas> machine, so we should depend on host-zlib, and pass the appropriate
- Thomas> LDFLAGS. This is what this patch does.
+The base library configuration for the CodeSourcery x86 toolchain is
+Intel Pentium 4. I am not sure the VIA C3 implements the Pentium 4
+instruction set, I am not very familiar with those x86 clones.
 
-Committed, thanks.
+> The problem disappears changing the busybox of buildroot with a 
+> statically linked one.
 
- Thomas> ---
- Thomas> Note: I already have a patch that converts elf2flt to the package
- Thomas> infrastructure, but I am waiting to have the patches to make the
- Thomas> entire internal toolchain logic use the package infrastructure to send
- Thomas> them.
+Hum, this is interesting. Maybe when it's statically linked you don't
+hit the problematic code paths?
 
-Ok.
+Can you paste the complete panic message, so we can have a look?
 
+> What is wrong with the VIA board? Any suggestion is appreciated, thank 
+> you in advance.
+
+Probably nothing is wrong with the VIA board, most likely with the
+toolchain configuration.
+
+Can you try BR2_x86_c3=y, dynamic linking, with the Buildroot internal
+toolchain?
+
+Thanks,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
