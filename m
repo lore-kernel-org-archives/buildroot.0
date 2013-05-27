@@ -1,65 +1,79 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 27 May 2013 13:10:26 +0200
-Subject: [Buildroot] [git commit branch/next] dropbear: factorize the
-	'depends on BR2_PACKAGE_DROPBEAR'
-Message-ID: <20130527221105.0221E9A5E8@busybox.osuosl.org>
+Date: Mon, 27 May 2013 23:59:54 +0200
+Subject: [Buildroot] [git commit branch/next] toolchain-external: add
+	support for 'Sourcery CodeBench ARM 2013.05'
+Message-ID: <20130527221105.423719A5E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a5ee03b252906f4a3533566dad170a16d9d6125f
+commit: http://git.buildroot.net/buildroot/commit/?id=786700eebea40147b88a4d96bd56504bf51241b2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Enclose all dropbear sub-options into a 'if BR2_PACKAGE_DROPBEAR'
-... 'endif' block rather than having 'depends on BR2_PACKAGE_DROPBEAR'
-for each option.
-
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dropbear/Config.in |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ toolchain/toolchain-external/Config.in   |   25 +++++++++++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    3 +++
+ 2 files changed, 28 insertions(+), 0 deletions(-)
 
-diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
-index 0903ad1..68c3b71 100644
---- a/package/dropbear/Config.in
-+++ b/package/dropbear/Config.in
-@@ -6,9 +6,10 @@ config BR2_PACKAGE_DROPBEAR
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index a93ada3..5fdd27b 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -64,6 +64,30 @@ comment "Linaro toolchains available for Cortex-A{5,8,9,15}"
+ 	depends on BR2_arm
+ 	depends on !BR2_cortex_a5 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15
  
- 	  http://matt.ucc.asn.au/dropbear/dropbear.html
- 
-+if BR2_PACKAGE_DROPBEAR
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
++	bool "Sourcery CodeBench ARM 2013.05"
++	depends on BR2_arm
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	help
++	  Sourcery CodeBench toolchain for the ARM architecture, from
++	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
++	  2.17 and gdb 7.4.50, kernel headers 3.8.2. It has support
++	  for the following variants:
++	    - ARMv5TE, little endian, soft-float, glibc
++	      Select ARM926T, ARM10T, XScale or another ARMv5 core
++	      Select BR2_SOFT_FLOAT
++	    - ARMv4T, little endian, soft-float, glibc
++	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
++	      Select BR2_SOFT_FLOAT
++	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
++	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -mthumb
 +
- config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
- 	bool "disable reverse DNS lookups"
--	depends on BR2_PACKAGE_DROPBEAR
- 	help
- 	  Disable reverse DNS lookups on connection. This can be handy
- 	  on systems without working DNS, as connections otherwise
-@@ -17,7 +18,6 @@ config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
- config BR2_PACKAGE_DROPBEAR_SMALL
- 	bool "optimize for size"
- 	default y
--	depends on BR2_PACKAGE_DROPBEAR
- 	help
- 	  Compile dropbear for the smallest possible binary size.
- 
-@@ -26,14 +26,14 @@ config BR2_PACKAGE_DROPBEAR_SMALL
- 
- config BR2_PACKAGE_DROPBEAR_WTMP
- 	bool "log dropbear access to wtmp"
--	depends on BR2_PACKAGE_DROPBEAR
- 	help
- 	  Enable logging of dropbear access to wtmp. Notice that
- 	  Buildroot does not generate wtmp by default.
- 
- config BR2_PACKAGE_DROPBEAR_LASTLOG
- 	bool "log dropbear access to lastlog"
--	depends on BR2_PACKAGE_DROPBEAR
- 	help
- 	  Enable logging of dropbear access to lastlog. Notice that
- 	  Buildroot does not generate lastlog by default.
-+
-+endif
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
+ 	bool "Sourcery CodeBench ARM 2012.03"
+ 	depends on BR2_arm
+@@ -764,6 +788,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
++	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_03
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_02
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_01
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index bf2bee8..b6532fc 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -200,6 +200,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gn
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
+ TOOLCHAIN_EXTERNAL_SOURCE=arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
++TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
++TOOLCHAIN_EXTERNAL_SOURCE=arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01),y)
+ TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2013.01/+download/
+ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.01-20130125_linux.tar.bz2
