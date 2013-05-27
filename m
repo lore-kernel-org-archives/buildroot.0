@@ -1,32 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 May 2013 00:13:44 +0200
-Subject: [Buildroot] [PATCH v7 00/10] add Gstreamer 1.X for gst-omx
-	support
-In-Reply-To: <20130527220435.5ab17b79@skate> (Thomas Petazzoni's message of
- "Mon, 27 May 2013 22:04:35 +0200")
-References: <1369588343-13950-1-git-send-email-spenser@gillilanding.com>
- <20130527202508.662f74ab@skate>
- <CAEBucnAfh3MsG9itFTxmb53cnTyFT7XAhewGQS3zXCoLigN3qw@mail.gmail.com>
- <20130527220435.5ab17b79@skate>
-Message-ID: <87vc64ax5z.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 May 2013 00:28:11 +0200
+Subject: [Buildroot] Buildroot / Eclipse integration, version 2.1.0 released!
+Message-ID: <20130528002811.164a038f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
-Hi,
+I'm happy to announce that M?lanie Bats has released version 2.1.0 of
+the Buildroot/Eclipse integration yesterday. It has been uploaded to
+the Buildroot Eclipse update site at
+http://buildroot.org/downloads/eclipse/, so updates should be automatic
+for users.
 
- Thomas> Send them as separate patches, and make it explicit in your
- Thomas> cover e-mail which patches are in fact so closely related
- Thomas> together than we might want to apply them all at once.
+This release fixes a major regression that was introduced in version
+2.0.0, which was causing toolchain configurations to become "orphaned"
+as soon as you exited and restarted Eclipse. This bug is now fixed, and
+makes the plugin really usable again.
 
- Thomas> Peter will then be able to decide whether he'll want to take
- Thomas> them as a single patch, or as separate patches.
+As usual, we are very interested by your comments and suggestions about
+those developments.
 
-Yes please, smaller individual patches are easier to review.
+For more information, please consult the project's wiki at
+https://github.com/mbats/eclipse-buildroot-bundle/wiki.
 
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
