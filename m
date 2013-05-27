@@ -1,43 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 May 2013 01:01:04 +0200
-Subject: [Buildroot] [PATCH 6/6] xlib_libX11: ensure target and host variant
-	have the same patch hooks
-In-Reply-To: <1369695664-5670-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1369695664-5670-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1369695664-5670-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 May 2013 01:03:45 +0200
+Subject: [Buildroot] [PATCH] gdb: apply post-patch hook on both the host and
+	target builds
+Message-ID: <1369695825-5789-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In preparation for the out-of-tree support, it is important that all
-packages have the same patch hooks for the host variant and the target
-variant (because the source tree will be shared between host and
-target variants when doing out-of-tree build).
+When a Xtensa specific patch needs to be applied, it should be applied
+both when doing the target and the host build.
 
-In the case of the xlib_libX11 package, the post-patch hook removes
-some flags from the build of the makekeys utility, so that when
-xlib_libX11 is built for the target, the build of makekeys for the
-host works properly. This modification can be applied to the host
-variant of xlib_libX11 without any problem.
+This change is part of the effort to remove the differences between
+host and target post-extract and post-patch hooks, that are
+problematic for the out-of-tree support.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.mk |    1 +
+ package/gdb/gdb.mk |    1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 2d68f9e..5d0607b 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -43,6 +43,7 @@ define XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 398ef7b..5f4a753 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -48,6 +48,7 @@ define GDB_XTENSA_PRE_PATCH
+ 	tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(XTENSA_CORE_NAME).tar \
+ 		-C $(@D) --strip-components=1 gdb
  endef
++GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
+ HOST_GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
+ endif
  
- XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
-+HOST_XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
 -- 
 1.7.9.5
