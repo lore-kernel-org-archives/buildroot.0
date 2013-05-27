@@ -1,113 +1,54 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 May 2013 21:05:30 +0200
-Subject: [Buildroot] [PATCH] qt5: mysql and sqlite plugins
-In-Reply-To: <1369343084-1925-1-git-send-email-wojciech.slenska@gmail.com>
-References: <1369343084-1925-1-git-send-email-wojciech.slenska@gmail.com>
-Message-ID: <51A3AE7A.9080005@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 May 2013 21:12:00 +0200
+Subject: [Buildroot] Design issue with the out-of-tree support
+In-Reply-To: <51A38EEE.7000406@mind.be>
+References: <20130523131251.2ffc509f@skate>
+	<51A38EEE.7000406@mind.be>
+Message-ID: <20130527211200.735491c7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/05/13 23:04, Wojciech Slenska wrote:
-> Added support for mysql and sqlite plugins. Configuration is based on qt package.
->
-> Signed-off-by: Wojciech Slenska <wojciech.slenska@gmail.com>
+Dear Arnout Vandecappelle,
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (untested)
+On Mon, 27 May 2013 18:50:54 +0200, Arnout Vandecappelle wrote:
 
-  One minor comment below.
+>   I haven't read the thread in detail or thought about it very carefully, 
+> but some time ago I already thought that this would be better.
+> 
+>   It is not necessarily limited to autoreconf. For example, the way that 
+> xenomai patches the linux sources fits in this as well (xenomai could add 
+> to LINUX_POST_AUTORECONF_HOOKS).
+> 
+>   So I would propose to add another step to the generic infrastructure. I 
+> would call it the PREPARE step, and make it a full step with CMDS and HOOKS.
 
-> ---
->   package/qt5/qt5base/Config.in  | 36 ++++++++++++++++++++++++++++++++++++
->   package/qt5/qt5base/qt5base.mk | 11 +++++++++++
->   2 files changed, 47 insertions(+)
->
-> diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-> index 7974357..9c7fd15 100644
-> --- a/package/qt5/qt5base/Config.in
-> +++ b/package/qt5/qt5base/Config.in
-> @@ -43,6 +43,42 @@ config BR2_PACKAGE_QT5BASE_SQL
->   	help
->   	  This options enables the Qt5Sql library.
->
-> +if BR2_PACKAGE_QT5BASE_SQL
-> +config BR2_PACKAGE_QT5BASE_MYSQL
-> +	bool "MySQL Plugin"
-> +	select BR2_PACKAGE_MYSQL_CLIENT
-> +	select BR2_PACKAGE_NCURSES
-> +	select BR2_PACKAGE_READLINE
-> +	depends on BR2_USE_MMU # mysql
-> +	help
-> +	  Build MySQL plugin
-> +	  If unsure, say n.
-> +choice
-> +	prompt "SQLite 3 support"
-> +	default BR2_PACKAGE_QT5BASE_SQLITE_NONE
-> +	help
-> +	  Select SQLite support.
-> +
-> +config BR2_PACKAGE_QT5BASE_SQLITE_NONE
-> +	bool "No sqlite support"
-> +	help
-> +	  Do not compile any kind of SQLite support.
-> +
-> +config BR2_PACKAGE_QT5BASE_SQLITE_QT
-> +	bool "Qt SQLite"
-> +	help
-> +	  Use Qt bundled SQLite support.
-> +
-> +config BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM
-> +	bool "System SQLite"
-> +	select BR2_PACKAGE_SQLITE
-> +	help
-> +	  Use system SQLite.
-> +
-> +endchoice
-> +
-> +endif
-> +
->   config BR2_PACKAGE_QT5BASE_TEST
->   	bool "test module"
->   	help
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index bfc6c91..5b0596d 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -60,6 +60,17 @@ QT5BASE_LICENSE = Commercial license
->   QT5BASE_REDISTRIBUTE = NO
->   endif
->
-> +# Qt5 SQL Plugins
-> +ifeq ($(BR2_PACKAGE_QT5BASE_SQL),y)
-> +QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_MYSQL),-plugin-sql-mysql -mysql_config $(STAGING_DIR)/usr/bin/mysql_config,-no-sql-mysql)
+Indeed. For now, it's only has a CMDS and no HOOKS, but it could be
+added later on.
 
-  Please split this long line. Actually, an ifeq - else construct seems 
-more appropriate in this case.
+>   The question is whether the OVERRIDE_SRCDIR infrastructure should apply 
+> this step or not. Conceptually, it shouldn't, but that means that users 
+> of OVERRIDE_SRCDIR for packages that need an autoreconf would need to do 
+> the autoreconf manually. Which is probably for the best anyway, but which 
+> is a change compared to current behaviour.
 
-  Regards,
-  Arnout
+For now, I consider doing the prepare step even on OVERRIDE_SRCDIR
+package, even if that means that we are modifying the source directory.
 
-> +QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_MYSQL),mysql_client)
-> +
-> +QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_QT),-plugin-sql-sqlite)
-> +QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),-system-sqlite)
-> +QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),sqlite)
-> +QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_NONE),-no-sql-sqlite)
-> +endif
-> +
->   # We have to use --enable-linuxfb, otherwise Qt thinks that -linuxfb
->   # is to add a link against the "inuxfb" library.
->   QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-gui,-no-gui)
->
+>   BTW the libtool fixup should probably be done in this prepare step as 
+> well. But again, I haven't thought this through in detail.
 
+This is already done:
 
+ http://git.free-electrons.com/users/thomas-petazzoni/buildroot/commit/?h=out-of-tree-v3&id=5cf6166d713a43cdf83cdf794502eb77be36d43f
+
+Thanks for the feedback!
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
