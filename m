@@ -1,28 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 May 2013 13:36:48 +0200
-Subject: [Buildroot] [PATCH 05/20] toolchain: blackfin: Remove Blackfin
-	toolchain 2011R1 release.
-In-Reply-To: <1369606110-8088-6-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 27 May 2013 00:08:15 +0200")
-References: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1369606110-8088-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87ppwcd57z.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 27 May 2013 08:43:35 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
+	9}.x stable version
+Message-ID: <1369655016-28855-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                                  | 6 +++---
+ ...0.80-headers_install-fix-__packed-in-exported-kernel-head.patch} | 0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.78-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.80-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
- Thomas> From: Sonic Zhang <sonic.zhang@analog.com>
- Thomas> ADI officially supports the buildroot and related GNU toolchain for
- Thomas> Blackfin since ADI's 2012R1 release only. In order to avoid confusion,
- Thomas> it is better to remove the 2011R1 GNU toolchain for Blackfin. In
- Thomas> addition, the 2011R1 GNU toolchain for Blackfin doesn't support the
- Thomas> BF60x processors.
-
-Committed to next, thanks.
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index a54f9ce..1bb9c02 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -70,15 +70,15 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.78"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.80"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.44"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.45"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.47"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+-	default "3.9.2"		if BR2_KERNEL_HEADERS_3_9
++	default "3.9.4"		if BR2_KERNEL_HEADERS_3_9
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.78-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.80-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.78-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.80-headers_install-fix-__packed-in-exported-kernel-head.patch
 -- 
-Bye, Peter Korsgaard
+1.8.1.5
