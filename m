@@ -1,27 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 May 2013 20:50:29 +0200
-Subject: [Buildroot] [PATCH] gdb: apply post-patch hook on both the host
-	and target builds
-In-Reply-To: <1369695825-5789-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 28 May 2013 01:03:45 +0200")
-References: <1369695825-5789-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87d2sb9bwq.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 28 May 2013 20:46:51 +0200
+Subject: [Buildroot] [git commit] barebox: bump to version 2013.05.1
+Message-ID: <20130528185536.D743C9A61F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9428d103621f12fa1fd51ebaeb782128c9fae014
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> When a Xtensa specific patch needs to be applied, it should be applied
- Thomas> both when doing the target and the host build.
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ boot/barebox/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- Thomas> This change is part of the effort to remove the differences between
- Thomas> host and target post-extract and post-patch hooks, that are
- Thomas> problematic for the out-of-tree support.
-
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 21da3f9..09edecf 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2013.05.0"
++	bool "2013.05.1"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2013.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2013.05.1"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
