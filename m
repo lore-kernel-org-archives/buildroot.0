@@ -1,49 +1,54 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Tue, 28 May 2013 15:55:57 +0200
-Subject: [Buildroot] [PATCH] Add HW decoding support for Hantro x170
-In-Reply-To: <CAHt8ZCOuz5b36gHziMCoW+d57a3k14tt_pUAZwG-9xi1qQJ6ig@mail.gmail.com>
-References: <1369689224-492-1-git-send-email-alexandre.belloni@free-electrons.com>
- <20130528133906.5bfff499@skate>
- <CAHt8ZCOuz5b36gHziMCoW+d57a3k14tt_pUAZwG-9xi1qQJ6ig@mail.gmail.com>
-Message-ID: <51A4B76D.8020408@free-electrons.com>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Tue, 28 May 2013 09:02:56 -0500
+Subject: [Buildroot] [PATCH 1/1] attr: bump to version 2.4.47
+In-Reply-To: <20130528130703.694786e2@skate>
+References: <1369738614-31476-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <20130528130703.694786e2@skate>
+Message-ID: <CAEBucnA0ZwDr35-9wr7jA3Gu-6pR_xpy6iXQo_EqGCnKdE4aZw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/05/2013 14:02, Simon Dawson wrote:
-> Indeed, this is true. I spent some time trying to get this hardware
-> decoder to work, and never managed to get anywhere with it. Atmel
-> technical support were incredibly frustrating, providing such pearls
-> of wisdom as:
+On Tue, May 28, 2013 at 6:07 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Jerzy Grzegorek,
 >
-> "We found that there might be a little problem if you we use dynamic
-> libraries like cannot play video correctly. Our OS experts are still
-> working on this."
+> On Tue, 28 May 2013 12:56:54 +0200, Jerzy Grzegorek wrote:
+>> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+>> ---
+>>  ...r-0001-attr-Fix-static-build-installation.patch |   30 --------------------
 >
-> On the basis of this and other information provided by Atmel, I ended
-> up using the static libraries. This complicates the package makefiles
-> somewhat, of course; but you can presumably then avoid the restriction
-> to glibc.
-
-That's a nice idea, I doubt on2-8170-libs would ever be used without the
-gstreamer plugin.
-
-> Alexandre: have you actually managed to get the decoder to work?
-
-It has been working but I don't remember all the specific. That is
-something I did quickly for a customer having to create a demo for an
-exhibition so the buildroot integration was not really in the scope.
-
-> Simon.
+> Can you confirm that this patch has been integrated in the new upstream
+> version?
+>
+> Generally speaking, when bumping to a new upstream version involves
+> removing/adding patches, it would be nice to have a slightly more
+> detailed commit log that explains why patches are added/removed.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
 
+Thomas,
 
--- 
-Alexandre Belloni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I investigated this issue a while ago for fun and I don't think that
+patch ever worked.  Many (maybe all) of the autobuild failures on acl
+were because there was no static library of attr to link against.
+
+Spenser
+
+--
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
