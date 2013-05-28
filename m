@@ -1,48 +1,49 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 May 2013 23:47:29 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 4,
-	9}.x stable version
-Message-ID: <20130528221726.0FC549A622@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 29 May 2013 00:19:04 +0200
+Subject: [Buildroot] [PATCH] fs/ext2: further fix to the UUID
+In-Reply-To: <1369779097-28915-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Wed, 29 May 2013 00:11:37 +0200")
+References: <1369779097-28915-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <8738t69293.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fb1419bedd8b08770b27ca0223709ab75cfac9db
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in                 |    6 +++---
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> Turned out that setting a nil-UUID is no better than clearing it.
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index a54f9ce..1bb9c02 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -70,15 +70,15 @@ config BR2_DEFAULT_KERNEL_VERSION
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.0.78"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.80"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.44"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.45"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.47"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
--	default "3.9.2"		if BR2_KERNEL_HEADERS_3_9
-+	default "3.9.4"		if BR2_KERNEL_HEADERS_3_9
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.78-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.80-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.78-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.80-headers_install-fix-__packed-in-exported-kernel-head.patch
+ Yann> What currently happens is as follows:
+ Yann>   - first, genext2fs does not generate a UUID
+ Yann>   - then we tune2fs to upgrade the filesystem
+ Yann>   - then we run fsck, which generates a random UUID
+ Yann>   - then we re-run tune2fs to set a nil-UUID
+
+ Yann> So, on the target, if the file system is improperly unmounted (eg.
+ Yann> with a power failure), on next boot, fsck may be run, and a new
+ Yann> random UUID will be generated.
+
+ Yann> *However*, fsck improperly updates the filesystem when it adds the
+ Yann> UUID, and there are a few group descriptor checksum errors.
+
+ Yann> Those errors will go undetected until the next fsck, which will then
+ Yann> block for user input (bad on embedded systems, bad).
+
+ Yann> Fix that by systematically generating a random UUID _before_ we call
+ Yann> to fsck.
+
+ Yann> A random UUID is not so bad, after all, since there are already so
+ Yann> many sources of unpredictability in the filesystem: files date and
+ Yann> ordering, files content (date, paths...) which renders a fixed UUID
+ Yann> unneeded.
+
+ Yann> And it is still possible to set the UUID in a post-image script if
+ Yann> needed, anyway.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
