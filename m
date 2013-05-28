@@ -1,41 +1,48 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 May 2013 23:47:52 +0200
-Subject: [Buildroot] [git commit] linux: bump 3.9.x stable version
-Message-ID: <20130528221726.3CF999A622@busybox.osuosl.org>
+Date: Tue, 28 May 2013 23:47:29 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 4,
+	9}.x stable version
+Message-ID: <20130528221726.0FC549A622@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5b591b4052de5c650dcaa9033d77b739b82c132a
+commit: http://git.buildroot.net/buildroot/commit/?id=fb1419bedd8b08770b27ca0223709ab75cfac9db
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    6 +++---
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index b2d7850..1bbb574 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index a54f9ce..1bb9c02 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -70,15 +70,15 @@ config BR2_DEFAULT_KERNEL_VERSION
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.9.2"
-+	bool "3.9.4"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
+ config BR2_DEFAULT_KERNEL_HEADERS
  	string
--	default "3.9.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.9.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-	default "3.0.78"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.80"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.44"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.45"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.47"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+-	default "3.9.2"		if BR2_KERNEL_HEADERS_3_9
++	default "3.9.4"		if BR2_KERNEL_HEADERS_3_9
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.78-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.80-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.78-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.80-headers_install-fix-__packed-in-exported-kernel-head.patch
