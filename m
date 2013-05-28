@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 May 2013 20:48:35 +0200
-Subject: [Buildroot] [PATCH v2] lttng-babeltrace: fix build failure on
-	gcc14
-In-Reply-To: <1369765289-30040-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 28 May 2013 20:21:29 +0200")
-References: <1369765289-30040-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87hahn9bzw.fsf@dell.be.48ers.dk>
+Date: Tue, 28 May 2013 20:50:29 +0200
+Subject: [Buildroot] [PATCH] gdb: apply post-patch hook on both the host
+	and target builds
+In-Reply-To: <1369695825-5789-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 28 May 2013 01:03:45 +0200")
+References: <1369695825-5789-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87d2sb9bwq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The gcc14 machine has a moderately old host gcc, which was causing a
- Thomas> recurrent build failure of host-lttng-babeltrace:
+ Thomas> When a Xtensa specific patch needs to be applied, it should be applied
+ Thomas> both when doing the target and the host build.
 
- Thomas>  http://autobuild.buildroot.org/results/492/49216052c161874f41738e41e6e0c89a6dd04000/build-end.log
+ Thomas> This change is part of the effort to remove the differences between
+ Thomas> host and target post-extract and post-patch hooks, that are
+ Thomas> problematic for the out-of-tree support.
 
- Thomas> This commit adds a patch to fix this build failure, related to the
- Thomas> access of the ULLONG_MAX define on compilers that did not default to
- Thomas> the C99 variant of the C language.
-
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas> v2:
- Thomas>  Also autoreconf the target package, for consistency.
-
-Committed, thanks.
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
