@@ -1,68 +1,57 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue, 28 May 2013 12:56:54 +0200
-Subject: [Buildroot] [PATCH 1/1] attr: bump to version 2.4.47
-Message-ID: <1369738614-31476-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 May 2013 13:05:47 +0200
+Subject: [Buildroot] [PATCH] flex: fix autobuilder failures
+Message-ID: <1369739147-17289-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- ...r-0001-attr-Fix-static-build-installation.patch |   30 --------------------
- package/attr/attr.mk                               |    2 +-
- 2 files changed, 1 insertion(+), 31 deletions(-)
- delete mode 100644 package/attr/attr-0001-attr-Fix-static-build-installation.patch
+Since fe6a9e5e9d (flex: needs M4 at runtime), the autobuilders have
+been producing a number of flex related build failures. They have been
+hard to track down, because even on the same machine, with the same
+Git commit ID and the same configuration, the failure could not be
+reproduced.
 
-diff --git a/package/attr/attr-0001-attr-Fix-static-build-installation.patch b/package/attr/attr-0001-attr-Fix-static-build-installation.patch
-deleted file mode 100644
-index ed51dbb..0000000
---- a/package/attr/attr-0001-attr-Fix-static-build-installation.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 1d510e6049e7c7cb7ed4e87780b2c1a997d47b64 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 17 Nov 2012 19:36:39 +0100
--Subject: [PATCH] attr: Fix static build installation
--
--When doing a static build the .lai file is not created, so do not try
--to install it.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- include/buildmacros |    3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/include/buildmacros b/include/buildmacros
--index ab89182..d81e62b 100644
----- a/include/buildmacros
--+++ b/include/buildmacros
--@@ -98,8 +98,7 @@ endif
-- 
-- INSTALL_LTLIB_STATIC = \
-- 	cd $(TOPDIR)/$(LIBNAME)/.libs; \
---	../$(INSTALL) -m 755 -d $(PKG_DEVLIB_DIR); \
---	../$(INSTALL) -m 644 -T old_lib $(LIBNAME).lai $(PKG_DEVLIB_DIR)
--+	../$(INSTALL) -m 755 -d $(PKG_DEVLIB_DIR);
-- 
-- INSTALL_MAN = \
-- 	@for d in $(MAN_PAGES); do \
---- 
--1.7.9.5
--
-diff --git a/package/attr/attr.mk b/package/attr/attr.mk
-index 288052d..2b67010 100644
---- a/package/attr/attr.mk
-+++ b/package/attr/attr.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+However, a close inspection of flex's config.log file allowed to find
+out what the problem was. In its configure script, flex uses the
+host-flex to generate a minimal example, and find out the name of the
+output file of flex.
+
+When the M4 environment is passed when building the target flex, it
+also affects the *execution* of the host-flex, which tries to use
+/usr/bin/m4 (which doesn't exist in the autobuilder machines) instead
+of the one built in $(HOST_DIR)/usr/bin/m4. So generating the minimal
+example fails. And this is where what I could reproduce and what the
+autobuilders script produce differ: in my case, even though host-flex
+fails to run, it creates an empty lex.yy.c, which is enough to make
+the configure script happy. In the context of the autobuild scripts,
+this file is apparently not created at all, for an unknown reason, and
+this leads to the configure script to abort.
+
+The fix is to set ac_cv_path_M4. This will affect the default m4 used
+by the target flex, but it will not affect the m4 used by the
+host-flex. It allows the test made during the configure script to work
+properly, and therefore should fix the issue seen in the autobuilders.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/flex/flex.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index 748365b..2361536 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -11,7 +11,7 @@ FLEX_LICENSE = FLEX
+ FLEX_LICENSE_FILES = COPYING
+ FLEX_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_GETTEXT_IF_LOCALE),gettext) host-m4
+-FLEX_CONF_ENV = M4=/usr/bin/m4
++FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
+ # we don't have a host-gettext/libintl
+ HOST_FLEX_DEPENDENCIES = host-m4
  
--ATTR_VERSION = 2.4.46
-+ATTR_VERSION = 2.4.47
- ATTR_SOURCE = attr-$(ATTR_VERSION).src.tar.gz
- ATTR_SITE = http://download.savannah.gnu.org/releases/attr
- ATTR_INSTALL_STAGING = YES
 -- 
 1.7.9.5
