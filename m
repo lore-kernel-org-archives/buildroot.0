@@ -1,33 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 May 2013 23:27:37 +0200
-Subject: [Buildroot] [git commit] Revert "gmp: bump to version 5.1.2"
-Message-ID: <20130528213106.ED5459A621@busybox.osuosl.org>
+Date: Tue, 28 May 2013 23:28:25 +0200
+Subject: [Buildroot] [git commit] Revert "mpg123: bump to version 1.15.4"
+Message-ID: <20130528213107.3D69F9A621@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d2d64f88f592010a5f45e4d55c5884110b9d6188
+commit: http://git.buildroot.net/buildroot/commit/?id=b85f5e8b457ffa1aad6e8063b5c6bbf6ca475eac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 78927d3f92f0a397e9551dee491e26602e63a30a.
+This reverts commit 609aa4156aa6fbda182856d3dab7df752c54eb78.
 
 This was supposed to have been for next, not 2013.05.
 ---
- package/gmp/gmp.mk |    2 +-
+ package/multimedia/mpg123/mpg123.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index cf5c310..e895a48 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
+diff --git a/package/multimedia/mpg123/mpg123.mk b/package/multimedia/mpg123/mpg123.mk
+index 8796392..c65920f 100644
+--- a/package/multimedia/mpg123/mpg123.mk
++++ b/package/multimedia/mpg123/mpg123.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--GMP_VERSION = 5.1.2
-+GMP_VERSION = 5.1.1
- GMP_SITE = ftp://ftp.gmplib.org/pub/gmp-$(GMP_VERSION)
- GMP_SOURCE = gmp-$(GMP_VERSION).tar.bz2
- GMP_INSTALL_STAGING = YES
+-MPG123_VERSION = 1.15.4
++MPG123_VERSION = 1.15.3
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPT = --with-optimization=0 --disable-lfs-alias
