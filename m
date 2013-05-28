@@ -1,21 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 May 2013 14:59:29 +0200
-Subject: [Buildroot] [PATCH 1/3] gmp: bump to version 5.1.2
-In-Reply-To: <1369743452-12867-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 28 May 2013 09:17:30 -0300")
-References: <1369743452-12867-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wqqj9s5q.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 28 May 2013 14:59:04 +0200
+Subject: [Buildroot] [git commit] gmp: bump to version 5.1.2
+Message-ID: <20130528130059.6B3E39A61F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=78927d3f92f0a397e9551dee491e26602e63a30a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/gmp/gmp.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed all 3 to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index e895a48..cf5c310 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-GMP_VERSION = 5.1.1
++GMP_VERSION = 5.1.2
+ GMP_SITE = ftp://ftp.gmplib.org/pub/gmp-$(GMP_VERSION)
+ GMP_SOURCE = gmp-$(GMP_VERSION).tar.bz2
+ GMP_INSTALL_STAGING = YES
