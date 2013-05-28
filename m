@@ -1,125 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 May 2013 13:39:06 +0200
-Subject: [Buildroot] [PATCH] Add HW decoding support for Hantro x170
-In-Reply-To: <1369689224-492-1-git-send-email-alexandre.belloni@free-electrons.com>
-References: <1369689224-492-1-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <20130528133906.5bfff499@skate>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Tue, 28 May 2013 12:41:26 +0100
+Subject: [Buildroot] [PATCH] jamvm: Not available for all architectures
+Message-ID: <1369741286-11470-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexandre Belloni,
+From: Markos Chandras <markos.chandras@imgtec.com>
 
-On Mon, 27 May 2013 23:13:44 +0200, Alexandre Belloni wrote:
-> This actually consist in a set of proprietary libs, on2-8170-libs and a
-> gstreamer plugin making use of those libraries.
-> 
-> on2-8170-libs is probably libc agnostic but this has not been tested
-> thoroughly.
-> 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-> ---
->  package/multimedia/Config.in                       |  2 ++
->  package/multimedia/gst-plugin-x170/Config.in       | 10 ++++++++
->  .../gst-plugin-x170-01-correct-CFLAGS.patch        | 28 ++++++++++++++++++++++
->  .../multimedia/gst-plugin-x170/gst-plugin-x170.mk  | 14 +++++++++++
->  package/multimedia/on2-8170-libs/Config.in         |  8 +++++++
->  package/multimedia/on2-8170-libs/on2-8170-libs.mk  | 20 ++++++++++++++++
+jamvm supports arm, armeb, powerpc, i386, x86_64 and mipsel.
 
-We normally do separate patches for separate package additions. So a
-first patch for on2-8170-libs, and then a second patch with the
-gst-plugin.
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ package/jamvm/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> diff --git a/package/multimedia/gst-plugin-x170/gst-plugin-x170.mk b/package/multimedia/gst-plugin-x170/gst-plugin-x170.mk
-> new file mode 100644
-> index 0000000..e1c42ef
-> --- /dev/null
-> +++ b/package/multimedia/gst-plugin-x170/gst-plugin-x170.mk
-> @@ -0,0 +1,14 @@
-> +#############################################################
-> +#
-> +# gst-plugins-x170
-> +#
-> +#############################################################
-
-On empty new line between header and variables please.
-
-> +GST_PLUGIN_X170_VERSION = 1.0
-> +GST_PLUGIN_X170_SITE = ftp://ftp.linux4sam.org/pub/demo/linux4sam_1.9/codec/
-
-You should add _LICENSE and _LICENSE_FILES variables as well.
-
-> diff --git a/package/multimedia/on2-8170-libs/Config.in b/package/multimedia/on2-8170-libs/Config.in
-> new file mode 100644
-> index 0000000..d5d1a58
-> --- /dev/null
-> +++ b/package/multimedia/on2-8170-libs/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_ON2_8170_LIBS
-> +	depends on BR2_arm926t
-> +	bool "on2-8170-libs"
-> +	help
-> +	  Libraries for Hantro X170 video decoder
-> +
-> +	  http://www.at91.com/linux4sam/bin/view/Linux4SAM/SAM9M10Gstreamer
-
-As was pointed out in a previous review, this package contains
-pre-built library. And they can only work with glibc:
-
-$ readelf -d libdwlx170.so | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
-
-This means that whenever something will try to load libdwlx170.so, it
-will try to find libc.so.6, which is glibc.
-
-So your package should have something like:
-
-	depends on BR2_TOOLCHAIN_EXTERNAL_GLIBC || \
-		BR2_TOOLCHAIN_CTNG_eglibc || \
-		BR2_TOOLCHAIN_CTNG_glibc
-
-with a comment above that explains why.
-
-> diff --git a/package/multimedia/on2-8170-libs/on2-8170-libs.mk b/package/multimedia/on2-8170-libs/on2-8170-libs.mk
-> new file mode 100644
-> index 0000000..160b2d9
-> --- /dev/null
-> +++ b/package/multimedia/on2-8170-libs/on2-8170-libs.mk
-> @@ -0,0 +1,20 @@
-> +#############################################################
-> +#
-> +# on2-8170-libs
-> +#
-> +#############################################################
-
-Missing empty line.
-
-> +ON2_8170_LIBS_VERSION = 1.0
-> +ON2_8170_LIBS_SITE = ftp://ftp.linux4sam.org/pub/demo/linux4sam_1.9/codec/
-
-_LICENSE and _LICENSE_FILES.
-
-> +
-> +ON2_8170_LIBS_INSTALL_STAGING = YES
-> +
-> +define ON2_8170_LIBS_INSTALL_STAGING_CMDS
-> +	cp -dpf $(@D)/*.a $(@D)/*.so $(STAGING_DIR)/usr/lib
-> +	cp -dpf $(@D)/*.h $(STAGING_DIR)/usr/include
-> +endef
-> +
-> +define ON2_8170_LIBS_INSTALL_TARGET_CMDS
-> +	cp -dpf $(@D)/*.so $(TARGET_DIR)/usr/lib
-> +endef
-> +
-> +$(eval $(generic-package))
-
-Thanks!
-
-Thomas
+diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
+index 0287f80..3a2bd20 100644
+--- a/package/jamvm/Config.in
++++ b/package/jamvm/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_JAMVM
+ 	bool "jamvm"
+ 	depends on BR2_INET_IPV6
++	depends on BR2_arm || BR2_armeb || BR2_i386 \
++		|| BR2_mipsel || BR2_powerpc || BR2_x86_64
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_CLASSPATH
+ 	help
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.2.1
