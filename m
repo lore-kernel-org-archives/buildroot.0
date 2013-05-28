@@ -1,39 +1,81 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue, 28 May 2013 15:06:09 +0200
-Subject: [Buildroot] [PATCH 1/1] barebox: bump to version 2013.05.1
-Message-ID: <1369746369-1777-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 May 2013 15:22:49 +0200
+Subject: [Buildroot] [PATCH] lttng-babeltrace: fix build failure on gcc14
+Message-ID: <1369747369-21243-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- boot/barebox/Config.in |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The gcc14 machine has a moderately old host gcc, which was causing a
+recurrent build failure of host-lttng-babeltrace:
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 21da3f9..09edecf 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+ http://autobuild.buildroot.org/results/492/49216052c161874f41738e41e6e0c89a6dd04000/build-end.log
+
+This commit adds a patch to fix this build failure, related to the
+access of the ULLONG_MAX define on compilers that did not default to
+the C99 variant of the C language.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...beltrace-01-no-posix-fallocate-in-uclibc.patch} |    0
+ ...tng-babeltrace-02-fix-build-old-compilers.patch |   27 ++++++++++++++++++++
+ package/lttng-babeltrace/lttng-babeltrace.mk       |    4 +++
+ 3 files changed, 31 insertions(+)
+ rename package/lttng-babeltrace/{lttng-babeltrace-no-posix-fallocate-in-uclibc.patch => lttng-babeltrace-01-no-posix-fallocate-in-uclibc.patch} (100%)
+ create mode 100644 package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
+
+diff --git a/package/lttng-babeltrace/lttng-babeltrace-no-posix-fallocate-in-uclibc.patch b/package/lttng-babeltrace/lttng-babeltrace-01-no-posix-fallocate-in-uclibc.patch
+similarity index 100%
+rename from package/lttng-babeltrace/lttng-babeltrace-no-posix-fallocate-in-uclibc.patch
+rename to package/lttng-babeltrace/lttng-babeltrace-01-no-posix-fallocate-in-uclibc.patch
+diff --git a/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch b/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
+new file mode 100644
+index 0000000..b8f31be
+--- /dev/null
++++ b/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
+@@ -0,0 +1,27 @@
++Support old compilers
++
++Some old compilers do not use C99 as their default C language variant,
++for example gcc 4.3.x, which is used on some old machines. When such a
++compiler is used, by default, ULLONG_MAX is not visible. Adding
++-std=gnu99 is needed to make this definition visible.
++
++In autoconf speak, this translates into the need of using
++AC_PROC_CC_STDC instead of AC_PROG_CC. See
++http://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/C-Compiler.html
++for more details.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/configure.ac
++===================================================================
++--- a/configure.ac
+++++ b/configure.ac
++@@ -17,7 +17,7 @@
++ AC_SYS_LARGEFILE
++ 
++ # Checks for programs.
++-AC_PROG_CC
+++AC_PROG_CC_STDC
++ AC_PROG_MAKE_SET
++ LT_INIT
++ AC_PROG_YACC
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+index 82376a3..a68320c 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.mk
++++ b/package/lttng-babeltrace/lttng-babeltrace.mk
+@@ -4,5 +4,9 @@ LTTNG_BABELTRACE_SOURCE  = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2013.05.0"
-+	bool "2013.05.1"
+ LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
  
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2013.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2013.05.1"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default $BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
++# We patch configure.ac to fix a problem that appears
++# only with some old host gcc
++HOST_LTTNG_BABELTRACE_AUTORECONF = YES
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 1.7.9.5
