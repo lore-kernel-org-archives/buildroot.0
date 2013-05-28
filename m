@@ -1,84 +1,22 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 29 May 2013 00:11:37 +0200
-Subject: [Buildroot] [PATCH] fs/ext2: further fix to the UUID
-Message-ID: <1369779097-28915-1-git-send-email-yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 29 May 2013 00:15:46 +0200
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
+	9}.x stable version
+In-Reply-To: <1369655016-28855-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 27 May 2013 08:43:35 -0300")
+References: <1369655016-28855-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877gii92el.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Turned out that setting a nil-UUID is no better than clearing it.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-What currently happens is as follows:
-  - first, genext2fs does not generate a UUID
-  - then we tune2fs to upgrade the filesystem
-  - then we run fsck, which generates a random UUID
-  - then we re-run tune2fs to set a nil-UUID
+Committed both, thanks.
 
-So, on the target, if the file system is improperly unmounted (eg.
-with a power failure), on next boot, fsck may be run, and a new
-random UUID will be generated.
-
-*However*, fsck improperly updates the filesystem when it adds the
-UUID, and there are a few group descriptor checksum errors.
-
-Those errors will go undetected until the next fsck, which will then
-block for user input (bad on embedded systems, bad).
-
-Fix that by systematically generating a random UUID _before_ we call
-to fsck.
-
-A random UUID is not so bad, after all, since there are already so
-many sources of unpredictability in the filesystem: files date and
-ordering, files content (date, paths...) which renders a fixed UUID
-unneeded.
-
-And it is still possible to set the UUID in a post-image script if
-needed, anyway.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- fs/ext2/genext2fs.sh | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/fs/ext2/genext2fs.sh b/fs/ext2/genext2fs.sh
-index 7a6e232..a6cd7d2 100755
---- a/fs/ext2/genext2fs.sh
-+++ b/fs/ext2/genext2fs.sh
-@@ -49,6 +49,14 @@ e2tunefsck() {
-         tune2fs "$@" "${IMG}"
-     fi
- 
-+    # genext2fs does not generate a UUID, but fsck will whine if one is
-+    # is missing, so we need to add a UUID.
-+    # Of course, this has to happend _before_ we run fsck.
-+    # Although a random UUID may seem bad for reproducibility, there
-+    # already are so many things that are not reproducible in a
-+    # filesystem: file dates, file ordering, content of the files...
-+    tune2fs -U random "${IMG}"
-+
-     # After changing filesystem options, running fsck is required
-     # (see: man tune2fs). Running e2fsck in other cases will ensure
-     # coherency of the filesystem, although it is not required.
-@@ -69,14 +77,9 @@ e2tunefsck() {
-     printf "\ne2fsck was successfully run on '%s' (ext%d)\n\n"  \
-            "${IMG##*/}" "${GEN}"
- 
--    # e2fsck will force a *random* UUID, which is bad
--    # for reproducibility, so we do not want it. Asking
--    # tune2fs to 'clear' the UUID makes for an invalid
--    # fs, so we explicitly set a NULL UUID, which works.
-     # Remove count- and time-based checks, they are not welcome
-     # on embedded devices, where they can cause serious boot-time
-     # issues by tremendously slowing down the boot.
--    tune2fs -U 00000000-0000-0000-0000-000000000000 "${IMG}"
-     tune2fs -c 0 -i 0 "${IMG}"
- }
- 
 -- 
-1.8.1.2
+Bye, Peter Korsgaard
