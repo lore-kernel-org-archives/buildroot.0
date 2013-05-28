@@ -1,37 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 May 2013 12:14:22 +0200
-Subject: [Buildroot] [PATCH 1/6] bzip2: improve the packaging
-In-Reply-To: <1369695664-5670-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1369695664-5670-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1369695664-5670-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20130528121422.5f9b02e8@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 28 May 2013 12:33:35 +0200
+Subject: [Buildroot] [PATCH] fs/ext2: explicitly set a NULL UUID
+Message-ID: <1369737215-11993-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Tue, 28 May 2013 01:00:59 +0200, Thomas Petazzoni wrote:
-> Instead of doing some nasty SED tricks, use a patch that modifies the
-> bzip2 build system to make it a little bit nicer. Those SEDs were made
-> differently for the host and target packages, which is contrary to the
-> logic of not having any difference in the source tree between the host
-> build and the target build.
-> 
-> This commit also makes sure that bzip2.mk behaves properly in a
-> BR2_PREFER_STATIC_LIB=y context.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+"tune2fs -U clear" creates an invalid filesystem, that fsck.ext2
+whines about later:
 
-This patch should also fix
-http://autobuild.buildroot.org/results/91e/91ef29128f9e4e68dd433bd87d61c60852e741b3/build-end.log.
+    $ make rootfs-ext2
+    [--SNIP--]
 
-(i.e static build on bfin).
+    $ ./host/usr/sbin/fsck.ext4 images/rootfs.ext2
+    e2fsck 1.42.7 (21-Jan-2013)
+    Filesystem did not have a UUID; generating one.
+    images/rootfs.ext2: clean, 4616/5120 files, 53171/131072 blocks
 
-Thomas
+    $ ./host/usr/sbin/fsck.ext4 -f images/rootfs.ext2
+    e2fsck 1.42.7 (21-Jan-2013)
+    One or more block group descriptor checksums are invalid.  Fix<y>? yes
+    Group descriptor 0 checksum is 0x4131, should be 0x8bdb.  FIXED.
+    [--SNIP--]
+
+So we set an explicitly NULL UUID instead.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ fs/ext2/genext2fs.sh | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/fs/ext2/genext2fs.sh b/fs/ext2/genext2fs.sh
+index f7f8d33..7a6e232 100755
+--- a/fs/ext2/genext2fs.sh
++++ b/fs/ext2/genext2fs.sh
+@@ -70,11 +70,14 @@ e2tunefsck() {
+            "${IMG##*/}" "${GEN}"
+ 
+     # e2fsck will force a *random* UUID, which is bad
+-    # for reproducibility, so we do not want it.
++    # for reproducibility, so we do not want it. Asking
++    # tune2fs to 'clear' the UUID makes for an invalid
++    # fs, so we explicitly set a NULL UUID, which works.
+     # Remove count- and time-based checks, they are not welcome
+     # on embedded devices, where they can cause serious boot-time
+     # issues by tremendously slowing down the boot.
+-    tune2fs -U clear -c 0 -i 0 "${IMG}"
++    tune2fs -U 00000000-0000-0000-0000-000000000000 "${IMG}"
++    tune2fs -c 0 -i 0 "${IMG}"
+ }
+ 
+ # Check we know what generation to generate
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.2
