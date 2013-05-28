@@ -1,33 +1,105 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 May 2013 22:11:56 +0200
-Subject: [Buildroot] [PATCH 4/6] gutenprint: ensure target and host
- variant have the same patch hooks
-In-Reply-To: <1369695664-5670-5-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1369695664-5670-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1369695664-5670-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <51A50F8C.3040304@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 May 2013 22:27:06 +0200
+Subject: [Buildroot] [PATCH] qt5jsbackend: only available on ARM, x86,
+	x86-64 and mipsel
+Message-ID: <1369772826-8019-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/05/13 01:01, Thomas Petazzoni wrote:
-> In the case of gutenprint, the patch hook executed for the target just
-> creates one directory which is needed for autoreconf to work, and the
-> host variant is not autoreconf'ed. So there is no harm in also
-> applying this patch hook to the host variant.
+The v8 Javascript virtual machine that is the core of qt5jsbackend is
+only available on certain architectures. At the moment, only ARM, x86,
+x86-64 and mipsel are supported.
 
-  Since autoreconf is going to be done on the source tree, you should 
-probably autoreconf the host variant as well.
+Fixes:
 
-  Regards,
-  Arnout
+  http://autobuild.buildroot.org/results/a2e/a2e62e2deaa28ec9d4d957523a00ee0b7a634950/build-end.log
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5declarative/Config.in |    4 +++-
+ package/qt5/qt5jsbackend/Config.in   |    7 +++++++
+ package/qt5/qt5multimedia/Config.in  |    5 ++++-
+ package/qt5/qt5quick1/Config.in      |    4 +++-
+ 4 files changed, 17 insertions(+), 3 deletions(-)
+
+diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
+index f862b94..9332865 100644
+--- a/package/qt5/qt5declarative/Config.in
++++ b/package/qt5/qt5declarative/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_QT5DECLARATIVE
+ 	select BR2_PACKAGE_QT5BASE_EGLFS
+ 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
+ 	depends on BR2_PACKAGE_HAS_OPENGL_ES
++	depends on BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
+@@ -15,4 +16,5 @@ config BR2_PACKAGE_QT5DECLARATIVE
+ 	  http://qt-project.org
+ 
+ comment "qt5declarative requires an OpenGL-capable backend"
+-	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
++	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES) && \
++		BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
+diff --git a/package/qt5/qt5jsbackend/Config.in b/package/qt5/qt5jsbackend/Config.in
+index 89d5067..2f5ac1f 100644
+--- a/package/qt5/qt5jsbackend/Config.in
++++ b/package/qt5/qt5jsbackend/Config.in
+@@ -1,6 +1,13 @@
++config BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
++	bool
++	# v8 is only available on certain architectures
++	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
++	default y
++
+ config BR2_PACKAGE_QT5JSBACKEND
+ 	bool "qt5jsbackend"
+ 	select BR2_PACKAGE_QT5BASE
++	depends on BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
+diff --git a/package/qt5/qt5multimedia/Config.in b/package/qt5/qt5multimedia/Config.in
+index fd36672..080cba2 100644
+--- a/package/qt5/qt5multimedia/Config.in
++++ b/package/qt5/qt5multimedia/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_QT5MULTIMEDIA
+ 	select BR2_PACKAGE_QT5DECLARATIVE
+ 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
+ 	depends on BR2_PACKAGE_HAS_OPENGL_ES
++	# qt5declarative -> qt5jsbackend
++	depends on BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
+@@ -13,4 +15,5 @@ config BR2_PACKAGE_QT5MULTIMEDIA
+ 	  http://qt-project.org
+ 
+ comment "qt5multimedia requires an OpenGL-capable backend"
+-	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
++	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES) && \
++		BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
+diff --git a/package/qt5/qt5quick1/Config.in b/package/qt5/qt5quick1/Config.in
+index 99fd5a4..65b1f62 100644
+--- a/package/qt5/qt5quick1/Config.in
++++ b/package/qt5/qt5quick1/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_QT5QUICK1
+ 	depends on !BR2_PREFER_STATIC_LIB
+ 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
+ 	depends on BR2_PACKAGE_HAS_OPENGL_ES
++	depends on BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
+@@ -19,4 +20,5 @@ config BR2_PACKAGE_QT5QUICK1
+ 	  http://qt-project.org
+ 
+ comment "qt5quick1 requires an OpenGL-capable backend"
+-	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
++	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES) && \
++		BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.9.5
