@@ -1,65 +1,153 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 May 2013 14:59:12 +0200
-Subject: [Buildroot] [git commit] sqlite: bump to version 3.7.17
-Message-ID: <20130528130059.D4D079A61F@busybox.osuosl.org>
+From: Nicolas Menegale <nicolas.menegale@openwide.fr>
+Date: Tue, 28 May 2013 15:04:18 +0200 (CEST)
+Subject: [Buildroot] [PATCH 1/1] cppcms: new package
+In-Reply-To: <968444525.2595803.1369130658757.JavaMail.root@openwide.fr>
+Message-ID: <929104792.2857192.1369746258845.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ddddef3e6e52b4205306190e4a3830fad06d23aa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Any news ?
+Thanks everyone.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../sqlite/sqlite-dont-force-posix-fallocate.patch |   23 ++++++++++++++++++++
- package/sqlite/sqlite.mk                           |    4 +-
- 2 files changed, 25 insertions(+), 2 deletions(-)
+Nicolas.
 
-diff --git a/package/sqlite/sqlite-dont-force-posix-fallocate.patch b/package/sqlite/sqlite-dont-force-posix-fallocate.patch
-new file mode 100644
-index 0000000..118001b
---- /dev/null
-+++ b/package/sqlite/sqlite-dont-force-posix-fallocate.patch
-@@ -0,0 +1,23 @@
-+This is checked by configure and passed as a define directive when building.
-+There's no need to check again and potentially override a failed check
-+(uClibc <= 0.9.33.2 for example lacks posix_fallocate).
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura sqlite-autoconf-3071700.orig/sqlite3.c sqlite-autoconf-3071700/sqlite3.c
-+--- sqlite-autoconf-3071700.orig/sqlite3.c	2013-05-23 03:17:27.170459400 -0300
-++++ sqlite-autoconf-3071700/sqlite3.c	2013-05-23 03:25:01.839227616 -0300
-+@@ -22931,13 +22931,6 @@
-+ */
-+ #if SQLITE_OS_UNIX              /* This file is used on unix only */
-+
-+-/* Use posix_fallocate() if it is available
-+-*/
-+-#if !defined(HAVE_POSIX_FALLOCATE) \
-+-      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L)
-+-# define HAVE_POSIX_FALLOCATE 1
-+-#endif
-+-
-+ /*
-+ ** There are various methods for file locking used for concurrency
-+ ** control:
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 8eb6b2f..39a39d0 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,9 +4,9 @@
- #
- #############################################################
- 
--SQLITE_VERSION = 3071401
-+SQLITE_VERSION = 3071700
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
--SQLITE_SITE = http://www.sqlite.org
-+SQLITE_SITE = http://www.sqlite.org/2013
- SQLITE_LICENSE = Public domain
- SQLITE_INSTALL_STAGING = YES
- 
+
+----- Mail original -----
+> De: "Nicolas Menegale" <nicolas.menegale@openwide.fr>
+> ?: buildroot at busybox.net
+> Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> Envoy?: Mardi 21 Mai 2013 12:04:18
+> Objet: Re: [Buildroot] [PATCH 1/1] cppcms: new package
+> 
+> Hi Guys,
+> 
+> Sorry I made a mistake in the mail subject the first time I sent the
+> patch. But both sent patches (v1) are the same.
+> I realized that cppcms_run wasn't necessary into the host. Only
+> cppcms_tmpl is, as explained in the commentary.
+> 
+> What do you think about this v1 ?
+> 
+> Thanks a lot,
+> Nicolas M?n?gale.
+> 
+> 
+> ----- Mail original -----
+> > De: "Nicolas Menegale" <nicolas.menegale@openwide.fr>
+> > ?: buildroot at busybox.net
+> > Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> > Envoy?: Mardi 21 Mai 2013 11:58:24
+> > Objet: Re: [Buildroot] [PATCH 1/1] cppcms: new package
+> > 
+> > Signed-off-by: Nicolas M?n?gale <nicolas.menegale@openwide.fr>
+> > ---
+> > v1: minor modifications
+> > CppCMS is a C++ web framework. The cppcms.mk also copy into the
+> > host
+> > after
+> > staging install two scripts needed when you compile an application
+> > using the
+> > web framework (cppcms_tmpl_cc).
+> > As discussed on IRC it's not worth creating an host-cppcms package
+> > for one
+> > script.
+> > Signed-off-by: Nicolas M?n?gale <nicolas.menegale@openwide.fr>
+> > ---
+> >  package/Config.in        |  1 +
+> >  package/cppcms/Config.in | 21 +++++++++++++++++++++
+> >  package/cppcms/cppcms.mk | 23 +++++++++++++++++++++++
+> >  3 files changed, 45 insertions(+)
+> >  create mode 100644 package/cppcms/Config.in
+> >  create mode 100644 package/cppcms/cppcms.mk
+> > 
+> > diff --git a/package/Config.in b/package/Config.in
+> > index ab514c7..3ade087 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -556,6 +556,7 @@ source "package/apr/Config.in"
+> >  source "package/apr-util/Config.in"
+> >  source "package/libcofi/Config.in"
+> >  source "package/classpath/Config.in"
+> > +source "package/cppcms/Config.in"
+> >  source "package/elfutils/Config.in"
+> >  source "package/fftw/Config.in"
+> >  source "package/libargtable2/Config.in"
+> > diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
+> > new file mode 100644
+> > index 0000000..b53ba18
+> > --- /dev/null
+> > +++ b/package/cppcms/Config.in
+> > @@ -0,0 +1,21 @@
+> > +config BR2_PACKAGE_CPPCMS
+> > +	bool "cppcms"
+> > +	select BR2_PACKAGE_ZLIB
+> > +	select BR2_PACKAGE_PCRE
+> > +	select BR2_PACKAGE_ICU
+> > +	select BR2_PACKAGE_LIBGCRYPT
+> > +	depends on BR2_INSTALL_LIBSTDCPP
+> > +	depends on BR2_USE_WCHAR
+> > +	help
+> > +	  CppCMS is a Free High Performance Web Development Framework
+> > +	  (not a CMS) aimed for Rapid Web Application Development.
+> > +	  It differs from most of other web development frameworks
+> > +	  like: Python Django, Java Servlets in following:
+> > +	  It is designed and tuned to handle extremely high loads.
+> > +	  It uses modern C++ as primary development language in order to
+> > achieve first
+> > +	  goal.
+> > +	  It is aimed on development of both Web Sites and Web Services.
+> > +
+> > +	  http://cppcms.com
+> > +
+> > +comment "cppcms requires a toolchain with C++ & WCHAR support
+> > enabled"
+> > +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+> > diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
+> > new file mode 100644
+> > index 0000000..b3319c2
+> > --- /dev/null
+> > +++ b/package/cppcms/cppcms.mk
+> > @@ -0,0 +1,23 @@
+> > +#############################################################
+> > +#
+> > +# CppCMS
+> > +#
+> > +#############################################################
+> > +
+> > +CPPCMS_VERSION = 1.0.3
+> > +CPPCMS_SOURCE = cppcms-$(CPPCMS_VERSION).tar.bz2
+> > +CPPCMS_LICENSE = LGPLv3
+> > +CPPCMS_LICENSE_FILE = COPYING.TXT
+> > +CPPCMS_SITE =
+> > http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
+> > +CPPCMS_INSTALL_STAGING = YES
+> > +CPPCMS_CONF_OPT = -DDISABLE_ICONV=ON
+> > +CPPCMS_DEPENDENCIES = zlib pcre icu libgcrypt
+> > +
+> > +# We copy cppcms_tmpl_cc from staging to host because this file
+> > can
+> > be needed
+> > +# for compiling packages using cppcms. And it is not worth
+> > creating
+> > a host
+> > +# package just for a python script.
+> > +define CPPCMS_INSTALL_HOST_TOOLS
+> > +	cp $(STAGING_DIR)/usr/bin/cppcms_tmpl_cc
+> > $(HOST_DIR)/usr/bin/cppcms_tmpl_cc
+> > +endef
+> > +CPPCMS_POST_INSTALL_STAGING_HOOKS += CPPCMS_INSTALL_HOST_TOOLS
+> > +
+> > +$(eval $(cmake-package))
+> > --
+> > 1.8.1.2
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
