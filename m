@@ -1,42 +1,84 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 May 2013 23:39:55 +0200
-Subject: [Buildroot] [git commit] flex: propagate m4 dependency on wchar
-Message-ID: <20130528214155.524019A3F9@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 29 May 2013 00:11:37 +0200
+Subject: [Buildroot] [PATCH] fs/ext2: further fix to the UUID
+Message-ID: <1369779097-28915-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c0d30d4c94047ab29db021a921dc3762e81ac5e7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Commit fe6a9e5e9d4046173a60235f8fd9a3b4746929c6 missed the fact that
-m4 has a dependency on wide char support, so this dependency should be
-propagated to flex.
+Turned out that setting a nil-UUID is no better than clearing it.
 
-Fixes:
+What currently happens is as follows:
+  - first, genext2fs does not generate a UUID
+  - then we tune2fs to upgrade the filesystem
+  - then we run fsck, which generates a random UUID
+  - then we re-run tune2fs to set a nil-UUID
 
-  http://autobuild.buildroot.org/results/495/49502b2e33a346b2fcebf5e2da00af2661b54d6e/build-end.log
+So, on the target, if the file system is improperly unmounted (eg.
+with a power failure), on next boot, fsck may be run, and a new
+random UUID will be generated.
 
-[Peter: Note where wchar dep comes from, show comment if not available]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+*However*, fsck improperly updates the filesystem when it adds the
+UUID, and there are a few group descriptor checksum errors.
+
+Those errors will go undetected until the next fsck, which will then
+block for user input (bad on embedded systems, bad).
+
+Fix that by systematically generating a random UUID _before_ we call
+to fsck.
+
+A random UUID is not so bad, after all, since there are already so
+many sources of unpredictability in the filesystem: files date and
+ordering, files content (date, paths...) which renders a fixed UUID
+unneeded.
+
+And it is still possible to set the UUID in a post-image script if
+needed, anyway.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/flex/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ fs/ext2/genext2fs.sh | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/flex/Config.in b/package/flex/Config.in
-index 1ecd0c3..4fbc56c 100644
---- a/package/flex/Config.in
-+++ b/package/flex/Config.in
-@@ -14,5 +14,9 @@ config BR2_PACKAGE_FLEX_BINARY
- 	depends on BR2_PACKAGE_FLEX
- 	# runtime dependency
- 	select BR2_PACKAGE_M4
-+	depends on BR2_USE_WCHAR # m4
- 	help
- 	  Install the flex binary tool in the target filesystem.
+diff --git a/fs/ext2/genext2fs.sh b/fs/ext2/genext2fs.sh
+index 7a6e232..a6cd7d2 100755
+--- a/fs/ext2/genext2fs.sh
++++ b/fs/ext2/genext2fs.sh
+@@ -49,6 +49,14 @@ e2tunefsck() {
+         tune2fs "$@" "${IMG}"
+     fi
+ 
++    # genext2fs does not generate a UUID, but fsck will whine if one is
++    # is missing, so we need to add a UUID.
++    # Of course, this has to happend _before_ we run fsck.
++    # Although a random UUID may seem bad for reproducibility, there
++    # already are so many things that are not reproducible in a
++    # filesystem: file dates, file ordering, content of the files...
++    tune2fs -U random "${IMG}"
 +
-+comment "flex binary requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
+     # After changing filesystem options, running fsck is required
+     # (see: man tune2fs). Running e2fsck in other cases will ensure
+     # coherency of the filesystem, although it is not required.
+@@ -69,14 +77,9 @@ e2tunefsck() {
+     printf "\ne2fsck was successfully run on '%s' (ext%d)\n\n"  \
+            "${IMG##*/}" "${GEN}"
+ 
+-    # e2fsck will force a *random* UUID, which is bad
+-    # for reproducibility, so we do not want it. Asking
+-    # tune2fs to 'clear' the UUID makes for an invalid
+-    # fs, so we explicitly set a NULL UUID, which works.
+     # Remove count- and time-based checks, they are not welcome
+     # on embedded devices, where they can cause serious boot-time
+     # issues by tremendously slowing down the boot.
+-    tune2fs -U 00000000-0000-0000-0000-000000000000 "${IMG}"
+     tune2fs -c 0 -i 0 "${IMG}"
+ }
+ 
+-- 
+1.8.1.2
