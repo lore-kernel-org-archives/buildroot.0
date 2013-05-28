@@ -1,32 +1,65 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 May 2013 14:59:07 +0200
-Subject: [Buildroot] [git commit] mpg123: bump to version 1.15.4
-Message-ID: <20130528130059.9FD7B9A61F@busybox.osuosl.org>
+Date: Tue, 28 May 2013 14:59:12 +0200
+Subject: [Buildroot] [git commit] sqlite: bump to version 3.7.17
+Message-ID: <20130528130059.D4D079A61F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=609aa4156aa6fbda182856d3dab7df752c54eb78
+commit: http://git.buildroot.net/buildroot/commit/?id=ddddef3e6e52b4205306190e4a3830fad06d23aa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/mpg123/mpg123.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../sqlite/sqlite-dont-force-posix-fallocate.patch |   23 ++++++++++++++++++++
+ package/sqlite/sqlite.mk                           |    4 +-
+ 2 files changed, 25 insertions(+), 2 deletions(-)
 
-diff --git a/package/multimedia/mpg123/mpg123.mk b/package/multimedia/mpg123/mpg123.mk
-index c65920f..8796392 100644
---- a/package/multimedia/mpg123/mpg123.mk
-+++ b/package/multimedia/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/sqlite/sqlite-dont-force-posix-fallocate.patch b/package/sqlite/sqlite-dont-force-posix-fallocate.patch
+new file mode 100644
+index 0000000..118001b
+--- /dev/null
++++ b/package/sqlite/sqlite-dont-force-posix-fallocate.patch
+@@ -0,0 +1,23 @@
++This is checked by configure and passed as a define directive when building.
++There's no need to check again and potentially override a failed check
++(uClibc <= 0.9.33.2 for example lacks posix_fallocate).
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura sqlite-autoconf-3071700.orig/sqlite3.c sqlite-autoconf-3071700/sqlite3.c
++--- sqlite-autoconf-3071700.orig/sqlite3.c	2013-05-23 03:17:27.170459400 -0300
+++++ sqlite-autoconf-3071700/sqlite3.c	2013-05-23 03:25:01.839227616 -0300
++@@ -22931,13 +22931,6 @@
++ */
++ #if SQLITE_OS_UNIX              /* This file is used on unix only */
++
++-/* Use posix_fallocate() if it is available
++-*/
++-#if !defined(HAVE_POSIX_FALLOCATE) \
++-      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L)
++-# define HAVE_POSIX_FALLOCATE 1
++-#endif
++-
++ /*
++ ** There are various methods for file locking used for concurrency
++ ** control:
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 8eb6b2f..39a39d0 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,9 +4,9 @@
  #
  #############################################################
  
--MPG123_VERSION = 1.15.3
-+MPG123_VERSION = 1.15.4
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPT = --with-optimization=0 --disable-lfs-alias
+-SQLITE_VERSION = 3071401
++SQLITE_VERSION = 3071700
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+-SQLITE_SITE = http://www.sqlite.org
++SQLITE_SITE = http://www.sqlite.org/2013
+ SQLITE_LICENSE = Public domain
+ SQLITE_INSTALL_STAGING = YES
+ 
