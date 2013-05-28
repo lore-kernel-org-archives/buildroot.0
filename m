@@ -1,82 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 May 2013 20:47:29 +0200
-Subject: [Buildroot] [git commit] lttng-babeltrace: fix build failure on
-	gcc14
-Message-ID: <20130528185537.0ED029A19E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 28 May 2013 21:00:00 +0200
+Subject: [Buildroot] [PATCH 1/6] bzip2: improve the packaging
+In-Reply-To: <1369695664-5670-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 28 May 2013 01:00:59 +0200")
+References: <1369695664-5670-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1369695664-5670-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <878v2z9bgv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c95ba8a487ba751134f63e2bbf45c5a09ee870a3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-The gcc14 machine has a moderately old host gcc, which was causing a
-recurrent build failure of host-lttng-babeltrace:
+ Thomas> Instead of doing some nasty SED tricks, use a patch that modifies the
+ Thomas> bzip2 build system to make it a little bit nicer. Those SEDs were made
+ Thomas> differently for the host and target packages, which is contrary to the
+ Thomas> logic of not having any difference in the source tree between the host
+ Thomas> build and the target build.
 
- http://autobuild.buildroot.org/results/492/49216052c161874f41738e41e6e0c89a6dd04000/build-end.log
+ Thomas> This commit also makes sure that bzip2.mk behaves properly in a
+ Thomas> BR2_PREFER_STATIC_LIB=y context.
 
-This commit adds a patch to fix this build failure, related to the
-access of the ULLONG_MAX define on compilers that did not default to
-the C99 variant of the C language.
+Committed to next, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...beltrace-01-no-posix-fallocate-in-uclibc.patch} |    0
- ...tng-babeltrace-02-fix-build-old-compilers.patch |   27 ++++++++++++++++++++
- package/lttng-babeltrace/lttng-babeltrace.mk       |    4 +++
- 3 files changed, 31 insertions(+), 0 deletions(-)
+It would be good if you could try to push the patch upstream.
 
-diff --git a/package/lttng-babeltrace/lttng-babeltrace-no-posix-fallocate-in-uclibc.patch b/package/lttng-babeltrace/lttng-babeltrace-01-no-posix-fallocate-in-uclibc.patch
-similarity index 100%
-rename from package/lttng-babeltrace/lttng-babeltrace-no-posix-fallocate-in-uclibc.patch
-rename to package/lttng-babeltrace/lttng-babeltrace-01-no-posix-fallocate-in-uclibc.patch
-diff --git a/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch b/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
-new file mode 100644
-index 0000000..b8f31be
---- /dev/null
-+++ b/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
-@@ -0,0 +1,27 @@
-+Support old compilers
-+
-+Some old compilers do not use C99 as their default C language variant,
-+for example gcc 4.3.x, which is used on some old machines. When such a
-+compiler is used, by default, ULLONG_MAX is not visible. Adding
-+-std=gnu99 is needed to make this definition visible.
-+
-+In autoconf speak, this translates into the need of using
-+AC_PROC_CC_STDC instead of AC_PROG_CC. See
-+http://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/C-Compiler.html
-+for more details.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/configure.ac
-+===================================================================
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -17,7 +17,7 @@
-+ AC_SYS_LARGEFILE
-+ 
-+ # Checks for programs.
-+-AC_PROG_CC
-++AC_PROG_CC_STDC
-+ AC_PROG_MAKE_SET
-+ LT_INIT
-+ AC_PROG_YACC
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index 82376a3..d3bfc83 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.mk
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -4,5 +4,9 @@ LTTNG_BABELTRACE_SOURCE  = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
- 
- LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
- 
-+# One patch touches configure.ac
-+LTTNG_BABELTRACE_AUTORECONF = YES
-+HOST_LTTNG_BABELTRACE_AUTORECONF = YES
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-- 
+Bye, Peter Korsgaard
