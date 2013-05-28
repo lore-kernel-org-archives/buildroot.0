@@ -1,54 +1,84 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Tue, 28 May 2013 11:02:53 -0500
-Subject: [Buildroot] [PATCH 1/1] attr: bump to version 2.4.47
-In-Reply-To: <20130528161303.126e7e64@skate>
-References: <1369738614-31476-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <20130528130703.694786e2@skate>
- <CAEBucnA0ZwDr35-9wr7jA3Gu-6pR_xpy6iXQo_EqGCnKdE4aZw@mail.gmail.com>
- <20130528161303.126e7e64@skate>
-Message-ID: <CAEBucnB6VcA8ML8T6h_aK+anX83hA8-SycwrPkz_J+2B81g9DA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 May 2013 20:21:29 +0200
+Subject: [Buildroot] [PATCH v2] lttng-babeltrace: fix build failure on gcc14
+Message-ID: <1369765289-30040-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+The gcc14 machine has a moderately old host gcc, which was causing a
+recurrent build failure of host-lttng-babeltrace:
 
-> Are you insinuating that my patch was not correct? :-) Come on, this
-> never happens to me!
+ http://autobuild.buildroot.org/results/492/49216052c161874f41738e41e6e0c89a6dd04000/build-end.log
 
-Of course not!  I'm just saying that maybe somewhere along the line
-you may have overlooked the small aspect of installing the static
-version of the library.  :-)
+This commit adds a patch to fix this build failure, related to the
+access of the ULLONG_MAX define on compilers that did not default to
+the C99 variant of the C language.
 
-> If you look at 5ad2879a8bca386fa5c256a4286ccc928601cc1a, the purpose of
-> the patch was not really to fix *other* libraries linking against the
-> static version of attr, but rather fix the attr build process *itself*
-> which was crashing when BR2_PREFER_STATIC_LIB=y.
->
-> See
-> http://autobuild.buildroot.org/results/58a3d4113172813183d43fddc1248b35bd0c4994/build-end.log
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+v2:
+ Also autoreconf the target package, for consistency.
+---
+ ...beltrace-01-no-posix-fallocate-in-uclibc.patch} |    0
+ ...tng-babeltrace-02-fix-build-old-compilers.patch |   27 ++++++++++++++++++++
+ package/lttng-babeltrace/lttng-babeltrace.mk       |    4 +++
+ 3 files changed, 31 insertions(+)
+ rename package/lttng-babeltrace/{lttng-babeltrace-no-posix-fallocate-in-uclibc.patch => lttng-babeltrace-01-no-posix-fallocate-in-uclibc.patch} (100%)
+ create mode 100644 package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
 
-There is a libtool .la library in the folder where it is looking for a
-.lai .  I don't understand libtool well enough to understand what the
-difference is between a .la and .lai library.  Thus, I quit working on
-it.
-
-> That said, if other packages were still not able to link statically
-> against attr after that patch, then clearly it means that the patch was
-> not sufficient.
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-
-
-
---
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+diff --git a/package/lttng-babeltrace/lttng-babeltrace-no-posix-fallocate-in-uclibc.patch b/package/lttng-babeltrace/lttng-babeltrace-01-no-posix-fallocate-in-uclibc.patch
+similarity index 100%
+rename from package/lttng-babeltrace/lttng-babeltrace-no-posix-fallocate-in-uclibc.patch
+rename to package/lttng-babeltrace/lttng-babeltrace-01-no-posix-fallocate-in-uclibc.patch
+diff --git a/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch b/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
+new file mode 100644
+index 0000000..b8f31be
+--- /dev/null
++++ b/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
+@@ -0,0 +1,27 @@
++Support old compilers
++
++Some old compilers do not use C99 as their default C language variant,
++for example gcc 4.3.x, which is used on some old machines. When such a
++compiler is used, by default, ULLONG_MAX is not visible. Adding
++-std=gnu99 is needed to make this definition visible.
++
++In autoconf speak, this translates into the need of using
++AC_PROC_CC_STDC instead of AC_PROG_CC. See
++http://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/C-Compiler.html
++for more details.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/configure.ac
++===================================================================
++--- a/configure.ac
+++++ b/configure.ac
++@@ -17,7 +17,7 @@
++ AC_SYS_LARGEFILE
++ 
++ # Checks for programs.
++-AC_PROG_CC
+++AC_PROG_CC_STDC
++ AC_PROG_MAKE_SET
++ LT_INIT
++ AC_PROG_YACC
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+index 82376a3..d3bfc83 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.mk
++++ b/package/lttng-babeltrace/lttng-babeltrace.mk
+@@ -4,5 +4,9 @@ LTTNG_BABELTRACE_SOURCE  = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
+ 
+ LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
+ 
++# One patch touches configure.ac
++LTTNG_BABELTRACE_AUTORECONF = YES
++HOST_LTTNG_BABELTRACE_AUTORECONF = YES
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+1.7.9.5
