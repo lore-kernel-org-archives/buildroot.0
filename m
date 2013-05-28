@@ -1,34 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 May 2013 14:13:28 +0200
-Subject: [Buildroot] [git commit] jamvm: Not available for all architectures
-Message-ID: <20130528121540.2A1B09A610@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 28 May 2013 09:17:30 -0300
+Subject: [Buildroot] [PATCH 1/3] gmp: bump to version 5.1.2
+Message-ID: <1369743452-12867-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c3b24797a1a369819ed21f8fffcb8e26c5c867d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-jamvm supports arm, armeb, powerpc, i386, x86_64 and mipsel.
-
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/jamvm/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/gmp/gmp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
-index 0287f80..3a2bd20 100644
---- a/package/jamvm/Config.in
-+++ b/package/jamvm/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_JAMVM
- 	bool "jamvm"
- 	depends on BR2_INET_IPV6
-+	depends on BR2_arm || BR2_armeb || BR2_i386 \
-+		|| BR2_mipsel || BR2_powerpc || BR2_x86_64
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_CLASSPATH
- 	help
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index e895a48..cf5c310 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-GMP_VERSION = 5.1.1
++GMP_VERSION = 5.1.2
+ GMP_SITE = ftp://ftp.gmplib.org/pub/gmp-$(GMP_VERSION)
+ GMP_SOURCE = gmp-$(GMP_VERSION).tar.bz2
+ GMP_INSTALL_STAGING = YES
+-- 
+1.8.1.5
