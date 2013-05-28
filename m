@@ -1,33 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 May 2013 23:33:07 +0200
-Subject: [Buildroot] [git commit] acpid: fix obvious syntax error in
-	addprefix call
-Message-ID: <20130528214154.7CD079A3F9@busybox.osuosl.org>
+Date: Tue, 28 May 2013 23:39:55 +0200
+Subject: [Buildroot] [git commit] flex: propagate m4 dependency on wchar
+Message-ID: <20130528214155.524019A3F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d96dc1a67569b4a2f67dbf9dee69dcdf1ce2200
+commit: http://git.buildroot.net/buildroot/commit/?id=c0d30d4c94047ab29db021a921dc3762e81ac5e7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Commit fe6a9e5e9d4046173a60235f8fd9a3b4746929c6 missed the fact that
+m4 has a dependency on wide char support, so this dependency should be
+propagated to flex.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/495/49502b2e33a346b2fcebf5e2da00af2661b54d6e/build-end.log
+
+[Peter: Note where wchar dep comes from, show comment if not available]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/acpid/acpid.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/flex/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
-index 4ad9f66..b557617 100644
---- a/package/acpid/acpid.mk
-+++ b/package/acpid/acpid.mk
-@@ -26,7 +26,7 @@ endef
- define ACPID_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/sbin/acpid
- 	rm -f $(TARGET_DIR)/usr/bin/acpi_listen
--	rm -f $(addprefix )$(TARGET_DIR)/usr/share/man/man8/,acpid.8 acpi_listen.8)
-+	rm -f $(addprefix $(TARGET_DIR)/usr/share/man/man8/,acpid.8 acpi_listen.8)
- endef
- 
- define ACPID_CLEAN_CMDS
+diff --git a/package/flex/Config.in b/package/flex/Config.in
+index 1ecd0c3..4fbc56c 100644
+--- a/package/flex/Config.in
++++ b/package/flex/Config.in
+@@ -14,5 +14,9 @@ config BR2_PACKAGE_FLEX_BINARY
+ 	depends on BR2_PACKAGE_FLEX
+ 	# runtime dependency
+ 	select BR2_PACKAGE_M4
++	depends on BR2_USE_WCHAR # m4
+ 	help
+ 	  Install the flex binary tool in the target filesystem.
++
++comment "flex binary requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
