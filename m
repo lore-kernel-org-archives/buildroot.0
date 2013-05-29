@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 29 May 2013 00:58:49 +0000 (UTC)
+Date: Wed, 29 May 2013 01:00:51 +0000 (UTC)
 Subject: [Buildroot] [Bug 6272] coreutils build fails
 In-Reply-To: <bug-6272-163@https.bugs.busybox.net/>
 References: <bug-6272-163@https.bugs.busybox.net/>
-Message-ID: <20130529005849.344189A64B@busybox.osuosl.org>
+Message-ID: <20130529010051.7EB839A64C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,12 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=6272
 
---- Comment #3 from Ryan <ryan.pruden@schange.com> 2013-05-29 00:57:23 UTC ---
-Created attachment 4934
-  --> https://bugs.busybox.net/attachment.cgi?id=4934
-Configuration file showing(-ish) the problem.
+--- Comment #4 from Ryan <ryan.pruden@schange.com> 2013-05-29 00:59:26 UTC ---
+Created attachment 4940
+  --> https://bugs.busybox.net/attachment.cgi?id=4940
+Failed configure.
 
-See config.log line 1059 for more information.
+Line 1059 shows same failure type, but during the configure stages of systemd.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
