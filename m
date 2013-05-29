@@ -1,78 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 30 May 2013 14:07:10 +0200
-Subject: [Buildroot] [PATCH] linux: Fix uImage with appended DTs
-	generation
-In-Reply-To: <1369816605-6268-1-git-send-email-maxime.ripard@free-electrons.com>
- (Maxime Ripard's message of "Wed, 29 May 2013 10:36:45 +0200")
-References: <1369816605-6268-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <87ip201xjl.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 29 May 2013 21:44:27 +0200
+Subject: [Buildroot] [git commit] pulseaudio : bump to version 3.0
+Message-ID: <20130530120917.AAE3A9A692@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d3bde0a64edb5a3392314d2cdd2c4e4057d15831
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Maxime> Fixes bug #5516 - appended device tree blobs on uImage fails
- Maxime> Before version 3.7 of the kernel, building the zImage and then the
- Maxime> uImage will rewrite the zImage in the process, removing the device tree
- Maxime> we just appended.
+Signed-off-by: J??r??my Rosen <jeremy.rosen@openwide.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/pulseaudio/pulseaudio.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- Maxime> Use mkimage to append the device tree to the uImage and rebuild the
- Maxime> headers directly.
-
- Maxime> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
- Maxime> ---
- Maxime>  linux/linux.mk | 14 +++++++++++---
- Maxime>  1 file changed, 11 insertions(+), 3 deletions(-)
-
- Maxime> diff --git a/linux/linux.mk b/linux/linux.mk
- Maxime> index 3877c35..a1166e5 100644
- Maxime> --- a/linux/linux.mk
- Maxime> +++ b/linux/linux.mk
- Maxime> @@ -228,9 +228,17 @@ define LINUX_APPEND_DTB
- Maxime>  	fi >> $(KERNEL_ARCH_PATH)/boot/zImage
- Maxime>  endef
- Maxime>  ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
- Maxime> -# We need to generate the uImage here after that so that the uImage is
- Maxime> -# generated with the right image size.
- Maxime> -LINUX_APPEND_DTB += $(sep)$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) uImage
- Maxime> +# We need to generate a new u-boot image that takes into
- Maxime> +# account the extra-size added by the device tree at the end
- Maxime> +# of the image. To do so, we first need to retrieve both load
- Maxime> +# address and entry point for the kernel from the already
- Maxime> +# generate uboot image before using mkimage -l.
-
-This doesn't seem right. APPENDED_UIMAGE implies APPENDED_DTB, which
-only builds a zImage, so there isn't any uImage to get the load address
-/ entry point from.
-
-
- Maxime> +LINUX_APPEND_DTB += $(sep) LOAD=`$(HOST_DIR)/usr/bin/mkimage -l $(LINUX_IMAGE_PATH) |\
- Maxime> +                    sed -n 's/Load Address: \([0-9]*\)/\1/p'`; \
- Maxime> +                    ENTRY=`$(HOST_DIR)/usr/bin/mkimage -l $(LINUX_IMAGE_PATH) |\
- Maxime> +                    sed -n 's/Entry Point: \([0-9]*\)/\1/p'`; \
- Maxime> +                    $(HOST_DIR)/usr/bin/mkimage -A $(KERNEL_ARCH) -O linux -T kernel -C none -a $${LOAD} -e $${ENTRY} \
- Maxime> +                    -n 'Linux Buildroot' -d $(KERNEL_ARCH_PATH)/boot/zImage $(LINUX_IMAGE_PATH);
-
-These regexps don't make much sense to me as the values are in
-hexidecimal (E.G. prefixed with 0x) and the Entry Point: line as an
-extra space before the numbers.
-
-It would also be good to keep the previous name instead of hardcoding
-Linux Buildroot.
-
-I think it is simpler and cleaner to simply create the mkimage command
-line with a single sed invocation, E.G. something like:
-
-LINUX_APPEND_DTB += $(sep) MKIMAGE_ARGS=`$(HOST_DIR)/usr/bin/mkimage -l $(LINUX_IMAGE_PATH) |\
-	sed -n -e 's/Image Name:[ ]*\(.*\)/-n "\1"/p' -e 's/Load Address:/-a/' -e 's/Entry Point:/-e/'`; \
-	$(HOST_DIR)/usr/bin/mkimage -A $(KERNEL_ARCH) -O linux \
-	-T kernel -C none $${MKIMAGE_ARGS} \
-	-d $(KERNEL_ARCH_PATH)/boot/zImage $(LINUX_IMAGE_PATH);
-
-(Construct the needed -n / -a / -e options in place).
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
+index b39d99e..529f5dd 100644
+--- a/package/multimedia/pulseaudio/pulseaudio.mk
++++ b/package/multimedia/pulseaudio/pulseaudio.mk
+@@ -3,8 +3,7 @@
+ # pulseaudio
+ #
+ ################################################################################
+-
+-PULSEAUDIO_VERSION = 2.1
++PULSEAUDIO_VERSION = 3.0
+ PULSEAUDIO_SITE = http://freedesktop.org/software/pulseaudio/releases/
+ PULSEAUDIO_INSTALL_STAGING = YES
+ PULSEAUDIO_CONF_OPT = \
+@@ -60,6 +59,7 @@ endef
+ PULSEAUDIO_POST_PATCH_HOOKS += PULSEAUDIO_FORCE_CC
+ endif
+ 
++PULSEAUDIO_CONF_OPT += $(if $(BR2_ARM_ENABLE_NEON),--enable-neon-opt=yes,--enable-neon-opt=no)
+ # pulseaudio alsa backend needs pcm/mixer apis
+ ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
+ PULSEAUDIO_CONF_OPT += --disable-alsa
