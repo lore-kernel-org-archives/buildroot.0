@@ -1,22 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 29 May 2013 20:38:11 +0200
-Subject: [Buildroot] [PATCHv2] configs: add sample for olimex mx233
-	olinuxino
-In-Reply-To: <1369672918-3877-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 27 May 2013 13:41:58 -0300")
-References: <1369672918-3877-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mwrd638s.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 29 May 2013 19:14:24 +0200
+Subject: [Buildroot] [git commit branch/next] logrotate: Bump version to
+	3.8.4
+Message-ID: <20130529185743.390D79A65F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9fc981ab3ab04276371b4c4a0125f729323ba82f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The changelog for logrotate indicates some CVE's were fixed in 3.8.0.
+(changelog at http://svn.fedorahosted.org/svn/logrotate/tags/r3-8-4/CHANGES)
 
-Committed to next, thanks.
+Signed-off-by: Arne Rovet <arnerro@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/logrotate/logrotate.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index da8e4b3..c920b46 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -3,7 +3,7 @@
+ # logrotate
+ #
+ #############################################################
+-LOGROTATE_VERSION = 3.7.9
++LOGROTATE_VERSION = 3.8.4
+ LOGROTATE_SOURCE = logrotate-$(LOGROTATE_VERSION).tar.gz
+ LOGROTATE_SITE = https://fedorahosted.org/releases/l/o/logrotate/
+ LOGROTATE_LICENSE = GPLv2+
