@@ -1,32 +1,26 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
-Date: Wed, 29 May 2013 09:11:57 +0200
-Subject: [Buildroot] [PATCH 1/2] libtool : bump to version 2.4.2
-In-Reply-To: <1369811518-31896-1-git-send-email-jeremy.rosen@openwide.fr>
-References: <1369811518-31896-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <1369811518-31896-2-git-send-email-jeremy.rosen@openwide.fr>
+Date: Wed, 29 May 2013 09:11:56 +0200
+Subject: [Buildroot] [PATCH 0/2] Bump pulseaudio and dependencies
+Message-ID: <1369811518-31896-1-git-send-email-jeremy.rosen@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
----
- package/libtool/libtool.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This serie of patch will bump pulseaudio to version 3.0
 
-diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
-index 6f0b904..25cd89d 100644
---- a/package/libtool/libtool.mk
-+++ b/package/libtool/libtool.mk
-@@ -3,7 +3,7 @@
- # libtool
- #
- #############################################################
--LIBTOOL_VERSION = 2.2.10
-+LIBTOOL_VERSION = 2.4.2
- LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.gz
- LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
- LIBTOOL_INSTALL_STAGING = YES
+pulseaudio needs a newer version of libtool, so also bump this
+
+v2: rebase on next instead of master
+
+J?r?my Rosen (2):
+  libtool : bump to version 2.4.2
+  pulseaudio : bump to version 3.0
+
+ package/libtool/libtool.mk                  |    2 +-
+ package/multimedia/pulseaudio/pulseaudio.mk |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
 -- 
 1.7.10.4
