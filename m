@@ -1,22 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 29 May 2013 19:13:31 +0000 (UTC)
-Subject: [Buildroot] [Bug 6272] coreutils build fails
-In-Reply-To: <bug-6272-163@https.bugs.busybox.net/>
-References: <bug-6272-163@https.bugs.busybox.net/>
-Message-ID: <20130529191331.839B99A494@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 29 May 2013 21:21:32 +0200
+Subject: [Buildroot] [PATCH 1/2] czmq: prevent selection when ADI
+	Blackfin external toolchains are used
+In-Reply-To: <1369770335-6995-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 28 May 2013 21:45:34 +0200")
+References: <1369770335-6995-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1369770335-6995-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87ip21618j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6272
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
---- Comment #7 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-05-29 19:11:59 UTC ---
-Ok, I've found the toolchain on some random website. I'll need some time to
-reproduce the problem, though.
+ Thomas> czmq fails to build with the Blackfin external toolchains provided by
+ Thomas> Analog Devices, because their uClibc configuration doesn't include
+ Thomas> AI_ADDRCONFIG. In order to prevent such build failures to happen, we
+ Thomas> simply prevent the selection of czmq or one of its reverse
+ Thomas> dependencies when such toolchains are used.
+
+ Thomas> This fixes:
+
+ Thomas>   http://autobuild.buildroot.org/results/821/82140fac4c2a2cef3f38f06cada8f17fd7f0078b/build-end.log
+
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
