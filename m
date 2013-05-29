@@ -1,29 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 May 2013 21:47:51 +0200
-Subject: [Buildroot] [PATCH] qt5jsbackend: only available on ARM, x86,
- x86-64 and mipsel
-In-Reply-To: <87a9nd60wj.fsf@dell.be.48ers.dk>
-References: <1369772826-8019-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <87a9nd60wj.fsf@dell.be.48ers.dk>
-Message-ID: <20130529214751.1dbdfa09@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 29 May 2013 21:44:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 6272] coreutils build fails
+In-Reply-To: <bug-6272-163@https.bugs.busybox.net/>
+References: <bug-6272-163@https.bugs.busybox.net/>
+Message-ID: <20130529214432.CE5C69A622@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+https://bugs.busybox.net/show_bug.cgi?id=6272
 
-On Wed, 29 May 2013 21:28:44 +0200, Peter Korsgaard wrote:
+--- Comment #8 from Ryan <ryan.pruden@schange.com> 2013-05-29 21:42:59 UTC ---
+Okay. If the toolchain you have found isn't enough, I can upload mine. Just let
+me know!
 
-> You seem to have forgotten qt5graphicaleffects, which also selects
-> qt5declarative.
-
-Gaah, right. Seems like there's some hole in my grep :)
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
