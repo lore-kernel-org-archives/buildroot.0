@@ -1,77 +1,37 @@
-From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
-Date: Wed, 29 May 2013 11:41:19 +0200
-Subject: [Buildroot] [PATCH] ext-toolchain-wrapper: fix paths if executable
- was resolved by PATH
-Message-ID: <51A5CD3F.1070100@fh-kl.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 29 May 2013 12:54:22 +0200
+Subject: [Buildroot] [PATCH 13/20] cubieboard: add support
+In-Reply-To: <1369606110-8088-14-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 27 May 2013 00:08:23 +0200")
+References: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1369606110-8088-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87txlm6opt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If ext-toolchain-wrapper or any symbolic link to it was resolved by PATH,
-the wrapper takes the working directory to calculate the relative paths.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Now '/proc/self/exe' is used to resolve the absolute path to the toolchain
-directory if the wrapper was called neither with a relative nor an absolute
-path.
+ Thomas> From: Carlo Caione <carlo.caione@gmail.com>
+ Thomas> Signed-off-by: Carlo Caione <carlo.caione@gmail.com>
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  board/cubietech/cubieboard/boot.cmd       |    4 +
+ Thomas>  board/cubietech/cubieboard/mkcubiecard.sh |  119 +++++++++++++++++++++++++++++
+ Thomas>  board/cubietech/cubieboard/post-build.sh  |   15 ++++
+ Thomas>  board/cubietech/cubieboard/readme.txt     |   59 ++++++++++++++
+ Thomas>  configs/cubieboard_defconfig              |   39 ++++++++++
+ Thomas>  5 files changed, 236 insertions(+)
+ Thomas>  create mode 100644 board/cubietech/cubieboard/boot.cmd
+ Thomas>  create mode 100755 board/cubietech/cubieboard/mkcubiecard.sh
+ Thomas>  create mode 100755 board/cubietech/cubieboard/post-build.sh
+ Thomas>  create mode 100644 board/cubietech/cubieboard/readme.txt
+ Thomas>  create mode 100644 configs/cubieboard_defconfig
 
-Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
----
- toolchain/toolchain-external/ext-toolchain-wrapper.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index 9a2fc70..e71a90a 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -61,7 +61,7 @@ int main(int argc, char **argv)
- 	char *relbasedir, *absbasedir;
- 	char *progpath = argv[0];
- 	char *basename;
--	int ret;
-+	int ret, i, count = 0;
- 
- 	/* Calculate the relative paths */
- 	basename = strrchr(progpath, '/');
-@@ -77,7 +77,19 @@ int main(int argc, char **argv)
- 		absbasedir = realpath(relbasedir, NULL);
- 	} else {
- 		basename = progpath;
--		absbasedir = realpath("../..", NULL);
-+		absbasedir = malloc(PATH_MAX + 1);
-+		ret = readlink("/proc/self/exe", absbasedir, PATH_MAX);
-+		if (ret < 0) {
-+			perror(__FILE__ ": readlink");
-+			return 2;
-+		}
-+		for (i = ret; i > 0; i--) {
-+			if ('/' == absbasedir[i]) {
-+				absbasedir[i] = '\0';
-+				if (3 == ++count)
-+					break;
-+			}
-+		}
- 	}
- 	if (absbasedir == NULL) {
- 		perror(__FILE__ ": realpath");
--- 
-1.8.1.2
-
+Committed to next with the defconfig adjusted for the _FEX_FILE change,
+thanks.
 
 -- 
-Dipl.-Inf. (FH) Patrick Ziegler
-
-University Of Applied Sciences
-Kaiserslautern
-
-Amerikastrasse 1
-D-66482 Zweibruecken
-Germany
-
-Phone:  +49 631 3724 5526
-Mail:   patrick.ziegler at fh-kl.de
-PGP KeyID 0xB4796B8C
-
-http://www.fh-kl.de
-http://www.fh-kl.de/fachbereiche/imst/iuk-knowhow.html
+Bye, Peter Korsgaard
