@@ -1,22 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 29 May 2013 19:14:48 +0200
-Subject: [Buildroot] [PATCH 1/1] logrotate: Bump version to 3.8.4
-In-Reply-To: <1369834937-4162-1-git-send-email-arnerro@gmail.com> (Arne
- Rovet's message of "Wed, 29 May 2013 23:42:17 +1000")
-References: <1369834937-4162-1-git-send-email-arnerro@gmail.com>
-Message-ID: <87r4gp673r.fsf@dell.be.48ers.dk>
+Date: Wed, 29 May 2013 20:38:11 +0200
+Subject: [Buildroot] [PATCHv2] configs: add sample for olimex mx233
+	olinuxino
+In-Reply-To: <1369672918-3877-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 27 May 2013 13:41:58 -0300")
+References: <1369672918-3877-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87mwrd638s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arne" == Arne Rovet <arnerro@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Arne> The changelog for logrotate indicates some CVE's were fixed in 3.8.0.
-
- Arne> (changelog at
- Arne> http://svn.fedorahosted.org/svn/logrotate/tags/r3-8-4/CHANGES)
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed to next, thanks.
 
