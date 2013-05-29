@@ -1,78 +1,56 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 29 May 2013 15:29:50 +0200
-Subject: [Buildroot] [git commit branch/next] firmware-imx: move to the
-	freescale-imx directory
-Message-ID: <20130529141136.55EAF9A65C@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 29 May 2013 16:56:47 +0200
+Subject: [Buildroot] [PATCHv3 ] python3: Port python2 patches to reduce
+ the interpreter size
+In-Reply-To: <1369816617-6315-1-git-send-email-maxime.ripard@free-electrons.com>
+References: <1369816617-6315-1-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <CAHXCMMJgpbTstcZyUOnz2dsAFpWvZNhGgSdHggPNfHfR3tMPjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7aa425e9034069dfeb91361c90256b9cb831bc67
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi Maxime, all,
 
-This commit moves the firmware-imx package to the newly introduced
-freescale-imx/ directory, and uses the new variables provided by
-freescale-imx/freescale-imx.mk.
+2013/5/29 Maxime Ripard <maxime.ripard@free-electrons.com>:
+> Some of the python2 patches were left behind when doing the python3
+> package. This was because the python build system can now autodetect
+> what packages can be built in the system.
+>
+> However, some of these patches are actually useful to reduce drastically
+> the size of the interpreter.
+>
+> This patch ports the relevant patches to the python3 package, and adds a
+> new patch to remove the idle3 IDE as well from the interpreter.
+>
+> Fixes #5696
 
-Signed-off-by: Henk Fijnvandraat <h.fijnvandraat@inter.nl.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in                                  |    1 -
- package/freescale-imx/Config.in                    |    1 +
- package/{ => freescale-imx}/firmware-imx/Config.in |    0
- .../firmware-imx/firmware-imx.mk                   |    7 +++----
- 4 files changed, 4 insertions(+), 5 deletions(-)
+I've run few builds (same config, with all or no modules selected,
+with/without this patch applied):
+-rw-r--r-- 1 sam sam 64M May 29 12:39
+br-output/python-without-patch/images/rootfs.tar
+-rw-r--r-- 1 sam sam 29M May 29 12:50
+br-output/python-with-patch-v3-no-modules/images/rootfs.tar
+-rw-r--r-- 1 sam sam 32M May 29 12:49
+br-output/python-with-patch-v3-all-modules/images/rootfs.tar
 
-diff --git a/package/Config.in b/package/Config.in
-index 6e7335b..ab6df09 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -217,7 +217,6 @@ menu "Hardware handling"
- menu "Misc devices firmwares"
- source "package/am33x-cm3/Config.in"
- source "package/b43-firmware/Config.in"
--source "package/firmware-imx/Config.in"
- source "package/linux-firmware/Config.in"
- source "package/rpi-firmware/Config.in"
- source "package/sunxi-boards/Config.in"
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index edc9ab5..840b83b 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -2,5 +2,6 @@ menu "Freescale i.MX libraries"
- 	depends on BR2_arm
- 
- source "package/freescale-imx/imx-lib/Config.in"
-+source "package/freescale-imx/firmware-imx/Config.in"
- 
- endmenu
-diff --git a/package/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-similarity index 100%
-rename from package/firmware-imx/Config.in
-rename to package/freescale-imx/firmware-imx/Config.in
-diff --git a/package/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-similarity index 85%
-rename from package/firmware-imx/firmware-imx.mk
-rename to package/freescale-imx/firmware-imx/firmware-imx.mk
-index 3b43bef..85f8dc2 100644
---- a/package/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -1,12 +1,11 @@
- #############################################################
- #
--# buildroot makefile for firmware-imx
-+# firmware-imx
- #
- #############################################################
- 
--FIRMWARE_IMX_VERSION = 12.09.01
--# No official download site from freescale, just this mirror
--FIRMWARE_IMX_SITE = http://download.ossystems.com.br/bsp/freescale/source
-+FIRMWARE_IMX_VERSION = $(FREESCALE_IMX_VERSION)
-+FIRMWARE_IMX_SITE = $(FREESCALE_IMX_MIRROR_SITE)
- FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
- FIRMWARE_IMX_LICENSE = Freescale Semiconductor Software License Agreement, \
- 	Atheros license (ath6k)
+So, #5696 seems fixed. \o/
+
+I also tried run a simple python test script[1] in the chroots built
+with the patch applied:
+- amazingly, zlib module is available when it has been disabled in menuconfig
+  (probably caued by auto-detection the python confiugure script);
+- unfortunately, when all modules are enabled, few of them fail [2].
+
+Here is the defconfig [3] of the build with the patch applied and all
+modules enabled.
+
+[1] http://code.bulix.org/1ufj2l-83660
+[2] http://code.bulix.org/sw2k9j-83662
+[3] http://code.bulix.org/6jewj3-83663
+
+Regards,
+
+-- 
+Samuel
