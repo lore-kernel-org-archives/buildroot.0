@@ -1,28 +1,75 @@
-From: Arne Rovet <arnerro@gmail.com>
-Date: Thu, 30 May 2013 01:46:21 +1000
-Subject: [Buildroot] [PATCH 1/1] logrotate: Bump version to 3.8.4
-In-Reply-To: <87hahpfto6.fsf@dell.be.48ers.dk>
-References: <1369319353-5915-1-git-send-email-arnerro@gmail.com>
- <87hahpfto6.fsf@dell.be.48ers.dk>
-Message-ID: <CAD0gWNaMcbshEmXfbotWxtYd27ny3A4RhrHiX4oHQ2L4tfyFBQ@mail.gmail.com>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Wed, 29 May 2013 17:09:46 +0100
+Subject: [Buildroot] [PATCH v2] directfb: Make imlib2 support optional
+In-Reply-To: <1369128580-15685-1-git-send-email-markos.chandras@gmail.com>
+References: <1369128580-15685-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <CAG2jQ8i-3_gNChmCHYX_hMc+soQrRrokTg50SzYM+kegaFp5mg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27 May 2013 05:05, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Arn" == Arn R <arnerro@gmail.com> writes:
+On 21 May 2013 10:29, Markos Chandras <markos.chandras@gmail.com> wrote:
+> From: Markos Chandras <markos.chandras@imgtec.com>
 >
->  Arn> The changelog for logrotate indicates some CVE's were fixed in 3.8.0.
->  Arn> (changelog at http://svn.fedorahosted.org/svn/logrotate/tags/r3-8-4/CHANGES)
->  Arn> Signed-off-by: Arn R <arnerro@gmail.com>
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> ---
+> Changes since v1:
+> - Make imlib2 support optional
+> ---
+>  package/directfb/Config.in   | 5 +++++
+>  package/directfb/directfb.mk | 8 ++++++++
+>  2 files changed, 13 insertions(+)
 >
-> Looks good, but please sign off with you full name.
+> diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+> index b9ff5f9..a6bfb6b 100644
+> --- a/package/directfb/Config.in
+> +++ b/package/directfb/Config.in
+> @@ -100,6 +100,11 @@ config BR2_PACKAGE_DIRECTFB_GIF
+>         bool "enable GIF support"
+>         default y
 >
-> Could you resend this and the gpsd patch with your real name?
+> +config BR2_PACKAGE_DIRECTFB_IMLIB2
+> +       bool "enable IMLIB2 support"
+> +       default y
+> +       select BR2_PACKAGE_IMLIB2
+> +
+>  config BR2_PACKAGE_DIRECTFB_JPEG
+>         bool "enable JPEG support"
+>         default y
+> diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+> index 5ead084..e5a423d 100644
+> --- a/package/directfb/directfb.mk
+> +++ b/package/directfb/directfb.mk
+> @@ -108,6 +108,14 @@ else
+>  DIRECTFB_CONF_OPT += --disable-jpeg
+>  endif
 >
-Ok, resent this patch with name.
-
+> +ifeq ($(BR2_PACKAGE_DIRECTFB_IMLIB2),y)
+> +DIRECTFB_CONF_OPT += --enable-imlib2
+> +DIRECTFB_DEPENDENCIES += imlib2
+> +DIRECTFB_CONF_ENV += ac_cv_path_IMLIB2_CONFIG=$(STAGING_DIR)/usr/bin/imlib2-config
+> +else
+> +DIRECTFB_CONF_OPT += --disable-imlib2
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_DIRECTFB_DITHER_RGB16),y)
+>  DIRECTFB_CONF_OPT += --with-dither-rgb16=advanced
+>  else
 > --
-> Bye, Peter Korsgaard
+> 1.8.2.1
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Hi,
+
+Any comments about this patch?
+
+--
+Regards,
+Markos Chandras
