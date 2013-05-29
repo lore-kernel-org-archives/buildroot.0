@@ -1,35 +1,67 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 29 May 2013 19:14:24 +0200
-Subject: [Buildroot] [git commit] logrotate: Bump version to 3.8.4
-Message-ID: <20130602212112.4EA939A6A7@busybox.osuosl.org>
+Date: Wed, 29 May 2013 14:19:11 +0200
+Subject: [Buildroot] [git commit] freescale-imx: new package directory
+Message-ID: <20130602212107.7DEDD9A6D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9fc981ab3ab04276371b4c4a0125f729323ba82f
+commit: http://git.buildroot.net/buildroot/commit/?id=e2e33e2cb56d7cdb04259366ba076cd168576cbe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The changelog for logrotate indicates some CVE's were fixed in 3.8.0.
-(changelog at http://svn.fedorahosted.org/svn/logrotate/tags/r3-8-4/CHANGES)
+The freescale-imx directory is intended to contain all freescale
+i.MXyy related packages, together with their download site and version
+info
 
-Signed-off-by: Arne Rovet <arnerro@gmail.com>
+Signed-off-by: Henk Fijnvandraat <h.fijnvandraat@inter.nl.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/logrotate/logrotate.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in                      |    1 +
+ package/freescale-imx/Config.in        |    4 ++++
+ package/freescale-imx/freescale-imx.mk |   13 +++++++++++++
+ 3 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
-index da8e4b3..c920b46 100644
---- a/package/logrotate/logrotate.mk
-+++ b/package/logrotate/logrotate.mk
-@@ -3,7 +3,7 @@
- # logrotate
- #
- #############################################################
--LOGROTATE_VERSION = 3.7.9
-+LOGROTATE_VERSION = 3.8.4
- LOGROTATE_SOURCE = logrotate-$(LOGROTATE_VERSION).tar.gz
- LOGROTATE_SITE = https://fedorahosted.org/releases/l/o/logrotate/
- LOGROTATE_LICENSE = GPLv2+
+diff --git a/package/Config.in b/package/Config.in
+index 7bf7dd0..dee1180 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -224,6 +224,7 @@ source "package/sunxi-boards/Config.in"
+ source "package/ux500-firmware/Config.in"
+ source "package/zd1211-firmware/Config.in"
+ endmenu
++source "package/freescale-imx/Config.in"
+ source "package/acpid/Config.in"
+ source "package/cdrkit/Config.in"
+ source "package/dbus/Config.in"
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+new file mode 100644
+index 0000000..389bcc6
+--- /dev/null
++++ b/package/freescale-imx/Config.in
+@@ -0,0 +1,4 @@
++menu "Freescale i.MX libraries"
++	depends on BR2_arm
++
++endmenu
+diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+new file mode 100644
+index 0000000..0d5400b
+--- /dev/null
++++ b/package/freescale-imx/freescale-imx.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# freescale-imx
++#
++#############################################################
++
++FREESCALE_IMX_VERSION = 12.09.01
++
++# No official download site from freescale, just this mirror
++FREESCALE_IMX_MIRROR_SITE   = http://download.ossystems.com.br/bsp/freescale/source
++
++include package/freescale-imx/*/*.mk
++
