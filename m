@@ -1,81 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 May 2013 18:48:59 +0200
-Subject: [Buildroot] [PATCH v9 03/14] libgtk2: bump to version 2.24.18
-In-Reply-To: <1369931437-12445-4-git-send-email-spenser@gillilanding.com>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Thu, 30 May 2013 11:55:39 -0500
+Subject: [Buildroot] [PATCH v9 05/14] webkit: bump to version 1.9.6
+In-Reply-To: <20130530184530.7b6243b3@skate>
 References: <1369931437-12445-1-git-send-email-spenser@gillilanding.com>
- <1369931437-12445-4-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130530184859.3ace3c42@skate>
+ <1369931437-12445-6-git-send-email-spenser@gillilanding.com>
+ <20130530184530.7b6243b3@skate>
+Message-ID: <CAEBucnB3G_GwGwssXWMa1DBSajWTzaU-QS=wvsJw-SPtFA=B-w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+On Thu, May 30, 2013 at 11:45 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Spenser Gilliland,
+>
+> On Thu, 30 May 2013 11:30:28 -0500, Spenser Gilliland wrote:
+>>
+>> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+>> ---
+>>  package/webkit/webkit-bison-2-6-compat.patch       |  672 --------------------
+>>  package/webkit/webkit-disable-docrebase.patch      |   21 +
+>>  package/webkit/webkit-disable-tests.patch          |   76 +++
+>>  package/webkit/webkit-execinfo_h.patch             |   24 +
+>>  .../webkit-fix-build-issue-with-old-gtk.patch      |   22 -
+>>  package/webkit/webkit-fix-build-with-gcc-4-6.patch |   45 --
+>>  .../webkit-fix-compilation-on-DirectFB-2.patch     |   33 -
+>>  .../webkit-fix-compilation-on-DirectFB.patch       |  144 -----
+>>  package/webkit/webkit-fix-pool.patch               |   67 --
+>>  package/webkit/webkit-pthread_getattr_np.patch     |   80 ---
+>>  package/webkit/webkit.mk                           |   31 +-
+>
+> When so many patches are added/removed, it'd be good to have a short
+> explanation in the commit log as to why such or such patch has been
+> removed. Can be simply "drop webkit-fix-pool.patch" because it is
+> upstream, or "drop webkit-fix-compilation-on-DirectFB-2.patch because
+> we no longer support the DirectFB backend".
 
-On Thu, 30 May 2013 11:30:26 -0500, Spenser Gilliland wrote:
-> 
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> ---
->  package/libgtk2/Config.in                         |   13 ++----
->  package/libgtk2/libgtk2-reduce-dependencies.patch |   51 +++++++++++----------
->  package/libgtk2/libgtk2.mk                        |    2 +-
->  3 files changed, 32 insertions(+), 34 deletions(-)
-> 
-> diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
-> index 88f4cc1..462b0b6 100644
-> --- a/package/libgtk2/Config.in
-> +++ b/package/libgtk2/Config.in
-> @@ -8,11 +8,11 @@ config BR2_PACKAGE_LIBGTK2
->  	select BR2_PACKAGE_LIBGLIB2
->  	select BR2_PACKAGE_PANGO
->  	select BR2_PACKAGE_GDK_PIXBUF
-> -	select BR2_PACKAGE_FONTCONFIG if BR2_PACKAGE_XORG7
-> -	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-> -	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-> -	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_XORG7
-> -	depends on BR2_PACKAGE_XORG7||BR2_PACKAGE_DIRECTFB
-> +	select BR2_PACKAGE_FONTCONFIG
-> +	select BR2_PACKAGE_XLIB_LIBX11
-> +	select BR2_PACKAGE_XLIB_LIBXEXT
-> +	select BR2_PACKAGE_XLIB_LIBXRENDER
-> +	depends on BR2_PACKAGE_XORG7
->  	depends on BR2_USE_WCHAR # glib2
->  	depends on BR2_INSTALL_LIBSTDCPP # pango
->  	help
-> @@ -29,6 +29,3 @@ config BR2_PACKAGE_LIBGTK2_DEMO
->  
->  comment "libgtk2 requires a toolchain with WCHAR and C++ support"
->  	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-> -
-> -comment "WARNING: Libgtk2 directfb backend is deprecated"
-> -	depends on BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_XORG7
+Fixed in newest revision. The following text was added to the commit message
 
-Please mention explicitly in the commit log that you are dropping
-DirectFB support for good. Generally speaking, your commit log would
-need to be a little bit more detailed about what you're doing. No need
-to give gazillion of details, but highlighting the important changes is
-good when the bump is not simply a mechanical bump.
+    Remove bison-2.6-compat patch as it has been incorporated upstream.
+    Remove fix build issue with old gtk as gtk has been bumped to a newer
+    version.
+    Remove fix-build-with-gcc-4-6 as it has incorporated upstream.
+    Remove directfb patches due to depreciation
+    Remove pool patch as it is no longer required
+    Remove pthread_getattr_np as webkit no longer uses this function.
 
-Also, I believe more parts of libgtk2.mk can be removed if you remove
-DirectFB support:
+> Also, the new patches you had lack a header with description and
+> Signed-off-by.
 
-ifeq ($(BR2_PACKAGE_DIRECTFB),y)
-        LIBGTK2_CONF_OPT += --with-gdktarget=directfb
-        LIBGTK2_DEPENDENCIES += directfb
-endif
+Fixed as well.
 
-and also all the code that was enclosed in a ifeq
-($(BR2_PACKAGE_XORG7),y) can now go out of this conditional.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
-Or maybe you want to do two separate patches: one that drops the
-DirectFB support, and then one that bumps to 2.24.18.
 
-Thanks!
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+--
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
