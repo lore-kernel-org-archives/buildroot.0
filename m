@@ -1,32 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 30 May 2013 21:54:59 +0200
-Subject: [Buildroot] [PATCH 4/6] gutenprint: ensure target and host
-	variant have the same patch hooks
-In-Reply-To: <1369695664-5670-5-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 28 May 2013 01:01:02 +0200")
-References: <1369695664-5670-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1369695664-5670-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <874ndkz1ik.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 30 May 2013 21:48:00 +0200
+Subject: [Buildroot] [git commit branch/next] binutils: apply post-patch
+	hook on both the host and target builds
+Message-ID: <20130530195804.CCCE59A69D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=dc3e6500577b18309699e957257f2d4966790c83
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Thomas> In preparation for the out-of-tree support, it is important that all
- Thomas> packages have the same patch hooks for the host variant and the target
- Thomas> variant (because the source tree will be shared between host and
- Thomas> target variants when doing out-of-tree build).
+When a Xtensa specific patch needs to be applied, it should be applied
+both when doing the target and the host build.
 
- Thomas> In the case of gutenprint, the patch hook executed for the target just
- Thomas> creates one directory which is needed for autoreconf to work, and the
- Thomas> host variant is not autoreconf'ed. So there is no harm in also
- Thomas> applying this patch hook to the host variant.
+This change is part of the effort to remove the differences between
+host and target post-extract and post-patch hooks, that are
+problematic for the out-of-tree support.
 
-Committed to next with HOST_GUTENPRINT_AUTORECONF = YES as pointed out
-by Arnout, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/binutils/binutils.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 081be6a..a2c4150 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -81,6 +81,7 @@ define BINUTILS_XTENSA_PRE_PATCH
+ 	tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(XTENSA_CORE_NAME).tar \
+ 		-C $(@D) --strip-components=1 binutils
+ endef
++BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
+ HOST_BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
+ endif
+ 
