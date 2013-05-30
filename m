@@ -1,44 +1,77 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 30 May 2013 21:52:01 +0200
-Subject: [Buildroot] [git commit] libgtk2: remove useless post-patch hook
-Message-ID: <20130602212114.5C8AC9A6A7@busybox.osuosl.org>
+Date: Thu, 30 May 2013 21:40:03 +0200
+Subject: [Buildroot] [git commit] neard: add init script
+Message-ID: <20130602212113.B8F359A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4378648aaff35fffb04dc44b0cd5caf762c73737
+commit: http://git.buildroot.net/buildroot/commit/?id=a94650c184f78620eb63d2d25065c4ea3ceec8d8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There used to be a post-patch hook to apply a patch only on the host
-variant of libgtk2. However, after the reorganization of the patch
-naming policy, this was no longer working properly, so
-dd1848bc73ee9dfe211ca3ed3a233707e3bc5955 changed this by a patch that
-works on both the target and host variants.
-
-We can therefore get rid of the useless post-patch hook.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libgtk2/libgtk2.mk |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+ package/neard/S53neard |   33 +++++++++++++++++++++++++++++++++
+ package/neard/neard.mk |    9 +++++++++
+ 2 files changed, 42 insertions(+), 0 deletions(-)
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index b1ce99a..5881ea7 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -175,12 +175,6 @@ HOST_LIBGTK2_CONF_OPT = \
- 		--disable-cups \
- 		--disable-debug
+diff --git a/package/neard/S53neard b/package/neard/S53neard
+new file mode 100755
+index 0000000..0a75941
+--- /dev/null
++++ b/package/neard/S53neard
+@@ -0,0 +1,33 @@
++#!/bin/sh
++#
++# Starts neard
++#
++
++NAME=neard
++DAEMON=/usr/libexec/nfc/$NAME
++
++# Exit gracefully if the package has been removed
++[ -x $DAEMON ] || exit 0
++
++case "$1" in
++  start)
++    echo -n "Starting $NAME: "
++    start-stop-daemon -S -q -p /var/run/${NAME}.pid -x $DAEMON -- -d '*'
++    echo "OK"
++    ;;
++  stop)
++    echo -n "Stopping $NAME: "
++    start-stop-daemon -K -q -p /var/run/${NAME}.pid
++    echo "OK"
++    ;;
++  restart|reload)
++    $0 stop
++    sleep 1
++    $0 start
++    ;;
++  *)
++    echo "Usage: $0 {start|stop|restart}"
++    exit 1
++esac
++
++exit $?
+diff --git a/package/neard/neard.mk b/package/neard/neard.mk
+index cc6aeac..57a434d 100644
+--- a/package/neard/neard.mk
++++ b/package/neard/neard.mk
+@@ -17,4 +17,13 @@ ifeq ($(BR2_PACKAGE_NEARD_TOOLS),y)
+ 	NEARD_CONF_OPT += --enable-tools
+ endif
  
--define HOST_LIBGTK2_PATCH_REDUCE_DEPENDENCIES_HOOK
-- support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) host-*.patch
--endef
--
--HOST_LIBGTK2_POST_PATCH_HOOKS += HOST_LIBGTK2_PATCH_REDUCE_DEPENDENCIES_HOOK
--
- define HOST_LIBGTK2_BUILD_CMDS
-  $(HOST_MAKE_ENV) make -C $(@D)/gtk gtk-update-icon-cache
- endef
++define NEARD_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/neard/S53neard \
++		$(TARGET_DIR)/etc/init.d/S53neard
++endef
++
++define NEARD_UNINSTALL_INIT_SYSV
++	$(RM) $(TARGET_DIR)/etc/init.d/S53neard
++endef
++
+ $(eval $(autotools-package))
