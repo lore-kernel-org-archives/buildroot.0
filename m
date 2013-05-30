@@ -1,11 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 30 May 2013 21:26:35 +0200
-Subject: [Buildroot] [PATCH v9 11/14] libvpx: new package libvpx
-In-Reply-To: <1369931437-12445-12-git-send-email-spenser@gillilanding.com>
- (Spenser Gilliland's message of "Thu, 30 May 2013 11:30:34 -0500")
+Date: Thu, 30 May 2013 21:34:30 +0200
+Subject: [Buildroot] [PATCH v9 13/14] libopenmax: Add libopenmax virtual
+	package
+In-Reply-To: <1369931437-12445-14-git-send-email-spenser@gillilanding.com>
+ (Spenser Gilliland's message of "Thu, 30 May 2013 11:30:36 -0500")
 References: <1369931437-12445-1-git-send-email-spenser@gillilanding.com>
- <1369931437-12445-12-git-send-email-spenser@gillilanding.com>
-Message-ID: <87y5awz2tw.fsf@dell.be.48ers.dk>
+ <1369931437-12445-14-git-send-email-spenser@gillilanding.com>
+Message-ID: <87txlkz2gp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,62 +15,66 @@ To: buildroot@busybox.net
 
 >>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
 
- Spenser> adds webm multimedia support and the VP8 encoder/decoder library.
- Spenser> http://www.webmproject.org/
-
+ Spenser> this adds the libopenmax virtual package for hardware based video acceleration
  Spenser> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
  Spenser> ---
- Spenser>  package/multimedia/Config.in        |    1 +
- Spenser>  package/multimedia/libvpx/Config.in |    6 ++++
- Spenser>  package/multimedia/libvpx/libvpx.mk |   53 +++++++++++++++++++++++++++++++++++
- Spenser>  3 files changed, 60 insertions(+)
- Spenser>  create mode 100644 package/multimedia/libvpx/Config.in
- Spenser>  create mode 100644 package/multimedia/libvpx/libvpx.mk
+ Spenser>  package/multimedia/bellagio/Config.in   |    1 +
+ Spenser>  package/opengl/Config.in                |    3 +++
+ Spenser>  package/opengl/libopenmax/libopenmax.mk |   24 ++++++++++++++++++++++++
+ Spenser>  package/rpi-userland/Config.in          |    1 +
+ Spenser>  4 files changed, 29 insertions(+)
+ Spenser>  create mode 100644 package/opengl/libopenmax/libopenmax.mk
 
- Spenser> diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
- Spenser> index d0594b9..a0927e9 100644
- Spenser> --- a/package/multimedia/Config.in
- Spenser> +++ b/package/multimedia/Config.in
- Spenser> @@ -20,6 +20,7 @@ source "package/multimedia/gst1-plugins-bad/Config.in"
- Spenser>  source "package/multimedia/gst-plugins-ugly/Config.in"
- Spenser>  source "package/multimedia/gst1-plugins-ugly/Config.in"
- Spenser>  source "package/multimedia/lame/Config.in"
- Spenser> +source "package/multimedia/libvpx/Config.in"
- Spenser>  source "package/multimedia/madplay/Config.in"
- Spenser>  source "package/multimedia/mpd/Config.in"
- Spenser>  source "package/multimedia/mpg123/Config.in"
- Spenser> diff --git a/package/multimedia/libvpx/Config.in b/package/multimedia/libvpx/Config.in
- Spenser> new file mode 100644
- Spenser> index 0000000..2327971
- Spenser> --- /dev/null
- Spenser> +++ b/package/multimedia/libvpx/Config.in
- Spenser> @@ -0,0 +1,6 @@
- Spenser> +config BR2_PACKAGE_LIBVPX
- Spenser> +	bool "libvpx"
- Spenser> +	help
- Spenser> +	  a high-quality, open video format that's freely available to everyone.
+ Spenser> diff --git a/package/multimedia/bellagio/Config.in b/package/multimedia/bellagio/Config.in
+ Spenser> index 4be3aee..3292ef5 100644
+ Spenser> --- a/package/multimedia/bellagio/Config.in
+ Spenser> +++ b/package/multimedia/bellagio/Config.in
+ Spenser> @@ -2,6 +2,7 @@ config BR2_PACKAGE_BELLAGIO
+ Spenser>  	bool "bellagio"
+ Spenser>  	depends on BR2_INSTALL_LIBSTDCPP
+ Spenser>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+ Spenser> +	select BR2_PACKAGE_HAS_OPENMAX
+ Spenser>  	help
+ Spenser>  	  Bellagio is an opensource implementation of the
+ Spenser>  	  OpenMAX IL API.
+ Spenser> diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+ Spenser> index 81616f9..1636807 100644
+ Spenser> --- a/package/opengl/Config.in
+ Spenser> +++ b/package/opengl/Config.in
+ Spenser> @@ -6,3 +6,6 @@ config BR2_PACKAGE_HAS_OPENGL_ES
+ 
+ Spenser>  config BR2_PACKAGE_HAS_OPENVG
+ Spenser>  	bool
  Spenser> +
- Spenser> +	  http://webmproject.org
- Spenser> diff --git a/package/multimedia/libvpx/libvpx.mk b/package/multimedia/libvpx/libvpx.mk
+ Spenser> +config BR2_PACKAGE_HAS_OPENMAX
+ Spenser> +	bool
+ Spenser> diff --git a/package/opengl/libopenmax/libopenmax.mk b/package/opengl/libopenmax/libopenmax.mk
  Spenser> new file mode 100644
- Spenser> index 0000000..964d98a
+ Spenser> index 0000000..dc29370
  Spenser> --- /dev/null
- Spenser> +++ b/package/multimedia/libvpx/libvpx.mk
- Spenser> @@ -0,0 +1,53 @@
+ Spenser> +++ b/package/opengl/libopenmax/libopenmax.mk
+ Spenser> @@ -0,0 +1,24 @@
  Spenser> +#############################################################
  Spenser> +#
- Spenser> +# libvpx
+ Spenser> +# Virtual package for libopenmax
  Spenser> +#
  Spenser> +#############################################################
  Spenser> +
- Spenser> +LIBVPX_VERSION = v1.2.0
- Spenser> +LIBVPX_SITE = http://git.chromium.org/webm/libvpx.git
- Spenser> +LIBVPX_SITE_METHOD = git
+ Spenser> +LIBOPENMAX_SOURCE =
  Spenser> +
- Spenser> +LIBVPX_LICENSE = BSD-3c 
- Spenser> +LIBVPX_LICENSE_FILES = LICENSE PATENTS 
+ Spenser> +ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+ Spenser> +LIBOPENMAX_DEPENDENCIES += rpi-userland
+ Spenser> +endif
+ Spenser> +
+ Spenser> +ifeq ($(BR2_PACKAGE_BELLAGIO),y)
+ Spenser> +LIBOPENMAX_DEPENDENCIES += bellagio
+ Spenser> +endif
+ Spenser> +
+ Spenser> +ifeq ($(LIBOPENMAX_DEPENDENCIES),y)
 
-Trailing spaces. Otherwise looks good, committed to next - Thanks.
+Same issue as what was pointed out for the opengl package earlier today.
+
+Committed to next with this fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
