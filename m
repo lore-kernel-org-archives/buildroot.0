@@ -1,188 +1,91 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 30 May 2013 11:30:33 -0500
-Subject: [Buildroot] [PATCH v9 10/14] gst1-plugins-ugly: add gstreamer1 ugly
-	plugins
+Date: Thu, 30 May 2013 11:30:36 -0500
+Subject: [Buildroot] [PATCH v9 13/14] libopenmax: Add libopenmax virtual
+	package
 In-Reply-To: <1369931437-12445-1-git-send-email-spenser@gillilanding.com>
 References: <1369931437-12445-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1369931437-12445-11-git-send-email-spenser@gillilanding.com>
+Message-ID: <1369931437-12445-14-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds gstreamer 1.X ugly plugins
+this adds the libopenmax virtual package for hardware based video acceleration
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/multimedia/Config.in                       |    1 +
- package/multimedia/gst1-plugins-ugly/Config.in     |   49 +++++++++++
- .../gst1-plugins-ugly/gst1-plugins-ugly.mk         |   89 ++++++++++++++++++++
- 3 files changed, 139 insertions(+)
- create mode 100644 package/multimedia/gst1-plugins-ugly/Config.in
- create mode 100644 package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
+ package/multimedia/bellagio/Config.in   |    1 +
+ package/opengl/Config.in                |    3 +++
+ package/opengl/libopenmax/libopenmax.mk |   24 ++++++++++++++++++++++++
+ package/rpi-userland/Config.in          |    1 +
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/opengl/libopenmax/libopenmax.mk
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index ecdef5c..d0594b9 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -18,6 +18,7 @@ source "package/multimedia/gst1-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
- source "package/multimedia/gst1-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
-+source "package/multimedia/gst1-plugins-ugly/Config.in"
- source "package/multimedia/lame/Config.in"
- source "package/multimedia/madplay/Config.in"
- source "package/multimedia/mpd/Config.in"
-diff --git a/package/multimedia/gst1-plugins-ugly/Config.in b/package/multimedia/gst1-plugins-ugly/Config.in
+diff --git a/package/multimedia/bellagio/Config.in b/package/multimedia/bellagio/Config.in
+index 4be3aee..3292ef5 100644
+--- a/package/multimedia/bellagio/Config.in
++++ b/package/multimedia/bellagio/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_BELLAGIO
+ 	bool "bellagio"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_HAS_OPENMAX
+ 	help
+ 	  Bellagio is an opensource implementation of the
+ 	  OpenMAX IL API.
+diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+index 81616f9..1636807 100644
+--- a/package/opengl/Config.in
++++ b/package/opengl/Config.in
+@@ -6,3 +6,6 @@ config BR2_PACKAGE_HAS_OPENGL_ES
+ 
+ config BR2_PACKAGE_HAS_OPENVG
+ 	bool
++
++config BR2_PACKAGE_HAS_OPENMAX
++	bool
+diff --git a/package/opengl/libopenmax/libopenmax.mk b/package/opengl/libopenmax/libopenmax.mk
 new file mode 100644
-index 0000000..c4a3c87
+index 0000000..dc29370
 --- /dev/null
-+++ b/package/multimedia/gst1-plugins-ugly/Config.in
-@@ -0,0 +1,49 @@
-+menuconfig BR2_PACKAGE_GST1_PLUGINS_UGLY
-+	bool "gst1-plugins-ugly"
-+	depends on BR2_PACKAGE_GSTREAMER1
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	help
-+	  A set of well-supported plug-ins for GStreamer, but might pose
-+	  problems for distributors.
-+
-+	  http://gstreamer.freedesktop.org/
-+
-+if BR2_PACKAGE_GST1_PLUGINS_UGLY
-+
-+comment "dependency-less plugins"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_ASFDEMUX
-+	bool "asfdemux"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDLPCMDEC
-+	bool "dvdlpcmdec"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDSUB
-+	bool "dvdsub"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX
-+	bool "xingmux"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_REALMEDIA
-+	bool "realmedia"
-+
-+comment "plugins with external dependencies (there may be more available)"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME
-+	bool "lame (*.mp3 audio encoder)"
-+	select BR2_PACKAGE_LAME
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD
-+	bool "dvdread"
-+	select BR2_PACKAGE_LIBDVDREAD
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD
-+	bool "mad (*.mp3 audio)"
-+	select BR2_PACKAGE_LIBID3TAG
-+	select BR2_PACKAGE_LIBMAD
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC
-+	bool "mpeg2dec"
-+	select BR2_PACKAGE_LIBMPEG2
-+
-+endif
-diff --git a/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
-new file mode 100644
-index 0000000..1bafdc6
---- /dev/null
-+++ b/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
-@@ -0,0 +1,89 @@
++++ b/package/opengl/libopenmax/libopenmax.mk
+@@ -0,0 +1,24 @@
 +#############################################################
 +#
-+# gst1-plugins-ugly
++# Virtual package for libopenmax
 +#
 +#############################################################
-+GST1_PLUGINS_UGLY_VERSION = 1.0.7
-+GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
-+GST1_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
 +
-+GST1_PLUGINS_UGLY_CONF_OPT = \
-+		--disable-examples \
-+		--disable-debug \
-+		--disable-valgrind
++LIBOPENMAX_SOURCE =
 +
-+GST_PLUGINS_BAD1_CONF_OPT += \
-+		--disable-a52dec \
-+		--disable-amrnb \
-+		--disable-amrwb \
-+		--disable-cdio \
-+		--disable-sidplay \
-+		--disable-twolame \
-+		--disable-x264
-+
-+GST1_PLUGINS_UGLY_DEPENDENCIES = gstreamer1 gst1-plugins-base
-+
-+ifeq ($(BR2_PACKAGE_ORC),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-orc
-+GST1_PLUGINS_UGLY_DEPENDENCIES += orc
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++LIBOPENMAX_DEPENDENCIES += rpi-userland
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_ASFDEMUX),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-asfdemux
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-asfdemux
++ifeq ($(BR2_PACKAGE_BELLAGIO),y)
++LIBOPENMAX_DEPENDENCIES += bellagio
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDLPCMDEC),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-dvdlpcmdec
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-dvdlpcmdec
++ifeq ($(LIBOPENMAX_DEPENDENCIES),y)
++define LIBOPENMAX_CONFIGURE_CMDS
++	echo "No libopenmax implementation selected. Configuration error."
++	exit 1
++endef
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDSUB),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-dvdsub
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-dvdsub
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_UGL1_PLUGIN_XINGMUX),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-xingmux
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-xingmux
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_REALMEDIA),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-realmedia
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-realmedia
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-lame
-+GST1_PLUGINS_UGLY_DEPENDENCIES += lame
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-lame
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-dvdread
-+GST1_PLUGINS_UGLY_DEPENDENCIES += libdvdread
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-dvdread
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-mad
-+GST1_PLUGINS_UGLY_DEPENDENCIES += libid3tag libmad
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-mad
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC),y)
-+GST1_PLUGINS_UGLY_CONF_OPT += --enable-mpeg2dec
-+GST1_PLUGINS_UGLY_DEPENDENCIES += libmpeg2
-+else
-+GST1_PLUGINS_UGLY_CONF_OPT += --disable-mpeg2dec
-+endif
-+
-+$(eval $(autotools-package))
++$(eval $(generic-package))
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index 2c35fb7..da5726f 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_RPI_USERLAND
+ 	select BR2_PACKAGE_HAS_OPENGL_EGL
+ 	select BR2_PACKAGE_HAS_OPENGL_ES
+ 	select BR2_PACKAGE_HAS_OPENVG
++	select BR2_PACKAGE_HAS_OPENMAX
+ 	help
+ 	  Raspberry Pi Userland contains the necessary library to use the
+ 	  VideoCore driver.
 -- 
 1.7.9.5
