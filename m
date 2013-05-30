@@ -1,22 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 30 May 2013 22:02:56 +0200
-Subject: [Buildroot] [PATCH] qt5 libQt5OpenGL.so library installation
-In-Reply-To: <1368650084-24427-1-git-send-email-wojciech.slenska@gmail.com>
- (Wojciech Slenska's message of "Wed, 15 May 2013 22:34:44 +0200")
-References: <1368650084-24427-1-git-send-email-wojciech.slenska@gmail.com>
-Message-ID: <87zjvcxmkv.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 30 May 2013 22:03:00 +0200
+Subject: [Buildroot] [git commit branch/next] qt5: add libQt5OpenGL.so
+	library installation
+Message-ID: <20130530200625.BC6009A69E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Wojciech" == Wojciech Slenska <wojciech.slenska@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=db3efd92adfc1c86811d8d664e8e979a82c49944
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Wojciech> When qt5 is build with EGLFS support, libQt5OpenGL library
- Wojciech> should be copied to target.
+When qt5 is built with EGLFS support, libQt5OpenGL library should be copied to
+target.
 
-Committed to next, thanks.
+Signed-off-by: Wojciech Slenska <wojciech.slenska@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/qt5/qt5base/qt5base.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index bfc6c91..7c6a093 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -118,6 +118,7 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_CONCURRENT) += Qt5Concurrent
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_SQL)        += Qt5Sql
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_TEST)       += Qt5Test
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XML)        += Qt5Xml
++QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_EGLFS)      += Qt5OpenGL
+ 
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_GUI)          += Qt5Gui
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_WIDGETS)      += Qt5Widgets
