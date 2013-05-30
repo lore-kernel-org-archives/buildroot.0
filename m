@@ -1,22 +1,91 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 29 May 2013 21:44:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 6272] coreutils build fails
-In-Reply-To: <bug-6272-163@https.bugs.busybox.net/>
-References: <bug-6272-163@https.bugs.busybox.net/>
-Message-ID: <20130529214432.CE5C69A622@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 May 2013 08:30:04 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-05-29
+Message-ID: <20130530063005.259CD52C08A@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6272
+Build statistics for 2013-05-29
+===============================
 
---- Comment #8 from Ryan <ryan.pruden@schange.com> 2013-05-29 21:42:59 UTC ---
-Okay. If the toolchain you have found isn't enough, I can upload mine. Just let
-me know!
+        success : 97 
+       failures : 35 
+       timeouts : 0  
+          TOTAL : 132
+
+Classification of failures by reason
+====================================
+
+         host-gutenprint-5.2.9 | 4 
+               sconeserver-211 | 3 
+media-ctl-ac40b79f002a2315f... | 3 
+                 rt-tests-0.83 | 2 
+              matchbox-lib-1.9 | 1 
+             bluez_utils-4.101 | 1 
+                 qt5base-5.0.2 | 1 
+               wvstreams-4.6.1 | 1 
+                    acl-2.2.51 | 1 
+                gptfdisk-0.8.6 | 1 
+                lmbench-3.0-a9 | 1 
+              libsvgtiny-12121 | 1 
+                  webkit-1.2.7 | 1 
+                   dbus-1.4.24 | 1 
+      gst-plugins-good-0.10.31 | 1 
+                      gpsd-3.9 | 1 
+        liblog4c-localtime-1.0 | 1 
+                   icu-4.8.1.1 | 1 
+                 pixman-0.28.2 | 1 
+               libcap-ng-0.6.6 | 1 
+               qt5webkit-5.0.2 | 1 
+                  ne10-88c18f0 | 1 
+              gettext-0.18.2.1 | 1 
+               libglib2-2.30.3 | 1 
+                  zeromq-3.2.3 | 1 
+                    systemd-44 | 1 
+                  gnutls-3.1.9 | 1 
+
+Detail of failures
+===================
+
+       arm |                     acl-2.2.51 | NOK | http://autobuild.buildroot.net/results/dc70b467e28121521c8ed5be773f77d34567b922/
+     avr32 |              bluez_utils-4.101 | NOK | http://autobuild.buildroot.net/results/2438397fcf5632107bbd7af351fd1473bf69ee26/
+   aarch64 |                    dbus-1.4.24 | NOK | http://autobuild.buildroot.net/results/67caf34d2e6940c5713064b436d99be1c05b4a07/
+    xtensa |               gettext-0.18.2.1 | NOK | http://autobuild.buildroot.net/results/62e1254a7e333a3f35a68be6864f0940ccb11bc7/
+     avr32 |                   gnutls-3.1.9 | NOK | http://autobuild.buildroot.net/results/5be8a1a1dbb5cf49ec84e8b73166670761e503d3/
+    x86_64 |                       gpsd-3.9 | NOK | http://autobuild.buildroot.net/results/879853d4f1ae189fb7f95b97d5cb16d0731c6b27/
+      bfin |                 gptfdisk-0.8.6 | NOK | http://autobuild.buildroot.net/results/5cb50188dc4fb092f64aadbe70e2503cda269309/
+       arm |       gst-plugins-good-0.10.31 | NOK | http://autobuild.buildroot.net/results/a71a26cfe86a4225daf12074477c23c5dc3efc21/
+       arm |          host-gutenprint-5.2.9 | NOK | http://autobuild.buildroot.net/results/2379e4c18d6b7ecc48741c53b3f2c2445cf5e75c/
+   powerpc |          host-gutenprint-5.2.9 | NOK | http://autobuild.buildroot.net/results/25cd86379823c973eb14ad1441151cd497e4c041/
+      i686 |          host-gutenprint-5.2.9 | NOK | http://autobuild.buildroot.net/results/c687b22f1b4d1ad857c427d915870e70fcf637b3/
+       arm |          host-gutenprint-5.2.9 | NOK | http://autobuild.buildroot.net/results/d336fbfeb1d416d01794574383a297f1195f8da3/
+      bfin |                    icu-4.8.1.1 | NOK | http://autobuild.buildroot.net/results/0f953610792aa75f9bb1f9218bcac27b2786e3f8/
+     avr32 |                libcap-ng-0.6.6 | NOK | http://autobuild.buildroot.net/results/3c3181e6387c6331dff67614224fb8fb23bfbdb0/
+      bfin |                libglib2-2.30.3 | NOK | http://autobuild.buildroot.net/results/b06a47212e25d3e147e2aa0d49a6ec323002f1ce/
+       arm |         liblog4c-localtime-1.0 | NOK | http://autobuild.buildroot.net/results/0cdffefa977a8992a5783406b10ea586c2c6df47/
+   powerpc |               libsvgtiny-12121 | NOK | http://autobuild.buildroot.net/results/808ff4c68995d2b56b51662350455d03f64bc194/
+    xtensa |                 lmbench-3.0-a9 | NOK | http://autobuild.buildroot.net/results/be53ac66f015bff2c926f8cce48ef66986fc5781/
+   powerpc |               matchbox-lib-1.9 | NOK | http://autobuild.buildroot.net/results/1ca3058fbcb615d1dc885ad4ea2830af4c0c5faf/
+   powerpc | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/df752c449b42b7fd4f668e15e3e662ab40dbfb67/
+   powerpc | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/44b0f95b90720a75ac52bd6fbedae4576570e4f9/
+   powerpc | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/d115a205342146bb66096f1f00cc5d3c96d8e566/
+       arm |                   ne10-88c18f0 | NOK | http://autobuild.buildroot.net/results/17b88d8a5819f828e67c9cae1200c360210893db/
+      mips |                  pixman-0.28.2 | NOK | http://autobuild.buildroot.net/results/eb0ce37e0de285c819fe3eea0c22b5b44a5ae00b/
+      i686 |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/214ca0646837a3a51058ba3f1fb5a77bcf981b02/
+       arm |                qt5webkit-5.0.2 | NOK | http://autobuild.buildroot.net/results/d5fd44a74e283e8f0974ae015c15367f8c3abcec/
+    mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/c94d638c2edb50e8bdfd9766e6ed9fa4479dbcf8/
+    mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/250c999b62cdaa9896b7bfddc2592fe384cd7740/
+       arm |                sconeserver-211 | NOK | http://autobuild.buildroot.net/results/5dbfe1236aadeaf1945b65c325615990f79b18c6/
+       arm |                sconeserver-211 | NOK | http://autobuild.buildroot.net/results/2a6ec57e36fc351a0a8465ea04af61f0aa9dd6ff/
+   powerpc |                sconeserver-211 | NOK | http://autobuild.buildroot.net/results/250559b3f86dcfdf5fcef656d4c82420ba6d34f3/
+       arm |                     systemd-44 | NOK | http://autobuild.buildroot.net/results/81e2c02229c17783aea0ff89f0dba16d84427bc3/
+   powerpc |                   webkit-1.2.7 | NOK | http://autobuild.buildroot.net/results/52169b76ad6dbfb781d9833ad36b74526bafc019/
+    x86_64 |                wvstreams-4.6.1 | NOK | http://autobuild.buildroot.net/results/1cb7047947fb49e23b8011ac6b9922eebb9d2e15/
+     avr32 |                   zeromq-3.2.3 | NOK | http://autobuild.buildroot.net/results/668d50c0b78d217d701e2288bd3a99c53c35b460/
+
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+http://autobuild.buildroot.net
