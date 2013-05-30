@@ -1,37 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 30 May 2013 15:29:31 +0200
-Subject: [Buildroot] [git commit] pulseaudio : bump to version 3.0
-In-Reply-To: <20130530144647.5d5237f9@skate> (Thomas Petazzoni's message of
- "Thu, 30 May 2013 14:46:47 +0200")
-References: <20130530120917.AAE3A9A692@busybox.osuosl.org>
- <20130530144647.5d5237f9@skate>
-Message-ID: <87ehco1tqc.fsf@dell.be.48ers.dk>
+Date: Thu, 30 May 2013 15:33:01 +0200
+Subject: [Buildroot] [git commit] Revert "pulseaudio : bump to version 3.0"
+Message-ID: <20130530133547.707299A4CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7183fc0f3fefc9722bcd1f1be6ca02cdbfe0eb57
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Dear Peter Korsgaard,
- Thomas> On Wed, 29 May 2013 21:44:27 +0200, Peter Korsgaard wrote:
- >> commit: http://git.buildroot.net/buildroot/commit/?id=d3bde0a64edb5a3392314d2cdd2c4e4057d15831
- >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
- >> 
- >> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
- >> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+This reverts commit d3bde0a64edb5a3392314d2cdd2c4e4057d15831.
 
- Thomas> (As discussed on IRC)
+This wasn't supposed to be applied to master.
+---
+ package/multimedia/pulseaudio/pulseaudio.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- Thomas> This shouldn't be committed on the master branch, and as J?r?my
- Thomas> highlighted in his patch series, the bump of Pulseaudio requires
- Thomas> bumping libtool, which we certainly cannot do in master right now.
-
-Argh, I must have applied the wrong patch. I blame the cold medication
-:/
-
-Will revert.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
+index 529f5dd..b39d99e 100644
+--- a/package/multimedia/pulseaudio/pulseaudio.mk
++++ b/package/multimedia/pulseaudio/pulseaudio.mk
+@@ -3,7 +3,8 @@
+ # pulseaudio
+ #
+ ################################################################################
+-PULSEAUDIO_VERSION = 3.0
++
++PULSEAUDIO_VERSION = 2.1
+ PULSEAUDIO_SITE = http://freedesktop.org/software/pulseaudio/releases/
+ PULSEAUDIO_INSTALL_STAGING = YES
+ PULSEAUDIO_CONF_OPT = \
+@@ -59,7 +60,6 @@ endef
+ PULSEAUDIO_POST_PATCH_HOOKS += PULSEAUDIO_FORCE_CC
+ endif
+ 
+-PULSEAUDIO_CONF_OPT += $(if $(BR2_ARM_ENABLE_NEON),--enable-neon-opt=yes,--enable-neon-opt=no)
+ # pulseaudio alsa backend needs pcm/mixer apis
+ ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
+ PULSEAUDIO_CONF_OPT += --disable-alsa
