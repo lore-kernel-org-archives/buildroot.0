@@ -1,33 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 May 2013 16:01:09 +0200
-Subject: [Buildroot] [PATCH] Makefile: defconfig: use BR2_DEFCONFIG only
- when the file exists
-In-Reply-To: <1369922260-8237-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1369922260-8237-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20130530160109.7c07ecf1@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 30 May 2013 16:06:27 +0200
+Subject: [Buildroot] [PATCH] system/device-table: do not set
+	/home/default stgid
+In-Reply-To: <1369514012-19606-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 25 May 2013 22:33:32 +0200")
+References: <1369514012-19606-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <8761y01s0s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Thu, 30 May 2013 15:57:40 +0200, Fabio Porcedda wrote:
-> This is to be able to use "make defconfig" even when BR2_DEFCONFIG has
-> a filename that does not exist or use the default value that
-> does not exists.
-> 
-> Example on a clean installation, without a "./defconfig":
->    make defconfig
->    make defconfig
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> Currently, /home/default is mode 2755 which means it is setgid.
+ Yann> Since /home/default is not group-writable, it is useless.
 
-I'm not sure to understand the example here. Could you detail a little
-bit?
-
-Thomas
+Committed to next, thanks.
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
