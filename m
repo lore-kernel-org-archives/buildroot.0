@@ -1,33 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 May 2013 15:26:16 +0200
-Subject: [Buildroot] [PATCH] opengl: correct detection of virtual
- packages having no dependencies
-In-Reply-To: <51A74F35.2050403@carallon.com>
-References: <51A74F35.2050403@carallon.com>
-Message-ID: <20130530152616.4befe3b4@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 30 May 2013 15:29:31 +0200
+Subject: [Buildroot] [git commit] pulseaudio : bump to version 3.0
+In-Reply-To: <20130530144647.5d5237f9@skate> (Thomas Petazzoni's message of
+ "Thu, 30 May 2013 14:46:47 +0200")
+References: <20130530120917.AAE3A9A692@busybox.osuosl.org>
+ <20130530144647.5d5237f9@skate>
+Message-ID: <87ehco1tqc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Wagner,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Thu, 30 May 2013 14:08:05 +0100, Will Wagner wrote:
-> I believe the original intent was to make it that the configure step
-> for the opengl virtual packages fails if there is not at least one
-> dependency. This patch fixes the logic so that it actually fails if
-> dependency list is empty
-> 
-> Signed-off-by: Will Wagner <will_wagner@carallon.com>
+ Thomas> Dear Peter Korsgaard,
+ Thomas> On Wed, 29 May 2013 21:44:27 +0200, Peter Korsgaard wrote:
+ >> commit: http://git.buildroot.net/buildroot/commit/?id=d3bde0a64edb5a3392314d2cdd2c4e4057d15831
+ >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ >> 
+ >> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+ >> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
-Indeed. Thanks for spotting the mistake!
+ Thomas> (As discussed on IRC)
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> This shouldn't be committed on the master branch, and as J?r?my
+ Thomas> highlighted in his patch series, the bump of Pulseaudio requires
+ Thomas> bumping libtool, which we certainly cannot do in master right now.
 
-Thomas
+Argh, I must have applied the wrong patch. I blame the cold medication
+:/
+
+Will revert.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
