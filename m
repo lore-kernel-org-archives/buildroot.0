@@ -1,35 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 30 May 2013 22:03:00 +0200
-Subject: [Buildroot] [git commit branch/next] qt5: add libQt5OpenGL.so
-	library installation
-Message-ID: <20130530200625.BC6009A69E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 30 May 2013 22:31:13 +0200
+Subject: [Buildroot] [PATCH 0/2] Bump pulseaudio and dependencies
+In-Reply-To: <1369811518-31896-1-git-send-email-jeremy.rosen@openwide.fr>
+ (=?utf-8?B?IkrDqXLDqW15?= Rosen"'s message of "Wed, 29 May 2013 09:11:56
+ +0200")
+References: <1369811518-31896-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <87vc60xl9q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=db3efd92adfc1c86811d8d664e8e979a82c49944
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "J?r?my" == J?r?my Rosen <jeremy.rosen@openwide.fr> writes:
 
-When qt5 is built with EGLFS support, libQt5OpenGL library should be copied to
-target.
+ J?r?my> This serie of patch will bump pulseaudio to version 3.0
+ J?r?my> pulseaudio needs a newer version of libtool, so also bump this
 
-Signed-off-by: Wojciech Slenska <wojciech.slenska@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt5/qt5base/qt5base.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ J?r?my> v2: rebase on next instead of master
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index bfc6c91..7c6a093 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -118,6 +118,7 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_CONCURRENT) += Qt5Concurrent
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_SQL)        += Qt5Sql
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_TEST)       += Qt5Test
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XML)        += Qt5Xml
-+QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_EGLFS)      += Qt5OpenGL
- 
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_GUI)          += Qt5Gui
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_WIDGETS)      += Qt5Widgets
+ J?r?my> J?r?my Rosen (2):
+ J?r?my>   libtool : bump to version 2.4.2
+ J?r?my>   pulseaudio : bump to version 3.0
+
+Committed both to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
