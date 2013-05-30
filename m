@@ -1,67 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 30 May 2013 15:42:45 +0200
-Subject: [Buildroot] [git commit] opengl: correct detection of virtual
-	packages having no dependencies
-Message-ID: <20130530134716.099D79A64B@busybox.osuosl.org>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Thu, 30 May 2013 15:57:40 +0200
+Subject: [Buildroot] [PATCH] Makefile: defconfig: use BR2_DEFCONFIG only
+	when the file exists
+Message-ID: <1369922260-8237-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=14470b325935ee8a0ef8b73b33827ab633c1366f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This is to be able to use "make defconfig" even when BR2_DEFCONFIG has
+a filename that does not exist or use the default value that
+does not exists.
 
-I believe the original intent was to make it that the configure step
-for the opengl virtual packages fails if there is not at least one
-dependency. This patch fixes the logic so that it actually fails if
-dependency list is empty
+Example on a clean installation, without a "./defconfig":
+   make defconfig
+   make defconfig
 
-Signed-off-by: Will Wagner <will_wagner@carallon.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/opengl/libegl/libegl.mk       |    2 +-
- package/opengl/libgles/libgles.mk     |    2 +-
- package/opengl/libopenvg/libopenvg.mk |    2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
-index c495496..8ff24e8 100644
---- a/package/opengl/libegl/libegl.mk
-+++ b/package/opengl/libegl/libegl.mk
-@@ -10,7 +10,7 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- LIBEGL_DEPENDENCIES += rpi-userland
- endif
+diff --git a/Makefile b/Makefile
+index e8647d1..57bf8b3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -698,7 +698,7 @@ olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
  
--ifeq ($(LIBEGL_DEPENDENCIES),y)
-+ifeq ($(LIBEGL_DEPENDENCIES),)
- define LIBEGL_CONFIGURE_CMDS
- 	echo "No libEGL implementation selected. Configuration error."
- 	exit 1
-diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
-index f0d0eec..675d11f 100644
---- a/package/opengl/libgles/libgles.mk
-+++ b/package/opengl/libgles/libgles.mk
-@@ -10,7 +10,7 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- LIBGLES_DEPENDENCIES += rpi-userland
- endif
+ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+-	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
++	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(wildcard $(DEFCONFIG)),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
  
--ifeq ($(LIBGLES_DEPENDENCIES),y)
-+ifeq ($(LIBGLES_DEPENDENCIES),)
- define LIBGLES_CONFIGURE_CMDS
- 	echo "No libGLES implementation selected. Configuration error."
- 	exit 1
-diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
-index 573fa78..746b52c 100644
---- a/package/opengl/libopenvg/libopenvg.mk
-+++ b/package/opengl/libopenvg/libopenvg.mk
-@@ -10,7 +10,7 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- LIBOPENVG_DEPENDENCIES += rpi-userland
- endif
- 
--ifeq ($(LIBOPENVG_DEPENDENCIES),y)
-+ifeq ($(LIBOPENVG_DEPENDENCIES),)
- define LIBOPENVG_CONFIGURE_CMDS
- 	echo "No libOpenVG implementation selected. Configuration error."
- 	exit 1
+ %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+-- 
+1.8.1.4
