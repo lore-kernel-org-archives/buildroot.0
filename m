@@ -1,45 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 30 May 2013 21:52:01 +0200
-Subject: [Buildroot] [git commit branch/next] libgtk2: remove useless
-	post-patch hook
-Message-ID: <20130530195805.07A269A69D@busybox.osuosl.org>
+Date: Thu, 30 May 2013 21:52:51 +0200
+Subject: [Buildroot] [git commit branch/next] xlib_libX11: ensure target and
+	host variant have the same patch hooks
+Message-ID: <20130530195805.2F40D9A69D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4378648aaff35fffb04dc44b0cd5caf762c73737
+commit: http://git.buildroot.net/buildroot/commit/?id=f0e3147ee52b274ad887e59450d8a20427ea75f6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-There used to be a post-patch hook to apply a patch only on the host
-variant of libgtk2. However, after the reorganization of the patch
-naming policy, this was no longer working properly, so
-dd1848bc73ee9dfe211ca3ed3a233707e3bc5955 changed this by a patch that
-works on both the target and host variants.
+In preparation for the out-of-tree support, it is important that all
+packages have the same patch hooks for the host variant and the target
+variant (because the source tree will be shared between host and
+target variants when doing out-of-tree build).
 
-We can therefore get rid of the useless post-patch hook.
+In the case of the xlib_libX11 package, the post-patch hook removes
+some flags from the build of the makekeys utility, so that when
+xlib_libX11 is built for the target, the build of makekeys for the
+host works properly. This modification can be applied to the host
+variant of xlib_libX11 without any problem.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libgtk2/libgtk2.mk |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+ package/x11r7/xlib_libX11/xlib_libX11.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index b1ce99a..5881ea7 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -175,12 +175,6 @@ HOST_LIBGTK2_CONF_OPT = \
- 		--disable-cups \
- 		--disable-debug
- 
--define HOST_LIBGTK2_PATCH_REDUCE_DEPENDENCIES_HOOK
-- support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) host-*.patch
--endef
--
--HOST_LIBGTK2_POST_PATCH_HOOKS += HOST_LIBGTK2_PATCH_REDUCE_DEPENDENCIES_HOOK
--
- define HOST_LIBGTK2_BUILD_CMDS
-  $(HOST_MAKE_ENV) make -C $(@D)/gtk gtk-update-icon-cache
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 3b106cd..f801673 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -41,6 +41,7 @@ define XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
  endef
+ 
+ XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
++HOST_XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
