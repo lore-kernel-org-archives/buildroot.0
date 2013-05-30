@@ -1,41 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 29 May 2013 15:41:13 +0200
-Subject: [Buildroot] [git commit] network-manager: use a <pkg>_VERSION_MAJOR
-	variable
-Message-ID: <20130602212111.9837D9A6D3@busybox.osuosl.org>
+Date: Thu, 30 May 2013 15:50:21 +0200
+Subject: [Buildroot] [git commit] system/device-table: do not set
+	/home/default stgid
+Message-ID: <20130602212112.EA59F9A097@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2db98f63b0140a7dc7e9d9715c072e79cc68c4a0
+commit: http://git.buildroot.net/buildroot/commit/?id=03bc3c3bdcffbef498b9072e9cd1c079fd0dd26a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Just like we do for many other GNOME-hosted tarballs, use a
-<pkg>_VERSION_MAJOR variable for network-manager.
+Currently, /home/default is mode 2755 which means it is setgid.
+Since /home/default is not group-writable, it is useless.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/network-manager/network-manager.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ system/device_table.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index b3715d8..261f2d3 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -3,9 +3,11 @@
- # NetworkManager
- #
- #############################################################
--NETWORK_MANAGER_VERSION = 0.9.2.0
-+
-+NETWORK_MANAGER_VERSION_MAJOR = 0.9
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2.0
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.bz2
--NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.9/
-+NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
- NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
- 	libgcrypt wireless_tools util-linux host-intltool
+diff --git a/system/device_table.txt b/system/device_table.txt
+index 421728b..43c0cfa 100644
+--- a/system/device_table.txt
++++ b/system/device_table.txt
+@@ -9,7 +9,7 @@
+ /dev					d	755	0	0	-	-	-	-	-
+ /tmp					d	1777	0	0	-	-	-	-	-
+ /etc					d	755	0	0	-	-	-	-	-
+-/home/default				d	2755	1000	1000	-	-	-	-	-
++/home/default				d	755	1000	1000	-	-	-	-	-
+ /var/www				d	755	33	33	-	-	-	-	-
+ /etc/shadow				f	600	0	0	-	-	-	-	-
+ /etc/passwd				f	644	0	0	-	-	-	-	-
