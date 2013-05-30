@@ -1,110 +1,48 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 30 May 2013 11:30:34 -0500
-Subject: [Buildroot] [PATCH v9 11/14] libvpx: new package libvpx
-In-Reply-To: <1369931437-12445-1-git-send-email-spenser@gillilanding.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 May 2013 18:45:30 +0200
+Subject: [Buildroot] [PATCH v9 05/14] webkit: bump to version 1.9.6
+In-Reply-To: <1369931437-12445-6-git-send-email-spenser@gillilanding.com>
 References: <1369931437-12445-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1369931437-12445-12-git-send-email-spenser@gillilanding.com>
+ <1369931437-12445-6-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130530184530.7b6243b3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-adds webm multimedia support and the VP8 encoder/decoder library.
+Dear Spenser Gilliland,
 
-http://www.webmproject.org/
+On Thu, 30 May 2013 11:30:28 -0500, Spenser Gilliland wrote:
+> 
+> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+> ---
+>  package/webkit/webkit-bison-2-6-compat.patch       |  672 --------------------
+>  package/webkit/webkit-disable-docrebase.patch      |   21 +
+>  package/webkit/webkit-disable-tests.patch          |   76 +++
+>  package/webkit/webkit-execinfo_h.patch             |   24 +
+>  .../webkit-fix-build-issue-with-old-gtk.patch      |   22 -
+>  package/webkit/webkit-fix-build-with-gcc-4-6.patch |   45 --
+>  .../webkit-fix-compilation-on-DirectFB-2.patch     |   33 -
+>  .../webkit-fix-compilation-on-DirectFB.patch       |  144 -----
+>  package/webkit/webkit-fix-pool.patch               |   67 --
+>  package/webkit/webkit-pthread_getattr_np.patch     |   80 ---
+>  package/webkit/webkit.mk                           |   31 +-
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
----
- package/multimedia/Config.in        |    1 +
- package/multimedia/libvpx/Config.in |    6 ++++
- package/multimedia/libvpx/libvpx.mk |   53 +++++++++++++++++++++++++++++++++++
- 3 files changed, 60 insertions(+)
- create mode 100644 package/multimedia/libvpx/Config.in
- create mode 100644 package/multimedia/libvpx/libvpx.mk
+When so many patches are added/removed, it'd be good to have a short
+explanation in the commit log as to why such or such patch has been
+removed. Can be simply "drop webkit-fix-pool.patch" because it is
+upstream, or "drop webkit-fix-compilation-on-DirectFB-2.patch because
+we no longer support the DirectFB backend".
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index d0594b9..a0927e9 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -20,6 +20,7 @@ source "package/multimedia/gst1-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
- source "package/multimedia/gst1-plugins-ugly/Config.in"
- source "package/multimedia/lame/Config.in"
-+source "package/multimedia/libvpx/Config.in"
- source "package/multimedia/madplay/Config.in"
- source "package/multimedia/mpd/Config.in"
- source "package/multimedia/mpg123/Config.in"
-diff --git a/package/multimedia/libvpx/Config.in b/package/multimedia/libvpx/Config.in
-new file mode 100644
-index 0000000..2327971
---- /dev/null
-+++ b/package/multimedia/libvpx/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBVPX
-+	bool "libvpx"
-+	help
-+	  a high-quality, open video format that's freely available to everyone.
-+
-+	  http://webmproject.org
-diff --git a/package/multimedia/libvpx/libvpx.mk b/package/multimedia/libvpx/libvpx.mk
-new file mode 100644
-index 0000000..964d98a
---- /dev/null
-+++ b/package/multimedia/libvpx/libvpx.mk
-@@ -0,0 +1,53 @@
-+#############################################################
-+#
-+# libvpx
-+#
-+#############################################################
-+
-+LIBVPX_VERSION = v1.2.0
-+LIBVPX_SITE = http://git.chromium.org/webm/libvpx.git
-+LIBVPX_SITE_METHOD = git
-+
-+LIBVPX_LICENSE = BSD-3c 
-+LIBVPX_LICENSE_FILES = LICENSE PATENTS 
-+
-+LIBVPX_INSTALL_STAGING = YES
-+
-+# ld is being used with cc options. therefore, pretend ld is cc.
-+LIBVPX_CONF_ENV = \
-+	LD="$(TARGET_CC)" \
-+	CROSS=$(GNU_TARGET_NAME)
-+
-+LIBVPX_CONF_OPT = \
-+	--disable-examples \
-+	--disable-docs \
-+	--disable-unit-tests
-+
-+# This is not a true autotools package.  It is based on the ffmpeg build system
-+define LIBVPX_CONFIGURE_CMDS
-+	(cd $(LIBVPX_SRCDIR) && rm -rf config.cache && \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_CONFIGURE_ARGS) \
-+	$(LIBVPX_CONF_ENV) \
-+	./configure \
-+		--target=generic-gnu \
-+		--enable-pic \
-+		--prefix=/usr \
-+		$(SHARED_STATIC_LIBS_OPTS) \
-+		$(LIBVPX_CONF_OPT) \
-+	)
-+endef
-+
-+define LIBVPX_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) all
-+endef
-+
-+define LIBVPX_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D) install
-+endef
-+
-+define LIBVPX_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
-+endef
-+
-+$(eval $(generic-package))
+Also, the new patches you had lack a header with description and
+Signed-off-by.
+
+Thanks!
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
