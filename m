@@ -1,110 +1,91 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 30 May 2013 21:28:15 +0200
-Subject: [Buildroot] [git commit branch/next] libvpx: new package libvpx
-Message-ID: <20130530194325.83FBB9A620@busybox.osuosl.org>
+Date: Thu, 30 May 2013 21:36:16 +0200
+Subject: [Buildroot] [git commit branch/next] libopenmax: Add libopenmax
+	virtual package
+Message-ID: <20130530194325.B881C9A620@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1460245354019df29ffc4c3d76ddd61cb14dfd04
+commit: http://git.buildroot.net/buildroot/commit/?id=37f6ecd4d02d1e0fdce70fe4a7b404a6e2d06426
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-adds webm multimedia support and the VP8 encoder/decoder library.
+this adds the libopenmax virtual package for hardware based video acceleration
 
-http://www.webmproject.org/
-
-[Peter: strip trailing spaces, wrap help text]
+[Peter: fix openmax-without-any-backends check]
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/Config.in        |    1 +
- package/multimedia/libvpx/Config.in |    7 ++++
- package/multimedia/libvpx/libvpx.mk |   53 +++++++++++++++++++++++++++++++++++
- 3 files changed, 61 insertions(+), 0 deletions(-)
+ package/multimedia/bellagio/Config.in   |    1 +
+ package/opengl/Config.in                |    3 +++
+ package/opengl/libopenmax/libopenmax.mk |   24 ++++++++++++++++++++++++
+ package/rpi-userland/Config.in          |    1 +
+ 4 files changed, 29 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 931e6d3..dd74863 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -15,6 +15,7 @@ source "package/multimedia/gst-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
- source "package/multimedia/lame/Config.in"
-+source "package/multimedia/libvpx/Config.in"
- source "package/multimedia/madplay/Config.in"
- source "package/multimedia/mpd/Config.in"
- source "package/multimedia/mpg123/Config.in"
-diff --git a/package/multimedia/libvpx/Config.in b/package/multimedia/libvpx/Config.in
-new file mode 100644
-index 0000000..1332c56
---- /dev/null
-+++ b/package/multimedia/libvpx/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBVPX
-+	bool "libvpx"
-+	help
-+	  A high-quality, open video format that's freely available to
-+	  everyone.
+diff --git a/package/multimedia/bellagio/Config.in b/package/multimedia/bellagio/Config.in
+index 1458f63..d918f80 100644
+--- a/package/multimedia/bellagio/Config.in
++++ b/package/multimedia/bellagio/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_BELLAGIO
+ 	bool "bellagio"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_HAS_OPENMAX
+ 	help
+ 	  Bellagio is an opensource implementation of the
+ 	  OpenMAX IL API.
+diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+index 81616f9..1636807 100644
+--- a/package/opengl/Config.in
++++ b/package/opengl/Config.in
+@@ -6,3 +6,6 @@ config BR2_PACKAGE_HAS_OPENGL_ES
+ 
+ config BR2_PACKAGE_HAS_OPENVG
+ 	bool
 +
-+	  http://webmproject.org
-diff --git a/package/multimedia/libvpx/libvpx.mk b/package/multimedia/libvpx/libvpx.mk
++config BR2_PACKAGE_HAS_OPENMAX
++	bool
+diff --git a/package/opengl/libopenmax/libopenmax.mk b/package/opengl/libopenmax/libopenmax.mk
 new file mode 100644
-index 0000000..131fd49
+index 0000000..4307602
 --- /dev/null
-+++ b/package/multimedia/libvpx/libvpx.mk
-@@ -0,0 +1,53 @@
++++ b/package/opengl/libopenmax/libopenmax.mk
+@@ -0,0 +1,24 @@
 +#############################################################
 +#
-+# libvpx
++# Virtual package for libopenmax
 +#
 +#############################################################
 +
-+LIBVPX_VERSION = v1.2.0
-+LIBVPX_SITE = http://git.chromium.org/webm/libvpx.git
-+LIBVPX_SITE_METHOD = git
++LIBOPENMAX_SOURCE =
 +
-+LIBVPX_LICENSE = BSD-3c
-+LIBVPX_LICENSE_FILES = LICENSE PATENTS
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++LIBOPENMAX_DEPENDENCIES += rpi-userland
++endif
 +
-+LIBVPX_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_BELLAGIO),y)
++LIBOPENMAX_DEPENDENCIES += bellagio
++endif
 +
-+# ld is being used with cc options. therefore, pretend ld is cc.
-+LIBVPX_CONF_ENV = \
-+	LD="$(TARGET_CC)" \
-+	CROSS=$(GNU_TARGET_NAME)
-+
-+LIBVPX_CONF_OPT = \
-+	--disable-examples \
-+	--disable-docs \
-+	--disable-unit-tests
-+
-+# This is not a true autotools package.  It is based on the ffmpeg build system
-+define LIBVPX_CONFIGURE_CMDS
-+	(cd $(LIBVPX_SRCDIR) && rm -rf config.cache && \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_CONFIGURE_ARGS) \
-+	$(LIBVPX_CONF_ENV) \
-+	./configure \
-+		--target=generic-gnu \
-+		--enable-pic \
-+		--prefix=/usr \
-+		$(SHARED_STATIC_LIBS_OPTS) \
-+		$(LIBVPX_CONF_OPT) \
-+	)
++ifeq ($(LIBOPENMAX_DEPENDENCIES),)
++define LIBOPENMAX_CONFIGURE_CMDS
++	echo "No libopenmax implementation selected. Configuration error."
++	exit 1
 +endef
-+
-+define LIBVPX_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) all
-+endef
-+
-+define LIBVPX_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D) install
-+endef
-+
-+define LIBVPX_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
-+endef
++endif
 +
 +$(eval $(generic-package))
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index 2c35fb7..da5726f 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_RPI_USERLAND
+ 	select BR2_PACKAGE_HAS_OPENGL_EGL
+ 	select BR2_PACKAGE_HAS_OPENGL_ES
+ 	select BR2_PACKAGE_HAS_OPENVG
++	select BR2_PACKAGE_HAS_OPENMAX
+ 	help
+ 	  Raspberry Pi Userland contains the necessary library to use the
+ 	  VideoCore driver.
