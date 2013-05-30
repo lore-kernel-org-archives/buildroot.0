@@ -1,195 +1,124 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 30 May 2013 11:30:26 -0500
-Subject: [Buildroot] [PATCH v9 03/14] libgtk2: bump to version 2.24.18
+Date: Thu, 30 May 2013 11:30:29 -0500
+Subject: [Buildroot] [PATCH v9 06/14] gstreamer1: Add gstreamer version
+	1.0.7 package
 In-Reply-To: <1369931437-12445-1-git-send-email-spenser@gillilanding.com>
 References: <1369931437-12445-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1369931437-12445-4-git-send-email-spenser@gillilanding.com>
+Message-ID: <1369931437-12445-7-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch adds the gstreamer version 1.x series to buildroot.
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/libgtk2/Config.in                         |   13 ++----
- package/libgtk2/libgtk2-reduce-dependencies.patch |   51 +++++++++++----------
- package/libgtk2/libgtk2.mk                        |    2 +-
- 3 files changed, 32 insertions(+), 34 deletions(-)
+ package/multimedia/Config.in                |    1 +
+ package/multimedia/gstreamer1/Config.in     |   38 +++++++++++++++++++++++++++
+ package/multimedia/gstreamer1/gstreamer1.mk |   36 +++++++++++++++++++++++++
+ 3 files changed, 75 insertions(+)
+ create mode 100644 package/multimedia/gstreamer1/Config.in
+ create mode 100644 package/multimedia/gstreamer1/gstreamer1.mk
 
-diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
-index 88f4cc1..462b0b6 100644
---- a/package/libgtk2/Config.in
-+++ b/package/libgtk2/Config.in
-@@ -8,11 +8,11 @@ config BR2_PACKAGE_LIBGTK2
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_PANGO
- 	select BR2_PACKAGE_GDK_PIXBUF
--	select BR2_PACKAGE_FONTCONFIG if BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_XORG7
--	depends on BR2_PACKAGE_XORG7||BR2_PACKAGE_DIRECTFB
-+	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXRENDER
-+	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	help
-@@ -29,6 +29,3 @@ config BR2_PACKAGE_LIBGTK2_DEMO
- 
- comment "libgtk2 requires a toolchain with WCHAR and C++ support"
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
--
--comment "WARNING: Libgtk2 directfb backend is deprecated"
--	depends on BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_XORG7
-diff --git a/package/libgtk2/libgtk2-reduce-dependencies.patch b/package/libgtk2/libgtk2-reduce-dependencies.patch
-index 5bb9db9..e9be429 100644
---- a/package/libgtk2/libgtk2-reduce-dependencies.patch
-+++ b/package/libgtk2/libgtk2-reduce-dependencies.patch
-@@ -3,21 +3,23 @@ dependencies on graphic backends such as X.org or DirectFB. Gtk does
- not fully build in this mode, but it builds sufficiently to build the
- host tools that are needed to build the target Gtk.
- 
-+Changes:
-+	Ported to 2.24.18
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 931e6d3..f6a5fd7 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -6,6 +6,7 @@ source "package/multimedia/faad2/Config.in"
+ source "package/multimedia/flac/Config.in"
+ source "package/multimedia/ffmpeg/Config.in"
+ source "package/multimedia/gstreamer/Config.in"
++source "package/multimedia/gstreamer1/Config.in"
+ source "package/multimedia/gst-ffmpeg/Config.in"
+ source "package/multimedia/gst-dsp/Config.in"
+ source "package/multimedia/gst-fsl-plugins/Config.in"
+diff --git a/package/multimedia/gstreamer1/Config.in b/package/multimedia/gstreamer1/Config.in
+new file mode 100644
+index 0000000..c627eb7
+--- /dev/null
++++ b/package/multimedia/gstreamer1/Config.in
+@@ -0,0 +1,38 @@
++config BR2_PACKAGE_GSTREAMER1
++	bool "gstreamer1"
++	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  GStreamer is an open source multimedia framework.
 +
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
- ---
-- configure.in |   34 +++++++++++++++++++++++++++-------
-- 1 file changed, 27 insertions(+), 7 deletions(-)
--
--Index: b/configure.in
-+Index: libgtk2-2.24.18/configure.ac
- ===================================================================
----- a/configure.in
--+++ b/configure.in
--@@ -259,12 +259,12 @@
-+--- libgtk2-2.24.18.orig/configure.ac	2013-05-13 07:02:44.000000000 -0500
-++++ libgtk2-2.24.18/configure.ac	2013-05-27 02:12:09.947030335 -0500
-+@@ -258,12 +258,13 @@
-    gdktarget=x11
-  fi
-  
- -AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/win32/quartz/directfb]] select non-default GDK target],
--+AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/win32/quartz/directfb/none]] select non-default GDK target],
-++AC_ARG_WITH(gdktarget,
-++				[  --with-gdktarget=[[x11/win32/quartz/directfb/none]] select non-default GDK target],
-  	gdktarget=$with_gdktarget)
-  
-  AC_SUBST(gdktarget)
-@@ -27,7 +29,7 @@ Index: b/configure.in
-    *) AC_MSG_ERROR([Invalid target for GDK: use x11, quartz, directfb or win32.]);;
-  esac
-  
--@@ -374,11 +374,15 @@
-+@@ -372,11 +373,15 @@
-  ## annoying to construct
-  PKG_CHECK_MODULES(BASE_DEPENDENCIES,
-    [glib-2.0 >= glib_required_version dnl
-@@ -37,16 +39,16 @@ Index: b/configure.in
-     gdk-pixbuf-2.0 >= gdk_pixbuf_required_version])
-  
- +if test "x$gdktarget" != "xnone"; then
--+   PKG_CHECK_MODULES(BASE_DEPENDENCIES,
--+	[atk >= atk_required_version dnl
--+	 pango >= pango_required_version dnl
--+	 cairo >= cairo_required_version])
-++	PKG_CHECK_MODULES(BASE_DEPENDENCIES,
-++		[atk >= atk_required_version dnl
-++		 pango >= pango_required_version dnl
-++		 cairo >= cairo_required_version])
- +fi
- +
-  ## In addition to checking that cairo is present, we also need to
-  ## check that the correct cairo backend is there. E.g. if the GDK
-  ## target is win32 we need the cairo-win32 backend and so on.
--@@ -389,8 +393,11 @@
-+@@ -387,8 +392,11 @@
-  if test "x$cairo_backend" = "xx11"; then
-     cairo_backend=xlib
-  fi
-@@ -54,13 +56,13 @@ Index: b/configure.in
- -  [cairo-$cairo_backend >= cairo_required_version])
- +
- +if test "x$gdktarget" != "xnone"; then
--+   PKG_CHECK_MODULES(CAIRO_BACKEND,
--+	[cairo-$cairo_backend >= cairo_required_version])
-++	PKG_CHECK_MODULES(CAIRO_BACKEND,
-++		[cairo-$cairo_backend >= cairo_required_version])
- +fi
-  
-  PKG_CHECK_MODULES(GMODULE, [gmodule-2.0])
-  
--@@ -1281,6 +1288,7 @@
-+@@ -1279,6 +1287,7 @@
-    AM_CONDITIONAL(USE_DIRECTFB, false)
-  fi
-  
-@@ -68,7 +70,7 @@ Index: b/configure.in
-  
-  # Check for Pango flags
-  
--@@ -1326,6 +1334,8 @@
-+@@ -1324,6 +1333,8 @@
-    GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 gdk-pixbuf-2.0 cairo-$cairo_backend"
-  fi
-  
-@@ -77,16 +79,15 @@ Index: b/configure.in
-  GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES` $MATH_LIB"
-  GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES` $GDK_EXTRA_CFLAGS"
-  #
--@@ -1344,6 +1354,8 @@
-+@@ -1341,6 +1352,7 @@
-+ AC_SUBST(GDK_DEP_LIBS)
-  AC_SUBST(GDK_DEP_CFLAGS)
-  
-- 
- +if test "x$gdktarget" != "xnone"; then
--+
-+ 
-  ########################################
-  # Check for Accessibility Toolkit flags
-- ########################################
--@@ -1374,6 +1386,10 @@
-+@@ -1372,6 +1384,10 @@
-  fi
-  
-  GTK_PACKAGES="atk cairo gdk-pixbuf-2.0 gio-2.0"
-@@ -97,7 +98,7 @@ Index: b/configure.in
-  if test "x$gdktarget" = "xx11"; then
-    GTK_PACKAGES="$GTK_PACKAGES pangoft2"
-  fi
--@@ -1529,6 +1545,8 @@
-+@@ -1533,6 +1549,8 @@
-  gtk_save_cppflags="$CPPFLAGS"
-  CPPFLAGS="$CPPFLAGS $GTK_DEP_CFLAGS $GDK_DEP_CFLAGS"
-  
-@@ -106,7 +107,7 @@ Index: b/configure.in
-  AC_CHECK_HEADER(cairo-pdf.h,,AC_MSG_ERROR([
-  *** Can't find cairo-pdf.h. You must build Cairo with the pdf
-  *** backend enabled.]))
--@@ -1543,6 +1561,8 @@
-+@@ -1547,6 +1565,8 @@
-  *** svg backend enabled.]))
-  fi   
-  
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index b1ce99a..d49bfeb 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- LIBGTK2_VERSION_MAJOR = 2.24
--LIBGTK2_VERSION_MINOR = 10
-+LIBGTK2_VERSION_MINOR = 18
- LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).$(LIBGTK2_VERSION_MINOR)
- 
- LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
++	  http://gstreamer.freedesktop.org/
++
++comment "gstreamer requires a toolchain with WCHAR and threads support"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
++if BR2_PACKAGE_GSTREAMER1
++
++config BR2_PACKAGE_GSTREAMER1_GST_DEBUG
++	bool "enable gst-debug trace support"
++	default y
++	help
++	  Enable support for the gst-debug tracing functionality in gstreamer.
++	  This has limited CPU overhead, but does increase the rootfs size
++	  somewhat.
++
++config BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY
++	bool "enable plugin registry"
++	default y
++	help
++	  Enable support for the GStreamer plugin registry. This may increase
++	  the launch-time for a GStreamer application.
++
++config BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS
++	bool "install gst-launch gst-inspect"
++	default y
++	help
++	  Install the gst-launch and gst-inspect tools. This will take up
++	  additional space on the target
++
++endif
+diff --git a/package/multimedia/gstreamer1/gstreamer1.mk b/package/multimedia/gstreamer1/gstreamer1.mk
+new file mode 100644
+index 0000000..7abdc09
+--- /dev/null
++++ b/package/multimedia/gstreamer1/gstreamer1.mk
+@@ -0,0 +1,36 @@
++#############################################################
++#
++# gstreamer1
++#
++#############################################################
++
++GSTREAMER1_VERSION = 1.0.7
++GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
++GSTREAMER1_SITE = http://gstreamer.freedesktop.org/src/gstreamer
++GSTREAMER1_INSTALL_STAGING = YES
++
++# Checking if unaligned memory access works correctly cannot be done when cross
++# compiling. For the following architectures there is no information available
++# in the configure script.
++ifeq ($(BR2_avr32),y)
++GSTREAMER1_CONF_ENV = as_cv_unaligned_access=no
++endif
++ifeq ($(BR2_aarch64),y)
++GSTREAMER1_CONF_ENV = as_cv_unaligned_access=yes
++endif
++
++GSTREAMER1_CONF_OPT = \
++		--disable-examples \
++		--disable-tests \
++		--disable-failing-tests \
++		--disable-debug \
++		--disable-valgrind \
++		--disable-benchmarks \
++		--disable-check \
++		$(if $(BR2_PACKAGE_GSTREAMER1_GST_DEBUG),,--disable-gst-debug) \
++		$(if $(BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY),,--disable-registry) \
++		$(if $(BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS),,--disable-tools) \
++
++GSTREAMER1_DEPENDENCIES = libglib2 host-pkgconf host-bison host-flex
++
++$(eval $(autotools-package))
 -- 
 1.7.9.5
