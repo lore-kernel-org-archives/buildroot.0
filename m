@@ -1,32 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 30 May 2013 22:19:14 +0200
-Subject: [Buildroot] [git commit branch/next] libtool : bump to version 2.4.2
-Message-ID: <20130530203306.2797B9A69E@busybox.osuosl.org>
+From: Nathan Lynch <ntl@pobox.com>
+Date: Thu, 30 May 2013 15:36:37 -0500
+Subject: [Buildroot] [RFC/PATCH 0/4] support building from read-only
+ source tree
+In-Reply-To: <20130526163633.GB3380@free.fr>
+References: <1340031743-29694-1-git-send-email-ntl@pobox.com>
+ <20130526144540.GA3380@free.fr> <20130526163633.GB3380@free.fr>
+Message-ID: <1369946197.13828.33.camel@doorstop.aus.2wire.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=64e04fb27a9a0a4fcc519bcc7344a67009490a91
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sun, 2013-05-26 at 18:36 +0200, Yann E. MORIN wrote:
+> Nathan, All,
+> 
+> On 2013-05-26 16:45 +0200, Yann E. MORIN spake thusly:
+> > On 2012-06-18 10:02 -0500, Nathan Lynch spake thusly:
+> > > There are several places in Buildroot where files are copied from the
+> > > source tree to the output directory and then modified.  The most
+> > > obvious case is copying a .config or equivalent to the build
+> > > directory and then modifying it with sed, as with uClibc or busybox.
+> > 
+> > Unfortunately, those patches mostly no longer apply, since there have
+> > been some code churn (reoridering) in the meantime.
+> > 
+> > I'll take whatever I can, and adapt the remaining.
+> 
+> I've added them to my patchwork branch:
+>     https://www.gitorious.org/buildroot/buildroot/commits/yem-patchwork-fixes
+> 
+> Thank you!
 
-Signed-off-by: J??r??my Rosen <jeremy.rosen@openwide.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libtool/libtool.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
-index 6f0b904..25cd89d 100644
---- a/package/libtool/libtool.mk
-+++ b/package/libtool/libtool.mk
-@@ -3,7 +3,7 @@
- # libtool
- #
- #############################################################
--LIBTOOL_VERSION = 2.2.10
-+LIBTOOL_VERSION = 2.4.2
- LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.gz
- LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
- LIBTOOL_INSTALL_STAGING = YES
+Thank you for picking these up.  I haven't been sufficiently motivated
+to pursue these (obviously); hopefully they will be useful to others.
