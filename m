@@ -1,29 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 30 May 2013 22:31:13 +0200
-Subject: [Buildroot] [PATCH 0/2] Bump pulseaudio and dependencies
-In-Reply-To: <1369811518-31896-1-git-send-email-jeremy.rosen@openwide.fr>
- (=?utf-8?B?IkrDqXLDqW15?= Rosen"'s message of "Wed, 29 May 2013 09:11:56
- +0200")
-References: <1369811518-31896-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <87vc60xl9q.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 30 May 2013 22:19:17 +0200
+Subject: [Buildroot] [git commit branch/next] pulseaudio : bump to version
+	3.0
+Message-ID: <20130530203306.560F79A69F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?r?my" == J?r?my Rosen <jeremy.rosen@openwide.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ac23d50496d590026fe5ae140bc5e98e72f208e3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- J?r?my> This serie of patch will bump pulseaudio to version 3.0
- J?r?my> pulseaudio needs a newer version of libtool, so also bump this
+Signed-off-by: J??r??my Rosen <jeremy.rosen@openwide.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/pulseaudio/pulseaudio.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- J?r?my> v2: rebase on next instead of master
-
- J?r?my> J?r?my Rosen (2):
- J?r?my>   libtool : bump to version 2.4.2
- J?r?my>   pulseaudio : bump to version 3.0
-
-Committed both to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
+index 16df855..f171fb9 100644
+--- a/package/multimedia/pulseaudio/pulseaudio.mk
++++ b/package/multimedia/pulseaudio/pulseaudio.mk
+@@ -3,8 +3,7 @@
+ # pulseaudio
+ #
+ ################################################################################
+-
+-PULSEAUDIO_VERSION = 2.1
++PULSEAUDIO_VERSION = 3.0
+ PULSEAUDIO_SITE = http://freedesktop.org/software/pulseaudio/releases/
+ PULSEAUDIO_INSTALL_STAGING = YES
+ PULSEAUDIO_CONF_OPT = \
+@@ -47,6 +46,7 @@ endef
+ PULSEAUDIO_POST_PATCH_HOOKS += PULSEAUDIO_FORCE_CC
+ endif
+ 
++PULSEAUDIO_CONF_OPT += $(if $(BR2_ARM_ENABLE_NEON),--enable-neon-opt=yes,--enable-neon-opt=no)
+ # pulseaudio alsa backend needs pcm/mixer apis
+ ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
+ PULSEAUDIO_CONF_OPT += --disable-alsa
