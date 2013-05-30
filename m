@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 30 May 2013 21:53:02 +0200
-Subject: [Buildroot] [PATCH 6/6] xlib_libX11: ensure target and host
+Date: Thu, 30 May 2013 21:54:59 +0200
+Subject: [Buildroot] [PATCH 4/6] gutenprint: ensure target and host
 	variant have the same patch hooks
-In-Reply-To: <1369695664-5670-7-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 28 May 2013 01:01:04 +0200")
+In-Reply-To: <1369695664-5670-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 28 May 2013 01:01:02 +0200")
 References: <1369695664-5670-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1369695664-5670-7-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878v2wz1lt.fsf@dell.be.48ers.dk>
+ <1369695664-5670-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <874ndkz1ik.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,12 +20,13 @@ To: buildroot@busybox.net
  Thomas> variant (because the source tree will be shared between host and
  Thomas> target variants when doing out-of-tree build).
 
- Thomas> In the case of the xlib_libX11 package, the post-patch hook removes
- Thomas> some flags from the build of the makekeys utility, so that when
- Thomas> xlib_libX11 is built for the target, the build of makekeys for the
- Thomas> host works properly. This modification can be applied to the host
- Thomas> variant of xlib_libX11 without any problem.
+ Thomas> In the case of gutenprint, the patch hook executed for the target just
+ Thomas> creates one directory which is needed for autoreconf to work, and the
+ Thomas> host variant is not autoreconf'ed. So there is no harm in also
+ Thomas> applying this patch hook to the host variant.
 
-Committed to next, thanks.
+Committed to next with HOST_GUTENPRINT_AUTORECONF = YES as pointed out
+by Arnout, thanks.
+
 -- 
 Bye, Peter Korsgaard
