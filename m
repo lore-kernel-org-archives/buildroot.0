@@ -1,72 +1,96 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 30 May 2013 23:02:54 +0200
-Subject: [Buildroot] [git commit] package/snappy: new package
-Message-ID: <20130602212116.4234D9A6A7@busybox.osuosl.org>
+Date: Thu, 30 May 2013 23:47:56 +0200
+Subject: [Buildroot] [git commit] qt5: mysql and sqlite plugins
+Message-ID: <20130602212116.A516F9A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=164b90649b4f34c3e7cd1b6ded46c921db4fc2f1
+commit: http://git.buildroot.net/buildroot/commit/?id=0b78baafbda4b97c96793231f559735139506ee1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: needs C++ support]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Added support for mysql and sqlite plugins. Configuration is based on qt package.
+
+[Peter: strip trailing spaces]
+Signed-off-by: Wojciech Slenska <wojciech.slenska@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in        |    1 +
- package/snappy/Config.in |   13 +++++++++++++
- package/snappy/snappy.mk |   13 +++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
+ package/qt5/qt5base/Config.in  |   36 ++++++++++++++++++++++++++++++++++++
+ package/qt5/qt5base/qt5base.mk |   15 +++++++++++++++
+ 2 files changed, 51 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 428aaba..4233ff2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -386,6 +386,7 @@ endmenu
- menu "Compression and decompression"
- source "package/libarchive/Config.in"
- source "package/lzo/Config.in"
-+source "package/snappy/Config.in"
- source "package/zlib/Config.in"
- endmenu
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 7974357..9c7fd15 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -43,6 +43,42 @@ config BR2_PACKAGE_QT5BASE_SQL
+ 	help
+ 	  This options enables the Qt5Sql library.
  
-diff --git a/package/snappy/Config.in b/package/snappy/Config.in
-new file mode 100644
-index 0000000..36093bc
---- /dev/null
-+++ b/package/snappy/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_SNAPPY
-+	bool "snappy"
-+	depends on BR2_INSTALL_LIBSTDCPP
++if BR2_PACKAGE_QT5BASE_SQL
++config BR2_PACKAGE_QT5BASE_MYSQL
++	bool "MySQL Plugin"
++	select BR2_PACKAGE_MYSQL_CLIENT
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_READLINE
++	depends on BR2_USE_MMU # mysql
 +	help
-+	  Snappy is a compression/decompression library. It does not aim for
-+	  maximum compression, or compatibility with any other compression
-+	  library; instead, it aims for very high speeds and reasonable
-+	  compression.
++	  Build MySQL plugin
++	  If unsure, say n.
++choice
++	prompt "SQLite 3 support"
++	default BR2_PACKAGE_QT5BASE_SQLITE_NONE
++	help
++	  Select SQLite support.
 +
-+	  http://code.google.com/p/snappy/
++config BR2_PACKAGE_QT5BASE_SQLITE_NONE
++	bool "No sqlite support"
++	help
++	  Do not compile any kind of SQLite support.
 +
-+comment "snappy requires a toolchain with C++ support"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
-new file mode 100644
-index 0000000..2704b97
---- /dev/null
-+++ b/package/snappy/snappy.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# snappy
-+#
-+#############################################################
++config BR2_PACKAGE_QT5BASE_SQLITE_QT
++	bool "Qt SQLite"
++	help
++	  Use Qt bundled SQLite support.
 +
-+SNAPPY_VERSION		= 1.1.0
-+SNAPPY_SITE		= http://snappy.googlecode.com/files/
-+SNAPPY_LICENSE		= BSD-3c
-+SNAPPY_LICENSE_FILES	= COPYING
-+SNAPPY_INSTALL_STAGING	= YES
++config BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM
++	bool "System SQLite"
++	select BR2_PACKAGE_SQLITE
++	help
++	  Use system SQLite.
 +
-+$(eval $(autotools-package))
++endchoice
++
++endif
++
+ config BR2_PACKAGE_QT5BASE_TEST
+ 	bool "test module"
+ 	help
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 7c6a093..cfa06ea 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -60,6 +60,21 @@ QT5BASE_LICENSE = Commercial license
+ QT5BASE_REDISTRIBUTE = NO
+ endif
+ 
++# Qt5 SQL Plugins
++ifeq ($(BR2_PACKAGE_QT5BASE_SQL),y)
++ifeq ($(BR2_PACKAGE_QT5BASE_MYSQL),y)
++QT5BASE_CONFIGURE_OPTS += -plugin-sql-mysql -mysql_config $(STAGING_DIR)/usr/bin/mysql_config
++QT5BASE_DEPENDENCIES   += mysql_client
++else
++QT5BASE_CONFIGURE_OPTS += -no-sql-mysql
++endif
++
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_QT),-plugin-sql-sqlite)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),-system-sqlite)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),sqlite)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_NONE),-no-sql-sqlite)
++endif
++
+ # We have to use --enable-linuxfb, otherwise Qt thinks that -linuxfb
+ # is to add a link against the "inuxfb" library.
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-gui,-no-gui)
