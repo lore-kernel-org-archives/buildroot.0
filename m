@@ -1,37 +1,28 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Thu, 30 May 2013 10:27:17 +0100
-Subject: [Buildroot] [PATCH] libplayer: Remove unsupported QUIET variable
-Message-ID: <1369906037-5251-1-git-send-email-markos.chandras@gmail.com>
+From: Sabri Altunbas <sabri.altunbas@gmx.de>
+Date: Thu, 30 May 2013 11:44:25 +0200
+Subject: [Buildroot] buildroot needs a root pasword, why ??
+In-Reply-To: <20130525151830.68bca681@skate>
+References: <2F3FBE81FE784B19BA37A3BE62C1FA7A@M58p><20130524174319.GA3205@free.fr><B2E777BEED5E4FB9A7E403CE15ED3A4A@M58p><20130524213049.GB3205@free.fr>
+ <20130525151830.68bca681@skate>
+Message-ID: <E4C98346893A45B5B83D3625E810D675@M58p>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Markos Chandras <markos.chandras@imgtec.com>
+Hello,
 
-Fixes the following compilation problem when building with 'make -s'
+i found here
 
-Unknown option "-q".
-See ./configure --help for available options.
+http://buildroot-busybox.2317881.n4.nabble.com/Console-login-root-needing-a-
+password-td15155.html
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
----
- package/libplayer/libplayer.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+a thread regarding this topic. But as i understand it. It is no solution but
+a workaround.
 
-diff --git a/package/libplayer/libplayer.mk b/package/libplayer/libplayer.mk
-index 8f655ae..511c7f6 100644
---- a/package/libplayer/libplayer.mk
-+++ b/package/libplayer/libplayer.mk
-@@ -18,7 +18,7 @@ define LIBPLAYER_CONFIGURE_CMDS
- 		--prefix=/usr \
- 		--cross-compile \
- 		$(SHARED_STATIC_LIBS_OPTS) \
--		$(QUIET) $(LIBPLAYER_CONF_OPT) \
-+		$(LIBPLAYER_CONF_OPT) \
- 	)
- endef
- 
--- 
-1.8.2.1
+With "ttyAMA0::respawn:/bin/sh it works for me too
+
+
+Regards,
+S.Altunbas
