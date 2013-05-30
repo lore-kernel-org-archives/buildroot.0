@@ -1,77 +1,110 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 30 May 2013 21:40:03 +0200
-Subject: [Buildroot] [git commit branch/next] neard: add init script
-Message-ID: <20130530194325.F1B4D9A620@busybox.osuosl.org>
+Date: Thu, 30 May 2013 21:28:15 +0200
+Subject: [Buildroot] [git commit branch/next] libvpx: new package libvpx
+Message-ID: <20130530194325.83FBB9A620@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a94650c184f78620eb63d2d25065c4ea3ceec8d8
+commit: http://git.buildroot.net/buildroot/commit/?id=1460245354019df29ffc4c3d76ddd61cb14dfd04
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+adds webm multimedia support and the VP8 encoder/decoder library.
+
+http://www.webmproject.org/
+
+[Peter: strip trailing spaces, wrap help text]
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/neard/S53neard |   33 +++++++++++++++++++++++++++++++++
- package/neard/neard.mk |    9 +++++++++
- 2 files changed, 42 insertions(+), 0 deletions(-)
+ package/multimedia/Config.in        |    1 +
+ package/multimedia/libvpx/Config.in |    7 ++++
+ package/multimedia/libvpx/libvpx.mk |   53 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 61 insertions(+), 0 deletions(-)
 
-diff --git a/package/neard/S53neard b/package/neard/S53neard
-new file mode 100755
-index 0000000..0a75941
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 931e6d3..dd74863 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -15,6 +15,7 @@ source "package/multimedia/gst-plugins-good/Config.in"
+ source "package/multimedia/gst-plugins-bad/Config.in"
+ source "package/multimedia/gst-plugins-ugly/Config.in"
+ source "package/multimedia/lame/Config.in"
++source "package/multimedia/libvpx/Config.in"
+ source "package/multimedia/madplay/Config.in"
+ source "package/multimedia/mpd/Config.in"
+ source "package/multimedia/mpg123/Config.in"
+diff --git a/package/multimedia/libvpx/Config.in b/package/multimedia/libvpx/Config.in
+new file mode 100644
+index 0000000..1332c56
 --- /dev/null
-+++ b/package/neard/S53neard
-@@ -0,0 +1,33 @@
-+#!/bin/sh
++++ b/package/multimedia/libvpx/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBVPX
++	bool "libvpx"
++	help
++	  A high-quality, open video format that's freely available to
++	  everyone.
++
++	  http://webmproject.org
+diff --git a/package/multimedia/libvpx/libvpx.mk b/package/multimedia/libvpx/libvpx.mk
+new file mode 100644
+index 0000000..131fd49
+--- /dev/null
++++ b/package/multimedia/libvpx/libvpx.mk
+@@ -0,0 +1,53 @@
++#############################################################
 +#
-+# Starts neard
++# libvpx
 +#
++#############################################################
 +
-+NAME=neard
-+DAEMON=/usr/libexec/nfc/$NAME
++LIBVPX_VERSION = v1.2.0
++LIBVPX_SITE = http://git.chromium.org/webm/libvpx.git
++LIBVPX_SITE_METHOD = git
 +
-+# Exit gracefully if the package has been removed
-+[ -x $DAEMON ] || exit 0
++LIBVPX_LICENSE = BSD-3c
++LIBVPX_LICENSE_FILES = LICENSE PATENTS
 +
-+case "$1" in
-+  start)
-+    echo -n "Starting $NAME: "
-+    start-stop-daemon -S -q -p /var/run/${NAME}.pid -x $DAEMON -- -d '*'
-+    echo "OK"
-+    ;;
-+  stop)
-+    echo -n "Stopping $NAME: "
-+    start-stop-daemon -K -q -p /var/run/${NAME}.pid
-+    echo "OK"
-+    ;;
-+  restart|reload)
-+    $0 stop
-+    sleep 1
-+    $0 start
-+    ;;
-+  *)
-+    echo "Usage: $0 {start|stop|restart}"
-+    exit 1
-+esac
++LIBVPX_INSTALL_STAGING = YES
 +
-+exit $?
-diff --git a/package/neard/neard.mk b/package/neard/neard.mk
-index cc6aeac..57a434d 100644
---- a/package/neard/neard.mk
-+++ b/package/neard/neard.mk
-@@ -17,4 +17,13 @@ ifeq ($(BR2_PACKAGE_NEARD_TOOLS),y)
- 	NEARD_CONF_OPT += --enable-tools
- endif
- 
-+define NEARD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/neard/S53neard \
-+		$(TARGET_DIR)/etc/init.d/S53neard
++# ld is being used with cc options. therefore, pretend ld is cc.
++LIBVPX_CONF_ENV = \
++	LD="$(TARGET_CC)" \
++	CROSS=$(GNU_TARGET_NAME)
++
++LIBVPX_CONF_OPT = \
++	--disable-examples \
++	--disable-docs \
++	--disable-unit-tests
++
++# This is not a true autotools package.  It is based on the ffmpeg build system
++define LIBVPX_CONFIGURE_CMDS
++	(cd $(LIBVPX_SRCDIR) && rm -rf config.cache && \
++	$(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_ARGS) \
++	$(LIBVPX_CONF_ENV) \
++	./configure \
++		--target=generic-gnu \
++		--enable-pic \
++		--prefix=/usr \
++		$(SHARED_STATIC_LIBS_OPTS) \
++		$(LIBVPX_CONF_OPT) \
++	)
 +endef
 +
-+define NEARD_UNINSTALL_INIT_SYSV
-+	$(RM) $(TARGET_DIR)/etc/init.d/S53neard
++define LIBVPX_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) all
 +endef
 +
- $(eval $(autotools-package))
++define LIBVPX_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D) install
++endef
++
++define LIBVPX_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
++endef
++
++$(eval $(generic-package))
