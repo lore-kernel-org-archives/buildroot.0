@@ -1,41 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 30 May 2013 22:19:17 +0200
-Subject: [Buildroot] [git commit] pulseaudio : bump to version 3.0
-Message-ID: <20130602212115.921CA9A6D3@busybox.osuosl.org>
+Date: Thu, 30 May 2013 21:52:51 +0200
+Subject: [Buildroot] [git commit] xlib_libX11: ensure target and host
+	variant have the same patch hooks
+Message-ID: <20130602212114.AFBA59A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac23d50496d590026fe5ae140bc5e98e72f208e3
+commit: http://git.buildroot.net/buildroot/commit/?id=f0e3147ee52b274ad887e59450d8a20427ea75f6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??r??my Rosen <jeremy.rosen@openwide.fr>
+In preparation for the out-of-tree support, it is important that all
+packages have the same patch hooks for the host variant and the target
+variant (because the source tree will be shared between host and
+target variants when doing out-of-tree build).
+
+In the case of the xlib_libX11 package, the post-patch hook removes
+some flags from the build of the makekeys utility, so that when
+xlib_libX11 is built for the target, the build of makekeys for the
+host works properly. This modification can be applied to the host
+variant of xlib_libX11 without any problem.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/pulseaudio/pulseaudio.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libX11/xlib_libX11.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
-index 16df855..f171fb9 100644
---- a/package/multimedia/pulseaudio/pulseaudio.mk
-+++ b/package/multimedia/pulseaudio/pulseaudio.mk
-@@ -3,8 +3,7 @@
- # pulseaudio
- #
- ################################################################################
--
--PULSEAUDIO_VERSION = 2.1
-+PULSEAUDIO_VERSION = 3.0
- PULSEAUDIO_SITE = http://freedesktop.org/software/pulseaudio/releases/
- PULSEAUDIO_INSTALL_STAGING = YES
- PULSEAUDIO_CONF_OPT = \
-@@ -47,6 +46,7 @@ endef
- PULSEAUDIO_POST_PATCH_HOOKS += PULSEAUDIO_FORCE_CC
- endif
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 3b106cd..f801673 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -41,6 +41,7 @@ define XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
+ endef
  
-+PULSEAUDIO_CONF_OPT += $(if $(BR2_ARM_ENABLE_NEON),--enable-neon-opt=yes,--enable-neon-opt=no)
- # pulseaudio alsa backend needs pcm/mixer apis
- ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
- PULSEAUDIO_CONF_OPT += --disable-alsa
+ XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
++HOST_XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
