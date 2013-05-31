@@ -1,39 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 31 May 2013 17:25:22 +0200
-Subject: [Buildroot] [PATCH] ext-toolchain-wrapper: fix paths if
- executable was resolved by PATH
-In-Reply-To: <51A5CD3F.1070100@fh-kl.de>
-References: <51A5CD3F.1070100@fh-kl.de>
-Message-ID: <20130531172522.330a5f6b@skate>
+From: this_thread <chrisddail@gmail.com>
+Date: Fri, 31 May 2013 08:46:13 -0700 (PDT)
+Subject: [Buildroot]  Installing package to custom location
+Message-ID: <35575784.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Patrick Ziegler,
 
-On Wed, 29 May 2013 11:41:19 +0200, Patrick Ziegler wrote:
-> If ext-toolchain-wrapper or any symbolic link to it was resolved by PATH,
-> the wrapper takes the working directory to calculate the relative paths.
-> 
-> Now '/proc/self/exe' is used to resolve the absolute path to the toolchain
-> directory if the wrapper was called neither with a relative nor an absolute
-> path.
-> 
-> Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
-
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-This should be part of 2013.05 if it's not too late, since it fixes a
-real problem. My colleague Gregory (Cc'ed) was hit by the problem, and
-both of us confirmed that this patch is fixing the problem.
-
-Best regards,
-
-Thomas
+Is it possible to use buildroot to install individual packages to a custom
+location (rather than installing to the target?)  I have several packages I
+want to install to my target, and several others that I'd like to be made
+available to individual users on an as-needed basis.  Is it possible to use
+Buildroot to specify some alternate install location, giving each package
+it's own directory, or would I just need to cross-compile them using the
+toolchain individually?
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+View this message in context: http://old.nabble.com/Installing-package-to-custom-location-tp35575784p35575784.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
