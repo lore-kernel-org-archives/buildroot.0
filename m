@@ -1,96 +1,58 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 31 May 2013 22:29:04 +0200
-Subject: [Buildroot] [git commit] Update for 2013.05
-Message-ID: <20130531203942.DA41A9A6EB@busybox.osuosl.org>
+Date: Fri, 31 May 2013 22:24:52 +0200
+Subject: [Buildroot] [git commit] Update copyright info for 2013
+Message-ID: <20130531203942.5DD7A9A6EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=615fd9b0f37ee5479dd45ed8358cebdc8546cfab
+commit: http://git.buildroot.net/buildroot/commit/?id=26b11df79c59bb77599aeb84daf075ff3f2fc82a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES            |    2 +-
  Makefile           |    2 +-
- docs/download.html |    9 +++++----
- docs/news.html     |    9 +++++++++
- 4 files changed, 16 insertions(+), 6 deletions(-)
+ docs/copyright.txt |    2 +-
+ docs/footer.html   |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 4884a59..910b942 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,4 +1,4 @@
--2013.05, Not yet released:
-+2013.05, Released May 31th, 2013:
- 
- 	Minor fixes.
- 
 diff --git a/Makefile b/Makefile
-index d172bb4..1d6b574 100644
+index e8647d1..d172bb4 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
+@@ -1,7 +1,7 @@
+ # Makefile for buildroot2
+ #
+ # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
+-# Copyright (C) 2006-2012 by the Buildroot developers <buildroot@uclibc.org>
++# Copyright (C) 2006-2013 by the Buildroot developers <buildroot@uclibc.org>
+ #
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+diff --git a/docs/copyright.txt b/docs/copyright.txt
+index 3614616..497d67b 100644
+--- a/docs/copyright.txt
++++ b/docs/copyright.txt
+@@ -1,6 +1,6 @@
  
- # Set and export the version string
--export BR2_VERSION:=2013.05-rc3
-+export BR2_VERSION:=2013.05
+ The code and graphics on this website (and it's mirror sites, if any) are
+-Copyright (c) 1999-2005 by Erik Andersen, 2006-2012 The Buildroot
++Copyright (c) 1999-2005 by Erik Andersen, 2006-2013 The Buildroot
+ developers. All rights reserved.
  
- # Check for minimal make version (note: this check will break at make 10.x)
- MIN_MAKE_VERSION=3.81
-diff --git a/docs/download.html b/docs/download.html
-index 7d881f7..85aaa62 100644
---- a/docs/download.html
-+++ b/docs/download.html
-@@ -6,14 +6,15 @@
- 
- <p>
- 
--The latest stable release is <b>2013.02</b>, which can be downloaded
-+The latest stable release is <b>2013.05</b>, which can be downloaded
- here:<p>
- 
--<a href="/downloads/buildroot-2013.02.tar.gz">buildroot-2013.02.tar.gz</a>
-+<a href="/downloads/buildroot-2013.05.tar.gz">buildroot-2013.05.tar.gz</a>
- or
--<a href="/downloads/buildroot-2013.02.tar.bz2">buildroot-2013.02.tar.bz2</a>.
-+<a href="/downloads/buildroot-2013.05.tar.bz2">buildroot-2013.05.tar.bz2</a>.
- 
- <p>
-+<!--
- The latest release candidate is <b>2013.05-rc3</b>, which can be
- downloaded here:<p>
- 
-@@ -21,7 +22,7 @@ downloaded here:<p>
- or
- <a href="/downloads/buildroot-2013.05-rc3.tar.bz2">buildroot-2013.05-rc3.tar.bz2</a>.
- <p>
--
-+-->
- This and earlier releases can always be downloaded from
- <a href="/downloads/">http://buildroot.net/downloads/</a>.
- 
-diff --git a/docs/news.html b/docs/news.html
-index 93554f0..e537ed1 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -5,6 +5,15 @@
- <p>
- 
- <ul>
-+  <li><b>31 May 2013 -- 2013.05 released</b>
-+
-+    <p>The stable 2013.05 release is out - Thanks to everyone
-+    contributing and testing the release candidates. See the
-+    <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.05">CHANGES</a>
-+    file for more details
-+    and go to the <a href="/downloads/">downloads page</a> to pick up the
-+    <a href="/downloads/buildroot-2013.05.tar.bz2">2013.05 release</a>.</p>
-+
-   <li><b>25 May 2013 -- 2013.05-rc3 released</b>
- 
-     <p>Another week, another release candidate with more cleanups and
+ Documents on this Web site including their graphical elements, design, and
+diff --git a/docs/footer.html b/docs/footer.html
+index 2bfcf0a..a5de214 100644
+--- a/docs/footer.html
++++ b/docs/footer.html
+@@ -10,7 +10,7 @@
+     <p>
+     <font face="arial, helvetica, sans-serif" size="-1">
+ 	<a HREF="/copyright.txt">Copyright &copy; 1999-2005 Erik Andersen,
+-	2006-2012 The Buildroot developers</a>
++	2006-2013 The Buildroot developers</a>
+ 	<br>
+ 	Mail all comments, insults, suggestions and bribes to
+ 	<br>
