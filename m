@@ -1,64 +1,100 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 31 May 2013 22:10:55 +0200
-Subject: [Buildroot] [PATCH v9 08/14] gst1-plugins-good: add gstreamer1
- good plugins
-In-Reply-To: <1369931437-12445-9-git-send-email-spenser@gillilanding.com>
-References: <1369931437-12445-1-git-send-email-spenser@gillilanding.com>
- <1369931437-12445-9-git-send-email-spenser@gillilanding.com>
-Message-ID: <CAHXCMMLXDJOaOPc3JKwbLqYX5C-SKEnUjMrkTk+E8NPRWTTHpQ@mail.gmail.com>
+From: Marcin Bis <marcin@bis.org.pl>
+Date: Fri, 31 May 2013 22:12:55 +0200
+Subject: [Buildroot] [PATCH v2] ecryptfs-utils: new package
+In-Reply-To: <20130531202622.6576897d@skate>
+References: <20130531202622.6576897d@skate>
+Message-ID: <1370031175-31230-1-git-send-email-marcin@bis.org.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Spencer, all,
+The following patch adds support for ecryptfs-utils.
+http://ecryptfs.org/
 
-2013/5/30 Spenser Gilliland <spenser@gillilanding.com>:
-> Adds gstreamer 1.X good plugins.
->
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> ---
->  package/multimedia/Config.in                       |    1 +
->  package/multimedia/gst1-plugins-good/Config.in     |  214 +++++++++++
->  .../gst1-plugins-good/gst1-plugins-good.mk         |  400 ++++++++++++++++++++
->  3 files changed, 615 insertions(+)
->  create mode 100644 package/multimedia/gst1-plugins-good/Config.in
->  create mode 100644 package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
->
-> diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-> index e851187..725a7b2 100644
-> --- a/package/multimedia/Config.in
-> +++ b/package/multimedia/Config.in
-> @@ -14,6 +14,7 @@ source "package/multimedia/gst-omapfb/Config.in"
->  source "package/multimedia/gst-plugins-base/Config.in"
->  source "package/multimedia/gst1-plugins-base/Config.in"
->  source "package/multimedia/gst-plugins-good/Config.in"
-> +source "package/multimedia/gst1-plugins-good/Config.in"
->  source "package/multimedia/gst-plugins-bad/Config.in"
->  source "package/multimedia/gst-plugins-ugly/Config.in"
-
-I think we don't want to interleave the gstreamer-{0.10,1} submenus,
-since both can co-exist.
-
-IMHO, it makes things clearer having all stuff for gstreamer-0.10
-first, then all stuff for gstreamer-1
-(though this might slightly break the alphabetical order...):
+Signed-off-by: Marcin Bis <marcin@bis.org.pl>
 ---
-source "package/multimedia/gstreamer/Config.in"
-source "package/multimedia/gst-plugins-base/Config.in"
-source "package/multimedia/gst-plugins-good/Config.in"
-source "package/multimedia/gst-plugins-bad/Config.in"
-source "package/multimedia/gst-plugins-ugly/Config.in"
+ package/Config.in                        |    1 +
+ package/ecryptfs-utils/Config.in         |   22 ++++++++++++++++++++++
+ package/ecryptfs-utils/ecryptfs-utils.mk |   28 ++++++++++++++++++++++++++++
+ 3 files changed, 51 insertions(+), 0 deletions(-)
+ create mode 100644 package/ecryptfs-utils/Config.in
+ create mode 100644 package/ecryptfs-utils/ecryptfs-utils.mk
 
-source "package/multimedia/gstreamer1/Config.in"
-source "package/multimedia/gst1-plugins-base/Config.in"
-source "package/multimedia/gst1-plugins-good/Config.in"
-source "package/multimedia/gst1-plugins-bad/Config.in"
-source "package/multimedia/gst1-plugins-ugly/Config.in"
----
-
-Regards,
-
+diff --git a/package/Config.in b/package/Config.in
+index d980871..54711c8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -194,6 +194,7 @@ source "package/cramfs/Config.in"
+ source "package/curlftpfs/Config.in"
+ source "package/dosfstools/Config.in"
+ source "package/e2fsprogs/Config.in"
++source "package/ecryptfs-utils/Config.in"
+ source "package/exfat/Config.in"
+ source "package/exfat-utils/Config.in"
+ source "package/f2fs-tools/Config.in"
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+new file mode 100644
+index 0000000..8f89e75
+--- /dev/null
++++ b/package/ecryptfs-utils/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_ECRYPTFS_UTILS
++	bool "ecryptfs-utils"
++	select BR2_PACKAGE_KEYUTILS
++	select BR2_PACKAGE_LIBNSS
++	depends on BR2_USE_MMU # keyutils
++	depends on !BR2_avr32 && !BR2_microblaze # keyutils
++	depends on BR2_LARGEFILE # libnss
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
++	help
++	  eCryptfs is a POSIX-compliant enterprise cryptographic
++	  filesystem for Linux. It is stacked on top of any other
++	  Linux filesystem, it stores cryptographic metadata in the header
++	  of each file written.
++	  
++	  The eCryptfs kernel module is available in all Linux kernels
++	  since version 2.6.19. This package provides userspace utilities
++	  needed to mount eCryptfs.
++	  
++	  Files are encrypted using a passpthase. Consider building openssl
++	  for another method.
++	  
++	  http://ecryptfs.org
+diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
+new file mode 100644
+index 0000000..32b509f
+--- /dev/null
++++ b/package/ecryptfs-utils/ecryptfs-utils.mk
+@@ -0,0 +1,28 @@
++#############################################################
++#
++# ecryptfs-utils
++#
++##############################################################
++
++ECRYPTFS_UTILS_VERSION         = 103
++ECRYPTFS_UTILS_SOURCE          = ecryptfs-utils_$(ECRYPTFS_UTILS_VERSION).orig.tar.gz
++ECRYPTFS_UTILS_SITE            = https://launchpad.net/ecryptfs/trunk/$(ECRYPTFS_UTILS_VERSION)/+download
++ECRYPTFS_UTILS_LICENSE         = GPLv2+
++ECRYPTFS_UTILS_LICENSE_FILES   = COPYING
++
++ECRYPTFS_UTILS_DEPENDENCIES    = keyutils libnss
++ECRYPTFS_UTILS_CONF_OPT        = --disable-pywrap --disable-pam
++
++#Needed for build system to find pk11func.h and libnss3.so
++ECRYPTFS_UTILS_CONF_ENV = \
++  NSS_CFLAGS="-I$(STAGING_DIR)/usr/include/nss -I$(STAGING_DIR)/usr/include/nspr" \
++  NSS_LIBS="-lnss3"
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++	ECRYPTFS_UTILS_CONF_OPT += --enable-openssl
++	ECRYPTFS_UTILS_DEPENDENCIES += openssl
++else
++	ECRYPTFS_UTILS_CONF_OPT += --disable-openssl
++endif
++
++$(eval $(autotools-package))
 -- 
-Samuel
+1.7.2.5
