@@ -1,40 +1,52 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 01 Jun 2013 20:14:11 +0200
-Subject: [Buildroot] [PATCH 18/20] gpu-viv-bin-mx6q: new package
-In-Reply-To: <20130529154831.4ed34d89@skate>
-References: <1369606110-8088-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1369606110-8088-19-git-send-email-thomas.petazzoni@free-electrons.com>
- <878v2x7vn1.fsf@dell.be.48ers.dk> <20130529154831.4ed34d89@skate>
-Message-ID: <51AA39F3.90506@mind.be>
+Date: Sat, 01 Jun 2013 20:40:31 +0200
+Subject: [Buildroot] [Bug 6290] New: copying the kernel fails
+In-Reply-To: <bug-6290-163@https.bugs.busybox.net/>
+References: <bug-6290-163@https.bugs.busybox.net/>
+Message-ID: <51AA401F.9050301@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/05/13 15:48, Thomas Petazzoni wrote:
->> >What kind of kernel dependencies does this package have?
+On 29/05/13 08:23, bugzilla at busybox.net wrote:
+> https://bugs.busybox.net/show_bug.cgi?id=6290
+>
+>             Summary: copying the kernel fails
+>             Product: buildroot
+>             Version: unspecified
+>            Platform: PC
+>          OS/Version: Linux
+>              Status: NEW
+>            Severity: critical
+>            Priority: P5
+>           Component: Other
+>          AssignedTo: unassigned at buildroot.uclibc.org
+>          ReportedBy: jungmann0 at gmail.com
+>                  CC: buildroot at uclibc.org
+>     Estimated Hours: 0.0
+>
+>
+> I want to build a linux system for my arm-based PDA (Intel PXA255 processor).
+> The build fails with the following message:
+>
+> # dtbs moved from arch/RCH/boot to arch/RCH/boot/dts since 3.8-rc1
+> cp  /home/jakob/Downloads/Buildroot/output/target/boot/
+> cp is missing the destination
+> ?cp --help? gives more information.
+> make: ***
+> [/home/jakob/Downloads/Buildroot/output/build/linux-3.7.8/.stamp_target_installed]
+> Error 1
 
-> As far as I can see, it doesn't have any build-time dependency. It's
-> just a bunch of pre-built shared libraries and header files that get
-> copied around. At runtime, I believe a specific kernel driver is
-> needed.
-
-  It's hard to know for sure. Like most SoC vendors, Freescale assume 
-you'll just use _their_ kernel, _their_ toolchain, _their_ binary 
-libraries and even _their_ LTIB (though it seems Freescale is becoming 
-more open about this).
-
-  Now, regarding the kernel it's pretty easy: upstream support for i.MX6 
-is limited to UART, SD and USB so you're bound to the Freescale kernel if 
-you want to use any graphics at all. And the Freescale kernel contains 
-the galcore module needed for accessing the vivante GPU.
-
-  There is also firmware for the VPU in the imx-firmware package, but I 
-think that is only needed for the H.264 etc. codecs.
+  Probably BR2_LINUX_KERNEL_CUSTOM_DTS_PATH or 
+BR2_LINUX_KERNEL_INTREE_DTS_NAME is empty. We should add a check for that.
 
   Regards,
   Arnout
+
+
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
