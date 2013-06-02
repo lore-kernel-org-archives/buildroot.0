@@ -1,32 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 02 Jun 2013 21:19:16 -0000
-Subject: [Buildroot] [git commit] libftdi: handle libftdi-config script
-Message-ID: <20130602212045.D146E9A6A7@busybox.osuosl.org>
+Date: Sun, 02 Jun 2013 21:19:17 -0000
+Subject: [Buildroot] [git commit] netatalk: handle netatalk-config script
+Message-ID: <20130602212046.66F879A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4cfe29abf8603798c5389aa6bdb5c9a41b55ff28
+commit: http://git.buildroot.net/buildroot/commit/?id=4b0542d46254fd1c9966e783f5c56bd468f05e16
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libftdi/libftdi.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/netatalk/netatalk.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
-index d0f5ef6..c5590ba 100644
---- a/package/libftdi/libftdi.mk
-+++ b/package/libftdi/libftdi.mk
-@@ -8,7 +8,7 @@ LIBFTDI_SOURCE = libftdi-$(LIBFTDI_VERSION).tar.gz
- LIBFTDI_SITE = http://www.intra2net.com/en/developer/libftdi/download/
- LIBFTDI_DEPENDENCIES = libusb-compat libusb
- LIBFTDI_INSTALL_STAGING = YES
--
-+LIBFTDI_CONFIG_SCRIPTS = libftdi-config
- LIBFTDI_AUTORECONF = YES
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index 243d3f7..a366644 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -8,6 +8,7 @@ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NET
+ NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
  
- LIBFDTI_CONF_OPT = --without-examples
+ NETATALK_AUTORECONF = YES
++NETATALK_CONFIG_SCRIPTS = netatalk-config
+ 
+ NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error
+ NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99"
