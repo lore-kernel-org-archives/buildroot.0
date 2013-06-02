@@ -1,53 +1,44 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 02 Jun 2013 21:21:54 -0000
-Subject: [Buildroot] [git commit] Choose xz compressed tarball for linux
-	kernel.
-Message-ID: <20130602212048.8B5EB9A6A7@busybox.osuosl.org>
+Date: Sun, 02 Jun 2013 21:21:55 -0000
+Subject: [Buildroot] [git commit] httping: bump to version 2.2.1
+Message-ID: <20130602212049.C1A409A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=98b5cc3eb4d4103b2149325b98a5e93e68c68dd8
+commit: http://git.buildroot.net/buildroot/commit/?id=a2f30cacd95d7d850a22a6824ec748e448b1e772
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Prefer xz compressed tarball so some bandwidth is saved for kernel headers
-and kernel itself downloads.
-
-Signed-off-by: Ra??l S??nchez Siles <rasasi78@gmail.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/linux.mk                             |    2 +-
- toolchain/kernel-headers/kernel-headers.mk |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/httping/httping.mk |    9 +++++++--
+ 1 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index d375cf0..3115564 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -16,7 +16,7 @@ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
- LINUX_SITE_METHOD = git
- else
--LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
-+LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
- # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
- # to use the $(word) function. We support versions such as 3.1,
- # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
-diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
-index adf7bc4..b5ae322 100644
---- a/toolchain/kernel-headers/kernel-headers.mk
-+++ b/toolchain/kernel-headers/kernel-headers.mk
-@@ -31,8 +31,8 @@ LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v2.6/
- else
- LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v3.x/
- endif
--LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
--LINUX_HEADERS_CAT:=$(BZCAT)
-+LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.xz
-+LINUX_HEADERS_CAT:=$(XZCAT)
- LINUX_HEADERS_UNPACK_DIR:=$(TOOLCHAIN_DIR)/linux-$(LINUX_HEADERS_VERSION)
- LINUX_HEADERS_DIR:=$(TOOLCHAIN_DIR)/linux
+diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+index 2ebc75e..8f7cb97 100644
+--- a/package/httping/httping.mk
++++ b/package/httping/httping.mk
+@@ -4,13 +4,18 @@
+ #
+ #############################################################
+ 
+-HTTPING_VERSION = 1.6
++HTTPING_VERSION = 2.2.1
+ HTTPING_SOURCE = httping-$(HTTPING_VERSION).tgz
+ HTTPING_SITE = http://www.vanheusden.com/httping
+ HTTPING_LICENSE = GPLv2
+ HTTPING_LICENSE_FILES = license.txt
+-HTTPING_DEPENDENCIES = $(if $(BR2_PACKAGE_OPENSSL),openssl)
++HTTPING_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
++	$(if $(BR2_PACKAGE_NCURSES),ncurses) \
++	$(if $(BR2_PACKAGE_FFTW),fftw)
+ HTTPING_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) \
++	FW=$(if $(BR2_PACKAGE_FFTW),yes,no) \
++	NC=$(if $(BR2_PACKAGE_NCURSES),yes,no) \
+ 	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
+ 	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no)
  
