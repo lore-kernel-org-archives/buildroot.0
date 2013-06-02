@@ -1,31 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 02 Jun 2013 21:20:47 -0000
-Subject: [Buildroot] [git commit] gsl: handle gsl-config script
-Message-ID: <20130602212043.A654B9A6A7@busybox.osuosl.org>
+Date: Sun, 02 Jun 2013 21:21:38 -0000
+Subject: [Buildroot] [git commit] imlib2: handle imlib2-config script
+Message-ID: <20130602212044.91AE69A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3a91b976b7c12a46536f12b430b3af4335556a09
+commit: http://git.buildroot.net/buildroot/commit/?id=24b950f76f5f88817991bb9238356325dc43bba6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gsl/gsl.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/imlib2/imlib2.mk |    6 ++----
+ 1 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
-index 6591591..ef426cf 100644
---- a/package/gsl/gsl.mk
-+++ b/package/gsl/gsl.mk
-@@ -9,6 +9,7 @@ GSL_SITE = $(BR2_GNU_MIRROR)/gsl
- GSL_INSTALL_STAGING = YES
- GSL_LICENSE = GPLv3
- GSL_LICENSE_FILES = COPYING
-+GSL_CONFIG_SCRIPTS = gsl-config
+diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
+index c7029ae..cec6706 100644
+--- a/package/imlib2/imlib2.mk
++++ b/package/imlib2/imlib2.mk
+@@ -12,6 +12,7 @@ IMLIB2_LICENSE_FILES = COPYING
+ IMLIB2_INSTALL_STAGING = YES
+ IMLIB2_DEPENDENCIES = host-pkgconf freetype
+ IMLIB2_CONF_OPT = --with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config
++IMLIB2_CONFIG_SCRIPTS = imlib2-config
  
- # uClibc pretends to have fenv support as it installs <fenv.h>, but in
- # practice, it only implements it for i386. Problem reported upstream
+ ifeq ($(BR2_PACKAGE_IMLIB2_X),y)
+ 	IMLIB2_CONF_OPT += --with-x
+@@ -57,10 +58,7 @@ endif
+ 
+ # drop -L<dir> from linker flags
+ define IMLIB2_FIXUP_IMLIB2_CONFIG
+-	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
+-		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
+-		-e  's/-L[^ ]*//g' \
+-		$(STAGING_DIR)/usr/bin/imlib2-config
++	$(SED) 's/-L[^ ]*//g' $(STAGING_DIR)/usr/bin/imlib2-config
+ endef
+ 
+ IMLIB2_POST_INSTALL_STAGING_HOOKS += IMLIB2_FIXUP_IMLIB2_CONFIG
