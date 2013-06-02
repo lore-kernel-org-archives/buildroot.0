@@ -1,50 +1,98 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 02 Jun 2013 22:21:49 +0200
-Subject: [Buildroot] [PATCH] Add support for the Calao-systems
-	TNY-A9G20-LPW
-In-Reply-To: <1370017868-30944-1-git-send-email-gregory.hermant@calao-systems.com>
- (Gregory Hermant's message of "Fri, 31 May 2013 18:31:08 +0200")
-References: <1370017868-30944-1-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <87d2s4w9eq.fsf@dell.be.48ers.dk>
+Date: Sun, 02 Jun 2013 23:17:46 +0200
+Subject: [Buildroot] [PATCH v2] ecryptfs-utils: new package
+In-Reply-To: <1370031175-31230-1-git-send-email-marcin@bis.org.pl> (Marcin
+ Bis's message of "Fri, 31 May 2013 22:12:55 +0200")
+References: <20130531202622.6576897d@skate>
+ <1370031175-31230-1-git-send-email-marcin@bis.org.pl>
+Message-ID: <877gicw6th.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gregory" == Gregory Hermant <gregory.hermant@calao-systems.com> writes:
+>>>>> "Marcin" == Marcin Bis <marcin@bis.org.pl> writes:
 
- Gregory> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
- Gregory> +++ b/configs/calao_tny_a9g20_lpw_defconfig
- Gregory> @@ -0,0 +1,15 @@
- Gregory> +BR2_arm=y
- Gregory> +BR2_PACKAGE_HOST_SAM_BA=y
+ Marcin> The following patch adds support for ecryptfs-utils.
+ Marcin> http://ecryptfs.org/
 
-I noticed that you've enabled devtmpfs in the kernel config, so I added
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
+ Marcin> Signed-off-by: Marcin Bis <marcin@bis.org.pl>
+ Marcin> ---
+ Marcin>  package/Config.in                        |    1 +
+ Marcin>  package/ecryptfs-utils/Config.in         |   22 ++++++++++++++++++++++
+ Marcin>  package/ecryptfs-utils/ecryptfs-utils.mk |   28 ++++++++++++++++++++++++++++
+ Marcin>  3 files changed, 51 insertions(+), 0 deletions(-)
+ Marcin>  create mode 100644 package/ecryptfs-utils/Config.in
+ Marcin>  create mode 100644 package/ecryptfs-utils/ecryptfs-utils.mk
 
- Gregory> +BR2_TARGET_ROOTFS_UBIFS=y
- Gregory> +BR2_TARGET_AT91BOOTSTRAP=y
- Gregory> +BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR="board/calao/tny-a9g20-lpw/"
- Gregory> +BR2_TARGET_AT91BOOTSTRAP_BOARD="tny_a9g20_lpw"
- Gregory> +BR2_TARGET_AT91BOOTSTRAP_NANDFLASH=y
- Gregory> +BR2_TARGET_BAREBOX=y
- Gregory> +BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="tny_a9g20"
+ Marcin> diff --git a/package/Config.in b/package/Config.in
+ Marcin> index d980871..54711c8 100644
+ Marcin> --- a/package/Config.in
+ Marcin> +++ b/package/Config.in
+ Marcin> @@ -194,6 +194,7 @@ source "package/cramfs/Config.in"
+ Marcin>  source "package/curlftpfs/Config.in"
+ Marcin>  source "package/dosfstools/Config.in"
+ Marcin>  source "package/e2fsprogs/Config.in"
+ Marcin> +source "package/ecryptfs-utils/Config.in"
+ Marcin>  source "package/exfat/Config.in"
+ Marcin>  source "package/exfat-utils/Config.in"
+ Marcin>  source "package/f2fs-tools/Config.in"
+ Marcin> diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+ Marcin> new file mode 100644
+ Marcin> index 0000000..8f89e75
+ Marcin> --- /dev/null
+ Marcin> +++ b/package/ecryptfs-utils/Config.in
+ Marcin> @@ -0,0 +1,22 @@
+ Marcin> +config BR2_PACKAGE_ECRYPTFS_UTILS
+ Marcin> +	bool "ecryptfs-utils"
+ Marcin> +	select BR2_PACKAGE_KEYUTILS
+ Marcin> +	select BR2_PACKAGE_LIBNSS
+ Marcin> +	depends on BR2_USE_MMU # keyutils
+ Marcin> +	depends on !BR2_avr32 && !BR2_microblaze # keyutils
+ Marcin> +	depends on BR2_LARGEFILE # libnss
+ Marcin> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
+ Marcin> +	help
+ Marcin> +	  eCryptfs is a POSIX-compliant enterprise cryptographic
+ Marcin> +	  filesystem for Linux. It is stacked on top of any other
+ Marcin> +	  Linux filesystem, it stores cryptographic metadata in the header
+ Marcin> +	  of each file written.
+ Marcin> +	  
+ Marcin> +	  The eCryptfs kernel module is available in all Linux kernels
+ Marcin> +	  since version 2.6.19. This package provides userspace utilities
+ Marcin> +	  needed to mount eCryptfs.
+ Marcin> +	  
+ Marcin> +	  Files are encrypted using a passpthase. Consider building openssl
 
+s/passthase/passphrase/
 
- Gregory> +BR2_LINUX_KERNEL=y
- Gregory> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- Gregory> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/calao/tny-a9g20-lpw/linux-3.9.config"
+ Marcin> +	  for another method.
+ Marcin> +	  
+ Marcin> +	  http://ecryptfs.org
+ Marcin> diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
+ Marcin> new file mode 100644
+ Marcin> index 0000000..32b509f
+ Marcin> --- /dev/null
+ Marcin> +++ b/package/ecryptfs-utils/ecryptfs-utils.mk
+ Marcin> @@ -0,0 +1,28 @@
+ Marcin> +#############################################################
+ Marcin> +#
+ Marcin> +# ecryptfs-utils
+ Marcin> +#
+ Marcin> +##############################################################
+ Marcin> +
+ Marcin> +ECRYPTFS_UTILS_VERSION         = 103
+ Marcin> +ECRYPTFS_UTILS_SOURCE          = ecryptfs-utils_$(ECRYPTFS_UTILS_VERSION).orig.tar.gz
+ Marcin> +ECRYPTFS_UTILS_SITE            = https://launchpad.net/ecryptfs/trunk/$(ECRYPTFS_UTILS_VERSION)/+download
+ Marcin> +ECRYPTFS_UTILS_LICENSE         = GPLv2+
+ Marcin> +ECRYPTFS_UTILS_LICENSE_FILES   = COPYING
+ Marcin> +
+ Marcin> +ECRYPTFS_UTILS_DEPENDENCIES    = keyutils libnss
 
-You should lock the kernel to 3.9 with something like:
+It also needs host-intltool, and >= 0.41, so I had to bump our intltool
+package.
 
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.4"
-
-And also select the same kernel headers version.
-
-I've fixed that and added a few comments to defconfig and committed,
-thanks.
+Committed with these fixes, thanks.
 
 -- 
 Bye, Peter Korsgaard
