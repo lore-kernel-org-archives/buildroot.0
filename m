@@ -1,31 +1,48 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 02 Jun 2013 21:19:17 -0000
-Subject: [Buildroot] [git commit] netatalk: handle netatalk-config script
-Message-ID: <20130602212046.66F879A6A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] liblog4c-localtime: remove whitespace at
+	beginning of lines
+Message-ID: <20130602212047.1655F9A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4b0542d46254fd1c9966e783f5c56bd468f05e16
+commit: http://git.buildroot.net/buildroot/commit/?id=f5058411423de4e250253809549e54151fdb6667
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/netatalk/netatalk.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/liblog4c-localtime/liblog4c-localtime.mk |   20 ++++++++++----------
+ 1 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-index 243d3f7..a366644 100644
---- a/package/netatalk/netatalk.mk
-+++ b/package/netatalk/netatalk.mk
-@@ -8,6 +8,7 @@ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NET
- NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
+diff --git a/package/liblog4c-localtime/liblog4c-localtime.mk b/package/liblog4c-localtime/liblog4c-localtime.mk
+index 3b1642c..492c6ef 100644
+--- a/package/liblog4c-localtime/liblog4c-localtime.mk
++++ b/package/liblog4c-localtime/liblog4c-localtime.mk
+@@ -1,13 +1,13 @@
+- #############################################################
+- #
+- # liblog4c
+- #
+- #############################################################
+- LIBLOG4C_LOCALTIME_VERSION = 1.0
+- LIBLOG4C_LOCALTIME_SITE    = https://github.com/rcmadruga/log4c-localtime/tarball/v$(LIBLOG4C_LOCALTIME_VERSION)
+- LIBLOG4C_LOCALTIME_INSTALL_STAGING = YES
+- LIBLOG4C_LOCALTIME_CONF_OPT = --disable-expattest
+- LIBLOG4C_LOCALTIME_DEPENDENCIES = expat
++#############################################################
++#
++# liblog4c
++#
++#############################################################
++LIBLOG4C_LOCALTIME_VERSION = 1.0
++LIBLOG4C_LOCALTIME_SITE    = https://github.com/rcmadruga/log4c-localtime/tarball/v$(LIBLOG4C_LOCALTIME_VERSION)
++LIBLOG4C_LOCALTIME_INSTALL_STAGING = YES
++LIBLOG4C_LOCALTIME_CONF_OPT = --disable-expattest
++LIBLOG4C_LOCALTIME_DEPENDENCIES = expat
  
- NETATALK_AUTORECONF = YES
-+NETATALK_CONFIG_SCRIPTS = netatalk-config
- 
- NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error
- NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99"
+ define LIBLOG4C_LOCALTIME_FIX_CONFIGURE_PERMS
+ 	chmod +x $(@D)/configure
