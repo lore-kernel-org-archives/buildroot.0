@@ -1,160 +1,518 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 02 Jun 2013 21:21:56 -0000
-Subject: [Buildroot] [git commit] package/dtc: new package
-Message-ID: <20130602212051.C0D2C9A6A7@busybox.osuosl.org>
+Date: Sun, 02 Jun 2013 21:22:00 -0000
+Subject: [Buildroot] [git commit] beaglebone: update to linux 3.8
+Message-ID: <20130602212052.73C479A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=47f578e3c2db53caf51fad9ec24e71ff1606c862
+commit: http://git.buildroot.net/buildroot/commit/?id=0012b7dcdb7f5cb5e6f22f08fcc6124979c1c9ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-dtc is the Device Tree Compiler, and manipulates device trees.
+As the beaglebone support is mainlined, there's no support for the old
+board setup files, and the only supported run-time configuration is through
+the device tree.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+We're also setting the kernel headers to follow the 3.8 series.
+
+Signed-off-by: Anders Darander <anders@chargestorm.se>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                          |    1 +
- package/dtc/Config.in                      |    9 +++++++
- package/dtc/dtc-extra_cflags.patch         |   28 +++++++++++++++++++++++
- package/dtc/dtc-separate-lib-install.patch |   28 +++++++++++++++++++++++
- package/dtc/dtc.mk                         |   33 ++++++++++++++++++++++++++++
- 5 files changed, 99 insertions(+), 0 deletions(-)
+ board/beaglebone/linux-3.2.9.config |  252 -----------------------------------
+ board/beaglebone/linux-3.8.config   |  201 ++++++++++++++++++++++++++++
+ configs/beaglebone_defconfig        |   10 +-
+ 3 files changed, 207 insertions(+), 256 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 55a38b9..1dee2ab 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -459,6 +459,7 @@ endmenu
+diff --git a/board/beaglebone/linux-3.2.9.config b/board/beaglebone/linux-3.2.9.config
+deleted file mode 100644
+index 4052f6e..0000000
+--- a/board/beaglebone/linux-3.2.9.config
++++ /dev/null
+@@ -1,252 +0,0 @@
+-CONFIG_EXPERIMENTAL=y
+-# CONFIG_LOCALVERSION_AUTO is not set
+-CONFIG_DEFAULT_HOSTNAME="beaglebone"
+-CONFIG_SYSVIPC=y
+-CONFIG_POSIX_MQUEUE=y
+-CONFIG_BSD_PROCESS_ACCT=y
+-CONFIG_BSD_PROCESS_ACCT_V3=y
+-CONFIG_FHANDLE=y
+-CONFIG_SPARSE_IRQ=y
+-CONFIG_IKCONFIG=y
+-CONFIG_IKCONFIG_PROC=y
+-CONFIG_NAMESPACES=y
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+-CONFIG_SYSCTL_SYSCALL=y
+-CONFIG_KALLSYMS_ALL=y
+-CONFIG_EMBEDDED=y
+-CONFIG_SLAB=y
+-CONFIG_PROFILING=y
+-CONFIG_OPROFILE=m
+-CONFIG_MODULES=y
+-CONFIG_MODULE_FORCE_LOAD=y
+-CONFIG_MODULE_UNLOAD=y
+-CONFIG_MODULE_FORCE_UNLOAD=y
+-CONFIG_MODVERSIONS=y
+-CONFIG_BLK_DEV_INTEGRITY=y
+-CONFIG_ARCH_OMAP=y
+-CONFIG_OMAP_MUX_DEBUG=y
+-CONFIG_OMAP_MBOX_FWK=y
+-# CONFIG_OMAP_32K_TIMER is not set
+-# CONFIG_MACH_OMAP_GENERIC is not set
+-# CONFIG_ARCH_OMAP2 is not set
+-# CONFIG_ARCH_OMAP4 is not set
+-# CONFIG_SOC_OMAP3430 is not set
+-# CONFIG_MACH_OMAP3_BEAGLE is not set
+-# CONFIG_MACH_DEVKIT8000 is not set
+-# CONFIG_MACH_OMAP_LDP is not set
+-# CONFIG_MACH_OMAP3530_LV_SOM is not set
+-# CONFIG_MACH_OMAP3_TORPEDO is not set
+-# CONFIG_MACH_ENCORE is not set
+-# CONFIG_MACH_OVERO is not set
+-# CONFIG_MACH_OMAP3EVM is not set
+-# CONFIG_MACH_OMAP3517EVM is not set
+-# CONFIG_MACH_OMAP3_PANDORA is not set
+-# CONFIG_MACH_OMAP3_TOUCHBOOK is not set
+-# CONFIG_MACH_OMAP_3430SDP is not set
+-# CONFIG_MACH_NOKIA_RM680 is not set
+-# CONFIG_MACH_NOKIA_RX51 is not set
+-# CONFIG_MACH_OMAP_ZOOM2 is not set
+-# CONFIG_MACH_OMAP_ZOOM3 is not set
+-# CONFIG_MACH_CM_T35 is not set
+-# CONFIG_MACH_CM_T3517 is not set
+-# CONFIG_MACH_IGEP0020 is not set
+-# CONFIG_MACH_IGEP0030 is not set
+-# CONFIG_MACH_SBC3530 is not set
+-# CONFIG_MACH_OMAP_3630SDP is not set
+-# CONFIG_MACH_TI8168EVM is not set
+-# CONFIG_MACH_TI8148EVM is not set
+-# CONFIG_MACH_AM335XIAEVM is not set
+-CONFIG_OMAP3_EDMA=y
+-CONFIG_ARM_THUMBEE=y
+-CONFIG_ARM_ERRATA_430973=y
+-CONFIG_NO_HZ=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_THUMB2_KERNEL=y
+-CONFIG_ZBOOT_ROM_TEXT=0x0
+-CONFIG_ZBOOT_ROM_BSS=0x0
+-CONFIG_CMDLINE=" debug "
+-CONFIG_AUTO_ZRELADDR=y
+-CONFIG_CPU_FREQ=y
+-CONFIG_CPU_FREQ_STAT_DETAILS=y
+-CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE=y
+-CONFIG_CPU_FREQ_GOV_POWERSAVE=y
+-CONFIG_CPU_FREQ_GOV_ONDEMAND=y
+-CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
+-CONFIG_BINFMT_MISC=y
+-# CONFIG_SUSPEND is not set
+-CONFIG_PM_DEBUG=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_XFRM_USER=y
+-CONFIG_NET_KEY=y
+-CONFIG_INET=y
+-CONFIG_IP_MULTICAST=y
+-# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET_XFRM_MODE_BEET is not set
+-# CONFIG_INET_LRO is not set
+-# CONFIG_INET_DIAG is not set
+-# CONFIG_IPV6 is not set
+-# CONFIG_WIRELESS is not set
+-CONFIG_RFKILL_REGULATOR=m
+-CONFIG_DEVTMPFS=y
+-CONFIG_DEVTMPFS_MOUNT=y
+-CONFIG_CONNECTOR=y
+-CONFIG_BLK_DEV_LOOP=y
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_BLK_DEV_RAM_COUNT=2
+-CONFIG_BLK_DEV_RAM_SIZE=65536
+-CONFIG_MISC_DEVICES=y
+-CONFIG_BMP085=m
+-CONFIG_EEPROM_AT24=y
+-CONFIG_EEPROM_93CX6=m
+-CONFIG_SENSORS_LIS3_I2C=y
+-CONFIG_NETDEVICES=y
+-CONFIG_MII=y
+-# CONFIG_NET_VENDOR_BROADCOM is not set
+-# CONFIG_NET_VENDOR_CHELSIO is not set
+-# CONFIG_NET_VENDOR_FARADAY is not set
+-# CONFIG_NET_VENDOR_INTEL is not set
+-# CONFIG_NET_VENDOR_MARVELL is not set
+-# CONFIG_NET_VENDOR_MICREL is not set
+-# CONFIG_NET_VENDOR_MICROCHIP is not set
+-# CONFIG_NET_VENDOR_NATSEMI is not set
+-# CONFIG_NET_VENDOR_SEEQ is not set
+-# CONFIG_NET_VENDOR_SMSC is not set
+-# CONFIG_NET_VENDOR_STMICRO is not set
+-CONFIG_TI_CPSW=y
+-CONFIG_SMSC_PHY=y
+-# CONFIG_WLAN is not set
+-# CONFIG_INPUT_MOUSEDEV is not set
+-CONFIG_INPUT_EVDEV=y
+-# CONFIG_KEYBOARD_ATKBD is not set
+-CONFIG_KEYBOARD_GPIO=y
+-# CONFIG_MOUSE_PS2 is not set
+-CONFIG_INPUT_MISC=y
+-CONFIG_INPUT_AD714X=m
+-CONFIG_INPUT_BMA150=m
+-CONFIG_INPUT_MMA8450=m
+-CONFIG_INPUT_MPU3050=m
+-CONFIG_INPUT_ATI_REMOTE2=m
+-CONFIG_INPUT_KEYSPAN_REMOTE=m
+-CONFIG_INPUT_KXTJ9=m
+-CONFIG_INPUT_POWERMATE=m
+-CONFIG_INPUT_YEALINK=m
+-CONFIG_INPUT_CM109=m
+-CONFIG_INPUT_TWL4030_PWRBUTTON=y
+-CONFIG_INPUT_TWL4030_VIBRA=m
+-CONFIG_INPUT_TWL6040_VIBRA=m
+-CONFIG_INPUT_UINPUT=m
+-CONFIG_INPUT_PCF8574=m
+-CONFIG_INPUT_GPIO_ROTARY_ENCODER=m
+-CONFIG_INPUT_ADXL34X=m
+-CONFIG_INPUT_CMA3000=m
+-CONFIG_INPUT_CMA3000_I2C=m
+-# CONFIG_SERIO is not set
+-CONFIG_VT_HW_CONSOLE_BINDING=y
+-# CONFIG_LEGACY_PTYS is not set
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_8250_CONSOLE=y
+-CONFIG_SERIAL_8250_NR_UARTS=32
+-CONFIG_SERIAL_8250_EXTENDED=y
+-CONFIG_SERIAL_8250_MANY_PORTS=y
+-CONFIG_SERIAL_8250_SHARE_IRQ=y
+-CONFIG_SERIAL_8250_DETECT_IRQ=y
+-CONFIG_SERIAL_8250_RSA=y
+-CONFIG_HW_RANDOM=y
+-CONFIG_RAW_DRIVER=m
+-CONFIG_I2C_CHARDEV=y
+-CONFIG_SPI=y
+-CONFIG_SPI_GPIO=m
+-CONFIG_SPI_OMAP24XX=y
+-CONFIG_SPI_SPIDEV=m
+-CONFIG_DEBUG_GPIO=y
+-CONFIG_GPIO_SYSFS=y
+-CONFIG_GPIO_TWL4030=y
+-CONFIG_GENERIC_PWM=y
+-CONFIG_DAVINCI_EHRPWM=y
+-CONFIG_ECAP_PWM=y
+-CONFIG_POWER_SUPPLY=y
+-# CONFIG_HWMON is not set
+-CONFIG_WATCHDOG=y
+-CONFIG_OMAP_WATCHDOG=y
+-CONFIG_TWL4030_WATCHDOG=y
+-CONFIG_MFD_TPS65217=y
+-CONFIG_REGULATOR_DUMMY=y
+-CONFIG_REGULATOR_FIXED_VOLTAGE=y
+-CONFIG_REGULATOR_VIRTUAL_CONSUMER=y
+-CONFIG_REGULATOR_USERSPACE_CONSUMER=y
+-CONFIG_REGULATOR_GPIO=y
+-CONFIG_REGULATOR_TWL4030=y
+-CONFIG_REGULATOR_TPS65023=y
+-CONFIG_REGULATOR_TPS6507X=y
+-CONFIG_REGULATOR_TPS65217=y
+-CONFIG_DISPLAY_SUPPORT=y
+-CONFIG_HIDRAW=y
+-CONFIG_USB=y
+-CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+-CONFIG_USB_DEVICEFS=y
+-CONFIG_USB_MUSB_HDRC=y
+-CONFIG_USB_MUSB_TI81XX_GLUE=y
+-CONFIG_USB_TI_CPPI41_DMA_HW=y
+-CONFIG_USB_ACM=y
+-CONFIG_USB_LIBUSUAL=y
+-CONFIG_USB_GADGET=y
+-CONFIG_USB_GADGET_MUSB_HDRC=y
+-CONFIG_USB_ETH=m
+-CONFIG_USB_MASS_STORAGE=m
+-CONFIG_USB_G_SERIAL=m
+-CONFIG_USB_CDC_COMPOSITE=m
+-CONFIG_USB_G_MULTI=m
+-CONFIG_USB_G_HID=m
+-CONFIG_MMC=y
+-CONFIG_MMC_UNSAFE_RESUME=y
+-CONFIG_MMC_OMAP_HS=y
+-CONFIG_NEW_LEDS=y
+-CONFIG_LEDS_CLASS=y
+-CONFIG_LEDS_GPIO=y
+-CONFIG_LEDS_TRIGGERS=y
+-CONFIG_LEDS_TRIGGER_TIMER=y
+-CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+-CONFIG_LEDS_TRIGGER_BACKLIGHT=y
+-CONFIG_LEDS_TRIGGER_GPIO=y
+-CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
+-CONFIG_UIO=m
+-CONFIG_UIO_PDRV=m
+-CONFIG_UIO_PDRV_GENIRQ=m
+-CONFIG_UIO_PRUSS=m
+-CONFIG_STAGING=y
+-CONFIG_IIO=y
+-CONFIG_IIO_BUFFER=y
+-CONFIG_IIO_SW_RING=y
+-CONFIG_IIO_KFIFO_BUF=y
+-# CONFIG_IOMMU_SUPPORT is not set
+-CONFIG_PM_DEVFREQ=y
+-CONFIG_DEVFREQ_GOV_USERSPACE=y
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT4_FS=y
+-CONFIG_EXT4_FS_POSIX_ACL=y
+-CONFIG_FANOTIFY=y
+-CONFIG_MSDOS_FS=y
+-CONFIG_VFAT_FS=y
+-CONFIG_TMPFS=y
+-CONFIG_TMPFS_POSIX_ACL=y
+-# CONFIG_NETWORK_FILESYSTEMS is not set
+-CONFIG_NLS_CODEPAGE_437=y
+-CONFIG_NLS_ISO8859_1=y
+-CONFIG_NLS_UTF8=y
+-CONFIG_PRINTK_TIME=y
+-CONFIG_MAGIC_SYSRQ=y
+-CONFIG_DEBUG_FS=y
+-CONFIG_DETECT_HUNG_TASK=y
+-CONFIG_SCHEDSTATS=y
+-CONFIG_TIMER_STATS=y
+-# CONFIG_DEBUG_BUGVERBOSE is not set
+-# CONFIG_FTRACE is not set
+-CONFIG_DEBUG_LL=y
+-CONFIG_EARLY_PRINTK=y
+-CONFIG_DEBUG_JTAG_ENABLE=y
+-# CONFIG_CRYPTO_ANSI_CPRNG is not set
+-# CONFIG_CRYPTO_HW is not set
+diff --git a/board/beaglebone/linux-3.8.config b/board/beaglebone/linux-3.8.config
+new file mode 100644
+index 0000000..c083c70
+--- /dev/null
++++ b/board/beaglebone/linux-3.8.config
+@@ -0,0 +1,201 @@
++CONFIG_EXPERIMENTAL=y
++CONFIG_DEFAULT_HOSTNAME="beaglebone"
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_BSD_PROCESS_ACCT=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_LOG_BUF_SHIFT=16
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_CC_OPTIMIZE_FOR_SIZE=y
++CONFIG_EMBEDDED=y
++CONFIG_SLAB=y
++CONFIG_PROFILING=y
++CONFIG_OPROFILE=m
++CONFIG_KPROBES=y
++CONFIG_MODULES=y
++CONFIG_MODULE_FORCE_LOAD=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODULE_FORCE_UNLOAD=y
++CONFIG_MODVERSIONS=y
++# CONFIG_BLK_DEV_BSG is not set
++CONFIG_ARCH_OMAP=y
++CONFIG_OMAP_RESET_CLOCKS=y
++CONFIG_OMAP_MUX_DEBUG=y
++# CONFIG_ARCH_OMAP2 is not set
++# CONFIG_ARCH_OMAP3 is not set
++# CONFIG_ARCH_OMAP4 is not set
++CONFIG_ARM_THUMBEE=y
++CONFIG_ARM_ERRATA_720789=y
++CONFIG_ARM_ARCH_TIMER=y
++CONFIG_ZBOOT_ROM_TEXT=0x0
++CONFIG_ZBOOT_ROM_BSS=0x0
++CONFIG_CMDLINE="root=/dev/mmcblk0p2 rootwait console=ttyO2,115200"
++CONFIG_KEXEC=y
++CONFIG_AUTO_ZRELADDR=y
++CONFIG_CPU_FREQ=y
++CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
++CONFIG_CPU_FREQ_GOV_POWERSAVE=y
++CONFIG_CPU_FREQ_GOV_USERSPACE=y
++CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
++CONFIG_NEON=y
++CONFIG_BINFMT_MISC=y
++CONFIG_PM_DEBUG=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_XFRM_USER=y
++CONFIG_NET_KEY=y
++CONFIG_NET_KEY_MIGRATE=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++CONFIG_IP_PNP_BOOTP=y
++CONFIG_IP_PNP_RARP=y
++# CONFIG_INET_LRO is not set
++# CONFIG_IPV6 is not set
++# CONFIG_WIRELESS is not set
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_OMAP_OCP2SCP=y
++CONFIG_OMAP_INTERCONNECT=y
++CONFIG_CONNECTOR=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_SIZE=16384
++CONFIG_EEPROM_93CX6=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_SCSI_MULTI_LUN=y
++CONFIG_SCSI_SCAN_ASYNC=y
++CONFIG_ATA=y
++# CONFIG_SATA_PMP is not set
++CONFIG_SATA_AHCI_PLATFORM=m
++# CONFIG_ATA_SFF is not set
++CONFIG_NETDEVICES=y
++CONFIG_MII=y
++# CONFIG_NET_VENDOR_BROADCOM is not set
++# CONFIG_NET_VENDOR_CIRRUS is not set
++# CONFIG_NET_VENDOR_FARADAY is not set
++# CONFIG_NET_VENDOR_INTEL is not set
++# CONFIG_NET_VENDOR_MARVELL is not set
++# CONFIG_NET_VENDOR_MICREL is not set
++# CONFIG_NET_VENDOR_MICROCHIP is not set
++# CONFIG_NET_VENDOR_NATSEMI is not set
++# CONFIG_NET_VENDOR_SEEQ is not set
++# CONFIG_NET_VENDOR_SMSC is not set
++# CONFIG_NET_VENDOR_STMICRO is not set
++CONFIG_TI_CPSW=y
++# CONFIG_NET_VENDOR_WIZNET is not set
++CONFIG_SMSC_PHY=y
++# CONFIG_WLAN is not set
++CONFIG_INPUT_POLLDEV=m
++# CONFIG_INPUT_MOUSEDEV is not set
++# CONFIG_INPUT_KEYBOARD is not set
++# CONFIG_INPUT_MOUSE is not set
++CONFIG_INPUT_MISC=y
++CONFIG_VT_HW_CONSOLE_BINDING=y
++# CONFIG_LEGACY_PTYS is not set
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_8250_NR_UARTS=32
++CONFIG_SERIAL_8250_EXTENDED=y
++CONFIG_SERIAL_8250_MANY_PORTS=y
++CONFIG_SERIAL_8250_SHARE_IRQ=y
++CONFIG_SERIAL_8250_DETECT_IRQ=y
++CONFIG_SERIAL_8250_RSA=y
++CONFIG_HW_RANDOM=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_SPI=y
++CONFIG_SPI_OMAP24XX=y
++CONFIG_DEBUG_PINCTRL=y
++CONFIG_PINCTRL_SINGLE=y
++CONFIG_DEBUG_GPIO=y
++CONFIG_GPIO_SYSFS=y
++CONFIG_W1=y
++CONFIG_POWER_SUPPLY=y
++CONFIG_THERMAL=y
++CONFIG_THERMAL_GOV_FAIR_SHARE=y
++CONFIG_THERMAL_GOV_USER_SPACE=y
++CONFIG_CPU_THERMAL=y
++CONFIG_WATCHDOG=y
++CONFIG_OMAP_WATCHDOG=y
++CONFIG_MFD_TPS65217=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_REGULATOR_TPS65023=y
++CONFIG_REGULATOR_TPS6507X=y
++CONFIG_REGULATOR_TPS65217=y
++CONFIG_USB=y
++CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
++CONFIG_USB_SUSPEND=y
++CONFIG_USB_MON=y
++CONFIG_USB_MUSB_HDRC=m
++CONFIG_USB_MUSB_AM35X=m
++CONFIG_USB_STORAGE=y
++CONFIG_USB_TEST=y
++CONFIG_OMAP_USB2=m
++CONFIG_OMAP_USB3=m
++CONFIG_OMAP_CONTROL_USB=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_GADGET_DEBUG=y
++CONFIG_USB_GADGET_DEBUG_FILES=y
++CONFIG_USB_GADGET_DEBUG_FS=y
++CONFIG_USB_ZERO=m
++CONFIG_USB_ETH=m
++CONFIG_USB_ETH_EEM=y
++CONFIG_USB_MASS_STORAGE=m
++CONFIG_USB_G_MULTI=m
++CONFIG_USB_G_MULTI_CDC=y
++CONFIG_MMC=y
++CONFIG_MMC_UNSAFE_RESUME=y
++CONFIG_SDIO_UART=y
++CONFIG_MMC_OMAP=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGERS=y
++CONFIG_LEDS_TRIGGER_TIMER=y
++CONFIG_LEDS_TRIGGER_ONESHOT=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_LEDS_TRIGGER_BACKLIGHT=y
++CONFIG_LEDS_TRIGGER_CPU=y
++CONFIG_LEDS_TRIGGER_GPIO=y
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_OMAP=y
++CONFIG_DMADEVICES=y
++CONFIG_TI_EDMA=y
++CONFIG_DMA_OMAP=y
++CONFIG_STAGING=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT3_FS=y
++# CONFIG_EXT3_FS_XATTR is not set
++CONFIG_EXT4_FS=y
++CONFIG_QUOTA=y
++CONFIG_QFMT_V2=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS=y
++# CONFIG_MISC_FILESYSTEMS is not set
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_PRINTK_TIME=y
++CONFIG_MAGIC_SYSRQ=y
++CONFIG_SCHEDSTATS=y
++CONFIG_TIMER_STATS=y
++CONFIG_PROVE_LOCKING=y
++# CONFIG_DEBUG_BUGVERBOSE is not set
++CONFIG_DEBUG_INFO=y
++CONFIG_CRYPTO_MANAGER=m
++CONFIG_CRYPTO_SHA256=m
++CONFIG_CRYPTO_DEFLATE=y
++CONFIG_CRYPTO_LZO=y
++# CONFIG_CRYPTO_ANSI_CPRNG is not set
++CONFIG_CRC_CCITT=y
++CONFIG_CRC_T10DIF=y
++CONFIG_CRC_ITU_T=y
++CONFIG_CRC7=y
++CONFIG_LIBCRC32C=y
++CONFIG_AVERAGE=y
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 2177068..38a63a1 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_EXT2=y
  
- menu "Hardware handling"
- source "package/ccid/Config.in"
-+source "package/dtc/Config.in"
- source "package/imx-lib/Config.in"
- source "package/lcdapi/Config.in"
- source "package/libaio/Config.in"
-diff --git a/package/dtc/Config.in b/package/dtc/Config.in
-new file mode 100644
-index 0000000..e1f6e86
---- /dev/null
-+++ b/package/dtc/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_DTC
-+	bool "dtc"
-+	help
-+	  The Device Tree Compiler, dtc, takes as input a device-tree in
-+	  a given format and outputs a device-tree in another format.
-+
-+	  Note that only the library is installed for now.
-+
-+	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
-diff --git a/package/dtc/dtc-extra_cflags.patch b/package/dtc/dtc-extra_cflags.patch
-new file mode 100644
-index 0000000..3ce699b
---- /dev/null
-+++ b/package/dtc/dtc-extra_cflags.patch
-@@ -0,0 +1,28 @@
-+Makefile: append the CFLAGS to existing ones
-+
-+Allow the user to pass custom CFLAGS (eg. optimisation flags).
-+
-+Do not use EXTRA_CFLAGS, append to existing CFLAGS with +=  (Arnout)
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Cc: Arnout Vandecappelle <arnout@mind.be>
-+
-+---
-+Patch not sent upstream.
-+
-+Although not specific to buildroot, I am not sure this is the best
-+way to handle user-supplied CFLAGS.
-+
-+diff -durN dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile
-+--- dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile	2012-10-22 22:02:47.541240846 +0200
-++++ dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile	2012-10-22 22:03:21.151047833 +0200
-+@@ -18,7 +18,8 @@
-+ CPPFLAGS = -I libfdt -I .
-+ WARNINGS = -Werror -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
-+ 	-Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls
-+-CFLAGS = -g -Os -fPIC -Werror $(WARNINGS)
-++CFLAGS ?= -g -Os
-++CFLAGS += -fPIC $(WARNINGS)
-+ 
-+ BISON = bison
-+ LEX = flex
-diff --git a/package/dtc/dtc-separate-lib-install.patch b/package/dtc/dtc-separate-lib-install.patch
-new file mode 100644
-index 0000000..c86d587
---- /dev/null
-+++ b/package/dtc/dtc-separate-lib-install.patch
-@@ -0,0 +1,28 @@
-+Makefile: add a rule to only install libfdt
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Patch not sent upstream.
-+
-+It's really specific to buildroot, and is probably not
-+good (aka generic) enough to be pushed upstream.
-+
-+diff --git a/Makefile b/Makefile
-+index 1169e6c..39e7190 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -160,10 +160,12 @@ endif
-+ # intermediate target and building them again "for real"
-+ .SECONDARY: $(DTC_GEN_SRCS) $(CONVERT_GEN_SRCS)
-+ 
-+-install: all $(SCRIPTS)
-++install: all $(SCRIPTS) libfdt_install
-+ 	@$(VECHO) INSTALL
-+ 	$(INSTALL) -d $(DESTDIR)$(BINDIR)
-+ 	$(INSTALL) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
-++
-++libfdt_install: libfdt
-+ 	$(INSTALL) -d $(DESTDIR)$(LIBDIR)
-+ 	$(INSTALL) $(LIBFDT_lib) $(DESTDIR)$(LIBDIR)
-+ 	ln -sf $(notdir $(LIBFDT_lib)) $(DESTDIR)$(LIBDIR)/$(LIBFDT_soname)
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-new file mode 100644
-index 0000000..f05b09d
---- /dev/null
-+++ b/package/dtc/dtc.mk
-@@ -0,0 +1,33 @@
-+#############################################################
-+#
-+# dtc
-+#
-+#############################################################
-+
-+DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
-+DTC_SITE            = git://git.jdl.com/software/dtc.git
-+DTC_LICENSE         = GPLv2+/BSD-2c
-+DTC_LICENSE_FILES   = README.license GPL
-+# Note: the dual-license only applies to the library.
-+#       The DT compiler (dtc) is GPLv2+, but we do not install it.
-+DTC_INSTALL_STAGING = YES
-+
-+define DTC_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS)    \
-+	$(MAKE) -C $(@D) PREFIX=/usr libfdt
-+endef
-+
-+#??libfdt_install is our own install rule added by our patch
-+define DTC_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
-+endef
-+
-+define DTC_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr libfdt_install
-+endef
-+
-+define DTC_CLEAN_CMDS
-+	$(MAKE) -C $(@D) libfdt_clean
-+endef
-+
-+$(eval $(generic-package))
+ # lock down headers to avoid breaking with new defaults
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.2.9"
++BR2_DEFAULT_KERNEL_VERSION="3.8.12"
+ 
+ # bootloader
+ BR2_TARGET_UBOOT=y
+@@ -30,7 +30,9 @@ BR2_TARGET_UBOOT_SPL_NAME="MLO"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/koenkooi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="linux-ti33x-psp-3.2-r5a+gitr09e9651bcf2ee8d86685f2a8075bc6557b1d3b91"
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="935f6c2f82056d538b528272e2bdbb5c08d69a58"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.2.9.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.8.config"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-bone"
