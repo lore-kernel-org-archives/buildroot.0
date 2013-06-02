@@ -1,31 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 02 Jun 2013 21:21:53 -0000
-Subject: [Buildroot] [git commit] python3: remove another config script
-Message-ID: <20130602212047.F007C9A6A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] ipset: bump to version 6.19
+Message-ID: <20130602212049.4A1679A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd8f39653a9939a5d5e1043c874e4b26f412c388
+commit: http://git.buildroot.net/buildroot/commit/?id=2db1e84e28b308c85b0919bd015c36ed4fc3590d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/python3/python3.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/ipset/ipset.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 7551a7b..239ac8f 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -130,6 +130,7 @@ PYTHON3_POST_INSTALL_STAGING_HOOKS += PYTHON3_FIXUP_LIBDIR
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+index 50915ef..daadc9e 100644
+--- a/package/ipset/ipset.mk
++++ b/package/ipset/ipset.mk
+@@ -4,7 +4,7 @@
  #
- define PYTHON3_REMOVE_DEVFILES
- 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
-+	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
- 	rm -f $(TARGET_DIR)/usr/bin/python3-config
- endef
+ #############################################################
  
+-IPSET_VERSION = 6.18
++IPSET_VERSION = 6.19
+ IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
+ IPSET_SITE = http://ipset.netfilter.org
+ IPSET_DEPENDENCIES = libmnl host-pkgconf
