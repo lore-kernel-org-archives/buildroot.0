@@ -1,32 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 02 Jun 2013 21:19:18 -0000
-Subject: [Buildroot] [git commit] liblog4c-localtime: handle log4c-config
-	script
-Message-ID: <20130602212047.58E8E9A6A7@busybox.osuosl.org>
+Date: Sun, 02 Jun 2013 21:19:19 -0000
+Subject: [Buildroot] [git commit] fftw: bump to version 3.3.3
+Message-ID: <20130602212049.901099A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4af6818109bf94ea809c0cb7f39f86527bb907d7
+commit: http://git.buildroot.net/buildroot/commit/?id=7893840d16419e5795bd6b8cbc3adf5a99d9298f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/liblog4c-localtime/liblog4c-localtime.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/fftw/fftw.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/liblog4c-localtime/liblog4c-localtime.mk b/package/liblog4c-localtime/liblog4c-localtime.mk
-index 492c6ef..3701cca 100644
---- a/package/liblog4c-localtime/liblog4c-localtime.mk
-+++ b/package/liblog4c-localtime/liblog4c-localtime.mk
-@@ -8,6 +8,7 @@ LIBLOG4C_LOCALTIME_SITE    = https://github.com/rcmadruga/log4c-localtime/tarbal
- LIBLOG4C_LOCALTIME_INSTALL_STAGING = YES
- LIBLOG4C_LOCALTIME_CONF_OPT = --disable-expattest
- LIBLOG4C_LOCALTIME_DEPENDENCIES = expat
-+LIBLOG4C_LOCALTIME_CONFIG_SCRIPTS = log4c-config
+diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+index 74a5e11..d0af752 100644
+--- a/package/fftw/fftw.mk
++++ b/package/fftw/fftw.mk
+@@ -4,8 +4,10 @@
+ #
+ ################################################################################
  
- define LIBLOG4C_LOCALTIME_FIX_CONFIGURE_PERMS
- 	chmod +x $(@D)/configure
+-FFTW_VERSION = 3.3.2
++FFTW_VERSION = 3.3.3
+ FFTW_SITE = http://www.fftw.org
+ FFTW_INSTALL_STAGING = YES
++FFTW_LICENSE = GPLv2+
++FFTW_LICENSE_FILES = COPYING
+ 
+ $(eval $(autotools-package))
