@@ -1,30 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 02 Jun 2013 21:19:15 -0000
-Subject: [Buildroot] [git commit] libcdaudio: handle libcdaudio-config script
-Message-ID: <20130602212045.445329A6A7@busybox.osuosl.org>
+Date: Sun, 02 Jun 2013 21:19:16 -0000
+Subject: [Buildroot] [git commit] netsnmp: handle net-snmp-config script
+Message-ID: <20130602212046.B58CB9A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7fb8e6a55636a2161dbf9a3fc41a0d0d24b74591
+commit: http://git.buildroot.net/buildroot/commit/?id=1deff2b17e30f4722c9e3a913d66ef403b816d6d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libcdaudio/libcdaudio.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/netsnmp/netsnmp.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcdaudio/libcdaudio.mk b/package/libcdaudio/libcdaudio.mk
-index 203a8aa..92efabc 100644
---- a/package/libcdaudio/libcdaudio.mk
-+++ b/package/libcdaudio/libcdaudio.mk
-@@ -10,5 +10,6 @@ LIBCDAUDIO_SITE = http://downloads.sourceforge.net/project/libcdaudio/libcdaudio
- LIBCDAUDIO_AUTORECONF = YES
- LIBCDAUDIO_LIBTOOL_PATCH = YES
- LIBCDAUDIO_INSTALL_STAGING = YES
-+LIBCDAUDIO_CONFIG_SCRIPTS = libcdaudio-config
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index a6912e5..6a72da7 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -24,6 +24,8 @@ NETSNMP_CONF_OPT = --with-persistent-directory=/var/lib/snmp --disable-static \
+ 		--with-out-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES))" \
+ 		--with-out-transports="Unix"
+ NETSNMP_MAKE = $(MAKE1)
++NETSNMP_CONFIG_SCRIPTS = net-snmp-config
++
+ NETSNMP_BLOAT_MIBS = BRIDGE DISMAN-EVENT DISMAN-SCHEDULE DISMAN-SCRIPT EtherLike RFC-1215 RFC1155-SMI RFC1213 SCTP SMUX
  
- $(eval $(autotools-package))
+ ifeq ($(BR2_ENDIAN),"BIG")
+@@ -81,9 +83,7 @@ define NETSNMP_UNINSTALL_TARGET_CMDS
+ endef
+ 
+ define NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
+-	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
+-		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
+-		-e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" \
++	$(SED) 	"s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" \
+ 		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
+ 		$(STAGING_DIR)/usr/bin/net-snmp-config
+ endef
