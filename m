@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 02 Jun 2013 21:19:09 -0000
-Subject: [Buildroot] [git commit] libcgicc: handle cgicc-config script
-Message-ID: <20130602212040.060FF9A6A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] luafilesystem: bump to version 1.6.2
+Message-ID: <20130602212039.B76559A5A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c9a2aa3b3845ebdae5bc33ee7064062bb3477b25
+commit: http://git.buildroot.net/buildroot/commit/?id=3a19a70b2e11676a02adecd245ef5acc28de57c1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libcgicc/libcgicc.mk |    2 +-
+ package/luafilesystem/luafilesystem.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
-index 80e9213..4c5664f 100644
---- a/package/libcgicc/libcgicc.mk
-+++ b/package/libcgicc/libcgicc.mk
-@@ -9,7 +9,7 @@ LIBCGICC_SOURCE=cgicc-$(LIBCGICC_VERSION).tar.gz
- LIBCGICC_LICENSE=LGPLv3+
- LIBCGICC_INSTALL_STAGING=YES
- LIBCGICC_AUTORECONF=YES
--
-+LIBCGICC_CONFIG_SCRIPTS = cgicc-config
- LIBCGICC_CONF_OPT = \
- 	--disable-demos \
- 	--disable-doc
+diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
+index 8553212..d23fbce 100644
+--- a/package/luafilesystem/luafilesystem.mk
++++ b/package/luafilesystem/luafilesystem.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LUAFILESYSTEM_VERSION = 1.5.0
++LUAFILESYSTEM_VERSION = 1.6.2
+ LUAFILESYSTEM_SITE = http://github.com/downloads/keplerproject/luafilesystem
+ LUAFILESYSTEM_DEPENDENCIES = lua
+ LUAFILESYSTEM_LICENSE = MIT
