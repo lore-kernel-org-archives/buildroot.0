@@ -1,216 +1,127 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 02 Jun 2013 21:19:22 -0000
-Subject: [Buildroot] [git commit] dnsmasq: bump to version 2.66
-Message-ID: <20130602212050.55AEE9A6A7@busybox.osuosl.org>
+Date: Sun, 02 Jun 2013 21:19:26 -0000
+Subject: [Buildroot] [git commit] package/dtc: add option to install programs
+Message-ID: <20130602212052.1FD6F9A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87c6b15c7d354ab52cb1f7b785b233293800eca1
+commit: http://git.buildroot.net/buildroot/commit/?id=257e1f4f4388b9cdb734dc55b35e70ff731d0492
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+By default, we only install the libfdt library.
+
+As suggested by Arnout, add an option that also
+installs the few dtc programs.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../dnsmasq-01-fix-wrong-size-in-memset-call.patch |   27 ++++
- ...-number-zero-in-encapsulated-dhcp-options.patch |  143 ++++++++++++++++++++
- package/dnsmasq/dnsmasq.mk                         |    2 +-
- 3 files changed, 171 insertions(+), 1 deletions(-)
+ package/dtc/Config.in |   28 ++++++++++++++++++++++++++--
+ package/dtc/dtc.mk    |   35 +++++++++++++++++++++++++++++------
+ 2 files changed, 55 insertions(+), 8 deletions(-)
 
-diff --git a/package/dnsmasq/dnsmasq-01-fix-wrong-size-in-memset-call.patch b/package/dnsmasq/dnsmasq-01-fix-wrong-size-in-memset-call.patch
-new file mode 100644
-index 0000000..536552a
---- /dev/null
-+++ b/package/dnsmasq/dnsmasq-01-fix-wrong-size-in-memset-call.patch
-@@ -0,0 +1,27 @@
-+From 4582c0efe7d7af93517b1f3bcc7af67685ab3e5c Mon Sep 17 00:00:00 2001
-+From: Dave Reisner <d@falconindy.com>
-+Date: Thu, 18 Apr 2013 09:47:49 +0100
-+Subject: [PATCH] Fix wrong size in memset() call.
-+
-+Thanks to Dave Reisner.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ src/ipset.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/ipset.c b/src/ipset.c
-+index a34ed96..f175fa4 100644
-+--- a/src/ipset.c
-++++ b/src/ipset.c
-+@@ -110,7 +110,7 @@ static int new_add_to_ipset(const char *setname, const struct all_addr *ipaddr,
-+       return -1;
-+     }
-+   
-+-  memset(buffer, 0, sizeof(buffer));
-++  memset(buffer, 0, BUFF_SZ);
-+ 
-+   nlh = (struct nlmsghdr *)buffer;
-+   nlh->nlmsg_len = NL_ALIGN(sizeof(struct nlmsghdr));
-+--
-+1.8.1.5
-diff --git a/package/dnsmasq/dnsmasq-02-allow-option-number-zero-in-encapsulated-dhcp-options.patch b/package/dnsmasq/dnsmasq-02-allow-option-number-zero-in-encapsulated-dhcp-options.patch
-new file mode 100644
-index 0000000..79f57bf
---- /dev/null
-+++ b/package/dnsmasq/dnsmasq-02-allow-option-number-zero-in-encapsulated-dhcp-options.patch
-@@ -0,0 +1,143 @@
-+From bd08ae67f9a0cae2ce15be885254cad9449d4551 Mon Sep 17 00:00:00 2001
-+From: Simon Kelley <simon@thekelleys.org.uk>
-+Date: Fri, 19 Apr 2013 10:22:06 +0100
-+Subject: [PATCH] Allow option number zero in encapsulated DHCP options.
-+
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ src/dhcp-common.c |  6 +++---
-+ src/dnsmasq.h     |  4 ++--
-+ src/option.c      | 33 ++++++++++++++++++++-------------
-+ 3 files changed, 25 insertions(+), 18 deletions(-)
-+
-+diff --git a/src/dhcp-common.c b/src/dhcp-common.c
-+index f4fd088..8de4268 100644
-+--- a/src/dhcp-common.c
-++++ b/src/dhcp-common.c
-+@@ -512,7 +512,7 @@ void display_opts6(void)
-+ }
-+ #endif
-+ 
-+-u16 lookup_dhcp_opt(int prot, char *name)
-++int lookup_dhcp_opt(int prot, char *name)
-+ {
-+   const struct opttab_t *t;
-+   int i;
-+@@ -528,10 +528,10 @@ u16 lookup_dhcp_opt(int prot, char *name)
-+     if (strcasecmp(t[i].name, name) == 0)
-+       return t[i].val;
-+   
-+-  return 0;
-++  return -1;
-+ }
-+ 
-+-u16 lookup_dhcp_len(int prot, u16 val)
-++int lookup_dhcp_len(int prot, int val)
-+ {
-+   const struct opttab_t *t;
-+   int i;
-+diff --git a/src/dnsmasq.h b/src/dnsmasq.h
-+index 69ae7a7..41e2798 100644
-+--- a/src/dnsmasq.h
-++++ b/src/dnsmasq.h
-+@@ -1216,8 +1216,8 @@ void log_tags(struct dhcp_netid *netid, u32 xid);
-+ int match_bytes(struct dhcp_opt *o, unsigned char *p, int len);
-+ void dhcp_update_configs(struct dhcp_config *configs);
-+ void display_opts(void);
-+-u16 lookup_dhcp_opt(int prot, char *name);
-+-u16 lookup_dhcp_len(int prot, u16 val);
-++int lookup_dhcp_opt(int prot, char *name);
-++int lookup_dhcp_len(int prot, int val);
-+ char *option_string(int prot, unsigned int opt, unsigned char *val, 
-+ 		    int opt_len, char *buf, int buf_len);
-+ #ifdef HAVE_LINUX_NETWORK
-+diff --git a/src/option.c b/src/option.c
-+index b2596ec..2a61017 100644
-+--- a/src/option.c
-++++ b/src/option.c
-+@@ -750,6 +750,7 @@ static int parse_dhcp_opt(char *errstr, char *arg, int flags)
-+   struct dhcp_netid *np = NULL;
-+   u16 opt_len = 0;
-+   int is6 = 0;
-++  int option_ok = 0;
-+ 
-+   new->len = 0;
-+   new->flags = flags;
-+@@ -769,16 +770,19 @@ static int parse_dhcp_opt(char *errstr, char *arg, int flags)
-+ 	{
-+ 	  new->opt = atoi(arg);
-+ 	  opt_len = 0;
-++	  option_ok = 1;
-+ 	  break;
-+ 	}
-+       
-+       if (strstr(arg, "option:") == arg)
-+ 	{
-+-	  new->opt = lookup_dhcp_opt(AF_INET, arg+7);
-+-	  opt_len = lookup_dhcp_len(AF_INET, new->opt);
-+-	  /* option:<optname> must follow tag and vendor string. */
-+-	  if ((opt_len & OT_INTERNAL) && flags != DHOPT_MATCH)
-+-	    new->opt = 0;
-++	  if ((new->opt = lookup_dhcp_opt(AF_INET, arg+7)) != -1)
-++	    {
-++	      opt_len = lookup_dhcp_len(AF_INET, new->opt);
-++	      /* option:<optname> must follow tag and vendor string. */
-++	      if (!(opt_len & OT_INTERNAL) || flags == DHOPT_MATCH)
-++		option_ok = 1;
-++	    }
-+ 	  break;
-+ 	}
-+ #ifdef HAVE_DHCP6
-+@@ -792,13 +796,16 @@ static int parse_dhcp_opt(char *errstr, char *arg, int flags)
-+ 	    {
-+ 	      new->opt = atoi(arg+8);
-+ 	      opt_len = 0;
-++	      option_ok = 1;
-+ 	    }
-+ 	  else
-+ 	    {
-+-	      new->opt = lookup_dhcp_opt(AF_INET6, arg+8);
-+-	      opt_len = lookup_dhcp_len(AF_INET6, new->opt);
-+-	      if ((opt_len & OT_INTERNAL) && flags != DHOPT_MATCH)
-+-		new->opt = 0;
-++	      if ((new->opt = lookup_dhcp_opt(AF_INET6, arg+8)) != -1)
-++		{
-++		  opt_len = lookup_dhcp_len(AF_INET6, new->opt);
-++		  if (!(opt_len & OT_INTERNAL) || flags == DHOPT_MATCH)
-++		    option_ok = 1;
-++		}
-+ 	    }
-+ 	  /* option6:<opt>|<optname> must follow tag and vendor string. */
-+ 	  is6 = 1;
-+@@ -821,7 +828,7 @@ static int parse_dhcp_opt(char *errstr, char *arg, int flags)
-+ 	  new->flags |= DHOPT_RFC3925;
-+ 	  if (flags == DHOPT_MATCH)
-+ 	    {
-+-	      new->opt = 1; /* avoid error below */
-++	      option_ok = 1;
-+ 	      break;
-+ 	    }
-+ 	}
-+@@ -848,16 +855,16 @@ static int parse_dhcp_opt(char *errstr, char *arg, int flags)
-+       
-+       if (opt_len == 0 &&
-+ 	  !(new->flags & DHOPT_RFC3925))
-+-	opt_len = lookup_dhcp_len(AF_INET6 ,new->opt);
-++	opt_len = lookup_dhcp_len(AF_INET6, new->opt);
-+     }
-+   else
-+ #endif
-+     if (opt_len == 0 &&
-+ 	!(new->flags & (DHOPT_VENDOR | DHOPT_ENCAPSULATE | DHOPT_RFC3925)))
-+-      opt_len = lookup_dhcp_len(AF_INET ,new->opt);
-++      opt_len = lookup_dhcp_len(AF_INET, new->opt);
-+   
-+   /* option may be missing with rfc3925 match */
-+-  if (new->opt == 0)
-++  if (!option_ok)
-+     ret_err(_("bad dhcp-option"));
-+   
-+   if (comma)
-+--
-+1.8.1.5
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 8fb1fb1..04e3630 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/package/dtc/Config.in b/package/dtc/Config.in
+index e1f6e86..fac6ab2 100644
+--- a/package/dtc/Config.in
++++ b/package/dtc/Config.in
+@@ -1,9 +1,33 @@
+ config BR2_PACKAGE_DTC
+-	bool "dtc"
++	bool "dtc (libfdt)"
+ 	help
+ 	  The Device Tree Compiler, dtc, takes as input a device-tree in
+ 	  a given format and outputs a device-tree in another format.
  
--DNSMASQ_VERSION = 2.65
-+DNSMASQ_VERSION = 2.66
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
- DNSMASQ_MAKE_OPT = COPTS="$(DNSMASQ_COPTS)" PREFIX=/usr CFLAGS="$(TARGET_CFLAGS)"
+-	  Note that only the library is installed for now.
++	  Note that only the library is installed.
++	  If you want the programs, say 'y' here, and to "dtc programs", below.
+ 
+ 	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
++
++if BR2_PACKAGE_DTC
++
++config BR2_PACKAGE_DTC_PROGRAMS
++	bool "dtc programs"
++	help
++	  Say 'y' here if you also want the programs on the target:
++	    - convert-dtsv0     convert from version 0 to version 1
++	    - dtc               the device tree compiler
++	    - dtdiff            compare two device trees (needs bash)
++	    - fdtdump           print a readable version of a flat device tree
++	    - fdtget            read values from device tree
++	    - fdtput            write a property value to a device tree
++
++	  Note: dtdiff requires bash, so if bash is not selected, dtdiff will
++	        be removed from the target file system. Enable bash if you
++	        need dtdiff on the target.
++
++comment "dtdiff will not be installed: it requires bash"
++	depends on BR2_PACKAGE_DTC_PROGRAMS
++	depends on !BR2_PACKAGE_BASH
++
++endif
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index f05b09d..76ff361 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -8,26 +8,49 @@ DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
+ DTC_SITE            = git://git.jdl.com/software/dtc.git
+ DTC_LICENSE         = GPLv2+/BSD-2c
+ DTC_LICENSE_FILES   = README.license GPL
+-# Note: the dual-license only applies to the library.
+-#       The DT compiler (dtc) is GPLv2+, but we do not install it.
+ DTC_INSTALL_STAGING = YES
+ 
++define DTC_POST_INSTALL_TARGET_RM_DTDIFF
++	rm -f $(TARGET_DIR)/usr/bin/dtdiff
++endef
++
++ifeq ($(BR2_PACKAGE_DTC_PROGRAMS),y)
++
++DTC_LICENSE        += (for the library), GPLv2+ (for the executables)
++# Use default goal to build everything
++DTC_BUILD_GOAL      =
++DTC_INSTALL_GOAL    = install
++DTC_CLEAN_GOAL      = clean
++ifeq ($(BR2_PACKAGE_BASH),)
++DTC_POST_INSTALL_TARGET_HOOKS += DTC_POST_INSTALL_TARGET_RM_DTDIFF
++endif
++
++else # $(BR2_PACKAGE_DTC_PROGRAMS) != y
++
++DTC_BUILD_GOAL      = libfdt
++#??libfdt_install is our own install rule added by our patch
++DTC_INSTALL_GOAL    = libfdt_install
++DTC_CLEAN_GOAL      = libfdt_clean
++
++endif # $(BR2_PACKAGE_DTC_PROGRAMS) != y
++
+ define DTC_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS)    \
+-	$(MAKE) -C $(@D) PREFIX=/usr libfdt
++	CFLAGS="$(TARGET_CFLAGS)"   \
++	$(MAKE) -C $(@D) PREFIX=/usr $(DTC_BUILD_GOAL)
+ endef
+ 
+-#??libfdt_install is our own install rule added by our patch
++# For staging, only the library is needed
+ define DTC_INSTALL_STAGING_CMDS
+ 	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
+ endef
+ 
+ define DTC_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr libfdt_install
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr $(DTC_INSTALL_GOAL)
+ endef
+ 
+ define DTC_CLEAN_CMDS
+-	$(MAKE) -C $(@D) libfdt_clean
++	$(MAKE) -C $(@D) $(DTC_CLEAN_GOAL)
+ endef
+ 
+ $(eval $(generic-package))
