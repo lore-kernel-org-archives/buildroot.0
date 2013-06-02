@@ -1,27 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 02 Jun 2013 21:19:09 -0000
-Subject: [Buildroot] [git commit] ptpd: new package
-Message-ID: <20130602212038.E2FCF9A6D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libcgicc: handle cgicc-config script
+Message-ID: <20130602212040.060FF9A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7d6449bb165c8708652bbc3e0373cc6d70299afe
+commit: http://git.buildroot.net/buildroot/commit/?id=c9a2aa3b3845ebdae5bc33ee7064062bb3477b25
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add the new ptpd package, loosely based on the one from bug #2305.
-This one handles the IEEE 1588-2002 spec.
-
-[Peter: mark init script as executable]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in      |    1 +
- package/ptpd/Config.in |    7 +++++++
- package/ptpd/S65ptpd   |   29 +++++++++++++++++++++++++++++
- package/ptpd/ptpd.mk   |   25 +++++++++++++++++++++++++
- 4 files changed, 62 insertions(+), 0 deletions(-)
+ package/libcgicc/libcgicc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
+index 80e9213..4c5664f 100644
+--- a/package/libcgicc/libcgicc.mk
++++ b/package/libcgicc/libcgicc.mk
+@@ -9,7 +9,7 @@ LIBCGICC_SOURCE=cgicc-$(LIBCGICC_VERSION).tar.gz
+ LIBCGICC_LICENSE=LGPLv3+
+ LIBCGICC_INSTALL_STAGING=YES
+ LIBCGICC_AUTORECONF=YES
+-
++LIBCGICC_CONFIG_SCRIPTS = cgicc-config
+ LIBCGICC_CONF_OPT = \
+ 	--disable-demos \
+ 	--disable-doc
