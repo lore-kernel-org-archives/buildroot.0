@@ -1,41 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 02 Jun 2013 21:21:50 -0000
-Subject: [Buildroot] [git commit] python: remove stale python2-config
-	symbolic link
-Message-ID: <20130602212047.97AB69A6D3@busybox.osuosl.org>
+Date: Sun, 02 Jun 2013 21:21:53 -0000
+Subject: [Buildroot] [git commit] python3: remove another config script
+Message-ID: <20130602212047.F007C9A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=85c798b88b56dbf79caba55226e0ebf12817caf2
+commit: http://git.buildroot.net/buildroot/commit/?id=fd8f39653a9939a5d5e1043c874e4b26f412c388
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We already remove python2.7-config and the symbolic link
-python-config, but we forgot to remove the python2-config symbolic
-link.
-
-Note that we can't use the <pkg>_CONFIG_SCRIPTS mechanism here because
-python2.7-config is written in... Python, and doesn't follow the usual
-syntax of <pkg>-config scripts. It takes the paths directly from
-distutils.sysconfig.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/python/python.mk |    1 +
+ package/python3/python3.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index b942854..801c669 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -154,6 +154,7 @@ PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_SMTPD
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 7551a7b..239ac8f 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -130,6 +130,7 @@ PYTHON3_POST_INSTALL_STAGING_HOOKS += PYTHON3_FIXUP_LIBDIR
  #
- define PYTHON_REMOVE_DEVFILES
- 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)-config
-+	rm -f $(TARGET_DIR)/usr/bin/python2-config
- 	rm -f $(TARGET_DIR)/usr/bin/python-config
+ define PYTHON3_REMOVE_DEVFILES
+ 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
++	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
+ 	rm -f $(TARGET_DIR)/usr/bin/python3-config
  endef
  
