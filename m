@@ -1,44 +1,160 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 02 Jun 2013 21:21:55 -0000
-Subject: [Buildroot] [git commit] httping: bump to version 2.2.1
-Message-ID: <20130602212049.C1A409A6A7@busybox.osuosl.org>
+Date: Sun, 02 Jun 2013 21:21:56 -0000
+Subject: [Buildroot] [git commit] package/dtc: new package
+Message-ID: <20130602212051.C0D2C9A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2f30cacd95d7d850a22a6824ec748e448b1e772
+commit: http://git.buildroot.net/buildroot/commit/?id=47f578e3c2db53caf51fad9ec24e71ff1606c862
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+dtc is the Device Tree Compiler, and manipulates device trees.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/httping/httping.mk |    9 +++++++--
- 1 files changed, 7 insertions(+), 2 deletions(-)
+ package/Config.in                          |    1 +
+ package/dtc/Config.in                      |    9 +++++++
+ package/dtc/dtc-extra_cflags.patch         |   28 +++++++++++++++++++++++
+ package/dtc/dtc-separate-lib-install.patch |   28 +++++++++++++++++++++++
+ package/dtc/dtc.mk                         |   33 ++++++++++++++++++++++++++++
+ 5 files changed, 99 insertions(+), 0 deletions(-)
 
-diff --git a/package/httping/httping.mk b/package/httping/httping.mk
-index 2ebc75e..8f7cb97 100644
---- a/package/httping/httping.mk
-+++ b/package/httping/httping.mk
-@@ -4,13 +4,18 @@
- #
- #############################################################
+diff --git a/package/Config.in b/package/Config.in
+index 55a38b9..1dee2ab 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -459,6 +459,7 @@ endmenu
  
--HTTPING_VERSION = 1.6
-+HTTPING_VERSION = 2.2.1
- HTTPING_SOURCE = httping-$(HTTPING_VERSION).tgz
- HTTPING_SITE = http://www.vanheusden.com/httping
- HTTPING_LICENSE = GPLv2
- HTTPING_LICENSE_FILES = license.txt
--HTTPING_DEPENDENCIES = $(if $(BR2_PACKAGE_OPENSSL),openssl)
-+HTTPING_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
-+	$(if $(BR2_PACKAGE_NCURSES),ncurses) \
-+	$(if $(BR2_PACKAGE_FFTW),fftw)
- HTTPING_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) \
-+	FW=$(if $(BR2_PACKAGE_FFTW),yes,no) \
-+	NC=$(if $(BR2_PACKAGE_NCURSES),yes,no) \
- 	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
- 	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no)
- 
+ menu "Hardware handling"
+ source "package/ccid/Config.in"
++source "package/dtc/Config.in"
+ source "package/imx-lib/Config.in"
+ source "package/lcdapi/Config.in"
+ source "package/libaio/Config.in"
+diff --git a/package/dtc/Config.in b/package/dtc/Config.in
+new file mode 100644
+index 0000000..e1f6e86
+--- /dev/null
++++ b/package/dtc/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_DTC
++	bool "dtc"
++	help
++	  The Device Tree Compiler, dtc, takes as input a device-tree in
++	  a given format and outputs a device-tree in another format.
++
++	  Note that only the library is installed for now.
++
++	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
+diff --git a/package/dtc/dtc-extra_cflags.patch b/package/dtc/dtc-extra_cflags.patch
+new file mode 100644
+index 0000000..3ce699b
+--- /dev/null
++++ b/package/dtc/dtc-extra_cflags.patch
+@@ -0,0 +1,28 @@
++Makefile: append the CFLAGS to existing ones
++
++Allow the user to pass custom CFLAGS (eg. optimisation flags).
++
++Do not use EXTRA_CFLAGS, append to existing CFLAGS with +=  (Arnout)
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Cc: Arnout Vandecappelle <arnout@mind.be>
++
++---
++Patch not sent upstream.
++
++Although not specific to buildroot, I am not sure this is the best
++way to handle user-supplied CFLAGS.
++
++diff -durN dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile
++--- dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile	2012-10-22 22:02:47.541240846 +0200
+++++ dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile	2012-10-22 22:03:21.151047833 +0200
++@@ -18,7 +18,8 @@
++ CPPFLAGS = -I libfdt -I .
++ WARNINGS = -Werror -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
++ 	-Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls
++-CFLAGS = -g -Os -fPIC -Werror $(WARNINGS)
+++CFLAGS ?= -g -Os
+++CFLAGS += -fPIC $(WARNINGS)
++ 
++ BISON = bison
++ LEX = flex
+diff --git a/package/dtc/dtc-separate-lib-install.patch b/package/dtc/dtc-separate-lib-install.patch
+new file mode 100644
+index 0000000..c86d587
+--- /dev/null
++++ b/package/dtc/dtc-separate-lib-install.patch
+@@ -0,0 +1,28 @@
++Makefile: add a rule to only install libfdt
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Patch not sent upstream.
++
++It's really specific to buildroot, and is probably not
++good (aka generic) enough to be pushed upstream.
++
++diff --git a/Makefile b/Makefile
++index 1169e6c..39e7190 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -160,10 +160,12 @@ endif
++ # intermediate target and building them again "for real"
++ .SECONDARY: $(DTC_GEN_SRCS) $(CONVERT_GEN_SRCS)
++ 
++-install: all $(SCRIPTS)
+++install: all $(SCRIPTS) libfdt_install
++ 	@$(VECHO) INSTALL
++ 	$(INSTALL) -d $(DESTDIR)$(BINDIR)
++ 	$(INSTALL) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
+++
+++libfdt_install: libfdt
++ 	$(INSTALL) -d $(DESTDIR)$(LIBDIR)
++ 	$(INSTALL) $(LIBFDT_lib) $(DESTDIR)$(LIBDIR)
++ 	ln -sf $(notdir $(LIBFDT_lib)) $(DESTDIR)$(LIBDIR)/$(LIBFDT_soname)
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+new file mode 100644
+index 0000000..f05b09d
+--- /dev/null
++++ b/package/dtc/dtc.mk
+@@ -0,0 +1,33 @@
++#############################################################
++#
++# dtc
++#
++#############################################################
++
++DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
++DTC_SITE            = git://git.jdl.com/software/dtc.git
++DTC_LICENSE         = GPLv2+/BSD-2c
++DTC_LICENSE_FILES   = README.license GPL
++# Note: the dual-license only applies to the library.
++#       The DT compiler (dtc) is GPLv2+, but we do not install it.
++DTC_INSTALL_STAGING = YES
++
++define DTC_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS)    \
++	$(MAKE) -C $(@D) PREFIX=/usr libfdt
++endef
++
++#??libfdt_install is our own install rule added by our patch
++define DTC_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
++endef
++
++define DTC_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr libfdt_install
++endef
++
++define DTC_CLEAN_CMDS
++	$(MAKE) -C $(@D) libfdt_clean
++endef
++
++$(eval $(generic-package))
