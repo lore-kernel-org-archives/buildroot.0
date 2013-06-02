@@ -1,32 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 02 Jun 2013 21:19:27 -0000
-Subject: [Buildroot] [git commit] pixman: Version bump to 0.30.0
-Message-ID: <20130602212053.B0D359A6F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] beaglebone: add am33x-cm3 to the build
+Message-ID: <20130602212053.268499A6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=686d4f433b4acb7846cd8d881a03803b911d418c
+commit: http://git.buildroot.net/buildroot/commit/?id=0399249b76bc02e4cb1cad2edc3812f4f992ce7a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Add the FW needed for the Cortex M3 on the beaglebone. This is required
+for working power management.
+
+Signed-off-by: Anders Darander <anders@chargestorm.se>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pixman/pixman.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ configs/beaglebone_defconfig |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index 607f82e..326f9eb 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -3,7 +3,7 @@
- # pixman
- #
- ################################################################################
--PIXMAN_VERSION = 0.28.2
-+PIXMAN_VERSION = 0.30.0
- PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
- PIXMAN_INSTALL_STAGING = YES
- PIXMAN_DEPENDENCIES = host-pkgconf
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 38a63a1..a141320 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -11,6 +11,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
+ # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+ 
+ # filesystem
++BR2_PACKAGE_AM33X_CM3=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
