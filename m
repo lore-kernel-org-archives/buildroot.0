@@ -1,32 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 02 Jun 2013 21:21:50 -0000
-Subject: [Buildroot] [git commit] libvncserver: handle libvncserver-config
-	script
-Message-ID: <20130602212046.1CE9B9A6A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python: remove stale python2-config
+	symbolic link
+Message-ID: <20130602212047.97AB69A6D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=726413103b8f5023b3035640f19fcdfc61f823c7
+commit: http://git.buildroot.net/buildroot/commit/?id=85c798b88b56dbf79caba55226e0ebf12817caf2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+We already remove python2.7-config and the symbolic link
+python-config, but we forgot to remove the python2-config symbolic
+link.
+
+Note that we can't use the <pkg>_CONFIG_SCRIPTS mechanism here because
+python2.7-config is written in... Python, and doesn't follow the usual
+syntax of <pkg>-config scripts. It takes the paths directly from
+distutils.sysconfig.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libvncserver/libvncserver.mk |    1 +
+ package/python/python.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index 550abc4..a450632 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -10,6 +10,7 @@ LIBVNCSERVER_SITE = http://downloads.sourceforge.net/project/libvncserver/libvnc
- LIBVNCSERVER_LICENSE = GPLv2+
- LIBVNCSERVER_LICENSE_FILES = COPYING
- LIBVNCSERVER_INSTALL_STAGING = YES
-+LIBVNCSERVER_CONFIG_SCRIPTS = libvncserver-config
+diff --git a/package/python/python.mk b/package/python/python.mk
+index b942854..801c669 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -154,6 +154,7 @@ PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_SMTPD
+ #
+ define PYTHON_REMOVE_DEVFILES
+ 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)-config
++	rm -f $(TARGET_DIR)/usr/bin/python2-config
+ 	rm -f $(TARGET_DIR)/usr/bin/python-config
+ endef
  
- # only used for examples
- LIBVNCSERVER_CONF_OPT += --with-sdl-config=/bin/false
