@@ -1,44 +1,88 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Jun 2013 22:15:05 +0200
-Subject: [Buildroot] EGL Confusion
-In-Reply-To: <CALo-6+g+z8xV9bnzbF6MAB0VUEzO-mkYocHvVM=GziSmyFAk5A@mail.gmail.com>
-References: <CALo-6+g+z8xV9bnzbF6MAB0VUEzO-mkYocHvVM=GziSmyFAk5A@mail.gmail.com>
-Message-ID: <20130603201505.GB3439@free.fr>
+Date: Mon,  3 Jun 2013 22:15:46 +0200
+Subject: [Buildroot] [pull request] Pull request for branch yem-misc-updates
+Message-ID: <cover.1370289131.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Charles, All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2013-06-03 13:05 -0700, Charles Krinke spake thusly:
-> Either my understanding of buildroot is incomplete (most likely) or
-> buildroot is incomplete (least likely), but in either case, I would
-> appreciate a bit of advice.
-> 
-> I am moving a TI AM3517 design from last springs buildroot to the
-> lastest buildroot in order to go from Qt-4.8.2 to Qt-5.0.2 and I can
-> build a reasonable rootfs unless I try to configure QtDeclarative
-> which is grayed out.
-> 
-> In looking into why it is grayed out, it seems to have to do with
-> BR2_PACKAGE_HAS_OPENGL_EGL which is also grayed out as I am not on a
-> Raspberry Pi.
-> 
-> My need is to reference the external EGL supplied by TI in their
-> Graphics_SDK and I was hoping that we have a way to get from here to
-> there and would appreciate any advice on the path with the least
-> problems.
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Hello All!
 
-You'd have to package the TI stuff, and that package would select the
-BR2_PACKAGE_HAS_OPENGL_EGL option, like the packages rpi-userland and
-freescale-imx/gpu-viv-bin-mx6q do.
+Here are a few version bumps related to the Raspberry Pi:
+  - rpi_defconfig: bump kernel (many fixes, improvements)
+  - linux-firmware: bump (new firmware files for WiFi dongles)
+  - rpi-firmware: bump (new codecs, mostly)
+  - rpi-firmware: select firmware(s) to install
+
+Also, promote genext2fs as a host-package, too, like we have
+for other filesystem generators.
+
+
+Notes only slightly related to this series:
+
+For the Linux kernel for the RPi, there are a few branches available in
+the raspbberypi repository:
+  - rpi-3.6.y: that branch seems stable, and I just bump to the latest
+               cset in that branch
+  - rpi-3.8.y: I've expereienced many MMC errors using that branch
+  - rpi-3.9.y: ditto, many MMC errors
+
+However, with a RAM-based rootfs (eg. initramfs) or a network rootfs
+(eg. NFS), it might be possible to reliably use those two last branches,
+as long as the SDcard is not used.
+
+Booting one of those two branches with the rpi-firmware currently packaged
+in Buildroot fails, so it seems we first need to update rpi-firmware before
+switching to rpi-3.{8,9}.y.
+
+I'll report back on any improvement in this area.
 
 Regards,
-Yann E. MORIN.
+Yann E. MORIN
 
+
+The following changes since commit 7672b1235d8f786938af66068c1c1da8a766bb38:
+
+  gnutls: wchar only needed for tools (2013-06-03 17:27:00 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem-misc-updates
+
+for you to fetch changes up to a72081fb5d6b38ae6a661e2777003e4dd109e18c:
+
+  package/rpi-firmware: update (2013-06-03 20:01:21 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (6):
+      package/tvheadend: update to a git snapshot
+      package/linux-firmware: bump version for new firmware
+      package/genext2fs: add host variant
+      boards/rpi: bump kernel
+      package/rpi-firmware: add options to select what firmware to install
+      package/rpi-firmware: update
+
+ board/raspberrypi/readme.txt                       | 12 ++---
+ configs/rpi_defconfig                              |  2 +-
+ fs/ext2/Config.in                                  |  1 +
+ package/Config.in.host                             |  1 +
+ package/genext2fs/Config.in.host                   |  9 ++++
+ package/linux-firmware/Config.in                   | 12 ++---
+ package/linux-firmware/linux-firmware.mk           | 15 +++---
+ package/rpi-firmware/Config.in                     | 55 ++++++++++++++++++++++
+ package/rpi-firmware/cmdline.txt                   |  1 +
+ package/rpi-firmware/config.txt                    |  1 -
+ package/rpi-firmware/rpi-firmware.mk               | 25 ++++++++--
+ .../tvheadend-001-no-auto-download-dvbscans.patch  | 13 +++--
+ .../tvheadend/tvheadend-002-no-check_config.patch  |  4 +-
+ package/tvheadend/tvheadend.mk                     |  4 +-
+ 14 files changed, 117 insertions(+), 38 deletions(-)
+ create mode 100644 package/genext2fs/Config.in.host
+ create mode 100644 package/rpi-firmware/cmdline.txt
 -- 
 .-----------------.--------------------.------------------.--------------------.
 |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
