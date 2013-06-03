@@ -1,38 +1,44 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 3 Jun 2013 23:17:02 +0200
-Subject: [Buildroot] [git commit] logrotate: workaround wget issue with
-	wildcard ssl certificates
-Message-ID: <20130603212030.3D5659A8A6@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Jun 2013 00:11:12 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+ yem-patchwork-fixes
+In-Reply-To: <cover.1369650924.git.yann.morin.1998@free.fr>
+References: <cover.1369650924.git.yann.morin.1998@free.fr>
+Message-ID: <20130603221112.GC3439@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4486455c5d31eaab6367160648f487b27f4c7621
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+All,
 
-Fixes http://autobuild.buildroot.net/results/815/815e2759f4961805d768efe79f0d83d13b16e706/build-end.log
+On 2013-05-27 12:36 +0200, Yann E. MORIN spake thusly:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Hello All!
+> 
+> Here are four patches from Nathan Lynch to fix building out-of-tree
+> when the Buildroot source tree is readonly (eg. shared via NFS between
+> multiple developers).
 
-Certain wget versions dislike downloading from fedorahosted.org which
-provides a SSL certificate for *.fedorahosted.org. Work around it by
-instead downloading from www.fedorahosted.org instead.
+Ping? I'm trying to check bug #5780, but can't go that far, since
+target/ is readonly, which is fixed by one of these patches.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/logrotate/logrotate.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> ----------------------------------------------------------------
+> Nathan Lynch (4):
+>       toolchain/uClibc: ensure .oldconfig is writable
+>       target: ensure target/ dir is writable
+>       busybox: ensure $(BUSYBOX_BUILD_CONFIG) is writable
+>       linux: ensure buildroot_defconfig is writable
 
-diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
-index c920b46..82dde39 100644
---- a/package/logrotate/logrotate.mk
-+++ b/package/logrotate/logrotate.mk
-@@ -5,7 +5,7 @@
- #############################################################
- LOGROTATE_VERSION = 3.8.4
- LOGROTATE_SOURCE = logrotate-$(LOGROTATE_VERSION).tar.gz
--LOGROTATE_SITE = https://fedorahosted.org/releases/l/o/logrotate/
-+LOGROTATE_SITE = https://www.fedorahosted.org/releases/l/o/logrotate/
- LOGROTATE_LICENSE = GPLv2+
- LOGROTATE_LICENSE_FILES = COPYING
- 
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
