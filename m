@@ -1,75 +1,96 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 3 Jun 2013 16:49:47 +0200
-Subject: [Buildroot] [git commit] p11-kit: new package
-Message-ID: <20130603152934.136BF9A893@busybox.osuosl.org>
+Date: Mon, 3 Jun 2013 17:27:00 +0200
+Subject: [Buildroot] [git commit] gnutls: wchar only needed for tools
+Message-ID: <20130603152934.77C7A9A891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f0f72c8792ff416621cdd354aca084f1c0c4e02
+commit: http://git.buildroot.net/buildroot/commit/?id=7672b1235d8f786938af66068c1c1da8a766bb38
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+And adjust reverse dependencies to match.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in          |    1 +
- package/p11-kit/Config.in  |   15 +++++++++++++++
- package/p11-kit/p11-kit.mk |   15 +++++++++++++++
- 3 files changed, 31 insertions(+), 0 deletions(-)
+ package/connman/Config.in       |    2 +-
+ package/gnutls/Config.in        |    9 ++++++---
+ package/libmicrohttpd/Config.in |    4 ----
+ package/libsoup/Config.in       |    2 +-
+ 4 files changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 8a29c99..0d4ed90 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -610,6 +610,7 @@ source "package/mpc/Config.in"
- source "package/mpfr/Config.in"
- source "package/mtdev2tuio/Config.in"
- source "package/orc/Config.in"
-+source "package/p11-kit/Config.in"
- source "package/poco/Config.in"
- source "package/protobuf/Config.in"
- source "package/protobuf-c/Config.in"
-diff --git a/package/p11-kit/Config.in b/package/p11-kit/Config.in
-new file mode 100644
-index 0000000..40a07d3
---- /dev/null
-+++ b/package/p11-kit/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_P11_KIT
-+	bool "p11-kit"
-+	depends on !BR2_PREFER_STATIC_LIB
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBTASN1
-+	help
-+	  Provides a way to load and enumerate PKCS#11 modules.
-+	  Provides a standard configuration setup for installing PKCS#11
-+	  modules in such a way that they're discoverable.
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 93f9ab5..4c9741b 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_CONNMAN
+ 	select BR2_PACKAGE_IPTABLES
+ 	select BR2_PACKAGE_GNUTLS
+ 	depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
+-	depends on BR2_USE_WCHAR # libglib2 and gnutls
++	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_USE_MMU # dbus
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index f699af7..a4eaa98 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -2,18 +2,21 @@ config BR2_PACKAGE_GNUTLS
+ 	bool "gnutls"
+ 	select BR2_PACKAGE_NETTLE
+ 	select BR2_PACKAGE_PCRE
+-	depends on BR2_USE_WCHAR
+ 	help
+ 	  GnuTLS is a secure communications library implementing the SSL
+ 	  and TLS protocols and technologies around them.
+ 
+ 	  http://www.gnutls.org
+ 
++if BR2_PACKAGE_GNUTLS
 +
-+	  http://p11-glue.freedesktop.org/p11-kit.html
+ config BR2_PACKAGE_GNUTLS_TOOLS
+ 	bool "install tools"
+-	depends on BR2_PACKAGE_GNUTLS
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  Install GnuTLS command line tools for various cryptographic tasks.
+ 
+-comment "gnutls requires a toolchain with WCHAR support"
++comment "gnutls tools requires a toolchain with WCHAR support"
+ 	depends on !BR2_USE_WCHAR
 +
-+comment "p11-kit requires a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-new file mode 100644
-index 0000000..2ddb27c
---- /dev/null
-+++ b/package/p11-kit/p11-kit.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# p11-kit
-+#
-+#############################################################
-+
-+P11_KIT_VERSION = 0.18.1
-+P11_KIT_SITE = http://p11-glue.freedesktop.org/releases
-+P11_KIT_DEPENDENCIES = host-pkgconf libtasn1
-+P11_KIT_INSTALL_STAGING = YES
-+P11_KIT_CONF_OPT = --disable-static
-+P11_KIT_LICENSE = BSD-3c
-+P11_KIT_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
++endif
+diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
+index 2e4de0f..4e78a99 100644
+--- a/package/libmicrohttpd/Config.in
++++ b/package/libmicrohttpd/Config.in
+@@ -10,7 +10,6 @@ config BR2_PACKAGE_LIBMICROHTTPD
+ config BR2_PACKAGE_LIBMICROHTTPD_SSL
+        bool "https support"
+        depends on BR2_PACKAGE_LIBMICROHTTPD
+-       depends on BR2_USE_WCHAR
+        select BR2_PACKAGE_GNUTLS
+        select BR2_PACKAGE_LIBGCRYPT
+        help
+@@ -18,6 +17,3 @@ config BR2_PACKAGE_LIBMICROHTTPD_SSL
+ 
+ comment "libmicrohttpd needs a toolchain with thread support"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-
+-comment "libmicrohttpd https support needs a toolchain with wchar support"
+-	depends on BR2_PACKAGE_LIBMICROHTTPD && !BR2_USE_WCHAR
+diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+index 57b425f..c3b4ceb 100644
+--- a/package/libsoup/Config.in
++++ b/package/libsoup/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBSOUP
+ 	bool "libsoup"
+-	depends on BR2_USE_WCHAR # glib2 and gnutls
++	depends on BR2_USE_WCHAR # glib2
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
