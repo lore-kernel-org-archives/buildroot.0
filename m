@@ -1,31 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  3 Jun 2013 10:04:59 -0300
-Subject: [Buildroot] [PATCH] aespipe: needs mmu
-Message-ID: <1370264699-16193-1-git-send-email-gustavo@zacarias.com.ar>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Mon, 3 Jun 2013 14:12:27 +0100
+Subject: [Buildroot] [PATCH] sconeserver: fix autouild failure
+In-Reply-To: <20130603144414.562f9385@skate>
+References: <1370261409-8722-1-git-send-email-spdawson@gmail.com>
+ <20130603144414.562f9385@skate>
+Message-ID: <CAHt8ZCO8PF0gxsvDWtCgWRdpbnUwGoNJmUdqe-eRO9ZKznJVZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/9f3/9f3f85a024791cdc6b10e3e40cf41707eb074447/
+Hi Thomas; thanks for looking at this.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/aespipe/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+On 3 June 2013 13:44, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> This more-or-less reverts part of your commit
+> 8d34e073c00236ff41a6df8f0fdd6b0b25dc4ad1. Is there a reason why
+> sconeserver isn't taking the right ldflags from mysql_config?
 
-diff --git a/package/aespipe/Config.in b/package/aespipe/Config.in
-index ccc94c2..df99523 100644
---- a/package/aespipe/Config.in
-+++ b/package/aespipe/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_AESPIPE
- 	bool "aespipe"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  aespipe program is AES encrypting or decrypting pipe. It reads from
- 	  standard input and writes to standard output. It can be used to
--- 
-1.8.1.5
+The sconeserver configure script doesn't call mysql_config until after
+it has checked for the mysqlclient library; the adjustment of the
+LDFLAGS in the package makefile is needed so that the check for the
+mysqlclient library works correctly. Once this library check has been
+performed, the configure script calls mysql_config to obtain compile
+and link flags for the build.
+
+Simon.
