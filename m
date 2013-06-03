@@ -1,54 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Jun 2013 11:38:57 +0200
-Subject: [Buildroot] Recurrent Blackfin build failure on icu
-In-Reply-To: <CAJxxZ0MzWeQ4USQbwNwAuxGpkvwcejqaZvC7bGpySrZCdzus+g@mail.gmail.com>
-References: <20130529213510.43fc1372@skate>
- <CAJxxZ0MzWeQ4USQbwNwAuxGpkvwcejqaZvC7bGpySrZCdzus+g@mail.gmail.com>
-Message-ID: <20130603113857.0c7ff74a@skate>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon,  3 Jun 2013 13:52:50 +0200
+Subject: [Buildroot] [PATCH] barebox: bump to version 2013.06.0
+Message-ID: <1370260370-7147-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sonic Zhang,
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ boot/barebox/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, 3 Jun 2013 17:26:08 +0800, Sonic Zhang wrote:
-
-> For historic reasons, Blackfin GNU toolchain generate assembly symbols
-> with the prefix '_'. For example: _uconvmsg_dat and _icudt48_dat .
-> But, the pkgdata tool in icu doesn't generate assembly file
-> uconvmsg_dat.s and icudt48l_dat.s in this way when Blackfin GNU
-> toolchain is used. What do you think is a better way to fix it?
-
-Can this specific behavior of the Blackfin toolchain be detected? Is
-there a typical autotools test that would allow to test this?
-
-Adding Mike in Cc, since I'm pretty sure he has some ideas about this.
-
-> /buildroot/output/build/host-icu-4.8.1.1/source/bin/pkgdata -p
-> uconvmsg -O pkgdata.inc -m static -s uconvmsg -d uconvmsg -T uconvmsg
-> uconvmsg/uconvmsg.lst
-> 
-> 
-> .globl uconvmsg_dat
->         .section .note.GNU-stack,"",%progbits
->         .section .rodata
->         .align 8
->         .type uconvmsg_dat,%object
-> uconvmsg_dat:
-> ...
-> 
-> 
-> In addition, I am fine to receive the test log by this email.
-
-Ok, I'll work on this.
-
-Thanks,
-
-Thomas
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 09edecf..9fa8c5d 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2013.05.1"
++	bool "2013.06.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2013.05.1"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2013.06.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.4
