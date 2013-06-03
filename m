@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  3 Jun 2013 22:15:48 +0200
-Subject: [Buildroot] [PATCH 2/6] package/linux-firmware: bump version for
-	new firmware
+Date: Mon,  3 Jun 2013 22:15:49 +0200
+Subject: [Buildroot] [PATCH 3/6] package/genext2fs: add host variant
 In-Reply-To: <cover.1370289131.git.yann.morin.1998@free.fr>
 References: <cover.1370289131.git.yann.morin.1998@free.fr>
-Message-ID: <97ba0d959c1ec97eea764c84f57d1e2d5e99bff4.1370289131.git.yann.morin.1998@free.fr>
+Message-ID: <eb1ddff01f34cffea3d4556f414dda0f346ec703.1370289131.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,87 +12,67 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Bump version to get a few new firmware files for some WiFi adapters.
+genext2fs is built only if the user selected an ext2 root filesystem.
 
-In the rtl81xx familly, it's hard to differentiate each members: I have
-a USB stick that identifies itself as TRL8188CUS, but is handled by the
-rtl8192ce driver. So I moved all of rtl81xx firmwares under the same
-option to avoid confusion.
+However, some use-cases can't live with the full target/ dir on the
+root filesystem, and requires separate partitions (eg. for /usr).
+In this case, the user would not select an ext2 root fs in the
+Buildrooot menu, and would only generate a tarball of the rootfs.
+This tarball would then be used from a post-image script to build
+the actual required FSes.
 
-It will be the responsibility of the user to eventually get rid of
-unwanted firmware files in a post-build script, if needed.
+But then, genext2fs is not built, since the ext2 root FS was not
+selected.
 
-Ditto for rtl87xx.
+As for the other filesystem generators, provide a host variant of
+genext2fs (genext2fs is already host-package aware, so only needs
+adding a Kconfig entry).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/linux-firmware/Config.in         | 12 ++++++------
- package/linux-firmware/linux-firmware.mk | 15 +++++++++------
- 2 files changed, 15 insertions(+), 12 deletions(-)
+ fs/ext2/Config.in                | 1 +
+ package/Config.in.host           | 1 +
+ package/genext2fs/Config.in.host | 9 +++++++++
+ 3 files changed, 11 insertions(+)
+ create mode 100644 package/genext2fs/Config.in.host
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 9998f22..d9bb095 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -61,15 +61,15 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index e75ef54..c26482f 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_TARGET_ROOTFS_EXT2
+ 	bool "ext2/3/4 root filesystem"
++	select BR2_PACKAGE_HOST_GENEXT2FS
+ 	select BR2_PACKAGE_HOST_E2FSPROGS
  	help
- 	  Ralink rt27xx/rt28xx/rt30xx
- 
--config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8192
--	bool "Realtek 8192"
-+config BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX
-+	bool "Realtek 81xx"
- 	help
--	  Realtek 8192
-+	  Realtek 8188/8192
- 
--config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712
--	bool "Realtek 8712"
-+config BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX
-+	bool "Realtek 87xx"
- 	help
--	  Realtek 8712
-+	  Realtek 8712/8723
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X
- 	bool "TI wl127X"
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 0cb08b4..0ba2b82 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LINUX_FIRMWARE_VERSION = 65a5163b8bb77bd7759efa3ca780867fcaed89b0
-+LINUX_FIRMWARE_VERSION = 07ea598af5b9dde3acdf279846b062fa1b2987b8
- LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
- 
-@@ -22,16 +22,19 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX) += \
- 	rt2860.bin rt2870.bin rt3070.bin rt3071.bin rt3090.bin 	\
- 	LICENCE.ralink-firmware.txt
- 
--# rtl8192
--LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RTL_8192) += \
-+# rtl81xx
-+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX) += \
- 	rtlwifi/rtl8192cfw.bin rtlwifi/rtl8192cfwU.bin 		\
- 	rtlwifi/rtl8192cfwU_B.bin rtlwifi/rtl8192cufw.bin	\
- 	rtlwifi/rtl8192defw.bin rtlwifi/rtl8192sefw.bin		\
-+	rtlwifi/rtl8188efw.bin					\
- 	LICENCE.rtlwifi_firmware.txt
- 
--# rtl8712
--LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712) += \
--	rtlwifi/rtl8712u.bin LICENCE.rtlwifi_firmware.txt
-+# rtl87xx
-+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX) += \
-+	rtlwifi/rtl8712u.bin rtlwifi/rtl8723fw.bin		\
-+	rtlwifi/rtl8723fw_B.bin					\
-+	LICENCE.rtlwifi_firmware.txt
- 
- # ar7010
- LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010) += \
+ 	  Build an ext2/3/4 root filesystem
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 54178ea..5fd2570 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -3,6 +3,7 @@ menu "Host utilities"
+ source "package/dfu-util/Config.in.host"
+ source "package/dosfstools/Config.in.host"
+ source "package/e2fsprogs/Config.in.host"
++source "package/genext2fs/Config.in.host"
+ source "package/genimage/Config.in.host"
+ source "package/genpart/Config.in.host"
+ source "package/lpc3250loader/Config.in.host"
+diff --git a/package/genext2fs/Config.in.host b/package/genext2fs/Config.in.host
+new file mode 100644
+index 0000000..a03e16b
+--- /dev/null
++++ b/package/genext2fs/Config.in.host
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HOST_GENEXT2FS
++	bool "host genext2fs"
++	help
++	  genext2fs generates an ext2 filesystem as a normal (non-root)
++	  user.  It does not require you to mount the image file to
++	  copy files on it, nor does it require that you become the
++	  superuser to make device nodes.
++
++	  http://genext2fs.sourceforge.net/
 -- 
 1.8.1.2
