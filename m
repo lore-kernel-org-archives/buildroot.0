@@ -1,97 +1,105 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 3 Jun 2013 23:00:46 +0200
-Subject: [Buildroot] [git commit] package/linux-firmware: bump version for
-	new firmware
-Message-ID: <20130603211155.65BC99A1FC@busybox.osuosl.org>
+Date: Mon, 3 Jun 2013 23:00:27 +0200
+Subject: [Buildroot] [git commit] package/tvheadend: update to a git snapshot
+Message-ID: <20130603211155.385089A8A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e650b8861542ba613bddad3d9b51d456bdeadc9
+commit: http://git.buildroot.net/buildroot/commit/?id=a9a12f03e9a6a3182804bcd4b61d75ac698b2569
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump version to get a few new firmware files for some WiFi adapters.
+There are a buncha fixes that are not available in a release yet.
 
-In the rtl81xx familly, it's hard to differentiate each members: I have
-a USB stick that identifies itself as TRL8188CUS, but is handled by the
-rtl8192ce driver. So I moved all of rtl81xx firmwares under the same
-option to avoid confusion.
-
-It will be the responsibility of the user to eventually get rid of
-unwanted firmware files in a post-build script, if needed.
-
-Ditto for rtl87xx.
+Needs refreshing our patches.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/linux-firmware/Config.in         |   12 ++++++------
- package/linux-firmware/linux-firmware.mk |   15 +++++++++------
- 2 files changed, 15 insertions(+), 12 deletions(-)
+ .../tvheadend-001-no-auto-download-dvbscans.patch  |   13 ++++++-------
+ .../tvheadend/tvheadend-002-no-check_config.patch  |    4 ++--
+ package/tvheadend/tvheadend.mk                     |    4 ++--
+ 3 files changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 9998f22..d9bb095 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -61,15 +61,15 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX
- 	help
- 	  Ralink rt27xx/rt28xx/rt30xx
- 
--config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8192
--	bool "Realtek 8192"
-+config BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX
-+	bool "Realtek 81xx"
- 	help
--	  Realtek 8192
-+	  Realtek 8188/8192
- 
--config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712
--	bool "Realtek 8712"
-+config BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX
-+	bool "Realtek 87xx"
- 	help
--	  Realtek 8712
-+	  Realtek 8712/8723
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X
- 	bool "TI wl127X"
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 0cb08b4..0ba2b82 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/tvheadend/tvheadend-001-no-auto-download-dvbscans.patch b/package/tvheadend/tvheadend-001-no-auto-download-dvbscans.patch
+index cc25c56..b64627e 100644
+--- a/package/tvheadend/tvheadend-001-no-auto-download-dvbscans.patch
++++ b/package/tvheadend/tvheadend-001-no-auto-download-dvbscans.patch
+@@ -11,13 +11,13 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ diff -durN tvheadend-v3.5.orig/configure tvheadend-v3.5/configure
+ --- tvheadend-v3.5.orig/configure	2013-02-15 14:41:26.000000000 +0100
+ +++ tvheadend-v3.5/configure	2013-02-16 15:41:16.675556099 +0100
+-@@ -178,15 +178,16 @@
++@@ -179,15 +179,16 @@
+  #
+  # DVB scan
+  #
+ -if enabled linuxdvb && enabled dvbscan; then
+ -  printf "${TAB}" "fetching dvb-scan files ..."
+--  ${ROOTDIR}/support/getmuxlist
++-  "${ROOTDIR}/support/getmuxlist"
+ -  if [ $? -ne 0 ]; then
+ -    echo "fail"
+ -    die "Failed to fetch dvb-scan data (use --disable-dvbscan)"
+@@ -27,7 +27,7 @@ diff -durN tvheadend-v3.5.orig/configure tvheadend-v3.5/configure
+ +# For buildroot, we already installed those files via the dvb-apps package
+ +#if enabled linuxdvb && enabled dvbscan; then
+ +#  printf "${TAB}" "fetching dvb-scan files ..."
+-+#  ${ROOTDIR}/support/getmuxlist
+++#  "${ROOTDIR}/support/getmuxlist"
+ +#  if [ $? -ne 0 ]; then
+ +#    echo "fail"
+ +#    die "Failed to fetch dvb-scan data (use --disable-dvbscan)"
+@@ -37,11 +37,10 @@ diff -durN tvheadend-v3.5.orig/configure tvheadend-v3.5/configure
+  
+  # ###########################################################################
+  # Write config
+-Binary files tvheadend-v3.5.orig/.configure.swp and tvheadend-v3.5/.configure.swp differ
+ diff -durN tvheadend-v3.5.orig/Makefile tvheadend-v3.5/Makefile
+ --- tvheadend-v3.5.orig/Makefile	2013-02-15 14:41:26.000000000 +0100
+ +++ tvheadend-v3.5/Makefile	2013-02-16 15:41:38.218821287 +0100
+-@@ -207,7 +207,7 @@
++@@ -211,7 +211,7 @@
+  SRCS-${CONFIG_BUNDLE}     += bundle.c
+  BUNDLES-yes               += docs/html docs/docresources src/webui/static
+  BUNDLES-yes               += data/conf
+@@ -62,5 +61,5 @@ diff -durN tvheadend-v3.5.orig/support/posix.mk tvheadend-v3.5/support/posix.mk
+ +	ln -sf /usr/share/dvb ${DESTDIR}${datadir}/tvheadend/data/dvb-scan
+ +
+  uninstall:
+- 	rm -f ${DESTDIR}${bindir)/tvheadend
+- 	rm -f ${DESTDIR}${mandir)/tvheadend.1
++ 	rm -f ${DESTDIR}${bindir}/tvheadend
++ 	rm -f ${DESTDIR}${mandir}/tvheadend.1
+diff --git a/package/tvheadend/tvheadend-002-no-check_config.patch b/package/tvheadend/tvheadend-002-no-check_config.patch
+index a0edcdc..aad04e5 100644
+--- a/package/tvheadend/tvheadend-002-no-check_config.patch
++++ b/package/tvheadend/tvheadend-002-no-check_config.patch
+@@ -12,8 +12,8 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ diff -durN tvheadend-v3.5.orig/Makefile tvheadend-v3.5/Makefile
+ --- tvheadend-v3.5.orig/Makefile	2013-02-17 15:15:03.228749505 +0100
+ +++ tvheadend-v3.5/Makefile	2013-02-17 15:15:51.591923062 +0100
+-@@ -246,7 +246,7 @@
+- 	$(CURDIR)/configure $(CONFIGURE_ARGS)
++@@ -250,7 +250,7 @@
++ 	$(ROOTDIR)/configure $(CONFIGURE_ARGS)
+  
+  # Binary
+ -${PROG}: check_config $(OBJS) $(ALLDEPS)
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 58965d6..5ddcd75c 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,8 +4,8 @@
  #
- #############################################################
+ ##############################################################
  
--LINUX_FIRMWARE_VERSION = 65a5163b8bb77bd7759efa3ca780867fcaed89b0
-+LINUX_FIRMWARE_VERSION = 07ea598af5b9dde3acdf279846b062fa1b2987b8
- LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
- 
-@@ -22,16 +22,19 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX) += \
- 	rt2860.bin rt2870.bin rt3070.bin rt3071.bin rt3090.bin 	\
- 	LICENCE.ralink-firmware.txt
- 
--# rtl8192
--LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RTL_8192) += \
-+# rtl81xx
-+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX) += \
- 	rtlwifi/rtl8192cfw.bin rtlwifi/rtl8192cfwU.bin 		\
- 	rtlwifi/rtl8192cfwU_B.bin rtlwifi/rtl8192cufw.bin	\
- 	rtlwifi/rtl8192defw.bin rtlwifi/rtl8192sefw.bin		\
-+	rtlwifi/rtl8188efw.bin					\
- 	LICENCE.rtlwifi_firmware.txt
- 
--# rtl8712
--LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712) += \
--	rtlwifi/rtl8712u.bin LICENCE.rtlwifi_firmware.txt
-+# rtl87xx
-+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX) += \
-+	rtlwifi/rtl8712u.bin rtlwifi/rtl8723fw.bin		\
-+	rtlwifi/rtl8723fw_B.bin					\
-+	LICENCE.rtlwifi_firmware.txt
- 
- # ar7010
- LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010) += \
+-TVHEADEND_VERSION           = v3.5
+-TVHEADEND_SITE              = http://github.com/tvheadend/tvheadend/tarball/$(TVHEADEND_VERSION)
++TVHEADEND_VERSION           = 5513b44
++TVHEADEND_SITE              = git://github.com/tvheadend/tvheadend.git
+ TVHEADEND_LICENSE           = GPLv3+
+ TVHEADEND_LICENSE_FILES     = LICENSE
+ TVHEADEND_DEPENDENCIES      = host-pkgconf host-python openssl
