@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  3 Jun 2013 22:15:49 +0200
-Subject: [Buildroot] [PATCH 3/6] package/genext2fs: add host variant
+Date: Mon,  3 Jun 2013 22:15:50 +0200
+Subject: [Buildroot] [PATCH 4/6] boards/rpi: bump kernel
 In-Reply-To: <cover.1370289131.git.yann.morin.1998@free.fr>
 References: <cover.1370289131.git.yann.morin.1998@free.fr>
-Message-ID: <eb1ddff01f34cffea3d4556f414dda0f346ec703.1370289131.git.yann.morin.1998@free.fr>
+Message-ID: <6cf94a59711d1669443d09c5afe8c56433eb45d1.1370289131.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,67 +12,23 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-genext2fs is built only if the user selected an ext2 root filesystem.
-
-However, some use-cases can't live with the full target/ dir on the
-root filesystem, and requires separate partitions (eg. for /usr).
-In this case, the user would not select an ext2 root fs in the
-Buildrooot menu, and would only generate a tarball of the rootfs.
-This tarball would then be used from a post-image script to build
-the actual required FSes.
-
-But then, genext2fs is not built, since the ext2 root FS was not
-selected.
-
-As for the other filesystem generators, provide a host variant of
-genext2fs (genext2fs is already host-package aware, so only needs
-adding a Kconfig entry).
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- fs/ext2/Config.in                | 1 +
- package/Config.in.host           | 1 +
- package/genext2fs/Config.in.host | 9 +++++++++
- 3 files changed, 11 insertions(+)
- create mode 100644 package/genext2fs/Config.in.host
+ configs/rpi_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index e75ef54..c26482f 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -1,5 +1,6 @@
- config BR2_TARGET_ROOTFS_EXT2
- 	bool "ext2/3/4 root filesystem"
-+	select BR2_PACKAGE_HOST_GENEXT2FS
- 	select BR2_PACKAGE_HOST_E2FSPROGS
- 	help
- 	  Build an ext2/3/4 root filesystem
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 54178ea..5fd2570 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -3,6 +3,7 @@ menu "Host utilities"
- source "package/dfu-util/Config.in.host"
- source "package/dosfstools/Config.in.host"
- source "package/e2fsprogs/Config.in.host"
-+source "package/genext2fs/Config.in.host"
- source "package/genimage/Config.in.host"
- source "package/genpart/Config.in.host"
- source "package/lpc3250loader/Config.in.host"
-diff --git a/package/genext2fs/Config.in.host b/package/genext2fs/Config.in.host
-new file mode 100644
-index 0000000..a03e16b
---- /dev/null
-+++ b/package/genext2fs/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_GENEXT2FS
-+	bool "host genext2fs"
-+	help
-+	  genext2fs generates an ext2 filesystem as a normal (non-root)
-+	  user.  It does not require you to mount the image file to
-+	  copy files on it, nor does it require that you become the
-+	  superuser to make device nodes.
-+
-+	  http://genext2fs.sourceforge.net/
+diff --git a/configs/rpi_defconfig b/configs/rpi_defconfig
+index 96f63ba..e3d0a79 100644
+--- a/configs/rpi_defconfig
++++ b/configs/rpi_defconfig
+@@ -17,7 +17,7 @@ BR2_DEFAULT_KERNEL_VERSION="3.6.11"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="e959a8e"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="5d5301e"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
 1.8.1.2
