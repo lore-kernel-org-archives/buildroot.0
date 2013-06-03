@@ -1,13 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 Jun 2013 23:09:13 +0200
-Subject: [Buildroot] [PATCH 2/6] package/linux-firmware: bump version
-	for new firmware
-In-Reply-To: <97ba0d959c1ec97eea764c84f57d1e2d5e99bff4.1370289131.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 3 Jun 2013 22:15:48 +0200")
+Date: Mon, 03 Jun 2013 23:09:26 +0200
+Subject: [Buildroot] [PATCH 3/6] package/genext2fs: add host variant
+In-Reply-To: <eb1ddff01f34cffea3d4556f414dda0f346ec703.1370289131.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 3 Jun 2013 22:15:49 +0200")
 References: <cover.1370289131.git.yann.morin.1998@free.fr>
  <cover.1370289131.git.yann.morin.1998@free.fr>
- <97ba0d959c1ec97eea764c84f57d1e2d5e99bff4.1370289131.git.yann.morin.1998@free.fr>
-Message-ID: <87ehcihpfq.fsf@dell.be.48ers.dk>
+ <eb1ddff01f34cffea3d4556f414dda0f346ec703.1370289131.git.yann.morin.1998@free.fr>
+Message-ID: <87a9n6hpfd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,17 +16,21 @@ To: buildroot@busybox.net
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
  Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> Bump version to get a few new firmware files for some WiFi adapters.
+ Yann> genext2fs is built only if the user selected an ext2 root filesystem.
 
- Yann> In the rtl81xx familly, it's hard to differentiate each members: I have
- Yann> a USB stick that identifies itself as TRL8188CUS, but is handled by the
- Yann> rtl8192ce driver. So I moved all of rtl81xx firmwares under the same
- Yann> option to avoid confusion.
+ Yann> However, some use-cases can't live with the full target/ dir on the
+ Yann> root filesystem, and requires separate partitions (eg. for /usr).
+ Yann> In this case, the user would not select an ext2 root fs in the
+ Yann> Buildrooot menu, and would only generate a tarball of the rootfs.
+ Yann> This tarball would then be used from a post-image script to build
+ Yann> the actual required FSes.
 
- Yann> It will be the responsibility of the user to eventually get rid of
- Yann> unwanted firmware files in a post-build script, if needed.
+ Yann> But then, genext2fs is not built, since the ext2 root FS was not
+ Yann> selected.
 
- Yann> Ditto for rtl87xx.
+ Yann> As for the other filesystem generators, provide a host variant of
+ Yann> genext2fs (genext2fs is already host-package aware, so only needs
+ Yann> adding a Kconfig entry).
 
 Committed, thanks.
 
