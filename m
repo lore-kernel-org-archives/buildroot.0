@@ -1,43 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Jun 2013 14:44:14 +0200
-Subject: [Buildroot] [PATCH] sconeserver: fix autouild failure
-In-Reply-To: <1370261409-8722-1-git-send-email-spdawson@gmail.com>
-References: <1370261409-8722-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20130603144414.562f9385@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  3 Jun 2013 10:03:28 -0300
+Subject: [Buildroot] [PATCH] libbsd: doesn't have any license files
+Message-ID: <1370264608-2698-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon,
+Fixes autobuilder error:
+http://autobuild.buildroot.net/results/ccd/ccd2f3fe69a3e0321685daf95f85eca5ba2d64cf/
 
-On Mon,  3 Jun 2013 13:10:09 +0100, spdawson at gmail.com wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libbsd/libbsd.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-> diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-> index 744f389..565d467 100644
-> --- a/package/sconeserver/sconeserver.mk
-> +++ b/package/sconeserver/sconeserver.mk
-> @@ -60,7 +60,8 @@ endif
->  ifeq ($(BR2_PACKAGE_SCONESERVER_MYSQL),y)
->  	SCONESERVER_DEPENDENCIES += mysql_client
->  	SCONESERVER_CONF_OPT += --with-mysql \
-> -		--with-mysql_config="$(STAGING_DIR)/usr/bin/mysql_config"
-> +		--with-mysql_config="$(STAGING_DIR)/usr/bin/mysql_config" \
-> +		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib/mysql"
->  else
->  	SCONESERVER_CONF_OPT += --without-mysql
->  endif
-
-This more-or-less reverts part of your commit
-8d34e073c00236ff41a6df8f0fdd6b0b25dc4ad1. Is there a reason why
-sconeserver isn't taking the right ldflags from mysql_config?
-
-Thanks,
-
-Thomas
+diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
+index 3af1002..d5a4c39 100644
+--- a/package/libbsd/libbsd.mk
++++ b/package/libbsd/libbsd.mk
+@@ -8,7 +8,6 @@ LIBBSD_VERSION         = 0.4.2
+ LIBBSD_SOURCE          = libbsd-$(LIBBSD_VERSION).tar.gz
+ LIBBSD_SITE            = http://libbsd.freedesktop.org/releases
+ LIBBSD_LICENSE         = BSD-3c MIT
+-LIBBSD_LICENSE_FILES   = LICENSE
+ 
+ # man-pages are BSD-4c, so that license only matters
+ # if doc is kept in the target rootfs
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.5
