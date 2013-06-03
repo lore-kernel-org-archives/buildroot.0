@@ -1,7 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  3 Jun 2013 22:15:46 +0200
-Subject: [Buildroot] [pull request] Pull request for branch yem-misc-updates
-Message-ID: <cover.1370289131.git.yann.morin.1998@free.fr>
+Date: Mon,  3 Jun 2013 22:15:47 +0200
+Subject: [Buildroot] [PATCH 1/6] package/tvheadend: update to a git snapshot
+In-Reply-To: <cover.1370289131.git.yann.morin.1998@free.fr>
+References: <cover.1370289131.git.yann.morin.1998@free.fr>
+Message-ID: <b2d5d5a29d2759681834892af8e0c9e849885a1c.1370289131.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,83 +12,96 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+There are a buncha fixes that are not available in a release yet.
 
-Here are a few version bumps related to the Raspberry Pi:
-  - rpi_defconfig: bump kernel (many fixes, improvements)
-  - linux-firmware: bump (new firmware files for WiFi dongles)
-  - rpi-firmware: bump (new codecs, mostly)
-  - rpi-firmware: select firmware(s) to install
+Needs refreshing our patches.
 
-Also, promote genext2fs as a host-package, too, like we have
-for other filesystem generators.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ .../tvheadend/tvheadend-001-no-auto-download-dvbscans.patch | 13 ++++++-------
+ package/tvheadend/tvheadend-002-no-check_config.patch       |  4 ++--
+ package/tvheadend/tvheadend.mk                              |  4 ++--
+ 3 files changed, 10 insertions(+), 11 deletions(-)
 
-
-Notes only slightly related to this series:
-
-For the Linux kernel for the RPi, there are a few branches available in
-the raspbberypi repository:
-  - rpi-3.6.y: that branch seems stable, and I just bump to the latest
-               cset in that branch
-  - rpi-3.8.y: I've expereienced many MMC errors using that branch
-  - rpi-3.9.y: ditto, many MMC errors
-
-However, with a RAM-based rootfs (eg. initramfs) or a network rootfs
-(eg. NFS), it might be possible to reliably use those two last branches,
-as long as the SDcard is not used.
-
-Booting one of those two branches with the rpi-firmware currently packaged
-in Buildroot fails, so it seems we first need to update rpi-firmware before
-switching to rpi-3.{8,9}.y.
-
-I'll report back on any improvement in this area.
-
-Regards,
-Yann E. MORIN
-
-
-The following changes since commit 7672b1235d8f786938af66068c1c1da8a766bb38:
-
-  gnutls: wchar only needed for tools (2013-06-03 17:27:00 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem-misc-updates
-
-for you to fetch changes up to a72081fb5d6b38ae6a661e2777003e4dd109e18c:
-
-  package/rpi-firmware: update (2013-06-03 20:01:21 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (6):
-      package/tvheadend: update to a git snapshot
-      package/linux-firmware: bump version for new firmware
-      package/genext2fs: add host variant
-      boards/rpi: bump kernel
-      package/rpi-firmware: add options to select what firmware to install
-      package/rpi-firmware: update
-
- board/raspberrypi/readme.txt                       | 12 ++---
- configs/rpi_defconfig                              |  2 +-
- fs/ext2/Config.in                                  |  1 +
- package/Config.in.host                             |  1 +
- package/genext2fs/Config.in.host                   |  9 ++++
- package/linux-firmware/Config.in                   | 12 ++---
- package/linux-firmware/linux-firmware.mk           | 15 +++---
- package/rpi-firmware/Config.in                     | 55 ++++++++++++++++++++++
- package/rpi-firmware/cmdline.txt                   |  1 +
- package/rpi-firmware/config.txt                    |  1 -
- package/rpi-firmware/rpi-firmware.mk               | 25 ++++++++--
- .../tvheadend-001-no-auto-download-dvbscans.patch  | 13 +++--
- .../tvheadend/tvheadend-002-no-check_config.patch  |  4 +-
- package/tvheadend/tvheadend.mk                     |  4 +-
- 14 files changed, 117 insertions(+), 38 deletions(-)
- create mode 100644 package/genext2fs/Config.in.host
- create mode 100644 package/rpi-firmware/cmdline.txt
+diff --git a/package/tvheadend/tvheadend-001-no-auto-download-dvbscans.patch b/package/tvheadend/tvheadend-001-no-auto-download-dvbscans.patch
+index cc25c56..b64627e 100644
+--- a/package/tvheadend/tvheadend-001-no-auto-download-dvbscans.patch
++++ b/package/tvheadend/tvheadend-001-no-auto-download-dvbscans.patch
+@@ -11,13 +11,13 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ diff -durN tvheadend-v3.5.orig/configure tvheadend-v3.5/configure
+ --- tvheadend-v3.5.orig/configure	2013-02-15 14:41:26.000000000 +0100
+ +++ tvheadend-v3.5/configure	2013-02-16 15:41:16.675556099 +0100
+-@@ -178,15 +178,16 @@
++@@ -179,15 +179,16 @@
+  #
+  # DVB scan
+  #
+ -if enabled linuxdvb && enabled dvbscan; then
+ -  printf "${TAB}" "fetching dvb-scan files ..."
+--  ${ROOTDIR}/support/getmuxlist
++-  "${ROOTDIR}/support/getmuxlist"
+ -  if [ $? -ne 0 ]; then
+ -    echo "fail"
+ -    die "Failed to fetch dvb-scan data (use --disable-dvbscan)"
+@@ -27,7 +27,7 @@ diff -durN tvheadend-v3.5.orig/configure tvheadend-v3.5/configure
+ +# For buildroot, we already installed those files via the dvb-apps package
+ +#if enabled linuxdvb && enabled dvbscan; then
+ +#  printf "${TAB}" "fetching dvb-scan files ..."
+-+#  ${ROOTDIR}/support/getmuxlist
+++#  "${ROOTDIR}/support/getmuxlist"
+ +#  if [ $? -ne 0 ]; then
+ +#    echo "fail"
+ +#    die "Failed to fetch dvb-scan data (use --disable-dvbscan)"
+@@ -37,11 +37,10 @@ diff -durN tvheadend-v3.5.orig/configure tvheadend-v3.5/configure
+  
+  # ###########################################################################
+  # Write config
+-Binary files tvheadend-v3.5.orig/.configure.swp and tvheadend-v3.5/.configure.swp differ
+ diff -durN tvheadend-v3.5.orig/Makefile tvheadend-v3.5/Makefile
+ --- tvheadend-v3.5.orig/Makefile	2013-02-15 14:41:26.000000000 +0100
+ +++ tvheadend-v3.5/Makefile	2013-02-16 15:41:38.218821287 +0100
+-@@ -207,7 +207,7 @@
++@@ -211,7 +211,7 @@
+  SRCS-${CONFIG_BUNDLE}     += bundle.c
+  BUNDLES-yes               += docs/html docs/docresources src/webui/static
+  BUNDLES-yes               += data/conf
+@@ -62,5 +61,5 @@ diff -durN tvheadend-v3.5.orig/support/posix.mk tvheadend-v3.5/support/posix.mk
+ +	ln -sf /usr/share/dvb ${DESTDIR}${datadir}/tvheadend/data/dvb-scan
+ +
+  uninstall:
+- 	rm -f ${DESTDIR}${bindir)/tvheadend
+- 	rm -f ${DESTDIR}${mandir)/tvheadend.1
++ 	rm -f ${DESTDIR}${bindir}/tvheadend
++ 	rm -f ${DESTDIR}${mandir}/tvheadend.1
+diff --git a/package/tvheadend/tvheadend-002-no-check_config.patch b/package/tvheadend/tvheadend-002-no-check_config.patch
+index a0edcdc..aad04e5 100644
+--- a/package/tvheadend/tvheadend-002-no-check_config.patch
++++ b/package/tvheadend/tvheadend-002-no-check_config.patch
+@@ -12,8 +12,8 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ diff -durN tvheadend-v3.5.orig/Makefile tvheadend-v3.5/Makefile
+ --- tvheadend-v3.5.orig/Makefile	2013-02-17 15:15:03.228749505 +0100
+ +++ tvheadend-v3.5/Makefile	2013-02-17 15:15:51.591923062 +0100
+-@@ -246,7 +246,7 @@
+- 	$(CURDIR)/configure $(CONFIGURE_ARGS)
++@@ -250,7 +250,7 @@
++ 	$(ROOTDIR)/configure $(CONFIGURE_ARGS)
+  
+  # Binary
+ -${PROG}: check_config $(OBJS) $(ALLDEPS)
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 58965d6..5ddcd75c 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,8 +4,8 @@
+ #
+ ##############################################################
+ 
+-TVHEADEND_VERSION           = v3.5
+-TVHEADEND_SITE              = http://github.com/tvheadend/tvheadend/tarball/$(TVHEADEND_VERSION)
++TVHEADEND_VERSION           = 5513b44
++TVHEADEND_SITE              = git://github.com/tvheadend/tvheadend.git
+ TVHEADEND_LICENSE           = GPLv3+
+ TVHEADEND_LICENSE_FILES     = LICENSE
+ TVHEADEND_DEPENDENCIES      = host-pkgconf host-python openssl
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
