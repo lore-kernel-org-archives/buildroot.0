@@ -1,37 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 3 Jun 2013 16:33:20 +0200
-Subject: [Buildroot] [git commit] sconeserver: fix autouild failure
-Message-ID: <20130603143943.CF6299A892@busybox.osuosl.org>
+Date: Mon, 3 Jun 2013 16:37:38 +0200
+Subject: [Buildroot] [git commit] aespipe: needs mmu
+Message-ID: <20130603143944.EDDB79A893@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=626f9e37492c7f9f5332df02c17e09349f54565b
+commit: http://git.buildroot.net/buildroot/commit/?id=0e1ec378b32486c27bdd69589a493ed79dac2708
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes autobuild failures such as the following.
+Fixes:
+http://autobuild.buildroot.net/results/9f3/9f3f85a024791cdc6b10e3e40cf41707eb074447/
 
-  http://autobuild.buildroot.net/results/1bdb5e014daf76b701afea5c82ac83ac4c97d4cb/
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sconeserver/sconeserver.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/aespipe/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-index 744f389..565d467 100644
---- a/package/sconeserver/sconeserver.mk
-+++ b/package/sconeserver/sconeserver.mk
-@@ -60,7 +60,8 @@ endif
- ifeq ($(BR2_PACKAGE_SCONESERVER_MYSQL),y)
- 	SCONESERVER_DEPENDENCIES += mysql_client
- 	SCONESERVER_CONF_OPT += --with-mysql \
--		--with-mysql_config="$(STAGING_DIR)/usr/bin/mysql_config"
-+		--with-mysql_config="$(STAGING_DIR)/usr/bin/mysql_config" \
-+		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib/mysql"
- else
- 	SCONESERVER_CONF_OPT += --without-mysql
- endif
+diff --git a/package/aespipe/Config.in b/package/aespipe/Config.in
+index ccc94c2..df99523 100644
+--- a/package/aespipe/Config.in
++++ b/package/aespipe/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_AESPIPE
+ 	bool "aespipe"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  aespipe program is AES encrypting or decrypting pipe. It reads from
+ 	  standard input and writes to standard output. It can be used to
