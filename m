@@ -1,32 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  4 Jun 2013 07:51:36 -0300
-Subject: [Buildroot] [PATCHv2] dtc: needs host-bison and host-flex
-Message-ID: <1370343096-5366-1-git-send-email-gustavo@zacarias.com.ar>
+From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
+Date: Tue, 4 Jun 2013 13:29:59 +0200
+Subject: [Buildroot] problem with external toolchain with hard float
+In-Reply-To: <51ADA9AA.4060506@carallon.com>
+References: <51ADA9AA.4060506@carallon.com>
+Message-ID: <51ADCFB7.2020508@fh-kl.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/000/000a042f6b485d90717d14b93efcf011841c33c3/
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/dtc/dtc.mk | 1 +
- 1 file changed, 1 insertion(+)
+Am 04.06.2013 10:47, schrieb Will Wagner:
+> Hello All,
+>
+> I'm trying to update a project to 2013.05. I have an external toolchain (build with ct-ng 1.18) for arm that is hard float.
+>
+> The problem I have is that the elf files being built for the target do not run. This is because in each elf file the program interpreter is set as /lib/ld-linux.so.3 but if I look in the target filesystem that is generated it has /lib/ld-linux-armhf.so.3
+>
+> So it seems like my toolchain is somehow building elf files that won't run with the toolchain which has me pretty confused. Do I just need  a suitable sym link in my target fs or is this something wrong with how things are being built. Could it be that the toolchain wrapper is somehow forcing soft float?
 
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index 76ff361..7dd4fe7 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -9,6 +9,7 @@ DTC_SITE            = git://git.jdl.com/software/dtc.git
- DTC_LICENSE         = GPLv2+/BSD-2c
- DTC_LICENSE_FILES   = README.license GPL
- DTC_INSTALL_STAGING = YES
-+DTC_DEPENDENCIES    = host-bison host-flex
+If BR2_SOFT_FLOAT is set, the toolchain wrapper adds "-msoft-float" by default. But this option is only available if you build the toolchain with buildroot (or deprecated ct-ng backend)
 
- define DTC_POST_INSTALL_TARGET_RM_DTDIFF
- 	rm -f $(TARGET_DIR)/usr/bin/dtdiff
---
-1.8.1.5
+Best regards
+Patrick
+
+-- 
+Dipl.-Inf. (FH) Patrick Ziegler
+
+University Of Applied Sciences
+Kaiserslautern
+
+Amerikastrasse 1
+D-66482 Zweibruecken
+Germany
+
+Phone:  +49 631 3724 5526
+Mail:   patrick.ziegler at fh-kl.de
+PGP KeyID 0xB4796B8C
+
+http://www.fh-kl.de
+http://www.fh-kl.de/fachbereiche/imst/iuk-knowhow.html
