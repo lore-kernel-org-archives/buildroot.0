@@ -1,23 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Jun 2013 08:49:58 +0200
-Subject: [Buildroot] [PATCH 4/7] libmpeg2: add license info
-In-Reply-To: <1370311415-1966-4-git-send-email-danomimanchego123@gmail.com>
- (Danomi Manchego's message of "Mon, 3 Jun 2013 22:03:32 -0400")
-References: <1370311415-1966-1-git-send-email-danomimanchego123@gmail.com>
- <1370311415-1966-4-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <87obbmfjzd.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 4 Jun 2013 08:43:51 +0200
+Subject: [Buildroot] [git commit] sdl: add license info
+Message-ID: <20130604065154.340959A918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=181768f00c316e13b4ae24c9361bf0aad3609a74
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Danomi> Also, remove trailing slash from site.
- Danomi> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+[Peter: License is LGPLv2.1+]
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sdl/sdl.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index 59576fb..fc60de6 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -7,6 +7,8 @@
+ SDL_VERSION = 1.2.15
+ SDL_SOURCE = SDL-$(SDL_VERSION).tar.gz
+ SDL_SITE = http://www.libsdl.org/release
++SDL_LICENSE = LGPLv2.1+
++SDL_LICENSE_FILES = COPYING
+ SDL_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_SDL_FBCON),y)
