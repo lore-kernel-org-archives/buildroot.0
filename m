@@ -1,44 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Jun 2013 00:11:12 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
- yem-patchwork-fixes
-In-Reply-To: <cover.1369650924.git.yann.morin.1998@free.fr>
-References: <cover.1369650924.git.yann.morin.1998@free.fr>
-Message-ID: <20130603221112.GC3439@free.fr>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Mon,  3 Jun 2013 22:03:29 -0400
+Subject: [Buildroot] [PATCH 1/7] sdl: add license info
+Message-ID: <1370311415-1966-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/sdl/sdl.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-On 2013-05-27 12:36 +0200, Yann E. MORIN spake thusly:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Hello All!
-> 
-> Here are four patches from Nathan Lynch to fix building out-of-tree
-> when the Buildroot source tree is readonly (eg. shared via NFS between
-> multiple developers).
-
-Ping? I'm trying to check bug #5780, but can't go that far, since
-target/ is readonly, which is fixed by one of these patches.
-
-> ----------------------------------------------------------------
-> Nathan Lynch (4):
->       toolchain/uClibc: ensure .oldconfig is writable
->       target: ensure target/ dir is writable
->       busybox: ensure $(BUSYBOX_BUILD_CONFIG) is writable
->       linux: ensure buildroot_defconfig is writable
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index 59576fb..85d8cd1 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -7,6 +7,8 @@
+ SDL_VERSION = 1.2.15
+ SDL_SOURCE = SDL-$(SDL_VERSION).tar.gz
+ SDL_SITE = http://www.libsdl.org/release
++SDL_LICENSE = LGPLv2.1
++SDL_LICENSE_FILES = COPYING
+ SDL_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_SDL_FBCON),y)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.9.5
