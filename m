@@ -1,35 +1,32 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Tue, 04 Jun 2013 09:47:38 +0100
-Subject: [Buildroot] problem with external toolchain with hard float
-Message-ID: <51ADA9AA.4060506@carallon.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  4 Jun 2013 07:49:25 -0300
+Subject: [Buildroot] [PATCH 1/2] dtc: needs host-bison and host-flex
+Message-ID: <1370342966-5107-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+Fixes:
+http://autobuild.buildroot.net/results/000/000a042f6b485d90717d14b93efcf011841c33c3/
 
-I'm trying to update a project to 2013.05. I have an external toolchain 
-(build with ct-ng 1.18) for arm that is hard float.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dtc/dtc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-The problem I have is that the elf files being built for the target do 
-not run. This is because in each elf file the program interpreter is set 
-as /lib/ld-linux.so.3 but if I look in the target filesystem that is 
-generated it has /lib/ld-linux-armhf.so.3
-
-So it seems like my toolchain is somehow building elf files that won't 
-run with the toolchain which has me pretty confused. Do I just need  a 
-suitable sym link in my target fs or is this something wrong with how 
-things are being built. Could it be that the toolchain wrapper is 
-somehow forcing soft float?
-
-Thanks
-Will
-
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index 76ff361..3ab5e3c 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -9,6 +9,7 @@ DTC_SITE            = git://git.jdl.com/software/dtc.git
+ DTC_LICENSE         = GPLv2+/BSD-2c
+ DTC_LICENSE_FILES   = README.license GPL
+ DTC_INSTALL_STAGING = YES
++DTC_DEPDENENCIES    = host-bison host-flex
+ 
+ define DTC_POST_INSTALL_TARGET_RM_DTDIFF
+ 	rm -f $(TARGET_DIR)/usr/bin/dtdiff
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7471 9224
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+1.8.1.5
