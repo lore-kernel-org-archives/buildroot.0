@@ -1,41 +1,35 @@
-From: wacha at mit.bme.hu <wacha@mit.bme.hu>
-Date: Tue, 04 Jun 2013 10:18:20 +0200
-Subject: [Buildroot] Build kernel with devicetree support
-Message-ID: <20130604101820.Horde.Y0PAK1HM6z3pTjPtdLCJCA1@www.mit.bme.hu>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Tue, 04 Jun 2013 09:47:38 +0100
+Subject: [Buildroot] problem with external toolchain with hard float
+Message-ID: <51ADA9AA.4060506@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear developers,
+Hello All,
 
-I am trying to build a root file system and the Linux kernel with buildroot.
+I'm trying to update a project to 2013.05. I have an external toolchain 
+(build with ct-ng 1.18) for arm that is hard float.
 
-Because it is a custom hardware, I've set the device tree source  
-option to use a custom device tree file.
-My device tree source file path is set to the device tree file name,  
-which resides in the buildroot top level directory.
+The problem I have is that the elf files being built for the target do 
+not run. This is because in each elf file the program interpreter is set 
+as /lib/ld-linux.so.3 but if I look in the target filesystem that is 
+generated it has /lib/ld-linux-armhf.so.3
 
-With that configuration the kernel fails to build from source:
+So it seems like my toolchain is somehow building elf files that won't 
+run with the toolchain which has me pretty confused. Do I just need  a 
+suitable sym link in my target fs or is this something wrong with how 
+things are being built. Could it be that the toolchain wrapper is 
+somehow forcing soft float?
 
-(irrelevant parts truncated)
-make[1]: Leaving directory  
-`/home/wachag/zynq/buildroot/output/build/linux-v3.6-digilent-13.01'
-PATH="/home/wachag/zynq/buildroot/output/host/bin:/home/wachag/zynq/buildroot/output/host/usr/bin:/home/wachag/zynq/buildroot/output/host/usr/sbin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-7-oracle/bin:/usr/lib/jvm/java-7-oracle/db/bin:/usr/lib/jvm/java-7-oracle/jre/bin" PERLLIB="/home/wachag/zynq/buildroot/output/host/usr/lib/perl" /usr/bin/make -j5 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm INSTALL_MOD_PATH=/home/wachag/zynq/buildroot/output/target CROSS_COMPILE=" /home/wachag/zynq/buildroot/output/host/usr/bin/arm-none-linux-gnueabi-" DEPMOD=/home/wachag/zynq/buildroot/output/host/usr/sbin/depmod -C /home/wachag/zynq/buildroot/output/build/linux-v3.6-digilent-13.01  
-"zedboard-devicetree.dtb
-/bin/sh: -c: line 0: unexpected EOF while looking for matching `"'
-/bin/sh: -c: line 1: syntax error: unexpected end of file
-make: ***  
-[/home/wachag/zynq/buildroot/output/build/linux-v3.6-digilent-13.01/.stamp_built] Error  
-1
+Thanks
+Will
 
-It seems that a quotation mark is missing from the end of the command line.
-Since I am new in the buildroot system, I could not find the  
-appropriate line in the Makefile.
-Could someone confirm this is an error in buildroot and not in my  
-configuration?
-
-Regards,
-
-Gabor Wacha
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7471 9224
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
