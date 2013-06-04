@@ -1,65 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Jun 2013 10:09:47 +0200
-Subject: [Buildroot] [PATCH 2/6] package/linux-firmware: bump version
-	for new firmware
-In-Reply-To: <87k3maficu.fsf@dell.be.48ers.dk>
-References: <cover.1370289131.git.yann.morin.1998@free.fr>
- <20130604091305.6fdc8fdc@skate> <87k3maficu.fsf@dell.be.48ers.dk>
-Message-ID: <201306041009.47767.yann.morin.1998@free.fr>
+From: wacha at mit.bme.hu <wacha@mit.bme.hu>
+Date: Tue, 04 Jun 2013 10:18:20 +0200
+Subject: [Buildroot] Build kernel with devicetree support
+Message-ID: <20130604101820.Horde.Y0PAK1HM6z3pTjPtdLCJCA1@www.mit.bme.hu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Peter, All,
+Dear developers,
 
-On Tuesday 04 June 2013 09:25:05 Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
->  Thomas> Dear Yann E. MORIN,
->  Thomas> On Mon,  3 Jun 2013 22:15:48 +0200, Yann E. MORIN wrote:
-> 
->  >> -config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8192
->  >> -	bool "Realtek 8192"
->  >> +config BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX
->  >> +	bool "Realtek 81xx"
->  >> help
->  >> -	  Realtek 8192
->  >> +	  Realtek 8188/8192
->  >> 
->  >> -config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712
->  >> -	bool "Realtek 8712"
->  >> +config BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX
->  >> +	bool "Realtek 87xx"
->  >> help
->  >> -	  Realtek 8712
->  >> +	  Realtek 8712/8723
-> 
->  Thomas> Warning, warning, warning: renaming of Kconfig options without
->  Thomas> Config.in.legacy updates!
+I am trying to build a root file system and the Linux kernel with buildroot.
 
-Gahhh... :-(
-I even thought about it at the time, and just forgot... :-(
+Because it is a custom hardware, I've set the device tree source  
+option to use a custom device tree file.
+My device tree source file path is set to the device tree file name,  
+which resides in the buildroot top level directory.
 
->  Thomas> I must say I'm proud to be the one who mentions that, even after Peter
->  Thomas> reviewed and committed the patch :-)
-> 
-> Gaah, I even thought about it when I saw it, but then forgot about it
-> again.
-> 
-> Yann, will you send a patch adding Config.in.legacy handling for the old
-> names?
+With that configuration the kernel fails to build from source:
 
-Yes, this evening, when back at home.
+(irrelevant parts truncated)
+make[1]: Leaving directory  
+`/home/wachag/zynq/buildroot/output/build/linux-v3.6-digilent-13.01'
+PATH="/home/wachag/zynq/buildroot/output/host/bin:/home/wachag/zynq/buildroot/output/host/usr/bin:/home/wachag/zynq/buildroot/output/host/usr/sbin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-7-oracle/bin:/usr/lib/jvm/java-7-oracle/db/bin:/usr/lib/jvm/java-7-oracle/jre/bin" PERLLIB="/home/wachag/zynq/buildroot/output/host/usr/lib/perl" /usr/bin/make -j5 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm INSTALL_MOD_PATH=/home/wachag/zynq/buildroot/output/target CROSS_COMPILE=" /home/wachag/zynq/buildroot/output/host/usr/bin/arm-none-linux-gnueabi-" DEPMOD=/home/wachag/zynq/buildroot/output/host/usr/sbin/depmod -C /home/wachag/zynq/buildroot/output/build/linux-v3.6-digilent-13.01  
+"zedboard-devicetree.dtb
+/bin/sh: -c: line 0: unexpected EOF while looking for matching `"'
+/bin/sh: -c: line 1: syntax error: unexpected end of file
+make: ***  
+[/home/wachag/zynq/buildroot/output/build/linux-v3.6-digilent-13.01/.stamp_built] Error  
+1
+
+It seems that a quotation mark is missing from the end of the command line.
+Since I am new in the buildroot system, I could not find the  
+appropriate line in the Makefile.
+Could someone confirm this is an error in buildroot and not in my  
+configuration?
 
 Regards,
-Yann E. MORIN.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Gabor Wacha
