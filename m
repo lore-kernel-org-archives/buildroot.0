@@ -1,56 +1,67 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon,  3 Jun 2013 22:03:35 -0400
-Subject: [Buildroot] [PATCH 7/7] kmod: adjust license info based on kmod
-	tools selection
-In-Reply-To: <1370311415-1966-1-git-send-email-danomimanchego123@gmail.com>
-References: <1370311415-1966-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <1370311415-1966-7-git-send-email-danomimanchego123@gmail.com>
+From: Sundareson, Prabindh <prabu@ti.com>
+Date: Tue, 4 Jun 2013 03:15:53 +0000
+Subject: [Buildroot] EGL Confusion
+In-Reply-To: <20130603201505.GB3439@free.fr>
+References: <CALo-6+g+z8xV9bnzbF6MAB0VUEzO-mkYocHvVM=GziSmyFAk5A@mail.gmail.com>
+ <20130603201505.GB3439@free.fr>
+Message-ID: <321768C95D21724485BCE784F1BE98473EB3CE90@DBDE04.ent.ti.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libkmod is licensed as LGPL, while the kmod tools are GPL.
-We always install libkmod, but conditionally install the tools.
-This patch adjusts the license variables accordingly.
+Spenser was working on packaging the TI SDK per below message, please let us know if this is on track, or if this needs any help.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/kmod/kmod.mk |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+http://lists.busybox.net/pipermail/buildroot/2013-May/072537.html
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 5c733b9..2fe9942 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -7,11 +7,13 @@
- KMOD_VERSION = 13
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
- KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod/
--KMOD_LICENSE = GPLv2+ LGPLv2.1+
--KMOD_LICENSE_FILES = COPYING libkmod/COPYING
- KMOD_INSTALL_STAGING = YES
- KMOD_DEPENDENCIES = host-pkgconf
- 
-+# license info for libkmod only, conditionally add more below
-+KMOD_LICENSE = LGPLv2.1+
-+KMOD_LICENSE_FILES = libkmod/COPYING
-+
- ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- KMOD_CONF_OPT += --disable-manpages
- endif
-@@ -27,6 +29,11 @@ KMOD_CONF_OPT += --with-xz
- endif
- 
- ifeq ($(BR2_PACKAGE_KMOD_TOOLS),y)
-+
-+# add license info for kmod tools
-+KMOD_LICENSE += GPLv2+
-+KMOD_LICENSE_FILES += COPYING
-+
- # take precedence over busybox / module-init-tools implementations
- KMOD_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_BUSYBOX),busybox) \
--- 
-1.7.9.5
+regards,
+Prabu
+
+
+-----Original Message-----
+From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of Yann E. MORIN
+Sent: Tuesday, June 04, 2013 1:45 AM
+To: Charles Krinke
+Cc: buildroot
+Subject: Re: [Buildroot] EGL Confusion
+
+Charles, All,
+
+On 2013-06-03 13:05 -0700, Charles Krinke spake thusly:
+> Either my understanding of buildroot is incomplete (most likely) or 
+> buildroot is incomplete (least likely), but in either case, I would 
+> appreciate a bit of advice.
+> 
+> I am moving a TI AM3517 design from last springs buildroot to the 
+> lastest buildroot in order to go from Qt-4.8.2 to Qt-5.0.2 and I can 
+> build a reasonable rootfs unless I try to configure QtDeclarative 
+> which is grayed out.
+> 
+> In looking into why it is grayed out, it seems to have to do with 
+> BR2_PACKAGE_HAS_OPENGL_EGL which is also grayed out as I am not on a 
+> Raspberry Pi.
+> 
+> My need is to reference the external EGL supplied by TI in their 
+> Graphics_SDK and I was hoping that we have a way to get from here to 
+> there and would appreciate any advice on the path with the least 
+> problems.
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+You'd have to package the TI stuff, and that package would select the BR2_PACKAGE_HAS_OPENGL_EGL option, like the packages rpi-userland and freescale-imx/gpu-viv-bin-mx6q do.
+
+Regards,
+Yann E. MORIN.
+
+--
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' 
+| conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
