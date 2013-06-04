@@ -1,51 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  4 Jun 2013 23:49:53 +0200
-Subject: [Buildroot] [PATCH] legacy: add options for the legacy Realtek WiFi
-	options in linux-firmware
-Message-ID: <1370382593-26889-1-git-send-email-yann.morin.1998@free.fr>
+Date: Wed, 5 Jun 2013 00:05:58 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+ yem-patchwork-fixes
+In-Reply-To: <20130603221112.GC3439@free.fr>
+References: <cover.1369650924.git.yann.morin.1998@free.fr>
+ <20130603221112.GC3439@free.fr>
+Message-ID: <20130604220558.GA3206@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+All,
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- Config.in.legacy | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+On 2013-06-04 00:11 +0200, Yann E. MORIN spake thusly:
+> On 2013-05-27 12:36 +0200, Yann E. MORIN spake thusly:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > Hello All!
+> > 
+> > Here are four patches from Nathan Lynch to fix building out-of-tree
+> > when the Buildroot source tree is readonly (eg. shared via NFS between
+> > multiple developers).
+> 
+> Ping? I'm trying to check bug #5780, but can't go that far, since
+> target/ is readonly, which is fixed by one of these patches.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 7748ab3..bb9c4a9 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -41,6 +41,24 @@ comment "will fail.                                          "
- endif
- 
- #
-+# Legacy options since 2013.05
-+#
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8192
-+	bool "Realtek 8192 replaced by Realtek 81xx"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX
-+	help
-+	  Now covers the whole Realtek 81xx familly: 8188/8192.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712
-+	bool "Realtek 8712 replaced by Realtek 87xx"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX
-+	help
-+	  Now covers the whole Realtek 87xx familly: 8712/8723.
-+
-+#
- # Legacy options since 2013.02
- #
- 
+Well, forget this series, I've uncovered a remaining issue.
+(Peter: I've marked it as "Changes Requested" in the Patchwork ;-) )
+
+Sorry... :-/
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.1.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
