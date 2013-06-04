@@ -1,39 +1,54 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  4 Jun 2013 08:58:06 -0300
-Subject: [Buildroot] [PATCH] bwm-ng: move to appropiate category
-Message-ID: <1370347086-21126-1-git-send-email-gustavo@zacarias.com.ar>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Tue, 4 Jun 2013 10:22:21 -0500
+Subject: [Buildroot] Build kernel with devicetree support
+In-Reply-To: <20130604101820.Horde.Y0PAK1HM6z3pTjPtdLCJCA1@www.mit.bme.hu>
+References: <20130604101820.Horde.Y0PAK1HM6z3pTjPtdLCJCA1@www.mit.bme.hu>
+Message-ID: <20130604102221.3a321d6f@bourban.gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-bwm-ng is a networking application, not a system one.
+On Tue, 04 Jun 2013 10:18:20 +0200
+wacha at mit.bme.hu wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Dear developers,
+> 
+> I am trying to build a root file system and the Linux kernel with
+> buildroot.
+> 
+> Because it is a custom hardware, I've set the device tree source  
+> option to use a custom device tree file.
+> My device tree source file path is set to the device tree file name,  
+> which resides in the buildroot top level directory.
+> 
+> With that configuration the kernel fails to build from source:
+> 
+> (irrelevant parts truncated)
+> make[1]: Leaving directory  
+> `/home/wachag/zynq/buildroot/output/build/linux-v3.6-digilent-13.01'
+> PATH="/home/wachag/zynq/buildroot/output/host/bin:/home/wachag/zynq/buildroot/output/host/usr/bin:/home/wachag/zynq/buildroot/output/host/usr/sbin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-7-oracle/bin:/usr/lib/jvm/java-7-oracle/db/bin:/usr/lib/jvm/java-7-oracle/jre/bin"
+> PERLLIB="/home/wachag/zynq/buildroot/output/host/usr/lib/perl" /usr/bin/make
+> -j5 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm
+> INSTALL_MOD_PATH=/home/wachag/zynq/buildroot/output/target
+> CROSS_COMPILE=" /home/wachag/zynq/buildroot/output/host/usr/bin/arm-none-linux-gnueabi-"
+> DEPMOD=/home/wachag/zynq/buildroot/output/host/usr/sbin/depmod
+> -C /home/wachag/zynq/buildroot/output/build/linux-v3.6-digilent-13.01
+> "zedboard-devicetree.dtb /bin/sh: -c: line 0: unexpected EOF while
+> looking for matching `"' /bin/sh: -c: line 1: syntax error:
+> unexpected end of file make: ***
+> [/home/wachag/zynq/buildroot/output/build/linux-v3.6-digilent-13.01/.stamp_built]
+> Error 1
+>
+> It seems that a quotation mark is missing from the end of the command
+> line. Since I am new in the buildroot system, I could not find the  
+> appropriate line in the Makefile.
+> Could someone confirm this is an error in buildroot and not in my  
+> configuration?
 
-diff --git a/package/Config.in b/package/Config.in
-index ce3943a..41bc936 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -684,6 +684,7 @@ source "package/boa/Config.in"
- source "package/bind/Config.in"
- source "package/bmon/Config.in"
- source "package/bridge-utils/Config.in"
-+source "package/bwm-ng/Config.in"
- source "package/can-utils/Config.in"
- source "package/chrony/Config.in"
- source "package/connman/Config.in"
-@@ -857,7 +858,6 @@ source "package/attr/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/bootutils/Config.in"
- endif
--source "package/bwm-ng/Config.in"
- source "package/cpuload/Config.in"
- source "package/htop/Config.in"
- source "package/keyutils/Config.in"
--- 
-1.8.1.5
+This is working for me.  Can you provide your .config file and the
+version of Buildroot you are using?
+
+Thank,
+Spenser
