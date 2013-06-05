@@ -1,68 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Jun 2013 20:00:11 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-06-04
-In-Reply-To: <20130605170058.GA3185@free.fr>
-References: <20130605063004.4425352C13E@lolut.humanoidz.org>
- <20130605182924.71a07679@skate> <20130605170058.GA3185@free.fr>
-Message-ID: <20130605180011.GD3185@free.fr>
+From: =?ISO-8859-2?Q?Wojciech_Sle=F1ska?= <wojciech.slenska@gmail.com>
+Date: Wed, 5 Jun 2013 20:05:09 +0200
+Subject: [Buildroot] AM3517 Neon, OpenGL & EGLFS support
+In-Reply-To: <CALo-6+h9ELx+Hp_OQB0kvrdv9mH1VKnrKKcTTXLNSYkK0vFhHQ@mail.gmail.com>
+References: <CALo-6+h9ELx+Hp_OQB0kvrdv9mH1VKnrKKcTTXLNSYkK0vFhHQ@mail.gmail.com>
+Message-ID: <CAMYPSMpE=ziBR4TuRbkjG+78fcJ=DXA67ePTXTDBPDRv+asEyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello Charles,
 
-On 2013-06-05 19:00 +0200, Yann E. MORIN spake thusly:
-> On 2013-06-05 18:29 +0200, Thomas Petazzoni spake thusly:
-> > On Wed,  5 Jun 2013 08:30:04 +0200 (CEST), Thomas Petazzoni wrote:
-> > >                   libbsd-0.4.2 | 12
+I already have full OpenGL ES support on my TI AM3517 in QT5 using eglfs plugin.
 
-Patch sent.
+I use following half-manual procedure to made this:
+1. I build kernel modules using TI Graphics_SDK_4_09_00_01 package,
+downloaded from TI page
+2. I made some changes in qt5 build scripts (check attachment) in
+buildroot and add path to ti libs
 
-> > > dtc-e4b497f367a3b2ae99cc520... | 3 
+As compiler I use arago-2011.09 with following flags -march=armv7-a
+-mtune=cortex-a8 -mfpu=neon -mfloat-abi=softfp
 
-Gustavo already sent a fix.
+3. When build is finished. I copy some files from
+Graphics_SDK_4_09_00_01/gfx_rel_es3.x/ directory to target rootfs.
+4. Now I can run ./hellogl_es2 -platform eglfs
 
-> > >                 libiscsi-1.6.0 | 1 
+I hope that this solution will help You.
 
-I don't know what to do with this one. It seems like another wrapper
-issue:
+Best Regards
+Wojciech Slenska
 
-    /bin/bash ./libtool  --tag=CC   --mode=link
-        /home/test/test/1/output/host/usr/bin/mips64el-unknown-linux-gnu-gcc
-        -Wall -W -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-align
-        -Wwrite-strings -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-        -D_FILE_OFFSET_BITS=64  -pipe -Os  -ldl  -o bin/iscsi-test
-        test-tool/bin_iscsi_test-iscsi-test.o
-        [--SNIP lots of .o files--]
-        test-tool/bin_iscsi_test-1020_bufferoffset_invalid.o lib/libiscsi.la
-        -lpopt 
-    /home/test/test/1/output/host/usr/bin/mips64el-unknown-linux-gnu-ld:
-    src/bin_ld_iscsi-ld_iscsi.o: ABI is incompatible with that of the
-    selected emulation
-    /home/test/test/1/output/host/usr/bin/mips64el-unknown-linux-gnu-ld:
-    failed to merge target specific data of file src/bin_ld_iscsi-ld_iscsi.o
-    /home/test/test/1/output/host/usr/bin/mips64el-unknown-linux-gnu-ld:
-    lib/.libs/libiscsi_convenience.a(connect.o): ABI is incompatible with
-    that of the selected emulation
-    [--SNIP--]
-    /home/test/test/1/output/host/usr/bin/mips64el-unknown-linux-gnu-ld:
-    final link failed: File in wrong format
-
-> > >                   libedit-2.11 | 1 
-
-libedit: no longer available on MIPS, since it depends on libbsd, which
-is not available on MIPS.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2013/6/5 Charles Krinke <charles.krinke@gmail.com>:
+> This is probably a question for Prabu and Spenser as I undestand a
+> buildroot patch is on the near horizon for Qt5 and OpenGL.
+>
+> I have downloaded last nights nightly build of buildroot and built Qt5
+> for ARM for the TI AM3517 as we try to move from Qt-4.8.2 to Qt-5.0.2
+> and am looking at three features that are currently disabled.
+>
+> These are support for Neon, OpenGL & EGLFS.
+>
+> I was able to add QMAKE_INCDIR_OPENGL_ES2, QMAKE_LIBDIR_OPENGL_ES2 &
+> QMAKE_LIBS_OPENGL_ES2 to the mkspec patch this week using last weeks
+> buildroot-20130529 and get OpenGL to compile pointing to my external
+> TI Graphics_SDK, but then get into trouble with EGLFS and later on
+> with VERSION in qt_module.prf. So, I think there is a bit more to the
+> problem then just adding constants to the mkspecs patch.
+>
+> Can someone possibly describe more of what needs to be done in a
+> dialect of techno-babble that I understand to get these three features
+> supported for the AM3517, please?
+>
+> --
+> Charles Krinke
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-qt5-OMAP-EGLFS-enable-dirty-fix.patch
+Type: application/octet-stream
+Size: 7723 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130605/3e72b324/attachment.obj>
