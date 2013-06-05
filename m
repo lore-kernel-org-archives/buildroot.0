@@ -1,30 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Jun 2013 22:33:27 +0200
-Subject: [Buildroot] [PATCH 2/2] sunxi-boards: set a default board
-In-Reply-To: <20130605222659.59ab6272@skate> (Thomas Petazzoni's message of
- "Wed, 5 Jun 2013 22:26:59 +0200")
-References: <1370449270-22014-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1370449270-22014-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <87d2s0cqtw.fsf@dell.be.48ers.dk> <20130605213807.0c015c5d@skate>
- <878v2ocpey.fsf@dell.be.48ers.dk> <20130605222659.59ab6272@skate>
-Message-ID: <874ndccn6w.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 5 Jun 2013 22:38:03 +0200
+Subject: [Buildroot] [PATCH] package/libbsd: depends on architectures
+ providing a.out.h
+In-Reply-To: <87li6ocri6.fsf@dell.be.48ers.dk>
+References: <1370454724-10594-1-git-send-email-yann.morin.1998@free.fr>
+ <87li6ocri6.fsf@dell.be.48ers.dk>
+Message-ID: <20130605203803.GE3185@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Peter, All,
 
-Hi,
+On 2013-06-05 21:00 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  Yann> libbsd requires a.out.h, which is only available in a select subset
+>  Yann> of the architectures Buildroot supports.
+> 
+>  Yann> This means libedit can no longer 'select' libbsd, so turn the 'select'
+>  Yann> into a 'depends on'. And the dependency chain ends there.
+> 
+> Why? You can just propagate the arch dependencies to libedit as well.
 
- Thomas> While you're at it, can you change your build result submit
- Thomas> script to no longer include the full build log (it gets deleted
- Thomas> anyway once it arrives on the server, they consume too much
- Thomas> disk space), and increase the length of the "build end log" to
- Thomas> 500 lines instead of 100 lines?
+Sure, will do.
 
-Sure, done!
+> I don't like dependencies for libraries, it isn't obvious to people that
+> we actually have a libedit package.
+
+I don't like propagating the dependencies. ;-)
+
+I wonder if I should revive the _AVAILABLE stuff from last year? But
+that's for another thread.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
