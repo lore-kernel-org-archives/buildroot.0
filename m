@@ -1,32 +1,60 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Wed, 5 Jun 2013 10:36:29 -0700
-Subject: [Buildroot] AM3517 Neon, OpenGL & EGLFS support
-Message-ID: <CALo-6+h9ELx+Hp_OQB0kvrdv9mH1VKnrKKcTTXLNSYkK0vFhHQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  5 Jun 2013 19:52:04 +0200
+Subject: [Buildroot] [PATCH] package/libbsd: depends on architectures
+	providing a.out.h
+Message-ID: <1370454724-10594-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is probably a question for Prabu and Spenser as I undestand a
-buildroot patch is on the near horizon for Qt5 and OpenGL.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-I have downloaded last nights nightly build of buildroot and built Qt5
-for ARM for the TI AM3517 as we try to move from Qt-4.8.2 to Qt-5.0.2
-and am looking at three features that are currently disabled.
+libbsd requires a.out.h, which is only available in a select subset
+of the architectures Buildroot supports.
 
-These are support for Neon, OpenGL & EGLFS.
+This means libedit can no longer 'select' libbsd, so turn the 'select'
+into a 'depends on'. And the dependency chain ends there.
 
-I was able to add QMAKE_INCDIR_OPENGL_ES2, QMAKE_LIBDIR_OPENGL_ES2 &
-QMAKE_LIBS_OPENGL_ES2 to the mkspec patch this week using last weeks
-buildroot-20130529 and get OpenGL to compile pointing to my external
-TI Graphics_SDK, but then get into trouble with EGLFS and later on
-with VERSION in qt_module.prf. So, I think there is a bit more to the
-problem then just adding constants to the mkspecs patch.
+Fixes:
+    http://autobuild.buildroot.org/results/019/019091312ec547520370ffad967b53e23f54a14b
+    http://autobuild.buildroot.org/results/87c/87c3a8bf2248606d80ddcfd96132de4c5fe869ed
+    http://autobuild.buildroot.org/results/589/5891f539ce3f3ff2e3411228472c8833fdd0d7c0
+    [...]
 
-Can someone possibly describe more of what needs to be done in a
-dialect of techno-babble that I understand to get these three features
-supported for the AM3517, please?
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libbsd/Config.in  | 3 +++
+ package/libedit/Config.in | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index 0ed9dac..915a4bd 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -1,5 +1,8 @@
+ config BR2_PACKAGE_LIBBSD
+ 	bool "libbsd"
++	# libbsd requires a.out.h, which is only available for those
++	# architectures: arm, m68k, x86 (and alpha, but we don't care.)
++	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 )
+ 	help
+ 	  This library provides useful functions commonly found on BSD
+ 	  systems, and lacking on others like GNU systems, thus making
+diff --git a/package/libedit/Config.in b/package/libedit/Config.in
+index b49c23c..86a70b4 100644
+--- a/package/libedit/Config.in
++++ b/package/libedit/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBEDIT
+ 	bool "libedit"
+-	select BR2_PACKAGE_LIBBSD
++	depends on BR2_PACKAGE_LIBBSD
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  The editline library (from BSD) provides generic line editing
 -- 
-Charles Krinke
+1.8.1.2
