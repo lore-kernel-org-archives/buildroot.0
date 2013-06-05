@@ -1,40 +1,51 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Jun 2013 11:00:04 +0200
-Subject: [Buildroot] [git commit] monit: needs threads support in toolchain
-Message-ID: <20130605090358.A5DEB9A95D@busybox.osuosl.org>
+Date: Wed, 5 Jun 2013 11:01:27 +0200
+Subject: [Buildroot] [git commit] legacy: add options for the legacy Realtek
+	WiFi options in linux-firmware
+Message-ID: <20130605090359.87E769A95D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=46ae86b3df6092cb29d647eaa6464400609d247b
+commit: http://git.buildroot.net/buildroot/commit/?id=860d37a27609a9d3040e19c82804ed506f41090b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.org/results/0b5/0b5838f3d11b45244f27bd2bcb092dd6a88fd39d
-
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/monit/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ Config.in.legacy |   18 ++++++++++++++++++
+ 1 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/monit/Config.in b/package/monit/Config.in
-index 6933aaf..3127da9 100644
---- a/package/monit/Config.in
-+++ b/package/monit/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_MONIT
- 	bool "monit"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Monit is a free open source utility for managing and
- 	  monitoring, processes, programs, files, directories and
-@@ -8,3 +9,6 @@ config BR2_PACKAGE_MONIT
- 	  actions in error situations.
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7748ab3..bb9c4a9 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -41,6 +41,24 @@ comment "will fail.                                          "
+ endif
  
- 	  http://mmonit.com/monit/
+ #
++# Legacy options since 2013.05
++#
 +
-+comment "monit requires a toolchain with threads support"
-+       depends on !BR2_TOOLCHAIN_HAS_THREADS
++config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8192
++	bool "Realtek 8192 replaced by Realtek 81xx"
++	select BR2_LEGACY
++	select BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX
++	help
++	  Now covers the whole Realtek 81xx familly: 8188/8192.
++
++config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712
++	bool "Realtek 8712 replaced by Realtek 87xx"
++	select BR2_LEGACY
++	select BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX
++	help
++	  Now covers the whole Realtek 87xx familly: 8712/8723.
++
++#
+ # Legacy options since 2013.02
+ #
+ 
