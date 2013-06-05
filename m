@@ -1,41 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Jun 2013 15:50:21 +0200
-Subject: [Buildroot] [PATCH] bzip2: Rearrange build order
-In-Reply-To: <1370436976-746-1-git-send-email-markos.chandras@gmail.com>
- (Markos Chandras's message of "Wed, 5 Jun 2013 13:56:16 +0100")
-References: <1370436976-746-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <877gi8ekf6.fsf@dell.be.48ers.dk>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Wed, 5 Jun 2013 15:02:36 +0100
+Subject: [Buildroot] [PATCH] wvstreams: Build bundled argp library with -fPIC
+Message-ID: <1370440956-8000-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
+From: Markos Chandras <markos.chandras@imgtec.com>
 
- Markos> From: Markos Chandras <markos.chandras@imgtec.com>
- Markos> Several object files are shared between the libbz2.so shared library
- Markos> and the libbz2.a static one. MIPS will refuce to build a relocatable
- Markos> object when creating a new shared library with the following error:
+Fixes linking problems on MIPS.
 
- Markos> blocksort.o: relocation R_MIPS_HI16 against `__gnu_local_gp' can not be used
- Markos> when making a shared object; recompile with -fPIC
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ package/wvstreams/wvstreams-0006-argp-fpic.patch | 28 ++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/wvstreams/wvstreams-0006-argp-fpic.patch
 
- Markos> This is because these files are build without -fPIC when creating the
- Markos> static library and later on they are used to build the shared one.
-
- Markos> This is easily fixed if we add the shared library build rule before
- Markos> creating the static library so object files are always compiled with
- Markos> -fPIC.
-
-This works, but is afaik less efficient for the static lib case.
-
-The real fix is imho to build the object files twice, like how libtool
-does it.
-
-If you look at the Debian package, they work around it by adding a
-seperate .c -> .sho build rule, which adds -fPIC, and then link the .so
-file with the .sho files instead.
-
+diff --git a/package/wvstreams/wvstreams-0006-argp-fpic.patch b/package/wvstreams/wvstreams-0006-argp-fpic.patch
+new file mode 100644
+index 0000000..b4cf1d2
+--- /dev/null
++++ b/package/wvstreams/wvstreams-0006-argp-fpic.patch
+@@ -0,0 +1,28 @@
++Build argp object files with -fPIC.
++
++The argp bundled dependency is linked to the libwvutils.so shared library.
++MIPS will refuce to link a non-PIC library with a shared one.
++
++We fix this problem by building the argp source files using -fPIC since
++the libargp static library will only be used to link to libwvutils.so
++as instructed by the following rule in the root Makefile:
++
++ifeq ($(USE_WVSTREAMS_ARGP),1)
++  utils/wvargs.o-CPPFLAGS += -Iargp
++  libwvutils.so-LIBS += -Largp -largp
++
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++
++Index: wvstreams-4.6.1/argp/Makefile.in
++===================================================================
++--- wvstreams-4.6.1.orig/argp/Makefile.in
+++++ wvstreams-4.6.1/argp/Makefile.in
++@@ -137,7 +137,7 @@ AUTOMAKE = @AUTOMAKE@
++ AWK = @AWK@
++ CC = @CC@
++ CCDEPMODE = @CCDEPMODE@
++-CFLAGS = @CFLAGS@
+++CFLAGS = @CFLAGS@ -fPIC
++ CPP = @CPP@
++ CPPFLAGS = @CPPFLAGS@
++ CYGPATH_W = @CYGPATH_W@
 -- 
-Bye, Peter Korsgaard
+1.8.2.1
