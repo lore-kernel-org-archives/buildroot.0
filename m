@@ -1,47 +1,97 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Jun 2013 23:08:38 +0200
-Subject: [Buildroot] [git commit] xapp_luit: Add patch to fix building with
-	recent gcc versions
-Message-ID: <20130605211328.A92379A96A@busybox.osuosl.org>
+Date: Wed, 5 Jun 2013 23:07:56 +0200
+Subject: [Buildroot] [git commit] xapp_xmodmap: Fix build problems due to
+	missing asprintf definition
+Message-ID: <20130605211328.714129A962@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=99c016336e974727135a40b1ac86d8d14c4cdab6
+commit: http://git.buildroot.net/buildroot/commit/?id=96f522ee7bc94b1440c5d53d44d26a491ca8f9ab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream bugzilla: https://bugs.freedesktop.org/show_bug.cgi?id=47792
+Upstream Bugzilla: https://bugs.freedesktop.org/show_bug.cgi?id=48696
 
 Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../x11r7/xapp_luit/xapp_luit-posix-openpt.patch   |   19 +++++++++++++++++++
- 1 files changed, 19 insertions(+), 0 deletions(-)
+ .../x11r7/xapp_xmodmap/xapp_xmodmap-asprintf.patch |   69 ++++++++++++++++++++
+ 1 files changed, 69 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xapp_luit/xapp_luit-posix-openpt.patch b/package/x11r7/xapp_luit/xapp_luit-posix-openpt.patch
+diff --git a/package/x11r7/xapp_xmodmap/xapp_xmodmap-asprintf.patch b/package/x11r7/xapp_xmodmap/xapp_xmodmap-asprintf.patch
 new file mode 100644
-index 0000000..c8ff8e4
+index 0000000..8eb2b9c
 --- /dev/null
-+++ b/package/x11r7/xapp_luit/xapp_luit-posix-openpt.patch
-@@ -0,0 +1,19 @@
-+Suggested workaround to build with recent gcc versions
++++ b/package/x11r7/xapp_xmodmap/xapp_xmodmap-asprintf.patch
+@@ -0,0 +1,69 @@
++Fixes build problems due to missing asprintf() definition
 +
-+Upstream bugzilla: https://bugs.freedesktop.org/show_bug.cgi?id=47792
++Upstream bug: https://bugs.freedesktop.org/show_bug.cgi?id=48696
 +
 +Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 +
-+Index: xapp_luit-1.1.1/sys.c
-+===================================================================
-+--- xapp_luit-1.1.1.orig/sys.c
-++++ xapp_luit-1.1.1/sys.c
-+@@ -20,6 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWAR
-+ THE SOFTWARE.
++From dab3ce5b4b9d7078cd55515441b2ba244a32516a Mon Sep 17 00:00:00 2001
++From: Alan Coopersmith <alan.coopersmith@oracle.com>
++Date: Mon, 23 Apr 2012 07:28:39 -0700
++Subject: [PATCH:xmodmap] include config.h before stdio.h & other system
++ headers
++
++Ensures definitions like _GNU_SOURCE are visible when needed.
++
++Signed-off-by: Alan Coopersmith <alan.coopersmith@oracle.com>
++---
++ exec.c    |    4 ++++
++ pf.c      |    4 ++++
++ xmodmap.c |    4 ++++
++ 3 files changed, 12 insertions(+)
++
++diff --git a/exec.c b/exec.c
++index dbcb669..419b10e 100644
++--- a/exec.c
+++++ b/exec.c
++@@ -54,6 +54,10 @@ from The Open Group.
++  * original xmodmap, written by David Rosenthal, of Sun Microsystems.
++  */
++ 
+++#ifdef HAVE_CONFIG_H
+++# include "config.h"
+++#endif
+++
++ #include <X11/Xos.h>
++ #include <X11/Xlib.h>
++ #include <stdio.h>
++diff --git a/pf.c b/pf.c
++index 0eb0f55..3f0c3f4 100644
++--- a/pf.c
+++++ b/pf.c
++@@ -26,6 +26,10 @@ from The Open Group.
++ 
 + */
 + 
-++#define _XOPEN_SOURCE 600
+++#ifdef HAVE_CONFIG_H
+++# include "config.h"
+++#endif
 ++
-+ #ifdef HAVE_CONFIG_H
-+ # include "config.h"
-+ #endif
++ #include <X11/Xos.h>
++ #include <X11/Xlib.h>
++ #include <stdio.h>
++diff --git a/xmodmap.c b/xmodmap.c
++index 58a8e70..0f89629 100644
++--- a/xmodmap.c
+++++ b/xmodmap.c
++@@ -26,6 +26,10 @@ from The Open Group.
++ 
++ */
++ 
+++#ifdef HAVE_CONFIG_H
+++# include "config.h"
+++#endif
+++
++ #include <X11/Xos.h>
++ #include <X11/Xlib.h>
++ #include <stdio.h>
++-- 
++1.7.9.2
++
