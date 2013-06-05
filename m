@@ -1,48 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 Jun 2013 00:10:18 +0200
-Subject: [Buildroot] [PATCH v2] directfb: Make imlib2 support optional
-In-Reply-To: <1369128580-15685-1-git-send-email-markos.chandras@gmail.com>
- (Markos Chandras's message of "Tue, 21 May 2013 10:29:40 +0100")
-References: <1369128580-15685-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <8738swb451.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 6 Jun 2013 00:10:31 +0200
+Subject: [Buildroot] [git commit] directfb: add optional imlib2 support
+Message-ID: <20130605221238.3C16D9A5CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=88378877273829c387f48a6c96959712b892856f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Regarding subject - That's not really what the patch does, it adds
-optional imlib2 support.
+[Peter: drop default y]
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/directfb/Config.in   |    4 ++++
+ package/directfb/directfb.mk |    8 ++++++++
+ 2 files changed, 12 insertions(+), 0 deletions(-)
 
- Markos> From: Markos Chandras <markos.chandras@imgtec.com>
- Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
- Markos> ---
- Markos> Changes since v1:
- Markos> - Make imlib2 support optional
- Markos> ---
- Markos>  package/directfb/Config.in   | 5 +++++
- Markos>  package/directfb/directfb.mk | 8 ++++++++
- Markos>  2 files changed, 13 insertions(+)
-
- Markos> diff --git a/package/directfb/Config.in b/package/directfb/Config.in
- Markos> index b9ff5f9..a6bfb6b 100644
- Markos> --- a/package/directfb/Config.in
- Markos> +++ b/package/directfb/Config.in
- Markos> @@ -100,6 +100,11 @@ config BR2_PACKAGE_DIRECTFB_GIF
- Markos>  	bool "enable GIF support"
- Markos>  	default y
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index b9ff5f9..4712db0 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -100,6 +100,10 @@ config BR2_PACKAGE_DIRECTFB_GIF
+ 	bool "enable GIF support"
+ 	default y
  
- Markos> +config BR2_PACKAGE_DIRECTFB_IMLIB2
- Markos> +	bool "enable IMLIB2 support"
- Markos> +	default y
- Markos> +	select BR2_PACKAGE_IMLIB2
-
-Directfb didn't use to pull in imlib2, and it apparently wasn't
-critical, so I've dropped the 'default y'.
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
++config BR2_PACKAGE_DIRECTFB_IMLIB2
++	bool "enable IMLIB2 support"
++	select BR2_PACKAGE_IMLIB2
++
+ config BR2_PACKAGE_DIRECTFB_JPEG
+ 	bool "enable JPEG support"
+ 	default y
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 5ead084..e5a423d 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -108,6 +108,14 @@ else
+ DIRECTFB_CONF_OPT += --disable-jpeg
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DIRECTFB_IMLIB2),y)
++DIRECTFB_CONF_OPT += --enable-imlib2
++DIRECTFB_DEPENDENCIES += imlib2
++DIRECTFB_CONF_ENV += ac_cv_path_IMLIB2_CONFIG=$(STAGING_DIR)/usr/bin/imlib2-config
++else
++DIRECTFB_CONF_OPT += --disable-imlib2
++endif
++
+ ifeq ($(BR2_PACKAGE_DIRECTFB_DITHER_RGB16),y)
+ DIRECTFB_CONF_OPT += --with-dither-rgb16=advanced
+ else
