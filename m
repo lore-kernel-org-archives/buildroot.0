@@ -1,33 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Jun 2013 23:56:52 +0200
-Subject: [Buildroot] [PATCH] bzip2: Rearrange build order
-In-Reply-To: <20130605172207.7251ce79@skate> (Thomas Petazzoni's message of
- "Wed, 5 Jun 2013 17:22:07 +0200")
-References: <1370436976-746-1-git-send-email-markos.chandras@gmail.com>
- <877gi8ekf6.fsf@dell.be.48ers.dk> <20130605160438.2a47341b@skate>
- <8738swej95.fsf@dell.be.48ers.dk> <20130605172207.7251ce79@skate>
-Message-ID: <87bo7kb4rf.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 5 Jun 2013 23:52:44 +0200
+Subject: [Buildroot] [git commit] dtc: needs host-bison and host-flex
+Message-ID: <20130605215851.5054C9A972@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=40d782cd0e3942c56fec6d136b6792d39cf00d85
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fixes:
+http://autobuild.buildroot.net/results/000/000a042f6b485d90717d14b93efcf011841c33c3/
 
- Thomas> In fact, I hadn't realized that libtool was building each and
- Thomas> every .c file twice, once without -fPIC for the static library,
- Thomas> and once with -fPIC for the shared library.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/dtc/dtc.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- Thomas> I believe we have three choices:
-
-Yes, like we discussed on IRC I think we need to end up with 3 options:
-
-- Build only shared libraries (default)
-- Build only static libraries (BR2_PREFER_STATIC_LIB)
-- Build both, and prefer shared libraries (what we have today)
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index 76ff361..7dd4fe7 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -9,6 +9,7 @@ DTC_SITE            = git://git.jdl.com/software/dtc.git
+ DTC_LICENSE         = GPLv2+/BSD-2c
+ DTC_LICENSE_FILES   = README.license GPL
+ DTC_INSTALL_STAGING = YES
++DTC_DEPENDENCIES    = host-bison host-flex
+ 
+ define DTC_POST_INSTALL_TARGET_RM_DTDIFF
+ 	rm -f $(TARGET_DIR)/usr/bin/dtdiff
