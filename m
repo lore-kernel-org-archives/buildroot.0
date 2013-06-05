@@ -1,19 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Jun 2013 11:00:51 +0200
-Subject: [Buildroot] [PATCH] bwm-ng: move to appropiate category
-In-Reply-To: <1370347086-21126-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 4 Jun 2013 08:58:06 -0300")
-References: <1370347086-21126-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k3m9dj98.fsf@dell.be.48ers.dk>
+Date: Wed, 05 Jun 2013 11:01:15 +0200
+Subject: [Buildroot] [PATCH] luajit: bump to version 2.0.2
+In-Reply-To: <1370360008-1415-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Tue, 4 Jun 2013 17:33:27 +0200")
+References: <1370360008-1415-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87fvwxdj8k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- Gustavo> bwm-ng is a networking application, not a system one.
+ Francois> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Committed, thanks.
 
