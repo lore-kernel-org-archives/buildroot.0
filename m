@@ -1,74 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jun 2013 18:48:36 +0200
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 5 Jun 2013 19:00:58 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2013-06-04
 In-Reply-To: <20130605182924.71a07679@skate>
 References: <20130605063004.4425352C13E@lolut.humanoidz.org>
  <20130605182924.71a07679@skate>
-Message-ID: <20130605184836.6ea2b205@skate>
+Message-ID: <20130605170058.GA3185@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Wed, 5 Jun 2013 18:29:24 +0200, Thomas Petazzoni wrote:
-
-> >              host-libftdi-0.19 | 20
+On 2013-06-05 18:29 +0200, Thomas Petazzoni spake thusly:
+> On Wed,  5 Jun 2013 08:30:04 +0200 (CEST), Thomas Petazzoni wrote:
+> >                   libbsd-0.4.2 | 12
 > 
-> Those issues are caused by the bump of libtool, from the testing I
-> could do. Reverting libtool to the previous version "solves" the
-> problem.
-> 
-> The thing that happens is that libftdi (for the target) has
-> AUTORECONF=YES, but not host-libftdi. So libftdi gets autoreconfigured,
-> and then when host-libftdi is being built, even though we don't have
-> AUTORECONF=YES, when starting the build, it does execute
-> 'CDPATH="${ZSH_VERSION+.}:" && cd .
-> && /bin/bash /home/test/outputs/libftdi/build/host-libftdi-0.19/missing
-> --run aclocal-1.11 ' and it ends up failing.
+> PowerPC does not have a.out.h. But mipsel also doesn't
+> (http://autobuild.buildroot.org/results/019/019091312ec547520370ffad967b53e23f54a14b/build-end.log),
+> libbsd doesn't have support for AArch64
+> (http://autobuild.buildroot.org/results/87c/87c3a8bf2248606d80ddcfd96132de4c5fe869ed/build-end.log).
+> And SH4 doesn't have a.out.h
+> (http://autobuild.buildroot.org/results/589/5891f539ce3f3ff2e3411228472c8833fdd0d7c0/build-end.log).
 
-Ok, the reason it does execute "missing" and does a kind of automatic
-autoreconf is because we have one patch that modifies configure.in. So
-configure.in is more recent than the configure script itself. When
-libtool/autoconf/automake has not been built before host-libftdi, then
-this automatic autoreconf cannot proceed:
+Mine! ;-)
 
-CDPATH="${ZSH_VERSION+.}:" && cd . && /bin/bash /home/test/outputs/toto/build/host-libftdi-0.19/missing --run aclocal-1.11 
-/home/test/outputs/toto/build/host-libftdi-0.19/missing: line 52: aclocal-1.11: command not found
-WARNING: `aclocal-1.11' is missing on your system.  You should only need it if
-         you modified `acinclude.m4' or `configure.in'.  You might want
-         to install the `Automake' and `Perl' packages.  Grab them from
-         any GNU archive site.
-CDPATH="${ZSH_VERSION+.}:" && cd . && /bin/bash /home/test/outputs/toto/build/host-libftdi-0.19/missing --run autoconf
- cd . && /bin/bash /home/test/outputs/toto/build/host-libftdi-0.19/missing --run automake-1.11 --foreign
-/home/test/outputs/toto/build/host-libftdi-0.19/missing: line 52: autoconf: command not found
-/home/test/outputs/toto/build/host-libftdi-0.19/missing: line 52: automake-1.11: command not found
-WARNING: `autoconf' is missing on your system.  You should only need it if
-         you modified `configure.in'.  You might want to install the
-         `Autoconf' and `GNU m4' packages.  Grab them from any GNU
-         archive site.
+> > dtc-e4b497f367a3b2ae99cc520... | 3 
+> >                 libiscsi-1.6.0 | 1 
+> >                   libedit-2.11 | 1 
 
-and it in facts makes the thing work.
+Mine, too.
 
-However, when this "automatic autoreconf" is done, and an
-automake/autoconf/libtool set of tools, with the latest libtool, has
-already been built and installed, then it generates some wrong stuff.
+Regards,
+Yann E. MORIN.
 
-An easy fix is to add:
-
-HOST_LIBFTDI_AUTORECONF = YES
-
-to libftdi.mk. It doesn't really explain why it was working with
-libtool 2.2 and no longer with libtool 2.4, but it works.
-
-Thoughts?
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
