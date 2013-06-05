@@ -1,85 +1,38 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Wed, 5 Jun 2013 15:57:16 +0100
-Subject: [Buildroot] [PATCH] bzip2: Fix build system to build object files
-	twice
-Message-ID: <1370444236-12962-1-git-send-email-markos.chandras@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  5 Jun 2013 11:58:17 -0300
+Subject: [Buildroot] [PATCH] gnutls: make crywrap a tools option
+Message-ID: <1370444297-17883-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Markos Chandras <markos.chandras@imgtec.com>
+crywrap now needs wchar support so just build it when tools are enabled.
+It's also a tool so it belongs there anyway.
+Fixes:
+http://autobuild.buildroot.net/results/418/418ce71eecc1db725e3b3f092131a01cb1666a60/
 
-Fixes build problems on MIPS
-
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/bzip2/bzip2-build-objects-twice.patch | 56 +++++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/bzip2/bzip2-build-objects-twice.patch
+ package/gnutls/gnutls.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/bzip2/bzip2-build-objects-twice.patch b/package/bzip2/bzip2-build-objects-twice.patch
-new file mode 100644
-index 0000000..9bde0f6
---- /dev/null
-+++ b/package/bzip2/bzip2-build-objects-twice.patch
-@@ -0,0 +1,56 @@
-+Build objects twice for shared and static libraries
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 3089979..43ec977 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -37,6 +37,11 @@ GNUTLS_CONF_OPT += --with-regex-header=pcreposix.h \
+ 	--with-libregex-cflags="`$(PKG_CONFIG_HOST_BINARY) libpcreposix --cflags`" \
+ 	--with-libregex-libs="`$(PKG_CONFIG_HOST_BINARY) libpcreposix --libs`"
+ 
++# Consider crywrap as part of tools because it needs WCHAR, and it's so too
++ifeq ($(BR2_PACKAGE_GNUTLS_TOOLS),)
++	GNUTLS_CONF_OPT += --disable-crywrap
++endif
 +
-+The existing Makefile causes problems on MIPS because the same object
-+files (not compiled with -fPIC) are used in static and shared libraries.
-+MIPS will refuce to link non-pic objects in shared libraries.
-+We fix this problems by creating a new rule for the shared library
-+and build the shared objects as *.sho instead of *.o.
-+Then, we use these objects to create the shared library.
-+
-+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-+
-+Index: bzip2-1.0.6/Makefile-libbz2_so
-+===================================================================
-+--- bzip2-1.0.6.orig/Makefile-libbz2_so
-++++ bzip2-1.0.6/Makefile-libbz2_so
-+@@ -25,13 +25,13 @@ SHELL=/bin/sh
-+ CC=gcc
-+ override CFLAGS += -fpic -fPIC -Wall
-+ 
-+-OBJS= blocksort.o  \
-+-      huffman.o    \
-+-      crctable.o   \
-+-      randtable.o  \
-+-      compress.o   \
-+-      decompress.o \
-+-      bzlib.o
-++OBJS= blocksort.sho  \
-++      huffman.sho    \
-++      crctable.sho   \
-++      randtable.sho  \
-++      compress.sho   \
-++      decompress.sho \
-++      bzlib.sho
-+ 
-+ all: $(OBJS)
-+ 	$(CC) -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.6 $(OBJS)
-+@@ -45,17 +45,5 @@ install:
-+ clean: 
-+ 	rm -f $(OBJS) bzip2.o libbz2.so.1.0.6 libbz2.so.1.0 bzip2-shared
-+ 
-+-blocksort.o: blocksort.c
-+-	$(CC) $(CFLAGS) -c blocksort.c
-+-huffman.o: huffman.c
-+-	$(CC) $(CFLAGS) -c huffman.c
-+-crctable.o: crctable.c
-+-	$(CC) $(CFLAGS) -c crctable.c
-+-randtable.o: randtable.c
-+-	$(CC) $(CFLAGS) -c randtable.c
-+-compress.o: compress.c
-+-	$(CC) $(CFLAGS) -c compress.c
-+-decompress.o: decompress.c
-+-	$(CC) $(CFLAGS) -c decompress.c
-+-bzlib.o: bzlib.c
-+-	$(CC) $(CFLAGS) -c bzlib.c
-++%.sho: %.c
-++	$(CC) $(CFLAGS) -o $@ -c $<
+ # libidn support for nommu must exclude the crywrap wrapper (uses fork)
+ GNUTLS_CONF_OPT += $(if $(BR2_USE_MMU),,--disable-crywrap)
+ GNUTLS_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBIDN),libidn)
 -- 
-1.8.2.1
+1.8.1.5
