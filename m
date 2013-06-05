@@ -1,23 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Jun 2013 23:07:06 +0200
-Subject: [Buildroot] [PATCH] gnutls: make crywrap a tools option
-In-Reply-To: <1370444297-17883-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 5 Jun 2013 11:58:17 -0300")
-References: <1370444297-17883-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wqq8b72d.fsf@dell.be.48ers.dk>
+Date: Wed, 05 Jun 2013 23:08:23 +0200
+Subject: [Buildroot] [PATCH] xapp_xmodmap: Fix build problems due to
+	missing asprintf definition
+In-Reply-To: <1370445476-16452-1-git-send-email-markos.chandras@gmail.com>
+ (Markos Chandras's message of "Wed, 5 Jun 2013 16:17:56 +0100")
+References: <1370445476-16452-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <87sj0wb708.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
 
- Gustavo> crywrap now needs wchar support so just build it when tools are enabled.
- Gustavo> It's also a tool so it belongs there anyway.
-
- Gustavo> Fixes:
- Gustavo> http://autobuild.buildroot.net/results/418/418ce71eecc1db725e3b3f092131a01cb1666a60/
+ Markos> From: Markos Chandras <markos.chandras@imgtec.com>
+ Markos> Upstream Bugzilla: https://bugs.freedesktop.org/show_bug.cgi?id=48696
 
 Committed, thanks.
 
