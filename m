@@ -1,23 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Jun 2013 23:53:59 +0200
-Subject: [Buildroot] [PATCH 2/2] udpcast: needs host-m4
-In-Reply-To: <1370342966-5107-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 4 Jun 2013 07:49:26 -0300")
-References: <1370342966-5107-1-git-send-email-gustavo@zacarias.com.ar>
- <1370342966-5107-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87fvwwb4w8.fsf@dell.be.48ers.dk>
+Date: Wed, 05 Jun 2013 23:56:52 +0200
+Subject: [Buildroot] [PATCH] bzip2: Rearrange build order
+In-Reply-To: <20130605172207.7251ce79@skate> (Thomas Petazzoni's message of
+ "Wed, 5 Jun 2013 17:22:07 +0200")
+References: <1370436976-746-1-git-send-email-markos.chandras@gmail.com>
+ <877gi8ekf6.fsf@dell.be.48ers.dk> <20130605160438.2a47341b@skate>
+ <8738swej95.fsf@dell.be.48ers.dk> <20130605172207.7251ce79@skate>
+Message-ID: <87bo7kb4rf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Gustavo> Fixes:
- Gustavo> http://autobuild.buildroot.net/results/28b/28bc8651ee798af150bba5997b66ec7bb450ecde/
+Hi,
 
-Committed, thanks.
+ Thomas> In fact, I hadn't realized that libtool was building each and
+ Thomas> every .c file twice, once without -fPIC for the static library,
+ Thomas> and once with -fPIC for the shared library.
+
+ Thomas> I believe we have three choices:
+
+Yes, like we discussed on IRC I think we need to end up with 3 options:
+
+- Build only shared libraries (default)
+- Build only static libraries (BR2_PREFER_STATIC_LIB)
+- Build both, and prefer shared libraries (what we have today)
 
 -- 
 Bye, Peter Korsgaard
