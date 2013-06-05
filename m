@@ -1,12 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Jun 2013 19:17:19 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-06-04
-In-Reply-To: <51AF6FD2.1090803@zacarias.com.ar>
-References: <20130605063004.4425352C13E@lolut.humanoidz.org>
- <20130605182924.71a07679@skate> <20130605170058.GA3185@free.fr>
- <51AF6FD2.1090803@zacarias.com.ar>
-Message-ID: <20130605171719.GB3185@free.fr>
+Date: Wed, 5 Jun 2013 19:22:28 +0200
+Subject: [Buildroot] [PATCHv2] dtc: needs host-bison and host-flex
+In-Reply-To: <1370343096-5366-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1370343096-5366-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130605172228.GC3185@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +12,37 @@ To: buildroot@busybox.net
 
 Gustavo, All,
 
-On 2013-06-05 14:05 -0300, Gustavo Zacarias spake thusly:
-> On 06/05/2013 02:00 PM, Yann E. MORIN wrote:
+On 2013-06-04 07:51 -0300, Gustavo Zacarias spake thusly:
+> Fixes:
+> http://autobuild.buildroot.net/results/000/000a042f6b485d90717d14b93efcf011841c33c3/
 > 
-> >> PowerPC does not have a.out.h. But mipsel also doesn't
-> >> (http://autobuild.buildroot.org/results/019/019091312ec547520370ffad967b53e23f54a14b/build-end.log),
-> >> libbsd doesn't have support for AArch64
-> >> (http://autobuild.buildroot.org/results/87c/87c3a8bf2248606d80ddcfd96132de4c5fe869ed/build-end.log).
-> >> And SH4 doesn't have a.out.h
-> >> (http://autobuild.buildroot.org/results/589/5891f539ce3f3ff2e3411228472c8833fdd0d7c0/build-end.log).
-> > 
-> > Mine! ;-)
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+> ---
+>  package/dtc/dtc.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Already tried guarding the a.out.h include with __NO_A_OUT_SUPPORT in
-> src/nlist.c, but that's not enough, it's using the N_EXT and other
-> defines from a.out.h
-> (to avoid going a path that's been walked before!)
-
-Best for Buildroot is just to depends on !(ARCH_it_s_broken_on).
-
-As said on IRC, if an arch is missing something, we don't add it.
-(If it's broken, we can fix it, however).
-
-And faking a a.out.h does not seem so trivial ?
-
-Regards,
-Yann E. MORIN.
+> diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+> index 76ff361..7dd4fe7 100644
+> --- a/package/dtc/dtc.mk
+> +++ b/package/dtc/dtc.mk
+> @@ -9,6 +9,7 @@ DTC_SITE            = git://git.jdl.com/software/dtc.git
+>  DTC_LICENSE         = GPLv2+/BSD-2c
+>  DTC_LICENSE_FILES   = README.license GPL
+>  DTC_INSTALL_STAGING = YES
+> +DTC_DEPENDENCIES    = host-bison host-flex
+> 
+>  define DTC_POST_INSTALL_TARGET_RM_DTDIFF
+>  	rm -f $(TARGET_DIR)/usr/bin/dtdiff
+> --
+> 1.8.1.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
