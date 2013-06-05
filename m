@@ -1,37 +1,63 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  5 Jun 2013 15:17:43 -0300
-Subject: [Buildroot] [PATCH] p11-kit: fix argp_standalone build error
-Message-ID: <1370456263-17708-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 05 Jun 2013 20:52:49 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-06-04
+In-Reply-To: <20130605184836.6ea2b205@skate> (Thomas Petazzoni's message of
+ "Wed, 5 Jun 2013 18:48:36 +0200")
+References: <20130605063004.4425352C13E@lolut.humanoidz.org>
+ <20130605182924.71a07679@skate> <20130605184836.6ea2b205@skate>
+Message-ID: <87txlccrum.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When BR2_PACKAGE_ARGP_STANDALONE is enabled and built before p11-kit the
-configure script detects it and a conflict arises because libc already
-includes and defines program_invocation_short_name.
-Avoid this by forcing the detection to true otherwise the configure
-script tries to use argp-standalone and it clashes with libc. Fixes:
-http://autobuild.buildroot.net/results/a39/a39fe81a356b922a891d4225a56ce2427ab5bca7/
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/p11-kit/p11-kit.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ Thomas> Hello,
+ Thomas> On Wed, 5 Jun 2013 18:29:24 +0200, Thomas Petazzoni wrote:
 
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 2ddb27c..89774dc 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
-@@ -9,6 +9,8 @@ P11_KIT_SITE = http://p11-glue.freedesktop.org/releases
- P11_KIT_DEPENDENCIES = host-pkgconf libtasn1
- P11_KIT_INSTALL_STAGING = YES
- P11_KIT_CONF_OPT = --disable-static
-+P11_KIT_CONF_ENV = ac_cv_have_decl_program_invocation_short_name=yes \
-+	ac_cv_have_decl___progname=yes
- P11_KIT_LICENSE = BSD-3c
- P11_KIT_LICENSE_FILES = COPYING
- 
+ >> >              host-libftdi-0.19 | 20
+ >> 
+ >> Those issues are caused by the bump of libtool, from the testing I
+ >> could do. Reverting libtool to the previous version "solves" the
+ >> problem.
+ >> 
+ >> The thing that happens is that libftdi (for the target) has
+ >> AUTORECONF=YES, but not host-libftdi. So libftdi gets autoreconfigured,
+ >> and then when host-libftdi is being built, even though we don't have
+ >> AUTORECONF=YES, when starting the build, it does execute
+ >> 'CDPATH="${ZSH_VERSION+.}:" && cd .
+ >> && /bin/bash /home/test/outputs/libftdi/build/host-libftdi-0.19/missing
+ >> --run aclocal-1.11 ' and it ends up failing.
+
+ Thomas> Ok, the reason it does execute "missing" and does a kind of automatic
+ Thomas> autoreconf is because we have one patch that modifies configure.in. So
+ Thomas> configure.in is more recent than the configure script itself. When
+ Thomas> libtool/autoconf/automake has not been built before host-libftdi, then
+ Thomas> this automatic autoreconf cannot proceed:
+
+That makes more sense. I didn't get how a target build (in a different
+directory) could affect it.
+
+So the fix is just HOST_LIBFTDI_AUTORECONF = YES?
+
+ Thomas> and it in facts makes the thing work.
+
+ Thomas> However, when this "automatic autoreconf" is done, and an
+ Thomas> automake/autoconf/libtool set of tools, with the latest libtool, has
+ Thomas> already been built and installed, then it generates some wrong stuff.
+
+ Thomas> An easy fix is to add:
+
+ Thomas> HOST_LIBFTDI_AUTORECONF = YES
+
+ Thomas> to libftdi.mk. It doesn't really explain why it was working with
+ Thomas> libtool 2.2 and no longer with libtool 2.4, but it works.
+
+Indeed, odd. Well, having <pkg>_AUTORECONF = YES without
+HOST_<pkg>_AUTORECONF = YES is obviously wrong, so let's just fix that.
+
 -- 
-1.8.1.5
+Bye, Peter Korsgaard
