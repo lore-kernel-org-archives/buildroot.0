@@ -1,44 +1,85 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Jun 2013 16:48:41 +0200
-Subject: [Buildroot] [PATCH] bzip2: Rearrange build order
-In-Reply-To: <CAG2jQ8iYbYKBsS6Mku-NOgvdKigP9Doyy8_++joecKk7t31qRg@mail.gmail.com>
- (Markos Chandras's message of "Wed, 5 Jun 2013 15:25:29 +0100")
-References: <1370436976-746-1-git-send-email-markos.chandras@gmail.com>
- <877gi8ekf6.fsf@dell.be.48ers.dk> <20130605160438.2a47341b@skate>
- <8738swej95.fsf@dell.be.48ers.dk>
- <CAG2jQ8iYbYKBsS6Mku-NOgvdKigP9Doyy8_++joecKk7t31qRg@mail.gmail.com>
-Message-ID: <87y5aod35i.fsf@dell.be.48ers.dk>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Wed, 5 Jun 2013 15:57:16 +0100
+Subject: [Buildroot] [PATCH] bzip2: Fix build system to build object files
+	twice
+Message-ID: <1370444236-12962-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
+From: Markos Chandras <markos.chandras@imgtec.com>
 
-Hi,
+Fixes build problems on MIPS
 
- Markos> The problem here is that Debian uses a single Makefile to build both
- Markos> the static and the shared library but in buildroot we use
- Markos> the Makefile for the static one and Makefile-libbz2_so for the shared
- Markos> one. In this case, doing what Debian did is not possible
- Markos> but what we can do is to remove the *.o files within the
- Markos> Makefile-libbz2_so before we try to build the shared library.
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ package/bzip2/bzip2-build-objects-twice.patch | 56 +++++++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/bzip2/bzip2-build-objects-twice.patch
 
-Or we could just do something like:
-
-define BZIP2_BUILD_CMDS
-	$(TARGET_MAKE_ENV)
-		$(MAKE) -C $(@D) libbz2.a bzip2 bzip2recover \
-                        $(if $(BR2_PREFER_STATIC_LIB),,libbz2.so) \
-                        $(TARGET_CONFIGURE_OPTS)
-endef
-
-E.G. only build the libbz2.so taget (which pulls in *.sho) if building
-shared.
-
-Or alternatively, keep Makefile-libbz2_so, but change it to use .sho
-files instead of .o
-
+diff --git a/package/bzip2/bzip2-build-objects-twice.patch b/package/bzip2/bzip2-build-objects-twice.patch
+new file mode 100644
+index 0000000..9bde0f6
+--- /dev/null
++++ b/package/bzip2/bzip2-build-objects-twice.patch
+@@ -0,0 +1,56 @@
++Build objects twice for shared and static libraries
++
++The existing Makefile causes problems on MIPS because the same object
++files (not compiled with -fPIC) are used in static and shared libraries.
++MIPS will refuce to link non-pic objects in shared libraries.
++We fix this problems by creating a new rule for the shared library
++and build the shared objects as *.sho instead of *.o.
++Then, we use these objects to create the shared library.
++
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++
++Index: bzip2-1.0.6/Makefile-libbz2_so
++===================================================================
++--- bzip2-1.0.6.orig/Makefile-libbz2_so
+++++ bzip2-1.0.6/Makefile-libbz2_so
++@@ -25,13 +25,13 @@ SHELL=/bin/sh
++ CC=gcc
++ override CFLAGS += -fpic -fPIC -Wall
++ 
++-OBJS= blocksort.o  \
++-      huffman.o    \
++-      crctable.o   \
++-      randtable.o  \
++-      compress.o   \
++-      decompress.o \
++-      bzlib.o
+++OBJS= blocksort.sho  \
+++      huffman.sho    \
+++      crctable.sho   \
+++      randtable.sho  \
+++      compress.sho   \
+++      decompress.sho \
+++      bzlib.sho
++ 
++ all: $(OBJS)
++ 	$(CC) -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.6 $(OBJS)
++@@ -45,17 +45,5 @@ install:
++ clean: 
++ 	rm -f $(OBJS) bzip2.o libbz2.so.1.0.6 libbz2.so.1.0 bzip2-shared
++ 
++-blocksort.o: blocksort.c
++-	$(CC) $(CFLAGS) -c blocksort.c
++-huffman.o: huffman.c
++-	$(CC) $(CFLAGS) -c huffman.c
++-crctable.o: crctable.c
++-	$(CC) $(CFLAGS) -c crctable.c
++-randtable.o: randtable.c
++-	$(CC) $(CFLAGS) -c randtable.c
++-compress.o: compress.c
++-	$(CC) $(CFLAGS) -c compress.c
++-decompress.o: decompress.c
++-	$(CC) $(CFLAGS) -c decompress.c
++-bzlib.o: bzlib.c
++-	$(CC) $(CFLAGS) -c bzlib.c
+++%.sho: %.c
+++	$(CC) $(CFLAGS) -o $@ -c $<
 -- 
-Bye, Peter Korsgaard
+1.8.2.1
