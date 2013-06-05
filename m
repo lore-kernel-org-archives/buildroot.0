@@ -1,60 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  5 Jun 2013 19:52:04 +0200
-Subject: [Buildroot] [PATCH] package/libbsd: depends on architectures
-	providing a.out.h
-Message-ID: <1370454724-10594-1-git-send-email-yann.morin.1998@free.fr>
+Date: Wed, 5 Jun 2013 20:00:11 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-06-04
+In-Reply-To: <20130605170058.GA3185@free.fr>
+References: <20130605063004.4425352C13E@lolut.humanoidz.org>
+ <20130605182924.71a07679@skate> <20130605170058.GA3185@free.fr>
+Message-ID: <20130605180011.GD3185@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thomas, All,
 
-libbsd requires a.out.h, which is only available in a select subset
-of the architectures Buildroot supports.
+On 2013-06-05 19:00 +0200, Yann E. MORIN spake thusly:
+> On 2013-06-05 18:29 +0200, Thomas Petazzoni spake thusly:
+> > On Wed,  5 Jun 2013 08:30:04 +0200 (CEST), Thomas Petazzoni wrote:
+> > >                   libbsd-0.4.2 | 12
 
-This means libedit can no longer 'select' libbsd, so turn the 'select'
-into a 'depends on'. And the dependency chain ends there.
+Patch sent.
 
-Fixes:
-    http://autobuild.buildroot.org/results/019/019091312ec547520370ffad967b53e23f54a14b
-    http://autobuild.buildroot.org/results/87c/87c3a8bf2248606d80ddcfd96132de4c5fe869ed
-    http://autobuild.buildroot.org/results/589/5891f539ce3f3ff2e3411228472c8833fdd0d7c0
-    [...]
+> > > dtc-e4b497f367a3b2ae99cc520... | 3 
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libbsd/Config.in  | 3 +++
- package/libedit/Config.in | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+Gustavo already sent a fix.
 
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index 0ed9dac..915a4bd 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -1,5 +1,8 @@
- config BR2_PACKAGE_LIBBSD
- 	bool "libbsd"
-+	# libbsd requires a.out.h, which is only available for those
-+	# architectures: arm, m68k, x86 (and alpha, but we don't care.)
-+	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 )
- 	help
- 	  This library provides useful functions commonly found on BSD
- 	  systems, and lacking on others like GNU systems, thus making
-diff --git a/package/libedit/Config.in b/package/libedit/Config.in
-index b49c23c..86a70b4 100644
---- a/package/libedit/Config.in
-+++ b/package/libedit/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBEDIT
- 	bool "libedit"
--	select BR2_PACKAGE_LIBBSD
-+	depends on BR2_PACKAGE_LIBBSD
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  The editline library (from BSD) provides generic line editing
+> > >                 libiscsi-1.6.0 | 1 
+
+I don't know what to do with this one. It seems like another wrapper
+issue:
+
+    /bin/bash ./libtool  --tag=CC   --mode=link
+        /home/test/test/1/output/host/usr/bin/mips64el-unknown-linux-gnu-gcc
+        -Wall -W -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-align
+        -Wwrite-strings -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+        -D_FILE_OFFSET_BITS=64  -pipe -Os  -ldl  -o bin/iscsi-test
+        test-tool/bin_iscsi_test-iscsi-test.o
+        [--SNIP lots of .o files--]
+        test-tool/bin_iscsi_test-1020_bufferoffset_invalid.o lib/libiscsi.la
+        -lpopt 
+    /home/test/test/1/output/host/usr/bin/mips64el-unknown-linux-gnu-ld:
+    src/bin_ld_iscsi-ld_iscsi.o: ABI is incompatible with that of the
+    selected emulation
+    /home/test/test/1/output/host/usr/bin/mips64el-unknown-linux-gnu-ld:
+    failed to merge target specific data of file src/bin_ld_iscsi-ld_iscsi.o
+    /home/test/test/1/output/host/usr/bin/mips64el-unknown-linux-gnu-ld:
+    lib/.libs/libiscsi_convenience.a(connect.o): ABI is incompatible with
+    that of the selected emulation
+    [--SNIP--]
+    /home/test/test/1/output/host/usr/bin/mips64el-unknown-linux-gnu-ld:
+    final link failed: File in wrong format
+
+> > >                   libedit-2.11 | 1 
+
+libedit: no longer available on MIPS, since it depends on libbsd, which
+is not available on MIPS.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.1.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
