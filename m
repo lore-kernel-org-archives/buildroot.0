@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jun 2013 18:29:24 +0200
+Date: Wed, 5 Jun 2013 18:48:36 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2013-06-04
-In-Reply-To: <20130605063004.4425352C13E@lolut.humanoidz.org>
+In-Reply-To: <20130605182924.71a07679@skate>
 References: <20130605063004.4425352C13E@lolut.humanoidz.org>
-Message-ID: <20130605182924.71a07679@skate>
+ <20130605182924.71a07679@skate>
+Message-ID: <20130605184836.6ea2b205@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,86 +14,57 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  5 Jun 2013 08:30:04 +0200 (CEST), Thomas Petazzoni wrote:
+On Wed, 5 Jun 2013 18:29:24 +0200, Thomas Petazzoni wrote:
 
->              host-libftdi-0.19 | 20
+> >              host-libftdi-0.19 | 20
+> 
+> Those issues are caused by the bump of libtool, from the testing I
+> could do. Reverting libtool to the previous version "solves" the
+> problem.
+> 
+> The thing that happens is that libftdi (for the target) has
+> AUTORECONF=YES, but not host-libftdi. So libftdi gets autoreconfigured,
+> and then when host-libftdi is being built, even though we don't have
+> AUTORECONF=YES, when starting the build, it does execute
+> 'CDPATH="${ZSH_VERSION+.}:" && cd .
+> && /bin/bash /home/test/outputs/libftdi/build/host-libftdi-0.19/missing
+> --run aclocal-1.11 ' and it ends up failing.
 
-Those issues are caused by the bump of libtool, from the testing I
-could do. Reverting libtool to the previous version "solves" the
-problem.
+Ok, the reason it does execute "missing" and does a kind of automatic
+autoreconf is because we have one patch that modifies configure.in. So
+configure.in is more recent than the configure script itself. When
+libtool/autoconf/automake has not been built before host-libftdi, then
+this automatic autoreconf cannot proceed:
 
-The thing that happens is that libftdi (for the target) has
-AUTORECONF=YES, but not host-libftdi. So libftdi gets autoreconfigured,
-and then when host-libftdi is being built, even though we don't have
-AUTORECONF=YES, when starting the build, it does execute
-'CDPATH="${ZSH_VERSION+.}:" && cd .
-&& /bin/bash /home/test/outputs/libftdi/build/host-libftdi-0.19/missing
---run aclocal-1.11 ' and it ends up failing.
+CDPATH="${ZSH_VERSION+.}:" && cd . && /bin/bash /home/test/outputs/toto/build/host-libftdi-0.19/missing --run aclocal-1.11 
+/home/test/outputs/toto/build/host-libftdi-0.19/missing: line 52: aclocal-1.11: command not found
+WARNING: `aclocal-1.11' is missing on your system.  You should only need it if
+         you modified `acinclude.m4' or `configure.in'.  You might want
+         to install the `Automake' and `Perl' packages.  Grab them from
+         any GNU archive site.
+CDPATH="${ZSH_VERSION+.}:" && cd . && /bin/bash /home/test/outputs/toto/build/host-libftdi-0.19/missing --run autoconf
+ cd . && /bin/bash /home/test/outputs/toto/build/host-libftdi-0.19/missing --run automake-1.11 --foreign
+/home/test/outputs/toto/build/host-libftdi-0.19/missing: line 52: autoconf: command not found
+/home/test/outputs/toto/build/host-libftdi-0.19/missing: line 52: automake-1.11: command not found
+WARNING: `autoconf' is missing on your system.  You should only need it if
+         you modified `configure.in'.  You might want to install the
+         `Autoconf' and `GNU m4' packages.  Grab them from any GNU
+         archive site.
 
-If you just build host-libftdi, without having built libftdi before, it
-does not fail.
+and it in facts makes the thing work.
 
->                    bzip2-1.0.6 | 16
+However, when this "automatic autoreconf" is done, and an
+automake/autoconf/libtool set of tools, with the latest libtool, has
+already been built and installed, then it generates some wrong stuff.
 
-Shared vs. static thing, being handled by Markos.
+An easy fix is to add:
 
->                   libbsd-0.4.2 | 12
+HOST_LIBFTDI_AUTORECONF = YES
 
-PowerPC does not have a.out.h. But mipsel also doesn't
-(http://autobuild.buildroot.org/results/019/019091312ec547520370ffad967b53e23f54a14b/build-end.log),
-libbsd doesn't have support for AArch64
-(http://autobuild.buildroot.org/results/87c/87c3a8bf2248606d80ddcfd96132de4c5fe869ed/build-end.log).
-And SH4 doesn't have a.out.h
-(http://autobuild.buildroot.org/results/589/5891f539ce3f3ff2e3411228472c8833fdd0d7c0/build-end.log).
+to libftdi.mk. It doesn't really explain why it was working with
+libtool 2.2 and no longer with libtool 2.4, but it works.
 
->                 p11-kit-0.18.1 | 12
-
-compat.c:85:14: error: conflicting types for
-'program_invocation_short_name'
-
-Conflict between the compat.c stuff of p11-kit and the uClibc code, it
-seems.
-
-> package/sunxi-boards/sunxi-... | 10
-
-I've just sent a proposal to fix this.
-
->                sconeserver-211 | 5 
-
-MySQL issue. Simon has sent a patch to fix this.
-
-> dtc-e4b497f367a3b2ae99cc520... | 3 
->                      pcre-8.33 | 3 
->                     acl-2.2.52 | 3 
->                       qt-4.8.4 | 2 
->                 libtirpc-0.2.2 | 2 
->      xlib_libpthread-stubs-0.3 | 2 
->                qt5webkit-5.0.2 | 2 
-> media-ctl-ac40b79f002a2315f... | 2 
->                  cairo-1.12.10 | 2 
->                      m4-1.4.16 | 2 
->                  binutils-2.21 | 2 
->                  openvpn-2.3.1 | 1 
->                 libiscsi-1.6.0 | 1 
->                   zeromq-3.2.3 | 1 
->               udpcast-20120424 | 1 
->       gst-plugins-good-0.10.31 | 1 
->                libglib2-2.30.3 | 1 
->                 cifs-utils-6.0 | 1 
->                   libedit-2.11 | 1 
->                  libpfm4-4.3.0 | 1 
->                aircrack-ng-1.1 | 1 
->                    libcap-2.22 | 1 
-> am33x-cm3-AM335xPSP_04.06.0... | 1 
->                  libevas-1.7.4 | 1 
->                audiofile-0.3.6 | 1 
->           host-protobuf-c-0.15 | 1 
->              bluez_utils-4.101 | 1 
->                   connman-1.12 | 1 
->                libcap-ng-0.6.6 | 1 
->                      monit-5.4 | 1 
-
-Pfff, and a lot of other issues...
+Thoughts?
 
 Thomas
 -- 
