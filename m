@@ -1,53 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Jun 2013 19:22:28 +0200
-Subject: [Buildroot] [PATCHv2] dtc: needs host-bison and host-flex
-In-Reply-To: <1370343096-5366-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1370343096-5366-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130605172228.GC3185@free.fr>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Wed, 5 Jun 2013 10:36:29 -0700
+Subject: [Buildroot] AM3517 Neon, OpenGL & EGLFS support
+Message-ID: <CALo-6+h9ELx+Hp_OQB0kvrdv9mH1VKnrKKcTTXLNSYkK0vFhHQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+This is probably a question for Prabu and Spenser as I undestand a
+buildroot patch is on the near horizon for Qt5 and OpenGL.
 
-On 2013-06-04 07:51 -0300, Gustavo Zacarias spake thusly:
-> Fixes:
-> http://autobuild.buildroot.net/results/000/000a042f6b485d90717d14b93efcf011841c33c3/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+I have downloaded last nights nightly build of buildroot and built Qt5
+for ARM for the TI AM3517 as we try to move from Qt-4.8.2 to Qt-5.0.2
+and am looking at three features that are currently disabled.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+These are support for Neon, OpenGL & EGLFS.
 
-> ---
->  package/dtc/dtc.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-> index 76ff361..7dd4fe7 100644
-> --- a/package/dtc/dtc.mk
-> +++ b/package/dtc/dtc.mk
-> @@ -9,6 +9,7 @@ DTC_SITE            = git://git.jdl.com/software/dtc.git
->  DTC_LICENSE         = GPLv2+/BSD-2c
->  DTC_LICENSE_FILES   = README.license GPL
->  DTC_INSTALL_STAGING = YES
-> +DTC_DEPENDENCIES    = host-bison host-flex
-> 
->  define DTC_POST_INSTALL_TARGET_RM_DTDIFF
->  	rm -f $(TARGET_DIR)/usr/bin/dtdiff
-> --
-> 1.8.1.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I was able to add QMAKE_INCDIR_OPENGL_ES2, QMAKE_LIBDIR_OPENGL_ES2 &
+QMAKE_LIBS_OPENGL_ES2 to the mkspec patch this week using last weeks
+buildroot-20130529 and get OpenGL to compile pointing to my external
+TI Graphics_SDK, but then get into trouble with EGLFS and later on
+with VERSION in qt_module.prf. So, I think there is a bit more to the
+problem then just adding constants to the mkspecs patch.
+
+Can someone possibly describe more of what needs to be done in a
+dialect of techno-babble that I understand to get these three features
+supported for the AM3517, please?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Charles Krinke
