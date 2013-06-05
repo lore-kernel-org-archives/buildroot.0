@@ -1,55 +1,52 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 6 Jun 2013 00:10:31 +0200
-Subject: [Buildroot] [git commit] directfb: add optional imlib2 support
-Message-ID: <20130605221238.3C16D9A5CD@busybox.osuosl.org>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Wed, 5 Jun 2013 15:16:20 -0700
+Subject: [Buildroot] AM3517 Neon, OpenGL & EGLFS support
+In-Reply-To: <CALo-6+hLNK70Bdh7C+ViD+T8XgbpKdBorcsqZfvhNqz-cbcV5A@mail.gmail.com>
+References: <CALo-6+h9ELx+Hp_OQB0kvrdv9mH1VKnrKKcTTXLNSYkK0vFhHQ@mail.gmail.com>
+ <CAMYPSMpE=ziBR4TuRbkjG+78fcJ=DXA67ePTXTDBPDRv+asEyw@mail.gmail.com>
+ <CALo-6+hLNK70Bdh7C+ViD+T8XgbpKdBorcsqZfvhNqz-cbcV5A@mail.gmail.com>
+Message-ID: <CALo-6+jLazVYE_tXAyL+JVr6Duo-3yd+ayiX4PHOB5wiskBCKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=88378877273829c387f48a6c96959712b892856f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Wojciech:
 
-[Peter: drop default y]
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/directfb/Config.in   |    4 ++++
- package/directfb/directfb.mk |    8 ++++++++
- 2 files changed, 12 insertions(+), 0 deletions(-)
+I have been working with your patch but seem to have gotten myself
+into another "pickle" in that when I compile, I get the sequence
+below. I will start again fresh in the morning with the original patch
+and the nightly build from buildroot, which will be
+buildroot-20130606.tgz.
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index b9ff5f9..4712db0 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -100,6 +100,10 @@ config BR2_PACKAGE_DIRECTFB_GIF
- 	bool "enable GIF support"
- 	default y
- 
-+config BR2_PACKAGE_DIRECTFB_IMLIB2
-+	bool "enable IMLIB2 support"
-+	select BR2_PACKAGE_IMLIB2
-+
- config BR2_PACKAGE_DIRECTFB_JPEG
- 	bool "enable JPEG support"
- 	default y
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 5ead084..e5a423d 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -108,6 +108,14 @@ else
- DIRECTFB_CONF_OPT += --disable-jpeg
- endif
- 
-+ifeq ($(BR2_PACKAGE_DIRECTFB_IMLIB2),y)
-+DIRECTFB_CONF_OPT += --enable-imlib2
-+DIRECTFB_DEPENDENCIES += imlib2
-+DIRECTFB_CONF_ENV += ac_cv_path_IMLIB2_CONFIG=$(STAGING_DIR)/usr/bin/imlib2-config
-+else
-+DIRECTFB_CONF_OPT += --disable-imlib2
-+endif
-+
- ifeq ($(BR2_PACKAGE_DIRECTFB_DITHER_RGB16),y)
- DIRECTFB_CONF_OPT += --with-dither-rgb16=advanced
- else
+Question, I presume the patch should apply against tonights buildroot?
+If not, is there a nightly build you would recommend for applying to
+patch to?
+
+If you have a suggestion on the errors, that would be appreciated.
+
+Hopefully you, Spenser or Prabu can get this and any remaining logic
+into buildroot so Neon, OpenGl and EGLFS support becomes part of the
+buildroot trunk, soon.
+
+>>> qt5base 5.0.2 Extracting
+xzcat /home/ckrinke/buildroot-20130605/dl/qtbase-opensource-src-5.0.2.tar.xz
+| tar --strip-components=1 -C
+/home/ckrinke/buildroot-20130605/output/build/qt5base-5.0.2  -xf -
+>>> qt5base 5.0.2 Patching package/qt5//qt5base
+
+Applying qt5base-mkspecs-files.patch using patch:
+patching file mkspecs/devices/linux-buildroot-g++/qmake.conf
+patching file mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+
+Applying qt5base-uclibc-no-lfs.patch using patch:
+patching file mkspecs/common/posix/qplatformdefs.h
+>>> libgles undefined Configuring
+>>> libgles undefined Building
+>>> libgles undefined Installing to target
+>>> libegl undefined Extracting
+>>> libegl undefined Patching package/opengl//libegl
+>>> libegl undefined Configuring
+echo "No libEGL implementation selected. Configuration error."
+No libEGL implementation selected. Configuration error.
