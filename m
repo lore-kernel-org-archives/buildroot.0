@@ -1,41 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jun 2013 15:08:55 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 05 Jun 2013 15:50:21 +0200
 Subject: [Buildroot] [PATCH] bzip2: Rearrange build order
 In-Reply-To: <1370436976-746-1-git-send-email-markos.chandras@gmail.com>
+ (Markos Chandras's message of "Wed, 5 Jun 2013 13:56:16 +0100")
 References: <1370436976-746-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <20130605150855.289fe5bd@skate>
+Message-ID: <877gi8ekf6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+>>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
 
-On Wed, 5 Jun 2013 13:56:16 +0100, Markos Chandras wrote:
-> From: Markos Chandras <markos.chandras@imgtec.com>
-> 
-> Several object files are shared between the libbz2.so shared library
-> and the libbz2.a static one. MIPS will refuce to build a relocatable
-> object when creating a new shared library with the following error:
-> 
-> blocksort.o: relocation R_MIPS_HI16 against `__gnu_local_gp' can not be used
-> when making a shared object; recompile with -fPIC
-> 
-> This is because these files are build without -fPIC when creating the
-> static library and later on they are used to build the shared one.
-> 
-> This is easily fixed if we add the shared library build rule before
-> creating the static library so object files are always compiled with
-> -fPIC.
-> 
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+ Markos> From: Markos Chandras <markos.chandras@imgtec.com>
+ Markos> Several object files are shared between the libbz2.so shared library
+ Markos> and the libbz2.a static one. MIPS will refuce to build a relocatable
+ Markos> object when creating a new shared library with the following error:
 
-This seems to make sense to me, so:
+ Markos> blocksort.o: relocation R_MIPS_HI16 against `__gnu_local_gp' can not be used
+ Markos> when making a shared object; recompile with -fPIC
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Markos> This is because these files are build without -fPIC when creating the
+ Markos> static library and later on they are used to build the shared one.
+
+ Markos> This is easily fixed if we add the shared library build rule before
+ Markos> creating the static library so object files are always compiled with
+ Markos> -fPIC.
+
+This works, but is afaik less efficient for the static lib case.
+
+The real fix is imho to build the object files twice, like how libtool
+does it.
+
+If you look at the Debian package, they work around it by adding a
+seperate .c -> .sho build rule, which adds -fPIC, and then link the .so
+file with the .sho files instead.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
