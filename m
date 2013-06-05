@@ -1,36 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Jun 2013 20:53:19 +0200
-Subject: [Buildroot] [git commit] libftdi: autoreconf should happen for host
-	as well
-Message-ID: <20130605191224.740229A967@busybox.osuosl.org>
+Date: Wed, 5 Jun 2013 21:05:18 +0200
+Subject: [Buildroot] [git commit] linux: qstrip the custom DTS path
+Message-ID: <20130605191225.2EF199A967@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b713a39802fab4a8c983222273e6641db320a667
+commit: http://git.buildroot.net/buildroot/commit/?id=82d2a47478e436495e5fe3cd5aff308fe3f212d4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/d30/d3090804149654e099d3bc9953d48fd920812bf4/build-end.log
+This fixes a problem reported by wacha at mit.bme.hu, see
+http://lists.busybox.net/pipermail/buildroot/2013-June/073312.html.
 
-The same patches gets applied for target and host, so we should do
-autoreconf for the host as well.
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libftdi/libftdi.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ linux/linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
-index c5590ba..06316fe 100644
---- a/package/libftdi/libftdi.mk
-+++ b/package/libftdi/libftdi.mk
-@@ -10,6 +10,7 @@ LIBFTDI_DEPENDENCIES = libusb-compat libusb
- LIBFTDI_INSTALL_STAGING = YES
- LIBFTDI_CONFIG_SCRIPTS = libftdi-config
- LIBFTDI_AUTORECONF = YES
-+HOST_LIBFTDI_AUTORECONF = YES
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 11b32c3..177446d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -55,7 +55,7 @@ LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-
+ ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
+ KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
+ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
+-KERNEL_DTS_NAME = $(basename $(notdir $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))
++KERNEL_DTS_NAME = $(basename $(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH))))
+ endif
  
- LIBFDTI_CONF_OPT = --without-examples
- 
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),y)
