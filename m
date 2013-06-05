@@ -1,23 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Jun 2013 10:59:37 +0200
-Subject: [Buildroot] [PATCH 7/7] kmod: adjust license info based on kmod
-	tools selection
-In-Reply-To: <1370311415-1966-7-git-send-email-danomimanchego123@gmail.com>
- (Danomi Manchego's message of "Mon, 3 Jun 2013 22:03:35 -0400")
-References: <1370311415-1966-1-git-send-email-danomimanchego123@gmail.com>
- <1370311415-1966-7-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <87sj0xdjba.fsf@dell.be.48ers.dk>
+Date: Wed, 05 Jun 2013 11:00:25 +0200
+Subject: [Buildroot] [PATCH] monit: needs threads support in toolchain
+In-Reply-To: <1370328065-16275-1-git-send-email-gilles.talis@gmail.com>
+ (Gilles Talis's message of "Mon, 3 Jun 2013 23:41:05 -0700")
+References: <1370328065-16275-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <87obbldj9y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
- Danomi> The libkmod is licensed as LGPL, while the kmod tools are GPL.
- Danomi> We always install libkmod, but conditionally install the tools.
- Danomi> This patch adjusts the license variables accordingly.
+ Gilles> Fixes:
+ Gilles> http://autobuild.buildroot.org/results/0b5/0b5838f3d11b45244f27bd2bcb092dd6a88fd39d
 
 Committed, thanks.
 
