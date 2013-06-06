@@ -1,32 +1,30 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 6 Jun 2013 23:07:41 +0200
-Subject: [Buildroot] [git commit] ne10: fix github tarball to use commit id
-Message-ID: <20130606211256.813AA9A9A0@busybox.osuosl.org>
+Date: Thu, 6 Jun 2013 22:59:29 +0200
+Subject: [Buildroot] [git commit] jsmin: fix github tarball to use commit id
+Message-ID: <20130606211253.A4C139A9A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c2b205c038bc0dba3960917f2eb1bd30fbc24b03
+commit: http://git.buildroot.net/buildroot/commit/?id=f0f124f36a8616a1e0895b2eb9411a8459daa3c9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ne10/ne10.mk |    2 +-
+ package/jsmin/jsmin.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
-index f5121ed..9c78c45 100644
---- a/package/ne10/ne10.mk
-+++ b/package/ne10/ne10.mk
-@@ -7,7 +7,7 @@
- # We use a Git commit ID because the last tagged version is more than
- # one year old.
- NE10_VERSION = 88c18f0
--NE10_SITE = http://github.com/projectNe10/Ne10/tarball/master
-+NE10_SITE = http://github.com/projectNe10/Ne10/tarball/$(NE10_VERSION)
- NE10_LICENSE = BSD-3c or Apache 2.0
- NE10_LICENSE_FILES = doc/LICENSE
+diff --git a/package/jsmin/jsmin.mk b/package/jsmin/jsmin.mk
+index 0e82008..bb65c6c 100644
+--- a/package/jsmin/jsmin.mk
++++ b/package/jsmin/jsmin.mk
+@@ -1,5 +1,5 @@
+ JSMIN_VERSION = a9b4755
+-JSMIN_SITE = http://github.com/douglascrockford/JSMin/tarball/master
++JSMIN_SITE = http://github.com/douglascrockford/JSMin/tarball/$(JSMIN_VERSION)
  
+ define JSMIN_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) jsmin
