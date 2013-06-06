@@ -1,37 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 6 Jun 2013 22:27:49 +0200
-Subject: [Buildroot] [git commit] doc: Add txt document for the new
-	package-specific FLAT_STACKSIZE option.
-Message-ID: <20130606211250.1E2699A9A3@busybox.osuosl.org>
+Date: Thu, 6 Jun 2013 23:05:12 +0200
+Subject: [Buildroot] [git commit] linenoise: fix github tarball to use
+	commit id
+Message-ID: <20130606211255.08E629A9A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51dea66f96b5c00433070ef126d829292b3cad97
+commit: http://git.buildroot.net/buildroot/commit/?id=b89e8141e3247e28387e14a2959d3ec8ea11f12c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/adding-packages-generic.txt |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/linenoise/linenoise.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index aa94b88..0d75042 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -342,6 +342,12 @@ information is (assuming the package name is +libfoo+) :
-   non-opensource packages: Buildroot will not save the source code for this
-   package when collecting the +legal-info+.
+diff --git a/package/linenoise/linenoise.mk b/package/linenoise/linenoise.mk
+index 0265e10..01bfa0c 100644
+--- a/package/linenoise/linenoise.mk
++++ b/package/linenoise/linenoise.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+* +LIBFOO_FLAT_STACKSIZE+ defines the stack size of an application built into
-+  the FLAT binary format. The application stack size on the NOMMU architecture
-+  processors can't be enlarged at run time. The default stack size for the
-+  FLAT binary format is only 4k bytes. If the application consumes more stack,
-+  append the required number here.
-+
- The recommended way to define these variables is to use the following
- syntax:
+ LINENOISE_VERSION = g27a3b4d
+-LINENOISE_SITE = http://github.com/antirez/linenoise/tarball/master
++LINENOISE_SITE = http://github.com/antirez/linenoise/tarball/$(LINENOISE_VERSION)
+ LINENOISE_LICENSE = BSD-2c
+ LINENOISE_INSTALL_STAGING = YES
  
