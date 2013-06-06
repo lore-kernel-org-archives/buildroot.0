@@ -1,88 +1,52 @@
-From: =?ISO-8859-2?Q?Wojciech_Sle=F1ska?= <wojciech.slenska@gmail.com>
-Date: Thu, 6 Jun 2013 19:16:17 +0200
-Subject: [Buildroot] AM3517 Neon, OpenGL & EGLFS support
-In-Reply-To: <CALo-6+jLazVYE_tXAyL+JVr6Duo-3yd+ayiX4PHOB5wiskBCKw@mail.gmail.com>
-References: <CALo-6+h9ELx+Hp_OQB0kvrdv9mH1VKnrKKcTTXLNSYkK0vFhHQ@mail.gmail.com>
- <CAMYPSMpE=ziBR4TuRbkjG+78fcJ=DXA67ePTXTDBPDRv+asEyw@mail.gmail.com>
- <CALo-6+hLNK70Bdh7C+ViD+T8XgbpKdBorcsqZfvhNqz-cbcV5A@mail.gmail.com>
- <CALo-6+jLazVYE_tXAyL+JVr6Duo-3yd+ayiX4PHOB5wiskBCKw@mail.gmail.com>
-Message-ID: <CAMYPSMppGbVCw451=gaDOvROj=HLpYd1z9HRg5ujA9N2cu7q0w@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 6 Jun 2013 19:42:45 +0200
+Subject: [Buildroot] [PATCH 04/14] lua-msgpack-native: fix github
+ tarball to use commit id
+In-Reply-To: <1370537249-15682-4-git-send-email-spenser@gillilanding.com>
+References: <bug-6302-163@https.bugs.busybox.net/>
+ <1370537249-15682-1-git-send-email-spenser@gillilanding.com>
+ <1370537249-15682-4-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130606174245.GA3461@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Charles,
+Spenser, All,
 
-I didn't check this patch for current version of buildroot. It was
-created some time before 2013.05. Sorry for that.
+On 2013-06-06 11:47 -0500, Spenser Gilliland spake thusly:
+> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+> ---
+>  package/lua-msgpack-native/lua-msgpack-native.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
+> index 97ce83c..b9ef21c 100644
+> --- a/package/lua-msgpack-native/lua-msgpack-native.mk
+> +++ b/package/lua-msgpack-native/lua-msgpack-native.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  #############################################################
+>  LUA_MSGPACK_NATIVE_VERSION = g41cce91
+> -LUA_MSGPACK_NATIVE_SITE = http://github.com/kengonakajima/lua-msgpack-native/tarball/master
+> +LUA_MSGPACK_NATIVE_SITE = http://github.com/kengonakajima/lua-msgpack-native/tarball/${LUA_MSGPACK_NATIVE_VERSION)
 
-I noticed that there was some changes in libgles configuration in new
-versions of buildroot.
-In attachment you can find patch for buildroot 2013.05 and my .config file.
+$ make
+package/lua-msgpack-native/lua-msgpack-native.mk:8: *** unterminated
+variable reference.  Stop.
+make: *** [all] Error 2
 
-In config I used arago compiler, because I had some problems in past
-with others compilers ? maybe just for sure use arago. You can find it
-here: http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/index_FDS.html
+That's because you are using an opening curly-brace, but a closing
+parenthesis in: ${LUA_MSGPACK_NATIVE_VERSION)
 
-Few minutes ago I made build and test this solution on my TI AM3517
-and it is working.
+Regards,
+Yann E. MORIN.
 
-Best Regards
-Wojciech Slenska
-
-
-2013/6/6 Charles Krinke <charles.krinke@gmail.com>:
-> Dear Wojciech:
->
-> I have been working with your patch but seem to have gotten myself
-> into another "pickle" in that when I compile, I get the sequence
-> below. I will start again fresh in the morning with the original patch
-> and the nightly build from buildroot, which will be
-> buildroot-20130606.tgz.
->
-> Question, I presume the patch should apply against tonights buildroot?
-> If not, is there a nightly build you would recommend for applying to
-> patch to?
->
-> If you have a suggestion on the errors, that would be appreciated.
->
-> Hopefully you, Spenser or Prabu can get this and any remaining logic
-> into buildroot so Neon, OpenGl and EGLFS support becomes part of the
-> buildroot trunk, soon.
->
->>>> qt5base 5.0.2 Extracting
-> xzcat /home/ckrinke/buildroot-20130605/dl/qtbase-opensource-src-5.0.2.tar.xz
-> | tar --strip-components=1 -C
-> /home/ckrinke/buildroot-20130605/output/build/qt5base-5.0.2  -xf -
->>>> qt5base 5.0.2 Patching package/qt5//qt5base
->
-> Applying qt5base-mkspecs-files.patch using patch:
-> patching file mkspecs/devices/linux-buildroot-g++/qmake.conf
-> patching file mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
->
-> Applying qt5base-uclibc-no-lfs.patch using patch:
-> patching file mkspecs/common/posix/qplatformdefs.h
->>>> libgles undefined Configuring
->>>> libgles undefined Building
->>>> libgles undefined Installing to target
->>>> libegl undefined Extracting
->>>> libegl undefined Patching package/opengl//libegl
->>>> libegl undefined Configuring
-> echo "No libEGL implementation selected. Configuration error."
-> No libEGL implementation selected. Configuration error.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/octet-stream
-Size: 29255 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130606/13941175/attachment-0002.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Qt5-EGL-for-OMAP-dirty-patch-for-builroot-2013.05.patch
-Type: application/octet-stream
-Size: 8785 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130606/13941175/attachment-0003.obj>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
