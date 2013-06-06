@@ -1,21 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 Jun 2013 22:28:29 +0200
-Subject: [Buildroot] [PATCH] doc: Add txt document for the new
-	package-specific FLAT_STACKSIZE option.
-In-Reply-To: <1370508450-4897-1-git-send-email-sonic.adi@gmail.com> (Sonic
- Zhang's message of "Thu, 6 Jun 2013 16:47:30 +0800")
-References: <1370508450-4897-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <87zjv37zma.fsf@dell.be.48ers.dk>
+Date: Thu, 06 Jun 2013 22:34:02 +0200
+Subject: [Buildroot] [PATCH 6/7] Remove description and url from header
+In-Reply-To: <1370512410-8553-7-git-send-email-alexandre.belloni@free-electrons.com>
+ (Alexandre Belloni's message of "Thu, 6 Jun 2013 11:53:29 +0200")
+References: <1370512410-8553-1-git-send-email-alexandre.belloni@free-electrons.com>
+ <1370512410-8553-7-git-send-email-alexandre.belloni@free-electrons.com>
+Message-ID: <87vc5r7zd1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sonic" == Sonic Zhang <sonic.adi@gmail.com> writes:
+>>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@free-electrons.com> writes:
 
- Sonic> From: Sonic Zhang <sonic.zhang@analog.com>
- Sonic> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+ Alexandre> Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 
 Committed, thanks.
 
