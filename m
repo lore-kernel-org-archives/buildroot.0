@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 Jun 2013 22:34:02 +0200
-Subject: [Buildroot] [PATCH 6/7] Remove description and url from header
-In-Reply-To: <1370512410-8553-7-git-send-email-alexandre.belloni@free-electrons.com>
- (Alexandre Belloni's message of "Thu, 6 Jun 2013 11:53:29 +0200")
+Date: Thu, 06 Jun 2013 22:34:44 +0200
+Subject: [Buildroot] [PATCH 7/7] Normalize separator size to 80
+In-Reply-To: <1370512410-8553-8-git-send-email-alexandre.belloni@free-electrons.com>
+ (Alexandre Belloni's message of "Thu, 6 Jun 2013 11:53:30 +0200")
 References: <1370512410-8553-1-git-send-email-alexandre.belloni@free-electrons.com>
- <1370512410-8553-7-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <87vc5r7zd1.fsf@dell.be.48ers.dk>
+ <1370512410-8553-8-git-send-email-alexandre.belloni@free-electrons.com>
+Message-ID: <87r4gf7zbv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,7 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@free-electrons.com> writes:
 
- Alexandre> Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+ Alexandre> Signed-off-by: Alexandre Belloni
+ Alexandre> <alexandre.belloni@free-electrons.com>
 
 Committed, thanks.
 
