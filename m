@@ -1,33 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 6 Jun 2013 23:08:24 +0200
-Subject: [Buildroot] [git commit] rpi-firmware: fix github tarball to use
-	commit id
-Message-ID: <20130606211257.A33CD9A9A3@busybox.osuosl.org>
+Date: Thu, 6 Jun 2013 23:07:45 +0200
+Subject: [Buildroot] [git commit] omap-u-boot-utils: fix github tarball to
+	use commit id
+Message-ID: <20130606211257.522019A9A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b16001d4f026fd08f14a4b2043710531b50a0ad
+commit: http://git.buildroot.net/buildroot/commit/?id=ae5be552b6435437db42b168b61aa15b8bed2fbc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/rpi-firmware/rpi-firmware.mk |    2 +-
+ package/omap-u-boot-utils/omap-u-boot-utils.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 11dffe6..ba0e04a 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
+diff --git a/package/omap-u-boot-utils/omap-u-boot-utils.mk b/package/omap-u-boot-utils/omap-u-boot-utils.mk
+index 77bb6a6..7039d07 100644
+--- a/package/omap-u-boot-utils/omap-u-boot-utils.mk
++++ b/package/omap-u-boot-utils/omap-u-boot-utils.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- RPI_FIRMWARE_VERSION = 76d0ac38f16b6343c6155c80db1e4758b3a5838a
--RPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/master
-+RPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/$(RPI_FIRMWARE_VERSION)
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+ OMAP_U_BOOT_UTILS_VERSION = 8aff852
+-OMAP_U_BOOT_UTILS_SITE = http://github.com/nmenon/omap-u-boot-utils/tarball/master
++OMAP_U_BOOT_UTILS_SITE = http://github.com/nmenon/omap-u-boot-utils/tarball/$(OMAP_U_BOOT_UTILS_VERSION)
+ OMAP_U_BOOT_UTILS_LICENSE = GPLv2, GPLv2+
+ OMAP_U_BOOT_UTILS_LICENSE_FILES = COPYING
  
