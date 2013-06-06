@@ -1,32 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 6 Jun 2013 16:50:18 +0200
-Subject: [Buildroot] [git commit] xfsprogs: Version bump to 3.1.11
-Message-ID: <20130606145221.847459A1ED@busybox.osuosl.org>
+Date: Thu, 6 Jun 2013 16:50:01 +0200
+Subject: [Buildroot] [git commit] p11-kit: fix __progname build failure
+Message-ID: <20130606145220.B19219A987@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d0d8a53dda3a5a757ae892b803bf25647be10aae
+commit: http://git.buildroot.net/buildroot/commit/?id=9c778689c4d443705f69ab0477747adc54aa5dbc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Even though we've got UCLIBC_HAS___PROGNAME=y in our internal toolchains
+the build seems to fail under some circumstances.
+Since program_invocation_short_name is equally as useful just disable
+__progname usage. Fixes:
+http://autobuild.buildroot.net/results/cc8/cc861f5a034a0922a90fb6f22835a1fe8205d497/
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/xfsprogs/xfsprogs.mk |    2 +-
+ package/p11-kit/p11-kit.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index 532e8c0..823bf39 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -3,7 +3,7 @@
- # xfsprogs
- #
- #############################################################
--XFSPROGS_VERSION = 3.1.8
-+XFSPROGS_VERSION = 3.1.11
- XFSPROGS_SITE=ftp://oss.sgi.com/projects/xfs/cmd_tars
+diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
+index 89774dc..6cb81ee 100644
+--- a/package/p11-kit/p11-kit.mk
++++ b/package/p11-kit/p11-kit.mk
+@@ -10,7 +10,7 @@ P11_KIT_DEPENDENCIES = host-pkgconf libtasn1
+ P11_KIT_INSTALL_STAGING = YES
+ P11_KIT_CONF_OPT = --disable-static
+ P11_KIT_CONF_ENV = ac_cv_have_decl_program_invocation_short_name=yes \
+-	ac_cv_have_decl___progname=yes
++	ac_cv_have_decl___progname=no
+ P11_KIT_LICENSE = BSD-3c
+ P11_KIT_LICENSE_FILES = COPYING
  
- XFSPROGS_DEPENDENCIES = util-linux
