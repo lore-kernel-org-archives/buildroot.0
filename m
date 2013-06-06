@@ -1,33 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 6 Jun 2013 23:09:06 +0200
-Subject: [Buildroot] [git commit] sunxi-tools: fix github tarball to use
-	commit id
-Message-ID: <20130606211259.229A49A9A3@busybox.osuosl.org>
+Date: Thu, 6 Jun 2013 23:07:01 +0200
+Subject: [Buildroot] [git commit] lua-msgpack-native: fix github tarball to
+	use commit id
+Message-ID: <20130606211255.4384E9A9A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=63c39b52ce3cfacf12071e8d76a5a30c57fe54d6
+commit: http://git.buildroot.net/buildroot/commit/?id=55c90b10b3c73ff0708ceb73645c51658f4821aa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: fix {/( mixup as pointed out by Yann]
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sunxi-tools/sunxi-tools.mk |    2 +-
+ package/lua-msgpack-native/lua-msgpack-native.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
-index 8f1ae28..d47574c 100644
---- a/package/sunxi-tools/sunxi-tools.mk
-+++ b/package/sunxi-tools/sunxi-tools.mk
+diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
+index 4979a11..03ea5f8 100644
+--- a/package/lua-msgpack-native/lua-msgpack-native.mk
++++ b/package/lua-msgpack-native/lua-msgpack-native.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- SUNXI_TOOLS_VERSION = 3a94e721dd8d1e13d0b25da0a83463891e8e9ee0
--SUNXI_TOOLS_SITE = http://github.com/linux-sunxi/sunxi-tools/tarball/master
-+SUNXI_TOOLS_SITE = http://github.com/linux-sunxi/sunxi-tools/tarball/$(SUNXI_TOOLS_VERSION)
- SUNXI_TOOLS_LICENSE = GPLv2+
- SUNXI_TOOLS_LICENSE_FILES = COPYING
- HOST_SUNXI_TOOLS_DEPENDENCIES = host-libusb
+ LUA_MSGPACK_NATIVE_VERSION = g41cce91
+-LUA_MSGPACK_NATIVE_SITE = http://github.com/kengonakajima/lua-msgpack-native/tarball/master
++LUA_MSGPACK_NATIVE_SITE = http://github.com/kengonakajima/lua-msgpack-native/tarball/$(LUA_MSGPACK_NATIVE_VERSION)
+ LUA_MSGPACK_NATIVE_DEPENDENCIES = lua
+ LUA_MSGPACK_NATIVE_LICENSE = Apache-2.0
+ LUA_MSGPACK_NATIVE_LICENSE_FILES = LICENSE.txt
