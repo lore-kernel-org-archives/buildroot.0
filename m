@@ -1,11 +1,11 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu,  6 Jun 2013 11:47:23 -0500
-Subject: [Buildroot] [PATCH 08/14] rpi-firmware: fix github tarball to use
+Date: Thu,  6 Jun 2013 11:47:25 -0500
+Subject: [Buildroot] [PATCH 10/14] socketcand: fix github tarball to use
 	commit id
 In-Reply-To: <1370537249-15682-1-git-send-email-spenser@gillilanding.com>
 References: <bug-6302-163@https.bugs.busybox.net/>
  <1370537249-15682-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1370537249-15682-8-git-send-email-spenser@gillilanding.com>
+Message-ID: <1370537249-15682-10-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/rpi-firmware/rpi-firmware.mk |    2 +-
+ package/socketcand/socketcand.mk |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index dcda6b0..ae2ddaf 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/socketcand/socketcand.mk b/package/socketcand/socketcand.mk
+index efade31..43dc414 100644
+--- a/package/socketcand/socketcand.mk
++++ b/package/socketcand/socketcand.mk
+@@ -4,7 +4,7 @@
+ #
  #############################################################
- 
- RPI_FIRMWARE_VERSION = 76d0ac38f16b6343c6155c80db1e4758b3a5838a
--RPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/master
-+RPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/$(RPI_FIRMWARE_VERSION)
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+ SOCKETCAND_VERSION = 7d06986
+-SOCKETCAND_SITE = http://github.com/dschanoeh/socketcand/tarball/master
++SOCKETCAND_SITE = http://github.com/dschanoeh/socketcand/tarball/$(SOCKETCAND_VERSION)
+ SOCKETCAND_AUTORECONF = YES
+ SOCKETCAND_DEPENDENCIES = libconfig
  
 -- 
 1.7.9.5
