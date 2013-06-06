@@ -1,29 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  6 Jun 2013 21:14:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 6302] Versions of packages retrieved from
-	github.com are wrong
-In-Reply-To: <bug-6302-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 06 Jun 2013 23:09:54 +0200
+Subject: [Buildroot] [PATCH 01/14] jsmin: fix github tarball to use
+	commit id
+In-Reply-To: <1370537249-15682-1-git-send-email-spenser@gillilanding.com>
+ (Spenser Gilliland's message of "Thu, 6 Jun 2013 11:47:16 -0500")
 References: <bug-6302-163@https.bugs.busybox.net/>
-Message-ID: <20130606211421.88A909A9A3@busybox.osuosl.org>
+ <1370537249-15682-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <87ip1r7xp9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6302
+>>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Spenser> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2013-06-06 21:12:38 UTC ---
-Fixed in git by Spenser. Thanks both!
+Committed series (with the lua-msgpack-native issue pointed out by Yann
+fixed), thanks!
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
