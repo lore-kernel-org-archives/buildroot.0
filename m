@@ -1,34 +1,37 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 06 Jun 2013 23:01:08 +0200
-Subject: [Buildroot] strace-4.8
-In-Reply-To: <51B0DB7A.3070507@zankel.net>
-References: <51B0DB7A.3070507@zankel.net>
-Message-ID: <13f1b4af906.2760.0f39ed3bcad52ef2c88c90062b7714dc@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 6 Jun 2013 22:27:49 +0200
+Subject: [Buildroot] [git commit] doc: Add txt document for the new
+	package-specific FLAT_STACKSIZE option.
+Message-ID: <20130606211250.1E2699A9A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 6 June 2013 20:56:58 Chris Zankel <chris@zankel.net> wrote:
-> Hi,
->
-> With strace-4.8 just released, we can probably now enable the package
-> for aarch64(?), arc, and xtensa :-)
->
-> I don't have a patch ready (yet), as there are two patches in the strace
-> package I'm not sure are still necessary:
->
-> strace-fix-arm-bad-syscall.patch - add fix for ARM fake syscall from
-> execve. Closes #626
-> strace-fix-disabled-largefile-syscalls.patch - bump version and make it
-> behave of LFS is of
+commit: http://git.buildroot.net/buildroot/commit/?id=51dea66f96b5c00433070ef126d829292b3cad97
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It could be that the LFS one is already in current strace, I can have a 
-look tomorrow if you don't beat me to it..
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/manual/adding-packages-generic.txt |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-Thanks,
-
-
-Sent with AquaMail for Android
-http://www.aqua-mail.com
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index aa94b88..0d75042 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -342,6 +342,12 @@ information is (assuming the package name is +libfoo+) :
+   non-opensource packages: Buildroot will not save the source code for this
+   package when collecting the +legal-info+.
+ 
++* +LIBFOO_FLAT_STACKSIZE+ defines the stack size of an application built into
++  the FLAT binary format. The application stack size on the NOMMU architecture
++  processors can't be enlarged at run time. The default stack size for the
++  FLAT binary format is only 4k bytes. If the application consumes more stack,
++  append the required number here.
++
+ The recommended way to define these variables is to use the following
+ syntax:
+ 
