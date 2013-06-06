@@ -1,87 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 6 Jun 2013 16:38:04 +0200
-Subject: [Buildroot] [git commit] package: add tree
-Message-ID: <20130606144144.764E49A943@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  6 Jun 2013 11:42:18 -0300
+Subject: [Buildroot] [PATCH] p11-kit: fix __progname build failure
+Message-ID: <1370529738-5275-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7c5d92314061ff68c8f12d0788f65b1d979cf11
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Even though we've got UCLIBC_HAS___PROGNAME=y in our internal toolchains
+the build seems to fail under some circumstances.
+Since program_invocation_short_name is equally as useful just disable
+__progname usage. Fixes:
+http://autobuild.buildroot.net/results/cc8/cc861f5a034a0922a90fb6f22835a1fe8205d497/
 
-Tree is a recursive directory listing command that produces a depth
-indented listing of files.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in      |    1 +
- package/tree/Config.in |   13 +++++++++++++
- package/tree/tree.mk   |   27 +++++++++++++++++++++++++++
- 3 files changed, 41 insertions(+), 0 deletions(-)
+ package/p11-kit/p11-kit.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f26b1aa..ce82e99 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -95,6 +95,7 @@ source "package/sstrip/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/tar/Config.in"
- endif
-+source "package/tree/Config.in"
- source "package/vala/Config.in"
- source "package/yasm/Config.in"
- endmenu
-diff --git a/package/tree/Config.in b/package/tree/Config.in
-new file mode 100644
-index 0000000..b6e21c8
---- /dev/null
-+++ b/package/tree/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_TREE
-+	bool "tree"
-+	depends on BR2_USE_WCHAR
-+	help
-+	  Tree is a recursive directory listing command that produces
-+	  a depth indented listing of files, which is colorized ala
-+	  dircolors if the LS_COLORS environment variable is set and
-+	  output is to tty.
-+
-+	  http://mama.indstate.edu/users/ice/tree/
-+
-+comment "tree requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/tree/tree.mk b/package/tree/tree.mk
-new file mode 100644
-index 0000000..509ba45
---- /dev/null
-+++ b/package/tree/tree.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# tree
-+#
-+################################################################################
-+
-+TREE_VERSION = 1.6.0
-+TREE_SOURCE = tree-$(TREE_VERSION).tgz
-+TREE_SITE = http://mama.indstate.edu/users/ice/tree/src/
-+TREE_LICENSE = GPLv2+
-+TREE_LICENSE_FILES = LICENSE
-+
-+define TREE_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define TREE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/tree $(TARGET_DIR)/usr/bin/tree
-+	$(INSTALL) -D -m 0644 $(@D)/doc/tree.1 \
-+		$(TARGET_DIR)/usr/share/man/man1/tree.1
-+endef
-+
-+define TREE_CLEAN_CMDS
-+	-$(MAKE) -C $(@D) clean
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
+index 89774dc..6cb81ee 100644
+--- a/package/p11-kit/p11-kit.mk
++++ b/package/p11-kit/p11-kit.mk
+@@ -10,7 +10,7 @@ P11_KIT_DEPENDENCIES = host-pkgconf libtasn1
+ P11_KIT_INSTALL_STAGING = YES
+ P11_KIT_CONF_OPT = --disable-static
+ P11_KIT_CONF_ENV = ac_cv_have_decl_program_invocation_short_name=yes \
+-	ac_cv_have_decl___progname=yes
++	ac_cv_have_decl___progname=no
+ P11_KIT_LICENSE = BSD-3c
+ P11_KIT_LICENSE_FILES = COPYING
+ 
+-- 
+1.8.1.5
