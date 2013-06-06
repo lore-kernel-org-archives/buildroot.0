@@ -1,55 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Jun 2013 10:51:39 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain: wrap 'ld' so that a ld
- emulation can be specified
-In-Reply-To: <CAG2jQ8jst0KgN9q5mEeGeeucctcr4g+-sCqQxaTguNFa7Mwh1Q@mail.gmail.com>
-References: <1370469543-20677-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAG2jQ8jst0KgN9q5mEeGeeucctcr4g+-sCqQxaTguNFa7Mwh1Q@mail.gmail.com>
-Message-ID: <20130606105139.267eb78d@skate>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Thu, 6 Jun 2013 16:47:30 +0800
+Subject: [Buildroot] [PATCH] doc: Add txt document for the new
+	package-specific FLAT_STACKSIZE option.
+Message-ID: <1370508450-4897-1-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+From: Sonic Zhang <sonic.zhang@analog.com>
 
-On Thu, 6 Jun 2013 09:31:25 +0100, Markos Chandras wrote:
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+---
+ docs/manual/adding-packages-generic.txt |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-> My understanding is that this is also a problem with buildroot
-> toolchains as well. So whilst your patch fixes the problem with
-> external
-> toolchains, MIPS64/n64 buildroot toolchains will still have the same
-> problem.
-
-Yes, I do remember your patch
-http://patchwork.ozlabs.org/patch/244694/. Normally, for internal
-toolchains, the idea is that the tools (gcc, ld) are configured, at
-build time, to produce the 'right' code by default, without requiring
-any tuning. The man page of 'ld' says:
-
-       -m emulation
-           Emulate the emulation linker.  You can list the available
-           emulations with the --verbose or -V options.
-
-           If the -m option is not used, the emulation is taken from the
-           "LDEMULATION" environment variable, if that is defined.
-
-           Otherwise, the default emulation depends upon how the linker
-           was configured.
-
-The last paragraph being the important one here. See what OpenEmbedded
-is doing:
-https://github.com/openembedded/oe-core/blob/master/meta/recipes-devtools/binutils/binutils-2.23.2/mips64-default-ld-emulation.patch.
-
-The problem here is that the MIPS tuples do not contain the ABI, so the
-ld/configure.tgt and bfd/config.bfd scripts of binutils have no way of
-knowing which emulation you would like to have by default. Maybe we
-need to improve binutils to make this configurable?
-
-Thomas
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index a615ae2..20d5483 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -330,6 +330,12 @@ information is (assuming the package name is +libfoo+) :
+   non-opensource packages: Buildroot will not save the source code for this
+   package when collecting the +legal-info+.
+ 
++* +LIBFOO_FLAT_STACKSIZE+ defines the stack size of an application built into
++  the FLAT binary format. The application stack size on the NOMMU architecture
++  processors can't be enlarged at run time. The default stack size for the
++  FLAT binary format is only 4k bytes. If the application consumes more stack,
++  append the required number here.
++
+ The recommended way to define these variables is to use the following
+ syntax:
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.0.4
