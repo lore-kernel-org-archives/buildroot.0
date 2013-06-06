@@ -1,105 +1,79 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 6 Jun 2013 15:02:38 +0200
-Subject: [Buildroot] [git commit] Revert "gnutls: wchar only needed for
-	tools"
-Message-ID: <20130606130642.066649A988@busybox.osuosl.org>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Thu, 6 Jun 2013 14:09:22 +0100
+Subject: [Buildroot] [PATCH] wvstreams: Build bundled argp library with
+	-fPIC
+In-Reply-To: <1370440956-8000-1-git-send-email-markos.chandras@gmail.com>
+References: <1370440956-8000-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <CAG2jQ8ibG-WBUGbaSyWKefdjZZ0aS2U3NRBY-x7h4QzYiNLi9g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=669de89be785f83ae4840b0ba3983d044e374172
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 5 June 2013 15:02, Markos Chandras <markos.chandras@gmail.com> wrote:
+> From: Markos Chandras <markos.chandras@imgtec.com>
+>
+> Fixes linking problems on MIPS.
+>
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> ---
+>  package/wvstreams/wvstreams-0006-argp-fpic.patch | 28 ++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>  create mode 100644 package/wvstreams/wvstreams-0006-argp-fpic.patch
+>
+> diff --git a/package/wvstreams/wvstreams-0006-argp-fpic.patch b/package/wvstreams/wvstreams-0006-argp-fpic.patch
+> new file mode 100644
+> index 0000000..b4cf1d2
+> --- /dev/null
+> +++ b/package/wvstreams/wvstreams-0006-argp-fpic.patch
+> @@ -0,0 +1,28 @@
+> +Build argp object files with -fPIC.
+> +
+> +The argp bundled dependency is linked to the libwvutils.so shared library.
+> +MIPS will refuce to link a non-PIC library with a shared one.
+> +
+> +We fix this problem by building the argp source files using -fPIC since
+> +the libargp static library will only be used to link to libwvutils.so
+> +as instructed by the following rule in the root Makefile:
+> +
+> +ifeq ($(USE_WVSTREAMS_ARGP),1)
+> +  utils/wvargs.o-CPPFLAGS += -Iargp
+> +  libwvutils.so-LIBS += -Largp -largp
+> +
+> +Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> +
+> +Index: wvstreams-4.6.1/argp/Makefile.in
+> +===================================================================
+> +--- wvstreams-4.6.1.orig/argp/Makefile.in
+> ++++ wvstreams-4.6.1/argp/Makefile.in
+> +@@ -137,7 +137,7 @@ AUTOMAKE = @AUTOMAKE@
+> + AWK = @AWK@
+> + CC = @CC@
+> + CCDEPMODE = @CCDEPMODE@
+> +-CFLAGS = @CFLAGS@
+> ++CFLAGS = @CFLAGS@ -fPIC
+> + CPP = @CPP@
+> + CPPFLAGS = @CPPFLAGS@
+> + CYGPATH_W = @CYGPATH_W@
+> --
+> 1.8.2.1
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-This reverts commit 7672b1235d8f786938af66068c1c1da8a766bb38.
+Hi all,
 
-It turns out that libgnutls.so ends up with a reference to wctomb() on
-uClibc, as uClibc doesn't have vasnprintf so gnutls builds its internal
-gnulib version of it, referencing wctomb().
+After the relevant discussion in the bzip2 static/shared lib patch, I
+believe this patch is safe to be applied as is, since the argp static
+library is only a dependency for the shared libwvutils.so. In my
+opinion, it is fine to build argp with -fPIC since it's only going to
+be used
+in a shared library.
 
-Fix it by going back to requiring wchar for the base gnutls library as well.
-
-Fixes http://autobuild.buildroot.net/results/780/780e825e56dc78f1ea347ca462e2e31044428775/
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/connman/Config.in       |    2 +-
- package/gnutls/Config.in        |    9 +++------
- package/libmicrohttpd/Config.in |    4 ++++
- package/libsoup/Config.in       |    2 +-
- 4 files changed, 9 insertions(+), 8 deletions(-)
-
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 4c9741b..93f9ab5 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_CONNMAN
- 	select BR2_PACKAGE_IPTABLES
- 	select BR2_PACKAGE_GNUTLS
- 	depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
--	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_USE_WCHAR # libglib2 and gnutls
- 	depends on BR2_INET_IPV6
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
- 	depends on BR2_USE_MMU # dbus
-diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-index a4eaa98..f699af7 100644
---- a/package/gnutls/Config.in
-+++ b/package/gnutls/Config.in
-@@ -2,21 +2,18 @@ config BR2_PACKAGE_GNUTLS
- 	bool "gnutls"
- 	select BR2_PACKAGE_NETTLE
- 	select BR2_PACKAGE_PCRE
-+	depends on BR2_USE_WCHAR
- 	help
- 	  GnuTLS is a secure communications library implementing the SSL
- 	  and TLS protocols and technologies around them.
- 
- 	  http://www.gnutls.org
- 
--if BR2_PACKAGE_GNUTLS
--
- config BR2_PACKAGE_GNUTLS_TOOLS
- 	bool "install tools"
--	depends on BR2_USE_WCHAR
-+	depends on BR2_PACKAGE_GNUTLS
- 	help
- 	  Install GnuTLS command line tools for various cryptographic tasks.
- 
--comment "gnutls tools requires a toolchain with WCHAR support"
-+comment "gnutls requires a toolchain with WCHAR support"
- 	depends on !BR2_USE_WCHAR
--
--endif
-diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
-index 4e78a99..2e4de0f 100644
---- a/package/libmicrohttpd/Config.in
-+++ b/package/libmicrohttpd/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_LIBMICROHTTPD
- config BR2_PACKAGE_LIBMICROHTTPD_SSL
-        bool "https support"
-        depends on BR2_PACKAGE_LIBMICROHTTPD
-+       depends on BR2_USE_WCHAR
-        select BR2_PACKAGE_GNUTLS
-        select BR2_PACKAGE_LIBGCRYPT
-        help
-@@ -17,3 +18,6 @@ config BR2_PACKAGE_LIBMICROHTTPD_SSL
- 
- comment "libmicrohttpd needs a toolchain with thread support"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "libmicrohttpd https support needs a toolchain with wchar support"
-+	depends on BR2_PACKAGE_LIBMICROHTTPD && !BR2_USE_WCHAR
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index c3b4ceb..57b425f 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBSOUP
- 	bool "libsoup"
--	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_USE_WCHAR # glib2 and gnutls
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+--
+Regards,
+Markos Chandras
