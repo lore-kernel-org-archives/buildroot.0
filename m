@@ -1,33 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 6 Jun 2013 23:07:39 +0200
-Subject: [Buildroot] [git commit] mtdev2tuio: fix github tarball to use
-	commit id
-Message-ID: <20130606211255.ED2459A9A3@busybox.osuosl.org>
+Date: Thu, 6 Jun 2013 23:01:40 +0200
+Subject: [Buildroot] [git commit] libcofi: fix github tarball to use commit
+	id
+Message-ID: <20130606211254.64F259A9A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e9c9bd2d62a1d09f2f54b55f05301be0e06981df
+commit: http://git.buildroot.net/buildroot/commit/?id=9bb2757c461271f4458294d417f440f839513e33
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mtdev2tuio/mtdev2tuio.mk |    2 +-
+ package/libcofi/libcofi.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/mtdev2tuio/mtdev2tuio.mk b/package/mtdev2tuio/mtdev2tuio.mk
-index 3f34702..c78e373 100644
---- a/package/mtdev2tuio/mtdev2tuio.mk
-+++ b/package/mtdev2tuio/mtdev2tuio.mk
+diff --git a/package/libcofi/libcofi.mk b/package/libcofi/libcofi.mk
+index 6e9c564..88d51d3 100644
+--- a/package/libcofi/libcofi.mk
++++ b/package/libcofi/libcofi.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- MTDEV2TUIO_VERSION = e1e7378
--MTDEV2TUIO_SITE = http://github.com/olivopaolo/mtdev2tuio/tarball/master
-+MTDEV2TUIO_SITE = http://github.com/olivopaolo/mtdev2tuio/tarball/$(MTDEV2TUIO_VERSION)
- MTDEV2TUIO_DEPENDENCIES = mtdev liblo
- MTDEV2TUIO_LICENSE = GPLv3+
- MTDEV2TUIO_LICENSE_FILES = COPYING
+ LIBCOFI_VERSION = 7313fbe12b0593034d0a1b606bf33c7cf4ababce
+-LIBCOFI_SITE = http://github.com/simonjhall/copies-and-fills/tarball/master
++LIBCOFI_SITE = http://github.com/simonjhall/copies-and-fills/tarball/$(LIBCOFI_VERSION)
+ LIBCOFI_LICENSE = LGPLv2.1
+ LIBCOFI_LICENSE_FILES = README.md
+ 
