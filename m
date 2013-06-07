@@ -1,7 +1,9 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Fri,  7 Jun 2013 09:54:10 +0200
-Subject: [Buildroot] [PATCH 1/4] Fix package headers
-Message-ID: <1370591655-19855-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Fri,  7 Jun 2013 09:54:12 +0200
+Subject: [Buildroot] [PATCH 3/4] Convert headers to lower case when relevant
+In-Reply-To: <1370591655-19855-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1370591655-19855-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <1370591655-19855-3-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,65 +12,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/bonnie/bonnie.mk                  |    2 ++
- package/libroxml/libroxml.mk              |    2 ++
- package/multimedia/gstreamer/gstreamer.mk |    1 -
- toolchain/gcc/gcc-uclibc-4.x.mk           |    4 ++++
- 4 files changed, 8 insertions(+), 1 deletion(-)
+ boot/at91dataflashboot/at91dataflashboot.mk |    2 +-
+ boot/barebox/barebox.mk                     |    2 +-
+ boot/lpc32xxcdl/lpc32xxcdl.mk               |    2 +-
+ boot/uboot/uboot.mk                         |    2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/bonnie/bonnie.mk b/package/bonnie/bonnie.mk
-index 6d82b8a..a901986 100644
---- a/package/bonnie/bonnie.mk
-+++ b/package/bonnie/bonnie.mk
-@@ -1,6 +1,8 @@
-+################################################################################
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+index 10f54a1..d224a4f 100644
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ b/boot/at91dataflashboot/at91dataflashboot.mk
+@@ -1,6 +1,6 @@
+ #############################################################
  #
- # bonnie++
+-# DataFlashBoot
++# at91dataflashboot
  #
-+################################################################################
+ #############################################################
  
- BONNIE_VERSION = 1.03e
- BONNIE_SOURCE = bonnie++-$(BONNIE_VERSION).tgz
-diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
-index 6e690aa..98b9740 100644
---- a/package/libroxml/libroxml.mk
-+++ b/package/libroxml/libroxml.mk
-@@ -1,6 +1,8 @@
-+################################################################################
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 5ec47f6..113110e 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -1,6 +1,6 @@
+ #############################################################
  #
- # libroxml
+-# Barebox
++# barebox
  #
-+################################################################################
+ #############################################################
  
- LIBROXML_VERSION = 2.2.1
- LIBROXML_SITE = http://libroxml.googlecode.com/files
-diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
-index 4453fc8..f0fdea4 100644
---- a/package/multimedia/gstreamer/gstreamer.mk
-+++ b/package/multimedia/gstreamer/gstreamer.mk
-@@ -1,4 +1,3 @@
--
- ################################################################################
+diff --git a/boot/lpc32xxcdl/lpc32xxcdl.mk b/boot/lpc32xxcdl/lpc32xxcdl.mk
+index c4e8d2d..6e49a42 100644
+--- a/boot/lpc32xxcdl/lpc32xxcdl.mk
++++ b/boot/lpc32xxcdl/lpc32xxcdl.mk
+@@ -1,6 +1,6 @@
+ #############################################################
  #
- # gstreamer
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 5be26c4..7ebcbac 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -1,3 +1,5 @@
-+################################################################################
-+#
- # Makefile for to build a gcc/uClibc toolchain
+-# LPC32XX CDL
++# lpc32xxcdl
  #
- # Copyright (C) 2002-2003 Erik Andersen <andersen@uclibc.org>
-@@ -16,6 +18,8 @@
- # You should have received a copy of the GNU General Public License
- # along with this program; if not, write to the Free Software
- # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-+#
-+################################################################################
+ #############################################################
  
- GCC_VERSION:=$(call qstrip,$(BR2_GCC_VERSION))
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 1b708d5..f8e4aa9 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -1,6 +1,6 @@
+ #############################################################
+ #
+-# U-Boot
++# uboot
+ #
+ #############################################################
  
 -- 
 1.7.9.5
