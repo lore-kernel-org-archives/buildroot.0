@@ -1,39 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Jun 2013 18:23:03 +0200
-Subject: [Buildroot] Why have legal info for host packages?
-In-Reply-To: <20130607154649.GA6124@free.fr>
-References: <CANxTyt6LO-Q3orQnXGL873wG5z9f3ufiE6YOUNMuBq--8VMzFQ@mail.gmail.com>
- <20130602161923.GB3510@free.fr> <20130607115100.510530ad@skate>
- <20130607154649.GA6124@free.fr>
-Message-ID: <20130607182303.0ca6ba3d@skate>
+Date: Fri, 7 Jun 2013 18:48:29 +0200
+Subject: [Buildroot] AM3517 Neon, OpenGL & EGLFS support
+In-Reply-To: <CALo-6+jJ7CNYrQnxdvZiS-zC8n4XqeLMHf7h9CwaGnC=u4SjfA@mail.gmail.com>
+References: <CALo-6+h9ELx+Hp_OQB0kvrdv9mH1VKnrKKcTTXLNSYkK0vFhHQ@mail.gmail.com>
+ <CAMYPSMpE=ziBR4TuRbkjG+78fcJ=DXA67ePTXTDBPDRv+asEyw@mail.gmail.com>
+ <CALo-6+hLNK70Bdh7C+ViD+T8XgbpKdBorcsqZfvhNqz-cbcV5A@mail.gmail.com>
+ <CALo-6+jLazVYE_tXAyL+JVr6Duo-3yd+ayiX4PHOB5wiskBCKw@mail.gmail.com>
+ <CAMYPSMppGbVCw451=gaDOvROj=HLpYd1z9HRg5ujA9N2cu7q0w@mail.gmail.com>
+ <CALo-6+h9Hm4BdgLa=ATXmZsyyQnmYYsszBFJ9zaXcu5vt2kyxA@mail.gmail.com>
+ <20130607100824.2cc5e5e0@skate>
+ <CALo-6+j5W7OERo3dtuUqzmcidq2tcR=BobM_d6NWt2iMx-s0tQ@mail.gmail.com>
+ <20130607172352.091a3888@skate>
+ <CALo-6+jJ7CNYrQnxdvZiS-zC8n4XqeLMHf7h9CwaGnC=u4SjfA@mail.gmail.com>
+Message-ID: <20130607184829.36e06bfb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Charles Krinke,
 
-On Fri, 7 Jun 2013 17:46:49 +0200, Yann E. MORIN wrote:
+On Fri, 7 Jun 2013 08:40:40 -0700, Charles Krinke wrote:
 
-> > Yes, but as we discussed some time ago, the host packages should either
-> > be identified as such in the legal info, or even maybe a separate
-> > manifest.csv file should be generated for the host packages.
+> You touch on the key piece of understanding I am seeking.
+> Unfortunately some of this understanding is obfuscated by similar
+> terms used by different groups.
 > 
-> Indeed. I never said otherwise. I was just pointing out that we also
-> want to generate it for host packages, and was giving an example why
-> this was needed.
+> In the AM3517, there is a source tree called the "Graphics_SDK". And
+> it contains, I believe, EGL and OpenGL implementations for the AM3517
+> and other SoC from TI. Wojciech patch does define several variables
+> which include headers and libraries for Qt.
 > 
-> That this legal-info stuff be generated in a separate location (file,
-> dir) is orthogonal: we want it generated.
+> I *think* we are 99% there and the missing part is this library
+> constant from Raspberry Pi, but, ... because all the alphabet soup is
+> different between Ti, Qt, and the rest of the opensource community, we
+> get to deal with ambiguity a bit.
 
-Agreed. But the way your e-mail was written could be understood as "the
-way things are currently is correct, we don't want to change it", which
-is why I reacted to it.
+I am not sure what is confusing you here. OpenGL, EGL, OpenVG and so on
+are APIs. Those APIs are provided by different implementations,
+depending on which SoC you're using. Those implementations are
+generally provided by libraries given by the SoC vendor. So in
+Buildroot, a package that needs OpenGL doesn't depend directly on a
+specific OpenGL implementation. Instead, it depends on 'libgles',
+which is a virtual package that guarantees that *one* OpenGLES
+implementation has been selected in the system.
 
-But anyway, I know we both agree :)
+The rpi-userland is currently the only OpenGL implementation that we
+support in Buildroot (but more are coming!). So what the rpi-userland
+package does in its Config.in is:
 
-Thanks,
+        select BR2_PACKAGE_HAS_OPENGL_EGL
+        select BR2_PACKAGE_HAS_OPENGL_ES
+        select BR2_PACKAGE_HAS_OPENVG
+        select BR2_PACKAGE_HAS_OPENMAX
+
+This "announces" to packages like Qt that an OpenGLES, an EGL, an
+OpenVG and an OpenMAX implementation is available. Therefore, packages
+like Qt are allowed to depend on virtual packages libgles, libegl,
+libopenvg and libopenmax.
+
+In turn, those virtual packages do the following:
+
+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+LIBGLES_DEPENDENCIES += rpi-userland
+endif
+
+ifeq ($(LIBGLES_DEPENDENCIES),)
+define LIBGLES_CONFIGURE_CMDS
+        echo "No libGLES implementation selected. Configuration error."
+        exit 1
+endef
+endif
+
+This allows to make the virtual package 'libgles' depend on
+'rpi-userland' is this package is selected. However, if no dependency
+exists of libgles, it means that no OpenGL implementation was selected,
+which is an error: some packages (Qt for example) uses the libgles
+dependency, but no OpenGLES implementation has been enabled in the
+Buildroot configuration.
+
+Again, just wait for Spenser to post his patches, it should make OpenGL
+work out-of-the-box for AM3xxx.
+
+Thanks!
 
 Thomas
 -- 
