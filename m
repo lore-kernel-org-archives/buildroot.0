@@ -1,34 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  6 Jun 2013 23:44:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 6302] Versions of packages retrieved from
-	github.com are wrong
-In-Reply-To: <bug-6302-163@https.bugs.busybox.net/>
-References: <bug-6302-163@https.bugs.busybox.net/>
-Message-ID: <20130606234413.AA3569A982@busybox.osuosl.org>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Thu,  6 Jun 2013 19:03:26 -0500
+Subject: [Buildroot] [PATCH 1/1] manual: correct error in github tarball
+	information
+In-Reply-To: <20130606234413.AA3569A982@busybox.osuosl.org>
+References: <20130606234413.AA3569A982@busybox.osuosl.org>
+Message-ID: <1370563406-3124-1-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6302
+Updates to manual for bug 6302
 
-Andrew Scheller <uclibc-bugzilla@loowis.durge.org> changed:
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+---
+ docs/manual/adding-packages-tips.txt |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|FIXED                       |
-
---- Comment #2 from Andrew Scheller <uclibc-bugzilla@loowis.durge.org> 2013-06-06 23:42:30 UTC ---
-Great!
-But
-http://git.buildroot.net/buildroot/tree/docs/manual/adding-packages-tips.txt
-still needs to be updated (and
-http://www.buildroot.org/downloads/manual/manual.html regenerated as necessary)
-to prevent other people making the same mistake in future...
-
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index 21e520b..f435add 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -58,7 +58,7 @@ enough):
+ 
+ ------------------------
+ FOO_VERSION = 1234567
+-FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
++FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
+ ------------------------
+ 
+ Note that the name of the tarball is the default +foo-1234567.tar.gz+
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.9.5
