@@ -1,32 +1,73 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 7 Jun 2013 10:56:21 +0200
-Subject: [Buildroot] [git commit] package/rpi-userland: bump version
-Message-ID: <20130607090527.499C69A9FF@busybox.osuosl.org>
+Date: Fri, 7 Jun 2013 10:56:01 +0200
+Subject: [Buildroot] [git commit] package/rpi-firmware: update
+Message-ID: <20130607090526.D89369A9FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28ab11d7855a1b85e4be15cd9c86ad0838fa1cb1
+commit: http://git.buildroot.net/buildroot/commit/?id=e22f57d41ba9ca334b227051963fd37edbf9aeb8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Updating brings in a new bootloader that enables more free codecs:
+    MJPEG, VP6, VP8, Ogg Theora and Ogg Vorbis
+
+Also, the command-line definition has moved to its own file, now.
+Although the legacy 'cmdline' variable seems to still be supported
+for a little while, better switch now than forget when we upgrade
+later.
+
+Update the RPi board readme accordingly.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/rpi-userland/rpi-userland.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/rpi-firmware/cmdline.txt     |    1 +
+ package/rpi-firmware/config.txt      |    1 -
+ package/rpi-firmware/rpi-firmware.mk |    5 ++++-
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 45ad64b..55d7b09 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
+diff --git a/package/rpi-firmware/cmdline.txt b/package/rpi-firmware/cmdline.txt
+new file mode 100644
+index 0000000..061e54b
+--- /dev/null
++++ b/package/rpi-firmware/cmdline.txt
+@@ -0,0 +1 @@
++dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootwait
+diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
+index a818762..994972b 100644
+--- a/package/rpi-firmware/config.txt
++++ b/package/rpi-firmware/config.txt
+@@ -12,4 +12,3 @@ gpu_mem_256=100
+ gpu_mem_512=100
+ sdram_freq=400
+ over_voltage=0
+-cmdline="dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootwait"
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index ba0e04a..391a418 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_USERLAND_VERSION = 5e9a740a88a889dfc8a18bb1b00c17e5dd9d0108
-+RPI_USERLAND_VERSION = 986774edf7c91a8a91d59abadbdb0b34b5a387dc
- RPI_USERLAND_SITE = http://github.com/raspberrypi/userland/tarball/$(RPI_USERLAND_VERSION)
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
+-RPI_FIRMWARE_VERSION = 76d0ac38f16b6343c6155c80db1e4758b3a5838a
++RPI_FIRMWARE_VERSION = 06f6c909e285beceeb7e51f71ba6ffe754f073e8
+ RPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/$(RPI_FIRMWARE_VERSION)
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+@@ -13,9 +13,12 @@ define RPI_FIRMWARE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/start.elf $(BINARIES_DIR)/rpi-firmware/start.elf
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/start_cd.elf $(BINARIES_DIR)/rpi-firmware/start_cd.elf
++	$(INSTALL) -D -m 0644 $(@D)/boot/start_x.elf $(BINARIES_DIR)/rpi-firmware/start_x.elf
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/fixup.dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/fixup_cd.dat $(BINARIES_DIR)/rpi-firmware/fixup_cd.dat
++	$(INSTALL) -D -m 0644 $(@D)/boot/fixup_x.dat $(BINARIES_DIR)/rpi-firmware/fixup_x.dat
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
++	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
+ endef
+ 
+ $(eval $(generic-package))
