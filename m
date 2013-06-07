@@ -1,664 +1,229 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Fri,  7 Jun 2013 18:18:54 -0500
-Subject: [Buildroot] [PATCH v10 09/13] gst1-plugins-good: add gstreamer1
-	good plugins
+Date: Fri,  7 Jun 2013 18:18:58 -0500
+Subject: [Buildroot] [PATCH v10 13/13] gst-omx: add gst-omx package
 In-Reply-To: <1370647138-26623-1-git-send-email-spenser@gillilanding.com>
 References: <1370647138-26623-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1370647138-26623-10-git-send-email-spenser@gillilanding.com>
+Message-ID: <1370647138-26623-14-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds gstreamer 1.X good plugins.
+gst-omx enables OpenMAX based accelerated video decode.
 ---
  package/multimedia/Config.in                       |    1 +
- package/multimedia/gst1-plugins-good/Config.in     |  214 +++++++++++
- .../gst1-plugins-good/gst1-plugins-good.mk         |  403 ++++++++++++++++++++
- 3 files changed, 618 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/gst1-plugins-good/Config.in
- create mode 100644 package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
+ package/multimedia/gst-omx/Config.in               |   11 ++
+ .../multimedia/gst-omx/gst-omx-config-files.patch  |  127 ++++++++++++++++++++
+ package/multimedia/gst-omx/gst-omx.mk              |   37 ++++++
+ 4 files changed, 176 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/gst-omx/Config.in
+ create mode 100644 package/multimedia/gst-omx/gst-omx-config-files.patch
+ create mode 100644 package/multimedia/gst-omx/gst-omx.mk
 
 diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 253fd17..d39436b 100644
+index a0927e9..68dfa13 100644
 --- a/package/multimedia/Config.in
 +++ b/package/multimedia/Config.in
-@@ -14,6 +14,7 @@ source "package/multimedia/gst-omapfb/Config.in"
+@@ -11,6 +11,7 @@ source "package/multimedia/gst-ffmpeg/Config.in"
+ source "package/multimedia/gst-dsp/Config.in"
+ source "package/multimedia/gst-fsl-plugins/Config.in"
+ source "package/multimedia/gst-omapfb/Config.in"
++source "package/multimedia/gst-omx/Config.in"
  source "package/multimedia/gst-plugins-base/Config.in"
  source "package/multimedia/gst1-plugins-base/Config.in"
  source "package/multimedia/gst-plugins-good/Config.in"
-+source "package/multimedia/gst1-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
- source "package/multimedia/lame/Config.in"
-diff --git a/package/multimedia/gst1-plugins-good/Config.in b/package/multimedia/gst1-plugins-good/Config.in
+diff --git a/package/multimedia/gst-omx/Config.in b/package/multimedia/gst-omx/Config.in
 new file mode 100644
-index 0000000..2c27fe8
+index 0000000..b6ea116
 --- /dev/null
-+++ b/package/multimedia/gst1-plugins-good/Config.in
-@@ -0,0 +1,214 @@
-+menuconfig BR2_PACKAGE_GST1_PLUGINS_GOOD
-+	bool "gst1-plugins-good"
-+	depends on BR2_PACKAGE_GSTREAMER1
++++ b/package/multimedia/gst-omx/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_GST_OMX
++	bool "gst-omx"
++	depends on BR2_PACKAGE_GSTREAMER1 && BR2_PACKAGE_HAS_OPENMAX
 +	select BR2_PACKAGE_GST1_PLUGINS_BASE
 +	help
-+	  A set of well-supported plug-ins for GStreamer under the preferred
-+	  license.
++	  GStreamer plug-in to use OpenMAX API.
 +
-+	  http://gstreamer.freedesktop.org/
++	  http://cgit.freedesktop.org/gstreamer/gst-omx
 +
-+if BR2_PACKAGE_GST1_PLUGINS_GOOD
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_JPEG
-+	bool "jpeg (JPEG support)"
-+	select BR2_PACKAGE_JPEG
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PNG
-+	bool "png (PNG support)"
-+	select BR2_PACKAGE_LIBPNG
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_BZ2
-+	bool "bz2 support"
-+	depends on BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
-+	select BR2_PACKAGE_BZIP2
-+	help
-+	  Enable bz2 support for the following plugins:
-+	  matroska
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB
-+	bool "zlib support"
-+	depends on BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QTDEMUX || BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ID3DEMUX || BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Enable zlib support for the following plugins:
-+	  id3demux, qtdemux, matroska
-+
-+comment "dependency-less plugins"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ALPHA
-+	bool "alpha"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_APETAG
-+	bool "apetag"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOFX
-+	bool "audiofx"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOPARSERS
-+	bool "audioparsers"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUPARSE
-+	bool "auparse"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT
-+	bool "autodetect"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AVI
-+	bool "avi (*.avi video)"
-+	default y
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CUTTER
-+	bool "cutter"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_DEBUGUTILS
-+	bool "debugutils"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_DEINTERLACE
-+	bool "deinterlace"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_EFFECTV
-+	bool "effectv"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_EQUALIZER
-+	bool "equalizer"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLV
-+	bool "flv"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLX
-+	bool "flx"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GOOM
-+	bool "goom"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GOOM2K1
-+	bool "goom2k1"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ID3DEMUX
-+	bool "id3demux (*.mp3 audio)"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ICYDEMUX
-+	bool "icydemux"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_IMAGEFREEZE
-+	bool "imagefreeze"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_INTERLEAVE
-+	bool "interleave"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4
-+	bool "isomp4"
-+	default y
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LAW
-+	bool "law"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LEVEL
-+	bool "level"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
-+	bool "matroska"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MONOSCOPE
-+	bool "monoscope"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MULTIFILE
-+	bool "multifile"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MULTIPART
-+	bool "multipart"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_REPLAYGAIN
-+	bool "replaygain"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTP
-+	bool "rtp"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTPMANAGER
-+	bool "rtpmanager"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP
-+	bool "rtsp"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHAPEWIPE
-+	bool "shapewipe"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SMPTE
-+	bool "smpte"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SPECTRUM
-+	bool "spectrum"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_UDP
-+	depends on BR2_INET_IPV6
-+	bool "udp"
-+
-+comment "udp requires a toolchain with IPv6 support"
-+	depends on !BR2_INET_IPV6
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOBOX
-+	bool "videobox"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOCROP
-+	bool "videocrop"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOFILTER
-+	bool "videofilter"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOMIXER
-+	bool "videomixer"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVENC
-+	bool "wavenc"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVPARSE
-+	bool "wavparse (*.wav audio)"
-+	default y
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_Y4M
-+	bool "y4m"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
-+	bool "v4l2"
-+
-+comment "plugins with external dependencies"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO
-+	bool "cairo"
-+	select BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_CAIRO_PNG
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLAC
-+	bool "flac (libFLAC)"
-+	select BR2_PACKAGE_FLAC
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GDKPIXBUF
-+	bool "gdkpixbuf"
-+	select BR2_PACKAGE_GDK_PIXBUF
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS
-+	bool "ossaudio (OSS audio)"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS4
-+	bool "oss4 (Open Sound System 4)"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
-+	depends on BR2_LARGEFILE # pulseaudio -> libsndfile
-+	select BR2_PACKAGE_PULSEAUDIO
-+	bool "pulseaudio"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
-+	bool "souphttpsrc (http client)"
-+	select BR2_PACKAGE_LIBSOUP
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SPEEX
-+	bool "speex"
-+	select BR2_PACKAGE_SPEEX
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVPACK
-+	bool "wavpack (*.wv audio)"
-+	select BR2_PACKAGE_WAVPACK
-+
-+endif
-diff --git a/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk b/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
++comment "gst-omx requires a OpenMAX implementation"
++	depends on BR2_PACKAGE_GSTREAMER1 && !BR2_PACKAGE_HAS_OPENMAX
+diff --git a/package/multimedia/gst-omx/gst-omx-config-files.patch b/package/multimedia/gst-omx/gst-omx-config-files.patch
 new file mode 100644
-index 0000000..ee65f75
+index 0000000..f484521
 --- /dev/null
-+++ b/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
-@@ -0,0 +1,403 @@
-+###############################################################################
++++ b/package/multimedia/gst-omx/gst-omx-config-files.patch
+@@ -0,0 +1,127 @@
++Change config files to match default buildroot install
++
++Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
++---
++Index: gst-omx-1.0.0/config/bellagio/gstomx.conf
++===================================================================
++--- gst-omx-1.0.0.orig/config/bellagio/gstomx.conf	2013-03-12 04:12:09.000000000 -0500
+++++ gst-omx-1.0.0/config/bellagio/gstomx.conf	2013-05-21 17:50:14.545692908 -0500
++@@ -1,6 +1,6 @@
++ [omxmpeg4videodec]
++ type-name=GstOMXMPEG4VideoDec
++-core-name=/usr/local/lib/libomxil-bellagio.so.0
+++core-name=/usr/lib/libomxil-bellagio.so.0
++ component-name=OMX.st.video_decoder.mpeg4
++ rank=256
++ in-port-index=0
++@@ -9,7 +9,7 @@
++ 
++ [omxh264dec]
++ type-name=GstOMXH264Dec
++-core-name=/usr/local/lib/libomxil-bellagio.so.0
+++core-name=/usr/lib/libomxil-bellagio.so.0
++ component-name=OMX.st.video_decoder.avc
++ rank=256
++ in-port-index=0
++@@ -18,7 +18,7 @@
++ 
++ [omxmpeg4videoenc]
++ type-name=GstOMXMPEG4VideoEnc
++-core-name=/usr/local/lib/libomxil-bellagio.so.0
+++core-name=/usr/lib/libomxil-bellagio.so.0
++ component-name=OMX.st.video_encoder.mpeg4
++ rank=0
++ in-port-index=0
++@@ -27,7 +27,7 @@
++ 
++ [omxaacenc]
++ type-name=GstOMXAACEnc
++-core-name=/usr/local/lib/libomxil-bellagio.so.0
+++core-name=/usr/lib/libomxil-bellagio.so.0
++ component-name=OMX.st.audio_encoder.aac
++ rank=0
++ in-port-index=0
++Index: gst-omx-1.0.0/config/rpi/gstomx.conf
++===================================================================
++--- gst-omx-1.0.0.orig/config/rpi/gstomx.conf	2013-05-21 17:51:39.965693635 -0500
+++++ gst-omx-1.0.0/config/rpi/gstomx.conf	2013-05-21 17:52:07.781693871 -0500
++@@ -1,6 +1,6 @@
++ [omxmpeg2videodec]
++ type-name=GstOMXMPEG2VideoDec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -9,7 +9,7 @@
++ 
++ [omxmpeg4videodec]
++ type-name=GstOMXMPEG4VideoDec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -18,7 +18,7 @@
++ 
++ [omxh263dec]
++ type-name=GstOMXH263Dec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -27,7 +27,7 @@
++ 
++ [omxh264dec]
++ type-name=GstOMXH264Dec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -36,7 +36,7 @@
++ 
++ [omxtheoradec]
++ type-name=GstOMXTheoraDec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -45,7 +45,7 @@
++ 
++ [omxvp8dec]
++ type-name=GstOMXVP8Dec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -54,7 +54,7 @@
++ 
++ [omxmjpegdec]
++ type-name=GstOMXMJPEGDec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_decode
++ rank=256
++ in-port-index=130
++@@ -63,7 +63,7 @@
++ 
++ [omxvc1dec]
++ type-name=GstOMXWMVDec
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_encode
++ rank=256
++ in-port-index=130
++@@ -73,7 +73,7 @@
++ 
++ [omxh264enc]
++ type-name=GstOMXH264Enc
++-core-name=/opt/vc/lib/libopenmaxil.so
+++core-name=/usr/lib/libopenmaxil.so
++ component-name=OMX.broadcom.video_encode
++ rank=256
++ in-port-index=200
+diff --git a/package/multimedia/gst-omx/gst-omx.mk b/package/multimedia/gst-omx/gst-omx.mk
+new file mode 100644
+index 0000000..00abecb
+--- /dev/null
++++ b/package/multimedia/gst-omx/gst-omx.mk
+@@ -0,0 +1,37 @@
++#############################################################
 +#
-+# gst1-plugins-good
++# gst-omx
 +#
-+###############################################################################
++#############################################################
 +
-+GST1_PLUGINS_GOOD_VERSION = 1.1.1
-+GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
-+GST1_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
-+GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
-+GST1_PLUGINS_GOOD_LICENSE = LGPLv2.1+
++GST_OMX_VERSION = 1.0.0
++GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
++GST_OMX_SITE = http://gstreamer.freedesktop.org/src/gst-omx/
 +
-+GST1_PLUGINS_GOOD_CONF_OPT = \
-+	--disable-debug \
-+	--disable-valgrind \
-+	--disable-examples \
-+	--disable-directsound \
-+	--disable-sunaudio \
-+	--disable-osx_audio \
-+	--disable-osx_video \
-+	--disable-aalib \
-+	--disable-aalibtest \
-+	--disable-libcaca \
-+	--disable-esd \
-+	--disable-esdtest \
-+	--disable-shout2
++GST_OMX_LICENSE = LGPLv2.1
++GST_OMX_LICENSE_FILE = COPYING
 +
-+# Options which require currently unpackaged libraries
-+GST1_PLUGINS_GOOD_CONF_OPT += \
-+	--disable-jack \
-+	--disable-libdv \
-+	--disable-dv1394 \
-+	--disable-taglib \
-+	--disable-vpx
-+
-+GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
-+
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+GST1_PLUGINS_GOOD_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXv
-+GST1_PLUGINS_GOOD_CONF_OPT += \
-+	--enable-x \
-+	--enable-xshm \
-+	--enable-xvideo
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += \
-+	--disable-x \
-+	--disable-xshm \
-+	--disable-xvideo
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++GST_OMX_CONF_OPT = \
++	--with-omx-target=rpi
++GST_OMX_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) \
++		-I$(STAGING_DIR)/usr/include/IL \
++		-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
++		-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
 +endif
 +
-+ifeq ($(BR2_PACKAGE_ORC),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-orc
-+GST1_PLUGINS_GOOD_DEPENDENCIES += orc
++ifeq ($(BR2_PACKAGE_BELLAGIO),y)
++GST_OMX_CONF_OPT = \
++	--with-omx-target=bellagio
++GST_OMX_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) \
++		-DOMX_VERSION_MAJOR=1 \
++		-DOMX_VERSION_MINOR=1 \
++		-DOMX_VERSION_REVISION=2 \
++		-DOMX_VERSION_STEP=0"
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_JPEG),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-jpeg
-+GST1_PLUGINS_GOOD_DEPENDENCIES += jpeg
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-jpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PNG),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-libpng
-+GST1_PLUGINS_GOOD_DEPENDENCIES += libpng
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-libpng
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_BZ2),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-bz2
-+GST1_PLUGINS_GOOD_DEPENDENCIES += bzip2
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-bz2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-zlib
-+GST1_PLUGINS_GOOD_DEPENDENCIES += zlib
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ALPHA),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-alpha
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-alpha
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_APETAG),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-apetag
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-apetag
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOFX),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-audiofx
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-audiofx
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOPARSERS),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-audioparsers
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-audioparsers
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUPARSE),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-auparse
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-auparse
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-autodetect
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-autodetect
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AVI),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-avi
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-avi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CUTTER),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-cutter
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-cutter
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_DEBUGUTILS),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-debugutils
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-debugutils
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_DEINTERLACE),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-deinterlace
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-deinterlace
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_EFFECTV),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-effectv
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-effectv
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_EQUALIZER),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-equalizer
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-equalizer
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLV),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-flv
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-flv
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLX),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-flx
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-flx
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GOOM),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-goom
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-goom
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GOOM2K1),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-goom2k1
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-goom2k1
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ID3DEMUX),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-id3demux
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-id3demux
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ICYDEMUX),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-icydemux
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-icydemux
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_IMAGEFREEZE),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-imagefreeze
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-imagefreeze
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_INTERLEAVE),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-interleave
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-interleave
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-isomp4
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-isomp4
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LAW),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-law
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-law
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LEVEL),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-level
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-level
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-matroska
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-matroska
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MONOSCOPE),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-monoscope
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-monoscope
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MULTIFILE),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-multifile
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-multifile
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MULTIPART),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-multipart
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-multipart
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_REPLAYGAIN),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-replaygain
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-replaygain
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTP),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-rtp
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-rtp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTPMANAGER),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-rtpmanager
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-rtpmanager
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-rtsp
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-rtsp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHAPEWIPE),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-shapewipe
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-shapewipe
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SMPTE),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-smpte
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-smpte
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SPECTRUM),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-spectrum
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-spectrum
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_UDP),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-udp
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-udp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOBOX),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-videobox
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-videobox
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOCROP),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-videocrop
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-videocrop
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOFILTER),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-videofilter
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-videofilter
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOMIXER),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-videomixer
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-videomixer
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVENC),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-wavenc
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-wavenc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVPARSE),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-wavparse
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-wavparse
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_Y4M),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-y4m
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-y4m
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-gst_v4l2
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-gst_v4l2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-cairo
-+GST1_PLUGINS_GOOD_DEPENDENCIES += cairo
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-cairo
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLAC),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-flac
-+GST1_PLUGINS_GOOD_DEPENDENCIES += flac
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-flac
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GDKPIXBUF),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-gdk_pixbuf
-+GST1_PLUGINS_GOOD_DEPENDENCIES += gdk-pixbuf
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-gdk_pixbuf
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-oss
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-oss
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS4),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-oss4
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-oss4
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-pulse
-+GST1_PLUGINS_GOOD_DEPENDENCIES += pulseaudio
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-pulse
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-soup
-+GST1_PLUGINS_GOOD_DEPENDENCIES += libsoup
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-soup
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SPEEX),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-speex
-+GST1_PLUGINS_GOOD_DEPENDENCIES += speex
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-speex
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVPACK),y)
-+GST1_PLUGINS_GOOD_CONF_OPT += --enable-wavpack
-+GST1_PLUGINS_GOOD_DEPENDENCIES += wavpack
-+else
-+GST1_PLUGINS_GOOD_CONF_OPT += --disable-wavpack
-+endif
++GST_OMX_DEPENDENCIES = gstreamer1 gst1-plugins-base libopenmax
 +
 +$(eval $(autotools-package))
 -- 
