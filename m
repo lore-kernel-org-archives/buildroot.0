@@ -1,72 +1,81 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Fri,  7 Jun 2013 15:21:43 +0200
-Subject: [Buildroot] [PATCHv2] linux: Fix uImage with appended DTs generation
-Message-ID: <1370611303-5054-1-git-send-email-maxime.ripard@free-electrons.com>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Fri, 7 Jun 2013 07:44:09 -0700
+Subject: [Buildroot] AM3517 Neon, OpenGL & EGLFS support
+In-Reply-To: <20130607100824.2cc5e5e0@skate>
+References: <CALo-6+h9ELx+Hp_OQB0kvrdv9mH1VKnrKKcTTXLNSYkK0vFhHQ@mail.gmail.com>
+ <CAMYPSMpE=ziBR4TuRbkjG+78fcJ=DXA67ePTXTDBPDRv+asEyw@mail.gmail.com>
+ <CALo-6+hLNK70Bdh7C+ViD+T8XgbpKdBorcsqZfvhNqz-cbcV5A@mail.gmail.com>
+ <CALo-6+jLazVYE_tXAyL+JVr6Duo-3yd+ayiX4PHOB5wiskBCKw@mail.gmail.com>
+ <CAMYPSMppGbVCw451=gaDOvROj=HLpYd1z9HRg5ujA9N2cu7q0w@mail.gmail.com>
+ <CALo-6+h9Hm4BdgLa=ATXmZsyyQnmYYsszBFJ9zaXcu5vt2kyxA@mail.gmail.com>
+ <20130607100824.2cc5e5e0@skate>
+Message-ID: <CALo-6+j5W7OERo3dtuUqzmcidq2tcR=BobM_d6NWt2iMx-s0tQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes bug #5516 - appended device tree blobs on uImage fails
+Thank you both Thomas and Wojciech:
 
-Before version 3.7 of the kernel, building the zImage and then the
-uImage will rewrite the zImage in the process, removing the device tree
-we just appended.
+I can seem to get past this error by enabling "rpi-userland" which
+does define LIBGLES_DEPENDENCIES, but this seems like the wrong answer
+to me. Perhaps there is a different configuration setting somewhere
+else that defines sufficient configuration for the AM3517 that I have
+missed?
 
-Use mkimage to append the device tree to the uImage and rebuild the
-headers directly.
+I just did a make clean && make after defining "rpi-userland" and the
+compilation completed with a libQt5OpenGL.so.5.0.2 about 300KBytes in
+size, so something seems to have worked.
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
----
- linux/linux.mk | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+Would it be correct that LIBGLES_DEPENDENCIES may just have to be
+defined to "anything" so we could put into qt5base/qt5.mk a line that
+says
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 57956dd..50fa943 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -106,12 +106,6 @@ ifneq ($(LINUX_KERNEL_UIMAGE_LOADADDR),)
- LINUX_MAKE_FLAGS+=LOADADDR="$(LINUX_KERNEL_UIMAGE_LOADADDR)"
- endif
- 
--ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
--LINUX_IMAGE_TARGET=zImage
--else
--LINUX_IMAGE_TARGET=$(LINUX_IMAGE_NAME)
--endif
--
- # Compute the arch path, since i386 and x86_64 are in arch/x86 and not
- # in arch/$(KERNEL_ARCH). Even if the kernel creates symbolic links
- # for bzImage, arch/i386 and arch/x86_64 do not exist when copying the
-@@ -229,9 +223,16 @@ define LINUX_APPEND_DTB
- 	fi >> $(KERNEL_ARCH_PATH)/boot/zImage
- endef
- ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
--# We need to generate the uImage here after that so that the uImage is
--# generated with the right image size.
--LINUX_APPEND_DTB += $(sep)$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) uImage
-+# We need to generate a new u-boot image that takes into
-+# account the extra-size added by the device tree at the end
-+# of the image. To do so, we first need to retrieve both load
-+# address and entry point for the kernel from the already
-+# generate uboot image before using mkimage -l.
-+LINUX_APPEND_DTB += $(sep) MKIMAGE_ARGS=`$(HOST_DIR)/usr/bin/mkimage -l $(LINUX_IMAGE_PATH) |\
-+        sed -n -e 's/Image Name:[ ]*\(.*\)/-n \1/p' -e 's/Load Address:/-a/p' -e 's/Entry Point:/-e/p'`; \
-+        $(HOST_DIR)/usr/bin/mkimage -A $(KERNEL_ARCH) -O linux \
-+        -T kernel -C none $${MKIMAGE_ARGS} \
-+        -d $(KERNEL_ARCH_PATH)/boot/zImage $(LINUX_IMAGE_PATH);
- endif
- endif
- 
-@@ -240,7 +241,7 @@ endif
- define LINUX_BUILD_CMDS
- 	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
- 		cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH) $(KERNEL_ARCH_PATH)/boot/dts/)
--	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_TARGET)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
- 		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
- 	fi
+LIBGLES_DEPENDENCIES += any_string_will_do
+
+and expect success?
+
+On 6/7/13, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> Dear Charles Krinke,
+>
+> On Thu, 6 Jun 2013 11:20:05 -0700, Charles Krinke wrote:
+>
+>> Your new patch looks like the only difference is the line changing
+>> package/opengl/libgles/libgles.mk from
+>>
+>> -ifeq ($(LIBGLES_DEPENDENCIES),)
+>> +ifeq ($(LIBGLES_DEPENDENCIES),y)
+>
+> The first line is the correct one. The second line was the one
+> originally introduced, but it was a bug. The idea here is that if
+> LIBGLES has no dependencies, then it means that no OpenGL
+> implementation was selected.
+>
+>> I still get the same error when compiling Qt and that is:
+>>
+>> patching file mkspecs/common/posix/qplatformdefs.h
+>> >>> libgles undefined Configuring
+>> >>> libgles undefined Building
+>> >>> libgles undefined Installing to target
+>> >>> libegl undefined Extracting
+>> >>> libegl undefined Patching package/opengl//libegl
+>> >>> libegl undefined Configuring
+>> echo "No libEGL implementation selected. Configuration error."
+>
+> This happens when no package provides a libEGL implementation, i.e
+> LIBEGL_DEPENDENCIES is empty.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
+
+
 -- 
-1.8.3
+Charles Krinke
