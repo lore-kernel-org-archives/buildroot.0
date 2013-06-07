@@ -1,47 +1,32 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Fri, 7 Jun 2013 10:57:19 +0200
-Subject: [Buildroot] [PATCHv3 ] python3: Port python2 patches to reduce
- the interpreter size
-In-Reply-To: <20130529171711.412e5b4c@skate>
-References: <1369816617-6315-1-git-send-email-maxime.ripard@free-electrons.com>
- <CAHXCMMJgpbTstcZyUOnz2dsAFpWvZNhGgSdHggPNfHfR3tMPjA@mail.gmail.com>
- <20130529171711.412e5b4c@skate>
-Message-ID: <20130607085719.GH14209@lukather>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 07 Jun 2013 10:58:06 +0200
+Subject: [Buildroot] [PATCH 4/4] Normalize separator size to 80
+In-Reply-To: <51B19FFE.8040703@free-electrons.com> (Alexandre Belloni's
+ message of "Fri, 07 Jun 2013 10:55:26 +0200")
+References: <1370591655-19855-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <1370591655-19855-4-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <51B19FFE.8040703@free-electrons.com>
+Message-ID: <87sj0ucn6p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@free-electrons.com> writes:
 
-On Wed, May 29, 2013 at 05:17:11PM +0200, Thomas Petazzoni wrote:
-> On Wed, 29 May 2013 16:56:47 +0200, Samuel Martin wrote:
-> > I've run few builds (same config, with all or no modules selected,
-> > with/without this patch applied):
-> > -rw-r--r-- 1 sam sam 64M May 29 12:39
-> > br-output/python-without-patch/images/rootfs.tar
-> > -rw-r--r-- 1 sam sam 29M May 29 12:50
-> > br-output/python-with-patch-v3-no-modules/images/rootfs.tar
-> > -rw-r--r-- 1 sam sam 32M May 29 12:49
-> > br-output/python-with-patch-v3-all-modules/images/rootfs.tar
-> 
-> I would have expected this 32M to be much closer to the 64M. Normally,
-> with all modules enabled, we should have the same size as the Python
-> interpreter without Maxime's patch.
-> 
-> Or am I missing something?
+ Alexandre> Hi,
+ Alexandre> Thanks for pointing out that I forgot everything that wasn't in packages ;)
 
-To be honest, I don't recall much about this 6-monthes-old patch.
+ Alexandre> You actually forgot some separators in:
+ Alexandre> fs/iso9660/iso9660.mk
+ Alexandre> toolchain/gcc/gcc-uclibc-4.x.mk
+ Alexandre> toolchain/uClibc/uclibc.mk
 
-What I recall however is that it removed a significant size notably
-because we don't integrate the python unittests *at all*. And they were
-taking a significant space.
+ Alexandre> Please fix that and resubmit !
 
-I'd say that this patch reduces drastically the size of the interpreter
-without adding extra bugs (at least none that we caught so far). So
-maybe we can just merge this patch, close the bug, and if someone's
-willing to improve the situation, he can still step up and send
-additional patches.
+I've already applied the patches, please send a followup patch fixing
+the remaining issues - Thanks.
 
-Maxime
+-- 
+Bye, Peter Korsgaard
