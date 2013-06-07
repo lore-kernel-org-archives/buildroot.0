@@ -1,38 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Jun 2013 11:51:00 +0200
-Subject: [Buildroot] Why have legal info for host packages?
-In-Reply-To: <20130602161923.GB3510@free.fr>
-References: <CANxTyt6LO-Q3orQnXGL873wG5z9f3ufiE6YOUNMuBq--8VMzFQ@mail.gmail.com>
- <20130602161923.GB3510@free.fr>
-Message-ID: <20130607115100.510530ad@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 7 Jun 2013 11:52:07 +0200
+Subject: [Buildroot] [PATCHv3 ] python3: Port python2 patches to reduce
+ the interpreter size
+In-Reply-To: <20130607085719.GH14209@lukather>
+References: <1369816617-6315-1-git-send-email-maxime.ripard@free-electrons.com>
+ <CAHXCMMJgpbTstcZyUOnz2dsAFpWvZNhGgSdHggPNfHfR3tMPjA@mail.gmail.com>
+ <20130529171711.412e5b4c@skate> <20130607085719.GH14209@lukather>
+Message-ID: <CAHXCMMKsjheubMqTfZ4QS+heh-AGMDB+a_i0taxi+kx59=v3JA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hi Thomas, Maxime, all,
 
-On Sun, 2 Jun 2013 18:19:23 +0200, Yann E. MORIN wrote:
+2013/6/7 Maxime Ripard <maxime.ripard@free-electrons.com>:
+> Hi Thomas,
+>
+> On Wed, May 29, 2013 at 05:17:11PM +0200, Thomas Petazzoni wrote:
+>> On Wed, 29 May 2013 16:56:47 +0200, Samuel Martin wrote:
+>> > I've run few builds (same config, with all or no modules selected,
+>> > with/without this patch applied):
+>> > -rw-r--r-- 1 sam sam 64M May 29 12:39
+>> > br-output/python-without-patch/images/rootfs.tar
+>> > -rw-r--r-- 1 sam sam 29M May 29 12:50
+>> > br-output/python-with-patch-v3-no-modules/images/rootfs.tar
+>> > -rw-r--r-- 1 sam sam 32M May 29 12:49
+>> > br-output/python-with-patch-v3-all-modules/images/rootfs.tar
+>>
+>> I would have expected this 32M to be much closer to the 64M. Normally,
+>> with all modules enabled, we should have the same size as the Python
+>> interpreter without Maxime's patch.
+>>
+>> Or am I missing something?
+Certainly ;)
 
-> On 2013-06-02 12:12 -0400, Danomi Manchego spake thusly:
-> > I was using the outputs from "make legal-info" yesterday as the basis for
-> > our embedded product's licenses web page, and found myself modifying
-> > pkg-generic.mk to exclude host packages from the legal info collection.  So
-> > I was wondering - what is the value in including the legal info of packages
-> > built for the host?
-> 
-> Some companies use Buildroot as a base for the SDK and provide pre-built
-> environment to their customers. So, we have to also install legal-info
-> for host packages to cope with this situation.
+>
+> To be honest, I don't recall much about this 6-monthes-old patch.
+>
+> What I recall however is that it removed a significant size notably
+> because we don't integrate the python unittests *at all*. And they were
+> taking a significant space.
+>
+> I'd say that this patch reduces drastically the size of the interpreter
+> without adding extra bugs (at least none that we caught so far). So
+> maybe we can just merge this patch, close the bug, and if someone's
+> willing to improve the situation, he can still step up and send
+> additional patches.
+>
+> Maxime
 
-Yes, but as we discussed some time ago, the host packages should either
-be identified as such in the legal info, or even maybe a separate
-manifest.csv file should be generated for the host packages.
+Here are few diffs on the target dirs of the builds I run few days ago [1,2].
 
-Thomas
+As you can see, in [2], most of the diff is due to the removal of:
+- tk/idle
+- 2to3 stuff
+- tests
+
+Regards,
+
+
+[1] http://code.bulix.org/7tri5g-83719
+[2] http://code.bulix.org/gzt98n-83720
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Samuel
