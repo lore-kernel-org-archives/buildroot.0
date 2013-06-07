@@ -1,91 +1,50 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Fri, 7 Jun 2013 08:40:40 -0700
-Subject: [Buildroot] AM3517 Neon, OpenGL & EGLFS support
-In-Reply-To: <20130607172352.091a3888@skate>
-References: <CALo-6+h9ELx+Hp_OQB0kvrdv9mH1VKnrKKcTTXLNSYkK0vFhHQ@mail.gmail.com>
- <CAMYPSMpE=ziBR4TuRbkjG+78fcJ=DXA67ePTXTDBPDRv+asEyw@mail.gmail.com>
- <CALo-6+hLNK70Bdh7C+ViD+T8XgbpKdBorcsqZfvhNqz-cbcV5A@mail.gmail.com>
- <CALo-6+jLazVYE_tXAyL+JVr6Duo-3yd+ayiX4PHOB5wiskBCKw@mail.gmail.com>
- <CAMYPSMppGbVCw451=gaDOvROj=HLpYd1z9HRg5ujA9N2cu7q0w@mail.gmail.com>
- <CALo-6+h9Hm4BdgLa=ATXmZsyyQnmYYsszBFJ9zaXcu5vt2kyxA@mail.gmail.com>
- <20130607100824.2cc5e5e0@skate>
- <CALo-6+j5W7OERo3dtuUqzmcidq2tcR=BobM_d6NWt2iMx-s0tQ@mail.gmail.com>
- <20130607172352.091a3888@skate>
-Message-ID: <CALo-6+jJ7CNYrQnxdvZiS-zC8n4XqeLMHf7h9CwaGnC=u4SjfA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 7 Jun 2013 17:46:49 +0200
+Subject: [Buildroot] Why have legal info for host packages?
+In-Reply-To: <20130607115100.510530ad@skate>
+References: <CANxTyt6LO-Q3orQnXGL873wG5z9f3ufiE6YOUNMuBq--8VMzFQ@mail.gmail.com>
+ <20130602161923.GB3510@free.fr> <20130607115100.510530ad@skate>
+Message-ID: <20130607154649.GA6124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas:
+Thomas, All,
 
-You touch on the key piece of understanding I am seeking.
-Unfortunately some of this understanding is obfuscated by similar
-terms used by different groups.
+On 2013-06-07 11:51 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 2 Jun 2013 18:19:23 +0200, Yann E. MORIN wrote:
+> 
+> > On 2013-06-02 12:12 -0400, Danomi Manchego spake thusly:
+> > > I was using the outputs from "make legal-info" yesterday as the basis for
+> > > our embedded product's licenses web page, and found myself modifying
+> > > pkg-generic.mk to exclude host packages from the legal info collection.  So
+> > > I was wondering - what is the value in including the legal info of packages
+> > > built for the host?
+> > 
+> > Some companies use Buildroot as a base for the SDK and provide pre-built
+> > environment to their customers. So, we have to also install legal-info
+> > for host packages to cope with this situation.
+> 
+> Yes, but as we discussed some time ago, the host packages should either
+> be identified as such in the legal info, or even maybe a separate
+> manifest.csv file should be generated for the host packages.
 
-In the AM3517, there is a source tree called the "Graphics_SDK". And
-it contains, I believe, EGL and OpenGL implementations for the AM3517
-and other SoC from TI. Wojciech patch does define several variables
-which include headers and libraries for Qt.
+Indeed. I never said otherwise. I was just pointing out that we also
+want to generate it for host packages, and was giving an example why
+this was needed.
 
-I *think* we are 99% there and the missing part is this library
-constant from Raspberry Pi, but, ... because all the alphabet soup is
-different between Ti, Qt, and the rest of the opensource community, we
-get to deal with ambiguity a bit.
+That this legal-info stuff be generated in a separate location (file,
+dir) is orthogonal: we want it generated.
 
-
-
-On 6/7/13, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> Dear Charles Krinke,
->
-> On Fri, 7 Jun 2013 07:44:09 -0700, Charles Krinke wrote:
->
->> I can seem to get past this error by enabling "rpi-userland" which
->> does define LIBGLES_DEPENDENCIES, but this seems like the wrong answer
->> to me.
->
-> Enabling rpi-userland provides an EGL implementation that works on the
-> RasberryPi, so obviously, this isn't going to work for you.
->
->> Perhaps there is a different configuration setting somewhere
->> else that defines sufficient configuration for the AM3517 that I have
->> missed?
->
-> Spenser is creating a Buildroot package that properly packages the
-> OpenGL/EGL implementation for OMAP/AM3xxx. I hope he can post that soon.
->
->> I just did a make clean && make after defining "rpi-userland" and the
->> compilation completed with a libQt5OpenGL.so.5.0.2 about 300KBytes in
->> size, so something seems to have worked.
->>
->> Would it be correct that LIBGLES_DEPENDENCIES may just have to be
->> defined to "anything" so we could put into qt5base/qt5.mk a line that
->> says
->>
->> LIBGLES_DEPENDENCIES += any_string_will_do
->>
->> and expect success?
->
-> Well, if you install manually your OpenGL and EGL libraries, maybe. But
-> that's ugly. The libegl and libopengl packages are virtual packages,
-> and one package is supposed to provide one EGL and one OpenGL
-> implementation for your specific SoC.
->
-> Spenser, can you update us on your patches? Even if there's not fully
-> ready, posting them with a RFC tag would allow Charles and Wojchiech to
-> experiment with them.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
->
-
+Regards,
+Yann E. MORIN.
 
 -- 
-Charles Krinke
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
