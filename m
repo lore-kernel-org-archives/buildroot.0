@@ -1,35 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 7 Jun 2013 09:32:28 +0200
-Subject: [Buildroot] [git commit] manual: correct error in github tarball
-	information
-Message-ID: <20130607085237.455A49A9DE@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  7 Jun 2013 08:54:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 6302] Versions of packages retrieved from
+	github.com are wrong
+In-Reply-To: <bug-6302-163@https.bugs.busybox.net/>
+References: <bug-6302-163@https.bugs.busybox.net/>
+Message-ID: <20130607085427.5A9E09A9E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=484b6dd8a3abccf0be34d1bed3761a8809ba23be
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=6302
 
-Updates to manual for bug 6302
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/manual/adding-packages-tips.txt |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|REOPENED                    |RESOLVED
+         Resolution|                            |FIXED
 
-diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-index 21e520b..f435add 100644
---- a/docs/manual/adding-packages-tips.txt
-+++ b/docs/manual/adding-packages-tips.txt
-@@ -58,7 +58,7 @@ enough):
- 
- ------------------------
- FOO_VERSION = 1234567
--FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
-+FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
- ------------------------
- 
- Note that the name of the tarball is the default +foo-1234567.tar.gz+
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> 2013-06-07 08:52:44 UTC ---
+(In reply to comment #2)
+> Great!
+> But
+> http://git.buildroot.net/buildroot/tree/docs/manual/adding-packages-tips.txt
+> still needs to be updated (and
+> http://www.buildroot.org/downloads/manual/manual.html regenerated as necessary)
+> to prevent other people making the same mistake in future...
+
+Manual updated in git and website updated, thanks.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
