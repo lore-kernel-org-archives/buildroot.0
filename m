@@ -1,170 +1,127 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  8 Jun 2013 11:14:14 +0200
-Subject: [Buildroot] [PATCH 1/9] toolchain-external: Version bump to 2013.05
-	release for MIPS
-Message-ID: <1370682862-7285-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat,  8 Jun 2013 11:14:15 +0200
+Subject: [Buildroot] [PATCH 2/9] toolchain-external: bump Linaro ARM
+	toolchains to 2013.04 and 2013.05
+In-Reply-To: <1370682862-7285-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1370682862-7285-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1370682862-7285-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Markos Chandras <markos.chandras@imgtec.com>
+We add support for Linaro 2013.04 and Linaro 2013.05 and remove
+support for Linaro 2013.01 and Linaro 2013.02.
 
-Remove old 2011.09 release. Allow MIPS64 cores on
-2013.05 release since they are supported by the toolchain.
-
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in   | 42 ++++++++++++++++----------------
- toolchain/toolchain-external/ext-tool.mk |  6 ++---
- 2 files changed, 24 insertions(+), 24 deletions(-)
+ toolchain/toolchain-external/Config.in   | 24 ++++++++++++------------
+ toolchain/toolchain-external/ext-tool.mk | 12 ++++++------
+ 2 files changed, 18 insertions(+), 18 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 47b2bf5..37c5648 100644
+index 37c5648..6a58e0f 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -136,9 +136,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	      Select BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -mthumb
+@@ -3,8 +3,8 @@ if BR2_TOOLCHAIN_EXTERNAL
+ choice
+ 	prompt "Toolchain"
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
--	bool "Sourcery CodeBench MIPS 2012.09"
--	depends on BR2_mips || BR2_mipsel
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
-+	bool "Sourcery CodeBench MIPS 2013.05"
-+	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
+-	bool "Linaro 2013.03"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_05
++	bool "Linaro 2013.05"
+ 	depends on BR2_arm
+ 	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-@@ -146,14 +146,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+@@ -14,16 +14,16 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
  	select BR2_HOSTARCH_NEEDS_IA32_LIBS
  	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51, glibc
--	  2.16, uClibc 0.9.30 and gdb 7.4.50, kernel headers
--	  3.5.4. It has support for the following variants:
-+	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
-+	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers
-+	  3.8.2. It has support for the following variants:
- 	    - MIPS32 O32 big endian glibc
- 	      Select a MIPS generic core
- 	      Disable BR2_SOFT_FLOAT
- 	    - MIPS64 big endian glibc
--	      Select a MIPS generic core
-+	      Select a MIPS64 generic core
- 	      Select the n64 ABI
- 	      Disable BR2_SOFT_FLOAT
- 	    - MIPS32 O32 little endian glibc
-@@ -161,7 +161,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
- 	      Disable BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -EL
- 	    - MIPS64 little endian glibc
--	      Select a MIPS generic core
-+	      Select a MIPS64 generic core
- 	      Select the n64 ABI
- 	      Disable BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -EL
-@@ -169,7 +169,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
- 	      Select a MIPS generic core
- 	      Select BR2_SOFT_FLOAT
- 	    - MIPS64 big endian soft float glibc
--	      Select a MIPS generic core
-+	      Select a MIPS64 generic core
- 	      Select the n64 ABI
- 	      Select BR2_SOFT_FLOAT
- 	    - MIPS32 little endian soft float glibc
-@@ -177,7 +177,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
- 	      Select BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -EL
- 	    - MIPS64 little endian soft float glibc
--	      Select a MIPS generic core
-+	      Select a MIPS64 generic core
- 	      Select the n64 ABI
- 	      Select BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -EL
-@@ -206,8 +206,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
- 	    - MIPS32 little endian soft float uclibc
- 	      Not usable in Buildroot yet.
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2013.03 (based on gcc 4.7), Linaro GDB 2012.12 (based on
+-	  GDB 7.5), eglibc 2.15. It generates code that runs on all
++	  GCC 2013.05 (based on gcc 4.8), Linaro GDB 2013.05 (based on
++	  GDB 7.6), eglibc 2.15. It generates code that runs on all
+ 	  Cortex-A profile devices, but tuned for the Cortex-A9. The
+ 	  code generated is Thumb 2, with the hard floating point
+ 	  calling convention, and uses the VFPv3-D16 FPU instructions.
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
--	bool "Sourcery CodeBench MIPS 2012.03"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
-+	bool "Sourcery CodeBench MIPS 2012.09"
- 	depends on BR2_mips || BR2_mipsel
+ 	  To use this toolchain, you must disable soft float usage.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02
+-	bool "Linaro 2013.02"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_04
++	bool "Linaro 2013.04"
+ 	depends on BR2_arm
+ 	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-@@ -216,9 +216,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+@@ -33,7 +33,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02
  	select BR2_HOSTARCH_NEEDS_IA32_LIBS
  	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
--	  2.15, uClibc 0.9.30 and gdb 7.2.50, kernel headers
--	  3.2.10. It has support for the following variants:
-+	  Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51, glibc
-+	  2.16, uClibc 0.9.30 and gdb 7.4.50, kernel headers
-+	  3.5.4. It has support for the following variants:
- 	    - MIPS32 O32 big endian glibc
- 	      Select a MIPS generic core
- 	      Disable BR2_SOFT_FLOAT
-@@ -276,8 +276,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
- 	    - MIPS32 little endian soft float uclibc
- 	      Not usable in Buildroot yet.
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2013.02 (based on gcc 4.7), Linaro GDB 2012.12 (based on
++	  GCC 2013.04 (based on gcc 4.7), Linaro GDB 2012.12 (based on
+ 	  GDB 7.5), eglibc 2.15. It generates code that runs on all
+ 	  Cortex-A profile devices, but tuned for the Cortex-A9. The
+ 	  code generated is Thumb 2, with the hard floating point
+@@ -41,8 +41,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
--	bool "Sourcery CodeBench MIPS 2011.09"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
-+	bool "Sourcery CodeBench MIPS 2012.03"
- 	depends on BR2_mips || BR2_mipsel
+ 	  To use this toolchain, you must disable soft float usage.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
+-	bool "Linaro 2013.01"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
++	bool "Linaro 2013.03"
+ 	depends on BR2_arm
+ 	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-@@ -286,9 +286,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
+@@ -52,7 +52,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
  	select BR2_HOSTARCH_NEEDS_IA32_LIBS
  	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.5.2, binutils 2.21.53, glibc
--	  2.13, uClibc 0.9.30 and gdb 7.2.50, kernel headers
--	  3.0.1. It has support for the following variants:
-+	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
-+	  2.15, uClibc 0.9.30 and gdb 7.2.50, kernel headers
-+	  3.2.10. It has support for the following variants:
- 	    - MIPS32 O32 big endian glibc
- 	      Select a MIPS generic core
- 	      Disable BR2_SOFT_FLOAT
-@@ -754,9 +754,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
- 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
--	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
-+	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2013.01 (based on gcc 4.7), Linaro GDB 2012.12 (based on
++	  GCC 2013.03 (based on gcc 4.7), Linaro GDB 2012.12 (based on
+ 	  GDB 7.5), eglibc 2.15. It generates code that runs on all
+ 	  Cortex-A profile devices, but tuned for the Cortex-A9. The
+ 	  code generated is Thumb 2, with the hard floating point
+@@ -741,9 +741,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	string
++	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_05
++	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_04
+ 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
+-	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02
+-	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
 diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 93b3b15..218ef07 100644
+index 218ef07..93aec83 100644
 --- a/toolchain/toolchain-external/ext-tool.mk
 +++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -209,15 +209,15 @@ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.02-01-20130221
+@@ -200,15 +200,15 @@ TOOLCHAIN_EXTERNAL_SOURCE=arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gn
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
+ TOOLCHAIN_EXTERNAL_SOURCE=arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01),y)
+-TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2013.01/+download/
+-TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.01-20130125_linux.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02),y)
+-TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.02/components/toolchain/binaries/
+-TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.02-01-20130221_linux.tar.xz
  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03),y)
  TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.03/components/toolchain/binaries/
  TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.03-20130313_linux.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109),y)
--TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
--TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.09-75-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_04),y)
++TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.04/components/toolchain/binaries/
++TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux.tar.xz
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_05),y)
++TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.05/components/toolchain/binaries/
++TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.8-2013.05_linux.tar.xz
  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203),y)
  TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
  TOOLCHAIN_EXTERNAL_SOURCE=mips-2012.03-63-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
-+TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE=mips-2013.05-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
 -- 
 1.8.1.2
