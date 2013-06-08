@@ -1,86 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 8 Jun 2013 21:48:40 +0200
-Subject: [Buildroot] [git commit] libpcap: bump to version 1.4.0
-Message-ID: <20130608224113.2A48A9AA3D@busybox.osuosl.org>
+Date: Sat, 8 Jun 2013 21:50:31 +0200
+Subject: [Buildroot] [git commit] linux: bump 3.9.x stable version
+Message-ID: <20130608224114.3B3049AA3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d4c3a7eefa26e804ec93f1a16e27cc7696c7213
+commit: http://git.buildroot.net/buildroot/commit/?id=4f7bf81e9ba7f8f5e5bb9faf1d23f0e01e70155e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../libpcap/libpcap-canusb-requires-pthread.patch  |   29 --------------------
- package/libpcap/libpcap.mk                         |   16 ++---------
- 2 files changed, 3 insertions(+), 42 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpcap/libpcap-canusb-requires-pthread.patch b/package/libpcap/libpcap-canusb-requires-pthread.patch
-deleted file mode 100644
-index ed3bc1a..0000000
---- a/package/libpcap/libpcap-canusb-requires-pthread.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--canusb uses pthreads, but -lpthread is never added to LIBS hence missing
--from pcap-config, causing build failures. Fix this.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura libpcap-1.3.0.orig//configure libpcap-1.3.0/configure
----- libpcap-1.3.0.orig//configure	2012-06-26 09:42:06.072155279 -0300
--+++ libpcap-1.3.0/configure	2012-06-26 09:42:12.617196326 -0300
--@@ -7607,7 +7607,7 @@
-- $as_echo "#define PCAP_SUPPORT_CANUSB 1" >>confdefs.h
-- 
-- 		    CANUSB_SRC=pcap-canusb-linux.c
---		    LIBS="-lusb-1.0 $LIBS"
--+		    LIBS="-lusb-1.0 -lpthread $LIBS"
-- 		    { $as_echo "$as_me:${as_lineno-$LINENO}: canusb sniffing is supported" >&5
-- $as_echo "$as_me: canusb sniffing is supported" >&6;}
-- 
--diff -Nura libpcap-1.3.0.orig//configure.in libpcap-1.3.0/configure.in
----- libpcap-1.3.0.orig//configure.in	2012-06-26 09:42:06.067155242 -0300
--+++ libpcap-1.3.0/configure.in	2012-06-26 09:42:22.267256741 -0300
--@@ -1406,7 +1406,7 @@
-- 		[
-- 		    AC_DEFINE(PCAP_SUPPORT_CANUSB, 1, [target host supports canusb])
-- 		    CANUSB_SRC=pcap-canusb-linux.c
---		    LIBS="-lusb-1.0 $LIBS"
--+		    LIBS="-lusb-1.0 -lpthread $LIBS"
-- 		    AC_MSG_NOTICE(canusb sniffing is supported)
-- 		],
-- 		AC_MSG_NOTICE(canusb sniffing is not supported; install libusb1.0 lib devel to enable it)
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 26f807b..bbbecdc 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -4,23 +4,13 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 1bbb574..a49ff8a 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
--LIBPCAP_VERSION = 1.3.0
-+LIBPCAP_VERSION = 1.4.0
- LIBPCAP_SITE = http://www.tcpdump.org/release
- LIBPCAP_LICENSE = BSD-3c
- LIBPCAP_LICENSE_FILES = LICENSE
- LIBPCAP_INSTALL_STAGING = YES
--
--# The configure.in file contains the necessary code to handle
--# --enable-shared/--disable-shared properly, but the configure script
--# bundled with the libpcap tarball is not up-to-date with the
--# configure.in file. In order to get proper handling of
--# --enable-shared/--disable-shared, which is needed when doing a
--# static library build, we autoreconfigure this package. This can be
--# removed when bumping libpcap, after checking that the bundled
--# configure script correctly handles --enable-shared/--disable-shared.
--LIBPCAP_AUTORECONF = YES
--
--LIBPCAP_DEPENDENCIES = zlib host-flex host-bison
-+LIBPCAP_DEPENDENCIES = zlib host-flex host-bison \
-+	$(if $(BR2_PACKAGE_LIBNL),libnl)
- LIBPCAP_CONF_ENV = ac_cv_linux_vers=2 \
- 		ac_cv_header_linux_wireless_h=yes # configure misdetects this
- LIBPCAP_CONF_OPT = --disable-yydebug --with-pcap=linux
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.9.4"
++	bool "3.9.5"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.9.4" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.9.5" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
