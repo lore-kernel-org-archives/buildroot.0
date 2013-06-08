@@ -1,60 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 8 Jun 2013 21:50:10 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 2, 4,
-	9}.x stable version
-Message-ID: <20130608224113.EDC0F9AA3D@busybox.osuosl.org>
+Date: Sat, 8 Jun 2013 21:49:01 +0200
+Subject: [Buildroot] [git commit] tcpdump: bump to version 4.4.0
+Message-ID: <20130608224113.62CAB9AA3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b0e0ec04d57c9cd555f41742226d4257447369b6
+commit: http://git.buildroot.net/buildroot/commit/?id=540e67b03996e7b5c90454dfa2d577bf2ece7f36
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-And mark 3.8.x series as deprecated to match upstream.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in                 |   10 +++++-----
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/tcpdump/tcpdump.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 1bb9c02..77da947 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -49,7 +49,7 @@ choice
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index 6b95ba7..a865e81 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
  
- 	config BR2_KERNEL_HEADERS_3_8
- 		bool "Linux 3.8.x kernel headers"
--		depends on !BR2_arc
-+		depends on BR2_DEPRECATED && !BR2_arc
- 
- 	config BR2_KERNEL_HEADERS_3_9
- 		bool "Linux 3.9.x kernel headers"
-@@ -70,15 +70,15 @@ config BR2_DEFAULT_KERNEL_VERSION
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.0.80"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.81"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.44"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.45"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.47"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.48"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
--	default "3.9.4"		if BR2_KERNEL_HEADERS_3_9
-+	default "3.9.5"		if BR2_KERNEL_HEADERS_3_9
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.80-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.81-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.80-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.81-headers_install-fix-__packed-in-exported-kernel-head.patch
+-TCPDUMP_VERSION = 4.3.0
++TCPDUMP_VERSION = 4.4.0
+ TCPDUMP_SITE = http://www.tcpdump.org/release
+ TCPDUMP_LICENSE = BSD-3c
+ TCPDUMP_LICENSE_FILES = LICENSE
+-
+ TCPDUMP_CONF_ENV = ac_cv_linux_vers=2 td_cv_buggygetaddrinfo=no
+ TCPDUMP_CONF_OPT = --without-crypto \
+ 		$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
