@@ -1,116 +1,170 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  8 Jun 2013 08:30:06 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-06-07
-Message-ID: <20130608063007.2747152C0FD@lolut.humanoidz.org>
+Date: Sat,  8 Jun 2013 11:14:14 +0200
+Subject: [Buildroot] [PATCH 1/9] toolchain-external: Version bump to 2013.05
+	release for MIPS
+Message-ID: <1370682862-7285-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2013-06-07
-===============================
+From: Markos Chandras <markos.chandras@imgtec.com>
 
-        success : 128
-       failures : 55 
-       timeouts : 0  
-          TOTAL : 183
+Remove old 2011.09 release. Allow MIPS64 cores on
+2013.05 release since they are supported by the toolchain.
 
-Classification of failures by reason
-====================================
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/Config.in   | 42 ++++++++++++++++----------------
+ toolchain/toolchain-external/ext-tool.mk |  6 ++---
+ 2 files changed, 24 insertions(+), 24 deletions(-)
 
-            host-erlang-R15B01 | 12
-                     m4-1.4.16 | 3 
-am33x-cm3-AM335xPSP_04.06.0... | 3 
-                      qt-4.8.4 | 2 
-           imagemagick-6.7.8-8 | 2 
-media-ctl-ac40b79f002a2315f... | 2 
-                libtirpc-0.2.2 | 2 
-                 qt5base-5.0.2 | 2 
-                cegui06-0.6.2b | 2 
-                  ne10-88c18f0 | 2 
-          host-protobuf-c-0.15 | 2 
-               sconeserver-211 | 1 
-                 cairo-1.12.10 | 1 
-                 rt-tests-0.83 | 1 
-            xlib_libXpm-3.5.10 | 1 
-                   ncftp-3.2.5 | 1 
-                  iozone-3_414 | 1 
-                directfb-1.6.3 | 1 
-      gst-plugins-good-0.10.31 | 1 
-                 libevas-1.7.4 | 1 
-                sdl_ttf-2.0.11 | 1 
-                      bash-4.2 | 1 
-                libroxml-2.2.1 | 1 
-               libcap-ng-0.6.6 | 1 
-                 libiconv-1.14 | 1 
-        liblog4c-localtime-1.0 | 1 
-                lmbench-3.0-a9 | 1 
-                libosip2-3.6.0 | 1 
-                      gpsd-3.9 | 1 
-                host-gdb-7.5.1 | 1 
-                busybox-1.21.0 | 1 
-               alsa-lib-1.0.26 | 1 
-
-Detail of failures
-===================
-
-      i686 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/aa2bf6c125001bb25e5faf709a6ec9924e88eb6a/
-       arm | am33x-cm3-AM335xPSP_04.06.0... | NOK | http://autobuild.buildroot.net/results/b10e2a8315cd61f6273519936a28dcc1612a7dee/
-       arm | am33x-cm3-AM335xPSP_04.06.0... | NOK | http://autobuild.buildroot.net/results/18001a0e706ffd6eb586bd504c0918cfb59d085b/
-       arm | am33x-cm3-AM335xPSP_04.06.0... | NOK | http://autobuild.buildroot.net/results/bc8b346a63995927997fbb9ccad48ac47b982e85/
-      i586 |                       bash-4.2 | NOK | http://autobuild.buildroot.net/results/51d730bdf04c145135879be1758231a22cc94ae4/
-       arc |                 busybox-1.21.0 | NOK | http://autobuild.buildroot.net/results/a865a256f040de8b029d362c7e000d09795eaf16/
-      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/e1dc603cad9e091889641e81074fe52a24650eaf/
-      bfin |                 cegui06-0.6.2b | NOK | http://autobuild.buildroot.net/results/2c4c3a5f4e9776e3b85d225c46015d8a27698064/
-      bfin |                 cegui06-0.6.2b | NOK | http://autobuild.buildroot.net/results/a9f25e0d7be2b27445c8a50079066fb797f5e5ef/
-    x86_64 |                 directfb-1.6.3 | NOK | http://autobuild.buildroot.net/results/85e7dc7feb49d02e9cb3c564ecb509d3d2e804aa/
-    x86_64 |                       gpsd-3.9 | NOK | http://autobuild.buildroot.net/results/3fb941bb6cd68311a97ac1a75070071feb181588/
-   powerpc |       gst-plugins-good-0.10.31 | NOK | http://autobuild.buildroot.net/results/8928d6f78803815482650dd21be187b36eac4cd7/
-      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/7bb907a32f2d73f2c4c6dd8bc7210b21c53c7793/
-      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/4e80ee7a50a6528f4253107e515c9e581ed42ece/
-      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/90521a0ba60d5afde741eb4c2e81863b21bc8bb6/
-      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/3c3c5a1a98e7bc3f2d0e876093aaa3b0c471eb4c/
-      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/8bc69d98befe8b01c7ef0ddbd01c0a778d66c107/
-      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/7a805d2e9de1cf6afc77aff089b9b718e9b4e970/
-      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/42622750ec0d9f48a3341aec88c5cf44fa58c9e6/
-      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/8a8bf866f1b30805db2eddb1c7e247cc85eec0d7/
-      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/00a604dec8c6db17c876ddd7f16c6600fd51c079/
-      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/216829ce5e0c0937e5bbd13968998e96450d8ead/
-      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/e9574d61ab1d389ae857ca185cd03cdcc6d63c3d/
-      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/5e1ec8f5be96724fc05eadad0573ad2fd56ba279/
-       arc |                 host-gdb-7.5.1 | NOK | http://autobuild.buildroot.net/results/5dc8817bdc1cd250020bc20498d740bfc02f1b58/
-   aarch64 |           host-protobuf-c-0.15 | NOK | http://autobuild.buildroot.net/results/96e9df33314848acf883375a2281bc5e3fa4cd8b/
-       sh4 |           host-protobuf-c-0.15 | NOK | http://autobuild.buildroot.net/results/b659cfbfbc40142d11afb4889de6cc157c932838/
-   powerpc |            imagemagick-6.7.8-8 | NOK | http://autobuild.buildroot.net/results/24fbfe3063a2461a8d82ce1a244638702f3819ca/
-       arc |            imagemagick-6.7.8-8 | NOK | http://autobuild.buildroot.net/results/1641b268951d7429da3f48ecff8546bb06bc4a59/
-    x86_64 |                   iozone-3_414 | NOK | http://autobuild.buildroot.net/results/7196cd732cddd8512317578a2ccbc76d16d8a2f2/
-     avr32 |                libcap-ng-0.6.6 | NOK | http://autobuild.buildroot.net/results/8b022ea905b47dce1431512bdd18271da4b5b5d8/
-     avr32 |                  libevas-1.7.4 | NOK | http://autobuild.buildroot.net/results/0e2f97b4447285a775bf39aa3a098cc42a8851fd/
-      bfin |                  libiconv-1.14 | NOK | http://autobuild.buildroot.net/results/0651fc8d04f481383dc168e2e9ad1806fc860f59/
-       arm |         liblog4c-localtime-1.0 | NOK | http://autobuild.buildroot.net/results/cb59d484120e6f3c534c0382bfcfece27d78d95a/
-       arc |                 libosip2-3.6.0 | NOK | http://autobuild.buildroot.net/results/6cafee6ffe1daf3c41d95d24c79fccedebf08b85/
-       arm |                 libroxml-2.2.1 | NOK | http://autobuild.buildroot.net/results/0f94d0582bee93c183bf88ede65bb054fffd9fcc/
-microblaze |                 libtirpc-0.2.2 | NOK | http://autobuild.buildroot.net/results/433b12475b68a36aaf074054784c51b1b0361e6f/
-       arm |                 libtirpc-0.2.2 | NOK | http://autobuild.buildroot.net/results/1356578405d3ecbfef5a864124b5bc10b6705c6f/
-    xtensa |                 lmbench-3.0-a9 | NOK | http://autobuild.buildroot.net/results/7c2083756b8075a4f55b603c3b2f4fc02a8b38fc/
-    xtensa |                      m4-1.4.16 | NOK | http://autobuild.buildroot.net/results/2c6b4f33e977dcd272df28e5231d5293a6e707e9/
-    xtensa |                      m4-1.4.16 | NOK | http://autobuild.buildroot.net/results/0374c825e6e05722960417a4fe5dd65e0f642478/
-       arc |                      m4-1.4.16 | NOK | http://autobuild.buildroot.net/results/1deaed2ef149ebdcdb783750173145a140dd9d3a/
-   powerpc | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/1790838f09a5ff3ac36a16aceb9b21fa901ab3ea/
-      sh4a | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/6cb27a1bb23f31b1d9433144b24284e2b554c411/
-      i686 |                    ncftp-3.2.5 | NOK | http://autobuild.buildroot.net/results/f787fb4e506d8bc1efa23e2e6a70573354140a6f/
-       arm |                   ne10-88c18f0 | NOK | http://autobuild.buildroot.net/results/f8928d56c38be72d3dd0493a5c6245dae4f69680/
-       arm |                   ne10-88c18f0 | NOK | http://autobuild.buildroot.net/results/bbd925788a63bb76b05382b0fd79a8671a4c137d/
-   powerpc |                       qt-4.8.4 | NOK | http://autobuild.buildroot.net/results/420eebeadfe71061709595805180ea29c9748bf9/
-   powerpc |                       qt-4.8.4 | NOK | http://autobuild.buildroot.net/results/a4af576f9680f9ca77e24528d70fdecaa0b7751f/
-       sh4 |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/e011065333ab79c0594242578b9cbe6b599fb70b/
-      i686 |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/af5bdd4db636885254dec2e38264ad5088c8ad43/
-    mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/4b0d09dd976bc05b4f33a8c8662a7c63ca236fe1/
-   powerpc |                sconeserver-211 | NOK | http://autobuild.buildroot.net/results/0fc30bfca7ce462439c8728c9da8a58639c16cd2/
-       arm |                 sdl_ttf-2.0.11 | NOK | http://autobuild.buildroot.net/results/88dca94fb981fdbbb5973c03f2b964b328a70dc1/
-      mips |             xlib_libXpm-3.5.10 | NOK | http://autobuild.buildroot.net/results/e4187fe286bf76b24811544de68e22e02a12305c/
-
-
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 47b2bf5..37c5648 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -136,9 +136,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	      Select BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -mthumb
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+-	bool "Sourcery CodeBench MIPS 2012.09"
+-	depends on BR2_mips || BR2_mipsel
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
++	bool "Sourcery CodeBench MIPS 2013.05"
++	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+@@ -146,14 +146,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the MIPS architecture, from
+-	  Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51, glibc
+-	  2.16, uClibc 0.9.30 and gdb 7.4.50, kernel headers
+-	  3.5.4. It has support for the following variants:
++	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
++	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers
++	  3.8.2. It has support for the following variants:
+ 	    - MIPS32 O32 big endian glibc
+ 	      Select a MIPS generic core
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS64 big endian glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS32 O32 little endian glibc
+@@ -161,7 +161,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	      Disable BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -EL
+ 	    - MIPS64 little endian glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Disable BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -EL
+@@ -169,7 +169,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	      Select a MIPS generic core
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS64 big endian soft float glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS32 little endian soft float glibc
+@@ -177,7 +177,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	      Select BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -EL
+ 	    - MIPS64 little endian soft float glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Select BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -EL
+@@ -206,8 +206,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	    - MIPS32 little endian soft float uclibc
+ 	      Not usable in Buildroot yet.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+-	bool "Sourcery CodeBench MIPS 2012.03"
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
++	bool "Sourcery CodeBench MIPS 2012.09"
+ 	depends on BR2_mips || BR2_mipsel
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+@@ -216,9 +216,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the MIPS architecture, from
+-	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
+-	  2.15, uClibc 0.9.30 and gdb 7.2.50, kernel headers
+-	  3.2.10. It has support for the following variants:
++	  Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51, glibc
++	  2.16, uClibc 0.9.30 and gdb 7.4.50, kernel headers
++	  3.5.4. It has support for the following variants:
+ 	    - MIPS32 O32 big endian glibc
+ 	      Select a MIPS generic core
+ 	      Disable BR2_SOFT_FLOAT
+@@ -276,8 +276,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	    - MIPS32 little endian soft float uclibc
+ 	      Not usable in Buildroot yet.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
+-	bool "Sourcery CodeBench MIPS 2011.09"
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
++	bool "Sourcery CodeBench MIPS 2012.03"
+ 	depends on BR2_mips || BR2_mipsel
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+@@ -286,9 +286,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the MIPS architecture, from
+-	  Mentor Graphics. It uses gcc 4.5.2, binutils 2.21.53, glibc
+-	  2.13, uClibc 0.9.30 and gdb 7.2.50, kernel headers
+-	  3.0.1. It has support for the following variants:
++	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
++	  2.15, uClibc 0.9.30 and gdb 7.2.50, kernel headers
++	  3.2.10. It has support for the following variants:
+ 	    - MIPS32 O32 big endian glibc
+ 	      Select a MIPS generic core
+ 	      Disable BR2_SOFT_FLOAT
+@@ -754,9 +754,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
+ 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+-	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
++	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 93b3b15..218ef07 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -209,15 +209,15 @@ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.02-01-20130221
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03),y)
+ TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.03/components/toolchain/binaries/
+ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.03-20130313_linux.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109),y)
+-TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+-TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.09-75-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=mips-2012.03-63-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
++TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
++TOOLCHAIN_EXTERNAL_SOURCE=mips-2013.05-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
 -- 
-http://autobuild.buildroot.net
+1.8.1.2
