@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 08 Jun 2013 21:49:28 +0200
-Subject: [Buildroot] [PATCH 1/2] libpcap: bump to version 1.4.0
-In-Reply-To: <1370699580-14502-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 8 Jun 2013 10:52:59 -0300")
+Date: Sat, 08 Jun 2013 21:49:36 +0200
+Subject: [Buildroot] [PATCH 2/2] tcpdump: bump to version 4.4.0
+In-Reply-To: <1370699580-14502-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 8 Jun 2013 10:53:00 -0300")
 References: <1370699580-14502-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8761xocrhz.fsf@dell.be.48ers.dk>
+ <1370699580-14502-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871u8ccrhr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
