@@ -1,28 +1,86 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 09 Jun 2013 00:38:57 +0200
-Subject: [Buildroot] [PATCH v10 05/13] webkit: bump to version 1.9.6
-In-Reply-To: <1370647138-26623-6-git-send-email-spenser@gillilanding.com>
- (Spenser Gilliland's message of "Fri, 7 Jun 2013 18:18:50 -0500")
-References: <1370647138-26623-1-git-send-email-spenser@gillilanding.com>
- <1370647138-26623-6-git-send-email-spenser@gillilanding.com>
-Message-ID: <87bo7gb532.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 8 Jun 2013 21:48:40 +0200
+Subject: [Buildroot] [git commit] libpcap: bump to version 1.4.0
+Message-ID: <20130608224113.2A48A9AA3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8d4c3a7eefa26e804ec93f1a16e27cc7696c7213
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Spenser> Remove bison-2.6-compat patch as it has been incorporated upstream.
- Spenser> Remove fix build issue with old gtk as gtk has been bumped to a newer
- Spenser> version.
- Spenser> Remove fix-build-with-gcc-4-6 as it has incorporated upstream.
- Spenser> Remove directfb patches due to depreciation
- Spenser> Remove pool patch as it is no longer required
- Spenser> Remove pthread_getattr_np as webkit no longer uses this function.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../libpcap/libpcap-canusb-requires-pthread.patch  |   29 --------------------
+ package/libpcap/libpcap.mk                         |   16 ++---------
+ 2 files changed, 3 insertions(+), 42 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libpcap/libpcap-canusb-requires-pthread.patch b/package/libpcap/libpcap-canusb-requires-pthread.patch
+deleted file mode 100644
+index ed3bc1a..0000000
+--- a/package/libpcap/libpcap-canusb-requires-pthread.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-canusb uses pthreads, but -lpthread is never added to LIBS hence missing
+-from pcap-config, causing build failures. Fix this.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura libpcap-1.3.0.orig//configure libpcap-1.3.0/configure
+---- libpcap-1.3.0.orig//configure	2012-06-26 09:42:06.072155279 -0300
+-+++ libpcap-1.3.0/configure	2012-06-26 09:42:12.617196326 -0300
+-@@ -7607,7 +7607,7 @@
+- $as_echo "#define PCAP_SUPPORT_CANUSB 1" >>confdefs.h
+- 
+- 		    CANUSB_SRC=pcap-canusb-linux.c
+--		    LIBS="-lusb-1.0 $LIBS"
+-+		    LIBS="-lusb-1.0 -lpthread $LIBS"
+- 		    { $as_echo "$as_me:${as_lineno-$LINENO}: canusb sniffing is supported" >&5
+- $as_echo "$as_me: canusb sniffing is supported" >&6;}
+- 
+-diff -Nura libpcap-1.3.0.orig//configure.in libpcap-1.3.0/configure.in
+---- libpcap-1.3.0.orig//configure.in	2012-06-26 09:42:06.067155242 -0300
+-+++ libpcap-1.3.0/configure.in	2012-06-26 09:42:22.267256741 -0300
+-@@ -1406,7 +1406,7 @@
+- 		[
+- 		    AC_DEFINE(PCAP_SUPPORT_CANUSB, 1, [target host supports canusb])
+- 		    CANUSB_SRC=pcap-canusb-linux.c
+--		    LIBS="-lusb-1.0 $LIBS"
+-+		    LIBS="-lusb-1.0 -lpthread $LIBS"
+- 		    AC_MSG_NOTICE(canusb sniffing is supported)
+- 		],
+- 		AC_MSG_NOTICE(canusb sniffing is not supported; install libusb1.0 lib devel to enable it)
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 26f807b..bbbecdc 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -4,23 +4,13 @@
+ #
+ ################################################################################
+ 
+-LIBPCAP_VERSION = 1.3.0
++LIBPCAP_VERSION = 1.4.0
+ LIBPCAP_SITE = http://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3c
+ LIBPCAP_LICENSE_FILES = LICENSE
+ LIBPCAP_INSTALL_STAGING = YES
+-
+-# The configure.in file contains the necessary code to handle
+-# --enable-shared/--disable-shared properly, but the configure script
+-# bundled with the libpcap tarball is not up-to-date with the
+-# configure.in file. In order to get proper handling of
+-# --enable-shared/--disable-shared, which is needed when doing a
+-# static library build, we autoreconfigure this package. This can be
+-# removed when bumping libpcap, after checking that the bundled
+-# configure script correctly handles --enable-shared/--disable-shared.
+-LIBPCAP_AUTORECONF = YES
+-
+-LIBPCAP_DEPENDENCIES = zlib host-flex host-bison
++LIBPCAP_DEPENDENCIES = zlib host-flex host-bison \
++	$(if $(BR2_PACKAGE_LIBNL),libnl)
+ LIBPCAP_CONF_ENV = ac_cv_linux_vers=2 \
+ 		ac_cv_header_linux_wireless_h=yes # configure misdetects this
+ LIBPCAP_CONF_OPT = --disable-yydebug --with-pcap=linux
