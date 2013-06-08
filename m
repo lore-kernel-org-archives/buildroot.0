@@ -1,20 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 08 Jun 2013 21:51:38 +0200
-Subject: [Buildroot] [PATCH 2/2] linux: bump 3.9.x stable version
-In-Reply-To: <1370693517-24002-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 8 Jun 2013 09:11:57 -0300")
-References: <1370693517-24002-1-git-send-email-gustavo@zacarias.com.ar>
- <1370693517-24002-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87sj0sbctx.fsf@dell.be.48ers.dk>
+Date: Sat, 08 Jun 2013 21:52:47 +0200
+Subject: [Buildroot] [PATCH 1/1] lua-msgpack-native: fix git hash tag
+In-Reply-To: <1370648770-18308-1-git-send-email-fhunleth@troodon-software.com>
+ (Frank Hunleth's message of "Fri, 7 Jun 2013 16:46:10 -0700")
+References: <1370648770-18308-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <87obbgbcs0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Frank> Remove initial g from hash tag to fix downloads from github.
 
 Committed, thanks.
 
