@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 09 Jun 2013 21:01:27 +0200
-Subject: [Buildroot] [PATCH] dosfstools: upstream tarball site changed
-In-Reply-To: <1370781434-15528-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 9 Jun 2013 09:37:14 -0300")
-References: <1370781434-15528-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ppvv9khk.fsf@dell.be.48ers.dk>
+Date: Sun, 09 Jun 2013 21:02:18 +0200
+Subject: [Buildroot] [PATCH] samba: needs threads
+In-Reply-To: <1370781998-17422-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 9 Jun 2013 09:46:38 -0300")
+References: <1370781998-17422-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87li6j9kg5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,8 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> Upstream changed their distribution tarball site.
- Gustavo> Thanks go to Andrew Scheller from bug #6308 for noticing and reporting.
+ Gustavo> As pointed by Thomas on IRC. Fixes:
+ Gustavo> http://autobuild.buildroot.net/results/24f/24fe95a7775af10c6ed7514cbc72a2189e57bc25/
 
 Committed, thanks.
 
