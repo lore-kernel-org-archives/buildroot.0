@@ -1,42 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  9 Jun 2013 12:36:39 +0200
-Subject: [Buildroot] [PATCH] gvfs: bump to 1.16.2
-Message-ID: <1370774199-14550-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun,  9 Jun 2013 12:57:38 +0200
+Subject: [Buildroot] [PATCH] am33x-cm3: Enforce correct -march option
+Message-ID: <1370775458-31863-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following the libglib2 bump, gvfs must be updated. We don't bump to
-the latest 1.17.1, because it requires libglib2 2.37, and we have only
-libglib2 2.36.x at this point.
+Buildroot uses a normal ARM compiler to build the AM33X CM3 firmware
+(which runs on a Cortex-M3 processor), but Buildroot will have a
+default -march value that doesn't necessarily match the one needed for
+Cortex-M3, leading to build failures (gcc complains that the
+-mcpu=cortex-m3 option being passed is not compatible with the
+selected -march).
+
+Fix this by explicitly indicating -march=armv7-m.
 
 Fixes:
 
-   http://autobuild.buildroot.net/results/d02/d026f3e697d60a3730f89acab18515eb568c4d0e/build-end.log
+   http://autobuild.buildroot.net/results/db1/db13623b1701bfe678c302e8f88c7473cb2345f9/build-end.log
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gvfs/gvfs.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../am33x-cm3/am33x-cm3-0001-fix-makefile.patch    | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
 
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index 32d8b49..d99c784 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--GVFS_VERSION_MAJOR = 1.8
-+GVFS_VERSION_MAJOR = 1.16
- GVFS_VERSION_MINOR = 2
- GVFS_VERSION = $(GVFS_VERSION_MAJOR).$(GVFS_VERSION_MINOR)
--GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.gz
-+GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
- GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
- GVFS_DEPENDENCIES = host-pkgconf host-libglib2 libglib2 dbus shared-mime-info
+diff --git a/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch b/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
+new file mode 100644
+index 0000000..77ba11c
+--- /dev/null
++++ b/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
+@@ -0,0 +1,26 @@
++Enforce correct -march option
++
++Buildroot uses a normal ARM compiler to build the AM33X CM3 firmware
++(which runs on a Cortex-M3 processor), but Buildroot will have a
++default -march value that doesn't necessarily match the one needed for
++Cortex-M3, leading to build failures (gcc complains that the
++-mcpu=cortex-m3 option being passed is not compatible with the
++selected -march).
++
++Fix this by explicitly indicating -march=armv7-m.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/Makefile
++===================================================================
++--- a/Makefile
+++++ b/Makefile
++@@ -13,7 +13,7 @@
++ BINDIR = bin
++ 
++ INCLUDES = $(SRCDIR)/include
++-CFLAGS =-mcpu=cortex-m3 -mthumb -nostdlib -Wall -g -I$(INCLUDES)
+++CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -g -I$(INCLUDES)
++ LDFLAGS =-nostartfiles -fno-exceptions -Tfirmware.ld
++ 
++ EXECUTABLE=am335x-pm-firmware.elf
 -- 
 1.8.1.2
