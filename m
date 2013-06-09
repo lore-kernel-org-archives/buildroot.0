@@ -1,63 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  9 Jun 2013 12:57:38 +0200
-Subject: [Buildroot] [PATCH] am33x-cm3: Enforce correct -march option
-Message-ID: <1370775458-31863-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  9 Jun 2013 12:26:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 6308] New: dosfstools download link is wrong
+Message-ID: <bug-6308-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot uses a normal ARM compiler to build the AM33X CM3 firmware
-(which runs on a Cortex-M3 processor), but Buildroot will have a
-default -march value that doesn't necessarily match the one needed for
-Cortex-M3, leading to build failures (gcc complains that the
--mcpu=cortex-m3 option being passed is not compatible with the
-selected -march).
+https://bugs.busybox.net/show_bug.cgi?id=6308
 
-Fix this by explicitly indicating -march=armv7-m.
+           Summary: dosfstools download link is wrong
+           Product: buildroot
+           Version: unspecified
+          Platform: All
+        OS/Version: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: uclibc-bugzilla at loowis.durge.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Fixes:
 
-   http://autobuild.buildroot.net/results/db1/db13623b1701bfe678c302e8f88c7473cb2345f9/build-end.log
+I was making buildroot last night, and trying to build dosfstools failed, which
+broke the whole build.
+Took me a while to figure out what was going on, but it turns out that even
+though buildroot was specifically trying to download
+http://fossies.org/linux/misc/dosfstools-3.0.16.tar.gz the fossies.org
+webserver was erroneously serving up dosfstools-3.0.18.tar.gz instead! (in the
+latest version of dosfstools the tools have been renamed, which is what was
+breaking the build)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../am33x-cm3/am33x-cm3-0001-fix-makefile.patch    | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
+I've now emailed the fossies.org webmaster and he's corrected the problem on
+his webserver, and trying to download dosfstools-3.0.16.tar.gz now results in a
+"410 Gone", so the DOSFSTOOLS_SITE setting in package/dosfstools/dosfstools.mk
+needs to be changed from http://fossies.org/linux/misc to
+http://www.daniel-baumann.ch/software/dosfstools
 
-diff --git a/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch b/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
-new file mode 100644
-index 0000000..77ba11c
---- /dev/null
-+++ b/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
-@@ -0,0 +1,26 @@
-+Enforce correct -march option
-+
-+Buildroot uses a normal ARM compiler to build the AM33X CM3 firmware
-+(which runs on a Cortex-M3 processor), but Buildroot will have a
-+default -march value that doesn't necessarily match the one needed for
-+Cortex-M3, leading to build failures (gcc complains that the
-+-mcpu=cortex-m3 option being passed is not compatible with the
-+selected -march).
-+
-+Fix this by explicitly indicating -march=armv7-m.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/Makefile
-+===================================================================
-+--- a/Makefile
-++++ b/Makefile
-+@@ -13,7 +13,7 @@
-+ BINDIR = bin
-+ 
-+ INCLUDES = $(SRCDIR)/include
-+-CFLAGS =-mcpu=cortex-m3 -mthumb -nostdlib -Wall -g -I$(INCLUDES)
-++CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -g -I$(INCLUDES)
-+ LDFLAGS =-nostartfiles -fno-exceptions -Tfirmware.ld
-+ 
-+ EXECUTABLE=am335x-pm-firmware.elf
+I checked with a "find -exec grep" and dosfstools is the only package that was
+being downloaded from fossies.org. And checking in the dosfstools.mk history,
+this bug basically needs to "undo"
+http://git.buildroot.net/buildroot/commit/?id=0810280fec7745b2534c2fa9d0526115e05b26f7
+( proposed here: http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/51618
+)
+
+It's funny how similar this is to my previous bug #6302 ;-)
+
 -- 
-1.8.1.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
