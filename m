@@ -1,28 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 9 Jun 2013 21:03:01 +0200
-Subject: [Buildroot] [git commit] libglib2: renumber patches
-Message-ID: <20130609190600.BAB4E9AA3E@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  9 Jun 2013 19:06:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 6308] dosfstools download link is wrong
+In-Reply-To: <bug-6308-163@https.bugs.busybox.net/>
+References: <bug-6308-163@https.bugs.busybox.net/>
+Message-ID: <20130609190605.7F4C99AA3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f8634af6912fe1bdc408ffa99c9c175b0f9156ab
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=6308
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...pv6.patch => libglib2-0001-optional-ipv6.patch} |    0
- ...b2-0002-fix-build-when-no-thread-support.patch} |    0
- 2 files changed, 0 insertions(+), 0 deletions(-)
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-diff --git a/package/libglib2/libglib2-optional-ipv6.patch b/package/libglib2/libglib2-0001-optional-ipv6.patch
-similarity index 100%
-rename from package/libglib2/libglib2-optional-ipv6.patch
-rename to package/libglib2/libglib2-0001-optional-ipv6.patch
-diff --git a/package/libglib2/libglib2-0004-fix-build-when-no-thread-support.patch b/package/libglib2/libglib2-0002-fix-build-when-no-thread-support.patch
-similarity index 100%
-rename from package/libglib2/libglib2-0004-fix-build-when-no-thread-support.patch
-rename to package/libglib2/libglib2-0002-fix-build-when-no-thread-support.patch
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> 2013-06-09 19:04:24 UTC ---
+Fixed by Gustavo in git, thanks both.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
