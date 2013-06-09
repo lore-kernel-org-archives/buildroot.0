@@ -1,60 +1,59 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 9 Jun 2013 21:01:42 +0200
-Subject: [Buildroot] [git commit] samba: needs threads
-Message-ID: <20130609190559.D8A549AA3E@busybox.osuosl.org>
+Date: Sun, 9 Jun 2013 21:02:24 +0200
+Subject: [Buildroot] [git commit] squid: bump to version 3.3.5
+Message-ID: <20130609190600.34DA99AA3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f0deded91247e079d84542a89a9b2a2280827181
+commit: http://git.buildroot.net/buildroot/commit/?id=dbf426da06e034d1109897f557445b192cb6a128
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-As pointed by Thomas on IRC. Fixes:
-http://autobuild.buildroot.net/results/24f/24fe95a7775af10c6ed7514cbc72a2189e57bc25/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/samba/Config.in |    9 ++++++---
- 1 files changed, 6 insertions(+), 3 deletions(-)
+ .../squid/squid-01-assume-get-certificate-ok.patch |   16 ++++++++++++++++
+ package/squid/squid.mk                             |    3 ++-
+ 2 files changed, 18 insertions(+), 1 deletions(-)
 
-diff --git a/package/samba/Config.in b/package/samba/Config.in
-index 0ab67ed..a3218b5 100644
---- a/package/samba/Config.in
-+++ b/package/samba/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SAMBA
- 	bool "samba"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_POPT
- 	help
- 	  Provides print services to all manner of SMB/CIFS clients,
-@@ -11,6 +12,9 @@ config BR2_PACKAGE_SAMBA
- 	  NOTE: A complete Samba install takes over 50MB of space,
- 		so choose only the components you need.
- 
-+comment "samba needs a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/squid/squid-01-assume-get-certificate-ok.patch b/package/squid/squid-01-assume-get-certificate-ok.patch
+new file mode 100644
+index 0000000..e7d4515
+--- /dev/null
++++ b/package/squid/squid-01-assume-get-certificate-ok.patch
+@@ -0,0 +1,16 @@
++The openssl get_certificate working test isn't cross compile friendly.
++Just assume it works ok since we're using a modern OpenSSL version.
 +
- if BR2_PACKAGE_SAMBA
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura squid-3.3.5.orig/configure.ac squid-3.3.5/configure.ac
++--- squid-3.3.5.orig/configure.ac	2013-06-03 09:37:44.016398185 -0300
+++++ squid-3.3.5/configure.ac	2013-06-03 09:37:55.926784556 -0300
++@@ -1261,7 +1261,6 @@
++ AC_SUBST(SSLLIB)
++
++ if test "x$with_openssl" = "xyes"; then
++-SQUID_CHECK_OPENSSL_GETCERTIFICATE_WORKS
++ SQUID_CHECK_OPENSSL_TXTDB
++ fi
++
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 934277e..4dd1404 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_SAMBA_MAX_DEBUGLEVEL
-@@ -240,14 +244,13 @@ config BR2_PACKAGE_SAMBA_AVAHI
- 	bool "support avahi"
- 	default y
- 	depends on BR2_PACKAGE_AVAHI_DAEMON
--	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
- 	depends on BR2_USE_MMU # dbus
- 	select BR2_PACKAGE_DBUS
- 	help
- 	  Include support for avahi
- 
--comment "support avahi - disabled (requires avahi-daemon and thread support in toolchain)"
--	depends on !BR2_PACKAGE_AVAHI_DAEMON || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "support avahi - disabled (requires avahi-daemon)"
-+	depends on !BR2_PACKAGE_AVAHI_DAEMON
- 
- config BR2_PACKAGE_SAMBA_GAMIN
- 	bool "support gamin"
+-SQUID_VERSION = 3.3.4
++SQUID_VERSION = 3.3.5
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.3
+ SQUID_LICENSE = GPLv2+
+ SQUID_LICENSE_FILES = COPYING
++SQUID_AUTORECONF = YES
+ SQUID_DEPENDENCIES = libcap host-libcap host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
+ SQUID_CONF_ENV =	ac_cv_epoll_works=yes ac_cv_func_setresuid=yes \
