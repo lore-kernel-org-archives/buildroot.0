@@ -1,33 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  9 Jun 2013 09:37:14 -0300
-Subject: [Buildroot] [PATCH] dosfstools: upstream tarball site changed
-Message-ID: <1370781434-15528-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  9 Jun 2013 12:40:10 +0000 (UTC)
+Subject: [Buildroot] [Bug 6308] dosfstools download link is wrong
+In-Reply-To: <bug-6308-163@https.bugs.busybox.net/>
+References: <bug-6308-163@https.bugs.busybox.net/>
+Message-ID: <20130609124011.0B1059A839@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream changed their distribution tarball site.
-Thanks go to Andrew Scheller from bug #6308 for noticing and reporting.
+https://bugs.busybox.net/show_bug.cgi?id=6308
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/dosfstools/dosfstools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index 624198c..7482bc8 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- DOSFSTOOLS_VERSION = 3.0.16
--DOSFSTOOLS_SITE = http://fossies.org/linux/misc
-+DOSFSTOOLS_SITE = http://daniel-baumann.ch/files/software/dosfstools
- DOSFSTOOLS_LICENSE = GPLv3+
- DOSFSTOOLS_LICENSE_FILES = COPYING
- DOSFSTOOLS_LDFLAGS = $(TARGET_LDFLAGS)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+
+--- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-06-09 12:38:30 UTC ---
+Patch sent to fix this, it should be picked up shortly.
+Thanks for noticing and reporting!
+
 -- 
-1.8.1.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
