@@ -1,34 +1,33 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 09 Jun 2013 09:32:46 -0300
-Subject: [Buildroot] [PATCH] libpcap: fix build failure related to libnl3
-In-Reply-To: <1370771136-1443-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1370771136-1443-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <51B475EE.3090503@zacarias.com.ar>
+Date: Sun,  9 Jun 2013 09:37:14 -0300
+Subject: [Buildroot] [PATCH] dosfstools: upstream tarball site changed
+Message-ID: <1370781434-15528-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/09/2013 06:45 AM, Thomas Petazzoni wrote:
+Upstream changed their distribution tarball site.
+Thanks go to Andrew Scheller from bug #6308 for noticing and reporting.
 
-> When libpcap detects that libnl3 is available, it hardcodes the fact
-> of using -I/usr/include/libnl3, which is completely wrong in
-> cross-compilation.
-> 
-> This commit fixes that, by removing this hardcoded include path, and
-> by passing an appropriate -I option from libpcap.mk.
-> 
-> The original issue has been reported upstream at
-> https://github.com/the-tcpdump-group/libpcap/issues/305.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/b65/b6585bf2985a188e797e5a6b71a35c461421e3b4/build-end.log
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dosfstools/dosfstools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-On a gentoo host (desktop) there are plenty of headers hence this went
-unnoticed by myself.
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index 624198c..7482bc8 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ DOSFSTOOLS_VERSION = 3.0.16
+-DOSFSTOOLS_SITE = http://fossies.org/linux/misc
++DOSFSTOOLS_SITE = http://daniel-baumann.ch/files/software/dosfstools
+ DOSFSTOOLS_LICENSE = GPLv3+
+ DOSFSTOOLS_LICENSE_FILES = COPYING
+ DOSFSTOOLS_LDFLAGS = $(TARGET_LDFLAGS)
+-- 
+1.8.1.5
