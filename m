@@ -1,86 +1,111 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 9 Jun 2013 22:09:00 +0200
-Subject: [Buildroot] [git commit] poco: Add upstream patch to add support
-	for aarch64.
-Message-ID: <20130609201710.9C2E59AA6C@busybox.osuosl.org>
+From: Chris Zankel <chris@zankel.net>
+Date: Sun, 9 Jun 2013 14:35:44 -0700
+Subject: [Buildroot] [PATCH] strace: upgrade to 4.8, supporting now aarch64,
+ arc, and xtensa
+Message-ID: <51b4f73a.e6b4420a.5627.fffffb01@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2228c15e4161881fd77c3134f73bb5f913d4971a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Remove 'strace-fix-arm-bad-syscall.patch'. This patch had been integrated
+in v4.6 (commit: 9bc6340d2) and was later replaced with a generic solution
+in v.7 (commit: 2ce12ed31c2).
 
-Signed-off-by: Will Newton <will.newton@linaro.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/poco/Config.in          |    4 ++--
- package/poco/poco-aarch64.patch |   39 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 41 insertions(+), 2 deletions(-)
+Strace still cannot handle non-LFS environments, so a modified version of
+strace-fix-disabled-largefile-syscalls.patch remains. The 64-bit syscalls
+(sys_truncate64, etc.) are references in the sysent structure but the
+functinon definitions are commented out becuase of the missing LFS support.
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index 402f96d..47ca83d 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_POCO
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !(BR2_aarch64 || BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel || BR2_xtensa)
-+	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel || BR2_xtensa)
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_PCRE
+The workaround for the 'forced lfs mode' doesn't seem to be necessary anymore.
+
+Build tested on arm w and w/o LFS support.
+
+Signed-off-by: Chris Zankel <chris@zankel.net>
+
+diff --git a/package/strace/Config.in b/package/strace/Config.in
+index 153bcf6..bbb582a 100644
+--- a/package/strace/Config.in
++++ b/package/strace/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_STRACE
+ 	bool "strace"
+-	depends on !(BR2_xtensa || BR2_aarch64 || BR2_arc)
  	help
-@@ -62,4 +62,4 @@ endif # BR2_PACKAGE_POCO
- comment "poco requires a toolchain with WCHAR, threads, and C++ support"
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS
--	depends on !(BR2_aarch64 || BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel || BR2_xtensa)
-+	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel || BR2_xtensa)
-diff --git a/package/poco/poco-aarch64.patch b/package/poco/poco-aarch64.patch
-new file mode 100644
-index 0000000..f629f7b
---- /dev/null
-+++ b/package/poco/poco-aarch64.patch
-@@ -0,0 +1,39 @@
-+From 37899eda9563d9134cb5864751b6432cabfaac3e Mon Sep 17 00:00:00 2001
-+From: Will Newton <will.newton@linaro.org>
-+Date: Tue, 21 May 2013 22:11:05 +0100
-+Subject: [PATCH] Foundation/include/Poco/Platform.h: Add support for AArch64.
-+
-+Add support for big and little endian AArch64 preprocessor defines.
-+---
-+ Foundation/include/Poco/Platform.h | 8 +++++++-
-+ 1 file changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/Foundation/include/Poco/Platform.h b/Foundation/include/Poco/Platform.h
-+index f34f277..8ddb4cb 100644
-+--- a/Foundation/include/Poco/Platform.h
-++++ b/Foundation/include/Poco/Platform.h
-+@@ -145,6 +145,7 @@
-+ #define POCO_ARCH_S390    0x0c
-+ #define POCO_ARCH_SH      0x0d
-+ #define POCO_ARCH_NIOS2   0x0e
-++#define POCO_ARCH_AARCH64 0x0f
-+ 
-+ 
-+ #if defined(__ALPHA) || defined(__alpha) || defined(__alpha__) || defined(_M_ALPHA)
-+@@ -207,7 +208,12 @@
-+ 	#else
-+ 		#define POCO_ARCH_BIG_ENDIAN 1
-+ 	#endif
-+-
-++#elif defined(__AARCH64EL__)
-++	#define POCO_ARCH POCO_ARCH_AARCH64
-++	#define POCO_ARCH_LITTLE_ENDIAN 1
-++#elif defined(__AARCH64EB__)
-++	#define POCO_ARCH POCO_ARCH_AARCH64
-++	#define POCO_ARCH_BIG_ENDIAN 1
-+ #endif
-+ 
-+ 
-+-- 
-+1.8.1.4
-+
+ 	  A useful diagnostic, instructional, and debugging tool.
+ 	  Allows you to track what system calls a program makes
+diff --git a/package/strace/strace-fix-arm-bad-syscall.patch b/package/strace/strace-fix-arm-bad-syscall.patch
+deleted file mode 100644
+index 3f3144e..0000000
+--- a/package/strace/strace-fix-arm-bad-syscall.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+---- a/syscall.c
+-+++ b/syscall.c
+-@@ -1016,6 +1016,15 @@ struct tcb *tcp;
+- 		/*
+- 		 * Note: we only deal with only 32-bit CPUs here.
+- 		 */
+-+
+-+		if (!(tcp->flags & TCB_INSYSCALL) &&
+-+		    (tcp->flags & TCB_WAITEXECVE)) {
+-+			/* caught a fake syscall from the execve's exit */
+-+			tcp->flags &= ~TCB_WAITEXECVE;
+-+			return 0;
+-+		}
+-+ 
+-+
+- 		if (regs.ARM_cpsr & 0x20) {
+- 			/*
+- 			 * Get the Thumb-mode system call number
+diff --git a/package/strace/strace-fix-disabled-largefile-syscalls.patch b/package/strace/strace-fix-disabled-largefile-syscalls.patch
+index f6bcf96..2117a0e 100644
+--- a/package/strace/strace-fix-disabled-largefile-syscalls.patch
++++ b/package/strace/strace-fix-disabled-largefile-syscalls.patch
+@@ -1,8 +1,8 @@
+ --- a/syscall.c
+ +++ b/syscall.c
+ @@ -125,6 +125,18 @@
+- #define TP TRACE_PROCESS
+- #define TS TRACE_SIGNAL
++ #define NF SYSCALL_NEVER_FAILS
++ #define MA MAX_ARGS
+  
+ +#ifndef HAVE_STATFS64
+ +/*
+@@ -16,6 +16,6 @@
+ +#define sys_fstatfs64   sys_fstatfs
+ +#endif
+ +
+- static const struct sysent sysent0[] = {
++ const struct_sysent sysent0[] = {
+  #include "syscallent.h"
+  };
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index b172a20..0dce096 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRACE_VERSION = 4.7
++STRACE_VERSION = 4.8
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
+ STRACE_LICENSE = BSD-3c
+@@ -13,13 +13,6 @@ STRACE_LICENSE_FILES = COPYRIGHT
+ STRACE_CONF_ENV = ac_cv_header_linux_if_packet_h=yes \
+ 		  ac_cv_header_linux_netlink_h=yes
+ 
+-ifeq ($(BR2_LARGEFILE),y)
+-# strace gets confused when lfs mode is forced, so don't
+-STRACE_CONF_ENV += \
+-	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
+-	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
+-endif
+-
+ define STRACE_REMOVE_STRACE_GRAPH
+ 	rm -f $(TARGET_DIR)/usr/bin/strace-graph
+ endef
