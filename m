@@ -1,38 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 9 Jun 2013 22:03:54 +0200
-Subject: [Buildroot] [git commit] linphone: Disable building with -Werror
-Message-ID: <20130609201036.096539AA0A@busybox.osuosl.org>
+From: czankel <chris@zankel.net>
+Date: Sun, 09 Jun 2013 12:49:36 -0700
+Subject: [Buildroot] strace-4.8
+In-Reply-To: <CAC1BbcT6+-VddQUEmZGJdYVvxa_2ZFs3O4pGBpJ6YBiUk10Cjw@mail.gmail.com>
+References: <51B0DB7A.3070507@zankel.net>
+ <13f1b4af906.2760.0f39ed3bcad52ef2c88c90062b7714dc@gmail.com>
+ <CAC1BbcT6+-VddQUEmZGJdYVvxa_2ZFs3O4pGBpJ6YBiUk10Cjw@mail.gmail.com>
+Message-ID: <51B4DC50.1060607@zankel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=258bb8e1610e13d2d5dfaeb39fe8291fcabb3558
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Bernhard,
 
-Pass --disable-strict to avoid having -Werror in CFLAGS.
-Having -Werror in CFLAGS can lead to build problems depending
-on the gcc version that is being used and it should not be used
-in released code.
+On 6/7/13 12:34 AM, Bernhard Reutner-Fischer wrote:
+> On 6 June 2013 23:01, Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> wrote:
+> The LFS one should not be needed anymore. It sounds a bit like the 
+> TCB_WAITEXECVE was fixed, too, but better verify this yourself.
+Had to do a little bit of research. The TCB_WAITEXECVE patch currently 
+in Buildroot had been added to strace in 2007 (commit: 9bc6340d2, 
+released with 4.6) but was later replaced with a generic solution in 
+2011  (commit: 2ce12ed31c2, released with 4.7).
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/linphone/linphone.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+I'll create patch for strace shortly.
 
-diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
-index bbab1e5..2ff678b 100644
---- a/package/linphone/linphone.mk
-+++ b/package/linphone/linphone.mk
-@@ -8,7 +8,8 @@ LINPHONE_VERSION = 3.5.2
- LINPHONE_SITE = http://download-mirror.savannah.gnu.org/releases/linphone/3.5.x/sources/
- LINPHONE_CONF_OPT = \
- 	--enable-external-ortp \
--	--enable-external-mediastreamer
-+	--enable-external-mediastreamer \
-+	--disable-strict
- 
- LINPHONE_DEPENDENCIES = host-pkgconf ortp mediastreamer libeXosip2 speex
- 
+Thanks,
+-Chris
