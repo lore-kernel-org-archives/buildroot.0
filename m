@@ -1,34 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 10 Jun 2013 14:04:03 +0200
-Subject: [Buildroot] [git commit] Makefile: Fix KERNEL_ARCH for big endian
-	ARC
-Message-ID: <20130610120910.B29399AA3A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 10 Jun 2013 14:09:47 +0200
+Subject: [Buildroot] [PATCH 1/2] php: security bump to version 5.3.26
+In-Reply-To: <1370862806-14534-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 10 Jun 2013 08:13:25 -0300")
+References: <1370862806-14534-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878v2i6ub8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8332ffab07456bd3969b6c4bff2d0c9d3e1e51e5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Big endian ARC is called arceb, not arcbe.
+ Gustavo> Fixes CVE-2013-2110.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Committed, thanks.
 
-diff --git a/Makefile b/Makefile
-index d7437a7..c514e4f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -239,7 +239,7 @@ ARCH:=$(call qstrip,$(BR2_ARCH))
- KERNEL_ARCH:=$(shell echo "$(ARCH)" | sed -e "s/-.*//" \
- 	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
- 	-e s/arcle/arc/ \
--	-e s/arcbe/arc/ \
-+	-e s/arceb/arc/ \
- 	-e s/arm.*/arm/ -e s/sa110/arm/ \
- 	-e s/aarch64/arm64/ \
- 	-e s/bfin/blackfin/ \
+-- 
+Bye, Peter Korsgaard
