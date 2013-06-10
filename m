@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Jun 2013 23:07:52 +0200
-Subject: [Buildroot] [PATCH] strace: fix legal info
-In-Reply-To: <1370881618-16167-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 10 Jun 2013 13:26:58 -0300")
-References: <1370881618-16167-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8761xl65ef.fsf@dell.be.48ers.dk>
+Date: Mon, 10 Jun 2013 23:08:12 +0200
+Subject: [Buildroot] [PATCH] webkit: needs host-ruby
+In-Reply-To: <1370881379-14622-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 10 Jun 2013 13:22:59 -0300")
+References: <1370881379-14622-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871u8965dv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,8 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> The license file changed from COPYRIGHT->COPYING. Fixes:
- Gustavo> http://autobuild.buildroot.net/results/b61/b61e1775cd1eec83470424e88ced5bd49e0cd469/
+ Gustavo> Fixes:
+ Gustavo> http://autobuild.buildroot.net/results/13a/13a4ad4622be0c9f395e8c81db2a842b71962f61/
 
 Committed, thanks.
 
