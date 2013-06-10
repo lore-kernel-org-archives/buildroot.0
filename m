@@ -1,81 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Jun 2013 18:57:06 +0200
-Subject: [Buildroot] [PATCHv2 1/3] Add on2-8170 kernel modules
-In-Reply-To: <1370803110-27093-1-git-send-email-alexandre.belloni@free-electrons.com>
-References: <1370803110-27093-1-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <51B60562.1020308@mind.be>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Mon, 10 Jun 2013 19:42:19 +0100
+Subject: [Buildroot] [PATCH] boost: only the iostreams library requires bzip2
+Message-ID: <51B61E0B.6020209@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/06/13 20:38, Alexandre Belloni wrote:
-> diff --git a/package/on2-8170-modules/Config.in b/package/on2-8170-modules/Config.in
-> new file mode 100644
-> index 0000000..f082c5f
-> --- /dev/null
-> +++ b/package/on2-8170-modules/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_ON2_8170_MODULES
-> +	bool "on2-8170 modules"
-> +	depends on BR2_LINUX_KERNEL
+Signed-off-by: Will Wagner <will_wagner@carallon.com>
+---
+  package/boost/Config.in |    4 ++++
+  package/boost/boost.mk  |    6 +++++-
+  2 files changed, 9 insertions(+), 1 deletions(-)
 
-  We usually add a "depends on BR2_arm" or something similar for such 
-SoC-specific packages.
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 5c65b2f..fbe99d0 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -18,6 +18,9 @@ config BR2_PACKAGE_BOOST
 
-  I'm not sure though if everyone agrees that this is a good ide.
+  if BR2_PACKAGE_BOOST
 
-> +	help
-> +	  Kernel modules for the Hantro x170 hardware video decompression.
-> +
-> +	http://www.at91.com/linux4sam/bin/view/Linux4SAM/SAM9M10Gstreamer
-> +
-> +comment "on2-8170 modules requires a linux kernel to be built"
-> +	depends on !BR2_LINUX_KERNEL
-> diff --git a/package/on2-8170-modules/on2-8170-modules.mk b/package/on2-8170-modules/on2-8170-modules.mk
-> new file mode 100644
-> index 0000000..53286fb
-> --- /dev/null
-> +++ b/package/on2-8170-modules/on2-8170-modules.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# on2-8170-modules
-> +#
-> +################################################################################
-> +
-> +ON2_8170_MODULES_VERSION = 73b08061d30789178e692bc332b73d1d9922bf39
-> +ON2_8170_MODULES_SITE    = git://github.com/alexandrebelloni/on2-8170-modules.git
++config BR2_PACKAGE_BOOST_REQUIRES_BZIP2
++	bool
++
+  config BR2_PACKAGE_BOOST_CHRONO
+  	bool "boost-chrono"
 
-  Can you use a tarball, cfr. 
-docs/manual/adding-packages-tips.txt:[[github-download-url]] ?
+@@ -43,6 +46,7 @@ config BR2_PACKAGE_BOOST_GRAPH_PARALLEL
 
-  Could you add license info?
+  config BR2_PACKAGE_BOOST_IOSTREAMS
+  	bool "boost-iostreams"
++	select BR2_PACKAGE_BOOST_REQUIRES_BZIP2
 
+  config BR2_PACKAGE_BOOST_LOCALE
+  	depends on BR2_USE_WCHAR
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index d11f378..c733b89 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -12,7 +12,7 @@ BOOST_INSTALL_STAGING = YES
 
+  TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
 
-  Regards,
-  Arnout
+-BOOST_DEPENDENCIES = bzip2 zlib
++BOOST_DEPENDENCIES = zlib
 
-> +
-> +ON2_8170_MODULES_DEPENDENCIES = linux
-> +
-> +define ON2_8170_MODULES_BUILD_CMDS
-> +	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D)
-> +endef
-> +
-> +define ON2_8170_MODULES_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) modules_install
-> +endef
-> +
-> +$(eval $(generic-package))
+  BOOST_FLAGS =
 
+@@ -48,6 +48,10 @@ else
+  BOOST_FLAGS += --without-icu
+  endif
 
++ifeq ($(BR2_PACKAGE_BOOST_REQUIRES_BZIP2),y)
++BOOST_DEPENDENCIES += bzip2
++endif
++
+  BOOST_OPT += toolset=gcc \
+  	     threading=multi \
+  	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release) \
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.2.5
