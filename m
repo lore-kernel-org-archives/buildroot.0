@@ -1,127 +1,83 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 11 Jun 2013 00:01:36 +0200
-Subject: [Buildroot] [git commit] toolchain-external: bump Linaro ARM
-	toolchains to 2013.04 and 2013.05
-Message-ID: <20130611100806.937AF9A178@busybox.osuosl.org>
+Date: Tue, 11 Jun 2013 00:03:49 +0200
+Subject: [Buildroot] [git commit] toolchain-external: add support for Arago
+	2011.09 ARMv7A
+Message-ID: <20130611100807.64F779AC6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ea25177384368531ed269033984a2925b54f4e79
+commit: http://git.buildroot.net/buildroot/commit/?id=93d2b247f969bda955ff0b2470c3536cef8d29c0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We add support for Linaro 2013.04 and Linaro 2013.05 and remove
-support for Linaro 2013.01 and Linaro 2013.02.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/Config.in   |   24 ++++++++++++------------
- toolchain/toolchain-external/ext-tool.mk |   12 ++++++------
- 2 files changed, 18 insertions(+), 18 deletions(-)
+ toolchain/toolchain-external/Config.in   |   18 ++++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    8 ++++++++
+ 2 files changed, 26 insertions(+), 0 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 37c5648..6a58e0f 100644
+index f87b6ac..3ce58ac 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -3,8 +3,8 @@ if BR2_TOOLCHAIN_EXTERNAL
- choice
- 	prompt "Toolchain"
+@@ -136,6 +136,23 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	      Select BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -mthumb
  
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
--	bool "Linaro 2013.03"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_05
-+	bool "Linaro 2013.05"
- 	depends on BR2_arm
- 	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -14,16 +14,16 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2013.03 (based on gcc 4.7), Linaro GDB 2012.12 (based on
--	  GDB 7.5), eglibc 2.15. It generates code that runs on all
-+	  GCC 2013.05 (based on gcc 4.8), Linaro GDB 2013.05 (based on
-+	  GDB 7.6), eglibc 2.15. It generates code that runs on all
- 	  Cortex-A profile devices, but tuned for the Cortex-A9. The
- 	  code generated is Thumb 2, with the hard floating point
- 	  calling convention, and uses the VFPv3-D16 FPU instructions.
- 
- 	  To use this toolchain, you must disable soft float usage.
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02
--	bool "Linaro 2013.02"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_04
-+	bool "Linaro 2013.04"
- 	depends on BR2_arm
- 	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -33,7 +33,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2013.02 (based on gcc 4.7), Linaro GDB 2012.12 (based on
-+	  GCC 2013.04 (based on gcc 4.7), Linaro GDB 2012.12 (based on
- 	  GDB 7.5), eglibc 2.15. It generates code that runs on all
- 	  Cortex-A profile devices, but tuned for the Cortex-A9. The
- 	  code generated is Thumb 2, with the hard floating point
-@@ -41,8 +41,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02
- 
- 	  To use this toolchain, you must disable soft float usage.
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
--	bool "Linaro 2013.01"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
-+	bool "Linaro 2013.03"
- 	depends on BR2_arm
- 	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -52,7 +52,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2013.01 (based on gcc 4.7), Linaro GDB 2012.12 (based on
-+	  GCC 2013.03 (based on gcc 4.7), Linaro GDB 2012.12 (based on
- 	  GDB 7.5), eglibc 2.15. It generates code that runs on all
- 	  Cortex-A profile devices, but tuned for the Cortex-A9. The
- 	  code generated is Thumb 2, with the hard floating point
-@@ -741,9 +741,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
- 
- config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	string
-+	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_05
-+	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_04
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
--	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02
--	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01
++config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
++	bool "Arago ARMv7 2011.09"
++	depends on BR2_arm
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	help
++	  Texas Instruments Arago 2011.09 toolchain, with gcc 4.5.3,
++	  binutils 2.20.1, glibc 2.12, gdb 7.2.
++
++	  This toolchain uses -mfloat-abi=softfp (i.e use FPU
++	  instructions, but pass floating point function arguments in
++	  non-floating point registers).
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
+ 	bool "Sourcery CodeBench MIPS 2013.05"
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+@@ -749,6 +766,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
  	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
  	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
  	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
++	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_05
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_04
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_03
 diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 218ef07..93aec83 100644
+index 0f8ede0..0d29d36 100644
 --- a/toolchain/toolchain-external/ext-tool.mk
 +++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -200,15 +200,15 @@ TOOLCHAIN_EXTERNAL_SOURCE=arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gn
+@@ -200,6 +200,13 @@ TOOLCHAIN_EXTERNAL_SOURCE=arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gn
  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
  TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
  TOOLCHAIN_EXTERNAL_SOURCE=arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_01),y)
--TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2013.01/+download/
--TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.01-20130125_linux.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_02),y)
--TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.02/components/toolchain/binaries/
--TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.02-01-20130221_linux.tar.xz
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109),y)
++TOOLCHAIN_EXTERNAL_SITE=http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports/
++TOOLCHAIN_EXTERNAL_SOURCE=arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
++define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
++	mv $(@D)/arago-2011.09/armv7a/* $(@D)/
++	rm -rf $(@D)/arago-2011.09/
++endef
  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03),y)
  TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.03/components/toolchain/binaries/
  TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.03-20130313_linux.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_04),y)
-+TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.04/components/toolchain/binaries/
-+TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux.tar.xz
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_05),y)
-+TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.05/components/toolchain/binaries/
-+TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.8-2013.05_linux.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=mips-2012.03-63-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+@@ -333,6 +340,7 @@ $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE)
+ 	mkdir -p $(@D)
+ 	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE))) $^ | \
+ 		$(TAR) $(TAR_STRIP_COMPONENTS)=1 --exclude='usr/lib/locale/*' -C $(@D) $(TAR_OPTIONS) -
++	$(TOOLCHAIN_EXTERNAL_FIXUP_CMDS)
+ 	$(Q)touch $@
+ endif
+ 
