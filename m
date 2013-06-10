@@ -1,35 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 10 Jun 2013 23:07:42 +0200
-Subject: [Buildroot] [git commit] strace: fix legal info
-Message-ID: <20130610211339.5F4139A5B9@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 10 Jun 2013 20:55:30 -0300
+Subject: [Buildroot] [PATCH] ruby: security bump to version 1.9.3-p429
+Message-ID: <1370908530-23706-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=205f06c615d70a877ab3c96dd2f1b5bdb01f678f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The license file changed from COPYRIGHT->COPYING. Fixes:
-http://autobuild.buildroot.net/results/b61/b61e1775cd1eec83470424e88ced5bd49e0cd469/
+Fixes CVE-2013-2065.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/strace/strace.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/ruby/ruby.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 0dce096..9addbb6 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -8,7 +8,7 @@ STRACE_VERSION = 4.8
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
- STRACE_LICENSE = BSD-3c
--STRACE_LICENSE_FILES = COPYRIGHT
-+STRACE_LICENSE_FILES = COPYING
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index e708262..020cd76 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- STRACE_CONF_ENV = ac_cv_header_linux_if_packet_h=yes \
- 		  ac_cv_header_linux_netlink_h=yes
+-RUBY_VERSION = 1.9.3-p392
++RUBY_VERSION = 1.9.3-p429
+ RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/1.9
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+ HOST_RUBY_DEPENDENCIES = host-pkgconf
+-- 
+1.8.1.5
