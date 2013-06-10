@@ -1,34 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 10 Jun 2013 15:15:14 +0000 (UTC)
-Subject: [Buildroot] [Bug 6122] iconv.h missing for charconv.c build
-In-Reply-To: <bug-6122-163@https.bugs.busybox.net/>
-References: <bug-6122-163@https.bugs.busybox.net/>
-Message-ID: <20130610151514.DD7E19ABA1@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 10 Jun 2013 13:22:59 -0300
+Subject: [Buildroot] [PATCH] webkit: needs host-ruby
+Message-ID: <1370881379-14622-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6122
+Fixes:
+http://autobuild.buildroot.net/results/13a/13a4ad4622be0c9f395e8c81db2a842b71962f61/
 
---- Comment #4 from Andrew Scheller <uclibc-bugzilla@loowis.durge.org> 2013-06-10 15:13:28 UTC ---
-I just had this bug too, but I dunno what caused it, and I dunno how to
-reproduce it!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/webkit/webkit.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-For some unknown reason I was getting a fatal error during the compilation of
-dosfstools 3.0.16 about charconv.c trying to include iconv.h but being unable
-to. I tried investigating, but couldn't work out what was going wrong (I'm not
-that familiar with buildroot or cross-compilation setups). So I did 'rm -r
-output/build/dosfstools-3.0.16' followed by a 'make' and I still got the same
-error. So tried investigating again, but didn't get anywhere. So then I did 'rm
--r output/build/dosfstools-3.0.16; rm -r output/build/libiconv-1.14' and to my
-great surprise this time the 'make' worked fine.
-So I dunno how buildroot / dosfstools / libiconv got itself into this funny
-situation, but everything is building fine again now, and I dunno how to
-reproduce the problem.
-
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+index 9aa8390..116a5e7 100644
+--- a/package/webkit/webkit.mk
++++ b/package/webkit/webkit.mk
+@@ -8,8 +8,8 @@ WEBKIT_VERSION = 1.9.6
+ WEBKIT_SITE = http://www.webkitgtk.org/releases
+ WEBKIT_SOURCE = webkit-$(WEBKIT_VERSION).tar.xz
+ WEBKIT_INSTALL_STAGING = YES
+-WEBKIT_DEPENDENCIES = host-flex host-bison host-gperf icu libcurl libxml2 \
+-	libxslt libgtk2 sqlite enchant libsoup jpeg libgail
++WEBKIT_DEPENDENCIES = host-ruby host-flex host-bison host-gperf icu libcurl \
++	libxml2 libxslt libgtk2 sqlite enchant libsoup jpeg libgail
+ 
+ # webkit-disable-tests.patch changes configure.ac therefore autoreconf required
+ WEBKIT_AUTORECONF = YES
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.1.5
