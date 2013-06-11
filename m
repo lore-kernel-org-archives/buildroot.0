@@ -1,41 +1,67 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 11 Jun 2013 00:06:30 +0200
-Subject: [Buildroot] [git commit] ext-toolchain-wrapper: force hash-style to
-	'both'
-Message-ID: <20130611100809.45B8C9AC6A@busybox.osuosl.org>
+Date: Tue, 11 Jun 2013 11:58:27 +0200
+Subject: [Buildroot] [git commit] boost: only the iostreams library requires
+	bzip2 and zlib
+Message-ID: <20130611100810.5A1499AC6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9d5e6fa2fd4e48bdc0235f6bb902329b804b312d
+commit: http://git.buildroot.net/buildroot/commit/?id=e2f28217816174550dc5858fbb4f1d68ee5f0c20
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If ext-toolchain-wrapper was built with a gcc that uses hash-style 'gnu' by
-default, the resulting binary might be unusable on other systems. The error
-in this case is "Floating point exception".
-Using hash-style 'both' solves this issue.
-
-Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Will Wagner <will_wagner@carallon.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/ext-tool.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/boost/Config.in |    4 ++--
+ package/boost/boost.mk  |    6 +++++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 30a4953..430b2bc 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -491,7 +491,9 @@ $(HOST_DIR)/usr/bin/ext-toolchain-wrapper: $(STAMP_DIR)/ext-toolchain-installed
- 			;; \
- 		esac; \
- 	done ;
--	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_EXTERNAL_WRAPPER_ARGS) -s \
-+	# We use --hash-style=both to increase the compatibility of
-+	# the generated binary with older platforms
-+	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_EXTERNAL_WRAPPER_ARGS) -s -Wl,--hash-style=both \
- 		toolchain/toolchain-external/ext-toolchain-wrapper.c -o $@
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 5c65b2f..912717a 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -9,8 +9,6 @@ config BR2_PACKAGE_BOOST
+ 	# that unfortunately doesn't work. Until someone fixes that,
+ 	# let's depend on threads.
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_BZIP2
+-	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  A general purpose C++ library
  
- # 'uclibc' is the target to provide toolchain / staging dir
+@@ -43,6 +41,8 @@ config BR2_PACKAGE_BOOST_GRAPH_PARALLEL
+ 
+ config BR2_PACKAGE_BOOST_IOSTREAMS
+ 	bool "boost-iostreams"
++	select BR2_PACKAGE_BZIP2
++	select BR2_PACKAGE_ZLIB
+ 
+ config BR2_PACKAGE_BOOST_LOCALE
+ 	depends on BR2_USE_WCHAR
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 57d021a..ce72990 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -12,7 +12,7 @@ BOOST_INSTALL_STAGING = YES
+ 
+ TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
+ 
+-BOOST_DEPENDENCIES = bzip2 zlib
++BOOST_DEPENDENCIES =
+ 
+ BOOST_FLAGS =
+ 
+@@ -48,6 +48,10 @@ else
+ BOOST_FLAGS += --without-icu
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BOOST_IOSTREAMS),y)
++BOOST_DEPENDENCIES += bzip2 zlib
++endif
++
+ BOOST_OPT += toolset=gcc \
+ 	     threading=multi \
+ 	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release) \
