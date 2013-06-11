@@ -1,115 +1,59 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Tue, 11 Jun 2013 12:18:41 +0200
-Subject: [Buildroot] [PATCHv3 3/3] Add gstreamer plugin for Hantro x170
-In-Reply-To: <1370945921-23444-1-git-send-email-alexandre.belloni@free-electrons.com>
-References: <1370945921-23444-1-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <1370945921-23444-3-git-send-email-alexandre.belloni@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 11 Jun 2013 07:52:00 -0300
+Subject: [Buildroot] [PATCH] openswan: fix older gcc build failure
+Message-ID: <1370947920-10745-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
----
- package/multimedia/Config.in                       |  1 +
- package/multimedia/gst-plugin-x170/Config.in       | 14 +++++++++++
- .../gst-plugin-x170-01-correct-CFLAGS.patch        | 28 ++++++++++++++++++++++
- .../multimedia/gst-plugin-x170/gst-plugin-x170.mk  | 18 ++++++++++++++
- 4 files changed, 61 insertions(+)
- create mode 100644 package/multimedia/gst-plugin-x170/Config.in
- create mode 100644 package/multimedia/gst-plugin-x170/gst-plugin-x170-01-correct-CFLAGS.patch
- create mode 100644 package/multimedia/gst-plugin-x170/gst-plugin-x170.mk
+Older gcc versions (< 4.4) don't accept cpp as -Werror / -Wno-error
+parameters.
+Disable it since it's not yet a default with any version and we don't do
+-Werror by default. Fixes:
+http://autobuild.buildroot.net/results/977/9779215c4dfb68dc105f27097246a97851b1f6c2/
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 4cb81bf..77c0a22 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -14,6 +14,7 @@ source "package/multimedia/gst-plugins-base/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
-+source "package/multimedia/gst-plugin-x170/Config.in"
- source "package/multimedia/lame/Config.in"
- source "package/multimedia/libvpx/Config.in"
- source "package/multimedia/madplay/Config.in"
-diff --git a/package/multimedia/gst-plugin-x170/Config.in b/package/multimedia/gst-plugin-x170/Config.in
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/openswan/openswan-wno-error-cpp.patch | 29 +++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/openswan/openswan-wno-error-cpp.patch
+
+diff --git a/package/openswan/openswan-wno-error-cpp.patch b/package/openswan/openswan-wno-error-cpp.patch
 new file mode 100644
-index 0000000..0787013
+index 0000000..8e79ae9
 --- /dev/null
-+++ b/package/multimedia/gst-plugin-x170/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_GST_PLUGIN_X170
-+	bool "gst-plugin-x170"
-+	depends on BR2_PACKAGE_GSTREAMER
-+	depends on BR2_arm926t
-+	depends on (BR2_TOOLCHAIN_EXTERNAL_GLIBC || \
-+		BR2_TOOLCHAIN_CTNG_eglibc || \
-+		BR2_TOOLCHAIN_CTNG_glibc)
-+	select BR2_PACKAGE_ON2_8170_LIBS
-+	help
-+	  GStreamer plug-in to use the Hantro X170 video decoder present on
-+	  ATMEL AT91SAM9M10 SoC.
++++ b/package/openswan/openswan-wno-error-cpp.patch
+@@ -0,0 +1,29 @@
++Kill -Wno-error=cpp, old(ish) gcc versions (< 4.4) don't like it and we still
++got 4.3.x available for internal toolchains.
 +
-+	  http://www.at91.com/linux4sam/bin/view/Linux4SAM/SAM9M10Gstreamer
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-diff --git a/package/multimedia/gst-plugin-x170/gst-plugin-x170-01-correct-CFLAGS.patch b/package/multimedia/gst-plugin-x170/gst-plugin-x170-01-correct-CFLAGS.patch
-new file mode 100644
-index 0000000..9c32e46
---- /dev/null
-+++ b/package/multimedia/gst-plugin-x170/gst-plugin-x170-01-correct-CFLAGS.patch
-@@ -0,0 +1,28 @@
-+The configure script is correctly getting the CFLAGS needed to compile a plugin
-+for gstreamer and storing them in GST_BASE_CFLAGS but the Makefiles are never
-+making use of those.
++diff -Nura openswan-2.6.39.orig/lib/libopenswan/Makefile openswan-2.6.39/lib/libopenswan/Makefile
++--- openswan-2.6.39.orig/lib/libopenswan/Makefile	2013-06-11 07:22:50.228520267 -0300
+++++ openswan-2.6.39/lib/libopenswan/Makefile	2013-06-11 07:27:40.087849447 -0300
++@@ -86,7 +86,7 @@
++ CFLAGS+= -Wno-error=cast-qual
 +
-+We actually have to use AM_CPPFLAGS as AM_CFLAGS is used everywhere but on the
-+real compiling rule...
++ # some junk left in alg_info.c
++-CFLAGS+= -Wno-error=cpp
+++#CFLAGS+= -Wno-error=cpp
 +
-+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-+---
-+ src/Makefile.am | 2 ++
-+ 1 file changed, 2 insertions(+)
++ #CFLAGS+= -Wmissing-declarations
++ CFLAGS+= -Wstrict-prototypes
++diff -Nura openswan-2.6.39.orig/programs/pluto/Makefile openswan-2.6.39/programs/pluto/Makefile
++--- openswan-2.6.39.orig/programs/pluto/Makefile	2013-06-11 07:22:49.753504978 -0300
+++++ openswan-2.6.39/programs/pluto/Makefile	2013-06-11 07:27:53.020265681 -0300
++@@ -47,7 +47,7 @@
 +
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 8cb51d1..6af5d91 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -5,6 +5,8 @@
-+ ##############################################################################
-+ plugin_LTLIBRARIES = libgstx170.la
-+ 
-++AM_CPPFLAGS = @GST_BASE_CFLAGS@
-++
-+ ##############################################################################
-+ # for the next set of variables, rename the prefix if you renamed the .la,   #
-+ #  e.g. libgstplugin_la_SOURCES => libmysomething_la_SOURCES                 #
-+-- 
-+1.8.1.2
++ # must turn this off due to myid.c
++ CFLAGS+= -Wno-error=cast-qual
++-CFLAGS+= -Wno-error=cpp
+++#CFLAGS+= -Wno-error=cpp
 +
-diff --git a/package/multimedia/gst-plugin-x170/gst-plugin-x170.mk b/package/multimedia/gst-plugin-x170/gst-plugin-x170.mk
-new file mode 100644
-index 0000000..a6143ed
---- /dev/null
-+++ b/package/multimedia/gst-plugin-x170/gst-plugin-x170.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# gst-plugins-x170
-+#
-+################################################################################
-+
-+GST_PLUGIN_X170_VERSION = 1.0
-+GST_PLUGIN_X170_SITE = ftp://ftp.linux4sam.org/pub/demo/linux4sam_1.9/codec/
-+
-+GST_PLUGIN_X170_LICENSE = BSD-1c
-+#A license file is included but it is just a placeholder
-+
-+# There is no generated configure script in the tarball.
-+GST_PLUGIN_X170_AUTORECONF = YES
-+GST_PLUGIN_X170_AUTORECONF_OPT = -Im4/
-+GST_PLUGIN_X170_DEPENDENCIES = gstreamer libglib2 on2-8170-libs
-+
-+$(eval $(autotools-package))
++ ifeq ($(HAVE_BROKEN_POPEN),true)
++ CFLAGS+=-DHAVE_BROKEN_POPEN
 -- 
-1.8.1.2
+1.8.1.5
