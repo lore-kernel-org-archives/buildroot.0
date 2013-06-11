@@ -1,112 +1,131 @@
-From: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
-Date: Tue, 11 Jun 2013 14:52:08 +0200
-Subject: [Buildroot] [git commit] package: add libwebsockets
-In-Reply-To: <20130414193550.D82F69B078@busybox.osuosl.org>
-References: <20130414193550.D82F69B078@busybox.osuosl.org>
-Message-ID: <51B71D78.2040903@nanotronic.ch>
+From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
+Date: Tue, 11 Jun 2013 17:21:49 +0200
+Subject: [Buildroot] [PATCH v2] usb_modeswitch_data: bump to version 20130610
+Message-ID: <51B7408D.6020800@fh-kl.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Remove 'usb_modeswitch_data-fix-parallel-install.patch' because it was merged
+upstream.
 
-Hi,
+Remove dependency on Tcl because the dispatcher script has been moved to
+usb_modeswitch package.
 
-Just for my understandings:
+Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
+---
+ package/usb_modeswitch_data/Config.in                   |  3 ---
+ .../usb_modeswitch_data-fix-parallel-install.patch      | 17 -----------------
+ .../usb_modeswitch_data-makefile.patch                  | 17 +++++++++--------
+ package/usb_modeswitch_data/usb_modeswitch_data.mk      |  2 +-
+ 4 files changed, 10 insertions(+), 29 deletions(-)
+ delete mode 100644 package/usb_modeswitch_data/usb_modeswitch_data-fix-parallel-install.patch
 
- > [Peter: add missing zlib select to Config.in]
+diff --git a/package/usb_modeswitch_data/Config.in b/package/usb_modeswitch_data/Config.in
+index 8698bb6..6df408f 100644
+--- a/package/usb_modeswitch_data/Config.in
++++ b/package/usb_modeswitch_data/Config.in
+@@ -1,9 +1,6 @@
+ config BR2_PACKAGE_USB_MODESWITCH_DATA
+ 	bool "usb_modeswitch_data"
+ 	select BR2_PACKAGE_USB_MODESWITCH
+-	# tcl is a runtime dependency
+-	select BR2_PACKAGE_TCL
+-	select BR2_PACKAGE_TCL_TCLSH
+ 	help
+ 	  USB mode switch data
+ 	  Contains udev rules and events to allow usb_modeswitch to
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data-fix-parallel-install.patch b/package/usb_modeswitch_data/usb_modeswitch_data-fix-parallel-install.patch
+deleted file mode 100644
+index ba30499..0000000
+--- a/package/usb_modeswitch_data/usb_modeswitch_data-fix-parallel-install.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Properly create the directory before creating it so that parallel
+-install work fine.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/Makefile
+-===================================================================
+---- a/Makefile
+-+++ b/Makefile
+-@@ -22,6 +22,7 @@
+- 	install -D --mode=644 40-usb_modeswitch.rules $(RULESDIR)/40-usb_modeswitch.rules
+- 
+- db-install:
+-+	install -d $(PREFIX)/share/usb_modeswitch
+- 	install --mode=644 -t $(PREFIX)/share/usb_modeswitch ./usb_modeswitch.d/*
+- 
+- db-install-packed:
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
+index 769e514..28441fe 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
++++ b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
+@@ -2,21 +2,22 @@ Fixed Makefile install sections to not reload udev rules. In a
+ cross-compiler environment, it is not wanted to reload the host udev rules.
+ 
+ Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
+---- usb_modeswitch_data-20120120.orig/Makefile	2012-01-20 17:25:32.000000000 -0500
+-+++ usb_modeswitch_data-20120120/Makefile	2012-02-06 14:20:47.000000000 -0500
+-@@ -12,9 +12,9 @@
+- 
++Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
++--- a/Makefile	2013-06-10 22:32:53.000000000 +0200
+++++ b/Makefile	2013-06-11 10:38:03.181161401 +0200
++@@ -13,9 +13,9 @@
+  clean:
++ 	$(RM) 40-usb_modeswitch.rules
+  
+--install: files-install db-install rules-reload
+-+install: files-install db-install
++-install: all files-install db-install rules-reload
+++install: all files-install db-install
+  
+ -install-packed: files-install db-install-packed rules-reload
+ +install-packed: files-install db-install-packed
+  
+- files-install:
++ files-install: 
+  	install -d $(PREFIX)/share/usb_modeswitch
+-@@ -50,7 +50,7 @@
++@@ -54,7 +54,7 @@
+  		fi \
+  	fi
+  
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+index cb9754f..a9ce006 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
++++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USB_MODESWITCH_DATA_VERSION = 20121109
++USB_MODESWITCH_DATA_VERSION = 20130610
+ USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
+ USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
+-- 
+1.8.1.2
 
-This means, we kind of track dependencies twice?
 
-1) in Config.in we tell the config system to also select the packages we 
-depend on (here "zlib").
-2) On the other hand I have to specify the dependencies in the 
-build-recipe too ("LIBWEBSOCKETS_DEPENENCIES = zlib").
-
-What is the reason we do this twice?
-
-My thought to not add "select BR2_PACKAGE_ZLIB" was:
-When I select libwebsockets, it automatically includes zlib in the build 
-process. When I later de-select libwebsockets, the next build would not 
-include zlib.
-
-
-Regards,
-Andi
-
-
-
-
-
-On 04/14/2013 09:35 PM, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=381c4646c5078cb2f31437598e1e353fb1bdb587
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> [Peter: add missing zlib select to Config.in]
-> Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-> ---
->   package/Config.in                      |    1 +
->   package/libwebsockets/Config.in        |    9 +++++++++
->   package/libwebsockets/libwebsockets.mk |   15 +++++++++++++++
->   3 files changed, 25 insertions(+), 0 deletions(-)
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 97ba790..322e005 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -535,6 +535,7 @@ source "package/libtirpc/Config.in"
->   source "package/libtorrent/Config.in"
->   source "package/libupnp/Config.in"
->   source "package/libvncserver/Config.in"
-> +source "package/libwebsockets/Config.in"
->   source "package/nss-mdns/Config.in"
->   source "package/openpgm/Config.in"
->   source "package/ortp/Config.in"
-> diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
-> new file mode 100644
-> index 0000000..1d927bb
-> --- /dev/null
-> +++ b/package/libwebsockets/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_LIBWEBSOCKETS
-> +	bool "libwebsockets"
-> +	select BR2_PACKAGE_ZLIB
-> +	help
-> +	  Libwebsockets is a lightweight pure C library built to use
-> +	  minimal CPU and memory resources, and provide fast throughput
-> +	  in both directions.
-> +
-> +	  http://libwebsockets.org/
-> diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-> new file mode 100644
-> index 0000000..a3d8936
-> --- /dev/null
-> +++ b/package/libwebsockets/libwebsockets.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# libwebsockets
-> +#
-> +################################################################################
-> +
-> +LIBWEBSOCKETS_VERSION = v1.1-chrome26-firefox18
-> +LIBWEBSOCKETS_SITE = http://git.libwebsockets.org/cgi-bin/cgit/libwebsockets/snapshot
-> +LIBWEBSOCKETS_LICENSE = LGPLv2.1
-> +LIBWEBSOCKETS_LICENSE_FILES = COPYING
-> +LIBWEBSOCKETS_DEPENDENCIES = zlib
-> +LIBWEBSOCKETS_AUTORECONF = YES
-> +LIBWEBSOCKETS_INSTALL_STAGING = YES
-> +
-> +$(eval $(autotools-package))
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
 
 -- 
-Andreas Wetzel
-nanoTRONIC GmbH // Hinterm?ttlistrasse 9 // CH-5506 M?genwil
+Dipl.-Inf. (FH) Patrick Ziegler
+
+University Of Applied Sciences
+Kaiserslautern
+
+Amerikastrasse 1
+D-66482 Zweibruecken
+Germany
+
+Phone:  +49 631 3724 5526
+Mail:   patrick.ziegler at fh-kl.de
+PGP KeyID 0xB4796B8C
+
+http://www.fh-kl.de
+http://www.fh-kl.de/fachbereiche/imst/iuk-knowhow.html
