@@ -1,135 +1,65 @@
-From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
-Date: Tue, 11 Jun 2013 17:22:20 +0200
-Subject: [Buildroot] [PATCH v2] usb_modeswitch: bump to version 1.2.6
-Message-ID: <51B740AC.5010406@fh-kl.de>
+From: =?iso-8859-1?Q?Ra=FAl_S=E1nchez?= Siles <rasasi78@gmail.com>
+Date: Tue, 11 Jun 2013 18:24:12 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: Add upstream patch to avoid
+ occasional mdev SIGSEGV.
+Message-ID: <20130611162412.GE18264@trismegisto.universo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove 'usb_modeswitch-makefile.patch' because it was merged upstream.
+This implies rename of previous patch for a correct patch ordering.
 
-This package contains a dispatcher (wrapper) that can be installed as Tcl script
-or as binary without further dependency. If Tcl is selected and the binary
-interpreter is installed (BR2_PACKAGE_TCL && !BR2_PACKAGE_TCL_SHLIB_ONLY) the
-dispatcher will be installed as Tcl script otherwise as binary.
-
-Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
+Signed-off-by: Ra?l S?nchez Siles <rasasi78@gmail.com>
 ---
- .../usb_modeswitch/usb_modeswitch-makefile.patch   | 31 ----------------------
- package/usb_modeswitch/usb_modeswitch.mk           | 26 +++++++++++-------
- 2 files changed, 17 insertions(+), 40 deletions(-)
- delete mode 100644 package/usb_modeswitch/usb_modeswitch-makefile.patch
+ ...21.0-mdev.patch => busybox-1.21.0-mdev_1.patch} |    0
+ .../busybox-1.21.0-mdev_2_check_ACTION.patch       |   32 ++++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+ rename package/busybox/1.21.0/{busybox-1.21.0-mdev.patch => busybox-1.21.0-mdev_1.patch} (100%)
+ create mode 100644 package/busybox/1.21.0/busybox-1.21.0-mdev_2_check_ACTION.patch
 
-diff --git a/package/usb_modeswitch/usb_modeswitch-makefile.patch b/package/usb_modeswitch/usb_modeswitch-makefile.patch
-deleted file mode 100644
-index b792741..0000000
---- a/package/usb_modeswitch/usb_modeswitch-makefile.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--Removed the -s from the install command. Without this, usb_modeswitch would
--fail to install.
--
--Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
--
--Index: b/Makefile
--===================================================================
----- a/Makefile
--+++ b/Makefile
--@@ -46,7 +46,7 @@
-- 	cd jim && $(MAKE) distclean
-- 
-- install-common: all
---	install -D -s --mode=755 usb_modeswitch $(SBINDIR)/usb_modeswitch
--+	install -D --mode=755 usb_modeswitch $(SBINDIR)/usb_modeswitch
-- 	install -D --mode=755 usb_modeswitch.sh $(UDEVDIR)/usb_modeswitch
-- 	install -D --mode=644 usb_modeswitch.conf $(ETCDIR)/usb_modeswitch.conf
-- 	install -D --mode=644 usb_modeswitch.1 $(MANDIR)/usb_modeswitch.1
--@@ -67,10 +67,10 @@
-- install: install-common install-script
-- 
-- install-shared: dispatcher-dynamic install-common
---	install -D -s --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
--+	install -D --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
-- 
-- install-static: dispatcher-static install-common
---	install -D -s --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
--+	install -D --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
-- 
-- uninstall:
-- 	$(RM) $(SBINDIR)/usb_modeswitch
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index 92ca163..fe54b50 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -4,19 +4,32 @@
- #
- ################################################################################
- 
--USB_MODESWITCH_VERSION = 1.2.5
-+USB_MODESWITCH_VERSION = 1.2.6
- USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
- USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DEPENDENCIES = libusb-compat
- USB_MODESWITCH_LICENSE = GPLv2+
- USB_MODESWITCH_LICENSE_FILES = COPYING
- 
-+USB_MODESWITCH_BUILD_TARGETS = static
-+USB_MODESWITCH_INSTALL_TARGETS = install-static
+diff --git a/package/busybox/1.21.0/busybox-1.21.0-mdev.patch b/package/busybox/1.21.0/busybox-1.21.0-mdev_1.patch
+similarity index 100%
+rename from package/busybox/1.21.0/busybox-1.21.0-mdev.patch
+rename to package/busybox/1.21.0/busybox-1.21.0-mdev_1.patch
+diff --git a/package/busybox/1.21.0/busybox-1.21.0-mdev_2_check_ACTION.patch b/package/busybox/1.21.0/busybox-1.21.0-mdev_2_check_ACTION.patch
+new file mode 100644
+index 0000000..f731cc0
+--- /dev/null
++++ b/package/busybox/1.21.0/busybox-1.21.0-mdev_2_check_ACTION.patch
+@@ -0,0 +1,32 @@
++From d35cbad0efaa57bf7c5280e62825966f7757906a Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Tue, 02 Apr 2013 12:37:06 +0000
++Subject: mdev: call index_in_strings on $ACTION only after we checked it for NULL
 +
-+ifeq ($(BR2_PACKAGE_TCL)$(BR2_PACKAGE_TCL_SHLIB_ONLY),y)
-+	USB_MODESWITCH_DEPENDENCIES += tcl
-+	USB_MODESWITCH_BUILD_TARGETS = script
-+	USB_MODESWITCH_INSTALL_TARGETS = install-script
-+endif
-+
- define USB_MODESWITCH_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -Wall -I." \
-+		-C $(@D) $(USB_MODESWITCH_BUILD_TARGETS)
- endef
- 
- define USB_MODESWITCH_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		DESTDIR=$(TARGET_DIR) \
-+		-C $(@D) $(USB_MODESWITCH_INSTALL_TARGETS)
- endef
- 
- 
-@@ -25,12 +38,7 @@ define USB_MODESWITCH_CLEAN_CMDS
- endef
- 
- define USB_MODESWITCH_UNINSTALL_CMDS
--	$(RM) -f $(TARGET_DIR)/usr/sbin/usb_modeswitch
--	$(RM) -f $(TARGET_DIR)/lib/udev/usb_modeswitch
--	$(RM) -f $(TARGET_DIR)/etc/usb_modeswitch.setup
--	$(RM) -f $(TARGET_DIR)/usr/share/man/man1/usb_modeswitch.1
--	$(RM) -rf $(TARGET_DIR)/var/lib/usb_modeswitch
--	$(RM) -f $(TARGET_DIR)/usr/sbin/usb_modeswitch_dispatcher
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) uninstall
- endef
- 
- $(eval $(generic-package))
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++---
++diff --git a/util-linux/mdev.c b/util-linux/mdev.c
++index 5fe6bbb..1d74136 100644
++--- a/util-linux/mdev.c
+++++ b/util-linux/mdev.c
++@@ -1060,15 +1060,15 @@ int mdev_main(int argc UNUSED_PARAM, char **argv)
++ 		 * ACTION can be "add", "remove", "change"
++ 		 * DEVPATH is like "/block/sda" or "/class/input/mice"
++ 		 */
++-		action = getenv("ACTION");
++-		op = index_in_strings(keywords, action);
++ 		env_devname = getenv("DEVNAME"); /* can be NULL */
++-		env_devpath = getenv("DEVPATH");
++ 		G.subsystem = getenv("SUBSYSTEM");
+++		action = getenv("ACTION");
+++		env_devpath = getenv("DEVPATH");
++ 		if (!action || !env_devpath /*|| !G.subsystem*/)
++ 			bb_show_usage();
++ 		fw = getenv("FIRMWARE");
++ 		seq = getenv("SEQNUM");
+++		op = index_in_strings(keywords, action);
++ 
++ 		my_pid = getpid();
++ 		open_mdev_log(seq, my_pid);
++--
++cgit v0.9.1
 -- 
-1.8.1.2
-
-
--- 
-Dipl.-Inf. (FH) Patrick Ziegler
-
-University Of Applied Sciences
-Kaiserslautern
-
-Amerikastrasse 1
-D-66482 Zweibruecken
-Germany
-
-Phone:  +49 631 3724 5526
-Mail:   patrick.ziegler at fh-kl.de
-PGP KeyID 0xB4796B8C
-
-http://www.fh-kl.de
-http://www.fh-kl.de/fachbereiche/imst/iuk-knowhow.html
+1.7.10.4
