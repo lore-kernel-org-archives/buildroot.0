@@ -1,34 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 11 Jun 2013 21:29:35 +0200
-Subject: [Buildroot] [git commit] mutt: needs mmu
-Message-ID: <20130611193507.871709AC6A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 11 Jun 2013 22:59:22 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: Add upstream patch to avoid
+	occasional mdev SIGSEGV.
+In-Reply-To: <20130611162412.GE18264@trismegisto.universo> (=?utf-8?Q?=22R?=
+ =?utf-8?Q?a=C3=BAl_S=C3=A1nchez?=
+ Siles"'s message of "Tue, 11 Jun 2013 18:24:12 +0200")
+References: <20130611162412.GE18264@trismegisto.universo>
+Message-ID: <871u884b4l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=31e75f2213637948b512512ca2725fd67de65be1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Ra?l" == Ra?l S?nchez Siles <rasasi78@gmail.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/8ce/8ceec55fa8358d8821f2deaf3440f5b06270db6a/
+ Ra?l> This implies rename of previous patch for a correct patch ordering.
+ Ra?l> Signed-off-by: Ra?l S?nchez Siles <rasasi78@gmail.com>
+ Ra?l> ---
+ Ra?l>  ...21.0-mdev.patch => busybox-1.21.0-mdev_1.patch} |    0
+ Ra?l>  .../busybox-1.21.0-mdev_2_check_ACTION.patch       |   32 ++++++++++++++++++++
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/mutt/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+I would prefer to not rename the existing patch, as it makes it less
+clear where it comes from (http://busybox.net/downloads/fixes-1.21.0/).
 
-diff --git a/package/mutt/Config.in b/package/mutt/Config.in
-index 754979a..bb97cb0 100644
---- a/package/mutt/Config.in
-+++ b/package/mutt/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_MUTT
- 	bool "mutt"
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  Mutt is a sophisticated text-based Mail User Agent (MUA)
+It shouldn't be necessary either as '.' comes before '_' (but not before
+'-').
+
+Talking of which, why is this patch not in the fixes directory? Does
+Denys not consider it important enough?
+
+-- 
+Bye, Peter Korsgaard
