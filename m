@@ -1,414 +1,89 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Jun 2013 08:21:37 +0200
-Subject: [Buildroot] [PATCH v10 08/13] gst1-plugins-base: add gstreamer1
- base plugins
-In-Reply-To: <1370647138-26623-9-git-send-email-spenser@gillilanding.com>
-References: <1370647138-26623-1-git-send-email-spenser@gillilanding.com>
- <1370647138-26623-9-git-send-email-spenser@gillilanding.com>
-Message-ID: <51B81371.3050109@mind.be>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Wed, 12 Jun 2013 09:22:38 +0100
+Subject: [Buildroot] [PATCH] wvstreams: Build bundled argp library with
+	-fPIC
+In-Reply-To: <CAG2jQ8ibG-WBUGbaSyWKefdjZZ0aS2U3NRBY-x7h4QzYiNLi9g@mail.gmail.com>
+References: <1370440956-8000-1-git-send-email-markos.chandras@gmail.com>
+ <CAG2jQ8ibG-WBUGbaSyWKefdjZZ0aS2U3NRBY-x7h4QzYiNLi9g@mail.gmail.com>
+Message-ID: <CAG2jQ8jhJbSd0GdkONA5EpS+EpPp-zTztaYAq_5GYAk=QG5Vjg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/06/13 01:18, Spenser Gilliland wrote:
-> Adds gstreamer 1.X base plugins.
-
-  Missing SoB.
-
-  Protip: git config --global format.signoff true
-
-> ---
->   package/multimedia/Config.in                       |    1 +
->   package/multimedia/gst1-plugins-base/Config.in     |  106 ++++++++++
->   .../gst1-plugins-base/gst1-plugins-base.mk         |  204 ++++++++++++++++++++
->   3 files changed, 311 insertions(+), 0 deletions(-)
->   create mode 100644 package/multimedia/gst1-plugins-base/Config.in
->   create mode 100644 package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
+On 6 June 2013 14:09, Markos Chandras <markos.chandras@gmail.com> wrote:
+> On 5 June 2013 15:02, Markos Chandras <markos.chandras@gmail.com> wrote:
+>> From: Markos Chandras <markos.chandras@imgtec.com>
+>>
+>> Fixes linking problems on MIPS.
+>>
+>> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+>> ---
+>>  package/wvstreams/wvstreams-0006-argp-fpic.patch | 28 ++++++++++++++++++++++++
+>>  1 file changed, 28 insertions(+)
+>>  create mode 100644 package/wvstreams/wvstreams-0006-argp-fpic.patch
+>>
+>> diff --git a/package/wvstreams/wvstreams-0006-argp-fpic.patch b/package/wvstreams/wvstreams-0006-argp-fpic.patch
+>> new file mode 100644
+>> index 0000000..b4cf1d2
+>> --- /dev/null
+>> +++ b/package/wvstreams/wvstreams-0006-argp-fpic.patch
+>> @@ -0,0 +1,28 @@
+>> +Build argp object files with -fPIC.
+>> +
+>> +The argp bundled dependency is linked to the libwvutils.so shared library.
+>> +MIPS will refuce to link a non-PIC library with a shared one.
+>> +
+>> +We fix this problem by building the argp source files using -fPIC since
+>> +the libargp static library will only be used to link to libwvutils.so
+>> +as instructed by the following rule in the root Makefile:
+>> +
+>> +ifeq ($(USE_WVSTREAMS_ARGP),1)
+>> +  utils/wvargs.o-CPPFLAGS += -Iargp
+>> +  libwvutils.so-LIBS += -Largp -largp
+>> +
+>> +Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+>> +
+>> +Index: wvstreams-4.6.1/argp/Makefile.in
+>> +===================================================================
+>> +--- wvstreams-4.6.1.orig/argp/Makefile.in
+>> ++++ wvstreams-4.6.1/argp/Makefile.in
+>> +@@ -137,7 +137,7 @@ AUTOMAKE = @AUTOMAKE@
+>> + AWK = @AWK@
+>> + CC = @CC@
+>> + CCDEPMODE = @CCDEPMODE@
+>> +-CFLAGS = @CFLAGS@
+>> ++CFLAGS = @CFLAGS@ -fPIC
+>> + CPP = @CPP@
+>> + CPPFLAGS = @CPPFLAGS@
+>> + CYGPATH_W = @CYGPATH_W@
+>> --
+>> 1.8.2.1
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-> index 0351fd0..253fd17 100644
-> --- a/package/multimedia/Config.in
-> +++ b/package/multimedia/Config.in
-> @@ -12,6 +12,7 @@ source "package/multimedia/gst-dsp/Config.in"
->   source "package/multimedia/gst-fsl-plugins/Config.in"
->   source "package/multimedia/gst-omapfb/Config.in"
->   source "package/multimedia/gst-plugins-base/Config.in"
-> +source "package/multimedia/gst1-plugins-base/Config.in"
-
-  Same remark: keep all gst1 stuff together.
-
->   source "package/multimedia/gst-plugins-good/Config.in"
->   source "package/multimedia/gst-plugins-bad/Config.in"
->   source "package/multimedia/gst-plugins-ugly/Config.in"
-> diff --git a/package/multimedia/gst1-plugins-base/Config.in b/package/multimedia/gst1-plugins-base/Config.in
-> new file mode 100644
-> index 0000000..2a95846
-> --- /dev/null
-> +++ b/package/multimedia/gst1-plugins-base/Config.in
-> @@ -0,0 +1,106 @@
-> +menuconfig BR2_PACKAGE_GST1_PLUGINS_BASE
-> +	bool "gst1-plugins-base"
-> +	depends on BR2_PACKAGE_GSTREAMER1
-> +	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_XLIB_LIBXV if BR2_PACKAGE_XORG7
-> +	help
-> +	  A basic set of well-supported plug-ins for GStreamer.
-> +
-> +	  http://gstreamer.freedesktop.org/
-> +
-> +if BR2_PACKAGE_GST1_PLUGINS_BASE
-> +
-> +comment "dependency-less plugins"
-
-  It would be nice if these plugins would get some help text explaining 
-what they are.  Copy and past of the description in gst-inspect is 
-probably sufficient.
-
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ADDER
-> +	bool "adder"
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
-> +	bool "app"
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT
-> +	bool "audioconvert (mandatory for audio playback)"
-> +	default y
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORATE
-> +	bool "audiorate"
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
-> +	bool "audioresample (mandatory for audio playback)"
-> +	default y
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC
-> +	bool "audiotestsrc"
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING
-> +	bool "encoding"
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO
-> +	bool "gio"
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK
-> +	bool "playback"
-> +	default y
-
-  I would add a "select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TYPEFIND" 
-here. I think that is the only required dependency of the playsinks.
-
-
-  There's also a gdp and a gst_v4l plugin for which no config option exists.
-
-
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE
-> +	bool "subparse"
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TCP
-> +	bool "tcp"
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TYPEFIND
-> +	bool "typefind"
-> +	default y
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT
-> +	bool "videoconvert"
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC
-> +	bool "videotestsrc"
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEORATE
-> +	bool "videorate"
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
-> +	bool "videoscale (mandatory for video playback)"
-> +	default y
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
-> +	bool "volume (mandatory for audio playback)"
-> +	default y
-> +
-> +comment "plugins with external dependencies (there may be more available)"
-
-  What does "there may be more available" mean?
-
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
-> +	bool "alsa (mandatory for audio playback)"
-> +	select BR2_PACKAGE_ALSA_LIB
-> +	select BR2_PACKAGE_ALSA_LIB_MIXER
-> +	select BR2_PACKAGE_ALSA_LIB_PCM
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OGG
-> +	bool "ogg (*.ogg audio/video)"
-> +	select BR2_PACKAGE_LIBOGG
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
-> +	bool "pango font renderer"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	select BR2_PACKAGE_PANGO
-> +
-> +comment "pango plugin requires a toolchain with C++ support"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA
-> +	bool "theora (*.ogg video)"
-> +	select BR2_PACKAGE_LIBTHEORA
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TREMOR
-> +	bool "tremor"
-> +	select BR2_PACKAGE_TREMOR
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VORBIS
-> +	bool "vorbis (*.ogg audio)"
-> +	select BR2_PACKAGE_LIBVORBIS
-> +
-> +endif
-> +
-> diff --git a/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
-> new file mode 100644
-> index 0000000..63c4955
-> --- /dev/null
-> +++ b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
-> @@ -0,0 +1,204 @@
-> +################################################################################
-> +#
-> +# gst1-plugins-base
-> +#
-> +################################################################################
-> +
-> +GST1_PLUGINS_BASE_VERSION = 1.1.1
-
-  I could be wrong, but didn't gstreamer switch to simultaneous releases, 
-so we could use $(GSTREAMER1_VERSION) here instead?
-
-> +GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
-> +GST1_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
-> +GST1_PLUGINS_BASE_INSTALL_STAGING = YES
-> +GST1_PLUGINS_BASE_LICENSE_FILES = COPYING COPYING.LIB
-
-  COPYING contains the GPL which isn't actually used by any source file 
-(only some old tests). So it can be left out.
-
-> +GST1_PLUGINS_BASE_LICENSE = LGPLv2+ LGPLv2.1+
-> +
-> +# freetype is only used by examples, but if it is not found
-> +# and the host has a freetype-config script, then the host
-> +# include dirs are added to the search path causing trouble
-> +GST1_PLUGINS_BASE_CONF_ENV =
-> +	FT2_CONFIG=/bin/false \
-> +	ac_cv_header_stdint_t="stdint.h"
-
-  Why is this necessary?
-
-> +
-> +GST1_PLUGINS_BASE_CONF_OPT = \
-> +	--disable-examples \
-> +	--disable-oggtest \
-> +	--disable-vorbistest \
-> +	--disable-freetypetest \
-> +	--disable-valgrind \
-> +	--disable-debug
-> +
-> +# Options which require currently unpackaged libraries
-> +GST1_PLUGINS_BASE_CONF_OPT += \
-> +	--disable-cdparanoia \
-> +	--disable-libvisual \
-> +	--disable-iso-codes
-> +
-> +GST1_PLUGINS_BASE_DEPENDENCIES = gstreamer1
-> +
-> +ifeq ($(BR2_PACKAGE_XORG7),y)
-> +GST1_PLUGINS_BASE_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXv
-> +GST1_PLUGINS_BASE_CONF_OPT += \
-> +	--enable-x \
-> +	--enable-xshm \
-> +	--enable-xvideo
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += \
-> +	--disable-x \
-> +	--disable-xshm \
-> +	--disable-xvideo
-> +endif
-
-  I would actually make configure options for ximagesink and xvimagesink 
-(--enable-x and --enable-xvideo).
-
-> +
-> +ifeq ($(BR2_PACKAGE_ORC),y)
-> +GST1_PLUGINS_BASE_DEPENDENCIES += orc
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-orc
-> +endif
-> +
-
-  It would be nice if the plugins below could be kept alphabetic.
-
-
-  Regards,
-  Arnout
-
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA),y)
-> +GST1_PLUGINS_BASE_DEPENDENCIES += alsa-lib
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-alsa
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ADDER),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-adder
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-adder
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-app
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-app
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-audioconvert
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-audioconvert
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORATE),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-audiorate
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-audiorate
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-audioresample
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-audioresample
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-audiotestsrc
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-audiotestsrc
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-encoding
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-encoding
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-videoconvert
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-videoconvert
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-gio
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-gio
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-playback
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-playback
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-subparse
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-subparse
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TCP),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-tcp
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-tcp
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TYPEFIND),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-typefind
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-typefind
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-videotestsrc
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-videotestsrc
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEORATE),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-videorate
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-videorate
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-videoscale
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-videoscale
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-volume
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-volume
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OGG),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-ogg
-> +GST1_PLUGINS_BASE_DEPENDENCIES += libogg
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-ogg
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-pango
-> +GST1_PLUGINS_BASE_DEPENDENCIES += pango
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-pango
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-theora
-> +GST1_PLUGINS_BASE_DEPENDENCIES += libtheora
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-theora
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TREMOR),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-ivorbis
-> +GST1_PLUGINS_BASE_DEPENDENCIES += tremor
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-ivorbis
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VORBIS),y)
-> +GST1_PLUGINS_BASE_CONF_OPT += --enable-vorbis
-> +GST1_PLUGINS_BASE_DEPENDENCIES += libvorbis
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-vorbis
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_ZLIB),y)
-> +GST1_PLUGINS_BASE_DEPENDENCIES += zlib
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPT += --disable-zlib
-> +endif
-> +
-> +$(eval $(autotools-package))
+> Hi all,
 >
+> After the relevant discussion in the bzip2 static/shared lib patch, I
+> believe this patch is safe to be applied as is, since the argp static
+> library is only a dependency for the shared libwvutils.so. In my
+> opinion, it is fine to build argp with -fPIC since it's only going to
+> be used
+> in a shared library.
+>
+> --
+> Regards,
+> Markos Chandras
 
+Hi,
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+ping? :)
+
+--
+Regards,
+Markos Chandras
