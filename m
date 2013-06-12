@@ -1,72 +1,43 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Wed, 12 Jun 2013 14:42:46 -0700
-Subject: [Buildroot] [PATCH] sdl_image: bump to version 1.2.12
-Message-ID: <1371073366-11446-1-git-send-email-gilles.talis@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 12 Jun 2013 23:48:06 +0200
+Subject: [Buildroot] [PATCH] sconeserver: fix autouild failure
+In-Reply-To: <CAHt8ZCOT2bj=-5C6Y34ULOoqV-YN74-N+hV9gYdsDBB8h8W=-w@mail.gmail.com>
+References: <1370261409-8722-1-git-send-email-spdawson@gmail.com>
+ <20130608174904.0559f1be@skate>
+ <CAHt8ZCOT2bj=-5C6Y34ULOoqV-YN74-N+hV9gYdsDBB8h8W=-w@mail.gmail.com>
+Message-ID: <51B8EC96.8030007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also added:
-- WEBP file format support
-- License information
+On 12/06/13 20:40, Simon Dawson wrote:
+> Hi Thomas,
+>
+> On 8 June 2013 16:49, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> There are still build failures related to sconeserver and MySQL. See
+>> http://autobuild.buildroot.org/results/a16/a162fbd8977faa561a76f76072ec3335fb8e8d1f/build-end.log.
+>
+> I've been unable to reproduce this using the defconfig from the failed
+> autobuild. I'm struggling to understand what exactly is causing the
+> failures; would appreciate any suggestions that you may have...
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/sdl_image/Config.in    |    4 ++++
- package/sdl_image/sdl_image.mk |    8 ++++++--
- 2 files changed, 10 insertions(+), 2 deletions(-)
+  mysql.h is in $(STAGING_DIR)/usr/include/mysql, but that doesn't get 
+included in the CXXFLAGS.
 
-diff --git a/package/sdl_image/Config.in b/package/sdl_image/Config.in
-index 36aa4a8..be0321a 100644
---- a/package/sdl_image/Config.in
-+++ b/package/sdl_image/Config.in
-@@ -42,6 +42,10 @@ config BR2_PACKAGE_SDL_IMAGE_TIFF
- 	bool "enable TIFF file format support"
- 	select BR2_PACKAGE_TIFF
- 
-+config BR2_PACKAGE_SDL_IMAGE_WEBP
-+	bool "enable WEBP file format support"
-+	select BR2_PACKAGE_WEBP
-+
- config BR2_PACKAGE_SDL_IMAGE_XCF
- 	bool "enable XCF file format support"
- 
-diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
-index de72a04..3945505 100644
---- a/package/sdl_image/sdl_image.mk
-+++ b/package/sdl_image/sdl_image.mk
-@@ -4,10 +4,12 @@
- #
- ################################################################################
- 
--SDL_IMAGE_VERSION = 1.2.6
-+SDL_IMAGE_VERSION = 1.2.12
- SDL_IMAGE_SOURCE = SDL_image-$(SDL_IMAGE_VERSION).tar.gz
- SDL_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
- SDL_IMAGE_INSTALL_STAGING = YES
-+SDL_IMAGE_LICENSE = zlib
-+SDL_IMAGE_LICENSE_FILES = COPYING
- 
- SDL_IMAGE_CONF_OPT = --with-sdl-prefix=$(STAGING_DIR)/usr \
- 		--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
-@@ -25,6 +27,7 @@ SDL_IMAGE_CONF_OPT = --with-sdl-prefix=$(STAGING_DIR)/usr \
- 		--enable-pnm=$(if $(BR2_PACKAGE_SDL_IMAGE_PNM),yes,no) \
- 		--enable-tga=$(if $(BR2_PACKAGE_SDL_IMAGE_TARGA),yes,no) \
- 		--enable-tif=$(if $(BR2_PACKAGE_SDL_IMAGE_TIFF),yes,no) \
-+		--enable-webp=$(if $(BR2_PACKAGE_SDL_IMAGE_WEBP),yes,no) \
- 		--enable-xcf=$(if $(BR2_PACKAGE_SDL_IMAGE_XCF),yes,no) \
- 		--enable-xpm=$(if $(BR2_PACKAGE_SDL_IMAGE_XPM),yes,no) \
- 		--enable-xv=$(if $(BR2_PACKAGE_SDL_IMAGE_XV),yes,no) \
-@@ -32,6 +35,7 @@ SDL_IMAGE_CONF_OPT = --with-sdl-prefix=$(STAGING_DIR)/usr \
- SDL_IMAGE_DEPENDENCIES = sdl \
- 	$(if $(BR2_PACKAGE_SDL_IMAGE_JPEG),jpeg) \
- 	$(if $(BR2_PACKAGE_SDL_IMAGE_PNG),libpng) \
--	$(if $(BR2_PACKAGE_SDL_IMAGE_TIFF),tiff)
-+	$(if $(BR2_PACKAGE_SDL_IMAGE_TIFF),tiff) \
-+	$(if $(BR2_PACKAGE_SDL_IMAGE_WEBP),webp)
- 
- $(eval $(autotools-package))
+  Peter, can you reproduce the autobuilder error and extract the 
+config.log and $(STAGING_DIR)/usr/bin/mysql_config?
+
+  Regards,
+  Arnout
+
+
 -- 
-1.7.4.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
