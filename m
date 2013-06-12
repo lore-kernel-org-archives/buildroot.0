@@ -1,29 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 12 Jun 2013 22:31:28 +0200
-Subject: [Buildroot] [git commit] flot: bump to version 0.8.1
-Message-ID: <20130612203720.F0CC19AD48@busybox.osuosl.org>
+Date: Wed, 12 Jun 2013 22:29:53 +0200
+Subject: [Buildroot] [git commit] sdparm: bump to version 1.08
+Message-ID: <20130612203719.240CF9AD48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=31655888bcdb240768dd79dee97ea00b777e5972
+commit: http://git.buildroot.net/buildroot/commit/?id=df13ceb90c59f6bbe13c9f5fda5725a627dde941
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/flot/flot.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sdparm/sdparm.mk |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/flot/flot.mk b/package/flot/flot.mk
-index 56cb22e..a0ba6c2 100644
---- a/package/flot/flot.mk
-+++ b/package/flot/flot.mk
-@@ -1,4 +1,4 @@
--FLOT_VERSION = 0.8.0
-+FLOT_VERSION = 0.8.1
- FLOT_SITE = http://www.flotcharts.org/downloads
- FLOT_LICENSE = MIT
- FLOT_LICENSE_FILES = LICENSE.txt
+diff --git a/package/sdparm/sdparm.mk b/package/sdparm/sdparm.mk
+index ef30887..1b3ec4b 100644
+--- a/package/sdparm/sdparm.mk
++++ b/package/sdparm/sdparm.mk
+@@ -1,6 +1,12 @@
+-SDPARM_VERSION = 1.07
++################################################################################
++#
++# sdparm
++#
++################################################################################
++
++SDPARM_VERSION = 1.08
+ SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tgz
+-SDPARM_SITE = http://sg.danny.cz/sg/p/
++SDPARM_SITE = http://sg.danny.cz/sg/p
+ SDPARM_LICENSE = BSD-3c
+ SDPARM_LICENSE_FILES = COPYING
+ 
