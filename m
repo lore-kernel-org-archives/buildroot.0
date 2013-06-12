@@ -1,35 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 12 Jun 2013 23:01:46 +0200
-Subject: [Buildroot] [git commit] apply-patches.sh: ensure a fixed (and
-	simple) sorting order is used
-Message-ID: <20130612210546.7175B9AD50@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 12 Jun 2013 23:13:19 +0200
+Subject: [Buildroot] [PATCH 1/1] Changed broken link for cups-lib
+In-Reply-To: <CAJrq4U6FfaQQPUwREWAgHP5J1ObVhtVADoYiYL4CKwEX0pQ1yg@mail.gmail.com>
+ (Jelle Sels's message of "Tue, 11 Jun 2013 20:39:40 +0200")
+References: <CAJrq4U6FfaQQPUwREWAgHP5J1ObVhtVADoYiYL4CKwEX0pQ1yg@mail.gmail.com>
+Message-ID: <8738sn2ftc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=15ceab14b4967711119587f0e7c3b324ce11fea8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Jelle" == Jelle Sels <jellesels@gmail.com> writes:
 
-So we always apply patches in the samme order.
+ Jelle> From 552a9ee3a27e60c4da9d4c44d0420dc2550beb88 Mon Sep 17 00:00:00 2001
+ Jelle> From: Jelle Sels <Jelle Sels>
+ Jelle> Date: Tue, 11 Jun 2013 20:29:37 +0200
+ Jelle> Subject: [PATCH 1/1] Changed broken link for cups-lib
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- support/scripts/apply-patches.sh |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+Committed, thanks.
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 7d5856c..2995ea9 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -34,6 +34,9 @@ patchdir=${2-../kernel-patches}
- shift 2
- patchpattern=${@-*}
- 
-+# use a well defined sorting order
-+export LC_COLLATE=C
-+
- if [ ! -d "${builddir}" ] ; then
-     echo "Aborting.  '${builddir}' is not a directory."
-     exit 1
+Your mailer had corrupted the patch so I had to fix it up manually -
+Please consider using git send-email in the future.
+
+-- 
+Bye, Peter Korsgaard
