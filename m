@@ -1,22 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 12 Jun 2013 22:40:16 +0200
-Subject: [Buildroot] [PATCH] toolchain/uClibc: remove deprecated version
-	0.9.31
-In-Reply-To: <1371062793-27218-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 12 Jun 2013 15:46:33 -0300")
-References: <1371062793-27218-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k3lz2hcf.fsf@dell.be.48ers.dk>
+Date: Wed, 12 Jun 2013 22:49:56 +0200
+Subject: [Buildroot] [PATCH v2] usb_modeswitch_data: bump to version
+	20130610
+In-Reply-To: <51B7408D.6020800@fh-kl.de> (Patrick Ziegler's message of "Tue,
+ 11 Jun 2013 17:21:49 +0200")
+References: <51B7408D.6020800@fh-kl.de>
+Message-ID: <87fvwn2gwb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Patrick" == Patrick Ziegler <patrick.ziegler@fh-kl.de> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Patrick> Remove 'usb_modeswitch_data-fix-parallel-install.patch'
+ Patrick> because it was merged upstream.
 
-Comitted, thanks.
+ Patrick> Remove dependency on Tcl because the dispatcher script has
+ Patrick> been moved to usb_modeswitch package.
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
