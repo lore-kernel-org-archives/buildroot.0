@@ -1,25 +1,27 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Wed, 12 Jun 2013 19:40:39 +0100
-Subject: [Buildroot] [PATCH] sconeserver: fix autouild failure
-In-Reply-To: <20130608174904.0559f1be@skate>
-References: <1370261409-8722-1-git-send-email-spdawson@gmail.com>
- <20130608174904.0559f1be@skate>
-Message-ID: <CAHt8ZCOT2bj=-5C6Y34ULOoqV-YN74-N+hV9gYdsDBB8h8W=-w@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 12 Jun 2013 15:57:01 -0300
+Subject: [Buildroot] [PATCH 1/3] jquery: bump to version 1.10.1
+Message-ID: <1371063424-28818-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/jquery/jquery.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 8 June 2013 16:49, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> There are still build failures related to sconeserver and MySQL. See
-> http://autobuild.buildroot.org/results/a16/a162fbd8977faa561a76f76072ec3335fb8e8d1f/build-end.log.
-
-I've been unable to reproduce this using the defconfig from the failed
-autobuild. I'm struggling to understand what exactly is causing the
-failures; would appreciate any suggestions that you may have...
-
-Simon.
+diff --git a/package/jquery/jquery.mk b/package/jquery/jquery.mk
+index 4df2801..98b325b 100644
+--- a/package/jquery/jquery.mk
++++ b/package/jquery/jquery.mk
+@@ -1,4 +1,4 @@
+-JQUERY_VERSION = 1.9.1
++JQUERY_VERSION = 1.10.1
+ JQUERY_SITE = http://code.jquery.com
+ JQUERY_SOURCE = jquery-$(JQUERY_VERSION).min.js
+ JQUERY_LICENSE = MIT
+-- 
+1.8.1.5
