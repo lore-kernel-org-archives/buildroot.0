@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Jun 2013 15:57:01 -0300
-Subject: [Buildroot] [PATCH 1/3] jquery: bump to version 1.10.1
-Message-ID: <1371063424-28818-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 12 Jun 2013 15:57:02 -0300
+Subject: [Buildroot] [PATCH 2/3] flot: bump to version 0.8.1
+In-Reply-To: <1371063424-28818-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1371063424-28818-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1371063424-28818-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,18 +12,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/jquery/jquery.mk | 2 +-
+ package/flot/flot.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/jquery/jquery.mk b/package/jquery/jquery.mk
-index 4df2801..98b325b 100644
---- a/package/jquery/jquery.mk
-+++ b/package/jquery/jquery.mk
+diff --git a/package/flot/flot.mk b/package/flot/flot.mk
+index 56cb22e..a0ba6c2 100644
+--- a/package/flot/flot.mk
++++ b/package/flot/flot.mk
 @@ -1,4 +1,4 @@
--JQUERY_VERSION = 1.9.1
-+JQUERY_VERSION = 1.10.1
- JQUERY_SITE = http://code.jquery.com
- JQUERY_SOURCE = jquery-$(JQUERY_VERSION).min.js
- JQUERY_LICENSE = MIT
+-FLOT_VERSION = 0.8.0
++FLOT_VERSION = 0.8.1
+ FLOT_SITE = http://www.flotcharts.org/downloads
+ FLOT_LICENSE = MIT
+ FLOT_LICENSE_FILES = LICENSE.txt
 -- 
 1.8.1.5
