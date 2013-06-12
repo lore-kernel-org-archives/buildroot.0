@@ -1,70 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 12 Jun 2013 22:54:42 +0200
-Subject: [Buildroot] [PATCH 1/1] busybox: Add upstream patch to avoid
-	occasional mdev SIGSEGV.
-In-Reply-To: <201306120825.03217.rasasi78@gmail.com> (=?utf-8?Q?=22Ra?=
- =?utf-8?Q?=C3=BAl_S=C3=A1nchez?= Siles"'s
- message of "Wed, 12 Jun 2013 08:24:58 +0200")
-References: <20130611162412.GE18264@trismegisto.universo>
- <871u884b4l.fsf@dell.be.48ers.dk>
- <201306120825.03217.rasasi78@gmail.com>
-Message-ID: <877ghz2god.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 12 Jun 2013 22:58:15 +0200
+Subject: [Buildroot] Unable to open switchtest device
+In-Reply-To: <D82259C7-D19C-4A4A-A5E6-E35B62A8F550@deadfrog.net>
+References: <D82259C7-D19C-4A4A-A5E6-E35B62A8F550@deadfrog.net>
+Message-ID: <51B8E0E7.4020705@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ra?l" == Ra?l S?nchez Siles <rasasi78@gmail.com> writes:
+On 12/06/13 06:18, Ryan Wilkins wrote:
+> Hi All.
+>
+> I'm fairly new to buildroot but do have it running on a x86 platform.  Buildroot release 2013.05.  I need Xenomai and have compiled in Xenomai 2.6.2.1 with Linux Kernel 3.5.7.  The processor is a Core 2 Quad and the kernel was initially compiled for x86_64 but recompiled for i386 with no change in outcome.  I am using a custom kernel configuration which is referenced in the buildroot "Kernel" configuration menu.
+>
+> The issue that I'm experiencing is with running the 'xeno-test' command and it failing with a "Unable to open switchtest device" message.  I've checked around in the archives and couldn't find anything that was useful to solving my situation.  Running the latency test command by itself works so I know Xenomai is working but it's just unable to complete the xeno-test commands.  Can anyone suggest some direction to look in to hopefully solve the issue with the switchtest device?
 
-Hi,
+  There is probably some module that you need to load, and maybe there's 
+something you need to configure in the Xenomai section of the kernel 
+config. But this almost certainly has nothing to do with buildroot. You'd 
+better consult the Xenomai website and ask on the Xenomai list.
 
- >> I would prefer to not rename the existing patch, as it makes it less
- >> clear where it comes from (http://busybox.net/downloads/fixes-1.21.0/).
- >> 
- >> It shouldn't be necessary either as '.' comes before '_' (but not before
- >> '-').
-
- Ra?l>   That's not what I got here. I've done a more comprehensive test:
- Ra?l> $ ls -1 |sort 
- Ra?l> busybox-1.21.0-mdev_2_check_ACTION.patch
- Ra?l> busybox-1.21.0-mdev_check_ACTION.patch
- Ra?l> busybox-1.21.0-mdev-check_ACTION.patch
- Ra?l> busybox-1.21.0-mdev.patch
-
- Ra?l>   As you can see the one we want to apply first comes last
- Ra?l> compared with other possibilities :/
-
-That's because localization is odd.
-
-touch busybox-1.21.0-mdev_2_check_ACTION.patch busybox-1.21.0-mdev.patch
-
-ls -1
-busybox-1.21.0-mdev_2_check_ACTION.patch
-busybox-1.21.0-mdev.patch
-
-LANG=C ls -1
-busybox-1.21.0-mdev.patch
-busybox-1.21.0-mdev_2_check_ACTION.patch
-
-We should arguably force LANG=C (or atleast LC_COLLATE, E.G. the sort
-order) in apply-patches.sh so we always use the same sort order, I'll
-fix that now.
-
- >> Talking of which, why is this patch not in the fixes directory? Does
- >> Denys not consider it important enough?
-
- Ra?l>   That's probably something to ask him. I found this bug by
- Ra?l> chance and I don't consider it critical in any way, altough I
- Ra?l> haven't explored further implications. This can be reproduced
- Ra?l> when you invoke mdev without parameters. It will SIGSEGV since,
- Ra?l> as per current 1.21.0 code, you'll check for ACTION environment
- Ra?l> variable, which doesn't exist. This means a null pointer which is
- Ra?l> passed to index_in_strings which, in turn, passes it to the
- Ra?l> uclibc strcmp function that is unable to handle this case
- Ra?l> gracefully.
-
-Could you bring it up on the busybox list and suggest it gets added to 1.21-fixes, please?
+  Regards,
+  Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
