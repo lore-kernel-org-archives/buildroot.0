@@ -1,26 +1,72 @@
-From: Ryan Wilkins <ryan@deadfrog.net>
-Date: Wed, 12 Jun 2013 17:39:57 -0400
-Subject: [Buildroot] Unable to open switchtest device
-In-Reply-To: <51B8E0E7.4020705@mind.be>
-References: <D82259C7-D19C-4A4A-A5E6-E35B62A8F550@deadfrog.net>
- <51B8E0E7.4020705@mind.be>
-Message-ID: <0304B68E-73DD-46B4-B637-2E87F6EE1D0B@deadfrog.net>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Wed, 12 Jun 2013 14:42:46 -0700
+Subject: [Buildroot] [PATCH] sdl_image: bump to version 1.2.12
+Message-ID: <1371073366-11446-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the reply, Arnout.  I'll check with the Xenomai crowd.
+Also added:
+- WEBP file format support
+- License information
 
-Best,
-Ryan Wilkins
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ package/sdl_image/Config.in    |    4 ++++
+ package/sdl_image/sdl_image.mk |    8 ++++++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-
-On Jun 12, 2013, at 4:58 PM, Arnout Vandecappelle <arnout@mind.be> 
-
-> There is probably some module that you need to load, and maybe there's something you need to configure in the Xenomai section of the kernel config. But this almost certainly has nothing to do with buildroot. You'd better consult the Xenomai website and ask on the Xenomai list.
-> 
-> Regards,
-> Arnout
-> 
+diff --git a/package/sdl_image/Config.in b/package/sdl_image/Config.in
+index 36aa4a8..be0321a 100644
+--- a/package/sdl_image/Config.in
++++ b/package/sdl_image/Config.in
+@@ -42,6 +42,10 @@ config BR2_PACKAGE_SDL_IMAGE_TIFF
+ 	bool "enable TIFF file format support"
+ 	select BR2_PACKAGE_TIFF
+ 
++config BR2_PACKAGE_SDL_IMAGE_WEBP
++	bool "enable WEBP file format support"
++	select BR2_PACKAGE_WEBP
++
+ config BR2_PACKAGE_SDL_IMAGE_XCF
+ 	bool "enable XCF file format support"
+ 
+diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
+index de72a04..3945505 100644
+--- a/package/sdl_image/sdl_image.mk
++++ b/package/sdl_image/sdl_image.mk
+@@ -4,10 +4,12 @@
+ #
+ ################################################################################
+ 
+-SDL_IMAGE_VERSION = 1.2.6
++SDL_IMAGE_VERSION = 1.2.12
+ SDL_IMAGE_SOURCE = SDL_image-$(SDL_IMAGE_VERSION).tar.gz
+ SDL_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
+ SDL_IMAGE_INSTALL_STAGING = YES
++SDL_IMAGE_LICENSE = zlib
++SDL_IMAGE_LICENSE_FILES = COPYING
+ 
+ SDL_IMAGE_CONF_OPT = --with-sdl-prefix=$(STAGING_DIR)/usr \
+ 		--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
+@@ -25,6 +27,7 @@ SDL_IMAGE_CONF_OPT = --with-sdl-prefix=$(STAGING_DIR)/usr \
+ 		--enable-pnm=$(if $(BR2_PACKAGE_SDL_IMAGE_PNM),yes,no) \
+ 		--enable-tga=$(if $(BR2_PACKAGE_SDL_IMAGE_TARGA),yes,no) \
+ 		--enable-tif=$(if $(BR2_PACKAGE_SDL_IMAGE_TIFF),yes,no) \
++		--enable-webp=$(if $(BR2_PACKAGE_SDL_IMAGE_WEBP),yes,no) \
+ 		--enable-xcf=$(if $(BR2_PACKAGE_SDL_IMAGE_XCF),yes,no) \
+ 		--enable-xpm=$(if $(BR2_PACKAGE_SDL_IMAGE_XPM),yes,no) \
+ 		--enable-xv=$(if $(BR2_PACKAGE_SDL_IMAGE_XV),yes,no) \
+@@ -32,6 +35,7 @@ SDL_IMAGE_CONF_OPT = --with-sdl-prefix=$(STAGING_DIR)/usr \
+ SDL_IMAGE_DEPENDENCIES = sdl \
+ 	$(if $(BR2_PACKAGE_SDL_IMAGE_JPEG),jpeg) \
+ 	$(if $(BR2_PACKAGE_SDL_IMAGE_PNG),libpng) \
+-	$(if $(BR2_PACKAGE_SDL_IMAGE_TIFF),tiff)
++	$(if $(BR2_PACKAGE_SDL_IMAGE_TIFF),tiff) \
++	$(if $(BR2_PACKAGE_SDL_IMAGE_WEBP),webp)
+ 
+ $(eval $(autotools-package))
+-- 
+1.7.4.1
