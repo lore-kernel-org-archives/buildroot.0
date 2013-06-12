@@ -1,32 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 12 Jun 2013 23:13:28 +0200
-Subject: [Buildroot] [git commit] cups: fix upstream URL
-Message-ID: <20130612211542.ACCD99AD50@busybox.osuosl.org>
+From: Ryan Wilkins <ryan@deadfrog.net>
+Date: Wed, 12 Jun 2013 17:39:57 -0400
+Subject: [Buildroot] Unable to open switchtest device
+In-Reply-To: <51B8E0E7.4020705@mind.be>
+References: <D82259C7-D19C-4A4A-A5E6-E35B62A8F550@deadfrog.net>
+ <51B8E0E7.4020705@mind.be>
+Message-ID: <0304B68E-73DD-46B4-B637-2E87F6EE1D0B@deadfrog.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ca0b3486e1e0ab96e73a29c53bfb326e92151333
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thanks for the reply, Arnout.  I'll check with the Xenomai crowd.
 
-Signed-off-by: Jelle Sels <jellesels@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/cups/cups.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Best,
+Ryan Wilkins
 
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index f8ace71..9b8d7c5 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -6,7 +6,7 @@
- 
- CUPS_VERSION = 1.3.11
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.bz2
--CUPS_SITE = http://ftp.easysw.com/pub/cups/$(CUPS_VERSION)
-+CUPS_SITE = http://www.cups.org/software/$(CUPS_VERSION)
- CUPS_INSTALL_STAGING = YES
- CUPS_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) DSTROOT=$(STAGING_DIR) install
- CUPS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) DSTROOT=$(TARGET_DIR) install
+
+On Jun 12, 2013, at 4:58 PM, Arnout Vandecappelle <arnout@mind.be> 
+
+> There is probably some module that you need to load, and maybe there's something you need to configure in the Xenomai section of the kernel config. But this almost certainly has nothing to do with buildroot. You'd better consult the Xenomai website and ask on the Xenomai list.
+> 
+> Regards,
+> Arnout
+> 
