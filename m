@@ -1,43 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Jun 2013 23:48:06 +0200
-Subject: [Buildroot] [PATCH] sconeserver: fix autouild failure
-In-Reply-To: <CAHt8ZCOT2bj=-5C6Y34ULOoqV-YN74-N+hV9gYdsDBB8h8W=-w@mail.gmail.com>
-References: <1370261409-8722-1-git-send-email-spdawson@gmail.com>
- <20130608174904.0559f1be@skate>
- <CAHt8ZCOT2bj=-5C6Y34ULOoqV-YN74-N+hV9gYdsDBB8h8W=-w@mail.gmail.com>
-Message-ID: <51B8EC96.8030007@mind.be>
+From: Scott Kelly <skellystarman@gmail.com>
+Date: Thu, 13 Jun 2013 09:14:07 +1000
+Subject: [Buildroot] Eclipse does not see Toolchain
+Message-ID: <CAGBa4kARr8ho40ADxxpitKYTW-M4UVET0sDPgr5VP4Zw6dB2iw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/06/13 20:40, Simon Dawson wrote:
-> Hi Thomas,
->
-> On 8 June 2013 16:49, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> There are still build failures related to sconeserver and MySQL. See
->> http://autobuild.buildroot.org/results/a16/a162fbd8977faa561a76f76072ec3335fb8e8d1f/build-end.log.
->
-> I've been unable to reproduce this using the defconfig from the failed
-> autobuild. I'm struggling to understand what exactly is causing the
-> failures; would appreciate any suggestions that you may have...
+Hi All,
 
-  mysql.h is in $(STAGING_DIR)/usr/include/mysql, but that doesn't get 
-included in the CXXFLAGS.
+I'm using a clean install of Ubuntu 12.04, latest Buildroot (2013.05),
+Eclipse Juno SR2 CDT and have installed the Eclipse Buildroot plugin from
+release URL (seems to be the correct latest 2.1 release). I perform my
+Buildroot build with the "Register Eclipse Plugin" option checked and
+indeed the integration file (~/.buildroot-eclipse.toolchains) is created.
 
-  Peter, can you reproduce the autobuilder error and extract the 
-config.log and $(STAGING_DIR)/usr/bin/mysql_config?
+But, for the life of me, I can't work out why the toolchain is not detect
+or listed by Eclipse. I've tried with both internal and external Toolchains
+but no difference.
 
-  Regards,
-  Arnout
+Does anyone have any suggestions as to where I can look for clues as to
+what the problem might be. I've checked the Eclipse log file but am not
+sure what I am looking for and didn't really find anything anyway.
 
+Any suggestions appreciated.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Cheers,
+
+Scott
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130613/32389d02/attachment.html>
