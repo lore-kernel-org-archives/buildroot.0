@@ -1,119 +1,114 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 12 Jun 2013 22:50:17 +0200
-Subject: [Buildroot] [git commit] usb_modeswitch: bump to version 1.2.6
-Message-ID: <20130612210545.F27E09AC69@busybox.osuosl.org>
+Date: Wed, 12 Jun 2013 22:41:34 +0200
+Subject: [Buildroot] [git commit] usb_modeswitch_data: bump to version
+	20130610
+Message-ID: <20130612210545.A4C629AD50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3e4db4e34927bff16c2ef06033304a068f46292
+commit: http://git.buildroot.net/buildroot/commit/?id=4eb64b232c6d211edf35fc7f8a2e8bb578bbb960
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove 'usb_modeswitch-makefile.patch' because it was merged upstream.
+Remove 'usb_modeswitch_data-fix-parallel-install.patch' because it was merged
+upstream.
 
-This package contains a dispatcher (wrapper) that can be installed as Tcl
-script or as binary without further dependency.  If Tcl is selected and the
-binary interpreter is installed (BR2_PACKAGE_TCL &&
-!BR2_PACKAGE_TCL_SHLIB_ONLY) the dispatcher will be installed as Tcl script
-otherwise as binary.
+Remove dependency on Tcl because the dispatcher script has been moved to
+usb_modeswitch package.
 
 Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../usb_modeswitch/usb_modeswitch-makefile.patch   |   31 --------------------
- package/usb_modeswitch/usb_modeswitch.mk           |   26 +++++++++++------
- 2 files changed, 17 insertions(+), 40 deletions(-)
+ package/usb_modeswitch_data/Config.in              |    3 ---
+ .../usb_modeswitch_data-fix-parallel-install.patch |   17 -----------------
+ .../usb_modeswitch_data-makefile.patch             |   17 +++++++++--------
+ package/usb_modeswitch_data/usb_modeswitch_data.mk |    2 +-
+ 4 files changed, 10 insertions(+), 29 deletions(-)
 
-diff --git a/package/usb_modeswitch/usb_modeswitch-makefile.patch b/package/usb_modeswitch/usb_modeswitch-makefile.patch
+diff --git a/package/usb_modeswitch_data/Config.in b/package/usb_modeswitch_data/Config.in
+index 8698bb6..6df408f 100644
+--- a/package/usb_modeswitch_data/Config.in
++++ b/package/usb_modeswitch_data/Config.in
+@@ -1,9 +1,6 @@
+ config BR2_PACKAGE_USB_MODESWITCH_DATA
+ 	bool "usb_modeswitch_data"
+ 	select BR2_PACKAGE_USB_MODESWITCH
+-	# tcl is a runtime dependency
+-	select BR2_PACKAGE_TCL
+-	select BR2_PACKAGE_TCL_TCLSH
+ 	help
+ 	  USB mode switch data
+ 	  Contains udev rules and events to allow usb_modeswitch to
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data-fix-parallel-install.patch b/package/usb_modeswitch_data/usb_modeswitch_data-fix-parallel-install.patch
 deleted file mode 100644
-index b792741..0000000
---- a/package/usb_modeswitch/usb_modeswitch-makefile.patch
+index ba30499..0000000
+--- a/package/usb_modeswitch_data/usb_modeswitch_data-fix-parallel-install.patch
 +++ /dev/null
-@@ -1,31 +0,0 @@
--Removed the -s from the install command. Without this, usb_modeswitch would
--fail to install.
+@@ -1,17 +0,0 @@
+-Properly create the directory before creating it so that parallel
+-install work fine.
 -
--Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -
 -Index: b/Makefile
 -===================================================================
 ---- a/Makefile
 -+++ b/Makefile
--@@ -46,7 +46,7 @@
-- 	cd jim && $(MAKE) distclean
+-@@ -22,6 +22,7 @@
+- 	install -D --mode=644 40-usb_modeswitch.rules $(RULESDIR)/40-usb_modeswitch.rules
 - 
-- install-common: all
---	install -D -s --mode=755 usb_modeswitch $(SBINDIR)/usb_modeswitch
--+	install -D --mode=755 usb_modeswitch $(SBINDIR)/usb_modeswitch
-- 	install -D --mode=755 usb_modeswitch.sh $(UDEVDIR)/usb_modeswitch
-- 	install -D --mode=644 usb_modeswitch.conf $(ETCDIR)/usb_modeswitch.conf
-- 	install -D --mode=644 usb_modeswitch.1 $(MANDIR)/usb_modeswitch.1
--@@ -67,10 +67,10 @@
-- install: install-common install-script
+- db-install:
+-+	install -d $(PREFIX)/share/usb_modeswitch
+- 	install --mode=644 -t $(PREFIX)/share/usb_modeswitch ./usb_modeswitch.d/*
 - 
-- install-shared: dispatcher-dynamic install-common
---	install -D -s --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
--+	install -D --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
+- db-install-packed:
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
+index 769e514..28441fe 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
++++ b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
+@@ -2,21 +2,22 @@ Fixed Makefile install sections to not reload udev rules. In a
+ cross-compiler environment, it is not wanted to reload the host udev rules.
+ 
+ Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
+---- usb_modeswitch_data-20120120.orig/Makefile	2012-01-20 17:25:32.000000000 -0500
+-+++ usb_modeswitch_data-20120120/Makefile	2012-02-06 14:20:47.000000000 -0500
+-@@ -12,9 +12,9 @@
 - 
-- install-static: dispatcher-static install-common
---	install -D -s --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
--+	install -D --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
-- 
-- uninstall:
-- 	$(RM) $(SBINDIR)/usb_modeswitch
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index 92ca163..fe54b50 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -4,19 +4,32 @@
++Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
++--- a/Makefile	2013-06-10 22:32:53.000000000 +0200
+++++ b/Makefile	2013-06-11 10:38:03.181161401 +0200
++@@ -13,9 +13,9 @@
+  clean:
++ 	$(RM) 40-usb_modeswitch.rules
+  
+--install: files-install db-install rules-reload
+-+install: files-install db-install
++-install: all files-install db-install rules-reload
+++install: all files-install db-install
+  
+ -install-packed: files-install db-install-packed rules-reload
+ +install-packed: files-install db-install-packed
+  
+- files-install:
++ files-install: 
+  	install -d $(PREFIX)/share/usb_modeswitch
+-@@ -50,7 +50,7 @@
++@@ -54,7 +54,7 @@
+  		fi \
+  	fi
+  
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+index cb9754f..a9ce006 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
++++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--USB_MODESWITCH_VERSION = 1.2.5
-+USB_MODESWITCH_VERSION = 1.2.6
- USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
- USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DEPENDENCIES = libusb-compat
- USB_MODESWITCH_LICENSE = GPLv2+
- USB_MODESWITCH_LICENSE_FILES = COPYING
- 
-+USB_MODESWITCH_BUILD_TARGETS = static
-+USB_MODESWITCH_INSTALL_TARGETS = install-static
-+
-+ifeq ($(BR2_PACKAGE_TCL)$(BR2_PACKAGE_TCL_SHLIB_ONLY),y)
-+	USB_MODESWITCH_DEPENDENCIES += tcl
-+	USB_MODESWITCH_BUILD_TARGETS = script
-+	USB_MODESWITCH_INSTALL_TARGETS = install-script
-+endif
-+
- define USB_MODESWITCH_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -Wall -I." \
-+		-C $(@D) $(USB_MODESWITCH_BUILD_TARGETS)
- endef
- 
- define USB_MODESWITCH_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		DESTDIR=$(TARGET_DIR) \
-+		-C $(@D) $(USB_MODESWITCH_INSTALL_TARGETS)
- endef
- 
- 
-@@ -25,12 +38,7 @@ define USB_MODESWITCH_CLEAN_CMDS
- endef
- 
- define USB_MODESWITCH_UNINSTALL_CMDS
--	$(RM) -f $(TARGET_DIR)/usr/sbin/usb_modeswitch
--	$(RM) -f $(TARGET_DIR)/lib/udev/usb_modeswitch
--	$(RM) -f $(TARGET_DIR)/etc/usb_modeswitch.setup
--	$(RM) -f $(TARGET_DIR)/usr/share/man/man1/usb_modeswitch.1
--	$(RM) -rf $(TARGET_DIR)/var/lib/usb_modeswitch
--	$(RM) -f $(TARGET_DIR)/usr/sbin/usb_modeswitch_dispatcher
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) uninstall
- endef
- 
- $(eval $(generic-package))
+-USB_MODESWITCH_DATA_VERSION = 20121109
++USB_MODESWITCH_DATA_VERSION = 20130610
+ USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
+ USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
