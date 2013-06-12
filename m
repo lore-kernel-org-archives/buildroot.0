@@ -1,163 +1,405 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Jun 2013 07:51:34 +0200
-Subject: [Buildroot] [PATCH v10 06/13] gstreamer1: Add gstreamer version
- 1.1.1 package
-In-Reply-To: <1370647138-26623-7-git-send-email-spenser@gillilanding.com>
+Date: Wed, 12 Jun 2013 08:21:37 +0200
+Subject: [Buildroot] [PATCH v10 08/13] gst1-plugins-base: add gstreamer1
+ base plugins
+In-Reply-To: <1370647138-26623-9-git-send-email-spenser@gillilanding.com>
 References: <1370647138-26623-1-git-send-email-spenser@gillilanding.com>
- <1370647138-26623-7-git-send-email-spenser@gillilanding.com>
-Message-ID: <51B80C66.3070602@mind.be>
+ <1370647138-26623-9-git-send-email-spenser@gillilanding.com>
+Message-ID: <51B81371.3050109@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Spenser,
-
 On 08/06/13 01:18, Spenser Gilliland wrote:
-> This patch adds the gstreamer version 1.x series to buildroot.
+> Adds gstreamer 1.X base plugins.
 
-  Missing SoB
+  Missing SoB.
+
+  Protip: git config --global format.signoff true
 
 > ---
->   package/multimedia/Config.in                |    1 +
->   package/multimedia/gstreamer1/Config.in     |   41 +++++++++++++++++++++++++++
->   package/multimedia/gstreamer1/gstreamer1.mk |   38 +++++++++++++++++++++++++
->   3 files changed, 80 insertions(+), 0 deletions(-)
->   create mode 100644 package/multimedia/gstreamer1/Config.in
->   create mode 100644 package/multimedia/gstreamer1/gstreamer1.mk
+>   package/multimedia/Config.in                       |    1 +
+>   package/multimedia/gst1-plugins-base/Config.in     |  106 ++++++++++
+>   .../gst1-plugins-base/gst1-plugins-base.mk         |  204 ++++++++++++++++++++
+>   3 files changed, 311 insertions(+), 0 deletions(-)
+>   create mode 100644 package/multimedia/gst1-plugins-base/Config.in
+>   create mode 100644 package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
 >
 > diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-> index dd74863..0351fd0 100644
+> index 0351fd0..253fd17 100644
 > --- a/package/multimedia/Config.in
 > +++ b/package/multimedia/Config.in
-> @@ -6,6 +6,7 @@ source "package/multimedia/faad2/Config.in"
->   source "package/multimedia/flac/Config.in"
->   source "package/multimedia/ffmpeg/Config.in"
->   source "package/multimedia/gstreamer/Config.in"
-> +source "package/multimedia/gstreamer1/Config.in"
-
-  I think this should come below the gst-0.10 packages (so below 
-gst-plugins-ugly) so they're more logically collected.
-
-
->   source "package/multimedia/gst-ffmpeg/Config.in"
->   source "package/multimedia/gst-dsp/Config.in"
+> @@ -12,6 +12,7 @@ source "package/multimedia/gst-dsp/Config.in"
 >   source "package/multimedia/gst-fsl-plugins/Config.in"
-> diff --git a/package/multimedia/gstreamer1/Config.in b/package/multimedia/gstreamer1/Config.in
+>   source "package/multimedia/gst-omapfb/Config.in"
+>   source "package/multimedia/gst-plugins-base/Config.in"
+> +source "package/multimedia/gst1-plugins-base/Config.in"
+
+  Same remark: keep all gst1 stuff together.
+
+>   source "package/multimedia/gst-plugins-good/Config.in"
+>   source "package/multimedia/gst-plugins-bad/Config.in"
+>   source "package/multimedia/gst-plugins-ugly/Config.in"
+> diff --git a/package/multimedia/gst1-plugins-base/Config.in b/package/multimedia/gst1-plugins-base/Config.in
 > new file mode 100644
-> index 0000000..96b32e9
+> index 0000000..2a95846
 > --- /dev/null
-> +++ b/package/multimedia/gstreamer1/Config.in
-> @@ -0,0 +1,41 @@
-> +config BR2_PACKAGE_GSTREAMER1
-> +	bool "gstreamer1"
-> +	depends on BR2_USE_WCHAR # glib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_PACKAGE_LIBGLIB2
+> +++ b/package/multimedia/gst1-plugins-base/Config.in
+> @@ -0,0 +1,106 @@
+> +menuconfig BR2_PACKAGE_GST1_PLUGINS_BASE
+> +	bool "gst1-plugins-base"
+> +	depends on BR2_PACKAGE_GSTREAMER1
+> +	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXV if BR2_PACKAGE_XORG7
 > +	help
-> +	  GStreamer is an open source multimedia framework. This 1.x version of
-> +	  Gstreamer is incompatible with Gstreamer 0.1x.
-
-  Well, gstreamer 0.11 was actually an experimental pre-release branch 
-for 1.x (although there are still lots of incompatible changes between 
-0.11 and 1.0). I think it's more clear and accurate if you say it's 
-incompatible with Gstreamer 0.10.
-
-
+> +	  A basic set of well-supported plug-ins for GStreamer.
 > +
 > +	  http://gstreamer.freedesktop.org/
 > +
-> +if BR2_PACKAGE_GSTREAMER1
+> +if BR2_PACKAGE_GST1_PLUGINS_BASE
 > +
-> +config BR2_PACKAGE_GSTREAMER1_GST_DEBUG
-> +	bool "enable gst-debug trace support"
-> +	default y
-> +	help
-> +	  Enable support for the gst-debug tracing functionality in gstreamer.
-> +	  This has limited CPU overhead, but does increase the rootfs size
-> +	  somewhat.
+> +comment "dependency-less plugins"
 
-  I believe the disable-parse and disable-trace options have at least as 
-much impact on CPU and size overhead as the gst-debug, so it would make 
-sense to export them as well. Although actually I expect the difference 
-to be vanishingly small for any of them.
+  It would be nice if these plugins would get some help text explaining 
+what they are.  Copy and past of the description in gst-inspect is 
+probably sufficient.
 
 > +
-> +config BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY
-> +	bool "enable plugin registry"
-> +	default y
-> +	help
-> +	  Enable support for the GStreamer plugin registry. This may increase
-> +	  the launch-time for a GStreamer application.
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ADDER
+> +	bool "adder"
 > +
-> +config BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS
-> +	bool "install gst-launch gst-inspect"
-
-  "install gst-launch & gst-inspect"
-
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
+> +	bool "app"
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT
+> +	bool "audioconvert (mandatory for audio playback)"
 > +	default y
-> +	help
-> +	  Install the gst-launch and gst-inspect tools. This will take up
-> +	  additional space on the target
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORATE
+> +	bool "audiorate"
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
+> +	bool "audioresample (mandatory for audio playback)"
+> +	default y
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC
+> +	bool "audiotestsrc"
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING
+> +	bool "encoding"
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO
+> +	bool "gio"
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK
+> +	bool "playback"
+> +	default y
+
+  I would add a "select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TYPEFIND" 
+here. I think that is the only required dependency of the playsinks.
+
+
+  There's also a gdp and a gst_v4l plugin for which no config option exists.
+
+
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE
+> +	bool "subparse"
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TCP
+> +	bool "tcp"
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TYPEFIND
+> +	bool "typefind"
+> +	default y
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT
+> +	bool "videoconvert"
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC
+> +	bool "videotestsrc"
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEORATE
+> +	bool "videorate"
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
+> +	bool "videoscale (mandatory for video playback)"
+> +	default y
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
+> +	bool "volume (mandatory for audio playback)"
+> +	default y
+> +
+> +comment "plugins with external dependencies (there may be more available)"
+
+  What does "there may be more available" mean?
+
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
+> +	bool "alsa (mandatory for audio playback)"
+> +	select BR2_PACKAGE_ALSA_LIB
+> +	select BR2_PACKAGE_ALSA_LIB_MIXER
+> +	select BR2_PACKAGE_ALSA_LIB_PCM
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OGG
+> +	bool "ogg (*.ogg audio/video)"
+> +	select BR2_PACKAGE_LIBOGG
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
+> +	bool "pango font renderer"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	select BR2_PACKAGE_PANGO
+> +
+> +comment "pango plugin requires a toolchain with C++ support"
+> +	depends on !BR2_INSTALL_LIBSTDCPP
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA
+> +	bool "theora (*.ogg video)"
+> +	select BR2_PACKAGE_LIBTHEORA
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TREMOR
+> +	bool "tremor"
+> +	select BR2_PACKAGE_TREMOR
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VORBIS
+> +	bool "vorbis (*.ogg audio)"
+> +	select BR2_PACKAGE_LIBVORBIS
 > +
 > +endif
 > +
-> +comment "gstreamer1 requires a toolchain with WCHAR and threads support"
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +
-> diff --git a/package/multimedia/gstreamer1/gstreamer1.mk b/package/multimedia/gstreamer1/gstreamer1.mk
+> diff --git a/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
 > new file mode 100644
-> index 0000000..90cf0f6
+> index 0000000..63c4955
 > --- /dev/null
-> +++ b/package/multimedia/gstreamer1/gstreamer1.mk
-> @@ -0,0 +1,38 @@
-> +#############################################################
+> +++ b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
+> @@ -0,0 +1,204 @@
+> +################################################################################
 > +#
-> +# gstreamer1
+> +# gst1-plugins-base
 > +#
-> +#############################################################
+> +################################################################################
 > +
-> +GSTREAMER1_VERSION = 1.1.1
-> +GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
-> +GSTREAMER1_SITE = http://gstreamer.freedesktop.org/src/gstreamer
-> +GSTREAMER1_INSTALL_STAGING = YES
-> +GSTREAMER1_LICENSE_FILES = COPYING
-> +GSTREAMER1_LICENSE = GPLv2 LGPLv2+ LGPLv2.1+
+> +GST1_PLUGINS_BASE_VERSION = 1.1.1
 
-  I couldn't find any GPLv2 license headers except some tests and an m4 
-header (which we normally don't consider to be part of the code requiring 
-a license).
+  I could be wrong, but didn't gstreamer switch to simultaneous releases, 
+so we could use $(GSTREAMER1_VERSION) here instead?
+
+> +GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
+> +GST1_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
+> +GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+> +GST1_PLUGINS_BASE_LICENSE_FILES = COPYING COPYING.LIB
+
+  COPYING contains the GPL which isn't actually used by any source file 
+(only some old tests). So it can be left out.
+
+> +GST1_PLUGINS_BASE_LICENSE = LGPLv2+ LGPLv2.1+
+> +
+> +# freetype is only used by examples, but if it is not found
+> +# and the host has a freetype-config script, then the host
+> +# include dirs are added to the search path causing trouble
+> +GST1_PLUGINS_BASE_CONF_ENV =
+> +	FT2_CONFIG=/bin/false \
+> +	ac_cv_header_stdint_t="stdint.h"
+
+  Why is this necessary?
+
+> +
+> +GST1_PLUGINS_BASE_CONF_OPT = \
+> +	--disable-examples \
+> +	--disable-oggtest \
+> +	--disable-vorbistest \
+> +	--disable-freetypetest \
+> +	--disable-valgrind \
+> +	--disable-debug
+> +
+> +# Options which require currently unpackaged libraries
+> +GST1_PLUGINS_BASE_CONF_OPT += \
+> +	--disable-cdparanoia \
+> +	--disable-libvisual \
+> +	--disable-iso-codes
+> +
+> +GST1_PLUGINS_BASE_DEPENDENCIES = gstreamer1
+> +
+> +ifeq ($(BR2_PACKAGE_XORG7),y)
+> +GST1_PLUGINS_BASE_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXv
+> +GST1_PLUGINS_BASE_CONF_OPT += \
+> +	--enable-x \
+> +	--enable-xshm \
+> +	--enable-xvideo
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += \
+> +	--disable-x \
+> +	--disable-xshm \
+> +	--disable-xvideo
+> +endif
+
+  I would actually make configure options for ximagesink and xvimagesink 
+(--enable-x and --enable-xvideo).
+
+> +
+> +ifeq ($(BR2_PACKAGE_ORC),y)
+> +GST1_PLUGINS_BASE_DEPENDENCIES += orc
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-orc
+> +endif
+> +
+
+  It would be nice if the plugins below could be kept alphabetic.
 
 
   Regards,
   Arnout
 
-> +
-> +# Checking if unaligned memory access works correctly cannot be done when cross
-> +# compiling. For the following architectures there is no information available
-> +# in the configure script.
-> +ifeq ($(BR2_avr32),y)
-> +GSTREAMER1_CONF_ENV = as_cv_unaligned_access=no
-> +endif
-> +ifeq ($(BR2_aarch64),y)
-> +GSTREAMER1_CONF_ENV = as_cv_unaligned_access=yes
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA),y)
+> +GST1_PLUGINS_BASE_DEPENDENCIES += alsa-lib
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-alsa
 > +endif
 > +
-> +GSTREAMER1_CONF_OPT = \
-> +	--disable-examples \
-> +	--disable-tests \
-> +	--disable-failing-tests \
-> +	--disable-debug \
-> +	--disable-valgrind \
-> +	--disable-benchmarks \
-> +	--disable-check \
-> +	$(if $(BR2_PACKAGE_GSTREAMER1_GST_DEBUG),,--disable-gst-debug) \
-> +	$(if $(BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY),,--disable-registry) \
-> +	$(if $(BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS),,--disable-tools)
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ADDER),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-adder
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-adder
+> +endif
 > +
-> +GSTREAMER1_DEPENDENCIES = libglib2 host-pkgconf host-bison host-flex
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-app
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-app
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-audioconvert
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-audioconvert
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORATE),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-audiorate
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-audiorate
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-audioresample
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-audioresample
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-audiotestsrc
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-audiotestsrc
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-encoding
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-encoding
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-videoconvert
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-videoconvert
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-gio
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-gio
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-playback
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-playback
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-subparse
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-subparse
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TCP),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-tcp
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-tcp
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TYPEFIND),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-typefind
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-typefind
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-videotestsrc
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-videotestsrc
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEORATE),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-videorate
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-videorate
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-videoscale
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-videoscale
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-volume
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-volume
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OGG),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-ogg
+> +GST1_PLUGINS_BASE_DEPENDENCIES += libogg
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-ogg
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-pango
+> +GST1_PLUGINS_BASE_DEPENDENCIES += pango
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-pango
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-theora
+> +GST1_PLUGINS_BASE_DEPENDENCIES += libtheora
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-theora
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TREMOR),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-ivorbis
+> +GST1_PLUGINS_BASE_DEPENDENCIES += tremor
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-ivorbis
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VORBIS),y)
+> +GST1_PLUGINS_BASE_CONF_OPT += --enable-vorbis
+> +GST1_PLUGINS_BASE_DEPENDENCIES += libvorbis
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-vorbis
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZLIB),y)
+> +GST1_PLUGINS_BASE_DEPENDENCIES += zlib
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPT += --disable-zlib
+> +endif
 > +
 > +$(eval $(autotools-package))
 >
