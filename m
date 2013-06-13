@@ -1,30 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 13 Jun 2013 10:29:42 +0200
-Subject: [Buildroot] [PATCH] sconeserver: fix autouild failure
-In-Reply-To: <51B97E20.1070209@mind.be> (Arnout Vandecappelle's message of
- "Thu, 13 Jun 2013 10:09:04 +0200")
-References: <1370261409-8722-1-git-send-email-spdawson@gmail.com>
- <20130608174904.0559f1be@skate>
- <CAHt8ZCOT2bj=-5C6Y34ULOoqV-YN74-N+hV9gYdsDBB8h8W=-w@mail.gmail.com>
- <51B8EC96.8030007@mind.be> <87y5ae1lz2.fsf@dell.be.48ers.dk>
- <51B97E20.1070209@mind.be>
-Message-ID: <87txl21ki1.fsf@dell.be.48ers.dk>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Thu, 13 Jun 2013 09:55:04 +0100
+Subject: [Buildroot] [PATCH] toolchain/uClibc: remove deprecated version
+	0.9.31
+In-Reply-To: <87k3lz2hcf.fsf@dell.be.48ers.dk>
+References: <1371062793-27218-1-git-send-email-gustavo@zacarias.com.ar>
+ <87k3lz2hcf.fsf@dell.be.48ers.dk>
+Message-ID: <CAHt8ZCPEM0E87VSETkkb731SjiwoAcwBGY7D-0-UB5ua7fxgYw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+On 12 June 2013 21:40, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>
+>  Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>
+> Comitted, thanks.
 
- >> Ehh, it was a build failure on Thomas' server, so it probably makes more
- >> sense that he does it?
+Ah. I need uClibc 0.9.31 to support a long-running avr32-based
+project. The only option available now in Buildroot is 0.9.33, which
+for some reason results in a system that has unusably poor performance
+compared to the 0.9.31-based build.
 
- Arnout>  Sorry, I thought that those /home/test paths were yours. Won't
- Arnout> happen again :-)
+Is there any chance that uClibc 0.9.31 can be retained in Buildroot?
+I'm not clear what the rationale for removing it is/was...
 
-No problem. This is one of the reasons why we have the submitter file in
-the same directory.
-
--- 
-Bye, Peter Korsgaard
+Simon.
