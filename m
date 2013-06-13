@@ -1,43 +1,104 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 13 Jun 2013 09:58:42 -0500
-Subject: [Buildroot] [RFC] ti-gfx: add new package
-In-Reply-To: <EE4E4767751A8B40949306E403F4DDD802EEB1D7@sv03ultra002.ultratronik.de>
-References: <CALo-6+j77P2RsdYRO9BR04rUX-j0HmxzXtBuHzo_UQ1wDjXbHQ@mail.gmail.com>
- <1370636307-23089-1-git-send-email-spenser@gillilanding.com>
- <CALo-6+ihs6caa98RCvZmZKZ5pUsfXjXPPBJn_zG4J6eBBpsuAw@mail.gmail.com>
- <CAEBucnC-HdSyDttBo4te_=eOR259ebSAwWQuE_W3zcyLVjwSQA@mail.gmail.com>
- <EE4E4767751A8B40949306E403F4DDD802EEB1D7@sv03ultra002.ultratronik.de>
-Message-ID: <CAEBucnD1-qa-mf5w1o9JaAFQArd_tTO0K=7rCC3k3LNMazDdFw@mail.gmail.com>
+Date: Thu, 13 Jun 2013 10:10:53 -0500
+Subject: [Buildroot] [PATCH v10 08/13] gst1-plugins-base: add gstreamer1
+ base plugins
+In-Reply-To: <51B95F64.1050105@mind.be>
+References: <1370647138-26623-1-git-send-email-spenser@gillilanding.com>
+ <1370647138-26623-9-git-send-email-spenser@gillilanding.com>
+ <51B81371.3050109@mind.be>
+ <CAEBucnB6iVqt4A6muV9ouwpqk4Npmd7Uu7SkNDrr3myGk_9Mnw@mail.gmail.com>
+ <51B95F64.1050105@mind.be>
+Message-ID: <CAEBucnA=rBWMdAWvQcDia924ZkQ28-JjJLA50_v3P51kE0wqdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Naumann,
+Arnout,
 
-Thanks for working on this patch.  Hopefully, this cleaned up and
-included in the next release.
+>>>> +comment "plugins with external dependencies (there may be more
+>>>> available)"
+>>>
+>>>
+>>>
+>>>   What does "there may be more available" mean?
+>>
+>>
+>> I've updated the wording to "plugins which have unpackaged
+>> dependencies are not shown" .
+>
+>
+>  I think that will make the line too long so you'd have to split it. But
+> actually, for other packages we never say things like that.
+>
 
-> I'm happily jumping on integrating the egl stuff in buildroot (and qt), thanks for you start Spenser.
-> As for Charles concerns, I too see the kernel build being triggered by ti-gfx, but that's natural since the modules depend on it. I have no problems with that. However, since I'm using a 3.1 kernel, the newclkapi patch broke the ti-gfx build for me. I just removed it, but maybe this can be solved better.
+The more I look at this the more I believe it should be removed.  It
+was a hold over from the gst-plugins-base package.  I'll remove it
+from the next patch series instead of the previously mentioned
+explanation.
 
-To solve this problem, an ifdef on the kernel version should be done.
-I'll try to figure out which version incorporated the clock changes
-and add this to the patch.
+>
+>>>> +# freetype is only used by examples, but if it is not found
+>>>> +# and the host has a freetype-config script, then the host
+>>>> +# include dirs are added to the search path causing trouble
+>>>> +GST1_PLUGINS_BASE_CONF_ENV =
+>>>> +       FT2_CONFIG=/bin/false \
+>>>> +       ac_cv_header_stdint_t="stdint.h"
+>>>
+>>>
+>>>
+>>>   Why is this necessary?
+>>
+>>
+>> Not sure, this was in the gst-plugins-base and was simply copied to
+>> gst1-plugins-base.
+>>
+>> The following two commits created these lines.
+>>
+>> http://git.buildroot.net/buildroot/commit/package/multimedia/gst-plugins-base/gst-plugins-base.mk?id=8232850c51e07b99ba84769b492faa147290fdc7
+>>
+>> http://git.buildroot.net/buildroot/commit/package/multimedia/gst-plugins-base/gst-plugins-base.mk?id=32d319e6f7242553c821c7a1eadfabd2719f5992
+>
+>
+>  I was only referring to the stdint - the other one has a proper comment.
+>
+>  But since nothing seems to have changed in the stdint.h detection code
+> since 0.10.25, I guess it's best to keep it.
+>
 
-> To go further with the qt support, I have added staging headers and libs, see patch below. I can now build qt5 with the gui module (which needs the eglfs support). However, when preparing an out of tree qt-project with buildroots qmake, the subsequent make step says it's got nothing to do. Looking into it, the SOURCES from the .pro file did not get picked up, but I have no idea why. Maybe this is another post though.
+Sounds good to me.
 
-I'll leave this one for someone more experience in QT and I agree that
-this issue does seem external to the inclusion of the ti-gfx package.
+>>>   I would actually make configure options for ximagesink and xvimagesink
+>>> (--enable-x and --enable-xvideo).
+>>
+>>
+>> As X already consumes a large amount of
+>
+>
+>  I can complete that sentence :-)
+>
+>  Fair enough.
 
-The patch below looks good to me.  I'm hoping to get some run time
-testing on a couple of boards (Beagleboard xM/Beaglebone Black) done
-by next week.  Then, this patch should be ready for inclusion or at
-least moving to a proper patch review.
+Oops, forgot to include the rest there but the point does get across
+in not to many words! :)  Hopefully, I can get a second opinion on
+this but X is not a package you include on a bare minimal system;
+therefore, IMHO it's probably more important to implicitly enable
+support rather than explicitly.
+
+>>>   It would be nice if the plugins below could be kept alphabetic.
+>>
+>>
+>> How about if I keep them in the order of ./configure --help?  That way
+>> its easy to spot when new ones are added and old ones removed.
+>
+>
+>  Yes, good idea.
+
+Thanks, I'll make these adjustments in the next patch series. Thanks
+for the review!
 
 Thanks,
-
 Spenser
 
 --
