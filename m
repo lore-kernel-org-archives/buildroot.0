@@ -1,44 +1,176 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 13 Jun 2013 10:55:56 -0300
-Subject: [Buildroot] [PATCH] toolchain/uClibc: remove deprecated version
- 0.9.31
-In-Reply-To: <CAHt8ZCPEM0E87VSETkkb731SjiwoAcwBGY7D-0-UB5ua7fxgYw@mail.gmail.com>
-References: <1371062793-27218-1-git-send-email-gustavo@zacarias.com.ar>
- <87k3lz2hcf.fsf@dell.be.48ers.dk>
- <CAHt8ZCPEM0E87VSETkkb731SjiwoAcwBGY7D-0-UB5ua7fxgYw@mail.gmail.com>
-Message-ID: <51B9CF6C.5070402@zacarias.com.ar>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Thu, 13 Jun 2013 07:11:18 -0700
+Subject: [Buildroot] [RFC] ti-gfx: add new package
+In-Reply-To: <EE4E4767751A8B40949306E403F4DDD802EEB1D7@sv03ultra002.ultratronik.de>
+References: <CALo-6+j77P2RsdYRO9BR04rUX-j0HmxzXtBuHzo_UQ1wDjXbHQ@mail.gmail.com>
+ <1370636307-23089-1-git-send-email-spenser@gillilanding.com>
+ <CALo-6+ihs6caa98RCvZmZKZ5pUsfXjXPPBJn_zG4J6eBBpsuAw@mail.gmail.com>
+ <CAEBucnC-HdSyDttBo4te_=eOR259ebSAwWQuE_W3zcyLVjwSQA@mail.gmail.com>
+ <EE4E4767751A8B40949306E403F4DDD802EEB1D7@sv03ultra002.ultratronik.de>
+Message-ID: <CALo-6+jEOu+5pTr2oizokQexOdm1EimxYhM-Q1sHEnJ_oBFMog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/13/2013 05:55 AM, Simon Dawson wrote:
+Dear Naumann:
 
-> Ah. I need uClibc 0.9.31 to support a long-running avr32-based
-> project. The only option available now in Buildroot is 0.9.33, which
-> for some reason results in a system that has unusably poor performance
-> compared to the 0.9.31-based build.
-> 
-> Is there any chance that uClibc 0.9.31 can be retained in Buildroot?
-> I'm not clear what the rationale for removing it is/was...
+If you select QtQuick, you should find that the build fails on copying
+qmlview in the qt5quick package make file. In looking at this, it
+looks like qmlview is not part of Qt5, so it seems commenting out that
+line in the package .mk file is reasonable. Perhaps you could confirm
+this when you have a chance.
 
-Rationale was the usual deprecation period and later removal.
-0.9.31 isn't getting any younger, and lacks modern syscalls/functions -
-i personally haven't been testing packages with that version for a while.
-I'm pretty sure many modern packages will fail without some agressive
-patch backporting.
-I'm considering (BIG "considering", it's a non-priority for me) working
-on a systemd/udev bump which will require backports for 0.9.32.x/33.x
-and looking out for 0.9.31.x is not on my list.
-Really, Atmel has sunk the AP7 (1), i'm sorry about that, but it's the
-way life is for whatever strategic and/or commercial reason.
-If vanilla toolchain components were in working shape we wouldn't be
-talking about this.
+On Spenser's patch, my comments to the RFC remain the same and those
+are 1) Graphics_SDK should not be a part of buildroot and 2) A kernel
+build should be independent of the root file system.
 
-Can't you keep your project running with buildroot 2013.05 or some other
-release?
-Regards.
+Charles
 
-(1)
-http://www.atmel.com/About/Quality/obsolescence/obsolete_items.aspx?searchText=ap7
+On 6/13/13, Naumann Andreas <ANaumann@ultratronik.de> wrote:
+> Hi,
+>
+> I'm happily jumping on integrating the egl stuff in buildroot (and qt),
+> thanks for you start Spenser.
+> As for Charles concerns, I too see the kernel build being triggered by
+> ti-gfx, but that's natural since the modules depend on it. I have no
+> problems with that. However, since I'm using a 3.1 kernel, the newclkapi
+> patch broke the ti-gfx build for me. I just removed it, but maybe this can
+> be solved better.
+>
+> To go further with the qt support, I have added staging headers and libs,
+> see patch below. I can now build qt5 with the gui module (which needs the
+> eglfs support). However, when preparing an out of tree qt-project with
+> buildroots qmake, the subsequent make step says it's got nothing to do.
+> Looking into it, the SOURCES from the .pro file did not get picked up, but I
+> have no idea why. Maybe this is another post though.
+>
+> Here's my patch:
+>
+>
+> Betreff: [PATCH] ti-gfx: Install headers and libs to staging.
+>
+> This enables the qt5 packages to successfully build with OpenGL / EGL
+> support.
+>
+> ---
+>  package/ti-gfx/ti-gfx.mk | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
+> index 154c792..1446fe5 100644
+> --- a/package/ti-gfx/ti-gfx.mk
+> +++ b/package/ti-gfx/ti-gfx.mk
+> @@ -30,6 +30,12 @@ TI_GFX_OMAPES = 8.x
+>  TI_GFX_PLATFORM = ti335x
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_TI_GFX_DEBUG),y)
+> +TI_GFX_RELDBG = rel
+> +else
+> +TI_GFX_RELDBG = dbg
+> +endif
+> +
+>  define TI_GFX_EXTRACT_CMDS
+>  	$(RM) -rf $(TI_GFX_DIR)
+>  	chmod +x $(DL_DIR)/$(TI_GFX_SOURCE)
+> @@ -50,13 +56,20 @@ TI_GFX_MAKE_CMD = cd $(TI_GFX_SRCDIR)/GFX_Linux_KM && \
+>  			SUPPORT_XORG=0 \
+>  			KERNELDIR=$(LINUX_DIR)
+>
+> +TI_GFX_BIN_PATH = gfx_$(TI_GFX_RELDBG)_es$(TI_GFX_OMAPES)
+> +
+>  define TI_GFX_BUILD_CMDS
+>  	( $(TI_GFX_MAKE_CMD) clean && \
+>  	  $(TI_GFX_MAKE_CMD) all )
+>  endef
+>
+> +SUB_FOLDER = EGL EWS GLES2 KHR
+>  define TI_GFX_INSTALL_STAGING_CMDS
+> -	
+> +	for folder in $(SUB_FOLDER); do \
+> +		$(INSTALL) -d $(STAGING_DIR)/usr/include/$$folder ; \
+> +		$(INSTALL) -D -m 0644 $(@D)/include/OGLES2/$$folder/*.h
+> $(STAGING_DIR)/usr/include/$$folder ; \
+> +	done
+> +	$(INSTALL) -D -m 0644 $(@D)/$(TI_GFX_BIN_PATH)/*.so
+> $(STAGING_DIR)/usr/lib
+>  endef
+>
+>  define TI_GFX_INSTALL_TARGET_CMDS
+> --
+> 1.8.2.3
+>
+>
+>
+>
+> ------------------------------------------------------------------------------
+> Dipl.-Ing. (FH)
+> Andreas Naumann
+> Embedded Software
+> T +49 8105 77839-363
+> F +49 8105 77839-850
+> ANaumann at ultratronik.de
+> www.ultratronik.de
+> Dornierstra?e 9
+> 82205 Gilching
+> ULTRATRONIK
+> L?SUNGEN F?R IHREN ERFOLG - SOLUTIONS FOR YOUR SUCCESS
+>
+> ------------------------------------------------------------------------------
+>
+> Gesch?ftsf?hrer: Dipl.-Ing. Wolfgang Sorg, Dipl.-Kfm. Alexander Sorg
+> Sitz der Gesellschaft: Gilching
+> Registergericht M?nchen HRB 49567 (Ultratronik Vertriebs GmbH)
+> Registergericht M?nchen HRB 55584 (Ultratronik GmbH)
+>
+> ------------------------------------------------------------------------------
+>
+>
+>
+>
+> ________________________________________
+>
+> Von: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Im
+> Auftrag von Spenser Gilliland
+> Gesendet: Mittwoch, 12. Juni 2013 19:33
+> An: Charles Krinke
+> Cc: buildroot
+> Betreff: Re: [Buildroot] [RFC] ti-gfx: add new package
+>
+> Charles,
+>
+>> I believe including a kernel compile with this patch is a problem for
+>> several reasons.
+> There is no kernel compile in this patch.   Only the sgx kernel modules are
+> built.  The make KERNELDIR=path/to/sgx/dir modules only builds the modules
+> in the current directory.
+>> The first is that the TI defconfig for AM3517_evm never made it into
+>> the Linux kernel along with all the supporting changes, so the build
+>> fails.
+> You can use any kernel you would like and are not bound to mainline kernels.
+>  If the ti kernel has the needed patches, you may use it.  The only
+> requirement is that the kernel is specified in the kernel configuration
+> section.
+>> The second is that folks are using various versions of Graphics_SDK
+>> from 4_05_xx through 4_09_xx. These same folks generally build the
+>> Graphics_SDK once externally to buildroot to avoid carrying a 135MB
+>> file in the dl/ directory. This doesnt make sense for buildroot for
+>> two kernel .ko modules where 135MByte is larger then any other
+>> package.
+> It has to be downloaded anyways and as long as you don't distclean often; it
+> will only be downloaded once.  It may make sense to provide an option to
+> select which version of the gfx sdk but there's no need if they maintain
+> backwards compatibility.
+>> Perhaps you can consider making Graphics_SDK an external reference in
+>> your patch to make things go more smoothly?
+> IMHO. This would complicate the process.   The method presented would allow
+> people with no ti-gfx experience to quickly get up and running.
+> Thanks,
+> Spenser
+>
+
+
+-- 
+Charles Krinke
