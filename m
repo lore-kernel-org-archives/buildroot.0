@@ -1,23 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Jun 2013 13:56:23 +0200
-Subject: [Buildroot] [PATCH] sdl_image: bump to version 1.2.12
-In-Reply-To: <1371073366-11446-1-git-send-email-gilles.talis@gmail.com>
- (Gilles Talis's message of "Wed, 12 Jun 2013 14:42:46 -0700")
-References: <1371073366-11446-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <878v2c29eg.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 14 Jun 2013 13:15:22 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 4,
+	9}.x stable version
+Message-ID: <20130614115833.707AD9AD56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=4aa71bba79483b69f001a810a6cd3f4739daade5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gilles> Also added:
- Gilles> - WEBP file format support
- Gilles> - License information
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in                 |    6 +++---
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 77da947..b25e0ab 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -70,15 +70,15 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.81"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.82"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.45"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.48"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.49"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+-	default "3.9.5"		if BR2_KERNEL_HEADERS_3_9
++	default "3.9.6"		if BR2_KERNEL_HEADERS_3_9
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.81-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.82-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.81-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.82-headers_install-fix-__packed-in-exported-kernel-head.patch
