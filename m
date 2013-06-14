@@ -1,168 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 14 Jun 2013 15:14:46 -0300
-Subject: [Buildroot] [PATCH] iozone: fixup build system
-Message-ID: <1371233686-24012-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Jun 2013 22:12:17 +0200
+Subject: [Buildroot] Eclipse does not see Toolchain
+In-Reply-To: <CAGBa4kARr8ho40ADxxpitKYTW-M4UVET0sDPgr5VP4Zw6dB2iw@mail.gmail.com>
+References: <CAGBa4kARr8ho40ADxxpitKYTW-M4UVET0sDPgr5VP4Zw6dB2iw@mail.gmail.com>
+Message-ID: <20130614221217.16c738af@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixup iozone's build system to make it somewhat more flexible.
-First make our own linux targets for non-AIO toolchains (uClibc) and
-non-threading.
-And second, just ditch forced largefile support and expect it from
-CFLAGS.
-Otherwise using the generic target caused issues like:
-http://autobuild.buildroot.net/results/19f606f2978dc3c8039b1bccfcc562b4050083c7/
-...which is fixed by this.
+Dear Scott Kelly,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/iozone/Config.in            |  4 --
- package/iozone/iozone-targets.patch | 92 +++++++++++++++++++++++++++++++++++++
- package/iozone/iozone.mk            | 13 +++---
- 3 files changed, 98 insertions(+), 11 deletions(-)
- create mode 100644 package/iozone/iozone-targets.patch
+On Thu, 13 Jun 2013 09:14:07 +1000, Scott Kelly wrote:
 
-diff --git a/package/iozone/Config.in b/package/iozone/Config.in
-index 5481ca1..26d4daa 100644
---- a/package/iozone/Config.in
-+++ b/package/iozone/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_IOZONE
- 	bool "iozone"
--	depends on BR2_LARGEFILE
- 	depends on BR2_USE_MMU # fork()
- 	help
- 	  IOzone is a filesystem benchmark tool.
- 	  The benchmark generates and measures a variety of file operations
- 
- 	  http://www.iozone.org/
--
--comment "IOzone requires a toolchain with LARGEFILE support"
--	depends on !BR2_LARGEFILE
-diff --git a/package/iozone/iozone-targets.patch b/package/iozone/iozone-targets.patch
-new file mode 100644
-index 0000000..258b960
---- /dev/null
-+++ b/package/iozone/iozone-targets.patch
-@@ -0,0 +1,92 @@
-+Add new targets for iozone:
-+
-+linux-noaio is for linux targets without AIO (use case: uClibc)
-+linux-noth is for linux target without threads or AIO
-+
-+And make largefile support optional via CFLAGS.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura iozone3_414.orig/src/current/makefile iozone3_414/src/current/makefile
-+--- iozone3_414.orig/src/current/makefile	2013-06-11 09:48:18.257837091 -0300
-++++ iozone3_414/src/current/makefile	2013-06-11 13:05:56.338162144 -0300
-+@@ -166,10 +166,28 @@
-+ # GNU 'C' compiler Linux build with threads, largefiles, async I/O 
-+ #
-+ linux:	iozone_linux.o libasync.o libbif.o fileop_linux.o pit_server.o
-+-	$(CC)  -O3 $(LDFLAGS) iozone_linux.o libasync.o libbif.o -lpthread \
-++	$(CC)  $(CFLAGS) $(LDFLAGS) iozone_linux.o libasync.o libbif.o \
-++		-lpthread -lrt -o iozone
-++	$(CC)  $(CFLAGS) -Dlinux fileop_linux.o -o fileop
-++	$(CC)  $(CFLAGS) -Dlinux pit_server.o -o pit_server
-++
-++#
-++# GNU 'C' compiler Linux build with threads, largefiles
-++#
-++linux-noaio: iozone_linux-noaio.o libbif.o fileop_linux.o pit_server.o
-++	$(CC)  $(CFLAGS) $(LDFLAGS) iozone_linux-noaio.o libbif.o \
-++		-lpthread -lrt -o iozone
-++	$(CC)  $(CFLAGS) -Dlinux fileop_linux.o -o fileop
-++	$(CC)  $(CFLAGS) -Dlinux pit_server.o -o pit_server
-++
-++#
-++# GNU 'C' compiler Linux build with largefiles
-++#
-++linux-noth: iozone_linux-noth.o libbif.o fileop_linux.o pit_server.o
-++	$(CC)  $(CFLAGS) $(LDFLAGS) iozone_linux-noth.o libbif.o \
-+ 		-lrt -o iozone
-+-	$(CC)  -O3 -Dlinux fileop_linux.o -o fileop
-+-	$(CC)  -O3 -Dlinux pit_server.o -o pit_server
-++	$(CC)  $(CFLAGS) -Dlinux fileop_linux.o -o fileop
-++	$(CC)  $(CFLAGS) -Dlinux pit_server.o -o pit_server
-+ 
-+ #
-+ # GNU 'C' compiler Linux build for powerpc chip with threads, largefiles, async I/O 
-+@@ -795,13 +813,33 @@
-+ 	@echo ""
-+ 	@echo "Building iozone for Linux"
-+ 	@echo ""
-+-	$(CC) -Wall -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
-+-		-DSHARED_MEM -Dlinux -D_LARGEFILE64_SOURCE $(CFLAGS) iozone.c \
-++	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
-++		-DSHARED_MEM -Dlinux $(CFLAGS) iozone.c \
-+ 		-DNAME='"linux"' -o iozone_linux.o
-+-	$(CC) -Wall -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -D_LARGEFILE64_SOURCE \
-++	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO \
-++		-DSHARED_MEM -Dlinux $(CFLAGS) libbif.c -o libbif.o
-++	$(CC) -Wall -c -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
-++		$(CFLAGS) libasync.c  -o libasync.o 
-++
-++iozone_linux-noaio.o: iozone.c libbif.c
-++	@echo ""
-++	@echo "Building iozone for Linux no AIO"
-++	@echo ""
-++	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DHAVE_PREAD \
-++		-DSHARED_MEM -Dlinux $(CFLAGS) iozone.c \
-++		-DNAME='"linux"' -o iozone_linux-noaio.o
-++	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C \
-++		-DSHARED_MEM -Dlinux $(CFLAGS) libbif.c -o libbif.o
-++
-++iozone_linux-noth.o: iozone.c libbif.c
-++	@echo ""
-++	@echo "Building iozone for Linux with no threads"
-++	@echo ""
-++	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DNO_THREADS -DHAVE_PREAD \
-++		-DSHARED_MEM -Dlinux $(CFLAGS) iozone.c \
-++		-DNAME='"linux"' -o iozone_linux-noth.o
-++	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DNO_THREADS \
-+ 		-DSHARED_MEM -Dlinux $(CFLAGS) libbif.c -o libbif.o
-+-	$(CC) -Wall -c -O3 -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
-+-		-D_LARGEFILE64_SOURCE $(CFLAGS) libasync.c  -o libasync.o 
-+ 
-+ fileop_AIX.o:	fileop.c
-+ 	@echo ""
-+@@ -893,7 +931,7 @@
-+ 	@echo ""
-+ 	@echo "Building fileop for Linux"
-+ 	@echo ""
-+-	$(CC) -Wall -c -O3 $(CFLAGS) fileop.c -o fileop_linux.o
-++	$(CC) -Wall -c $(CFLAGS) fileop.c -o fileop_linux.o
-+ 
-+ fileop_openbsd.o:	fileop.c
-+ 	@echo ""
-diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
-index eb0a6d8..970e509 100644
---- a/package/iozone/iozone.mk
-+++ b/package/iozone/iozone.mk
-@@ -11,13 +11,12 @@ IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
- # IOzone license details can be found at:
- # http://www.iozone.org/docs/Iozone_License.txt
- 
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
--# aio.h is not available on uClibc. Select "generic" target that does not use it.
--IOZONE_TARGET = generic
--else ifeq ($(BR2_powerpc),y)
--IOZONE_TARGET = linux-powerpc
--else ifeq ($(BR2_sparc),y)
--IOZONE_TARGET = linux-sparc
-+# No threading target is non-AIO as well
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-+IOZONE_TARGET = linux-noth
-+# AIO support not available on uClibc, use the linux (non-aio) target.
-+else ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
-+IOZONE_TARGET = linux-noaio
- else
- IOZONE_TARGET = linux
- endif
+> I'm using a clean install of Ubuntu 12.04, latest Buildroot (2013.05),
+> Eclipse Juno SR2 CDT and have installed the Eclipse Buildroot plugin from
+> release URL (seems to be the correct latest 2.1 release). I perform my
+> Buildroot build with the "Register Eclipse Plugin" option checked and
+> indeed the integration file (~/.buildroot-eclipse.toolchains) is created.
+> 
+> But, for the life of me, I can't work out why the toolchain is not detect
+> or listed by Eclipse. I've tried with both internal and external Toolchains
+> but no difference.
+> 
+> Does anyone have any suggestions as to where I can look for clues as to
+> what the problem might be. I've checked the Eclipse log file but am not
+> sure what I am looking for and didn't really find anything anyway.
+
+Thanks for your report. This is quite strange, as the plugin is working
+for us. The only checks that Eclipse is doing is to verify that the
+compiler path points to an existing file.
+
+Could you give us your Buildroot .config, the generated
+~/.buildroot-eclipse.toolchains, and verify by yourself that the
+compiler pointed by ~/.buildroot-eclipse.toolchains indeed exists?
+
+I suppose you've verified that you don't see the Buildroot toolchain
+when trying to create a C Executable project, as shown in
+https://raw.github.com/mbats/eclipse-buildroot-bundle/master/doc/images/eclipse_new_project_toolchain.png ?
+
+Best regards,
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
