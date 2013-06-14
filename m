@@ -1,48 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 14 Jun 2013 13:15:22 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 4,
-	9}.x stable version
-Message-ID: <20130614115833.707AD9AD56@busybox.osuosl.org>
+Date: Fri, 14 Jun 2013 13:12:53 +0200
+Subject: [Buildroot] [git commit] package/dosfstools: bump version for bug
+	fixes
+Message-ID: <20130614115832.AEF6F9ADC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4aa71bba79483b69f001a810a6cd3f4739daade5
+commit: http://git.buildroot.net/buildroot/commit/?id=48c86a40e0cb79024253a98e763b3002d1686051
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in                 |    6 +++---
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dosfstools/dosfstools.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 77da947..b25e0ab 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -70,15 +70,15 @@ config BR2_DEFAULT_KERNEL_VERSION
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index 4664faa..3f70238 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.0.81"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.82"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.45"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.48"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.49"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
--	default "3.9.5"		if BR2_KERNEL_HEADERS_3_9
-+	default "3.9.6"		if BR2_KERNEL_HEADERS_3_9
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.81-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.82-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.81-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.82-headers_install-fix-__packed-in-exported-kernel-head.patch
+-DOSFSTOOLS_VERSION = 3.0.18
++DOSFSTOOLS_VERSION = 3.0.20
+ DOSFSTOOLS_SITE = http://daniel-baumann.ch/files/software/dosfstools
+ DOSFSTOOLS_LICENSE = GPLv3+
+ DOSFSTOOLS_LICENSE_FILES = COPYING
