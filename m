@@ -1,20 +1,47 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 14 Jun 2013 07:26:52 -0300
-Subject: [Buildroot] [PATCH] package/dosfstools: bump version for bug
-	fixes
-In-Reply-To: <1371193144-3262-1-git-send-email-yann.morin.1998@free.fr>
-References: <1371193144-3262-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <51BAEFEC.3020402@zacarias.com.ar>
+Date: Fri, 14 Jun 2013 08:10:38 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
+	9}.x stable version
+Message-ID: <1371208239-6133-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/14/2013 03:59 AM, Yann E. MORIN wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                                  | 6 +++---
+ ...0.82-headers_install-fix-__packed-in-exported-kernel-head.patch} | 0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.81-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.82-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 77da947..b25e0ab 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -70,15 +70,15 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.81"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.82"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.45"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.48"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.49"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+-	default "3.9.5"		if BR2_KERNEL_HEADERS_3_9
++	default "3.9.6"		if BR2_KERNEL_HEADERS_3_9
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.81-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.82-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.81-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.82-headers_install-fix-__packed-in-exported-kernel-head.patch
+-- 
+1.8.1.5
