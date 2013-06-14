@@ -1,15 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 13 Jun 2013 18:49:47 +0200
+From: Sundareson, Prabindh <prabu@ti.com>
+Date: Fri, 14 Jun 2013 02:20:12 +0000
 Subject: [Buildroot] [RFC] ti-gfx: add new package
-In-Reply-To: <1370636307-23089-1-git-send-email-spenser@gillilanding.com>
+In-Reply-To: <51B9F82B.8030203@mind.be>
 References: <CALo-6+j77P2RsdYRO9BR04rUX-j0HmxzXtBuHzo_UQ1wDjXbHQ@mail.gmail.com>
  <1370636307-23089-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <51B9F82B.8030203@mind.be>
+ <51B9F82B.8030203@mind.be>
+Message-ID: <321768C95D21724485BCE784F1BE98473EB48108@DBDE04.ent.ti.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+In case it helps the discussion,
+
+
+1. TSPA stands for "Technology / Software Publicly Available"
+
+>> > +TI_GFX_LICENSE = TSPA
+>>  This is not one of the well-known licenses, so should be expanded to ...
+
+
+
+2. devmem2 is used for querying the version of the SGX core at runtime to do the right initialization
+
+> +	select BR2_PACKAGE_DEVMEM2
+>>  Why is this needed?
+
+
+regards,
+Prabu
+
+
+
+-----Original Message-----
+From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of Arnout Vandecappelle
+Sent: Thursday, June 13, 2013 10:20 PM
+To: Spenser Gilliland
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] [RFC] ti-gfx: add new package
 
   Hi Spenser,
 
@@ -37,8 +66,8 @@ On 07/06/13 22:18, Spenser Gilliland wrote:
 >   create mode 100644 package/ti-gfx/ti-gfx-newclkapi.patch
 >   create mode 100644 package/ti-gfx/ti-gfx.mk
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index ce82e99..8c40b56 100644
+> diff --git a/package/Config.in b/package/Config.in index 
+> ce82e99..8c40b56 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
 > @@ -290,6 +290,7 @@ source "package/snowball-hdmiservice/Config.in"
@@ -53,9 +82,8 @@ On 07/06/13 22:18, Spenser Gilliland wrote:
 >   source "package/uboot-tools/Config.in"
 >   source "package/udev/Config.in"
 [snip]
-> diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
-> new file mode 100644
-> index 0000000..c3ac984
+> diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in new 
+> file mode 100644 index 0000000..c3ac984
 > --- /dev/null
 > +++ b/package/ti-gfx/Config.in
 > @@ -0,0 +1,54 @@
@@ -91,7 +119,9 @@ On 07/06/13 22:18, Spenser Gilliland wrote:
 > +	help
 > +	  Select the SOC for which you would like to install drivers. Please
 > +	  use the chart at
-> +	  http://processors.wiki.ti.com/index.php/OMAP35x_Graphics_SDK_Getting_Started_Guide
+> +	  
+> +http://processors.wiki.ti.com/index.php/OMAP35x_Graphics_SDK_Getting_
+> +Started_Guide
 > +
 > +config BR2_PACKAGE_TI_GFX_ES3
 > +	bool "es3.x"
@@ -118,15 +148,16 @@ On 07/06/13 22:18, Spenser Gilliland wrote:
 > +endif
 > +
 > +comment "requires an external eglibc/glibc based toolchain"
-  You must say that ti-gfx requires it, because the config option is not 
-visible when there's no glibc.
+  You must say that ti-gfx requires it, because the config option is not visible when there's no glibc.
 
-> +	depends on !(BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_glibc)
+> +	depends on !(BR2_TOOLCHAIN_EXTERNAL_GLIBC || 
+> +BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_glibc)
 
   We really should refactor this into a single symbol...
 
 
-> diff --git a/package/ti-gfx/ti-gfx-km_install_modules.patch b/package/ti-gfx/ti-gfx-km_install_modules.patch
+> diff --git a/package/ti-gfx/ti-gfx-km_install_modules.patch 
+> b/package/ti-gfx/ti-gfx-km_install_modules.patch
 > new file mode 100644
 > index 0000000..63bfd19
 > --- /dev/null
@@ -144,14 +175,13 @@ visible when there's no glibc.
 > ++	$(MAKE) -C $(KERNELDIR) M=`pwd` modules_install
 > ++
 
-  Actually, instead of patching the Makefile, you could just run the 
-kernel make command directly from buildroot's .mk file. I think there are 
-a few module packages that do that.
+  Actually, instead of patching the Makefile, you could just run the kernel make command directly from buildroot's .mk file. I think there are a few module packages that do that.
 
 > + clean:
 > + 	@find . -name "*.o" -exec rm -r {} \;
 > + 	@find . -name "*.ko" -exec rm -r {} \;
-> diff --git a/package/ti-gfx/ti-gfx-newclkapi.patch b/package/ti-gfx/ti-gfx-newclkapi.patch
+> diff --git a/package/ti-gfx/ti-gfx-newclkapi.patch 
+> b/package/ti-gfx/ti-gfx-newclkapi.patch
 > new file mode 100644
 > index 0000000..b35ac31
 > --- /dev/null
@@ -160,7 +190,9 @@ a few module packages that do that.
 
   This patch is missing an explanation and a SoB.
 
-> +Index: ti-gfx-4_09_00_01/GFX_Linux_KM/services4/system/omap3630/sysutils_linux.c
+> +Index: 
+> +ti-gfx-4_09_00_01/GFX_Linux_KM/services4/system/omap3630/sysutils_lin
+> +ux.c 
 > +===================================================================
 > +--- ti-gfx-4_09_00_01.orig/GFX_Linux_KM/services4/system/omap3630/sysutils_linux.c	2013-03-04 08:41:35.000000000 -0600
 > ++++ ti-gfx-4_09_00_01/GFX_Linux_KM/services4/system/omap3630/sysutils_linux.c	2013-06-05 12:00:08.778605221 -0500
@@ -180,7 +212,8 @@ a few module packages that do that.
 > + 	res=clk_enable(psSysSpecData->psSGX_FCK);
 > + 	if (res < 0)
 > +         {
-> +                 PVR_DPF((PVR_DBG_ERROR, "EnableSGXClocks: Couldn't enable SGX functional clock (%d)", res));
+> +                 PVR_DPF((PVR_DBG_ERROR, "EnableSGXClocks: Couldn't 
+> + enable SGX functional clock (%d)", res));
 > ++                clk_unprepare(psSysSpecData->psSGX_FCK);
 > ++                return PVRSRV_ERROR_UNABLE_TO_ENABLE_CLOCK;
 > ++        }
@@ -196,7 +229,8 @@ a few module packages that do that.
 > +@@ -178,8 +194,9 @@
 > +         if (res < 0)
 > +         {
-> +                 PVR_DPF((PVR_DBG_ERROR, "EnableSGXClocks: Couldn't enable SGX interface clock (%d)", res));
+> +                 PVR_DPF((PVR_DBG_ERROR, "EnableSGXClocks: Couldn't 
+> +enable SGX interface clock (%d)", res));
 > +-
 > ++                clk_unprepare(psSysSpecData->psSGX_ICK);
 > +                 clk_disable(psSysSpecData->psSGX_FCK);
@@ -205,7 +239,8 @@ a few module packages that do that.
 > +         }
 > +
 > +@@ -247,8 +264,9 @@
-> + 	PVR_DPF((PVR_DBG_MESSAGE, "DisableSGXClocks: Disabling SGX Clocks"));
+> + 	PVR_DPF((PVR_DBG_MESSAGE, "DisableSGXClocks: Disabling SGX 
+> +Clocks"));
 > + 	
 > + 	clk_disable(psSysSpecData->psSGX_FCK);
 > +-
@@ -215,25 +250,28 @@ a few module packages that do that.
 > +
 > + //	SysDisableSGXInterrupts(psSysData);
 > +
-> diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
-> new file mode 100644
-> index 0000000..154c792
+> diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk new 
+> file mode 100644 index 0000000..154c792
 > --- /dev/null
 > +++ b/package/ti-gfx/ti-gfx.mk
 > @@ -0,0 +1,71 @@
-> +###############################################################################
+> +#####################################################################
+> +##########
 > +#
 > +# ti-gfx
 > +#
-> +###############################################################################
+> +#####################################################################
+> +##########
 > +
 > +TI_GFX_VERSION = 4_09_00_01
-> +TI_GFX_SOURCE = Graphics_SDK_setuplinux_$(TI_GFX_VERSION)_minimal_demos.bin
-> +TI_GFX_SITE = http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/gfxsdk/$(TI_GFX_VERSION)/exports/
+> +TI_GFX_SOURCE = 
+> +Graphics_SDK_setuplinux_$(TI_GFX_VERSION)_minimal_demos.bin
+> +TI_GFX_SITE = 
+> +http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/gf
+> +xsdk/$(TI_GFX_VERSION)/exports/
 > +TI_GFX_LICENSE = TSPA
 
-  This is not one of the well-known licenses, so should be expanded to 
-"Texas Instruments Software Piracy Agreement" or whatever it stands for.
+  This is not one of the well-known licenses, so should be expanded to "Texas Instruments Software Piracy Agreement" or whatever it stands for.
 
 > +TI_GFX_LICENSE_FILES = TSPA.txt
 > +TI_GFX_INSTALL_STAGING = YES
@@ -257,15 +295,13 @@ a few module packages that do that.
 > +TI_GFX_PLATFORM = ti335x
 > +endif
 
-  Personally I prefer to do "case statements" like this in the Config.in, 
-but it's a minor thing.
+  Personally I prefer to do "case statements" like this in the Config.in, but it's a minor thing.
 
 > +
 > +define TI_GFX_EXTRACT_CMDS
 > +	$(RM) -rf $(TI_GFX_DIR)
 
-  We normally don't do that. Is it needed (i.e. does it fail if you don't 
-and the source was already extracted before)?
+  We normally don't do that. Is it needed (i.e. does it fail if you don't and the source was already extracted before)?
 
   Also, use $(@D) instead of $(TI_GFX_DIR).
 
@@ -305,8 +341,7 @@ and the build commands become
 
   Is the clean really needed? We normally don't.
 
-  Also don't connect commands with && unless they really need to be 
-executed in the same sub-shell.
+  Also don't connect commands with && unless they really need to be executed in the same sub-shell.
 
 > +	  $(TI_GFX_MAKE_CMD) all )
 > +endef
@@ -325,11 +360,9 @@ executed in the same sub-shell.
 
 > +		echo "Your kernel configuration must include FB_DA8XX"
 
-  I think that should be checked by observing the kernel's .config in the 
-CONFIGURE_CMDS.
+  I think that should be checked by observing the kernel's .config in the CONFIGURE_CMDS.
 
-  Ideally, it would be enabled automatically but I don't think we can do 
-that at the moment.
+  Ideally, it would be enabled automatically but I don't think we can do that at the moment.
 
 > +endef
 > +
@@ -337,8 +370,7 @@ that at the moment.
 > +	( $(TI_GFX_MAKE_CMD) clean )
 > +endef
 
-  Clean is going to be deprecated so you don't need to add it. But I 
-guess you're using it a lot now...
+  Clean is going to be deprecated so you don't need to add it. But I guess you're using it a lot now...
 
 > +
 > +$(eval $(generic-package))
@@ -351,4 +383,7 @@ Senior Embedded Software Architect            +32-16-286500
 Essensium/Mind                                http://www.mind.be
 G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
 LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F _______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
