@@ -1,23 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Jun 2013 13:13:22 +0200
-Subject: [Buildroot] [PATCH] package/dosfstools: bump version for bug
-	fixes
-In-Reply-To: <1371193144-3262-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Fri, 14 Jun 2013 08:59:04 +0200")
-References: <1371193144-3262-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87hah10wtp.fsf@dell.be.48ers.dk>
+Date: Fri, 14 Jun 2013 13:15:39 +0200
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
+	9}.x stable version
+In-Reply-To: <1371208239-6133-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 14 Jun 2013 08:10:38 -0300")
+References: <1371208239-6133-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d2rp0wpw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
