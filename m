@@ -1,22 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Jun 2013 13:15:39 +0200
-Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
-	9}.x stable version
-In-Reply-To: <1371208239-6133-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 14 Jun 2013 08:10:38 -0300")
-References: <1371208239-6133-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87d2rp0wpw.fsf@dell.be.48ers.dk>
+Date: Fri, 14 Jun 2013 13:56:23 +0200
+Subject: [Buildroot] [PATCH] sdl_image: bump to version 1.2.12
+In-Reply-To: <1371073366-11446-1-git-send-email-gilles.talis@gmail.com>
+ (Gilles Talis's message of "Wed, 12 Jun 2013 14:42:46 -0700")
+References: <1371073366-11446-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <878v2c29eg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gilles> Also added:
+ Gilles> - WEBP file format support
+ Gilles> - License information
 
-Committed both, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
