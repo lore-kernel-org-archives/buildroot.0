@@ -1,41 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 14 Jun 2013 08:10:39 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump 3.9.x stable version
-In-Reply-To: <1371208239-6133-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1371208239-6133-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1371208239-6133-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 14 Jun 2013 13:13:22 +0200
+Subject: [Buildroot] [PATCH] package/dosfstools: bump version for bug
+	fixes
+In-Reply-To: <1371193144-3262-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Fri, 14 Jun 2013 08:59:04 +0200")
+References: <1371193144-3262-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87hah10wtp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index a49ff8a..cfad172 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.9.5"
-+	bool "3.9.6"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.9.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.9.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Committed, thanks.
+
 -- 
-1.8.1.5
+Bye, Peter Korsgaard
