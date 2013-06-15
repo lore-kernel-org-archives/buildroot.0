@@ -1,51 +1,45 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 15 Jun 2013 23:24:09 +0200
-Subject: [Buildroot] [git commit] uboot: Add ELF target
-Message-ID: <20130615213835.107339AE65@busybox.osuosl.org>
+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Date: Sun, 16 Jun 2013 00:18:53 +0200
+Subject: [Buildroot] [PATCHv3 2/3] Add proprietary libraries for Hantro
+	x170 HW decoding
+In-Reply-To: <87k3lvxeig.fsf@dell.be.48ers.dk>
+References: <1370945921-23444-1-git-send-email-alexandre.belloni@free-electrons.com>
+ <1370945921-23444-2-git-send-email-alexandre.belloni@free-electrons.com>
+ <87k3lvxeig.fsf@dell.be.48ers.dk>
+Message-ID: <51BCE84D.9070605@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4d27205ab1c140f9d81fa200f36d118a3dbdad33
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter,
 
-adds ELF image option to uboot
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- boot/uboot/Config.in |    3 +++
- boot/uboot/uboot.mk  |    4 +++-
- 2 files changed, 6 insertions(+), 1 deletions(-)
+On 15/06/2013 23:14, Peter Korsgaard wrote:
+>  Alexandre> diff --git a/package/multimedia/on2-8170-libs/Config.in b/package/multimedia/on2-8170-libs/Config.in
+>  Alexandre> new file mode 100644
+>  Alexandre> index 0000000..09ed808
+>  Alexandre> --- /dev/null
+>  Alexandre> +++ b/package/multimedia/on2-8170-libs/Config.in
+>  Alexandre> @@ -0,0 +1,12 @@
+>  Alexandre> +config BR2_PACKAGE_ON2_8170_LIBS
+>  Alexandre> +	#This is a binary only package which has been compiled for glibc
+>  Alexandre> +	depends on BR2_arm926t
+>  Alexandre> +	depends on (BR2_TOOLCHAIN_EXTERNAL_GLIBC || \
+>  Alexandre> +		BR2_TOOLCHAIN_CTNG_eglibc || \
+>  Alexandre> +		BR2_TOOLCHAIN_CTNG_glibc)
+>  Alexandre> +	bool "on2-8170-libs"
+>
+> Presumably this doesn't do much without the kernel modules, so I changed
+> this to select on2-8170-modules.
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index a1874a1..aadf757 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -98,6 +98,9 @@ config BR2_TARGET_UBOOT_FORMAT_LDR
- 	depends on BR2_bfin
- 	bool "u-boot.ldr"
- 
-+config BR2_TARGET_UBOOT_FORMAT_ELF
-+	bool "u-boot.elf"
-+
- endchoice
- 
- config BR2_TARGET_UBOOT_OMAP_IFT
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 3e188ee..b357e0f 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -26,7 +26,9 @@ UBOOT_SITE    = ftp://ftp.denx.de/pub/u-boot
- UBOOT_SOURCE  = u-boot-$(UBOOT_VERSION).tar.bz2
- endif
- 
--ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
-+UBOOT_BIN          = u-boot
-+else ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
- UBOOT_BIN          = u-boot.kwb
- UBOOT_MAKE_TARGET  = $(UBOOT_BIN)
- else ifeq ($(BR2_TARGET_UBOOT_FORMAT_AIS),y)
+Hum, Is that really a good idea ? I can imagine people building their
+kernel out of buildroot and then not being able to select on2-8170-libs.
+
+
+
+-- 
+Alexandre Belloni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
