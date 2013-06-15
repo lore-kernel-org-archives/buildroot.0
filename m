@@ -1,45 +1,59 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Sun, 16 Jun 2013 00:18:53 +0200
-Subject: [Buildroot] [PATCHv3 2/3] Add proprietary libraries for Hantro
-	x170 HW decoding
-In-Reply-To: <87k3lvxeig.fsf@dell.be.48ers.dk>
-References: <1370945921-23444-1-git-send-email-alexandre.belloni@free-electrons.com>
- <1370945921-23444-2-git-send-email-alexandre.belloni@free-electrons.com>
- <87k3lvxeig.fsf@dell.be.48ers.dk>
-Message-ID: <51BCE84D.9070605@free-electrons.com>
+From: piquemal michel <michel_piquemal@yahoo.fr>
+Date: Sun, 16 Jun 2013 00:26:21 +0100 (BST)
+Subject: [Buildroot] Building with uClibc 0.9.28, Linux 2.6.36
+In-Reply-To: <877ghvxdkf.fsf@dell.be.48ers.dk>
+References: <1371326730.31593.YahooMailNeo@web171503.mail.ir2.yahoo.com>
+ <87bo77yveg.fsf@dell.be.48ers.dk>
+ <1371329906.70128.YahooMailNeo@web171503.mail.ir2.yahoo.com>
+ <87sj0jxf0n.fsf@dell.be.48ers.dk>
+ <1371332003.62321.YahooMailNeo@web171505.mail.ir2.yahoo.com>
+ <877ghvxdkf.fsf@dell.be.48ers.dk>
+Message-ID: <1371338781.70346.YahooMailNeo@web171503.mail.ir2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
+Great, thanks a lot, it does get much further, but there are still some problems with some paths probably.
+Or maybe I should use an earlier gcc version...
+
+Best.
+
+make[4]: Entering directory `/home/mpi/development/buildroot-2010.05/output/toolchain/uClibc-0.9.28.3/libc/misc/assert'
+/home/mpi/development/buildroot-2010.05/output/staging/usr/bin/mipsel-unknown-linux-uclibc-gcc ?-Wall -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing ?-mips1 -msoft-float -fno-stack-protector -fno-builtin -nostdinc -D_LIBC -I../../../include -I. ?-Os -funit-at-a-time ?-mno-split-addresses -isystem /home/mpi/development/buildroot-2010.05/output/staging/usr/lib/gcc/mipsel-unknown-linux-uclibc/4.3.4/include -DNDEBUG -fPIC -c __assert.c -o __assert.o
+In file included from ../../../include/bits/uClibc_uintmaxtostr.h:41,
+? ? ? ? ? ? ? ? ?from __assert.c:34:
+../../../include/limits.h:124:26: error: limits.h: No such file or directory
+make[4]: *** [__assert.o] Error 1
+make[4]: Leaving directory `/home/mpi/development/buildroot-2010.05/output/toolchain/uClibc-0.9.28.3/libc/misc/assert'
+make[3]: *** [_dir_assert] Error 2
+make[3]: Leaving directory `/home/mpi/development/buildroot-2010.05/output/toolchain/uClibc-0.9.28.3/libc/misc'
+make[2]: *** [_dir_misc] Error 2
+make[2]: Leaving directory `/home/mpi/development/buildroot-2010.05/output/toolchain/uClibc-0.9.28.3/libc'
+make[1]: *** [_dir_libc] Error 2
+make[1]: Leaving directory `/home/mpi/development/buildroot-2010.05/output/toolchain/uClibc-0.9.28.3'
+make: *** [/home/mpi/development/buildroot-2010.05/output/toolchain/uClibc-0.9.28.3/lib/libc.a] Error 2
 
 
-On 15/06/2013 23:14, Peter Korsgaard wrote:
->  Alexandre> diff --git a/package/multimedia/on2-8170-libs/Config.in b/package/multimedia/on2-8170-libs/Config.in
->  Alexandre> new file mode 100644
->  Alexandre> index 0000000..09ed808
->  Alexandre> --- /dev/null
->  Alexandre> +++ b/package/multimedia/on2-8170-libs/Config.in
->  Alexandre> @@ -0,0 +1,12 @@
->  Alexandre> +config BR2_PACKAGE_ON2_8170_LIBS
->  Alexandre> +	#This is a binary only package which has been compiled for glibc
->  Alexandre> +	depends on BR2_arm926t
->  Alexandre> +	depends on (BR2_TOOLCHAIN_EXTERNAL_GLIBC || \
->  Alexandre> +		BR2_TOOLCHAIN_CTNG_eglibc || \
->  Alexandre> +		BR2_TOOLCHAIN_CTNG_glibc)
->  Alexandre> +	bool "on2-8170-libs"
->
-> Presumably this doesn't do much without the kernel modules, so I changed
-> this to select on2-8170-modules.
-
-Hum, Is that really a good idea ? I can imagine people building their
-kernel out of buildroot and then not being able to select on2-8170-libs.
 
 
+
+----- Mail original -----
+De?: Peter Korsgaard <jacmet@uclibc.org>
+??: piquemal michel <michel_piquemal@yahoo.fr>
+Cc?: Peter Korsgaard <jacmet@uclibc.org>; "buildroot at busybox.net" <buildroot@busybox.net>
+Envoy? le : Samedi 15 juin 2013 23h35
+Objet?: Re: Building with uClibc 0.9.28, Linux 2.6.36
+
+>>>>> "piquemal" == piquemal michel <michel_piquemal@yahoo.fr> writes:
+
+piquemal> hum, thanks!
+piquemal> however what does
+piquemal> depends on !BR2_avr32
+piquemal> mean: could not find which option it is.
+
+Yes, but as you're building for mips, that's not a problem.
 
 -- 
-Alexandre Belloni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
