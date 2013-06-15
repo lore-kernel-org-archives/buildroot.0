@@ -1,74 +1,101 @@
-From: piquemal michel <michel_piquemal@yahoo.fr>
-Date: Sat, 15 Jun 2013 21:05:30 +0100 (BST)
-Subject: [Buildroot] Building with uClibc 0.9.28, Linux 2.6.36
-Message-ID: <1371326730.31593.YahooMailNeo@web171503.mail.ir2.yahoo.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 15 Jun 2013 22:10:24 +0200
+Subject: [Buildroot] [PATCH 1/1] New package: libqrencode
+In-Reply-To: <1371199666-17156-1-git-send-email-phil@zankapfel.net> (Phil
+ Eichinger's message of "Fri, 14 Jun 2013 10:47:46 +0200")
+References: <1371199666-17156-1-git-send-email-phil@zankapfel.net>
+Message-ID: <87fvwjyw27.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Phil" == Phil Eichinger <phil@zankapfel.net> writes:
 
-I'm trying to build a matching dev environment for a MIPSel embedded product that I bought.
-It's based uClibc 0.9.28, Linux 2.6.36, I know...pretty old stuff.
+ Phil> Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+ Phil> ---
+ Phil>  package/Config.in                  |    1 +
+ Phil>  package/libqrencode/Config.in      |   20 ++++++++++++++++++++
+ Phil>  package/libqrencode/libqrencode.mk |   20 ++++++++++++++++++++
+ Phil>  3 files changed, 41 insertions(+)
+ Phil>  create mode 100644 package/libqrencode/Config.in
+ Phil>  create mode 100644 package/libqrencode/libqrencode.mk
 
-I started off latest 05-13 buildroot menuconfig, setting up target HW, linux version.
-While I could not select appropriate uClibC version I left default, but made some minor change in uclib.mk to reflect proper version and download location.
+ Phil> diff --git a/package/Config.in b/package/Config.in
+ Phil> index ce82e99..3f4cbca 100644
+ Phil> --- a/package/Config.in
+ Phil> +++ b/package/Config.in
+ Phil> @@ -138,6 +138,7 @@ source "package/sdl_sound/Config.in"
+ Phil>  source "package/sdl_net/Config.in"
+ Phil>  source "package/sdl_ttf/Config.in"
+ Phil>  source "package/sdl_gfx/Config.in"
+ Phil> +source "package/libqrencode/Config.in"
 
-make fails when it comes to uClibC related stuff obviously.
-First is default path for linux headers: I did uclibc menuconfig and changed path to ../linux (relative where uclibC is)
-fix_includes then complained about detection for linux version: I added?
-#define UTS_RELEASE "2.6.26" in linux include file version.h
-and make went some bit further, but I'm stuck (log below).
+This is a library, so it belongs in libraries->graphics, just under
+libpng.
+
+ 
+ Phil>  comment "other GUIs"
+ Phil>  source "package/efl/Config.in"
+ Phil> diff --git a/package/libqrencode/Config.in b/package/libqrencode/Config.in
+ Phil> new file mode 100644
+ Phil> index 0000000..285dba0
+ Phil> --- /dev/null
+ Phil> +++ b/package/libqrencode/Config.in
+ Phil> @@ -0,0 +1,20 @@
+ Phil> +config BR2_PACKAGE_LIBQRENCODE
+ Phil> +        bool "libqrencode"
+ Phil> +        select BR2_PACKAGE_LIBPNG
+ Phil> +        help
+
+Config.in files should be indented with <tab> and not spaces.
 
 
-I may not be far from target, but I fear I can go endlessly into such sort of dirty modding.
-Are there some patches available to build environement with such an old uClibc version?
-Or can anyone help into reaching the last mile and get such hacked setup successful?
+ Phil> +          libqrencode is a C library for encoding data in a QR Code 
+ Phil> +          symbol, a kind of 2D symbology that can be scanned by handy 
+ Phil> +          terminals such as a mobile phone with CCD. The capacity of 
+ Phil> +          QR Code is up to 7000 digits or 4000 characters, and is 
+ Phil> +          highly robust.
 
-Many thanks!
+Your help text as a trailing space on each line.
 
+ Phil> +
+ Phil> +          http://fukuchi.org/works/qrencode/index.html
+ Phil> +
+ Phil> +if BR2_PACKAGE_LIBQRENCODE
+ Phil> +
+ Phil> +config BR2_PACKAGE_LIBQRENCODE_TOOLS
+ Phil> +        bool "Command-line tools"
+ Phil> +        help
+ Phil> +          Build command-line tools
+ Phil> +
+ Phil> +endif #BR2_PACKAGE_LIBQRENCODE
+ Phil> diff --git a/package/libqrencode/libqrencode.mk b/package/libqrencode/libqrencode.mk
+ Phil> new file mode 100644
+ Phil> index 0000000..d47f866
+ Phil> --- /dev/null
+ Phil> +++ b/package/libqrencode/libqrencode.mk
+ Phil> @@ -0,0 +1,20 @@
+ Phil> +#############################################################
+ Phil> +#
+ Phil> +# libqrencode
+ Phil> +#
+ Phil> +#############################################################
+ Phil> +
+ Phil> +LIBQRENCODE_VERSION = 3.4.2
+ Phil> +LIBQRENCODE_SOURCE = qrencode-$(LIBQRENCODE_VERSION).tar.gz
+ Phil> +LIBQRENCODE_SITE = http://fukuchi.org/works/qrencode
+ Phil> +LIBQRENCODE_DEPENDENCIES = libpng
+ Phil> +LIBQRENCODE_LICENSE = LGPLv2.1+
+ Phil> +LIBQRENCODE_LICENSE_FILES = COPYING
 
+Libraries should be installed into $(STAGING_DIR) as well, so other
+packages can find them, so there should be a
 
+LIBQRENCODE_INSTALL_STAGING = YES
 
->>> ? Installing uClibc headers
-/usr/bin/make -j1 -C /home/mpi/development/buildroot-2013.05/output/toolchain/uClibc-0.9.28 \
-ARCH="mips" \
-PREFIX=/home/mpi/development/buildroot-2013.05/output/toolchain/uClibc_dev/ \
-DEVEL_PREFIX=/usr/ \
-RUNTIME_PREFIX=/home/mpi/development/buildroot-2013.05/output/toolchain/uClibc_dev/ \
-CROSS_COMPILE="/home/mpi/development/buildroot-2013.05/output/host/usr/bin/mipsel-buildroot-linux-uclibc-" \
-UCLIBC_EXTRA_CFLAGS="" \
-HOSTCC="/usr/bin/gcc" headers \
-lib/crt1.o lib/crti.o lib/crtn.o \
-install_headers
-make[1]: Entering directory `/home/mpi/development/buildroot-2013.05/output/toolchain/uClibc-0.9.28'
-+ ./extra/scripts/fix_includes.sh -k ../linux -t mips
-Current kernel version is 2.6.36
--e?
+Committed with these things fixed up, thanks.
 
-Using kernel headers from 2.6.36 for architecture 'mips'
--e provided in directory ../linux
--e?
-
-+ TOPDIR=. CC= /home/mpi/development/buildroot-2013.05/output/host/usr/bin/mipsel-buildroot-linux-uclibc-gcc /bin/sh extra/scripts/gen_bits_syscall_h.sh
-mipsel-buildroot-linux-uclibc-gcc: error: ./include/asm/unistd.h: No such file or directory
-mipsel-buildroot-linux-uclibc-gcc: fatal error: no input files
-compilation terminated.
-<stdin>:1:34: fatal error: ./include/asm/unistd.h: No such file or directory
-compilation terminated.
-+ cmp include/bits/sysnum.h include/bits/sysnum.h.new
-+ mv -f include/bits/sysnum.h.new include/bits/sysnum.h
-/usr/bin/make -C libc/sysdeps/linux/common headers
-make[2]: Entering directory `/home/mpi/development/buildroot-2013.05/output/toolchain/uClibc-0.9.28/libc/sysdeps/linux/common'
-ln -fs ../libc/sysdeps/linux/common/fpu_control.h ../../../..//include/
-make[2]: Leaving directory `/home/mpi/development/buildroot-2013.05/output/toolchain/uClibc-0.9.28/libc/sysdeps/linux/common'
-/usr/bin/make -C libc/sysdeps/linux/mips headers
-make[2]: Entering directory `/home/mpi/development/buildroot-2013.05/output/toolchain/uClibc-0.9.28/libc/sysdeps/linux/mips'
-ln -fs ../libc/sysdeps/linux/mips/sgidefs.h ../../../..//include/
-ln -fs ../libc/sysdeps/linux/mips/fpu_control.h ../../../..//include/
-make[2]: Leaving directory `/home/mpi/development/buildroot-2013.05/output/toolchain/uClibc-0.9.28/libc/sysdeps/linux/mips'
-make[1]: *** No rule to make target `lib/crt1.o'. ?Stop.
-make[1]: Leaving directory `/home/mpi/development/buildroot-2013.05/output/toolchain/uClibc-0.9.28'
-make: *** [/home/mpi/development/buildroot-2013.05/output/toolchain/uClibc-0.9.28/.configured] Error 2
+-- 
+Bye, Peter Korsgaard
