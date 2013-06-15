@@ -1,65 +1,89 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 15 Jun 2013 23:18:22 +0200
-Subject: [Buildroot] [PATCHv3 3/3] Add gstreamer plugin for Hantro x170
-In-Reply-To: <1370945921-23444-3-git-send-email-alexandre.belloni@free-electrons.com>
- (Alexandre Belloni's message of "Tue, 11 Jun 2013 12:18:41 +0200")
-References: <1370945921-23444-1-git-send-email-alexandre.belloni@free-electrons.com>
- <1370945921-23444-3-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <87fvwjxech.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 15 Jun 2013 23:15:05 +0200
+Subject: [Buildroot] [git commit] Add proprietary libraries for Hantro x170
+	HW decoding
+Message-ID: <20130615212019.0F04A9AE5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b31ec9d641e772c90dc646b8feba01fc4129dc88
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Alexandre> Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
- Alexandre> ---
- Alexandre>  package/multimedia/Config.in                       |  1 +
- Alexandre>  package/multimedia/gst-plugin-x170/Config.in       | 14 +++++++++++
- Alexandre>  .../gst-plugin-x170-01-correct-CFLAGS.patch        | 28 ++++++++++++++++++++++
- Alexandre>  .../multimedia/gst-plugin-x170/gst-plugin-x170.mk  | 18 ++++++++++++++
- Alexandre>  4 files changed, 61 insertions(+)
- Alexandre>  create mode 100644 package/multimedia/gst-plugin-x170/Config.in
- Alexandre>  create mode 100644 package/multimedia/gst-plugin-x170/gst-plugin-x170-01-correct-CFLAGS.patch
- Alexandre>  create mode 100644 package/multimedia/gst-plugin-x170/gst-plugin-x170.mk
+[Peter: select on2-8170-modules, ensure dest dirs exist]
+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/Config.in                      |    1 +
+ package/multimedia/on2-8170-libs/Config.in        |   16 +++++++++++++
+ package/multimedia/on2-8170-libs/on2-8170-libs.mk |   26 +++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 0 deletions(-)
 
- Alexandre> diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
- Alexandre> index 4cb81bf..77c0a22 100644
- Alexandre> --- a/package/multimedia/Config.in
- Alexandre> +++ b/package/multimedia/Config.in
- Alexandre> @@ -14,6 +14,7 @@ source "package/multimedia/gst-plugins-base/Config.in"
- Alexandre>  source "package/multimedia/gst-plugins-good/Config.in"
- Alexandre>  source "package/multimedia/gst-plugins-bad/Config.in"
- Alexandre>  source "package/multimedia/gst-plugins-ugly/Config.in"
- Alexandre> +source "package/multimedia/gst-plugin-x170/Config.in"
- Alexandre>  source "package/multimedia/lame/Config.in"
- Alexandre>  source "package/multimedia/libvpx/Config.in"
- Alexandre>  source "package/multimedia/madplay/Config.in"
- Alexandre> diff --git a/package/multimedia/gst-plugin-x170/Config.in b/package/multimedia/gst-plugin-x170/Config.in
- Alexandre> new file mode 100644
- Alexandre> index 0000000..0787013
- Alexandre> --- /dev/null
- Alexandre> +++ b/package/multimedia/gst-plugin-x170/Config.in
- Alexandre> @@ -0,0 +1,14 @@
- Alexandre> +config BR2_PACKAGE_GST_PLUGIN_X170
- Alexandre> +	bool "gst-plugin-x170"
- Alexandre> +	depends on BR2_PACKAGE_GSTREAMER
- Alexandre> +	depends on BR2_arm926t
- Alexandre> +	depends on (BR2_TOOLCHAIN_EXTERNAL_GLIBC || \
- Alexandre> +		BR2_TOOLCHAIN_CTNG_eglibc || \
- Alexandre> +		BR2_TOOLCHAIN_CTNG_glibc)
- Alexandre> +	select BR2_PACKAGE_ON2_8170_LIBS
- Alexandre> +	help
- Alexandre> +	  GStreamer plug-in to use the Hantro X170 video decoder present on
- Alexandre> +	  ATMEL AT91SAM9M10 SoC.
- Alexandre> +
- Alexandre> +	  http://www.at91.com/linux4sam/bin/view/Linux4SAM/SAM9M10Gstreamer
- Alexandre> +
-
-Dropped this empty line and added a comment where the glibc dependency
-comes from and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index dd74863..4cb81bf 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -21,6 +21,7 @@ source "package/multimedia/mpd/Config.in"
+ source "package/multimedia/mpg123/Config.in"
+ source "package/multimedia/mplayer/Config.in"
+ source "package/multimedia/musepack/Config.in"
++source "package/multimedia/on2-8170-libs/Config.in"
+ source "package/opus-tools/Config.in"
+ source "package/multimedia/pulseaudio/Config.in"
+ source "package/multimedia/tidsp-binaries/Config.in"
+diff --git a/package/multimedia/on2-8170-libs/Config.in b/package/multimedia/on2-8170-libs/Config.in
+new file mode 100644
+index 0000000..0cf05ad
+--- /dev/null
++++ b/package/multimedia/on2-8170-libs/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_ON2_8170_LIBS
++	#This is a binary only package which has been compiled for glibc
++	depends on BR2_arm926t
++	depends on (BR2_TOOLCHAIN_EXTERNAL_GLIBC || \
++		BR2_TOOLCHAIN_CTNG_eglibc || \
++		BR2_TOOLCHAIN_CTNG_glibc)
++	depends on BR2_LINUX_KERNEL # on2-8170-modules
++	select BR2_PACKAGE_ON2_8170_MODULES # runtime
++	bool "on2-8170-libs"
++	help
++	  Libraries for Hantro X170 video decoder
++
++	  http://www.at91.com/linux4sam/bin/view/Linux4SAM/SAM9M10Gstreamer
++
++comment "on2-8170 libs requires a linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/multimedia/on2-8170-libs/on2-8170-libs.mk b/package/multimedia/on2-8170-libs/on2-8170-libs.mk
+new file mode 100644
+index 0000000..7cdb991
+--- /dev/null
++++ b/package/multimedia/on2-8170-libs/on2-8170-libs.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# on2-8170-libs
++#
++################################################################################
++
++ON2_8170_LIBS_VERSION = 1.0
++ON2_8170_LIBS_SITE = ftp://ftp.linux4sam.org/pub/demo/linux4sam_1.9/codec/
++
++ON2_8170_LICENSE = PROPRIETARY
++# No license file is included in the archive
++
++ON2_8170_LIBS_INSTALL_STAGING = YES
++
++define ON2_8170_LIBS_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/lib $(STAGING_DIR)/usr/include
++	cp -dpf $(@D)/*.a $(@D)/*.so $(STAGING_DIR)/usr/lib
++	cp -dpf $(@D)/*.h $(STAGING_DIR)/usr/include
++endef
++
++define ON2_8170_LIBS_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/lib
++	cp -dpf $(@D)/*.so $(TARGET_DIR)/usr/lib
++endef
++
++$(eval $(generic-package))
