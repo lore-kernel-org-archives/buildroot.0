@@ -1,87 +1,169 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 15 Jun 2013 22:14:18 +0200
-Subject: [Buildroot] [git commit] New package: libqrencode
-Message-ID: <20130615201636.D70899ADAC@busybox.osuosl.org>
+Date: Sat, 15 Jun 2013 21:47:15 +0200
+Subject: [Buildroot] [git commit] iozone: fixup build system
+Message-ID: <20130615201636.B66E89AE44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f5eb71790ad69460df8496e808ff12ab505b5c89
+commit: http://git.buildroot.net/buildroot/commit/?id=f72467e754cc4896adabf07f9e6fabcf10653192
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: move to libraries, fix Config.in, install into STAGING_DIR]
-Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+Fixup iozone's build system to make it somewhat more flexible.
+First make our own linux targets for non-AIO toolchains (uClibc) and
+non-threading.
+And second, just ditch forced largefile support and expect it from
+CFLAGS.
+Otherwise using the generic target caused issues like:
+http://autobuild.buildroot.net/results/19f606f2978dc3c8039b1bccfcc562b4050083c7/
+...which is fixed by this.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                  |    1 +
- package/libqrencode/Config.in      |   20 ++++++++++++++++++++
- package/libqrencode/libqrencode.mk |   21 +++++++++++++++++++++
- 3 files changed, 42 insertions(+), 0 deletions(-)
+ package/iozone/Config.in            |    4 --
+ package/iozone/iozone-targets.patch |   92 +++++++++++++++++++++++++++++++++++
+ package/iozone/iozone.mk            |   13 ++---
+ 3 files changed, 98 insertions(+), 11 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index ce82e99..b23da75 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -448,6 +448,7 @@ source "package/libglade/Config.in"
- source "package/gdk-pixbuf/Config.in"
- source "package/libgtk2/Config.in"
- source "package/libpng/Config.in"
-+source "package/libqrencode/Config.in"
- source "package/libraw/Config.in"
- source "package/librsvg/Config.in"
- source "package/libsvgtiny/Config.in"
-diff --git a/package/libqrencode/Config.in b/package/libqrencode/Config.in
+diff --git a/package/iozone/Config.in b/package/iozone/Config.in
+index 5481ca1..26d4daa 100644
+--- a/package/iozone/Config.in
++++ b/package/iozone/Config.in
+@@ -1,12 +1,8 @@
+ config BR2_PACKAGE_IOZONE
+ 	bool "iozone"
+-	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  IOzone is a filesystem benchmark tool.
+ 	  The benchmark generates and measures a variety of file operations
+ 
+ 	  http://www.iozone.org/
+-
+-comment "IOzone requires a toolchain with LARGEFILE support"
+-	depends on !BR2_LARGEFILE
+diff --git a/package/iozone/iozone-targets.patch b/package/iozone/iozone-targets.patch
 new file mode 100644
-index 0000000..e8fc1d4
+index 0000000..258b960
 --- /dev/null
-+++ b/package/libqrencode/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_LIBQRENCODE
-+	bool "libqrencode"
-+	select BR2_PACKAGE_LIBPNG
-+	help
-+	  libqrencode is a C library for encoding data in a QR Code
-+	  symbol, a kind of 2D symbology that can be scanned by handy
-+	  terminals such as a mobile phone with CCD. The capacity of
-+	  QR Code is up to 7000 digits or 4000 characters, and is
-+	  highly robust.
++++ b/package/iozone/iozone-targets.patch
+@@ -0,0 +1,92 @@
++Add new targets for iozone:
 +
-+	  http://fukuchi.org/works/qrencode/index.html
++linux-noaio is for linux targets without AIO (use case: uClibc)
++linux-noth is for linux target without threads or AIO
 +
-+if BR2_PACKAGE_LIBQRENCODE
++And make largefile support optional via CFLAGS.
 +
-+config BR2_PACKAGE_LIBQRENCODE_TOOLS
-+	bool "libqrencode tools"
-+	help
-+	  Build command-line tools
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+endif #BR2_PACKAGE_LIBQRENCODE
-diff --git a/package/libqrencode/libqrencode.mk b/package/libqrencode/libqrencode.mk
-new file mode 100644
-index 0000000..e1f2362
---- /dev/null
-+++ b/package/libqrencode/libqrencode.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# libqrencode
-+#
-+################################################################################
-+
-+LIBQRENCODE_VERSION = 3.4.2
-+LIBQRENCODE_SOURCE = qrencode-$(LIBQRENCODE_VERSION).tar.gz
-+LIBQRENCODE_SITE = http://fukuchi.org/works/qrencode
-+LIBQRENCODE_DEPENDENCIES = libpng
-+LIBQRENCODE_INSTALL_STAGING = YES
-+LIBQRENCODE_LICENSE = LGPLv2.1+
-+LIBQRENCODE_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_LIBQRENCODE_TOOLS),y)
-+        LIBQRENCODE_CONF_OPT += --with-tools=yes
-+else
-+        LIBQRENCODE_CONF_OPT += --with-tools=no
-+endif
-+
-+$(eval $(autotools-package))
++diff -Nura iozone3_414.orig/src/current/makefile iozone3_414/src/current/makefile
++--- iozone3_414.orig/src/current/makefile	2013-06-11 09:48:18.257837091 -0300
+++++ iozone3_414/src/current/makefile	2013-06-11 13:05:56.338162144 -0300
++@@ -166,10 +166,28 @@
++ # GNU 'C' compiler Linux build with threads, largefiles, async I/O 
++ #
++ linux:	iozone_linux.o libasync.o libbif.o fileop_linux.o pit_server.o
++-	$(CC)  -O3 $(LDFLAGS) iozone_linux.o libasync.o libbif.o -lpthread \
+++	$(CC)  $(CFLAGS) $(LDFLAGS) iozone_linux.o libasync.o libbif.o \
+++		-lpthread -lrt -o iozone
+++	$(CC)  $(CFLAGS) -Dlinux fileop_linux.o -o fileop
+++	$(CC)  $(CFLAGS) -Dlinux pit_server.o -o pit_server
+++
+++#
+++# GNU 'C' compiler Linux build with threads, largefiles
+++#
+++linux-noaio: iozone_linux-noaio.o libbif.o fileop_linux.o pit_server.o
+++	$(CC)  $(CFLAGS) $(LDFLAGS) iozone_linux-noaio.o libbif.o \
+++		-lpthread -lrt -o iozone
+++	$(CC)  $(CFLAGS) -Dlinux fileop_linux.o -o fileop
+++	$(CC)  $(CFLAGS) -Dlinux pit_server.o -o pit_server
+++
+++#
+++# GNU 'C' compiler Linux build with largefiles
+++#
+++linux-noth: iozone_linux-noth.o libbif.o fileop_linux.o pit_server.o
+++	$(CC)  $(CFLAGS) $(LDFLAGS) iozone_linux-noth.o libbif.o \
++ 		-lrt -o iozone
++-	$(CC)  -O3 -Dlinux fileop_linux.o -o fileop
++-	$(CC)  -O3 -Dlinux pit_server.o -o pit_server
+++	$(CC)  $(CFLAGS) -Dlinux fileop_linux.o -o fileop
+++	$(CC)  $(CFLAGS) -Dlinux pit_server.o -o pit_server
++ 
++ #
++ # GNU 'C' compiler Linux build for powerpc chip with threads, largefiles, async I/O 
++@@ -795,13 +813,33 @@
++ 	@echo ""
++ 	@echo "Building iozone for Linux"
++ 	@echo ""
++-	$(CC) -Wall -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
++-		-DSHARED_MEM -Dlinux -D_LARGEFILE64_SOURCE $(CFLAGS) iozone.c \
+++	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
+++		-DSHARED_MEM -Dlinux $(CFLAGS) iozone.c \
++ 		-DNAME='"linux"' -o iozone_linux.o
++-	$(CC) -Wall -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -D_LARGEFILE64_SOURCE \
+++	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO \
+++		-DSHARED_MEM -Dlinux $(CFLAGS) libbif.c -o libbif.o
+++	$(CC) -Wall -c -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
+++		$(CFLAGS) libasync.c  -o libasync.o 
+++
+++iozone_linux-noaio.o: iozone.c libbif.c
+++	@echo ""
+++	@echo "Building iozone for Linux no AIO"
+++	@echo ""
+++	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DHAVE_PREAD \
+++		-DSHARED_MEM -Dlinux $(CFLAGS) iozone.c \
+++		-DNAME='"linux"' -o iozone_linux-noaio.o
+++	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C \
+++		-DSHARED_MEM -Dlinux $(CFLAGS) libbif.c -o libbif.o
+++
+++iozone_linux-noth.o: iozone.c libbif.c
+++	@echo ""
+++	@echo "Building iozone for Linux with no threads"
+++	@echo ""
+++	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DNO_THREADS -DHAVE_PREAD \
+++		-DSHARED_MEM -Dlinux $(CFLAGS) iozone.c \
+++		-DNAME='"linux"' -o iozone_linux-noth.o
+++	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DNO_THREADS \
++ 		-DSHARED_MEM -Dlinux $(CFLAGS) libbif.c -o libbif.o
++-	$(CC) -Wall -c -O3 -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
++-		-D_LARGEFILE64_SOURCE $(CFLAGS) libasync.c  -o libasync.o 
++ 
++ fileop_AIX.o:	fileop.c
++ 	@echo ""
++@@ -893,7 +931,7 @@
++ 	@echo ""
++ 	@echo "Building fileop for Linux"
++ 	@echo ""
++-	$(CC) -Wall -c -O3 $(CFLAGS) fileop.c -o fileop_linux.o
+++	$(CC) -Wall -c $(CFLAGS) fileop.c -o fileop_linux.o
++ 
++ fileop_openbsd.o:	fileop.c
++ 	@echo ""
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+index eb0a6d8..970e509 100644
+--- a/package/iozone/iozone.mk
++++ b/package/iozone/iozone.mk
+@@ -11,13 +11,12 @@ IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
+ # IOzone license details can be found at:
+ # http://www.iozone.org/docs/Iozone_License.txt
+ 
+-ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
+-# aio.h is not available on uClibc. Select "generic" target that does not use it.
+-IOZONE_TARGET = generic
+-else ifeq ($(BR2_powerpc),y)
+-IOZONE_TARGET = linux-powerpc
+-else ifeq ($(BR2_sparc),y)
+-IOZONE_TARGET = linux-sparc
++# No threading target is non-AIO as well
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++IOZONE_TARGET = linux-noth
++# AIO support not available on uClibc, use the linux (non-aio) target.
++else ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
++IOZONE_TARGET = linux-noaio
+ else
+ IOZONE_TARGET = linux
+ endif
