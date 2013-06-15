@@ -1,112 +1,79 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 15 Jun 2013 23:17:25 +0200
-Subject: [Buildroot] [git commit] Add gstreamer plugin for Hantro x170
-Message-ID: <20130615212019.3BBFA9AE5F@busybox.osuosl.org>
+Date: Sat, 15 Jun 2013 23:12:48 +0200
+Subject: [Buildroot] [git commit] Add on2-8170 kernel modules
+Message-ID: <20130615212018.CF9759AE5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7c6a2995ddb045e5c0617997a9f1fe1f4b382571
+commit: http://git.buildroot.net/buildroot/commit/?id=82fddc399e7e9dc302d6172edd2bcbdf5feca091
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: Config.in: add comment about glibc dependency]
 Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/Config.in                       |    1 +
- package/multimedia/gst-plugin-x170/Config.in       |   13 +++++++++
- .../gst-plugin-x170-01-correct-CFLAGS.patch        |   28 ++++++++++++++++++++
- .../multimedia/gst-plugin-x170/gst-plugin-x170.mk  |   18 ++++++++++++
- 4 files changed, 60 insertions(+), 0 deletions(-)
+ package/Config.in                            |    1 +
+ package/on2-8170-modules/Config.in           |   11 +++++++++++
+ package/on2-8170-modules/on2-8170-modules.mk |   23 +++++++++++++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 4cb81bf..77c0a22 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -14,6 +14,7 @@ source "package/multimedia/gst-plugins-base/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
-+source "package/multimedia/gst-plugin-x170/Config.in"
- source "package/multimedia/lame/Config.in"
- source "package/multimedia/libvpx/Config.in"
- source "package/multimedia/madplay/Config.in"
-diff --git a/package/multimedia/gst-plugin-x170/Config.in b/package/multimedia/gst-plugin-x170/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index b23da75..fa64426 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -272,6 +272,7 @@ source "package/minicom/Config.in"
+ source "package/nanocom/Config.in"
+ source "package/neard/Config.in"
+ source "package/ofono/Config.in"
++source "package/on2-8170-modules/Config.in"
+ source "package/open2300/Config.in"
+ source "package/openocd/Config.in"
+ source "package/owl-linux/Config.in"
+diff --git a/package/on2-8170-modules/Config.in b/package/on2-8170-modules/Config.in
 new file mode 100644
-index 0000000..fd93947
+index 0000000..18c066e
 --- /dev/null
-+++ b/package/multimedia/gst-plugin-x170/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_GST_PLUGIN_X170
-+	bool "gst-plugin-x170"
-+	depends on BR2_PACKAGE_GSTREAMER
++++ b/package/on2-8170-modules/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_ON2_8170_MODULES
++	bool "on2-8170 modules"
++	depends on BR2_LINUX_KERNEL
 +	depends on BR2_arm926t
-+	depends on (BR2_TOOLCHAIN_EXTERNAL_GLIBC || \
-+		BR2_TOOLCHAIN_CTNG_eglibc || \
-+		BR2_TOOLCHAIN_CTNG_glibc) # on2-8170-libs
-+	select BR2_PACKAGE_ON2_8170_LIBS
 +	help
-+	  GStreamer plug-in to use the Hantro X170 video decoder present on
-+	  ATMEL AT91SAM9M10 SoC.
++	  Kernel modules for Hantro x170 hardware video decompression support.
 +
 +	  http://www.at91.com/linux4sam/bin/view/Linux4SAM/SAM9M10Gstreamer
-diff --git a/package/multimedia/gst-plugin-x170/gst-plugin-x170-01-correct-CFLAGS.patch b/package/multimedia/gst-plugin-x170/gst-plugin-x170-01-correct-CFLAGS.patch
++
++comment "on2-8170 modules requires a linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/on2-8170-modules/on2-8170-modules.mk b/package/on2-8170-modules/on2-8170-modules.mk
 new file mode 100644
-index 0000000..9c32e46
+index 0000000..800abc7
 --- /dev/null
-+++ b/package/multimedia/gst-plugin-x170/gst-plugin-x170-01-correct-CFLAGS.patch
-@@ -0,0 +1,28 @@
-+The configure script is correctly getting the CFLAGS needed to compile a plugin
-+for gstreamer and storing them in GST_BASE_CFLAGS but the Makefiles are never
-+making use of those.
-+
-+We actually have to use AM_CPPFLAGS as AM_CFLAGS is used everywhere but on the
-+real compiling rule...
-+
-+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-+---
-+ src/Makefile.am | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 8cb51d1..6af5d91 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -5,6 +5,8 @@
-+ ##############################################################################
-+ plugin_LTLIBRARIES = libgstx170.la
-+ 
-++AM_CPPFLAGS = @GST_BASE_CFLAGS@
-++
-+ ##############################################################################
-+ # for the next set of variables, rename the prefix if you renamed the .la,   #
-+ #  e.g. libgstplugin_la_SOURCES => libmysomething_la_SOURCES                 #
-+-- 
-+1.8.1.2
-+
-diff --git a/package/multimedia/gst-plugin-x170/gst-plugin-x170.mk b/package/multimedia/gst-plugin-x170/gst-plugin-x170.mk
-new file mode 100644
-index 0000000..a6143ed
---- /dev/null
-+++ b/package/multimedia/gst-plugin-x170/gst-plugin-x170.mk
-@@ -0,0 +1,18 @@
++++ b/package/on2-8170-modules/on2-8170-modules.mk
+@@ -0,0 +1,23 @@
 +################################################################################
 +#
-+# gst-plugins-x170
++# on2-8170-modules
 +#
 +################################################################################
 +
-+GST_PLUGIN_X170_VERSION = 1.0
-+GST_PLUGIN_X170_SITE = ftp://ftp.linux4sam.org/pub/demo/linux4sam_1.9/codec/
++ON2_8170_MODULES_VERSION = 73b0806
++ON2_8170_MODULES_SITE    = http://github.com/alexandrebelloni/on2-8170-modules/tarball/$(ON2_8170_MODULES_VERSION)
 +
-+GST_PLUGIN_X170_LICENSE = BSD-1c
-+#A license file is included but it is just a placeholder
++ON2_8170_MODULES_DEPENDENCIES = linux
 +
-+# There is no generated configure script in the tarball.
-+GST_PLUGIN_X170_AUTORECONF = YES
-+GST_PLUGIN_X170_AUTORECONF_OPT = -Im4/
-+GST_PLUGIN_X170_DEPENDENCIES = gstreamer libglib2 on2-8170-libs
++ON2_8170_MODULES_LICENSE = GPLv2+
++#There is no license file
 +
-+$(eval $(autotools-package))
++define ON2_8170_MODULES_BUILD_CMDS
++	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D)
++endef
++
++define ON2_8170_MODULES_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) modules_install
++endef
++
++$(eval $(generic-package))
