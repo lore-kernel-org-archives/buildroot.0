@@ -1,43 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Jun 2013 18:00:54 +0200
-Subject: [Buildroot] Changes in the Buildroot autobuilders
-Message-ID: <20130616180054.58f52914@skate>
+Date: Sun, 16 Jun 2013 18:03:00 +0200
+Subject: [Buildroot] binutils doesn't like -elf2flt option
+In-Reply-To: <kphffs$v5g$1@ger.gmane.org>
+References: <kphffs$v5g$1@ger.gmane.org>
+Message-ID: <20130616180300.68ba98a4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Adam Nielsen,
 
-I've made a number of small changes in the autobuilders configuration
-and setup:
+On Sat, 15 Jun 2013 20:26:09 +1000, Adam Nielsen wrote:
 
- *) I've extended the mail notification script to be able to send
-    per-architecture notification to persons who are specifically taking
-    care of a given architecture. So far, Sonic Zhang is receiving a
-    notification for Blackfin related failures, and Mischa Jonker is
-    receiving a notification for ARC related failures.
+> I'm trying to compile a toolchain with elf2flt enabled, but I'm having 
+> problems getting binutils to compile.
+> 
+> Normally the parameter "-W,-elf2flt" is passed to GCC to tell it to pass 
 
- *) On the Free Electrons build server, I've modified the build script
-    so that before every build, it removes 5 random files from the
-    download directory. This will allow to make sure the autobuilders
-    sometimes re-download tarballs or git trees, and therefore we
-    should notice sooner when something is no longer available. For
-    example, I've discovered that both the axel and the Blackfin
-    toolchain downloads were broken, but that wasn't noticeable due to
-    the tarballs already being in the download cache of the
-    autobuilders.
+Should be -Wl,-elf2flt, but you got it correct in the log below, so I
+guess this one was just a typo.
 
- *) I've updated the toolchain configurations on the Free Electrons
-    build server. All external toolchains built by Buildroot have been
-    rebuilt using Buildroot 2013.05 (tarballs available at
-    http://autobuild.buildroot.org/toolchains/tarballs/). Many
-    configurations that used external toolchains have been updated to
-    use the latest available versions of those toolchains and I've added
-    a MIPS64 configuration that uses the Sourcery toolchain. See
-    http://autobuild.buildroot.org/toolchains/configs/free-electrons/
-    for the complete list of toolchains.
+> "-elf2flt" to the linker.  elf2flt then picks this up and does what it needs 
+> to, courtesy of a wrapper script around "ld".  I have set this parameter in 
+> TARGET_CFLAGS in one of the buildroot makefiles.
+> 
+> However when I am compiling binutils, it seems that elf2flt has not been 
+> installed yet, so it is not recognising the -elf2flt option, and gives me this 
+> error:
+> 
+> arm-buildroot-linux-uclibcgnueabi-gcc -o conftest -D_LARGEFILE_SOURCE 
+> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -Wl,-elf2flt 
+> -DBR_BINFMT_FLAT   --static -Wl,-rpath -Wl,/foo conftest.c  >&5
+> arm-buildroot-linux-uclibcgnueabi/bin/ld: warning: cannot find entry symbol 
+> lf2flt; defaulting to 00000000000080c0
+> 
+> I think binutils needs to use elf2flt, otherwise any binaries it produces will 
+> not be in BFLT format, so I am guessing I need to tell buildroot to compile 
+> elf2flt before binutils.  Does this sound correct?  Is it even possible to 
+> compile something like that before binutils?  Or do I have to somehow avoid 
+> passing the -elf2flt parameter to binutils?  How might one achieve this?
+
+Are we talking about the cross binutils (i.e the one that runs on your
+development PC and generates code for your target platform), or the
+target binutils (i.e the one that runs on your target platform and
+generates code for your target platform) ?
 
 Best regards,
 
