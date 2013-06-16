@@ -1,40 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Jun 2013 19:15:58 +0200
-Subject: [Buildroot] [PATCH] sconeserver: add patch to fix build issue
-In-Reply-To: <CAHt8ZCMYSSHYyPofmMacBUK1v1cyttyOHCuY9cQJ=W_taZa3yg@mail.gmail.com>
-References: <1371401514-17259-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAHt8ZCMYSSHYyPofmMacBUK1v1cyttyOHCuY9cQJ=W_taZa3yg@mail.gmail.com>
-Message-ID: <20130616191558.741a3f52@skate>
+Date: Sun, 16 Jun 2013 19:18:06 +0200
+Subject: [Buildroot] Changes in the Buildroot autobuilders
+In-Reply-To: <20130616170305.GI3495@free.fr>
+References: <20130616180054.58f52914@skate>
+	<20130616170305.GI3495@free.fr>
+Message-ID: <20130616191806.7b4a899a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Simon Dawson,
+Dear Yann E. MORIN,
 
-On Sun, 16 Jun 2013 17:56:14 +0100, Simon Dawson wrote:
+On Sun, 16 Jun 2013 19:03:05 +0200, Yann E. MORIN wrote:
 
-> > Simon, feel free to upstream this patch. Since I know you've been
-> > following the sconeserver development, it's probably easier if you
-> > upstream the patch.
-> > ---
+> It would be nice if it were also possible to somehow "subscribe" to a
+> list of packages and get a mail when any of these packages fails to
+> build.
+
+Indeed. Are we also talking about a daily e-mail?
+
+> For example, I'd like to catch errors in the packages I've submitted.
 > 
-> Okay; will do.
-
-Thanks!
-
-> > +The '==' shell operator doesn't work in POSIX shells, so when sh is
-> > +symlinked to a POSIX shell such as dash and not a bash shell, the
-> > +configure tests that use this operator fail to work.
-> > +
-> > +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> I see two options for this:
+>   - add a global MAINTAINERS file that list maintainers for each
+>     actively maintained packages (a bit like the Linux kernel does);
+>   - add a FOO_MAINTAINER variable to foo.mk (for each maintained 'foo'
+>     package).
 > 
-> Aha; that explains why I couldn't get it to fail on my build machine.
-> Well spotted!
+> Would that be possible?
 
-Yeah, I already encountered the issue with some other configure scripts
-using bashims.
+Yes that would be possible. For now, I don't have a particularly strong
+opinion between the two solutions you proposed. Maybe the second one is
+more Buildroot-ish?
 
 Best regards,
 
