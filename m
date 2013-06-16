@@ -1,57 +1,126 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Jun 2013 18:03:00 +0200
-Subject: [Buildroot] binutils doesn't like -elf2flt option
-In-Reply-To: <kphffs$v5g$1@ger.gmane.org>
-References: <kphffs$v5g$1@ger.gmane.org>
-Message-ID: <20130616180300.68ba98a4@skate>
+Date: Sun, 16 Jun 2013 18:51:54 +0200
+Subject: [Buildroot] [PATCH] sconeserver: add patch to fix build issue
+Message-ID: <1371401514-17259-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Adam Nielsen,
+Fixes:
 
-On Sat, 15 Jun 2013 20:26:09 +1000, Adam Nielsen wrote:
+  http://autobuild.buildroot.org/results/f28/f2856c00d99fbf9ce882442ab7b868ccc4966388/build-end.log
 
-> I'm trying to compile a toolchain with elf2flt enabled, but I'm having 
-> problems getting binutils to compile.
-> 
-> Normally the parameter "-W,-elf2flt" is passed to GCC to tell it to pass 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Simon Dawson <spdawson@gmail.com>
+---
+Simon, feel free to upstream this patch. Since I know you've been
+following the sconeserver development, it's probably easier if you
+upstream the patch.
+---
+ .../sconeserver-fix-configure-operators.patch      | 93 ++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
+ create mode 100644 package/sconeserver/sconeserver-fix-configure-operators.patch
 
-Should be -Wl,-elf2flt, but you got it correct in the log below, so I
-guess this one was just a typo.
-
-> "-elf2flt" to the linker.  elf2flt then picks this up and does what it needs 
-> to, courtesy of a wrapper script around "ld".  I have set this parameter in 
-> TARGET_CFLAGS in one of the buildroot makefiles.
-> 
-> However when I am compiling binutils, it seems that elf2flt has not been 
-> installed yet, so it is not recognising the -elf2flt option, and gives me this 
-> error:
-> 
-> arm-buildroot-linux-uclibcgnueabi-gcc -o conftest -D_LARGEFILE_SOURCE 
-> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -Wl,-elf2flt 
-> -DBR_BINFMT_FLAT   --static -Wl,-rpath -Wl,/foo conftest.c  >&5
-> arm-buildroot-linux-uclibcgnueabi/bin/ld: warning: cannot find entry symbol 
-> lf2flt; defaulting to 00000000000080c0
-> 
-> I think binutils needs to use elf2flt, otherwise any binaries it produces will 
-> not be in BFLT format, so I am guessing I need to tell buildroot to compile 
-> elf2flt before binutils.  Does this sound correct?  Is it even possible to 
-> compile something like that before binutils?  Or do I have to somehow avoid 
-> passing the -elf2flt parameter to binutils?  How might one achieve this?
-
-Are we talking about the cross binutils (i.e the one that runs on your
-development PC and generates code for your target platform), or the
-target binutils (i.e the one that runs on your target platform and
-generates code for your target platform) ?
-
-Best regards,
-
-Thomas
+diff --git a/package/sconeserver/sconeserver-fix-configure-operators.patch b/package/sconeserver/sconeserver-fix-configure-operators.patch
+new file mode 100644
+index 0000000..504be45
+--- /dev/null
++++ b/package/sconeserver/sconeserver-fix-configure-operators.patch
+@@ -0,0 +1,93 @@
++configure: use the proper '=' POSIX shell operator
++
++The '==' shell operator doesn't work in POSIX shells, so when sh is
++symlinked to a POSIX shell such as dash and not a bash shell, the
++configure tests that use this operator fail to work.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: sconeserver-211/configure.in
++===================================================================
++--- sconeserver-211.orig/configure.in	2013-05-14 12:00:19.000000000 +0200
+++++ sconeserver-211/configure.in	2013-06-16 18:47:31.000000000 +0200
++@@ -121,7 +121,7 @@
++   [SSL="$withval"],
++   [AC_CHECK_HEADER([openssl/ssl.h],[SSL="yes"],[SSL="no"])]
++ )
++-if test "x$SSL" == "xyes"; then
+++if test "x$SSL" = "xyes"; then
++   AC_CHECK_HEADER([openssl/ssl.h],,
++     [AC_MSG_ERROR([header file <openssl/ssl.h> is required for OpenSSL, use --with-openssl-path=PATH])]
++   )
++@@ -179,7 +179,7 @@
++ )
++ 
++ # Check we have libxml2 if Sconesite is enabled
++-if test "x$SCONESITE" == "xyes"; then
+++if test "x$SCONESITE" = "xyes"; then
++   if test "x$ac_cv_lib_xml2_xmlNewDoc" != "xyes"; then
++     AC_MSG_ERROR([library 'libxml2' is required for Sconesite])
++   fi
++@@ -195,7 +195,7 @@
++   [MAGICK_CONFIG="Magick++-config"]
++ )
++ AC_CHECK_PROG([MAGICK], ["$MAGICK_CONFIG"], [yes], [no])
++-if test "x$MAGICK" == "xyes"; then
+++if test "x$MAGICK" = "xyes"; then
++   MAGICK_CFLAGS=`$MAGICK_CONFIG --cppflags`
++   MAGICK_LDFLAGS=`$MAGICK_CONFIG --ldflags`
++   MAGICK_LIBS=`$MAGICK_CONFIG --libs`
++@@ -209,7 +209,7 @@
++ )
++ 
++ # Need ImageMagick for image
++-if test "x$IMAGE" == "xyes"; then
+++if test "x$IMAGE" = "xyes"; then
++   if test "x$MAGICK" != "xyes"; then
++     AC_MSG_ERROR([library 'Magick++' is required for image])
++   fi
++@@ -227,7 +227,7 @@
++   [RSS="yes"]
++ )
++ # Need libxml2 library for rss
++-if test "x$RSS" == "xyes"; then
+++if test "x$RSS" = "xyes"; then
++   if test "x$ac_cv_lib_xml2_xmlNewDoc" != "xyes"; then
++     AC_MSG_ERROR([library 'libxml2' is required for the rss module])
++   fi
++@@ -249,7 +249,7 @@
++   [AC_CHECK_HEADER([mysql/mysql.h],[MYSQL="yes"],[MYSQL="no"])]
++ )
++ # Need mysqlclient library for mysql
++-if test "x$MYSQL" == "xyes"; then
+++if test "x$MYSQL" = "xyes"; then
++   AC_CHECK_LIB([mysqlclient],[mysql_init],
++     [CXXFLAGS="$CXXFLAGS `$MYSQL_CONFIG --cflags`"
++      MYSQL_LIBADD=`$MYSQL_CONFIG --libs`
++@@ -266,7 +266,7 @@
++   [AC_CHECK_HEADER([sqlite3.h],[SQLITE="yes"],[SQLITE="no"])]
++ )
++ # Need sqlite3 library for sqlite
++-if test "x$SQLITE" == "xyes"; then
+++if test "x$SQLITE" = "xyes"; then
++   AC_CHECK_LIB([sqlite3],[sqlite3_open_v2],
++     [SQLITE_LIBADD="-lsqlite3"
++      AC_SUBST(SQLITE_LIBADD)],
++@@ -283,7 +283,7 @@
++   [AC_CHECK_HEADER([mpfr.h],[MATHS="yes"],[MATHS="no"])]
++ )
++ # Need libgmp and libmpfr library for maths
++-if test "x$MATHS" == "xyes"; then
+++if test "x$MATHS" = "xyes"; then
++   AC_CHECK_LIB([mpfr],[mpfr_init],
++     [MATHS_LIBADD="-lgmp -lmpfr"
++      AC_SUBST(MATHS_LIBADD)],
++@@ -300,7 +300,7 @@
++   [AC_CHECK_HEADER([X11/Xlib.h],[UI="yes"],[UI="no"])]
++ )
++ # Need libX11 library for ui
++-if test "x$UI" == "xyes"; then
+++if test "x$UI" = "xyes"; then
++   AC_CHECK_LIB([X11],[XOpenDisplay],
++     [UI_LIBADD="-lX11"
++      AC_SUBST(UI_LIBADD)],
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.2
