@@ -1,48 +1,79 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 16 Jun 2013 21:53:58 +0200
-Subject: [Buildroot] [PATCH 05/12] lua-ev: New package
-In-Reply-To: <CAB0FRsvRF=cpFEY8d7nXXz849UBMyqJJ0VmMMCjzU5rReb3Svg@mail.gmail.com>
- (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Mon, 20 May 2013
- 18:05:06 +0200")
+Date: Sun, 16 Jun 2013 22:03:03 +0200
+Subject: [Buildroot] [PATCH 06/12] luabitop: New package
+In-Reply-To: <1369054604-26139-6-git-send-email-shmuelzon@gmail.com> (Assaf
+ Inbal's message of "Mon, 20 May 2013 15:56:38 +0300")
 References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
- <1369054604-26139-5-git-send-email-shmuelzon@gmail.com>
- <CAB0FRsvRF=cpFEY8d7nXXz849UBMyqJJ0VmMMCjzU5rReb3Svg@mail.gmail.com>
-Message-ID: <8761xdvnl5.fsf@dell.be.48ers.dk>
+ <1369054604-26139-6-git-send-email-shmuelzon@gmail.com>
+Message-ID: <871u81vn60.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
+>>>>> "Assaf" == Assaf Inbal <shmuelzon@gmail.com> writes:
 
- Fran?ois> 2013/5/20 Assaf Inbal <shmuelzon@gmail.com>
+ Assaf> Lua library for binary operations
+ Assaf> Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
+ Assaf> ---
+ Assaf>  package/Config.in            |  1 +
+ Assaf>  package/luabitop/Config.in   |  7 +++++++
+ Assaf>  package/luabitop/luabitop.mk | 27 +++++++++++++++++++++++++++
+ Assaf>  3 files changed, 35 insertions(+)
+ Assaf>  create mode 100644 package/luabitop/Config.in
+ Assaf>  create mode 100644 package/luabitop/luabitop.mk
 
- Fran?ois>     Lua bindings for libev
+ Assaf> diff --git a/package/Config.in b/package/Config.in
+ Assaf> index e94cb39..1089533 100644
+ Assaf> --- a/package/Config.in
+ Assaf> +++ b/package/Config.in
+ Assaf> @@ -308,6 +308,7 @@ source "package/cgilua/Config.in"
+ Assaf>  source "package/copas/Config.in"
+ Assaf>  source "package/coxpcall/Config.in"
+ Assaf>  source "package/lbase64/Config.in"
+ Assaf> +source "package/luabitop/Config.in"
+ Assaf>  source "package/luacjson/Config.in"
+ Assaf>  source "package/luaexpat/Config.in"
+ Assaf>  source "package/luafilesystem/Config.in"
+ Assaf> diff --git a/package/luabitop/Config.in b/package/luabitop/Config.in
+ Assaf> new file mode 100644
+ Assaf> index 0000000..83a85b1
+ Assaf> --- /dev/null
+ Assaf> +++ b/package/luabitop/Config.in
+ Assaf> @@ -0,0 +1,7 @@
+ Assaf> +config BR2_PACKAGE_LUABITOP
+ Assaf> +	bool "luabitop"
+ Assaf> +	help
+ Assaf> +	  Lua BitOp is a C extension module for Lua 5.1/5.2 which adds bitwise
+ Assaf> +	  operations on numbers.
+ Assaf> +
+ Assaf> +	  http://bitop.luajit.org
+ Assaf> diff --git a/package/luabitop/luabitop.mk b/package/luabitop/luabitop.mk
+ Assaf> new file mode 100644
+ Assaf> index 0000000..aaa01cd
+ Assaf> --- /dev/null
+ Assaf> +++ b/package/luabitop/luabitop.mk
+ Assaf> @@ -0,0 +1,27 @@
+ Assaf> +#############################################################
+ Assaf> +#
+ Assaf> +# luabitop
+ Assaf> +#
+ Assaf> +#############################################################
+ Assaf> +
+ Assaf> +LUABITOP_VERSION = 1.0.2
+ Assaf> +LUABITOP_SOURCE = LuaBitOp-$(LUABITOP_VERSION).tar.gz
+ Assaf> +LUABITOP_SITE = http://bitop.luajit.org/download
+ Assaf> +LUABITOP_LICENSE = MIT
+ Assaf> +LUABITOP_LICENSE_FILES = README
+ Assaf> +LUABITOP_DEPENDENCIES = lua
+ Assaf> +
+ Assaf> +define LUABITOP_BUILD_CMDS
+ Assaf> +	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
 
- Fran?ois>     +++ b/package/lua-ev/lua-ev.mk
- Fran?ois>     @@ -0,0 +1,16 @@
- Fran?ois>     +#############################################################
- Fran?ois>     +#
- Fran?ois>     +# lua-ev
- Fran?ois>     +#
- Fran?ois>     +#############################################################
- Fran?ois>     +
- Fran?ois>     +LUA_EV_VERSION = master
- Fran?ois>     +LUA_EV_SITE = git://github.com/brimworks/lua-ev.git
- Fran?ois>     +LUA_EV_SITE_METHOD = git
+TARGET_CONFIGURE_OPTS should be used instead.
 
-
- Fran?ois> master is not a fixed reference.
-
- Fran?ois> -LUA_EV_VERSION = master
- Fran?ois> -LUA_EV_SITE = git://github.com/brimworks/lua-ev.git
- Fran?ois> -LUA_EV_SITE_METHOD = git
- Fran?ois> +LUA_EV_VERSION = g458165b
- Fran?ois> +LUA_EV_SITE = http://github.com/brimworks/lua-ev/tarball/master
-
-Assaf, will you send an updated patch taking the review feedback into
-consideration?
+Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
