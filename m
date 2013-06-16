@@ -1,59 +1,65 @@
-From: piquemal michel <michel_piquemal@yahoo.fr>
-Date: Sun, 16 Jun 2013 00:26:21 +0100 (BST)
-Subject: [Buildroot] Building with uClibc 0.9.28, Linux 2.6.36
-In-Reply-To: <877ghvxdkf.fsf@dell.be.48ers.dk>
-References: <1371326730.31593.YahooMailNeo@web171503.mail.ir2.yahoo.com>
- <87bo77yveg.fsf@dell.be.48ers.dk>
- <1371329906.70128.YahooMailNeo@web171503.mail.ir2.yahoo.com>
- <87sj0jxf0n.fsf@dell.be.48ers.dk>
- <1371332003.62321.YahooMailNeo@web171505.mail.ir2.yahoo.com>
- <877ghvxdkf.fsf@dell.be.48ers.dk>
-Message-ID: <1371338781.70346.YahooMailNeo@web171503.mail.ir2.yahoo.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 16 Jun 2013 08:30:04 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-06-15
+Message-ID: <20130616063004.C42C652C0E2@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Great, thanks a lot, it does get much further, but there are still some problems with some paths probably.
-Or maybe I should use an earlier gcc version...
+Build statistics for 2013-06-15
+===============================
 
-Best.
+        success : 73 
+       failures : 28 
+       timeouts : 0  
+          TOTAL : 101
 
-make[4]: Entering directory `/home/mpi/development/buildroot-2010.05/output/toolchain/uClibc-0.9.28.3/libc/misc/assert'
-/home/mpi/development/buildroot-2010.05/output/staging/usr/bin/mipsel-unknown-linux-uclibc-gcc ?-Wall -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing ?-mips1 -msoft-float -fno-stack-protector -fno-builtin -nostdinc -D_LIBC -I../../../include -I. ?-Os -funit-at-a-time ?-mno-split-addresses -isystem /home/mpi/development/buildroot-2010.05/output/staging/usr/lib/gcc/mipsel-unknown-linux-uclibc/4.3.4/include -DNDEBUG -fPIC -c __assert.c -o __assert.o
-In file included from ../../../include/bits/uClibc_uintmaxtostr.h:41,
-? ? ? ? ? ? ? ? ?from __assert.c:34:
-../../../include/limits.h:124:26: error: limits.h: No such file or directory
-make[4]: *** [__assert.o] Error 1
-make[4]: Leaving directory `/home/mpi/development/buildroot-2010.05/output/toolchain/uClibc-0.9.28.3/libc/misc/assert'
-make[3]: *** [_dir_assert] Error 2
-make[3]: Leaving directory `/home/mpi/development/buildroot-2010.05/output/toolchain/uClibc-0.9.28.3/libc/misc'
-make[2]: *** [_dir_misc] Error 2
-make[2]: Leaving directory `/home/mpi/development/buildroot-2010.05/output/toolchain/uClibc-0.9.28.3/libc'
-make[1]: *** [_dir_libc] Error 2
-make[1]: Leaving directory `/home/mpi/development/buildroot-2010.05/output/toolchain/uClibc-0.9.28.3'
-make: *** [/home/mpi/development/buildroot-2010.05/output/toolchain/uClibc-0.9.28.3/lib/libc.a] Error 2
+Classification of failures by reason
+====================================
 
+        host-dosfstools-3.0.20 | 14
+            host-erlang-R15B01 | 7 
+                libtirpc-0.2.2 | 2 
+               libglib2-2.36.1 | 1 
+      gst-plugins-good-0.10.31 | 1 
+          host-protobuf-c-0.15 | 1 
+                      bash-4.2 | 1 
+                      qt-4.8.4 | 1 
 
+Detail of failures
+===================
 
+      i586 |                       bash-4.2 | NOK | http://autobuild.buildroot.net/results/b16c63b08aad43fa9aba5ed2682cb9799859b2e1/
+   powerpc |       gst-plugins-good-0.10.31 | NOK | http://autobuild.buildroot.net/results/3ef4559523ac46c7ff670c338061797fdf4042b7/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/3141b6366609a1c6db5968862e7a8bce0ee4f489/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/76314d89177394923077f85100da63c4519a0c57/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/727e83508dd4ae6f5347da79e7fe48c4e57eb3b6/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/8fb2ffe5d8d48755fd9f0033597a18d14ad1dbaa/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/b9e9d0dd94b34599de151aff1b40d67c342063f0/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/05cd6cb8a489b1cbe92d23133c8b7802bd91d68e/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/8e087d9fce229eb9a784a6eec099ecfa39bb4d17/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/a5822f423599d9ce67dfd50f466149e35ab07af4/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/a3326f34b5ed61e207e770981032aa9a8a7f4de4/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/d6011bcebe87bd21a40d3df09e4fedbd5148e077/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/f2d6b300959365169eadbc8809a98ab0c0c7e1b5/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/d50a7fd0d206202db2343fe5496448b749294b8b/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/4989d9a2ea22e6addfc46eb5a0864b8e4beae96c/
+      i586 |         host-dosfstools-3.0.20 | NOK | http://autobuild.buildroot.net/results/9ebf85463b44f23f6b6992877d854d30345e007c/
+      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/65d5b15fd100e736304d9aae6351ba507dc148f1/
+      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/afededf24659647eebbe257980c19dec7e87f98c/
+      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/3fda8ddaa6d2081a15d74b1951248da51500058f/
+      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/6eae1edbc502316176f2dd34f68b26f40b94e9f6/
+      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/6310c635346c74d5cda2e9f5d8e081f3dfac5171/
+      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/336729eb44af706e593b79eb4fdb8d779d6d81a0/
+      i586 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/d7a96cbf15ff6f7f21da65e8691f6b44f28774b5/
+      mips |           host-protobuf-c-0.15 | NOK | http://autobuild.buildroot.net/results/a19567e4a3289889174b4618268eea8d9431f31c/
+      bfin |                libglib2-2.36.1 | NOK | http://autobuild.buildroot.net/results/7bef1ae159af6ee156c4c3f0e9905176f2273163/
+       arm |                 libtirpc-0.2.2 | NOK | http://autobuild.buildroot.net/results/0bc6874374c9a120f5f38e1ea3c45eaf19ceb411/
+       arm |                 libtirpc-0.2.2 | NOK | http://autobuild.buildroot.net/results/96b9839163a0630a33a60a6083c0cab302b23911/
+   powerpc |                       qt-4.8.4 | NOK | http://autobuild.buildroot.net/results/52465897dbc4a90d65a2f1d5b5d8e5d9fc01b260/
 
-
------ Mail original -----
-De?: Peter Korsgaard <jacmet@uclibc.org>
-??: piquemal michel <michel_piquemal@yahoo.fr>
-Cc?: Peter Korsgaard <jacmet@uclibc.org>; "buildroot at busybox.net" <buildroot@busybox.net>
-Envoy? le : Samedi 15 juin 2013 23h35
-Objet?: Re: Building with uClibc 0.9.28, Linux 2.6.36
-
->>>>> "piquemal" == piquemal michel <michel_piquemal@yahoo.fr> writes:
-
-piquemal> hum, thanks!
-piquemal> however what does
-piquemal> depends on !BR2_avr32
-piquemal> mean: could not find which option it is.
-
-Yes, but as you're building for mips, that's not a problem.
 
 -- 
-Bye, Peter Korsgaard
+http://autobuild.buildroot.net
