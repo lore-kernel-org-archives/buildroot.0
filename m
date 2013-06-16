@@ -1,38 +1,62 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 16 Jun 2013 09:47:32 +0200
-Subject: [Buildroot] [PATCHv3 2/3] Add proprietary libraries for Hantro
-	x170 HW decoding
-In-Reply-To: <51BCE84D.9070605@free-electrons.com> (Alexandre Belloni's
- message of "Sun, 16 Jun 2013 00:18:53 +0200")
-References: <1370945921-23444-1-git-send-email-alexandre.belloni@free-electrons.com>
- <1370945921-23444-2-git-send-email-alexandre.belloni@free-electrons.com>
- <87k3lvxeig.fsf@dell.be.48ers.dk>
- <51BCE84D.9070605@free-electrons.com>
-Message-ID: <87y5aawl7v.fsf@dell.be.48ers.dk>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Sun, 16 Jun 2013 12:34:28 +0100
+Subject: [Buildroot] [PATCH] gpsd: make init script optional
+Message-ID: <1371382468-5838-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@free-electrons.com> writes:
+From: Simon Dawson <spdawson@gmail.com>
 
-Hi,
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/gpsd/Config.in | 7 +++++++
+ package/gpsd/gpsd.mk   | 7 +++++++
+ 2 files changed, 14 insertions(+)
 
- >> Presumably this doesn't do much without the kernel modules, so I changed
- >> this to select on2-8170-modules.
-
- Alexandre> Hum, Is that really a good idea ? I can imagine people
- Alexandre> building their kernel out of buildroot and then not being
- Alexandre> able to select on2-8170-libs.
-
-Well, it's consistent with how we do it for E.G. linux-fusion and the
-recently proposed ti-gfx. But if people agree, we could change it to
-simply do:
-
-       select BR2_PACKAGE_ON2_8170_MODULES if BR2_LINUX_KERNEL
-
-E.G. you're on your own if you don't build the kernel in buildroot.
-
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index 337f8e7..29e061f 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -21,6 +21,13 @@ config BR2_PACKAGE_GPSD_DEVICES
+ 	default "/dev/ttyS1"
+ 	depends on BR2_PACKAGE_GPSD
+ 
++config BR2_PACKAGE_GPSD_INSTALL_INITSCRIPT
++	bool "install init script"
++	default y
++	depends on BR2_PACKAGE_GPSD
++	help
++	  Install a gpsd init script
++
+ menu "Features"
+ 	depends on BR2_PACKAGE_GPSD
+ 
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index be2e681..45d1aed 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -207,12 +207,19 @@ define GPSD_INSTALL_TARGET_CMDS
+ 		$(SCONS) \
+ 		$(GPSD_SCONS_OPTS) \
+ 		install)
++endef
++
++define GPSD_INSTALL_INITSCRIPT
+ 	if [ ! -f $(TARGET_DIR)/etc/init.d/S50gpsd ]; then \
+ 		$(INSTALL) -m 0755 -D package/gpsd/S50gpsd $(TARGET_DIR)/etc/init.d/S50gpsd; \
+ 		$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd; \
+ 	fi
+ endef
+ 
++ifeq ($(BR2_PACKAGE_GPSD_INSTALL_INITSCRIPT),y)
++GPSD_POST_INSTALL_TARGET_HOOKS = GPSD_INSTALL_INITSCRIPT
++endif
++
+ define GPSD_INSTALL_STAGING_CMDS
+ 	(cd $(@D); \
+ 		$(GPSD_SCONS_ENV) \
 -- 
-Bye, Peter Korsgaard
+1.8.1.2
