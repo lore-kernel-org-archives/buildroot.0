@@ -1,99 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 16 Jun 2013 21:40:18 +0200
-Subject: [Buildroot] [git commit] Add documentation for the header style
-Message-ID: <20130616194240.C38D79AD51@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 16 Jun 2013 21:46:13 +0200
+Subject: [Buildroot] [PATCH 01/12] coxpcall: Updated source location
+In-Reply-To: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com> (Assaf
+ Inbal's message of "Mon, 20 May 2013 15:56:33 +0300")
+References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
+Message-ID: <87ip1dvny2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=07278078a65559400458d7ad07f18f93f5e20ebf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Assaf" == Assaf Inbal <shmuelzon@gmail.com> writes:
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/manual/adding-packages-autotools.txt |    4 ++--
- docs/manual/adding-packages-cmake.txt     |    4 ++--
- docs/manual/adding-packages-generic.txt   |    4 ++--
- docs/manual/writing-rules.txt             |   12 ++++++++++++
- 4 files changed, 18 insertions(+), 6 deletions(-)
+ Assaf> Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
+ Assaf> ---
+ Assaf>  package/coxpcall/coxpcall.mk | 2 +-
+ Assaf>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
-index 1d5f30b..1e7b058 100644
---- a/docs/manual/adding-packages-autotools.txt
-+++ b/docs/manual/adding-packages-autotools.txt
-@@ -13,11 +13,11 @@ First, let's see how to write a +.mk+ file for an autotools-based
- package, with an example :
+ Assaf> diff --git a/package/coxpcall/coxpcall.mk b/package/coxpcall/coxpcall.mk
+ Assaf> index e7fb76d..f260d72 100644
+ Assaf> --- a/package/coxpcall/coxpcall.mk
+ Assaf> +++ b/package/coxpcall/coxpcall.mk
+ Assaf> @@ -5,7 +5,7 @@
+ Assaf>  #############################################################
  
- ------------------------
--01: #############################################################
-+01: ################################################################################
- 02: #
- 03: # libfoo
- 04: #
--05: #############################################################
-+05: ################################################################################
- 06:
- 07: LIBFOO_VERSION = 1.0
- 08: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
-diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
-index 6ac073c..b7388c8 100644
---- a/docs/manual/adding-packages-cmake.txt
-+++ b/docs/manual/adding-packages-cmake.txt
-@@ -13,11 +13,11 @@ First, let's see how to write a +.mk+ file for a CMake-based package,
- with an example :
- 
- ------------------------
--01: #############################################################
-+01: ################################################################################
- 02: #
- 03: # libfoo
- 04: #
--05: #############################################################
-+05: ################################################################################
- 06:
- 07: LIBFOO_VERSION = 1.0
- 08: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 0d75042..faf70b1 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -15,11 +15,11 @@ system is based on hand-written Makefiles or shell scripts.
- ^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
- ------------------------------
--01: #############################################################
-+01: ################################################################################
- 02: #
- 03: # libfoo
- 04: #
--05: #############################################################
-+05: ################################################################################
- 06:
- 07: LIBFOO_VERSION = 1.0
- 08: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
-diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-index c9816a4..b649c9f 100644
---- a/docs/manual/writing-rules.txt
-+++ b/docs/manual/writing-rules.txt
-@@ -52,6 +52,18 @@ http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt[].
- The +.mk+ file
- ~~~~~~~~~~~~~~
- 
-+* Header: The file starts with a header. It contains the module name,
-+preferably in lowercase, enclosed between separators made of 80 hashes. A
-+blank line is mandatory after the header:
-++
-+---------------------
-+################################################################################
-+#
-+# libfoo
-+#
-+################################################################################
-+---------------------
-++
- * Assignment: use +=+ preceded and followed by one space:
- +
- ---------------------
+ Assaf>  COXPCALL_VERSION = 1.13.0
+ Assaf> -COXPCALL_SITE = http://luaforge.net/frs/download.php/3406
+ Assaf> +COXPCALL_SITE = http://github.com/downloads/keplerproject/coxpcall
+
+Ehh, thanks - But it doesn't work:
+
+>>> coxpcall 1.13.0 Downloading
+--2013-06-16 21:45:03--  http://github.com/downloads/keplerproject/coxpcall/coxpcall-1.13.0.tar.gz
+Resolving github.com (github.com)... 204.232.175.90
+Connecting to github.com (github.com)|204.232.175.90|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://github.com/downloads/keplerproject/coxpcall/coxpcall-1.13.0.tar.gz [following]
+--2013-06-16 21:45:03--  https://github.com/downloads/keplerproject/coxpcall/coxpcall-1.13.0.tar.gz
+Connecting to github.com (github.com)|204.232.175.90|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2013-06-16 21:45:04 ERROR 404: Not Found.
+
+
+-- 
+Bye, Peter Korsgaard
