@@ -1,27 +1,22 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Sun, 16 Jun 2013 19:16:20 +0100
-Subject: [Buildroot] [PATCH] gpsd: make init script optional
-In-Reply-To: <878v2avtx0.fsf@dell.be.48ers.dk>
-References: <1371382468-5838-1-git-send-email-spdawson@gmail.com>
- <20130616130904.GD3495@free.fr>
- <CAHt8ZCPnR+9SG=rDfyzeLQcbT=UWAwhun4PJ31Ohk=60=0+a7g@mail.gmail.com>
- <878v2avtx0.fsf@dell.be.48ers.dk>
-Message-ID: <CAHt8ZCPoQE0yY_KDuQgDW_+MVka5N1hyUoOjOhgbruVjSAkqFw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 16 Jun 2013 20:30:45 +0200
+Subject: [Buildroot] [PATCH] sconeserver: add patch to fix build issue
+In-Reply-To: <1371401514-17259-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 16 Jun 2013 18:51:54 +0200")
+References: <1371401514-17259-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <874ncxx60a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 16 June 2013 18:37, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> Sorry, but it imho doesn't scale to add configuration options for this
-> kind of stuff for each package.
->
-> Realisticly seem, you almost always need to do some minor fixups in
-> post-build for any real projects.
+ Thomas> Fixes:
+ Thomas>   http://autobuild.buildroot.org/results/f28/f2856c00d99fbf9ce882442ab7b868ccc4966388/build-end.log
 
-Fair enough; thanks for the input.
+Committed, thanks.
 
-Simon.
+-- 
+Bye, Peter Korsgaard
