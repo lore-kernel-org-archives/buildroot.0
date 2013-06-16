@@ -1,62 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 16 Jun 2013 22:16:39 +0200
-Subject: [Buildroot] [PATCH 07/12] luacrypto: New package
-In-Reply-To: <CAB0FRsuYNEGZdVwj3mKVBRp2uyfwY5EbOfZ=wuSMvO51iDZMFg@mail.gmail.com>
- (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Mon, 20 May 2013
- 18:07:51 +0200")
-References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
- <1369054604-26139-7-git-send-email-shmuelzon@gmail.com>
- <CAB0FRsuYNEGZdVwj3mKVBRp2uyfwY5EbOfZ=wuSMvO51iDZMFg@mail.gmail.com>
-Message-ID: <87wqptu7yw.fsf@dell.be.48ers.dk>
+From: piquemal michel <michel_piquemal@yahoo.fr>
+Date: Sun, 16 Jun 2013 21:25:31 +0100 (BST)
+Subject: [Buildroot] Building with uClibc 0.9.28, Linux 2.6.36
+In-Reply-To: <87r4g1vo98.fsf@dell.be.48ers.dk>
+References: <1371326730.31593.YahooMailNeo@web171503.mail.ir2.yahoo.com>
+ <87bo77yveg.fsf@dell.be.48ers.dk>
+ <1371329906.70128.YahooMailNeo@web171503.mail.ir2.yahoo.com>
+ <87sj0jxf0n.fsf@dell.be.48ers.dk>
+ <1371332003.62321.YahooMailNeo@web171505.mail.ir2.yahoo.com>
+ <877ghvxdkf.fsf@dell.be.48ers.dk>
+ <1371338781.70346.YahooMailNeo@web171503.mail.ir2.yahoo.com>
+ <87r4g1vo98.fsf@dell.be.48ers.dk>
+Message-ID: <1371414331.31683.YahooMailNeo@web171504.mail.ir2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
+target has been built with gcc 3.4.2...
+it does not seem I can select such old version with buildroot 2010-05 :(
+Hopefully one older buildroot version can support the right mix...
 
-Hi,
-
- Fran?ois>     +++ b/package/luacrypto/luacrypto.mk
- Fran?ois>     @@ -0,0 +1,15 @@
- Fran?ois>     +#############################################################
- Fran?ois>     +#
- Fran?ois>     +# lucrypto
+Best
 
 
- Fran?ois> typo : luacrypto
- Fran?ois> ?
+----- Mail original -----
+De?: Peter Korsgaard <jacmet@uclibc.org>
+??: piquemal michel <michel_piquemal@yahoo.fr>
+Cc?: Peter Korsgaard <jacmet@uclibc.org>; "buildroot at busybox.net" <buildroot@busybox.net>
+Envoy? le : Dimanche 16 juin 2013 21h39
+Objet?: Re: Building with uClibc 0.9.28, Linux 2.6.36
 
- Fran?ois>     +#
- Fran?ois>     +#############################################################
- Fran?ois>     +
- Fran?ois>     +LUACRYPTO_VERSION = master
- Fran?ois>     +LUACRYPTO_SITE = git://github.com/mkottman/luacrypto.git
- Fran?ois>     +LUACRYPTO_SITE_METHOD = git
+>>>>> "piquemal" == piquemal michel <michel_piquemal@yahoo.fr> writes:
 
+piquemal> Great, thanks a lot, it does get much further, but there are
+piquemal> still some problems with some paths probably.
 
- Fran?ois> master is not fixed reference.
+Sorry, don't know, it's been a while since 2010.05..
 
- Fran?ois> -LUACRYPTO_VERSION = master
- Fran?ois> -LUACRYPTO_SITE = git://github.com/mkottman/luacrypto.git
- Fran?ois> -LUACRYPTO_SITE_METHOD = git
- Fran?ois> +LUACRYPTO_VERSION = 0.3.2
- Fran?ois> +LUACRYPTO_SOURCE = $(LUACRYPTO_VERSION).tar.gz
- Fran?ois> +LUACRYPTO_SITE = https://github.com/mkottman/luacrypto/archive
+piquemal> Or maybe I should use an earlier gcc version...
 
-
- Fran?ois> ?
-
- Fran?ois>     +LUACRYPTO_LICENSE = MIT
- Fran?ois>     +LUACRYPTO_LICENSE_FILES = COPYING
- Fran?ois>     +LUACRYPTO_DEPENDENCIES = lua luasocket openssl
-
-
- Fran?ois> luasocket is not a built dependency.
-
-Assaf, will you send an updated patch taking the review feedback into
-consideration?
+Yes, you should most likely use an old toolchain version with 0.9.28.
 
 -- 
 Bye, Peter Korsgaard
