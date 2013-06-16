@@ -1,59 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Jun 2013 19:25:08 +0200
-Subject: [Buildroot] Changes in the Buildroot autobuilders
-In-Reply-To: <20130616191806.7b4a899a@skate>
-References: <20130616180054.58f52914@skate> <20130616170305.GI3495@free.fr>
- <20130616191806.7b4a899a@skate>
-Message-ID: <20130616172508.GL3495@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 16 Jun 2013 19:37:15 +0200
+Subject: [Buildroot] [PATCH] gpsd: make init script optional
+In-Reply-To: <CAHt8ZCPnR+9SG=rDfyzeLQcbT=UWAwhun4PJ31Ohk=60=0+a7g@mail.gmail.com>
+ (Simon Dawson's message of "Sun, 16 Jun 2013 16:59:06 +0100")
+References: <1371382468-5838-1-git-send-email-spdawson@gmail.com>
+ <20130616130904.GD3495@free.fr>
+ <CAHt8ZCPnR+9SG=rDfyzeLQcbT=UWAwhun4PJ31Ohk=60=0+a7g@mail.gmail.com>
+Message-ID: <878v2avtx0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2013-06-16 19:18 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 16 Jun 2013 19:03:05 +0200, Yann E. MORIN wrote:
-> > It would be nice if it were also possible to somehow "subscribe" to a
-> > list of packages and get a mail when any of these packages fails to
-> > build.
-> 
-> Indeed. Are we also talking about a daily e-mail?
+>>>>> "Simon" == Simon Dawson <spdawson@gmail.com> writes:
 
-If there are build failures, yes.
-Of course, no need for a mail if no build failure.
+Hi,
 
-> > For example, I'd like to catch errors in the packages I've submitted.
-> > 
-> > I see two options for this:
-> >   - add a global MAINTAINERS file that list maintainers for each
-> >     actively maintained packages (a bit like the Linux kernel does);
-> >   - add a FOO_MAINTAINER variable to foo.mk (for each maintained 'foo'
-> >     package).
-> > 
-> > Would that be possible?
-> 
-> Yes that would be possible. For now, I don't have a particularly strong
-> opinion between the two solutions you proposed. Maybe the second one is
-> more Buildroot-ish?
+ >> Otherwise, please expand on why not wanting the init script should be
+ >> configurable at all.
 
-Yes, that's my preferred one.
+ Simon> There are other possibilities, beyond SysV and systemd: I've
+ Simon> previously run gpsd and other managed services using daemontools
+ Simon> and runit.
 
-Should that be a single email adress, or can this be a list?
-    FOO_MAINTAINERS = me at there him at overthere somone at somewhere
+True, but we don't currently have any support for these in buildroot.
 
-I would not expect more than one maintainer, but then why restrict
-ourselves...
+ Simon> My present use case has udev kicking off gpsd in response to
+ Simon> hotplug events for a USB GPS device.
 
-I'll adapt the manual to document this new variable, and will submit a
-patch to add myself as maintainer for a few packages.
+ Simon> I seem to always end up having to remove the gpsd SysV init
+ Simon> script in my post-build script; hence the desire for a
+ Simon> configuration option.
 
-Regards,
-Yann E. MORIN.
+Sorry, but it imho doesn't scale to add configuration options for this
+kind of stuff for each package.
+
+Realisticly seem, you almost always need to do some minor fixups in
+post-build for any real projects.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
