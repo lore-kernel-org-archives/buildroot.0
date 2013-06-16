@@ -1,126 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Jun 2013 18:51:54 +0200
+From: Simon Dawson <spdawson@gmail.com>
+Date: Sun, 16 Jun 2013 17:56:14 +0100
 Subject: [Buildroot] [PATCH] sconeserver: add patch to fix build issue
-Message-ID: <1371401514-17259-1-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1371401514-17259-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1371401514-17259-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAHt8ZCMYSSHYyPofmMacBUK1v1cyttyOHCuY9cQJ=W_taZa3yg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Hi Thomas; thanks for looking into this.
 
-  http://autobuild.buildroot.org/results/f28/f2856c00d99fbf9ce882442ab7b868ccc4966388/build-end.log
+On 16 June 2013 17:51, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Fixes:
+>
+>   http://autobuild.buildroot.org/results/f28/f2856c00d99fbf9ce882442ab7b868ccc4966388/build-end.log
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Simon Dawson <spdawson@gmail.com>
+> ---
+> Simon, feel free to upstream this patch. Since I know you've been
+> following the sconeserver development, it's probably easier if you
+> upstream the patch.
+> ---
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Simon Dawson <spdawson@gmail.com>
----
-Simon, feel free to upstream this patch. Since I know you've been
-following the sconeserver development, it's probably easier if you
-upstream the patch.
----
- .../sconeserver-fix-configure-operators.patch      | 93 ++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
- create mode 100644 package/sconeserver/sconeserver-fix-configure-operators.patch
+Okay; will do.
 
-diff --git a/package/sconeserver/sconeserver-fix-configure-operators.patch b/package/sconeserver/sconeserver-fix-configure-operators.patch
-new file mode 100644
-index 0000000..504be45
---- /dev/null
-+++ b/package/sconeserver/sconeserver-fix-configure-operators.patch
-@@ -0,0 +1,93 @@
-+configure: use the proper '=' POSIX shell operator
-+
-+The '==' shell operator doesn't work in POSIX shells, so when sh is
-+symlinked to a POSIX shell such as dash and not a bash shell, the
-+configure tests that use this operator fail to work.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: sconeserver-211/configure.in
-+===================================================================
-+--- sconeserver-211.orig/configure.in	2013-05-14 12:00:19.000000000 +0200
-++++ sconeserver-211/configure.in	2013-06-16 18:47:31.000000000 +0200
-+@@ -121,7 +121,7 @@
-+   [SSL="$withval"],
-+   [AC_CHECK_HEADER([openssl/ssl.h],[SSL="yes"],[SSL="no"])]
-+ )
-+-if test "x$SSL" == "xyes"; then
-++if test "x$SSL" = "xyes"; then
-+   AC_CHECK_HEADER([openssl/ssl.h],,
-+     [AC_MSG_ERROR([header file <openssl/ssl.h> is required for OpenSSL, use --with-openssl-path=PATH])]
-+   )
-+@@ -179,7 +179,7 @@
-+ )
-+ 
-+ # Check we have libxml2 if Sconesite is enabled
-+-if test "x$SCONESITE" == "xyes"; then
-++if test "x$SCONESITE" = "xyes"; then
-+   if test "x$ac_cv_lib_xml2_xmlNewDoc" != "xyes"; then
-+     AC_MSG_ERROR([library 'libxml2' is required for Sconesite])
-+   fi
-+@@ -195,7 +195,7 @@
-+   [MAGICK_CONFIG="Magick++-config"]
-+ )
-+ AC_CHECK_PROG([MAGICK], ["$MAGICK_CONFIG"], [yes], [no])
-+-if test "x$MAGICK" == "xyes"; then
-++if test "x$MAGICK" = "xyes"; then
-+   MAGICK_CFLAGS=`$MAGICK_CONFIG --cppflags`
-+   MAGICK_LDFLAGS=`$MAGICK_CONFIG --ldflags`
-+   MAGICK_LIBS=`$MAGICK_CONFIG --libs`
-+@@ -209,7 +209,7 @@
-+ )
-+ 
-+ # Need ImageMagick for image
-+-if test "x$IMAGE" == "xyes"; then
-++if test "x$IMAGE" = "xyes"; then
-+   if test "x$MAGICK" != "xyes"; then
-+     AC_MSG_ERROR([library 'Magick++' is required for image])
-+   fi
-+@@ -227,7 +227,7 @@
-+   [RSS="yes"]
-+ )
-+ # Need libxml2 library for rss
-+-if test "x$RSS" == "xyes"; then
-++if test "x$RSS" = "xyes"; then
-+   if test "x$ac_cv_lib_xml2_xmlNewDoc" != "xyes"; then
-+     AC_MSG_ERROR([library 'libxml2' is required for the rss module])
-+   fi
-+@@ -249,7 +249,7 @@
-+   [AC_CHECK_HEADER([mysql/mysql.h],[MYSQL="yes"],[MYSQL="no"])]
-+ )
-+ # Need mysqlclient library for mysql
-+-if test "x$MYSQL" == "xyes"; then
-++if test "x$MYSQL" = "xyes"; then
-+   AC_CHECK_LIB([mysqlclient],[mysql_init],
-+     [CXXFLAGS="$CXXFLAGS `$MYSQL_CONFIG --cflags`"
-+      MYSQL_LIBADD=`$MYSQL_CONFIG --libs`
-+@@ -266,7 +266,7 @@
-+   [AC_CHECK_HEADER([sqlite3.h],[SQLITE="yes"],[SQLITE="no"])]
-+ )
-+ # Need sqlite3 library for sqlite
-+-if test "x$SQLITE" == "xyes"; then
-++if test "x$SQLITE" = "xyes"; then
-+   AC_CHECK_LIB([sqlite3],[sqlite3_open_v2],
-+     [SQLITE_LIBADD="-lsqlite3"
-+      AC_SUBST(SQLITE_LIBADD)],
-+@@ -283,7 +283,7 @@
-+   [AC_CHECK_HEADER([mpfr.h],[MATHS="yes"],[MATHS="no"])]
-+ )
-+ # Need libgmp and libmpfr library for maths
-+-if test "x$MATHS" == "xyes"; then
-++if test "x$MATHS" = "xyes"; then
-+   AC_CHECK_LIB([mpfr],[mpfr_init],
-+     [MATHS_LIBADD="-lgmp -lmpfr"
-+      AC_SUBST(MATHS_LIBADD)],
-+@@ -300,7 +300,7 @@
-+   [AC_CHECK_HEADER([X11/Xlib.h],[UI="yes"],[UI="no"])]
-+ )
-+ # Need libX11 library for ui
-+-if test "x$UI" == "xyes"; then
-++if test "x$UI" = "xyes"; then
-+   AC_CHECK_LIB([X11],[XOpenDisplay],
-+     [UI_LIBADD="-lX11"
-+      AC_SUBST(UI_LIBADD)],
--- 
-1.8.1.2
+> diff --git a/package/sconeserver/sconeserver-fix-configure-operators.patch b/package/sconeserver/sconeserver-fix-configure-operators.patch
+> new file mode 100644
+> index 0000000..504be45
+> --- /dev/null
+> +++ b/package/sconeserver/sconeserver-fix-configure-operators.patch
+> @@ -0,0 +1,93 @@
+> +configure: use the proper '=' POSIX shell operator
+> +
+> +The '==' shell operator doesn't work in POSIX shells, so when sh is
+> +symlinked to a POSIX shell such as dash and not a bash shell, the
+> +configure tests that use this operator fail to work.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Aha; that explains why I couldn't get it to fail on my build machine.
+Well spotted!
+
+Simon.
