@@ -1,44 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Jun 2013 16:22:13 +0200
-Subject: [Buildroot] qt5: No SOURCES in qmake created Makefiles
-In-Reply-To: <51BF198C.2040405@andin.de>
-References: <51BF198C.2040405@andin.de>
-Message-ID: <20130617162213.1fdc7d97@skate>
+Date: Mon, 17 Jun 2013 16:25:07 +0200
+Subject: [Buildroot] gcc-4.7.3 potential issue with barebox
+In-Reply-To: <51BF07B1.6060900@calao-systems.com>
+References: <51BF07B1.6060900@calao-systems.com>
+Message-ID: <20130617162507.0cf4a4b3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andreas Naumann,
+Dear Gr?gory Hermant,
 
-On Mon, 17 Jun 2013 16:13:32 +0200, Andreas Naumann wrote:
+On Mon, 17 Jun 2013 14:57:21 +0200, Gr?gory Hermant wrote:
 
-> when using qt4 up till now I used the output/host/usr/bin/qmake to 
-> prepare out of tree projects/examples for compilation. Worked like a 
-> charm and i was very happy being able to use a consistent toolchain for 
-> that.
+> I noticed an issue with barebox binary about the nandflash detection.
+> Indeed barebox is unable to detect the nandflash when i build barebox from gcc-4.7.3 (buildroot-2013.05)
+> By digging a little bit  i noticed  that  the size of atmel_nand.o was different according to the toolchain release (atmel_nand.o 4732bytes vs 5096 bytes for gcc-4.6.3 )
+> If i disassemble atmel_nand.o i notice that  atmel_nand_enable & atmel_nand_disable are missing.
+> Is it an known issue ?
 
-Using output/host/usr/bin/qmake is indeed the correct way and is
-supposed to do the right thing in terms of toolchain and flags and so
-on.
+I don't remember hearing about this, but maybe you could check with
+another ARM gcc 4.7 based toolchain such as the Linaro toolchain, and
+see if the generated code is correct or not. If the generated code is
+also not correct, then maybe it's a Barebox issue, otherwise it would
+most likely be a Buildroot toolchain issue.
 
-> However when I try the same with the qt5 qmake binary, the the SOURCES 
-> of the .pro file (and maybe other options) dont make it into the 
-> Makefile.
-
-Can you clarify exactly what happens?
-
-> So running make results in "Nothing to do for target first". 
-> Have you or anybody else successfully compiled out of tree qt5 
-> applications and if so how? Or, are there any examples on writing a 
-> package for qt5 applications?
-
-It has been a few months now, but when I did the Qt5 packaging, I'm
-pretty sure I did test a sample Hello World application that was
-compiled "out of tree" (i.e not a Buildroot package) with
-output/host/usr/bin/qmake. There may have been some regressions/issues
-in the mean time, though.
+Best regards,
 
 Thomas
 -- 
