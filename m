@@ -1,14 +1,14 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 17 Jun 2013 23:14:10 +0200
-Subject: [Buildroot] [PATCH 05/12] lua-ev: New package
-In-Reply-To: <CADwac6B8ieVcC1GpuSUnBpJ8MafWG-cpHb=UeqE3eHzcGc_3yQ@mail.gmail.com>
- (Assaf Inbal's message of "Mon, 17 Jun 2013 08:58:21 +0300")
+Date: Mon, 17 Jun 2013 23:18:23 +0200
+Subject: [Buildroot] [PATCH 07/12] luacrypto: New package
+In-Reply-To: <CADwac6ARLvCy+n5EnUHQgHVBkPCAvBnW5Vxx6Qd3VHmv007UcA@mail.gmail.com>
+ (Assaf Inbal's message of "Mon, 17 Jun 2013 09:18:15 +0300")
 References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
- <1369054604-26139-5-git-send-email-shmuelzon@gmail.com>
- <CAB0FRsvRF=cpFEY8d7nXXz849UBMyqJJ0VmMMCjzU5rReb3Svg@mail.gmail.com>
- <8761xdvnl5.fsf@dell.be.48ers.dk>
- <CADwac6B8ieVcC1GpuSUnBpJ8MafWG-cpHb=UeqE3eHzcGc_3yQ@mail.gmail.com>
-Message-ID: <87fvwgsan1.fsf@dell.be.48ers.dk>
+ <1369054604-26139-7-git-send-email-shmuelzon@gmail.com>
+ <CAB0FRsuYNEGZdVwj3mKVBRp2uyfwY5EbOfZ=wuSMvO51iDZMFg@mail.gmail.com>
+ <87wqptu7yw.fsf@dell.be.48ers.dk>
+ <CADwac6ARLvCy+n5EnUHQgHVBkPCAvBnW5Vxx6Qd3VHmv007UcA@mail.gmail.com>
+Message-ID: <87a9mosag0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,11 +21,10 @@ To: buildroot@busybox.net
  Assaf>     consideration?
 
 
- Assaf> Yes, although I've made a change to the above feedback.
- Assaf> As far as I can tell, it will always pull master, and just change the download
- Assaf> file name, so it still isn't a fixed reference.
+ Assaf> Yes, please see attached.
+ Assaf> Again, minor changes to download site.
 
-Committed with minor tweaks, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
