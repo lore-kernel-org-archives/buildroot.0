@@ -1,51 +1,47 @@
-From: Adam Nielsen <a.nielsen@shikadi.net>
-Date: Mon, 17 Jun 2013 17:10:39 +1000
-Subject: [Buildroot] binutils doesn't like -elf2flt option
-In-Reply-To: <51BEAB3A.8010408@mind.be>
-References: <kphffs$v5g$1@ger.gmane.org> <51BEAB3A.8010408@mind.be>
-Message-ID: <kpmcpb$lbo$1@ger.gmane.org>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Mon, 17 Jun 2013 09:45:35 +0200
+Subject: [Buildroot] Changes in the Buildroot autobuilders
+In-Reply-To: <20130616200540.5a370504@skate>
+References: <20130616180054.58f52914@skate> <20130616170305.GI3495@free.fr>
+ <20130616191806.7b4a899a@skate> <20130616172508.GL3495@free.fr>
+ <20130616200540.5a370504@skate>
+Message-ID: <20130617074535.GB16699@lukather>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
-> Are we talking about the cross binutils (i.e the one that runs on your
-> development PC and generates code for your target platform), or the
-> target binutils (i.e the one that runs on your target platform and
-> generates code for your target platform) ?
+On Sun, Jun 16, 2013 at 08:05:40PM +0200, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
+> 
+> On Sun, 16 Jun 2013 19:25:08 +0200, Yann E. MORIN wrote:
+> 
+> > > Indeed. Are we also talking about a daily e-mail?
+> > 
+> > If there are build failures, yes.
+> > Of course, no need for a mail if no build failure.
+> 
+> Ok. This will require a little bit of work, because until now, the
+> autobuild.buildroot.org machine, which sends the daily e-mails, was not
+> using the Buildroot source code at all to do its job. So either the
+> slave build machines will have to submit the list of maintainers of the
+> failing package as part of the tarball they submit to
+> autobuild.buildroot.org, or autobuild.b.o will have to look at the
+> Buildroot source code to find the maintainers of the failing package.
+> 
+> Either way, it will not be immediate to implement.
 
-I'm not entirely sure.  I can run "make binutils" to cause the error, so I'm 
-assuming it must be target binutils.  But then that doesn't make sense, 
-because I have not configured buildroot to compile binutils for my target 
-platform (BR2_PACKAGE_BINUTILS=n).
+Maybe having a make pkg-maintainers target that would output the list of
+mails for a package maintainer would be a more reasonable thing to do.
 
-There is a file buildroot/build/host-binutils-2.23.2/.stamp_built so I am 
-guessing that means the cross binutils worked.  So I am not sure why it is 
-trying to compile target binutils?
+That would allow the autobuilders to not have some knowledge of the
+buildroot source code, while we remain free to change the "maintainer
+implementation" at any point in time.
 
-Here's my buildroot config if it helps: 
-<http://www.shikadi.net/files/buildroot/2013-06-17.br.binutils_elf2flt_err.config>
+Maxime
 
-Be warned there are a couple of new options in there I have added myself.
-
-Arnout Vandecappelle wrote:
->   elf2flt already depends on binutils (it uses libbfd), so this won't work.
-> And as Thomas mentioned, this is only relevant for target-binutils (which you
-> probably don't even need).
-
-Hmm yes, since I'm not producing BFLT binaries (as they will run on the host) 
-I can see that I should not be specifying these options.  However since the 
-host/cross binutils builds successfully, it seems that part is working.
-
->   However, it looks like there is no explicit dependency on elf2flt when
-> building the toolchain. Probably elf2flt should be added to BASE_TARGETS, to
-> make sure it gets built before all the rest.
-
-Would this mean elf2flt gets built before the target binutils, should I choose 
-to enable it?  I am guessing that is what needs to happen for this to work 
-correctly, assuming target binutils should be built.
-
-Many thanks,
-Adam.
+-- 
+Maxime Ripard, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
