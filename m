@@ -1,49 +1,73 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 17 Jun 2013 11:26:27 -0500
-Subject: [Buildroot] [RFC] ti-gfx: add new package
-In-Reply-To: <51BF10BE.2010502@andin.de>
-References: <CALo-6+j77P2RsdYRO9BR04rUX-j0HmxzXtBuHzo_UQ1wDjXbHQ@mail.gmail.com>
- <1370636307-23089-1-git-send-email-spenser@gillilanding.com>
- <CALo-6+ihs6caa98RCvZmZKZ5pUsfXjXPPBJn_zG4J6eBBpsuAw@mail.gmail.com>
- <CAEBucnC-HdSyDttBo4te_=eOR259ebSAwWQuE_W3zcyLVjwSQA@mail.gmail.com>
- <EE4E4767751A8B40949306E403F4DDD802EEB1D7@sv03ultra002.ultratronik.de>
- <CAEBucnD1-qa-mf5w1o9JaAFQArd_tTO0K=7rCC3k3LNMazDdFw@mail.gmail.com>
- <51BF10BE.2010502@andin.de>
-Message-ID: <CAEBucnA96tZNo=_o57Bu2jh39vq3SutUJzgJoB4amMESdrS5wA@mail.gmail.com>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Mon, 17 Jun 2013 09:57:12 -0700
+Subject: [Buildroot] qt5: No SOURCES in qmake created Makefiles
+In-Reply-To: <20130617162213.1fdc7d97@skate>
+References: <51BF198C.2040405@andin.de>
+	<20130617162213.1fdc7d97@skate>
+Message-ID: <CALo-6+jQ-qjc9HfFwTSUh1x6JQnTtH1XUOo0oX8f4nApVH=L7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Naumann,
+Dear Andreas:
 
->> To solve this problem, an ifdef on the kernel version should be done.
->> I'll try to figure out which version incorporated the clock changes
->> and add this to the patch.
+I am using a similar recipe with Qt-5.0.2 as with Qt-4.8.2 for out of
+tree application builds, that is, exporting the PATH prefix to
+output/host/usr/bin/qmake and now specifying the mkspec in
+mkspec/devices/linux-buildroot-g++, so I can confirm this works and is
+both finding the Qt5 *stuff* and the TI es3 *stuff*.
+
+Now, I am using Wojeich's patch for the mkspec as it is a lot simpler
+and actually works then the one that brings in the Graphics_SDK, but
+lets assume that is not your issue.
+
+Charles
+
+On 6/17/13, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> Dear Andreas Naumann,
 >
+> On Mon, 17 Jun 2013 16:13:32 +0200, Andreas Naumann wrote:
 >
-> It came in in 3.2.
-
-Great.  I'll add this to the patch.
-
+>> when using qt4 up till now I used the output/host/usr/bin/qmake to
+>> prepare out of tree projects/examples for compilation. Worked like a
+>> charm and i was very happy being able to use a consistent toolchain for
+>> that.
 >
-> I'm a little on hold until I get further with the qmake issue, but I'm
-> thinking about further integrating the target install step. How can we work
-> together on this? I mean, in case you (or I) want to incorporate Arnouts
-> comments and then go further?
+> Using output/host/usr/bin/qmake is indeed the correct way and is
+> supposed to do the right thing in terms of toolchain and flags and so
+> on.
+>
+>> However when I try the same with the qt5 qmake binary, the the SOURCES
+>> of the .pro file (and maybe other options) dont make it into the
+>> Makefile.
+>
+> Can you clarify exactly what happens?
+>
+>> So running make results in "Nothing to do for target first".
+>> Have you or anybody else successfully compiled out of tree qt5
+>> applications and if so how? Or, are there any examples on writing a
+>> package for qt5 applications?
+>
+> It has been a few months now, but when I did the Qt5 packaging, I'm
+> pretty sure I did test a sample Hello World application that was
+> compiled "out of tree" (i.e not a Buildroot package) with
+> output/host/usr/bin/qmake. There may have been some regressions/issues
+> in the mean time, though.
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
-I'm usually much more on top of things.  Last week I had to get a
-paper done so I had to put this project on the back burner.  I'm going
-to incoporate all the changes suggested and hopefully have a new patch
-out by this afternoon (CST). Everything will be available from the
-beaglxm branch of my github repo at
-http://github.com/Spenser309/buildroot and the new patch will be sent
-to the list.
 
-Spenser
-
---
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+-- 
+Charles Krinke
