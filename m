@@ -1,54 +1,38 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Jun 2013 08:22:50 +0200
-Subject: [Buildroot] binutils doesn't like -elf2flt option
-In-Reply-To: <kphffs$v5g$1@ger.gmane.org>
-References: <kphffs$v5g$1@ger.gmane.org>
-Message-ID: <51BEAB3A.8010408@mind.be>
+Date: Mon, 17 Jun 2013 08:25:47 +0200
+Subject: [Buildroot] Changes in the Buildroot autobuilders
+In-Reply-To: <20130616172508.GL3495@free.fr>
+References: <20130616180054.58f52914@skate> <20130616170305.GI3495@free.fr>
+ <20130616191806.7b4a899a@skate> <20130616172508.GL3495@free.fr>
+Message-ID: <51BEABEB.9080102@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/15/13 12:26, Adam Nielsen wrote:
-> Hi all,
->
-> I'm trying to compile a toolchain with elf2flt enabled, but I'm having
-> problems getting binutils to compile.
->
-> Normally the parameter "-W,-elf2flt" is passed to GCC to tell it to pass
-> "-elf2flt" to the linker.  elf2flt then picks this up and does what it
-> needs to, courtesy of a wrapper script around "ld".  I have set this
-> parameter in TARGET_CFLAGS in one of the buildroot makefiles.
->
-> However when I am compiling binutils, it seems that elf2flt has not been
-> installed yet, so it is not recognising the -elf2flt option, and gives me
-> this error:
->
-> arm-buildroot-linux-uclibcgnueabi-gcc -o conftest -D_LARGEFILE_SOURCE
-> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -Wl,-elf2flt
-> -DBR_BINFMT_FLAT   --static -Wl,-rpath -Wl,/foo conftest.c  >&5
-> arm-buildroot-linux-uclibcgnueabi/bin/ld: warning: cannot find entry
-> symbol lf2flt; defaulting to 00000000000080c0
->
-> I think binutils needs to use elf2flt, otherwise any binaries it produces
-> will not be in BFLT format, so I am guessing I need to tell buildroot to
-> compile elf2flt before binutils.  Does this sound correct?  Is it even
-> possible to compile something like that before binutils?  Or do I have to
-> somehow avoid passing the -elf2flt parameter to binutils?  How might one
-> achieve this?
+On 06/16/13 19:25, Yann E. MORIN wrote:
+>>> > >For example, I'd like to catch errors in the packages I've submitted.
+>>> > >
+>>> > >I see two options for this:
+>>> > >   - add a global MAINTAINERS file that list maintainers for each
+>>> > >     actively maintained packages (a bit like the Linux kernel does);
+>>> > >   - add a FOO_MAINTAINER variable to foo.mk (for each maintained 'foo'
+>>> > >     package).
+>>> > >
+>>> > >Would that be possible?
+>> >
+>> >Yes that would be possible. For now, I don't have a particularly strong
+>> >opinion between the two solutions you proposed. Maybe the second one is
+>> >more Buildroot-ish?
+> Yes, that's my preferred one.
 
-  elf2flt already depends on binutils (it uses libbfd), so this won't 
-work. And as Thomas mentioned, this is only relevant for target-binutils 
-(which you probably don't even need).
-
-  However, it looks like there is no explicit dependency on elf2flt when 
-building the toolchain. Probably elf2flt should be added to BASE_TARGETS, 
-to make sure it gets built before all the rest.
+  I don't really like to clutter the buildroot infrastructure with 
+something as ephemeral as a maintainer... A more dynamic way of 
+subscribing would be more relevant I think.
 
   Regards,
   Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
