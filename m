@@ -1,69 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Jun 2013 07:22:05 +0200
-Subject: [Buildroot] gst-fsl-plugins @ buildroot
-In-Reply-To: <51BE6522.2040309@gluem.org>
-References: <51BE6522.2040309@gluem.org>
-Message-ID: <51BE9CFD.10002@mind.be>
+Date: Mon, 17 Jun 2013 08:22:50 +0200
+Subject: [Buildroot] binutils doesn't like -elf2flt option
+In-Reply-To: <kphffs$v5g$1@ger.gmane.org>
+References: <kphffs$v5g$1@ger.gmane.org>
+Message-ID: <51BEAB3A.8010408@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Adrian,
+On 06/15/13 12:26, Adam Nielsen wrote:
+> Hi all,
+>
+> I'm trying to compile a toolchain with elf2flt enabled, but I'm having
+> problems getting binutils to compile.
+>
+> Normally the parameter "-W,-elf2flt" is passed to GCC to tell it to pass
+> "-elf2flt" to the linker.  elf2flt then picks this up and does what it
+> needs to, courtesy of a wrapper script around "ld".  I have set this
+> parameter in TARGET_CFLAGS in one of the buildroot makefiles.
+>
+> However when I am compiling binutils, it seems that elf2flt has not been
+> installed yet, so it is not recognising the -elf2flt option, and gives me
+> this error:
+>
+> arm-buildroot-linux-uclibcgnueabi-gcc -o conftest -D_LARGEFILE_SOURCE
+> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -Wl,-elf2flt
+> -DBR_BINFMT_FLAT   --static -Wl,-rpath -Wl,/foo conftest.c  >&5
+> arm-buildroot-linux-uclibcgnueabi/bin/ld: warning: cannot find entry
+> symbol lf2flt; defaulting to 00000000000080c0
+>
+> I think binutils needs to use elf2flt, otherwise any binaries it produces
+> will not be in BFLT format, so I am guessing I need to tell buildroot to
+> compile elf2flt before binutils.  Does this sound correct?  Is it even
+> possible to compile something like that before binutils?  Or do I have to
+> somehow avoid passing the -elf2flt parameter to binutils?  How might one
+> achieve this?
 
-  Please send questions like this to the mailing list, not directly to 
-the author.
+  elf2flt already depends on binutils (it uses libbfd), so this won't 
+work. And as Thomas mentioned, this is only relevant for target-binutils 
+(which you probably don't even need).
 
-On 06/17/13 03:23, Adri?n wrote:
-> Hello Arnout,
->
-> I am trying to utilized buidroot + an IMX6 board to run gstreamer on it.
->
-> Although gst-fsl-plugins compiles fine and so on, looks like gstreamer
-> is not able to load the plugins:
->
-> /usr/libexec/gstreamer-0.10/gst-plugin-scanner: symbol 'shm_open': can't
-> resolve symbol
->
-> (gst-plugin-scanner:1170): GStreamer-WARNING **: Failed to load plugin
-> '/usr/lib/gstreamer-0.10/libmfw_gst_v4lsink.so': unknown dl-error
->
-> (gst-plugin-scanner:1170): GStreamer-WARNING **: Failed to load plugin
-> '/usr/lib/gstreamer-0.10/libmfw_gst_h264dec.so': File not found
->
-> (gst-plugin-scanner:1170): GStreamer-WARNING **: Failed to load plugin
-> '/usr/lib/gstreamer-0.10/libmfw_gst_amrdec.so': File not found
->
-> (gst-plugin-scanner:1170): GStreamer-WARNING **: Failed to load plugin
-> '/usr/lib/gstreamer-0.10/libmfw_gst_mpeg4aspdec.so': File not found
->
-> (gst-plugin-scanner:1170): GStreamer-WARNING **: Failed to load plugin
-> '/usr/lib/gstreamer-0.10/libmfw_gst_aacdec.so': File not found
->
-> [...]
->
-> The files are there for sure. However, I suspect that it is required to
-> compile these plugins against some particular toolchain version due to
-> the blobs involved (i.e some ABI break?).
->
-> Have you been trying this under any IMX6 based board? any useful insight?
-
-  I can only tell you that it worked for me :-) We use the Sourcery 
-2009.11 toolchain. But as far as I can remember there are no binaries in
-
-  The "shm_open" failure is suspicious, because that is a pretty standard 
-symbol that is present in librt.so. I don't think gstreamer itself would 
-build without shm_open.
+  However, it looks like there is no explicit dependency on elf2flt when 
+building the toolchain. Probably elf2flt should be added to BASE_TARGETS, 
+to make sure it gets built before all the rest.
 
   Regards,
   Arnout
-
->
-> Thanks,
->
-> Adrian.
->
 
 
 -- 
