@@ -1,37 +1,62 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Mon, 17 Jun 2013 18:07:42 +0000
-Subject: [Buildroot] Changes in the Buildroot autobuilders
-In-Reply-To: <20130617175407.GA3202@free.fr>
-References: <20130616180054.58f52914@skate> <20130616170305.GI3495@free.fr>
- <20130616191806.7b4a899a@skate> <20130616172508.GL3495@free.fr>
- <20130616200540.5a370504@skate> <20130617074535.GB16699@lukather>
- <20130617094958.33eaff88@skate>
- <CAEBucnCWYyj23_RyLtP3p-B6zmBYiYOA4LiODMEdxEr7x4D+xw@mail.gmail.com>
- <20130617175407.GA3202@free.fr>
-Message-ID: <F9C551623D2CBB4C9488801D14F864C639A66D56@ex-mb1.corp.adtran.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 17 Jun 2013 18:14:35 +0000 (UTC)
+Subject: [Buildroot] [Bug 6320] New: Fix kernel compile issue if
+ BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION/BR2_LINUX_KERNEL_SOURCE_DIR and
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME are defined
+Message-ID: <bug-6320-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> So, there are three possibilities:
-> 
->   - per-package _MAINTAINER variable in each .mk
->   - global MAINTAINERS a bit like the Linux kernel
->   - subscription from the autobuilder website
-> 
-> My preference goes to the first, but I think the second is good too.
-> I'd expect the third to be complex and too overkill for this, unless
-> Thomas (which is responsible for the autobulders ;-) ) thinks he can
-> handle this, of course.
+https://bugs.busybox.net/show_bug.cgi?id=6320
 
-I wonder if we could default to 2 if 1 is not set.  Are all packages
-really owned by someone?  I would guess that there are many that just
-exist and only get updated when someone needs to bump the version or
-if there is a corner case.
+           Summary: Fix kernel compile issue if
+                    BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION/BR2_LINUX_KERNEL_S
+                    OURCE_DIR and BR2_LINUX_KERNEL_INTREE_DTS_NAME are
+                    defined
+           Product: buildroot
+           Version: unspecified
+          Platform: All
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: aronrosenberg at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-$0.02 (USD)
 
-Andy
+Created attachment 4946
+  --> https://bugs.busybox.net/attachment.cgi?id=4946
+Patch to fix issue
+
+If you use BR2_LINUX_KERNEL_SOURCE_DIR and/or
+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION along with BR2_LINUX_KERNEL_INTREE_DTS_NAME
+the kernel will fail to build.
+
+1. BR2_LINUX_KERNEL_SOURCE_DIR is not properly added when LINUX_BUILD_DTB is
+defined so the make command fails.
+
+2. BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION and BR2_LINUX_KERNEL_SOURCE_DIR are
+quoted strings and the "wildcard" call can't handle if a double-quote is
+contained within it (which happens if BR2_LINUX_KERNEL_INTREE_DTS_NAME or
+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION are defined). So if you are using a kernel
+newer than 3.8, it will fail the new test and look for the dtb without the dts/
+sub-directory.
+
+linux/linux.mk:
+        $(KERNEL_ARCH_PATH)/boot/$(if $(wildcard \
+        $(addprefix
+$(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
+        $(BINARIES_DIR)/
+
+The attached patch fixes both issues.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
