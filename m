@@ -1,34 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 17 Jun 2013 09:09:28 +0200
-Subject: [Buildroot] Building with uClibc 0.9.28, Linux 2.6.36
-In-Reply-To: <1371414331.31683.YahooMailNeo@web171504.mail.ir2.yahoo.com>
- (piquemal michel's message of "Sun, 16 Jun 2013 21:25:31 +0100 (BST)")
-References: <1371326730.31593.YahooMailNeo@web171503.mail.ir2.yahoo.com>
- <87bo77yveg.fsf@dell.be.48ers.dk>
- <1371329906.70128.YahooMailNeo@web171503.mail.ir2.yahoo.com>
- <87sj0jxf0n.fsf@dell.be.48ers.dk>
- <1371332003.62321.YahooMailNeo@web171505.mail.ir2.yahoo.com>
- <877ghvxdkf.fsf@dell.be.48ers.dk>
- <1371338781.70346.YahooMailNeo@web171503.mail.ir2.yahoo.com>
- <87r4g1vo98.fsf@dell.be.48ers.dk>
- <1371414331.31683.YahooMailNeo@web171504.mail.ir2.yahoo.com>
-Message-ID: <87li69tdqv.fsf@dell.be.48ers.dk>
+From: Adam Nielsen <a.nielsen@shikadi.net>
+Date: Mon, 17 Jun 2013 17:10:39 +1000
+Subject: [Buildroot] binutils doesn't like -elf2flt option
+In-Reply-To: <51BEAB3A.8010408@mind.be>
+References: <kphffs$v5g$1@ger.gmane.org> <51BEAB3A.8010408@mind.be>
+Message-ID: <kpmcpb$lbo$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "piquemal" == piquemal michel <michel_piquemal@yahoo.fr> writes:
+Thomas Petazzoni wrote:
+> Are we talking about the cross binutils (i.e the one that runs on your
+> development PC and generates code for your target platform), or the
+> target binutils (i.e the one that runs on your target platform and
+> generates code for your target platform) ?
 
- piquemal> target has been built with gcc 3.4.2...
+I'm not entirely sure.  I can run "make binutils" to cause the error, so I'm 
+assuming it must be target binutils.  But then that doesn't make sense, 
+because I have not configured buildroot to compile binutils for my target 
+platform (BR2_PACKAGE_BINUTILS=n).
 
- piquemal> it does not seem I can select such old version with buildroot
- piquemal> 2010-05 :( Hopefully one older buildroot version can support
- piquemal> the right mix...
+There is a file buildroot/build/host-binutils-2.23.2/.stamp_built so I am 
+guessing that means the cross binutils worked.  So I am not sure why it is 
+trying to compile target binutils?
 
-Yes, 3.4.x support was removed in October 2009, so perhaps 2009.08 is a
-better option.
+Here's my buildroot config if it helps: 
+<http://www.shikadi.net/files/buildroot/2013-06-17.br.binutils_elf2flt_err.config>
 
--- 
-Bye, Peter Korsgaard
+Be warned there are a couple of new options in there I have added myself.
+
+Arnout Vandecappelle wrote:
+>   elf2flt already depends on binutils (it uses libbfd), so this won't work.
+> And as Thomas mentioned, this is only relevant for target-binutils (which you
+> probably don't even need).
+
+Hmm yes, since I'm not producing BFLT binaries (as they will run on the host) 
+I can see that I should not be specifying these options.  However since the 
+host/cross binutils builds successfully, it seems that part is working.
+
+>   However, it looks like there is no explicit dependency on elf2flt when
+> building the toolchain. Probably elf2flt should be added to BASE_TARGETS, to
+> make sure it gets built before all the rest.
+
+Would this mean elf2flt gets built before the target binutils, should I choose 
+to enable it?  I am guessing that is what needs to happen for this to work 
+correctly, assuming target binutils should be built.
+
+Many thanks,
+Adam.
