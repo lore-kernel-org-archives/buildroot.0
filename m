@@ -1,34 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Jun 2013 09:07:03 +0200
-Subject: [Buildroot] [PATCH] gpsd: make init script optional
-In-Reply-To: <51BFFD16.7030009@mind.be>
-References: <1371382468-5838-1-git-send-email-spdawson@gmail.com>
- <20130616130904.GD3495@free.fr>
- <CAHt8ZCPnR+9SG=rDfyzeLQcbT=UWAwhun4PJ31Ohk=60=0+a7g@mail.gmail.com>
- <20130616183051.GZ16699@lukather> <51BFFD16.7030009@mind.be>
-Message-ID: <20130618090703.05d44c80@skate>
+Date: Tue, 18 Jun 2013 09:12:39 +0200
+Subject: [Buildroot] Changes in the Buildroot autobuilders
+In-Reply-To: <E6BF041E97966E4DB955F0DF883AD2D633A03317@de02wembxa.internal.synopsys.com>
+References: <20130616180054.58f52914@skate> <20130616170305.GI3495@free.fr>
+ <20130616191806.7b4a899a@skate> <20130616172508.GL3495@free.fr>
+ <20130616200540.5a370504@skate> <20130617074535.GB16699@lukather>
+ <20130617094958.33eaff88@skate>
+ <CAEBucnCWYyj23_RyLtP3p-B6zmBYiYOA4LiODMEdxEr7x4D+xw@mail.gmail.com>
+ <20130617175407.GA3202@free.fr>
+ <F9C551623D2CBB4C9488801D14F864C639A66D56@ex-mb1.corp.adtran.com>
+ <E6BF041E97966E4DB955F0DF883AD2D633A03317@de02wembxa.internal.synopsys.com>
+Message-ID: <20130618091239.28d1dbc8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Mischa Jonker,
 
-On Tue, 18 Jun 2013 08:24:22 +0200, Arnout Vandecappelle wrote:
+On Mon, 17 Jun 2013 20:09:51 +0000, Mischa Jonker wrote:
 
->   There are just a few daemons that you'd want to run from hotplug, most 
-> of them would still run from init.d.
-> 
->   But I really would like a better way to manage the services you want to 
-> run in init.d, and especially their order. I can't come up with a good 
-> solution, though, so I'm not actively complaining :-)
+> How would we handle architecture-specific failures for a package if we don't have a global MAINTAINERS file? Add another _MAINTAINER variable in the config.in.<arch> file?
 
-I believe it's typically the kind of customization that is left to the
-user, through a post-build script. Buildroot provides a relatively sane
-default installation, and the user has to further tweak it if needed. I
-don't think we should make Buildroot more complex to allow directly in
-the Buildroot configuration this kind of very specific customization.
+I believe architecture-specific failures would have to be handled
+separately. We can't really add a maintainer into a Config.in file.
+
+Even if we have a global MAINTAINERS file, how would architecture
+maintainers be expressed? In the kernel, the MAINTAINERS file creates a
+relation between a person and set of files/directories, but an
+architecture in Buildroot is not a set of files or directories.
 
 Best regards,
 
