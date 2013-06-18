@@ -1,34 +1,91 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Tue, 18 Jun 2013 15:05:09 +0100
-Subject: [Buildroot] Does MIP64 ABI 64 support dynamic linking?
-In-Reply-To: <D4B053F823DA904C8FD129217ABE432D02E4B147C47B@fs28.airspan.com>
-References: <D4B053F823DA904C8FD129217ABE432D02E4B147C47B@fs28.airspan.com>
-Message-ID: <CAG2jQ8iJ8PxUOrQbiWCuOgptHFq+A7LYVGuO9C+B9P=+MGajXw@mail.gmail.com>
+From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
+Date: Tue, 18 Jun 2013 16:19:51 +0200
+Subject: [Buildroot] [PATCH v2] libqmi: new package
+Message-ID: <51C06C87.6080706@fh-kl.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30 April 2013 19:55, Michael Feldman <mfeldman@airspan.com> wrote:
-> Hello,
->
->
->
-> I built a buildroot MIPS64 BE rootfs for my XLP-based custom board (running
-> currently an angstrom-based distribution built with gcc-4.4.5) using last
-> version of buildroot.
->
->...
-> Has anybody faced this problem and has a hint how to solve it?
+libqmi is a glib-based library for talking to WWAN modems and devices which
+speak the Qualcomm MSM Interface (QMI) protocol.
 
-Hi Michael,
+Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
+---
+ package/Config.in        |  1 +
+ package/libqmi/Config.in |  9 +++++++++
+ package/libqmi/libqmi.mk | 16 ++++++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/libqmi/Config.in
+ create mode 100644 package/libqmi/libqmi.mk
 
-I believe I've seen this problem once in the past. I did the same
-thing like you did. Build a static busybox.
+diff --git a/package/Config.in b/package/Config.in
+index 5b066dc..426004b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -484,6 +484,7 @@ source "package/libhid/Config.in"
+ source "package/libiqrf/Config.in"
+ source "package/libnfc/Config.in"
+ source "package/libnfc-llcp/Config.in"
++source "package/libqmi/Config.in"
+ source "package/libserial/Config.in"
+ source "package/libusb/Config.in"
+ source "package/libusb-compat/Config.in"
+diff --git a/package/libqmi/Config.in b/package/libqmi/Config.in
+new file mode 100644
+index 0000000..0e1df08
+--- /dev/null
++++ b/package/libqmi/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBQMI
++	bool "libqmi"
++	select BR2_PACKAGE_LIBGLIB2
++	depends on BR2_USE_WCHAR # libglib2
++	help
++	  libqmi is a glib-based library for talking to WWAN modems and devices
++	  which speak the Qualcomm MSM Interface (QMI) protocol.
++	  
++	  http://www.freedesktop.org/wiki/Software/libqmi/
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+new file mode 100644
+index 0000000..911b1a7
+--- /dev/null
++++ b/package/libqmi/libqmi.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libqmi
++#
++################################################################################
++
++LIBQMI_VERSION = 1.4.0
++LIBQMI_SITE    = http://www.freedesktop.org/software/libqmi/
++LIBQMI_SOURCE  = libqmi-$(LIBQMI_VERSION).tar.xz
++LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
++LIBQMI_LICENSE_FILES = COPYING
++LIBQMI_INSTALL_STAGING = YES
++
++LIBQMI_DEPENDENCIES = libglib2
++
++$(eval $(autotools-package))
+-- 
+1.8.1.2
 
-I was wondering if you've managed to debug this problem.
 
---
-Regards,
-Markos Chandras
+-- 
+Dipl.-Inf. (FH) Patrick Ziegler
+
+University Of Applied Sciences
+Kaiserslautern
+
+Amerikastrasse 1
+D-66482 Zweibruecken
+Germany
+
+Phone:  +49 631 3724 5526
+Mail:   patrick.ziegler at fh-kl.de
+PGP KeyID 0xB4796B8C
+
+http://www.fh-kl.de
+http://www.fh-kl.de/fachbereiche/imst/iuk-knowhow.html
