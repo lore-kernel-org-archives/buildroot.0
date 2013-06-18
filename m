@@ -1,89 +1,26 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Jun 2013 18:00:03 +0200
+From: Adam Nielsen <a.nielsen@shikadi.net>
+Date: Wed, 19 Jun 2013 06:34:48 +1000
 Subject: [Buildroot] binutils doesn't like -elf2flt option
-In-Reply-To: <kpmcpb$lbo$1@ger.gmane.org>
+In-Reply-To: <51C08403.4050900@mind.be>
 References: <kphffs$v5g$1@ger.gmane.org> <51BEAB3A.8010408@mind.be>
- <kpmcpb$lbo$1@ger.gmane.org>
-Message-ID: <51C08403.4050900@mind.be>
+ <kpmcpb$lbo$1@ger.gmane.org> <51C08403.4050900@mind.be>
+Message-ID: <kpqg93$v74$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/06/13 09:10, Adam Nielsen wrote:
-> Thomas Petazzoni wrote:
->> Are we talking about the cross binutils (i.e the one that runs on your
->> development PC and generates code for your target platform), or the
->> target binutils (i.e the one that runs on your target platform and
->> generates code for your target platform) ?
->
-> I'm not entirely sure.  I can run "make binutils" to cause the error, so
-> I'm assuming it must be target binutils.  But then that doesn't make
-> sense, because I have not configured buildroot to compile binutils for my
-> target platform (BR2_PACKAGE_BINUTILS=n).
+>   If you explicitly ask to build binutils (for the target), then the value of
+> BR2_PACKAGE_BINUTILS is ignored. So 'make binutils' tries to build binutils
+> for the target.
 
-  If you explicitly ask to build binutils (for the target), then the 
-value of BR2_PACKAGE_BINUTILS is ignored. So 'make binutils' tries to 
-build binutils for the target.
+Sorry, to clarify - I get the error running just "make", but if I want to 
+experiment by changing build flags, I can run "make binutils" to skip 
+recompiling gcc, uclibc, etc. and just attempt the bit that recently failed.
 
+This is just a timesaver when testing though, the real problem is that I still 
+get these errors from the target binutils when running "make".
 
-> There is a file buildroot/build/host-binutils-2.23.2/.stamp_built so I am
-> guessing that means the cross binutils worked.  So I am not sure why it
-> is trying to compile target binutils?
->
-> Here's my buildroot config if it helps:
-> <http://www.shikadi.net/files/buildroot/2013-06-17.br.binutils_elf2flt_err.config>
->
->
-> Be warned there are a couple of new options in there I have added myself.
->
-> Arnout Vandecappelle wrote:
->>   elf2flt already depends on binutils (it uses libbfd), so this won't
->> work.
->> And as Thomas mentioned, this is only relevant for target-binutils
->> (which you
->> probably don't even need).
->
-> Hmm yes, since I'm not producing BFLT binaries (as they will run on the
-> host) I can see that I should not be specifying these options.  However
-> since the host/cross binutils builds successfully, it seems that part is
-> working.
->
->>   However, it looks like there is no explicit dependency on elf2flt when
->> building the toolchain. Probably elf2flt should be added to
->> BASE_TARGETS, to
->> make sure it gets built before all the rest.
->
-> Would this mean elf2flt gets built before the target binutils, should I
-> choose to enable it?  I am guessing that is what needs to happen for this
-> to work correctly, assuming target binutils should be built.
-
-  host-elf2flt is built before binutils, yes. (Note that host-elf2flt 
-will actually be called elf2flt without the host because it has not been 
-converted to the generic package infrastructure; it's also in the 
-toolchain directory rather than the build directory.)
-
-
-  Regards,
-  Arnout
-
->
-> Many thanks,
-> Adam.
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thanks,
+Adam.
