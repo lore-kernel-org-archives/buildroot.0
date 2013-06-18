@@ -1,26 +1,51 @@
-From: Adam Nielsen <a.nielsen@shikadi.net>
-Date: Wed, 19 Jun 2013 06:34:48 +1000
-Subject: [Buildroot] binutils doesn't like -elf2flt option
-In-Reply-To: <51C08403.4050900@mind.be>
-References: <kphffs$v5g$1@ger.gmane.org> <51BEAB3A.8010408@mind.be>
- <kpmcpb$lbo$1@ger.gmane.org> <51C08403.4050900@mind.be>
-Message-ID: <kpqg93$v74$1@ger.gmane.org>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Tue, 18 Jun 2013 14:22:34 -0700
+Subject: [Buildroot] [PATCH] socketcand: bump to version 0.3.1
+Message-ID: <1371590554-12702-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->   If you explicitly ask to build binutils (for the target), then the value of
-> BR2_PACKAGE_BINUTILS is ignored. So 'make binutils' tries to build binutils
-> for the target.
+Since version 0.3.0, libconfig has been made optional
 
-Sorry, to clarify - I get the error running just "make", but if I want to 
-experiment by changing build flags, I can run "make binutils" to skip 
-recompiling gcc, uclibc, etc. and just attempt the bit that recently failed.
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ package/socketcand/Config.in     |    1 -
+ package/socketcand/socketcand.mk |    7 ++++++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-This is just a timesaver when testing though, the real problem is that I still 
-get these errors from the target binutils when running "make".
-
-Thanks,
-Adam.
+diff --git a/package/socketcand/Config.in b/package/socketcand/Config.in
+index d5d02de..72315c0 100644
+--- a/package/socketcand/Config.in
++++ b/package/socketcand/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_SOCKETCAND
+ 	bool "socketcand"
+-	select BR2_PACKAGE_LIBCONFIG
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Socketcand is a daemon that provides access to CAN interfaces
+diff --git a/package/socketcand/socketcand.mk b/package/socketcand/socketcand.mk
+index d85eb1a..8e42698 100644
+--- a/package/socketcand/socketcand.mk
++++ b/package/socketcand/socketcand.mk
+@@ -4,9 +4,14 @@
+ #
+ ################################################################################
+ 
+-SOCKETCAND_VERSION = 7d06986
++SOCKETCAND_VERSION = dc3437ab
+ SOCKETCAND_SITE = http://github.com/dschanoeh/socketcand/tarball/$(SOCKETCAND_VERSION)
+ SOCKETCAND_AUTORECONF = YES
++
++ifeq ($(BR2_PACKAGE_LIBCONFIG),y)
+ SOCKETCAND_DEPENDENCIES = libconfig
++else
++SOCKETCAND_CONF_OPT = --without-config
++endif
+ 
+ $(eval $(autotools-package))
+-- 
+1.7.4.1
