@@ -1,102 +1,74 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Tue, 18 Jun 2013 17:37:26 +0200
-Subject: [Buildroot] qt5: No SOURCES in qmake created Makefiles
-In-Reply-To: <CALo-6+jQ-qjc9HfFwTSUh1x6JQnTtH1XUOo0oX8f4nApVH=L7w@mail.gmail.com>
-References: <51BF198C.2040405@andin.de> <20130617162213.1fdc7d97@skate>
- <CALo-6+jQ-qjc9HfFwTSUh1x6JQnTtH1XUOo0oX8f4nApVH=L7w@mail.gmail.com>
-Message-ID: <51C07EB6.4080003@andin.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Jun 2013 18:46:48 +0200
+Subject: [Buildroot] Changes in the Buildroot autobuilders
+In-Reply-To: <20130618091639.4f82fa41@skate>
+References: <20130616170305.GI3495@free.fr> <20130616191806.7b4a899a@skate>
+ <20130616172508.GL3495@free.fr> <20130616200540.5a370504@skate>
+ <20130617074535.GB16699@lukather> <20130617094958.33eaff88@skate>
+ <CAEBucnCWYyj23_RyLtP3p-B6zmBYiYOA4LiODMEdxEr7x4D+xw@mail.gmail.com>
+ <20130617175407.GA3202@free.fr> <51BFFC5D.4040600@mind.be>
+ <20130618091639.4f82fa41@skate>
+Message-ID: <20130618164648.GA3952@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas and Charles
+Thomas, All,
 
-In order to reproduce the issue I used the beaglebone_defconfig, changed 
-to linaro toolchain and activated a minimal qt5 set:
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_QT5BASE=y
-BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-BR2_PACKAGE_QT5BASE_GUI=y
-BR2_PACKAGE_QT5BASE_WIDGETS=y
-BR2_PACKAGE_QT5BASE_LINUXFB=y
-BR2_PACKAGE_QT5JSBACKEND=y
+On 2013-06-18 09:16 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 18 Jun 2013 08:21:17 +0200, Arnout Vandecappelle wrote:
+> >   So I think a nice solution would be to add a script in support/scripts 
+> > that explicitly encodes all the maintainers - maintainers can add 
+> > themselves with patches (just like in the kernel). The a.b.o would fetch 
+> > the script once a day just before sending out its daily mails, and call 
+> > it with everything it knows about the build failure set in the environment.
+> 
+> This does sound like a nice idea, but I would like it to also handle
+> architecture maintainers if possible.
+> 
+> So something like:
+> 
+> support/script/get_maintainer --arch arc --package tvheadend
+> 
+> would return:
+> 
+> Mischa Jonker <Mischa.Jonker@synopsys.com>
+> 'Yann E. MORIN' <yann.morin.1998@free.fr>
+> 
+> the first being the architecture maintainer, the second being the
+> package maintainer.
 
-Now I have been going back in revisions and find the problem to start 
-exactly when switching to qt 5.0.2 (d6b2bac qt5: bump to 5.0.2). So I 
-have been looking through the release notes 
-(http://blog.qt.digia.com/blog/2013/04/10/qt-5-0-2-released/) but 
-nothing really rings a bell. But I'm not very knowledgable in the qt 
-build framework.
+OK, I'll code this, then.
 
-So Charles, I'm interested in how you still get it working. What do you 
-mean with similar recipe? Do you use the qt-5.0.2 package from 
-buildroot? Which QT5 configs, toolchain, board?
+> But then, I would probably have to send one e-mail per failure, because
+> grouping them would be hard since there may be another failure for
+> tvheadend, but not on the ARC architecture.
 
+Maybe you'd want to separate the mails:
+  - one for packages
+  - one for achitectures
 
-regards
-Andreas
+> >   However, Spenser points out in another mail:
+> > 
+> > > I think many people would like to know if something they did may have
+> > > triggered a bug, not just the maintainer of the package.
+> > 
+> >   I could agree with sending mails automatically to the authors of a 
+> > package commit if the commit was done in the last week or so.
+> 
+> Hum, ok. Not impossible to do, for sure.
 
+Yes, sounds like a good idea.
 
+Regards,
+Yann E. MORIN.
 
-
-Am 17.06.2013 18:57, schrieb Charles Krinke:
-> Dear Andreas:
->
-> I am using a similar recipe with Qt-5.0.2 as with Qt-4.8.2 for out of
-> tree application builds, that is, exporting the PATH prefix to
-> output/host/usr/bin/qmake and now specifying the mkspec in
-> mkspec/devices/linux-buildroot-g++, so I can confirm this works and is
-> both finding the Qt5 *stuff* and the TI es3 *stuff*.
->
-> Now, I am using Wojeich's patch for the mkspec as it is a lot simpler
-> and actually works then the one that brings in the Graphics_SDK, but
-> lets assume that is not your issue.
->
-> Charles
->
-> On 6/17/13, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Andreas Naumann,
->>
->> On Mon, 17 Jun 2013 16:13:32 +0200, Andreas Naumann wrote:
->>
->>> when using qt4 up till now I used the output/host/usr/bin/qmake to
->>> prepare out of tree projects/examples for compilation. Worked like a
->>> charm and i was very happy being able to use a consistent toolchain for
->>> that.
->>
->> Using output/host/usr/bin/qmake is indeed the correct way and is
->> supposed to do the right thing in terms of toolchain and flags and so
->> on.
->>
->>> However when I try the same with the qt5 qmake binary, the the SOURCES
->>> of the .pro file (and maybe other options) dont make it into the
->>> Makefile.
->>
->> Can you clarify exactly what happens?
->>
->>> So running make results in "Nothing to do for target first".
->>> Have you or anybody else successfully compiled out of tree qt5
->>> applications and if so how? Or, are there any examples on writing a
->>> package for qt5 applications?
->>
->> It has been a few months now, but when I did the Qt5 packaging, I'm
->> pretty sure I did test a sample Hello World application that was
->> compiled "out of tree" (i.e not a Buildroot package) with
->> output/host/usr/bin/qmake. There may have been some regressions/issues
->> in the mean time, though.
->>
->> Thomas
->> --
->> Thomas Petazzoni, Free Electrons
->> Kernel, drivers, real-time and embedded Linux
->> development, consulting, training and support.
->> http://free-electrons.com
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->
->
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
