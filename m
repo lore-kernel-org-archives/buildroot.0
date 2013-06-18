@@ -1,66 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Jun 2013 08:21:17 +0200
-Subject: [Buildroot] Changes in the Buildroot autobuilders
-In-Reply-To: <20130617175407.GA3202@free.fr>
-References: <20130616180054.58f52914@skate> <20130616170305.GI3495@free.fr>
- <20130616191806.7b4a899a@skate> <20130616172508.GL3495@free.fr>
- <20130616200540.5a370504@skate> <20130617074535.GB16699@lukather>
- <20130617094958.33eaff88@skate>
- <CAEBucnCWYyj23_RyLtP3p-B6zmBYiYOA4LiODMEdxEr7x4D+xw@mail.gmail.com>
- <20130617175407.GA3202@free.fr>
-Message-ID: <51BFFC5D.4040600@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Jun 2013 09:07:03 +0200
+Subject: [Buildroot] [PATCH] gpsd: make init script optional
+In-Reply-To: <51BFFD16.7030009@mind.be>
+References: <1371382468-5838-1-git-send-email-spdawson@gmail.com>
+ <20130616130904.GD3495@free.fr>
+ <CAHt8ZCPnR+9SG=rDfyzeLQcbT=UWAwhun4PJ31Ohk=60=0+a7g@mail.gmail.com>
+ <20130616183051.GZ16699@lukather> <51BFFD16.7030009@mind.be>
+Message-ID: <20130618090703.05d44c80@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/06/13 19:54, Yann E. MORIN wrote:
-> On 2013-06-17 11:20 -0500, Spenser Gilliland spake thusly:
->> >Are we sure we want to add more variables to the .mk files.  One of
->> >Buildroot's main differentiators is the cleanliness of these files in
->> >comparison to other packaging methods.
+Dear Arnout Vandecappelle,
 
-  +1
+On Tue, 18 Jun 2013 08:24:22 +0200, Arnout Vandecappelle wrote:
 
-  At least on the short term, the number of maintainers will be small and 
-the number of packages per maintainer will be large. Some maintainers 
-will also be fairly ephemeral - e.g. Maxime added support for systemd a 
-year ago, but probably by now he doesn't consider himself a maintainer of 
-it anymore. Also the rules may be a little more complex than based on 
-package name.
+>   There are just a few daemons that you'd want to run from hotplug, most 
+> of them would still run from init.d.
+> 
+>   But I really would like a better way to manage the services you want to 
+> run in init.d, and especially their order. I can't come up with a good 
+> solution, though, so I'm not actively complaining :-)
 
-  So I think a nice solution would be to add a script in support/scripts 
-that explicitly encodes all the maintainers - maintainers can add 
-themselves with patches (just like in the kernel). The a.b.o would fetch 
-the script once a day just before sending out its daily mails, and call 
-it with everything it knows about the build failure set in the environment.
+I believe it's typically the kind of customization that is left to the
+user, through a post-build script. Buildroot provides a relatively sane
+default installation, and the user has to further tweak it if needed. I
+don't think we should make Buildroot more complex to allow directly in
+the Buildroot configuration this kind of very specific customization.
 
->> >
->> >As an alternative, this information could be pulled from the git log
->> >and anyone who has made a change to the package directory in the past
->> >would be subscribed to errors.
-> No, I am not in favour of this solution.
->
-> Being a 'maintainer' should be voluntary, opt-in, and explicit.
+Best regards,
 
-  +1 too.
-
-  However, Spenser points out in another mail:
-
-> I think many people would like to know if something they did may have
-> triggered a bug, not just the maintainer of the package.
-
-  I could agree with sending mails automatically to the authors of a 
-package commit if the commit was done in the last week or so.
-
-
-  Regards,
-  Arnout
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
