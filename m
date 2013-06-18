@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Jun 2013 19:00:09 +0200
-Subject: [Buildroot] Randomization of kconfig choices?
-In-Reply-To: <20130618164904.GB3952@free.fr>
-References: <20130618093107.6c08e477@skate>
-	<20130618164904.GB3952@free.fr>
-Message-ID: <20130618190009.7a08518a@skate>
+Date: Tue, 18 Jun 2013 19:05:30 +0200
+Subject: [Buildroot] gcc-4.7.3 potential issue with barebox
+In-Reply-To: <51C076A3.4040008@calao-systems.com>
+References: <51BF07B1.6060900@calao-systems.com>
+ <20130617162507.0cf4a4b3@skate>
+ <51C076A3.4040008@calao-systems.com>
+Message-ID: <20130618190530.37e44241@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Gr?gory Hermant,
 
-On Tue, 18 Jun 2013 18:49:04 +0200, Yann E. MORIN wrote:
+On Tue, 18 Jun 2013 17:02:59 +0200, Gr?gory Hermant wrote:
 
-> No, I could not come up with a satisfiable solution so far. I've put it
-> a bit in a limbo, so I can start afresh from a new angle.
-> 
-> There have been some fixes in this area recently, but alas, none fixes
-> the randomisation of choices in presence of KCONFIG_ALLCONFIG.
-> 
-> But I was planning to work on this this week. Let's see where that will
-> get us...
+> Same issue with gcc version 4.7.3 (Sourcery CodeBench Lite 2013.05-24) toolchain.
 
-Aren't there some people that know better the history of this kconfig
-that would be able to help? It seems like you're now more-or-less the
-only one patching this stuff.
+Then maybe it's a Barebox vs. gcc 4.7.x issue that should be reported
+to the Barebox people? I'm pretty sure they have already built and
+tested Barebox with gcc 4.7, but maybe there are some remaining
+problems in specific areas?
 
 Best regards,
 
