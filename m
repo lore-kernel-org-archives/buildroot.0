@@ -1,53 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Jun 2013 08:24:22 +0200
-Subject: [Buildroot] [PATCH] gpsd: make init script optional
-In-Reply-To: <20130616183051.GZ16699@lukather>
-References: <1371382468-5838-1-git-send-email-spdawson@gmail.com>
- <20130616130904.GD3495@free.fr>
- <CAHt8ZCPnR+9SG=rDfyzeLQcbT=UWAwhun4PJ31Ohk=60=0+a7g@mail.gmail.com>
- <20130616183051.GZ16699@lukather>
-Message-ID: <51BFFD16.7030009@mind.be>
+Date: Tue, 18 Jun 2013 08:21:17 +0200
+Subject: [Buildroot] Changes in the Buildroot autobuilders
+In-Reply-To: <20130617175407.GA3202@free.fr>
+References: <20130616180054.58f52914@skate> <20130616170305.GI3495@free.fr>
+ <20130616191806.7b4a899a@skate> <20130616172508.GL3495@free.fr>
+ <20130616200540.5a370504@skate> <20130617074535.GB16699@lukather>
+ <20130617094958.33eaff88@skate>
+ <CAEBucnCWYyj23_RyLtP3p-B6zmBYiYOA4LiODMEdxEr7x4D+xw@mail.gmail.com>
+ <20130617175407.GA3202@free.fr>
+Message-ID: <51BFFC5D.4040600@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/06/13 20:30, Maxime Ripard wrote:
-> On Sun, Jun 16, 2013 at 04:59:06PM +0100, Simon Dawson wrote:
->> Hi Yann, Maxime.
->>
->> On 16 June 2013 14:09, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->>> Why would one not want the init script? Is this because of systemd? If so,
->>> then you should use GPSD_INSTALL_INIT_SYSV and GPSD_INSTALL_INIT_SYSTEMD
->>> as pointed out by Maxime.
->>>
->>> This ensures the init script will only be installed if a SysV init
->>> scheme is used (and conversely for the systemd unit).
->>>
->>> Otherwise, please expand on why not wanting the init script should be
->>> configurable at all.
->>
->> There are other possibilities, beyond SysV and systemd: I've
->> previously run gpsd and other managed services using daemontools and
->> runit. My present use case has udev kicking off gpsd in response to
->> hotplug events for a USB GPS device.
->>
->> I seem to always end up having to remove the gpsd SysV init script in
->> my post-build script; hence the desire for a configuration option.
+On 17/06/13 19:54, Yann E. MORIN wrote:
+> On 2013-06-17 11:20 -0500, Spenser Gilliland spake thusly:
+>> >Are we sure we want to add more variables to the .mk files.  One of
+>> >Buildroot's main differentiators is the cleanliness of these files in
+>> >comparison to other packaging methods.
+
+  +1
+
+  At least on the short term, the number of maintainers will be small and 
+the number of packages per maintainer will be large. Some maintainers 
+will also be fairly ephemeral - e.g. Maxime added support for systemd a 
+year ago, but probably by now he doesn't consider himself a maintainer of 
+it anymore. Also the rules may be a little more complex than based on 
+package name.
+
+  So I think a nice solution would be to add a script in support/scripts 
+that explicitly encodes all the maintainers - maintainers can add 
+themselves with patches (just like in the kernel). The a.b.o would fetch 
+the script once a day just before sending out its daily mails, and call 
+it with everything it knows about the build failure set in the environment.
+
+>> >
+>> >As an alternative, this information could be pulled from the git log
+>> >and anyone who has made a change to the package directory in the past
+>> >would be subscribed to errors.
+> No, I am not in favour of this solution.
 >
-> Maybe you can add a BR2_INIT_NONE choice here then to not copy all the
-> install scripts.
+> Being a 'maintainer' should be voluntary, opt-in, and explicit.
 
-  There are just a few daemons that you'd want to run from hotplug, most 
-of them would still run from init.d.
+  +1 too.
 
-  But I really would like a better way to manage the services you want to 
-run in init.d, and especially their order. I can't come up with a good 
-solution, though, so I'm not actively complaining :-)
+  However, Spenser points out in another mail:
 
-  I agree with Peter that having an option for each package is not a good 
-solution.
+> I think many people would like to know if something they did may have
+> triggered a bug, not just the maintainer of the package.
+
+  I could agree with sending mails automatically to the authors of a 
+package commit if the commit was done in the last week or so.
 
 
   Regards,
