@@ -1,29 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Jun 2013 19:05:30 +0200
-Subject: [Buildroot] gcc-4.7.3 potential issue with barebox
-In-Reply-To: <51C076A3.4040008@calao-systems.com>
-References: <51BF07B1.6060900@calao-systems.com>
- <20130617162507.0cf4a4b3@skate>
- <51C076A3.4040008@calao-systems.com>
-Message-ID: <20130618190530.37e44241@skate>
+Date: Tue, 18 Jun 2013 19:06:56 +0200
+Subject: [Buildroot] qt5: No SOURCES in qmake created Makefiles
+In-Reply-To: <51C07EB6.4080003@andin.de>
+References: <51BF198C.2040405@andin.de> <20130617162213.1fdc7d97@skate>
+ <CALo-6+jQ-qjc9HfFwTSUh1x6JQnTtH1XUOo0oX8f4nApVH=L7w@mail.gmail.com>
+ <51C07EB6.4080003@andin.de>
+Message-ID: <20130618190656.228e7658@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gr?gory Hermant,
+Dear Andreas Naumann,
 
-On Tue, 18 Jun 2013 17:02:59 +0200, Gr?gory Hermant wrote:
+On Tue, 18 Jun 2013 17:37:26 +0200, Andreas Naumann wrote:
 
-> Same issue with gcc version 4.7.3 (Sourcery CodeBench Lite 2013.05-24) toolchain.
+> In order to reproduce the issue I used the beaglebone_defconfig, changed 
+> to linaro toolchain and activated a minimal qt5 set:
+> BR2_PACKAGE_QT5=y
+> BR2_PACKAGE_QT5BASE=y
+> BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+> BR2_PACKAGE_QT5BASE_GUI=y
+> BR2_PACKAGE_QT5BASE_WIDGETS=y
+> BR2_PACKAGE_QT5BASE_LINUXFB=y
+> BR2_PACKAGE_QT5JSBACKEND=y
+> 
+> Now I have been going back in revisions and find the problem to start 
+> exactly when switching to qt 5.0.2 (d6b2bac qt5: bump to 5.0.2). So I 
+> have been looking through the release notes 
+> (http://blog.qt.digia.com/blog/2013/04/10/qt-5-0-2-released/) but 
+> nothing really rings a bell. But I'm not very knowledgable in the qt 
+> build framework.
 
-Then maybe it's a Barebox vs. gcc 4.7.x issue that should be reported
-to the Barebox people? I'm pretty sure they have already built and
-tested Barebox with gcc 4.7, but maybe there are some remaining
-problems in specific areas?
+Ah, ah, this is interesting. I'll try to reproduce and let you know
+what I find.
 
-Best regards,
+Thanks,
 
 Thomas
 -- 
