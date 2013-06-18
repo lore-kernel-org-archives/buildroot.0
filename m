@@ -1,100 +1,61 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 18 Jun 2013 08:45:47 +0200
-Subject: [Buildroot] [git commit] dhcpcd: new package
-Message-ID: <20130618065043.5C1859AF05@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Jun 2013 08:24:22 +0200
+Subject: [Buildroot] [PATCH] gpsd: make init script optional
+In-Reply-To: <20130616183051.GZ16699@lukather>
+References: <1371382468-5838-1-git-send-email-spdawson@gmail.com>
+ <20130616130904.GD3495@free.fr>
+ <CAHt8ZCPnR+9SG=rDfyzeLQcbT=UWAwhun4PJ31Ohk=60=0+a7g@mail.gmail.com>
+ <20130616183051.GZ16699@lukather>
+Message-ID: <51BFFD16.7030009@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=69a0a1e1d369fc2312b741f009bcecaf1ee33798
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 16/06/13 20:30, Maxime Ripard wrote:
+> On Sun, Jun 16, 2013 at 04:59:06PM +0100, Simon Dawson wrote:
+>> Hi Yann, Maxime.
+>>
+>> On 16 June 2013 14:09, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>>> Why would one not want the init script? Is this because of systemd? If so,
+>>> then you should use GPSD_INSTALL_INIT_SYSV and GPSD_INSTALL_INIT_SYSTEMD
+>>> as pointed out by Maxime.
+>>>
+>>> This ensures the init script will only be installed if a SysV init
+>>> scheme is used (and conversely for the systemd unit).
+>>>
+>>> Otherwise, please expand on why not wanting the init script should be
+>>> configurable at all.
+>>
+>> There are other possibilities, beyond SysV and systemd: I've
+>> previously run gpsd and other managed services using daemontools and
+>> runit. My present use case has udev kicking off gpsd in response to
+>> hotplug events for a USB GPS device.
+>>
+>> I seem to always end up having to remove the gpsd SysV init script in
+>> my post-build script; hence the desire for a configuration option.
+>
+> Maybe you can add a BR2_INIT_NONE choice here then to not copy all the
+> install scripts.
 
-Dhcpcd is an RFC2131 compliant DHCP client.
+  There are just a few daemons that you'd want to run from hotplug, most 
+of them would still run from init.d.
 
-[Peter: needs ipv6, fix whitespace/file header]
-Signed-off-by: John Stile <john@stilen.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in        |    1 +
- package/dhcpcd/Config.in |   10 ++++++++++
- package/dhcpcd/dhcpcd.mk |   42 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 53 insertions(+), 0 deletions(-)
+  But I really would like a better way to manage the services you want to 
+run in init.d, and especially their order. I can't come up with a good 
+solution, though, so I'm not actively complaining :-)
 
-diff --git a/package/Config.in b/package/Config.in
-index bcc3470..5b066dc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -703,6 +703,7 @@ source "package/hplip/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/dhcp/Config.in"
- endif
-+source "package/dhcpcd/Config.in"
- source "package/dhcpdump/Config.in"
- source "package/dnsmasq/Config.in"
- source "package/dropbear/Config.in"
-diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
-new file mode 100644
-index 0000000..a06a973
---- /dev/null
-+++ b/package/dhcpcd/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_DHCPCD
-+	depends on BR2_INET_IPV6
-+	bool "dhcpcd"
-+	help
-+	  An RFC2131 compliant DHCP client
-+
-+	  http://roy.marples.name/downloads/dhcpcd
-+
-+comment "dhcpcd requires a toolchain with IPV6 support"
-+	depends on !BR2_INET_IPV6
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-new file mode 100644
-index 0000000..9d4a72b
---- /dev/null
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -0,0 +1,42 @@
-+################################################################################
-+#
-+# dhcpcd
-+#
-+################################################################################
-+
-+DHCPCD_VERSION = 5.6.7
-+DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
-+DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd/
-+DHCPCD_LICENSE = BSD-2c
-+
-+ifeq ($(BR2_USE_MMU),)
-+	DHCPCD_CONFIG_OPT += --disable-fork
-+endif
-+
-+define DHCPCD_CONFIGURE_CMDS
-+	(cd $(@D); \
-+	./configure \
-+		--target=$(BR2_GCC_TARGET_ARCH) \
-+		--os=linux \
-+		$(DHCPCD_CONFIG_OPT) )
-+endef
-+
-+define DHCPCD_BUILD_CMDS
-+	$(MAKE) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		-C $(@D) all
-+endef
-+
-+define DHCPCD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/dhcpcd \
-+		$(TARGET_DIR)/usr/bin/dhcpcd
-+	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf \
-+		$(TARGET_DIR)/etc/dhcpcd.conf
-+	$(INSTALL) -D -m 0755 $(@D)/dhcpcd-run-hooks \
-+		$(TARGET_DIR)/libexec/dhcpcd-run-hooks
-+endef
-+
-+# NOTE: Even though this package has a configure script, it is not generated
-+# using the autotools, so we have to use the generic package infrastructure.
-+
-+$(eval $(call generic-package))
+  I agree with Peter that having an option for each package is not a good 
+solution.
+
+
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
