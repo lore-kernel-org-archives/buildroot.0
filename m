@@ -1,35 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Jun 2013 09:12:39 +0200
+Date: Tue, 18 Jun 2013 09:16:39 +0200
 Subject: [Buildroot] Changes in the Buildroot autobuilders
-In-Reply-To: <E6BF041E97966E4DB955F0DF883AD2D633A03317@de02wembxa.internal.synopsys.com>
+In-Reply-To: <51BFFC5D.4040600@mind.be>
 References: <20130616180054.58f52914@skate> <20130616170305.GI3495@free.fr>
  <20130616191806.7b4a899a@skate> <20130616172508.GL3495@free.fr>
  <20130616200540.5a370504@skate> <20130617074535.GB16699@lukather>
  <20130617094958.33eaff88@skate>
  <CAEBucnCWYyj23_RyLtP3p-B6zmBYiYOA4LiODMEdxEr7x4D+xw@mail.gmail.com>
- <20130617175407.GA3202@free.fr>
- <F9C551623D2CBB4C9488801D14F864C639A66D56@ex-mb1.corp.adtran.com>
- <E6BF041E97966E4DB955F0DF883AD2D633A03317@de02wembxa.internal.synopsys.com>
-Message-ID: <20130618091239.28d1dbc8@skate>
+ <20130617175407.GA3202@free.fr> <51BFFC5D.4040600@mind.be>
+Message-ID: <20130618091639.4f82fa41@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mischa Jonker,
+Dear Arnout Vandecappelle,
 
-On Mon, 17 Jun 2013 20:09:51 +0000, Mischa Jonker wrote:
+On Tue, 18 Jun 2013 08:21:17 +0200, Arnout Vandecappelle wrote:
 
-> How would we handle architecture-specific failures for a package if we don't have a global MAINTAINERS file? Add another _MAINTAINER variable in the config.in.<arch> file?
+>   So I think a nice solution would be to add a script in support/scripts 
+> that explicitly encodes all the maintainers - maintainers can add 
+> themselves with patches (just like in the kernel). The a.b.o would fetch 
+> the script once a day just before sending out its daily mails, and call 
+> it with everything it knows about the build failure set in the environment.
 
-I believe architecture-specific failures would have to be handled
-separately. We can't really add a maintainer into a Config.in file.
+This does sound like a nice idea, but I would like it to also handle
+architecture maintainers if possible.
 
-Even if we have a global MAINTAINERS file, how would architecture
-maintainers be expressed? In the kernel, the MAINTAINERS file creates a
-relation between a person and set of files/directories, but an
-architecture in Buildroot is not a set of files or directories.
+So something like:
+
+support/script/get_maintainer --arch arc --package tvheadend
+
+would return:
+
+Mischa Jonker <Mischa.Jonker@synopsys.com>
+'Yann E. MORIN' <yann.morin.1998@free.fr>
+
+the first being the architecture maintainer, the second being the
+package maintainer.
+
+But then, I would probably have to send one e-mail per failure, because
+grouping them would be hard since there may be another failure for
+tvheadend, but not on the ARC architecture.
+
+>   However, Spenser points out in another mail:
+> 
+> > I think many people would like to know if something they did may have
+> > triggered a bug, not just the maintainer of the package.
+> 
+>   I could agree with sending mails automatically to the authors of a 
+> package commit if the commit was done in the last week or so.
+
+Hum, ok. Not impossible to do, for sure.
 
 Best regards,
 
