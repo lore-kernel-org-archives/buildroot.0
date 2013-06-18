@@ -1,86 +1,89 @@
-From: piquemal michel <michel_piquemal@yahoo.fr>
-Date: Tue, 18 Jun 2013 19:13:20 +0100 (BST)
-Subject: [Buildroot] Building with uClibc 0.9.28, Linux 2.6.36
-In-Reply-To: <1371568310.52100.YahooMailNeo@web171504.mail.ir2.yahoo.com>
-References: <1371326730.31593.YahooMailNeo@web171503.mail.ir2.yahoo.com>
- <87bo77yveg.fsf@dell.be.48ers.dk>
- <1371329906.70128.YahooMailNeo@web171503.mail.ir2.yahoo.com>
- <87sj0jxf0n.fsf@dell.be.48ers.dk>
- <1371332003.62321.YahooMailNeo@web171505.mail.ir2.yahoo.com>
- <877ghvxdkf.fsf@dell.be.48ers.dk>
- <1371338781.70346.YahooMailNeo@web171503.mail.ir2.yahoo.com>
- <87r4g1vo98.fsf@dell.be.48ers.dk>
- <1371414331.31683.YahooMailNeo@web171504.mail.ir2.yahoo.com>
- <87li69tdqv.fsf@dell.be.48ers.dk>
- <1371560776.84702.YahooMailNeo@web171502.mail.ir2.yahoo.com>
- <87txkvr0sj.fsf@dell.be.48ers.dk>
- <1371568310.52100.YahooMailNeo@web171504.mail.ir2.yahoo.com>
-Message-ID: <1371579200.26794.YahooMailNeo@web171506.mail.ir2.yahoo.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Jun 2013 18:00:03 +0200
+Subject: [Buildroot] binutils doesn't like -elf2flt option
+In-Reply-To: <kpmcpb$lbo$1@ger.gmane.org>
+References: <kphffs$v5g$1@ger.gmane.org> <51BEAB3A.8010408@mind.be>
+ <kpmcpb$lbo$1@ger.gmane.org>
+Message-ID: <51C08403.4050900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-humm, it seems there might be some binutils incompabilities with gcc 3.4.x :(
-Could that be the reason.
-Then I have to go back to binutils 2.15 (used default 2.19.1) ...which is not in Buildroot 2009.08 pick-list...hugh!!
-Any suggestion on yet another Buildroot version then?
+On 17/06/13 09:10, Adam Nielsen wrote:
+> Thomas Petazzoni wrote:
+>> Are we talking about the cross binutils (i.e the one that runs on your
+>> development PC and generates code for your target platform), or the
+>> target binutils (i.e the one that runs on your target platform and
+>> generates code for your target platform) ?
+>
+> I'm not entirely sure.  I can run "make binutils" to cause the error, so
+> I'm assuming it must be target binutils.  But then that doesn't make
+> sense, because I have not configured buildroot to compile binutils for my
+> target platform (BR2_PACKAGE_BINUTILS=n).
+
+  If you explicitly ask to build binutils (for the target), then the 
+value of BR2_PACKAGE_BINUTILS is ignored. So 'make binutils' tries to 
+build binutils for the target.
 
 
-Is there some sort of compatibility matrix somewhere so that I can pick a proper toolchain components mix and avoid trials/errors?
+> There is a file buildroot/build/host-binutils-2.23.2/.stamp_built so I am
+> guessing that means the cross binutils worked.  So I am not sure why it
+> is trying to compile target binutils?
+>
+> Here's my buildroot config if it helps:
+> <http://www.shikadi.net/files/buildroot/2013-06-17.br.binutils_elf2flt_err.config>
+>
+>
+> Be warned there are a couple of new options in there I have added myself.
+>
+> Arnout Vandecappelle wrote:
+>>   elf2flt already depends on binutils (it uses libbfd), so this won't
+>> work.
+>> And as Thomas mentioned, this is only relevant for target-binutils
+>> (which you
+>> probably don't even need).
+>
+> Hmm yes, since I'm not producing BFLT binaries (as they will run on the
+> host) I can see that I should not be specifying these options.  However
+> since the host/cross binutils builds successfully, it seems that part is
+> working.
+>
+>>   However, it looks like there is no explicit dependency on elf2flt when
+>> building the toolchain. Probably elf2flt should be added to
+>> BASE_TARGETS, to
+>> make sure it gets built before all the rest.
+>
+> Would this mean elf2flt gets built before the target binutils, should I
+> choose to enable it?  I am guessing that is what needs to happen for this
+> to work correctly, assuming target binutils should be built.
 
-Thanks!
+  host-elf2flt is built before binutils, yes. (Note that host-elf2flt 
+will actually be called elf2flt without the host because it has not been 
+converted to the generic package infrastructure; it's also in the 
+toolchain directory rather than the build directory.)
 
 
+  Regards,
+  Arnout
 
-
------ Mail original -----
-De?: piquemal michel <michel_piquemal@yahoo.fr>
-??: Peter Korsgaard <jacmet@uclibc.org>
-Cc?: "buildroot at busybox.net" <buildroot@busybox.net>
-Envoy? le : Mardi 18 juin 2013 17h11
-Objet?: Re: [Buildroot] Building with uClibc 0.9.28, Linux 2.6.36
-
-Peter>?You normally shouldn't need -mulibc. Does it work without?
-
-
-Same error.
-I'm wondering if it's not similar kind of issue than below:
-http://git.uclibc.org/buildroot/commit/?h=95d7c269156de54c245b2c43343e034c9eb479f9&id=fd3bb17cbb87e2cbcc6dce5b70c87daa2904a95d
-
-
-I hope this path think can be resolved by some LDFLAG directives or so.
-
-
-
------ Mail original -----
-De?: Peter Korsgaard <jacmet@uclibc.org>
-??: piquemal michel <michel_piquemal@yahoo.fr>
-Cc?: Peter Korsgaard <jacmet@uclibc.org>; "buildroot at busybox.net" <buildroot@busybox.net>
-Envoy? le : Mardi 18 juin 2013 15h44
-Objet?: Re: Building with uClibc 0.9.28, Linux 2.6.36
-
->>>>> "piquemal" == piquemal michel <michel_piquemal@yahoo.fr> writes:
-
-piquemal> Thanks again Peter for your help and patience!...
-piquemal> I'm almost there (very close!)...
-
-piquemal> Buildroot 2009.08 allowed me to build a quite close toochain
-piquemal> (linux 2.6.30, gcc 3.4.6, uClibC 0.9.28.3) in relation to my
-piquemal> target (linux 2.6.36, gcc 3.4.2, uClibC 0.9.28)
-
-Great!
-
-piquemal> Now I'm trying to cross-compile a helloworld sample.
-piquemal> Works great in static and runs on target, but still have some building issue for dynamic linking (my end-goal to enjoy smaller binaries).
-
-piquemal> mipsel-linux-uclibc-gcc -s -o hello hello.o main.o ?-mulibc
+>
+> Many thanks,
+> Adam.
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
 
 
 -- 
-Bye, Peter Korsgaard 
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
