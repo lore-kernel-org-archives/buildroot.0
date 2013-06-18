@@ -1,77 +1,61 @@
 From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
-Date: Tue, 18 Jun 2013 16:19:51 +0200
-Subject: [Buildroot] [PATCH v2] libqmi: new package
-Message-ID: <51C06C87.6080706@fh-kl.de>
+Date: Tue, 18 Jun 2013 16:27:30 +0200
+Subject: [Buildroot] [PATCH] libqmi: new package
+In-Reply-To: <20130618140601.18787f92@skate>
+References: <51C034FB.3010605@fh-kl.de> <20130618140601.18787f92@skate>
+Message-ID: <51C06E52.3070801@fh-kl.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libqmi is a glib-based library for talking to WWAN modems and devices which
-speak the Qualcomm MSM Interface (QMI) protocol.
+Dear Thomas Petazzoni,
 
-Signed-off-by: Patrick Ziegler <patrick.ziegler@fh-kl.de>
----
- package/Config.in        |  1 +
- package/libqmi/Config.in |  9 +++++++++
- package/libqmi/libqmi.mk | 16 ++++++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/libqmi/Config.in
- create mode 100644 package/libqmi/libqmi.mk
+On 18.06.2013 14:06, Thomas Petazzoni wrote:
+> 
+> On Tue, 18 Jun 2013 12:22:51 +0200, Patrick Ziegler wrote:
+> 
+>> +config BR2_PACKAGE_LIBQMI
+>> +	bool "libqmi"
+>> +	select BR2_PACKAGE_LIBGLIB2
+> 
+> You need to propagate the "depends on" that libglib2 has, i.e WCHAR.
+> 
+>> +	help
+>> +	  libqmi is a glib-based library for talking to WWAN modems and devices
+>> +	  which speak the Qualcomm MSM Interface (QMI) protocol.
+> 
+> Upstream URL missing.
+> 
+>> +LIBQMI_VERSION = 1.4.0
+>> +LIBQMI_SITE    = http://cgit.freedesktop.org/libqmi/snapshot/
+>> +LIBQMI_SOURCE  = libqmi-$(LIBQMI_VERSION).tar.gz
+> 
+> This is the default, so you could remove this line.
+> 
+>> +LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
+>> +LIBQMI_LICENSE_FILES = COPYING
+>> +LIBQMI_INSTALL_STAGING = YES
+>> +LIBQMI_AUTORECONF = YES
+> 
+> It would be good to have a comment that explains why autoreconf is
+> needed, i.e "The tarball is a Git snapshot, doesn't contain the
+> genrated configure script and Makefile" or something like this.
+> 
+>> +LIBQMI_DEPENDENCIES += libglib2
+> 
+> You could use a = here.
+> 
 
-diff --git a/package/Config.in b/package/Config.in
-index 5b066dc..426004b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -484,6 +484,7 @@ source "package/libhid/Config.in"
- source "package/libiqrf/Config.in"
- source "package/libnfc/Config.in"
- source "package/libnfc-llcp/Config.in"
-+source "package/libqmi/Config.in"
- source "package/libserial/Config.in"
- source "package/libusb/Config.in"
- source "package/libusb-compat/Config.in"
-diff --git a/package/libqmi/Config.in b/package/libqmi/Config.in
-new file mode 100644
-index 0000000..0e1df08
---- /dev/null
-+++ b/package/libqmi/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBQMI
-+	bool "libqmi"
-+	select BR2_PACKAGE_LIBGLIB2
-+	depends on BR2_USE_WCHAR # libglib2
-+	help
-+	  libqmi is a glib-based library for talking to WWAN modems and devices
-+	  which speak the Qualcomm MSM Interface (QMI) protocol.
-+	  
-+	  http://www.freedesktop.org/wiki/Software/libqmi/
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-new file mode 100644
-index 0000000..911b1a7
---- /dev/null
-+++ b/package/libqmi/libqmi.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# libqmi
-+#
-+################################################################################
-+
-+LIBQMI_VERSION = 1.4.0
-+LIBQMI_SITE    = http://www.freedesktop.org/software/libqmi/
-+LIBQMI_SOURCE  = libqmi-$(LIBQMI_VERSION).tar.xz
-+LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
-+LIBQMI_LICENSE_FILES = COPYING
-+LIBQMI_INSTALL_STAGING = YES
-+
-+LIBQMI_DEPENDENCIES = libglib2
-+
-+$(eval $(autotools-package))
--- 
-1.8.1.2
+thanks for having a look on this patch.
 
+While I was searching for the best upstream URL, I've found a better source tarball that doesn't need autoreconf.
+I will update my patch and resend.
+
+Best regards
+
+Patrick
 
 -- 
 Dipl.-Inf. (FH) Patrick Ziegler
