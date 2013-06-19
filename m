@@ -1,53 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 19 Jun 2013 20:30:24 +0200
-Subject: [Buildroot] [git commit] socketcand: bump to version 0.3.1
-Message-ID: <20130619183248.C138C9A1DA@busybox.osuosl.org>
+Date: Wed, 19 Jun 2013 20:27:01 +0200
+Subject: [Buildroot] [git commit] system/skeleton: remove /etc/hostname
+Message-ID: <20130619183248.8670C9A1DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=53e498da2f2ebfc87c3de0fe18bc9132e94b4fcb
+commit: http://git.buildroot.net/buildroot/commit/?id=9dab397a4fa019b6b0825809d13f93214212284b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since version 0.3.0, libconfig has been made optional
+We already provide BR2_TARGET_GENERIC_HOSTNAME to set /etc/hostname,
+so a default /etc/hostname file isn't needed.
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+More importantly, if the user has explictly set BR2_TARGET_GENERIC_HOSTNAME
+to the empty string, we would still end up with a /etc/hostname containing
+'buildroot' which is unlikely to be what the user wanted.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/socketcand/Config.in     |    1 -
- package/socketcand/socketcand.mk |    7 ++++++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ system/skeleton/etc/hostname |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/socketcand/Config.in b/package/socketcand/Config.in
-index d5d02de..72315c0 100644
---- a/package/socketcand/Config.in
-+++ b/package/socketcand/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_SOCKETCAND
- 	bool "socketcand"
--	select BR2_PACKAGE_LIBCONFIG
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Socketcand is a daemon that provides access to CAN interfaces
-diff --git a/package/socketcand/socketcand.mk b/package/socketcand/socketcand.mk
-index d85eb1a..8e42698 100644
---- a/package/socketcand/socketcand.mk
-+++ b/package/socketcand/socketcand.mk
-@@ -4,9 +4,14 @@
- #
- ################################################################################
- 
--SOCKETCAND_VERSION = 7d06986
-+SOCKETCAND_VERSION = dc3437ab
- SOCKETCAND_SITE = http://github.com/dschanoeh/socketcand/tarball/$(SOCKETCAND_VERSION)
- SOCKETCAND_AUTORECONF = YES
-+
-+ifeq ($(BR2_PACKAGE_LIBCONFIG),y)
- SOCKETCAND_DEPENDENCIES = libconfig
-+else
-+SOCKETCAND_CONF_OPT = --without-config
-+endif
- 
- $(eval $(autotools-package))
+diff --git a/system/skeleton/etc/hostname b/system/skeleton/etc/hostname
+deleted file mode 100644
+index 5b26b35..0000000
+--- a/system/skeleton/etc/hostname
++++ /dev/null
+@@ -1 +0,0 @@
+-buildroot
