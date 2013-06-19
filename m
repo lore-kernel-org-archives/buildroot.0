@@ -1,31 +1,53 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 19 Jun 2013 20:23:09 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.2.x stable version
-Message-ID: <20130619183248.647EC9AF6B@busybox.osuosl.org>
+Date: Wed, 19 Jun 2013 20:30:24 +0200
+Subject: [Buildroot] [git commit] socketcand: bump to version 0.3.1
+Message-ID: <20130619183248.C138C9A1DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c9c40d53b1268ccf35044ceb56431a92164e3a6
+commit: http://git.buildroot.net/buildroot/commit/?id=53e498da2f2ebfc87c3de0fe18bc9132e94b4fcb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Since version 0.3.0, libconfig has been made optional
+
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/socketcand/Config.in     |    1 -
+ package/socketcand/socketcand.mk |    7 ++++++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index b25e0ab..5667efb 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -72,7 +72,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.82"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.45"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.47"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
- 	default "3.4.49"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+diff --git a/package/socketcand/Config.in b/package/socketcand/Config.in
+index d5d02de..72315c0 100644
+--- a/package/socketcand/Config.in
++++ b/package/socketcand/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_SOCKETCAND
+ 	bool "socketcand"
+-	select BR2_PACKAGE_LIBCONFIG
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Socketcand is a daemon that provides access to CAN interfaces
+diff --git a/package/socketcand/socketcand.mk b/package/socketcand/socketcand.mk
+index d85eb1a..8e42698 100644
+--- a/package/socketcand/socketcand.mk
++++ b/package/socketcand/socketcand.mk
+@@ -4,9 +4,14 @@
+ #
+ ################################################################################
+ 
+-SOCKETCAND_VERSION = 7d06986
++SOCKETCAND_VERSION = dc3437ab
+ SOCKETCAND_SITE = http://github.com/dschanoeh/socketcand/tarball/$(SOCKETCAND_VERSION)
+ SOCKETCAND_AUTORECONF = YES
++
++ifeq ($(BR2_PACKAGE_LIBCONFIG),y)
+ SOCKETCAND_DEPENDENCIES = libconfig
++else
++SOCKETCAND_CONF_OPT = --without-config
++endif
+ 
+ $(eval $(autotools-package))
