@@ -1,89 +1,78 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 19 Jun 2013 23:24:17 +0200
-Subject: [Buildroot] [PATCH 08/12] luaexpatutils: New package
-In-Reply-To: <1369054604-26139-8-git-send-email-shmuelzon@gmail.com> (Assaf
- Inbal's message of "Mon, 20 May 2013 15:56:40 +0300")
-References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
- <1369054604-26139-8-git-send-email-shmuelzon@gmail.com>
-Message-ID: <87d2rhpzem.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 19 Jun 2013 23:24:39 +0200
+Subject: [Buildroot] [git commit] luaexpatutils: New package
+Message-ID: <20130619212701.46E239AF75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Assaf" == Assaf Inbal <shmuelzon@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0b20c1aa33638bdf6cbcddd7a01ce6a78e25a382
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Assaf> lxp.doc is a module that provides useful features for working
- Assaf> with XML formats in LOM format as used by the LuaExpat project
- Assaf> from Kepler.
+lxp.doc is a module that provides useful features for working with XML
+formats in LOM format as used by the LuaExpat project from Kepler.
 
- Assaf> Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
- Assaf> ---
- Assaf>  package/Config.in                      |  1 +
- Assaf>  package/luaexpatutils/Config.in        |  8 ++++++++
- Assaf>  package/luaexpatutils/luaexpatutils.mk | 21 +++++++++++++++++++++
- Assaf>  3 files changed, 30 insertions(+)
- Assaf>  create mode 100644 package/luaexpatutils/Config.in
- Assaf>  create mode 100644 package/luaexpatutils/luaexpatutils.mk
+[Peter: use fixed git revision, github tarball, install -D]
+Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in                      |    1 +
+ package/luaexpatutils/Config.in        |    8 ++++++++
+ package/luaexpatutils/luaexpatutils.mk |   21 +++++++++++++++++++++
+ 3 files changed, 30 insertions(+), 0 deletions(-)
 
- Assaf> diff --git a/package/Config.in b/package/Config.in
- Assaf> index c11ff27..3351f21 100644
- Assaf> --- a/package/Config.in
- Assaf> +++ b/package/Config.in
- Assaf> @@ -312,6 +312,7 @@ source "package/luabitop/Config.in"
- Assaf>  source "package/luacjson/Config.in"
- Assaf>  source "package/luacrypto/Config.in"
- Assaf>  source "package/luaexpat/Config.in"
- Assaf> +source "package/luaexpatutils/Config.in"
- Assaf>  source "package/luafilesystem/Config.in"
- Assaf>  source "package/luasocket/Config.in"
- Assaf>  source "package/lua-ev/Config.in"
- Assaf> diff --git a/package/luaexpatutils/Config.in b/package/luaexpatutils/Config.in
- Assaf> new file mode 100644
- Assaf> index 0000000..cb2887a
- Assaf> --- /dev/null
- Assaf> +++ b/package/luaexpatutils/Config.in
- Assaf> @@ -0,0 +1,8 @@
- Assaf> +config BR2_PACKAGE_LUAEXPATUTILS
- Assaf> +	bool "luaexpatutils"
- Assaf> +	select BR2_PACKAGE_LUAEXPAT
- Assaf> +	help
- Assaf> +	  lxp.doc is a module that provides useful features for working with
- Assaf> +	  XML formats in LOM format as used by the LuaExpat project from Kepler.
- Assaf> +
- Assaf> +	  https://github.com/stevedonovan/LuaExpatUtils
- Assaf> diff --git a/package/luaexpatutils/luaexpatutils.mk b/package/luaexpatutils/luaexpatutils.mk
- Assaf> new file mode 100644
- Assaf> index 0000000..a9e3190
- Assaf> --- /dev/null
- Assaf> +++ b/package/luaexpatutils/luaexpatutils.mk
- Assaf> @@ -0,0 +1,21 @@
- Assaf> +#############################################################
- Assaf> +#
- Assaf> +# luaexpatutils
- Assaf> +#
- Assaf> +#############################################################
- Assaf> +
- Assaf> +LUAEXPATUTILS_VERSION = master
- Assaf> +LUAEXPATUTILS_SITE = git://github.com/stevedonovan/LuaExpatUtils.git
- Assaf> +LUAEXPATUTILS_SITE_METHOD = git
-
-This should use a fixed revision and github's tarball logic instead of
-git.
-
-I've changed it to use 88c228365b (current head).
-
- Assaf> +LUAEXPATUTILS_LICENSE = Public Domain
- Assaf> +LUAEXPATUTILS_DEPENDENCIES = luaexpat
- Assaf> +
- Assaf> +define LUAEXPATUTILS_INSTALL_TARGET_CMDS
- Assaf> +	cp $(@D)/lua/doc.lua $(TARGET_DIR)/usr/share/lua/lxp/
-
-We normally use install -D to get proper permissions and create the
-needed destination directories if needed.
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index 426004b..2d8c936 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -319,6 +319,7 @@ source "package/luabitop/Config.in"
+ source "package/luacjson/Config.in"
+ source "package/luacrypto/Config.in"
+ source "package/luaexpat/Config.in"
++source "package/luaexpatutils/Config.in"
+ source "package/luafilesystem/Config.in"
+ source "package/luasocket/Config.in"
+ source "package/lua-ev/Config.in"
+diff --git a/package/luaexpatutils/Config.in b/package/luaexpatutils/Config.in
+new file mode 100644
+index 0000000..cb2887a
+--- /dev/null
++++ b/package/luaexpatutils/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LUAEXPATUTILS
++	bool "luaexpatutils"
++	select BR2_PACKAGE_LUAEXPAT
++	help
++	  lxp.doc is a module that provides useful features for working with
++	  XML formats in LOM format as used by the LuaExpat project from Kepler.
++
++	  https://github.com/stevedonovan/LuaExpatUtils
+diff --git a/package/luaexpatutils/luaexpatutils.mk b/package/luaexpatutils/luaexpatutils.mk
+new file mode 100644
+index 0000000..79578c0
+--- /dev/null
++++ b/package/luaexpatutils/luaexpatutils.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# luaexpatutils
++#
++#############################################################
++
++LUAEXPATUTILS_VERSION = 88c228365b
++LUAEXPATUTILS_SITE = http://github.com/stevedonovan/LuaExpatUtils/tarball/$(LUAEXPATUTILS_VERSION)
++LUAEXPATUTILS_LICENSE = Public Domain
++LUAEXPATUTILS_DEPENDENCIES = luaexpat
++
++define LUAEXPATUTILS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/lua/doc.lua \
++		$(TARGET_DIR)/usr/share/lua/lxp/doc.lua
++endef
++
++define LUAEXPATUTILS_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/share/lua/lxp/doc.lua
++endef
++
++$(eval $(generic-package))
