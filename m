@@ -1,32 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 19 Jun 2013 20:27:01 +0200
-Subject: [Buildroot] [git commit] system/skeleton: remove /etc/hostname
-Message-ID: <20130619183248.8670C9A1DA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 19 Jun 2013 22:32:29 +0200
+Subject: [Buildroot] [PATCH] usbmount: stop using blkid,
+	use udev environment variables instead
+In-Reply-To: <1371657388-11563-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Wed, 19 Jun 2013 17:56:28 +0200")
+References: <20130619164656.33bc3f8c@skate>
+ <1371657388-11563-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87r4fxq1sy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9dab397a4fa019b6b0825809d13f93214212284b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-We already provide BR2_TARGET_GENERIC_HOSTNAME to set /etc/hostname,
-so a default /etc/hostname file isn't needed.
+ Sven> The blkid binary is not any longer installed when libblkid from
+ Sven> util-linux is selected. udev has a builtin blkid command though
+ Sven> and already detects all values that we are interested in. Change
+ Sven> the usbmount script to use the environment variables set by udev
+ Sven> instead of calling blkid directly.
 
-More importantly, if the user has explictly set BR2_TARGET_GENERIC_HOSTNAME
-to the empty string, we would still end up with a /etc/hostname containing
-'buildroot' which is unlikely to be what the user wanted.
+ Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- system/skeleton/etc/hostname |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+Committed, thanks. Please don't forget to send the patch upstream as
+well.
 
-diff --git a/system/skeleton/etc/hostname b/system/skeleton/etc/hostname
-deleted file mode 100644
-index 5b26b35..0000000
---- a/system/skeleton/etc/hostname
-+++ /dev/null
-@@ -1 +0,0 @@
--buildroot
+-- 
+Bye, Peter Korsgaard
