@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Jun 2013 08:25:57 +0200
-Subject: [Buildroot] binutils doesn't like -elf2flt option
-In-Reply-To: <kpqg93$v74$1@ger.gmane.org>
-References: <kphffs$v5g$1@ger.gmane.org> <51BEAB3A.8010408@mind.be>
- <kpmcpb$lbo$1@ger.gmane.org> <51C08403.4050900@mind.be>
- <kpqg93$v74$1@ger.gmane.org>
-Message-ID: <20130619082557.447efce8@skate>
+Date: Wed, 19 Jun 2013 08:28:19 +0200
+Subject: [Buildroot] Randomization of kconfig choices?
+In-Reply-To: <20130618181036.GD3952@free.fr>
+References: <20130618093107.6c08e477@skate> <20130618164904.GB3952@free.fr>
+ <20130618190009.7a08518a@skate> <20130618171508.GC3952@free.fr>
+ <20130618181036.GD3952@free.fr>
+Message-ID: <20130619082819.77410225@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Adam Nielsen,
+Dear Yann E. MORIN,
 
-On Wed, 19 Jun 2013 06:34:48 +1000, Adam Nielsen wrote:
+On Tue, 18 Jun 2013 20:10:36 +0200, Yann E. MORIN wrote:
 
-> Sorry, to clarify - I get the error running just "make", but if I want to 
-> experiment by changing build flags, I can run "make binutils" to skip 
-> recompiling gcc, uclibc, etc. and just attempt the bit that recently failed.
+> On 2013-06-18 19:15 +0200, Yann E. MORIN spake thusly:
+> > I have a small idea at the back of my mind that I have to put to
+> > testing. I /may/ put you to contribution later tonight, mind you! ;-)
+> 
+> OK, ~2000 (two thousands!) tests, and counting. And still no breakage
+> observed. Yet, choices are now properly randomised!
+> 
+> For the records, the previous attempts would break as soon as ~100-200
+> tests.
+> 
+> So, I'm rather inclined and confident to say: Woohoo! :-)
+> But let's see...
 
-I believe you're still confusing the target binutils (which gets built
-when you run "make binutils") with the cross binutils (which gets built
-together with gcc, uclibc as part of the cross-compilation toolchain,
-this one can be rebuilt explicitly by doing "make host-binutils").
+Nice! Let's integrate your patch in Buildroot then, and see what
+happens, it should also be a good testing.
 
-> This is just a timesaver when testing though, the real problem is that I still 
-> get these errors from the target binutils when running "make".
-
-Do you need the target binutils? If you need BFLT support, your target
-system has no MMU, so is probably a bit memory limited, so what would
-you need to have binutils on your target on a small system?
+Best regards,
 
 Thomas
 -- 
