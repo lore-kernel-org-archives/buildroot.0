@@ -1,34 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 19 Jun 2013 23:56:41 +0200
-Subject: [Buildroot] [git commit] wvstreams: needs host-pkgconf
-Message-ID: <20130619220719.DD7D69AF78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] wvstreams: fix openssl detection when
+	statically linking
+Message-ID: <20130619220720.15EAA9AF76@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b03e04f3df86e1f2e6e136c5a536c516e2374807
+commit: http://git.buildroot.net/buildroot/commit/?id=aa60e76c02f21edb461f16ae4a7f62ea3b2c1d0b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The wvstreams configure script uses pkg-config, so we need to build
-host-pkgconf before.
+The openssl tests need to link against libz as libcrypto references it.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/wvstreams/wvstreams.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/wvstreams/wvstreams.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
 diff --git a/package/wvstreams/wvstreams.mk b/package/wvstreams/wvstreams.mk
-index 13982c4..d363f4c 100644
+index d363f4c..65f48d4 100644
 --- a/package/wvstreams/wvstreams.mk
 +++ b/package/wvstreams/wvstreams.mk
-@@ -6,7 +6,7 @@
+@@ -24,6 +24,9 @@ WVSTREAMS_CONF_OPT += \
+ 	--without-pam \
+ 	--disable-warnings
  
- WVSTREAMS_VERSION = 4.6.1
- WVSTREAMS_SITE = http://wvstreams.googlecode.com/files
--WVSTREAMS_DEPENDENCIES = openssl zlib
-+WVSTREAMS_DEPENDENCIES = openssl zlib host-pkgconf
- WVSTREAMS_INSTALL_STAGING = YES
- 
- WVSTREAMS_LICENSE = LGPLv2+
++# needed for openssl detection when statically linking (as ssl needs lz)
++WVSTREAMS_CONF_ENV += LIBS=-lz
++
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ 	WVSTREAMS_DEPENDENCIES += dbus
+ 	WVSTREAMS_CONF_OPT += --with-dbus
