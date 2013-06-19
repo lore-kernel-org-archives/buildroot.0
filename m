@@ -1,99 +1,36 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Wed, 19 Jun 2013 09:23:47 +0100
-Subject: [Buildroot] [PATCH] wvstreams: Build bundled argp library with
-	-fPIC
-In-Reply-To: <CAG2jQ8jhJbSd0GdkONA5EpS+EpPp-zTztaYAq_5GYAk=QG5Vjg@mail.gmail.com>
-References: <1370440956-8000-1-git-send-email-markos.chandras@gmail.com>
- <CAG2jQ8ibG-WBUGbaSyWKefdjZZ0aS2U3NRBY-x7h4QzYiNLi9g@mail.gmail.com>
- <CAG2jQ8jhJbSd0GdkONA5EpS+EpPp-zTztaYAq_5GYAk=QG5Vjg@mail.gmail.com>
-Message-ID: <CAG2jQ8h5jrj0pJK1Ban3zqQ_0zTRq8geOeX7+gPgmg6MhXSojw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 19 Jun 2013 10:41:09 +0200
+Subject: [Buildroot] Dates for the next Buildroot Developers Meeting
+In-Reply-To: <20130525222335.42f91125@skate> (Thomas Petazzoni's message of
+ "Sat, 25 May 2013 22:23:35 +0200")
+References: <20130525222335.42f91125@skate>
+Message-ID: <87bo72qyqi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12 June 2013 09:22, Markos Chandras <markos.chandras@gmail.com> wrote:
-> On 6 June 2013 14:09, Markos Chandras <markos.chandras@gmail.com> wrote:
->> On 5 June 2013 15:02, Markos Chandras <markos.chandras@gmail.com> wrote:
->>> From: Markos Chandras <markos.chandras@imgtec.com>
->>>
->>> Fixes linking problems on MIPS.
->>>
->>> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
->>> ---
->>>  package/wvstreams/wvstreams-0006-argp-fpic.patch | 28 ++++++++++++++++++++++++
->>>  1 file changed, 28 insertions(+)
->>>  create mode 100644 package/wvstreams/wvstreams-0006-argp-fpic.patch
->>>
->>> diff --git a/package/wvstreams/wvstreams-0006-argp-fpic.patch b/package/wvstreams/wvstreams-0006-argp-fpic.patch
->>> new file mode 100644
->>> index 0000000..b4cf1d2
->>> --- /dev/null
->>> +++ b/package/wvstreams/wvstreams-0006-argp-fpic.patch
->>> @@ -0,0 +1,28 @@
->>> +Build argp object files with -fPIC.
->>> +
->>> +The argp bundled dependency is linked to the libwvutils.so shared library.
->>> +MIPS will refuce to link a non-PIC library with a shared one.
->>> +
->>> +We fix this problem by building the argp source files using -fPIC since
->>> +the libargp static library will only be used to link to libwvutils.so
->>> +as instructed by the following rule in the root Makefile:
->>> +
->>> +ifeq ($(USE_WVSTREAMS_ARGP),1)
->>> +  utils/wvargs.o-CPPFLAGS += -Iargp
->>> +  libwvutils.so-LIBS += -Largp -largp
->>> +
->>> +Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
->>> +
->>> +Index: wvstreams-4.6.1/argp/Makefile.in
->>> +===================================================================
->>> +--- wvstreams-4.6.1.orig/argp/Makefile.in
->>> ++++ wvstreams-4.6.1/argp/Makefile.in
->>> +@@ -137,7 +137,7 @@ AUTOMAKE = @AUTOMAKE@
->>> + AWK = @AWK@
->>> + CC = @CC@
->>> + CCDEPMODE = @CCDEPMODE@
->>> +-CFLAGS = @CFLAGS@
->>> ++CFLAGS = @CFLAGS@ -fPIC
->>> + CPP = @CPP@
->>> + CPPFLAGS = @CPPFLAGS@
->>> + CYGPATH_W = @CYGPATH_W@
->>> --
->>> 1.8.2.1
->>>
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->> Hi all,
->>
->> After the relevant discussion in the bzip2 static/shared lib patch, I
->> believe this patch is safe to be applied as is, since the argp static
->> library is only a dependency for the shared libwvutils.so. In my
->> opinion, it is fine to build argp with -fPIC since it's only going to
->> be used
->> in a shared library.
->>
->> --
->> Regards,
->> Markos Chandras
->
-> Hi,
->
-> ping? :)
->
-> --
-> Regards,
-> Markos Chandras
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hello,
+ Thomas> Hello,
+ Thomas> Over the last few years, the Buildroot project has established a
+ Thomas> tradition of organizing two physical meetings per year. A first one in
+ Thomas> February, in Brussels, next to the FOSDEM conference, and a second one
+ Thomas> in late October / early November, next to the Embedded Linux Conference
+ Thomas> Europe, whose location changes from one year to the other.
 
-any comments on this patch?
+ Thomas> The next Embedded Linux Conference Europe will take place on
+ Thomas> Thursday 24th and Friday 25th of October, in Edinburgh,
+ Thomas> UK. Since LinuxCon Europe will take place at the beginning of
+ Thomas> the week (from Monday to Wednesday), I believe the best date
+ Thomas> for our meeting will be on Saturday 26th and Sunday 27th.
 
---
-Regards,
-Markos Chandras
+I'm planning on attending the gstreamer conference (22-23th), so the
+weekend after would also fit me best.
+
+If anyone disagrees, please let us know because I would like to book
+flight/hotel soon.
+
+-- 
+Bye, Peter Korsgaard
