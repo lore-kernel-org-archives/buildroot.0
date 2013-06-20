@@ -1,37 +1,74 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Fri, 21 Jun 2013 10:59:44 -0700
-Subject: [Buildroot] [PATCH] tinyhttpd: do not link against pthread
-Message-ID: <1371837584-6270-1-git-send-email-gilles.talis@gmail.com>
+From: piquemal michel <michel_piquemal@yahoo.fr>
+Date: Thu, 20 Jun 2013 22:17:52 +0100 (BST)
+Subject: [Buildroot] Building with uClibc 0.9.28, Linux 2.6.36
+In-Reply-To: <87txkvr0sj.fsf@dell.be.48ers.dk>
+References: <1371326730.31593.YahooMailNeo@web171503.mail.ir2.yahoo.com>
+ <87bo77yveg.fsf@dell.be.48ers.dk>
+ <1371329906.70128.YahooMailNeo@web171503.mail.ir2.yahoo.com>
+ <87sj0jxf0n.fsf@dell.be.48ers.dk>
+ <1371332003.62321.YahooMailNeo@web171505.mail.ir2.yahoo.com>
+ <877ghvxdkf.fsf@dell.be.48ers.dk>
+ <1371338781.70346.YahooMailNeo@web171503.mail.ir2.yahoo.com>
+ <87r4g1vo98.fsf@dell.be.48ers.dk>
+ <1371414331.31683.YahooMailNeo@web171504.mail.ir2.yahoo.com>
+ <87li69tdqv.fsf@dell.be.48ers.dk>
+ <1371560776.84702.YahooMailNeo@web171502.mail.ir2.yahoo.com>
+ <87txkvr0sj.fsf@dell.be.48ers.dk>
+Message-ID: <1371763072.16710.YahooMailNeo@web171501.mail.ir2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Original patch for tinyhttpd disables pthread support from the code
-but does not disable it from makefile.
-This patch disables pthread support altogether
+Dear Peter
 
-Fixes:
-http://autobuild.buildroot.net/results/2e61a80fcbddd62c76e0406c34ab44d14a4b5c79
+Just a quick note to let know (in case anyone finds it usefull at some point) one can build a reasonably approaching toochain, namely with:
+- Buildroot 2010.05
+- uclibc 0.9.28.3
+- Linux 2.6.33.5 headers
+- gcc 4.1.2
+- binutils 2.17
+- patches from http://lists.busybox.net/pipermail/uclibc-cvs/2006-September/023471.html
+- patch from https://bugs.busybox.net/show_bug.cgi?id=4171 to build root fs (but I only need toolchain)
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/tinyhttpd/tinyhttpd.patch |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/tinyhttpd/tinyhttpd.patch b/package/tinyhttpd/tinyhttpd.patch
-index 02eb189..05d6e50 100644
---- a/package/tinyhttpd/tinyhttpd.patch
-+++ b/package/tinyhttpd/tinyhttpd.patch
-@@ -73,7 +73,7 @@ diff -ur tinyhttpd-0.1.0/Makefile tinyhttpd-0.1.0-patched/Makefile
-  
-  httpd: httpd.c
- -	gcc -W -Wall -lsocket -lpthread -o httpd httpd.c
--+	$(CC) $(CFLAGS) $(LDFLAGS) -W -Wall -lpthread -o httpd httpd.c
-++	$(CC) $(CFLAGS) $(LDFLAGS) -W -Wall -o httpd httpd.c
-  
-  clean:
- -	rm httpd
+I still could not be successful with gcc 3.4.x (probably requires binutils 2.15). Later gcc 4.3 would also fail (asset issue).
+
+Of course I did not try all gcc combos, but that one seems decently ok.
+
+I'm still interested if anyone has a trick to fully match linux 2.6.36, uClibc 0.9.28, gcc 3.4.2
+
+Thanks again for your kind support.
+
+
+
+
+
+----- Mail original -----
+De?: Peter Korsgaard <jacmet@uclibc.org>
+??: piquemal michel <michel_piquemal@yahoo.fr>
+Cc?: Peter Korsgaard <jacmet@uclibc.org>; "buildroot at busybox.net" <buildroot@busybox.net>
+Envoy? le : Mardi 18 juin 2013 15h44
+Objet?: Re: Building with uClibc 0.9.28, Linux 2.6.36
+
+>>>>> "piquemal" == piquemal michel <michel_piquemal@yahoo.fr> writes:
+
+piquemal> Thanks again Peter for your help and patience!...
+piquemal> I'm almost there (very close!)...
+
+piquemal> Buildroot 2009.08 allowed me to build a quite close toochain
+piquemal> (linux 2.6.30, gcc 3.4.6, uClibC 0.9.28.3) in relation to my
+piquemal> target (linux 2.6.36, gcc 3.4.2, uClibC 0.9.28)
+
+Great!
+
+piquemal> Now I'm trying to cross-compile a helloworld sample.
+piquemal> Works great in static and runs on target, but still have some building issue for dynamic linking (my end-goal to enjoy smaller binaries).
+
+piquemal> mipsel-linux-uclibc-gcc -s -o hello hello.o main.o ?-mulibc
+
+You normally shouldn't need -mulibc. Does it work without?
+
 -- 
-1.7.4.1
+Bye, Peter Korsgaard 
