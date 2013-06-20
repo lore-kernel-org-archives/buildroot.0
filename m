@@ -1,9 +1,9 @@
 From: Richard Genoud <richard.genoud@gmail.com>
-Date: Thu, 20 Jun 2013 17:53:29 +0200
-Subject: [Buildroot] [PATCH 3/4] usb_modeswitch: bump to 1.2.6
+Date: Thu, 20 Jun 2013 17:53:30 +0200
+Subject: [Buildroot] [PATCH 4/4] usb_modeswitch_data: bump to 20130610
 In-Reply-To: <1371743610-17810-1-git-send-email-richard.genoud@gmail.com>
 References: <1371743610-17810-1-git-send-email-richard.genoud@gmail.com>
-Message-ID: <1371743610-17810-4-git-send-email-richard.genoud@gmail.com>
+Message-ID: <1371743610-17810-5-git-send-email-richard.genoud@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,60 +12,71 @@ To: buildroot@busybox.net
 
 Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
 ---
- .../usb_modeswitch/usb_modeswitch-makefile.patch   |   31 --------------------
- package/usb_modeswitch/usb_modeswitch.mk           |    2 +-
- 2 files changed, 1 insertion(+), 32 deletions(-)
- delete mode 100644 package/usb_modeswitch/usb_modeswitch-makefile.patch
+ .../usb_modeswitch_data-fix-parallel-install.patch         |    6 +++---
+ .../usb_modeswitch_data/usb_modeswitch_data-makefile.patch |   12 ++++++------
+ package/usb_modeswitch_data/usb_modeswitch_data.mk         |    2 +-
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/usb_modeswitch/usb_modeswitch-makefile.patch b/package/usb_modeswitch/usb_modeswitch-makefile.patch
-deleted file mode 100644
-index b792741..0000000
---- a/package/usb_modeswitch/usb_modeswitch-makefile.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--Removed the -s from the install command. Without this, usb_modeswitch would
--fail to install.
--
--Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
--
--Index: b/Makefile
--===================================================================
----- a/Makefile
--+++ b/Makefile
--@@ -46,7 +46,7 @@
-- 	cd jim && $(MAKE) distclean
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data-fix-parallel-install.patch b/package/usb_modeswitch_data/usb_modeswitch_data-fix-parallel-install.patch
+index ba30499..9319d0d 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data-fix-parallel-install.patch
++++ b/package/usb_modeswitch_data/usb_modeswitch_data-fix-parallel-install.patch
+@@ -7,10 +7,10 @@ Index: b/Makefile
+ ===================================================================
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -22,6 +22,7 @@
+- 	install -D --mode=644 40-usb_modeswitch.rules $(RULESDIR)/40-usb_modeswitch.rules
++@@ -26,6 +26,7 @@
++ 	./gen-rules.tcl
+  
+- db-install:
++ db-install: files-install
+ +	install -d $(PREFIX)/share/usb_modeswitch
+  	install --mode=644 -t $(PREFIX)/share/usb_modeswitch ./usb_modeswitch.d/*
+  
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
+index 769e514..5632abd 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
++++ b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
+@@ -4,19 +4,19 @@ cross-compiler environment, it is not wanted to reload the host udev rules.
+ Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
+ --- usb_modeswitch_data-20120120.orig/Makefile	2012-01-20 17:25:32.000000000 -0500
+ +++ usb_modeswitch_data-20120120/Makefile	2012-02-06 14:20:47.000000000 -0500
+-@@ -12,9 +12,9 @@
 - 
-- install-common: all
---	install -D -s --mode=755 usb_modeswitch $(SBINDIR)/usb_modeswitch
--+	install -D --mode=755 usb_modeswitch $(SBINDIR)/usb_modeswitch
-- 	install -D --mode=755 usb_modeswitch.sh $(UDEVDIR)/usb_modeswitch
-- 	install -D --mode=644 usb_modeswitch.conf $(ETCDIR)/usb_modeswitch.conf
-- 	install -D --mode=644 usb_modeswitch.1 $(MANDIR)/usb_modeswitch.1
--@@ -67,10 +67,10 @@
-- install: install-common install-script
-- 
-- install-shared: dispatcher-dynamic install-common
---	install -D -s --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
--+	install -D --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
-- 
-- install-static: dispatcher-static install-common
---	install -D -s --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
--+	install -D --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
-- 
-- uninstall:
-- 	$(RM) $(SBINDIR)/usb_modeswitch
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index 653109d..35f90bb 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
++@@ -13,9 +13,9 @@
+  clean:
++ 	$(RM) 40-usb_modeswitch.rules
+  
+--install: files-install db-install rules-reload
+-+install: files-install db-install
++-install: all files-install db-install rules-reload
+++install: all files-install db-install
+  
+ -install-packed: files-install db-install-packed rules-reload
+ +install-packed: files-install db-install-packed
+  
+- files-install:
++ files-install: 
+  	install -d $(PREFIX)/share/usb_modeswitch
+-@@ -50,7 +50,7 @@
++@@ -54,7 +54,7 @@
+  		fi \
+  	fi
+  
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+index 479137c..26432c1 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
++++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--USB_MODESWITCH_VERSION = 1.2.5
-+USB_MODESWITCH_VERSION = 1.2.6
- USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
- USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DEPENDENCIES = libusb-compat
+-USB_MODESWITCH_DATA_VERSION = 20121109
++USB_MODESWITCH_DATA_VERSION = 20130610
+ USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
+ USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
 -- 
 1.7.10.4
