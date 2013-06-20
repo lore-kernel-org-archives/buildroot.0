@@ -1,60 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Jun 2013 15:52:36 +0200
-Subject: [Buildroot] Bizarre behavior of armeb toolchain
-In-Reply-To: <20130620154130.1606594d@skate>
-References: <20130620154130.1606594d@skate>
-Message-ID: <20130620155236.45eda7ac@skate>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Thu, 20 Jun 2013 15:14:10 +0100
+Subject: [Buildroot] [PATCH v2] wvstreams: Pass -fPIC to CFLAGS when
+	building PIC objects
+Message-ID: <1371737650-12310-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Markos Chandras <markos.chandras@imgtec.com>
 
-On Thu, 20 Jun 2013 15:41:30 +0200, Thomas Petazzoni wrote:
+The argp bundled dependency which is linked to the libwvutils.so
+shared library, wasn't built with -fPIC.
+MIPS will refuce to link a non-PIC library with a shared one.
 
->  (*) On ARMv7 however, the code is different whether -mbig-endian is
->  passed or not, even though an "armeb-linux" compiler is supposed to
->  generate big endian code by default. When no flags is passed, both the
->  data *and* code are big-endian (so it's BE32 like on ARMv5), but
->  passing -mbig-endian makes the thing behave properly (code is
->  little-endian, data is big-endian).
+We fix this problem by appending -fPIC to CFLAGS and build all the
+shared objects with -fPIC.
 
-Interestingly, this problem is visible when you run gcc with the -v
-option, and look at the options passed to collect2.
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ package/wvstreams/wvstreams.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-when no options are passed to gcc (and it generates incorrect BE32
-code), the options passed to collect2 are:
-
-/home/test/outputs/armv7be/host/usr/libexec/gcc/armeb-buildroot-linux-uclibcgnueabi/4.7.3/collect2
-	--sysroot=/home/test/outputs/armv7be/host/usr/armeb-buildroot-linux-uclibcgnueabi/sysroot
-	--eh-frame-hdr
-	-dynamic-linker /lib/ld-uClibc.so.0
-	-X -m armelfb_linux_eabi -o toto
-	[...]
-	/tmp/ccJDVjCg.o
-
-When -mbig-endian is passed to gcc, gcc then passes the following
-options to collect2:
-
-/home/test/outputs/armv7be/host/usr/libexec/gcc/armeb-buildroot-linux-uclibcgnueabi/4.7.3/collect2
-	--sysroot=/home/test/outputs/armv7be/host/usr/armeb-buildroot-linux-uclibcgnueabi/sysroot
-	--eh-frame-hdr
-	--be8
-	-dynamic-linker /lib/ld-uClibc.so.0
-	-X -EB -m armelfb_linux_eabi -o toto
-	[...]
-	/tmp/ccnje5oi.o
-
-Notice how it passes -EB and more importantly --be8, which indicates to
-ld that it should swap code to make it little endian again (after it
-has been generated big endian by as).
-
-Best regards,
-
-Thomas
+diff --git a/package/wvstreams/wvstreams.mk b/package/wvstreams/wvstreams.mk
+index 65f48d4..fddaad7 100644
+--- a/package/wvstreams/wvstreams.mk
++++ b/package/wvstreams/wvstreams.mk
+@@ -27,6 +27,10 @@ WVSTREAMS_CONF_OPT += \
+ # needed for openssl detection when statically linking (as ssl needs lz)
+ WVSTREAMS_CONF_ENV += LIBS=-lz
+ 
++ifneq ($(BR2_PREFER_STATIC_LIB),y)
++	WVSTREAMS_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
++endif
++
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ 	WVSTREAMS_DEPENDENCIES += dbus
+ 	WVSTREAMS_CONF_OPT += --with-dbus
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.2.1
