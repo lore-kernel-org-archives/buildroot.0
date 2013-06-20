@@ -1,44 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 20 Jun 2013 17:06:21 +0200
-Subject: [Buildroot] [PATCH v2] wvstreams: Pass -fPIC to CFLAGS when
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 20 Jun 2013 17:08:18 +0200
+Subject: [Buildroot] [git commit] wvstreams: Pass -fPIC to CFLAGS when
 	building PIC objects
-In-Reply-To: <1371737650-12310-1-git-send-email-markos.chandras@gmail.com>
- (Markos Chandras's message of "Thu, 20 Jun 2013 15:14:10 +0100")
-References: <1371737650-12310-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <87ehbwom8i.fsf@dell.be.48ers.dk>
+Message-ID: <20130620151029.15F8F9AF7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=31d72937cf17e9e476e956986030e93f8fd2ce56
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Markos> From: Markos Chandras <markos.chandras@imgtec.com>
- Markos> The argp bundled dependency which is linked to the libwvutils.so
- Markos> shared library, wasn't built with -fPIC.
- Markos> MIPS will refuce to link a non-PIC library with a shared one.
+The argp bundled dependency which is linked to the libwvutils.so
+shared library, wasn't built with -fPIC.
+MIPS will refuce to link a non-PIC library with a shared one.
 
- Markos> We fix this problem by appending -fPIC to CFLAGS and build all the
- Markos> shared objects with -fPIC.
+We fix this problem by appending -fPIC to CFLAGS and build all the
+shared objects with -fPIC.
 
- Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
- Markos> ---
- Markos>  package/wvstreams/wvstreams.mk | 4 ++++
- Markos>  1 file changed, 4 insertions(+)
+[Peter: use +=]
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/wvstreams/wvstreams.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
- Markos> diff --git a/package/wvstreams/wvstreams.mk b/package/wvstreams/wvstreams.mk
- Markos> index 65f48d4..fddaad7 100644
- Markos> --- a/package/wvstreams/wvstreams.mk
- Markos> +++ b/package/wvstreams/wvstreams.mk
- Markos> @@ -27,6 +27,10 @@ WVSTREAMS_CONF_OPT += \
- Markos>  # needed for openssl detection when statically linking (as ssl needs lz)
- Markos>  WVSTREAMS_CONF_ENV += LIBS=-lz
+diff --git a/package/wvstreams/wvstreams.mk b/package/wvstreams/wvstreams.mk
+index 65f48d4..b4f7d89 100644
+--- a/package/wvstreams/wvstreams.mk
++++ b/package/wvstreams/wvstreams.mk
+@@ -27,6 +27,10 @@ WVSTREAMS_CONF_OPT += \
+ # needed for openssl detection when statically linking (as ssl needs lz)
+ WVSTREAMS_CONF_ENV += LIBS=-lz
  
- Markos> +ifneq ($(BR2_PREFER_STATIC_LIB),y)
- Markos> +	WVSTREAMS_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
-
-Committed with this changed to a +=, thanks.
-
--- 
-Bye, Peter Korsgaard
++ifneq ($(BR2_PREFER_STATIC_LIB),y)
++	WVSTREAMS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fPIC"
++endif
++
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ 	WVSTREAMS_DEPENDENCIES += dbus
+ 	WVSTREAMS_CONF_OPT += --with-dbus
