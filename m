@@ -1,39 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 20 Jun 2013 14:51:40 +0200
-Subject: [Buildroot] [PATCH v11 02/11] gstreamer: update for gstreamer1
-In-Reply-To: <1371701651-7739-3-git-send-email-spenser@gillilanding.com>
- (Spenser Gilliland's message of "Wed, 19 Jun 2013 23:14:01 -0500")
-References: <1371701651-7739-1-git-send-email-spenser@gillilanding.com>
- <1371701651-7739-3-git-send-email-spenser@gillilanding.com>
-Message-ID: <87k3lpndwj.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 20 Jun 2013 14:51:56 +0200
+Subject: [Buildroot] [git commit] gstreamer: update for gstreamer1
+Message-ID: <20130620125535.B492C9AF47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b4c20a0353acf0440ab6c8e9f6a5d765a61a585e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Spenser> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+[Peter: fix long line, trailing space, Gstreamer/GStreamer]
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/gstreamer/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
- Spenser> ---
- Spenser>  package/multimedia/gstreamer/Config.in |    3 ++-
- Spenser>  1 file changed, 2 insertions(+), 1 deletion(-)
-
- Spenser> diff --git a/package/multimedia/gstreamer/Config.in b/package/multimedia/gstreamer/Config.in
- Spenser> index 4b4d80f..44c96e4 100644
- Spenser> --- a/package/multimedia/gstreamer/Config.in
- Spenser> +++ b/package/multimedia/gstreamer/Config.in
- Spenser> @@ -4,7 +4,8 @@ config BR2_PACKAGE_GSTREAMER
- Spenser>  	depends on BR2_TOOLCHAIN_HAS_THREADS
- Spenser>  	select BR2_PACKAGE_LIBGLIB2
- Spenser>  	help
- Spenser> -	  GStreamer is an open source multimedia framework.
- Spenser> +	  GStreamer is an open source multimedia framework. This 0.10.x version of
- Spenser> +	  Gstreamer is incompatible with Gstreamer 1.X. 
-
-Line too long, trailing space and GStreamer/Gstreamer mismatch. All
-fixed and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/multimedia/gstreamer/Config.in b/package/multimedia/gstreamer/Config.in
+index 4b4d80f..d2f99da 100644
+--- a/package/multimedia/gstreamer/Config.in
++++ b/package/multimedia/gstreamer/Config.in
+@@ -6,6 +6,9 @@ config BR2_PACKAGE_GSTREAMER
+ 	help
+ 	  GStreamer is an open source multimedia framework.
+ 
++	  This 0.10.x version of GStreamer is incompatible with
++	  GStreamer 1.X.
++
+ 	  http://gstreamer.freedesktop.org/
+ 
+ config BR2_PACKAGE_GSTREAMER_GST_DEBUG
