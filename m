@@ -1,41 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Jun 2013 09:57:48 +0200
-Subject: [Buildroot] Build error when trying to build the py-smbus
- package of i2c-tools
-In-Reply-To: <4E062DFADC6E8142AA8EE9D214BA0C50E3E24C@NB-EX-MBX01.diasemi.com>
-References: <4E062DFADC6E8142AA8EE9D214BA0C50E3E24C@NB-EX-MBX01.diasemi.com>
-Message-ID: <20130620095748.1e480e0a@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 20 Jun 2013 10:00:34 +0200
+Subject: [Buildroot] [PATCH] wvstreams: Build bundled argp library with
+	-fPIC
+In-Reply-To: <1370440956-8000-1-git-send-email-markos.chandras@gmail.com>
+ (Markos Chandras's message of "Wed, 5 Jun 2013 15:02:36 +0100")
+References: <1370440956-8000-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <87obb1nrdp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Weininger,
+>>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
 
-On Thu, 20 Jun 2013 07:18:42 +0000, Thomas Weininger wrote:
+ Markos> From: Markos Chandras <markos.chandras@imgtec.com>
+ Markos> Fixes linking problems on MIPS.
 
-> /home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/ccache /home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -DNDEBUG -g -O3 -Wall -Wstrict-prototypes -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -mfpu=vfpv4-d16 -mfloat-abi=hard -O3 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include -fPIC -I/home/diasemi/workspace/dialog/buildroot/output/host/usr/include/python2.7 -c smbusmodule.c -o build/temp.linux-i686-2.7/smbusmodule.o
+ Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+ Markos> ---
+ Markos>  package/wvstreams/wvstreams-0006-argp-fpic.patch | 28 ++++++++++++++++++++++++
+ Markos>  1 file changed, 28 insertions(+)
+ Markos>  create mode 100644 package/wvstreams/wvstreams-0006-argp-fpic.patch
 
-This line is correctly using the ARM cross-compiler.
+ Markos> diff --git a/package/wvstreams/wvstreams-0006-argp-fpic.patch b/package/wvstreams/wvstreams-0006-argp-fpic.patch
+ Markos> new file mode 100644
+ Markos> index 0000000..b4cf1d2
+ Markos> --- /dev/null
+ Markos> +++ b/package/wvstreams/wvstreams-0006-argp-fpic.patch
+ Markos> @@ -0,0 +1,28 @@
+ Markos> +Build argp object files with -fPIC.
+ Markos> +
+ Markos> +The argp bundled dependency is linked to the libwvutils.so shared library.
+ Markos> +MIPS will refuce to link a non-PIC library with a shared one.
+ Markos> +
+ Markos> +We fix this problem by building the argp source files using -fPIC since
+ Markos> +the libargp static library will only be used to link to libwvutils.so
+ Markos> +as instructed by the following rule in the root Makefile:
+ Markos> +
+ Markos> +ifeq ($(USE_WVSTREAMS_ARGP),1)
+ Markos> +  utils/wvargs.o-CPPFLAGS += -Iargp
+ Markos> +  libwvutils.so-LIBS += -Largp -largp
+ Markos> +
+ Markos> +Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+ Markos> +
+ Markos> +Index: wvstreams-4.6.1/argp/Makefile.in
+ Markos> +===================================================================
+ Markos> +--- wvstreams-4.6.1.orig/argp/Makefile.in
+ Markos> ++++ wvstreams-4.6.1/argp/Makefile.in
+ Markos> +@@ -137,7 +137,7 @@ AUTOMAKE = @AUTOMAKE@
+ Markos> + AWK = @AWK@
+ Markos> + CC = @CC@
+ Markos> + CCDEPMODE = @CCDEPMODE@
+ Markos> +-CFLAGS = @CFLAGS@
+ Markos> ++CFLAGS = @CFLAGS@ -fPIC
 
-> smbusmodule.c: In function 'initsmbus':
-> smbusmodule.c:695:2: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
-> creating build/lib.linux-i686-2.7
-> /home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -pthread -shared -L/home/diasemi/workspace/dialog/buildroot/output/host/lib -L/home/diasemi/workspace/dialog/buildroot/output/host/usr/lib -Wl,-rpath,/home/diasemi/workspace/dialog/buildroot/output/host/usr/lib -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -mfpu=vfpv4-d16 -mfloat-abi=hard -O3 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include build/temp.linux-i686-2.7/smbusmodule.o -L/home/diasemi/workspace/dialog/buildroot/output/host/usr/lib -lpython2.7 -o build/lib.linux-i686-2.7/smbus.so
-> gcc: error: unrecognized command line option '-mfpu=vfpv4-d16'
-> gcc: error: unrecognized command line option '-mfloat-abi=hard'
+How about when wvstreams is built as a static library
+(BR2_PREFER_STATIC_LIB)?
 
-But this line is using a native compiler (gcc) and ARM-specific options
-are passed (-mfpu, -mfloat-abi). You'll have to figure out why the
-i2c-tools build system is using the native compiler and not the
-cross-compiler here.
+Makefile.in is a generated file, so you should rather fix Makefile.am
+and set WVSTREAMS_AUTORECONF = YES, but wouldn't it just be simpler to
+just add CFLAGS="$(TARGET_CFLAGS) -fPIC" to WVSTREAMS_CONF_ENV when
+building in the !BR2_PREFER_STATIC_LIB case?
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
