@@ -1,38 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 20 Jun 2013 14:04:59 -0300
-Subject: [Buildroot] [PATCH 3/4] usb_modeswitch: bump to 1.2.6
-In-Reply-To: <CACQ1gAi1cVMztoq2YH0=ZmU0yqiYN0Z9kr7ZHE4z35Utgr4q1g@mail.gmail.com>
-References: <1371743610-17810-1-git-send-email-richard.genoud@gmail.com>
- <1371743610-17810-4-git-send-email-richard.genoud@gmail.com>
- <20130620180015.72d60cc4@skate>
- <CACQ1gAi1cVMztoq2YH0=ZmU0yqiYN0Z9kr7ZHE4z35Utgr4q1g@mail.gmail.com>
-Message-ID: <51C3363B.4040701@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Jun 2013 19:40:09 +0200
+Subject: [Buildroot] Xenomai package not extracted in time
+In-Reply-To: <000501ce6dda$fca14a90$f5e3dfb0$@z9.com>
+References: <02de01ce6dd0$bb38f3a0$31aadae0$@spamcop.net>
+ <20130620184222.37b73ce2@skate>
+ <000501ce6dda$fca14a90$f5e3dfb0$@z9.com>
+Message-ID: <20130620194009.55364faf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/20/2013 02:02 PM, Richard Genoud wrote:
+Dear George Pontis,
 
-> 2013/6/20 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->> Dear Richard Genoud,
->>
->> On Thu, 20 Jun 2013 17:53:29 +0200, Richard Genoud wrote:
->>> Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
->>> ---
->>>  .../usb_modeswitch/usb_modeswitch-makefile.patch   |   31 --------------------
->>>  package/usb_modeswitch/usb_modeswitch.mk           |    2 +-
->>>  2 files changed, 1 insertion(+), 32 deletions(-)
->>>  delete mode 100644 package/usb_modeswitch/usb_modeswitch-makefile.patch
->>
->> When bumping to a new version leads to the removal of some patches, it
->> is always good to mention /why/ they are removed (they got upstreamed,
->> they are no longer needed because..).
-> 
-> You're right, I've been a little lazy on this !
-> I'll resend the whole set tomorrow.
+Please don't reply to me only, but also to the list.
 
-Never mind about 3-4/4 since it's been already done by Patrick Ziegler
-and committed already :)
-Regards.
+On Thu, 20 Jun 2013 10:24:14 -0700, George Pontis wrote:
+> Thanks for your attention Thomas. I look forward to a fix, but in the short
+> term I'll look at the commit and see if I can back it out temporarily since
+> we only use Xenomai.
+
+Backing out the commit will be hard because many other related changes
+have been done since then.
+
+You can try adding a line like:
+
+linux-patch: xenomai-extract
+
+in the linux/linux-ext-xenomai.mk.
+
+Completely untested, of course.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
