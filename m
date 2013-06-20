@@ -1,42 +1,51 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 20 Jun 2013 14:37:28 -0500
-Subject: [Buildroot] [PATCH v11 09/11] multimedia: reorganize for gst1
-In-Reply-To: <20130620095456.1bac20d0@skate>
-References: <1371701651-7739-1-git-send-email-spenser@gillilanding.com>
- <1371701651-7739-10-git-send-email-spenser@gillilanding.com>
- <20130620095456.1bac20d0@skate>
-Message-ID: <CAEBucnD2QtgyQiMAdmRLYYfGDYoDYaNYvzxFDNAmoxqbnzhYaA@mail.gmail.com>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Thu, 20 Jun 2013 21:21:38 +0100
+Subject: [Buildroot] [PATCH v2] wvstreams: Pass -fPIC to CFLAGS when
+	building PIC objects
+In-Reply-To: <87ehbwom8i.fsf@dell.be.48ers.dk>
+References: <1371737650-12310-1-git-send-email-markos.chandras@gmail.com>
+ <87ehbwom8i.fsf@dell.be.48ers.dk>
+Message-ID: <CAG2jQ8hTJZ_PrCPHVxEHGDvQN5Th+h7xWDhyAOJ8Tp_QnUAuuQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas
-
+On 20 June 2013 16:06, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
 >
-> I think this organization is good, but I wonder why it's not done when
-> the packages are introduced. I.e, the patch adding gstreamer1 should do:
+>  Markos> From: Markos Chandras <markos.chandras@imgtec.com>
+>  Markos> The argp bundled dependency which is linked to the libwvutils.so
+>  Markos> shared library, wasn't built with -fPIC.
+>  Markos> MIPS will refuce to link a non-PIC library with a shared one.
 >
-> +# GStreamer 1.x & Plugins
-> +source "package/multimedia/gstreamer1/Config.in"
+>  Markos> We fix this problem by appending -fPIC to CFLAGS and build all the
+>  Markos> shared objects with -fPIC.
 >
-> Then, the patch adding the base plugins should do:
+>  Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+>  Markos> ---
+>  Markos>  package/wvstreams/wvstreams.mk | 4 ++++
+>  Markos>  1 file changed, 4 insertions(+)
 >
-> +source "package/multimedia/gst1-plugins-base/Config.in"
+>  Markos> diff --git a/package/wvstreams/wvstreams.mk b/package/wvstreams/wvstreams.mk
+>  Markos> index 65f48d4..fddaad7 100644
+>  Markos> --- a/package/wvstreams/wvstreams.mk
+>  Markos> +++ b/package/wvstreams/wvstreams.mk
+>  Markos> @@ -27,6 +27,10 @@ WVSTREAMS_CONF_OPT += \
+>  Markos>  # needed for openssl detection when statically linking (as ssl needs lz)
+>  Markos>  WVSTREAMS_CONF_ENV += LIBS=-lz
 >
-> But, ok, I'm nitpicking here :)
+>  Markos> +ifneq ($(BR2_PREFER_STATIC_LIB),y)
+>  Markos> +      WVSTREAMS_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
+>
+> Committed with this changed to a +=, thanks.
+>
+> --
+> Bye, Peter Korsgaard
 
-I agree that's the better way to do it but it would have meant re
-working every single commit. It was far easier just to throw in the
-reorganization as a separate patch.
-
-Regards,
-
-Spenser
-
+Thank you Peter
 
 --
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+Regards,
+Markos Chandras
