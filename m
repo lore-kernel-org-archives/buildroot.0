@@ -1,36 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Jun 2013 09:46:52 +0200
-Subject: [Buildroot] [PATCH 09/12] luaposix: New package
-In-Reply-To: <CADwac6BcbG6_K_zFbvh7UCB6gn=6dT_-FjqUL36nuMSqMQDy+Q@mail.gmail.com>
-References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
- <1369054604-26139-9-git-send-email-shmuelzon@gmail.com>
- <877ghppyyf.fsf@dell.be.48ers.dk>
- <CADwac6CSHFb=EGawg0x-QPhWpPoeZXtmzN9XtX-u23zittoCqQ@mail.gmail.com>
- <20130620081006.5adbce32@skate>
- <CADwac6AgCoqwwLZcJys51THfEmKunzY=QyNDwoBeS1H4ws=5CQ@mail.gmail.com>
- <CADwac6BcbG6_K_zFbvh7UCB6gn=6dT_-FjqUL36nuMSqMQDy+Q@mail.gmail.com>
-Message-ID: <20130620094652.7fbf1476@skate>
+Date: Thu, 20 Jun 2013 09:54:56 +0200
+Subject: [Buildroot] [PATCH v11 09/11] multimedia: reorganize for gst1
+In-Reply-To: <1371701651-7739-10-git-send-email-spenser@gillilanding.com>
+References: <1371701651-7739-1-git-send-email-spenser@gillilanding.com>
+ <1371701651-7739-10-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130620095456.1bac20d0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Assaf Inbal,
+Dear Spenser Gilliland,
 
-On Thu, 20 Jun 2013 10:39:43 +0300, Assaf Inbal wrote:
+On Wed, 19 Jun 2013 23:14:08 -0500, Spenser Gilliland wrote:
+> 
+> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+> ---
+>  package/multimedia/Config.in |   19 ++++++++++++-------
+>  1 file changed, 12 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+> index 292d029..925051e 100644
+> --- a/package/multimedia/Config.in
+> +++ b/package/multimedia/Config.in
+> @@ -5,22 +5,27 @@ source "package/multimedia/bellagio/Config.in"
+>  source "package/multimedia/faad2/Config.in"
+>  source "package/multimedia/flac/Config.in"
+>  source "package/multimedia/ffmpeg/Config.in"
+> +
+> +# Gstreamer 0.10.x & Plugins
+>  source "package/multimedia/gstreamer/Config.in"
+> -source "package/multimedia/gstreamer1/Config.in"
+> +source "package/multimedia/gst-plugins-base/Config.in"
+> +source "package/multimedia/gst-plugins-good/Config.in"
+> +source "package/multimedia/gst-plugins-bad/Config.in"
+> +source "package/multimedia/gst-plugins-ugly/Config.in"
+>  source "package/multimedia/gst-ffmpeg/Config.in"
+>  source "package/multimedia/gst-dsp/Config.in"
+>  source "package/multimedia/gst-fsl-plugins/Config.in"
+>  source "package/multimedia/gst-omapfb/Config.in"
+> -source "package/multimedia/gst-omx/Config.in"
+> -source "package/multimedia/gst-plugins-base/Config.in"
+> +source "package/multimedia/gst-plugin-x170/Config.in"
+> +
+> +# Gstreamer 1.x & Plugins
+> +source "package/multimedia/gstreamer1/Config.in"
+>  source "package/multimedia/gst1-plugins-base/Config.in"
+> -source "package/multimedia/gst-plugins-good/Config.in"
+>  source "package/multimedia/gst1-plugins-good/Config.in"
+> -source "package/multimedia/gst-plugins-bad/Config.in"
+>  source "package/multimedia/gst1-plugins-bad/Config.in"
+> -source "package/multimedia/gst-plugins-ugly/Config.in"
+>  source "package/multimedia/gst1-plugins-ugly/Config.in"
+> -source "package/multimedia/gst-plugin-x170/Config.in
+> +source "package/multimedia/gst-omx/Config.in"
+> +
+>  source "package/multimedia/lame/Config.in"
+>  source "package/multimedia/libvpx/Config.in"
+>  source "package/multimedia/madplay/Config.in"
 
-> OK, so I've done a bit more digging and saw that buildroot adds -rpath as a
-> part of the HOST_LDFLAGS, but the problem was that this variable wasn't
-> passed to Lua's make file.
+I think this organization is good, but I wonder why it's not done when
+the packages are introduced. I.e, the patch adding gstreamer1 should do:
 
-Ok.
++# GStreamer 1.x & Plugins
++source "package/multimedia/gstreamer1/Config.in"
 
-> So, I'm submitting now two patches. The first is for adding these flags to
-> the host compilation of Lua and the second the for adding Luaposix, without
-> the LD_LIBRARY_PATH hack.
+Then, the patch adding the base plugins should do:
 
-Thanks, this looks a lot better!
++source "package/multimedia/gst1-plugins-base/Config.in"
+
+But, ok, I'm nitpicking here :)
 
 Best regards,
 
