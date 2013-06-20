@@ -1,76 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Jun 2013 09:54:56 +0200
-Subject: [Buildroot] [PATCH v11 09/11] multimedia: reorganize for gst1
-In-Reply-To: <1371701651-7739-10-git-send-email-spenser@gillilanding.com>
-References: <1371701651-7739-1-git-send-email-spenser@gillilanding.com>
- <1371701651-7739-10-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130620095456.1bac20d0@skate>
+Date: Thu, 20 Jun 2013 09:57:48 +0200
+Subject: [Buildroot] Build error when trying to build the py-smbus
+ package of i2c-tools
+In-Reply-To: <4E062DFADC6E8142AA8EE9D214BA0C50E3E24C@NB-EX-MBX01.diasemi.com>
+References: <4E062DFADC6E8142AA8EE9D214BA0C50E3E24C@NB-EX-MBX01.diasemi.com>
+Message-ID: <20130620095748.1e480e0a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Dear Thomas Weininger,
 
-On Wed, 19 Jun 2013 23:14:08 -0500, Spenser Gilliland wrote:
-> 
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> ---
->  package/multimedia/Config.in |   19 ++++++++++++-------
->  1 file changed, 12 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-> index 292d029..925051e 100644
-> --- a/package/multimedia/Config.in
-> +++ b/package/multimedia/Config.in
-> @@ -5,22 +5,27 @@ source "package/multimedia/bellagio/Config.in"
->  source "package/multimedia/faad2/Config.in"
->  source "package/multimedia/flac/Config.in"
->  source "package/multimedia/ffmpeg/Config.in"
-> +
-> +# Gstreamer 0.10.x & Plugins
->  source "package/multimedia/gstreamer/Config.in"
-> -source "package/multimedia/gstreamer1/Config.in"
-> +source "package/multimedia/gst-plugins-base/Config.in"
-> +source "package/multimedia/gst-plugins-good/Config.in"
-> +source "package/multimedia/gst-plugins-bad/Config.in"
-> +source "package/multimedia/gst-plugins-ugly/Config.in"
->  source "package/multimedia/gst-ffmpeg/Config.in"
->  source "package/multimedia/gst-dsp/Config.in"
->  source "package/multimedia/gst-fsl-plugins/Config.in"
->  source "package/multimedia/gst-omapfb/Config.in"
-> -source "package/multimedia/gst-omx/Config.in"
-> -source "package/multimedia/gst-plugins-base/Config.in"
-> +source "package/multimedia/gst-plugin-x170/Config.in"
-> +
-> +# Gstreamer 1.x & Plugins
-> +source "package/multimedia/gstreamer1/Config.in"
->  source "package/multimedia/gst1-plugins-base/Config.in"
-> -source "package/multimedia/gst-plugins-good/Config.in"
->  source "package/multimedia/gst1-plugins-good/Config.in"
-> -source "package/multimedia/gst-plugins-bad/Config.in"
->  source "package/multimedia/gst1-plugins-bad/Config.in"
-> -source "package/multimedia/gst-plugins-ugly/Config.in"
->  source "package/multimedia/gst1-plugins-ugly/Config.in"
-> -source "package/multimedia/gst-plugin-x170/Config.in
-> +source "package/multimedia/gst-omx/Config.in"
-> +
->  source "package/multimedia/lame/Config.in"
->  source "package/multimedia/libvpx/Config.in"
->  source "package/multimedia/madplay/Config.in"
+On Thu, 20 Jun 2013 07:18:42 +0000, Thomas Weininger wrote:
 
-I think this organization is good, but I wonder why it's not done when
-the packages are introduced. I.e, the patch adding gstreamer1 should do:
+> /home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/ccache /home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -DNDEBUG -g -O3 -Wall -Wstrict-prototypes -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -mfpu=vfpv4-d16 -mfloat-abi=hard -O3 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include -fPIC -I/home/diasemi/workspace/dialog/buildroot/output/host/usr/include/python2.7 -c smbusmodule.c -o build/temp.linux-i686-2.7/smbusmodule.o
 
-+# GStreamer 1.x & Plugins
-+source "package/multimedia/gstreamer1/Config.in"
+This line is correctly using the ARM cross-compiler.
 
-Then, the patch adding the base plugins should do:
+> smbusmodule.c: In function 'initsmbus':
+> smbusmodule.c:695:2: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
+> creating build/lib.linux-i686-2.7
+> /home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -pthread -shared -L/home/diasemi/workspace/dialog/buildroot/output/host/lib -L/home/diasemi/workspace/dialog/buildroot/output/host/usr/lib -Wl,-rpath,/home/diasemi/workspace/dialog/buildroot/output/host/usr/lib -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -mfpu=vfpv4-d16 -mfloat-abi=hard -O3 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include build/temp.linux-i686-2.7/smbusmodule.o -L/home/diasemi/workspace/dialog/buildroot/output/host/usr/lib -lpython2.7 -o build/lib.linux-i686-2.7/smbus.so
+> gcc: error: unrecognized command line option '-mfpu=vfpv4-d16'
+> gcc: error: unrecognized command line option '-mfloat-abi=hard'
 
-+source "package/multimedia/gst1-plugins-base/Config.in"
-
-But, ok, I'm nitpicking here :)
+But this line is using a native compiler (gcc) and ARM-specific options
+are passed (-mfpu, -mfloat-abi). You'll have to figure out why the
+i2c-tools build system is using the native compiler and not the
+cross-compiler here.
 
 Best regards,
 
