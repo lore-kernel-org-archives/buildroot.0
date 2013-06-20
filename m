@@ -1,12 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 20 Jun 2013 14:49:19 +0200
-Subject: [Buildroot] [PATCH v11 01/11] gstreamer1: Add gstreamer version
-	1.1.1 package
-In-Reply-To: <1371701651-7739-2-git-send-email-spenser@gillilanding.com>
- (Spenser Gilliland's message of "Wed, 19 Jun 2013 23:14:00 -0500")
+Date: Thu, 20 Jun 2013 14:51:40 +0200
+Subject: [Buildroot] [PATCH v11 02/11] gstreamer: update for gstreamer1
+In-Reply-To: <1371701651-7739-3-git-send-email-spenser@gillilanding.com>
+ (Spenser Gilliland's message of "Wed, 19 Jun 2013 23:14:01 -0500")
 References: <1371701651-7739-1-git-send-email-spenser@gillilanding.com>
- <1371701651-7739-2-git-send-email-spenser@gillilanding.com>
-Message-ID: <87obb1ne0g.fsf@dell.be.48ers.dk>
+ <1371701651-7739-3-git-send-email-spenser@gillilanding.com>
+Message-ID: <87k3lpndwj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,28 +14,26 @@ To: buildroot@busybox.net
 
 >>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
 
- Spenser> This patch adds the gstreamer version 1.x series to buildroot.
  Spenser> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+
  Spenser> ---
- Spenser>  package/multimedia/Config.in                |    1 +
- Spenser>  package/multimedia/gstreamer1/Config.in     |   55 +++++++++++++++++++++++++++
- Spenser>  package/multimedia/gstreamer1/gstreamer1.mk |   40 +++++++++++++++++++
- Spenser>  3 files changed, 96 insertions(+)
+ Spenser>  package/multimedia/gstreamer/Config.in |    3 ++-
+ Spenser>  1 file changed, 2 insertions(+), 1 deletion(-)
 
- Spenser> +++ b/package/multimedia/gstreamer1/gstreamer1.mk
- Spenser> @@ -0,0 +1,40 @@
- Spenser> +#############################################################
- Spenser> +#
- Spenser> +# gstreamer1
- Spenser> +#
- Spenser> +#############################################################
- Spenser> +
- Spenser> +GSTREAMER1_VERSION = 1.1.1
+ Spenser> diff --git a/package/multimedia/gstreamer/Config.in b/package/multimedia/gstreamer/Config.in
+ Spenser> index 4b4d80f..44c96e4 100644
+ Spenser> --- a/package/multimedia/gstreamer/Config.in
+ Spenser> +++ b/package/multimedia/gstreamer/Config.in
+ Spenser> @@ -4,7 +4,8 @@ config BR2_PACKAGE_GSTREAMER
+ Spenser>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+ Spenser>  	select BR2_PACKAGE_LIBGLIB2
+ Spenser>  	help
+ Spenser> -	  GStreamer is an open source multimedia framework.
+ Spenser> +	  GStreamer is an open source multimedia framework. This 0.10.x version of
+ Spenser> +	  Gstreamer is incompatible with Gstreamer 1.X. 
 
-Maybe I missed the discussion about this earlier, but why are you
-packaging the 1.1.x development version instead of the stable 1.0.x? I
-would imagine that most people (if they are not actively working on
-gstreamer atleast) would prefer the stable version?
+Line too long, trailing space and GStreamer/Gstreamer mismatch. All
+fixed and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
