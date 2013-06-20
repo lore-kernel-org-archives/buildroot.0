@@ -1,31 +1,99 @@
-From: Adam Nielsen <a.nielsen@shikadi.net>
-Date: Thu, 20 Jun 2013 19:16:23 +1000
-Subject: [Buildroot] binutils doesn't like -elf2flt option
-In-Reply-To: <20130619121625.3a47c45e@skate>
-References: <kphffs$v5g$1@ger.gmane.org> <51BEAB3A.8010408@mind.be>
- <kpmcpb$lbo$1@ger.gmane.org> <51C08403.4050900@mind.be>
- <kpqg93$v74$1@ger.gmane.org> <20130619082557.447efce8@skate>
- <kprol2$uk1$1@ger.gmane.org> <20130619102133.7570dcd4@skate>
- <kprv8d$6iq$1@ger.gmane.org> <20130619120616.447be089@skate>
- <kps03n$e9p$1@ger.gmane.org> <20130619121625.3a47c45e@skate>
-Message-ID: <kpuh91$4ad$1@ger.gmane.org>
+From: Thomas Weininger <Thomas.Weininger@diasemi.com>
+Date: Thu, 20 Jun 2013 09:30:32 +0000
+Subject: [Buildroot] Build error when trying to build the py-smbus
+ package of i2c-tools
+In-Reply-To: <20130620095748.1e480e0a@skate>
+References: <4E062DFADC6E8142AA8EE9D214BA0C50E3E24C@NB-EX-MBX01.diasemi.com>
+ <20130620095748.1e480e0a@skate>
+Message-ID: <4E062DFADC6E8142AA8EE9D214BA0C50E3E441@NB-EX-MBX01.diasemi.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Ah, right, elf2flt isn't a real package, so it fails.
+> -----Original Message-----
+> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
+> Sent: Donnerstag, 20. Juni 2013 09:58
+> To: Thomas Weininger
+> Cc: buildroot at busybox.net
+> Subject: Re: [Buildroot] Build error when trying to build the py-smbus
+> package of i2c-tools
 >
-> Can you push your current Buildroot code on some Git repository so that
-> we can have a look? I looked at your configuration, and I really don't
-> see what could be pulling the target binutils into the build.
+> Dear Thomas Weininger,
+>
+> On Thu, 20 Jun 2013 07:18:42 +0000, Thomas Weininger wrote:
+>
+> > /home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/ccache
+> > /home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/arm-
+> build
+> > root-linux-uclibcgnueabi-gcc -DNDEBUG -g -O3 -Wall -Wstrict-prototypes
+> > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -
+> pipe
+> > -mfpu=vfpv4-d16 -mfloat-abi=hard -O3 -D_LARGEFILE_SOURCE
+> > -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include -fPIC
+> > -
+> I/home/diasemi/workspace/dialog/buildroot/output/host/usr/include/pyt
+> > hon2.7 -c smbusmodule.c -o build/temp.linux-i686-2.7/smbusmodule.o
+>
+> This line is correctly using the ARM cross-compiler.
+>
+> > smbusmodule.c: In function 'initsmbus':
+> > smbusmodule.c:695:2: warning: dereferencing type-punned pointer will
+> > break strict-aliasing rules [-Wstrict-aliasing] creating
+> > build/lib.linux-i686-2.7
+> > /home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/ccache
+> > /usr/bin/gcc -pthread -shared
+> > -L/home/diasemi/workspace/dialog/buildroot/output/host/lib
+> > -L/home/diasemi/workspace/dialog/buildroot/output/host/usr/lib
+> > -Wl,-
+> rpath,/home/diasemi/workspace/dialog/buildroot/output/host/usr/li
+> > b -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -
+> D_FILE_OFFSET_BITS=64
+> > -pipe -mfpu=vfpv4-d16 -mfloat-abi=hard -O3 -D_LARGEFILE_SOURCE
+> > -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include
+> > build/temp.linux-i686-2.7/smbusmodule.o
+> > -L/home/diasemi/workspace/dialog/buildroot/output/host/usr/lib
+> > -lpython2.7 -o build/lib.linux-i686-2.7/smbus.so
+> > gcc: error: unrecognized command line option '-mfpu=vfpv4-d16'
+> > gcc: error: unrecognized command line option '-mfloat-abi=hard'
+>
+> But this line is using a native compiler (gcc) and ARM-specific options are
+> passed (-mfpu, -mfloat-abi). You'll have to figure out why the i2c-tools build
+> system is using the native compiler and not the cross-compiler here.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux development, consulting,
+> training and support.
+> http://free-electrons.com
 
-Sure, you can get it from here:
+ [Thomas Weininger]
+Thank you Thomas for your help. I decided to split the py-smbus module from i2c-tools to a separate package. This may not be the most elegant way, but it works for me. Also the gcc errors do not occur anymore.
 
-https://github.com/Malvineous/buildroot-openipcam
+The downside of this approach is that I have to provide an extra python-smbus-3.1.0.tar.gz package. If someone is interested I could provide a patch for this package.
 
-Make sure to use the 'nuc700' branch.  Many thanks for taking a look!
+Best regards,
+Thomas
 
-Cheers,
-Adam.
+
+
+
+
+
+________________________________
+
+Dialog Semiconductor GmbH
+Neue Str. 95
+D-73230 Kirchheim
+Managing Directors: Dr. Jalal Bagherli, Jean-Michel Richard
+Chairman of the Supervisory Board: Gregorio Reyes
+Commercial register: Amtsgericht Stuttgart: HRB 231181
+UST-ID-Nr. DE 811121668
+
+Legal Disclaimer: This e-mail communication (and any attachment/s) is confidential and contains proprietary information, some or all of which may be legally privileged. It is intended solely for the use of the individual or entity to which it is addressed. Access to this email by anyone else is unauthorized. If you are not the intended recipient, any disclosure, copying, distribution or any action taken or omitted to be taken in reliance on it, is prohibited and may be unlawful.
+
+Please consider the environment before printing this e-mail
