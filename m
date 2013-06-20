@@ -1,231 +1,405 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 19 Jun 2013 23:14:07 -0500
-Subject: [Buildroot] [PATCH v11 08/11] gst-omx: add gst-omx package
+Date: Wed, 19 Jun 2013 23:14:09 -0500
+Subject: [Buildroot] [PATCH v11 10/11] libav: add new package
 In-Reply-To: <1371701651-7739-1-git-send-email-spenser@gillilanding.com>
 References: <1371701651-7739-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1371701651-7739-9-git-send-email-spenser@gillilanding.com>
+Message-ID: <1371701651-7739-11-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gst-omx enables OpenMAX based accelerated video decode.
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/multimedia/Config.in                       |    1 +
- package/multimedia/gst-omx/Config.in               |   11 ++
- .../multimedia/gst-omx/gst-omx-config-files.patch  |  127 ++++++++++++++++++++
- package/multimedia/gst-omx/gst-omx.mk              |   37 ++++++
- 4 files changed, 176 insertions(+)
- create mode 100644 package/multimedia/gst-omx/Config.in
- create mode 100644 package/multimedia/gst-omx/gst-omx-config-files.patch
- create mode 100644 package/multimedia/gst-omx/gst-omx.mk
+ package/multimedia/Config.in       |    1 +
+ package/multimedia/libav/Config.in |  158 ++++++++++++++++++++++++++++
+ package/multimedia/libav/libav.mk  |  200 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 359 insertions(+)
+ create mode 100644 package/multimedia/libav/Config.in
+ create mode 100644 package/multimedia/libav/libav.mk
 
 diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 30a20cb..292d029 100644
+index 925051e..4d5219d 100644
 --- a/package/multimedia/Config.in
 +++ b/package/multimedia/Config.in
-@@ -11,6 +11,7 @@ source "package/multimedia/gst-ffmpeg/Config.in"
- source "package/multimedia/gst-dsp/Config.in"
- source "package/multimedia/gst-fsl-plugins/Config.in"
- source "package/multimedia/gst-omapfb/Config.in"
-+source "package/multimedia/gst-omx/Config.in"
- source "package/multimedia/gst-plugins-base/Config.in"
- source "package/multimedia/gst1-plugins-base/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
-diff --git a/package/multimedia/gst-omx/Config.in b/package/multimedia/gst-omx/Config.in
+@@ -27,6 +27,7 @@ source "package/multimedia/gst1-plugins-ugly/Config.in"
+ source "package/multimedia/gst-omx/Config.in"
+ 
+ source "package/multimedia/lame/Config.in"
++source "package/multimedia/libav/Config.in"
+ source "package/multimedia/libvpx/Config.in"
+ source "package/multimedia/madplay/Config.in"
+ source "package/multimedia/mpd/Config.in"
+diff --git a/package/multimedia/libav/Config.in b/package/multimedia/libav/Config.in
 new file mode 100644
-index 0000000..b6ea116
+index 0000000..35bbb64
 --- /dev/null
-+++ b/package/multimedia/gst-omx/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_GST_OMX
-+	bool "gst-omx"
-+	depends on BR2_PACKAGE_GSTREAMER1 && BR2_PACKAGE_HAS_OPENMAX
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
++++ b/package/multimedia/libav/Config.in
+@@ -0,0 +1,158 @@
++comment "libav requires a toolchain with LARGEFILE and IPV6 support"
++	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
++
++menuconfig BR2_PACKAGE_LIBAV
++	bool "libav"
++	depends on BR2_LARGEFILE
++	depends on BR2_INET_IPV6
 +	help
-+	  GStreamer plug-in to use OpenMAX API.
++         libav is a complete, cross-platform solution to record, convert
++         and stream audio and video.
 +
-+	  http://cgit.freedesktop.org/gstreamer/gst-omx
++	 http://www.libav.org
 +
-+comment "gst-omx requires a OpenMAX implementation"
-+	depends on BR2_PACKAGE_GSTREAMER1 && !BR2_PACKAGE_HAS_OPENMAX
-diff --git a/package/multimedia/gst-omx/gst-omx-config-files.patch b/package/multimedia/gst-omx/gst-omx-config-files.patch
++if BR2_PACKAGE_LIBAV
++
++config BR2_PACKAGE_LIBAV_GPL
++	bool "Enable GPL code"
++	help
++         allow use of GPL code, the resulting libs and binaries will
++         be under GPL
++
++config BR2_PACKAGE_LIBAV_NONFREE
++	bool "Enable nonfree code"
++	help
++         allow use of nonfree code, the resulting libs and binaries
++         will be unredistributable
++
++config BR2_PACKAGE_LIBAV_LIBAV
++	bool "Build libav (the command line application)"
++	select BR2_PACKAGE_LIBAV_SWSCALE
++	default y
++	help
++         libav is a very fast video and audio converter.
++         It can also grab from a live audio/video source.
++
++         It is not needed if you want to link the libav libraries
++         to your application.
++
++config BR2_PACKAGE_LIBAV_FFPLAY
++	bool "Build ffplay"
++	select BR2_PACKAGE_SDL
++	help
++         FFplay is a very simple and portable media player using the
++         libav libraries and the SDL library.
++         It is mostly used as a testbed for the various libav APIs.
++
++config BR2_PACKAGE_LIBAV_FFSERVER
++	bool "Build ffserver"
++	help
++         FFserver is a streaming server for both audio and video.
++
++config BR2_PACKAGE_LIBAV_POSTPROC
++	bool "Build libpostproc"
++	depends on BR2_PACKAGE_LIBAV_GPL
++	help
++	  Postproc is a library of video postprocessing routines.
++
++config BR2_PACKAGE_LIBAV_SWSCALE
++	bool "Build libswscale"
++	help
++	  Swscale is a library of video scaling routines.
++
++config BR2_PACKAGE_LIBAV_ENCODERS
++	string "Enabled encoders"
++	default "all"
++	help
++	 Space-separated list of encoders to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-encoders in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_DECODERS
++	string "Enabled decoders"
++	default "all"
++	help
++	 Space-separated list of decoders to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-decoders in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_MUXERS
++	string "Enabled muxers"
++	default "all"
++	help
++	 Space-separated list of muxers to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-muxers in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_DEMUXERS
++	string "Enabled demuxers"
++	default "all"
++	help
++	 Space-separated list of demuxers to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-demuxers in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_PARSERS
++	string "Enabled parsers"
++	default "all"
++	help
++	 Space-separated list of parsers to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-parsers in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_BSFS
++	string "Enabled bitstreams"
++	default "all"
++	help
++	 Space-separated list of bitstream filters to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-bsfs in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_PROTOCOLS
++	string "Enabled protocols"
++	default "all"
++	help
++	 Space-separated list of protocols to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-protocols in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_FILTERS
++	string "Enabled filters"
++	default "all"
++	help
++	 Space-separated list of filters to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-filters in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_INDEVS
++	bool "Enable input devices"
++	default y
++
++config BR2_PACKAGE_LIBAV_OUTDEVS
++	bool "Enable output devices"
++	default y
++
++config BR2_PACKAGE_LIBAV_EXTRACONF
++	string "Additional parameters for ./configure"
++	default ""
++	help
++	 Extra parameters that will be appended to libav's
++	 ./configure commandline.
++
++endif
+diff --git a/package/multimedia/libav/libav.mk b/package/multimedia/libav/libav.mk
 new file mode 100644
-index 0000000..f484521
+index 0000000..6503a0e
 --- /dev/null
-+++ b/package/multimedia/gst-omx/gst-omx-config-files.patch
-@@ -0,0 +1,127 @@
-+Change config files to match default buildroot install
-+
-+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-+---
-+Index: gst-omx-1.0.0/config/bellagio/gstomx.conf
-+===================================================================
-+--- gst-omx-1.0.0.orig/config/bellagio/gstomx.conf	2013-03-12 04:12:09.000000000 -0500
-++++ gst-omx-1.0.0/config/bellagio/gstomx.conf	2013-05-21 17:50:14.545692908 -0500
-+@@ -1,6 +1,6 @@
-+ [omxmpeg4videodec]
-+ type-name=GstOMXMPEG4VideoDec
-+-core-name=/usr/local/lib/libomxil-bellagio.so.0
-++core-name=/usr/lib/libomxil-bellagio.so.0
-+ component-name=OMX.st.video_decoder.mpeg4
-+ rank=256
-+ in-port-index=0
-+@@ -9,7 +9,7 @@
-+ 
-+ [omxh264dec]
-+ type-name=GstOMXH264Dec
-+-core-name=/usr/local/lib/libomxil-bellagio.so.0
-++core-name=/usr/lib/libomxil-bellagio.so.0
-+ component-name=OMX.st.video_decoder.avc
-+ rank=256
-+ in-port-index=0
-+@@ -18,7 +18,7 @@
-+ 
-+ [omxmpeg4videoenc]
-+ type-name=GstOMXMPEG4VideoEnc
-+-core-name=/usr/local/lib/libomxil-bellagio.so.0
-++core-name=/usr/lib/libomxil-bellagio.so.0
-+ component-name=OMX.st.video_encoder.mpeg4
-+ rank=0
-+ in-port-index=0
-+@@ -27,7 +27,7 @@
-+ 
-+ [omxaacenc]
-+ type-name=GstOMXAACEnc
-+-core-name=/usr/local/lib/libomxil-bellagio.so.0
-++core-name=/usr/lib/libomxil-bellagio.so.0
-+ component-name=OMX.st.audio_encoder.aac
-+ rank=0
-+ in-port-index=0
-+Index: gst-omx-1.0.0/config/rpi/gstomx.conf
-+===================================================================
-+--- gst-omx-1.0.0.orig/config/rpi/gstomx.conf	2013-05-21 17:51:39.965693635 -0500
-++++ gst-omx-1.0.0/config/rpi/gstomx.conf	2013-05-21 17:52:07.781693871 -0500
-+@@ -1,6 +1,6 @@
-+ [omxmpeg2videodec]
-+ type-name=GstOMXMPEG2VideoDec
-+-core-name=/opt/vc/lib/libopenmaxil.so
-++core-name=/usr/lib/libopenmaxil.so
-+ component-name=OMX.broadcom.video_decode
-+ rank=256
-+ in-port-index=130
-+@@ -9,7 +9,7 @@
-+ 
-+ [omxmpeg4videodec]
-+ type-name=GstOMXMPEG4VideoDec
-+-core-name=/opt/vc/lib/libopenmaxil.so
-++core-name=/usr/lib/libopenmaxil.so
-+ component-name=OMX.broadcom.video_decode
-+ rank=256
-+ in-port-index=130
-+@@ -18,7 +18,7 @@
-+ 
-+ [omxh263dec]
-+ type-name=GstOMXH263Dec
-+-core-name=/opt/vc/lib/libopenmaxil.so
-++core-name=/usr/lib/libopenmaxil.so
-+ component-name=OMX.broadcom.video_decode
-+ rank=256
-+ in-port-index=130
-+@@ -27,7 +27,7 @@
-+ 
-+ [omxh264dec]
-+ type-name=GstOMXH264Dec
-+-core-name=/opt/vc/lib/libopenmaxil.so
-++core-name=/usr/lib/libopenmaxil.so
-+ component-name=OMX.broadcom.video_decode
-+ rank=256
-+ in-port-index=130
-+@@ -36,7 +36,7 @@
-+ 
-+ [omxtheoradec]
-+ type-name=GstOMXTheoraDec
-+-core-name=/opt/vc/lib/libopenmaxil.so
-++core-name=/usr/lib/libopenmaxil.so
-+ component-name=OMX.broadcom.video_decode
-+ rank=256
-+ in-port-index=130
-+@@ -45,7 +45,7 @@
-+ 
-+ [omxvp8dec]
-+ type-name=GstOMXVP8Dec
-+-core-name=/opt/vc/lib/libopenmaxil.so
-++core-name=/usr/lib/libopenmaxil.so
-+ component-name=OMX.broadcom.video_decode
-+ rank=256
-+ in-port-index=130
-+@@ -54,7 +54,7 @@
-+ 
-+ [omxmjpegdec]
-+ type-name=GstOMXMJPEGDec
-+-core-name=/opt/vc/lib/libopenmaxil.so
-++core-name=/usr/lib/libopenmaxil.so
-+ component-name=OMX.broadcom.video_decode
-+ rank=256
-+ in-port-index=130
-+@@ -63,7 +63,7 @@
-+ 
-+ [omxvc1dec]
-+ type-name=GstOMXWMVDec
-+-core-name=/opt/vc/lib/libopenmaxil.so
-++core-name=/usr/lib/libopenmaxil.so
-+ component-name=OMX.broadcom.video_encode
-+ rank=256
-+ in-port-index=130
-+@@ -73,7 +73,7 @@
-+ 
-+ [omxh264enc]
-+ type-name=GstOMXH264Enc
-+-core-name=/opt/vc/lib/libopenmaxil.so
-++core-name=/usr/lib/libopenmaxil.so
-+ component-name=OMX.broadcom.video_encode
-+ rank=256
-+ in-port-index=200
-diff --git a/package/multimedia/gst-omx/gst-omx.mk b/package/multimedia/gst-omx/gst-omx.mk
-new file mode 100644
-index 0000000..00abecb
---- /dev/null
-+++ b/package/multimedia/gst-omx/gst-omx.mk
-@@ -0,0 +1,37 @@
-+#############################################################
++++ b/package/multimedia/libav/libav.mk
+@@ -0,0 +1,200 @@
++################################################################################
 +#
-+# gst-omx
++# libav
 +#
-+#############################################################
++################################################################################
 +
-+GST_OMX_VERSION = 1.0.0
-+GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
-+GST_OMX_SITE = http://gstreamer.freedesktop.org/src/gst-omx/
++LIBAV_VERSION = 9.6
++LIBAV_SOURCE = libav-$(LIBAV_VERSION).tar.xz
++LIBAV_SITE = http://libav.org/releases
++LIBAV_INSTALL_STAGING = YES
 +
-+GST_OMX_LICENSE = LGPLv2.1
-+GST_OMX_LICENSE_FILE = COPYING
++LIBAV_LICENSE = LGPLv2.1+, libjpeg license
++LIBAV_LICENSE_FILES = LICENSE COPYING.LGPLv2.1
 +
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+GST_OMX_CONF_OPT = \
-+	--with-omx-target=rpi
-+GST_OMX_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) \
-+		-I$(STAGING_DIR)/usr/include/IL \
-+		-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
-+		-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
++ifeq ($(BR2_PACKAGE_LIBAV_GPL),y)
++LIBAV_LICENSE += and GPLv2+
++LIBAV_LICENSE_FILES += COPYING.GPLv2
 +endif
 +
-+ifeq ($(BR2_PACKAGE_BELLAGIO),y)
-+GST_OMX_CONF_OPT = \
-+	--with-omx-target=bellagio
-+GST_OMX_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) \
-+		-DOMX_VERSION_MAJOR=1 \
-+		-DOMX_VERSION_MINOR=1 \
-+		-DOMX_VERSION_REVISION=2 \
-+		-DOMX_VERSION_STEP=0"
++LIBAV_CONF_OPT = \
++	--prefix=/usr \
++	$(if $(BR2_HAVE_DOCUMENTATION),,--disable-doc)
++
++
++ifeq ($(BR2_PACKAGE_LIBAV_GPL),y)
++LIBAV_CONF_OPT += --enable-gpl
++else
++LIBAV_CONF_OPT += --disable-gpl
 +endif
 +
-+GST_OMX_DEPENDENCIES = gstreamer1 gst1-plugins-base libopenmax
++ifeq ($(BR2_PACKAGE_LIBAV_VERSION3),y)
++LIBAV_CONF_OPT += --enable-version3
++else
++LIBAV_CONF_OPT += --disable-version3
++endif
++
++ifeq ($(BR2_PACKAGE_LIBAV_NONFREE),y)
++LIBAV_CONF_OPT += --enable-nonfree
++else
++LIBAV_CONF_OPT += --disable-nonfree
++endif
++
++ifeq ($(BR2_PACKAGE_LIBAV_AVCONV),y)
++LIBAV_CONF_OPT += --enable-avconv
++else
++LIBAV_CONF_OPT += --disable-avconv
++endif
++
++ifeq ($(BR2_PACKAGE_LIBAV_AVPLAY),y)
++LIBAV_DEPENDENCIES += sdl
++LIBAV_CONF_OPT += --enable-avplay
++LIBAV_CONF_ENV += SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
++else
++LIBAV_CONF_OPT += --disable-avplay
++endif
++
++ifeq ($(BR2_PACKAGE_LIBAV_AVPROBE),y)
++LIBAV_CONF_OPT += --enable-avprobe
++else
++LIBAV_CONF_OPT += --disable-avprobe
++endif
++
++ifeq ($(BR2_PACKAGE_LIBAV_AVSERVER),y)
++LIBAV_CONF_OPT += --enable-avserver
++else
++LIBAV_CONF_OPT += --disable-avserver
++endif
++
++ifeq ($(BR2_PACKAGE_LIBAV_SWSCALE),y)
++LIBAV_CONF_OPT += --enable-swscale
++else
++LIBAV_CONF_OPT += --disable-swscale
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_ENCODERS)),all)
++LIBAV_CONF_OPT += --disable-encoders \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_ENCODERS)),--enable-encoder=$(x))
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_DECODERS)),all)
++LIBAV_CONF_OPT += --disable-decoders \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_DECODERS)),--enable-decoder=$(x))
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_MUXERS)),all)
++LIBAV_CONF_OPT += --disable-muxers \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_MUXERS)),--enable-muxer=$(x))
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_DEMUXERS)),all)
++LIBAV_CONF_OPT += --disable-demuxers \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_DEMUXERS)),--enable-demuxer=$(x))
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_PARSERS)),all)
++LIBAV_CONF_OPT += --disable-parsers \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_PARSERS)),--enable-parser=$(x))
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_BSFS)),all)
++LIBAV_CONF_OPT += --disable-bsfs \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_BSFS)),--enable-bsf=$(x))
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_PROTOCOLS)),all)
++LIBAV_CONF_OPT += --disable-protocols \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_PROTOCOLS)),--enable-protocol=$(x))
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_FILTERS)),all)
++LIBAV_CONF_OPT += --disable-filters \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_FILTERS)),--enable-filter=$(x))
++endif
++
++ifeq ($(BR2_PACKAGE_LIBAV_INDEVS),y)
++LIBAV_CONF_OPT += --enable-indevs
++else
++LIBAV_CONF_OPT += --disable-indevs
++endif
++
++ifeq ($(BR2_PACKAGE_LIBAV_OUTDEVS),y)
++LIBAV_CONF_OPT += --enable-outdevs
++else
++LIBAV_CONF_OPT += --disable-outdevs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIBAV_CONF_OPT += --enable-pthreads
++else
++LIBAV_CONF_OPT += --disable-pthreads
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LIBAV_CONF_OPT += --enable-zlib
++LIBAV_DEPENDENCIES += zlib
++else
++LIBAV_CONF_OPT += --disable-zlib
++endif
++
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++# MMX on is default for x86, disable it for lowly x86-type processors
++ifeq ($(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_i686)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
++LIBAV_CONF_OPT += --disable-mmx
++else
++# If it is enabled, nasm is required
++LIBAV_DEPENDENCIES += host-nasm
++endif
++endif
++
++# Explicitly disable everything that doesn't match for ARM
++# LIBAV "autodetects" by compiling an extended instruction via AS
++# This works on compilers that aren't built for generic by default
++ifeq ($(BR2_arm7tdmi)$(BR2_arm720t)$(BR2_arm920t)$(BR2_arm922t)$(BR2_strongarm)$(BR2_fa526),y)
++LIBAV_CONF_OPT += --disable-armv5te
++endif
++ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf-s),y)
++LIBAV_CONF_OPT += --enable-armv6
++else
++LIBAV_CONF_OPT += --disable-armv6 --disable-armv6t2
++endif
++ifeq ($(BR2_arm10)$(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf-s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
++LIBAV_CONF_OPT += --enable-vfp
++else
++LIBAV_CONF_OPT += --disable-vfp
++endif
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
++LIBAV_CONF_OPT += --enable-neon
++endif
++
++# Set powerpc altivec appropriately
++ifeq ($(BR2_powerpc),y)
++ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
++LIBAV_CONF_OPT += --enable-altivec
++else
++LIBAV_CONF_OPT += --disable-altivec
++endif
++endif
++
++LIBAV_CONF_OPT += $(call qstrip,$(BR2_PACKAGE_LIBAV_EXTRACONF))
++
++# Override LIBAV_CONFIGURE_CMDS: libav does not support --target and others
++define LIBAV_CONFIGURE_CMDS
++	(cd $(LIBAV_SRCDIR) && rm -rf config.cache && \
++	$(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_ARGS) \
++	$(LIBAV_CONF_ENV) \
++	./configure \
++		--enable-cross-compile	\
++		--cross-prefix=$(TARGET_CROSS) \
++		--sysroot=$(STAGING_DIR) \
++		--host-cc="$(HOSTCC)" \
++		--arch=$(BR2_ARCH) \
++		--target-os=linux \
++		--extra-cflags=-fPIC \
++		$(SHARED_STATIC_LIBS_OPTS) \
++		$(LIBAV_CONF_OPT) \
++	)
++endef
 +
 +$(eval $(autotools-package))
 -- 
