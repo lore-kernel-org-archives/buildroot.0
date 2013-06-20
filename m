@@ -1,406 +1,467 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 20 Jun 2013 17:07:45 -0500
-Subject: [Buildroot] [PATCH v12 10/11] libav: add new package
-In-Reply-To: <1371766066-676-1-git-send-email-spenser@gillilanding.com>
-References: <1371766066-676-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1371766066-676-11-git-send-email-spenser@gillilanding.com>
+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Date: Fri, 21 Jun 2013 00:17:14 +0200
+Subject: [Buildroot] [PATCH] Add header to packages where missing
+Message-ID: <1371766634-25000-1-git-send-email-alexandre.belloni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+Reported-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 ---
- package/multimedia/Config.in       |    1 +
- package/multimedia/libav/Config.in |  158 ++++++++++++++++++++++++++++
- package/multimedia/libav/libav.mk  |  200 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 359 insertions(+)
- create mode 100644 package/multimedia/libav/Config.in
- create mode 100644 package/multimedia/libav/libav.mk
+ package/cifs-utils/cifs-utils.mk                           | 6 ++++++
+ package/classpath/classpath.mk                             | 6 ++++++
+ package/cloop/cloop.mk                                     | 6 ++++++
+ package/crosstool-ng/crosstool-ng.mk                       | 6 ++++++
+ package/dsp-tools/dsp-tools.mk                             | 6 ++++++
+ package/explorercanvas/explorercanvas.mk                   | 6 ++++++
+ package/fbgrab/fbgrab.mk                                   | 6 ++++++
+ package/feh/feh.mk                                         | 6 ++++++
+ package/flot/flot.mk                                       | 6 ++++++
+ package/hiawatha/hiawatha.mk                               | 6 ++++++
+ package/igh-ethercat/igh-ethercat.mk                       | 6 ++++++
+ package/jamvm/jamvm.mk                                     | 6 ++++++
+ package/jquery-sparkline/jquery-sparkline.mk               | 6 ++++++
+ package/jquery-validation/jquery-validation.mk             | 6 ++++++
+ package/jquery/jquery.mk                                   | 6 ++++++
+ package/jsmin/jsmin.mk                                     | 6 ++++++
+ package/lpc3250loader/lpc3250loader.mk                     | 6 ++++++
+ package/lttng-babeltrace/lttng-babeltrace.mk               | 6 ++++++
+ package/multimedia/gst-dsp/gst-dsp.mk                      | 6 ++++++
+ package/multimedia/gst-omapfb/gst-omapfb.mk                | 6 ++++++
+ package/multimedia/tidsp-binaries/tidsp-binaries.mk        | 6 ++++++
+ package/nettle/nettle.mk                                   | 6 ++++++
+ package/ortp/ortp.mk                                       | 6 ++++++
+ package/polarssl/polarssl.mk                               | 6 ++++++
+ package/rt-tests/rt-tests.mk                               | 6 ++++++
+ package/rtai/rtai.mk                                       | 6 ++++++
+ package/scons/scons.mk                                     | 6 ++++++
+ package/squashfs/squashfs.mk                               | 6 ++++++
+ package/squashfs3/squashfs3.mk                             | 6 ++++++
+ package/webrtc-audio-processing/webrtc-audio-processing.mk | 6 ++++++
+ 30 files changed, 180 insertions(+)
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 925051e..4d5219d 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -27,6 +27,7 @@ source "package/multimedia/gst1-plugins-ugly/Config.in"
- source "package/multimedia/gst-omx/Config.in"
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index 3e221e8..6f8d651 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# cifs-utils
++#
++################################################################################
++
+ CIFS_UTILS_VERSION = 6.0
+ CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+diff --git a/package/classpath/classpath.mk b/package/classpath/classpath.mk
+index 61a1034..62167aa 100644
+--- a/package/classpath/classpath.mk
++++ b/package/classpath/classpath.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# classpath
++#
++################################################################################
++
+ CLASSPATH_VERSION = 0.98
+ CLASSPATH_SITE = $(BR2_GNU_MIRROR)/classpath
+ CLASSPATH_CONF_OPT = \
+diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
+index 809e531..1e9b723 100644
+--- a/package/cloop/cloop.mk
++++ b/package/cloop/cloop.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# cloop
++#
++################################################################################
++
+ CLOOP_VERSION=2.634-1
+ CLOOP_SOURCE=cloop_$(CLOOP_VERSION).tar.gz
+ CLOOP_SITE=http://debian-knoppix.alioth.debian.org/packages/sources/cloop
+diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
+index b533396..d3ee5f8 100644
+--- a/package/crosstool-ng/crosstool-ng.mk
++++ b/package/crosstool-ng/crosstool-ng.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# crosstool-ng
++#
++################################################################################
++
+ CROSSTOOL_NG_VERSION           = 1.18.0
+ CROSSTOOL_NG_SOURCE            = crosstool-ng-$(CROSSTOOL_NG_VERSION).tar.bz2
+ CROSSTOOL_NG_SITE              = http://crosstool-ng.org/download/crosstool-ng/
+diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
+index 42aac05..e91c7bc 100644
+--- a/package/dsp-tools/dsp-tools.mk
++++ b/package/dsp-tools/dsp-tools.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# dsp-tools
++#
++################################################################################
++
+ DSP_TOOLS_VERSION = 2.0
+ DSP_TOOLS_SOURCE = dsp-tools-$(DSP_TOOLS_VERSION).tar.gz
+ DSP_TOOLS_SITE = http://gst-dsp.googlecode.com/files/
+diff --git a/package/explorercanvas/explorercanvas.mk b/package/explorercanvas/explorercanvas.mk
+index 968843c..976082a 100644
+--- a/package/explorercanvas/explorercanvas.mk
++++ b/package/explorercanvas/explorercanvas.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# explorercanvas
++#
++################################################################################
++
+ EXPLORERCANVAS_VERSION = r3
+ EXPLORERCANVAS_SITE = http://explorercanvas.googlecode.com/files/
+ EXPLORERCANVAS_SOURCE = excanvas_$(EXPLORERCANVAS_VERSION).zip
+diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
+index b0b46cb..7645a6b 100644
+--- a/package/fbgrab/fbgrab.mk
++++ b/package/fbgrab/fbgrab.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# fbgrab
++#
++################################################################################
++
+ FBGRAB_VERSION = 1.0
+ FBGRAB_SOURCE = fbgrab-$(FBGRAB_VERSION).tar.gz
+ FBGRAB_SITE = http://hem.bredband.net/gmogmo/fbgrab
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index 97a272d..360d03a 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# feh
++#
++################################################################################
++
+ FEH_VERSION = 2.9.1
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org/
+diff --git a/package/flot/flot.mk b/package/flot/flot.mk
+index a0ba6c2..dfa6c55 100644
+--- a/package/flot/flot.mk
++++ b/package/flot/flot.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# flot
++#
++################################################################################
++
+ FLOT_VERSION = 0.8.1
+ FLOT_SITE = http://www.flotcharts.org/downloads
+ FLOT_LICENSE = MIT
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index 3348d53..1ecb0e8 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# hiawatha
++#
++################################################################################
++
+ HIAWATHA_VERSION = 9.1
+ HIAWATHA_SITE = http://www.hiawatha-webserver.org/files
+ HIAWATHA_LICENSE = GPLv2
+diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
+index a531cab..63bda2f 100644
+--- a/package/igh-ethercat/igh-ethercat.mk
++++ b/package/igh-ethercat/igh-ethercat.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# igh-ethercat
++#
++################################################################################
++
+ IGH_ETHERCAT_VERSION = 1.5.1
+ IGH_ETHERCAT_SITE    = http://etherlab.org/download/ethercat/
+ IGH_ETHERCAT_SOURCE  = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
+diff --git a/package/jamvm/jamvm.mk b/package/jamvm/jamvm.mk
+index 3f05361..34f1b9f 100644
+--- a/package/jamvm/jamvm.mk
++++ b/package/jamvm/jamvm.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# jamvm
++#
++################################################################################
++
+ JAMVM_VERSION = 1.5.4
+ JAMVM_SITE = http://downloads.sourceforge.net/project/jamvm/jamvm/JamVM%20$(JAMVM_VERSION)
+ JAMVM_DEPENDENCIES = zlib classpath
+diff --git a/package/jquery-sparkline/jquery-sparkline.mk b/package/jquery-sparkline/jquery-sparkline.mk
+index aa6395c..af05045 100644
+--- a/package/jquery-sparkline/jquery-sparkline.mk
++++ b/package/jquery-sparkline/jquery-sparkline.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# jquery-sparkline
++#
++################################################################################
++
+ JQUERY_SPARKLINE_VERSION = 2.1.1
+ JQUERY_SPARKLINE_SITE = http://www.omnipotent.net/jquery.sparkline/$(JQUERY_SPARKLINE_VERSION)
+ JQUERY_SPARKLINE_SOURCE = jquery.sparkline.min.js
+diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
+index 423d7f1..71acaff 100644
+--- a/package/jquery-validation/jquery-validation.mk
++++ b/package/jquery-validation/jquery-validation.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# jquery-validation
++#
++################################################################################
++
+ JQUERY_VALIDATION_VERSION = 1.11.1
+ JQUERY_VALIDATION_SITE = http://jquery.bassistance.de/validate
+ JQUERY_VALIDATION_SOURCE = jquery-validation-$(JQUERY_VALIDATION_VERSION).zip
+diff --git a/package/jquery/jquery.mk b/package/jquery/jquery.mk
+index 98b325b..44c444b 100644
+--- a/package/jquery/jquery.mk
++++ b/package/jquery/jquery.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# jquery
++#
++################################################################################
++
+ JQUERY_VERSION = 1.10.1
+ JQUERY_SITE = http://code.jquery.com
+ JQUERY_SOURCE = jquery-$(JQUERY_VERSION).min.js
+diff --git a/package/jsmin/jsmin.mk b/package/jsmin/jsmin.mk
+index bb65c6c..d511911 100644
+--- a/package/jsmin/jsmin.mk
++++ b/package/jsmin/jsmin.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# jsmin
++#
++################################################################################
++
+ JSMIN_VERSION = a9b4755
+ JSMIN_SITE = http://github.com/douglascrockford/JSMin/tarball/$(JSMIN_VERSION)
  
- source "package/multimedia/lame/Config.in"
-+source "package/multimedia/libav/Config.in"
- source "package/multimedia/libvpx/Config.in"
- source "package/multimedia/madplay/Config.in"
- source "package/multimedia/mpd/Config.in"
-diff --git a/package/multimedia/libav/Config.in b/package/multimedia/libav/Config.in
-new file mode 100644
-index 0000000..35bbb64
---- /dev/null
-+++ b/package/multimedia/libav/Config.in
-@@ -0,0 +1,158 @@
-+comment "libav requires a toolchain with LARGEFILE and IPV6 support"
-+	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
-+
-+menuconfig BR2_PACKAGE_LIBAV
-+	bool "libav"
-+	depends on BR2_LARGEFILE
-+	depends on BR2_INET_IPV6
-+	help
-+         libav is a complete, cross-platform solution to record, convert
-+         and stream audio and video.
-+
-+	 http://www.libav.org
-+
-+if BR2_PACKAGE_LIBAV
-+
-+config BR2_PACKAGE_LIBAV_GPL
-+	bool "Enable GPL code"
-+	help
-+         allow use of GPL code, the resulting libs and binaries will
-+         be under GPL
-+
-+config BR2_PACKAGE_LIBAV_NONFREE
-+	bool "Enable nonfree code"
-+	help
-+         allow use of nonfree code, the resulting libs and binaries
-+         will be unredistributable
-+
-+config BR2_PACKAGE_LIBAV_LIBAV
-+	bool "Build libav (the command line application)"
-+	select BR2_PACKAGE_LIBAV_SWSCALE
-+	default y
-+	help
-+         libav is a very fast video and audio converter.
-+         It can also grab from a live audio/video source.
-+
-+         It is not needed if you want to link the libav libraries
-+         to your application.
-+
-+config BR2_PACKAGE_LIBAV_FFPLAY
-+	bool "Build ffplay"
-+	select BR2_PACKAGE_SDL
-+	help
-+         FFplay is a very simple and portable media player using the
-+         libav libraries and the SDL library.
-+         It is mostly used as a testbed for the various libav APIs.
-+
-+config BR2_PACKAGE_LIBAV_FFSERVER
-+	bool "Build ffserver"
-+	help
-+         FFserver is a streaming server for both audio and video.
-+
-+config BR2_PACKAGE_LIBAV_POSTPROC
-+	bool "Build libpostproc"
-+	depends on BR2_PACKAGE_LIBAV_GPL
-+	help
-+	  Postproc is a library of video postprocessing routines.
-+
-+config BR2_PACKAGE_LIBAV_SWSCALE
-+	bool "Build libswscale"
-+	help
-+	  Swscale is a library of video scaling routines.
-+
-+config BR2_PACKAGE_LIBAV_ENCODERS
-+	string "Enabled encoders"
-+	default "all"
-+	help
-+	 Space-separated list of encoders to build in libav,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-encoders in the libav sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_LIBAV_DECODERS
-+	string "Enabled decoders"
-+	default "all"
-+	help
-+	 Space-separated list of decoders to build in libav,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-decoders in the libav sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_LIBAV_MUXERS
-+	string "Enabled muxers"
-+	default "all"
-+	help
-+	 Space-separated list of muxers to build in libav,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-muxers in the libav sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_LIBAV_DEMUXERS
-+	string "Enabled demuxers"
-+	default "all"
-+	help
-+	 Space-separated list of demuxers to build in libav,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-demuxers in the libav sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_LIBAV_PARSERS
-+	string "Enabled parsers"
-+	default "all"
-+	help
-+	 Space-separated list of parsers to build in libav,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-parsers in the libav sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_LIBAV_BSFS
-+	string "Enabled bitstreams"
-+	default "all"
-+	help
-+	 Space-separated list of bitstream filters to build in libav,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-bsfs in the libav sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_LIBAV_PROTOCOLS
-+	string "Enabled protocols"
-+	default "all"
-+	help
-+	 Space-separated list of protocols to build in libav,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-protocols in the libav sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_LIBAV_FILTERS
-+	string "Enabled filters"
-+	default "all"
-+	help
-+	 Space-separated list of filters to build in libav,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-filters in the libav sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_LIBAV_INDEVS
-+	bool "Enable input devices"
-+	default y
-+
-+config BR2_PACKAGE_LIBAV_OUTDEVS
-+	bool "Enable output devices"
-+	default y
-+
-+config BR2_PACKAGE_LIBAV_EXTRACONF
-+	string "Additional parameters for ./configure"
-+	default ""
-+	help
-+	 Extra parameters that will be appended to libav's
-+	 ./configure commandline.
-+
-+endif
-diff --git a/package/multimedia/libav/libav.mk b/package/multimedia/libav/libav.mk
-new file mode 100644
-index 0000000..6503a0e
---- /dev/null
-+++ b/package/multimedia/libav/libav.mk
-@@ -0,0 +1,200 @@
+diff --git a/package/lpc3250loader/lpc3250loader.mk b/package/lpc3250loader/lpc3250loader.mk
+index 2b9af88..42beb7b 100644
+--- a/package/lpc3250loader/lpc3250loader.mk
++++ b/package/lpc3250loader/lpc3250loader.mk
+@@ -1,3 +1,9 @@
 +################################################################################
 +#
-+# libav
++# lpc3250loader
 +#
 +################################################################################
 +
-+LIBAV_VERSION = 9.6
-+LIBAV_SOURCE = libav-$(LIBAV_VERSION).tar.xz
-+LIBAV_SITE = http://libav.org/releases
-+LIBAV_INSTALL_STAGING = YES
+ HOST_LPC3250LOADER_SITE = git://gitorious.org/lpc3250loader/lpc3250loader.git
+ HOST_LPC3250LOADER_VERSION = 1.0
+ 
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+index d3bfc83..2947c35 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.mk
++++ b/package/lttng-babeltrace/lttng-babeltrace.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# lttng-babeltrace
++#
++################################################################################
 +
-+LIBAV_LICENSE = LGPLv2.1+, libjpeg license
-+LIBAV_LICENSE_FILES = LICENSE COPYING.LGPLv2.1
+ LTTNG_BABELTRACE_SITE    = http://lttng.org/files/babeltrace/
+ LTTNG_BABELTRACE_VERSION = 1.0.2
+ LTTNG_BABELTRACE_SOURCE  = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
+diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
+index 74b4c98..1fd6976 100644
+--- a/package/multimedia/gst-dsp/gst-dsp.mk
++++ b/package/multimedia/gst-dsp/gst-dsp.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# gst-dsp
++#
++################################################################################
 +
-+ifeq ($(BR2_PACKAGE_LIBAV_GPL),y)
-+LIBAV_LICENSE += and GPLv2+
-+LIBAV_LICENSE_FILES += COPYING.GPLv2
-+endif
+ GST_DSP_VERSION = 0.10.2
+ GST_DSP_SITE = http://gst-dsp.googlecode.com/files/
+ 
+diff --git a/package/multimedia/gst-omapfb/gst-omapfb.mk b/package/multimedia/gst-omapfb/gst-omapfb.mk
+index f23bc86..7b8b128 100644
+--- a/package/multimedia/gst-omapfb/gst-omapfb.mk
++++ b/package/multimedia/gst-omapfb/gst-omapfb.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# gst-omapfb
++#
++################################################################################
 +
-+LIBAV_CONF_OPT = \
-+	--prefix=/usr \
-+	$(if $(BR2_HAVE_DOCUMENTATION),,--disable-doc)
+ GST_OMAPFB_VERSION=1.0
+ GST_OMAPFB_SOURCE=gst-omapfb-$(GST_OMAPFB_VERSION).tar.gz
+ GST_OMAPFB_SITE=http://gst-dsp.googlecode.com/files/
+diff --git a/package/multimedia/tidsp-binaries/tidsp-binaries.mk b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
+index 356baf4..fd799fb 100644
+--- a/package/multimedia/tidsp-binaries/tidsp-binaries.mk
++++ b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# tidsp-binaries
++#
++################################################################################
 +
+ TIDSP_BINARIES_VERSION = 23.i3.8
+ TIDSP_BINARIES_SOURCE = tidsp-binaries-$(TIDSP_BINARIES_VERSION).tar.gz
+ TIDSP_BINARIES_SITE = http://gst-dsp.googlecode.com/files/
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index 131826e..b772d3a 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# nettle
++#
++################################################################################
 +
-+ifeq ($(BR2_PACKAGE_LIBAV_GPL),y)
-+LIBAV_CONF_OPT += --enable-gpl
-+else
-+LIBAV_CONF_OPT += --disable-gpl
-+endif
+ NETTLE_VERSION = 2.7
+ NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
+ NETTLE_DEPENDENCIES = gmp
+diff --git a/package/ortp/ortp.mk b/package/ortp/ortp.mk
+index c4c900a..8983df7 100644
+--- a/package/ortp/ortp.mk
++++ b/package/ortp/ortp.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# ortp
++#
++################################################################################
 +
-+ifeq ($(BR2_PACKAGE_LIBAV_VERSION3),y)
-+LIBAV_CONF_OPT += --enable-version3
-+else
-+LIBAV_CONF_OPT += --disable-version3
-+endif
+ ORTP_VERSION = 0.20.0
+ ORTP_SITE = http://download.savannah.nongnu.org/releases/linphone/ortp/sources
+ ORTP_CONF_OPT = --disable-strict
+diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
+index 7d7fe3e..0b44dc9 100644
+--- a/package/polarssl/polarssl.mk
++++ b/package/polarssl/polarssl.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# polarssl
++#
++################################################################################
 +
-+ifeq ($(BR2_PACKAGE_LIBAV_NONFREE),y)
-+LIBAV_CONF_OPT += --enable-nonfree
-+else
-+LIBAV_CONF_OPT += --disable-nonfree
-+endif
+ POLARSSL_SITE = https://polarssl.org/download
+ POLARSSL_VERSION = 1.2.7
+ POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
+diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
+index 60f63b5..f574d3a 100644
+--- a/package/rt-tests/rt-tests.mk
++++ b/package/rt-tests/rt-tests.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# rt-tests
++#
++################################################################################
 +
-+ifeq ($(BR2_PACKAGE_LIBAV_AVCONV),y)
-+LIBAV_CONF_OPT += --enable-avconv
-+else
-+LIBAV_CONF_OPT += --disable-avconv
-+endif
+ RT_TESTS_SITE    = http://snapshot.debian.org/archive/debian/20111202T222101Z/pool/main/r/rt-tests/
+ RT_TESTS_VERSION = 0.83
+ RT_TESTS_SOURCE  = rt-tests_$(RT_TESTS_VERSION).orig.tar.gz
+diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
+index be5abb1..c24fa41 100644
+--- a/package/rtai/rtai.mk
++++ b/package/rtai/rtai.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# rtai
++#
++################################################################################
 +
-+ifeq ($(BR2_PACKAGE_LIBAV_AVPLAY),y)
-+LIBAV_DEPENDENCIES += sdl
-+LIBAV_CONF_OPT += --enable-avplay
-+LIBAV_CONF_ENV += SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
-+else
-+LIBAV_CONF_OPT += --disable-avplay
-+endif
+ RTAI_VERSION = 3.8.1
+ RTAI_SOURCE  = rtai-$(RTAI_VERSION).tar.bz2
+ RTAI_SITE    = http://www.rtai.org/RTAI/
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+index 79fd6b1..c256d5f 100644
+--- a/package/scons/scons.mk
++++ b/package/scons/scons.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# scons
++#
++################################################################################
 +
-+ifeq ($(BR2_PACKAGE_LIBAV_AVPROBE),y)
-+LIBAV_CONF_OPT += --enable-avprobe
-+else
-+LIBAV_CONF_OPT += --disable-avprobe
-+endif
+ SCONS_VERSION = 2.2.0
+ SCONS_SOURCE = scons-$(SCONS_VERSION).tar.gz
+ SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index c0485a3..1341402 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# squashfs
++#
++################################################################################
 +
-+ifeq ($(BR2_PACKAGE_LIBAV_AVSERVER),y)
-+LIBAV_CONF_OPT += --enable-avserver
-+else
-+LIBAV_CONF_OPT += --disable-avserver
-+endif
+ SQUASHFS_VERSION=4.2
+ SQUASHFS_SOURCE=squashfs$(SQUASHFS_VERSION).tar.gz
+ SQUASHFS_SITE=http://downloads.sourceforge.net/projct/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
+diff --git a/package/squashfs3/squashfs3.mk b/package/squashfs3/squashfs3.mk
+index e121c51..956dbd6 100644
+--- a/package/squashfs3/squashfs3.mk
++++ b/package/squashfs3/squashfs3.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# squashfs3
++#
++################################################################################
 +
-+ifeq ($(BR2_PACKAGE_LIBAV_SWSCALE),y)
-+LIBAV_CONF_OPT += --enable-swscale
-+else
-+LIBAV_CONF_OPT += --disable-swscale
-+endif
+ SQUASHFS3_VERSION=3.4
+ SQUASHFS3_SOURCE=squashfs$(SQUASHFS3_VERSION).tar.gz
+ SQUASHFS3_SITE=http://downloads.sourceforge.net/project/squashfs/squashfs/$(SQUASHFS3_VERSION)
+diff --git a/package/webrtc-audio-processing/webrtc-audio-processing.mk b/package/webrtc-audio-processing/webrtc-audio-processing.mk
+index 4fbf8f6..9f76cba 100644
+--- a/package/webrtc-audio-processing/webrtc-audio-processing.mk
++++ b/package/webrtc-audio-processing/webrtc-audio-processing.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# webrtc-audio-processing
++#
++################################################################################
 +
-+ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_ENCODERS)),all)
-+LIBAV_CONF_OPT += --disable-encoders \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_ENCODERS)),--enable-encoder=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_DECODERS)),all)
-+LIBAV_CONF_OPT += --disable-decoders \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_DECODERS)),--enable-decoder=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_MUXERS)),all)
-+LIBAV_CONF_OPT += --disable-muxers \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_MUXERS)),--enable-muxer=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_DEMUXERS)),all)
-+LIBAV_CONF_OPT += --disable-demuxers \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_DEMUXERS)),--enable-demuxer=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_PARSERS)),all)
-+LIBAV_CONF_OPT += --disable-parsers \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_PARSERS)),--enable-parser=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_BSFS)),all)
-+LIBAV_CONF_OPT += --disable-bsfs \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_BSFS)),--enable-bsf=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_PROTOCOLS)),all)
-+LIBAV_CONF_OPT += --disable-protocols \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_PROTOCOLS)),--enable-protocol=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_FILTERS)),all)
-+LIBAV_CONF_OPT += --disable-filters \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_FILTERS)),--enable-filter=$(x))
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBAV_INDEVS),y)
-+LIBAV_CONF_OPT += --enable-indevs
-+else
-+LIBAV_CONF_OPT += --disable-indevs
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBAV_OUTDEVS),y)
-+LIBAV_CONF_OPT += --enable-outdevs
-+else
-+LIBAV_CONF_OPT += --disable-outdevs
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+LIBAV_CONF_OPT += --enable-pthreads
-+else
-+LIBAV_CONF_OPT += --disable-pthreads
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+LIBAV_CONF_OPT += --enable-zlib
-+LIBAV_DEPENDENCIES += zlib
-+else
-+LIBAV_CONF_OPT += --disable-zlib
-+endif
-+
-+ifeq ($(BR2_i386)$(BR2_x86_64),y)
-+# MMX on is default for x86, disable it for lowly x86-type processors
-+ifeq ($(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_i686)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
-+LIBAV_CONF_OPT += --disable-mmx
-+else
-+# If it is enabled, nasm is required
-+LIBAV_DEPENDENCIES += host-nasm
-+endif
-+endif
-+
-+# Explicitly disable everything that doesn't match for ARM
-+# LIBAV "autodetects" by compiling an extended instruction via AS
-+# This works on compilers that aren't built for generic by default
-+ifeq ($(BR2_arm7tdmi)$(BR2_arm720t)$(BR2_arm920t)$(BR2_arm922t)$(BR2_strongarm)$(BR2_fa526),y)
-+LIBAV_CONF_OPT += --disable-armv5te
-+endif
-+ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf-s),y)
-+LIBAV_CONF_OPT += --enable-armv6
-+else
-+LIBAV_CONF_OPT += --disable-armv6 --disable-armv6t2
-+endif
-+ifeq ($(BR2_arm10)$(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf-s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
-+LIBAV_CONF_OPT += --enable-vfp
-+else
-+LIBAV_CONF_OPT += --disable-vfp
-+endif
-+ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-+LIBAV_CONF_OPT += --enable-neon
-+endif
-+
-+# Set powerpc altivec appropriately
-+ifeq ($(BR2_powerpc),y)
-+ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
-+LIBAV_CONF_OPT += --enable-altivec
-+else
-+LIBAV_CONF_OPT += --disable-altivec
-+endif
-+endif
-+
-+LIBAV_CONF_OPT += $(call qstrip,$(BR2_PACKAGE_LIBAV_EXTRACONF))
-+
-+# Override LIBAV_CONFIGURE_CMDS: libav does not support --target and others
-+define LIBAV_CONFIGURE_CMDS
-+	(cd $(LIBAV_SRCDIR) && rm -rf config.cache && \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_CONFIGURE_ARGS) \
-+	$(LIBAV_CONF_ENV) \
-+	./configure \
-+		--enable-cross-compile	\
-+		--cross-prefix=$(TARGET_CROSS) \
-+		--sysroot=$(STAGING_DIR) \
-+		--host-cc="$(HOSTCC)" \
-+		--arch=$(BR2_ARCH) \
-+		--target-os=linux \
-+		--extra-cflags=-fPIC \
-+		$(SHARED_STATIC_LIBS_OPTS) \
-+		$(LIBAV_CONF_OPT) \
-+	)
-+endef
-+
-+$(eval $(autotools-package))
+ WEBRTC_AUDIO_PROCESSING_VERSION = 0.1
+ WEBRTC_AUDIO_PROCESSING_SOURCE = webrtc-audio-processing-$(WEBRTC_AUDIO_PROCESSING_VERSION).tar.xz
+ WEBRTC_AUDIO_PROCESSING_SITE = http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
 -- 
-1.7.9.5
+1.8.1.2
