@@ -1,73 +1,64 @@
-From: Thomas Weininger <Thomas.Weininger@diasemi.com>
-Date: Thu, 20 Jun 2013 07:18:42 +0000
-Subject: [Buildroot] Build error when trying to build the py-smbus package
-	of i2c-tools
-Message-ID: <4E062DFADC6E8142AA8EE9D214BA0C50E3E24C@NB-EX-MBX01.diasemi.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Jun 2013 09:39:05 +0200
+Subject: [Buildroot] buildroot and kernel modules
+In-Reply-To: <20130619155518.8G4TE.59637.root@cdptpa-web08-z02>
+References: <20130619173521.558f6d53@skate>
+ <20130619155518.8G4TE.59637.root@cdptpa-web08-z02>
+Message-ID: <20130620093905.4b98be51@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-I'm using Buildroot Git version 28ab11d7855a1b85e4be15cd9c86ad0838fa1cb1 from 2013-06-06. I tried to change the package/i2c-tools/i2c-tools.mk in order to build an extra package called py-smbus, which is part of i2c-tools but not built by default. Considering the i2c-tools README http://www.lm-sensors.org/browser/i2c-tools/trunk/README?rev=6171 I added EXTRA="py-smbus" to the make options.
+Please do not reply to me directly, but keep the Buildroot mailing list
+Cc'ed. It would also be nice if you could comply with the basic e-mail
+rules: no top-posting, wrapping at ~80 characters, etc.
 
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 1589d04..403b96d 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -9,7 +9,7 @@ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
-I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
- define I2C_TOOLS_BUILD_CMDS
-- $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+ $(MAKE) $(TARGET_CONFIGURE_OPTS) EXTRA="py-smbus" -C $(@D)
-endef
- define I2C_TOOLS_INSTALL_TARGET_CMDS
+Anyway, my answers below.
 
+On Wed, 19 Jun 2013 11:55:18 -0400, jerryalex at tx.rr.com wrote:
 
-But even this small change breaks the build. I'm confused because of the strage error message:
-gcc: error: unrecognized command line option '-mfpu=vfpv4-d16'
-gcc: error: unrecognized command line option '-mfloat-abi=hard'
+>         I checked our tftpboot file system and there is no /etc/modules or a comparable script
+>         under /etc/init.d to install the modules on bootup.
 
-Could you please help me to understand what is going wrong here and how to fix it? The mfpu and mfloat-abi switches are okay IMO. My toolchain is built by Buildroot. It is configured to build for an ARM Cortex A5 target (Atmel SAMA5D3).
+Because there is no such mechanism in Buildroot by default. You have to
+create this /etc/modules file and a corresponding script
+in /etc/init.d/.
 
+>         With regard to hotplugging via udev, every time a device is added or removed, the kernel sends a 
+>         uevent to notify udev of the change.  This requires the module to be installed for udev to recognize
+>         it and create the corresponding /dev entry.
+>         So I am missing something on how udev receives notification and runs modprobe.  
+>         Modules are being loaded on our bootup so the mechanism exists but I have not been able to determine
+>         how it is loading the modules.
+>         How does the kernel recognize the device and notify udev of the device availability without loading
+>         the module first.
 
->>> i2c-tools 3.1.0 Building
-[...]
-/home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/ccache /home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc  -o tools/i2cget tools/i2cget.o tools/i2cbusses.o tools/util.o
-running build
-running build_ext
-building 'smbus' extension
-creating build
-creating build/temp.linux-i686-2.7
-/home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/ccache /home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -DNDEBUG -g -O3 -Wall -Wstrict-prototypes -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -mfpu=vfpv4-d16 -mfloat-abi=hard -O3 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include -fPIC -I/home/diasemi/workspace/dialog/buildroot/output/host/usr/include/python2.7 -c smbusmodule.c -o build/temp.linux-i686-2.7/smbusmodule.o
-smbusmodule.c: In function 'initsmbus':
-smbusmodule.c:695:2: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
-creating build/lib.linux-i686-2.7
-/home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -pthread -shared -L/home/diasemi/workspace/dialog/buildroot/output/host/lib -L/home/diasemi/workspace/dialog/buildroot/output/host/usr/lib -Wl,-rpath,/home/diasemi/workspace/dialog/buildroot/output/host/usr/lib -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -mfpu=vfpv4-d16 -mfloat-abi=hard -O3 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include build/temp.linux-i686-2.7/smbusmodule.o -L/home/diasemi/workspace/dialog/buildroot/output/host/usr/lib -lpython2.7 -o build/lib.linux-i686-2.7/smbus.so
-gcc: error: unrecognized command line option '-mfpu=vfpv4-d16'
-gcc: error: unrecognized command line option '-mfloat-abi=hard'
-error: command '/home/diasemi/workspace/dialog/buildroot/output/host/usr/bin/ccache' failed with exit status 1
-make[1]: *** [all-python] Error 1
-make[1]: Leaving directory `/home/diasemi/workspace/dialog/buildroot/output/build/i2c-tools-3.1.0'
-make: *** [/home/diasemi/workspace/dialog/buildroot/output/build/i2c-tools-3.1.0/.stamp_built] Error 2
+Because the device driver for a given device is not needed to detect
+that the device is here. Take USB for example: to detect the USB
+devices on a USB bus, you need the driver for the USB *controller* to
+be loaded, but not at all the drivers for the USB *devices*. So, as
+long as the USB *controller* driver is loaded, it will enumerate the
+USB devices that are available on the system's USB busses, and will
+send udev events about those devices. udev will then load the USB
+*device* drivers using modprobe, and the kernel will be able to
+actually use these devices.
 
-________________________________
+Didn't you notice that 'lsusb' shows *all* USB devices, regardless of
+whether there is a corresponding kernel driver for them?
 
-Dialog Semiconductor GmbH
-Neue Str. 95
-D-73230 Kirchheim
-Managing Directors: Dr. Jalal Bagherli, Jean-Michel Richard
-Chairman of the Supervisory Board: Gregorio Reyes
-Commercial register: Amtsgericht Stuttgart: HRB 231181
-UST-ID-Nr. DE 811121668
+So again, on USB or PCI, being able to enumerate/recognize a device is
+completely independent from the fact of having a driver for this
+particular device.
 
-Legal Disclaimer: This e-mail communication (and any attachment/s) is confidential and contains proprietary information, some or all of which may be legally privileged. It is intended solely for the use of the individual or entity to which it is addressed. Access to this email by anyone else is unauthorized. If you are not the intended recipient, any disclosure, copying, distribution or any action taken or omitted to be taken in reliance on it, is prohibited and may be unlawful.
+Best regards,
 
-Please consider the environment before printing this e-mail
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130620/d162d62e/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
