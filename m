@@ -1,76 +1,31 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Thu, 20 Jun 2013 10:05:19 +0100
-Subject: [Buildroot] [PATCH] wvstreams: Build bundled argp library with
-	-fPIC
-In-Reply-To: <87obb1nrdp.fsf@dell.be.48ers.dk>
-References: <1370440956-8000-1-git-send-email-markos.chandras@gmail.com>
- <87obb1nrdp.fsf@dell.be.48ers.dk>
-Message-ID: <CAG2jQ8iY8ti1Uaveob7fuPWfCY9kd9_M7EUQqT-cxJM+3agcaA@mail.gmail.com>
+From: Adam Nielsen <a.nielsen@shikadi.net>
+Date: Thu, 20 Jun 2013 19:16:23 +1000
+Subject: [Buildroot] binutils doesn't like -elf2flt option
+In-Reply-To: <20130619121625.3a47c45e@skate>
+References: <kphffs$v5g$1@ger.gmane.org> <51BEAB3A.8010408@mind.be>
+ <kpmcpb$lbo$1@ger.gmane.org> <51C08403.4050900@mind.be>
+ <kpqg93$v74$1@ger.gmane.org> <20130619082557.447efce8@skate>
+ <kprol2$uk1$1@ger.gmane.org> <20130619102133.7570dcd4@skate>
+ <kprv8d$6iq$1@ger.gmane.org> <20130619120616.447be089@skate>
+ <kps03n$e9p$1@ger.gmane.org> <20130619121625.3a47c45e@skate>
+Message-ID: <kpuh91$4ad$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20 June 2013 09:00, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
+> Ah, right, elf2flt isn't a real package, so it fails.
 >
->  Markos> From: Markos Chandras <markos.chandras@imgtec.com>
->  Markos> Fixes linking problems on MIPS.
->
->  Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
->  Markos> ---
->  Markos>  package/wvstreams/wvstreams-0006-argp-fpic.patch | 28 ++++++++++++++++++++++++
->  Markos>  1 file changed, 28 insertions(+)
->  Markos>  create mode 100644 package/wvstreams/wvstreams-0006-argp-fpic.patch
->
->  Markos> diff --git a/package/wvstreams/wvstreams-0006-argp-fpic.patch b/package/wvstreams/wvstreams-0006-argp-fpic.patch
->  Markos> new file mode 100644
->  Markos> index 0000000..b4cf1d2
->  Markos> --- /dev/null
->  Markos> +++ b/package/wvstreams/wvstreams-0006-argp-fpic.patch
->  Markos> @@ -0,0 +1,28 @@
->  Markos> +Build argp object files with -fPIC.
->  Markos> +
->  Markos> +The argp bundled dependency is linked to the libwvutils.so shared library.
->  Markos> +MIPS will refuce to link a non-PIC library with a shared one.
->  Markos> +
->  Markos> +We fix this problem by building the argp source files using -fPIC since
->  Markos> +the libargp static library will only be used to link to libwvutils.so
->  Markos> +as instructed by the following rule in the root Makefile:
->  Markos> +
->  Markos> +ifeq ($(USE_WVSTREAMS_ARGP),1)
->  Markos> +  utils/wvargs.o-CPPFLAGS += -Iargp
->  Markos> +  libwvutils.so-LIBS += -Largp -largp
->  Markos> +
->  Markos> +Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
->  Markos> +
->  Markos> +Index: wvstreams-4.6.1/argp/Makefile.in
->  Markos> +===================================================================
->  Markos> +--- wvstreams-4.6.1.orig/argp/Makefile.in
->  Markos> ++++ wvstreams-4.6.1/argp/Makefile.in
->  Markos> +@@ -137,7 +137,7 @@ AUTOMAKE = @AUTOMAKE@
->  Markos> + AWK = @AWK@
->  Markos> + CC = @CC@
->  Markos> + CCDEPMODE = @CCDEPMODE@
->  Markos> +-CFLAGS = @CFLAGS@
->  Markos> ++CFLAGS = @CFLAGS@ -fPIC
->
-> How about when wvstreams is built as a static library
-> (BR2_PREFER_STATIC_LIB)?
->
-> Makefile.in is a generated file, so you should rather fix Makefile.am
-> and set WVSTREAMS_AUTORECONF = YES, but wouldn't it just be simpler to
-> just add CFLAGS="$(TARGET_CFLAGS) -fPIC" to WVSTREAMS_CONF_ENV when
-> building in the !BR2_PREFER_STATIC_LIB case?
->
-> --
-> Bye, Peter Korsgaard
+> Can you push your current Buildroot code on some Git repository so that
+> we can have a look? I looked at your configuration, and I really don't
+> see what could be pulling the target binutils into the build.
 
-Hi Peter,
+Sure, you can get it from here:
 
-Yes modifying the CFLAGS is simpler. I will do that.
+https://github.com/Malvineous/buildroot-openipcam
 
---
-Regards,
-Markos Chandras
+Make sure to use the 'nuc700' branch.  Many thanks for taking a look!
+
+Cheers,
+Adam.
