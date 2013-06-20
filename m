@@ -1,1199 +1,405 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 20 Jun 2013 17:07:40 -0500
-Subject: [Buildroot] [PATCH v12 05/11] gst1-plugins-bad: add gstreamer1 bad
-	plugins
+Date: Thu, 20 Jun 2013 17:07:45 -0500
+Subject: [Buildroot] [PATCH v12 10/11] libav: add new package
 In-Reply-To: <1371766066-676-1-git-send-email-spenser@gillilanding.com>
 References: <1371766066-676-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1371766066-676-6-git-send-email-spenser@gillilanding.com>
+Message-ID: <1371766066-676-11-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds gstreamer 1.X bad plugins
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/multimedia/Config.in                       |    1 +
- package/multimedia/gst1-plugins-bad/Config.in      |  447 +++++++++++++
- .../gst1-plugins-bad-use-gettext-0.18.patch        |   17 +
- .../gst1-plugins-bad/gst1-plugins-bad.mk           |  678 ++++++++++++++++++++
- 4 files changed, 1143 insertions(+)
- create mode 100644 package/multimedia/gst1-plugins-bad/Config.in
- create mode 100644 package/multimedia/gst1-plugins-bad/gst1-plugins-bad-use-gettext-0.18.patch
- create mode 100644 package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
+ package/multimedia/Config.in       |    1 +
+ package/multimedia/libav/Config.in |  158 ++++++++++++++++++++++++++++
+ package/multimedia/libav/libav.mk  |  200 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 359 insertions(+)
+ create mode 100644 package/multimedia/libav/Config.in
+ create mode 100644 package/multimedia/libav/libav.mk
 
 diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 935fde8..318dd74 100644
+index 925051e..4d5219d 100644
 --- a/package/multimedia/Config.in
 +++ b/package/multimedia/Config.in
-@@ -16,6 +16,7 @@ source "package/multimedia/gst1-plugins-base/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
- source "package/multimedia/gst1-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
-+source "package/multimedia/gst1-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
- source "package/multimedia/gst-plugin-x170/Config.in"
+@@ -27,6 +27,7 @@ source "package/multimedia/gst1-plugins-ugly/Config.in"
+ source "package/multimedia/gst-omx/Config.in"
+ 
  source "package/multimedia/lame/Config.in"
-diff --git a/package/multimedia/gst1-plugins-bad/Config.in b/package/multimedia/gst1-plugins-bad/Config.in
++source "package/multimedia/libav/Config.in"
+ source "package/multimedia/libvpx/Config.in"
+ source "package/multimedia/madplay/Config.in"
+ source "package/multimedia/mpd/Config.in"
+diff --git a/package/multimedia/libav/Config.in b/package/multimedia/libav/Config.in
 new file mode 100644
-index 0000000..9b853b1
+index 0000000..35bbb64
 --- /dev/null
-+++ b/package/multimedia/gst1-plugins-bad/Config.in
-@@ -0,0 +1,447 @@
-+menuconfig BR2_PACKAGE_GST1_PLUGINS_BAD
-+	bool "gst1-plugins-bad"
-+	depends on BR2_PACKAGE_GSTREAMER1
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	help
-+	  A set of plug-ins for GStreamer that may be of poor quality or
-+	  lacking some features.
-+
-+	  http://gstreamer.freedesktop.org/
-+
-+if BR2_PACKAGE_GST1_PLUGINS_BAD
-+
-+comment "dependency-less plugins"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ADPCMDEC
-+	bool "adpcmdec"
-+	help
-+	  ADPCM decoder
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ADPCMENC
-+	bool "adpcmenc"
-+	help
-+	  ADPCM encoder
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AIFF
-+	bool "aiff"
-+	help
-+	  Create and parse Audio interchange File Format (AIFF) files
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ASFMUX
-+	bool "asfmux"
-+	help
-+	  ASF Muxer Plugin
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOVISUALIZERS
-+	bool "audiovisualizers"
-+	help
-+	  Creates video visualizations of audio input
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUTOCONVERT
-+	bool "autoconvert"
-+	help
-+	  Selects convertor element based on caps
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BAYER
-+	bool "bayer"
-+	help
-+	  Elements to convert Bayer images
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CAMERABIN2
-+	bool "camerabin2"
-+	help
-+	  Take image snapshots and record movies from camera
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CDXAPARSE
-+	bool "cdxaparse"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_COLOREFFECTS
-+	bool "coloreffects"
-+	help
-+	  Color Look-up Table filters
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DATAURISRC
-+	bool "dataurisrc"
-+	help
-+	  data: URI source
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DCCP
-+	bool "dccp"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS
-+	bool "debugutils"
-+	help
-+	  Collection of elements that may or may not be useful for debugging
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DTMF
-+	bool "dtmf"
-+	help
-+	  DTMF plugins
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVBSUBOVERLAY
-+	bool "dvdsuboverlay"
-+	help
-+	  DTMF plugins
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVDSPU
-+	bool "dvdspu"
-+	help
-+	  DVD Sub-picture Overlay element
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FACEOVERLAY
-+	bool "faceoverlay"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FESTIVAL
-+	bool "festival"
-+	help
-+	  Synthesizes plain text into audio
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FIELDANALYSIS
-+	bool "fieldanalysis"
-+	help
-+	  Video field analysis
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FREEVERB
-+	bool "freeverb"
-+	help
-+	  Reverberation/room effect
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FREI0R
-+	bool "frei0r"
-+	help
-+	  frei0r plugin library
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GAUDIEFFECTS
-+	bool "gaudieffects"
-+	help
-+	  Gaudi video effects
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GEOMETRICTRANSFORM
-+	bool "geometrictransform"
-+	help
-+	  Various geometric image transform elements
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GDP
-+	bool "gdp"
-+	help
-+	  Payload/depayload GDP packets
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HDVPARSE
-+	bool "hdvparse"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS
-+	bool "hls"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ID3TAG
-+	bool "id3tag"
-+	help
-+	  ID3 v1 and v2 muxing plugin
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_INTER
-+	bool "inter"
-+	help
-+	  plugin for inter-pipeline communication
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_INTERLACE
-+	bool "interlace"
-+	help
-+	  Create an interlaced video stream
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IVFPARSE
-+	bool "ivfparse"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_JP2KDECIMATOR
-+	bool "jp2kdecimator"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_JPEGFORMAT
-+	bool "jpegformat"
-+	help
-+	  JPEG interchange format plugin
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBRFB
-+	bool "librfb"
-+	help
-+	  Connects to a VNC server and decodes RFB stream
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIVEADDER
-+	bool "liveadder"
-+	help
-+	  Adds multiple live discontinuous streams
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGDEMUX
-+	bool "mpegdemux"
-+	help
-+	  MPEG-PS demuxer
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGTSDEMUX
-+	bool "mpegtsdemux"
-+	help
-+	  MPEG TS demuxer
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGTSMUX
-+	bool "mpegtsmux"
-+	help
-+	  MPEG-TS muxer
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGPSMUX
-+	bool "mpegpsmux"
-+	help
-+	  MPEG-PS muxer
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MVE
-+	bool "mve"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MXF
-+	bool "mxf"
-+	help
-+	  MXF plugin library
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NUVDEMUX
-+	bool "nuvdemux"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PATCHDETECT
-+	bool "patchdetect"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PCAPPARSE
-+	bool "pcapparse"
-+	help
-+	  Element parsing raw pcap streams
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PNM
-+	bool "pnm"
-+	help
-+	  PNM plugin
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE
-+	bool "rawparse"
-+	help
-+	  Parses byte streams into raw frames
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REAL
-+	bool "real"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REMOVESILENCE
-+	bool "removesilence"
-+	help
-+	  Removes silence from an audio stream
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTPMUX
-+	bool "rtpmux"
-+	help
-+	  RTP Muxer plugins
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTPVP8
-+	bool "rtpvp8"
-+	help
-+	  rtpvp8
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SCALETEMPO
-+	bool "scaletempo"
-+	help
-+	  Scale audio tempo in sync with playback rate
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI
-+	bool "sdi"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDP
-+	bool "sdp"
-+	help
-+	  configure streaming sessions using SDP
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SEGMENTCLIP
-+	bool "segmentclip"
-+	help
-+	  Segment clip elements
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SIREN
-+	bool "siren"
-+	help
-+	  Siren encoder/decoder/payloader/depayloader plugins
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SMOOTH
-+	bool "smooth"
-+	help
-+	  Apply a smooth filter to an image
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SPEED
-+	bool "speed"
-+	help
-+	  Set speed/pitch on audio/raw streams (resampler)
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SUBENC
-+	bool "subenc"
-+	help
-+	  subtitle encoders
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_STEREO
-+	bool "stereo"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTA
-+	bool "tta"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOFILTERS
-+	bool "videofilters"
-+	help
-+	  Video filters in gst-plugins-bad
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOMEASURE
-+	bool "videomeasure"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOPARSERS
-+	bool "videoparsers"
-+	help
-+	  videoparsers
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOSIGNAL
-+	bool "videosignal"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VMNC
-+	bool "vmnc"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_Y4M
-+	bool "y4m"
-+	help
-+	  Demuxes/decodes YUV4MPEG streams
-+
-+comment "plugins with external dependencies"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SHM
-+	bool "shm"
-+	help
-+	  shared memory sink source
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD
-+	bool "vcd"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_APEXSINK
-+	bool "apexsink"
-+	select BR2_PACKAGE_OPENSSL
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BZ2
-+	bool "bz2"
-+	select BR2_PACKAGE_BZIP2
-+	help
-+	  Compress or decompress streams
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CDAUDIO
-+	bool "cdaudio"
-+	select BR2_PACKAGE_LIBCDAUDIO
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CELT
-+	bool "celt"
-+	select BR2_PACKAGE_CELT051
-+	help
-+	  CELT plugin library
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CURL
-+	bool "curl"
-+	select BR2_PACKAGE_LIBCURL
-+	help
-+	  libcurl-based elements
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DECKLINK
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	bool "decklink"
-+	help
-+	  Blackmagic Decklink plugin
-+
-+comment "decklink requires a toolchain with C++ support enabled"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DIRECTFB
-+	bool "directfb"
-+	select BR2_PACKAGE_DIRECTFB
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND
-+	bool "wayland"
-+	select BR2_PACKAGE_WAYLAND
-+	help
-+	  Wayland Video Sink
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FAAD
-+	bool "faad"
-+	select BR2_PACKAGE_FAAD2
-+	help
-+	  Free AAC Decoder (FAAD)
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FBDEV
-+	bool "fbdev"
-+	help
-+	  Linux framebuffer video sink
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBMMS
-+	bool "libmms"
-+	select BR2_PACKAGE_LIBMMS
-+	help
-+	  Microsoft Multi Media Server streaming protocol support
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEG2ENC
-+	bool "mpeg2enc"
-+	select BR2_PACKAGE_LIBMPEG2
-+	help
-+	  High-quality MPEG-1/2 video encoder
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPG123
-+	bool "mpg123"
-+	select BR2_PACKAGE_MPG123
-+	help
-+	  mp3 decoding based on the mpg123 library
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MUSEPACK
-+	bool "musepack"
-+	select BR2_PACKAGE_MUSEPACK
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NEON
-+	bool "neon"
-+	select BR2_PACKAGE_NEON
-+	help
-+	  lib neon http client src
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
-+	bool "opencv"
-+	select BR2_PACKAGE_OPENCV
-+	help
-+	  GStreamer OpenCV Plugins
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPUS
-+	bool "opus"
-+	select BR2_PACKAGE_OPUS
-+	help
-+	  OPUS plugin library
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RSVG
-+	bool "rsvg"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_LIBRSVG
-+	help
-+	  RSVG plugin library
-+
-+comment "rsvg plugin requires a toolchain with C++ support"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_EGLGLES
-+	bool "eglgles"
-+	depends on BR2_PACKAGE_HAS_OPENGL_EGL && BR2_PACKAGE_HAS_OPENGL_ES
-+	help
-+	  EGL/GLES sink
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDL
-+	bool "sdl"
-+	select BR2_PACKAGE_SDL
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SNDFILE
-+	bool "sndfile"
-+	select BR2_PACKAGE_LIBSNDFILE
++++ b/package/multimedia/libav/Config.in
+@@ -0,0 +1,158 @@
++comment "libav requires a toolchain with LARGEFILE and IPV6 support"
++	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
++
++menuconfig BR2_PACKAGE_LIBAV
++	bool "libav"
 +	depends on BR2_LARGEFILE
-+
-+comment "gst-plugins-bad-plugin-sndfile requires a toolchain with LARGEFILE support"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVB
-+	bool "dvb"
-+	select BR2_PACKAGE_DVB_APPS
++	depends on BR2_INET_IPV6
 +	help
-+	  DVB elements
++         libav is a complete, cross-platform solution to record, convert
++         and stream audio and video.
++
++	 http://www.libav.org
++
++if BR2_PACKAGE_LIBAV
++
++config BR2_PACKAGE_LIBAV_GPL
++	bool "Enable GPL code"
++	help
++         allow use of GPL code, the resulting libs and binaries will
++         be under GPL
++
++config BR2_PACKAGE_LIBAV_NONFREE
++	bool "Enable nonfree code"
++	help
++         allow use of nonfree code, the resulting libs and binaries
++         will be unredistributable
++
++config BR2_PACKAGE_LIBAV_LIBAV
++	bool "Build libav (the command line application)"
++	select BR2_PACKAGE_LIBAV_SWSCALE
++	default y
++	help
++         libav is a very fast video and audio converter.
++         It can also grab from a live audio/video source.
++
++         It is not needed if you want to link the libav libraries
++         to your application.
++
++config BR2_PACKAGE_LIBAV_FFPLAY
++	bool "Build ffplay"
++	select BR2_PACKAGE_SDL
++	help
++         FFplay is a very simple and portable media player using the
++         libav libraries and the SDL library.
++         It is mostly used as a testbed for the various libav APIs.
++
++config BR2_PACKAGE_LIBAV_FFSERVER
++	bool "Build ffserver"
++	help
++         FFserver is a streaming server for both audio and video.
++
++config BR2_PACKAGE_LIBAV_POSTPROC
++	bool "Build libpostproc"
++	depends on BR2_PACKAGE_LIBAV_GPL
++	help
++	  Postproc is a library of video postprocessing routines.
++
++config BR2_PACKAGE_LIBAV_SWSCALE
++	bool "Build libswscale"
++	help
++	  Swscale is a library of video scaling routines.
++
++config BR2_PACKAGE_LIBAV_ENCODERS
++	string "Enabled encoders"
++	default "all"
++	help
++	 Space-separated list of encoders to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-encoders in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_DECODERS
++	string "Enabled decoders"
++	default "all"
++	help
++	 Space-separated list of decoders to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-decoders in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_MUXERS
++	string "Enabled muxers"
++	default "all"
++	help
++	 Space-separated list of muxers to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-muxers in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_DEMUXERS
++	string "Enabled demuxers"
++	default "all"
++	help
++	 Space-separated list of demuxers to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-demuxers in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_PARSERS
++	string "Enabled parsers"
++	default "all"
++	help
++	 Space-separated list of parsers to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-parsers in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_BSFS
++	string "Enabled bitstreams"
++	default "all"
++	help
++	 Space-separated list of bitstream filters to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-bsfs in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_PROTOCOLS
++	string "Enabled protocols"
++	default "all"
++	help
++	 Space-separated list of protocols to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-protocols in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_FILTERS
++	string "Enabled filters"
++	default "all"
++	help
++	 Space-separated list of filters to build in libav,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-filters in the libav sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_LIBAV_INDEVS
++	bool "Enable input devices"
++	default y
++
++config BR2_PACKAGE_LIBAV_OUTDEVS
++	bool "Enable output devices"
++	default y
++
++config BR2_PACKAGE_LIBAV_EXTRACONF
++	string "Additional parameters for ./configure"
++	default ""
++	help
++	 Extra parameters that will be appended to libav's
++	 ./configure commandline.
 +
 +endif
-+
-diff --git a/package/multimedia/gst1-plugins-bad/gst1-plugins-bad-use-gettext-0.18.patch b/package/multimedia/gst1-plugins-bad/gst1-plugins-bad-use-gettext-0.18.patch
+diff --git a/package/multimedia/libav/libav.mk b/package/multimedia/libav/libav.mk
 new file mode 100644
-index 0000000..ebf4567
+index 0000000..6503a0e
 --- /dev/null
-+++ b/package/multimedia/gst1-plugins-bad/gst1-plugins-bad-use-gettext-0.18.patch
-@@ -0,0 +1,17 @@
-+Use newer version of gettext to match current buildroot gettext.
-+
-+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-+----
-+Index: gst1-plugins-bad-1.1.1/po/Makefile.in.in
-+===================================================================
-+--- gst1-plugins-bad-1.1.1.orig/po/Makefile.in.in
-++++ gst1-plugins-bad-1.1.1/po/Makefile.in.in
-+@@ -9,7 +9,7 @@
-+ # General Public License and is *not* in the public domain.
-+ #
-+ # Origin: gettext-0.17
-+-GETTEXT_MACRO_VERSION = 0.17
-++GETTEXT_MACRO_VERSION = 0.18
-+ 
-+ PACKAGE = @PACKAGE@
-+ VERSION = @VERSION@
-diff --git a/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk b/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
-new file mode 100644
-index 0000000..1e61bd2
---- /dev/null
-+++ b/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -0,0 +1,678 @@
-+###############################################################################
++++ b/package/multimedia/libav/libav.mk
+@@ -0,0 +1,200 @@
++################################################################################
 +#
-+# gst1-plugins-bad
++# libav
 +#
-+###############################################################################
++################################################################################
 +
-+GST1_PLUGINS_BAD_VERSION = 1.0.7
-+GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
-+GST1_PLUGINS_BAD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-bad
-+GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
-+# Unknown and GPL licensed plugins will append to GST1_PLUGINS_BAD_LICENSE if
-+# enabled.
-+GST1_PLUGINS_BAD_LICENSE = LGPLv2+ LGPLv2.1+
++LIBAV_VERSION = 9.6
++LIBAV_SOURCE = libav-$(LIBAV_VERSION).tar.xz
++LIBAV_SITE = http://libav.org/releases
++LIBAV_INSTALL_STAGING = YES
 +
-+GST1_PLUGINS_BAD_AUTORECONF = YES
-+GST1_PLUGINS_BAD_AUTORECONF_OPT = -I $(@D)/common/m4
++LIBAV_LICENSE = LGPLv2.1+, libjpeg license
++LIBAV_LICENSE_FILES = LICENSE COPYING.LGPLv2.1
 +
-+GST1_PLUGINS_BAD_CONF_OPT = \
-+	--disable-examples \
-+	--disable-debug \
-+	--disable-valgrind \
-+	--disable-directsound \
-+	--disable-wsapi \
-+	--disable-direct3d \
-+	--disable-directdraw \
-+	--disable-direct3d9 \
-+	--disable-directshow \
-+	--disable-android_media \
-+	--disable-apple_media \
-+	--disable-osx_video \
-+	--disable-sdltest \
-+	--disable-wininet \
-+	--disable-acm
-+
-+# Options which require currently unpackaged libraries
-+GST1_PLUGINS_BAD_CONF_OPT += \
-+	--disable-avc \
-+	--disable-quicktime \
-+	--disable-mfc \
-+	--disable-opensles \
-+	--disable-uvch264 \
-+	--disable-assrender \
-+	--disable-voamrwbenc \
-+	--disable-voaacenc \
-+	--disable-chromaprint \
-+	--disable-dash \
-+	--disable-dc1394 \
-+	--disable-dts \
-+	--disable-resindvd \
-+	--disable-faac \
-+	--disable-flite \
-+	--disable-gsm \
-+	--disable-fluidsynth \
-+	--disable-kate \
-+	--disable-ladspa \
-+	--disable-lv2 \
-+	--disable-strp \
-+	--disable-linsys \
-+	--disable-modplug \
-+	--disable-mimic \
-+	--disable-mplex \
-+	--disable-mythtv \
-+	--disable-nas \
-+	--disable-ofa \
-+	--disable-openal \
-+	--disable-openjpeg \
-+	--disable-pvr \
-+	--disable-timidity \
-+	--disable-teletextdec \
-+	--disable-wildmidi \
-+	--disable-smoothstreaming \
-+	--disable-soundtouch \
-+	--disable-spc \
-+	--disable-gme \
-+	--disable-xvid \
-+	--disable-vdpau \
-+	--disable-sbc \
-+	--disable-schro \
-+	--disable-zbar \
-+	--disable-rtmp \
-+	--disable-spandsp \
-+	--disable-gsettings \
-+	--disable-sndio \
-+	--disable-hls
-+
-+GST1_PLUGINS_BAD_DEPENDENCIES = gst1-plugins-base gstreamer1
-+
-+ifeq ($(BR2_PACKAGE_ORC),y)
-+GST1_PLUGINS_BAD_DEPENDENCIES += orc
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-orc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ADPCMDEC),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-adpcmdec
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-adpcmdec
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ADPCMENC),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-adpcmenc
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-adpcmenc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AIFF),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-aiff
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-aiff
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ASFMUX),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-asfmux
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-asfmux
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOVISUALIZERS),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-audiovisualizers
-+GST1_PLUGINS_BAD_HAS_GPL_LICENSE = y
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-audiovisualizers
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUTOCONVERT),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-autoconvert
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-autoconvert
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BAYER),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-bayer
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-bayer
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CAMERABIN2),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-camerabin2
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-camerabin2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CDXAPARSE),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-cdxaparse
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-cdxaparse
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_COLOREFFECTS),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-coloreffects
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-coloreffects
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DATAURISRC),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-dataurisrc
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-dataurisrc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DCCP),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-dccp
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-dccp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-debugutils
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-debugutils
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DTMF),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-dtmf
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-dtmf
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVBSUBOVERLAY),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-dvbsuboverlay
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-dvbsuboverlay
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVDSPU),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-dvdspu
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-dvdspu
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FACEOVERLAY),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-faceoverlay
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-faceoverlay
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FESTIVAL),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-festival
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-festival
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FIELDANALYSIS),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-fieldanalysis
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-fieldanalysis
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FREEVERB),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-freeverb
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-freeverb
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FREI0R),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-frei0r
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-frei0r
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GAUDIEFFECTS),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-gaudieffects
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-gaudieffects
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GEOMETRICTRANSFORM),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-geometrictransform
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-geometrictransform
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GDP),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-gdp
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-gdp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HDVPARSE),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-hdvparse
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-hdvparse
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-hls
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-hls
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ID3TAG),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-id3tag
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-id3tag
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_INTER),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-inter
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-inter
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_INTERLACE),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-interlace
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-interlace
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IVFPARSE),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-ivfparse
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-ivfparse
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_JP2KDECIMATOR),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-jp2kdecimator
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-jp2kdecimator
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_JPEGFORMAT),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-jpegformat
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-jpegformat
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBRFB),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-librfb
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-librfb
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIVEADDER),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-liveadder
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-liveadder
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGDEMUX),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-mpegdemux
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-mpegdemux
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGTSDEMUX),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-mpegtsdemux
-+GST1_PLUGINS_BAD_HAS_UNKNOWN_LICENSE = y
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-mpegtsdemux
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGTSMUX),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-mpegtsmux
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-mpegtsmux
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGPSMUX),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-mpegpsmux
-+GST1_PLUGINS_BAD_HAS_UNKNOWN_LICENSE = y
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-mpegpsmux
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MVE),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-mve
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-mve
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MXF),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-mxf
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-mxf
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NUVDEMUX),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-nuvdemux
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-nuvdemux
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PATCHDETECT),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-patchdetect
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-patchdetect
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PCAPPARSE),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-pcapparse
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-pcapparse
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PNM),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-pnm
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-pnm
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-rawparse
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-rawparse
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REAL),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-real
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-real
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REMOVESILENCE),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-removesilence
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-removesilence
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTPMUX),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-rtpmux
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-rtpmux
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTPVP8),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-rtpvp8
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-rtpvp8
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SCALETEMPO),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-scaletempo
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-scaletempo
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-sdi
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-sdi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDP),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-sdp
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-sdp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SEGMENTCLIP),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-segmentclip
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-segmentclip
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SIREN),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-siren
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-siren
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SMOOTH),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-smooth
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-smooth
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SPEED),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-speed
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-speed
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SUBENC),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-subenc
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-subenc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_STEREO),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-stereo
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-stereo
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTA),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-tta
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-tta
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOFILTERS),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-videofilters
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-videofilters
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOMEASURE),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-videomeasure
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-videomeasure
++ifeq ($(BR2_PACKAGE_LIBAV_GPL),y)
++LIBAV_LICENSE += and GPLv2+
++LIBAV_LICENSE_FILES += COPYING.GPLv2
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOPARSERS),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-videoparsers
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-videoparsers
-+endif
++LIBAV_CONF_OPT = \
++	--prefix=/usr \
++	$(if $(BR2_HAVE_DOCUMENTATION),,--disable-doc)
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOSIGNAL),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-videosignal
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-videosignal
-+endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VMNC),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-vmnc
++ifeq ($(BR2_PACKAGE_LIBAV_GPL),y)
++LIBAV_CONF_OPT += --enable-gpl
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-vmnc
++LIBAV_CONF_OPT += --disable-gpl
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_Y4M),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-y4m
++ifeq ($(BR2_PACKAGE_LIBAV_VERSION3),y)
++LIBAV_CONF_OPT += --enable-version3
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-y4m
++LIBAV_CONF_OPT += --disable-version3
 +endif
 +
-+# Plugins with dependencies
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SHM),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-shm
++ifeq ($(BR2_PACKAGE_LIBAV_NONFREE),y)
++LIBAV_CONF_OPT += --enable-nonfree
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-shm
++LIBAV_CONF_OPT += --disable-nonfree
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-vcd
++ifeq ($(BR2_PACKAGE_LIBAV_AVCONV),y)
++LIBAV_CONF_OPT += --enable-avconv
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-vcd
++LIBAV_CONF_OPT += --disable-avconv
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_APEXSINK),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-apexsink
-+GST1_PLUGINS_BAD_DEPENDENCIES += openssl
++ifeq ($(BR2_PACKAGE_LIBAV_AVPLAY),y)
++LIBAV_DEPENDENCIES += sdl
++LIBAV_CONF_OPT += --enable-avplay
++LIBAV_CONF_ENV += SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-apexsink
++LIBAV_CONF_OPT += --disable-avplay
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BZ2),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-bz2
-+GST1_PLUGINS_BAD_DEPENDENCIES += bzip2
++ifeq ($(BR2_PACKAGE_LIBAV_AVPROBE),y)
++LIBAV_CONF_OPT += --enable-avprobe
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-bz2
++LIBAV_CONF_OPT += --disable-avprobe
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CDAUDIO),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-cdaudio
-+GST1_PLUGINS_BAD_DEPENDENCIES += libcdaudio
++ifeq ($(BR2_PACKAGE_LIBAV_AVSERVER),y)
++LIBAV_CONF_OPT += --enable-avserver
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-cdaudio
++LIBAV_CONF_OPT += --disable-avserver
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CELT),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-celt
-+GST1_PLUGINS_BAD_DEPENDENCIES += celt051
++ifeq ($(BR2_PACKAGE_LIBAV_SWSCALE),y)
++LIBAV_CONF_OPT += --enable-swscale
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-celt
++LIBAV_CONF_OPT += --disable-swscale
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CURL),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-curl
-+GST1_PLUGINS_BAD_DEPENDENCIES += libcurl
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-curl
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_ENCODERS)),all)
++LIBAV_CONF_OPT += --disable-encoders \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_ENCODERS)),--enable-encoder=$(x))
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DECKLINK),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-decklink
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-decklink
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_DECODERS)),all)
++LIBAV_CONF_OPT += --disable-decoders \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_DECODERS)),--enable-decoder=$(x))
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DIRECTFB),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-directfb
-+GST1_PLUGINS_BAD_DEPENDENCIES += directfb
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-directfb
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_MUXERS)),all)
++LIBAV_CONF_OPT += --disable-muxers \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_MUXERS)),--enable-muxer=$(x))
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-wayland
-+GST1_PLUGINS_BAD_DEPENDENCIES += wayland
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-wayland
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_DEMUXERS)),all)
++LIBAV_CONF_OPT += --disable-demuxers \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_DEMUXERS)),--enable-demuxer=$(x))
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FAAD),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-faad
-+GST1_PLUGINS_BAD_DEPENDENCIES += faad2
-+GST1_PLUGINS_BAD_HAS_GPL_LICENSE = y
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-faad
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_PARSERS)),all)
++LIBAV_CONF_OPT += --disable-parsers \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_PARSERS)),--enable-parser=$(x))
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FBDEV),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-fbdev
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-fbdev
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_BSFS)),all)
++LIBAV_CONF_OPT += --disable-bsfs \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_BSFS)),--enable-bsf=$(x))
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBMMS),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-libmms
-+GST1_PLUGINS_BAD_DEPENDENCIES += libmms
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-libmms
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_PROTOCOLS)),all)
++LIBAV_CONF_OPT += --disable-protocols \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_PROTOCOLS)),--enable-protocol=$(x))
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEG2ENC),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-mpeg2enc
-+GST1_PLUGINS_BAD_DEPENDENCIES += libmpeg2
-+GST1_PLUGINS_BAD_HAS_GPL_LICENSE = y
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-mpeg2enc
++ifneq ($(call qstrip,$(BR2_PACKAGE_LIBAV_FILTERS)),all)
++LIBAV_CONF_OPT += --disable-filters \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_LIBAV_FILTERS)),--enable-filter=$(x))
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPG123),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-mpg123
-+GST1_PLUGINS_BAD_DEPENDENCIES += mpg123
++ifeq ($(BR2_PACKAGE_LIBAV_INDEVS),y)
++LIBAV_CONF_OPT += --enable-indevs
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-mpg123
++LIBAV_CONF_OPT += --disable-indevs
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MUSEPACK),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-musepack
-+GST1_PLUGINS_BAD_DEPENDENCIES += musepack
++ifeq ($(BR2_PACKAGE_LIBAV_OUTDEVS),y)
++LIBAV_CONF_OPT += --enable-outdevs
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-musepack
++LIBAV_CONF_OPT += --disable-outdevs
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NEON),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-neon
-+GST1_PLUGINS_BAD_DEPENDENCIES += neon
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIBAV_CONF_OPT += --enable-pthreads
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-neon
++LIBAV_CONF_OPT += --disable-pthreads
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-opencv
-+GST1_PLUGINS_BAD_DEPENDENCIES += opencv
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LIBAV_CONF_OPT += --enable-zlib
++LIBAV_DEPENDENCIES += zlib
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-opencv
++LIBAV_CONF_OPT += --disable-zlib
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPUS),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-opus
-+GST1_PLUGINS_BAD_DEPENDENCIES += opus
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++# MMX on is default for x86, disable it for lowly x86-type processors
++ifeq ($(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_i686)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
++LIBAV_CONF_OPT += --disable-mmx
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-opus
++# If it is enabled, nasm is required
++LIBAV_DEPENDENCIES += host-nasm
 +endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RSVG),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-rsvg
-+GST1_PLUGINS_BAD_DEPENDENCIES += librsvg
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-rsvg
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_EGLGLES),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-eglgles
-+GST1_PLUGINS_BAD_DEPENDENCIES += libegl libgles
-+
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+# RPI has odd locations for several required headers.
-+GST1_PLUGINS_BAD_CONF_OPT += --with-egl-window-system=rpi
-+GST1_PLUGINS_BAD_CONF_ENV += \
-+	CFLAGS="$(TARGET_CFLAGS) \
-+	-I$(STAGING_DIR)/usr/include/IL \
-+	-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
-+	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
++# Explicitly disable everything that doesn't match for ARM
++# LIBAV "autodetects" by compiling an extended instruction via AS
++# This works on compilers that aren't built for generic by default
++ifeq ($(BR2_arm7tdmi)$(BR2_arm720t)$(BR2_arm920t)$(BR2_arm922t)$(BR2_strongarm)$(BR2_fa526),y)
++LIBAV_CONF_OPT += --disable-armv5te
 +endif
++ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf-s),y)
++LIBAV_CONF_OPT += --enable-armv6
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-eglgles
++LIBAV_CONF_OPT += --disable-armv6 --disable-armv6t2
 +endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDL),y)
-+GST1_PLUGINS_BAD_CONF_ENV += ac_cv_path_SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-sdl
-+GST1_PLUGINS_BAD_DEPENDENCIES += sdl
++ifeq ($(BR2_arm10)$(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf-s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
++LIBAV_CONF_OPT += --enable-vfp
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-sdl
++LIBAV_CONF_OPT += --disable-vfp
 +endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SNDFILE),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-sndfile
-+GST1_PLUGINS_BAD_DEPENDENCIES += libsndfile
-+else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-sndfile
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
++LIBAV_CONF_OPT += --enable-neon
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVB),y)
-+GST1_PLUGINS_BAD_CONF_OPT += --enable-dvb
-+GST1_PLUGINS_BAD_DEPENDENCIES += dvb-apps
++# Set powerpc altivec appropriately
++ifeq ($(BR2_powerpc),y)
++ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
++LIBAV_CONF_OPT += --enable-altivec
 +else
-+GST1_PLUGINS_BAD_CONF_OPT += --disable-dvb
++LIBAV_CONF_OPT += --disable-altivec
 +endif
-+
-+# Add GPL license if GPL licensed plugins enabled.
-+ifeq ($(GST1_PLUGINS_BAD_HAS_GPL_LICENSE),y)
-+GST1_PLUGINS_BAD_LICENSE += GPL
 +endif
 +
-+# Add Unknown license if Unknown licensed plugins enabled.
-+ifeq ($(GST1_PLUGINS_BAD_HAS_UNKNOWN_LICENSE),y)
-+GST1_PLUGINS_BAD_LICENSE += UNKNOWN
-+endif
++LIBAV_CONF_OPT += $(call qstrip,$(BR2_PACKAGE_LIBAV_EXTRACONF))
 +
-+# Use the following command to extract license info for plugins.
-+# # find . -name 'plugin-*.xml' | xargs grep license
++# Override LIBAV_CONFIGURE_CMDS: libav does not support --target and others
++define LIBAV_CONFIGURE_CMDS
++	(cd $(LIBAV_SRCDIR) && rm -rf config.cache && \
++	$(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_ARGS) \
++	$(LIBAV_CONF_ENV) \
++	./configure \
++		--enable-cross-compile	\
++		--cross-prefix=$(TARGET_CROSS) \
++		--sysroot=$(STAGING_DIR) \
++		--host-cc="$(HOSTCC)" \
++		--arch=$(BR2_ARCH) \
++		--target-os=linux \
++		--extra-cflags=-fPIC \
++		$(SHARED_STATIC_LIBS_OPTS) \
++		$(LIBAV_CONF_OPT) \
++	)
++endef
 +
 +$(eval $(autotools-package))
 -- 
