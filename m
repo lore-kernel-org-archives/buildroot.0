@@ -1,46 +1,78 @@
-From: gpontis at spamcop.net <gpontis@spamcop.net>
-Date: Thu, 20 Jun 2013 10:52:23 -0700
-Subject: [Buildroot] FW:  Xenomai package not extracted in time
-References: <02de01ce6dd0$bb38f3a0$31aadae0$@spamcop.net>	<20130620184222.37b73ce2@skate>	<000501ce6dda$fca14a90$f5e3dfb0$@z9.com>
- <20130620194009.55364faf@skate> 
-Message-ID: <001701ce6dde$eaff24c0$c0fd6e40$@spamcop.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 Jun 2013 18:25:04 +0200
+Subject: [Buildroot] Build error when trying to build the py-smbus
+ package of i2c-tools
+In-Reply-To: <4E062DFADC6E8142AA8EE9D214BA0C50E3E24C@NB-EX-MBX01.diasemi.com>
+References: <4E062DFADC6E8142AA8EE9D214BA0C50E3E24C@NB-EX-MBX01.diasemi.com>
+Message-ID: <51C32CE0.9050902@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> -----Original Message-----
-> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
-> Sent: Thursday, June 20, 2013 10:40 AM
-> To: George Pontis
-> Cc: buildroot at uclibc.org
-> Subject: Re: [Buildroot] Xenomai package not extracted in time
+On 20/06/13 09:18, Thomas Weininger wrote:
+> Hi,
 > 
-> Dear George Pontis,
+> I'm using Buildroot Git version 28ab11d7855a1b85e4be15cd9c86ad0838fa1cb1 
+> from 2013-06-06. I tried to change the package/i2c-tools/i2c-tools.mk in 
+> order to build an extra package called py-smbus, which is part of 
+> i2c-tools but not built by default. Considering the i2c-tools README 
+> http://www.lm-sensors.org/browser/i2c-tools/trunk/README?rev=6171 I added 
+> EXTRA="py-smbus" to the make options.
 > 
-> Please don't reply to me only, but also to the list.
+> diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
 > 
-> On Thu, 20 Jun 2013 10:24:14 -0700, George Pontis wrote:
-> > Thanks for your attention Thomas. I look forward to a fix, but in 
-> > the short term I'll look at the commit and see if I can back it out 
-> > temporarily since we only use Xenomai.
+> index 1589d04..403b96d 100644
 > 
-> Backing out the commit will be hard because many other related changes 
-> have been done since then.
+> --- a/package/i2c-tools/i2c-tools.mk
 > 
-> You can try adding a line like:
+> +++ b/package/i2c-tools/i2c-tools.mk
 > 
-> linux-patch: xenomai-extract
+> @@ -9,7 +9,7 @@ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
 > 
-> in the linux/linux-ext-xenomai.mk.
+> I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
 > 
-> Completely untested, of course.
+>   define I2C_TOOLS_BUILD_CMDS
 > 
-> Best regards,
+> - $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
 > 
-> Thomas
+> + $(MAKE) $(TARGET_CONFIGURE_OPTS) EXTRA="py-smbus" -C $(@D)
 
-That seems to take care of it. Thank you Thomas.
+ Can you try if
+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+		EXTRA="py-smbus" -C $(@D)
+works?
 
-- Geo.
+ The problem is that the PATH doesn't get propagated, so the Makefile is using
+the system's python instead of buildroot's python.
+
+ By the way, you should also add
+
+I2C_TOOLS_DEPENDENCIES = host-python
+
+to make sure the cross-python is built before i2c-tools.
+
+
+ If you get this working, it would be nice if you could send a patch that adds
+a configure option for py-smbus.
+
+
+ Regards,
+ Arnout
+
+ 
+> 
+> endef
+> 
+>   define I2C_TOOLS_INSTALL_TARGET_CMDS
+
+[snip]
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
