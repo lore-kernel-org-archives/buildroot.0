@@ -1,86 +1,133 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 Jun 2013 23:36:28 +0200
-Subject: [Buildroot] [RFC] post-build scripts: limitations, and proposal
-Message-ID: <20130620213628.GA3534@free.fr>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Thu, 20 Jun 2013 17:07:35 -0500
+Subject: [Buildroot] [PATCH v12 00/11] add Gstreamer 1.X for gst-omx support
+Message-ID: <1371766066-676-1-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+This patch adds gst-omx support to buildroot. Thus, making it possible to use
+gstreamer applications which utilize hardware acceleration on OpenMAX supported
+systems.
 
-Currently, I'm using a set of post-build scripts, and it's becoming to
-be slightly tedious.
+In addition, the patches include the libvpx library and enablement in gstreamer.
+This is meant to give an example of how to add support in the future.
 
-For example, here are a few of them:
+To test this patch series on the Raspberry Pi, select the eglgles plugin in
+gst1-plugins-bad and select gst-omx.  To decode a 720p h264 encoded .mov file,
+the following gst-launch pipeline can be used.
 
-  - rpi-fixup-rootfs
-    - adds /dev/mmcblk0p1 on /boot to fstab, don't mount _netdev filesystems
-    - set root's PS1
-    - store config's tree hash in /etc/rpi-config.version  [0]
+Sample file: http://download.blender.org/peach/trailer/trailer_720p.mov
 
-  - rpi-fixup-rootfs-yem
-    - stores my ssh pub key in root's ~/.ssh/authorized_keys
+   # gst-launch-1.0 filesrc location=/path/to/file \
+   #   ! qtdemux ! h264parse ! omx264dec ! eglglessink
 
-  - rpi-fixup-rootfs-tvheadend
-    - add a script to wait for DVB devices
-    - add a CIFS mount to fstab, to access my NAS
+v11 -> v12:
+   - Move back to gstreamer 1.0.7 as 1.1.1 is an experimental branch.
 
-  - rpi-fixup-rootfs-wpa
-    - add my wpa-supplicant conf file to connect to my LAN
+v10 -> v11:
+   - Add descriptions for each plugin from gst-inspect xml files.
+   - Put plugins in "./configure --help" order
+   - Add new options to gstreamer1
+   - Include rudimentry gst-libav (needs additional work) 
 
-So, when I build my tvheadend filesystem, I want to run scripts:
-    rpi-fixup-rootfs  rpi-fixup-rootfs-yem  rpi-fixup-rootfs-tvheadend
+v9 -> v10:
+   - Bump to gstreamer version 1.1.1 which due to poor packaging required a
+     patch to reinclude some header files.
+   - Add licensing information.
+   - Cleanup headers and whitespace changes.
 
-But when I want to build my mpd filesystem, I want to run scripts:
-    rpi-fixup-rootfs  rpi-fixup-rootfs-yem rpi-fixup-rootfs-wpa
+v8 -> v9:
+   - Fix webkit build failures due to libglib2 bump.
+   - bump gdk-pixbuf to 2.28.1
+   - bump libgtk2 to 2.24.18
+   - bump libsoup to 2.43.1
+   - bump webkit to 1.9.6
 
+v7 -> v8:
+   - Incoporate threads patch and rebase on top of master.
 
-Since the scripts lie out of the buildroot tree, I set (all on one line,
-but broken-out for readability):
+v6 -> v7:
+   - Additional verification complete with both RPi and Bellagio.
+   - Moved additional includes to the gst-omx and gst-plugins bad packages for
+     openmax and eglgles.
+   - A patch was added that ensures that the config files point to the correct
+     location.
 
-    BR2_ROOTFS_POST_BUILD_SCRIPT="
-        $(CONFIG_DIR)/../scripts/rpi-fixup-rootfs
-        $(CONFIG_DIR)/../scripts/rpi-fixup-rootfs-yem
-        $(CONFIG_DIR)/../scripts/rpi-fixup-rootfs-tvheadend"
+v5 -> v6:
+   - Combined libglib patches to allow git-bisect
+   - added libopenmax virtual package for gst-omx (and future omx packages)
 
-Now, I am adding a new script. This is starting to be ridiculous...
+v4 -> v5:
+   - added gst-omx as a new package
+   - combined glib bump to 2.36.1 with gstreamer 1.x and gst-omx (libglib
+     2.32.1 is required for gstreamer 1.X)
 
-What I'd like is to be able to pass one or more options to each
-post-build script, so I can have a wrapper and tell it what to run:
+v3 -> v4:
+   - uses new style if/endif syntax and removes depends properties for
+     config elements in gstreamer1
 
-    BR2_ROOTFS_POST_BUILD_SCRIPT="
-        $(CONFIG_DIR)/../scripts/fixup-rootfs rpi ssh-key rpi-tvheadend"
+v2 -> v3:
+   - fixes issues found while building with all/none plugins enabled
+   - change naming from gst-plugins-<blah>1 to gst1-plugins-<blah>
+   - options which require currently unpackged libraries are disabled
 
-to call those scripts:
-    fixup-rootfs-rpi
-    fixup-rootfs-ssh-key
-    fixup-rootfs-rpi-tvheadend
+v1 -> v2:
+   - completed patch by adding good/bad/ugly plguins.
+Spenser Gilliland (11):
+  gstreamer1: Add gstreamer version 1.1.1 package
+  gstreamer: update for gstreamer1
+  gst1-plugins-base: add gstreamer1 base plugins
+  gst1-plugins-good: add gstreamer1 good plugins
+  gst1-plugins-bad: add gstreamer1 bad plugins
+  gst1-plugins-ugly: add gstreamer1 ugly plugins
+  gst1-plugins-good: add libvpx support
+  gst-omx: add gst-omx package
+  multimedia: reorganize for gst1
+  libav: add new package
+  gst-libav: add libav plugin for gtreamer 1.x
 
-But it is not possible, as Buildroot interprets BR2_ROOTFS_POST_BUILD_SCRIPT
-as a space-separated list, not a single command. So, it is not possible
-to pass any option to the post-build scripts.
-
-So, I was going to change it from space-separated to colon-separated. But
-that would break existing configuration. Sigh... :-(
-
-I can see only one way to solve this: rename the variable (and add to
-legacy), and make it a colon-separated list.
-
-Opinions?
-
-[0] My config files (and scripts...) are stored in a git tree, so I want
-    to know which to rebuild only by looking at a file on a running board.
-    Having only the Buildroot tree hash is not enough.
-
-Regards,
-Yann E. MORIN.
+ package/multimedia/Config.in                       |   21 +-
+ package/multimedia/gst-libav/Config.in             |   16 +
+ package/multimedia/gst-libav/gst-libav.mk          |   18 +
+ package/multimedia/gst-omx/Config.in               |   11 +
+ .../multimedia/gst-omx/gst-omx-config-files.patch  |  127 ++++
+ package/multimedia/gst-omx/gst-omx.mk              |   37 ++
+ package/multimedia/gst1-plugins-bad/Config.in      |  447 +++++++++++++
+ .../gst1-plugins-bad-use-gettext-0.18.patch        |   17 +
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |  678 ++++++++++++++++++++
+ package/multimedia/gst1-plugins-base/Config.in     |  153 +++++
+ .../gst1-plugins-base/gst1-plugins-base.mk         |  206 ++++++
+ package/multimedia/gst1-plugins-good/Config.in     |  330 ++++++++++
+ .../gst1-plugins-good/gst1-plugins-good.mk         |  411 ++++++++++++
+ package/multimedia/gst1-plugins-ugly/Config.in     |   69 ++
+ .../gst1-plugins-ugly/gst1-plugins-ugly.mk         |  104 +++
+ package/multimedia/gstreamer/Config.in             |    3 +-
+ package/multimedia/gstreamer1/Config.in            |   55 ++
+ package/multimedia/gstreamer1/gstreamer1.mk        |   40 ++
+ package/multimedia/libav/Config.in                 |  158 +++++
+ package/multimedia/libav/libav.mk                  |  200 ++++++
+ 20 files changed, 3096 insertions(+), 5 deletions(-)
+ create mode 100644 package/multimedia/gst-libav/Config.in
+ create mode 100644 package/multimedia/gst-libav/gst-libav.mk
+ create mode 100644 package/multimedia/gst-omx/Config.in
+ create mode 100644 package/multimedia/gst-omx/gst-omx-config-files.patch
+ create mode 100644 package/multimedia/gst-omx/gst-omx.mk
+ create mode 100644 package/multimedia/gst1-plugins-bad/Config.in
+ create mode 100644 package/multimedia/gst1-plugins-bad/gst1-plugins-bad-use-gettext-0.18.patch
+ create mode 100644 package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
+ create mode 100644 package/multimedia/gst1-plugins-base/Config.in
+ create mode 100644 package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
+ create mode 100644 package/multimedia/gst1-plugins-good/Config.in
+ create mode 100644 package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
+ create mode 100644 package/multimedia/gst1-plugins-ugly/Config.in
+ create mode 100644 package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
+ create mode 100644 package/multimedia/gstreamer1/Config.in
+ create mode 100644 package/multimedia/gstreamer1/gstreamer1.mk
+ create mode 100644 package/multimedia/libav/Config.in
+ create mode 100644 package/multimedia/libav/libav.mk
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.9.5
