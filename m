@@ -1,144 +1,408 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 20 Jun 2013 17:07:36 -0500
-Subject: [Buildroot] [PATCH v12 01/11] gstreamer1: Add gstreamer version
-	1.0.7 package
+Date: Thu, 20 Jun 2013 17:07:38 -0500
+Subject: [Buildroot] [PATCH v12 03/11] gst1-plugins-base: add gstreamer1
+	base plugins
 In-Reply-To: <1371766066-676-1-git-send-email-spenser@gillilanding.com>
 References: <1371766066-676-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1371766066-676-2-git-send-email-spenser@gillilanding.com>
+Message-ID: <1371766066-676-4-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds the gstreamer version 1.x series to buildroot.
+Adds gstreamer 1.X base plugins.
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/multimedia/Config.in                |    1 +
- package/multimedia/gstreamer1/Config.in     |   55 +++++++++++++++++++++++++++
- package/multimedia/gstreamer1/gstreamer1.mk |   40 +++++++++++++++++++
- 3 files changed, 96 insertions(+)
- create mode 100644 package/multimedia/gstreamer1/Config.in
- create mode 100644 package/multimedia/gstreamer1/gstreamer1.mk
+ package/multimedia/Config.in                       |    1 +
+ package/multimedia/gst1-plugins-base/Config.in     |  153 +++++++++++++++
+ .../gst1-plugins-base/gst1-plugins-base.mk         |  206 ++++++++++++++++++++
+ 3 files changed, 360 insertions(+)
+ create mode 100644 package/multimedia/gst1-plugins-base/Config.in
+ create mode 100644 package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
 
 diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 77c0a22..1427a27 100644
+index 1427a27..6e21fc6 100644
 --- a/package/multimedia/Config.in
 +++ b/package/multimedia/Config.in
-@@ -6,6 +6,7 @@ source "package/multimedia/faad2/Config.in"
- source "package/multimedia/flac/Config.in"
- source "package/multimedia/ffmpeg/Config.in"
- source "package/multimedia/gstreamer/Config.in"
-+source "package/multimedia/gstreamer1/Config.in"
- source "package/multimedia/gst-ffmpeg/Config.in"
- source "package/multimedia/gst-dsp/Config.in"
+@@ -12,6 +12,7 @@ source "package/multimedia/gst-dsp/Config.in"
  source "package/multimedia/gst-fsl-plugins/Config.in"
-diff --git a/package/multimedia/gstreamer1/Config.in b/package/multimedia/gstreamer1/Config.in
+ source "package/multimedia/gst-omapfb/Config.in"
+ source "package/multimedia/gst-plugins-base/Config.in"
++source "package/multimedia/gst1-plugins-base/Config.in"
+ source "package/multimedia/gst-plugins-good/Config.in"
+ source "package/multimedia/gst-plugins-bad/Config.in"
+ source "package/multimedia/gst-plugins-ugly/Config.in"
+diff --git a/package/multimedia/gst1-plugins-base/Config.in b/package/multimedia/gst1-plugins-base/Config.in
 new file mode 100644
-index 0000000..2bd911a
+index 0000000..2aea910
 --- /dev/null
-+++ b/package/multimedia/gstreamer1/Config.in
-@@ -0,0 +1,55 @@
-+config BR2_PACKAGE_GSTREAMER1
-+	bool "gstreamer1"
-+	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBGLIB2
++++ b/package/multimedia/gst1-plugins-base/Config.in
+@@ -0,0 +1,153 @@
++menuconfig BR2_PACKAGE_GST1_PLUGINS_BASE
++	bool "gst1-plugins-base"
++	depends on BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXV if BR2_PACKAGE_XORG7
 +	help
-+	  GStreamer is an open source multimedia framework. This 1.x version of
-+	  Gstreamer is incompatible with Gstreamer 0.10.x.
++	  A basic set of well-supported plug-ins for GStreamer.
 +
 +	  http://gstreamer.freedesktop.org/
 +
-+if BR2_PACKAGE_GSTREAMER1
++if BR2_PACKAGE_GST1_PLUGINS_BASE
 +
-+config BR2_PACKAGE_GSTREAMER1_PARSE
-+	bool "enable command-line parser"
++comment "dependency-less plugins"
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ADDER
++	bool "adder"
++	help
++	  Adds multiple streams
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
++	bool "app"
++	help
++	  Elements used to communicate with applications
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT
++	bool "audioconvert (mandatory for audio playback)"
 +	default y
 +	help
-+	  Enable command line parser for gstreamer. This may incrase the CPu
-+	  overhead by a small amount.
++	  Convert audio to different formats
 +
-+config BR2_PACKAGE_GSTREAMER1_TRACE
-+	bool "enable tracing subsystem"
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORATE
++	bool "audiorate"
++	help
++	  Adjusts audio frames
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC
++	bool "audiotestsrc"
++	help
++	  Creates audio test signals of given frequency and volume
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING
++	bool "encoding"
++	help
++	  various encoding-related elements
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT
++	bool "videoconvert"
++	help
++	  Colorspace conversion
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO
++	bool "gio"
++	help
++	  GIO elements
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TYPEFIND
++	bool "playback"
 +	default y
 +	help
-+	  Enable the tracing subsystem within gstreamer.  This may increase CPU
-+	  overhead by a small amount.
++	  various playback elements
 +
-+config BR2_PACKAGE_GSTREAMER1_GST_DEBUG
-+	bool "enable gst-debug trace support"
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
++	bool "audioresample (mandatory for audio playback)"
 +	default y
 +	help
-+	  Enable support for the gst-debug tracing functionality in gstreamer.
-+	  This has limited CPU overhead, but does increase the rootfs size
-+	  somewhat.
++	  Resamples audio
 +
-+config BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY
-+	bool "enable plugin registry"
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE
++	bool "subparse"
++	help
++	  Subtitle parsing
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TCP
++	bool "tcp"
++	help
++	  transfer data over the network via TCP
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TYPEFIND
++	bool "typefind"
 +	default y
 +	help
-+	  Enable support for the GStreamer plugin registry. This may increase
-+	  the launch-time for a GStreamer application.
++	  default typefind functions
 +
-+config BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS
-+	bool "install gst-launch & gst-inspect"
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC
++	bool "videotestsrc"
++	help
++	  Creates a test video stream
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEORATE
++	bool "videorate"
++	help
++	  Adjusts video frames
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
++	bool "videoscale (mandatory for video playback)"
 +	default y
 +	help
-+	  Install the gst-launch and gst-inspect tools. This will take up
-+	  additional space on the target.
++	  Resizes video
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
++	bool "volume (mandatory for audio playback)"
++	default y
++	help
++	  plugin for controlling audio volume
++
++comment "plugins with external dependencies"
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
++	bool "alsa (mandatory for audio playback)"
++	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_ALSA_LIB_MIXER
++	select BR2_PACKAGE_ALSA_LIB_PCM
++	help
++	  ALSA plugin library
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TREMOR
++	bool "tremor"
++	select BR2_PACKAGE_TREMOR
++	help
++	  Vorbis Tremor decoder
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OGG
++	bool "ogg (*.ogg audio/video)"
++	select BR2_PACKAGE_LIBOGG
++	help
++	  ogg stream manipulation (info about ogg: http://xiph.org)
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
++	bool "pango font renderer"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_PANGO
++	help
++	  Pango-based text rendering and overlay
++
++comment "pango plugin requires a toolchain with C++ support"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA
++	bool "theora (*.ogg video)"
++	select BR2_PACKAGE_LIBTHEORA
++	help
++	  Theora plugin library
++
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VORBIS
++	bool "vorbis (*.ogg audio)"
++	select BR2_PACKAGE_LIBVORBIS
++	help
++	  Vorbis plugin library
 +
 +endif
 +
-+comment "gstreamer1 requires a toolchain with WCHAR and threads support"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+
-diff --git a/package/multimedia/gstreamer1/gstreamer1.mk b/package/multimedia/gstreamer1/gstreamer1.mk
+diff --git a/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
 new file mode 100644
-index 0000000..71ad08b
+index 0000000..1ab6f1e
 --- /dev/null
-+++ b/package/multimedia/gstreamer1/gstreamer1.mk
-@@ -0,0 +1,40 @@
-+#############################################################
++++ b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
+@@ -0,0 +1,206 @@
++################################################################################
 +#
-+# gstreamer1
++# gst1-plugins-base
 +#
-+#############################################################
++################################################################################
 +
-+GSTREAMER1_VERSION = 1.0.7
-+GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
-+GSTREAMER1_SITE = http://gstreamer.freedesktop.org/src/gstreamer
-+GSTREAMER1_INSTALL_STAGING = YES
-+GSTREAMER1_LICENSE_FILES = COPYING
-+GSTREAMER1_LICENSE = LGPLv2+ LGPLv2.1+
++GST1_PLUGINS_BASE_VERSION = 1.0.7
++GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
++GST1_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
++GST1_PLUGINS_BASE_INSTALL_STAGING = YES
++GST1_PLUGINS_BASE_LICENSE_FILES = COPYING.LIB
++GST1_PLUGINS_BASE_LICENSE = LGPLv2+ LGPLv2.1+
 +
-+# Checking if unaligned memory access works correctly cannot be done when cross
-+# compiling. For the following architectures there is no information available
-+# in the configure script.
-+ifeq ($(BR2_avr32),y)
-+GSTREAMER1_CONF_ENV = as_cv_unaligned_access=no
-+endif
-+ifeq ($(BR2_aarch64),y)
-+GSTREAMER1_CONF_ENV = as_cv_unaligned_access=yes
-+endif
++# freetype is only used by examples, but if it is not found
++# and the host has a freetype-config script, then the host
++# include dirs are added to the search path causing trouble
++GST1_PLUGINS_BASE_CONF_ENV =
++	FT2_CONFIG=/bin/false \
++	ac_cv_header_stdint_t="stdint.h"
 +
-+GSTREAMER1_CONF_OPT = \
++GST1_PLUGINS_BASE_CONF_OPT = \
 +	--disable-examples \
-+	--disable-tests \
-+	--disable-failing-tests \
-+	--disable-debug \
++	--disable-oggtest \
++	--disable-vorbistest \
++	--disable-freetypetest \
 +	--disable-valgrind \
-+	--disable-benchmarks \
-+	--disable-check \
-+	$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),,--disable-trace) \
-+	$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),,--disable-parse) \
-+	$(if $(BR2_PACKAGE_GSTREAMER1_GST_DEBUG),,--disable-gst-debug) \
-+	$(if $(BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY),,--disable-registry) \
-+	$(if $(BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS),,--disable-tools)
++	--disable-debug
 +
-+GSTREAMER1_DEPENDENCIES = libglib2 host-pkgconf host-bison host-flex
++# Options which require currently unpackaged libraries
++GST1_PLUGINS_BASE_CONF_OPT += \
++	--disable-cdparanoia \
++	--disable-libvisual \
++	--disable-iso-codes
++
++GST1_PLUGINS_BASE_DEPENDENCIES = gstreamer1
++
++# These plugins are liste in the order from ./configure --help
++
++ifeq ($(BR2_PACKAGE_ORC),y)
++GST1_PLUGINS_BASE_DEPENDENCIES += orc
++GST1_PLUGINS_BASE_CONF_OPT += --enable-orc
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ADDER),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-adder
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-adder
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-app
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-app
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-audioconvert
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-audioconvert
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORATE),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-audiorate
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-audiorate
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-audiotestsrc
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-audiotestsrc
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-encoding
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-encoding
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-videoconvert
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-videoconvert
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-gio
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-gio
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-playback
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-playback
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-audioresample
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-audioresample
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-subparse
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-subparse
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TCP),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-tcp
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-tcp
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TYPEFIND),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-typefind
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-typefind
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-videotestsrc
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-videotestsrc
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEORATE),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-videorate
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-videorate
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-videoscale
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-videoscale
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-volume
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-volume
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++GST1_PLUGINS_BASE_DEPENDENCIES += zlib
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-zlib
++endif
++
++ifeq ($(BR2_PACKAGE_XORG7),y)
++GST1_PLUGINS_BASE_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXv
++GST1_PLUGINS_BASE_CONF_OPT += \
++	--enable-x \
++	--enable-xshm \
++	--enable-xvideo
++else
++GST1_PLUGINS_BASE_CONF_OPT += \
++	--disable-x \
++	--disable-xshm \
++	--disable-xvideo
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA),y)
++GST1_PLUGINS_BASE_DEPENDENCIES += alsa-lib
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-alsa
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TREMOR),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-ivorbis
++GST1_PLUGINS_BASE_DEPENDENCIES += tremor
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-ivorbis
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OGG),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-ogg
++GST1_PLUGINS_BASE_DEPENDENCIES += libogg
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-ogg
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-pango
++GST1_PLUGINS_BASE_DEPENDENCIES += pango
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-pango
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-theora
++GST1_PLUGINS_BASE_DEPENDENCIES += libtheora
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-theora
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VORBIS),y)
++GST1_PLUGINS_BASE_CONF_OPT += --enable-vorbis
++GST1_PLUGINS_BASE_DEPENDENCIES += libvorbis
++else
++GST1_PLUGINS_BASE_CONF_OPT += --disable-vorbis
++endif
 +
 +$(eval $(autotools-package))
 -- 
