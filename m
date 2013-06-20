@@ -1,133 +1,87 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 19 Jun 2013 23:13:59 -0500
-Subject: [Buildroot] [PATCH v11 00/11] add Gstreamer 1.X for gst-omx support
-Message-ID: <1371701651-7739-1-git-send-email-spenser@gillilanding.com>
+From: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Thu, 20 Jun 2013 12:26:29 +0800
+Subject: [Buildroot] Unstripped binaries for debugging with gdbserver
+Message-ID: <CAEvN+1j-GoCE=SXuSSAqhuyYFy4MMAOP5_HNrUXSdN4kHAc6jw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds gst-omx support to buildroot. Thus, making it possible to use
-gstreamer applications which utilize hardware acceleration on OpenMAX supported
-systems.
+Hi Folks,
 
-In addition, the patches include the libvpx library and enablement in gstreamer.
-This is meant to give an example of how to add support in the future.
+I'm debugging user programs with gdbserver.
 
-To test this patch series on the Raspberry Pi, select the eglgles plugin in
-gst1-plugins-bad and select gst-omx.  To decode a 720p h264 encoded .mov file,
-the following gst-launch pipeline can be used.
+Since binaries are stripped for the target, we need to use the
+unstripped ones somewhere else.
+The sysroot (staging) is the perfect candidate, and all we need to do
+is to 'set sysroot' to staging in the gdb.
 
-Sample file: http://download.blender.org/peach/trailer/trailer_720p.mov
+However, this requires the package to be installed in staging as well,
+which is not the current default.
 
-   # gst-launch-1.0 filesrc location=/path/to/file \
-   #   ! qtdemux ! h264parse ! omx264dec ! eglglessink
+So I'm wondering does it make sense to turn on the "install staging'
+by default when gdbserver is in used.
 
-v10 -> v11:
-   - Add descriptions for each plugin from gst-inspect xml files.
-   - Put plugins in "./configure --help" order
-   - Add new options to gstreamer1
-   - Include rudimentry gst-libav (needs additional work) 
 
-v9 -> v10:
-   - Bump to gstreamer version 1.1.1 which due to poor packaging required a
-     patch to reinclude some header files.
-   - Add licensing information.
-   - Cleanup headers and whitespace changes.
+------------------------------------------------------------------------------
+commit 119ac6d18bca7f03ed70a63cc0f5ff694112bac0
+Author: Tzu-Jung Lee <tjlee@ambarella.com>
+Date:   Thu Jun 20 12:19:53 2013 +0800
 
-v8 -> v9:
-   - Fix webkit build failures due to libglib2 bump.
-   - bump gdk-pixbuf to 2.28.1
-   - bump libgtk2 to 2.24.18
-   - bump libsoup to 2.43.1
-   - bump webkit to 1.9.6
+    build: install staging if gdbserver is enabled.
 
-v7 -> v8:
-   - Incoporate threads patch and rebase on top of master.
+    Change-Id: I7644813f06fc1b43744b04279afc84fc8c5efa58
+    Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
 
-v6 -> v7:
-   - Additional verification complete with both RPi and Bellagio.
-   - Moved additional includes to the gst-omx and gst-plugins bad packages for
-     openmax and eglgles.
-   - A patch was added that ensures that the config files point to the correct
-     location.
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 288fc94..f6d9297 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -308,7 +308,12 @@ $(2)_REDISTRIBUTE          ?= YES
 
-v5 -> v6:
-   - Combined libglib patches to allow git-bisect
-   - added libopenmax virtual package for gst-omx (and future omx packages)
+ $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst
+host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
 
-v4 -> v5:
-   - added gst-omx as a new package
-   - combined glib bump to 2.36.1 with gstreamer 1.x and gst-omx (libglib
-     2.32.1 is required for gstreamer 1.X)
++#ifdef BR2_PACKAGE_GDB_SERVER
++$(2)_INSTALL_STAGING           ?= YES
++#else
+ $(2)_INSTALL_STAGING           ?= NO
++#endif
++
+ $(2)_INSTALL_IMAGES            ?= NO
+ $(2)_INSTALL_TARGET            ?= YES
+ $(2)_DIR_PREFIX                        = $(if $(4),$(4),$(TOP_SRCDIR)/package)
+------------------------------------------------------------------------------
 
-v3 -> v4:
-   - uses new style if/endif syntax and removes depends properties for
-     config elements in gstreamer1
+I also found a topic on FOSDEM 2013, which attempts to makes target/ a
+subset of staging/
+Any follow up on this?
 
-v2 -> v3:
-   - fixes issues found while building with all/none plugins enabled
-   - change naming from gst-plugins-<blah>1 to gst1-plugins-<blah>
-   - options which require currently unpackged libraries are disabled
+------------------------------------------------------------------------------
+http://elinux.org/Buildroot:DeveloperDaysFOSDEM2013
 
-v1 -> v2:
-   - completed patch by adding good/bad/ugly plguins.
+Discussion
 
-Spenser Gilliland (11):
-  gstreamer1: Add gstreamer version 1.1.1 package
-  gstreamer: update for gstreamer1
-  gst1-plugins-base: add gstreamer1 base plugins
-  gst1-plugins-good: add gstreamer1 good plugins
-  gst1-plugins-bad: add gstreamer1 bad plugins
-  gst1-plugins-ugly: add gstreamer1 ugly plugins
-  gst1-plugins-good: add libvpx support
-  gst-omx: add gst-omx package
-  multimedia: reorganize for gst1
-  libav: add new package
-  gst-libav: add libav plugin for gtreamer 1.x
+Copy target before creating images: the idea is to avoid the need for
+creating idempotent scripts in e.g. post-build script. It does make
+sense, because for the user it's a bit more difficult to make scripts
+idempotent. Also it can be a step for hiding the "target" directory.
+And it makes complete sense if we remove the "target" directory
+completely and copy from staging instead.
 
- package/multimedia/Config.in                       |   21 +-
- package/multimedia/gst-libav/Config.in             |   16 +
- package/multimedia/gst-libav/gst-libav.mk          |   18 +
- package/multimedia/gst-omx/Config.in               |   11 +
- .../multimedia/gst-omx/gst-omx-config-files.patch  |  127 ++++
- package/multimedia/gst-omx/gst-omx.mk              |   37 ++
- package/multimedia/gst1-plugins-bad/Config.in      |  457 +++++++++++++
- .../gst1-plugins-bad-dist-opencv-headers.patch     |  214 ++++++
- .../gst1-plugins-bad-use-gettext-0.18.patch        |   17 +
- .../gst1-plugins-bad/gst1-plugins-bad.mk           |  691 ++++++++++++++++++++
- package/multimedia/gst1-plugins-base/Config.in     |  153 +++++
- .../gst1-plugins-base/gst1-plugins-base.mk         |  206 ++++++
- package/multimedia/gst1-plugins-good/Config.in     |  330 ++++++++++
- .../gst1-plugins-good/gst1-plugins-good.mk         |  411 ++++++++++++
- package/multimedia/gst1-plugins-ugly/Config.in     |   69 ++
- .../gst1-plugins-ugly/gst1-plugins-ugly.mk         |  104 +++
- package/multimedia/gstreamer/Config.in             |    3 +-
- package/multimedia/gstreamer1/Config.in            |   55 ++
- package/multimedia/gstreamer1/gstreamer1.mk        |   40 ++
- package/multimedia/libav/Config.in                 |  158 +++++
- package/multimedia/libav/libav.mk                  |  200 ++++++
- 21 files changed, 3333 insertions(+), 5 deletions(-)
- create mode 100644 package/multimedia/gst-libav/Config.in
- create mode 100644 package/multimedia/gst-libav/gst-libav.mk
- create mode 100644 package/multimedia/gst-omx/Config.in
- create mode 100644 package/multimedia/gst-omx/gst-omx-config-files.patch
- create mode 100644 package/multimedia/gst-omx/gst-omx.mk
- create mode 100644 package/multimedia/gst1-plugins-bad/Config.in
- create mode 100644 package/multimedia/gst1-plugins-bad/gst1-plugins-bad-dist-opencv-headers.patch
- create mode 100644 package/multimedia/gst1-plugins-bad/gst1-plugins-bad-use-gettext-0.18.patch
- create mode 100644 package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
- create mode 100644 package/multimedia/gst1-plugins-base/Config.in
- create mode 100644 package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
- create mode 100644 package/multimedia/gst1-plugins-good/Config.in
- create mode 100644 package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
- create mode 100644 package/multimedia/gst1-plugins-ugly/Config.in
- create mode 100644 package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
- create mode 100644 package/multimedia/gstreamer1/Config.in
- create mode 100644 package/multimedia/gstreamer1/gstreamer1.mk
- create mode 100644 package/multimedia/libav/Config.in
- create mode 100644 package/multimedia/libav/libav.mk
+The compelling reason to make target a subset of staging is that it is
+much easier to do debugging: just "gdb staging/usr/bin/foo" and it
+will have debug symbols and the paths to the source files.
+Single install commands: FOO_INSTALL_CMDS. They get executed twice,
+with DESTDIR set to the correct place (target or staging or host). The
+POST_XXX_INSTALL_HOOKS would still be executed separately. But this
+doesn't yet give us the situation that target and staging are the
+same, but target just has some stuff removed.
+Take it one step at the time: start with FOO_INSTALL_CMDS, we can see
+how far we get.
+Document that post-build script has to be idempotent (with an example).
+------------------------------------------------------------------------------
 
--- 
-1.7.9.5
+Regards,
+Roy
