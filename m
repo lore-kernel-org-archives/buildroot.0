@@ -1,35 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jun 2013 09:00:37 +0200
-Subject: [Buildroot] [PATCH v11 09/11] multimedia: reorganize for gst1
-In-Reply-To: <CAEBucnD2QtgyQiMAdmRLYYfGDYoDYaNYvzxFDNAmoxqbnzhYaA@mail.gmail.com>
-References: <1371701651-7739-1-git-send-email-spenser@gillilanding.com>
- <1371701651-7739-10-git-send-email-spenser@gillilanding.com>
- <20130620095456.1bac20d0@skate>
- <CAEBucnD2QtgyQiMAdmRLYYfGDYoDYaNYvzxFDNAmoxqbnzhYaA@mail.gmail.com>
-Message-ID: <20130621090037.79c159b0@skate>
+From: Andreas Naumann <anaumann@ultratronik.de>
+Date: Fri, 21 Jun 2013 11:02:00 +0200
+Subject: [Buildroot] [PATCH] qt5/qt5quick1: Drop qmlviewer from install
+	since its no longer provided.
+Message-ID: <1371805320-25495-1-git-send-email-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
 
-On Thu, 20 Jun 2013 14:37:28 -0500, Spenser Gilliland wrote:
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+---
+As Charles Krinke found out earlier, it seems like qmlviewer was dropped in qt5. Or is there anything I'm missing?
+ package/qt5/qt5quick1/qt5quick1.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-> I agree that's the better way to do it but it would have meant re
-> working every single commit. It was far easier just to throw in the
-> reorganization as a separate patch.
-
-It is far easier, but not really clean. That said, let's wait to see
-what Peter says, if he's fine with the options being re-organized
-through a followup patch, I'm fine with that.
-
-Best regards,
-
-Thomas
+diff --git a/package/qt5/qt5quick1/qt5quick1.mk b/package/qt5/qt5quick1/qt5quick1.mk
+index 0b7f9ea..cd804d6 100644
+--- a/package/qt5/qt5quick1/qt5quick1.mk
++++ b/package/qt5/qt5quick1/qt5quick1.mk
+@@ -38,7 +38,6 @@ define QT5QUICK1_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Declarative.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpf $(STAGING_DIR)/usr/lib/qt/plugins/qmltooling/libqmldbg_inspector.so $(TARGET_DIR)/usr/lib/qt/plugins/qmltooling/
+ 	cp -dpf $(STAGING_DIR)/usr/lib/qt/plugins/qmltooling/libqmldbg_tcp_qtdeclarative.so $(TARGET_DIR)/usr/lib/qt/plugins/qmltooling/
+-	cp -dpf $(STAGING_DIR)/usr/bin/qmlviewer $(TARGET_DIR)/usr/bin
+ 	cp -dpfr $(STAGING_DIR)/usr/imports $(TARGET_DIR)/usr
+ endef
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.2.3
