@@ -1,31 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Jun 2013 08:59:19 +0200
-Subject: [Buildroot] [RFC] post-build scripts: limitations, and proposal
-In-Reply-To: <CAAXf6LVO6Rz3RXLW++kOOfaHGRvR_4AB8Mi=VS2S-pKhJSm5Lw@mail.gmail.com>
-References: <20130620213628.GA3534@free.fr>
- <CAAXf6LVO6Rz3RXLW++kOOfaHGRvR_4AB8Mi=VS2S-pKhJSm5Lw@mail.gmail.com>
-Message-ID: <20130621085919.4f2c6579@skate>
+Date: Fri, 21 Jun 2013 09:00:37 +0200
+Subject: [Buildroot] [PATCH v11 09/11] multimedia: reorganize for gst1
+In-Reply-To: <CAEBucnD2QtgyQiMAdmRLYYfGDYoDYaNYvzxFDNAmoxqbnzhYaA@mail.gmail.com>
+References: <1371701651-7739-1-git-send-email-spenser@gillilanding.com>
+ <1371701651-7739-10-git-send-email-spenser@gillilanding.com>
+ <20130620095456.1bac20d0@skate>
+ <CAEBucnD2QtgyQiMAdmRLYYfGDYoDYaNYvzxFDNAmoxqbnzhYaA@mail.gmail.com>
+Message-ID: <20130621090037.79c159b0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Thomas,
+Dear Spenser Gilliland,
 
-On Fri, 21 Jun 2013 08:17:05 +0200, Thomas De Schampheleire wrote:
+On Thu, 20 Jun 2013 14:37:28 -0500, Spenser Gilliland wrote:
 
-> Instead of passing multiple scripts, you could just pass one wrapper
-> post build script, without options. This wrapper would be different in
-> your different configurations, and would call all relevant scripts in
-> turn. Adding a script for a certain configuration now no longer means
-> updating the buildroot configuration, but instead updating the wrapper
-> script.
+> I agree that's the better way to do it but it would have meant re
+> working every single commit. It was far easier just to throw in the
+> reorganization as a separate patch.
 
-This is absolutely what should be done in Yann's case. There's no need
-to make the post-build script mechanism in Buildroot more complicated,
-just handle the complexity in our own scripts, it is much more
-flexible.
+It is far easier, but not really clean. That said, let's wait to see
+what Peter says, if he's fine with the options being re-organized
+through a followup patch, I'm fine with that.
 
 Best regards,
 
