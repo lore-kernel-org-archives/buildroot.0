@@ -1,469 +1,778 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 21 Jun 2013 11:00:31 +0200
-Subject: [Buildroot] [git commit] Add header to packages where missing
-Message-ID: <20130621143539.323C89B075@busybox.osuosl.org>
+Date: Fri, 21 Jun 2013 15:58:48 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-good: add gstreamer1 good
+	plugins
+Message-ID: <20130621143540.4FB4A9AF72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=23ac7255c89a67d171a16f3ee1d4d160a43a305f
+commit: http://git.buildroot.net/buildroot/commit/?id=0c54fefe44be5e2e9cd4be0a767366fb7dc0d3a6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reported-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Adds gstreamer 1.X good plugins.
+
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/cifs-utils/cifs-utils.mk                   |    6 ++++++
- package/classpath/classpath.mk                     |    6 ++++++
- package/cloop/cloop.mk                             |    6 ++++++
- package/crosstool-ng/crosstool-ng.mk               |    6 ++++++
- package/dsp-tools/dsp-tools.mk                     |    6 ++++++
- package/explorercanvas/explorercanvas.mk           |    6 ++++++
- package/fbgrab/fbgrab.mk                           |    6 ++++++
- package/feh/feh.mk                                 |    6 ++++++
- package/flot/flot.mk                               |    6 ++++++
- package/hiawatha/hiawatha.mk                       |    6 ++++++
- package/igh-ethercat/igh-ethercat.mk               |    6 ++++++
- package/jamvm/jamvm.mk                             |    6 ++++++
- package/jquery-sparkline/jquery-sparkline.mk       |    6 ++++++
- package/jquery-validation/jquery-validation.mk     |    6 ++++++
- package/jquery/jquery.mk                           |    6 ++++++
- package/jsmin/jsmin.mk                             |    6 ++++++
- package/lpc3250loader/lpc3250loader.mk             |    6 ++++++
- package/lttng-babeltrace/lttng-babeltrace.mk       |    6 ++++++
- package/multimedia/gst-dsp/gst-dsp.mk              |    6 ++++++
- package/multimedia/gst-omapfb/gst-omapfb.mk        |    6 ++++++
- .../multimedia/tidsp-binaries/tidsp-binaries.mk    |    6 ++++++
- package/nettle/nettle.mk                           |    6 ++++++
- package/ortp/ortp.mk                               |    6 ++++++
- package/polarssl/polarssl.mk                       |    6 ++++++
- package/rt-tests/rt-tests.mk                       |    6 ++++++
- package/rtai/rtai.mk                               |    6 ++++++
- package/scons/scons.mk                             |    6 ++++++
- package/squashfs/squashfs.mk                       |    6 ++++++
- package/squashfs3/squashfs3.mk                     |    6 ++++++
- .../webrtc-audio-processing.mk                     |    6 ++++++
- 30 files changed, 180 insertions(+), 0 deletions(-)
+ package/multimedia/Config.in                       |    1 +
+ package/multimedia/gst1-plugins-good/Config.in     |  326 ++++++++++++++++
+ .../gst1-plugins-good/gst1-plugins-good.mk         |  404 ++++++++++++++++++++
+ 3 files changed, 731 insertions(+), 0 deletions(-)
 
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 3e221e8..6f8d651 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# cifs-utils
-+#
-+################################################################################
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 6e21fc6..935fde8 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -14,6 +14,7 @@ source "package/multimedia/gst-omapfb/Config.in"
+ source "package/multimedia/gst-plugins-base/Config.in"
+ source "package/multimedia/gst1-plugins-base/Config.in"
+ source "package/multimedia/gst-plugins-good/Config.in"
++source "package/multimedia/gst1-plugins-good/Config.in"
+ source "package/multimedia/gst-plugins-bad/Config.in"
+ source "package/multimedia/gst-plugins-ugly/Config.in"
+ source "package/multimedia/gst-plugin-x170/Config.in"
+diff --git a/package/multimedia/gst1-plugins-good/Config.in b/package/multimedia/gst1-plugins-good/Config.in
+new file mode 100644
+index 0000000..9b7eba0
+--- /dev/null
++++ b/package/multimedia/gst1-plugins-good/Config.in
+@@ -0,0 +1,326 @@
++menuconfig BR2_PACKAGE_GST1_PLUGINS_GOOD
++	bool "gst1-plugins-good"
++	depends on BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	help
++	  A set of well-supported plug-ins for GStreamer under the preferred
++	  license.
 +
- CIFS_UTILS_VERSION = 6.0
- CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
- CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
-diff --git a/package/classpath/classpath.mk b/package/classpath/classpath.mk
-index 61a1034..62167aa 100644
---- a/package/classpath/classpath.mk
-+++ b/package/classpath/classpath.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# classpath
-+#
-+################################################################################
++	  http://gstreamer.freedesktop.org/
 +
- CLASSPATH_VERSION = 0.98
- CLASSPATH_SITE = $(BR2_GNU_MIRROR)/classpath
- CLASSPATH_CONF_OPT = \
-diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
-index 809e531..1e9b723 100644
---- a/package/cloop/cloop.mk
-+++ b/package/cloop/cloop.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# cloop
-+#
-+################################################################################
++if BR2_PACKAGE_GST1_PLUGINS_GOOD
 +
- CLOOP_VERSION=2.634-1
- CLOOP_SOURCE=cloop_$(CLOOP_VERSION).tar.gz
- CLOOP_SITE=http://debian-knoppix.alioth.debian.org/packages/sources/cloop
-diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
-index b533396..d3ee5f8 100644
---- a/package/crosstool-ng/crosstool-ng.mk
-+++ b/package/crosstool-ng/crosstool-ng.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# crosstool-ng
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_JPEG
++	bool "jpeg (JPEG support)"
++	select BR2_PACKAGE_JPEG
++	help
++	  JPeg plugin library
 +
- CROSSTOOL_NG_VERSION           = 1.18.0
- CROSSTOOL_NG_SOURCE            = crosstool-ng-$(CROSSTOOL_NG_VERSION).tar.bz2
- CROSSTOOL_NG_SITE              = http://crosstool-ng.org/download/crosstool-ng/
-diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
-index 42aac05..e91c7bc 100644
---- a/package/dsp-tools/dsp-tools.mk
-+++ b/package/dsp-tools/dsp-tools.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# dsp-tools
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PNG
++	bool "png (PNG support)"
++	select BR2_PACKAGE_LIBPNG
++	help
++	  PNG plugin library
 +
- DSP_TOOLS_VERSION = 2.0
- DSP_TOOLS_SOURCE = dsp-tools-$(DSP_TOOLS_VERSION).tar.gz
- DSP_TOOLS_SITE = http://gst-dsp.googlecode.com/files/
-diff --git a/package/explorercanvas/explorercanvas.mk b/package/explorercanvas/explorercanvas.mk
-index 968843c..976082a 100644
---- a/package/explorercanvas/explorercanvas.mk
-+++ b/package/explorercanvas/explorercanvas.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# explorercanvas
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_BZ2
++	bool "bz2 support"
++	depends on BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
++	select BR2_PACKAGE_BZIP2
++	help
++	  Enable bz2 support for the following plugins:
++	  matroska
 +
- EXPLORERCANVAS_VERSION = r3
- EXPLORERCANVAS_SITE = http://explorercanvas.googlecode.com/files/
- EXPLORERCANVAS_SOURCE = excanvas_$(EXPLORERCANVAS_VERSION).zip
-diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
-index b0b46cb..7645a6b 100644
---- a/package/fbgrab/fbgrab.mk
-+++ b/package/fbgrab/fbgrab.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# fbgrab
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB
++	bool "zlib support"
++	depends on BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QTDEMUX || BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ID3DEMUX || BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
++	select BR2_PACKAGE_ZLIB
++	help
++	  Enable zlib support for the following plugins:
++	  id3demux, qtdemux, matroska
 +
- FBGRAB_VERSION = 1.0
- FBGRAB_SOURCE = fbgrab-$(FBGRAB_VERSION).tar.gz
- FBGRAB_SITE = http://hem.bredband.net/gmogmo/fbgrab
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 97a272d..360d03a 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# feh
-+#
-+################################################################################
++comment "dependency-less plugins"
 +
- FEH_VERSION = 2.9.1
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org/
-diff --git a/package/flot/flot.mk b/package/flot/flot.mk
-index a0ba6c2..dfa6c55 100644
---- a/package/flot/flot.mk
-+++ b/package/flot/flot.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# flot
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ALPHA
++	bool "alpha"
++	help
++	  adds an alpha channel to video - constant or via chroma-keying
 +
- FLOT_VERSION = 0.8.1
- FLOT_SITE = http://www.flotcharts.org/downloads
- FLOT_LICENSE = MIT
-diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
-index 3348d53..1ecb0e8 100644
---- a/package/hiawatha/hiawatha.mk
-+++ b/package/hiawatha/hiawatha.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# hiawatha
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_APETAG
++	bool "apetag"
++	help
++	  APEv1/2 tag reader
 +
- HIAWATHA_VERSION = 9.1
- HIAWATHA_SITE = http://www.hiawatha-webserver.org/files
- HIAWATHA_LICENSE = GPLv2
-diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
-index a531cab..63bda2f 100644
---- a/package/igh-ethercat/igh-ethercat.mk
-+++ b/package/igh-ethercat/igh-ethercat.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# igh-ethercat
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOFX
++	bool "audiofx"
++	help
++	  Audio effects plugin
 +
- IGH_ETHERCAT_VERSION = 1.5.1
- IGH_ETHERCAT_SITE    = http://etherlab.org/download/ethercat/
- IGH_ETHERCAT_SOURCE  = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
-diff --git a/package/jamvm/jamvm.mk b/package/jamvm/jamvm.mk
-index 3f05361..34f1b9f 100644
---- a/package/jamvm/jamvm.mk
-+++ b/package/jamvm/jamvm.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# jamvm
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOPARSERS
++	bool "audioparsers"
++	help
++	  Parsers for various audio formats
 +
- JAMVM_VERSION = 1.5.4
- JAMVM_SITE = http://downloads.sourceforge.net/project/jamvm/jamvm/JamVM%20$(JAMVM_VERSION)
- JAMVM_DEPENDENCIES = zlib classpath
-diff --git a/package/jquery-sparkline/jquery-sparkline.mk b/package/jquery-sparkline/jquery-sparkline.mk
-index aa6395c..af05045 100644
---- a/package/jquery-sparkline/jquery-sparkline.mk
-+++ b/package/jquery-sparkline/jquery-sparkline.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# jquery-sparkline
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUPARSE
++	bool "auparse"
++	help
++	  parses au streams
 +
- JQUERY_SPARKLINE_VERSION = 2.1.1
- JQUERY_SPARKLINE_SITE = http://www.omnipotent.net/jquery.sparkline/$(JQUERY_SPARKLINE_VERSION)
- JQUERY_SPARKLINE_SOURCE = jquery.sparkline.min.js
-diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
-index 423d7f1..71acaff 100644
---- a/package/jquery-validation/jquery-validation.mk
-+++ b/package/jquery-validation/jquery-validation.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# jquery-validation
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT
++	bool "autodetect"
++	help
++	  Plugin contains auto-detection plugins for video/audio in- and outputs
 +
- JQUERY_VALIDATION_VERSION = 1.11.1
- JQUERY_VALIDATION_SITE = http://jquery.bassistance.de/validate
- JQUERY_VALIDATION_SOURCE = jquery-validation-$(JQUERY_VALIDATION_VERSION).zip
-diff --git a/package/jquery/jquery.mk b/package/jquery/jquery.mk
-index 98b325b..44c444b 100644
---- a/package/jquery/jquery.mk
-+++ b/package/jquery/jquery.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# jquery
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AVI
++	bool "avi (*.avi video)"
++	default y
++	help
++	  AVI stream handling
 +
- JQUERY_VERSION = 1.10.1
- JQUERY_SITE = http://code.jquery.com
- JQUERY_SOURCE = jquery-$(JQUERY_VERSION).min.js
-diff --git a/package/jsmin/jsmin.mk b/package/jsmin/jsmin.mk
-index bb65c6c..d511911 100644
---- a/package/jsmin/jsmin.mk
-+++ b/package/jsmin/jsmin.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# jsmin
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CUTTER
++	bool "cutter"
++	help
++	  Audio Cutter to split audio into non-silent bits
 +
- JSMIN_VERSION = a9b4755
- JSMIN_SITE = http://github.com/douglascrockford/JSMin/tarball/$(JSMIN_VERSION)
- 
-diff --git a/package/lpc3250loader/lpc3250loader.mk b/package/lpc3250loader/lpc3250loader.mk
-index 2b9af88..42beb7b 100644
---- a/package/lpc3250loader/lpc3250loader.mk
-+++ b/package/lpc3250loader/lpc3250loader.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# lpc3250loader
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_DEBUGUTILS
++	bool "debugutils"
++	help
++	  elements for testing and debugging
 +
- HOST_LPC3250LOADER_SITE = git://gitorious.org/lpc3250loader/lpc3250loader.git
- HOST_LPC3250LOADER_VERSION = 1.0
- 
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index d3bfc83..2947c35 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.mk
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# lttng-babeltrace
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_DEINTERLACE
++	bool "deinterlace"
++	help
++	  Deinterlacer
 +
- LTTNG_BABELTRACE_SITE    = http://lttng.org/files/babeltrace/
- LTTNG_BABELTRACE_VERSION = 1.0.2
- LTTNG_BABELTRACE_SOURCE  = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
-diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
-index 74b4c98..1fd6976 100644
---- a/package/multimedia/gst-dsp/gst-dsp.mk
-+++ b/package/multimedia/gst-dsp/gst-dsp.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# gst-dsp
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_EFFECTV
++	bool "effectv"
++	help
++	  effect plugins from the effectv project
 +
- GST_DSP_VERSION = 0.10.2
- GST_DSP_SITE = http://gst-dsp.googlecode.com/files/
- 
-diff --git a/package/multimedia/gst-omapfb/gst-omapfb.mk b/package/multimedia/gst-omapfb/gst-omapfb.mk
-index f23bc86..7b8b128 100644
---- a/package/multimedia/gst-omapfb/gst-omapfb.mk
-+++ b/package/multimedia/gst-omapfb/gst-omapfb.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# gst-omapfb
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_EQUALIZER
++	bool "equalizer"
++	help
++	  GStreamer audio equalizers
 +
- GST_OMAPFB_VERSION=1.0
- GST_OMAPFB_SOURCE=gst-omapfb-$(GST_OMAPFB_VERSION).tar.gz
- GST_OMAPFB_SITE=http://gst-dsp.googlecode.com/files/
-diff --git a/package/multimedia/tidsp-binaries/tidsp-binaries.mk b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
-index 356baf4..fd799fb 100644
---- a/package/multimedia/tidsp-binaries/tidsp-binaries.mk
-+++ b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# tidsp-binaries
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLV
++	bool "flv"
++	help
++	  FLV muxing and demuxing plugin
 +
- TIDSP_BINARIES_VERSION = 23.i3.8
- TIDSP_BINARIES_SOURCE = tidsp-binaries-$(TIDSP_BINARIES_VERSION).tar.gz
- TIDSP_BINARIES_SITE = http://gst-dsp.googlecode.com/files/
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-index 131826e..b772d3a 100644
---- a/package/nettle/nettle.mk
-+++ b/package/nettle/nettle.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# nettle
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLX
++	bool "flx"
++	help
++	  FLC/FLI/FLX video decoder
 +
- NETTLE_VERSION = 2.7
- NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
- NETTLE_DEPENDENCIES = gmp
-diff --git a/package/ortp/ortp.mk b/package/ortp/ortp.mk
-index c4c900a..8983df7 100644
---- a/package/ortp/ortp.mk
-+++ b/package/ortp/ortp.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# ortp
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GOOM
++	bool "goom"
++	help
++	  GOOM visualization filter
 +
- ORTP_VERSION = 0.20.0
- ORTP_SITE = http://download.savannah.nongnu.org/releases/linphone/ortp/sources
- ORTP_CONF_OPT = --disable-strict
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-index 7d7fe3e..0b44dc9 100644
---- a/package/polarssl/polarssl.mk
-+++ b/package/polarssl/polarssl.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# polarssl
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GOOM2K1
++	bool "goom2k1"
++	help
++	  GOOM 2k1 visualization filter
 +
- POLARSSL_SITE = https://polarssl.org/download
- POLARSSL_VERSION = 1.2.7
- POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
-diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-index 60f63b5..f574d3a 100644
---- a/package/rt-tests/rt-tests.mk
-+++ b/package/rt-tests/rt-tests.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# rt-tests
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ICYDEMUX
++	bool "icydemux"
++	help
++	  Demux ICY tags from a stream
 +
- RT_TESTS_SITE    = http://snapshot.debian.org/archive/debian/20111202T222101Z/pool/main/r/rt-tests/
- RT_TESTS_VERSION = 0.83
- RT_TESTS_SOURCE  = rt-tests_$(RT_TESTS_VERSION).orig.tar.gz
-diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
-index be5abb1..c24fa41 100644
---- a/package/rtai/rtai.mk
-+++ b/package/rtai/rtai.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# rtai
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ID3DEMUX
++	bool "id3demux (*.mp3 audio)"
++	help
++	  Demux ID3v1 and ID3v2 tags from a file
 +
- RTAI_VERSION = 3.8.1
- RTAI_SOURCE  = rtai-$(RTAI_VERSION).tar.bz2
- RTAI_SITE    = http://www.rtai.org/RTAI/
-diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-index 79fd6b1..c256d5f 100644
---- a/package/scons/scons.mk
-+++ b/package/scons/scons.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# scons
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_IMAGEFREEZE
++	bool "imagefreeze"
++	help
++	  Still frame stream generator
 +
- SCONS_VERSION = 2.2.0
- SCONS_SOURCE = scons-$(SCONS_VERSION).tar.gz
- SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
-diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-index c0485a3..1341402 100644
---- a/package/squashfs/squashfs.mk
-+++ b/package/squashfs/squashfs.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# squashfs
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_INTERLEAVE
++	bool "interleave"
++	help
++	  Audio interleaver/deinterleaver
 +
- SQUASHFS_VERSION=4.2
- SQUASHFS_SOURCE=squashfs$(SQUASHFS_VERSION).tar.gz
- SQUASHFS_SITE=http://downloads.sourceforge.net/projct/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
-diff --git a/package/squashfs3/squashfs3.mk b/package/squashfs3/squashfs3.mk
-index e121c51..956dbd6 100644
---- a/package/squashfs3/squashfs3.mk
-+++ b/package/squashfs3/squashfs3.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# squashfs3
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4
++	bool "isomp4"
++	default y
++	help
++	  ISO base media file format support (mp4, 3gpp, qt, mj2)
 +
- SQUASHFS3_VERSION=3.4
- SQUASHFS3_SOURCE=squashfs$(SQUASHFS3_VERSION).tar.gz
- SQUASHFS3_SITE=http://downloads.sourceforge.net/project/squashfs/squashfs/$(SQUASHFS3_VERSION)
-diff --git a/package/webrtc-audio-processing/webrtc-audio-processing.mk b/package/webrtc-audio-processing/webrtc-audio-processing.mk
-index 4fbf8f6..9f76cba 100644
---- a/package/webrtc-audio-processing/webrtc-audio-processing.mk
-+++ b/package/webrtc-audio-processing/webrtc-audio-processing.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# webrtc-audio-processing
-+#
-+################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LAW
++	bool "law"
 +
- WEBRTC_AUDIO_PROCESSING_VERSION = 0.1
- WEBRTC_AUDIO_PROCESSING_SOURCE = webrtc-audio-processing-$(WEBRTC_AUDIO_PROCESSING_VERSION).tar.xz
- WEBRTC_AUDIO_PROCESSING_SITE = http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LEVEL
++	bool "level"
++	help
++	  Audio level plugin
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
++	bool "matroska"
++	help
++	  Matroska and WebM stream handling
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MONOSCOPE
++	bool "monoscope"
++	help
++	  Monoscope visualization
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MULTIFILE
++	bool "multifile"
++	help
++	  Reads/Writes buffers from/to sequentially named files
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MULTIPART
++	bool "multipart"
++	help
++	  multipart stream manipulation
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_REPLAYGAIN
++	bool "replaygain"
++	help
++	  ReplayGain volume normalization
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTP
++	bool "rtp"
++	help
++	  Real-time protocol plugins
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTPMANAGER
++	bool "rtpmanager"
++	help
++	  RTP session management plugin library
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP
++	bool "rtsp"
++	help
++	  transfer data via RTSP
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHAPEWIPE
++	bool "shapewipe"
++	help
++	  Shape Wipe transition filter
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SMPTE
++	bool "smpte"
++	help
++	  Apply the standard SMPTE transitions on video images
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SPECTRUM
++	bool "spectrum"
++	help
++	  Run an FFT on the audio signal, output spectrum data
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_UDP
++	depends on BR2_INET_IPV6
++	bool "udp"
++	help
++	  transfer data via UDP
++
++comment "udp requires a toolchain with IPv6 support"
++	depends on !BR2_INET_IPV6
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOBOX
++	bool "videobox"
++	help
++	  resizes a video by adding borders or cropping
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOCROP
++	bool "videocrop"
++	help
++	  Crops video into a user-defined region
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOFILTER
++	bool "videofilter"
++	help
++	  Video filters plugin
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOMIXER
++	bool "videomixer"
++	help
++	  Video mixer
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVENC
++	bool "wavenc"
++	help
++	  Encode raw audio into WAV
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVPARSE
++	bool "wavparse (*.wav audio)"
++	default y
++	help
++	  Parse a .wav file into raw audio
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_Y4M
++	bool "y4m"
++	help
++	  Encodes a YUV frame into the yuv4mpeg format (mjpegtools)
++
++comment "plugins with external dependencies"
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS
++	bool "ossaudio (OSS audio)"
++	help
++	  OSS (Open Sound System) support for GStreamer
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS4
++	bool "oss4 (Open Sound System 4)"
++	help
++	  Open Sound System (OSS) version 4 support for GStreamer
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
++	bool "v4l2"
++	help
++	  elements for Video 4 Linux
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO
++	bool "cairo"
++	select BR2_PACKAGE_CAIRO
++	select BR2_PACKAGE_CAIRO_PNG
++	help
++	  Cairo-based elements
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLAC
++	bool "flac (libFLAC)"
++	select BR2_PACKAGE_FLAC
++	help
++	  The FLAC Lossless compressor Codec
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GDKPIXBUF
++	bool "gdkpixbuf"
++	select BR2_PACKAGE_GDK_PIXBUF
++	help
++	  GdkPixbuf-based image decoder, overlay and sink
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
++	depends on BR2_LARGEFILE # pulseaudio -> libsndfile
++	select BR2_PACKAGE_PULSEAUDIO
++	bool "pulseaudio"
++	help
++	  PulseAudio plugin library
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
++	bool "souphttpsrc (http client)"
++	select BR2_PACKAGE_LIBSOUP
++	help
++	  libsoup HTTP client src/sink
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SPEEX
++	bool "speex"
++	select BR2_PACKAGE_SPEEX
++	help
++	  Speex plugin library
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
++	bool "vpx (webm)"
++	select BR2_PACKAGE_LIBVPX
++	help
++	  VP8 plugin
++
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVPACK
++	bool "wavpack (*.wv audio)"
++	select BR2_PACKAGE_WAVPACK
++	help
++	  Wavpack lossless/lossy audio format handling
++
++endif
+diff --git a/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk b/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
+new file mode 100644
+index 0000000..f177ed1
+--- /dev/null
++++ b/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
+@@ -0,0 +1,404 @@
++###############################################################################
++#
++# gst1-plugins-good
++#
++###############################################################################
++
++GST1_PLUGINS_GOOD_VERSION = 1.0.7
++GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
++GST1_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
++GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
++GST1_PLUGINS_GOOD_LICENSE = LGPLv2.1+
++
++GST1_PLUGINS_GOOD_CONF_OPT = \
++	--disable-debug \
++	--disable-valgrind \
++	--disable-examples \
++	--disable-directsound \
++	--disable-waveform \
++	--disable-sunaudio \
++	--disable-osx_audio \
++	--disable-osx_video \
++	--disable-aalib \
++	--disable-aalibtest \
++	--disable-libcaca \
++	--disable-esd \
++	--disable-esdtest
++
++
++# Options which require currently unpackaged libraries
++GST1_PLUGINS_GOOD_CONF_OPT += \
++	--disable-jack \
++	--disable-libdv \
++	--disable-dv1394 \
++	--disable-shout2 \
++	--disable-taglib
++
++GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
++
++ifeq ($(BR2_PACKAGE_ORC),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-orc
++GST1_PLUGINS_GOOD_DEPENDENCIES += orc
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ALPHA),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-alpha
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-alpha
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_APETAG),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-apetag
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-apetag
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOFX),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-audiofx
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-audiofx
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOPARSERS),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-audioparsers
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-audioparsers
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUPARSE),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-auparse
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-auparse
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-autodetect
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-autodetect
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AVI),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-avi
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-avi
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CUTTER),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-cutter
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-cutter
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_DEBUGUTILS),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-debugutils
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-debugutils
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_DEINTERLACE),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-deinterlace
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-deinterlace
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_EFFECTV),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-effectv
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-effectv
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_EQUALIZER),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-equalizer
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-equalizer
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLV),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-flv
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-flv
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLX),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-flx
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-flx
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GOOM),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-goom
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-goom
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GOOM2K1),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-goom2k1
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-goom2k1
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ICYDEMUX),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-icydemux
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-icydemux
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ID3DEMUX),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-id3demux
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-id3demux
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_IMAGEFREEZE),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-imagefreeze
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-imagefreeze
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_INTERLEAVE),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-interleave
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-interleave
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-isomp4
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-isomp4
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LAW),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-law
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-law
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LEVEL),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-level
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-level
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-matroska
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-matroska
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MONOSCOPE),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-monoscope
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-monoscope
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MULTIFILE),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-multifile
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-multifile
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MULTIPART),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-multipart
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-multipart
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_REPLAYGAIN),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-replaygain
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-replaygain
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTP),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-rtp
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-rtp
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTPMANAGER),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-rtpmanager
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-rtpmanager
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-rtsp
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-rtsp
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHAPEWIPE),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-shapewipe
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-shapewipe
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SMPTE),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-smpte
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-smpte
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SPECTRUM),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-spectrum
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-spectrum
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_UDP),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-udp
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-udp
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOBOX),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-videobox
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-videobox
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOCROP),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-videocrop
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-videocrop
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOFILTER),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-videofilter
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-videofilter
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VIDEOMIXER),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-videomixer
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-videomixer
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVENC),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-wavenc
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-wavenc
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVPARSE),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-wavparse
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-wavparse
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_Y4M),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-y4m
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-y4m
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-oss
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-oss
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS4),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-oss4
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-oss4
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-gst_v4l2
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-gst_v4l2
++endif
++
++ifeq ($(BR2_PACKAGE_XORG7),y)
++GST1_PLUGINS_GOOD_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXv
++GST1_PLUGINS_GOOD_CONF_OPT += \
++	--enable-x \
++	--enable-xshm \
++	--enable-xvideo
++else
++GST1_PLUGINS_GOOD_CONF_OPT += \
++	--disable-x \
++	--disable-xshm \
++	--disable-xvideo
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-cairo
++GST1_PLUGINS_GOOD_DEPENDENCIES += cairo
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-cairo
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLAC),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-flac
++GST1_PLUGINS_GOOD_DEPENDENCIES += flac
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-flac
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GDKPIXBUF),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-gdk_pixbuf
++GST1_PLUGINS_GOOD_DEPENDENCIES += gdk-pixbuf
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-gdk_pixbuf
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_JPEG),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-jpeg
++GST1_PLUGINS_GOOD_DEPENDENCIES += jpeg
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-jpeg
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PNG),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-libpng
++GST1_PLUGINS_GOOD_DEPENDENCIES += libpng
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-libpng
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-pulse
++GST1_PLUGINS_GOOD_DEPENDENCIES += pulseaudio
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-pulse
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-soup
++GST1_PLUGINS_GOOD_DEPENDENCIES += libsoup
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-soup
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SPEEX),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-speex
++GST1_PLUGINS_GOOD_DEPENDENCIES += speex
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-speex
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVPACK),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-wavpack
++GST1_PLUGINS_GOOD_DEPENDENCIES += wavpack
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-wavpack
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-zlib
++GST1_PLUGINS_GOOD_DEPENDENCIES += zlib
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-zlib
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_BZ2),y)
++GST1_PLUGINS_GOOD_CONF_OPT += --enable-bz2
++GST1_PLUGINS_GOOD_DEPENDENCIES += bzip2
++else
++GST1_PLUGINS_GOOD_CONF_OPT += --disable-bz2
++endif
++
++$(eval $(autotools-package))
