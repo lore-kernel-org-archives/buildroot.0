@@ -1,49 +1,64 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Fri, 21 Jun 2013 23:03:10 +0000
-Subject: [Buildroot] [PATCH] libunwind:  new package
-Message-ID: <F9C551623D2CBB4C9488801D14F864C639A6A708@ex-mb1.corp.adtran.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Fri, 21 Jun 2013 16:59:03 -0700
+Subject: [Buildroot] [PATCH] libevent: disable building test programs
+Message-ID: <1371859143-31329-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by:  Andy Kennedy <andy.kennedy@adtran.com>
+Libevent test programs use fork(), function
+that is not available on MMU-less architecture.
+
+This patch prevents compiling libevent test programs
+so that library can successfully build on architectures
+like blackfin
+
+Fixes:
+http://autobuild.buildroot.org/results/2e0/2e0422f1042d0cb00f5bab0dc190930581ed4ef2/
+
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
-diff -Naur a/package/Config.in b/package/Config.in
---- a/package/Config.in 2013-06-20 10:32:07.000000000 -0500
-+++ b/package/Config.in 2013-06-21 17:00:21.000000000 -0500
-@@ -612,6 +612,7 @@
- source "package/libtasn1/Config.in"
- source "package/libtpl/Config.in"
- source "package/libseccomp/Config.in"
-+source "package/libunwind/Config.in"
- source "package/liburcu/Config.in"
- source "package/linux-pam/Config.in"
- source "package/log4cxx/Config.in"
-diff -Naur a/package/libunwind/Config.in b/package/libunwind/Config.in
---- a/package/libunwind/Config.in       1969-12-31 18:00:00.000000000 -0600
-+++ b/package/libunwind/Config.in       2013-06-21 17:23:46.000000000 -0500
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBUNWIND
-+	bool "libunwind"
-+	help
-+	  C API to determine the call-chain of a program.
+ .../libevent-disable-building-test-programs.patch  |   30 ++++++++++++++++++++
+ 1 files changed, 30 insertions(+), 0 deletions(-)
+ create mode 100644 package/libevent/libevent-disable-building-test-programs.patch
+
+diff --git a/package/libevent/libevent-disable-building-test-programs.patch b/package/libevent/libevent-disable-building-test-programs.patch
+new file mode 100644
+index 0000000..4b0f0d9
+--- /dev/null
++++ b/package/libevent/libevent-disable-building-test-programs.patch
+@@ -0,0 +1,30 @@
++From e932c8864e1bb8b6a7901d4b049a1100c4becba5 Mon Sep 17 00:00:00 2001
++From: Gilles Talis <gilles.talis@gmail.com>
++Date: Fri, 21 Jun 2013 15:25:11 -0700
++Subject: [PATCH] Disable building test programs
 +
-+	  Project home:  <http://www.nongnu.org/libunwind/index.html>
-diff -Naur a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk
---- a/package/libunwind/libunwind.mk    1969-12-31 18:00:00.000000000 -0600
-+++ b/package/libunwind/libunwind.mk    2013-06-21 17:23:38.000000000 -0500
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# libuwind
-+#
-+################################################################################
++We are not really interested in building test programs.
++Moreover, these programs use fork() function that is
++not available on MMU-less architectures.
 +
-+LIBUNWIND_VERSION = 1.1
-+LIBUNWIND_SITE = http://download.savannah.gnu.org/releases/libunwind
-+LIBUNWIND_INSTALL_STAGING = YES
-+LIBUNWIND_LICENSE_FILES = COPYING
++Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
++---
++ Makefile.in |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
 +
-+$(eval $(autotools-package))
++diff --git a/Makefile.in b/Makefile.in
++index 2ebefa2..4fba1ff 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -487,7 +487,7 @@ LIBEVENT_LIBS_LA = libevent.la libevent_core.la libevent_extra.la \
++ @INSTALL_LIBEVENT_TRUE at lib_LTLIBRARIES = $(LIBEVENT_LIBS_LA)
++ @INSTALL_LIBEVENT_TRUE at pkgconfig_DATA = $(LIBEVENT_PKGCONFIG)
++ @INSTALL_LIBEVENT_FALSE at noinst_LTLIBRARIES = $(LIBEVENT_LIBS_LA)
++-SUBDIRS = . include sample test
+++SUBDIRS = . include sample
++ @BUILD_WIN32_FALSE at SYS_LIBS = 
++ @BUILD_WIN32_TRUE at SYS_LIBS = -lws2_32 -lshell32 -ladvapi32
++ @BUILD_WIN32_FALSE at SYS_SRC = $(am__append_5) $(am__append_6) \
++-- 
++1.7.4.1
++
+-- 
+1.7.4.1
