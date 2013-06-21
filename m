@@ -1,10 +1,11 @@
 From: richard.genoud at gmail.com <richard.genoud@gmail.com>
-Date: Fri, 21 Jun 2013 13:57:01 +0200
-Subject: [Buildroot] [PATCH 5/6] tcl: add a tclsh symlink
+Date: Fri, 21 Jun 2013 13:57:02 +0200
+Subject: [Buildroot] [PATCH 6/6] tcl: make the libtcl writable in order to
+	be stripped
 In-Reply-To: <1371815822-29453-1-git-send-email-y>
 References: <1371743610-17810-1-git-send-email-richard.genoud@gmail.com>
  <1371815822-29453-1-git-send-email-y>
-Message-ID: <51c43fa4.ebbbb40a.0abf.ffffba19@mx.google.com>
+Message-ID: <51c43fa6.ebbbb40a.0abf.ffffba1d@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +14,30 @@ To: buildroot@busybox.net
 
 From: Richard Genoud <richard.genoud@gmail.com>
 
-tclsh is installed with its version number (tclshx.y) but scripts (like
-usb_modeswitch_dispatcher) are calling tclsh, not tclshx.y.
+The libtcl is installed with 0555 and that prevents it from being
+stripped.
 
 Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
 ---
- package/tcl/tcl.mk |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/tcl/tcl.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index 90989d0..b50daeb 100644
+index b50daeb..55d083a 100644
 --- a/package/tcl/tcl.mk
 +++ b/package/tcl/tcl.mk
-@@ -30,7 +30,12 @@ endef
- TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_ENCODINGS
+@@ -42,5 +42,12 @@ endef
+ TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_TCLSH
  endif
  
--ifneq ($(BR2_PACKAGE_TCL_TCLSH),y)
-+ifeq ($(BR2_PACKAGE_TCL_TCLSH),y)
-+define TCL_SYMLINK_TCLSH
-+	ln -s tclsh$(TCL_VERSION_MAJOR) $(TARGET_DIR)/usr/bin/tclsh
++# library get installed read only, so strip fails
++define TCL_FIXUP_RO_LIB
++	chmod +w $(TARGET_DIR)/usr/lib/libtcl*
 +endef
-+TCL_POST_INSTALL_TARGET_HOOKS += TCL_SYMLINK_TCLSH
-+else
- define TCL_REMOVE_TCLSH
- 	rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR)
- endef
++
++TCL_POST_INSTALL_TARGET_HOOKS += TCL_FIXUP_RO_LIB
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 1.7.10.4
