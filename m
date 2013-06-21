@@ -1,38 +1,47 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Thu, 20 Jun 2013 19:21:48 -0400
-Subject: [Buildroot] Recurrent Blackfin build failure on icu
-In-Reply-To: <CAJxxZ0NqXVjrO9_d6mYALXP6ktvLMxXFyc--RS9y9GVm5UkE7Q@mail.gmail.com>
-References: <20130529213510.43fc1372@skate> <20130603113857.0c7ff74a@skate>
- <CAJxxZ0NqXVjrO9_d6mYALXP6ktvLMxXFyc--RS9y9GVm5UkE7Q@mail.gmail.com>
-Message-ID: <201306201921.49209.vapier@gentoo.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 20 Jun 2013 22:22:16 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
+	9}.x stable version
+Message-ID: <1371777737-30853-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 05 June 2013 22:32:27 Sonic Zhang wrote:
-> On Mon, Jun 3, 2013 at 5:38 PM, Thomas Petazzoni wrote:
-> > On Mon, 3 Jun 2013 17:26:08 +0800, Sonic Zhang wrote:
-> >> For historic reasons, Blackfin GNU toolchain generate assembly symbols
-> >> with the prefix '_'. For example: _uconvmsg_dat and _icudt48_dat .
-> >> But, the pkgdata tool in icu doesn't generate assembly file
-> >> uconvmsg_dat.s and icudt48l_dat.s in this way when Blackfin GNU
-> >> toolchain is used. What do you think is a better way to fix it?
-> > 
-> > Can this specific behavior of the Blackfin toolchain be detected? Is
-> > there a typical autotools test that would allow to test this?
-> 
-> Maybe you can check the symbol name after compiling a C file into an
-> assembly file?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                                  | 6 +++---
+ ...0.83-headers_install-fix-__packed-in-exported-kernel-head.patch} | 0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.82-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.83-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-gcc provides __USER_LABEL_PREFIX__ specifically for this.  but you'd have to 
-create a .S file and run it through the preprocessor to do that ...
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130620/c44662b3/attachment.asc>
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 5667efb..de0c703 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -70,15 +70,15 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.82"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.83"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.47"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.49"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.50"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+-	default "3.9.6"		if BR2_KERNEL_HEADERS_3_9
++	default "3.9.7"		if BR2_KERNEL_HEADERS_3_9
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.82-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.83-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.82-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.83-headers_install-fix-__packed-in-exported-kernel-head.patch
+-- 
+1.8.1.5
