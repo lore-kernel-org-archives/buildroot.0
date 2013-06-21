@@ -1,10 +1,11 @@
 From: richard.genoud at gmail.com <richard.genoud@gmail.com>
-Date: Fri, 21 Jun 2013 13:56:56 +0200
-Subject: [Buildroot] [PATCH 0/6] tcl rework (was: make usb_modeswitch work
-	with udev)
-In-Reply-To: <1371743610-17810-1-git-send-email-richard.genoud@gmail.com>
+Date: Fri, 21 Jun 2013 13:56:57 +0200
+Subject: [Buildroot] [PATCH 1/6] tcl: change BR2_PACKAGE_TCL_SHLIB_ONLY
+	option
+In-Reply-To: <1371815822-29453-1-git-send-email-y>
 References: <1371743610-17810-1-git-send-email-richard.genoud@gmail.com>
-Message-ID: <51c43f99.ebbbb40a.0abf.ffffba01@mx.google.com>
+ <1371815822-29453-1-git-send-email-y>
+Message-ID: <51c43f9c.ebbbb40a.0abf.ffffba07@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +14,57 @@ To: buildroot@busybox.net
 
 From: Richard Genoud <richard.genoud@gmail.com>
 
-At first, the goal of this patch set was to add a symlink
-tclsh->tclsh8.4 to make usb_modeswitch_dispatcher happy (it has a
-shebang #!/usr/bin/tclsh).
+It's not convenient to have an option (defaulted to yes) that removes a
+software.
+For instance, usb_modeswitching_data needs the tclsh interpreter, so it
+would have to un-select this option, but select TCL.
 
-While doing that, I saw some other problems (libtcl not stripped and
-not into staging). Also, Thomas suggested (and coded it actually !) that
-make condition should be used.
-Hence, a bigger patchset.
+Having an option that adds the tclsh binary (defaulted to no to keep the
+same behaviour) is way more convenient.
+Moreover, it seems that it was intended liked that at the begining
+because usb_modeswitching_data already selects BR2_PACKAGE_TCL_TCLSH
+which wasn't declared anywhere.
 
-Changes since v1:
-	- drop usb_modeswitch{,_data} version bumps patches as they are
-	  already mainlined (thanks Gustavo for the heads up !)
-	- use make conditions rather than shell conditions
-	- drop the explicit strip
-	- install the library into stating
-	- make the library writable
-
-Richard Genoud (6):
-  tcl: change BR2_PACKAGE_TCL_SHLIB_ONLY option
-  tcl: use make conditions
-  tcl: remove strip command
-  tcl: install the libtcl into staging
-  tcl: add a tclsh symlink
-  tcl: make the libtcl writable in order to be stripped
-
+Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+---
  package/tcl/Config.in |   11 +++++------
- package/tcl/tcl.mk    |   33 ++++++++++++++++++++++++---------
- 2 files changed, 29 insertions(+), 15 deletions(-)
+ package/tcl/tcl.mk    |    2 +-
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
+diff --git a/package/tcl/Config.in b/package/tcl/Config.in
+index 7a4d887..8af7980 100644
+--- a/package/tcl/Config.in
++++ b/package/tcl/Config.in
+@@ -16,12 +16,11 @@ config BR2_PACKAGE_TCL_DEL_ENCODINGS
+ 
+ 	  It saves approx. 1.4 Mb of space.
+ 
+-config BR2_PACKAGE_TCL_SHLIB_ONLY
+-	bool "install only shared library"
+-	default y
++config BR2_PACKAGE_TCL_TCLSH
++	bool "Install also tclsh binary, not only the shared library"
++	default n
+ 	depends on BR2_PACKAGE_TCL
+ 	help
+-	  Install only TCL shared library and not binary tcl
+-	  interpreter(tclsh8.4).
++	  Install the TCL interpreter binary file(tclsh8.4).
+ 
+-	  Saves ~14kb.
++	  Adds ~14kb.
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index 0c8fa33..ad23b80 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -27,7 +27,7 @@ define TCL_POST_INSTALL_CLEANUP
+ 	-if [ "$(BR2_PACKAGE_TCL_DEL_ENCODINGS)" = "y" ]; then \
+ 	rm -Rf $(TARGET_DIR)/usr/lib/tcl$(TCL_VERSION_MAJOR)/encoding/*; \
+ 	fi
+-	-if [ "$(BR2_PACKAGE_TCL_SHLIB_ONLY)" = "y" ]; then \
++	-if [ "$(BR2_PACKAGE_TCL_TCLSH)" != "y" ]; then \
+ 	rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR); \
+ 	fi
+ endef
 -- 
 1.7.10.4
