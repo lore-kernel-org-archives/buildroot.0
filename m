@@ -1,55 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 22 Jun 2013 21:23:56 +0000 (UTC)
-Subject: [Buildroot] [Bug 6326] New: Dropbear: Add options to allow better
- config for different target devices (e.g. routers)
-Message-ID: <bug-6326-163@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Jun 2013 00:22:32 +0200
+Subject: [Buildroot] [PATCH] system/permissions: make /root group+others
+	non-writable
+Message-ID: <1371939752-29205-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6326
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-              Host: any
-            Target: any
-             Build: buildroot 2013.05
-           Summary: Dropbear: Add options to allow better config for
-                    different target devices (e.g. routers)
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Keywords: patch
-          Severity: enhancement
-          Priority: P3
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: mail at maddes.net
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Upon logging, dropbear whines if /root is group- or others-writable, and
+key-based authentication is attempted, reverting to password-based
+authentication:
+    dropbear[149]: /root must be owned by user or root, and not writable by others
+    dropbear[149]: Password auth succeeded for 'root' from 192.168.127.35:41566
 
+On my system, /root was 770. Changing to 700 fixed the issue.
 
-Created attachment 4952
-  --> https://bugs.busybox.net/attachment.cgi?id=4952
-Patch (-p1) to add more buildroot options for Dropbear package.
+Having /root 700 is a good idea, anyway.
 
-Multiple embedded devices targets do not allow to put files everywhere,
-therefore paths and commands must be adopted to the given file system.
-Additionally the current make file changes the path of the xauth command in the
-background instead of providing an config option.
-The attached patch (-p1) adds four buildroot options to the Dropbear package,
-so it's config can be adopted to any given situation.
-Please apply for a future release.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ system/device_table.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-Kind regards
-Maddes
-
-P.S.:
-Bugzilla does not know the current stable release of buildroot.
-
+diff --git a/system/device_table.txt b/system/device_table.txt
+index 43c0cfa..7ae4b07 100644
+--- a/system/device_table.txt
++++ b/system/device_table.txt
+@@ -9,6 +9,7 @@
+ /dev					d	755	0	0	-	-	-	-	-
+ /tmp					d	1777	0	0	-	-	-	-	-
+ /etc					d	755	0	0	-	-	-	-	-
++/root					d	700	0	0	-	-	-	-	-
+ /home/default				d	755	1000	1000	-	-	-	-	-
+ /var/www				d	755	33	33	-	-	-	-	-
+ /etc/shadow				f	600	0	0	-	-	-	-	-
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.1.2
