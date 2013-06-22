@@ -1,61 +1,55 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sat, 22 Jun 2013 12:04:49 +0200
-Subject: [Buildroot] libunwind: new package
-In-Reply-To: <51C57411.40608@wp.pl>
-References: <51C57411.40608@wp.pl>
-Message-ID: <51C576C1.1030500@trzebnica.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 22 Jun 2013 21:23:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 6326] New: Dropbear: Add options to allow better
+ config for different target devices (e.g. routers)
+Message-ID: <bug-6326-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Andy,
-> Signed-off-by:  Andy Kennedy <andy.kennedy@adtran.com  <http://lists.busybox.net/mailman/listinfo/buildroot>>
-> ---
-> diff -Naur a/package/Config.in b/package/Config.in
-> --- a/package/Config.in 2013-06-20 10:32:07.000000000 -0500
-> +++ b/package/Config.in 2013-06-21 17:00:21.000000000 -0500
-> @@ -612,6 +612,7 @@
->   source "package/libtasn1/Config.in"
->   source "package/libtpl/Config.in"
->   source "package/libseccomp/Config.in"
-> +source "package/libunwind/Config.in"
->   source "package/liburcu/Config.in"
->   source "package/linux-pam/Config.in"
->   source "package/log4cxx/Config.in"
-> diff -Naur a/package/libunwind/Config.in b/package/libunwind/Config.in
-> --- a/package/libunwind/Config.in       1969-12-31 18:00:00.000000000 -0600
-> +++ b/package/libunwind/Config.in       2013-06-21 17:23:46.000000000 -0500
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_LIBUNWIND
-> +	bool "libunwind"
-> +	help
-> +	  C API to determine the call-chain of a program.
-> +
-> +	  Project home:  <http://www.nongnu.org/libunwind/index.html>
-> diff -Naur a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk
-> --- a/package/libunwind/libunwind.mk    1969-12-31 18:00:00.000000000 -0600
-> +++ b/package/libunwind/libunwind.mk    2013-06-21 17:23:38.000000000 -0500
-> @@ -0,0 +1,12 @@
-> +################################################################################
-> +#
-> +# libuwind
-Please fix typo - libunwind.
+https://bugs.busybox.net/show_bug.cgi?id=6326
 
-Regards,
-Jerzy
-> +#
-> +################################################################################
-> +
-> +LIBUNWIND_VERSION = 1.1
-> +LIBUNWIND_SITE =http://download.savannah.gnu.org/releases/libunwind
-> +LIBUNWIND_INSTALL_STAGING = YES
-> +LIBUNWIND_LICENSE_FILES = COPYING
-> +
-> +$(eval $(autotools-package))
-> ------------------------------------------------------------------------
+              Host: any
+            Target: any
+             Build: buildroot 2013.05
+           Summary: Dropbear: Add options to allow better config for
+                    different target devices (e.g. routers)
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Keywords: patch
+          Severity: enhancement
+          Priority: P3
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mail at maddes.net
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130622/55cd8718/attachment.html>
+
+Created attachment 4952
+  --> https://bugs.busybox.net/attachment.cgi?id=4952
+Patch (-p1) to add more buildroot options for Dropbear package.
+
+Multiple embedded devices targets do not allow to put files everywhere,
+therefore paths and commands must be adopted to the given file system.
+Additionally the current make file changes the path of the xauth command in the
+background instead of providing an config option.
+The attached patch (-p1) adds four buildroot options to the Dropbear package,
+so it's config can be adopted to any given situation.
+Please apply for a future release.
+
+Kind regards
+Maddes
+
+P.S.:
+Bugzilla does not know the current stable release of buildroot.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
