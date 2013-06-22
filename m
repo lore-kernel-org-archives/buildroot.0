@@ -1,32 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Jun 2013 11:15:25 +0200
-Subject: [Buildroot] [PATCH] libunwind:  new package
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C639A6A708@ex-mb1.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C639A6A708@ex-mb1.corp.adtran.com>
-Message-ID: <20130622111525.3d15ac49@skate>
+From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
+Date: Sat, 22 Jun 2013 11:15:56 +0200
+Subject: [Buildroot] [PATCH 1/6] tcl: change BR2_PACKAGE_TCL_SHLIB_ONLY
+ option
+In-Reply-To: <51c43f9c.ebbbb40a.0abf.ffffba07@mx.google.com>
+References: <1371743610-17810-1-git-send-email-richard.genoud@gmail.com>
+ <1371815822-29453-1-git-send-email-y>
+ <51c43f9c.ebbbb40a.0abf.ffffba07@mx.google.com>
+Message-ID: <51C56B4C.1070908@fh-kl.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear ANDY KENNEDY,
+Dear Richard Genoud,
 
-On Fri, 21 Jun 2013 23:03:10 +0000, ANDY KENNEDY wrote:
+Am 21.06.2013 13:56, schrieb richard.genoud at gmail.com:
+> From: Richard Genoud <richard.genoud@gmail.com>
+> 
+> It's not convenient to have an option (defaulted to yes) that removes a
+> software.
+> For instance, usb_modeswitching_data needs the tclsh interpreter, so it
+> would have to un-select this option, but select TCL.
+> 
+> Having an option that adds the tclsh binary (defaulted to no to keep the
+> same behaviour) is way more convenient.
+> Moreover, it seems that it was intended liked that at the begining
+> because usb_modeswitching_data already selects BR2_PACKAGE_TCL_TCLSH
+> which wasn't declared anywhere.
+> 
+> Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
 
-> +LIBUNWIND_VERSION = 1.1
-> +LIBUNWIND_SITE = http://download.savannah.gnu.org/releases/libunwind
-> +LIBUNWIND_INSTALL_STAGING = YES
-> +LIBUNWIND_LICENSE_FILES = COPYING
+If you change an existing option, please have a look on the
+Config.in.legacy file. You should add the old option to that file, so
+the user gets informed about the change.
 
-Please also add a LIBUNWIND_LICENSE variable with the name of the
-license.
+Finally you should check if another package uses this option for its own
+configuration and change this to the new option.
+BR2_PACKAGE_TCL_SHLIB_ONLY is used by usb_modeswitch (not
+usb_modeswitch_data anymore) to switch between the binary wrapper and
+the tcl wrapper script.
 
-Thanks,
+Best regards
+Patrick
 
-Thomas
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Dipl.-Inf. (FH) Patrick Ziegler
+
+University Of Applied Sciences
+Kaiserslautern
+
+Amerikastrasse 1
+D-66482 Zweibruecken
+Germany
+
+Phone:	+49 631 3724 5526
+Mail:	patrick.ziegler at fh-kl.de
+
+http://www.fh-kl.de
+http://www.fh-kl.de/fachbereiche/imst/iuk-knowhow.html
