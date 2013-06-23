@@ -1,36 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 23 Jun 2013 21:43:34 +0200
-Subject: [Buildroot] [git commit] libserial: prevent documentation from
-	being build
-Message-ID: <20130623200855.8DE619B141@busybox.osuosl.org>
+Date: Sun, 23 Jun 2013 21:47:15 +0200
+Subject: [Buildroot] [git commit] tinyhttpd: do not link against pthread
+Message-ID: <20130623200856.689DD9B141@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2e0aff3b5cf2f83a3ddd31dfd572b29a8288f6be
+commit: http://git.buildroot.net/buildroot/commit/?id=c3cf32ebf55c203ec4d3fcd566ca64bf173b9079
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If docbook2pdf is present on the host, the documentation is built, no
-matter all the --disable-doc*
-But forcing ac_cv_prog_DOCBOOK2PDF to no tells configure that
-docbook2pdf is absent, and thus the documentation is not built.
+Original patch for tinyhttpd disables pthread support from the code
+but does not disable it from makefile.
+This patch disables pthread support altogether
 
-Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/2e61a80fcbddd62c76e0406c34ab44d14a4b5c79
+
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libserial/libserial.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/tinyhttpd/tinyhttpd.patch |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libserial/libserial.mk b/package/libserial/libserial.mk
-index c5142c5..d2c928b 100644
---- a/package/libserial/libserial.mk
-+++ b/package/libserial/libserial.mk
-@@ -10,4 +10,6 @@ LIBSERIAL_INSTALL_STAGING = YES
- LIBSERIAL_LICENSE = GPLv2+
- LIBSERIAL_LICENSE_FILES = COPYING
- 
-+LIBSERIAL_CONF_ENV = ac_cv_prog_DOCBOOK2PDF=no
-+
- $(eval $(autotools-package))
+diff --git a/package/tinyhttpd/tinyhttpd.patch b/package/tinyhttpd/tinyhttpd.patch
+index 02eb189..05d6e50 100644
+--- a/package/tinyhttpd/tinyhttpd.patch
++++ b/package/tinyhttpd/tinyhttpd.patch
+@@ -73,7 +73,7 @@ diff -ur tinyhttpd-0.1.0/Makefile tinyhttpd-0.1.0-patched/Makefile
+  
+  httpd: httpd.c
+ -	gcc -W -Wall -lsocket -lpthread -o httpd httpd.c
+-+	$(CC) $(CFLAGS) $(LDFLAGS) -W -Wall -lpthread -o httpd httpd.c
+++	$(CC) $(CFLAGS) $(LDFLAGS) -W -Wall -o httpd httpd.c
+  
+  clean:
+ -	rm httpd
