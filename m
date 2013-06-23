@@ -1,41 +1,36 @@
-From: Stefan Peter <st3fanp3t3r@gmail.com>
-Date: Sun, 23 Jun 2013 22:02:06 +0200
-Subject: [Buildroot] Beaglebone Black support
-In-Reply-To: <CA+-urNQPUunJ4se0apcfimNRAK4iq1u_mLaCYRvcPJWS6Uq+HQ@mail.gmail.com>
-References: <CA+-urNQPUunJ4se0apcfimNRAK4iq1u_mLaCYRvcPJWS6Uq+HQ@mail.gmail.com>
-Message-ID: <51C7543E.3080402@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 23 Jun 2013 21:43:34 +0200
+Subject: [Buildroot] [git commit] libserial: prevent documentation from
+	being build
+Message-ID: <20130623200855.8DE619B141@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Frank
+commit: http://git.buildroot.net/buildroot/commit/?id=2e0aff3b5cf2f83a3ddd31dfd572b29a8288f6be
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 23.06.2013 21:21, Frank Hunleth wrote:
-> I just got a Beaglebone Black and wanted to try out Buildroot with it.
-> The 3.8 kernel from TI that was referenced in beaglebone_defconfig
-> didn't boot all the way for me. I could probably do a better job of
-> getting it to work since it looked close, but I was interested in some
-> of the cape and PRU code that was in the beaglebone.org kernel
-> patches. The good news was that as soon as I applied all of the
-> beaglebone.org kernel patches to a plain 3.8.13 kernel, the
-> buildroot-built images started booting with the peripherals of
-> interest working (minor issues, but it looks promising.)
-> 
-> I'd like to get things in a form that I could contribute upstream and
-> I'm not sure how to deal with the kernel. Both "kernels" referenced by
-> people on the beageboard mailing lists, the beaglebone.org kernel and
-> the Robert J. Nelson kernel, are really a list of patches (100s of
-> them) and a shell script to download the 3.8.13 kernel and apply them.
-> See here for an example:
-> 
-> https://github.com/beagleboard/kernel/tree/3.8
+If docbook2pdf is present on the host, the documentation is built, no
+matter all the --disable-doc*
+But forcing ac_cv_prog_DOCBOOK2PDF to no tells configure that
+docbook2pdf is absent, and thus the documentation is not built.
 
-Getting these patches upstream into Linus kernel is the final solution.
-Customers like you putting pressure to do so on TI (or whoever provides
-these patches) are the key to reach this target.
+Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libserial/libserial.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Regards
-
-Stefan Peter
+diff --git a/package/libserial/libserial.mk b/package/libserial/libserial.mk
+index c5142c5..d2c928b 100644
+--- a/package/libserial/libserial.mk
++++ b/package/libserial/libserial.mk
+@@ -10,4 +10,6 @@ LIBSERIAL_INSTALL_STAGING = YES
+ LIBSERIAL_LICENSE = GPLv2+
+ LIBSERIAL_LICENSE_FILES = COPYING
+ 
++LIBSERIAL_CONF_ENV = ac_cv_prog_DOCBOOK2PDF=no
++
+ $(eval $(autotools-package))
