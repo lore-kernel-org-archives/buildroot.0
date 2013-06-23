@@ -1,43 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 23 Jun 2013 21:51:57 +0200
-Subject: [Buildroot] [git commit] system/permissions: make /root
-	group+others non-writable
-Message-ID: <20130623200856.C9A869B141@busybox.osuosl.org>
+Date: Sun, 23 Jun 2013 21:33:49 +0200
+Subject: [Buildroot] [git commit] linux: bump 3.9.x stable version
+Message-ID: <20130623200855.2933A9B141@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2f2bf6a800d585ea381e09eec148844a7135ac53
+commit: http://git.buildroot.net/buildroot/commit/?id=e7c042588793844e251ef0936306b90268b4b155
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upon logging, dropbear whines if /root is group- or others-writable, and
-key-based authentication is attempted, reverting to password-based
-authentication:
-    dropbear[149]: /root must be owned by user or root, and not writable by others
-    dropbear[149]: Password auth succeeded for 'root' from 192.168.127.35:41566
-
-On my system, /root was 770. Changing to 700 fixed the issue.
-
-Having /root 700 is a good idea, anyway.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- system/device_table.txt |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/system/device_table.txt b/system/device_table.txt
-index 43c0cfa..7ae4b07 100644
---- a/system/device_table.txt
-+++ b/system/device_table.txt
-@@ -9,6 +9,7 @@
- /dev					d	755	0	0	-	-	-	-	-
- /tmp					d	1777	0	0	-	-	-	-	-
- /etc					d	755	0	0	-	-	-	-	-
-+/root					d	700	0	0	-	-	-	-	-
- /home/default				d	755	1000	1000	-	-	-	-	-
- /var/www				d	755	33	33	-	-	-	-	-
- /etc/shadow				f	600	0	0	-	-	-	-	-
+diff --git a/linux/Config.in b/linux/Config.in
+index cfad172..0912965 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.9.6"
++	bool "3.9.7"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.9.6" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.9.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
