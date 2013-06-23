@@ -1,56 +1,62 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 23 Jun 2013 21:45:02 +0200
-Subject: [Buildroot] [git commit] gvfs: Depend on libgcrypt if it is selected
-Message-ID: <20130623200855.C969B9B143@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Jun 2013 22:40:51 +0200
+Subject: [Buildroot] [pull request] Pull request for branch yem-misc-updates
+Message-ID: <cover.1372019882.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=953430bc4dcf7e8691252b3a60d10d6ff72db5c9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-gvfs can make optional use of libgcrypt so it needs to depend on
-it if it is selected. It's also necessary to set the
-ac_cv_path_LIBGCRYPT_CONFIG variable to a known value in order
-to prevent the AM_PATH_LIBGCRYPT macro from searching the host
-paths for the libgcrypt-config script.
+Hello All!
 
-Fixes the following build problem when libgcrypt is installed on the
-host system but the package is not selected in buildroot:
+Here are a few versions bumps:
+  - rpi-firmware, for a few fixes
+  - rpi_defconfig, for a new kernel with some fixes and enhancements
+  - tvheadend, for a few libav-related fixes
 
-gvfsbackendafpbrowse.c:31:20: fatal error: gcrypt.h: No such file or directory
+And a new package, w_scan, to scan for DVB channels without a pre-tuned
+config file (the other dvb-apps scan utils require a pre-tuned config
+file).
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gvfs/gvfs.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+Regards,
+Yann E. MORIN
 
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index d99c784..6e88f6e 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -12,6 +12,10 @@ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
- GVFS_DEPENDENCIES = host-pkgconf host-libglib2 libglib2 dbus shared-mime-info
- 
-+# Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
-+# build system from searching the host paths.
-+GVFS_CONF_ENV = ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
-+
- GVFS_CONF_OPT = \
- 	--disable-gconf			\
- 	--disable-cdda			\
-@@ -42,6 +46,10 @@ else
- GVFS_CONF_OPT += --disable-fuse
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+GVFS_DEPENDENCIES += libgcrypt
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBSOUP),y)
- GVFS_DEPENDENCIES += libsoup
- GVFS_CONF_OPT += --enable-http
+
+The following changes since commit 164f9fef0f80a7a38221787be8bf8a6d1684a107:
+
+  toolchain-external: bump to Linaro AArch64 2013.06 (2013-06-23 21:55:55 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem-misc-updates
+
+for you to fetch changes up to a4416db33352923370280841140fb56daa85fd86:
+
+  package/w_scan: new package (2013-06-23 22:29:07 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      package/rpi-firmware: version bump for HDMI and audio fixes
+      configs: bump kernel in rpi_defconfig for misc fixes
+      package/tvheadend: bump version for libav fixes
+      package/w_scan: new package
+
+ configs/rpi_defconfig                |  2 +-
+ package/Config.in                    |  1 +
+ package/rpi-firmware/rpi-firmware.mk |  2 +-
+ package/tvheadend/tvheadend.mk       |  2 +-
+ package/w_scan/Config.in             |  9 +++++++++
+ package/w_scan/w_scan.mk             | 13 +++++++++++++
+ 6 files changed, 26 insertions(+), 3 deletions(-)
+ create mode 100644 package/w_scan/Config.in
+ create mode 100644 package/w_scan/w_scan.mk
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
