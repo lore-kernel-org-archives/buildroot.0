@@ -1,123 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Jun 2013 15:58:08 +0200
-Subject: [Buildroot] [PATCH] lttng: bump the various LTTng components
-Message-ID: <1371995888-3263-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Jun 2013 16:20:03 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain-external: bump to Linaro AArch64
+	2013.06
+In-Reply-To: <1371997203-27475-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1371997203-27475-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1371997203-27475-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit bumps the various LTTng components to their latest stable
-version: 0.7.7 for liburcu, 1.1.1 for babeltrace, 2.1.3 for libust and
-2.1.2 for lttng-modules.
-
-For babeltrace, the patch
-lttng-babeltrace-02-fix-build-old-compilers.patch has been removed
-because it has been merged upstream as of version 1.1.1. This is also
-the reason why the package no longer needs to be autoreconfigured.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/liburcu/liburcu.mk                         |  2 +-
- ...tng-babeltrace-02-fix-build-old-compilers.patch | 27 ----------------------
- package/lttng-babeltrace/lttng-babeltrace.mk       |  6 +----
- package/lttng-libust/lttng-libust.mk               |  2 +-
- package/lttng-modules/lttng-modules.mk             |  2 +-
- 5 files changed, 4 insertions(+), 35 deletions(-)
- delete mode 100644 package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
+ toolchain/toolchain-external/Config.in   | 15 ++++++++-------
+ toolchain/toolchain-external/ext-tool.mk |  6 +++---
+ 2 files changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-index 3c684ea..35f09f7 100644
---- a/package/liburcu/liburcu.mk
-+++ b/package/liburcu/liburcu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index ebe9fcd..2c1c99b 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -692,8 +692,8 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+ 	  Toolchain for the Microblaze architecture, from
+ 	  http://wiki.xilinx.com/mb-gnu-tools
  
--LIBURCU_VERSION = 0.7.6
-+LIBURCU_VERSION = 0.7.7
- LIBURCU_SITE    = http://lttng.org/files/urcu/
- LIBURCU_SOURCE  = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_05
+-	bool "Linaro AArch64 13.05"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_06
++	bool "Linaro AArch64 13.06"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+@@ -704,8 +704,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_05
+ 	  Toolchain for the AArch64 architecture, from
+ 	  http://www.linaro.org/engineering/armv8/
  
-diff --git a/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch b/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
-deleted file mode 100644
-index b8f31be..0000000
---- a/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--Support old compilers
--
--Some old compilers do not use C99 as their default C language variant,
--for example gcc 4.3.x, which is used on some old machines. When such a
--compiler is used, by default, ULLONG_MAX is not visible. Adding
---std=gnu99 is needed to make this definition visible.
--
--In autoconf speak, this translates into the need of using
--AC_PROC_CC_STDC instead of AC_PROG_CC. See
--http://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/C-Compiler.html
--for more details.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/configure.ac
--===================================================================
----- a/configure.ac
--+++ b/configure.ac
--@@ -17,7 +17,7 @@
-- AC_SYS_LARGEFILE
-- 
-- # Checks for programs.
---AC_PROG_CC
--+AC_PROG_CC_STDC
-- AC_PROG_MAKE_SET
-- LT_INIT
-- AC_PROG_YACC
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index 2947c35..96d3a31 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.mk
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -5,14 +5,10 @@
- ################################################################################
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_04
+-	bool "Linaro AArch64 13.04"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_05
++	bool "Linaro AArch64 13.05"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+@@ -716,13 +716,14 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_04
+ 	  Toolchain for the AArch64 architecture, from
+ 	  http://www.linaro.org/engineering/armv8/
  
- LTTNG_BABELTRACE_SITE    = http://lttng.org/files/babeltrace/
--LTTNG_BABELTRACE_VERSION = 1.0.2
-+LTTNG_BABELTRACE_VERSION = 1.1.1
- LTTNG_BABELTRACE_SOURCE  = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
- 
- LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
- 
--# One patch touches configure.ac
--LTTNG_BABELTRACE_AUTORECONF = YES
--HOST_LTTNG_BABELTRACE_AUTORECONF = YES
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index 625475f..c295046 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LTTNG_LIBUST_SITE    = http://lttng.org/files/lttng-ust/
--LTTNG_LIBUST_VERSION = 2.1.1
-+LTTNG_LIBUST_VERSION = 2.1.3
- LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
- 
- LTTNG_LIBUST_INSTALL_STAGING = YES
-diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-index c1dfff9..85ccaf3 100644
---- a/package/lttng-modules/lttng-modules.mk
-+++ b/package/lttng-modules/lttng-modules.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LTTNG_MODULES_VERSION = 2.1.0
-+LTTNG_MODULES_VERSION = 2.1.2
- LTTNG_MODULES_SITE    = http://lttng.org/files/lttng-modules/
- LTTNG_MODULES_SOURCE  = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
- 
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_03
+-	bool "Linaro AArch64 13.03"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_04
++	bool "Linaro AArch64 13.04"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  Toolchain for the AArch64 architecture, from
+ 	  http://www.linaro.org/engineering/armv8/
+@@ -785,9 +786,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
++	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_06
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_05
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_04
+-	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_03
+ 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
+ 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 2b0b23e..1d76a66 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -290,15 +290,15 @@ TOOLCHAIN_EXTERNAL_SOURCE=lin32-microblaze-unknown-linux-gnu_14.3_early.tar.xz
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sources.buildroot.net/
+ TOOLCHAIN_EXTERNAL_SOURCE=microblaze-unknown-linux-gnu.tgz
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_03),y)
+-TOOLCHAIN_EXTERNAL_SITE=http://releases.linaro.org/13.03/components/toolchain/binaries/
+-TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-aarch64-linux-gnu-4.7-2013.03-20130313_linux.tar.xz
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_04),y)
+ TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.04/components/toolchain/binaries/
+ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-aarch64-linux-gnu-4.7-2013.04-20130415_linux.tar.xz
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_05),y)
+ TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.05/components/toolchain/binaries/
+ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-aarch64-linux-gnu-4.8-2013.05_linux.tar.xz
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_06),y)
++TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.06/components/toolchain/binaries/
++TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-aarch64-linux-gnu-4.8-2013.06_linux.tar.xz
+ else
+ # Custom toolchain
+ TOOLCHAIN_EXTERNAL_SITE=$(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
 -- 
 1.8.1.2
