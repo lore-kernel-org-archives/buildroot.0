@@ -1,7 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Jun 2013 22:40:51 +0200
-Subject: [Buildroot] [pull request] Pull request for branch yem-misc-updates
-Message-ID: <cover.1372019882.git.yann.morin.1998@free.fr>
+Date: Sun, 23 Jun 2013 22:40:53 +0200
+Subject: [Buildroot] [PATCH 2/4] configs: bump kernel in rpi_defconfig for
+	misc fixes
+In-Reply-To: <cover.1372019882.git.yann.morin.1998@free.fr>
+References: <cover.1372019882.git.yann.morin.1998@free.fr>
+Message-ID: <79eae970cd22fb7e6dbd96dd9ab9c8fd8df7289d.1372019882.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,53 +13,28 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Fixes in GPIOs, I2C and DMA.
 
-Here are a few versions bumps:
-  - rpi-firmware, for a few fixes
-  - rpi_defconfig, for a new kernel with some fixes and enhancements
-  - tvheadend, for a few libav-related fixes
+And since the RPi git tree fork has a non-upstream driver
+for rtl8192c WiFi USB stick, there's a fix for that, too.
 
-And a new package, w_scan, to scan for DVB channels without a pre-tuned
-config file (the other dvb-apps scan utils require a pre-tuned config
-file).
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ configs/rpi_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN
-
-
-The following changes since commit 164f9fef0f80a7a38221787be8bf8a6d1684a107:
-
-  toolchain-external: bump to Linaro AArch64 2013.06 (2013-06-23 21:55:55 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem-misc-updates
-
-for you to fetch changes up to a4416db33352923370280841140fb56daa85fd86:
-
-  package/w_scan: new package (2013-06-23 22:29:07 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      package/rpi-firmware: version bump for HDMI and audio fixes
-      configs: bump kernel in rpi_defconfig for misc fixes
-      package/tvheadend: bump version for libav fixes
-      package/w_scan: new package
-
- configs/rpi_defconfig                |  2 +-
- package/Config.in                    |  1 +
- package/rpi-firmware/rpi-firmware.mk |  2 +-
- package/tvheadend/tvheadend.mk       |  2 +-
- package/w_scan/Config.in             |  9 +++++++++
- package/w_scan/w_scan.mk             | 13 +++++++++++++
- 6 files changed, 26 insertions(+), 3 deletions(-)
- create mode 100644 package/w_scan/Config.in
- create mode 100644 package/w_scan/w_scan.mk
+diff --git a/configs/rpi_defconfig b/configs/rpi_defconfig
+index e3d0a79..40fd333 100644
+--- a/configs/rpi_defconfig
++++ b/configs/rpi_defconfig
+@@ -17,7 +17,7 @@ BR2_DEFAULT_KERNEL_VERSION="3.6.11"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="5d5301e"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="5516fc2"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
