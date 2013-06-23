@@ -1,32 +1,36 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sat, 22 Jun 2013 23:39:43 -0700
-Subject: [Buildroot] [PATCH 2/2] dash: add license information
-In-Reply-To: <1371969583-29063-1-git-send-email-gilles.talis@gmail.com>
-References: <1371969583-29063-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <1371969583-29063-2-git-send-email-gilles.talis@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Jun 2013 10:08:02 +0200
+Subject: [Buildroot] [PATCH] system/permissions: make /root group+others
+ non-writable
+In-Reply-To: <1371939752-29205-1-git-send-email-yann.morin.1998@free.fr>
+References: <1371939752-29205-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20130623100802.652eac9d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/dash/dash.mk |    2 ++
- 1 file changed, 2 insertions(+)
+Dear Yann E. MORIN,
 
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index 2765ed4..c6a8b11 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -8,6 +8,8 @@ DASH_VERSION = 0.5.7
- DASH_SOURCE = dash_$(DASH_VERSION).orig.tar.gz
- DASH_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/d/dash
- DASH_PATCH = dash_$(DASH_VERSION)-2.diff.gz
-+DASH_LICENSE = BSD-3c, GPLv2+ (mksignames.c)
-+DASH_LICENSE_FILES = COPYING
- 
- define DASH_INSTALL_TARGET_CMDS
- 	cp -a $(@D)/src/dash $(TARGET_DIR)/bin/dash
+On Sun, 23 Jun 2013 00:22:32 +0200, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Upon logging, dropbear whines if /root is group- or others-writable, and
+> key-based authentication is attempted, reverting to password-based
+> authentication:
+>     dropbear[149]: /root must be owned by user or root, and not writable by others
+>     dropbear[149]: Password auth succeeded for 'root' from 192.168.127.35:41566
+> 
+> On my system, /root was 770. Changing to 700 fixed the issue.
+> 
+> Having /root 700 is a good idea, anyway.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-1.7.10.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
