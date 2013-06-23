@@ -1,71 +1,123 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 23 Jun 2013 10:26:28 +0000 (UTC)
-Subject: [Buildroot] [Bug 6326] Dropbear: Add options to allow better config
- for different target devices (e.g. routers)
-In-Reply-To: <bug-6326-163@https.bugs.busybox.net/>
-References: <bug-6326-163@https.bugs.busybox.net/>
-Message-ID: <20130623102628.51DEB9AEAF@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Jun 2013 15:58:08 +0200
+Subject: [Buildroot] [PATCH] lttng: bump the various LTTng components
+Message-ID: <1371995888-3263-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6326
+This commit bumps the various LTTng components to their latest stable
+version: 0.7.7 for liburcu, 1.1.1 for babeltrace, 2.1.3 for libust and
+2.1.2 for lttng-modules.
 
---- Comment #2 from Maddes <mail@maddes.net> 2013-06-23 10:24:40 UTC ---
-#1 not a hacky target
-It is not about hacked/closed firmwares: I built Dropbear for an older DD-Wrt
-based router from Buffalo, which is an open firmware and allows access to the
-Linux console and config, with support from Buffalo.
-I *do* want to keep the official firmware with its feature, but the included
-Dropbear is years old and SSH is available from WAN. Therefore a newer Dropbear
-build is necessary to close security gaps.
-The file system layout/design of the firmware consists of a read-only root plus
-mount points for the writable flash partition and optional USB devices.
-Even if I use `mount -o bind` to overlay the original files, the paths are
-still not the same as the default ones in options.h.
-I hope this explanation will get the focus back to the feature/patch itself.
+For babeltrace, the patch
+lttng-babeltrace-02-fix-build-old-compilers.patch has been removed
+because it has been merged upstream as of version 1.1.1. This is also
+the reason why the package no longer needs to be autoreconfigured.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/liburcu/liburcu.mk                         |  2 +-
+ ...tng-babeltrace-02-fix-build-old-compilers.patch | 27 ----------------------
+ package/lttng-babeltrace/lttng-babeltrace.mk       |  6 +----
+ package/lttng-libust/lttng-libust.mk               |  2 +-
+ package/lttng-modules/lttng-modules.mk             |  2 +-
+ 5 files changed, 4 insertions(+), 35 deletions(-)
+ delete mode 100644 package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
 
-#2 patch for new options to adopt paths
-The current make file already "fixes" the XAUTH_COMMAND define in options.h,
-but that fix must not be correct for all builds/targets.
-Providing a config option for this makes the buildroot default change
-transparent and flexible for the builder.
-So the current make file already shows that adopting paths to the build/target
-is indeed needed for normal usage.
-
-But the XAUTH_COMMAND define is not the only path which has to be adopted for a
-build/target. Therefore the other new options are required too.
-
-
-#3 global patch dir
-Of course the global patch dir can always be used to change anything.
-But patches are intended for custom features and others that incorporate real
-code changes.
-Flexible configuration settings like these should be generally available and
-hold in config files.
-
-
-I see two ways to go:
-a) builder-unfriendly
-   Get rid of the "XAUTH_COMMAND" fix, and leave it *all* to the builder to
-patch paths in options.h.
-   A short sentence (either via Config.in or in dropbear.mk) about using the
-global patch dir would avoid support requests.
-   Builders will have to deal with multiple patch files via
-BR2_GLOBAL_PATCH_DIR, incl. rebasing all for changes in Dropbear and/or
-buildroot.
-b) builder-friendly
-   Apply the patch of this ticket to allow different paths for different builds
-via config files.
-   Builders can use the normal buildroot way of storing configurations.
-
-Kind Regards
-Maddes
-
+diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+index 3c684ea..35f09f7 100644
+--- a/package/liburcu/liburcu.mk
++++ b/package/liburcu/liburcu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBURCU_VERSION = 0.7.6
++LIBURCU_VERSION = 0.7.7
+ LIBURCU_SITE    = http://lttng.org/files/urcu/
+ LIBURCU_SOURCE  = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+ 
+diff --git a/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch b/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
+deleted file mode 100644
+index b8f31be..0000000
+--- a/package/lttng-babeltrace/lttng-babeltrace-02-fix-build-old-compilers.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-Support old compilers
+-
+-Some old compilers do not use C99 as their default C language variant,
+-for example gcc 4.3.x, which is used on some old machines. When such a
+-compiler is used, by default, ULLONG_MAX is not visible. Adding
+--std=gnu99 is needed to make this definition visible.
+-
+-In autoconf speak, this translates into the need of using
+-AC_PROC_CC_STDC instead of AC_PROG_CC. See
+-http://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/C-Compiler.html
+-for more details.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/configure.ac
+-===================================================================
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -17,7 +17,7 @@
+- AC_SYS_LARGEFILE
+- 
+- # Checks for programs.
+--AC_PROG_CC
+-+AC_PROG_CC_STDC
+- AC_PROG_MAKE_SET
+- LT_INIT
+- AC_PROG_YACC
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+index 2947c35..96d3a31 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.mk
++++ b/package/lttng-babeltrace/lttng-babeltrace.mk
+@@ -5,14 +5,10 @@
+ ################################################################################
+ 
+ LTTNG_BABELTRACE_SITE    = http://lttng.org/files/babeltrace/
+-LTTNG_BABELTRACE_VERSION = 1.0.2
++LTTNG_BABELTRACE_VERSION = 1.1.1
+ LTTNG_BABELTRACE_SOURCE  = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
+ 
+ LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
+ 
+-# One patch touches configure.ac
+-LTTNG_BABELTRACE_AUTORECONF = YES
+-HOST_LTTNG_BABELTRACE_AUTORECONF = YES
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index 625475f..c295046 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LTTNG_LIBUST_SITE    = http://lttng.org/files/lttng-ust/
+-LTTNG_LIBUST_VERSION = 2.1.1
++LTTNG_LIBUST_VERSION = 2.1.3
+ LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
+ 
+ LTTNG_LIBUST_INSTALL_STAGING = YES
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index c1dfff9..85ccaf3 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTTNG_MODULES_VERSION = 2.1.0
++LTTNG_MODULES_VERSION = 2.1.2
+ LTTNG_MODULES_SITE    = http://lttng.org/files/lttng-modules/
+ LTTNG_MODULES_SOURCE  = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.1.2
