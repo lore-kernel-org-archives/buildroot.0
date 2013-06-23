@@ -1,120 +1,48 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 23 Jun 2013 21:55:42 +0200
-Subject: [Buildroot] [git commit] toolchain-external: bump to Linaro ARM
-	2013.06
-Message-ID: <20130623200857.08E059B141@busybox.osuosl.org>
+Date: Sun, 23 Jun 2013 21:33:44 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 4,
+	9}.x stable version
+Message-ID: <20130623200854.AD46D9B141@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=88d9d17d975e97edde093f441b42d35f8a178aca
+commit: http://git.buildroot.net/buildroot/commit/?id=6e9686419f9cc78705f84588a8737491c9df450e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/Config.in   |   22 +++++++++++-----------
- toolchain/toolchain-external/ext-tool.mk |    6 +++---
- 2 files changed, 14 insertions(+), 14 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    6 +++---
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 94b8158..ebe9fcd 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -3,8 +3,8 @@ if BR2_TOOLCHAIN_EXTERNAL
- choice
- 	prompt "Toolchain"
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 5667efb..de0c703 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -70,15 +70,15 @@ config BR2_DEFAULT_KERNEL_VERSION
  
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_05
--	bool "Linaro 2013.05"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_06
-+	bool "Linaro 2013.06"
- 	depends on BR2_arm
- 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -14,7 +14,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_05
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2013.05 (based on gcc 4.8), Linaro GDB 2013.05 (based on
-+	  GCC 2013.06 (based on gcc 4.8), Linaro GDB 2013.06 (based on
- 	  GDB 7.6), eglibc 2.15. It generates code that runs on all
- 	  Cortex-A profile devices, but tuned for the Cortex-A9. The
- 	  code generated is Thumb 2, with the hard floating point
-@@ -22,8 +22,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_05
- 
- 	  To use this toolchain, you must disable soft float usage.
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_04
--	bool "Linaro 2013.04"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_05
-+	bool "Linaro 2013.05"
- 	depends on BR2_arm
- 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -33,16 +33,16 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_04
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2013.04 (based on gcc 4.7), Linaro GDB 2012.12 (based on
--	  GDB 7.5), eglibc 2.15. It generates code that runs on all
-+	  GCC 2013.05 (based on gcc 4.8), Linaro GDB 2013.05 (based on
-+	  GDB 7.6), eglibc 2.15. It generates code that runs on all
- 	  Cortex-A profile devices, but tuned for the Cortex-A9. The
- 	  code generated is Thumb 2, with the hard floating point
- 	  calling convention, and uses the VFPv3-D16 FPU instructions.
- 
- 	  To use this toolchain, you must disable soft float usage.
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
--	bool "Linaro 2013.03"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_04
-+	bool "Linaro 2013.04"
- 	depends on BR2_arm
- 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -52,7 +52,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2013.03 (based on gcc 4.7), Linaro GDB 2012.12 (based on
-+	  GCC 2013.04 (based on gcc 4.7), Linaro GDB 2012.12 (based on
- 	  GDB 7.5), eglibc 2.15. It generates code that runs on all
- 	  Cortex-A profile devices, but tuned for the Cortex-A9. The
- 	  code generated is Thumb 2, with the hard floating point
-@@ -777,9 +777,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
- 
- config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ config BR2_DEFAULT_KERNEL_HEADERS
  	string
-+	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_06
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_05
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_04
--	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index e5dc8ed..2b0b23e 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -218,15 +218,15 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
- 	mv $(@D)/arago-2011.09/armv5te/* $(@D)/
- 	rm -rf $(@D)/arago-2011.09/
- endef
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_03),y)
--TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.03/components/toolchain/binaries/
--TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.03-20130313_linux.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_04),y)
- TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.04/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_05),y)
- TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.05/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.8-2013.05_linux.tar.xz
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_06),y)
-+TOOLCHAIN_EXTERNAL_SITE=https://releases.linaro.org/13.06/components/toolchain/binaries/
-+TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.8-2013.06_linux.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=mips-2012.03-63-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-	default "3.0.82"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.83"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.47"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.49"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.50"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+-	default "3.9.6"		if BR2_KERNEL_HEADERS_3_9
++	default "3.9.7"		if BR2_KERNEL_HEADERS_3_9
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.82-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.83-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.82-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.83-headers_install-fix-__packed-in-exported-kernel-head.patch
