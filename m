@@ -1,48 +1,57 @@
 From: Richard Genoud <richard.genoud@gmail.com>
-Date: Mon, 24 Jun 2013 10:40:51 +0200
-Subject: [Buildroot] [PATCHv3 0/5] tcl rework (was: make usb_modeswitch work
-	with udev)
-In-Reply-To: <1371743610-17810-1-git-send-email-richard.genoud@gmail.com>
+Date: Mon, 24 Jun 2013 10:40:52 +0200
+Subject: [Buildroot] [PATCHv3 1/5] tcl: use make conditions
+In-Reply-To: <1372063256-23292-1-git-send-email-richard.genoud@gmail.com>
 References: <1371743610-17810-1-git-send-email-richard.genoud@gmail.com>
-Message-ID: <1372063256-23292-1-git-send-email-richard.genoud@gmail.com>
+ <1372063256-23292-1-git-send-email-richard.genoud@gmail.com>
+Message-ID: <1372063256-23292-2-git-send-email-richard.genoud@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At first, the goal of this patch set was to add a symlink
-tclsh->tclsh8.4 to make usb_modeswitch_dispatcher happy (it has a
-shebang #!/usr/bin/tclsh).
+As suggested by Thomas Petazzoni, make conditions should be used rather
+than shell condition in Makefiles.
 
-While doing that, I saw some other problems (libtcl not stripped and
-not into staging). Also, Thomas suggested (and coded it actually !) that
-make condition should be used.
-Hence, a bigger patchset.
+Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+---
+ package/tcl/tcl.mk |   21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-Changes since v2:
-	- drop the change of BR2_PACKAGE_TCL_SHLIB_ONLY option as commit
-	d3e4db4 (usb_modeswitch: bump to version 1.2.6) already fixes
-	the problem.
-
-Changes since v1:
-	- drop usb_modeswitch{,_data} version bumps patches as they are
-	  already mainlined (thanks Gustavo for the heads up !)
-	- use make conditions rather than shell conditions
-	- drop the explicit strip
-	- install the library into stating
-	- make the library writable
-
-
-Richard Genoud (5):
-  tcl: use make conditions
-  tcl: remove strip command
-  tcl: install the libtcl into staging
-  tcl: add a tclsh symlink
-  tcl: make the libtcl writable in order to be stripped
-
- package/tcl/tcl.mk |   33 ++++++++++++++++++++++++---------
- 1 file changed, 24 insertions(+), 9 deletions(-)
-
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index 0c8fa33..fc62abd 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -24,15 +24,22 @@ HOST_TCL_CONF_OPT = \
+ 
+ define TCL_POST_INSTALL_CLEANUP
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtcl8.4.so
+-	-if [ "$(BR2_PACKAGE_TCL_DEL_ENCODINGS)" = "y" ]; then \
+-	rm -Rf $(TARGET_DIR)/usr/lib/tcl$(TCL_VERSION_MAJOR)/encoding/*; \
+-	fi
+-	-if [ "$(BR2_PACKAGE_TCL_SHLIB_ONLY)" = "y" ]; then \
+-	rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR); \
+-	fi
+ endef
+-
+ TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_CLEANUP
+ 
++ifeq ($(BR2_PACKAGE_TCL_DEL_ENCODINGS),y)
++define TCL_REMOVE_ENCODINGS
++	rm -rf $(TARGET_DIR)/usr/lib/tcl$(TCL_VERSION_MAJOR)/encoding/*
++endef
++TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_ENCODINGS
++endif
++
++ifeq ($(BR2_PACKAGE_TCL_SHLIB_ONLY),y)
++define TCL_REMOVE_TCLSH
++	rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR)
++endef
++TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_TCLSH
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 1.7.10.4
