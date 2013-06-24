@@ -1,29 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Jun 2013 13:45:09 +0200
-Subject: [Buildroot] [PATCH] gvfs: Depend on libgcrypt if it is selected
-In-Reply-To: <1371825691-27746-1-git-send-email-markos.chandras@gmail.com>
- (Markos Chandras's message of "Fri, 21 Jun 2013 15:41:31 +0100")
-References: <1371825691-27746-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <87obavivga.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Jun 2013 13:56:05 +0200
+Subject: [Buildroot] [PATCH] system/permissions: make /root group+others
+	non-writable
+In-Reply-To: <1371939752-29205-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 23 Jun 2013 00:22:32 +0200")
+References: <1371939752-29205-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87k3ljiuy2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- Markos> From: Markos Chandras <markos.chandras@imgtec.com>
- Markos> gvfs can make optional use of libgcrypt so it needs to depend on
- Markos> it if it is selected. It's also necessary to set the
- Markos> ac_cv_path_LIBGCRYPT_CONFIG variable to a known value in order
- Markos> to prevent the AM_PATH_LIBGCRYPT macro from searching the host
- Markos> paths for the libgcrypt-config script.
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> Upon logging, dropbear whines if /root is group- or others-writable, and
+ Yann> key-based authentication is attempted, reverting to password-based
+ Yann> authentication:
+ Yann>     dropbear[149]: /root must be owned by user or root, and not writable by others
+ Yann>     dropbear[149]: Password auth succeeded for 'root' from 192.168.127.35:41566
 
- Markos> Fixes the following build problem when libgcrypt is installed on the
- Markos> host system but the package is not selected in buildroot:
+ Yann> On my system, /root was 770. Changing to 700 fixed the issue.
 
- Markos> gvfsbackendafpbrowse.c:31:20: fatal error: gcrypt.h: No such file or directory
+ Yann> Having /root 700 is a good idea, anyway.
 
 Committed, thanks.
 
