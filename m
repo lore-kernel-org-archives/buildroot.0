@@ -1,81 +1,71 @@
 From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Mon, 24 Jun 2013 08:07:56 -0400
+Date: Mon, 24 Jun 2013 08:22:56 -0400
 Subject: [Buildroot] Beaglebone Black support
-In-Reply-To: <20130624042824.GQ4824@tarshish>
+In-Reply-To: <20130623214133.6249f43e6e2d8bda20aa971a@lavabit.com>
 References: <CA+-urNQPUunJ4se0apcfimNRAK4iq1u_mLaCYRvcPJWS6Uq+HQ@mail.gmail.com>
  <20130623161357.136be827bdb312f43bda51a6@lavabit.com>
  <CA+-urNTKwwCtPZkWaxisFbLWiYCRJA1-5COK-rT8NW3QU+kyZw@mail.gmail.com>
- <20130624042824.GQ4824@tarshish>
-Message-ID: <CA+-urNS_evsGARC-Hm4CFM7OBkbfT7weyCnM3tpoxiRUxF-Pvg@mail.gmail.com>
+ <20130623214133.6249f43e6e2d8bda20aa971a@lavabit.com>
+Message-ID: <CA+-urNTQxDOjPKMAMgTbpp_i5_oD_z0k44hVzL8gRwfz7u3B3A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Hi Richard,
 
-On Mon, Jun 24, 2013 at 12:28 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Frank,
+On Mon, Jun 24, 2013 at 12:41 AM, rh <richard_hubbe11@lavabit.com> wrote:
+> On Sun, 23 Jun 2013 23:30:12 -0400
+> Frank Hunleth
+> <fhunleth@troodon-software.com> wrote:
 >
-> On Sun, Jun 23, 2013 at 11:30:12PM -0400, Frank Hunleth wrote:
->> On Sun, Jun 23, 2013 at 7:13 PM, rh <richard_hubbe11@lavabit.com> wrote:
->> > On Sun, 23 Jun 2013 15:21:04 -0400
->> > Frank Hunleth
->> > <fhunleth@troodon-software.com> wrote:
->> >
->> > --8<--
->> >
->> >> However, copying the patches over to buildroot seems wrong and painful
->> >> to maintain, but as far as I can tell, there's no official/maintained
->> >> git repo with the beaglebone.org kernel patches.
->> >
->> > This seems official to me but not sure what you mean by official.
->> > Do you mean kernel.org-official?  TI-official? Circuitco?
->>
+> --8<--
+>
 >> I'd just like to point to a kernel that is maintained and has the
 >> features that I need. The one at github.com/beagleboard/kernel is the
 >> obvious choice since that's what's shipped on the Beaglebone Black.
+>
+> I was asking since I just started trying buildroot myself.
+
+If you'd like to try out my repository for the BBB, feel free to look at:
+
+https://github.com/fhunleth/buildroot-bbb
+
+I don't have much in the line of instructions right now, but it should
+build for you. Check out the bbb branch and run "make
+beagleboneblack_defconfig" and make. I can run the images from both a
+microSD card and eMMC, and things seem to be coming up.
+
+Also, I just put in the PRU's PASM assembler and interface libraries.
+I haven't checked it out yet except that it builds and can assemble
+the examples.
+
+>
 >>
 >> The point of my email is just that the github.com/beagleboard/kernel
 >> repository is not in a form that nicely integrates with buildroot due
 >> to it just containing patches for a Linux kernel. I'm just looking for
 >> pointers on how best to handle this.
 >
-> git integrates quite nicely with Buildroot, and a lot of packages fetch their
-> sources from git repos. See the 'LIBFOO_SITE_METHOD' description in the
-> Buildroot manual (http://buildroot.net/downloads/manual/manual.html). Also
-> look for a github specific tip under 'Tips and tricks'.
+> I think the answer is in the other reply, but I'm not sure yet. From the
+> brief time I've used buildroot it seems flexible enough to allow pulling
+> stuff from lots of places.
+
+Despite using br for the past few years on a handful of projects, it
+seems like every time I update my tree that I learn about a few new
+features.
+
 >
+>>
+>> For the time being, I just ran the github.com/beaglebone/kernel script
+>> to create a patched kernel, tarred it up and posted it on a server for
+>> buildroot to download. It will become annoying after a few updates to
+>> the patch set, and I may consider automating it, but for now it keeps
+>> me moving forward. I'll happily change what I'm doing should a better
+>> way come up.
+>
+> I think the ARM stuff needs more work before it's accepted upstream but
+> don't know for sure.
 
-Let me try asking my question again, since some of the details from
-the original email have been trimmed.
-
-Here's what root directory of the Beaglebone "kernel" git repo (3.8
-branch) looks like:
-
-configs/
-hacks/
-patches/
-    6lowpan/
-        0001-6lowpan-...
-        <lots of patches>
-    PG2
-        0001-beaglebone-black-1ghz-hack.patch
-    <lots of other directories with patches>
-recipies/
-patch.sh
-
-The patch.sh script clones the Linus kernel and patches it when you run it.
-
-Now, regarding Buildroot, there's an option for specifying the Linux
-kernel via a git reference, but the expectation is that you'll be
-getting Linux source code. There are also ways of applying patches to
-a Linus kernel. The problem that I am trying to ask about is how best
-to deal with the 600+ patches that are contained in beagleboard/kernel
-patch tree.
-
-Does this make more sense now?
-
-Thanks,
-Frank
+Agreed.
