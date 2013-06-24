@@ -1,51 +1,48 @@
 From: Richard Genoud <richard.genoud@gmail.com>
-Date: Mon, 24 Jun 2013 09:49:21 +0200
-Subject: [Buildroot] [PATCH 1/6] tcl: change BR2_PACKAGE_TCL_SHLIB_ONLY
-	option
-In-Reply-To: <51C56B4C.1070908@fh-kl.de>
+Date: Mon, 24 Jun 2013 10:40:51 +0200
+Subject: [Buildroot] [PATCHv3 0/5] tcl rework (was: make usb_modeswitch work
+	with udev)
+In-Reply-To: <1371743610-17810-1-git-send-email-richard.genoud@gmail.com>
 References: <1371743610-17810-1-git-send-email-richard.genoud@gmail.com>
- <51c43f9c.ebbbb40a.0abf.ffffba07@mx.google.com> <51C56B4C.1070908@fh-kl.de>
-Message-ID: <CACQ1gAiQo31ayhuMfPfSc0bnYw68fCX4YHeA4u-Ekksso4NNyg@mail.gmail.com>
+Message-ID: <1372063256-23292-1-git-send-email-richard.genoud@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/6/22 Patrick Ziegler <patrick.ziegler@fh-kl.de>:
-> Dear Richard Genoud,
->
-> Am 21.06.2013 13:56, schrieb richard.genoud at gmail.com:
->> From: Richard Genoud <richard.genoud@gmail.com>
->>
->> It's not convenient to have an option (defaulted to yes) that removes a
->> software.
->> For instance, usb_modeswitching_data needs the tclsh interpreter, so it
->> would have to un-select this option, but select TCL.
->>
->> Having an option that adds the tclsh binary (defaulted to no to keep the
->> same behaviour) is way more convenient.
->> Moreover, it seems that it was intended liked that at the begining
->> because usb_modeswitching_data already selects BR2_PACKAGE_TCL_TCLSH
->> which wasn't declared anywhere.
->>
->> Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
->
-> If you change an existing option, please have a look on the
-> Config.in.legacy file. You should add the old option to that file, so
-> the user gets informed about the change.
->
-> Finally you should check if another package uses this option for its own
-> configuration and change this to the new option.
-> BR2_PACKAGE_TCL_SHLIB_ONLY is used by usb_modeswitch (not
-> usb_modeswitch_data anymore) to switch between the binary wrapper and
-> the tcl wrapper script.
->
-I didn't saw your patch on that !
-It seems that you already correct the problem with the tclsh interpreter.
-So I can drop this patch.
+At first, the goal of this patch set was to add a symlink
+tclsh->tclsh8.4 to make usb_modeswitch_dispatcher happy (it has a
+shebang #!/usr/bin/tclsh).
 
-Thanks !
+While doing that, I saw some other problems (libtcl not stripped and
+not into staging). Also, Thomas suggested (and coded it actually !) that
+make condition should be used.
+Hence, a bigger patchset.
 
-Best regards,
-Richard.
+Changes since v2:
+	- drop the change of BR2_PACKAGE_TCL_SHLIB_ONLY option as commit
+	d3e4db4 (usb_modeswitch: bump to version 1.2.6) already fixes
+	the problem.
+
+Changes since v1:
+	- drop usb_modeswitch{,_data} version bumps patches as they are
+	  already mainlined (thanks Gustavo for the heads up !)
+	- use make conditions rather than shell conditions
+	- drop the explicit strip
+	- install the library into stating
+	- make the library writable
+
+
+Richard Genoud (5):
+  tcl: use make conditions
+  tcl: remove strip command
+  tcl: install the libtcl into staging
+  tcl: add a tclsh symlink
+  tcl: make the libtcl writable in order to be stripped
+
+ package/tcl/tcl.mk |   33 ++++++++++++++++++++++++---------
+ 1 file changed, 24 insertions(+), 9 deletions(-)
+
+-- 
+1.7.10.4
