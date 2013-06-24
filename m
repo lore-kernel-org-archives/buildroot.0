@@ -1,38 +1,25 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon, 24 Jun 2013 11:34:56 +0200
-Subject: [Buildroot] [PATCHv2] linux: Fix uImage with appended DTs
-	generation
-In-Reply-To: <1370611303-5054-1-git-send-email-maxime.ripard@free-electrons.com>
-References: <1370611303-5054-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <20130624093456.GH26008@lukather>
+From: Jan Pohanka <xhpohanka@gmail.com>
+Date: Mon, 24 Jun 2013 12:55:52 +0200
+Subject: [Buildroot] why to have separate uboot-tools?
+Message-ID: <51C825B8.6070800@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 07, 2013 at 03:21:43PM +0200, Maxime Ripard wrote:
-> Fixes bug #5516 - appended device tree blobs on uImage fails
-> 
-> Before version 3.7 of the kernel, building the zImage and then the
-> uImage will rewrite the zImage in the process, removing the device tree
-> we just appended.
-> 
-> Use mkimage to append the device tree to the uImage and rebuild the
-> headers directly.
-> 
-> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Hi all,
 
-Ping?
+currently I'm trying to customize buildroot a bit to allow it to be used 
+by my colleagues as a base of their development environment.
+I have noticed that there is separate package for u-boot-tools (mkimage, 
+etc.) Can please someone tell me why these tools are not installed from 
+u-boot package defined in bootloaders section?
 
--- 
-Maxime Ripard, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130624/047e5d23/attachment-0001.asc>
+Once we use our own u-boot with its own tools (uflash from TI) I need to 
+alter two packages and also u-boot sources are downloaded two times.
+I can prepare a patch to use just u-boot in bootloaders section, but the 
+question is if it is not worthless...
+
+thanks
+Jan
