@@ -1,27 +1,21 @@
-From: Jan Pohanka <xhpohanka@gmail.com>
-Date: Tue, 25 Jun 2013 09:58:00 +0200
-Subject: [Buildroot] using a variable within a buildroot menuconfig
-Message-ID: <51C94D88.5080707@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 25 Jun 2013 10:04:02 +0200
+Subject: [Buildroot] [PATCH] curl: add security patch for CVE-2013-2174
+In-Reply-To: <1372115574-31827-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 24 Jun 2013 20:12:54 -0300")
+References: <1372115574-31827-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874ncm62h9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-I have another /weird/ question.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-I would like to know if it is possible to create an item in 
-configuration which will for example contain some (absolute) path on my 
-filesystem. Then I would like to use this variable for example in 
---extra-cflags configure option for applications like ffmpeg etc.
+Committed, thanks.
 
-I know that it is not very nice way, but I need to integrate buildroot 
-with Texas Instruments SDK, which is not very GNU build tools friendy.
-
-best regards
-Jan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130625/2a4f55c8/attachment.html>
+-- 
+Bye, Peter Korsgaard
