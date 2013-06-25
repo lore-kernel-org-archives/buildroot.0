@@ -1,52 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jun 2013 21:35:40 +0200
-Subject: [Buildroot] [RFCv1 05/18] toolchain: remove references to
-	LIBFLOAT_TARGET
+Date: Tue, 25 Jun 2013 21:35:36 +0200
+Subject: [Buildroot] [RFCv1 01/18] uClibc: KERNEL_SOURCE no longer exists
 In-Reply-To: <1372188953-29449-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1372188953-29449-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1372188953-29449-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1372188953-29449-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libfloat package was removed in
-accbd71154b8815678baa12f21f853ed8478f400, and therefore since this
-commit, the LIBFLOAT_TARGET variable is always empty. We get rid of
-the stale references to this variable.
+The KERNEL_SOURCE configuration option no longer exists in uClibc, so
+there's no point in setting it.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/gcc/gcc-uclibc-4.x.mk | 2 +-
- toolchain/uClibc/uclibc.mk      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/uClibc/uclibc.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 79a0125..0dc8200 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -518,7 +518,7 @@ endif
- 
- cross_compiler:=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc
- cross_compiler gcc: gcc_intermediate \
--	$(LIBFLOAT_TARGET) uclibc $(GCC_BUILD_DIR3)/.installed \
-+	uclibc $(GCC_BUILD_DIR3)/.installed \
- 	$(STAMP_DIR)/gcc_libs_target_installed \
- 	$(GCC_TARGETS)
- 
 diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 5a84c5d..c8fc992 100644
+index da1830f..5a84c5d 100644
 --- a/toolchain/uClibc/uclibc.mk
 +++ b/toolchain/uClibc/uclibc.mk
-@@ -437,7 +437,7 @@ $(UCLIBC_DIR)/.configured: $(LINUX_HEADERS_DIR)/.configured $(UCLIBC_DIR)/.confi
- 	cp -pLR $(UCLIBC_DIR)/lib/crt[1in].o $(TOOLCHAIN_DIR)/uClibc_dev/usr/lib/
- 	touch $@
- 
--$(UCLIBC_DIR)/lib/libc.a: $(UCLIBC_DIR)/.configured $(gcc_intermediate) $(LIBFLOAT_TARGET)
-+$(UCLIBC_DIR)/lib/libc.a: $(UCLIBC_DIR)/.configured $(gcc_intermediate)
- 	$(Q)$(call MESSAGE,"Building uClibc")
- 	$(MAKE1) -C $(UCLIBC_DIR) \
- 		ARCH="$(UCLIBC_TARGET_ARCH)" \
+@@ -98,7 +98,6 @@ $(UCLIBC_DIR)/.oldconfig: $(UCLIBC_DIR)/.patched $(UCLIBC_CONFIG_FILE)
+ 	$(SED) 's,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="$(TARGET_CROSS)",g' \
+ 		-e 's,# TARGET_$(UCLIBC_TARGET_ARCH) is not set,TARGET_$(UCLIBC_TARGET_ARCH)=y,g' \
+ 		-e 's,^TARGET_ARCH=".*",TARGET_ARCH=\"$(UCLIBC_TARGET_ARCH)\",g' \
+-		-e 's,^KERNEL_SOURCE=.*,KERNEL_SOURCE=\"$(LINUX_HEADERS_DIR)\",g' \
+ 		-e 's,^KERNEL_HEADERS=.*,KERNEL_HEADERS=\"$(LINUX_HEADERS_DIR)/include\",g' \
+ 		-e 's,^RUNTIME_PREFIX=.*,RUNTIME_PREFIX=\"/\",g' \
+ 		-e 's,^DEVEL_PREFIX=.*,DEVEL_PREFIX=\"/usr/\",g' \
 -- 
 1.8.1.2
