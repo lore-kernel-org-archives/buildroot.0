@@ -1,51 +1,67 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Tue, 25 Jun 2013 21:57:14 +0000
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 25 Jun 2013 23:59:08 +0200
 Subject: [Buildroot] [PATCH] libunwind:  new pacakge
-In-Reply-To: <20130625235022.75b13738@skate>
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C639A6F946@ex-mb1.corp.adtran.com>
 References: <F9C551623D2CBB4C9488801D14F864C639A6F946@ex-mb1.corp.adtran.com>
- <20130625235022.75b13738@skate>
-Message-ID: <F9C551623D2CBB4C9488801D14F864C639A6F98F@ex-mb1.corp.adtran.com>
+Message-ID: <20130625215908.GD14074@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> > +	  Project home:  <http://www.nongnu.org/libunwind/index.html>
-> 
-> No need to indicate "Project home:", just:
+Andy, All,
 
-Okay, I can fix that.
+On 2013-06-25 21:41 +0000, ANDY KENNEDY spake thusly:
+> Signed-off-by:  Andy Kennedy <andy.kennedy@adtran.com>
+> ---
+> diff -Naur a/package/Config.in b/package/Config.in
+> --- a/package/Config.in 2013-06-20 10:32:07.000000000 -0500
+> +++ b/package/Config.in 2013-06-21 17:00:21.000000000 -0500
+> @@ -612,6 +612,7 @@
+>  source "package/libtasn1/Config.in"
+>  source "package/libtpl/Config.in"
+>  source "package/libseccomp/Config.in"
+> +source "package/libunwind/Config.in"
+>  source "package/liburcu/Config.in"
+>  source "package/linux-pam/Config.in"
+>  source "package/log4cxx/Config.in"
+> diff -Naur a/package/libunwind/Config.in b/package/libunwind/Config.in
+> --- a/package/libunwind/Config.in       1969-12-31 18:00:00.000000000 -0600
+> +++ b/package/libunwind/Config.in       2013-06-21 17:23:46.000000000 -0500
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_LIBUNWIND
+> +	bool "libunwind"
+> +	help
+> +	  C API to determine the call-chain of a program.
+> +
+> +	  Project home:  <http://www.nongnu.org/libunwind/index.html>
 
-> 
-> 	  http://www.nongnu.org/libunwind/index.html
-> 
-> Also:
-> 
->  1) Did you check that it builds fine with uClibc? This kind of library
->  tend to use some funky C library features, sometimes not available in
->  uClibc.
+In addition to other comments, could you please add a changelog to your
+patch, and a version number in the subject? Such as:
 
-Nope, I didn't.
+    [PATCH v3] libunwind: new pacakge
 
-> 
->  2) The libunwind code seems to contain some architecture-specific
->  code. While aarch64, arm, mips, ppc, sh, x86 and x86-64 are supported,
->  some other architectures that Buildroot supports are not supported. So
->  maybe this package should have a "depends on BR2_aarch64 || BR2_arm ||
->  BR2_armeb || ..."
+    sob: you
 
-That is possible as well.  I'm really not devoted to owning this
-package that much.  I was merely attempting to push it back as I
-added it to our usage of BuildRoot.  To that end, shall I abandon
-the process (as I clearly am not willing to do it justice)?
+    ---
+    Changes v2->v3:
+      - blabla
+    Changes v1->v2:
+      - blabla
+      - blabla
 
-It is no skin off my nose whether it gets put into BuildRoot, I was
-only pushing it back as I didn't know it was there until someone else
-I work with pointed out that this *seems* to be the basic library GDB
-is based off of, thus could be useful in our embedded system.
+This is a least version 3 (or 4?) of this patch, and its hard to tell
+what changed between revisions, and to check if suggestions were
+applied.
 
-Anybody willing to carry this flag for me?  I'm just not that committed
-to it.
+Regards,
+Yann E. MORIN.
 
-Andy
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
