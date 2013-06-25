@@ -1,402 +1,297 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jun 2013 21:35:52 +0200
-Subject: [Buildroot] [RFCv1 17/18] Remove BR2_HAVE_DEVFILES
+Date: Tue, 25 Jun 2013 21:35:42 +0200
+Subject: [Buildroot] [RFCv1 07/18] elf2flt: convert to the package
+	infrastructure
 In-Reply-To: <1372188953-29449-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1372188953-29449-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1372188953-29449-18-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1372188953-29449-8-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This finally removes the BR2_HAVE_DEVFILES option, that was used to
-install/keep development files on target. With the recent migration of
-the internal backend to the package infrastructure, we had anyway lost
-the ability to build gcc for the target, and install the uClibc
-development files on the target.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in                           |  8 --------
- Makefile                            |  4 ----
- package/dbus/dbus.mk                |  2 --
- package/libdnet/libdnet.mk          |  2 --
- package/libglib2/libglib2.mk        |  2 --
- package/lua/lua.mk                  | 13 -------------
- package/multimedia/mpg123/mpg123.mk |  3 +--
- package/ncurses/ncurses.mk          | 20 --------------------
- package/opencv/opencv.mk            |  2 --
- package/openssl/openssl.mk          | 12 ------------
- package/orc/orc.mk                  |  3 ---
- package/pkg-generic.mk              |  2 --
- package/python/python.mk            | 16 +++-------------
- package/python3/python3.mk          | 16 +++-------------
- package/sdl_sound/sdl_sound.mk      |  2 +-
- package/taglib/taglib.mk            |  2 --
- package/usbutils/usbutils.mk        |  2 --
- package/xenomai/xenomai.mk          |  2 --
- 18 files changed, 8 insertions(+), 105 deletions(-)
+ Config.in.legacy                                   |  7 ++++
+ .../Config.in => package/elf2flt/Config.in.host    |  2 +-
+ package/elf2flt/elf2flt.mk                         | 28 +++++++++++++
+ .../elf2flt => package/elf2flt/src}/LICENSE.TXT    |  0
+ .../elf2flt => package/elf2flt/src}/Makefile.in    |  0
+ .../elf2flt/elf2flt => package/elf2flt/src}/README |  0
+ .../elf2flt => package/elf2flt/src}/config.guess   |  0
+ .../elf2flt => package/elf2flt/src}/config.sub     |  0
+ .../elf2flt => package/elf2flt/src}/configure      |  0
+ .../elf2flt => package/elf2flt/src}/configure.in   |  0
+ .../elf2flt => package/elf2flt/src}/cygwin-elf.h   |  0
+ .../elf2flt => package/elf2flt/src}/e1-elf2flt.ld  |  0
+ .../elf2flt => package/elf2flt/src}/elf2flt.c      |  0
+ .../elf2flt => package/elf2flt/src}/elf2flt.ld     |  0
+ .../elf2flt/elf2flt => package/elf2flt/src}/flat.h |  0
+ .../elf2flt => package/elf2flt/src}/flthdr.c       |  0
+ .../elf2flt => package/elf2flt/src}/install-sh     |  0
+ .../elf2flt => package/elf2flt/src}/ld-elf2flt.in  |  0
+ .../elf2flt => package/elf2flt/src}/maketarball.sh |  0
+ .../elf2flt => package/elf2flt/src}/stubs.c        |  0
+ toolchain/elf2flt/elf2flt.mk                       | 46 ----------------------
+ toolchain/toolchain-buildroot.mk                   |  1 -
+ toolchain/toolchain-buildroot/Config.in.2          |  2 +-
+ toolchain/toolchain-crosstool-ng.mk                |  1 -
+ toolchain/toolchain-external.mk                    |  1 -
+ 25 files changed, 37 insertions(+), 51 deletions(-)
+ rename toolchain/elf2flt/Config.in => package/elf2flt/Config.in.host (91%)
+ create mode 100644 package/elf2flt/elf2flt.mk
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/LICENSE.TXT (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/Makefile.in (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/README (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/config.guess (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/config.sub (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/configure (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/configure.in (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/cygwin-elf.h (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/e1-elf2flt.ld (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/elf2flt.c (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/elf2flt.ld (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/flat.h (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/flthdr.c (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/install-sh (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/ld-elf2flt.in (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/maketarball.sh (100%)
+ rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/stubs.c (100%)
+ delete mode 100644 toolchain/elf2flt/elf2flt.mk
 
-diff --git a/Config.in b/Config.in
-index bbb9885..78dea3b 100644
---- a/Config.in
-+++ b/Config.in
-@@ -419,14 +419,6 @@ config BR2_HAVE_DOCUMENTATION
- 	  If you say n here, your target will not contain any
- 	  documentation.
- 
--config BR2_HAVE_DEVFILES
--	bool "development files in target filesystem"
--	# We no longer want to support a toolchain on the target
--	depends on BR2_DEPRECATED
--	help
--	  Install headers and static libraries in the
--	  target filesystem
--
- config BR2_PACKAGE_OVERRIDE_FILE
- 	string "location of a package override file"
- 	default "$(TOPDIR)/local.mk"
-diff --git a/Makefile b/Makefile
-index 53e17bc..0318664 100644
---- a/Makefile
-+++ b/Makefile
-@@ -444,16 +444,12 @@ STRIP_FIND_CMD += -type f -perm +111
- STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
- 
- target-finalize:
--ifeq ($(BR2_HAVE_DEVFILES),y)
--	( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
--else
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
- 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
- 		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
- 	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/usr/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
--endif
- ifneq ($(BR2_PACKAGE_GDB),y)
- 	rm -rf $(TARGET_DIR)/usr/share/gdb
- endif
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index cb72f1f..37960f2 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -61,9 +61,7 @@ define DBUS_REMOVE_DEVFILES
- 	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
- endef
- 
--ifneq ($(BR2_HAVE_DEVFILES),y)
- DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_REMOVE_DEVFILES
--endif
- 
- define DBUS_INSTALL_TARGET_FIXUP
- 	rm -rf $(TARGET_DIR)/var/lib/dbus
-diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
-index 78f0ae0..ea10251 100644
---- a/package/libdnet/libdnet.mk
-+++ b/package/libdnet/libdnet.mk
-@@ -34,8 +34,6 @@ define LIBDNET_REMOVE_CONFIG_SCRIPT
- 	$(RM) -f $(TARGET_DIR)/usr/bin/dnet-config
- endef
- 
--ifneq ($(BR2_HAVE_DEVFILES),y)
- LIBDNET_POST_INSTALL_TARGET_HOOKS += LIBDNET_REMOVE_CONFIG_SCRIPT
--endif
- 
- $(eval $(autotools-package))
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 4821a76..8fb10f2 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -103,9 +103,7 @@ define LIBGLIB2_REMOVE_DEV_FILES
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,glib-genmarshal glib-gettextize glib-mkenums gobject-query gtester gtester-report)
- endef
- 
--ifneq ($(BR2_HAVE_DEVFILES),y)
- LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
--endif
- 
- define LIBGLIB2_REMOVE_GDB_FILES
- 	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gdb
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index ac75fe6..904ca52 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -64,18 +64,6 @@ define LUA_INSTALL_STAGING_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(STAGING_DIR)/usr/include/lauxlib.h
- endef
- 
--ifeq ($(BR2_HAVE_DEVFILES),y)
--define LUA_INSTALL_DEVFILES
--	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
--		$(TARGET_DIR)/usr/lib/pkgconfig/lua.pc
--	$(INSTALL) -m 0644 -D $(@D)/src/lua.h $(TARGET_DIR)/usr/include/lua.h
--	$(INSTALL) -m 0644 -D $(@D)/src/luaconf.h $(TARGET_DIR)/usr/include/luaconf.h
--	$(INSTALL) -m 0644 -D $(@D)/src/lualib.h $(TARGET_DIR)/usr/include/lualib.h
--	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(TARGET_DIR)/usr/include/lauxlib.h
--endef
--endif
--
--
- define LUA_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/src/lua $(TARGET_DIR)/usr/bin/lua
- 	$(INSTALL) -m 0755 -D $(@D)/src/luac $(TARGET_DIR)/usr/bin/luac
-@@ -83,7 +71,6 @@ define LUA_INSTALL_TARGET_CMDS
- 		$(TARGET_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
- 	ln -sf liblua.so.$(LUA_VERSION) $(TARGET_DIR)/usr/lib/liblua.so
- 	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
--	$(LUA_INSTALL_DEVFILES)
- endef
- 
- define HOST_LUA_INSTALL_CMDS
-diff --git a/package/multimedia/mpg123/mpg123.mk b/package/multimedia/mpg123/mpg123.mk
-index f554043..e9d074f 100644
---- a/package/multimedia/mpg123/mpg123.mk
-+++ b/package/multimedia/mpg123/mpg123.mk
-@@ -61,8 +61,7 @@ MPG123_CONF_OPT += --with-audio=$(shell echo $(MPG123_AUDIO) | tr ' ' ,)
- 
- ifeq ($(BR2_PACKAGE_LIBTOOL),y)
- MPG123_DEPENDENCIES += libtool
--# .la files gets stripped unless HAVE_DEVFILES is enabled, so directly
--# load .so files rather than .la
-+# .la files gets stripped , so directly load .so files rather than .la
- MPG123_CONF_OPT += --with-modules --with-module-suffix=.so
- endif
- 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 5381bd1..dbb514e 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -38,25 +38,6 @@ define NCURSES_BUILD_CMDS
- 	$(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR)
- endef
- 
--ifeq ($(BR2_HAVE_DEVFILES),y)
--define NCURSES_INSTALL_TARGET_DEVFILES
--	mkdir -p $(TARGET_DIR)/usr/include
--	cp -dpf $(NCURSES_DIR)/include/curses.h $(TARGET_DIR)/usr/include/curses.h
--	cp -dpf $(NCURSES_DIR)/include/ncurses_dll.h $(TARGET_DIR)/usr/include/ncurses_dll.h
--	cp -dpf $(NCURSES_DIR)/include/term.h $(TARGET_DIR)/usr/include/
--	cp -dpf $(NCURSES_DIR)/include/unctrl.h $(TARGET_DIR)/usr/include/
--	cp -dpf $(NCURSES_DIR)/include/termcap.h $(TARGET_DIR)/usr/include/
--	cp -dpf $(NCURSES_DIR)/lib/libncurses.a $(TARGET_DIR)/usr/lib/
--	(cd $(TARGET_DIR)/usr/lib; \
--	 ln -fs libncurses.a libcurses.a; \
--	 ln -fs libncurses.a libtermcap.a; \
--	)
--	(cd $(TARGET_DIR)/usr/include; ln -fs curses.h ncurses.h)
--	rm -f $(TARGET_DIR)/usr/lib/libncurses.so
--	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses.so.$(NCURSES_VERSION) libncurses.so)
--endef
--endif
--
- ifneq ($(BR2_PREFER_STATIC_LIB),y)
- 
- ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PANEL),y)
-@@ -101,7 +82,6 @@ define NCURSES_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
- 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/s
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/s/screen $(TARGET_DIR)/usr/share/terminfo/s
--	$(NCURSES_INSTALL_TARGET_DEVFILES)
- endef # NCURSES_INSTALL_TARGET_CMDS
- 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index cd23492..af1ee7b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -86,6 +86,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712
  #
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 3bf7ee9..b9ed8cb 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -169,12 +169,10 @@ endef
- OPENCV_POST_INSTALL_TARGET_HOOKS += OPENCV_CLEAN_INSTALL_DOC
- endif
- 
--ifneq ($(BR2_HAVE_DEVFILES),y)
- define OPENCV_CLEAN_INSTALL_CMAKE
- 	$(RM) -f $(TARGET_DIR)/usr/share/OpenCV/OpenCVConfig*.cmake
- endef
- OPENCV_POST_INSTALL_TARGET_HOOKS += OPENCV_CLEAN_INSTALL_CMAKE
--endif
- 
- ifneq ($(BR2_PACKAGE_OPENCV_INSTALL_DATA),y)
- define OPENCV_CLEAN_INSTALL_DATA
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index e16c91f..a0e103b 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -105,22 +105,10 @@ endef
- 
- define OPENSSL_INSTALL_TARGET_CMDS
- 	$(MAKE1) -C $(@D) INSTALL_PREFIX=$(TARGET_DIR) install
--endef
--
--define OPENSSL_REMOVE_DEV_FILES
- 	rm -rf $(TARGET_DIR)/usr/lib/ssl
--endef
--
--ifneq ($(BR2_HAVE_DEVFILES),y)
--OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_DEV_FILES
--endif
--
--define OPENSSL_INSTALL_FIXUPS
- 	rm -f $(TARGET_DIR)/usr/bin/c_rehash
- endef
- 
--OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_INSTALL_FIXUPS
--
- ifneq ($(BR2_PREFER_STATIC_LIB),y)
- 
- # libraries gets installed read only, so strip fails
-diff --git a/package/orc/orc.mk b/package/orc/orc.mk
-index 9d9921a..dc93882 100644
---- a/package/orc/orc.mk
-+++ b/package/orc/orc.mk
-@@ -20,10 +20,7 @@ define ORC_REMOVE_DEVFILES
- endef
- 
- ORC_POST_INSTALL_TARGET_HOOKS += ORC_REMOVE_BUGREPORT
--
--ifneq ($(BR2_HAVE_DEVFILES),y)
- ORC_POST_INSTALL_TARGET_HOOKS += ORC_REMOVE_DEVFILES
--endif
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 56fca6b..668f011 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -153,11 +153,9 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- 		$($(PKG)_INSTALL_INIT_SYSV))
- 	$($(PKG)_INSTALL_TARGET_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
--ifeq ($(BR2_HAVE_DEVFILES),)
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
- 	fi
--endif
- 	$(Q)touch $@
- 
- # Clean package
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 363513d..975d6f4 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -151,23 +151,13 @@ endef
- PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_SMTPD
- 
+ # Legacy options since 2013.02
  #
--# Development files removal
++config BR2_ELF2FLT
++	bool "the elf2flt option has been renamed"
++	select BR2_LEGACY
++	help
++	  The BR2_ELF2FLT option has been renamed to
++	  BR2_PACKAGE_HOST_ELF2FLT due to the conversion of elf2flt to
++	  the package infrastructure.
+ 
+ config BR2_sa110
+ 	bool "sa110 ARM target switched to strongarm"
+diff --git a/toolchain/elf2flt/Config.in b/package/elf2flt/Config.in.host
+similarity index 91%
+rename from toolchain/elf2flt/Config.in
+rename to package/elf2flt/Config.in.host
+index b4e450a..31a6c7f 100644
+--- a/toolchain/elf2flt/Config.in
++++ b/package/elf2flt/Config.in.host
+@@ -1,4 +1,4 @@
+-config BR2_ELF2FLT
++config BR2_PACKAGE_HOST_ELF2FLT
+ 	bool "Enable elf2flt support?"
+ 	depends on BR2_arm || BR2_sh || BR2_sparc
+ 	help
+diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
+new file mode 100644
+index 0000000..5afa5ca
+--- /dev/null
++++ b/package/elf2flt/elf2flt.mk
+@@ -0,0 +1,28 @@
++#############################################################
++#
++# elf2flt
++#
++#############################################################
++
++ELF2FLT_SOURCE =
++HOST_ELF2FLT_SOURCE =
++ELF2FLT_VERSION = cvs
++ELF2FLT_LICENSE = GPLv2+
++ELF2FLT_LICENSE_FILES = LICENSE.TXT
++
++HOST_ELF2FLT_DEPENDENCIES = host-binutils host-zlib
++
++# It is not exactly a host variant, but more a cross variant, which is
++# why we pass a special --target option.
++HOST_ELF2FLT_CONF_OPT = \
++	--with-bfd-include-dir=$(HOST_BINUTILS_DIR)/bfd/ \
++	--with-binutils-include-dir=$(HOST_BINUTILS_DIR)/include/ \
++	--with-libbfd=$(HOST_BINUTILS_DIR)/bfd/libbfd.a \
++	--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
++	--target=$(GNU_TARGET_NAME)
++
++define HOST_ELF2FLT_EXTRACT_CMDS
++	cp -r package/elf2flt/src/* $(@D)
++endef
++
++$(eval $(host-autotools-package))
+diff --git a/toolchain/elf2flt/elf2flt/LICENSE.TXT b/package/elf2flt/src/LICENSE.TXT
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/LICENSE.TXT
+rename to package/elf2flt/src/LICENSE.TXT
+diff --git a/toolchain/elf2flt/elf2flt/Makefile.in b/package/elf2flt/src/Makefile.in
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/Makefile.in
+rename to package/elf2flt/src/Makefile.in
+diff --git a/toolchain/elf2flt/elf2flt/README b/package/elf2flt/src/README
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/README
+rename to package/elf2flt/src/README
+diff --git a/toolchain/elf2flt/elf2flt/config.guess b/package/elf2flt/src/config.guess
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/config.guess
+rename to package/elf2flt/src/config.guess
+diff --git a/toolchain/elf2flt/elf2flt/config.sub b/package/elf2flt/src/config.sub
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/config.sub
+rename to package/elf2flt/src/config.sub
+diff --git a/toolchain/elf2flt/elf2flt/configure b/package/elf2flt/src/configure
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/configure
+rename to package/elf2flt/src/configure
+diff --git a/toolchain/elf2flt/elf2flt/configure.in b/package/elf2flt/src/configure.in
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/configure.in
+rename to package/elf2flt/src/configure.in
+diff --git a/toolchain/elf2flt/elf2flt/cygwin-elf.h b/package/elf2flt/src/cygwin-elf.h
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/cygwin-elf.h
+rename to package/elf2flt/src/cygwin-elf.h
+diff --git a/toolchain/elf2flt/elf2flt/e1-elf2flt.ld b/package/elf2flt/src/e1-elf2flt.ld
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/e1-elf2flt.ld
+rename to package/elf2flt/src/e1-elf2flt.ld
+diff --git a/toolchain/elf2flt/elf2flt/elf2flt.c b/package/elf2flt/src/elf2flt.c
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/elf2flt.c
+rename to package/elf2flt/src/elf2flt.c
+diff --git a/toolchain/elf2flt/elf2flt/elf2flt.ld b/package/elf2flt/src/elf2flt.ld
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/elf2flt.ld
+rename to package/elf2flt/src/elf2flt.ld
+diff --git a/toolchain/elf2flt/elf2flt/flat.h b/package/elf2flt/src/flat.h
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/flat.h
+rename to package/elf2flt/src/flat.h
+diff --git a/toolchain/elf2flt/elf2flt/flthdr.c b/package/elf2flt/src/flthdr.c
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/flthdr.c
+rename to package/elf2flt/src/flthdr.c
+diff --git a/toolchain/elf2flt/elf2flt/install-sh b/package/elf2flt/src/install-sh
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/install-sh
+rename to package/elf2flt/src/install-sh
+diff --git a/toolchain/elf2flt/elf2flt/ld-elf2flt.in b/package/elf2flt/src/ld-elf2flt.in
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/ld-elf2flt.in
+rename to package/elf2flt/src/ld-elf2flt.in
+diff --git a/toolchain/elf2flt/elf2flt/maketarball.sh b/package/elf2flt/src/maketarball.sh
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/maketarball.sh
+rename to package/elf2flt/src/maketarball.sh
+diff --git a/toolchain/elf2flt/elf2flt/stubs.c b/package/elf2flt/src/stubs.c
+similarity index 100%
+rename from toolchain/elf2flt/elf2flt/stubs.c
+rename to package/elf2flt/src/stubs.c
+diff --git a/toolchain/elf2flt/elf2flt.mk b/toolchain/elf2flt/elf2flt.mk
+deleted file mode 100644
+index 1462227..0000000
+--- a/toolchain/elf2flt/elf2flt.mk
++++ /dev/null
+@@ -1,46 +0,0 @@
+-################################################################################
 -#
--define PYTHON_REMOVE_DEVFILES
--	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)-config
--	rm -f $(TARGET_DIR)/usr/bin/python2-config
--	rm -f $(TARGET_DIR)/usr/bin/python-config
--endef
--
--ifneq ($(BR2_HAVE_DEVFILES),y)
--PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_DEVFILES
--endif
--
+-# elf2flt
 -#
- # Remove useless files. In the config/ directory, only the Makefile
- # and the pyconfig.h files are needed at runtime.
- #
- define PYTHON_REMOVE_USELESS_FILES
-+	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)-config
-+	rm -f $(TARGET_DIR)/usr/bin/python2-config
-+	rm -f $(TARGET_DIR)/usr/bin/python-config
- 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/config/ \
- 		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
- 		rm -f $$i ; \
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 11ffe61..bf78ee6 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -127,23 +127,13 @@ endef
- PYTHON3_POST_INSTALL_STAGING_HOOKS += PYTHON3_FIXUP_LIBDIR
- 
- #
--# Development files removal
--#
--define PYTHON3_REMOVE_DEVFILES
--	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
--	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
--	rm -f $(TARGET_DIR)/usr/bin/python3-config
--endef
+-################################################################################
 -
--ifneq ($(BR2_HAVE_DEVFILES),y)
--PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_DEVFILES
--endif
+-# we keep a local checkout of uClinux CVS
+-ELF2FLT_SOURCE:=$(ELF2FLT_DIR)/elf2flt
+-ELF2FLT_DIR:=$(TOOLCHAIN_DIR)/elf2flt
+-ELF2FLT_BINARY:=elf2flt
 -
--#
- # Remove useless files. In the config/ directory, only the Makefile
- # and the pyconfig.h files are needed at runtime.
- #
- define PYTHON3_REMOVE_USELESS_FILES
-+	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
-+	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
-+	rm -f $(TARGET_DIR)/usr/bin/python3-config
- 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-3.3m/ \
- 		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
- 		rm -f $$i ; \
-diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
-index ae449ae..cd1ed3e 100644
---- a/package/sdl_sound/sdl_sound.mk
-+++ b/package/sdl_sound/sdl_sound.mk
-@@ -48,7 +48,7 @@ SDL_SOUND_POST_INSTALL_TARGET_HOOKS += SDL_SOUND_REMOVE_PLAYSOUND
- endif
- 
- # target shared libs doesn't get removed by make uninstall if the .la
--# files are removed (E.G. if BR2_HAVE_DEVFILES isn't set)
-+# files are removed
- define SDL_SOUND_UNINSTALL_TARGET_CMDS
- 	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(@D)
- 	rm -f $(TARGET_DIR)/usr/lib/libSDL_sound*so*
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index 8260293..75e8e67 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
-@@ -22,8 +22,6 @@ define TAGLIB_REMOVE_DEVFILE
- 	rm -f $(TARGET_DIR)/usr/bin/taglib-config
- endef
- 
--ifneq ($(BR2_HAVE_DEVFILES),y)
- TAGLIB_POST_INSTALL_TARGET_HOOKS += TAGLIB_REMOVE_DEVFILE
+-$(ELF2FLT_DIR)/.unpacked:
+-	cp -r toolchain/elf2flt/elf2flt "$(TOOLCHAIN_DIR)/elf2flt"
+-	touch $@
+-
+-$(ELF2FLT_DIR)/.patched: $(ELF2FLT_DIR)/.unpacked
+-	$(call CONFIG_UPDATE,$(@D))
+-	touch $@
+-
+-$(ELF2FLT_DIR)/.configured: $(ELF2FLT_DIR)/.patched
+-	(cd $(ELF2FLT_DIR); rm -rf config.cache; \
+-		LDFLAGS="$(HOST_LDFLAGS) -lz" \
+-		$(ELF2FLT_DIR)/configure $(QUIET) \
+-		--with-bfd-include-dir=$(HOST_BINUTILS_DIR)/bfd/ \
+-		--with-binutils-include-dir=$(HOST_BINUTILS_DIR)/include/ \
+-		--target=$(GNU_TARGET_NAME) \
+-		--with-libbfd=$(HOST_BINUTILS_DIR)/bfd/libbfd.a \
+-		--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
+-		--prefix=$(HOST_DIR)/usr)
+-	touch $@
+-
+-$(ELF2FLT_DIR)/$(ELF2FLT_BINARY): $(ELF2FLT_DIR)/.configured
+-	$(MAKE) -C $(ELF2FLT_DIR) all
+-	$(MAKE) -C $(ELF2FLT_DIR) install
+-
+-elf2flt: uclibc_target uclibc-configured binutils gcc host-zlib $(ELF2FLT_DIR)/$(ELF2FLT_BINARY)
+-
+-elf2flt-clean:
+-	rm -rf $(ELF2FLT_SOURCE)
+-
+-elf2flt-dirclean:
+-	rm -rf $(ELF2FLT_SOURCE)
+-
+-ifeq ($(BR2_ELF2FLT),y)
+-TARGETS+=elf2flt
 -endif
+diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
+index 5493177..5b89d56 100644
+--- a/toolchain/toolchain-buildroot.mk
++++ b/toolchain/toolchain-buildroot.mk
+@@ -1,6 +1,5 @@
+ # Include files required for the internal toolchain backend
  
- $(eval $(cmake-package))
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index e679b26..c56702b 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -51,8 +51,6 @@ define USBUTILS_REMOVE_DEVFILES
- 	rm -f $(TARGET_DIR)/usr/bin/libusb-config
- endef
+-include toolchain/elf2flt/elf2flt.mk
+ include toolchain/gcc/gcc-uclibc-4.x.mk
+ include toolchain/kernel-headers/kernel-headers.mk
+ include toolchain/uClibc/uclibc.mk
+diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
+index f58a4f7..422602e 100644
+--- a/toolchain/toolchain-buildroot/Config.in.2
++++ b/toolchain/toolchain-buildroot/Config.in.2
+@@ -98,7 +98,7 @@ config BR2_PTHREAD_DEBUG
+ 	help
+ 	  Build the thread library with debugging enabled.
  
--ifneq ($(BR2_HAVE_DEVFILES),y)
- USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_DEVFILES
--endif
+-source "toolchain/elf2flt/Config.in"
++source "package/elf2flt/Config.in.host"
  
- $(eval $(autotools-package))
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index 14c616e..8598953 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -19,7 +19,6 @@ XENOMAI_INSTALL_STAGING = YES
+ config BR2_VFP_FLOAT
+ 	bool "Use ARM Vector Floating Point unit"
+diff --git a/toolchain/toolchain-crosstool-ng.mk b/toolchain/toolchain-crosstool-ng.mk
+index d1e7552..4f9c29c 100644
+--- a/toolchain/toolchain-crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng.mk
+@@ -2,7 +2,6 @@
  
- XENOMAI_CONF_OPT += --includedir=/usr/include/xenomai/
+ # Explicit ordering:
+ include toolchain/helpers.mk
+-include toolchain/elf2flt/elf2flt.mk
+ include toolchain/gcc/gcc-uclibc-4.x.mk
+ include toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+ include toolchain/uClibc/uclibc.mk
+diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
+index 9999aa2..2aa0141 100644
+--- a/toolchain/toolchain-external.mk
++++ b/toolchain/toolchain-external.mk
+@@ -1,7 +1,6 @@
+ # Required includes for the external toolchain backend
  
--ifeq ($(BR2_HAVE_DEVFILES),)
- define XENOMAI_REMOVE_DEVFILES
- 	for i in xeno-config xeno-info wrap-link.sh ; do \
- 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
-@@ -27,7 +26,6 @@ define XENOMAI_REMOVE_DEVFILES
- endef
- 
- XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_DEVFILES
--endif
- 
- ifeq ($(BR2_PACKAGE_XENOMAI_TESTSUITE),)
- define XENOMAI_REMOVE_TESTSUITE
+ include toolchain/helpers.mk
+-include toolchain/elf2flt/elf2flt.mk
+ include toolchain/gcc/gcc-uclibc-4.x.mk
+ include toolchain/kernel-headers/kernel-headers.mk
+ include toolchain/toolchain-external/ext-tool.mk
 -- 
 1.8.1.2
