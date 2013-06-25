@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Jun 2013 17:34:38 -0300
-Subject: [Buildroot] [PATCH] pax-utils: new package
-Message-ID: <1372192478-2367-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 25 Jun 2013 17:41:07 -0300
+Subject: [Buildroot] [PATCHv2] pax-utils: new package
+Message-ID: <1372192867-3403-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,8 +12,8 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
  package/Config.in              |  1 +
  package/pax-utils/Config.in    |  7 ++++++
- package/pax-utils/pax-utils.mk | 53 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 61 insertions(+)
+ package/pax-utils/pax-utils.mk | 55 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 63 insertions(+)
  create mode 100644 package/pax-utils/Config.in
  create mode 100644 package/pax-utils/pax-utils.mk
 
@@ -44,10 +44,10 @@ index 0000000..58100e4
 +	  http://www.gentoo.org/proj/en/hardened/pax-utils.xml
 diff --git a/package/pax-utils/pax-utils.mk b/package/pax-utils/pax-utils.mk
 new file mode 100644
-index 0000000..ff5aae6
+index 0000000..69198c2
 --- /dev/null
 +++ b/package/pax-utils/pax-utils.mk
-@@ -0,0 +1,53 @@
+@@ -0,0 +1,55 @@
 +################################################################################
 +#
 +# pax-utils
@@ -57,6 +57,8 @@ index 0000000..ff5aae6
 +PAX_UTILS_VERSION = 0.7
 +PAX_UTILS_SITE = http://distfiles.gentoo.org/distfiles
 +PAX_UTILS_SOURCE = pax-utils-$(PAX_UTILS_VERSION).tar.xz
++PAX_UTILS_LICENSE = GPLv2
++PAX_UTILS_LICENSE_FILES = COPYING
 +
 +ifeq ($(BR2_PACKAGE_LIBCAP),y)
 +PAX_UTILS_DEPENDENCIES += libcap
