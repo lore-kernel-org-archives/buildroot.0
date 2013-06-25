@@ -1,297 +1,265 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jun 2013 21:35:42 +0200
-Subject: [Buildroot] [RFCv1 07/18] elf2flt: convert to the package
-	infrastructure
+Date: Tue, 25 Jun 2013 21:35:48 +0200
+Subject: [Buildroot] [RFCv1 13/18] gcc-initial, gcc-intermediate,
+	gcc: optimize extraction
 In-Reply-To: <1372188953-29449-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1372188953-29449-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1372188953-29449-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1372188953-29449-14-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Several sub-directories of the gcc code base are in fact not needed
+for the Buildroot build: libjava/, libgo/ and gcc/testsuite/ being the
+biggest ones. Avoiding their extraction saves quite a bit of disk
+space, and compensates a bit the fact that we now extract three times
+the gcc source code.
+
+This requires changing the 100-uclibc-conf.patch to no longer patch
+files from the libjava/ directory, since this directory is no longer
+extracted.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                                   |  7 ++++
- .../Config.in => package/elf2flt/Config.in.host    |  2 +-
- package/elf2flt/elf2flt.mk                         | 28 +++++++++++++
- .../elf2flt => package/elf2flt/src}/LICENSE.TXT    |  0
- .../elf2flt => package/elf2flt/src}/Makefile.in    |  0
- .../elf2flt/elf2flt => package/elf2flt/src}/README |  0
- .../elf2flt => package/elf2flt/src}/config.guess   |  0
- .../elf2flt => package/elf2flt/src}/config.sub     |  0
- .../elf2flt => package/elf2flt/src}/configure      |  0
- .../elf2flt => package/elf2flt/src}/configure.in   |  0
- .../elf2flt => package/elf2flt/src}/cygwin-elf.h   |  0
- .../elf2flt => package/elf2flt/src}/e1-elf2flt.ld  |  0
- .../elf2flt => package/elf2flt/src}/elf2flt.c      |  0
- .../elf2flt => package/elf2flt/src}/elf2flt.ld     |  0
- .../elf2flt/elf2flt => package/elf2flt/src}/flat.h |  0
- .../elf2flt => package/elf2flt/src}/flthdr.c       |  0
- .../elf2flt => package/elf2flt/src}/install-sh     |  0
- .../elf2flt => package/elf2flt/src}/ld-elf2flt.in  |  0
- .../elf2flt => package/elf2flt/src}/maketarball.sh |  0
- .../elf2flt => package/elf2flt/src}/stubs.c        |  0
- toolchain/elf2flt/elf2flt.mk                       | 46 ----------------------
- toolchain/toolchain-buildroot.mk                   |  1 -
- toolchain/toolchain-buildroot/Config.in.2          |  2 +-
- toolchain/toolchain-crosstool-ng.mk                |  1 -
- toolchain/toolchain-external.mk                    |  1 -
- 25 files changed, 37 insertions(+), 51 deletions(-)
- rename toolchain/elf2flt/Config.in => package/elf2flt/Config.in.host (91%)
- create mode 100644 package/elf2flt/elf2flt.mk
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/LICENSE.TXT (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/Makefile.in (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/README (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/config.guess (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/config.sub (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/configure (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/configure.in (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/cygwin-elf.h (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/e1-elf2flt.ld (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/elf2flt.c (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/elf2flt.ld (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/flat.h (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/flthdr.c (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/install-sh (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/ld-elf2flt.in (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/maketarball.sh (100%)
- rename {toolchain/elf2flt/elf2flt => package/elf2flt/src}/stubs.c (100%)
- delete mode 100644 toolchain/elf2flt/elf2flt.mk
+ package/gcc-initial/gcc-initial.mk           |  8 ++++++++
+ package/gcc-intermediate/gcc-intermediate.mk |  8 ++++++++
+ package/gcc/4.3.6/100-uclibc-conf.patch      | 20 --------------------
+ package/gcc/4.4.7/100-uclibc-conf.patch      | 20 --------------------
+ package/gcc/4.5.4/100-uclibc-conf.patch      | 20 --------------------
+ package/gcc/4.6.4/100-uclibc-conf.patch      | 20 --------------------
+ package/gcc/4.7.3/100-uclibc-conf.patch      | 20 --------------------
+ package/gcc/4.8.1/100-uclibc-conf.patch      | 22 ----------------------
+ package/gcc/gcc.mk                           |  8 ++++++++
+ 9 files changed, 24 insertions(+), 122 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index cd23492..af1ee7b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -86,6 +86,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712
- #
- # Legacy options since 2013.02
- #
-+config BR2_ELF2FLT
-+	bool "the elf2flt option has been renamed"
-+	select BR2_LEGACY
-+	help
-+	  The BR2_ELF2FLT option has been renamed to
-+	  BR2_PACKAGE_HOST_ELF2FLT due to the conversion of elf2flt to
-+	  the package infrastructure.
+diff --git a/package/gcc-initial/gcc-initial.mk b/package/gcc-initial/gcc-initial.mk
+index bf776b1..c92a1ea 100644
+--- a/package/gcc-initial/gcc-initial.mk
++++ b/package/gcc-initial/gcc-initial.mk
+@@ -11,6 +11,14 @@ GCC_INITIAL_SOURCE  = gcc-$(GCC_INITIAL_VERSION).tar.bz2
  
- config BR2_sa110
- 	bool "sa110 ARM target switched to strongarm"
-diff --git a/toolchain/elf2flt/Config.in b/package/elf2flt/Config.in.host
-similarity index 91%
-rename from toolchain/elf2flt/Config.in
-rename to package/elf2flt/Config.in.host
-index b4e450a..31a6c7f 100644
---- a/toolchain/elf2flt/Config.in
-+++ b/package/elf2flt/Config.in.host
-@@ -1,4 +1,4 @@
--config BR2_ELF2FLT
-+config BR2_PACKAGE_HOST_ELF2FLT
- 	bool "Enable elf2flt support?"
- 	depends on BR2_arm || BR2_sh || BR2_sparc
- 	help
-diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-new file mode 100644
-index 0000000..5afa5ca
---- /dev/null
-+++ b/package/elf2flt/elf2flt.mk
-@@ -0,0 +1,28 @@
-+#############################################################
-+#
-+# elf2flt
-+#
-+#############################################################
-+
-+ELF2FLT_SOURCE =
-+HOST_ELF2FLT_SOURCE =
-+ELF2FLT_VERSION = cvs
-+ELF2FLT_LICENSE = GPLv2+
-+ELF2FLT_LICENSE_FILES = LICENSE.TXT
-+
-+HOST_ELF2FLT_DEPENDENCIES = host-binutils host-zlib
-+
-+# It is not exactly a host variant, but more a cross variant, which is
-+# why we pass a special --target option.
-+HOST_ELF2FLT_CONF_OPT = \
-+	--with-bfd-include-dir=$(HOST_BINUTILS_DIR)/bfd/ \
-+	--with-binutils-include-dir=$(HOST_BINUTILS_DIR)/include/ \
-+	--with-libbfd=$(HOST_BINUTILS_DIR)/bfd/libbfd.a \
-+	--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
-+	--target=$(GNU_TARGET_NAME)
-+
-+define HOST_ELF2FLT_EXTRACT_CMDS
-+	cp -r package/elf2flt/src/* $(@D)
+ HOST_GCC_INITIAL_DEPENDENCIES = host-binutils
+ 
++# Optimize the extraction process by skipping a lot of unused things
++define HOST_GCC_INITIAL_EXTRACT_CMDS
++	$(BZCAT) $(DL_DIR)/$(GCC_INITIAL_SOURCE) | \
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) \
++		--exclude='libjava/*' --exclude='libgo/*' --exclude='gcc/testsuite/*' \
++		$(TAR_OPTIONS) -
 +endef
 +
-+$(eval $(host-autotools-package))
-diff --git a/toolchain/elf2flt/elf2flt/LICENSE.TXT b/package/elf2flt/src/LICENSE.TXT
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/LICENSE.TXT
-rename to package/elf2flt/src/LICENSE.TXT
-diff --git a/toolchain/elf2flt/elf2flt/Makefile.in b/package/elf2flt/src/Makefile.in
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/Makefile.in
-rename to package/elf2flt/src/Makefile.in
-diff --git a/toolchain/elf2flt/elf2flt/README b/package/elf2flt/src/README
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/README
-rename to package/elf2flt/src/README
-diff --git a/toolchain/elf2flt/elf2flt/config.guess b/package/elf2flt/src/config.guess
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/config.guess
-rename to package/elf2flt/src/config.guess
-diff --git a/toolchain/elf2flt/elf2flt/config.sub b/package/elf2flt/src/config.sub
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/config.sub
-rename to package/elf2flt/src/config.sub
-diff --git a/toolchain/elf2flt/elf2flt/configure b/package/elf2flt/src/configure
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/configure
-rename to package/elf2flt/src/configure
-diff --git a/toolchain/elf2flt/elf2flt/configure.in b/package/elf2flt/src/configure.in
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/configure.in
-rename to package/elf2flt/src/configure.in
-diff --git a/toolchain/elf2flt/elf2flt/cygwin-elf.h b/package/elf2flt/src/cygwin-elf.h
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/cygwin-elf.h
-rename to package/elf2flt/src/cygwin-elf.h
-diff --git a/toolchain/elf2flt/elf2flt/e1-elf2flt.ld b/package/elf2flt/src/e1-elf2flt.ld
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/e1-elf2flt.ld
-rename to package/elf2flt/src/e1-elf2flt.ld
-diff --git a/toolchain/elf2flt/elf2flt/elf2flt.c b/package/elf2flt/src/elf2flt.c
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/elf2flt.c
-rename to package/elf2flt/src/elf2flt.c
-diff --git a/toolchain/elf2flt/elf2flt/elf2flt.ld b/package/elf2flt/src/elf2flt.ld
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/elf2flt.ld
-rename to package/elf2flt/src/elf2flt.ld
-diff --git a/toolchain/elf2flt/elf2flt/flat.h b/package/elf2flt/src/flat.h
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/flat.h
-rename to package/elf2flt/src/flat.h
-diff --git a/toolchain/elf2flt/elf2flt/flthdr.c b/package/elf2flt/src/flthdr.c
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/flthdr.c
-rename to package/elf2flt/src/flthdr.c
-diff --git a/toolchain/elf2flt/elf2flt/install-sh b/package/elf2flt/src/install-sh
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/install-sh
-rename to package/elf2flt/src/install-sh
-diff --git a/toolchain/elf2flt/elf2flt/ld-elf2flt.in b/package/elf2flt/src/ld-elf2flt.in
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/ld-elf2flt.in
-rename to package/elf2flt/src/ld-elf2flt.in
-diff --git a/toolchain/elf2flt/elf2flt/maketarball.sh b/package/elf2flt/src/maketarball.sh
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/maketarball.sh
-rename to package/elf2flt/src/maketarball.sh
-diff --git a/toolchain/elf2flt/elf2flt/stubs.c b/package/elf2flt/src/stubs.c
-similarity index 100%
-rename from toolchain/elf2flt/elf2flt/stubs.c
-rename to package/elf2flt/src/stubs.c
-diff --git a/toolchain/elf2flt/elf2flt.mk b/toolchain/elf2flt/elf2flt.mk
-deleted file mode 100644
-index 1462227..0000000
---- a/toolchain/elf2flt/elf2flt.mk
-+++ /dev/null
-@@ -1,46 +0,0 @@
--################################################################################
--#
--# elf2flt
--#
--################################################################################
--
--# we keep a local checkout of uClinux CVS
--ELF2FLT_SOURCE:=$(ELF2FLT_DIR)/elf2flt
--ELF2FLT_DIR:=$(TOOLCHAIN_DIR)/elf2flt
--ELF2FLT_BINARY:=elf2flt
--
--$(ELF2FLT_DIR)/.unpacked:
--	cp -r toolchain/elf2flt/elf2flt "$(TOOLCHAIN_DIR)/elf2flt"
--	touch $@
--
--$(ELF2FLT_DIR)/.patched: $(ELF2FLT_DIR)/.unpacked
--	$(call CONFIG_UPDATE,$(@D))
--	touch $@
--
--$(ELF2FLT_DIR)/.configured: $(ELF2FLT_DIR)/.patched
--	(cd $(ELF2FLT_DIR); rm -rf config.cache; \
--		LDFLAGS="$(HOST_LDFLAGS) -lz" \
--		$(ELF2FLT_DIR)/configure $(QUIET) \
--		--with-bfd-include-dir=$(HOST_BINUTILS_DIR)/bfd/ \
--		--with-binutils-include-dir=$(HOST_BINUTILS_DIR)/include/ \
--		--target=$(GNU_TARGET_NAME) \
--		--with-libbfd=$(HOST_BINUTILS_DIR)/bfd/libbfd.a \
--		--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
--		--prefix=$(HOST_DIR)/usr)
--	touch $@
--
--$(ELF2FLT_DIR)/$(ELF2FLT_BINARY): $(ELF2FLT_DIR)/.configured
--	$(MAKE) -C $(ELF2FLT_DIR) all
--	$(MAKE) -C $(ELF2FLT_DIR) install
--
--elf2flt: uclibc_target uclibc-configured binutils gcc host-zlib $(ELF2FLT_DIR)/$(ELF2FLT_BINARY)
--
--elf2flt-clean:
--	rm -rf $(ELF2FLT_SOURCE)
--
--elf2flt-dirclean:
--	rm -rf $(ELF2FLT_SOURCE)
--
--ifeq ($(BR2_ELF2FLT),y)
--TARGETS+=elf2flt
--endif
-diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
-index 5493177..5b89d56 100644
---- a/toolchain/toolchain-buildroot.mk
-+++ b/toolchain/toolchain-buildroot.mk
-@@ -1,6 +1,5 @@
- # Include files required for the internal toolchain backend
+ define HOST_GCC_INITIAL_XTENSA_OVERLAY_EXTRACT
+         tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip,\
+                 $(BR2_XTENSA_CORE_NAME)).tar -C $(@D) --strip-components=1 gcc
+diff --git a/package/gcc-intermediate/gcc-intermediate.mk b/package/gcc-intermediate/gcc-intermediate.mk
+index 6418b9d..25adb23 100644
+--- a/package/gcc-intermediate/gcc-intermediate.mk
++++ b/package/gcc-intermediate/gcc-intermediate.mk
+@@ -9,6 +9,14 @@ GCC_INTERMEDIATE_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
+ GCC_INTERMEDIATE_SITE    = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_INTERMEDIATE_VERSION)
+ GCC_INTERMEDIATE_SOURCE  = gcc-$(GCC_INTERMEDIATE_VERSION).tar.bz2
  
--include toolchain/elf2flt/elf2flt.mk
- include toolchain/gcc/gcc-uclibc-4.x.mk
- include toolchain/kernel-headers/kernel-headers.mk
- include toolchain/uClibc/uclibc.mk
-diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
-index f58a4f7..422602e 100644
---- a/toolchain/toolchain-buildroot/Config.in.2
-+++ b/toolchain/toolchain-buildroot/Config.in.2
-@@ -98,7 +98,7 @@ config BR2_PTHREAD_DEBUG
- 	help
- 	  Build the thread library with debugging enabled.
++# Optimize the extraction process by skipping a lot of unused things
++define HOST_GCC_INTERMEDIATE_EXTRACT_CMDS
++	$(BZCAT) $(DL_DIR)/$(GCC_INTERMEDIATE_SOURCE) | \
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) \
++		--exclude='libjava/*' --exclude='libgo/*' --exclude='gcc/testsuite/*' \
++		$(TAR_OPTIONS) -
++endef
++
+ define HOST_GCC_INTERMEDIATE_XTENSA_OVERLAY_EXTRACT
+         tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip,\
+                 $(BR2_XTENSA_CORE_NAME)).tar -C $(@D) --strip-components=1 gcc
+diff --git a/package/gcc/4.3.6/100-uclibc-conf.patch b/package/gcc/4.3.6/100-uclibc-conf.patch
+index cca8c82..6bad179 100644
+--- a/package/gcc/4.3.6/100-uclibc-conf.patch
++++ b/package/gcc/4.3.6/100-uclibc-conf.patch
+@@ -11,23 +11,3 @@
+  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+    make bootstrap || exit 1
+    make install || exit 1
+---- gcc/libjava/classpath/ltconfig
+-+++ gcc/libjava/classpath/ltconfig
+-@@ -603,7 +603,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+--linux-gnu*) ;;
+-+linux-gnu*|linux-uclibc*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+- 
+-@@ -1251,7 +1251,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+diff --git a/package/gcc/4.4.7/100-uclibc-conf.patch b/package/gcc/4.4.7/100-uclibc-conf.patch
+index cca8c82..6bad179 100644
+--- a/package/gcc/4.4.7/100-uclibc-conf.patch
++++ b/package/gcc/4.4.7/100-uclibc-conf.patch
+@@ -11,23 +11,3 @@
+  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+    make bootstrap || exit 1
+    make install || exit 1
+---- gcc/libjava/classpath/ltconfig
+-+++ gcc/libjava/classpath/ltconfig
+-@@ -603,7 +603,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+--linux-gnu*) ;;
+-+linux-gnu*|linux-uclibc*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+- 
+-@@ -1251,7 +1251,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+diff --git a/package/gcc/4.5.4/100-uclibc-conf.patch b/package/gcc/4.5.4/100-uclibc-conf.patch
+index cca8c82..6bad179 100644
+--- a/package/gcc/4.5.4/100-uclibc-conf.patch
++++ b/package/gcc/4.5.4/100-uclibc-conf.patch
+@@ -11,23 +11,3 @@
+  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+    make bootstrap || exit 1
+    make install || exit 1
+---- gcc/libjava/classpath/ltconfig
+-+++ gcc/libjava/classpath/ltconfig
+-@@ -603,7 +603,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+--linux-gnu*) ;;
+-+linux-gnu*|linux-uclibc*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+- 
+-@@ -1251,7 +1251,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+diff --git a/package/gcc/4.6.4/100-uclibc-conf.patch b/package/gcc/4.6.4/100-uclibc-conf.patch
+index cca8c82..6bad179 100644
+--- a/package/gcc/4.6.4/100-uclibc-conf.patch
++++ b/package/gcc/4.6.4/100-uclibc-conf.patch
+@@ -11,23 +11,3 @@
+  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+    make bootstrap || exit 1
+    make install || exit 1
+---- gcc/libjava/classpath/ltconfig
+-+++ gcc/libjava/classpath/ltconfig
+-@@ -603,7 +603,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+--linux-gnu*) ;;
+-+linux-gnu*|linux-uclibc*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+- 
+-@@ -1251,7 +1251,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+diff --git a/package/gcc/4.7.3/100-uclibc-conf.patch b/package/gcc/4.7.3/100-uclibc-conf.patch
+index cca8c82..6bad179 100644
+--- a/package/gcc/4.7.3/100-uclibc-conf.patch
++++ b/package/gcc/4.7.3/100-uclibc-conf.patch
+@@ -11,23 +11,3 @@
+  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+    make bootstrap || exit 1
+    make install || exit 1
+---- gcc/libjava/classpath/ltconfig
+-+++ gcc/libjava/classpath/ltconfig
+-@@ -603,7 +603,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+--linux-gnu*) ;;
+-+linux-gnu*|linux-uclibc*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+- 
+-@@ -1251,7 +1251,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+diff --git a/package/gcc/4.8.1/100-uclibc-conf.patch b/package/gcc/4.8.1/100-uclibc-conf.patch
+index d855b30..d56bf0a 100644
+--- a/package/gcc/4.8.1/100-uclibc-conf.patch
++++ b/package/gcc/4.8.1/100-uclibc-conf.patch
+@@ -13,25 +13,3 @@ Index: gcc-4.8.0/contrib/regression/objs-gcc.sh
+  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+    make bootstrap || exit 1
+    make install || exit 1
+-Index: gcc-4.8.0/libjava/classpath/ltconfig
+-===================================================================
+---- gcc-4.8.0.orig/libjava/classpath/ltconfig	2011-02-13 12:45:53.000000000 +0100
+-+++ gcc-4.8.0/libjava/classpath/ltconfig	2013-03-23 17:39:04.000000000 +0100
+-@@ -603,7 +603,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+--linux-gnu*) ;;
+-+linux-gnu*|linux-uclibc*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+- 
+-@@ -1247,7 +1247,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index e07e6ea..dfd91d7 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -22,6 +22,14 @@ GCC_SOURCE = gcc-$(GCC_VERSION).tar.bz2
  
--source "toolchain/elf2flt/Config.in"
-+source "package/elf2flt/Config.in.host"
+ HOST_GCC_DEPENDENCIES = host-gmp host-mpfr uclibc
  
- config BR2_VFP_FLOAT
- 	bool "Use ARM Vector Floating Point unit"
-diff --git a/toolchain/toolchain-crosstool-ng.mk b/toolchain/toolchain-crosstool-ng.mk
-index d1e7552..4f9c29c 100644
---- a/toolchain/toolchain-crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng.mk
-@@ -2,7 +2,6 @@
- 
- # Explicit ordering:
- include toolchain/helpers.mk
--include toolchain/elf2flt/elf2flt.mk
- include toolchain/gcc/gcc-uclibc-4.x.mk
- include toolchain/toolchain-crosstool-ng/crosstool-ng.mk
- include toolchain/uClibc/uclibc.mk
-diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
-index 9999aa2..2aa0141 100644
---- a/toolchain/toolchain-external.mk
-+++ b/toolchain/toolchain-external.mk
-@@ -1,7 +1,6 @@
- # Required includes for the external toolchain backend
- 
- include toolchain/helpers.mk
--include toolchain/elf2flt/elf2flt.mk
- include toolchain/gcc/gcc-uclibc-4.x.mk
- include toolchain/kernel-headers/kernel-headers.mk
- include toolchain/toolchain-external/ext-tool.mk
++# Optimize the extraction process by skipping a lot of unused things
++define HOST_GCC_EXTRACT_CMDS
++	$(BZCAT) $(DL_DIR)/$(GCC_SOURCE) | \
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) \
++		--exclude='libjava/*' --exclude='libgo/*' --exclude='gcc/testsuite/*' \
++		$(TAR_OPTIONS) -
++endef
++
+ define HOST_GCC_XTENSA_OVERLAY_EXTRACT
+         tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip,\
+                 $(BR2_XTENSA_CORE_NAME)).tar -C $(@D) --strip-components=1 gcc
 -- 
 1.8.1.2
