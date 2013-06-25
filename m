@@ -1,47 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jun 2013 21:35:39 +0200
-Subject: [Buildroot] [RFCv1 04/18] toolchain/gcc: remove dead code related
-	to host binary stripping
+Date: Tue, 25 Jun 2013 21:35:37 +0200
+Subject: [Buildroot] [RFCv1 02/18] busybox: don't use kernel headers directly
 In-Reply-To: <1372188953-29449-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1372188953-29449-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1372188953-29449-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1372188953-29449-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The GCC_STRIP_HOST_BINARIES variable was always defined to 'nope',
-which means that the host binaries were never stripped. Get rid of the
-corresponding code, which is not in use.
+The kernel headers are part of the staging directory, so there is no
+reason to point the Busybox CFLAGS directly to them.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/gcc/gcc-uclibc-4.x.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ package/busybox/busybox.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 92361e5..79a0125 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -43,7 +43,6 @@ GCC_SOURCE:=gcc-$(GCC_VERSION).tar.bz2
- GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
- GCC_DIR:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)
- GCC_CAT:=$(BZCAT)
--GCC_STRIP_HOST_BINARIES:=nope
- GCC_SRC_DIR:=$(GCC_DIR)
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index cfefdbb..acc9008 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -16,8 +16,7 @@ BUSYBOX_LICENSE = GPLv2
+ BUSYBOX_LICENSE_FILES = LICENSE
  
- # Branding works on >= 4.3
-@@ -472,10 +471,6 @@ $(GCC_BUILD_DIR3)/.installed: $(GCC_BUILD_DIR3)/.compiled
- 		rmdir "$(STAGING_DIR)/lib64"; \
- 		rm "$(STAGING_DIR)/usr/$(GNU_TARGET_NAME)/lib64";\
- 	fi
--	# Strip the host binaries
--ifeq ($(GCC_STRIP_HOST_BINARIES),true)
--	strip --strip-all -R .note -R .comment $(filter-out %-gccbug %-embedspu,$(wildcard $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-*))
--endif
- 	# Make sure we have 'cc'.
- 	if [ ! -e $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc ]; then \
- 		ln -snf $(GNU_TARGET_NAME)-gcc \
+ BUSYBOX_CFLAGS = \
+-	$(TARGET_CFLAGS) \
+-	-I$(LINUX_HEADERS_DIR)/include
++	$(TARGET_CFLAGS)
+ 
+ BUSYBOX_LDFLAGS = \
+ 	$(TARGET_LDFLAGS)
 -- 
 1.8.1.2
