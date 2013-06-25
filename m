@@ -1,64 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Jun 2013 00:01:10 +0200
-Subject: [Buildroot] [Q] Buildroot vs uCLinux
-In-Reply-To: <CALF0-+Wpm=JN0jOk8mu4QgaEvRvvbOw1mM4T6W8mYLMtSh2qSg@mail.gmail.com>
-References: <CALF0-+Wpm=JN0jOk8mu4QgaEvRvvbOw1mM4T6W8mYLMtSh2qSg@mail.gmail.com>
-Message-ID: <20130626000110.0bbb80cc@skate>
+Date: Wed, 26 Jun 2013 00:04:30 +0200
+Subject: [Buildroot] [PATCH] libunwind:  new pacakge
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C639A6F98F@ex-mb1.corp.adtran.com>
+References: <F9C551623D2CBB4C9488801D14F864C639A6F946@ex-mb1.corp.adtran.com>
+ <20130625235022.75b13738@skate>
+ <F9C551623D2CBB4C9488801D14F864C639A6F98F@ex-mb1.corp.adtran.com>
+Message-ID: <20130626000430.502a306a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garcia,
+Dear ANDY KENNEDY,
 
-On Mon, 24 Jun 2013 14:57:08 -0300, Ezequiel Garcia wrote:
+On Tue, 25 Jun 2013 21:57:14 +0000, ANDY KENNEDY wrote:
 
-> I'm working on a project where the customer has decided to use uCLinux
-> as the base distribution on a MMU platform.
-
-On a platform that has a MMU? Using uClinux-dist doesn't seem like a
-very wise choice in this case. Which CPU architecture is this platform
-using?
-
-> Can anyone give me any insights on what would be the differences between
-> this choice, and choosing buildroot instead?
+> >  1) Did you check that it builds fine with uClibc? This kind of library
+> >  tend to use some funky C library features, sometimes not available in
+> >  uClibc.
 > 
-> AFAIK, they're both source-oriented, uclibc-based distributions.
+> Nope, I didn't.
 
-Buildroot is not limited to uClibc. It can use glibc or eglibc
-toolchains just fine, and build systems with those C libraries.
+Then just do a build with a uClibc toolchain. If you don't want to wait
+for the toolchain to build, you can use
+http://autobuild.buildroot.org/toolchains/tarballs/br-arm-basic-2013.05-1.tar.bz2
+as an external toolchain. It's a basic ARM uClibc toolchain (with no
+option enabled: no WCHAR, no largefile, no IPv6, no RPC, no locales).
 
-> uCLinux seems more
-> biased towards MMU-less platforms, but since this is not the case, I'd
-> like to know
-> if there's something I'm missing, before I suggest my customer to try
-> Buildroot instead.
+> >  2) The libunwind code seems to contain some architecture-specific
+> >  code. While aarch64, arm, mips, ppc, sh, x86 and x86-64 are supported,
+> >  some other architectures that Buildroot supports are not supported. So
+> >  maybe this package should have a "depends on BR2_aarch64 || BR2_arm ||
+> >  BR2_armeb || ..."
+> 
+> That is possible as well.  I'm really not devoted to owning this
+> package that much.  I was merely attempting to push it back as I
+> added it to our usage of BuildRoot.  To that end, shall I abandon
+> the process (as I clearly am not willing to do it justice)?
 
-As Stephan mentions, uClinux-dist stores the complete source tree of
-most packages directly in the uClinux-dist code base, which makes it
-quite huge. Buildroot instead always downloads the upstream tarball or
-Git repository, and only stores in its source tree a few patches for
-some packages, when needed to make them cross-compile properly. I
-believe this, by itself, already makes Buildroot a bit more convenient
-to use.
+No, you shouldn't abandon the process. Your contributions are very
+welcome! I think you're very close to have something that can be
+merged, just keep sending new revisions of your patch that takes into
+account the comments from contributors.
 
-Being on the uclinux-dist-dev and uclinux-dev mailing list since about 3
-years or so, I can also say that the amount of e-mails about
-uClinux-dist is very very low, almost inexistent. Maybe those are no
-longer the right mailing lists for uClinux-dist development, I'm not
-sure. There is some regular traffic on those lists, but it's only about
-Linux kernel support for non-MMU architectures, not the uClinux-dist
-build system.
+> It is no skin off my nose whether it gets put into BuildRoot, I was
+> only pushing it back as I didn't know it was there until someone else
+> I work with pointed out that this *seems* to be the basic library GDB
+> is based off of, thus could be useful in our embedded system.
 
-There are apparently some not too old releases of uClinux-dist (october
-2012), but I'm not sure where the development is happening since the
-CVS repository reference on the project web site seems to contain only
-very old stuff.
-
-I believe that one good indication is that Analog Devices was using
-uClinux-dist as the build system offered to their Blackfin customers,
-and last year, they have switched to use Buildroot instead.
+Yes, it would certainly be useful.
 
 Best regards,
 
