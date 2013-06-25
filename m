@@ -1,34 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Jun 2013 10:50:24 -0300
-Subject: [Buildroot] [PATCH] dbus: security bump to version 1.4.26
-Message-ID: <1372168224-17272-1-git-send-email-gustavo@zacarias.com.ar>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Tue, 25 Jun 2013 16:14:36 +0100
+Subject: [Buildroot] [PATCH] openswan: Restore -fPIE to USERCOMPILE flags
+Message-ID: <1372173276-13616-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2013-2168.
+From: Markos Chandras <markos.chandras@imgtec.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The default USERCOMPILE variable uses -fPIE so we bring this back.
+This also fixes linking problems for MIPS when non-PIC objects
+are used to form a PIC one.
+
+Fixes the following linking problem on MIPS:
+connections.o: relocation R_MIPS_HI16 against `__gnu_local_gp'
+can not be used when making a shared object; recompile with -fPIC
+
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 ---
- package/dbus/dbus.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/openswan/openswan.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index cb72f1f..a855f05 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+index 8a857d4..0b8e7d3 100644
+--- a/package/openswan/openswan.mk
++++ b/package/openswan/openswan.mk
+@@ -11,7 +11,7 @@ OPENSWAN_LICENSE_FILES = COPYING LICENSE
  
--DBUS_VERSION = 1.4.24
--DBUS_SITE = http://dbus.freedesktop.org/releases/dbus/
-+DBUS_VERSION = 1.4.26
-+DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFLv2.1 GPLv2+
- DBUS_LICENSE_FILES = COPYING
- DBUS_INSTALL_STAGING = YES
+ OPENSWAN_DEPENDENCIES = host-bison gmp iproute2
+ OPENSWAN_MAKE_OPT = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
+-	USERCOMPILE="$(TARGET_CFLAGS)" INC_USRLOCAL=/usr \
++	USERCOMPILE="$(TARGET_CFLAGS) -fPIE" INC_USRLOCAL=/usr \
+ 	USE_KLIPS=false USE_MAST=false USE_NM=false
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
 -- 
-1.8.1.5
+1.8.2.1
