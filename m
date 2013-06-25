@@ -1,60 +1,74 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Jun 2013 15:42:20 -0300
-Subject: [Buildroot] [PATCH 2/2] samba: bump to version 3.6.16
-In-Reply-To: <1372185740-28886-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1372185740-28886-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1372185740-28886-2-git-send-email-gustavo@zacarias.com.ar>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Tue, 25 Jun 2013 21:08:33 +0200
+Subject: [Buildroot] [PATCH] package/libmicrohttpd: minor fixes and additions
+Message-ID: <1372187313-15042-1-git-send-email-c.schoenert@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/samba/samba-fix-smbd-libs-avahi.patch | 14 ++++++++------
- package/samba/samba.mk                        |  2 +-
- 2 files changed, 9 insertions(+), 7 deletions(-)
+From: Carsten Schoenert <c.schoenert@gmail.com>
 
-diff --git a/package/samba/samba-fix-smbd-libs-avahi.patch b/package/samba/samba-fix-smbd-libs-avahi.patch
-index d6423de..6624f57 100644
---- a/package/samba/samba-fix-smbd-libs-avahi.patch
-+++ b/package/samba/samba-fix-smbd-libs-avahi.patch
-@@ -2,14 +2,16 @@ Expliticly link with -lpthread if smbd is compiled with
- avahi support. Otherwise the binary will fail to run.
+Correcting the indentation inside Config.in. Also adding the missed
+license information.
+
+Note: libmicrohttpd is partialy dual licensed, if you don't need or want
+to use the HTTPS option you can choose between LPGLv2.1 and the eCos
+license (http://ecos.sourceware.org/license-overview.html).
+If you use the HTTPS option you have to agree to the LGPLv2.1!
+
+Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+---
+ package/libmicrohttpd/Config.in        |   14 +++++++-------
+ package/libmicrohttpd/libmicrohttpd.mk |    5 ++++-
+ 2 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
+index 2e4de0f..5c20ba6 100644
+--- a/package/libmicrohttpd/Config.in
++++ b/package/libmicrohttpd/Config.in
+@@ -8,13 +8,13 @@ config BR2_PACKAGE_LIBMICROHTTPD
+ 	  http://www.gnu.org/software/libmicrohttpd/
  
- Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----- samba-3.5.6-orig/source3/Makefile.in	2010-10-07 18:41:16.000000000 +0200
--+++ samba-3.5.6/source3/Makefile.in	2010-10-27 14:52:40.000000000 +0200
--@@ -1552,7 +1552,7 @@
-+
-+diff -Nura samba-3.6.16.orig/source3/Makefile.in samba-3.6.16/source3/Makefile.in
-+--- samba-3.6.16.orig/source3/Makefile.in	2013-06-21 08:12:39.995871935 -0300
-++++ samba-3.6.16/source3/Makefile.in	2013-06-21 08:13:17.778103805 -0300
-+@@ -1783,7 +1783,7 @@
-  		$(KRB5LIBS) $(DYNEXP) $(PRINT_LIBS) $(AUTH_LIBS) \
-  		$(ACL_LIBS) $(PASSDB_LIBS) $(LIBS) $(DNSSD_LIBS) $(AVAHI_LIBS) \
-- 		$(POPT_LIBS) @SMBD_LIBS@ $(LIBTALLOC_LIBS) $(LIBTDB_LIBS) \
-+ 		$(POPT_LIBS) @SMBD_LIBS@ $(LIBTALLOC_LIBS) $(LIBTEVENT_LIBS) $(LIBTDB_LIBS) \
- -		$(LIBWBCLIENT_LIBS) $(ZLIB_LIBS)
- +		$(LIBWBCLIENT_LIBS) $(ZLIB_LIBS) $(PTHREAD_LDFLAGS)
-- 
-- bin/nmbd at EXEEXT@: $(BINARY_PREREQS) $(NMBD_OBJ) @BUILD_POPT@ $(LIBTALLOC) $(LIBTDB) $(LIBWBCLIENT)
-+
-+ bin/nmbd at EXEEXT@: $(BINARY_PREREQS) $(NMBD_OBJ) @BUILD_POPT@ $(LIBTALLOC) $(LIBTEVENT) $(LIBTDB) $(LIBWBCLIENT)
-  	@echo Linking $@
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 528e29c..fd90d96 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ config BR2_PACKAGE_LIBMICROHTTPD_SSL
+-       bool "https support"
+-       depends on BR2_PACKAGE_LIBMICROHTTPD
+-       depends on BR2_USE_WCHAR
+-       select BR2_PACKAGE_GNUTLS
+-       select BR2_PACKAGE_LIBGCRYPT
+-       help
+-         Enable HTTPS (SSL) support.
++	bool "https support"
++	depends on BR2_PACKAGE_LIBMICROHTTPD
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_LIBGCRYPT
++	help
++	  Enable HTTPS (SSL) support.
  
--SAMBA_VERSION = 3.6.15
-+SAMBA_VERSION = 3.6.16
- SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA_SUBDIR = source3
- SAMBA_INSTALL_STAGING = YES
+ comment "libmicrohttpd needs a toolchain with thread support"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 697cbf5..40ef197 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -6,12 +6,15 @@
+ 
+ LIBMICROHTTPD_VERSION = 0.9.27
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
++LIBMICROHTTPD_LICENSE = LGPLv2.1 eCos
++LIBMICROHTTPD_LICENSE_FILE = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
+ LIBMICROHTTPD_DEPENDENCIES += gnutls libgcrypt
+ LIBMICROHTTPD_CONF_OPT += --enable-https --with-gnutls=$(STAGING_DIR)/usr \
+-			  --with-libgcrypt-prefix=$(STAGING_DIR)/usr
++						  --with-libgcrypt-prefix=$(STAGING_DIR)/usr
++LIBMICROHTTPD_LICENSE = LGPLv2.1
+ else
+ LIBMICROHTTPD_CONF_OPT += --disable-https
+ endif
 -- 
-1.8.1.5
+1.7.10.4
