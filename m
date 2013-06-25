@@ -1,67 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 25 Jun 2013 23:59:08 +0200
-Subject: [Buildroot] [PATCH] libunwind:  new pacakge
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C639A6F946@ex-mb1.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C639A6F946@ex-mb1.corp.adtran.com>
-Message-ID: <20130625215908.GD14074@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Jun 2013 00:01:10 +0200
+Subject: [Buildroot] [Q] Buildroot vs uCLinux
+In-Reply-To: <CALF0-+Wpm=JN0jOk8mu4QgaEvRvvbOw1mM4T6W8mYLMtSh2qSg@mail.gmail.com>
+References: <CALF0-+Wpm=JN0jOk8mu4QgaEvRvvbOw1mM4T6W8mYLMtSh2qSg@mail.gmail.com>
+Message-ID: <20130626000110.0bbb80cc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andy, All,
+Dear Ezequiel Garcia,
 
-On 2013-06-25 21:41 +0000, ANDY KENNEDY spake thusly:
-> Signed-off-by:  Andy Kennedy <andy.kennedy@adtran.com>
-> ---
-> diff -Naur a/package/Config.in b/package/Config.in
-> --- a/package/Config.in 2013-06-20 10:32:07.000000000 -0500
-> +++ b/package/Config.in 2013-06-21 17:00:21.000000000 -0500
-> @@ -612,6 +612,7 @@
->  source "package/libtasn1/Config.in"
->  source "package/libtpl/Config.in"
->  source "package/libseccomp/Config.in"
-> +source "package/libunwind/Config.in"
->  source "package/liburcu/Config.in"
->  source "package/linux-pam/Config.in"
->  source "package/log4cxx/Config.in"
-> diff -Naur a/package/libunwind/Config.in b/package/libunwind/Config.in
-> --- a/package/libunwind/Config.in       1969-12-31 18:00:00.000000000 -0600
-> +++ b/package/libunwind/Config.in       2013-06-21 17:23:46.000000000 -0500
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_LIBUNWIND
-> +	bool "libunwind"
-> +	help
-> +	  C API to determine the call-chain of a program.
-> +
-> +	  Project home:  <http://www.nongnu.org/libunwind/index.html>
+On Mon, 24 Jun 2013 14:57:08 -0300, Ezequiel Garcia wrote:
 
-In addition to other comments, could you please add a changelog to your
-patch, and a version number in the subject? Such as:
+> I'm working on a project where the customer has decided to use uCLinux
+> as the base distribution on a MMU platform.
 
-    [PATCH v3] libunwind: new pacakge
+On a platform that has a MMU? Using uClinux-dist doesn't seem like a
+very wise choice in this case. Which CPU architecture is this platform
+using?
 
-    sob: you
+> Can anyone give me any insights on what would be the differences between
+> this choice, and choosing buildroot instead?
+> 
+> AFAIK, they're both source-oriented, uclibc-based distributions.
 
-    ---
-    Changes v2->v3:
-      - blabla
-    Changes v1->v2:
-      - blabla
-      - blabla
+Buildroot is not limited to uClibc. It can use glibc or eglibc
+toolchains just fine, and build systems with those C libraries.
 
-This is a least version 3 (or 4?) of this patch, and its hard to tell
-what changed between revisions, and to check if suggestions were
-applied.
+> uCLinux seems more
+> biased towards MMU-less platforms, but since this is not the case, I'd
+> like to know
+> if there's something I'm missing, before I suggest my customer to try
+> Buildroot instead.
 
-Regards,
-Yann E. MORIN.
+As Stephan mentions, uClinux-dist stores the complete source tree of
+most packages directly in the uClinux-dist code base, which makes it
+quite huge. Buildroot instead always downloads the upstream tarball or
+Git repository, and only stores in its source tree a few patches for
+some packages, when needed to make them cross-compile properly. I
+believe this, by itself, already makes Buildroot a bit more convenient
+to use.
 
+Being on the uclinux-dist-dev and uclinux-dev mailing list since about 3
+years or so, I can also say that the amount of e-mails about
+uClinux-dist is very very low, almost inexistent. Maybe those are no
+longer the right mailing lists for uClinux-dist development, I'm not
+sure. There is some regular traffic on those lists, but it's only about
+Linux kernel support for non-MMU architectures, not the uClinux-dist
+build system.
+
+There are apparently some not too old releases of uClinux-dist (october
+2012), but I'm not sure where the development is happening since the
+CVS repository reference on the project web site seems to contain only
+very old stuff.
+
+I believe that one good indication is that Analog Devices was using
+uClinux-dist as the build system offered to their Blackfin customers,
+and last year, they have switched to use Buildroot instead.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
