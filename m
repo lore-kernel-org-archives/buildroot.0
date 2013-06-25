@@ -1,48 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Jun 2013 21:37:50 +0200
-Subject: [Buildroot] Some issues found while trying to add JimTcl to
- buildroot
-In-Reply-To: <CALF0-+Wv84PKHfz8XzfEBEmprrtOfBF+Szqy8ATZ4y0x3xpsjg@mail.gmail.com>
-References: <CALF0-+V5oWQ_zo6pzs8WOEj02H2Q9W7rzBvioabK0u_nuAaXDg@mail.gmail.com>
- <20130625212043.3d224da3@skate>
- <CALF0-+Wv84PKHfz8XzfEBEmprrtOfBF+Szqy8ATZ4y0x3xpsjg@mail.gmail.com>
-Message-ID: <20130625213750.63247a3e@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 25 Jun 2013 19:39:17 +0200
+Subject: [Buildroot] using a variable within a buildroot menuconfig
+In-Reply-To: <51C94D88.5080707@gmail.com>
+References: <51C94D88.5080707@gmail.com>
+Message-ID: <51C9D5C5.4090409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garcia,
+On 25/06/13 09:58, Jan Pohanka wrote:
+> Hi all,
+>
+> I have another /weird/ question.
+>
+> I would like to know if it is possible to create an item in configuration
+> which will for example contain some (absolute) path on my filesystem.
+> Then I would like to use this variable for example in --extra-cflags
+> configure option for applications like ffmpeg etc.
 
-On Tue, 25 Jun 2013 16:29:05 -0300, Ezequiel Garcia wrote:
+  I'm afraid that I don't understand your question. string type 
+configuration variables can contain any kind of string, including paths 
+of files. This is used for instance in BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE.
 
-> > Any reason not to use it? This patch is also in our patchwork at
-> 
-> Well, on a very first look I need the libjim.a to embed the
-> interpreter inside an application.
-> Sadly, the shell is useless in this case. I'll see if I can work on
-> top of Gustavo's patch
-> and install the library and the headers.
+  Specifically for ffmpeg, however, there is already the 
+BR2_PACKAGE_FFMPEG_EXTRACONF option. You can just set that to
+--extra-cflags '-fPIC -DMY_DEFINE' (note the funky quoting, which I'm not 
+100% sure will work correctly).
 
-Ok.
+> I know that it is not very nice way, but I need to integrate buildroot
+> with Texas Instruments SDK, which is not very GNU build tools friendy.
+
+  I wonder what you mean with the TI SDK. You probably mean you have to 
+use _some packages_ that are in the 700MB self-extractor, right? Because 
+the SDK itself is in fact a replacement for buildroot (or buildroot is a 
+replacement for the SDK, depending on how you want to look at it :-).
+
+  Getting that stuff to work is absolute horror, I can testify. I did 
+that a year and a half ago for the DM365 multimedia codecs, but I never 
+found a reasonable solution to extract and build individual packages.
 
 
-> > TARGET_MAKE_ENV already sets a PATH variable that has the toolchain
-> > directory in it. See package/Makefile.in for the definition of
-> > TARGET_MAKE_ENV.
-> 
-> Cool, thanks.
-> 
-> I'll take a closer look to this, and to Gustavo's patch and let you both know.
+  Regards,
+  Arnout
 
-Don't hesitate to take Gustavo patch, make the necessary
-fixes/improvements and resend it with your Acked-by. Maybe that will
-push Peter into merging Gustavo's patch :-)
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
