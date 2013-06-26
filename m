@@ -1,56 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Jun 2013 15:35:43 +0200
-Subject: [Buildroot] [Q] Buildroot vs uCLinux
-In-Reply-To: <CALF0-+UubeQyQPoiQf2y8f30BkbGO+9AzzirCRcfss1sfS724Q@mail.gmail.com>
-References: <CALF0-+Wpm=JN0jOk8mu4QgaEvRvvbOw1mM4T6W8mYLMtSh2qSg@mail.gmail.com>
- <20130626000110.0bbb80cc@skate>
- <CALF0-+UubeQyQPoiQf2y8f30BkbGO+9AzzirCRcfss1sfS724Q@mail.gmail.com>
-Message-ID: <20130626153543.4bf75096@skate>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 26 Jun 2013 17:26:30 +0200
+Subject: [Buildroot] [PATCH] libunwind:  new pacakge
+In-Reply-To: <20130625235022.75b13738@skate>
+References: <F9C551623D2CBB4C9488801D14F864C639A6F946@ex-mb1.corp.adtran.com>
+ <20130625235022.75b13738@skate>
+Message-ID: <1372260390.2822.5.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garcia,
+Hi,
 
-On Wed, 26 Jun 2013 10:19:07 -0300, Ezequiel Garcia wrote:
+as we are also using libunwind with buildroot, perhaps I can add some of
+our experiences with it...
+
+Plain libunwind-1.1 won't compile on uClibc x86 as it uses setcontext().
+This function is not available in uClibc (at least not in the released
+versions). I have worked around this by commenting out some code in
+libunwind (see attached patch), but this is probably not a good
+solution.
+
+I've also had a build failure at some point in the tests because there
+is code that includes execinfo.h unconditionally.
+
+I've attached the patches that we are using with libunwind. Perhaps they
+can be useful for you.
 
 
-> > Which CPU architecture is this platform
-> > using?
-> 
-> Nios2
+Regards,
+Sven
 
-Nice! However, beware that Buildroot has no support for NIOS2. That
-said, if you have prebuilt known-working toolchains for NIOS2, adding
-support for this architecture in Buildroot is not very complicated.
 
-Patches welcome!
-
-> > There are apparently some not too old releases of uClinux-dist (october
-> > 2012), but I'm not sure where the development is happening since the
-> > CVS repository reference on the project web site seems to contain only
-> > very old stuff.
-> 
-> Well, this is my very same concern: the lack of a healthy community
-> on the uCLinux side. I can it's a good choice for MMU-less platforms
-> given packages have been heavily patched. But this is not the case,
-> and hence my perplexity.
-
-Correct, we don't have as many noMMU fixes in Buildroot as uClibc-dist
-has, but we're working on this progressively.
-
-> Since this platforms come in two flavors (MMU and MMU-less) I was almost sure
-> the reason is mostly historical.
-
-Most likely yes.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: libunwind-001-disable-code-that-doesn-t-compile-with-uCLibc.patch
+Type: text/x-patch
+Size: 921 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130626/1a6ad7d3/attachment.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: libunwind-002-tests-don-t-include-execinfo.h-unconditionally.patch
+Type: text/x-patch
+Size: 1192 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130626/1a6ad7d3/attachment-0001.bin>
