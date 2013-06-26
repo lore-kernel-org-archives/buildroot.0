@@ -1,273 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Jun 2013 00:26:09 +0200
-Subject: [Buildroot] [RFCv2 14/19] gcc-initial, gcc-intermediate,
-	gcc-final: optimize extraction
+Date: Thu, 27 Jun 2013 00:26:11 +0200
+Subject: [Buildroot] [RFCv2 16/19] Remove TOOLCHAIN_DIR
 In-Reply-To: <1372285574-29423-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1372285574-29423-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1372285574-29423-15-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1372285574-29423-17-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Several sub-directories of the gcc code base are in fact not needed
-for the Buildroot build: libjava/, libgo/ and gcc/testsuite/ being the
-biggest ones. Avoiding their extraction saves quite a bit of disk
-space, and compensates a bit the fact that we now extract three times
-the gcc source code.
-
-This requires changing the 100-uclibc-conf.patch to no longer patch
-files from the libjava/ directory, since this directory is no longer
-extracted.
+The $(O)/toolchain directory, also called $(TOOLCHAIN_DIR) is no
+longer needed, as all packages are now built in $(O)/build/, including
+gcc and uClibc.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/4.3.6/100-uclibc-conf.patch          | 20 --------------------
- package/gcc/4.4.7/100-uclibc-conf.patch          | 20 --------------------
- package/gcc/4.5.4/100-uclibc-conf.patch          | 20 --------------------
- package/gcc/4.6.4/100-uclibc-conf.patch          | 20 --------------------
- package/gcc/4.7.3/100-uclibc-conf.patch          | 20 --------------------
- package/gcc/4.8.1/100-uclibc-conf.patch          | 22 ----------------------
- package/gcc/gcc-final/gcc-final.mk               |  2 ++
- package/gcc/gcc-initial/gcc-initial.mk           |  2 ++
- package/gcc/gcc-intermediate/gcc-intermediate.mk |  2 ++
- package/gcc/gcc.mk                               | 14 ++++++++++++++
- 10 files changed, 20 insertions(+), 122 deletions(-)
+ Makefile | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/gcc/4.3.6/100-uclibc-conf.patch b/package/gcc/4.3.6/100-uclibc-conf.patch
-index cca8c82..6bad179 100644
---- a/package/gcc/4.3.6/100-uclibc-conf.patch
-+++ b/package/gcc/4.3.6/100-uclibc-conf.patch
-@@ -11,23 +11,3 @@
-  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
-    make bootstrap || exit 1
-    make install || exit 1
----- gcc/libjava/classpath/ltconfig
--+++ gcc/libjava/classpath/ltconfig
--@@ -603,7 +603,7 @@
-- 
-- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
-- case $host_os in
---linux-gnu*) ;;
--+linux-gnu*|linux-uclibc*) ;;
-- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
-- esac
-- 
--@@ -1251,7 +1251,7 @@
--   ;;
-- 
-- # This must be Linux ELF.
---linux-gnu*)
--+linux*)
--   version_type=linux
--   need_lib_prefix=no
--   need_version=no
-diff --git a/package/gcc/4.4.7/100-uclibc-conf.patch b/package/gcc/4.4.7/100-uclibc-conf.patch
-index cca8c82..6bad179 100644
---- a/package/gcc/4.4.7/100-uclibc-conf.patch
-+++ b/package/gcc/4.4.7/100-uclibc-conf.patch
-@@ -11,23 +11,3 @@
-  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
-    make bootstrap || exit 1
-    make install || exit 1
----- gcc/libjava/classpath/ltconfig
--+++ gcc/libjava/classpath/ltconfig
--@@ -603,7 +603,7 @@
-- 
-- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
-- case $host_os in
---linux-gnu*) ;;
--+linux-gnu*|linux-uclibc*) ;;
-- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
-- esac
-- 
--@@ -1251,7 +1251,7 @@
--   ;;
-- 
-- # This must be Linux ELF.
---linux-gnu*)
--+linux*)
--   version_type=linux
--   need_lib_prefix=no
--   need_version=no
-diff --git a/package/gcc/4.5.4/100-uclibc-conf.patch b/package/gcc/4.5.4/100-uclibc-conf.patch
-index cca8c82..6bad179 100644
---- a/package/gcc/4.5.4/100-uclibc-conf.patch
-+++ b/package/gcc/4.5.4/100-uclibc-conf.patch
-@@ -11,23 +11,3 @@
-  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
-    make bootstrap || exit 1
-    make install || exit 1
----- gcc/libjava/classpath/ltconfig
--+++ gcc/libjava/classpath/ltconfig
--@@ -603,7 +603,7 @@
-- 
-- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
-- case $host_os in
---linux-gnu*) ;;
--+linux-gnu*|linux-uclibc*) ;;
-- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
-- esac
-- 
--@@ -1251,7 +1251,7 @@
--   ;;
-- 
-- # This must be Linux ELF.
---linux-gnu*)
--+linux*)
--   version_type=linux
--   need_lib_prefix=no
--   need_version=no
-diff --git a/package/gcc/4.6.4/100-uclibc-conf.patch b/package/gcc/4.6.4/100-uclibc-conf.patch
-index cca8c82..6bad179 100644
---- a/package/gcc/4.6.4/100-uclibc-conf.patch
-+++ b/package/gcc/4.6.4/100-uclibc-conf.patch
-@@ -11,23 +11,3 @@
-  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
-    make bootstrap || exit 1
-    make install || exit 1
----- gcc/libjava/classpath/ltconfig
--+++ gcc/libjava/classpath/ltconfig
--@@ -603,7 +603,7 @@
-- 
-- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
-- case $host_os in
---linux-gnu*) ;;
--+linux-gnu*|linux-uclibc*) ;;
-- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
-- esac
-- 
--@@ -1251,7 +1251,7 @@
--   ;;
-- 
-- # This must be Linux ELF.
---linux-gnu*)
--+linux*)
--   version_type=linux
--   need_lib_prefix=no
--   need_version=no
-diff --git a/package/gcc/4.7.3/100-uclibc-conf.patch b/package/gcc/4.7.3/100-uclibc-conf.patch
-index cca8c82..6bad179 100644
---- a/package/gcc/4.7.3/100-uclibc-conf.patch
-+++ b/package/gcc/4.7.3/100-uclibc-conf.patch
-@@ -11,23 +11,3 @@
-  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
-    make bootstrap || exit 1
-    make install || exit 1
----- gcc/libjava/classpath/ltconfig
--+++ gcc/libjava/classpath/ltconfig
--@@ -603,7 +603,7 @@
-- 
-- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
-- case $host_os in
---linux-gnu*) ;;
--+linux-gnu*|linux-uclibc*) ;;
-- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
-- esac
-- 
--@@ -1251,7 +1251,7 @@
--   ;;
-- 
-- # This must be Linux ELF.
---linux-gnu*)
--+linux*)
--   version_type=linux
--   need_lib_prefix=no
--   need_version=no
-diff --git a/package/gcc/4.8.1/100-uclibc-conf.patch b/package/gcc/4.8.1/100-uclibc-conf.patch
-index d855b30..d56bf0a 100644
---- a/package/gcc/4.8.1/100-uclibc-conf.patch
-+++ b/package/gcc/4.8.1/100-uclibc-conf.patch
-@@ -13,25 +13,3 @@ Index: gcc-4.8.0/contrib/regression/objs-gcc.sh
-  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
-    make bootstrap || exit 1
-    make install || exit 1
--Index: gcc-4.8.0/libjava/classpath/ltconfig
--===================================================================
----- gcc-4.8.0.orig/libjava/classpath/ltconfig	2011-02-13 12:45:53.000000000 +0100
--+++ gcc-4.8.0/libjava/classpath/ltconfig	2013-03-23 17:39:04.000000000 +0100
--@@ -603,7 +603,7 @@
-- 
-- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
-- case $host_os in
---linux-gnu*) ;;
--+linux-gnu*|linux-uclibc*) ;;
-- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
-- esac
-- 
--@@ -1247,7 +1247,7 @@
--   ;;
-- 
-- # This must be Linux ELF.
---linux-gnu*)
--+linux*)
--   version_type=linux
--   need_lib_prefix=no
--   need_version=no
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 8969877..42282d1 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -12,6 +12,8 @@ HOST_GCC_FINAL_DEPENDENCIES = \
- 	$(HOST_GCC_COMMON_DEPENDENCIES) \
- 	uclibc
+diff --git a/Makefile b/Makefile
+index bc0bc37..c0bd66e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -264,7 +264,6 @@ STAMP_DIR:=$(BASE_DIR)/stamps
  
-+HOST_GCC_FINAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
-+
- ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
- HOST_GCC_FINAL_POST_EXTRACT_CMDS += HOST_GCC_FINAL_XTENSA_OVERLAY_EXTRACT
- endif
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 37fb2bb..961fc2e 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -10,6 +10,8 @@ GCC_INITIAL_SOURCE  = $(GCC_SOURCE)
+ BINARIES_DIR:=$(BASE_DIR)/images
+ TARGET_DIR:=$(BASE_DIR)/target
+-TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
+ TARGET_SKELETON=$(TOPDIR)/system/skeleton
  
- HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
+ LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
+@@ -387,7 +386,7 @@ TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
+ # all targets depend on the crosscompiler and it's prerequisites
+ $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
  
-+HOST_GCC_INITIAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
-+
- ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
- HOST_GCC_INITIAL_POST_EXTRACT_CMDS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
- endif
-diff --git a/package/gcc/gcc-intermediate/gcc-intermediate.mk b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-index 42fbd8e..9a6b180 100644
---- a/package/gcc/gcc-intermediate/gcc-intermediate.mk
-+++ b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-@@ -12,6 +12,8 @@ HOST_GCC_INTERMEDIATE_DEPENDENCIES = \
- 	$(HOST_GCC_COMMON_DEPENDENCIES) \
- 	uclibc-configured
+-dirs: $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
++dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
  
-+HOST_GCC_INTERMEDIATE_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
-+
- ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
- HOST_GCC_INTERMEDIATE_POST_EXTRACT_CMDS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
- endif
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index b5cd091..a2e7404 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -40,6 +40,20 @@ define HOST_GCC_APPLY_PATCHES
- endef
+ $(BASE_TARGETS): dirs $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+@@ -405,7 +404,7 @@ world: toolchain $(TARGETS_ALL)
+ 	legal-info legal-info-prepare legal-info-clean \
+ 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
+ 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
+-	$(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
++	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
  
+ ################################################################################
+@@ -414,7 +413,7 @@ world: toolchain $(TARGETS_ALL)
+ # dependencies anywhere else
  #
-+# Custom extract command
-+#
-+
-+define HOST_GCC_EXTRACT_CMDS
-+	$(BZCAT) $(DL_DIR)/$(GCC_SOURCE) | \
-+		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) \
-+		--exclude='libjava/*' \
-+		--exclude='libgo/*' \
-+		--exclude='gcc/testsuite/*' \
-+		--exclude='libstdc++-v3/testsuite/*' \
-+		$(TAR_OPTIONS) -
-+endef
-+
-+#
- # Create 'build' directory and configure symlink
- #
+ ################################################################################
+-$(TOOLCHAIN_DIR) $(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR):
++$(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR):
+ 	@mkdir -p $@
  
+ $(STAGING_DIR):
+@@ -732,7 +731,7 @@ endif
+ 
+ clean:
+ 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+-		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(BASE_DIR)/staging \
++		$(STAMP_DIR) $(BUILD_DIR) $(BASE_DIR)/staging \
+ 		$(LEGAL_INFO_DIR)
+ 
+ distclean: clean
 -- 
 1.8.1.2
