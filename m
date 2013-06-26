@@ -1,88 +1,342 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 26 Jun 2013 12:53:00 -0500
+Date: Wed, 26 Jun 2013 12:52:52 -0500
 Subject: [Buildroot] [RFC v2 1/1] ti-gfx: add new package
-In-Reply-To: <51CA0EE2.70301@mind.be>
+In-Reply-To: <20130625223125.7b8e3721@skate>
 References: <1372177754-13431-1-git-send-email-spenser@gillilanding.com>
- <51CA0EE2.70301@mind.be>
-Message-ID: <20130626125300.057a48ca@bourban>
+ <20130625223125.7b8e3721@skate>
+Message-ID: <20130626125252.12035fd0@bourban>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 25 Jun 2013 23:42:58 +0200
+On Tue, 25 Jun 2013 22:31:25 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Dear Arnout,
+Dear Thomas, 
 
-> > This is WIP of adding the TI Graphics SDK to Buildroot
-> 
->   It's not really _the_ graphics SDK, since it only supports a subset
-> of TI platforms (no OMAP1, OMAP2 or Davinci, and I'm not sure about
-> OMAP5 either).
-> 
-> >
-> > Current Status:
-> >     Kernel Drivers load without errror.
-> >     pvrsrvctl starts with no errors.
-> >     Some demos run, others do not.
-> >     gstreamer videotestsrc ! eglglessink does not work.
-> >
-> > TODO:
-> >     Install startup files for sgx core.
-> >     Create .pc files to simplify additional packaging.
-> 
->   We don't usually create pc files if the package doesn't provide
-> them. It's not really needed, because packages that use the library
-> will anyway not use pkg-config to get the package info.
+> Nice, thanks for your work on this. Having support for OpenGL on
+> OMAP3, OMAP4 and AM335x is definitely one of the most important part
+> of the GSoC.
 
-This was done for the rpi-userland component. It's a sensible thing to
-do as many packages require egl or gles libraries.  It's easier to
-just add an PKG_CHECK_MODULES to configure.ac then to add a bunch of
-different ifdefs for each and every opengl implementation.  Thus, I
-believe that this should be included.
-
-> >     Hard Float Binaries
-> 
->   Doesn't the package contain soft-float binary libraries? Then 
-> hard-float won't be possible, right?
-
-TI provides a set of hard float binaries as well; however, they are in a
-different download.
+I completely agree.  I'm working very diligently on this.
 
 > 
-> >     Testing, lots of testing.
-> >
 > > Additional Info:
-> >     I've been using the 3.9.6-x3 tag of the kernel at
-> >     https://github.com/RobertCNelson/stable-kernel  by use of the
-> >     LINUX_OVERRIDE_SRCDIR option.
-> >
-> >     You must use a soft-float toolchain (ie Code Sourcery) as the
+> >    I've been using the 3.9.6-x3 tag of the kernel at 
+> >    https://github.com/RobertCNelson/stable-kernel by use of the
+> >    LINUX_OVERRIDE_SRCDIR option.
+> 
+> Are there some reports of the ti-gfx stuff working on such recent
+> kernels? Have you looked at the Yocto meta-ti layer at
+> http://git.yoctoproject.org/cgit/cgit.cgi/meta-ti/ ? If I look there,
+> they apparently don't have anything more recent than 3.0 or 3.1.
+
+Yes, the RobertCNelson kernel has builds up to 3.9.6.   I am using this
+with fairly good success.  I've been using the meta-ti layer
+extensively to understand the process of installing the SGX drivers.
+Many things refer to a 3.8 kernel from ti.  However, this kernel was
+unbootable on the Beagle-XM. This may be a more apporiate option for
+the Beagle Black though.   
+
+> Also, are you still trying on the Beagle-XM, or have you switched to
+> the BeagleBone Black.
+
+The Beagle-XM is the current target.  From the start, I was trying to
+read the revision number on the SGX core using devmem2.  However for
+some unknown reason,  devmem2 is not working properly on the
+Beagle-XM.  When I finally tried the devmem from busybox, the revision
+was correctly read.  Thus, I'm thinking that there is a bug in devmem2
+which is causing the problem.  See patch here
+https://github.com/openembedded/meta-oe/blob/master/meta-oe/recipes-support/devmem2/devmem2/devmem2-fixups-2.patch
+
+> > 
+> >    You must use a soft-float toolchain (ie Code Sourcery) as the
 > > binaries provided by the Graphics SDK are soft-float. (hard float
 > > is on the TODO list)
-> >
-> >     To load the driver manually use the following:
-> >        modprobe omaplfb
-> >        modprobe bufferclass-ti
-> >        pvrsrvctl --start --no-module
-> >
-> > Signed-off-by: Spenser Gilliland<spenser@gillilanding.com>
 > 
->   Please keep a changelog of the history of your patch in the commit 
-> message, so we can keep track of which review comments you've already 
-> taken into account.
+> Note that I've recently added the Arago toolchain as an external
+> toolchain in Buildroot. I don't remember if it's a -mfloat-abi=hard or
+> -mfloat-abi=softfp toolchain, though.
 
-Will do.
+I'll run some tests with the Arago toolchain and determine if it's
+appropriate to use for this SGX stuff.
  
->   In this particular case, I notice that Thomas repeats a lot of
-> review comments that I've made a week ago, so writing "review
-> comments from Arnout not taken into account" would have helped :-) Or
-> maybe you missed those?
+> > +	select BR2_LINUX_KERNEL
+> 
+> We typically never "select" the kernel, but instead depend on it, and
+> have a comment if the kernel is not enabled. This is because we can't
+> enable the kernel in the back of the user: the user has to be aware
+> that (s)he should go in the kernel menu, and configure the
+> version/configuration.
 
-Sorry about that, they were good comments but I was just trying to get
-it functional and most of the comments were cosmetic in nature.  I'll
-get them all fixed up soon.
+Will fix.
+ 
+> > +choice
+> > +	prompt "Target"
+> > +	default BR2_PACKAGE_TI_GFX_ES3
+> > +	help
+> > +	  Select the SOC for which you would like to install
+> > drivers. Please 
+> > +	  use the chart at
+> > +
+> > http://processors.wiki.ti.com/index.php/OMAP35x_Graphics_SDK_Getting_Started_Guide
+> > + +config BR2_PACKAGE_TI_GFX_ES3
+> > +	bool "es3.x"
+> 
+> That's a detail, but maybe it would be worth doing:
+> 
+> 	bool "es3.x (OMAP35xx, AM35xx)"
+> 
+> so that the user doesn't have to go in the help text of each option to
+> find the right value to use. 
 
+Will fix.
 
-Spenser
+> > +comment "requires an external eglibc/glibc based toolchain"
+> > +	depends on !(BR2_TOOLCHAIN_EXTERNAL_GLIBC ||
+> > BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_glibc)
+> 
+> the toolchain is not necessarily external, it may be using the
+> crosstool-ng backend. So just "requires an eglibc/glibc based
+> toolchain" is enough.
+
+Will fix.
+
+> > diff --git a/package/ti-gfx/ti-gfx-km_install_modules.patch
+> > b/package/ti-gfx/ti-gfx-km_install_modules.patch new file mode
+> > 100644 index 0000000..63bfd19
+> > --- /dev/null
+> > +++ b/package/ti-gfx/ti-gfx-km_install_modules.patch
+> 
+> Missing description + SoB.
+
+Will fix.
+
+> 
+> > @@ -0,0 +1,14 @@
+> > +Index: ti-gfx-4_09_00_01/GFX_Linux_KM/Makefile
+> > +===================================================================
+> > +--- ti-gfx-4_09_00_01.orig/GFX_Linux_KM/Makefile	2013-03-07
+> > 11:00:11.000000000 -0600 ++++
+> > ti-gfx-4_09_00_01/GFX_Linux_KM/Makefile	2013-05-23
+> > 01:36:29.356676281 -0500 +@@ -479,6 +479,9 @@
+> > + all:
+> > + 	$(MAKE) -C $(KERNELDIR) M=`pwd` $*
+> > + 
+> > ++install:
+> > ++	$(MAKE) -C $(KERNELDIR) M=`pwd` modules_install
+> 
+> You could directly do this modules_install from the Buildroot .mk
+> file, but ok, why not.
+
+Will fix.  This was mentioned in the a previous review but I haven't
+fixed it yet.
+
+> > --- /dev/null
+> > +++ b/package/ti-gfx/ti-gfx-newclkapi.patch
+> > @@ -0,0 +1,62 @@
+> 
+> Missing description + SoB.
+> 
+> > +Index:
+> > ti-gfx-4_09_00_01/GFX_Linux_KM/services4/system/omap3630/sysutils_linux.c
+> > +===================================================================
+> > +---
+> > ti-gfx-4_09_00_01.orig/GFX_Linux_KM/services4/system/omap3630/sysutils_linux.c
+> > 2013-06-18 11:03:06.606245728 -0500 ++++
+> > ti-gfx-4_09_00_01/GFX_Linux_KM/services4/system/omap3630/sysutils_linux.c
+> > 2013-06-18 11:11:17.908972042 -0500 +@@ -166,11 +166,30 @@
+> > + 	}
+> > + 
+> > + 	PVR_DPF((PVR_DBG_MESSAGE, "EnableSGXClocks: Enabling SGX
+> > Clocks")); +-	
+> > ++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0)
+> > ++	res=clk_prepare(psSysSpecData->psSGX_FCK);
+> > ++	if (res < 0)
+> > ++        {
+> > ++                PVR_DPF((PVR_DBG_ERROR, "EnableSGXClocks:
+> > Couldn't enable SGX functional clock (%d)", res));
+> > ++                clk_unprepare(psSysSpecData->psSGX_FCK);
+> > ++                return PVRSRV_ERROR_UNABLE_TO_ENABLE_CLOCK;
+> > ++        } ++#endif 
+> > + 	res=clk_enable(psSysSpecData->psSGX_FCK);
+> 
+> 
+> One option would have been to replace clk_enable() by
+> clk_prepare_enable(), that does both the prepare and enable. But that
+> call has been introduced in 3.3 only, so for 3.2, you would still need
+> to call clk_prepare().
+> 
+> Or maybe you can do something like:
+> 
+> #if LINUX_VERSION_CODE < KERNEL_VERSION(3,2,0)
+> int clk_prepare_enable(struct clk *clk)
+> {
+> 	return clk_enable(clk);
+> }
+> #elif LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0)
+> int clk_prepare_enable(struct clk *clk)
+> {
+> 	res = clk_prepare(clk);
+> 	if (ret < 0)
+> 		return res;
+> 
+> 	res = clk_enable(clk);
+> 	if (res < 0) {
+> 		clk_unprepare(clk);
+> 		return res;
+> 	}
+> 
+> 	return 0;
+> }
+> #endif
+> 
+> this way, you can simply the rest of the patch by just doing
+> s/clk_enable/clk_prepare_enable/. Ditto for disable/unprepare, of
+> course.
+
+Good idea.  This sounds easier to port forward. Will fix.
+
+> 
+> > +@@ -247,8 +271,9 @@
+> > + 	PVR_DPF((PVR_DBG_MESSAGE, "DisableSGXClocks: Disabling
+> > SGX Clocks"));
+> > + 	
+> > + 	clk_disable(psSysSpecData->psSGX_FCK);
+> > +-
+> > ++	clk_unprepare(psSysSpecData->psSGX_FCK);
+> > + 	clk_disable(psSysSpecData->psSGX_ICK);
+> > ++	clk_unprepare(psSysSpecData->psSGX_ICK);
+> 
+> Missing kernel version conditionals here.
+
+Oops, will fix with method above.
+
+> 
+> > +TI_GFX_BIN_PATH = gfx_$(TI_GFX_DEBUG_LIB)_es$(TI_GFX_OMAPES)
+> > +
+> > +define TI_GFX_EXTRACT_CMDS 
+> > +	$(RM) -rf $(TI_GFX_DIR)
+> > +	chmod +x $(DL_DIR)/$(TI_GFX_SOURCE)
+> > +	printf "Y\nY\n qY\n\n" | $(DL_DIR)/$(TI_GFX_SOURCE) \
+> > +		--prefix $(@D) \
+> > +		--mode console
+> > +endef
+> > +
+> > +TI_GFX_MAKE_CMD = cd $(@D)/GFX_Linux_KM && \
+> > +		$(MAKE) $(LINUX_MAKE_FLAGS) \
+> > +			BUILD=$(TI_GFX_DEBUG_KM) \
+> > +			TI_PLATFORM=$(TI_GFX_PLATFORM) \
+> > +			OMAPES=$(TI_GFX_OMAPES) \
+> > +			SUPPORT_XORG=0 \
+> > +			KERNELDIR=$(LINUX_DIR)
+> 
+> This is a rather unusual way of doing this. We prefer something like:
+>
+> TI_GFX_MAKE_OPTS = \
+> 	$(LINUX_MAKE_FLAGS) \
+> 	BUILD=$(TI_GFX_DEBUG_KM) \
+> 	TI_PLATFORM=$(TI_GFX_PLATFORM) \
+> 	OMAPES=$(TI_GFX_OMAPES) \
+> 	SUPPORT_XORG=0 \
+> 	KERNELDIR=$(LINUX_DIR)
+> 
+> And then do:
+> 
+> define TI_GFX_BUILD_CMDS
+> 	$(MAKE) $(TI_GFX_MAKE_OPTS) -C $(@D)/GFX_Linux_KM
+> endef
+
+Will fix. This is much cleaner.
+
+> Also, I'm surprised you're not passing $(TARGET_CONFIGURE_OPTS) to
+> ensure the right compiler is used, etc.
+
+This information is included in LINUX_MAKE_FLAGS.
+ 
+> > +define TI_GFX_BUILD_CMDS
+> > +	( $(TI_GFX_MAKE_CMD) all )
+> > +endef
+> 
+> Parenthesis are not needed.
+
+Will fix.
+
+> > +define TI_GFX_INSTALL_STAGING_CMDS
+> > +	for incdir in EGL EWS GLES2 KHR; do \
+> > +		$(INSTALL) -d $(STAGING_DIR)/usr/include/$$incdir;
+> > \
+> > +		$(INSTALL) -D -m 0644
+> > $(@D)/include/OGLES2/$$incdir/*.h
+> > $(STAGING_DIR)/usr/include/$$incdir; \
+> > +	done
+> > +	$(INSTALL) -D -m 0755 $(@D)/$(TI_GFX_BIN_PATH)/*.so
+> > $(STAGING_DIR)/usr/lib +endef
+> > +
+> > +TI_GFX_TARGET_BIN = \
+> > +	pvrsrvctl \
+> > +
+> > +ifeq ($(BR2_PACKAGE_TI_GFX_DEBUG),y)
+> > +TI_GFX_TARGET_BIN += \
+> > +	eglinfo \
+> > +	ews_server \
+> > +	ews_server_es2 \
+> > +	ews_test_gles1 \
+> > +	ews_test_gles2 \
+> > +	ews_test_swrender \
+> > +	gles1test1 \
+> > +	gles2test1 \
+> > +	pvr2d_test \
+> > +	services_test \
+> > +	sgx_blit_test \
+> > +	sgx_clipblit_test \
+> > +	sgx_flip_test \
+> > +	sgx_init_test \
+> > +	sgx_render_flip_test
+> > +endif
+> > +
+> > +TI_GFX_IMGPV = "1.9.2188537"
+> > +
+> > +define TI_GFX_INSTALL_TARGET_CMDS
+> > +	( $(TI_GFX_MAKE_CMD) install ) || \
+> > +		echo "Your kernel configuration must include
+> > FB_DA8XX"
+> > +	for file in $(TI_GFX_TARGET_BIN); do \
+> > +		$(INSTALL) -D -m 0755
+> > $(@D)/$(TI_GFX_BIN_PATH)/$$file  $(TARGET_DIR)/usr/bin/$$file; \
+> > +	done
+> > +	for sofile in $$(find $(@D)/$(TI_GFX_BIN_PATH) -name
+> > "lib*Open*.so") $$(find $(@D)/$(TI_GFX_BIN_PATH) -name
+> > "lib*srv*.so") $$(find $(@D)/$(TI_GFX_BIN_PATH) -name "lib*gl*.so")
+> > $$(find $(@D)/$(TI_GFX_BIN_PATH) -name "libpvr*.so") $$(find
+> > $(@D)/$(TI_GFX_BIN_PATH) -name "lib*GL*.so") $$(find
+> > $(@D)/$(TI_GFX_BIN_PATH) -name "libusc.so"); do \
+> 
+> I guess this could maybe be refactored, but we can see that later once
+> the whole thing works.
+
+Yes, it's kinda ugly.  I'm still working out the issues.  Once I know
+exactly what must be installed, I can start to clean this up.  
+ 
+> > +		if [ "$$(readlink -n $${sofile})" = "" ] ; then \
+> > +			sobase=$$(basename $${sofile}); \
+> > +			$(INSTALL) -D -m 0755 $$sofile
+> > $(TARGET_DIR)/usr/lib/$${sobase}.$(TI_GFX_IMGPV); \
+> > +			ln -sf $${sobase}.$(TI_GFX_IMGPV)
+> > $(TARGET_DIR)/usr/lib/$${sobase}; \
+> > +			ln -sf $${sobase}.$(TI_GFX_IMGPV)
+> > $(TARGET_DIR)/usr/lib/$${sobase}$$(echo $(TI_GFX_IMGPV) | awk -F.
+> > '{print "." $$1}'); \
+> > +			ln -sf $${sobase}.$(TI_GFX_IMGPV)
+> > $(TARGET_DIR)/usr/lib/$${sobase}$$(echo $(TI_GFX_IMGPV) | awk -F.
+> > '{print "." $$1 "." $$2}'); \
+> > +		fi; \
+> > +	done
+> > +endef
+> > +
+> > +define TI_GFX_CLEAN_CMDS
+> > +	( $(TI_GFX_MAKE_CMD) clean )
+> > +endef
+> 
