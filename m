@@ -1,34 +1,88 @@
-From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Wed, 26 Jun 2013 19:09:48 +0200
-Subject: [Buildroot] [PATCH] package/libmicrohttpd: minor fixes and
-	additions
-In-Reply-To: <51CA0AD2.7030006@mind.be>
-References: <1372187313-15042-1-git-send-email-c.schoenert@gmail.com>
- <51CA0AD2.7030006@mind.be>
-Message-ID: <51CB205C.7010200@googlemail.com>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Wed, 26 Jun 2013 12:53:00 -0500
+Subject: [Buildroot] [RFC v2 1/1] ti-gfx: add new package
+In-Reply-To: <51CA0EE2.70301@mind.be>
+References: <1372177754-13431-1-git-send-email-spenser@gillilanding.com>
+ <51CA0EE2.70301@mind.be>
+Message-ID: <20130626125300.057a48ca@bourban>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+On Tue, 25 Jun 2013 23:42:58 +0200
 
-Am 25.06.2013 23:25, schrieb Arnout Vandecappelle:
->  Quick check tells me it's LGPLv2.1+
+Dear Arnout,
 
-Ah, yes. I just looked into COPYING. Will correct.
+> > This is WIP of adding the TI Graphics SDK to Buildroot
+> 
+>   It's not really _the_ graphics SDK, since it only supports a subset
+> of TI platforms (no OMAP1, OMAP2 or Davinci, and I'm not sure about
+> OMAP5 either).
+> 
+> >
+> > Current Status:
+> >     Kernel Drivers load without errror.
+> >     pvrsrvctl starts with no errors.
+> >     Some demos run, others do not.
+> >     gstreamer videotestsrc ! eglglessink does not work.
+> >
+> > TODO:
+> >     Install startup files for sgx core.
+> >     Create .pc files to simplify additional packaging.
+> 
+>   We don't usually create pc files if the package doesn't provide
+> them. It's not really needed, because packages that use the library
+> will anyway not use pkg-config to get the package info.
 
->  I would write "LGPLv2.1+ or eCos license" to make the choice more
-> explicit, else it looks as if both licenses apply.
+This was done for the rpi-userland component. It's a sensible thing to
+do as many packages require egl or gles libraries.  It's easier to
+just add an PKG_CHECK_MODULES to configure.ac then to add a bunch of
+different ifdefs for each and every opengl implementation.  Thus, I
+believe that this should be included.
 
-Also true. Agreed.
+> >     Hard Float Binaries
+> 
+>   Doesn't the package contain soft-float binary libraries? Then 
+> hard-float won't be possible, right?
 
->  We would typically put the LGPLv2.1 or eCos option in the else branch
-> of the condition, rather than overwriting it.
+TI provides a set of hard float binaries as well; however, they are in a
+different download.
 
-I was thinking about that, but decided to the kind I made the patch. I
-prepare a new patch and will resend.
+> 
+> >     Testing, lots of testing.
+> >
+> > Additional Info:
+> >     I've been using the 3.9.6-x3 tag of the kernel at
+> >     https://github.com/RobertCNelson/stable-kernel  by use of the
+> >     LINUX_OVERRIDE_SRCDIR option.
+> >
+> >     You must use a soft-float toolchain (ie Code Sourcery) as the
+> > binaries provided by the Graphics SDK are soft-float. (hard float
+> > is on the TODO list)
+> >
+> >     To load the driver manually use the following:
+> >        modprobe omaplfb
+> >        modprobe bufferclass-ti
+> >        pvrsrvctl --start --no-module
+> >
+> > Signed-off-by: Spenser Gilliland<spenser@gillilanding.com>
+> 
+>   Please keep a changelog of the history of your patch in the commit 
+> message, so we can keep track of which review comments you've already 
+> taken into account.
 
-Regards
-Carsten
+Will do.
+ 
+>   In this particular case, I notice that Thomas repeats a lot of
+> review comments that I've made a week ago, so writing "review
+> comments from Arnout not taken into account" would have helped :-) Or
+> maybe you missed those?
+
+Sorry about that, they were good comments but I was just trying to get
+it functional and most of the comments were cosmetic in nature.  I'll
+get them all fixed up soon.
+
+
+Spenser
