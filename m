@@ -1,85 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Jun 2013 21:46:58 +0200
-Subject: [Buildroot] [RFC v2 1/1] ti-gfx: add new package
-In-Reply-To: <20130626125252.12035fd0@bourban>
-References: <1372177754-13431-1-git-send-email-spenser@gillilanding.com>
- <20130625223125.7b8e3721@skate> <20130626125252.12035fd0@bourban>
-Message-ID: <20130626214658.0eb7992f@skate>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 26 Jun 2013 21:50:28 +0200
+Subject: [Buildroot] [PATCH 1/1] pv: bump to version 1.4.6
+Message-ID: <1372276230-15075-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ .../{pv-1.2.0-fixld.patch => pv-0001-fixld.patch}  |    9 ++++-----
+ package/pv/pv.mk                                   |    4 ++--
+ 2 files changed, 6 insertions(+), 7 deletions(-)
+ rename package/pv/{pv-1.2.0-fixld.patch => pv-0001-fixld.patch} (66%)
 
-On Wed, 26 Jun 2013 12:52:52 -0500, Spenser Gilliland wrote:
-
-> > Nice, thanks for your work on this. Having support for OpenGL on
-> > OMAP3, OMAP4 and AM335x is definitely one of the most important part
-> > of the GSoC.
-> 
-> I completely agree.  I'm working very diligently on this.
-
-Great!
-
-> > > Additional Info:
-> > >    I've been using the 3.9.6-x3 tag of the kernel at 
-> > >    https://github.com/RobertCNelson/stable-kernel by use of the
-> > >    LINUX_OVERRIDE_SRCDIR option.
-> > 
-> > Are there some reports of the ti-gfx stuff working on such recent
-> > kernels? Have you looked at the Yocto meta-ti layer at
-> > http://git.yoctoproject.org/cgit/cgit.cgi/meta-ti/ ? If I look there,
-> > they apparently don't have anything more recent than 3.0 or 3.1.
-> 
-> Yes, the RobertCNelson kernel has builds up to 3.9.6.   I am using this
-> with fairly good success.  I've been using the meta-ti layer
-> extensively to understand the process of installing the SGX drivers.
-> Many things refer to a 3.8 kernel from ti.  However, this kernel was
-> unbootable on the Beagle-XM. This may be a more apporiate option for
-> the Beagle Black though.   
-
-Ok.
-
-> > Also, are you still trying on the Beagle-XM, or have you switched to
-> > the BeagleBone Black.
-> 
-> The Beagle-XM is the current target.  From the start, I was trying to
-> read the revision number on the SGX core using devmem2.  However for
-> some unknown reason,  devmem2 is not working properly on the
-> Beagle-XM.  When I finally tried the devmem from busybox, the revision
-> was correctly read.  Thus, I'm thinking that there is a bug in devmem2
-> which is causing the problem.  See patch here
-> https://github.com/openembedded/meta-oe/blob/master/meta-oe/recipes-support/devmem2/devmem2/devmem2-fixups-2.patch
-
-Argh, strange. The patch seems like devmem2 may not be working properly
-on platforms that don't support unaligned accesses.
-
-
-
-> > Also, I'm surprised you're not passing $(TARGET_CONFIGURE_OPTS) to
-> > ensure the right compiler is used, etc.
-> 
-> This information is included in LINUX_MAKE_FLAGS.
-
-Ah, correct, ok!
-
-
-> > I guess this could maybe be refactored, but we can see that later once
-> > the whole thing works.
-> 
-> Yes, it's kinda ugly.  I'm still working out the issues.  Once I know
-> exactly what must be installed, I can start to clean this up.  
-
-Yes sure, that's also why I haven't looked in more detail on what else
-to propose.
-
-Best regards,
-
-Thomas
+diff --git a/package/pv/pv-1.2.0-fixld.patch b/package/pv/pv-0001-fixld.patch
+similarity index 66%
+rename from package/pv/pv-1.2.0-fixld.patch
+rename to package/pv/pv-0001-fixld.patch
+index 9df279d..2598a9b 100644
+--- a/package/pv/pv-1.2.0-fixld.patch
++++ b/package/pv/pv-0001-fixld.patch
+@@ -6,15 +6,14 @@ a cross-compiler toolchain.
+ The fix takes the CC variable and changes the 'gcc' extension to 'ld'.
+ 
+ Signed-off-by: Roeland Van Praet <roelvp@mind.be>
++Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+ ---
+-diff -ruN a/autoconf/make/vars.mk b/autoconf/make/vars.mk
+---- a/autoconf/make/vars.mk	2010-03-11 00:43:19.000000000 +0100
+-+++ b/autoconf/make/vars.mk	2011-10-06 15:47:18.000000000 +0200
+-@@ -30,7 +30,7 @@
++--- a/autoconf/make/vars.mk	2012-06-05 23:55:23.000000000 +0200
+++++ b/autoconf/make/vars.mk	2013-06-26 17:47:16.000000000 +0200
++@@ -30,6 +30,7 @@ INSTOBJEXT = @INSTOBJEXT@
+  @SET_MAKE@
+  SHELL = /bin/sh
+  CC = @CC@
+--LD = ld
+ +LD = $(CC:gcc=ld)
+  DO_GZIP = @DO_GZIP@
+  INSTALL = @INSTALL@
+diff --git a/package/pv/pv.mk b/package/pv/pv.mk
+index 1aa95f6..3717977 100644
+--- a/package/pv/pv.mk
++++ b/package/pv/pv.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PV_VERSION = 1.2.0
++PV_VERSION = 1.4.6
+ PV_SOURCE = pv-$(PV_VERSION).tar.bz2
+-PV_SITE = http://pipeviewer.googlecode.com/files
++PV_SITE = http://www.ivarch.com/programs/sources
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
