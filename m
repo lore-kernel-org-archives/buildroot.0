@@ -1,43 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 26 Jun 2013 21:51:18 +0200
-Subject: [Buildroot] [git commit] busybox: udhcpc.script: fix
-	resolv.conf handling with multiple interfaces
-In-Reply-To: <51CB213A.9070202@mind.be> (Arnout Vandecappelle's message of
- "Wed, 26 Jun 2013 19:13:30 +0200")
-References: <20130626132400.8C4AC9B1C4@busybox.osuosl.org>
- <51CB213A.9070202@mind.be>
-Message-ID: <87k3lg4pmx.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Jun 2013 21:52:15 +0200
+Subject: [Buildroot] [RFCv1 00/18] Convert the internal toolchain
+ backend to packages
+In-Reply-To: <CAAXf6LXU3fv0O5hu4hG7f9WaWe_SoAvK5Se=J63ZdHNkszwdOw@mail.gmail.com>
+References: <1372188953-29449-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LXU3fv0O5hu4hG7f9WaWe_SoAvK5Se=J63ZdHNkszwdOw@mail.gmail.com>
+Message-ID: <20130626215215.3cf0699c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Dear Thomas De Schampheleire,
 
- >> diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
- >> index f7beb56..43742fb 100755
- >> --- a/package/busybox/udhcpc.script
- >> +++ b/package/busybox/udhcpc.script
- >> @@ -13,6 +13,13 @@ case "$1" in
- >> /sbin/ifconfig $interface up
- >> /sbin/ifconfig $interface 0.0.0.0
- >> 
- >> +		# drop info from this interface
- >> +		# resolv.conf may be a symlink to /tmp/, so take care
- >> +		TMPFILE=$(mktemp)
- >> +		grep -vE "# $interface\$" $RESOLV_CONF > $TMPFILE
- >> +		cat $TMPFILE > $RESOLV_CONF
+On Wed, 26 Jun 2013 19:08:33 +0200, Thomas De Schampheleire wrote:
 
- Arnout>  Isn't the non-atomicity of this line a potential race condition?
+> What about putting all three gcc/gcc-initial/gcc-intermediate packages
+> in one directory (three .mk files) and then a common file. This common
+> file can contain common rules that can be used by all gcc packages.
+> You can make sure that the variables are defined by including the
+> common file explicitly from each .mk file (and making sure it doesn't
+> match the global 'include package/*/*.mk').
 
-Possibly, but no worse than what it was before ;)
+This seems like a good idea, I'll try this out, thanks!
 
+Best regards,
 
- Arnout> mv -f $TMPFILE $(readlink -f $RESOLV_CONF)
- Arnout> might be a better idea.
-
-Yes. Care to send a patch?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
