@@ -1,8 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 26 Jun 2013 09:49:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 6344] New: Wrong handling of license text files
- with same name and different directory
-Message-ID: <bug-6344-163@https.bugs.busybox.net/>
+Date: Wed, 26 Jun 2013 11:50:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 6344] Wrong handling of license text files with
+ same name and different directory
+In-Reply-To: <bug-6344-163@https.bugs.busybox.net/>
+References: <bug-6344-163@https.bugs.busybox.net/>
+Message-ID: <20130626115041.5729B9AF03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,29 +13,19 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=6344
 
-           Summary: Wrong handling of license text files with same name
-                    and different directory
-           Product: buildroot
-           Version: 2013.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: aleksandar.zivkovic at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Use e2fsprogs as example
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-06-26 11:48:50 UTC ---
+This has already been fixed in Git by commit
+31aa4264d8839d05684e67a238837e8633d1e1bc. See
+http://git.buildroot.net/buildroot/commit/?id=31aa4264d8839d05684e67a238837e8633d1e1bc.
 
-License files given there are:
-COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
-
-Not both files (COPYING and lib/uuid/COPYING) are copied in
-output/legal-info/licenses/e2fsprogs because with the same name.
+Thanks for the report!
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
