@@ -1,9 +1,12 @@
 From: Sinan Akpolat <sinan@linkas.com.tr>
-Date: Wed, 26 Jun 2013 12:04:46 +0300
-Subject: [Buildroot] About ti-gfx package
-In-Reply-To: <51CAAD08.5010104@linkas.com.tr>
-References: <51CAAD08.5010104@linkas.com.tr>
-Message-ID: <51CAAEAE.5000505@linkas.com.tr>
+Date: Wed, 26 Jun 2013 11:59:21 +0300
+Subject: [Buildroot]   About ti-gfx package
+In-Reply-To: <321768C95D21724485BCE784F1BE98473EB59B09@DBDE04.ent.ti.com>
+References: <1372177754-13431-1-git-send-email-spenser@gillilanding.com>
+ <51CA0EE2.70301@mind.be>
+ <CAOT3mi+3ErtCqZejtcLHLHtQx=RB2ewa4BWBTL5Q=vS8iKUDUQ@mail.gmail.com>
+ <321768C95D21724485BCE784F1BE98473EB59B09@DBDE04.ent.ti.com>
+Message-ID: <51CAAD69.1010409@linkas.com.tr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -32,8 +35,8 @@ can't remember where I get that idea, but I know Technexion doesn't
 provide any later kernels for their AM3517 boards.
 
 I don't know how buildroot works exactly but I started reading the 
-documentation. I hope I can help. We are hoping to use EGL and Qt5, it 
-will be easier to configure them and put the necessary files into the 
-rootfs if Buildroot handles everything.
+documentation. I hope I can help. We are hoping to use EGL and Qt5.
 
-Sorry if I wrote technically incorrect stuff, I begin working on
+Sorry if I wrote technically incorrect stuff, I worked on SGX SDK for a 
+short while last month and I realize I have forgotten most of what I did 
+now : )
