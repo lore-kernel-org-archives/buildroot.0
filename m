@@ -1,41 +1,34 @@
-From: Sinan Akpolat <sinan@linkas.com.tr>
-Date: Wed, 26 Jun 2013 12:12:01 +0300
-Subject: [Buildroot] About ti-gfx package
-In-Reply-To: <51CAAEAE.5000505@linkas.com.tr>
-References: <51CAAD08.5010104@linkas.com.tr> <51CAAEAE.5000505@linkas.com.tr>
-Message-ID: <51CAB061.9020409@linkas.com.tr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 26 Jun 2013 09:38:18 +0000 (UTC)
+Subject: [Buildroot] [Bug 6338] New: Wrong download link for minicom package
+Message-ID: <bug-6338-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=6338
 
-My company is working on a AM3517 board. We are using Technexion's 
-TAM3517 board for development right now.
+           Summary: Wrong download link for minicom package
+           Product: buildroot
+           Version: 2013.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: aleksandar.zivkovic at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I was working on TI's SDK a few weeks ago but some more urgent things 
-came up. I would definitely like to help if we can get it working in 
-Buildroot. I can also help in testing.
 
-I don't know much about the history about TI's GFX SDK. I don't know 
-about the soft float issue either. I was trying to run it with mfpu=neon 
-parameter in the toolchain.
+-MINICOM_SITE = http://alioth.debian.org/frs/download.php/3700/
++MINICOM_SITE = http://alioth.debian.org/frs/download.php/file/3700/
 
-There are some other things I'm not certain.
-
-I was working with 4_09_00_01 version and I think it works on AM35xx right?
-
-Also I thought TI only supported kernels up to 2.6.37 for AM3517. I 
-can't remember where I get that idea, but I know Technexion doesn't 
-provide any later kernels for their AM3517 boards.
-
-I don't know how buildroot works exactly but I started reading the 
-documentation. I hope I can help. We are hoping to use EGL and Qt5, it 
-will be easier to configure them and put the necessary files into the 
-rootfs if Buildroot handles everything.
-
-Sorry if I wrote technically incorrect stuff, I worked on SGX SDK for a 
-short while last month and I realize I have forgotten most of what I did 
-now : )
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
