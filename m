@@ -1,104 +1,85 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 26 Jun 2013 19:13:30 +0200
-Subject: [Buildroot] [git commit] busybox: udhcpc.script: fix
- resolv.conf handling with multiple interfaces
-In-Reply-To: <20130626132400.8C4AC9B1C4@busybox.osuosl.org>
-References: <20130626132400.8C4AC9B1C4@busybox.osuosl.org>
-Message-ID: <51CB213A.9070202@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Jun 2013 21:46:58 +0200
+Subject: [Buildroot] [RFC v2 1/1] ti-gfx: add new package
+In-Reply-To: <20130626125252.12035fd0@bourban>
+References: <1372177754-13431-1-git-send-email-spenser@gillilanding.com>
+ <20130625223125.7b8e3721@skate> <20130626125252.12035fd0@bourban>
+Message-ID: <20130626214658.0eb7992f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/06/13 15:20, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=584f418ec1ae3f0b5e09c10133c82578d78a3e03
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> When udhcpc is used on multiple network devices at the same time (or a mix
-> of dhcp and fixed configuration), /etc/resolv.conf should contain the
-> union of information from all the interfaces.
->
-> Currently that's not the case. The udhcpc script simply overwrites
-> resolv.conf with the information from the specific interface on each dhcp
-> bound/renew event.
->
-> Fix it by tagging lines with the interface they came from when added,
-> and drop the affected lines on deconfig/renew. As /etc/resolv.conf is
-> often a symlink to /tmp (and rootfs might be read only), special care
-> has to be taken when it is updated.
->
-> Notice that I'm not really aware of any official documentation requiring
-> that '#' comments in /etc/resolv.conf must be supported, but atleast
-> glibc and uClibc do.
->
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-> ---
->   package/busybox/udhcpc.script |   19 ++++++++++++++++---
->   1 files changed, 16 insertions(+), 3 deletions(-)
->
-> diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
-> index f7beb56..43742fb 100755
-> --- a/package/busybox/udhcpc.script
-> +++ b/package/busybox/udhcpc.script
-> @@ -13,6 +13,13 @@ case "$1" in
->   		/sbin/ifconfig $interface up
->   		/sbin/ifconfig $interface 0.0.0.0
->
-> +		# drop info from this interface
-> +		# resolv.conf may be a symlink to /tmp/, so take care
-> +		TMPFILE=$(mktemp)
-> +		grep -vE "# $interface\$" $RESOLV_CONF > $TMPFILE
-> +		cat $TMPFILE > $RESOLV_CONF
+Dear Spenser Gilliland,
 
-  Isn't the non-atomicity of this line a potential race condition?
+On Wed, 26 Jun 2013 12:52:52 -0500, Spenser Gilliland wrote:
 
-mv -f $TMPFILE $(readlink -f $RESOLV_CONF)
+> > Nice, thanks for your work on this. Having support for OpenGL on
+> > OMAP3, OMAP4 and AM335x is definitely one of the most important part
+> > of the GSoC.
+> 
+> I completely agree.  I'm working very diligently on this.
 
-might be a better idea.
+Great!
 
+> > > Additional Info:
+> > >    I've been using the 3.9.6-x3 tag of the kernel at 
+> > >    https://github.com/RobertCNelson/stable-kernel by use of the
+> > >    LINUX_OVERRIDE_SRCDIR option.
+> > 
+> > Are there some reports of the ti-gfx stuff working on such recent
+> > kernels? Have you looked at the Yocto meta-ti layer at
+> > http://git.yoctoproject.org/cgit/cgit.cgi/meta-ti/ ? If I look there,
+> > they apparently don't have anything more recent than 3.0 or 3.1.
+> 
+> Yes, the RobertCNelson kernel has builds up to 3.9.6.   I am using this
+> with fairly good success.  I've been using the meta-ti layer
+> extensively to understand the process of installing the SGX drivers.
+> Many things refer to a 3.8 kernel from ti.  However, this kernel was
+> unbootable on the Beagle-XM. This may be a more apporiate option for
+> the Beagle Black though.   
 
-  Regards,
-  Arnout
+Ok.
 
-> +		rm -f $TMPFILE
-> +
->   		if [ -x /usr/sbin/avahi-autoipd ]; then
->   			/usr/sbin/avahi-autoipd -k $interface
->   		fi
-> @@ -41,11 +48,17 @@ case "$1" in
->   			done
->   		fi
->
-> -		echo -n > $RESOLV_CONF
-> -		[ -n "$domain" ] && echo search $domain >> $RESOLV_CONF
-> +		# drop info from this interface
-> +		# resolv.conf may be a symlink to /tmp/, so take care
-> +		TMPFILE=$(mktemp)
-> +		grep -vE "# $interface\$" $RESOLV_CONF > $TMPFILE
-> +		cat $TMPFILE > $RESOLV_CONF
-> +		rm -f $TMPFILE
-> +
-> +		[ -n "$domain" ] && echo "search $domain # $interface" >> $RESOLV_CONF
->   		for i in $dns ; do
->   			echo adding dns $i
-> -			echo nameserver $i >> $RESOLV_CONF
-> +			echo "nameserver $i # $interface" >> $RESOLV_CONF
->   		done
->   		;;
->   esac
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
+> > Also, are you still trying on the Beagle-XM, or have you switched to
+> > the BeagleBone Black.
+> 
+> The Beagle-XM is the current target.  From the start, I was trying to
+> read the revision number on the SGX core using devmem2.  However for
+> some unknown reason,  devmem2 is not working properly on the
+> Beagle-XM.  When I finally tried the devmem from busybox, the revision
+> was correctly read.  Thus, I'm thinking that there is a bug in devmem2
+> which is causing the problem.  See patch here
+> https://github.com/openembedded/meta-oe/blob/master/meta-oe/recipes-support/devmem2/devmem2/devmem2-fixups-2.patch
+
+Argh, strange. The patch seems like devmem2 may not be working properly
+on platforms that don't support unaligned accesses.
 
 
+
+> > Also, I'm surprised you're not passing $(TARGET_CONFIGURE_OPTS) to
+> > ensure the right compiler is used, etc.
+> 
+> This information is included in LINUX_MAKE_FLAGS.
+
+Ah, correct, ok!
+
+
+> > I guess this could maybe be refactored, but we can see that later once
+> > the whole thing works.
+> 
+> Yes, it's kinda ugly.  I'm still working out the issues.  Once I know
+> exactly what must be installed, I can start to clean this up.  
+
+Yes sure, that's also why I haven't looked in more detail on what else
+to propose.
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
