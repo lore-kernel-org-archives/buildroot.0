@@ -1,55 +1,104 @@
-From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Wed, 26 Jun 2013 21:03:58 +0200
-Subject: [Buildroot] Update documentation [was] Re: [PATCH]
- package/libmicrohttpd: minor fixes and additions
-In-Reply-To: <51CA0AD2.7030006@mind.be>
-References: <1372187313-15042-1-git-send-email-c.schoenert@gmail.com>
- <51CA0AD2.7030006@mind.be>
-Message-ID: <51CB3B1E.90605@googlemail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 26 Jun 2013 19:13:30 +0200
+Subject: [Buildroot] [git commit] busybox: udhcpc.script: fix
+ resolv.conf handling with multiple interfaces
+In-Reply-To: <20130626132400.8C4AC9B1C4@busybox.osuosl.org>
+References: <20130626132400.8C4AC9B1C4@busybox.osuosl.org>
+Message-ID: <51CB213A.9070202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello again,
+On 26/06/13 15:20, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=584f418ec1ae3f0b5e09c10133c82578d78a3e03
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> When udhcpc is used on multiple network devices at the same time (or a mix
+> of dhcp and fixed configuration), /etc/resolv.conf should contain the
+> union of information from all the interfaces.
+>
+> Currently that's not the case. The udhcpc script simply overwrites
+> resolv.conf with the information from the specific interface on each dhcp
+> bound/renew event.
+>
+> Fix it by tagging lines with the interface they came from when added,
+> and drop the affected lines on deconfig/renew. As /etc/resolv.conf is
+> often a symlink to /tmp (and rootfs might be read only), special care
+> has to be taken when it is updated.
+>
+> Notice that I'm not really aware of any official documentation requiring
+> that '#' comments in /etc/resolv.conf must be supported, but atleast
+> glibc and uClibc do.
+>
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+>   package/busybox/udhcpc.script |   19 ++++++++++++++++---
+>   1 files changed, 16 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+> index f7beb56..43742fb 100755
+> --- a/package/busybox/udhcpc.script
+> +++ b/package/busybox/udhcpc.script
+> @@ -13,6 +13,13 @@ case "$1" in
+>   		/sbin/ifconfig $interface up
+>   		/sbin/ifconfig $interface 0.0.0.0
+>
+> +		# drop info from this interface
+> +		# resolv.conf may be a symlink to /tmp/, so take care
+> +		TMPFILE=$(mktemp)
+> +		grep -vE "# $interface\$" $RESOLV_CONF > $TMPFILE
+> +		cat $TMPFILE > $RESOLV_CONF
 
-Am 25.06.2013 23:25, schrieb Arnout Vandecappelle:
->  I would write "LGPLv2.1+ or eCos license" to make the choice more
-> explicit, else it looks as if both licenses apply.
+  Isn't the non-atomicity of this line a potential race condition?
 
-I have a take a look into the documenation and this part is missing that
-kind of info. I have tried to wrote some informative, what do you think?
+mv -f $TMPFILE $(readlink -f $RESOLV_CONF)
 
-> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> index faf70b1..f31e069 100644
-> --- a/docs/manual/adding-packages-generic.txt
-> +++ b/docs/manual/adding-packages-generic.txt
-> @@ -328,6 +328,24 @@ information is (assuming the package name is +libfoo+) :
->    ambiguous names such as +BSD+ which actually name a family of licenses.
->    This variable is optional. If it is not defined, +unknown+ will appear in
->    the +license+ field of the manifest file for this package.
-> +  If the package is licensed with more than one license just write all
-> +  licenses into that line and make clear how the usage of the licenses are
-> +  interact.
-> +
-> +For example the package could licensed under LGPLv2.1+ or MIT:
-> +
-> +---------------------------------
-> +LIBFOO_LICENSE = LGPLv2.1+ or MIT
-> +---------------------------------
-> +
-> +Some packages may need two licenses at the same time, that would be the
-> +opposite of the above example. Then you have to combine the two licenses
-> +(don't forget to check if there are two, or more, fields in
-> ++LIBFOO_LICENSE_FILES+ needed):
-> +
-> +--------------------------------------
-> +LIBFOO_LICENSE = Special1 and Special2
-> +--------------------------------------
-> 
->  * +LIBFOO_LICENSE_FILES+ is a space-separated list of files in the package
->    tarball that contain the license(s) under which the package is released.
+might be a better idea.
 
-Regards
-Carsten
+
+  Regards,
+  Arnout
+
+> +		rm -f $TMPFILE
+> +
+>   		if [ -x /usr/sbin/avahi-autoipd ]; then
+>   			/usr/sbin/avahi-autoipd -k $interface
+>   		fi
+> @@ -41,11 +48,17 @@ case "$1" in
+>   			done
+>   		fi
+>
+> -		echo -n > $RESOLV_CONF
+> -		[ -n "$domain" ] && echo search $domain >> $RESOLV_CONF
+> +		# drop info from this interface
+> +		# resolv.conf may be a symlink to /tmp/, so take care
+> +		TMPFILE=$(mktemp)
+> +		grep -vE "# $interface\$" $RESOLV_CONF > $TMPFILE
+> +		cat $TMPFILE > $RESOLV_CONF
+> +		rm -f $TMPFILE
+> +
+> +		[ -n "$domain" ] && echo "search $domain # $interface" >> $RESOLV_CONF
+>   		for i in $dns ; do
+>   			echo adding dns $i
+> -			echo nameserver $i >> $RESOLV_CONF
+> +			echo "nameserver $i # $interface" >> $RESOLV_CONF
+>   		done
+>   		;;
+>   esac
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
