@@ -1,31 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 27 Jun 2013 22:42:08 +0200
-Subject: [Buildroot] [git commit] qt5declarative: eglfs depends on gui
-	support, so select that as well
-Message-ID: <20130627204441.EEADF99A1E@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 27 Jun 2013 17:51:50 -0300
+Subject: [Buildroot] [PATCH] polarssl: fix download URL
+Message-ID: <1372366310-25901-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c9b59ab2b363efa057468a388ef1d999bf7636b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Switch to a non-redirect download URL to fix:
+http://autobuild.buildroot.net/results/ec3/ec340fffa6eebb18a0746097419359b44c557a90/
+Thanks go to Paul Bakker for the quick response!
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/qt5/qt5declarative/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/polarssl/polarssl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
-index 9332865..c9a6736 100644
---- a/package/qt5/qt5declarative/Config.in
-+++ b/package/qt5/qt5declarative/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_QT5DECLARATIVE
- 	select BR2_PACKAGE_QT5XMLPATTERNS
- 	select BR2_PACKAGE_QT5JSBACKEND
- 	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_GUI
- 	select BR2_PACKAGE_QT5BASE_EGLFS
- 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
- 	depends on BR2_PACKAGE_HAS_OPENGL_ES
+diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
+index 39de3e3..f3bc421 100644
+--- a/package/polarssl/polarssl.mk
++++ b/package/polarssl/polarssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POLARSSL_SITE = https://polarssl.org/download
++POLARSSL_SITE = https://polarssl.org/code/releases
+ POLARSSL_VERSION = 1.2.8
+ POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
+ POLARSSL_CONF_OPT = \
+-- 
+1.8.1.5
