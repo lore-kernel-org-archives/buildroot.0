@@ -1,49 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 27 Jun 2013 21:58:06 +0200
-Subject: [Buildroot] [git commit] toolchain/uClibc: properly honor DEBUG and
-	STRIP options
-Message-ID: <20130627200344.D9B779B25E@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 27 Jun 2013 17:02:18 -0300
+Subject: [Buildroot] [PATCH] jimtcl: new package
+In-Reply-To: <1372252177-3592-1-git-send-email-elezegarcia@gmail.com>
+References: <1372252177-3592-1-git-send-email-elezegarcia@gmail.com>
+Message-ID: <51CC9A4A.9040206@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0056b811f7c94ea8f31e138bf827c5ce90ea5b66
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 06/26/2013 10:09 AM, Ezequiel Garcia wrote:
 
-The default uClibc configurations strip the resulting binaries/libraries
-and don't add debug symbols which is a problem when wanting to debug
-issues.
-Bind the buildroot BR2_STRIP_* option to uClibc .config DO_STRIP and
-BR2_ENABLE_DEBUG to uClibc DO_DEBUG.
+A few fixes...
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/uClibc/uclibc.mk |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+> +JIMTCL_VERSION = 0.73
+> +JIMTCL_SITE = git://repo.or.cz/jimtcl.git
+> +JIMTCL_SITE_METHOD = git
+> +JIMTCL_INSTALL_STAGING = YES
 
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index da1830f..2036dab 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -287,6 +287,18 @@ endif
- 	$(SED) '/LINUXTHREADS_OLD/d' $(UCLIBC_DIR)/.oldconfig
- 	$(SED) '/PTHREADS_DEBUG_SUPPORT/d' $(UCLIBC_DIR)/.oldconfig
- 	$(SED) '/UCLIBC_HAS_THREADS_NATIVE/d' $(UCLIBC_DIR)/.oldconfig
-+	$(SED) '/DODEBUG /d' $(UCLIBC_DIR)/.oldconfig
-+	$(SED) '/DOSTRIP/d' $(UCLIBC_DIR)/.oldconfig
-+ifeq ($(BR2_STRIP_none),y)
-+	echo "# DOSTRIP is not set" >> $(UCLIBC_DIR)/.oldconfig
-+else
-+	echo "DOSTRIP=y" >> $(UCLIBC_DIR)/.oldconfig
-+endif
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+	echo "DODEBUG=y" >> $(UCLIBC_DIR)/.oldconfig
-+else
-+	echo "# DODEBUG is not set" >> $(UCLIBC_DIR)/.oldconfig
-+endif
- ifeq ($(BR2_PTHREADS_NONE),y)
- 	echo "# UCLIBC_HAS_THREADS is not set" >> $(UCLIBC_DIR)/.oldconfig
- else
+Why not use the debian mirror as i did?
+It's usually nicer to do http since some paranoid firewalling in some
+companies block git access.
+
+> +ifneq ($(BR2_PACKAGE_TCL),y)
+> +define JIMTCL_LINK_TCLSH
+> +	ln -sf jimsh $(TARGET_DIR)/usr/bin/tclsh
+> +endef
+> +endif
+
+Positive logic preferred...
+ifeq ($(BR2_PACKAGE_TCL),)
+...
+(my fault from my old submission though).
+
+Care to resend a V2?
+Thanks.
