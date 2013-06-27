@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 27 Jun 2013 08:48:45 +0000 (UTC)
+Date: Thu, 27 Jun 2013 08:50:13 +0000 (UTC)
 Subject: [Buildroot] [Bug 6338] Wrong download link for minicom package
 In-Reply-To: <bug-6338-163@https.bugs.busybox.net/>
 References: <bug-6338-163@https.bugs.busybox.net/>
-Message-ID: <20130627084845.216449B216@busybox.osuosl.org>
+Message-ID: <20130627085013.AD7379AF77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,15 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=6338
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> 2013-06-27 08:46:51 UTC ---
-(In reply to comment #1)
-> What's wrong about it? It seems to work here:
-> 
-> wget http://alioth.debian.org/frs/download.php/3700/minicom-2.6.1.tar.gz
-> --2013-06-27 10:43:28-- 
-> http://alioth.debian.org/frs/download.php/3700/minicom-2.6.1.tar.gz
-> Resolving alioth.debian.org (alioth.debian.org)... 217.196.43.134
-> Connecting to alioth.debian.org (alioth.debian.org)|217.196.43.134|:80...
-> connected.
-> HTTP request sent, awaiting response... 200 OK
-> Length: 0 [text/html]
-> Saving to: `minicom-2.6.1.tar.gz'
-> 
->     [ <=>                                   ] 0           --.-K/s   in 0s      
-> 
-> 2013-06-27 10:43:28 (0.00 B/s) - `minicom-2.6.1.tar.gz' saved [0/0]
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Sorry, I didn't notice the file size. Will fix, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-It would be nice if you could send git formatted (with a signed-off-by) patches
-to the mailing list instead of bugzilla in the future, thanks.
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> 2013-06-27 08:48:20 UTC ---
+Fixed in git (a1f483b2c3e)
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
