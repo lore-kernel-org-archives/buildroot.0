@@ -1,48 +1,50 @@
-From: Ezequiel Garcia <elezegarcia@gmail.com>
-Date: Thu, 27 Jun 2013 17:07:48 -0300
-Subject: [Buildroot] [PATCH] jimtcl: new package
-In-Reply-To: <51CC9A4A.9040206@zacarias.com.ar>
-References: <1372252177-3592-1-git-send-email-elezegarcia@gmail.com>
- <51CC9A4A.9040206@zacarias.com.ar>
-Message-ID: <CALF0-+W+KELx_qdMyVEZgddP7B90jzfd_SiV75yFGzQr59-v4g@mail.gmail.com>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Thu, 27 Jun 2013 20:32:49 +0000
+Subject: [Buildroot] [PATCH] libunwind:  new pacakge
+In-Reply-To: <20130626000430.502a306a@skate>
+References: <F9C551623D2CBB4C9488801D14F864C639A6F946@ex-mb1.corp.adtran.com>
+ <20130625235022.75b13738@skate>
+ <F9C551623D2CBB4C9488801D14F864C639A6F98F@ex-mb1.corp.adtran.com>
+ <20130626000430.502a306a@skate>
+Message-ID: <F9C551623D2CBB4C9488801D14F864C639A711B6@ex-mb1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 27, 2013 at 5:02 PM, Gustavo Zacarias
-<gustavo@zacarias.com.ar> wrote:
->
-> Why not use the debian mirror as i did?
+> > >  1) Did you check that it builds fine with uClibc? This kind of library
+> > >  tend to use some funky C library features, sometimes not available in
+> > >  uClibc.
+> >
+> > Nope, I didn't.
+> 
+> Then just do a build with a uClibc toolchain. If you don't want to wait
+> for the toolchain to build, you can use
+> http://autobuild.buildroot.org/toolchains/tarballs/br-arm-basic-2013.05-1.tar.bz2
+> as an external toolchain. It's a basic ARM uClibc toolchain (with no
+> option enabled: no WCHAR, no largefile, no IPv6, no RPC, no locales).
 
-I thought using the jimtcl source of the sources was nicer...
+Had some time to fool around with this.  A couple of things to note:
 
-> It's usually nicer to do http since some paranoid firewalling in some
-> companies block git access.
->
+execinfo.h STILL doesn't end up in the toolchain when building uClibc.
+Copying that file over to the toolchain gets past that, however, there
+are a other errors:
 
-... but that's a good reason to not do it. I guess it's pretty much the
-same in terms of getting the latest stuff, since jimtcl is not going
-fast enough to care -0.73 is already 18-months old.
+../src/.libs/libunwind.so: undefined reference to `sigreturn'
+../src/.libs/libunwind.so: undefined reference to `setcontext'
+collect2: error: ld returned 1 exit status
+../src/.libs/libunwind-x86.so: undefined reference to `sigreturn'
+../src/.libs/libunwind-x86.so: undefined reference to `setcontext'
+collect2: error: ld returned 1 exit status
+../src/.libs/libunwind-x86.so: undefined reference to `sigreturn'
+../src/.libs/libunwind-x86.so: undefined reference to `setcontext'
+collect2: error: ld returned 1 exit status
 
->> +ifneq ($(BR2_PACKAGE_TCL),y)
->> +define JIMTCL_LINK_TCLSH
->> +     ln -sf jimsh $(TARGET_DIR)/usr/bin/tclsh
->> +endef
->> +endif
->
-> Positive logic preferred...
-> ifeq ($(BR2_PACKAGE_TCL),)
-> ...
-> (my fault from my old submission though).
->
+I'm wondering whether these are configuration issues with uClibc, or if
+these various symbols are never available in uClibc.  Anyone know?
 
-Sure.
+Pending the outcome of that question, I'll put in the config a
+dependency of !BR2_TOOLCHAIN_*_<uclibc>.
 
-> Care to resend a V2?
-
-Of course.
-
--- 
-    Ezequiel
+Andy
