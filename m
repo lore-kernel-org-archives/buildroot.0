@@ -1,32 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 27 Jun 2013 11:25:52 +0200
-Subject: [Buildroot] [PATCH 1/1] pv: bump to version 1.4.6
-In-Reply-To: <51CB4D8D.2040202@trzebnica.net> (Jerzy Grzegorek's message of
- "Wed, 26 Jun 2013 22:22:37 +0200")
-References: <1372276230-15075-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <51CB48B5.7070308@mind.be> <51CB4D8D.2040202@trzebnica.net>
-Message-ID: <87bo6r52hr.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 27 Jun 2013 11:29:06 +0200
+Subject: [Buildroot] [git commit] pv: add license info
+Message-ID: <20130627093155.D84849A10F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3ba9f8231d3dd71303b0218679d6c384be76fc6e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/pv/pv.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- >> If the new version's build system doesn't define the LD variable
- >> anymore, then this patch is probably not needed anymore either.
- >> 
- >> Can you try to just remove the patch?
- Jerzy> Without this patch build doesn't work.
-
-Ok, but atleast the patch description should change. Rather than doing
-that, I simply dropped the patch and instead changed it to pass
-LD=$(TARGET_LD) on the make cmdline.
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pv/pv.mk b/package/pv/pv.mk
+index 261f213..c2dca2a 100644
+--- a/package/pv/pv.mk
++++ b/package/pv/pv.mk
+@@ -7,6 +7,8 @@
+ PV_VERSION = 1.4.6
+ PV_SOURCE = pv-$(PV_VERSION).tar.bz2
+ PV_SITE = http://www.ivarch.com/programs/sources
++PV_LICENSE = Artistic-2.0
++PV_LICENSE_FILES = doc/COPYING
+ PV_MAKE_OPT = LD=$(TARGET_LD) # otherwise 'ld' is used
+ 
+ $(eval $(autotools-package))
