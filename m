@@ -1,33 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Jun 2013 11:49:14 -0300
-Subject: [Buildroot] [PATCH] xlib_libXpm: needs host-gettext
-Message-ID: <1372344554-15562-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 27 Jun 2013 18:56:28 +0200
+Subject: [Buildroot] [PATCH 4/4] package/w_scan: new package
+In-Reply-To: <a4416db33352923370280841140fb56daa85fd86.1372019882.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 23 Jun 2013 22:40:55 +0200")
+References: <cover.1372019882.git.yann.morin.1998@free.fr>
+ <cover.1372019882.git.yann.morin.1998@free.fr>
+ <a4416db33352923370280841140fb56daa85fd86.1372019882.git.yann.morin.1998@free.fr>
+Message-ID: <87ip0z332b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/00b/00b5c7745df5359908f6c77f90c1598b71638081/
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/x11r7/xlib_libXpm/xlib_libXpm.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> ---
+ Yann>  package/Config.in        |  1 +
+ Yann>  package/w_scan/Config.in |  9 +++++++++
+ Yann>  package/w_scan/w_scan.mk | 13 +++++++++++++
+ Yann>  3 files changed, 23 insertions(+)
+ Yann>  create mode 100644 package/w_scan/Config.in
+ Yann>  create mode 100644 package/w_scan/w_scan.mk
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index 6e72281..e0b4f2f 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -10,6 +10,7 @@ XLIB_LIBXPM_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXPM_LICENSE = MIT
- XLIB_LIBXPM_LICENSE_FILES = COPYING
- XLIB_LIBXPM_INSTALL_STAGING = YES
--XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto
-+XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto \
-+	host-gettext
- 
- $(eval $(autotools-package))
+ Yann> +###############################################################################
+ Yann> +#
+ Yann> +# w_scan
+ Yann> +#
+ Yann> +###############################################################################
+ Yann> +
+ Yann> +W_SCAN_VERSION              = 20130331
+ Yann> +W_SCAN_SOURCE               = w_scan-$(W_SCAN_VERSION).tar.bz2
+ Yann> +W_SCAN_SITE                 = http://wirbel.htpc-forum.de/w_scan
+ Yann> +W_SCAN_LICENSE              = GPLv2+
+ Yann> +W_SCAN_LICENSE_FILES        = COPYING
+
+It uses iconv.h, so I changed it to pull in libiconv if the toolchain
+doesn't have locale.
+
+Committed series with that fixed, thanks.
+
 -- 
-1.8.1.5
+Bye, Peter Korsgaard
