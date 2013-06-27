@@ -1,22 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 27 Jun 2013 14:15:22 +0200
-Subject: [Buildroot] [PATCH] dbus: security bump to version 1.4.26
-In-Reply-To: <1372168224-17272-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 25 Jun 2013 10:50:24 -0300")
-References: <1372168224-17272-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8738s34un9.fsf@dell.be.48ers.dk>
+From: Aleksandar Zivkovic <Aleksandar.Zivkovic@rt-rk.com>
+Date: Thu, 27 Jun 2013 14:18:18 +0200
+Subject: [Buildroot] legal-info manifest file contains duplicated packages
+Message-ID: <kqhai4$sid$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Dear group,
 
- Gustavo> Fixes CVE-2013-2168.
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+If you check at Buildroot autobuilder legal-info manifest file (e.g. 
+http://autobuild.buildroot.org/results/9e6/9e624f84404134623329bea03506e07822c1836d//licenses-manifest.csv) 
+you can see that some packages are duplicated (e.g. dbus) duplicates are 
+mostly at the end of the list.
 
-Committed, thanks
+Here is a list of duplicated packages I have detected in my build:
+dbus-glib
+dbus
+freetype
+libcap
+libtool
+icu
+libgtk2
+gdk-pixbuf
+libglib2
+libpng
+expat
+libffi
+libxml2
+libxslt
+ncurses
+xapp_xcursorgen
+xapp_xkbcomp
+xcb-proto
+xlib_libfontenc
+xlib_libX11
+xlib_libXcursor
+xlib_libxkbfile
+xproto_xproto
+xlib_libXfont
 
--- 
-Bye, Peter Korsgaard
+
+Regards,
+Aleksandar Zivkovic
