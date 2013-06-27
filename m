@@ -1,46 +1,33 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Jun 2013 11:14:12 -0300
-Subject: [Buildroot] [PATCH] qt: broken on avr32
-Message-ID: <1372342452-25725-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 27 Jun 2013 11:49:14 -0300
+Subject: [Buildroot] [PATCH] xlib_libXpm: needs host-gettext
+Message-ID: <1372344554-15562-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt is broken for the avr32 architecture since it lacks TLS support.
 Fixes:
-http://autobuild.buildroot.net/results/56d/56d1d8f12a847f1ba49547a51d7a3605755a0bb8/
+http://autobuild.buildroot.net/results/00b/00b5c7745df5359908f6c77f90c1598b71638081/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/opencv/Config.in | 1 +
- package/qt/Config.in     | 1 +
- 2 files changed, 2 insertions(+)
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 6a47ac5..26bf5e7 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -167,6 +167,7 @@ config BR2_PACKAGE_OPENCV_WITH_PNG
- config BR2_PACKAGE_OPENCV_WITH_QT
- 	bool "qt backend support"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_avr32 # qt
- 	select BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT_STL
- 	default y
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index fdbb598..9f6e54d 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -3,6 +3,7 @@ comment "qt requires a toolchain with C++ support enabled"
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+index 6e72281..e0b4f2f 100644
+--- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+@@ -10,6 +10,7 @@ XLIB_LIBXPM_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXPM_LICENSE = MIT
+ XLIB_LIBXPM_LICENSE_FILES = COPYING
+ XLIB_LIBXPM_INSTALL_STAGING = YES
+-XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto
++XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto \
++	host-gettext
  
- menuconfig BR2_PACKAGE_QT
- 	bool "Qt"
-+	depends on !BR2_avr32 # lacks TLS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Qt is a cross-platform application and UI framework for
+ $(eval $(autotools-package))
 -- 
 1.8.1.5
