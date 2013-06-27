@@ -1,46 +1,21 @@
-From: Aleksandar Zivkovic <Aleksandar.Zivkovic@rt-rk.com>
-Date: Thu, 27 Jun 2013 14:18:18 +0200
-Subject: [Buildroot] legal-info manifest file contains duplicated packages
-Message-ID: <kqhai4$sid$1@ger.gmane.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 27 Jun 2013 14:24:02 +0200
+Subject: [Buildroot] [PATCH 1/2] openssh: bump to version 6.2p2
+In-Reply-To: <1372185740-28886-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 25 Jun 2013 15:42:19 -0300")
+References: <1372185740-28886-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87y59v3fod.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear group,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-If you check at Buildroot autobuilder legal-info manifest file (e.g. 
-http://autobuild.buildroot.org/results/9e6/9e624f84404134623329bea03506e07822c1836d//licenses-manifest.csv) 
-you can see that some packages are duplicated (e.g. dbus) duplicates are 
-mostly at the end of the list.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Here is a list of duplicated packages I have detected in my build:
-dbus-glib
-dbus
-freetype
-libcap
-libtool
-icu
-libgtk2
-gdk-pixbuf
-libglib2
-libpng
-expat
-libffi
-libxml2
-libxslt
-ncurses
-xapp_xcursorgen
-xapp_xkbcomp
-xcb-proto
-xlib_libfontenc
-xlib_libX11
-xlib_libXcursor
-xlib_libxkbfile
-xproto_xproto
-xlib_libXfont
+Committed both, thanks.
 
-
-Regards,
-Aleksandar Zivkovic
+-- 
+Bye, Peter Korsgaard
