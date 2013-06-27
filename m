@@ -1,35 +1,49 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 27 Jun 2013 19:40:34 +0200
-Subject: [Buildroot] [git commit] xlib_libXpm: needs host-gettext
-Message-ID: <20130627174332.2E2C19AF55@busybox.osuosl.org>
+Date: Thu, 27 Jun 2013 19:37:46 +0200
+Subject: [Buildroot] [git commit] sconeserver/libedbus: fix missing avr32
+	arch exclusions
+Message-ID: <20130627174331.01A7E9AF55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=79c55aadd54d098696644d77f9e60cd200e08753
+commit: http://git.buildroot.net/buildroot/commit/?id=f1e957ce41d472301f6f0f21d7740d6df8524cbd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/00b/00b5c7745df5359908f6c77f90c1598b71638081/
+Fix missing avr32 arch exclusions regarding bluez_utils being
+unavailable. Fixes:
+http://autobuild.buildroot.net/results/789/78901c36517b1d897a1200ccddd79afec8a605de/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/xlib_libXpm/xlib_libXpm.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/efl/libedbus/Config.in |    1 +
+ package/sconeserver/Config.in  |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index 6e72281..e0b4f2f 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -10,6 +10,7 @@ XLIB_LIBXPM_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXPM_LICENSE = MIT
- XLIB_LIBXPM_LICENSE_FILES = COPYING
- XLIB_LIBXPM_INSTALL_STAGING = YES
--XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto
-+XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto \
-+	host-gettext
+diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
+index 9b57592..64b001e 100644
+--- a/package/efl/libedbus/Config.in
++++ b/package/efl/libedbus/Config.in
+@@ -16,6 +16,7 @@ if BR2_PACKAGE_LIBEDBUS
  
- $(eval $(autotools-package))
+ config BR2_PACKAGE_LIBEDBUS_BLUEZ
+ 	bool "bluez support"
++	depends on !BR2_avr32 # bluez_utils
+ 	select BR2_PACKAGE_BLUEZ_UTILS
+ 	help
+ 	  Bluetooth support.
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index a467476..60ae2ae 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -43,6 +43,7 @@ config BR2_PACKAGE_SCONESERVER_BLUETOOTH
+ 	depends on BR2_USE_WCHAR # bluez->libglib2
+ 	depends on BR2_USE_MMU # bluez->dbus
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez->dbus
++	depends on !BR2_avr32 # bluez_utils
+ 	select BR2_PACKAGE_BLUEZ_UTILS
+ 	help
+ 	  Bluetooth module for Sconeserver
