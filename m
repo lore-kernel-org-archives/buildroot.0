@@ -1,63 +1,48 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 27 Jun 2013 19:04:56 +0200
-Subject: [Buildroot] [git commit] libbsd: needs threads
-Message-ID: <20130627174330.1E4F49AF55@busybox.osuosl.org>
+Date: Thu, 27 Jun 2013 19:39:45 +0200
+Subject: [Buildroot] [git commit] qt: broken on avr32
+Message-ID: <20130627174331.BF9F19AF55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4788dddc39a12b6064ee6e1dfd0a999e5c981f83
+commit: http://git.buildroot.net/buildroot/commit/?id=416a405d60bf1278126452ac3d226218cbced9b0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Qt is broken for the avr32 architecture since it lacks TLS support.
 Fixes:
-http://autobuild.buildroot.net/results/397/39728c5eeb6c4e213cd96cb6639bc28f337bf214/
+http://autobuild.buildroot.net/results/56d/56d1d8f12a847f1ba49547a51d7a3605755a0bb8/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libbsd/Config.in  |    5 +++++
- package/libedit/Config.in |    5 +++++
- 2 files changed, 10 insertions(+), 0 deletions(-)
+ package/opencv/Config.in |    1 +
+ package/qt/Config.in     |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index 915a4bd..1fa9497 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBBSD
- 	# libbsd requires a.out.h, which is only available for those
- 	# architectures: arm, m68k, x86 (and alpha, but we don't care.)
- 	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 )
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  This library provides useful functions commonly found on BSD
- 	  systems, and lacking on others like GNU systems, thus making
-@@ -11,3 +12,7 @@ config BR2_PACKAGE_LIBBSD
- 	  project.
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 6a47ac5..26bf5e7 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -167,6 +167,7 @@ config BR2_PACKAGE_OPENCV_WITH_PNG
+ config BR2_PACKAGE_OPENCV_WITH_QT
+ 	bool "qt backend support"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_avr32 # qt
+ 	select BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT_STL
+ 	default y
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index fdbb598..9f6e54d 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -3,6 +3,7 @@ comment "qt requires a toolchain with C++ support enabled"
  
- 	  http://libbsd.freedesktop.org/
-+
-+comment "libbsd requires a toolchain with thread support"
-+	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 )
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libedit/Config.in b/package/libedit/Config.in
-index 34160f4..7a515db 100644
---- a/package/libedit/Config.in
-+++ b/package/libedit/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBEDIT
- 	bool "libedit"
- 	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 )  # libbsd
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
- 	select BR2_PACKAGE_LIBBSD
- 	select BR2_PACKAGE_NCURSES
+ menuconfig BR2_PACKAGE_QT
+ 	bool "Qt"
++	depends on !BR2_avr32 # lacks TLS
+ 	depends on BR2_INSTALL_LIBSTDCPP
  	help
-@@ -8,3 +9,7 @@ config BR2_PACKAGE_LIBEDIT
- 	  and history functions. It slightly resembles GNU readline.
- 
- 	  http://ftp.netbsd.org/pub/NetBSD/NetBSD-release-5-0/src/lib/libedit/
-+
-+comment "libedit requires a toolchain with thread support"
-+	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 ) # libbsd
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS # libbsd
+ 	  Qt is a cross-platform application and UI framework for
