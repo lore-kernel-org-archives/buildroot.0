@@ -1,47 +1,46 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Jun 2013 11:03:11 -0300
-Subject: [Buildroot] [PATCH] sconeserver/libedbus: fix missing avr32 arch
-	exclusions
-Message-ID: <1372341791-18200-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 27 Jun 2013 11:14:12 -0300
+Subject: [Buildroot] [PATCH] qt: broken on avr32
+Message-ID: <1372342452-25725-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix missing avr32 arch exclusions regarding bluez_utils being
-unavailable. Fixes:
-http://autobuild.buildroot.net/results/789/78901c36517b1d897a1200ccddd79afec8a605de/
+Qt is broken for the avr32 architecture since it lacks TLS support.
+Fixes:
+http://autobuild.buildroot.net/results/56d/56d1d8f12a847f1ba49547a51d7a3605755a0bb8/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/efl/libedbus/Config.in | 1 +
- package/sconeserver/Config.in  | 1 +
+ package/opencv/Config.in | 1 +
+ package/qt/Config.in     | 1 +
  2 files changed, 2 insertions(+)
 
-diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
-index 9b57592..64b001e 100644
---- a/package/efl/libedbus/Config.in
-+++ b/package/efl/libedbus/Config.in
-@@ -16,6 +16,7 @@ if BR2_PACKAGE_LIBEDBUS
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 6a47ac5..26bf5e7 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -167,6 +167,7 @@ config BR2_PACKAGE_OPENCV_WITH_PNG
+ config BR2_PACKAGE_OPENCV_WITH_QT
+ 	bool "qt backend support"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_avr32 # qt
+ 	select BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT_STL
+ 	default y
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index fdbb598..9f6e54d 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -3,6 +3,7 @@ comment "qt requires a toolchain with C++ support enabled"
  
- config BR2_PACKAGE_LIBEDBUS_BLUEZ
- 	bool "bluez support"
-+	depends on !BR2_avr32 # bluez_utils
- 	select BR2_PACKAGE_BLUEZ_UTILS
+ menuconfig BR2_PACKAGE_QT
+ 	bool "Qt"
++	depends on !BR2_avr32 # lacks TLS
+ 	depends on BR2_INSTALL_LIBSTDCPP
  	help
- 	  Bluetooth support.
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index a467476..60ae2ae 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -43,6 +43,7 @@ config BR2_PACKAGE_SCONESERVER_BLUETOOTH
- 	depends on BR2_USE_WCHAR # bluez->libglib2
- 	depends on BR2_USE_MMU # bluez->dbus
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez->dbus
-+	depends on !BR2_avr32 # bluez_utils
- 	select BR2_PACKAGE_BLUEZ_UTILS
- 	help
- 	  Bluetooth module for Sconeserver
+ 	  Qt is a cross-platform application and UI framework for
 -- 
 1.8.1.5
