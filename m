@@ -1,46 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 27 Jun 2013 10:34:15 +0200
-Subject: [Buildroot] [PATCH v3] package/libmicrohttpd: minor fixes and
-	additions
-In-Reply-To: <1372272580-26574-1-git-send-email-c.schoenert@gmail.com>
- (Carsten Schoenert's message of "Wed, 26 Jun 2013 20:49:40 +0200")
-References: <1372272580-26574-1-git-send-email-c.schoenert@gmail.com>
-Message-ID: <87fvw43qbc.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 27 Jun 2013 08:46:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 6338] Wrong download link for minicom package
+In-Reply-To: <bug-6338-163@https.bugs.busybox.net/>
+References: <bug-6338-163@https.bugs.busybox.net/>
+Message-ID: <20130627084638.DE8869B216@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carsten" == Carsten Schoenert <c.schoenert@gmail.com> writes:
-h
- Carsten> From: Carsten Schoenert <c.schoenert@gmail.com>
- Carsten> Correcting the indentation inside Config.in. Also adding the missed
- Carsten> license information.
+https://bugs.busybox.net/show_bug.cgi?id=6338
 
- Carsten> Note: libmicrohttpd is partialy dual licensed, if you don't need or want
- Carsten> to use the HTTPS option you can choose between LPGLv2.1+ and the eCos
- Carsten> license (http://ecos.sourceware.org/license-overview.html).
- Carsten> If you use the HTTPS option you have to agree to the LGPLv2.1+!
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2013-06-27 08:44:45 UTC ---
+What's wrong about it? It seems to work here:
 
- Carsten> --- a/package/libmicrohttpd/libmicrohttpd.mk
- Carsten> +++ b/package/libmicrohttpd/libmicrohttpd.mk
- Carsten> @@ -6,13 +6,16 @@
- 
- Carsten>  LIBMICROHTTPD_VERSION = 0.9.27
- Carsten>  LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- Carsten> +LIBMICROHTTPD_LICENSE_FILE = COPYING
- Carsten>  LIBMICROHTTPD_INSTALL_STAGING = YES
- 
- Carsten>  ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
- Carsten> +LIBMICROHTTPD_LICENSE = LGPLv2.1+
- Carsten>  LIBMICROHTTPD_DEPENDENCIES += gnutls libgcrypt
- Carsten>  LIBMICROHTTPD_CONF_OPT += --enable-https --with-gnutls=$(STAGING_DIR)/usr \
- Carsten> -			  --with-libgcrypt-prefix=$(STAGING_DIR)/usr
- Carsten> +						  --with-libgcrypt-prefix=$(STAGING_DIR)/usr
+wget http://alioth.debian.org/frs/download.php/3700/minicom-2.6.1.tar.gz
+--2013-06-27 10:43:28-- 
+http://alioth.debian.org/frs/download.php/3700/minicom-2.6.1.tar.gz
+Resolving alioth.debian.org (alioth.debian.org)... 217.196.43.134
+Connecting to alioth.debian.org (alioth.debian.org)|217.196.43.134|:80...
+connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 0 [text/html]
+Saving to: `minicom-2.6.1.tar.gz'
 
-No need to indent this far. Other than that it looks good - Committed,
-thanks.
+    [ <=>                                   ] 0           --.-K/s   in 0s      
+
+2013-06-27 10:43:28 (0.00 B/s) - `minicom-2.6.1.tar.gz' saved [0/0]
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
