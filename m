@@ -1,55 +1,47 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Thu, 27 Jun 2013 15:57:20 +0200
-Subject: [Buildroot] qt5: No SOURCES in qmake created Makefiles
-In-Reply-To: <20130618190656.228e7658@skate>
-References: <51BF198C.2040405@andin.de> <20130617162213.1fdc7d97@skate>
- <CALo-6+jQ-qjc9HfFwTSUh1x6JQnTtH1XUOo0oX8f4nApVH=L7w@mail.gmail.com>
- <51C07EB6.4080003@andin.de> <20130618190656.228e7658@skate>
-Message-ID: <51CC44C0.8020509@andin.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 27 Jun 2013 11:03:11 -0300
+Subject: [Buildroot] [PATCH] sconeserver/libedbus: fix missing avr32 arch
+	exclusions
+Message-ID: <1372341791-18200-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-am a little sorry for the fuzz. This worked out to be a non-issue. Seems 
-when using examples from another qt tree, even though absolutely clean 
-within the directory, still build options from the folders above get 
-picked up.
-When I copied it away, in my case to /tmp/analogclock/, compiling with 
-buildroots qmake from 5.0.2 works just fine.
+Fix missing avr32 arch exclusions regarding bluez_utils being
+unavailable. Fixes:
+http://autobuild.buildroot.net/results/789/78901c36517b1d897a1200ccddd79afec8a605de/
 
-cheers,
-Andreas
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/efl/libedbus/Config.in | 1 +
+ package/sconeserver/Config.in  | 1 +
+ 2 files changed, 2 insertions(+)
 
-
-Am 18.06.2013 19:06, schrieb Thomas Petazzoni:
-> Dear Andreas Naumann,
->
-> On Tue, 18 Jun 2013 17:37:26 +0200, Andreas Naumann wrote:
->
->> In order to reproduce the issue I used the beaglebone_defconfig, changed
->> to linaro toolchain and activated a minimal qt5 set:
->> BR2_PACKAGE_QT5=y
->> BR2_PACKAGE_QT5BASE=y
->> BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
->> BR2_PACKAGE_QT5BASE_GUI=y
->> BR2_PACKAGE_QT5BASE_WIDGETS=y
->> BR2_PACKAGE_QT5BASE_LINUXFB=y
->> BR2_PACKAGE_QT5JSBACKEND=y
->>
->> Now I have been going back in revisions and find the problem to start
->> exactly when switching to qt 5.0.2 (d6b2bac qt5: bump to 5.0.2). So I
->> have been looking through the release notes
->> (http://blog.qt.digia.com/blog/2013/04/10/qt-5-0-2-released/) but
->> nothing really rings a bell. But I'm not very knowledgable in the qt
->> build framework.
->
-> Ah, ah, this is interesting. I'll try to reproduce and let you know
-> what I find.
->
-> Thanks,
->
-> Thomas
->
+diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
+index 9b57592..64b001e 100644
+--- a/package/efl/libedbus/Config.in
++++ b/package/efl/libedbus/Config.in
+@@ -16,6 +16,7 @@ if BR2_PACKAGE_LIBEDBUS
+ 
+ config BR2_PACKAGE_LIBEDBUS_BLUEZ
+ 	bool "bluez support"
++	depends on !BR2_avr32 # bluez_utils
+ 	select BR2_PACKAGE_BLUEZ_UTILS
+ 	help
+ 	  Bluetooth support.
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index a467476..60ae2ae 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -43,6 +43,7 @@ config BR2_PACKAGE_SCONESERVER_BLUETOOTH
+ 	depends on BR2_USE_WCHAR # bluez->libglib2
+ 	depends on BR2_USE_MMU # bluez->dbus
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez->dbus
++	depends on !BR2_avr32 # bluez_utils
+ 	select BR2_PACKAGE_BLUEZ_UTILS
+ 	help
+ 	  Bluetooth module for Sconeserver
+-- 
+1.8.1.5
