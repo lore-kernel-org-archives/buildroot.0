@@ -1,61 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Jun 2013 10:53:17 -0300
-Subject: [Buildroot] [PATCH] libbsd: needs threads
-Message-ID: <1372341197-7903-1-git-send-email-gustavo@zacarias.com.ar>
+From: Andreas Naumann <dev@andin.de>
+Date: Thu, 27 Jun 2013 15:57:20 +0200
+Subject: [Buildroot] qt5: No SOURCES in qmake created Makefiles
+In-Reply-To: <20130618190656.228e7658@skate>
+References: <51BF198C.2040405@andin.de> <20130617162213.1fdc7d97@skate>
+ <CALo-6+jQ-qjc9HfFwTSUh1x6JQnTtH1XUOo0oX8f4nApVH=L7w@mail.gmail.com>
+ <51C07EB6.4080003@andin.de> <20130618190656.228e7658@skate>
+Message-ID: <51CC44C0.8020509@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/397/39728c5eeb6c4e213cd96cb6639bc28f337bf214/
+Hi,
+am a little sorry for the fuzz. This worked out to be a non-issue. Seems 
+when using examples from another qt tree, even though absolutely clean 
+within the directory, still build options from the folders above get 
+picked up.
+When I copied it away, in my case to /tmp/analogclock/, compiling with 
+buildroots qmake from 5.0.2 works just fine.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libbsd/Config.in  | 5 +++++
- package/libedit/Config.in | 5 +++++
- 2 files changed, 10 insertions(+)
+cheers,
+Andreas
 
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index 915a4bd..1fa9497 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBBSD
- 	# libbsd requires a.out.h, which is only available for those
- 	# architectures: arm, m68k, x86 (and alpha, but we don't care.)
- 	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 )
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  This library provides useful functions commonly found on BSD
- 	  systems, and lacking on others like GNU systems, thus making
-@@ -11,3 +12,7 @@ config BR2_PACKAGE_LIBBSD
- 	  project.
- 
- 	  http://libbsd.freedesktop.org/
-+
-+comment "libbsd requires a toolchain with thread support"
-+	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 )
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libedit/Config.in b/package/libedit/Config.in
-index 34160f4..7a515db 100644
---- a/package/libedit/Config.in
-+++ b/package/libedit/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBEDIT
- 	bool "libedit"
- 	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 )  # libbsd
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
- 	select BR2_PACKAGE_LIBBSD
- 	select BR2_PACKAGE_NCURSES
- 	help
-@@ -8,3 +9,7 @@ config BR2_PACKAGE_LIBEDIT
- 	  and history functions. It slightly resembles GNU readline.
- 
- 	  http://ftp.netbsd.org/pub/NetBSD/NetBSD-release-5-0/src/lib/libedit/
-+
-+comment "libedit requires a toolchain with thread support"
-+	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 ) # libbsd
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS # libbsd
--- 
-1.8.1.5
+
+Am 18.06.2013 19:06, schrieb Thomas Petazzoni:
+> Dear Andreas Naumann,
+>
+> On Tue, 18 Jun 2013 17:37:26 +0200, Andreas Naumann wrote:
+>
+>> In order to reproduce the issue I used the beaglebone_defconfig, changed
+>> to linaro toolchain and activated a minimal qt5 set:
+>> BR2_PACKAGE_QT5=y
+>> BR2_PACKAGE_QT5BASE=y
+>> BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+>> BR2_PACKAGE_QT5BASE_GUI=y
+>> BR2_PACKAGE_QT5BASE_WIDGETS=y
+>> BR2_PACKAGE_QT5BASE_LINUXFB=y
+>> BR2_PACKAGE_QT5JSBACKEND=y
+>>
+>> Now I have been going back in revisions and find the problem to start
+>> exactly when switching to qt 5.0.2 (d6b2bac qt5: bump to 5.0.2). So I
+>> have been looking through the release notes
+>> (http://blog.qt.digia.com/blog/2013/04/10/qt-5-0-2-released/) but
+>> nothing really rings a bell. But I'm not very knowledgable in the qt
+>> build framework.
+>
+> Ah, ah, this is interesting. I'll try to reproduce and let you know
+> what I find.
+>
+> Thanks,
+>
+> Thomas
+>
