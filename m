@@ -1,36 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 27 Jun 2013 23:30:06 +0200
-Subject: [Buildroot] [git commit] polarssl: fix download URL
-Message-ID: <20130627213213.2DF5C9B256@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 27 Jun 2013 18:57:39 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
+	9}.x stable version
+Message-ID: <1372370260-28701-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=04ac296a3b7230c23afbed2c8db9309ed91366ec
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Switch to a non-redirect download URL to fix:
-http://autobuild.buildroot.net/results/ec3/ec340fffa6eebb18a0746097419359b44c557a90/
-Thanks go to Paul Bakker for the quick response!
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/polarssl/polarssl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/kernel-headers/Config.in                                  | 6 +++---
+ ...0.84-headers_install-fix-__packed-in-exported-kernel-head.patch} | 0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.83-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.84-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-index 39de3e3..f3bc421 100644
---- a/package/polarssl/polarssl.mk
-+++ b/package/polarssl/polarssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index de0c703..ce812af 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -70,15 +70,15 @@ config BR2_DEFAULT_KERNEL_VERSION
  
--POLARSSL_SITE = https://polarssl.org/download
-+POLARSSL_SITE = https://polarssl.org/code/releases
- POLARSSL_VERSION = 1.2.8
- POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
- POLARSSL_CONF_OPT = \
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.83"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.84"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.47"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.50"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.51"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+-	default "3.9.7"		if BR2_KERNEL_HEADERS_3_9
++	default "3.9.8"		if BR2_KERNEL_HEADERS_3_9
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.83-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.84-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.83-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.84-headers_install-fix-__packed-in-exported-kernel-head.patch
+-- 
+1.8.1.5
