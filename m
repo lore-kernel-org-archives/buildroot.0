@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 28 Jun 2013 21:16:32 +0200
-Subject: [Buildroot] [PATCH] gutenprint: forcibly disable ijs-config
-In-Reply-To: <1372437994-28897-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 28 Jun 2013 13:46:34 -0300")
-References: <1372437994-28897-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8761wyyrjj.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Jun 2013 21:42:42 +0200
+Subject: [Buildroot] [PATCH 13/19] libcap-ng: define license
+In-Reply-To: <1372426876-2258-13-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 28 Jun 2013 10:41:10 -0300")
+References: <1372426876-2258-1-git-send-email-gustavo@zacarias.com.ar>
+ <1372426876-2258-13-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871u7myqbx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +14,22 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> ijs-config (ghostscript) is looked up in /usr/bin, if you've
- Gustavo> got a host that has ghostscript with development headers
- Gustavo> installed then the build fails when trying to link to the host
- Gustavo> libijs.  Forcibly disable ghostscript support since we lack a
- Gustavo> package.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  package/libcap-ng/libcap-ng.mk | 2 ++
+ Gustavo>  1 file changed, 2 insertions(+)
 
-Committed, thanks.
+ Gustavo> diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+ Gustavo> index d1c4462..630089b 100644
+ Gustavo> --- a/package/libcap-ng/libcap-ng.mk
+ Gustavo> +++ b/package/libcap-ng/libcap-ng.mk
+ Gustavo> @@ -10,5 +10,7 @@ LIBCAP_NG_SOURCE = libcap-ng-$(LIBCAP_NG_VERSION).tar.gz
+ Gustavo>  LIBCAP_NG_INSTALL_STAGING = YES
+ Gustavo>  LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
+ Gustavo>  LIBCAP_NG_CONF_OPT = --without-python
+ Gustavo> +LIBCAP_NG_LICENSE = GPLv2+ LGPLv2+
+
+It's LGPLv2.1+
 
 -- 
 Bye, Peter Korsgaard
