@@ -1,32 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Jun 2013 21:34:55 +0200
-Subject: [Buildroot] [git commit] fbgrab: define license
-Message-ID: <20130628195143.3A27D9B291@busybox.osuosl.org>
+Date: Fri, 28 Jun 2013 21:38:16 +0200
+Subject: [Buildroot] [git commit] gamin: define license
+Message-ID: <20130628195144.8CCDB9B290@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a354f8a5959b23caf0ac4dacc900187ffda779c
+commit: http://git.buildroot.net/buildroot/commit/?id=cc6c2babb9a2edc087c6fee790702a06ff377c1f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/fbgrab/fbgrab.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/gamin/gamin.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
-index 7645a6b..62539a8 100644
---- a/package/fbgrab/fbgrab.mk
-+++ b/package/fbgrab/fbgrab.mk
-@@ -8,6 +8,8 @@ FBGRAB_VERSION = 1.0
- FBGRAB_SOURCE = fbgrab-$(FBGRAB_VERSION).tar.gz
- FBGRAB_SITE = http://hem.bredband.net/gmogmo/fbgrab
- FBGRAB_DEPENDENCIES = libpng
-+FBGRAB_LICENSE = GPLv2
-+FBGRAB_LICENSE_FILES = COPYING
+diff --git a/package/gamin/gamin.mk b/package/gamin/gamin.mk
+index 7939992..c7ec531 100644
+--- a/package/gamin/gamin.mk
++++ b/package/gamin/gamin.mk
+@@ -9,7 +9,8 @@ GAMIN_SOURCE = gamin-$(GAMIN_VERSION).tar.gz
+ GAMIN_SITE = http://www.gnome.org/~veillard/gamin/sources
+ GAMIN_AUTORECONF = YES
+ GAMIN_INSTALL_STAGING = YES
+-
++GAMIN_LICENSE = LGPLv2+
++GAMIN_LICENSE_FILES = COPYING
+ GAMIN_CONF_OPT = --disable-debug
  
- define FBGRAB_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ # python support broken
