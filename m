@@ -1,84 +1,176 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 Jun 2013 19:05:04 +0200
-Subject: [Buildroot] Sample configurations / test suite ?
-In-Reply-To: <20130627004309.6f15cf53@skate>
-References: <20130627004309.6f15cf53@skate>
-Message-ID: <20130628170504.GB3165@free.fr>
+From: =?utf-8?b?Q2lhcsOhbg==?= Rehill <cir.vfi@gmail.com>
+Date: Fri, 28 Jun 2013 16:55:33 +0000 (UTC)
+Subject: [Buildroot] ldconfig - unknown machine 40
+Message-ID: <loom.20130628T172450-675@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2013-06-27 00:43 +0200, Thomas Petazzoni spake thusly:
-> Currently, the defconfig that we accept in configs/ are defconfig for
-> various hardware platforms that should be as minimal as possible: the
-> bootloader(s), the kernel, Busybox, the right filesystem images and
-> that's it. Since I've been a fairly strong supporter of this approach,
-> I continue to believe it makes sense, since there is no way, for a
-> particular board, to decide which software components should or should
-> not be part of the default configuration for this board.
-> 
-> However, I am seeing two cases where we would want to have bigger, more
-> specific defconfig files:
-> 
->  1) As part of a test suite. Things like building Xenomai, RTAI,
->     building a kernel with the various combination (with or without DT,
->     etc.) are not tested by our autobuilders, and we've recently had
->     reports of Xenomai being broken for example. Having a set of
->     configurations that are interesting to build would be very useful,
->     and this set could be extended when we think it is necessary (for
->     example after receiving a bug report). Those configurations could
->     be built on a daily basis, they could have some custom post-image
->     script to verify that the build has generated everything that was
->     expected, etc.
-> 
->  2) As part of a set of demonstration defconfigs. For example, Spenser
->     Gilliland has recently posted on his blog a defconfig that
->     demonstrates how to use OpenMAX on Raspberry Pi to do
->     hardware-accelerated video decoding. Maybe it would make sense to
->     have a way of storing those "demonstration" configurations
->     somewhere, so that they gain in visibility and can more easily be
->     re-used by users.
-> 
-> What do you think about this? Do you have ideas on how to implement
-> this? Should it be part of the Buildroot tree itself, or something
-> separate? If something separate, how do we keep Buildroot and this
-> separate tree in sync?
+(Actual questions are below, on lines starting with "*** ", but some 
+explanation of context is required first.)
 
-For what it's worth, I've started something along those lines. This is
-for now a simple git-tree with a few (RPi-related for now) defconfigs
-and a collection of scripts.
+I'm cross-compiling on an x86_64 build machine for an ARMv6 target using an 
+external CodeSourcery toolchain.  The build machine is running Fedora 18, 
+with glibc 2.16.
+I notice that in the "target-finalize" stage, "ldconfig -r ..." is printing 
+out a lot of lines like:
 
-For lack of a better name, I've called it 'Buildroot.config'. You can
-browse the tree there:
-    http://ymorin.is-a-geek.org/git/buildroot.config/
+    /lib:
+    /sbin/ldconfig: /lib/libnsl.so.1 is for unknown machine 40.
+    ...
+    /sbin/ldconfig: /lib/libthread_db-1.0.so is for unknown machine 40.
+    /sbin/ldconfig: /lib/libgcc_s.so.1 is for unknown machine 40.
+    ...
+    /sbin/ldconfig: /lib/ld-linux.so.3 is for unknown machine 40.
+    /sbin/ldconfig: /lib/libm.so.6 is for unknown machine 40.
+    ...
+    /sbin/ldconfig: /lib/libc.so.6 is for unknown machine 40.
 
-The basic idea I've had for this was to automate building a known
-Buildroot configuration, from cloning the Buildroot tree, up to
-generating the final images.
+and so on.  You'll notice these are toolchain-provided libraries; the same 
+happens for all generated libraries too.
+These are _not_ just warnings; ldconfig ignores the library content, so 
+"output/target/etc/ld.so.cache" is left unpopulated, meaning that the 
+target device will not boot successfully due to missing libraries (the 
+libraries are on the file-system, just the ld.so.cache does not list them).
 
-It's still rough on the edges, and still lacks all the glue to make it
-work seamlessly. I'm currently implementing a simple script that would
-wrap all of this, but I still need to make some design decisions.
+The same build works on a Ubuntu machine with (e)glibc 2.15 and older 
+Fedora machines with earlier versions of glibc.
 
-I wanted to wait yet a bit more before advertising it, but since you
-raised the question, here it goes public! Well, Peter already knew, but
-it's yet more public, now! :-)
+Since v2.15 appears to work and v2.16 does not, I grabbed the glibc git 
+repo and did some digging in the commits between the two releases.  The one 
+that grabbed my attention was commit 
+f1a77b01f4e3a80782171297120e77ab112ce85d, in particular the change in 
+"sysdeps/unix/sysv/linux/i386/readelflib.c" (equivalently the x86_64 
+version after this commit too).
 
-Maybe this Buildroot.config tree is something we can improve with the
-aim of making it the basis of this full-blown defconfig-for-tests
-infrastructure. Please tell me what you think about it! :-)
+The patch is relatively small for this file so I'll include it here.
 
-Regards,
-Yann E. MORIN.
+--
+diff --git a/sysdeps/unix/sysv/linux/i386/readelflib.c b/sysdeps/unix/sysv/
+linux/i386/readelflib.c
+index bdd5e70..fab830e 100644
+--- a/sysdeps/unix/sysv/linux/i386/readelflib.c
++++ b/sysdeps/unix/sysv/linux/i386/readelflib.c
+@@ -32,40 +32,52 @@ process_elf_file (const char *file_name, const char 
+*lib, int *flag,
+           size_t file_length)
+ {
+   ElfW(Ehdr) *elf_header = (ElfW(Ehdr) *) file_contents;
+-  int ret;
++  int ret, file_flag = 0;
+ 
+-  if (elf_header->e_ident [EI_CLASS] == ELFCLASS32)
+-    return process_elf32_file (file_name, lib, flag, osversion, soname,
+-                   file_contents, file_length);
+-  else
++  switch (elf_header->e_machine)
+     {
+-      switch (elf_header->e_machine)
++    case EM_X86_64:
++      if (elf_header->e_ident[EI_CLASS] == ELFCLASS64)
++    /* X86-64 64bit libraries are always libc.so.6+.  */
++    file_flag = FLAG_X8664_LIB64|FLAG_ELF_LIBC6;
++      else
++    /* X32 libraries are always libc.so.6+.  */
++    file_flag = FLAG_X8664_LIBX32|FLAG_ELF_LIBC6;
++      break;
++#ifndef SKIP_EM_IA_64
++    case EM_IA_64:
++      if (elf_header->e_ident[EI_CLASS] == ELFCLASS64)
+     {
+-    case EM_IA_64:
+-    case EM_X86_64:
++      /* IA64 64bit libraries are always libc.so.6+.  */
++      file_flag = FLAG_IA64_LIB64|FLAG_ELF_LIBC6;
+       break;
+-    default:
+-      error (0, 0, _("%s is for unknown machine %d.\n"),
+-         file_name, elf_header->e_machine);
+-      return 1;
+     }
++      goto failed;
++#endif
++    case EM_386:
++      if (elf_header->e_ident[EI_CLASS] == ELFCLASS32)
++    break;
++      /* Fall through.  */
++    default:
++#ifndef SKIP_EM_IA_64
++failed:
++#endif
++      error (0, 0, _("%s is for unknown machine %d.\n"),
++         file_name, elf_header->e_machine);
++      return 1;
++    }
+ 
+-      ret = process_elf64_file (file_name, lib, flag, osversion, soname,
+-                file_contents, file_length);
+-      /* IA64/X86-64 64bit libraries are always libc.so.6+.  */
+-      if (!ret)
+-    switch (elf_header->e_machine)
+-      {
+-      case EM_IA_64:
+-        *flag = FLAG_IA64_LIB64|FLAG_ELF_LIBC6;
+-        break;
+-      case EM_X86_64:
+-        *flag = FLAG_X8664_LIB64|FLAG_ELF_LIBC6;
+-        break;
+-      }
++  if (elf_header->e_ident[EI_CLASS] == ELFCLASS32)
++    ret = process_elf32_file (file_name, lib, flag, osversion, soname,
++                  file_contents, file_length);
++  else
++    ret = process_elf64_file (file_name, lib, flag, osversion, soname,
++                  file_contents, file_length);
+ 
+-      return ret;
+-    }
++  if (!ret && file_flag)
++    *flag = file_flag;
++
++  return ret;
+ }
+ 
+ #undef __ELF_NATIVE_CLASS
+--
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+So, instead of just accepting the class identifier (ELFCLASS32, which 
+includes most ARM binaries) and moving on, it now tests the machine and 
+*then* the class.  Unfortunately, the list of accepted machines does not 
+include ARM, so the "unknown machine 40" (40 being EM_ARM) is spat out and 
+the attempt to process is abandoned.
+
+*** Firstly, anyone else seeing this?  Searching doesn't turn up much.
+
+*** Second, is my train of thought above correct?
+
+*** Most importantly, any ideas on how to successfully use Buildroot on an 
+F18 machine for ARM (or any non-Intel arch, I suppose)?
+
+The act of typing the above line now makes me suspicious that I *am* the 
+only one seeing this so there's something wrong on my end, but I have 
+confirmed that this error *is* emitted with the top of current master 
+branch (a2d06655e5684c10f6a02cc065aaf481f56a8c64) though, using the 
+following defconfig:
+
+--
+BR2_arm=y
+BR2_arm1136jf_s_r0=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_PATH="$(HOME)/CodeSourcery/Sourcery_G++/libc/usr"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-none-linux-gnueabi"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+--
+
+
+Sorry for the long message, but I think everything mentioned is relevant 
+(except this line ;-).
