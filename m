@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 28 Jun 2013 10:41:05 -0300
-Subject: [Buildroot] [PATCH 08/19] enchant: define license
+Date: Fri, 28 Jun 2013 10:41:07 -0300
+Subject: [Buildroot] [PATCH 10/19] fbterm: define license
 In-Reply-To: <1372426876-2258-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1372426876-2258-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1372426876-2258-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1372426876-2258-10-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/enchant/enchant.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/fbterm/fbterm.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/enchant/enchant.mk b/package/enchant/enchant.mk
-index 50a8a6c..8a76c6b 100644
---- a/package/enchant/enchant.mk
-+++ b/package/enchant/enchant.mk
-@@ -9,5 +9,7 @@ ENCHANT_SOURCE = enchant-$(ENCHANT_VERSION).tar.gz
- ENCHANT_SITE = http://www.abisource.com/downloads/enchant/$(ENCHANT_VERSION)
- ENCHANT_INSTALL_STAGING = YES
- ENCHANT_DEPENDENCIES = libglib2 host-pkgconf
-+ENCHANT_LICENSE = LGPLv2.1+
-+ENCHANT_LICENSE_FILES = COPYING.LIB
+diff --git a/package/fbterm/fbterm.mk b/package/fbterm/fbterm.mk
+index 6fc4d7f..7e9d324 100644
+--- a/package/fbterm/fbterm.mk
++++ b/package/fbterm/fbterm.mk
+@@ -5,8 +5,9 @@
+ ################################################################################
+ 
+ FBTERM_VERSION = 1.7.0
+-FBTERM_SITE = http://fbterm.googlecode.com/files/
+-
++FBTERM_SITE = http://fbterm.googlecode.com/files
++FBTERM_LICENSE = GPLv2+
++FBTERM_LICENSE_FILES = COPYING
+ FBTERM_DEPENDENCIES = fontconfig liberation
  
  $(eval $(autotools-package))
 -- 
