@@ -1,170 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Jun 2013 14:37:17 +0200
-Subject: [Buildroot] Issue with Qt5 and PowerVR drivers
-Message-ID: <20130628143717.3e16fd9c@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 28 Jun 2013 14:46:49 +0200
+Subject: [Buildroot] [git commit] neard: bump version to 0.12
+Message-ID: <20130628124854.0C90E9B281@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Prabu,
+commit: http://git.buildroot.net/buildroot/commit/?id=a2d06655e5684c10f6a02cc065aaf481f56a8c64
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Over the last few days, I've worked on getting the PowerVR drivers to
-work with Qt4 and Qt5 to get OpenGL features. Thanks to your blog
-posts, patches and configuration examples, I managed to get Qt4 running
-quite well:
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/neard/neard.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-  http://free-electrons.com/~thomas/pub/opengl-beagle.mp4
-
-So except the artifact on the text that shows the frame rate, it works
-properly (if you have informations about this artifact, I'm
-interested). I've given my patches to Spenser Gilliland so that he can
-clean them up and submit them for integration in Buildroot.
-
-Then, I worked to do the same on Qt5. I've integrated your eglfswindow
-patch from
-https://github.com/prabindh/qt-configs/blob/master/qt5_1.0_Feb13/qeglfswindow.cpp.patch
-(note: I had to replace
-QPlatformIntegration::Capability::MultipleWindows by
-QPlatformIntegration::MultipleWindows to get things to build).
-
-The hellogl_es2 application runs, but it only shows the OpenGL part
-itself, and not the window around it, the menu bar, the status bar and
-so on. Is this expected? See the following video:
-
-  http://free-electrons.com/~thomas/pub/opengl-beagle-qt5.mp4
-
-Also, when I run an application like the analogclock, with Qt4 it takes
-only a portion of the screen size (the rest of the screen being green),
-while with Qt5 the analogclock application is scaled to take the entire
-screen. I have the feeling that the way windows/widgets are managed is
-quite different between Qt4 and Qt5.
-
-In Qt4, my understanding is that there is some special integration with
-the PowerVR drivers with the libpvrQWSWSEGL.so.1 library, which one
-references from /etc/powervr.ini. However, with Qt5, there is no such
-thing as far as I understand. Is this the reason why I don't have the
-hellogl_es2 application showing all the widgets?
-
-Note that the hellogl_es2 application displays a number of error
-messages when executed with Qt5:
-
-This plugin does not support propagateSizeHints()
-This plugin does not support setParent!
-This plugin does not support setParent!
-This plugin does not support setParent!
-This plugin does not support setParent!
-This plugin does not support setParent!
-This plugin does not support setParent!
-This plugin does not support setParent!
-This plugin does not support propagateSizeHints()
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QOpenGLContext::swapBuffers() called with non-opengl surface 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QOpenGLContext::swapBuffers() called with non-opengl surface 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QOpenGLContext::swapBuffers() called with non-opengl surface 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QOpenGLContext::swapBuffers() called with non-opengl surface 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QOpenGLContext::swapBuffers() called with non-opengl surface 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QOpenGLContext::swapBuffers() called with non-opengl surface 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QOpenGLContext::swapBuffers() called with non-opengl surface 
-QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
-QOpenGLContext::swapBuffers() called with non-opengl surface 
-
-For reference here is my Qt5 configure line:
-
-./configure -v -prefix /usr -hostprefix /home/test/outputs/xyz/host/usr -sysroot /home/test/outputs/xyz/host/usr/arm-buildroot-linux-gnueabi/sysroot -plugindir /usr/lib/qt/plugins -no-rpath -nomake examples -nomake demos -nomake tests -device buildroot -no-c++11 -optimized-qmake -no-kms -no-cups -no-nis -no-libudev -no-iconv -no-gstreamer -no-gtkstyle -system-zlib -system-pcre -no-pch -release -shared -largefile -opensource -confirm-license -gui -widgets --enable-linuxfb -no-directfb -no-xcb -opengl es2 -eglfs -openssl -no-fontconfig -no-gif -no-libjpeg -no-libpng -no-dbus -glib -no-icu
-
-And here is the list of features that Qt5 has enabled:
-
-qmake vars .......... styles += mac fusion windows QT_CFLAGS_GLIB = -pthread -I/home/test/outputs/xyz/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/glib-2.0 -I/home/test/outputs/xyz/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/glib-2.0/include   QT_L
-IBS_GLIB = -lgthread-2.0 -pthread  -lrt -L/home/test/outputs/xyz/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib -lglib-2.0   DEFINES += QT_NO_LIBUDEV DEFINES += QT_NO_XCB PRECOMPILED_DIR = .pch/release-shared OBJECTS_DIR = .obj/release-shared MOC_DIR = .moc/release
--shared RCC_DIR = .rcc/release-shared UI_DIR = .uic/release-shared sql-drivers =  sql-plugins =  sqlite qmake switches ......... 
-Build .................. libs
-Configuration ..........  cross_compile qpa largefile neon  minimal-config small-config medium-config large-config full-config evdev linuxfb accessibility egl eglfs opengl opengles2 shared qpa reduce_exports reduce_relocations clock-gettime clock-monotonic mremap getaddrin
-fo ipv6ifname getifaddrs inotify no-jpeg no-png no-gif freetype system-zlib glib openssl concurrent audio-backend v8 release
-Debug .................. no
-C++11 support .......... no
-pkg-config ............. yes
-Qt D-Bus module ........ no
-Qt Concurrent code ..... yes
-Qt GUI module .......... yes
-Qt Widgets module ...... yes
-JavaScriptCore JIT ..... To be decided by JavaScriptCore
-QML debugging .......... yes
-PCH support ............ no
-iWMMXt support ......... no
-NEON support ........... yes
-IPv6 ifname support .... yes
-getaddrinfo support .... yes
-getifaddrs support ..... yes
-Accessibility .......... yes
-NIS support ............ no
-CUPS support ........... no
-Iconv support .......... no
-Glib support ........... yes
-GStreamer support ...... no
-PulseAudio support ..... no
-Large File support ..... yes
-GIF support ............ no
-JPEG support ........... no
-PNG support ............ no
-zlib support ........... system
-Session management ..... auto
-libudev support ........ no
-Use system proxies ..... no
-OpenGL support ......... yes (OpenGL ES 2.x)
-OpenVG support ......... no
-XShape support ......... auto
-XVideo support ......... auto
-XSync support .......... auto
-Xinerama support ....... runtime
-Xcursor support ........ runtime
-Xfixes support ......... runtime
-Xrandr support ......... runtime
-Xi support ............. runtime
-Xi2 support ............ auto
-MIT-SHM support ........ auto
-FontConfig support ..... no
-XKB Support ............ auto
-GTK theme support ...... no
-SQLite support ......... plugin (qt)
-OpenSSL support ........ yes (run-time)
-Alsa support ........... no
-libICU support ......... no
-PCRE support ........... system
-Xcb support ............ no
-Xrender support ........ no
-EGLFS support .......... yes
-DirectFB support ....... no
-LinuxFB support ........ yes
-KMS support ............ no
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/neard/neard.mk b/package/neard/neard.mk
+index 0fa30ea..56730b2 100644
+--- a/package/neard/neard.mk
++++ b/package/neard/neard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NEARD_VERSION = 0.11
++NEARD_VERSION = 0.12
+ NEARD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/nfc
+ NEARD_LICENSE = GPLv2
+ NEARD_LICENSE_FILES = COPYING
