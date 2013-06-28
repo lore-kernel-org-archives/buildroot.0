@@ -1,24 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 28 Jun 2013 21:15:33 +0200
-Subject: [Buildroot] [PATCH 4/4] package/directfb: fixing typo in
-	DIRECTFB_CONF_OPT
-In-Reply-To: <1372445557-15546-4-git-send-email-c.schoenert@gmail.com>
- (Carsten Schoenert's message of "Fri, 28 Jun 2013 20:52:37 +0200")
-References: <1372445557-15546-1-git-send-email-c.schoenert@gmail.com>
- <1372445557-15546-4-git-send-email-c.schoenert@gmail.com>
-Message-ID: <87a9mayrl6.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Jun 2013 21:16:32 +0200
+Subject: [Buildroot] [PATCH] gutenprint: forcibly disable ijs-config
+In-Reply-To: <1372437994-28897-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 28 Jun 2013 13:46:34 -0300")
+References: <1372437994-28897-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8761wyyrjj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carsten" == Carsten Schoenert <c.schoenert@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Carsten> From: Carsten Schoenert <c.schoenert@gmail.com>
-
- Carsten> The DIRECTFB_CONF_OPT variable was missspelled for disabling
- Carsten> the X11 support.
+ Gustavo> ijs-config (ghostscript) is looked up in /usr/bin, if you've
+ Gustavo> got a host that has ghostscript with development headers
+ Gustavo> installed then the build fails when trying to link to the host
+ Gustavo> libijs.  Forcibly disable ghostscript support since we lack a
+ Gustavo> package.
 
 Committed, thanks.
 
