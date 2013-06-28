@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 28 Jun 2013 10:41:10 -0300
-Subject: [Buildroot] [PATCH 13/19] libcap-ng: define license
+Date: Fri, 28 Jun 2013 10:41:12 -0300
+Subject: [Buildroot] [PATCH 15/19] rdesktop: define license
 In-Reply-To: <1372426876-2258-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1372426876-2258-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1372426876-2258-13-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1372426876-2258-15-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,19 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libcap-ng/libcap-ng.mk | 2 ++
+ package/rdesktop/rdesktop.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
-index d1c4462..630089b 100644
---- a/package/libcap-ng/libcap-ng.mk
-+++ b/package/libcap-ng/libcap-ng.mk
-@@ -10,5 +10,7 @@ LIBCAP_NG_SOURCE = libcap-ng-$(LIBCAP_NG_VERSION).tar.gz
- LIBCAP_NG_INSTALL_STAGING = YES
- LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
- LIBCAP_NG_CONF_OPT = --without-python
-+LIBCAP_NG_LICENSE = GPLv2+ LGPLv2+
-+LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
+diff --git a/package/rdesktop/rdesktop.mk b/package/rdesktop/rdesktop.mk
+index fa7359c..75d0d98 100644
+--- a/package/rdesktop/rdesktop.mk
++++ b/package/rdesktop/rdesktop.mk
+@@ -9,5 +9,7 @@ RDESKTOP_SOURCE = rdesktop-$(RDESKTOP_VERSION).tar.gz
+ RDESKTOP_SITE = http://downloads.sourceforge.net/project/rdesktop/rdesktop/$(RDESKTOP_VERSION)
+ RDESKTOP_DEPENDENCIES = openssl xlib_libX11 xlib_libXt
+ RDESKTOP_CONF_OPT = --with-openssl=$(STAGING_DIR)/usr
++RDESKTOP_LICENSE = GPLv2+
++RDESKTOP_LICENSE_FILES = COPYING
  
  $(eval $(autotools-package))
 -- 
