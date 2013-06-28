@@ -1,176 +1,99 @@
-From: =?utf-8?b?Q2lhcsOhbg==?= Rehill <cir.vfi@gmail.com>
-Date: Fri, 28 Jun 2013 16:55:33 +0000 (UTC)
-Subject: [Buildroot] ldconfig - unknown machine 40
-Message-ID: <loom.20130628T172450-675@post.gmane.org>
+From: Sundareson, Prabindh <prabu@ti.com>
+Date: Fri, 28 Jun 2013 17:56:37 +0000
+Subject: [Buildroot] Issue with Qt5 and PowerVR drivers
+In-Reply-To: <20130628161533.2dea9fdf@skate>
+References: <20130628143717.3e16fd9c@skate>
+ <321768C95D21724485BCE784F1BE98473EB5E16F@DBDE04.ent.ti.com>,
+ <20130628161533.2dea9fdf@skate>
+Message-ID: <321768C95D21724485BCE784F1BE98473EB5E2E9@DBDE04.ent.ti.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-(Actual questions are below, on lines starting with "*** ", but some 
-explanation of context is required first.)
+I see. For 5.0.2 you may not need the eglfs patch at all I think.
 
-I'm cross-compiling on an x86_64 build machine for an ARMv6 target using an 
-external CodeSourcery toolchain.  The build machine is running Fedora 18, 
-with glibc 2.16.
-I notice that in the "target-finalize" stage, "ldconfig -r ..." is printing 
-out a lot of lines like:
+>> The 5.0.2 version, since 5.1 is still alpha (or beta?)
 
-    /lib:
-    /sbin/ldconfig: /lib/libnsl.so.1 is for unknown machine 40.
-    ...
-    /sbin/ldconfig: /lib/libthread_db-1.0.so is for unknown machine 40.
-    /sbin/ldconfig: /lib/libgcc_s.so.1 is for unknown machine 40.
-    ...
-    /sbin/ldconfig: /lib/ld-linux.so.3 is for unknown machine 40.
-    /sbin/ldconfig: /lib/libm.so.6 is for unknown machine 40.
-    ...
-    /sbin/ldconfig: /lib/libc.so.6 is for unknown machine 40.
 
-and so on.  You'll notice these are toolchain-provided libraries; the same 
-happens for all generated libraries too.
-These are _not_ just warnings; ldconfig ignores the library content, so 
-"output/target/etc/ld.so.cache" is left unpopulated, meaning that the 
-target device will not boot successfully due to missing libraries (the 
-libraries are on the file-system, just the ld.so.cache does not list them).
+nullws - null window system, consider it a full screen "window"
 
-The same build works on a Ubuntu machine with (e)glibc 2.15 and older 
-Fedora machines with earlier versions of glibc.
+>> Hum, what is nullws ?
 
-Since v2.15 appears to work and v2.16 does not, I grabbed the glibc git 
-repo and did some digging in the commits between the two releases.  The one 
-that grabbed my attention was commit 
-f1a77b01f4e3a80782171297120e77ab112ce85d, in particular the change in 
-"sysdeps/unix/sysv/linux/i386/readelflib.c" (equivalently the x86_64 
-version after this commit too).
 
-The patch is relatively small for this file so I'll include it here.
+What you are seeing is exactly what is expected. My own results were published in the video below:
 
+http://www.youtube.com/watch?v=Z9r8o2ToLRw
+
+>>  is what I am seeing the expected result with Qt5 as of today, or should I be able to see the widgets around the OpenGL Qt logo and bubbles?
+
+regards
+Prabindh
+
+________________________________________
+From: Thomas Petazzoni [thomas.petazzoni at free-electrons.com]
+Sent: Friday, June 28, 2013 7:45 PM
+To: Sundareson, Prabindh
+Cc: buildroot at uclibc.org
+Subject: Re: Issue with Qt5 and PowerVR drivers
+
+Hello Prabu,
+
+Thanks for your reply!
+
+On Fri, 28 Jun 2013 14:03:05 +0000, Sundareson, Prabindh wrote:
+
+> Very glad to see the video. What version of Qt5 was used ?
+
+The 5.0.2 version, since 5.1 is still alpha (or beta?), we haven't
+integrated it in Buildroot yet.
+
+> Qt5 is quite different from Qt4, and the default eglfs port with the
+> TI nullws package is a full-screen implementation, fully rendered
+> with OpenGL ES2 (ie, the full screen image is a quad texture, and
+> cursor is laid as a texture on top of it).
+
+Hum, what is nullws ?
+
+> However an application is free to generate other sized widgets and
+> display them (but there are some issues as I mentioned in the Qt bug
+> on eglfs). With other platform (non eglfs) implementations, and with
+> a window manager in place, you can get desktop windows. The goal with
+> Qt5 is to really get a touchscreen based single-screen device going
+> with eglfs. If a real desktop implementation is required, better to
+> go with the wayland platform plugin.
+
+I'm not interested by multiple applications, only one application has
+to run full-screen, but I'd like to see all the widgets drawn by this
+application, which is not the case here.
+
+> /etc/powervr.ini  is still used (that is referred by the GL driver
+> internally).  PVR2D based powervr plugin is not used in Qt5 as it
+> directly uses OpenGL ES2.  But as mentioned above, that is not the
+> reason why you get a full screen view.
+
+Yes, I still have a /etc/powervr.ini, except that it points to the
+default pvr2d implementation from the PowerVR drivers (i.e
+libpvrPVR2D_FRONTWSEGL.so) instead of pointing to the Qt4 specific QWS
+library.
+
+> The eglErrors in the context shown below are pending in my list of
+> TODOs, and are really indicative of some of the major issues in the
+> current rendering framework in Qt5 relating to eglfs. It is going to
+> take some effort to push all the patches upstream.
+
+Ok. But things are still not clear for me: is what I am seeing the
+expected result with Qt5 as of today, or should I be able to see the
+widgets around the OpenGL Qt logo and bubbles?
+
+Thanks,
+
+Thomas
 --
-diff --git a/sysdeps/unix/sysv/linux/i386/readelflib.c b/sysdeps/unix/sysv/
-linux/i386/readelflib.c
-index bdd5e70..fab830e 100644
---- a/sysdeps/unix/sysv/linux/i386/readelflib.c
-+++ b/sysdeps/unix/sysv/linux/i386/readelflib.c
-@@ -32,40 +32,52 @@ process_elf_file (const char *file_name, const char 
-*lib, int *flag,
-           size_t file_length)
- {
-   ElfW(Ehdr) *elf_header = (ElfW(Ehdr) *) file_contents;
--  int ret;
-+  int ret, file_flag = 0;
- 
--  if (elf_header->e_ident [EI_CLASS] == ELFCLASS32)
--    return process_elf32_file (file_name, lib, flag, osversion, soname,
--                   file_contents, file_length);
--  else
-+  switch (elf_header->e_machine)
-     {
--      switch (elf_header->e_machine)
-+    case EM_X86_64:
-+      if (elf_header->e_ident[EI_CLASS] == ELFCLASS64)
-+    /* X86-64 64bit libraries are always libc.so.6+.  */
-+    file_flag = FLAG_X8664_LIB64|FLAG_ELF_LIBC6;
-+      else
-+    /* X32 libraries are always libc.so.6+.  */
-+    file_flag = FLAG_X8664_LIBX32|FLAG_ELF_LIBC6;
-+      break;
-+#ifndef SKIP_EM_IA_64
-+    case EM_IA_64:
-+      if (elf_header->e_ident[EI_CLASS] == ELFCLASS64)
-     {
--    case EM_IA_64:
--    case EM_X86_64:
-+      /* IA64 64bit libraries are always libc.so.6+.  */
-+      file_flag = FLAG_IA64_LIB64|FLAG_ELF_LIBC6;
-       break;
--    default:
--      error (0, 0, _("%s is for unknown machine %d.\n"),
--         file_name, elf_header->e_machine);
--      return 1;
-     }
-+      goto failed;
-+#endif
-+    case EM_386:
-+      if (elf_header->e_ident[EI_CLASS] == ELFCLASS32)
-+    break;
-+      /* Fall through.  */
-+    default:
-+#ifndef SKIP_EM_IA_64
-+failed:
-+#endif
-+      error (0, 0, _("%s is for unknown machine %d.\n"),
-+         file_name, elf_header->e_machine);
-+      return 1;
-+    }
- 
--      ret = process_elf64_file (file_name, lib, flag, osversion, soname,
--                file_contents, file_length);
--      /* IA64/X86-64 64bit libraries are always libc.so.6+.  */
--      if (!ret)
--    switch (elf_header->e_machine)
--      {
--      case EM_IA_64:
--        *flag = FLAG_IA64_LIB64|FLAG_ELF_LIBC6;
--        break;
--      case EM_X86_64:
--        *flag = FLAG_X8664_LIB64|FLAG_ELF_LIBC6;
--        break;
--      }
-+  if (elf_header->e_ident[EI_CLASS] == ELFCLASS32)
-+    ret = process_elf32_file (file_name, lib, flag, osversion, soname,
-+                  file_contents, file_length);
-+  else
-+    ret = process_elf64_file (file_name, lib, flag, osversion, soname,
-+                  file_contents, file_length);
- 
--      return ret;
--    }
-+  if (!ret && file_flag)
-+    *flag = file_flag;
-+
-+  return ret;
- }
- 
- #undef __ELF_NATIVE_CLASS
---
-
-
-So, instead of just accepting the class identifier (ELFCLASS32, which 
-includes most ARM binaries) and moving on, it now tests the machine and 
-*then* the class.  Unfortunately, the list of accepted machines does not 
-include ARM, so the "unknown machine 40" (40 being EM_ARM) is spat out and 
-the attempt to process is abandoned.
-
-*** Firstly, anyone else seeing this?  Searching doesn't turn up much.
-
-*** Second, is my train of thought above correct?
-
-*** Most importantly, any ideas on how to successfully use Buildroot on an 
-F18 machine for ARM (or any non-Intel arch, I suppose)?
-
-The act of typing the above line now makes me suspicious that I *am* the 
-only one seeing this so there's something wrong on my end, but I have 
-confirmed that this error *is* emitted with the top of current master 
-branch (a2d06655e5684c10f6a02cc065aaf481f56a8c64) though, using the 
-following defconfig:
-
---
-BR2_arm=y
-BR2_arm1136jf_s_r0=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_PATH="$(HOME)/CodeSourcery/Sourcery_G++/libc/usr"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-none-linux-gnueabi"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-# BR2_TARGET_ROOTFS_TAR is not set
---
-
-
-Sorry for the long message, but I think everything mentioned is relevant 
-(except this line ;-).
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
