@@ -1,32 +1,42 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri, 28 Jun 2013 10:36:11 +0100
-Subject: [Buildroot] [PATCH] neard: bump version to 0.12
-Message-ID: <1372412171-3500-1-git-send-email-spdawson@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 28 Jun 2013 11:50:54 +0200
+Subject: [Buildroot] qt5: No SOURCES in qmake created Makefiles
+In-Reply-To: <51CC44C0.8020509@andin.de>
+References: <51BF198C.2040405@andin.de> <20130617162213.1fdc7d97@skate>
+ <CALo-6+jQ-qjc9HfFwTSUh1x6JQnTtH1XUOo0oX8f4nApVH=L7w@mail.gmail.com>
+ <51C07EB6.4080003@andin.de> <20130618190656.228e7658@skate>
+ <51CC44C0.8020509@andin.de>
+Message-ID: <20130628115054.745027af@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Dear Andreas Naumann,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/neard/neard.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, 27 Jun 2013 15:57:20 +0200, Andreas Naumann wrote:
 
-diff --git a/package/neard/neard.mk b/package/neard/neard.mk
-index 0fa30ea..56730b2 100644
---- a/package/neard/neard.mk
-+++ b/package/neard/neard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NEARD_VERSION = 0.11
-+NEARD_VERSION = 0.12
- NEARD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/nfc
- NEARD_LICENSE = GPLv2
- NEARD_LICENSE_FILES = COPYING
+> am a little sorry for the fuzz. This worked out to be a non-issue. Seems 
+> when using examples from another qt tree, even though absolutely clean 
+> within the directory, still build options from the folders above get 
+> picked up.
+> When I copied it away, in my case to /tmp/analogclock/, compiling with 
+> buildroots qmake from 5.0.2 works just fine.
+
+I do reproduce your problem now: when building an example from within
+the Qt source tree, it fails with "Nothing to do for target first",
+when copying the source code of the example outside of Qt source tree,
+the building goes on nicely.
+
+We still should fix this, examples are supposed to build from within
+the Qt source tree.
+
+Best regards,
+
+Thomas
 -- 
-1.8.1.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
