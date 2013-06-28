@@ -1,22 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 28 Jun 2013 14:47:03 +0200
-Subject: [Buildroot] [PATCH] neard: bump version to 0.12
-In-Reply-To: <1372412171-3500-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Fri, 28 Jun 2013 10:36:11 +0100")
-References: <1372412171-3500-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87vc4yz9ko.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Jun 2013 14:51:29 +0200
+Subject: [Buildroot] [PATCH] ramspeed/smp: new package
+In-Reply-To: <1372416026-7582-1-git-send-email-keguang.zhang@gmail.com>
+ (Kelvin Cheung's message of "Fri, 28 Jun 2013 18:40:26 +0800")
+References: <1372416026-7582-1-git-send-email-keguang.zhang@gmail.com>
+Message-ID: <87r4fmz9da.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+>>>>> "Kelvin" == Kelvin Cheung <keguang.zhang@gmail.com> writes:
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ Kelvin> Add new package: ramspeed/smp
+ Kelvin> RAMspeed/SMP, a cache and memory benchmarking tool
+ Kelvin> (for multiprocessor machines running UNIX-like operating systems)
 
-Committed, thanks.
+ Kelvin> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+
+This looks very similar to our existing ramspeed package. Is it the
+same/different? Do we need both?
 
 -- 
 Bye, Peter Korsgaard
