@@ -1,36 +1,23 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Jun 2013 12:41:11 +0200
-Subject: [Buildroot] [git commit] qt5quick1: ensure optional qt5webkit
-	support is enabled if present
-Message-ID: <20130628104414.853339B27F@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 28 Jun 2013 14:03:10 +0200
+Subject: [Buildroot] [PATCH] polarssl: fix download URL
+In-Reply-To: <1372366310-25901-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 27 Jun 2013 17:51:50 -0300")
+References: <1372366310-25901-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874nci1lz5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e3f983c851a0f2b13f47850276f5e4ce0f984403
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-qt5quick1 has optional qt5webkit support, so ensure it is built after
-qt5webkit if enabled.
+ Gustavo> Switch to a non-redirect download URL to fix:
+ Gustavo> http://autobuild.buildroot.net/results/ec3/ec340fffa6eebb18a0746097419359b44c557a90/
+ Gustavo> Thanks go to Paul Bakker for the quick response!
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt5/qt5quick1/qt5quick1.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+Committed, thanks.
 
-diff --git a/package/qt5/qt5quick1/qt5quick1.mk b/package/qt5/qt5quick1/qt5quick1.mk
-index fc37388..83e11c4 100644
---- a/package/qt5/qt5quick1/qt5quick1.mk
-+++ b/package/qt5/qt5quick1/qt5quick1.mk
-@@ -7,7 +7,8 @@
- QT5QUICK1_VERSION = $(QT5_VERSION)
- QT5QUICK1_SITE = $(QT5_SITE)
- QT5QUICK1_SOURCE = qtquick1-opensource-src-$(QT5QUICK1_VERSION).tar.xz
--QT5QUICK1_DEPENDENCIES = qt5base qt5xmlpatterns qt5script qt5declarative qt5jsbackend
-+QT5QUICK1_DEPENDENCIES = qt5base qt5xmlpatterns qt5script qt5declarative qt5jsbackend \
-+	$(if $(BR2_PACKAGE_QT5WEBKIT),qt5webkit)
- QT5QUICK1_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-- 
+Bye, Peter Korsgaard
