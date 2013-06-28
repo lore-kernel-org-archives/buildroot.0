@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Jun 2013 21:37:10 +0200
-Subject: [Buildroot] [git commit] findutils: define license
-Message-ID: <20130628195144.222B99B292@busybox.osuosl.org>
+Date: Fri, 28 Jun 2013 21:24:13 +0200
+Subject: [Buildroot] [git commit] curlftpfs: define license
+Message-ID: <20130628195141.4F5FD9B290@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=781771cf1e0f1599f648cc1cc2fb7d3f778535c7
+commit: http://git.buildroot.net/buildroot/commit/?id=054ff5c71ed78f70072ea7a2f2abe757b507b6af
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/findutils/findutils.mk |    2 ++
+ package/curlftpfs/curlftpfs.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/findutils/findutils.mk b/package/findutils/findutils.mk
-index 464f28b..d9b6050 100644
---- a/package/findutils/findutils.mk
-+++ b/package/findutils/findutils.mk
-@@ -6,6 +6,8 @@
- 
- FINDUTILS_VERSION = 4.4.2
- FINDUTILS_SITE = $(BR2_GNU_MIRROR)/findutils
-+FINDUTILS_LICENSE = GPLv3+
-+FINDUTILS_LICENSE_FILES = COPYING
- FINDUTILS_CONF_ENV = gl_cv_func_stdin=yes \
- 			gl_cv_func_wcwidth_works=yes
- 
+diff --git a/package/curlftpfs/curlftpfs.mk b/package/curlftpfs/curlftpfs.mk
+index 117e041..8ec3e4c 100644
+--- a/package/curlftpfs/curlftpfs.mk
++++ b/package/curlftpfs/curlftpfs.mk
+@@ -7,6 +7,8 @@
+ CURLFTPFS_VERSION = 0.9.2
+ CURLFTPFS_SITE = http://downloads.sourceforge.net/project/curlftpfs/curlftpfs/$(CURLFTPFS_VERSION)
+ CURLFTPFS_CONF_ENV = ac_cv_path__libcurl_config=$(STAGING_DIR)/usr/bin/curl-config
++CURLFTPFS_LICENSE = GPLv2
++CURLFTPFS_LICENSE_FILES = COPYING
+ CURLFTPFS_DEPENDENCIES = \
+ 	libglib2 libfuse openssl libcurl \
+ 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
