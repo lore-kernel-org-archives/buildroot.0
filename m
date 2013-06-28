@@ -1,131 +1,60 @@
-From: Ezequiel Garcia <elezegarcia@gmail.com>
-Date: Fri, 28 Jun 2013 11:32:24 -0300
-Subject: [Buildroot] [PATCH v2] jimtcl: New package
-Message-ID: <1372429944-2732-1-git-send-email-elezegarcia@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 28 Jun 2013 18:08:06 +0200
+Subject: [Buildroot] [PATCH 4/4] package/w_scan: new package
+In-Reply-To: <87ip0z332b.fsf@dell.be.48ers.dk>
+References: <cover.1372019882.git.yann.morin.1998@free.fr>
+ <cover.1372019882.git.yann.morin.1998@free.fr>
+ <a4416db33352923370280841140fb56daa85fd86.1372019882.git.yann.morin.1998@free.fr>
+ <87ip0z332b.fsf@dell.be.48ers.dk>
+Message-ID: <20130628160806.GA3165@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add new jimtcl package - a lightweight tclsh alternative.
-Useful for a lighter footprint usb_modeswitch installation.
-tclsh size is ~700kB for ARM compared to ~200kB for jimtcl.
+Peter, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Ezequiel Garcia <elezegarcia@gmail.com>
----
-Changes from v1:
+On 2013-06-27 18:56 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  Yann> ---
+>  Yann>  package/Config.in        |  1 +
+>  Yann>  package/w_scan/Config.in |  9 +++++++++
+>  Yann>  package/w_scan/w_scan.mk | 13 +++++++++++++
+>  Yann>  3 files changed, 23 insertions(+)
+>  Yann>  create mode 100644 package/w_scan/Config.in
+>  Yann>  create mode 100644 package/w_scan/w_scan.mk
+> 
+>  Yann> +###############################################################################
+>  Yann> +#
+>  Yann> +# w_scan
+>  Yann> +#
+>  Yann> +###############################################################################
+>  Yann> +
+>  Yann> +W_SCAN_VERSION              = 20130331
+>  Yann> +W_SCAN_SOURCE               = w_scan-$(W_SCAN_VERSION).tar.bz2
+>  Yann> +W_SCAN_SITE                 = http://wirbel.htpc-forum.de/w_scan
+>  Yann> +W_SCAN_LICENSE              = GPLv2+
+>  Yann> +W_SCAN_LICENSE_FILES        = COPYING
+> 
+> It uses iconv.h, so I changed it to pull in libiconv if the toolchain
+> doesn't have locale.
 
- * Use selected Debian mirror to get the package sources,
-   instead of Jim Tcl's Git repository. Suggested by Gustavo.
+OK, thanks. My test environment is glibc-based, so I did not catch this
+(and honestly, I was relying on the autobuilders to eventually catch it).
 
- * Use positive logic in ifeq's. Suggested by Gustavo.
+Thank you!
 
- * Build a shared library by default, and make this depend on
-   BR_PREFER_STATIC_LIB option.
+Regards,
+Yann E. MORIN.
 
- package/Config.in        |  1 +
- package/jimtcl/Config.in |  9 +++++++
- package/jimtcl/jimtcl.mk | 62 ++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 72 insertions(+)
- create mode 100644 package/jimtcl/Config.in
- create mode 100644 package/jimtcl/jimtcl.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 0eb6a9c..b62f90a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -307,6 +307,7 @@ source "package/erlang/Config.in"
- source "package/enscript/Config.in"
- source "package/haserl/Config.in"
- source "package/jamvm/Config.in"
-+source "package/jimtcl/Config.in"
- source "package/lua/Config.in"
- source "package/luajit/Config.in"
- if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT
-diff --git a/package/jimtcl/Config.in b/package/jimtcl/Config.in
-new file mode 100644
-index 0000000..c7a12f2
---- /dev/null
-+++ b/package/jimtcl/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_JIMTCL
-+	bool "jimtcl"
-+	help
-+	  Jim Tcl is a small footprint reimplementation of the Tcl scripting language.
-+	  The core language engine is compatible with Tcl 8.5+, while implementing
-+	  a significant subset of the Tcl 8.6 command set, plus additional features
-+	  available only in Jim Tcl.
-+
-+	  http://jim.tcl.tk
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-new file mode 100644
-index 0000000..97c8a42
---- /dev/null
-+++ b/package/jimtcl/jimtcl.mk
-@@ -0,0 +1,62 @@
-+#############################################################
-+#
-+# jimtcl
-+#
-+#############################################################
-+
-+JIMTCL_VERSION = 0.73
-+JIMTCL_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/jimtcl
-+JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.bz2
-+JIMTCL_INSTALL_STAGING = YES
-+
-+JIMTCL_HEADERS_TO_INSTALL = \
-+	jim.h \
-+	jim-eventloop.h \
-+	jim-signal.h \
-+	jim-subcmd.h \
-+	jim-win32compat.h \
-+	jim-config.h \
-+
-+ifeq ($(BR2_PACKAGE_TCL),)
-+define JIMTCL_LINK_TCLSH
-+	ln -sf jimsh $(TARGET_DIR)/usr/bin/tclsh
-+endef
-+endif
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+JIMTCL_SHARED =
-+JIMTCL_LIB = a
-+JIMTCL_INSTALL_LIB =
-+else
-+JIMTCL_SHARED = --shared
-+JIMTCL_LIB = so
-+JIMTCL_INSTALL_LIB = $(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
-+		     $(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
-+endif
-+
-+define JIMTCL_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		./configure --prefix=/usr \
-+		$(JIMTCL_SHARED) \
-+	)
-+endef
-+
-+define JIMTCL_BUILD_CMDS
-+	$(MAKE) -C $(@D)
-+endef
-+
-+define JIMTCL_INSTALL_STAGING_CMDS
-+	for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
-+		cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ ; \
-+	done; \
-+	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
-+endef
-+
-+define JIMTCL_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D $(@D)/jimsh $(TARGET_DIR)/usr/bin/jimsh
-+	$(JIMTCL_INSTALL_LIB)
-+	$(JIMTCL_LINK_TCLSH)
-+endef
-+
-+$(eval $(generic-package))
 -- 
-1.8.1.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
