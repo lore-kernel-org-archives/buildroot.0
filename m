@@ -1,41 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Jun 2013 11:35:07 +0200
-Subject: [Buildroot] [git commit] linux: bump 3.9.x stable version
-Message-ID: <20130628093716.028D79A6E7@busybox.osuosl.org>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 28 Jun 2013 10:36:11 +0100
+Subject: [Buildroot] [PATCH] neard: bump version to 0.12
+Message-ID: <1372412171-3500-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5cdb43203edef7211b9651a6ff531fc45f8dbe95
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/neard/neard.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 0912965..f58e714 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/neard/neard.mk b/package/neard/neard.mk
+index 0fa30ea..56730b2 100644
+--- a/package/neard/neard.mk
++++ b/package/neard/neard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.9.7"
-+	bool "3.9.8"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.9.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.9.8" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-NEARD_VERSION = 0.11
++NEARD_VERSION = 0.12
+ NEARD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/nfc
+ NEARD_LICENSE = GPLv2
+ NEARD_LICENSE_FILES = COPYING
+-- 
+1.8.1.2
