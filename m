@@ -1,115 +1,170 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Jun 2013 14:34:18 +0200
-Subject: [Buildroot] [git commit] qt5: add _LICENSE_FILES where applicable
-Message-ID: <20130628123728.2E0BA9B281@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 28 Jun 2013 14:37:17 +0200
+Subject: [Buildroot] Issue with Qt5 and PowerVR drivers
+Message-ID: <20130628143717.3e16fd9c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6488d59a884ff75623f6eec75708980675336fd3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Prabu,
 
-Some (but not all) of the qt5 module tarballs contain license files, so
-let's reference them.
+Over the last few days, I've worked on getting the PowerVR drivers to
+work with Qt4 and Qt5 to get OpenGL features. Thanks to your blog
+posts, patches and configuration examples, I managed to get Qt4 running
+quite well:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt5/qt5declarative/qt5declarative.mk   |    4 +---
- package/qt5/qt5imageformats/qt5imageformats.mk |    3 +--
- package/qt5/qt5jsbackend/qt5jsbackend.mk       |    4 +---
- package/qt5/qt5quick1/qt5quick1.mk             |    4 +---
- package/qt5/qt5script/qt5script.mk             |    4 +---
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk   |    4 +---
- 6 files changed, 6 insertions(+), 17 deletions(-)
+  http://free-electrons.com/~thomas/pub/opengl-beagle.mp4
 
-diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
-index 83810ad..603c0e7 100644
---- a/package/qt5/qt5declarative/qt5declarative.mk
-+++ b/package/qt5/qt5declarative/qt5declarative.mk
-@@ -13,9 +13,7 @@ QT5DECLARATIVE_INSTALL_STAGING = YES
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
- QT5DECLARATIVE_CONFIGURE_OPTS += -opensource -confirm-license
- QT5DECLARATIVE_LICENSE = LGPLv2.1 or GPLv3.0
--# Here we would like to get license files from qt5base, but qt5base
--# may not be extracted at the time we get the legal-info for
--# qt5script.
-+QT5DECLARATIVE_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
- else
- QT5DECLARATIVE_LICENSE = Commercial license
- QT5DECLARATIVE_REDISTRIBUTE = NO
-diff --git a/package/qt5/qt5imageformats/qt5imageformats.mk b/package/qt5/qt5imageformats/qt5imageformats.mk
-index 8aa412d..10d744b 100644
---- a/package/qt5/qt5imageformats/qt5imageformats.mk
-+++ b/package/qt5/qt5imageformats/qt5imageformats.mk
-@@ -13,8 +13,7 @@ QT5IMAGEFORMATS_INSTALL_STAGING = YES
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
- QT5IMAGEFORMATS_CONFIGURE_OPTS += -opensource -confirm-license
- QT5IMAGEFORMATS_LICENSE = LGPLv2.1 or GPLv3.0
--# Here we would like to get license files from qt5base, but qt5base
--# may not be extracted at the time we get the legal-info for qt5svg.
-+QT5IMAGEFORMATS_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
- else
- QT5IMAGEFORMATS_LICENSE = Commercial license
- QT5IMAGEFORMATS_REDISTRIBUTE = NO
-diff --git a/package/qt5/qt5jsbackend/qt5jsbackend.mk b/package/qt5/qt5jsbackend/qt5jsbackend.mk
-index 9134579..d065f0b 100644
---- a/package/qt5/qt5jsbackend/qt5jsbackend.mk
-+++ b/package/qt5/qt5jsbackend/qt5jsbackend.mk
-@@ -13,9 +13,7 @@ QT5JSBACKEND_INSTALL_STAGING = YES
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
- QT5JSBACKEND_CONFIGURE_OPTS += -opensource -confirm-license
- QT5JSBACKEND_LICENSE = LGPLv2.1 or GPLv3.0
--# Here we would like to get license files from qt5base, but qt5base
--# may not be extracted at the time we get the legal-info for
--# qt5script.
-+QT5JSBACKEND_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
- else
- QT5JSBACKEND_LICENSE = Commercial license
- QT5JSBACKEND_REDISTRIBUTE = NO
-diff --git a/package/qt5/qt5quick1/qt5quick1.mk b/package/qt5/qt5quick1/qt5quick1.mk
-index 83e11c4..9bd36db 100644
---- a/package/qt5/qt5quick1/qt5quick1.mk
-+++ b/package/qt5/qt5quick1/qt5quick1.mk
-@@ -14,9 +14,7 @@ QT5QUICK1_INSTALL_STAGING = YES
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
- QT5QUICK1_CONFIGURE_OPTS += -opensource -confirm-license
- QT5QUICK1_LICENSE = LGPLv2.1 or GPLv3.0
--# Here we would like to get license files from qt5base, but qt5base
--# may not be extracted at the time we get the legal-info for
--# qt5script.
-+QT5QUICK1_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
- else
- QT5QUICK1_LICENSE = Commercial license
- QT5QUICK1_REDISTRIBUTE = NO
-diff --git a/package/qt5/qt5script/qt5script.mk b/package/qt5/qt5script/qt5script.mk
-index 8687f49..e436474 100644
---- a/package/qt5/qt5script/qt5script.mk
-+++ b/package/qt5/qt5script/qt5script.mk
-@@ -13,9 +13,7 @@ QT5SCRIPT_INSTALL_STAGING = YES
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
- QT5SCRIPT_CONFIGURE_OPTS += -opensource -confirm-license
- QT5SCRIPT_LICENSE = LGPLv2.1 or GPLv3.0
--# Here we would like to get license files from qt5base, but qt5base
--# may not be extracted at the time we get the legal-info for
--# qt5script.
-+QT5SCRIPT_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
- else
- QT5SCRIPT_LICENSE = Commercial license
- QT5SCRIPT_REDISTRIBUTE = NO
-diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-index f92f853..322fd70 100644
---- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-+++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-@@ -13,9 +13,7 @@ QT5XMLPATTERNS_INSTALL_STAGING = YES
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
- QT5XMLPATTERNS_CONFIGURE_OPTS += -opensource -confirm-license
- QT5XMLPATTERNS_LICENSE = LGPLv2.1 or GPLv3.0
--# Here we would like to get license files from qt5base, but qt5base
--# may not be extracted at the time we get the legal-info for
--# qt5script.
-+QT5XMLPATTERNS_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
- else
- QT5XMLPATTERNS_LICENSE = Commercial license
- QT5XMLPATTERNS_REDISTRIBUTE = NO
+So except the artifact on the text that shows the frame rate, it works
+properly (if you have informations about this artifact, I'm
+interested). I've given my patches to Spenser Gilliland so that he can
+clean them up and submit them for integration in Buildroot.
+
+Then, I worked to do the same on Qt5. I've integrated your eglfswindow
+patch from
+https://github.com/prabindh/qt-configs/blob/master/qt5_1.0_Feb13/qeglfswindow.cpp.patch
+(note: I had to replace
+QPlatformIntegration::Capability::MultipleWindows by
+QPlatformIntegration::MultipleWindows to get things to build).
+
+The hellogl_es2 application runs, but it only shows the OpenGL part
+itself, and not the window around it, the menu bar, the status bar and
+so on. Is this expected? See the following video:
+
+  http://free-electrons.com/~thomas/pub/opengl-beagle-qt5.mp4
+
+Also, when I run an application like the analogclock, with Qt4 it takes
+only a portion of the screen size (the rest of the screen being green),
+while with Qt5 the analogclock application is scaled to take the entire
+screen. I have the feeling that the way windows/widgets are managed is
+quite different between Qt4 and Qt5.
+
+In Qt4, my understanding is that there is some special integration with
+the PowerVR drivers with the libpvrQWSWSEGL.so.1 library, which one
+references from /etc/powervr.ini. However, with Qt5, there is no such
+thing as far as I understand. Is this the reason why I don't have the
+hellogl_es2 application showing all the widgets?
+
+Note that the hellogl_es2 application displays a number of error
+messages when executed with Qt5:
+
+This plugin does not support propagateSizeHints()
+This plugin does not support setParent!
+This plugin does not support setParent!
+This plugin does not support setParent!
+This plugin does not support setParent!
+This plugin does not support setParent!
+This plugin does not support setParent!
+This plugin does not support setParent!
+This plugin does not support propagateSizeHints()
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QOpenGLContext::swapBuffers() called with non-opengl surface 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QOpenGLContext::swapBuffers() called with non-opengl surface 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QOpenGLContext::swapBuffers() called with non-opengl surface 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QOpenGLContext::swapBuffers() called with non-opengl surface 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QOpenGLContext::swapBuffers() called with non-opengl surface 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QOpenGLContext::swapBuffers() called with non-opengl surface 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QOpenGLContext::swapBuffers() called with non-opengl surface 
+QEGLPlatformContext::makeCurrent: eglError: 3009, this: 0x3f7e8 
+QOpenGLContext::swapBuffers() called with non-opengl surface 
+
+For reference here is my Qt5 configure line:
+
+./configure -v -prefix /usr -hostprefix /home/test/outputs/xyz/host/usr -sysroot /home/test/outputs/xyz/host/usr/arm-buildroot-linux-gnueabi/sysroot -plugindir /usr/lib/qt/plugins -no-rpath -nomake examples -nomake demos -nomake tests -device buildroot -no-c++11 -optimized-qmake -no-kms -no-cups -no-nis -no-libudev -no-iconv -no-gstreamer -no-gtkstyle -system-zlib -system-pcre -no-pch -release -shared -largefile -opensource -confirm-license -gui -widgets --enable-linuxfb -no-directfb -no-xcb -opengl es2 -eglfs -openssl -no-fontconfig -no-gif -no-libjpeg -no-libpng -no-dbus -glib -no-icu
+
+And here is the list of features that Qt5 has enabled:
+
+qmake vars .......... styles += mac fusion windows QT_CFLAGS_GLIB = -pthread -I/home/test/outputs/xyz/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/glib-2.0 -I/home/test/outputs/xyz/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/glib-2.0/include   QT_L
+IBS_GLIB = -lgthread-2.0 -pthread  -lrt -L/home/test/outputs/xyz/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib -lglib-2.0   DEFINES += QT_NO_LIBUDEV DEFINES += QT_NO_XCB PRECOMPILED_DIR = .pch/release-shared OBJECTS_DIR = .obj/release-shared MOC_DIR = .moc/release
+-shared RCC_DIR = .rcc/release-shared UI_DIR = .uic/release-shared sql-drivers =  sql-plugins =  sqlite qmake switches ......... 
+Build .................. libs
+Configuration ..........  cross_compile qpa largefile neon  minimal-config small-config medium-config large-config full-config evdev linuxfb accessibility egl eglfs opengl opengles2 shared qpa reduce_exports reduce_relocations clock-gettime clock-monotonic mremap getaddrin
+fo ipv6ifname getifaddrs inotify no-jpeg no-png no-gif freetype system-zlib glib openssl concurrent audio-backend v8 release
+Debug .................. no
+C++11 support .......... no
+pkg-config ............. yes
+Qt D-Bus module ........ no
+Qt Concurrent code ..... yes
+Qt GUI module .......... yes
+Qt Widgets module ...... yes
+JavaScriptCore JIT ..... To be decided by JavaScriptCore
+QML debugging .......... yes
+PCH support ............ no
+iWMMXt support ......... no
+NEON support ........... yes
+IPv6 ifname support .... yes
+getaddrinfo support .... yes
+getifaddrs support ..... yes
+Accessibility .......... yes
+NIS support ............ no
+CUPS support ........... no
+Iconv support .......... no
+Glib support ........... yes
+GStreamer support ...... no
+PulseAudio support ..... no
+Large File support ..... yes
+GIF support ............ no
+JPEG support ........... no
+PNG support ............ no
+zlib support ........... system
+Session management ..... auto
+libudev support ........ no
+Use system proxies ..... no
+OpenGL support ......... yes (OpenGL ES 2.x)
+OpenVG support ......... no
+XShape support ......... auto
+XVideo support ......... auto
+XSync support .......... auto
+Xinerama support ....... runtime
+Xcursor support ........ runtime
+Xfixes support ......... runtime
+Xrandr support ......... runtime
+Xi support ............. runtime
+Xi2 support ............ auto
+MIT-SHM support ........ auto
+FontConfig support ..... no
+XKB Support ............ auto
+GTK theme support ...... no
+SQLite support ......... plugin (qt)
+OpenSSL support ........ yes (run-time)
+Alsa support ........... no
+libICU support ......... no
+PCRE support ........... system
+Xcb support ............ no
+Xrender support ........ no
+EGLFS support .......... yes
+DirectFB support ....... no
+LinuxFB support ........ yes
+KMS support ............ no
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
