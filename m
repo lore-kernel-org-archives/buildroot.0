@@ -1,32 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Jun 2013 21:27:36 +0200
-Subject: [Buildroot] [git commit] dstat: define license
-Message-ID: <20130628195142.1D9169B291@busybox.osuosl.org>
+Date: Fri, 28 Jun 2013 21:15:13 +0200
+Subject: [Buildroot] [git commit] package/directfb: fixing typo in
+	DIRECTFB_CONF_OPT
+Message-ID: <20130628195139.1C8D29A838@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=db8b9f3c0853fe0020f79facab401560a2aa2235
+commit: http://git.buildroot.net/buildroot/commit/?id=2699d4f315247dd395f40397e9a0e3b5d19180c7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The DIRECTFB_CONF_OPT variable was missspelled for disabling the X11
+support.
+
+Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dstat/dstat.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/directfb/directfb.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/dstat/dstat.mk b/package/dstat/dstat.mk
-index de0f0a8..e71b0cc 100644
---- a/package/dstat/dstat.mk
-+++ b/package/dstat/dstat.mk
-@@ -7,6 +7,8 @@
- DSTAT_VERSION = 0.7.2
- DSTAT_SOURCE = dstat-$(DSTAT_VERSION).tar.bz2
- DSTAT_SITE = http://dag.wieers.com/home-made/dstat
-+DSTAT_LICENSE = GPLv2
-+DSTAT_LICENSE_FILES = COPYING
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 46f1eb9..c065eef 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -44,7 +44,7 @@ endif
+ ifeq ($(BR2_PACKAGE_XSERVER),y)
+ DIRECTFB_CONF_OPT += --enable-x11
+ else
+-DIRECTFB_CONF_OPT += -disable-x11
++DIRECTFB_CONF_OPT += --disable-x11
+ endif
  
- define DSTAT_INSTALL_TARGET_CMDS
-        $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ ifeq ($(BR2_PACKAGE_DIRECTFB_UNIQUE),y)
