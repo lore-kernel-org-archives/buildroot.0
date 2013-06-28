@@ -1,32 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Jun 2013 14:46:49 +0200
-Subject: [Buildroot] [git commit] neard: bump version to 0.12
-Message-ID: <20130628124854.0C90E9B281@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 28 Jun 2013 14:47:03 +0200
+Subject: [Buildroot] [PATCH] neard: bump version to 0.12
+In-Reply-To: <1372412171-3500-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Fri, 28 Jun 2013 10:36:11 +0100")
+References: <1372412171-3500-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87vc4yz9ko.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2d06655e5684c10f6a02cc065aaf481f56a8c64
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/neard/neard.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
-diff --git a/package/neard/neard.mk b/package/neard/neard.mk
-index 0fa30ea..56730b2 100644
---- a/package/neard/neard.mk
-+++ b/package/neard/neard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NEARD_VERSION = 0.11
-+NEARD_VERSION = 0.12
- NEARD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/nfc
- NEARD_LICENSE = GPLv2
- NEARD_LICENSE_FILES = COPYING
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
