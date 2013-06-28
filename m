@@ -1,70 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Jun 2013 16:15:33 +0200
-Subject: [Buildroot] Issue with Qt5 and PowerVR drivers
-In-Reply-To: <321768C95D21724485BCE784F1BE98473EB5E16F@DBDE04.ent.ti.com>
-References: <20130628143717.3e16fd9c@skate>
- <321768C95D21724485BCE784F1BE98473EB5E16F@DBDE04.ent.ti.com>
-Message-ID: <20130628161533.2dea9fdf@skate>
+From: Ezequiel Garcia <elezegarcia@gmail.com>
+Date: Fri, 28 Jun 2013 11:32:24 -0300
+Subject: [Buildroot] [PATCH v2] jimtcl: New package
+Message-ID: <1372429944-2732-1-git-send-email-elezegarcia@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Prabu,
+Add new jimtcl package - a lightweight tclsh alternative.
+Useful for a lighter footprint usb_modeswitch installation.
+tclsh size is ~700kB for ARM compared to ~200kB for jimtcl.
 
-Thanks for your reply!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Ezequiel Garcia <elezegarcia@gmail.com>
+---
+Changes from v1:
 
-On Fri, 28 Jun 2013 14:03:05 +0000, Sundareson, Prabindh wrote:
+ * Use selected Debian mirror to get the package sources,
+   instead of Jim Tcl's Git repository. Suggested by Gustavo.
 
-> Very glad to see the video. What version of Qt5 was used ?
+ * Use positive logic in ifeq's. Suggested by Gustavo.
 
-The 5.0.2 version, since 5.1 is still alpha (or beta?), we haven't
-integrated it in Buildroot yet.
+ * Build a shared library by default, and make this depend on
+   BR_PREFER_STATIC_LIB option.
 
-> Qt5 is quite different from Qt4, and the default eglfs port with the
-> TI nullws package is a full-screen implementation, fully rendered
-> with OpenGL ES2 (ie, the full screen image is a quad texture, and
-> cursor is laid as a texture on top of it).
+ package/Config.in        |  1 +
+ package/jimtcl/Config.in |  9 +++++++
+ package/jimtcl/jimtcl.mk | 62 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 72 insertions(+)
+ create mode 100644 package/jimtcl/Config.in
+ create mode 100644 package/jimtcl/jimtcl.mk
 
-Hum, what is nullws ?
-
-> However an application is free to generate other sized widgets and
-> display them (but there are some issues as I mentioned in the Qt bug
-> on eglfs). With other platform (non eglfs) implementations, and with
-> a window manager in place, you can get desktop windows. The goal with
-> Qt5 is to really get a touchscreen based single-screen device going
-> with eglfs. If a real desktop implementation is required, better to
-> go with the wayland platform plugin.
-
-I'm not interested by multiple applications, only one application has
-to run full-screen, but I'd like to see all the widgets drawn by this
-application, which is not the case here.
-
-> /etc/powervr.ini  is still used (that is referred by the GL driver
-> internally).  PVR2D based powervr plugin is not used in Qt5 as it
-> directly uses OpenGL ES2.  But as mentioned above, that is not the
-> reason why you get a full screen view.
-
-Yes, I still have a /etc/powervr.ini, except that it points to the
-default pvr2d implementation from the PowerVR drivers (i.e
-libpvrPVR2D_FRONTWSEGL.so) instead of pointing to the Qt4 specific QWS
-library.
-
-> The eglErrors in the context shown below are pending in my list of
-> TODOs, and are really indicative of some of the major issues in the
-> current rendering framework in Qt5 relating to eglfs. It is going to
-> take some effort to push all the patches upstream.
-
-Ok. But things are still not clear for me: is what I am seeing the
-expected result with Qt5 as of today, or should I be able to see the
-widgets around the OpenGL Qt logo and bubbles?
-
-Thanks,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 0eb6a9c..b62f90a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -307,6 +307,7 @@ source "package/erlang/Config.in"
+ source "package/enscript/Config.in"
+ source "package/haserl/Config.in"
+ source "package/jamvm/Config.in"
++source "package/jimtcl/Config.in"
+ source "package/lua/Config.in"
+ source "package/luajit/Config.in"
+ if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT
+diff --git a/package/jimtcl/Config.in b/package/jimtcl/Config.in
+new file mode 100644
+index 0000000..c7a12f2
+--- /dev/null
++++ b/package/jimtcl/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_JIMTCL
++	bool "jimtcl"
++	help
++	  Jim Tcl is a small footprint reimplementation of the Tcl scripting language.
++	  The core language engine is compatible with Tcl 8.5+, while implementing
++	  a significant subset of the Tcl 8.6 command set, plus additional features
++	  available only in Jim Tcl.
++
++	  http://jim.tcl.tk
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+new file mode 100644
+index 0000000..97c8a42
+--- /dev/null
++++ b/package/jimtcl/jimtcl.mk
+@@ -0,0 +1,62 @@
++#############################################################
++#
++# jimtcl
++#
++#############################################################
++
++JIMTCL_VERSION = 0.73
++JIMTCL_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/jimtcl
++JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.bz2
++JIMTCL_INSTALL_STAGING = YES
++
++JIMTCL_HEADERS_TO_INSTALL = \
++	jim.h \
++	jim-eventloop.h \
++	jim-signal.h \
++	jim-subcmd.h \
++	jim-win32compat.h \
++	jim-config.h \
++
++ifeq ($(BR2_PACKAGE_TCL),)
++define JIMTCL_LINK_TCLSH
++	ln -sf jimsh $(TARGET_DIR)/usr/bin/tclsh
++endef
++endif
++
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++JIMTCL_SHARED =
++JIMTCL_LIB = a
++JIMTCL_INSTALL_LIB =
++else
++JIMTCL_SHARED = --shared
++JIMTCL_LIB = so
++JIMTCL_INSTALL_LIB = $(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
++		     $(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
++endif
++
++define JIMTCL_CONFIGURE_CMDS
++	(cd $(@D); \
++		$(TARGET_CONFIGURE_OPTS) \
++		./configure --prefix=/usr \
++		$(JIMTCL_SHARED) \
++	)
++endef
++
++define JIMTCL_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define JIMTCL_INSTALL_STAGING_CMDS
++	for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
++		cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ ; \
++	done; \
++	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
++endef
++
++define JIMTCL_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/jimsh $(TARGET_DIR)/usr/bin/jimsh
++	$(JIMTCL_INSTALL_LIB)
++	$(JIMTCL_LINK_TCLSH)
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.5
