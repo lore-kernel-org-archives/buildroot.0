@@ -1,59 +1,27 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Sat, 29 Jun 2013 13:10:23 +0100
-Subject: [Buildroot] [PATCH] libtpl: bump version
-Message-ID: <1372507823-12410-1-git-send-email-spdawson@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 29 Jun 2013 09:31:21 -0300
+Subject: [Buildroot] [PATCH] dhcpcd: unavailable for bfin and fix
+ another bug
+In-Reply-To: <20130629125530.412858a5@skate>
+References: <1372463785-29537-1-git-send-email-gustavo@zacarias.com.ar>
+ <20130629104251.4697be00@skate> <51CEBC51.9030601@zacarias.com.ar>
+ <20130629125530.412858a5@skate>
+Message-ID: <51CED399.8050408@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+On 06/29/2013 07:55 AM, Thomas Petazzoni wrote:
 
-Note that libtpl has moved from sourceforge to github, and there is no longer
-a version-specific tarball available.
+>> (all defaults except +IPV6 for dhcpcd).
+>> And 2012R1-RC2 fails to download properly (2012R2-RC2 too for that
+>> matter but i've got a local copy).
+>> I kind of doubt that 2012R1 being older has getifaddrs enabled though.
+> 
+> Yes, one recent patch to the download infrastructure broke this. I
+> should sent a different e-mail with this.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/libtpl/Config.in |  2 +-
- package/libtpl/libtpl.mk | 13 ++++++++++---
- 2 files changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/package/libtpl/Config.in b/package/libtpl/Config.in
-index a2c2c2d..0286e03 100644
---- a/package/libtpl/Config.in
-+++ b/package/libtpl/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_LIBTPL
- 	help
- 	  Easily store and retrieve binary data in C
- 
--	  http://tpl.sourceforge.net/
-+	  http://troydhanson.github.io/tpl/
-diff --git a/package/libtpl/libtpl.mk b/package/libtpl/libtpl.mk
-index 0016c31..478b298 100644
---- a/package/libtpl/libtpl.mk
-+++ b/package/libtpl/libtpl.mk
-@@ -4,11 +4,18 @@
- #
- ################################################################################
- 
--LIBTPL_VERSION = 1.5
--LIBTPL_SOURCE = libtpl-$(LIBTPL_VERSION).tar.bz2
--LIBTPL_SITE = http://downloads.sourceforge.net/project/tpl/tpl/libtpl-$(LIBTPL_VERSION)
-+LIBTPL_VERSION = 445b4e9f236a48e274eaace31acf56d700da142a
-+LIBTPL_SITE = http://github.com/troydhanson/tpl/tarball/$(LIBTPL_VERSION)
- LIBTPL_INSTALL_STAGING = YES
- LIBTPL_LICENSE = BSD-like
- LIBTPL_LICENSE_FILES = LICENSE
- 
-+LIBTPL_AUTORECONF = YES
-+LIBTPL_AUTORECONF_OPT = --install --force
-+
-+define LIBTPL_CREATE_MISSING_FILES
-+	touch $(@D)/NEWS $(@D)/AUTHORS $(@D)/ChangeLog $(@D)/COPYING
-+endef
-+LIBTPL_POST_EXTRACT_HOOKS += LIBTPL_CREATE_MISSING_FILES
-+
- $(eval $(autotools-package))
--- 
-1.8.1.2
+Downloaded manually and as i supposed, it lacks getifaddrs too.
+Regards.
