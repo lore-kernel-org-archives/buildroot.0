@@ -1,37 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 29 Jun 2013 21:03:34 +0200
-Subject: [Buildroot] [git commit] dbus: ensure directory exists before
-	installing symlink
-Message-ID: <20130629190817.A00489B2CF@busybox.osuosl.org>
+Date: Sat, 29 Jun 2013 21:05:15 +0200
+Subject: [Buildroot] [git commit] imagemagick: bump to version 6.8.6-2
+Message-ID: <20130629190818.A3B929B2CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0cf8595f2996b46143c1a95d3bd6f4e131a94b94
+commit: http://git.buildroot.net/buildroot/commit/?id=a8db50a7ab75ddb9b90195fbfaa3c46bd6673fd1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If you use a custom target skeleton with no /var/lib directory,
-then the symlink installation in dbus.mk will fail.  This patch
-fixes this issue by creating /var/lib before creating a symlink
-there.
-
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dbus/dbus.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/imagemagick/imagemagick.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index a855f05..57274a0 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -66,6 +66,7 @@ DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_REMOVE_DEVFILES
- endif
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index e2259e6..12b9f4b 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- define DBUS_INSTALL_TARGET_FIXUP
-+	mkdir -p $(TARGET_DIR)/var/lib
- 	rm -rf $(TARGET_DIR)/var/lib/dbus
- 	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
- 	$(INSTALL) -m 0755 -D package/dbus/S30dbus $(TARGET_DIR)/etc/init.d/S30dbus
+-IMAGEMAGICK_MAJOR = 6.7.8
+-IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-8
++IMAGEMAGICK_MAJOR = 6.8.6
++IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-2
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.bz2
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
