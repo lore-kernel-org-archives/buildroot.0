@@ -1,92 +1,86 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 29 Jun 2013 17:09:37 +0200
-Subject: [Buildroot] [PATCH 2/4] package/libsvg: new package
-In-Reply-To: <51CE9EEC.3090809@googlemail.com> (Carsten Schoenert's message of
- "Sat, 29 Jun 2013 10:46:36 +0200")
-References: <1372445557-15546-1-git-send-email-c.schoenert@gmail.com>
- <1372445557-15546-2-git-send-email-c.schoenert@gmail.com>
- <87ehbmyrmg.fsf@dell.be.48ers.dk> <51CE9EEC.3090809@googlemail.com>
-Message-ID: <877ghdx8b2.fsf@dell.be.48ers.dk>
+From: John Stile <john@stilen.com>
+Date: Sat, 29 Jun 2013 10:08:44 -0700
+Subject: [Buildroot] how does buildroot avoid requireing root?
+In-Reply-To: <20130629104921.12fc15ea@skate>
+References: <1372466836.28302.157.camel@localhost>
+ <20130629104921.12fc15ea@skate>
+Message-ID: <1372525724.28302.168.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carsten" == Carsten Schoenert <c.schoenert@gmail.com> writes:
+That does answer my question very well.
+Thank you.
 
- Carsten> Hello Peter,
- Carsten> Am 28.06.2013 21:14, schrieb Peter Korsgaard:
- Carsten> +	  http://www.t2-project.org/packages/libsvg.html
- >> 
- >> Are you sure that's the upstream URL? Isn't t2 yet another embedded
- >> build system?
-
- Carsten> Yes, true. After a longer try to find a "official" project webpage I
- Carsten> couldn't find no one that fits into.
- Carsten> The source is placed under cairographics.org (but even without any
- Carsten> dedicated info for the package libsvg (and also for libsvg-cairo). So
- Carsten> just point to the main site of cairographics.org?
-
-Yes, just use http://cairographics.org
-
- >> It looks good, but it doesn't work:
- >> 
- >> checking for ANSI C header files... (cached) yes
- >> checking whether libexpat is requested... no
- >> ./configure: line 20639: /home/peko/source/buildroot/output/host/usr/bin/pkg-config: No such file or directory
- >> *** Your version of pkg-config is too old. You need version 0.9.0 or newer.
- >> *** See http://www.freedesktop.org/software/pkgconfig
- >> configure: error: Library requirements (libxml-2.0 >= 2.4.7 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them.
- >> 
- >> So you atleast need host-pkgconf as a dependency. It looks like it can
- >> work with expat instead, so you could drop the hard dependency on
- >> libxml2, but that is not really critical.
-
- Carsten> That's correct, it should working with expat too (as a deeper
- Carsten> look into configure.in is showing). I changed the the
- Carsten> libsvg.mk to cover this
-
- >> ifeq ($(BR2_PACKAGE_EXPAT),y)
- >> LIBSVG_CONF_OPT += --with-expat
- >> else
- >> LIBSVG_DEPENDENCIES += libxml2
- >> endif
-
-You should also add expat to LIBSVG_DEPENDENCIES for the expat case, and
-select the libxml2 package in Config.in if need (so Kconfig is in sync
-with the makefile) - something like:
-
-     select BR2_PACKAGE_LIBXML2 if !BR2_PACKAGE_EXPAT
-
-
- Carsten> but it doesn't work with my external (crosstool-NG) toolchain which I
- Carsten> create at my self, the expat.h is missing.
-
- >> checking whether libexpat is requested... yes
- >> configure: creating ./config.status
- >> config.status: creating libsvg.spec
- >> config.status: creating libsvg.pc
- >> config.status: creating src/svg_version.h
- >> config.status: creating Makefile
- >> config.status: creating src/Makefile
- >> config.status: creating config.h
- >> config.status: executing depfiles commands
- >>>>> libsvg 0.1.4 Building
- Carsten> ...
- >> In file included from svg.c:31:0:
- >> svgint.h:28:19: fatal error: expat.h: No such file or directory
-
-Probably because you forgot to add expat to the dependencies, so it
-isn't built yet by the time libsvg configure runs.
-
- Carsten> The BR2_PACKAGE_EXPAT is set by BR2_INSTALL_LIBSTDCPP which is set by
- Carsten> BR2_TOOLCHAIN_EXTERNAL_CXX. But crosstool-NG didn't provide the expat
- Carsten> related files.
-
-Ehh, I don't quite follow. BR2_PACKAGE_EXPAT is about libexpat for the
-TARGET. It doesn't have anything to do with the cross compiler needing
-expat for the host.
-
--- 
-Bye, Peter Korsgaard
+On Sat, 2013-06-29 at 10:49 +0200, Thomas Petazzoni wrote:
+> Dear John Stile,
+> 
+> On Fri, 28 Jun 2013 17:47:16 -0700, John Stile wrote:
+> > I am confused about how buildroot creates busybox.
+> > 
+> > There are notes that one must ensure that busybox setuid root.
+> > 
+> > Performing this operation must be performed as root:
+> >    chown 0.0 /bin/busybox; chmod 4755 /bin/busybox
+> > 
+> > Yet when I use buildroot I never become root.
+> > 
+> > How does buildroot accomplish this?
+> > 
+> > In output/build/busybox-1.18.5 I see applets/install.sh calls:
+> >   install -m 755 busybox $prefix/bin/busybox || exit 1
+> > 
+> > but I don't see how this becomes setuid?
+> > 
+> > On my embedded system, I see:
+> > -rwsr-xr-x    1 root     root        605876 Jun 28  2013 /bin/busybox*
+> 
+> We use a combination of 'fakeroot' and 'makedevs'. From
+> http://man.he.net/man1/fakeroot:
+>    
+>        	fakeroot runs a command in an environment wherein it
+>        	appears to  have root  privileges  for  file
+>        	manipulation.  This is useful for allowing users to
+>        	create archives (tar, ar, .deb etc.) with files in them
+>        	with root  permissions/ownership. Without  fakeroot one
+>        	would need to have root privileges to create the
+>        	constituent files of  the archives  with the correct
+>        	permissions  and ownership, and then pack them up, or
+>        	one would have to  construct  the  archives  directly,
+>        	without using  the archiver.
+> 
+> 	fakeroot  works  by  replacing  the file manipulation library
+>        	functions (chmod(2), stat(2) etc.) by ones that
+>        	simulate  the effect  the  real library  functions would
+>        	have had, had the user really been root. These wrapper
+>        	functions are  in  a shared
+>        	library  /usr/lib/libfakeroot.so* which is loaded
+>        	through the LD_PRELOAD mechanism of the dynamic loader.
+>        	(See ld.so(8))
+> 
+> Basically, we use fakeroot to run the following commands:
+> 
+> 	makedevs
+> 	tar cf rootfs.tar output/target
+> 
+> And what makedevs does is that it reads some permission and device
+> tables to create device files and adjust permissions. Those
+> device/permission tables are constructed from system/device_table.txt
+> (and system/device_table_dev.txt for devices) and also from individual
+> package .mk files that use the <pkg>_PERMISSIONS and <pkg>_DEVICES
+> mechanism. From package/busybox/busybox.mk:
+> 
+> define BUSYBOX_PERMISSIONS
+> /bin/busybox                     f 4755 0 0 - - - - -
+> /usr/share/udhcpc/default.script f 755  0 0 - - - - -
+> endef
+> 
+> Here you see that we tell Buildroot to make Busybox a setuid binary.
+> 
+> Does that answer your question?
+> 
+> Best regards,
+> 
+> Thomas
