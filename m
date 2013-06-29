@@ -1,58 +1,57 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Jun 2013 22:02:44 +0200
-Subject: [Buildroot] [git commit] python3: Port python2 patches to reduce
-	the interpreter size
-Message-ID: <20130629190817.1B21D9B2CF@busybox.osuosl.org>
+Date: Sat, 29 Jun 2013 21:04:34 +0200
+Subject: [Buildroot] [git commit] tzdata/zic: bump to version 2013c and
+	switch SITE
+Message-ID: <20130629190817.E38EA9B2CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f1c092da8ba4d03125387a337ab45c9b5a1315dc
+commit: http://git.buildroot.net/buildroot/commit/?id=6e01ba1dc2ce282f9af2d859e37b88e674070b91
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some of the python2 patches were left behind when doing the python3
-package. This was because the python build system can now autodetect
-what packages can be built in the system.
+Bump to version 2013c and switch to the FTP site since the HTTP one is
+unfortunately serving .tar.gz files that are just plain tar files
+(uncompressed).
 
-However, some of these patches are actually useful to reduce drastically
-the size of the interpreter.
-
-This patch ports the relevant patches to the python3 package, and adds a
-new patch to remove the idle3 IDE as well from the interpreter.
-
-Fixes #5696
-
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/python3/Config.in                          |   11 ++
- ...thon3-000-generate-sysconfigdata-buildir.patch} |    0
- ...d.patch => python3-001-support-for-build.patch} |    0
- ...atch => python3-002-no-host-headers-libs.patch} |    0
- ...patch => python3-003-staging-header-libs.patch} |    0
- ...thon3-004-no-import-when-cross-compiling.patch} |    0
- ...=> python3-005-do-not-generate-pyo-files.patch} |    0
- ....patch => python3-006-reread-environment.patch} |    0
- ...> python3-007-change-pyconfig-h-location.patch} |    0
- ...8-no-rpath.patch => python3-008-no-rpath.patch} |    0
- ...atch => python3-009-verbose-module-build.patch} |    0
- ...-010-distutils-cross-compilation-support.patch} |    0
- ...=> python3-011-cross-compile-getaddrinfo.patch} |    0
- .../python3/python3-012-disable-extensions.patch   |   98 +++++++++++++++++
- .../python3-100-optional-test-modules.patch        |  102 ++++++++++++++++++
- package/python3/python3-101-optional-pydoc.patch   |   91 ++++++++++++++++
- package/python3/python3-102-optional-2to3.patch    |  111 ++++++++++++++++++++
- package/python3/python3-103-optional-sqlite.patch  |   64 +++++++++++
- package/python3/python3-104-optional-tk.patch      |   69 ++++++++++++
- package/python3/python3-105-optional-curses.patch  |   54 ++++++++++
- package/python3/python3-106-optional-expat.patch   |   85 +++++++++++++++
- .../python3/python3-107-optional-codecs-cjk.patch  |   25 +++++
- package/python3/python3-108-optional-nis.patch     |   28 +++++
- .../python3/python3-109-optional-unicodedata.patch |   25 +++++
- package/python3/python3-110-optional-idle.patch    |   83 +++++++++++++++
- package/python3/python3.mk                         |   25 +++--
- 26 files changed, 862 insertions(+), 9 deletions(-)
+ package/tzdata/tzdata.mk |    4 ++--
+ package/zic/zic.mk       |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 4a9affe..26f623d 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-TZDATA_VERSION = 2012j
++TZDATA_VERSION = 2013c
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+-TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
++TZDATA_SITE = ftp://ftp.iana.org/tz/releases
+ TZDATA_DEPENDENCIES = host-zic
+ TZDATA_LICENSE = Public domain
+ 
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 7a06a58..3d56df1 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-ZIC_VERSION = 2012j
++ZIC_VERSION = 2013c
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+-ZIC_SITE = http://www.iana.org/time-zones/repository/releases
++ZIC_SITE = ftp://ftp.iana.org/tz/releases
+ ZIC_LICENSE = Public domain
+ 
+ # Don't strip any path components during extraction.
