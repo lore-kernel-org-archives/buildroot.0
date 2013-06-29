@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 29 Jun 2013 21:05:32 +0200
-Subject: [Buildroot] [PATCH 1/2] autoconf: bump to version 2.69
-In-Reply-To: <1372504006-627-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 29 Jun 2013 08:06:45 -0300")
+Date: Sat, 29 Jun 2013 21:05:41 +0200
+Subject: [Buildroot] [PATCH 2/2] imagemagick: bump to version 6.8.6-2
+In-Reply-To: <1372504006-627-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 29 Jun 2013 08:06:46 -0300")
 References: <1372504006-627-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ppv4wxdv.fsf@dell.be.48ers.dk>
+ <1372504006-627-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87li5swxdm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
