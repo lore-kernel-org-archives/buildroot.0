@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Jun 2013 00:38:12 +0200
-Subject: [Buildroot] [PATCH 1/2] legacy: print removal date in menuconfig
+Date: Sun, 30 Jun 2013 00:38:13 +0200
+Subject: [Buildroot] [PATCH 2/2] legacy: make it clear legacy options will
+	be removed at some point
 In-Reply-To: <cover.1372545265.git.yann.morin.1998@free.fr>
 References: <cover.1372545265.git.yann.morin.1998@free.fr>
-Message-ID: <a80b880f1ca476a1da355362eca62d35d60086fe.1372545265.git.yann.morin.1998@free.fr>
+Message-ID: <0e43364c4b19cbab8f8297f38ab009475beba3d6.1372545265.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,79 +13,25 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Show the user how old the legacy options are, as a
-subtle suggestion for him to update mopre often. ;-)
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- Config.in.legacy | 27 +++++++++++----------------
- 1 file changed, 11 insertions(+), 16 deletions(-)
+ Config.in.legacy | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index cd23492..1252d16 100644
+index 1252d16..921a0eb 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -40,9 +40,8 @@ comment "As long as these options stay selected, the build   "
+@@ -38,6 +38,10 @@ comment "Please look at the options which have been selected "
+ comment "and read their help text.                           "
+ comment "As long as these options stay selected, the build   "
  comment "will fail.                                          "
++comment "Note: at some point in the future, the oldest legacy"
++comment "options will be removed, and configuration files    "
++comment "that still have those options set, will fail to     "
++comment "build, or run, in unpredictable ways.               "
  endif
  
--#
--# Legacy options since 2013.08
--#
-+###############################################################################
-+comment "Legacy options removed in 2013.08"
- 
- config BR2_PACKAGE_DOSFSTOOLS_DOSFSCK
- 	bool "dosfstools dosfsck renamed to fsck.fat"
-@@ -65,9 +64,8 @@ config BR2_PACKAGE_DOSFSTOOLS_MKDOSFS
- 	help
- 	  mkdosfs was renamed upstream to mkfs.fat for consistency.
- 
--#
--# Legacy options since 2013.05
--#
-+###############################################################################
-+comment "Legacy options removed in 2013.05"
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8192
- 	bool "Realtek 8192 replaced by Realtek 81xx"
-@@ -83,9 +81,8 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712
- 	help
- 	  Now covers the whole Realtek 87xx familly: 8712/8723.
- 
--#
--# Legacy options since 2013.02
--#
-+###############################################################################
-+comment "Legacy options removed in 2013.02"
- 
- config BR2_sa110
- 	bool "sa110 ARM target switched to strongarm"
-@@ -151,9 +148,9 @@ config BR2_PACKAGE_DIRECTB_TESTS
- 	  The option has been renamed
- 	  BR2_PACKAGE_DIRECTFB_TESTS.
- 
--#
--# Legacy options since 2012.11
--#
-+###############################################################################
-+comment "Legacy options removed in 2012.11"
-+
- config BR2_PACKAGE_CUSTOMIZE
- 	bool "customize package has been removed"
- 	select BR2_LEGACY
-@@ -188,10 +185,8 @@ config BR2_PACKAGE_PTHREAD_STUBS
- 	  For consistency reason, the pthread-stubs package has been
- 	  renamed to xlib_libpthread-stubs.
- 
--
--#
--# Legacy options since 2012.08
--#
-+###############################################################################
-+comment "Legacy options removed in 2012.08"
- 
- config BR2_PACKAGE_GETTEXT_STATIC
- 	bool "libgettext.a is now selected by BR2_PREFER_STATIC_LIB"
+ ###############################################################################
 -- 
 1.8.1.2
