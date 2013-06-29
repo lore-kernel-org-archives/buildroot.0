@@ -1,60 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Jun 2013 10:57:10 +0200
-Subject: [Buildroot] Issue with Qt5 and PowerVR drivers
-In-Reply-To: <321768C95D21724485BCE784F1BE98473EB5E2E9@DBDE04.ent.ti.com>
-References: <20130628143717.3e16fd9c@skate>
- <321768C95D21724485BCE784F1BE98473EB5E16F@DBDE04.ent.ti.com>
- <20130628161533.2dea9fdf@skate>
- <321768C95D21724485BCE784F1BE98473EB5E2E9@DBDE04.ent.ti.com>
-Message-ID: <20130629105710.42fe04e0@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 29 Jun 2013 07:52:01 -0300
+Subject: [Buildroot] [PATCH] dhcpcd: unavailable for bfin and fix
+ another bug
+In-Reply-To: <20130629104251.4697be00@skate>
+References: <1372463785-29537-1-git-send-email-gustavo@zacarias.com.ar>
+ <20130629104251.4697be00@skate>
+Message-ID: <51CEBC51.9030601@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Prabu,
+On 06/29/2013 05:42 AM, Thomas Petazzoni wrote:
 
-Thanks for your reply.
-
-On Fri, 28 Jun 2013 17:56:37 +0000, Sundareson, Prabindh wrote:
-
-> I see. For 5.0.2 you may not need the eglfs patch at all I think.
-
-The patch was definitely needed. Without it, I'm getting the error "EGL
-Error : Could not create the egl surface: error = 0x3003" which you
-mentioned in
-http://tigraphics.blogspot.fr/2013/02/qt500-eglfs-could-not-create-egl.html.
-Applying your patch made the error go away.
-
-> >> The 5.0.2 version, since 5.1 is still alpha (or beta?)
+> I would prefer to see an explicit "depends on !" on the specific
+> Blackfin external toolchains that are causing problems. If one day we
+> get the internal backend to properly build a toolchain for Blackfin,
+> then doing a "depends on !BR2_bfin" wouldn't make sense.
 > 
-> nullws - null window system, consider it a full screen "window"
+> The Blackin external toolchain versions aren't changing that often, so
+> it shouldn't cause too much hassle to update dhpcd dependencies when
+> that happens.
 
-Ok.
+That would be all good and well if the internal toolchain worked, snip:
 
-I see in
-https://github.com/openwebos/qt/blob/master/src/plugins/gfxdrivers/eglnullws/README
-that this nullws thing also exists in Qt4, and is useful to get more
-performances when you're running a single OpenGL application, full
-screen.
+checking for F_SETLKW... yes
+checking if mkdir takes one argument... no
+This target does not support --with-cpu.
+Valid --with options are:
+make[1]: *** [configure-gcc] Error 1
+make[1]: Leaving directory
+`/home/gustavoz/b/fin/output/toolchain/gcc-4.7.3-initial'
+make: ***
+[/home/gustavoz/b/fin/output/toolchain/gcc-4.7.3-initial/.compiled] Error 2
 
-> >> Hum, what is nullws ?
-> 
-> 
-> What you are seeing is exactly what is expected. My own results were published in the video below:
-> 
-> http://www.youtube.com/watch?v=Z9r8o2ToLRw
-
-Ok, but then how is this usable? I believe there are many cases where
-you will want to mix normal Qt widgets (buttons, menus, etc.) with one
-OpenGL-capable Qt widget. How can one achieve that with Qt5?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+(all defaults except +IPV6 for dhcpcd).
+And 2012R1-RC2 fails to download properly (2012R2-RC2 too for that
+matter but i've got a local copy).
+I kind of doubt that 2012R1 being older has getifaddrs enabled though.
+Regards.
