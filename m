@@ -1,86 +1,31 @@
-From: John Stile <john@stilen.com>
-Date: Sat, 29 Jun 2013 10:08:44 -0700
-Subject: [Buildroot] how does buildroot avoid requireing root?
-In-Reply-To: <20130629104921.12fc15ea@skate>
-References: <1372466836.28302.157.camel@localhost>
- <20130629104921.12fc15ea@skate>
-Message-ID: <1372525724.28302.168.camel@localhost>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 29 Jun 2013 15:26:39 -0300
+Subject: [Buildroot] [PATCH] dhcpcd: unavailable for bfin and fix
+ another bug
+In-Reply-To: <20130629143754.184edb41@skate>
+References: <1372463785-29537-1-git-send-email-gustavo@zacarias.com.ar>
+ <20130629104251.4697be00@skate> <51CEBC51.9030601@zacarias.com.ar>
+ <20130629125530.412858a5@skate> <51CED399.8050408@zacarias.com.ar>
+ <20130629143754.184edb41@skate>
+Message-ID: <51CF26DF.20406@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-That does answer my question very well.
-Thank you.
+On 06/29/2013 09:37 AM, Thomas Petazzoni wrote:
 
-On Sat, 2013-06-29 at 10:49 +0200, Thomas Petazzoni wrote:
-> Dear John Stile,
-> 
-> On Fri, 28 Jun 2013 17:47:16 -0700, John Stile wrote:
-> > I am confused about how buildroot creates busybox.
-> > 
-> > There are notes that one must ensure that busybox setuid root.
-> > 
-> > Performing this operation must be performed as root:
-> >    chown 0.0 /bin/busybox; chmod 4755 /bin/busybox
-> > 
-> > Yet when I use buildroot I never become root.
-> > 
-> > How does buildroot accomplish this?
-> > 
-> > In output/build/busybox-1.18.5 I see applets/install.sh calls:
-> >   install -m 755 busybox $prefix/bin/busybox || exit 1
-> > 
-> > but I don't see how this becomes setuid?
-> > 
-> > On my embedded system, I see:
-> > -rwsr-xr-x    1 root     root        605876 Jun 28  2013 /bin/busybox*
-> 
-> We use a combination of 'fakeroot' and 'makedevs'. From
-> http://man.he.net/man1/fakeroot:
->    
->        	fakeroot runs a command in an environment wherein it
->        	appears to  have root  privileges  for  file
->        	manipulation.  This is useful for allowing users to
->        	create archives (tar, ar, .deb etc.) with files in them
->        	with root  permissions/ownership. Without  fakeroot one
->        	would need to have root privileges to create the
->        	constituent files of  the archives  with the correct
->        	permissions  and ownership, and then pack them up, or
->        	one would have to  construct  the  archives  directly,
->        	without using  the archiver.
-> 
-> 	fakeroot  works  by  replacing  the file manipulation library
->        	functions (chmod(2), stat(2) etc.) by ones that
->        	simulate  the effect  the  real library  functions would
->        	have had, had the user really been root. These wrapper
->        	functions are  in  a shared
->        	library  /usr/lib/libfakeroot.so* which is loaded
->        	through the LD_PRELOAD mechanism of the dynamic loader.
->        	(See ld.so(8))
-> 
-> Basically, we use fakeroot to run the following commands:
-> 
-> 	makedevs
-> 	tar cf rootfs.tar output/target
-> 
-> And what makedevs does is that it reads some permission and device
-> tables to create device files and adjust permissions. Those
-> device/permission tables are constructed from system/device_table.txt
-> (and system/device_table_dev.txt for devices) and also from individual
-> package .mk files that use the <pkg>_PERMISSIONS and <pkg>_DEVICES
-> mechanism. From package/busybox/busybox.mk:
-> 
-> define BUSYBOX_PERMISSIONS
-> /bin/busybox                     f 4755 0 0 - - - - -
-> /usr/share/udhcpc/default.script f 755  0 0 - - - - -
-> endef
-> 
-> Here you see that we tell Buildroot to make Busybox a setuid binary.
-> 
-> Does that answer your question?
-> 
-> Best regards,
-> 
-> Thomas
+> Yes, of course it lacks getifaddrs, but I don't see how it changes the
+> point I was making originally: it is not because /some/ external
+> toolchains are affected that we should exclude an entire architecture
+> from building a particular package.
+
+Oh come on!
+The ct-ng sample doesn't have UCLIBC_SUPPORT_AI_ADDRCONFIG set
+(default=n in uClibc upstream).
+None of Analog's toolchains have it either.
+There's some old Ronetix blackfin toolchain that doesn't support it either.
+So that just leaves a customized ct-ng or hand-built toolchain as a
+canditate, which i take it as "very unlikely" to happen.
+Regards.
