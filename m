@@ -1,71 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 29 Jun 2013 08:06:45 -0300
-Subject: [Buildroot] [PATCH 1/2] autoconf: bump to version 2.69
-Message-ID: <1372504006-627-1-git-send-email-gustavo@zacarias.com.ar>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Sat, 29 Jun 2013 13:10:23 +0100
+Subject: [Buildroot] [PATCH] libtpl: bump version
+Message-ID: <1372507823-12410-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../autoconf-dont-add-dirty-to-version.patch       | 30 ++++++++++------------
- package/autoconf/autoconf.mk                       |  2 +-
- 2 files changed, 15 insertions(+), 17 deletions(-)
+From: Simon Dawson <spdawson@gmail.com>
 
-diff --git a/package/autoconf/autoconf-dont-add-dirty-to-version.patch b/package/autoconf/autoconf-dont-add-dirty-to-version.patch
-index 38ac163..e8d9f6a 100644
---- a/package/autoconf/autoconf-dont-add-dirty-to-version.patch
-+++ b/package/autoconf/autoconf-dont-add-dirty-to-version.patch
-@@ -10,21 +10,19 @@ commonly done in buildroot).
- The affect is that autoconf gets built as being version 2.65-dirty, which
- breaks programs (like Python) which explicitly checks for autoconf-2.65.
+Note that libtpl has moved from sourceforge to github, and there is no longer
+a version-specific tarball available.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/libtpl/Config.in |  2 +-
+ package/libtpl/libtpl.mk | 13 ++++++++++---
+ 2 files changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/package/libtpl/Config.in b/package/libtpl/Config.in
+index a2c2c2d..0286e03 100644
+--- a/package/libtpl/Config.in
++++ b/package/libtpl/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_LIBTPL
+ 	help
+ 	  Easily store and retrieve binary data in C
  
-+[Gustavo: update for autoconf 2.69]
- Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- build-aux/git-version-gen |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- 
--Index: autoconf-2.65/build-aux/git-version-gen
--===================================================================
----- autoconf-2.65.orig/build-aux/git-version-gen
--+++ autoconf-2.65/build-aux/git-version-gen
--@@ -135,7 +135,7 @@ case "$dirty" in
--     *) # Append the suffix only if there isn't one already.
-- 	case $v in
-- 	  *-dirty) ;;
---	  *) v="$v-dirty" ;;
--+	  #*) v="$v-dirty" ;;
-- 	esac ;;
-- esac
-- 
-+diff -Nura autoconf-2.69.orig/build-aux/git-version-gen autoconf-2.69/build-aux/git-version-gen
-+--- autoconf-2.69.orig/build-aux/git-version-gen	2013-06-27 11:31:02.340200154 -0300
-++++ autoconf-2.69/build-aux/git-version-gen	2013-06-27 11:31:13.734577033 -0300
-+@@ -203,7 +203,7 @@
-+       *) # Append the suffix only if there isn't one already.
-+           case $v in
-+             *-dirty) ;;
-+-            *) v="$v-dirty" ;;
-++            #*) v="$v-dirty" ;;
-+           esac ;;
-+   esac
-+ fi
-diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-index bc6f65f..2482552 100644
---- a/package/autoconf/autoconf.mk
-+++ b/package/autoconf/autoconf.mk
-@@ -4,7 +4,7 @@
+-	  http://tpl.sourceforge.net/
++	  http://troydhanson.github.io/tpl/
+diff --git a/package/libtpl/libtpl.mk b/package/libtpl/libtpl.mk
+index 0016c31..478b298 100644
+--- a/package/libtpl/libtpl.mk
++++ b/package/libtpl/libtpl.mk
+@@ -4,11 +4,18 @@
  #
  ################################################################################
  
--AUTOCONF_VERSION = 2.68
-+AUTOCONF_VERSION = 2.69
- AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
+-LIBTPL_VERSION = 1.5
+-LIBTPL_SOURCE = libtpl-$(LIBTPL_VERSION).tar.bz2
+-LIBTPL_SITE = http://downloads.sourceforge.net/project/tpl/tpl/libtpl-$(LIBTPL_VERSION)
++LIBTPL_VERSION = 445b4e9f236a48e274eaace31acf56d700da142a
++LIBTPL_SITE = http://github.com/troydhanson/tpl/tarball/$(LIBTPL_VERSION)
+ LIBTPL_INSTALL_STAGING = YES
+ LIBTPL_LICENSE = BSD-like
+ LIBTPL_LICENSE_FILES = LICENSE
  
- AUTOCONF_LICENSE = GPLv3+ with exceptions
++LIBTPL_AUTORECONF = YES
++LIBTPL_AUTORECONF_OPT = --install --force
++
++define LIBTPL_CREATE_MISSING_FILES
++	touch $(@D)/NEWS $(@D)/AUTHORS $(@D)/ChangeLog $(@D)/COPYING
++endef
++LIBTPL_POST_EXTRACT_HOOKS += LIBTPL_CREATE_MISSING_FILES
++
+ $(eval $(autotools-package))
 -- 
-1.8.1.5
+1.8.1.2
