@@ -1,9 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 29 Jun 2013 08:06:46 -0300
-Subject: [Buildroot] [PATCH 2/2] imagemagick: bump to version 6.8.6-2
-In-Reply-To: <1372504006-627-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1372504006-627-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1372504006-627-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 29 Jun 2013 08:06:45 -0300
+Subject: [Buildroot] [PATCH 1/2] autoconf: bump to version 2.69
+Message-ID: <1372504006-627-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +10,62 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/imagemagick/imagemagick.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../autoconf-dont-add-dirty-to-version.patch       | 30 ++++++++++------------
+ package/autoconf/autoconf.mk                       |  2 +-
+ 2 files changed, 15 insertions(+), 17 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index e2259e6..12b9f4b 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/autoconf/autoconf-dont-add-dirty-to-version.patch b/package/autoconf/autoconf-dont-add-dirty-to-version.patch
+index 38ac163..e8d9f6a 100644
+--- a/package/autoconf/autoconf-dont-add-dirty-to-version.patch
++++ b/package/autoconf/autoconf-dont-add-dirty-to-version.patch
+@@ -10,21 +10,19 @@ commonly done in buildroot).
+ The affect is that autoconf gets built as being version 2.65-dirty, which
+ breaks programs (like Python) which explicitly checks for autoconf-2.65.
+ 
++[Gustavo: update for autoconf 2.69]
+ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- build-aux/git-version-gen |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+-Index: autoconf-2.65/build-aux/git-version-gen
+-===================================================================
+---- autoconf-2.65.orig/build-aux/git-version-gen
+-+++ autoconf-2.65/build-aux/git-version-gen
+-@@ -135,7 +135,7 @@ case "$dirty" in
+-     *) # Append the suffix only if there isn't one already.
+- 	case $v in
+- 	  *-dirty) ;;
+--	  *) v="$v-dirty" ;;
+-+	  #*) v="$v-dirty" ;;
+- 	esac ;;
+- esac
+- 
++diff -Nura autoconf-2.69.orig/build-aux/git-version-gen autoconf-2.69/build-aux/git-version-gen
++--- autoconf-2.69.orig/build-aux/git-version-gen	2013-06-27 11:31:02.340200154 -0300
+++++ autoconf-2.69/build-aux/git-version-gen	2013-06-27 11:31:13.734577033 -0300
++@@ -203,7 +203,7 @@
++       *) # Append the suffix only if there isn't one already.
++           case $v in
++             *-dirty) ;;
++-            *) v="$v-dirty" ;;
+++            #*) v="$v-dirty" ;;
++           esac ;;
++   esac
++ fi
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index bc6f65f..2482552 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMAGEMAGICK_MAJOR = 6.7.8
--IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-8
-+IMAGEMAGICK_MAJOR = 6.8.6
-+IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-2
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.bz2
- # The official ImageMagick site only keeps the latest versions
- # available, which is annoying. Use an alternate site that keeps all
+-AUTOCONF_VERSION = 2.68
++AUTOCONF_VERSION = 2.69
+ AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
+ 
+ AUTOCONF_LICENSE = GPLv3+ with exceptions
 -- 
 1.8.1.5
