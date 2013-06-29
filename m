@@ -1,43 +1,97 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Jun 2013 10:42:51 +0200
-Subject: [Buildroot] [PATCH] dhcpcd: unavailable for bfin and fix
- another bug
-In-Reply-To: <1372463785-29537-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1372463785-29537-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130629104251.4697be00@skate>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Sat, 29 Jun 2013 10:46:36 +0200
+Subject: [Buildroot] [PATCH 2/4] package/libsvg: new package
+In-Reply-To: <87ehbmyrmg.fsf@dell.be.48ers.dk>
+References: <1372445557-15546-1-git-send-email-c.schoenert@gmail.com>
+ <1372445557-15546-2-git-send-email-c.schoenert@gmail.com>
+ <87ehbmyrmg.fsf@dell.be.48ers.dk>
+Message-ID: <51CE9EEC.3090809@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hello Peter,
 
-On Fri, 28 Jun 2013 20:56:25 -0300, Gustavo Zacarias wrote:
+Am 28.06.2013 21:14, schrieb Peter Korsgaard:
+>  Carsten> +	  http://www.t2-project.org/packages/libsvg.html
+> 
+> Are you sure that's the upstream URL? Isn't t2 yet another embedded
+> build system?
 
-> diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
-> index a06a973..a032694 100644
-> --- a/package/dhcpcd/Config.in
-> +++ b/package/dhcpcd/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_DHCPCD
->  	depends on BR2_INET_IPV6
-> +	depends on !BR2_bfin
+Yes, true. After a longer try to find a "official" project webpage I
+couldn't find no one that fits into.
+The source is placed under cairographics.org (but even without any
+dedicated info for the package libsvg (and also for libsvg-cairo). So
+just point to the main site of cairographics.org?
 
-I would prefer to see an explicit "depends on !" on the specific
-Blackfin external toolchains that are causing problems. If one day we
-get the internal backend to properly build a toolchain for Blackfin,
-then doing a "depends on !BR2_bfin" wouldn't make sense.
+> This is the default, so you can drop this line.
+> 
+> Personally I prefer to not align the '=' signs, but I know we have a bit
+> of a mix in the tree.
 
-The Blackin external toolchain versions aren't changing that often, so
-it shouldn't cause too much hassle to update dhpcd dependencies when
-that happens.
+Ahh, o.k. I didn't ever realize that, will drop this line.
 
-Best regards,
+>  Carsten> +LIBSVG_LICENSE         = LGPLv2
+> 
+> grep -rls 'any later version' src | wc -l
+> 24
+> 
+> It looks to be LGPLv2+.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+You are right, it's later written in the COPYING file.
+
+> It looks good, but it doesn't work:
+> 
+> checking for ANSI C header files... (cached) yes
+> checking whether libexpat is requested... no
+> ./configure: line 20639: /home/peko/source/buildroot/output/host/usr/bin/pkg-config: No such file or directory
+> *** Your version of pkg-config is too old. You need version 0.9.0 or newer.
+> *** See http://www.freedesktop.org/software/pkgconfig
+> configure: error: Library requirements (libxml-2.0 >= 2.4.7 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them.
+> 
+> So you atleast need host-pkgconf as a dependency. It looks like it can
+> work with expat instead, so you could drop the hard dependency on
+> libxml2, but that is not really critical.
+
+That's correct, it should working with expat too (as a deeper look into
+configure.in is showing). I changed the the libsvg.mk to cover this
+
+> ifeq ($(BR2_PACKAGE_EXPAT),y)
+> LIBSVG_CONF_OPT += --with-expat
+> else
+> LIBSVG_DEPENDENCIES += libxml2
+> endif
+
+but it doesn't work with my external (crosstool-NG) toolchain which I
+create at my self, the expat.h is missing.
+
+> checking whether libexpat is requested... yes
+> configure: creating ./config.status
+> config.status: creating libsvg.spec
+> config.status: creating libsvg.pc
+> config.status: creating src/svg_version.h
+> config.status: creating Makefile
+> config.status: creating src/Makefile
+> config.status: creating config.h
+> config.status: executing depfiles commands
+>>>> libsvg 0.1.4 Building
+...
+> In file included from svg.c:31:0:
+> svgint.h:28:19: fatal error: expat.h: No such file or directory
+
+The BR2_PACKAGE_EXPAT is set by BR2_INSTALL_LIBSTDCPP which is set by
+BR2_TOOLCHAIN_EXTERNAL_CXX. But crosstool-NG didn't provide the expat
+related files.
+
+http://sourceware.org/ml/crossgcc/2013-03/msg00021.html
+
+So I think there is a little problem, how to tell buildroot if there is
+a real support for expat or not? Maybe the other external toolchains
+provide the expat files, I don't have tested this.
+
+So I would suggest to set up the dependency to libxml2 with a comment why.
+
+Regards
+Carsten
