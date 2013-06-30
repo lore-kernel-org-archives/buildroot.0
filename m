@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Jun 2013 21:29:05 +0200
-Subject: [Buildroot] [PATCH 15/23] uclibc: convert to the package
-	infrastructure
+Date: Sun, 30 Jun 2013 21:29:03 +0200
+Subject: [Buildroot] [PATCH 13/23] toolchain: switch to using gcc through
+	package infrastructure
 In-Reply-To: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1372620553-11416-16-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1372620553-11416-14-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,1543 +13,1332 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/gcc-intermediate/gcc-intermediate.mk   |   2 +-
- ...__libc_epoll_pwait-compile-failure-on-x86.patch |   0
- ...x-e500-__fe_nomask_env-use-of-__set_errno.patch |   0
- .../0.9.32.1/uclibc-linuxthreads-errno-fix.patch   |   0
- .../uclibc/0.9.32.1/uclibc-sparc-errno-fix.patch   |   0
- .../uclibc/0.9.32.1/uclibc-unshare.patch           |   0
- .../uclibc-OpenWRT-140-avr32_atomic_fix.patch      |   0
- .../uclibc-bits-time.h-sync-with-glibc-2.16.patch  |   0
- .../0.9.33.2/uclibc-define-MSG_CMSG_CLOEXEC.patch  |   0
- .../uclibc/0.9.33.2/uclibc-dup3.patch              |   0
- package/uclibc/Config.in                           | 166 ++++++
- .../uClibc => package/uclibc}/uClibc-0.9.32.config |   0
- .../uClibc => package/uclibc}/uClibc-0.9.33.config |   0
- .../uclibc}/uClibc-snapshot.config                 |   0
- package/uclibc/uclibc.mk                           | 484 ++++++++++++++++
- toolchain/toolchain-buildroot.mk                   |   4 -
+ Makefile                                           |   2 +-
+ package/Config.in                                  |   1 -
+ .../1001-gcc-4.2.x-inhibit-libc.patch              |   0
+ ...-fix-removal-of-redundant-cast-operations.patch |   0
+ ...conditional-insn-which-clobbers-cc_status.patch |   0
+ ...use-movh-to-move-immediates-into-register.patch |   0
+ .../gcc/4.3.6/100-uclibc-conf.patch                |   0
+ .../gcc/4.3.6/104-gnuhurd-uclibc-conf.patch        |   0
+ .../gcc/4.3.6/301-missing-execinfo_h.patch         |   0
+ .../gcc/4.3.6/302-c99-snprintf.patch               |   0
+ .../gcc/4.3.6/305-libmudflap-susv3-legacy.patch    |   0
+ .../gcc/4.3.6/810-arm-softfloat-libgcc.patch       |   0
+ .../4.3.6/993-arm_insn-opinit-RTX_CODE-fixup.patch |   0
+ .../gcc/4.3.6/998-gcc-4.3.0-fix-header.00.patch    |   0
+ .../gcc/4.3.6/999-4.3.2-armeabi-aapcs-linux.patch  |   0
+ .../4.3.6/999-4.3.3-arm-fix-for-bug-37436.patch    |   0
+ ...gcc-4.3.0-cris-pragma-pack-warning-remove.patch |   0
+ .../gcc/4.3.6/gcc-43-pr39429.patch                 |   0
+ .../powerpc-link-with-math-lib.patch.conditional   |   0
+ .../gcc/4.4.7-arc/fix_branch_out_of_range.patch    |   0
+ .../gcc/4.4.7/100-uclibc-conf.patch                |   0
+ .../gcc/4.4.7/301-missing-execinfo_h.patch         |   0
+ .../gcc/4.4.7/302-c99-snprintf.patch               |   0
+ .../gcc/4.4.7/305-libmudflap-susv3-legacy.patch    |   0
+ .../gcc/4.4.7/810-arm-softfloat-libgcc.patch       |   0
+ .../gcc/4.4.7/950-sparc-leon.patch                 |   0
+ .../gcc/4.4.7/gcc-44-pr39429.patch                 |   0
+ .../powerpc-link-with-math-lib.patch.conditional   |   0
+ .../gcc/4.5.4/100-uclibc-conf.patch                |   0
+ .../gcc/4.5.4/301-missing-execinfo_h.patch         |   0
+ .../gcc/4.5.4/302-c99-snprintf.patch               |   0
+ .../gcc/4.5.4/305-libmudflap-susv3-legacy.patch    |   0
+ .../gcc/4.5.4/810-arm-softfloat-libgcc.patch       |   0
+ .../gcc/4.5.4/820-arm-unbreak-armv4t.patch         |   0
+ .../gcc/4.5.4/830-arm-pr43440.patch                |   0
+ .../powerpc-link-with-math-lib.patch.conditional   |   0
+ .../gcc/4.6.4/100-uclibc-conf.patch                |   0
+ .../gcc/4.6.4/301-missing-execinfo_h.patch         |   0
+ .../gcc/4.6.4/302-c99-snprintf.patch               |   0
+ .../gcc/4.6.4/305-libmudflap-susv3-legacy.patch    |   0
+ .../gcc/4.6.4/810-arm-softfloat-libgcc.patch       |   0
+ .../gcc/4.6.4/820-arm-unbreak-armv4t.patch         |   0
+ .../powerpc-link-with-math-lib.patch.conditional   |   0
+ .../gcc/4.7.3/100-uclibc-conf.patch                |   0
+ .../gcc/4.7.3/301-missing-execinfo_h.patch         |   0
+ .../gcc/4.7.3/302-c99-snprintf.patch               |   0
+ .../gcc/4.7.3/305-libmudflap-susv3-legacy.patch    |   0
+ .../gcc/4.7.3/810-arm-softfloat-libgcc.patch       |   0
+ .../gcc/4.7.3/830-arm_unbreak_armv4t.patch         |   0
+ .../powerpc-link-with-math-lib.patch.conditional   |   0
+ .../gcc/4.8.1/100-uclibc-conf.patch                |   0
+ .../gcc/4.8.1/301-missing-execinfo_h.patch         |   0
+ .../gcc/4.8.1/302-c99-snprintf.patch               |   0
+ .../gcc/4.8.1/305-libmudflap-susv3-legacy.patch    |   0
+ .../gcc/4.8.1/810-arm-softfloat-libgcc.patch       |   0
+ .../gcc/4.8.1/830-arm_unbreak_armv4t.patch         |   0
+ .../powerpc-link-with-math-lib.patch.conditional   |   0
+ toolchain/gcc/Config.in                            | 130 -----
+ toolchain/gcc/Config.in.2                          |  34 --
+ toolchain/gcc/gcc-uclibc-4.x.mk                    | 640 ---------------------
+ toolchain/toolchain-buildroot.mk                   |   7 +-
  toolchain/toolchain-buildroot/Config.in            |   2 +-
  toolchain/toolchain-crosstool-ng.mk                |   1 -
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk   |   2 +-
  toolchain/toolchain-external.mk                    |   1 -
- toolchain/uClibc/Config.in                         |  97 ----
- toolchain/uClibc/uclibc.mk                         | 610 ---------------------
- 22 files changed, 653 insertions(+), 716 deletions(-)
- rename toolchain/uClibc/uClibc-0.9.32.1-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch => package/uclibc/0.9.32.1/uclibc-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch (100%)
- rename toolchain/uClibc/uClibc-0.9.32.1-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch => package/uclibc/0.9.32.1/uclibc-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch (100%)
- rename toolchain/uClibc/uClibc-0.9.32.1-linuxthreads-errno-fix.patch => package/uclibc/0.9.32.1/uclibc-linuxthreads-errno-fix.patch (100%)
- rename toolchain/uClibc/uClibc-0.9.32.1-sparc-errno-fix.patch => package/uclibc/0.9.32.1/uclibc-sparc-errno-fix.patch (100%)
- rename toolchain/uClibc/uClibc-0.9.32.1-unshare.patch => package/uclibc/0.9.32.1/uclibc-unshare.patch (100%)
- rename toolchain/uClibc/uClibc-0.9.33.2-OpenWRT-140-avr32_atomic_fix.patch => package/uclibc/0.9.33.2/uclibc-OpenWRT-140-avr32_atomic_fix.patch (100%)
- rename toolchain/uClibc/uClibc-0.9.33.2-bits-time.h-sync-with-glibc-2.16.patch => package/uclibc/0.9.33.2/uclibc-bits-time.h-sync-with-glibc-2.16.patch (100%)
- rename toolchain/uClibc/uClibc-0.9.33.2-define-MSG_CMSG_CLOEXEC.patch => package/uclibc/0.9.33.2/uclibc-define-MSG_CMSG_CLOEXEC.patch (100%)
- rename toolchain/uClibc/uClibc-0.9.33.2-dup3.patch => package/uclibc/0.9.33.2/uclibc-dup3.patch (100%)
- create mode 100644 package/uclibc/Config.in
- rename {toolchain/uClibc => package/uclibc}/uClibc-0.9.32.config (100%)
- rename {toolchain/uClibc => package/uclibc}/uClibc-0.9.33.config (100%)
- rename {toolchain/uClibc => package/uclibc}/uClibc-snapshot.config (100%)
- create mode 100644 package/uclibc/uclibc.mk
- delete mode 100644 toolchain/uClibc/Config.in
- delete mode 100644 toolchain/uClibc/uclibc.mk
+ toolchain/uClibc/uclibc.mk                         |  36 +-
+ 65 files changed, 23 insertions(+), 831 deletions(-)
+ rename {toolchain => package}/gcc/4.2.2-avr32-2.1.5/1001-gcc-4.2.x-inhibit-libc.patch (100%)
+ rename {toolchain => package}/gcc/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch (100%)
+ rename {toolchain => package}/gcc/4.2.2-avr32-2.1.5/904-avr32-fix-conditional-insn-which-clobbers-cc_status.patch (100%)
+ rename {toolchain => package}/gcc/4.2.2-avr32-2.1.5/905-avr32-optimize-movsf2-use-movh-to-move-immediates-into-register.patch (100%)
+ rename {toolchain => package}/gcc/4.3.6/100-uclibc-conf.patch (100%)
+ rename {toolchain => package}/gcc/4.3.6/104-gnuhurd-uclibc-conf.patch (100%)
+ rename {toolchain => package}/gcc/4.3.6/301-missing-execinfo_h.patch (100%)
+ rename {toolchain => package}/gcc/4.3.6/302-c99-snprintf.patch (100%)
+ rename {toolchain => package}/gcc/4.3.6/305-libmudflap-susv3-legacy.patch (100%)
+ rename {toolchain => package}/gcc/4.3.6/810-arm-softfloat-libgcc.patch (100%)
+ rename {toolchain => package}/gcc/4.3.6/993-arm_insn-opinit-RTX_CODE-fixup.patch (100%)
+ rename {toolchain => package}/gcc/4.3.6/998-gcc-4.3.0-fix-header.00.patch (100%)
+ rename {toolchain => package}/gcc/4.3.6/999-4.3.2-armeabi-aapcs-linux.patch (100%)
+ rename {toolchain => package}/gcc/4.3.6/999-4.3.3-arm-fix-for-bug-37436.patch (100%)
+ rename {toolchain => package}/gcc/4.3.6/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch (100%)
+ rename {toolchain => package}/gcc/4.3.6/gcc-43-pr39429.patch (100%)
+ rename {toolchain => package}/gcc/4.3.6/powerpc-link-with-math-lib.patch.conditional (100%)
+ rename {toolchain => package}/gcc/4.4.7-arc/fix_branch_out_of_range.patch (100%)
+ rename {toolchain => package}/gcc/4.4.7/100-uclibc-conf.patch (100%)
+ rename {toolchain => package}/gcc/4.4.7/301-missing-execinfo_h.patch (100%)
+ rename {toolchain => package}/gcc/4.4.7/302-c99-snprintf.patch (100%)
+ rename {toolchain => package}/gcc/4.4.7/305-libmudflap-susv3-legacy.patch (100%)
+ rename {toolchain => package}/gcc/4.4.7/810-arm-softfloat-libgcc.patch (100%)
+ rename {toolchain => package}/gcc/4.4.7/950-sparc-leon.patch (100%)
+ rename {toolchain => package}/gcc/4.4.7/gcc-44-pr39429.patch (100%)
+ rename {toolchain => package}/gcc/4.4.7/powerpc-link-with-math-lib.patch.conditional (100%)
+ rename {toolchain => package}/gcc/4.5.4/100-uclibc-conf.patch (100%)
+ rename {toolchain => package}/gcc/4.5.4/301-missing-execinfo_h.patch (100%)
+ rename {toolchain => package}/gcc/4.5.4/302-c99-snprintf.patch (100%)
+ rename {toolchain => package}/gcc/4.5.4/305-libmudflap-susv3-legacy.patch (100%)
+ rename {toolchain => package}/gcc/4.5.4/810-arm-softfloat-libgcc.patch (100%)
+ rename {toolchain => package}/gcc/4.5.4/820-arm-unbreak-armv4t.patch (100%)
+ rename {toolchain => package}/gcc/4.5.4/830-arm-pr43440.patch (100%)
+ rename {toolchain => package}/gcc/4.5.4/powerpc-link-with-math-lib.patch.conditional (100%)
+ rename {toolchain => package}/gcc/4.6.4/100-uclibc-conf.patch (100%)
+ rename {toolchain => package}/gcc/4.6.4/301-missing-execinfo_h.patch (100%)
+ rename {toolchain => package}/gcc/4.6.4/302-c99-snprintf.patch (100%)
+ rename {toolchain => package}/gcc/4.6.4/305-libmudflap-susv3-legacy.patch (100%)
+ rename {toolchain => package}/gcc/4.6.4/810-arm-softfloat-libgcc.patch (100%)
+ rename {toolchain => package}/gcc/4.6.4/820-arm-unbreak-armv4t.patch (100%)
+ rename {toolchain => package}/gcc/4.6.4/powerpc-link-with-math-lib.patch.conditional (100%)
+ rename {toolchain => package}/gcc/4.7.3/100-uclibc-conf.patch (100%)
+ rename {toolchain => package}/gcc/4.7.3/301-missing-execinfo_h.patch (100%)
+ rename {toolchain => package}/gcc/4.7.3/302-c99-snprintf.patch (100%)
+ rename {toolchain => package}/gcc/4.7.3/305-libmudflap-susv3-legacy.patch (100%)
+ rename {toolchain => package}/gcc/4.7.3/810-arm-softfloat-libgcc.patch (100%)
+ rename {toolchain => package}/gcc/4.7.3/830-arm_unbreak_armv4t.patch (100%)
+ rename {toolchain => package}/gcc/4.7.3/powerpc-link-with-math-lib.patch.conditional (100%)
+ rename {toolchain => package}/gcc/4.8.1/100-uclibc-conf.patch (100%)
+ rename {toolchain => package}/gcc/4.8.1/301-missing-execinfo_h.patch (100%)
+ rename {toolchain => package}/gcc/4.8.1/302-c99-snprintf.patch (100%)
+ rename {toolchain => package}/gcc/4.8.1/305-libmudflap-susv3-legacy.patch (100%)
+ rename {toolchain => package}/gcc/4.8.1/810-arm-softfloat-libgcc.patch (100%)
+ rename {toolchain => package}/gcc/4.8.1/830-arm_unbreak_armv4t.patch (100%)
+ rename {toolchain => package}/gcc/4.8.1/powerpc-link-with-math-lib.patch.conditional (100%)
+ delete mode 100644 toolchain/gcc/Config.in
+ delete mode 100644 toolchain/gcc/Config.in.2
+ delete mode 100644 toolchain/gcc/gcc-uclibc-4.x.mk
 
-diff --git a/package/gcc/gcc-intermediate/gcc-intermediate.mk b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-index 6b6b57e..3a71671 100644
---- a/package/gcc/gcc-intermediate/gcc-intermediate.mk
-+++ b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-@@ -10,7 +10,7 @@ GCC_INTERMEDIATE_SOURCE  = $(GCC_SOURCE)
- 
- HOST_GCC_INTERMEDIATE_DEPENDENCIES = \
- 	$(HOST_GCC_COMMON_DEPENDENCIES) \
--	uclibc-configured
-+	uclibc-configure
- 
- HOST_GCC_INTERMEDIATE_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
- 
-diff --git a/toolchain/uClibc/uClibc-0.9.32.1-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch b/package/uclibc/0.9.32.1/uclibc-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
-similarity index 100%
-rename from toolchain/uClibc/uClibc-0.9.32.1-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
-rename to package/uclibc/0.9.32.1/uclibc-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
-diff --git a/toolchain/uClibc/uClibc-0.9.32.1-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch b/package/uclibc/0.9.32.1/uclibc-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
-similarity index 100%
-rename from toolchain/uClibc/uClibc-0.9.32.1-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
-rename to package/uclibc/0.9.32.1/uclibc-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
-diff --git a/toolchain/uClibc/uClibc-0.9.32.1-linuxthreads-errno-fix.patch b/package/uclibc/0.9.32.1/uclibc-linuxthreads-errno-fix.patch
-similarity index 100%
-rename from toolchain/uClibc/uClibc-0.9.32.1-linuxthreads-errno-fix.patch
-rename to package/uclibc/0.9.32.1/uclibc-linuxthreads-errno-fix.patch
-diff --git a/toolchain/uClibc/uClibc-0.9.32.1-sparc-errno-fix.patch b/package/uclibc/0.9.32.1/uclibc-sparc-errno-fix.patch
-similarity index 100%
-rename from toolchain/uClibc/uClibc-0.9.32.1-sparc-errno-fix.patch
-rename to package/uclibc/0.9.32.1/uclibc-sparc-errno-fix.patch
-diff --git a/toolchain/uClibc/uClibc-0.9.32.1-unshare.patch b/package/uclibc/0.9.32.1/uclibc-unshare.patch
-similarity index 100%
-rename from toolchain/uClibc/uClibc-0.9.32.1-unshare.patch
-rename to package/uclibc/0.9.32.1/uclibc-unshare.patch
-diff --git a/toolchain/uClibc/uClibc-0.9.33.2-OpenWRT-140-avr32_atomic_fix.patch b/package/uclibc/0.9.33.2/uclibc-OpenWRT-140-avr32_atomic_fix.patch
-similarity index 100%
-rename from toolchain/uClibc/uClibc-0.9.33.2-OpenWRT-140-avr32_atomic_fix.patch
-rename to package/uclibc/0.9.33.2/uclibc-OpenWRT-140-avr32_atomic_fix.patch
-diff --git a/toolchain/uClibc/uClibc-0.9.33.2-bits-time.h-sync-with-glibc-2.16.patch b/package/uclibc/0.9.33.2/uclibc-bits-time.h-sync-with-glibc-2.16.patch
-similarity index 100%
-rename from toolchain/uClibc/uClibc-0.9.33.2-bits-time.h-sync-with-glibc-2.16.patch
-rename to package/uclibc/0.9.33.2/uclibc-bits-time.h-sync-with-glibc-2.16.patch
-diff --git a/toolchain/uClibc/uClibc-0.9.33.2-define-MSG_CMSG_CLOEXEC.patch b/package/uclibc/0.9.33.2/uclibc-define-MSG_CMSG_CLOEXEC.patch
-similarity index 100%
-rename from toolchain/uClibc/uClibc-0.9.33.2-define-MSG_CMSG_CLOEXEC.patch
-rename to package/uclibc/0.9.33.2/uclibc-define-MSG_CMSG_CLOEXEC.patch
-diff --git a/toolchain/uClibc/uClibc-0.9.33.2-dup3.patch b/package/uclibc/0.9.33.2/uclibc-dup3.patch
-similarity index 100%
-rename from toolchain/uClibc/uClibc-0.9.33.2-dup3.patch
-rename to package/uclibc/0.9.33.2/uclibc-dup3.patch
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-new file mode 100644
-index 0000000..22c70a2
---- /dev/null
-+++ b/package/uclibc/Config.in
-@@ -0,0 +1,166 @@
-+comment "uClibc Options"
-+
-+choice
-+	prompt "uClibc C library Version"
-+	default BR2_UCLIBC_VERSION_0_9_33
-+	help
-+	  Select the version of uClibc you wish to use.
-+
-+	config BR2_UCLIBC_VERSION_0_9_32
-+		bool "uClibc 0.9.32.x"
-+		depends on !(BR2_arc || BR2_avr32 || BR2_sh || BR2_xtensa)
-+
-+	config BR2_UCLIBC_VERSION_0_9_33
-+		bool "uClibc 0.9.33.x"
-+		depends on !(BR2_arc || BR2_xtensa)
-+
-+	config BR2_UCLIBC_VERSION_0_9_33_ARC
-+		bool "uClibc 0.9.33.x-arc"
-+		depends on BR2_arc
-+
-+	config BR2_UCLIBC_VERSION_SNAPSHOT
-+		bool "daily snapshot"
-+
-+endchoice
-+
-+config BR2_USE_UCLIBC_SNAPSHOT
-+	string "Date (yyyymmdd) of snapshot or 'snapshot' for latest"
-+	default "snapshot"
-+	depends on BR2_UCLIBC_VERSION_SNAPSHOT
-+	help
-+	    Use latest snapshot or one from a specific date?
-+
-+config BR2_UCLIBC_VERSION_STRING
-+	string
-+	default 0.9.32.1	if BR2_UCLIBC_VERSION_0_9_32
-+	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
-+	default 0.9.33-arc	if BR2_UCLIBC_VERSION_0_9_33_ARC
-+	default $BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
-+
-+config BR2_UCLIBC_CONFIG
-+	string "uClibc configuration file to use?"
-+	default "package/uclibc/uClibc-0.9.32.config" if BR2_UCLIBC_VERSION_0_9_32
-+	default "package/uclibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
-+	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_0_9_33_ARC
-+	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
-+	help
-+	  Some people may wish to use their own modified uClibc configuration
-+	  file and will specify their config file location with this option.
-+	  See also docs/README in this package.
-+	  If unsure, use the default.
-+
-+config BR2_UCLIBC_INSTALL_TEST_SUITE
-+	bool "Compile and install uClibc tests"
-+	select BR2_PACKAGE_MAKE
-+	help
-+	  Enabling this option will compile and install the uClibc test suite.
-+	  This is useful if you want to check if the uClibc library is working
-+	  for your architecture and/or help developing uClibc.
-+
-+	  The test suite will be installed into /root/uClibc directory. To run
-+	  the test suite enter the /root/uClibc/test directory and type
-+	  "make UCLIBC_ONLY=1 CC=/bin/true check".
-+
-+	  See the /root/uClibc/test/README for additional information.
-+
-+	  This is not needed at all for normal builds, so you can safely say no
-+	  if you do not plan to dig into your C library.
-+
-+# Mapping from the Buildroot architecture configuration options to the
-+# uClibc architecture names.
-+config BR2_UCLIBC_TARGET_ARCH
-+	string
-+	default arc	   if BR2_arcle || BR2_arceb
-+	default arm	   if BR2_arm	|| BR2_armeb
-+	default avr32	   if BR2_avr32
-+	default bfin	   if BR2_bfin
-+	default m68k	   if BR2_m68k
-+	default mips	   if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	default powerpc	   if BR2_powerpc
-+	default sh	   if BR2_sh
-+	default sparc	   if BR2_sparc
-+	default xtensa	   if BR2_xtensa
-+	default i386	   if BR2_i386
-+	default x86_64	   if BR2_x86_64
-+
-+# This is only useful for uClibc <= 0.9.32. It can be removed once
-+# Buildroot will support only uClibc >= 0.9.33 on ARM.
-+config BR2_UCLIBC_ARM_TYPE
-+	string
-+	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
-+	default GENERIC_ARM	if BR2_fa526
-+	default ARM7TDMI	if BR2_arm7tdmi
-+	default ARM720T		if BR2_arm720t
-+	default ARM920T		if BR2_arm920t
-+	default ARM922T		if BR2_arm922t
-+	default ARM926T		if BR2_arm926t
-+	default ARM10T		if BR2_arm10t
-+	default ARM1136JF_S	if BR2_arm1136jf_s
-+	default ARM1176JZ_S	if BR2_arm1176jz_s
-+	default ARM1176JZF_S	if BR2_arm1176jzf_s
-+	default ARM_SA1100	if BR2_strongarm
-+	default ARM_XSCALE	if BR2_xscale
-+	default ARM_IWMMXT	if BR2_iwmmxt
-+	default ARM_CORTEXA8	if BR2_cortex_a8
-+	default ARM_CORTEXA9	if BR2_cortex_a9
-+
-+config BR2_UCLIBC_ARM_ABI
-+	string
-+	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
-+	default OABI if BR2_ARM_OABI
-+	default EABI if BR2_ARM_EABI
-+
-+config BR2_UCLIBC_ARM_BX
-+	bool
-+	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
-+	default y if !BR2_fa265 && !BR2_strongarm
-+
-+config BR2_UCLIBC_MIPS_ABI
-+	string
-+	depends on BR2_UCLIBC_TARGET_ARCH = "mips"
-+	default O32 if BR2_MIPS_OABI32
-+	default N32 if BR2_MIPS_NABI32
-+	default N64 if BR2_MIPS_NABI64
-+
-+config BR2_UCLIBC_MIPS_ISA
-+	string
-+	depends on BR2_UCLIBC_TARGET_ARCH = "mips"
-+	default 1 if BR2_mips_1
-+	default 2 if BR2_mips_2
-+	default 3 if BR2_mips_3
-+	default 4 if BR2_mips_4
-+	default mips32 if BR2_mips_32
-+	default mips32r2 if BR2_mips_32r2
-+	default mips64 if BR2_mips_64
-+
-+config BR2_UCLIBC_SH_TYPE
-+	string
-+	depends on BR2_UCLIBC_TARGET_ARCH = "sh"
-+	default SHA2 if BR2_sh2
-+	default SH3  if BR2_sh3 || BR2_sh3eb
-+	default SH4  if BR2_sh4 || BR2_sh4eb
-+
-+config BR2_UCLIBC_SPARC_TYPE
-+	string
-+	depends on BR2_UCLIBC_TARGET_ARCH = "sparc"
-+	default V7	if BR2_sparc_v7 || BR2_sparc_sparchfleon || BR2_sparc_sparcsfleon
-+	default V8	if BR2_sparc_v8 || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleonv8
-+
-+config BR2_UCLIBC_POWERPC_TYPE
-+	string
-+	depends on BR2_UCLIBC_TARGET_ARCH = "powerpc"
-+	default CLASSIC if !BR2_powerpc_8540 && !BR2_powerpc_8548 && !BR2_powerpc_e500mc
-+	default E500    if BR2_powerpc_8540 || BR2_powerpc_8548 || BR2_powerpc_e500mc
-+
-+config BR2_UCLIBC_X86_TYPE
-+	string
-+	depends on BR2_UCLIBC_TARGET_ARCH = "i386"
-+	default 386     if BR2_x86_i386
-+	default 486	if BR2_x86_i486
-+	default 586	if BR2_x86_i586
-+	default 586MMX	if BR2_x86_pentium_mmx
-+	default 686	if BR2_x86_i686 || BR2_x86_pentiumpro
-+	default PENTIUMII  if BR2_x86_pentium2
-+	default PENTIUMIII if BR2_x86_pentium3
-+	default PENTIUM4   if BR2_x86_pentium4 || BR2_x86_pentium_m || \
-+			      BR2_x86_nocona || BR2_x86_core2
-diff --git a/toolchain/uClibc/uClibc-0.9.32.config b/package/uclibc/uClibc-0.9.32.config
-similarity index 100%
-rename from toolchain/uClibc/uClibc-0.9.32.config
-rename to package/uclibc/uClibc-0.9.32.config
-diff --git a/toolchain/uClibc/uClibc-0.9.33.config b/package/uclibc/uClibc-0.9.33.config
-similarity index 100%
-rename from toolchain/uClibc/uClibc-0.9.33.config
-rename to package/uclibc/uClibc-0.9.33.config
-diff --git a/toolchain/uClibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
-similarity index 100%
-rename from toolchain/uClibc/uClibc-snapshot.config
-rename to package/uclibc/uClibc-snapshot.config
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-new file mode 100644
-index 0000000..1c5340c
---- /dev/null
-+++ b/package/uclibc/uclibc.mk
-@@ -0,0 +1,484 @@
-+################################################################################
-+#
-+# uclibc
-+#
-+################################################################################
-+
-+UCLIBC_VERSION = $(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
-+UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.xz
-+
-+ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
-+UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
-+else ifeq ($(findstring arc,$(UCLIBC_VERSION)),arc)
-+UCLIBC_SITE = $(BR2_ARC_SITE)
-+UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.bz2
-+else
-+UCLIBC_SITE = http://www.uclibc.org/downloads
-+endif
-+
-+UCLIBC_INSTALL_STAGING = YES
-+
-+# Before uClibc is configured, we must have the first stage
-+# cross-compiler and the kernel headers
-+UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
-+
-+# Before uClibc is built, we must have the second stage cross-compiler
-+uclibc-build: host-gcc-intermediate
-+
-+# specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
-+# setting.
-+ifndef UCLIBC_CONFIG_FILE
-+UCLIBC_CONFIG_FILE = $(call qstrip,$(BR2_UCLIBC_CONFIG))
-+endif
-+
-+UCLIBC_TARGET_ARCH = $(call qstrip,$(BR2_UCLIBC_TARGET_ARCH))
-+
-+ifeq ($(GENERATE_LOCALE),)
-+# We need at least one locale
-+UCLIBC_LOCALES = en_US
-+else
-+# Strip out the encoding part of locale names, if any
-+UCLIBC_LOCALES = $(foreach locale,$(GENERATE_LOCALE),\
-+		   $(firstword $(subst .,$(space),$(locale))))
-+endif
-+
-+#
-+# Utility functions to manipulation the uClibc configuration file
-+#
-+
-+define UCLIBC_OPT_SET
-+	$(SED) '/$(1)/d' $(3)/.config
-+	echo '$(1)=$(2)' >> $(3)/.config
-+endef
-+
-+define UCLIBC_OPT_UNSET
-+	$(SED) '/$(1)/d' $(2)/.config
-+	echo '# $(1) is not set' >> $(2)/.config
-+endef
-+
-+#
-+# ARM definitions
-+#
-+
-+ifeq ($(UCLIBC_TARGET_ARCH),arm)
-+UCLIBC_ARM_TYPE = CONFIG_$(call qstrip,$(BR2_UCLIBC_ARM_TYPE))
-+
-+define UCLIBC_ARM_TYPE_CONFIG
-+	$(SED) 's/^\(CONFIG_[^_]*[_]*ARM[^=]*\)=.*/# \1 is not set/g' \
-+		$(@D)/.config
-+	$(call UCLIBC_OPT_SET,$(UCLIBC_ARM_TYPE),y,$(@D))
-+endef
-+
-+UCLIBC_ARM_ABI = CONFIG_ARM_$(call qstrip,$(BR2_UCLIBC_ARM_ABI))
-+
-+define UCLIBC_ARM_ABI_CONFIG
-+	$(SED) '/CONFIG_ARM_.ABI/d' $(@D)/.config
-+	$(call UCLIBC_OPT_SET,$(UCLIBC_ARM_ABI),y,$(@D))
-+endef
-+
-+ifeq ($(BR2_UCLIBC_ARM_BX),y)
-+define UCLIBC_ARM_BX_CONFIG
-+	$(call UCLIBC_OPT_SET,USE_BX,y,$(@D))
-+endef
-+else
-+define UCLIBC_ARM_BX_CONFIG
-+	$(call UCLIBC_OPT_UNSET,USE_BX,y,$(@D))
-+endef
-+endif
-+
-+endif # arm
-+
-+#
-+# MIPS definitions
-+#
-+
-+ifeq ($(UCLIBC_TARGET_ARCH),mips)
-+UCLIBC_MIPS_ABI = CONFIG_MIPS_$(call qstrip,$(BR2_UCLIBC_MIPS_ABI))_ABI
-+define UCLIBC_MIPS_ABI_CONFIG
-+	$(SED) '/CONFIG_MIPS_[NO].._ABI/d' $(@D)/.config
-+	$(call UCLIBC_OPT_SET,$(UCLIBC_MIPS_ABI),y,$(@D))
-+endef
-+
-+UCLIBC_MIPS_ISA = CONFIG_MIPS_ISA_$(call qstrip,$(BR2_UCLIBC_MIPS_ISA))
-+define UCLIBC_MIPS_ISA_CONFIG
-+	$(SED) '/CONFIG_MIPS_ISA_.*/d' $(@D)/.config
-+	$(call UCLIBC_OPT_SET,$(UCLIBC_MIPS_ISA),y,$(@D))
-+endef
-+endif # mips
-+
-+#
-+# SH definitions
-+#
-+
-+ifeq ($(UCLIBC_TARGET_ARCH),sh)
-+UCLIBC_SH_TYPE = CONFIG_$(call qstrip,$(BR2_UCLIBC_SH_TYPE))
-+define UCLIBC_SH_TYPE_CONFIG
-+	$(SED) '/CONFIG_SH[234A]*/d' $(@D)/.config
-+	$(call UCLIBC_OPT_SET,$(UCLIBC_SH_TYPE),y,$(@?))
-+endef
-+endif # sh
-+
-+#
-+# SPARC definitions
-+#
-+
-+ifeq ($(UCLIBC_TARGET_ARCH),sparc)
-+UCLIBC_SPARC_TYPE = CONFIG_SPARC_$(call qstrip,$(BR2_UCLIBC_SPARC_TYPE))
-+define UCLIBC_SPARC_TYPE_CONFIG
-+	$(SED) 's/^\(CONFIG_[^_]*[_]*SPARC[^=]*\)=.*/# \1 is not set/g' \
-+		 $(@?)/.config
-+	$(call UCLIBC_OPT_SET,$(UCLIBC_SPARC_TYPE),y,$(@D))
-+endef
-+endif # sparc
-+
-+#
-+# PowerPC definitions
-+#
-+
-+ifeq ($(UCLIBC_TARGET_ARCH),powerpc)
-+UCLIBC_POWERPC_TYPE = CONFIG_$(call qstrip,$(BR2_UCLIBC_POWERPC_TYPE))
-+define UCLIBC_POWERPC_TYPE_CONFIG
-+	$(call UCLIBC_OPT_UNSET,CONFIG_GENERIC,$(@D))
-+	$(call UCLIBC_OPT_UNSET,CONFIG_E500,$(@D))
-+	$(call UCLIBC_OPT_SET,$(UCLIBC_POWERPC_TYPE),y,$(@?))
-+endef
-+endif # powerpc
-+
-+#
-+# AVR32 definitions
-+#
-+
-+ifeq ($(UCLIBC_TARGET_ARCH),avr32)
-+define UCLIBC_AVR32_CONFIG
-+	$(call UCLIBC_OPT_SET,LINKRELAX,y,$(@D))
-+endef
-+endif # avr32
-+
-+#
-+# x86 definitions
-+#
-+ifeq ($(UCLIBC_TARGET_ARCH),i386)
-+UCLIBC_X86_TYPE = CONFIG_$(call qstrip,$(BR2_UCLIBC_X86_TYPE))
-+define UCLIBC_X86_TYPE_CONFIG
-+	$(call UCLIBC_OPT_SET,$(UCLIBC_X86_TYPE),y,$(@D))
-+endef
-+endif
-+
-+#
-+# ARC definitions
-+#
-+ifeq ($(UCLIBC_TARGET_ARCH),arc)
-+REALLY_NOSTDLIB = -really-nostdlib
-+endif
-+
-+#
-+# Endianess
-+#
-+
-+ifeq ($(call qstrip,$(BR2_ENDIAN)),BIG)
-+define UCLIBC_ENDIAN_CONFIG
-+	$(call UCLIBC_OPT_SET,ARCH_BIG_ENDIAN,y,$(@D))
-+	$(call UCLIBC_OPT_SET,ARCH_WANTS_BIG_ENDIAN,y,$(@D))
-+	$(call UCLIBC_OPT_UNSET,ARCH_LITTLE_ENDIAN,$(@D))
-+	$(call UCLIBC_OPT_UNSET,ARCH_WANTS_LITTLE_ENDIAN,$(@D))
-+endef
-+else
-+define UCLIBC_ENDIAN_CONFIG
-+	$(call UCLIBC_OPT_SET,ARCH_LITTLE_ENDIAN,y,$(@D))
-+	$(call UCLIBC_OPT_SET,ARCH_WANTS_LITTLE_ENDIAN,y,$(@D))
-+	$(call UCLIBC_OPT_UNSET,ARCH_BIG_ENDIAN,$(@D))
-+	$(call UCLIBC_OPT_UNSET,ARCH_WANTS_BIG_ENDIAN,$(@D))
-+endef
-+endif
-+
-+#
-+# Largefile
-+#
-+
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LARGEFILE),y)
-+define UCLIBC_LARGEFILE_CONFIG
-+	$(call UCLIBC_OPT_SET,UCLIBC_HAS_LFS,y,$(@D))
-+endef
-+else
-+define UCLIBC_LARGEFILE_CONFIG
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_HAS_LFS,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_HAS_FOPEN_LARGEFILE_MODE,$(@D))
-+endef
-+endif
-+
-+#
-+# IPv6
-+#
-+
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_IPV6),y)
-+UCLIBC_IPV6_CONFIG = $(call UCLIBC_OPT_SET,UCLIBC_HAS_IPV6,y,$(@D))
-+else
-+UCLIBC_IPV6_CONFIG = $(call UCLIBC_OPT_UNSET,UCLIBC_HAS_IPV6,$(@D))
-+endif
-+
-+#
-+# RPC
-+#
-+
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_RPC),y)
-+define UCLIBC_RPC_CONFIG
-+	$(call UCLIBC_OPT_SET,UCLIBC_HAS_RPC,y,$(@D))
-+	$(call UCLIBC_OPT_SET,UCLIBC_HAS_FULL_RPC,y,$(@D))
-+	$(call UCLIBC_OPT_SET,UCLIBC_HAS_REENTRANT_RPC,y,$(@D))
-+endef
-+else
-+define UCLIBC_RPC_CONFIG
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_HAS_RPC,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_HAS_FULL_RPC,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_HAS_REENTRANT_RPC,$(@D))
-+endef
-+endif
-+
-+#
-+# soft-float
-+#
-+
-+ifeq ($(BR2_SOFT_FLOAT),y)
-+define UCLIBC_FLOAT_CONFIG
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_HAS_FPU,$(@D))
-+	$(call UCLIBC_OPT_SET,UCLIBC_HAS_FLOATS,y,$(@D))
-+	$(call UCLIBC_OPT_SET,DO_C99_MATH,y,$(@D))
-+endef
-+else
-+define UCLIBC_FLOAT_CONFIG
-+	$(call UCLIBC_OPT_SET,UCLIBC_HAS_FPU,y,$(@D))
-+	$(call UCLIBC_OPT_SET,UCLIBC_HAS_FLOATS,y,$(@D))
-+endef
-+endif
-+
-+#
-+# SSP
-+#
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
-+UCLIBC_SSP_CONFIG = $(call UCLIBC_OPT_SET,UCLIBC_HAS_SSP,y,$(@D))
-+else
-+UCLIBC_SSP_CONFIG = $(call UCLIBC_OPT_UNSET,UCLIBC_HAS_SSP,$(@D))
-+endif
-+
-+#
-+# Threads
-+#
-+ifeq ($(BR2_PTHREADS_NONE),y)
-+define UCLIBC_THREAD_CONFIG
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_HAS_THREADS,$(@D))
-+	$(call UCLIBC_OPT_UNSET,LINUXTHREADS,$(@D))
-+	$(call UCLIBC_OPT_UNSET,LINUXTHREADS_OLD,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_HAS_THREADS_NATIVE,$(@D))
-+endef
-+else ifeq ($(BR2_PTHREADS),y)
-+define UCLIBC_THREAD_CONFIG
-+	$(call UCLIBC_OPT_SET,UCLIBC_HAS_THREADS,y,$(@D))
-+	$(call UCLIBC_OPT_SET,LINUXTHREADS_NEW,y,$(@D))
-+	$(call UCLIBC_OPT_UNSET,LINUXTHREADS_OLD,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_HAS_THREADS_NATIVE,$(@D))
-+endef
-+else ifeq ($(BR2_PTHREADS_OLD),y)
-+define UCLIBC_THREAD_CONFIG
-+	$(call UCLIBC_OPT_SET,UCLIBC_HAS_THREADS,y,$(@D))
-+	$(call UCLIBC_OPT_UNSET,LINUXTHREADS_NEW,$(@D))
-+	$(call UCLIBC_OPT_SET,LINUXTHREADS_OLD,y,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_HAS_THREADS_NATIVE,$(@D))
-+endef
-+else ifeq ($(BR2_PTHREADS_NATIVE),y)
-+define UCLIBC_THREAD_CONFIG
-+	$(call UCLIBC_OPT_SET,UCLIBC_HAS_THREADS,y,$(@D))
-+	$(call UCLIBC_OPT_UNSET,LINUXTHREADS_NEW,$(@D))
-+	$(call UCLIBC_OPT_UNSET,LINUXTHREADS_OLD,$(@D))
-+	$(call UCLIBC_OPT_SET,UCLIBC_HAS_THREADS_NATIVE,y,$(@D))
-+endef
-+endif
-+
-+#
-+# Thread debug
-+#
-+
-+ifeq ($(BR2_PTHREAD_DEBUG),y)
-+UCLIBC_THREAD_DEBUG_CONFIG = $(call UCLIBC_OPT_SET,PTHREADS_DEBUG_SUPPORT,y,$(@D))
-+else
-+UCLIBC_THREAD_DEBUG_CONFIG = $(call UCLIBC_OPT_UNSET,PTHREADS_DEBUG_SUPPORT,$(@D))
-+endif
-+
-+#
-+# Locale
-+#
-+
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LOCALE),y)
-+define UCLIBC_LOCALE_CONFIG
-+	$(call UCLIBC_OPT_SET,UCLIBC_HAS_LOCALE,y,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_BUILD_ALL_LOCALE,$(@D))
-+	$(call UCLIBC_OPT_SET,UCLIBC_BUILD_MINIMAL_LOCALE,y,$(@D))
-+	$(call UCLIBC_OPT_SET,UCLIBC_BUILD_MINIMAL_LOCALES,"$(UCLIBC_LOCALES)",$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_PREGENERATED_LOCALE_DATA,$(@D))
-+	$(call UCLIBC_OPT_UNSET,DOWNLOAD_PREGENERATED_LOCALE_DATA,$(@D))
-+	$(call UCLIBC_OPT_SET,UCLIBC_HAS_XLOCALE,y,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_HAS_GLIBC_DIGIT_GROUPING,$(@D))
-+endef
-+else
-+define UCLIBC_LOCALE_CONFIG
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_HAS_LOCALE,$(@D))
-+endef
-+endif
-+
-+#
-+# wchar
-+#
-+
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_WCHAR),y)
-+UCLIBC_WCHAR_CONFIG = $(call UCLIBC_OPT_SET,UCLIBC_HAS_WCHAR,y,$(@D))
-+else
-+UCLIBC_WCHAR_CONFIG = $(call UCLIBC_OPT_UNSET,UCLIBC_HAS_WCHAR,$(@D))
-+endif
-+
-+#
-+# debug
-+#
-+
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+UCLIBC_DEBUG_CONFIG = $(call UCLIBC_OPT_SET,DODEBUG,y,$(@D))
-+endif
-+
-+#
-+# strip
-+#
-+
-+ifeq ($(BR2_STRIP_none),y)
-+UCLIBC_STRIP_CONFIG = $(call UCLIBC_OPT_SET,DOSTRIP,y,$(@D))
-+endif
-+
-+#
-+# Commands
-+#
-+
-+UCLIBC_MAKE_FLAGS = \
-+	ARCH="$(UCLIBC_TARGET_ARCH)" \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
-+	UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
-+	HOSTCC="$(HOSTCC)"
-+
-+define UCLIBC_CONFIGURE_CMDS
-+	cp -f $(UCLIBC_CONFIG_FILE) $(@D)/.config
-+	$(call UCLIBC_OPT_SET,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D))
-+	$(call UCLIBC_OPT_SET,TARGET_$(UCLIBC_TARGET_ARCH),y,$(@D))
-+	$(call UCLIBC_OPT_SET,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D))
-+	$(call UCLIBC_OPT_SET,KERNEL_HEADERS,"$(STAGING_DIR)/usr/include",$(@D))
-+	$(call UCLIBC_OPT_SET,RUNTIME_PREFIX,"/",$(@D))
-+	$(call UCLIBC_OPT_SET,DEVEL_PREFIX,"/usr",$(@D))
-+	$(call UCLIBC_OPT_SET,SHARED_LIB_LOADER_PREFIX,"/lib",$(@D))
-+	$(UCLIBC_ARM_TYPE_CONFIG)
-+	$(UCLIBC_ARM_ABI_CONFIG)
-+	$(UCLIBC_ARM_BX_CONFIG)
-+	$(UCLIBC_MIPS_ABI_CONFIG)
-+	$(UCLIBC_MIPS_ISA_CONFIG)
-+	$(UCLIBC_SH_TYPE_CONFIG)
-+	$(UCLIBC_SPARC_TYPE_CONFIG)
-+	$(UCLIBC_POWERPC_TYPE_CONFIG)
-+	$(UCLIBC_AVR32_CONFIG)
-+	$(UCLIBC_X86_TYPE_CONFIG)
-+	$(UCLIBC_ENDIAN_CONFIG)
-+	$(UCLIBC_LARGEFILE_CONFIG)
-+	$(UCLIBC_IPV6_CONFIG)
-+	$(UCLIBC_RPC_CONFIG)
-+	$(UCLIBC_FLOAT_CONFIG)
-+	$(UCLIBC_SSP_CONFIG)
-+	$(UCLIBC_THREAD_CONFIG)
-+	$(UCLIBC_THREAD_DEBUG_CONFIG)
-+	$(UCLIBC_LOCALE_CONFIG)
-+	$(UCLIBC_WCHAR_CONFIG)
-+	$(UCLIBC_STRIP_CONFIG)
-+	$(UCLIBC_DEBUG_CONFIG)
-+	yes "" | $(MAKE1) -C $(@D) \
-+		$(UCLIBC_MAKE_FLAGS) \
-+		PREFIX=$(STAGING_DIR) \
-+		DEVEL_PREFIX=/usr/ \
-+		RUNTIME_PREFIX=$(STAGING_DIR) \
-+		oldconfig
-+	$(MAKE1) -C $(UCLIBC_DIR) \
-+		$(UCLIBC_MAKE_FLAGS) \
-+		PREFIX=$(STAGING_DIR) \
-+		DEVEL_PREFIX=/usr/ \
-+		RUNTIME_PREFIX=$(STAGING_DIR) \
-+		headers lib/crt1.o lib/crti.o lib/crtn.o \
-+		install_headers
-+	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) \
-+		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
-+	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) \
-+		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libm.so
-+	cp -pLR $(UCLIBC_DIR)/lib/crt[1in].o $(STAGING_DIR)/usr/lib/
-+endef
-+
-+ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
-+define UCLIBC_BUILD_TEST_SUITE
-+	$(MAKE1) -C $(@D)/test \
-+		$(UCLIBC_MAKE_FLAGS) \
-+		ARCH_CFLAGS=-I$(STAGING_DIR)/usr/include \
-+		UCLIBC_ONLY=1 \
-+		TEST_INSTALLED_UCLIBC=1 \
-+		compile
-+endef
-+endif
-+
-+define UCLIBC_BUILD_CMDS
-+	$(MAKE1) -C $(@D) \
-+		$(UCLIBC_MAKE_FLAGS) \
-+		PREFIX= \
-+		DEVEL_PREFIX=/ \
-+		RUNTIME_PREFIX=/ \
-+		all
-+	$(MAKE1) -C $(@D)/utils \
-+		PREFIX=$(HOST_DIR) \
-+		HOSTCC="$(HOSTCC)" hostutils
-+	$(UCLIBC_BUILD_TEST_SUITE)
-+endef
-+
-+ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
-+define UCLIBC_INSTALL_TEST_SUITE
-+	mkdir -p $(TARGET_DIR)/root/uClibc
-+	cp -rdpf $(@D)/test $(TARGET_DIR)/root/uClibc
-+	$(INSTALL) -D -m 0644 $(@D)/Rules.mak $(TARGET_DIR)/root/uClibc/Rules.mak
-+	$(INSTALL) -D -m 0644 $(@D)/.config $(TARGET_DIR)/root/uClibc/.config
-+endef
-+endif
-+
-+define UCLIBC_INSTALL_TARGET_CMDS
-+	$(MAKE1) -C $(@D) \
-+		$(UCLIBC_MAKE_FLAGS) \
-+		PREFIX=$(TARGET_DIR) \
-+		DEVEL_PREFIX=/usr/ \
-+		RUNTIME_PREFIX=/ \
-+		install_runtime
-+	$(MAKE1) -C $(@D) \
-+		CC="$(TARGET_CC)" CPP="$(TARGET_CPP)" LD="$(TARGET_LD)" \
-+		ARCH="$(UCLIBC_TARGET_ARCH)" \
-+		PREFIX=$(TARGET_DIR) \
-+		utils install_utils
-+	$(UCLIBC_INSTALL_TEST_SUITE)
-+endef
-+
-+define UCLIBC_INSTALL_STAGING_CMDS
-+	$(MAKE1) -C $(@D) \
-+		$(UCLIBC_MAKE_FLAGS) \
-+		PREFIX=$(STAGING_DIR) \
-+		DEVEL_PREFIX=/usr/ \
-+		RUNTIME_PREFIX=/ \
-+		install_runtime install_dev
-+	install -D -m 0755 $(@D)/utils/ldd.host $(HOST_DIR)/usr/bin/ldd
-+	ln -sf ldd $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldd
-+	install -D -m 0755 $(@D)/utils/ldconfig.host $(HOST_DIR)/usr/bin/ldconfig
-+	ln -sf ldconfig $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldconfig
-+endef
-+
-+uclibc-menuconfig: dirs uclibc-configure
-+	$(MAKE1) -C $(UCLIBC_DIR) \
-+		$(UCLIBC_MAKE_FLAGS) \
-+		PREFIX=$(STAGING_DIR) \
-+		DEVEL_PREFIX=/usr/ \
-+		RUNTIME_PREFIX=$(STAGING_DIR)/ \
-+		menuconfig
-+	rm -f $(UCLIBC_DIR)/.stamp_{built,target_installed,staging_installed}
-+
-+$(eval $(generic-package))
-diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
-index b2eb9de..e7241bf 100644
---- a/toolchain/toolchain-buildroot.mk
-+++ b/toolchain/toolchain-buildroot.mk
-@@ -1,7 +1,3 @@
--# Include files required for the internal toolchain backend
--
--include toolchain/uClibc/uclibc.mk
--
- # Triggerring the build of the host-gcc-final will automaticaly do the
- # build of binutils, uClibc, kernel headers and all the intermediate
- # gcc steps.
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 4ad0603..416695b 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -2,7 +2,7 @@
- 
- if BR2_TOOLCHAIN_BUILDROOT
- source "package/linux-headers/Config.in.host"
--source "toolchain/uClibc/Config.in"
-+source "package/uclibc/Config.in"
- source "package/binutils/Config.in.host"
- source "package/gcc/Config.in.host"
+diff --git a/Makefile b/Makefile
+index 509eab6..189a1db 100644
+--- a/Makefile
++++ b/Makefile
+@@ -224,7 +224,7 @@ BASE_TARGETS += host-ccache
  endif
-diff --git a/toolchain/toolchain-crosstool-ng.mk b/toolchain/toolchain-crosstool-ng.mk
-index 6ef73bb..9e666a0 100644
---- a/toolchain/toolchain-crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng.mk
-@@ -3,4 +3,3 @@
- # Explicit ordering:
- include toolchain/helpers.mk
- include toolchain/toolchain-crosstool-ng/crosstool-ng.mk
--include toolchain/uClibc/uclibc.mk
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 59f18c7..79ad7e1 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -10,7 +10,7 @@
  
- CTNG_DIR := $(BUILD_DIR)/build-toolchain
- 
--CTNG_UCLIBC_CONFIG_FILE := $(TOPDIR)/toolchain/uClibc/uClibc-0.9.33.config
-+CTNG_UCLIBC_CONFIG_FILE := $(TOPDIR)/package/uclibc/uClibc-0.9.33.config
- CTNG_CONFIG_FILE:=$(call qstrip,$(BR2_TOOLCHAIN_CTNG_CONFIG))
- 
- # Hack! ct-ng is in fact a Makefile script. As such, it accepts all
-diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
-index 1198a57..2f43db7 100644
---- a/toolchain/toolchain-external.mk
-+++ b/toolchain/toolchain-external.mk
-@@ -2,4 +2,3 @@
- 
- include toolchain/helpers.mk
- include toolchain/toolchain-external/ext-tool.mk
--include toolchain/uClibc/uclibc.mk
-diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+-BASE_TARGETS += uclibc-configured host-binutils cross_compiler uclibc-target-utils kernel-headers
++BASE_TARGETS += toolchain-buildroot
+ else
+ BASE_TARGETS += uclibc
+ endif
+diff --git a/package/Config.in b/package/Config.in
+index ebeabeb..a30f0f3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -74,7 +74,6 @@ source "package/flex/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/gawk/Config.in"
+ endif
+-source "toolchain/gcc/Config.in.2"
+ source "package/gettext/Config.in"
+ source "package/git/Config.in"
+ source "package/gperf/Config.in"
+diff --git a/toolchain/gcc/4.2.2-avr32-2.1.5/1001-gcc-4.2.x-inhibit-libc.patch b/package/gcc/4.2.2-avr32-2.1.5/1001-gcc-4.2.x-inhibit-libc.patch
+similarity index 100%
+rename from toolchain/gcc/4.2.2-avr32-2.1.5/1001-gcc-4.2.x-inhibit-libc.patch
+rename to package/gcc/4.2.2-avr32-2.1.5/1001-gcc-4.2.x-inhibit-libc.patch
+diff --git a/toolchain/gcc/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch b/package/gcc/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch
+similarity index 100%
+rename from toolchain/gcc/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch
+rename to package/gcc/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch
+diff --git a/toolchain/gcc/4.2.2-avr32-2.1.5/904-avr32-fix-conditional-insn-which-clobbers-cc_status.patch b/package/gcc/4.2.2-avr32-2.1.5/904-avr32-fix-conditional-insn-which-clobbers-cc_status.patch
+similarity index 100%
+rename from toolchain/gcc/4.2.2-avr32-2.1.5/904-avr32-fix-conditional-insn-which-clobbers-cc_status.patch
+rename to package/gcc/4.2.2-avr32-2.1.5/904-avr32-fix-conditional-insn-which-clobbers-cc_status.patch
+diff --git a/toolchain/gcc/4.2.2-avr32-2.1.5/905-avr32-optimize-movsf2-use-movh-to-move-immediates-into-register.patch b/package/gcc/4.2.2-avr32-2.1.5/905-avr32-optimize-movsf2-use-movh-to-move-immediates-into-register.patch
+similarity index 100%
+rename from toolchain/gcc/4.2.2-avr32-2.1.5/905-avr32-optimize-movsf2-use-movh-to-move-immediates-into-register.patch
+rename to package/gcc/4.2.2-avr32-2.1.5/905-avr32-optimize-movsf2-use-movh-to-move-immediates-into-register.patch
+diff --git a/toolchain/gcc/4.3.6/100-uclibc-conf.patch b/package/gcc/4.3.6/100-uclibc-conf.patch
+similarity index 100%
+rename from toolchain/gcc/4.3.6/100-uclibc-conf.patch
+rename to package/gcc/4.3.6/100-uclibc-conf.patch
+diff --git a/toolchain/gcc/4.3.6/104-gnuhurd-uclibc-conf.patch b/package/gcc/4.3.6/104-gnuhurd-uclibc-conf.patch
+similarity index 100%
+rename from toolchain/gcc/4.3.6/104-gnuhurd-uclibc-conf.patch
+rename to package/gcc/4.3.6/104-gnuhurd-uclibc-conf.patch
+diff --git a/toolchain/gcc/4.3.6/301-missing-execinfo_h.patch b/package/gcc/4.3.6/301-missing-execinfo_h.patch
+similarity index 100%
+rename from toolchain/gcc/4.3.6/301-missing-execinfo_h.patch
+rename to package/gcc/4.3.6/301-missing-execinfo_h.patch
+diff --git a/toolchain/gcc/4.3.6/302-c99-snprintf.patch b/package/gcc/4.3.6/302-c99-snprintf.patch
+similarity index 100%
+rename from toolchain/gcc/4.3.6/302-c99-snprintf.patch
+rename to package/gcc/4.3.6/302-c99-snprintf.patch
+diff --git a/toolchain/gcc/4.3.6/305-libmudflap-susv3-legacy.patch b/package/gcc/4.3.6/305-libmudflap-susv3-legacy.patch
+similarity index 100%
+rename from toolchain/gcc/4.3.6/305-libmudflap-susv3-legacy.patch
+rename to package/gcc/4.3.6/305-libmudflap-susv3-legacy.patch
+diff --git a/toolchain/gcc/4.3.6/810-arm-softfloat-libgcc.patch b/package/gcc/4.3.6/810-arm-softfloat-libgcc.patch
+similarity index 100%
+rename from toolchain/gcc/4.3.6/810-arm-softfloat-libgcc.patch
+rename to package/gcc/4.3.6/810-arm-softfloat-libgcc.patch
+diff --git a/toolchain/gcc/4.3.6/993-arm_insn-opinit-RTX_CODE-fixup.patch b/package/gcc/4.3.6/993-arm_insn-opinit-RTX_CODE-fixup.patch
+similarity index 100%
+rename from toolchain/gcc/4.3.6/993-arm_insn-opinit-RTX_CODE-fixup.patch
+rename to package/gcc/4.3.6/993-arm_insn-opinit-RTX_CODE-fixup.patch
+diff --git a/toolchain/gcc/4.3.6/998-gcc-4.3.0-fix-header.00.patch b/package/gcc/4.3.6/998-gcc-4.3.0-fix-header.00.patch
+similarity index 100%
+rename from toolchain/gcc/4.3.6/998-gcc-4.3.0-fix-header.00.patch
+rename to package/gcc/4.3.6/998-gcc-4.3.0-fix-header.00.patch
+diff --git a/toolchain/gcc/4.3.6/999-4.3.2-armeabi-aapcs-linux.patch b/package/gcc/4.3.6/999-4.3.2-armeabi-aapcs-linux.patch
+similarity index 100%
+rename from toolchain/gcc/4.3.6/999-4.3.2-armeabi-aapcs-linux.patch
+rename to package/gcc/4.3.6/999-4.3.2-armeabi-aapcs-linux.patch
+diff --git a/toolchain/gcc/4.3.6/999-4.3.3-arm-fix-for-bug-37436.patch b/package/gcc/4.3.6/999-4.3.3-arm-fix-for-bug-37436.patch
+similarity index 100%
+rename from toolchain/gcc/4.3.6/999-4.3.3-arm-fix-for-bug-37436.patch
+rename to package/gcc/4.3.6/999-4.3.3-arm-fix-for-bug-37436.patch
+diff --git a/toolchain/gcc/4.3.6/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch b/package/gcc/4.3.6/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch
+similarity index 100%
+rename from toolchain/gcc/4.3.6/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch
+rename to package/gcc/4.3.6/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch
+diff --git a/toolchain/gcc/4.3.6/gcc-43-pr39429.patch b/package/gcc/4.3.6/gcc-43-pr39429.patch
+similarity index 100%
+rename from toolchain/gcc/4.3.6/gcc-43-pr39429.patch
+rename to package/gcc/4.3.6/gcc-43-pr39429.patch
+diff --git a/toolchain/gcc/4.3.6/powerpc-link-with-math-lib.patch.conditional b/package/gcc/4.3.6/powerpc-link-with-math-lib.patch.conditional
+similarity index 100%
+rename from toolchain/gcc/4.3.6/powerpc-link-with-math-lib.patch.conditional
+rename to package/gcc/4.3.6/powerpc-link-with-math-lib.patch.conditional
+diff --git a/toolchain/gcc/4.4.7-arc/fix_branch_out_of_range.patch b/package/gcc/4.4.7-arc/fix_branch_out_of_range.patch
+similarity index 100%
+rename from toolchain/gcc/4.4.7-arc/fix_branch_out_of_range.patch
+rename to package/gcc/4.4.7-arc/fix_branch_out_of_range.patch
+diff --git a/toolchain/gcc/4.4.7/100-uclibc-conf.patch b/package/gcc/4.4.7/100-uclibc-conf.patch
+similarity index 100%
+rename from toolchain/gcc/4.4.7/100-uclibc-conf.patch
+rename to package/gcc/4.4.7/100-uclibc-conf.patch
+diff --git a/toolchain/gcc/4.4.7/301-missing-execinfo_h.patch b/package/gcc/4.4.7/301-missing-execinfo_h.patch
+similarity index 100%
+rename from toolchain/gcc/4.4.7/301-missing-execinfo_h.patch
+rename to package/gcc/4.4.7/301-missing-execinfo_h.patch
+diff --git a/toolchain/gcc/4.4.7/302-c99-snprintf.patch b/package/gcc/4.4.7/302-c99-snprintf.patch
+similarity index 100%
+rename from toolchain/gcc/4.4.7/302-c99-snprintf.patch
+rename to package/gcc/4.4.7/302-c99-snprintf.patch
+diff --git a/toolchain/gcc/4.4.7/305-libmudflap-susv3-legacy.patch b/package/gcc/4.4.7/305-libmudflap-susv3-legacy.patch
+similarity index 100%
+rename from toolchain/gcc/4.4.7/305-libmudflap-susv3-legacy.patch
+rename to package/gcc/4.4.7/305-libmudflap-susv3-legacy.patch
+diff --git a/toolchain/gcc/4.4.7/810-arm-softfloat-libgcc.patch b/package/gcc/4.4.7/810-arm-softfloat-libgcc.patch
+similarity index 100%
+rename from toolchain/gcc/4.4.7/810-arm-softfloat-libgcc.patch
+rename to package/gcc/4.4.7/810-arm-softfloat-libgcc.patch
+diff --git a/toolchain/gcc/4.4.7/950-sparc-leon.patch b/package/gcc/4.4.7/950-sparc-leon.patch
+similarity index 100%
+rename from toolchain/gcc/4.4.7/950-sparc-leon.patch
+rename to package/gcc/4.4.7/950-sparc-leon.patch
+diff --git a/toolchain/gcc/4.4.7/gcc-44-pr39429.patch b/package/gcc/4.4.7/gcc-44-pr39429.patch
+similarity index 100%
+rename from toolchain/gcc/4.4.7/gcc-44-pr39429.patch
+rename to package/gcc/4.4.7/gcc-44-pr39429.patch
+diff --git a/toolchain/gcc/4.4.7/powerpc-link-with-math-lib.patch.conditional b/package/gcc/4.4.7/powerpc-link-with-math-lib.patch.conditional
+similarity index 100%
+rename from toolchain/gcc/4.4.7/powerpc-link-with-math-lib.patch.conditional
+rename to package/gcc/4.4.7/powerpc-link-with-math-lib.patch.conditional
+diff --git a/toolchain/gcc/4.5.4/100-uclibc-conf.patch b/package/gcc/4.5.4/100-uclibc-conf.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.4/100-uclibc-conf.patch
+rename to package/gcc/4.5.4/100-uclibc-conf.patch
+diff --git a/toolchain/gcc/4.5.4/301-missing-execinfo_h.patch b/package/gcc/4.5.4/301-missing-execinfo_h.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.4/301-missing-execinfo_h.patch
+rename to package/gcc/4.5.4/301-missing-execinfo_h.patch
+diff --git a/toolchain/gcc/4.5.4/302-c99-snprintf.patch b/package/gcc/4.5.4/302-c99-snprintf.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.4/302-c99-snprintf.patch
+rename to package/gcc/4.5.4/302-c99-snprintf.patch
+diff --git a/toolchain/gcc/4.5.4/305-libmudflap-susv3-legacy.patch b/package/gcc/4.5.4/305-libmudflap-susv3-legacy.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.4/305-libmudflap-susv3-legacy.patch
+rename to package/gcc/4.5.4/305-libmudflap-susv3-legacy.patch
+diff --git a/toolchain/gcc/4.5.4/810-arm-softfloat-libgcc.patch b/package/gcc/4.5.4/810-arm-softfloat-libgcc.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.4/810-arm-softfloat-libgcc.patch
+rename to package/gcc/4.5.4/810-arm-softfloat-libgcc.patch
+diff --git a/toolchain/gcc/4.5.4/820-arm-unbreak-armv4t.patch b/package/gcc/4.5.4/820-arm-unbreak-armv4t.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.4/820-arm-unbreak-armv4t.patch
+rename to package/gcc/4.5.4/820-arm-unbreak-armv4t.patch
+diff --git a/toolchain/gcc/4.5.4/830-arm-pr43440.patch b/package/gcc/4.5.4/830-arm-pr43440.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.4/830-arm-pr43440.patch
+rename to package/gcc/4.5.4/830-arm-pr43440.patch
+diff --git a/toolchain/gcc/4.5.4/powerpc-link-with-math-lib.patch.conditional b/package/gcc/4.5.4/powerpc-link-with-math-lib.patch.conditional
+similarity index 100%
+rename from toolchain/gcc/4.5.4/powerpc-link-with-math-lib.patch.conditional
+rename to package/gcc/4.5.4/powerpc-link-with-math-lib.patch.conditional
+diff --git a/toolchain/gcc/4.6.4/100-uclibc-conf.patch b/package/gcc/4.6.4/100-uclibc-conf.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.4/100-uclibc-conf.patch
+rename to package/gcc/4.6.4/100-uclibc-conf.patch
+diff --git a/toolchain/gcc/4.6.4/301-missing-execinfo_h.patch b/package/gcc/4.6.4/301-missing-execinfo_h.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.4/301-missing-execinfo_h.patch
+rename to package/gcc/4.6.4/301-missing-execinfo_h.patch
+diff --git a/toolchain/gcc/4.6.4/302-c99-snprintf.patch b/package/gcc/4.6.4/302-c99-snprintf.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.4/302-c99-snprintf.patch
+rename to package/gcc/4.6.4/302-c99-snprintf.patch
+diff --git a/toolchain/gcc/4.6.4/305-libmudflap-susv3-legacy.patch b/package/gcc/4.6.4/305-libmudflap-susv3-legacy.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.4/305-libmudflap-susv3-legacy.patch
+rename to package/gcc/4.6.4/305-libmudflap-susv3-legacy.patch
+diff --git a/toolchain/gcc/4.6.4/810-arm-softfloat-libgcc.patch b/package/gcc/4.6.4/810-arm-softfloat-libgcc.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.4/810-arm-softfloat-libgcc.patch
+rename to package/gcc/4.6.4/810-arm-softfloat-libgcc.patch
+diff --git a/toolchain/gcc/4.6.4/820-arm-unbreak-armv4t.patch b/package/gcc/4.6.4/820-arm-unbreak-armv4t.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.4/820-arm-unbreak-armv4t.patch
+rename to package/gcc/4.6.4/820-arm-unbreak-armv4t.patch
+diff --git a/toolchain/gcc/4.6.4/powerpc-link-with-math-lib.patch.conditional b/package/gcc/4.6.4/powerpc-link-with-math-lib.patch.conditional
+similarity index 100%
+rename from toolchain/gcc/4.6.4/powerpc-link-with-math-lib.patch.conditional
+rename to package/gcc/4.6.4/powerpc-link-with-math-lib.patch.conditional
+diff --git a/toolchain/gcc/4.7.3/100-uclibc-conf.patch b/package/gcc/4.7.3/100-uclibc-conf.patch
+similarity index 100%
+rename from toolchain/gcc/4.7.3/100-uclibc-conf.patch
+rename to package/gcc/4.7.3/100-uclibc-conf.patch
+diff --git a/toolchain/gcc/4.7.3/301-missing-execinfo_h.patch b/package/gcc/4.7.3/301-missing-execinfo_h.patch
+similarity index 100%
+rename from toolchain/gcc/4.7.3/301-missing-execinfo_h.patch
+rename to package/gcc/4.7.3/301-missing-execinfo_h.patch
+diff --git a/toolchain/gcc/4.7.3/302-c99-snprintf.patch b/package/gcc/4.7.3/302-c99-snprintf.patch
+similarity index 100%
+rename from toolchain/gcc/4.7.3/302-c99-snprintf.patch
+rename to package/gcc/4.7.3/302-c99-snprintf.patch
+diff --git a/toolchain/gcc/4.7.3/305-libmudflap-susv3-legacy.patch b/package/gcc/4.7.3/305-libmudflap-susv3-legacy.patch
+similarity index 100%
+rename from toolchain/gcc/4.7.3/305-libmudflap-susv3-legacy.patch
+rename to package/gcc/4.7.3/305-libmudflap-susv3-legacy.patch
+diff --git a/toolchain/gcc/4.7.3/810-arm-softfloat-libgcc.patch b/package/gcc/4.7.3/810-arm-softfloat-libgcc.patch
+similarity index 100%
+rename from toolchain/gcc/4.7.3/810-arm-softfloat-libgcc.patch
+rename to package/gcc/4.7.3/810-arm-softfloat-libgcc.patch
+diff --git a/toolchain/gcc/4.7.3/830-arm_unbreak_armv4t.patch b/package/gcc/4.7.3/830-arm_unbreak_armv4t.patch
+similarity index 100%
+rename from toolchain/gcc/4.7.3/830-arm_unbreak_armv4t.patch
+rename to package/gcc/4.7.3/830-arm_unbreak_armv4t.patch
+diff --git a/toolchain/gcc/4.7.3/powerpc-link-with-math-lib.patch.conditional b/package/gcc/4.7.3/powerpc-link-with-math-lib.patch.conditional
+similarity index 100%
+rename from toolchain/gcc/4.7.3/powerpc-link-with-math-lib.patch.conditional
+rename to package/gcc/4.7.3/powerpc-link-with-math-lib.patch.conditional
+diff --git a/toolchain/gcc/4.8.1/100-uclibc-conf.patch b/package/gcc/4.8.1/100-uclibc-conf.patch
+similarity index 100%
+rename from toolchain/gcc/4.8.1/100-uclibc-conf.patch
+rename to package/gcc/4.8.1/100-uclibc-conf.patch
+diff --git a/toolchain/gcc/4.8.1/301-missing-execinfo_h.patch b/package/gcc/4.8.1/301-missing-execinfo_h.patch
+similarity index 100%
+rename from toolchain/gcc/4.8.1/301-missing-execinfo_h.patch
+rename to package/gcc/4.8.1/301-missing-execinfo_h.patch
+diff --git a/toolchain/gcc/4.8.1/302-c99-snprintf.patch b/package/gcc/4.8.1/302-c99-snprintf.patch
+similarity index 100%
+rename from toolchain/gcc/4.8.1/302-c99-snprintf.patch
+rename to package/gcc/4.8.1/302-c99-snprintf.patch
+diff --git a/toolchain/gcc/4.8.1/305-libmudflap-susv3-legacy.patch b/package/gcc/4.8.1/305-libmudflap-susv3-legacy.patch
+similarity index 100%
+rename from toolchain/gcc/4.8.1/305-libmudflap-susv3-legacy.patch
+rename to package/gcc/4.8.1/305-libmudflap-susv3-legacy.patch
+diff --git a/toolchain/gcc/4.8.1/810-arm-softfloat-libgcc.patch b/package/gcc/4.8.1/810-arm-softfloat-libgcc.patch
+similarity index 100%
+rename from toolchain/gcc/4.8.1/810-arm-softfloat-libgcc.patch
+rename to package/gcc/4.8.1/810-arm-softfloat-libgcc.patch
+diff --git a/toolchain/gcc/4.8.1/830-arm_unbreak_armv4t.patch b/package/gcc/4.8.1/830-arm_unbreak_armv4t.patch
+similarity index 100%
+rename from toolchain/gcc/4.8.1/830-arm_unbreak_armv4t.patch
+rename to package/gcc/4.8.1/830-arm_unbreak_armv4t.patch
+diff --git a/toolchain/gcc/4.8.1/powerpc-link-with-math-lib.patch.conditional b/package/gcc/4.8.1/powerpc-link-with-math-lib.patch.conditional
+similarity index 100%
+rename from toolchain/gcc/4.8.1/powerpc-link-with-math-lib.patch.conditional
+rename to package/gcc/4.8.1/powerpc-link-with-math-lib.patch.conditional
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
 deleted file mode 100644
-index ab1f600..0000000
---- a/toolchain/uClibc/Config.in
+index 7830241..0000000
+--- a/toolchain/gcc/Config.in
 +++ /dev/null
-@@ -1,97 +0,0 @@
--# Choose uClibc options
--#
+@@ -1,130 +0,0 @@
+-# Choose gcc version.
 -
--comment "uClibc Options"
+-comment "GCC Options"
+-
+-config BR2_GCC_NEEDS_MPC
+-	bool
 -
 -choice
--	prompt "uClibc C library Version"
--	default BR2_UCLIBC_VERSION_0_9_33
+-	prompt "GCC compiler Version"
+-	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
+-	default BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 if BR2_avr32
+-	default BR2_GCC_VERSION_4_4_7_ARC if BR2_arc
+-	default BR2_GCC_VERSION_4_7_X
 -	help
--	  Select the version of uClibc you wish to use.
+-	  Select the version of gcc you wish to use.
 -
--	config BR2_UCLIBC_VERSION_0_9_32
--		bool "uClibc 0.9.32.x"
--		depends on !(BR2_arc || BR2_avr32 || BR2_sh || BR2_xtensa)
--
--	config BR2_UCLIBC_VERSION_0_9_33
--		bool "uClibc 0.9.33.x"
--		depends on !(BR2_arc || BR2_xtensa)
--
--	config BR2_UCLIBC_VERSION_0_9_33_ARC
--		bool "uClibc 0.9.33.x-arc"
+-	config BR2_GCC_VERSION_4_4_7_ARC
 -		depends on BR2_arc
+-		bool "gcc 4.4.7-arc"
 -
--	config BR2_UCLIBC_VERSION_SNAPSHOT
--		bool "daily snapshot"
+-	config BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
+-	       depends on BR2_avr32
+-	       bool "gcc 4.2.2-avr32-2.1.5"
 -
+-	config BR2_GCC_VERSION_4_3_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
+-		bool "gcc 4.3.x"
+-
+-	config BR2_GCC_VERSION_4_4_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
+-		bool "gcc 4.4.x"
+-
+-	config BR2_GCC_VERSION_4_5_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
+-		select BR2_GCC_NEEDS_MPC
+-		bool "gcc 4.5.x"
+-
+-	config BR2_GCC_VERSION_4_6_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
+-		select BR2_GCC_NEEDS_MPC
+-		bool "gcc 4.6.x"
+-
+-	config BR2_GCC_VERSION_4_7_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
+-		select BR2_GCC_NEEDS_MPC
+-		bool "gcc 4.7.x"
+-
+-	config BR2_GCC_VERSION_4_8_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
+-		select BR2_GCC_NEEDS_MPC
+-		bool "gcc 4.8.x"
+-
+-	config BR2_GCC_VERSION_SNAP
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
+-		select BR2_GCC_NEEDS_MPC
+-		bool "gcc snapshot"
 -endchoice
 -
--config BR2_USE_UCLIBC_SNAPSHOT
--	string "Date (yyyymmdd) of snapshot or 'snapshot' for latest"
--	default "snapshot"
--	depends on BR2_UCLIBC_VERSION_SNAPSHOT
+-config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
+-	bool
+-	default y if !BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
+-
+-config BR2_GCC_SNAP_DATE
+-	string "GCC snapshot date"
+-	default "4.8-20120429"
+-	depends on BR2_GCC_VERSION_SNAP
 -	help
--	    Use latest snapshot or one from a specific date?
+-	  Enter snapshot date to use for gcc.
+-	  Format is: A.B-YYYYMMDD
 -
--config BR2_UCLIBC_VERSION_STRING
+-	  A is GCC major version, for example 4.
+-	  B is GCC minor version, for example 7.
+-	  YYYYMMDD is snapshot date, for example 20110430.
+-
+-	  This way we'd get version 4.7-20110430
+-
+-config BR2_GCC_VERSION
 -	string
--	default 0.9.32.1	if BR2_UCLIBC_VERSION_0_9_32
--	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
--	default 0.9.33-arc	if BR2_UCLIBC_VERSION_0_9_33_ARC
--	default $BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
+-	default "4.2.2-avr32-2.1.5" if BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
+-	default "4.3.6"     if BR2_GCC_VERSION_4_3_X
+-	default "4.4.7"     if BR2_GCC_VERSION_4_4_X
+-	default "4.4.7-arc" if BR2_GCC_VERSION_4_4_7_ARC
+-	default "4.5.4"     if BR2_GCC_VERSION_4_5_X
+-	default "4.6.4"     if BR2_GCC_VERSION_4_6_X
+-	default "4.7.3"     if BR2_GCC_VERSION_4_7_X
+-	default "4.8.1"     if BR2_GCC_VERSION_4_8_X
+-	default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
 -
--config BR2_UCLIBC_CONFIG
--	string "uClibc configuration file to use?"
--	default "toolchain/uClibc/uClibc-0.9.32.config" if BR2_UCLIBC_VERSION_0_9_32
--	default "toolchain/uClibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
--	default "toolchain/uClibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_0_9_33_ARC
--	default "toolchain/uClibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
+-config BR2_EXTRA_GCC_CONFIG_OPTIONS
+-	string "Additional gcc options"
+-	default ""
 -	help
--	  Some people may wish to use their own modified uClibc configuration
--	  file and will specify their config file location with this option.
--	  See also docs/README in this package.
--	  If unsure, use the default.
+-	  Any additional gcc configure options you may want to include....
 -
--config BR2_UCLIBC_INSTALL_TEST_SUITE
--	bool "Compile and install uClibc tests"
--	select BR2_PACKAGE_MAKE
+-config BR2_INSTALL_OBJC
+-	bool "Build/install Objective-C compiler and runtime?"
+-	depends on !BR2_avr32
 -	help
--	  Enabling this option will compile and install the uClibc test suite.
--	  This is useful if you want to check if the uClibc library is working
--	  for your architecture and/or help developing uClibc.
+-	  Build/install Objective-C compiler and runtime?
 -
--	  The test suite will be installed into /root/uClibc directory. To run
--	  the test suite enter the /root/uClibc/test directory and type
--	  "make UCLIBC_ONLY=1 CC=/bin/true check".
+-config BR2_INSTALL_FORTRAN
+-	bool "Build/install Fortran compiler and runtime?"
+-	depends on !BR2_avr32
+-	select BR2_PACKAGE_LIBMPFR
+-	help
+-	  Build/install Fortran compiler and runtime?
+-	  Note that it is highly recommended NOT to use gfortran
+-	  from gcc older than 4.2.0
 -
--	  See the /root/uClibc/test/README for additional information.
+-config BR2_GCC_SHARED_LIBGCC
+-	bool "Build/install a shared libgcc?"
+-	depends on !BR2_PREFER_STATIC_LIB
+-	default y
+-	depends on !BR2_sparc
+-	help
+-	  Build/install a shared libgcc library
 -
--	  This is not needed at all for normal builds, so you can safely say no
--	  if you do not plan to dig into your C library.
+-config BR2_GCC_ENABLE_TLS
+-	bool "Enable compiler tls support"
+-	default y
+-	depends on BR2_PTHREADS_NATIVE
+-	help
+-	  Enable the compiler to generate code for accessing
+-	  thread local storage variables
 -
--# This is only useful for uClibc <= 0.9.32. It can be removed once
--# Buildroot will support only uClibc >= 0.9.33 on ARM.
--config BR2_UCLIBC_ARM_TYPE
--	string
--	depends on BR2_arm || BR2_armeb
--	default GENERIC_ARM	if BR2_fa526
--	default ARM7TDMI	if BR2_arm7tdmi
--	default ARM720T		if BR2_arm720t
--	default ARM920T		if BR2_arm920t
--	default ARM922T		if BR2_arm922t
--	default ARM926T		if BR2_arm926t
--	default ARM10T		if BR2_arm10t
--	default ARM1136JF_S	if BR2_arm1136jf_s
--	default ARM1176JZ_S	if BR2_arm1176jz_s
--	default ARM1176JZF_S	if BR2_arm1176jzf_s
--	default ARM_SA1100	if BR2_strongarm
--	default ARM_XSCALE	if BR2_xscale
--	default ARM_IWMMXT	if BR2_iwmmxt
--	default ARM_CORTEXA8	if BR2_cortex_a8
--	default ARM_CORTEXA9	if BR2_cortex_a9
--
--config BR2_UCLIBC_SPARC_TYPE
--	string
--	depends on BR2_sparc
--	default V7	if BR2_sparc_v7 || BR2_sparc_cypress || BR2_sparc_sparclite || BR2_sparc_f930 || BR2_sparc_f934 || BR2_sparc_sparclite86x || BR2_sparc_sparclet || BR2_sparc_tsc701 || BR2_sparc_sparchfleon || BR2_sparc_sparcsfleon
--	default V8	if BR2_sparc_v8 || BR2_sparc_supersparc || BR2_sparc_hypersparc || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleonv8
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+-config BR2_GCC_ENABLE_OPENMP
+-	bool "Enable compiler OpenMP support"
+-	depends on !BR2_PTHREADS_NONE && !BR2_avr32 && !BR2_arc
+-	help
+-	  Enable OpenMP support for the compiler
+diff --git a/toolchain/gcc/Config.in.2 b/toolchain/gcc/Config.in.2
 deleted file mode 100644
-index 06f5b23..0000000
---- a/toolchain/uClibc/uclibc.mk
+index c8a8cf6..0000000
+--- a/toolchain/gcc/Config.in.2
 +++ /dev/null
-@@ -1,610 +0,0 @@
+@@ -1,34 +0,0 @@
+-config BR2_PACKAGE_GCC_TARGET
+-	bool "gcc"
+-	# We no longer want to support a toolchain on the target
+-	depends on BR2_DEPRECATED
+-	depends on BR2_HAVE_DEVFILES && BR2_TOOLCHAIN_BUILDROOT
+-	select BR2_PACKAGE_BINUTILS
+-	select BR2_PACKAGE_BINUTILS_TARGET
+-	select BR2_PACKAGE_MPC if (BR2_GCC_VERSION_4_5_X || BR2_GCC_VERSION_4_6_X || BR2_GCC_VERSION_4_7_X || BR2_GCC_VERSION_SNAP)
+-	select BR2_PACKAGE_MPFR
+-	select BR2_PACKAGE_GMP
+-	help
+-	  If you want the target system to be able to run
+-	  binutils/gcc and compile native code, say Y here.
+-
+-config BR2_GCC_CROSS_FORTRAN
+-	bool "fortran support"
+-	depends on !BR2_avr32 && BR2_PACKAGE_GCC_TARGET
+-	help
+-	  Build a Fortran compiler
+-
+-config BR2_GCC_CROSS_OBJC
+-	bool "objective-c support"
+-	depends on !BR2_avr32 && BR2_PACKAGE_GCC_TARGET
+-	help
+-	  Build an Objective-C compiler
+-
+-config BR2_EXTRA_TARGET_GCC_CONFIG_OPTIONS
+-	string "Additional target gcc options"
+-	default ""
+-	depends on BR2_PACKAGE_GCC_TARGET
+-	help
+-	  Any additional target gcc options you may want to include....
+-	  Including, but not limited to --disable-checking etc.
+-	  Refer to */configure in your gcc sources.
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+deleted file mode 100644
+index b1484eb..0000000
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ /dev/null
+@@ -1,640 +0,0 @@
 -################################################################################
 -#
--# uClibc (the C library)
+-# Makefile for to build a gcc/uClibc toolchain
+-#
+-# Copyright (C) 2002-2003 Erik Andersen <andersen@uclibc.org>
+-# Copyright (C) 2004 Manuel Novoa III <mjn3@uclibc.org>
+-#
+-# This program is free software; you can redistribute it and/or modify
+-# it under the terms of the GNU General Public License as published by
+-# the Free Software Foundation; either version 2 of the License, or
+-# (at your option) any later version.
+-#
+-# This program is distributed in the hope that it will be useful,
+-# but WITHOUT ANY WARRANTY; without even the implied warranty of
+-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+-# General Public License for more details.
+-#
+-# You should have received a copy of the GNU General Public License
+-# along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 -#
 -################################################################################
+-
+-GCC_VERSION:=$(call qstrip,$(BR2_GCC_VERSION))
+-
+-ifeq ($(BR2_GCC_VERSION_SNAP),y)
+-GCC_SNAP_DATE:=$(call qstrip,$(BR2_GCC_SNAP_DATE))
+-else
+-GCC_SNAP_DATE:=
+-endif
+-
+-ifneq ($(GCC_SNAP_DATE),)
+- GCC_SITE:=ftp://gcc.gnu.org/pub/gcc/snapshots/$(GCC_SNAP_DATE)/
+-else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
+- GCC_SITE:=ftp://www.at91.com/pub/buildroot/
+-else ifeq ($(findstring arc,$(GCC_VERSION)),arc)
+- GCC_SITE:=$(BR2_ARC_SITE)
+-else
+- GCC_SITE:=$(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
+-endif
+-
+-GCC_SOURCE:=gcc-$(GCC_VERSION).tar.bz2
+-GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
+-GCC_DIR:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)
+-GCC_CAT:=$(BZCAT)
+-GCC_SRC_DIR:=$(GCC_DIR)
+-
+-# Branding works on >= 4.3
+-ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
+-EXTRA_GCC_CONFIG_OPTIONS+=--with-pkgversion="Buildroot $(BR2_VERSION_FULL)" \
+-	--with-bugurl="http://bugs.buildroot.net/"
+-endif
+-
+-# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
+-# Workaround until it's fixed in 4.5.4 or later
+-ifeq ($(ARCH),powerpc)
+-ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
+-GCC_OPTSPACE=--disable-target-optspace
+-endif
+-else
+-GCC_OPTSPACE=--enable-target-optspace
+-endif
+-
+-# gcc 4.6.x quadmath requires wchar
+-ifneq ($(BR2_TOOLCHAIN_BUILDROOT_WCHAR),y)
+-GCC_QUADMATH=--disable-libquadmath
+-endif
+-
+-# Determine soft-float options
+-ifeq ($(BR2_SOFT_FLOAT),y)
+-# only mips*-*-*, arm*-*-* and sparc*-*-* accept --with-float
+-# powerpc seems to be needing it as well
+-ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),y)
+-SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
+-endif
+-ifeq ($(BR2_arm)$(BR2_armeb),y) # only set float-abi for arm
+-TARGET_SOFT_FLOAT:=-mfloat-abi=soft
+-else
+-TARGET_SOFT_FLOAT:=-msoft-float
+-endif
+-else # no softfloat support
+-SOFT_FLOAT_CONFIG_OPTION:=
+-TARGET_SOFT_FLOAT:=
+-endif
+-
+-# Determine arch/tune/abi/cpu options
+-ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
+-GCC_WITH_ARCH:=--with-arch=$(BR2_GCC_TARGET_ARCH)
+-endif
+-ifneq ($(call qstrip,$(BR2_GCC_TARGET_TUNE)),)
+-GCC_WITH_TUNE:=--with-tune=$(BR2_GCC_TARGET_TUNE)
+-endif
+-ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
+-GCC_WITH_ABI:=--with-abi=$(BR2_GCC_TARGET_ABI)
+-endif
+-ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
+-ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
+-GCC_WITH_CPU:=--with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
+-else
+-GCC_WITH_CPU:=--with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
+-endif
+-endif
+-
+-# AVR32 GCC special configuration
+-ifeq ($(BR2_avr32),y)
+-# For the cross-compiler
+-EXTRA_GCC_CONFIG_OPTIONS += \
+-	--disable-libmudflap
+-SOFT_FLOAT_CONFIG_OPTION:=
+-
+-# For the target compiler
+-EXTRA_TARGET_GCC_CONFIG_OPTIONS += \
+-	--disable-libmudflap
+-EXTRA_TARGET_GCC_CONFIG_OPTIONS += \
+-	--with-build-time-tools=$(STAGING_DIR)/$(GNU_TARGET_NAME)/bin
+-EXTRA_TARGET_GCC_CONFIG_OPTIONS += \
+-	--with-as=$(TARGET_CROSS)as
+-endif
+-
+-# Disable mudflap and enable proper double/long double for SPE ABI
+-ifeq ($(BR2_powerpc_SPE),y)
+-EXTRA_GCC_CONFIG_OPTIONS +=  \
+-	--disable-libmudflap \
+-	--enable-e500_double \
+-	--with-long-double-128
+-endif
+-
+-# End with user-provided options, so that they can override previously
+-# defined options.
+-EXTRA_GCC_CONFIG_OPTIONS += \
+-	$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS))
+-EXTRA_TARGET_GCC_CONFIG_OPTIONS += \
+-	$(call qstrip,$(BR2_EXTRA_TARGET_GCC_CONFIG_OPTIONS))
+-
+-################################################################################
+-#
+-# Setup some initial stuff
+-#
+-################################################################################
+-
+-GCC_STAGING_PREREQ+=$(STAGING_DIR)/usr/lib/libc.a
+-
+-GCC_TARGET_LANGUAGES:=c
+-
+-GCC_CROSS_LANGUAGES:=c
+-ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+-GCC_CROSS_LANGUAGES:=$(GCC_CROSS_LANGUAGES),c++
+-endif
+-ifeq ($(BR2_GCC_CROSS_FORTRAN),y)
+-GCC_CROSS_LANGUAGES:=$(GCC_CROSS_LANGUAGES),fortran
+-endif
+-ifeq ($(BR2_GCC_CROSS_OBJC),y)
+-GCC_CROSS_LANGUAGES:=$(GCC_CROSS_LANGUAGES),objc
+-endif
+-
+-ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+-GCC_TARGET_LANGUAGES:=$(GCC_TARGET_LANGUAGES),c++
+-endif
+-
+-ifeq ($(BR2_INSTALL_OBJC),y)
+-GCC_TARGET_LANGUAGES:=$(GCC_TARGET_LANGUAGES),objc
+-endif
+-
+-ifeq ($(BR2_INSTALL_FORTRAN),y)
+-GCC_TARGET_LANGUAGES:=$(GCC_TARGET_LANGUAGES),fortran
+-endif
+-
+-# GCC 4.x prerequisites
+-GCC_WITH_HOST_GMP = --with-gmp=$(HOST_DIR)/usr
+-GCC_WITH_HOST_MPFR = --with-mpfr=$(HOST_DIR)/usr
+-ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+-HOST_SOURCE += host-gmp-source host-mpfr-source
+-endif
+-GCC_HOST_PREREQ = host-gmp host-mpfr
+-GCC_TARGET_PREREQ += mpfr gmp
+-
+-ifeq ($(BR2_GCC_NEEDS_MPC),y)
+-GCC_WITH_HOST_MPC = --with-mpc=$(HOST_DIR)/usr
+-GCC_TARGET_PREREQ += mpc
+-ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+-HOST_SOURCE += host-mpc-source
+-endif
+-GCC_HOST_PREREQ += host-mpc
+-endif
+-
+-ifeq ($(BR2_GCC_VERSION_4_4_7_ARC),y)
+-GCC_HOST_PREREQ += host-flex host-bison
+-endif
+-
+-ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
+-GCC_SHARED_LIBGCC:=--enable-shared
+-else
+-GCC_SHARED_LIBGCC:=--disable-shared
+-endif
+-
+-ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
+-GCC_ENABLE_OPENMP:=--enable-libgomp
+-else
+-GCC_ENABLE_OPENMP:=--disable-libgomp
+-endif
+-
+-ifeq ($(BR2_GCC_ENABLE_TLS),y)
+-GCC_TLS:=--enable-tls
+-else
+-GCC_TLS:=--disable-tls
+-endif
+-
+-ifeq ($(BR2_PTHREADS_NONE),y)
+-THREADS:=--disable-threads --disable-libitm --disable-libatomic
+-else
+-THREADS:=--enable-threads
+-endif
+-
+-ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+-GCC_DECIMAL_FLOAT:=--disable-decimal-float
+-endif
+-
+-# gcc version < 4.2.0 don't have -Wno-overlength-strings and the configure
+-# script has problems detecting it, so help it
+-ifeq ($(shell test $(HOSTCC_VERSION) -lt 420 && echo OLD),OLD)
+-GCC_CONF_ENV:=acx_cv_prog_cc_pedantic__Wno_long_long__Wno_variadic_macros_____________Wno_overlength_strings=no \
+-	acx_cv_prog_cc_warning__Wno_overlength_strings=no
+-endif
 -
 -ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--
--# specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
--# setting.
--ifndef UCLIBC_CONFIG_FILE
--UCLIBC_CONFIG_FILE=$(call qstrip,$(BR2_UCLIBC_CONFIG))
+-HOST_SOURCE+=gcc-source
 -endif
 -
--UCLIBC_VERSION:=$(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
+-$(DL_DIR)/$(GCC_SOURCE):
+-	mkdir -p $(DL_DIR)
+-	$(Q)$(call MESSAGE,"Downloading gcc")
+-	$(call DOWNLOAD,$(GCC_SITE:/=)/$(GCC_SOURCE))
 -
--ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
--UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
--UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc
--else ifeq ($(findstring arc,$(UCLIBC_VERSION)),arc)
--UCLIBC_SITE:=$(BR2_ARC_SITE)
--UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_VERSION)
--else
--UCLIBC_SITE:=http://www.uclibc.org/downloads
--UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_VERSION)
--endif
--
--UCLIBC_PATCH_DIR:=toolchain/uClibc/
--UCLIBC_SOURCE:=uClibc-$(UCLIBC_VERSION).tar.bz2
--
--UCLIBC_CAT:=$(BZCAT)
--
--UCLIBC_TARGET_ARCH:=$(shell $(SHELL) -c "echo $(ARCH) | sed \
--		-e 's/-.*//' \
--		-e 's/i.86/i386/' \
--		-e 's/sparc.*/sparc/' \
--		-e 's/arc.*/arc/g' \
--		-e 's/arm.*/arm/g' \
--		-e 's/m68k.*/m68k/' \
--		-e 's/ppc/powerpc/g' \
--		-e 's/v850.*/v850/g' \
--		-e 's/sh[234].*/sh/' \
--		-e 's/mips.*/mips/' \
--		-e 's/cris.*/cris/' \
--		-e 's/xtensa.*/xtensa/' \
--")
--
--UCLIBC_TARGET_ENDIAN:=$(call qstrip,$(BR2_ENDIAN))
--
--ifeq ($(UCLIBC_TARGET_ENDIAN),LITTLE)
--UCLIBC_NOT_TARGET_ENDIAN:=BIG
--else
--UCLIBC_NOT_TARGET_ENDIAN:=LITTLE
--endif
--
--UCLIBC_ARM_TYPE:=CONFIG_$(call qstrip,$(BR2_UCLIBC_ARM_TYPE))
--UCLIBC_SPARC_TYPE:=CONFIG_SPARC_$(call qstrip,$(BR2_UCLIBC_SPARC_TYPE))
--
--ifeq ($(GENERATE_LOCALE),)
--# We need at least one locale
--UCLIBC_LOCALES = en_US
--else
--# Strip out the encoding part of locale names, if any
--UCLIBC_LOCALES = $(foreach locale,$(GENERATE_LOCALE),\
--		   $(firstword $(subst .,$(space),$(locale))))
--endif
--
--$(DL_DIR)/$(UCLIBC_SOURCE):
--	$(Q)$(call MESSAGE,"Downloading uClibc")
--	$(call DOWNLOAD,$(UCLIBC_SITE:/=)/$(UCLIBC_SOURCE))
--
--uclibc-unpacked: $(UCLIBC_DIR)/.unpacked
--$(UCLIBC_DIR)/.unpacked: $(DL_DIR)/$(UCLIBC_SOURCE)
--	$(Q)$(call MESSAGE,"Extracting uClibc")
+-gcc-unpacked: $(GCC_DIR)/.patched
+-$(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
+-	$(Q)$(call MESSAGE,"Extracting gcc")
 -	mkdir -p $(TOOLCHAIN_DIR)
--	rm -rf $(UCLIBC_DIR)
--	$(UCLIBC_CAT) $(DL_DIR)/$(UCLIBC_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
--	touch $@
--
--uclibc-patched: $(UCLIBC_DIR)/.patched
--$(UCLIBC_DIR)/.patched: $(UCLIBC_DIR)/.unpacked
--	$(Q)$(call MESSAGE,"Patching uClibc")
--ifneq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
--	support/scripts/apply-patches.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) \
--		uClibc-$(UCLIBC_VERSION)-\*.patch \
--		uClibc-$(UCLIBC_VERSION)-\*.patch.$(ARCH)
--else
--	support/scripts/apply-patches.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) \
--		uClibc.\*.patch uClibc.\*.patch.$(ARCH)
+-	rm -rf $(GCC_DIR)
+-	$(GCC_CAT) $(DL_DIR)/$(GCC_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
+-	$(call CONFIG_UPDATE,$(@D))
+-ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+-	tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip,\
+-		$(BR2_XTENSA_CORE_NAME)).tar -C $(@D) --strip-components=1 gcc
 -endif
 -	touch $@
 -
--
--# Some targets may wish to provide their own UCLIBC_CONFIG_FILE...
--$(UCLIBC_DIR)/.oldconfig: $(UCLIBC_DIR)/.patched $(UCLIBC_CONFIG_FILE)
--	$(Q)$(call MESSAGE,"Pre-configuring uClibc")
--	cp -f $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.oldconfig
--	$(SED) 's,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="$(TARGET_CROSS)",g' \
--		-e 's,# TARGET_$(UCLIBC_TARGET_ARCH) is not set,TARGET_$(UCLIBC_TARGET_ARCH)=y,g' \
--		-e 's,^TARGET_ARCH=".*",TARGET_ARCH=\"$(UCLIBC_TARGET_ARCH)\",g' \
--		-e 's,^KERNEL_HEADERS=.*,KERNEL_HEADERS=\"$(STAGING_DIR)/usr/include\",g' \
--		-e 's,^RUNTIME_PREFIX=.*,RUNTIME_PREFIX=\"/\",g' \
--		-e 's,^DEVEL_PREFIX=.*,DEVEL_PREFIX=\"/usr/\",g' \
--		-e 's,^SHARED_LIB_LOADER_PREFIX=.*,SHARED_LIB_LOADER_PREFIX=\"/lib\",g' \
--		$(UCLIBC_DIR)/.oldconfig
--ifeq ($(UCLIBC_TARGET_ARCH),arm)
--	(/bin/echo "# CONFIG_GENERIC_ARM is not set"; \
--	 /bin/echo "# CONFIG_ARM610 is not set"; \
--	 /bin/echo "# CONFIG_ARM710 is not set"; \
--	 /bin/echo "# CONFIG_ARM7TDMI is not set"; \
--	 /bin/echo "# CONFIG_ARM720T is not set"; \
--	 /bin/echo "# CONFIG_ARM920T is not set"; \
--	 /bin/echo "# CONFIG_ARM922T is not set"; \
--	 /bin/echo "# CONFIG_ARM926T is not set"; \
--	 /bin/echo "# CONFIG_ARM10T is not set"; \
--	 /bin/echo "# CONFIG_ARM1136JF_S is not set"; \
--	 /bin/echo "# CONFIG_ARM1176JZ_S is not set"; \
--	 /bin/echo "# CONFIG_ARM1176JZF_S is not set"; \
--	 /bin/echo "# CONFIG_ARM_SA110 is not set"; \
--	 /bin/echo "# CONFIG_ARM_SA1100 is not set"; \
--	 /bin/echo "# CONFIG_ARM_XSCALE is not set"; \
--	 /bin/echo "# CONFIG_ARM_IWMMXT is not set"; \
--	) >> $(UCLIBC_DIR)/.oldconfig
--	$(SED) 's/^\(CONFIG_[^_]*[_]*ARM[^=]*\)=.*/# \1 is not set/g' \
--		 $(UCLIBC_DIR)/.oldconfig
--	$(SED) 's/^.*$(UCLIBC_ARM_TYPE).*/$(UCLIBC_ARM_TYPE)=y/g' $(UCLIBC_DIR)/.oldconfig
--	$(SED) '/CONFIG_ARM_.ABI/d' $(UCLIBC_DIR)/.oldconfig
--ifeq ($(BR2_ARM_EABI),y)
--	/bin/echo "# CONFIG_ARM_OABI is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "CONFIG_ARM_EABI=y" >> $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_ARM_OABI),y)
--	/bin/echo "CONFIG_ARM_OABI=y" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_ARM_EABI is not set" >> $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_fa526)$(BR2_strongarm),y)
--	$(SED) 's,USE_BX=y,# USE_BX is not set,' $(UCLIBC_DIR)/.oldconfig
--endif
--endif
--ifeq ($(UCLIBC_TARGET_ARCH),mips)
--	$(SED) '/CONFIG_MIPS_[NO].._ABI/d' $(UCLIBC_DIR)/.oldconfig
--	$(SED) '/CONFIG_MIPS_ISA_.*/d' $(UCLIBC_DIR)/.oldconfig
--	(/bin/echo "# CONFIG_MIPS_O32_ABI is not set"; \
--	 /bin/echo "# CONFIG_MIPS_N32_ABI is not set"; \
--	 /bin/echo "# CONFIG_MIPS_N64_ABI is not set"; \
--	 /bin/echo "# CONFIG_MIPS_ISA_1 is not set"; \
--	 /bin/echo "# CONFIG_MIPS_ISA_2 is not set"; \
--	 /bin/echo "# CONFIG_MIPS_ISA_3 is not set"; \
--	 /bin/echo "# CONFIG_MIPS_ISA_4 is not set"; \
--	 /bin/echo "# CONFIG_MIPS_ISA_MIPS32 is not set"; \
--	 /bin/echo "# CONFIG_MIPS_ISA_MIPS32R2 is not set"; \
--	 /bin/echo "# CONFIG_MIPS_ISA_MIPS64 is not set"; \
--	) >> $(UCLIBC_DIR)/.oldconfig
--ifeq ($(BR2_MIPS_OABI32),y)
--	$(SED) 's/.*\(CONFIG_MIPS_O32_ABI\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_MIPS_NABI32),y)
--	$(SED) 's/.*\(CONFIG_MIPS_N32_ABI\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_MIPS_NABI64),y)
--	$(SED) 's/.*\(CONFIG_MIPS_N64_ABI\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_mips_1),y)
--	$(SED) 's/.*\(CONFIG_MIPS_ISA_1\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_mips_2),y)
--	$(SED) 's/.*\(CONFIG_MIPS_ISA_2\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_mips_3),y)
--	$(SED) 's/.*\(CONFIG_MIPS_ISA_3\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_mips_4),y)
--	$(SED) 's/.*\(CONFIG_MIPS_ISA_4\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_mips_32),y)
--	$(SED) 's/.*\(CONFIG_MIPS_ISA_MIPS32\)[^R].*/\1=y/' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_mips_32r2),y)
--	$(SED) 's/.*\(CONFIG_MIPS_ISA_MIPS32R2\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_mips_64),y)
--	$(SED) 's/.*\(CONFIG_MIPS_ISA_MIPS64\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
--endif
--endif
--ifeq ($(UCLIBC_TARGET_ARCH),sh)
--	/bin/echo "# CONFIG_SH2A is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_SH2 is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_SH3 is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_SH4 is not set" >> $(UCLIBC_DIR)/.oldconfig
--ifeq ($(BR2_sh2a),y)
--	$(SED) 's,# CONFIG_SH2A is not set,CONFIG_SH2A=y,g' $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# UCLIBC_FORMAT_FDPIC_ELF is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# UCLIBC_FORMAT_FLAT is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# UCLIBC_FORMAT_FLAT_SEP_DATA is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# UCLIBC_FORMAT_SHARED_FLAT is not set" >> $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_sh2),y)
--	$(SED) 's,# CONFIG_SH2 is not set,CONFIG_SH2=y,g' $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# UCLIBC_FORMAT_FDPIC_ELF is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# UCLIBC_FORMAT_FLAT is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# UCLIBC_FORMAT_FLAT_SEP_DATA is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# UCLIBC_FORMAT_SHARED_FLAT is not set" >> $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_sh3eb),y)
--	$(SED) 's,# CONFIG_SH3 is not set,CONFIG_SH3=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_sh3),y)
--	$(SED) 's,# CONFIG_SH3 is not set,CONFIG_SH3=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_sh4eb),y)
--	$(SED) 's,# CONFIG_SH4 is not set,CONFIG_SH4=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_sh4),y)
--	$(SED) 's,# CONFIG_SH4 is not set,CONFIG_SH4=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--endif
--ifeq ($(UCLIBC_TARGET_ARCH),sparc)
--	$(SED) 's/^\(CONFIG_[^_]*[_]*SPARC[^=]*\)=.*/# \1 is not set/g' \
--		 $(UCLIBC_DIR)/.oldconfig
--	for i in V7 V8 V9 V9B; do echo "# CONFIG_SPARC_$$i is not set"; done \
--		>> $(UCLIBC_DIR)/.oldconfig
--	$(SED) 's/^.*$(UCLIBC_SPARC_TYPE)[^B].*/$(UCLIBC_SPARC_TYPE)=y/g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(UCLIBC_TARGET_ARCH),powerpc)
--ifeq ($(BR2_powerpc_8540)$(BR2_powerpc_8548)$(BR2_powerpc_e500mc),y)
--	/bin/echo "# CONFIG_CLASSIC is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "CONFIG_E500=y" >> $(UCLIBC_DIR)/.oldconfig
--else
--	/bin/echo "CONFIG_CLASSIC=y" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_E500 is not set" >> $(UCLIBC_DIR)/.oldconfig
--endif
--endif
--ifeq ($(UCLIBC_TARGET_ARCH),avr32)
--	/bin/echo "LINKRELAX=y" >> $(UCLIBC_DIR)/.oldconfig
--endif
--ifneq ($(UCLIBC_TARGET_ENDIAN),)
--	# The above doesn't work for me, so redo
--	$(SED) 's/.*\(ARCH_$(UCLIBC_NOT_TARGET_ENDIAN)_ENDIAN\).*/# \1 is not set/g' \
--		-e 's/.*\(ARCH_WANTS_$(UCLIBC_NOT_TARGET_ENDIAN)_ENDIAN\).*/# \1 is not set/g' \
--		-e 's/.*\(ARCH_$(UCLIBC_TARGET_ENDIAN)_ENDIAN\).*/\1=y/g' \
--		-e 's/.*\(ARCH_WANTS_$(UCLIBC_TARGET_ENDIAN)_ENDIAN\).*/\1=y/g' \
--		$(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LARGEFILE),y)
--	$(SED) 's,.*UCLIBC_HAS_LFS.*,UCLIBC_HAS_LFS=y,g' $(UCLIBC_DIR)/.oldconfig
--else
--	$(SED) 's,.*UCLIBC_HAS_LFS.*,UCLIBC_HAS_LFS=n,g' $(UCLIBC_DIR)/.oldconfig
--	$(SED) '/.*UCLIBC_HAS_FOPEN_LARGEFILE_MODE.*/d' $(UCLIBC_DIR)/.oldconfig
--	echo "# UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set" >> $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_IPV6),y)
--	$(SED) 's,^.*UCLIBC_HAS_IPV6.*,UCLIBC_HAS_IPV6=y,g' $(UCLIBC_DIR)/.oldconfig
--else
--	$(SED) 's,^.*UCLIBC_HAS_IPV6.*,UCLIBC_HAS_IPV6=n,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_RPC),y)
--	$(SED) 's,^.*UCLIBC_HAS_RPC.*,UCLIBC_HAS_RPC=y,g' \
--		-e 's,^.*UCLIBC_HAS_FULL_RPC.*,UCLIBC_HAS_FULL_RPC=y,g' \
--		-e 's,^.*UCLIBC_HAS_REENTRANT_RPC.*,UCLIBC_HAS_REENTRANT_RPC=y,g' \
--		$(UCLIBC_DIR)/.oldconfig
--else
--	$(SED) 's,^.*UCLIBC_HAS_RPC.*,UCLIBC_HAS_RPC=n,g' \
--		-e 's,^.*UCLIBC_HAS_FULL_RPC.*,UCLIBC_HAS_FULL_RPC=n,g' \
--		-e 's,^.*UCLIBC_HAS_REENTRANT_RPC.*,UCLIBC_HAS_REENTRANT_RPC=n,g' \
--		$(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_SOFT_FLOAT),y)
--	$(SED) 's,.*UCLIBC_HAS_FPU.*,UCLIBC_HAS_FPU=n,g' \
--		-e 's,^[^_]*HAS_FPU.*,HAS_FPU=n,g' \
--		-e 's,.*UCLIBC_HAS_FLOATS.*,UCLIBC_HAS_FLOATS=y,g' \
--		-e 's,.*DO_C99_MATH.*,DO_C99_MATH=y,g' \
--		$(UCLIBC_DIR)/.oldconfig
--	#$(SED) 's,.*UCLIBC_HAS_FPU.*,UCLIBC_HAS_FPU=n\nHAS_FPU=n\nUCLIBC_HAS_FLOATS=y\nUCLIBC_HAS_SOFT_FLOAT=y,g' $(UCLIBC_DIR)/.oldconfig
--else
--	$(SED) '/UCLIBC_HAS_FLOATS/d' \
--		-e 's,.*UCLIBC_HAS_FPU.*,UCLIBC_HAS_FPU=y\nHAS_FPU=y\nUCLIBC_HAS_FLOATS=y\n,g' \
--		$(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
--	$(SED) 's,^.*UCLIBC_HAS_SSP[^_].*,UCLIBC_HAS_SSP=y,g' $(UCLIBC_DIR)/.oldconfig
--else
--	$(SED) 's,^.*UCLIBC_HAS_SSP[^_].*,UCLIBC_HAS_SSP=n,g' $(UCLIBC_DIR)/.oldconfig
--endif
--	$(SED) '/UCLIBC_HAS_THREADS/d' $(UCLIBC_DIR)/.oldconfig
--	$(SED) '/LINUXTHREADS/d' $(UCLIBC_DIR)/.oldconfig
--	$(SED) '/LINUXTHREADS_OLD/d' $(UCLIBC_DIR)/.oldconfig
--	$(SED) '/PTHREADS_DEBUG_SUPPORT/d' $(UCLIBC_DIR)/.oldconfig
--	$(SED) '/UCLIBC_HAS_THREADS_NATIVE/d' $(UCLIBC_DIR)/.oldconfig
--	$(SED) '/DODEBUG /d' $(UCLIBC_DIR)/.oldconfig
--	$(SED) '/DOSTRIP/d' $(UCLIBC_DIR)/.oldconfig
--ifeq ($(BR2_STRIP_none),y)
--	echo "# DOSTRIP is not set" >> $(UCLIBC_DIR)/.oldconfig
--else
--	echo "DOSTRIP=y" >> $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_ENABLE_DEBUG),y)
--	echo "DODEBUG=y" >> $(UCLIBC_DIR)/.oldconfig
--else
--	echo "# DODEBUG is not set" >> $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_PTHREADS_NONE),y)
--	echo "# UCLIBC_HAS_THREADS is not set" >> $(UCLIBC_DIR)/.oldconfig
--else
--	echo "UCLIBC_HAS_THREADS=y" >> $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_PTHREADS),y)
--	echo "LINUXTHREADS=y" >> $(UCLIBC_DIR)/.oldconfig
--	echo "LINUXTHREADS_NEW=y" >> $(UCLIBC_DIR)/.oldconfig
--else
--	echo "# LINUXTHREADS is not set" >> $(UCLIBC_DIR)/.oldconfig
--	echo "# LINUXTHREADS_NEW is not set" >> $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_PTHREADS_OLD),y)
--	echo "LINUXTHREADS_OLD=y" >> $(UCLIBC_DIR)/.oldconfig
--else
--	echo "# LINUXTHREADS_OLD is not set" >> $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_PTHREADS_NATIVE),y)
--	echo "UCLIBC_HAS_THREADS_NATIVE=y" >> $(UCLIBC_DIR)/.oldconfig
--else
--	echo "# UCLIBC_HAS_THREADS_NATIVE is not set" >> $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_PTHREAD_DEBUG),y)
--	echo "PTHREADS_DEBUG_SUPPORT=y" >> $(UCLIBC_DIR)/.oldconfig
--else
--	echo "# PTHREADS_DEBUG_SUPPORT is not set" >> $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LOCALE),y)
--	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\n# UCLIBC_BUILD_ALL_LOCALE is not set\nUCLIBC_BUILD_MINIMAL_LOCALE=y\nUCLIBC_BUILD_MINIMAL_LOCALES="$(UCLIBC_LOCALES)"\nUCLIBC_PREGENERATED_LOCALE_DATA=n\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=n\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
--else
--	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=n,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT_WCHAR),y)
--	$(SED) 's,^.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=y,g' $(UCLIBC_DIR)/.oldconfig
--else
--	$(SED) 's,^.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=n,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ("$(KERNEL_ARCH)","i386")
--	/bin/echo "# CONFIG_GENERIC_386 is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_386 is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_486 is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_586 is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_586MMX is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_686 is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_PENTIUMII is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_PENTIUMIII is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_PENTIUM4 is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_K6 is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_K7 is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_ELAN is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_CRUSOE is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_WINCHIPC6 is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_WINCHIP2 is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_CYRIXIII is not set" >> $(UCLIBC_DIR)/.oldconfig
--	/bin/echo "# CONFIG_NEHEMIAH is not set" >> $(UCLIBC_DIR)/.oldconfig
--ifeq ($(BR2_x86_i386),y)
--	$(SED) 's,# CONFIG_386 is not set,CONFIG_386=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_x86_i486),y)
--	$(SED) 's,# CONFIG_486 is not set,CONFIG_486=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_x86_i586),y)
--	$(SED) 's,# CONFIG_586 is not set,CONFIG_586=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_x86_pentium_mmx),y)
--	$(SED) 's,# CONFIG_586MMX is not set,CONFIG_586MMX=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_x86_i686),y)
--	$(SED) 's,# CONFIG_686 is not set,CONFIG_686=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_x86_pentiumpro),y)
--	$(SED) 's,# CONFIG_686 is not set,CONFIG_686=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_x86_pentium2),y)
--	$(SED) 's,# CONFIG_PENTIUMII is not set,CONFIG_PENTIUMII=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_x86_pentium3),y)
--	$(SED) 's,# CONFIG_PENTIUMIII is not set,CONFIG_PENTIUMIII=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_x86_pentium4),y)
--	$(SED) 's,# CONFIG_PENTIUM4 is not set,CONFIG_PENTIUM4=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_x86_pentium_m),y)
--	$(SED) 's,# CONFIG_PENTIUM4 is not set,CONFIG_PENTIUM4=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_x86_nocona),y)
--	$(SED) 's,# CONFIG_PENTIUM4 is not set,CONFIG_PENTIUM4=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
--ifeq ($(BR2_x86_core2),y)
--	$(SED) 's,# CONFIG_PENTIUM4 is not set,CONFIG_PENTIUM4=y,g' $(UCLIBC_DIR)/.oldconfig
--endif
+-gcc-patched: $(GCC_DIR)/.patched
+-$(GCC_DIR)/.patched: $(GCC_DIR)/.unpacked
+-	$(Q)$(call MESSAGE,"Patching gcc")
+-	# Apply any files named gcc-*.patch from the source directory to gcc
+-ifneq ($(wildcard $(GCC_PATCH_DIR)),)
+-	support/scripts/apply-patches.sh $(GCC_DIR) $(GCC_PATCH_DIR) \*.patch
 -endif
 -
--$(UCLIBC_DIR)/.config: $(UCLIBC_DIR)/.oldconfig
--	$(Q)$(call MESSAGE,"Configuring uClibc")
--	cp -f $(UCLIBC_DIR)/.oldconfig $(UCLIBC_DIR)/.config
--	mkdir -p $(STAGING_DIR)/usr/include
--	mkdir -p $(STAGING_DIR)/usr/lib
--	mkdir -p $(STAGING_DIR)/lib
--	$(MAKE1) -C $(UCLIBC_DIR) \
--		ARCH="$(UCLIBC_TARGET_ARCH)" \
--		PREFIX=$(STAGING_DIR) \
--		DEVEL_PREFIX=/usr/ \
--		RUNTIME_PREFIX=$(STAGING_DIR) \
--		CROSS_COMPILE="$(TARGET_CROSS)" \
--		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
--		HOSTCC="$(HOSTCC)" \
--		oldconfig
+-ifeq ($(ARCH)-$(BR2_GCC_SHARED_LIBGCC),powerpc-y)
+-ifneq ($(BR2_SOFT_FLOAT),)
+-	support/scripts/apply-patches.sh $(GCC_DIR) toolchain/gcc/$(GCC_VERSION) powerpc-link-with-math-lib.patch.conditional
+-endif
+-endif
 -	touch $@
--
--ifeq ($(BR2_CCACHE),y)
--# we'll need ccache for the host built before make oldconfig
--# if configured, otherwise uclibc-menuconfig will fail.
--# Use order-only dependency as host-ccache is a virtual target
--$(UCLIBC_DIR)/.config: | host-ccache
--endif
--
--# For ARC, libgcc is always included, even when -nostdlib is given. This
--# is related to some small pieces of code that are not always generated
--# by the compiler; a call to libgcc is used in those cases instead.
--#
--# During the initial stages of building the toolchain, this is a problem,
--# as libgcc does not exist yet. The ARC compiler supports -really-nostdlib
--# to override the default behavior.
--ifeq ($(BR2_arc),y)
--REALLY_NOSTDLIB=-really-nostdlib
--endif
--
--$(UCLIBC_DIR)/.configured: $(UCLIBC_DIR)/.config
--	$(Q)$(call MESSAGE,"Installing uClibc headers")
--	$(MAKE1) -C $(UCLIBC_DIR) \
--		ARCH="$(UCLIBC_TARGET_ARCH)" \
--		PREFIX=$(STAGING_DIR) \
--		DEVEL_PREFIX=/usr/ \
--		RUNTIME_PREFIX=$(STAGING_DIR) \
--		CROSS_COMPILE="$(TARGET_CROSS)" \
--		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
--		HOSTCC="$(HOSTCC)" headers \
--		lib/crt1.o lib/crti.o lib/crtn.o \
--		install_headers
--	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) -nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
--	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) -nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libm.so
--	cp -pLR $(UCLIBC_DIR)/lib/crt[1in].o $(STAGING_DIR)/usr/lib/
--	touch $@
--
--$(UCLIBC_DIR)/lib/libc.a: $(UCLIBC_DIR)/.configured $(HOST_GCC_INTERMEDIATE_TARGET_INSTALL_HOST)
--	$(Q)$(call MESSAGE,"Building uClibc")
--	$(MAKE1) -C $(UCLIBC_DIR) \
--		ARCH="$(UCLIBC_TARGET_ARCH)" \
--		PREFIX= \
--		DEVEL_PREFIX=/ \
--		RUNTIME_PREFIX=/ \
--		CROSS_COMPILE="$(TARGET_CROSS)" \
--		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
--		HOSTCC="$(HOSTCC)" \
--		all
--	touch -c $@
--
--uclibc-menuconfig: dirs $(UCLIBC_DIR)/.config
--	$(MAKE1) -C $(UCLIBC_DIR) \
--		ARCH="$(UCLIBC_TARGET_ARCH)" \
--		PREFIX=$(STAGING_DIR) \
--		DEVEL_PREFIX=/usr/ \
--		RUNTIME_PREFIX=$(STAGING_DIR) \
--		CROSS_COMPILE="$(TARGET_CROSS)" \
--		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
--		HOSTCC="$(HOSTCC)" \
--		menuconfig && \
--	touch -c $(UCLIBC_DIR)/.config
--
--
--$(STAGING_DIR)/usr/lib/libc.a: $(UCLIBC_DIR)/lib/libc.a
--	$(Q)$(call MESSAGE,"Installing uClibc to staging dir")
--	$(MAKE1) -C $(UCLIBC_DIR) \
--		ARCH="$(UCLIBC_TARGET_ARCH)" \
--		PREFIX=$(STAGING_DIR) \
--		DEVEL_PREFIX=/usr/ \
--		RUNTIME_PREFIX=/ \
--		CROSS_COMPILE="$(TARGET_CROSS)" \
--		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
--		install_runtime install_dev
--	# Build the host utils. Need to add an install target...
--	$(MAKE1) -C $(UCLIBC_DIR)/utils \
--		PREFIX=$(HOST_DIR) \
--		HOSTCC="$(HOSTCC)" \
--		hostutils
--	if [ -f $(UCLIBC_DIR)/utils/ldd.host ]; then \
--		install -D $(UCLIBC_DIR)/utils/ldd.host $(HOST_DIR)/usr/bin/ldd; \
--		ln -sf ldd $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldd; \
--	fi
--	if [ -f $(UCLIBC_DIR)/utils/ldconfig.host ]; then \
--		install -D $(UCLIBC_DIR)/utils/ldconfig.host $(HOST_DIR)/usr/bin/ldconfig; \
--		ln -sf ldconfig $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldconfig; \
--	fi
--	touch -c $@
--
--ifneq ($(TARGET_DIR),)
--$(TARGET_DIR)/lib/libc.so.0: $(STAGING_DIR)/usr/lib/libc.a
--	$(Q)$(call MESSAGE,"Installing uClibc runtime to target dir")
--	$(MAKE1) -C $(UCLIBC_DIR) \
--		ARCH="$(UCLIBC_TARGET_ARCH)" \
--		PREFIX=$(TARGET_DIR) \
--		DEVEL_PREFIX=/usr/ \
--		RUNTIME_PREFIX=/ \
--		CROSS_COMPILE="$(TARGET_CROSS)" \
--		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
--		install_runtime
--	touch -c $@
--
--$(TARGET_DIR)/usr/bin/ldd: $(cross_compiler)
--	$(Q)$(call MESSAGE,"Installing uClibc utils to target dir")
--	$(MAKE1) -C $(UCLIBC_DIR) CC=$(TARGET_CROSS)gcc \
--		CPP=$(TARGET_CROSS)cpp LD=$(TARGET_CROSS)ld \
--		ARCH="$(UCLIBC_TARGET_ARCH)" \
--		PREFIX=$(TARGET_DIR) utils install_utils
--	touch -c $@
--
--ifneq ($(BR2_PREFER_STATIC_LIB),y)
--UCLIBC_TARGETS=$(TARGET_DIR)/lib/libc.so.0
--endif
--
--ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
--UCLIBC_TARGETS+=uclibc-test
--endif
--endif
--
--uclibc: host-gcc-intermediate $(STAGING_DIR)/usr/lib/libc.a $(UCLIBC_TARGETS)
--
--uclibc-source: $(DL_DIR)/$(UCLIBC_SOURCE)
--
--uclibc-unpacked: $(UCLIBC_DIR)/.unpacked
--
--uclibc-config: $(UCLIBC_DIR)/.config
--
--uclibc-oldconfig: $(UCLIBC_DIR)/.oldconfig
--
--uclibc-update-config: uclibc-config
--	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
--
--uclibc-configured: host-gcc-initial linux-headers $(UCLIBC_DIR)/.configured
--
--uclibc-configured-source: uclibc-source
--
--uclibc-clean: uclibc-test-clean
--	-$(MAKE1) -C $(UCLIBC_DIR) ARCH="$(UCLIBC_TARGET_ARCH)" clean
--	rm -f $(UCLIBC_DIR)/.config
--
--uclibc-dirclean: uclibc-test-dirclean
--	rm -rf $(UCLIBC_DIR)
--
--uclibc-target-utils: $(TARGET_DIR)/usr/bin/ldd
--
--uclibc-target-utils-source: $(DL_DIR)/$(UCLIBC_SOURCE)
--
--$(UCLIBC_DIR)/test/unistd/errno:
--	$(Q)$(call MESSAGE,"Building uClibc test suite")
--	$(MAKE) -C $(UCLIBC_DIR)/test \
--	ARCH_CFLAGS=-I$(STAGING_DIR)/usr/include \
--	UCLIBC_ONLY=1 TEST_INSTALLED_UCLIBC=1 compile
--
--$(TARGET_DIR)/root/uClibc/test/unistd/errno: $(UCLIBC_DIR)/test/unistd/errno
--	$(Q)$(call MESSAGE,"Installing uClibc test suite to target dir")
--	mkdir -p $(TARGET_DIR)/root/uClibc
--	cp -rdpf $(UCLIBC_DIR)/test $(TARGET_DIR)/root/uClibc
--	$(INSTALL) $(UCLIBC_DIR)/Rules.mak $(TARGET_DIR)/root/uClibc
--	$(INSTALL) $(UCLIBC_DIR)/.config $(TARGET_DIR)/root/uClibc
--
--uclibc-test: $(STAGING_DIR)/usr/lib/libc.a $(TARGET_DIR)/root/uClibc/test/unistd/errno
--
--uclibc-test-source: uclibc-source
--
--uclibc-test-clean:
--	-$(MAKE) -C $(UCLIBC_DIR)/test clean
--	rm -rf $(TARGET_DIR)/root/uClibc
--
--uclibc-test-dirclean:
--	rm -rf $(TARGET_DIR)/root/uClibc
 -
 -################################################################################
 -#
--# uClibc for the target just needs its header files
--# and whatnot installed.
+-# build the first pass gcc compiler
 -#
 -################################################################################
+-GCC_BUILD_DIR1:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-initial
 -
--$(TARGET_DIR)/usr/lib/libc.a: $(STAGING_DIR)/usr/lib/libc.a
--	$(Q)$(call MESSAGE,"Installing uClibc development files to target dir")
--	$(MAKE1) -C $(UCLIBC_DIR) \
--		ARCH="$(UCLIBC_TARGET_ARCH)" \
--		PREFIX=$(TARGET_DIR) \
--		DEVEL_PREFIX=/usr/ \
--		RUNTIME_PREFIX=/ \
--		install_dev
--	# Install the kernel headers to the target dir if necessary
--	if [ ! -f $(TARGET_DIR)/usr/include/linux/version.h ]; then \
--		cp -pLR $(LINUX_HEADERS_DIR)/include/* \
--			$(TARGET_DIR)/usr/include/; \
+-$(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
+-	$(Q)$(call MESSAGE,"Configuring gcc pass-1")
+-	mkdir -p $(GCC_BUILD_DIR1)
+-	(cd $(GCC_BUILD_DIR1); rm -rf config.cache; \
+-		$(HOST_CONFIGURE_OPTS) \
+-		MAKEINFO=missing \
+-		$(GCC_DIR)/configure $(QUIET) \
+-		--prefix=$(HOST_DIR)/usr \
+-		--build=$(GNU_HOST_NAME) \
+-		--host=$(GNU_HOST_NAME) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--enable-languages=c \
+-		--with-sysroot=$(TOOLCHAIN_DIR)/uClibc_dev/ \
+-		--disable-__cxa_atexit \
+-		$(GCC_OPTSPACE) \
+-		$(GCC_QUADMATH) \
+-		$(GCC_ENABLE_OPENMP) \
+-		--with-gnu-ld \
+-		--disable-shared \
+-		--disable-libssp \
+-		--without-headers \
+-		--with-newlib \
+-		--disable-multilib \
+-		$(GCC_TLS) \
+-		$(GCC_WITH_HOST_GMP) \
+-		$(GCC_WITH_HOST_MPFR) \
+-		$(GCC_WITH_HOST_MPC) \
+-		$(DISABLE_NLS) \
+-		$(THREADS) \
+-		$(GCC_DECIMAL_FLOAT) \
+-		$(SOFT_FLOAT_CONFIG_OPTION) \
+-		$(GCC_WITH_ABI) $(GCC_WITH_ARCH) $(GCC_WITH_TUNE) $(GCC_WITH_CPU) \
+-		$(DISABLE_LARGEFILE) \
+-		$(EXTRA_GCC_CONFIG_OPTIONS) \
+-	)
+-	touch $@
+-
+-$(GCC_BUILD_DIR1)/.compiled: $(GCC_BUILD_DIR1)/.configured
+-	$(Q)$(call MESSAGE,"Building gcc pass-1")
+-ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+-	$(GCC_CONF_ENV) $(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
+-else
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
+-endif
+-	touch $@
+-
+-gcc_initial=$(GCC_BUILD_DIR1)/.installed
+-$(gcc_initial) $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc: $(GCC_BUILD_DIR1)/.compiled
+-	$(Q)$(call MESSAGE,"Installing gcc pass-1")
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) install-gcc
+-	touch $(gcc_initial)
+-
+-gcc_initial: $(GCC_HOST_PREREQ) host-binutils $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc
+-
+-gcc_initial-clean:
+-	rm -rf $(GCC_BUILD_DIR1)
+-
+-gcc_initial-dirclean:
+-	rm -rf $(GCC_BUILD_DIR1) $(GCC_DIR)
+-
+-################################################################################
+-#
+-# build the second pass gcc compiler
+-#
+-################################################################################
+-GCC_BUILD_DIR2:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-intermediate
+-
+-# The --without-headers option stopped working with gcc 3.0 and has never been
+-# fixed, so we need to actually have working C library header files prior to
+-# the step or libgcc will not build...
+-
+-$(GCC_BUILD_DIR2)/.configured: $(GCC_DIR)/.patched
+-	$(Q)$(call MESSAGE,"Configuring gcc pass-2")
+-	mkdir -p $(GCC_BUILD_DIR2)
+-	(cd $(GCC_BUILD_DIR2); rm -rf config.cache; \
+-		$(HOST_CONFIGURE_OPTS) \
+-		MAKEINFO=missing \
+-		$(GCC_DIR)/configure $(QUIET) \
+-		--prefix=$(HOST_DIR)/usr \
+-		--build=$(GNU_HOST_NAME) \
+-		--host=$(GNU_HOST_NAME) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--enable-languages=c \
+-		--with-sysroot=$(TOOLCHAIN_DIR)/uClibc_dev/ \
+-		--disable-__cxa_atexit \
+-		$(GCC_OPTSPACE) \
+-		$(GCC_QUADMATH) \
+-		$(GCC_ENABLE_OPENMP) \
+-		--with-gnu-ld \
+-		--enable-shared \
+-		--disable-libssp \
+-		--disable-multilib \
+-		$(GCC_TLS) \
+-		$(GCC_WITH_HOST_GMP) \
+-		$(GCC_WITH_HOST_MPFR) \
+-		$(GCC_WITH_HOST_MPC) \
+-		$(DISABLE_NLS) \
+-		$(THREADS) \
+-		$(MULTILIB) \
+-		$(GCC_DECIMAL_FLOAT) \
+-		$(SOFT_FLOAT_CONFIG_OPTION) \
+-		$(GCC_WITH_ABI) $(GCC_WITH_ARCH) $(GCC_WITH_TUNE) $(GCC_WITH_CPU) \
+-		$(DISABLE_LARGEFILE) \
+-		$(EXTRA_GCC_CONFIG_OPTIONS) \
+-	)
+-	touch $@
+-
+-$(GCC_BUILD_DIR2)/.compiled: $(GCC_BUILD_DIR2)/.configured
+-	$(Q)$(call MESSAGE,"Building gcc pass-2")
+-	# gcc >= 4.3.0 have to also build all-target-libgcc
+-ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+-	$(GCC_CONF_ENV) $(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) all-gcc all-target-libgcc
+-else
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) all-gcc
+-endif
+-	touch $@
+-
+-gcc_intermediate=$(GCC_BUILD_DIR2)/.installed
+-$(gcc_intermediate): $(GCC_BUILD_DIR2)/.compiled
+-	$(Q)$(call MESSAGE,"Installing gcc pass-2")
+-	# gcc >= 4.3.0 have to also install install-target-libgcc
+-ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) install-gcc install-target-libgcc
+-else
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR2) install-gcc
+-endif
+-	touch $(gcc_intermediate)
+-
+-gcc_intermediate: uclibc-configured $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc
+-
+-gcc_intermediate-clean:
+-	rm -rf $(GCC_BUILD_DIR2)
+-
+-gcc_intermediate-dirclean:
+-	rm -rf $(GCC_BUILD_DIR2) $(GCC_DIR)
+-
+-################################################################################
+-#
+-# third pass compiler build. Build the compiler targeting
+-# the newly built shared uClibc library.
+-#
+-################################################################################
+-#
+-# Sigh... I had to rework things because using --with-gxx-include-dir
+-# causes issues with include dir search order for g++. This seems to
+-# have something to do with "path translations" and possibly doesn't
+-# affect gcc-target. However, I haven't tested gcc-target yet so no
+-# guarantees. mjn3
+-
+-GCC_BUILD_DIR3:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-final
+-$(GCC_BUILD_DIR3)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
+-	$(Q)$(call MESSAGE,"Configuring gcc final")
+-	mkdir -p $(GCC_BUILD_DIR3)
+-	# Important! Required for limits.h to be fixed.
+-	ln -snf ../include/ $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sys-include
+-	(cd $(GCC_BUILD_DIR3); rm -rf config.cache; \
+-		$(HOST_CONFIGURE_OPTS) \
+-		MAKEINFO=missing \
+-		$(GCC_SRC_DIR)/configure $(QUIET) \
+-		--prefix=$(HOST_DIR)/usr \
+-		--build=$(GNU_HOST_NAME) \
+-		--host=$(GNU_HOST_NAME) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--enable-languages=$(GCC_CROSS_LANGUAGES) \
+-		--with-sysroot=$(STAGING_DIR) \
+-		--with-build-time-tools=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin \
+-		--disable-__cxa_atexit \
+-		$(GCC_OPTSPACE) \
+-		$(GCC_QUADMATH) \
+-		$(GCC_ENABLE_OPENMP) \
+-		--with-gnu-ld \
+-		--disable-libssp \
+-		--disable-multilib \
+-		$(GCC_TLS) \
+-		$(GCC_SHARED_LIBGCC) \
+-		$(GCC_WITH_HOST_GMP) \
+-		$(GCC_WITH_HOST_MPFR) \
+-		$(GCC_WITH_HOST_MPC) \
+-		$(DISABLE_NLS) \
+-		$(THREADS) \
+-		$(GCC_DECIMAL_FLOAT) \
+-		$(SOFT_FLOAT_CONFIG_OPTION) \
+-		$(GCC_WITH_ABI) $(GCC_WITH_ARCH) $(GCC_WITH_TUNE) $(GCC_WITH_CPU) \
+-		$(DISABLE_LARGEFILE) \
+-		$(EXTRA_GCC_CONFIG_OPTIONS) \
+-	)
+-	touch $@
+-
+-$(GCC_BUILD_DIR3)/.compiled: $(GCC_BUILD_DIR3)/.configured
+-	$(Q)$(call MESSAGE,"Building gcc final")
+-	$(GCC_CONF_ENV) $(HOST_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR3) all
+-	touch $@
+-
+-$(GCC_BUILD_DIR3)/.installed: $(GCC_BUILD_DIR3)/.compiled
+-	$(Q)$(call MESSAGE,"Installing gcc final")
+-	$(HOST_MAKE_ENV) $(MAKE) \
+-		-C $(GCC_BUILD_DIR3) install
+-	if [ -d "$(STAGING_DIR)/lib64" ]; then \
+-		if [ ! -e "$(STAGING_DIR)/lib" ]; then \
+-			mkdir -p "$(STAGING_DIR)/lib"; \
+-		fi; \
+-		mv "$(STAGING_DIR)/lib64/"* "$(STAGING_DIR)/lib/"; \
+-		rmdir "$(STAGING_DIR)/lib64"; \
+-		rm "$(STAGING_DIR)/usr/$(GNU_TARGET_NAME)/lib64";\
 -	fi
+-	# Make sure we have 'cc'.
+-	if [ ! -e $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc ]; then \
+-		ln -snf $(GNU_TARGET_NAME)-gcc \
+-			$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
+-	fi
+-	if [ ! -e $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc ]; then \
+-		ln -snf gcc $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc; \
+-	fi
+-	# arch-linux-* symlinks
+-	cd $(HOST_DIR)/usr/bin; for i in $(GNU_TARGET_NAME)-*; do \
+-		ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
+-	done
+-
+-	mkdir -p $(TARGET_DIR)/usr/lib $(TARGET_DIR)/usr/sbin
+-	touch $@
+-
+-$(STAMP_DIR)/gcc_libs_target_installed: $(GCC_BUILD_DIR3)/.installed
+-	$(Q)$(call MESSAGE,"Installing gcc final libraries to staging and target")
+-ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
+-	# These go in /lib, so...
+-	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
+-	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libgcc_s* \
+-		$(STAGING_DIR)/lib/
+-	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libgcc_s* \
+-		$(TARGET_DIR)/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libgcc_s*
+-endif
+-ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+-ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libstdc++.so* \
+-		$(STAGING_DIR)/usr/lib/
+-	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libstdc++.so* \
+-		$(TARGET_DIR)/usr/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libstdc++.so*
+-endif
+-endif
+-ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
+-	cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libgomp.so* $(STAGING_DIR)/usr/lib/
+-	cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libgomp.so* $(TARGET_DIR)/usr/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libgomp.so*
+-endif
+-	mkdir -p $(@D)
+-	touch $@
+-
+-cross_compiler:=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc
+-cross_compiler gcc: gcc_intermediate \
+-	uclibc $(GCC_BUILD_DIR3)/.installed \
+-	$(STAMP_DIR)/gcc_libs_target_installed
+-
+-gcc-source: $(DL_DIR)/$(GCC_SOURCE)
+-
+-gcc-clean:
+-	rm -rf $(GCC_BUILD_DIR3)
+-	for prog in cpp gcc gcc-[0-9]* protoize unprotoize gcov gccbug cc; do \
+-		rm -f $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-$$prog; \
+-	done
+-
+-gcc-dirclean: gcc_initial-dirclean
+-	rm -rf $(GCC_BUILD_DIR3)
+-
+-################################################################################
+-#
+-# Next build target gcc compiler
+-#
+-################################################################################
+-GCC_BUILD_DIR4:=$(BUILD_DIR)/gcc-$(GCC_VERSION)-target
+-
+-$(GCC_BUILD_DIR4)/.prepared: $(STAMP_DIR)/gcc_libs_target_installed
+-	mkdir -p $(GCC_BUILD_DIR4)
+-	touch $@
+-
+-$(GCC_BUILD_DIR4)/.configured: $(GCC_BUILD_DIR4)/.prepared
+-	$(Q)$(call MESSAGE,"Configuring gcc on target")
+-	(cd $(GCC_BUILD_DIR4); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		CFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
+-		CXXFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
+-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
+-		BOOT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
+-		GCC_FOR_TARGET="$(TARGET_CC)" \
+-		CC_FOR_TARGET="$(TARGET_CC)" \
+-		CXX_FOR_TARGET="$(TARGET_CXX)" \
+-		$(GCC_SRC_DIR)/configure $(QUIET) \
+-		--prefix=/usr \
+-		--build=$(GNU_HOST_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--enable-languages=$(GCC_TARGET_LANGUAGES) \
+-		--with-gxx-include-dir=/usr/include/c++ \
+-		--disable-__cxa_atexit \
+-		$(GCC_OPTSPACE) \
+-		$(GCC_QUADMATH) \
+-		$(GCC_ENABLE_OPENMP) \
+-		--with-gnu-ld \
+-		--disable-libssp \
+-		--disable-multilib \
+-		$(GCC_TLS) \
+-		$(GCC_SHARED_LIBGCC) \
+-		$(DISABLE_NLS) \
+-		$(THREADS) \
+-		$(GCC_DECIMAL_FLOAT) \
+-		$(SOFT_FLOAT_CONFIG_OPTION) \
+-		$(GCC_WITH_ABI) $(GCC_WITH_ARCH) $(GCC_WITH_TUNE) $(GCC_WITH_CPU) \
+-		$(DISABLE_LARGEFILE) \
+-		$(EXTRA_GCC_CONFIG_OPTIONS) \
+-		$(EXTRA_TARGET_GCC_CONFIG_OPTIONS) \
+-	)
+-	touch $@
+-
+-$(GCC_BUILD_DIR4)/.compiled: $(GCC_BUILD_DIR4)/.configured
+-	$(Q)$(call MESSAGE,"Building gcc on target")
+-	$(TARGET_MAKE_ENV) \
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(GCC_BUILD_DIR4) all
+-	touch $@
+-
+-GCC_LIB_SUBDIR=lib/gcc/$(GNU_TARGET_NAME)/$(GCC_VERSION)
+-ifeq ($(findstring x4.2,x$(GCC_VERSION)),x4.2)
+-GCC_INCLUDE_DIR:=include
+-else
+-GCC_INCLUDE_DIR:=include-fixed
+-endif
+-
+-$(TARGET_DIR)/usr/bin/gcc: $(GCC_BUILD_DIR4)/.compiled
+-	$(Q)$(call MESSAGE,"Installing gcc on target")
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) \
+-		$(MAKE1) -C $(GCC_BUILD_DIR4) install
+-	# Remove broken specs file (cross compile flag is set).
+-	rm -f $(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR)/specs
+-
+-	# Remove useless copies of gcc, c++, g++
+-	rm -f $(TARGET_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc*
+-	rm -f $(TARGET_DIR)/usr/bin/$(GNU_TARGET_NAME)-g++*
+-	rm -f $(TARGET_DIR)/usr/bin/$(GNU_TARGET_NAME)-c++*
+-
+-	# Work around problem of missing syslimits.h
+-	if [ ! -f $(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR)/$(GCC_INCLUDE_DIR)/syslimits.h ]; then \
+-		echo "warning: working around missing syslimits.h"; \
+-		cp -f $(HOST_DIR)/$(GCC_LIB_SUBDIR)/$(GCC_INCLUDE_DIR)/syslimits.h \
+-			$(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR)/$(GCC_INCLUDE_DIR)/; \
+-	fi
+-
+-	# Make sure we have 'cc'.
+-	if [ ! -e $(TARGET_DIR)/usr/bin/cc ]; then \
+-		ln -snf gcc $(TARGET_DIR)/usr/bin/cc; \
+-	fi
+-
+-	# Copy C runtime initialization object files
+-	cp -f $(STAGING_DIR)/usr/lib/*crt*.o $(TARGET_DIR)/usr/lib
+-
+-	# These are in /lib, so...
+-	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
 -	touch -c $@
 -
--uclibc_target: cross_compiler uclibc $(TARGET_DIR)/usr/lib/libc.a $(TARGET_DIR)/usr/bin/ldd
+-gcc_target: $(STAMP_DIR)/gcc_libs_target_installed $(GCC_TARGET_PREREQ) binutils $(TARGET_DIR)/usr/bin/gcc
 -
--uclibc_target-clean: uclibc-test-clean
--	rm -rf $(TARGET_DIR)/usr/include \
--		$(TARGET_DIR)/usr/lib/libc.a $(TARGET_DIR)/usr/bin/ldd
+-gcc_target-clean:
+-	rm -rf $(GCC_BUILD_DIR4)
+-	rm -f $(TARGET_DIR)/usr/bin/$(GNU_TARGET_NAME)*
 -
--uclibc_target-dirclean: uclibc-test-dirclean
--	rm -rf $(TARGET_DIR)/usr/include
+-gcc_target-dirclean:
+-	rm -rf $(GCC_BUILD_DIR4)
 -
+-ifeq ($(BR2_PACKAGE_GCC_TARGET),y)
+-TARGETS+=gcc_target
 -endif
+diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
+index a8dd58b..b2eb9de 100644
+--- a/toolchain/toolchain-buildroot.mk
++++ b/toolchain/toolchain-buildroot.mk
+@@ -1,4 +1,9 @@
+ # Include files required for the internal toolchain backend
+ 
+-include toolchain/gcc/gcc-uclibc-4.x.mk
+ include toolchain/uClibc/uclibc.mk
++
++# Triggerring the build of the host-gcc-final will automaticaly do the
++# build of binutils, uClibc, kernel headers and all the intermediate
++# gcc steps.
++
++toolchain-buildroot: host-gcc-final
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 3d70fa1..4ad0603 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -4,5 +4,5 @@ if BR2_TOOLCHAIN_BUILDROOT
+ source "package/linux-headers/Config.in.host"
+ source "toolchain/uClibc/Config.in"
+ source "package/binutils/Config.in.host"
+-source "toolchain/gcc/Config.in"
++source "package/gcc/Config.in.host"
+ endif
+diff --git a/toolchain/toolchain-crosstool-ng.mk b/toolchain/toolchain-crosstool-ng.mk
+index 4f9c29c..6ef73bb 100644
+--- a/toolchain/toolchain-crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng.mk
+@@ -2,6 +2,5 @@
+ 
+ # Explicit ordering:
+ include toolchain/helpers.mk
+-include toolchain/gcc/gcc-uclibc-4.x.mk
+ include toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+ include toolchain/uClibc/uclibc.mk
+diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
+index 40fc633..1198a57 100644
+--- a/toolchain/toolchain-external.mk
++++ b/toolchain/toolchain-external.mk
+@@ -1,6 +1,5 @@
+ # Required includes for the external toolchain backend
+ 
+ include toolchain/helpers.mk
+-include toolchain/gcc/gcc-uclibc-4.x.mk
+ include toolchain/toolchain-external/ext-tool.mk
+ include toolchain/uClibc/uclibc.mk
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index e06fafc..06f5b23 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -394,14 +394,14 @@ endif
+ $(UCLIBC_DIR)/.config: $(UCLIBC_DIR)/.oldconfig
+ 	$(Q)$(call MESSAGE,"Configuring uClibc")
+ 	cp -f $(UCLIBC_DIR)/.oldconfig $(UCLIBC_DIR)/.config
+-	mkdir -p $(TOOLCHAIN_DIR)/uClibc_dev/usr/include
+-	mkdir -p $(TOOLCHAIN_DIR)/uClibc_dev/usr/lib
+-	mkdir -p $(TOOLCHAIN_DIR)/uClibc_dev/lib
++	mkdir -p $(STAGING_DIR)/usr/include
++	mkdir -p $(STAGING_DIR)/usr/lib
++	mkdir -p $(STAGING_DIR)/lib
+ 	$(MAKE1) -C $(UCLIBC_DIR) \
+ 		ARCH="$(UCLIBC_TARGET_ARCH)" \
+-		PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
++		PREFIX=$(STAGING_DIR) \
+ 		DEVEL_PREFIX=/usr/ \
+-		RUNTIME_PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
++		RUNTIME_PREFIX=$(STAGING_DIR) \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
+ 		HOSTCC="$(HOSTCC)" \
+@@ -430,26 +430,20 @@ $(UCLIBC_DIR)/.configured: $(UCLIBC_DIR)/.config
+ 	$(Q)$(call MESSAGE,"Installing uClibc headers")
+ 	$(MAKE1) -C $(UCLIBC_DIR) \
+ 		ARCH="$(UCLIBC_TARGET_ARCH)" \
+-		PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
++		PREFIX=$(STAGING_DIR) \
+ 		DEVEL_PREFIX=/usr/ \
+-		RUNTIME_PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
++		RUNTIME_PREFIX=$(STAGING_DIR) \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
+ 		HOSTCC="$(HOSTCC)" headers \
+ 		lib/crt1.o lib/crti.o lib/crtn.o \
+ 		install_headers
+-	# Install the kernel headers to the first stage gcc include dir
+-	# if necessary
+-	if [ ! -f $(TOOLCHAIN_DIR)/uClibc_dev/usr/include/linux/version.h ]; then \
+-		cp -pLR $(STAGING_DIR)/usr/include/* \
+-			$(TOOLCHAIN_DIR)/uClibc_dev/usr/include/; \
+-	fi
+-	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) -nostartfiles -shared -x c /dev/null -o $(TOOLCHAIN_DIR)/uClibc_dev/usr/lib/libc.so
+-	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) -nostartfiles -shared -x c /dev/null -o $(TOOLCHAIN_DIR)/uClibc_dev/usr/lib/libm.so
+-	cp -pLR $(UCLIBC_DIR)/lib/crt[1in].o $(TOOLCHAIN_DIR)/uClibc_dev/usr/lib/
++	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) -nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
++	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) -nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libm.so
++	cp -pLR $(UCLIBC_DIR)/lib/crt[1in].o $(STAGING_DIR)/usr/lib/
+ 	touch $@
+ 
+-$(UCLIBC_DIR)/lib/libc.a: $(UCLIBC_DIR)/.configured $(gcc_intermediate)
++$(UCLIBC_DIR)/lib/libc.a: $(UCLIBC_DIR)/.configured $(HOST_GCC_INTERMEDIATE_TARGET_INSTALL_HOST)
+ 	$(Q)$(call MESSAGE,"Building uClibc")
+ 	$(MAKE1) -C $(UCLIBC_DIR) \
+ 		ARCH="$(UCLIBC_TARGET_ARCH)" \
+@@ -465,9 +459,9 @@ $(UCLIBC_DIR)/lib/libc.a: $(UCLIBC_DIR)/.configured $(gcc_intermediate)
+ uclibc-menuconfig: dirs $(UCLIBC_DIR)/.config
+ 	$(MAKE1) -C $(UCLIBC_DIR) \
+ 		ARCH="$(UCLIBC_TARGET_ARCH)" \
+-		PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
++		PREFIX=$(STAGING_DIR) \
+ 		DEVEL_PREFIX=/usr/ \
+-		RUNTIME_PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
++		RUNTIME_PREFIX=$(STAGING_DIR) \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
+ 		HOSTCC="$(HOSTCC)" \
+@@ -530,7 +524,7 @@ UCLIBC_TARGETS+=uclibc-test
+ endif
+ endif
+ 
+-uclibc: $(gcc_intermediate) $(STAGING_DIR)/usr/lib/libc.a $(UCLIBC_TARGETS)
++uclibc: host-gcc-intermediate $(STAGING_DIR)/usr/lib/libc.a $(UCLIBC_TARGETS)
+ 
+ uclibc-source: $(DL_DIR)/$(UCLIBC_SOURCE)
+ 
+@@ -543,7 +537,7 @@ uclibc-oldconfig: $(UCLIBC_DIR)/.oldconfig
+ uclibc-update-config: uclibc-config
+ 	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
+ 
+-uclibc-configured: gcc_initial linux-headers $(UCLIBC_DIR)/.configured
++uclibc-configured: host-gcc-initial linux-headers $(UCLIBC_DIR)/.configured
+ 
+ uclibc-configured-source: uclibc-source
+ 
 -- 
 1.8.1.2
