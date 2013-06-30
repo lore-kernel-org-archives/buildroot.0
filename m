@@ -1,32 +1,34 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 30 Jun 2013 17:01:07 +0200
-Subject: [Buildroot] [PATCH 6/8] lttng-libust: define license
-In-Reply-To: <1372604469-24361-1-git-send-email-s.martin49@gmail.com>
-References: <1372604469-24361-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1372604469-24361-6-git-send-email-s.martin49@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Jun 2013 21:28:51 +0200
+Subject: [Buildroot] [PATCH 01/23] uClibc: KERNEL_SOURCE no longer exists
+In-Reply-To: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1372620553-11416-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/lttng-libust/lttng-libust.mk | 2 ++
- 1 file changed, 2 insertions(+)
+The KERNEL_SOURCE configuration option no longer exists in uClibc, so
+there's no point in setting it.
 
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index 35d9eef..c3137aa 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -7,6 +7,8 @@
- LTTNG_LIBUST_SITE    = http://lttng.org/files/lttng-ust/
- LTTNG_LIBUST_VERSION = 2.2.0
- LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
-+LTTNG_LIBUST_LICENSE = LGPLv2.1; GPLv2 for lttng-gen-tp and ust-ctl
-+LTTNG_LIBUST_LICENSE_FILES = COPYING
- 
- LTTNG_LIBUST_INSTALL_STAGING = YES
- LTTNG_LIBUST_DEPENDENCIES    = liburcu util-linux
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/uClibc/uclibc.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index 2036dab..0e01d94 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -98,7 +98,6 @@ $(UCLIBC_DIR)/.oldconfig: $(UCLIBC_DIR)/.patched $(UCLIBC_CONFIG_FILE)
+ 	$(SED) 's,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="$(TARGET_CROSS)",g' \
+ 		-e 's,# TARGET_$(UCLIBC_TARGET_ARCH) is not set,TARGET_$(UCLIBC_TARGET_ARCH)=y,g' \
+ 		-e 's,^TARGET_ARCH=".*",TARGET_ARCH=\"$(UCLIBC_TARGET_ARCH)\",g' \
+-		-e 's,^KERNEL_SOURCE=.*,KERNEL_SOURCE=\"$(LINUX_HEADERS_DIR)\",g' \
+ 		-e 's,^KERNEL_HEADERS=.*,KERNEL_HEADERS=\"$(LINUX_HEADERS_DIR)/include\",g' \
+ 		-e 's,^RUNTIME_PREFIX=.*,RUNTIME_PREFIX=\"/\",g' \
+ 		-e 's,^DEVEL_PREFIX=.*,DEVEL_PREFIX=\"/usr/\",g' \
 -- 
-1.8.3.1
+1.8.1.2
