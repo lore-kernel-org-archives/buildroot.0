@@ -1,74 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Jun 2013 22:25:04 +0200
-Subject: [Buildroot] [PATCH v2] package/libsvg: new package
-In-Reply-To: <1372593363-10994-1-git-send-email-c.schoenert@gmail.com>
-References: <1372593363-10994-1-git-send-email-c.schoenert@gmail.com>
-Message-ID: <20130630222504.7e6131b8@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 30 Jun 2013 21:29:59 +0200
+Subject: [Buildroot] [git commit] e2fsprogs: bump to version 1.42.8
+Message-ID: <20130701094854.7C11D99A82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Carsten Schoenert,
+commit: http://git.buildroot.net/buildroot/commit/?id=65012b3b1efb201df5997ef672963cd1488ffc63
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 30 Jun 2013 13:56:03 +0200, Carsten Schoenert wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/e2fsprogs/e2fsprogs.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> +config BR2_PACKAGE_LIBSVG
-> +	bool "libsvg"
-> +	select BR2_PACKAGE_LIBXML2 if !BR2_PACKAGE_LIBSVG_EXPAT
-
-I don't think we want the BR2_PACKAGE_LIBSVG_EXPAT option. Just make
-this:
-
-	select BR2_PACKAGE_LIBXML2 if !BR2_PACKAGE_EXPAT
-
-> +	help
-> +	  Libsvg provides a parser for SVG content in files or buffers.
-> +	  Libsvg does not do any rendering, but instead provides a
-> +	  function-based interface that can be used by various rendering
-> +	  engines.
-> +
-> +	  http://cairographics.org/snapshots/
-> +
-> +if BR2_PACKAGE_LIBSVG
-> +
-> +config BR2_PACKAGE_LIBSVG_EXPAT
-> +    bool "use expat XML parser library"
-> +	select BR2_PACKAGE_EXPAT
-> +	default y
-> +	help
-> +	  Libsvg needs a XML parsing library!
-> +	  Select expat if you want to use the Expat XML Parser library,
-> +	  otherwhise the libxml2 library will be used.
-
-Remove this option.
-
-
-> +LIBSVG_VERSION         = 0.1.4
-> +LIBSVG_SITE            = http://cairographics.org/snapshots/
-> +LIBSVG_DEPENDENCIES    = host-pkgconf libpng libjpeg
-> +LIBSVG_INSTALL_STAGING = YES
-> +LIBSVG_LICENSE         = LGPLv2+
-> +LIBSVG_LICENSE_FILES   = COPYING
-> +
-> +# libsvg needs at last a XML parser
-> +ifeq ($(BR2_PACKAGE_LIBSVG_EXPAT),y)
-
-ifeq ($(BR2_PACKAGE_EXPAT),y)
-
-> +LIBSVG_CONF_OPT += --with-expat
-> +LIBSVG_DEPENDENCIES += expat
-> +else ifeq ($(BR2_PACKAGE_LIBXML2),y)
-> +LIBSVG_CONF_OPT += --with-libxml2
-> +LIBSVG_DEPENDENCIES += libxml2
-> +endif
-> +
-> +$(eval $(autotools-package))
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 790cb43..0670c74 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-E2FSPROGS_VERSION = 1.42.7
++E2FSPROGS_VERSION = 1.42.8
+ E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
+ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
