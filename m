@@ -1,37 +1,92 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Jun 2013 00:38:13 +0200
-Subject: [Buildroot] [PATCH 2/2] legacy: make it clear legacy options will
-	be removed at some point
-In-Reply-To: <cover.1372545265.git.yann.morin.1998@free.fr>
-References: <cover.1372545265.git.yann.morin.1998@free.fr>
-Message-ID: <0e43364c4b19cbab8f8297f38ab009475beba3d6.1372545265.git.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 30 Jun 2013 00:23:26 -0300
+Subject: [Buildroot] [PATCH] icu: security bump to version 51.2
+Message-ID: <1372562606-991-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fixes CVE-2011-4599, CVE 2013-0900, CVE-2013-1569, CVE-2013-2383,
+CVE-2013-2384, CVE-2013-2419.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- Config.in.legacy | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/icu/icu-workaround-toolchain-bugs.patch | 32 ++++++++++++-------------
+ package/icu/icu.mk                              |  5 ++--
+ 2 files changed, 19 insertions(+), 18 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 1252d16..921a0eb 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -38,6 +38,10 @@ comment "Please look at the options which have been selected "
- comment "and read their help text.                           "
- comment "As long as these options stay selected, the build   "
- comment "will fail.                                          "
-+comment "Note: at some point in the future, the oldest legacy"
-+comment "options will be removed, and configuration files    "
-+comment "that still have those options set, will fail to     "
-+comment "build, or run, in unpredictable ways.               "
- endif
+diff --git a/package/icu/icu-workaround-toolchain-bugs.patch b/package/icu/icu-workaround-toolchain-bugs.patch
+index df9d528..64d67a0 100644
+--- a/package/icu/icu-workaround-toolchain-bugs.patch
++++ b/package/icu/icu-workaround-toolchain-bugs.patch
+@@ -10,27 +10,27 @@ is trivial in this case. So it will avoid our users falling into this
+ internal compiler error, and allow our autobuilders to test more
+ packages using this Sourcery CodeBench toolchain.qq
  
- ###############################################################################
++[Gustavo: update for ICU4C 51.2]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ 
+-Index: b/source/configure
+-===================================================================
+---- a/source/configure
+-+++ b/source/configure
+-@@ -4320,7 +4320,7 @@
+-                 echo "# Note: We are not using '-ansi' with HP/UX GCC because int64_t broke, see <http://bugs.icu-project.org/trac/ticket/8493>"
+-                 CFLAGS="$CFLAGS -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
+-             *)
+--                CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
+-+                CFLAGS="$CFLAGS -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
+-             esac
++diff -Nura icu.orig/source/configure icu/source/configure
++--- icu.orig/source/configure	2013-05-23 17:06:32.000000000 -0300
+++++ icu/source/configure	2013-06-29 15:43:04.202320953 -0300
++@@ -4066,7 +4066,7 @@
++         then
++             # Do not use -ansi. It limits us to C90, and it breaks some platforms.
++             # We use -std=c99 to disable the gnu99 defaults and its associated warnings
++-            CFLAGS="$CFLAGS -Wall -std=c99 -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
+++            CFLAGS="$CFLAGS -std=c99 -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
+          else
+              case "${host}" in
+-@@ -4333,7 +4333,7 @@
++             *-*-cygwin)
++@@ -4078,7 +4078,7 @@
+          fi
+          if test "$GXX" = yes
+          then
+--            CXXFLAGS="$CXXFLAGS -W -Wall -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
+-+            CXXFLAGS="$CXXFLAGS -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
++-            CXXFLAGS="$CXXFLAGS -W -Wall -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
+++            CXXFLAGS="$CXXFLAGS -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
++         else
+              case "${host}" in
+-             *-*-solaris*)
+-                 CXXFLAGS="$CXXFLAGS -D__STDC__=0";;
++             *-*-cygwin)
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 00eacc7..7954eb0 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ICU_VERSION = 4.8.1.1
++ICU_VERSION = 51.2
+ ICU_SOURCE = icu4c-$(subst .,_,$(ICU_VERSION))-src.tgz
+ ICU_SITE = http://download.icu-project.org/files/icu4c/$(ICU_VERSION)
+ ICU_LICENSE = ICU License
+@@ -20,7 +20,8 @@ HOST_ICU_CONF_OPT = \
+ 	--disable-tests \
+ 	--disable-extras \
+ 	--disable-icuio \
+-	--disable-layout
++	--disable-layout \
++	--disable-renaming
+ ICU_MAKE = $(MAKE1)
+ ICU_SUBDIR = source
+ HOST_ICU_SUBDIR = source
 -- 
-1.8.1.2
+1.8.1.5
