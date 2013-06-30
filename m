@@ -1,38 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 30 Jun 2013 13:50:36 +0200
-Subject: [Buildroot] [git commit] gst1-plugins-ugly: libdvdread needs
-	largefile support
-Message-ID: <20130630122922.1321990AF0@busybox.osuosl.org>
+Date: Sun, 30 Jun 2013 10:20:35 +0200
+Subject: [Buildroot] [git commit] haserl: fix download URLs
+Message-ID: <20130630082440.7A2229B16D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=27215647240731757342930bb177461438b06c53
+commit: http://git.buildroot.net/buildroot/commit/?id=daee3e30baa60dcb84d5b3ac44c32d8adea94a11
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The 0.8.0 version is at /projects/haserl/haserl/0.8.0, and 0.9.x versions
+at /projects/haserl/haserl-devel/.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/gst1-plugins-ugly/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/haserl/haserl.mk |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/gst1-plugins-ugly/Config.in b/package/multimedia/gst1-plugins-ugly/Config.in
-index a6ca387..0fb3e92 100644
---- a/package/multimedia/gst1-plugins-ugly/Config.in
-+++ b/package/multimedia/gst1-plugins-ugly/Config.in
-@@ -41,10 +41,14 @@ comment "plugins with external dependencies (there may be more available)"
+diff --git a/package/haserl/haserl.mk b/package/haserl/haserl.mk
+index 767ce24..56240c7 100644
+--- a/package/haserl/haserl.mk
++++ b/package/haserl/haserl.mk
+@@ -5,7 +5,11 @@
+ ################################################################################
  
- config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD
- 	bool "dvdread"
-+	depends on BR2_LARGEFILE # libdvdread
- 	select BR2_PACKAGE_LIBDVDREAD
- 	help
- 	  Access a DVD with dvdread
+ HASERL_VERSION = $(call qstrip,$(BR2_PACKAGE_HASERL_VERSION))
+-HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl-devel/$(HASERL_VERSION)
++ifeq ($(BR2_PACKAGE_HASERL_VERSION_0_8_X),y)
++HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl/$(HASERL_VERSION)
++else
++HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl-devel
++endif
+ HASERL_LICENSE = GPLv2
+ HASERL_LICENSE_FILES = COPYING
  
-+comment "dvdread requires a toolchain with largefile support"
-+	depends on !BR2_LARGEFILE
-+
- config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME
- 	bool "lame (*.mp3 audio encoder)"
- 	select BR2_PACKAGE_LAME
