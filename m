@@ -1,33 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 30 Jun 2013 15:28:31 +0200
-Subject: [Buildroot] [git commit] sane-backends: fix download URL
-Message-ID: <20130630133059.3328696997@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 30 Jun 2013 17:01:09 +0200
+Subject: [Buildroot] [PATCH 8/8] lttng-tools: define license
+In-Reply-To: <1372604469-24361-1-git-send-email-s.martin49@gmail.com>
+References: <1372604469-24361-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1372604469-24361-8-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9ad42a480126a4cc466940318c600548bf854e9d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes http://autobuild.buildroot.net/results/134/134d081dfb514d3bc20ef68f4ebec7d7e4bba8dc/
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/sane-backends/sane-backends.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/lttng-tools/lttng-tools.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
-index 96a6100..3b7076e 100644
---- a/package/sane-backends/sane-backends.mk
-+++ b/package/sane-backends/sane-backends.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 992ecad..2e9f936 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -7,6 +7,9 @@
+ LTTNG_TOOLS_VERSION = 2.2.0
+ LTTNG_TOOLS_SITE    = http://lttng.org/files/lttng-tools/
+ LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
++LTTNG_TOOLS_LICENSE = GPLv2; LGPLv2.1 for include/lttng/* and src/lib/lttng-ctl/*
++# gpl-2.0.txt and lgpl-2.1.txt files are missing from the sources
++LTTNG_TOOLS_LICENSE_FILES = LICENSE
  
- SANE_BACKENDS_VERSION = 1.0.22
- SANE_BACKENDS_SOURCE = sane-backends-$(SANE_BACKENDS_VERSION).tar.gz
--SANE_BACKENDS_SITE = https://alioth.debian.org/frs/download.php/3503
-+SANE_BACKENDS_SITE = https://alioth.debian.org/frs/download.php/file/3503
- SANE_BACKENDS_CONFIG_SCRIPTS = sane-config
- 
- ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ # The host-lttng-babeltrace technically isn't a required build
+ # dependency. However, having the babeltrace utilities built for the
+-- 
+1.8.3.1
