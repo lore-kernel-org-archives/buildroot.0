@@ -1,33 +1,22 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 30 Jun 2013 17:01:09 +0200
-Subject: [Buildroot] [PATCH 8/8] lttng-tools: define license
-In-Reply-To: <1372604469-24361-1-git-send-email-s.martin49@gmail.com>
-References: <1372604469-24361-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1372604469-24361-8-git-send-email-s.martin49@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 30 Jun 2013 10:22:15 +0200
+Subject: [Buildroot] [PATCH] icu: security bump to version 51.2
+In-Reply-To: <1372562606-991-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 30 Jun 2013 00:23:26 -0300")
+References: <1372562606-991-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87haggvwi0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/lttng-tools/lttng-tools.mk | 3 +++
- 1 file changed, 3 insertions(+)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index 992ecad..2e9f936 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -7,6 +7,9 @@
- LTTNG_TOOLS_VERSION = 2.2.0
- LTTNG_TOOLS_SITE    = http://lttng.org/files/lttng-tools/
- LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
-+LTTNG_TOOLS_LICENSE = GPLv2; LGPLv2.1 for include/lttng/* and src/lib/lttng-ctl/*
-+# gpl-2.0.txt and lgpl-2.1.txt files are missing from the sources
-+LTTNG_TOOLS_LICENSE_FILES = LICENSE
- 
- # The host-lttng-babeltrace technically isn't a required build
- # dependency. However, having the babeltrace utilities built for the
+ Gustavo> Fixes CVE-2011-4599, CVE 2013-0900, CVE-2013-1569, CVE-2013-2383,
+ Gustavo> CVE-2013-2384, CVE-2013-2419.
+
+Committed, thanks.
+
 -- 
-1.8.3.1
+Bye, Peter Korsgaard
