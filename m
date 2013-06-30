@@ -1,402 +1,180 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Jun 2013 21:29:08 +0200
-Subject: [Buildroot] [PATCH 18/23] Remove BR2_HAVE_DEVFILES
+Date: Sun, 30 Jun 2013 21:29:12 +0200
+Subject: [Buildroot] [PATCH 22/23] eglibc: enable support in the Buildroot
+	toolchain backend
 In-Reply-To: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1372620553-11416-19-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1372620553-11416-23-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This finally removes the BR2_HAVE_DEVFILES option, that was used to
-install/keep development files on target. With the recent migration of
-the internal backend to the package infrastructure, we had anyway lost
-the ability to build gcc for the target, and install the uClibc
-development files on the target.
+Using the newly introduced 'eglibc' package, this commit enables the
+option of building a toolchain using the eglibc C library in the
+Buildroot toolchain backend.
+
+In details, this commit:
+
+ * Creates a choice to select uClibc or eglibc in the Buildroot
+   toolchain backend (in toolchain/toolchain-buildroot/Config.in), and
+   removes the fact that the Buildroot toolchain backend forcefully
+   enables uClibc (toolchain/Config.in).
+
+ * Creates a BUILDROOT_UCLIBC variables, which points to the package
+   implementing the C library (i.e either 'uclibc' or 'eglibc').
+
+ * Modifies the gcc-final and gcc-intermediate makefiles to use the
+   BUILDROOT_UCLIBC variable instead of hardcoding the use of uclibc.
+
+ * Ensures that TLS support is always enabled when building eglibc.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in                           |  8 --------
- Makefile                            |  4 ----
- package/dbus/dbus.mk                |  2 --
- package/libdnet/libdnet.mk          |  2 --
- package/libglib2/libglib2.mk        |  2 --
- package/lua/lua.mk                  | 13 -------------
- package/multimedia/mpg123/mpg123.mk |  3 +--
- package/ncurses/ncurses.mk          | 20 --------------------
- package/opencv/opencv.mk            |  2 --
- package/openssl/openssl.mk          | 12 ------------
- package/orc/orc.mk                  |  3 ---
- package/pkg-generic.mk              |  2 --
- package/python/python.mk            | 16 +++-------------
- package/python3/python3.mk          | 16 +++-------------
- package/sdl_sound/sdl_sound.mk      |  2 +-
- package/taglib/taglib.mk            |  2 --
- package/usbutils/usbutils.mk        |  2 --
- package/xenomai/xenomai.mk          |  2 --
- 18 files changed, 8 insertions(+), 105 deletions(-)
+ package/gcc/Config.in.host                       |  4 +--
+ package/gcc/gcc-final/gcc-final.mk               |  2 +-
+ package/gcc/gcc-intermediate/gcc-intermediate.mk |  2 +-
+ package/uclibc/Config.in                         |  4 +++
+ toolchain/Config.in                              |  1 -
+ toolchain/toolchain-buildroot.mk                 |  4 +++
+ toolchain/toolchain-buildroot/Config.in          | 40 ++++++++++++++++++++++++
+ 7 files changed, 52 insertions(+), 5 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index bbb9885..78dea3b 100644
---- a/Config.in
-+++ b/Config.in
-@@ -419,14 +419,6 @@ config BR2_HAVE_DOCUMENTATION
- 	  If you say n here, your target will not contain any
- 	  documentation.
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 7ecf2fb..0e26a80 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -114,9 +114,9 @@ config BR2_GCC_SHARED_LIBGCC
+ 	  Build/install a shared libgcc library
  
--config BR2_HAVE_DEVFILES
--	bool "development files in target filesystem"
--	# We no longer want to support a toolchain on the target
--	depends on BR2_DEPRECATED
--	help
--	  Install headers and static libraries in the
--	  target filesystem
--
- config BR2_PACKAGE_OVERRIDE_FILE
- 	string "location of a package override file"
- 	default "$(TOPDIR)/local.mk"
-diff --git a/Makefile b/Makefile
-index 7a4602c..fe9bde7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -450,16 +450,12 @@ STRIP_FIND_CMD += -type f -perm +111
- STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
+ config BR2_GCC_ENABLE_TLS
+-	bool "Enable compiler tls support"
++	bool "Enable compiler tls support" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	default y
+-	depends on BR2_PTHREADS_NATIVE
++	depends on BR2_PTHREADS_NATIVE || BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 	help
+ 	  Enable the compiler to generate code for accessing
+ 	  thread local storage variables
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 1af733f..11af163 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -10,7 +10,7 @@ GCC_FINAL_SOURCE  = $(GCC_SOURCE)
  
- target-finalize:
--ifeq ($(BR2_HAVE_DEVFILES),y)
--	( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
--else
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
- 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
- 		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
- 	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/usr/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
--endif
- ifneq ($(BR2_PACKAGE_GDB),y)
- 	rm -rf $(TARGET_DIR)/usr/share/gdb
+ HOST_GCC_FINAL_DEPENDENCIES = \
+ 	$(HOST_GCC_COMMON_DEPENDENCIES) \
+-	uclibc
++	$(BUILDROOT_LIBC)
+ 
+ HOST_GCC_FINAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
+ 
+diff --git a/package/gcc/gcc-intermediate/gcc-intermediate.mk b/package/gcc/gcc-intermediate/gcc-intermediate.mk
+index 3a71671..5460000 100644
+--- a/package/gcc/gcc-intermediate/gcc-intermediate.mk
++++ b/package/gcc/gcc-intermediate/gcc-intermediate.mk
+@@ -10,7 +10,7 @@ GCC_INTERMEDIATE_SOURCE  = $(GCC_SOURCE)
+ 
+ HOST_GCC_INTERMEDIATE_DEPENDENCIES = \
+ 	$(HOST_GCC_COMMON_DEPENDENCIES) \
+-	uclibc-configure
++	$(BUILDROOT_LIBC)-configure
+ 
+ HOST_GCC_INTERMEDIATE_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
+ 
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 410326b..f309243 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -1,3 +1,5 @@
++if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
++
+ comment "uClibc Options"
+ 
+ choice
+@@ -241,3 +243,5 @@ config BR2_UCLIBC_X86_TYPE
+ 	default PENTIUMIII if BR2_x86_pentium3
+ 	default PENTIUM4   if BR2_x86_pentium4 || BR2_x86_pentium_m || \
+ 			      BR2_x86_nocona || BR2_x86_core2
++
++endif # BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 448bccc..53d2573 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -27,7 +27,6 @@ config BR2_TOOLCHAIN_BUILDROOT
+ 	bool "Buildroot toolchain"
+ 	depends on !BR2_microblaze && !BR2_aarch64
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+-	select BR2_TOOLCHAIN_USES_UCLIBC
+ 
+ config BR2_TOOLCHAIN_EXTERNAL
+ 	bool "External toolchain"
+diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
+index e7241bf..3a05800 100644
+--- a/toolchain/toolchain-buildroot.mk
++++ b/toolchain/toolchain-buildroot.mk
+@@ -2,4 +2,8 @@
+ # build of binutils, uClibc, kernel headers and all the intermediate
+ # gcc steps.
+ 
++include toolchain/helpers.mk
++
++BUILDROOT_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
++
+ toolchain-buildroot: host-gcc-final
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 416695b..396a434 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -2,7 +2,47 @@
+ 
+ if BR2_TOOLCHAIN_BUILDROOT
+ source "package/linux-headers/Config.in.host"
++
++choice
++	prompt "C library"
++
++config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
++	bool "uClibc"
++	select BR2_TOOLCHAIN_USES_UCLIBC
++	help
++	  This option selects uClibc as the C library for the
++	  cross-compilation toolchain.
++
++	  http://uclibc.org
++
++config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
++	bool "eglibc (experimental)"
++	depends on BR2_arm    || BR2_armeb    || BR2_aarch64 || \
++		   BR2_i386   || BR2_mips     || BR2_mipsel  || \
++		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
++		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
++		   BR2_x86_64
++	select BR2_TOOLCHAIN_USES_GLIBC
++	# our eglibc.mk enables RPC support
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	help
++	  This option selects eglibc as the C library for the
++	  cross-compilation toolchain.
++
++	  The eglibc support in the Buildroot toolchain backend is
++	  very recent, and therefore marked experimental.
++
++	  http://eglibc.org
++
++endchoice
++
++config BR2_TOOLCHAIN_BUILDROOT_LIBC
++	string
++	default "uclibc" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
++	default "eglibc" if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
++
+ source "package/uclibc/Config.in"
++
+ source "package/binutils/Config.in.host"
+ source "package/gcc/Config.in.host"
  endif
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index a855f05..baa5c0b 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -61,9 +61,7 @@ define DBUS_REMOVE_DEVFILES
- 	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
- endef
- 
--ifneq ($(BR2_HAVE_DEVFILES),y)
- DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_REMOVE_DEVFILES
--endif
- 
- define DBUS_INSTALL_TARGET_FIXUP
- 	rm -rf $(TARGET_DIR)/var/lib/dbus
-diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
-index 78f0ae0..ea10251 100644
---- a/package/libdnet/libdnet.mk
-+++ b/package/libdnet/libdnet.mk
-@@ -34,8 +34,6 @@ define LIBDNET_REMOVE_CONFIG_SCRIPT
- 	$(RM) -f $(TARGET_DIR)/usr/bin/dnet-config
- endef
- 
--ifneq ($(BR2_HAVE_DEVFILES),y)
- LIBDNET_POST_INSTALL_TARGET_HOOKS += LIBDNET_REMOVE_CONFIG_SCRIPT
--endif
- 
- $(eval $(autotools-package))
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 4821a76..8fb10f2 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -103,9 +103,7 @@ define LIBGLIB2_REMOVE_DEV_FILES
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,glib-genmarshal glib-gettextize glib-mkenums gobject-query gtester gtester-report)
- endef
- 
--ifneq ($(BR2_HAVE_DEVFILES),y)
- LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
--endif
- 
- define LIBGLIB2_REMOVE_GDB_FILES
- 	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gdb
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index ac75fe6..904ca52 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -64,18 +64,6 @@ define LUA_INSTALL_STAGING_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(STAGING_DIR)/usr/include/lauxlib.h
- endef
- 
--ifeq ($(BR2_HAVE_DEVFILES),y)
--define LUA_INSTALL_DEVFILES
--	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
--		$(TARGET_DIR)/usr/lib/pkgconfig/lua.pc
--	$(INSTALL) -m 0644 -D $(@D)/src/lua.h $(TARGET_DIR)/usr/include/lua.h
--	$(INSTALL) -m 0644 -D $(@D)/src/luaconf.h $(TARGET_DIR)/usr/include/luaconf.h
--	$(INSTALL) -m 0644 -D $(@D)/src/lualib.h $(TARGET_DIR)/usr/include/lualib.h
--	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(TARGET_DIR)/usr/include/lauxlib.h
--endef
--endif
--
--
- define LUA_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/src/lua $(TARGET_DIR)/usr/bin/lua
- 	$(INSTALL) -m 0755 -D $(@D)/src/luac $(TARGET_DIR)/usr/bin/luac
-@@ -83,7 +71,6 @@ define LUA_INSTALL_TARGET_CMDS
- 		$(TARGET_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
- 	ln -sf liblua.so.$(LUA_VERSION) $(TARGET_DIR)/usr/lib/liblua.so
- 	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
--	$(LUA_INSTALL_DEVFILES)
- endef
- 
- define HOST_LUA_INSTALL_CMDS
-diff --git a/package/multimedia/mpg123/mpg123.mk b/package/multimedia/mpg123/mpg123.mk
-index f554043..e9d074f 100644
---- a/package/multimedia/mpg123/mpg123.mk
-+++ b/package/multimedia/mpg123/mpg123.mk
-@@ -61,8 +61,7 @@ MPG123_CONF_OPT += --with-audio=$(shell echo $(MPG123_AUDIO) | tr ' ' ,)
- 
- ifeq ($(BR2_PACKAGE_LIBTOOL),y)
- MPG123_DEPENDENCIES += libtool
--# .la files gets stripped unless HAVE_DEVFILES is enabled, so directly
--# load .so files rather than .la
-+# .la files gets stripped , so directly load .so files rather than .la
- MPG123_CONF_OPT += --with-modules --with-module-suffix=.so
- endif
- 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 5381bd1..dbb514e 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -38,25 +38,6 @@ define NCURSES_BUILD_CMDS
- 	$(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR)
- endef
- 
--ifeq ($(BR2_HAVE_DEVFILES),y)
--define NCURSES_INSTALL_TARGET_DEVFILES
--	mkdir -p $(TARGET_DIR)/usr/include
--	cp -dpf $(NCURSES_DIR)/include/curses.h $(TARGET_DIR)/usr/include/curses.h
--	cp -dpf $(NCURSES_DIR)/include/ncurses_dll.h $(TARGET_DIR)/usr/include/ncurses_dll.h
--	cp -dpf $(NCURSES_DIR)/include/term.h $(TARGET_DIR)/usr/include/
--	cp -dpf $(NCURSES_DIR)/include/unctrl.h $(TARGET_DIR)/usr/include/
--	cp -dpf $(NCURSES_DIR)/include/termcap.h $(TARGET_DIR)/usr/include/
--	cp -dpf $(NCURSES_DIR)/lib/libncurses.a $(TARGET_DIR)/usr/lib/
--	(cd $(TARGET_DIR)/usr/lib; \
--	 ln -fs libncurses.a libcurses.a; \
--	 ln -fs libncurses.a libtermcap.a; \
--	)
--	(cd $(TARGET_DIR)/usr/include; ln -fs curses.h ncurses.h)
--	rm -f $(TARGET_DIR)/usr/lib/libncurses.so
--	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses.so.$(NCURSES_VERSION) libncurses.so)
--endef
--endif
--
- ifneq ($(BR2_PREFER_STATIC_LIB),y)
- 
- ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PANEL),y)
-@@ -101,7 +82,6 @@ define NCURSES_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
- 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/s
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/s/screen $(TARGET_DIR)/usr/share/terminfo/s
--	$(NCURSES_INSTALL_TARGET_DEVFILES)
- endef # NCURSES_INSTALL_TARGET_CMDS
- 
- #
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 3bf7ee9..b9ed8cb 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -169,12 +169,10 @@ endef
- OPENCV_POST_INSTALL_TARGET_HOOKS += OPENCV_CLEAN_INSTALL_DOC
- endif
- 
--ifneq ($(BR2_HAVE_DEVFILES),y)
- define OPENCV_CLEAN_INSTALL_CMAKE
- 	$(RM) -f $(TARGET_DIR)/usr/share/OpenCV/OpenCVConfig*.cmake
- endef
- OPENCV_POST_INSTALL_TARGET_HOOKS += OPENCV_CLEAN_INSTALL_CMAKE
--endif
- 
- ifneq ($(BR2_PACKAGE_OPENCV_INSTALL_DATA),y)
- define OPENCV_CLEAN_INSTALL_DATA
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index e16c91f..a0e103b 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -105,22 +105,10 @@ endef
- 
- define OPENSSL_INSTALL_TARGET_CMDS
- 	$(MAKE1) -C $(@D) INSTALL_PREFIX=$(TARGET_DIR) install
--endef
--
--define OPENSSL_REMOVE_DEV_FILES
- 	rm -rf $(TARGET_DIR)/usr/lib/ssl
--endef
--
--ifneq ($(BR2_HAVE_DEVFILES),y)
--OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_DEV_FILES
--endif
--
--define OPENSSL_INSTALL_FIXUPS
- 	rm -f $(TARGET_DIR)/usr/bin/c_rehash
- endef
- 
--OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_INSTALL_FIXUPS
--
- ifneq ($(BR2_PREFER_STATIC_LIB),y)
- 
- # libraries gets installed read only, so strip fails
-diff --git a/package/orc/orc.mk b/package/orc/orc.mk
-index 9d9921a..dc93882 100644
---- a/package/orc/orc.mk
-+++ b/package/orc/orc.mk
-@@ -20,10 +20,7 @@ define ORC_REMOVE_DEVFILES
- endef
- 
- ORC_POST_INSTALL_TARGET_HOOKS += ORC_REMOVE_BUGREPORT
--
--ifneq ($(BR2_HAVE_DEVFILES),y)
- ORC_POST_INSTALL_TARGET_HOOKS += ORC_REMOVE_DEVFILES
--endif
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 56fca6b..668f011 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -153,11 +153,9 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- 		$($(PKG)_INSTALL_INIT_SYSV))
- 	$($(PKG)_INSTALL_TARGET_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
--ifeq ($(BR2_HAVE_DEVFILES),)
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
- 	fi
--endif
- 	$(Q)touch $@
- 
- # Clean package
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 363513d..975d6f4 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -151,23 +151,13 @@ endef
- PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_SMTPD
- 
- #
--# Development files removal
--#
--define PYTHON_REMOVE_DEVFILES
--	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)-config
--	rm -f $(TARGET_DIR)/usr/bin/python2-config
--	rm -f $(TARGET_DIR)/usr/bin/python-config
--endef
--
--ifneq ($(BR2_HAVE_DEVFILES),y)
--PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_DEVFILES
--endif
--
--#
- # Remove useless files. In the config/ directory, only the Makefile
- # and the pyconfig.h files are needed at runtime.
- #
- define PYTHON_REMOVE_USELESS_FILES
-+	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)-config
-+	rm -f $(TARGET_DIR)/usr/bin/python2-config
-+	rm -f $(TARGET_DIR)/usr/bin/python-config
- 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/config/ \
- 		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
- 		rm -f $$i ; \
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 11ffe61..bf78ee6 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -127,23 +127,13 @@ endef
- PYTHON3_POST_INSTALL_STAGING_HOOKS += PYTHON3_FIXUP_LIBDIR
- 
- #
--# Development files removal
--#
--define PYTHON3_REMOVE_DEVFILES
--	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
--	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
--	rm -f $(TARGET_DIR)/usr/bin/python3-config
--endef
--
--ifneq ($(BR2_HAVE_DEVFILES),y)
--PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_DEVFILES
--endif
--
--#
- # Remove useless files. In the config/ directory, only the Makefile
- # and the pyconfig.h files are needed at runtime.
- #
- define PYTHON3_REMOVE_USELESS_FILES
-+	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
-+	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
-+	rm -f $(TARGET_DIR)/usr/bin/python3-config
- 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-3.3m/ \
- 		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
- 		rm -f $$i ; \
-diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
-index ae449ae..cd1ed3e 100644
---- a/package/sdl_sound/sdl_sound.mk
-+++ b/package/sdl_sound/sdl_sound.mk
-@@ -48,7 +48,7 @@ SDL_SOUND_POST_INSTALL_TARGET_HOOKS += SDL_SOUND_REMOVE_PLAYSOUND
- endif
- 
- # target shared libs doesn't get removed by make uninstall if the .la
--# files are removed (E.G. if BR2_HAVE_DEVFILES isn't set)
-+# files are removed
- define SDL_SOUND_UNINSTALL_TARGET_CMDS
- 	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(@D)
- 	rm -f $(TARGET_DIR)/usr/lib/libSDL_sound*so*
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index 8260293..75e8e67 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
-@@ -22,8 +22,6 @@ define TAGLIB_REMOVE_DEVFILE
- 	rm -f $(TARGET_DIR)/usr/bin/taglib-config
- endef
- 
--ifneq ($(BR2_HAVE_DEVFILES),y)
- TAGLIB_POST_INSTALL_TARGET_HOOKS += TAGLIB_REMOVE_DEVFILE
--endif
- 
- $(eval $(cmake-package))
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index e679b26..c56702b 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -51,8 +51,6 @@ define USBUTILS_REMOVE_DEVFILES
- 	rm -f $(TARGET_DIR)/usr/bin/libusb-config
- endef
- 
--ifneq ($(BR2_HAVE_DEVFILES),y)
- USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_DEVFILES
--endif
- 
- $(eval $(autotools-package))
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index 14c616e..8598953 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -19,7 +19,6 @@ XENOMAI_INSTALL_STAGING = YES
- 
- XENOMAI_CONF_OPT += --includedir=/usr/include/xenomai/
- 
--ifeq ($(BR2_HAVE_DEVFILES),)
- define XENOMAI_REMOVE_DEVFILES
- 	for i in xeno-config xeno-info wrap-link.sh ; do \
- 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
-@@ -27,7 +26,6 @@ define XENOMAI_REMOVE_DEVFILES
- endef
- 
- XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_DEVFILES
--endif
- 
- ifeq ($(BR2_PACKAGE_XENOMAI_TESTSUITE),)
- define XENOMAI_REMOVE_TESTSUITE
 -- 
 1.8.1.2
