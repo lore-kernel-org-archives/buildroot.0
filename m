@@ -1,38 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 30 Jun 2013 10:20:35 +0200
-Subject: [Buildroot] [git commit] haserl: fix download URLs
-Message-ID: <20130630082440.7A2229B16D@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 30 Jun 2013 17:01:08 +0200
+Subject: [Buildroot] [PATCH 7/8] lttng-modules: define license
+In-Reply-To: <1372604469-24361-1-git-send-email-s.martin49@gmail.com>
+References: <1372604469-24361-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1372604469-24361-7-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=daee3e30baa60dcb84d5b3ac44c32d8adea94a11
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The 0.8.0 version is at /projects/haserl/haserl/0.8.0, and 0.9.x versions
-at /projects/haserl/haserl-devel/.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/haserl/haserl.mk |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ package/lttng-modules/lttng-modules.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/haserl/haserl.mk b/package/haserl/haserl.mk
-index 767ce24..56240c7 100644
---- a/package/haserl/haserl.mk
-+++ b/package/haserl/haserl.mk
-@@ -5,7 +5,11 @@
- ################################################################################
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index a0f6c8f..66faa1f 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -7,6 +7,8 @@
+ LTTNG_MODULES_VERSION = 2.2.0
+ LTTNG_MODULES_SITE    = http://lttng.org/files/lttng-modules/
+ LTTNG_MODULES_SOURCE  = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
++LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 for kernel modules; MIT for lib/bitfield.h and lib/prio_heap/*
++LTTNG_MODULES_LICENSE_FILES = lgpl-2.1.txt gpl-2.0.txt mit-license.txt LICENSE
  
- HASERL_VERSION = $(call qstrip,$(BR2_PACKAGE_HASERL_VERSION))
--HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl-devel/$(HASERL_VERSION)
-+ifeq ($(BR2_PACKAGE_HASERL_VERSION_0_8_X),y)
-+HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl/$(HASERL_VERSION)
-+else
-+HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl-devel
-+endif
- HASERL_LICENSE = GPLv2
- HASERL_LICENSE_FILES = COPYING
+ LTTNG_MODULES_DEPENDENCIES = linux
  
+-- 
+1.8.3.1
