@@ -1,180 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Jun 2013 21:29:12 +0200
-Subject: [Buildroot] [PATCH 22/23] eglibc: enable support in the Buildroot
-	toolchain backend
+Date: Sun, 30 Jun 2013 21:29:13 +0200
+Subject: [Buildroot] [PATCH 23/23] docs/manual: update to mention eglibc
+	support in Buildroot toolchain backend
 In-Reply-To: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1372620553-11416-23-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1372620553-11416-24-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using the newly introduced 'eglibc' package, this commit enables the
-option of building a toolchain using the eglibc C library in the
-Buildroot toolchain backend.
-
-In details, this commit:
-
- * Creates a choice to select uClibc or eglibc in the Buildroot
-   toolchain backend (in toolchain/toolchain-buildroot/Config.in), and
-   removes the fact that the Buildroot toolchain backend forcefully
-   enables uClibc (toolchain/Config.in).
-
- * Creates a BUILDROOT_UCLIBC variables, which points to the package
-   implementing the C library (i.e either 'uclibc' or 'eglibc').
-
- * Modifies the gcc-final and gcc-intermediate makefiles to use the
-   BUILDROOT_UCLIBC variable instead of hardcoding the use of uclibc.
-
- * Ensures that TLS support is always enabled when building eglibc.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/Config.in.host                       |  4 +--
- package/gcc/gcc-final/gcc-final.mk               |  2 +-
- package/gcc/gcc-intermediate/gcc-intermediate.mk |  2 +-
- package/uclibc/Config.in                         |  4 +++
- toolchain/Config.in                              |  1 -
- toolchain/toolchain-buildroot.mk                 |  4 +++
- toolchain/toolchain-buildroot/Config.in          | 40 ++++++++++++++++++++++++
- 7 files changed, 52 insertions(+), 5 deletions(-)
+ docs/manual/configure.txt | 52 +++++++++++++++++++++++------------------------
+ 1 file changed, 26 insertions(+), 26 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 7ecf2fb..0e26a80 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -114,9 +114,9 @@ config BR2_GCC_SHARED_LIBGCC
- 	  Build/install a shared libgcc library
+diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+index 4f9a6bb..e554ff8 100644
+--- a/docs/manual/configure.txt
++++ b/docs/manual/configure.txt
+@@ -72,11 +72,12 @@ The _internal toolchain backend_ is the backend where Buildroot builds
+ by itself a cross-compilation toolchain, before building the userspace
+ applications and libraries for your target embedded system.
  
- config BR2_GCC_ENABLE_TLS
--	bool "Enable compiler tls support"
-+	bool "Enable compiler tls support" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 	default y
--	depends on BR2_PTHREADS_NATIVE
-+	depends on BR2_PTHREADS_NATIVE || BR2_TOOLCHAIN_BUILDROOT_EGLIBC
- 	help
- 	  Enable the compiler to generate code for accessing
- 	  thread local storage variables
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 1af733f..11af163 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -10,7 +10,7 @@ GCC_FINAL_SOURCE  = $(GCC_SOURCE)
+-This backend is the historical backend of Buildroot, and is limited to
+-the usage of the http://www.uclibc.org[uClibc C library] (i.e, the
+-_glibc_ and _eglibc_ C libraries are not supported by this backend,
+-see the _External toolchain backend_ and _Crosstool-NG toolchain
+-backend_ for solutions to use either _glibc_ or _eglibc_).
++This backend is the historical backend of Buildroot, and has been
++limited for a long time to the usage of the
++http://www.uclibc.org[uClibc C library]. Support for the _eglibc_ C
++library has been added in 2013 and is at this point. considered
++experimental. See the _External toolchain backend_ and _Crosstool-NG
++toolchain backend_ for other solutions to use _glibc_ or _eglibc_.
  
- HOST_GCC_FINAL_DEPENDENCIES = \
- 	$(HOST_GCC_COMMON_DEPENDENCIES) \
--	uclibc
-+	$(BUILDROOT_LIBC)
+ Once you have selected this backend, a number of options appear. The
+ most important ones allow to:
+@@ -99,29 +100,29 @@ most important ones allow to:
+    the C library might be using interfaces that are not provided by
+    your Linux kernel.
  
- HOST_GCC_FINAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
+- * Change the version and the configuration of the uClibc C
+-   library. The default options are usually fine. However, if you
+-   really need to specifically customize the configuration of your
+-   uClibc C library, you can pass a specific configuration file
+-   here. Or alternatively, you can run the +make uclibc-menuconfig+
+-   command to get access to uClibc's configuration interface. Note
+-   that all packages in Buildroot are tested against the default
+-   uClibc configuration bundled in Buildroot: if you deviate from this
+-   configuration by removing features from uClibc, some packages may
+-   no longer build.
++ * Change the version and the configuration of the uClibc C library
++   (if uClibc is selected). The default options are usually
++   fine. However, if you really need to specifically customize the
++   configuration of your uClibc C library, you can pass a specific
++   configuration file here. Or alternatively, you can run the +make
++   uclibc-menuconfig+ command to get access to uClibc's configuration
++   interface. Note that all packages in Buildroot are tested against
++   the default uClibc configuration bundled in Buildroot: if you
++   deviate from this configuration by removing features from uClibc,
++   some packages may no longer build.
  
-diff --git a/package/gcc/gcc-intermediate/gcc-intermediate.mk b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-index 3a71671..5460000 100644
---- a/package/gcc/gcc-intermediate/gcc-intermediate.mk
-+++ b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-@@ -10,7 +10,7 @@ GCC_INTERMEDIATE_SOURCE  = $(GCC_SOURCE)
+  * Change the version of the GCC compiler and binutils.
  
- HOST_GCC_INTERMEDIATE_DEPENDENCIES = \
- 	$(HOST_GCC_COMMON_DEPENDENCIES) \
--	uclibc-configure
-+	$(BUILDROOT_LIBC)-configure
+- * Select a number of toolchain options: whether the toolchain should
+-   have largefile support (i.e support for files larger than 2 GB on
+-   32 bits systems), IPv6 support, RPC support (used mainly for NFS),
+-   wide-char support, locale support (for internationalization), C++
+-   support, thread support. Depending on which options you choose, the
+-   number of userspace applications and libraries visible in Buildroot
+-   menus will change: many applications and libraries require certain
+-   toolchain options to be enabled. Most packages show a comment when
+-   a certain toolchain option is required to be able to enable those
+-   packages.
++ * Select a number of toolchain options (uClibc only): whether the
++   toolchain should have largefile support (i.e support for files
++   larger than 2 GB on 32 bits systems), IPv6 support, RPC support
++   (used mainly for NFS), wide-char support, locale support (for
++   internationalization), C++ support, thread support. Depending on
++   which options you choose, the number of userspace applications and
++   libraries visible in Buildroot menus will change: many applications
++   and libraries require certain toolchain options to be enabled. Most
++   packages show a comment when a certain toolchain option is required
++   to be able to enable those packages.
  
- HOST_GCC_INTERMEDIATE_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
+ It is worth noting that whenever one of those options is modified,
+ then the entire toolchain and system must be rebuilt. See
+@@ -137,7 +138,6 @@ Drawbacks of this backend:
+ * Rebuilding the toolchain is needed when doing +make clean+, which
+   takes time. If you're trying to reduce your build time, consider
+   using the _External toolchain backend_.
+-* Limited to the _uClibc_ C library.
  
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 410326b..f309243 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -1,3 +1,5 @@
-+if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
-+
- comment "uClibc Options"
- 
- choice
-@@ -241,3 +243,5 @@ config BR2_UCLIBC_X86_TYPE
- 	default PENTIUMIII if BR2_x86_pentium3
- 	default PENTIUM4   if BR2_x86_pentium4 || BR2_x86_pentium_m || \
- 			      BR2_x86_nocona || BR2_x86_core2
-+
-+endif # BR2_TOOLCHAIN_BUILDROOT_UCLIBC
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 448bccc..53d2573 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -27,7 +27,6 @@ config BR2_TOOLCHAIN_BUILDROOT
- 	bool "Buildroot toolchain"
- 	depends on !BR2_microblaze && !BR2_aarch64
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
--	select BR2_TOOLCHAIN_USES_UCLIBC
- 
- config BR2_TOOLCHAIN_EXTERNAL
- 	bool "External toolchain"
-diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
-index e7241bf..3a05800 100644
---- a/toolchain/toolchain-buildroot.mk
-+++ b/toolchain/toolchain-buildroot.mk
-@@ -2,4 +2,8 @@
- # build of binutils, uClibc, kernel headers and all the intermediate
- # gcc steps.
- 
-+include toolchain/helpers.mk
-+
-+BUILDROOT_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
-+
- toolchain-buildroot: host-gcc-final
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 416695b..396a434 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -2,7 +2,47 @@
- 
- if BR2_TOOLCHAIN_BUILDROOT
- source "package/linux-headers/Config.in.host"
-+
-+choice
-+	prompt "C library"
-+
-+config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
-+	bool "uClibc"
-+	select BR2_TOOLCHAIN_USES_UCLIBC
-+	help
-+	  This option selects uClibc as the C library for the
-+	  cross-compilation toolchain.
-+
-+	  http://uclibc.org
-+
-+config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
-+	bool "eglibc (experimental)"
-+	depends on BR2_arm    || BR2_armeb    || BR2_aarch64 || \
-+		   BR2_i386   || BR2_mips     || BR2_mipsel  || \
-+		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
-+		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
-+		   BR2_x86_64
-+	select BR2_TOOLCHAIN_USES_GLIBC
-+	# our eglibc.mk enables RPC support
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	help
-+	  This option selects eglibc as the C library for the
-+	  cross-compilation toolchain.
-+
-+	  The eglibc support in the Buildroot toolchain backend is
-+	  very recent, and therefore marked experimental.
-+
-+	  http://eglibc.org
-+
-+endchoice
-+
-+config BR2_TOOLCHAIN_BUILDROOT_LIBC
-+	string
-+	default "uclibc" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
-+	default "eglibc" if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
-+
- source "package/uclibc/Config.in"
-+
- source "package/binutils/Config.in.host"
- source "package/gcc/Config.in.host"
- endif
+ [[external-toolchain-backend]]
+ External toolchain backend
 -- 
 1.8.1.2
