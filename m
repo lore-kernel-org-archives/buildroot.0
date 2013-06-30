@@ -1,34 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Jun 2013 21:28:51 +0200
-Subject: [Buildroot] [PATCH 01/23] uClibc: KERNEL_SOURCE no longer exists
+Date: Sun, 30 Jun 2013 21:28:53 +0200
+Subject: [Buildroot] [PATCH 03/23] package: allow to override the make
+	install target for host packages
 In-Reply-To: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1372620553-11416-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1372620553-11416-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The KERNEL_SOURCE configuration option no longer exists in uClibc, so
-there's no point in setting it.
+In order to convert gcc to the package infrastructure, we need a way
+of overriding the name of the make target used for the installation of
+host packages, just like we have for target packages.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/uClibc/uclibc.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/pkg-autotools.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 2036dab..0e01d94 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -98,7 +98,6 @@ $(UCLIBC_DIR)/.oldconfig: $(UCLIBC_DIR)/.patched $(UCLIBC_CONFIG_FILE)
- 	$(SED) 's,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="$(TARGET_CROSS)",g' \
- 		-e 's,# TARGET_$(UCLIBC_TARGET_ARCH) is not set,TARGET_$(UCLIBC_TARGET_ARCH)=y,g' \
- 		-e 's,^TARGET_ARCH=".*",TARGET_ARCH=\"$(UCLIBC_TARGET_ARCH)\",g' \
--		-e 's,^KERNEL_SOURCE=.*,KERNEL_SOURCE=\"$(LINUX_HEADERS_DIR)\",g' \
- 		-e 's,^KERNEL_HEADERS=.*,KERNEL_HEADERS=\"$(LINUX_HEADERS_DIR)/include\",g' \
- 		-e 's,^RUNTIME_PREFIX=.*,RUNTIME_PREFIX=\"/\",g' \
- 		-e 's,^DEVEL_PREFIX=.*,DEVEL_PREFIX=\"/usr/\",g' \
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index d8d7e6d..09deef2 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -76,6 +76,7 @@ $(2)_MAKE_ENV			?=
+ $(2)_MAKE_OPT			?=
+ $(2)_AUTORECONF			?= NO
+ $(2)_AUTORECONF_OPT		?=
++$(2)_INSTALL_OPT                ?= install
+ $(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
+ $(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install
+ $(2)_CLEAN_OPT			?= clean
+@@ -232,7 +233,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+-	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -C $$($$(PKG)_SRCDIR) install
++	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_OPT) -C $$($$(PKG)_SRCDIR)
+ endef
+ endif
+ 
 -- 
 1.8.1.2
