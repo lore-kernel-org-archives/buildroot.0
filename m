@@ -1,209 +1,276 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Jun 2013 21:29:10 +0200
-Subject: [Buildroot] [PATCH 20/23] uclibc: move configuration options into
-	the package
+Date: Sun, 30 Jun 2013 21:29:04 +0200
+Subject: [Buildroot] [PATCH 14/23] gcc-initial, gcc-intermediate,
+	gcc-final: optimize extraction
 In-Reply-To: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1372620553-11416-21-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1372620553-11416-15-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In preparation for the introduction of the eglibc library to the
-internal toolchain backend, the options that allow to enable/disable C
-library features such as largefile, IPv6, RPC and so on now belong to
-the uClibc package.
+Several sub-directories of the gcc code base are in fact not needed
+for the Buildroot build: libjava/, libgo/ and gcc/testsuite/ being the
+biggest ones. Avoiding their extraction saves quite a bit of disk
+space, and compensates a bit the fact that we now extract three times
+the gcc source code.
+
+This requires changing the 100-uclibc-conf.patch to no longer patch
+files from the libjava/ directory, since this directory is no longer
+extracted.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/Config.in                  | 77 +++++++++++++++++++++++++++++++
- toolchain/toolchain-buildroot/Config.in.2 | 77 -------------------------------
- 2 files changed, 77 insertions(+), 77 deletions(-)
+ package/gcc/4.3.6/100-uclibc-conf.patch          | 20 --------------------
+ package/gcc/4.4.7/100-uclibc-conf.patch          | 20 --------------------
+ package/gcc/4.5.4/100-uclibc-conf.patch          | 20 --------------------
+ package/gcc/4.6.4/100-uclibc-conf.patch          | 20 --------------------
+ package/gcc/4.7.3/100-uclibc-conf.patch          | 20 --------------------
+ package/gcc/4.8.1/100-uclibc-conf.patch          | 22 ----------------------
+ package/gcc/gcc-final/gcc-final.mk               |  2 ++
+ package/gcc/gcc-initial/gcc-initial.mk           |  2 ++
+ package/gcc/gcc-intermediate/gcc-intermediate.mk |  2 ++
+ package/gcc/gcc.mk                               | 17 +++++++++++++++++
+ 10 files changed, 23 insertions(+), 122 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 22c70a2..410326b 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -49,6 +49,83 @@ config BR2_UCLIBC_CONFIG
- 	  See also docs/README in this package.
- 	  If unsure, use the default.
+diff --git a/package/gcc/4.3.6/100-uclibc-conf.patch b/package/gcc/4.3.6/100-uclibc-conf.patch
+index cca8c82..6bad179 100644
+--- a/package/gcc/4.3.6/100-uclibc-conf.patch
++++ b/package/gcc/4.3.6/100-uclibc-conf.patch
+@@ -11,23 +11,3 @@
+  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+    make bootstrap || exit 1
+    make install || exit 1
+---- gcc/libjava/classpath/ltconfig
+-+++ gcc/libjava/classpath/ltconfig
+-@@ -603,7 +603,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+--linux-gnu*) ;;
+-+linux-gnu*|linux-uclibc*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+- 
+-@@ -1251,7 +1251,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+diff --git a/package/gcc/4.4.7/100-uclibc-conf.patch b/package/gcc/4.4.7/100-uclibc-conf.patch
+index cca8c82..6bad179 100644
+--- a/package/gcc/4.4.7/100-uclibc-conf.patch
++++ b/package/gcc/4.4.7/100-uclibc-conf.patch
+@@ -11,23 +11,3 @@
+  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+    make bootstrap || exit 1
+    make install || exit 1
+---- gcc/libjava/classpath/ltconfig
+-+++ gcc/libjava/classpath/ltconfig
+-@@ -603,7 +603,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+--linux-gnu*) ;;
+-+linux-gnu*|linux-uclibc*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+- 
+-@@ -1251,7 +1251,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+diff --git a/package/gcc/4.5.4/100-uclibc-conf.patch b/package/gcc/4.5.4/100-uclibc-conf.patch
+index cca8c82..6bad179 100644
+--- a/package/gcc/4.5.4/100-uclibc-conf.patch
++++ b/package/gcc/4.5.4/100-uclibc-conf.patch
+@@ -11,23 +11,3 @@
+  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+    make bootstrap || exit 1
+    make install || exit 1
+---- gcc/libjava/classpath/ltconfig
+-+++ gcc/libjava/classpath/ltconfig
+-@@ -603,7 +603,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+--linux-gnu*) ;;
+-+linux-gnu*|linux-uclibc*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+- 
+-@@ -1251,7 +1251,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+diff --git a/package/gcc/4.6.4/100-uclibc-conf.patch b/package/gcc/4.6.4/100-uclibc-conf.patch
+index cca8c82..6bad179 100644
+--- a/package/gcc/4.6.4/100-uclibc-conf.patch
++++ b/package/gcc/4.6.4/100-uclibc-conf.patch
+@@ -11,23 +11,3 @@
+  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+    make bootstrap || exit 1
+    make install || exit 1
+---- gcc/libjava/classpath/ltconfig
+-+++ gcc/libjava/classpath/ltconfig
+-@@ -603,7 +603,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+--linux-gnu*) ;;
+-+linux-gnu*|linux-uclibc*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+- 
+-@@ -1251,7 +1251,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+diff --git a/package/gcc/4.7.3/100-uclibc-conf.patch b/package/gcc/4.7.3/100-uclibc-conf.patch
+index cca8c82..6bad179 100644
+--- a/package/gcc/4.7.3/100-uclibc-conf.patch
++++ b/package/gcc/4.7.3/100-uclibc-conf.patch
+@@ -11,23 +11,3 @@
+  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+    make bootstrap || exit 1
+    make install || exit 1
+---- gcc/libjava/classpath/ltconfig
+-+++ gcc/libjava/classpath/ltconfig
+-@@ -603,7 +603,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+--linux-gnu*) ;;
+-+linux-gnu*|linux-uclibc*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+- 
+-@@ -1251,7 +1251,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+diff --git a/package/gcc/4.8.1/100-uclibc-conf.patch b/package/gcc/4.8.1/100-uclibc-conf.patch
+index d855b30..d56bf0a 100644
+--- a/package/gcc/4.8.1/100-uclibc-conf.patch
++++ b/package/gcc/4.8.1/100-uclibc-conf.patch
+@@ -13,25 +13,3 @@ Index: gcc-4.8.0/contrib/regression/objs-gcc.sh
+  elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+    make bootstrap || exit 1
+    make install || exit 1
+-Index: gcc-4.8.0/libjava/classpath/ltconfig
+-===================================================================
+---- gcc-4.8.0.orig/libjava/classpath/ltconfig	2011-02-13 12:45:53.000000000 +0100
+-+++ gcc-4.8.0/libjava/classpath/ltconfig	2013-03-23 17:39:04.000000000 +0100
+-@@ -603,7 +603,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+--linux-gnu*) ;;
+-+linux-gnu*|linux-uclibc*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+- 
+-@@ -1247,7 +1247,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index a3312bf..1af733f 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -12,6 +12,8 @@ HOST_GCC_FINAL_DEPENDENCIES = \
+ 	$(HOST_GCC_COMMON_DEPENDENCIES) \
+ 	uclibc
  
-+config BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
-+	bool "Enable large file (files > 2 GB) support"
-+	select BR2_LARGEFILE
-+	help
-+	  Enable this option if you want your toolchain to support
-+	  files bigger than 2 GB.
++HOST_GCC_FINAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
 +
-+config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
-+	bool "Enable IPv6 support"
-+	select BR2_INET_IPV6
-+	help
-+	  Enable this option if you want your toolchain to support
-+	  IPv6.
-+
-+config BR2_TOOLCHAIN_BUILDROOT_INET_RPC
-+	bool "Enable RPC support"
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	help
-+	  Enable this option if you want your toolchain to support
-+	  RPC (needed for NFS, for example).
-+
-+config BR2_TOOLCHAIN_BUILDROOT_WCHAR
-+	bool "Enable WCHAR support"
-+	select BR2_USE_WCHAR
-+	help
-+	  Enable this option if you want your toolchain to support
-+	  wide characters (i.e characters longer than 8 bits, needed
-+	  for locale support).
-+
-+config BR2_TOOLCHAIN_BUILDROOT_LOCALE
-+	bool "Enable toolchain locale/i18n support"
-+	select BR2_TOOLCHAIN_BUILDROOT_WCHAR
-+	select BR2_ENABLE_LOCALE
-+	help
-+	  Enable this option if you want your toolchain to support
-+	  localization and internationalization.
-+
-+choice
-+	prompt "Thread library implementation"
-+	default BR2_PTHREADS_NATIVE if !BR2_ARM_OABI && !(BR2_avr32 || BR2_xtensa)
-+	default BR2_PTHREADS_OLD
-+	help
-+	  Use this option to select the thread library implementation
-+	  that should be used in your toolchain. Not all thread
-+	  variants work with all versions of uClibc, the "linuxthreads
-+	  (stable/old)" may be a working fallback if you need
-+	  threading at all.
-+
-+	config BR2_PTHREADS_NONE
-+		bool "none"
-+
-+	config BR2_PTHREADS
-+		bool "linuxthreads"
-+		depends on !BR2_xtensa
-+	        select BR2_TOOLCHAIN_HAS_THREADS
-+
-+	config BR2_PTHREADS_OLD
-+		bool "linuxthreads (stable/old)"
-+	        select BR2_TOOLCHAIN_HAS_THREADS
-+
-+	config BR2_PTHREADS_NATIVE
-+		bool "Native POSIX Threading (NPTL)"
-+	        select BR2_TOOLCHAIN_HAS_THREADS
-+		depends on !BR2_ARM_OABI
-+		depends on !BR2_x86_i386
-+		depends on !BR2_avr32
-+		depends on !BR2_xtensa
-+		depends on !BR2_arc
-+endchoice
-+
-+config BR2_PTHREAD_DEBUG
-+	bool "Thread library debugging"
-+	depends on BR2_PTHREADS || BR2_PTHREADS_OLD || BR2_PTHREADS_NATIVE
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	help
-+	  Build the thread library with debugging enabled.
-+
- config BR2_UCLIBC_INSTALL_TEST_SUITE
- 	bool "Compile and install uClibc tests"
- 	select BR2_PACKAGE_MAKE
-diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
-index 422602e..9bbf016 100644
---- a/toolchain/toolchain-buildroot/Config.in.2
-+++ b/toolchain/toolchain-buildroot/Config.in.2
-@@ -4,43 +4,6 @@ if BR2_TOOLCHAIN_BUILDROOT
+ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+ HOST_GCC_FINAL_POST_EXTRACT_CMDS += HOST_GCC_FINAL_XTENSA_OVERLAY_EXTRACT
+ endif
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index e07783e..05c956a 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -10,6 +10,8 @@ GCC_INITIAL_SOURCE  = $(GCC_SOURCE)
  
- comment "Toolchain Options"
+ HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
  
--config BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
--	bool "Enable large file (files > 2 GB) support"
--	select BR2_LARGEFILE
--	help
--	  Enable this option if you want your toolchain to support
--	  files bigger than 2 GB.
--
--config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
--	bool "Enable IPv6 support"
--	select BR2_INET_IPV6
--	help
--	  Enable this option if you want your toolchain to support
--	  IPv6.
--
--config BR2_TOOLCHAIN_BUILDROOT_INET_RPC
--	bool "Enable RPC support"
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	help
--	  Enable this option if you want your toolchain to support
--	  RPC (needed for NFS, for example).
--
--config BR2_TOOLCHAIN_BUILDROOT_WCHAR
--	bool "Enable WCHAR support"
--	select BR2_USE_WCHAR
--	help
--	  Enable this option if you want your toolchain to support
--	  wide characters (i.e characters longer than 8 bits, needed
--	  for locale support).
--
--config BR2_TOOLCHAIN_BUILDROOT_LOCALE
--	bool "Enable toolchain locale/i18n support"
--	select BR2_TOOLCHAIN_BUILDROOT_WCHAR
--	select BR2_ENABLE_LOCALE
--	help
--	  Enable this option if you want your toolchain to support
--	  localization and internationalization.
--
- config BR2_TOOLCHAIN_BUILDROOT_CXX
- 	bool "Enable C++ support"
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -58,46 +21,6 @@ config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
- 	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
- 	  for details.
++HOST_GCC_INITIAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
++
+ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+ HOST_GCC_INITIAL_POST_EXTRACT_CMDS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
+ endif
+diff --git a/package/gcc/gcc-intermediate/gcc-intermediate.mk b/package/gcc/gcc-intermediate/gcc-intermediate.mk
+index 0c062a7..6b6b57e 100644
+--- a/package/gcc/gcc-intermediate/gcc-intermediate.mk
++++ b/package/gcc/gcc-intermediate/gcc-intermediate.mk
+@@ -12,6 +12,8 @@ HOST_GCC_INTERMEDIATE_DEPENDENCIES = \
+ 	$(HOST_GCC_COMMON_DEPENDENCIES) \
+ 	uclibc-configured
  
--choice
--	prompt "Thread library implementation"
--	default BR2_PTHREADS_NATIVE if !BR2_ARM_OABI && !(BR2_avr32 || BR2_xtensa)
--	default BR2_PTHREADS_OLD
--	help
--	  Use this option to select the thread library implementation
--	  that should be used in your toolchain. Not all thread
--	  variants work with all versions of uClibc, the "linuxthreads
--	  (stable/old)" may be a working fallback if you need
--	  threading at all.
--
--	config BR2_PTHREADS_NONE
--		bool "none"
--
--	config BR2_PTHREADS
--		bool "linuxthreads"
--		depends on !BR2_xtensa
--	        select BR2_TOOLCHAIN_HAS_THREADS
--
--	config BR2_PTHREADS_OLD
--		bool "linuxthreads (stable/old)"
--	        select BR2_TOOLCHAIN_HAS_THREADS
--
--	config BR2_PTHREADS_NATIVE
--		bool "Native POSIX Threading (NPTL)"
--	        select BR2_TOOLCHAIN_HAS_THREADS
--		depends on !BR2_ARM_OABI
--		depends on !BR2_x86_i386
--		depends on !BR2_avr32
--		depends on !BR2_xtensa
--		depends on !BR2_arc
--endchoice
--
--config BR2_PTHREAD_DEBUG
--	bool "Thread library debugging"
--	depends on BR2_PTHREADS || BR2_PTHREADS_OLD || BR2_PTHREADS_NATIVE
--	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
--	help
--	  Build the thread library with debugging enabled.
--
- source "package/elf2flt/Config.in.host"
++HOST_GCC_INTERMEDIATE_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
++
+ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+ HOST_GCC_INTERMEDIATE_POST_EXTRACT_CMDS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
+ endif
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index b5cd091..7d28819 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -40,6 +40,23 @@ define HOST_GCC_APPLY_PATCHES
+ endef
  
- config BR2_VFP_FLOAT
+ #
++# Custom extract command
++#
++
++define HOST_GCC_EXTRACT_CMDS
++	$(BZCAT) $(DL_DIR)/$(GCC_SOURCE) | \
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) \
++		--exclude='libjava/*' \
++		--exclude='libgo/*' \
++		--exclude='gcc/testsuite/*' \
++		--exclude='libstdc++-v3/testsuite/*' \
++		$(TAR_OPTIONS) -
++	mkdir -p $(@D)/libstdc++-v3/testsuite/
++	echo "all:" > $(@D)/libstdc++-v3/testsuite/Makefile.in
++	echo "install:" >> $(@D)/libstdc++-v3/testsuite/Makefile.in
++endef
++
++#
+ # Create 'build' directory and configure symlink
+ #
+ 
 -- 
 1.8.1.2
