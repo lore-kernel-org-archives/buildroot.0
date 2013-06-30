@@ -1,94 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 30 Jun 2013 10:21:52 +0200
-Subject: [Buildroot] [git commit] icu: security bump to version 51.2
-Message-ID: <20130630082441.31CED9B16C@busybox.osuosl.org>
+Date: Sun, 30 Jun 2013 10:32:37 +0200
+Subject: [Buildroot] [git commit] libhid: fix download URL
+Message-ID: <20130630083505.0DAD19B173@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3911e67151bfa5885e6e4c7a93e02c89ccac069f
+commit: http://git.buildroot.net/buildroot/commit/?id=df91b9eb6e8d6181d9c49834a1444344f8814e53
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2011-4599, CVE 2013-0900, CVE-2013-1569, CVE-2013-2383,
-CVE-2013-2384, CVE-2013-2419.
+Fixes http://autobuild.buildroot.net/results/c65/c652df3854dec40e6420cba8a6d48c8ddc9b1ecd/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/icu/icu-workaround-toolchain-bugs.patch |   32 +++++++++++-----------
- package/icu/icu.mk                              |    5 ++-
- 2 files changed, 19 insertions(+), 18 deletions(-)
+ package/libhid/libhid.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/icu/icu-workaround-toolchain-bugs.patch b/package/icu/icu-workaround-toolchain-bugs.patch
-index df9d528..64d67a0 100644
---- a/package/icu/icu-workaround-toolchain-bugs.patch
-+++ b/package/icu/icu-workaround-toolchain-bugs.patch
-@@ -10,27 +10,27 @@ is trivial in this case. So it will avoid our users falling into this
- internal compiler error, and allow our autobuilders to test more
- packages using this Sourcery CodeBench toolchain.qq
+diff --git a/package/libhid/libhid.mk b/package/libhid/libhid.mk
+index 530ef50..4cecd34 100644
+--- a/package/libhid/libhid.mk
++++ b/package/libhid/libhid.mk
+@@ -6,7 +6,7 @@
  
-+[Gustavo: update for ICU4C 51.2]
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
--Index: b/source/configure
--===================================================================
----- a/source/configure
--+++ b/source/configure
--@@ -4320,7 +4320,7 @@
--                 echo "# Note: We are not using '-ansi' with HP/UX GCC because int64_t broke, see <http://bugs.icu-project.org/trac/ticket/8493>"
--                 CFLAGS="$CFLAGS -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
--             *)
---                CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
--+                CFLAGS="$CFLAGS -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
--             esac
-+diff -Nura icu.orig/source/configure icu/source/configure
-+--- icu.orig/source/configure	2013-05-23 17:06:32.000000000 -0300
-++++ icu/source/configure	2013-06-29 15:43:04.202320953 -0300
-+@@ -4066,7 +4066,7 @@
-+         then
-+             # Do not use -ansi. It limits us to C90, and it breaks some platforms.
-+             # We use -std=c99 to disable the gnu99 defaults and its associated warnings
-+-            CFLAGS="$CFLAGS -Wall -std=c99 -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
-++            CFLAGS="$CFLAGS -std=c99 -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
-          else
-              case "${host}" in
--@@ -4333,7 +4333,7 @@
-+             *-*-cygwin)
-+@@ -4078,7 +4078,7 @@
-          fi
-          if test "$GXX" = yes
-          then
---            CXXFLAGS="$CXXFLAGS -W -Wall -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
--+            CXXFLAGS="$CXXFLAGS -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
-+-            CXXFLAGS="$CXXFLAGS -W -Wall -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
-++            CXXFLAGS="$CXXFLAGS -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
-+         else
-              case "${host}" in
--             *-*-solaris*)
--                 CXXFLAGS="$CXXFLAGS -D__STDC__=0";;
-+             *-*-cygwin)
-diff --git a/package/icu/icu.mk b/package/icu/icu.mk
-index 00eacc7..7954eb0 100644
---- a/package/icu/icu.mk
-+++ b/package/icu/icu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ICU_VERSION = 4.8.1.1
-+ICU_VERSION = 51.2
- ICU_SOURCE = icu4c-$(subst .,_,$(ICU_VERSION))-src.tgz
- ICU_SITE = http://download.icu-project.org/files/icu4c/$(ICU_VERSION)
- ICU_LICENSE = ICU License
-@@ -20,7 +20,8 @@ HOST_ICU_CONF_OPT = \
- 	--disable-tests \
- 	--disable-extras \
- 	--disable-icuio \
--	--disable-layout
-+	--disable-layout \
-+	--disable-renaming
- ICU_MAKE = $(MAKE1)
- ICU_SUBDIR = source
- HOST_ICU_SUBDIR = source
+ LIBHID_VERSION = 0.2.16
+ LIBHID_SOURCE = libhid-$(LIBHID_VERSION).tar.gz
+-LIBHID_SITE = http://alioth.debian.org/frs/download.php/1958
++LIBHID_SITE = http://alioth.debian.org/frs/download.php/file/1958
+ LIBHID_DEPENDENCIES = libusb-compat libusb
+ LIBHID_INSTALL_STAGING = YES
+ LIBHID_AUTORECONF = YES
