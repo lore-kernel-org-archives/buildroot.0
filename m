@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 1 Jul 2013 11:43:31 +0200
-Subject: [Buildroot] [git commit] liburcu: define license
-Message-ID: <20130701094857.0BA0E99A82@busybox.osuosl.org>
+Date: Mon, 1 Jul 2013 11:43:48 +0200
+Subject: [Buildroot] [git commit] lttng-babeltrace: define license
+Message-ID: <20130701094857.6DA2399A82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=327748e9e83fc8a5f4101624c96faaf5221f50db
+commit: http://git.buildroot.net/buildroot/commit/?id=f0a5318865f567211711a162558298cb7689260a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/liburcu/liburcu.mk |    2 ++
+ package/lttng-babeltrace/lttng-babeltrace.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-index 35f09f7..7a32e7f 100644
---- a/package/liburcu/liburcu.mk
-+++ b/package/liburcu/liburcu.mk
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+index 96d3a31..044dac0 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.mk
++++ b/package/lttng-babeltrace/lttng-babeltrace.mk
 @@ -7,6 +7,8 @@
- LIBURCU_VERSION = 0.7.7
- LIBURCU_SITE    = http://lttng.org/files/urcu/
- LIBURCU_SOURCE  = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
-+LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE
-+LIBURCU_LICENSE_FILES = lgpl-2.1.txt lgpl-relicensing.txt LICENSE
+ LTTNG_BABELTRACE_SITE    = http://lttng.org/files/babeltrace/
+ LTTNG_BABELTRACE_VERSION = 1.1.1
+ LTTNG_BABELTRACE_SOURCE  = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
++LTTNG_BABELTRACE_LICENSE = MIT; LGPLv2 for include/babeltrace/list.h; GPLv3+ for formats/ctf/metadata/ctf-parser.h
++LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt LICENSE
  
- LIBURCU_INSTALL_STAGING = YES
+ LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
  
