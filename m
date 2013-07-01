@@ -1,77 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 01 Jul 2013 12:03:17 +0200
-Subject: [Buildroot] Sample configurations / test suite ?
-In-Reply-To: <20130701091925.6c67a6c7@skate> (Thomas Petazzoni's message of
- "Mon, 1 Jul 2013 09:19:25 +0200")
-References: <20130627004309.6f15cf53@skate> <51D11AE2.5050707@mind.be>
- <20130701091925.6c67a6c7@skate>
-Message-ID: <8738ryvbq1.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 01 Jul 2013 12:03:55 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	yem-misc-updates
+In-Reply-To: <87bo6mvcog.fsf@dell.be.48ers.dk>
+References: <cover.1372545265.git.yann.morin.1998@free.fr>
+ <87bo6mvcog.fsf@dell.be.48ers.dk>
+Message-ID: <51D1540B.7000006@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 07/01/13 11:42, Peter Korsgaard wrote:
+>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>
+>   Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>   Yann> Hello All!
+>
+>   Yann> This two-patch series adds some cosmetics to the legacy menu.
+>
+>   Yann> The first patch displays the removal date in the menuconfig, to show
+>   Yann> the user how old the legacy options he's using are.
+>
+>   Yann> The second patch adds to the top-level comment, that legacy options
+>   Yann> will be removed at some point in the future, and that non-updated
+>   Yann> .config files may fail to build, or run, in unpredictable ways.
+>
+>   Yann> If we do not intend to remove legacy options, let's just drop patch #2,
+>   Yann> of course.
+>
+> I think we do, question is how soon? 6 months, 1 year?
+>
+> They are not very expensive, so I suggest we keep them for 1 year.
 
-Hi,
-
- >> For both use cases, it makes the most sense if these defconfigs are 
- >> part of the buildroot tree.
-
- Thomas> In order to keep those configurations consistent with the rest of
- Thomas> Buildroot, I agree that having them in the Buildroot tree is probably
- Thomas> the easiest option. However, I'm worried about the size of it: I was
- Thomas> not only thinking of defconfigs, but potentially additional artifacts
- Thomas> needed to make the build work.
-
-Yes, I also think they need to be in tree to really be useful.
+  I would keep them much longer, at least three years. Most distros have 
+a 3 year or more 'stable' branch, so anything inexpensive that we can do 
+to approximate that is good I think.
 
 
- >> The risk is that the configs/ directory becomes too large and unwieldy 
- >> (people will have to browse it to find the defconfig they want). So 
- >> perhaps this calls for changing it into a tree.y
- >> 
- >> Personally, I think it makes sense to move the defconfigs into the 
- >> board/ directory. Many defconfigs already refer into there for kernel 
- >> configs or specific patches, so it makes sense to put the defconfig in 
- >> the same place.
-
- Thomas> Funnily enough, the defconfigs *used* to be in the board/ directory
- Thomas> (which at the time was target/device). We had a discussion back in the
- Thomas> days on whether the defconfigs should remain with their board, or
- Thomas> grouped in the top-level configs/ directory.
-
- Thomas> See
- Thomas> http://lists.busybox.net/pipermail/buildroot/2009-October/029556.html
- Thomas> and my complaint
- Thomas> http://lists.busybox.net/pipermail/buildroot/2009-October/029559.html.
-
-Gah, 2009 ;)
-
-I do still think having the available configs listed together (like
-linux/barebox arch/$ARCH/configs, or u-boot's boards.cfg) is nice for
-users.
-
- Thomas> That said, after several years, I feel that configs/ was a pretty good
- Thomas> choice, I don't really feel the need of moving things back to board/,
- Thomas> especially considering the change it will cause to all users.
-
- Thomas> Moreover, I am not sure that those test suite / demos
- Thomas> configurations should be located in the same place as the minimal
- Thomas> defconfigs we have in configs/.
-
- >> And while I'm on this subject, I think the structure of the board 
- >> directory is not very clear. It would make sense to me to switch to the 
- >> layout that U-Boot uses: board/<arch>/<soc>/<boardname>/ (although the 
- >> <soc> level may be optional for us). You can expect people to know what 
- >> the basic architecture of the processor is, but not always who the vendor 
- >> is (which is probably why raspberrypi, beaglebone and gnublin don't have 
- >> a vendor directory). Or sometimes there are multiple vendors for the same 
- >> board (e.g. Beagleboard and SabreLite).
-
-U-boot actually nowadays normally use board/<vendor>/<boardname>, which
-is in line with what we do.
-
+  Regards,
+  Arnout
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
