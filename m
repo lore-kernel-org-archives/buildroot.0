@@ -1,43 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  1 Jul 2013 23:34:34 +0200
-Subject: [Buildroot] [PATCH] gst1-plugins-bad: add missing depends on C++
-	for the OpenCV plugin
-Message-ID: <1372714474-11674-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Milton Soares Filho <milton.soares.filho@gmail.com>
+Date: Mon, 1 Jul 2013 19:25:49 -0300
+Subject: [Buildroot] ldconfig - unknown machine 40
+In-Reply-To: <loom.20130628T172450-675@post.gmane.org>
+References: <loom.20130628T172450-675@post.gmane.org>
+Message-ID: <CAPNngRMnWn3gAo3ut1GmoVJmCh2yiGu=2sUFWWXkTrL4M-NR6Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OpenCV requires C++ support, so we shouldn't select it without
-depending on C++ support.
+On 28 June 2013 13:55, Ciar?n Rehill <cir.vfi@gmail.com> wrote:
+>     /sbin/ldconfig: /lib/libnsl.so.1 is for unknown machine 40.
+> [...]
+> *** Firstly, anyone else seeing this?  Searching doesn't turn up much.
 
-Fixes:
-http://autobuild.buildroot.org/results/71f/71f2d8a267a0d159521407a9a2330e68d756c4b3/build-end.log.
+Me too! Trying to build a ST sh4 target using an external toolchain.
+My host machine has Ubuntu 13.04 x86-64 installed and ships ldconfig
+version 2.17.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/multimedia/gst1-plugins-bad/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+> *** Most importantly, any ideas on how to successfully use Buildroot on an
+> F18 machine for ARM (or any non-Intel arch, I suppose)?
 
-diff --git a/package/multimedia/gst1-plugins-bad/Config.in b/package/multimedia/gst1-plugins-bad/Config.in
-index 7eb531a..98550e0 100644
---- a/package/multimedia/gst1-plugins-bad/Config.in
-+++ b/package/multimedia/gst1-plugins-bad/Config.in
-@@ -400,10 +400,14 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NEON
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
- 	bool "opencv"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_OPENCV
- 	help
- 	  GStreamer OpenCV Plugins
- 
-+comment "opencv plugin requires a toolchain with C++ support"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPUS
- 	bool "opus"
- 	select BR2_PACKAGE_OPUS
--- 
-1.8.1.2
+Still have no idea on how to fix this issue, since my external
+toolchain is pre-compiled and does not ship cross-ldconfig within it.
+I have done a workaround using LD_LIBRARY_PATH on the target
+initialization scripts, but assuming it's a sub-optimal solution.
+
+Best regards.
+
+[]s, milton
