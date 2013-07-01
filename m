@@ -1,59 +1,44 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed, 31 Jul 2013 22:52:34 -0400
-Subject: [Buildroot] List of pending patches: what to do?
-In-Reply-To: <20130731191415.545f7dff@skate>
-References: <20130731191415.545f7dff@skate>
-Message-ID: <CANxTyt5V08njumRpKWQJEqThgd_FUKYnjg+XLwbFbWk+MKvx6Q@mail.gmail.com>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Mon, 1 Jul 2013 10:26:02 +0800
+Subject: [Buildroot] [PATCH] ramspeed/smp: new package
+In-Reply-To: <87r4fmz9da.fsf@dell.be.48ers.dk>
+References: <1372416026-7582-1-git-send-email-keguang.zhang@gmail.com>
+ <87r4fmz9da.fsf@dell.be.48ers.dk>
+Message-ID: <CAJhJPsU-DJWKjTt-_h+u40Tkr+Q4gnMr3hZASOJEBkP_TdAGLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> http://patchwork.ozlabs.org/patch/172171 avahi: only install
-> default.script/S05avahi-setup.sh if not present in fs skeleton
+Hi Peter,
+
+Yes, they are different.
+RAMspeed is for uniprocessor machines.
+RAMspeed/SMP is for multiprocessor machines.
+
+2013/6/28 Peter Korsgaard <jacmet@uclibc.org>
+
+> >>>>> "Kelvin" == Kelvin Cheung <keguang.zhang@gmail.com> writes:
+>
+>  Kelvin> Add new package: ramspeed/smp
+>  Kelvin> RAMspeed/SMP, a cache and memory benchmarking tool
+>  Kelvin> (for multiprocessor machines running UNIX-like operating systems)
+>
+>  Kelvin> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+>
+> This looks very similar to our existing ramspeed package. Is it the
+> same/different? Do we need both?
+>
+> --
+> Bye, Peter Korsgaard
 >
 
-This issue has already been fixed a different way; patch can be discarded.
-
-http://patchwork.ozlabs.org/patch/179493 relative DL_DIR okay?
->
-
-This issue has already been fixed a different way; patch can be discarded.
 
 
-> http://patchwork.ozlabs.org/patch/198234 group file: define groups
-> expected by udev
->
-
-This patch is still good as-is.
-
-
-> http://patchwork.ozlabs.org/patch/249912 Makefile: change rsync used in
-> overlays to always transfer files
->
-
-The patch still applies, with no fuzz but some shifted lines.  The problem
-described still exists, and is still fixed by the patch.
-
-http://patchwork.ozlabs.org/patch/165382 [1/1] ccache: expose control
-> interface via 'make ccache-options'
->
-
-I've no strong objection, but I think that using a Makefile variable to
-access the ccache binary is cumbersome, as cumbersome as having to export
-a BUILDROOT_CACHE_DIR to get ccache to point to the right directory.
- Mercifully, buildroot avoids forcing us to define environment variables
-for regular use - for everything except setting up ccache options, that is.
- Because of this, I tend to patch ccache to change the last-ditch cache dir
-value from "format("%s/.ccache", home_directory)" to the value set in the
-.config, which has a much better chance of being correct than
-$HOME/.ccache, but can still be overridden by exporting
-BUILDROOT_CACHE_DIR.  Then output/host/usr/bin/ccache can be invoked
-directly to set max-size, stat-clearing, etc. without needing environment
-variables.
-
-Danomi -
+-- 
+Best Regards!
+Kelvin Cheung
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130731/a8f893b6/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130701/7da50eba/attachment.html>
