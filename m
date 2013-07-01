@@ -1,89 +1,93 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 1 Jul 2013 11:40:59 +0200
-Subject: [Buildroot] [git commit] legacy: print removal date in menuconfig
-Message-ID: <20130701094855.040988A369@busybox.osuosl.org>
+Date: Mon, 1 Jul 2013 11:42:58 +0200
+Subject: [Buildroot] [git commit] lttng-tools: bump version to 2.2.0
+Message-ID: <20130701094856.1B41499A82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67eaf7057d2b4ab90885ee013a29eaa40682f93a
+commit: http://git.buildroot.net/buildroot/commit/?id=ed692e2dbbf8d4751d39a636dd1119e829bd0f99
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Show the user how old the legacy options are, as a
-subtle suggestion for him to update mopre often. ;-)
+Remove lttng-tools-no-sync-file-range-in-uclibc.patch because it got
+merged upstream.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Config.in.legacy |   27 +++++++++++----------------
- 1 files changed, 11 insertions(+), 16 deletions(-)
+ .../lttng-tools-no-sync-file-range-in-uclibc.patch |   51 --------------------
+ package/lttng-tools/lttng-tools.mk                 |    2 +-
+ 2 files changed, 1 insertions(+), 52 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index cd23492..1252d16 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -40,9 +40,8 @@ comment "As long as these options stay selected, the build   "
- comment "will fail.                                          "
- endif
- 
--#
--# Legacy options since 2013.08
--#
-+###############################################################################
-+comment "Legacy options removed in 2013.08"
- 
- config BR2_PACKAGE_DOSFSTOOLS_DOSFSCK
- 	bool "dosfstools dosfsck renamed to fsck.fat"
-@@ -65,9 +64,8 @@ config BR2_PACKAGE_DOSFSTOOLS_MKDOSFS
- 	help
- 	  mkdosfs was renamed upstream to mkfs.fat for consistency.
- 
--#
--# Legacy options since 2013.05
--#
-+###############################################################################
-+comment "Legacy options removed in 2013.05"
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8192
- 	bool "Realtek 8192 replaced by Realtek 81xx"
-@@ -83,9 +81,8 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712
- 	help
- 	  Now covers the whole Realtek 87xx familly: 8712/8723.
- 
--#
--# Legacy options since 2013.02
--#
-+###############################################################################
-+comment "Legacy options removed in 2013.02"
- 
- config BR2_sa110
- 	bool "sa110 ARM target switched to strongarm"
-@@ -151,9 +148,9 @@ config BR2_PACKAGE_DIRECTB_TESTS
- 	  The option has been renamed
- 	  BR2_PACKAGE_DIRECTFB_TESTS.
- 
--#
--# Legacy options since 2012.11
--#
-+###############################################################################
-+comment "Legacy options removed in 2012.11"
-+
- config BR2_PACKAGE_CUSTOMIZE
- 	bool "customize package has been removed"
- 	select BR2_LEGACY
-@@ -188,10 +185,8 @@ config BR2_PACKAGE_PTHREAD_STUBS
- 	  For consistency reason, the pthread-stubs package has been
- 	  renamed to xlib_libpthread-stubs.
- 
+diff --git a/package/lttng-tools/lttng-tools-no-sync-file-range-in-uclibc.patch b/package/lttng-tools/lttng-tools-no-sync-file-range-in-uclibc.patch
+deleted file mode 100644
+index fcaaa3e..0000000
+--- a/package/lttng-tools/lttng-tools-no-sync-file-range-in-uclibc.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-Make sync_file_range() usage optional
 -
--#
--# Legacy options since 2012.08
--#
-+###############################################################################
-+comment "Legacy options removed in 2012.08"
+-Under uClibc, sync_file_range() is not available under all
+-architectures, so we fall back to fdatasync() in this case.
+-
+-Inspired by the patch done by Thomas Petazzoni for the
+-2.0-pre25 version.
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+----
+- configure.ac              |    2 +-
+- src/common/compat/fcntl.h |    5 +++++
+- 2 files changed, 6 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 5808c79..065b9cf 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -150,7 +150,7 @@ AS_IF([test "x$lttng_ust_support" = "xyes"], [
+- 	)
+- ])
+- AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [test "x$lttng_ust_ctl_found" = xyes])
+--AC_CHECK_FUNCS([sched_getcpu sysconf])
+-+AC_CHECK_FUNCS([sched_getcpu sysconf sync_file_range])
+- 
+- # check for dlopen
+- AC_CHECK_LIB([dl], [dlopen],
+-@@ -394,4 +394,3 @@ AS_IF([test "x$consumerd_only" = "xno"],[
+- ])
+- 
+- AS_ECHO()
+--
+-diff --git a/src/common/compat/compat-fcntl.c b/src/common/compat/compat-fcntl.c
+-index 5a1c757..7ff63a3 100644
+---- a/src/common/compat/compat-fcntl.c
+-+++ b/src/common/compat/compat-fcntl.c
+-@@ -23,7 +23,11 @@
+- int compat_sync_file_range(int fd, off64_t offset, off64_t nbytes,
+- 		unsigned int flags)
+- {
+-+#ifdef HAVE_SYNC_FILE_RANGE
+- 	return sync_file_range(fd, offset, nbytes, flags);
+-+#else
+-+	return fdatasync(fd);
+-+#endif
+- }
+- 
+- #endif /* __linux__ */
+--- 
+-1.8.0.3
+-
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 77bf7d6..992ecad 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_GETTEXT_STATIC
- 	bool "libgettext.a is now selected by BR2_PREFER_STATIC_LIB"
+-LTTNG_TOOLS_VERSION = 2.1.1
++LTTNG_TOOLS_VERSION = 2.2.0
+ LTTNG_TOOLS_SITE    = http://lttng.org/files/lttng-tools/
+ LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ 
