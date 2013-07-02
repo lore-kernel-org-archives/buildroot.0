@@ -1,34 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Jul 2013 09:38:52 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-07-01
-In-Reply-To: <20130702063005.2F3D352C121@lolut.humanoidz.org>
-References: <20130702063005.2F3D352C121@lolut.humanoidz.org>
-Message-ID: <20130702093852.123fdc11@skate>
+From: Wade Berrier <wberrier@gmail.com>
+Date: Tue, 2 Jul 2013 02:52:26 -0600
+Subject: [Buildroot] [PATCH] system: only set the root password if it's not
+	empty
+Message-ID: <20130702085224.GA25620@berrier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+No need to replace the password in etc/shadow with a blank password.
 
-On Tue,  2 Jul 2013 08:30:05 +0200 (CEST), Thomas Petazzoni wrote:
+This also helps alleviate the situation when etc/shadow contains a password
+which isn't meant to be blown away with a blank root password because mkpasswd
+is non-functioning (rhel6).
 
-> Classification of failures by reason
-> ====================================
-> 
->         ltp-testsuite-20130109 | 8 
+This is somewhat of a workaround for distros (rhel6, and maybe fedora?) that
+don't have a compatible mkpasswd.  They have grub-crypt, but it doesn't appear
+to be as script friendly.
 
-Can you adjust your build script to not build ltp-testsuite when using
-uClibc? It is well known that our default uClibc configuration doesn't
-have all the necessary bits to build ltp-testsuite.
+Signed-off-by: Wade Berrier <wberrier@gmail.com>
+---
+ system/system.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks!
-
-Thomas
+diff --git a/system/system.mk b/system/system.mk
+index 50c86ad..fa98532 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -57,7 +57,9 @@ TARGETS += target-generic-issue
+ endif
+ 
+ ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
++ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
+ TARGETS += target-root-passwd
++endif
+ 
+ ifneq ($(TARGET_GENERIC_GETTY),)
+ TARGETS += target-generic-getty-$(if $(BR2_PACKAGE_SYSVINIT),sysvinit,busybox)
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
