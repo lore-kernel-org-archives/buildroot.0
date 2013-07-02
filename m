@@ -1,76 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 02 Jul 2013 18:29:56 +0200
-Subject: [Buildroot] [PATCH] Makefile: Symlink lib32 to lib for
-	MIPS64/n32
-In-Reply-To: <CAG2jQ8j2iucPz356Wkz8=xSOQ=QC2u_7ebZZimRhycBGu4_nvg@mail.gmail.com>
-References: <1372675884-963-1-git-send-email-markos.chandras@gmail.com>
- <51D26C51.8070108@mind.be>
- <CAG2jQ8j2iucPz356Wkz8=xSOQ=QC2u_7ebZZimRhycBGu4_nvg@mail.gmail.com>
-Message-ID: <51D30004.7060200@mind.be>
+Date: Tue, 02 Jul 2013 18:46:23 +0200
+Subject: [Buildroot] Beaglebone Black support
+In-Reply-To: <20130702093415.5db13282@skate>
+References: <CA+-urNQPUunJ4se0apcfimNRAK4iq1u_mLaCYRvcPJWS6Uq+HQ@mail.gmail.com>
+ <20130623161357.136be827bdb312f43bda51a6@lavabit.com>
+ <CA+-urNTKwwCtPZkWaxisFbLWiYCRJA1-5COK-rT8NW3QU+kyZw@mail.gmail.com>
+ <20130623214133.6249f43e6e2d8bda20aa971a@lavabit.com>
+ <CA+-urNTQxDOjPKMAMgTbpp_i5_oD_z0k44hVzL8gRwfz7u3B3A@mail.gmail.com>
+ <20130624124933.e7983d6a3730922581985bf4@lavabit.com>
+ <51D155A0.3010205@gmail.com> <51D26E29.6030805@mind.be>
+ <20130702093415.5db13282@skate>
+Message-ID: <51D303DF.70406@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/02/13 15:36, Markos Chandras wrote:
-> Hi Arnout,
+On 07/02/13 09:34, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 >
-> On 2 July 2013 06:59, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 07/01/13 12:51, Markos Chandras wrote:
->>>
->>> From: Markos Chandras <markos.chandras@imgtec.com>
->>>
->>> gcc hardcodes the uClibc interpreter for MIPS64/n32 as follows:
->>> (gcc-4.7.3, gcc/config/mips/linux64.h):
->>> define UCLIBC_DYNAMIC_LINKERN32 "/lib32/ld-uClibc.so.0"
->>>
->>> However, buildroot always creates the $(TARGET_DIR)/lib and
->>> $(TARGET_DIR)/usr/lib directories, therefore for consinstency
->>> reasons, we create a lib32->lib symlink to fix the interpreter
->>> problems for MIPS64/n32.
->>
->>
->>   I would say we do it for all 32-bit platforms. If people feel they can't
->> afford the overhead of two additional inodes in their rootfs, they can still
->> remove the link in a post-build script.
->>
+> On Tue, 02 Jul 2013 08:07:37 +0200, Arnout Vandecappelle wrote:
 >
-> Is this preferred?
+>>    I guess you can download the patches as a tarball, right? Then you
+>> should just be able to use the tarball's URL in BR2_LINUX_KERNEL_PATCH
+>> and buildroot will extract them from the tarball and apply them all in
+>> directory order (or according to the series file, if present). Or does
+>> that not work for some reason?
 >
-> +ifeq ($(BR2_MIPS_NABI64)$(BR2_aarch64)$(BR2_sh64)$(BR2_x86_64),)
+> If you look at
+> https://github.com/RobertCNelson/linux-dev/tree/am33x-v3.8/patches,
+> you'll see that patches are organized in a set of sub-directories, and
+> the patch order is defined in a shell script,
+> https://github.com/RobertCNelson/linux-dev/blob/am33x-v3.8/patch.sh,
+> that has to be executed over a Git kernel tree.
+>
+> To handle such a bizarre stuff, I don't see any other option that
+> adding a new kconfig option to specify a shell script to be executed at
+> "patch" time of the kernel, so that one can do whatever funky things
+> (s)he wants. That's ugly, but I don't see a nice and generic way of
+> handling such a bizarre distribution of kernel code.
 
-  I was going to say:
+  Actually, Xenomai and RTAI are similar. So we could add a config option 
+that allows the user to add something to the LINUX_PRE_PATCH_HOOK. But I 
+admit, it is getting pretty awkward.
 
-ifeq ($(BR2_ARCH_IS_64),)
-
-but only now I realise you're talking about n32 on a 64-bit MIPS. Though 
-I must say, I don't understand why we call it BR2_ARCH_IS_64 if the ABI 
-is 32 bit - or is it actually a 64-bit ABI that is just called n32 by 
-accident?
-
-  I also noticed now that for lib64, we only create the symlinks if they 
-exists in the external toolchain, and we remove the lib64 directory in 
-the internal toolchain. Perhaps this can be simplified into creating the 
-lib64/lib32 links unconditionally after installing the toolchain?
-
-
-> +       ln -sfn lib $(TARGET_DIR)/lib32; \
-> +               ln -sfn lib $(TARGET_DIR)/usr/lib32;
-
-  No need for the semicolon and the backslash, this can be done as two 
-separate commands.
-
+  I think it is easier if someone who cares just forks a linux tree on 
+github and applies the patches there.
 
   Regards,
   Arnout
 
-> +endif
 >
-> --
-> Regards,
-> Markos Chandras
+> Best regards,
 >
+> Thomas
 >
 
 
