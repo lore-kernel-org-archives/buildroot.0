@@ -1,65 +1,60 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 2 Jul 2013 22:09:15 +0200
-Subject: [Buildroot] [git commit] libevent: disable building test programs
-Message-ID: <20130702203314.022589A089@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 02 Jul 2013 22:31:07 +0200
+Subject: [Buildroot] [PATCH v3] package/libsvg: new package
+In-Reply-To: <1372706401-10935-1-git-send-email-c.schoenert@gmail.com>
+ (Carsten Schoenert's message of "Mon, 1 Jul 2013 21:20:01 +0200")
+References: <1372706401-10935-1-git-send-email-c.schoenert@gmail.com>
+Message-ID: <87y59osnzo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a213dc6d53aef7076942c29a1338d0c9fb78ca64
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Carsten" == Carsten Schoenert <c.schoenert@gmail.com> writes:
 
-Libevent test programs use fork(), function
-that is not available on MMU-less architecture.
+ Carsten> From: Carsten Schoenert <c.schoenert@gmail.com>
+ Carsten> Libsvg provides a library for parsing SVG content in files or buffers.
+ Carsten> Libsvg does not do any rendering, but instead provides a function-based
+ Carsten> interface that can be used by various rendering engines.
 
-This patch prevents compiling libevent test programs
-so that library can successfully build on architectures
-like blackfin
+ Carsten> Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+ Carsten> ---
+ Carsten> Changes v3:
+ Carsten> 	- removing specific config option for selection of XML parser, the
+ Carsten> 	  XML parser can be changed by selecting BR2_PACKAGE_EXPAT from the
+ Carsten> 	  user manually, otherwise BR2_PACKAGE_LIBXML2 will be automatically
+ Carsten> 	  selected
+ Carsten> 	- setting selection for BR2_PACKAGE_LIBPNG and _LIBJPEG in Config.in
 
-Fixes:
-http://autobuild.buildroot.org/results/2e0/2e0422f1042d0cb00f5bab0dc190930581ed4ef2/
+ Carsten> Changes v2:
+ Carsten> 	- reworking the whole patch after suggestions from Peter and Thomas
+ Carsten> 	- adding patch to preventing compiler errors while linking
+ Carsten> 	  against libexpat
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../libevent-disable-building-test-programs.patch  |   30 ++++++++++++++++++++
- 1 files changed, 30 insertions(+), 0 deletions(-)
+ Carsten> +################################################################################
+ Carsten> +#
+ Carsten> +# libsvg
+ Carsten> +#
+ Carsten> +################################################################################
+ Carsten> +
+ Carsten> +LIBSVG_VERSION         = 0.1.4
+ Carsten> +LIBSVG_SITE            = http://cairographics.org/snapshots/
+ Carsten> +LIBSVG_DEPENDENCIES    = host-pkgconf libpng libjpeg
+ Carsten> +LIBSVG_INSTALL_STAGING = YES
+ Carsten> +LIBSVG_LICENSE         = LGPLv2+
+ Carsten> +LIBSVG_LICENSE_FILES   = COPYING
+ Carsten> +
+ Carsten> +# libsvg needs at last a XML parser
+ Carsten> +ifeq ($(BR2_PACKAGE_EXPAT),y)
+ Carsten> +LIBSVG_CONF_OPT += --with-expat
+ Carsten> +LIBSVG_DEPENDENCIES += expat
+ Carsten> +else ifeq ($(BR2_PACKAGE_LIBXML2),y)
 
-diff --git a/package/libevent/libevent-disable-building-test-programs.patch b/package/libevent/libevent-disable-building-test-programs.patch
-new file mode 100644
-index 0000000..4b0f0d9
---- /dev/null
-+++ b/package/libevent/libevent-disable-building-test-programs.patch
-@@ -0,0 +1,30 @@
-+From e932c8864e1bb8b6a7901d4b049a1100c4becba5 Mon Sep 17 00:00:00 2001
-+From: Gilles Talis <gilles.talis@gmail.com>
-+Date: Fri, 21 Jun 2013 15:25:11 -0700
-+Subject: [PATCH] Disable building test programs
-+
-+We are not really interested in building test programs.
-+Moreover, these programs use fork() function that is
-+not available on MMU-less architectures.
-+
-+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-+---
-+ Makefile.in |    2 +-
-+ 1 files changed, 1 insertions(+), 1 deletions(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 2ebefa2..4fba1ff 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -487,7 +487,7 @@ LIBEVENT_LIBS_LA = libevent.la libevent_core.la libevent_extra.la \
-+ @INSTALL_LIBEVENT_TRUE at lib_LTLIBRARIES = $(LIBEVENT_LIBS_LA)
-+ @INSTALL_LIBEVENT_TRUE at pkgconfig_DATA = $(LIBEVENT_PKGCONFIG)
-+ @INSTALL_LIBEVENT_FALSE at noinst_LTLIBRARIES = $(LIBEVENT_LIBS_LA)
-+-SUBDIRS = . include sample test
-++SUBDIRS = . include sample
-+ @BUILD_WIN32_FALSE at SYS_LIBS = 
-+ @BUILD_WIN32_TRUE at SYS_LIBS = -lws2_32 -lshell32 -ladvapi32
-+ @BUILD_WIN32_FALSE at SYS_SRC = $(am__append_5) $(am__append_6) \
-+-- 
-+1.7.4.1
-+
+This ifeq isn't really needed as there's only 2 options, expat or
+libxml2.
+
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
