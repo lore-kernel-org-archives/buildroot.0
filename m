@@ -1,123 +1,48 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 2 Jul 2013 23:26:11 +0200
-Subject: [Buildroot] [git commit] jimtcl: New package
-Message-ID: <20130702213000.8D4819A08C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 02 Jul 2013 23:43:02 +0200
+Subject: [Buildroot] Beaglebone Black support
+In-Reply-To: <20130702071112.d2bed52344e1786c14494b36@lavabit.com> (rh's
+ message of "Tue, 2 Jul 2013 07:11:12 -0700")
+References: <CA+-urNQPUunJ4se0apcfimNRAK4iq1u_mLaCYRvcPJWS6Uq+HQ@mail.gmail.com>
+ <20130623161357.136be827bdb312f43bda51a6@lavabit.com>
+ <CA+-urNTKwwCtPZkWaxisFbLWiYCRJA1-5COK-rT8NW3QU+kyZw@mail.gmail.com>
+ <20130623214133.6249f43e6e2d8bda20aa971a@lavabit.com>
+ <CA+-urNTQxDOjPKMAMgTbpp_i5_oD_z0k44hVzL8gRwfz7u3B3A@mail.gmail.com>
+ <20130624124933.e7983d6a3730922581985bf4@lavabit.com>
+ <51D155A0.3010205@gmail.com> <51D26E29.6030805@mind.be>
+ <20130702093415.5db13282@skate>
+ <20130702071112.d2bed52344e1786c14494b36@lavabit.com>
+Message-ID: <87d2r0sknt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=423006bb48786aa528954e63805e6ff0b4a14799
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "rh" == rh  <richard_hubbe11@lavabit.com> writes:
 
-Add new jimtcl package - a lightweight tclsh alternative.
-Useful for a lighter footprint usb_modeswitch installation.
-tclsh size is ~700kB for ARM compared to ~200kB for jimtcl.
+ rh> On Tue, 2 Jul 2013 09:34:15 +0200
+ rh> Thomas Petazzoni <thomas.petazzoni-wi1
+ rh> +55ScJUtKEb57/3fJTNBPR1lH4CV8 at public.gmane.org> wrote:
 
-[Peter: wrap help text, fix file header]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Ezequiel Garcia <elezegarcia@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in        |    1 +
- package/jimtcl/Config.in |   10 +++++++
- package/jimtcl/jimtcl.mk |   62 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 73 insertions(+), 0 deletions(-)
+ rh> --8<--
 
-diff --git a/package/Config.in b/package/Config.in
-index 5f2d31b..575d986 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -310,6 +310,7 @@ source "package/erlang/Config.in"
- source "package/enscript/Config.in"
- source "package/haserl/Config.in"
- source "package/jamvm/Config.in"
-+source "package/jimtcl/Config.in"
- source "package/lua/Config.in"
- source "package/luajit/Config.in"
- if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT
-diff --git a/package/jimtcl/Config.in b/package/jimtcl/Config.in
-new file mode 100644
-index 0000000..1324590
---- /dev/null
-+++ b/package/jimtcl/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_JIMTCL
-+	bool "jimtcl"
-+	help
-+	  Jim Tcl is a small footprint reimplementation of the Tcl
-+	  scripting language.  The core language engine is compatible
-+	  with Tcl 8.5+, while implementing a significant subset of
-+	  the Tcl 8.6 command set, plus additional features available
-+	  only in Jim Tcl.
-+
-+	  http://jim.tcl.tk
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-new file mode 100644
-index 0000000..5c5cdb3
---- /dev/null
-+++ b/package/jimtcl/jimtcl.mk
-@@ -0,0 +1,62 @@
-+################################################################################
-+#
-+# jimtcl
-+#
-+################################################################################
-+
-+JIMTCL_VERSION = 0.73
-+JIMTCL_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/jimtcl
-+JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.bz2
-+JIMTCL_INSTALL_STAGING = YES
-+
-+JIMTCL_HEADERS_TO_INSTALL = \
-+	jim.h \
-+	jim-eventloop.h \
-+	jim-signal.h \
-+	jim-subcmd.h \
-+	jim-win32compat.h \
-+	jim-config.h \
-+
-+ifeq ($(BR2_PACKAGE_TCL),)
-+define JIMTCL_LINK_TCLSH
-+	ln -sf jimsh $(TARGET_DIR)/usr/bin/tclsh
-+endef
-+endif
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+JIMTCL_SHARED =
-+JIMTCL_LIB = a
-+JIMTCL_INSTALL_LIB =
-+else
-+JIMTCL_SHARED = --shared
-+JIMTCL_LIB = so
-+JIMTCL_INSTALL_LIB = $(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
-+		     $(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
-+endif
-+
-+define JIMTCL_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		./configure --prefix=/usr \
-+		$(JIMTCL_SHARED) \
-+	)
-+endef
-+
-+define JIMTCL_BUILD_CMDS
-+	$(MAKE) -C $(@D)
-+endef
-+
-+define JIMTCL_INSTALL_STAGING_CMDS
-+	for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
-+		cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ ; \
-+	done; \
-+	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
-+endef
-+
-+define JIMTCL_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D $(@D)/jimsh $(TARGET_DIR)/usr/bin/jimsh
-+	$(JIMTCL_INSTALL_LIB)
-+	$(JIMTCL_LINK_TCLSH)
-+endef
-+
-+$(eval $(generic-package))
+ >> To handle such a bizarre stuff, I don't see any other option that
+ >> adding a new kconfig option to specify a shell script to be executed
+ >> at "patch" time of the kernel, so that one can do whatever funky
+ >> things (s)he wants. That's ugly, but I don't see a nice and generic
+ >> way of handling such a bizarre distribution of kernel code.
+
+ rh> It's not a good situation. 3.8 kernel is EOL and it seems that TI
+ rh> has no resources to get the code upstream.
+
+Well, things are moving - Just not always as fast as you could hope. TI
+is certainly not the worst vendor, but we're not there yet for am335x.
+
+I think the best way forward in the short term would be if somebody
+would maintain a git tree containing the kernel sources and Koen's patch
+set applied on top, and once in a while sync / send a patch to buildroot
+to update the git revision the bbb config uses.
+
+-- 
+Bye, Peter Korsgaard
