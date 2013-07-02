@@ -1,22 +1,36 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 02 Jul 2013 23:00:03 +0200
-Subject: [Buildroot] [PATCH] msgpack: new package
-In-Reply-To: <1372619817-24115-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Sun, 30 Jun 2013 20:16:57 +0100")
-References: <1372619817-24115-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87txkcsmng.fsf@dell.be.48ers.dk>
+Date: Tue, 02 Jul 2013 23:04:14 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-07-01
+In-Reply-To: <20130702093852.123fdc11@skate> (Thomas Petazzoni's message of
+ "Tue, 2 Jul 2013 09:38:52 +0200")
+References: <20130702063005.2F3D352C121@lolut.humanoidz.org>
+ <20130702093852.123fdc11@skate>
+Message-ID: <87ppv0smgh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ Thomas> Peter,
+ Thomas> On Tue,  2 Jul 2013 08:30:05 +0200 (CEST), Thomas Petazzoni wrote:
 
-Committed, thanks.
+ >> Classification of failures by reason
+ >> ====================================
+ >> 
+ >> ltp-testsuite-20130109 | 8 
+
+ Thomas> Can you adjust your build script to not build ltp-testsuite when using
+ Thomas> uClibc? It is well known that our default uClibc configuration doesn't
+ Thomas> have all the necessary bits to build ltp-testsuite.
+
+Yes, I used to have that, but it must have been dropped by my recent
+cleanup / move to gcc20.
+
+Fixed now.
 
 -- 
 Bye, Peter Korsgaard
