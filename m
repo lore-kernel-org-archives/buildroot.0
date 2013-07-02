@@ -1,26 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 02 Jul 2013 13:46:36 +0200
-Subject: [Buildroot] [PATCH] gst1-plugins-bad: add missing depends on
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 2 Jul 2013 13:45:47 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-bad: add missing depends on
 	C++ for the OpenCV plugin
-In-Reply-To: <1372714474-11674-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 1 Jul 2013 23:34:34 +0200")
-References: <1372714474-11674-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <877gh9tc9v.fsf@dell.be.48ers.dk>
+Message-ID: <20130702114844.399129A02E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b767aee44395fe5dae4d0b05a67810c7cce855b5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> OpenCV requires C++ support, so we shouldn't select it without
- Thomas> depending on C++ support.
+OpenCV requires C++ support, so we shouldn't select it without
+depending on C++ support.
 
- Thomas> Fixes:
- Thomas> http://autobuild.buildroot.org/results/71f/71f2d8a267a0d159521407a9a2330e68d756c4b3/build-end.log.
+Fixes:
+http://autobuild.buildroot.org/results/71f/71f2d8a267a0d159521407a9a2330e68d756c4b3/build-end.log.
 
-Committed, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/gst1-plugins-bad/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/multimedia/gst1-plugins-bad/Config.in b/package/multimedia/gst1-plugins-bad/Config.in
+index 7eb531a..98550e0 100644
+--- a/package/multimedia/gst1-plugins-bad/Config.in
++++ b/package/multimedia/gst1-plugins-bad/Config.in
+@@ -400,10 +400,14 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NEON
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
+ 	bool "opencv"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_OPENCV
+ 	help
+ 	  GStreamer OpenCV Plugins
+ 
++comment "opencv plugin requires a toolchain with C++ support"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPUS
+ 	bool "opus"
+ 	select BR2_PACKAGE_OPUS
