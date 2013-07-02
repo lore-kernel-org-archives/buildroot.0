@@ -1,34 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Jul 2013 15:16:51 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-07-01
-In-Reply-To: <CALR4fEL=6vPWnZTxRzcY-1tmYNjkbn2K=oVauCxAee1bKhZ0eA@mail.gmail.com>
-References: <20130702063005.2F3D352C121@lolut.humanoidz.org>
- <20130702093852.123fdc11@skate>
- <CALR4fEL=6vPWnZTxRzcY-1tmYNjkbn2K=oVauCxAee1bKhZ0eA@mail.gmail.com>
-Message-ID: <20130702151651.02aeda7e@skate>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Tue, 2 Jul 2013 14:36:51 +0100
+Subject: [Buildroot] [PATCH] Makefile: Symlink lib32 to lib for
+	MIPS64/n32
+In-Reply-To: <51D26C51.8070108@mind.be>
+References: <1372675884-963-1-git-send-email-markos.chandras@gmail.com>
+ <51D26C51.8070108@mind.be>
+Message-ID: <CAG2jQ8j2iucPz356Wkz8=xSOQ=QC2u_7ebZZimRhycBGu4_nvg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Diego Iastrubni,
+Hi Arnout,
 
-On Tue, 2 Jul 2013 15:21:45 +0300, Diego Iastrubni wrote:
+On 2 July 2013 06:59, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 07/01/13 12:51, Markos Chandras wrote:
+>>
+>> From: Markos Chandras <markos.chandras@imgtec.com>
+>>
+>> gcc hardcodes the uClibc interpreter for MIPS64/n32 as follows:
+>> (gcc-4.7.3, gcc/config/mips/linux64.h):
+>> define UCLIBC_DYNAMIC_LINKERN32 "/lib32/ld-uClibc.so.0"
+>>
+>> However, buildroot always creates the $(TARGET_DIR)/lib and
+>> $(TARGET_DIR)/usr/lib directories, therefore for consinstency
+>> reasons, we create a lib32->lib symlink to fix the interpreter
+>> problems for MIPS64/n32.
+>
+>
+>  I would say we do it for all 32-bit platforms. If people feel they can't
+> afford the overhead of two additional inodes in their rootfs, they can still
+> remove the link in a post-build script.
+>
 
-> BTW, do we test that the images run? I was unable to test the default arm
-> versatile image on QEmu (qemu fails loading).
+Is this preferred?
 
-No, at this point there is no automated runtime testing of the builds.
-It would be a nice thing to have, but isn't very easy to setup. If you
-have issues, please report specific problems, as Gustavo asked.
++ifeq ($(BR2_MIPS_NABI64)$(BR2_aarch64)$(BR2_sh64)$(BR2_x86_64),)
++       ln -sfn lib $(TARGET_DIR)/lib32; \
++               ln -sfn lib $(TARGET_DIR)/usr/lib32;
++endif
 
-Thanks for your report!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+--
+Regards,
+Markos Chandras
