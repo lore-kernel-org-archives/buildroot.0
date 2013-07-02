@@ -1,46 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 2 Jul 2013 19:31:11 +0200
-Subject: [Buildroot] [PATCH] system: only set the root password if it's
- not empty
-In-Reply-To: <20130702085224.GA25620@berrier.lan>
-References: <20130702085224.GA25620@berrier.lan>
-Message-ID: <20130702173111.GA3221@free.fr>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Tue, 2 Jul 2013 18:55:38 +0100
+Subject: [Buildroot] [PATCH] Makefile: Symlink lib32 to lib for
+	MIPS64/n32
+In-Reply-To: <51D30004.7060200@mind.be>
+References: <1372675884-963-1-git-send-email-markos.chandras@gmail.com>
+ <51D26C51.8070108@mind.be>
+ <CAG2jQ8j2iucPz356Wkz8=xSOQ=QC2u_7ebZZimRhycBGu4_nvg@mail.gmail.com>
+ <51D30004.7060200@mind.be>
+Message-ID: <CAG2jQ8iqGmmMNn7v1ko7==gVxKGtjjmkrd26WD_6_K2hvk-Ukg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Wade, All,
+On 2 July 2013 17:29, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 07/02/13 15:36, Markos Chandras wrote:
 
-On 2013-07-02 02:52 -0600, Wade Berrier spake thusly:
-> No need to replace the password in etc/shadow with a blank password.
+>> Is this preferred?
+>>
+>> +ifeq ($(BR2_MIPS_NABI64)$(BR2_aarch64)$(BR2_sh64)$(BR2_x86_64),)
+>
+>
+>  I was going to say:
+>
+> ifeq ($(BR2_ARCH_IS_64),)
+>
+> but only now I realise you're talking about n32 on a 64-bit MIPS. Though I
+> must say, I don't understand why we call it BR2_ARCH_IS_64 if the ABI is 32
+> bit - or is it actually a 64-bit ABI that is just called n32 by accident?
 
-How do you differentiate between those two cases:
-  - use an empty password,
-  - do not change the existing password?
+n32 is a 64-bit ABI with 32-bit pointers (something like the new x32 for x86).
 
-My opinion is that we do want to be able to set an empty pasword,
-especially in the case of a custom skeleton. This makes it systematic,
-so the user knows what to expect.
+>
+>  I also noticed now that for lib64, we only create the symlinks if they
+> exists in the external toolchain, and we remove the lib64 directory in the
+> internal toolchain. Perhaps this can be simplified into creating the
+> lib64/lib32 links unconditionally after installing the toolchain?
 
-If you want to not use the config option to handle the root password,
-then you can use either:
-  - a post-build script, or
-  - a skeleton overlay.
+Whatever works best. I have no strong preference on this.
 
-(If I read the Makefiles correctly, skeleton overlays are handled during
-target-finalize, which is called after target-root-passwd, so the
-overlay should take precedence over the root password option. To be
-confirmed...)
+>
+>
+>
+>> +       ln -sfn lib $(TARGET_DIR)/lib32; \
+>> +               ln -sfn lib $(TARGET_DIR)/usr/lib32;
+>
+>
+>  No need for the semicolon and the backslash, this can be done as two
+> separate commands.
 
+Ok I will fix that.
+
+--
 Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Markos Chandras
