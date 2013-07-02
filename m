@@ -1,72 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 02 Jul 2013 07:59:45 +0200
-Subject: [Buildroot] [PATCH] Makefile: Symlink lib32 to lib for
-	MIPS64/n32
-In-Reply-To: <1372675884-963-1-git-send-email-markos.chandras@gmail.com>
-References: <1372675884-963-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <51D26C51.8070108@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 2 Jul 2013 09:34:15 +0200
+Subject: [Buildroot] Beaglebone Black support
+In-Reply-To: <51D26E29.6030805@mind.be>
+References: <CA+-urNQPUunJ4se0apcfimNRAK4iq1u_mLaCYRvcPJWS6Uq+HQ@mail.gmail.com>
+ <20130623161357.136be827bdb312f43bda51a6@lavabit.com>
+ <CA+-urNTKwwCtPZkWaxisFbLWiYCRJA1-5COK-rT8NW3QU+kyZw@mail.gmail.com>
+ <20130623214133.6249f43e6e2d8bda20aa971a@lavabit.com>
+ <CA+-urNTQxDOjPKMAMgTbpp_i5_oD_z0k44hVzL8gRwfz7u3B3A@mail.gmail.com>
+ <20130624124933.e7983d6a3730922581985bf4@lavabit.com>
+ <51D155A0.3010205@gmail.com> <51D26E29.6030805@mind.be>
+Message-ID: <20130702093415.5db13282@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/01/13 12:51, Markos Chandras wrote:
-> From: Markos Chandras <markos.chandras@imgtec.com>
->
-> gcc hardcodes the uClibc interpreter for MIPS64/n32 as follows:
-> (gcc-4.7.3, gcc/config/mips/linux64.h):
-> define UCLIBC_DYNAMIC_LINKERN32 "/lib32/ld-uClibc.so.0"
->
-> However, buildroot always creates the $(TARGET_DIR)/lib and
-> $(TARGET_DIR)/usr/lib directories, therefore for consinstency
-> reasons, we create a lib32->lib symlink to fix the interpreter
-> problems for MIPS64/n32.
+Dear Arnout Vandecappelle,
 
-  I would say we do it for all 32-bit platforms. If people feel they 
-can't afford the overhead of two additional inodes in their rootfs, they 
-can still remove the link in a post-build script.
+On Tue, 02 Jul 2013 08:07:37 +0200, Arnout Vandecappelle wrote:
 
->
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-> ---
->   Makefile | 6 ++++++
->   1 file changed, 6 insertions(+)
->
-> diff --git a/Makefile b/Makefile
-> index c514e4f..0059d0c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -436,6 +436,12 @@ $(BUILD_DIR)/.root:
->   		--exclude .hg --exclude=CVS --exclude '*~' \
->   		$(TARGET_SKELETON)/ $(TARGET_DIR)/
->   	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
-> +ifeq ($(BR2_MIPS_NABI32),y)
-> +	pushd $(TARGET_DIR) > /dev/null 2>&1; \
-> +		ln -sfn lib lib32; \
-> +		ln -sfn lib usr/lib32; \
+>   I guess you can download the patches as a tarball, right? Then you 
+> should just be able to use the tarball's URL in BR2_LINUX_KERNEL_PATCH 
+> and buildroot will extract them from the tarball and apply them all in 
+> directory order (or according to the series file, if present). Or does 
+> that not work for some reason?
 
-  No need for the pushd/popd; just:
+If you look at
+https://github.com/RobertCNelson/linux-dev/tree/am33x-v3.8/patches,
+you'll see that patches are organized in a set of sub-directories, and
+the patch order is defined in a shell script,
+https://github.com/RobertCNelson/linux-dev/blob/am33x-v3.8/patch.sh,
+that has to be executed over a Git kernel tree.
 
-	ln -sfn lib $(TARGET_DIR)/lib32
-	ln -sfn lib $(TARGET_DIR)/usr/lib32
+To handle such a bizarre stuff, I don't see any other option that
+adding a new kconfig option to specify a shell script to be executed at
+"patch" time of the kernel, so that one can do whatever funky things
+(s)he wants. That's ugly, but I don't see a nice and generic way of
+handling such a bizarre distribution of kernel code.
 
+Best regards,
 
-  Regards,
-  Arnout
-
-> +		popd > /dev/null 2>&1
-> +endif
->   	touch $@
->
->   $(TARGET_DIR): $(BUILD_DIR)/.root
->
-
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
