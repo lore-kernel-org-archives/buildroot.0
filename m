@@ -1,70 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 2 Jul 2013 22:38:36 +0200
-Subject: [Buildroot] [git commit] msgpack: new package
-Message-ID: <20130702210637.21E479A08C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 02 Jul 2013 23:09:30 +0200
+Subject: [Buildroot] [PATCH 1/8] lttng-tools: bump version to 2.2.0
+In-Reply-To: <1372604469-24361-1-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Sun, 30 Jun 2013 17:01:02 +0200")
+References: <1372604469-24361-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <87li5osm7p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a20fc5ae2b416067afc64ccb9b99a27266f9b13a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in          |    1 +
- package/msgpack/Config.in  |   13 +++++++++++++
- package/msgpack/msgpack.mk |   12 ++++++++++++
- 3 files changed, 26 insertions(+), 0 deletions(-)
+ Samuel> Remove lttng-tools-no-sync-file-range-in-uclibc.patch because it got
+ Samuel> merged upstream.
 
-diff --git a/package/Config.in b/package/Config.in
-index 7f5714d..5f2d31b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -623,6 +623,7 @@ source "package/log4cxx/Config.in"
- source "package/lttng-libust/Config.in"
- source "package/mpc/Config.in"
- source "package/mpfr/Config.in"
-+source "package/msgpack/Config.in"
- source "package/mtdev2tuio/Config.in"
- source "package/orc/Config.in"
- source "package/p11-kit/Config.in"
-diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
-new file mode 100644
-index 0000000..7f28eaf
---- /dev/null
-+++ b/package/msgpack/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_MSGPACK
-+	bool "msgpack"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  MessagePack is an efficient binary serialization format.
-+
-+	  It lets you exchange data among multiple languages like JSON but
-+	  it's faster and smaller.
-+
-+	  http://msgpack.org/
-+
-+comment "msgpack requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
-new file mode 100644
-index 0000000..c77729f
---- /dev/null
-+++ b/package/msgpack/msgpack.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# msgpack
-+#
-+################################################################################
-+
-+MSGPACK_VERSION = 0.5.4
-+MSGPACK_SITE = http://downloads.sourceforge.net/project/msgpack/msgpack/cpp/
-+MSGPACK_LICENSE = Apache-2.0
-+MSGPACK_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+ Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+
+ Samuel> index 77bf7d6..992ecad 100644
+ Samuel> --- a/package/lttng-tools/lttng-tools.mk
+ Samuel> +++ b/package/lttng-tools/lttng-tools.mk
+ Samuel> @@ -4,7 +4,7 @@
+ Samuel>  #
+ Samuel>  ################################################################################
+ 
+ Samuel> -LTTNG_TOOLS_VERSION = 2.1.1
+ Samuel> +LTTNG_TOOLS_VERSION = 2.2.0
+
+It seems like it has grown a libuuid dependency. Care to have a look?
+
+http://autobuild.buildroot.net/results/fa2/fa2d699901b72d36c5ac3078ef0e7bad2002b9d5/build-end.log
+
+-- 
+Bye, Peter Korsgaard
