@@ -1,57 +1,26 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Tue, 2 Jul 2013 12:04:35 +0100
-Subject: [Buildroot] [PATCH] Makefile: Symlink lib32 to lib for
-	MIPS64/n32
-In-Reply-To: <51D26C51.8070108@mind.be>
-References: <1372675884-963-1-git-send-email-markos.chandras@gmail.com>
- <51D26C51.8070108@mind.be>
-Message-ID: <CAG2jQ8irfbxmye7Kf+t=FwSrA=aOVRm6WmP627D-r9ZcQJ1uzw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 02 Jul 2013 13:46:36 +0200
+Subject: [Buildroot] [PATCH] gst1-plugins-bad: add missing depends on
+	C++ for the OpenCV plugin
+In-Reply-To: <1372714474-11674-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 1 Jul 2013 23:34:34 +0200")
+References: <1372714474-11674-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <877gh9tc9v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 2 July 2013 06:59, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 07/01/13 12:51, Markos Chandras wrote:
->>
->> From: Markos Chandras <markos.chandras@imgtec.com>
->>
->> gcc hardcodes the uClibc interpreter for MIPS64/n32 as follows:
->> (gcc-4.7.3, gcc/config/mips/linux64.h):
->> define UCLIBC_DYNAMIC_LINKERN32 "/lib32/ld-uClibc.so.0"
->>
->> However, buildroot always creates the $(TARGET_DIR)/lib and
->> $(TARGET_DIR)/usr/lib directories, therefore for consinstency
->> reasons, we create a lib32->lib symlink to fix the interpreter
->> problems for MIPS64/n32.
->
->
->  I would say we do it for all 32-bit platforms. If people feel they can't
-> afford the overhead of two additional inodes in their rootfs, they can still
-> remove the link in a post-build script.
+ Thomas> OpenCV requires C++ support, so we shouldn't select it without
+ Thomas> depending on C++ support.
 
-I wouldn't mind doing the symlink for the following architectures:
+ Thomas> Fixes:
+ Thomas> http://autobuild.buildroot.org/results/71f/71f2d8a267a0d159521407a9a2330e68d756c4b3/build-end.log.
 
-!mips64/n64 && !x86_64 && !sparc64. It's probably harmless.
-Do I forget another architecture?
+Committed, thanks.
 
->> +ifeq ($(BR2_MIPS_NABI32),y)
->> +       pushd $(TARGET_DIR) > /dev/null 2>&1; \
->> +               ln -sfn lib lib32; \
->> +               ln -sfn lib usr/lib32; \
->
->
->  No need for the pushd/popd; just:
->
->         ln -sfn lib $(TARGET_DIR)/lib32
->         ln -sfn lib $(TARGET_DIR)/usr/lib32
->
-
-Thanks. I will fix that in v2
-
---
-Regards,
-Markos Chandras
+-- 
+Bye, Peter Korsgaard
