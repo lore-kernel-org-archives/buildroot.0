@@ -1,30 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Jul 2013 15:46:48 +0200
-Subject: [Buildroot] Shutting down a websocket
-In-Reply-To: <51D2C4FC.7040307@peavey-eu.com>
-References: <51D2C4FC.7040307@peavey-eu.com>
-Message-ID: <20130702154648.08d09e31@skate>
+From: Milton Soares Filho <milton.soares.filho@gmail.com>
+Date: Tue, 2 Jul 2013 13:31:04 -0300
+Subject: [Buildroot] ldconfig - unknown machine 40
+In-Reply-To: <1372765788.4683.13.camel@dublxciaranr1.verifone.com>
+References: <loom.20130628T172450-675@post.gmane.org>
+ <CAPNngRMnWn3gAo3ut1GmoVJmCh2yiGu=2sUFWWXkTrL4M-NR6Q@mail.gmail.com>
+ <1372765788.4683.13.camel@dublxciaranr1.verifone.com>
+Message-ID: <CAPNngROZPybYo4pkY3GXFgH8yONY9bXwMU7o23hmQ39J=0BN=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Graham Newton,
+On 2 July 2013 08:49, Ciar?n Rehill <cir.vfi@gmail.com> wrote:
+> Is it normal not to supply a cross-ldconfig with a toolchain release or
+> is there a standard policy on this?
 
-On Tue, 02 Jul 2013 13:18:04 +0100, Graham Newton wrote:
+I haven't found a cross-ldconfig within both sh4 and broadcom
+toolchains which I have available.
 
-> Am I shutting down the websocket in the correct manner?
+> Is it possible to build the ldconfig from source without going through a
+> full toolchain build process, given that the majority of the components
+> already exist?
 
-Hm, am I confused. What makes you think this question is related to
-Buildroot? Don't you think it would be better to ask such a question on
-a mailing list dedicated to websocket related development?
+Oh, I've lamely tried a 'make host-ldconfig' before reasearching the issue :-P
 
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+[]s, milton
