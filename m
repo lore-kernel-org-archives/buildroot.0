@@ -1,47 +1,66 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 02 Jul 2013 08:07:37 +0200
-Subject: [Buildroot] Beaglebone Black support
-In-Reply-To: <51D155A0.3010205@gmail.com>
-References: <CA+-urNQPUunJ4se0apcfimNRAK4iq1u_mLaCYRvcPJWS6Uq+HQ@mail.gmail.com>
- <20130623161357.136be827bdb312f43bda51a6@lavabit.com>
- <CA+-urNTKwwCtPZkWaxisFbLWiYCRJA1-5COK-rT8NW3QU+kyZw@mail.gmail.com>
- <20130623214133.6249f43e6e2d8bda20aa971a@lavabit.com>
- <CA+-urNTQxDOjPKMAMgTbpp_i5_oD_z0k44hVzL8gRwfz7u3B3A@mail.gmail.com>
- <20130624124933.e7983d6a3730922581985bf4@lavabit.com>
- <51D155A0.3010205@gmail.com>
-Message-ID: <51D26E29.6030805@mind.be>
+Date: Tue, 02 Jul 2013 07:59:45 +0200
+Subject: [Buildroot] [PATCH] Makefile: Symlink lib32 to lib for
+	MIPS64/n32
+In-Reply-To: <1372675884-963-1-git-send-email-markos.chandras@gmail.com>
+References: <1372675884-963-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <51D26C51.8070108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/01/13 12:10, Zoltan Gyarmati wrote:
-> checked the linked config from fhunleth, it seems in the used kernel
-> tree (
-> http://files.troodon-software.com/br/beagleboard-kernel-b37928553c8de3598d8a259d7ce5c4be713c2908.tar.xz
-> ), the usb and the ethernet support is broken (or, as it always
-> possible, i failed something).
->   So to get a working kernel, i used the patchset from
-> https://github.com/RobertCNelson/linux-dev/tree/am33x-v3.8  ,
-> ( which patches are extracted from the Angstrom build tree ), applied
-> them manually on the mainline tree, created a tarball, and used that to
-> build with Buildroot.
-> So far everything works well (UART,USB host/gadget, ethernet, GPIO
-> tested). I wondering, would it be possible to apply those subdir-style (
-> https://github.com/RobertCNelson/linux-dev/tree/am33x-v3.8/patches  )
-> patches automatically in Buildroot on an elegant way? Or better to
-> create a git tree with applied patches somewhere online and use that in
-> Buildroot?
+On 07/01/13 12:51, Markos Chandras wrote:
+> From: Markos Chandras <markos.chandras@imgtec.com>
+>
+> gcc hardcodes the uClibc interpreter for MIPS64/n32 as follows:
+> (gcc-4.7.3, gcc/config/mips/linux64.h):
+> define UCLIBC_DYNAMIC_LINKERN32 "/lib32/ld-uClibc.so.0"
+>
+> However, buildroot always creates the $(TARGET_DIR)/lib and
+> $(TARGET_DIR)/usr/lib directories, therefore for consinstency
+> reasons, we create a lib32->lib symlink to fix the interpreter
+> problems for MIPS64/n32.
 
-  I guess you can download the patches as a tarball, right? Then you 
-should just be able to use the tarball's URL in BR2_LINUX_KERNEL_PATCH 
-and buildroot will extract them from the tarball and apply them all in 
-directory order (or according to the series file, if present). Or does 
-that not work for some reason?
+  I would say we do it for all 32-bit platforms. If people feel they 
+can't afford the overhead of two additional inodes in their rootfs, they 
+can still remove the link in a post-build script.
+
+>
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> ---
+>   Makefile | 6 ++++++
+>   1 file changed, 6 insertions(+)
+>
+> diff --git a/Makefile b/Makefile
+> index c514e4f..0059d0c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -436,6 +436,12 @@ $(BUILD_DIR)/.root:
+>   		--exclude .hg --exclude=CVS --exclude '*~' \
+>   		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+>   	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+> +ifeq ($(BR2_MIPS_NABI32),y)
+> +	pushd $(TARGET_DIR) > /dev/null 2>&1; \
+> +		ln -sfn lib lib32; \
+> +		ln -sfn lib usr/lib32; \
+
+  No need for the pushd/popd; just:
+
+	ln -sfn lib $(TARGET_DIR)/lib32
+	ln -sfn lib $(TARGET_DIR)/usr/lib32
+
 
   Regards,
   Arnout
+
+> +		popd > /dev/null 2>&1
+> +endif
+>   	touch $@
+>
+>   $(TARGET_DIR): $(BUILD_DIR)/.root
+>
 
 
 -- 
