@@ -1,86 +1,39 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Wed, 3 Jul 2013 12:00:27 +0100
-Subject: [Buildroot] [PATCH] uClibc: Add uClibc patch to fix MIPS64/n64
-	interpreter
-Message-ID: <1372849227-31525-1-git-send-email-markos.chandras@gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 3 Jul 2013 07:54:31 -0400
+Subject: [Buildroot] Beaglebone Black support
+In-Reply-To: <87d2r0sknt.fsf@dell.be.48ers.dk>
+References: <CA+-urNQPUunJ4se0apcfimNRAK4iq1u_mLaCYRvcPJWS6Uq+HQ@mail.gmail.com>
+ <20130623161357.136be827bdb312f43bda51a6@lavabit.com>
+ <CA+-urNTKwwCtPZkWaxisFbLWiYCRJA1-5COK-rT8NW3QU+kyZw@mail.gmail.com>
+ <20130623214133.6249f43e6e2d8bda20aa971a@lavabit.com>
+ <CA+-urNTQxDOjPKMAMgTbpp_i5_oD_z0k44hVzL8gRwfz7u3B3A@mail.gmail.com>
+ <20130624124933.e7983d6a3730922581985bf4@lavabit.com>
+ <51D155A0.3010205@gmail.com> <51D26E29.6030805@mind.be>
+ <20130702093415.5db13282@skate>
+ <20130702071112.d2bed52344e1786c14494b36@lavabit.com>
+ <87d2r0sknt.fsf@dell.be.48ers.dk>
+Message-ID: <CA+-urNQB5-1ZjvzV2mVdtFq2cnbb3R5r-LWLuVj0Si=LtKjOUQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Markos Chandras <markos.chandras@imgtec.com>
+On Tue, Jul 2, 2013 at 5:43 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "rh" == rh  <richard_hubbe11@lavabit.com> writes:
+>
+> I think the best way forward in the short term would be if somebody
+> would maintain a git tree containing the kernel sources and Koen's patch
+> set applied on top, and once in a while sync / send a patch to buildroot
+> to update the git revision the bbb config uses.
+>
 
-uClibc picks the wrong interpreter for MIPS64/n64.
-This patch fixes this problem by checking the selected
-MIPS ABI instead of the MIPS variant.
+FWIW, Robert Nelson (Ubuntu and Debian maintainer for Beaglebone)
+regularly posts a summarized version of Koen's patch set. Here's what
+I'm currently using for the BBB:
 
-This patch was sent upstream:
-http://lists.uclibc.org/pipermail/uclibc/2013-July/047838.html
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.13"
+BR2_LINUX_KERNEL_PATCH="http://rcn-ee.net/deb/sid-armhf/v3.8.13-bone22/patch-3.8.13-bone22.diff.gz"
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
----
- toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch | 52 ++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch
-
-diff --git a/toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch b/toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch
-new file mode 100644
-index 0000000..6eb3ab9
---- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch
-@@ -0,0 +1,52 @@
-+From b598215c00a1f9df5d47ce2a730399787351b782 Mon Sep 17 00:00:00 2001
-+From: Markos Chandras <markos.chandras@imgtec.com>
-+Date: Mon, 1 Jul 2013 09:59:40 +0100
-+Subject: [PATCH uClibc] Rules.mak: MIPS64: Select correct interpreter
-+
-+gcc (eg 4.7.3) hardcodes the MIPS64 interpreters like this:
-+(see gcc/config/linux.h and gcc/config/mips/linux64.h)
-+
-+o32: UCLIBC_DYNAMIC_LINKER "/lib/ld-uClibc.so.0"
-+n32: UCLIBC_DYNAMIC_LINKERN32 "/lib32/ld-uClibc.so.0"
-+n64: UCLIBC_DYNAMIC_LINKER64 "/lib/ld64-uClibc.so.0"
-+
-+The existing check for MIPS64 in uClibc is wrong because it does
-+not respect the selected ABI
-+
-+We fix this by explicitely checking the selected ABI instead of the
-+selected MIPS variant.
-+
-+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-+---
-+ Rules.mak | 12 ++++++++----
-+ 1 file changed, 8 insertions(+), 4 deletions(-)
-+
-+diff --git a/Rules.mak b/Rules.mak
-+index 792b794..87eb5ae 100644
-+--- a/Rules.mak
-++++ b/Rules.mak
-+@@ -138,13 +138,17 @@ export MAJOR_VERSION MINOR_VERSION SUBLEVEL VERSION ABI_VERSION LC_ALL
-+ LIBC := libc
-+ SHARED_LIBNAME := $(LIBC).so.$(ABI_VERSION)
-+ UBACKTRACE_DSO := libubacktrace.so.$(ABI_VERSION)
-+-ifneq ($(findstring  $(TARGET_ARCH) , hppa64 ia64 mips64 powerpc64 s390x sparc64 x86_64 ),)
-+-UCLIBC_LDSO_NAME := ld64-uClibc
-+-ARCH_NATIVE_BIT := 64
-+-else
-++
-+ UCLIBC_LDSO_NAME := ld-uClibc
-+ ARCH_NATIVE_BIT := 32
-++ifneq ($(findstring  $(TARGET_ARCH) , hppa64 ia64 powerpc64 s390x sparc64 x86_64 ),)
-++UCLIBC_LDSO_NAME := ld64-uClibc
-++ARCH_NATIVE_BIT := 64
-++else ifeq ($(CONFIG_MIPS_N64_ABI),y)
-++UCLIBC_LDSO_NAME := ld64-uClibc
-++ARCH_NATIVE_BIT := 64
-+ endif
-++
-+ UCLIBC_LDSO := $(UCLIBC_LDSO_NAME).so.$(ABI_VERSION)
-+ NONSHARED_LIBNAME := uclibc_nonshared.a
-+ libc := $(top_builddir)lib/$(SHARED_LIBNAME)
-+-- 
-+1.8.2.1
-+
--- 
-1.8.2.1
+It seems to work, but I haven't tested all that much yet.
