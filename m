@@ -1,12 +1,13 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 03 Jul 2013 23:51:35 +0200
-Subject: [Buildroot] [git commit] kmod: bump version
-In-Reply-To: <20130703234907.3c4c944e@skate> (Thomas Petazzoni's message of
- "Wed, 3 Jul 2013 23:49:07 +0200")
-References: <20130703194340.D760E9A19A@busybox.osuosl.org>
- <20130703232625.08b7fe54@skate> <8761wrpbrt.fsf@dell.be.48ers.dk>
- <20130703234907.3c4c944e@skate>
-Message-ID: <87bo6jnwgo.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 03 Jul 2013 23:52:51 +0200
+Subject: [Buildroot] [PATCH 14/23] gcc-initial, gcc-intermediate,
+	gcc-final: optimize extraction
+In-Reply-To: <20130703234559.663f27b0@skate> (Thomas Petazzoni's message of
+ "Wed, 3 Jul 2013 23:45:59 +0200")
+References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1372620553-11416-15-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87k3l7nwz6.fsf@dell.be.48ers.dk> <20130703234559.663f27b0@skate>
+Message-ID: <877gh7nwek.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +16,15 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ >> I added a short comment that this is purely a disk space optimization,
+ >> and committed - Thanks.
 
- Thomas> Or, as we discussed when talking about building with -fPIC: build
- Thomas> static /and/ dynamic, build dynamic only (default), build static only.
+ Thomas> Besides the disk space optimization, I am also hoping that it reduces a
+ Thomas> little bit the time to extract the tarball, but I haven't made
+ Thomas> measurements to check if it was really the case.
 
-Yes, I completely agree. I'll fix it once I'm done with your toolchain
-series.
-
-
- Thomas> Indeed. I must say I'm somewhat surprised that something relatively
- Thomas> simple like kmod doesn't support static linking.
-
-Indeed. It seems to be because of policy rather than anything technical:
-
-https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=b7016153ec8
+Yes, that as well. I just wanted to make it clear that there's no
+functional reason why we couldn't just extract it all.
 
 -- 
 Bye, Peter Korsgaard
