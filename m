@@ -1,13 +1,12 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 03 Jul 2013 23:31:57 +0200
-Subject: [Buildroot] [PATCH 08/23] kernel-headers: migrate to the
-	package infrastructure
-In-Reply-To: <20130703232405.3b60a57a@skate> (Thomas Petazzoni's message of
- "Wed, 3 Jul 2013 23:24:05 +0200")
-References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1372620553-11416-9-git-send-email-thomas.petazzoni@free-electrons.com>
- <20130703232405.3b60a57a@skate>
-Message-ID: <87ehbfpbxu.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 03 Jul 2013 23:32:53 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.0.x / 3.4.x /
+	3.9.x stable versions
+In-Reply-To: <20130703232502.2259d23a@skate> (Thomas Petazzoni's message of
+ "Wed, 3 Jul 2013 23:25:02 +0200")
+References: <20130703191057.2EF969A19A@busybox.osuosl.org>
+ <20130703232502.2259d23a@skate>
+Message-ID: <87a9m3pbwa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,13 +15,11 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- >> +config BR2_PACKAGE_HOST_LINUX_HEADERS
- >> +	bool
 
- Thomas> Now that I read this again, I'm wondering why I've added this dummy
- Thomas> hidden Config.in option. It seems useless, no?
+ Thomas> This will conflict when applying the conversion of
+ Thomas> linux-headers to the package infrastructure.
 
-Hmm, yes I think it is.
+Yeah, I fixed it up while applying.
 
 -- 
 Bye, Peter Korsgaard
