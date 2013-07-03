@@ -1,39 +1,52 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 3 Jul 2013 07:54:31 -0400
-Subject: [Buildroot] Beaglebone Black support
-In-Reply-To: <87d2r0sknt.fsf@dell.be.48ers.dk>
-References: <CA+-urNQPUunJ4se0apcfimNRAK4iq1u_mLaCYRvcPJWS6Uq+HQ@mail.gmail.com>
- <20130623161357.136be827bdb312f43bda51a6@lavabit.com>
- <CA+-urNTKwwCtPZkWaxisFbLWiYCRJA1-5COK-rT8NW3QU+kyZw@mail.gmail.com>
- <20130623214133.6249f43e6e2d8bda20aa971a@lavabit.com>
- <CA+-urNTQxDOjPKMAMgTbpp_i5_oD_z0k44hVzL8gRwfz7u3B3A@mail.gmail.com>
- <20130624124933.e7983d6a3730922581985bf4@lavabit.com>
- <51D155A0.3010205@gmail.com> <51D26E29.6030805@mind.be>
- <20130702093415.5db13282@skate>
- <20130702071112.d2bed52344e1786c14494b36@lavabit.com>
- <87d2r0sknt.fsf@dell.be.48ers.dk>
-Message-ID: <CA+-urNQB5-1ZjvzV2mVdtFq2cnbb3R5r-LWLuVj0Si=LtKjOUQ@mail.gmail.com>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Wed, 3 Jul 2013 14:06:56 +0100
+Subject: [Buildroot] [PATCH v2] Makefile: Symlink lib32 to lib for MIPS64/n32
+Message-ID: <1372856816-12493-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 2, 2013 at 5:43 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "rh" == rh  <richard_hubbe11@lavabit.com> writes:
->
-> I think the best way forward in the short term would be if somebody
-> would maintain a git tree containing the kernel sources and Koen's patch
-> set applied on top, and once in a while sync / send a patch to buildroot
-> to update the git revision the bbb config uses.
->
+From: Markos Chandras <markos.chandras@imgtec.com>
 
-FWIW, Robert Nelson (Ubuntu and Debian maintainer for Beaglebone)
-regularly posts a summarized version of Koen's patch set. Here's what
-I'm currently using for the BBB:
+gcc hardcodes the uClibc interpreter for MIPS64/n32 as follows:
+(gcc-4.7.3, gcc/config/mips/linux64.h):
+define UCLIBC_DYNAMIC_LINKERN32 "/lib32/ld-uClibc.so.0"
 
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.13"
-BR2_LINUX_KERNEL_PATCH="http://rcn-ee.net/deb/sid-armhf/v3.8.13-bone22/patch-3.8.13-bone22.diff.gz"
+However, buildroot always creates the $(TARGET_DIR)/lib,
+$(TARGET_DIR)/usr/lib, $(STAGING_DIR)/lib and
+$(STAGING_DIR)/usr/lib directories, therefore for consinstency
+reasons, we create a lib32->lib symlink to fix the interpreter
+problems for MIPS64/n32.
 
-It seems to work, but I haven't tested all that much yet.
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+Changes since v1:
+http://lists.busybox.net/pipermail/buildroot/2013-July/074586.html
+- drop pushd/popd
+- Create symlinks for the STAGING_DIR as well
+---
+ Makefile | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 509eab6..31c41e4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -436,6 +436,13 @@ $(BUILD_DIR)/.root:
+ 		--exclude .hg --exclude=CVS --exclude '*~' \
+ 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+ 	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
++ifeq ($(BR2_MIPS_NABI32),y)
++	ln -sfn lib $(TARGET_DIR)/lib32
++	ln -sfn lib $(TARGET_DIR)/usr/lib32
++	ln -sfn lib $(STAGING_DIR)/lib32
++	ln -sfn lib $(STAGING_DIR)/usr/lib32
++
++endif
+ 	touch $@
+ 
+ $(TARGET_DIR): $(BUILD_DIR)/.root
+-- 
+1.8.2.1
