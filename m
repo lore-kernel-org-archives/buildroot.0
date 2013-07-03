@@ -1,59 +1,55 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 2 Jul 2013 23:44:37 +0200
-Subject: [Buildroot] [git commit] libtpl: bump version
-Message-ID: <20130702215129.D7A099A093@busybox.osuosl.org>
+From: Wade Berrier <wberrier@gmail.com>
+Date: Tue, 2 Jul 2013 22:46:19 -0600
+Subject: [Buildroot] [PATCH] system: only set the root password if it's
+ not empty
+In-Reply-To: <20130702173111.GA3221@free.fr>
+References: <20130702085224.GA25620@berrier.lan>
+ <20130702173111.GA3221@free.fr>
+Message-ID: <20130703044618.GA4406@berrier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=751c2d20d786f5ed05a27bdfddf00473efba1fac
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Note that libtpl has moved from sourceforge to github, and there is no longer
-a version-specific tarball available.
+On Jul 02 19:31, Yann E. MORIN wrote:
+> Wade, All,
+> 
+> On 2013-07-02 02:52 -0600, Wade Berrier spake thusly:
+> > No need to replace the password in etc/shadow with a blank password.
+> 
+> How do you differentiate between those two cases:
+>   - use an empty password,
+>   - do not change the existing password?
+> 
+> My opinion is that we do want to be able to set an empty pasword,
+> especially in the case of a custom skeleton. This makes it systematic,
+> so the user knows what to expect.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libtpl/Config.in |    2 +-
- package/libtpl/libtpl.mk |   13 ++++++++++---
- 2 files changed, 11 insertions(+), 4 deletions(-)
+If that's desired, then yes, my patch isn't a good solution.
 
-diff --git a/package/libtpl/Config.in b/package/libtpl/Config.in
-index a2c2c2d..0286e03 100644
---- a/package/libtpl/Config.in
-+++ b/package/libtpl/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_LIBTPL
- 	help
- 	  Easily store and retrieve binary data in C
- 
--	  http://tpl.sourceforge.net/
-+	  http://troydhanson.github.io/tpl/
-diff --git a/package/libtpl/libtpl.mk b/package/libtpl/libtpl.mk
-index 0016c31..478b298 100644
---- a/package/libtpl/libtpl.mk
-+++ b/package/libtpl/libtpl.mk
-@@ -4,11 +4,18 @@
- #
- ################################################################################
- 
--LIBTPL_VERSION = 1.5
--LIBTPL_SOURCE = libtpl-$(LIBTPL_VERSION).tar.bz2
--LIBTPL_SITE = http://downloads.sourceforge.net/project/tpl/tpl/libtpl-$(LIBTPL_VERSION)
-+LIBTPL_VERSION = 445b4e9f236a48e274eaace31acf56d700da142a
-+LIBTPL_SITE = http://github.com/troydhanson/tpl/tarball/$(LIBTPL_VERSION)
- LIBTPL_INSTALL_STAGING = YES
- LIBTPL_LICENSE = BSD-like
- LIBTPL_LICENSE_FILES = LICENSE
- 
-+LIBTPL_AUTORECONF = YES
-+LIBTPL_AUTORECONF_OPT = --install --force
-+
-+define LIBTPL_CREATE_MISSING_FILES
-+	touch $(@D)/NEWS $(@D)/AUTHORS $(@D)/ChangeLog $(@D)/COPYING
-+endef
-+LIBTPL_POST_EXTRACT_HOOKS += LIBTPL_CREATE_MISSING_FILES
-+
- $(eval $(autotools-package))
+> 
+> If you want to not use the config option to handle the root password,
+> then you can use either:
+>   - a post-build script, or
+>   - a skeleton overlay.
+> 
+> (If I read the Makefiles correctly, skeleton overlays are handled during
+> target-finalize, which is called after target-root-passwd, so the
+> overlay should take precedence over the root password option. To be
+> confirmed...)
+
+I guess one real issue is that mkpasswd on redhat fails and returns an empty
+hash, which is inserted into the shadow file.
+
+Maybe the thing to do to work across distros would be to compile the correct
+mkpasswd as a host- package?
+
+In the meantime I think your suggestions of using a custom overlay or post build
+script should work great.
+
+Thanks,
+
+Wade
