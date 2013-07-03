@@ -1,30 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 03 Jul 2013 23:52:51 +0200
-Subject: [Buildroot] [PATCH 14/23] gcc-initial, gcc-intermediate,
-	gcc-final: optimize extraction
-In-Reply-To: <20130703234559.663f27b0@skate> (Thomas Petazzoni's message of
- "Wed, 3 Jul 2013 23:45:59 +0200")
-References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1372620553-11416-15-git-send-email-thomas.petazzoni@free-electrons.com>
- <87k3l7nwz6.fsf@dell.be.48ers.dk> <20130703234559.663f27b0@skate>
-Message-ID: <877gh7nwek.fsf@dell.be.48ers.dk>
+Date: Thu, 04 Jul 2013 00:02:54 +0200
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: add new package
+In-Reply-To: <1372452103-14337-1-git-send-email-spenser@gillilanding.com>
+ (Spenser Gilliland's message of "Fri, 28 Jun 2013 15:41:43 -0500")
+References: <1372452103-14337-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <8738rvnvxt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
 
- >> I added a short comment that this is purely a disk space optimization,
- >> and committed - Thanks.
+ Spenser> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+ Spenser> ---
 
- Thomas> Besides the disk space optimization, I am also hoping that it reduces a
- Thomas> little bit the time to extract the tarball, but I haven't made
- Thomas> measurements to check if it was really the case.
+ Spenser> This is the first patch for the TI Graphics SDK in Buildroot.
+ Spenser> Please review and try this on your own boards.
 
-Yes, that as well. I just wanted to make it clear that there's no
-functional reason why we couldn't just extract it all.
+I think this is basically good to go. Could you send a v2 taking Yann's
+comments into consideration?
+
 
 -- 
 Bye, Peter Korsgaard
