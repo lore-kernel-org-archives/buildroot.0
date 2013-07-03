@@ -1,53 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Jul 2013 23:49:07 +0200
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 03 Jul 2013 23:51:35 +0200
 Subject: [Buildroot] [git commit] kmod: bump version
-In-Reply-To: <8761wrpbrt.fsf@dell.be.48ers.dk>
+In-Reply-To: <20130703234907.3c4c944e@skate> (Thomas Petazzoni's message of
+ "Wed, 3 Jul 2013 23:49:07 +0200")
 References: <20130703194340.D760E9A19A@busybox.osuosl.org>
  <20130703232625.08b7fe54@skate> <8761wrpbrt.fsf@dell.be.48ers.dk>
-Message-ID: <20130703234907.3c4c944e@skate>
+ <20130703234907.3c4c944e@skate>
+Message-ID: <87bo6jnwgo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, 03 Jul 2013 23:35:34 +0200, Peter Korsgaard wrote:
+Hi,
 
->  Thomas> 	depends !BR2_PREFER_STATIC_LIB
-> 
->  Thomas> in the kconfig dependencies maybe?
-> 
-> We could, yes.  I'm fairly sure we have a number of other packages
-> that don't handle BR2_PREFER_STATIC_LIB though.
+ Thomas> Or, as we discussed when talking about building with -fPIC: build
+ Thomas> static /and/ dynamic, build dynamic only (default), build static only.
 
-True, but I believe those packages should either be fixed, or marked
-as depends on !BR2_PREFER_STATIC_LIB. As we have discussed a number of
-times in the past, I believe that a "prefer static libraries" option
-doesn't make much sense. Either you /want/ static libraries, or
-you /don't/ want static libraries. But a "prefer" option that doesn't
-even tell you for which libraries static linking or dynamic linking
-will be used is kinda useless. And since kconfig doesn't allow us to
-easily provide per-package options to allow the user to define on a
-per-library basis whether it should be built static or dynamic, I
-believe the only two selections that make sense are: full dynamic or
-full static.
+Yes, I completely agree. I'll fix it once I'm done with your toolchain
+series.
 
-Or, as we discussed when talking about building with -fPIC: build
-static /and/ dynamic, build dynamic only (default), build static only.
 
-> It will need to be propagated to kmods reverse dependencies (udev,
-> network-manager, udisks, ..)
+ Thomas> Indeed. I must say I'm somewhat surprised that something relatively
+ Thomas> simple like kmod doesn't support static linking.
 
-Indeed. I must say I'm somewhat surprised that something relatively
-simple like kmod doesn't support static linking.
+Indeed. It seems to be because of policy rather than anything technical:
 
-Best regards,
+https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=b7016153ec8
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
