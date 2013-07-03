@@ -1,11 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 03 Jul 2013 23:38:58 +0200
-Subject: [Buildroot] [PATCH 12/23] gcc-final: new package
-In-Reply-To: <1372620553-11416-13-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Jun 2013 21:29:02 +0200")
+Date: Wed, 03 Jul 2013 23:39:37 +0200
+Subject: [Buildroot] [PATCH 13/23] toolchain: switch to using gcc
+	through package infrastructure
+In-Reply-To: <1372620553-11416-14-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 30 Jun 2013 21:29:03 +0200")
 References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1372620553-11416-13-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87sizvnx1p.fsf@dell.be.48ers.dk>
+ <1372620553-11416-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87obajnx0m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,17 +16,8 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
  Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  package/gcc/gcc-final/gcc-final.mk | 136 +++++++++++++++++++++++++++++++++++++
- Thomas>  1 file changed, 136 insertions(+)
- Thomas>  create mode 100644 package/gcc/gcc-final/gcc-final.mk
 
- Thomas> +endif
- Thomas> +
- Thomas> +
- Thomas> +$(eval $(host-autotools-package))
-
-Stripped the extra newline and committed, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
