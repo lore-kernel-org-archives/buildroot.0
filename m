@@ -1,44 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 03 Jul 2013 22:46:06 +0200
-Subject: [Buildroot] [PATCH 08/23] kernel-headers: migrate to the
-	package infrastructure
-In-Reply-To: <1372620553-11416-9-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Jun 2013 21:28:58 +0200")
-References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1372620553-11416-9-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87vc4rpe29.fsf@dell.be.48ers.dk>
+From: Marek Belisko <marek.belisko@open-nandra.com>
+Date: Wed,  3 Jul 2013 22:51:20 +0200
+Subject: [Buildroot] [PATCH] libiqrf: Bump to v0.1.2 + update build system.
+Message-ID: <1372884680-14309-1-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+v0.1.2 update build system from autotools to cmake.
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  ...tall-fix-__packed-in-exported-kernel-head.patch |  0
- Thomas>  .../linux-headers/3.3.8/linux-fix-umode_t.patch    |  0
- Thomas>  .../linux-headers/Config.in.host                   |  5 +-
- Thomas>  package/linux-headers/linux-headers.mk             | 31 ++++++++
- Thomas>  toolchain/kernel-headers/kernel-headers.mk         | 87 ----------------------
- Thomas>  toolchain/toolchain-buildroot.mk                   |  1 -
- Thomas>  toolchain/toolchain-buildroot/Config.in            |  2 +-
- Thomas>  toolchain/toolchain-external.mk                    |  1 -
- Thomas>  toolchain/uClibc/uclibc.mk                         | 13 +---
- Thomas>  9 files changed, 38 insertions(+), 102 deletions(-)
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+---
+ package/libiqrf/libiqrf.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- Thomas> +++ b/package/linux-headers/linux-headers.mk
- Thomas> @@ -0,0 +1,31 @@
- Thomas> +#############################################################
- Thomas> +#
- Thomas> +# linux-headers
- Thomas> +#
- Thomas> +#############################################################
-
-These should be 80 chars.
-
-Committed with that fixed, thanks.
-
+diff --git a/package/libiqrf/libiqrf.mk b/package/libiqrf/libiqrf.mk
+index f2d5b4c..df4bb42 100644
+--- a/package/libiqrf/libiqrf.mk
++++ b/package/libiqrf/libiqrf.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBIQRF_VERSION = v0.1.0
++LIBIQRF_VERSION = v0.1.2
+ LIBIQRF_SITE = http://github.com/nandra/libiqrf/tarball/$(LIBIQRF_VERSION)
+ LIBIQRF_INSTALL_STAGING = YES
+ 
+ LIBIQRF_DEPENDENCIES = libusb
+ 
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
+ 
 -- 
-Bye, Peter Korsgaard
+1.8.1.2
