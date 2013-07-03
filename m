@@ -1,47 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Jul 2013 23:45:59 +0200
-Subject: [Buildroot] [PATCH 14/23] gcc-initial, gcc-intermediate,
- gcc-final: optimize extraction
-In-Reply-To: <87k3l7nwz6.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 03 Jul 2013 23:48:45 +0200
+Subject: [Buildroot] [PATCH 15/23] uclibc: convert to the package
+	infrastructure
+In-Reply-To: <1372620553-11416-16-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 30 Jun 2013 21:29:05 +0200")
 References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1372620553-11416-15-git-send-email-thomas.petazzoni@free-electrons.com>
- <87k3l7nwz6.fsf@dell.be.48ers.dk>
-Message-ID: <20130703234559.663f27b0@skate>
+ <1372620553-11416-16-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87fvvvnwle.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, 03 Jul 2013 23:40:29 +0200, Peter Korsgaard wrote:
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  package/gcc/gcc-intermediate/gcc-intermediate.mk   |   2 +-
+ Thomas>  ...__libc_epoll_pwait-compile-failure-on-x86.patch |   0
+ Thomas>  ...x-e500-__fe_nomask_env-use-of-__set_errno.patch |   0
+ Thomas>  .../0.9.32.1/uclibc-linuxthreads-errno-fix.patch   |   0
+ Thomas>  .../uclibc/0.9.32.1/uclibc-sparc-errno-fix.patch   |   0
+ Thomas>  .../uclibc/0.9.32.1/uclibc-unshare.patch           |   0
+ Thomas>  .../uclibc-OpenWRT-140-avr32_atomic_fix.patch      |   0
+ Thomas>  .../uclibc-bits-time.h-sync-with-glibc-2.16.patch  |   0
+ Thomas>  .../0.9.33.2/uclibc-define-MSG_CMSG_CLOEXEC.patch  |   0
+ Thomas>  .../uclibc/0.9.33.2/uclibc-dup3.patch              |   0
+ Thomas>  package/uclibc/Config.in                           | 166 ++++++
+ Thomas>  .../uClibc => package/uclibc}/uClibc-0.9.32.config |   0
+ Thomas>  .../uClibc => package/uclibc}/uClibc-0.9.33.config |   0
+ Thomas>  .../uclibc}/uClibc-snapshot.config                 |   0
+ Thomas>  package/uclibc/uclibc.mk                           | 484 ++++++++++++++++
+ Thomas>  toolchain/toolchain-buildroot.mk                   |   4 -
+ Thomas>  toolchain/toolchain-buildroot/Config.in            |   2 +-
+ Thomas>  toolchain/toolchain-crosstool-ng.mk                |   1 -
+ Thomas>  toolchain/toolchain-crosstool-ng/crosstool-ng.mk   |   2 +-
+ Thomas>  toolchain/toolchain-external.mk                    |   1 -
+ Thomas>  toolchain/uClibc/Config.in                         |  97 ----
+ Thomas>  toolchain/uClibc/uclibc.mk                         |
 
->  Thomas> Several sub-directories of the gcc code base are in fact not
->  Thomas> needed for the Buildroot build: libjava/, libgo/ and
->  Thomas> gcc/testsuite/ being the biggest ones. Avoiding their
->  Thomas> extraction saves quite a bit of disk space, and compensates
->  Thomas> a bit the fact that we now extract three times the gcc
->  Thomas> source code.
-> 
->  Thomas> This requires changing the 100-uclibc-conf.patch to no
->  Thomas> longer patch files from the libjava/ directory, since this
->  Thomas> directory is no longer extracted.
->  
->  Thomas>  #
->  Thomas> +# Custom extract command
->  Thomas> +#
-> 
-> I added a short comment that this is purely a disk space optimization,
-> and committed - Thanks.
+You forgot to update docs/manual/customize-uclibc-config.txt. Committed
+with that fixed, thanks.
 
-Besides the disk space optimization, I am also hoping that it reduces a
-little bit the time to extract the tarball, but I haven't made
-measurements to check if it was really the case.
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
