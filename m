@@ -1,45 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 3 Jul 2013 07:35:52 +0200
-Subject: [Buildroot] [git commit] package: allow to override the make
-	install target for host packages
-Message-ID: <20130703070347.39A93998B6@busybox.osuosl.org>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Wed, 3 Jul 2013 11:20:41 +0200
+Subject: [Buildroot] [PATCHv3 ] python3: Port python2 patches to reduce
+ the interpreter size
+In-Reply-To: <CANxTyt52OPdj0gmCZ8narNkgSpAZahnWR_-iuTHTe+nvHsjvHQ@mail.gmail.com>
+References: <1369816617-6315-1-git-send-email-maxime.ripard@free-electrons.com>
+ <87obapxr4y.fsf@dell.be.48ers.dk>
+ <CANxTyt52OPdj0gmCZ8narNkgSpAZahnWR_-iuTHTe+nvHsjvHQ@mail.gmail.com>
+Message-ID: <20130703092041.GH2969@lukather>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=598ade90a8a4eb6036499d8d81589aadd69d9f43
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Danomi,
 
-In order to convert gcc to the package infrastructure, we need a way
-of overriding the name of the make target used for the installation of
-host packages, just like we have for target packages.
+On Mon, Jul 01, 2013 at 03:29:59PM -0400, Danomi Manchego wrote:
+> I noticed that most the original python3-3.3-* patches got renamed to
+> python3-*.  But one did not, python3-3.3-012-old-stdlib-cache.patch.  This
+> feels like an oversight - was it supposed to be renamed, or deleted maybe?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/pkg-autotools.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+Yeah, sorry, I somehow forgot to rename that patch.
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index d8d7e6d..09deef2 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -76,6 +76,7 @@ $(2)_MAKE_ENV			?=
- $(2)_MAKE_OPT			?=
- $(2)_AUTORECONF			?= NO
- $(2)_AUTORECONF_OPT		?=
-+$(2)_INSTALL_OPT                ?= install
- $(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
- $(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install
- $(2)_CLEAN_OPT			?= clean
-@@ -232,7 +233,7 @@ endif
- #
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
--	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -C $$($$(PKG)_SRCDIR) install
-+	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
- 
+Do you want to do it?
+
+Maxime
+
+-- 
+Maxime Ripard, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130703/4ef63afe/attachment-0001.asc>
