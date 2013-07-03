@@ -1,32 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Jul 2013 23:24:05 +0200
-Subject: [Buildroot] [PATCH 08/23] kernel-headers: migrate to the
- package infrastructure
-In-Reply-To: <1372620553-11416-9-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1372620553-11416-9-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20130703232405.3b60a57a@skate>
+Date: Wed, 3 Jul 2013 23:25:02 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.0.x / 3.4.x /
+ 3.9.x stable versions
+In-Reply-To: <20130703191057.2EF969A19A@busybox.osuosl.org>
+References: <20130703191057.2EF969A19A@busybox.osuosl.org>
+Message-ID: <20130703232502.2259d23a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Peter Korsgaard,
 
-On Sun, 30 Jun 2013 21:28:58 +0200, Thomas Petazzoni wrote:
+On Wed, 3 Jul 2013 21:08:21 +0200, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=8a3992e897bde8649f922e2b15ca5225490e1166
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+>  toolchain/kernel-headers/Config.in                 |    6 +++---
+>  ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-> --- a/toolchain/kernel-headers/Config.in
-> +++ b/package/linux-headers/Config.in.host
-> @@ -1,6 +1,5 @@
-> -# Choose the kernel headers to use for kernel-headers target. This is
-> -# ignored if you are building your own kernel or using the system kernel.
-> -#
-> +config BR2_PACKAGE_HOST_LINUX_HEADERS
-> +	bool
-
-Now that I read this again, I'm wondering why I've added this dummy
-hidden Config.in option. It seems useless, no?
+This will conflict when applying the conversion of linux-headers to the
+package infrastructure.
 
 Thomas
 -- 
