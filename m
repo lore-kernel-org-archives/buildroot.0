@@ -1,269 +1,323 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 3 Jul 2013 22:45:14 +0200
-Subject: [Buildroot] [git commit] kernel-headers: migrate to the package
-	infrastructure
-Message-ID: <20130704095649.7BB8F9A29F@busybox.osuosl.org>
+Date: Wed, 3 Jul 2013 22:58:27 +0200
+Subject: [Buildroot] [git commit] gcc: common definitions
+Message-ID: <20130704095649.AD5849A29F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f240d984b721c104fec6aee5710277c6955206b
+commit: http://git.buildroot.net/buildroot/commit/?id=f198318fa564bead33bb0e389ddae1f5cbec0b6c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: fix file header]
+[Peter: tweak file header]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...tall-fix-__packed-in-exported-kernel-head.patch |    0
- .../linux-headers/3.3.8/linux-fix-umode_t.patch    |    0
- .../linux-headers/Config.in.host                   |    5 +-
- package/linux-headers/linux-headers.mk             |   31 +++++++
- toolchain/kernel-headers/kernel-headers.mk         |   87 --------------------
- toolchain/toolchain-buildroot.mk                   |    1 -
- toolchain/toolchain-buildroot/Config.in            |    2 +-
- toolchain/toolchain-external.mk                    |    1 -
- toolchain/uClibc/uclibc.mk                         |   13 +--
- 9 files changed, 38 insertions(+), 102 deletions(-)
+ package/gcc/Config.in.host |  128 ++++++++++++++++++++++++++++++++++
+ package/gcc/gcc.mk         |  162 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 290 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/kernel-headers/linux-3.0.85-headers_install-fix-__packed-in-exported-kernel-head.patch b/package/linux-headers/3.0.85/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.85-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to package/linux-headers/3.0.85/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
-diff --git a/toolchain/kernel-headers/linux-3.3.8-fix-umode_t.patch b/package/linux-headers/3.3.8/linux-fix-umode_t.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.3.8-fix-umode_t.patch
-rename to package/linux-headers/3.3.8/linux-fix-umode_t.patch
-diff --git a/toolchain/kernel-headers/Config.in b/package/linux-headers/Config.in.host
-similarity index 94%
-rename from toolchain/kernel-headers/Config.in
-rename to package/linux-headers/Config.in.host
-index b10900f..4955524 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/package/linux-headers/Config.in.host
-@@ -1,6 +1,5 @@
--# Choose the kernel headers to use for kernel-headers target. This is
--# ignored if you are building your own kernel or using the system kernel.
--#
-+config BR2_PACKAGE_HOST_LINUX_HEADERS
-+	bool
- 
- comment "Kernel Header Options"
- 
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
 new file mode 100644
-index 0000000..9d7a683
+index 0000000..7ecf2fb
 --- /dev/null
-+++ b/package/linux-headers/linux-headers.mk
-@@ -0,0 +1,31 @@
++++ b/package/gcc/Config.in.host
+@@ -0,0 +1,128 @@
++comment "GCC Options"
++
++config BR2_GCC_NEEDS_MPC
++	bool
++
++choice
++	prompt "GCC compiler Version"
++	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
++	default BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 if BR2_avr3
++	default BR2_GCC_VERSION_4_4_7_ARC if BR2_arc
++	default BR2_GCC_VERSION_4_7_X
++	help
++	  Select the version of gcc you wish to use.
++
++	config BR2_GCC_VERSION_4_4_7_ARC
++		depends on BR2_arc
++		bool "gcc 4.4.7-arc"
++
++	config BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
++		depends on BR2_avr32
++		bool "gcc 4.2.2-avr32-2.1.5"
++
++	config BR2_GCC_VERSION_4_3_X
++		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
++		bool "gcc 4.3.x"
++
++	config BR2_GCC_VERSION_4_4_X
++		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
++		bool "gcc 4.4.x"
++
++	config BR2_GCC_VERSION_4_5_X
++		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
++		select BR2_GCC_NEEDS_MPC
++		bool "gcc 4.5.x"
++
++	config BR2_GCC_VERSION_4_6_X
++		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
++		select BR2_GCC_NEEDS_MPC
++		bool "gcc 4.6.x"
++
++	config BR2_GCC_VERSION_4_7_X
++		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
++		select BR2_GCC_NEEDS_MPC
++		bool "gcc 4.7.x"
++
++	config BR2_GCC_VERSION_4_8_X
++		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		select BR2_GCC_NEEDS_MPC
++		bool "gcc 4.8.x"
++
++	config BR2_GCC_VERSION_SNAP
++		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		select BR2_GCC_NEEDS_MPC
++		bool "gcc snapshot"
++endchoice
++
++config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
++	bool
++	default y if !BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
++
++config BR2_GCC_SNAP_DATE
++	string "GCC snapshot date"
++	default "4.8-20120429"
++	depends on BR2_GCC_VERSION_SNAP
++	help
++	  Enter snapshot date to use for gcc.
++	  Format is: A.B-YYYYMMDD
++
++	  A is GCC major version, for example 4.
++	  B is GCC minor version, for example 7.
++	  YYYYMMDD is snapshot date, for example 20110430.
++
++	  This way we'd get version 4.7-20110430
++
++config BR2_GCC_VERSION
++	string
++	default "4.2.2-avr32-2.1.5" if BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
++	default "4.3.6"     if BR2_GCC_VERSION_4_3_X
++	default "4.4.7"     if BR2_GCC_VERSION_4_4_X
++	default "4.4.7-arc" if BR2_GCC_VERSION_4_4_7_ARC
++	default "4.5.4"     if BR2_GCC_VERSION_4_5_X
++	default "4.6.4"     if BR2_GCC_VERSION_4_6_X
++	default "4.7.3"     if BR2_GCC_VERSION_4_7_X
++	default "4.8.1"     if BR2_GCC_VERSION_4_8_X
++	default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
++
++config BR2_EXTRA_GCC_CONFIG_OPTIONS
++	string "Additional gcc options"
++	default ""
++	help
++	  Any additional gcc configure options you may want to include....
++
++config BR2_INSTALL_OBJC
++	bool "Build/install Objective-C compiler and runtime?"
++	depends on !BR2_avr32
++	help
++	  Build/install Objective-C compiler and runtime?
++
++config BR2_INSTALL_FORTRAN
++	bool "Build/install Fortran compiler and runtime?"
++	depends on !BR2_avr32
++	select BR2_PACKAGE_LIBMPFR
++	help
++	  Build/install Fortran compiler and runtime?
++	  Note that it is highly recommended NOT to use gfortran
++	  from gcc older than 4.2.0
++
++config BR2_GCC_SHARED_LIBGCC
++	bool "Build/install a shared libgcc?"
++	depends on !BR2_PREFER_STATIC_LIB
++	default y
++	depends on !BR2_sparc
++	help
++	  Build/install a shared libgcc library
++
++config BR2_GCC_ENABLE_TLS
++	bool "Enable compiler tls support"
++	default y
++	depends on BR2_PTHREADS_NATIVE
++	help
++	  Enable the compiler to generate code for accessing
++	  thread local storage variables
++
++config BR2_GCC_ENABLE_OPENMP
++	bool "Enable compiler OpenMP support"
++	depends on !BR2_PTHREADS_NONE && !BR2_avr32 && !BR2_arc
++	help
++	  Enable OpenMP support for the compiler
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+new file mode 100644
+index 0000000..3b61ffd
+--- /dev/null
++++ b/package/gcc/gcc.mk
+@@ -0,0 +1,162 @@
 +################################################################################
 +#
-+# linux-headers
++# Common variables for the gcc-initial, gcc-intermediate and gcc-final
++# packages.
 +#
 +################################################################################
 +
-+# This package is used to provide Linux kernel headers for the
-+# internal toolchain backend.
++#
++# Version, site and source
++#
 +
-+LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
-+ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
-+LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
-+else
-+LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x/
++GCC_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
++
++ifeq ($(BR2_GCC_VERSION_SNAP),y)
++GCC_SNAP_DATE = $(call qstrip,$(BR2_GCC_SNAP_DATE))
 +endif
-+LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.bz2
 +
-+LINUX_HEADERS_INSTALL_STAGING = YES
++ifneq ($(GCC_SNAP_DATE),)
++GCC_SITE = ftp://gcc.gnu.org/pub/gcc/snapshots/$(GCC_SNAP_DATE)/
++else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
++GCC_SITE = ftp://www.at91.com/pub/buildroot/
++else
++GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
++endif
 +
-+define LINUX_HEADERS_INSTALL_STAGING_CMDS
-+	(cd $(@D); \
-+		$(TARGET_MAKE_ENV) $(MAKE) \
-+			ARCH=$(KERNEL_ARCH) \
-+			HOSTCC="$(HOSTCC)" \
-+			HOSTCFLAGS="$(HOSTCFLAGS)" \
-+			HOSTCXX="$(HOSTCXX)" \
-+			INSTALL_HDR_PATH=$(STAGING_DIR)/usr \
-+			headers_install)
++GCC_SOURCE = gcc-$(GCC_VERSION).tar.bz2
++
++#
++# Xtensa special hook
++#
++
++define HOST_GCC_XTENSA_OVERLAY_EXTRACT
++        tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip,\
++                $(BR2_XTENSA_CORE_NAME)).tar -C $(@D) --strip-components=1 gcc
 +endef
 +
-+$(eval $(generic-package))
-diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
-deleted file mode 100644
-index a04395b..0000000
---- a/toolchain/kernel-headers/kernel-headers.mk
-+++ /dev/null
-@@ -1,87 +0,0 @@
--################################################################################
--#
--# Setup the kernel headers. I include a generic package of
--# kernel headers here, so you shouldn't need to include your
--# own. Be aware these kernel headers _will_ get blown away
--# by a 'make clean' so don't put anything sacred in here...
--#
--################################################################################
--
--DEFAULT_KERNEL_HEADERS:=$(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
--
--LINUX_HEADERS_SITE:=127.0.0.1
--LINUX_HEADERS_SOURCE:=unspecified-kernel-headers
--LINUX_HEADERS_UNPACK_DIR:=$(TOOLCHAIN_DIR)/linux-libc-headers-null
--
--# parse linux version string
--LNXVER:=$(subst ., , $(strip $(DEFAULT_KERNEL_HEADERS)))
--VERSION:=$(word 1, $(LNXVER))
--PATCHLEVEL:=$(word 2, $(LNXVER))
--SUBLEVEL:=$(word 3, $(LNXVER))
--EXTRAVERSION:=$(word 4, $(LNXVER))
--LOCALVERSION:=
--
--# should contain prepended dot
--SUBLEVEL:=$(if $(SUBLEVEL),.$(SUBLEVEL),)
--EXTRAVERSION:=$(if $(EXTRAVERSION),.$(EXTRAVERSION),)
--
--LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL)$(SUBLEVEL)$(EXTRAVERSION)
--ifeq ($(findstring x2.6.,x$(DEFAULT_KERNEL_HEADERS)),x2.6.)
--LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v2.6/
--else
--LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR:/=)/linux/kernel/v3.x/
--endif
--LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.xz
--LINUX_HEADERS_CAT:=$(XZCAT)
--LINUX_HEADERS_UNPACK_DIR:=$(TOOLCHAIN_DIR)/linux-$(LINUX_HEADERS_VERSION)
--LINUX_HEADERS_DIR:=$(TOOLCHAIN_DIR)/linux
--
--LINUX_HEADERS_DEPENDS:=
--
--$(LINUX_HEADERS_UNPACK_DIR)/.unpacked: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
--	$(Q)$(call MESSAGE,"Extracting kernel headers")
--	rm -rf $(LINUX_HEADERS_DIR)
--	$(INSTALL) -d $(@D)
--	$(LINUX_HEADERS_CAT) $(DL_DIR)/$(LINUX_HEADERS_SOURCE) | \
--	tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
--	touch $@
--
--$(LINUX_HEADERS_UNPACK_DIR)/.patched: $(LINUX_HEADERS_UNPACK_DIR)/.unpacked $(LINUX_HEADERS_DEPENDS)
--	$(Q)$(call MESSAGE,"Patching kernel headers")
--	support/scripts/apply-patches.sh $(LINUX_HEADERS_UNPACK_DIR) toolchain/kernel-headers \
--		linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
--ifneq ($(KERNEL_HEADERS_PATCH_DIR),)
--	support/scripts/apply-patches.sh $(LINUX_HEADERS_UNPACK_DIR) $(KERNEL_HEADERS_PATCH_DIR) \
--		linux-$(LINUX_HEADERS_VERSION)-\*.patch{,.gz,.bz2}
--endif
--	touch $@
--
--$(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
--	$(Q)$(call MESSAGE,"Installing kernel headers")
--	(cd $(LINUX_HEADERS_UNPACK_DIR); \
--	 $(MAKE) ARCH=$(KERNEL_ARCH) \
--		HOSTCC="$(HOSTCC)" HOSTCFLAGS="$(HOSTCFLAGS)" \
--		HOSTCXX="$(HOSTCXX)" \
--		INSTALL_HDR_PATH=$(LINUX_HEADERS_DIR) headers_install; \
--	)
--	touch $@
--
--$(DL_DIR)/$(LINUX_HEADERS_SOURCE):
--ifeq ($(BR2_KERNEL_HEADERS_SNAP),y)
--	$(error No local $@ found, cannot continue. Are you sure you wanted to enable BR2_KERNEL_HEADERS_SNAP?)
--endif
--	$(Q)$(call MESSAGE,"Downloading kernel headers")
--	$(call DOWNLOAD,$(LINUX_HEADERS_SITE:/=)/$(LINUX_HEADERS_SOURCE))
--
--kernel-headers: $(LINUX_HEADERS_DIR)/.configured
--
--kernel-headers-source: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
--
--kernel-headers-clean: clean
--	rm -rf $(LINUX_HEADERS_DIR)
--
--kernel-headers-dirclean:
--	rm -rf $(LINUX_HEADERS_DIR)
--	rm -rf $(LINUX_HEADERS_UNPACK_DIR)
--
--.PHONY: kernel-headers
-diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
-index 5b89d56..a8dd58b 100644
---- a/toolchain/toolchain-buildroot.mk
-+++ b/toolchain/toolchain-buildroot.mk
-@@ -1,5 +1,4 @@
- # Include files required for the internal toolchain backend
- 
- include toolchain/gcc/gcc-uclibc-4.x.mk
--include toolchain/kernel-headers/kernel-headers.mk
- include toolchain/uClibc/uclibc.mk
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 3894890..3d70fa1 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -1,7 +1,7 @@
- # Config entries for internal toolchain backend
- 
- if BR2_TOOLCHAIN_BUILDROOT
--source "toolchain/kernel-headers/Config.in"
-+source "package/linux-headers/Config.in.host"
- source "toolchain/uClibc/Config.in"
- source "package/binutils/Config.in.host"
- source "toolchain/gcc/Config.in"
-diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
-index 2aa0141..40fc633 100644
---- a/toolchain/toolchain-external.mk
-+++ b/toolchain/toolchain-external.mk
-@@ -2,6 +2,5 @@
- 
- include toolchain/helpers.mk
- include toolchain/gcc/gcc-uclibc-4.x.mk
--include toolchain/kernel-headers/kernel-headers.mk
- include toolchain/toolchain-external/ext-tool.mk
- include toolchain/uClibc/uclibc.mk
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index f042c63..e06fafc 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -98,7 +98,7 @@ $(UCLIBC_DIR)/.oldconfig: $(UCLIBC_DIR)/.patched $(UCLIBC_CONFIG_FILE)
- 	$(SED) 's,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="$(TARGET_CROSS)",g' \
- 		-e 's,# TARGET_$(UCLIBC_TARGET_ARCH) is not set,TARGET_$(UCLIBC_TARGET_ARCH)=y,g' \
- 		-e 's,^TARGET_ARCH=".*",TARGET_ARCH=\"$(UCLIBC_TARGET_ARCH)\",g' \
--		-e 's,^KERNEL_HEADERS=.*,KERNEL_HEADERS=\"$(LINUX_HEADERS_DIR)/include\",g' \
-+		-e 's,^KERNEL_HEADERS=.*,KERNEL_HEADERS=\"$(STAGING_DIR)/usr/include\",g' \
- 		-e 's,^RUNTIME_PREFIX=.*,RUNTIME_PREFIX=\"/\",g' \
- 		-e 's,^DEVEL_PREFIX=.*,DEVEL_PREFIX=\"/usr/\",g' \
- 		-e 's,^SHARED_LIB_LOADER_PREFIX=.*,SHARED_LIB_LOADER_PREFIX=\"/lib\",g' \
-@@ -426,7 +426,7 @@ ifeq ($(BR2_arc),y)
- REALLY_NOSTDLIB=-really-nostdlib
- endif
- 
--$(UCLIBC_DIR)/.configured: $(LINUX_HEADERS_DIR)/.configured $(UCLIBC_DIR)/.config
-+$(UCLIBC_DIR)/.configured: $(UCLIBC_DIR)/.config
- 	$(Q)$(call MESSAGE,"Installing uClibc headers")
- 	$(MAKE1) -C $(UCLIBC_DIR) \
- 		ARCH="$(UCLIBC_TARGET_ARCH)" \
-@@ -441,7 +441,7 @@ $(UCLIBC_DIR)/.configured: $(LINUX_HEADERS_DIR)/.configured $(UCLIBC_DIR)/.confi
- 	# Install the kernel headers to the first stage gcc include dir
- 	# if necessary
- 	if [ ! -f $(TOOLCHAIN_DIR)/uClibc_dev/usr/include/linux/version.h ]; then \
--		cp -pLR $(LINUX_HEADERS_DIR)/include/* \
-+		cp -pLR $(STAGING_DIR)/usr/include/* \
- 			$(TOOLCHAIN_DIR)/uClibc_dev/usr/include/; \
- 	fi
- 	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) -nostartfiles -shared -x c /dev/null -o $(TOOLCHAIN_DIR)/uClibc_dev/usr/lib/libc.so
-@@ -485,11 +485,6 @@ $(STAGING_DIR)/usr/lib/libc.a: $(UCLIBC_DIR)/lib/libc.a
- 		CROSS_COMPILE="$(TARGET_CROSS)" \
- 		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
- 		install_runtime install_dev
--	# Install the kernel headers to the staging dir if necessary
--	if [ ! -f $(STAGING_DIR)/usr/include/linux/version.h ]; then \
--		cp -pLR $(LINUX_HEADERS_DIR)/include/* \
--			$(STAGING_DIR)/usr/include/; \
--	fi
- 	# Build the host utils. Need to add an install target...
- 	$(MAKE1) -C $(UCLIBC_DIR)/utils \
- 		PREFIX=$(HOST_DIR) \
-@@ -548,7 +543,7 @@ uclibc-oldconfig: $(UCLIBC_DIR)/.oldconfig
- uclibc-update-config: uclibc-config
- 	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
- 
--uclibc-configured: gcc_initial kernel-headers $(UCLIBC_DIR)/.configured
-+uclibc-configured: gcc_initial linux-headers $(UCLIBC_DIR)/.configured
- 
- uclibc-configured-source: uclibc-source
- 
++#
++# Apply patches
++#
++
++define HOST_GCC_APPLY_PATCHES
++	support/scripts/apply-patches.sh $(@D) package/gcc/$(GCC_VERSION) \*.patch
++endef
++
++#
++# Create 'build' directory and configure symlink
++#
++
++define HOST_GCC_CONFIGURE_SYMLINK
++	mkdir -p $(@D)/build
++	ln -s ../configure $(@D)/build/configure
++endef
++
++#
++# Common configuration options
++#
++
++HOST_GCC_COMMON_DEPENDENCIES = \
++	host-binutils \
++	host-gmp \
++	host-mpfr
++
++HOST_GCC_COMMON_CONF_OPT = \
++	--target=$(GNU_TARGET_NAME) \
++	--with-sysroot=$(STAGING_DIR) \
++	--disable-__cxa_atexit \
++	--with-gnu-ld \
++	--disable-libssp \
++	--disable-multilib \
++	--with-gmp=$(HOST_DIR)/usr \
++	--with-mpfr=$(HOST_DIR)/usr \
++
++# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
++# Workaround until it's fixed in 4.5.4 or later
++ifeq ($(ARCH),powerpc)
++ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
++HOST_GCC_COMMON_CONF_OPT += --disable-target-optspace
++endif
++else
++HOST_GCC_COMMON_CONF_OPT += --enable-target-optspace
++endif
++
++# gcc 4.6.x quadmath requires wchar
++ifneq ($(BR2_TOOLCHAIN_BUILDROOT_WCHAR),y)
++HOST_GCC_COMMON_CONF_OPT += --disable-libquadmath
++endif
++
++ifeq ($(BR2_GCC_ENABLE_TLS),y)
++HOST_GCC_COMMON_CONF_OPT += --enable-tls
++else
++HOST_GCC_COMMON_CONF_OPT += --disable-tls
++endif
++
++ifeq ($(BR2_PTHREADS_NONE),y)
++HOST_GCC_COMMON_CONF_OPT += \
++	--disable-threads \
++	--disable-libitm \
++	--disable-libatomic
++else
++HOST_GCC_COMMON_CONF_OPT += --enable-threads
++endif
++
++ifeq ($(BR2_GCC_NEEDS_MPC),y)
++HOST_GCC_COMMON_DEPENDENCIES += host-mpc
++HOST_GCC_COMMON_CONF_OPT += --with-mpc=$(HOST_DIR)/usr
++endif
++
++ifeq ($(BR2_GCC_VERSION_4_4_7_ARC),y)
++HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
++endif
++
++ifeq ($(BR2_SOFT_FLOAT),y)
++# only mips*-*-*, arm*-*-* and sparc*-*-* accept --with-float
++# powerpc seems to be needing it as well
++ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),y)
++HOST_GCC_COMMON_CONF_OPT += --with-float=soft
++endif
++endif
++
++ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
++HOST_GCC_COMMON_CONF_OPT += --disable-decimal-float
++endif
++
++# Determine arch/tune/abi/cpu options
++ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
++HOST_GCC_COMMON_CONF_OPT += --with-arch=$(BR2_GCC_TARGET_ARCH)
++endif
++ifneq ($(call qstrip,$(BR2_GCC_TARGET_TUNE)),)
++HOST_GCC_COMMON_CONF_OPT += --with-tune=$(BR2_GCC_TARGET_TUNE)
++endif
++ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
++HOST_GCC_COMMON_CONF_OPT += --with-abi=$(BR2_GCC_TARGET_ABI)
++endif
++ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
++ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
++HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
++else
++HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
++endif
++endif
++
++# Branding works on >= 4.3
++ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
++HOST_GCC_COMMON_CONF_OPT += \
++	--with-pkgversion="Buildroot $(BR2_VERSION_FULL)" \
++	--with-bugurl="http://bugs.buildroot.net/"
++endif
++
++# AVR32 GCC special configuration
++ifeq ($(BR2_avr32),y)
++HOST_GCC_COMMON_CONF_OPT += --disable-libmudflap
++endif
++
++# Disable mudflap and enable proper double/long double for SPE ABI
++ifeq ($(BR2_powerpc_SPE),y)
++HOST_GCC_COMMON_CONF_OPT += \
++	--disable-libmudflap \
++	--enable-e500_double \
++	--with-long-double-128
++endif
++
++include package/gcc/*/*.mk
