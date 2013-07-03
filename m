@@ -1,39 +1,86 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 3 Jul 2013 11:20:41 +0200
-Subject: [Buildroot] [PATCHv3 ] python3: Port python2 patches to reduce
- the interpreter size
-In-Reply-To: <CANxTyt52OPdj0gmCZ8narNkgSpAZahnWR_-iuTHTe+nvHsjvHQ@mail.gmail.com>
-References: <1369816617-6315-1-git-send-email-maxime.ripard@free-electrons.com>
- <87obapxr4y.fsf@dell.be.48ers.dk>
- <CANxTyt52OPdj0gmCZ8narNkgSpAZahnWR_-iuTHTe+nvHsjvHQ@mail.gmail.com>
-Message-ID: <20130703092041.GH2969@lukather>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Wed, 3 Jul 2013 12:00:27 +0100
+Subject: [Buildroot] [PATCH] uClibc: Add uClibc patch to fix MIPS64/n64
+	interpreter
+Message-ID: <1372849227-31525-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Danomi,
+From: Markos Chandras <markos.chandras@imgtec.com>
 
-On Mon, Jul 01, 2013 at 03:29:59PM -0400, Danomi Manchego wrote:
-> I noticed that most the original python3-3.3-* patches got renamed to
-> python3-*.  But one did not, python3-3.3-012-old-stdlib-cache.patch.  This
-> feels like an oversight - was it supposed to be renamed, or deleted maybe?
+uClibc picks the wrong interpreter for MIPS64/n64.
+This patch fixes this problem by checking the selected
+MIPS ABI instead of the MIPS variant.
 
-Yeah, sorry, I somehow forgot to rename that patch.
+This patch was sent upstream:
+http://lists.uclibc.org/pipermail/uclibc/2013-July/047838.html
 
-Do you want to do it?
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch | 52 ++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch
 
-Maxime
-
+diff --git a/toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch b/toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch
+new file mode 100644
+index 0000000..6eb3ab9
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch
+@@ -0,0 +1,52 @@
++From b598215c00a1f9df5d47ce2a730399787351b782 Mon Sep 17 00:00:00 2001
++From: Markos Chandras <markos.chandras@imgtec.com>
++Date: Mon, 1 Jul 2013 09:59:40 +0100
++Subject: [PATCH uClibc] Rules.mak: MIPS64: Select correct interpreter
++
++gcc (eg 4.7.3) hardcodes the MIPS64 interpreters like this:
++(see gcc/config/linux.h and gcc/config/mips/linux64.h)
++
++o32: UCLIBC_DYNAMIC_LINKER "/lib/ld-uClibc.so.0"
++n32: UCLIBC_DYNAMIC_LINKERN32 "/lib32/ld-uClibc.so.0"
++n64: UCLIBC_DYNAMIC_LINKER64 "/lib/ld64-uClibc.so.0"
++
++The existing check for MIPS64 in uClibc is wrong because it does
++not respect the selected ABI
++
++We fix this by explicitely checking the selected ABI instead of the
++selected MIPS variant.
++
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++---
++ Rules.mak | 12 ++++++++----
++ 1 file changed, 8 insertions(+), 4 deletions(-)
++
++diff --git a/Rules.mak b/Rules.mak
++index 792b794..87eb5ae 100644
++--- a/Rules.mak
+++++ b/Rules.mak
++@@ -138,13 +138,17 @@ export MAJOR_VERSION MINOR_VERSION SUBLEVEL VERSION ABI_VERSION LC_ALL
++ LIBC := libc
++ SHARED_LIBNAME := $(LIBC).so.$(ABI_VERSION)
++ UBACKTRACE_DSO := libubacktrace.so.$(ABI_VERSION)
++-ifneq ($(findstring  $(TARGET_ARCH) , hppa64 ia64 mips64 powerpc64 s390x sparc64 x86_64 ),)
++-UCLIBC_LDSO_NAME := ld64-uClibc
++-ARCH_NATIVE_BIT := 64
++-else
+++
++ UCLIBC_LDSO_NAME := ld-uClibc
++ ARCH_NATIVE_BIT := 32
+++ifneq ($(findstring  $(TARGET_ARCH) , hppa64 ia64 powerpc64 s390x sparc64 x86_64 ),)
+++UCLIBC_LDSO_NAME := ld64-uClibc
+++ARCH_NATIVE_BIT := 64
+++else ifeq ($(CONFIG_MIPS_N64_ABI),y)
+++UCLIBC_LDSO_NAME := ld64-uClibc
+++ARCH_NATIVE_BIT := 64
++ endif
+++
++ UCLIBC_LDSO := $(UCLIBC_LDSO_NAME).so.$(ABI_VERSION)
++ NONSHARED_LIBNAME := uclibc_nonshared.a
++ libc := $(top_builddir)lib/$(SHARED_LIBNAME)
++-- 
++1.8.2.1
++
 -- 
-Maxime Ripard, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130703/4ef63afe/attachment-0001.asc>
+1.8.2.1
