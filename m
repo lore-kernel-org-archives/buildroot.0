@@ -1,37 +1,34 @@
-From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Wed,  3 Jul 2013 22:51:20 +0200
-Subject: [Buildroot] [PATCH] libiqrf: Bump to v0.1.2 + update build system.
-Message-ID: <1372884680-14309-1-git-send-email-marek.belisko@open-nandra.com>
+From: Wade Berrier <wberrier@gmail.com>
+Date: Wed, 3 Jul 2013 14:57:35 -0600
+Subject: [Buildroot] [PATCH] tar: avoid ccache chicken and egg problem when
+ bootstrapping tar
+Message-ID: <20130703205733.GA11235@berrier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-v0.1.2 update build system from autotools to cmake.
-
-Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+Signed-off-by: Wade Berrier <wberrier@gmail.com>
 ---
- package/libiqrf/libiqrf.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/tar/tar.mk |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libiqrf/libiqrf.mk b/package/libiqrf/libiqrf.mk
-index f2d5b4c..df4bb42 100644
---- a/package/libiqrf/libiqrf.mk
-+++ b/package/libiqrf/libiqrf.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--LIBIQRF_VERSION = v0.1.0
-+LIBIQRF_VERSION = v0.1.2
- LIBIQRF_SITE = http://github.com/nandra/libiqrf/tarball/$(LIBIQRF_VERSION)
- LIBIQRF_INSTALL_STAGING = YES
- 
- LIBIQRF_DEPENDENCIES = libusb
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
- 
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 3ffeaf0..56443a8 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -20,6 +20,11 @@ $(eval $(autotools-package))
+ # host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
+ # of needing tar to build tar.
+ HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
++
++# ccache isn't available yet when building for the host
++HOST_TAR_CONF_ENV = \
++	CC="$(HOSTCC_NOCCACHE)"
++
+ define HOST_TAR_EXTRACT_CMDS
+ 	mkdir -p $(@D)
+ 	cd $(@D) && \
 -- 
-1.8.1.2
+1.7.9.5
