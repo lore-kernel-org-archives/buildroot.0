@@ -1,47 +1,53 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 03 Jul 2013 23:48:45 +0200
-Subject: [Buildroot] [PATCH 15/23] uclibc: convert to the package
-	infrastructure
-In-Reply-To: <1372620553-11416-16-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Jun 2013 21:29:05 +0200")
-References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1372620553-11416-16-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87fvvvnwle.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 3 Jul 2013 23:49:07 +0200
+Subject: [Buildroot] [git commit] kmod: bump version
+In-Reply-To: <8761wrpbrt.fsf@dell.be.48ers.dk>
+References: <20130703194340.D760E9A19A@busybox.osuosl.org>
+ <20130703232625.08b7fe54@skate> <8761wrpbrt.fsf@dell.be.48ers.dk>
+Message-ID: <20130703234907.3c4c944e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Peter Korsgaard,
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  package/gcc/gcc-intermediate/gcc-intermediate.mk   |   2 +-
- Thomas>  ...__libc_epoll_pwait-compile-failure-on-x86.patch |   0
- Thomas>  ...x-e500-__fe_nomask_env-use-of-__set_errno.patch |   0
- Thomas>  .../0.9.32.1/uclibc-linuxthreads-errno-fix.patch   |   0
- Thomas>  .../uclibc/0.9.32.1/uclibc-sparc-errno-fix.patch   |   0
- Thomas>  .../uclibc/0.9.32.1/uclibc-unshare.patch           |   0
- Thomas>  .../uclibc-OpenWRT-140-avr32_atomic_fix.patch      |   0
- Thomas>  .../uclibc-bits-time.h-sync-with-glibc-2.16.patch  |   0
- Thomas>  .../0.9.33.2/uclibc-define-MSG_CMSG_CLOEXEC.patch  |   0
- Thomas>  .../uclibc/0.9.33.2/uclibc-dup3.patch              |   0
- Thomas>  package/uclibc/Config.in                           | 166 ++++++
- Thomas>  .../uClibc => package/uclibc}/uClibc-0.9.32.config |   0
- Thomas>  .../uClibc => package/uclibc}/uClibc-0.9.33.config |   0
- Thomas>  .../uclibc}/uClibc-snapshot.config                 |   0
- Thomas>  package/uclibc/uclibc.mk                           | 484 ++++++++++++++++
- Thomas>  toolchain/toolchain-buildroot.mk                   |   4 -
- Thomas>  toolchain/toolchain-buildroot/Config.in            |   2 +-
- Thomas>  toolchain/toolchain-crosstool-ng.mk                |   1 -
- Thomas>  toolchain/toolchain-crosstool-ng/crosstool-ng.mk   |   2 +-
- Thomas>  toolchain/toolchain-external.mk                    |   1 -
- Thomas>  toolchain/uClibc/Config.in                         |  97 ----
- Thomas>  toolchain/uClibc/uclibc.mk                         |
+On Wed, 03 Jul 2013 23:35:34 +0200, Peter Korsgaard wrote:
 
-You forgot to update docs/manual/customize-uclibc-config.txt. Committed
-with that fixed, thanks.
+>  Thomas> 	depends !BR2_PREFER_STATIC_LIB
+> 
+>  Thomas> in the kconfig dependencies maybe?
+> 
+> We could, yes.  I'm fairly sure we have a number of other packages
+> that don't handle BR2_PREFER_STATIC_LIB though.
 
+True, but I believe those packages should either be fixed, or marked
+as depends on !BR2_PREFER_STATIC_LIB. As we have discussed a number of
+times in the past, I believe that a "prefer static libraries" option
+doesn't make much sense. Either you /want/ static libraries, or
+you /don't/ want static libraries. But a "prefer" option that doesn't
+even tell you for which libraries static linking or dynamic linking
+will be used is kinda useless. And since kconfig doesn't allow us to
+easily provide per-package options to allow the user to define on a
+per-library basis whether it should be built static or dynamic, I
+believe the only two selections that make sense are: full dynamic or
+full static.
+
+Or, as we discussed when talking about building with -fPIC: build
+static /and/ dynamic, build dynamic only (default), build static only.
+
+> It will need to be propagated to kmods reverse dependencies (udev,
+> network-manager, udisks, ..)
+
+Indeed. I must say I'm somewhat surprised that something relatively
+simple like kmod doesn't support static linking.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
