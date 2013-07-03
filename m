@@ -1,85 +1,160 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 3 Jul 2013 23:00:02 +0200
-Subject: [Buildroot] [git commit] toolchain: switch to using gcc through
-	package infrastructure
-Message-ID: <20130704095650.D0F189A29F@busybox.osuosl.org>
+Date: Wed, 3 Jul 2013 22:59:27 +0200
+Subject: [Buildroot] [git commit] gcc-final: new package
+Message-ID: <20130704095650.678A09A29F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e236fe481e5f8c4cd4984f39dc37dbf19c8d8eda
+commit: http://git.buildroot.net/buildroot/commit/?id=4d7c13dd5382a56045e54389550b08c32fa94550
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile                                           |    2 +-
- package/Config.in                                  |    1 -
- .../1001-gcc-4.2.x-inhibit-libc.patch              |    0
- ...-fix-removal-of-redundant-cast-operations.patch |    0
- ...conditional-insn-which-clobbers-cc_status.patch |    0
- ...use-movh-to-move-immediates-into-register.patch |    0
- .../gcc/4.3.6/100-uclibc-conf.patch                |    0
- .../gcc/4.3.6/104-gnuhurd-uclibc-conf.patch        |    0
- .../gcc/4.3.6/301-missing-execinfo_h.patch         |    0
- .../gcc/4.3.6/302-c99-snprintf.patch               |    0
- .../gcc/4.3.6/305-libmudflap-susv3-legacy.patch    |    0
- .../gcc/4.3.6/810-arm-softfloat-libgcc.patch       |    0
- .../4.3.6/993-arm_insn-opinit-RTX_CODE-fixup.patch |    0
- .../gcc/4.3.6/998-gcc-4.3.0-fix-header.00.patch    |    0
- .../gcc/4.3.6/999-4.3.2-armeabi-aapcs-linux.patch  |    0
- .../4.3.6/999-4.3.3-arm-fix-for-bug-37436.patch    |    0
- ...gcc-4.3.0-cris-pragma-pack-warning-remove.patch |    0
- .../gcc/4.3.6/gcc-43-pr39429.patch                 |    0
- .../powerpc-link-with-math-lib.patch.conditional   |    0
- .../gcc/4.4.7-arc/fix_branch_out_of_range.patch    |    0
- .../gcc/4.4.7/100-uclibc-conf.patch                |    0
- .../gcc/4.4.7/301-missing-execinfo_h.patch         |    0
- .../gcc/4.4.7/302-c99-snprintf.patch               |    0
- .../gcc/4.4.7/305-libmudflap-susv3-legacy.patch    |    0
- .../gcc/4.4.7/810-arm-softfloat-libgcc.patch       |    0
- .../gcc/4.4.7/950-sparc-leon.patch                 |    0
- .../gcc/4.4.7/gcc-44-pr39429.patch                 |    0
- .../powerpc-link-with-math-lib.patch.conditional   |    0
- .../gcc/4.5.4/100-uclibc-conf.patch                |    0
- .../gcc/4.5.4/301-missing-execinfo_h.patch         |    0
- .../gcc/4.5.4/302-c99-snprintf.patch               |    0
- .../gcc/4.5.4/305-libmudflap-susv3-legacy.patch    |    0
- .../gcc/4.5.4/810-arm-softfloat-libgcc.patch       |    0
- .../gcc/4.5.4/820-arm-unbreak-armv4t.patch         |    0
- .../gcc/4.5.4/830-arm-pr43440.patch                |    0
- .../powerpc-link-with-math-lib.patch.conditional   |    0
- .../gcc/4.6.4/100-uclibc-conf.patch                |    0
- .../gcc/4.6.4/301-missing-execinfo_h.patch         |    0
- .../gcc/4.6.4/302-c99-snprintf.patch               |    0
- .../gcc/4.6.4/305-libmudflap-susv3-legacy.patch    |    0
- .../gcc/4.6.4/810-arm-softfloat-libgcc.patch       |    0
- .../gcc/4.6.4/820-arm-unbreak-armv4t.patch         |    0
- .../powerpc-link-with-math-lib.patch.conditional   |    0
- .../gcc/4.7.3/100-uclibc-conf.patch                |    0
- .../gcc/4.7.3/301-missing-execinfo_h.patch         |    0
- .../gcc/4.7.3/302-c99-snprintf.patch               |    0
- .../gcc/4.7.3/305-libmudflap-susv3-legacy.patch    |    0
- .../gcc/4.7.3/810-arm-softfloat-libgcc.patch       |    0
- .../gcc/4.7.3/830-arm_unbreak_armv4t.patch         |    0
- .../powerpc-link-with-math-lib.patch.conditional   |    0
- .../gcc/4.8.1/100-uclibc-conf.patch                |    0
- .../gcc/4.8.1/301-missing-execinfo_h.patch         |    0
- .../gcc/4.8.1/302-c99-snprintf.patch               |    0
- .../gcc/4.8.1/305-libmudflap-susv3-legacy.patch    |    0
- .../gcc/4.8.1/810-arm-softfloat-libgcc.patch       |    0
- .../gcc/4.8.1/830-arm_unbreak_armv4t.patch         |    0
- .../powerpc-link-with-math-lib.patch.conditional   |    0
- toolchain/gcc/Config.in                            |  130 ----
- toolchain/gcc/Config.in.2                          |   34 -
- toolchain/gcc/gcc-uclibc-4.x.mk                    |  640 --------------------
- toolchain/toolchain-buildroot.mk                   |    7 +-
- toolchain/toolchain-buildroot/Config.in            |    2 +-
- toolchain/toolchain-crosstool-ng.mk                |    1 -
- toolchain/toolchain-external.mk                    |    1 -
- toolchain/uClibc/uclibc.mk                         |   36 +-
- 65 files changed, 23 insertions(+), 831 deletions(-)
+ package/gcc/gcc-final/gcc-final.mk |  135 ++++++++++++++++++++++++++++++++++++
+ 1 files changed, 135 insertions(+), 0 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+new file mode 100644
+index 0000000..1767bbb
+--- /dev/null
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -0,0 +1,135 @@
++################################################################################
++#
++# gcc-final
++#
++################################################################################
++
++GCC_FINAL_VERSION = $(GCC_VERSION)
++GCC_FINAL_SITE    = $(GCC_SITE)
++GCC_FINAL_SOURCE  = $(GCC_SOURCE)
++
++HOST_GCC_FINAL_DEPENDENCIES = \
++	$(HOST_GCC_COMMON_DEPENDENCIES) \
++	uclibc
++
++ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
++HOST_GCC_FINAL_POST_EXTRACT_CMDS += HOST_GCC_FINAL_XTENSA_OVERLAY_EXTRACT
++endif
++
++HOST_GCC_FINAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
++
++# gcc doesn't support in-tree build, so we create a 'build'
++# subdirectory in the gcc sources, and build from there.
++HOST_GCC_FINAL_SUBDIR = build
++
++define HOST_GCC_FINAL_CONFIGURE_SYMLINK
++	mkdir -p $(@D)/build
++	ln -s ../configure $(@D)/build/configure
++endef
++
++HOST_GCC_FINAL_PRE_CONFIGURE_HOOKS += HOST_GCC_FINAL_CONFIGURE_SYMLINK
++
++# Languages supported by the cross-compiler
++GCC_FINAL_CROSS_LANGUAGES-y = c
++GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_LIBSTDCPP) += c++
++GCC_FINAL_CROSS_LANGUAGES-$(BR2_GCC_CROSS_FORTRAN) += fortran
++GCC_FINAL_CROSS_LANGUAGES-$(BR2_GCC_CROSS_OBJC)    += objc
++GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGES-y))
++
++HOST_GCC_FINAL_CONF_OPT = \
++	$(HOST_GCC_COMMON_CONF_OPT) \
++	--enable-languages=$(GCC_FINAL_CROSS_LANGUAGES) \
++	--with-build-time-tools=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin
++
++ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
++HOST_GCC_FINAL_CONF_OPT += --enable-libgomp
++else
++HOST_GCC_FINAL_CONF_OPT += --disable-libgomp
++endif
++
++ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
++HOST_GCC_FINAL_CONF_OPT += --enable-shared
++else
++HOST_GCC_FINAL_CONF_OPT += --disable-shared
++endif
++
++# End with user-provided options, so that they can override previously
++# defined options.
++HOST_GCC_FINAL_CONF_OPT += \
++	$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS))
++
++# Handle lib64
++define HOST_GCC_FINAL_HANDLE_LIB64
++	if [ -d "$(STAGING_DIR)/lib64" ]; then \
++		if [ ! -e "$(STAGING_DIR)/lib" ]; then \
++			mkdir -p "$(STAGING_DIR)/lib"; \
++		fi; \
++		mv "$(STAGING_DIR)/lib64/"* "$(STAGING_DIR)/lib/"; \
++		rmdir "$(STAGING_DIR)/lib64"; \
++		rm "$(STAGING_DIR)/usr/$(GNU_TARGET_NAME)/lib64";\
++	fi
++endef
++
++HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_HANDLE_LIB64
++
++# Make sure we have 'cc'
++define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
++	if [ ! -e $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc ]; then \
++		ln -snf $(GNU_TARGET_NAME)-gcc \
++			$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
++	fi
++	if [ ! -e $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc ]; then \
++		ln -snf gcc $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc; \
++	fi
++endef
++
++HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_CC_SYMLINKS
++
++# Create <arch>-linux-<tool> symlinks
++define HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
++	(cd $(HOST_DIR)/usr/bin; for i in $(GNU_TARGET_NAME)-*; do \
++		ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
++	done)
++endef
++
++HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
++
++# Cannot use the HOST_GCC_FINAL_USR_LIBS mechanism below, because we want
++# libgcc_s to be installed in /lib and not /usr/lib. We add +x on
++# libgcc_s to ensure it will be stripped.
++ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
++define HOST_GCC_FINAL_INSTALL_LIBGCC
++	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libgcc_s* \
++		$(STAGING_DIR)/lib/
++	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libgcc_s* \
++		$(TARGET_DIR)/lib/
++	-chmod +x $(TARGET_DIR)/lib/libgcc_s.so.1
++endef
++
++HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBGCC
++endif
++
++# Handle the installation of libraries in /usr/lib
++HOST_GCC_FINAL_USR_LIBS =
++
++ifeq ($(BR2_GCC_SHARED_LIBGCC)$(BR2_INSTALL_LIBSTDCPP),yy)
++HOST_GCC_FINAL_USR_LIBS += libstdc++
++endif
++
++ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
++HOST_GCC_FINAL_USR_LIBS += libgomp
++endif
++
++ifneq ($(HOST_GCC_FINAL_USR_LIBS),)
++define HOST_GCC_FINAL_INSTALL_USR_LIBS
++	for i in $(HOST_GCC_FINAL_USR_LIBS) ; do \
++		cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/$${i}.so* \
++			$(STAGING_DIR)/usr/lib/ ; \
++		cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/$${i}.so* \
++			$(TARGET_DIR)/usr/lib/ ; \
++	done
++endef
++HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_USR_LIBS
++endif
++
++$(eval $(host-autotools-package))
