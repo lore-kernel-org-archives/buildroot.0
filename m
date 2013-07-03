@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 03 Jul 2013 09:00:24 +0200
-Subject: [Buildroot] [PATCH 03/23] package: allow to override the make
-	install target for host packages
-In-Reply-To: <1372620553-11416-4-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Jun 2013 21:28:53 +0200")
+Date: Wed, 03 Jul 2013 09:00:38 +0200
+Subject: [Buildroot] [PATCH 04/23] toolchain/gcc: remove dead code
+	related to host binary stripping
+In-Reply-To: <1372620553-11416-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 30 Jun 2013 21:28:54 +0200")
 References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1372620553-11416-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87vc4sqgaf.fsf@dell.be.48ers.dk>
+ <1372620553-11416-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87r4fgqga1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +15,10 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> In order to convert gcc to the package infrastructure, we need
- Thomas> a way of overriding the name of the make target used for the
- Thomas> installation of host packages, just like we have for target
- Thomas> packages.
+ Thomas> The GCC_STRIP_HOST_BINARIES variable was always defined to
+ Thomas> 'nope', which means that the host binaries were never
+ Thomas> stripped. Get rid of the corresponding code, which is not in
+ Thomas> use.
 
 Committed, thanks.
 
