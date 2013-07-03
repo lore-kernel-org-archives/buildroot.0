@@ -1,33 +1,23 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 03 Jul 2013 16:18:41 +0200
-Subject: [Buildroot] [PATCHv3 ] python3: Port python2 patches to reduce
-	the interpreter size
-In-Reply-To: <20130703092041.GH2969@lukather> (Maxime Ripard's message of
- "Wed, 3 Jul 2013 11:20:41 +0200")
-References: <1369816617-6315-1-git-send-email-maxime.ripard@free-electrons.com>
- <87obapxr4y.fsf@dell.be.48ers.dk>
- <CANxTyt52OPdj0gmCZ8narNkgSpAZahnWR_-iuTHTe+nvHsjvHQ@mail.gmail.com>
- <20130703092041.GH2969@lukather>
-Message-ID: <874ncbrake.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 3 Jul 2013 16:18:01 +0200
+Subject: [Buildroot] [git commit] python: rename old-stdlib-cache patch to
+	match naming convention
+Message-ID: <20130703150151.829149A186@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ed6697339721e85a8f59feab0e4deaab8447a9bf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Maxime> Hi Danomi,
- Maxime> On Mon, Jul 01, 2013 at 03:29:59PM -0400, Danomi Manchego wrote:
- >> I noticed that most the original python3-3.3-* patches got renamed to
- >> python3-*.  But one did not, python3-3.3-012-old-stdlib-cache.patch.  This
- >> feels like an oversight - was it supposed to be renamed, or deleted maybe?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ...he.patch => python3-112-old-stdlib-cache.patch} |    0
+ 1 files changed, 0 insertions(+), 0 deletions(-)
 
- Maxime> Yeah, sorry, I somehow forgot to rename that patch.
-
- Maxime> Do you want to do it?
-
-Yes, I'll rename it.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python3/python3-3.3-012-old-stdlib-cache.patch b/package/python3/python3-112-old-stdlib-cache.patch
+similarity index 100%
+rename from package/python3/python3-3.3-012-old-stdlib-cache.patch
+rename to package/python3/python3-112-old-stdlib-cache.patch
