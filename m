@@ -1,34 +1,36 @@
-From: Wade Berrier <wberrier@gmail.com>
-Date: Wed, 3 Jul 2013 14:57:35 -0600
-Subject: [Buildroot] [PATCH] tar: avoid ccache chicken and egg problem when
- bootstrapping tar
-Message-ID: <20130703205733.GA11235@berrier.lan>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 03 Jul 2013 23:02:31 +0200
+Subject: [Buildroot] [PATCH 09/23] gcc: common definitions
+In-Reply-To: <1372620553-11416-10-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 30 Jun 2013 21:28:59 +0200")
+References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1372620553-11416-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87r4ffpdaw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Wade Berrier <wberrier@gmail.com>
----
- package/tar/tar.mk |    5 +++++
- 1 file changed, 5 insertions(+)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index 3ffeaf0..56443a8 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -20,6 +20,11 @@ $(eval $(autotools-package))
- # host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
- # of needing tar to build tar.
- HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
-+
-+# ccache isn't available yet when building for the host
-+HOST_TAR_CONF_ENV = \
-+	CC="$(HOSTCC_NOCCACHE)"
-+
- define HOST_TAR_EXTRACT_CMDS
- 	mkdir -p $(@D)
- 	cd $(@D) && \
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  package/gcc/Config.in.host | 128 ++++++++++++++++++++++++++++++++++++
+ Thomas>  package/gcc/gcc.mk         | 159 +++++++++++++++++++++++++++++++++++++++++++++
+ Thomas>  2 files changed, 287 insertions(+)
+ Thomas>  create mode 100644 package/gcc/Config.in.host
+ Thomas>  create mode 100644 package/gcc/gcc.mk
+
+ Thomas> +++ b/package/gcc/gcc.mk
+ Thomas> @@ -0,0 +1,159 @@
+ Thomas> +
+ Thomas> +# Common variables for the gcc-initial, gcc-intermediate and gcc-final
+ Thomas> +# packages.
+ Thomas> +
+
+I've changed this to a more "standard" file header and committed,
+thanks.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
