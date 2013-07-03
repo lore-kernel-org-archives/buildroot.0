@@ -1,41 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Jul 2013 11:53:25 +0200
-Subject: [Buildroot] [PATCH] fbgrab: bump to version 1.1
-In-Reply-To: <1372898075-30947-1-git-send-email-gilles.talis@gmail.com>
- (Gilles Talis's message of "Wed, 3 Jul 2013 17:34:35 -0700")
-References: <1372898075-30947-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87mwq2lkh6.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 3 Jul 2013 22:09:12 +0200
+Subject: [Buildroot] [git commit] elf2flt: convert to the package
+	infrastructure
+Message-ID: <20130704095649.422E69A29F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e21db000267cfbff000f1fc8c8e3329c5473ce1e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gilles> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
- Gilles> ---
- Gilles>  ...bgrab-proper-Makefile-for-cross-compiling.patch |   39 ++++++++++++++++++++
- Gilles>  package/fbgrab/fbgrab-proper_makefile.patch        |   23 ------------
- Gilles>  package/fbgrab/fbgrab.mk                           |    4 +-
- Gilles>  3 files changed, 41 insertions(+), 25 deletions(-)
- Gilles>  create mode 100644 package/fbgrab/fbgrab-proper-Makefile-for-cross-compiling.patch
- Gilles>  delete mode 100644 package/fbgrab/fbgrab-proper_makefile.patch
+[Peter: Correct legacy position]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Config.in.legacy                                   |    8 +++
+ .../Config.in => package/elf2flt/Config.in.host    |    2 +-
+ package/elf2flt/elf2flt.mk                         |   28 ++++++++++++
+ .../elf2flt => package/elf2flt/src}/LICENSE.TXT    |    0
+ .../elf2flt => package/elf2flt/src}/Makefile.in    |    0
+ .../elf2flt/elf2flt => package/elf2flt/src}/README |    0
+ .../elf2flt => package/elf2flt/src}/config.guess   |    0
+ .../elf2flt => package/elf2flt/src}/config.sub     |    0
+ .../elf2flt => package/elf2flt/src}/configure      |    0
+ .../elf2flt => package/elf2flt/src}/configure.in   |    0
+ .../elf2flt => package/elf2flt/src}/cygwin-elf.h   |    0
+ .../elf2flt => package/elf2flt/src}/e1-elf2flt.ld  |    0
+ .../elf2flt => package/elf2flt/src}/elf2flt.c      |    0
+ .../elf2flt => package/elf2flt/src}/elf2flt.ld     |    0
+ .../elf2flt/elf2flt => package/elf2flt/src}/flat.h |    0
+ .../elf2flt => package/elf2flt/src}/flthdr.c       |    0
+ .../elf2flt => package/elf2flt/src}/install-sh     |    0
+ .../elf2flt => package/elf2flt/src}/ld-elf2flt.in  |    0
+ .../elf2flt => package/elf2flt/src}/maketarball.sh |    0
+ .../elf2flt => package/elf2flt/src}/stubs.c        |    0
+ toolchain/elf2flt/elf2flt.mk                       |   46 --------------------
+ toolchain/toolchain-buildroot.mk                   |    1 -
+ toolchain/toolchain-buildroot/Config.in.2          |    2 +-
+ toolchain/toolchain-crosstool-ng.mk                |    1 -
+ toolchain/toolchain-external.mk                    |    1 -
+ 25 files changed, 38 insertions(+), 51 deletions(-)
 
- Gilles> +++ b/package/fbgrab/fbgrab.mk
- Gilles> @@ -4,9 +4,9 @@
- Gilles>  #
- Gilles>  ################################################################################
- 
- Gilles> -FBGRAB_VERSION = 1.0
- Gilles> +FBGRAB_VERSION = 1.1
- Gilles>  FBGRAB_SOURCE = fbgrab-$(FBGRAB_VERSION).tar.gz
- Gilles> -FBGRAB_SITE = http://hem.bredband.net/gmogmo/fbgrab
- Gilles> +FBGRAB_SITE = http://fbgrab.monells.se
-
-The homepage URL in Config.in should also be updated.
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Patch is too large, so refusing to show it
