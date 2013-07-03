@@ -1,39 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 3 Jul 2013 16:58:41 +0200
-Subject: [Buildroot] [git commit] qt: bump version
-Message-ID: <20130703150151.BA49999B45@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 3 Jul 2013 18:50:41 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-07-02
+In-Reply-To: <20130703063004.ABFF552C4E3@lolut.humanoidz.org>
+References: <20130703063004.ABFF552C4E3@lolut.humanoidz.org>
+Message-ID: <20130703165041.GB3268@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8a0d1fd1932ebe48b19e327e2441e518252af12d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-For details, see http://blog.qt.digia.com/blog/2013/07/02/qt-4-8-5-released/
+On 2013-07-03 08:30 +0200, Thomas Petazzoni spake thusly:
+> Detail of failures
+> ===================
+> 
+>    powerpc |                w_scan-20130331 | NOK | http://autobuild.buildroot.net/results/bda11786649e8dd6f7d644bbe39c3d278fa37f9e/
 
-Also move to the (current?) official download location, as the previous
-location doesn't have 4.8.5.
+Toolchain used is too old, and lacks up-to-date DVB headers for w_scan
+to build:
+    checking for linux/dvb/frontend.h presence... yes
+    checking for linux/dvb/frontend.h usability (FE_CAN_2G_MODULATION)... yes
+    checking for linux/dvb/frontend.h usability (DVB-T2, DVB API >= v5.3)... no
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt/qt.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Toolchain is:
+    freescale-2011.03-38-powerpc-linux-gnu-i686-pc-linux-gnu
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 71b9e4c..9325b56 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -11,9 +11,9 @@
- #
- ################################################################################
- 
--QT_VERSION = 4.8.4
-+QT_VERSION = 4.8.5
- QT_SOURCE  = qt-everywhere-opensource-src-$(QT_VERSION).tar.gz
--QT_SITE    = http://releases.qt-project.org/qt4/source
-+QT_SITE    = http://download.qt-project.org/official_releases/qt/4.8/$(QT_VERSION)
- QT_DEPENDENCIES = host-pkgconf
- QT_INSTALL_STAGING = YES
- 
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
