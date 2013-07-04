@@ -1,42 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Jul 2013 10:48:08 +0200
-Subject: [Buildroot] Dates for the next Buildroot Developers Meeting
-In-Reply-To: <87hagan2al.fsf@dell.be.48ers.dk>
-References: <20130525222335.42f91125@skate> <87bo72qyqi.fsf@dell.be.48ers.dk>
- <87hagan2al.fsf@dell.be.48ers.dk>
-Message-ID: <20130704104808.360f3738@skate>
+From: Phil Eichinger <phil.eichinger@gmail.com>
+Date: Thu, 4 Jul 2013 11:02:19 +0200
+Subject: [Buildroot] About Code Sourcery and Crosstool-NG
+In-Reply-To: <20130704084057.GA24592@zuhnb712.ap.bm.net>
+References: <20130704084057.GA24592@zuhnb712.ap.bm.net>
+Message-ID: <CAPiYbRKt1k6seCMSvBxTRS7+iG-9WMeS5SrrTco7wApShZKnEQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+On 4 July 2013 10:40, Woody Wu <narkewoody@gmail.com> wrote:
 
-On Thu, 04 Jul 2013 10:43:14 +0200, Peter Korsgaard wrote:
+> Hi,
+>
+> When the online manul talks about external toolchain, it mentiond
+> crosstool-NG.  But when I firstly open the 2013.05 buildroot, I found
+> there is no crosstool-NG in the options at all, but I found Code
+> Sourcery ARM.
+>
 
->  Thomas> The next Embedded Linux Conference Europe will take place on
->  Thomas> Thursday 24th and Friday 25th of October, in Edinburgh,
->  Thomas> UK. Since LinuxCon Europe will take place at the beginning of
->  Thomas> the week (from Monday to Wednesday), I believe the best date
->  Thomas> for our meeting will be on Saturday 26th and Sunday 27th.
-> 
->  Peter> I'm planning on attending the gstreamer conference (22-23th), so the
->  Peter> weekend after would also fit me best.
-> 
->  Peter> If anyone disagrees, please let us know because I would like to book
->  Peter> flight/hotel soon.
-> 
-> I've now booked conference/hotel/flights (21-27th). Anybody else?
+crosstool-NG support is deprecated, check the CHANGES file.
+You can still activate the option by checking "Show packages that are
+deprecated or obsolete" under "Build options", but YMMV.
+I used an external crosstool-NG install to generate my toolchain and used
+that within Buildroot.
 
-I haven't booked yet, but I'm planning on attending the Buildroot
-meeting on Saturday/Sunday.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Cheers, Phil
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130704/230e7fb4/attachment.html>
