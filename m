@@ -1,36 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Jul 2013 15:40:36 +0200
-Subject: [Buildroot] [PATCH] linux-headers: switch to xz format
-In-Reply-To: <51D57AC9.90702@zacarias.com.ar>
-References: <1372935038-28722-1-git-send-email-gustavo@zacarias.com.ar>
- <20130704153548.2d982a19@skate> <51D57AC9.90702@zacarias.com.ar>
-Message-ID: <20130704154036.7688cce7@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 4 Jul 2013 15:42:37 +0200
+Subject: [Buildroot] [git commit] uclibc: snapshots are bz2
+Message-ID: <20130704134452.C99EE99BD1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=1aced6c48dfed999594737c0c1ecc20892239ed9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 04 Jul 2013 10:38:17 -0300, Gustavo Zacarias wrote:
+Snapshot tarballs are only in bz2 format, fixes:
+http://autobuild.buildroot.net/results/b02/b021b296309d01405ad45344055863a5761abd70/
 
-> No problem, it was better to apply it and get it rolling for the border
-> cases.
-> I personally didn't have time to test it before.
-> I'll be sending some other toolchain patches that i didn't send before
-> to avoid stalling the toolchain packaging since it was long overdue, and
-> they're simple so no sweat in rebasing them.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/uclibc/uclibc.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Great thanks. Looking forward to see your toolchain patches. Hopefully,
-you'll find the new stuff a bit easier to work with than the old
-toolchain/ code.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index f8495ba..5cbc011 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -5,15 +5,15 @@
+ ################################################################################
+ 
+ UCLIBC_VERSION = $(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
+-UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.xz
++UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.bz2
+ 
+ ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+ UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
+ else ifeq ($(findstring arc,$(UCLIBC_VERSION)),arc)
+ UCLIBC_SITE = $(BR2_ARC_SITE)
+-UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.bz2
+ else
+ UCLIBC_SITE = http://www.uclibc.org/downloads
++UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.xz
+ endif
+ 
+ UCLIBC_INSTALL_STAGING = YES
