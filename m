@@ -1,99 +1,112 @@
-From: Wade Berrier <wberrier@gmail.com>
-Date: Wed, 3 Jul 2013 16:27:21 -0600
-Subject: [Buildroot] [PATCH] system: add config item to set root password or
-	not
-Message-ID: <20130703222719.GA12284@berrier.lan>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Wed,  3 Jul 2013 17:34:35 -0700
+Subject: [Buildroot] [PATCH] fbgrab: bump to version 1.1
+Message-ID: <1372898075-30947-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-... to address the difference of whether a password should get set
-versus setting an empty password.
 
-Signed-off-by: Wade Berrier <wberrier@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- support/dependencies/dependencies.sh |    2 +-
- system/Config.in                     |   17 +++++++++++------
- system/system.mk                     |    5 ++++-
- 3 files changed, 16 insertions(+), 8 deletions(-)
+ ...bgrab-proper-Makefile-for-cross-compiling.patch |   39 ++++++++++++++++++++
+ package/fbgrab/fbgrab-proper_makefile.patch        |   23 ------------
+ package/fbgrab/fbgrab.mk                           |    4 +-
+ 3 files changed, 41 insertions(+), 25 deletions(-)
+ create mode 100644 package/fbgrab/fbgrab-proper-Makefile-for-cross-compiling.patch
+ delete mode 100644 package/fbgrab/fbgrab-proper_makefile.patch
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 0b44c5a..912d03c 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -173,7 +173,7 @@ if grep -q ^BR2_PACKAGE_CLASSPATH=y $BUILDROOT_CONFIG ; then
-     done
- fi
- 
--if grep -E '^BR2_TARGET_GENERIC_ROOT_PASSWD=".+"$' $BUILDROOT_CONFIG > /dev/null 2>&1; then
-+if grep -E '^BR2_TARGET_GENERIC_SET_ROOT_PASSWD=y' $BUILDROOT_CONFIG > /dev/null 2>&1; then
-     if ! which mkpasswd > /dev/null 2>&1; then
-         /bin/echo -e "\nYou need the 'mkpasswd' utility to set the root password\n"
-         /bin/echo -e "(in Debian/ubuntu, 'mkpasswd' provided by the whois package)\n"
-diff --git a/system/Config.in b/system/Config.in
-index c0e4f4a..6b90854 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -173,15 +173,12 @@ endif
- 
- if BR2_ROOTFS_SKELETON_DEFAULT
- 
--config BR2_TARGET_GENERIC_ROOT_PASSWD
--	string "Root password"
--	default ""
-+config BR2_TARGET_GENERIC_SET_ROOT_PASSWD
-+	bool "Set root password"
-+	default y
- 	help
- 	  Set the initial root password (in clear). It will be md5-encrypted.
- 
--	  If set to empty (the default), then no root password will be set,
--	  and root will need no password to log in.
--
- 	  WARNING! WARNING!
- 	  Although pretty strong, MD5 is now an old hash function, and
- 	  suffers from some weaknesses, which makes it susceptible to attacks.
-@@ -194,6 +191,14 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	  in the build log! Avoid using a valuable password if either the
- 	  .config file or the build log may be distributed!
- 
-+config BR2_TARGET_GENERIC_ROOT_PASSWD
-+	string "Root password"
-+	depends on BR2_TARGET_GENERIC_SET_ROOT_PASSWD
-+	default ""
-+	help
-+	  If set to empty (the default), then no root password will be set,
-+	  and root will need no password to log in.
+diff --git a/package/fbgrab/fbgrab-proper-Makefile-for-cross-compiling.patch b/package/fbgrab/fbgrab-proper-Makefile-for-cross-compiling.patch
+new file mode 100644
+index 0000000..a211774
+--- /dev/null
++++ b/package/fbgrab/fbgrab-proper-Makefile-for-cross-compiling.patch
+@@ -0,0 +1,39 @@
++From 2283817b9aed0b6228d0255d5aba7968379c9854 Mon Sep 17 00:00:00 2001
++From: Gilles Talis <gilles.talis@gmail.com>
++Date: Wed, 3 Jul 2013 11:40:36 -0700
++Subject: [PATCH] fbgrab: A proper Makefile for cross compiling
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
- config BR2_TARGET_GENERIC_GETTY_PORT
- 	string "Port to run a getty (login prompt) on"
- 	default "ttyS0"
-diff --git a/system/system.mk b/system/system.mk
-index 50c86ad..728ce6e 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -1,8 +1,9 @@
- TARGET_GENERIC_HOSTNAME:=$(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
- TARGET_GENERIC_ISSUE:=$(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
-+TARGET_GENERIC_SET_ROOT_PASSWD:=$(call qstrip,$(BR2_TARGET_GENERIC_SET_ROOT_PASSWD))
- TARGET_GENERIC_ROOT_PASSWD:=$(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
- TARGET_GENERIC_PASSWD_METHOD:=$(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
--ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
-+ifeq ($(TARGET_GENERIC_SET_ROOT_PASSWD),y)
- TARGET_GENERIC_ROOT_PASSWD_HASH=$(shell mkpasswd -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)")
- endif
- TARGET_GENERIC_GETTY:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
-@@ -57,7 +58,9 @@ TARGETS += target-generic-issue
- endif
++Respect to the CC, CFLAGS and LDFLAGS is required for cross compiling in
++Buildroot. And there's no need to run the source through splint.
++
++Reworked original patch from: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
++
++Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
++Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
++---
++ Makefile |    6 ++++--
++ 1 files changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index aae16e6..2d6b6fc 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -3,8 +3,10 @@
++ ### modular. So this is a simple gnu Makefile...
++ ###
++ 
++-fbgrab: fbgrab.c
++-	gcc -g -Wall fbgrab.c -lpng -lz -o fbgrab
+++LDFLAGS += -lpng -lz
+++
+++fbgrab: fbgrab.o
+++	$(CC) $(LDFLAGS) fbgrab.o -o $@
++ 
++ install:
++ 	install fbgrab /usr/bin/fbgrab
++-- 
++1.7.4.1
++
+diff --git a/package/fbgrab/fbgrab-proper_makefile.patch b/package/fbgrab/fbgrab-proper_makefile.patch
+deleted file mode 100644
+index e907ed7..0000000
+--- a/package/fbgrab/fbgrab-proper_makefile.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-[PATCH] fbgrab: A proper Makefile for cross compiling
+-
+-Respect to the CC, CFLAGS and LDFLAGS is required for cross compiling in
+-Buildroot. And there's no need to run the source through splint.
+-
+-Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+-
+---- fbgrab-1.0.orig/Makefile	2010-12-07 22:57:24.000000000 +0100
+-+++ fbgrab-1.0/Makefile	2010-12-07 22:58:36.000000000 +0100
+-@@ -3,9 +3,10 @@
+- ### modular. So this is a simple gnu Makefile...
+- ###
+- 
+--fbgrab: fbgrab.c
+--	splint +posixlib fbgrab.c
+--	gcc -g -Wall fbgrab.c -lpng -lz -o fbgrab
+-+LDFLAGS += -lpng -lz
+-+
+-+fbgrab: fbgrab.o
+-+	$(CC) $(LDFLAGS) fbgrab.o -o $@
+- 
+- install:
+- 	strip fbgrab
+diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
+index 62539a8..b404c69 100644
+--- a/package/fbgrab/fbgrab.mk
++++ b/package/fbgrab/fbgrab.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
-+ifeq ($(TARGET_GENERIC_SET_ROOT_PASSWD),y)
- TARGETS += target-root-passwd
-+endif
- 
- ifneq ($(TARGET_GENERIC_GETTY),)
- TARGETS += target-generic-getty-$(if $(BR2_PACKAGE_SYSVINIT),sysvinit,busybox)
+-FBGRAB_VERSION = 1.0
++FBGRAB_VERSION = 1.1
+ FBGRAB_SOURCE = fbgrab-$(FBGRAB_VERSION).tar.gz
+-FBGRAB_SITE = http://hem.bredband.net/gmogmo/fbgrab
++FBGRAB_SITE = http://fbgrab.monells.se
+ FBGRAB_DEPENDENCIES = libpng
+ FBGRAB_LICENSE = GPLv2
+ FBGRAB_LICENSE_FILES = COPYING
 -- 
-1.7.9.5
+1.7.4.1
