@@ -1,63 +1,55 @@
-From: Kelvin Cheung <keguang.zhang@gmail.com>
-Date: Fri, 5 Jul 2013 10:52:04 +0800
-Subject: [Buildroot] [git commit] bwm-ng: move to appropiate category
-In-Reply-To: <51D5A42A.7000205@zacarias.com.ar>
-References: <20130605090359.015649A95D@busybox.osuosl.org>
- <CAJhJPsVBJKoRH5W=_iAKv4ReqUMH7=X4EZCX4=4TT6gMn2YK_g@mail.gmail.com>
- <CAJhJPsWQgPbgMcr2b1m2GF58ekx0mVq+QEce++rVqpstDhzh-g@mail.gmail.com>
- <20130704161923.GB5374@free.fr> <51D5A42A.7000205@zacarias.com.ar>
-Message-ID: <CAJhJPsVerC9DzBipnAv7sAz3NCRmM7j21p+K0xyqXX+tttMaZQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 04 Jul 2013 19:51:08 +0200
+Subject: [Buildroot] [git commit] gcc: common definitions
+In-Reply-To: <20130704095649.AD5849A29F@busybox.osuosl.org>
+References: <20130704095649.AD5849A29F@busybox.osuosl.org>
+Message-ID: <51D5B60C.2010603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/7/5 Gustavo Zacarias <gustavo@zacarias.com.ar>
+On 07/03/13 22:58, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=f198318fa564bead33bb0e389ddae1f5cbec0b6c
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> [Peter: tweak file header]
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+>   package/gcc/Config.in.host |  128 ++++++++++++++++++++++++++++++++++
+>   package/gcc/gcc.mk         |  162 ++++++++++++++++++++++++++++++++++++++++++++
+>   2 files changed, 290 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+> new file mode 100644
+> index 0000000..7ecf2fb
+> --- /dev/null
+> +++ b/package/gcc/Config.in.host
+> @@ -0,0 +1,128 @@
+> +comment "GCC Options"
+> +
+> +config BR2_GCC_NEEDS_MPC
+> +	bool
+> +
+> +choice
+> +	prompt "GCC compiler Version"
+> +	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
+> +	default BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 if BR2_avr3
 
-> On 07/04/2013 01:19 PM, Yann E. MORIN wrote:
->
-> > Kelvin, Peter, All,
-> >
-> >> 2013/7/2 Kelvin Cheung <keguang.zhang@gmail.com>
-> >>> Hi Gustavo & Peter,
-> >>> Last year, I submitted a patch to move bwm-ng from "Networking
-> >>> applications" to "System tools".
-> >>> Because bwm-ng can monitor not only network bandwidth but also disk-io
-> >>> bandwidth.
-> >>> So, could you just leave it as it is?
-> >
-> > Agreed.
->
-> Well, sysstat handles I/O bandwidth as well, and it's in hardware
-> handling, should we move it too? Or maybe bwm-ng to hardware?
-> Most of the time i tend to think "System Tools" as "Basic Tools" (i.e.
-> things needed for a system to boot & run, non-busybox based that is).
-> For that matter we could also move it to "Debugging, profiling and
-> benchmark".
-> At least for me it clearly doesn't belong in the System Tools category.
-> bwm-ng IMHO would most likely be used to measure network bandwidth
-> rather than disk I/O on embedded systems (which usually lack disk).
->
-
-Indeed.
-However, you forgot storage devices in embedded systems such as MTD, SD
-card and etc.
-I believe that some of us are interested in the bandwidth of this kind of
-device.
-First and last, 'Networking applications' is definitely inappropriate for
-bwm-ng.
+  avr3?
 
 
-> Regards.
->
->
->
+  Regards,
+  Arnout
 
 
+[snip]
 -- 
-Best Regards!
-Kelvin Cheung
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130705/3adcf3f5/attachment.html>
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
