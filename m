@@ -1,48 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 4 Jul 2013 18:17:24 +0200
-Subject: [Buildroot] Dates for the next Buildroot Developers Meeting
-In-Reply-To: <20130704104808.360f3738@skate>
-References: <20130525222335.42f91125@skate> <87bo72qyqi.fsf@dell.be.48ers.dk>
- <87hagan2al.fsf@dell.be.48ers.dk> <20130704104808.360f3738@skate>
-Message-ID: <20130704161724.GA5374@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  4 Jul 2013 13:18:32 -0300
+Subject: [Buildroot] [PATCH] classpath: fix alsa-related build failure
+Message-ID: <1372954712-30134-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas, All,
+Classpath requires sequencer support besides pcm support. Fixes:
+http://autobuild.buildroot.org/results/2bd/2bd39ffa821bc02d64998bc9e8fe178d3741a1d8/
 
-On 2013-07-04 10:48 +0200, Thomas Petazzoni spake thusly:
-> On Thu, 04 Jul 2013 10:43:14 +0200, Peter Korsgaard wrote:
-> >  Thomas> The next Embedded Linux Conference Europe will take place on
-> >  Thomas> Thursday 24th and Friday 25th of October, in Edinburgh,
-> >  Thomas> UK. Since LinuxCon Europe will take place at the beginning of
-> >  Thomas> the week (from Monday to Wednesday), I believe the best date
-> >  Thomas> for our meeting will be on Saturday 26th and Sunday 27th.
-> > 
-> >  Peter> I'm planning on attending the gstreamer conference (22-23th), so the
-> >  Peter> weekend after would also fit me best.
-> > 
-> >  Peter> If anyone disagrees, please let us know because I would like to book
-> >  Peter> flight/hotel soon.
-> > 
-> > I've now booked conference/hotel/flights (21-27th). Anybody else?
-> 
-> I haven't booked yet, but I'm planning on attending the Buildroot
-> meeting on Saturday/Sunday.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/classpath/classpath.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-I also plan to attend the Buildroot meeting.
-
-I have yet to book flight+hotel, though...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/classpath/classpath.mk b/package/classpath/classpath.mk
+index c305178..fbf80f0 100644
+--- a/package/classpath/classpath.mk
++++ b/package/classpath/classpath.mk
+@@ -22,7 +22,9 @@ CLASSPATH_AUTORECONF = YES
+ CLASSPATH_LICENSE = GPLv2+ with exception
+ CLASSPATH_LICENSE_FILES = COPYING
+ 
+-ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++# Needs ALSA pcm and sequencer (midi) support
++# pcm is always on for alsa-lib
++ifeq ($(BR2_PACKAGE_ALSA_LIB_SEQ),y)
+ CLASSPATH_CONF_OPT += --enable-alsa
+ CLASSPATH_DEPENDENCIES += alsa-lib
+ else
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.5
