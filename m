@@ -1,123 +1,101 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 4 Jul 2013 11:52:42 +0200
-Subject: [Buildroot] [git commit] fbgrab: bump to version 1.1
-Message-ID: <20130704095654.6F7289A29F@busybox.osuosl.org>
+Date: Thu, 4 Jul 2013 11:08:41 +0200
+Subject: [Buildroot] [git commit] docs/manual: update to mention eglibc
+	support in Buildroot toolchain backend
+Message-ID: <20130704095653.E483A9A2A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8916f9d80eb2c6a089ba4c9250656f47b5d6de77
+commit: http://git.buildroot.net/buildroot/commit/?id=30224b8ee221e273ca0a0128c5f487df23167b51
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: also update URL in Config.in]
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+[Peter: minor tweak]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/fbgrab/Config.in                           |    2 +-
- ...bgrab-proper-Makefile-for-cross-compiling.patch |   39 ++++++++++++++++++++
- package/fbgrab/fbgrab-proper_makefile.patch        |   23 ------------
- package/fbgrab/fbgrab.mk                           |    4 +-
- 4 files changed, 42 insertions(+), 26 deletions(-)
+ docs/manual/configure.txt |   52 ++++++++++++++++++++++----------------------
+ 1 files changed, 26 insertions(+), 26 deletions(-)
 
-diff --git a/package/fbgrab/Config.in b/package/fbgrab/Config.in
-index ca6c6b7..f3b29d9 100644
---- a/package/fbgrab/Config.in
-+++ b/package/fbgrab/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_FBGRAB
- 	  FBGrab is a framebuffer screenshot program, capturing the linux
- 	  frambuffer and converting it to a png-picture.
+diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+index 4f9a6bb..56b0469 100644
+--- a/docs/manual/configure.txt
++++ b/docs/manual/configure.txt
+@@ -72,11 +72,12 @@ The _internal toolchain backend_ is the backend where Buildroot builds
+ by itself a cross-compilation toolchain, before building the userspace
+ applications and libraries for your target embedded system.
  
--	  http://hem.bredband.net/gmogmo/fbgrab
-+	  http://fbgrab.monells.se/
-diff --git a/package/fbgrab/fbgrab-proper-Makefile-for-cross-compiling.patch b/package/fbgrab/fbgrab-proper-Makefile-for-cross-compiling.patch
-new file mode 100644
-index 0000000..a211774
---- /dev/null
-+++ b/package/fbgrab/fbgrab-proper-Makefile-for-cross-compiling.patch
-@@ -0,0 +1,39 @@
-+From 2283817b9aed0b6228d0255d5aba7968379c9854 Mon Sep 17 00:00:00 2001
-+From: Gilles Talis <gilles.talis@gmail.com>
-+Date: Wed, 3 Jul 2013 11:40:36 -0700
-+Subject: [PATCH] fbgrab: A proper Makefile for cross compiling
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Respect to the CC, CFLAGS and LDFLAGS is required for cross compiling in
-+Buildroot. And there's no need to run the source through splint.
-+
-+Reworked original patch from: Daniel Nystr??m <daniel.nystrom@timeterminal.se>
-+
-+Signed-off-by: Daniel Nystr??m <daniel.nystrom@timeterminal.se>
-+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-+---
-+ Makefile |    6 ++++--
-+ 1 files changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index aae16e6..2d6b6fc 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -3,8 +3,10 @@
-+ ### modular. So this is a simple gnu Makefile...
-+ ###
-+ 
-+-fbgrab: fbgrab.c
-+-	gcc -g -Wall fbgrab.c -lpng -lz -o fbgrab
-++LDFLAGS += -lpng -lz
-++
-++fbgrab: fbgrab.o
-++	$(CC) $(LDFLAGS) fbgrab.o -o $@
-+ 
-+ install:
-+ 	install fbgrab /usr/bin/fbgrab
-+-- 
-+1.7.4.1
-+
-diff --git a/package/fbgrab/fbgrab-proper_makefile.patch b/package/fbgrab/fbgrab-proper_makefile.patch
-deleted file mode 100644
-index e907ed7..0000000
---- a/package/fbgrab/fbgrab-proper_makefile.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--[PATCH] fbgrab: A proper Makefile for cross compiling
--
--Respect to the CC, CFLAGS and LDFLAGS is required for cross compiling in
--Buildroot. And there's no need to run the source through splint.
--
--Signed-off-by: Daniel Nystr??m <daniel.nystrom@timeterminal.se>
--
----- fbgrab-1.0.orig/Makefile	2010-12-07 22:57:24.000000000 +0100
--+++ fbgrab-1.0/Makefile	2010-12-07 22:58:36.000000000 +0100
--@@ -3,9 +3,10 @@
-- ### modular. So this is a simple gnu Makefile...
-- ###
-- 
---fbgrab: fbgrab.c
---	splint +posixlib fbgrab.c
---	gcc -g -Wall fbgrab.c -lpng -lz -o fbgrab
--+LDFLAGS += -lpng -lz
--+
--+fbgrab: fbgrab.o
--+	$(CC) $(LDFLAGS) fbgrab.o -o $@
-- 
-- install:
-- 	strip fbgrab
-diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
-index 62539a8..b404c69 100644
---- a/package/fbgrab/fbgrab.mk
-+++ b/package/fbgrab/fbgrab.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+-This backend is the historical backend of Buildroot, and is limited to
+-the usage of the http://www.uclibc.org[uClibc C library] (i.e, the
+-_glibc_ and _eglibc_ C libraries are not supported by this backend,
+-see the _External toolchain backend_ and _Crosstool-NG toolchain
+-backend_ for solutions to use either _glibc_ or _eglibc_).
++This backend is the historical backend of Buildroot, and has been
++limited for a long time to the usage of the
++http://www.uclibc.org[uClibc C library]. Support for the _eglibc_ C
++library has been added in 2013 and is at this point considered
++experimental. See the _External toolchain backend_ and _Crosstool-NG
++toolchain backend_ for other solutions to use _glibc_ or _eglibc_.
  
--FBGRAB_VERSION = 1.0
-+FBGRAB_VERSION = 1.1
- FBGRAB_SOURCE = fbgrab-$(FBGRAB_VERSION).tar.gz
--FBGRAB_SITE = http://hem.bredband.net/gmogmo/fbgrab
-+FBGRAB_SITE = http://fbgrab.monells.se
- FBGRAB_DEPENDENCIES = libpng
- FBGRAB_LICENSE = GPLv2
- FBGRAB_LICENSE_FILES = COPYING
+ Once you have selected this backend, a number of options appear. The
+ most important ones allow to:
+@@ -99,29 +100,29 @@ most important ones allow to:
+    the C library might be using interfaces that are not provided by
+    your Linux kernel.
+ 
+- * Change the version and the configuration of the uClibc C
+-   library. The default options are usually fine. However, if you
+-   really need to specifically customize the configuration of your
+-   uClibc C library, you can pass a specific configuration file
+-   here. Or alternatively, you can run the +make uclibc-menuconfig+
+-   command to get access to uClibc's configuration interface. Note
+-   that all packages in Buildroot are tested against the default
+-   uClibc configuration bundled in Buildroot: if you deviate from this
+-   configuration by removing features from uClibc, some packages may
+-   no longer build.
++ * Change the version and the configuration of the uClibc C library
++   (if uClibc is selected). The default options are usually
++   fine. However, if you really need to specifically customize the
++   configuration of your uClibc C library, you can pass a specific
++   configuration file here. Or alternatively, you can run the +make
++   uclibc-menuconfig+ command to get access to uClibc's configuration
++   interface. Note that all packages in Buildroot are tested against
++   the default uClibc configuration bundled in Buildroot: if you
++   deviate from this configuration by removing features from uClibc,
++   some packages may no longer build.
+ 
+  * Change the version of the GCC compiler and binutils.
+ 
+- * Select a number of toolchain options: whether the toolchain should
+-   have largefile support (i.e support for files larger than 2 GB on
+-   32 bits systems), IPv6 support, RPC support (used mainly for NFS),
+-   wide-char support, locale support (for internationalization), C++
+-   support, thread support. Depending on which options you choose, the
+-   number of userspace applications and libraries visible in Buildroot
+-   menus will change: many applications and libraries require certain
+-   toolchain options to be enabled. Most packages show a comment when
+-   a certain toolchain option is required to be able to enable those
+-   packages.
++ * Select a number of toolchain options (uClibc only): whether the
++   toolchain should have largefile support (i.e support for files
++   larger than 2 GB on 32 bits systems), IPv6 support, RPC support
++   (used mainly for NFS), wide-char support, locale support (for
++   internationalization), C++ support, thread support. Depending on
++   which options you choose, the number of userspace applications and
++   libraries visible in Buildroot menus will change: many applications
++   and libraries require certain toolchain options to be enabled. Most
++   packages show a comment when a certain toolchain option is required
++   to be able to enable those packages.
+ 
+ It is worth noting that whenever one of those options is modified,
+ then the entire toolchain and system must be rebuilt. See
+@@ -137,7 +138,6 @@ Drawbacks of this backend:
+ * Rebuilding the toolchain is needed when doing +make clean+, which
+   takes time. If you're trying to reduce your build time, consider
+   using the _External toolchain backend_.
+-* Limited to the _uClibc_ C library.
+ 
+ [[external-toolchain-backend]]
+ External toolchain backend
