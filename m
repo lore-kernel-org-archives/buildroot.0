@@ -1,39 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 04 Jul 2013 13:34:50 -0300
-Subject: [Buildroot] [git commit] bwm-ng: move to appropiate category
-In-Reply-To: <20130704161923.GB5374@free.fr>
-References: <20130605090359.015649A95D@busybox.osuosl.org>
- <CAJhJPsVBJKoRH5W=_iAKv4ReqUMH7=X4EZCX4=4TT6gMn2YK_g@mail.gmail.com>
- <CAJhJPsWQgPbgMcr2b1m2GF58ekx0mVq+QEce++rVqpstDhzh-g@mail.gmail.com>
- <20130704161923.GB5374@free.fr>
-Message-ID: <51D5A42A.7000205@zacarias.com.ar>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Thu,  4 Jul 2013 17:45:12 +0100
+Subject: [Buildroot] [PATCH] sconeserver: upstream has moved to GitHub
+Message-ID: <1372956312-6170-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/04/2013 01:19 PM, Yann E. MORIN wrote:
+From: Simon Dawson <spdawson@gmail.com>
 
-> Kelvin, Peter, All,
-> 
->> 2013/7/2 Kelvin Cheung <keguang.zhang@gmail.com>
->>> Hi Gustavo & Peter,
->>> Last year, I submitted a patch to move bwm-ng from "Networking
->>> applications" to "System tools".
->>> Because bwm-ng can monitor not only network bandwidth but also disk-io
->>> bandwidth.
->>> So, could you just leave it as it is?
-> 
-> Agreed.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/sconeserver/sconeserver.mk | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-Well, sysstat handles I/O bandwidth as well, and it's in hardware
-handling, should we move it too? Or maybe bwm-ng to hardware?
-Most of the time i tend to think "System Tools" as "Basic Tools" (i.e.
-things needed for a system to boot & run, non-busybox based that is).
-For that matter we could also move it to "Debugging, profiling and
-benchmark".
-At least for me it clearly doesn't belong in the System Tools category.
-bwm-ng IMHO would most likely be used to measure network bandwidth
-rather than disk I/O on embedded systems (which usually lack disk).
-Regards.
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index 62cc0ee..be5fab7 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -5,10 +5,9 @@
+ ################################################################################
+ 
+ # Release 0.6.0 doesn't build cleanly, so use a recent
+-# Subversion trunk snapshot.
+-SCONESERVER_VERSION = 212
+-SCONESERVER_SITE = svn://svn.code.sf.net/p/sconeserver/code/trunk
+-SCONESERVER_SITE_METHOD = svn
++# Git commit.
++SCONESERVER_VERSION = d58f2de88c681939554089f786e360042a30c8f8
++SCONESERVER_SITE = git://github.com/sconemad/sconeserver.git
+ SCONESERVER_LICENSE = GPLv2+
+ SCONESERVER_LICENSE_FILES = COPYING
+ 
+-- 
+1.8.1.2
