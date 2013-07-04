@@ -1,71 +1,123 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 4 Jul 2013 00:13:36 +0200
-Subject: [Buildroot] [git commit] Remove TOOLCHAIN_DIR
-Message-ID: <20130704095651.A26FA9A29F@busybox.osuosl.org>
+Date: Thu, 4 Jul 2013 10:35:21 +0200
+Subject: [Buildroot] [git commit] eglibc: new package
+Message-ID: <20130704095653.56F769A29F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d21a176bd517a788e19fce95f3fbd5cb0bd14e58
+commit: http://git.buildroot.net/buildroot/commit/?id=413ecfa80faf29b55a94b666c97efea0dc8162d9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The $(O)/toolchain directory, also called $(TOOLCHAIN_DIR) is no
-longer needed, as all packages are now built in $(O)/build/, including
-gcc and uClibc.
+This commit adds a target 'eglibc' package. For now, there is no way
+to build this package, the next commit will add the integration of
+eglibc into the Buildroot toolchain backend.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |    9 ++++-----
- 1 files changed, 4 insertions(+), 5 deletions(-)
+ package/eglibc/eglibc.mk |   94 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 94 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 189a1db..e3e2750 100644
---- a/Makefile
-+++ b/Makefile
-@@ -264,7 +264,6 @@ STAMP_DIR:=$(BASE_DIR)/stamps
- 
- BINARIES_DIR:=$(BASE_DIR)/images
- TARGET_DIR:=$(BASE_DIR)/target
--TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
- TARGET_SKELETON=$(TOPDIR)/system/skeleton
- 
- LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
-@@ -387,7 +386,7 @@ TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
- # all targets depend on the crosscompiler and it's prerequisites
- $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
- 
--dirs: $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
-+dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
- 
- $(BASE_TARGETS): dirs $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
-@@ -405,7 +404,7 @@ world: toolchain $(TARGETS_ALL)
- 	legal-info legal-info-prepare legal-info-clean \
- 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
- 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
--	$(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
-+	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
- 
- ################################################################################
-@@ -414,7 +413,7 @@ world: toolchain $(TARGETS_ALL)
- # dependencies anywhere else
- #
- ################################################################################
--$(TOOLCHAIN_DIR) $(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR):
-+$(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR):
- 	@mkdir -p $@
- 
- $(STAGING_DIR):
-@@ -732,7 +731,7 @@ endif
- 
- clean:
- 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
--		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(BASE_DIR)/staging \
-+		$(STAMP_DIR) $(BUILD_DIR) $(BASE_DIR)/staging \
- 		$(LEGAL_INFO_DIR)
- 
- distclean: clean
+diff --git a/package/eglibc/eglibc.mk b/package/eglibc/eglibc.mk
+new file mode 100644
+index 0000000..ec80d5e
+--- /dev/null
++++ b/package/eglibc/eglibc.mk
+@@ -0,0 +1,94 @@
++################################################################################
++#
++# eglibc
++#
++################################################################################
++
++EGLIBC_VERSION = 2.17-svnr22064
++EGLIBC_SITE = http://downloads.yoctoproject.org/releases/eglibc/
++EGLIBC_SOURCE = eglibc-$(EGLIBC_VERSION).tar.bz2
++
++# Before eglibc is configured, we must have the first stage
++# cross-compiler and the kernel headers
++EGLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
++
++# Before eglibc is built, we must have the second stage cross-compiler
++eglibc-build: host-gcc-intermediate
++
++EGLIBC_SUBDIR = build
++
++EGLIBC_INSTALL_STAGING = YES
++
+++EGLIBC_INSTALL_STAGING_OPT = install_root=$(STAGING_DIR) install
++
++# Even though we use the autotools-package infrastructure, we have to
++# override the default configure commands for several reasons:
++#
++#  1. We have to build out-of-tree, but we can't use the same
++#     'symbolic link to configure' used with the gcc packages.
++#
++#  2. We have to execute the configure script with bash and not sh.
++#
++define EGLIBC_CONFIGURE_CMDS
++	mkdir -p $(@D)/build
++	# Do the configuration
++	(cd $(@D)/build; \
++		$(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="-O2" CPPFLAGS="" CXXFLAGS="-O2" \
++		$(SHELL) $(@D)/libc/configure \
++		ac_cv_path_BASH_SHELL=/bin/bash \
++		libc_cv_forced_unwind=yes \
++		--target=$(GNU_TARGET_NAME) \
++		--host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--prefix=/usr \
++		--enable-shared \
++		$(if $(BR2_SOFT_FLOAT),--without-fp,--with-fp) \
++		--with-pkgversion="Buildroot" \
++		--without-cvs \
++		--disable-profile \
++		--without-gd \
++		--enable-obsolete-rpc \
++		--with-headers=$(STAGING_DIR)/usr/include)
++	# Install headers and start files
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build \
++		install_root=$(STAGING_DIR) \
++		install-bootstrap-headers=yes \
++		install-headers
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build csu/subdir_lib
++	cp $(@D)/build/csu/crt1.o $(STAGING_DIR)/usr/lib/
++	cp $(@D)/build/csu/crti.o $(STAGING_DIR)/usr/lib/
++	cp $(@D)/build/csu/crtn.o $(STAGING_DIR)/usr/lib/
++	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) \
++		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
++endef
++
++
++#
++# We also override the install to target commands since we only want
++# to install the libraries, and nothing more.
++#
++
++EGLIBC_LIBS_LIB = \
++	ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so	   \
++	libnsl.so libpthread.so libresolv.so librt.so libutil.so   \
++	libnss_files.so libnss_dns.so
++
++ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
++EGLIBC_LIBS_LIB += libthread_db.so
++endif
++
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++EGLIBC_LIBS_USR_LIB += libstdc++.so
++endif
++
++define EGLIBC_INSTALL_TARGET_CMDS
++	for libs in $(EGLIBC_LIBS_LIB); do \
++		$(call copy_toolchain_lib_root,$(STAGING_DIR)/,,lib,$$libs,/lib) ; \
++	done
++	for libs in $(EGLIBC_LIBS_USR_LIB); do \
++		$(call copy_toolchain_lib_root,$(STAGING_DIR)/,,lib,$$libs,/usr/lib) ; \
++	done
++endef
++
++$(eval $(autotools-package))
