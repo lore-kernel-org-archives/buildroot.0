@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Jul 2013 11:11:45 +0200
-Subject: [Buildroot] [PATCH 22/23] eglibc: enable support in the
-	Buildroot toolchain backend
-In-Reply-To: <1372620553-11416-23-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Jun 2013 21:29:12 +0200")
+Date: Thu, 04 Jul 2013 11:12:10 +0200
+Subject: [Buildroot] [PATCH 23/23] docs/manual: update to mention eglibc
+	support in Buildroot toolchain backend
+In-Reply-To: <1372620553-11416-24-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 30 Jun 2013 21:29:13 +0200")
 References: <1372620553-11416-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1372620553-11416-23-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <874ncan0z2.fsf@dell.be.48ers.dk>
+ <1372620553-11416-24-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87zju2lmdx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,32 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Using the newly introduced 'eglibc' package, this commit enables the
- Thomas> option of building a toolchain using the eglibc C library in the
- Thomas> Buildroot toolchain backend.
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  docs/manual/configure.txt | 52 +++++++++++++++++++++++------------------------
+ Thomas>  1 file changed, 26 insertions(+), 26 deletions(-)
 
- Thomas> In details, this commit:
+ Thomas> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+ Thomas> index 4f9a6bb..e554ff8 100644
+ Thomas> --- a/docs/manual/configure.txt
+ Thomas> +++ b/docs/manual/configure.txt
+ Thomas> @@ -72,11 +72,12 @@ The _internal toolchain backend_ is the backend where Buildroot builds
+ Thomas>  by itself a cross-compilation toolchain, before building the userspace
+ Thomas>  applications and libraries for your target embedded system.
+ 
+ Thomas> -This backend is the historical backend of Buildroot, and is limited to
+ Thomas> -the usage of the http://www.uclibc.org[uClibc C library] (i.e, the
+ Thomas> -_glibc_ and _eglibc_ C libraries are not supported by this backend,
+ Thomas> -see the _External toolchain backend_ and _Crosstool-NG toolchain
+ Thomas> -backend_ for solutions to use either _glibc_ or _eglibc_).
+ Thomas> +This backend is the historical backend of Buildroot, and has been
+ Thomas> +limited for a long time to the usage of the
+ Thomas> +http://www.uclibc.org[uClibc C library]. Support for the _eglibc_ C
+ Thomas> +library has been added in 2013 and is at this point. considered
 
- Thomas>  * Creates a choice to select uClibc or eglibc in the Buildroot
- Thomas>    toolchain backend (in toolchain/toolchain-buildroot/Config.in), and
- Thomas>    removes the fact that the Buildroot toolchain backend forcefully
- Thomas>    enables uClibc (toolchain/Config.in).
+The '.' after point shouldn't be there.
 
- Thomas>  * Creates a BUILDROOT_UCLIBC variables, which points to the package
- Thomas>    implementing the C library (i.e either 'uclibc' or 'eglibc').
-
- Thomas>  * Modifies the gcc-final and gcc-intermediate makefiles to use the
- Thomas>    BUILDROOT_UCLIBC variable instead of hardcoding the use of uclibc.
-
-The variable is called BUILDROOT_LIBC.
-
-Committed with the description adjusted, thanks.
+Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
