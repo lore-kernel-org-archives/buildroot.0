@@ -1,10 +1,11 @@
 From: Kelvin Cheung <keguang.zhang@gmail.com>
-Date: Thu, 4 Jul 2013 16:24:02 +0800
-Subject: [Buildroot] [git commit] bwm-ng: move to appropiate category
-In-Reply-To: <CAJhJPsVBJKoRH5W=_iAKv4ReqUMH7=X4EZCX4=4TT6gMn2YK_g@mail.gmail.com>
-References: <20130605090359.015649A95D@busybox.osuosl.org>
- <CAJhJPsVBJKoRH5W=_iAKv4ReqUMH7=X4EZCX4=4TT6gMn2YK_g@mail.gmail.com>
-Message-ID: <CAJhJPsWQgPbgMcr2b1m2GF58ekx0mVq+QEce++rVqpstDhzh-g@mail.gmail.com>
+Date: Thu, 4 Jul 2013 16:24:18 +0800
+Subject: [Buildroot] [PATCH] ramspeed/smp: new package
+In-Reply-To: <CAJhJPsU-DJWKjTt-_h+u40Tkr+Q4gnMr3hZASOJEBkP_TdAGLw@mail.gmail.com>
+References: <1372416026-7582-1-git-send-email-keguang.zhang@gmail.com>
+ <87r4fmz9da.fsf@dell.be.48ers.dk>
+ <CAJhJPsU-DJWKjTt-_h+u40Tkr+Q4gnMr3hZASOJEBkP_TdAGLw@mail.gmail.com>
+Message-ID: <CAJhJPsVwdaqZKLQo7+H01HpB1uzyNvKJ4tCbNLPRDPsFJ4HHWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,54 +14,30 @@ To: buildroot@busybox.net
 
 ping ?
 
-2013/7/2 Kelvin Cheung <keguang.zhang@gmail.com>
+2013/7/1 Kelvin Cheung <keguang.zhang@gmail.com>
 
-> Hi Gustavo & Peter,
-> Last year, I submitted a patch to move bwm-ng from "Networking
-> applications" to "System tools".
-> Because bwm-ng can monitor not only network bandwidth but also disk-io
-> bandwidth.
-> So, could you just leave it as it is?
+> Hi Peter,
+>
+> Yes, they are different.
+> RAMspeed is for uniprocessor machines.
+> RAMspeed/SMP is for multiprocessor machines.
 >
 >
-> 2013/6/5 Peter Korsgaard <jacmet@sunsite.dk>
+> 2013/6/28 Peter Korsgaard <jacmet@uclibc.org>
 >
->> commit:
->> http://git.buildroot.net/buildroot/commit/?id=0b6af1af6fee511b5565dc3ca791e6ac9458ca15
->> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>> >>>>> "Kelvin" == Kelvin Cheung <keguang.zhang@gmail.com> writes:
 >>
->> bwm-ng is a networking application, not a system one.
+>>  Kelvin> Add new package: ramspeed/smp
+>>  Kelvin> RAMspeed/SMP, a cache and memory benchmarking tool
+>>  Kelvin> (for multiprocessor machines running UNIX-like operating systems)
 >>
->> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
->> ---
->>  package/Config.in |    2 +-
->>  1 files changed, 1 insertions(+), 1 deletions(-)
+>>  Kelvin> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 >>
->> diff --git a/package/Config.in b/package/Config.in
->> index 0d4ed90..f26b1aa 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -682,6 +682,7 @@ source "package/boa/Config.in"
->>  source "package/bind/Config.in"
->>  source "package/bmon/Config.in"
->>  source "package/bridge-utils/Config.in"
->> +source "package/bwm-ng/Config.in"
->>  source "package/can-utils/Config.in"
->>  source "package/chrony/Config.in"
->>  source "package/connman/Config.in"
->> @@ -854,7 +855,6 @@ source "package/attr/Config.in"
->>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->>  source "package/bootutils/Config.in"
->>  endif
->> -source "package/bwm-ng/Config.in"
->>  source "package/cpuload/Config.in"
->>  source "package/htop/Config.in"
->>  source "package/keyutils/Config.in"
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+>> This looks very similar to our existing ramspeed package. Is it the
+>> same/different? Do we need both?
+>>
+>> --
+>> Bye, Peter Korsgaard
 >>
 >
 >
@@ -78,4 +55,4 @@ Best Regards!
 Kelvin Cheung
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130704/66c457a1/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130704/d29972c5/attachment.html>
