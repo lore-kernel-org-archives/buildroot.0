@@ -1,101 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  4 Jul 2013 12:59:31 -0300
-Subject: [Buildroot] [PATCH] classpath: fix build errors with gmp support
-Message-ID: <1372953571-15249-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 4 Jul 2013 18:17:24 +0200
+Subject: [Buildroot] Dates for the next Buildroot Developers Meeting
+In-Reply-To: <20130704104808.360f3738@skate>
+References: <20130525222335.42f91125@skate> <87bo72qyqi.fsf@dell.be.48ers.dk>
+ <87hagan2al.fsf@dell.be.48ers.dk> <20130704104808.360f3738@skate>
+Message-ID: <20130704161724.GA5374@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gmp support has a hardcoded /usr/include include PATH which causes
-breakage when there is a distribution gmp with development headers
-installed. Fixes:
-http://autobuild.buildroot.net/results/849/8497648c0b21390782eecc5b4aa91281bcf58ad6/
+Peter, Thomas, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../classpath/classpath-01-fix-gmp-include.patch   | 46 ++++++++++++++++++++++
- package/classpath/classpath.mk                     |  6 ++-
- 2 files changed, 50 insertions(+), 2 deletions(-)
- create mode 100644 package/classpath/classpath-01-fix-gmp-include.patch
+On 2013-07-04 10:48 +0200, Thomas Petazzoni spake thusly:
+> On Thu, 04 Jul 2013 10:43:14 +0200, Peter Korsgaard wrote:
+> >  Thomas> The next Embedded Linux Conference Europe will take place on
+> >  Thomas> Thursday 24th and Friday 25th of October, in Edinburgh,
+> >  Thomas> UK. Since LinuxCon Europe will take place at the beginning of
+> >  Thomas> the week (from Monday to Wednesday), I believe the best date
+> >  Thomas> for our meeting will be on Saturday 26th and Sunday 27th.
+> > 
+> >  Peter> I'm planning on attending the gstreamer conference (22-23th), so the
+> >  Peter> weekend after would also fit me best.
+> > 
+> >  Peter> If anyone disagrees, please let us know because I would like to book
+> >  Peter> flight/hotel soon.
+> > 
+> > I've now booked conference/hotel/flights (21-27th). Anybody else?
+> 
+> I haven't booked yet, but I'm planning on attending the Buildroot
+> meeting on Saturday/Sunday.
 
-diff --git a/package/classpath/classpath-01-fix-gmp-include.patch b/package/classpath/classpath-01-fix-gmp-include.patch
-new file mode 100644
-index 0000000..f7a3920
---- /dev/null
-+++ b/package/classpath/classpath-01-fix-gmp-include.patch
-@@ -0,0 +1,46 @@
-+The GMP include is hardcoded to /usr/include causing obvious problems.
-+
-+From classpath CVS:
-+http://cvs.savannah.gnu.org/viewvc/classpath/configure.ac?root=classpath&r1=1.245&r2=1.246
-+
-+[Gustavo: ditch -L or libtool complains loudly]
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- a/configure.ac	2010/01/30 01:33:50	1.245
-++++ b/configure.ac	2010/05/04 12:29:23	1.246
-+@@ -752,10 +752,32 @@
-+   dnl __gmpz_mul_si for earlier versions (>= 3.1).
-+   dnl IMPORTANT: if you decide to look for __gmpz_combit, don't forget to
-+   dnl change the name of the corresponding ac_ variable on lines 860...
-++  AC_ARG_WITH(gmp, [  --with-gmp=PATH         specify prefix directory for the installed GMP package.
-++                          Equivalent to --with-gmp-include=PATH/include
-++                          plus --with-gmp-lib=PATH/lib])
-++  AC_ARG_WITH(gmp_include, [  --with-gmp-include=PATH specify directory for installed GMP include files])
-++  AC_ARG_WITH(gmp_lib, [  --with-gmp-lib=PATH     specify directory for the installed GMP library])
-++
-+   if test "x${COMPILE_GMP}" = xyes; then
-++    AC_MSG_CHECKING([for GMP directories])
-++    if test "x$with_gmp" != x; then
-++       gmplibs="-lgmp"
-++       gmpinc="-I$with_gmp/include"
-++       if test "x$with_gmp_include" != x; then
-++       	  gmpinc="-I$with_gmp_include $gmpinc"
-++       fi
-++       if test "x$with_gmp_lib" != x; then
-++       	  gmplibs="$gmplibs"
-++       fi
-++    else
-++        with_gmp="/usr"
-++	gmplibs="-lgmp"
-++    	gmpinc="-I/usr/include"
-++    fi
-++    AC_MSG_RESULT([prefix=$with_gmp, libs=$gmplibs, inc=$gmpinc])
-+     AC_CHECK_LIB(gmp, __gmpz_mul_si,
-+-      [GMP_CFLAGS=-I/usr/include
-+-       GMP_LIBS=-lgmp ],
-++      [GMP_CFLAGS="$gmpinc"
-++       GMP_LIBS="$gmplibs" ],
-+       [GMP_CFLAGS=
-+        GMP_LIBS= ])
-+     AC_SUBST(GMP_CFLAGS)
-diff --git a/package/classpath/classpath.mk b/package/classpath/classpath.mk
-index 62167aa..c305178 100644
---- a/package/classpath/classpath.mk
-+++ b/package/classpath/classpath.mk
-@@ -17,8 +17,10 @@ CLASSPATH_CONF_OPT = \
- # classpath assumes qt runs on top of X11, but we
- # don't support qt4 on X11
- CLASSPATH_CONF_OPT += --disable-qt-peer
--
- CLASSPATH_DEPENDENCIES = host-pkgconf
-+CLASSPATH_AUTORECONF = YES
-+CLASSPATH_LICENSE = GPLv2+ with exception
-+CLASSPATH_LICENSE_FILES = COPYING
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- CLASSPATH_CONF_OPT += --enable-alsa
-@@ -28,7 +30,7 @@ CLASSPATH_CONF_OPT += --disable-alsa
- endif
- 
- ifeq ($(BR2_PACKAGE_GMP),y)
--CLASSPATH_CONF_OPT += --enable-gmp
-+CLASSPATH_CONF_OPT += --enable-gmp --with-gmp="$(STAGING_DIR)/usr"
- CLASSPATH_DEPENDENCIES += gmp
- else
- CLASSPATH_CONF_OPT += --disable-gmp
+I also plan to attend the Buildroot meeting.
+
+I have yet to book flight+hotel, though...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.1.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
