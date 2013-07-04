@@ -1,35 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  4 Jul 2013 13:18:32 -0300
-Subject: [Buildroot] [PATCH] classpath: fix alsa-related build failure
-Message-ID: <1372954712-30134-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 4 Jul 2013 18:19:23 +0200
+Subject: [Buildroot] [git commit] bwm-ng: move to appropiate category
+In-Reply-To: <CAJhJPsWQgPbgMcr2b1m2GF58ekx0mVq+QEce++rVqpstDhzh-g@mail.gmail.com>
+References: <20130605090359.015649A95D@busybox.osuosl.org>
+ <CAJhJPsVBJKoRH5W=_iAKv4ReqUMH7=X4EZCX4=4TT6gMn2YK_g@mail.gmail.com>
+ <CAJhJPsWQgPbgMcr2b1m2GF58ekx0mVq+QEce++rVqpstDhzh-g@mail.gmail.com>
+Message-ID: <20130704161923.GB5374@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Classpath requires sequencer support besides pcm support. Fixes:
-http://autobuild.buildroot.org/results/2bd/2bd39ffa821bc02d64998bc9e8fe178d3741a1d8/
+Kelvin, Peter, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/classpath/classpath.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> 2013/7/2 Kelvin Cheung <keguang.zhang@gmail.com>
+> > Hi Gustavo & Peter,
+> > Last year, I submitted a patch to move bwm-ng from "Networking
+> > applications" to "System tools".
+> > Because bwm-ng can monitor not only network bandwidth but also disk-io
+> > bandwidth.
+> > So, could you just leave it as it is?
 
-diff --git a/package/classpath/classpath.mk b/package/classpath/classpath.mk
-index c305178..fbf80f0 100644
---- a/package/classpath/classpath.mk
-+++ b/package/classpath/classpath.mk
-@@ -22,7 +22,9 @@ CLASSPATH_AUTORECONF = YES
- CLASSPATH_LICENSE = GPLv2+ with exception
- CLASSPATH_LICENSE_FILES = COPYING
- 
--ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+# Needs ALSA pcm and sequencer (midi) support
-+# pcm is always on for alsa-lib
-+ifeq ($(BR2_PACKAGE_ALSA_LIB_SEQ),y)
- CLASSPATH_CONF_OPT += --enable-alsa
- CLASSPATH_DEPENDENCIES += alsa-lib
- else
+Agreed.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.1.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
