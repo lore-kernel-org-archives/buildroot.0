@@ -1,42 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  4 Jul 2013 10:22:25 -0300
-Subject: [Buildroot] [PATCH] uclibc: snapshots are bz2
-Message-ID: <1372944145-4354-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 Jul 2013 15:34:38 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-07-03
+In-Reply-To: <51D55EC4.70209@googlemail.com>
+References: <20130704063005.AD97652C109@lolut.humanoidz.org>
+ <51D55EC4.70209@googlemail.com>
+Message-ID: <20130704153438.5417c004@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Snapshot tarballs are only in bz2 format, fixes:
-http://autobuild.buildroot.net/results/b02/b021b296309d01405ad45344055863a5761abd70/
+Dear Carsten Schoenert,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/uclibc/uclibc.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Thu, 04 Jul 2013 13:38:44 +0200, Carsten Schoenert wrote:
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index f8495ba..5cbc011 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -5,15 +5,15 @@
- ################################################################################
- 
- UCLIBC_VERSION = $(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
--UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.xz
-+UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.bz2
- 
- ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
- UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
- else ifeq ($(findstring arc,$(UCLIBC_VERSION)),arc)
- UCLIBC_SITE = $(BR2_ARC_SITE)
--UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.bz2
- else
- UCLIBC_SITE = http://www.uclibc.org/downloads
-+UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.xz
- endif
- 
- UCLIBC_INSTALL_STAGING = YES
+> I looked at a build failure on libglib2.
+> 
+> Am 04.07.2013 08:30, schrieb Thomas Petazzoni:
+> >        arm |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/e9fc40239d13a2fcdc842eced2c39994ac2ca498/
+> 
+> I changed the Config.in file like that because libglib2 needs a thread
+> implementation.
+
+I don't think that's what we want to do. We have a patch on libglib2
+that normally allows libglib2 to build and work without thread support,
+see
+package/libglib2/libglib2-0002-fix-build-when-no-thread-support.patch.
+However, when libglib2 was bumped by Spenser Gilliland to 2.36.x, this
+patch was not completely properly updated it seems. Maybe this is
+something that Samuel Martin could have a look at, since he was the one
+who did the original patch?
+
+Unless of course we decide that we don't care about supporting libglib2
+without threads, but in this case, the addition "depends
+on !BR2_TOOLCHAIN_HAS_THREADS" has to be propagated to *all* reverse
+dependencies of libglib2 (quite a significant number of packages).
+
+Best regards,
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
