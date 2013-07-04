@@ -1,29 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Jul 2013 11:12:43 +0200
-Subject: [Buildroot] [PATCH 1/1] ti-gfx: add new package
-In-Reply-To: <CAEBucnABfipoLANk7MoOGfxpOn90zgVDatk3oRsfEX36a=JKQA@mail.gmail.com>
- (Spenser Gilliland's message of "Thu, 4 Jul 2013 00:58:48 -0500")
-References: <1372452103-14337-1-git-send-email-spenser@gillilanding.com>
- <8738rvnvxt.fsf@dell.be.48ers.dk>
- <CAEBucnABfipoLANk7MoOGfxpOn90zgVDatk3oRsfEX36a=JKQA@mail.gmail.com>
-Message-ID: <87vc4qlmd0.fsf@dell.be.48ers.dk>
+Date: Thu, 04 Jul 2013 11:50:57 +0200
+Subject: [Buildroot] [PATCH 1/2] lttng-tools: add missing dependency on
+	util-linux for libuuid
+In-Reply-To: <1372889089-3139-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 4 Jul 2013 00:04:48 +0200")
+References: <1372889089-3139-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87r4felkla.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Spenser> Peter,
- >> 
- >> I think this is basically good to go. Could you send a v2 taking Yann's
- >> comments into consideration?
- >> 
- Spenser> Yes, I'll send it to you as soon as possible but I will be at a bbq
- Spenser> tomorrow (Independence Day) so it may be Friday.
+ Thomas> Fixes:
+ Thomas> http://autobuild.buildroot.org/results/76a/76a91bd139a93f63e17732c9a933664e8e5d3fe1/build-end.log.
 
-No problem - Enjoy!
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
