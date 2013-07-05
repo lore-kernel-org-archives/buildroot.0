@@ -1,92 +1,63 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Thu,  4 Jul 2013 19:18:00 -0700
-Subject: [Buildroot] [PATCH] ocrad: new package
-Message-ID: <1372990680-16147-1-git-send-email-gilles.talis@gmail.com>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Fri, 5 Jul 2013 10:52:04 +0800
+Subject: [Buildroot] [git commit] bwm-ng: move to appropiate category
+In-Reply-To: <51D5A42A.7000205@zacarias.com.ar>
+References: <20130605090359.015649A95D@busybox.osuosl.org>
+ <CAJhJPsVBJKoRH5W=_iAKv4ReqUMH7=X4EZCX4=4TT6gMn2YK_g@mail.gmail.com>
+ <CAJhJPsWQgPbgMcr2b1m2GF58ekx0mVq+QEce++rVqpstDhzh-g@mail.gmail.com>
+ <20130704161923.GB5374@free.fr> <51D5A42A.7000205@zacarias.com.ar>
+Message-ID: <CAJhJPsVerC9DzBipnAv7sAz3NCRmM7j21p+K0xyqXX+tttMaZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GNU Ocrad is an OCR (Optical Character Recognition) program
-based on a feature extraction method.
-It reads images in pbm (bitmap), pgm (greyscale) or ppm (color) formats
-and produces text in byte (8-bit) or UTF-8 formats.
+2013/7/5 Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/Config.in       |    1 +
- package/ocrad/Config.in |   16 ++++++++++++++++
- package/ocrad/ocrad.mk  |   26 ++++++++++++++++++++++++++
- 3 files changed, 43 insertions(+)
- create mode 100644 package/ocrad/Config.in
- create mode 100644 package/ocrad/ocrad.mk
+> On 07/04/2013 01:19 PM, Yann E. MORIN wrote:
+>
+> > Kelvin, Peter, All,
+> >
+> >> 2013/7/2 Kelvin Cheung <keguang.zhang@gmail.com>
+> >>> Hi Gustavo & Peter,
+> >>> Last year, I submitted a patch to move bwm-ng from "Networking
+> >>> applications" to "System tools".
+> >>> Because bwm-ng can monitor not only network bandwidth but also disk-io
+> >>> bandwidth.
+> >>> So, could you just leave it as it is?
+> >
+> > Agreed.
+>
+> Well, sysstat handles I/O bandwidth as well, and it's in hardware
+> handling, should we move it too? Or maybe bwm-ng to hardware?
+> Most of the time i tend to think "System Tools" as "Basic Tools" (i.e.
+> things needed for a system to boot & run, non-busybox based that is).
+> For that matter we could also move it to "Debugging, profiling and
+> benchmark".
+> At least for me it clearly doesn't belong in the System Tools category.
+> bwm-ng IMHO would most likely be used to measure network bandwidth
+> rather than disk I/O on embedded systems (which usually lack disk).
+>
 
-diff --git a/package/Config.in b/package/Config.in
-index 7c24dab..62fbba0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -131,6 +131,7 @@ source "package/fb-test-app/Config.in"
- source "package/imagemagick/Config.in"
- source "package/linux-fusion/Config.in"
- source "package/lite/Config.in"
-+source "package/ocrad/Config.in"
- source "package/sawman/Config.in"
- source "package/sdl/Config.in"
- source "package/sdl_image/Config.in"
-diff --git a/package/ocrad/Config.in b/package/ocrad/Config.in
-new file mode 100644
-index 0000000..1065f01
---- /dev/null
-+++ b/package/ocrad/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_OCRAD
-+	bool "ocrad"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  GNU Ocrad is an OCR (Optical Character Recognition) program
-+	  based on a feature extraction method. 
-+	  It reads images in pbm (bitmap), pgm (greyscale) or 
-+	  ppm (color) formats and produces text in byte (8-bit) or 
-+	  UTF-8 formats.
-+
-+	  http://www.gnu.org/software/ocrad/
-+
-+comment "ocrad needs a toolchain with C++ support"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+
-diff --git a/package/ocrad/ocrad.mk b/package/ocrad/ocrad.mk
-new file mode 100644
-index 0000000..4f4b793
---- /dev/null
-+++ b/package/ocrad/ocrad.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# ocrad
-+#
-+################################################################################
-+
-+OCRAD_VERSION = 0.21
-+OCRAD_SITE = http://ftp.gnu.org/gnu/ocrad
-+OCRAD_LICENSE = GPLv3+
-+OCRAD_LICENSE_FILES = COPYING
-+
-+# This is not a true autotools package.
-+define OCRAD_CONFIGURE_CMDS
-+	(cd $(@D); \
-+	./configure $(TARGET_CONFIGURE_OPTS) )
-+endef
-+
-+define OCRAD_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define OCRAD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/ocrad $(TARGET_DIR)/usr/bin/ocrad
-+endef
-+
-+$(eval $(generic-package))
+Indeed.
+However, you forgot storage devices in embedded systems such as MTD, SD
+card and etc.
+I believe that some of us are interested in the bandwidth of this kind of
+device.
+First and last, 'Networking applications' is definitely inappropriate for
+bwm-ng.
+
+
+> Regards.
+>
+>
+>
+
+
 -- 
-1.7.10.4
+Best Regards!
+Kelvin Cheung
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130705/3adcf3f5/attachment.html>
