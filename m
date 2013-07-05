@@ -1,23 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 05 Jul 2013 10:16:40 -0300
-Subject: [Buildroot] [PATCH] gcc: apply PowerPC patch when needed
-In-Reply-To: <20130705150137.773e3ad7@skate>
-References: <1373013652-4162-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <51D6C2AA.8070703@zacarias.com.ar> <20130705150137.773e3ad7@skate>
-Message-ID: <51D6C738.2060605@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 05 Jul 2013 15:30:52 +0200
+Subject: [Buildroot] [PATCH] Add 'bc' in the mandatory dependencies
+In-Reply-To: <1373014089-4489-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 5 Jul 2013 10:48:09 +0200")
+References: <1373014089-4489-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87obahjfqr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/05/2013 10:01 AM, Thomas Petazzoni wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> I remember reading this thread a long time ago. But my question is
-> more: why hasn't the problem been fixed since 5 years? :-)
+ Thomas> Since a few kernel releases, having 'bc' installed is mandatory to
+ Thomas> build the kernel. See commit
+ Thomas> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=70730bca1331fc50c3caacaea00439de1325bd6e
+ Thomas> of the kernel.
 
-Difference of opinions i suppose, with the original patch creator
-thinking it's patch is right and the complaining end not creating a
-"proper" patch :)
-Probably the same case as the ever-lasting arm softfloat patch hehe.
-Regards.
+ Thomas> Since this tool is generally available by default in distributions,
+ Thomas> and we're unlikely to see version-specific problems with it, we
+ Thomas> just check for it to be installed in
+ Thomas> support/dependencies/dependencies.sh.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
