@@ -1,42 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 5 Jul 2013 15:30:43 +0200
-Subject: [Buildroot] [git commit] Add 'bc' in the mandatory dependencies
-Message-ID: <20130705133336.041398194E@busybox.osuosl.org>
+Date: Fri, 05 Jul 2013 15:39:16 +0200
+Subject: [Buildroot] buildroot
+In-Reply-To: <51D4A9FB.1070402@lamiaworks.com.au> (scsijon@lamiaworks.com.au's
+ message of "Thu, 04 Jul 2013 08:47:23 +1000")
+References: <51D4A9FB.1070402@lamiaworks.com.au>
+Message-ID: <87fvvtjfcr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7cbebbc48c26ddfb18da23ffba356744a5592ea6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "scsijon" == scsijon  <scsijon@lamiaworks.com.au> writes:
 
-Since a few kernel releases, having 'bc' installed is mandatory to
-build the kernel. See commit
-https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=70730bca1331fc50c3caacaea00439de1325bd6e
-of the kernel.
+Hi,
 
-Since this tool is generally available by default in distributions,
-and we're unlikely to see version-specific problems with it, we
-just check for it to be installed in
-support/dependencies/dependencies.sh.
+Please send buildroot questions to the buildroot list instead of
+directly to me, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- support/dependencies/dependencies.sh |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ scsijon> Any chance that buildroot may have a 'switch' to make the development
+ scsijon> files (compiler, header files, etc.) appear in the target.
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 0b44c5a..61a4140 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -132,7 +132,7 @@ fi;
- 
- # Check that a few mandatory programs are installed
- missing_progs="no"
--for prog in patch perl tar wget cpio python unzip rsync ${DL_TOOLS} ; do
-+for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
-     if ! which $prog > /dev/null ; then
- 	/bin/echo -e "You must install '$prog' on your build machine";
- 	missing_progs="yes"
+We used to have that (BR2_HAVE_DEVFILES), but it has been deprecated for
+a while and has recently been completely removed.
+
+ scsijon> I want to use it together with Aboriginal and create a total
+ scsijon> self contained Cross-compiler Development System and they are
+ scsijon> needed for further application and utility compiling.
+
+I don't quite understand how you would combine them. Buildroot is really
+about cross compiling everyting, and Aboriginal is just the opposite -
+Compiling on (emulated) native hardware. They both more or less solve
+the same problem, just in different ways.
+
+-- 
+Bye, Peter Korsgaard
