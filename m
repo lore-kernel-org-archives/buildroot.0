@@ -1,37 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 05 Jul 2013 15:39:16 +0200
-Subject: [Buildroot] buildroot
-In-Reply-To: <51D4A9FB.1070402@lamiaworks.com.au> (scsijon@lamiaworks.com.au's
- message of "Thu, 04 Jul 2013 08:47:23 +1000")
-References: <51D4A9FB.1070402@lamiaworks.com.au>
-Message-ID: <87fvvtjfcr.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  5 Jul 2013 12:09:42 -0300
+Subject: [Buildroot] [PATCH] docs: linuxdevices is dead,
+	switch to linuxgizmos
+Message-ID: <1373036982-2673-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "scsijon" == scsijon  <scsijon@lamiaworks.com.au> writes:
+linuxdevices.com has been dead for some time now when it was bought out.
+Switch to linuxgizmos.com which is the new page of the author.
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ docs/header.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please send buildroot questions to the buildroot list instead of
-directly to me, thanks.
-
- scsijon> Any chance that buildroot may have a 'switch' to make the development
- scsijon> files (compiler, header files, etc.) appear in the target.
-
-We used to have that (BR2_HAVE_DEVFILES), but it has been deprecated for
-a while and has recently been completely removed.
-
- scsijon> I want to use it together with Aboriginal and create a total
- scsijon> self contained Cross-compiler Development System and they are
- scsijon> needed for further application and utility compiling.
-
-I don't quite understand how you would combine them. Buildroot is really
-about cross compiling everyting, and Aboriginal is just the opposite -
-Compiling on (emulated) native hardware. They both more or less solve
-the same problem, just in different ways.
-
+diff --git a/docs/header.html b/docs/header.html
+index aa16d54..a7160cd 100644
+--- a/docs/header.html
++++ b/docs/header.html
+@@ -65,7 +65,7 @@
+     <br><a href="http://www.scratchbox.org/">Scratchbox</a>
+     <br><a href="http://openembedded.org/">OpenEmbedded</a>
+     <br><a href="http://www.ucdot.org/">uCdot</a>
+-    <br><a href="http://www.linuxdevices.com/">LinuxDevices</a>
++    <br><a href="http://linuxgizmos.com/">LinuxGizmos</a>
+     <br><a href="http://slashdot.org/">Slashdot</a>
+     <br><a href="http://freecode.com/">Freecode</a>
+     <br><a href="http://linuxtoday.com/">Linux Today</a>
 -- 
-Bye, Peter Korsgaard
+1.8.1.5
