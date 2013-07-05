@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 05 Jul 2013 10:32:56 +0200
-Subject: [Buildroot] [PATCH] eglibc: fix typo
-In-Reply-To: <1373012633-3767-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 5 Jul 2013 10:23:53 +0200")
-References: <1373012633-3767-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87wqp5jtjb.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Jul 2013 10:33:23 +0200
+Subject: [Buildroot] [PATCH] eglibc: add license details
+In-Reply-To: <1373012866-3927-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 5 Jul 2013 10:27:46 +0200")
+References: <1373012866-3927-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87siztjtik.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,7 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> For some reason, a '+' sign was left at the beginning of a line in
- Thomas> eglibc.mk. Noticed by Gustavo Zacarias.
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
