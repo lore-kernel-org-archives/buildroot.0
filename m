@@ -1,40 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  5 Jul 2013 10:48:09 +0200
-Subject: [Buildroot] [PATCH] Add 'bc' in the mandatory dependencies
-Message-ID: <1373014089-4489-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Ian Eperson <ian.eperson@dedf.co.uk>
+Date: Fri, 5 Jul 2013 02:04:04 -0700 (PDT)
+Subject: [Buildroot] Antw:Re:  libgcc build fails on Fedora15
+In-Reply-To: <72a087c6ebedc.4e7e366e@home.nl>
+References: <7290940beabd3.4e7df687@home.nl> <20110924174825.131f8fee@skate>
+ <72a087c6ebedc.4e7e366e@home.nl>
+Message-ID: <1373015044930-47930.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since a few kernel releases, having 'bc' installed is mandatory to
-build the kernel. See commit
-https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=70730bca1331fc50c3caacaea00439de1325bd6e
-of the kernel.
 
-Since this tool is generally available by default in distributions,
-and we're unlikely to see version-specific problems with it, we
-just check for it to be installed in
-support/dependencies/dependencies.sh.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/dependencies/dependencies.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Was there any resolution, or even progress, on the (apparent) legacy
+Fedora:Buildroot incompatibility?
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 0b44c5a..61a4140 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -132,7 +132,7 @@ fi;
+I am getting the same error (libgcc_s.so.1: ELF file OS ABI invalid) across
+a variety of Buildroots from 2009, 2010, 2011 with Fedora Core 16.
+
+Any guidance would be useful.  Is moving Fedora forward or back likely to
+overcome this (or moving to some other development platform)?  Would moving
+forward or back with Buildroot be a better strategy?
+
+The target is for a mature Atmel ARM9 SOC.  The assumption was that
+(roughly) aligning the platform, target and Buildroot versions in time was
+likely to maximize compatibility.  Clearly not. 
+
+Regards
+
+
+
+Ian 
+
+
+
  
- # Check that a few mandatory programs are installed
- missing_progs="no"
--for prog in patch perl tar wget cpio python unzip rsync ${DL_TOOLS} ; do
-+for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
-     if ! which $prog > /dev/null ; then
- 	/bin/echo -e "You must install '$prog' on your build machine";
- 	missing_progs="yes"
--- 
-1.8.1.2
+ 
+ 
+ 
+
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/libgcc-build-fails-on-Fedora15-tp2493p47930.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
