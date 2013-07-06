@@ -1,170 +1,45 @@
-From: Jonathan Liu <net147@gmail.com>
-Date: Sat,  6 Jul 2013 23:35:31 +1000
-Subject: [Buildroot] [PATCH 1/1] qt: add patch for QTBUG-31579 to fix
-	polyline drawing
-Message-ID: <1373117731-4997-1-git-send-email-net147@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat,  6 Jul 2013 17:08:08 +0200
+Subject: [Buildroot] [PATCH 4/8] binutils: exclude binutils versions that
+	don't support EABIhf
+In-Reply-To: <1373123292-15085-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1373123292-15085-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1373123292-15085-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jonathan Liu <net147@gmail.com>
----
- package/qt/qt-fix-polyline-drawing.patch | 145 +++++++++++++++++++++++++++++++
- 1 file changed, 145 insertions(+)
- create mode 100644 package/qt/qt-fix-polyline-drawing.patch
+The ARM EABIhf support was introduced in Binutils 2.22, so earlier
+versions should not be selected when EABIhf is used.
 
-diff --git a/package/qt/qt-fix-polyline-drawing.patch b/package/qt/qt-fix-polyline-drawing.patch
-new file mode 100644
-index 0000000..d0c3d07
---- /dev/null
-+++ b/package/qt/qt-fix-polyline-drawing.patch
-@@ -0,0 +1,145 @@
-+From b7029fbd12c32e851ed7d81b692197176eb71d9e Mon Sep 17 00:00:00 2001
-+From: Gunnar Sletta <gunnar.sletta@digia.com>
-+Date: Thu, 4 Jul 2013 16:20:40 +1000
-+Subject: [PATCH] Fix drawing of 0-width polylines from outside the devicerect.
-+
-+This was broken by a previous fix which aimed to fix gaps in
-+polylines with tiny line segments. The result was that we
-+skipped updating the origin point when stroke() didn't produce
-+pixels which accidentally included the case of the line
-+being completely outside the deviceRect. I fixed this
-+by returning the value of clipLine in drawLine to the caller
-+so we could still update the origin for this case.
-+
-+Task-number: QTBUG-31579
-+Change-Id: Iac29436f042da7658bbeaf9370351dc6f2c95065
-+(cherry picked from qtbase/900cccfd459fcbdbc4aa3d313afe12cfbf68fd87)
-+---
-+ src/gui/painting/qcosmeticstroker.cpp | 42 ++++++++++++++++++++++-------------
-+ src/gui/painting/qcosmeticstroker_p.h |  2 +-
-+ 2 files changed, 27 insertions(+), 17 deletions(-)
-+
-+diff --git a/src/gui/painting/qcosmeticstroker.cpp b/src/gui/painting/qcosmeticstroker.cpp
-+index 0061ecb..4413170 100644
-+--- a/src/gui/painting/qcosmeticstroker.cpp
-++++ b/src/gui/painting/qcosmeticstroker.cpp
-+@@ -133,10 +133,15 @@ struct NoDasher {
-+ 
-+ };
-+ 
-++/*
-++ * The return value is the result of the clipLine() call performed at the start
-++ * of each of the two functions, aka "false" means completely outside the devices
-++ * rect.
-++ */
-+ template<DrawPixel drawPixel, class Dasher>
-+-static void drawLine(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
-++static bool drawLine(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
-+ template<DrawPixel drawPixel, class Dasher>
-+-static void drawLineAA(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
-++static bool drawLineAA(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
-+ 
-+ inline void drawPixel(QCosmeticStroker *stroker, int x, int y, int coverage)
-+ {
-+@@ -602,17 +607,20 @@ void QCosmeticStroker::drawPath(const QVectorPath &path)
-+                 caps |= CapEnd;
-+ 
-+             QCosmeticStroker::Point last = this->lastPixel;
-+-            stroke(this, p.x(), p.y(), p2.x(), p2.y(), caps);
-++            bool unclipped = stroke(this, p.x(), p.y(), p2.x(), p2.y(), caps);
-+ 
-+             /* fix for gaps in polylines with fastpen and aliased in a sequence
-+                of points with small distances: if current point p2 has been dropped
-+-               out, keep last non dropped point p. */
-+-            if (fastPenAliased) {
-+-                if (last.x != lastPixel.x || last.y != lastPixel.y ||
-+-                    points == begin + 2 || points == end - 2 ) {
-+-                    {
-+-                        p = p2;
-+-                    }
-++               out, keep last non dropped point p.
-++
-++               However, if the line was completely outside the devicerect, we
-++               still need to update p to avoid drawing the line after this one from
-++               a bad starting position.
-++            */
-++            if (fastPenAliased && unclipped) {
-++                if (last.x != lastPixel.x || last.y != lastPixel.y
-++                    || points == begin + 2 || points == end - 2) {
-++                    p = p2;
-+                 }
-+             } else {
-+                 p = p2;
-+@@ -720,10 +728,10 @@ static inline void capAdjust(int caps, int &x1, int &x2, int &y, int yinc)
-+   the drawing shifts from horizontal to vertical or back.
-+   */
-+ template<DrawPixel drawPixel, class Dasher>
-+-static void drawLine(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2, qreal ry2, int caps)
-++static bool drawLine(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2, qreal ry2, int caps)
-+ {
-+     if (stroker->clipLine(rx1, ry1, rx2, ry2))
-+-        return;
-++        return false;
-+ 
-+     static const int half = 31;
-+     int x1 = toF26Dot6(rx1) + half;
-+@@ -813,7 +821,7 @@ static void drawLine(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2,
-+     } else {
-+         // horizontal
-+         if (!dx)
-+-            return;
-++            return true;
-+ 
-+         QCosmeticStroker::Direction dir = QCosmeticStroker::LeftToRight;
-+ 
-+@@ -886,14 +894,15 @@ static void drawLine(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2,
-+         }
-+     }
-+     stroker->lastPixel = last;
-++    return true;
-+ }
-+ 
-+ 
-+ template<DrawPixel drawPixel, class Dasher>
-+-static void drawLineAA(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2, qreal ry2, int caps)
-++static bool drawLineAA(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2, qreal ry2, int caps)
-+ {
-+     if (stroker->clipLine(rx1, ry1, rx2, ry2))
-+-        return;
-++        return false;
-+ 
-+     int x1 = toF26Dot6(rx1);
-+     int y1 = toF26Dot6(ry1);
-+@@ -967,7 +976,7 @@ static void drawLineAA(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx
-+     } else {
-+         // horizontal
-+         if (!dx)
-+-            return;
-++            return true;
-+ 
-+         int yinc = F16Dot16FixedDiv(dy, dx);
-+ 
-+@@ -1029,6 +1038,7 @@ static void drawLineAA(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx
-+             drawPixel(stroker, x, (y>>16) + 1, alpha * alphaEnd >> 6);
-+         }
-+     }
-++    return true;
-+ }
-+ 
-+ QT_END_NAMESPACE
-+diff --git a/src/gui/painting/qcosmeticstroker_p.h b/src/gui/painting/qcosmeticstroker_p.h
-+index 870738b..3216856 100644
-+--- a/src/gui/painting/qcosmeticstroker_p.h
-++++ b/src/gui/painting/qcosmeticstroker_p.h
-+@@ -56,7 +56,7 @@ QT_MODULE(Gui)
-+ class QCosmeticStroker;
-+ 
-+ 
-+-typedef void (*StrokeLine)(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
-++typedef bool (*StrokeLine)(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
-+ 
-+ class QCosmeticStroker
-+ {
-+-- 
-+1.8.3.2
-+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/binutils/Config.in.host | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 3d687fe..9ddaed7 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -14,14 +14,17 @@ choice
+ 
+ 	config BR2_BINUTILS_VERSION_2_20_1
+ 		depends on !BR2_avr32
++		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.20.1"
+ 
+ 	config BR2_BINUTILS_VERSION_2_21
+ 		depends on !BR2_avr32
++		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.21"
+ 
+ 	config BR2_BINUTILS_VERSION_2_21_1
+ 		depends on !BR2_avr32
++		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.21.1"
+ 
+ 	config BR2_BINUTILS_VERSION_2_22
 -- 
-1.8.3.2
+1.8.1.2
