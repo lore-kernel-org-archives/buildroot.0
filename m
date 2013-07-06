@@ -1,76 +1,170 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 06 Jul 2013 10:35:28 +0200
-Subject: [Buildroot] [Hosting] Primary Prod Ganeti Cluster Hardware
-	Migration & Upgrade - Jul 8-12, 2013 (Time Varies)
-In-Reply-To: <CAORfjXRuN034X3wHFv-0tfL3==F1d6FbhpCziK67EmNhtN-WNg@mail.gmail.com>
- (Lance Albertson's message of "Fri, 5 Jul 2013 12:00:49 -0700")
-References: <CAORfjXRuN034X3wHFv-0tfL3==F1d6FbhpCziK67EmNhtN-WNg@mail.gmail.com>
-Message-ID: <8738rsjdbj.fsf@dell.be.48ers.dk>
+From: Jonathan Liu <net147@gmail.com>
+Date: Sat,  6 Jul 2013 23:35:31 +1000
+Subject: [Buildroot] [PATCH 1/1] qt: add patch for QTBUG-31579 to fix
+	polyline drawing
+Message-ID: <1373117731-4997-1-git-send-email-net147@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Lance" == Lance Albertson <lance@osuosl.org> writes:
+Signed-off-by: Jonathan Liu <net147@gmail.com>
+---
+ package/qt/qt-fix-polyline-drawing.patch | 145 +++++++++++++++++++++++++++++++
+ 1 file changed, 145 insertions(+)
+ create mode 100644 package/qt/qt-fix-polyline-drawing.patch
 
-FYI,
-
-Website and git will also see some downtime next week.
-
- Lance> Service(s) affected: All VMs hosted on our primary production
- Lance> Ganeti cluster We will be performing three tasks on the prod
- Lance> cluster:
-
- Lance> 1. Migration to newer hardware
- Lance> 2. Switching Node OS to CentOS 6
- Lance> 3. Upgrading Ganeti to 2.6.2
-
- Lance> Outage Window:
- Lance> Start: ? Mon, Jul 8, 9:00AM PDT (Mon Jul 8 1600 UTC)
-
- Lance> End: ? ?Fri, Jul 12, 5:00PM PDT (Sat Jul 13 0000 UTC)
-
- Lance> Special Note: The actual outage windows will generally happen
- Lance> during our normal business hours to ensure we get the most
- Lance> productive outcome. If you wish to have your VM migration to
- Lance> happen at a specific time, we can certainly do that even outside
- Lance> of this scheduled window. Please email me directly for that.
-
- Lance> I will send another email on the day of the migration with
- Lance> details on what hosts will be impacted that day and continue to
- Lance> send updates as the week progresses. We could in theory get this
- Lance> completed within a few days but we're doing a week long window
- Lance> just in case.
-
- Lance> Reason for outage:
-
- Lance> We are finally retiring some of the original Ganeti hardware in
- Lance> and moving to newer hardware which will expand our capacity
- Lance> quite a bit. We'll go from a 5-node cluster to a 6-node cluster
- Lance> with about 2-3 times more capacity.
-
- Lance> In addition we're going to switch the primary OS on all the
- Lance> nodes from Gentoo to CentOS 6 to offer better stability and
- Lance> lower staff time maintaining the OS.  Lastly we're finally going
- Lance> to upgrade to Ganeti 2.6.2 which will happen first.
-
- Lance> Projects affected: All VMs hosted on the prod cluster will
- Lance> experience a short down time at some point. Unfortunately we
- Lance> will not be able to do a live migration of the VMs since we're
- Lance> going between different versions of KVM. This means that we will
- Lance> gracefully shutdown a VM and fail it over to the newer hardware
- Lance> and start it back up.
-
- Lance> Please let me know ASAP if you need a specific time setup for
- Lance> your migration.
-
- Lance> Thank you!
-
- Lance> --
- Lance> Lance Albertson
- Lance> Director
- Lance> Oregon State University |?Open Source Lab?
-
+diff --git a/package/qt/qt-fix-polyline-drawing.patch b/package/qt/qt-fix-polyline-drawing.patch
+new file mode 100644
+index 0000000..d0c3d07
+--- /dev/null
++++ b/package/qt/qt-fix-polyline-drawing.patch
+@@ -0,0 +1,145 @@
++From b7029fbd12c32e851ed7d81b692197176eb71d9e Mon Sep 17 00:00:00 2001
++From: Gunnar Sletta <gunnar.sletta@digia.com>
++Date: Thu, 4 Jul 2013 16:20:40 +1000
++Subject: [PATCH] Fix drawing of 0-width polylines from outside the devicerect.
++
++This was broken by a previous fix which aimed to fix gaps in
++polylines with tiny line segments. The result was that we
++skipped updating the origin point when stroke() didn't produce
++pixels which accidentally included the case of the line
++being completely outside the deviceRect. I fixed this
++by returning the value of clipLine in drawLine to the caller
++so we could still update the origin for this case.
++
++Task-number: QTBUG-31579
++Change-Id: Iac29436f042da7658bbeaf9370351dc6f2c95065
++(cherry picked from qtbase/900cccfd459fcbdbc4aa3d313afe12cfbf68fd87)
++---
++ src/gui/painting/qcosmeticstroker.cpp | 42 ++++++++++++++++++++++-------------
++ src/gui/painting/qcosmeticstroker_p.h |  2 +-
++ 2 files changed, 27 insertions(+), 17 deletions(-)
++
++diff --git a/src/gui/painting/qcosmeticstroker.cpp b/src/gui/painting/qcosmeticstroker.cpp
++index 0061ecb..4413170 100644
++--- a/src/gui/painting/qcosmeticstroker.cpp
+++++ b/src/gui/painting/qcosmeticstroker.cpp
++@@ -133,10 +133,15 @@ struct NoDasher {
++ 
++ };
++ 
+++/*
+++ * The return value is the result of the clipLine() call performed at the start
+++ * of each of the two functions, aka "false" means completely outside the devices
+++ * rect.
+++ */
++ template<DrawPixel drawPixel, class Dasher>
++-static void drawLine(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
+++static bool drawLine(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
++ template<DrawPixel drawPixel, class Dasher>
++-static void drawLineAA(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
+++static bool drawLineAA(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
++ 
++ inline void drawPixel(QCosmeticStroker *stroker, int x, int y, int coverage)
++ {
++@@ -602,17 +607,20 @@ void QCosmeticStroker::drawPath(const QVectorPath &path)
++                 caps |= CapEnd;
++ 
++             QCosmeticStroker::Point last = this->lastPixel;
++-            stroke(this, p.x(), p.y(), p2.x(), p2.y(), caps);
+++            bool unclipped = stroke(this, p.x(), p.y(), p2.x(), p2.y(), caps);
++ 
++             /* fix for gaps in polylines with fastpen and aliased in a sequence
++                of points with small distances: if current point p2 has been dropped
++-               out, keep last non dropped point p. */
++-            if (fastPenAliased) {
++-                if (last.x != lastPixel.x || last.y != lastPixel.y ||
++-                    points == begin + 2 || points == end - 2 ) {
++-                    {
++-                        p = p2;
++-                    }
+++               out, keep last non dropped point p.
+++
+++               However, if the line was completely outside the devicerect, we
+++               still need to update p to avoid drawing the line after this one from
+++               a bad starting position.
+++            */
+++            if (fastPenAliased && unclipped) {
+++                if (last.x != lastPixel.x || last.y != lastPixel.y
+++                    || points == begin + 2 || points == end - 2) {
+++                    p = p2;
++                 }
++             } else {
++                 p = p2;
++@@ -720,10 +728,10 @@ static inline void capAdjust(int caps, int &x1, int &x2, int &y, int yinc)
++   the drawing shifts from horizontal to vertical or back.
++   */
++ template<DrawPixel drawPixel, class Dasher>
++-static void drawLine(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2, qreal ry2, int caps)
+++static bool drawLine(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2, qreal ry2, int caps)
++ {
++     if (stroker->clipLine(rx1, ry1, rx2, ry2))
++-        return;
+++        return false;
++ 
++     static const int half = 31;
++     int x1 = toF26Dot6(rx1) + half;
++@@ -813,7 +821,7 @@ static void drawLine(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2,
++     } else {
++         // horizontal
++         if (!dx)
++-            return;
+++            return true;
++ 
++         QCosmeticStroker::Direction dir = QCosmeticStroker::LeftToRight;
++ 
++@@ -886,14 +894,15 @@ static void drawLine(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2,
++         }
++     }
++     stroker->lastPixel = last;
+++    return true;
++ }
++ 
++ 
++ template<DrawPixel drawPixel, class Dasher>
++-static void drawLineAA(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2, qreal ry2, int caps)
+++static bool drawLineAA(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2, qreal ry2, int caps)
++ {
++     if (stroker->clipLine(rx1, ry1, rx2, ry2))
++-        return;
+++        return false;
++ 
++     int x1 = toF26Dot6(rx1);
++     int y1 = toF26Dot6(ry1);
++@@ -967,7 +976,7 @@ static void drawLineAA(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx
++     } else {
++         // horizontal
++         if (!dx)
++-            return;
+++            return true;
++ 
++         int yinc = F16Dot16FixedDiv(dy, dx);
++ 
++@@ -1029,6 +1038,7 @@ static void drawLineAA(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx
++             drawPixel(stroker, x, (y>>16) + 1, alpha * alphaEnd >> 6);
++         }
++     }
+++    return true;
++ }
++ 
++ QT_END_NAMESPACE
++diff --git a/src/gui/painting/qcosmeticstroker_p.h b/src/gui/painting/qcosmeticstroker_p.h
++index 870738b..3216856 100644
++--- a/src/gui/painting/qcosmeticstroker_p.h
+++++ b/src/gui/painting/qcosmeticstroker_p.h
++@@ -56,7 +56,7 @@ QT_MODULE(Gui)
++ class QCosmeticStroker;
++ 
++ 
++-typedef void (*StrokeLine)(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
+++typedef bool (*StrokeLine)(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
++ 
++ class QCosmeticStroker
++ {
++-- 
++1.8.3.2
++
 -- 
-Bye, Peter Korsgaard
+1.8.3.2
