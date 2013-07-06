@@ -1,74 +1,115 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  6 Jul 2013 17:08:09 +0200
-Subject: [Buildroot] [PATCH 5/8] gcc: take into account ARM floating point
-	capabilities
+Date: Sat,  6 Jul 2013 17:08:05 +0200
+Subject: [Buildroot] [PATCH 1/8] arch: introduce BR2_GCC_TARGET_{FPU, FLOAT}
 In-Reply-To: <1373123292-15085-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1373123292-15085-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1373123292-15085-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1373123292-15085-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ARM EABIhf support was introduced in gcc 4.6.x, so versions
-earlier than this one should not be used when EABIhf is selected.
+Buildroot already has the BR2_GCC_TARGET_{TUNE,ARCH,ABI,CPU} hidden
+kconfig strings that allow per-architecture Config.in files to feed
+the appropriate values of --with-{tune,arch,abi-cpu} when building
+gcc, or the appropriate flags for the external toolchain wrapper.
 
-The ARM VFPv4 support was introduced in gcc 4.5.x, so versions earlier
-than this one should not be used when VFPv4 is used.
+This commit has two additional options: BR2_GCC_TARGET_{FPU,FLOAT},
+that allows to define the --with-{fpu,float} gcc configure options for
+the internal backend, or the -mfpu/-mfloat-abi options for the flags
+of the external toolchain wrapper.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/Config.in.host | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ arch/Config.in                                       |  6 ++++++
+ package/gcc/gcc.mk                                   | 10 ++++++++++
+ toolchain/toolchain-external/ext-tool.mk             | 10 ++++++++++
+ toolchain/toolchain-external/ext-toolchain-wrapper.c |  6 ++++++
+ 4 files changed, 32 insertions(+)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 1b19128..0a893b2 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -22,15 +22,22 @@ choice
+diff --git a/arch/Config.in b/arch/Config.in
+index 5ca05cd..d95d4ef 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -192,6 +192,12 @@ config BR2_GCC_TARGET_CPU
+ config BR2_GCC_TARGET_CPU_REVISION
+ 	string
  
- 	config BR2_GCC_VERSION_4_3_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
-+		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.3.x"
++config BR2_GCC_TARGET_FPU
++	string
++
++config BR2_GCC_TARGET_FLOAT_ABI
++	string
++
+ # Set up target binary format
+ choice
+ 	prompt "Target Binary Format"
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 968354b..c5ca857 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -165,6 +165,16 @@ HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
+ endif
+ endif
  
- 	config BR2_GCC_VERSION_4_4_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
- 		bool "gcc 4.4.x"
-+		# ARM EABIhf support appeared in gcc 4.6
-+		depends on !BR2_ARM_EABIHF
-+		# VFPv4 support appeared in gcc 4.5
-+		depends on !BR2_ARM_FPU_VFPV4 && !BR2_ARM_FPU_VFPV4D16
++GCC_TARGET_FPU = $(call qstrip,$(BR2_GCC_TARGET_FPU))
++ifneq ($(GCC_TARGET_FPU),)
++HOST_GCC_COMMON_CONF_OPT += --with-fpu=$(GCC_TARGET_FPU)
++endif
++
++GCC_TARGET_FLOAT_ABI = $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
++ifneq ($(GCC_TARGET_FLOAT_ABI),)
++HOST_GCC_COMMON_CONF_OPT += --with-float=$(GCC_TARGET_FLOAT_ABI)
++endif
++
+ # Branding works on >= 4.3
+ ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
+ HOST_GCC_COMMON_CONF_OPT += \
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index b8d77ad..5c51e06 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -145,6 +145,8 @@ CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISIO
+ endif
+ CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
+ CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
++CC_TARGET_FLOAT_:=$(call qstrip,$(BR2_GCC_TARGET_FLOAT))
++CC_TARGET_FPU_:=$(call qstrip,$(BR2_GCC_TARGET_FPU))
  
- 	config BR2_GCC_VERSION_4_5_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
-+		# ARM EABIhf support appeared in gcc 4.6
-+		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.5.x"
- 
- 	config BR2_GCC_VERSION_4_6_X
-@@ -40,17 +47,20 @@ choice
- 
- 	config BR2_GCC_VERSION_4_7_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
-+		depends on !BR2_ARM_OABI
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.7.x"
- 
- 	config BR2_GCC_VERSION_4_8_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
-+		depends on !BR2_ARM_OABI
- 		bool "gcc 4.8.x"
- 
- 	config BR2_GCC_VERSION_SNAP
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
-+		depends on !BR2_ARM_OABI
- 		bool "gcc snapshot"
- endchoice
- 
+ # march/mtune/floating point mode needs to be passed to the external toolchain
+ # to select the right multilib variant
+@@ -168,6 +170,14 @@ ifneq ($(CC_TARGET_ABI_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
+ endif
++ifneq ($(CC_TARGET_FLOAT_),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(CC_TARGET_FLOAT_)
++TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_FLOAT='"$(CC_TARGET_FLOAT_)"'
++endif
++ifneq ($(CC_TARGET_FPU_),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=$(CC_TARGET_FPU_)
++TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_FPU='"$(CC_TARGET_FPU_)"'
++endif
+ ifeq ($(BR2_BINFMT_FLAT),y)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_BINFMT_FLAT
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index 9d79d68..e504ff2 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -38,6 +38,12 @@ static char *predef_args[] = {
+ #ifdef BR_ABI
+ 	"-mabi=" BR_ABI,
+ #endif
++#ifdef BR_FLOAT
++	"-mfloat-abi=" BR_FLOAT,
++#endif
++#ifdef BR2_FPU
++	"-mfpu=" BR_FPU,
++#endif
+ #ifdef BR_SOFTFLOAT
+ 	"-msoft-float",
+ #endif /* BR_SOFTFLOAT */
 -- 
 1.8.1.2
