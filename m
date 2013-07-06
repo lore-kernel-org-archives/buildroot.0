@@ -1,81 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  6 Jul 2013 17:08:11 +0200
-Subject: [Buildroot] [PATCH 7/8] configs: update defconfigs after VFP option
-	changes
+Date: Sat,  6 Jul 2013 17:08:10 +0200
+Subject: [Buildroot] [PATCH 6/8] toolchain: remove the old BR2_VFP_FLOAT
+	option
 In-Reply-To: <1373123292-15085-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1373123292-15085-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1373123292-15085-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1373123292-15085-7-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Now that we have a much better way of selecting between the various
+VFP versions and capabilities, the BR2_VFP_FLOAT version no longer
+makes sense. This commit gets rid of it, and adds the appropriate
+Config.in.legacy code.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/calao_snowball_defconfig    | 3 +--
- configs/mx53loco_defconfig          | 3 +--
- configs/qemu_arm_nuri_defconfig     | 3 +--
- configs/qemu_arm_vexpress_defconfig | 3 +--
- 4 files changed, 4 insertions(+), 8 deletions(-)
+ Config.in.legacy                                     |  9 +++++++++
+ toolchain/toolchain-buildroot/Config.in.2            | 12 ------------
+ toolchain/toolchain-external/ext-tool.mk             |  5 -----
+ toolchain/toolchain-external/ext-toolchain-wrapper.c |  3 ---
+ 4 files changed, 9 insertions(+), 20 deletions(-)
 
-diff --git a/configs/calao_snowball_defconfig b/configs/calao_snowball_defconfig
-index 360ed51..fd9e1b6 100644
---- a/configs/calao_snowball_defconfig
-+++ b/configs/calao_snowball_defconfig
-@@ -1,10 +1,9 @@
- BR2_arm=y
- BR2_cortex_a9=y
- BR2_GCC_VERSION_4_7_X=y
--# BR2_SOFT_FLOAT is not set
-+BR2_ARM_FPU_VFPV3D16=y
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
--BR2_VFP_FLOAT=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA2"
- BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index ff3948b..08de3da 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -1,8 +1,7 @@
- # Architecture
- BR2_arm=y
- BR2_cortex_a8=y
--# BR2_SOFT_FLOAT is not set
--BR2_VFP_FLOAT=y
-+BR2_ARM_FPU_VFPV3D16=y
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 01bf900..b92b656 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -76,6 +76,15 @@ config BR2_ELF2FLT
+ 	  BR2_PACKAGE_HOST_ELF2FLT due to the conversion of elf2flt to
+ 	  the package infrastructure.
  
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
-index 27dac27..57c0470 100644
---- a/configs/qemu_arm_nuri_defconfig
-+++ b/configs/qemu_arm_nuri_defconfig
-@@ -2,8 +2,7 @@
- BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
--BR2_VFP_FLOAT=y
--# BR2_SOFT_FLOAT is not set
-+BR2_ARM_FPU_VFPV3D16=y
++config BR2_VFP_FLOAT
++	bool "the ARM VFP floating point option has been renamed"
++	select BR2_LEGACY
++	help
++	  Due to a major refactoring of the floating-point handling of
++	  the ARM architecture support, the BR2_VFP_FLOAT option has
++	  been replaced with a choice of options that allows to select
++	  between various VFP versions/capabilities.
++
+ ###############################################################################
+ comment "Legacy options removed in 2013.05"
  
- # System
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index 07b629e..4184da4 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -2,8 +2,7 @@
- BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
--BR2_VFP_FLOAT=y
--# BR2_SOFT_FLOAT is not set
-+BR2_ARM_FPU_VFPV3D16=y
+diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
+index 9bbf016..5a191f3 100644
+--- a/toolchain/toolchain-buildroot/Config.in.2
++++ b/toolchain/toolchain-buildroot/Config.in.2
+@@ -23,16 +23,4 @@ config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
  
- # System
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ source "package/elf2flt/Config.in.host"
+ 
+-config BR2_VFP_FLOAT
+-	bool "Use ARM Vector Floating Point unit"
+-	depends on !BR2_SOFT_FLOAT
+-	depends on BR2_arm || BR2_armeb
+-	help
+-	  Setting this option will enable the "-mfpu=vfp" option.
+-	  If your ARM CPU has a Vector Floating Point Unit (VFP)
+-	  and the toolchain supports the option, then the
+-	  code can be optimized.
+-
+-	  Most people will answer N.
+-
+ endif
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 5c51e06..98a4c59 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -196,11 +196,6 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
+ endif
+ 
+-ifeq ($(BR2_VFP_FLOAT),y)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=vfp
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_VFPFLOAT=1
+-endif
+-
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
+ TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(TOOLCHAIN_EXTERNAL_DIR)/.extracted
+ endif
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index e504ff2..d3319e9 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -47,9 +47,6 @@ static char *predef_args[] = {
+ #ifdef BR_SOFTFLOAT
+ 	"-msoft-float",
+ #endif /* BR_SOFTFLOAT */
+-#ifdef BR_VFPFLOAT
+-	"-mfpu=vfp",
+-#endif /* BR_VFPFLOAT */
+ #ifdef BR_64
+ 	"-m64",
+ #endif
 -- 
 1.8.1.2
