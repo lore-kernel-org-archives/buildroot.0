@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  6 Jul 2013 22:48:44 +0200
-Subject: [Buildroot] [PATCH 05/12] toolchain/helpers: ARM OABI is no longer
-	supported
+Date: Sat,  6 Jul 2013 22:48:51 +0200
+Subject: [Buildroot] [PATCH 12/12] arch/arm: remove ARM_EABI symbol since
+	there's no users left
 In-Reply-To: <cover.1373143368.git.yann.morin.1998@free.fr>
 References: <cover.1373143368.git.yann.morin.1998@free.fr>
-Message-ID: <786c4e1f1dd6043e11563d535916248e68b297ca.1373143368.git.yann.morin.1998@free.fr>
+Message-ID: <95403113defe7a6c8f713a3e2ba0c85ca1e6df3b.1373143368.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +14,24 @@ To: buildroot@busybox.net
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ arch/Config.in.arm | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 1509ff8..0398b63 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -285,10 +285,6 @@ check_arm_abi = \
- 	else \
- 		EXT_TOOLCHAIN_ABI="oabi" ; \
- 	fi ; \
--	if [ x$(BR2_ARM_OABI) = x"y" -a $${EXT_TOOLCHAIN_ABI} = "eabi" ] ; then \
--		echo "Incorrect ABI setting" ; \
--		exit 1 ; \
--	fi ; \
- 	if [ x$(BR2_ARM_EABI) = x"y" -a $${EXT_TOOLCHAIN_ABI} = "oabi" ] ; then \
- 		echo "Incorrect ABI setting" ; \
- 		exit 1 ; \
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 8399a8c..39406fa 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -64,9 +64,6 @@ config BR2_arm1136jf_s
+ 	bool
+ 	default BR2_arm1136jf_s_r0 || BR2_arm1136jf_s_r1
+ 
+-config BR2_ARM_EABI
+-	def_bool y
+-
+ config BR2_ARM_ENABLE_NEON
+ 	bool "Enable NEON SIMD extension support"
+ 	depends on BR2_ARM_CPU_MAYBE_HAS_NEON
 -- 
 1.8.1.2
