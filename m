@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  6 Jul 2013 22:48:43 +0200
-Subject: [Buildroot] [PATCH 04/12] package/uclibc: ARM OABI is no longer
-	supported
+Date: Sat,  6 Jul 2013 22:48:45 +0200
+Subject: [Buildroot] [PATCH 06/12] arch/arm: drop 'if EABI' since it's
+	always true now
 In-Reply-To: <cover.1373143368.git.yann.morin.1998@free.fr>
 References: <cover.1373143368.git.yann.morin.1998@free.fr>
-Message-ID: <e6a7a3fba7677d056f6b81acdd2b067374a686e0.1373143368.git.yann.morin.1998@free.fr>
+Message-ID: <91f558c7563a286c58210ae8490a057368e84b5c.1373143368.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +14,20 @@ To: buildroot@busybox.net
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/Config.in | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ arch/Config.in.arm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index e508342..b9917a7 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -90,7 +90,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 1fc0bd7..8399a8c 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -130,4 +130,4 @@ config BR2_GCC_TARGET_ARCH
+ 	default "iwmmxt"	if BR2_iwmmxt
  
- choice
- 	prompt "Thread library implementation"
--	default BR2_PTHREADS_NATIVE if !BR2_ARM_OABI && !(BR2_avr32 || BR2_xtensa)
-+	default BR2_PTHREADS_NATIVE if !(BR2_avr32 || BR2_xtensa)
- 	default BR2_PTHREADS_OLD
- 	help
- 	  Use this option to select the thread library implementation
-@@ -114,7 +114,6 @@ choice
- 	config BR2_PTHREADS_NATIVE
- 		bool "Native POSIX Threading (NPTL)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
--		depends on !BR2_ARM_OABI
- 		depends on !BR2_x86_i386
- 		depends on !BR2_avr32
- 		depends on !BR2_xtensa
-@@ -186,7 +185,6 @@ config BR2_UCLIBC_ARM_TYPE
- config BR2_UCLIBC_ARM_ABI
- 	string
- 	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
--	default OABI if BR2_ARM_OABI
- 	default EABI if BR2_ARM_EABI
- 
- config BR2_UCLIBC_ARM_BX
+ config BR2_GCC_TARGET_ABI
+-	default "aapcs-linux"	if BR2_ARM_EABI
++	default "aapcs-linux"
 -- 
 1.8.1.2
