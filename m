@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  6 Jul 2013 22:48:47 +0200
-Subject: [Buildroot] [PATCH 08/12] pkg-infra: dump all ARM OABI references
-	when setting ABI
+Date: Sat,  6 Jul 2013 22:48:48 +0200
+Subject: [Buildroot] [PATCH 09/12] toolchain/helpers: only check for an EABI
+	toolchain
 In-Reply-To: <cover.1373143368.git.yann.morin.1998@free.fr>
 References: <cover.1373143368.git.yann.morin.1998@free.fr>
-Message-ID: <4623a55d6aea14eeff64180bbfdb159d12ab017c.1373143368.git.yann.morin.1998@free.fr>
+Message-ID: <3b6cf971d7a39efdd850193671308292d8716594.1373143368.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,33 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+... since we only support EABI now.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ toolchain/helpers.mk | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 405b3e4..06db122 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -30,11 +30,10 @@ LIBC=gnu
- endif
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 0398b63..95217e7 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -280,13 +280,8 @@ check_uclibc = \
+ check_arm_abi = \
+ 	__CROSS_CC=$(strip $1) ; \
+ 	EXT_TOOLCHAIN_TARGET=`LANG=C $${__CROSS_CC} -v 2>&1 | grep ^Target | cut -f2 -d ' '` ; \
+-	if echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
+-		EXT_TOOLCHAIN_ABI="eabi" ; \
+-	else \
+-		EXT_TOOLCHAIN_ABI="oabi" ; \
+-	fi ; \
+-	if [ x$(BR2_ARM_EABI) = x"y" -a $${EXT_TOOLCHAIN_ABI} = "oabi" ] ; then \
+-		echo "Incorrect ABI setting" ; \
++	if ! echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
++		echo "External toolchain uses the unsuported OABI" ; \
+ 		exit 1 ; \
+ 	fi
  
- # The ABI suffix is a bit special on ARM, as it needs to be
--# -uclibcgnueabi for uClibc EABI, -uclibc for uClibc OABI, -gnueabi
--# for glibc EABI and -gnu for glibc OABI. This means that the LIBC and
--# ABI aren't strictly orthogonal, which explains why we need the test
--# on LIBC below.
--ifeq ($(BR2_ARM_EABI),y)
-+# -uclibcgnueabi for uClibc EABI, and -gnueabi for glibc EABI.
-+# This means that the LIBC and ABI aren't strictly orthogonal,
-+# which explains why we need the test on LIBC below.
-+ifeq ($(BR2_arm)$(BR2_armeb),y)
- ifeq ($(LIBC),uclibc)
- ABI=gnueabi
- else
 -- 
 1.8.1.2
