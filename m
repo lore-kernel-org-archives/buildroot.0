@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  6 Jul 2013 22:48:45 +0200
-Subject: [Buildroot] [PATCH 06/12] arch/arm: drop 'if EABI' since it's
-	always true now
+Date: Sat,  6 Jul 2013 22:48:46 +0200
+Subject: [Buildroot] [PATCH 07/12] linux: remove EABI conditional
 In-Reply-To: <cover.1373143368.git.yann.morin.1998@free.fr>
 References: <cover.1373143368.git.yann.morin.1998@free.fr>
-Message-ID: <91f558c7563a286c58210ae8490a057368e84b5c.1373143368.git.yann.morin.1998@free.fr>
+Message-ID: <63ebabf8467d7e6bbc5317e251d680acfbaa285a.1373143368.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,29 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- arch/Config.in.arm | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+We're only EABI now, so we want to always build an EABI kernel
+when we're building for ARM.
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 1fc0bd7..8399a8c 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -130,4 +130,4 @@ config BR2_GCC_TARGET_ARCH
- 	default "iwmmxt"	if BR2_iwmmxt
- 
- config BR2_GCC_TARGET_ABI
--	default "aapcs-linux"	if BR2_ARM_EABI
-+	default "aapcs-linux"
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ linux/linux.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index befef16..5ccd205 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -170,9 +170,8 @@ define LINUX_CONFIGURE_CMDS
+ 	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+ 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+-	$(if $(BR2_ARM_EABI),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config),
+-		$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config))
++	$(if $(BR2_arm)$(BR2_armeb),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
+ 	# As the kernel gets compiled before root filesystems are
+ 	# built, we create a fake cpio file. It'll be
+ 	# replaced later by the real cpio archive, and the kernel will be
 -- 
 1.8.1.2
