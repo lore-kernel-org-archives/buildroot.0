@@ -1,12 +1,11 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 06 Jul 2013 10:32:55 +0200
-Subject: [Buildroot] [Hosting] Migrating ash (mailman, ticket tracking,
-	imap, shell server) to a VM - Jul 8,
-	2013 5:00PM PDT (Jul 9 2013 0000 UTC)
-In-Reply-To: <CAORfjXTabfgCw=KANg3Te42TAB2=oM7h3kxhuvWRJVT2xF3L3g@mail.gmail.com>
- (Lance Albertson's message of "Fri, 5 Jul 2013 12:13:26 -0700")
-References: <CAORfjXTabfgCw=KANg3Te42TAB2=oM7h3kxhuvWRJVT2xF3L3g@mail.gmail.com>
-Message-ID: <877gh4jdfs.fsf@dell.be.48ers.dk>
+Date: Sat, 06 Jul 2013 10:35:28 +0200
+Subject: [Buildroot] [Hosting] Primary Prod Ganeti Cluster Hardware
+	Migration & Upgrade - Jul 8-12, 2013 (Time Varies)
+In-Reply-To: <CAORfjXRuN034X3wHFv-0tfL3==F1d6FbhpCziK67EmNhtN-WNg@mail.gmail.com>
+ (Lance Albertson's message of "Fri, 5 Jul 2013 12:00:49 -0700")
+References: <CAORfjXRuN034X3wHFv-0tfL3==F1d6FbhpCziK67EmNhtN-WNg@mail.gmail.com>
+Message-ID: <8738rsjdbj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,37 +16,56 @@ To: buildroot@busybox.net
 
 FYI,
 
-The mailing list will have a short downtime on Monday.
+Website and git will also see some downtime next week.
 
-let me know if something isn't working afterwards.
+ Lance> Service(s) affected: All VMs hosted on our primary production
+ Lance> Ganeti cluster We will be performing three tasks on the prod
+ Lance> cluster:
 
-
- Lance> Service(s) affected: All mailman instances on our shared
- Lance> instance, all OSL mail delivery, RT (ticket tracking) and OSL
- Lance> Shell access.
-
- Lance> All mail will be queued up while the outage occurs.?
+ Lance> 1. Migration to newer hardware
+ Lance> 2. Switching Node OS to CentOS 6
+ Lance> 3. Upgrading Ganeti to 2.6.2
 
  Lance> Outage Window:
- Lance> Start: ? Mon, Jul 8, 5:00PM PDT (Tue Jul 9 0000 UTC)
+ Lance> Start: ? Mon, Jul 8, 9:00AM PDT (Mon Jul 8 1600 UTC)
 
- Lance> End: ? ?Mon, Jul 8, 7:00PM PDT (Tue Jul 9 0200 UTC)
+ Lance> End: ? ?Fri, Jul 12, 5:00PM PDT (Sat Jul 13 0000 UTC)
+
+ Lance> Special Note: The actual outage windows will generally happen
+ Lance> during our normal business hours to ensure we get the most
+ Lance> productive outcome. If you wish to have your VM migration to
+ Lance> happen at a specific time, we can certainly do that even outside
+ Lance> of this scheduled window. Please email me directly for that.
+
+ Lance> I will send another email on the day of the migration with
+ Lance> details on what hosts will be impacted that day and continue to
+ Lance> send updates as the week progresses. We could in theory get this
+ Lance> completed within a few days but we're doing a week long window
+ Lance> just in case.
 
  Lance> Reason for outage:
 
- Lance> The hardware that hosts mailman, our mail store and shell is
- Lance> aging and?desperately?needs to be on better hardware. In
- Lance> additional we're running out of disk space on the machine and
- Lance> can more easily manage that grow in a virtualizied
- Lance> environment. I expect the actual outage to last around one hour
- Lance> while we wait for a final sync of the data to the VM.
+ Lance> We are finally retiring some of the original Ganeti hardware in
+ Lance> and moving to newer hardware which will expand our capacity
+ Lance> quite a bit. We'll go from a 5-node cluster to a 6-node cluster
+ Lance> with about 2-3 times more capacity.
 
- Lance> We will likely have another outage on this host later in the
- Lance> summer to switch it to CentOS 6 but this migration is literally
- Lance> just an rsync to get it on newer hardware.
+ Lance> In addition we're going to switch the primary OS on all the
+ Lance> nodes from Gentoo to CentOS 6 to offer better stability and
+ Lance> lower staff time maintaining the OS.  Lastly we're finally going
+ Lance> to upgrade to Ganeti 2.6.2 which will happen first.
 
- Lance> Projects affected: All shared mailman instances on ash and OSL
- Lance> staff.
+ Lance> Projects affected: All VMs hosted on the prod cluster will
+ Lance> experience a short down time at some point. Unfortunately we
+ Lance> will not be able to do a live migration of the VMs since we're
+ Lance> going between different versions of KVM. This means that we will
+ Lance> gracefully shutdown a VM and fail it over to the newer hardware
+ Lance> and start it back up.
+
+ Lance> Please let me know ASAP if you need a specific time setup for
+ Lance> your migration.
+
+ Lance> Thank you!
 
  Lance> --
  Lance> Lance Albertson
