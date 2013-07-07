@@ -1,31 +1,133 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 07 Jul 2013 21:39:09 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	yem-misc-updates
-In-Reply-To: <cover.1373202515.git.yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 7 Jul 2013 15:13:23 +0200")
-References: <cover.1373202515.git.yann.morin.1998@free.fr>
-Message-ID: <87hag6i2hu.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Jul 2013 21:42:49 +0200
+Subject: [Buildroot] [PATCH] icecast: new package
+In-Reply-To: <1373222441-2848-1-git-send-email-ezequiel.garcia@free-electrons.com>
+References: <1373222441-2848-1-git-send-email-ezequiel.garcia@free-electrons.com>
+Message-ID: <20130707214249.2677a569@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Dear Ezequiel Garcia,
 
- Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> Hello All!
+On Sun,  7 Jul 2013 15:40:41 -0300, Ezequiel Garcia wrote:
+> Icecast is a streaming media server which currently supports Ogg
+> Vorbis and MP3 audio streams. It can be used to create an Internet
+> radio station or a privately running jukebox and many things in
+> between. It is very versatile in that new formats can be added
+> relatively easily and supports open standards for commuincation and
+> interaction.
+> 
+> Icecast is distributed under the GNU GPL, version 2. A copy of this
+> license is included with this software in the COPYING file.
+> 
+> Signed-off-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
+> ---
+> I'm no longer working on this stuff because the box I was interested
+> in hadn't hardware FP support making it impossible to achieve what
+> I originally planned.
 
- Yann> Here is a small series that (again) bumps the RPi-related packages.
- Yann> Basically, there are a bunch of fixes in audio, GL, USB and raspi-cam,
- Yann> plus a few framebuffer optimisations.
+Are you still willing to do a few iterations to get it merged?
 
- Yann> I'm not sure how inter-twinned the linux/firmware/userland bits are,
- Yann> so I've made three patches. They work nicely in this order for me,
- Yann> but YMMV, as they say. ;-)
+A couple of comments below.
 
-Committed series, thanks.
+> diff --git a/package/multimedia/icecast/Config.in b/package/multimedia/icecast/Config.in
+> new file mode 100644
+> index 0000000..0d2c343
+> --- /dev/null
+> +++ b/package/multimedia/icecast/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_ICECAST
+> +	bool "icecast"
+> +	select BR2_PACKAGE_LIBOGG
+> +	select BR2_PACKAGE_LIBVORBIS
+> +	select BR2_PACKAGE_LIBXML2
+> +	select BR2_PACKAGE_LIBXSLT
+> +	help
+> +	  Icecast is a streaming media server which currently supports Ogg
+> +	  Vorbis and MP3 audio streams. It can be used to create an Internet
+> +	  radio station or a privately running jukebox and many things in
+> +	  between. It is very versatile in that new formats can be added
+> +	  relatively easily and supports open standards for commuincation and
+> +	  interaction.
 
+We normally add a empty line here, and then one line with the upstream
+project URL.
+
+> diff --git a/package/multimedia/icecast/icecast-curl-config.patch b/package/multimedia/icecast/icecast-curl-config.patch
+> new file mode 100644
+> index 0000000..c193aa9
+> --- /dev/null
+> +++ b/package/multimedia/icecast/icecast-curl-config.patch
+> @@ -0,0 +1,12 @@
+
+We always want a description + Signed-off-by line. We also generally
+prefer patches on the configure.in or configure.ac file, rather than on
+configure directly. For efficiency reasons (avoid the need of
+autoreconfiguring the package), we may accept a patch on configure, but
+I would say that configure.in or configure.ac should also be patched
+appropriately.
+
+> diff --git a/package/multimedia/icecast/icecast.mk b/package/multimedia/icecast/icecast.mk
+> new file mode 100644
+> index 0000000..f840be1
+> --- /dev/null
+> +++ b/package/multimedia/icecast/icecast.mk
+> @@ -0,0 +1,25 @@
+> +############################################################
+
+80 # are needed now.
+
+> +#
+> +# Icecast (Shoutcast compatible streaming server)
+
+Just the package name, not more.
+
+> +#
+> +############################################################
+> +
+> +ICECAST_SITE = http://downloads.xiph.org/releases/icecast
+> +ICECAST_VERSION = 2.3.2
+> +ICECAST_LICENSE = GPLv2
+
+Have you checked whether is GPLv2 only, or GPLv2 or later? If the
+latter, then it should be GPLv2+.
+
+> +ICECAST_LICENSE_FILES = COPYING
+> +
+> +ICECAST_DEPENDENCIES = host-pkgconf libxslt libxml2 libogg libvorbis libcurl
+
+Why do you have libcurl here? From the rest of your package, it seems
+like an optional dependency.
+
+> +ICECAST_CONF_OPT += --with-xslt-config=$(STAGING_DIR)/usr/bin/xslt-config
+> +ICECAST_CONF_OPT += --with-ogg=$(STAGING_DIR)/usr
+> +ICECAST_CONF_OPT += --with-vorbis=$(STAGING_DIR)/usr
+
+We normally write this like:
+
+ICECAST_CONF_OPT = \
+	--with-xslt-config=$(STAGING_DIR)/usr/bin/xslt-config \
+	--with-ogg=$(STAGING_DIR)/usr \
+	--with-vorbis=$(STAGING_DIR)/usr
+
+> +
+> +ifeq ($(BR2_PACKAGE_LIBCURL),y)
+> +ICECAST_DEPENDENCIES += libcurl
+> +ICECAST_CONF_OPT += --with-curl-config=$(STAGING_DIR)/usr/bin/curl-config
+> +else
+> +ICECAST_CONF_OPT += --without-curl
+> +endif
+> +
+> +$(eval $(autotools-package))
+
+Otherwise, looks good to me.
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
