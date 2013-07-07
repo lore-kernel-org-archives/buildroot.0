@@ -1,26 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 07 Jul 2013 21:45:00 +0200
-Subject: [Buildroot] [PATCH 1/3] efl: factorize version number as
-	EFL_VERSION
-In-Reply-To: <1373209644-18260-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 7 Jul 2013 17:07:22 +0200")
-References: <1373209644-18260-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878v1ii283.fsf@dell.be.48ers.dk>
+Date: Sun, 07 Jul 2013 21:45:19 +0200
+Subject: [Buildroot] [PATCH] package/tvheadend: bump version
+In-Reply-To: <1373213633-18190-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 7 Jul 2013 18:13:53 +0200")
+References: <1373213633-18190-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <874nc6i27k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- Thomas> All the EFL components are released simultaneously, with an
- Thomas> identical version number, just like all Qt5 components for
- Thomas> example. So it makes sense to have a single EFL_VERSION
- Thomas> variable in package/efl/efl.mk that is used by all the packages
- Thomas> in package/efl/*/*.mk.
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> ... for a truck-load of memory-leak and other various fixes.
 
-Committed series, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
