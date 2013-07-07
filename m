@@ -1,36 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Jul 2013 15:13:26 +0200
-Subject: [Buildroot] [PATCH 3/3] package/rpi-userland: bump version
-In-Reply-To: <cover.1373202515.git.yann.morin.1998@free.fr>
-References: <cover.1373202515.git.yann.morin.1998@free.fr>
-Message-ID: <2498afa0081e1da31f07adc355a2ac1b47bda093.1373202515.git.yann.morin.1998@free.fr>
+Date: Sun, 7 Jul 2013 15:20:03 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+ yem-no-arm-oabi
+In-Reply-To: <20130707150942.21590fe2@skate>
+References: <cover.1373143368.git.yann.morin.1998@free.fr>
+ <20130707150942.21590fe2@skate>
+Message-ID: <20130707132003.GA3574@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thomas, All,
 
-Misc fixes for audio and raspi-cam.
+On 2013-07-07 15:09 +0200, Thomas Petazzoni spake thusly:
+> On Sat,  6 Jul 2013 22:48:39 +0200, Yann E. MORIN wrote:
+> > This series finally gets rid of the legacy ARM OABI support.
+> > The series is split in four steps:
+[--SNIP--]
+> As we further discussed, I will take your patch series, put it at the
+> beginning of mine (with some necessary adjustments), will rebase my
+> work on top of it, and resend the whole thing.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/rpi-userland/rpi-userland.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ok, thank you! :-)
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 55d7b09..fca0e25 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_USERLAND_VERSION = 986774edf7c91a8a91d59abadbdb0b34b5a387dc
-+RPI_USERLAND_VERSION = 8b271ac
- RPI_USERLAND_SITE = http://github.com/raspberrypi/userland/tarball/$(RPI_USERLAND_VERSION)
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.1.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
