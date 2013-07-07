@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Jul 2013 15:13:25 +0200
-Subject: [Buildroot] [PATCH 2/3] config/rpi: bump kernel
+Date: Sun,  7 Jul 2013 15:13:26 +0200
+Subject: [Buildroot] [PATCH 3/3] package/rpi-userland: bump version
 In-Reply-To: <cover.1373202515.git.yann.morin.1998@free.fr>
 References: <cover.1373202515.git.yann.morin.1998@free.fr>
-Message-ID: <6c4c2d2ee3ed0eba2cb3392c8e360859285b2f9f.1373202515.git.yann.morin.1998@free.fr>
+Message-ID: <2498afa0081e1da31f07adc355a2ac1b47bda093.1373202515.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +12,25 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Misc fixes and enhancements:
-  - faster image blitting in framebuffer
-  - USB fixes, and use of FIQ instead of plain IRQ
-  - generic ARM fixes for memset
-  - BT l2cap fix
+Misc fixes for audio and raspi-cam.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- configs/rpi_defconfig | 2 +-
+ package/rpi-userland/rpi-userland.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/rpi_defconfig b/configs/rpi_defconfig
-index 40fd333..3df440f 100644
---- a/configs/rpi_defconfig
-+++ b/configs/rpi_defconfig
-@@ -17,7 +17,7 @@ BR2_DEFAULT_KERNEL_VERSION="3.6.11"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="5516fc2"
-+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="53f7e0b"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 55d7b09..fca0e25 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_USERLAND_VERSION = 986774edf7c91a8a91d59abadbdb0b34b5a387dc
++RPI_USERLAND_VERSION = 8b271ac
+ RPI_USERLAND_SITE = http://github.com/raspberrypi/userland/tarball/$(RPI_USERLAND_VERSION)
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
 -- 
 1.8.1.2
