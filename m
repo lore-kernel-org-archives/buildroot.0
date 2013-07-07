@@ -1,58 +1,49 @@
-From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-Date: Sun, 7 Jul 2013 18:43:30 -0300
-Subject: [Buildroot] uClibc toolchain building issue
-In-Reply-To: <87ip0mgkeu.fsf@dell.be.48ers.dk>
-References: <20130707202939.GB5429@localhost> <87ip0mgkeu.fsf@dell.be.48ers.dk>
-Message-ID: <20130707214327.GC5429@localhost>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 7 Jul 2013 23:02:57 +0200
+Subject: [Buildroot] [git commit] linux-headers: add 3.10.x series
+Message-ID: <20130707214539.043B19A58F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 07, 2013 at 10:55:05PM +0200, Peter Korsgaard wrote:
-> >>>>> "Ezequiel" == Ezequiel Garcia <ezequiel.garcia@free-electrons.com> writes:
-> 
->  Ezequiel> Hello,
->  Ezequiel> I'm using today's origin/master HEAD to build my uClibc toolchain
->  Ezequiel> with the below config, and I found this error message:
-> 
->  Ezequiel>   cp -f toolchain/uClibc/uClibc-0.9.33.config /home/zeta/buildroot/buildroot/output/build/uclibc-0.9.32.1/.config
->  Ezequiel>   cp: cannot stat ?toolchain/uClibc/uClibc-0.9.33.config?: No such file or directory
->  Ezequiel>   make: *** [/home/zeta/buildroot/buildroot/output/build/uclibc-0.9.32.1/.stamp_configured] Error 1
-> 
->  Ezequiel> But a quick find tells me that the uClibc config is not in toolchain,
->  Ezequiel> but in package/uclibc, right?
-> 
->  Ezequiel>   $ find . -name "uClibc*"
->  Ezequiel>   ./package/uclibc/uClibc-0.9.33.config
->  Ezequiel>   ./package/uclibc/uClibc-snapshot.config
->  Ezequiel>   ./package/uclibc/uClibc-0.9.32.config
-> 
-> Indeed, it recently got moved.
-> 
->  Ezequiel> So, am I doing anything wrong or is this a bug?
-> 
-> I'm not sure I would call it a bug in buildroot. The problem is that the
-> uClibc configuration file is given as a kconfig string variable, which
-> defaults to the "standard" configuration file shipped with Buildroot.
-> 
-> The problem is that kconfig writes this value to the .config file, even
-> though the user hasn't actively changed it, so if we move files around
-> (and change the default for the string option), old .config files are
-> not automatically updated and the build will fail.
-> 
-> Minimal config files (as output by make savedefconfig) don't have this
-> problem as they only contain the lines that are changed from the
-> default, which is why we recommend people use them (and use them
-> ourselves for the defconfigs).
-> 
+commit: http://git.buildroot.net/buildroot/commit/?id=eaf446e751d41d68c069edfe3732ff74cf083c7b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Of course, this is no bug, it's just me forgetting to update the config
-after the recent toolchain changes.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/linux-headers/Config.in.host |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-Thanks for the help,
--- 
-Ezequiel Garc?a, Free Electrons
-Embedded Linux, Kernel and Android Engineering
-http://free-electrons.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4955524..8431b2d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -5,7 +5,7 @@ comment "Kernel Header Options"
+ 
+ choice
+ 	prompt "Kernel Headers"
+-	default BR2_KERNEL_HEADERS_3_9
++	default BR2_KERNEL_HEADERS_3_10
+ 	help
+ 	  Select the version of kernel header files you wish to use.
+ 	  You must select the correct set of header files to match
+@@ -53,6 +53,9 @@ choice
+ 	config BR2_KERNEL_HEADERS_3_9
+ 		bool "Linux 3.9.x kernel headers"
+ 
++	config BR2_KERNEL_HEADERS_3_10
++		bool "Linux 3.10.x kernel headers"
++
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+ 
+@@ -79,5 +82,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.9"		if BR2_KERNEL_HEADERS_3_9
++	default "3.10"		if BR2_KERNEL_HEADERS_3_10
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
