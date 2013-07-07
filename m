@@ -1,144 +1,80 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 7 Jul 2013 22:21:35 +0200
-Subject: [Buildroot] [PATCH 3/3] opencv: bump version to 2.4.6
-In-Reply-To: <20130707212836.16957ea2@skate>
-References: <1373222695-9148-1-git-send-email-s.martin49@gmail.com>
- <1373222695-9148-3-git-send-email-s.martin49@gmail.com>
- <20130707212836.16957ea2@skate>
-Message-ID: <CAHXCMM+4qweNpA+BVPnp1wt1uNMc=HJaKnLXRa=x98rBR92w5w@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 07 Jul 2013 22:24:05 +0200
+Subject: [Buildroot] [PATCH 2/8] arch: Refactor BR2_SOFT_FLOAT into
+	per-architecture options
+In-Reply-To: <1373123292-15085-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 6 Jul 2013 17:08:06 +0200")
+References: <1373123292-15085-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1373123292-15085-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87vc4mglui.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-2013/7/7 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Samuel Martin,
->
-> On Sun,  7 Jul 2013 20:44:55 +0200, Samuel Martin wrote:
->> Also:
->> - add license details;
->> - add new modules option;
->> - explicitly disable python support to avoid being confuse by the one from the
->>   host;
->> - update qt support (now handle qt4/qt5)
->
-> It would probably be good if some of those changes were split in
-> separate patches. The license, bump, python stuff are fairly
-> uncontroversial, so they could get merged quickly. I believe the Qt
-> part will most likely require more work.
-Right, will do on the next round. ;)
+ Thomas> As we are going to introduced a more advanced support of floating
+ Thomas> point options for the ARM architecture, we need to adjust how the
+ Thomas> soft-float option is handled. We replace the current hidden option
+ Thomas> BR2_PREFER_SOFT_FLOAT option and the visible BR2_SOFT_FLOAT option by:
 
->
->> +if BR2_INSTALL_LIBSTDCPP && (!BR2_avr32 || (BR2_USE_WCHAR && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS)) # qt{4,5} dependencies
->> +
->> +if !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
->> +comment "Qt support not available."
->> +comment "Enable one of the Qt libraries before enabling Qt support in OpenCV"
->> +endif
->> +
->>  config BR2_PACKAGE_OPENCV_WITH_QT
->> -     bool "qt backend support"
->> -     depends on BR2_INSTALL_LIBSTDCPP
->> -     depends on !BR2_avr32 # qt
->> -     select BR2_PACKAGE_QT
->> -     select BR2_PACKAGE_QT_STL
->> -     default y
->> -     help
->> -       Use Qt with STL support
->> +     bool "Qt support"
->> +     #prompt "Qt4 support" if BR2_PACKAGE_QT
->> +     #prompt "Qt5 support" if BR2_PACKAGE_QT5
->
-> Hum?
-oops!
+ Thomas>  * A global hidden BR2_SOFT_FLOAT option, defined in arch/Config.in,
+ Thomas>    that tells whether the architecture-specific code is using software
+ Thomas>    emulated floating point. This hidden option can be used throughout
+ Thomas>    Buildroot to determine whether soft float is used or not.
 
->
->> +     depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
->
-> Since you're using "depends on" for Qt, why do you need the complicated
-> BR2_INSTALL_LIBSTDCPP ... condition above?
-Hmm... Good catch!
-Only the comments needs the above condition.
+ Thomas>  * Per-architecture visible BR2_<arch>_SOFT_FLOAT options, for the
+ Thomas>    architecture for which it makes sense, which allows users to select
+ Thomas>    soft float emulation when needed.
 
->
->> +     select BR2_PACKAGE_QT_STL             if BR2_PACKAGE_QT
->> +     select BR2_PACKAGE_QT5BASE            if BR2_PACKAGE_QT5
->> +     select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5
->> +     select BR2_PACKAGE_QT5BASE_TEST       if BR2_PACKAGE_QT5
->> +     select BR2_PACKAGE_QT5BASE_GUI        if BR2_PACKAGE_QT5
->> +     select BR2_PACKAGE_QT5BASE_WIDGETS    if BR2_PACKAGE_QT5
->> +
->> +endif # qt{4,5} dependencies
->
->> -OPENCV_VERSION = 2.4.2
->> +OPENCV_VERSION = 2.4.6
->>  OPENCV_SITE    = http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/$(OPENCV_VERSION)
->> -OPENCV_SOURCE  = OpenCV-$(OPENCV_VERSION).tar.bz2
->>  OPENCV_INSTALL_STAGING = YES
->> +OPENCV_LICENSE = BSD-3c
->> +OPENCV_LICENSE_FILES = doc/license.txt
->>
->> +OPENCV_CONF_ENV = PATH="$(TARGET_PATH)"
->
-> Maybe this should be part of the CMake package infrastructure? It kind
-> of makes sense to execute cmake with PATH="$(TARGET_PATH)", in order to
-> allow cmake to pick up any host tool we might have built and installed
-> in $(HOST_DIR).
-yup.
+ Thomas> This change will allow each architecture to have a different way of
+ Thomas> presenting its floating point capabilities.
 
->
->>  OPENCV_CONF_OPT += \
->>       -DCMAKE_BUILD_TYPE=$(if $(BR2_ENABLE_DEBUG),Debug,Release)   \
->>       -DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON)    \
->> @@ -47,13 +49,19 @@ OPENCV_CONF_OPT += \
->>       -DBUILD_opencv_nonfree=$(if $(BR2_PACKAGE_OPENCV_LIB_NONFREE),ON,OFF)   \
->>       -DBUILD_opencv_objdetect=$(if $(BR2_PACKAGE_OPENCV_LIB_OBJDETECT),ON,OFF) \
->>       -DBUILD_opencv_photo=$(if $(BR2_PACKAGE_OPENCV_LIB_PHOTO),ON,OFF)       \
->> -     -DBUILD_opencv_python=OFF                                               \
->>       -DBUILD_opencv_stitching=$(if $(BR2_PACKAGE_OPENCV_LIB_STITCHING),ON,OFF) \
->> +     -DBUILD_opencv_superres=$(if $(BR2_PACKAGE_OPENCV_LIB_SUPERRES),ON,OFF) \
->>       -DBUILD_opencv_ts=$(if $(BR2_PACKAGE_OPENCV_LIB_TS),ON,OFF)             \
->>       -DBUILD_opencv_video=$(if $(BR2_PACKAGE_OPENCV_LIB_VIDEO),ON,OFF)       \
->>       -DBUILD_opencv_videostab=$(if $(BR2_PACKAGE_OPENCV_LIB_VIDEOSTAB),ON,OFF) \
->>       -DBUILD_opencv_world=OFF
->>
->> +# Explicitly disable python to avoid confusing OpenCV, which comes with its
->> +# own implementation of the Python detection CMake module.
->> +OPENCV_CONF_OPT += \
->> +     -DBUILD_opencv_python=OFF \
->> +     -DPYTHON_EXECUTABLE=OFF
->
-> Why not part of the OPENCV_CONF_OPT assignment above? For the comment?
-Yes, for the comment.
+ Thomas> diff --git a/arch/Config.in.avr32 b/arch/Config.in.avr32
+ Thomas> index ebf8454..34055d9 100644
+ Thomas> --- a/arch/Config.in.avr32
+ Thomas> +++ b/arch/Config.in.avr32
+ Thomas> @@ -3,3 +3,13 @@ config BR2_ARCH
+ 
+ Thomas>  config BR2_ENDIAN
+ Thomas>         default "BIG"
+ Thomas> +
+ Thomas> +config BR2_AVR32_SOFT_FLOAT
+ Thomas> +	bool "Use soft-float"
+ Thomas> +	default y
+ Thomas> +	select BR2_SOFT_FLOAT
+ Thomas> +	help
+ Thomas> +	  If your target CPU does not have a Floating Point Unit (FPU)
+ Thomas> +	  or a kernel FPU emulator, but you still wish to support
+ Thomas> +	  floating point functions, then everything will need to be
+ Thomas> +	  compiled with soft floating point support (-msoft-float).
 
->
->> +
->>  # Hardware support options.
->>  #
->>  # * PowerPC support is turned off since its only effect is altering CFLAGS,
->> @@ -141,8 +149,8 @@ OPENCV_CONF_OPT += -DWITH_PNG=OFF
->>  endif
->>
->>  ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT),y)
->> -OPENCV_CONF_OPT += -DWITH_QT=ON
->> -OPENCV_DEPENDENCIES += qt
->> +OPENCV_CONF_OPT += -DWITH_QT=$(if $(BR2_PACKAGE_QT),4,5)
->> +OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_QT),qt,qt5base)
->>  else
->>  OPENCV_CONF_OPT += -DWITH_QT=OFF
->>  endif
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+Does avr32 SoCs with hard float even exist? Does
+uClibc/kernel/.. support it? If not, we could just make this a hidden
+option.
+ 
+ Thomas> +config BR2_POWERPC_SOFT_FLOAT
+ Thomas> +	bool "Use soft-float"
+ Thomas> +	default y
+ Thomas> +	select BR2_SOFT_FLOAT
+ Thomas> +	help
+ Thomas> +	  If your target CPU does not have a Floating Point Unit (FPU)
+ Thomas> +	  or a kernel FPU emulator, but you still wish to support
+ Thomas> +	  floating point functions, then everything will need to be
+ Thomas> +	  compiled with soft floating point support (-msoft-float).
 
-
+We didn't use to default to soft float for powerpc, as most cores have a
+FPU.
+ 
+ Thomas> -config BR2_PREFER_SOFT_FLOAT
+ Thomas> -	bool
+ Thomas> -	default y if BR2_arm
+ Thomas> -	default y if BR2_armeb
+ Thomas> -	default y if BR2_avr32
+ Thomas> -	default y if BR2_mips
+ Thomas> -	default y if BR2_mipsel
 
 -- 
-Samuel
+Bye, Peter Korsgaard
