@@ -1,49 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 7 Jul 2013 23:02:57 +0200
-Subject: [Buildroot] [git commit] linux-headers: add 3.10.x series
-Message-ID: <20130707214539.043B19A58F@busybox.osuosl.org>
+Date: Sun, 7 Jul 2013 23:03:05 +0200
+Subject: [Buildroot] [git commit] linux: default to version 3.10
+Message-ID: <20130707214539.59A339A594@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eaf446e751d41d68c069edfe3732ff74cf083c7b
+commit: http://git.buildroot.net/buildroot/commit/?id=57a0b924c66bbc373f05c27e54f61c4a28cff136
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/linux-headers/Config.in.host |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 4955524..8431b2d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -5,7 +5,7 @@ comment "Kernel Header Options"
+diff --git a/linux/Config.in b/linux/Config.in
+index f58e714..421f855 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
- choice
- 	prompt "Kernel Headers"
--	default BR2_KERNEL_HEADERS_3_9
-+	default BR2_KERNEL_HEADERS_3_10
- 	help
- 	  Select the version of kernel header files you wish to use.
- 	  You must select the correct set of header files to match
-@@ -53,6 +53,9 @@ choice
- 	config BR2_KERNEL_HEADERS_3_9
- 		bool "Linux 3.9.x kernel headers"
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.9.8"
++	bool "3.10"
  
-+	config BR2_KERNEL_HEADERS_3_10
-+		bool "Linux 3.10.x kernel headers"
-+
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
  
-@@ -79,5 +82,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.9"		if BR2_KERNEL_HEADERS_3_9
-+	default "3.10"		if BR2_KERNEL_HEADERS_3_10
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.9.8" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
