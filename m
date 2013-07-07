@@ -1,29 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 07 Jul 2013 22:45:51 +0200
-Subject: [Buildroot] [PATCH 0/8] ARM floating point improvements and
-	EABIhf support
-In-Reply-To: <1373123292-15085-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 6 Jul 2013 17:08:04 +0200")
-References: <1373123292-15085-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87mwpygku8.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 7 Jul 2013 22:48:38 +0200
+Subject: [Buildroot] [git commit] gcc: re-add upstream URL for arc specific
+	gcc variant
+Message-ID: <20130707205041.9C0A69A591@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a74eed067593aa3c7726e23f1f85f527b7195f76
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Hello,
- Thomas> Here is a patch series that improves the support for the various
- Thomas> floating point possibilities on ARM, and adds support for the new
- Thomas> EABIhf ARM ABI. Until now, we only had a global BR2_SOFT_FLOAT option
- Thomas> to enable/disable soft-float support, and on ARM a BR2_VFP_FLOAT
- Thomas> option to enable -mfpu=vfp. This clearly isn't sufficient to take into
- Thomas> the various possibilities offered by the Cortex-A ARM cores.
+Got dropped in the gcc -> packages work.
 
-Series looks good (+/- the minor issues I mentioned), but I will wait
-until you send an update with the oabi stuff from Yann integrated.
+Fixes http://autobuild.buildroot.net/results/08e/08e8149c9889141d644896e1fd3e0d2f14299033/
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/gcc/gcc.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 968354b..d38629d 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -19,6 +19,8 @@ ifneq ($(GCC_SNAP_DATE),)
+ GCC_SITE = ftp://gcc.gnu.org/pub/gcc/snapshots/$(GCC_SNAP_DATE)/
+ else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
+ GCC_SITE = ftp://www.at91.com/pub/buildroot/
++else ifeq ($(findstring arc,$(GCC_VERSION)),arc)
++GCC_SITE = $(BR2_ARC_SITE)
+ else
+ GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
+ endif
