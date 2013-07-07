@@ -1,28 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jul 2013 21:38:25 +0200
-Subject: [Buildroot] [PATCH] Makefile: unset MAKEFLAGS
-In-Reply-To: <1373222539-8915-1-git-send-email-s.martin49@gmail.com>
-References: <1373222539-8915-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20130707213825.170ad4fb@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 07 Jul 2013 21:39:09 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	yem-misc-updates
+In-Reply-To: <cover.1373202515.git.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 7 Jul 2013 15:13:23 +0200")
+References: <cover.1373202515.git.yann.morin.1998@free.fr>
+Message-ID: <87hag6i2hu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Sun,  7 Jul 2013 20:42:19 +0200, Samuel Martin wrote:
-> MAKEFLAGS can carry options that make Buildroot failed, eg. '-jN'.
-> To avoid this, unset the MAKEFLAGS environment variable.
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> Hello All!
 
-Does unsetting MAKEFLAGS really allows to prevent top-level parallel
-build on Buildroot? Or does it only prevents MAKEFLAGS from leaking to
-the sub-make calls that we do to build packages?
+ Yann> Here is a small series that (again) bumps the RPi-related packages.
+ Yann> Basically, there are a bunch of fixes in audio, GL, USB and raspi-cam,
+ Yann> plus a few framebuffer optimisations.
 
-Thomas
+ Yann> I'm not sure how inter-twinned the linux/firmware/userland bits are,
+ Yann> so I've made three patches. They work nicely in this order for me,
+ Yann> but YMMV, as they say. ;-)
+
+Committed series, thanks.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
