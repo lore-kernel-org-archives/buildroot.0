@@ -1,32 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 7 Jul 2013 21:15:28 +0200
-Subject: [Buildroot] [git commit] ethtool: bump to version 3.10
-Message-ID: <20130707200243.1C7F399A84@busybox.osuosl.org>
+Date: Sun, 7 Jul 2013 21:19:45 +0200
+Subject: [Buildroot] [git commit] iptables: fix build after linux-headers
+	changes
+Message-ID: <20130707200243.C7F4C9A591@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fbca9aa24ede06dd1bcdff630d1a7cb61266ef22
+commit: http://git.buildroot.net/buildroot/commit/?id=478f826518e1cf769abfb69da9361d931be15f8c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+As reported by 'scanf' on IRC, the iptables now fails to build because
+of a missing <asm/cache.h> header in the kernel headers. The package
+directly uses $(LINUX_HEADERS_DIR), which is not correct: this is the
+source directory of the kernel, not where they are installed, and in
+addition, this directory is empty/does not exist when using external
+toolchains.
+
+Instead, we use $(STAGING_DIR)/usr, which contains the kernel headers,
+as part of the toolchain headers.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ethtool/ethtool.mk |    2 +-
+ package/iptables/iptables.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index bb2dc9f..66f8ffa 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index cfb227a..f548cb9 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -12,7 +12,7 @@ IPTABLES_DEPENDENCIES = host-pkgconf
+ IPTABLES_LICENSE = GPLv2
+ IPTABLES_LICENSE_FILES = COPYING
  
--ETHTOOL_VERSION = 3.9
-+ETHTOOL_VERSION = 3.10
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPLv2
- ETHTOOL_LICENSE_FILES = COPYING
+-IPTABLES_CONF_OPT = --libexecdir=/usr/lib --with-kernel=$(LINUX_HEADERS_DIR)
++IPTABLES_CONF_OPT = --libexecdir=/usr/lib --with-kernel=$(STAGING_DIR)/usr
+ 
+ define IPTABLES_TARGET_SYMLINK_CREATE
+ 	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/iptables
