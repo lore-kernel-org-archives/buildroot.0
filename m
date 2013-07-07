@@ -1,35 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 07 Jul 2013 21:43:21 +0200
-Subject: [Buildroot] savedefconfig for busybox?
-In-Reply-To: <20130707132034.GA10748@zuhnb712> (Woody Wu's message of "Sun, 7
- Jul 2013 21:20:34 +0800")
-References: <20130707132034.GA10748@zuhnb712>
-Message-ID: <87d2qui2au.fsf@dell.be.48ers.dk>
+Date: Sun, 07 Jul 2013 21:45:00 +0200
+Subject: [Buildroot] [PATCH 1/3] efl: factorize version number as
+	EFL_VERSION
+In-Reply-To: <1373209644-18260-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 7 Jul 2013 17:07:22 +0200")
+References: <1373209644-18260-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <878v1ii283.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Woody" == Woody Wu <narkewoody@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Woody> Hi,
- Woody> Is there something like 'make busybox-savedefconfig'?
- Woody> Or, otherwise, how to save busybox config changes?
+ Thomas> All the EFL components are released simultaneously, with an
+ Thomas> identical version number, just like all Qt5 components for
+ Thomas> example. So it makes sense to have a single EFL_VERSION
+ Thomas> variable in package/efl/efl.mk that is used by all the packages
+ Thomas> in package/efl/*/*.mk.
 
-Do you mean a minimal .config (a defconfig) file? Upstream busybox
-unfortunately doesn't support that.
-
-If you just mean how to save your full busybox .config after you changed
-it with 'make busybox-menuconfig', then you can just copy
-out/build/busybox-*/.config to somewhere
-(board/vendor/product/busybox.config is a common location) and
-then change your buildroot BR2_PACKAGE_BUSYBOX_CONFIG option to point to
-it.
-
-Also see section 3.3.2 and 3.3.3 in the user manual:
-
-http://buildroot.net/downloads/manual/manual.html#busybox-custom
+Committed series, thanks.
 
 -- 
 Bye, Peter Korsgaard
