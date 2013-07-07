@@ -1,69 +1,76 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Sun,  7 Jul 2013 18:31:05 -0500
-Subject: [Buildroot] [PATCH 1/2] linux: install firmware to staging.
-Message-ID: <1373239866-18076-1-git-send-email-spenser@gillilanding.com>
+Date: Sun,  7 Jul 2013 18:31:06 -0500
+Subject: [Buildroot] [PATCH 2/2] beagle-capes: new package
+In-Reply-To: <1373239866-18076-1-git-send-email-spenser@gillilanding.com>
+References: <1373239866-18076-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <1373239866-18076-2-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Install firmware to staging when the hidden option
-BR2_LINUX_KERNEL_INSTALL_FIRMWARE is selected.  This allows parts of the
-firmware provided by the linux kernel to be installed in the target.
+installs cape dtbos from the kernel firmware into the target system.
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- linux/Config.in |  5 +++++
- linux/linux.mk  | 13 +++++++++++++
- 2 files changed, 18 insertions(+)
+ package/Config.in                    |  1 +
+ package/beagle-capes/Config.in       | 12 ++++++++++++
+ package/beagle-capes/beagle-capes.mk | 15 +++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/beagle-capes/Config.in
+ create mode 100644 package/beagle-capes/beagle-capes.mk
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f58e714..b733019 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -297,6 +297,11 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
- 	  /boot in the target root filesystem, as is typically done on
- 	  x86/x86_64 systems.
- 
-+# This option is used to install firmware to staging. Other packages such as
-+# beagle-capes then install the firmware into the target. This avoids
-+# installing all linux firmware.
-+config BR2_LINUX_KERNEL_INSTALL_FIRMWARE
-+	bool
- 
- # Linux extensions
- source "linux/Config.ext.in"
-diff --git a/linux/linux.mk b/linux/linux.mk
-index befef16..88c954d 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -256,6 +256,15 @@ define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
- endef
- endif
- 
-+ifeq ($(BR2_LINUX_KERNEL_INSTALL_FIRMWARE),y)
+diff --git a/package/Config.in b/package/Config.in
+index 4df48ba..3b06f98 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -226,6 +226,7 @@ source "package/rpi-firmware/Config.in"
+ source "package/sunxi-boards/Config.in"
+ source "package/ux500-firmware/Config.in"
+ source "package/zd1211-firmware/Config.in"
++source "package/beagle-capes/Config.in"
+ endmenu
+ source "package/freescale-imx/Config.in"
+ source "package/acpid/Config.in"
+diff --git a/package/beagle-capes/Config.in b/package/beagle-capes/Config.in
+new file mode 100644
+index 0000000..568e84f
+--- /dev/null
++++ b/package/beagle-capes/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_BEAGLE_CAPES
++	bool "beagle-capes"
++	depends on BR2_LINUX_KERNEL && BR2_arm
++	select BR2_LINUX_KERNEL_INSTALL_FIRMWARE
++	help
++	  Installs beaglebone capes firmware from the kernel source.
 +
-+LINUX_INSTALL_STAGING = YES
++	  This package requires that a kernel with beaglebone capes firmware is
++	  selected.
 +
-+define LINUX_INSTALL_FIRMWARE_TO_STAGING
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) firmware_install \
-+		INSTALL_FW_PATH=$(STAGING_DIR)/lib/firmware/
++comment "requires the linux kernel"
++	depends on !(BR2_LINUX_KERNEL)
+diff --git a/package/beagle-capes/beagle-capes.mk b/package/beagle-capes/beagle-capes.mk
+new file mode 100644
+index 0000000..5b6f121
+--- /dev/null
++++ b/package/beagle-capes/beagle-capes.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# beagle-capes 
++#
++################################################################################
++
++BEAGLE_CAPES_SOURCE =
++
++BEAGLE_CAPES_DEPENDENCIES = linux
++
++define BEAGLE_CAPES_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 644 $(STAGING_DIR)/lib/firmware/*.dtbo $(TARGET_DIR)/lib/firmware/
 +endef
-+endif
- 
- define LINUX_INSTALL_HOST_TOOLS
- 	# Installing dtc (device tree compiler) as host tool, if selected
-@@ -269,6 +278,10 @@ define LINUX_INSTALL_IMAGES_CMDS
- 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
- endef
- 
-+define LINUX_INSTALL_STAGING_CMDS
-+	$(LINUX_INSTALL_FIRMWARE_TO_STAGING)
-+endef
 +
- define LINUX_INSTALL_TARGET_CMDS
- 	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
- 	$(LINUX_INSTALL_DTB)
++$(eval $(generic-package))
 -- 
 1.8.1.2
