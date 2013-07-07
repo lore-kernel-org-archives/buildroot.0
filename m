@@ -1,36 +1,51 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 7 Jul 2013 22:48:38 +0200
-Subject: [Buildroot] [git commit] gcc: re-add upstream URL for arc specific
-	gcc variant
-Message-ID: <20130707205041.9C0A69A591@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 07 Jul 2013 22:55:05 +0200
+Subject: [Buildroot] uClibc toolchain building issue
+In-Reply-To: <20130707202939.GB5429@localhost> (Ezequiel Garcia's message of
+ "Sun, 7 Jul 2013 17:29:40 -0300")
+References: <20130707202939.GB5429@localhost>
+Message-ID: <87ip0mgkeu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a74eed067593aa3c7726e23f1f85f527b7195f76
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel.garcia@free-electrons.com> writes:
 
-Got dropped in the gcc -> packages work.
+ Ezequiel> Hello,
+ Ezequiel> I'm using today's origin/master HEAD to build my uClibc toolchain
+ Ezequiel> with the below config, and I found this error message:
 
-Fixes http://autobuild.buildroot.net/results/08e/08e8149c9889141d644896e1fd3e0d2f14299033/
+ Ezequiel>   cp -f toolchain/uClibc/uClibc-0.9.33.config /home/zeta/buildroot/buildroot/output/build/uclibc-0.9.32.1/.config
+ Ezequiel>   cp: cannot stat ?toolchain/uClibc/uClibc-0.9.33.config?: No such file or directory
+ Ezequiel>   make: *** [/home/zeta/buildroot/buildroot/output/build/uclibc-0.9.32.1/.stamp_configured] Error 1
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gcc/gcc.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ Ezequiel> But a quick find tells me that the uClibc config is not in toolchain,
+ Ezequiel> but in package/uclibc, right?
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 968354b..d38629d 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -19,6 +19,8 @@ ifneq ($(GCC_SNAP_DATE),)
- GCC_SITE = ftp://gcc.gnu.org/pub/gcc/snapshots/$(GCC_SNAP_DATE)/
- else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
- GCC_SITE = ftp://www.at91.com/pub/buildroot/
-+else ifeq ($(findstring arc,$(GCC_VERSION)),arc)
-+GCC_SITE = $(BR2_ARC_SITE)
- else
- GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
- endif
+ Ezequiel>   $ find . -name "uClibc*"
+ Ezequiel>   ./package/uclibc/uClibc-0.9.33.config
+ Ezequiel>   ./package/uclibc/uClibc-snapshot.config
+ Ezequiel>   ./package/uclibc/uClibc-0.9.32.config
+
+Indeed, it recently got moved.
+
+ Ezequiel> So, am I doing anything wrong or is this a bug?
+
+I'm not sure I would call it a bug in buildroot. The problem is that the
+uClibc configuration file is given as a kconfig string variable, which
+defaults to the "standard" configuration file shipped with Buildroot.
+
+The problem is that kconfig writes this value to the .config file, even
+though the user hasn't actively changed it, so if we move files around
+(and change the default for the string option), old .config files are
+not automatically updated and the build will fail.
+
+Minimal config files (as output by make savedefconfig) don't have this
+problem as they only contain the lines that are changed from the
+default, which is why we recommend people use them (and use them
+ourselves for the defconfigs).
+
+-- 
+Bye, Peter Korsgaard
