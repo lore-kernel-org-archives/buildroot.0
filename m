@@ -1,25 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 07 Jul 2013 21:19:13 +0200
-Subject: [Buildroot] [PATCH 1/1] qt: add patch for QTBUG-31579 to fix
-	polyline drawing
-In-Reply-To: <1373117731-4997-1-git-send-email-net147@gmail.com> (Jonathan
- Liu's message of "Sat, 6 Jul 2013 23:35:31 +1000")
-References: <1373117731-4997-1-git-send-email-net147@gmail.com>
-Message-ID: <87ppuui3f2.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Jul 2013 21:23:35 +0200
+Subject: [Buildroot] [PATCH 1/3] qt{4,
+ 5}: add an explicit choice to express Buildroot does not support
+ their coexistence
+In-Reply-To: <CAHXCMMKx-vf9ZFRgzhj_bvYwbb2vHz3qQkC6ebgKqts_-v6-bA@mail.gmail.com>
+References: <1373222695-9148-1-git-send-email-s.martin49@gmail.com>
+ <CAHXCMMKx-vf9ZFRgzhj_bvYwbb2vHz3qQkC6ebgKqts_-v6-bA@mail.gmail.com>
+Message-ID: <20130707212335.630a2d32@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jonathan" == Jonathan Liu <net147@gmail.com> writes:
+Dear Samuel Martin,
 
- Jonathan> Signed-off-by: Jonathan Liu <net147@gmail.com>
+On Sun, 7 Jul 2013 21:08:25 +0200, Samuel Martin wrote:
 
-Committed, thanks.
+> I forgot to mention that using an explicit choice allow to get rid of
+> the dependency between the
+> Qt4 and Qt5 packages.
+> So, for packages supporting both Qt4 and Qt5 (like OpenCV), it makes
+> possible to handle the
+> right dependency with no circular/recursive dependency in the Config.in files.
 
-I've updated the commit log with a link to the upstream patch, please
-consider to include it in the future.
+Can you give more details about this circular/recursive dependency
+problem?
 
+I'm not too enthusiastic about your PATCH 1/3, so I'd like to be sure
+to completely understand what the problem is, and look at the different
+possible solutions.
+
+Thanks,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
