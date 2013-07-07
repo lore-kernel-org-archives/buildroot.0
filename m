@@ -1,7 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Jul 2013 15:13:23 +0200
-Subject: [Buildroot] [pull request] Pull request for branch yem-misc-updates
-Message-ID: <cover.1373202515.git.yann.morin.1998@free.fr>
+Date: Sun,  7 Jul 2013 15:13:24 +0200
+Subject: [Buildroot] [PATCH 1/3] package/rpi-firmware: bump version
+In-Reply-To: <cover.1373202515.git.yann.morin.1998@free.fr>
+References: <cover.1373202515.git.yann.morin.1998@free.fr>
+Message-ID: <45d5ab06a5965194fd97f7c2050688010ba949e3.1373202515.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,47 +12,34 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Fixes for:
+  - sound volume
+  - GL deadlock
+  - ressources leak
+  - compressed audio streams
+  - audio sampling up to 192kHz
+  - display scaling
+  - cache flush for mailbox
 
-Here is a small series that (again) bumps the RPi-related packages.
-Basically, there are a bunch of fixes in audio, GL, USB and raspi-cam,
-plus a few framebuffer optimisations.
+Switch to using a 7-char cset, instead of the long one.
 
-I'm not sure how inter-twinned the linux/firmware/userland bits are,
-so I've made three patches. They work nicely in this order for me,
-but YMMV, as they say. ;-)
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 7cbebbc48c26ddfb18da23ffba356744a5592ea6:
-
-  Add 'bc' in the mandatory dependencies (2013-07-05 15:30:43 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem-misc-updates
-
-for you to fetch changes up to 2498afa0081e1da31f07adc355a2ac1b47bda093:
-
-  package/rpi-userland: bump version (2013-07-07 15:01:45 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      package/rpi-firmware: bump version
-      config/rpi: bump kernel
-      package/rpi-userland: bump version
-
- configs/rpi_defconfig                | 2 +-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
  package/rpi-firmware/rpi-firmware.mk | 2 +-
- package/rpi-userland/rpi-userland.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index b490296..6ea621f 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = a0c98fa6bc0f93bad8cbfcf749f7be7dc2276192
++RPI_FIRMWARE_VERSION = 320084a
+ RPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/$(RPI_FIRMWARE_VERSION)
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
