@@ -1,54 +1,62 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 8 Jul 2013 18:49:40 +0200
-Subject: [Buildroot] where is 'ldd'?
-In-Reply-To: <20130708142743.GB11258@zuhnb712>
-References: <20130708135640.GA7070@zuhnb712> <51DAC94D.2030706@gmail.com>
- <20130708142743.GB11258@zuhnb712>
-Message-ID: <CAAXf6LU3ShNk9JdG-eVv7Lt3OLopP5butkPK-8Mb4L+3gmRzxg@mail.gmail.com>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Mon, 8 Jul 2013 12:11:42 -0500
+Subject: [Buildroot] [PATCH v3 2/2] qt: add powervr and opengl
+In-Reply-To: <321768C95D21724485BCE784F1BE98473EB6A579@DBDE04.ent.ti.com>
+References: <1373217165-14521-1-git-send-email-spenser@gillilanding.com>
+ <1373217165-14521-2-git-send-email-spenser@gillilanding.com>
+ <321768C95D21724485BCE784F1BE98473EB6A448@DBDE04.ent.ti.com>
+ <CAEBucnCNkD0VfqjgL7d3Rkt_+-wcj34BkZkLSO3cPRkXkm+v=A@mail.gmail.com>
+ <321768C95D21724485BCE784F1BE98473EB6A579@DBDE04.ent.ti.com>
+Message-ID: <CAEBucnC34wtUDkJm5_1OyjWxrnbJxh1bShM=Q=xuLxOGNop5Vw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Prabu,
 
-On Mon, Jul 8, 2013 at 4:27 PM, Woody Wu <narkewoody@gmail.com> wrote:
-> On Mon, Jul 08, 2013 at 04:14:37PM +0200, Zoltan Gyarmati wrote:
->> On 07/08/2013 03:56 PM, Woody Wu wrote:
->> > Hi,
->> >
->> > I just cann't find what is the menu item in buildroot to enable building
->> > of 'ldd' for my target.  Does anyone know it?
->> >
->> > Thanks in advance.
->> >
->> Sure you don't have it already on your system? What toolchain / libc
->> are you using?
+>>> >> - Can you also specify where the pvr2d.h and wsegl.h are picked up from (which Graphics SDK version) ?
+>>> Ahh, this is something I missed while porting the patch. I'll have to look at this some more, these should be from the latest version.  I'll try to get qt to pick these up from $(STAGING_DIR)/usr/include .
 >
-> I also feel strange, but its sure. I am using Code Sorucery, downloaded
-> it's lite version (arm linux eabi version, 2013-05-24). It comes with an
-> installer, which created a seperated directory in my home. I searched
-> through its installation directory (via 'find'), sure not have anything
-> like "*ldd".
+>
+> Thinking more on the above - Is it not possible to pick up the pvr2d.h and wsegl.h from the version of Graphics package used for building Qt itself ?
 
-You really don't need a special ldd.
-ldd is just a script. In its most basic usage (ldd <executable>), it just runs:
-# LD_TRACE_LOADED_OBJECTS=1 <executable>
+I'll be picking up wsegl.h and pvr2d.h from the
+$(STAGING_DIR)/usr/include directory which is where the powervr
+drivers installs these include files.
 
-For example on busybox:
-# LD_TRACE_LOADED_OBJECTS=1 /bin/busybox
-        linux-vdso32.so.1 =>  (0x00100000)
-        libc.so.6 => /lib/libc.so.6 (0x0fe70000)
-        /lib/ld.so.1 (0x48000000
+>Why does this need to be included in the patch, duplicating the file already existing in the staging area ?
+>
+> That will resolve the issue of mismatches once and for all.
 
-So for sporadic usage, an ldd script isn't even needed.
+It doesn't it was an oversight on my part when I was porting the patch
+over. The new patch (attached) now removes the files from the
+$(QT_SRCDIR)/src/3rdparty/powervr/{wsegl.h,pvr2d.h} files which should
+allow the compiler to find them in the $(STAGING_DIR)/usr/include
+directory.
 
-See 'man ld.so' for information on this LD_TRACE_LOADED_OBJECTS
-variable (and several other useful variables that change the behavior
-of the executable.
+However after removing the files, I'm getting segfaults on all demos
+when powervr.ini has WindowSystem=libpvrQWSWSEGL.so.1
+(WindowSystem=libpvrPVR2D_FRONTWSEGL.so works fine).  What is the best
+method for debugging this further?
 
-See also: http://www.catonmat.net/blog/ldd-arbitrary-code-execution/
+Attached is the patch.  To test you can remove the qt-wsegl2.patch and
+qt-pvrqwswseql.patch patches and install the attached patch into the
+package/qt directory. In addition, you must have the current ti-gfx
+patch applied.
 
-Best regards,
-Thomas
+Thanks,
+Spenser
+
+--
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: qt-eglwsegl-use-system.patch
+Type: application/octet-stream
+Size: 26335 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130708/c6c6c11c/attachment-0001.obj>
