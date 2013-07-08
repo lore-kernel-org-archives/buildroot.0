@@ -1,48 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  8 Jul 2013 17:59:53 +0200
-Subject: [Buildroot] [PATCH] toolchain: disable C++ support on AVR32 gcc 4.2
-	with uClibc
-Message-ID: <1373299193-9419-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 8 Jul 2013 18:49:40 +0200
+Subject: [Buildroot] where is 'ldd'?
+In-Reply-To: <20130708142743.GB11258@zuhnb712>
+References: <20130708135640.GA7070@zuhnb712> <51DAC94D.2030706@gmail.com>
+ <20130708142743.GB11258@zuhnb712>
+Message-ID: <CAAXf6LU3ShNk9JdG-eVv7Lt3OLopP5butkPK-8Mb4L+3gmRzxg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In 25c3160092d7 ("uClibc 0.9.31: remove stray kludges/conditions"), a
-conditional that prevents the combination gcc 4.2-avr / C++ / locale
-with uClibc 0.9.31 was removed. However, it turns out that the same
-problem is affecting uClibc 0.9.33, described at
-http://comments.gmane.org/gmane.comp.lib.uclibc.buildroot/24260.
+Hi,
 
-Therefore, we prevent the combination of gcc 4.2-avr / C++ / locale to
-happen.
+On Mon, Jul 8, 2013 at 4:27 PM, Woody Wu <narkewoody@gmail.com> wrote:
+> On Mon, Jul 08, 2013 at 04:14:37PM +0200, Zoltan Gyarmati wrote:
+>> On 07/08/2013 03:56 PM, Woody Wu wrote:
+>> > Hi,
+>> >
+>> > I just cann't find what is the menu item in buildroot to enable building
+>> > of 'ldd' for my target.  Does anyone know it?
+>> >
+>> > Thanks in advance.
+>> >
+>> Sure you don't have it already on your system? What toolchain / libc
+>> are you using?
+>
+> I also feel strange, but its sure. I am using Code Sorucery, downloaded
+> it's lite version (arm linux eabi version, 2013-05-24). It comes with an
+> installer, which created a seperated directory in my home. I searched
+> through its installation directory (via 'find'), sure not have anything
+> like "*ldd".
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-buildroot/Config.in.2 | 5 +++++
- 1 file changed, 5 insertions(+)
+You really don't need a special ldd.
+ldd is just a script. In its most basic usage (ldd <executable>), it just runs:
+# LD_TRACE_LOADED_OBJECTS=1 <executable>
 
-diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
-index 9bbf016..e223d9d 100644
---- a/toolchain/toolchain-buildroot/Config.in.2
-+++ b/toolchain/toolchain-buildroot/Config.in.2
-@@ -7,11 +7,16 @@ comment "Toolchain Options"
- config BR2_TOOLCHAIN_BUILDROOT_CXX
- 	bool "Enable C++ support"
- 	select BR2_INSTALL_LIBSTDCPP
-+	depends on !(BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 && \
-+		     BR2_TOOLCHAIN_BUILDROOT_LOCALE)
- 	help
- 	  Enable this option if you want your toolchain to support the
- 	  C++ language and you want C++ libraries to be installed on
- 	  your target system.
- 
-+comment "C++ support broken in uClibc with locale enabled with gcc 4.2"
-+	depends on BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 && BR2_TOOLCHAIN_BUILDROOT_LOCALE
-+
- config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
- 	bool "Enable stack protection support"
- 	help
--- 
-1.8.1.2
+For example on busybox:
+# LD_TRACE_LOADED_OBJECTS=1 /bin/busybox
+        linux-vdso32.so.1 =>  (0x00100000)
+        libc.so.6 => /lib/libc.so.6 (0x0fe70000)
+        /lib/ld.so.1 (0x48000000
+
+So for sporadic usage, an ldd script isn't even needed.
+
+See 'man ld.so' for information on this LD_TRACE_LOADED_OBJECTS
+variable (and several other useful variables that change the behavior
+of the executable.
+
+See also: http://www.catonmat.net/blog/ldd-arbitrary-code-execution/
+
+Best regards,
+Thomas
