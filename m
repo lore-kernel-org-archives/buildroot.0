@@ -1,108 +1,89 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Jul 2013 19:47:39 +0200
-Subject: [Buildroot] [PATCH 2/2] beagle-capes: new package
-In-Reply-To: <1373239866-18076-2-git-send-email-spenser@gillilanding.com>
+Date: Mon, 8 Jul 2013 19:52:21 +0200
+Subject: [Buildroot] [PATCH 1/2] linux: install firmware to staging.
+In-Reply-To: <1373239866-18076-1-git-send-email-spenser@gillilanding.com>
 References: <1373239866-18076-1-git-send-email-spenser@gillilanding.com>
- <1373239866-18076-2-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130708174739.GD3206@free.fr>
+Message-ID: <20130708175221.GE3206@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Spenser, All,
-
 On 2013-07-07 18:31 -0500, Spenser Gilliland spake thusly:
-> installs cape dtbos from the kernel firmware into the target system.
-
-I know it was me suggesting this new package, but in the end, wouldn't
-this be better handled with a post-build script?
-
-A post-build script would also have all lattitude to decide what exact
-.dtbo files to copy over, not just everything.
-
-Not saying we should drop this package, but there really are a few
-options here, and I don't really know what's better.
-
+> Install firmware to staging when the hidden option
+> BR2_LINUX_KERNEL_INSTALL_FIRMWARE is selected.  This allows parts of the
+> firmware provided by the linux kernel to be installed in the target.
+> 
 > Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 > ---
->  package/Config.in                    |  1 +
->  package/beagle-capes/Config.in       | 12 ++++++++++++
->  package/beagle-capes/beagle-capes.mk | 15 +++++++++++++++
->  3 files changed, 28 insertions(+)
->  create mode 100644 package/beagle-capes/Config.in
->  create mode 100644 package/beagle-capes/beagle-capes.mk
+>  linux/Config.in |  5 +++++
+>  linux/linux.mk  | 13 +++++++++++++
+>  2 files changed, 18 insertions(+)
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index 4df48ba..3b06f98 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -226,6 +226,7 @@ source "package/rpi-firmware/Config.in"
->  source "package/sunxi-boards/Config.in"
->  source "package/ux500-firmware/Config.in"
->  source "package/zd1211-firmware/Config.in"
-> +source "package/beagle-capes/Config.in"
+> diff --git a/linux/Config.in b/linux/Config.in
+> index f58e714..b733019 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -297,6 +297,11 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
+>  	  /boot in the target root filesystem, as is typically done on
+>  	  x86/x86_64 systems.
+>  
+> +# This option is used to install firmware to staging. Other packages such as
+> +# beagle-capes then install the firmware into the target. This avoids
+> +# installing all linux firmware.
 
-Alphabetical order, please.
+I would also states that this applies to special firmware files that are
+*not* distributed with the linux-firmware package. All 'standard'
+firmwares should be installed via linux-firmware. This knob is for very
+special cases such as the BBB capes. Waht about:
 
->  endmenu
->  source "package/freescale-imx/Config.in"
->  source "package/acpid/Config.in"
-> diff --git a/package/beagle-capes/Config.in b/package/beagle-capes/Config.in
-> new file mode 100644
-> index 0000000..568e84f
-> --- /dev/null
-> +++ b/package/beagle-capes/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_BEAGLE_CAPES
-> +	bool "beagle-capes"
-> +	depends on BR2_LINUX_KERNEL && BR2_arm
-> +	select BR2_LINUX_KERNEL_INSTALL_FIRMWARE
-> +	help
-> +	  Installs beaglebone capes firmware from the kernel source.
+# This option can be selected by other packages that require special
+# firmwares bundled in some fiorks of the Linux kernell (eg. the BBB
+# capes firmwares (.dtbo) as distributed in the TI Linux kernel fork).
+# To install other firmwares, please use the linux-firmware package.
 
-The comment is mis-leading: the firmware files are not copied from the
-kernel source tree, but from staging. I would not state where they are
-copied from, so I'd say something along those lines:
-
-    Install BeagleBone capes firmwares.
-
-    These firmwares are bundled in the TI fork on the Linux kernel for
-    the BegaleBone, so you'll need to configure Buildroot to use such a
-    kernel.
-
-> +	  This package requires that a kernel with beaglebone capes firmware is
-> +	  selected.
+> +config BR2_LINUX_KERNEL_INSTALL_FIRMWARE
+> +	bool
+>  
+>  # Linux extensions
+>  source "linux/Config.ext.in"
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index befef16..88c954d 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -256,6 +256,15 @@ define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
+>  endef
+>  endif
+>  
+> +ifeq ($(BR2_LINUX_KERNEL_INSTALL_FIRMWARE),y)
 > +
-> +comment "requires the linux kernel"
-
-comment "beagle-capes requires a Linux kernel"
-
-> +	depends on !(BR2_LINUX_KERNEL)
-> diff --git a/package/beagle-capes/beagle-capes.mk b/package/beagle-capes/beagle-capes.mk
-> new file mode 100644
-> index 0000000..5b6f121
-> --- /dev/null
-> +++ b/package/beagle-capes/beagle-capes.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# beagle-capes 
-> +#
-> +################################################################################
+> +LINUX_INSTALL_STAGING = YES
 > +
-> +BEAGLE_CAPES_SOURCE =
-> +
-> +BEAGLE_CAPES_DEPENDENCIES = linux
-> +
-> +define BEAGLE_CAPES_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 644 $(STAGING_DIR)/lib/firmware/*.dtbo $(TARGET_DIR)/lib/firmware/
+> +define LINUX_INSTALL_FIRMWARE_TO_STAGING
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) firmware_install \
+> +		INSTALL_FW_PATH=$(STAGING_DIR)/lib/firmware/
+> +endef
+> +endif
+>  
+>  define LINUX_INSTALL_HOST_TOOLS
+>  	# Installing dtc (device tree compiler) as host tool, if selected
+> @@ -269,6 +278,10 @@ define LINUX_INSTALL_IMAGES_CMDS
+>  	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
+>  endef
+>  
+> +define LINUX_INSTALL_STAGING_CMDS
+> +	$(LINUX_INSTALL_FIRMWARE_TO_STAGING)
 > +endef
 > +
-> +$(eval $(generic-package))
+>  define LINUX_INSTALL_TARGET_CMDS
+>  	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
+>  	$(LINUX_INSTALL_DTB)
 
 Otherwise, LGTM.
+
+Peter, Thomas, what do you thiink of this scheme? Should we puruse this
+series, or do you have a better idea?
 
 Regards,
 Yann E. MORIN.
