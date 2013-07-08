@@ -1,76 +1,116 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Sun,  7 Jul 2013 18:31:06 -0500
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sun, 7 Jul 2013 20:43:41 -0400
 Subject: [Buildroot] [PATCH 2/2] beagle-capes: new package
-In-Reply-To: <1373239866-18076-1-git-send-email-spenser@gillilanding.com>
+In-Reply-To: <1373239866-18076-2-git-send-email-spenser@gillilanding.com>
 References: <1373239866-18076-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1373239866-18076-2-git-send-email-spenser@gillilanding.com>
+ <1373239866-18076-2-git-send-email-spenser@gillilanding.com>
+Message-ID: <CA+-urNSaorXGZOEOEfGPDgAKk3cVx04K=YBP_htmhxJtB9bYrw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-installs cape dtbos from the kernel firmware into the target system.
+Hi Spenser,
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
----
- package/Config.in                    |  1 +
- package/beagle-capes/Config.in       | 12 ++++++++++++
- package/beagle-capes/beagle-capes.mk | 15 +++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/beagle-capes/Config.in
- create mode 100644 package/beagle-capes/beagle-capes.mk
+On Sun, Jul 7, 2013 at 7:31 PM, Spenser Gilliland
+<spenser@gillilanding.com> wrote:
+> installs cape dtbos from the kernel firmware into the target system.
+>
 
-diff --git a/package/Config.in b/package/Config.in
-index 4df48ba..3b06f98 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -226,6 +226,7 @@ source "package/rpi-firmware/Config.in"
- source "package/sunxi-boards/Config.in"
- source "package/ux500-firmware/Config.in"
- source "package/zd1211-firmware/Config.in"
-+source "package/beagle-capes/Config.in"
- endmenu
- source "package/freescale-imx/Config.in"
- source "package/acpid/Config.in"
-diff --git a/package/beagle-capes/Config.in b/package/beagle-capes/Config.in
-new file mode 100644
-index 0000000..568e84f
---- /dev/null
-+++ b/package/beagle-capes/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_BEAGLE_CAPES
-+	bool "beagle-capes"
-+	depends on BR2_LINUX_KERNEL && BR2_arm
-+	select BR2_LINUX_KERNEL_INSTALL_FIRMWARE
-+	help
-+	  Installs beaglebone capes firmware from the kernel source.
-+
-+	  This package requires that a kernel with beaglebone capes firmware is
-+	  selected.
-+
-+comment "requires the linux kernel"
-+	depends on !(BR2_LINUX_KERNEL)
-diff --git a/package/beagle-capes/beagle-capes.mk b/package/beagle-capes/beagle-capes.mk
-new file mode 100644
-index 0000000..5b6f121
---- /dev/null
-+++ b/package/beagle-capes/beagle-capes.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# beagle-capes 
-+#
-+################################################################################
-+
-+BEAGLE_CAPES_SOURCE =
-+
-+BEAGLE_CAPES_DEPENDENCIES = linux
-+
-+define BEAGLE_CAPES_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 644 $(STAGING_DIR)/lib/firmware/*.dtbo $(TARGET_DIR)/lib/firmware/
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.8.1.2
+Slightly off topic, but did you run into any issues with the eMMC
+virtual cape when you did this? The cape manager requests the eMMC
+cape dtbo before the root file system is mounted. When mdev was
+finally run from the init scripts, it didn't satisfy that request (I
+quickly looked through the mdev source, and I didn't see any code to
+do this. mdev seems to only handle "hotplug" firmware requests). If I
+manually loaded the eMMC virtual cape dtbo file before the timeout, I
+could get things to work. I ended up compiling the dtbos into the
+kernel, but if your br configuration doesn't need to do this, then
+could you share?
+
+Also, and this is just to understand things better, but if you don't
+want a firmware file copied to the target, wouldn't you just turn it
+off in the kernel's configuration?
+
+Or were you motivated by the shear volume of dtbo files that you get
+when you turn on Beaglebone cape support? I was thinking that I wanted
+finer grain configuration in the Linux kernel so that I could select
+whether or not I wanted "cape-bone-exptest.dtbo" or
+"cape-bone-adafruit-lcd", etc., but I don't think that's a br problem.
+Prior to the Beaglebone capes, I had not seen so many firmware files
+that I didn't need.
+
+Thanks,
+Frank
+
+p.s. thanks for the opengl work. I have a project coming up in the
+fall that will need it, so your commits are very timely.
+
+> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+> ---
+>  package/Config.in                    |  1 +
+>  package/beagle-capes/Config.in       | 12 ++++++++++++
+>  package/beagle-capes/beagle-capes.mk | 15 +++++++++++++++
+>  3 files changed, 28 insertions(+)
+>  create mode 100644 package/beagle-capes/Config.in
+>  create mode 100644 package/beagle-capes/beagle-capes.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 4df48ba..3b06f98 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -226,6 +226,7 @@ source "package/rpi-firmware/Config.in"
+>  source "package/sunxi-boards/Config.in"
+>  source "package/ux500-firmware/Config.in"
+>  source "package/zd1211-firmware/Config.in"
+> +source "package/beagle-capes/Config.in"
+>  endmenu
+>  source "package/freescale-imx/Config.in"
+>  source "package/acpid/Config.in"
+> diff --git a/package/beagle-capes/Config.in b/package/beagle-capes/Config.in
+> new file mode 100644
+> index 0000000..568e84f
+> --- /dev/null
+> +++ b/package/beagle-capes/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_BEAGLE_CAPES
+> +       bool "beagle-capes"
+> +       depends on BR2_LINUX_KERNEL && BR2_arm
+> +       select BR2_LINUX_KERNEL_INSTALL_FIRMWARE
+> +       help
+> +         Installs beaglebone capes firmware from the kernel source.
+> +
+> +         This package requires that a kernel with beaglebone capes firmware is
+> +         selected.
+> +
+> +comment "requires the linux kernel"
+> +       depends on !(BR2_LINUX_KERNEL)
+> diff --git a/package/beagle-capes/beagle-capes.mk b/package/beagle-capes/beagle-capes.mk
+> new file mode 100644
+> index 0000000..5b6f121
+> --- /dev/null
+> +++ b/package/beagle-capes/beagle-capes.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# beagle-capes
+> +#
+> +################################################################################
+> +
+> +BEAGLE_CAPES_SOURCE =
+> +
+> +BEAGLE_CAPES_DEPENDENCIES = linux
+> +
+> +define BEAGLE_CAPES_INSTALL_TARGET_CMDS
+> +       $(INSTALL) -m 644 $(STAGING_DIR)/lib/firmware/*.dtbo $(TARGET_DIR)/lib/firmware/
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 1.8.1.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
