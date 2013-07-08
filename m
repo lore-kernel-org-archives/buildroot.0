@@ -1,33 +1,43 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Mon, 8 Jul 2013 22:27:43 +0800
-Subject: [Buildroot] where is 'ldd'?
-In-Reply-To: <51DAC94D.2030706@gmail.com>
-References: <20130708135640.GA7070@zuhnb712>
- <51DAC94D.2030706@gmail.com>
-Message-ID: <20130708142743.GB11258@zuhnb712>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 8 Jul 2013 17:03:19 +0200
+Subject: [Buildroot] How to rebuild root filesystem?
+In-Reply-To: <20130708141210.GA11258@zuhnb712>
+References: <20130708045657.GA29211@zuhnb712.ap.bm.net>
+ <20130708102732.46a8b87d@skate> <20130708141210.GA11258@zuhnb712>
+Message-ID: <20130708170319.5e53eab8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 08, 2013 at 04:14:37PM +0200, Zoltan Gyarmati wrote:
-> On 07/08/2013 03:56 PM, Woody Wu wrote:
-> > Hi,
-> >
-> > I just cann't find what is the menu item in buildroot to enable building
-> > of 'ldd' for my target.  Does anyone know it?
-> >
-> > Thanks in advance.
-> >
-> Sure you don't have it already on your system? What toolchain / libc 
-> are you using?
+Dear Woody Wu,
 
-I also feel strange, but its sure. I am using Code Sorucery, downloaded
-it's lite version (arm linux eabi version, 2013-05-24). It comes with an
-installer, which created a seperated directory in my home. I searched
-through its installation directory (via 'find'), sure not have anything
-like "*ldd".
+On Mon, 8 Jul 2013 22:12:10 +0800, Woody Wu wrote:
 
--
-woody
+> okay, may be it tooks too long time to make me think it was building the
+> toolchain, maybe it was just building the kernel. Whatever.
+> 
+> When I said external toolchain, I actually's talking about Code Sourery
+> which can be selected from buildroot toolchain configuration menu. Maybe
+> she's now so external.
+
+If you're using the Sourcery CodeBench toolchain (formerly known as
+CodeSourcery toolchains), then you are using an external toolchain, and
+the toolchain never gets rebuilt.
+
+> Anyway, for my real question, is there a solution? How to reuild the
+> root filesystem from scratch.  Thanks!
+
+The only safe solution is "make clean && make". Any other solution
+risks of giving you an inconsistent filesystem in terms of library
+dependencies.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
