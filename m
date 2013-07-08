@@ -1,32 +1,22 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  8 Jul 2013 09:34:22 -0300
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 08 Jul 2013 14:50:10 +0200
 Subject: [Buildroot] [PATCH] website: remove dead udhcp link
-Message-ID: <1373286862-16765-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <1373286862-16765-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 8 Jul 2013 09:34:22 -0300")
+References: <1373286862-16765-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87k3l1fc71.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The udhcp.busybox.net site is gone, it's now pointing to bugzilla.
-udhcp has been a part of busybox for some time now.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- docs/header.html | 1 -
- 1 file changed, 1 deletion(-)
+ Gustavo> The udhcp.busybox.net site is gone, it's now pointing to bugzilla.
+ Gustavo> udhcp has been a part of busybox for some time now.
 
-diff --git a/docs/header.html b/docs/header.html
-index a7160cd..12716d0 100644
---- a/docs/header.html
-+++ b/docs/header.html
-@@ -61,7 +61,6 @@
-     <br><a href="http://busybox.net/">BusyBox</a>
-     <br><a href="http://uclibc.org/">uClibc.org</a>
-     <br><a href="http://cxx.uclibc.org/">uClibc++</a>
--    <br><a href="http://udhcp.busybox.net/">udhcp</a>
-     <br><a href="http://www.scratchbox.org/">Scratchbox</a>
-     <br><a href="http://openembedded.org/">OpenEmbedded</a>
-     <br><a href="http://www.ucdot.org/">uCdot</a>
+Committed, thanks.
+
 -- 
-1.8.1.5
+Bye, Peter Korsgaard
