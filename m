@@ -1,50 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 8 Jul 2013 23:10:29 +0200
-Subject: [Buildroot] [git commit] toolchain: disable C++ support on AVR32
-	gcc 4.2 with uClibc
-Message-ID: <20130708211334.9706D99CC4@busybox.osuosl.org>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Mon, 8 Jul 2013 14:13:57 -0700
+Subject: [Buildroot] [PATCH] ocrad: new package
+In-Reply-To: <87sizoiz0f.fsf@dell.be.48ers.dk>
+References: <1372990680-16147-1-git-send-email-gilles.talis@gmail.com>
+ <87sizoiz0f.fsf@dell.be.48ers.dk>
+Message-ID: <CAKcgs2wcjG5CQ-B0shoZTR8nh9pUtKTmEUp0aHn1M5UcNE6CvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=748b45ab5740d9e5e4791e298a5f7ba3699932d5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter,
 
-In 25c3160092d7 ("uClibc 0.9.31: remove stray kludges/conditions"), a
-conditional that prevents the combination gcc 4.2-avr / C++ / locale
-with uClibc 0.9.31 was removed. However, it turns out that the same
-problem is affecting uClibc 0.9.33, described at
-http://comments.gmane.org/gmane.comp.lib.uclibc.buildroot/24260.
 
-Therefore, we prevent the combination of gcc 4.2-avr / C++ / locale to
-happen.
+2013/7/8 Peter Korsgaard <jacmet@uclibc.org>
+>
+> >>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+>
+>  Gilles> GNU Ocrad is an OCR (Optical Character Recognition) program
+>  Gilles> based on a feature extraction method.
+>  Gilles> It reads images in pbm (bitmap), pgm (greyscale) or ppm (color) formats
+>  Gilles> and produces text in byte (8-bit) or UTF-8 formats.
+>
+> Committed with some fixes (see below).
+>
+Thanks for fixing all these mistakes!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/toolchain-buildroot/Config.in.2 |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
-
-diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
-index 9bbf016..e223d9d 100644
---- a/toolchain/toolchain-buildroot/Config.in.2
-+++ b/toolchain/toolchain-buildroot/Config.in.2
-@@ -7,11 +7,16 @@ comment "Toolchain Options"
- config BR2_TOOLCHAIN_BUILDROOT_CXX
- 	bool "Enable C++ support"
- 	select BR2_INSTALL_LIBSTDCPP
-+	depends on !(BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 && \
-+		     BR2_TOOLCHAIN_BUILDROOT_LOCALE)
- 	help
- 	  Enable this option if you want your toolchain to support the
- 	  C++ language and you want C++ libraries to be installed on
- 	  your target system.
- 
-+comment "C++ support broken in uClibc with locale enabled with gcc 4.2"
-+	depends on BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 && BR2_TOOLCHAIN_BUILDROOT_LOCALE
-+
- config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
- 	bool "Enable stack protection support"
- 	help
+Gilles.
