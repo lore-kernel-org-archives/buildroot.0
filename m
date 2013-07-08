@@ -1,38 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jul 2013 16:05:41 +0200
-Subject: [Buildroot] [PATCH 3/8] arch: improve ARM floating point
- support and add support for EABIhf
-In-Reply-To: <87r4fagkx3.fsf@dell.be.48ers.dk>
-References: <1373123292-15085-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1373123292-15085-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <87r4fagkx3.fsf@dell.be.48ers.dk>
-Message-ID: <20130708160541.7a78c59c@skate>
+From: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
+Date: Mon,  8 Jul 2013 16:08:18 +0200
+Subject: [Buildroot] [PATCH 1/1] Make the microblaze toolchains easily
+	distinguishable
+Message-ID: <1373292498-1117-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+It was confusing to have two different toolchains with the
+same label.
 
-On Sun, 07 Jul 2013 22:44:08 +0200, Peter Korsgaard wrote:
+Signed-off-by: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
+---
+ toolchain/toolchain-external/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-> Looks good. You could argue that we should do:
-> 
->       default BR2_ARM_EABIHF
-> 
-> instead (E.G. default to eabihf if available, otherwise fall back to
-> eabi), but with all the optional vfp units it's perhaps better to play
-> it safe..
-
-Yeah, I thought that defaulting on eabihf today (for ARMv7) was a bit
-too much. I played conservative, and remained on eabi by default.
-
-Best regards,
-
-Thomas
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 946063f..130b705 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -649,7 +649,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
+ 	  http://blackfin.uclinux.org.
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
+-	bool "Xilinx Little Endian Microblaze GNU Tools"
++	bool "Xilinx Little Endian Microblaze GNU Tools 14.3"
+ 	depends on BR2_microblazeel
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+@@ -661,7 +661,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
+ 	  uses gcc 4.6.2, binutils 2.21.53, glibc 2.14 and gdb 7.4.50.
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+-	bool "Xilinx Little Endian Microblaze GNU Tools"
++	bool "Xilinx Little Endian Microblaze GNU Tools v2"
+ 	depends on BR2_microblazeel
+ 	depends on BR2_HOSTARCH = "x86_64"
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
