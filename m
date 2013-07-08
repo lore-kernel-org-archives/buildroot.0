@@ -1,37 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 8 Jul 2013 21:52:49 +0200
-Subject: [Buildroot] [git commit] sconeserver: upstream has moved to GitHub
-Message-ID: <20130708195827.B6C1E9A299@busybox.osuosl.org>
+From: Daniel. <danielhilst@gmail.com>
+Date: Mon, 8 Jul 2013 20:08:52 +0000
+Subject: [Buildroot] =?windows-1252?q?Error_while_installing_dosfstools=3A?=
+	=?windows-1252?q?_mkdosfs=92=3A_No_such_file_or_directory?=
+Message-ID: <CAF3SDA4DY8DkDTVr5F4aLxmoJha60Y4DnZ9yC0u7PdhteR3Svg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f594e946327cc742ac5517815e9b52bbcd3048fc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I'm receiving this error while trying to compile dosfstools
+[hilst at archhilst buildroot-2013.05]$ make
+>>> dosfstools 3.0.16 Installing to target
+test -z "mkdosfs" || install -m 755
+/home/hilst/buildroot/buildroot-2013.05/output/build/dosfstools-3.0.16/mkdosfs
+/home/hilst/buildroot/buildroot-2013.05/output/target/sbin/
+install: cannot stat
+?/home/hilst/buildroot/buildroot-2013.05/output/build/dosfstools-3.0.16/mkdosfs?:
+No such file or directory
+make: ***
+[/home/hilst/buildroot/buildroot-2013.05/output/build/dosfstools-3.0.16/.stamp_target_installed]
+Error 1
+[hilst at archhilst buildroot-2013.05]$ ls -l
+/home/hilst/buildroot/buildroot-2013.05/output/build/dosfstools-3.0.16/mkdosfs
+ls: cannot access
+/home/hilst/buildroot/buildroot-2013.05/output/build/dosfstools-3.0.16/mkdosfs:
+No such file or directory
+[hilst at archhilst buildroot-2013.05]$
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/sconeserver/sconeserver.mk |    7 +++----
- 1 files changed, 3 insertions(+), 4 deletions(-)
+It seems that mkdosfs isn't generated, still I got no copile error..
 
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-index 62cc0ee..be5fab7 100644
---- a/package/sconeserver/sconeserver.mk
-+++ b/package/sconeserver/sconeserver.mk
-@@ -5,10 +5,9 @@
- ################################################################################
- 
- # Release 0.6.0 doesn't build cleanly, so use a recent
--# Subversion trunk snapshot.
--SCONESERVER_VERSION = 212
--SCONESERVER_SITE = svn://svn.code.sf.net/p/sconeserver/code/trunk
--SCONESERVER_SITE_METHOD = svn
-+# Git commit.
-+SCONESERVER_VERSION = d58f2de88c681939554089f786e360042a30c8f8
-+SCONESERVER_SITE = git://github.com/sconemad/sconeserver.git
- SCONESERVER_LICENSE = GPLv2+
- SCONESERVER_LICENSE_FILES = COPYING
- 
+Cheers,
+
+
+-- 
+*"Do or do not. There is no try"*
+*  **Yoda Master*
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130708/00aaf9a4/attachment.html>
