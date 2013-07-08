@@ -1,30 +1,46 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Mon, 8 Jul 2013 14:13:57 -0700
-Subject: [Buildroot] [PATCH] ocrad: new package
-In-Reply-To: <87sizoiz0f.fsf@dell.be.48ers.dk>
-References: <1372990680-16147-1-git-send-email-gilles.talis@gmail.com>
- <87sizoiz0f.fsf@dell.be.48ers.dk>
-Message-ID: <CAKcgs2wcjG5CQ-B0shoZTR8nh9pUtKTmEUp0aHn1M5UcNE6CvA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 9 Jul 2013 00:57:58 +0300
+Subject: [Buildroot] Error while building libevas,
+	SFD_NONBLOCK undeclared
+In-Reply-To: <CAF3SDA77hPn0TiYNajKZNTBGWAobSuFKEyWcvRZmmrNhyjRPkA@mail.gmail.com>
+References: <CAF3SDA77hPn0TiYNajKZNTBGWAobSuFKEyWcvRZmmrNhyjRPkA@mail.gmail.com>
+Message-ID: <20130708215758.GL5098@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Hi Daniel,
 
+On Mon, Jul 08, 2013 at 06:01:26PM +0000, Daniel. wrote:
+> I'm receiving this error while trying to build with buildroot.
+> 
+> make[5]: Entering directory
+> `/home/hilst/buildroot/buildroot-2013.05/output/build/libevas-1.7.4/src/bin'
+> CC evas_cserve2_main_loop_linux.o
+> evas_cserve2_main_loop_linux.c: In function '_signalfd_setup':
+> evas_cserve2_main_loop_linux.c:156: error: 'SFD_NONBLOCK' undeclared (first
+> use in this function)
+> evas_cserve2_main_loop_linux.c:156: error: (Each undeclared identifier is
+> reported only once
+> evas_cserve2_main_loop_linux.c:156: error: for each function it appears in.)
+> evas_cserve2_main_loop_linux.c:156: error: 'SFD_CLOEXEC' undeclared (first
+> use in this fu
+> 
+> My .config can be found here: https://gist.github.com/gkos/5950964
+> 
+> Any help is appreciated,
+> 
+> I'm on archilinux using Sourcery CodeBench toolchain..
 
-2013/7/8 Peter Korsgaard <jacmet@uclibc.org>
->
-> >>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
->
->  Gilles> GNU Ocrad is an OCR (Optical Character Recognition) program
->  Gilles> based on a feature extraction method.
->  Gilles> It reads images in pbm (bitmap), pgm (greyscale) or ppm (color) formats
->  Gilles> and produces text in byte (8-bit) or UTF-8 formats.
->
-> Committed with some fixes (see below).
->
-Thanks for fixing all these mistakes!
+The signalfd(2) man page says that these flags (SFD_NONBLOCK and SFD_CLOEXEC) 
+are only defined since kernel version 2.6.27. It seems that your toolchain 
+uses an older kernel. Which version of the Sourcery CodeBench do you use?
 
-Gilles.
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
