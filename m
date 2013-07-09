@@ -1,58 +1,78 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 9 Jul 2013 20:43:06 +0300
-Subject: [Buildroot] where is 'ldd'?
-In-Reply-To: <CAAXf6LV9K=KmTRK9cfZRRztZiZWE1q0MeLtvupuj3j+1jzLkaw@mail.gmail.com>
-References: <20130708135640.GA7070@zuhnb712> <51DAC94D.2030706@gmail.com>
- <20130708142743.GB11258@zuhnb712>
- <CAAXf6LU3ShNk9JdG-eVv7Lt3OLopP5butkPK-8Mb4L+3gmRzxg@mail.gmail.com>
- <20130709124030.530d3a3e@skate>
- <CAAXf6LV9K=KmTRK9cfZRRztZiZWE1q0MeLtvupuj3j+1jzLkaw@mail.gmail.com>
-Message-ID: <20130709174306.GT5098@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  9 Jul 2013 20:06:36 +0200
+Subject: [Buildroot] [PATCH] system: add option to pass extra args to
+	post-build and post-image scripts
+Message-ID: <1373393196-19024-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Tue, Jul 09, 2013 at 07:39:49PM +0200, Thomas De Schampheleire wrote:
-> Op 9-jul.-2013 12:40 schreef "Thomas Petazzoni" <
-> thomas.petazzoni at free-electrons.com> het volgende:
-> >
-> > Dear Thomas De Schampheleire,
-> >
-> > On Mon, 8 Jul 2013 18:49:40 +0200, Thomas De Schampheleire wrote:
-> >
-> > > You really don't need a special ldd.
-> > > ldd is just a script. In its most basic usage (ldd <executable>), it
-> just runs:
-> > > # LD_TRACE_LOADED_OBJECTS=1 <executable>
-> > >
-> > > For example on busybox:
-> > > # LD_TRACE_LOADED_OBJECTS=1 /bin/busybox
-> > >         linux-vdso32.so.1 =>  (0x00100000)
-> > >         libc.so.6 => /lib/libc.so.6 (0x0fe70000)
-> > >         /lib/ld.so.1 (0x48000000
-> > >
-> > > So for sporadic usage, an ldd script isn't even needed.
-> >
-> > Right, but does this work with the uClibc dynamic loader? Anyway, if
-> > those features don't exist with the uClibc dynamic loader, then
-> > implementing ldd is simply impossible.
-> 
-> I haven't tried this on uClibc yet. Anyone that has such a target at hand
-> willing to give it a shot?
+It can be useful to have different configuration use the same post-build
+and/or post-image scripts as they share a common infrastructure, but yet
+have minor differentiation.
 
-Trying on uClibc (0.9.33.2) xtensa target I see:
+This option allows passing zero or more additional arguments to each
+post-build or post-image script.
 
-# LD_TRACE_LOADED_OBJECTS=1 /bin/busybox
-    libc.so.0 => /lib/libc.so.0 (0x20008000)
-    ld-uClibc.so.0 => /lib/ld-uClibc.so.0 (0x20000000)
+The same set of extra arguments are passed to all scripts, it is not
+possible to pass different arguments to each script.
 
-baruch
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ Makefile         |  4 ++--
+ system/Config.in | 16 ++++++++++++++++
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index 955e684..f6e9965 100644
+--- a/Makefile
++++ b/Makefile
+@@ -512,7 +512,7 @@ endif
+ 
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-build script $(s)"); \
+-		$(s) $(TARGET_DIR)$(sep))
++		$(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
+ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+ LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
+@@ -558,7 +558,7 @@ endif
+ target-post-image:
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+-		$(s) $(BINARIES_DIR)$(sep))
++		$(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
+ toolchain-eclipse-register:
+ 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
+diff --git a/system/Config.in b/system/Config.in
+index c0e4f4a..da50f67 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -294,4 +294,20 @@ config BR2_ROOTFS_POST_IMAGE_SCRIPT
+ 	  first and only argument. The script is executed from the
+ 	  main Buildroot source directory as the current directory.
+ 
++config BR2_ROOTFS_POST_SCRIPT_ARGS
++	string "Extra post-{build,image} arguments"
++	depends on BR2_ROOTFS_POST_BUILD_SCRIPT != "" || BR2_ROOTFS_POST_IMAGE_SCRIPT != ""
++	help
++	  Pass these aditional arguments to each post-build or post-image
++	  scripts.
++
++	  Note that all the post-build and post-image scripts will be passed
++	  the same set of arguments, you can not pass different arguments to
++	  each script.
++
++	  Note also, as stated in their respective help text, that the first
++	  argument to each post-build or post-image script is the target/
++	  directory $(TARGET_DIR). The arguments in this option will be
++	  passed *after*.
++
+ endmenu
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.8.1.2
