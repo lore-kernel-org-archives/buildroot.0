@@ -1,105 +1,75 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue, 9 Jul 2013 12:28:22 -0400
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Tue, 9 Jul 2013 11:54:31 -0500
 Subject: [Buildroot] Cape firmware in /lib/firmware
-In-Reply-To: <CAEBucnBRDa2CZ2RDBtkX3rT=d57bcVaGnsxvh6X1-QJTchs-MQ@mail.gmail.com>
+In-Reply-To: <CA+-urNT-Pj3mWEucVW5uCdD-nsdFRUVDm+0YismGjTCwsYW_Dg@mail.gmail.com>
 References: <CA+-urNSTk=U5uOCSnmPLd0iziW7Lh_HTb9Zb+eR2aaBByi=WtQ@mail.gmail.com>
  <CAEBucnBRDa2CZ2RDBtkX3rT=d57bcVaGnsxvh6X1-QJTchs-MQ@mail.gmail.com>
-Message-ID: <CA+-urNT-Pj3mWEucVW5uCdD-nsdFRUVDm+0YismGjTCwsYW_Dg@mail.gmail.com>
+ <CA+-urNT-Pj3mWEucVW5uCdD-nsdFRUVDm+0YismGjTCwsYW_Dg@mail.gmail.com>
+Message-ID: <CAEBucnB3FH5eaB6HHOJ-ZB9N2W-oj7M49c9JuzPzLxADo61T3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Spenser,
-
-On Tue, Jul 9, 2013 at 11:22 AM, Spenser Gilliland
-<spenser@gillilanding.com> wrote:
-> Hi Frank,
+On Tue, Jul 9, 2013 at 11:28 AM, Frank Hunleth
+<fhunleth@troodon-software.com> wrote:
+> Hi Spenser,
 >
-> I'm respond to the mailing list as many people could find this
-> information useful.
->
->> I just double checked whether the eMMC would work when the cape dtbos
->> were not compiled into the kernel (I was also trying out your patches
->> too), and it's not looking like it is working.
+> On Tue, Jul 9, 2013 at 11:22 AM, Spenser Gilliland
+> <spenser@gillilanding.com> wrote:
+>> Hi Frank,
 >>
->> Just to make sure that we're doing the same thing, I assume that you have:
+>> I'm respond to the mailing list as many people could find this
+>> information useful.
 >>
->> # CONFIG_FIRMWARE_IN_KERNEL is not set
+>>> I just double checked whether the eMMC would work when the cape dtbos
+>>> were not compiled into the kernel (I was also trying out your patches
+>>> too), and it's not looking like it is working.
+>>>
+>>> Just to make sure that we're doing the same thing, I assume that you have:
+>>>
+>>> # CONFIG_FIRMWARE_IN_KERNEL is not set
+>>>
+>>> in your kernel config. Do you have any other changes? As far as I can
+>>> tell, the dtbos are installed correctly.
 >>
->> in your kernel config. Do you have any other changes? As far as I can
->> tell, the dtbos are installed correctly.
->
-> Unfortunately, I have the CONFIG_FIRMWARE_IN_KERNEL set to y.  So, I
-> am not actually performing the firmware loads as I had thought.  Thank
-> you for pointing me towards this issue.
->
->> To be honest, I don't understand how eMMC is working for you if you
->> don't build cape-bone-2g-emmc1.dtbo into the kernel. It seems like the
->> firmware request just comes too early.
+>> Unfortunately, I have the CONFIG_FIRMWARE_IN_KERNEL set to y.  So, I
+>> am not actually performing the firmware loads as I had thought.  Thank
+>> you for pointing me towards this issue.
 >>
->> Anyway, if it does work, I'd like to change my setup to more closely
->> mirror yours since having the dtbos not compiled into the kernel seems
->> like the right way to go.
+>>> To be honest, I don't understand how eMMC is working for you if you
+>>> don't build cape-bone-2g-emmc1.dtbo into the kernel. It seems like the
+>>> firmware request just comes too early.
+>>>
+>>> Anyway, if it does work, I'd like to change my setup to more closely
+>>> mirror yours since having the dtbos not compiled into the kernel seems
+>>> like the right way to go.
+>>
+>> So, If I disable CONFIG_FIRMWARE_IN_KERNEL option and boot from the
+>> sdcard.  The following firmware loading is observed but only slot-5 is
+>> successfully loaded.
 >
-> So, If I disable CONFIG_FIRMWARE_IN_KERNEL option and boot from the
-> sdcard.  The following firmware loading is observed but only slot-5 is
-> successfully loaded.
-
-Ok. The output that I see is identical to what you posted, so at least
-we're seeing the same thing.
-
-I'm going to keep the firmware compiled into the kernel for a while
-longer and then circle back after I make progress in other areas. As
-far as I can tell, Debian doesn't include the dtbos in the kernel and
-it works, so there must be a way to fix this.
-
-Frank
-
+> Ok. The output that I see is identical to what you posted, so at least
+> we're seeing the same thing.
 >
-> beaglebone login: [   61.502280] bone-capemgr bone_capemgr.8: failed
-> to load firmware 'cape-bone-2g-emmc1.dtbo'
-> [   61.510994] bone-capemgr bone_capemgr.8: loader: failed to load
-> slot-4 BB-BONE-EMMC-2G:00A0 (prio 1)
-> [   61.520998] bone-capemgr bone_capemgr.8: slot #5: Requesting
-> firmware 'cape-boneblack-hdmi-00A0.dtbo' for board-name
-> 'Bone-Black-HDMI', version '00A0'
-> [   61.535117] bone-capemgr bone_capemgr.8: loader: check slot-6
-> BB-BONELT-HDMIN:00A0 (prio 2)
-> [   61.553375] bone-capemgr bone_capemgr.8: slot #5: dtbo
-> 'cape-boneblack-hdmi-00A0.dtbo' loaded; converting to live tree
-> [   61.565195] bone-capemgr bone_capemgr.8: slot #5: #4 overlays
-> [   61.576715] platform 4830e000.fb: alias fck already exists
-> [   61.596648] bone-capemgr bone_capemgr.8: slot #5: Applied #4 overlays.
-> [   61.603577] bone-capemgr bone_capemgr.8: loader: done slot-5
-> BB-BONELT-HDMI:00A0 (prio 1)
-> [   61.612492] bone-capemgr bone_capemgr.8: loader: check slot-6
-> BB-BONELT-HDMIN:00A0 (prio 2)
-> [   61.625585] bone-capemgr bone_capemgr.8: loader: after slot-6
-> BB-BONELT-HDMIN:00A0 (prio 2)
-> [   61.634998] bone-capemgr bone_capemgr.8: slot #6: Requesting
-> firmware 'cape-boneblack-hdmin-00A0.dtbo' for board-name
-> 'Bone-Black-HDMIN', version '00A0'
-> [   61.652387] bone-capemgr bone_capemgr.8: slot #6: dtbo
-> 'cape-boneblack-hdmin-00A0.dtbo' loaded; converting to live tree
-> [   61.664160] bone-capemgr bone_capemgr.8: slot #6: BB-BONELT-HDMIN
-> conflict P8.45 (#5:BB-BONELT-HDMI)
-> [   61.673749] bone-capemgr bone_capemgr.8: slot #6: Failed verification
-> [   61.680499] bone-capemgr bone_capemgr.8: loader: failed to load
-> slot-6 BB-BONELT-HDMIN:00A0 (prio 2)
+> I'm going to keep the firmware compiled into the kernel for a while
+> longer and then circle back after I make progress in other areas. As
+> far as I can tell, Debian doesn't include the dtbos in the kernel and
+> it works, so there must be a way to fix this.
 >
-> Thanks,
-> Spenser
->
-> --
-> Spenser Gilliland
-> Computer Engineer
-> Doctoral Candidate
+> Frank
 
+The only way to boot from eMMC would be to use an initramfs with the
+dtbos.  A circular dependency would be created otherwise. Therefore,
+the Debian kernel is probably booting with an initramfs. Since the
+initramfs would be available very early during boot, request firmware
+is able to work.  Therefore, perhaps you should try booting from and
+initramfs?
 
+Spenser
 
 --
-Frank Hunleth
-Troodon Software LLC
-http://troodon-software.com/
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
