@@ -1,84 +1,58 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Tue,  9 Jul 2013 12:39:55 -0500
-Subject: [Buildroot] [PATCH v2 2/2] beagle-capes: new package
-In-Reply-To: <1373391595-19359-1-git-send-email-spenser@gillilanding.com>
-References: <1373391595-19359-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1373391595-19359-2-git-send-email-spenser@gillilanding.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 9 Jul 2013 20:43:06 +0300
+Subject: [Buildroot] where is 'ldd'?
+In-Reply-To: <CAAXf6LV9K=KmTRK9cfZRRztZiZWE1q0MeLtvupuj3j+1jzLkaw@mail.gmail.com>
+References: <20130708135640.GA7070@zuhnb712> <51DAC94D.2030706@gmail.com>
+ <20130708142743.GB11258@zuhnb712>
+ <CAAXf6LU3ShNk9JdG-eVv7Lt3OLopP5butkPK-8Mb4L+3gmRzxg@mail.gmail.com>
+ <20130709124030.530d3a3e@skate>
+ <CAAXf6LV9K=KmTRK9cfZRRztZiZWE1q0MeLtvupuj3j+1jzLkaw@mail.gmail.com>
+Message-ID: <20130709174306.GT5098@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-installs the beaglebone cape dtbos.
+Hi Thomas,
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Yann E. Morin <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-v1->v2:
-  - alpha order in ../Config.in
-  - clarify Config.in
----
- package/Config.in                    |  1 +
- package/beagle-capes/Config.in       | 13 +++++++++++++
- package/beagle-capes/beagle-capes.mk | 15 +++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/beagle-capes/Config.in
- create mode 100644 package/beagle-capes/beagle-capes.mk
+On Tue, Jul 09, 2013 at 07:39:49PM +0200, Thomas De Schampheleire wrote:
+> Op 9-jul.-2013 12:40 schreef "Thomas Petazzoni" <
+> thomas.petazzoni at free-electrons.com> het volgende:
+> >
+> > Dear Thomas De Schampheleire,
+> >
+> > On Mon, 8 Jul 2013 18:49:40 +0200, Thomas De Schampheleire wrote:
+> >
+> > > You really don't need a special ldd.
+> > > ldd is just a script. In its most basic usage (ldd <executable>), it
+> just runs:
+> > > # LD_TRACE_LOADED_OBJECTS=1 <executable>
+> > >
+> > > For example on busybox:
+> > > # LD_TRACE_LOADED_OBJECTS=1 /bin/busybox
+> > >         linux-vdso32.so.1 =>  (0x00100000)
+> > >         libc.so.6 => /lib/libc.so.6 (0x0fe70000)
+> > >         /lib/ld.so.1 (0x48000000
+> > >
+> > > So for sporadic usage, an ldd script isn't even needed.
+> >
+> > Right, but does this work with the uClibc dynamic loader? Anyway, if
+> > those features don't exist with the uClibc dynamic loader, then
+> > implementing ldd is simply impossible.
+> 
+> I haven't tried this on uClibc yet. Anyone that has such a target at hand
+> willing to give it a shot?
 
-diff --git a/package/Config.in b/package/Config.in
-index 4df48ba..d17baa9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -221,6 +221,7 @@ menu "Hardware handling"
- menu "Misc devices firmwares"
- source "package/am33x-cm3/Config.in"
- source "package/b43-firmware/Config.in"
-+source "package/beagle-capes/Config.in"
- source "package/linux-firmware/Config.in"
- source "package/rpi-firmware/Config.in"
- source "package/sunxi-boards/Config.in"
-diff --git a/package/beagle-capes/Config.in b/package/beagle-capes/Config.in
-new file mode 100644
-index 0000000..90482ec
---- /dev/null
-+++ b/package/beagle-capes/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_BEAGLE_CAPES
-+	bool "beagle-capes"
-+	depends on BR2_LINUX_KERNEL && BR2_arm
-+	select BR2_LINUX_KERNEL_INSTALL_FIRMWARE
-+	help
-+	  Installs beaglebone capes firmwares.
-+
-+	  These firmwares are bundled in the TI fork on the Linux kernel for the
-+	  BeagleBone; therefore, a kernel with these firmwares must be configured in
-+	  the Kernel Configuration section of Buildroot.
-+
-+comment "beagle-capes requires a Linux kernel"
-+	depends on !(BR2_LINUX_KERNEL)
-diff --git a/package/beagle-capes/beagle-capes.mk b/package/beagle-capes/beagle-capes.mk
-new file mode 100644
-index 0000000..5b6f121
---- /dev/null
-+++ b/package/beagle-capes/beagle-capes.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# beagle-capes 
-+#
-+################################################################################
-+
-+BEAGLE_CAPES_SOURCE =
-+
-+BEAGLE_CAPES_DEPENDENCIES = linux
-+
-+define BEAGLE_CAPES_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 644 $(STAGING_DIR)/lib/firmware/*.dtbo $(TARGET_DIR)/lib/firmware/
-+endef
-+
-+$(eval $(generic-package))
+Trying on uClibc (0.9.33.2) xtensa target I see:
+
+# LD_TRACE_LOADED_OBJECTS=1 /bin/busybox
+    libc.so.0 => /lib/libc.so.0 (0x20008000)
+    ld-uClibc.so.0 => /lib/ld-uClibc.so.0 (0x20000000)
+
+baruch
+
 -- 
-1.8.1.2
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
