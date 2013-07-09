@@ -1,80 +1,57 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Tue, 9 Jul 2013 10:22:25 -0500
-Subject: [Buildroot] Cape firmware in /lib/firmware
-In-Reply-To: <CA+-urNSTk=U5uOCSnmPLd0iziW7Lh_HTb9Zb+eR2aaBByi=WtQ@mail.gmail.com>
-References: <CA+-urNSTk=U5uOCSnmPLd0iziW7Lh_HTb9Zb+eR2aaBByi=WtQ@mail.gmail.com>
-Message-ID: <CAEBucnBRDa2CZ2RDBtkX3rT=d57bcVaGnsxvh6X1-QJTchs-MQ@mail.gmail.com>
+Date: Tue, 9 Jul 2013 10:34:32 -0500
+Subject: [Buildroot] [PATCH 2/2] beagle-capes: new package
+In-Reply-To: <20130708174739.GD3206@free.fr>
+References: <1373239866-18076-1-git-send-email-spenser@gillilanding.com>
+ <1373239866-18076-2-git-send-email-spenser@gillilanding.com>
+ <20130708174739.GD3206@free.fr>
+Message-ID: <CAEBucnCRUZg_n7PgP6NaM6Y7dUsoTv0xW9Y-22s4ct0vEfw=EQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Frank,
+Yann,
 
-I'm respond to the mailing list as many people could find this
-information useful.
+> I know it was me suggesting this new package, but in the end, wouldn't
+> this be better handled with a post-build script?
 
-> I just double checked whether the eMMC would work when the cape dtbos
-> were not compiled into the kernel (I was also trying out your patches
-> too), and it's not looking like it is working.
+If it's handled with a post script; then the kconfig option for
+installing firmware would need to be visible to the user.
+
+> A post-build script would also have all lattitude to decide what exact
+> .dtbo files to copy over, not just everything.
 >
-> Just to make sure that we're doing the same thing, I assume that you have:
+> Not saying we should drop this package, but there really are a few
+> options here, and I don't really know what's better.
 >
-> # CONFIG_FIRMWARE_IN_KERNEL is not set
+> Alphabetical order, please.
+
+Will fix.
+
+> The comment is mis-leading: the firmware files are not copied from the
+> kernel source tree, but from staging. I would not state where they are
+> copied from, so I'd say something along those lines:
 >
-> in your kernel config. Do you have any other changes? As far as I can
-> tell, the dtbos are installed correctly.
-
-Unfortunately, I have the CONFIG_FIRMWARE_IN_KERNEL set to y.  So, I
-am not actually performing the firmware loads as I had thought.  Thank
-you for pointing me towards this issue.
-
-> To be honest, I don't understand how eMMC is working for you if you
-> don't build cape-bone-2g-emmc1.dtbo into the kernel. It seems like the
-> firmware request just comes too early.
+>     Install BeagleBone capes firmwares.
 >
-> Anyway, if it does work, I'd like to change my setup to more closely
-> mirror yours since having the dtbos not compiled into the kernel seems
-> like the right way to go.
+>     These firmwares are bundled in the TI fork on the Linux kernel for
+>     the BegaleBone, so you'll need to configure Buildroot to use such a
+>     kernel.
 
-So, If I disable CONFIG_FIRMWARE_IN_KERNEL option and boot from the
-sdcard.  The following firmware loading is observed but only slot-5 is
-successfully loaded.
+Will fix.
 
-beaglebone login: [   61.502280] bone-capemgr bone_capemgr.8: failed
-to load firmware 'cape-bone-2g-emmc1.dtbo'
-[   61.510994] bone-capemgr bone_capemgr.8: loader: failed to load
-slot-4 BB-BONE-EMMC-2G:00A0 (prio 1)
-[   61.520998] bone-capemgr bone_capemgr.8: slot #5: Requesting
-firmware 'cape-boneblack-hdmi-00A0.dtbo' for board-name
-'Bone-Black-HDMI', version '00A0'
-[   61.535117] bone-capemgr bone_capemgr.8: loader: check slot-6
-BB-BONELT-HDMIN:00A0 (prio 2)
-[   61.553375] bone-capemgr bone_capemgr.8: slot #5: dtbo
-'cape-boneblack-hdmi-00A0.dtbo' loaded; converting to live tree
-[   61.565195] bone-capemgr bone_capemgr.8: slot #5: #4 overlays
-[   61.576715] platform 4830e000.fb: alias fck already exists
-[   61.596648] bone-capemgr bone_capemgr.8: slot #5: Applied #4 overlays.
-[   61.603577] bone-capemgr bone_capemgr.8: loader: done slot-5
-BB-BONELT-HDMI:00A0 (prio 1)
-[   61.612492] bone-capemgr bone_capemgr.8: loader: check slot-6
-BB-BONELT-HDMIN:00A0 (prio 2)
-[   61.625585] bone-capemgr bone_capemgr.8: loader: after slot-6
-BB-BONELT-HDMIN:00A0 (prio 2)
-[   61.634998] bone-capemgr bone_capemgr.8: slot #6: Requesting
-firmware 'cape-boneblack-hdmin-00A0.dtbo' for board-name
-'Bone-Black-HDMIN', version '00A0'
-[   61.652387] bone-capemgr bone_capemgr.8: slot #6: dtbo
-'cape-boneblack-hdmin-00A0.dtbo' loaded; converting to live tree
-[   61.664160] bone-capemgr bone_capemgr.8: slot #6: BB-BONELT-HDMIN
-conflict P8.45 (#5:BB-BONELT-HDMI)
-[   61.673749] bone-capemgr bone_capemgr.8: slot #6: Failed verification
-[   61.680499] bone-capemgr bone_capemgr.8: loader: failed to load
-slot-6 BB-BONELT-HDMIN:00A0 (prio 2)
+>> +
+>> +comment "requires the linux kernel"
+>
+> comment "beagle-capes requires a Linux kernel"
+
+Will fix.
 
 Thanks,
 Spenser
+
 
 --
 Spenser Gilliland
