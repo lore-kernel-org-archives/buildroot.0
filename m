@@ -1,55 +1,39 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Tue, 9 Jul 2013 09:03:02 -0500
-Subject: [Buildroot] [PATCH 1/2] linux: install firmware to staging.
-In-Reply-To: <20130709125435.68e83fc2@skate>
-References: <1373239866-18076-1-git-send-email-spenser@gillilanding.com>
- <20130708175221.GE3206@free.fr> <20130709125435.68e83fc2@skate>
-Message-ID: <CAEBucnC7c1tJFQCeGRfYD4O4xD4vwn=GpZnK6gQnJ=7X_jAjyQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 Jul 2013 17:14:04 +0200
+Subject: [Buildroot] Buildroot compilation using uClibc and activating
+ bluez
+In-Reply-To: <747C1E83C744F44E9ACFB89FAEEC2C7B2423BF9A50@EXDCVYMBSTM005.EQ1STM.local>
+References: <747C1E83C744F44E9ACFB89FAEEC2C7B2423BF9923@EXDCVYMBSTM005.EQ1STM.local>
+ <20130709125037.0a4e0077@skate>
+ <747C1E83C744F44E9ACFB89FAEEC2C7B2423BF9A50@EXDCVYMBSTM005.EQ1STM.local>
+Message-ID: <20130709171404.1fc94ea6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Dear Julien COUVRAND,
 
->> # This option can be selected by other packages that require special
->> # firmwares bundled in some fiorks of the Linux kernell (eg. the BBB
->> # capes firmwares (.dtbo) as distributed in the TI Linux kernel fork).
->> # To install other firmwares, please use the linux-firmware package.
->
-> The thing that worries me here is that this .dtbo thing for capes is
-> custom to the BBB kernel, and as far as I know, not in the upstream
-> kernel. So it annoys me a bit to have this within the linux/linux.mk
-> logic, because if we started to add vendor-specific logic in this
-> generic kernel .mk file, where are we going to end?
+On Tue, 9 Jul 2013 16:36:15 +0200, Julien COUVRAND wrote:
+> Thanks Thomas
+> I am going to check it.
 
-This should be the only change required to support any in-kernel
-firmware.  It's very vendor agnostic and can be useful for more than
-just beagle-capes.  This also establishes precedent for how to handle
-non-mainlined in-kernel firmware.
+Please don't reply to me directly: keep the list Cc'ed.
 
-> In order to have a better understanding of the problem, could someone
-> summarize how things work with those .dtbo? Where are they located
-> source wise, how they are built, where they should be installed,
-> how/when they are loaded/used in the system, etc.
+Now that my network connection is working a little bit better, the
+Blackfin guys indeed have a noMMU patch for D-Bus, at
+http://blackfin.uclinux.org/git/?p=buildroot;a=blob;f=package/dbus/dbus-nommu.patch;h=bd1cf4c00b454634648a7d074f2f7bda009b6581;hb=HEAD.
+It'd be great if you could test it, clean it up, and submit it to
+Buildroot.
 
-The .dtbo are device tree overlay files, the device tree sources from
-which they are made are located in <kernel>/firmware/capes.  They are
-built using the device tree compiler (dtc). They should be installed
-in /lib/firmware and are used by the in-kernel capebus manager on boot
-to add support for the capes.  The kernel installs these dtbo when the
-firmware_install target is built.
-
-In the kernel, the capebus manager uses eeproms to determine which
-capes are installed on the target and installs the needed dtbo for the
-cape.  This creates the needed platform devices in the kernel.
+Just curious, which noMMU architecture are you working on?
 
 Thanks,
-Spenser
 
-
---
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
