@@ -1,43 +1,69 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue,  9 Jul 2013 10:47:47 +0200
-Subject: [Buildroot] [PATCH 3/4] package: fix generic extract target for
-	top-level parallel make
-In-Reply-To: <1373359668-18099-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1373359668-18099-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1373359668-18099-4-git-send-email-fabio.porcedda@gmail.com>
+From: Julien COUVRAND <julien.couvrand@stericsson.com>
+Date: Tue, 9 Jul 2013 10:57:13 +0200
+Subject: [Buildroot] Buildroot compilation using uClibc and activating bluez
+Message-ID: <747C1E83C744F44E9ACFB89FAEEC2C7B2423BF9923@EXDCVYMBSTM005.EQ1STM.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To be able to use top-level parallel make we must don't depend in a rule
-on the order of evaluation of the prerequisites, so instead of reling on
-the left to right ordering of evaluation of the prerequisites add
-an explicit rule to describe the dependencies.
+Hi,
 
-Add a rule to specify that the $(2)_TARGET_EXTRACT target depends
-on $(2)_TARGET_SOURCE target.
+I would like to enable Bluez packages using uClibc but i meet some dependencies with MMU.
+We can't enable bluez-utils package while MMU is deactivated. 
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/pkg-generic.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+As soon as i compile Buildroot deactivating MMU dependencies into Config.in from bluez-utils package such as:
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 7e46126..fb317d5 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -396,8 +396,8 @@ $(1)-configure:		$(1)-patch $(1)-depends \
- 
- $(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
- 
--$(1)-extract:		$(1)-source \
--			$$($(2)_TARGET_EXTRACT)
-+$$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
-+$(1)-extract:			$$($(2)_TARGET_EXTRACT)
- 
- $(1)-depends:		$$($(2)_DEPENDENCIES)
- 
--- 
-1.8.1.4
+--
+config BR2_PACKAGE_BLUEZ_UTILS
+	bool "bluez-utils"
+	depends on !BR2_avr32
+	depends on BR2_USE_WCHAR # libglib2
+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib
+	# depends on BR2_USE_MMU # dbus
+	select BR2_PACKAGE_DBUS
+	select BR2_PACKAGE_LIBGLIB2
+	help
+	  bluez utils
+--
+
+I have got following compilation errors:
+
+--
+>../dbus/.libs/libdbus-internal.a(libdbus_internal_la-dbus-sysdeps-util-unix.o): In function `_dbus_become_daemon':
+> dbus-sysdeps-util-unix.c:(.text+0x530): undefined reference to `fork'
+> ../dbus/.libs/libdbus-internal.a(libdbus_internal_la-dbus-spawn.o): In function `_dbus_spawn_async_with_babysitter':
+> dbus-spawn.c:(.text+0xe38): undefined reference to `fork'
+> dbus-spawn.c:(.text+0xea0): undefined reference to `fork'
+> collect2: error: ld returned 1 exit status
+> make[3]: *** [dbus-daemon] Error 1
+> make[3]: *** Waiting for unfinished jobs....
+> ../dbus/.libs/libdbus-internal.a(libdbus_internal_la-dbus-sysdeps-util-unix.o): In function `_dbus_become_daemon':
+> dbus-sysdeps-util-unix.c:(.text+0x530): undefined reference to `fork'
+> collect2: error: ld returned 1 exit status
+> make[3]: *** [dbus-daemon-launch-helper] Error 1
+--
+
+So, currently, using uclibc for bluez, without MMU activation, I can't compile Buildroot due dBus and the "fork".
+Does it exist a way to enable bluez using uClibc avoiding Dbus issues?
+
+
+Thanks in advance
+
+
+Julien
+
+
+Julien COUVRAND
+------------------------------------------------------------------------------------
+
+Mailto:???? 11 rue Pierre-Felix Delarue
+??????????????????? 72100 Le Mans -? FRANCE
+Office:????? +33 2 44 02 71 07
+Mobile: ?? +33 6 03 49 09 04 
+Emailto :?? julien.couvrand at stericsson.com
+-------------------------------------------------------------------------------------
+This communication is confidential and intended solely for the addressee(s). Any unauthorized review, use, disclosure or distribution is prohibited. If you believe this message has been sent to you in error, please notify the sender by replying to this transmission and delete the message without disclosing it. Thank you.
+
+E-mail including attachments is susceptible to data corruption, interception, unauthorized amendment, tampering and viruses, and we only send and receive emails on the basis that we are not liable for any such corruption, interception, amendment, tampering or viruses or any consequences thereof.
