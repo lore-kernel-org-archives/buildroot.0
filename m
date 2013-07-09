@@ -1,21 +1,19 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 9 Jul 2013 21:25:36 +0300
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 9 Jul 2013 20:35:05 +0200
 Subject: [Buildroot] [PATCH] system: add option to pass extra args to
  post-build and post-image scripts
 In-Reply-To: <1373393196-19024-1-git-send-email-yann.morin.1998@free.fr>
 References: <1373393196-19024-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20130709182536.GU5098@tarshish>
+Message-ID: <20130709183505.GB3543@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello All!
 
-On Tue, Jul 09, 2013 at 08:06:36PM +0200, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
+On 2013-07-09 20:06 +0200, Yann E. MORIN spake thusly:
 > It can be useful to have different configuration use the same post-build
 > and/or post-image scripts as they share a common infrastructure, but yet
 > have minor differentiation.
@@ -25,68 +23,50 @@ On Tue, Jul 09, 2013 at 08:06:36PM +0200, Yann E. MORIN wrote:
 > 
 > The same set of extra arguments are passed to all scripts, it is not
 > possible to pass different arguments to each script.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-You should also change the "first and only argument" language in the help text 
-of BR2_ROOTFS_POST_BUILD_SCRIPT and BR2_ROOTFS_POST_IMAGE_SCRIPT.
+I've already suggested moving the current _POST_BUILD_SCRIPT and
+_POST_IMAGE_SCRIPT options to Legacy, and introduce two new options that
+would accept a single script with arguments.
 
-baruch
+This was refused (and rightfully) as that would greatly impact users
+depending on the current behaviour, and some alternate solution were
+proposed:
+  - have a single script that would behave differently on how it sould
+    be called, and have different symlinks pointing to that script;
+  - have a script for each configuration, that 'sources' a functions
+    file and call the required functions
 
-> ---
->  Makefile         |  4 ++--
->  system/Config.in | 16 ++++++++++++++++
->  2 files changed, 18 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 955e684..f6e9965 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -512,7 +512,7 @@ endif
->  
->  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
->  		$(call MESSAGE,"Executing post-build script $(s)"); \
-> -		$(s) $(TARGET_DIR)$(sep))
-> +		$(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
->  
->  ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
->  LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
-> @@ -558,7 +558,7 @@ endif
->  target-post-image:
->  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
->  		$(call MESSAGE,"Executing post-image script $(s)"); \
-> -		$(s) $(BINARIES_DIR)$(sep))
-> +		$(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
->  
->  toolchain-eclipse-register:
->  	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
-> diff --git a/system/Config.in b/system/Config.in
-> index c0e4f4a..da50f67 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -294,4 +294,20 @@ config BR2_ROOTFS_POST_IMAGE_SCRIPT
->  	  first and only argument. The script is executed from the
->  	  main Buildroot source directory as the current directory.
->  
-> +config BR2_ROOTFS_POST_SCRIPT_ARGS
-> +	string "Extra post-{build,image} arguments"
-> +	depends on BR2_ROOTFS_POST_BUILD_SCRIPT != "" || BR2_ROOTFS_POST_IMAGE_SCRIPT != ""
-> +	help
-> +	  Pass these aditional arguments to each post-build or post-image
-> +	  scripts.
-> +
-> +	  Note that all the post-build and post-image scripts will be passed
-> +	  the same set of arguments, you can not pass different arguments to
-> +	  each script.
-> +
-> +	  Note also, as stated in their respective help text, that the first
-> +	  argument to each post-build or post-image script is the target/
-> +	  directory $(TARGET_DIR). The arguments in this option will be
-> +	  passed *after*.
-> +
->  endmenu
+After playing a bit with both solutions, it turned out to be not
+entirely manageable, especially when the inrastructure put in place by
+the functions changes, since all scripts must be changed accordingly.
+
+So, I'm back with this yet-alternate solution, that passes a set of
+extra args to the scripts, so it becomes possible to have a single (or
+more!) script which can decide what to do, based on its arguments.
+
+In my case, the arguments are a description file of the target:
+  - the steps to execute post-build
+  - the partitioning scheme(s) of the storage device(s)
+
+Since it is using a description file, and the post scripts only read
+that file for deciding what to do, a change in the functions API has no
+impact on the main script.
+
+Granted, a change in the description format will require all description
+files to be updated, but that is *not* expected to happen too often.
+
+Besides, this new solution is fully backward-compatible, so does not
+break existing workflows.
+
+Ready to hear^Wread comments! ;-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
