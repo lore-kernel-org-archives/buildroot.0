@@ -1,44 +1,77 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 9 Jul 2013 19:39:49 +0200
-Subject: [Buildroot] where is 'ldd'?
-In-Reply-To: <20130709124030.530d3a3e@skate>
-References: <20130708135640.GA7070@zuhnb712> <51DAC94D.2030706@gmail.com>
- <20130708142743.GB11258@zuhnb712>
- <CAAXf6LU3ShNk9JdG-eVv7Lt3OLopP5butkPK-8Mb4L+3gmRzxg@mail.gmail.com>
- <20130709124030.530d3a3e@skate>
-Message-ID: <CAAXf6LV9K=KmTRK9cfZRRztZiZWE1q0MeLtvupuj3j+1jzLkaw@mail.gmail.com>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Tue,  9 Jul 2013 12:39:54 -0500
+Subject: [Buildroot] [PATCH v2 1/2] linux: install firmware to staging.
+Message-ID: <1373391595-19359-1-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Op 9-jul.-2013 12:40 schreef "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> het volgende:
->
-> Dear Thomas De Schampheleire,
->
-> On Mon, 8 Jul 2013 18:49:40 +0200, Thomas De Schampheleire wrote:
->
-> > You really don't need a special ldd.
-> > ldd is just a script. In its most basic usage (ldd <executable>), it
-just runs:
-> > # LD_TRACE_LOADED_OBJECTS=1 <executable>
-> >
-> > For example on busybox:
-> > # LD_TRACE_LOADED_OBJECTS=1 /bin/busybox
-> >         linux-vdso32.so.1 =>  (0x00100000)
-> >         libc.so.6 => /lib/libc.so.6 (0x0fe70000)
-> >         /lib/ld.so.1 (0x48000000
-> >
-> > So for sporadic usage, an ldd script isn't even needed.
->
-> Right, but does this work with the uClibc dynamic loader? Anyway, if
-> those features don't exist with the uClibc dynamic loader, then
-> implementing ldd is simply impossible.
+Install firmware to staging when the hidden option
+BR2_LINUX_KERNEL_INSTALL_FIRMWARE is selected.  This allows parts of the
+firmware provided by the linux kernel to be installed in the target.
 
-I haven't tried this on uClibc yet. Anyone that has such a target at hand
-willing to give it a shot?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130709/4e9803f9/attachment-0001.html>
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Yann E. Morin <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+v1->v2:
+  - increase comment clarity in Config.in
+---
+ linux/Config.in |  7 +++++++
+ linux/linux.mk  | 13 +++++++++++++
+ 2 files changed, 20 insertions(+)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index f58e714..f5c4764 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -297,6 +297,13 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
+ 	  /boot in the target root filesystem, as is typically done on
+ 	  x86/x86_64 systems.
+ 
++# This option can be selected by other packages that require special
++# firmwares bundled in some forks of the Linux kernel (e.g. the BeagleBone
++# Black cape firmwares (.dtbo) as distibuted in the TI Linux Kernel fork.) To
++# install firmware from the mainline kernel please use the
++# linux-firmware package.
++config BR2_LINUX_KERNEL_INSTALL_FIRMWARE
++	bool
+ 
+ # Linux extensions
+ source "linux/Config.ext.in"
+diff --git a/linux/linux.mk b/linux/linux.mk
+index befef16..88c954d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -256,6 +256,15 @@ define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
+ endef
+ endif
+ 
++ifeq ($(BR2_LINUX_KERNEL_INSTALL_FIRMWARE),y)
++
++LINUX_INSTALL_STAGING = YES
++
++define LINUX_INSTALL_FIRMWARE_TO_STAGING
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) firmware_install \
++		INSTALL_FW_PATH=$(STAGING_DIR)/lib/firmware/
++endef
++endif
+ 
+ define LINUX_INSTALL_HOST_TOOLS
+ 	# Installing dtc (device tree compiler) as host tool, if selected
+@@ -269,6 +278,10 @@ define LINUX_INSTALL_IMAGES_CMDS
+ 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
+ endef
+ 
++define LINUX_INSTALL_STAGING_CMDS
++	$(LINUX_INSTALL_FIRMWARE_TO_STAGING)
++endef
++
+ define LINUX_INSTALL_TARGET_CMDS
+ 	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
+ 	$(LINUX_INSTALL_DTB)
+-- 
+1.8.1.2
