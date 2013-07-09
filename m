@@ -1,39 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jul 2013 17:14:04 +0200
-Subject: [Buildroot] Buildroot compilation using uClibc and activating
- bluez
-In-Reply-To: <747C1E83C744F44E9ACFB89FAEEC2C7B2423BF9A50@EXDCVYMBSTM005.EQ1STM.local>
-References: <747C1E83C744F44E9ACFB89FAEEC2C7B2423BF9923@EXDCVYMBSTM005.EQ1STM.local>
- <20130709125037.0a4e0077@skate>
- <747C1E83C744F44E9ACFB89FAEEC2C7B2423BF9A50@EXDCVYMBSTM005.EQ1STM.local>
-Message-ID: <20130709171404.1fc94ea6@skate>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Tue, 9 Jul 2013 10:22:25 -0500
+Subject: [Buildroot] Cape firmware in /lib/firmware
+In-Reply-To: <CA+-urNSTk=U5uOCSnmPLd0iziW7Lh_HTb9Zb+eR2aaBByi=WtQ@mail.gmail.com>
+References: <CA+-urNSTk=U5uOCSnmPLd0iziW7Lh_HTb9Zb+eR2aaBByi=WtQ@mail.gmail.com>
+Message-ID: <CAEBucnBRDa2CZ2RDBtkX3rT=d57bcVaGnsxvh6X1-QJTchs-MQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Julien COUVRAND,
+Hi Frank,
 
-On Tue, 9 Jul 2013 16:36:15 +0200, Julien COUVRAND wrote:
-> Thanks Thomas
-> I am going to check it.
+I'm respond to the mailing list as many people could find this
+information useful.
 
-Please don't reply to me directly: keep the list Cc'ed.
+> I just double checked whether the eMMC would work when the cape dtbos
+> were not compiled into the kernel (I was also trying out your patches
+> too), and it's not looking like it is working.
+>
+> Just to make sure that we're doing the same thing, I assume that you have:
+>
+> # CONFIG_FIRMWARE_IN_KERNEL is not set
+>
+> in your kernel config. Do you have any other changes? As far as I can
+> tell, the dtbos are installed correctly.
 
-Now that my network connection is working a little bit better, the
-Blackfin guys indeed have a noMMU patch for D-Bus, at
-http://blackfin.uclinux.org/git/?p=buildroot;a=blob;f=package/dbus/dbus-nommu.patch;h=bd1cf4c00b454634648a7d074f2f7bda009b6581;hb=HEAD.
-It'd be great if you could test it, clean it up, and submit it to
-Buildroot.
+Unfortunately, I have the CONFIG_FIRMWARE_IN_KERNEL set to y.  So, I
+am not actually performing the firmware loads as I had thought.  Thank
+you for pointing me towards this issue.
 
-Just curious, which noMMU architecture are you working on?
+> To be honest, I don't understand how eMMC is working for you if you
+> don't build cape-bone-2g-emmc1.dtbo into the kernel. It seems like the
+> firmware request just comes too early.
+>
+> Anyway, if it does work, I'd like to change my setup to more closely
+> mirror yours since having the dtbos not compiled into the kernel seems
+> like the right way to go.
+
+So, If I disable CONFIG_FIRMWARE_IN_KERNEL option and boot from the
+sdcard.  The following firmware loading is observed but only slot-5 is
+successfully loaded.
+
+beaglebone login: [   61.502280] bone-capemgr bone_capemgr.8: failed
+to load firmware 'cape-bone-2g-emmc1.dtbo'
+[   61.510994] bone-capemgr bone_capemgr.8: loader: failed to load
+slot-4 BB-BONE-EMMC-2G:00A0 (prio 1)
+[   61.520998] bone-capemgr bone_capemgr.8: slot #5: Requesting
+firmware 'cape-boneblack-hdmi-00A0.dtbo' for board-name
+'Bone-Black-HDMI', version '00A0'
+[   61.535117] bone-capemgr bone_capemgr.8: loader: check slot-6
+BB-BONELT-HDMIN:00A0 (prio 2)
+[   61.553375] bone-capemgr bone_capemgr.8: slot #5: dtbo
+'cape-boneblack-hdmi-00A0.dtbo' loaded; converting to live tree
+[   61.565195] bone-capemgr bone_capemgr.8: slot #5: #4 overlays
+[   61.576715] platform 4830e000.fb: alias fck already exists
+[   61.596648] bone-capemgr bone_capemgr.8: slot #5: Applied #4 overlays.
+[   61.603577] bone-capemgr bone_capemgr.8: loader: done slot-5
+BB-BONELT-HDMI:00A0 (prio 1)
+[   61.612492] bone-capemgr bone_capemgr.8: loader: check slot-6
+BB-BONELT-HDMIN:00A0 (prio 2)
+[   61.625585] bone-capemgr bone_capemgr.8: loader: after slot-6
+BB-BONELT-HDMIN:00A0 (prio 2)
+[   61.634998] bone-capemgr bone_capemgr.8: slot #6: Requesting
+firmware 'cape-boneblack-hdmin-00A0.dtbo' for board-name
+'Bone-Black-HDMIN', version '00A0'
+[   61.652387] bone-capemgr bone_capemgr.8: slot #6: dtbo
+'cape-boneblack-hdmin-00A0.dtbo' loaded; converting to live tree
+[   61.664160] bone-capemgr bone_capemgr.8: slot #6: BB-BONELT-HDMIN
+conflict P8.45 (#5:BB-BONELT-HDMI)
+[   61.673749] bone-capemgr bone_capemgr.8: slot #6: Failed verification
+[   61.680499] bone-capemgr bone_capemgr.8: loader: failed to load
+slot-6 BB-BONELT-HDMIN:00A0 (prio 2)
 
 Thanks,
+Spenser
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+--
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
