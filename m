@@ -1,46 +1,56 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 9 Jul 2013 00:57:58 +0300
-Subject: [Buildroot] Error while building libevas,
-	SFD_NONBLOCK undeclared
-In-Reply-To: <CAF3SDA77hPn0TiYNajKZNTBGWAobSuFKEyWcvRZmmrNhyjRPkA@mail.gmail.com>
-References: <CAF3SDA77hPn0TiYNajKZNTBGWAobSuFKEyWcvRZmmrNhyjRPkA@mail.gmail.com>
-Message-ID: <20130708215758.GL5098@tarshish>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Tue, 9 Jul 2013 09:05:58 +0800
+Subject: [Buildroot] where is 'ldd'?
+In-Reply-To: <CAAXf6LU3ShNk9JdG-eVv7Lt3OLopP5butkPK-8Mb4L+3gmRzxg@mail.gmail.com>
+References: <20130708135640.GA7070@zuhnb712> <51DAC94D.2030706@gmail.com>
+ <20130708142743.GB11258@zuhnb712>
+ <CAAXf6LU3ShNk9JdG-eVv7Lt3OLopP5butkPK-8Mb4L+3gmRzxg@mail.gmail.com>
+Message-ID: <20130709010558.GA20702@zuhnb712.ap.bm.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Daniel,
-
-On Mon, Jul 08, 2013 at 06:01:26PM +0000, Daniel. wrote:
-> I'm receiving this error while trying to build with buildroot.
+On Mon, Jul 08, 2013 at 06:49:40PM +0200, Thomas De Schampheleire wrote:
+> Hi,
 > 
-> make[5]: Entering directory
-> `/home/hilst/buildroot/buildroot-2013.05/output/build/libevas-1.7.4/src/bin'
-> CC evas_cserve2_main_loop_linux.o
-> evas_cserve2_main_loop_linux.c: In function '_signalfd_setup':
-> evas_cserve2_main_loop_linux.c:156: error: 'SFD_NONBLOCK' undeclared (first
-> use in this function)
-> evas_cserve2_main_loop_linux.c:156: error: (Each undeclared identifier is
-> reported only once
-> evas_cserve2_main_loop_linux.c:156: error: for each function it appears in.)
-> evas_cserve2_main_loop_linux.c:156: error: 'SFD_CLOEXEC' undeclared (first
-> use in this fu
+> On Mon, Jul 8, 2013 at 4:27 PM, Woody Wu <narkewoody@gmail.com> wrote:
+> > On Mon, Jul 08, 2013 at 04:14:37PM +0200, Zoltan Gyarmati wrote:
+> >> On 07/08/2013 03:56 PM, Woody Wu wrote:
+> >> > Hi,
+> >> >
+> >> > I just cann't find what is the menu item in buildroot to enable building
+> >> > of 'ldd' for my target.  Does anyone know it?
+> >> >
+> >> > Thanks in advance.
+> >> >
+> >> Sure you don't have it already on your system? What toolchain / libc
+> >> are you using?
+> >
+> > I also feel strange, but its sure. I am using Code Sorucery, downloaded
+> > it's lite version (arm linux eabi version, 2013-05-24). It comes with an
+> > installer, which created a seperated directory in my home. I searched
+> > through its installation directory (via 'find'), sure not have anything
+> > like "*ldd".
 > 
-> My .config can be found here: https://gist.github.com/gkos/5950964
+> You really don't need a special ldd.
+> ldd is just a script. In its most basic usage (ldd <executable>), it just runs:
+> # LD_TRACE_LOADED_OBJECTS=1 <executable>
 > 
-> Any help is appreciated,
+> For example on busybox:
+> # LD_TRACE_LOADED_OBJECTS=1 /bin/busybox
+>         linux-vdso32.so.1 =>  (0x00100000)
+>         libc.so.6 => /lib/libc.so.6 (0x0fe70000)
+>         /lib/ld.so.1 (0x48000000
 > 
-> I'm on archilinux using Sourcery CodeBench toolchain..
+> So for sporadic usage, an ldd script isn't even needed.
+> 
+> See 'man ld.so' for information on this LD_TRACE_LOADED_OBJECTS
+> variable (and several other useful variables that change the behavior
+> of the executable.
+> 
+> See also: http://www.catonmat.net/blog/ldd-arbitrary-code-execution/
+> 
 
-The signalfd(2) man page says that these flags (SFD_NONBLOCK and SFD_CLOEXEC) 
-are only defined since kernel version 2.6.27. It seems that your toolchain 
-uses an older kernel. Which version of the Sourcery CodeBench do you use?
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Cool! learned a thing!
