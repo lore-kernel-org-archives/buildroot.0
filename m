@@ -1,32 +1,51 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 10 Jul 2013 22:14:20 +0200
-Subject: [Buildroot] [git commit] sdl_net: define license
-Message-ID: <20130710202007.674329A196@busybox.osuosl.org>
+Date: Wed, 10 Jul 2013 21:56:44 +0200
+Subject: [Buildroot] [git commit] python: remove idle sample
+Message-ID: <20130710202004.6460C9A196@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f62b07fe1c3a61043a91352ba4bcd6ac542eea56
+commit: http://git.buildroot.net/buildroot/commit/?id=371c395b60d854a9b2f9e99f5d3243a6a8deeb41
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Also move smtpd.py removal to the global remove useless files define.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sdl_net/sdl_net.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/python/python.mk |   11 ++++-------
+ 1 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/sdl_net/sdl_net.mk b/package/sdl_net/sdl_net.mk
-index de1dc59..8039da4 100644
---- a/package/sdl_net/sdl_net.mk
-+++ b/package/sdl_net/sdl_net.mk
-@@ -7,6 +7,8 @@
- SDL_NET_VERSION = 1.2.8
- SDL_NET_SITE = http://www.libsdl.org/projects/SDL_net/release
- SDL_NET_SOURCE = SDL_net-$(SDL_NET_VERSION).tar.gz
-+SDL_NET_LICENSE = zlib
-+SDL_NET_LICENSE_FILES = COPYING
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 975d6f4..ecea638 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -143,21 +143,18 @@ endef
  
- SDL_NET_CONF_OPT = --localstatedir=/var \
- 		--with-sdl-prefix=$(STAGING_DIR)/usr \
+ PYTHON_POST_INSTALL_STAGING_HOOKS += PYTHON_FIXUP_LIBDIR
+ 
+-# Bad shebang, normally not used
+-define PYTHON_REMOVE_SMTPD
+-	rm -f $(TARGET_DIR)/usr/bin/smtpd.py
+-endef
+-
+-PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_SMTPD
+-
+ #
+ # Remove useless files. In the config/ directory, only the Makefile
+ # and the pyconfig.h files are needed at runtime.
+ #
++# idle & smtpd.py have bad shebangs and are mostly samples
++#
+ define PYTHON_REMOVE_USELESS_FILES
++	rm -f $(TARGET_DIR)/usr/bin/idle
+ 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)-config
+ 	rm -f $(TARGET_DIR)/usr/bin/python2-config
+ 	rm -f $(TARGET_DIR)/usr/bin/python-config
++	rm -f $(TARGET_DIR)/usr/bin/smtpd.py
+ 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/config/ \
+ 		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
+ 		rm -f $$i ; \
