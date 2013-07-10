@@ -1,37 +1,40 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Tue, 9 Jul 2013 19:38:08 -0700
-Subject: [Buildroot] [PATCH] mongrel2: needs threads
-Message-ID: <CAKcgs2y2BdqScXnRPcr1vLusRAu-tjKU04X7kuxEYD5ofe_BaQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 10 Jul 2013 07:15:11 +0200
+Subject: [Buildroot] [Hosting] Primary Prod Ganeti Cluster Hardware
+	Migration & Upgrade - Jul 8-12, 2013 (Time Varies)
+In-Reply-To: <CAORfjXRr-Cs3nQcUfY7s_8vLYsHkWUyVM2=Ldpe1nYkDwzoW+A@mail.gmail.com>
+ (Lance Albertson's message of "Tue, 9 Jul 2013 16:00:09 -0700")
+References: <CAORfjXRuN034X3wHFv-0tfL3==F1d6FbhpCziK67EmNhtN-WNg@mail.gmail.com>
+ <CAORfjXRnxBV+dDMqgm_1y02g=6FxVyRwXE5Mb46uKDwBJ51VFA@mail.gmail.com>
+ <CAORfjXRr-Cs3nQcUfY7s_8vLYsHkWUyVM2=Ldpe1nYkDwzoW+A@mail.gmail.com>
+Message-ID: <87r4f7gfmo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mongrel2 uses zeromq that needs threads
+>>>>> "Lance" == Lance Albertson <lance@osuosl.org> writes:
 
-Fixes:
-http://autobuild.buildroot.org/results/93d/93da58453e1ca0cc491170976cfbdeb8bee5c648
+FYI,
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/mongrel2/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+Buildroot/Busybox/uClibc VM migration is planned for the 12th.
 
-diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
-index ca7e609..435d97e 100644
---- a/package/mongrel2/Config.in
-+++ b/package/mongrel2/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_MONGREL2
-  select BR2_PACKAGE_ZEROMQ
-  depends on BR2_INSTALL_LIBSTDCPP # zeromq
-  depends on BR2_INET_IPV6 # zeromq
-+ depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-  depends on BR2_LARGEFILE # zeromq -> util-linux
-  depends on BR2_USE_WCHAR # zeromq -> util-linux
-  # {get,make,swap}context functions present in
+ Lance> Sorry for the delay on this email. I will be starting moves of
+ Lance> other VMs tomorrow and going through at least early next week
+ Lance> during our normal 8-5 business hours. I have created a
+ Lance> spreadsheet [1] that you can follow to see what day your VM will
+ Lance> be affected. I will keep it updated as we continue to move
+ Lance> forward.
+
+ Lance> The VMs listed in the TBA column will need to be scheduled with
+ Lance> us directly. If you would like to have your VM scheduled please
+ Lance> contact me directly so we can figure that out.
+
+ Lance> So far the migration has been working well without any
+ Lance> issues. If you have any questions please let me know!
+
+ Lance> [1]?http://goo.gl/Hkk87
+
 -- 
-1.7.10.4
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130709/69b1dcbd/attachment.html>
+Bye, Peter Korsgaard
