@@ -1,33 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 10 Jul 2013 22:12:30 +0200
-Subject: [Buildroot] [git commit] ramsmp: define license
-Message-ID: <20130710202006.CFD119A196@busybox.osuosl.org>
+Date: Wed, 10 Jul 2013 22:14:20 +0200
+Subject: [Buildroot] [git commit] sdl_net: define license
+Message-ID: <20130710202007.674329A196@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff35cddc63be5ac0d8ed6acc98e601c388245ba4
+commit: http://git.buildroot.net/buildroot/commit/?id=f62b07fe1c3a61043a91352ba4bcd6ac542eea56
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: fix license file name]
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ramsmp/ramsmp.mk |    2 ++
+ package/sdl_net/sdl_net.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/ramsmp/ramsmp.mk b/package/ramsmp/ramsmp.mk
-index 1b44402..7d4eee7 100644
---- a/package/ramsmp/ramsmp.mk
-+++ b/package/ramsmp/ramsmp.mk
+diff --git a/package/sdl_net/sdl_net.mk b/package/sdl_net/sdl_net.mk
+index de1dc59..8039da4 100644
+--- a/package/sdl_net/sdl_net.mk
++++ b/package/sdl_net/sdl_net.mk
 @@ -7,6 +7,8 @@
- RAMSMP_VERSION = 3.5.0
- RAMSMP_SITE = http://www.alasir.com/software/ramspeed
- RAMSMP_ARCH = $(if $(BR2_i386),i386)$(if $(BR2_x86_64),x86_64)
-+RAMSMP_LICENSE = Alasir License
-+RAMSMP_LICENSE_FILES = LICENCE
+ SDL_NET_VERSION = 1.2.8
+ SDL_NET_SITE = http://www.libsdl.org/projects/SDL_net/release
+ SDL_NET_SOURCE = SDL_net-$(SDL_NET_VERSION).tar.gz
++SDL_NET_LICENSE = zlib
++SDL_NET_LICENSE_FILES = COPYING
  
- define RAMSMP_BUILD_CMDS
- 	cp -f package/ramsmp/Makefile $(@D)
+ SDL_NET_CONF_OPT = --localstatedir=/var \
+ 		--with-sdl-prefix=$(STAGING_DIR)/usr \
