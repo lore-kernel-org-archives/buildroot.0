@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 10 Jul 2013 22:15:44 +0200
-Subject: [Buildroot] [git commit] ushare: define license
-Message-ID: <20130710202007.A7EC59A196@busybox.osuosl.org>
+Date: Wed, 10 Jul 2013 22:16:18 +0200
+Subject: [Buildroot] [git commit] inadyn: define license
+Message-ID: <20130710202007.ED8319A196@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c9578712794db59dc1448dffa982119e5ccd25b
+commit: http://git.buildroot.net/buildroot/commit/?id=2ea220d53a491220c0ac299f2f15c7c64028617a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ushare/ushare.mk |    2 ++
+ package/inadyn/inadyn.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/ushare/ushare.mk b/package/ushare/ushare.mk
-index 5cdc931..25f880c 100644
---- a/package/ushare/ushare.mk
-+++ b/package/ushare/ushare.mk
-@@ -8,6 +8,8 @@ USHARE_VERSION = 1.1a
- USHARE_SOURCE = ushare-$(USHARE_VERSION).tar.bz2
- USHARE_SITE = http://ushare.geexbox.org/releases
- USHARE_DEPENDENCIES = host-pkgconf libupnp
-+USHARE_LICENSE = GPLv2+
-+USHARE_LICENSE_FILES = COPYING
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 221a3d1..12f8acc 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -7,6 +7,8 @@
+ INADYN_VERSION = 1.98.1
+ INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.bz2
+ INADYN_SITE = https://github.com/downloads/troglobit/inadyn
++INADYN_LICENSE = GPLv2+
++INADYN_LICENSE_FILES = COPYING LICENSE
  
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- USHARE_DEPENDENCIES += gettext
+ define INADYN_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
