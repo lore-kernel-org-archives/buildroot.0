@@ -1,81 +1,56 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 10 Jul 2013 17:42:37 +0000 (UTC)
-Subject: [Buildroot] [Bug 6374] New: gnutls package broken if linux
- cryptodev module selected
-Message-ID: <bug-6374-163@https.bugs.busybox.net/>
+From: Magnus Edenhill <magnus@edenhill.se>
+Date: Wed, 10 Jul 2013 19:29:26 +0200
+Subject: [Buildroot]
+	=?windows-1252?q?Error_while_installing_dosfstools=3A?=
+	=?windows-1252?q?_mkdosfs=92=3A_No_such_file_or_directory?=
+In-Reply-To: <51DD94D9.6060001@zacarias.com.ar>
+References: <CAF3SDA4DY8DkDTVr5F4aLxmoJha60Y4DnZ9yC0u7PdhteR3Svg@mail.gmail.com>
+ <87obaciyn8.fsf@dell.be.48ers.dk>
+ <CAF3SDA7tGGeJfP2kJcf9Hy6Z4KrqUhHV0E1JBTE+0x+-bCMEMw@mail.gmail.com>
+ <87bo6ci9xk.fsf@dell.be.48ers.dk> <51DD6469.4010504@gmail.com>
+ <20130710185808.56c3ac52@skate> <51DD94D9.6060001@zacarias.com.ar>
+Message-ID: <CAHCQUcBYBENiZZZh=e9n-8V0mC-HSmG8ZCx=prhy+28Bp0jg=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6374
+2013/7/10 Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-           Summary: gnutls package broken if linux cryptodev module
-                    selected
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: rjbarnet at rockwellcollins.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> On 07/10/2013 01:58 PM, Thomas Petazzoni wrote:
+>
+> > Dear Daniel Hilst Selli,
+> >
+> > On Wed, 10 Jul 2013 13:40:57 +0000, Daniel Hilst Selli wrote:
+> >
+> >> Here, this solves my problem.
+> >> http://pastebin.com/esGFdC0n
+> >
+> > Can you send a proper patch with this fix?
+>
+> How so?
+> There's something fishy with this "bug".
+> The tool renaming happened with dosfstools 3.0.18, hence 3.0.16 behaves
+> the exact same way as before (mkdosfs instead of mkfs.fat and so on).
+> Either the 3.0.16 tarball he has isn't really 3.0.16 or i don't know
+> what's up.
+> Daniel: did you try removing the source tarball and trying a new download?
+>
 
 
-With the latest version of buildroot from the git repository as of 7/10/2013 -
-2013.08-git-00452-gcca5538 - if the BR2_PACKAGE_CRYPTODEV_LINUX is selected the
-package BR2_PACKAGE_GNUTLS will not build successfully as the following error
-occurs during a build:
+I think we saw this issue too (with 13.02).
+Turns out the dosfstools tarball content was changed without stepping the
+version number (3.0.12 iirc).
+There was a site update aswell which fixed it for us:
 
-  CC     ocsp_output.lo
-  CCLD   libgnutls_x509.la
-make[4]: Leaving directory
-`/home/rjbarnet/projects/eicu/selinux/buildroot/output/build/gnutls-3.2.1/lib/x509'
-Making all in accelerated
-make[4]: Entering directory
-`/home/rjbarnet/projects/eicu/selinux/buildroot/output/build/gnutls-3.2.1/lib/accelerated'
-make[5]: Entering directory
-`/home/rjbarnet/projects/eicu/selinux/buildroot/output/build/gnutls-3.2.1/lib/accelerated'
-  CC     accelerated.lo
-  CC     cryptodev.lo
-  CC     cryptodev-gcm.lo
-cryptodev.c:359:3: error: unknown field 'reset' specified in initializer
-cryptodev.c:361:1: warning: initialization from incompatible pointer type
-[enabled by default]
-cryptodev.c:361:1: warning: (near initialization for 'mac_struct.fast')
-[enabled by default]
-cryptodev.c:410:3: error: unknown field 'reset' specified in initializer
-make[5]: *** [cryptodev.lo] Error 1
-make[5]: *** Waiting for unfinished jobs....
-make[5]: Leaving directory
-`/home/rjbarnet/projects/eicu/selinux/buildroot/output/build/gnutls-3.2.1/lib/accelerated'
-make[4]: *** [all-recursive] Error 1
-make[4]: Leaving directory
-`/home/rjbarnet/projects/eicu/selinux/buildroot/output/build/gnutls-3.2.1/lib/accelerated'
-make[3]: *** [all-recursive] Error 1
-make[3]: Leaving directory
-`/home/rjbarnet/projects/eicu/selinux/buildroot/output/build/gnutls-3.2.1/lib'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/rjbarnet/projects/eicu/selinux/buildroot/output/build/gnutls-3.2.1'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/home/rjbarnet/projects/eicu/selinux/buildroot/output/build/gnutls-3.2.1'
-make: ***
-[/home/rjbarnet/projects/eicu/selinux/buildroot/output/build/gnutls-3.2.1/.stamp_built]
-Error 2
+-DOSFSTOOLS_SITE = http://fossies.org/linux/misc/
++DOSFSTOOLS_SITE = http://daniel-baumann.ch/files/software/dosfstools
 
-This worked with the 2013.05 official release version of buildroot.
+Hope this helps.
 
-Thanks,
--Ryan
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Regards,
+Magnus
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130710/da2070ca/attachment.html>
