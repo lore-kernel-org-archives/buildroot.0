@@ -1,42 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 10 Jul 2013 21:56:39 +0200
-Subject: [Buildroot] [git commit] python external modules: reorder menu entry
-Message-ID: <20130710202004.2EE809A196@busybox.osuosl.org>
+Date: Wed, 10 Jul 2013 22:03:51 +0200
+Subject: [Buildroot] [git commit] jimtcl: define license
+Message-ID: <20130710202005.287AB9A659@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=21d77aa3fedbfcc08421d41c8393611ebe7e0e39
+commit: http://git.buildroot.net/buildroot/commit/?id=0e4f6dcb04819ca0dd2b1ebdb77a158488d92de8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reorder the external python modules menu entry so that it belongs under
-python(2) and not under python3 to avoid confusion.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/jimtcl/jimtcl.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3186bb7..8039834 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -344,7 +344,6 @@ endmenu
- endif
- source "package/php/Config.in"
- source "package/python/Config.in"
--source "package/python3/Config.in"
- if BR2_PACKAGE_PYTHON
- menu "external python modules"
- source "package/python-bottle/Config.in"
-@@ -362,6 +361,7 @@ source "package/python-setuptools/Config.in"
- source "package/python-thrift/Config.in"
- endmenu
- endif
-+source "package/python3/Config.in"
- source "package/ruby/Config.in"
- source "package/tcl/Config.in"
- if BR2_PACKAGE_TCL
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index 5c5cdb3..53cddf9 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -8,6 +8,8 @@ JIMTCL_VERSION = 0.73
+ JIMTCL_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/jimtcl
+ JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.bz2
+ JIMTCL_INSTALL_STAGING = YES
++JIMTCL_LICENSE = BSD-2c
++JIMTCL_LICENSE_FILES = LICENSE
+ 
+ JIMTCL_HEADERS_TO_INSTALL = \
+ 	jim.h \
