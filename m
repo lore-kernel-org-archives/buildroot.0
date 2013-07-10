@@ -1,28 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 10 Jul 2013 07:46:31 +0200
-Subject: [Buildroot] [PATCH] mongrel2: needs threads
-In-Reply-To: <CAKcgs2y2BdqScXnRPcr1vLusRAu-tjKU04X7kuxEYD5ofe_BaQ@mail.gmail.com>
- (Gilles Talis's message of "Tue, 9 Jul 2013 19:38:08 -0700")
-References: <CAKcgs2y2BdqScXnRPcr1vLusRAu-tjKU04X7kuxEYD5ofe_BaQ@mail.gmail.com>
-Message-ID: <87fvvnge6g.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 10 Jul 2013 07:37:06 +0200
+Subject: [Buildroot] [git commit] mongrel2: needs threads
+Message-ID: <20130710054847.B71669A64A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=575dac6922e9a20153a4f3526929618271b226c8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gilles> mongrel2 uses zeromq that needs threads
- Gilles> Fixes:
- Gilles> http://autobuild.buildroot.org/results/93d/
- Gilles> 93da58453e1ca0cc491170976cfbdeb8bee5c648
+mongrel2 uses zeromq that needs threads
 
-Committed, thanks.
+Fixes: http://autobuild.buildroot.org/results/93d/93da58453e1ca0cc491170976cfbdeb8bee5c648
 
-Notice that your patch was quite badly mangled by your mailer, so I had
-to fix it up manually. Please consider using git send-email in the
-future.
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ package/mongrel2/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
+index ca7e609..435d97e 100644
+--- a/package/mongrel2/Config.in
++++ b/package/mongrel2/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_MONGREL2
+ 	select BR2_PACKAGE_ZEROMQ
+ 	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+ 	depends on BR2_INET_IPV6 # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+ 	depends on BR2_LARGEFILE # zeromq -> util-linux
+ 	depends on BR2_USE_WCHAR # zeromq -> util-linux
+ 	# {get,make,swap}context functions present in
