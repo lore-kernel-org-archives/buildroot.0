@@ -1,39 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Jul 2013 11:29:39 +0200
-Subject: [Buildroot] [PATCH] system: add option to pass extra args to
- post-build and post-image scripts
-In-Reply-To: <20130710091628.1d01d59c@skate>
-References: <1373393196-19024-1-git-send-email-yann.morin.1998@free.fr>
- <20130709183505.GB3543@free.fr> <20130710091628.1d01d59c@skate>
-Message-ID: <20130710112939.3cfc5b3b@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 10 Jul 2013 11:49:25 +0200
+Subject: [Buildroot] [PATCH] uclibc: arc: add patch that adds
+	__kernel_(u)long
+In-Reply-To: <1373448351-2201-1-git-send-email-mjonker@synopsys.com> (Mischa
+ Jonker's message of "Wed, 10 Jul 2013 11:25:51 +0200")
+References: <1373448351-2201-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <877ggyhhi2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Mischa" == Mischa Jonker <Mischa.Jonker@synopsys.com> writes:
 
-On Wed, 10 Jul 2013 09:16:28 +0200, Thomas Petazzoni wrote:
+ Mischa> This adds a patch that adds the __kernel_long and
+ Mischa> __kernel_ulong types to uClibc. This fixes the build failure
+ Mischa> with Linux 3.10 headers.
 
-> > After playing a bit with both solutions, it turned out to be not
-> > entirely manageable, especially when the inrastructure put in place by
-> > the functions changes, since all scripts must be changed accordingly.
-> 
-> I am not quite sure to understand why the symlink solution doesn't work
-> in your case. Could you elaborate on that?
-> 
-> Regarding the patch itself, I'd say why not. I'm just wondering if it
-> wouldn't be better to have separate arguments for both scripts. Not
-> sure.
+Committed, thanks.
 
-Ok, I see that it has already been committed, without more
-discussion... Fair enough.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
