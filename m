@@ -1,37 +1,64 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 10 Jul 2013 14:07:37 -0300
-Subject: [Buildroot]
- =?windows-1252?q?Error_while_installing_dosfstools=3A?=
- =?windows-1252?q?_mkdosfs=92=3A_No_such_file_or_directory?=
-In-Reply-To: <20130710185808.56c3ac52@skate>
-References: <CAF3SDA4DY8DkDTVr5F4aLxmoJha60Y4DnZ9yC0u7PdhteR3Svg@mail.gmail.com>
- <87obaciyn8.fsf@dell.be.48ers.dk>
- <CAF3SDA7tGGeJfP2kJcf9Hy6Z4KrqUhHV0E1JBTE+0x+-bCMEMw@mail.gmail.com>
- <87bo6ci9xk.fsf@dell.be.48ers.dk> <51DD6469.4010504@gmail.com>
- <20130710185808.56c3ac52@skate>
-Message-ID: <51DD94D9.6060001@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 10 Jul 2013 19:12:18 +0200
+Subject: [Buildroot] [PATCH v2 1/2] linux: install firmware to staging.
+In-Reply-To: <20130710091145.7b8529d1@skate>
+References: <1373391595-19359-1-git-send-email-spenser@gillilanding.com>
+ <20130710091145.7b8529d1@skate>
+Message-ID: <20130710171218.GC3297@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/10/2013 01:58 PM, Thomas Petazzoni wrote:
+Thomas, Spenser, All,
 
-> Dear Daniel Hilst Selli,
+On 2013-07-10 09:11 +0200, Thomas Petazzoni spake thusly:
+> On Tue,  9 Jul 2013 12:39:54 -0500, Spenser Gilliland wrote:
+> > Install firmware to staging when the hidden option
+> > BR2_LINUX_KERNEL_INSTALL_FIRMWARE is selected.  This allows parts of the
+> > firmware provided by the linux kernel to be installed in the target.
+> > 
+> > Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+> > Cc: Peter Korsgaard <jacmet@uclibc.org>
+> > Cc: Yann E. Morin <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
-> On Wed, 10 Jul 2013 13:40:57 +0000, Daniel Hilst Selli wrote:
+> As discussed on IRC, I'm not really happy with the idea that one
+> package (linux) installs things in staging, and then another package
+> (beagle-capes) takes what the linux package has installed in staging,
+> and copies it to the target. Normally, it's the responsibility of a
+> given to package to install its stuff to the final destination.
+> Possibly with sub-options in this package to find out what should
+> actually be installed.
 > 
->> Here, this solves my problem.
->> http://pastebin.com/esGFdC0n
-> 
-> Can you send a proper patch with this fix?
+> So normally, the situation you have should be solved with a Linux
+> Kernel package sub-option to select the list of in-kernel firmwares to
+> install.
 
-How so?
-There's something fishy with this "bug".
-The tool renaming happened with dosfstools 3.0.18, hence 3.0.16 behaves
-the exact same way as before (mkdosfs instead of mkfs.fat and so on).
-Either the 3.0.16 tarball he has isn't really 3.0.16 or i don't know
-what's up.
-Daniel: did you try removing the source tarball and trying a new download?
-Regards.
+Altenatively, as I suggested before, this could be delegated to a
+post-build script:
+  - the package (linux) always install its files in staging
+  - a post-build scripts cherry-picks what is relevant
+
+What I don't like with this solution is that the Linux kernel would
+always install its firmware files, and that people will start using that
+as the source of the firmwares, while we do have linux-firmware for
+that.
+
+I really can't think of a better approach, considering that:
+  - we want to use linux-firmware to install 'standard' firmwares
+  - we want the use to be able to install capes' firmwares
+  - we do not want to have cross-package build/install procedures (what
+    I suggested and Spenser implemented in this patchset)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
