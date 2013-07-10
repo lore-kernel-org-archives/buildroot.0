@@ -1,31 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 10 Jul 2013 21:57:06 +0200
-Subject: [Buildroot] [git commit] python3: remove smtpd.py.3 sample
-Message-ID: <20130710202004.A4B779A196@busybox.osuosl.org>
+Date: Wed, 10 Jul 2013 21:56:39 +0200
+Subject: [Buildroot] [git commit] python external modules: reorder menu entry
+Message-ID: <20130710202004.2EE809A196@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c492a9a24af66e641d8e718620b00318fac89590
+commit: http://git.buildroot.net/buildroot/commit/?id=21d77aa3fedbfcc08421d41c8393611ebe7e0e39
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Reorder the external python modules menu entry so that it belongs under
+python(2) and not under python3 to avoid confusion.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/python3/python3.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index ed79f8e..036d1ac 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -141,6 +141,7 @@ define PYTHON3_REMOVE_USELESS_FILES
- 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
- 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
- 	rm -f $(TARGET_DIR)/usr/bin/python3-config
-+	rm -f $(TARGET_DIR)/usr/bin/smtpd.py.3
- 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-3.3m/ \
- 		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
- 		rm -f $$i ; \
+diff --git a/package/Config.in b/package/Config.in
+index 3186bb7..8039834 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -344,7 +344,6 @@ endmenu
+ endif
+ source "package/php/Config.in"
+ source "package/python/Config.in"
+-source "package/python3/Config.in"
+ if BR2_PACKAGE_PYTHON
+ menu "external python modules"
+ source "package/python-bottle/Config.in"
+@@ -362,6 +361,7 @@ source "package/python-setuptools/Config.in"
+ source "package/python-thrift/Config.in"
+ endmenu
+ endif
++source "package/python3/Config.in"
+ source "package/ruby/Config.in"
+ source "package/tcl/Config.in"
+ if BR2_PACKAGE_TCL
