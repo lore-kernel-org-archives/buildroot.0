@@ -1,229 +1,131 @@
-From: Guillermo A. Amaral <g@maral.me>
-Date: Wed, 10 Jul 2013 00:12:45 -0700
-Subject: [Buildroot] [PATCH] Raspberry Pi - WiringPi Library Package
-Message-ID: <1373440365-9031-1-git-send-email-g@maral.me>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 10 Jul 2013 08:52:21 +0200
+Subject: [Buildroot] [git commit] system: add option to pass extra args to
+	post-build and post-image scripts
+Message-ID: <20130710075652.D59149A655@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Guillermo A. Amaral" <g@maral.me>
+commit: http://git.buildroot.net/buildroot/commit/?id=f1f97b3a0587df7a44249ccf3e47c6d0d3087fa0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+It can be useful to have different configuration use the same post-build
+and/or post-image scripts as they share a common infrastructure, but yet
+have minor differentiation.
 
-Signed-off-by: Guillermo A. Amaral <g@maral.me>
+This option allows passing zero or more additional arguments to each
+post-build or post-image script.
+
+The same set of extra arguments are passed to all scripts, it is not
+possible to pass different arguments to each script.
+
+[Peter: fix help text, post-image gets called with the images dir]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                                 |   1 +
- package/wiringpi/Config.in                        |   8 ++
- package/wiringpi/wiringpi-CLOEXEC-undefined.patch |  15 ++++
- package/wiringpi/wiringpi-cmake-support.patch     | 101 ++++++++++++++++++++++
- package/wiringpi/wiringpi.mk                      |  41 +++++++++
- 5 files changed, 166 insertions(+)
- create mode 100644 package/wiringpi/Config.in
- create mode 100644 package/wiringpi/wiringpi-CLOEXEC-undefined.patch
- create mode 100644 package/wiringpi/wiringpi-cmake-support.patch
- create mode 100644 package/wiringpi/wiringpi.mk
+ Makefile                         |    4 ++--
+ docs/manual/customize-rootfs.txt |   19 ++++++++++++-------
+ system/Config.in                 |   26 +++++++++++++++++++++-----
+ 3 files changed, 35 insertions(+), 14 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3186bb7..2824904 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -303,6 +303,7 @@ source "package/usb_modeswitch_data/Config.in"
- source "package/usbmount/Config.in"
- source "package/usbutils/Config.in"
- source "package/wipe/Config.in"
-+source "package/wiringpi/Config.in"
- source "package/w_scan/Config.in"
- endmenu
+diff --git a/Makefile b/Makefile
+index 955e684..f6e9965 100644
+--- a/Makefile
++++ b/Makefile
+@@ -512,7 +512,7 @@ endif
  
-diff --git a/package/wiringpi/Config.in b/package/wiringpi/Config.in
-new file mode 100644
-index 0000000..7ce1048
---- /dev/null
-+++ b/package/wiringpi/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_WIRINGPI
-+        bool "wiringpi"
-+	depends on BR2_arm
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-build script $(s)"); \
+-		$(s) $(TARGET_DIR)$(sep))
++		$(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
+ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+ LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
+@@ -558,7 +558,7 @@ endif
+ target-post-image:
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+-		$(s) $(BINARIES_DIR)$(sep))
++		$(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
+ toolchain-eclipse-register:
+ 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index 7ff8d8b..49a6b4b 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -69,15 +69,20 @@ specify a space-separated list of scripts in the
+ found in the +System configuration+ menu as well.
+ 
+ Each of those scripts will be called with the path to the +images+
+-output directory as first and unique argument, and will be executed
+-with the main Buildroot source directory as the current
+-directory. Those scripts will be executed as the user that executes
+-Buildroot, which should normally not be the root user. Therefore, any
+-action requiring root permissions in one of these _post-image scripts_
+-will require special handling (usage of fakeroot or sudo), which is
+-left to the script developer.
++output directory as first argument, and will be executed with the main
++Buildroot source directory as the current directory. Those scripts will
++be executed as the user that executes Buildroot, which should normally
++not be the root user. Therefore, any action requiring root permissions
++in one of these _post-image scripts_ will require special handling
++(usage of fakeroot or sudo), which is left to the script developer.
+ 
+ Just like for the _post-build scripts_ mentioned above, you also have
+ access to the following environment variables from your _post-image
+ scripts_: +BUILDROOT_CONFIG+, +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+,
+ +BINARIES_DIR+ and +BASE_DIR+.
++
++Additionally, each of the +BR2_ROOTFS_POST_BUILD_SCRIPT+ and
+++BR2_ROOTFS_POST_IMAGE_SCRIPT+ scripts will be passed the arguments
++specified in +BR2_ROOTFS_POST_SCRIPT_ARGS+ (if that is not empty).
++All the scripts will be passed the exact same set of arguments, it
++is not possible to pass different sets of arguments to each script.
+diff --git a/system/Config.in b/system/Config.in
+index c0e4f4a..d41f184 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -272,9 +272,9 @@ config BR2_ROOTFS_POST_BUILD_SCRIPT
+ 	  add-ons and the like, so the generated files can be used directly
+ 	  without further processing.
+ 
+-	  These scripts are called with the target directory name as first and
+-	  only argument. Make sure the exit code of those scripts are 0,
+-	  otherwise make will stop after calling them.
++	  These scripts are called with the target directory name as first
++	  argument. Make sure the exit code of those scripts are 0, otherwise
++	  make will stop after calling them.
+ 
+ config BR2_ROOTFS_POST_IMAGE_SCRIPT
+ 	string "Custom scripts to run after creating filesystem images"
+@@ -291,7 +291,23 @@ config BR2_ROOTFS_POST_IMAGE_SCRIPT
+ 	  action.
+ 
+ 	  These scripts are called with the images directory name as
+-	  first and only argument. The script is executed from the
+-	  main Buildroot source directory as the current directory.
++	  first argument. The script is executed from the main Buildroot
++	  source directory as the current directory.
++
++config BR2_ROOTFS_POST_SCRIPT_ARGS
++	string "Extra post-{build,image} arguments"
++	depends on BR2_ROOTFS_POST_BUILD_SCRIPT != "" || BR2_ROOTFS_POST_IMAGE_SCRIPT != ""
 +	help
-+	  GPIO Interface library for the Raspberry Pi.
++	  Pass these aditional arguments to each post-build or post-image
++	  scripts.
 +
-+	  http://wiringpi.com/
++	  Note that all the post-build and post-image scripts will be passed
++	  the same set of arguments, you can not pass different arguments to
++	  each script.
 +
-diff --git a/package/wiringpi/wiringpi-CLOEXEC-undefined.patch b/package/wiringpi/wiringpi-CLOEXEC-undefined.patch
-new file mode 100644
-index 0000000..097cb93
---- /dev/null
-+++ b/package/wiringpi/wiringpi-CLOEXEC-undefined.patch
-@@ -0,0 +1,15 @@
-+diff --git a/wiringPi/wiringPi.c b/wiringPi/wiringPi.c
-+index ba61d9f..2ee23b9 100644
-+--- a/wiringPi/wiringPi.c
-++++ b/wiringPi/wiringPi.c
-+@@ -77,6 +77,10 @@
-+ #define	FALSE	(1==2)
-+ #endif
-+ 
-++#ifndef O_CLOEXEC
-++#define O_CLOEXEC 0
-++#endif
-++
-+ // Environment Variables
-+ 
-+ #define	ENV_DEBUG	"WIRINGPI_DEBUG"
-diff --git a/package/wiringpi/wiringpi-cmake-support.patch b/package/wiringpi/wiringpi-cmake-support.patch
-new file mode 100644
-index 0000000..f6664ab
---- /dev/null
-+++ b/package/wiringpi/wiringpi-cmake-support.patch
-@@ -0,0 +1,101 @@
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+new file mode 100644
-+index 0000000..324ccff
-+--- /dev/null
-++++ b/CMakeLists.txt
-+@@ -0,0 +1,9 @@
-++cmake_minimum_required(VERSION 2.8)
-++
-++project(wiringPi)
-++
-++set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared objects")
-++
-++add_subdirectory(wiringPi)
-++add_subdirectory(devLib)
-++add_subdirectory(gpio)
-+diff --git a/devLib/CMakeLists.txt b/devLib/CMakeLists.txt
-+new file mode 100644
-+index 0000000..6a7199d
-+--- /dev/null
-++++ b/devLib/CMakeLists.txt
-+@@ -0,0 +1,27 @@
-++set(CMAKE_INCLUDE_CURRENT_DIR ON)
-++
-++set(devLib_SOVERSION "2.0")
-++set(devLib_CFLAGS "-Wformat=2 -Winline")
-++
-++file(GLOB devLib_SRCS *.c)
-++file(GLOB devLib_HDRS *.h)
-++list(REMOVE_ITEM devLib_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/piFaceOld.c)
-++
-++find_library(PTHREAD_LIBRARY pthread)
-++
-++include_directories("../wiringPi")
-++
-++add_library(wiringPiDev ${devLib_SRCS})
-++target_link_libraries(wiringPiDev ${PTHREAD_LIBRARY})
-++set_target_properties(wiringPiDev PROPERTIES COMPILE_FLAGS ${devLib_CFLAGS})
-++set_target_properties(wiringPiDev PROPERTIES SOVERSION ${devLib_SOVERSION})
-++
-++install(TARGETS wiringPiDev
-++        LIBRARY DESTINATION lib COMPONENT target
-++        ARCHIVE DESTINATION lib COMPONENT staging
-++)
-++
-++install(FILES ${devLib_HDRS}
-++        DESTINATION include/wiringPi COMPONENT staging
-++)
-++
-+diff --git a/gpio/CMakeLists.txt b/gpio/CMakeLists.txt
-+new file mode 100644
-+index 0000000..a39e511
-+--- /dev/null
-++++ b/gpio/CMakeLists.txt
-+@@ -0,0 +1,20 @@
-++set(CMAKE_INCLUDE_CURRENT_DIR ON)
-++
-++set(gpio_CFLAGS "-Wformat=2 -Winline")
-++
-++file(GLOB gpio_SRCS *.c)
-++
-++include_directories("../wiringPi")
-++include_directories("../devLib")
-++
-++find_library(M_LIBRARY m)
-++find_library(PTHREAD_LIBRARY pthread)
-++
-++add_executable(gpio ${gpio_SRCS})
-++target_link_libraries(gpio ${M_LIBRARY} ${PTHREAD_LIBRARY} wiringPi wiringPiDev)
-++set_target_properties(gpio PROPERTIES COMPILE_FLAGS ${gpio_CFLAGS})
-++
-++install(TARGETS gpio
-++        RUNTIME DESTINATION bin COMPONENT target
-++)
-++
-+diff --git a/wiringPi/CMakeLists.txt b/wiringPi/CMakeLists.txt
-+new file mode 100644
-+index 0000000..e54eaf6
-+--- /dev/null
-++++ b/wiringPi/CMakeLists.txt
-+@@ -0,0 +1,21 @@
-++set(CMAKE_INCLUDE_CURRENT_DIR ON)
-++
-++set(wiringPi_SOVERSION "2.0")
-++set(wiringPi_CFLAGS "-Wformat=2 -Winline")
-++
-++file(GLOB wiringPi_SRCS *.c)
-++file(GLOB wiringPi_HDRS *.h)
-++
-++add_library(wiringPi ${wiringPi_SRCS})
-++set_target_properties(wiringPi PROPERTIES COMPILE_FLAGS ${wiringPi_CFLAGS})
-++set_target_properties(wiringPi PROPERTIES SOVERSION ${wiringPi_SOVERSION})
-++
-++install(TARGETS wiringPi
-++        LIBRARY DESTINATION lib COMPONENT target
-++        ARCHIVE DESTINATION lib COMPONENT staging
-++)
-++
-++install(FILES ${wiringPi_HDRS}
-++        DESTINATION include/wiringPi COMPONENT staging
-++)
-++
-diff --git a/package/wiringpi/wiringpi.mk b/package/wiringpi/wiringpi.mk
-new file mode 100644
-index 0000000..2f38c4e
---- /dev/null
-+++ b/package/wiringpi/wiringpi.mk
-@@ -0,0 +1,41 @@
-+#############################################################
-+#
-+# wiringpi
-+#
-+#############################################################
-+
-+WIRINGPI_VERSION = 02a3bd8d8f2ae5c873e63875a8faef5b627f9db6
-+WIRINGPI_SITE = git://git.drogon.net/wiringPi
-+WIRINGPI_LICENSE = LGPLv3+
-+WIRINGPI_LICENSE_FILES = COPYING.LESSER
-+WIRINGPI_INSTALL_STAGING = YES
-+WIRINGPI_INSTALL_TARGET = YES
-+WIRINGPI_CONF_OPT = -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
-+
-+define WIRINGPI_INSTALL_TARGET_CMDS
-+	$(HOST_DIR)/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=$(TARGET_DIR)/usr -DCOMPONENT=target -P "$(@D)/cmake_install.cmake"
-+	mv $(@D)/install_manifest_target.txt $(@D)/install_manifest_target_target.txt
-+endef
-+
-+define WIRINGPI_INSTALL_STAGING_CMDS
-+	$(HOST_DIR)/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=$(STAGING_DIR)/usr -DCOMPONENT=staging -P "$(@D)/cmake_install.cmake"
-+	mv $(@D)/install_manifest_staging.txt $(@D)/install_manifest_staging_staging.txt
-+
-+	$(HOST_DIR)/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=$(STAGING_DIR)/usr -DCOMPONENT=target -P "$(@D)/cmake_install.cmake"
-+	mv $(@D)/install_manifest_target.txt $(@D)/install_manifest_target_staging.txt
-+endef
-+
-+define WIRINGPI_POST_STAGING_CLEANUP
-+    rm $(STAGING_DIR)/usr/bin/cpio
-+endef
-+
-+define WIRINGPI_UNINSTALL_TARGET_CMDS
-+	xargs rm -f < $(@D)/install_manifest_target_target.txt
-+endef
-+
-+define WIRINGPI_UNINSTALL_STAGING_CMDS
-+	xargs rm -f < $(@D)/install_manifest_staging_staging.txt
-+	xargs rm -f < $(@D)/install_manifest_target_staging.txt
-+endef
-+
-+$(eval $(cmake-package))
--- 
-1.8.1.5
++	  Note also, as stated in their respective help text, that the first
++	  argument to each post-build or post-image script is the target
++	  directory / images directory. The arguments in this option will be
++	  passed *after* those.
+ 
+ endmenu
