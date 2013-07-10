@@ -1,40 +1,102 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 10 Jul 2013 07:15:11 +0200
-Subject: [Buildroot] [Hosting] Primary Prod Ganeti Cluster Hardware
-	Migration & Upgrade - Jul 8-12, 2013 (Time Varies)
-In-Reply-To: <CAORfjXRr-Cs3nQcUfY7s_8vLYsHkWUyVM2=Ldpe1nYkDwzoW+A@mail.gmail.com>
- (Lance Albertson's message of "Tue, 9 Jul 2013 16:00:09 -0700")
-References: <CAORfjXRuN034X3wHFv-0tfL3==F1d6FbhpCziK67EmNhtN-WNg@mail.gmail.com>
- <CAORfjXRnxBV+dDMqgm_1y02g=6FxVyRwXE5Mb46uKDwBJ51VFA@mail.gmail.com>
- <CAORfjXRr-Cs3nQcUfY7s_8vLYsHkWUyVM2=Ldpe1nYkDwzoW+A@mail.gmail.com>
-Message-ID: <87r4f7gfmo.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 10 Jul 2013 07:31:48 +0200
+Subject: [Buildroot] [PATCH] fdk-aac: new package
+In-Reply-To: <1367282387-8011-1-git-send-email-gilles.talis@gmail.com> (Gilles
+ Talis's message of "Mon, 29 Apr 2013 17:39:47 -0700")
+References: <1367282387-8011-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <87k3kzgeuz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Lance" == Lance Albertson <lance@osuosl.org> writes:
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
-FYI,
+Hi, and sorry for the slow response.
 
-Buildroot/Busybox/uClibc VM migration is planned for the 12th.
+ Gilles> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+ Gilles> ---
+ Gilles>  package/Config.in          |    1 +
+ Gilles>  package/fdk-aac/Config.in  |   12 ++++++++++++
+ Gilles>  package/fdk-aac/fdk-aac.mk |   14 ++++++++++++++
+ Gilles>  3 files changed, 27 insertions(+)
+ Gilles>  create mode 100644 package/fdk-aac/Config.in
+ Gilles>  create mode 100644 package/fdk-aac/fdk-aac.mk
 
- Lance> Sorry for the delay on this email. I will be starting moves of
- Lance> other VMs tomorrow and going through at least early next week
- Lance> during our normal 8-5 business hours. I have created a
- Lance> spreadsheet [1] that you can follow to see what day your VM will
- Lance> be affected. I will keep it updated as we continue to move
- Lance> forward.
+ Gilles> diff --git a/package/Config.in b/package/Config.in
+ Gilles> index 56fdd2f..9a06284 100644
+ Gilles> --- a/package/Config.in
+ Gilles> +++ b/package/Config.in
+ Gilles> @@ -350,6 +350,7 @@ menu "Audio/Sound"
+ Gilles>  source "package/alsa-lib/Config.in"
+ Gilles>  source "package/audiofile/Config.in"
+ Gilles>  source "package/celt051/Config.in"
+ Gilles> +source "package/fdk-aac/Config.in"
+ Gilles>  source "package/libao/Config.in"
+ Gilles>  source "package/libcdaudio/Config.in"
+ Gilles>  source "package/libcue/Config.in"
+ Gilles> diff --git a/package/fdk-aac/Config.in b/package/fdk-aac/Config.in
+ Gilles> new file mode 100644
+ Gilles> index 0000000..4fba357
+ Gilles> --- /dev/null
+ Gilles> +++ b/package/fdk-aac/Config.in
+ Gilles> @@ -0,0 +1,12 @@
+ Gilles> +config BR2_PACKAGE_FDK_AAC
+ Gilles> +	bool "fdk-aac"
+ Gilles> +	# These architectures are not supported by FDK AAC
+ Gilles> +	depends on !(BR2_bfin || BR2_avr32 || BR2_sparc || BR2_xtensa \
+ Gilles> +			|| BR2_microblaze)
 
- Lance> The VMs listed in the TBA column will need to be scheduled with
- Lance> us directly. If you would like to have your VM scheduled please
- Lance> contact me directly so we can figure that out.
+Are you sure about these? What about arc and aarch64? Normally we prefer
+positive logic so these things don't need to be updated when a new
+architecture is added.
 
- Lance> So far the migration has been working well without any
- Lance> issues. If you have any questions please let me know!
+With that said, from a 1 minute look at the source code, it looks like
+there's specific code for arm/mips/x86, but generic sw fallbacks for
+other archs - So perhaps it does work on all archs?
 
- Lance> [1]?http://goo.gl/Hkk87
+It is written in C++, so you need to depend on BR2_INSTALL_LIBSTDCPP and
+show a comment if not available.
+
+
+ Gilles> +	help
+ Gilles> +	  The Fraunhofer FDK AAC Codec Library for Android ("FDK AAC Codec")
+ Gilles> +	  is software that implements the MPEG Advanced Audio Coding ("AAC")
+ Gilles> +	  encoding and decoding scheme for digital audio
+ Gilles> +
+ Gilles> +	  http://sourceforge.net/projects/opencore-amr/files/fdk-aac/
+ Gilles> +
+ Gilles> diff --git a/package/fdk-aac/fdk-aac.mk b/package/fdk-aac/fdk-aac.mk
+ Gilles> new file mode 100644
+ Gilles> index 0000000..b36f144
+ Gilles> --- /dev/null
+ Gilles> +++ b/package/fdk-aac/fdk-aac.mk
+ Gilles> @@ -0,0 +1,14 @@
+ Gilles> +#############################################################
+ Gilles> +#
+ Gilles> +# fdk-aac
+ Gilles> +#
+ Gilles> +#############################################################
+
+We make the '#' headers 80 chars wide noadays.
+
+
+ Gilles> +
+ Gilles> +FDK_AAC_VERSION = 0.1.1
+ Gilles> +FDK_AAC_SITE = http://downloads.sourceforge.net/project/opencore-amr/fdk-aac
+ Gilles> +FDK_AAC_LICENSE = fdk-aac license
+ Gilles> +FDK_AAC_LICENSE_FILES = NOTICE
+ Gilles> +
+ Gilles> +FDK_AAC_INSTALL_STAGING = YES
+ Gilles> +
+ Gilles> +$(eval $(autotools-package))
+
+
+Are there no programs in buildroot that can use this library?
+
+Other that these minor issues it looks good, care to send an updated
+version fixing them? Thanks.
 
 -- 
 Bye, Peter Korsgaard
