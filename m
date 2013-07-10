@@ -1,7 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 10 Jul 2013 13:09:12 -0500
+Date: Wed, 10 Jul 2013 13:09:13 -0500
 Subject: [Buildroot] [PATCH v4 1/2] ti-gfx: add new package
-Message-ID: <1373479755-8086-1-git-send-email-spenser@gillilanding.com>
+In-Reply-To: <1373479755-8086-1-git-send-email-spenser@gillilanding.com>
+References: <1373479755-8086-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <1373479755-8086-2-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,6 +18,7 @@ Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Sundareson, Prabindh <prabu@ti.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
+
 v4:
  - Fix header issue with qt.
  - Add eglimage version installation.
