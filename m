@@ -1,9 +1,9 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Wed, 10 Jul 2013 10:25:45 -0700
-Subject: [Buildroot] [PATCH 06/11] libusb-compat: define license
+Date: Wed, 10 Jul 2013 10:25:43 -0700
+Subject: [Buildroot] [PATCH 04/11] libtheora: define license
 In-Reply-To: <1373477150-10251-1-git-send-email-gilles.talis@gmail.com>
 References: <1373477150-10251-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <1373477150-10251-6-git-send-email-gilles.talis@gmail.com>
+Message-ID: <1373477150-10251-4-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/libusb-compat/libusb-compat.mk |    2 ++
+ package/libtheora/libtheora.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libusb-compat/libusb-compat.mk b/package/libusb-compat/libusb-compat.mk
-index 8b4b0f6..8f2726e 100644
---- a/package/libusb-compat/libusb-compat.mk
-+++ b/package/libusb-compat/libusb-compat.mk
-@@ -10,6 +10,8 @@ LIBUSB_COMPAT_SITE = http://downloads.sourceforge.net/project/libusb/libusb-comp
- LIBUSB_COMPAT_DEPENDENCIES = host-pkgconf libusb
- LIBUSB_COMPAT_INSTALL_STAGING = YES
- LIBUSB_COMPAT_CONFIG_SCRIPTS = libusb-config
-+LIBUSB_COMPAT_LICENSE = LGPLv2.1+
-+LIBUSB_COMPAT_LICENSE_FILES = COPYING
+diff --git a/package/libtheora/libtheora.mk b/package/libtheora/libtheora.mk
+index d31dac3..4ba342b 100644
+--- a/package/libtheora/libtheora.mk
++++ b/package/libtheora/libtheora.mk
+@@ -8,6 +8,8 @@ LIBTHEORA_VERSION = 1.1.1
+ LIBTHEORA_SOURCE = libtheora-$(LIBTHEORA_VERSION).tar.bz2
+ LIBTHEORA_SITE = http://downloads.xiph.org/releases/theora
+ LIBTHEORA_INSTALL_STAGING = YES
++LIBTHEORA_LICENSE = BSD-3c
++LIBTHEORA_LICENSE_FILES = COPYING LICENSE
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ LIBTHEORA_CONF_OPT = \
+ 		--disable-oggtest \
 -- 
 1.7.4.1
