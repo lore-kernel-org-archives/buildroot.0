@@ -1,49 +1,65 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 10 Jul 2013 21:06:08 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-07-01
-In-Reply-To: <CALR4fEJeSBdCoAd=AKw6h6TnfZvw4P-XbR2tFHGtbaHtqpSDXw@mail.gmail.com>
- (Diego Iastrubni's message of "Wed, 10 Jul 2013 22:00:55 +0300")
-References: <20130702063005.2F3D352C121@lolut.humanoidz.org>
- <20130702093852.123fdc11@skate>
- <CALR4fEL=6vPWnZTxRzcY-1tmYNjkbn2K=oVauCxAee1bKhZ0eA@mail.gmail.com>
- <20130702151651.02aeda7e@skate>
- <CALR4fEJeSBdCoAd=AKw6h6TnfZvw4P-XbR2tFHGtbaHtqpSDXw@mail.gmail.com>
-Message-ID: <87txk2fd5r.fsf@dell.be.48ers.dk>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Wed, 10 Jul 2013 14:41:34 -0500
+Subject: [Buildroot] [PATCH v4 2/2] qt: add powervr and opengl
+In-Reply-To: <51DDAF1A.5040602@carallon.com>
+References: <1373479838-8288-1-git-send-email-spenser@gillilanding.com>
+ <51DDAF1A.5040602@carallon.com>
+Message-ID: <CAEBucnAPg=UxaS+rHVFZTROBkuAjt7m0-U24S+sDyWF3RS3kcQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Diego" == Diego Iastrubni <diegoiast@gmail.com> writes:
+Will,
 
- Diego> OK, I can reproduce this again. I think I am doing something wrong.
- Diego> Can anyone tell me if I am messing something up?
+> I don't like that this depends on the TI_GFX package. When I added powervr
+> support to Qt I added a powervr virtual package the same as opengl_es or
+> opengl_egl. This allows Qt to not contain anything specific to the hardware
+> graphics package.
 
- Diego> elcuco at stimpy:~/src/buildroot$ make qemu_arm_versatile_defconfig
- Diego> elcuco at stimpy:~/src/buildroot$ qemu-system-arm -kernel output/images/zImage
- Diego> qemu: hardware error: integratorcm_read: Unimplemented offset 0x1f1018
+Sounds reasonable.  I'll implement it this way as I will need to do a
+second package which implements the powervr functionality for the
+SGX540 on Pandaboard and your Freescale patch would be great to add as
+well.
 
- Diego> CPU #0:
- Diego> R00=003d7dc4 R01=00000055 R02=101f1000 R03=00000113
- Diego> R04=005c6e74 R05=005c6ea8 R06=005c6ea0 R07=00000113
- Diego> R08=00000100 R09=003d3bb0 R10=003d3320 R11=005c6e98
- Diego> R12=0000000d R13=005c7ea8 R14=003d43a0 R15=003d42c0
- Diego> PSR=200001d3 --C- A svc32
- Diego> Aborted
 
-You forgot to specify what machine qemu should emulate.
+> Is this really necessary. When I got this working I instead used the
+> variables provided by Qt to point it to the hardware specific headers. The
+> code looks like:
+>
+> +ifeq ($(BR2_PACKAGE_QT_GFX_POWERVR),y)
+> +define QT_CONFIGURE_POWERVR
+> +       $(call
+> QT_QMAKE_SET,QMAKE_INCDIR_OPENGL_ES2,$(STAGING_DIR)/usr/include/OGLES2,$(@D))
+> +       $(call
+> QT_QMAKE_SET,QMAKE_INCDIR_EGL,$(STAGING_DIR)/usr/include/OGLES2,$(@D))
+> +       $(call
+> QT_QMAKE_SET,QMAKE_INCDIR_POWERVR,$(STAGING_DIR)/usr/include/pvr2d
+> $(STAGING_DIR)/usr/include/wsegl,$(@D))
+> +endef
+> +endif
 
-% cat board/qemu/arm-versatile/readme.txt
-Run the emulation with:
+I install the headers into /usr/include by default from the TI_GFX
+package. As this is a default include path, they get picked up as long
+as no other header files are found.  Thus, removing these files
+ensures they don't get picked up.
 
-  qemu-system-arm -M versatilepb -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=scsi -append "root=/dev/sda console=ttyAMA0,115200" -serial stdio -net nic,model=smc91c111 -net user
+> I have this working with both TI and freescale hardware.
+>
+> I'll check what state my patches are in and if they need rebasing against
+> master and then I can post them if people would be interested.
 
-The login prompt will appear in the terminal that started Qemu. The
-graphical window is the framebuffer.
+Yea, please send them. If you feel they need additional cleanup but
+you don't have time, feel free to send them to me privately and I can
+get them integrated.
 
-Tested with QEMU 1.4.2
+Thanks,
+Spenser
 
--- 
-Bye, Peter Korsgaard
+
+
+--
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
