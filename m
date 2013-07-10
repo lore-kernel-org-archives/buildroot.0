@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 10 Jul 2013 22:08:04 +0200
-Subject: [Buildroot] [PATCH 03/11] libelf: define license
-In-Reply-To: <1373477150-10251-3-git-send-email-gilles.talis@gmail.com>
- (Gilles Talis's message of "Wed, 10 Jul 2013 10:25:42 -0700")
+Date: Wed, 10 Jul 2013 22:13:01 +0200
+Subject: [Buildroot] [PATCH 07/11] ramsmp: define license
+In-Reply-To: <1373477150-10251-7-git-send-email-gilles.talis@gmail.com>
+ (Gilles Talis's message of "Wed, 10 Jul 2013 10:25:46 -0700")
 References: <1373477150-10251-1-git-send-email-gilles.talis@gmail.com>
- <1373477150-10251-3-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87hag2faaj.fsf@dell.be.48ers.dk>
+ <1373477150-10251-7-git-send-email-gilles.talis@gmail.com>
+Message-ID: <87d2qqfa2a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +16,21 @@ To: buildroot@busybox.net
 
  Gilles> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
  Gilles> ---
- Gilles>  package/libelf/libelf.mk |    2 ++
+ Gilles>  package/ramsmp/ramsmp.mk |    2 ++
  Gilles>  1 files changed, 2 insertions(+), 0 deletions(-)
 
- Gilles> diff --git a/package/libelf/libelf.mk b/package/libelf/libelf.mk
- Gilles> index 725035f..c1befc8 100644
- Gilles> --- a/package/libelf/libelf.mk
- Gilles> +++ b/package/libelf/libelf.mk
- Gilles> @@ -10,6 +10,8 @@ LIBELF_SITE=http://www.mr511.de/software/
- Gilles>  LIBELF_INSTALL_STAGING = YES
- Gilles>  LIBELF_INSTALL_STAGING_OPT = instroot=$(STAGING_DIR) install
- Gilles>  LIBELF_INSTALL_TARGET_OPT = instroot=$(TARGET_DIR) install
- Gilles> +LIBELF_LICENSE = GPLv2+
- Gilles> +LIBELF_LICENSE_FILES = COPYING.LIB
+ Gilles> diff --git a/package/ramsmp/ramsmp.mk b/package/ramsmp/ramsmp.mk
+ Gilles> index 1b44402..5fb0542 100644
+ Gilles> --- a/package/ramsmp/ramsmp.mk
+ Gilles> +++ b/package/ramsmp/ramsmp.mk
+ Gilles> @@ -7,6 +7,8 @@
+ Gilles>  RAMSMP_VERSION = 3.5.0
+ Gilles>  RAMSMP_SITE = http://www.alasir.com/software/ramspeed
+ Gilles>  RAMSMP_ARCH = $(if $(BR2_i386),i386)$(if $(BR2_x86_64),x86_64)
+ Gilles> +RAMSMP_LICENSE = Alasir License
+ Gilles> +RAMSMP_LICENSE_FILES = LICENSE
 
-COPYING.LIB is LGPL, so it should be LGPLv2+
+License file is actually called 'LICENCE'.
 
 -- 
 Bye, Peter Korsgaard
