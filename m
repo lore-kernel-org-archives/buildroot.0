@@ -1,187 +1,35 @@
-From: Guillermo A. Amaral <g@maral.me>
-Date: Wed, 10 Jul 2013 01:39:22 -0700
-Subject: [Buildroot] [PATCH] Raspberry Pi SD-Card flasher script
-Message-ID: <1373445562-19938-1-git-send-email-g@maral.me>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Jul 2013 11:04:16 +0200
+Subject: [Buildroot] Buildroot compilation using uClibc and activating
+ bluez
+In-Reply-To: <747C1E83C744F44E9ACFB89FAEEC2C7B2423BF9B14@EXDCVYMBSTM005.EQ1STM.local>
+References: <747C1E83C744F44E9ACFB89FAEEC2C7B2423BF9923@EXDCVYMBSTM005.EQ1STM.local>
+ <20130709125037.0a4e0077@skate>
+ <747C1E83C744F44E9ACFB89FAEEC2C7B2423BF9A50@EXDCVYMBSTM005.EQ1STM.local>
+ <20130709171404.1fc94ea6@skate>
+ <747C1E83C744F44E9ACFB89FAEEC2C7B2423BF9A66@EXDCVYMBSTM005.EQ1STM.local>
+ <20130709173907.06199659@skate>
+ <747C1E83C744F44E9ACFB89FAEEC2C7B2423BF9B14@EXDCVYMBSTM005.EQ1STM.local>
+Message-ID: <20130710110416.40bb912c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Guillermo A. Amaral" <g@maral.me>
+Dear Julien COUVRAND,
 
-After successfully building your system, you can point this script to your
-sdcard device node and it will partition and populate it for you.
+On Wed, 10 Jul 2013 09:56:21 +0200, Julien COUVRAND wrote:
 
-    Example: sudo board/raspberrypi/mksdcard /dev/sdx
----
- board/raspberrypi/mksdcard | 158 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 158 insertions(+)
- create mode 100755 board/raspberrypi/mksdcard
+> I use the following toolchain:
+> uClibc/elf-fdpic-v7
 
-diff --git a/board/raspberrypi/mksdcard b/board/raspberrypi/mksdcard
-new file mode 100755
-index 0000000..c7b2c37
---- /dev/null
-+++ b/board/raspberrypi/mksdcard
-@@ -0,0 +1,158 @@
-+#!/bin/sh
-+#
-+# Flash Raspberry Pi SD card [buildroot]
-+#
-+# Guillermo A. Amaral B. <g@maral.me>
-+#
-+
-+SDCARD="${1}"
-+BOOT_SIZE="+40M"
-+
-+usage() {
-+	echo "Usage: ${0} [SDCARD]"
-+	echo "Where SDCARD is your SD card device node, for example: /dev/sdx"
-+	echo
-+	echo "You will require *root* privileges in order to use this script."
-+	echo
-+}
-+
-+confirm() {
-+	echo "You are about to totally decimate the following device node: ${SDCARD}"
-+	echo
-+	echo "If you are sure you want to continue? (Please write \"YES\" in all caps)"
-+
-+	read CONTUNUE
-+
-+	if [ "${CONTUNUE}" != "YES" ]; then
-+		echo "User didn't write \"YES\"... ABORTING!"
-+		exit 1
-+	fi
-+}
-+
-+section() {
-+	echo "*****************************************************************************************"
-+	echo "> ${*}"
-+	echo "*****************************************************************************************"
-+}
-+
-+# environment overrides
-+
-+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-+OUTPUT_PREFIX=""
-+
-+# check parameters
-+
-+if [ -z "${SDCARD}" ] || [ "${SDCARD}" == "-h" ] || [ "${SDCARD}" == "--help" ]; then
-+	usage
-+	exit 0
-+fi
-+
-+# check if node is a block device
-+
-+if [ ! -b "${SDCARD}" ]; then
-+	echo "${SDCARD} is not a block device!"
-+	exit 1
-+fi
-+
-+# root privilege check
-+
-+if [ ${EUID} -ne 0 ]; then
-+	echo "${0} requires root privileges in order to work."
-+	exit 0
-+fi
-+
-+# dependencies
-+
-+FDISK=`which fdisk`
-+MKFS_EXT4=`which mkfs.ext4`
-+MKFS_VFAT=`which mkfs.vfat`
-+TAR=`which tar`
-+
-+if [ -z "${FDISK}" ] || [ -z "${MKFS_EXT4}" ] || [ -z "${MKFS_VFAT}" ] || [ -z "${TAR}" ]; then
-+	echo "Missing dependencies:\n"
-+	echo "FDISK=${FDISK}"
-+	echo "MKFS_EXT4=${MKFS_EXT4}"
-+	echo "MKFS_VFAT=${MKFS_VFAT}"
-+	echo "TAR=${TAR}"
-+	exit 1
-+fi
-+
-+# sanity check
-+
-+if [ ! -f "images/zImage" ] || [ ! -f "images/rootfs.tar" ]; then
-+	if [ -f "output/images/zImage" ] && [ -f "output/images/rootfs.tar" ]; then
-+		OUTPUT_PREFIX="output/"
-+	else
-+		echo "Didn't find boot and/or rootfs.tar! ABORT."
-+		exit 1
-+	fi
-+fi
-+
-+# warn user
-+
-+confirm
-+
-+# partition image
-+
-+section "Partitioning SD card..."
-+
-+${FDISK} ${SDCARD} <<END
-+o
-+n
-+p
-+1
-+
-+${BOOT_SIZE}
-+t
-+c
-+n
-+p
-+2
-+
-+
-+a
-+1
-+w
-+END
-+
-+sync
-+sleep 1
-+
-+# format partitions
-+
-+section "Formatting partitions..."
-+
-+${MKFS_VFAT} -F 32 -n boot -I "${SDCARD}1" || exit 1
-+${MKFS_EXT4} -L rootfs "${SDCARD}2" || exit 1
-+sync
-+
-+# prepare to fill partitions
-+
-+mkdir .mnt
-+
-+# fill boot
-+
-+section "Populating boot partition..."
-+
-+mount "${SDCARD}1" .mnt || exit 2
-+cp ${OUTPUT_PREFIX}images/rpi-firmware/* .mnt
-+cp ${OUTPUT_PREFIX}images/zImage .mnt
-+umount .mnt
-+sync
-+
-+# fill rootfs
-+
-+section "Populating rootfs partition..."
-+
-+mount "${SDCARD}2" .mnt || exit 2
-+${TAR} -xpsf ${OUTPUT_PREFIX}images/rootfs.tar -C .mnt
-+umount .mnt
-+sync
-+
-+# clean up
-+
-+rmdir .mnt
-+
-+section "Finished!"
-+
-+exit 0
+Where is toolchain coming from? I wasn't aware there was FDPIC support
+available for ARM noMMU.
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
