@@ -1,30 +1,72 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 11 Jul 2013 12:40:15 -0300
-Subject: [Buildroot] [PATCH] cifs-utils: bump to version 6.1
-Message-ID: <1373557215-15518-1-git-send-email-gustavo@zacarias.com.ar>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Thu, 11 Jul 2013 10:59:01 -0500
+Subject: [Buildroot] About using ti-gfx package with cutom kernel
+In-Reply-To: <51DEC9F8.7010800@linkas.com.tr>
+References: <51DEC9F8.7010800@linkas.com.tr>
+Message-ID: <CAEBucnBBL0t4+wmLkWEu1ot+a1Ut6f9kz9r81-zh939yEwM5wA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/cifs-utils/cifs-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, Jul 11, 2013 at 10:06 AM, Sinan Akpolat <sinan@linkas.com.tr> wrote:
+> Hi,
+>
+> I want to thank Spenser for his great work on TI's PowerVR driver package.
+>
+> I couldn't test it yet and I need to ask something about that.
+>
+> The package needs Linux kernel to be selected. However I'm using a custom
+> kernel provided by the board manufacturer. How can I make buildroot use that
+> kernel? Or what is the correct way?
+>
+> Should I copy my custom kernel directory to output/build and change version
+> to suffix of the directory name
+>
+> Or should I edit the makefiles and make buildroot (TI_GFX package more
+> specifically) use my custom kernel's path while compiling PowerVR drivers?
+>
+> I guess this was discussed last month but I couldn't see how that discussion
+> ended.
+>
+> Thanks again for the package,
+> Sinan Akpolat
 
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 6f8d651..ae80531 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CIFS_UTILS_VERSION = 6.0
-+CIFS_UTILS_VERSION = 6.1
- CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
- CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
- CIFS_UTILS_LICENSE = GPLv3
--- 
-1.8.1.5
+Sinan,
+
+The best way to do this is to use the Kernel menu to configure a
+source for your kernel (e.g. download a tarball, git tree, or patch on
+top of a specific kernel version.) However, if the vendor does not
+provide any of these methods, you can use the
+LINUX_OVERRIDE_SRCDIR=<path/to/kernelsrc> which will override the
+settings in the Kernel menu and use the local directory on your
+machine.
+
+FWIW: <PKG>_OVERRIDE_SRCDIR is a way to provide a source tree to
+Buildroot for any package and is a useful variable for many other
+packages.
+
+The kernel menu will need to know the defconfig you are intending to
+build and the load address (if version > 3.7).  If you need a custom
+defconfig, the common solution is to create a directory in
+board/<vendor>/<boardname>  with the kernel defconfig you would like
+to use. This defconfig can then be referenced by the kernel menu by
+setting BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG to y and
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE to
+board/<vendor>/<boardname>/linux_defconfig.
+
+A good reference on using Buildroot for custom projects is
+http://free-electrons.com/~thomas/pub/using-buildroot-real-project.pdf
+and the buildroot manual at
+http://buildroot.uclibc.org/downloads/manual/manual.html .
+
+Hope this information helps and thanks for reviewing this patch!
+
+Thanks,
+Spenser
+
+--
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
