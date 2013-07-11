@@ -1,27 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 11 Jul 2013 11:06:37 -0300
-Subject: [Buildroot] [PATCH] gcc: provide an option to enable mudflap
- support
-In-Reply-To: <1373550693-14815-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1373550693-14815-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <51DEBBED.3010709@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Jul 2013 16:07:43 +0200
+Subject: [Buildroot] [PATCH v2] Makefile: Symlink lib32 to lib for
+ MIPS64/n32
+In-Reply-To: <CAG2jQ8ij_NnerC79h_NL4EpS9Sawv1EszOQp-iZW2W38nkeV6w@mail.gmail.com>
+References: <1372856816-12493-1-git-send-email-markos.chandras@gmail.com>
+ <CAAXf6LXK+7zWMGYd8n-kM5yNEE8YqTm30XGJD6A3zdd0nnBE5Q@mail.gmail.com>
+ <20130711125908.55bcb3b3@skate>
+ <CAG2jQ8ikuHv=zgoRN3Y6pyyGo8E49taW6M1ZMfbv6+xQ8r58cg@mail.gmail.com>
+ <CAAXf6LVN60LcoCDooO8N7wj_N-CRASJbofxk_LDi1qEdkXuaMA@mail.gmail.com>
+ <CAG2jQ8iHKiuRCGvMPOpgqmXdAuYgzJP6C4+CGq=dUz6p6JMTJw@mail.gmail.com>
+ <20130711154018.3ee37e86@skate>
+ <CAG2jQ8ij_NnerC79h_NL4EpS9Sawv1EszOQp-iZW2W38nkeV6w@mail.gmail.com>
+Message-ID: <20130711160743.78f8b824@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/11/2013 10:51 AM, Thomas Petazzoni wrote:
+Dear Markos Chandras,
 
-> The mudflap library is only useful if one uses the -fmudflap gcc
-> option, to do more checks on pointers/arrays, which is typically not
-> the case. Until now, it was always being built. This commit disables
-> it by default to save a little bit of build time, and provides an
-> option to enable it when needed.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Thu, 11 Jul 2013 15:00:24 +0100, Markos Chandras wrote:
 
-Nobody used it i think because libmudfap*.so* isn't copied to the target
-and it won't work without it.
-V2 incoming? ;)
-Regards.
+> I presume it's needed for every uClibc based toolchain. It's
+> definitely needed by the buildroot toolchain which is the one I use.
+
+But didn't you had gcc patches to make it use the correct patch for the
+program interpreter? But yeah, for external toolchains, it's not
+possible.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
