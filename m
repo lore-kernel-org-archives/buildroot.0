@@ -1,31 +1,30 @@
-From: Sinan Akpolat <sinan@linkas.com.tr>
-Date: Thu, 11 Jul 2013 18:06:32 +0300
-Subject: [Buildroot] About using ti-gfx package with cutom kernel
-Message-ID: <51DEC9F8.7010800@linkas.com.tr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 11 Jul 2013 12:40:15 -0300
+Subject: [Buildroot] [PATCH] cifs-utils: bump to version 6.1
+Message-ID: <1373557215-15518-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/cifs-utils/cifs-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I want to thank Spenser for his great work on TI's PowerVR driver package.
-
-I couldn't test it yet and I need to ask something about that.
-
-The package needs Linux kernel to be selected. However I'm using a 
-custom kernel provided by the board manufacturer. How can I make 
-buildroot use that kernel? Or what is the correct way?
-
-Should I copy my custom kernel directory to output/build and change 
-version to suffix of the directory name
-
-Or should I edit the makefiles and make buildroot (TI_GFX package more 
-specifically) use my custom kernel's path while compiling PowerVR drivers?
-
-I guess this was discussed last month but I couldn't see how that 
-discussion ended.
-
-Thanks again for the package,
-Sinan Akpolat
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index 6f8d651..ae80531 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CIFS_UTILS_VERSION = 6.0
++CIFS_UTILS_VERSION = 6.1
+ CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPLv3
+-- 
+1.8.1.5
