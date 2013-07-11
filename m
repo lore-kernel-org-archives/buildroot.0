@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Jul 2013 12:59:08 +0200
-Subject: [Buildroot] [PATCH v2] Makefile: Symlink lib32 to lib for
- MIPS64/n32
-In-Reply-To: <CAAXf6LXK+7zWMGYd8n-kM5yNEE8YqTm30XGJD6A3zdd0nnBE5Q@mail.gmail.com>
-References: <1372856816-12493-1-git-send-email-markos.chandras@gmail.com>
- <CAAXf6LXK+7zWMGYd8n-kM5yNEE8YqTm30XGJD6A3zdd0nnBE5Q@mail.gmail.com>
-Message-ID: <20130711125908.55bcb3b3@skate>
+Date: Thu, 11 Jul 2013 13:01:13 +0200
+Subject: [Buildroot] [PATCH] Makefile: unset MAKEFLAGS
+In-Reply-To: <CAAXf6LVC=vqL0mCFVMpKs2A99QtBviHXsmXZp3B+fo+32-+dXA@mail.gmail.com>
+References: <1373222539-8915-1-git-send-email-s.martin49@gmail.com>
+ <CAAXf6LVC=vqL0mCFVMpKs2A99QtBviHXsmXZp3B+fo+32-+dXA@mail.gmail.com>
+Message-ID: <20130711130113.02ef2730@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +13,33 @@ To: buildroot@busybox.net
 
 Dear Thomas De Schampheleire,
 
-On Thu, 11 Jul 2013 11:24:51 +0200, Thomas De Schampheleire wrote:
+On Thu, 11 Jul 2013 11:37:10 +0200, Thomas De Schampheleire wrote:
 
-> We are doing a similar thing from our post-build script, on a
-> Cavium-based MIPS64 n32 ABI, so I'm definitely in favor of this patch.
+> What is the strategy with respect to cleaning up the user's
+> environment when building buildroot?
+> Because there are a number of other variables that users can have (and
+> do have) that corrupt the build, for example:
 > 
-> I'm not sure though if the $(BUILD_DIR)/.root rule is the best place
-> to put this, it seems a bit odd in my opinion.
+> C_INCLUDE_PATH
+> CPLUS_INCLUDE_PATH
+> LIBRARY_PATH
+> LD_LIBRARY_PATH
+> PERL5LIB
+> GCC_EXEC_PREFIX
+> 
+> In the twisted environments that I'm working in, I'm unsetting these
+> from a wrapper around buildroot make. However, it seems that there
+> already are a number of cleanups done inside buildroot itself, so it
+> makes sense to add the above variables to the list.
+> 
+> What do you think?
 
-This thing is really toolchain related, so I believe it should be the
-responsibility of the respective toolchain backends to take care of
-this, whenever needed.
+We have are a bit inconsistent on this. Some variables are unset from
+the main Makefile, and a bunch of others are checked in
+support/dependencies/dependencies.sh. For example, LD_LIBRARY_PATH
+which you mentioned get checked in support/dependencies/dependencies.sh.
+
+Looks like a bit of cleanup in this area might be useful.
 
 Thomas
 -- 
