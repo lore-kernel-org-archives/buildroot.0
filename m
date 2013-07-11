@@ -1,44 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Jul 2013 11:45:23 +0200
-Subject: [Buildroot] [PATCH v4 2/2] qt: add powervr and opengl
-In-Reply-To: <51DE77FE.2060709@carallon.com>
-References: <1373479838-8288-1-git-send-email-spenser@gillilanding.com>
- <51DDAF1A.5040602@carallon.com> <20130711104744.7fa84966@skate>
- <51DE77FE.2060709@carallon.com>
-Message-ID: <20130711114523.1384e3c6@skate>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Thu, 11 Jul 2013 12:33:42 +0200
+Subject: [Buildroot] [PATCH] Makefile: unset MAKEFLAGS
+In-Reply-To: <CAAXf6LVC=vqL0mCFVMpKs2A99QtBviHXsmXZp3B+fo+32-+dXA@mail.gmail.com>
+References: <1373222539-8915-1-git-send-email-s.martin49@gmail.com>
+ <CAAXf6LVC=vqL0mCFVMpKs2A99QtBviHXsmXZp3B+fo+32-+dXA@mail.gmail.com>
+Message-ID: <CAEYzJUFzijo=jM+s4P_ZFAH-E_-MvhKZbcjHmNUBypiu5pF6zQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Wagner,
+On 11 July 2013 11:37, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> Hi,
+>
+> On Sun, Jul 7, 2013 at 8:42 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+>> MAKEFLAGS can carry options that make Buildroot failed, eg. '-jN'.
+>> To avoid this, unset the MAKEFLAGS environment variable.
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> ---
+>>  Makefile | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index 015fbdf..11a7b70 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -207,6 +207,7 @@ unexport CFLAGS
+>>  unexport CXXFLAGS
+>>  unexport GREP_OPTIONS
+>>  unexport CONFIG_SITE
+>> +unexport MAKEFLAGS
+>>  unexport QMAKESPEC
+>>  unexport TERMINFO
+>>
+>
+> What is the strategy with respect to cleaning up the user's
+> environment when building buildroot?
+> Because there are a number of other variables that users can have (and
+> do have) that corrupt the build, for example:
+>
+> C_INCLUDE_PATH
+> CPLUS_INCLUDE_PATH
+> LIBRARY_PATH
+> LD_LIBRARY_PATH
+> PERL5LIB
+> GCC_EXEC_PREFIX
+>
+> In the twisted environments that I'm working in, I'm unsetting these
+> from a wrapper around buildroot make. However, it seems that there
+> already are a number of cleanups done inside buildroot itself, so it
+> makes sense to add the above variables to the list.
+>
+> What do you think?
 
-On Thu, 11 Jul 2013 10:16:46 +0100, Will Wagner wrote:
-
-> Ok, makes sense that the virtual package is only needed if we have more 
-> than one package that offers it. I already have two hardware packages 
-> that offer powervr support which is why I did it that way and it sounds 
-> like Spenser is planning to add another as well.
-
-Okay, I wasn't really aware there was today another PowerVR
-implementation. Is it fully API-compatible with the PowerVR stuff of
-the ti-gfx package currently done by Spenser? What is this other
-PowerVR thing for compared to the one currently packaged by Spenser?
-Is the 'ti-gfx' package name chosen by Spenser appropriate?
-
-> Just to be difficult I'll also point out that currently in buildroot 
-> there is only one package (rpi_userland) that offers opengl_es and 
-> opengl_egl support so you were obviously planning for the future when 
-> you made those a virtual package :)
-
-That's true :)
+How about going all the way: clean out the environment completely, and
+explicitly add env vars to builders as needed. That would result in a
+more deterministic build environment, IMHO.
 
 Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bj?rn Forsman
