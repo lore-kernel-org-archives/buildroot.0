@@ -1,70 +1,179 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 11 Jul 2013 10:59:01 -0500
-Subject: [Buildroot] About using ti-gfx package with cutom kernel
-In-Reply-To: <51DEC9F8.7010800@linkas.com.tr>
-References: <51DEC9F8.7010800@linkas.com.tr>
-Message-ID: <CAEBucnBBL0t4+wmLkWEu1ot+a1Ut6f9kz9r81-zh939yEwM5wA@mail.gmail.com>
+Date: Thu, 11 Jul 2013 11:07:07 -0500
+Subject: [Buildroot] [PATCH v4 1/2] ti-gfx: add new package
+In-Reply-To: <20130711114129.346bc011@skate>
+References: <1373479755-8086-1-git-send-email-spenser@gillilanding.com>
+ <20130711114129.346bc011@skate>
+Message-ID: <CAEBucnAmh-ihLbEvCV+P81kcRYkC7EacYz+HQ6NkUg+tidMtGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 11, 2013 at 10:06 AM, Sinan Akpolat <sinan@linkas.com.tr> wrote:
-> Hi,
->
-> I want to thank Spenser for his great work on TI's PowerVR driver package.
->
-> I couldn't test it yet and I need to ask something about that.
->
-> The package needs Linux kernel to be selected. However I'm using a custom
-> kernel provided by the board manufacturer. How can I make buildroot use that
-> kernel? Or what is the correct way?
->
-> Should I copy my custom kernel directory to output/build and change version
-> to suffix of the directory name
->
-> Or should I edit the makefiles and make buildroot (TI_GFX package more
-> specifically) use my custom kernel's path while compiling PowerVR drivers?
->
-> I guess this was discussed last month but I couldn't see how that discussion
-> ended.
->
-> Thanks again for the package,
-> Sinan Akpolat
+Thomas,
 
-Sinan,
+> When a comment like this a shown, the package option is not visible, so
+> you must mention the package name in the comment, otherwise it's
+> impossible for the user to understand what the comment is about. So it
+> should be:
+>
+> comment "ti-gfx requires ..."
 
-The best way to do this is to use the Kernel menu to configure a
-source for your kernel (e.g. download a tarball, git tree, or patch on
-top of a specific kernel version.) However, if the vendor does not
-provide any of these methods, you can use the
-LINUX_OVERRIDE_SRCDIR=<path/to/kernelsrc> which will override the
-settings in the Kernel menu and use the local directory on your
-machine.
+Will fix.
 
-FWIW: <PKG>_OVERRIDE_SRCDIR is a way to provide a source tree to
-Buildroot for any package and is a useful variable for many other
-packages.
+>> +define TI_GFX_CONFIGURE_CMDS
+>> +     $(if $(BR2_PACKAGE_TI_GFX_EGLIMAGE),
+>> +             mv -f $(@D)/$(TI_GFX_BIN_PATH)/libEGL_eglimage.so \
+>> +                     $(@D)/$(TI_GFX_BIN_PATH)/libEGL.so; \
+>> +             mv -f $(@D)/$(TI_GFX_BIN_PATH)/libGLES_CM_eglimage.so \
+>> +                     $(@D)/$(TI_GFX_BIN_PATH)/libGLES_CM.so; \
+>> +             mv -f $(@D)/$(TI_GFX_BIN_PATH)/libGLESv2_eglimage.so \
+>> +                $(@D)/$(TI_GFX_BIN_PATH)/libGLESv2.so; \
+>> +             mv -f $(@D)/$(TI_GFX_BIN_PATH)/libglslcompiler_eglimage.so \
+>> +                     $(@D)/$(TI_GFX_BIN_PATH)/libglslcompiler.so; \
+>> +             mv -f $(@D)/$(TI_GFX_BIN_PATH)/libIMGegl_eglimage.so \
+>> +                     $(@D)/$(TI_GFX_BIN_PATH)/libIMGegl.so;
+>> +     )
+>
+> This seems not really nice to do, it should be handled at install time.
 
-The kernel menu will need to know the defconfig you are intending to
-build and the load address (if version > 3.7).  If you need a custom
-defconfig, the common solution is to create a directory in
-board/<vendor>/<boardname>  with the kernel defconfig you would like
-to use. This defconfig can then be referenced by the kernel menu by
-setting BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG to y and
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE to
-board/<vendor>/<boardname>/linux_defconfig.
+Will fix.
 
-A good reference on using Buildroot for custom projects is
-http://free-electrons.com/~thomas/pub/using-buildroot-real-project.pdf
-and the buildroot manual at
-http://buildroot.uclibc.org/downloads/manual/manual.html .
+>> +endef
+>> +
+>> +define TI_GFX_BUILD_KM_CMDS
+>> +     $(MAKE) $(TI_GFX_KM_MAKE_OPTS) -C $(@D)/GFX_Linux_KM all
+>> +endef
+>> +
+>> +define TI_GFX_BUILD_DEMO_CMDS
+>> +     $(foreach demo, $(TI_GFX_DEMOS), \
+>> +             cd $(@D)/$(TI_GFX_DEMOS_LOC)/$(demo)/$(TI_GFX_DEMOS_MAKE_LOC); \
+>> +             $(TARGET_MAKE_ENV) $(MAKE1) $(TI_GFX_DEMO_MAKE_OPTS) all
+>
+>         $(MAKE1) -C $(@D)/$(TI_GFX_DEMOS_LOC)/$(demo)/$(TI_GFX_DEMOS_MAKE_LOC)
+>
+> will avoid the need for the cd.
 
-Hope this information helps and thanks for reviewing this patch!
+Will fix.
 
-Thanks,
-Spenser
+>> +     )
+>> +endef
+>> +
+>> +define TI_GFX_BUILD_CMDS
+>> +     $(TI_GFX_BUILD_KM_CMDS)
+>> +     $(if $(BR2_PACKAGE_TI_GFX_DEMOS),
+>> +             $(TI_GFX_BUILD_DEMO_CMDS)
+>> +     )
+>> +endef
+>
+> I think I've said it before, but we generally do:
+>
+> ifeq ($(BR2_PACKAGE_TI_GFX_DEMOS),y)
+> define TI_GFX_BUILD_DEMO_CMDS
+>         ...
+> endef
+> endif
+>
+> define TI_GFX_BUILD_CMDS
+>         ...
+>         $(TI_GFX_BUILD_DEMO_CMDS)
+> endef
+
+Ok I think I understand this better now.  Will fix.
+
+>> +
+>> +define TI_GFX_INSTALL_STAGING_CMDS
+>> +     $(foreach incdir,$(TI_GFX_HDR_DIRS),
+>> +             $(INSTALL) -d $(STAGING_DIR)/usr/include/$(notdir $(incdir)); \
+>> +             $(INSTALL) -D -m 0644 $(@D)/include/$(incdir)/*.h \
+>> +                     $(STAGING_DIR)/usr/include/$(notdir $(incdir))/
+>> +     )
+>> +     $(INSTALL) -D -m 0755 $(@D)/$(TI_GFX_BIN_PATH)/*.so $(STAGING_DIR)/usr/lib/
+>> +     $(INSTALL) -D -m 0644 package/ti-gfx/egl.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+>> +     $(INSTALL) -D -m 0644 package/ti-gfx/glesv2.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+>> +endef
+>> +
+>> +define TI_GFX_INSTALL_KM_CMDS
+>> +     $(MAKE) $(TI_GFX_KM_MAKE_OPTS) -C $(@D)/GFX_Linux_KM install
+>> +endef
+>> +
+>> +define TI_GFX_INSTALL_BINS_CMDS
+>> +     $(foreach bin,$(TI_GFX_BIN),
+>> +             $(INSTALL) -D -m 0755 $(@D)/$(TI_GFX_BIN_PATH)/$(bin) \
+>> +                     $(TARGET_DIR)/usr/bin/$(bin)
+>> +     )
+>> +     $(if $(BR2_PACKAGE_TI_GFX_DEBUG),
+>> +             $(INSTALL) -D -m 0755 package/ti-gfx/esrev.sh \
+>> +                     $(TARGET_DIR)/usr/bin/esrev)
+>> +endef
+>> +
+>> +define TI_GFX_INSTALL_LIBS_CMDS
+>> +     # create symlinks and install libraries.  these libraries do not have a
+>> +     # SONAME defined; therefore, they will not be automatically renamed and
+>> +     # must be renamed manually.
+>
+> I still don't understand this "automatically renamed" comment here.
+
+i remember hearing that in some rootfs fixup, the libraries are
+renamed with symlinks according to the SONAME.  However, I can't find
+it in the code so maybe this was just bad information.  I'll remove
+the comment.
+
+>> +     $(foreach lib,$(TI_GFX_LIBS),
+>> +             $(INSTALL) -D -m 0755 $(@D)/$(TI_GFX_BIN_PATH)/$(lib).so \
+>> +                     $(TARGET_DIR)/usr/lib/$(lib).so.$(TI_GFX_SO_VERSION); \
+>> +             ln -sf $(lib).so.$(TI_GFX_SO_VERSION) \
+>> +                     $(TARGET_DIR)/usr/lib/$(lib).so
+>> +     )
+>> +     # libs use the following file for configuration.
+>> +     $(INSTALL) -D -m 0644 package/ti-gfx/powervr.ini \
+>> +             $(TARGET_DIR)/etc/powervr.ini
+>> +endef
+>> +
+>> +ifeq ($(BR2_PACKAGE_TI_GFX_DEMOS),y)
+>> +define TI_GFX_INSTALL_DEMOS_CMDS
+>> +     $(foreach demo,$(TI_GFX_DEMOS),
+>> +             $(INSTALL) -D -m 0755 \
+>> +             $(@D)/$(TI_GFX_DEMOS_LOC)/$(demo)/$(TI_GFX_DEMOS_BIN_LOC)/OGLES2$(demo) \
+>> +             $(TARGET_DIR)/usr/bin/OGLES2$(demo)
+>> +     )
+>> +endef
+>> +endif
+>> +
+>> +define TI_GFX_INSTALL_INIT_SYSV
+>> +     $(INSTALL) -D -m 0755 package/ti-gfx/S80ti-gfx \
+>> +             $(TARGET_DIR)/etc/init.d/S80ti-gfx
+>> +endef
+>> +
+>> +define TI_GFX_INSTALL_TARGET_CMDS
+>> +     $(TI_GFX_INSTALL_KM_CMDS)
+>> +     $(TI_GFX_INSTALL_BINS_CMDS)
+>> +     $(TI_GFX_INSTALL_LIBS_CMDS)
+>> +     $(if $(BR2_PACKAGE_TI_GFX_DEMOS),
+>> +             $(TI_GFX_INSTALL_DEMOS_CMDS)
+>> +     )
+>
+> Same comment as above for demo build, especially since
+> TI_GFX_INSTALL_DEMOS_CMDS is not defined when BR2_PACKAGE_TI_GFX_DEMOS
+> is not enabled.
+
+Wil fix.
+
+>> +endef
+>> +
+>> +$(eval $(generic-package))
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+
+
 
 --
 Spenser Gilliland
