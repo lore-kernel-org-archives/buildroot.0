@@ -1,57 +1,163 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 11 Jul 2013 11:37:10 +0200
-Subject: [Buildroot] [PATCH] Makefile: unset MAKEFLAGS
-In-Reply-To: <1373222539-8915-1-git-send-email-s.martin49@gmail.com>
-References: <1373222539-8915-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAAXf6LVC=vqL0mCFVMpKs2A99QtBviHXsmXZp3B+fo+32-+dXA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Jul 2013 11:41:29 +0200
+Subject: [Buildroot] [PATCH v4 1/2] ti-gfx: add new package
+In-Reply-To: <1373479755-8086-1-git-send-email-spenser@gillilanding.com>
+References: <1373479755-8086-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130711114129.346bc011@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Spenser Gilliland,
 
-On Sun, Jul 7, 2013 at 8:42 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> MAKEFLAGS can carry options that make Buildroot failed, eg. '-jN'.
-> To avoid this, unset the MAKEFLAGS environment variable.
->
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Makefile b/Makefile
-> index 015fbdf..11a7b70 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -207,6 +207,7 @@ unexport CFLAGS
->  unexport CXXFLAGS
->  unexport GREP_OPTIONS
->  unexport CONFIG_SITE
-> +unexport MAKEFLAGS
->  unexport QMAKESPEC
->  unexport TERMINFO
->
+On Wed, 10 Jul 2013 13:09:12 -0500, Spenser Gilliland wrote:
 
-What is the strategy with respect to cleaning up the user's
-environment when building buildroot?
-Because there are a number of other variables that users can have (and
-do have) that corrupt the build, for example:
+> +comment "requires an eglibc/glibc based toolchain and the linux kernel"
+> +	depends on !(BR2_LINUX_KERNEL && BR2_TOOLCHAIN_USES_GLIBC && BR2_arm)
 
-C_INCLUDE_PATH
-CPLUS_INCLUDE_PATH
-LIBRARY_PATH
-LD_LIBRARY_PATH
-PERL5LIB
-GCC_EXEC_PREFIX
+When a comment like this a shown, the package option is not visible, so
+you must mention the package name in the comment, otherwise it's
+impossible for the user to understand what the comment is about. So it
+should be:
 
-In the twisted environments that I'm working in, I'm unsetting these
-from a wrapper around buildroot make. However, it seems that there
-already are a number of cleanups done inside buildroot itself, so it
-makes sense to add the above variables to the list.
+comment "ti-gfx requires ..."
 
-What do you think?
+> +define TI_GFX_CONFIGURE_CMDS
+> +	$(if $(BR2_PACKAGE_TI_GFX_EGLIMAGE),
+> +		mv -f $(@D)/$(TI_GFX_BIN_PATH)/libEGL_eglimage.so \
+> +			$(@D)/$(TI_GFX_BIN_PATH)/libEGL.so; \
+> +		mv -f $(@D)/$(TI_GFX_BIN_PATH)/libGLES_CM_eglimage.so \
+> +			$(@D)/$(TI_GFX_BIN_PATH)/libGLES_CM.so; \
+> +		mv -f $(@D)/$(TI_GFX_BIN_PATH)/libGLESv2_eglimage.so \
+> +		   $(@D)/$(TI_GFX_BIN_PATH)/libGLESv2.so; \
+> +		mv -f $(@D)/$(TI_GFX_BIN_PATH)/libglslcompiler_eglimage.so \
+> +			$(@D)/$(TI_GFX_BIN_PATH)/libglslcompiler.so; \
+> +		mv -f $(@D)/$(TI_GFX_BIN_PATH)/libIMGegl_eglimage.so \
+> +			$(@D)/$(TI_GFX_BIN_PATH)/libIMGegl.so;
+> +	)
 
-Best regards,
+This seems not really nice to do, it should be handled at install time.
+
+> +endef
+> +
+> +define TI_GFX_BUILD_KM_CMDS
+> +	$(MAKE) $(TI_GFX_KM_MAKE_OPTS) -C $(@D)/GFX_Linux_KM all
+> +endef
+> +
+> +define TI_GFX_BUILD_DEMO_CMDS
+> +	$(foreach demo, $(TI_GFX_DEMOS), \
+> +		cd $(@D)/$(TI_GFX_DEMOS_LOC)/$(demo)/$(TI_GFX_DEMOS_MAKE_LOC); \
+> +		$(TARGET_MAKE_ENV) $(MAKE1) $(TI_GFX_DEMO_MAKE_OPTS) all
+
+	$(MAKE1) -C $(@D)/$(TI_GFX_DEMOS_LOC)/$(demo)/$(TI_GFX_DEMOS_MAKE_LOC)
+
+will avoid the need for the cd.
+
+> +	)
+> +endef
+> +
+> +define TI_GFX_BUILD_CMDS
+> +	$(TI_GFX_BUILD_KM_CMDS)
+> +	$(if $(BR2_PACKAGE_TI_GFX_DEMOS),
+> +		$(TI_GFX_BUILD_DEMO_CMDS)
+> +	)
+> +endef
+
+I think I've said it before, but we generally do:
+
+ifeq ($(BR2_PACKAGE_TI_GFX_DEMOS),y)
+define TI_GFX_BUILD_DEMO_CMDS
+	...
+endef
+endif
+
+define TI_GFX_BUILD_CMDS
+	...
+	$(TI_GFX_BUILD_DEMO_CMDS)
+endef
+
+> +
+> +define TI_GFX_INSTALL_STAGING_CMDS
+> +	$(foreach incdir,$(TI_GFX_HDR_DIRS),
+> +		$(INSTALL) -d $(STAGING_DIR)/usr/include/$(notdir $(incdir)); \
+> +		$(INSTALL) -D -m 0644 $(@D)/include/$(incdir)/*.h \
+> +			$(STAGING_DIR)/usr/include/$(notdir $(incdir))/
+> +	)
+> +	$(INSTALL) -D -m 0755 $(@D)/$(TI_GFX_BIN_PATH)/*.so $(STAGING_DIR)/usr/lib/
+> +	$(INSTALL) -D -m 0644 package/ti-gfx/egl.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+> +	$(INSTALL) -D -m 0644 package/ti-gfx/glesv2.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+> +endef
+> +
+> +define TI_GFX_INSTALL_KM_CMDS
+> +	$(MAKE) $(TI_GFX_KM_MAKE_OPTS) -C $(@D)/GFX_Linux_KM install
+> +endef
+> +
+> +define TI_GFX_INSTALL_BINS_CMDS
+> +	$(foreach bin,$(TI_GFX_BIN),
+> +		$(INSTALL) -D -m 0755 $(@D)/$(TI_GFX_BIN_PATH)/$(bin) \
+> +			$(TARGET_DIR)/usr/bin/$(bin)
+> +	)
+> +	$(if $(BR2_PACKAGE_TI_GFX_DEBUG),
+> +		$(INSTALL) -D -m 0755 package/ti-gfx/esrev.sh \
+> +			$(TARGET_DIR)/usr/bin/esrev)
+> +endef
+> +
+> +define TI_GFX_INSTALL_LIBS_CMDS
+> +	# create symlinks and install libraries.  these libraries do not have a 
+> +	# SONAME defined; therefore, they will not be automatically renamed and 
+> +	# must be renamed manually.
+
+I still don't understand this "automatically renamed" comment here.
+
+> +	$(foreach lib,$(TI_GFX_LIBS),
+> +		$(INSTALL) -D -m 0755 $(@D)/$(TI_GFX_BIN_PATH)/$(lib).so \
+> +			$(TARGET_DIR)/usr/lib/$(lib).so.$(TI_GFX_SO_VERSION); \
+> +		ln -sf $(lib).so.$(TI_GFX_SO_VERSION) \
+> +			$(TARGET_DIR)/usr/lib/$(lib).so
+> +	)
+> +	# libs use the following file for configuration.
+> +	$(INSTALL) -D -m 0644 package/ti-gfx/powervr.ini \
+> +		$(TARGET_DIR)/etc/powervr.ini
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_TI_GFX_DEMOS),y)
+> +define TI_GFX_INSTALL_DEMOS_CMDS
+> +	$(foreach demo,$(TI_GFX_DEMOS),
+> +		$(INSTALL) -D -m 0755 \
+> +		$(@D)/$(TI_GFX_DEMOS_LOC)/$(demo)/$(TI_GFX_DEMOS_BIN_LOC)/OGLES2$(demo) \
+> +		$(TARGET_DIR)/usr/bin/OGLES2$(demo)
+> +	)
+> +endef
+> +endif
+> +
+> +define TI_GFX_INSTALL_INIT_SYSV
+> +	$(INSTALL) -D -m 0755 package/ti-gfx/S80ti-gfx \
+> +		$(TARGET_DIR)/etc/init.d/S80ti-gfx
+> +endef
+> +
+> +define TI_GFX_INSTALL_TARGET_CMDS
+> +	$(TI_GFX_INSTALL_KM_CMDS)
+> +	$(TI_GFX_INSTALL_BINS_CMDS)
+> +	$(TI_GFX_INSTALL_LIBS_CMDS)
+> +	$(if $(BR2_PACKAGE_TI_GFX_DEMOS),
+> +		$(TI_GFX_INSTALL_DEMOS_CMDS)
+> +	)
+
+Same comment as above for demo build, especially since
+TI_GFX_INSTALL_DEMOS_CMDS is not defined when BR2_PACKAGE_TI_GFX_DEMOS
+is not enabled.
+
+> +endef
+> +
+> +$(eval $(generic-package))
+
+Thanks!
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
