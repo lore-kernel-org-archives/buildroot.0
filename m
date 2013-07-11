@@ -1,46 +1,25 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 11 Jul 2013 13:24:24 +0200
+Date: Thu, 11 Jul 2013 13:36:28 +0200
 Subject: [Buildroot] [PATCH] Makefile: unset MAKEFLAGS
-In-Reply-To: <CAEYzJUFzijo=jM+s4P_ZFAH-E_-MvhKZbcjHmNUBypiu5pF6zQ@mail.gmail.com>
+In-Reply-To: <20130711130113.02ef2730@skate>
 References: <1373222539-8915-1-git-send-email-s.martin49@gmail.com>
  <CAAXf6LVC=vqL0mCFVMpKs2A99QtBviHXsmXZp3B+fo+32-+dXA@mail.gmail.com>
- <CAEYzJUFzijo=jM+s4P_ZFAH-E_-MvhKZbcjHmNUBypiu5pF6zQ@mail.gmail.com>
-Message-ID: <CAAXf6LUWBrWmXaBNjKkjXtGMt9kWLvuOBsj8c4nuc_DdqurbUQ@mail.gmail.com>
+ <20130711130113.02ef2730@skate>
+Message-ID: <CAAXf6LUoX1iSW94RREcyOrX1_4QQf1dHFhDmynLoOy18js4fwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bj?rn,
+Hi Thomas,
 
-On Thu, Jul 11, 2013 at 12:33 PM, Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
-> On 11 July 2013 11:37, Thomas De Schampheleire
-> <patrickdepinguin+buildroot@gmail.com> wrote:
->> Hi,
->>
->> On Sun, Jul 7, 2013 at 8:42 PM, Samuel Martin <s.martin49@gmail.com> wrote:
->>> MAKEFLAGS can carry options that make Buildroot failed, eg. '-jN'.
->>> To avoid this, unset the MAKEFLAGS environment variable.
->>>
->>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->>> ---
->>>  Makefile | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/Makefile b/Makefile
->>> index 015fbdf..11a7b70 100644
->>> --- a/Makefile
->>> +++ b/Makefile
->>> @@ -207,6 +207,7 @@ unexport CFLAGS
->>>  unexport CXXFLAGS
->>>  unexport GREP_OPTIONS
->>>  unexport CONFIG_SITE
->>> +unexport MAKEFLAGS
->>>  unexport QMAKESPEC
->>>  unexport TERMINFO
->>>
->>
+On Thu, Jul 11, 2013 at 1:01 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Thu, 11 Jul 2013 11:37:10 +0200, Thomas De Schampheleire wrote:
+>
 >> What is the strategy with respect to cleaning up the user's
 >> environment when building buildroot?
 >> Because there are a number of other variables that users can have (and
@@ -60,13 +39,26 @@ On Thu, Jul 11, 2013 at 12:33 PM, Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
 >>
 >> What do you think?
 >
-> How about going all the way: clean out the environment completely, and
-> explicitly add env vars to builders as needed. That would result in a
-> more deterministic build environment, IMHO.
+> We have are a bit inconsistent on this. Some variables are unset from
+> the main Makefile, and a bunch of others are checked in
+> support/dependencies/dependencies.sh. For example, LD_LIBRARY_PATH
+> which you mentioned get checked in support/dependencies/dependencies.sh.
+>
+> Looks like a bit of cleanup in this area might be useful.
 
-It's true that it would be deterministic, but I'm not sure if it's
-always correct. There are some environment variables that could be
-needed for a correct build, like proxy settings. Clearing them out
-will be a problem in such cases.
-So either we should work with a whitelist of safe flags, or keep the
-existing environment but delete items on the blacklist.
+dependencies.sh does not complain on the existence of LD_LIBRARY_PATH
+in the environment, only on the presence of the current working
+directory inside of it. But of course, if we decide to unexport this
+variable, then checking its contents is no longer needed.
+Is there any valid use case for someone setting LD_LIBRARY_PATH during
+a buildroot build?
+
+For the check on the presence of the current working dir in PATH, we
+could question whether it makes sense to raise a message and exit, or
+to manipulate PATH during the build and continue.
+
+Another variable checked in dependencies.sh is PERL_MM_OPT. This seems
+a good candidate to add to the existing list in Makefile.
+
+Is there any particular reason why some unexports are done always, and
+some are done inside a check on BR2_HAVE_DOT_CONFIG ?
