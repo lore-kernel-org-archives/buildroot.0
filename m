@@ -1,64 +1,30 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Thu, 11 Jul 2013 12:33:42 +0200
-Subject: [Buildroot] [PATCH] Makefile: unset MAKEFLAGS
-In-Reply-To: <CAAXf6LVC=vqL0mCFVMpKs2A99QtBviHXsmXZp3B+fo+32-+dXA@mail.gmail.com>
-References: <1373222539-8915-1-git-send-email-s.martin49@gmail.com>
- <CAAXf6LVC=vqL0mCFVMpKs2A99QtBviHXsmXZp3B+fo+32-+dXA@mail.gmail.com>
-Message-ID: <CAEYzJUFzijo=jM+s4P_ZFAH-E_-MvhKZbcjHmNUBypiu5pF6zQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 11 Jul 2013 07:40:24 -0300
+Subject: [Buildroot] [PATCH 1/2] jquery: bump to version 1.10.2
+Message-ID: <1373539225-30092-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11 July 2013 11:37, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> Hi,
->
-> On Sun, Jul 7, 2013 at 8:42 PM, Samuel Martin <s.martin49@gmail.com> wrote:
->> MAKEFLAGS can carry options that make Buildroot failed, eg. '-jN'.
->> To avoid this, unset the MAKEFLAGS environment variable.
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->> ---
->>  Makefile | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/Makefile b/Makefile
->> index 015fbdf..11a7b70 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -207,6 +207,7 @@ unexport CFLAGS
->>  unexport CXXFLAGS
->>  unexport GREP_OPTIONS
->>  unexport CONFIG_SITE
->> +unexport MAKEFLAGS
->>  unexport QMAKESPEC
->>  unexport TERMINFO
->>
->
-> What is the strategy with respect to cleaning up the user's
-> environment when building buildroot?
-> Because there are a number of other variables that users can have (and
-> do have) that corrupt the build, for example:
->
-> C_INCLUDE_PATH
-> CPLUS_INCLUDE_PATH
-> LIBRARY_PATH
-> LD_LIBRARY_PATH
-> PERL5LIB
-> GCC_EXEC_PREFIX
->
-> In the twisted environments that I'm working in, I'm unsetting these
-> from a wrapper around buildroot make. However, it seems that there
-> already are a number of cleanups done inside buildroot itself, so it
-> makes sense to add the above variables to the list.
->
-> What do you think?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/jquery/jquery.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-How about going all the way: clean out the environment completely, and
-explicitly add env vars to builders as needed. That would result in a
-more deterministic build environment, IMHO.
-
-Best regards,
-Bj?rn Forsman
+diff --git a/package/jquery/jquery.mk b/package/jquery/jquery.mk
+index 44c444b..e76754f 100644
+--- a/package/jquery/jquery.mk
++++ b/package/jquery/jquery.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JQUERY_VERSION = 1.10.1
++JQUERY_VERSION = 1.10.2
+ JQUERY_SITE = http://code.jquery.com
+ JQUERY_SOURCE = jquery-$(JQUERY_VERSION).min.js
+ JQUERY_LICENSE = MIT
+-- 
+1.8.1.5
