@@ -1,49 +1,113 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 11 Jul 2013 11:28:17 -0300
-Subject: [Buildroot]
- =?windows-1252?q?Error_while_installing_dosfstools=3A?=
- =?windows-1252?q?_mkdosfs=92=3A_No_such_file_or_directory?=
-In-Reply-To: <alpine.LSU.2.10.1307111112110.7453@schiller.dip.t-dialin.net>
-References: <CAF3SDA4DY8DkDTVr5F4aLxmoJha60Y4DnZ9yC0u7PdhteR3Svg@mail.gmail.com>
- <87obaciyn8.fsf@dell.be.48ers.dk>
- <CAF3SDA7tGGeJfP2kJcf9Hy6Z4KrqUhHV0E1JBTE+0x+-bCMEMw@mail.gmail.com>
- <87bo6ci9xk.fsf@dell.be.48ers.dk> <51DD6469.4010504@gmail.com>
- <20130710185808.56c3ac52@skate> <51DD94D9.6060001@zacarias.com.ar>
- <87y59efgfj.fsf@dell.be.48ers.dk>
- <alpine.LSU.2.10.1307111112110.7453@schiller.dip.t-dialin.net>
-Message-ID: <51DEC101.6080606@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 11 Jul 2013 16:26:52 +0200
+Subject: [Buildroot] [git commit] gcc: remove BR2_GCC_SHARED_LIBGCC option
+Message-ID: <20130711143157.D78349A68F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/11/2013 06:33 AM, Schleusener, Jens wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=f03a9be4c323d0d305c7d55effe997dd1f2e6f48
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> 2) Changed behaviour: fossies.org now issued a "410 Gone" HTTP status
-> with some information in the HTML code about the reason together with a
-> link to the current (only) available newer version of the requested
-> package tarball.
-> 
-> 3) Remark: fossies.org isn't a mirror and is unsuitable for downloading
-> special legacy versions since it tries to offer only "fresh" current
-> versions. The sha1sum of an software archive is also available via for e.g.
->  http://fossies.org/linux/misc/dosfstools-3.0.20.tar.gz/sha1
-> or visible at the bottom of the contents file of the software archive
->  http://fossies.org/linux/misc/dosfstools-3.0.20.tar.gz/
-> The current contents file of an software archive incl. download links is
-> version-indepent always accessible via short-URLs specifying just the
-> software basename, for e.g.
->  http://fossies.org/dosfstools
-> 
-> Regards
-> 
-> Jens
+Commit 6b48b4803450 ("add a know to enable/disable building a shared
+libgcc"), from october 2006, isn't really as to why a
+BR2_GCC_SHARED_LIBGCC option was needed. However, now that gcc has
+been converted to the package infrastructure, it causes problems
+because the host packages are always being passed --enable-shared
+--disable-static, so re-adding --disable-shared on top of that break
+things.
 
-410 is fine, now it'll fall back on the buildroot mirror for sources
-which is best.
-For newer releases the URL was switched to
-http://daniel-baumann.ch/files/software/dosfstools/ which seems to keep
-old versions around.
-So everything is fine now, thanks.
-Regards.
+Moreover, our tests indicate that both a shared *and* a static version
+of libgcc are built, and that linking dynamically and statically a
+program that uses libgcc_s gives correct results: dynamically linked
+against libgcc_s in the first case, statically linked in the second
+case.
+
+Therefore, it appears that this option is no longer necessary, and
+removing it has the advantage of fixing the builds of
+qemu_mips64_malta_defconfig and qemu_sparc_ss10_defconfig, both of
+which had BR2_GCC_SHARED_LIBGCC not enabled.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/gcc/Config.in.host         |    8 --------
+ package/gcc/gcc-final/gcc-final.mk |   10 +---------
+ package/gcc/gcc.mk                 |    2 +-
+ 3 files changed, 2 insertions(+), 18 deletions(-)
+
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 1b19128..0836f9f 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -105,14 +105,6 @@ config BR2_INSTALL_FORTRAN
+ 	  Note that it is highly recommended NOT to use gfortran
+ 	  from gcc older than 4.2.0
+ 
+-config BR2_GCC_SHARED_LIBGCC
+-	bool "Build/install a shared libgcc?"
+-	depends on !BR2_PREFER_STATIC_LIB
+-	default y
+-	depends on !BR2_sparc
+-	help
+-	  Build/install a shared libgcc library
+-
+ config BR2_GCC_ENABLE_TLS
+ 	bool "Enable compiler tls support" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	default y
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index f99f1a3..0db2eaa 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -49,12 +49,6 @@ else
+ HOST_GCC_FINAL_CONF_OPT += --disable-libgomp
+ endif
+ 
+-ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
+-HOST_GCC_FINAL_CONF_OPT += --enable-shared
+-else
+-HOST_GCC_FINAL_CONF_OPT += --disable-shared
+-endif
+-
+ # End with user-provided options, so that they can override previously
+ # defined options.
+ HOST_GCC_FINAL_CONF_OPT += \
+@@ -99,7 +93,6 @@ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
+ # Cannot use the HOST_GCC_FINAL_USR_LIBS mechanism below, because we want
+ # libgcc_s to be installed in /lib and not /usr/lib. We add +x on
+ # libgcc_s to ensure it will be stripped.
+-ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
+ define HOST_GCC_FINAL_INSTALL_LIBGCC
+ 	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libgcc_s* \
+ 		$(STAGING_DIR)/lib/
+@@ -109,12 +102,11 @@ define HOST_GCC_FINAL_INSTALL_LIBGCC
+ endef
+ 
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBGCC
+-endif
+ 
+ # Handle the installation of libraries in /usr/lib
+ HOST_GCC_FINAL_USR_LIBS =
+ 
+-ifeq ($(BR2_GCC_SHARED_LIBGCC)$(BR2_INSTALL_LIBSTDCPP),yy)
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ HOST_GCC_FINAL_USR_LIBS += libstdc++
+ endif
+ 
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index d38629d..8bd65fc 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -40,7 +40,7 @@ endef
+ # Apply patches
+ #
+ 
+-ifeq ($(ARCH)-$(BR2_GCC_SHARED_LIBGCC),powerpc-y)
++ifeq ($(ARCH),powerpc)
+ ifneq ($(BR2_SOFT_FLOAT),)
+ define HOST_GCC_APPLY_POWERPC_PATCH
+ 	support/scripts/apply-patches.sh $(@D) package/gcc/$(GCC_VERSION) powerpc-link-with-math-lib.patch.conditional
