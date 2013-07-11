@@ -1,34 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Jul 2013 12:56:01 +0200
-Subject: [Buildroot] Issue with iconv_open and Linaro toolchain
-In-Reply-To: <51DE78F4.9050705@wanadoo.fr>
-References: <51DE78F4.9050705@wanadoo.fr>
-Message-ID: <20130711125601.75b219f6@skate>
+Date: Thu, 11 Jul 2013 12:59:08 +0200
+Subject: [Buildroot] [PATCH v2] Makefile: Symlink lib32 to lib for
+ MIPS64/n32
+In-Reply-To: <CAAXf6LXK+7zWMGYd8n-kM5yNEE8YqTm30XGJD6A3zdd0nnBE5Q@mail.gmail.com>
+References: <1372856816-12493-1-git-send-email-markos.chandras@gmail.com>
+ <CAAXf6LXK+7zWMGYd8n-kM5yNEE8YqTm30XGJD6A3zdd0nnBE5Q@mail.gmail.com>
+Message-ID: <20130711125908.55bcb3b3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thierry Bultel,
+Dear Thomas De Schampheleire,
 
-On Thu, 11 Jul 2013 11:20:52 +0200, Thierry Bultel wrote:
+On Thu, 11 Jul 2013 11:24:51 +0200, Thomas De Schampheleire wrote:
 
-> The /usr/lib/arm-linux-gnueabihf does not exist at all on the target, 
-> but only in the sysroot.
-> Copying it manually solves the issue, but I do not feel comfortable with 
-> having a piece
-> of the toolchain path on my system...
+> We are doing a similar thing from our post-build script, on a
+> Cavium-based MIPS64 n32 ABI, so I'm definitely in favor of this patch.
 > 
-> What is your point of view about this ? What would be the right way to do ?
+> I'm not sure though if the $(BUILD_DIR)/.root rule is the best place
+> to put this, it seems a bit odd in my opinion.
 
-The right way is to add a Buildroot option that copies certain gconv
-modules, which are needed on (e)glibc toolchains to make iconv work
-properly, and maybe generates the gconv-modules.cache (this is done
-using iconvconfig, we'd have to see how to get this tool, or package
-it).
-
-Best regards,
+This thing is really toolchain related, so I believe it should be the
+responsibility of the respective toolchain backends to take care of
+this, whenever needed.
 
 Thomas
 -- 
