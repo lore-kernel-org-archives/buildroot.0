@@ -1,56 +1,45 @@
-From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Thu, 11 Jul 2013 09:42:28 +0200
-Subject: [Buildroot] [PATCH] Raspberry Pi - WiringPi Library Package
-In-Reply-To: <20130711063845.GA7655@enterprise.localdomain>
-References: <1373519841-6138-1-git-send-email-g@maral.me>
- <1373519960-6212-1-git-send-email-g@maral.me>
- <20130711053359.GC4338@tarshish>
- <20130711060008.GA5570@enterprise.localdomain>
- <20130711060419.GD4338@tarshish>
- <20130711063845.GA7655@enterprise.localdomain>
-Message-ID: <51DE61E4.7030400@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Jul 2013 10:47:44 +0200
+Subject: [Buildroot] [PATCH v4 2/2] qt: add powervr and opengl
+In-Reply-To: <51DDAF1A.5040602@carallon.com>
+References: <1373479838-8288-1-git-send-email-spenser@gillilanding.com>
+ <51DDAF1A.5040602@carallon.com>
+Message-ID: <20130711104744.7fa84966@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Guillermo,
+Dear Will Wagner,
 
-Am 11.07.2013 08:38, schrieb Guillermo A. Amaral:
-> I searched around for alternative ways around the issue when I first
-> encountered it, it seemed no-oping it would be most portable/safest approach.
+On Wed, 10 Jul 2013 19:59:38 +0100, Will Wagner wrote:
 
-The O_CLOEXEC variable was introduced in 2.6.23.
+> > +config BR2_PACKAGE_QT_GFX_POWERVR
+> > +	depends on BR2_PACKAGE_QT_OPENGL_ES
+> > +	depends on BR2_PACKAGE_TI_GFX
+> > +	bool "powervr"
+> > +
+> 
+> I don't like that this depends on the TI_GFX package. When I added 
+> powervr support to Qt I added a powervr virtual package the same as 
+> opengl_es or opengl_egl. This allows Qt to not contain anything specific 
+> to the hardware graphics package.
 
->        O_CLOEXEC (Since Linux 2.6.23)
->               Enable the close-on-exec flag for the new file descriptor.
->               Specifying this flag permits a program to avoid additional
->               fcntl(2) F_SETFD operations to set the FD_CLOEXEC flag.
->               Additionally, use of this flag is essential in some
->               multithreaded programs since using a separate fcntl(2) F_SETFD
->               operation to set the FD_CLOEXEC flag does not suffice to avoid
->               race conditions where one thread opens a file descriptor at
->               the same time as another thread does a fork(2) plus execve(2).
+I don't quite understand this. The Qt code that gets enabled with this
+option *is* specific to this very driver, so it makes a lot of sense to
+have this dependency.
 
-So if you use a kernel less then 2.6.23 it make no sense to define
-O_CLOEXEC to whatever you want, the kernel doesn't know this. And in the
-opposite you can't defined it to some different then already defined for
-O_CLOEXEC.
+If at some point in the future, we have a different package that is
+API-compatible with the ti-gfx package and allows the same Qt PowerVR
+code to be enabled, then it will be good time to have a virtual
+package. Virtual packages have not impact on the Config.in options
+stored in .config, so moving things to a virtual package does not break
+the .config API, so we can safely do that in the future, when needed.
 
-The function 'open' can also used without the 3rd parameter.
-
-So I think you have to check which kernel version is used and build a
-patch which does something like
-
-#ifdef KERNEL_VER < 2_6_23
-  if ((fd = open ("/dev/mem", O_RDWR | O_SYNC) ) < 0)
-#else
-  if ((fd = open ("/dev/mem", O_RDWR | O_SYNC | O_CLOEXEC) ) < 0)
-#endif
-
-The guys from linux-wireless do a lot of this to get the wireless
-package working om different kernel versions.
-
-Regards
-Carsten
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
