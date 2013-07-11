@@ -1,41 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Jul 2013 10:47:44 +0200
-Subject: [Buildroot] [PATCH v4 2/2] qt: add powervr and opengl
-In-Reply-To: <51DDAF1A.5040602@carallon.com>
-References: <1373479838-8288-1-git-send-email-spenser@gillilanding.com>
- <51DDAF1A.5040602@carallon.com>
-Message-ID: <20130711104744.7fa84966@skate>
+Date: Thu, 11 Jul 2013 10:58:43 +0200
+Subject: [Buildroot] [PATCH v2 1/2] linux: install firmware to staging.
+In-Reply-To: <20130710171218.GC3297@free.fr>
+References: <1373391595-19359-1-git-send-email-spenser@gillilanding.com>
+ <20130710091145.7b8529d1@skate> <20130710171218.GC3297@free.fr>
+Message-ID: <20130711105843.3fdaef14@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Wagner,
+Dear Yann E. MORIN,
 
-On Wed, 10 Jul 2013 19:59:38 +0100, Will Wagner wrote:
+On Wed, 10 Jul 2013 19:12:18 +0200, Yann E. MORIN wrote:
 
-> > +config BR2_PACKAGE_QT_GFX_POWERVR
-> > +	depends on BR2_PACKAGE_QT_OPENGL_ES
-> > +	depends on BR2_PACKAGE_TI_GFX
-> > +	bool "powervr"
-> > +
+> Altenatively, as I suggested before, this could be delegated to a
+> post-build script:
+>   - the package (linux) always install its files in staging
+>   - a post-build scripts cherry-picks what is relevant
 > 
-> I don't like that this depends on the TI_GFX package. When I added 
-> powervr support to Qt I added a powervr virtual package the same as 
-> opengl_es or opengl_egl. This allows Qt to not contain anything specific 
-> to the hardware graphics package.
+> What I don't like with this solution is that the Linux kernel would
+> always install its firmware files, and that people will start using that
+> as the source of the firmwares, while we do have linux-firmware for
+> that.
 
-I don't quite understand this. The Qt code that gets enabled with this
-option *is* specific to this very driver, so it makes a lot of sense to
-have this dependency.
+Another solution is, inside the kernel menu:
 
-If at some point in the future, we have a different package that is
-API-compatible with the ti-gfx package and allows the same Qt PowerVR
-code to be enabled, then it will be good time to have a virtual
-package. Virtual packages have not impact on the Config.in options
-stored in .config, so moving things to a virtual package does not break
-the .config API, so we can safely do that in the future, when needed.
+	[*] Install in-kernel firmwares
+		(*.dtbo) List of firmwares to installs
+
+Best regards,
 
 Thomas
 -- 
