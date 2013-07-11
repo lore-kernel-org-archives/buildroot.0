@@ -1,9 +1,9 @@
 From: Guillermo A. Amaral <g@maral.me>
-Date: Wed, 10 Jul 2013 22:17:21 -0700
+Date: Wed, 10 Jul 2013 22:19:20 -0700
 Subject: [Buildroot] [PATCH] Raspberry Pi - WiringPi Library Package
-In-Reply-To: <CAPeEpDpMY2sRjGdd+TgPz5S--Pws+5hUNrV8jpiznxBqFZ7zDg@mail.gmail.com>
-References: <CAPeEpDpMY2sRjGdd+TgPz5S--Pws+5hUNrV8jpiznxBqFZ7zDg@mail.gmail.com>
-Message-ID: <1373519841-6138-1-git-send-email-g@maral.me>
+In-Reply-To: <1373519841-6138-1-git-send-email-g@maral.me>
+References: <1373519841-6138-1-git-send-email-g@maral.me>
+Message-ID: <1373519960-6212-1-git-send-email-g@maral.me>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,10 +17,10 @@ Signed-off-by: Guillermo A. Amaral <g@maral.me>
 ---
  package/Config.in                                 |   1 +
  package/wiringpi/Config.in                        |   8 ++
- package/wiringpi/wiringpi-CLOEXEC-undefined.patch |  28 +++++
+ package/wiringpi/wiringpi-CLOEXEC-undefined.patch |  29 +++++
  package/wiringpi/wiringpi-cmake-support.patch     | 122 ++++++++++++++++++++++
  package/wiringpi/wiringpi.mk                      |  14 +++
- 5 files changed, 173 insertions(+)
+ 5 files changed, 174 insertions(+)
  create mode 100644 package/wiringpi/Config.in
  create mode 100644 package/wiringpi/wiringpi-CLOEXEC-undefined.patch
  create mode 100644 package/wiringpi/wiringpi-cmake-support.patch
@@ -54,16 +54,17 @@ index 0000000..f368bf7
 +
 diff --git a/package/wiringpi/wiringpi-CLOEXEC-undefined.patch b/package/wiringpi/wiringpi-CLOEXEC-undefined.patch
 new file mode 100644
-index 0000000..e023d15
+index 0000000..ca0ed99
 --- /dev/null
 +++ b/package/wiringpi/wiringpi-CLOEXEC-undefined.patch
-@@ -0,0 +1,28 @@
+@@ -0,0 +1,29 @@
 +From 728b2634cbf661e5303b1e8cb791b909ad4e907c Mon Sep 17 00:00:00 2001
 +From: "Guillermo A. Amaral" <g@maral.me>
 +Date: Wed, 10 Jul 2013 22:05:12 -0700
 +Subject: [PATCH] Declare O_CLOEXEC on systems with an older kernel and/or
 + glibc.
 +
++Signed-off-by: Guillermo A. Amaral <g@maral.me>
 +---
 + wiringPi/wiringPi.c | 4 ++++
 + 1 file changed, 4 insertions(+)
