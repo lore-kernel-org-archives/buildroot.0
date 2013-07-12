@@ -1,237 +1,55 @@
-From: Guillermo A. Amaral <g@maral.me>
-Date: Thu, 11 Jul 2013 23:54:02 -0700
-Subject: [Buildroot] [PATCH] Raspberry Pi - WiringPi Library Package
-In-Reply-To: <20130712064749.GJ4338@tarshish>
-References: <20130712064749.GJ4338@tarshish>
-Message-ID: <1373612042-16848-1-git-send-email-g@maral.me>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 12 Jul 2013 09:01:18 +0200
+Subject: [Buildroot] [PATCH] busybox: register mdev as hotplug helper
+In-Reply-To: <1373574654-32427-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1373574654-32427-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <CAAXf6LVSOCLS54uAwJHH6DwenrexRY=17v_PoOe_KTnmWWTvWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Guillermo A. Amaral" <g@maral.me>
+Hi Gustavo,
 
----
- package/Config.in                                 |   1 +
- package/wiringpi/Config.in                        |   8 ++
- package/wiringpi/wiringpi-CLOEXEC-undefined.patch |  29 +++++
- package/wiringpi/wiringpi-cmake-support.patch     | 122 ++++++++++++++++++++++
- package/wiringpi/wiringpi.mk                      |  14 +++
- 5 files changed, 174 insertions(+)
- create mode 100644 package/wiringpi/Config.in
- create mode 100644 package/wiringpi/wiringpi-CLOEXEC-undefined.patch
- create mode 100644 package/wiringpi/wiringpi-cmake-support.patch
- create mode 100644 package/wiringpi/wiringpi.mk
+On Thu, Jul 11, 2013 at 10:30 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+> Register mdev as hotplug helper for many goodies and expected behaviour
+> (like automatic firmware loading).
+>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/busybox/S10mdev | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
+> index c06aa20..c41f166 100644
+> --- a/package/busybox/S10mdev
+> +++ b/package/busybox/S10mdev
+> @@ -6,6 +6,7 @@
+>  case "$1" in
+>    start)
+>         echo "Starting mdev..."
+> +       echo /sbin/mdev 2>/dev/null >/proc/sys/kernel/hotplug
+>         /sbin/mdev -s
+>         ;;
+>    stop)
 
-diff --git a/package/Config.in b/package/Config.in
-index b588a0c..e4051da 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -303,6 +303,7 @@ source "package/usb_modeswitch_data/Config.in"
- source "package/usbmount/Config.in"
- source "package/usbutils/Config.in"
- source "package/wipe/Config.in"
-+source "package/wiringpi/Config.in"
- source "package/w_scan/Config.in"
- endmenu
- 
-diff --git a/package/wiringpi/Config.in b/package/wiringpi/Config.in
-new file mode 100644
-index 0000000..f368bf7
---- /dev/null
-+++ b/package/wiringpi/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_WIRINGPI
-+	bool "wiringpi"
-+	depends on BR2_arm
-+	help
-+	  GPIO Interface library for the Raspberry Pi.
-+
-+	  http://wiringpi.com/
-+
-diff --git a/package/wiringpi/wiringpi-CLOEXEC-undefined.patch b/package/wiringpi/wiringpi-CLOEXEC-undefined.patch
-new file mode 100644
-index 0000000..fa16636
---- /dev/null
-+++ b/package/wiringpi/wiringpi-CLOEXEC-undefined.patch
-@@ -0,0 +1,29 @@
-+From 728b2634cbf661e5303b1e8cb791b909ad4e907c Mon Sep 17 00:00:00 2001
-+From: "Guillermo A. Amaral" <g@maral.me>
-+Date: Wed, 10 Jul 2013 22:05:12 -0700
-+Subject: [PATCH] Declare O_CLOEXEC on systems with an older kernel and/or
-+ glibc.
-+
-+Signed-off-by: Guillermo A. Amaral <g@maral.me>
-+---
-+ wiringPi/wiringPi.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/wiringPi/wiringPi.c b/wiringPi/wiringPi.c
-+index ba61d9f..2ee23b9 100644
-+--- a/wiringPi/wiringPi.c
-++++ b/wiringPi/wiringPi.c
-+@@ -77,6 +77,10 @@
-+ #define	FALSE	(1==2)
-+ #endif
-+ 
-++#ifndef O_CLOEXEC
-++#define O_CLOEXEC 02000000
-++#endif
-++
-+ // Environment Variables
-+ 
-+ #define	ENV_DEBUG	"WIRINGPI_DEBUG"
-+-- 
-+1.8.1.5
-+
-diff --git a/package/wiringpi/wiringpi-cmake-support.patch b/package/wiringpi/wiringpi-cmake-support.patch
-new file mode 100644
-index 0000000..05ccd72
---- /dev/null
-+++ b/package/wiringpi/wiringpi-cmake-support.patch
-@@ -0,0 +1,122 @@
-+From 8feae03a9b77f4a4504d00423d70d318ee08296a Mon Sep 17 00:00:00 2001
-+From: "Guillermo A. Amaral" <g@maral.me>
-+Date: Wed, 10 Jul 2013 22:02:44 -0700
-+Subject: [PATCH] CMake support for WiringPi
-+
-+
-+Signed-off-by: Guillermo A. Amaral <g@maral.me>
-+---
-+ CMakeLists.txt          |  9 +++++++++
-+ devLib/CMakeLists.txt   | 27 +++++++++++++++++++++++++++
-+ gpio/CMakeLists.txt     | 20 ++++++++++++++++++++
-+ wiringPi/CMakeLists.txt | 21 +++++++++++++++++++++
-+ 4 files changed, 77 insertions(+)
-+ create mode 100644 CMakeLists.txt
-+ create mode 100644 devLib/CMakeLists.txt
-+ create mode 100644 gpio/CMakeLists.txt
-+ create mode 100644 wiringPi/CMakeLists.txt
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+new file mode 100644
-+index 0000000..324ccff
-+--- /dev/null
-++++ b/CMakeLists.txt
-+@@ -0,0 +1,9 @@
-++cmake_minimum_required(VERSION 2.8)
-++
-++project(wiringPi)
-++
-++set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared objects")
-++
-++add_subdirectory(wiringPi)
-++add_subdirectory(devLib)
-++add_subdirectory(gpio)
-+diff --git a/devLib/CMakeLists.txt b/devLib/CMakeLists.txt
-+new file mode 100644
-+index 0000000..6a7199d
-+--- /dev/null
-++++ b/devLib/CMakeLists.txt
-+@@ -0,0 +1,27 @@
-++set(CMAKE_INCLUDE_CURRENT_DIR ON)
-++
-++set(devLib_SOVERSION "2.0")
-++set(devLib_CFLAGS "-Wformat=2 -Winline")
-++
-++file(GLOB devLib_SRCS *.c)
-++file(GLOB devLib_HDRS *.h)
-++list(REMOVE_ITEM devLib_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/piFaceOld.c)
-++
-++find_library(PTHREAD_LIBRARY pthread)
-++
-++include_directories("../wiringPi")
-++
-++add_library(wiringPiDev ${devLib_SRCS})
-++target_link_libraries(wiringPiDev ${PTHREAD_LIBRARY})
-++set_target_properties(wiringPiDev PROPERTIES COMPILE_FLAGS ${devLib_CFLAGS})
-++set_target_properties(wiringPiDev PROPERTIES SOVERSION ${devLib_SOVERSION})
-++
-++install(TARGETS wiringPiDev
-++        LIBRARY DESTINATION lib COMPONENT target
-++        ARCHIVE DESTINATION lib COMPONENT staging
-++)
-++
-++install(FILES ${devLib_HDRS}
-++        DESTINATION include/wiringPi COMPONENT staging
-++)
-++
-+diff --git a/gpio/CMakeLists.txt b/gpio/CMakeLists.txt
-+new file mode 100644
-+index 0000000..a39e511
-+--- /dev/null
-++++ b/gpio/CMakeLists.txt
-+@@ -0,0 +1,20 @@
-++set(CMAKE_INCLUDE_CURRENT_DIR ON)
-++
-++set(gpio_CFLAGS "-Wformat=2 -Winline")
-++
-++file(GLOB gpio_SRCS *.c)
-++
-++include_directories("../wiringPi")
-++include_directories("../devLib")
-++
-++find_library(M_LIBRARY m)
-++find_library(PTHREAD_LIBRARY pthread)
-++
-++add_executable(gpio ${gpio_SRCS})
-++target_link_libraries(gpio ${M_LIBRARY} ${PTHREAD_LIBRARY} wiringPi wiringPiDev)
-++set_target_properties(gpio PROPERTIES COMPILE_FLAGS ${gpio_CFLAGS})
-++
-++install(TARGETS gpio
-++        RUNTIME DESTINATION bin COMPONENT target
-++)
-++
-+diff --git a/wiringPi/CMakeLists.txt b/wiringPi/CMakeLists.txt
-+new file mode 100644
-+index 0000000..e54eaf6
-+--- /dev/null
-++++ b/wiringPi/CMakeLists.txt
-+@@ -0,0 +1,21 @@
-++set(CMAKE_INCLUDE_CURRENT_DIR ON)
-++
-++set(wiringPi_SOVERSION "2.0")
-++set(wiringPi_CFLAGS "-Wformat=2 -Winline")
-++
-++file(GLOB wiringPi_SRCS *.c)
-++file(GLOB wiringPi_HDRS *.h)
-++
-++add_library(wiringPi ${wiringPi_SRCS})
-++set_target_properties(wiringPi PROPERTIES COMPILE_FLAGS ${wiringPi_CFLAGS})
-++set_target_properties(wiringPi PROPERTIES SOVERSION ${wiringPi_SOVERSION})
-++
-++install(TARGETS wiringPi
-++        LIBRARY DESTINATION lib COMPONENT target
-++        ARCHIVE DESTINATION lib COMPONENT staging
-++)
-++
-++install(FILES ${wiringPi_HDRS}
-++        DESTINATION include/wiringPi COMPONENT staging
-++)
-++
-+-- 
-+1.8.1.5
-+
-diff --git a/package/wiringpi/wiringpi.mk b/package/wiringpi/wiringpi.mk
-new file mode 100644
-index 0000000..4341f49
---- /dev/null
-+++ b/package/wiringpi/wiringpi.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# wiringpi
-+#
-+#############################################################
-+
-+WIRINGPI_VERSION = 02a3bd8d8f2ae5c873e63875a8faef5b627f9db6
-+WIRINGPI_SITE = git://git.drogon.net/wiringPi
-+WIRINGPI_LICENSE = LGPLv3+
-+WIRINGPI_LICENSE_FILES = COPYING.LESSER
-+WIRINGPI_INSTALL_STAGING = YES
-+WIRINGPI_CONF_OPT = -DCMAKE_BUILD_TYPE=Release
-+
-+$(eval $(cmake-package))
--- 
-1.8.1.5
+In linux/linux.mk, there mdev is already set as hotplug helper in the
+kernel configuration.
+How does this change relate to it? At first sight, it seems unnecessary.
+
+I did notice that setting mdev as hotplug helper in the kernel
+configuration, can seriously impact boot performance. On a board with
+a not so fast single core processor (around 500MHz) boot time until
+userspace became about 10 seconds coming from 2s. We solved this by
+setting no helper in the kernel configuration (and telling buildroot
+to use just devtmpfs instead of mdev), and manually copying S10mdev to
+the rootfs. Then, mdev is run once during userspace init.
+This doesn't give automatic firmware loading, but that would be solved
+by your above patch, I think.
+
+Did anyone else notice such slowdown behavior?
+
+Best regards,
+Thomas
