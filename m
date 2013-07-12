@@ -1,39 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jul 2013 10:14:23 +0200
-Subject: [Buildroot] [PATCH] package/iozone: Build non-threads version
- if !BR2_PTHREADS_NATIVE
-In-Reply-To: <E6BF041E97966E4DB955F0DF883AD2D633A093BA@de02wembxa.internal.synopsys.com>
-References: <1373615072-5258-1-git-send-email-mjonker@synopsys.com>
- <20130712100429.7950ace7@skate>
- <E6BF041E97966E4DB955F0DF883AD2D633A093BA@de02wembxa.internal.synopsys.com>
-Message-ID: <20130712101423.7b281960@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 12 Jul 2013 10:26:11 +0200
+Subject: [Buildroot] [git commit] erlang: add upstream URL
+Message-ID: <20130712082825.B47EF9A293@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mischa Jonker,
+commit: http://git.buildroot.net/buildroot/commit/?id=5d09b72d608fe91e8305f1c12df42cd68f79c500
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 12 Jul 2013 08:06:36 +0000, Mischa Jonker wrote:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/erlang/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-> > BR2_PTHREADS_NATIVE is a Config.in option that only makes sense in the
-> > context of the internal toolchain backend. So any usage of it in package/ is
-> > going to not be suitable for external toolchain usage. So your change, as is,
-> > would disable thread support in IOZone for any external toolchain.
-> 
-> Should we add a BR2_TOOLCHAIN_HAS_THREADS_NATIVE to toolchain/toolchain-common.in? Or do you have another suggestion?
-
-Yes, I believe that's the only solution. In fact, it could also be used
-instead of the BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD that's being
-added by my proposed patch "[PATCH] toolchain-internal: skip
-gcc-intermediate when possible".
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/erlang/Config.in b/package/erlang/Config.in
+index 6920db6..27206f3 100644
+--- a/package/erlang/Config.in
++++ b/package/erlang/Config.in
+@@ -8,6 +8,8 @@ config BR2_PACKAGE_ERLANG
+ 	  telephony and instant messaging. Erlang's runtime system has
+ 	  built-in support for concurrency, distribution and fault tolerance.
+ 
++	  http://www.erlang.org
++
+ config BR2_PACKAGE_ERLANG_MEGACO
+ 	bool "install megaco application"
+ 	depends on BR2_PACKAGE_ERLANG
