@@ -1,31 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 12 Jul 2013 10:25:37 +0200
-Subject: [Buildroot] [git commit] erlang: bump version
-Message-ID: <20130712082824.C67169A7E6@busybox.osuosl.org>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Fri, 12 Jul 2013 08:27:20 +0000
+Subject: [Buildroot] [PATCH] package/iozone: Build non-threads version
+ if !BR2_PTHREADS_NATIVE
+In-Reply-To: <20130712101423.7b281960@skate>
+References: <1373615072-5258-1-git-send-email-mjonker@synopsys.com>
+ <20130712100429.7950ace7@skate>
+ <E6BF041E97966E4DB955F0DF883AD2D633A093BA@de02wembxa.internal.synopsys.com>
+ <20130712101423.7b281960@skate>
+Message-ID: <E6BF041E97966E4DB955F0DF883AD2D633A093E7@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3235d7a968ee6719a279b7ee6086b372d2832be
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas wrote:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/erlang/erlang.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+>> Should we add a BR2_TOOLCHAIN_HAS_THREADS_NATIVE to
+>> toolchain/toolchain-
+> common.in? Or do you have another suggestion?
+> 
+> Yes, I believe that's the only solution. In fact, it could also be
+> used instead of the BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD that's
+> being added by my proposed patch "[PATCH] toolchain-internal: skip
+> gcc-intermediate when possible".
 
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 3a5752e..9f47b84 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ERLANG_VERSION = R15B01
-+ERLANG_VERSION = R15B03-1
- ERLANG_SITE = http://www.erlang.org/download
- ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
- ERLANG_DEPENDENCIES = host-erlang
+Do you think that it's a safe assumption that GLIBC toolchains have NPTL? (just like BR2_TOOLCHAIN_HAS_THREADS is selected already if BR2_TOOLCHAIN_USES_GLIBC).
+
+Mischa
