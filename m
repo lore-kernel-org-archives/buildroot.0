@@ -1,31 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 12 Jul 2013 10:26:11 +0200
-Subject: [Buildroot] [git commit] erlang: add upstream URL
-Message-ID: <20130712082825.B47EF9A293@busybox.osuosl.org>
+Date: Fri, 12 Jul 2013 10:25:37 +0200
+Subject: [Buildroot] [git commit] erlang: bump version
+Message-ID: <20130712082824.C67169A7E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d09b72d608fe91e8305f1c12df42cd68f79c500
+commit: http://git.buildroot.net/buildroot/commit/?id=d3235d7a968ee6719a279b7ee6086b372d2832be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/erlang/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/erlang/erlang.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/erlang/Config.in b/package/erlang/Config.in
-index 6920db6..27206f3 100644
---- a/package/erlang/Config.in
-+++ b/package/erlang/Config.in
-@@ -8,6 +8,8 @@ config BR2_PACKAGE_ERLANG
- 	  telephony and instant messaging. Erlang's runtime system has
- 	  built-in support for concurrency, distribution and fault tolerance.
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 3a5752e..9f47b84 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+	  http://www.erlang.org
-+
- config BR2_PACKAGE_ERLANG_MEGACO
- 	bool "install megaco application"
- 	depends on BR2_PACKAGE_ERLANG
+-ERLANG_VERSION = R15B01
++ERLANG_VERSION = R15B03-1
+ ERLANG_SITE = http://www.erlang.org/download
+ ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
+ ERLANG_DEPENDENCIES = host-erlang
