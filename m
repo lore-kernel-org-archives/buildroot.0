@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 12 Jul 2013 13:33:04 +0200
-Subject: [Buildroot] [PATCH] Makefile: unexport RUBYOPT
-In-Reply-To: <1373553453-30335-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 11 Jul 2013 11:37:33 -0300")
-References: <1373553453-30335-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mwpsdndb.fsf@dell.be.48ers.dk>
+Date: Fri, 12 Jul 2013 13:33:24 +0200
+Subject: [Buildroot] [PATCH] php: security bump to version 5.3.27
+In-Reply-To: <1373567290-910-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 11 Jul 2013 15:28:10 -0300")
+References: <1373567290-910-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ehb4dncr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,7 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> On Gentoo systems with ruby installed RUBYOPT is set and causes build
- Gustavo> breakage for some packages that needs host-ruby (example: webkit).
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
