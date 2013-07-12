@@ -1,56 +1,50 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Fri, 12 Jul 2013 19:07:58 +0200
-Subject: [Buildroot] [PATCH] Makefile: unset MAKEFLAGS
-In-Reply-To: <201307111402.34152.yann.morin.1998@free.fr>
-References: <1373222539-8915-1-git-send-email-s.martin49@gmail.com>
- <CAEYzJUFzijo=jM+s4P_ZFAH-E_-MvhKZbcjHmNUBypiu5pF6zQ@mail.gmail.com>
- <20130711134646.6ef211dd@skate>
- <201307111402.34152.yann.morin.1998@free.fr>
-Message-ID: <CAEYzJUHpYVBAgHnrj73aMwj8pw+p_bScMToM-BSZh3bm--q2gA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 12 Jul 2013 22:22:55 +0200
+Subject: [Buildroot]
+ =?utf-8?q?Error_while_installing_dosfstools=3A_mkdosf?=
+ =?utf-8?q?s=E2=80=99=3A_No_such_file_or_directory?=
+In-Reply-To: <alpine.LSU.2.10.1307111112110.7453@schiller.dip.t-dialin.net>
+ (Jens Schleusener's message of "Thu, 11 Jul 2013 11:33:57 +0200
+ (CEST)")
+References: <CAF3SDA4DY8DkDTVr5F4aLxmoJha60Y4DnZ9yC0u7PdhteR3Svg@mail.gmail.com>
+ <87obaciyn8.fsf@dell.be.48ers.dk>
+ <CAF3SDA7tGGeJfP2kJcf9Hy6Z4KrqUhHV0E1JBTE+0x+-bCMEMw@mail.gmail.com>
+ <87bo6ci9xk.fsf@dell.be.48ers.dk> <51DD6469.4010504@gmail.com>
+ <20130710185808.56c3ac52@skate> <51DD94D9.6060001@zacarias.com.ar>
+ <87y59efgfj.fsf@dell.be.48ers.dk>
+ <alpine.LSU.2.10.1307111112110.7453@schiller.dip.t-dialin.net>
+Message-ID: <87txjzcyu8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11 July 2013 14:02, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas, All,
->
-> On Thursday 11 July 2013 13:46:46 Thomas Petazzoni wrote:
->> On Thu, 11 Jul 2013 12:33:42 +0200, Bj?rn Forsman wrote:
->> > How about going all the way: clean out the environment completely, and
->> > explicitly add env vars to builders as needed. That would result in a
->> > more deterministic build environment, IMHO.
->>
->> I don't think this works: there are a bunch of environment variables
->> that we accept (to tune the uClibc config file, the Busybox config
->> file, the host gcc to use, etc.). And we also accept the feature that
->> all BR2_<foo> values can be overridden using environment variables. So
->> I don't think wiping out the entire environment is possible. However,
->> we could /maybe/ (if that's possible), wipe out the entire environment
->> *except* the BR2_<foo> variables, and the few other variables that we
->> explicitly accept. But I'm not sure how to achieve that.
->
-> Even that would not work. For example, I have LD_PRELOAD set to tsocksify
-> all network connections, without which I could not download anything.
->
-> So, even though LD_PRELOAD looks like a good candidate to dump, it can be
-> valid in some cases.
->
-> I believe it is much better that Buildroot chokes on a select list of
-> variables, warn about a few others, and accept the rest.
+>>>>> "Jens" == Schleusener, Jens <Jens.Schleusener@t-online.de> writes:
 
-If you think about it, the downloader is actually a bit different from
-the builder. At some point Buildroot will (like all other build
-systems) grow support for checking each downloaded file against
-checksums specified in the package build file. And once you have that,
-it doesn't really matter how dirty the environment in the *downloader*
-is, because it will be guaranteed to match the checksum, or fail. It
-is only in the *builder* that the environment must be clean.
+Hi Jens,
 
-Are there any reasons for allowing env vars, other than BR2_*, to slip
-through from host and into the Buildroot *builder* processes? I cannot
-think of any.
+ Jens> Hmm, I am the fossies.org admin and I am not really sure what is the
+ Jens> right fix respectively fossies.org behaviour.
 
-Best regards,
-Bj?rn Forsman
+ Jens> 1) Remark: If you would use the wget option "--content-disposition"
+ Jens> you would get after downloading using the URL
+ Jens> http://fossies.org/linux/misc/dosfstools-3.0.16.tar.gz according the
+ Jens> "301 Moved Permanently"-Location a file named "dosfstools-3.0.20.tar.gz".
+
+ Jens> 2) Changed behaviour: fossies.org now issued a "410 Gone" HTTP status
+ Jens> with some information in the HTML code about the reason together with
+ Jens> a link to the current (only) available newer version of the requested
+ Jens> package tarball.
+
+That's good, thanks a lot.
+
+ Jens> 3) Remark: fossies.org isn't a mirror and is unsuitable for
+ Jens> downloading special legacy versions since it tries to offer only
+ Jens> "fresh" current versions.
+
+Ok, noted. The dosfstools package has been changed in git to no longer
+use fossies.org, so this is just for people using older releases.
+
+-- 
+Bye, Peter Korsgaard
