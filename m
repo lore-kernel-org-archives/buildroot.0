@@ -1,97 +1,50 @@
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Fri, 12 Jul 2013 10:39:50 +0200
-Subject: [Buildroot] [PATCH] toolchain: Add BR2_TOOLCHAIN_HAS_THREADS_NATIVE
-Message-ID: <1373618390-7548-1-git-send-email-mjonker@synopsys.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 12 Jul 2013 07:27:43 -0300
+Subject: [Buildroot] [PATCH] busybox: register mdev as hotplug helper
+In-Reply-To: <CAAXf6LVSOCLS54uAwJHH6DwenrexRY=17v_PoOe_KTnmWWTvWg@mail.gmail.com>
+References: <1373574654-32427-1-git-send-email-gustavo@zacarias.com.ar>
+ <CAAXf6LVSOCLS54uAwJHH6DwenrexRY=17v_PoOe_KTnmWWTvWg@mail.gmail.com>
+Message-ID: <51DFDA1F.60904@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This can be used to check dependencies for packages that need NPTL;
-furthermore it can be used to determine the number of stages required
-for building the toolchain.
+On 07/12/2013 04:01 AM, Thomas De Schampheleire wrote:
+> In linux/linux.mk, there mdev is already set as hotplug helper in the
+> kernel configuration.
+> How does this change relate to it? At first sight, it seems unnecessary.
+> 
+> I did notice that setting mdev as hotplug helper in the kernel
+> configuration, can seriously impact boot performance. On a board with
+> a not so fast single core processor (around 500MHz) boot time until
+> userspace became about 10 seconds coming from 2s. We solved this by
+> setting no helper in the kernel configuration (and telling buildroot
+> to use just devtmpfs instead of mdev), and manually copying S10mdev to
+> the rootfs. Then, mdev is run once during userspace init.
+> This doesn't give automatic firmware loading, but that would be solved
+> by your above patch, I think.
+> 
+> Did anyone else notice such slowdown behavior?
 
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
----
- package/uclibc/Config.in                   |    1 +
- toolchain/Config.in                        |    1 +
- toolchain/toolchain-common.in              |    3 +++
- toolchain/toolchain-crosstool-ng/Config.in |    1 +
- toolchain/toolchain-external/Config.in     |   11 +++++++++++
- 5 files changed, 17 insertions(+)
-
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index f309243..d810495 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -114,6 +114,7 @@ choice
- 	config BR2_PTHREADS_NATIVE
- 		bool "Native POSIX Threading (NPTL)"
- 	        select BR2_TOOLCHAIN_HAS_THREADS
-+	        select BR2_TOOLCHAIN_HAS_THREADS_NATIVE
- 		depends on !BR2_ARM_OABI
- 		depends on !BR2_x86_i386
- 		depends on !BR2_avr32
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 53d2573..b66cdcb 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -9,6 +9,7 @@ config BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_ENABLE_LOCALE
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	select BR2_TOOLCHAIN_HAS_THREADS_NATIVE
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 
- config BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 7c9b842..59bdad9 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -29,6 +29,9 @@ config BR2_TOOLCHAIN_HAS_THREADS
- config BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	bool
- 
-+config BR2_TOOLCHAIN_HAS_THREADS_NATIVE
-+	bool
-+
- config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 	bool
- 
-diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
-index 7cfd8c2..d057178 100644
---- a/toolchain/toolchain-crosstool-ng/Config.in
-+++ b/toolchain/toolchain-crosstool-ng/Config.in
-@@ -128,6 +128,7 @@ choice
- 		bool "Native POSIX Threading (NPTL)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
- 		select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+		select BR2_TOOLCHAIN_HAS_THREADS_NATIVE
- endchoice
- 
- endif # BR2_TOOLCHAIN_CTNG
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 130b705..71cbff1 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -899,6 +899,17 @@ config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
- 	  debugging support. If you don't know, leave the default
- 	  value, Buildroot will tell you if it's correct or not.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NATIVE
-+	bool "Toolchain has NPTL support?"
-+	depends on BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_NATIVE
-+	default y
-+	help
-+	  Select this option if your external toolchain has native
-+	  POSIX thread library (NPTL) support. If you don't know,
-+	  leave the default value, Buildroot will tell you if it's
-+	  correct or not.
-+
- endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
- 
- config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
--- 
-1.7.9.5
+I actually came up with this patch because a user on a pandaboard had
+issues getting the wifi up (wl127x, needs firmware).
+At first he was running a static device tree configuration which
+explained the problem.
+He then switched to mdev and things didn't work, and switching to udev
+did make it work.
+So i looked at S10mdev and saw that the hotplug helper wasn't registered.
+It's likely that he didn't make clean between switching to mdev and the
+kernel hence didn't get reconfigured/rebuilt and that was the problem.
+However as you say, if the kernel has pre-registered the hotplug helper
+in the configuration all the hotplug events at boot time are probably
+getting called (all the bus interfaces and whatnot).
+I tend to use my own initscripts tree since it's quite tweaked regarding
+the bare default (i basically nuke all of buildroots initscripts and
+replace them with my own), and on an arm920t (slow really, 180 mhz) i
+have no major delay when using this method.
+The only "drawback" would be missing usb devices if they're already
+plugged in and the usb controller driver isn't a module - but really
+that's coldplug-world.
+Regards.
