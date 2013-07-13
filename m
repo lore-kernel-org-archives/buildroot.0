@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jul 2013 00:27:32 +0200
-Subject: [Buildroot] [PATCHv2 09/25] toolchain/helpers: only check for an
-	EABI toolchain
+Date: Sun, 14 Jul 2013 00:27:31 +0200
+Subject: [Buildroot] [PATCHv2 08/25] pkg-infra: dump all ARM OABI references
+	when setting ABI
 In-Reply-To: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1373754468-7527-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1373754468-7527-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,32 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-... since we only support EABI now.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ package/Makefile.in | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 0398b63..95217e7 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -280,13 +280,8 @@ check_uclibc = \
- check_arm_abi = \
- 	__CROSS_CC=$(strip $1) ; \
- 	EXT_TOOLCHAIN_TARGET=`LANG=C $${__CROSS_CC} -v 2>&1 | grep ^Target | cut -f2 -d ' '` ; \
--	if echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
--		EXT_TOOLCHAIN_ABI="eabi" ; \
--	else \
--		EXT_TOOLCHAIN_ABI="oabi" ; \
--	fi ; \
--	if [ x$(BR2_ARM_EABI) = x"y" -a $${EXT_TOOLCHAIN_ABI} = "oabi" ] ; then \
--		echo "Incorrect ABI setting" ; \
-+	if ! echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
-+		echo "External toolchain uses the unsuported OABI" ; \
- 		exit 1 ; \
- 	fi
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 405b3e4..06db122 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -30,11 +30,10 @@ LIBC=gnu
+ endif
  
+ # The ABI suffix is a bit special on ARM, as it needs to be
+-# -uclibcgnueabi for uClibc EABI, -uclibc for uClibc OABI, -gnueabi
+-# for glibc EABI and -gnu for glibc OABI. This means that the LIBC and
+-# ABI aren't strictly orthogonal, which explains why we need the test
+-# on LIBC below.
+-ifeq ($(BR2_ARM_EABI),y)
++# -uclibcgnueabi for uClibc EABI, and -gnueabi for glibc EABI.
++# This means that the LIBC and ABI aren't strictly orthogonal,
++# which explains why we need the test on LIBC below.
++ifeq ($(BR2_arm)$(BR2_armeb),y)
+ ifeq ($(LIBC),uclibc)
+ ABI=gnueabi
+ else
 -- 
 1.8.1.2
