@@ -1,50 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Jul 2013 16:07:20 +0200
-Subject: [Buildroot] [PATCH] Makefile: unset MAKEFLAGS
-In-Reply-To: <CAEYzJUHpYVBAgHnrj73aMwj8pw+p_bScMToM-BSZh3bm--q2gA@mail.gmail.com>
-References: <1373222539-8915-1-git-send-email-s.martin49@gmail.com>
- <CAEYzJUFzijo=jM+s4P_ZFAH-E_-MvhKZbcjHmNUBypiu5pF6zQ@mail.gmail.com>
- <20130711134646.6ef211dd@skate>
- <201307111402.34152.yann.morin.1998@free.fr>
- <CAEYzJUHpYVBAgHnrj73aMwj8pw+p_bScMToM-BSZh3bm--q2gA@mail.gmail.com>
-Message-ID: <20130713160720.34d850a8@skate>
+Date: Sat, 13 Jul 2013 16:11:47 +0200
+Subject: [Buildroot] [PATCH v5 2/3] ti-gfx: add new package
+In-Reply-To: <1373639678-7357-2-git-send-email-spenser@gillilanding.com>
+References: <1373639678-7357-1-git-send-email-spenser@gillilanding.com>
+ <1373639678-7357-2-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130713161147.7ef19265@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bj?rn Forsman,
+Dear Spenser Gilliland,
 
-On Fri, 12 Jul 2013 19:07:58 +0200, Bj?rn Forsman wrote:
+On Fri, 12 Jul 2013 09:34:37 -0500, Spenser Gilliland wrote:
 
-> > I believe it is much better that Buildroot chokes on a select list of
-> > variables, warn about a few others, and accept the rest.
-> 
-> If you think about it, the downloader is actually a bit different from
-> the builder. At some point Buildroot will (like all other build
-> systems) grow support for checking each downloaded file against
-> checksums specified in the package build file. And once you have that,
-> it doesn't really matter how dirty the environment in the *downloader*
-> is, because it will be guaranteed to match the checksum, or fail. It
-> is only in the *builder* that the environment must be clean.
+> diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
+> index bd8040d..00e1f19 100644
+> --- a/package/opengl/libegl/libegl.mk
+> +++ b/package/opengl/libegl/libegl.mk
+> @@ -10,6 +10,10 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+>  LIBEGL_DEPENDENCIES += rpi-userland
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_TI_GFX),y)
+> +LIBEGL_DEPENDENCIES += ti-gfx
+> +endif
 
-I am not sure to understand why you separate the download side and the
-build side here. Both are done with Buildroot makefiles, there is
-nothing different in terms of environment variables between those
-steps.
+No, if you have introduced the powervr virtual package, then libegl
+should not directly depend on ti-gfx, but instead libegl should depend
+on powervr, which itself will depend on ti-gfx.
 
-> Are there any reasons for allowing env vars, other than BR2_*, to slip
-> through from host and into the Buildroot *builder* processes? I cannot
-> think of any.
+Generally speaking, I think this introduction of the powervr virtual
+package is a bit unfortunate for now. Your ti-gfx package was almost
+ready for merging, and now it's no longer the case. We should stop
+making further feature additions, and focus on getting ti-gfx merged.
+Later on, *when* a second PowerVR package appears, it would have been
+time to do the necessary work.
 
-Yes, we allow passing HOSTCC, UCLIBC_CONFIG_FILE, BUSYBOX_CONFIG_FILE,
-and a bunch of other environment variables (see the Buildroot manual).
-Also, some environment variables like LD_LIBRARY_PATH or LD_PRELOAD
-should just be usable by the user, if he has some funky setup that
-requires those environment variables to hold special values.
+But well, now that you've starting doing it, I guess it doesn't make
+sense to go backward and remove it again. But then please do it
+cleanly:
 
-Best regards,
+ * PATCH 1: add the virtual powervr package, with the necessary changes
+   to libegl.mk and libgles2.mk, to add the libegl -> powervr and
+   libgles2 -> powervr dependencies.
+
+ * PATCH 2: add the ti-gfx package, with the necessary change to
+   powervr.mk to add the powervr -> ti-gfx dependency.
+
+Other than that, I think the package is ready now.
+
+Thanks!
 
 Thomas
 -- 
