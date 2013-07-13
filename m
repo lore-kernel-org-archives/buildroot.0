@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jul 2013 00:27:42 +0200
-Subject: [Buildroot] [PATCHv2 19/25] configs: use new EABIhf option for
-	beaglebone_defconfig
+Date: Sun, 14 Jul 2013 00:27:48 +0200
+Subject: [Buildroot] [PATCHv2 25/25] arch: use tabs instead of spaces in
+	Config.in files
 In-Reply-To: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1373754468-7527-20-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1373754468-7527-26-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,46 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/beaglebone_defconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/Config.in       | 2 +-
+ arch/Config.in.avr32 | 4 ++--
+ arch/Config.in.bfin  | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index a141320..d6b5c31 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -1,8 +1,7 @@
- # architecture
- BR2_arm=y
- BR2_cortex_a8=y
--BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-fpu=vfpv3 --with-float=hard"
--# BR2_SOFT_FLOAT is not set
-+BR2_ARM_EABIHF=y
+diff --git a/arch/Config.in b/arch/Config.in
+index bd43e94..7452643 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_ARCH_IS_64
+-       bool
++	bool
  
- # system
- BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
+ config BR2_SOFT_FLOAT
+ 	bool
+diff --git a/arch/Config.in.avr32 b/arch/Config.in.avr32
+index ebf8454..199c150 100644
+--- a/arch/Config.in.avr32
++++ b/arch/Config.in.avr32
+@@ -1,5 +1,5 @@
+ config BR2_ARCH
+-       default "avr32"
++	default "avr32"
+ 
+ config BR2_ENDIAN
+-       default "BIG"
++	default "BIG"
+diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+index f755c8d..415fc89 100644
+--- a/arch/Config.in.bfin
++++ b/arch/Config.in.bfin
+@@ -66,7 +66,7 @@ config BR2_ARCH
+ 	default "bfin"
+ 
+ config BR2_ENDIAN
+-        default "LITTLE"
++	default "LITTLE"
+ 
+ config BR2_GCC_TARGET_CPU
+ 	default bf606		if BR2_bf606
 -- 
 1.8.1.2
