@@ -1,190 +1,142 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jul 2013 00:27:45 +0200
-Subject: [Buildroot] [PATCHv2 22/25] arch/arm: add support for Thumb2
+Date: Sun, 14 Jul 2013 00:27:43 +0200
+Subject: [Buildroot] [PATCHv2 20/25] toolchain-external: update config
+	options after EABIhf introduction
 In-Reply-To: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1373754468-7527-23-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1373754468-7527-21-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, we were using the default ARM instruction set, as used by
-the toolchain: the 32 bits ARM instruction set for the internal
-backend, and for external toolchain, whatever default was chosen when
-the toolchain was generated.
+The introduction of the EABIhf ABI requires a few updates to the
+configuration options for external toolchains, in order to ensure that
+the user doesn't do any invalid selection. In detail:
 
-This commit adds support for the Thumb2 instruction set. To do so, it:
+ * The Linaro ARM toolchains now depend on BR2_ARM_EABIHF, because
+   that's the ABI they use, and it is incompatible with EABI. The
+   comment about the availability of Linaro toolchains is updated to
+   inform users selecting EABI that they should select EABIhf if they
+   want to see Linaro toolchains.
 
- * provides a menuconfig choice between ARM and Thumb2. The choice is
-   only shown when Thumb2 is supported, i.e on ARMv7-A CPUs.
+ * The Sourcery CodeBench toolchains now depend on BR2_ARM_EABI,
+   because that's the ABI they use. A comment is added to inform users
+   that have selected EABIhf that Sourcery CodeBench are only
+   available when EABI is used.
 
- * passes the --with-mode={arm,thumb} option when building gcc in the
-   internal backend. This tells the compiler which type of
-   instructions it should generate.
-
- * passes the m{arm,thumb} option in the external toolchain
-   wrapper. ARM and Thumb2 code can freely be mixed together, so the
-   fact that the C library has been built either ARM or Thumb2 and
-   that the rest of the code is built Thumb2 or ARM is not a problem.
+ * The Arago toolchains now depend on BR2_ARM_EABI, because that's the
+   ABI they use. The description of the ARMv7 Arago toolchain is also
+   slightly improved.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in                                     |  3 ++
- arch/Config.in.arm                                 | 36 ++++++++++++++++++++++
- package/gcc/gcc.mk                                 |  5 +++
- toolchain/toolchain-external/ext-tool.mk           |  5 +++
- .../toolchain-external/ext-toolchain-wrapper.c     |  3 ++
- 5 files changed, 52 insertions(+)
+ toolchain/toolchain-external/Config.in | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 8daeee3..bd43e94 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -201,6 +201,9 @@ config BR2_GCC_TARGET_FPU
- config BR2_GCC_TARGET_FLOAT_ABI
- 	string
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 130b705..324401f 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -8,6 +8,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_06
+ 	depends on BR2_arm
+ 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_ARM_EABIHF
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -27,6 +28,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_05
+ 	depends on BR2_arm
+ 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_ARM_EABIHF
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -46,6 +48,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_04
+ 	depends on BR2_arm
+ 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_ARM_EABIHF
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -60,14 +63,16 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_04
  
-+config BR2_GCC_TARGET_MODE
-+	string
-+
- # Set up target binary format
- choice
- 	prompt "Target Binary Format"
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 2b493c0..94c32c9 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -31,6 +31,9 @@ config BR2_ARM_CPU_HAS_VFPV4
- 	bool
- 	select BR2_ARM_CPU_HAS_VFPV3
+ 	  To use this toolchain, you must disable soft float usage.
  
-+config BR2_ARM_CPU_HAS_THUMB2
-+	bool
-+
- choice
- 	prompt "Target Architecture Variant"
- 	depends on BR2_arm || BR2_armeb
-@@ -65,22 +68,27 @@ config BR2_cortex_a5
- 	bool "cortex-A5"
- 	select BR2_ARM_CPU_MAYBE_HAS_NEON
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV4
-+	select BR2_ARM_CPU_HAS_THUMB2
- config BR2_cortex_a7
- 	bool "cortex-A7"
- 	select BR2_ARM_CPU_HAS_NEON
- 	select BR2_ARM_CPU_HAS_VFPV4
-+	select BR2_ARM_CPU_HAS_THUMB2
- config BR2_cortex_a8
- 	bool "cortex-A8"
- 	select BR2_ARM_CPU_HAS_NEON
- 	select BR2_ARM_CPU_HAS_VFPV3
-+	select BR2_ARM_CPU_HAS_THUMB2
- config BR2_cortex_a9
- 	bool "cortex-A9"
- 	select BR2_ARM_CPU_MAYBE_HAS_NEON
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV3
-+	select BR2_ARM_CPU_HAS_THUMB2
- config BR2_cortex_a15
- 	bool "cortex-A15"
- 	select BR2_ARM_CPU_HAS_NEON
- 	select BR2_ARM_CPU_HAS_VFPV4
-+	select BR2_ARM_CPU_HAS_THUMB2
- config BR2_fa526
- 	bool "fa526/626"
- config BR2_pj4
-@@ -275,6 +283,30 @@ config BR2_ARM_FPU_NEON_VFPV4
+-comment "Linaro toolchains available for Cortex-A{5,8,9,15}"
++comment "Linaro toolchains available for Cortex-A{5,7,8,9,15} and the EABIhf ABI"
+ 	depends on BR2_arm
+ 	depends on BR2_GCC_TARGET_ARCH != "armv7-a"
++	depends on !BR2_ARM_EABIHF
  
- endchoice
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
+ 	bool "Sourcery CodeBench ARM 2013.05"
+ 	depends on BR2_arm
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_ARM_EABI
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -92,6 +97,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
+ 	bool "Sourcery CodeBench ARM 2012.03"
+ 	depends on BR2_arm
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_ARM_EABI
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -116,6 +122,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	bool "Sourcery CodeBench ARM 2011.09"
+ 	depends on BR2_arm
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_ARM_EABI
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -136,11 +143,17 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	      Select BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -mthumb
  
-+choice
-+	prompt "ARM instruction set"
-+	depends on BR2_ARM_CPU_HAS_THUMB2
++comment "Sourcery CodeBench toolchains available for the EABI ABI"
++	depends on BR2_arm
++	depends on !BR2_ARM_EABI
 +
-+config BR2_ARM_INSTRUCTIONS_ARM_CHOICE
-+	bool "ARM"
-+	help
-+	  This option instructs the compiler to generate regular ARM
-+	  instructions, that are all 32 bits wide.
-+
-+config BR2_ARM_INSTRUCTIONS_THUMB2
-+	bool "Thumb2"
-+	help
-+	  This option instructions the compiler to generate Thumb2
-+	  instructions, which allows to mix 16 bits instructions and
-+	  32 bits instructions. This generally provides a much smaller
-+	  compiled binary size.
-+
-+endchoice
-+
-+config BR2_ARM_INSTRUCTIONS_ARM
-+	def_bool y
-+	depends on !BR2_ARM_INSTRUCTIONS_THUMB2
-+
- config BR2_ARCH
- 	default "arm"	if BR2_arm
- 	default "armeb"	if BR2_armeb
-@@ -344,3 +376,7 @@ config BR2_GCC_TARGET_FLOAT_ABI
- 	default "soft"		if BR2_ARM_SOFT_FLOAT
- 	default "softfp"	if !BR2_ARM_SOFT_FLOAT && BR2_ARM_EABI
- 	default "hard"		if !BR2_ARM_SOFT_FLOAT && BR2_ARM_EABIHF
-+
-+config BR2_GCC_TARGET_MODE
-+	default "arm"		if BR2_ARM_INSTRUCTIONS_ARM
-+	default "thumb"		if BR2_ARM_INSTRUCTIONS_THUMB2
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index bfc41a4..d620980 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -177,6 +177,11 @@ ifneq ($(GCC_TARGET_FLOAT_ABI),)
- HOST_GCC_COMMON_CONF_OPT += --with-float=$(GCC_TARGET_FLOAT_ABI)
- endif
+ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
+ 	bool "Arago ARMv7 2011.09"
+ 	depends on BR2_arm
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
++	depends on BR2_ARM_EABI
++	depends on BR2_ARM_CPU_HAS_VFPV3 || BR2_ARM_CPU_MAYBE_HAS_VFPV3
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -149,9 +162,11 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
+ 	  Texas Instruments Arago 2011.09 toolchain, with gcc 4.5.3,
+ 	  binutils 2.20.1, glibc 2.12, gdb 7.2.
  
-+GCC_TARGET_MODE = $(call qstrip,$(BR2_GCC_TARGET_MODE))
-+ifneq ($(GCC_TARGET_MODE),y)
-+HOST_GCC_COMMON_CONF_OPT += --with-mode=$(GCC_TARGET_MODE)
-+endif
-+
- # Branding works on >= 4.3
- ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
- HOST_GCC_COMMON_CONF_OPT += \
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 212267e..cacb5d5 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -147,6 +147,7 @@ CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
- CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
- CC_TARGET_FLOAT_:=$(call qstrip,$(BR2_GCC_TARGET_FLOAT))
- CC_TARGET_FPU_:=$(call qstrip,$(BR2_GCC_TARGET_FPU))
-+CC_TARGET_MODE_:=$(call qstrip,$(BR2_GCC_TARGET_MODE))
+-	  This toolchain uses -mfloat-abi=softfp (i.e use FPU
+-	  instructions, but pass floating point function arguments in
+-	  non-floating point registers).
++	  This toolchain uses -mfloat-abi=softfp (i.e can use FPU
++	  instructions, but passes floating point function arguments
++	  in integer registers), and requires a VFPv3 floating point
++	  unit to work properly. This unit is available on most
++	  Cortex-A ARM processors, but not all.
  
- # march/mtune/floating point mode needs to be passed to the external toolchain
- # to select the right multilib variant
-@@ -178,6 +179,10 @@ ifneq ($(CC_TARGET_FPU_),)
- TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=$(CC_TARGET_FPU_)
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_FPU='"$(CC_TARGET_FPU_)"'
- endif
-+ifneq ($(CC_TARGET_MODE_),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -m$(CC_TARGET_MODE_)
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_MODE='"$(CC_TARGET_MODE_)"'
-+endif
- ifeq ($(BR2_BINFMT_FLAT),y)
- TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_BINFMT_FLAT
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index d3319e9..5ef6e4b 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -47,6 +47,9 @@ static char *predef_args[] = {
- #ifdef BR_SOFTFLOAT
- 	"-msoft-float",
- #endif /* BR_SOFTFLOAT */
-+#ifdef BR_MODE
-+	"-m" BR_MODE,
-+#endif
- #ifdef BR_64
- 	"-m64",
- #endif
+ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+ 	bool "Arago ARMv5 2011.09"
+@@ -160,6 +175,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+ 	depends on BR2_GCC_TARGET_ARCH != "armv4t" && \
+ 		BR2_GCC_TARGET_ARCH != "armv4" && \
+ 		BR2_GCC_TARGET_ARCH != "armv5t"
++	depends on BR2_ARM_EABI
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
 -- 
 1.8.1.2
