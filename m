@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jul 2013 00:27:26 +0200
-Subject: [Buildroot] [PATCHv2 03/25] arch/arm: remove OABI option
+Date: Sun, 14 Jul 2013 00:27:27 +0200
+Subject: [Buildroot] [PATCHv2 04/25] arch/arm: remove setting gcc's apcs-gnu
+	ABI (aka OABI)
 In-Reply-To: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1373754468-7527-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1373754468-7527-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,49 +13,23 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-OABI is more than legacy, it's dead.
-
-New developments should go with EABI, since it so much better.
-From the Debian EABI page [0] :
-  - floating point performance, with or without an FPU is very much faster
-  - mixing soft and hardfloat code is possible
-  - structure packing is not as painful as it used to be
-  - a more efficient syscall convention
-  - more compatibility with various tools
-
-[0] http://wiki.debian.org/ArmEabiPort
-
-[Thomas: keep the ABI choice, as we are going to introduce EABIhf later].
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in.arm | 7 -------
- 1 file changed, 7 deletions(-)
+ arch/Config.in.arm | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 983cac4..4daa91f 100644
+index 4daa91f..027dac2 100644
 --- a/arch/Config.in.arm
 +++ b/arch/Config.in.arm
-@@ -72,19 +72,12 @@ choice
- 	help
- 	  Application Binary Interface to use
+@@ -142,5 +142,4 @@ config BR2_GCC_TARGET_ARCH
+ 	default "iwmmxt"	if BR2_iwmmxt
  
--	  Note:
--	    Using OABI is discouraged.
--
- config BR2_ARM_EABI_CHOICE
- 	bool "EABI"
--config BR2_ARM_OABI
--	bool "OABI"
--	depends on !BR2_GCC_VERSION_4_7_X
- endchoice
- 
- config BR2_ARM_EABI
- 	def_bool y
--	depends on !BR2_ARM_OABI
- 
- config BR2_ARM_ENABLE_NEON
- 	bool "Enable NEON SIMD extension support"
+ config BR2_GCC_TARGET_ABI
+-	default "apcs-gnu"	if BR2_ARM_OABI
+-	default "aapcs-linux"	if BR2_ARM_EABI
++	default "aapcs-linux"
 -- 
 1.8.1.2
