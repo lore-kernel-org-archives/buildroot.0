@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Jul 2013 19:14:41 +0200
-Subject: [Buildroot] [PATCH v5 2/3] ti-gfx: add new package
-In-Reply-To: <CAEBucnCzR0mMnch+TbcFZJ3o=fBTDM5NZ1BwoRUhOzROiU+fiQ@mail.gmail.com>
+Date: Sat, 13 Jul 2013 19:27:53 +0200
+Subject: [Buildroot] [PATCH v5 3/3] qt: add powervr and opengl
+In-Reply-To: <CAEBucnANcfix57Ga40EAkDD+dJyHdy8G-aF63HsxWHJBSqhfXw@mail.gmail.com>
 References: <1373639678-7357-1-git-send-email-spenser@gillilanding.com>
- <1373639678-7357-2-git-send-email-spenser@gillilanding.com>
- <20130713161147.7ef19265@skate>
- <CAEBucnCzR0mMnch+TbcFZJ3o=fBTDM5NZ1BwoRUhOzROiU+fiQ@mail.gmail.com>
-Message-ID: <20130713191441.17ffdb9e@skate>
+ <1373639678-7357-3-git-send-email-spenser@gillilanding.com>
+ <20130713161320.4a7174b3@skate>
+ <CAEBucnANcfix57Ga40EAkDD+dJyHdy8G-aF63HsxWHJBSqhfXw@mail.gmail.com>
+Message-ID: <20130713192753.5128c5a4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +15,17 @@ To: buildroot@busybox.net
 
 Dear Spenser Gilliland,
 
-On Sat, 13 Jul 2013 12:08:45 -0500, Spenser Gilliland wrote:
+On Sat, 13 Jul 2013 11:24:04 -0500, Spenser Gilliland wrote:
 
-> > No, if you have introduced the powervr virtual package, then libegl
-> > should not directly depend on ti-gfx, but instead libegl should depend
-> > on powervr, which itself will depend on ti-gfx.
+> > In the patch set I had sent to you privately about Qt4/PowerVR, there
+> > was an additional patch, which was really necessary. Why did you remove
+> > it?
 > 
-> I don't believe this to be correct.  There is not specific dependency
-> chain as each powervr package implements its own set of egl/gles/vg.
-> The point of the PowerVR package is for each package that takes
-> advantage of PowerVR specific features.  IE. QT4.
-> 
-> Therefore, ti-gfx should depend on libgles, libegl,and powervr.
+> It's not removed; both patches are combined.  They both solve the
+> issue of fixing include paths. So, I didn't think it was necessary to
+> keep them split.
 
-I guess you mean "should provide" and not "should depend". But ok, as
-discussed on IRC, I see what you mean. We consider libegl, libgles2 and
-powervr to be separate virtual features, and it happens that ti-gfx
-provides all of them.
-
-Best regards,
+Ok, thanks for the precision!
 
 Thomas
 -- 
