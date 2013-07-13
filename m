@@ -1,74 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jul 2013 00:27:39 +0200
-Subject: [Buildroot] [PATCHv2 16/25] gcc: take into account ARM floating
-	point capabilities
+Date: Sun, 14 Jul 2013 00:27:40 +0200
+Subject: [Buildroot] [PATCHv2 17/25] toolchain: remove the old BR2_VFP_FLOAT
+	option
 In-Reply-To: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1373754468-7527-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1373754468-7527-18-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ARM EABIhf support was introduced in gcc 4.6.x, so versions
-earlier than this one should not be used when EABIhf is selected.
-
-The ARM VFPv4 support was introduced in gcc 4.5.x, so versions earlier
-than this one should not be used when VFPv4 is used.
+Now that we have a much better way of selecting between the various
+VFP versions and capabilities, the BR2_VFP_FLOAT version no longer
+makes sense. This commit gets rid of it, and adds the appropriate
+Config.in.legacy code.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/Config.in.host | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ Config.in.legacy                                     |  9 +++++++++
+ toolchain/toolchain-buildroot/Config.in.2            | 12 ------------
+ toolchain/toolchain-external/ext-tool.mk             |  5 -----
+ toolchain/toolchain-external/ext-toolchain-wrapper.c |  3 ---
+ 4 files changed, 9 insertions(+), 20 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index a529d14..1f9aa9a 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -22,15 +22,22 @@ choice
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 01bf900..b92b656 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -76,6 +76,15 @@ config BR2_ELF2FLT
+ 	  BR2_PACKAGE_HOST_ELF2FLT due to the conversion of elf2flt to
+ 	  the package infrastructure.
  
- 	config BR2_GCC_VERSION_4_3_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
-+		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.3.x"
++config BR2_VFP_FLOAT
++	bool "the ARM VFP floating point option has been renamed"
++	select BR2_LEGACY
++	help
++	  Due to a major refactoring of the floating-point handling of
++	  the ARM architecture support, the BR2_VFP_FLOAT option has
++	  been replaced with a choice of options that allows to select
++	  between various VFP versions/capabilities.
++
+ ###############################################################################
+ comment "Legacy options removed in 2013.05"
  
- 	config BR2_GCC_VERSION_4_4_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
- 		bool "gcc 4.4.x"
-+		# ARM EABIhf support appeared in gcc 4.6
-+		depends on !BR2_ARM_EABIHF
-+		# VFPv4 support appeared in gcc 4.5
-+		depends on !BR2_ARM_FPU_VFPV4 && !BR2_ARM_FPU_VFPV4D16
+diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
+index e223d9d..a9c102f 100644
+--- a/toolchain/toolchain-buildroot/Config.in.2
++++ b/toolchain/toolchain-buildroot/Config.in.2
+@@ -28,16 +28,4 @@ config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
  
- 	config BR2_GCC_VERSION_4_5_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
-+		# ARM EABIhf support appeared in gcc 4.6
-+		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.5.x"
+ source "package/elf2flt/Config.in.host"
  
- 	config BR2_GCC_VERSION_4_6_X
-@@ -40,17 +47,20 @@ choice
+-config BR2_VFP_FLOAT
+-	bool "Use ARM Vector Floating Point unit"
+-	depends on !BR2_SOFT_FLOAT
+-	depends on BR2_arm || BR2_armeb
+-	help
+-	  Setting this option will enable the "-mfpu=vfp" option.
+-	  If your ARM CPU has a Vector Floating Point Unit (VFP)
+-	  and the toolchain supports the option, then the
+-	  code can be optimized.
+-
+-	  Most people will answer N.
+-
+ endif
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 814533e..212267e 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -196,11 +196,6 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
+ endif
  
- 	config BR2_GCC_VERSION_4_7_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
-+		depends on !BR2_ARM_OABI
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.7.x"
- 
- 	config BR2_GCC_VERSION_4_8_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
-+		depends on !BR2_ARM_OABI
- 		bool "gcc 4.8.x"
- 
- 	config BR2_GCC_VERSION_SNAP
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
-+		depends on !BR2_ARM_OABI
- 		bool "gcc snapshot"
- endchoice
- 
+-ifeq ($(BR2_VFP_FLOAT),y)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=vfp
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_VFPFLOAT=1
+-endif
+-
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
+ TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(TOOLCHAIN_EXTERNAL_DIR)/.extracted
+ endif
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index e504ff2..d3319e9 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -47,9 +47,6 @@ static char *predef_args[] = {
+ #ifdef BR_SOFTFLOAT
+ 	"-msoft-float",
+ #endif /* BR_SOFTFLOAT */
+-#ifdef BR_VFPFLOAT
+-	"-mfpu=vfp",
+-#endif /* BR_VFPFLOAT */
+ #ifdef BR_64
+ 	"-m64",
+ #endif
 -- 
 1.8.1.2
