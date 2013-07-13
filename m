@@ -1,130 +1,189 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Jul 2013 08:30:05 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-07-12
-Message-ID: <20130713063005.E60CD52C0F5@lolut.humanoidz.org>
+From: Rohan Fletcher <rohfledev@gmail.com>
+Date: Sat, 13 Jul 2013 21:19:17 +1200
+Subject: [Buildroot] [PATCH 1/2] python-pip: new package,
+	update python-setuptools, enable openssl for host python
+Message-ID: <1373707158-31756-1-git-send-email-rohfledev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2013-07-12
-===============================
+Added python-pip - a package manager for python. easy way of adding python packages to buildroot.
+Updated python-setuptools to version 0.8 - distribute and setuptools have now merged.
+Enabled ssl in host python config so pip can download packages over https.
 
-        success : 85 
-       failures : 57 
-       timeouts : 0  
-          TOTAL : 142
+Signed-off-by: Rohan Fletcher <rohfledev@gmail.com>
+---
+ package/Config.in                              |  2 +
+ package/python-pip/Config.in                   | 20 +++++++++
+ package/python-pip/python-pip.mk               | 58 ++++++++++++++++++++++++++
+ package/python-setuptools/python-setuptools.mk | 10 ++---
+ package/python/python.mk                       |  5 +--
+ 5 files changed, 87 insertions(+), 8 deletions(-)
+ create mode 100644 package/python-pip/Config.in
+ create mode 100644 package/python-pip/python-pip.mk
 
-Classification of failures by reason
-====================================
-
-             gdk-pixbuf-2.28.1 | 4 
-                 libffi-3.0.13 | 4 
-                 qt5base-5.0.2 | 2 
-               libglib2-2.36.3 | 2 
-                  connman-1.12 | 2 
-                  iozone-3_414 | 2 
-                    acl-2.2.52 | 2 
-            host-erlang-R15B01 | 2 
-                 cairo-1.12.10 | 2 
-make: *** [ezxml-legal-info... | 1 
-make: *** [/home/test/test/... | 1 
-make: *** [dnsmasq-legal-in... | 1 
-make: *** [libosip2-legal-i... | 1 
-make: *** [zlib-legal-info]... | 1 
-media-ctl-ac40b79f002a2315f... | 1 
-make: *** [gmp-legal-info] ... | 1 
-                      bash-4.2 | 1 
-make: *** [/home/test/test/... | 1 
-make: *** [dmidecode-legal-... | 1 
-               audiofile-0.3.6 | 1 
-make: *** [liblog4c-localti... | 1 
-                libosip2-3.6.0 | 1 
-make: *** [apr-util-legal-i... | 1 
-               celt051-0.5.1.3 | 1 
-make: *** [iptables-legal-i... | 1 
-                     m4-1.4.16 | 1 
-               binutils-2.21.1 | 1 
-                  samba-3.6.16 | 1 
-make: *** [cache-calibrator... | 1 
-                  fbterm-1.7.0 | 1 
-                openssl-1.0.1e | 1 
-                 nodejs-0.8.22 | 1 
-               pcsc-lite-1.8.6 | 1 
-                      qt-4.8.5 | 1 
-                libcurl-7.28.1 | 1 
-make: *** [python-legal-inf... | 1 
-          host-protobuf-c-0.15 | 1 
-                busybox-1.21.1 | 1 
-                  zeromq-3.2.3 | 1 
-                   cups-1.3.11 | 1 
-make: *** [bustle-legal-inf... | 1 
-make: *** [/home/test/test/... | 1 
-                 binutils-2.21 | 1 
-make: *** [fontconfig-legal... | 1 
-
-Detail of failures
-===================
-
-      mips |                     acl-2.2.52 | NOK | http://autobuild.buildroot.net/results/444bcf26f0348933314b23d630e4ac0ea64b1d7b/
-       arm |                     acl-2.2.52 | NOK | http://autobuild.buildroot.net/results/a85aec00df5e515dd825b2e8409815a67467addb/
-      sh4a |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/e62c1adee5a9e7adf296c7ac0c9cfa94b926feab/
-      i686 |                       bash-4.2 | NOK | http://autobuild.buildroot.net/results/bf7ab147cc74601a3c21234a1c407971a9ce659b/
-       arm |                  binutils-2.21 | NOK | http://autobuild.buildroot.net/results/8e5e3d6b7201c679aa559557ffd8dfd23e778f07/
-    xtensa |                binutils-2.21.1 | NOK | http://autobuild.buildroot.net/results/5bbeb1145daf5447dcb3abd5a478dec6a9ee8beb/
-       arc |                 busybox-1.21.1 | NOK | http://autobuild.buildroot.net/results/55adb41f2c0b8be511d017086028851caf68d505/
-      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/3ad9e18a1c0940e0c8985da5bbbb960fb485eea4/
-      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/ced57355b6dc89de154e64db6ad7d9f107d49593/
-  mips64el |                celt051-0.5.1.3 | NOK | http://autobuild.buildroot.net/results/a4e7d509f7c517c1cb953598c25d359d6f871268/
-     avr32 |                   connman-1.12 | NOK | http://autobuild.buildroot.net/results/227f3d5746286447bf7a9a784d3b6cfbbee1c9b4/
-     avr32 |                   connman-1.12 | NOK | http://autobuild.buildroot.net/results/b4245a89fa5a70c5e3ede234355e02571ad4dc15/
-   aarch64 |                    cups-1.3.11 | NOK | http://autobuild.buildroot.net/results/0e1b913e4b9a88dd95b15cb61cc71c4c9922e23e/
-    x86_64 |                   fbterm-1.7.0 | NOK | http://autobuild.buildroot.net/results/03a8c977cdb7082d0e31387e56880da921ddb7d0/
-   aarch64 |              gdk-pixbuf-2.28.1 | NOK | http://autobuild.buildroot.net/results/494fbda5e5e4e6cedd54c03d35e1fcb433ab7cdc/
-   aarch64 |              gdk-pixbuf-2.28.1 | NOK | http://autobuild.buildroot.net/results/27b42b1782add0437accba2f05e25ad6b4519c7d/
-   aarch64 |              gdk-pixbuf-2.28.1 | NOK | http://autobuild.buildroot.net/results/39bbe7e4a0bb51a188cb109253606fe1d99d2766/
-   aarch64 |              gdk-pixbuf-2.28.1 | NOK | http://autobuild.buildroot.net/results/7a542b9c6b0236765a3b7b79139177b88ef76cf7/
-      i686 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/324b9dcc96762ed3a959d0016515228def4d6361/
-      i686 |             host-erlang-R15B01 | NOK | http://autobuild.buildroot.net/results/544e0459594e7268085be93fa6db1383c42ca280/
-      i686 |           host-protobuf-c-0.15 | NOK | http://autobuild.buildroot.net/results/b266f27c4733306433cdd64ee79f474c72f244d5/
-    xtensa |                   iozone-3_414 | NOK | http://autobuild.buildroot.net/results/91e329eed07b90e8b9518efc05c7566e5e4b0656/
-     avr32 |                   iozone-3_414 | NOK | http://autobuild.buildroot.net/results/afab593be88d233e66244a497eca28c157e8638e/
-       arc |                 libcurl-7.28.1 | NOK | http://autobuild.buildroot.net/results/82e1d47352ba30c5fa9a7510eea736f26e1a222b/
-  mips64el |                  libffi-3.0.13 | NOK | http://autobuild.buildroot.net/results/a5f3677ee55a8e2f0ad5dd27cba96e0fd53aaa2f/
-  mips64el |                  libffi-3.0.13 | NOK | http://autobuild.buildroot.net/results/637a77f90ac5e3b8ffe79911aed3621eaf749c05/
-  mips64el |                  libffi-3.0.13 | NOK | http://autobuild.buildroot.net/results/2fee419b7be5dfc8fd930c4521350777efe4a1d3/
-  mips64el |                  libffi-3.0.13 | NOK | http://autobuild.buildroot.net/results/2e2b16071247c4015bd227ff38a13a381d77025c/
-microblaze |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/cd7fcffb371f7bb85782a633eb3df003be6696a0/
-       arm |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/c6a53cb3dd81fff60b397ccbfef500663a336b53/
-       arc |                 libosip2-3.6.0 | NOK | http://autobuild.buildroot.net/results/6c7d3669617edbb5723fcbc8eba0d2afb7ff3402/
-    xtensa |                      m4-1.4.16 | NOK | http://autobuild.buildroot.net/results/056b07ed433bbd93935a902907c40a90f9ba6a55/
-      bfin | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/493f12964e2edbab9d16ab0d55bb8f5d6ded71fa/
-      bfin | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/b76f8b8aa5620a9e31563021d8c4b12ca25bc0a5/
-      bfin | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/973f99d26c44659065b83970bf8c24fe03277bff/
-       arm | make: *** [apr-util-legal-i... | NOK | http://autobuild.buildroot.net/results/f857f14c0edc0b1750b9f0cca29d91978d24674b/
-    x86_64 | make: *** [bustle-legal-inf... | NOK | http://autobuild.buildroot.net/results/dca91da2649492e3949cc2711014f8859cd9abbd/
-    x86_64 | make: *** [cache-calibrator... | NOK | http://autobuild.buildroot.net/results/841c8018879649e093087c919c6a7254a93df29d/
-    x86_64 | make: *** [dmidecode-legal-... | NOK | http://autobuild.buildroot.net/results/913e61ba1e1c300ecb52d3a503822df50baee913/
-       arm | make: *** [dnsmasq-legal-in... | NOK | http://autobuild.buildroot.net/results/5e27edaa3f86cbce4ef9f13043332fa40432bbcc/
-      i686 | make: *** [ezxml-legal-info... | NOK | http://autobuild.buildroot.net/results/42a2a1bd488e91f4dc32cbbf6dd9b3540ffba5aa/
-      sh4a | make: *** [fontconfig-legal... | NOK | http://autobuild.buildroot.net/results/38bae255f6ee3bf8b09ce4d0ea541e62bebdc511/
-    x86_64 | make: *** [gmp-legal-info] ... | NOK | http://autobuild.buildroot.net/results/8fbf81af7f4fb57ae67d3db1eb9cfb0cc4e2bcc2/
-   powerpc | make: *** [iptables-legal-i... | NOK | http://autobuild.buildroot.net/results/1ba20db4cdc92da6edb89ab0d328f4bc04eb8ac3/
-       sh4 | make: *** [liblog4c-localti... | NOK | http://autobuild.buildroot.net/results/8771f7d4775a2c5377f1190fefd3865bfa38a015/
-       arm | make: *** [libosip2-legal-i... | NOK | http://autobuild.buildroot.net/results/2e8e34ae1e66dac244ee936ebe3f2def8b0233af/
-      i686 | make: *** [python-legal-inf... | NOK | http://autobuild.buildroot.net/results/9941e6901c75c244bde988ccd786a39a790d0f54/
-       arm | make: *** [zlib-legal-info]... | NOK | http://autobuild.buildroot.net/results/a664ac9db0d04beb9d7132afa858448b1fb84045/
-   powerpc | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/d4bdb5a2e18a925483013ca8c799d82dc15e91ed/
-       arm |                  nodejs-0.8.22 | NOK | http://autobuild.buildroot.net/results/89ee5ba047a26a8c7a612d0285b08780b70efbd4/
-microblaze |                 openssl-1.0.1e | NOK | http://autobuild.buildroot.net/results/f032779f49d81441cc75e28df3a1045b7e5d454f/
-  mips64el |                pcsc-lite-1.8.6 | NOK | http://autobuild.buildroot.net/results/2bd985e20c0f5799091869e17ff9e88edcac1223/
-    mipsel |                       qt-4.8.5 | NOK | http://autobuild.buildroot.net/results/36d6e07a9a2661919584e99686705abdeaf1d151/
-      i686 |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/16e009342aab5fe74225ca0d760fd22290f1491f/
-       arm |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/b1a9d14dc466aa257cd8a92b6c9c87db410a5801/
-       arc |                   samba-3.6.16 | NOK | http://autobuild.buildroot.net/results/24cca3c3668be9bc2a6eecf24b6c3f6dcd8c942e/
-     avr32 |                   zeromq-3.2.3 | NOK | http://autobuild.buildroot.net/results/5e07e16b5a33278901f7f5fe0b59a7b5e0310c61/
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 6d5ff01..d6678a3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -359,6 +359,8 @@ source "package/python-pyparsing/Config.in"
+ source "package/python-serial/Config.in"
+ source "package/python-setuptools/Config.in"
+ source "package/python-thrift/Config.in"
++comment "custom python modules"
++source "package/python-pip/Config.in"
+ endmenu
+ endif
+ source "package/python3/Config.in"
+diff --git a/package/python-pip/Config.in b/package/python-pip/Config.in
+new file mode 100644
+index 0000000..48f3b04
+--- /dev/null
++++ b/package/python-pip/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_PYTHON_PIP
++    bool "python-pip"
++    help
++      A tool for installing and managing Python packages.
++
++      http://www.pip-installer.org
++
++if BR2_PACKAGE_PYTHON_PIP
++
++config BR2_PACKAGE_PYTHON_PIP_MODULES_ADDITIONAL
++	string "Additional modules"
++	help
++	  List of space-separated python modules to install via pip.
++	  See 'pip help install' for available installation methods. 
++	  For repeatable builds, download and save tgz files or clone 
++	  git repos for the components you care about.
++
++	  Example: module-name module-name==1.3.4 /my/module/mymodule.tgz git://github.com/someuser/somemodule.git#v1.2
++
++endif
+diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
+new file mode 100644
+index 0000000..7cf8ab4
+--- /dev/null
++++ b/package/python-pip/python-pip.mk
+@@ -0,0 +1,58 @@
++
++#############################################################
++#
++# python-pip
++#
++#############################################################
++
++PYTHON_PIP_VERSION = 1.3.1
++PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
++PYTHON_PIP_SITE = https://pypi.python.org/packages/source/p/pip
++PYTHON_PIP_DEPENDENCIES = python python-setuptools host-python-setuptools host-python-pip
++
++# README.rst refers to the file "LICENSE" but it's not included
++
++define PYTHON_PIP_BUILD_CMDS
++	(cd $(@D); \
++	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++	$(HOST_DIR)/usr/bin/python setup.py build --executable=/usr/bin/python)
++endef
++
++define HOST_PYTHON_PIP_INSTALL_CMDS
++	(cd $(@D); PYTHONPATH=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
++endef
++
++PYTHON_PIP_MODULES_LIST=$(call qstrip, $(BR2_PACKAGE_PYTHON_PIP_MODULES_ADDITIONAL))
++
++ifneq ($(PYTHON_PIP_MODULES_LIST),)
++define PYTHON_PIP_INSTALL_MODULES
++	# Explanation of environment variables
++	# PATH: the staging dir is required here so that xslt-config can be found
++	# 	when trying to install the python lxml package
++	# PIP_DOWNLOAD_CACHE: all downloads go into the buildroot download folder
++	# PIP_TARGET: this is where the packages end up
++	# PIP_BUILD: where the packages are built - a subdirectory of the pip folder
++	($(TARGET_CONFIGURE_OPTS) \
++	PATH=$(STAGING_DIR)/usr/bin:$(PATH) \
++	PIP_DOWNLOAD_CACHE=$(BR2_DL_DIR) \
++	PIP_TARGET=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++	PIP_BUILD=$(BUILD_DIR)/python-pip-$(PYTHON_PIP_VERSION)/packages \
++	CC="$(TARGET_CC)"		\
++	CFLAGS="$(TARGET_CFLAGS)" 	\
++	LDSHARED="$(TARGET_CC) -shared" \
++	LDFLAGS="$(TARGET_LDFLAGS)" 	\
++	$(HOST_DIR)/usr/bin/pip install \
++	$(PYTHON_PIP_MODULES_LIST))
++endef
++endif
++
++define PYTHON_PIP_INSTALL_TARGET_CMDS
++	(cd $(@D); PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++	$(PYTHON_PIP_INSTALL_MODULES)
++endef
++
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index cd5ee4d..416abfb 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -9,9 +9,9 @@
+ # switch back to it.
+ # See http://pypi.python.org/packages/source/s/setuptools
+ 
+-PYTHON_SETUPTOOLS_VERSION = 0.6.36
+-PYTHON_SETUPTOOLS_SOURCE  = distribute-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/d/distribute
++PYTHON_SETUPTOOLS_VERSION = 0.8
++PYTHON_SETUPTOOLS_SOURCE  = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
++PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/s/setuptools
+ PYTHON_SETUPTOOLS_DEPENDENCIES = python
+ 
+ define HOST_PYTHON_SETUPTOOLS_BUILD_CMDS
+@@ -20,7 +20,7 @@ endef
+ 
+ define PYTHON_SETUPTOOLS_BUILD_CMDS
+ 	(cd $(@D); \
+-	PYTHONPATH="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+ 	$(HOST_DIR)/usr/bin/python setup.py build)
+ endef
+ 
+@@ -32,7 +32,7 @@ endef
+ 
+ define PYTHON_SETUPTOOLS_INSTALL_TARGET_CMDS
+ 	(cd $(@D); \
+-	PYTHONPATH="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+ 	$(HOST_DIR)/usr/bin/python setup.py install --executable=/usr/bin/python \
+ 	--single-version-externally-managed --root=/ --prefix=$(TARGET_DIR)/usr)
+ endef
+diff --git a/package/python/python.mk b/package/python/python.mk
+index ecea638..45a0563 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -31,8 +31,7 @@ HOST_PYTHON_CONF_OPT += 	\
+ 	--disable-gdbm		\
+ 	--disable-bsddb		\
+ 	--disable-test-modules	\
+-	--disable-bz2		\
+-	--disable-ssl
++	--disable-bz2		
+ 
+ HOST_PYTHON_MAKE_ENV = \
+ 	PYTHON_MODULES_INCLUDE=$(HOST_DIR)/usr/include \
+@@ -50,7 +49,7 @@ HOST_PYTHON_MAKE = $(MAKE1)
+ 
+ PYTHON_DEPENDENCIES  = host-python libffi
+ 
+-HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
++HOST_PYTHON_DEPENDENCIES = host-expat host-zlib host-openssl
+ 
+ PYTHON_INSTALL_STAGING = YES
+ 
 -- 
-http://autobuild.buildroot.net
+1.8.1.2
