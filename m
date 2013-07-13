@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jul 2013 00:27:30 +0200
-Subject: [Buildroot] [PATCHv2 07/25] linux: remove EABI conditional
+Date: Sun, 14 Jul 2013 00:27:32 +0200
+Subject: [Buildroot] [PATCHv2 09/25] toolchain/helpers: only check for an
+	EABI toolchain
 In-Reply-To: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1373754468-7527-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1373754468-7527-10-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +13,34 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-We're only EABI now, so we want to always build an EABI kernel
-when we're building for ARM.
+... since we only support EABI now.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ toolchain/helpers.mk | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index dfc948c..2ab437d 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -170,9 +170,8 @@ define LINUX_CONFIGURE_CMDS
- 	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
- 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
--	$(if $(BR2_ARM_EABI),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config),
--		$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config))
-+	$(if $(BR2_arm)$(BR2_armeb),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
- 	# As the kernel gets compiled before root filesystems are
- 	# built, we create a fake cpio file. It'll be
- 	# replaced later by the real cpio archive, and the kernel will be
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 0398b63..95217e7 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -280,13 +280,8 @@ check_uclibc = \
+ check_arm_abi = \
+ 	__CROSS_CC=$(strip $1) ; \
+ 	EXT_TOOLCHAIN_TARGET=`LANG=C $${__CROSS_CC} -v 2>&1 | grep ^Target | cut -f2 -d ' '` ; \
+-	if echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
+-		EXT_TOOLCHAIN_ABI="eabi" ; \
+-	else \
+-		EXT_TOOLCHAIN_ABI="oabi" ; \
+-	fi ; \
+-	if [ x$(BR2_ARM_EABI) = x"y" -a $${EXT_TOOLCHAIN_ABI} = "oabi" ] ; then \
+-		echo "Incorrect ABI setting" ; \
++	if ! echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
++		echo "External toolchain uses the unsuported OABI" ; \
+ 		exit 1 ; \
+ 	fi
+ 
 -- 
 1.8.1.2
