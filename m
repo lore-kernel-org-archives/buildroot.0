@@ -1,58 +1,58 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 14 Jul 2013 22:19:09 +0200
-Subject: [Buildroot] [git commit] package/uClibc: drop ARM EABI conditions
-Message-ID: <20130714204246.C08B49A49D@busybox.osuosl.org>
+Date: Sun, 14 Jul 2013 22:09:45 +0200
+Subject: [Buildroot] [git commit] arch/arm: remove OABI option
+Message-ID: <20130714204246.7BE0D9A49D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8dad05fbb9b16af94c38669e39388f3a9e823e9
+commit: http://git.buildroot.net/buildroot/commit/?id=adf9646229fc5ede51297e2dc703926e1127aa6f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-... since we now only support EABI for ARM, we only need to
-force EABI unconditionally.
+OABI is more than legacy, it's dead.
 
+New developments should go with EABI, since it so much better.
+From the Debian EABI page [0] :
+  - floating point performance, with or without an FPU is very much faster
+  - mixing soft and hardfloat code is possible
+  - structure packing is not as painful as it used to be
+  - a more efficient syscall convention
+  - more compatibility with various tools
+
+[0] http://wiki.debian.org/ArmEabiPort
+
+[Thomas: keep the ABI choice, as we are going to introduce EABIhf later].
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/uclibc/Config.in |    5 -----
- package/uclibc/uclibc.mk |    4 +---
- 2 files changed, 1 insertions(+), 8 deletions(-)
+ arch/Config.in.arm |    7 -------
+ 1 files changed, 0 insertions(+), 7 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index b9917a7..8d16e8c 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -182,11 +182,6 @@ config BR2_UCLIBC_ARM_TYPE
- 	default ARM_CORTEXA8	if BR2_cortex_a8
- 	default ARM_CORTEXA9	if BR2_cortex_a9
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 983cac4..4daa91f 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -72,19 +72,12 @@ choice
+ 	help
+ 	  Application Binary Interface to use
  
--config BR2_UCLIBC_ARM_ABI
--	string
--	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
--	default EABI if BR2_ARM_EABI
+-	  Note:
+-	    Using OABI is discouraged.
 -
- config BR2_UCLIBC_ARM_BX
- 	bool
- 	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 421e323..8eca5fe 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -69,11 +69,9 @@ define UCLIBC_ARM_TYPE_CONFIG
- 	$(call UCLIBC_OPT_SET,$(UCLIBC_ARM_TYPE),y,$(@D))
- endef
+ config BR2_ARM_EABI_CHOICE
+ 	bool "EABI"
+-config BR2_ARM_OABI
+-	bool "OABI"
+-	depends on !BR2_GCC_VERSION_4_7_X
+ endchoice
  
--UCLIBC_ARM_ABI = CONFIG_ARM_$(call qstrip,$(BR2_UCLIBC_ARM_ABI))
--
- define UCLIBC_ARM_ABI_CONFIG
- 	$(SED) '/CONFIG_ARM_.ABI/d' $(@D)/.config
--	$(call UCLIBC_OPT_SET,$(UCLIBC_ARM_ABI),y,$(@D))
-+	$(call UCLIBC_OPT_SET,CONFIG_ARM_EABI,y,$(@D))
- endef
+ config BR2_ARM_EABI
+ 	def_bool y
+-	depends on !BR2_ARM_OABI
  
- ifeq ($(BR2_UCLIBC_ARM_BX),y)
+ config BR2_ARM_ENABLE_NEON
+ 	bool "Enable NEON SIMD extension support"
