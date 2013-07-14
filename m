@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 14 Jul 2013 22:31:08 +0200
-Subject: [Buildroot] [PATCHv2 05/25] package/uclibc: ARM OABI is no
+Date: Sun, 14 Jul 2013 22:31:27 +0200
+Subject: [Buildroot] [PATCHv2 06/25] toolchain/helpers: ARM OABI is no
 	longer supported
-In-Reply-To: <1373754468-7527-6-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 14 Jul 2013 00:27:28 +0200")
+In-Reply-To: <1373754468-7527-7-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 14 Jul 2013 00:27:29 +0200")
 References: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1373754468-7527-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87zjtoc29f.fsf@dell.be.48ers.dk>
+ <1373754468-7527-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87vc4cc28w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
