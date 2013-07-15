@@ -1,90 +1,74 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 15 Jul 2013 16:44:17 -0500
-Subject: [Buildroot] [PATCH v6 0/3] TI Graphics SDK
-Message-ID: <1373924660-1391-1-git-send-email-spenser@gillilanding.com>
+Date: Mon, 15 Jul 2013 16:44:18 -0500
+Subject: [Buildroot] [PATCH v6 1/3] powervr: add powervr virtual package
+In-Reply-To: <1373924660-1391-1-git-send-email-spenser@gillilanding.com>
+References: <1373924660-1391-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <1373924660-1391-2-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These patches integrate the TI Graphics SDK.
 
-v6:
- - Fix whitespace errors
- - Minor bug fixes
- - Fix typo in qt patch
-v5:
- - Fixed build issues on hard float (and non-CS toolchains)
- - added powervr virtual package
-v4:
- - Fix header issue with qt.
- - Add eglimage version installation.
-v3:
- - integrate reviews from thomas.
- - Add qt patch
-v2:
- - Take into account reviews.
- - Simplfy init script.
- - Fix header installation.
-v1:
- - Added .pc files
- - all review issues addressed
-RFC v3:
- - all reviews addressed
- - added demos
- - added hard float (not runtime tested)
- - added init script
- - added SGX detection script (untested)
- - tested on beaglexm using demos
-RFC v2:
- - basic working with minor issues during tests
-RFC v1:
- - inital revision
-
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Sundareson, Prabindh <prabu@ti.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 Cc: Sinan Akpolat <sinan@linkas.com.tr>
-
-Spenser Gilliland (3):
-  powervr: add powervr virtual package
-  ti-gfx: add new package
-  qt: add powervr and opengl
-
- package/Config.in                              |   2 +
- package/opengl/libegl/libegl.mk                |   4 +
- package/opengl/libgles/libgles.mk              |   4 +
- package/powervr/Config.in                      |   2 +
- package/powervr/powervr.mk                     |  20 +
- package/qt/Config.gfx.in                       |   5 +
- package/qt/Config.in                           |   8 +
- package/qt/powervr.ini                         |   2 +
- package/qt/qt-eglwsegl-use-system.patch        | 802 +++++++++++++++++++++++++
- package/qt/qt.mk                               |  29 +-
- package/ti-gfx/Config.in                       |  69 +++
- package/ti-gfx/S80ti-gfx                       |  53 ++
- package/ti-gfx/egl.pc                          |  11 +
- package/ti-gfx/esrev.sh                        |  59 ++
- package/ti-gfx/glesv2.pc                       |  11 +
- package/ti-gfx/powervr.ini                     |   2 +
- package/ti-gfx/ti-gfx-km_install_modules.patch |  19 +
- package/ti-gfx/ti-gfx-newclkapi.patch          | 143 +++++
- package/ti-gfx/ti-gfx.mk                       | 197 ++++++
- 19 files changed, 1441 insertions(+), 1 deletion(-)
+---
+ package/Config.in          |  1 +
+ package/powervr/Config.in  |  2 ++
+ package/powervr/powervr.mk | 20 ++++++++++++++++++++
+ 3 files changed, 23 insertions(+)
  create mode 100644 package/powervr/Config.in
  create mode 100644 package/powervr/powervr.mk
- create mode 100644 package/qt/powervr.ini
- create mode 100644 package/qt/qt-eglwsegl-use-system.patch
- create mode 100644 package/ti-gfx/Config.in
- create mode 100644 package/ti-gfx/S80ti-gfx
- create mode 100644 package/ti-gfx/egl.pc
- create mode 100644 package/ti-gfx/esrev.sh
- create mode 100644 package/ti-gfx/glesv2.pc
- create mode 100644 package/ti-gfx/powervr.ini
- create mode 100644 package/ti-gfx/ti-gfx-km_install_modules.patch
- create mode 100644 package/ti-gfx/ti-gfx-newclkapi.patch
- create mode 100644 package/ti-gfx/ti-gfx.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 6d5ff01..d2ad489 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -472,6 +472,7 @@ source "package/opengl/Config.in"
+ source "package/pango/Config.in"
+ source "package/pixman/Config.in"
+ source "package/poppler/Config.in"
++source "package/powervr/Config.in"
+ source "package/tiff/Config.in"
+ source "package/wayland/Config.in"
+ source "package/webkit/Config.in"
+diff --git a/package/powervr/Config.in b/package/powervr/Config.in
+new file mode 100644
+index 0000000..d09ce74
+--- /dev/null
++++ b/package/powervr/Config.in
+@@ -0,0 +1,2 @@
++config BR2_PACKAGE_HAS_POWERVR
++	bool
+diff --git a/package/powervr/powervr.mk b/package/powervr/powervr.mk
+new file mode 100644
+index 0000000..c6dd968
+--- /dev/null
++++ b/package/powervr/powervr.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# Virtual package for PowerVR driver 
++#
++################################################################################
++
++POWERVR_SOURCE =
++
++ifeq ($(BR2_PACKAGE_TI_GFX),y)
++POWERVR_DEPENDENCIES += ti-gfx
++endif
++
++ifeq ($(POWERVR_DEPENDENCIES),)
++define POWERVR_CONFIGURE_CMDS
++	echo "No PowerVR implementation selected. Configuration error."
++	exit 1
++endef
++endif
++
++$(eval $(generic-package))
 -- 
 1.8.1.2
