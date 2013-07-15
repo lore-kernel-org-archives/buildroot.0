@@ -1,34 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 15 Jul 2013 23:00:36 +0200
-Subject: [Buildroot] [git commit] gnutls: bump to version 3.2.2
-Message-ID: <20130715211528.AA9E69A34B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 15 Jul 2013 23:18:07 +0200
+Subject: [Buildroot] [PATCH v5 2/3] ti-gfx: add new package
+In-Reply-To: <CAEBucnDZOVK1OzCWyr+4FhORM4zJEReVE_KVNgBNCKdTbiN+QA@mail.gmail.com>
+ (Spenser Gilliland's message of "Mon, 15 Jul 2013 16:12:06 -0500")
+References: <1373639678-7357-1-git-send-email-spenser@gillilanding.com>
+ <1373639678-7357-2-git-send-email-spenser@gillilanding.com>
+ <87ppuja86n.fsf@dell.be.48ers.dk>
+ <CAEBucnDZOVK1OzCWyr+4FhORM4zJEReVE_KVNgBNCKdTbiN+QA@mail.gmail.com>
+Message-ID: <874nbva5f4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=42fb7c58bb7c44c00a04f0d60bf44c1f6eddcdf2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
 
-Closes bug #6374
+ Spenser> Peter,
+ Spenser> I'll get this fixed up immediately and get it back to you. Thanks for
+ Spenser> taking the time to review it.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gnutls/gnutls.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Great! Besides these minor issues I think this series is good to go.
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index ba38239..6562d8e 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUTLS_VERSION = 3.2.1
-+GNUTLS_VERSION = 3.2.2
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+-- 
+Bye, Peter Korsgaard
