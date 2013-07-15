@@ -1,9 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 15 Jul 2013 14:47:03 -0500
-Subject: [Buildroot] [PATCH 20/67] gvfs: libglib2 requires threads
+Date: Mon, 15 Jul 2013 14:47:04 -0500
+Subject: [Buildroot] [PATCH 21/67] json-glib: libglib2 requires threads
 In-Reply-To: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
 References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1373917670-30006-21-git-send-email-spenser@gillilanding.com>
+Message-ID: <1373917670-30006-22-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/gvfs/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/json-glib/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/gvfs/Config.in b/package/gvfs/Config.in
-index e0a945e..63c4996 100644
---- a/package/gvfs/Config.in
-+++ b/package/gvfs/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_GVFS
- 	depends on BR2_LARGEFILE
+diff --git a/package/json-glib/Config.in b/package/json-glib/Config.in
+index 3ebc76d..db25386 100644
+--- a/package/json-glib/Config.in
++++ b/package/json-glib/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_JSON_GLIB
+ 	bool "json-glib"
  	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_USE_MMU # dbus
--	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
  	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_SHARED_MIME_INFO
-@@ -16,5 +16,5 @@ config BR2_PACKAGE_GVFS
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	help
+@@ -10,5 +11,5 @@ config BR2_PACKAGE_JSON_GLIB
  
- 	  http://en.wikipedia.org/wiki/GVFS
+ 	  https://live.gnome.org/JsonGlib/
  
--comment "gvfs requires a toolchain with LARGEFILE and WCHAR support"
--	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR
-+comment "gvfs requires a toolchain with LARGEFILE, WCHAR and threading support"
-+	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+-comment "json-glib requires a toolchain with WCHAR support"
+-	depends on !BR2_USE_WCHAR
++comment "json-glib requires a toolchain with WCHAR and threading support"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 1.8.1.2
