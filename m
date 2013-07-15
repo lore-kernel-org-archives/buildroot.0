@@ -1,61 +1,64 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 15 Jul 2013 22:53:42 +0200
-Subject: [Buildroot] [git commit] libosip2: arc: Undefine __arc__ when
-	building for ARC processors
-Message-ID: <20130715211528.660439A4B8@busybox.osuosl.org>
+Date: Mon, 15 Jul 2013 22:19:53 +0200
+Subject: [Buildroot] [git commit] uclibc: arc: add patch to fix strcmp/index
+	susv3 legacy
+Message-ID: <20130715211528.5993A9A34B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=821a6d6338451d76d6856ab9c0bfe1a709543b4b
+commit: http://git.buildroot.net/buildroot/commit/?id=fd9c3e2bdaaea7bc54b2ea2c979a2ae061ed5149
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libosip2 appears to have support for the "ARC standard" (Advanced
-RISC Computing), which is unrelated to Synopsys DesignWare ARC
-processors. The check for this involves verifying the existence of
-the "__arc__" macro. Unfortunately, this macro is also present
-as a predefined built-in for the ARC processors, resulting into
-build failures.
+This fixes build errors for 'keyutils'
 
-[Peter: add short comment in .mk files as well]
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libeXosip2/libeXosip2.mk |    5 +++++
- package/libosip2/libosip2.mk     |    5 +++++
- 2 files changed, 10 insertions(+), 0 deletions(-)
+ package/uclibc/0.9.33-arc/fix-susv3-legacy.patch |   36 ++++++++++++++++++++++
+ 1 files changed, 36 insertions(+), 0 deletions(-)
 
-diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
-index 4be2f05..6abdaab 100644
---- a/package/libeXosip2/libeXosip2.mk
-+++ b/package/libeXosip2/libeXosip2.mk
-@@ -12,6 +12,11 @@ LIBEXOSIP2_LICENSE_FILES = COPYING
- 
- LIBEXOSIP2_DEPENDENCIES = host-pkgconf libosip2
- 
-+ifeq ($(BR2_arc),y)
-+# toolchain __arc__ define conflicts with libeXosip2 source
-+LIBEXOSIP2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -U__arc__"
-+endif
+diff --git a/package/uclibc/0.9.33-arc/fix-susv3-legacy.patch b/package/uclibc/0.9.33-arc/fix-susv3-legacy.patch
+new file mode 100644
+index 0000000..a768024
+--- /dev/null
++++ b/package/uclibc/0.9.33-arc/fix-susv3-legacy.patch
+@@ -0,0 +1,36 @@
++From 3124ace804337d32974392e0a73a09cdc0d60fc8 Mon Sep 17 00:00:00 2001
++From: Mischa Jonker <mjonker@synopsys.com>
++Date: Mon, 15 Jul 2013 13:06:11 +0200
++Subject: [PATCH] ARC: Add alias 'index' to strcmp for susv3 legacy
++ compatibility
 +
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBEXOSIP2_DEPENDENCIES += openssl
- LIBEXOSIP2_CONF_OPT += --enable-openssl
-diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
-index 6ae8149..0b672d8 100644
---- a/package/libosip2/libosip2.mk
-+++ b/package/libosip2/libosip2.mk
-@@ -10,6 +10,11 @@ LIBOSIP2_INSTALL_STAGING = YES
- LIBOSIP2_LICENSE = LGPLv2.1+
- LIBOSIP2_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_arc),y)
-+# toolchain __arc__ define conflicts with libosip2 source
-+LIBOSIP2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -U__arc__"
-+endif
++This fixes build errors for 'keyutils'
 +
- LIBOSIP2_CONF_OPT = \
- 	--enable-mt=$(if $(BR2_TOOLCHAIN_HAS_THREADS),yes,no)
- 
++Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
++---
++ libc/string/arc/strchr.S |    5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/libc/string/arc/strchr.S b/libc/string/arc/strchr.S
++index b9f28c0..8d51aa4 100644
++--- a/libc/string/arc/strchr.S
+++++ b/libc/string/arc/strchr.S
++@@ -1,6 +1,7 @@
++ /* Copyright (C) 2007 ARC International (UK) LTD */
++ 
++ #include <bits/asm.h>
+++#include <features.h>
++ 
++ /* ARC700 has a relatively long pipeline and branch prediction, so we want
++    to avoid branches that are hard to predict.  On the other hand, the
++@@ -115,3 +116,7 @@ ENTRY(strchr)
++ 	mov.mi	r0,0
++ #endif /* ENDIAN */
++ ENDFUNC(strchr)
+++
+++#ifdef __UCLIBC_SUSV3_LEGACY__
+++strong_alias(strchr,index)
+++#endif
++-- 
++1.7.9.5
++
