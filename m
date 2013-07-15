@@ -1,9 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 15 Jul 2013 14:47:11 -0500
-Subject: [Buildroot] [PATCH 28/67] libplayer: libglib2 requires threads
+Date: Mon, 15 Jul 2013 14:47:12 -0500
+Subject: [Buildroot] [PATCH 29/67] libqmi: libglib2 requires threads
 In-Reply-To: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
 References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1373917670-30006-29-git-send-email-spenser@gillilanding.com>
+Message-ID: <1373917670-30006-30-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/libplayer/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libqmi/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
-index df32901..e1b7f75 100644
---- a/package/libplayer/Config.in
-+++ b/package/libplayer/Config.in
-@@ -21,9 +21,10 @@ config BR2_PACKAGE_LIBPLAYER_MPLAYER
- config BR2_PACKAGE_LIBPLAYER_GSTREAMER
- 	bool "gstreamer backend"
- 	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	select BR2_PACKAGE_GSTREAMER
+diff --git a/package/libqmi/Config.in b/package/libqmi/Config.in
+index c5e8a5c..8484250 100644
+--- a/package/libqmi/Config.in
++++ b/package/libqmi/Config.in
+@@ -2,8 +2,12 @@ config BR2_PACKAGE_LIBQMI
+ 	bool "libqmi"
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	help
+ 	  libqmi is a glib-based library for talking to WWAN modems and devices
+ 	  which speak the Qualcomm MSM Interface (QMI) protocol.
  
--comment "gstreamer backend requires a toolchain with WCHAR support"
-+comment "gstreamer backend requires a toolchain with WCHAR and threading support"
- 	depends on !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_LIBPLAYER_PYTHON
+ 	  http://www.freedesktop.org/wiki/Software/libqmi/
++
++comment "libqmi requires a toolchain with WCHAR and threading support"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 1.8.1.2
