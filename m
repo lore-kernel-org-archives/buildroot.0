@@ -1,37 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Jul 2013 09:48:47 +0200
-Subject: [Buildroot] [PATCHv2 09/25] toolchain/helpers: only check for
- an EABI toolchain
-In-Reply-To: <87mwpoc27c.fsf@dell.be.48ers.dk>
+Date: Mon, 15 Jul 2013 09:52:01 +0200
+Subject: [Buildroot] [PATCHv2 12/25] arch: introduce BR2_GCC_TARGET_{FPU,
+	FLOAT}
+In-Reply-To: <8761wcc20o.fsf@dell.be.48ers.dk>
 References: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1373754468-7527-10-git-send-email-thomas.petazzoni@free-electrons.com>
- <87mwpoc27c.fsf@dell.be.48ers.dk>
-Message-ID: <20130715094847.6b365266@skate>
+ <1373754468-7527-13-git-send-email-thomas.petazzoni@free-electrons.com>
+ <8761wcc20o.fsf@dell.be.48ers.dk>
+Message-ID: <20130715095201.613a8994@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Peter Korsgaard,
 
-On Sun, 14 Jul 2013 22:32:23 +0200, Peter Korsgaard wrote:
+On Sun, 14 Jul 2013 22:36:23 +0200, Peter Korsgaard wrote:
 
->  Thomas> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  Thomas> ... since we only support EABI now.
+> And pass it as -mfloat-abi here (except you used the wrong variable, so
+> it's never passed).
 > 
->  Thomas> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  Thomas> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> This arguably should have been together with patch 6, but ok -
-> Committed, thanks.
+> What was the idea here?
 
-Yes, Yann's patches were heavily split in fine-grained commits. For two
-of them, I did a squash because it was really the same thing, but for
-the others, I kept as Yann did.
+To select the floating point strategy, you can either pass:
 
-Best regards,
+ * --with-float=<foo> at configure time of gcc, in which case it
+   applies to the default build of all binaries built by this gcc.
+
+ * -mfloat-abi=<foo> at run time of gcc.
+
+For the internal backend, where we build gcc, I use the former, while
+for external toolchain, I use the latter. The difference in option name
+explains the confusion in the variable name.
+
+I'll respin this patch (and the rest of the patch set) with this fixed.
+
+Thanks for the review (and the commit of all prior patches)!
 
 Thomas
 -- 
