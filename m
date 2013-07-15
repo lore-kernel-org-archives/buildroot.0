@@ -1,31 +1,57 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 15 Jul 2013 23:21:32 +0200
-Subject: [Buildroot] [PATCH v5 3/3] qt: add powervr and opengl
-In-Reply-To: <1373639678-7357-3-git-send-email-spenser@gillilanding.com>
- (Spenser Gilliland's message of "Fri, 12 Jul 2013 09:34:38 -0500")
-References: <1373639678-7357-1-git-send-email-spenser@gillilanding.com>
- <1373639678-7357-3-git-send-email-spenser@gillilanding.com>
-Message-ID: <87zjtn8qoz.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 15 Jul 2013 23:25:11 +0200
+Subject: [Buildroot] Dates for the next Buildroot Developers Meeting
+In-Reply-To: <20130704161724.GA5374@free.fr>
+References: <20130525222335.42f91125@skate> <87bo72qyqi.fsf@dell.be.48ers.dk>
+ <87hagan2al.fsf@dell.be.48ers.dk> <20130704104808.360f3738@skate>
+ <20130704161724.GA5374@free.fr>
+Message-ID: <20130715212511.GB12096@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
+Thomas, Peter, All,
 
- Spenser> Use the following to test:
- Spenser> /usr/share/qt/examples/opengl/hellogl_es2/hellogl_es2 -qws -display powervr
+On 2013-07-04 18:17 +0200, Yann E. MORIN spake thusly:
+> On 2013-07-04 10:48 +0200, Thomas Petazzoni spake thusly:
+> > On Thu, 04 Jul 2013 10:43:14 +0200, Peter Korsgaard wrote:
+> > >  Thomas> The next Embedded Linux Conference Europe will take place on
+> > >  Thomas> Thursday 24th and Friday 25th of October, in Edinburgh,
+> > >  Thomas> UK. Since LinuxCon Europe will take place at the beginning of
+> > >  Thomas> the week (from Monday to Wednesday), I believe the best date
+> > >  Thomas> for our meeting will be on Saturday 26th and Sunday 27th.
+> > > 
+> > >  Peter> I'm planning on attending the gstreamer conference (22-23th), so the
+> > >  Peter> weekend after would also fit me best.
+> > > 
+> > >  Peter> If anyone disagrees, please let us know because I would like to book
+> > >  Peter> flight/hotel soon.
+> > > 
+> > > I've now booked conference/hotel/flights (21-27th). Anybody else?
 
-Small issue that I just noticed:
+Ok, everything is under control!
 
- Spenser> +++ b/package/qt/qt-eglwsegl-use-system.patch
- Spenser> @@ -0,0 +1,802 @@
- Spenser> +Patch to remove obslete powervr headers and instead use the headers provided
+LCE: registered
+ELCE: registered
+Hotel: booked
+Flight: processing
 
-s/obslete/obsolete/
+I'll be in Edimburgh starting the 20st late in the afternoon.
+I'll be leaving on the 28th in the morning.
 
-Otherwise it looks good.
+So, I'll be attending the DevDay Saturday & Sunday.
+
+/me is looking forward to being there! :-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
