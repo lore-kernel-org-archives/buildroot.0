@@ -1,52 +1,51 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 15 Jul 2013 14:47:19 -0500
-Subject: [Buildroot] [PATCH 36/67] neard: libglib2 requires threads
+Date: Mon, 15 Jul 2013 14:47:20 -0500
+Subject: [Buildroot] [PATCH 37/67] neardal: libglib2 requires threads
 In-Reply-To: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
 References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1373917670-30006-37-git-send-email-spenser@gillilanding.com>
+Message-ID: <1373917670-30006-38-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-minor clean up as well
+minor cleanups as well
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/neard/Config.in | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ package/neardal/Config.in | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/neard/Config.in b/package/neard/Config.in
-index ec1fcb3..b23a154 100644
---- a/package/neard/Config.in
-+++ b/package/neard/Config.in
+diff --git a/package/neardal/Config.in b/package/neardal/Config.in
+index 76b5ffa..3841cac 100644
+--- a/package/neardal/Config.in
++++ b/package/neardal/Config.in
 @@ -1,7 +1,7 @@
- config BR2_PACKAGE_NEARD
- 	bool "neard"
- 	depends on BR2_USE_WCHAR # libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl / dbus
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl, dbus, libglib2
+ config BR2_PACKAGE_NEARDAL
+ 	bool "neardal"
+ 	depends on BR2_USE_WCHAR # glib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, glib2
  	depends on BR2_USE_MMU # dbus
  	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -14,11 +14,14 @@ config BR2_PACKAGE_NEARD
+ 	select BR2_PACKAGE_DBUS_GLIB
+@@ -11,11 +11,14 @@ config BR2_PACKAGE_NEARDAL
  
- 	  https://01.org/linux-nfc/documentation/how-start-linux-nfc-code...
+ 	  https://github.com/connectivity/neardal
  
-+if BR2_PACKAGE_NEARD
++if BR2_PACKAGE_NEARDAL
 +
- config BR2_PACKAGE_NEARD_TOOLS
- 	bool "neard tools"
--	depends on BR2_PACKAGE_NEARD
+ config BR2_PACKAGE_NEARDAL_NCL
+ 	bool "ncl tool"
+-	depends on BR2_PACKAGE_NEARDAL
  	help
- 	  Build and install neard tools.
+ 	  Build and install neardal ncl command line interpreter tool.
  
--comment "neard requires a toolchain with WCHAR and threads support"
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+-comment "neardal requires a toolchain with WCHAR and threads support"
 +endif
 +
-+comment "neard requires an MMU and a toolchain with WCHAR and threads support"
-+	depends on !BR2_USE_MMU || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++comment "neardal requires a toolchain with WCHAR and threading support"
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 1.8.1.2
