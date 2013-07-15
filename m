@@ -1,9 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 15 Jul 2013 14:47:05 -0500
-Subject: [Buildroot] [PATCH 22/67] latencytop: libglib2 requires threads
+Date: Mon, 15 Jul 2013 14:47:06 -0500
+Subject: [Buildroot] [PATCH 23/67] libgail: libglib2 requires threads
 In-Reply-To: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
 References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1373917670-30006-23-git-send-email-spenser@gillilanding.com>
+Message-ID: <1373917670-30006-24-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/latencytop/Config.in | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/libgail/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/latencytop/Config.in b/package/latencytop/Config.in
-index 12176c0..23e4c63 100644
---- a/package/latencytop/Config.in
-+++ b/package/latencytop/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LATENCYTOP
- 	bool "latencytop"
--	depends on BR2_USE_WCHAR
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_LIBGLIB2
+diff --git a/package/libgail/Config.in b/package/libgail/Config.in
+index ba74795..3e1af62 100644
+--- a/package/libgail/Config.in
++++ b/package/libgail/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_LIBGAIL
+ 	bool "libgail"
++	depends on BR2_USE_WCHAR # pango -> libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pango -> libglib2
+ 	depends on BR2_PACKAGE_LIBGTK2
+ 	select BR2_PACKAGE_PANGO
  	help
-@@ -19,5 +20,5 @@ config BR2_PACKAGE_LATENCYTOP
+@@ -16,3 +18,7 @@ config BR2_PACKAGE_LIBGAIL
+ 	  program.
  
- 	  http://www.latencytop.org
- 
--comment "latencytop requires a toolchain with WCHAR support"
--	depends on !BR2_USE_WCHAR
-+comment "latencytop requires a toolchain with WCHAR and threading support"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 	  http://developer.gnome.org/projects/gap
++
++comment "libgail requires a toolchain with WCHAR and threading support"
++	depends on BR2_PACKAGE_LIBGTK2 && \
++		(!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS)
 -- 
 1.8.1.2
