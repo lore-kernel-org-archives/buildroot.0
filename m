@@ -1,9 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 15 Jul 2013 14:46:59 -0500
-Subject: [Buildroot] [PATCH 16/67] glib-networking: libglib2 requires threads
+Date: Mon, 15 Jul 2013 14:47:00 -0500
+Subject: [Buildroot] [PATCH 17/67] glibmm: libglib2 requires threads
 In-Reply-To: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
 References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1373917670-30006-17-git-send-email-spenser@gillilanding.com>
+Message-ID: <1373917670-30006-18-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,29 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/glib-networking/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/glibmm/Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
-index dab35ea..8d106f5 100644
---- a/package/glib-networking/Config.in
-+++ b/package/glib-networking/Config.in
-@@ -1,10 +1,11 @@
- config BR2_PACKAGE_GLIB_NETWORKING
- 	bool "glib-networking"
- 	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+diff --git a/package/glibmm/Config.in b/package/glibmm/Config.in
+index cd4ac01..fddd5e4 100644
+--- a/package/glibmm/Config.in
++++ b/package/glibmm/Config.in
+@@ -3,11 +3,13 @@ config BR2_PACKAGE_GLIBMM
  	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	select BR2_PACKAGE_LIBSIGC
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_WCHAR
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
  	help
- 	  Network-related GIO modules for glib.
+ 	  The GLibmm package is a set of C++ bindings for GLib.
  
--comment "glib-networking requires a toolchain with WCHAR support"
--	depends on !BR2_USE_WCHAR
-+comment "glib-networking requires a toolchain with WCHAR and threading support"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 	  http://www.gtkmm.org/
+ 
+-comment "glibmm requires a toolchain with C++ & WCHAR support enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++comment "glibmm requires a toolchain with C++, WCHAR, and threading support"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS
 -- 
 1.8.1.2
