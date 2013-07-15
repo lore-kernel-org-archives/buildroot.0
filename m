@@ -1,9 +1,10 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 15 Jul 2013 14:46:53 -0500
-Subject: [Buildroot] [PATCH 10/67] libedbus: libglib2 requires threads
+Date: Mon, 15 Jul 2013 14:46:54 -0500
+Subject: [Buildroot] [PATCH 11/67] libevas-generic-loaders: libglib2
+	requires threads
 In-Reply-To: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
 References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1373917670-30006-11-git-send-email-spenser@gillilanding.com>
+Message-ID: <1373917670-30006-12-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +14,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/efl/libedbus/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/efl/libevas-generic-loaders/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
-index 64b001e..31a3b03 100644
---- a/package/efl/libedbus/Config.in
-+++ b/package/efl/libedbus/Config.in
-@@ -17,10 +17,15 @@ if BR2_PACKAGE_LIBEDBUS
- config BR2_PACKAGE_LIBEDBUS_BLUEZ
- 	bool "bluez support"
- 	depends on !BR2_avr32 # bluez_utils
-+	depends on BR2_USE_WCHAR # bluez_utils -> glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> glib2
- 	select BR2_PACKAGE_BLUEZ_UTILS
+diff --git a/package/efl/libevas-generic-loaders/Config.in b/package/efl/libevas-generic-loaders/Config.in
+index bfa6097..5363794 100644
+--- a/package/efl/libevas-generic-loaders/Config.in
++++ b/package/efl/libevas-generic-loaders/Config.in
+@@ -15,11 +15,12 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+ 	select BR2_PACKAGE_LIBRSVG
+ 	select BR2_PACKAGE_CAIRO
+ 	depends on BR2_USE_WCHAR # librsvg -> glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # librsvg -> glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
  	help
- 	  Bluetooth support.
+ 	  This option enables the Evas generic SVG loader
  
-+comment "bluez support requires a toolchain with WCHAR and threading support"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_LIBEDBUS_CONNMAN
- 	bool "connman support"
- 	depends on BR2_PACKAGE_CONNMAN
+-comment "SVG loader requires a toolchain with WCHAR and C++ support"
+-	depends on !BR2_USE_WCHAR && !BR2_INSTALL_LIBSTDCPP
++comment "SVG loader requires a toolchain with WCHAR, threading and C++ support"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+ 
+ endif
 -- 
 1.8.1.2
