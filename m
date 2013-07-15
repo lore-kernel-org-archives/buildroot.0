@@ -1,32 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 15 Jul 2013 11:19:17 -0300
-Subject: [Buildroot] [PATCH 7/7] ed: bump to version 1.9
-In-Reply-To: <1373897957-5938-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1373897957-5938-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1373897957-5938-7-git-send-email-gustavo@zacarias.com.ar>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Mon, 15 Jul 2013 10:04:02 -0500
+Subject: [Buildroot] [PATCH 1/1] libglib2: needs threads
+Message-ID: <1373900642-9049-1-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ed/ed.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+See autobuild failures
 
-diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-index 306e918..17de543 100644
---- a/package/ed/ed.mk
-+++ b/package/ed/ed.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+http://autobuild.buildroot.net/results/d1fb882fe4d22a17bdd438360da515011dda2b30/build-end.log
+http://autobuild.buildroot.net/results/b66e807769ead5caa3e3b6312e9f7c35c14eafe7/build-end.log
+http://autobuild.buildroot.net/results/9c3fa0c5003a6369e70bfe6d611f7d745742a8c7/build-end.log
+
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+---
+ package/libglib2/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/libglib2/Config.in b/package/libglib2/Config.in
+index 5282885..0ee53b7 100644
+--- a/package/libglib2/Config.in
++++ b/package/libglib2/Config.in
+@@ -5,10 +5,12 @@ config BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBFFI
+ 	select BR2_PACKAGE_ZLIB
+ 	depends on BR2_USE_WCHAR # gettext
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Low-level core library that forms the basis of GTK+ and GNOME.
  
--ED_VERSION = 1.7
-+ED_VERSION = 1.9
- ED_SITE = $(BR2_GNU_MIRROR)/ed
- ED_CONF_OPT = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)"
+ 	  http://www.gtk.org/
+ 
+-comment "libglib2 requires a toolchain with WCHAR support"
+-	depends on !BR2_USE_WCHAR
++comment "libglib2 requires a toolchain with WCHAR support and threading
++support"
++	depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
 -- 
-1.8.1.5
+1.8.1.2
