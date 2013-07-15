@@ -1,9 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 15 Jul 2013 14:46:49 -0500
-Subject: [Buildroot] [PATCH 06/67] curlftpfs: libglib2 requires threads
+Date: Mon, 15 Jul 2013 14:46:50 -0500
+Subject: [Buildroot] [PATCH 07/67] dbus-glib: libglib2 requires threads
 In-Reply-To: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
 References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1373917670-30006-7-git-send-email-spenser@gillilanding.com>
+Message-ID: <1373917670-30006-8-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/curlftpfs/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/dbus-glib/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/curlftpfs/Config.in b/package/curlftpfs/Config.in
-index 0d8e715..ac527da 100644
---- a/package/curlftpfs/Config.in
-+++ b/package/curlftpfs/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_CURLFTPFS
- 	select BR2_PACKAGE_LIBCURL
- 	depends on BR2_LARGEFILE
+diff --git a/package/dbus-glib/Config.in b/package/dbus-glib/Config.in
+index f1dab43..b019b34 100644
+--- a/package/dbus-glib/Config.in
++++ b/package/dbus-glib/Config.in
+@@ -2,11 +2,13 @@ config BR2_PACKAGE_DBUS_GLIB
+ 	bool "dbus-glib"
+ 	depends on BR2_PACKAGE_DBUS
  	depends on BR2_USE_WCHAR # glib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse, glib2
- 	depends on BR2_USE_MMU # libfuse
- 	depends on !BR2_PREFER_STATIC_LIB # libfuse
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
  	help
-@@ -17,5 +17,5 @@ config BR2_PACKAGE_CURLFTPFS
+ 	  GLib bindings for D-Bus.
  
- 	  http://curlftpfs.sourceforge.net/
+ 	  http://www.freedesktop.org/software/dbus
  
--comment "curlftpfs requires a toolchain with LARGEFILE, WCHAR, threads and dynamic library support"
-+comment "curlftpfs requires a toolchain with LARGEFILE, WCHAR, threading and dynamic library support"
- 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
+-comment "dbus-glib requires a toolchain with WCHAR support"
+-	depends on BR2_PACKAGE_DBUS && !BR2_USE_WCHAR
++comment "dbus-glib requires a toolchain with WCHAR and threading support"
++	depends on BR2_PACKAGE_DBUS && \
++		(!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS)
 -- 
 1.8.1.2
