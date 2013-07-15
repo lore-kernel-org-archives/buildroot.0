@@ -1,75 +1,75 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 15 Jul 2013 14:47:50 -0500
-Subject: [Buildroot] [PATCH 67/67] libglib2: needs threads
-In-Reply-To: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1373917670-30006-68-git-send-email-spenser@gillilanding.com>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Mon, 15 Jul 2013 21:52:38 +0200
+Subject: [Buildroot] [PATCH] package/libsvg-cairo: new package
+Message-ID: <1373917958-838-1-git-send-email-c.schoenert@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
----
- package/libglib2/Config.in                         |  5 ++--
- ...ib2-0002-fix-build-when-no-thread-support.patch | 30 ----------------------
- 2 files changed, 3 insertions(+), 32 deletions(-)
- delete mode 100644 package/libglib2/libglib2-0002-fix-build-when-no-thread-support.patch
+From: Carsten Schoenert <c.schoenert@gmail.com>
 
-diff --git a/package/libglib2/Config.in b/package/libglib2/Config.in
-index 5282885..806dbbe 100644
---- a/package/libglib2/Config.in
-+++ b/package/libglib2/Config.in
-@@ -5,10 +5,11 @@ config BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBFFI
- 	select BR2_PACKAGE_ZLIB
- 	depends on BR2_USE_WCHAR # gettext
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Low-level core library that forms the basis of GTK+ and GNOME.
- 
- 	  http://www.gtk.org/
- 
--comment "libglib2 requires a toolchain with WCHAR support"
--	depends on !BR2_USE_WCHAR
-+comment "libglib2 requires a toolchain with WCHAR support and threading support"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libglib2/libglib2-0002-fix-build-when-no-thread-support.patch b/package/libglib2/libglib2-0002-fix-build-when-no-thread-support.patch
-deleted file mode 100644
-index 43c7e16..0000000
---- a/package/libglib2/libglib2-0002-fix-build-when-no-thread-support.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--Fix gio/gcancellable.c build when thread support is disabled
--
--Changes:
--	Updated for 2.36.1
--
--Signed-off-by: "Samuel Martin" <s.martin49@gmail.com>
--Signed-off-by: "Spenser Gilliland" <spenser@gillilanding.com>
-----
----- libglib2-2.36.1.orig/gio/gcancellable.c	2013-03-13 08:39:09.000000000 -0500
--+++ libglib2-2.36.1/gio/gcancellable.c	2013-05-26 10:49:32.366019891 -0500
--@@ -267,7 +267,9 @@
--   while (priv->cancelled_running)
--     {
--       priv->cancelled_running_waiting = TRUE;
--+#if defined(G_THREADS_ENABLED)
--       g_cond_wait (&cancellable_cond, &cancellable_mutex);
--+#endif
--     }
-- 
--   if (priv->cancelled)
--@@ -620,7 +622,9 @@
--   while (priv->cancelled_running)
--     {
--       priv->cancelled_running_waiting = TRUE;
--+#if defined(G_THREADS_ENABLED)
--       g_cond_wait (&cancellable_cond, &cancellable_mutex);
--+#endif
--     }
-- 
--   g_signal_handler_disconnect (cancellable, handler_id);
+Libsvg-cairo provides the ability to render SVG content from files or
+buffers. All rendering is performed using the cairo rendering library.
+
+Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+---
+ package/Config.in                    |    1 +
+ package/libsvg-cairo/Config.in       |   11 +++++++++++
+ package/libsvg-cairo/libsvg-cairo.mk |   14 ++++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/libsvg-cairo/Config.in
+ create mode 100644 package/libsvg-cairo/libsvg-cairo.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 6d5ff01..aac31bf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -465,6 +465,7 @@ source "package/libqrencode/Config.in"
+ source "package/libraw/Config.in"
+ source "package/librsvg/Config.in"
+ source "package/libsvg/Config.in"
++source "package/libsvg-cairo/Config.in"
+ source "package/libsvgtiny/Config.in"
+ source "package/libungif/Config.in"
+ source "package/opencv/Config.in"
+diff --git a/package/libsvg-cairo/Config.in b/package/libsvg-cairo/Config.in
+new file mode 100644
+index 0000000..9577c69
+--- /dev/null
++++ b/package/libsvg-cairo/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBSVG_CAIRO
++	bool "libsvg-cairo"
++	select BR2_PACKAGE_CAIRO
++	select BR2_PACKAGE_CAIRO_SVG
++	select BR2_PACKAGE_LIBSVG
++	help
++	  Libsvg-cairo provides the ability to render SVG content from
++	  files or buffers. All rendering is performed using the cairo
++	  rendering library.
++
++	  http://cairographics.org
+diff --git a/package/libsvg-cairo/libsvg-cairo.mk b/package/libsvg-cairo/libsvg-cairo.mk
+new file mode 100644
+index 0000000..a41e859
+--- /dev/null
++++ b/package/libsvg-cairo/libsvg-cairo.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# libsvg-cairo
++#
++################################################################################
++
++LIBSVG_CAIRO_VERSION         = 0.1.6
++LIBSVG_CAIRO_SITE            = http://cairographics.org/snapshots/
++LIBSVG_CAIRO_DEPENDENCIES    = cairo libsvg
++LIBSVG_CAIRO_INSTALL_STAGING = YES
++LIBSVG_CAIRO_LICENSE         = LGPLv2+
++LIBSVG_CAIRO_LICENSE_FILES   = COPYING
++
++$(eval $(autotools-package))
 -- 
-1.8.1.2
+1.7.10.4
