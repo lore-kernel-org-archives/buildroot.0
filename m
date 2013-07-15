@@ -1,9 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 15 Jul 2013 14:46:46 -0500
-Subject: [Buildroot] [PATCH 03/67] bustle: libglib2 requires threads
+Date: Mon, 15 Jul 2013 14:46:47 -0500
+Subject: [Buildroot] [PATCH 04/67] connman: libglib2 requires threads
 In-Reply-To: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
 References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1373917670-30006-4-git-send-email-spenser@gillilanding.com>
+Message-ID: <1373917670-30006-5-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,29 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/bustle/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/connman/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bustle/Config.in b/package/bustle/Config.in
-index 2a2a2c1..704165d 100644
---- a/package/bustle/Config.in
-+++ b/package/bustle/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_BUSTLE
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_LIBGLIB2
- 	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_PACKAGE_DBUS # runtime
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index e0505b3..0853941 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_CONNMAN
+ 	depends on !BR2_UCLIBC_VERSION_0_9_32
+ 	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ 	depends on BR2_INET_IPV6
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus
  	help
- 	  Bustle is a better dbus-monitor! It records and draws
-@@ -18,5 +19,5 @@ config BR2_PACKAGE_BUSTLE
+ 	  The Connection Manager (ConnMan) project provides a daemon for
+@@ -49,6 +49,6 @@ config BR2_PACKAGE_CONNMAN_CLIENT
  
- 	  http://www.willthompson.co.uk/bustle/
+ endif # BR2_PACKAGE_CONNMAN
  
--comment "bustle requires a toolchain with WCHAR support"
--	depends on !BR2_USE_WCHAR
-+comment "bustle requires a toolchain with WCHAR support and threading support"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+-comment "connman needs a toolchain with IPv6, WCHAR, thread and resolver support"
++comment "connman needs a toolchain with IPv6, WCHAR, threading and resolver support"
+ 	depends on BR2_UCLIBC_VERSION_0_9_32 || \
+ 		!BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 1.8.1.2
