@@ -1,10 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 15 Jul 2013 14:47:30 -0500
-Subject: [Buildroot] [PATCH 47/67] shared-mime-info: libglib2 requires
-	threads
+Date: Mon, 15 Jul 2013 14:47:31 -0500
+Subject: [Buildroot] [PATCH 48/67] snowball-init: libglib2 requires threads
 In-Reply-To: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
 References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1373917670-30006-48-git-send-email-spenser@gillilanding.com>
+Message-ID: <1373917670-30006-49-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +13,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/shared-mime-info/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/snowball-init/Config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/shared-mime-info/Config.in b/package/shared-mime-info/Config.in
-index b08c1fd..ee635ac 100644
---- a/package/shared-mime-info/Config.in
-+++ b/package/shared-mime-info/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SHARED_MIME_INFO
- 	bool "shared-mime-info"
- 	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBXML2
+diff --git a/package/snowball-init/Config.in b/package/snowball-init/Config.in
+index 99abb35..33d3fa0 100644
+--- a/package/snowball-init/Config.in
++++ b/package/snowball-init/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_SNOWBALL_INIT
+ 	select BR2_PACKAGE_BLUEZ_UTILS
+ 	depends on !BR2_avr32
+ 	depends on BR2_USE_WCHAR # libglib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
+ 	depends on BR2_USE_MMU # dbus
+ 	select BR2_PACKAGE_UX500_FIRMWARE
  	help
-@@ -10,5 +11,5 @@ config BR2_PACKAGE_SHARED_MIME_INFO
+@@ -12,3 +12,6 @@ config BR2_PACKAGE_SNOWBALL_INIT
  
- 	  http://freedesktop.org/wiki/Software/shared-mime-info
+ 	  http://www.igloocommunity.org
  
--comment "shared-mime-info requires a toolchain with WCHAR support"
--	depends on !BR2_USE_WCHAR
-+comment "shared-mime-info requires a toolchain with WCHAR and threading support"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++comment "snowball-init requires a toolchain with WCHAR, threading, and MMU support"
++	depends on !BR2_avr32 && \
++		(!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_MMU)
 -- 
 1.8.1.2
