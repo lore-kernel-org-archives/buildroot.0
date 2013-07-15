@@ -1,56 +1,30 @@
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Mon, 15 Jul 2013 14:39:22 +0200
-Subject: [Buildroot] [PATCH] libosip2: arc: Undefine __arc__ when building
-	for ARC processors
-Message-ID: <1373891962-32493-1-git-send-email-mjonker@synopsys.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 15 Jul 2013 11:19:11 -0300
+Subject: [Buildroot] [PATCH 1/7] squid: bump to version 3.3.6
+Message-ID: <1373897957-5938-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libosip2 appears to have support for the "ARC standard" (Advanced
-RISC Computing), which is unrelated to Synopsys DesignWare ARC
-processors. The check for this involves verifying the existence of
-the "__arc__" macro. Unfortunately, this macro is also present
-as a predefined built-in for the ARC processors, resulting into
-build failures.
-
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libeXosip2/libeXosip2.mk |    4 ++++
- package/libosip2/libosip2.mk     |    4 ++++
- 2 files changed, 8 insertions(+)
+ package/squid/squid.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
-index 4be2f05..76c4947 100644
---- a/package/libeXosip2/libeXosip2.mk
-+++ b/package/libeXosip2/libeXosip2.mk
-@@ -12,6 +12,10 @@ LIBEXOSIP2_LICENSE_FILES = COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index e3daa32..f6be405 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- LIBEXOSIP2_DEPENDENCIES = host-pkgconf libosip2
- 
-+ifeq ($(BR2_arc),y)
-+LIBEXOSIP2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -U__arc__"
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBEXOSIP2_DEPENDENCIES += openssl
- LIBEXOSIP2_CONF_OPT += --enable-openssl
-diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
-index 6ae8149..6d5c516 100644
---- a/package/libosip2/libosip2.mk
-+++ b/package/libosip2/libosip2.mk
-@@ -10,6 +10,10 @@ LIBOSIP2_INSTALL_STAGING = YES
- LIBOSIP2_LICENSE = LGPLv2.1+
- LIBOSIP2_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_arc),y)
-+LIBOSIP2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -U__arc__"
-+endif
-+
- LIBOSIP2_CONF_OPT = \
- 	--enable-mt=$(if $(BR2_TOOLCHAIN_HAS_THREADS),yes,no)
- 
+-SQUID_VERSION = 3.3.5
++SQUID_VERSION = 3.3.6
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.3
+ SQUID_LICENSE = GPLv2+
+ SQUID_LICENSE_FILES = COPYING
 -- 
-1.7.9.5
+1.8.1.5
