@@ -1,45 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Jul 2013 09:52:01 +0200
-Subject: [Buildroot] [PATCHv2 12/25] arch: introduce BR2_GCC_TARGET_{FPU,
-	FLOAT}
-In-Reply-To: <8761wcc20o.fsf@dell.be.48ers.dk>
-References: <1373754468-7527-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1373754468-7527-13-git-send-email-thomas.petazzoni@free-electrons.com>
- <8761wcc20o.fsf@dell.be.48ers.dk>
-Message-ID: <20130715095201.613a8994@skate>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Mon, 15 Jul 2013 13:48:11 +0200
+Subject: [Buildroot] [PATCH] uclibc: arc: add patch to fix strcmp/index
+	susv3 legacy
+Message-ID: <1373888891-466-1-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+This fixes build errors for 'keyutils'
 
-On Sun, 14 Jul 2013 22:36:23 +0200, Peter Korsgaard wrote:
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+---
+ package/uclibc/0.9.33-arc/fix-susv3-legacy.patch |   36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/uclibc/0.9.33-arc/fix-susv3-legacy.patch
 
-> And pass it as -mfloat-abi here (except you used the wrong variable, so
-> it's never passed).
-> 
-> What was the idea here?
-
-To select the floating point strategy, you can either pass:
-
- * --with-float=<foo> at configure time of gcc, in which case it
-   applies to the default build of all binaries built by this gcc.
-
- * -mfloat-abi=<foo> at run time of gcc.
-
-For the internal backend, where we build gcc, I use the former, while
-for external toolchain, I use the latter. The difference in option name
-explains the confusion in the variable name.
-
-I'll respin this patch (and the rest of the patch set) with this fixed.
-
-Thanks for the review (and the commit of all prior patches)!
-
-Thomas
+diff --git a/package/uclibc/0.9.33-arc/fix-susv3-legacy.patch b/package/uclibc/0.9.33-arc/fix-susv3-legacy.patch
+new file mode 100644
+index 0000000..a768024
+--- /dev/null
++++ b/package/uclibc/0.9.33-arc/fix-susv3-legacy.patch
+@@ -0,0 +1,36 @@
++From 3124ace804337d32974392e0a73a09cdc0d60fc8 Mon Sep 17 00:00:00 2001
++From: Mischa Jonker <mjonker@synopsys.com>
++Date: Mon, 15 Jul 2013 13:06:11 +0200
++Subject: [PATCH] ARC: Add alias 'index' to strcmp for susv3 legacy
++ compatibility
++
++This fixes build errors for 'keyutils'
++
++Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
++---
++ libc/string/arc/strchr.S |    5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/libc/string/arc/strchr.S b/libc/string/arc/strchr.S
++index b9f28c0..8d51aa4 100644
++--- a/libc/string/arc/strchr.S
+++++ b/libc/string/arc/strchr.S
++@@ -1,6 +1,7 @@
++ /* Copyright (C) 2007 ARC International (UK) LTD */
++ 
++ #include <bits/asm.h>
+++#include <features.h>
++ 
++ /* ARC700 has a relatively long pipeline and branch prediction, so we want
++    to avoid branches that are hard to predict.  On the other hand, the
++@@ -115,3 +116,7 @@ ENTRY(strchr)
++ 	mov.mi	r0,0
++ #endif /* ENDIAN */
++ ENDFUNC(strchr)
+++
+++#ifdef __UCLIBC_SUSV3_LEGACY__
+++strong_alias(strchr,index)
+++#endif
++-- 
++1.7.9.5
++
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
