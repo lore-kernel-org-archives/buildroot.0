@@ -1,9 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 15 Jul 2013 14:47:36 -0500
-Subject: [Buildroot] [PATCH 53/67] ussp-push: libglib2 requires threads
+Date: Mon, 15 Jul 2013 14:47:39 -0500
+Subject: [Buildroot] [PATCH 56/67] wireshark: libglib2 requires threads
 In-Reply-To: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
 References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1373917670-30006-54-git-send-email-spenser@gillilanding.com>
+Message-ID: <1373917670-30006-57-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/ussp-push/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/wireshark/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/ussp-push/Config.in b/package/ussp-push/Config.in
-index 716ce34..27c5a43 100644
---- a/package/ussp-push/Config.in
-+++ b/package/ussp-push/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_USSP_PUSH
- 	depends on BR2_INET_IPV6
- 	depends on !BR2_avr32
- 	depends on BR2_USE_WCHAR # libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus
- 	select BR2_PACKAGE_OPENOBEX
- 	select BR2_PACKAGE_OPENOBEX_BLUEZ
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+index d4c8b43..bc15bd2 100644
+--- a/package/wireshark/Config.in
++++ b/package/wireshark/Config.in
+@@ -5,11 +5,12 @@ config BR2_PACKAGE_WIRESHARK
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	help
+ 	  Network traffic sniffer and protocol decoder. Currently only tshark,
+ 	  the console interface, is enabled.
+ 
+ 	  http://www.wireshark.org
+ 
+-comment "wireshark requires a toolchain with WCHAR support"
+-	depends on !BR2_USE_WCHAR
++comment "wireshark requires a MMU and a toolchain with WCHAR and threading support"
++	depends on !BR2_USE_MMU || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 1.8.1.2
