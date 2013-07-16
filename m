@@ -1,49 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jul 2013 10:03:21 +0200
-Subject: [Buildroot] [PATCHv3 10/14] gcc: create symbolic link to ld-linux
-	in EABIhf/gcc 4.7/eglibc
+Date: Tue, 16 Jul 2013 10:03:18 +0200
+Subject: [Buildroot] [PATCHv3 07/14] configs: update defconfigs after VFP
+	option changes
 In-Reply-To: <1373961805-3901-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1373961805-3901-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1373961805-3901-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1373961805-3901-8-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using eglibc, the ld-linux loader is installed as
-ld-linux-armhf.so.3, but gcc 4.7.x was not yet updated, and generates
-binaries that reference ld-linux.so.3. This was fixed starting with
-gcc 4.8.x. In order to be able to use gcc 4.7, we create the
-appropriate symbolic link.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/gcc-final/gcc-final.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ configs/calao_snowball_defconfig    | 3 +--
+ configs/mx53loco_defconfig          | 3 +--
+ configs/qemu_arm_nuri_defconfig     | 3 +--
+ configs/qemu_arm_vexpress_defconfig | 3 +--
+ 4 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 0db2eaa..b89b2b7 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -90,6 +90,18 @@ endef
+diff --git a/configs/calao_snowball_defconfig b/configs/calao_snowball_defconfig
+index 0631b52..90421a4 100644
+--- a/configs/calao_snowball_defconfig
++++ b/configs/calao_snowball_defconfig
+@@ -1,10 +1,9 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_KERNEL_HEADERS_3_4=y
+-# BR2_SOFT_FLOAT is not set
++BR2_ARM_FPU_VFPV3D16=y
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+-BR2_VFP_FLOAT=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA2"
+ BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index ff3948b..08de3da 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -1,8 +1,7 @@
+ # Architecture
+ BR2_arm=y
+ BR2_cortex_a8=y
+-# BR2_SOFT_FLOAT is not set
+-BR2_VFP_FLOAT=y
++BR2_ARM_FPU_VFPV3D16=y
  
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
+index 26eb815..1e435a6 100644
+--- a/configs/qemu_arm_nuri_defconfig
++++ b/configs/qemu_arm_nuri_defconfig
+@@ -2,8 +2,7 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+-BR2_VFP_FLOAT=y
+-# BR2_SOFT_FLOAT is not set
++BR2_ARM_FPU_VFPV3D16=y
  
-+# In gcc 4.7.x, the ARM EABIhf library loader path for eglibc was not
-+# correct, so we create a symbolic link to make things work
-+# properly. eglibc installs the library loader as ld-linux-armhf.so.3,
-+# but gcc creates binaries that reference ld-linux.so.3.
-+ifeq ($(BR2_arm)$(BR2_ARM_EABIHF)$(BR2_GCC_VERSION_4_7_X)$(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),yyyy)
-+define HOST_GCC_FINAL_LD_LINUX_LINK
-+	ln -sf ld-linux-armhf.so.3 $(TARGET_DIR)/lib/ld-linux.so.3
-+	ln -sf ld-linux-armhf.so.3 $(STAGING_DIR)/lib/ld-linux.so.3
-+endef
-+HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_LD_LINUX_LINK
-+endif
-+
- # Cannot use the HOST_GCC_FINAL_USR_LIBS mechanism below, because we want
- # libgcc_s to be installed in /lib and not /usr/lib. We add +x on
- # libgcc_s to ensure it will be stripped.
+ # System
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index 12d1d0b..2cc6db9 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -2,8 +2,7 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+-BR2_VFP_FLOAT=y
+-# BR2_SOFT_FLOAT is not set
++BR2_ARM_FPU_VFPV3D16=y
+ 
+ # System
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
 -- 
 1.8.1.2
