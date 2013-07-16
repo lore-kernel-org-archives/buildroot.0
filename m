@@ -1,35 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jul 2013 10:55:51 +0200
-Subject: [Buildroot] [RFC 3/3] opengl: add sunxi-mali as possible
- egl/gles provider
-In-Reply-To: <1373778632-16531-4-git-send-email-spenser@gillilanding.com>
-References: <1373778632-16531-1-git-send-email-spenser@gillilanding.com>
- <1373778632-16531-4-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130716105551.0bc2214b@skate>
+From: Jan Pohanka <xhpohanka@gmail.com>
+Date: Tue, 16 Jul 2013 11:55:03 +0200
+Subject: [Buildroot] custom linux headers from custom kernel
+Message-ID: <51E51877.4080004@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Hi all,
 
-On Sun, 14 Jul 2013 00:10:32 -0500, Spenser Gilliland wrote:
-> 
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> ---
->  package/opengl/libegl/libegl.mk   | 4 ++++
->  package/opengl/libgles/libgles.mk | 4 ++++
->  2 files changed, 8 insertions(+)
+in our project using buildroot we are using a heavily patched kernel, 
+which is retrieved form our GIT server. Thanks to buildroot this can be 
+set up very easily. All is compiled by Codesourcery toolchain.
 
-This one obviously looks good. Just rebase on top of master now that
-ti-gfx has been merged, in order to avoid merge conflicts.
+The kernel contains also a number of modules with own ioctls, so we need 
+to use specific headers. I have found a *linux-headers* package, which 
+installs own headers into staging directory, however there are also 
+options using official headers or the ones from local kernel snapshot. 
+Is there please any reason while there is no option for do 
+headers-install from the kernel built by buildroot? If not I would 
+prepare a patch adding this possibility into linux-headers package.
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+thanks
+Jan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130716/8bec131b/attachment.html>
