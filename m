@@ -1,193 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jul 2013 10:03:22 +0200
-Subject: [Buildroot] [PATCHv3 11/14] arch/arm: add support for Thumb2
-In-Reply-To: <1373961805-3901-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1373961805-3901-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1373961805-3901-12-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Jul 2013 10:16:38 +0200
+Subject: [Buildroot] [PATCH 23/67] libgail: libglib2 requires threads
+In-Reply-To: <1373917670-30006-24-git-send-email-spenser@gillilanding.com>
+References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
+ <1373917670-30006-24-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130716101638.0f741513@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, we were using the default ARM instruction set, as used by
-the toolchain: the 32 bits ARM instruction set for the internal
-backend, and for external toolchain, whatever default was chosen when
-the toolchain was generated.
+Dear Spenser Gilliland,
 
-This commit adds support for the Thumb2 instruction set. To do so, it:
+On Mon, 15 Jul 2013 14:47:06 -0500, Spenser Gilliland wrote:
+> 
+> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+> ---
+>  package/libgail/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/libgail/Config.in b/package/libgail/Config.in
+> index ba74795..3e1af62 100644
+> --- a/package/libgail/Config.in
+> +++ b/package/libgail/Config.in
+> @@ -1,5 +1,7 @@
+>  config BR2_PACKAGE_LIBGAIL
+>  	bool "libgail"
+> +	depends on BR2_USE_WCHAR # pango -> libglib2
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # pango -> libglib2
+>  	depends on BR2_PACKAGE_LIBGTK2
+>  	select BR2_PACKAGE_PANGO
+>  	help
+> @@ -16,3 +18,7 @@ config BR2_PACKAGE_LIBGAIL
+>  	  program.
+>  
+>  	  http://developer.gnome.org/projects/gap
+> +
+> +comment "libgail requires a toolchain with WCHAR and threading support"
+> +	depends on BR2_PACKAGE_LIBGTK2 && \
+> +		(!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS)
 
- * provides a menuconfig choice between ARM and Thumb2. The choice is
-   only shown when Thumb2 is supported, i.e on ARMv7-A CPUs.
+This one doesn't seem useful: the libgail package already has a
+dependency on libgtk2, so it can't be enabled if gtk2 is not enabled.
+And gtk2 can only be enabled if wchar and threads are available.
 
- * passes the --with-mode={arm,thumb} option when building gcc in the
-   internal backend. This tells the compiler which type of
-   instructions it should generate.
+So this patch is not useful.
 
- * passes the m{arm,thumb} option in the external toolchain
-   wrapper. ARM and Thumb2 code can freely be mixed together, so the
-   fact that the C library has been built either ARM or Thumb2 and
-   that the rest of the code is built Thumb2 or ARM is not a problem.
+Remember: propagation of "depends on" is needed from package A to
+package B when package B selects package A. If package B depends on
+package A, then there's no point in propagating the "depends on" of
+package A to package B.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- arch/Config.in                                     |  6 ++++
- arch/Config.in.arm                                 | 36 ++++++++++++++++++++++
- package/gcc/gcc.mk                                 |  5 +++
- toolchain/toolchain-external/ext-tool.mk           |  5 +++
- .../toolchain-external/ext-toolchain-wrapper.c     |  3 ++
- 5 files changed, 55 insertions(+)
+More aspirin? :-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index c2dc9e8..c2147a4 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -207,6 +207,12 @@ config BR2_GCC_TARGET_FPU
- config BR2_GCC_TARGET_FLOAT_ABI
- 	string
- 
-+# The value of this option will be passed as --with-mode=<value> when
-+# building gcc (internal backend) or -m<value> in the toolchain
-+# wrapper (external toolchain)
-+config BR2_GCC_TARGET_MODE
-+	string
-+
- # Set up target binary format
- choice
- 	prompt "Target Binary Format"
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 2b493c0..94c32c9 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -31,6 +31,9 @@ config BR2_ARM_CPU_HAS_VFPV4
- 	bool
- 	select BR2_ARM_CPU_HAS_VFPV3
- 
-+config BR2_ARM_CPU_HAS_THUMB2
-+	bool
-+
- choice
- 	prompt "Target Architecture Variant"
- 	depends on BR2_arm || BR2_armeb
-@@ -65,22 +68,27 @@ config BR2_cortex_a5
- 	bool "cortex-A5"
- 	select BR2_ARM_CPU_MAYBE_HAS_NEON
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV4
-+	select BR2_ARM_CPU_HAS_THUMB2
- config BR2_cortex_a7
- 	bool "cortex-A7"
- 	select BR2_ARM_CPU_HAS_NEON
- 	select BR2_ARM_CPU_HAS_VFPV4
-+	select BR2_ARM_CPU_HAS_THUMB2
- config BR2_cortex_a8
- 	bool "cortex-A8"
- 	select BR2_ARM_CPU_HAS_NEON
- 	select BR2_ARM_CPU_HAS_VFPV3
-+	select BR2_ARM_CPU_HAS_THUMB2
- config BR2_cortex_a9
- 	bool "cortex-A9"
- 	select BR2_ARM_CPU_MAYBE_HAS_NEON
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV3
-+	select BR2_ARM_CPU_HAS_THUMB2
- config BR2_cortex_a15
- 	bool "cortex-A15"
- 	select BR2_ARM_CPU_HAS_NEON
- 	select BR2_ARM_CPU_HAS_VFPV4
-+	select BR2_ARM_CPU_HAS_THUMB2
- config BR2_fa526
- 	bool "fa526/626"
- config BR2_pj4
-@@ -275,6 +283,30 @@ config BR2_ARM_FPU_NEON_VFPV4
- 
- endchoice
- 
-+choice
-+	prompt "ARM instruction set"
-+	depends on BR2_ARM_CPU_HAS_THUMB2
-+
-+config BR2_ARM_INSTRUCTIONS_ARM_CHOICE
-+	bool "ARM"
-+	help
-+	  This option instructs the compiler to generate regular ARM
-+	  instructions, that are all 32 bits wide.
-+
-+config BR2_ARM_INSTRUCTIONS_THUMB2
-+	bool "Thumb2"
-+	help
-+	  This option instructions the compiler to generate Thumb2
-+	  instructions, which allows to mix 16 bits instructions and
-+	  32 bits instructions. This generally provides a much smaller
-+	  compiled binary size.
-+
-+endchoice
-+
-+config BR2_ARM_INSTRUCTIONS_ARM
-+	def_bool y
-+	depends on !BR2_ARM_INSTRUCTIONS_THUMB2
-+
- config BR2_ARCH
- 	default "arm"	if BR2_arm
- 	default "armeb"	if BR2_armeb
-@@ -344,3 +376,7 @@ config BR2_GCC_TARGET_FLOAT_ABI
- 	default "soft"		if BR2_ARM_SOFT_FLOAT
- 	default "softfp"	if !BR2_ARM_SOFT_FLOAT && BR2_ARM_EABI
- 	default "hard"		if !BR2_ARM_SOFT_FLOAT && BR2_ARM_EABIHF
-+
-+config BR2_GCC_TARGET_MODE
-+	default "arm"		if BR2_ARM_INSTRUCTIONS_ARM
-+	default "thumb"		if BR2_ARM_INSTRUCTIONS_THUMB2
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index bfc41a4..d620980 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -177,6 +177,11 @@ ifneq ($(GCC_TARGET_FLOAT_ABI),)
- HOST_GCC_COMMON_CONF_OPT += --with-float=$(GCC_TARGET_FLOAT_ABI)
- endif
- 
-+GCC_TARGET_MODE = $(call qstrip,$(BR2_GCC_TARGET_MODE))
-+ifneq ($(GCC_TARGET_MODE),y)
-+HOST_GCC_COMMON_CONF_OPT += --with-mode=$(GCC_TARGET_MODE)
-+endif
-+
- # Branding works on >= 4.3
- ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
- HOST_GCC_COMMON_CONF_OPT += \
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 67fc40d..b9ae68f 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -147,6 +147,7 @@ CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
- CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
- CC_TARGET_FPU_:=$(call qstrip,$(BR2_GCC_TARGET_FPU))
- CC_TARGET_FLOAT_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
-+CC_TARGET_MODE_:=$(call qstrip,$(BR2_GCC_TARGET_MODE))
- 
- # march/mtune/floating point mode needs to be passed to the external toolchain
- # to select the right multilib variant
-@@ -178,6 +179,10 @@ ifneq ($(CC_TARGET_FLOAT_ABI_),)
- TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(CC_TARGET_FLOAT_ABI_)
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(CC_TARGET_FLOAT_ABI_)"'
- endif
-+ifneq ($(CC_TARGET_MODE_),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -m$(CC_TARGET_MODE_)
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_MODE='"$(CC_TARGET_MODE_)"'
-+endif
- ifeq ($(BR2_BINFMT_FLAT),y)
- TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_BINFMT_FLAT
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index afca6fa..460f255 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -47,6 +47,9 @@ static char *predef_args[] = {
- #ifdef BR_SOFTFLOAT
- 	"-msoft-float",
- #endif /* BR_SOFTFLOAT */
-+#ifdef BR_MODE
-+	"-m" BR_MODE,
-+#endif
- #ifdef BR_64
- 	"-m64",
- #endif
+Thomas
 -- 
-1.8.1.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
