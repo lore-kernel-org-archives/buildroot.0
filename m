@@ -1,149 +1,45 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 16 Jul 2013 14:35:07 +0200
-Subject: [Buildroot] [git commit] arch: Refactor BR2_SOFT_FLOAT into
-	per-architecture options
-Message-ID: <20130716140822.81EC09A5C9@busybox.osuosl.org>
+Date: Tue, 16 Jul 2013 15:07:07 +0200
+Subject: [Buildroot] [git commit] binutils: exclude binutils versions that
+	don't support EABIhf
+Message-ID: <20130716140822.CE81D9A079@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9b3e72b4fd51b63227adad5dbcae8f68333903df
+commit: http://git.buildroot.net/buildroot/commit/?id=ff71f8f8e1f2bff5e26d08b5cb4483507eed8edd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As we are going to introduced a more advanced support of floating
-point options for the ARM architecture, we need to adjust how the
-soft-float option is handled. We replace the current hidden option
-BR2_PREFER_SOFT_FLOAT option and the visible BR2_SOFT_FLOAT option by:
-
- * A global hidden BR2_SOFT_FLOAT option, defined in arch/Config.in,
-   that tells whether the architecture-specific code is using software
-   emulated floating point. This hidden option can be used throughout
-   Buildroot to determine whether soft float is used or not.
-
- * Per-architecture visible BR2_<arch>_SOFT_FLOAT options, for the
-   architecture for which it makes sense, which allows users to select
-   soft float emulation when needed.
-
-This change will allow each architecture to have a different way of
-presenting its floating point capabilities.
+The ARM EABIhf support was introduced in Binutils 2.22, so earlier
+versions should not be selected when EABIhf is used.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- arch/Config.in                |    3 +++
- arch/Config.in.arm            |   10 ++++++++++
- arch/Config.in.mips           |   10 ++++++++++
- arch/Config.in.powerpc        |    9 +++++++++
- toolchain/toolchain-common.in |   21 ---------------------
- 5 files changed, 32 insertions(+), 21 deletions(-)
+ package/binutils/Config.in.host |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 5bb96c5..c2dc9e8 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -1,6 +1,9 @@
- config BR2_ARCH_IS_64
-        bool
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 3d687fe..9ddaed7 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -14,14 +14,17 @@ choice
  
-+config BR2_SOFT_FLOAT
-+	bool
-+
- choice
- 	prompt "Target Architecture"
- 	default BR2_i386
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 027dac2..29b2b45 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -79,6 +79,16 @@ endchoice
- config BR2_ARM_EABI
- 	def_bool y
+ 	config BR2_BINUTILS_VERSION_2_20_1
+ 		depends on !BR2_avr32
++		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.20.1"
  
-+config BR2_ARM_SOFT_FLOAT
-+	bool "Use soft-float"
-+	default y
-+	select BR2_SOFT_FLOAT
-+	help
-+	  If your target CPU does not have a Floating Point Unit (FPU)
-+	  or a kernel FPU emulator, but you still wish to support
-+	  floating point functions, then everything will need to be
-+	  compiled with soft floating point support (-msoft-float).
-+
- config BR2_ARM_ENABLE_NEON
- 	bool "Enable NEON SIMD extension support"
- 	depends on BR2_ARM_CPU_MAYBE_HAS_NEON
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index 1454fb4..6242bcc 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -52,6 +52,16 @@ config BR2_MIPS_NABI64
- 	depends on BR2_ARCH_IS_64
- endchoice
+ 	config BR2_BINUTILS_VERSION_2_21
+ 		depends on !BR2_avr32
++		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.21"
  
-+config BR2_MIPS_SOFT_FLOAT
-+	bool "Use soft-float"
-+	default y
-+	select BR2_SOFT_FLOAT
-+	help
-+	  If your target CPU does not have a Floating Point Unit (FPU)
-+	  or a kernel FPU emulator, but you still wish to support
-+	  floating point functions, then everything will need to be
-+	  compiled with soft floating point support (-msoft-float).
-+
- config BR2_ARCH
- 	default "mips"		if BR2_mips
- 	default "mipsel"	if BR2_mipsel
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 8643efc..ae70a8a 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -88,6 +88,15 @@ config BR2_powerpc_SPE
- 	depends on BR2_powerpc_8540 || BR2_powerpc_8548
- endchoice
+ 	config BR2_BINUTILS_VERSION_2_21_1
+ 		depends on !BR2_avr32
++		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.21.1"
  
-+config BR2_POWERPC_SOFT_FLOAT
-+	bool "Use soft-float"
-+	select BR2_SOFT_FLOAT
-+	help
-+	  If your target CPU does not have a Floating Point Unit (FPU)
-+	  or a kernel FPU emulator, but you still wish to support
-+	  floating point functions, then everything will need to be
-+	  compiled with soft floating point support (-msoft-float).
-+
- config BR2_ARCH
- 	default "powerpc"	if BR2_powerpc
- 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 7c9b842..dc3bd2a 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -90,27 +90,6 @@ config BR2_USE_MMU
- 	  If your target has a MMU, you should say Y here.  If you
- 	  are unsure, just say Y.
- 
--config BR2_PREFER_SOFT_FLOAT
--	bool
--	default y if BR2_arm
--	default y if BR2_armeb
--	default y if BR2_avr32
--	default y if BR2_mips
--	default y if BR2_mipsel
--
--config BR2_SOFT_FLOAT
--	bool "Use software floating point by default"
--	depends on BR2_arm || BR2_armeb || BR2_avr32 || BR2_mips || BR2_mipsel || BR2_powerpc
--	# External toolchains will automatically do soft float or hard
--	# float depending on their configuration
--	depends on BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_CTNG
--	default $(BR2_PREFER_SOFT_FLOAT)
--	help
--	  If your target CPU does not have a Floating Point Unit (FPU) or a
--	  kernel FPU emulator, but you still wish to support floating point
--	  functions, then everything will need to be compiled with soft
--	  floating point support (-msoft-float).
--
- config BR2_TARGET_OPTIMIZATION
- 	string "Target Optimizations"
- 	default "-pipe"
+ 	config BR2_BINUTILS_VERSION_2_22
