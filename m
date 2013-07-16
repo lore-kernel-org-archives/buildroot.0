@@ -1,123 +1,141 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jul 2013 10:03:12 +0200
-Subject: [Buildroot] [PATCHv3 01/14] arch: introduce BR2_GCC_TARGET_{FPU,
-	FLOAT_ABI}
-In-Reply-To: <1373961805-3901-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1373961805-3901-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1373961805-3901-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Jul 2013 10:03:11 +0200
+Subject: [Buildroot] [PATCHv3 00/14] ARM floating point improvements,
+	EABIhf and Thumb2 support
+Message-ID: <1373961805-3901-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot already has the BR2_GCC_TARGET_{TUNE,ARCH,ABI,CPU} hidden
-kconfig strings that allow per-architecture Config.in files to feed
-the appropriate values of --with-{tune,arch,abi-cpu} when building
-gcc, or the appropriate flags for the external toolchain wrapper.
+Hello,
 
-This commit has two additional options:
-BR2_GCC_TARGET_{FPU,FLOAT_ABI}, that allows to define the
---with-{fpu,float} gcc configure options for the internal backend, or
-the -m{fpu,float-abi} options for the flags of the external toolchain
-wrapper.
+Here is a patch series that:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- arch/Config.in                                       | 12 ++++++++++++
- package/gcc/gcc.mk                                   | 10 ++++++++++
- toolchain/toolchain-external/ext-tool.mk             | 10 ++++++++++
- toolchain/toolchain-external/ext-toolchain-wrapper.c |  6 ++++++
- 4 files changed, 38 insertions(+)
+ * improves the support for various floating point possibilities on
+   ARM
+ * adds support for the ARM EABIhf ABI
+ * adds support for the Thumb2 instruction set
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 5ca05cd..5bb96c5 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -192,6 +192,18 @@ config BR2_GCC_TARGET_CPU
- config BR2_GCC_TARGET_CPU_REVISION
- 	string
- 
-+# The value of this option will be passed as --with-fpu=<value> when
-+# building gcc (internal backend) or -mfpu=<value> in the toolchain
-+# wrapper (external toolchain)
-+config BR2_GCC_TARGET_FPU
-+	string
-+
-+# The value of this option will be passed as --with-float=<value> when
-+# building gcc (internal backend) or -mfloat-abi=<value> in the toolchain
-+# wrapper (external toolchain)
-+config BR2_GCC_TARGET_FLOAT_ABI
-+	string
-+
- # Set up target binary format
- choice
- 	prompt "Target Binary Format"
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 8bd65fc..bfc41a4 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -167,6 +167,16 @@ HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
- endif
- endif
- 
-+GCC_TARGET_FPU = $(call qstrip,$(BR2_GCC_TARGET_FPU))
-+ifneq ($(GCC_TARGET_FPU),)
-+HOST_GCC_COMMON_CONF_OPT += --with-fpu=$(GCC_TARGET_FPU)
-+endif
-+
-+GCC_TARGET_FLOAT_ABI = $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
-+ifneq ($(GCC_TARGET_FLOAT_ABI),)
-+HOST_GCC_COMMON_CONF_OPT += --with-float=$(GCC_TARGET_FLOAT_ABI)
-+endif
-+
- # Branding works on >= 4.3
- ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
- HOST_GCC_COMMON_CONF_OPT += \
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 8d9f458..9d3dec4 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -145,6 +145,8 @@ CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISIO
- endif
- CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
- CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
-+CC_TARGET_FPU_:=$(call qstrip,$(BR2_GCC_TARGET_FPU))
-+CC_TARGET_FLOAT_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
- 
- # march/mtune/floating point mode needs to be passed to the external toolchain
- # to select the right multilib variant
-@@ -168,6 +170,14 @@ ifneq ($(CC_TARGET_ABI_),)
- TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
- endif
-+ifneq ($(CC_TARGET_FPU_),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=$(CC_TARGET_FPU_)
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_FPU='"$(CC_TARGET_FPU_)"'
-+endif
-+ifneq ($(CC_TARGET_FLOAT_ABI_),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(CC_TARGET_FLOAT_ABI_)
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(CC_TARGET_FLOAT_ABI_)"'
-+endif
- ifeq ($(BR2_BINFMT_FLAT),y)
- TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_BINFMT_FLAT
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index 9d79d68..f81aed4 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -38,6 +38,12 @@ static char *predef_args[] = {
- #ifdef BR_ABI
- 	"-mabi=" BR_ABI,
- #endif
-+#ifdef BR_FLOAT_ABI
-+	"-mfloat-abi=" BR_FLOAT_ABI,
-+#endif
-+#ifdef BR2_FPU
-+	"-mfpu=" BR_FPU,
-+#endif
- #ifdef BR_SOFTFLOAT
- 	"-msoft-float",
- #endif /* BR_SOFTFLOAT */
+Changes since v2:
+ * Dropped OABI removal patches, since they have been merged
+ * Dropped patch passing gcc options to initial and intermediate
+   passes, since it has been merged
+ * Fixed the usage of BR2_GCC_TARGET_FLOAT_ABI, as noticed by
+   Peter.
+ * Added some comments on BR2_GCC_TARGET_FPU, BR2_GCC_TARGET_FLOAT_ABI
+   and BR2_GCC_TARGET_MODE to explain what they do.
+
+Changes since v1:
+ * Integration of Yann patches to remove OABI.
+ * Integration of a gcc fix for the beaglebone_defconfig (patch 1)
+ * Select soft float unconditionally on AVR32. Suggested by Peter.
+ * Don't enable soft float by default on PowerPC. Suggested by Peter.
+ * Integration of an additional patch doing some tab/spaces cleanup in
+   arch/Config.in*
+ * Support for the Thumb2 instruction set
+
+In summary:
+
+ * Patch 1 introduces the BR2_GCC_TARGET_FLOAT_ABI and
+   BR2_GCC_TARGET_FPU hidden options, that will be used by the
+   Config.in.<arch> files to define which -mfloat-abi= and -mfpu=
+   values they want.
+
+ * Patch 2 moves BR2_SOFT_FLOAT as global hidden option, and adds
+   per-architecture visible options. This will allow each architecture
+   to do its own business in terms of floating point strategy
+   selection, while still providing a global BR2_SOFT_FLOAT for
+   Buildroot code that needs to know whether floating point is
+   emulated in software or not.
+
+ * Patch 3 is the core of the patch set, adding many new options to
+   select various VFP versions for various ARM cores, and adding
+   support for the EABIhf ARM ABI. A special attention has been made
+   on the Config.in help texts, to help the user making the right
+   choice in terms of VFP selection.
+
+ * Patch 4 and 5 adjust gcc and binutils version availabilities
+   according to the selected ABI or VFP version.
+
+ * Patch 6 removes the BR2_VFP_FLOAT option that no longer makes any
+   sense.
+
+ * Patch 7 updates some defconfig that were using BR2_VFP_FLOAT.
+
+ * Patch 8 updates the beaglebone_defconfig to use EABIhf.
+
+ * Patch 9 updates the external toolchain Config.in options after the
+   introduction of the VFP selection and EABIhf ABI.
+
+ * Patch 10 adds a fix for EABIhf that consists in creating a specific
+   symbolic link for the dynamic loader, which is needed when gcc 4.7
+   is used with eglibc.
+
+ * Patch 11, 12 and 13 add the support for Thumb2
+
+ * Patch 14 makes some minor space vs. tabs cleanups.
+
+Thanks,
+
+Thomas
+
+Thomas Petazzoni (14):
+  arch: introduce BR2_GCC_TARGET_{FPU,FLOAT_ABI}
+  arch: Refactor BR2_SOFT_FLOAT into per-architecture options
+  arch: improve ARM floating point support and add support for EABIhf
+  binutils: exclude binutils versions that don't support EABIhf
+  gcc: take into account ARM floating point capabilities
+  toolchain: remove the old BR2_VFP_FLOAT option
+  configs: update defconfigs after VFP option changes
+  configs: use new EABIhf option for beaglebone_defconfig
+  toolchain-external: update config options after EABIhf introduction
+  gcc: create symbolic link to ld-linux in EABIhf/gcc 4.7/eglibc
+  arch/arm: add support for Thumb2
+  uclibc: use numbered patches for 0.9.33.2
+  uclibc: add Thumb2 fixes
+  arch: use tabs instead of spaces in Config.in files
+
+ Config.in.legacy                                   |   9 +
+ arch/Config.in                                     |  23 +-
+ arch/Config.in.arm                                 | 249 +++++++++++++++++++-
+ arch/Config.in.avr32                               |   4 +-
+ arch/Config.in.bfin                                |   2 +-
+ arch/Config.in.mips                                |  10 +
+ arch/Config.in.powerpc                             |   9 +
+ configs/beaglebone_defconfig                       |   3 +-
+ configs/calao_snowball_defconfig                   |   3 +-
+ configs/mx53loco_defconfig                         |   3 +-
+ configs/qemu_arm_nuri_defconfig                    |   3 +-
+ configs/qemu_arm_vexpress_defconfig                |   3 +-
+ package/Makefile.in                                |   6 +
+ package/binutils/Config.in.host                    |   3 +
+ package/gcc/Config.in.host                         |  10 +
+ package/gcc/gcc-final/gcc-final.mk                 |  12 +
+ package/gcc/gcc.mk                                 |  15 ++
+ ...bc-0001-bits-time.h-sync-with-glibc-2.16.patch} |   9 +-
+ ...on-of-MSG_WAITFORONE-and-MSG_CMSG_CLOEXE.patch} |  23 +-
+ ...p3.patch => uclibc-0003-Add-dup3-syscall.patch} |  22 +-
+ ...eps-add-__kernel_long-and-__kernel_ulong.patch} |   7 +-
+ ...uclibc-0005-Patch-from-OpenWRT-for-avr32.patch} |  14 +-
+ ...estore-stack-pointer-just-after-return-fr.patch |  42 ++++
+ ...e.S-Add-missing-IT-instruction-for-Thumb2.patch |  29 +++
+ ...8-arm-move-check-for-BX-to-its-own-header.patch | 257 +++++++++++++++++++++
+ toolchain/toolchain-buildroot/Config.in.2          |  12 -
+ toolchain/toolchain-common.in                      |  21 --
+ toolchain/toolchain-external/Config.in             |  24 +-
+ toolchain/toolchain-external/ext-tool.mk           |  20 +-
+ .../toolchain-external/ext-toolchain-wrapper.c     |  12 +-
+ 30 files changed, 768 insertions(+), 91 deletions(-)
+ rename package/uclibc/0.9.33.2/{uclibc-bits-time.h-sync-with-glibc-2.16.patch => uclibc-0001-bits-time.h-sync-with-glibc-2.16.patch} (82%)
+ rename package/uclibc/0.9.33.2/{uclibc-define-MSG_CMSG_CLOEXEC.patch => uclibc-0002-Add-definition-of-MSG_WAITFORONE-and-MSG_CMSG_CLOEXE.patch} (54%)
+ rename package/uclibc/0.9.33.2/{uclibc-dup3.patch => uclibc-0003-Add-dup3-syscall.patch} (73%)
+ rename package/uclibc/0.9.33.2/{uclibc-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch => uclibc-0004-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch} (98%)
+ rename package/uclibc/0.9.33.2/{uclibc-OpenWRT-140-avr32_atomic_fix.patch => uclibc-0005-Patch-from-OpenWRT-for-avr32.patch} (50%)
+ create mode 100644 package/uclibc/0.9.33.2/uclibc-0006-arm-clone-restore-stack-pointer-just-after-return-fr.patch
+ create mode 100644 package/uclibc/0.9.33.2/uclibc-0007-arm-clone.S-Add-missing-IT-instruction-for-Thumb2.patch
+ create mode 100644 package/uclibc/0.9.33.2/uclibc-0008-arm-move-check-for-BX-to-its-own-header.patch
+
 -- 
 1.8.1.2
