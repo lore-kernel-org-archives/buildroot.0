@@ -1,68 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jul 2013 15:32:58 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 16 Jul 2013 15:39:19 +0200
 Subject: [Buildroot] [PATCHv3 08/14] configs: use new EABIhf option for
- beaglebone_defconfig
-In-Reply-To: <8761wa1w3b.fsf@dell.be.48ers.dk>
+	beaglebone_defconfig
+In-Reply-To: <20130716153258.1f2c3201@skate> (Thomas Petazzoni's message of
+ "Tue, 16 Jul 2013 15:32:58 +0200")
 References: <1373961805-3901-1-git-send-email-thomas.petazzoni@free-electrons.com>
  <1373961805-3901-9-git-send-email-thomas.petazzoni@free-electrons.com>
- <8761wa1w3b.fsf@dell.be.48ers.dk>
-Message-ID: <20130716153258.1f2c3201@skate>
+ <8761wa1w3b.fsf@dell.be.48ers.dk> <20130716153258.1f2c3201@skate>
+Message-ID: <87bo62zks8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 16 Jul 2013 15:19:04 +0200, Peter Korsgaard wrote:
+ Thomas> Dear Peter Korsgaard,
+ Thomas> On Tue, 16 Jul 2013 15:19:04 +0200, Peter Korsgaard wrote:
 
-> Did you test build this? I had a beaglebone derived config (but with
-> latest linaro), and u-boot failed to build with:
+ >> Did you test build this? I had a beaglebone derived config (but with
+ >> latest linaro), and u-boot failed to build with:
 
-Yes, I tried beaglebone_defconfig, which uses an internal toolchain...
-which would not exhibit this problem.
+ Thomas> Yes, I tried beaglebone_defconfig, which uses an internal toolchain...
+ Thomas> which would not exhibit this problem.
 
-> /home/peko/source/buildroot/output/host/usr/bin/arm-linux-gnueabihf-gcc -DDO_DEPS_ONLY \
-> 		-g  -Os   -fno-common -ffixed-r8 -msoft-float  -D__KERNEL__ -I/home/peko/source/buildroot/output/build/uboot-2013.04/include -fno-builtin -ffreestanding -nostdinc -isystem /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/4.8.2/include -pipe  -DCONFIG_ARM -D__ARM__ -marm -mno-thumb-interwork -mabi=aapcs-linux -march=armv7-a -Wall -Wstrict-prototypes       \
-> 			-o arch/arm/cpu/armv7/am33xx/asm-offsets.s arch/arm/cpu/armv7/am33xx/asm-offsets.c -c -S; \
-> 	else \
-> 		touch arch/arm/cpu/armv7/am33xx/asm-offsets.s; \
-> 	fi
-> arm-linux-gnueabihf-gcc: error: -mfloat-abi=soft and -mfloat-abi=hard may not be used together
-> make[1]: *** [lib/asm-offsets.s] Error 1
-> 
-> Because of the hard/soft float mixup. It might not happen with the
-> internal toolchain as we're not forcing -mfloat-abi=hard on the command
-> line, but I haven't tried yet.
+Ok, good. Then I'll commit it.
 
-Unfortunately, I'm not sure how to fix this particular problem. It's
-gcc that is too stupid to understand that -msoft-float appearing in the
-command line after -mfloat-abi=hard should take precedence over
--mfloat-abi=hard. I believe we already had this case in the past, maybe
-not specifically with those options, but with other options.
 
-One solution I see to this is not very nice:
+ Thomas> Unfortunately, I'm not sure how to fix this particular problem. It's
+ Thomas> gcc that is too stupid to understand that -msoft-float appearing in the
+ Thomas> command line after -mfloat-abi=hard should take precedence over
+ Thomas> -mfloat-abi=hard. I believe we already had this case in the past, maybe
+ Thomas> not specifically with those options, but with other options.
 
-	if (gcc command line contains -msoft-float) {
-		do not pass -mfloat-abi and -mfpu arguments
-	}
+ Thomas> One solution I see to this is not very nice:
 
-The other solution is to simply not pass -mfloat-abi=hard, assuming the
-toolchain would by default generate such binaries, which should be the
-case because EABI and EABIhf are not compatible. However, we should
-still pass -mfloat-abi=soft/softfp as needed.
+ Thomas> 	if (gcc command line contains -msoft-float) {
+ Thomas> 		do not pass -mfloat-abi and -mfpu arguments
+ Thomas> 	}
 
-That makes me think that I should maybe add a check that ensures that
-the ABI selection (EABI/EABIhf) matches the one provided by the
-external toolchain (which is useful when custom external toolchains are
-used).
+You mean in the toolchain wrapper? Yddrk.
 
-Thoughts?
 
-Thomas
+ Thomas> The other solution is to simply not pass -mfloat-abi=hard, assuming the
+ Thomas> toolchain would by default generate such binaries, which should be the
+ Thomas> case because EABI and EABIhf are not compatible. However, we should
+ Thomas> still pass -mfloat-abi=soft/softfp as needed.
+
+That could work, but also doesn't sound really nice. Presumably gcc
+doesn't complain about -mfloat-abi=softfp -mfloat-abi=soft as those are
+compatible.
+
+
+ Thomas> That makes me think that I should maybe add a check that ensures that
+ Thomas> the ABI selection (EABI/EABIhf) matches the one provided by the
+ Thomas> external toolchain (which is useful when custom external toolchains are
+ Thomas> used).
+
+That would be a nice addition, yes.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
