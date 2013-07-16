@@ -1,45 +1,49 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 16 Jul 2013 15:07:07 +0200
-Subject: [Buildroot] [git commit] binutils: exclude binutils versions that
-	don't support EABIhf
-Message-ID: <20130716140822.CE81D9A079@busybox.osuosl.org>
+Date: Tue, 16 Jul 2013 15:22:10 +0200
+Subject: [Buildroot] [git commit] gcc: create symbolic link to ld-linux in
+	EABIhf/gcc 4.7/eglibc
+Message-ID: <20130716140823.3D8969A079@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff71f8f8e1f2bff5e26d08b5cb4483507eed8edd
+commit: http://git.buildroot.net/buildroot/commit/?id=d2e3cc389d47f3f1f3aa5e92e2e00deb9f2f27ba
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ARM EABIhf support was introduced in Binutils 2.22, so earlier
-versions should not be selected when EABIhf is used.
+When using eglibc, the ld-linux loader is installed as
+ld-linux-armhf.so.3, but gcc 4.7.x was not yet updated, and generates
+binaries that reference ld-linux.so.3. This was fixed starting with
+gcc 4.8.x. In order to be able to use gcc 4.7, we create the
+appropriate symbolic link.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/binutils/Config.in.host |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/gcc/gcc-final/gcc-final.mk |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 3d687fe..9ddaed7 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -14,14 +14,17 @@ choice
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 0db2eaa..b89b2b7 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -90,6 +90,18 @@ endef
  
- 	config BR2_BINUTILS_VERSION_2_20_1
- 		depends on !BR2_avr32
-+		depends on !BR2_ARM_EABIHF
- 		bool "binutils 2.20.1"
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
  
- 	config BR2_BINUTILS_VERSION_2_21
- 		depends on !BR2_avr32
-+		depends on !BR2_ARM_EABIHF
- 		bool "binutils 2.21"
- 
- 	config BR2_BINUTILS_VERSION_2_21_1
- 		depends on !BR2_avr32
-+		depends on !BR2_ARM_EABIHF
- 		bool "binutils 2.21.1"
- 
- 	config BR2_BINUTILS_VERSION_2_22
++# In gcc 4.7.x, the ARM EABIhf library loader path for eglibc was not
++# correct, so we create a symbolic link to make things work
++# properly. eglibc installs the library loader as ld-linux-armhf.so.3,
++# but gcc creates binaries that reference ld-linux.so.3.
++ifeq ($(BR2_arm)$(BR2_ARM_EABIHF)$(BR2_GCC_VERSION_4_7_X)$(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),yyyy)
++define HOST_GCC_FINAL_LD_LINUX_LINK
++	ln -sf ld-linux-armhf.so.3 $(TARGET_DIR)/lib/ld-linux.so.3
++	ln -sf ld-linux-armhf.so.3 $(STAGING_DIR)/lib/ld-linux.so.3
++endef
++HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_LD_LINUX_LINK
++endif
++
+ # Cannot use the HOST_GCC_FINAL_USR_LIBS mechanism below, because we want
+ # libgcc_s to be installed in /lib and not /usr/lib. We add +x on
+ # libgcc_s to ensure it will be stripped.
