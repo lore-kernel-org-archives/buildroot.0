@@ -1,141 +1,149 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jul 2013 10:03:11 +0200
-Subject: [Buildroot] [PATCHv3 00/14] ARM floating point improvements,
-	EABIhf and Thumb2 support
-Message-ID: <1373961805-3901-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Jul 2013 10:03:13 +0200
+Subject: [Buildroot] [PATCHv3 02/14] arch: Refactor BR2_SOFT_FLOAT into
+	per-architecture options
+In-Reply-To: <1373961805-3901-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1373961805-3901-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1373961805-3901-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As we are going to introduced a more advanced support of floating
+point options for the ARM architecture, we need to adjust how the
+soft-float option is handled. We replace the current hidden option
+BR2_PREFER_SOFT_FLOAT option and the visible BR2_SOFT_FLOAT option by:
 
-Here is a patch series that:
+ * A global hidden BR2_SOFT_FLOAT option, defined in arch/Config.in,
+   that tells whether the architecture-specific code is using software
+   emulated floating point. This hidden option can be used throughout
+   Buildroot to determine whether soft float is used or not.
 
- * improves the support for various floating point possibilities on
-   ARM
- * adds support for the ARM EABIhf ABI
- * adds support for the Thumb2 instruction set
+ * Per-architecture visible BR2_<arch>_SOFT_FLOAT options, for the
+   architecture for which it makes sense, which allows users to select
+   soft float emulation when needed.
 
-Changes since v2:
- * Dropped OABI removal patches, since they have been merged
- * Dropped patch passing gcc options to initial and intermediate
-   passes, since it has been merged
- * Fixed the usage of BR2_GCC_TARGET_FLOAT_ABI, as noticed by
-   Peter.
- * Added some comments on BR2_GCC_TARGET_FPU, BR2_GCC_TARGET_FLOAT_ABI
-   and BR2_GCC_TARGET_MODE to explain what they do.
+This change will allow each architecture to have a different way of
+presenting its floating point capabilities.
 
-Changes since v1:
- * Integration of Yann patches to remove OABI.
- * Integration of a gcc fix for the beaglebone_defconfig (patch 1)
- * Select soft float unconditionally on AVR32. Suggested by Peter.
- * Don't enable soft float by default on PowerPC. Suggested by Peter.
- * Integration of an additional patch doing some tab/spaces cleanup in
-   arch/Config.in*
- * Support for the Thumb2 instruction set
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in                |  3 +++
+ arch/Config.in.arm            | 10 ++++++++++
+ arch/Config.in.mips           | 10 ++++++++++
+ arch/Config.in.powerpc        |  9 +++++++++
+ toolchain/toolchain-common.in | 21 ---------------------
+ 5 files changed, 32 insertions(+), 21 deletions(-)
 
-In summary:
-
- * Patch 1 introduces the BR2_GCC_TARGET_FLOAT_ABI and
-   BR2_GCC_TARGET_FPU hidden options, that will be used by the
-   Config.in.<arch> files to define which -mfloat-abi= and -mfpu=
-   values they want.
-
- * Patch 2 moves BR2_SOFT_FLOAT as global hidden option, and adds
-   per-architecture visible options. This will allow each architecture
-   to do its own business in terms of floating point strategy
-   selection, while still providing a global BR2_SOFT_FLOAT for
-   Buildroot code that needs to know whether floating point is
-   emulated in software or not.
-
- * Patch 3 is the core of the patch set, adding many new options to
-   select various VFP versions for various ARM cores, and adding
-   support for the EABIhf ARM ABI. A special attention has been made
-   on the Config.in help texts, to help the user making the right
-   choice in terms of VFP selection.
-
- * Patch 4 and 5 adjust gcc and binutils version availabilities
-   according to the selected ABI or VFP version.
-
- * Patch 6 removes the BR2_VFP_FLOAT option that no longer makes any
-   sense.
-
- * Patch 7 updates some defconfig that were using BR2_VFP_FLOAT.
-
- * Patch 8 updates the beaglebone_defconfig to use EABIhf.
-
- * Patch 9 updates the external toolchain Config.in options after the
-   introduction of the VFP selection and EABIhf ABI.
-
- * Patch 10 adds a fix for EABIhf that consists in creating a specific
-   symbolic link for the dynamic loader, which is needed when gcc 4.7
-   is used with eglibc.
-
- * Patch 11, 12 and 13 add the support for Thumb2
-
- * Patch 14 makes some minor space vs. tabs cleanups.
-
-Thanks,
-
-Thomas
-
-Thomas Petazzoni (14):
-  arch: introduce BR2_GCC_TARGET_{FPU,FLOAT_ABI}
-  arch: Refactor BR2_SOFT_FLOAT into per-architecture options
-  arch: improve ARM floating point support and add support for EABIhf
-  binutils: exclude binutils versions that don't support EABIhf
-  gcc: take into account ARM floating point capabilities
-  toolchain: remove the old BR2_VFP_FLOAT option
-  configs: update defconfigs after VFP option changes
-  configs: use new EABIhf option for beaglebone_defconfig
-  toolchain-external: update config options after EABIhf introduction
-  gcc: create symbolic link to ld-linux in EABIhf/gcc 4.7/eglibc
-  arch/arm: add support for Thumb2
-  uclibc: use numbered patches for 0.9.33.2
-  uclibc: add Thumb2 fixes
-  arch: use tabs instead of spaces in Config.in files
-
- Config.in.legacy                                   |   9 +
- arch/Config.in                                     |  23 +-
- arch/Config.in.arm                                 | 249 +++++++++++++++++++-
- arch/Config.in.avr32                               |   4 +-
- arch/Config.in.bfin                                |   2 +-
- arch/Config.in.mips                                |  10 +
- arch/Config.in.powerpc                             |   9 +
- configs/beaglebone_defconfig                       |   3 +-
- configs/calao_snowball_defconfig                   |   3 +-
- configs/mx53loco_defconfig                         |   3 +-
- configs/qemu_arm_nuri_defconfig                    |   3 +-
- configs/qemu_arm_vexpress_defconfig                |   3 +-
- package/Makefile.in                                |   6 +
- package/binutils/Config.in.host                    |   3 +
- package/gcc/Config.in.host                         |  10 +
- package/gcc/gcc-final/gcc-final.mk                 |  12 +
- package/gcc/gcc.mk                                 |  15 ++
- ...bc-0001-bits-time.h-sync-with-glibc-2.16.patch} |   9 +-
- ...on-of-MSG_WAITFORONE-and-MSG_CMSG_CLOEXE.patch} |  23 +-
- ...p3.patch => uclibc-0003-Add-dup3-syscall.patch} |  22 +-
- ...eps-add-__kernel_long-and-__kernel_ulong.patch} |   7 +-
- ...uclibc-0005-Patch-from-OpenWRT-for-avr32.patch} |  14 +-
- ...estore-stack-pointer-just-after-return-fr.patch |  42 ++++
- ...e.S-Add-missing-IT-instruction-for-Thumb2.patch |  29 +++
- ...8-arm-move-check-for-BX-to-its-own-header.patch | 257 +++++++++++++++++++++
- toolchain/toolchain-buildroot/Config.in.2          |  12 -
- toolchain/toolchain-common.in                      |  21 --
- toolchain/toolchain-external/Config.in             |  24 +-
- toolchain/toolchain-external/ext-tool.mk           |  20 +-
- .../toolchain-external/ext-toolchain-wrapper.c     |  12 +-
- 30 files changed, 768 insertions(+), 91 deletions(-)
- rename package/uclibc/0.9.33.2/{uclibc-bits-time.h-sync-with-glibc-2.16.patch => uclibc-0001-bits-time.h-sync-with-glibc-2.16.patch} (82%)
- rename package/uclibc/0.9.33.2/{uclibc-define-MSG_CMSG_CLOEXEC.patch => uclibc-0002-Add-definition-of-MSG_WAITFORONE-and-MSG_CMSG_CLOEXE.patch} (54%)
- rename package/uclibc/0.9.33.2/{uclibc-dup3.patch => uclibc-0003-Add-dup3-syscall.patch} (73%)
- rename package/uclibc/0.9.33.2/{uclibc-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch => uclibc-0004-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch} (98%)
- rename package/uclibc/0.9.33.2/{uclibc-OpenWRT-140-avr32_atomic_fix.patch => uclibc-0005-Patch-from-OpenWRT-for-avr32.patch} (50%)
- create mode 100644 package/uclibc/0.9.33.2/uclibc-0006-arm-clone-restore-stack-pointer-just-after-return-fr.patch
- create mode 100644 package/uclibc/0.9.33.2/uclibc-0007-arm-clone.S-Add-missing-IT-instruction-for-Thumb2.patch
- create mode 100644 package/uclibc/0.9.33.2/uclibc-0008-arm-move-check-for-BX-to-its-own-header.patch
-
+diff --git a/arch/Config.in b/arch/Config.in
+index 5bb96c5..c2dc9e8 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -1,6 +1,9 @@
+ config BR2_ARCH_IS_64
+        bool
+ 
++config BR2_SOFT_FLOAT
++	bool
++
+ choice
+ 	prompt "Target Architecture"
+ 	default BR2_i386
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 027dac2..29b2b45 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -79,6 +79,16 @@ endchoice
+ config BR2_ARM_EABI
+ 	def_bool y
+ 
++config BR2_ARM_SOFT_FLOAT
++	bool "Use soft-float"
++	default y
++	select BR2_SOFT_FLOAT
++	help
++	  If your target CPU does not have a Floating Point Unit (FPU)
++	  or a kernel FPU emulator, but you still wish to support
++	  floating point functions, then everything will need to be
++	  compiled with soft floating point support (-msoft-float).
++
+ config BR2_ARM_ENABLE_NEON
+ 	bool "Enable NEON SIMD extension support"
+ 	depends on BR2_ARM_CPU_MAYBE_HAS_NEON
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index 1454fb4..6242bcc 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -52,6 +52,16 @@ config BR2_MIPS_NABI64
+ 	depends on BR2_ARCH_IS_64
+ endchoice
+ 
++config BR2_MIPS_SOFT_FLOAT
++	bool "Use soft-float"
++	default y
++	select BR2_SOFT_FLOAT
++	help
++	  If your target CPU does not have a Floating Point Unit (FPU)
++	  or a kernel FPU emulator, but you still wish to support
++	  floating point functions, then everything will need to be
++	  compiled with soft floating point support (-msoft-float).
++
+ config BR2_ARCH
+ 	default "mips"		if BR2_mips
+ 	default "mipsel"	if BR2_mipsel
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index 8643efc..ae70a8a 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -88,6 +88,15 @@ config BR2_powerpc_SPE
+ 	depends on BR2_powerpc_8540 || BR2_powerpc_8548
+ endchoice
+ 
++config BR2_POWERPC_SOFT_FLOAT
++	bool "Use soft-float"
++	select BR2_SOFT_FLOAT
++	help
++	  If your target CPU does not have a Floating Point Unit (FPU)
++	  or a kernel FPU emulator, but you still wish to support
++	  floating point functions, then everything will need to be
++	  compiled with soft floating point support (-msoft-float).
++
+ config BR2_ARCH
+ 	default "powerpc"	if BR2_powerpc
+ 
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 7c9b842..dc3bd2a 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -90,27 +90,6 @@ config BR2_USE_MMU
+ 	  If your target has a MMU, you should say Y here.  If you
+ 	  are unsure, just say Y.
+ 
+-config BR2_PREFER_SOFT_FLOAT
+-	bool
+-	default y if BR2_arm
+-	default y if BR2_armeb
+-	default y if BR2_avr32
+-	default y if BR2_mips
+-	default y if BR2_mipsel
+-
+-config BR2_SOFT_FLOAT
+-	bool "Use software floating point by default"
+-	depends on BR2_arm || BR2_armeb || BR2_avr32 || BR2_mips || BR2_mipsel || BR2_powerpc
+-	# External toolchains will automatically do soft float or hard
+-	# float depending on their configuration
+-	depends on BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_CTNG
+-	default $(BR2_PREFER_SOFT_FLOAT)
+-	help
+-	  If your target CPU does not have a Floating Point Unit (FPU) or a
+-	  kernel FPU emulator, but you still wish to support floating point
+-	  functions, then everything will need to be compiled with soft
+-	  floating point support (-msoft-float).
+-
+ config BR2_TARGET_OPTIMIZATION
+ 	string "Target Optimizations"
+ 	default "-pipe"
 -- 
 1.8.1.2
