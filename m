@@ -1,49 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 16 Jul 2013 15:22:10 +0200
-Subject: [Buildroot] [git commit] gcc: create symbolic link to ld-linux in
-	EABIhf/gcc 4.7/eglibc
-Message-ID: <20130716140823.3D8969A079@busybox.osuosl.org>
+Date: Tue, 16 Jul 2013 15:39:59 +0200
+Subject: [Buildroot] [git commit] configs: use new EABIhf option for
+	beaglebone_defconfig
+Message-ID: <20130716140823.7FBE79A079@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d2e3cc389d47f3f1f3aa5e92e2e00deb9f2f27ba
+commit: http://git.buildroot.net/buildroot/commit/?id=d2dc7be318557412a553fae6647495de66dd0e66
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When using eglibc, the ld-linux loader is installed as
-ld-linux-armhf.so.3, but gcc 4.7.x was not yet updated, and generates
-binaries that reference ld-linux.so.3. This was fixed starting with
-gcc 4.8.x. In order to be able to use gcc 4.7, we create the
-appropriate symbolic link.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gcc/gcc-final/gcc-final.mk |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+ configs/beaglebone_defconfig |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 0db2eaa..b89b2b7 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -90,6 +90,18 @@ endef
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index a141320..d6b5c31 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -1,8 +1,7 @@
+ # architecture
+ BR2_arm=y
+ BR2_cortex_a8=y
+-BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-fpu=vfpv3 --with-float=hard"
+-# BR2_SOFT_FLOAT is not set
++BR2_ARM_EABIHF=y
  
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
- 
-+# In gcc 4.7.x, the ARM EABIhf library loader path for eglibc was not
-+# correct, so we create a symbolic link to make things work
-+# properly. eglibc installs the library loader as ld-linux-armhf.so.3,
-+# but gcc creates binaries that reference ld-linux.so.3.
-+ifeq ($(BR2_arm)$(BR2_ARM_EABIHF)$(BR2_GCC_VERSION_4_7_X)$(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),yyyy)
-+define HOST_GCC_FINAL_LD_LINUX_LINK
-+	ln -sf ld-linux-armhf.so.3 $(TARGET_DIR)/lib/ld-linux.so.3
-+	ln -sf ld-linux-armhf.so.3 $(STAGING_DIR)/lib/ld-linux.so.3
-+endef
-+HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_LD_LINUX_LINK
-+endif
-+
- # Cannot use the HOST_GCC_FINAL_USR_LIBS mechanism below, because we want
- # libgcc_s to be installed in /lib and not /usr/lib. We add +x on
- # libgcc_s to ensure it will be stripped.
+ # system
+ BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
