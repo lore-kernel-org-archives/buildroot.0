@@ -1,73 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Jul 2013 09:45:41 +0200
-Subject: [Buildroot] [PATCH] toolchain: check ARM EABI vs. EABIhf for
-	external toolchains
-In-Reply-To: <20130717092519.7543da71@skate>
-References: <1374012366-27612-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20130716223952.GB7947@free.fr> <20130717092519.7543da71@skate>
-Message-ID: <201307170945.41870.yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 17 Jul 2013 08:01:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 6392] Extended ARM uImage kernel options
+In-Reply-To: <bug-6392-163@https.bugs.busybox.net/>
+References: <bug-6392-163@https.bugs.busybox.net/>
+Message-ID: <20130717080141.512679A5FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+https://bugs.busybox.net/show_bug.cgi?id=6392
 
-On Wednesday 17 July 2013 09:25:19 Thomas Petazzoni wrote:
-> On Wed, 17 Jul 2013 00:39:53 +0200, Yann E. MORIN wrote:
-> > >  	EXT_TOOLCHAIN_TARGET=`LANG=C $${__CROSS_CC} -v 2>&1 | grep ^Target | cut -f2 -d ' '` ; \
-> > > -	if ! echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
-> > > -		echo "External toolchain uses the unsuported OABI" ; \
-> > > +	if echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi$$' ; then \
-> > > +		EXT_TOOLCHAIN_ABI="eabi" ; \
-> > > +	elif echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabihf$$' ; then \
-> > > +		EXT_TOOLCHAIN_ABI="eabihf" ; \
-> > 
-> > That's not always the case. You can well have a toolchain which tuple
-> > ends in eabi, but the toolchain uses the hard-float ABI.
-> > 
-> > That's the case by default for crosstool-NG toolchains, for example.
-> > Since the *eabihf is recent, not all gcc or binutils versions recognise
-> > it, while they are absolutely capable of emitting EABI using the
-> > hard-float ABI. Hence, ct-ng allows adding the 'hf' suffix as an option.
-> > (see attachment for an example of 'gcc -v' dump).
-> > 
-> > Checking for EABI, it is better and more reliable to run the
-> > preprocessor, and check some defines are available or not (I always
-> > need a bit of googling to get this):
-> >     ARM_TUPLE-gcc -E -dM -xc - </dev/null |grep __ARM_EABI__
-> > 
-> > However, I could not find a #define about the float ABI... :-(
+--- Comment #3 from Philipp Rahns <philipp.rahns@meinberg.de> 2013-07-17 08:01:49 UTC ---
+(In reply to comment #2)
+> Thanks for this contribution.
 > 
-> Ah, interesting. Originally, I wasn't planning on checking the tuple,
-> and I was instead thinking of using a specific tag in the ELF headers.
+> Can you give examples of usage of BR2_LINUX_KERNEL_MAKE_FLAGS ? Why would it be
+> limited to ARM and uImage ?
 > 
-> A binary compiled with an EABIhf toolchain:
+> Also, I don't quite understand BR2_LINUX_KERNEL_NATIVE_CONFIG. When you unpack
+> a kernel tarball or a Git tree, there's normally no .config in the kernel tree,
+> and it has to be created, either starting from a defconfig, or using one of the
+> menuconfig/nconfig/gconfig/xconfig configuration interfaces.
 > 
-> $ arm-linux-gnueabihf-readelf -A toto.o | grep Tag_ABI_VFP_args
->   Tag_ABI_VFP_args: VFP registers
+> Could you expand a bit on the use cases? Thanks!
 
-Woot! I learned something! :-)
+Hi Thomas,
 
-> A binary compiled with an EABI toolchain:
-> 
-> $ arm-linux-gnueabihf-readelf -A toto.o | grep Tag_ABI_VFP_args
-> $
-> 
-> I would run this on the libc or ld.so provided with the toolchain.
-> 
-> What do you think?
+I agree on the first one that it is not neccessarily limited to the ARM
+section.
+Could be used at any time when compiling a kernel in general.
 
-Yes, great! :-)
-
-Regards,
-Yann E. MORIN.
+Concerning native config:
+When you have a look at the Zedboard or the Raspberry Pi there are already
+modified kernel sources fitting to the board.
+In some cases this is not enough for the requirements of oneself and you start
+tweaking it. This is the point where you start "branching" the project and
+saving ( mostly likely ) the config related to your changes. Of course, you
+host this branch on a server and to make life easier for other developers you
+provide an out of the box solution. I know I could easily use
+"$(LINUX_DIR)/.config" as config file path but I though it was worth a single
+option.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
