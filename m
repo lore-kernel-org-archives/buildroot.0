@@ -1,51 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jul 2013 10:13:18 +0200
-Subject: [Buildroot] [PATCHv2 1/4] toolchain/helpers: don't use the x$(...)
-	= x"value" syntax
+Date: Wed, 17 Jul 2013 10:13:20 +0200
+Subject: [Buildroot] [PATCHv2 3/4] toolchain/toolchain-external: don't use
+	x$(...) construct or ==
 In-Reply-To: <1374048801-7666-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1374048801-7666-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1374048801-7666-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1374048801-7666-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As noted by Yann E. Morin, the x$(...) = x"value" syntax is old and
-ugly, and the easier to read "$(...)" = "value" can now be used
-without problems.
+With modern shells, we can simply do test using the "$(...)" = "value"
+form. This commit gets rid of the x$(...) = x"value" constructs and
+replaces == by =, which is the correct operator to test the equality
+of two strings with the test program.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ toolchain/toolchain-external/ext-tool.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 95217e7..94fe015 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -181,7 +181,7 @@ create_lib64_symlinks = \
- # $2: feature description
- #
- check_glibc_feature = \
--	if [ x$($(1)) != x"y" ] ; then \
-+	if [ "$($(1))" != "y" ] ; then \
- 		echo "$(2) available in C library, please enable $(1)" ; \
- 		exit 1 ; \
- 	fi
-@@ -236,11 +236,11 @@ check_glibc = \
- #
- check_uclibc_feature = \
- 	IS_IN_LIBC=`grep -q "\#define $(1) 1" $(3) && echo y` ; \
--	if [ x$($(2)) != x"y" -a x$${IS_IN_LIBC} = x"y" ] ; then \
-+	if [ "$($(2))" != "y" -a $${IS_IN_LIBC} = "y" ] ; then \
- 		echo "$(4) available in C library, please enable $(2)" ; \
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 80e03b9..8aac50e 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -368,15 +368,15 @@ $(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
+ 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
  		exit 1 ; \
  	fi ; \
--	if [ x$($(2)) = x"y" -a x$${IS_IN_LIBC} != x"y" ] ; then \
-+	if [ "$($(2))" = "y" -a $${IS_IN_LIBC} != "y" ] ; then \
- 		echo "$(4) not available in C library, please disable $(2)" ; \
- 		exit 1 ; \
- 	fi
+-	if test x$(BR2_arm) == x"y" ; then \
++	if test "$(BR2_arm)" = "y" ; then \
+ 		$(call check_arm_abi,\
+ 			"$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
+ 			$(TOOLCHAIN_EXTERNAL_READELF)) ; \
+ 	fi ; \
+-	if test x$(BR2_INSTALL_LIBSTDCPP) == x"y" ; then \
++	if test "$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
+ 		$(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
+ 	fi ; \
+-	if test x$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC) == x"y" ; then \
++	if test "$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
+ 		$(call check_uclibc,$${SYSROOT_DIR}) ; \
+ 	else \
+ 		$(call check_glibc,$${SYSROOT_DIR}) ; \
+@@ -464,7 +464,7 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
+ 	if [ -L $${ARCH_SYSROOT_DIR}/lib64 -o -d $${ARCH_SYSROOT_DIR}/lib64 ] ; then \
+ 		$(call create_lib64_symlinks) ; \
+ 	fi ; \
+-	if test x"$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" == x"y"; then \
++	if test "$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" = "y"; then \
+ 		$(call MESSAGE,"Copying gdbserver") ; \
+ 		gdbserver_found=0 ; \
+ 		for d in $${ARCH_SYSROOT_DIR}/usr $${ARCH_SYSROOT_DIR}/../debug-root/usr $${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} ; do \
 -- 
 1.8.1.2
