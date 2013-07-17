@@ -1,39 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 17 Jul 2013 12:46:12 -0300
-Subject: [Buildroot] Activation of pygobject
-In-Reply-To: <747C1E83C744F44E9ACFB89FAEEC2C7B2423DFD2A7@EXDCVYMBSTM005.EQ1STM.local>
-References: <747C1E83C744F44E9ACFB89FAEEC2C7B2423DFD2A7@EXDCVYMBSTM005.EQ1STM.local>
-Message-ID: <51E6BC44.7000600@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Jul 2013 17:58:38 +0200
+Subject: [Buildroot] [PATCH] arch/arm: add support for thumb(1) mode
+In-Reply-To: <1374075555-9599-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1374075555-9599-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130717175838.2fc2831e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/17/2013 10:03 AM, Julien COUVRAND wrote:
+Dear Gustavo Zacarias,
 
-> Hi,
-> 
-> Trying to enable simple agent from bluez such as :
-> simple-agent hci0 68:EB:AE:4F:A4:B5
-> 
-> I meet an error:
-> ---
-> Traceback (most recent call last):
->   File "/usr/bin/simple-agent", line 3, in <module>
->     import gobject
-> ImportError: No module named gobject
-> ---
-> 
-> My configuration is the following:
-> - Bluez
-> - Python
-> - Dbus-glib
-> - Dbus-python
-> 
-> However, on buildroot, I don't find the way to import python-gobject.
-> Do you know how to import gobject?
+On Wed, 17 Jul 2013 12:39:15 -0300, Gustavo Zacarias wrote:
 
-Hi.
-You're missing pygobject which isn't a package (yet) in buildroot.
-Regards.
+> +config BR2_ARM_INSTRUCTIONS_THUMB
+> +	bool "Thumb"
+> +	depends on BR2_ARM_CPU_HAS_THUMB
+> +	help
+> +	  This option instructions the compiler to generate Thumb
+> +	  instructions, which allows to mix 16 bits instructions and
+> +	  32 bits instructions. This generally provides a much smaller
+> +	  compiled binary size.
+
+I think this is misleading: Thumb doesn't allow to mix 16 bits and 32
+bits instructions like Thumb2 does. IIRC, with Thumb, a particular
+function needs to be either completely Thumb (16 bits) or completely
+ARM (32 bits), and there is the thumb-interworking mechanism between
+the two.
+
+Which leads me to this question: is adding Thumb support as simple as
+what you're adding? Aren't there some additional thumb-interworking
+complexities to handle?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
