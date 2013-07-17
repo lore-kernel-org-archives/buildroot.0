@@ -1,84 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jul 2013 10:13:19 +0200
-Subject: [Buildroot] [PATCHv2 2/4] toolchain: check ARM EABI vs. EABIhf for
-	external toolchains
-In-Reply-To: <1374048801-7666-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1374048801-7666-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1374048801-7666-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Jul 2013 12:19:05 +0200
+Subject: [Buildroot] [PATCH v2] icecast: new package
+In-Reply-To: <1374055607-24500-1-git-send-email-elezegarcia@gmail.com>
+References: <1374055607-24500-1-git-send-email-elezegarcia@gmail.com>
+Message-ID: <20130717121905.36d0e71f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following the introduction of the support of EABIhf as a second ARM
-ABI, it is important to check whether the external toolchain provided
-by the user actually uses the ABI that has been selected in the
-Buildroot configuration. This commit introduces such a check by
-looking at the 'Tag_ABI_VFP_args' tag of the architecture-specific
-section of the ELF headers. This assumes that ELF is the binary format
-used on ARM, which may not be the case on ARM noMMU systems (they use
-the FLAT binary format), but Buildroot doesn't have support for such
-systems at the moment.
+Dear Ezequiel Garcia,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/helpers.mk                     | 15 +++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |  5 ++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
+On Wed, 17 Jul 2013 07:06:47 -0300, Ezequiel Garcia wrote:
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 94fe015..a8dab90 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -279,10 +279,25 @@ check_uclibc = \
- #
- check_arm_abi = \
- 	__CROSS_CC=$(strip $1) ; \
-+	__CROSS_READELF=$(strip $2) ; \
- 	EXT_TOOLCHAIN_TARGET=`LANG=C $${__CROSS_CC} -v 2>&1 | grep ^Target | cut -f2 -d ' '` ; \
- 	if ! echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
- 		echo "External toolchain uses the unsuported OABI" ; \
- 		exit 1 ; \
-+	fi ; \
-+	EXT_TOOLCHAIN_CRT1=`LANG=C $${__CROSS_CC} -print-file-name=crt1.o` ; \
-+	if $${__CROSS_READELF} -A $${EXT_TOOLCHAIN_CRT1} | grep -q "Tag_ABI_VFP_args:" ; then \
-+		EXT_TOOLCHAIN_ABI="eabihf" ; \
-+	else \
-+		EXT_TOOLCHAIN_ABI="eabi" ; \
-+	fi ; \
-+	if [ "$(BR2_ARM_EABI)" = "y" -a $${EXT_TOOLCHAIN_ABI} = "eabihf" ] ; then \
-+		echo "Incorrect ABI setting: EABI selected, but toolchain uses EABIhf" ; \
-+		exit 1 ; \
-+	fi ; \
-+	if [ "$(BR2_ARM_EABIHF)" = "y" -a $${EXT_TOOLCHAIN_ABI} = "eabi" ] ; then \
-+		echo "Incorrect ABI setting: EABIhf selected, but toolchain uses EABI" ; \
-+		exit 1 ; \
- 	fi
- 
- #
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index b9ae68f..80e03b9 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -125,6 +125,7 @@ endif
- TOOLCHAIN_EXTERNAL_CROSS=$(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- TOOLCHAIN_EXTERNAL_CC=$(TOOLCHAIN_EXTERNAL_CROSS)gcc
- TOOLCHAIN_EXTERNAL_CXX=$(TOOLCHAIN_EXTERNAL_CROSS)g++
-+TOOLCHAIN_EXTERNAL_READELF=$(TOOLCHAIN_EXTERNAL_CROSS)readelf
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS = -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
- 
- ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
-@@ -368,7 +369,9 @@ $(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
- 		exit 1 ; \
- 	fi ; \
- 	if test x$(BR2_arm) == x"y" ; then \
--		$(call check_arm_abi,$(TOOLCHAIN_EXTERNAL_CC)) ; \
-+		$(call check_arm_abi,\
-+			"$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
-+			$(TOOLCHAIN_EXTERNAL_READELF)) ; \
- 	fi ; \
- 	if test x$(BR2_INSTALL_LIBSTDCPP) == x"y" ; then \
- 		$(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
+> +diff -Naur icecast-2.3.3/m4/xiph_curl.m4 icecast-2.3.3-patched/m4/xiph_curl.m4
+> +--- icecast-2.3.3/m4/xiph_curl.m4	2012-06-11 13:45:26.000000000 -0300
+> ++++ icecast-2.3.3-patched/m4/xiph_curl.m4	2013-07-17 06:58:02.000000000 -0300
+> +@@ -48,28 +48,10 @@
+> + dnl
+> + dnl Now check if the installed libcurl is sufficiently new.
+> + dnl
+> +-AC_CHECK_HEADERS([curl/curl.h],, curl_ok="no") 
+> + AC_MSG_CHECKING(for libcurl)
+> +-if test "$curl_ok" = "yes"
+> +-then
+> +-    AC_RUN_IFELSE(AC_LANG_SOURCE([
+> +-#include <curl/curl.h>
+> +-int main()
+> +-{
+> +-    return 0;
+> +-}
+> +-]),,[curl_ok="no"])
+> +-fi
+> +-if test "$curl_ok" = "yes"; then
+> +-    AC_MSG_RESULT(yes)
+> +-    AC_DEFINE(HAVE_CURL, 1, [Define if you have libcurl.])
+> +-    ifelse([$1], , :, [$1])     
+> +-else
+> +-    AC_MSG_RESULT(no)
+> +-    CURL_LIBS=""
+> +-    CURL_CFLAGS=""
+> +-    ifelse([$2], , :, [$2])
+> +-fi
+> ++AC_MSG_RESULT(yes)
+> ++AC_DEFINE(HAVE_CURL, 1, [Define if you have libcurl.])
+> ++ifelse([$1], , :, [$1])     
+
+So here you're completely removing the curl check and assume that it is
+always present?
+
+
+> +ifeq ($(BR2_PACKAGE_LIBCURL),y)
+> +ICECAST_DEPENDENCIES += libcurl
+> +ICECAST_CONF_OPT += --with-curl-config=$(STAGING_DIR)/usr/bin/curl-config
+> +else
+> +ICECAST_CONF_OPT += --without-curl
+> +endif
+
+and here curl is still optional?
+
+Regarding the xiph_curl.m4 check, you could turn it into an AC_TRY_LINK
+test, like is done for Speex, Theora and so on. Or maybe even keep only
+the AC_CHECK_HEADERS() as an indication of whether curl is available or
+not.
+
+Thomas
 -- 
-1.8.1.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
