@@ -1,84 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jul 2013 22:30:48 +0200
-Subject: [Buildroot] [PATCHv3 2/4] toolchain: check ARM EABI vs. EABIhf for
-	external toolchains
+Date: Wed, 17 Jul 2013 22:30:50 +0200
+Subject: [Buildroot] [PATCHv3 4/4] arch/arm: update VFPv2 comment to mention
+	ARMv5
 In-Reply-To: <1374093050-30344-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1374093050-30344-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1374093050-30344-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1374093050-30344-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following the introduction of the support of EABIhf as a second ARM
-ABI, it is important to check whether the external toolchain provided
-by the user actually uses the ABI that has been selected in the
-Buildroot configuration. This commit introduces such a check by
-looking at the 'Tag_ABI_VFP_args' tag of the architecture-specific
-section of the ELF headers. This assumes that ELF is the binary format
-used on ARM, which may not be the case on ARM noMMU systems (they use
-the FLAT binary format), but Buildroot doesn't have support for such
-systems at the moment.
+Commit 6b3a0417c4 ('arch/arm: arm926 may have VFP') forgot to update
+the help text of the VFPv2 option to mention ARMv5. This commit fixes
+that.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk                     | 15 +++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |  5 ++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
+ arch/Config.in.arm | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 764c795..4c988a5 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -279,10 +279,25 @@ check_uclibc = \
- #
- check_arm_abi = \
- 	__CROSS_CC=$(strip $1) ; \
-+	__CROSS_READELF=$(strip $2) ; \
- 	EXT_TOOLCHAIN_TARGET=`LANG=C $${__CROSS_CC} -v 2>&1 | grep ^Target | cut -f2 -d ' '` ; \
- 	if ! echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
- 		echo "External toolchain uses the unsuported OABI" ; \
- 		exit 1 ; \
-+	fi ; \
-+	EXT_TOOLCHAIN_CRT1=`LANG=C $${__CROSS_CC} -print-file-name=crt1.o` ; \
-+	if $${__CROSS_READELF} -A $${EXT_TOOLCHAIN_CRT1} | grep -q "Tag_ABI_VFP_args:" ; then \
-+		EXT_TOOLCHAIN_ABI="eabihf" ; \
-+	else \
-+		EXT_TOOLCHAIN_ABI="eabi" ; \
-+	fi ; \
-+	if [ "$(BR2_ARM_EABI)" = "y" -a "$${EXT_TOOLCHAIN_ABI}" = "eabihf" ] ; then \
-+		echo "Incorrect ABI setting: EABI selected, but toolchain uses EABIhf" ; \
-+		exit 1 ; \
-+	fi ; \
-+	if [ "$(BR2_ARM_EABIHF)" = "y" -a "$${EXT_TOOLCHAIN_ABI}" = "eabi" ] ; then \
-+		echo "Incorrect ABI setting: EABIhf selected, but toolchain uses EABI" ; \
-+		exit 1 ; \
- 	fi
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index b2fe257..2a0cf45 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -193,8 +193,9 @@ config BR2_ARM_FPU_VFPV2
+ 	depends on BR2_ARM_CPU_HAS_VFPV2 || BR2_ARM_CPU_MAYBE_HAS_VFPV2
+ 	help
+ 	  This option allows to use the VFPv2 floating point unit, as
+-	  available in some ARMv6 processors (ARM1136JF-S,
+-	  ARM1176JZF-S and ARM11 MPCore).
++	  available in some ARMv5 processors (ARM926EJ-S) and some
++	  ARMv6 processors (ARM1136JF-S, ARM1176JZF-S and ARM11
++	  MPCore).
  
- #
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index b9ae68f..80e03b9 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -125,6 +125,7 @@ endif
- TOOLCHAIN_EXTERNAL_CROSS=$(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- TOOLCHAIN_EXTERNAL_CC=$(TOOLCHAIN_EXTERNAL_CROSS)gcc
- TOOLCHAIN_EXTERNAL_CXX=$(TOOLCHAIN_EXTERNAL_CROSS)g++
-+TOOLCHAIN_EXTERNAL_READELF=$(TOOLCHAIN_EXTERNAL_CROSS)readelf
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS = -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
- 
- ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
-@@ -368,7 +369,9 @@ $(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
- 		exit 1 ; \
- 	fi ; \
- 	if test x$(BR2_arm) == x"y" ; then \
--		$(call check_arm_abi,$(TOOLCHAIN_EXTERNAL_CC)) ; \
-+		$(call check_arm_abi,\
-+			"$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
-+			$(TOOLCHAIN_EXTERNAL_READELF)) ; \
- 	fi ; \
- 	if test x$(BR2_INSTALL_LIBSTDCPP) == x"y" ; then \
- 		$(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
+ 	  Note that this option is also safe to use for newer cores
+ 	  such as Cortex-A, because the VFPv3 and VFPv4 units are
 -- 
 1.8.1.2
