@@ -1,37 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Jul 2013 07:27:42 +0200
-Subject: [Buildroot] [PATCH] toolchain: check ARM EABI vs. EABIhf for
-	external toolchains
-In-Reply-To: <20130716223952.GB7947@free.fr> (Yann E. MORIN's message of "Wed, 
- 17 Jul 2013 00:39:53 +0200")
-References: <1374012366-27612-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20130716223952.GB7947@free.fr>
-Message-ID: <87y595ycvl.fsf@dell.be.48ers.dk>
+Date: Wed, 17 Jul 2013 07:30:00 +0200
+Subject: [Buildroot] [PATCH] arch/arm: arm926 may have VFP
+In-Reply-To: <1374021165-30809-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 16 Jul 2013 21:32:45 -0300")
+References: <1374021165-30809-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87txjtycrr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Hi,
+ Gustavo> The VFP9-S FPU (VFPv2) is optional for ARM926EJ-S, see:
+ Gustavo> http://www.arm.com/products/processors/classic/arm9/arm926.php?tab=Specifications+
+ Gustavo> Real silicon:
+ Gustavo> http://www.nxp.com/documents/data_sheet/LPC3180.pdf
 
- >> +	else \
- >> +		echo "Unsupported ABI of the external toolchain" ; \
- >> +		exit 1 ; \
- >> +	fi ; \
- >> +	if [ x$(BR2_ARM_EABI) = x"y" -a $${EXT_TOOLCHAIN_ABI} = "eabihf" ] ; then \
-
- Yann> Using this 'x$(VAR) = xy' construct is ugly. Just quote the variables,
- Yann> it is easier to read:
- Yann>     if [ "$(BR2_ARM_EABI)" = "y" ... ]
-
- Yann> The x$VAR construct was from a time when some shells where failing to
- Yann> test against an empty string. That time is long gone. Virtaully all
- Yann> shells can compare to empty strings, nowadays.
-
-And we have SHELL=bash
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
