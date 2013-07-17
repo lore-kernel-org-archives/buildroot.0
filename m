@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 Jul 2013 06:34:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 6392] New: Extended ARM uImage kernel options
-Message-ID: <bug-6392-163@https.bugs.busybox.net/>
+Date: Wed, 17 Jul 2013 06:36:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 6392] Extended ARM uImage kernel options
+In-Reply-To: <bug-6392-163@https.bugs.busybox.net/>
+References: <bug-6392-163@https.bugs.busybox.net/>
+Message-ID: <20130717063612.124589A5A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,25 +12,17 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=6392
 
-           Summary: Extended ARM uImage kernel options
-           Product: buildroot
-           Version: 2013.05
-          Platform: Other
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: philipp.rahns at meinberg.de
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Philipp Rahns <philipp.rahns@meinberg.de> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         AssignedTo|unassigned at buildroot.uclibc |philipp.rahns at meinberg.de
+                   |.org                        |
 
-In same cases, and especially for self hosted Linux kernels and ARM projects,
-you need additional kernel compiling options. This is what the patch does
-including making life easier to use the "native" kernel config used in its
-source tree.
+--- Comment #1 from Philipp Rahns <philipp.rahns@meinberg.de> 2013-07-17 06:36:19 UTC ---
+Created attachment 4994
+  --> https://bugs.busybox.net/attachment.cgi?id=4994
+ARM uImage kernel compilation patches
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
