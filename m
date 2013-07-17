@@ -1,49 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 Jul 2013 08:01:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 6392] Extended ARM uImage kernel options
-In-Reply-To: <bug-6392-163@https.bugs.busybox.net/>
-References: <bug-6392-163@https.bugs.busybox.net/>
-Message-ID: <20130717080141.512679A5FE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Jul 2013 10:13:17 +0200
+Subject: [Buildroot] [PATCHv2 0/4] EABI vs EABIhf check
+Message-ID: <1374048801-7666-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6392
+Hello,
 
---- Comment #3 from Philipp Rahns <philipp.rahns@meinberg.de> 2013-07-17 08:01:49 UTC ---
-(In reply to comment #2)
-> Thanks for this contribution.
-> 
-> Can you give examples of usage of BR2_LINUX_KERNEL_MAKE_FLAGS ? Why would it be
-> limited to ARM and uImage ?
-> 
-> Also, I don't quite understand BR2_LINUX_KERNEL_NATIVE_CONFIG. When you unpack
-> a kernel tarball or a Git tree, there's normally no .config in the kernel tree,
-> and it has to be created, either starting from a defconfig, or using one of the
-> menuconfig/nconfig/gconfig/xconfig configuration interfaces.
-> 
-> Could you expand a bit on the use cases? Thanks!
+Second version of the EABI vs. EABIhf check, using a different
+technique, as discussed with Yann E. Morin, and also additional
+cleanups.
 
-Hi Thomas,
+I've also included a somewhat unrelated fix to the arch/Config.in.arm
+file.
 
-I agree on the first one that it is not neccessarily limited to the ARM
-section.
-Could be used at any time when compiling a kernel in general.
+Thomas
 
-Concerning native config:
-When you have a look at the Zedboard or the Raspberry Pi there are already
-modified kernel sources fitting to the board.
-In some cases this is not enough for the requirements of oneself and you start
-tweaking it. This is the point where you start "branching" the project and
-saving ( mostly likely ) the config related to your changes. Of course, you
-host this branch on a server and to make life easier for other developers you
-provide an out of the box solution. I know I could easily use
-"$(LINUX_DIR)/.config" as config file path but I though it was worth a single
-option.
+Thomas Petazzoni (4):
+  toolchain/helpers: don't use the x$(...) = x"value" syntax
+  toolchain: check ARM EABI vs. EABIhf for external toolchains
+  toolchain/toolchain-external: don't use x$(...) construct or ==
+  arch/arm: update VFPv2 comment to mention ARMv5
+
+ arch/Config.in.arm                       |  4 ++--
+ toolchain/helpers.mk                     | 21 ++++++++++++++++++---
+ toolchain/toolchain-external/ext-tool.mk | 13 ++++++++-----
+ 3 files changed, 28 insertions(+), 10 deletions(-)
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.1.2
