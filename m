@@ -1,58 +1,89 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 18 Jul 2013 00:25:06 +0200
-Subject: [Buildroot] [git commit] toolchain/toolchain-external: don't use
-	x$(...) construct or ==
-Message-ID: <20130718061512.23E6B9A299@busybox.osuosl.org>
+Date: Thu, 18 Jul 2013 00:22:40 +0200
+Subject: [Buildroot] [git commit] toolchain: check ARM EABI vs. EABIhf for
+	external toolchains
+Message-ID: <20130718061512.1727C8D522@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f50eff3401e5f41f68bd08d92d9886eecf23926f
+commit: http://git.buildroot.net/buildroot/commit/?id=b2e88073dbf05faa47475bf96d5ccf8a45906a3c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With modern shells, we can simply do test using the "$(...)" = "value"
-form. This commit gets rid of the x$(...) = x"value" constructs and
-replaces == by =, which is the correct operator to test the equality
-of two strings with the test program.
+Following the introduction of the support of EABIhf as a second ARM
+ABI, it is important to check whether the external toolchain provided
+by the user actually uses the ABI that has been selected in the
+Buildroot configuration. This commit introduces such a check by
+looking at the 'Tag_ABI_VFP_args' tag of the architecture-specific
+section of the ELF headers. This assumes that ELF is the binary format
+used on ARM, which may not be the case on ARM noMMU systems (they use
+the FLAT binary format), but Buildroot doesn't have support for such
+systems at the moment.
 
+Also ensure the correct CFLAGS are passed to the cross compiler for the
+test, so the correct variant is used in case the toolchain is multilib.
+
+[Peter: mention CFLAGS change]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/ext-tool.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ toolchain/helpers.mk                     |   15 +++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    5 ++++-
+ 2 files changed, 19 insertions(+), 1 deletions(-)
 
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 764c795..4c988a5 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -279,10 +279,25 @@ check_uclibc = \
+ #
+ check_arm_abi = \
+ 	__CROSS_CC=$(strip $1) ; \
++	__CROSS_READELF=$(strip $2) ; \
+ 	EXT_TOOLCHAIN_TARGET=`LANG=C $${__CROSS_CC} -v 2>&1 | grep ^Target | cut -f2 -d ' '` ; \
+ 	if ! echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
+ 		echo "External toolchain uses the unsuported OABI" ; \
+ 		exit 1 ; \
++	fi ; \
++	EXT_TOOLCHAIN_CRT1=`LANG=C $${__CROSS_CC} -print-file-name=crt1.o` ; \
++	if $${__CROSS_READELF} -A $${EXT_TOOLCHAIN_CRT1} | grep -q "Tag_ABI_VFP_args:" ; then \
++		EXT_TOOLCHAIN_ABI="eabihf" ; \
++	else \
++		EXT_TOOLCHAIN_ABI="eabi" ; \
++	fi ; \
++	if [ "$(BR2_ARM_EABI)" = "y" -a "$${EXT_TOOLCHAIN_ABI}" = "eabihf" ] ; then \
++		echo "Incorrect ABI setting: EABI selected, but toolchain uses EABIhf" ; \
++		exit 1 ; \
++	fi ; \
++	if [ "$(BR2_ARM_EABIHF)" = "y" -a "$${EXT_TOOLCHAIN_ABI}" = "eabi" ] ; then \
++		echo "Incorrect ABI setting: EABIhf selected, but toolchain uses EABI" ; \
++		exit 1 ; \
+ 	fi
+ 
+ #
 diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 80e03b9..8aac50e 100644
+index b9ae68f..80e03b9 100644
 --- a/toolchain/toolchain-external/ext-tool.mk
 +++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -368,15 +368,15 @@ $(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
- 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+@@ -125,6 +125,7 @@ endif
+ TOOLCHAIN_EXTERNAL_CROSS=$(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
+ TOOLCHAIN_EXTERNAL_CC=$(TOOLCHAIN_EXTERNAL_CROSS)gcc
+ TOOLCHAIN_EXTERNAL_CXX=$(TOOLCHAIN_EXTERNAL_CROSS)g++
++TOOLCHAIN_EXTERNAL_READELF=$(TOOLCHAIN_EXTERNAL_CROSS)readelf
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS = -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
+ 
+ ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
+@@ -368,7 +369,9 @@ $(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
  		exit 1 ; \
  	fi ; \
--	if test x$(BR2_arm) == x"y" ; then \
-+	if test "$(BR2_arm)" = "y" ; then \
- 		$(call check_arm_abi,\
- 			"$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
- 			$(TOOLCHAIN_EXTERNAL_READELF)) ; \
+ 	if test x$(BR2_arm) == x"y" ; then \
+-		$(call check_arm_abi,$(TOOLCHAIN_EXTERNAL_CC)) ; \
++		$(call check_arm_abi,\
++			"$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
++			$(TOOLCHAIN_EXTERNAL_READELF)) ; \
  	fi ; \
--	if test x$(BR2_INSTALL_LIBSTDCPP) == x"y" ; then \
-+	if test "$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
+ 	if test x$(BR2_INSTALL_LIBSTDCPP) == x"y" ; then \
  		$(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
- 	fi ; \
--	if test x$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC) == x"y" ; then \
-+	if test "$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
- 		$(call check_uclibc,$${SYSROOT_DIR}) ; \
- 	else \
- 		$(call check_glibc,$${SYSROOT_DIR}) ; \
-@@ -464,7 +464,7 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
- 	if [ -L $${ARCH_SYSROOT_DIR}/lib64 -o -d $${ARCH_SYSROOT_DIR}/lib64 ] ; then \
- 		$(call create_lib64_symlinks) ; \
- 	fi ; \
--	if test x"$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" == x"y"; then \
-+	if test "$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" = "y"; then \
- 		$(call MESSAGE,"Copying gdbserver") ; \
- 		gdbserver_found=0 ; \
- 		for d in $${ARCH_SYSROOT_DIR}/usr $${ARCH_SYSROOT_DIR}/../debug-root/usr $${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} ; do \
