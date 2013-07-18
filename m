@@ -1,83 +1,41 @@
-From: Jenkins, Lee (ISS Houston) <Lee.Jenkins@hp.com>
-Date: Thu, 18 Jul 2013 16:19:01 +0000
-Subject: [Buildroot] custom extraction and libs11n
-Message-ID: <2DD0B9C711CDFC45A3A266C78966CE7F451B3DA8@G4W3291.americas.hpqcorp.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 18 Jul 2013 18:29:17 +0200
+Subject: [Buildroot] [RFC 2/3] sunxi-mali: new package
+In-Reply-To: <CAEBucnB9sJ=LX6m5vgVSH1gRQ1nwcTtj9r5HwEKgCxTq=cVvjA@mail.gmail.com>
+References: <1373778632-16531-1-git-send-email-spenser@gillilanding.com>
+ <1373778632-16531-3-git-send-email-spenser@gillilanding.com>
+ <20130716201400.GA7947@free.fr>
+ <CAEBucnB9sJ=LX6m5vgVSH1gRQ1nwcTtj9r5HwEKgCxTq=cVvjA@mail.gmail.com>
+Message-ID: <20130718162917.GA3417@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have added the package libs11n to buildroot. I've tested the patch and makefile on my system and it appears to be working correctly.
+Spenser, All,
 
+On 2013-07-18 01:12 -0500, Spenser Gilliland spake thusly:
+> > On 2013-07-14 00:10 -0500, Spenser Gilliland spake thusly:
+> >> +config BR2_PACKAGE_SUNXI_MALI
+> >> +     bool "sunxi-mali"
+> >
+> > Do you plan on looking to the open source driver, lima, as an
+> > alternative to mali?
+> 
+> Yes, I've been looking at it but I'm not sure we should package it
+> just yet.  I'm going to work on the ODroidU2 first and come back to
+> this.
 
---- buildroot/package/Makefile.package.in 2013-07-18 09:42:31.458605792 -0500
-+++ buildroot-mods/package/Makefile.package.in       2013-07-18 09:41:40.614605176 -0500
-@@ -244,8 +245,10 @@
-$(BUILD_DIR)/%/.stamp_extracted:
-        @$(call MESSAGE,"Extracting")
-        $(Q)mkdir -p $(@D)
--       $(Q)$(if $($(PKG)_SOURCE),$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
--       $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -)
-+       $(if $($(PKG)_EXTRACT_CMDS), @echo $(PKG)_EXTRACT_CMDS IS DEFINED )
-+       $(if $($(PKG)_EXTRACT_CMDS), $($(PKG)_EXTRACT_CMDS), \
-+       $(if $($(PKG)_SOURCE),$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
-+       $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -) )
-# some packages have messed up permissions inside
-        $(Q)chmod -R ug+rw $(@D)
-        $(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
+OK, I just wanted to know if you had looked at it. You have, good! :-)
 
+Regards,
+Yann E. MORIN.
 
-
-#############################################################
-#
-# libs11n
-#
-#############################################################
-
-LIBS11N_VERSION          = 1.2.10
-LIBS11N_SOURCE_BASENAME  = libs11n-$(LIBS11N_VERSION)-nobuildfiles
-LIBS11N_SOURCE           = $(LIBS11N_SOURCE_BASENAME).zip
-LIBS11N_MAKE_DIR         = $(@D)/src
-LIBS11N_SITE             = http://s11n.net/download
-LIBS11N_LICENSE          = Public Domain
-LIBS11N_INSTALL_STAGING  = YES
-LIBS11N_DEPENDENCIES     = expat
-
-# use a custom extract because standard buildroot does not support .zip files
-# also, the files are extracted into a directory named libs11n-$(LIBS11N_VERSION)-nobuildfiles -- but
-# buildroot requires them to be put in libs11n-$(LIBS11N_VERSION) -- which buildroot creates
-define LIBS11N_EXTRACT_CMDS
-    unzip $(DL_DIR)/$(LIBS11N_SOURCE) -d $(@D)
-    mv $(@D)/$(LIBS11N_SOURCE_BASENAME)/* $(@D)
-    rmdir $(@D)/$(LIBS11N_SOURCE_BASENAME)
-endef
-
-define LIBS11N_CONFIGURE_CMDS
-    # use the configure command to modify the stock Makefile because
-    # it tries and fails to build an unneeded binary
-    cd $(LIBS11N_MAKE_DIR) ; sed -i 's/install: bins libs/install: libs/' Makefile ; sed -i '/cp ..S11NCONVERT_BIN/d' Makefile
-endef
-
-define LIBS11N_BUILD_CMDS
-    $(MAKE) CXX="$(TARGET_CC)" -C $(LIBS11N_MAKE_DIR) all
-endef
-
-define LIBS11N_INSTALL_STAGING_CMDS
-    $(MAKE) CXX="$(TARGET_CC)" DESTDIR=$(STAGING_DIR) -C $(LIBS11N_MAKE_DIR) install
-endef
-
-define LIBS11N_INSTALL_TARGET_CMDS
-    $(MAKE) CXX="$(TARGET_CC)" DESTDIR=$(TARGET_DIR) -C $(LIBS11N_MAKE_DIR) install
-endef
-
-define LIBS11N_CLEAN_CMDS
-    $(MAKE) -C $(LIBS11N_MAKE_DIR) clean
-endef
-
-$(eval $(call AUTOTARGETS,package,libs11n))
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130718/0ea1b9bb/attachment-0001.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
