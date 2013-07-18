@@ -1,62 +1,61 @@
-From: Julien COUVRAND <julien.couvrand@stericsson.com>
-Date: Thu, 18 Jul 2013 10:33:25 +0200
-Subject: [Buildroot] Activation of pygobject
-In-Reply-To: <20130718102739.6a64b0a1@skate>
-References: <747C1E83C744F44E9ACFB89FAEEC2C7B2423DFD2A7@EXDCVYMBSTM005.EQ1STM.local>
- <51E6BC44.7000600@zacarias.com.ar>
- <747C1E83C744F44E9ACFB89FAEEC2C7B2423DFD3DE@EXDCVYMBSTM005.EQ1STM.local>
- <20130718102739.6a64b0a1@skate>
-Message-ID: <747C1E83C744F44E9ACFB89FAEEC2C7B2423DFD3F7@EXDCVYMBSTM005.EQ1STM.local>
+From: Fabien Marteau <fabien.marteau@armadeus.com>
+Date: Thu, 18 Jul 2013 09:50:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-pyro: adding Pyro 3.14
+In-Reply-To: <1374133806-9162-1-git-send-email-fabien.marteau@armadeus.com>
+References: <1374133806-9162-1-git-send-email-fabien.marteau@armadeus.com>
+Message-ID: <1374133806-9162-2-git-send-email-fabien.marteau@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Thomas for this information.
-Why not :-)
 
+Signed-off-by: Fabien Marteau <fabien.marteau@armadeus.com>
+---
+ package/python-pyro/Config.in      |    9 +++++++++
+ package/python-pyro/python-pyro.mk |   17 +++++++++++++++++
+ 2 files changed, 26 insertions(+)
+ create mode 100644 package/python-pyro/Config.in
+ create mode 100644 package/python-pyro/python-pyro.mk
 
-Julien
-
-Julien COUVRAND
-MOPI - 8540 SWPF Object Leader
-------------------------------------------------------------------------------------
-
-Mailto:???? 11 rue Pierre-Felix Delarue
-??????????????????? 72100 Le Mans -? FRANCE
-Office:????? +33 2 44 02 71 07
-Mobile: ?? +33 6 03 49 09 04 
-Emailto :?? julien.couvrand at stericsson.com
--------------------------------------------------------------------------------------
-This communication is confidential and intended solely for the addressee(s). Any unauthorized review, use, disclosure or distribution is prohibited. If you believe this message has been sent to you in error, please notify the sender by replying to this transmission and delete the message without disclosing it. Thank you.
-
-E-mail including attachments is susceptible to data corruption, interception, unauthorized amendment, tampering and viruses, and we only send and receive emails on the basis that we are not liable for any such corruption, interception, amendment, tampering or viruses or any consequences thereof.
-
-
------Original Message-----
-From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
-Sent: jeudi 18 juillet 2013 10:28
-To: Julien COUVRAND
-Cc: Gustavo Zacarias; buildroot at busybox.net
-Subject: Re: [Buildroot] Activation of pygobject
-
-Dear Julien COUVRAND,
-
-On Thu, 18 Jul 2013 10:11:02 +0200, Julien COUVRAND wrote:
-
-> Do you know when this package is available under Buidlroot?
-
-When someone submits a patch to add it? Why not you, for example?
-
-> I guess the only way to solve this issue is to import manually this package under buildroot.
-
-I'm not sure what you mean by "manually". You just need to create a package, starting from the documentation available at http://buildroot.org/downloads/manual/manual.html#adding-packages.
-
-Best regards,
-
-Thomas
---
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/python-pyro/Config.in b/package/python-pyro/Config.in
+new file mode 100644
+index 0000000..b744c1c
+--- /dev/null
++++ b/package/python-pyro/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_PYRO
++	bool "python-pyro"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  python-pyro is a Python library stands for PYthon Remote Objects.
++		It is an advanced and powerful Distributed Object Technology system
++		written entirely in Python, that is designed to be very easy to use..
++
++	  https://pypi.python.org/pypi/Pyro/3.14
+diff --git a/package/python-pyro/python-pyro.mk b/package/python-pyro/python-pyro.mk
+new file mode 100644
+index 0000000..1b3b904
+--- /dev/null
++++ b/package/python-pyro/python-pyro.mk
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# python-pyro
++#
++#############################################################
++
++PYTHON_PYRO_VERSION = 3.14
++PYTHON_PYRO_SOURCE  = Pyro-$(PYTHON_PYRO_VERSION).tar.gz
++PYTHON_PYRO_SITE    = https://pypi.python.org/packages/source/P/Pyro/
++
++PYTHON_PYRO_DEPENDENCIES = python
++
++define PYTHON_PYRO_INSTALL_TARGET_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.10.4
