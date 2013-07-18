@@ -1,71 +1,75 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 18 Jul 2013 11:46:23 +0200
-Subject: [Buildroot] [RFC] BR2_DEFCONFIG not saved in defconfig,
-	why? (or: can we change that?)
-Message-ID: <CAAXf6LXJ6vkpMS2RxcakVPH8DvZeLi4Zejbnm-dLxWWeFmOXNQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 18 Jul 2013 12:18:16 +0200
+Subject: [Buildroot] [git commit] uclibc: uclibc-menuconfig: don't depend on
+	gcc/binutils
+Message-ID: <20130718102246.806539A31C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=e1ba6ef59579d28be7bbef030cfe138011135d13
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Following commit:
-http://git.buildroot.org/buildroot/commit/?id=1ed4996346c6504241c7a2c7541fefc914790219
+With the move of uclibc to package/uclibc, the uclibc-menuconfig target now
+depends on uclibc-configure, which brings in the build of
+binutils/gcc-initial/mpfr/gmp, causing it to take ages with a clean tree.
 
-added a configurable option to select the destination file of 'make
-savedefconfig'.
-The default is 'defconfig'. However, this new option BR2_DEFCONFIG is
-not saved in the defconfig itself. This is intentional, says the
-commit message:
+Fix it by moving the basic .config mangling to the patch step, and depend
+on that for menuconfig instead.
 
-"The BR2_DEFCONFIG value itself is not saved into the generated
-defconfig, since Kconfig considers it at its default. This is
-intentional, to avoid hard-coding an absolute path in the defconfig.
-It will anyway be set again when the defconfig is used with the 'make
-BR2_DEFCONFIG=... defconfig' command."
+Notice that this is broken for _OVERRIDE_SRCDIR users, just like for
+busybox, but as that is presumably a small subset of the buildroot
+user base (and these advanced users can just run menuconfig in their
+local uClibc tree), so this is considered the lesser evil of the two.
 
-Due to this, I fail to see how I can benefit from BR2_DEFCONFIG.
-My use case (before using BR2_DEFCONFIG) is as follows: I have
-defconfigs for various projects stored inside the configs/
-subdirectory. To build a given project, I run:
-make <name_of_defconfig>
-If I make changes to the configuration (through 'make menuconfig' or
-manual changes in .config), I update the stored configuration as
-follows:
-make savedefconfig
-mv defconfig configs/<name_of_defconfig>
+The proposed out-of-tree build series will also cause problems with
+this.
 
-I wanted to use BR2_DEFCONFIG to make these last steps simple. I had
-expected to set BR2_DEFCONFIG in the configuration to
-'configs/<name_of_defconfig>' or maybe
-'$(CONFIG_DIR)/configs/<name_of_defconfig>' or
-$(TOPDIR)/configs/name_of_defconfig), and then be able to run
-make <name_of_defconfig>
-to set a configuration, and
-make savedefconfig
-to store one.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/uclibc/uclibc.mk |   11 ++++++++---
+ 1 files changed, 8 insertions(+), 3 deletions(-)
 
-However, in my current understanding of the feature, I am forced to use
-make defconfig BR2_DEFCONFIG=configs/<name_of_defconfig>
-to set a configuration, and then
-make savedefconfig to store one.
-
-To me, the command to set a configuration is overcomplicated.
-Originally it was as simple as passing the name of the config file,
-now you not only have to pass its actual path (configs/), but also you
-have to give it in a variable BR2_DEFCONFIG, *and* use the defconfig
-rule. So, I feel better off with the original behavior.
-
-My question is: is it really needed that the value of BR2_DEFCONFIG is
-kept out of the defconfig itself? It is perfectly possible to set a
-relative path in it, or one based on a variable like TOPDIR or
-CONFIG_DIR, like so many other options already do. If someone does
-store an absolute path in it, I'd say this is the fault of the
-developer.
-
-What do you think?
-
-Thanks,
-Thomas
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 8eca5fe..f775b15 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -358,7 +358,7 @@ UCLIBC_MAKE_FLAGS = \
+ 	UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
+ 	HOSTCC="$(HOSTCC)"
+ 
+-define UCLIBC_CONFIGURE_CMDS
++define UCLIBC_SETUP_DOT_CONFIG
+ 	cp -f $(UCLIBC_CONFIG_FILE) $(@D)/.config
+ 	$(call UCLIBC_OPT_SET,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D))
+ 	$(call UCLIBC_OPT_SET,TARGET_$(UCLIBC_TARGET_ARCH),y,$(@D))
+@@ -395,6 +395,11 @@ define UCLIBC_CONFIGURE_CMDS
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=$(STAGING_DIR) \
+ 		oldconfig
++endef
++
++UCLIBC_POST_PATCH_HOOKS += UCLIBC_SETUP_DOT_CONFIG
++
++define UCLIBC_CONFIGURE_CMDS
+ 	$(MAKE1) -C $(UCLIBC_DIR) \
+ 		$(UCLIBC_MAKE_FLAGS) \
+ 		PREFIX=$(STAGING_DIR) \
+@@ -470,13 +475,13 @@ define UCLIBC_INSTALL_STAGING_CMDS
+ 	ln -sf ldconfig $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldconfig
+ endef
+ 
+-uclibc-menuconfig: dirs uclibc-configure
++uclibc-menuconfig: dirs uclibc-patch
+ 	$(MAKE1) -C $(UCLIBC_DIR) \
+ 		$(UCLIBC_MAKE_FLAGS) \
+ 		PREFIX=$(STAGING_DIR) \
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=$(STAGING_DIR)/ \
+ 		menuconfig
+-	rm -f $(UCLIBC_DIR)/.stamp_{built,target_installed,staging_installed}
++	rm -f $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
+ 
+ $(eval $(generic-package))
