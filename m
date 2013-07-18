@@ -1,113 +1,68 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Thu, 18 Jul 2013 20:32:33 +0200
-Subject: [Buildroot] [PATCH 2/3] arc: binutils: Go from 2.19-arc to
-	2.23.2-arc
+Date: Thu, 18 Jul 2013 20:32:32 +0200
+Subject: [Buildroot] [PATCH 1/3] uclibc,
+	eglibc: remove REALLY_NOSTDLIB references
 In-Reply-To: <1374172354-3248-1-git-send-email-mjonker@synopsys.com>
 References: <1374172354-3248-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1374172354-3248-3-git-send-email-mjonker@synopsys.com>
+Message-ID: <1374172354-3248-2-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+These were required with ARC gcc 4.4.7; ARC gcc 4.8 has been changed
+to behave the same as other architectures with -nostdlib, making this
+option obsolete.
+
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 ---
- .../binutils/2.19-arc/add-empty-info-files.patch   |   72 --------------------
- package/binutils/Config.in.host                    |    2 +-
- 2 files changed, 1 insertion(+), 73 deletions(-)
- delete mode 100644 package/binutils/2.19-arc/add-empty-info-files.patch
+ package/eglibc/eglibc.mk |    2 +-
+ package/uclibc/uclibc.mk |   11 ++---------
+ 2 files changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/package/binutils/2.19-arc/add-empty-info-files.patch b/package/binutils/2.19-arc/add-empty-info-files.patch
-deleted file mode 100644
-index 90de429..0000000
---- a/package/binutils/2.19-arc/add-empty-info-files.patch
-+++ /dev/null
-@@ -1,72 +0,0 @@
--binutils: add empty info files to remove makeinfo dependency
+diff --git a/package/eglibc/eglibc.mk b/package/eglibc/eglibc.mk
+index ccdc210..5431ac5 100644
+--- a/package/eglibc/eglibc.mk
++++ b/package/eglibc/eglibc.mk
+@@ -61,7 +61,7 @@ define EGLIBC_CONFIGURE_CMDS
+ 	cp $(@D)/build/csu/crt1.o $(STAGING_DIR)/usr/lib/
+ 	cp $(@D)/build/csu/crti.o $(STAGING_DIR)/usr/lib/
+ 	cp $(@D)/build/csu/crtn.o $(STAGING_DIR)/usr/lib/
+-	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) \
++	$(TARGET_CROSS)gcc -nostdlib \
+ 		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
+ endef
+ 
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index f775b15..d5ea7a4 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -163,13 +163,6 @@ endef
+ endif
+ 
+ #
+-# ARC definitions
+-#
+-ifeq ($(UCLIBC_TARGET_ARCH),arc)
+-REALLY_NOSTDLIB = -really-nostdlib
+-endif
 -
--Signed-off-by: Mischa jonker <mjonker@synopsys.com>
-----
-- bfd/doc/bfd.info           |    1 +
-- binutils/doc/binutils.info |    1 +
-- etc/configure.info         |    1 +
-- etc/standards.info         |    1 +
-- gas/doc/as.info            |    1 +
-- gprof/gprof.info           |    1 +
-- ld/ld.info                 |    1 +
-- 7 files changed, 7 insertions(+), 0 deletions(-)
-- create mode 100644 bfd/doc/bfd.info
-- create mode 100644 binutils/doc/binutils.info
-- create mode 100644 etc/configure.info
-- create mode 100644 etc/standards.info
-- create mode 100644 gas/doc/as.info
-- create mode 100644 gprof/gprof.info
-- create mode 100644 ld/ld.info
--
--diff --git a/bfd/doc/bfd.info b/bfd/doc/bfd.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/bfd/doc/bfd.info
--@@ -0,0 +1 @@
--+
--diff --git a/binutils/doc/binutils.info b/binutils/doc/binutils.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/binutils/doc/binutils.info
--@@ -0,0 +1 @@
--+
--diff --git a/etc/configure.info b/etc/configure.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/etc/configure.info
--@@ -0,0 +1 @@
--+
--diff --git a/etc/standards.info b/etc/standards.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/etc/standards.info
--@@ -0,0 +1 @@
--+
--diff --git a/gas/doc/as.info b/gas/doc/as.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/gas/doc/as.info
--@@ -0,0 +1 @@
--+
--diff --git a/gprof/gprof.info b/gprof/gprof.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/gprof/gprof.info
--@@ -0,0 +1 @@
--+
--diff --git a/ld/ld.info b/ld/ld.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/ld/ld.info
--@@ -0,0 +1 @@
--+
---- 
--1.7.0.4
--
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 9ddaed7..c2d2495 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -44,7 +44,7 @@ endchoice
- config BR2_BINUTILS_VERSION
- 	string
- 	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
--	default "2.19-arc"	if BR2_arc
-+	default "2.23.2-arc"	if BR2_arc
- 	default "2.20.1"	if BR2_BINUTILS_VERSION_2_20_1
- 	default "2.21"		if BR2_BINUTILS_VERSION_2_21
- 	default "2.21.1"	if BR2_BINUTILS_VERSION_2_21_1
+-#
+ # Endianess
+ #
+ 
+@@ -407,9 +400,9 @@ define UCLIBC_CONFIGURE_CMDS
+ 		RUNTIME_PREFIX=$(STAGING_DIR) \
+ 		headers lib/crt1.o lib/crti.o lib/crtn.o \
+ 		install_headers
+-	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) \
++	$(TARGET_CROSS)gcc -nostdlib \
+ 		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
+-	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) \
++	$(TARGET_CROSS)gcc -nostdlib \
+ 		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libm.so
+ 	cp -pLR $(UCLIBC_DIR)/lib/crt[1in].o $(STAGING_DIR)/usr/lib/
+ endef
 -- 
 1.7.9.5
