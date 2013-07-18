@@ -1,50 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 18 Jul 2013 13:09:57 +0200
-Subject: [Buildroot] [git commit] ti-gfx: use BR2_ARM_EABIHF
-Message-ID: <20130718111043.48E529A178@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 Jul 2013 13:24:07 +0200
+Subject: [Buildroot] [PATCH] arch/arm: add support for thumb(1) mode
+In-Reply-To: <51E7CC9B.1070109@zacarias.com.ar>
+References: <1374075555-9599-1-git-send-email-gustavo@zacarias.com.ar>
+ <20130717175838.2fc2831e@skate> <51E6C06C.8070300@zacarias.com.ar>
+ <20130717215826.60942218@skate> <51E719D4.4070304@zacarias.com.ar>
+ <20130718091917.06476a78@skate> <51E7CC9B.1070109@zacarias.com.ar>
+Message-ID: <20130718132407.5fe4133b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c34cd9e2dab7c37bb0bdea6f43e57addf2b710e2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ti-gfx/Config.in |    5 -----
- package/ti-gfx/ti-gfx.mk |    2 +-
- 2 files changed, 1 insertions(+), 6 deletions(-)
+On Thu, 18 Jul 2013 08:08:11 -0300, Gustavo Zacarias wrote:
 
-diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
-index a37705c..f336c52 100644
---- a/package/ti-gfx/Config.in
-+++ b/package/ti-gfx/Config.in
-@@ -28,11 +28,6 @@ config BR2_PACKAGE_TI_GFX_EGLIMAGE
- 	help
- 	  Installs OpenGL libaries which support the eglimage api.
- 
--config BR2_PACKAGE_TI_GFX_HARD_FLOAT
--	bool "use hard float binaries"
--	help
--	  Install hard float binaries (required if using a hard float toolchain)
--
- choice
- 	prompt "Target"
- 	default BR2_PACKAGE_TI_GFX_ES3
-diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
-index 0838bde..7713990 100644
---- a/package/ti-gfx/ti-gfx.mk
-+++ b/package/ti-gfx/ti-gfx.mk
-@@ -7,7 +7,7 @@
- TI_GFX_VERSION = 4_09_00_01
- TI_GFX_SO_VERSION = 1.9.2188537
- 
--ifeq ($(BR2_PACKAGE_TI_GFX_HARD_FLOAT),y)
-+ifeq ($(BR2_ARM_EABIHF),y)
- TI_GFX_SOURCE = Graphics_SDK_setuplinux_$(TI_GFX_VERSION)_hardfp_minimal_demos.bin
- else
- TI_GFX_SOURCE = Graphics_SDK_setuplinux_$(TI_GFX_VERSION)_minimal_demos.bin
+> > We definitely do something. If you enable Thumb in the
+> > configuration, then -mthumb gets hard-coded into the external
+> > toolchain wrapper. If you enable ARM in the configuration, then
+> > -marm gets hard-coded into the external toolchain wrapper.
+> > 
+> > See:
+> > http://git.buildroot.net/buildroot/tree/toolchain/toolchain-external/ext-tool.mk#n183
+> > and:
+> > http://git.buildroot.net/buildroot/tree/toolchain/toolchain-external/ext-toolchain-wrapper.c#n50.
+> 
+> Missed that!
+> It's working though, tested on real hardware (arm920t) with CS 2013.05
+
+Excellent, thanks for the testing!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
