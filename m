@@ -1,37 +1,62 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 19 Jul 2013 00:33:28 +0200
-Subject: [Buildroot] [git commit] defconfig/rpi: bump kernel for misc fixes
-Message-ID: <20130718224318.517B19A161@busybox.osuosl.org>
+Date: Fri, 19 Jul 2013 00:38:57 +0200
+Subject: [Buildroot] [git commit] package/nss-mdns: do not overwrite user's
+	nsswitch.conf
+Message-ID: <20130718224318.6C9739A2E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a03386fba330bc1c4efce56723a2dcec80739f37
+commit: http://git.buildroot.net/buildroot/commit/?id=f2e610da5a8dfd37ec4a963f0c99496a304d0b26
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump for a few fixes:
-  - fix for slow SDcards
-  - fix for USB interrupts
-  - fix for tracing functions
+Instead of over-writing the nsswitch.conf file (which may already contain
+user's specific configuration if it comes from a custom skeleton), just
+replace the 'hosts' line.
+
+Remove now-useless custom nsswitch.conf file.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/rpi_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/nss-mdns/nss-mdns.mk   |    3 ++-
+ package/nss-mdns/nsswitch.conf |   15 ---------------
+ 2 files changed, 2 insertions(+), 16 deletions(-)
 
-diff --git a/configs/rpi_defconfig b/configs/rpi_defconfig
-index 3df440f..9d608f1 100644
---- a/configs/rpi_defconfig
-+++ b/configs/rpi_defconfig
-@@ -17,7 +17,7 @@ BR2_DEFAULT_KERNEL_VERSION="3.6.11"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="53f7e0b"
-+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="0006326"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/package/nss-mdns/nss-mdns.mk b/package/nss-mdns/nss-mdns.mk
+index 4d36633..83d9a2a 100644
+--- a/package/nss-mdns/nss-mdns.mk
++++ b/package/nss-mdns/nss-mdns.mk
+@@ -10,7 +10,8 @@ NSS_MDNS_SITE=http://0pointer.de/lennart/projects/nss-mdns
+ NSS_MDNS_CONF_OPT += --localstatedir=/var
+ 
+ define NSS_MDNS_INSTALL_CONFIG
+-	$(INSTALL) -D -m 0664 package/nss-mdns/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf
++	sed -r -i -e 's/^(hosts:[[:space:]]+).*/\1files mdns4_minimal [NOTFOUND=return] dns mdns4/' \
++	    $(TARGET_DIR)/etc/nsswitch.conf
+ endef
+ 
+ NSS_MDNS_POST_INSTALL_TARGET_HOOKS += NSS_MDNS_INSTALL_CONFIG
+diff --git a/package/nss-mdns/nsswitch.conf b/package/nss-mdns/nsswitch.conf
+deleted file mode 100644
+index 94174e0..0000000
+--- a/package/nss-mdns/nsswitch.conf
++++ /dev/null
+@@ -1,15 +0,0 @@
+-# /etc/nsswitch.conf
+-
+-passwd:         compat
+-group:          compat
+-shadow:         compat
+-
+-hosts:          files mdns4_minimal [NOTFOUND=return] dns mdns4
+-networks:       files
+-
+-protocols:      db files
+-services:       db files
+-ethers:         db files
+-rpc:            db files
+-
+-netgroup:       nis
