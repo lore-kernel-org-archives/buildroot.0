@@ -1,25 +1,41 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Thu, 18 Jul 2013 19:17:48 +0200
-Subject: [Buildroot] Eclipse plugin and Kepler
-Message-ID: <51E8233C.5000105@relinux.de>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Thu, 18 Jul 2013 20:32:31 +0200
+Subject: [Buildroot] [PATCH 0/3] Upgrade ARC port to new toolchain
+Message-ID: <1374172354-3248-1-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+These three patches upgrade the ARC toolchain to GCC 4.8 and
+Binutils 2.23.2. This fixes multiple issues (including most
+autobuilder failures from the past couple of weeks).
 
-while I am setting up a new project I noticed that the buildroot plugin
-seems to break the most recent eclipse (Kepler). After installing the
-plugin I was no longer able to open my projects. Clicking on the little
-> left of the project name did not fold out the project. After removing
-the buildroot plugin everything is normal again.
+Mischa Jonker (3):
+  uclibc, eglibc: remove REALLY_NOSTDLIB references
+  arc: binutils: Go from 2.19-arc to 2.23.2-arc
+  arc: gcc: Go from 4.4.7 to 4.8 for ARC
 
-That is not a major problem, since I switched back to Juno for now.
+ .../binutils/2.19-arc/add-empty-info-files.patch   |   72 ----------
+ package/binutils/Config.in.host                    |    2 +-
+ package/eglibc/eglibc.mk                           |    2 +-
+ package/gcc/4.8-arc/100-uclibc-conf.patch          |   15 ++
+ package/gcc/4.8-arc/301-missing-execinfo_h.patch   |   13 ++
+ package/gcc/4.8-arc/302-c99-snprintf.patch         |   13 ++
+ .../gcc/4.8-arc/305-libmudflap-susv3-legacy.patch  |   49 +++++++
+ package/gcc/4.8-arc/disable_gc_sections.patch      |  145 ++++++++++++++++++++
+ package/gcc/4.8-arc/fix_branch_out_of_range.patch  |   30 ++++
+ package/gcc/Config.in.host                         |   13 +-
+ package/uclibc/uclibc.mk                           |   11 +-
+ 11 files changed, 276 insertions(+), 89 deletions(-)
+ delete mode 100644 package/binutils/2.19-arc/add-empty-info-files.patch
+ create mode 100644 package/gcc/4.8-arc/100-uclibc-conf.patch
+ create mode 100644 package/gcc/4.8-arc/301-missing-execinfo_h.patch
+ create mode 100644 package/gcc/4.8-arc/302-c99-snprintf.patch
+ create mode 100644 package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch
+ create mode 100644 package/gcc/4.8-arc/disable_gc_sections.patch
+ create mode 100644 package/gcc/4.8-arc/fix_branch_out_of_range.patch
 
-Are there plans on when to release a Kepler compatible plugin?
-
-Kind regards
-
-Stephan
+-- 
+1.7.9.5
