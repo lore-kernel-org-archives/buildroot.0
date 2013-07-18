@@ -1,70 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jul 2013 11:38:09 +0200
-Subject: [Buildroot] [PATCH v2 0/3] Fix for top-level parallel make part
- 1
-In-Reply-To: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20130718113809.663c6b58@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 18 Jul 2013 11:46:23 +0200
+Subject: [Buildroot] [RFC] BR2_DEFCONFIG not saved in defconfig,
+	why? (or: can we change that?)
+Message-ID: <CAAXf6LXJ6vkpMS2RxcakVPH8DvZeLi4Zejbnm-dLxWWeFmOXNQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Hi,
 
-Thanks for your patches!
+Following commit:
+http://git.buildroot.org/buildroot/commit/?id=1ed4996346c6504241c7a2c7541fefc914790219
 
-On Thu, 18 Jul 2013 11:12:23 +0200, Fabio Porcedda wrote:
+added a configurable option to select the destination file of 'make
+savedefconfig'.
+The default is 'defconfig'. However, this new option BR2_DEFCONFIG is
+not saved in the defconfig itself. This is intentional, says the
+commit message:
 
-> this is the first patch set for fixing top-level parallel make in buildroot,
-> the common problem scattered in buildroot's top-level makefile is that in the
-> rules it relies on the order of evaluation of the prerequisites,
-> to be able to use top-level parallel make instead of reling on the left to
-> right ordering of evaluation of the prerequisites we must add an explicit
-> rule to describe the dependency.
+"The BR2_DEFCONFIG value itself is not saved into the generated
+defconfig, since Kconfig considers it at its default. This is
+intentional, to avoid hard-coding an absolute path in the defconfig.
+It will anyway be set again when the defconfig is used with the 'make
+BR2_DEFCONFIG=... defconfig' command."
 
-I don't remember if we had this discussion in the past, but before
-going down the road of supporting top-level parallel make in Buildroot,
-I'd like to understand what is your plan to solve the most important
-problem that top-level parallel make creates: the need to create
-per-package sysroot, instead of the global single sysroot we have
-today. Have you thought about this problem already? What solution do
-you have for it?
+Due to this, I fail to see how I can benefit from BR2_DEFCONFIG.
+My use case (before using BR2_DEFCONFIG) is as follows: I have
+defconfigs for various projects stored inside the configs/
+subdirectory. To build a given project, I run:
+make <name_of_defconfig>
+If I make changes to the configuration (through 'make menuconfig' or
+manual changes in .config), I update the stored configuration as
+follows:
+make savedefconfig
+mv defconfig configs/<name_of_defconfig>
 
-In case the problem is not clear, here is a quick summary. The global
-sysroot we have today, in which all libraries and headers are
-installed, works fine because we have a guarantee on the build order
-that is consistent across rebuilds, because builds are non-parallel.
+I wanted to use BR2_DEFCONFIG to make these last steps simple. I had
+expected to set BR2_DEFCONFIG in the configuration to
+'configs/<name_of_defconfig>' or maybe
+'$(CONFIG_DIR)/configs/<name_of_defconfig>' or
+$(TOPDIR)/configs/name_of_defconfig), and then be able to run
+make <name_of_defconfig>
+to set a configuration, and
+make savedefconfig
+to store one.
 
-Now, let's introduce parallelization between builds of different
-packages, and suppose package A has an optional dependency on package
-B, but this dependency is not expressed in Buildroot Makefiles because
-we haven't seen that package A could optionally use package B.
+However, in my current understanding of the feature, I am forced to use
+make defconfig BR2_DEFCONFIG=configs/<name_of_defconfig>
+to set a configuration, and then
+make savedefconfig to store one.
 
-If you build things in parallel, then one build may lead to package A
-having been built with support for package B, because package B was
-built and installed in the sysroot prior to package A configure step.
-The next build you do, package A may be built without support for
-package B, because package A configure step is executed before package
-B is installed into the sysroot.
+To me, the command to set a configuration is overcomplicated.
+Originally it was as simple as passing the name of the config file,
+now you not only have to pass its actual path (configs/), but also you
+have to give it in a variable BR2_DEFCONFIG, *and* use the defconfig
+rule. So, I feel better off with the original behavior.
 
-So without doing *any* change in Buildroot or the configuration, two
-consecutive builds would have different results, which is clearly not
-nice.
+My question is: is it really needed that the value of BR2_DEFCONFIG is
+kept out of the defconfig itself? It is perfectly possible to set a
+relative path in it, or one based on a variable like TOPDIR or
+CONFIG_DIR, like so many other options already do. If someone does
+store an absolute path in it, I'd say this is the fault of the
+developer.
 
-The only solution to avoid this is to have a per-package sysroot, into
-which only the dependencies explicitly listed in the package .mk files
-are installed. It is probably not impossible to do with Buildroot, but
-isn't completely simple either.
+What do you think?
 
-What are your plans in that respect?
-
-Thanks!
-
+Thanks,
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
