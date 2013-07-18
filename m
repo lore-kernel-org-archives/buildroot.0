@@ -1,33 +1,70 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 18 Jul 2013 10:10:38 +0200
-Subject: [Buildroot] [PATCH] arch/arm: add support for thumb(1) mode
-In-Reply-To: <51E719D4.4070304@zacarias.com.ar> (Gustavo Zacarias's message of
- "Wed, 17 Jul 2013 19:25:24 -0300")
-References: <1374075555-9599-1-git-send-email-gustavo@zacarias.com.ar>
- <20130717175838.2fc2831e@skate> <51E6C06C.8070300@zacarias.com.ar>
- <20130717215826.60942218@skate> <51E719D4.4070304@zacarias.com.ar>
-Message-ID: <87zjtkwao1.fsf@dell.be.48ers.dk>
+From: Julien COUVRAND <julien.couvrand@stericsson.com>
+Date: Thu, 18 Jul 2013 10:11:02 +0200
+Subject: [Buildroot] Activation of pygobject
+In-Reply-To: <51E6BC44.7000600@zacarias.com.ar>
+References: <747C1E83C744F44E9ACFB89FAEEC2C7B2423DFD2A7@EXDCVYMBSTM005.EQ1STM.local>
+ <51E6BC44.7000600@zacarias.com.ar>
+Message-ID: <747C1E83C744F44E9ACFB89FAEEC2C7B2423DFD3DE@EXDCVYMBSTM005.EQ1STM.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Hi Gustavo,
 
- Gustavo> On 07/17/2013 04:58 PM, Thomas Petazzoni wrote:
- >> Ok, so if I select "Thumb" for ARMv5T, but use a normal ARMv5
- >> external toolchain (compiled ARM, not Thumb), it should work. Am I
- >> correct?
+Do you know when this package is available under Buidlroot?
+I guess the only way to solve this issue is to import manually this package under buildroot.
 
- Gustavo> Yes, because at the moment it's a NOP, we don't do anything
- Gustavo> regarding thumb and external toolchains :) However if we did
- Gustavo> it must work, it's part of the spec and the gcc default as
- Gustavo> long as we are talking about a thumb-supporting cpu of course.
 
-FYI, I just did a test build (arm926/thumb1/internal uclibc), and the
-build dies in NPTL when it runs out of registers. Without threads it
-builds and seems to work.
+Julien
 
--- 
-Bye, Peter Korsgaard
+Julien COUVRAND
+MOPI - 8540 SWPF Object Leader
+------------------------------------------------------------------------------------
+
+Mailto:???? 11 rue Pierre-Felix Delarue
+??????????????????? 72100 Le Mans -? FRANCE
+Office:????? +33 2 44 02 71 07
+Mobile: ?? +33 6 03 49 09 04 
+Emailto :?? julien.couvrand at stericsson.com
+-------------------------------------------------------------------------------------
+This communication is confidential and intended solely for the addressee(s). Any unauthorized review, use, disclosure or distribution is prohibited. If you believe this message has been sent to you in error, please notify the sender by replying to this transmission and delete the message without disclosing it. Thank you.
+
+E-mail including attachments is susceptible to data corruption, interception, unauthorized amendment, tampering and viruses, and we only send and receive emails on the basis that we are not liable for any such corruption, interception, amendment, tampering or viruses or any consequences thereof.
+
+
+-----Original Message-----
+From: Gustavo Zacarias [mailto:gustavo at zacarias.com.ar] 
+Sent: mercredi 17 juillet 2013 17:46
+To: Julien COUVRAND
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] Activation of pygobject
+
+On 07/17/2013 10:03 AM, Julien COUVRAND wrote:
+
+> Hi,
+> 
+> Trying to enable simple agent from bluez such as :
+> simple-agent hci0 68:EB:AE:4F:A4:B5
+> 
+> I meet an error:
+> ---
+> Traceback (most recent call last):
+>   File "/usr/bin/simple-agent", line 3, in <module>
+>     import gobject
+> ImportError: No module named gobject
+> ---
+> 
+> My configuration is the following:
+> - Bluez
+> - Python
+> - Dbus-glib
+> - Dbus-python
+> 
+> However, on buildroot, I don't find the way to import python-gobject.
+> Do you know how to import gobject?
+
+Hi.
+You're missing pygobject which isn't a package (yet) in buildroot.
+Regards.
