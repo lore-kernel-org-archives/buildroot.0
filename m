@@ -1,25 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 17 Jul 2013 19:25:24 -0300
-Subject: [Buildroot] [PATCH] arch/arm: add support for thumb(1) mode
-In-Reply-To: <20130717215826.60942218@skate>
-References: <1374075555-9599-1-git-send-email-gustavo@zacarias.com.ar>
- <20130717175838.2fc2831e@skate> <51E6C06C.8070300@zacarias.com.ar>
- <20130717215826.60942218@skate>
-Message-ID: <51E719D4.4070304@zacarias.com.ar>
+From: Erik Winn <sidewalksoftware@gmail.com>
+Date: Wed, 17 Jul 2013 21:09:54 -0600
+Subject: [Buildroot] Greetings
+Message-ID: <CAEaQ8PMT9_B7fK+=JyRxYENJD+--aAo9YBumuBVDv+JD9Qh1gg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/17/2013 04:58 PM, Thomas Petazzoni wrote:
+Hi all,
+ First I want to say to buildroot devs - you rock.  I haven't enjoyed
+checking out a tool like I have today with buildroot in a long time; really
+nice work - an extralarge Thank You!
 
-> Ok, so if I select "Thumb" for ARMv5T, but use a normal ARMv5
-> external toolchain (compiled ARM, not Thumb), it should work. Am I
-> correct?
+ Second - I needed libdc1394 so I added a package (which was almost trivial
+to do and part of what was so much fun today). And then thought - well,
+that's probably a nice option to have .. so, where do I go from here? I
+understand the parts about checking out git, patches, etc. - I just don't
+know if there is a protocol for submitting a new package, ie. would I make
+a proposal or is there discussion, package acceptance procedure, etc.?
+There might be thoughts about dependancies but the patch itself is tiny -
+almost identical to libraw1394.
 
-Yes, because at the moment it's a NOP, we don't do anything regarding
-thumb and external toolchains :)
-However if we did it must work, it's part of the spec and the gcc
-default as long as we are talking about a thumb-supporting cpu of course.
-Regards.
+Advice/guidance appreciated
+
+Thanks much.
+-e
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130717/e9fc3abe/attachment.html>
