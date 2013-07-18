@@ -1,48 +1,45 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 18 Jul 2013 01:50:34 -0500
-Subject: [Buildroot] [PATCH 1/1] ti-gfx: use BR2_ARM_EABIHF
-Message-ID: <1374130234-25465-1-git-send-email-spenser@gillilanding.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 Jul 2013 09:16:29 +0200
+Subject: [Buildroot] [RFC 2/3] sunxi-mali: new package
+In-Reply-To: <CAEBucnB9sJ=LX6m5vgVSH1gRQ1nwcTtj9r5HwEKgCxTq=cVvjA@mail.gmail.com>
+References: <1373778632-16531-1-git-send-email-spenser@gillilanding.com>
+ <1373778632-16531-3-git-send-email-spenser@gillilanding.com>
+ <20130716201400.GA7947@free.fr>
+ <CAEBucnB9sJ=LX6m5vgVSH1gRQ1nwcTtj9r5HwEKgCxTq=cVvjA@mail.gmail.com>
+Message-ID: <20130718091629.75a6ccf3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Spenser Gilliland,
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
----
- package/ti-gfx/Config.in | 5 -----
- package/ti-gfx/ti-gfx.mk | 2 +-
- 2 files changed, 1 insertion(+), 6 deletions(-)
+On Thu, 18 Jul 2013 01:12:17 -0500, Spenser Gilliland wrote:
 
-diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
-index a37705c..f336c52 100644
---- a/package/ti-gfx/Config.in
-+++ b/package/ti-gfx/Config.in
-@@ -28,11 +28,6 @@ config BR2_PACKAGE_TI_GFX_EGLIMAGE
- 	help
- 	  Installs OpenGL libaries which support the eglimage api.
- 
--config BR2_PACKAGE_TI_GFX_HARD_FLOAT
--	bool "use hard float binaries"
--	help
--	  Install hard float binaries (required if using a hard float toolchain)
--
- choice
- 	prompt "Target"
- 	default BR2_PACKAGE_TI_GFX_ES3
-diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
-index 0838bde..7713990 100644
---- a/package/ti-gfx/ti-gfx.mk
-+++ b/package/ti-gfx/ti-gfx.mk
-@@ -7,7 +7,7 @@
- TI_GFX_VERSION = 4_09_00_01
- TI_GFX_SO_VERSION = 1.9.2188537
- 
--ifeq ($(BR2_PACKAGE_TI_GFX_HARD_FLOAT),y)
-+ifeq ($(BR2_ARM_EABIHF),y)
- TI_GFX_SOURCE = Graphics_SDK_setuplinux_$(TI_GFX_VERSION)_hardfp_minimal_demos.bin
- else
- TI_GFX_SOURCE = Graphics_SDK_setuplinux_$(TI_GFX_VERSION)_minimal_demos.bin
+> > On 2013-07-14 00:10 -0500, Spenser Gilliland spake thusly:
+> >> +config BR2_PACKAGE_SUNXI_MALI
+> >> +     bool "sunxi-mali"
+> >
+> > Do you plan on looking to the open source driver, lima, as an
+> > alternative to mali?
+> 
+> Yes, I've been looking at it but I'm not sure we should package it
+> just yet.  I'm going to work on the ODroidU2 first and come back to
+> this.
+
+Is lima actually usable today as a drop-in replacement for libOpenGLES,
+libEGL and so on? Last time I had some infos, my understanding was that
+it was still some experimental code that isn't yet available in a form
+of a drop-in OpenGL ES implementation. I've been looking around
+yesterday for more details on the Lima website, but things aren't
+really clear, even by having a quick look at the source code.
+
+Best regards,
+
+Thomas
 -- 
-1.8.1.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
