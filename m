@@ -1,30 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 19 Jul 2013 00:39:29 +0200
-Subject: [Buildroot] [PATCH 3/4] package/nss-mdns: do not overwrite
-	user's nsswitch.conf
-In-Reply-To: <30a72c128f8850ae5ee21e06365bc89e37c6e9ab.1374182572.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Thu, 18 Jul 2013 23:24:14 +0200")
-References: <cover.1374182572.git.yann.morin.1998@free.fr>
- <cover.1374182572.git.yann.morin.1998@free.fr>
- <30a72c128f8850ae5ee21e06365bc89e37c6e9ab.1374182572.git.yann.morin.1998@free.fr>
-Message-ID: <8761w7wl0e.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 19 Jul 2013 00:34:04 +0200
+Subject: [Buildroot] [git commit] package/nss-mdns: fix avahi socket location
+Message-ID: <20130718224318.5CEC99A1A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a8a7960c3184bb97a8a60704cd4ba9b2c523188c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> Instead of over-writing the nsswitch.conf file (which may already
- Yann> contain user's specific configuration if it comes from a rootfs
- Yann> overlay, or a custom skeleton), just replace the 'hosts' line.
+In buildroot, the avahi socket is located in /var/run/avahi-daemon,
+not in /usr/var/run/avahi-daemon/socket.
 
-It's only an issue for custom skeletons, not overlays as they are only
-added after all the packages are built.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/nss-mdns/nss-mdns.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed with the description adjusted, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nss-mdns/nss-mdns.mk b/package/nss-mdns/nss-mdns.mk
+index ea53bc2..4d36633 100644
+--- a/package/nss-mdns/nss-mdns.mk
++++ b/package/nss-mdns/nss-mdns.mk
+@@ -7,6 +7,8 @@
+ NSS_MDNS_VERSION=0.10
+ NSS_MDNS_SITE=http://0pointer.de/lennart/projects/nss-mdns
+ 
++NSS_MDNS_CONF_OPT += --localstatedir=/var
++
+ define NSS_MDNS_INSTALL_CONFIG
+ 	$(INSTALL) -D -m 0664 package/nss-mdns/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf
+ endef
