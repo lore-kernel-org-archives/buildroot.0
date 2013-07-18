@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 19 Jul 2013 00:33:38 +0200
-Subject: [Buildroot] [PATCH 1/4] defconfig/rpi: bump kernel for misc
-	fixes
-In-Reply-To: <b70a2ed90c7068be35a49a17119fcd08fc6f806d.1374182572.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Thu, 18 Jul 2013 23:24:12 +0200")
+Date: Fri, 19 Jul 2013 00:34:52 +0200
+Subject: [Buildroot] [PATCH 2/4] package/nss-mdns: fix avahi socket
+	location
+In-Reply-To: <ecbc3969bbc335c75373f15fb7daa9e29248ec5d.1374182572.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Thu, 18 Jul 2013 23:24:13 +0200")
 References: <cover.1374182572.git.yann.morin.1998@free.fr>
  <cover.1374182572.git.yann.morin.1998@free.fr>
- <b70a2ed90c7068be35a49a17119fcd08fc6f806d.1374182572.git.yann.morin.1998@free.fr>
-Message-ID: <87ehavwla5.fsf@dell.be.48ers.dk>
+ <ecbc3969bbc335c75373f15fb7daa9e29248ec5d.1374182572.git.yann.morin.1998@free.fr>
+Message-ID: <87a9ljwl83.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,12 +17,8 @@ To: buildroot@busybox.net
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
  Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> Bump for a few fixes:
- Yann>   - fix for slow SDcards
- Yann>   - fix for USB interrupts
- Yann>   - fix for tracing functions
-
- Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> In buildroot, the avahi socket is located in /var/run/avahi-daemon,
+ Yann> not in /usr/var/run/avahi-daemon/socket.
 
 Committed, thanks.
 
