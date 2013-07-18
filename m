@@ -1,47 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jul 2013 21:57:57 +0200
-Subject: [Buildroot] [PATCH 0/3] Upgrade ARC port to new toolchain
-In-Reply-To: <1374172354-3248-1-git-send-email-mjonker@synopsys.com>
-References: <1374172354-3248-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <20130718215757.044949c7@skate>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Thu, 18 Jul 2013 22:39:48 +0200
+Subject: [Buildroot] Eclipse plugin and Kepler
+In-Reply-To: <51E848CA.1040209@obeo.fr>
+References: <51E8233C.5000105@relinux.de> <51E848CA.1040209@obeo.fr>
+Message-ID: <51E85294.60903@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mischa Jonker,
+Am 18.07.2013 21:58, schrieb M?lanie Bats:
+> Hello Stephan,
+>
+> Le 18/07/2013 19:17, Stephan Hoffmann a ?crit :
+>> while I am setting up a new project I noticed that the buildroot plugin
+>> seems to break the most recent eclipse (Kepler). After installing the
+>> plugin I was no longer able to open my projects. Clicking on the little
+>>> left of the project name did not fold out the project. After removing
+>> the buildroot plugin everything is normal again.
+>>
+>> That is not a major problem, since I switched back to Juno for now.
+>>
+>> Are there plans on when to release a Kepler compatible plugin?
+>
+> Yes! A bug is opened for that :
+> https://github.com/mbats/eclipse-buildroot-bundle/issues/17
+>
+> I will work on this next week and I expect to provide a new version
+> compatible with Kepler for the end of next week.
+Fine, thank you!
 
-On Thu, 18 Jul 2013 20:32:31 +0200, Mischa Jonker wrote:
-> These three patches upgrade the ARC toolchain to GCC 4.8 and
-> Binutils 2.23.2. This fixes multiple issues (including most
-> autobuilder failures from the past couple of weeks).
-
-Nice!
-
-Can you send a followup patch to remove:
-
-ifeq ($(BR2_GCC_VERSION_4_4_7_ARC),y)
-HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
-endif
-
-from package/gcc/gcc.mk
-
-and
-
-ifeq ($(BINUTILS_VERSION),2.19-arc)
-HOST_BINUTILS_DEPENDENCIES = host-flex host-bison
-else
-HOST_BINUTILS_DEPENDENCIES =
-endif
-
-from binutils.mk ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Stephan
+>
+> Best regards,
+> M?lanie
