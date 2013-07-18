@@ -1,20 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 19 Jul 2013 00:33:11 +0200
-Subject: [Buildroot] [PATCH] xenomai: requires thread support
-In-Reply-To: <1374184583-20571-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 18 Jul 2013 23:56:23 +0200")
-References: <1374184583-20571-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87ip07wlaw.fsf@dell.be.48ers.dk>
+Date: Fri, 19 Jul 2013 00:33:38 +0200
+Subject: [Buildroot] [PATCH 1/4] defconfig/rpi: bump kernel for misc
+	fixes
+In-Reply-To: <b70a2ed90c7068be35a49a17119fcd08fc6f806d.1374182572.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Thu, 18 Jul 2013 23:24:12 +0200")
+References: <cover.1374182572.git.yann.morin.1998@free.fr>
+ <cover.1374182572.git.yann.morin.1998@free.fr>
+ <b70a2ed90c7068be35a49a17119fcd08fc6f806d.1374182572.git.yann.morin.1998@free.fr>
+Message-ID: <87ehavwla5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- Thomas> Fixes
- Thomas> http://autobuild.buildroot.org/results/c99/c9912b2c21594350945c8a64528bb6a9b34d6292/build-end.log.
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> Bump for a few fixes:
+ Yann>   - fix for slow SDcards
+ Yann>   - fix for USB interrupts
+ Yann>   - fix for tracing functions
+
+ Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Committed, thanks.
 
