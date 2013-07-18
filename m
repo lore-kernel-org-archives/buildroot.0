@@ -1,49 +1,68 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Thu, 18 Jul 2013 23:47:49 +0200
-Subject: [Buildroot] [PATCH v2 0/3] Upgrade ARC port to new toolchain
-Message-ID: <1374184072-6531-1-git-send-email-mjonker@synopsys.com>
+Date: Thu, 18 Jul 2013 23:47:50 +0200
+Subject: [Buildroot] [PATCH v2 1/3] uclibc,
+	eglibc: remove REALLY_NOSTDLIB references
+In-Reply-To: <1374184072-6531-1-git-send-email-mjonker@synopsys.com>
+References: <1374184072-6531-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <1374184072-6531-2-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These three patches upgrade the ARC toolchain to GCC 4.8 and
-Binutils 2.23.2. This fixes multiple issues (including most
-autobuilder failures from the past couple of weeks).
+These were required with ARC gcc 4.4.7; ARC gcc 4.8 has been changed
+to behave the same as other architectures with -nostdlib, making this
+option obsolete.
 
-v2:
-  * Remove gcc 4.4.7 patch
-  * Fix whitespace in fix_branch_out_of_range.patch
-  * Remove binutils 2.19-arc dependencies (not required anymore)
-  * Fix gcc 4.8-arc dependencies (host-flex, host-bison still required :-( )
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+---
+ package/eglibc/eglibc.mk |    2 +-
+ package/uclibc/uclibc.mk |   11 ++---------
+ 2 files changed, 3 insertions(+), 10 deletions(-)
 
-Mischa Jonker (3):
-  uclibc, eglibc: remove REALLY_NOSTDLIB references
-  arc: binutils: Go from 2.19-arc to 2.23.2-arc
-  arc: gcc: Go from 4.4.7 to 4.8 for ARC
-
- .../binutils/2.19-arc/add-empty-info-files.patch   |   72 ----------
- package/binutils/Config.in.host                    |    2 +-
- package/binutils/binutils.mk                       |    4 -
- package/eglibc/eglibc.mk                           |    2 +-
- package/gcc/4.8-arc/100-uclibc-conf.patch          |   15 ++
- package/gcc/4.8-arc/301-missing-execinfo_h.patch   |   13 ++
- package/gcc/4.8-arc/302-c99-snprintf.patch         |   13 ++
- .../gcc/4.8-arc/305-libmudflap-susv3-legacy.patch  |   49 +++++++
- package/gcc/4.8-arc/disable_gc_sections.patch      |  145 ++++++++++++++++++++
- .../fix_branch_out_of_range.patch                  |    2 +-
- package/gcc/Config.in.host                         |   13 +-
- package/gcc/gcc.mk                                 |    2 +-
- package/uclibc/uclibc.mk                           |   11 +-
- 13 files changed, 248 insertions(+), 95 deletions(-)
- delete mode 100644 package/binutils/2.19-arc/add-empty-info-files.patch
- create mode 100644 package/gcc/4.8-arc/100-uclibc-conf.patch
- create mode 100644 package/gcc/4.8-arc/301-missing-execinfo_h.patch
- create mode 100644 package/gcc/4.8-arc/302-c99-snprintf.patch
- create mode 100644 package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch
- create mode 100644 package/gcc/4.8-arc/disable_gc_sections.patch
- rename package/gcc/{4.4.7-arc => 4.8-arc}/fix_branch_out_of_range.patch (96%)
-
+diff --git a/package/eglibc/eglibc.mk b/package/eglibc/eglibc.mk
+index ccdc210..5431ac5 100644
+--- a/package/eglibc/eglibc.mk
++++ b/package/eglibc/eglibc.mk
+@@ -61,7 +61,7 @@ define EGLIBC_CONFIGURE_CMDS
+ 	cp $(@D)/build/csu/crt1.o $(STAGING_DIR)/usr/lib/
+ 	cp $(@D)/build/csu/crti.o $(STAGING_DIR)/usr/lib/
+ 	cp $(@D)/build/csu/crtn.o $(STAGING_DIR)/usr/lib/
+-	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) \
++	$(TARGET_CROSS)gcc -nostdlib \
+ 		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
+ endef
+ 
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index f775b15..d5ea7a4 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -163,13 +163,6 @@ endef
+ endif
+ 
+ #
+-# ARC definitions
+-#
+-ifeq ($(UCLIBC_TARGET_ARCH),arc)
+-REALLY_NOSTDLIB = -really-nostdlib
+-endif
+-
+-#
+ # Endianess
+ #
+ 
+@@ -407,9 +400,9 @@ define UCLIBC_CONFIGURE_CMDS
+ 		RUNTIME_PREFIX=$(STAGING_DIR) \
+ 		headers lib/crt1.o lib/crti.o lib/crtn.o \
+ 		install_headers
+-	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) \
++	$(TARGET_CROSS)gcc -nostdlib \
+ 		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
+-	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) \
++	$(TARGET_CROSS)gcc -nostdlib \
+ 		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libm.so
+ 	cp -pLR $(UCLIBC_DIR)/lib/crt[1in].o $(STAGING_DIR)/usr/lib/
+ endef
 -- 
 1.7.9.5
