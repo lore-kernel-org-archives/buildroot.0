@@ -1,32 +1,35 @@
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Thu, 18 Jul 2013 22:09:39 +0000
-Subject: [Buildroot] [PATCH v2 0/3] Upgrade ARC port to new toolchain
-In-Reply-To: <20130718235253.3600712d@skate>
-References: <1374184072-6531-1-git-send-email-mjonker@synopsys.com>
- <20130718235253.3600712d@skate>
-Message-ID: <E6BF041E97966E4DB955F0DF883AD2D633A09F1D@de02wembxa.internal.synopsys.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 19 Jul 2013 00:32:16 +0200
+Subject: [Buildroot] [PATCH] arch/arm: add support for thumb(1) mode
+In-Reply-To: <51E812BF.9060808@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Thu, 18 Jul 2013 13:07:27 -0300")
+References: <1374075555-9599-1-git-send-email-gustavo@zacarias.com.ar>
+ <20130717175838.2fc2831e@skate> <51E6C06C.8070300@zacarias.com.ar>
+ <20130717215826.60942218@skate> <51E719D4.4070304@zacarias.com.ar>
+ <87zjtkwao1.fsf@dell.be.48ers.dk> <51E812BF.9060808@zacarias.com.ar>
+Message-ID: <87mwpjwlcf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-> While you're at it, have you followed the recent changes on floating point
-> support for ARM?
+ Gustavo> On 07/18/2013 05:10 AM, Peter Korsgaard wrote:
+ >> FYI, I just did a test build (arm926/thumb1/internal uclibc), and the
+ >> build dies in NPTL when it runs out of registers. Without threads it
+ >> builds and seems to work.
 
-I saw the mails, but I haven't studied them in detail. 
+ Gustavo> I regularly build -mthumb (via CFLAGS) projects without issues for an
+ Gustavo> arm920t, but that doesn't force those flags for uclibc, just catched the
+ Gustavo> breakage after you fixed my patch (mine was a no-op, d'oh!)
+ Gustavo> Seems uclibc is broken for thumb builds, even with
+ Gustavo> COMPILE_IN_THUMB_MODE=y in its config (which the only thing it does is
+ Gustavo> add -mthumb to the compile flags).
 
-> How does floating point support works on ARC?
-> Completely soft-float? Hard float is possible? Always the same FPU?
+Actually the uClibc breakage seems to only be in the NPTL stuff. A test
+build without threads worked OK.
 
-For the current generation of cores (ARC700 series for Linux) we do not really have an 'FPU'. The ARC cores have the possibility of adding various extensions, and for floating point we happen to have 4 different kinds of extensions: spfp-compact, dpfp-compact, spfp-fast, dpfp-fast. In reality, these are just ADD, SUB and MUL instructions, the rest still needs to happen in software. The single and double precision extensions can be combined so both are supported in the same core. The fast and compact variants relate to the speed and the number of gates/area; I think they share the same opcode space.
-
-I think right now it is more important to focus on getting most packages to build; after that I will look into the best way to make a toolchain + libraries tailored to the exact core configuration: the FPU is not the only thing that is configurable; you can have a variable set of registers, different types of multipliers, etc, etc.
-
-If I were to add this configurability somewhere, do you think that CTNG would be the right place, or Buildroot?
-
-Thanks,
-
-Mischa
+-- 
+Bye, Peter Korsgaard
