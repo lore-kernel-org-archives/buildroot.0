@@ -1,50 +1,65 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 19 Jul 2013 10:06:32 -0300
-Subject: [Buildroot] [PATCHv2 2/3] eglibc/arm: doesn't build in thumb(1) mode
+Date: Fri, 19 Jul 2013 10:06:33 -0300
+Subject: [Buildroot] [PATCHv2 3/3] uclibc/arm: doesn't build in thumb(1)
+	mode with threads
 In-Reply-To: <1374239193-23811-1-git-send-email-gustavo@zacarias.com.ar>
 References: <buildroot@busybox.net>
  <1374239193-23811-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1374239193-23811-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1374239193-23811-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It runs out of registers, so build it in ARM mode, EABI mandates
-interworking so this isn't an issue.
+It runs out of registers, it fails even in official form
+(COMPILE_IN_THUMB_MODE=y) so just build it in ARM mode since EABI
+mandates interworking.
 Tested in an arm920t board.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/eglibc/eglibc.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/uclibc/Config.in | 2 +-
+ package/uclibc/uclibc.mk | 7 ++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/eglibc/eglibc.mk b/package/eglibc/eglibc.mk
-index 5431ac5..253dabd 100644
---- a/package/eglibc/eglibc.mk
-+++ b/package/eglibc/eglibc.mk
-@@ -23,6 +23,11 @@ EGLIBC_INSTALL_STAGING = YES
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 8d16e8c..90aae90 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -185,7 +185,7 @@ config BR2_UCLIBC_ARM_TYPE
+ config BR2_UCLIBC_ARM_BX
+ 	bool
+ 	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
+-	default y if !BR2_fa265 && !BR2_strongarm
++	default y if (BR2_ARM_CPU_HAS_THUMB || BR2_ARM_CPU_HAS_THUMB2)
 
- EGLIBC_INSTALL_STAGING_OPT = install_root=$(STAGING_DIR) install
+ config BR2_UCLIBC_MIPS_ABI
+ 	string
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 0c76c3f..cf53280 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -74,6 +74,11 @@ define UCLIBC_ARM_ABI_CONFIG
+ 	$(call UCLIBC_OPT_SET,CONFIG_ARM_EABI,y,$(@D))
+ endef
 
-+# Thumb build is broken, build in ARM mode
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+EGLIBC_EXTRA_CFLAGS += -marm
++# Thumb build is broken with threads, build in ARM mode
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
++UCLIBC_EXTRA_CFLAGS += -marm
 +endif
 +
- # Even though we use the autotools-package infrastructure, we have to
- # override the default configure commands for several reasons:
- #
-@@ -36,7 +41,8 @@ define EGLIBC_CONFIGURE_CMDS
- 	# Do the configuration
- 	(cd $(@D)/build; \
- 		$(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="-O2" CPPFLAGS="" CXXFLAGS="-O2" \
-+		CFLAGS="-O2 $(EGLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
-+		CXXFLAGS="-O2 $(EGLIBC_EXTRA_CFLAGS)" \
- 		$(SHELL) $(@D)/libc/configure \
- 		ac_cv_path_BASH_SHELL=/bin/bash \
- 		libc_cv_forced_unwind=yes \
+ ifeq ($(BR2_UCLIBC_ARM_BX),y)
+ define UCLIBC_ARM_BX_CONFIG
+ 	$(call UCLIBC_OPT_SET,USE_BX,y,$(@D))
+@@ -354,7 +359,7 @@ endif
+ UCLIBC_MAKE_FLAGS = \
+ 	ARCH="$(UCLIBC_TARGET_ARCH)" \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+-	UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
++	UCLIBC_EXTRA_CFLAGS="$(UCLIBC_EXTRA_CFLAGS) $(TARGET_ABI)" \
+ 	HOSTCC="$(HOSTCC)"
+
+ define UCLIBC_SETUP_DOT_CONFIG
 --
 1.8.1.5
