@@ -1,84 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 19 Jul 2013 23:30:53 +0200
-Subject: [Buildroot] [git commit] uClibc: Add uClibc patch to fix MIPS64/n64
-	interpreter
-Message-ID: <20130719214137.0F0B39A0BF@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 19 Jul 2013 23:44:18 +0200
+Subject: [Buildroot] [PATCH] trivial: add space in 'bool"package"'
+	construct in Config.in
+In-Reply-To: <c92bd20931ef072a188e.1374235292@BEANTN0L019720> (Thomas De
+ Schampheleire's message of "Fri, 19 Jul 2013 14:01:32 +0200")
+References: <c92bd20931ef072a188e.1374235292@BEANTN0L019720>
+Message-ID: <87txjqtebx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fb354d5faaa9b912e3d868b92622c11323d6ae9f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
-uClibc picks the wrong interpreter for MIPS64/n64.
-This patch fixes this problem by checking the selected
-MIPS ABI instead of the MIPS variant.
+ Thomas> In early buildroot, it apparently was customary to have
+ Thomas> following style in Config.in files: bool"expat"
 
-The patch has been committed upstream:
-http://git.uclibc.org/uClibc/commit/?id=603af30d6992e94ac30a66b953264076f4f2fd71
+ Thomas> Nowadays, only two packages remain with this style: diffutils and expat.
+ Thomas> This trivial patch lines them up with the style:
+ Thomas>     bool "expat"
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../uclibc-0009-mips64-fix-n64-interp.patch        |   51 ++++++++++++++++++++
- 1 files changed, 51 insertions(+), 0 deletions(-)
+Committed, thanks.
 
-diff --git a/package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch b/package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch
-new file mode 100644
-index 0000000..7efef78
---- /dev/null
-+++ b/package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch
-@@ -0,0 +1,51 @@
-+From 603af30d6992e94ac30a66b953264076f4f2fd71 Mon Sep 17 00:00:00 2001
-+From: Markos Chandras <markos.chandras@imgtec.com>
-+Date: Thu, 11 Jul 2013 16:59:16 +0000
-+Subject: Rules.mak: MIPS64: Select correct interpreter
-+
-+gcc (eg 4.7.3) hardcodes the MIPS64 interpreters like this:
-+(see gcc/config/linux.h and gcc/config/mips/linux64.h)
-+
-+o32: UCLIBC_DYNAMIC_LINKER "/lib/ld-uClibc.so.0"
-+n32: UCLIBC_DYNAMIC_LINKERN32 "/lib32/ld-uClibc.so.0"
-+n64: UCLIBC_DYNAMIC_LINKER64 "/lib/ld64-uClibc.so.0"
-+
-+The existing check for MIPS64 in uClibc is wrong because it does
-+not respect the selected ABI
-+
-+We fix this by explicitely checking the selected ABI instead of the
-+selected MIPS variant.
-+
-+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-+Cc: Anthony G. Basile <blueness@gentoo.org>
-+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-+---
-+diff --git a/Rules.mak b/Rules.mak
-+index 792b794..889108e 100644
-+--- a/Rules.mak
-++++ b/Rules.mak
-+@@ -138,13 +138,19 @@ export MAJOR_VERSION MINOR_VERSION SUBLEVEL VERSION ABI_VERSION LC_ALL
-+ LIBC := libc
-+ SHARED_LIBNAME := $(LIBC).so.$(ABI_VERSION)
-+ UBACKTRACE_DSO := libubacktrace.so.$(ABI_VERSION)
-+-ifneq ($(findstring  $(TARGET_ARCH) , hppa64 ia64 mips64 powerpc64 s390x sparc64 x86_64 ),)
-++
-++UCLIBC_LDSO_NAME := ld-uClibc
-++ARCH_NATIVE_BIT := 32
-++ifneq ($(findstring $(TARGET_ARCH),hppa64 ia64 powerpc64 s390x sparc64 x86_64),)
-+ UCLIBC_LDSO_NAME := ld64-uClibc
-+ ARCH_NATIVE_BIT := 64
-+ else
-+-UCLIBC_LDSO_NAME := ld-uClibc
-+-ARCH_NATIVE_BIT := 32
-++ifeq ($(CONFIG_MIPS_N64_ABI),y)
-++UCLIBC_LDSO_NAME := ld64-uClibc
-++ARCH_NATIVE_BIT := 64
-+ endif
-++endif
-++
-+ UCLIBC_LDSO := $(UCLIBC_LDSO_NAME).so.$(ABI_VERSION)
-+ NONSHARED_LIBNAME := uclibc_nonshared.a
-+ libc := $(top_builddir)lib/$(SHARED_LIBNAME)
-+--
-+cgit v0.9.1
+-- 
+Bye, Peter Korsgaard
