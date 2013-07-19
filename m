@@ -1,30 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 19 Jul 2013 16:55:36 -0300
-Subject: [Buildroot] qemu_ppc_mpc8544ds_defconfig does not boot
-In-Reply-To: <CALR4fELm3cpt=x74-5fhXEr69ukbbE-Q6u_r6rS2qCbL43xVVg@mail.gmail.com>
-References: <CALR4fELm3cpt=x74-5fhXEr69ukbbE-Q6u_r6rS2qCbL43xVVg@mail.gmail.com>
-Message-ID: <51E999B8.2000806@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 19 Jul 2013 22:07:34 +0200
+Subject: [Buildroot] EABIhf: breaks kernel build
+In-Reply-To: <20130719161733.GC3751@free.fr> (Yann E. MORIN's message of "Fri, 
+ 19 Jul 2013 18:17:33 +0200")
+References: <20130719161733.GC3751@free.fr>
+Message-ID: <87fvvauxdl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/13/2013 06:42 AM, Diego Iastrubni wrote:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-> Hi all,
-> 
-> elcuco at stimpy:~/src/buildroot$ make qemu_ppc_mpc8544ds_defconfig
-> elcuco at stimpy:~/src/buildroot$ make
-> elcuco at stimpy:~/src/buildroot$ qemu-system-ppc -M mpc8544ds -kernel
-> output/images/vmlinux -serial stdio -net nic,model=e1000 -net user
-> Unable to copy device tree in memory
-> couldn't load device tree
-> 
-> Can anyone reproduce? I am using
-> cca5538556e854516a85b28ae56c06ed66427b71 (master).
+ Yann> Thomas, All,
+ Yann> Since the ARM EABIhf stuff was committed, the Linux kernel build is
+ Yann> broken, and fails with this message:
+ Yann>     armv6-rpi36-linux-gnueabi-gcc: error: -mfloat-abi=soft and
+ Yann>     -mfloat-abi=hard may not be used together
 
-Worksforme(tm) on gentoo with qemu 1.4.2.
-Which qemu version and distribution? Sounds like a qemu problem to me
-(maybe packaging).
-Regards.
+ Yann> This is because -mfloat-abi=hard is hard-coded in the wrapper, but the
+ Yann> kernel wants to pass -msoft-float.
+
+ Yann> See attach exerpt of my build log (with a instrumented ext-ttolchain
+ Yann> wrapper). Notice argv[6] and argv[41]:
+
+ Yann>     argv[6]='-mfloat-abi=hard'
+ Yann>     argv[41]='-msoft-float'
+
+ Yann> argv[6] is out hard-coded float ABI option, while argv[41] is passed by
+ Yann> the kernel.
+
+ Yann> I don't know how to solve this.
+
+ Yann> The trivial and immediate idea would be to have a black-list of
+ Yann> arguments and exclude the ones we pass that conflict with the ones
+ Yann> passed on the command line, but this will be *very* complex and always
+ Yann> incomplete.
+
+Yeah, but I think it's the best solution still.
+
+-- 
+Bye, Peter Korsgaard
