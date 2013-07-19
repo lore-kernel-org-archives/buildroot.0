@@ -1,50 +1,26 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 19 Jul 2013 14:46:37 +0200
-Subject: [Buildroot] [PATCH] dhcp: add config option for delayed-ack feature
-	of dhcp server
-Message-ID: <2ac4c1f0c7025c5012b9.1374237997@BEANTN0L019720>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 19 Jul 2013 10:06:26 -0300
+Subject: [Buildroot] [PATCH] arch/arm: add support for thumb(1) mode
+In-Reply-To: <87sizbuflm.fsf@dell.be.48ers.dk>
+References: <1374075555-9599-1-git-send-email-gustavo@zacarias.com.ar>
+ <20130717175838.2fc2831e@skate> <51E6C06C.8070300@zacarias.com.ar>
+ <20130717215826.60942218@skate> <51E719D4.4070304@zacarias.com.ar>
+ <87zjtkwao1.fsf@dell.be.48ers.dk> <51E812BF.9060808@zacarias.com.ar>
+ <87mwpjwlcf.fsf@dell.be.48ers.dk> <51E87032.3020102@zacarias.com.ar>
+ <87sizbuflm.fsf@dell.be.48ers.dk>
+Message-ID: <51E939D2.5080104@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch creates a config option for the ISC DHCP server to allow passing
---enable-delayed-ack to its configure script.
+On 07/19/2013 05:19 AM, Peter Korsgaard wrote:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>  Gustavo> Question is did (does) it really work or just built?
+> 
+> A statically built busybox with it atleast ran here. I didn't really
+> give it a lot of testing though.
 
----
- package/dhcp/Config.in |  5 +++++
- package/dhcp/dhcp.mk   |  4 ++++
- 2 files changed, 9 insertions(+), 0 deletions(-)
-
-diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
---- a/package/dhcp/Config.in
-+++ b/package/dhcp/Config.in
-@@ -13,6 +13,11 @@ config BR2_PACKAGE_DHCP_SERVER
- 	help
- 	  DHCP server from the ISC DHCP distribution.
- 
-+config BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK
-+	bool "Enable delayed ACK feature"
-+	depends on BR2_PACKAGE_DHCP_SERVER
-+	help
-+	  Enable delayed ACK feature in the ISC DHCP server.
- 
- config BR2_PACKAGE_DHCP_RELAY
- 	bool "dhcp relay"
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -17,6 +17,10 @@ DHCP_CONF_OPT = \
- 	--with-cli-pid-file=/var/run/dhclient.pid \
- 	--with-relay-pid-file=/var/run/dhcrelay.pid
- 
-+ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
-+        DHCP_CONF_OPT += --enable-delayed-ack
-+endif
-+
- ifneq ($(BR2_INET_IPV6),y)
-         DHCP_CONF_OPT += --disable-dhcpv6
- endif
+Fair enough then, i'll send a v2.
+Regards.
