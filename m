@@ -1,27 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 19 Jul 2013 23:44:18 +0200
-Subject: [Buildroot] [PATCH] trivial: add space in 'bool"package"'
-	construct in Config.in
-In-Reply-To: <c92bd20931ef072a188e.1374235292@BEANTN0L019720> (Thomas De
- Schampheleire's message of "Fri, 19 Jul 2013 14:01:32 +0200")
-References: <c92bd20931ef072a188e.1374235292@BEANTN0L019720>
-Message-ID: <87txjqtebx.fsf@dell.be.48ers.dk>
+Date: Sat, 20 Jul 2013 00:07:09 +0200
+Subject: [Buildroot] [PATCHv2 1/3] gcc/arm: disable mudflap for thumb(1)
+In-Reply-To: <1374239193-23811-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 19 Jul 2013 10:06:31 -0300")
+References: <buildroot@busybox.net>
+ <1374239193-23811-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ppuetd9u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Thomas> In early buildroot, it apparently was customary to have
- Thomas> following style in Config.in files: bool"expat"
+ Gustavo> libmudflap doesn't build for a thumb(1) toolchain so disable it.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- Thomas> Nowadays, only two packages remain with this style: diffutils and expat.
- Thomas> This trivial patch lines them up with the style:
- Thomas>     bool "expat"
-
-Committed, thanks.
+Committed series, thanks.
 
 -- 
 Bye, Peter Korsgaard
