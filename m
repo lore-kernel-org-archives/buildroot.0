@@ -1,91 +1,50 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 19 Jul 2013 14:25:18 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: support toolchains with
-	lib32 directories
-Message-ID: <6ea92f8ae6dd3f73dba1.1374236718@BEANTN0L019720>
+Date: Fri, 19 Jul 2013 14:46:37 +0200
+Subject: [Buildroot] [PATCH] dhcp: add config option for delayed-ack feature
+	of dhcp server
+Message-ID: <2ac4c1f0c7025c5012b9.1374237997@BEANTN0L019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some toolchains, like the Cavium Networks' one, have lib32/ and lib64/
-directories, while the standard lib/ is empty. To find libc.a, buildroot
-currently only looks in lib/ and lib64/. This patch extends the search
-to lib32/ as well.
+This patch creates a config option for the ISC DHCP server to allow passing
+--enable-delayed-ack to its configure script.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- toolchain/toolchain-external/ext-tool.mk |  20 ++++++++++----------
- 1 files changed, 10 insertions(+), 10 deletions(-)
+ package/dhcp/Config.in |  5 +++++
+ package/dhcp/dhcp.mk   |  4 ++++
+ 2 files changed, 9 insertions(+), 0 deletions(-)
 
-Note: instead of using the construct 'lib(32|64)*', one could also use
-'lib*'. The latter would also match libfoo, but that's probably ok. Let me
-know if you prefer that style.
-
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -363,7 +363,7 @@ endif
- 	@$(call MESSAGE,"Checking external toolchain settings")
- 	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
- 	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
--	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
-+	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(32|64)?/(.*/)?libc\.a::'` ; \
- 	if test -z "$${SYSROOT_DIR}" ; then \
- 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
- 		exit 1 ; \
-@@ -397,7 +397,7 @@ endif
- #
- #  SYSROOT_DIR:         the main sysroot directory, deduced from
- #                       LIBC_A_LOCATION by removing the
--#                       usr/lib[64]/libc.a part of the path.
-+#                       usr/lib[32|64]/libc.a part of the path.
- #                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/
- #
- # ARCH_LIBC_A_LOCATION: location of the libc.a file in the selected
-@@ -408,11 +408,11 @@ endif
- #
- # ARCH_SYSROOT_DIR:     the sysroot of the selected multilib variant,
- #                       deduced from ARCH_LIBC_A_LOCATION by removing
--#                       usr/lib[64]/libc.a at the end of the path.
-+#                       usr/lib[32|64]/libc.a at the end of the path.
- #                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/mips16/soft-float/el/
- #
--# ARCH_LIB_DIR:         'lib' or 'lib64' depending on where libraries are
--#                       stored. Deduced from ARCH_LIBC_A_LOCATION by
-+# ARCH_LIB_DIR:         'lib', 'lib32' or 'lib64' depending on where libraries
-+#                       are stored. Deduced from ARCH_LIBC_A_LOCATION by
- #                       looking at usr/lib??/libc.a.
- #                       Ex: lib
- #
-@@ -433,14 +433,14 @@ endif
+diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
+--- a/package/dhcp/Config.in
++++ b/package/dhcp/Config.in
+@@ -13,6 +13,11 @@ config BR2_PACKAGE_DHCP_SERVER
+ 	help
+ 	  DHCP server from the ISC DHCP distribution.
  
- $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
- 	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
--	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
-+	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(32|64)?/(.*/)?libc\.a::'` ; \
- 	if test -z "$${SYSROOT_DIR}" ; then \
- 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
- 		exit 1 ; \
- 	fi ; \
- 	ARCH_LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
--	ARCH_SYSROOT_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
--	ARCH_LIB_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
-+	ARCH_SYSROOT_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(32|64)?/(.*/)?libc\.a::'` ; \
-+	ARCH_LIB_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(32|64)?)/(.*/)?libc.a:\1:'` ; \
- 	SUPPORT_LIB_DIR="" ; \
- 	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
- 		LIBSTDCPP_A_LOCATION=$$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
-@@ -489,8 +489,8 @@ endif
- 	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
- 	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
- 	FDPIC_LIBC_A_LOCATION=`readlink -f $$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
--	FDPIC_SYSROOT_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
--	FDPIC_LIB_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
-+	FDPIC_SYSROOT_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(32|64)?/(.*/)?libc\.a::'` ; \
-+	FDPIC_LIB_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(32|64)?)/(.*/)?libc.a:\1:'` ; \
- 	FDPIC_SUPPORT_LIB_DIR="" ; \
- 	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
- 	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
++config BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK
++	bool "Enable delayed ACK feature"
++	depends on BR2_PACKAGE_DHCP_SERVER
++	help
++	  Enable delayed ACK feature in the ISC DHCP server.
+ 
+ config BR2_PACKAGE_DHCP_RELAY
+ 	bool "dhcp relay"
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -17,6 +17,10 @@ DHCP_CONF_OPT = \
+ 	--with-cli-pid-file=/var/run/dhclient.pid \
+ 	--with-relay-pid-file=/var/run/dhcrelay.pid
+ 
++ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
++        DHCP_CONF_OPT += --enable-delayed-ack
++endif
++
+ ifneq ($(BR2_INET_IPV6),y)
+         DHCP_CONF_OPT += --disable-dhcpv6
+ endif
