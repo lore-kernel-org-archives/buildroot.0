@@ -1,37 +1,50 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 19 Jul 2013 10:06:31 -0300
-Subject: [Buildroot] [PATCHv2 1/3] gcc/arm: disable mudflap for thumb(1)
-In-Reply-To: <buildroot@busybox.net>
+Date: Fri, 19 Jul 2013 10:06:32 -0300
+Subject: [Buildroot] [PATCHv2 2/3] eglibc/arm: doesn't build in thumb(1) mode
+In-Reply-To: <1374239193-23811-1-git-send-email-gustavo@zacarias.com.ar>
 References: <buildroot@busybox.net>
-Message-ID: <1374239193-23811-1-git-send-email-gustavo@zacarias.com.ar>
+ <1374239193-23811-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1374239193-23811-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libmudflap doesn't build for a thumb(1) toolchain so disable it.
+It runs out of registers, so build it in ARM mode, EABI mandates
+interworking so this isn't an issue.
+Tested in an arm920t board.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gcc/gcc.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/eglibc/eglibc.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index c0d821b..85cd7d4 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -194,6 +194,11 @@ ifeq ($(BR2_avr32),y)
- HOST_GCC_COMMON_CONF_OPT += --disable-libmudflap
- endif
+diff --git a/package/eglibc/eglibc.mk b/package/eglibc/eglibc.mk
+index 5431ac5..253dabd 100644
+--- a/package/eglibc/eglibc.mk
++++ b/package/eglibc/eglibc.mk
+@@ -23,6 +23,11 @@ EGLIBC_INSTALL_STAGING = YES
 
-+# ARM Thumb and mudflap aren't friends
+ EGLIBC_INSTALL_STAGING_OPT = install_root=$(STAGING_DIR) install
+
++# Thumb build is broken, build in ARM mode
 +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+HOST_GCC_COMMON_CONF_OPT += --disable-libmudflap
++EGLIBC_EXTRA_CFLAGS += -marm
 +endif
 +
- # Disable mudflap and enable proper double/long double for SPE ABI
- ifeq ($(BR2_powerpc_SPE),y)
- HOST_GCC_COMMON_CONF_OPT += \
+ # Even though we use the autotools-package infrastructure, we have to
+ # override the default configure commands for several reasons:
+ #
+@@ -36,7 +41,8 @@ define EGLIBC_CONFIGURE_CMDS
+ 	# Do the configuration
+ 	(cd $(@D)/build; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="-O2" CPPFLAGS="" CXXFLAGS="-O2" \
++		CFLAGS="-O2 $(EGLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
++		CXXFLAGS="-O2 $(EGLIBC_EXTRA_CFLAGS)" \
+ 		$(SHELL) $(@D)/libc/configure \
+ 		ac_cv_path_BASH_SHELL=/bin/bash \
+ 		libc_cv_forced_unwind=yes \
 --
 1.8.1.5
