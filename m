@@ -1,55 +1,84 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 19 Jul 2013 23:39:43 +0200
-Subject: [Buildroot] [git commit] dhcp: add config option for delayed-ack
-	feature of dhcp server
-Message-ID: <20130719214137.235E89A20B@busybox.osuosl.org>
+Date: Fri, 19 Jul 2013 23:30:53 +0200
+Subject: [Buildroot] [git commit] uClibc: Add uClibc patch to fix MIPS64/n64
+	interpreter
+Message-ID: <20130719214137.0F0B39A0BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4db37c663cc0988cf5993d14ee5fdb7976f45694
+commit: http://git.buildroot.net/buildroot/commit/?id=fb354d5faaa9b912e3d868b92622c11323d6ae9f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch creates a config option for the ISC DHCP server to allow passing
---enable-delayed-ack to its configure script.
+uClibc picks the wrong interpreter for MIPS64/n64.
+This patch fixes this problem by checking the selected
+MIPS ABI instead of the MIPS variant.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+The patch has been committed upstream:
+http://git.uclibc.org/uClibc/commit/?id=603af30d6992e94ac30a66b953264076f4f2fd71
+
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dhcp/Config.in |    5 +++++
- package/dhcp/dhcp.mk   |    4 ++++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+ .../uclibc-0009-mips64-fix-n64-interp.patch        |   51 ++++++++++++++++++++
+ 1 files changed, 51 insertions(+), 0 deletions(-)
 
-diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
-index 38cf007..e341485 100644
---- a/package/dhcp/Config.in
-+++ b/package/dhcp/Config.in
-@@ -13,6 +13,11 @@ config BR2_PACKAGE_DHCP_SERVER
- 	help
- 	  DHCP server from the ISC DHCP distribution.
- 
-+config BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK
-+	bool "Enable delayed ACK feature"
-+	depends on BR2_PACKAGE_DHCP_SERVER
-+	help
-+	  Enable delayed ACK feature in the ISC DHCP server.
- 
- config BR2_PACKAGE_DHCP_RELAY
- 	bool "dhcp relay"
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index ce0cf23..3baeb23 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -17,6 +17,10 @@ DHCP_CONF_OPT = \
- 	--with-cli-pid-file=/var/run/dhclient.pid \
- 	--with-relay-pid-file=/var/run/dhcrelay.pid
- 
-+ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
-+        DHCP_CONF_OPT += --enable-delayed-ack
-+endif
+diff --git a/package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch b/package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch
+new file mode 100644
+index 0000000..7efef78
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch
+@@ -0,0 +1,51 @@
++From 603af30d6992e94ac30a66b953264076f4f2fd71 Mon Sep 17 00:00:00 2001
++From: Markos Chandras <markos.chandras@imgtec.com>
++Date: Thu, 11 Jul 2013 16:59:16 +0000
++Subject: Rules.mak: MIPS64: Select correct interpreter
 +
- ifneq ($(BR2_INET_IPV6),y)
-         DHCP_CONF_OPT += --disable-dhcpv6
- endif
++gcc (eg 4.7.3) hardcodes the MIPS64 interpreters like this:
++(see gcc/config/linux.h and gcc/config/mips/linux64.h)
++
++o32: UCLIBC_DYNAMIC_LINKER "/lib/ld-uClibc.so.0"
++n32: UCLIBC_DYNAMIC_LINKERN32 "/lib32/ld-uClibc.so.0"
++n64: UCLIBC_DYNAMIC_LINKER64 "/lib/ld64-uClibc.so.0"
++
++The existing check for MIPS64 in uClibc is wrong because it does
++not respect the selected ABI
++
++We fix this by explicitely checking the selected ABI instead of the
++selected MIPS variant.
++
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++Cc: Anthony G. Basile <blueness@gentoo.org>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++diff --git a/Rules.mak b/Rules.mak
++index 792b794..889108e 100644
++--- a/Rules.mak
+++++ b/Rules.mak
++@@ -138,13 +138,19 @@ export MAJOR_VERSION MINOR_VERSION SUBLEVEL VERSION ABI_VERSION LC_ALL
++ LIBC := libc
++ SHARED_LIBNAME := $(LIBC).so.$(ABI_VERSION)
++ UBACKTRACE_DSO := libubacktrace.so.$(ABI_VERSION)
++-ifneq ($(findstring  $(TARGET_ARCH) , hppa64 ia64 mips64 powerpc64 s390x sparc64 x86_64 ),)
+++
+++UCLIBC_LDSO_NAME := ld-uClibc
+++ARCH_NATIVE_BIT := 32
+++ifneq ($(findstring $(TARGET_ARCH),hppa64 ia64 powerpc64 s390x sparc64 x86_64),)
++ UCLIBC_LDSO_NAME := ld64-uClibc
++ ARCH_NATIVE_BIT := 64
++ else
++-UCLIBC_LDSO_NAME := ld-uClibc
++-ARCH_NATIVE_BIT := 32
+++ifeq ($(CONFIG_MIPS_N64_ABI),y)
+++UCLIBC_LDSO_NAME := ld64-uClibc
+++ARCH_NATIVE_BIT := 64
++ endif
+++endif
+++
++ UCLIBC_LDSO := $(UCLIBC_LDSO_NAME).so.$(ABI_VERSION)
++ NONSHARED_LIBNAME := uclibc_nonshared.a
++ libc := $(top_builddir)lib/$(SHARED_LIBNAME)
++--
++cgit v0.9.1
