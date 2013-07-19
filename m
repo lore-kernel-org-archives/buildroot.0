@@ -1,86 +1,88 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 19 Jul 2013 17:41:42 +0200
-Subject: [Buildroot] [PATCH v2 0/3] Fix for top-level parallel make part
-	1
-In-Reply-To: <20130718113809.663c6b58@skate>
-References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
- <20130718113809.663c6b58@skate>
-Message-ID: <CAHkwnC8imHc+yWdkUeR6VdehBhpuux_xmKProHu7uFmmR50N8g@mail.gmail.com>
+From: Markos Chandras <markos.chandras@imgtec.com>
+Date: Fri, 19 Jul 2013 16:57:43 +0100
+Subject: [Buildroot] [PATCH v2] uClibc: Add uClibc patch to fix MIPS64/n64
+	interpreter
+Message-ID: <1374249463-10594-1-git-send-email-markos.chandras@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 18, 2013 at 11:38 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> Thanks for your patches!
+uClibc picks the wrong interpreter for MIPS64/n64.
+This patch fixes this problem by checking the selected
+MIPS ABI instead of the MIPS variant.
 
-Hi Thomas,
+The patch has been committed upstream:
+http://git.uclibc.org/uClibc/commit/?id=603af30d6992e94ac30a66b953264076f4f2fd71
 
-Thanks for reviewing the patches.
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+Changes since v1:
+- Adjust to new uclibc paths
+- Update patch to be compatible with make-3.80 and match the one
+actually committed upstream
+---
+ .../uclibc-0009-mips64-fix-n64-interp.patch        | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch
 
-> On Thu, 18 Jul 2013 11:12:23 +0200, Fabio Porcedda wrote:
->
->> this is the first patch set for fixing top-level parallel make in buildroot,
->> the common problem scattered in buildroot's top-level makefile is that in the
->> rules it relies on the order of evaluation of the prerequisites,
->> to be able to use top-level parallel make instead of reling on the left to
->> right ordering of evaluation of the prerequisites we must add an explicit
->> rule to describe the dependency.
->
-> I don't remember if we had this discussion in the past, but before
-> going down the road of supporting top-level parallel make in Buildroot,
-> I'd like to understand what is your plan to solve the most important
-> problem that top-level parallel make creates: the need to create
-> per-package sysroot, instead of the global single sysroot we have
-> today. Have you thought about this problem already? What solution do
-> you have for it?
-
-I hadn't thought about that, thanks for pointing it out.
-
-> In case the problem is not clear, here is a quick summary. The global
-> sysroot we have today, in which all libraries and headers are
-> installed, works fine because we have a guarantee on the build order
-> that is consistent across rebuilds, because builds are non-parallel.
->
-> Now, let's introduce parallelization between builds of different
-> packages, and suppose package A has an optional dependency on package
-> B, but this dependency is not expressed in Buildroot Makefiles because
-> we haven't seen that package A could optionally use package B.
->
-> If you build things in parallel, then one build may lead to package A
-> having been built with support for package B, because package B was
-> built and installed in the sysroot prior to package A configure step.
-> The next build you do, package A may be built without support for
-> package B, because package A configure step is executed before package
-> B is installed into the sysroot.
->
-> So without doing *any* change in Buildroot or the configuration, two
-> consecutive builds would have different results, which is clearly not
-> nice.
->
-> The only solution to avoid this is to have a per-package sysroot, into
-> which only the dependencies explicitly listed in the package .mk files
-> are installed. It is probably not impossible to do with Buildroot, but
-> isn't completely simple either.
->
-> What are your plans in that respect?
-
-So before to add top-level parallel make support we must add
-per-package sysroot...
-That's a bad news for me, i was already wokring on the second part :-(
-
-I can try to work to add per-package sysroot, but i've some doubts about that:
- - Is per-package sysroot a desiderable feature regardless the
-top-level parallel makefile support?
- - Is per-package an appropriate or overkill feature for buildroot?
-
-Do you know if the other build system use per-package sysroot solution
-to solve the same issue? like bitbake/os, debian, fedora, ...?
-
-Thanks and best regards
---
-Fabio Porcedda
+diff --git a/package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch b/package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch
+new file mode 100644
+index 0000000..7efef78
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch
+@@ -0,0 +1,51 @@
++From 603af30d6992e94ac30a66b953264076f4f2fd71 Mon Sep 17 00:00:00 2001
++From: Markos Chandras <markos.chandras@imgtec.com>
++Date: Thu, 11 Jul 2013 16:59:16 +0000
++Subject: Rules.mak: MIPS64: Select correct interpreter
++
++gcc (eg 4.7.3) hardcodes the MIPS64 interpreters like this:
++(see gcc/config/linux.h and gcc/config/mips/linux64.h)
++
++o32: UCLIBC_DYNAMIC_LINKER "/lib/ld-uClibc.so.0"
++n32: UCLIBC_DYNAMIC_LINKERN32 "/lib32/ld-uClibc.so.0"
++n64: UCLIBC_DYNAMIC_LINKER64 "/lib/ld64-uClibc.so.0"
++
++The existing check for MIPS64 in uClibc is wrong because it does
++not respect the selected ABI
++
++We fix this by explicitely checking the selected ABI instead of the
++selected MIPS variant.
++
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++Cc: Anthony G. Basile <blueness@gentoo.org>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++diff --git a/Rules.mak b/Rules.mak
++index 792b794..889108e 100644
++--- a/Rules.mak
+++++ b/Rules.mak
++@@ -138,13 +138,19 @@ export MAJOR_VERSION MINOR_VERSION SUBLEVEL VERSION ABI_VERSION LC_ALL
++ LIBC := libc
++ SHARED_LIBNAME := $(LIBC).so.$(ABI_VERSION)
++ UBACKTRACE_DSO := libubacktrace.so.$(ABI_VERSION)
++-ifneq ($(findstring  $(TARGET_ARCH) , hppa64 ia64 mips64 powerpc64 s390x sparc64 x86_64 ),)
+++
+++UCLIBC_LDSO_NAME := ld-uClibc
+++ARCH_NATIVE_BIT := 32
+++ifneq ($(findstring $(TARGET_ARCH),hppa64 ia64 powerpc64 s390x sparc64 x86_64),)
++ UCLIBC_LDSO_NAME := ld64-uClibc
++ ARCH_NATIVE_BIT := 64
++ else
++-UCLIBC_LDSO_NAME := ld-uClibc
++-ARCH_NATIVE_BIT := 32
+++ifeq ($(CONFIG_MIPS_N64_ABI),y)
+++UCLIBC_LDSO_NAME := ld64-uClibc
+++ARCH_NATIVE_BIT := 64
++ endif
+++endif
+++
++ UCLIBC_LDSO := $(UCLIBC_LDSO_NAME).so.$(ABI_VERSION)
++ NONSHARED_LIBNAME := uclibc_nonshared.a
++ libc := $(top_builddir)lib/$(SHARED_LIBNAME)
++--
++cgit v0.9.1
+-- 
+1.8.3.2
