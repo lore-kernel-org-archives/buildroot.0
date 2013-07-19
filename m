@@ -1,57 +1,75 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 19 Jul 2013 13:27:14 +0200
-Subject: [Buildroot] [PATCH 3 of 3] linux/uboot: line-up repository-related
- configuration options
-In-Reply-To: <patchbomb.1374233231@BEANTN0L019720>
-References: <patchbomb.1374233231@BEANTN0L019720>
-Message-ID: <3c808c389a7d8a39cfaf.1374233234@BEANTN0L019720>
+Date: Fri, 19 Jul 2013 13:46:29 +0200
+Subject: [Buildroot] [PATCH] xzcat: treat as host prerequisite and build if
+	needed
+Message-ID: <30d579ff97c4fb7e76b3.1374234389@BEANTN0L019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Although the configuration options for custom repository locations and
-versions are very similar between the linux and uboot packages, there are
-some minor differences. This patch lines up both packages.
+If xzcat is not present on the host system, buildroot bails out early asking
+the developer to install it (xzcat is now a DL_TOOLS_DEPENDENCY)
+Conversely, when BR2_TARGET_ROOTFS_CPIO_XZ is enabled, then host-xz is a
+build dependency, and no manual action is required from the developer.
+
+Because the second approach is nicer, also build host-xz when xzcat is not
+available, using the host-prerequisite and suitable-host-pkg mechanisms,
+already used for tar.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-Note: one remaining difference is that there are help texts in linux for
-options BR2_LINUX_KERNEL_CUSTOM_GIT and BR2_LINUX_KERNEL_CUSTOM_HG. I
-didn't add them to uboot because it seems a bit redundant, but if you
-prefer we can line this up as well (either add help texts to uboot or
-remove them from linux).
+ support/dependencies/check-host-xzcat.mk |   7 +++++++
+ support/dependencies/check-host-xzcat.sh |  14 ++++++++++++++
+ support/dependencies/dependencies.mk     |   4 +++-
+ 3 files changed, 24 insertions(+), 1 deletions(-)
 
- boot/uboot/Config.in |  5 +++++
- linux/Config.in      |  2 +-
- 2 files changed, 6 insertions(+), 1 deletions(-)
-
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -70,6 +70,11 @@ config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
- 
- config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
- 	string "Custom repository version"
-+	default "HEAD" if BR2_TARGET_UBOOT_CUSTOM_GIT
-+	default "tip" if BR2_TARGET_UBOOT_CUSTOM_HG
-+	help
-+	  Revision to use in the typical format used by Git/Mercurial
-+	  E.G. a sha id, a tag, branch, ..
- 
+diff --git a/support/dependencies/check-host-xzcat.mk b/support/dependencies/check-host-xzcat.mk
+new file mode 100644
+--- /dev/null
++++ b/support/dependencies/check-host-xzcat.mk
+@@ -0,0 +1,7 @@
++# XZCAT is taken from BR2_XZCAT (defaults to 'xzcat') (see Makefile)
++# If it is not present, build our own host-xzcat
++
++ifeq (,$(call suitable-host-package,xzcat,$(XZCAT)))
++  DEPENDENCIES_HOST_PREREQ += host-xz
++  XZCAT = $(HOST_DIR)/usr/bin/xzcat
++endif
+diff --git a/support/dependencies/check-host-xzcat.sh b/support/dependencies/check-host-xzcat.sh
+new file mode 100755
+--- /dev/null
++++ b/support/dependencies/check-host-xzcat.sh
+@@ -0,0 +1,14 @@
++#!/bin/sh
++
++candidate="$1"
++
++xzcat=`which $candidate 2>/dev/null`
++if [ ! -x "$xzcat" ]; then
++	xzcat=`which xzcat 2>/dev/null`
++	if [ ! -x "$xzcat" ]; then
++		# echo nothing: no suitable xzcat found
++		exit 1
++	fi
++fi
++
++echo $xzcat
+diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+--- a/support/dependencies/dependencies.mk
++++ b/support/dependencies/dependencies.mk
+@@ -20,9 +20,11 @@ ifeq ($(BR2_STRIP_sstrip),y)
+ DEPENDENCIES_HOST_PREREQ+=host-sstrip
  endif
  
-diff --git a/linux/Config.in b/linux/Config.in
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -47,7 +47,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	  specific kernel source tarball
++# Filter out XZCAT from download tools as this is already handled as host
++# prerequisite and will be built if needed.
+ core-dependencies:
+ 	@HOSTCC="$(firstword $(HOSTCC))" MAKE="$(MAKE)" \
+-		DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
++		DL_TOOLS="$(sort $(filter-out $(XZCAT),$(DL_TOOLS_DEPENDENCIES)))" \
+ 		$(TOPDIR)/support/dependencies/dependencies.sh
  
- config BR2_LINUX_KERNEL_CUSTOM_GIT
--	bool "Custom Git tree"
-+	bool "Custom Git repository"
- 	help
- 	  This option allows Buildroot to get the Linux kernel source
- 	  code from a Git repository.
+ dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
