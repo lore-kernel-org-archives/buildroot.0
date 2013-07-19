@@ -1,129 +1,371 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 19 Jul 2013 11:52:56 +0200
-Subject: [Buildroot] [git commit] arc: binutils: Go from 2.19-arc to
-	2.23.2-arc
-Message-ID: <20130719103550.210BF99A4E@busybox.osuosl.org>
+Date: Fri, 19 Jul 2013 11:53:21 +0200
+Subject: [Buildroot] [git commit] arc: gcc: Go from 4.4.7 to 4.8 for ARC
+Message-ID: <20130719103550.4056699A4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=983dd6426e7ed0df54c1e38d74bd6578b80d8e7b
+commit: http://git.buildroot.net/buildroot/commit/?id=381654d8a84072baf6742dd8697d65e3a55a5ef5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This fixes multiple issues, including:
+ - 'operand out of range' errors (due to defaulting to
+   medium calls instead of short calls)
+ - library dependencies that were not being found
 
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../binutils/2.19-arc/add-empty-info-files.patch   |   72 --------------------
- package/binutils/Config.in.host                    |    2 +-
- package/binutils/binutils.mk                       |    4 -
- 3 files changed, 1 insertions(+), 77 deletions(-)
+ package/gcc/4.8-arc/100-uclibc-conf.patch          |   15 ++
+ package/gcc/4.8-arc/301-missing-execinfo_h.patch   |   13 ++
+ package/gcc/4.8-arc/302-c99-snprintf.patch         |   13 ++
+ .../gcc/4.8-arc/305-libmudflap-susv3-legacy.patch  |   49 +++++++
+ package/gcc/4.8-arc/disable_gc_sections.patch      |  145 ++++++++++++++++++++
+ .../fix_branch_out_of_range.patch                  |    2 +-
+ package/gcc/Config.in.host                         |   13 +-
+ package/gcc/gcc.mk                                 |    2 +-
+ 8 files changed, 244 insertions(+), 8 deletions(-)
 
-diff --git a/package/binutils/2.19-arc/add-empty-info-files.patch b/package/binutils/2.19-arc/add-empty-info-files.patch
-deleted file mode 100644
-index 90de429..0000000
---- a/package/binutils/2.19-arc/add-empty-info-files.patch
-+++ /dev/null
-@@ -1,72 +0,0 @@
--binutils: add empty info files to remove makeinfo dependency
--
--Signed-off-by: Mischa jonker <mjonker@synopsys.com>
-----
-- bfd/doc/bfd.info           |    1 +
-- binutils/doc/binutils.info |    1 +
-- etc/configure.info         |    1 +
-- etc/standards.info         |    1 +
-- gas/doc/as.info            |    1 +
-- gprof/gprof.info           |    1 +
-- ld/ld.info                 |    1 +
-- 7 files changed, 7 insertions(+), 0 deletions(-)
-- create mode 100644 bfd/doc/bfd.info
-- create mode 100644 binutils/doc/binutils.info
-- create mode 100644 etc/configure.info
-- create mode 100644 etc/standards.info
-- create mode 100644 gas/doc/as.info
-- create mode 100644 gprof/gprof.info
-- create mode 100644 ld/ld.info
--
--diff --git a/bfd/doc/bfd.info b/bfd/doc/bfd.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/bfd/doc/bfd.info
--@@ -0,0 +1 @@
--+
--diff --git a/binutils/doc/binutils.info b/binutils/doc/binutils.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/binutils/doc/binutils.info
--@@ -0,0 +1 @@
--+
--diff --git a/etc/configure.info b/etc/configure.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/etc/configure.info
--@@ -0,0 +1 @@
--+
--diff --git a/etc/standards.info b/etc/standards.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/etc/standards.info
--@@ -0,0 +1 @@
--+
--diff --git a/gas/doc/as.info b/gas/doc/as.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/gas/doc/as.info
--@@ -0,0 +1 @@
--+
--diff --git a/gprof/gprof.info b/gprof/gprof.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/gprof/gprof.info
--@@ -0,0 +1 @@
--+
--diff --git a/ld/ld.info b/ld/ld.info
--new file mode 100644
--index 0000000..8b13789
----- /dev/null
--+++ b/ld/ld.info
--@@ -0,0 +1 @@
--+
---- 
--1.7.0.4
--
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 9ddaed7..c2d2495 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -44,7 +44,7 @@ endchoice
- config BR2_BINUTILS_VERSION
- 	string
- 	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
--	default "2.19-arc"	if BR2_arc
-+	default "2.23.2-arc"	if BR2_arc
- 	default "2.20.1"	if BR2_BINUTILS_VERSION_2_20_1
- 	default "2.21"		if BR2_BINUTILS_VERSION_2_21
- 	default "2.21.1"	if BR2_BINUTILS_VERSION_2_21_1
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 377bb79..f1723b2 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -55,11 +55,7 @@ HOST_BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
- 			--with-sysroot=$(STAGING_DIR) \
- 			$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+diff --git a/package/gcc/4.8-arc/100-uclibc-conf.patch b/package/gcc/4.8-arc/100-uclibc-conf.patch
+new file mode 100644
+index 0000000..d56bf0a
+--- /dev/null
++++ b/package/gcc/4.8-arc/100-uclibc-conf.patch
+@@ -0,0 +1,15 @@
++Index: gcc-4.8.0/contrib/regression/objs-gcc.sh
++===================================================================
++--- gcc-4.8.0.orig/contrib/regression/objs-gcc.sh	2009-04-09 17:00:19.000000000 +0200
+++++ gcc-4.8.0/contrib/regression/objs-gcc.sh	2013-03-23 17:39:04.000000000 +0100
++@@ -106,6 +106,10 @@
++  then
++   make all-gdb all-dejagnu all-ld || exit 1
++   make install-gdb install-dejagnu install-ld || exit 1
+++elif [ $H_REAL_TARGET = $H_REAL_HOST -a $H_REAL_TARGET = i686-pc-linux-uclibc ]
+++ then
+++  make all-gdb all-dejagnu all-ld || exit 1
+++  make install-gdb install-dejagnu install-ld || exit 1
++ elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
++   make bootstrap || exit 1
++   make install || exit 1
+diff --git a/package/gcc/4.8-arc/301-missing-execinfo_h.patch b/package/gcc/4.8-arc/301-missing-execinfo_h.patch
+new file mode 100644
+index 0000000..00efda2
+--- /dev/null
++++ b/package/gcc/4.8-arc/301-missing-execinfo_h.patch
+@@ -0,0 +1,13 @@
++Index: gcc-4.8.0/boehm-gc/include/gc.h
++===================================================================
++--- gcc-4.8.0.orig/boehm-gc/include/gc.h	2007-04-23 23:10:09.000000000 +0200
+++++ gcc-4.8.0/boehm-gc/include/gc.h	2013-03-23 17:39:20.000000000 +0100
++@@ -503,7 +503,7 @@
++ #if defined(__linux__) || defined(__GLIBC__)
++ # include <features.h>
++ # if (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1 || __GLIBC__ > 2) \
++-     && !defined(__ia64__)
+++     && !defined(__ia64__) && !defined(__UCLIBC__)
++ #   ifndef GC_HAVE_BUILTIN_BACKTRACE
++ #     define GC_HAVE_BUILTIN_BACKTRACE
++ #   endif
+diff --git a/package/gcc/4.8-arc/302-c99-snprintf.patch b/package/gcc/4.8-arc/302-c99-snprintf.patch
+new file mode 100644
+index 0000000..cd4d2cc
+--- /dev/null
++++ b/package/gcc/4.8-arc/302-c99-snprintf.patch
+@@ -0,0 +1,13 @@
++Index: gcc-4.8.0/libstdc++-v3/include/c_global/cstdio
++===================================================================
++--- gcc-4.8.0.orig/libstdc++-v3/include/c_global/cstdio	2013-02-03 18:54:05.000000000 +0100
+++++ gcc-4.8.0/libstdc++-v3/include/c_global/cstdio	2013-03-23 17:39:32.000000000 +0100
++@@ -138,7 +138,7 @@
++   using ::vsprintf;
++ } // namespace
++ 
++-#if _GLIBCXX_USE_C99
+++#if _GLIBCXX_USE_C99 || defined __UCLIBC__
++ 
++ #undef snprintf
++ #undef vfscanf
+diff --git a/package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch b/package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch
+new file mode 100644
+index 0000000..35d5f50
+--- /dev/null
++++ b/package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch
+@@ -0,0 +1,49 @@
++Index: gcc-4.8.0/libmudflap/mf-hooks2.c
++===================================================================
++--- gcc-4.8.0.orig/libmudflap/mf-hooks2.c	2013-02-03 18:48:05.000000000 +0100
+++++ gcc-4.8.0/libmudflap/mf-hooks2.c	2013-03-23 17:39:43.000000000 +0100
++@@ -424,7 +424,7 @@
++ {
++   TRACE ("%s\n", __PRETTY_FUNCTION__);
++   MF_VALIDATE_EXTENT(s, n, __MF_CHECK_WRITE, "bzero region");
++-  bzero (s, n);
+++  memset (s, 0, n);
++ }
++ 
++ 
++@@ -434,7 +434,7 @@
++   TRACE ("%s\n", __PRETTY_FUNCTION__);
++   MF_VALIDATE_EXTENT(src, n, __MF_CHECK_READ, "bcopy src");
++   MF_VALIDATE_EXTENT(dest, n, __MF_CHECK_WRITE, "bcopy dest");
++-  bcopy (src, dest, n);
+++  memmove (dest, src, n);
++ }
++ 
++ 
++@@ -444,7 +444,7 @@
++   TRACE ("%s\n", __PRETTY_FUNCTION__);
++   MF_VALIDATE_EXTENT(s1, n, __MF_CHECK_READ, "bcmp 1st arg");
++   MF_VALIDATE_EXTENT(s2, n, __MF_CHECK_READ, "bcmp 2nd arg");
++-  return bcmp (s1, s2, n);
+++  return n == 0 ? 0 : memcmp (s1, s2, n);
++ }
++ 
++ 
++@@ -453,7 +453,7 @@
++   size_t n = strlen (s);
++   TRACE ("%s\n", __PRETTY_FUNCTION__);
++   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "index region");
++-  return index (s, c);
+++  return strchr (s, c);
++ }
++ 
++ 
++@@ -462,7 +462,7 @@
++   size_t n = strlen (s);
++   TRACE ("%s\n", __PRETTY_FUNCTION__);
++   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "rindex region");
++-  return rindex (s, c);
+++  return strrchr (s, c);
++ }
++ 
++ /* XXX:  stpcpy, memccpy */
+diff --git a/package/gcc/4.8-arc/disable_gc_sections.patch b/package/gcc/4.8-arc/disable_gc_sections.patch
+new file mode 100644
+index 0000000..46a3a26
+--- /dev/null
++++ b/package/gcc/4.8-arc/disable_gc_sections.patch
+@@ -0,0 +1,145 @@
++From be904b178fc0858ad41a3c2fbc13b388bd1ff465 Mon Sep 17 00:00:00 2001
++From: Mischa Jonker <mjonker@synopsys.com>
++Date: Mon, 15 Jul 2013 11:50:20 +0200
++Subject: [PATCH] libstdc++: Disable gc-sections to work around binutils bug
++
++This is to work around the following error message:
++BFD (GNU Binutils) 2.23.2 assertion fail elf32-arc.c:2140
++
++Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
++---
++ libstdc++-v3/acinclude.m4 |    3 ---
++ libstdc++-v3/configure    |   33 ---------------------------------
++ 2 files changed, 36 deletions(-)
++
++diff --git a/libstdc++-v3/acinclude.m4 b/libstdc++-v3/acinclude.m4
++index e131214..aa2e375 100644
++--- a/libstdc++-v3/acinclude.m4
+++++ b/libstdc++-v3/acinclude.m4
++@@ -296,9 +296,6 @@ AC_DEFUN([GLIBCXX_CHECK_LINKER_FEATURES], [
++       fi
++       rm -f conftest.c conftest.o conftest
++     fi
++-    if test "$ac_gcsections" = "yes"; then
++-      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
++-    fi
++     AC_MSG_RESULT($ac_gcsections)
++ 
++     if test "$ac_test_CFLAGS" = set; then
++diff --git a/libstdc++-v3/configure b/libstdc++-v3/configure
++index ed049cf..d325e3e 100755
++--- a/libstdc++-v3/configure
+++++ b/libstdc++-v3/configure
++@@ -20653,9 +20653,6 @@ rm -f core conftest.err conftest.$ac_objext \
++       fi
++       rm -f conftest.c conftest.o conftest
++     fi
++-    if test "$ac_gcsections" = "yes"; then
++-      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
++-    fi
++     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
++ $as_echo "$ac_gcsections" >&6; }
++ 
++@@ -27688,9 +27685,6 @@ rm -f core conftest.err conftest.$ac_objext \
++       fi
++       rm -f conftest.c conftest.o conftest
++     fi
++-    if test "$ac_gcsections" = "yes"; then
++-      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
++-    fi
++     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
++ $as_echo "$ac_gcsections" >&6; }
++ 
++@@ -33619,9 +33613,6 @@ rm -f core conftest.err conftest.$ac_objext \
++       fi
++       rm -f conftest.c conftest.o conftest
++     fi
++-    if test "$ac_gcsections" = "yes"; then
++-      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
++-    fi
++     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
++ $as_echo "$ac_gcsections" >&6; }
++ 
++@@ -45496,9 +45487,6 @@ rm -f core conftest.err conftest.$ac_objext \
++       fi
++       rm -f conftest.c conftest.o conftest
++     fi
++-    if test "$ac_gcsections" = "yes"; then
++-      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
++-    fi
++     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
++ $as_echo "$ac_gcsections" >&6; }
++ 
++@@ -45710,9 +45698,6 @@ rm -f core conftest.err conftest.$ac_objext \
++       fi
++       rm -f conftest.c conftest.o conftest
++     fi
++-    if test "$ac_gcsections" = "yes"; then
++-      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
++-    fi
++     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
++ $as_echo "$ac_gcsections" >&6; }
++ 
++@@ -46185,9 +46170,6 @@ rm -f core conftest.err conftest.$ac_objext \
++       fi
++       rm -f conftest.c conftest.o conftest
++     fi
++-    if test "$ac_gcsections" = "yes"; then
++-      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
++-    fi
++     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
++ $as_echo "$ac_gcsections" >&6; }
++ 
++@@ -52470,9 +52452,6 @@ rm -f core conftest.err conftest.$ac_objext \
++       fi
++       rm -f conftest.c conftest.o conftest
++     fi
++-    if test "$ac_gcsections" = "yes"; then
++-      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
++-    fi
++     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
++ $as_echo "$ac_gcsections" >&6; }
++ 
++@@ -58386,9 +58365,6 @@ rm -f core conftest.err conftest.$ac_objext \
++       fi
++       rm -f conftest.c conftest.o conftest
++     fi
++-    if test "$ac_gcsections" = "yes"; then
++-      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
++-    fi
++     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
++ $as_echo "$ac_gcsections" >&6; }
++ 
++@@ -58553,9 +58529,6 @@ rm -f core conftest.err conftest.$ac_objext \
++       fi
++       rm -f conftest.c conftest.o conftest
++     fi
++-    if test "$ac_gcsections" = "yes"; then
++-      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
++-    fi
++     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
++ $as_echo "$ac_gcsections" >&6; }
++ 
++@@ -58781,9 +58754,6 @@ rm -f core conftest.err conftest.$ac_objext \
++       fi
++       rm -f conftest.c conftest.o conftest
++     fi
++-    if test "$ac_gcsections" = "yes"; then
++-      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
++-    fi
++     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
++ $as_echo "$ac_gcsections" >&6; }
++ 
++@@ -64697,9 +64667,6 @@ rm -f core conftest.err conftest.$ac_objext \
++       fi
++       rm -f conftest.c conftest.o conftest
++     fi
++-    if test "$ac_gcsections" = "yes"; then
++-      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
++-    fi
++     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
++ $as_echo "$ac_gcsections" >&6; }
++ 
++-- 
++1.7.9.5
++
+diff --git a/package/gcc/4.4.7-arc/fix_branch_out_of_range.patch b/package/gcc/4.8-arc/fix_branch_out_of_range.patch
+similarity index 96%
+rename from package/gcc/4.4.7-arc/fix_branch_out_of_range.patch
+rename to package/gcc/4.8-arc/fix_branch_out_of_range.patch
+index e39b1cc..5340a3b 100644
+--- a/package/gcc/4.4.7-arc/fix_branch_out_of_range.patch
++++ b/package/gcc/4.8-arc/fix_branch_out_of_range.patch
+@@ -24,7 +24,7 @@ index ff602c0..b3ca4c4 100644
+  		  if (op0 != cmp0)
+   		    cc_clob_rtx = gen_rtx_REG (CC_ZNmode, CC_REG);
+ - 		  else if ((offset >= -140 && offset < 140)
+-+ 		  else if ((offset >= -120 && offset < 120)
+++		  else if ((offset >= -120 && offset < 120)
+  			   && rtx_equal_p (op1, const0_rtx)
+  			   && compact_register_operand (op0, VOIDmode)
+  			   && (GET_CODE (op) == EQ
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 972f81f..c49b8ed 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -7,15 +7,11 @@ choice
+ 	prompt "GCC compiler Version"
+ 	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
+ 	default BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 if BR2_avr32
+-	default BR2_GCC_VERSION_4_4_7_ARC if BR2_arc
++	default BR2_GCC_VERSION_4_8_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_4_7_X
+ 	help
+ 	  Select the version of gcc you wish to use.
  
--ifeq ($(BINUTILS_VERSION),2.19-arc)
--HOST_BINUTILS_DEPENDENCIES = host-flex host-bison
--else
- HOST_BINUTILS_DEPENDENCIES =
--endif
+-	config BR2_GCC_VERSION_4_4_7_ARC
+-		depends on BR2_arc
+-		bool "gcc 4.4.7-arc"
+-
+ 	config BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
+ 		depends on BR2_avr32
+ 		bool "gcc 4.2.2-avr32-2.1.5"
+@@ -55,6 +51,11 @@ choice
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.8.x"
  
- # We just want libbfd and libiberty, not the full-blown binutils in staging
- define BINUTILS_INSTALL_STAGING_CMDS
++	config BR2_GCC_VERSION_4_8_ARC
++		depends on BR2_arc
++		select BR2_GCC_NEEDS_MPC
++		bool "gcc 4.8-arc"
++
+ 	config BR2_GCC_VERSION_SNAP
+ 		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
+ 		select BR2_GCC_NEEDS_MPC
+@@ -84,11 +85,11 @@ config BR2_GCC_VERSION
+ 	default "4.2.2-avr32-2.1.5" if BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
+ 	default "4.3.6"     if BR2_GCC_VERSION_4_3_X
+ 	default "4.4.7"     if BR2_GCC_VERSION_4_4_X
+-	default "4.4.7-arc" if BR2_GCC_VERSION_4_4_7_ARC
+ 	default "4.5.4"     if BR2_GCC_VERSION_4_5_X
+ 	default "4.6.4"     if BR2_GCC_VERSION_4_6_X
+ 	default "4.7.3"     if BR2_GCC_VERSION_4_7_X
+ 	default "4.8.1"     if BR2_GCC_VERSION_4_8_X
++	default "4.8-arc"   if BR2_GCC_VERSION_4_8_ARC
+ 	default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
+ 
+ config BR2_EXTRA_GCC_CONFIG_OPTIONS
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index ae2a363..c0d821b 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -133,7 +133,7 @@ HOST_GCC_COMMON_DEPENDENCIES += host-mpc
+ HOST_GCC_COMMON_CONF_OPT += --with-mpc=$(HOST_DIR)/usr
+ endif
+ 
+-ifeq ($(BR2_GCC_VERSION_4_4_7_ARC),y)
++ifeq ($(BR2_arc),y)
+ HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
+ endif
+ 
