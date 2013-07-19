@@ -1,87 +1,118 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 19 Jul 2013 20:11:53 +0200
-Subject: [Buildroot] EABIhf: breaks kernel build
-In-Reply-To: <20130719161733.GC3751@free.fr>
-References: <20130719161733.GC3751@free.fr>
-Message-ID: <20130719181153.GD3751@free.fr>
+From: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Sat, 20 Jul 2013 02:56:51 +0800
+Subject: [Buildroot] [PATCH] dropwatch: new package
+Message-ID: <1374260211-32686-1-git-send-email-tjlee@ambarella.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+---
+ package/Config.in                           |  1 +
+ package/dropwatch/Config.in                 |  7 +++++++
+ package/dropwatch/dropwatch-1.4-build.patch | 28 +++++++++++++++++++++++++++
+ package/dropwatch/dropwatch.mk              | 30 +++++++++++++++++++++++++++++
+ 4 files changed, 66 insertions(+)
+ create mode 100644 package/dropwatch/Config.in
+ create mode 100644 package/dropwatch/dropwatch-1.4-build.patch
+ create mode 100644 package/dropwatch/dropwatch.mk
 
-On 2013-07-19 18:17 +0200, Yann E. MORIN spake thusly:
-> Since the ARM EABIhf stuff was committed, the Linux kernel build is
-> broken, and fails with this message:
->     armv6-rpi36-linux-gnueabi-gcc: error: -mfloat-abi=soft and
->     -mfloat-abi=hard may not be used together
-> 
-> This is because -mfloat-abi=hard is hard-coded in the wrapper, but the
-> kernel wants to pass -msoft-float.
-> 
-> See attach exerpt of my build log (with a instrumented ext-ttolchain
-> wrapper). Notice argv[6] and argv[41]:
-> 
->     argv[6]='-mfloat-abi=hard'
->     argv[41]='-msoft-float'
-> 
-> argv[6] is out hard-coded float ABI option, while argv[41] is passed by
-> the kernel.
-> 
-> I don't know how to solve this.
-> 
-> The trivial and immediate idea would be to have a black-list of
-> arguments and exclude the ones we pass that conflict with the ones
-> passed on the command line, but this will be *very* complex and always
-> incomplete.
-> 
-> An alternate idea would be to detect we're building a Linux kernel by
-> looking at -D__KERNEL__ in the command line arguments, and if so, not
-> pass our hard-coded args. This would work for the Linux kernel, but
-> would break for other packages (eg. U-Boot?).
-> 
-> Another way would be to look at the environment and check if a variable
-> is set (eg. BR_IN_KERNEL_OR_UBOOT_OR_WHATEVER) and in this case not pass
-> our hard-coded options. While it would work from inside Buildroot, it
-> would break as soon as the user would want to use the toolchain directly
-> from outside Buildroot.
-> 
-> Or simply not pass -mfloat-abi=hard at all.
-
-One way which would solve my special case would be to only pass the
-sysroot in the wrapper, since my toolchain is already optimised by
-default for my target.
-
-So, an option like (give another!):
-
-    config BR2_TOOLCHAIN_WRAPPER_SYSROOT_ONLY
-        bool "External toolchain is already optimised for the target"
-        help
-          Say 'Y' here if your external toolchain is configured to
-          emit optimised code for your target.
-
-          If it is not the case, or you are unsure, say 'N', the default.
-
-Then guard the extra hard-coded args between #ifdef...#endif, keeping
-only the sysroot arg.
-
-No, this is not the solution at all. But at least it would work when the
-external toolchain has been tailored for the target in the first place.
-
-For now, I've just guarded all float-related args between:
-    #if defined NOT_DEFINED
-    ...
-    #endif
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index df7da83..49214d6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -22,6 +22,7 @@ source "package/cache-calibrator/Config.in"
+ source "package/dhrystone/Config.in"
+ source "package/dstat/Config.in"
+ source "package/dmalloc/Config.in"
++source "package/dropwatch/Config.in"
+ source "package/gdb/Config.in"
+ source "package/iozone/Config.in"
+ source "package/kexec/Config.in"
+diff --git a/package/dropwatch/Config.in b/package/dropwatch/Config.in
+new file mode 100644
+index 0000000..69d7cd5
+--- /dev/null
++++ b/package/dropwatch/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_DROPWATCH
++	bool "dropwatch"
++	help
++	  Dropwatch is a project I am tinkering with to improve the visibility
++	  developers and sysadmins have into the Linux networking stack.
++
++	  https://git.fedorahosted.org/git/dropwatch.git
+diff --git a/package/dropwatch/dropwatch-1.4-build.patch b/package/dropwatch/dropwatch-1.4-build.patch
+new file mode 100644
+index 0000000..05eae21
+--- /dev/null
++++ b/package/dropwatch/dropwatch-1.4-build.patch
+@@ -0,0 +1,28 @@
++From 86c77492992790ea92c0c7d2490543f312ada87c Mon Sep 17 00:00:00 2001
++From: Tzu-Jung Lee <tjlee@ambarella.com>
++Date: Fri, 12 Jul 2013 20:00:57 +0800
++Subject: [PATCH] build: modify hardcoded gcc to support buildroot
++
++
++Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
++
++diff --git a/src/Makefile b/src/Makefile
++index 026b6ba..b87ae9f 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -5,10 +5,10 @@ OBJFILES := main.o lookup.o\
++ 	 lookup_bfd.o lookup_kas.o
++
++ dropwatch: $(OBJFILES)
++-	gcc -g -o dropwatch $(OBJFILES) $(LDFLAGS)
+++	$(CC) -g -o dropwatch $(OBJFILES) $(LDFLAGS)
++
++ %.o: %.c
++-	gcc $(CFLAGS) $<
+++	$(CC) $(CFLAGS) $<
++ clean:
++ 	rm -f dropwatch *.o
++
++--
++1.8.2.1
++
+diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
+new file mode 100644
+index 0000000..b9676cb
+--- /dev/null
++++ b/package/dropwatch/dropwatch.mk
+@@ -0,0 +1,30 @@
++#############################################################
++#
++# dropwatch
++#
++#############################################################
++
++DROPWATCH_VERSION = 1.4
++DROPWATCH_SOURCE = dropwatch-$(DROPWATCH_VERSION).tar.bz2
++DROPWATCH_SITE = https://git.fedorahosted.org/cgit/dropwatch.git/snapshot/
++DROPWATCH_DEPENDENCIES = readline libnl binutils
++DROPWATCH_LICENSE = GPLv2+
++DROPWATCH_LICENSE_FILE = COPYING
++
++define DROPWATCH_INSTALL_TARGET_CMDS
++  cp $(@D)/src/dropwatch $(TARGET_DIR)/usr/bin
++endef
++
++define DROPWATCH_BUILD_CMDS
++  $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) build
++endef
++
++define DROPWATCH_CLEAN_CMDS
++  $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) clean
++endef
++
++define DROPWATCH_UNINSTALL_CMDS
++  rm -f $(TARGET_DIR)/usr/bin/dropwatch
++endef
++
++$(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
