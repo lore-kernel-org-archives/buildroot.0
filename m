@@ -1,30 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 19 Jul 2013 00:40:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 6374] gnutls package broken if linux cryptodev
-	module selected
-In-Reply-To: <bug-6374-163@https.bugs.busybox.net/>
-References: <bug-6374-163@https.bugs.busybox.net/>
-Message-ID: <20130719004041.A54F09A621@busybox.osuosl.org>
+From: Ryan Wilkins <ryan@deadfrog.net>
+Date: Fri, 19 Jul 2013 00:11:04 -0400
+Subject: [Buildroot] Problem compiling local code
+Message-ID: <4FDB62BA-61E8-4C1C-8835-61BC2DCF0FA4@deadfrog.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6374
+Hello,
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+I'm having an issue that I can't quite seem to figure out.  The problem I'm having is that I'm trying to add a custom package for buildroot to compile and add to a finished image.  It was simple to get the selection box show up for my sample project in menuconfig, but buildroot never seems to compile my code and install it.  I created a simple program, a hello world kind of thing, including a Makefile.  The program compiles and runs properly if I run "make" manually from the directory and run the executable.  I've created the Config.in and .mk files according to the buildroot documentation online or so I think.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+My environment is a x86_64 host cross compiling for x86.  Buildroot is 2013.05.  Toolchain is Sourcery CodeBench 2012.09.  Everything else in buildroot appears to build properly as I've had the produced image loaded and running on the target device and it works fine.  It just lacks my simple program
 
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-07-19 00:40:52 UTC ---
-Solved in git with the latest (3.2.2) gnutls version bump.
-Thanks for the report.
+I'm guessing the issue is with my hello.mk so below is that file.  Can anyone point me in a direction of what I might be doing wrong?
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thanks much!
+
+Ryan Wilkins
+
+
+
+#####
+#
+# hello test program
+#
+#####
+
+HELLO_VERSION = 0.1
+HELLO_SOURCE = hello-$(HELLO_VERSION).tar.gz
+HELLO_SITE = /vm/omnia/src/hello/
+HELLO_SITE_METHOD = file
+#HELLO_LICENSE = Proprietary
+#HELLO_LICENSE_FILES =
+#HELLO_INSTALL_STAGING =
+#HELLO_CONFIG_SCRIPTS =
+#HELLO_DEPENDENCIES =
+
+define HELLO_BUILD_CMDS
+	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) hello
+endef
+
+define HELLO_INSTALL_TARGET_CMDS
+	$(INSTALL) -m 0755 $(@D)/hello $(TARGET_DIR)/usr/bin
+endef
+
+$(eval $(generic-package))
