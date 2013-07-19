@@ -1,52 +1,68 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 19 Jul 2013 11:51:55 +0200
-Subject: [Buildroot] [git commit] linux-firmware: add support for b43xx
-	firmwares
-Message-ID: <20130719103550.17A649A225@busybox.osuosl.org>
+Date: Fri, 19 Jul 2013 11:54:28 +0200
+Subject: [Buildroot] [git commit] uclibc,
+	eglibc: remove REALLY_NOSTDLIB references
+Message-ID: <20130719103550.4AEF999A4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=39ed0d29990fda16bbc55e54183ea1331b72be0f
+commit: http://git.buildroot.net/buildroot/commit/?id=cdba648ec750ef49fffe31fe3de06b28ba39e130
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+These were required with ARC gcc 4.4.7; ARC gcc 4.8 has been changed
+to behave the same as other architectures with -nostdlib, making this
+option obsolete.
+
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/linux-firmware/Config.in         |    5 +++++
- package/linux-firmware/linux-firmware.mk |    3 +++
- 2 files changed, 8 insertions(+), 0 deletions(-)
+ package/eglibc/eglibc.mk |    2 +-
+ package/uclibc/uclibc.mk |   11 ++---------
+ 2 files changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index d9bb095..01fe90f 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -20,6 +20,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
- 	help
- 	  Firmware files for the Atheros 9271 module
+diff --git a/package/eglibc/eglibc.mk b/package/eglibc/eglibc.mk
+index ccdc210..5431ac5 100644
+--- a/package/eglibc/eglibc.mk
++++ b/package/eglibc/eglibc.mk
+@@ -61,7 +61,7 @@ define EGLIBC_CONFIGURE_CMDS
+ 	cp $(@D)/build/csu/crt1.o $(STAGING_DIR)/usr/lib/
+ 	cp $(@D)/build/csu/crti.o $(STAGING_DIR)/usr/lib/
+ 	cp $(@D)/build/csu/crtn.o $(STAGING_DIR)/usr/lib/
+-	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) \
++	$(TARGET_CROSS)gcc -nostdlib \
+ 		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
+ endef
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX
-+	bool "Broadcom BRCM bcm43xx"
-+	help
-+	  Firmware files for the Broadcom BRCM bcm43xx
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000
- 	bool "Intel iwlwifi 5000"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 4ff0e0a..a88bc4c 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -112,6 +112,9 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_DIB0700) += \
- LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_H5_DRXK) += \
- 	dvb-usb-terratec-h5-drxk.fw
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index f775b15..d5ea7a4 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -163,13 +163,6 @@ endef
+ endif
  
-+# brcm
-+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX) += \
-+	brcm/bcm43xx-0.fw brcm/bcm43xx_hdr-0.fw
+ #
+-# ARC definitions
+-#
+-ifeq ($(UCLIBC_TARGET_ARCH),arc)
+-REALLY_NOSTDLIB = -really-nostdlib
+-endif
+-
+-#
+ # Endianess
+ #
  
- ifneq ($(LINUX_FIRMWARE_FILES_y),)
- 
+@@ -407,9 +400,9 @@ define UCLIBC_CONFIGURE_CMDS
+ 		RUNTIME_PREFIX=$(STAGING_DIR) \
+ 		headers lib/crt1.o lib/crti.o lib/crtn.o \
+ 		install_headers
+-	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) \
++	$(TARGET_CROSS)gcc -nostdlib \
+ 		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
+-	$(TARGET_CROSS)gcc -nostdlib $(REALLY_NOSTDLIB) \
++	$(TARGET_CROSS)gcc -nostdlib \
+ 		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libm.so
+ 	cp -pLR $(UCLIBC_DIR)/lib/crt[1in].o $(STAGING_DIR)/usr/lib/
+ endef
