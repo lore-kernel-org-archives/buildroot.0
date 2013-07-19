@@ -1,70 +1,71 @@
-From: Tzu-Jung Lee <roylee17@gmail.com>
-Date: Sat, 20 Jul 2013 02:58:00 +0800
-Subject: [Buildroot] [PATCH 1/1] netcat6: new package
-Message-ID: <1374260280-514-1-git-send-email-tjlee@ambarella.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 19 Jul 2013 21:12:43 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-good: unbreak
+	(dyn|multi)udpsink for systems without IPv6 support
+Message-ID: <20130719191425.D62949A178@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
----
- package/Config.in          |  1 +
- package/netcat6/Config.in  | 12 ++++++++++++
- package/netcat6/netcat6.mk | 13 +++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/netcat6/Config.in
- create mode 100644 package/netcat6/netcat6.mk
+commit: http://git.buildroot.net/buildroot/commit/?id=717ac057500fb149dcff2d9d8216e75000b7661b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/Config.in b/package/Config.in
-index 286a605..df7da83 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -760,6 +760,7 @@ source "package/ncftp/Config.in"
- source "package/ndisc6/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/netcat/Config.in"
-+source "package/nc6/Config.in"
- source "package/netkitbase/Config.in"
- source "package/netkittelnet/Config.in"
- endif
-diff --git a/package/netcat6/Config.in b/package/netcat6/Config.in
+Patch from upstream git.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ...dpsink-unbreak-on-IPv6-systems-after-1302.patch |   44 ++++++++++++++++++++
+ 1 files changed, 44 insertions(+), 0 deletions(-)
+
+diff --git a/package/multimedia/gst1-plugins-good/gst1-plugins-good-dyn-multi-udpsink-unbreak-on-IPv6-systems-after-1302.patch b/package/multimedia/gst1-plugins-good/gst1-plugins-good-dyn-multi-udpsink-unbreak-on-IPv6-systems-after-1302.patch
 new file mode 100644
-index 0000000..68cf2dc
+index 0000000..68a9969
 --- /dev/null
-+++ b/package/netcat6/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_NETCAT6
-+	bool "netcat6"
-+	help
-+	  Netcat is a featured networking utility which reads and writes data
-+	  across network connections, using the TCP/IP protocol.
-+	  It is designed to be a reliable "back-end" tool that can be used
-+	  directly or easily driven by other programs and scripts. At the
-+	  same time, it is a feature-rich network debugging and exploration
-+	  tool, since it can create almost any kind of connection you would
-+	  need and has several interesting built-in capabilities.
++++ b/package/multimedia/gst1-plugins-good/gst1-plugins-good-dyn-multi-udpsink-unbreak-on-IPv6-systems-after-1302.patch
+@@ -0,0 +1,44 @@
++From 118876702467d6063e9c9745b7d093682ad16472 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <jacmet@sunsite.dk>
++Date: Fri, 19 Jul 2013 15:24:08 +0200
++Subject: [PATCH] (dyn|multi)udpsink: unbreak on !IPv6 systems after 130268bc
++ (Bind socket before using it)
 +
-+	  http://netcat.sourceforge.net/download.php
-diff --git a/package/netcat6/netcat6.mk b/package/netcat6/netcat6.mk
-new file mode 100644
-index 0000000..7cf900c
---- /dev/null
-+++ b/package/netcat6/netcat6.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# netcat6
-+#
-+#############################################################
++The g_socket functions only touch the error argument on errors, so clear
++err back to NULL in case g_socket_new (G_SOCKET_FAMILY_IPV6) failed, as
++we check for err != NULL later on to know if g_socket_bind() failed,
++otherwise we errously fail on systems without IPv6 support.
 +
-+NETCAT6_VERSION = 1.0
-+NETCAT6_SOURCE = nc6-$(NETCAT6_VERSION).tar.bz2
-+NETCAT6_SITE = http://downloads.sourceforge.net/project/netcat/netcat/$(NETCAT6_VERSION)
-+NETCAT6_LICENSE = GPLv2+
-+NETCAT6_LICENSE_FILES = COPYING
++https://bugzilla.gnome.org/show_bug.cgi?id=704553
++---
++ gst/udp/gstdynudpsink.c   |    1 +
++ gst/udp/gstmultiudpsink.c |    1 +
++ 2 files changed, 2 insertions(+)
 +
-+$(eval $(autotools-package))
--- 
-1.8.3.2
++diff --git a/gst/udp/gstdynudpsink.c b/gst/udp/gstdynudpsink.c
++index 4690bde..fadbd7f 100644
++--- a/gst/udp/gstdynudpsink.c
+++++ b/gst/udp/gstdynudpsink.c
++@@ -316,6 +316,7 @@ gst_dynudpsink_start (GstBaseSink * bsink)
++     if ((udpsink->used_socket =
++             g_socket_new (G_SOCKET_FAMILY_IPV6,
++                 G_SOCKET_TYPE_DATAGRAM, G_SOCKET_PROTOCOL_UDP, &err)) == NULL) {
+++      g_clear_error (&err);
++       udpsink->family = G_SOCKET_FAMILY_IPV4;
++       if ((udpsink->used_socket = g_socket_new (G_SOCKET_FAMILY_IPV4,
++                   G_SOCKET_TYPE_DATAGRAM, G_SOCKET_PROTOCOL_UDP, &err)) == NULL)
++diff --git a/gst/udp/gstmultiudpsink.c b/gst/udp/gstmultiudpsink.c
++index 92d1bac..69011c7 100644
++--- a/gst/udp/gstmultiudpsink.c
+++++ b/gst/udp/gstmultiudpsink.c
++@@ -868,6 +868,7 @@ gst_multiudpsink_start (GstBaseSink * bsink)
++     if (sink->force_ipv4 || (sink->used_socket =
++             g_socket_new (G_SOCKET_FAMILY_IPV6,
++                 G_SOCKET_TYPE_DATAGRAM, G_SOCKET_PROTOCOL_UDP, &err)) == NULL) {
+++      g_clear_error (&err);
++       if ((sink->used_socket = g_socket_new (G_SOCKET_FAMILY_IPV4,
++                   G_SOCKET_TYPE_DATAGRAM, G_SOCKET_PROTOCOL_UDP, &err)) == NULL)
++         goto no_socket;
++-- 
++1.7.10.4
++
