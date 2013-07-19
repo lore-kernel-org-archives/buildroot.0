@@ -1,54 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 20 Jul 2013 00:07:59 +0200
-Subject: [Buildroot] [PATCHv2 2/3] eglibc/arm: doesn't build in thumb(1)
-	mode
-In-Reply-To: <1374239193-23811-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 19 Jul 2013 10:06:32 -0300")
-References: <buildroot@busybox.net>
- <1374239193-23811-1-git-send-email-gustavo@zacarias.com.ar>
- <1374239193-23811-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87li52td8g.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 19 Jul 2013 23:44:09 +0200
+Subject: [Buildroot] [git commit] trivial: add space in 'bool"package"'
+	construct in Config.in
+Message-ID: <20130719220802.E14559A225@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=53f74fb5229e52f0939c9624fd17f5ef5f7a1e75
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> It runs out of registers, so build it in ARM mode, EABI mandates
- Gustavo> interworking so this isn't an issue.
- Gustavo> Tested in an arm920t board.
+In early buildroot, it apparently was customary to have following style in
+Config.in files:
+    bool"expat"
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/eglibc/eglibc.mk | 8 +++++++-
- Gustavo>  1 file changed, 7 insertions(+), 1 deletion(-)
+Nowadays, only two packages remain with this style: diffutils and expat.
+This trivial patch lines them up with the style:
+    bool "expat"
 
- Gustavo> diff --git a/package/eglibc/eglibc.mk b/package/eglibc/eglibc.mk
- Gustavo> index 5431ac5..253dabd 100644
- Gustavo> --- a/package/eglibc/eglibc.mk
- Gustavo> +++ b/package/eglibc/eglibc.mk
- Gustavo> @@ -23,6 +23,11 @@ EGLIBC_INSTALL_STAGING = YES
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/diffutils/Config.in |    2 +-
+ package/expat/Config.in     |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Gustavo>  EGLIBC_INSTALL_STAGING_OPT = install_root=$(STAGING_DIR) install
-
- Gustavo> +# Thumb build is broken, build in ARM mode
- Gustavo> +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- Gustavo> +EGLIBC_EXTRA_CFLAGS += -marm
- Gustavo> +endif
- Gustavo> +
- Gustavo>  # Even though we use the autotools-package infrastructure, we have to
- Gustavo>  # override the default configure commands for several reasons:
- Gustavo>  #
- Gustavo> @@ -36,7 +41,8 @@ define EGLIBC_CONFIGURE_CMDS
- Gustavo>  	# Do the configuration
- Gustavo>  	(cd $(@D)/build; \
- Gustavo>  		$(TARGET_CONFIGURE_OPTS) \
- Gustavo> -		CFLAGS="-O2" CPPFLAGS="" CXXFLAGS="-O2" \
- Gustavo> +		CFLAGS="-O2 $(EGLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
-
-I know you didn't add this, but why are we forcing -O2 here? Thomas?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/diffutils/Config.in b/package/diffutils/Config.in
+index 4cc16e2..7b2c9f9 100644
+--- a/package/diffutils/Config.in
++++ b/package/diffutils/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_DIFFUTILS
+-	bool"diffutils"
++	bool "diffutils"
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+diff --git a/package/expat/Config.in b/package/expat/Config.in
+index 3988c90..758fb7d 100644
+--- a/package/expat/Config.in
++++ b/package/expat/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_EXPAT
+-	bool"expat"
++	bool "expat"
+ 	help
+ 	  The Expat XML Parser.
+ 
