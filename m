@@ -1,33 +1,91 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 19 Jul 2013 14:13:43 +0200
-Subject: [Buildroot] [PATCH] trivial: use geturischeme helper function where
-	possible
-Message-ID: <1b6f296fec701a154c75.1374236023@BEANTN0L019720>
+Date: Fri, 19 Jul 2013 14:25:18 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: support toolchains with
+	lib32 directories
+Message-ID: <6ea92f8ae6dd3f73dba1.1374236718@BEANTN0L019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pkg-download.mk contains some helper functions to obtain subparts of URLs,
-like the URI scheme. In pkg-generic.mk, there is still one opportunity to use
-that helper function, instead of hardcoding it.
+Some toolchains, like the Cavium Networks' one, have lib32/ and lib64/
+directories, while the standard lib/ is empty. To find libc.a, buildroot
+currently only looks in lib/ and lib64/. This patch extends the search
+to lib32/ as well.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/pkg-generic.mk |  2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/toolchain-external/ext-tool.mk |  20 ++++++++++----------
+ 1 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -269,7 +269,7 @@ ifndef $(2)_SITE_METHOD
-   $(2)_SITE_METHOD = $($(3)_SITE_METHOD)
-  else
- 	# Try automatic detection using the scheme part of the URI
--	$(2)_SITE_METHOD = $(firstword $(subst ://, ,$(call qstrip,$($(2)_SITE))))
-+	$(2)_SITE_METHOD = $(call geturischeme,$($(2)_SITE))
-  endif
- endif
+Note: instead of using the construct 'lib(32|64)*', one could also use
+'lib*'. The latter would also match libfoo, but that's probably ok. Let me
+know if you prefer that style.
+
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -363,7 +363,7 @@ endif
+ 	@$(call MESSAGE,"Checking external toolchain settings")
+ 	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
+ 	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
+-	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
++	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(32|64)?/(.*/)?libc\.a::'` ; \
+ 	if test -z "$${SYSROOT_DIR}" ; then \
+ 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+ 		exit 1 ; \
+@@ -397,7 +397,7 @@ endif
+ #
+ #  SYSROOT_DIR:         the main sysroot directory, deduced from
+ #                       LIBC_A_LOCATION by removing the
+-#                       usr/lib[64]/libc.a part of the path.
++#                       usr/lib[32|64]/libc.a part of the path.
+ #                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/
+ #
+ # ARCH_LIBC_A_LOCATION: location of the libc.a file in the selected
+@@ -408,11 +408,11 @@ endif
+ #
+ # ARCH_SYSROOT_DIR:     the sysroot of the selected multilib variant,
+ #                       deduced from ARCH_LIBC_A_LOCATION by removing
+-#                       usr/lib[64]/libc.a at the end of the path.
++#                       usr/lib[32|64]/libc.a at the end of the path.
+ #                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/mips16/soft-float/el/
+ #
+-# ARCH_LIB_DIR:         'lib' or 'lib64' depending on where libraries are
+-#                       stored. Deduced from ARCH_LIBC_A_LOCATION by
++# ARCH_LIB_DIR:         'lib', 'lib32' or 'lib64' depending on where libraries
++#                       are stored. Deduced from ARCH_LIBC_A_LOCATION by
+ #                       looking at usr/lib??/libc.a.
+ #                       Ex: lib
+ #
+@@ -433,14 +433,14 @@ endif
  
+ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
+ 	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
+-	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
++	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(32|64)?/(.*/)?libc\.a::'` ; \
+ 	if test -z "$${SYSROOT_DIR}" ; then \
+ 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+ 		exit 1 ; \
+ 	fi ; \
+ 	ARCH_LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
+-	ARCH_SYSROOT_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
+-	ARCH_LIB_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
++	ARCH_SYSROOT_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(32|64)?/(.*/)?libc\.a::'` ; \
++	ARCH_LIB_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(32|64)?)/(.*/)?libc.a:\1:'` ; \
+ 	SUPPORT_LIB_DIR="" ; \
+ 	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
+ 		LIBSTDCPP_A_LOCATION=$$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
+@@ -489,8 +489,8 @@ endif
+ 	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
+ 	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
+ 	FDPIC_LIBC_A_LOCATION=`readlink -f $$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
+-	FDPIC_SYSROOT_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
+-	FDPIC_LIB_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
++	FDPIC_SYSROOT_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(32|64)?/(.*/)?libc\.a::'` ; \
++	FDPIC_LIB_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(32|64)?)/(.*/)?libc.a:\1:'` ; \
+ 	FDPIC_SUPPORT_LIB_DIR="" ; \
+ 	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
+ 	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
