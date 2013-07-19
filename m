@@ -1,64 +1,96 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 19 Jul 2013 23:46:56 +0200
-Subject: [Buildroot] [git commit] uclibc/arm: doesn't build in thumb(1) mode
-	with threads
-Message-ID: <20130719220803.1D14899CD0@busybox.osuosl.org>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Fri, 19 Jul 2013 17:19:16 -0500
+Subject: [Buildroot] [PATCH 1/1] ext-toolchain-wrapper: fix uboot/linux with
+	hardfp
+Message-ID: <1374272356-10160-1-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d244782caadd17849910451e707366fcbec68cca
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+disable -mfloat-abi when float abi is specified by the user
 
-It runs out of registers, it fails even in official form
-(COMPILE_IN_THUMB_MODE=y) so just build it in ARM mode since EABI
-mandates interworking.
-Tested in an arm920t board.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+Cc: Peter Korsgaard <jacmet@sunsite.dk>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/uclibc/Config.in |    2 +-
- package/uclibc/uclibc.mk |    7 ++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ .../toolchain-external/ext-toolchain-wrapper.c     | 28 ++++++++++++++++++----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 8d16e8c..90aae90 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -185,7 +185,7 @@ config BR2_UCLIBC_ARM_TYPE
- config BR2_UCLIBC_ARM_BX
- 	bool
- 	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
--	default y if !BR2_fa265 && !BR2_strongarm
-+	default y if (BR2_ARM_CPU_HAS_THUMB || BR2_ARM_CPU_HAS_THUMB2)
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index 460f255..d472b94 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -8,6 +8,7 @@
+  * (C) 2011 Peter Korsgaard <jacmet@sunsite.dk>
+  * (C) 2011 Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+  * (C) 2012 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++ * (C) 2013 Spenser Gilliland <spenser@gillilanding.com>
+  *
+  * This file is licensed under the terms of the GNU General Public License
+  * version 2.  This program is licensed "as is" without any warranty of any
+@@ -38,9 +39,6 @@ static char *predef_args[] = {
+ #ifdef BR_ABI
+ 	"-mabi=" BR_ABI,
+ #endif
+-#ifdef BR_FLOAT_ABI
+-	"-mfloat-abi=" BR_FLOAT_ABI,
+-#endif
+ #ifdef BR2_FPU
+ 	"-mfpu=" BR_FPU,
+ #endif
+@@ -61,6 +59,21 @@ static char *predef_args[] = {
+ #endif
+ };
  
- config BR2_UCLIBC_MIPS_ABI
- 	string
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index d5ea7a4..044de21 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -74,6 +74,11 @@ define UCLIBC_ARM_ABI_CONFIG
- 	$(call UCLIBC_OPT_SET,CONFIG_ARM_EABI,y,$(@D))
- endef
- 
-+# Thumb build is broken with threads, build in ARM mode
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-+UCLIBC_EXTRA_CFLAGS += -marm
-+endif
++int use_default_float_abi = 1;
 +
- ifeq ($(BR2_UCLIBC_ARM_BX),y)
- define UCLIBC_ARM_BX_CONFIG
- 	$(call UCLIBC_OPT_SET,USE_BX,y,$(@D))
-@@ -348,7 +353,7 @@ endif
- UCLIBC_MAKE_FLAGS = \
- 	ARCH="$(UCLIBC_TARGET_ARCH)" \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
--	UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
-+	UCLIBC_EXTRA_CFLAGS="$(UCLIBC_EXTRA_CFLAGS) $(TARGET_ABI)" \
- 	HOSTCC="$(HOSTCC)"
++int fix_predef_args(int argc, char **argv) {
++	int arg;
++	for (arg = 1; arg < argc; arg++) {
++		if (strncmp(argv[arg],"-mfloat-abi=", sizeof("-mfloat-abi=")/sizeof(char)-1) == 0 ||
++			strcmp(argv[arg],"-msoft-float") == 0 ||
++			strcmp(argv[arg],"-mhard-float") == 0 ) {
++			use_default_float_abi = 0;
++		}
++	}
++
++	return 0;
++}
++
+ int main(int argc, char **argv)
+ {
+ 	char **args, **cur;
+@@ -69,6 +82,8 @@ int main(int argc, char **argv)
+ 	char *basename;
+ 	int ret, i, count = 0;
  
- define UCLIBC_SETUP_DOT_CONFIG
++	fix_predef_args(argc,argv);
++
+ 	/* Calculate the relative paths */
+ 	basename = strrchr(progpath, '/');
+ 	if (basename) {
+@@ -119,7 +134,7 @@ int main(int argc, char **argv)
+ 		return 3;
+ 	}
+ 
+-	cur = args = malloc(sizeof(predef_args) + (sizeof(char *) * argc));
++	cur = args = malloc(sizeof(predef_args) + (sizeof(char *) * argc + use_default_float_abi));
+ 	if (args == NULL) {
+ 		perror(__FILE__ ": malloc");
+ 		return 2;
+@@ -128,7 +143,10 @@ int main(int argc, char **argv)
+ 	/* start with predefined args */
+ 	memcpy(cur, predef_args, sizeof(predef_args));
+ 	cur += sizeof(predef_args) / sizeof(predef_args[0]);
+-
++	if (use_default_float_abi) {
++		*cur = "-mfloat-abi=" BR_FLOAT_ABI;
++		cur++;
++	}
+ 	/* append forward args */
+ 	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
+ 	cur += argc - 1;
+-- 
+1.8.1.2
