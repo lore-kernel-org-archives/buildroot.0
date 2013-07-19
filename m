@@ -1,88 +1,101 @@
-From: Markos Chandras <markos.chandras@imgtec.com>
-Date: Fri, 19 Jul 2013 16:57:43 +0100
-Subject: [Buildroot] [PATCH v2] uClibc: Add uClibc patch to fix MIPS64/n64
-	interpreter
-Message-ID: <1374249463-10594-1-git-send-email-markos.chandras@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 19 Jul 2013 18:13:15 +0200
+Subject: [Buildroot] [PATCHv2 4/4] toolchain: instrument external
+	toolchain wrapper
+In-Reply-To: <871u6vvz2h.fsf@dell.be.48ers.dk>
+References: <574ef0eb7e941dcc6c9dba3540f4aa1c213472bc.1374182572.git.yann.morin.1998@free.fr>
+ <1374184490-13855-1-git-send-email-yann.morin.1998@free.fr>
+ <871u6vvz2h.fsf@dell.be.48ers.dk>
+Message-ID: <20130719161315.GA3751@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc picks the wrong interpreter for MIPS64/n64.
-This patch fixes this problem by checking the selected
-MIPS ABI instead of the MIPS variant.
+Peter, All,
 
-The patch has been committed upstream:
-http://git.uclibc.org/uClibc/commit/?id=603af30d6992e94ac30a66b953264076f4f2fd71
+On 2013-07-19 08:33 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  Yann> If BR_DEBUG_WRAPPER is set in the envirnment, dump the actual command
+>  Yann> being exec()uted, to ease debugging issues with the wrapper.
+> 
+>  Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  Yann> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+>  Yann> ---
+>  Yann> Changes v1 -> v2:
+>  Yann>   - style fixes (Thomas)
+>  Yann> ---
+>  Yann>  toolchain/toolchain-external/ext-toolchain-wrapper.c | 8 ++++++++
+>  Yann>  1 file changed, 8 insertions(+)
+> 
+>  Yann> diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+>  Yann> index 460f255..8e56414 100644
+>  Yann> --- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
+>  Yann> +++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+>  Yann> @@ -136,6 +136,14 @@ int main(int argc, char **argv)
+>  Yann>  	/* finish with NULL termination */
+>  Yann>  	*cur = NULL;
+>  
+>  Yann> +	if( getenv("BR_DEBUG_WRAPPER") ) {
+>  Yann> +		fprintf( stderr, "path='%s'\n", path );
+>  Yann> +		int i;
+>  Yann> +		for( i=0; args[i]; i++ ) {
+>  Yann> +			fprintf(stderr, "argv[%d]='%s'\n", i, args[i] );
+>  Yann> +		}
+>  Yann> +	}
+>  Yann> +
+> 
+> That's still not really the code style used elsewhere in this file.
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
----
-Changes since v1:
-- Adjust to new uclibc paths
-- Update patch to be compatible with make-3.80 and match the one
-actually committed upstream
----
- .../uclibc-0009-mips64-fix-n64-interp.patch        | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch
+Doh. What happenned? I've just looked at my tree here, adn the style
+fixes are applied.
 
-diff --git a/package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch b/package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch
-new file mode 100644
-index 0000000..7efef78
---- /dev/null
-+++ b/package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch
-@@ -0,0 +1,51 @@
-+From 603af30d6992e94ac30a66b953264076f4f2fd71 Mon Sep 17 00:00:00 2001
-+From: Markos Chandras <markos.chandras@imgtec.com>
-+Date: Thu, 11 Jul 2013 16:59:16 +0000
-+Subject: Rules.mak: MIPS64: Select correct interpreter
-+
-+gcc (eg 4.7.3) hardcodes the MIPS64 interpreters like this:
-+(see gcc/config/linux.h and gcc/config/mips/linux64.h)
-+
-+o32: UCLIBC_DYNAMIC_LINKER "/lib/ld-uClibc.so.0"
-+n32: UCLIBC_DYNAMIC_LINKERN32 "/lib32/ld-uClibc.so.0"
-+n64: UCLIBC_DYNAMIC_LINKER64 "/lib/ld64-uClibc.so.0"
-+
-+The existing check for MIPS64 in uClibc is wrong because it does
-+not respect the selected ABI
-+
-+We fix this by explicitely checking the selected ABI instead of the
-+selected MIPS variant.
-+
-+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-+Cc: Anthony G. Basile <blueness@gentoo.org>
-+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-+---
-+diff --git a/Rules.mak b/Rules.mak
-+index 792b794..889108e 100644
-+--- a/Rules.mak
-++++ b/Rules.mak
-+@@ -138,13 +138,19 @@ export MAJOR_VERSION MINOR_VERSION SUBLEVEL VERSION ABI_VERSION LC_ALL
-+ LIBC := libc
-+ SHARED_LIBNAME := $(LIBC).so.$(ABI_VERSION)
-+ UBACKTRACE_DSO := libubacktrace.so.$(ABI_VERSION)
-+-ifneq ($(findstring  $(TARGET_ARCH) , hppa64 ia64 mips64 powerpc64 s390x sparc64 x86_64 ),)
-++
-++UCLIBC_LDSO_NAME := ld-uClibc
-++ARCH_NATIVE_BIT := 32
-++ifneq ($(findstring $(TARGET_ARCH),hppa64 ia64 powerpc64 s390x sparc64 x86_64),)
-+ UCLIBC_LDSO_NAME := ld64-uClibc
-+ ARCH_NATIVE_BIT := 64
-+ else
-+-UCLIBC_LDSO_NAME := ld-uClibc
-+-ARCH_NATIVE_BIT := 32
-++ifeq ($(CONFIG_MIPS_N64_ABI),y)
-++UCLIBC_LDSO_NAME := ld64-uClibc
-++ARCH_NATIVE_BIT := 64
-+ endif
-++endif
-++
-+ UCLIBC_LDSO := $(UCLIBC_LDSO_NAME).so.$(ABI_VERSION)
-+ NONSHARED_LIBNAME := uclibc_nonshared.a
-+ libc := $(top_builddir)lib/$(SHARED_LIBNAME)
-+--
-+cgit v0.9.1
+OK. All sorted. I did 'git commit --amend'. I should forgot to pass '-a'
+also (or run 'git add' first).
+
+Doh, too bad. Sorry for the inconvenience... :-(
+
+> You could argue that this feature isn't really needed as you can just
+> run 'strace -s 1000 -e execve <wrapper>' for basically the same
+> information, but OK - This is perhaps a bit more user friendly.
+
+My use-case was to see how the kernel build-system was calling the
+wrapper. So I just ran:
+    BR_DEBUG_WRAPPER=1 make
+in my Buildroot build dir.
+
+> With that in mind, I think a more sensible output format is something
+> you can directly cut'n'paste and execute in the shell (after perhaps
+> tweaking something), so I've changed it to simply print the args space
+> seperated like this:
+
+Yet, one of the motivation behind the \n-separated args was to easily
+see the args, without having to 'parse' the command line with the eyes.
+
+The Linux kernel is passing something like 40+ args to the wrapper, so
+the line is getting rather long, and difficult to grok visually, while
+the one-arg per line output made it very easy.
+
+But OK, that's sane, too.
+
+> Committed with these changes, thanks.
+
+Again, sorry for the inconvenience. :-(
+
+I already owed you one ${BEVERAGE} in Edimburgh; you can make that two,
+now! ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
