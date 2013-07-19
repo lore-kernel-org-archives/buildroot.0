@@ -1,44 +1,76 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 19 Jul 2013 22:07:34 +0200
-Subject: [Buildroot] EABIhf: breaks kernel build
-In-Reply-To: <20130719161733.GC3751@free.fr> (Yann E. MORIN's message of "Fri, 
- 19 Jul 2013 18:17:33 +0200")
-References: <20130719161733.GC3751@free.fr>
-Message-ID: <87fvvauxdl.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 19 Jul 2013 22:27:43 +0200
+Subject: [Buildroot] [PATCH] toolchain/wrapper: add option to print one
+	argument per line
+Message-ID: <1374265663-30074-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- Yann> Thomas, All,
- Yann> Since the ARM EABIhf stuff was committed, the Linux kernel build is
- Yann> broken, and fails with this message:
- Yann>     armv6-rpi36-linux-gnueabi-gcc: error: -mfloat-abi=soft and
- Yann>     -mfloat-abi=hard may not be used together
+In case there are many arguments passed to the tools, the command line
+can get very long, and difficult to parse visually.
 
- Yann> This is because -mfloat-abi=hard is hard-coded in the wrapper, but the
- Yann> kernel wants to pass -msoft-float.
+For example, the Linux kernel passes a lot of arguments to gcc (at least
+45, which gives 53 with our hard-coded args). Looking at such a command
+line is daunting.
 
- Yann> See attach exerpt of my build log (with a instrumented ext-ttolchain
- Yann> wrapper). Notice argv[6] and argv[41]:
+So, add the possibility to print each argument on its own line.
 
- Yann>     argv[6]='-mfloat-abi=hard'
- Yann>     argv[41]='-msoft-float'
+Also, enclose all args between single quotes, so the command line
+can be safely copy-pasted without special chars (spaces, $) being
+inrerpreted by the shell.
 
- Yann> argv[6] is out hard-coded float ABI option, while argv[41] is passed by
- Yann> the kernel.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ .../toolchain-external/ext-toolchain-wrapper.c     | 25 +++++++++++++++-------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
- Yann> I don't know how to solve this.
-
- Yann> The trivial and immediate idea would be to have a black-list of
- Yann> arguments and exclude the ones we pass that conflict with the ones
- Yann> passed on the command line, but this will be *very* complex and always
- Yann> incomplete.
-
-Yeah, but I think it's the best solution still.
-
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index befd735..9094117 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -67,7 +67,8 @@ int main(int argc, char **argv)
+ 	char *relbasedir, *absbasedir;
+ 	char *progpath = argv[0];
+ 	char *basename;
+-	int ret, i, count = 0;
++	char *env_debug;
++	int ret, i, count = 0, debug;
+ 
+ 	/* Calculate the relative paths */
+ 	basename = strrchr(progpath, '/');
+@@ -136,13 +137,21 @@ int main(int argc, char **argv)
+ 	/* finish with NULL termination */
+ 	*cur = NULL;
+ 
+-	if (getenv("BR_DEBUG_WRAPPER")) {
+-		fprintf(stderr, "Executing");
+-
+-		for (i = 0; args[i]; i++)
+-			fprintf(stderr, " %s", args[i]);
+-
+-		fprintf(stderr, "\n");
++	/* Debug the wrapper to see actual arguments passed to
++	 * the compiler:
++	 * unset, empty, or 0: do not trace
++	 * set to 1          : trace all arguments on a single line
++	 * set to 2          : trace one argument per line
++	 */
++	if ((env_debug = getenv("BR_DEBUG_WRAPPER"))) {
++		debug = atoi(env_debug);
++		if (debug > 0) {
++			fprintf(stderr, "Toolchain wrapper executing:");
++			for (i = 0; args[i]; i++)
++				fprintf(stderr, "%s'%s'",
++					(debug == 2)?"\n    ":" ", args[i]);
++			fprintf(stderr, "\n");
++		}
+ 	}
+ 
+ 	if (execv(path, args))
 -- 
-Bye, Peter Korsgaard
+1.8.1.2
