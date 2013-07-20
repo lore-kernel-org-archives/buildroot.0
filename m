@@ -1,38 +1,36 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 20 Jul 2013 09:52:14 -0300
-Subject: [Buildroot] [PATCH 8/9] blackfin: set GNU_TARGET_NAME accordingly
+Date: Sat, 20 Jul 2013 09:52:15 -0300
+Subject: [Buildroot] [PATCH 9/9] gcc/mudflap: disable for blackfin,
+	it doesn't build
 In-Reply-To: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1374324735-2286-9-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1374324735-2286-10-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Blackfin for FDPIC targets uses *-linux-*, however for FLAT targets it
-needs *-uclinux-* in order for gcc to build properly.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Makefile.in | 5 +++++
+ package/gcc/gcc.mk | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a23eb41..acbc453 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -23,6 +23,11 @@ MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
- # Compute GNU_TARGET_NAME
- GNU_TARGET_NAME=$(ARCH)-buildroot-linux-$(LIBC)$(ABI)
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index cbeaa6c..cd6efed 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -202,6 +202,11 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ HOST_GCC_COMMON_CONF_OPT += --disable-libmudflap
+ endif
  
-+# Blackfin FLAT needs uclinux
-+ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
-+GNU_TARGET_NAME=$(ARCH)-buildroot-uclinux-$(LIBC)$(ABI)
++# Blackfin doesn't do mudflap
++ifeq ($(BR2_bfin),y)
++HOST_GCC_COMMON_CONF_OPT += --disable-libmudflap
 +endif
 +
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- LIBC=uclibc
- else
+ # Disable mudflap and enable proper double/long double for SPE ABI
+ ifeq ($(BR2_powerpc_SPE),y)
+ HOST_GCC_COMMON_CONF_OPT += \
 -- 
 1.8.1.5
