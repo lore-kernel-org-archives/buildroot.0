@@ -1,78 +1,52 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 20 Jul 2013 09:52:09 -0300
-Subject: [Buildroot] [PATCH 3/9] uclibc: make target utils optional
+Date: Sat, 20 Jul 2013 09:52:10 -0300
+Subject: [Buildroot] [PATCH 4/9] gcc/bfin: 4.{6,7,8}.x are broken
 In-Reply-To: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1374324735-2286-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1374324735-2286-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These are broken for blackfin unfortunately so they're disabled.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/uclibc/Config.in | 11 +++++++++++
- package/uclibc/uclibc.mk | 16 +++++++++++-----
- 2 files changed, 22 insertions(+), 5 deletions(-)
+ package/gcc/Config.in.host | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index f9c4956..32289bb 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -129,6 +129,17 @@ config BR2_PTHREAD_DEBUG
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index c49b8ed..a6acaa2 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -8,6 +8,7 @@ choice
+ 	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
+ 	default BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 if BR2_avr32
+ 	default BR2_GCC_VERSION_4_8_ARC if BR2_arc
++	default BR2_GCC_VERSION_4_5_X if BR2_bfin
+ 	default BR2_GCC_VERSION_4_7_X
  	help
- 	  Build the thread library with debugging enabled.
+ 	  Select the version of gcc you wish to use.
+@@ -37,17 +38,17 @@ choice
+ 		bool "gcc 4.5.x"
  
-+config BR2_UCLIBC_INSTALL_UTILS
-+	bool "Compile and install uClibc utilities"
-+	depends on !BR2_bfin
-+	default y
-+	help
-+	  Enabling this option will compile and install the getconf,
-+	  ldconfig and ldd uClibc utilities for the target.
-+
-+	  You can save ~32 KiB in target space by disabling them since
-+	  they're normally not needed.
-+
- config BR2_UCLIBC_INSTALL_TEST_SUITE
- 	bool "Compile and install uClibc tests"
- 	select BR2_PACKAGE_MAKE
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index cf53280..4a37fa0 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -451,6 +451,16 @@ define UCLIBC_INSTALL_TEST_SUITE
- endef
- endif
+ 	config BR2_GCC_VERSION_4_6_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
++		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.6.x"
  
-+ifeq ($(BR2_UCLIBC_INSTALL_UTILS),y)
-+define UCLIBC_INSTALL_UTILS_TARGET
-+	$(MAKE1) -C $(@D) \
-+		CC="$(TARGET_CC)" CPP="$(TARGET_CPP)" LD="$(TARGET_LD)" \
-+		ARCH="$(UCLIBC_TARGET_ARCH)" \
-+		PREFIX=$(TARGET_DIR) \
-+		utils install_utils
-+endef
-+endif
-+
- define UCLIBC_INSTALL_TARGET_CMDS
- 	$(MAKE1) -C $(@D) \
- 		$(UCLIBC_MAKE_FLAGS) \
-@@ -458,11 +468,7 @@ define UCLIBC_INSTALL_TARGET_CMDS
- 		DEVEL_PREFIX=/usr/ \
- 		RUNTIME_PREFIX=/ \
- 		install_runtime
--	$(MAKE1) -C $(@D) \
--		CC="$(TARGET_CC)" CPP="$(TARGET_CPP)" LD="$(TARGET_LD)" \
--		ARCH="$(UCLIBC_TARGET_ARCH)" \
--		PREFIX=$(TARGET_DIR) \
--		utils install_utils
-+	$(UCLIBC_INSTALL_UTILS_TARGET)
- 	$(UCLIBC_INSTALL_TEST_SUITE)
- endef
+ 	config BR2_GCC_VERSION_4_7_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
++		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.7.x"
+ 
+ 	config BR2_GCC_VERSION_4_8_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.8.x"
  
 -- 
 1.8.1.5
