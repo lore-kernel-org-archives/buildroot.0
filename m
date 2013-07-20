@@ -1,53 +1,38 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 20 Jul 2013 09:52:13 -0300
-Subject: [Buildroot] [PATCH 7/9] uclibc/bfin: don't install host utils if
-	not FDPIC
+Date: Sat, 20 Jul 2013 09:52:14 -0300
+Subject: [Buildroot] [PATCH 8/9] blackfin: set GNU_TARGET_NAME accordingly
 In-Reply-To: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1374324735-2286-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1374324735-2286-9-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Blackfin for FDPIC targets uses *-linux-*, however for FLAT targets it
+needs *-uclinux-* in order for gcc to build properly.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/uclibc/uclibc.mk | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ package/Makefile.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index cbc2e56..644c531 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -511,6 +511,16 @@ define UCLIBC_INSTALL_TARGET_CMDS
- 	$(UCLIBC_INSTALL_TEST_SUITE)
- endef
+diff --git a/package/Makefile.in b/package/Makefile.in
+index a23eb41..acbc453 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -23,6 +23,11 @@ MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
+ # Compute GNU_TARGET_NAME
+ GNU_TARGET_NAME=$(ARCH)-buildroot-linux-$(LIBC)$(ABI)
  
-+# For FLAT binfmts (static) there are no host utils
-+ifeq ($(BR2_BINFMT_FLAT),)
-+define UCLIBC_INSTALL_UTILS_STAGING
-+	$(INSTALL) -D -m 0755 $(@D)/utils/ldd.host $(HOST_DIR)/usr/bin/ldd
-+	ln -sf ldd $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldd
-+	$(INSTALL) -D -m 0755 $(@D)/utils/ldconfig.host $(HOST_DIR)/usr/bin/ldconfig
-+	ln -sf ldconfig $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldconfig
-+endef
++# Blackfin FLAT needs uclinux
++ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
++GNU_TARGET_NAME=$(ARCH)-buildroot-uclinux-$(LIBC)$(ABI)
 +endif
 +
- define UCLIBC_INSTALL_STAGING_CMDS
- 	$(MAKE1) -C $(@D) \
- 		$(UCLIBC_MAKE_FLAGS) \
-@@ -518,10 +528,7 @@ define UCLIBC_INSTALL_STAGING_CMDS
- 		DEVEL_PREFIX=/usr/ \
- 		RUNTIME_PREFIX=/ \
- 		install_runtime install_dev
--	install -D -m 0755 $(@D)/utils/ldd.host $(HOST_DIR)/usr/bin/ldd
--	ln -sf ldd $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldd
--	install -D -m 0755 $(@D)/utils/ldconfig.host $(HOST_DIR)/usr/bin/ldconfig
--	ln -sf ldconfig $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldconfig
-+	$(UCLIBC_INSTALL_UTILS_STAGING)
- endef
- 
- uclibc-menuconfig: dirs uclibc-patch
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ LIBC=uclibc
+ else
 -- 
 1.8.1.5
