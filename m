@@ -1,7 +1,7 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sat, 20 Jul 2013 11:24:48 +0200
-Subject: [Buildroot] [PATCH 1/1] ebtables: fix download url
-Message-ID: <1374312289-18436-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Sat, 20 Jul 2013 11:34:08 +0200
+Subject: [Buildroot] [PATCH 1/1] zlib: bump to version 1.2.8
+Message-ID: <1374312848-18715-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/ebtables/ebtables.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/zlib/zlib.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index 0b3fba6..ddc1f45 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
+index 25d40a5..a8f5516 100644
+--- a/package/zlib/zlib.mk
++++ b/package/zlib/zlib.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- EBTABLES_VERSION = 2.0.10-4
- EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
--EBTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/ebtables/ebtables-$(EBTABLES_VERSION)
-+EBTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/ebtables/ebtables-$(subst .,-,$(EBTABLES_VERSION))
- EBTABLES_LICENSE = GPLv2
- EBTABLES_LICENSE_FILES = COPYING
- EBTABLES_STATIC = $(if $(BR2_PREFER_STATIC_LIB),static)
+-ZLIB_VERSION = 1.2.7
+-ZLIB_SOURCE =zlib-$(ZLIB_VERSION).tar.bz2
++ZLIB_VERSION = 1.2.8
++ZLIB_SOURCE =zlib-$(ZLIB_VERSION).tar.xz
+ ZLIB_SITE = http://downloads.sourceforge.net/project/libpng/zlib/$(ZLIB_VERSION)
+ ZLIB_LICENSE = zlib license
+ ZLIB_LICENSE_FILES = README
 -- 
 1.7.9.5
