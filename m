@@ -1,36 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 20 Jul 2013 09:52:15 -0300
-Subject: [Buildroot] [PATCH 9/9] gcc/mudflap: disable for blackfin,
-	it doesn't build
-In-Reply-To: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 20 Jul 2013 14:58:53 +0200
+Subject: [Buildroot] [PATCH 2/9] uclibc/bfin: only supports
+ linuxthreads.old
+In-Reply-To: <1374324735-2286-3-git-send-email-gustavo@zacarias.com.ar>
 References: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1374324735-2286-10-git-send-email-gustavo@zacarias.com.ar>
+ <1374324735-2286-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130720125853.GC3507@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gcc/gcc.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+Gustavo, All,
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index cbeaa6c..cd6efed 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -202,6 +202,11 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- HOST_GCC_COMMON_CONF_OPT += --disable-libmudflap
- endif
- 
-+# Blackfin doesn't do mudflap
-+ifeq ($(BR2_bfin),y)
-+HOST_GCC_COMMON_CONF_OPT += --disable-libmudflap
-+endif
-+
- # Disable mudflap and enable proper double/long double for SPE ABI
- ifeq ($(BR2_powerpc_SPE),y)
- HOST_GCC_COMMON_CONF_OPT += \
+On 2013-07-20 09:52 -0300, Gustavo Zacarias spake thusly:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/uclibc/Config.in | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+> index 90aae90..f9c4956 100644
+> --- a/package/uclibc/Config.in
+> +++ b/package/uclibc/Config.in
+> @@ -104,6 +104,7 @@ choice
+>  
+>  	config BR2_PTHREADS
+>  		bool "linuxthreads"
+> +		depends on !BR2_bfin
+>  		depends on !BR2_xtensa
+>  	        select BR2_TOOLCHAIN_HAS_THREADS
+>  
+> @@ -115,9 +116,10 @@ choice
+>  		bool "Native POSIX Threading (NPTL)"
+>  		select BR2_TOOLCHAIN_HAS_THREADS
+>  		depends on !BR2_x86_i386
+> +		depends on !BR2_arc
+>  		depends on !BR2_avr32
+> +		depends on !BR2_bfin
+>  		depends on !BR2_xtensa
+> -		depends on !BR2_arc
+
+While at re-ordering, you could have also reorderd x86_i386.
+Note this in the commit log, such as:
+   trivial options re-rodering at the same time.
+
+Although I would prefer you not mix cosmetics with actual changes.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.1.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
