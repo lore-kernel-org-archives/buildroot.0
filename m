@@ -1,10 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 20 Jul 2013 09:52:07 -0300
-Subject: [Buildroot] [PATCH 1/9] gcc/bfin: doesn't support --with-cpu
-	defaults
+Date: Sat, 20 Jul 2013 09:52:08 -0300
+Subject: [Buildroot] [PATCH 2/9] uclibc/bfin: only supports linuxthreads.old
 In-Reply-To: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1374324735-2286-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1374324735-2286-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gcc/gcc.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/uclibc/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 85cd7d4..cbeaa6c 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -159,6 +159,8 @@ endif
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
- HOST_GCC_COMMON_CONF_OPT += --with-abi=$(BR2_GCC_TARGET_ABI)
- endif
-+# GCC doesn't support --with-cpu for bfin
-+ifeq ($(BR2_bfin),)
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
- HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
-@@ -166,6 +168,7 @@ else
- HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
- endif
- endif
-+endif
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 90aae90..f9c4956 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -104,6 +104,7 @@ choice
  
- GCC_TARGET_FPU = $(call qstrip,$(BR2_GCC_TARGET_FPU))
- ifneq ($(GCC_TARGET_FPU),)
+ 	config BR2_PTHREADS
+ 		bool "linuxthreads"
++		depends on !BR2_bfin
+ 		depends on !BR2_xtensa
+ 	        select BR2_TOOLCHAIN_HAS_THREADS
+ 
+@@ -115,9 +116,10 @@ choice
+ 		bool "Native POSIX Threading (NPTL)"
+ 		select BR2_TOOLCHAIN_HAS_THREADS
+ 		depends on !BR2_x86_i386
++		depends on !BR2_arc
+ 		depends on !BR2_avr32
++		depends on !BR2_bfin
+ 		depends on !BR2_xtensa
+-		depends on !BR2_arc
+ endchoice
+ 
+ config BR2_PTHREAD_DEBUG
 -- 
 1.8.1.5
