@@ -1,33 +1,21 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Jul 2013 15:08:57 +0200
-Subject: [Buildroot] [PATCH 3/9] uclibc: make target utils optional
-In-Reply-To: <1374324735-2286-4-git-send-email-gustavo@zacarias.com.ar>
-References: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
- <1374324735-2286-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130720130857.GD3507@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 20 Jul 2013 21:11:37 +0200
+Subject: [Buildroot] [PATCH 1/1] ebtables: fix download url
+In-Reply-To: <1374312289-18436-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ (Jerzy Grzegorek's message of "Sat, 20 Jul 2013 11:24:48 +0200")
+References: <1374312289-18436-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <87hafpt5au.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2013-07-20 09:52 -0300, Gustavo Zacarias spake thusly:
-> These are broken for blackfin unfortunately so they're disabled.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Jerzy> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
-BTW, I never know if Acked-by includes Reviewed-by...
-
-Regads,
-Yann E. MORIN.
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
