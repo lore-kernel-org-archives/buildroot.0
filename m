@@ -1,35 +1,41 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 20 Jul 2013 09:52:06 -0300
-Subject: [Buildroot] [PATCH 0/9] Fix internal blackfin toolchain
-Message-ID: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 20 Jul 2013 09:52:07 -0300
+Subject: [Buildroot] [PATCH 1/9] gcc/bfin: doesn't support --with-cpu
+	defaults
+In-Reply-To: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1374324735-2286-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patchset fixes the internal blackfin toolchain build.
-It's been broken for ages (never worked maybe?)
-Testers wanted, it builds what's supposed to build but i lack hardware
-to see if it really works.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gcc/gcc.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Gustavo Zacarias (9):
-  gcc/bfin: doesn't support --with-cpu defaults
-  uclibc/bfin: only supports linuxthreads.old
-  uclibc: make target utils optional
-  gcc/bfin: 4.{6,7,8}.x are broken
-  uclibc: use builtin startfiles target
-  uclibc/bfin: set the appropiate binfmt in the configuration
-  uclibc/bfin: don't install host utils if not FDPIC
-  blackfin: set GNU_TARGET_NAME accordingly
-  gcc/mudflap: disable for blackfin, it doesn't build
-
- package/Makefile.in        |  5 +++
- package/gcc/Config.in.host |  7 +++--
- package/gcc/gcc.mk         |  8 +++++
- package/uclibc/Config.in   | 15 ++++++++-
- package/uclibc/uclibc.mk   | 76 ++++++++++++++++++++++++++++++++++++++--------
- 5 files changed, 95 insertions(+), 16 deletions(-)
-
---
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 85cd7d4..cbeaa6c 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -159,6 +159,8 @@ endif
+ ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
+ HOST_GCC_COMMON_CONF_OPT += --with-abi=$(BR2_GCC_TARGET_ABI)
+ endif
++# GCC doesn't support --with-cpu for bfin
++ifeq ($(BR2_bfin),)
+ ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
+ ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
+ HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
+@@ -166,6 +168,7 @@ else
+ HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
+ endif
+ endif
++endif
+ 
+ GCC_TARGET_FPU = $(call qstrip,$(BR2_GCC_TARGET_FPU))
+ ifneq ($(GCC_TARGET_FPU),)
+-- 
 1.8.1.5
