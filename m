@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 22 Jul 2013 00:10:32 +0200
-Subject: [Buildroot] [PATCH 2 of 3] u-boot: add support for custom
-	Mercurial repository
-In-Reply-To: <21dda5e59e1c88ea78ef.1374233233@BEANTN0L019720> (Thomas De
- Schampheleire's message of "Fri, 19 Jul 2013 13:27:13 +0200")
+Date: Mon, 22 Jul 2013 00:11:36 +0200
+Subject: [Buildroot] [PATCH 3 of 3] linux/uboot: line-up
+	repository-related configuration options
+In-Reply-To: <3c808c389a7d8a39cfaf.1374233234@BEANTN0L019720> (Thomas De
+ Schampheleire's message of "Fri, 19 Jul 2013 13:27:14 +0200")
 References: <patchbomb.1374233231@BEANTN0L019720>
- <21dda5e59e1c88ea78ef.1374233233@BEANTN0L019720>
-Message-ID: <87txjnr2cn.fsf@dell.be.48ers.dk>
+ <3c808c389a7d8a39cfaf.1374233234@BEANTN0L019720>
+Message-ID: <87ppubr2av.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,52 +15,38 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
+ Thomas> Although the configuration options for custom repository locations and
+ Thomas> versions are very similar between the linux and uboot packages, there are
+ Thomas> some minor differences. This patch lines up both packages.
+
  Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
  Thomas> ---
- Thomas>  boot/uboot/Config.in |  15 +++++++++------
- Thomas>  boot/uboot/uboot.mk  |   5 ++++-
- Thomas>  2 files changed, 13 insertions(+), 7 deletions(-)
+ Thomas> Note: one remaining difference is that there are help texts in linux for
+ Thomas> options BR2_LINUX_KERNEL_CUSTOM_GIT and BR2_LINUX_KERNEL_CUSTOM_HG. I
+ Thomas> didn't add them to uboot because it seems a bit redundant, but if you
+ Thomas> prefer we can line this up as well (either add help texts to uboot or
+ Thomas> remove them from linux).
+
+ Thomas>  boot/uboot/Config.in |  5 +++++
+ Thomas>  linux/Config.in      |  2 +-
+ Thomas>  2 files changed, 6 insertions(+), 1 deletions(-)
 
  Thomas> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
  Thomas> --- a/boot/uboot/Config.in
  Thomas> +++ b/boot/uboot/Config.in
- Thomas> @@ -31,6 +31,9 @@ config BR2_TARGET_UBOOT_CUSTOM_TARBALL
- Thomas>  config BR2_TARGET_UBOOT_CUSTOM_GIT
- Thomas>  	bool "Custom Git repository"
+ Thomas> @@ -70,6 +70,11 @@ config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
  
- Thomas> +config BR2_TARGET_UBOOT_CUSTOM_HG
- Thomas> +	bool "Custom Mercurial repository"
- Thomas> +
- Thomas>  endchoice
- 
- Thomas>  config BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE
- Thomas> @@ -49,7 +52,7 @@ config BR2_TARGET_UBOOT_VERSION
- Thomas>  	default "2013.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
- Thomas>  	default $BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE if BR2_TARGET_UBOOT_CUSTOM_VERSION
- Thomas>  	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
- Thomas> -	default $BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION if BR2_TARGET_UBOOT_CUSTOM_GIT
- Thomas> +	default $BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
- 
- Thomas>  config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
- Thomas>  	string "custom patch dir"
- Thomas> @@ -60,13 +63,13 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
- 
- Thomas>  	  Most users may leave this empty
- 
- Thomas> -if BR2_TARGET_UBOOT_CUSTOM_GIT
- Thomas> +if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
- 
- Thomas> -config BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL
- Thomas> -	string "URL of custom Git repository"
- Thomas> +config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
- Thomas> +	string "URL of custom repository"
- 
- Thomas> -config BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION
- Thomas> -	string "Custom Git version"
- Thomas> +config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
- Thomas> +	string "Custom repository version"
+ Thomas>  config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
+ Thomas>  	string "Custom repository version"
+ Thomas> +	default "HEAD" if BR2_TARGET_UBOOT_CUSTOM_GIT
+ Thomas> +	default "tip" if BR2_TARGET_UBOOT_CUSTOM_HG
+ Thomas> +	help
+ Thomas> +	  Revision to use in the typical format used by Git/Mercurial
+ Thomas> +	  E.G. a sha id, a tag, branch, ..
 
-Same comment about Config.in.legacy.
+As mentioned for the linux change, I prefer to drop the defaults,
+otherwise it looks good.
 
 -- 
 Bye, Peter Korsgaard
