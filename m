@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Jul 2013 17:35:39 +0200
-Subject: [Buildroot] [PATCH 1/9] gcc/bfin: doesn't support --with-cpu
- defaults
-In-Reply-To: <1374324735-2286-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 21 Jul 2013 17:38:45 +0200
+Subject: [Buildroot] [PATCH 8/9] blackfin: set GNU_TARGET_NAME
+ accordingly
+In-Reply-To: <1374324735-2286-9-git-send-email-gustavo@zacarias.com.ar>
 References: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
- <1374324735-2286-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130721173539.28707500@skate>
+ <1374324735-2286-9-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130721173845.15f7da05@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +14,31 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Sat, 20 Jul 2013 09:52:07 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Sat, 20 Jul 2013 09:52:14 -0300, Gustavo Zacarias wrote:
 
-> +# GCC doesn't support --with-cpu for bfin
-> +ifeq ($(BR2_bfin),)
->  ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
->  ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
->  HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
-> @@ -166,6 +168,7 @@ else
->  HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
->  endif
->  endif
+> @@ -23,6 +23,11 @@ MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
+>  # Compute GNU_TARGET_NAME
+>  GNU_TARGET_NAME=$(ARCH)-buildroot-linux-$(LIBC)$(ABI)
+>  
+> +# Blackfin FLAT needs uclinux
+> +ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
+> +GNU_TARGET_NAME=$(ARCH)-buildroot-uclinux-$(LIBC)$(ABI)
 > +endif
 
-This looks odd because the BR2_GCC_TARGET_CPU_REVISION thing was added
-by Sonic Zhang, see 66d41890ec2b76189bcd427a0cc3966ff56f9712. So it is
-specifically useful on Blackfin. Maybe just with Analog Devices
-toolchains, I don't know. But clearly, removing that for Blackfin seems
-wrong.
+Isn't the 'uclinux' OS part something that is not specific to Blackfin?
+I.e, should this rather be something like:
 
+ifeq ($(BR2_USE_MMU),y)
+OS=linux
+else
+OS=uclinux
+endif
 
+GNU_TARGET_NAME=$(ARCH)-buildroot-$(OS)-$(LIBC)$(ABI)
+
+Thanks!
+
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
