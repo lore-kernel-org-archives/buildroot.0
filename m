@@ -1,89 +1,70 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 21 Jul 2013 23:55:29 +0200
-Subject: [Buildroot] [PATCH v2 1/1] netcat6: new package
-In-Reply-To: <1374280279-32703-1-git-send-email-tjlee@ambarella.com> (Tzu-Jung
- Lee's message of "Sat, 20 Jul 2013 08:31:19 +0800")
-References: <1374280279-32703-1-git-send-email-tjlee@ambarella.com>
-Message-ID: <8738r7shm6.fsf@dell.be.48ers.dk>
+Date: Mon, 22 Jul 2013 00:09:49 +0200
+Subject: [Buildroot] [PATCH 1 of 3] linux: add support for custom
+	Mercurial repository
+In-Reply-To: <301f1051caabe2cf9f48.1374233232@BEANTN0L019720> (Thomas De
+ Schampheleire's message of "Fri, 19 Jul 2013 13:27:12 +0200")
+References: <patchbomb.1374233231@BEANTN0L019720>
+ <301f1051caabe2cf9f48.1374233232@BEANTN0L019720>
+Message-ID: <87y58zr2du.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "T" == Tzu-Jung Lee <roylee17@gmail.com> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
- T> Change-Id: I9bc6ef244276f26ff6e4149677cd3a3d8f2de0c2
- T> Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
- T> ---
+ Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ Thomas> ---
+ Thomas>  linux/Config.in |  27 ++++++++++++++++++---------
+ Thomas>  linux/linux.mk  |   5 ++++-
+ Thomas>  2 files changed, 22 insertions(+), 10 deletions(-)
 
-Please document (under the --- line) what you have changed when you send
-updated patches.
+ Thomas> diff --git a/linux/Config.in b/linux/Config.in
+ Thomas> --- a/linux/Config.in
+ Thomas> +++ b/linux/Config.in
+ Thomas> @@ -52,6 +52,12 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT
+ Thomas>  	  This option allows Buildroot to get the Linux kernel source
+ Thomas>  	  code from a Git repository.
+ 
+ Thomas> +config BR2_LINUX_KERNEL_CUSTOM_HG
+ Thomas> +	bool "Custom Mercurial repository"
+ Thomas> +	help
+ Thomas> +	  This option allows Buildroot to get the Linux kernel source
+ Thomas> +	  code from a Mercurial repository.
+ Thomas> +
+ Thomas>  endchoice
+ 
+ Thomas>  config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+ Thomas> @@ -62,25 +68,28 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_L
+ Thomas>  	string "URL of custom kernel tarball"
+ Thomas>  	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 
+ Thomas> -config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
+ Thomas> -	string "URL of custom Git repository"
+ Thomas> -	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
+ Thomas> +if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
+ 
+ Thomas> -config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ Thomas> -	string "Custom Git version"
+ Thomas> -	default "HEAD"
+ Thomas> -	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
 
- T>  package/Config.in          |  1 +
- T>  package/netcat6/Config.in  | 12 ++++++++++++
- T>  package/netcat6/netcat6.mk | 13 +++++++++++++
- T>  3 files changed, 26 insertions(+)
- T>  create mode 100644 package/netcat6/Config.in
- T>  create mode 100644 package/netcat6/netcat6.mk
+Please add Config.in.legacy entries for these.
 
- T> diff --git a/package/Config.in b/package/Config.in
- T> index 286a605..b8011c7 100644
- T> --- a/package/Config.in
- T> +++ b/package/Config.in
- T> @@ -760,6 +760,7 @@ source "package/ncftp/Config.in"
- T>  source "package/ndisc6/Config.in"
- T>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- T>  source "package/netcat/Config.in"
- T> +source "package/netcat6/Config.in"
- T>  source "package/netkitbase/Config.in"
- T>  source "package/netkittelnet/Config.in"
- T>  endif
- T> diff --git a/package/netcat6/Config.in b/package/netcat6/Config.in
- T> new file mode 100644
- T> index 0000000..68cf2dc
- T> --- /dev/null
- T> +++ b/package/netcat6/Config.in
- T> @@ -0,0 +1,12 @@
- T> +config BR2_PACKAGE_NETCAT6
- T> +	bool "netcat6"
- T> +	help
- T> +	  Netcat is a featured networking utility which reads and writes data
- T> +	  across network connections, using the TCP/IP protocol.
- T> +	  It is designed to be a reliable "back-end" tool that can be used
- T> +	  directly or easily driven by other programs and scripts. At the
- T> +	  same time, it is a feature-rich network debugging and exploration
- T> +	  tool, since it can create almost any kind of connection you would
- T> +	  need and has several interesting built-in capabilities.
- T> +
- T> +	  http://netcat.sourceforge.net/download.php
- T> diff --git a/package/netcat6/netcat6.mk b/package/netcat6/netcat6.mk
- T> new file mode 100644
- T> index 0000000..7cf900c
- T> --- /dev/null
- T> +++ b/package/netcat6/netcat6.mk
- T> @@ -0,0 +1,13 @@
- T> +#############################################################
- T> +#
- T> +# netcat6
- T> +#
- T> +#############################################################
- T> +
- T> +NETCAT6_VERSION = 1.0
- T> +NETCAT6_SOURCE = nc6-$(NETCAT6_VERSION).tar.bz2
- T> +NETCAT6_SITE = http://downloads.sourceforge.net/project/netcat/netcat/$(NETCAT6_VERSION)
- T> +NETCAT6_LICENSE = GPLv2+
- T> +NETCAT6_LICENSE_FILES = COPYING
- T> +
- T> +$(eval $(autotools-package))
- T> -- 
- T> 1.8.3.2
+ Thomas> +config BR2_LINUX_KERNEL_CUSTOM_REPO_URL
+ Thomas> +	string "URL of custom repository"
+ Thomas> +
+ Thomas> +config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
+ Thomas> +	string "Custom repository version"
+ Thomas> +	default "HEAD" if BR2_LINUX_KERNEL_CUSTOM_GIT
+ Thomas> +	default "tip" if BR2_LINUX_KERNEL_CUSTOM_HG
 
- T> _______________________________________________
- T> buildroot mailing list
- T> buildroot at busybox.net
- T> http://lists.busybox.net/mailman/listinfo/buildroot
-
+I know we had this already for git, but these are not really good
+defaults as buildroot will only download these once and not update the
+tarballs even though HEAD/tip changes - So I think we should just
+default to "".
 
 -- 
 Bye, Peter Korsgaard
