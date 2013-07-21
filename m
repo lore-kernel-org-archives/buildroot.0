@@ -1,31 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 21 Jul 2013 18:06:58 +0200
-Subject: [Buildroot] [PATCHv2 2/3] eglibc/arm: doesn't build in thumb(1)
-	mode
-In-Reply-To: <20130721172415.1a730f0f@skate> (Thomas Petazzoni's message of
- "Sun, 21 Jul 2013 17:24:15 +0200")
-References: <buildroot@busybox.net>
- <1374239193-23811-1-git-send-email-gustavo@zacarias.com.ar>
- <1374239193-23811-2-git-send-email-gustavo@zacarias.com.ar>
- <87li52td8g.fsf@dell.be.48ers.dk> <20130721172415.1a730f0f@skate>
-Message-ID: <87hafnsxr1.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 21 Jul 2013 13:26:27 -0300
+Subject: [Buildroot] [PATCH 1/9] gcc/bfin: doesn't support --with-cpu
+ defaults
+In-Reply-To: <20130721173539.28707500@skate>
+References: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
+ <1374324735-2286-2-git-send-email-gustavo@zacarias.com.ar>
+ <20130721173539.28707500@skate>
+Message-ID: <51EC0BB3.6060109@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 07/21/2013 12:35 PM, Thomas Petazzoni wrote:
 
-Hi,
+> This looks odd because the BR2_GCC_TARGET_CPU_REVISION thing was added
+> by Sonic Zhang, see 66d41890ec2b76189bcd427a0cc3966ff56f9712. So it is
+> specifically useful on Blackfin. Maybe just with Analog Devices
+> toolchains, I don't know. But clearly, removing that for Blackfin seems
+> wrong.
 
- >> I know you didn't add this, but why are we forcing -O2 here? Thomas?
+Exactly, with their twisted toolchains, snip without it:
 
- Thomas> Because eglibc must be built with optimizations. See
- Thomas> http://patches.openembedded.org/patch/38849/ for example.
+checking for clock_t... yes
+checking for .preinit_array/.init_array/.fini_array support... yes
+checking if mkdir takes one argument... no
+This target does not support --with-cpu.
+Valid --with options are:
+make[1]: *** [configure-gcc] Error 1
+make[1]: Leaving directory
+`/home/gustavoz/b/fin/output/build/host-gcc-initial-4.5.4/build'
+make: ***
+[/home/gustavoz/b/fin/output/build/host-gcc-initial-4.5.4/.stamp_built]
+Error 2
 
-Ok, thanks. A small note about this would be good so it doesn't get
-removed in future "cleanups".
-
--- 
-Bye, Peter Korsgaard
+Regards.
