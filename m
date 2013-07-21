@@ -1,38 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Jul 2013 17:24:15 +0200
-Subject: [Buildroot] [PATCHv2 2/3] eglibc/arm: doesn't build in thumb(1)
-	mode
-In-Reply-To: <87li52td8g.fsf@dell.be.48ers.dk>
-References: <buildroot@busybox.net>
- <1374239193-23811-1-git-send-email-gustavo@zacarias.com.ar>
- <1374239193-23811-2-git-send-email-gustavo@zacarias.com.ar>
- <87li52td8g.fsf@dell.be.48ers.dk>
-Message-ID: <20130721172415.1a730f0f@skate>
+Date: Sun, 21 Jul 2013 17:35:39 +0200
+Subject: [Buildroot] [PATCH 1/9] gcc/bfin: doesn't support --with-cpu
+ defaults
+In-Reply-To: <1374324735-2286-2-git-send-email-gustavo@zacarias.com.ar>
+References: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
+ <1374324735-2286-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130721173539.28707500@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Gustavo Zacarias,
 
-On Sat, 20 Jul 2013 00:07:59 +0200, Peter Korsgaard wrote:
+On Sat, 20 Jul 2013 09:52:07 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
->  Gustavo> @@ -36,7 +41,8 @@ define EGLIBC_CONFIGURE_CMDS
->  Gustavo>  	# Do the configuration
->  Gustavo>  	(cd $(@D)/build; \
->  Gustavo>  		$(TARGET_CONFIGURE_OPTS) \
->  Gustavo> -		CFLAGS="-O2" CPPFLAGS="" CXXFLAGS="-O2" \
->  Gustavo> +		CFLAGS="-O2 $(EGLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
-> 
-> I know you didn't add this, but why are we forcing -O2 here? Thomas?
+> +# GCC doesn't support --with-cpu for bfin
+> +ifeq ($(BR2_bfin),)
+>  ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
+>  ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
+>  HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
+> @@ -166,6 +168,7 @@ else
+>  HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
+>  endif
+>  endif
+> +endif
 
-Because eglibc must be built with optimizations. See
-http://patches.openembedded.org/patch/38849/ for example.
+This looks odd because the BR2_GCC_TARGET_CPU_REVISION thing was added
+by Sonic Zhang, see 66d41890ec2b76189bcd427a0cc3966ff56f9712. So it is
+specifically useful on Blackfin. Maybe just with Analog Devices
+toolchains, I don't know. But clearly, removing that for Blackfin seems
+wrong.
 
-Best regards,
 
-Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
