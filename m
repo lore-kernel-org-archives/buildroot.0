@@ -1,76 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 22 Jul 2013 17:22:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pyro: adding Pyro 3.14
-In-Reply-To: <1374479727-2105-2-git-send-email-fabien.marteau@armadeus.com>
- (Fabien Marteau's message of "Mon, 22 Jul 2013 09:55:27 +0200")
-References: <1374479727-2105-1-git-send-email-fabien.marteau@armadeus.com>
- <1374479727-2105-2-git-send-email-fabien.marteau@armadeus.com>
-Message-ID: <878v0ypqku.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 22 Jul 2013 13:09:08 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{0, 4, 9,
+	10}.x stable versions
+Message-ID: <20130722152245.D21A69A947@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "F" == Fabien Marteau <fabien.marteau@armadeus.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c38ecc65f465d4a3bf8dcece621b8013949041af
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- F> Signed-off-by: Fabien Marteau <fabien.marteau@armadeus.com>
- F> ---
- F>  package/Config.in                  |    1 +
- F>  package/python-pyro/Config.in      |    9 +++++++++
- F>  package/python-pyro/python-pyro.mk |   18 ++++++++++++++++++
- F>  3 files changed, 28 insertions(+)
- F>  create mode 100644 package/python-pyro/Config.in
- F>  create mode 100644 package/python-pyro/python-pyro.mk
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ...tall-fix-__packed-in-exported-kernel-head.patch |    0
+ package/linux-headers/Config.in.host               |    8 ++++----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- F> diff --git a/package/Config.in b/package/Config.in
- F> index 7730317..9e1c0ae 100644
- F> --- a/package/Config.in
- F> +++ b/package/Config.in
- F> @@ -358,6 +358,7 @@ source "package/python-nfc/Config.in"
- F>  source "package/python-protobuf/Config.in"
- F>  source "package/python-pygame/Config.in"
- F>  source "package/python-pyparsing/Config.in"
- F> +source "package/python-pyro/Config.in"
- F>  source "package/python-serial/Config.in"
- F>  source "package/python-setuptools/Config.in"
- F>  source "package/python-thrift/Config.in"
- F> diff --git a/package/python-pyro/Config.in b/package/python-pyro/Config.in
- F> new file mode 100644
- F> index 0000000..60a3b22
- F> --- /dev/null
- F> +++ b/package/python-pyro/Config.in
- F> @@ -0,0 +1,9 @@
- F> +config BR2_PACKAGE_PYTHON_PYRO
- F> +	bool "python-pyro"
- F> +	depends on BR2_PACKAGE_PYTHON
- F> +	help
- F> +	  python-pyro is a Python library stands for PYthon Remote Objects.
- F> +	  It is an advanced and powerful Distributed Object Technology system
- F> +	  written entirely in Python, that is designed to be very easy to use..
- F> +
- F> +	  https://pypi.python.org/pypi/Pyro/3.14
-
-I dropped the 3.14 here so it doesn't get out of sync when/if we ever
-upgrade.
-
- F> +++ b/package/python-pyro/python-pyro.mk
- F> @@ -0,0 +1,18 @@
- F> +################################################################################
- F> +#
- F> +# python-pyro
- F> +#
- F> +################################################################################
- F> +
- F> +PYTHON_PYRO_VERSION = 3.14
- F> +PYTHON_PYRO_SOURCE  = Pyro-$(PYTHON_PYRO_VERSION).tar.gz
- F> +PYTHON_PYRO_SITE    = https://pypi.python.org/packages/source/P/Pyro/
- F> +PYTHON_PYRO_LICENSE = MIT
- F> +PYTHON_PYRO_LICENSE_FILE = LICENSE
-
-The variable is called _LICENSE_FILES
-
-Committed with these fixes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/3.0.86/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch b/package/linux-headers/3.0.87/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from package/linux-headers/3.0.86/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to package/linux-headers/3.0.87/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index a872445..7a5decd 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -72,16 +72,16 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.86"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.87"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.48"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.53"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.54"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+-	default "3.9.10"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.1"	if BR2_KERNEL_HEADERS_3_10
++	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
++	default "3.10.2"	if BR2_KERNEL_HEADERS_3_10
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
