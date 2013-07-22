@@ -1,41 +1,22 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 22 Jul 2013 07:57:43 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump 3.10.x stable version
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 22 Jul 2013 13:09:27 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{0, 4, 9,
+	10}.x stable versions
 In-Reply-To: <1374490663-16941-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 22 Jul 2013 07:57:42 -0300")
 References: <1374490663-16941-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1374490663-16941-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87fvv6q2ag.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 3936493..87a764d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.10.1"
-+	bool "3.10.2"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.10.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.10.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed series, thanks.
+
 -- 
-1.8.1.5
+Bye, Peter Korsgaard
