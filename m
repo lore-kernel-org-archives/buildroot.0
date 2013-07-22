@@ -1,125 +1,32 @@
-From: Tzu-Jung Lee <roylee17@gmail.com>
-Date: Mon, 22 Jul 2013 08:09:23 +0800
-Subject: [Buildroot] [PATCH v3 1/1] dropwatch: new package
-In-Reply-To: <CAEvN+1jnT+8CXC+gtHO-Pu1zPz9K181f6D6TsZ01CErbiuC6jw@mail.gmail.com>
-References: <CAEvN+1jnT+8CXC+gtHO-Pu1zPz9K181f6D6TsZ01CErbiuC6jw@mail.gmail.com>
-Message-ID: <1374451763-17956-1-git-send-email-tjlee@ambarella.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Mon, 22 Jul 2013 07:20:36 +0200
+Subject: [Buildroot] [PATCH 1/1] udisks: fix typos in license info
+Message-ID: <1374470436-3504-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
+ package/udisks/udisks.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v3 adopts all the review comments against v2 from Peter.
-
- package/Config.in                           |  1 +
- package/dropwatch/Config.in                 | 10 ++++++++++
- package/dropwatch/dropwatch-1.4-build.patch | 27 ++++++++++++++++++++++++++
- package/dropwatch/dropwatch.mk              | 30 +++++++++++++++++++++++++++++
- 4 files changed, 68 insertions(+)
- create mode 100644 package/dropwatch/Config.in
- create mode 100644 package/dropwatch/dropwatch-1.4-build.patch
- create mode 100644 package/dropwatch/dropwatch.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index b8011c7..1216450 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -22,6 +22,7 @@ source "package/cache-calibrator/Config.in"
- source "package/dhrystone/Config.in"
- source "package/dstat/Config.in"
- source "package/dmalloc/Config.in"
-+source "package/dropwatch/Config.in"
- source "package/gdb/Config.in"
- source "package/iozone/Config.in"
- source "package/kexec/Config.in"
-diff --git a/package/dropwatch/Config.in b/package/dropwatch/Config.in
-new file mode 100644
-index 0000000..c7fc933
---- /dev/null
-+++ b/package/dropwatch/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_DROPWATCH
-+	bool "dropwatch"
-+	select BR2_PACKAGE_BINUTILS
-+	select BR2_PACKAGE_READLINE
-+	select BR2_PACKAGE_LIBNL
-+	help
-+	  Dropwatch is an interactive utility for monitoring and recording packets
-+	  that are dropped by the kernel
-+
-+	  https://fedorahosted.org/dropwatch/
-diff --git a/package/dropwatch/dropwatch-1.4-build.patch b/package/dropwatch/dropwatch-1.4-build.patch
-new file mode 100644
-index 0000000..eed43e8
---- /dev/null
-+++ b/package/dropwatch/dropwatch-1.4-build.patch
-@@ -0,0 +1,27 @@
-+From 03bab84ca3f102274837e83ee6da4c997a9da018 Mon Sep 17 00:00:00 2001
-+From: Tzu-Jung Lee <tjlee@ambarella.com>
-+Date: Fri, 12 Jul 2013 20:00:57 +0800
-+Subject: [PATCH] build: modify hardcoded gcc to support buildroot
-+
-+Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
-+
-+diff --git a/src/Makefile b/src/Makefile
-+index 026b6ba..b87ae9f 100644
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -5,10 +5,10 @@ OBJFILES := main.o lookup.o\
-+ 	 lookup_bfd.o lookup_kas.o
-+ 
-+ dropwatch: $(OBJFILES) 
-+-	gcc -g -o dropwatch $(OBJFILES) $(LDFLAGS) 
-++	$(CC) -g -o dropwatch $(OBJFILES) $(LDFLAGS)
-+ 
-+ %.o: %.c
-+-	gcc $(CFLAGS) $<
-++	$(CC) $(CFLAGS) $<
-+ clean:
-+ 	rm -f dropwatch *.o
-+ 
-+-- 
-+1.8.3.2
-+
-diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
-new file mode 100644
-index 0000000..549e3bb
---- /dev/null
-+++ b/package/dropwatch/dropwatch.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# dropwatch
-+#
-+################################################################################
-+
-+DROPWATCH_VERSION = 1.4
-+DROPWATCH_SOURCE = dropwatch-$(DROPWATCH_VERSION).tar.bz2
-+DROPWATCH_SITE = https://git.fedorahosted.org/cgit/dropwatch.git/snapshot/
-+DROPWATCH_DEPENDENCIES = binutils libnl readline
-+DROPWATCH_LICENSE = GPLv2+
-+DROPWATCH_LICENSE_FILE = COPYING
-+
-+define DROPWATCH_BUILD_CMDS
-+  $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) build
-+endef
-+
-+define DROPWATCH_CLEAN_CMDS
-+  $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) clean
-+endef
-+
-+define DROPWATCH_INSTALL_TARGET_CMDS
-+  $(INSTALL) -D -m 0755 $(@D)/src/dropwatch $(TARGET_DIR)/usr/bin/dropwatch
-+endef
-+
-+define DROPWATCH_UNINSTALL_CMDS
-+  rm -f $(TARGET_DIR)/usr/bin/dropwatch
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
+index 5d3368d..28855dd 100644
+--- a/package/udisks/udisks.mk
++++ b/package/udisks/udisks.mk
+@@ -6,8 +6,8 @@
+ 
+ UDISKS_VERSION = 1.0.4
+ UDISKS_SITE    = http://hal.freedesktop.org/releases/
+-UDISKS_LICENCE = GPLv2+
+-UDISKS_LICENCE_FILES = COPYING
++UDISKS_LICENSE = GPLv2+
++UDISKS_LICENSE_FILES = COPYING
+ 
+ UDISKS_DEPENDENCIES = 	\
+ 	sg3_utils	\
 -- 
-1.8.3.2
+1.7.9.5
