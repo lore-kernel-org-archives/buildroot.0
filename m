@@ -1,59 +1,40 @@
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Tue, 23 Jul 2013 18:28:08 +0200
-Subject: [Buildroot] [PATCH] uclibc: arc: fix fstat for big-endian
-Message-ID: <1374596888-25427-1-git-send-email-mjonker@synopsys.com>
+From: Tim Nelson <tnelson@rockbochs.com>
+Date: Tue, 23 Jul 2013 15:33:28 -0500 (CDT)
+Subject: [Buildroot] Recommended cross toolchain for ARM
+In-Reply-To: <20130723060305.GA6169@zuhnb712.ap.bm.net>
+Message-ID: <4149687.113980.1374611608786.JavaMail.root@rockbochs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes "Value too large for defined data type" messages caused by fstat
-syscall wrapper returning -EOVERFLOW.
+----- Original Message -----
+> Hi,
+> 
+> Do you guys have a suggested cross toolchain?  I want to use glibc
+> instead of uclibc, so in the buildroot default supported options, it
+> left only Sourcery CodeBench (SCB).  But SCB seems not a very
+> completed
+> toolchain, when I use it to compile some of my applications, I found
+> it
+> missed with some definitions (such as RLIM_*) which should normally
+> appear in a standard header file.
+> 
+> Then I tried, Linaro, but it seems that it do not well support my
+> armv5t
+> core. Anyway, I run with errors after configured it with buildroot.
+> 
+> So, is there a free ARM cross toolchains which is in one hand
+> workable
+> with buidroot and on the other hand contains all the necessary things
+> that normally required to build applications.
+> 
+> Thanks in advance!
+> 
 
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
----
- package/uclibc/0.9.33-arc/fix-fstat-for-be.patch |   32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/uclibc/0.9.33-arc/fix-fstat-for-be.patch
+I've had good luck with building my own using crosstool-ng[1].
 
-diff --git a/package/uclibc/0.9.33-arc/fix-fstat-for-be.patch b/package/uclibc/0.9.33-arc/fix-fstat-for-be.patch
-new file mode 100644
-index 0000000..2cdb517
---- /dev/null
-+++ b/package/uclibc/0.9.33-arc/fix-fstat-for-be.patch
-@@ -0,0 +1,32 @@
-+From f394d65c74631a0e715bac582b09c302ee84114f Mon Sep 17 00:00:00 2001
-+From: Mischa Jonker <mjonker@synopsys.com>
-+Date: Tue, 23 Jul 2013 17:59:04 +0200
-+Subject: [PATCH] libc/sysdeps: Fix common-generic stat.h for BE part 2
-+
-+Previous patch only fixed the build. This patch fixes the behavior at
-+run-time as well.
-+
-+It fixes "Value too large for defined data type" messages caused by
-+fstat syscall wrapper returning -EOVERFLOW.
-+
-+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
-+---
-+ libc/sysdeps/linux/common-generic/bits/stat.h |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libc/sysdeps/linux/common-generic/bits/stat.h b/libc/sysdeps/linux/common-generic/bits/stat.h
-+index 07716ab..945c408 100644
-+--- a/libc/sysdeps/linux/common-generic/bits/stat.h
-++++ b/libc/sysdeps/linux/common-generic/bits/stat.h
-+@@ -63,8 +63,8 @@ struct stat
-+     unsigned long long __pad4;
-+     long __pad5;
-+     long st_size;				/* Size of file, in bytes. */
-+-    int __pad6;
-+     int st_blksize;				/* Optimal block size for I/O. */
-++    int __pad6;
-+     long __pad7;
-+     long st_blocks;				/* Number 512-byte blocks allocated */
-+ # endif /* __LITTLE_ENDIAN */
-+--
-+1.7.9.5
--- 
-1.7.9.5
+--Tim
+
+[1] http://crosstool-ng.org/
