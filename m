@@ -1,108 +1,1193 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 24 Jul 2013 11:51:03 +0200
-Subject: [Buildroot] [PATCH] dpkg: new package and host package
-Message-ID: <2e7a58f00720bcfba517.1374659463@BEANTN0L019720>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Wed, 24 Jul 2013 17:57:04 +0800
+Subject: [Buildroot] Failed building DirectFB
+In-Reply-To: <CAAXf6LXxkj=68rHGDt6yYnB5h4r7hT5JkV9fXhau3kAaDemQSg@mail.gmail.com>
+References: <20130724091011.GB11352@zuhnb712.ap.bm.net>
+ <CAAXf6LXxkj=68rHGDt6yYnB5h4r7hT5JkV9fXhau3kAaDemQSg@mail.gmail.com>
+Message-ID: <20130724095703.GA391@zuhnb712.ap.bm.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dpkg is the debian package manager. On target, it is useful to install
-.deb files containing certain software. On host, it is useful to create
-such .deb files. The creation of such .deb files could happen from a
-post-build script, or from project-specific packages.
+On Wed, Jul 24, 2013 at 11:30:12AM +0200, Thomas De Schampheleire wrote:
+> On Wed, Jul 24, 2013 at 11:10 AM, Woody Wu <narkewoody@gmail.com> wrote:
+> > Hi,
+> >
+> > I enabled DirectFB in buildroot-2013.05.  My toolchain is the Sourcery
+> > CodeBench selected from the buildroot toolchain menu.
+> >
+> > Now I got a compile error:
+> >
+> >
+> > make[5]: Leaving directory `/home/woody/src/buildroot-2013.05/output/build/directfb-1.6.3/interfaces/IDirectFBImageProvider/mpeg2'
+> > make[5]: Entering directory `/home/woody/src/buildroot-2013.05/output/build/directfb-1.6.3/interfaces/IDirectFBImageProvider'
+> >   CC     idirectfbimageprovider_dfiff.lo
+> >   CC     idirectfbimageprovider_gif.lo
+> >   CC     idirectfbimageprovider_jpeg.lo
+> >   CC     idirectfbimageprovider_png.lo
+> >   CC     idirectfbimageprovider_imlib2.lo
+> >   CC     idirectfbimageprovider_pnm.lo
+> > idirectfbimageprovider_imlib2.c:64:20: fatal error: Imlib2.h: No such file or directory
+> > compilation terminated.
+> >
+> > Do you have an idea about this? Or, what features I should disable to skip the problem?
+> 
+> It seems that directfb.mk already adds some dependencies to imlib2.
+> Normally, the imlib headers should be available in
+> output/staging/usr/include.
+> 
+> Is the imlib2 package already built? It should be present in
+> output/build/imlib2-...
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Understood. Now I enabled imlib2.  But, then I got other errors:
 
----
- package/Config.in           |   1 +
- package/Config.in.host      |   1 +
- package/dpkg/Config.in      |   7 +++++++
- package/dpkg/Config.in.host |   9 +++++++++
- package/dpkg/dpkg.mk        |  30 ++++++++++++++++++++++++++++++
- 5 files changed, 48 insertions(+), 0 deletions(-)
+mkdir .libs/libidirectfbimageprovider_mpeg2.a.tmp
+(cd .libs/libidirectfbimageprovider_mpeg2.a.tmp && /home/woody/src/buildroot-2013.05/output/host/usr/bin/arm-none-linux-gnueabi-ar x ../../.libs/libidirectfbimageprovider_mpeg2.a)
+/home/woody/src/buildroot-2013.05/output/host/usr/bin/arm-none-linux-gnueabi-ld -o libidirectfbimageprovider_mpeg2.o -r .libs/libidirectfbimageprovider_mpeg2.a.tmp/*.o
+rm -f .libs/libidirectfbimageprovider_mpeg2.a.tmp/*.o && rmdir .libs/libidirectfbimageprovider_mpeg2.a.tmp
+  CCLD   libidirectfbimageprovider_imlib2.la
+/home/woody/src/buildroot-2013.05/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.3/../../../../arm-none-linux-gnueabi/bin/ld: warning: library search path "/usr/lib" is unsafe for cross-compilation
+/usr/lib/libImlib2.so: could not read symbols: File in wrong format
+collect2: ld returned 1 exit status
+make[5]: *** [libidirectfbimageprovider_imlib2.la] Error 1
 
-diff --git a/package/Config.in b/package/Config.in
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -840,6 +840,7 @@ source "package/xl2tp/Config.in"
- endmenu
- 
- menu "Package managers"
-+source "package/dpkg/Config.in"
- source "package/ipkg/Config.in"
- source "package/opkg/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/Config.in.host b/package/Config.in.host
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -2,6 +2,7 @@ menu "Host utilities"
- 
- source "package/dfu-util/Config.in.host"
- source "package/dosfstools/Config.in.host"
-+source "package/dpkg/Config.in.host"
- source "package/e2fsprogs/Config.in.host"
- source "package/genext2fs/Config.in.host"
- source "package/genimage/Config.in.host"
-diff --git a/package/dpkg/Config.in b/package/dpkg/Config.in
-new file mode 100644
---- /dev/null
-+++ b/package/dpkg/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_DPKG
-+	bool "dpkg"
-+	help
-+	  This package provides the low-level infrastructure for handling
-+	  the installation and removal of Debian software packages.
-+
-+	  http://wiki.debian.org/Teams/Dpkg
-diff --git a/package/dpkg/Config.in.host b/package/dpkg/Config.in.host
-new file mode 100644
---- /dev/null
-+++ b/package/dpkg/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_DPKG
-+	bool "host dpkg"
-+	help
-+	  This package provides the low-level infrastructure for handling
-+	  the installation and removal of Debian software packages.
-+	  You could use it from a post-build script, or from project-specific
-+	  packages, to create .deb files for use on target.
-+
-+	  http://wiki.debian.org/Teams/Dpkg
-diff --git a/package/dpkg/dpkg.mk b/package/dpkg/dpkg.mk
-new file mode 100644
---- /dev/null
-+++ b/package/dpkg/dpkg.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# dpkg
-+#
-+################################################################################
-+
-+DPKG_VERSION = 1.16.10
-+DPKG_SOURCE = dpkg_$(DPKG_VERSION).tar.xz
-+DPKG_SITE = http://ftp.de.debian.org/debian/pool/main/d/dpkg
-+DPKG_LICENSE = GPLv2+
-+DPKG_LICENSE_FILES = COPYING
-+
-+DPKG_DEPENDENCIES = host-pkgconf
-+DPKG_CONF_OPT = \
-+	--localstatedir=/var \
-+	--disable-dselect \
-+	--disable-start-stop-daemon \
-+	--disable-update-alternatives
-+
-+HOST_DPKG_DEPENDENCIES = host-pkgconf
-+HOST_DPKG_CONF_OPT = \
-+	--disable-dselect \
-+	--disable-start-stop-daemon \
-+	--disable-update-alternatives
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-+
-+# variables used by other packages
-+DPKG:=$(HOST_DIR)/usr/bin/dpkg
+
+> Did you do anything special?
+
+No, I did not do anything special.
+
+> Can you send your .config file?
+
+Please help check the enclosed .config. Thanks!
+
+> Which version of buildroot are you using?
+
+Buildroot-2013.05
+
+> 
+> Best regards,
+> Thomas
+
+-- 
+I can't go back to yesterday - because I was a different person then
+-------------- next part --------------
+#
+# Automatically generated file; DO NOT EDIT.
+# Buildroot 2013.05 Configuration
+#
+BR2_HAVE_DOT_CONFIG=y
+BR2_HOSTARCH_NEEDS_IA32_LIBS=y
+# BR2_arcle is not set
+# BR2_arceb is not set
+BR2_arm=y
+# BR2_armeb is not set
+# BR2_aarch64 is not set
+# BR2_avr32 is not set
+# BR2_bfin is not set
+# BR2_i386 is not set
+# BR2_microblazeel is not set
+# BR2_microblazebe is not set
+# BR2_mips is not set
+# BR2_mipsel is not set
+# BR2_mips64 is not set
+# BR2_mips64el is not set
+# BR2_powerpc is not set
+# BR2_sh is not set
+# BR2_sh64 is not set
+# BR2_sparc is not set
+# BR2_x86_64 is not set
+# BR2_xtensa is not set
+BR2_ARCH="arm"
+BR2_ENDIAN="LITTLE"
+BR2_GCC_TARGET_TUNE="arm926ej-s"
+BR2_GCC_TARGET_ARCH="armv5te"
+BR2_GCC_TARGET_ABI="aapcs-linux"
+# BR2_arm7tdmi is not set
+# BR2_arm720t is not set
+# BR2_arm920t is not set
+# BR2_arm922t is not set
+BR2_arm926t=y
+# BR2_arm10t is not set
+# BR2_arm1136jf_s_r0 is not set
+# BR2_arm1136jf_s_r1 is not set
+# BR2_arm1176jz_s is not set
+# BR2_arm1176jzf_s is not set
+# BR2_cortex_a5 is not set
+# BR2_cortex_a8 is not set
+# BR2_cortex_a9 is not set
+# BR2_cortex_a15 is not set
+# BR2_fa526 is not set
+# BR2_pj4 is not set
+# BR2_strongarm is not set
+# BR2_xscale is not set
+# BR2_iwmmxt is not set
+# BR2_arm1136jf_s is not set
+BR2_ARM_EABI=y
+
+#
+# Build options
+#
+
+#
+# Commands
+#
+BR2_WGET="wget --passive-ftp -nd -t 3"
+BR2_SVN="svn"
+BR2_BZR="bzr"
+BR2_GIT="git"
+BR2_LOCALFILES="cp"
+BR2_SCP="scp"
+BR2_SSH="ssh"
+BR2_HG="hg"
+BR2_ZCAT="gzip -d -c"
+BR2_BZCAT="bzcat"
+BR2_XZCAT="xzcat"
+BR2_TAR_OPTIONS=""
+BR2_DEFCONFIG="/home/woody/git/buildroot-cfgs/ffc3-arm2416/defconfig"
+BR2_DL_DIR="/buildroot/packages"
+BR2_HOST_DIR="$(BASE_DIR)/host"
+
+#
+# Mirrors and Download locations
+#
+BR2_PRIMARY_SITE=""
+BR2_BACKUP_SITE="http://sources.buildroot.net/"
+BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
+BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
+BR2_DEBIAN_MIRROR="http://ftp.debian.org"
+BR2_JLEVEL=0
+# BR2_CCACHE is not set
+# BR2_DEPRECATED is not set
+# BR2_ENABLE_DEBUG is not set
+BR2_STRIP_strip=y
+# BR2_STRIP_sstrip is not set
+# BR2_STRIP_none is not set
+BR2_STRIP_EXCLUDE_FILES=""
+BR2_STRIP_EXCLUDE_DIRS=""
+# BR2_OPTIMIZE_0 is not set
+# BR2_OPTIMIZE_1 is not set
+# BR2_OPTIMIZE_2 is not set
+# BR2_OPTIMIZE_3 is not set
+BR2_OPTIMIZE_S=y
+# BR2_PREFER_STATIC_LIB is not set
+BR2_PACKAGE_OVERRIDE_FILE="$(TOPDIR)/local.mk"
+BR2_GLOBAL_PATCH_DIR=""
+
+#
+# Toolchain
+#
+# BR2_TOOLCHAIN_BUILDROOT is not set
+BR2_TOOLCHAIN_EXTERNAL=y
+
+#
+# Linaro toolchains available for Cortex-A{5,8,9,15}
+#
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203=y
+# BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109 is not set
+# BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103 is not set
+# BR2_TOOLCHAIN_EXTERNAL_CUSTOM is not set
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+# BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED is not set
+BR2_TOOLCHAIN_EXTERNAL_PREFIX="arm-none-linux-gnueabi"
+BR2_TOOLCHAIN_EXTERNAL_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
+BR2_LARGEFILE=y
+BR2_INET_IPV6=y
+BR2_TOOLCHAIN_HAS_NATIVE_RPC=y
+BR2_USE_WCHAR=y
+BR2_ENABLE_LOCALE=y
+BR2_INSTALL_LIBSTDCPP=y
+BR2_TOOLCHAIN_HAS_THREADS=y
+BR2_TOOLCHAIN_HAS_THREADS_DEBUG=y
+BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS=y
+# BR2_ENABLE_LOCALE_PURGE is not set
+BR2_GENERATE_LOCALE=""
+BR2_USE_MMU=y
+BR2_PREFER_SOFT_FLOAT=y
+BR2_TARGET_OPTIMIZATION="-pipe"
+BR2_TARGET_LDFLAGS=""
+# BR2_ECLIPSE_REGISTER is not set
+
+#
+# System configuration
+#
+BR2_TARGET_GENERIC_HOSTNAME="FFC3"
+BR2_TARGET_GENERIC_ISSUE="Welcome to FFC3 (ARM s3c2416, 128M DDR2, 1GiB NAND)"
+# BR2_TARGET_GENERIC_PASSWD_DES is not set
+BR2_TARGET_GENERIC_PASSWD_MD5=y
+# BR2_TARGET_GENERIC_PASSWD_SHA256 is not set
+# BR2_TARGET_GENERIC_PASSWD_SHA512 is not set
+BR2_TARGET_GENERIC_PASSWD_METHOD="md5"
+# BR2_ROOTFS_DEVICE_CREATION_STATIC is not set
+# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS is not set
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV is not set
+BR2_INIT_BUSYBOX=y
+# BR2_INIT_SYSV is not set
+
+#
+# systemd requires largefile, wchar, IPv6, threads and udev support
+#
+# BR2_INIT_NONE is not set
+BR2_ROOTFS_DEVICE_TABLE="system/device_table.txt"
+BR2_ROOTFS_SKELETON_DEFAULT=y
+# BR2_ROOTFS_SKELETON_CUSTOM is not set
+BR2_TARGET_GENERIC_ROOT_PASSWD=""
+BR2_TARGET_GENERIC_GETTY_PORT="ttySAC1"
+# BR2_TARGET_GENERIC_GETTY_BAUDRATE_KEEP is not set
+# BR2_TARGET_GENERIC_GETTY_BAUDRATE_9600 is not set
+# BR2_TARGET_GENERIC_GETTY_BAUDRATE_19200 is not set
+# BR2_TARGET_GENERIC_GETTY_BAUDRATE_38400 is not set
+# BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600 is not set
+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+BR2_TARGET_GENERIC_GETTY_BAUDRATE="115200"
+BR2_TARGET_GENERIC_GETTY_TERM="vt100"
+BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y
+BR2_ROOTFS_OVERLAY="rootfs-overlay"
+BR2_ROOTFS_POST_BUILD_SCRIPT=""
+BR2_ROOTFS_POST_IMAGE_SCRIPT=""
+
+#
+# Package Selection for the target
+#
+BR2_PACKAGE_BUSYBOX=y
+# BR2_BUSYBOX_VERSION_1_19_X is not set
+# BR2_BUSYBOX_VERSION_1_20_X is not set
+BR2_BUSYBOX_VERSION_1_21_X=y
+# BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
+BR2_BUSYBOX_VERSION="1.21.0"
+BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.21.x.config"
+# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set
+# BR2_PACKAGE_BUSYBOX_WATCHDOG is not set
+
+#
+# Audio and video applications
+#
+# BR2_PACKAGE_ALSA_UTILS is not set
+# BR2_PACKAGE_AUMIX is not set
+# BR2_PACKAGE_BELLAGIO is not set
+# BR2_PACKAGE_FAAD2 is not set
+# BR2_PACKAGE_FLAC is not set
+# BR2_PACKAGE_FFMPEG is not set
+# BR2_PACKAGE_GSTREAMER is not set
+# BR2_PACKAGE_LAME is not set
+# BR2_PACKAGE_MADPLAY is not set
+# BR2_PACKAGE_MPD is not set
+# BR2_PACKAGE_MPG123 is not set
+# BR2_PACKAGE_MPLAYER is not set
+# BR2_PACKAGE_MUSEPACK is not set
+# BR2_PACKAGE_OPUS_TOOLS is not set
+# BR2_PACKAGE_PULSEAUDIO is not set
+# BR2_PACKAGE_VORBIS_TOOLS is not set
+# BR2_PACKAGE_WAVPACK is not set
+# BR2_PACKAGE_YAVTA is not set
+
+#
+# Compressors and decompressors
+#
+# BR2_PACKAGE_BZIP2 is not set
+# BR2_PACKAGE_INFOZIP is not set
+# BR2_PACKAGE_LZOP is not set
+# BR2_PACKAGE_XZ is not set
+
+#
+# Debugging, profiling and benchmark
+#
+BR2_PACKAGE_BONNIE=y
+# BR2_PACKAGE_CACHE_CALIBRATOR is not set
+# BR2_PACKAGE_DHRYSTONE is not set
+# BR2_PACKAGE_DSTAT is not set
+# BR2_PACKAGE_DMALLOC is not set
+BR2_PACKAGE_GDB=y
+# BR2_PACKAGE_GDB_DEBUGGER is not set
+# BR2_PACKAGE_IOZONE is not set
+# BR2_PACKAGE_KEXEC is not set
+# BR2_PACKAGE_LATENCYTOP is not set
+# BR2_PACKAGE_LMBENCH is not set
+# BR2_PACKAGE_LTP_TESTSUITE is not set
+
+#
+# lttng-modules requires a linux kernel to be built
+#
+# BR2_PACKAGE_LTTNG_TOOLS is not set
+# BR2_PACKAGE_LTRACE is not set
+BR2_PACKAGE_MEMSTAT=y
+BR2_PACKAGE_NETPERF=y
+# BR2_PACKAGE_OPROFILE is not set
+
+#
+# perf only available if Linux kernel is enabled, and requires largefile support
+#
+BR2_PACKAGE_RAMSPEED=y
+# BR2_PACKAGE_RT_TESTS is not set
+BR2_PACKAGE_STRACE=y
+BR2_PACKAGE_STRESS=y
+# BR2_PACKAGE_WHETSTONE is not set
+# BR2_PACKAGE_PV is not set
+
+#
+# Development tools
+#
+BR2_PACKAGE_BINUTILS=y
+BR2_PACKAGE_BINUTILS_TARGET=y
+# BR2_PACKAGE_BISON is not set
+# BR2_PACKAGE_BSDIFF is not set
+# BR2_PACKAGE_CVS is not set
+# BR2_PACKAGE_DISTCC is not set
+# BR2_PACKAGE_FLEX is not set
+# BR2_PACKAGE_GPERF is not set
+BR2_PACKAGE_MAKE=y
+BR2_PACKAGE_LIBTOOL=y
+# BR2_PACKAGE_M4 is not set
+# BR2_PACKAGE_PKGCONF is not set
+# BR2_PACKAGE_SSTRIP is not set
+
+#
+# Games
+#
+# BR2_PACKAGE_GNUCHESS is not set
+# BR2_PACKAGE_PRBOOM is not set
+
+#
+# Graphic libraries and applications (graphic/text)
+#
+
+#
+# Graphic applications
+#
+# BR2_PACKAGE_GNUPLOT is not set
+# BR2_PACKAGE_JHEAD is not set
+# BR2_PACKAGE_RRDTOOL is not set
+
+#
+# graphic libraries
+#
+# BR2_PACKAGE_CEGUI06 is not set
+BR2_PACKAGE_DIRECTFB=y
+# BR2_PACKAGE_DIRECTFB_DEBUG is not set
+# BR2_PACKAGE_DIRECTFB_TRACE is not set
+# BR2_PACKAGE_DIRECTFB_PXA3XX is not set
+# BR2_PACKAGE_DIRECTFB_EP9X is not set
+BR2_PACKAGE_DIRECTFB_LINUXINPUT=y
+BR2_PACKAGE_DIRECTFB_KEYBOARD=y
+BR2_PACKAGE_DIRECTFB_PS2MOUSE=y
+BR2_PACKAGE_DIRECTFB_SERIALMOUSE=y
+BR2_PACKAGE_DIRECTFB_TSLIB=y
+BR2_PACKAGE_DIRECTFB_GIF=y
+BR2_PACKAGE_DIRECTFB_JPEG=y
+BR2_PACKAGE_DIRECTFB_PNG=y
+# BR2_PACKAGE_DIRECTFB_DITHER_RGB16 is not set
+# BR2_PACKAGE_DIRECTFB_TESTS is not set
+# BR2_PACKAGE_DIRECTFB_EXAMPLES is not set
+# BR2_PACKAGE_DIVINE is not set
+# BR2_PACKAGE_FBDUMP is not set
+BR2_PACKAGE_FBGRAB=y
+# BR2_PACKAGE_FBTERM is not set
+BR2_PACKAGE_FBV=y
+BR2_PACKAGE_FBV_PNG=y
+BR2_PACKAGE_FBV_JPEG=y
+BR2_PACKAGE_FBV_GIF=y
+BR2_PACKAGE_FB_TEST_APP=y
+# BR2_PACKAGE_IMAGEMAGICK is not set
+# BR2_PACKAGE_LITE is not set
+# BR2_PACKAGE_SAWMAN is not set
+# BR2_PACKAGE_SDL is not set
+
+#
+# other GUIs
+#
+# BR2_PACKAGE_EFL is not set
+# BR2_PACKAGE_QT is not set
+# BR2_PACKAGE_QT5 is not set
+# BR2_PACKAGE_XORG7 is not set
+
+#
+# weston requires udev
+#
+
+#
+# X libraries and helper libraries
+#
+# BR2_PACKAGE_LIBERATION is not set
+# BR2_PACKAGE_XKEYBOARD_CONFIG is not set
+
+#
+# X Window managers
+#
+
+#
+# X applications
+#
+# BR2_PACKAGE_GOB2 is not set
+
+#
+# midori requires C++, WCHAR in toolchain and libgtk2
+#
+
+#
+# Filesystem and flash utilities
+#
+# BR2_PACKAGE_CIFS_UTILS is not set
+# BR2_PACKAGE_CRAMFS is not set
+# BR2_PACKAGE_CURLFTPFS is not set
+# BR2_PACKAGE_DOSFSTOOLS is not set
+# BR2_PACKAGE_E2FSPROGS is not set
+# BR2_PACKAGE_EXFAT is not set
+# BR2_PACKAGE_EXFAT_UTILS is not set
+# BR2_PACKAGE_F2FS_TOOLS is not set
+# BR2_PACKAGE_FLASHBENCH is not set
+# BR2_PACKAGE_GENEXT2FS is not set
+# BR2_PACKAGE_GENROMFS is not set
+# BR2_PACKAGE_MAKEDEVS is not set
+BR2_PACKAGE_MTD=y
+
+#
+# MTD tools selection
+#
+# BR2_PACKAGE_MTD_DOCFDISK is not set
+# BR2_PACKAGE_MTD_DOC_LOADBIOS is not set
+BR2_PACKAGE_MTD_FLASHCP=y
+BR2_PACKAGE_MTD_FLASH_ERASE=y
+BR2_PACKAGE_MTD_FLASH_LOCK=y
+# BR2_PACKAGE_MTD_FLASH_OTP_DUMP is not set
+# BR2_PACKAGE_MTD_FLASH_OTP_INFO is not set
+# BR2_PACKAGE_MTD_FLASH_OTP_LOCK is not set
+# BR2_PACKAGE_MTD_FLASH_OTP_WRITE is not set
+BR2_PACKAGE_MTD_FLASH_UNLOCK=y
+# BR2_PACKAGE_MTD_FTL_CHECK is not set
+# BR2_PACKAGE_MTD_FTL_FORMAT is not set
+# BR2_PACKAGE_MTD_JFFS2DUMP is not set
+BR2_PACKAGE_MTD_MKFSJFFS2=y
+BR2_PACKAGE_MTD_MTD_DEBUG=y
+BR2_PACKAGE_MTD_NANDDUMP=y
+BR2_PACKAGE_MTD_NANDTEST=y
+BR2_PACKAGE_MTD_NANDWRITE=y
+# BR2_PACKAGE_MTD_NFTLDUMP is not set
+# BR2_PACKAGE_MTD_NFTL_FORMAT is not set
+# BR2_PACKAGE_MTD_RECV_IMAGE is not set
+# BR2_PACKAGE_MTD_RFDDUMP is not set
+# BR2_PACKAGE_MTD_RFDFORMAT is not set
+# BR2_PACKAGE_MTD_SERVE_IMAGE is not set
+# BR2_PACKAGE_MTD_SUMTOOL is not set
+BR2_PACKAGE_MTD_MTDINFO=y
+BR2_PACKAGE_MTD_UBIATTACH=y
+BR2_PACKAGE_MTD_UBICRC32=y
+BR2_PACKAGE_MTD_UBIDETACH=y
+BR2_PACKAGE_MTD_UBIFORMAT=y
+BR2_PACKAGE_MTD_UBIMKVOL=y
+BR2_PACKAGE_MTD_UBINFO=y
+BR2_PACKAGE_MTD_UBINIZE=y
+BR2_PACKAGE_MTD_UBIRENAME=y
+BR2_PACKAGE_MTD_UBIRMVOL=y
+BR2_PACKAGE_MTD_UBIRSVOL=y
+BR2_PACKAGE_MTD_UBIUPDATEVOL=y
+# BR2_PACKAGE_NFS_UTILS is not set
+# BR2_PACKAGE_NTFS_3G is not set
+# BR2_PACKAGE_SQUASHFS is not set
+# BR2_PACKAGE_SSHFS is not set
+# BR2_PACKAGE_UNIONFS is not set
+# BR2_PACKAGE_XFSPROGS is not set
+
+#
+# Hardware handling
+#
+
+#
+# Misc devices firmwares
+#
+# BR2_PACKAGE_B43_FIRMWARE is not set
+# BR2_PACKAGE_FIRMWARE_IMX is not set
+# BR2_PACKAGE_LINUX_FIRMWARE is not set
+# BR2_PACKAGE_RPI_FIRMWARE is not set
+# BR2_PACKAGE_UX500_FIRMWARE is not set
+# BR2_PACKAGE_ZD1211_FIRMWARE is not set
+# BR2_PACKAGE_CDRKIT is not set
+# BR2_PACKAGE_DBUS is not set
+# BR2_PACKAGE_DMRAID is not set
+# BR2_PACKAGE_DVB_APPS is not set
+# BR2_PACKAGE_DVBSNOOP is not set
+# BR2_PACKAGE_EEPROG is not set
+# BR2_PACKAGE_EVTEST is not set
+# BR2_PACKAGE_FAN_CTRL is not set
+# BR2_PACKAGE_FCONFIG is not set
+# BR2_PACKAGE_FIS is not set
+# BR2_PACKAGE_FMTOOLS is not set
+# BR2_PACKAGE_FXLOAD is not set
+# BR2_PACKAGE_GADGETFS_TEST is not set
+# BR2_PACKAGE_GPSD is not set
+# BR2_PACKAGE_GPTFDISK is not set
+# BR2_PACKAGE_GVFS is not set
+# BR2_PACKAGE_HWDATA is not set
+# BR2_PACKAGE_I2C_TOOLS is not set
+# BR2_PACKAGE_INPUT_EVENT_DAEMON is not set
+# BR2_PACKAGE_INPUT_TOOLS is not set
+# BR2_PACKAGE_IOSTAT is not set
+# BR2_PACKAGE_IRDA_UTILS is not set
+# BR2_PACKAGE_KBD is not set
+# BR2_PACKAGE_LCDPROC is not set
+# BR2_PACKAGE_LM_SENSORS is not set
+# BR2_PACKAGE_LSHW is not set
+# BR2_PACKAGE_LSUIO is not set
+# BR2_PACKAGE_LVM2 is not set
+# BR2_PACKAGE_MDADM is not set
+# BR2_PACKAGE_MEDIA_CTL is not set
+# BR2_PACKAGE_MEMTESTER is not set
+BR2_PACKAGE_MINICOM=y
+# BR2_PACKAGE_NANOCOM is not set
+# BR2_PACKAGE_NEARD is not set
+# BR2_PACKAGE_OFONO is not set
+# BR2_PACKAGE_OPEN2300 is not set
+# BR2_PACKAGE_OPENOCD is not set
+
+#
+# owl-linux requires a Linux kernel
+#
+# BR2_PACKAGE_PARTED is not set
+# BR2_PACKAGE_PCIUTILS is not set
+# BR2_PACKAGE_PICOCOM is not set
+# BR2_PACKAGE_RNG_TOOLS is not set
+# BR2_PACKAGE_RPI_USERLAND is not set
+# BR2_PACKAGE_SANE_BACKENDS is not set
+# BR2_PACKAGE_SDPARM is not set
+# BR2_PACKAGE_SETSERIAL is not set
+# BR2_PACKAGE_SG3_UTILS is not set
+# BR2_PACKAGE_SMARTMONTOOLS is not set
+# BR2_PACKAGE_SNOWBALL_HDMISERVICE is not set
+# BR2_PACKAGE_SREDIRD is not set
+# BR2_PACKAGE_STATSERIAL is not set
+# BR2_PACKAGE_SYSSTAT is not set
+# BR2_PACKAGE_TI_UTILS is not set
+# BR2_PACKAGE_UBOOT_TOOLS is not set
+
+#
+# udev requires /dev mgmnt set to udev under System configuration
+#
+
+#
+# udisks requires /dev mgmnt set to udev under System configuration
+#
+# BR2_PACKAGE_USB_MODESWITCH is not set
+# BR2_PACKAGE_USB_MODESWITCH_DATA is not set
+# BR2_PACKAGE_USBUTILS is not set
+# BR2_PACKAGE_WIPE is not set
+
+#
+# Interpreter languages and scripting
+#
+# BR2_PACKAGE_ERLANG is not set
+# BR2_PACKAGE_ENSCRIPT is not set
+# BR2_PACKAGE_HASERL is not set
+# BR2_PACKAGE_JAMVM is not set
+# BR2_PACKAGE_LUA is not set
+# BR2_PACKAGE_LUAJIT is not set
+# BR2_PACKAGE_NODEJS is not set
+# BR2_PACKAGE_PERL is not set
+# BR2_PACKAGE_PHP is not set
+# BR2_PACKAGE_PYTHON is not set
+# BR2_PACKAGE_PYTHON3 is not set
+# BR2_PACKAGE_RUBY is not set
+# BR2_PACKAGE_TCL is not set
+
+#
+# Libraries
+#
+
+#
+# Audio/Sound
+#
+# BR2_PACKAGE_ALSA_LIB is not set
+# BR2_PACKAGE_AUDIOFILE is not set
+# BR2_PACKAGE_CELT051 is not set
+# BR2_PACKAGE_LIBAO is not set
+# BR2_PACKAGE_LIBCDAUDIO is not set
+# BR2_PACKAGE_LIBCUE is not set
+# BR2_PACKAGE_LIBCUEFILE is not set
+# BR2_PACKAGE_LIBID3TAG is not set
+# BR2_PACKAGE_LIBLO is not set
+# BR2_PACKAGE_LIBMAD is not set
+# BR2_PACKAGE_LIBMPD is not set
+# BR2_PACKAGE_LIBREPLAYGAIN is not set
+# BR2_PACKAGE_LIBSAMPLERATE is not set
+# BR2_PACKAGE_LIBSNDFILE is not set
+# BR2_PACKAGE_LIBVORBIS is not set
+# BR2_PACKAGE_OPUS is not set
+# BR2_PACKAGE_PORTAUDIO is not set
+# BR2_PACKAGE_SPEEX is not set
+# BR2_PACKAGE_TAGLIB is not set
+# BR2_PACKAGE_TREMOR is not set
+# BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING is not set
+
+#
+# Compression and decompression
+#
+# BR2_PACKAGE_LIBARCHIVE is not set
+BR2_PACKAGE_LZO=y
+BR2_PACKAGE_ZLIB=y
+
+#
+# Crypto
+#
+# BR2_PACKAGE_BEECRYPT is not set
+# BR2_PACKAGE_GNUTLS is not set
+# BR2_PACKAGE_LIBGCRYPT is not set
+# BR2_PACKAGE_LIBGPG_ERROR is not set
+# BR2_PACKAGE_LIBMCRYPT is not set
+# BR2_PACKAGE_LIBMHASH is not set
+# BR2_PACKAGE_LIBNSS is not set
+# BR2_PACKAGE_LIBSHA1 is not set
+# BR2_PACKAGE_NETTLE is not set
+BR2_PACKAGE_OPENSSL=y
+BR2_PACKAGE_OPENSSL_BIN=y
+# BR2_PACKAGE_OPENSSL_ENGINES is not set
+# BR2_PACKAGE_POLARSSL is not set
+
+#
+# Database
+#
+# BR2_PACKAGE_BERKELEYDB is not set
+# BR2_PACKAGE_GDBM is not set
+# BR2_PACKAGE_MYSQL_CLIENT is not set
+# BR2_PACKAGE_REDIS is not set
+
+#
+# sqlcipher conflicts with sqlite
+#
+BR2_PACKAGE_SQLITE=y
+BR2_PACKAGE_SQLITE_READLINE=y
+# BR2_PACKAGE_SQLITE_STAT3 is not set
+# BR2_PACKAGE_SQLITE_ENABLE_FTS3 is not set
+# BR2_PACKAGE_SQLITE_ENABLE_UNLOCK_NOTIFY is not set
+# BR2_PACKAGE_SQLITE_SECURE_DELETE is not set
+
+#
+# Filesystem
+#
+# BR2_PACKAGE_GAMIN is not set
+# BR2_PACKAGE_LIBCONFIG is not set
+# BR2_PACKAGE_LIBCONFUSE is not set
+# BR2_PACKAGE_LIBFUSE is not set
+# BR2_PACKAGE_LIBLOCKFILE is not set
+# BR2_PACKAGE_LIBSYSFS is not set
+
+#
+# Graphics
+#
+# BR2_PACKAGE_ATK is not set
+# BR2_PACKAGE_CAIRO is not set
+# BR2_PACKAGE_FONTCONFIG is not set
+BR2_PACKAGE_FREETYPE=y
+# BR2_PACKAGE_GD is not set
+BR2_PACKAGE_IMLIB2=y
+BR2_PACKAGE_IMLIB2_JPEG=y
+BR2_PACKAGE_IMLIB2_PNG=y
+BR2_PACKAGE_IMLIB2_GIF=y
+# BR2_PACKAGE_IMLIB2_TIFF is not set
+# BR2_PACKAGE_IMLIB2_ID3 is not set
+BR2_PACKAGE_JPEG=y
+BR2_PACKAGE_LIBJPEG=y
+# BR2_PACKAGE_JPEG_TURBO is not set
+# BR2_PACKAGE_LCMS2 is not set
+# BR2_PACKAGE_LIBART is not set
+# BR2_PACKAGE_LIBDMTX is not set
+# BR2_PACKAGE_LIBEXIF is not set
+# BR2_PACKAGE_LIBGEOTIFF is not set
+# BR2_PACKAGE_GDK_PIXBUF is not set
+# BR2_PACKAGE_LIBGTK2 is not set
+BR2_PACKAGE_LIBPNG=y
+# BR2_PACKAGE_LIBRAW is not set
+# BR2_PACKAGE_LIBRSVG is not set
+# BR2_PACKAGE_LIBSVGTINY is not set
+BR2_PACKAGE_LIBUNGIF=y
+# BR2_PACKAGE_OPENCV is not set
+# BR2_PACKAGE_PANGO is not set
+# BR2_PACKAGE_PIXMAN is not set
+# BR2_PACKAGE_POPPLER is not set
+# BR2_PACKAGE_TIFF is not set
+# BR2_PACKAGE_WAYLAND is not set
+
+#
+# webkit requires C++, WCHAR in toolchain and libgtk2
+#
+# BR2_PACKAGE_WEBP is not set
+# BR2_PACKAGE_ZXING is not set
+
+#
+# Hardware handling
+#
+# BR2_PACKAGE_CCID is not set
+
+#
+# imx-lib needs an imx-specific kernel to be built
+#
+# BR2_PACKAGE_LCDAPI is not set
+# BR2_PACKAGE_LIBAIO is not set
+
+#
+# libatasmart requires udev to be enabled
+#
+# BR2_PACKAGE_LIBRAW1394 is not set
+BR2_PACKAGE_TSLIB=y
+# BR2_PACKAGE_LIBFREEFARE is not set
+# BR2_PACKAGE_LIBFTDI is not set
+# BR2_PACKAGE_LIBHID is not set
+# BR2_PACKAGE_LIBIQRF is not set
+# BR2_PACKAGE_LIBNFC is not set
+# BR2_PACKAGE_LIBNFC_LLCP is not set
+# BR2_PACKAGE_LIBSERIAL is not set
+# BR2_PACKAGE_LIBUSB is not set
+# BR2_PACKAGE_LIBV4L is not set
+# BR2_PACKAGE_LIBXKBCOMMON is not set
+# BR2_PACKAGE_MTDEV is not set
+# BR2_PACKAGE_NEARDAL is not set
+# BR2_PACKAGE_PCSC_LITE is not set
+# BR2_PACKAGE_URG is not set
+
+#
+# Javascript
+#
+# BR2_PACKAGE_EXPLORERCANVAS is not set
+# BR2_PACKAGE_FLOT is not set
+# BR2_PACKAGE_JQUERY is not set
+# BR2_PACKAGE_JQUERY_KEYBOARD is not set
+# BR2_PACKAGE_JQUERY_SPARKLINE is not set
+# BR2_PACKAGE_JQUERY_UI is not set
+# BR2_PACKAGE_JQUERY_VALIDATION is not set
+# BR2_PACKAGE_JSMIN is not set
+# BR2_PACKAGE_JSON_JAVASCRIPT is not set
+
+#
+# Multimedia
+#
+# BR2_PACKAGE_LIBDVDREAD is not set
+# BR2_PACKAGE_LIBDVDNAV is not set
+# BR2_PACKAGE_LIBEBML is not set
+# BR2_PACKAGE_LIBFSLCODEC is not set
+# BR2_PACKAGE_LIBFSLPARSER is not set
+
+#
+# libfslvpuwrap needs an imx-specific kernel to be built
+#
+# BR2_PACKAGE_LIBMATROSKA is not set
+# BR2_PACKAGE_LIBMMS is not set
+# BR2_PACKAGE_LIBMPEG2 is not set
+# BR2_PACKAGE_LIBOGG is not set
+# BR2_PACKAGE_LIBPLAYER is not set
+# BR2_PACKAGE_LIBTHEORA is not set
+# BR2_PACKAGE_LIVE555 is not set
+# BR2_PACKAGE_MEDIASTREAMER is not set
+
+#
+# Networking
+#
+# BR2_PACKAGE_CZMQ is not set
+# BR2_PACKAGE_CPPZMQ is not set
+# BR2_PACKAGE_FILEMQ is not set
+# BR2_PACKAGE_GLIB_NETWORKING is not set
+# BR2_PACKAGE_LIBCGI is not set
+# BR2_PACKAGE_LIBCGICC is not set
+# BR2_PACKAGE_LIBCURL is not set
+# BR2_PACKAGE_LIBDNET is not set
+# BR2_PACKAGE_LIBESMTP is not set
+# BR2_PACKAGE_LIBEXOSIP2 is not set
+# BR2_PACKAGE_LIBFCGI is not set
+# BR2_PACKAGE_LIBGSASL is not set
+# BR2_PACKAGE_LIBIDN is not set
+# BR2_PACKAGE_LIBISCSI is not set
+# BR2_PACKAGE_LIBOAUTH is not set
+# BR2_PACKAGE_LIBMICROHTTPD is not set
+# BR2_PACKAGE_NEON is not set
+# BR2_PACKAGE_LIBMNL is not set
+# BR2_PACKAGE_LIBMODBUS is not set
+# BR2_PACKAGE_LIBMBUS is not set
+# BR2_PACKAGE_LIBNETFILTER_ACCT is not set
+# BR2_PACKAGE_LIBNETFILTER_CONNTRACK is not set
+# BR2_PACKAGE_LIBNETFILTER_CTHELPER is not set
+# BR2_PACKAGE_LIBNETFILTER_CTTIMEOUT is not set
+# BR2_PACKAGE_LIBNETFILTER_LOG is not set
+# BR2_PACKAGE_LIBNETFILTER_QUEUE is not set
+# BR2_PACKAGE_LIBNFNETLINK is not set
+# BR2_PACKAGE_LIBNL is not set
+# BR2_PACKAGE_LIBOPING is not set
+BR2_PACKAGE_LIBPCAP=y
+# BR2_PACKAGE_LIBOSIP2 is not set
+# BR2_PACKAGE_LIBRSYNC is not set
+# BR2_PACKAGE_LIBSOUP is not set
+# BR2_PACKAGE_LIBTIRPC is not set
+# BR2_PACKAGE_LIBTORRENT is not set
+# BR2_PACKAGE_LIBUPNP is not set
+# BR2_PACKAGE_LIBVNCSERVER is not set
+# BR2_PACKAGE_LIBWEBSOCKETS is not set
+# BR2_PACKAGE_OPENPGM is not set
+# BR2_PACKAGE_ORTP is not set
+# BR2_PACKAGE_SLIRP is not set
+# BR2_PACKAGE_USBREDIR is not set
+# BR2_PACKAGE_WVSTREAMS is not set
+# BR2_PACKAGE_ZEROMQ is not set
+# BR2_PACKAGE_ZMQPP is not set
+# BR2_PACKAGE_ZYRE is not set
+
+#
+# Other
+#
+# BR2_PACKAGE_APR is not set
+# BR2_PACKAGE_APR_UTIL is not set
+# BR2_PACKAGE_LIBCOFI is not set
+# BR2_PACKAGE_ELFUTILS is not set
+# BR2_PACKAGE_FFTW is not set
+# BR2_PACKAGE_LIBARGTABLE2 is not set
+# BR2_PACKAGE_ARGP_STANDALONE is not set
+# BR2_PACKAGE_BOOST is not set
+# BR2_PACKAGE_GLIBMM is not set
+# BR2_PACKAGE_GMP is not set
+# BR2_PACKAGE_GSL is not set
+# BR2_PACKAGE_GTEST is not set
+# BR2_PACKAGE_LIBATOMIC_OPS is not set
+# BR2_PACKAGE_LIBCAP is not set
+# BR2_PACKAGE_LIBCAP_NG is not set
+# BR2_PACKAGE_LIBDAEMON is not set
+# BR2_PACKAGE_LIBELF is not set
+# BR2_PACKAGE_LIBEVENT is not set
+# BR2_PACKAGE_LIBEV is not set
+# BR2_PACKAGE_LIBFFI is not set
+# BR2_PACKAGE_LIBGLIB2 is not set
+# BR2_PACKAGE_LIBICAL is not set
+# BR2_PACKAGE_LIBNSPR is not set
+# BR2_PACKAGE_LIBPFM4 is not set
+# BR2_PACKAGE_LIBPTHSEM is not set
+# BR2_PACKAGE_LIBSIGC is not set
+# BR2_PACKAGE_LIBSIGSEGV is not set
+# BR2_PACKAGE_LIBTASN1 is not set
+# BR2_PACKAGE_LIBTPL is not set
+# BR2_PACKAGE_LIBURCU is not set
+# BR2_PACKAGE_LINUX_PAM is not set
+# BR2_PACKAGE_LOG4CXX is not set
+# BR2_PACKAGE_LTTNG_LIBUST is not set
+# BR2_PACKAGE_MPC is not set
+# BR2_PACKAGE_MPFR is not set
+# BR2_PACKAGE_MTDEV2TUIO is not set
+# BR2_PACKAGE_ORC is not set
+# BR2_PACKAGE_POCO is not set
+# BR2_PACKAGE_PROTOBUF is not set
+# BR2_PACKAGE_PROTOBUF_C is not set
+# BR2_PACKAGE_SCHIFRA is not set
+# BR2_PACKAGE_LIBLOG4C_LOCALTIME is not set
+# BR2_PACKAGE_TZDATA is not set
+
+#
+# Text and terminal handling
+#
+# BR2_PACKAGE_ENCHANT is not set
+# BR2_PACKAGE_LIBFRIBIDI is not set
+# BR2_PACKAGE_ICU is not set
+# BR2_PACKAGE_LINENOISE is not set
+BR2_PACKAGE_NCURSES=y
+BR2_PACKAGE_NCURSES_TARGET_PANEL=y
+BR2_PACKAGE_NCURSES_TARGET_FORM=y
+BR2_PACKAGE_NCURSES_TARGET_MENU=y
+# BR2_PACKAGE_NEWT is not set
+# BR2_PACKAGE_PCRE is not set
+# BR2_PACKAGE_POPT is not set
+BR2_PACKAGE_READLINE=y
+# BR2_PACKAGE_SLANG is not set
+
+#
+# JSON/XML
+#
+# BR2_PACKAGE_CJSON is not set
+# BR2_PACKAGE_EXPAT is not set
+# BR2_PACKAGE_EZXML is not set
+# BR2_PACKAGE_JANSSON is not set
+# BR2_PACKAGE_JSON_C is not set
+# BR2_PACKAGE_JSON_GLIB is not set
+# BR2_PACKAGE_LIBJSON is not set
+# BR2_PACKAGE_LIBROXML is not set
+# BR2_PACKAGE_LIBXML2 is not set
+# BR2_PACKAGE_LIBXMLPP is not set
+# BR2_PACKAGE_LIBXSLT is not set
+# BR2_PACKAGE_LIBYAML is not set
+# BR2_PACKAGE_MXML is not set
+# BR2_PACKAGE_RAPIDJSON is not set
+# BR2_PACKAGE_XERCES is not set
+# BR2_PACKAGE_YAJL is not set
+
+#
+# Miscellaneous
+#
+# BR2_PACKAGE_COLLECTD is not set
+# BR2_PACKAGE_EMPTY is not set
+# BR2_PACKAGE_GOOGLEFONTDIRECTORY is not set
+# BR2_PACKAGE_MCRYPT is not set
+# BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO is not set
+# BR2_PACKAGE_SHARED_MIME_INFO is not set
+# BR2_PACKAGE_SNOWBALL_INIT is not set
+# BR2_PACKAGE_SOUND_THEME_BOREALIS is not set
+# BR2_PACKAGE_SOUND_THEME_FREEDESKTOP is not set
+
+#
+# Networking applications
+#
+# BR2_PACKAGE_AIRCRACK_NG is not set
+# BR2_PACKAGE_ARGUS is not set
+# BR2_PACKAGE_ARPTABLES is not set
+# BR2_PACKAGE_AVAHI is not set
+# BR2_PACKAGE_AXEL is not set
+# BR2_PACKAGE_BCUSDK is not set
+# BR2_PACKAGE_BLUEZ_UTILS is not set
+# BR2_PACKAGE_BOA is not set
+# BR2_PACKAGE_BIND is not set
+# BR2_PACKAGE_BMON is not set
+# BR2_PACKAGE_BRIDGE_UTILS is not set
+# BR2_PACKAGE_CAN_UTILS is not set
+# BR2_PACKAGE_CHRONY is not set
+# BR2_PACKAGE_CONNMAN is not set
+# BR2_PACKAGE_CRDA is not set
+# BR2_PACKAGE_CTORRENT is not set
+# BR2_PACKAGE_CONNTRACK_TOOLS is not set
+# BR2_PACKAGE_CUPS is not set
+# BR2_PACKAGE_DHCPDUMP is not set
+# BR2_PACKAGE_DNSMASQ is not set
+# BR2_PACKAGE_DROPBEAR is not set
+# BR2_PACKAGE_EBTABLES is not set
+# BR2_PACKAGE_ETHTOOL is not set
+# BR2_PACKAGE_GESFTPSERVER is not set
+# BR2_PACKAGE_HEIRLOOM_MAILX is not set
+# BR2_PACKAGE_HIAWATHA is not set
+# BR2_PACKAGE_HOSTAPD is not set
+# BR2_PACKAGE_HTTPING is not set
+# BR2_PACKAGE_IFTOP is not set
+# BR2_PACKAGE_INADYN is not set
+BR2_PACKAGE_IPERF=y
+# BR2_PACKAGE_IPROUTE2 is not set
+# BR2_PACKAGE_IPSEC_TOOLS is not set
+# BR2_PACKAGE_IPSET is not set
+# BR2_PACKAGE_IPTABLES is not set
+# BR2_PACKAGE_IW is not set
+# BR2_PACKAGE_KISMET is not set
+# BR2_PACKAGE_LIGHTTPD is not set
+# BR2_PACKAGE_LINKNX is not set
+# BR2_PACKAGE_LINKS is not set
+# BR2_PACKAGE_LINPHONE is not set
+# BR2_PACKAGE_LRZSZ is not set
+# BR2_PACKAGE_MACCHANGER is not set
+# BR2_PACKAGE_MII_DIAG is not set
+# BR2_PACKAGE_MONGOOSE is not set
+# BR2_PACKAGE_MONGREL2 is not set
+# BR2_PACKAGE_MROUTED is not set
+# BR2_PACKAGE_MSMTP is not set
+# BR2_PACKAGE_MUTT is not set
+# BR2_PACKAGE_NBD is not set
+# BR2_PACKAGE_NCFTP is not set
+# BR2_PACKAGE_NDISC6 is not set
+# BR2_PACKAGE_NETATALK is not set
+# BR2_PACKAGE_NETPLUG is not set
+# BR2_PACKAGE_NETSNMP is not set
+# BR2_PACKAGE_NETSTAT_NAT is not set
+# BR2_PACKAGE_NFACCT is not set
+# BR2_PACKAGE_NMAP is not set
+# BR2_PACKAGE_NOIP is not set
+# BR2_PACKAGE_NGIRCD is not set
+# BR2_PACKAGE_NGREP is not set
+# BR2_PACKAGE_NTP is not set
+# BR2_PACKAGE_NUTTCP is not set
+# BR2_PACKAGE_OLSR is not set
+# BR2_PACKAGE_OPENNTPD is not set
+# BR2_PACKAGE_OPENOBEX is not set
+BR2_PACKAGE_OPENSSH=y
+# BR2_PACKAGE_OPENSWAN is not set
+# BR2_PACKAGE_OPENVPN is not set
+# BR2_PACKAGE_PORTMAP is not set
+# BR2_PACKAGE_PPPD is not set
+# BR2_PACKAGE_PPTP_LINUX is not set
+BR2_PACKAGE_PROFTPD=y
+# BR2_PACKAGE_PROFTPD_MOD_REWRITE is not set
+# BR2_PACKAGE_PROXYCHAINS_NG is not set
+# BR2_PACKAGE_QUAGGA is not set
+# BR2_PACKAGE_RADVD is not set
+# BR2_PACKAGE_RPCBIND is not set
+# BR2_PACKAGE_RSH_REDONE is not set
+# BR2_PACKAGE_RSYNC is not set
+# BR2_PACKAGE_RTORRENT is not set
+# BR2_PACKAGE_SAMBA is not set
+# BR2_PACKAGE_SCONESERVER is not set
+BR2_PACKAGE_SER2NET=y
+# BR2_PACKAGE_SOCAT is not set
+# BR2_PACKAGE_SOCKETCAND is not set
+# BR2_PACKAGE_SPAWN_FCGI is not set
+# BR2_PACKAGE_SPICE_PROTOCOL is not set
+# BR2_PACKAGE_SQUID is not set
+# BR2_PACKAGE_STUNNEL is not set
+BR2_PACKAGE_TCPDUMP=y
+# BR2_PACKAGE_TCPDUMP_SMB is not set
+# BR2_PACKAGE_TCPREPLAY is not set
+# BR2_PACKAGE_THTTPD is not set
+# BR2_PACKAGE_TINYHTTPD is not set
+# BR2_PACKAGE_TN5250 is not set
+# BR2_PACKAGE_TRANSMISSION is not set
+# BR2_PACKAGE_TVHEADEND is not set
+# BR2_PACKAGE_UDPCAST is not set
+# BR2_PACKAGE_ULOGD is not set
+# BR2_PACKAGE_USHARE is not set
+# BR2_PACKAGE_USSP_PUSH is not set
+# BR2_PACKAGE_VDE2 is not set
+# BR2_PACKAGE_VPNC is not set
+# BR2_PACKAGE_VSFTPD is not set
+# BR2_PACKAGE_VTUN is not set
+# BR2_PACKAGE_WIRELESS_REGDB is not set
+# BR2_PACKAGE_WIRELESS_TOOLS is not set
+# BR2_PACKAGE_WIRESHARK is not set
+# BR2_PACKAGE_WPA_SUPPLICANT is not set
+# BR2_PACKAGE_WVDIAL is not set
+# BR2_PACKAGE_XINETD is not set
+# BR2_PACKAGE_XL2TP is not set
+
+#
+# Package managers
+#
+# BR2_PACKAGE_IPKG is not set
+# BR2_PACKAGE_OPKG is not set
+
+#
+# Real-Time
+#
+# BR2_PACKAGE_XENOMAI is not set
+
+#
+# Shell and utilities
+#
+# BR2_PACKAGE_AT is not set
+# BR2_PACKAGE_DIALOG is not set
+# BR2_PACKAGE_DTACH is not set
+# BR2_PACKAGE_FILE is not set
+# BR2_PACKAGE_GNUPG is not set
+# BR2_PACKAGE_INOTIFY_TOOLS is not set
+# BR2_PACKAGE_LOCKFILE_PROGS is not set
+# BR2_PACKAGE_LOGROTATE is not set
+# BR2_PACKAGE_LOGSURFER is not set
+# BR2_PACKAGE_SCREEN is not set
+# BR2_PACKAGE_SUDO is not set
+# BR2_PACKAGE_XMLSTARLET is not set
+
+#
+# System tools
+#
+# BR2_PACKAGE_ACL is not set
+# BR2_PACKAGE_ATTR is not set
+# BR2_PACKAGE_BWM_NG is not set
+# BR2_PACKAGE_CPULOAD is not set
+# BR2_PACKAGE_HTOP is not set
+# BR2_PACKAGE_KEYUTILS is not set
+# BR2_PACKAGE_KMOD is not set
+# BR2_PACKAGE_MONIT is not set
+# BR2_PACKAGE_NCDU is not set
+# BR2_PACKAGE_POLKIT is not set
+# BR2_PACKAGE_QUOTA is not set
+
+#
+# supervisor needs the python interpreter
+#
+
+#
+# systemd not available (depends on /dev management with udev and ipv6 support, and thread support in toolchain)
+#
+# BR2_PACKAGE_UTIL_LINUX is not set
+
+#
+# Text editors and viewers
+#
+# BR2_PACKAGE_ED is not set
+# BR2_PACKAGE_NANO is not set
+# BR2_PACKAGE_UEMACS is not set
+
+#
+# Host utilities
+#
+# BR2_PACKAGE_HOST_DFU_UTIL is not set
+# BR2_PACKAGE_HOST_DOSFSTOOLS is not set
+# BR2_PACKAGE_HOST_E2FSPROGS is not set
+# BR2_PACKAGE_HOST_GENIMAGE is not set
+# BR2_PACKAGE_HOST_GENPART is not set
+# BR2_PACKAGE_HOST_LPC3250LOADER is not set
+# BR2_PACKAGE_HOST_MTOOLS is not set
+# BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS is not set
+# BR2_PACKAGE_HOST_OPENOCD is not set
+# BR2_PACKAGE_HOST_SAM_BA is not set
+# BR2_PACKAGE_HOST_UBOOT_TOOLS is not set
+
+#
+# Filesystem images
+#
+# BR2_TARGET_ROOTFS_CLOOP is not set
+# BR2_TARGET_ROOTFS_CPIO is not set
+# BR2_TARGET_ROOTFS_CRAMFS is not set
+# BR2_TARGET_ROOTFS_EXT2 is not set
+
+#
+# initramfs requires a Linux kernel to be built
+#
+BR2_TARGET_ROOTFS_JFFS2=y
+# BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056 is not set
+# BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
+# BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_512_16K is not set
+# BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K is not set
+# BR2_TARGET_ROOTFS_JFFS2_FLASH_128 is not set
+# BR2_TARGET_ROOTFS_JFFS2_FLASH_64 is not set
+BR2_TARGET_ROOTFS_JFFS2_CUSTOM=y
+BR2_TARGET_ROOTFS_JFFS2_CUSTOM_PAGESIZE=0x200
+BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x8000
+BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x200
+BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x8000
+BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+BR2_TARGET_ROOTFS_JFFS2_PAD=y
+BR2_TARGET_ROOTFS_JFFS2_PADSIZE=0x2000000
+BR2_TARGET_ROOTFS_JFFS2_LE=y
+# BR2_TARGET_ROOTFS_JFFS2_BE is not set
+# BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
+# BR2_TARGET_ROOTFS_ROMFS is not set
+# BR2_TARGET_ROOTFS_SQUASHFS is not set
+BR2_TARGET_ROOTFS_TAR=y
+BR2_TARGET_ROOTFS_TAR_NONE=y
+# BR2_TARGET_ROOTFS_TAR_GZIP is not set
+# BR2_TARGET_ROOTFS_TAR_BZIP2 is not set
+# BR2_TARGET_ROOTFS_TAR_LZMA is not set
+# BR2_TARGET_ROOTFS_TAR_LZO is not set
+# BR2_TARGET_ROOTFS_TAR_XZ is not set
+BR2_TARGET_ROOTFS_TAR_OPTIONS=""
+# BR2_TARGET_ROOTFS_UBIFS is not set
+
+#
+# Bootloaders
+#
+# BR2_TARGET_AT91BOOTSTRAP is not set
+# BR2_TARGET_AT91BOOTSTRAP3 is not set
+# BR2_TARGET_AT91DATAFLASHBOOT is not set
+# BR2_TARGET_BAREBOX is not set
+# BR2_TARGET_LPC32XXCDL is not set
+# BR2_TARGET_MXS_BOOTLETS is not set
+# BR2_TARGET_UBOOT is not set
+
+#
+# Kernel
+#
+# BR2_LINUX_KERNEL is not set
+
+#
+# Legacy config options
+#
+# BR2_sa110 is not set
+# BR2_sa1100 is not set
+# BR2_PACKAGE_GDISK is not set
+# BR2_PACKAGE_GDISK_GDISK is not set
+# BR2_PACKAGE_GDISK_SGDISK is not set
+# BR2_PACKAGE_GDB_HOST is not set
+# BR2_PACKAGE_DIRECTB_DITHER_RGB16 is not set
+# BR2_PACKAGE_DIRECTB_TESTS is not set
+# BR2_PACKAGE_CUSTOMIZE is not set
+# BR2_PACKAGE_XSERVER_xorg is not set
+# BR2_PACKAGE_XSERVER_tinyx is not set
+# BR2_PACKAGE_GETTEXT_STATIC is not set
+# BR2_PACKAGE_LIBINTL is not set
+# BR2_PACKAGE_INPUT_TOOLS_EVTEST is not set
+# BR2_BFIN_FDPIC is not set
+# BR2_BFIN_FLAT is not set
