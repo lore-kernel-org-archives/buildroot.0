@@ -1,35 +1,36 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Wed, 24 Jul 2013 11:05:01 +0100
-Subject: [Buildroot] Failed building DirectFB
-In-Reply-To: <20130724095703.GA391@zuhnb712.ap.bm.net>
-References: <20130724091011.GB11352@zuhnb712.ap.bm.net>
- <CAAXf6LXxkj=68rHGDt6yYnB5h4r7hT5JkV9fXhau3kAaDemQSg@mail.gmail.com>
- <20130724095703.GA391@zuhnb712.ap.bm.net>
-Message-ID: <51EFA6CD.9090005@imgtec.com>
+From: Anna Fischer (novero/Bochum) <Anna.Fischer@novero.com>
+Date: Wed, 24 Jul 2013 12:02:23 +0200
+Subject: [Buildroot] Problems building for ucLinux/ARM with elf2flt enabled
+Message-ID: <CBB26B88EF85F6489575628B28ECBE6D432860618A@ablexc01.internal.novero.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+I'm trying to build a ucLinux system for an ARM platform (no-MMU), but when trying to enabled elf2flt in the menuconfig I get the following error:
 
->
-> Understood. Now I enabled imlib2.  But, then I got other errors:
->
-> mkdir .libs/libidirectfbimageprovider_mpeg2.a.tmp
-> (cd .libs/libidirectfbimageprovider_mpeg2.a.tmp && /home/woody/src/buildroot-2013.05/output/host/usr/bin/arm-none-linux-gnueabi-ar x ../../.libs/libidirectfbimageprovider_mpeg2.a)
-> /home/woody/src/buildroot-2013.05/output/host/usr/bin/arm-none-linux-gnueabi-ld -o libidirectfbimageprovider_mpeg2.o -r .libs/libidirectfbimageprovider_mpeg2.a.tmp/*.o
-> rm -f .libs/libidirectfbimageprovider_mpeg2.a.tmp/*.o && rmdir .libs/libidirectfbimageprovider_mpeg2.a.tmp
->    CCLD   libidirectfbimageprovider_imlib2.la
-> /home/woody/src/buildroot-2013.05/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.3/../../../../arm-none-linux-gnueabi/bin/ld: warning: library search path "/usr/lib" is unsafe for cross-compilation
-> /usr/lib/libImlib2.so: could not read symbols: File in wrong format
-> collect2: ld returned 1 exit status
-> make[5]: *** [libidirectfbimageprovider_imlib2.la] Error 1
+/home/buildroot-2013.05/output/build/host-binutils-2.21.1/bfd/libbfd.a(compress.o): In function `bfd_compress_section_contents':
+compress.c:(.text+0x25): undefined reference to `compressBound'
+/home//buildroot-2013.05/output/build/host-binutils-2.21.1/bfd/libbfd.a(compress.o): In function `bfd_get_full_section_contents':
+compress.c:(.text+0x226): undefined reference to `inflateEnd'
+compress.c:(.text+0x37a): undefined reference to `inflateInit_'
+compress.c:(.text+0x3b0): undefined reference to `inflate'
+compress.c:(.text+0x3bf): undefined reference to `inflateReset'
+collect2: ld returned 1 exit status
+make[1]: *** [elf2flt] Error 1
+make[1]: Leaving directory `/home/buildroot-2013.05/output/toolchain/elf2flt'
+make: *** [/home/buildroot-2013.05/output/toolchain/elf2flt/elf2flt] Error 2
 
-This is because it picks the imlib2-config on the host instead of the 
-one in the staging directory. This has been fixed here
+It seems like it is missing libz? But I don't quite understand why, because I definitely have it installed on the system. Anyone ever seen this before?
 
-http://git.buildroot.net/buildroot/commit/package/directfb/directfb.mk?id=88378877273829c387f48a6c96959712b892856f
+I'm using the buildroot internal toolchain, uClibc-0.9.33.2, gcc-4.7.3, linux-3.8, and this is buildroot-2013.05. I have attached my .config as well. My build host is Ubuntu 64-bit.
 
-but it's not in the release you are using.
+Thanks for any pointers.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot.config
+Type: application/octet-stream
+Size: 32645 bytes
+Desc: buildroot.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130724/4ec04577/attachment-0001.obj>
