@@ -1,37 +1,46 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 24 Jul 2013 09:23:03 +0200
-Subject: [Buildroot] [PATCH 6 of 6 v2] linux: mention 3.x.y kernels in
- 'custom version' help
-In-Reply-To: <patchbomb.1374650577@BEANTN0L019720>
-References: <patchbomb.1374650577@BEANTN0L019720>
-Message-ID: <552e9f29dfd4c8d33b36.1374650583@BEANTN0L019720>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Wed, 24 Jul 2013 15:35:09 +0800
+Subject: [Buildroot] command line editing
+In-Reply-To: <CAJJ6jxtrgkacVO+uwkZgM+am6G1SFLNNiuVcsBm2BCnswLzE6A@mail.gmail.com>
+References: <20130724035428.GA24420@zuhnb712.ap.bm.net>
+ <CAJJ6jxtrgkacVO+uwkZgM+am6G1SFLNNiuVcsBm2BCnswLzE6A@mail.gmail.com>
+Message-ID: <20130724073509.GC6323@zuhnb712.ap.bm.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(also fix grammatical error versions -> version)
+On Tue, Jul 23, 2013 at 09:21:27PM -0700, Steve Calfee wrote:
+> Research Busybox. It is highly configurable. However it is also a very
+> small replacement for your favorite shell (whatever that is). However,
+> buildroot will allow you to select bash (and others) as your shell.
+> 
+> Steve
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Thanks Steve.  But I searched throught the busybox configuration menu,
+did not find how to switch shell. Can you please tell me?
 
----
-(v2): new patch in series, although only loosely related.
+> 
+> 
+> On Tue, Jul 23, 2013 at 8:54 PM, Woody Wu <narkewoody@gmail.com> wrote:
+> 
+> > Hi,
+> >
+> > Running with buildroot generated root filesyste, I found the shell don't
+> > have completed line editing capability. Backspace and DEL keys work, but
+> > Ctrl-A, Ctrl-E do not.  Maybe this is not the right list to ask the
+> > question, but don't know where should I go.
+> >
+> > Thanks in advance.
+> >
+> > --
+> > I can't go back to yesterday - because I was a different person then
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
 
- linux/Config.in |  4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/linux/Config.in b/linux/Config.in
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -37,8 +37,8 @@ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
- 	help
--	  This option allows to use a specific 2.6.x or 2.6.x.y
--	  official versions, as available on kernel.org
-+	  This option allows to use a specific official version from
-+	  kernel.org, like 2.6.x, 2.6.x.y, 3.x.y, ...
- 
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	bool "Custom tarball"
+-- 
+I can't go back to yesterday - because I was a different person then
