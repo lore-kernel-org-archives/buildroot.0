@@ -1,28 +1,21 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 24 Jul 2013 06:34:44 +0300
-Subject: [Buildroot] netcat package?
-In-Reply-To: <20130724032345.GB13697@zuhnb712.ap.bm.net>
-References: <20130724032345.GB13697@zuhnb712.ap.bm.net>
-Message-ID: <20130724033444.GI5509@tarshish>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Wed, 24 Jul 2013 11:54:28 +0800
+Subject: [Buildroot] command line editing
+Message-ID: <20130724035428.GA24420@zuhnb712.ap.bm.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Woody Wu,
+Hi,
 
-On Wed, Jul 24, 2013 at 11:23:45AM +0800, Woody Wu wrote:
-> Is there a netcat package in buildroot?  I did not find it on the menu,
-> but just think buildroot should already have this famous tool.
+Running with buildroot generated root filesyste, I found the shell don't
+have completed line editing capability. Backspace and DEL keys work, but
+Ctrl-A, Ctrl-E do not.  Maybe this is not the right list to ask the
+question, but don't know where should I go.
 
-You should find the netcat package under "Networking applications". Make sure 
-to select "Show packages that are also provided by busybox", otherwise the 
-netcat package is not shown in the menu.
-
-baruch
+Thanks in advance.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+I can't go back to yesterday - because I was a different person then
