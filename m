@@ -1,86 +1,60 @@
-From: Anna Fischer (novero/Bochum) <Anna.Fischer@novero.com>
-Date: Wed, 24 Jul 2013 14:05:40 +0200
-Subject: [Buildroot] Problems building for ucLinux/ARM with elf2flt
- enabled
-In-Reply-To: <CAAXf6LVTZW-vPP8riyEJNZT+rRdnJkzbu2LQiSr+RS-SAAEi6g@mail.gmail.com>
-References: <CBB26B88EF85F6489575628B28ECBE6D432860618A@ablexc01.internal.novero.com>
- <CAAXf6LUU_SkD-KSEMgX3t64F=oK=qzuzuQJG5NJ5u2PzE8nZsA@mail.gmail.com>
- <CBB26B88EF85F6489575628B28ECBE6D4328606253@ablexc01.internal.novero.com>
- <CAAXf6LVTZW-vPP8riyEJNZT+rRdnJkzbu2LQiSr+RS-SAAEi6g@mail.gmail.com>
-Message-ID: <CBB26B88EF85F6489575628B28ECBE6D4328606283@ablexc01.internal.novero.com>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Wed, 24 Jul 2013 15:30:05 +0300
+Subject: [Buildroot] netcat package?
+In-Reply-To: <20130724071634.GK5509@tarshish>
+References: <20130724032345.GB13697@zuhnb712.ap.bm.net>
+ <20130724033444.GI5509@tarshish>
+ <20130724070700.GA6323@zuhnb712.ap.bm.net> <20130724071634.GK5509@tarshish>
+Message-ID: <CALR4fE+-jipQ6pQw3XBfinL6cfqeZ1CNsDK_DraPozQUuyoJoA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Subject: Re: [Buildroot] Problems building for ucLinux/ARM with elf2flt
-> enabled
-> 
-> On Wed, Jul 24, 2013 at 1:39 PM, Anna Fischer (novero/Bochum)
-> <Anna.Fischer@novero.com> wrote:
-> >> Subject: Re: [Buildroot] Problems building for ucLinux/ARM with
-> >> elf2flt enabled
-> >>
-> >> Hi Anna,
-> >>
-> >> On Wed, Jul 24, 2013 at 12:02 PM, Anna Fischer (novero/Bochum)
-> >> <Anna.Fischer@novero.com> wrote:
-> >> > I'm trying to build a ucLinux system for an ARM platform (no-MMU),
-> >> but when trying to enabled elf2flt in the menuconfig I get the
-> >> following error:
-> >> >
-> >> > /home/buildroot-2013.05/output/build/host-binutils-
-> >> 2.21.1/bfd/libbfd.a(compress.o): In function
-> >> `bfd_compress_section_contents':
-> >> > compress.c:(.text+0x25): undefined reference to `compressBound'
-> >> > /home//buildroot-2013.05/output/build/host-binutils-
-> >> 2.21.1/bfd/libbfd.a(compress.o): In function
-> >> `bfd_get_full_section_contents':
-> >> > compress.c:(.text+0x226): undefined reference to `inflateEnd'
-> >> > compress.c:(.text+0x37a): undefined reference to `inflateInit_'
-> >> > compress.c:(.text+0x3b0): undefined reference to `inflate'
-> >> > compress.c:(.text+0x3bf): undefined reference to `inflateReset'
-> >> > collect2: ld returned 1 exit status
-> >> > make[1]: *** [elf2flt] Error 1
-> >> > make[1]: Leaving directory `/home/buildroot-
-> >> 2013.05/output/toolchain/elf2flt'
-> >> > make: ***
-> >> > [/home/buildroot-2013.05/output/toolchain/elf2flt/elf2flt]
-> >> > Error 2
-> >> >
-> >> > It seems like it is missing libz? But I don't quite understand
-> why,
-> >> because I definitely have it installed on the system. Anyone ever
-> >> seen this before?
-> >> >
-> >> > I'm using the buildroot internal toolchain, uClibc-0.9.33.2, gcc-
-> >> 4.7.3, linux-3.8, and this is buildroot-2013.05. I have attached my
-> >> .config as well. My build host is Ubuntu 64-bit.
-> >>
-> >> Do you have the -dev package of zlib? Also for 64-bit?
-> >>
-> >> On a CentOS system, I have seen a problem with the static version of
-> >> zlib missing, when building a static toolchain with crosstool-ng. On
-> >> CentOS, the static version (libz.a) is distributed as a separate
-> >> package. I don't know if this is the case on your system.
+Use the busybox-menu command to configure busybox and use it's "nc" applet.
+Use the extended commands and you are god to go.
+
+(otherwise you don't have "nc -l" which I usually miss)
+
+
+On Wed, Jul 24, 2013 at 10:16 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+
+> Hi Woody Wu,
+>
+> On Wed, Jul 24, 2013 at 03:07:01PM +0800, Woody Wu wrote:
+> > On Wed, Jul 24, 2013 at 06:34:44AM +0300, Baruch Siach wrote:
+> > > On Wed, Jul 24, 2013 at 11:23:45AM +0800, Woody Wu wrote:
+> > > > Is there a netcat package in buildroot?  I did not find it on the
+> menu,
+> > > > but just think buildroot should already have this famous tool.
+> > >
+> > > You should find the netcat package under "Networking applications".
+> Make sure
+> > > to select "Show packages that are also provided by busybox", otherwise
+> the
+> > > netcat package is not shown in the menu.
 > >
-> > libz.a and libz.so are installed in output/host/usr/lib in the
-> buildroot system, so apart from the fact that I have it installed as
-> part of my Ubuntu distribution (yes, I have the -dev package
-> installed), it is present in the buildroot output directory. The
-> elf2flt Makefile also references this folder in LDFLAGS. It is not
-> clear to me though if the problem is in elf2flt or in the binutils
-> itself under build/host-binutils-2.21.1/bfd (as referenced by the error
-> message I printed out above)?
-> 
-> Where exactly can you find libz in output/ ?
-
-As I said in output/host/usr/lib/libz.*
-
-
-> Since the error is in a host package, there should be such files in
-> output/host/ Any libz files in output/staging are irrelevant, as these
-> are for the target, not for the host.
-
-The libraries are there, but I still get the error.
+> > Thanks baruchy.  When enabled 'Show packages provided by busybox' and
+> > selected the 'nc', what 'nc' program will I finally get? I mean, the
+> > busybox one or standalone one?
+>
+> That depends on whether you have netcat enabled in your busybox build (just
+> run 'busybox' to see what applets you have enabled), and whether your
+> /usr/bin/nc points to busybox, or is a real executable.
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130724/929f6c02/attachment.html>
