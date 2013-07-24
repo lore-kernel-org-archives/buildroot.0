@@ -1,32 +1,44 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 24 Jul 2013 12:34:32 +0200
-Subject: [Buildroot] [PATCH 2 of 2] dhcp: install to staging
-In-Reply-To: <patchbomb.1374662070@BEANTN0L019720>
-References: <patchbomb.1374662070@BEANTN0L019720>
-Message-ID: <6519645a6ae79b943f1d.1374662072@BEANTN0L019720>
+Date: Wed, 24 Jul 2013 12:40:49 +0200
+Subject: [Buildroot] Problems building for ucLinux/ARM with elf2flt
+	enabled
+In-Reply-To: <CBB26B88EF85F6489575628B28ECBE6D432860618A@ablexc01.internal.novero.com>
+References: <CBB26B88EF85F6489575628B28ECBE6D432860618A@ablexc01.internal.novero.com>
+Message-ID: <CAAXf6LUU_SkD-KSEMgX3t64F=oK=qzuzuQJG5NJ5u2PzE8nZsA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Install dhcp to staging so other applications can use its include files
-and libraries.
+Hi Anna,
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Wed, Jul 24, 2013 at 12:02 PM, Anna Fischer (novero/Bochum)
+<Anna.Fischer@novero.com> wrote:
+> I'm trying to build a ucLinux system for an ARM platform (no-MMU), but when trying to enabled elf2flt in the menuconfig I get the following error:
+>
+> /home/buildroot-2013.05/output/build/host-binutils-2.21.1/bfd/libbfd.a(compress.o): In function `bfd_compress_section_contents':
+> compress.c:(.text+0x25): undefined reference to `compressBound'
+> /home//buildroot-2013.05/output/build/host-binutils-2.21.1/bfd/libbfd.a(compress.o): In function `bfd_get_full_section_contents':
+> compress.c:(.text+0x226): undefined reference to `inflateEnd'
+> compress.c:(.text+0x37a): undefined reference to `inflateInit_'
+> compress.c:(.text+0x3b0): undefined reference to `inflate'
+> compress.c:(.text+0x3bf): undefined reference to `inflateReset'
+> collect2: ld returned 1 exit status
+> make[1]: *** [elf2flt] Error 1
+> make[1]: Leaving directory `/home/buildroot-2013.05/output/toolchain/elf2flt'
+> make: *** [/home/buildroot-2013.05/output/toolchain/elf2flt/elf2flt] Error 2
+>
+> It seems like it is missing libz? But I don't quite understand why, because I definitely have it installed on the system. Anyone ever seen this before?
+>
+> I'm using the buildroot internal toolchain, uClibc-0.9.33.2, gcc-4.7.3, linux-3.8, and this is buildroot-2013.05. I have attached my .config as well. My build host is Ubuntu 64-bit.
 
----
- package/dhcp/dhcp.mk |  1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Do you have the -dev package of zlib? Also for 64-bit?
 
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -6,6 +6,7 @@
- 
- DHCP_VERSION = 4.1-ESV-R8
- DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
-+DHCP_INSTALL_STAGING = YES
- DHCP_LICENSE = ISC
- DHCP_LICENSE_FILES = LICENSE
- DHCP_CONF_ENV = ac_cv_file__dev_random=yes
+On a CentOS system, I have seen a problem with the static version of
+zlib missing, when building a static toolchain with crosstool-ng. On
+CentOS, the static version (libz.a) is distributed as a separate
+package. I don't know if this is the case on your system.
+
+Best regards,
+Thomas
