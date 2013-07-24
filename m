@@ -1,44 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 24 Jul 2013 12:40:49 +0200
-Subject: [Buildroot] Problems building for ucLinux/ARM with elf2flt
-	enabled
-In-Reply-To: <CBB26B88EF85F6489575628B28ECBE6D432860618A@ablexc01.internal.novero.com>
-References: <CBB26B88EF85F6489575628B28ECBE6D432860618A@ablexc01.internal.novero.com>
-Message-ID: <CAAXf6LUU_SkD-KSEMgX3t64F=oK=qzuzuQJG5NJ5u2PzE8nZsA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 24 Jul 2013 07:53:53 -0300
+Subject: [Buildroot] command line editing
+In-Reply-To: <20130724073509.GC6323@zuhnb712.ap.bm.net>
+References: <20130724035428.GA24420@zuhnb712.ap.bm.net>
+ <CAJJ6jxtrgkacVO+uwkZgM+am6G1SFLNNiuVcsBm2BCnswLzE6A@mail.gmail.com>
+ <20130724073509.GC6323@zuhnb712.ap.bm.net>
+Message-ID: <51EFB241.1000001@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Anna,
+On 07/24/2013 04:35 AM, Woody Wu wrote:
 
-On Wed, Jul 24, 2013 at 12:02 PM, Anna Fischer (novero/Bochum)
-<Anna.Fischer@novero.com> wrote:
-> I'm trying to build a ucLinux system for an ARM platform (no-MMU), but when trying to enabled elf2flt in the menuconfig I get the following error:
->
-> /home/buildroot-2013.05/output/build/host-binutils-2.21.1/bfd/libbfd.a(compress.o): In function `bfd_compress_section_contents':
-> compress.c:(.text+0x25): undefined reference to `compressBound'
-> /home//buildroot-2013.05/output/build/host-binutils-2.21.1/bfd/libbfd.a(compress.o): In function `bfd_get_full_section_contents':
-> compress.c:(.text+0x226): undefined reference to `inflateEnd'
-> compress.c:(.text+0x37a): undefined reference to `inflateInit_'
-> compress.c:(.text+0x3b0): undefined reference to `inflate'
-> compress.c:(.text+0x3bf): undefined reference to `inflateReset'
-> collect2: ld returned 1 exit status
-> make[1]: *** [elf2flt] Error 1
-> make[1]: Leaving directory `/home/buildroot-2013.05/output/toolchain/elf2flt'
-> make: *** [/home/buildroot-2013.05/output/toolchain/elf2flt/elf2flt] Error 2
->
-> It seems like it is missing libz? But I don't quite understand why, because I definitely have it installed on the system. Anyone ever seen this before?
->
-> I'm using the buildroot internal toolchain, uClibc-0.9.33.2, gcc-4.7.3, linux-3.8, and this is buildroot-2013.05. I have attached my .config as well. My build host is Ubuntu 64-bit.
+> On Tue, Jul 23, 2013 at 09:21:27PM -0700, Steve Calfee wrote:
+>> Research Busybox. It is highly configurable. However it is also a very
+>> small replacement for your favorite shell (whatever that is). However,
+>> buildroot will allow you to select bash (and others) as your shell.
+>>
+>> Steve
+> 
+> Thanks Steve.  But I searched throught the busybox configuration menu,
+> did not find how to switch shell. Can you please tell me?
 
-Do you have the -dev package of zlib? Also for 64-bit?
-
-On a CentOS system, I have seen a problem with the static version of
-zlib missing, when building a static toolchain with crosstool-ng. On
-CentOS, the static version (libz.a) is distributed as a separate
-package. I don't know if this is the case on your system.
-
-Best regards,
-Thomas
+Like Baruch said for netcat, this also applies to shells since there are
+many in busybox... enable "Show packages that are also provided by
+busybox" and go into the "Shell and utilities" category, which,
+surprisingly, contains complete full-blown shells like bash :)
+Regards.
