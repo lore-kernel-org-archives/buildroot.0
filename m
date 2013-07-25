@@ -1,56 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Jul 2013 08:30:06 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-07-24
-Message-ID: <20130725063006.48E92620066@lolut.humanoidz.org>
+From: Anna Fischer (novero/Bochum) <Anna.Fischer@novero.com>
+Date: Thu, 25 Jul 2013 11:45:56 +0200
+Subject: [Buildroot] Problems building for ucLinux/ARM with elf2flt
+ enabled
+In-Reply-To: <CAAXf6LVTZW-vPP8riyEJNZT+rRdnJkzbu2LQiSr+RS-SAAEi6g@mail.gmail.com>
+References: <CBB26B88EF85F6489575628B28ECBE6D432860618A@ablexc01.internal.novero.com>
+ <CAAXf6LUU_SkD-KSEMgX3t64F=oK=qzuzuQJG5NJ5u2PzE8nZsA@mail.gmail.com>
+ <CBB26B88EF85F6489575628B28ECBE6D4328606253@ablexc01.internal.novero.com>
+ <CAAXf6LVTZW-vPP8riyEJNZT+rRdnJkzbu2LQiSr+RS-SAAEi6g@mail.gmail.com>
+Message-ID: <CBB26B88EF85F6489575628B28ECBE6D4328606695@ablexc01.internal.novero.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2013-07-24
-===============================
+> Subject: Re: [Buildroot] Problems building for ucLinux/ARM with elf2flt
+> enabled
+> 
+> On Wed, Jul 24, 2013 at 1:39 PM, Anna Fischer (novero/Bochum)
+> <Anna.Fischer@novero.com> wrote:
+> >> Subject: Re: [Buildroot] Problems building for ucLinux/ARM with
+> >> elf2flt enabled
+> >>
+> >> Hi Anna,
+> >>
+> >> On Wed, Jul 24, 2013 at 12:02 PM, Anna Fischer (novero/Bochum)
+> >> <Anna.Fischer@novero.com> wrote:
+> >> > I'm trying to build a ucLinux system for an ARM platform (no-MMU),
+> >> but when trying to enabled elf2flt in the menuconfig I get the
+> >> following error:
+> >> >
+> >> > /home/buildroot-2013.05/output/build/host-binutils-
+> >> 2.21.1/bfd/libbfd.a(compress.o): In function
+> >> `bfd_compress_section_contents':
+> >> > compress.c:(.text+0x25): undefined reference to `compressBound'
+> >> > /home//buildroot-2013.05/output/build/host-binutils-
+> >> 2.21.1/bfd/libbfd.a(compress.o): In function
+> >> `bfd_get_full_section_contents':
+> >> > compress.c:(.text+0x226): undefined reference to `inflateEnd'
+> >> > compress.c:(.text+0x37a): undefined reference to `inflateInit_'
+> >> > compress.c:(.text+0x3b0): undefined reference to `inflate'
+> >> > compress.c:(.text+0x3bf): undefined reference to `inflateReset'
+> >> > collect2: ld returned 1 exit status
+> >> > make[1]: *** [elf2flt] Error 1
+> >> > make[1]: Leaving directory `/home/buildroot-
+> >> 2013.05/output/toolchain/elf2flt'
+> >> > make: ***
+> >> > [/home/buildroot-2013.05/output/toolchain/elf2flt/elf2flt]
+> >> > Error 2
+> >> >
+> >> > It seems like it is missing libz? But I don't quite understand
+> why,
+> >> because I definitely have it installed on the system. Anyone ever
+> >> seen this before?
+> >> >
+> >> > I'm using the buildroot internal toolchain, uClibc-0.9.33.2, gcc-
+> >> 4.7.3, linux-3.8, and this is buildroot-2013.05. I have attached my
+> >> .config as well. My build host is Ubuntu 64-bit.
+> >>
+> >> Do you have the -dev package of zlib? Also for 64-bit?
+> >>
+> >> On a CentOS system, I have seen a problem with the static version of
+> >> zlib missing, when building a static toolchain with crosstool-ng. On
+> >> CentOS, the static version (libz.a) is distributed as a separate
+> >> package. I don't know if this is the case on your system.
+> >
+> > libz.a and libz.so are installed in output/host/usr/lib in the
+> buildroot system, so apart from the fact that I have it installed as
+> part of my Ubuntu distribution (yes, I have the -dev package
+> installed), it is present in the buildroot output directory. The
+> elf2flt Makefile also references this folder in LDFLAGS. It is not
+> clear to me though if the problem is in elf2flt or in the binutils
+> itself under build/host-binutils-2.21.1/bfd (as referenced by the error
+> message I printed out above)?
+> 
+> Where exactly can you find libz in output/ ?
+> Since the error is in a host package, there should be such files in
+> output/host/ Any libz files in output/staging are irrelevant, as these
+> are for the target, not for the host.
+> 
+> If there is no libz in output/host, there may be a missing dependency
+> to host-zlib in binutils. You could verify this by running 'make host-
+> zlib' manually first, and then retrying the binutils build.
 
-        success : 28 
-       failures : 14 
-       timeouts : 0  
-          TOTAL : 42 
+I have fixed the problem now by adding the -lz to the end of the gcc command in the elf2flt Makefile. 
+Now the whole system builds without errors.
 
-Classification of failures by reason
-====================================
+However, in the target folder I'm still getting ELF files compiled, not FLAT format binaries. Is there any way I can tell the build system to change the binary format to FLAT by using the elf2flt tool at the end of each build process for binaries (or by adding -elf2flt to the build command)? I was hoping that by enabling elf2flt support it would do that automatically for target binaries.
 
-                 dropwatch-1.4 | 2 
-               alsa-lib-1.0.26 | 1 
-               libglib2-2.36.3 | 1 
-           argp-standalone-1.3 | 1 
-                  prboom-2.5.0 | 1 
-                 rt-tests-0.83 | 1 
-              python-pyro-3.14 | 1 
-                 qt5base-5.0.2 | 1 
-                 zmqpp-31220ca | 1 
-                  zeromq-3.2.3 | 1 
-                  poco-1.4.6p1 | 1 
-               binutils-2.21.1 | 1 
-                    systemd-44 | 1 
-
-Detail of failures
-===================
-
-   powerpc |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/e162465f235b4b2c34e6aeb639a597feac360d19/
-       arm |            argp-standalone-1.3 | NOK | http://autobuild.buildroot.net/results/948992527c2aaef7a703a47844b6011b30643b96/
-    xtensa |                binutils-2.21.1 | NOK | http://autobuild.buildroot.net/results/fbd126618dfcc2e1c68c2b00e0421ae4f4328f0c/
-    mipsel |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/60ae1df6c69db9079e4dcd2b1e6e230e5f2d18ad/
-       arm |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/d42cc66830abe1e35cadff67c084b4caa9982dd2/
-microblaze |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/fd52db912ae77ceaee363fd500d548116b4cb6e5/
-      sh4a |                   poco-1.4.6p1 | NOK | http://autobuild.buildroot.net/results/ca47df2cd1d437b42cedf88f4776f3f09f3ff46d/
-      sh4a |                   prboom-2.5.0 | NOK | http://autobuild.buildroot.net/results/43798b3e2964ba61d41adbf4897b5d7fca0616a6/
-   powerpc |               python-pyro-3.14 | NOK | http://autobuild.buildroot.net/results/3fc1da76a0b48dd517696b6be64a31c4fab35c21/
-      sh4a |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/6e757818c613a76699f9a5d5ad3a43bcca0611aa/
-    mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/5b90c8d65fc5c46acb265f267b72597c56726fae/
-      i686 |                     systemd-44 | NOK | http://autobuild.buildroot.net/results/85dd3c68f360e5d0e763c7888c9539e0d7364ee3/
-     avr32 |                   zeromq-3.2.3 | NOK | http://autobuild.buildroot.net/results/40a1d538ed58d8915303ea22166bf51595fc5e35/
-       arm |                  zmqpp-31220ca | NOK | http://autobuild.buildroot.net/results/5fbb2c1d340d5e54ebdb9f1ce388b6e8d5fff3fc/
-
-
--- 
-http://autobuild.buildroot.net
+Any pointers would be really appreciated.
