@@ -1,74 +1,38 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 24 Jul 2013 23:58:24 +0200
-Subject: [Buildroot] custom extraction and libs11n
-In-Reply-To: <CAAXf6LVVEdBfiKgqJtP+3XPYGz3U9aOiyQXiGtiKkZv0XhQj3A@mail.gmail.com>
-References: <2DD0B9C711CDFC45A3A266C78966CE7F451B3DA8@G4W3291.americas.hpqcorp.net>
- <CAAXf6LVVEdBfiKgqJtP+3XPYGz3U9aOiyQXiGtiKkZv0XhQj3A@mail.gmail.com>
-Message-ID: <712cfcb6-d412-4bff-8501-f25e5b02d11f@email.android.com>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Thu, 25 Jul 2013 08:53:51 +0800
+Subject: [Buildroot] Failed building DirectFB
+In-Reply-To: <CAAXf6LX8o02foDT7XQsJGKL24ZX1+qo5sTrE48UR4oa88AkO-A@mail.gmail.com>
+References: <20130724091011.GB11352@zuhnb712.ap.bm.net>
+ <CAAXf6LXxkj=68rHGDt6yYnB5h4r7hT5JkV9fXhau3kAaDemQSg@mail.gmail.com>
+ <20130724095703.GA391@zuhnb712.ap.bm.net>
+ <51EFA6CD.9090005@imgtec.com>
+ <CAAsE_uchPX7Bzbhd7NjkUe-Vyf-JwpeSj=pfsbpWm8bYZNNnjA@mail.gmail.com>
+ <CAAXf6LX8o02foDT7XQsJGKL24ZX1+qo5sTrE48UR4oa88AkO-A@mail.gmail.com>
+Message-ID: <20130725005350.GB391@zuhnb712.ap.bm.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Jul 24, 2013 at 03:37:32PM +0200, Thomas De Schampheleire wrote:
+> Hi,
+> 
+> Please don't top-post, put your reply _below_ the other person's reply. Thanks.
+> 
+Thanks for reminder that.  I do it right way usually in mutt, but
+something in gmail web application, it's a little different.
 
+> On Wed, Jul 24, 2013 at 3:34 PM, Woody Wu <narkewoody@gmail.com> wrote:
+> > What's the buildroot it refer to? It's older or newer than 2013.05?  Do you
+> > think I can modify the .mk file similar to what the patch did?  Thanks.
+> 
+> This is the latest development version, there is no release of it yet.
+> This change will become available in the next version 2013.08.
+> In the mean time, you can indeed apply the same changes as in the patch.
+> 
+> Best regards,
+> Thomas
 
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> wrote:
-
->Hi Lee Jenkins,
-...
->>
->> LIBS11N_LICENSE          = Public Domain
->
->There should also be a
->LIBS11N_LICENSE_FILES = LICENSE.libs11n
->line that refers to the file describing the license.
->
->*Luca*: different files in this package fall under different licenses.
->What is the best way to handle this?
-
-I can't check right now, but IIRC the convention in BR is a comma-separated list, e.g.:
-FOO_LICENSE = LGPLv3+, BSD-3c, MIT[, another_license...]
-
-From the LICENSE.libs11n file:
->
->---------
->All build-related files are Public Domain.
->
->Some source code falls under other licenses such as LGPL or BSD, as
->described in their source files. To the best of my understanding, s11n
->falls under Section 5 of the LGPL, and need not be released under that
->license. (More specifically, it contains no LGPL code, but uses
->features
->provided by a couple of LGPL'd classes.)
-
-I am not a lawyer, but I find section 5 a bit unclear.
-In all cases I think that if there are LGPL files in this lib, then [part of] the lib falls under the LGPL.
-But this is not a BR issue. You may want to contact the package author for a clarification.
-
->
->The list of files which are known to be exceptions to the Public
->Domain license:
->
->LGPL:
->        lib/toolbox/bzstream.{h,cpp}
->        lib/toolbox/gzstream.{h,cpp}
->
->BSD:
->        include/FlexLexer.h
->
->MIT:
->        lib/expat (may or may not be in your s11n distribution)
->
->Unspecified:
->        toc/bin/mkdeps.c
->
->These are all released under fairly non-restritive licenses.
->
->There *may* be other such files: please see the individual source
->files if in doubt.
->-------------------
->
->
-
-Luca
+-- 
+I can't go back to yesterday - because I was a different person then
