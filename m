@@ -1,72 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Jul 2013 21:18:23 +0200
-Subject: [Buildroot] [git commit] u-boot: support custom u-boot.bin name
-Message-ID: <20130726191843.97F229A074@busybox.osuosl.org>
+Date: Fri, 26 Jul 2013 21:13:53 +0200
+Subject: [Buildroot] [git commit] package/uclibc: fix big oops from fb354d5f
+Message-ID: <20130726191843.907099ABCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ab25903bd7d3f1aa58f96867304114cbd7a6fbad
+commit: http://git.buildroot.net/buildroot/commit/?id=6bd2fe479fa8643234e76efdda900f90cb151888
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On some platforms, the standard U-Boot binary is not called u-boot.bin,
-but u-boot<something>.bin. This is for example the case on the
-Cavium-provided u-boot, where the output file is called
-u-boot_<boardname>.bin.
-
-This patch adds a 'custom format' choice in the existing u-boot binary
-format selection, where this name can be put. In the Cavium example, this
-option could be set to:
-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-$(BR2_TARGET_UBOOT_BOARDNAME).bin"
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/uboot/Config.in |   16 ++++++++++++++++
- boot/uboot/uboot.mk  |    2 ++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ ...0010-Rules.mak-fix-breakage-from-603af30d.patch |   31 ++++++++++++++++++++
+ 1 files changed, 31 insertions(+), 0 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index aadf757..f5806e7 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -101,8 +101,24 @@ config BR2_TARGET_UBOOT_FORMAT_LDR
- config BR2_TARGET_UBOOT_FORMAT_ELF
- 	bool "u-boot.elf"
- 
-+config BR2_TARGET_UBOOT_FORMAT_CUSTOM
-+	bool "Custom (specify below)"
-+	help
-+	  On some platforms, the standard U-Boot binary is not called
-+	  u-boot.bin, but u-boot<something>.bin. If this is your case,
-+	  you should select this option and specify the correct name
-+	  in BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME.
+diff --git a/package/uclibc/0.9.33.2/uclibc-0010-Rules.mak-fix-breakage-from-603af30d.patch b/package/uclibc/0.9.33.2/uclibc-0010-Rules.mak-fix-breakage-from-603af30d.patch
+new file mode 100644
+index 0000000..61ed439
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/uclibc-0010-Rules.mak-fix-breakage-from-603af30d.patch
+@@ -0,0 +1,31 @@
++From f5017653dc63d62c94cc2884ed3a50a4f93001cd Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Wed, 24 Jul 2013 12:28:19 -0300
++Subject: [PATCHv2] Rules.mak: fix breakage from 603af30d
 +
- endchoice
- 
-+config BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME
-+	string "U-Boot binary format: custom name"
-+	depends on BR2_TARGET_UBOOT_FORMAT_CUSTOM
-+	help
-+	  Specify the correct name of the output binary created by
-+	  U-Boot, if it is not one of the default names. For example:
-+	  u-boot_magic.bin
++Removing the whitespace from findstring for 64 bit architectures has
++bad consequences since powerpc would be a match in powerpc64 and sparc
++would also be a match in sparc64.
++That doesn't make them 64 bits in reality causing general breakage.
 +
- config BR2_TARGET_UBOOT_OMAP_IFT
- 	depends on BR2_TARGET_UBOOT_FORMAT_BIN
- 	depends on BR2_arm || BR2_armeb
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index b357e0f..3904b8b 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -40,6 +40,8 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
- UBOOT_BIN          = u-boot-nand.bin
- else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
- UBOOT_BIN          = u-boot.img
-+else ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM),y)
-+UBOOT_BIN          = $(call qstrip,$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME))
- else
- UBOOT_BIN          = u-boot.bin
- UBOOT_BIN_IFT      = $(UBOOT_BIN).ift
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ Rules.mak | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Rules.mak b/Rules.mak
++index 889108e..be53d81 100644
++--- a/Rules.mak
+++++ b/Rules.mak
++@@ -141,7 +141,7 @@ UBACKTRACE_DSO := libubacktrace.so.$(ABI_VERSION)
++ 
++ UCLIBC_LDSO_NAME := ld-uClibc
++ ARCH_NATIVE_BIT := 32
++-ifneq ($(findstring $(TARGET_ARCH),hppa64 ia64 powerpc64 s390x sparc64 x86_64),)
+++ifneq ($(findstring  $(TARGET_ARCH) , hppa64 ia64 powerpc64 s390x sparc64 x86_64 ),)
++ UCLIBC_LDSO_NAME := ld64-uClibc
++ ARCH_NATIVE_BIT := 64
++ else
++-- 
++1.8.1.5
++
