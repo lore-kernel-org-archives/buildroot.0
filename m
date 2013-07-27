@@ -1,40 +1,43 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sat, 27 Jul 2013 21:33:31 +0200
-Subject: [Buildroot] Patches to merge before -rc1 ?
-In-Reply-To: <20130727161633.72e96e49@skate>
-References: <20130727161633.72e96e49@skate>
-Message-ID: <CAAXf6LUN0m33FR4v2P8zJBOz3BaZ4bHcn09Ddu1h2mFNZa8jbA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 27 Jul 2013 17:18:01 +0200
+Subject: [Buildroot] [git commit] dropwatch: add missing dependencies
+Message-ID: <20130727213154.0F25B9AD35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=dad93df6e83d5f463567ced4fb4d3738a5a6ce73
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, Jul 27, 2013 at 4:16 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello all,
->
-> It would be nice if people could point me to some patches you believe
-> should be merged before -rc1, be it your own patches, or patches from
-> other people that you believe are ready for merging.
+dropwatch requires thread support because it selects libnl that
+depends on thread support. Also dropwatch cannot build on AArch64,
+because it selects the target binutils package which isn't (yet)
+available on AArch64.
 
-I recently submitted a patch to fix extractions of .xz packages on
-systems that don't have xzcat installed:
-http://patchwork.ozlabs.org/patch/260246/
-I think this could be considered for inclusion.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dropwatch/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
->
-> It would also help dramatically if contributors could have a look at
-> the pending list of patches, test them, comment them, review them, and
-> provide the appropriate Acked-by/Reviewed-by tags. This would help me
-> see which patches should be merged now.
->
-
-I think I won't have time before -rc1 (due end of July?) to do
-anything useful in this respect, but I'll try helping a little here
-when I can.
-
-Best regards,
-Thomas
+diff --git a/package/dropwatch/Config.in b/package/dropwatch/Config.in
+index 4c0857e..ef9a20d 100644
+--- a/package/dropwatch/Config.in
++++ b/package/dropwatch/Config.in
+@@ -1,10 +1,15 @@
+ config BR2_PACKAGE_DROPWATCH
+ 	bool "dropwatch"
+ 	select BR2_PACKAGE_BINUTILS
++	depends on !BR2_aarch64 # binutils
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_LIBNL
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
+ 	help
+ 	  Dropwatch is an interactive utility for monitoring and
+ 	  recording packets that are dropped by the kernel
+ 
+ 	  https://fedorahosted.org/dropwatch/
++
++comment "dropwatch requires threading support in toolchain"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
