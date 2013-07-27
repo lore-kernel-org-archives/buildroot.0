@@ -1,9 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 14:38:44 +0200
-Subject: [Buildroot] [PATCH] u-boot: support custom u-boot.bin name
-In-Reply-To: <b03d9402321cbcb3ae1e.1374659414@BEANTN0L019720>
-References: <b03d9402321cbcb3ae1e.1374659414@BEANTN0L019720>
-Message-ID: <20130727143844.14d20a5e@skate>
+Date: Sat, 27 Jul 2013 15:00:13 +0200
+Subject: [Buildroot] Strange error when set root password in buildroot
+In-Reply-To: <CAAXf6LX1Yy4Nazpde1n1b31aYEkm53-fv8MQ=PFEPP8Nd646Dg@mail.gmail.com>
+References: <20130725024203.GC391@zuhnb712.ap.bm.net>
+ <CAAXf6LU==DtcLaPEiXopt6+32KH=0c4Ws7S7hjw=A183aNjP3w@mail.gmail.com>
+ <20130726093118.GA16261@zuhnb712.ap.bm.net>
+ <CAAXf6LXcgSMJ1v6nzVMOG=DfkWmJz8SaZm+Rzti4ENBXABKoqw@mail.gmail.com>
+ <20130727054252.GA4893@zuhnb712.ap.bm.net>
+ <CAAXf6LX1Yy4Nazpde1n1b31aYEkm53-fv8MQ=PFEPP8Nd646Dg@mail.gmail.com>
+Message-ID: <20130727150013.6cfc3f47@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +17,16 @@ To: buildroot@busybox.net
 
 Dear Thomas De Schampheleire,
 
-On Wed, 24 Jul 2013 11:50:14 +0200, Thomas De Schampheleire wrote:
-> On some platforms, the standard U-Boot binary is not called u-boot.bin,
-> but u-boot<something>.bin. This is for example the case on the
-> Cavium-provided u-boot, where the output file is called
-> u-boot_<boardname>.bin.
-> 
-> This patch adds a 'custom format' choice in the existing u-boot binary
-> format selection, where this name can be put. In the Cavium example, this
-> option could be set to:
-> BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-$(BR2_TARGET_UBOOT_BOARDNAME).bin"
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Sat, 27 Jul 2013 10:00:59 +0200, Thomas De Schampheleire wrote:
 
-Committed, thanks.
+> I guess it will work for you. But this is not an acceptable final solution.
+> 
+> Input from others would be great here.
+
+I guess the only option would be to build our own mkpasswd and use it
+when the user enters a non-empty root password in the configuration.
+
+Best regards,
 
 Thomas
 -- 
