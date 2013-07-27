@@ -1,30 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 16:20:33 +0200
-Subject: [Buildroot] [git commit] tstools: add missing comment when
-	!BR2_LARGEFILE
-Message-ID: <20130727142028.3215C9AC98@busybox.osuosl.org>
+Date: Sat, 27 Jul 2013 16:21:37 +0200
+Subject: [Buildroot] [PATCH 2/9] uclibc/bfin: only supports
+ linuxthreads.old
+In-Reply-To: <1374324735-2286-3-git-send-email-gustavo@zacarias.com.ar>
+References: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
+ <1374324735-2286-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130727162137.66a04363@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=519f7fbb1e1fb6bf8d59b6ec544bf1f19cf57dcf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tstools/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+On Sat, 20 Jul 2013 09:52:08 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/uclibc/Config.in | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+> index 90aae90..f9c4956 100644
+> --- a/package/uclibc/Config.in
+> +++ b/package/uclibc/Config.in
+> @@ -104,6 +104,7 @@ choice
+>  
+>  	config BR2_PTHREADS
+>  		bool "linuxthreads"
+> +		depends on !BR2_bfin
+>  		depends on !BR2_xtensa
+>  	        select BR2_TOOLCHAIN_HAS_THREADS
+>  
+> @@ -115,9 +116,10 @@ choice
+>  		bool "Native POSIX Threading (NPTL)"
+>  		select BR2_TOOLCHAIN_HAS_THREADS
+>  		depends on !BR2_x86_i386
+> +		depends on !BR2_arc
+>  		depends on !BR2_avr32
+> +		depends on !BR2_bfin
+>  		depends on !BR2_xtensa
+> -		depends on !BR2_arc
+>  endchoice
 
-diff --git a/package/tstools/Config.in b/package/tstools/Config.in
-index 58f3df1..1ca67bf 100644
---- a/package/tstools/Config.in
-+++ b/package/tstools/Config.in
-@@ -15,3 +15,6 @@ config BR2_PACKAGE_TSTOOLS
- 	  used to store data on DVDs.
- 
- 	  http://tstools.berlios.de/
-+
-+comment "tstools needs largefile support in toolchain"
-+	depends on !BR2_LARGEFILE
+As suggested by Yann, I've splitted this in two patches, one adding
+the !bfin dependency, another one doing the re-ordering, including
+x86_i386.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
