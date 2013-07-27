@@ -1,40 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 16:11:40 +0200
-Subject: [Buildroot] [git commit] uclibc/bfin: only supports linuxthreads.old
-Message-ID: <20130727141206.0923F9AC10@busybox.osuosl.org>
+Date: Sat, 27 Jul 2013 16:11:41 +0200
+Subject: [Buildroot] [git commit] blackfin: set GNU_TARGET_NAME accordingly
+Message-ID: <20130727141206.852C29AC92@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=04f0d1379c11a98dc43df4ab70a87c0651c75310
+commit: http://git.buildroot.net/buildroot/commit/?id=b32f186cfd2590da133c21dc32842c6bbc681e03
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: do not reorder options, as this is a separate change]
+Blackfin for FDPIC targets uses *-linux-*, however for FLAT targets it
+needs *-uclinux-* in order for gcc to build properly.
+
+[Thomas: use a TARGET_OS variable instead of redefining
+GNU_TARGET_NAME completely]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/Makefile.in |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 90aae90..094ea11 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -104,6 +104,7 @@ choice
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 95eec52..aed28d5 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -21,7 +21,14 @@ MAKE1:=$(HOSTMAKE) -j1
+ MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
  
- 	config BR2_PTHREADS
- 		bool "linuxthreads"
-+		depends on !BR2_bfin
- 		depends on !BR2_xtensa
- 	        select BR2_TOOLCHAIN_HAS_THREADS
+ # Compute GNU_TARGET_NAME
+-GNU_TARGET_NAME=$(ARCH)-buildroot-linux-$(LIBC)$(ABI)
++GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
++
++# Blackfin FLAT needs uclinux
++ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
++TARGET_OS=uclinux
++else
++TARGET_OS=linux
++endif
  
-@@ -116,6 +117,7 @@ choice
- 		select BR2_TOOLCHAIN_HAS_THREADS
- 		depends on !BR2_x86_i386
- 		depends on !BR2_avr32
-+		depends on !BR2_bfin
- 		depends on !BR2_xtensa
- 		depends on !BR2_arc
- endchoice
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ LIBC=uclibc
