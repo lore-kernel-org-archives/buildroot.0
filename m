@@ -1,60 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Jul 2013 21:20:02 +0200
-Subject: [Buildroot] [git commit] uclibc: arc: fix fstat for big-endian
-Message-ID: <20130726192311.EE5969ABCD@busybox.osuosl.org>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Sat, 27 Jul 2013 13:42:52 +0800
+Subject: [Buildroot] Strange error when set root password in buildroot
+In-Reply-To: <CAAXf6LXcgSMJ1v6nzVMOG=DfkWmJz8SaZm+Rzti4ENBXABKoqw@mail.gmail.com>
+References: <20130725024203.GC391@zuhnb712.ap.bm.net>
+ <CAAXf6LU==DtcLaPEiXopt6+32KH=0c4Ws7S7hjw=A183aNjP3w@mail.gmail.com>
+ <20130726093118.GA16261@zuhnb712.ap.bm.net>
+ <CAAXf6LXcgSMJ1v6nzVMOG=DfkWmJz8SaZm+Rzti4ENBXABKoqw@mail.gmail.com>
+Message-ID: <20130727054252.GA4893@zuhnb712.ap.bm.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fb3d0e177f40e9cbb54827d565e778eda2c5a58d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, Jul 26, 2013 at 12:25:33PM +0200, Thomas De Schampheleire wrote:
+> On Fri, Jul 26, 2013 at 11:31 AM, Woody Wu <narkewoody@gmail.com> wrote:
+> > On Thu, Jul 25, 2013 at 10:25:38AM +0200, Thomas De Schampheleire wrote:
+> >> Hi,
+> >>
+> >> On Thu, Jul 25, 2013 at 4:42 AM, Woody Wu <narkewoody@gmail.com> wrote:
+> >> > Hi,
+> >> >
+> >> > Today I just set the root password in buildroot. Then I got strange
+> >> > error when building:
+> >> >
+> >> > /usr/bin/sed -i -e 's,^root:[^:]*:,root:usage: mkpasswd [args] [user]   where arguments are:     -l #      (length of password, default = 9)     -d #      (min # of digits, default = 2)     -c #      (min # of lowercase chars, default = 2)     -C #      (min # of uppercase chars, default = 2)     -s #      (min # of special chars, default = 1)     -v        (verbose, show passwd interaction)     -p prog   (program to set password, default = passwd):,' /home/woody/src/buildroot-2013.05/output/target/etc/shadow
+> >> > /usr/bin/sed: -e expression #1, char 109: unknown option to `s'
+> >> > make: *** [target-root-passwd] Error 1
+> >> >
+> >> > What's the problem? Thanks.
+> >>
+> >> It seems that the mkpasswd on your system is not the same type as
+> >> buildroot expects.
+> >> Buildroot runs mkpasswd with '-m <method>', which does not seem to be
+> >> present on your mkpasswd.
+> >>
+> >> What Linux system is this?
+> >> What is the output of:
+> >> which mkpasswd
+> >> and
+> >> mkpasswd -V
+> >>
+> >> (I think the latter will not work in your case anyway, in my case it's:
+> >>
+> >> $ mkpasswd -V
+> >> mkpasswd 5.0.19
+> >>
+> >
+> > sorry, now I understand what you mean.  My linux is slackware linux, the
+> > mkpasswd located in /usr/bin/mkpasswd, which even don't support -V or
+> > --version to check its version number. And, yes, you are right, my
+> > 'mkpasswd' does not recognize '-m' option.
+> 
+> I'm not sure. Either we have to change buildroot to detect whether -m
+> is available before using it (if not, it will probably default to
+> md5). Or we need to find another solution.
+> 
+> Just a wild guess, can you check if there are other mkpasswd's available?
+> ls -l /bin/mkpasswd /usr/bin/mkpasswd /sbin/mkpasswd /usr/sbin/mkpasswd
+> 
+> A workaround for you is to change buildroot to remove the -m thing,
+> but it's better if we fix it completely, I think.
+> 
+> Thanks,
+> Thomas
 
-Fixes "Value too large for defined data type" messages caused by fstat
-syscall wrapper returning -EOVERFLOW.
+There is no other mkpasswd on my slackware box. The only one comes from
+the expect package. Would you please where to change the '-m' in
+buildroot and how?  Thanks.
 
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/uclibc/0.9.33-arc/fix-fstat-for-be.patch |   32 ++++++++++++++++++++++
- 1 files changed, 32 insertions(+), 0 deletions(-)
-
-diff --git a/package/uclibc/0.9.33-arc/fix-fstat-for-be.patch b/package/uclibc/0.9.33-arc/fix-fstat-for-be.patch
-new file mode 100644
-index 0000000..2cdb517
---- /dev/null
-+++ b/package/uclibc/0.9.33-arc/fix-fstat-for-be.patch
-@@ -0,0 +1,32 @@
-+From f394d65c74631a0e715bac582b09c302ee84114f Mon Sep 17 00:00:00 2001
-+From: Mischa Jonker <mjonker@synopsys.com>
-+Date: Tue, 23 Jul 2013 17:59:04 +0200
-+Subject: [PATCH] libc/sysdeps: Fix common-generic stat.h for BE part 2
-+
-+Previous patch only fixed the build. This patch fixes the behavior at
-+run-time as well.
-+
-+It fixes "Value too large for defined data type" messages caused by
-+fstat syscall wrapper returning -EOVERFLOW.
-+
-+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
-+---
-+ libc/sysdeps/linux/common-generic/bits/stat.h |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libc/sysdeps/linux/common-generic/bits/stat.h b/libc/sysdeps/linux/common-generic/bits/stat.h
-+index 07716ab..945c408 100644
-+--- a/libc/sysdeps/linux/common-generic/bits/stat.h
-++++ b/libc/sysdeps/linux/common-generic/bits/stat.h
-+@@ -63,8 +63,8 @@ struct stat
-+     unsigned long long __pad4;
-+     long __pad5;
-+     long st_size;				/* Size of file, in bytes. */
-+-    int __pad6;
-+     int st_blksize;				/* Optimal block size for I/O. */
-++    int __pad6;
-+     long __pad7;
-+     long st_blocks;				/* Number 512-byte blocks allocated */
-+ # endif /* __LITTLE_ENDIAN */
-+--
-+1.7.9.5
+-- 
+I can't go back to yesterday - because I was a different person then
