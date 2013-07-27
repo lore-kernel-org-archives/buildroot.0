@@ -1,27 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 15:48:07 +0200
-Subject: [Buildroot] [PATCH 0 of 2] bind/dhcp: install to staging
-In-Reply-To: <patchbomb.1374662070@BEANTN0L019720>
-References: <patchbomb.1374662070@BEANTN0L019720>
-Message-ID: <20130727154807.74619b74@skate>
+Date: Sat, 27 Jul 2013 15:48:23 +0200
+Subject: [Buildroot] [PATCH] squid: bump to version 3.3.8
+In-Reply-To: <1374927186-27619-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1374927186-27619-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130727154823.1a193b71@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Gustavo Zacarias,
 
-On Wed, 24 Jul 2013 12:34:30 +0200, Thomas De Schampheleire wrote:
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
+On Sat, 27 Jul 2013 09:13:06 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/bind/bind.mk |  1 +
->  package/dhcp/dhcp.mk |  1 +
->  2 files changed, 2 insertions(+), 0 deletions(-)
+>  package/squid/squid-01-assume-get-certificate-ok.patch | 12 ++++++------
+>  package/squid/squid.mk                                 |  2 +-
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 
-Committed both, thanks.
+Committed, thanks.
 
 Thomas
 -- 
