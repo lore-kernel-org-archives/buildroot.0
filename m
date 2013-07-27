@@ -1,26 +1,34 @@
-From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Sat, 27 Jul 2013 18:37:53 +0200
-Subject: [Buildroot] DirectFB failed
-In-Reply-To: <20130727080547.GA11545@zuhnb712.ap.bm.net>
-References: <20130727080547.GA11545@zuhnb712.ap.bm.net>
-Message-ID: <51F3F761.1010107@googlemail.com>
+From: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Sun, 28 Jul 2013 00:56:36 +0800
+Subject: [Buildroot] [PATCH] buildroot: Add POST_RSYNC_HOOKS support
+Message-ID: <1374944196-19580-1-git-send-email-tjlee@ambarella.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Woody,
+One of the use cases is for the 'local packages' to restore
+the SCM info.  Some packages use this information to generate
+version info during build time.  In this case, the local package
+can have this hook to restore it by symbolic link for example.
 
-Am 27.07.2013 10:05, schrieb Woody Wu:
-> I guess these error happened because I don't have correct DirectFB
-> configuration on my target - probably the /etc/directfbrc or
-> /etc/fb.modes files. Does anyone know what should these files contain on
-> my system?
+Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+---
+ package/pkg-generic.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-The best infos will be found on the directFB website, especially in the
-wiki.
-http://directfb.org/wiki/index.php/Configuring_DirectFB
-
-Regards
-Carsten
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index d9a12f2..06e865d 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -63,6 +63,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+ 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+ 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+ 	rsync -au --cvs-exclude --include core $(SRCDIR)/ $(@D)
++	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
+ 
+ # Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
+-- 
+1.8.3.2
