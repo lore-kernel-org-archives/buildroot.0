@@ -1,95 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 15:50:24 +0200
-Subject: [Buildroot] [PATCH 1 of 6 v2] Config.in.legacy: update
- description
-In-Reply-To: <2942a6d3dd9f0f3fd864.1374650578@BEANTN0L019720>
-References: <patchbomb.1374650577@BEANTN0L019720>
- <2942a6d3dd9f0f3fd864.1374650578@BEANTN0L019720>
-Message-ID: <20130727155024.2ca03010@skate>
+Date: Sat, 27 Jul 2013 16:11:40 +0200
+Subject: [Buildroot] [git commit] gcc/bfin: doesn't support --with-cpu
+	defaults
+Message-ID: <20130727141205.CA8AA9AC10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+commit: http://git.buildroot.net/buildroot/commit/?id=111ced757eece3172daad8a39d884aa274edba2b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As the author of the Config.in.legacy mechanism, it would be great if
-you could review/ack the below patch.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/gcc.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-Thanks,
-
-Thomas
-
-On Wed, 24 Jul 2013 09:22:58 +0200, Thomas De Schampheleire wrote:
-> The existing comments in Config.in.legacy are not entirely in-line with
-> current practice. The comments implies that BR2_LEGACY should not be set when
-> the conversion from old-to-new symbol can be done automatically using the
-> appropriate 'select' statements. However, none of the existing legacy options
-> does it this way. Moreover, I think it's intentional that the user is notified
-> of the change, so that the removal of the legacy options in later buildroot
-> versions no longer poses a problem.
-> 
-> Additionally, I have added an example of how to handle the renaming of a string
-> config option. Because a string option cannot 'select' something else, a wrapper
-> symbol is needed of type bool.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> ---
-> (v2): new patch in this series
-> 
->  Config.in.legacy |  22 +++++++++++++++++-----
->  1 files changed, 17 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -3,11 +3,10 @@
->  #
->  # When an existing Config.in symbol is removed, it should be added again in this
->  # file, and take appropriate action to approximate backward compatibility. If
-> -# there is an equivalent (set of) new symbols, these can just be select'ed by
-> -# the old symbol. This makes sure that running 'make oldconfig' will make things
-> -# "just work" when upgrading to a new buildroot version. If the change is too
-> -# fundamental and cannot be fixed by a simple select, then the old symbol should
-> -# select BR2_LEGACY.  If that symbol is set, the build will issue an error.
-> +# there is an equivalent (set of) new symbols, these should be select'ed by
-> +# the old symbol. This will make the transition for the user more convenient.
-> +# The old symbol should select BR2_LEGACY, so that the user is informed at
-> +# build-time about selected legacy options.
->  #
->  # When adding legacy symbols to this file, add them to the front. The oldest
->  # symbols will be removed again after about two years.
-> @@ -15,6 +14,19 @@
->  # The symbol should be copied as-is from the place where it was previously
->  # defined, but the help text should be removed or replaced with something that
->  # explains how to fix it.
-> +# If the old symbol is of type string, and the symbol has been renamed, you
-> +# should add it as a bool with another name (BR2_<foo>_WRAP), that defaults
-> +# to y if the old string is not set at its default value. For example:
-> +#     config BR2_FOO_STRING
-> +#             string "Some foo string"
-> +# would become:
-> +#     config BR2_FOO_STRING_WRAP
-> +#             bool "Foo string option has been renamed."
-> +#             default y if BR2_FOO_STRING != ""
-> +#             depends on BR2_LEGACY
-> +#             help
-> +#               <suitable help text>
-> +#
->  
->  config BR2_LEGACY
->  	bool
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 85cd7d4..cbeaa6c 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -159,6 +159,8 @@ endif
+ ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
+ HOST_GCC_COMMON_CONF_OPT += --with-abi=$(BR2_GCC_TARGET_ABI)
+ endif
++# GCC doesn't support --with-cpu for bfin
++ifeq ($(BR2_bfin),)
+ ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
+ ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
+ HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
+@@ -166,6 +168,7 @@ else
+ HOST_GCC_COMMON_CONF_OPT += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
+ endif
+ endif
++endif
+ 
+ GCC_TARGET_FPU = $(call qstrip,$(BR2_GCC_TARGET_FPU))
+ ifneq ($(GCC_TARGET_FPU),)
