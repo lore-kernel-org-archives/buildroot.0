@@ -1,44 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 16:11:41 +0200
-Subject: [Buildroot] [git commit] blackfin: set GNU_TARGET_NAME accordingly
-Message-ID: <20130727141206.852C29AC92@busybox.osuosl.org>
+Date: Sat, 27 Jul 2013 16:14:45 +0200
+Subject: [Buildroot] Recommended cross toolchain for ARM
+In-Reply-To: <20130723060305.GA6169@zuhnb712.ap.bm.net>
+References: <20130723060305.GA6169@zuhnb712.ap.bm.net>
+Message-ID: <20130727161445.1ca8a5c0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b32f186cfd2590da133c21dc32842c6bbc681e03
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Woody Wu,
 
-Blackfin for FDPIC targets uses *-linux-*, however for FLAT targets it
-needs *-uclinux-* in order for gcc to build properly.
+On Tue, 23 Jul 2013 14:03:05 +0800, Woody Wu wrote:
 
-[Thomas: use a TARGET_OS variable instead of redefining
-GNU_TARGET_NAME completely]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Makefile.in |    9 ++++++++-
- 1 files changed, 8 insertions(+), 1 deletions(-)
+> Do you guys have a suggested cross toolchain?  I want to use glibc
+> instead of uclibc, so in the buildroot default supported options, it
+> left only Sourcery CodeBench (SCB).  But SCB seems not a very completed
+> toolchain, when I use it to compile some of my applications, I found it
+> missed with some definitions (such as RLIM_*) which should normally
+> appear in a standard header file.
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 95eec52..aed28d5 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -21,7 +21,14 @@ MAKE1:=$(HOSTMAKE) -j1
- MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
- 
- # Compute GNU_TARGET_NAME
--GNU_TARGET_NAME=$(ARCH)-buildroot-linux-$(LIBC)$(ABI)
-+GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
-+
-+# Blackfin FLAT needs uclinux
-+ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
-+TARGET_OS=uclinux
-+else
-+TARGET_OS=linux
-+endif
- 
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- LIBC=uclibc
+Sourcery CodeBench toolchains usually work fine. Could you point to
+specific problems with them, i.e which package fails to build, with
+which version of the Sourcery CodeBench? Most likely, if your
+application fails to build with a Sourcery CodeBench toolchain, it's
+because your application doesn't #include the right header files.
+
+> Then I tried, Linaro, but it seems that it do not well support my armv5t
+> core. Anyway, I run with errors after configured it with buildroot.
+
+The Linaro toolchains are built for ARMv7, so the C library they
+contain will only work on ARMv7+ processors.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
