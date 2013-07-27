@@ -1,214 +1,173 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 15:20:54 +0200
-Subject: [Buildroot] [PATCH] toolchain-internal: skip gcc-intermediate
- when possible
-In-Reply-To: <1373551564-15418-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1373551564-15418-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20130727152054.5d189986@skate>
+Date: Sat, 27 Jul 2013 15:22:40 +0200
+Subject: [Buildroot] [git commit] normalize separator size to 80
+Message-ID: <20130727132236.E116D99C90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=03882d45b2dbf1ed0be759284d812d5f3cf3e917
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Could someone review/test/comment the below patch?
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bind/bind.mk                               |    2 +-
+ package/elf2flt/elf2flt.mk                         |    4 ++--
+ package/multimedia/gst-omx/gst-omx.mk              |    4 ++--
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |    4 ++--
+ .../gst1-plugins-good/gst1-plugins-good.mk         |    4 ++--
+ .../gst1-plugins-ugly/gst1-plugins-ugly.mk         |    4 ++--
+ package/multimedia/gstreamer1/gstreamer1.mk        |    4 ++--
+ package/ramsmp/ramsmp.mk                           |    4 ++--
+ package/ti-gfx/ti-gfx.mk                           |    4 ++--
+ package/w_scan/w_scan.mk                           |    4 ++--
+ 10 files changed, 19 insertions(+), 19 deletions(-)
 
-Thanks,
-
-Thomas
-
-On Thu, 11 Jul 2013 16:06:04 +0200, Thomas Petazzoni wrote:
-> When NPTL support was introduced, gcc required a three stages build
-> process. Since gcc 4.7, this is no longer necessary, and it is
-> possible to get back to a two stages build process. This patch takes
-> advantage of this, by doing a two stages build process when possible.
-> 
-> We introduce a few hidden kconfig options:
-> 
->  * BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD, which is set by the gcc
->    Config.in logic to indicate that the compiler might need a three
->    stages build. Currently, all versions prior to 4.7.x are selecting
->    this kconfig option.
-> 
->  * BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD, which indicates whether
->    the C library might need a three stages build. This is the case for
->    eglibc, and uClibc when NPTL is enabled.
-> 
->  * BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD finally is enabled when both
->    of the previous options are enabled. It indicates that a three
->    stages build is actually needed.
-> 
-> In addition to those options, the uClibc/gcc build logic is changed to
-> take use only a two stages build process when possible.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> This stuff is fairly tricky, so if people could test, it would be
-> great. Also, I am not necessarily entirely happy with the new
-> Config.in options and their naming, so if people have suggestions, I'm
-> interested.
-> 
->  package/eglibc/eglibc.mk               |  5 +++--
->  package/gcc/Config.in.host             | 12 ++++++++++++
->  package/gcc/gcc-initial/gcc-initial.mk |  8 ++++++++
->  package/uclibc/Config.in               |  1 +
->  package/uclibc/uclibc.mk               |  5 +++--
->  toolchain/Config.in                    |  9 +++++++++
->  6 files changed, 36 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/eglibc/eglibc.mk b/package/eglibc/eglibc.mk
-> index ccdc210..8bac72f 100644
-> --- a/package/eglibc/eglibc.mk
-> +++ b/package/eglibc/eglibc.mk
-> @@ -14,8 +14,9 @@ EGLIBC_LICENSE_FILES = libc/COPYING libc/COPYING.LIB libc/LICENSES
->  # cross-compiler and the kernel headers
->  EGLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
->  
-> -# Before eglibc is built, we must have the second stage cross-compiler
-> -eglibc-build: host-gcc-intermediate
-> +# Before eglibc is built, we must have the second stage
-> +# cross-compiler, for some gcc versions
-> +eglibc-build: $(if $(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),host-gcc-intermediate)
->  
->  EGLIBC_SUBDIR = build
->  
-> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index 86f7fdc..e34f73e 100644
-> --- a/package/gcc/Config.in.host
-> +++ b/package/gcc/Config.in.host
-> @@ -3,6 +3,12 @@ comment "GCC Options"
->  config BR2_GCC_NEEDS_MPC
->  	bool
->  
-> +# Until gcc 4.7, a three stage build process was needed when using
-> +# NPTL. This hidden option tells whether gcc is a version that
-> +# requires this three stage build process.
-> +config BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
-> +	bool
-> +
->  choice
->  	prompt "GCC compiler Version"
->  	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
-> @@ -15,28 +21,34 @@ choice
->  	config BR2_GCC_VERSION_4_4_7_ARC
->  		depends on BR2_arc
->  		bool "gcc 4.4.7-arc"
-> +		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
->  
->  	config BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
->  		depends on BR2_avr32
->  		bool "gcc 4.2.2-avr32-2.1.5"
-> +		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
->  
->  	config BR2_GCC_VERSION_4_3_X
->  		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
->  		bool "gcc 4.3.x"
-> +		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
->  
->  	config BR2_GCC_VERSION_4_4_X
->  		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
->  		bool "gcc 4.4.x"
-> +		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
->  
->  	config BR2_GCC_VERSION_4_5_X
->  		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
->  		select BR2_GCC_NEEDS_MPC
->  		bool "gcc 4.5.x"
-> +		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
->  
->  	config BR2_GCC_VERSION_4_6_X
->  		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
->  		select BR2_GCC_NEEDS_MPC
->  		bool "gcc 4.6.x"
-> +		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
->  
->  	config BR2_GCC_VERSION_4_7_X
->  		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
-> diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-> index 05c956a..08c7028 100644
-> --- a/package/gcc/gcc-initial/gcc-initial.mk
-> +++ b/package/gcc/gcc-initial/gcc-initial.mk
-> @@ -29,6 +29,7 @@ HOST_GCC_INITIAL_CONF_OPT = \
->  	--enable-languages=c \
->  	--disable-shared \
->  	--without-headers \
-> +	--disable-threads \
->  	--with-newlib \
->  	--disable-largefile \
->  	--disable-nls
-> @@ -36,4 +37,11 @@ HOST_GCC_INITIAL_CONF_OPT = \
->  HOST_GCC_INITIAL_MAKE_OPT = all-gcc
->  HOST_GCC_INITIAL_INSTALL_OPT = install-gcc
->  
-> +ifeq ($(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),)
-> +ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
-> +HOST_GCC_INITIAL_MAKE_OPT += all-target-libgcc
-> +HOST_GCC_INITIAL_INSTALL_OPT += install-target-libgcc
-> +endif
-> +endif
-> +
->  $(eval $(host-autotools-package))
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index f309243..23f7ae0 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -114,6 +114,7 @@ choice
->  	config BR2_PTHREADS_NATIVE
->  		bool "Native POSIX Threading (NPTL)"
->  	        select BR2_TOOLCHAIN_HAS_THREADS
-> +		select BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD
->  		depends on !BR2_ARM_OABI
->  		depends on !BR2_x86_i386
->  		depends on !BR2_avr32
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index 421e323..2dbf328 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -22,8 +22,9 @@ UCLIBC_INSTALL_STAGING = YES
->  # cross-compiler and the kernel headers
->  UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
->  
-> -# Before uClibc is built, we must have the second stage cross-compiler
-> -uclibc-build: host-gcc-intermediate
-> +# Before uClibc is built, we must have the second stage
-> +# cross-compiler, for some gcc versions, and when NPTL is used.
-> +uclibc-build: $(if $(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),host-gcc-intermediate)
->  
->  # specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
->  # setting.
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index 53d2573..64cdf81 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -1,5 +1,13 @@
->  menu "Toolchain"
->  
-> +config BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD
-> +	bool
-> +	default y if BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD && \
-> +		BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
-> +
-> +config BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD
-> +	bool
-> +
->  # Should be selected for glibc or eglibc
->  config BR2_TOOLCHAIN_USES_GLIBC
->  	bool
-> @@ -10,6 +18,7 @@ config BR2_TOOLCHAIN_USES_GLIBC
->  	select BR2_TOOLCHAIN_HAS_THREADS
->  	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
->  	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
-> +	select BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD
->  
->  config BR2_TOOLCHAIN_USES_UCLIBC
->  	bool
-
-
-
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 93fc9fb..306284b 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -1,4 +1,4 @@
+-###############################################################################
++################################################################################
+ #
+ # bind
+ #
+diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
+index cd1c21d..27dd807 100644
+--- a/package/elf2flt/elf2flt.mk
++++ b/package/elf2flt/elf2flt.mk
+@@ -1,8 +1,8 @@
+-#############################################################
++################################################################################
+ #
+ # elf2flt
+ #
+-#############################################################
++################################################################################
+ 
+ ELF2FLT_SOURCE =
+ HOST_ELF2FLT_SOURCE =
+diff --git a/package/multimedia/gst-omx/gst-omx.mk b/package/multimedia/gst-omx/gst-omx.mk
+index 1127ed8..4b92584 100644
+--- a/package/multimedia/gst-omx/gst-omx.mk
++++ b/package/multimedia/gst-omx/gst-omx.mk
+@@ -1,8 +1,8 @@
+-#############################################################
++################################################################################
+ #
+ # gst-omx
+ #
+-#############################################################
++################################################################################
+ 
+ GST_OMX_VERSION = 1.0.0
+ GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
+diff --git a/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk b/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
+index ac77392..732cddf 100644
+--- a/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -1,8 +1,8 @@
+-###############################################################################
++################################################################################
+ #
+ # gst1-plugins-bad
+ #
+-###############################################################################
++################################################################################
+ 
+ GST1_PLUGINS_BAD_VERSION = 1.0.8
+ GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
+diff --git a/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk b/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
+index 23fbd80..614a006 100644
+--- a/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
+@@ -1,8 +1,8 @@
+-###############################################################################
++################################################################################
+ #
+ # gst1-plugins-good
+ #
+-###############################################################################
++################################################################################
+ 
+ GST1_PLUGINS_GOOD_VERSION = 1.0.8
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+diff --git a/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index 4fcc3d4..c6c927b 100644
+--- a/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
+@@ -1,8 +1,8 @@
+-###############################################################################
++################################################################################
+ #
+ # gst1-plugins-ugly
+ #
+-###############################################################################
++################################################################################
+ 
+ GST1_PLUGINS_UGLY_VERSION = 1.0.8
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+diff --git a/package/multimedia/gstreamer1/gstreamer1.mk b/package/multimedia/gstreamer1/gstreamer1.mk
+index 1e1564f..d3db119 100644
+--- a/package/multimedia/gstreamer1/gstreamer1.mk
++++ b/package/multimedia/gstreamer1/gstreamer1.mk
+@@ -1,8 +1,8 @@
+-#############################################################
++################################################################################
+ #
+ # gstreamer1
+ #
+-#############################################################
++################################################################################
+ 
+ GSTREAMER1_VERSION = 1.0.8
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+diff --git a/package/ramsmp/ramsmp.mk b/package/ramsmp/ramsmp.mk
+index 7d4eee7..6098376 100644
+--- a/package/ramsmp/ramsmp.mk
++++ b/package/ramsmp/ramsmp.mk
+@@ -1,8 +1,8 @@
+-#############################################################
++################################################################################
+ #
+ # ramsmp
+ #
+-#############################################################
++################################################################################
+ 
+ RAMSMP_VERSION = 3.5.0
+ RAMSMP_SITE = http://www.alasir.com/software/ramspeed
+diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
+index 7713990..44a3c1d 100644
+--- a/package/ti-gfx/ti-gfx.mk
++++ b/package/ti-gfx/ti-gfx.mk
+@@ -1,8 +1,8 @@
+-###############################################################################
++################################################################################
+ #
+ # ti-gfx
+ #
+-###############################################################################
++################################################################################
+ 
+ TI_GFX_VERSION = 4_09_00_01
+ TI_GFX_SO_VERSION = 1.9.2188537
+diff --git a/package/w_scan/w_scan.mk b/package/w_scan/w_scan.mk
+index d2f3e4a..5ca02b8 100644
+--- a/package/w_scan/w_scan.mk
++++ b/package/w_scan/w_scan.mk
+@@ -1,8 +1,8 @@
+-###############################################################################
++################################################################################
+ #
+ # w_scan
+ #
+-###############################################################################
++################################################################################
+ 
+ W_SCAN_VERSION              = 20130331
+ W_SCAN_SOURCE               = w_scan-$(W_SCAN_VERSION).tar.bz2
