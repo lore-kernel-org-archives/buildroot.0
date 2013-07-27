@@ -1,41 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 17:15:53 +0200
-Subject: [Buildroot] [git commit] usb_modeswitch_data: requires thread
-	support
-Message-ID: <20130727213153.F3AE39ACCC@busybox.osuosl.org>
+Date: Sat, 27 Jul 2013 16:48:29 +0200
+Subject: [Buildroot] [git commit] avahi: minor cleanup
+Message-ID: <20130727213153.D84679AD30@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af1528af6385e19d0c351172701f3adb017c06f2
+commit: http://git.buildroot.net/buildroot/commit/?id=3fed58bd509b8dbb1ea5fe088fe92eb8cd86a410
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-usb_modeswitch_data unconditionally selects usb_modeswitch, but
-usb_modeswitch depends on thread support. This commit has the thread
-support dependency to usb_modeswitch_data.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/usb_modeswitch_data/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/avahi/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/usb_modeswitch_data/Config.in b/package/usb_modeswitch_data/Config.in
-index 6df408f..e0e8f4c 100644
---- a/package/usb_modeswitch_data/Config.in
-+++ b/package/usb_modeswitch_data/Config.in
-@@ -1,9 +1,13 @@
- config BR2_PACKAGE_USB_MODESWITCH_DATA
- 	bool "usb_modeswitch_data"
- 	select BR2_PACKAGE_USB_MODESWITCH
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # usb_modeswitch -> libusb
- 	help
- 	  USB mode switch data
- 	  Contains udev rules and events to allow usb_modeswitch to
- 	  function automatically
+diff --git a/package/avahi/Config.in b/package/avahi/Config.in
+index 60fd50f..c6af67e 100644
+--- a/package/avahi/Config.in
++++ b/package/avahi/Config.in
+@@ -10,10 +10,11 @@ config BR2_PACKAGE_AVAHI
  
- 	  http://www.draisberghof.de/usb_modeswitch/
+ 	  http://www.avahi.org/
+ 
++if BR2_PACKAGE_AVAHI
 +
-+comment "usb_modeswitch_data needs a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ config BR2_PACKAGE_AVAHI_AUTOIPD
+ 	bool "IPv4LL network address configuration daemon"
+ 	default y
+-	depends on BR2_PACKAGE_AVAHI
+ 	select BR2_PACKAGE_LIBDAEMON
+ 	help
+ 	  Avahi-autoipd implements IPv4LL, "Dynamic Configuration of
+@@ -25,7 +26,6 @@ config BR2_PACKAGE_AVAHI_AUTOIPD
+ 
+ config BR2_PACKAGE_AVAHI_DAEMON
+ 	bool "mDNS/DNS-SD daemon"
+-	depends on BR2_PACKAGE_AVAHI
+ 	select BR2_PACKAGE_LIBDAEMON
+ 	select BR2_PACKAGE_EXPAT
+ 	help
+@@ -34,5 +34,7 @@ config BR2_PACKAGE_AVAHI_DAEMON
+ 	  The daemon registers local IP addresses and services using
+ 	  mDNS/DNS-SD.
+ 
++endif
++
+ comment "avahi requires a toolchain with thread support"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
