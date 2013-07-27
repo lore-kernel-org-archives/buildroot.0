@@ -1,31 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 23:41:52 +0200
-Subject: [Buildroot] [PATCH 00/67] libglib2 requires threads
-In-Reply-To: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130727234152.2b058f4f@skate>
+Date: Sat, 27 Jul 2013 16:22:19 +0200
+Subject: [Buildroot] [PATCH 8/9] blackfin: set GNU_TARGET_NAME
+ accordingly
+In-Reply-To: <1374324735-2286-9-git-send-email-gustavo@zacarias.com.ar>
+References: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
+ <1374324735-2286-9-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130727162219.548826b8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Dear Gustavo Zacarias,
 
-On Mon, 15 Jul 2013 14:46:43 -0500, Spenser Gilliland wrote:
-> This patch removes support for an un-threaded version of libglib2. There were
-> minor cleanups and some bug fixes to various Config.in as well.
-> 
-> See autobuilder failures
-> 
-> http://autobuild.buildroot.net/results/d1fb882fe4d22a17bdd438360da515011dda2b30/build-end.log?
-> http://autobuild.buildroot.net/results/b66e807769ead5caa3e3b6312e9f7c35c14eafe7/build-end.log?
-> http://autobuild.buildroot.net/results/9c3fa0c5003a6369e70bfe6d611f7d745742a8c7/build-end.log?
+On Sat, 20 Jul 2013 09:52:14 -0300, Gustavo Zacarias wrote:
+> Blackfin for FDPIC targets uses *-linux-*, however for FLAT targets it
 
-I've committed this patch set, after squashing all the patches (except
-the avahi minor cleanup patch) into one and doing a few minor fixes.
+>  # Compute GNU_TARGET_NAME
+>  GNU_TARGET_NAME=$(ARCH)-buildroot-linux-$(LIBC)$(ABI)
+>  
+> +# Blackfin FLAT needs uclinux
+> +ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
+> +GNU_TARGET_NAME=$(ARCH)-buildroot-uclinux-$(LIBC)$(ABI)
+> +endif
 
-Thanks!
+I've changed that to keep a single GNU_TARGET_NAME definition and to
+use a new TARGET_OS variable, like the existing LIBC and ABI variables
+we had.
 
 Thomas
 -- 
