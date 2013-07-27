@@ -1,39 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 16:14:45 +0200
-Subject: [Buildroot] Recommended cross toolchain for ARM
-In-Reply-To: <20130723060305.GA6169@zuhnb712.ap.bm.net>
-References: <20130723060305.GA6169@zuhnb712.ap.bm.net>
-Message-ID: <20130727161445.1ca8a5c0@skate>
+Date: Sat, 27 Jul 2013 16:16:33 +0200
+Subject: [Buildroot] Patches to merge before -rc1 ?
+Message-ID: <20130727161633.72e96e49@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Woody Wu,
+Hello all,
 
-On Tue, 23 Jul 2013 14:03:05 +0800, Woody Wu wrote:
+It would be nice if people could point me to some patches you believe
+should be merged before -rc1, be it your own patches, or patches from
+other people that you believe are ready for merging.
 
-> Do you guys have a suggested cross toolchain?  I want to use glibc
-> instead of uclibc, so in the buildroot default supported options, it
-> left only Sourcery CodeBench (SCB).  But SCB seems not a very completed
-> toolchain, when I use it to compile some of my applications, I found it
-> missed with some definitions (such as RLIM_*) which should normally
-> appear in a standard header file.
+It would also help dramatically if contributors could have a look at
+the pending list of patches, test them, comment them, review them, and
+provide the appropriate Acked-by/Reviewed-by tags. This would help me
+see which patches should be merged now.
 
-Sourcery CodeBench toolchains usually work fine. Could you point to
-specific problems with them, i.e which package fails to build, with
-which version of the Sourcery CodeBench? Most likely, if your
-application fails to build with a Sourcery CodeBench toolchain, it's
-because your application doesn't #include the right header files.
-
-> Then I tried, Linaro, but it seems that it do not well support my armv5t
-> core. Anyway, I run with errors after configured it with buildroot.
-
-The Linaro toolchains are built for ARMv7, so the C library they
-contain will only work on ARMv7+ processors.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
