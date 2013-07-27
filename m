@@ -1,56 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 27 Jul 2013 09:13:06 -0300
-Subject: [Buildroot] [PATCH] squid: bump to version 3.3.8
-Message-ID: <1374927186-27619-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 27 Jul 2013 14:37:32 +0200
+Subject: [Buildroot] [PATCH 1/2] perl-cross: bump to version 0.7.2
+In-Reply-To: <1374766953-5614-1-git-send-email-francois.perrad@gadz.org>
+References: <1374766953-5614-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20130727143732.17c5cc47@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/squid/squid-01-assume-get-certificate-ok.patch | 12 ++++++------
- package/squid/squid.mk                                 |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Dear Francois Perrad,
 
-diff --git a/package/squid/squid-01-assume-get-certificate-ok.patch b/package/squid/squid-01-assume-get-certificate-ok.patch
-index e7d4515..0f8d93e 100644
---- a/package/squid/squid-01-assume-get-certificate-ok.patch
-+++ b/package/squid/squid-01-assume-get-certificate-ok.patch
-@@ -3,14 +3,14 @@ Just assume it works ok since we're using a modern OpenSSL version.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- 
--diff -Nura squid-3.3.5.orig/configure.ac squid-3.3.5/configure.ac
----- squid-3.3.5.orig/configure.ac	2013-06-03 09:37:44.016398185 -0300
--+++ squid-3.3.5/configure.ac	2013-06-03 09:37:55.926784556 -0300
--@@ -1261,7 +1261,6 @@
-+diff -Nura squid-3.3.8.orig/configure.ac squid-3.3.8/configure.ac
-+--- squid-3.3.8.orig/configure.ac	2013-07-26 08:57:50.177259534 -0300
-++++ squid-3.3.8/configure.ac	2013-07-26 08:57:55.997448040 -0300
-+@@ -1265,7 +1265,6 @@
-  AC_SUBST(SSLLIB)
--
-+ 
-  if test "x$with_openssl" = "xyes"; then
- -SQUID_CHECK_OPENSSL_GETCERTIFICATE_WORKS
-+ SQUID_CHECK_OPENSSL_CONST_SSL_METHOD
-  SQUID_CHECK_OPENSSL_TXTDB
-  fi
--
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index f6be405..f7d3987 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQUID_VERSION = 3.3.6
-+SQUID_VERSION = 3.3.8
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.3
- SQUID_LICENSE = GPLv2+
- SQUID_LICENSE_FILES = COPYING
+On Thu, 25 Jul 2013 17:42:31 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/perl/perl.mk |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+
+Committed both patches, thanks.
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
