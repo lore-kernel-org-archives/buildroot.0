@@ -1,23 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 14:37:57 +0200
-Subject: [Buildroot] [PATCHv2] package/uclibc: fix big oops from fb354d5f
-In-Reply-To: <1374680649-24409-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1374680649-24409-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130727143757.6e590179@skate>
+Date: Sat, 27 Jul 2013 14:38:44 +0200
+Subject: [Buildroot] [PATCH] u-boot: support custom u-boot.bin name
+In-Reply-To: <b03d9402321cbcb3ae1e.1374659414@BEANTN0L019720>
+References: <b03d9402321cbcb3ae1e.1374659414@BEANTN0L019720>
+Message-ID: <20130727143844.14d20a5e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Thomas De Schampheleire,
 
-On Wed, 24 Jul 2013 12:44:09 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ...0010-Rules.mak-fix-breakage-from-603af30d.patch | 31 ++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 package/uclibc/0.9.33.2/uclibc-0010-Rules.mak-fix-breakage-from-603af30d.patch
+On Wed, 24 Jul 2013 11:50:14 +0200, Thomas De Schampheleire wrote:
+> On some platforms, the standard U-Boot binary is not called u-boot.bin,
+> but u-boot<something>.bin. This is for example the case on the
+> Cavium-provided u-boot, where the output file is called
+> u-boot_<boardname>.bin.
+> 
+> This patch adds a 'custom format' choice in the existing u-boot binary
+> format selection, where this name can be put. In the Cavium example, this
+> option could be set to:
+> BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-$(BR2_TARGET_UBOOT_BOARDNAME).bin"
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 Committed, thanks.
 
