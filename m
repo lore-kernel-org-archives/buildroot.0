@@ -1,78 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 27 Jul 2013 16:11:41 +0200
-Subject: [Buildroot] [git commit] uclibc/bfin: set the appropiate binfmt in
-	the configuration
-Message-ID: <20130727141206.701D19AC10@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] uclibc/bfin: don't install host utils if
+	not FDPIC
+Message-ID: <20130727141206.7AAA19ACB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=806714a5d1701edf4040cb218ff82cd7d61b4b64
+commit: http://git.buildroot.net/buildroot/commit/?id=cd6c7bc29a072d65d384e47dfa9df4a8362e8143
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/uclibc.mk |   40 ++++++++++++++++++++++++++++++++++++++++
- 1 files changed, 40 insertions(+), 0 deletions(-)
+ package/uclibc/uclibc.mk |   15 +++++++++++----
+ 1 files changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index efe00a6..cbc2e56 100644
+index cbc2e56..644c531 100644
 --- a/package/uclibc/uclibc.mk
 +++ b/package/uclibc/uclibc.mk
-@@ -148,6 +148,45 @@ endef
- endif # powerpc
+@@ -511,6 +511,16 @@ define UCLIBC_INSTALL_TARGET_CMDS
+ 	$(UCLIBC_INSTALL_TEST_SUITE)
+ endef
  
- #
-+# Blackfin definitions
-+#
++# For FLAT binfmts (static) there are no host utils
++ifeq ($(BR2_BINFMT_FLAT),)
++define UCLIBC_INSTALL_UTILS_STAGING
++	$(INSTALL) -D -m 0755 $(@D)/utils/ldd.host $(HOST_DIR)/usr/bin/ldd
++	ln -sf ldd $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldd
++	$(INSTALL) -D -m 0755 $(@D)/utils/ldconfig.host $(HOST_DIR)/usr/bin/ldconfig
++	ln -sf ldconfig $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldconfig
++endef
++endif
 +
-+ifeq ($(UCLIBC_TARGET_ARCH),bfin)
-+ifeq ($(BR2_BINFMT_FDPIC),y)
-+define UCLIBC_BFIN_CONFIG
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_FORMAT_FLAT,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_FORMAT_SHARED_FLAT,$(@D))
-+	$(call UCLIBC_OPT_SET,UCLIBC_FORMAT_FDPIC_ELF,y,$(@D))
-+endef
-+endif
-+ifeq ($(BR2_BINFMT_FLAT_ONE),y)
-+define UCLIBC_BFIN_CONFIG
-+	$(call UCLIBC_OPT_SET,UCLIBC_FORMAT_FLAT,y,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_FORMAT_SHARED_FLAT,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_FORMAT_FDPIC_ELF,$(@D))
-+endef
-+endif
-+ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
-+define UCLIBC_BFIN_CONFIG
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_FORMAT_FLAT,$(@D))
-+	$(call UCLIBC_OPT_SET,UCLIBC_FORMAT_FLAT_SEP_DATA,y,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_FORMAT_SHARED_FLAT,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_FORMAT_FDPIC_ELF,$(@D))
-+endef
-+endif
-+ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
-+define UCLIBC_BFIN_CONFIG
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_FORMAT_FLAT,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D))
-+	$(call UCLIBC_OPT_SET,UCLIBC_FORMAT_SHARED_FLAT,y,$(@D))
-+	$(call UCLIBC_OPT_UNSET,UCLIBC_FORMAT_FDPIC_ELF,$(@D))
-+endef
-+endif
-+endif # bfin
-+
-+#
- # AVR32 definitions
- #
+ define UCLIBC_INSTALL_STAGING_CMDS
+ 	$(MAKE1) -C $(@D) \
+ 		$(UCLIBC_MAKE_FLAGS) \
+@@ -518,10 +528,7 @@ define UCLIBC_INSTALL_STAGING_CMDS
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=/ \
+ 		install_runtime install_dev
+-	install -D -m 0755 $(@D)/utils/ldd.host $(HOST_DIR)/usr/bin/ldd
+-	ln -sf ldd $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldd
+-	install -D -m 0755 $(@D)/utils/ldconfig.host $(HOST_DIR)/usr/bin/ldconfig
+-	ln -sf ldconfig $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldconfig
++	$(UCLIBC_INSTALL_UTILS_STAGING)
+ endef
  
-@@ -380,6 +419,7 @@ define UCLIBC_SETUP_DOT_CONFIG
- 	$(UCLIBC_SPARC_TYPE_CONFIG)
- 	$(UCLIBC_POWERPC_TYPE_CONFIG)
- 	$(UCLIBC_AVR32_CONFIG)
-+	$(UCLIBC_BFIN_CONFIG)
- 	$(UCLIBC_X86_TYPE_CONFIG)
- 	$(UCLIBC_ENDIAN_CONFIG)
- 	$(UCLIBC_LARGEFILE_CONFIG)
+ uclibc-menuconfig: dirs uclibc-patch
