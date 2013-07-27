@@ -1,37 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 23:38:17 +0200
-Subject: [Buildroot] [git commit] build: use find -perm /mode,
-	instead of -perm +mode STRIP_FIND_CMD
-Message-ID: <20130727213808.9FA439AD2F@busybox.osuosl.org>
+Date: Sat, 27 Jul 2013 23:41:52 +0200
+Subject: [Buildroot] [PATCH 00/67] libglib2 requires threads
+In-Reply-To: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
+References: <1373917670-30006-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130727234152.2b058f4f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=88418bd2de3e2161fc5085a68c5e558a95644a07
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Spenser Gilliland,
 
-The -perm +mode is deprecated, and sometimes yields suprising results.
-It can be confused with permission in symbolic mode, for example '+u+g',
-as POSIX spec suggests.
+On Mon, 15 Jul 2013 14:46:43 -0500, Spenser Gilliland wrote:
+> This patch removes support for an un-threaded version of libglib2. There were
+> minor cleanups and some bug fixes to various Config.in as well.
+> 
+> See autobuilder failures
+> 
+> http://autobuild.buildroot.net/results/d1fb882fe4d22a17bdd438360da515011dda2b30/build-end.log?
+> http://autobuild.buildroot.net/results/b66e807769ead5caa3e3b6312e9f7c35c14eafe7/build-end.log?
+> http://autobuild.buildroot.net/results/9c3fa0c5003a6369e70bfe6d611f7d745742a8c7/build-end.log?
 
-Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I've committed this patch set, after squashing all the patches (except
+the avahi minor cleanup patch) into one and doing a few minor fixes.
 
-diff --git a/Makefile b/Makefile
-index f477124..0cd7f55 100644
---- a/Makefile
-+++ b/Makefile
-@@ -449,7 +449,7 @@ STRIP_FIND_CMD = find $(TARGET_DIR)
- ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
- STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
- endif
--STRIP_FIND_CMD += -type f -perm +111
-+STRIP_FIND_CMD += -type f -perm /111
- STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
- 
- target-finalize:
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
