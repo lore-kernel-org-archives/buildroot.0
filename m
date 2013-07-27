@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 17:18:01 +0200
-Subject: [Buildroot] [git commit] dropwatch: add missing dependencies
-Message-ID: <20130727213154.0F25B9AD35@busybox.osuosl.org>
+Date: Sat, 27 Jul 2013 17:15:53 +0200
+Subject: [Buildroot] [git commit] usb_modeswitch_data: requires thread
+	support
+Message-ID: <20130727213153.F3AE39ACCC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dad93df6e83d5f463567ced4fb4d3738a5a6ce73
+commit: http://git.buildroot.net/buildroot/commit/?id=af1528af6385e19d0c351172701f3adb017c06f2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-dropwatch requires thread support because it selects libnl that
-depends on thread support. Also dropwatch cannot build on AArch64,
-because it selects the target binutils package which isn't (yet)
-available on AArch64.
+usb_modeswitch_data unconditionally selects usb_modeswitch, but
+usb_modeswitch depends on thread support. This commit has the thread
+support dependency to usb_modeswitch_data.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dropwatch/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/usb_modeswitch_data/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/dropwatch/Config.in b/package/dropwatch/Config.in
-index 4c0857e..ef9a20d 100644
---- a/package/dropwatch/Config.in
-+++ b/package/dropwatch/Config.in
-@@ -1,10 +1,15 @@
- config BR2_PACKAGE_DROPWATCH
- 	bool "dropwatch"
- 	select BR2_PACKAGE_BINUTILS
-+	depends on !BR2_aarch64 # binutils
- 	select BR2_PACKAGE_READLINE
- 	select BR2_PACKAGE_LIBNL
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
+diff --git a/package/usb_modeswitch_data/Config.in b/package/usb_modeswitch_data/Config.in
+index 6df408f..e0e8f4c 100644
+--- a/package/usb_modeswitch_data/Config.in
++++ b/package/usb_modeswitch_data/Config.in
+@@ -1,9 +1,13 @@
+ config BR2_PACKAGE_USB_MODESWITCH_DATA
+ 	bool "usb_modeswitch_data"
+ 	select BR2_PACKAGE_USB_MODESWITCH
++	depends on BR2_TOOLCHAIN_HAS_THREADS # usb_modeswitch -> libusb
  	help
- 	  Dropwatch is an interactive utility for monitoring and
- 	  recording packets that are dropped by the kernel
+ 	  USB mode switch data
+ 	  Contains udev rules and events to allow usb_modeswitch to
+ 	  function automatically
  
- 	  https://fedorahosted.org/dropwatch/
+ 	  http://www.draisberghof.de/usb_modeswitch/
 +
-+comment "dropwatch requires threading support in toolchain"
++comment "usb_modeswitch_data needs a toolchain with thread support"
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS
