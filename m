@@ -1,34 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 14:49:41 +0200
-Subject: [Buildroot] [git commit] bind: install to staging
-Message-ID: <20130727130650.148F49AC91@busybox.osuosl.org>
+Date: Sat, 27 Jul 2013 15:07:04 +0200
+Subject: [Buildroot] [git commit] squid: bump to version 3.3.8
+Message-ID: <20130727130650.3254F9AC91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8966bab7a49426d06029de9d12299bd32aff990
+commit: http://git.buildroot.net/buildroot/commit/?id=84779fd22a9b7cb76689b6453cee4b8b05a03b5f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Install bind to staging so other applications can use its include files
-and libraries.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bind/bind.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ .../squid/squid-01-assume-get-certificate-ok.patch |   12 ++++++------
+ package/squid/squid.mk                             |    2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 4137093..93fc9fb 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -7,6 +7,7 @@
- BIND_VERSION = 9.6-ESV-R9-P1
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_MAKE = $(MAKE1)
-+BIND_INSTALL_STAGING = YES
- BIND_LICENSE = ISC
- BIND_LICENSE_FILES = COPYRIGHT
- BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
+diff --git a/package/squid/squid-01-assume-get-certificate-ok.patch b/package/squid/squid-01-assume-get-certificate-ok.patch
+index e7d4515..0f8d93e 100644
+--- a/package/squid/squid-01-assume-get-certificate-ok.patch
++++ b/package/squid/squid-01-assume-get-certificate-ok.patch
+@@ -3,14 +3,14 @@ Just assume it works ok since we're using a modern OpenSSL version.
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+-diff -Nura squid-3.3.5.orig/configure.ac squid-3.3.5/configure.ac
+---- squid-3.3.5.orig/configure.ac	2013-06-03 09:37:44.016398185 -0300
+-+++ squid-3.3.5/configure.ac	2013-06-03 09:37:55.926784556 -0300
+-@@ -1261,7 +1261,6 @@
++diff -Nura squid-3.3.8.orig/configure.ac squid-3.3.8/configure.ac
++--- squid-3.3.8.orig/configure.ac	2013-07-26 08:57:50.177259534 -0300
+++++ squid-3.3.8/configure.ac	2013-07-26 08:57:55.997448040 -0300
++@@ -1265,7 +1265,6 @@
+  AC_SUBST(SSLLIB)
+-
++ 
+  if test "x$with_openssl" = "xyes"; then
+ -SQUID_CHECK_OPENSSL_GETCERTIFICATE_WORKS
++ SQUID_CHECK_OPENSSL_CONST_SSL_METHOD
+  SQUID_CHECK_OPENSSL_TXTDB
+  fi
+-
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index f6be405..f7d3987 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQUID_VERSION = 3.3.6
++SQUID_VERSION = 3.3.8
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.3
+ SQUID_LICENSE = GPLv2+
+ SQUID_LICENSE_FILES = COPYING
