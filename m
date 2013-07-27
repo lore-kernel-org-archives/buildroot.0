@@ -1,22 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 15:47:10 +0200
-Subject: [Buildroot] [PATCH] uclibc: arc: fix fstat for big-endian
-In-Reply-To: <1374596888-25427-1-git-send-email-mjonker@synopsys.com>
-References: <1374596888-25427-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <20130727154710.57e98d27@skate>
+Date: Sat, 27 Jul 2013 15:47:32 +0200
+Subject: [Buildroot] [PATCH] directfb-examples: install rose.png for
+ df_dok
+In-Reply-To: <1374593638-16863-1-git-send-email-james.hogan@imgtec.com>
+References: <1374593638-16863-1-git-send-email-james.hogan@imgtec.com>
+Message-ID: <20130727154732.7d96d8f0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mischa Jonker,
+Dear James Hogan,
 
-On Tue, 23 Jul 2013 18:28:08 +0200, Mischa Jonker wrote:
-> Fixes "Value too large for defined data type" messages caused by fstat
-> syscall wrapper returning -EOVERFLOW.
+On Tue, 23 Jul 2013 16:33:58 +0100, James Hogan wrote:
+> The directfb example program df_dok now requires rose.png to be
+> installed, otherwise it gives the following error:
 > 
-> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+> (#) DirectFBError [dfb->CreateImageProvider( dfb, DATADIR"/rose.png", &provider )]: A general or unknown error occured
+> 
+> Therefore add rose.png to the list of data files if df_dok is enabled.
+> 
+> Signed-off-by: James Hogan <james.hogan@imgtec.com>
+> ---
+>  package/directfb-examples/directfb-examples.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
 Committed, thanks.
 
