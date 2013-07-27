@@ -1,24 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 14:37:32 +0200
-Subject: [Buildroot] [PATCH 1/2] perl-cross: bump to version 0.7.2
-In-Reply-To: <1374766953-5614-1-git-send-email-francois.perrad@gadz.org>
-References: <1374766953-5614-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20130727143732.17c5cc47@skate>
+Date: Sat, 27 Jul 2013 14:37:57 +0200
+Subject: [Buildroot] [PATCHv2] package/uclibc: fix big oops from fb354d5f
+In-Reply-To: <1374680649-24409-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1374680649-24409-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130727143757.6e590179@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Gustavo Zacarias,
 
-On Thu, 25 Jul 2013 17:42:31 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Wed, 24 Jul 2013 12:44:09 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/perl/perl.mk |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  ...0010-Rules.mak-fix-breakage-from-603af30d.patch | 31 ++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>  create mode 100644 package/uclibc/0.9.33.2/uclibc-0010-Rules.mak-fix-breakage-from-603af30d.patch
 
-Committed both patches, thanks.
+Committed, thanks.
 
 Thomas
 -- 
