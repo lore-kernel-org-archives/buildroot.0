@@ -1,55 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jul 2013 16:21:37 +0200
-Subject: [Buildroot] [PATCH 2/9] uclibc/bfin: only supports
- linuxthreads.old
-In-Reply-To: <1374324735-2286-3-git-send-email-gustavo@zacarias.com.ar>
-References: <1374324735-2286-1-git-send-email-gustavo@zacarias.com.ar>
- <1374324735-2286-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130727162137.66a04363@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 27 Jul 2013 11:22:13 -0300
+Subject: [Buildroot] [PATCH] toolchain/buildroot: properly handle SSP
+In-Reply-To: <20130727131824.69df5bf9@skate>
+References: <1372962626-20736-1-git-send-email-gustavo@zacarias.com.ar>
+ <20130727131824.69df5bf9@skate>
+Message-ID: <51F3D795.6050402@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 07/27/2013 08:18 AM, Thomas Petazzoni wrote:
 
-On Sat, 20 Jul 2013 09:52:08 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/uclibc/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index 90aae90..f9c4956 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -104,6 +104,7 @@ choice
->  
->  	config BR2_PTHREADS
->  		bool "linuxthreads"
-> +		depends on !BR2_bfin
->  		depends on !BR2_xtensa
->  	        select BR2_TOOLCHAIN_HAS_THREADS
->  
-> @@ -115,9 +116,10 @@ choice
->  		bool "Native POSIX Threading (NPTL)"
->  		select BR2_TOOLCHAIN_HAS_THREADS
->  		depends on !BR2_x86_i386
-> +		depends on !BR2_arc
->  		depends on !BR2_avr32
-> +		depends on !BR2_bfin
->  		depends on !BR2_xtensa
-> -		depends on !BR2_arc
->  endchoice
+> Committed thanks. It would be nice to check whether something specific
+> is needed for eglibc.
 
-As suggested by Yann, I've splitted this in two patches, one adding
-the !bfin dependency, another one doing the re-ordering, including
-x86_i386.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+It's default on for eglibc as long as gcc supports -fstack-protector.
+And it doesn't seem to care much if i try to disable it, though i'd be a
+bit wary of doing so being upstream default.
+Regards.
