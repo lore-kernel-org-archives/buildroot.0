@@ -1,28 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 28 Jul 2013 09:12:01 -0300
-Subject: [Buildroot] [PATCH] busybox: register mdev as hotplug helper
-In-Reply-To: <CAAXf6LWwhMVkp_v17xYjJGr4d_+SGa_sKsVWHuP4RJmxKg4s7w@mail.gmail.com>
-References: <1373574654-32427-1-git-send-email-gustavo@zacarias.com.ar>
- <CAAXf6LVSOCLS54uAwJHH6DwenrexRY=17v_PoOe_KTnmWWTvWg@mail.gmail.com>
- <51DFDA1F.60904@zacarias.com.ar>
- <CAAXf6LWVWj-Z2Od9Zc=QjWELd3_R+5MQ+gTBo=dO-VgFiDoxGg@mail.gmail.com>
- <51F50077.2060204@zacarias.com.ar>
- <CAAXf6LXt7LzmRU+iWDM1_55f+AjwocG=NTpEzTVgWMZaCONoRg@mail.gmail.com>
- <51F5071F.9040906@zacarias.com.ar>
- <CAAXf6LWwhMVkp_v17xYjJGr4d_+SGa_sKsVWHuP4RJmxKg4s7w@mail.gmail.com>
-Message-ID: <51F50A91.6090703@zacarias.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 28 Jul 2013 14:13:08 +0200
+Subject: [Buildroot] [PATCH v2] ser2net: bump to 2.9
+Message-ID: <1375013588-2666-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/28/2013 09:09 AM, Thomas De Schampheleire wrote:
-> Alright, you win ;-)
-> 
-> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+SER2NET_AUTORECONF is needed because of libtool version mismatch.
+See error message bellow:
 
-Actually users who don't do the kernel in buildroot win, i usually do.
-And even if i didn't i use my own set of customs scripts :)
-Thanks.
-Regards.
+/bin/bash ./libtool --tag=CC   --mode=link gcc -Wall -g -O2   -o
+ser2net controller.o dataxfer.o devcfg.o readconfig.o selector.o
+ser2net.o utils.o telnet.o buffer.o  -lnsl
+libtool: Version mismatch error.  This is libtool 2.4.2
+Debian-2.4.2-1ubuntu1, but the
+libtool: definition of this LT_INIT comes from libtool 2.2.6b.
+libtool: You should recreate aclocal.m4 with macros from libtool 2.4.2
+Debian-2.4.2-1ubuntu1
+libtool: and run autoconf again.
+make: *** [ser2net] Error 63
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes since v1: added reason for autoreconf
+
+ package/ser2net/ser2net.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
+index 588571c..cc728a6 100644
+--- a/package/ser2net/ser2net.mk
++++ b/package/ser2net/ser2net.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+
+-SER2NET_VERSION = 2.8
++SER2NET_VERSION = 2.9
+ SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
++SER2NET_AUTORECONF = YES
+ SER2NET_LICENSE = GPLv2+
+ SER2NET_LICENSE_FILES = COPYING
+
+--
+1.8.1.2
