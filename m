@@ -1,33 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Jul 2013 16:20:04 +0200
-Subject: [Buildroot] [git commit] tcl: install the libtcl into staging
-Message-ID: <20130728142001.269C39AB40@busybox.osuosl.org>
+Date: Sun, 28 Jul 2013 16:29:35 +0200
+Subject: [Buildroot] [PATCHv3 0/5] tcl rework (was: make usb_modeswitch
+ work with udev)
+In-Reply-To: <1372063256-23292-1-git-send-email-richard.genoud@gmail.com>
+References: <1371743610-17810-1-git-send-email-richard.genoud@gmail.com>
+ <1372063256-23292-1-git-send-email-richard.genoud@gmail.com>
+Message-ID: <20130728162935.60b83ef8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b59411c759c8fe97e4edf78a7cd489d5c86ad66
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Richard Genoud,
 
-The tcl package contains a lib, so it should go into staging.
+On Mon, 24 Jun 2013 10:40:51 +0200, Richard Genoud wrote:
 
-Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tcl/tcl.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+> Richard Genoud (5):
+>   tcl: use make conditions
+>   tcl: remove strip command
+>   tcl: install the libtcl into staging
+>   tcl: add a tclsh symlink
+>   tcl: make the libtcl writable in order to be stripped
+> 
+>  package/tcl/tcl.mk |   33 ++++++++++++++++++++++++---------
+>  1 file changed, 24 insertions(+), 9 deletions(-)
 
-diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index 564d5bc..cc0565c 100644
---- a/package/tcl/tcl.mk
-+++ b/package/tcl/tcl.mk
-@@ -12,6 +12,7 @@ TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION_MAJOR)
- TCL_LICENSE = tcl license
- TCL_LICENSE_FILES = license.terms
- TCL_SUBDIR = unix
-+TCL_INSTALL_STAGING = YES
- TCL_CONF_OPT = \
- 		--disable-symbols \
- 		--disable-langinfo \
+Committed, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
