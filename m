@@ -1,66 +1,50 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Mon, 29 Jul 2013 01:30:16 +0800
-Subject: [Buildroot] [PATCH] uclibc/arm: don't install ldd.host and
- ldconfig.host if !HAVE_SHARED
-In-Reply-To: <20130728192227.708e6c2c@skate>
-References: <1375030117.13990.1.camel@phoenix> <20130728185932.5142e4b2@skate>
- <CAFRkauAQFyQCn1S=yUuzhCmCNdjMn1jTU-zzgG=eLAL-P7Hy3A@mail.gmail.com>
- <20130728192227.708e6c2c@skate>
-Message-ID: <CAFRkauBsnARbkfB8hYj=dBYD2mXTmYoSZyTgx11yHaJUrAgeuQ@mail.gmail.com>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Sun, 28 Jul 2013 19:19:19 +0100
+Subject: [Buildroot] [git commit] busybox: register mdev as hotplug
+ helper when selected
+In-Reply-To: <20130728143214.749C19AD30@busybox.osuosl.org>
+References: <20130728143214.749C19AD30@busybox.osuosl.org>
+Message-ID: <51F560A7.8020609@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/7/29 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Axel Lin,
->
-> On Mon, 29 Jul 2013 01:17:00 +0800, Axel Lin wrote:
->
->> Below is my settings.
->> I'm pretty new in using buildroot, below is my settings.
->> I hope my description here is clear.
->>
->> $ make menuconfig
->>
->> mainly with below settings:
->> ARM, arm7tdmi, uClibc,
->> BR2_USE_MMU is not set
->>
->> $ make uclibc-menuconfig
->>
->> ARCH_HAS_MMU is not set
->> UCLIBC_FORMAT_FLAT=y
->> ARCH_HAS_NO_SHARED=y
->> When ARCH_HAS_NO_SHARED=y, HAVE_SHARED is automatically set to "not set".
->
-> As soon as you customize the uClibc configuration with
-> uclibc-menuconfig, then we cannot support all the possible build
-> failures that you will get.
->
-> So the solution to this problem is to improve the ARM noMMU support in
-> Buildroot, making sure that:
->
->  1/ The uClibc configuration is automatically adjusted appropriately.
->
->  2/ The uClibc tools are not installed.
->
->
->> However, in package/uclibc/uclibc.mk, it always install ldd.host and
->> ldconfig.host if $(BR2_BINFMT_FLAT) is not set.
->
-> BR2_BINFMT_FLAT should be set when ARM noMMU is used, because I don't
-> think ELF binaries are supported on ARM noMMU.
-May I ask why config BR2_BINFMT_FLAT depends on BR2_bfin || BR2_m68k
-I ask this becuase I'm going to build for arm7tdmi which is noMMU.
-And config BR2_BINFMT_FLAT is invisible now due to the dependency.
 
+On 28/07/2013 15:32, Thomas Petazzoni wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=caae7fa1d737c550b4a2f557d6e1761b93934340
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 >
-> I know Gustavo is working on improving the ARM noMMU, hopefully he will
-> post patches soon.
-Good to know this.
-And thanks for your reply.
+> It's also done in the kernel configuration, however users may be using
+> some other pre-built kernel and miss functionality like firmware
+> loading.
+>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>   package/busybox/S10mdev |    1 +
+>   1 files changed, 1 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
+> index c06aa20..d386d42 100644
+> --- a/package/busybox/S10mdev
+> +++ b/package/busybox/S10mdev
+> @@ -6,6 +6,7 @@
+>   case "$1" in
+>     start)
+>   	echo "Starting mdev..."
+> +	echo /sbin/mdev >/proc/sys/kernel/hotplug
+>   	/sbin/mdev -s
+>   	;;
+>     stop)
 
-Regards,
-Axel
+If you make that change surely you should change linux.mk to no longer 
+set the option? Very confusing to have both at the same time.
+
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
