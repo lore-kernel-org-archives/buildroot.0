@@ -1,9 +1,9 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 28 Jul 2013 10:19:57 +0200
-Subject: [Buildroot] [PATCH] buildroot: Add POST_RSYNC_HOOKS support
-In-Reply-To: <1374944196-19580-1-git-send-email-tjlee@ambarella.com>
-References: <1374944196-19580-1-git-send-email-tjlee@ambarella.com>
-Message-ID: <CAAXf6LVM7yoWaVdKp90oYOyLbVS=OvNFMzQv2nvcXp-vUmTDww@mail.gmail.com>
+Date: Sun, 28 Jul 2013 10:22:17 +0200
+Subject: [Buildroot] [PATCH] <pkg>-rsync: support user custom cmds
+In-Reply-To: <1374944218-19629-1-git-send-email-tjlee@ambarella.com>
+References: <1374944218-19629-1-git-send-email-tjlee@ambarella.com>
+Message-ID: <CAAXf6LXQWBEF2uM4e5MQg-QooTMwHmgZ99HT6PDH1DHNDDM-Gw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +13,36 @@ To: buildroot@busybox.net
 Hi Tzu-Jung Lee,
 
 On Sat, Jul 27, 2013 at 6:56 PM, Tzu-Jung Lee <roylee17@gmail.com> wrote:
-> One of the use cases is for the 'local packages' to restore
-> the SCM info.  Some packages use this information to generate
-> version info during build time.  In this case, the local package
-> can have this hook to restore it by symbolic link for example.
->
 > Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+
+Could you explain more about the use case of this patch? Why do you
+want to override the rsync command?
+
 > ---
->  package/pkg-generic.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/pkg-generic.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
 > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index d9a12f2..06e865d 100644
+> index b8eaa98..d9a12f2 100644
 > --- a/package/pkg-generic.mk
 > +++ b/package/pkg-generic.mk
-> @@ -63,6 +63,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
->         @$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
->         @test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
->         rsync -au --cvs-exclude --include core $(SRCDIR)/ $(@D)
-> +       $(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
->         $(Q)touch $@
+> @@ -309,6 +309,10 @@ $(2)_INSTALL_IMAGES                ?= NO
+>  $(2)_INSTALL_TARGET            ?= YES
+>  $(2)_DIR_PREFIX                        = $(if $(4),$(4),$(TOP_SRCDIR)/package)
 >
->  # Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
+> +# default rsync command
+> +$(2)_RSYNC_CMDS ?= \
+> +       rsync -au --cvs-exclude --include core $(SRCDIR)/ $(@D)
+> +
+>  # define sub-target stamps
+>  $(2)_TARGET_INSTALL_TARGET =   $$($(2)_DIR)/.stamp_target_installed
+>  $(2)_TARGET_INSTALL_STAGING =  $$($(2)_DIR)/.stamp_staging_installed
 
-I think you should update the documentation to mention this hook.
+I fail to understand how this will work without further changes.
+Even if a package defines FOO_RSYNC_CMDS, where is it used? I guess
+the original rsync commands should be replaced by the new variable.
 
-Also, further in pkg-generic.mk is a list of all hooks defaulting to
-empty. You should add the new POST_RSYNC_HOOK there as well.
+Also here, documentation should be updated to reflect new features.
 
 Best regards,
 Thomas
