@@ -1,69 +1,35 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 28 Jul 2013 15:57:22 +0200
-Subject: [Buildroot] [PATCH v2] <pkg>-rsync: support user custom cmds
-In-Reply-To: <CAAXf6LXvJjA_Wxm=OMCBKYZKudveUj=J-fpU7SeXgCxoH3MQhA@mail.gmail.com>
-References: <CAAXf6LXQWBEF2uM4e5MQg-QooTMwHmgZ99HT6PDH1DHNDDM-Gw@mail.gmail.com>
- <1375007963-15935-1-git-send-email-tjlee@ambarella.com>
- <20130728150334.6a8a862c@skate>
- <CAAXf6LXvJjA_Wxm=OMCBKYZKudveUj=J-fpU7SeXgCxoH3MQhA@mail.gmail.com>
-Message-ID: <CAAXf6LWwD6fkDpANcYnKT+ShQoBPJKpjJm-1K70DYjs+5eWqEA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 28 Jul 2013 11:01:29 -0300
+Subject: [Buildroot] [PATCH] busybox: register mdev as hotplug helper
+In-Reply-To: <20130728155156.1bc37ffd@skate>
+References: <1373574654-32427-1-git-send-email-gustavo@zacarias.com.ar>
+ <CAAXf6LVSOCLS54uAwJHH6DwenrexRY=17v_PoOe_KTnmWWTvWg@mail.gmail.com>
+ <51DFDA1F.60904@zacarias.com.ar>
+ <CAAXf6LWVWj-Z2Od9Zc=QjWELd3_R+5MQ+gTBo=dO-VgFiDoxGg@mail.gmail.com>
+ <51F50077.2060204@zacarias.com.ar> <20130728151418.70891325@skate>
+ <51F51EBE.4000701@zacarias.com.ar> <20130728155156.1bc37ffd@skate>
+Message-ID: <51F52439.4060001@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Op 28-jul.-2013 15:15 schreef "Thomas De Schampheleire" <
-patrickdepinguin+buildroot@gmail.com> het volgende:
->
-> On Sun, Jul 28, 2013 at 3:03 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Dear Tzu-Jung Lee,
-> >
-> > On Sun, 28 Jul 2013 18:39:23 +0800, Tzu-Jung Lee wrote:
-> >> This patch allows users to override the options or entire command
-> >> line of rsync.  The default options filters out object or libraries
-> >> during rsync.  For local packages which come with pre-built binaries,
-> >> the copy in build/ directory will not have complete files as src/
-> >
-> > Hum, I am not sure this is the right way to fix this. When it was
-> > introduced, I thought the --cvs-exclude option was only ignoring things
-> > like CVS/ directories, .svn/ directories or .git/ directories. But now
-> > that I read the rsync man page, I see that it excludes a huge number of
-> > other file name patterns, which I think isn't desirable.
-> >
-> > So rather than providing a way for the user to override the rsync
-> > command, I'd prefer the rsync command to behave appropriately. I
-> > believe it should simply copy /everything/, including version control
-> > directories. Yes that's longer, but there's no reasonable generic way
-> > to determine which files should be copied and which files should not.
->
-> In my version of 'man rsync', here is the list of excluded patterns
-> when using cvs-exclude:
->
-> RCS SCCS CVS CVS.adm RCSLOG cvslog.* tags TAGS .make.state
-> .nse_depinfo *~ #* .#* ,* _$* *$ *.old *.bak *.BAK *.orig *.rej .del-*
-> *.a *.olb *.o *.obj *.so *.exe *.Z *.elc *.ln core .svn/ .git/ .hg/
-> .bzr/
->
->
-> I can see how excluding *.a *.o *.obj *.so *.exe can be debatable.
-> I would certainly like to keep excluding .svn, .git, .hg, and .bzr.
-> These directories can become very big, and in the general use case,
-> aren't needed.
-> Frankly, I don't care a lot about the other patterns.
->
-> Here are three suggestions:
-> - follow the proposed patch, keeping the default as it is and
-> providing a way to overrule it per package.
-> - simplifying the default exclusion list to .svn, .git, .hg and .bzr
-> (but this wouldn't cover the use case of Tzu-Jung Lee)
-> - make the exclusion list a global config option, defaulting to e.g.
-> .svn, .git, .hg, .bzr and maybe others, but changeable by the user.
+On 07/28/2013 10:51 AM, Thomas Petazzoni wrote:
 
-Other suggestion:
-- add a config option 'don't exclude version control files when rsyncing'
-and don't provide further flexibility.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130728/d9f467a1/attachment.html>
+>> For mdev that can be solved, at worst it'll be an (almost) no-op,
+>> devtmpfs is another story.
+> 
+> That's true.
+
+It basically boils down to helping people or not on alternate scenarios.
+Some random guy in #pandaboard was having issues loading firmware on a
+prebuilt kernel (which sometimes happens to be a sore PITA to build a
+working kernel with some vendors/for some people, no point in arguing
+that no matter how much we wish everything were upstreamed/vanilla) for
+WiFi support and (obviously) mdev wasn't working.
+Solution was get your kernel source/config right, or fix the script.
+The script was a quick way out without bad side effects.
+On a personal level i don't care about the patch, it was just a quick
+and painless way of fixing a common problem.
+Regards.
