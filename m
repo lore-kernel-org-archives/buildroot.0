@@ -1,27 +1,463 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 28 Jul 2013 08:28:55 -0300
-Subject: [Buildroot] [PATCH] busybox: register mdev as hotplug helper
-In-Reply-To: <CAAXf6LWVWj-Z2Od9Zc=QjWELd3_R+5MQ+gTBo=dO-VgFiDoxGg@mail.gmail.com>
-References: <1373574654-32427-1-git-send-email-gustavo@zacarias.com.ar>
- <CAAXf6LVSOCLS54uAwJHH6DwenrexRY=17v_PoOe_KTnmWWTvWg@mail.gmail.com>
- <51DFDA1F.60904@zacarias.com.ar>
- <CAAXf6LWVWj-Z2Od9Zc=QjWELd3_R+5MQ+gTBo=dO-VgFiDoxGg@mail.gmail.com>
-Message-ID: <51F50077.2060204@zacarias.com.ar>
+From: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Sun, 28 Jul 2013 19:59:40 +0800
+Subject: [Buildroot] [PATCH] tstools: fix build failure in parallel (-j)
+	build
+In-Reply-To: <20130727162009.7651acd5@skate>
+References: <20130727162009.7651acd5@skate>
+Message-ID: <1375012780-30975-1-git-send-email-tjlee@ambarella.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/28/2013 05:33 AM, Thomas De Schampheleire wrote:
+This patch fix the nightly build failure caused by tstools.
+It is back ported from recent upstream commit
 
-> So what do we do with this patch?
-> I ask it because it's still marked as 'New' in patchwork:
-> http://patchwork.ozlabs.org/patch/258619/
-> If we agree that it shouldn't be needed, I suggest to mark it as such.
-> If someone can come up with a proven failure scenario, we can still reopen it.
-> 
-> What do you think?
+  0e8463ea1dc55f566a88bb3df29cf3d5f23cc326
 
-Proven failure: not building a kernel with buildroot.
-Regards.
+  Once the upstream update the download page with more
+  recent source tarball, this will no be ino longer needed.
+
+Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+---
+
+ ...stools-001-build-get-along-with-buildroot.patch |  40 +++
+ ...ools-002-build-fix-parallel-build-failure.patch | 331 +++++++++++++++++++++
+ .../tstools-build-get-along-with-buildroot.patch   |  40 ---
+ 3 files changed, 371 insertions(+), 40 deletions(-)
+ create mode 100644 package/tstools/tstools-001-build-get-along-with-buildroot.patch
+ create mode 100644 package/tstools/tstools-002-build-fix-parallel-build-failure.patch
+ delete mode 100644 package/tstools/tstools-build-get-along-with-buildroot.patch
+
+diff --git a/package/tstools/tstools-001-build-get-along-with-buildroot.patch b/package/tstools/tstools-001-build-get-along-with-buildroot.patch
+new file mode 100644
+index 0000000..1e7a748
+--- /dev/null
++++ b/package/tstools/tstools-001-build-get-along-with-buildroot.patch
+@@ -0,0 +1,40 @@
++From 44f80bce0914d4d9c5e7486c7cdb521ba637b324 Mon Sep 17 00:00:00 2001
++From: Tzu-Jung Lee <tjlee@ambarella.com>
++Date: Fri, 19 Jul 2013 22:45:18 +0800
++Subject: [PATCH] build: get along with buildroot
++
++Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
++---
++ Makefile | 12 ++++++------
++ 1 file changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 2c3568e..98bb994 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -34,12 +34,6 @@ SHELL = /bin/sh
++ .SUFFIXES:
++ .SUFFIXES: .c .o
++ 
++-ifdef CROSS_COMPILE
++-CC = $(CROSS_COMPILE)gcc
++-else
++-CC = gcc
++-endif
++-
++ # Use WARN=1 periodically to get too many warnings...
++ ifdef WARN
++ WARNING_FLAGS = -Wall -W -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-qual -Wconversion -Wmissing-prototypes -Wmissing-declarations -Wunreachable-code -Winline
++@@ -452,3 +446,9 @@ test_lists:	$(BINDIR)/test_nal_unit_list  $(BINDIR)/test_es_unit_list
++ 	@echo +++ Testing ES unit lists
++ 	$(BINDIR)/test_es_unit_list
++ 	@echo +++ Test succeeded
+++
+++.PHONY: install
+++install:
+++	@for i in $(PROGS); do \
+++		cp -f $$i $(DESTDIR)/usr/bin/; \
+++	done
++-- 
++1.8.3.2
++
+diff --git a/package/tstools/tstools-002-build-fix-parallel-build-failure.patch b/package/tstools/tstools-002-build-fix-parallel-build-failure.patch
+new file mode 100644
+index 0000000..bbe61d9
+--- /dev/null
++++ b/package/tstools/tstools-002-build-fix-parallel-build-failure.patch
+@@ -0,0 +1,331 @@
++From 2fe4faa9d8eab6068976c7981bc166f576869b36 Mon Sep 17 00:00:00 2001
++From: Tzu-Jung Lee <tjlee@ambarella.com>
++Date: Sun, 28 Jul 2013 19:40:27 +0800
++Subject: [PATCH 1/1] build: fix parallel build failure
++
++This is back ported from recent upstream commit
++
++  0e8463ea1dc55f566a88bb3df29cf3d5f23cc326
++
++Once the upstream update the download page with more
++recent source tarball, this will no be ino longer needed.
++
++Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
++---
++ Makefile | 222 +++++++++++++++++++++++++++++++++------------------------------
++ 1 file changed, 115 insertions(+), 107 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index b79a573..ad7f163 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -67,67 +67,49 @@ LFS_FLAGS = -D_FILE_OFFSET_BITS=64
++ # sort of thing (presumably Linux or BSD)
++ ifeq ($(shell uname -s), Darwin)
++ 	SYSTEM = "macosx"
++-	ARCH_FLAGS = -arch ppc -arch i386
+++	ARCH_FLAGS =
+++	# If you're still building on a version of Mac OS X that supports powerpc,
+++	# then you may want to uncomment the next line. Obviously, this no longer
+++	# works in Lion, which doesn't support powerpc machines any more.
+++	#ARCH_FLAGS = -arch ppc -arch i386
++ else
++ 	SYSTEM = "other"
++-	ARCH_FLAGS =
+++	ARCH_FLAGS = -fPIC
++ endif
++ 
++ CFLAGS = $(WARNING_FLAGS) $(OPTIMISE_FLAGS) $(LFS_FLAGS) -I. $(PROFILE_FLAGS) $(ARCH_FLAGS)
++-LDFLAGS = -g -lm $(PROFILE_FLAGS) $(ARCH_FLAGS)
+++LDFLAGS = -g $(PROFILE_FLAGS) $(ARCH_FLAGS) -lm
++ 
++ # Target directories
++ OBJDIR = obj
++ LIBDIR = lib
++ BINDIR = bin
++ 
++-# All of our non-program source files
++-SRCS = \
++- accessunit.c \
++- ac3.c \
++- adts.c \
++- avs.c \
++- bitdata.c \
++- es.c \
++- fmtx.c \
++- h222.c \
++- h262.c \
++- audio.c \
++- l2audio.c \
++- misc.c \
++- nalunit.c \
++- ps.c \
++- pes.c \
++- pidint.c \
++- ts.c \
++- tswrite.c \
++- pcap.c 
++-
++ # All of our non-program object modules
++ OBJS = \
++- accessunit.o \
++- avs.o \
++- ac3.o \
++- adts.o \
++- bitdata.o \
++- es.o \
++- filter.o \
++- fmtx.o \
++- h222.o \
++- h262.o \
++- audio.o \
++- l2audio.o \
++- misc.o \
++- nalunit.o \
++- ps.o \
++- pes.o \
++- pidint.o \
++- reverse.o \
++- ts.o \
++- tswrite.o \
++- pcap.o \
++- ethernet.o \
++- ipv4.o
+++ $(OBJDIR)/accessunit.o \
+++ $(OBJDIR)/avs.o \
+++ $(OBJDIR)/ac3.o \
+++ $(OBJDIR)/adts.o \
+++ $(OBJDIR)/bitdata.o \
+++ $(OBJDIR)/es.o \
+++ $(OBJDIR)/filter.o \
+++ $(OBJDIR)/fmtx.o \
+++ $(OBJDIR)/h222.o \
+++ $(OBJDIR)/h262.o \
+++ $(OBJDIR)/audio.o \
+++ $(OBJDIR)/l2audio.o \
+++ $(OBJDIR)/misc.o \
+++ $(OBJDIR)/nalunit.o \
+++ $(OBJDIR)/ps.o \
+++ $(OBJDIR)/pes.o \
+++ $(OBJDIR)/pidint.o \
+++ $(OBJDIR)/reverse.o \
+++ $(OBJDIR)/ts.o \
+++ $(OBJDIR)/tswrite.o \
+++ $(OBJDIR)/pcap.o \
+++ $(OBJDIR)/ethernet.o \
+++ $(OBJDIR)/ipv4.o
++ 
++ # Our program object modules
++ PROG_OBJS = \
++@@ -161,9 +143,14 @@ TEST_OBJS = \
++   $(OBJDIR)/test_es_unit_list.o
++ 
++ # Our library
++-LIB = $(LIBDIR)/libtstools.a
++-LIBOPTS = -L$(LIBDIR) -ltstools $(ARCH_FLAGS)
+++STATIC_LIB = $(LIBDIR)/libtstools.a
+++LIBOPTS = $(ARCH_FLAGS) $(STATIC_LIB)
++ 
+++ifeq ($(shell uname -s), Darwin)
+++SHARED_LIB = $(LIBDIR)/libtstools.xxx
+++else
+++SHARED_LIB = $(LIBDIR)/libtstools.so
+++endif
++ # All of our programs (except the testing ones)
++ PROGS = \
++   $(BINDIR)/esfilter \
++@@ -197,7 +184,7 @@ TEST_PES_PROG = $(BINDIR)/test_pes
++ TEST_PROGS = test_nal_unit_list test_es_unit_list
++ 
++ # ------------------------------------------------------------
++-all:	$(BINDIR) $(LIBDIR) $(OBJDIR) $(PROGS)
+++all:	$(BINDIR) $(LIBDIR) $(OBJDIR) $(PROGS) $(SHARED_LIB)
++ 
++ # ts2ps is not yet an offical program, so for the moment build
++ # it separately
++@@ -205,82 +192,97 @@ all:	$(BINDIR) $(LIBDIR) $(OBJDIR) $(PROGS)
++ ts2ps:	$(TS2PS_PROG)
++ 
++ ifeq ($(shell uname -s), Darwin)
++-# Try getting a library containing universal objects on Mac
++-$(LIB): $(OBJS)
++-	libtool -static $(OBJS) -o $(LIB)
+++# Make libraries containing universal objects on Mac
+++$(STATIC_LIB): $(OBJS)
+++	libtool -static $(OBJS) -o $(STATIC_LIB)
+++$(SHARED_LIB): $(OBJS)
+++	libtool -dynamic $(OBJS) -o $(SHARED_LIB)
++ else
++-$(LIB): $(LIB)($(OBJS))
+++$(STATIC_LIB): $(OBJS)
+++	rm -f $(STATIC_LIB)
+++	ar rc $(STATIC_LIB) $(OBJS)
+++
+++$(SHARED_LIB): $(OBJS)
+++	$(LD) -shared -o $(SHARED_LIB) $(OBJS) -lc
++ endif
++ 
++-$(BINDIR)/esfilter:	$(OBJDIR)/esfilter.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/esfilter $(LDFLAGS) $(LIBOPTS)
+++# Build all of the utilities with the static library, so that they can
+++# be copied around, shared, etc., without having to think about it
+++
+++$(BINDIR)/esfilter:	$(OBJDIR)/esfilter.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/esfilter $(LIBOPTS) $(LDFLAGS)
+++
+++$(BINDIR)/ts2es:		$(OBJDIR)/ts2es.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/ts2es $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/ts2es:		$(OBJDIR)/ts2es.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/ts2es $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/es2ts:		$(OBJDIR)/es2ts.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/es2ts $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/es2ts:		$(OBJDIR)/es2ts.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/es2ts $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/esdots:		$(OBJDIR)/esdots.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/esdots $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/esdots:		$(OBJDIR)/esdots.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/esdots $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/esmerge:	$(OBJDIR)/esmerge.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/esmerge $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/esmerge:	$(OBJDIR)/esmerge.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/esmerge $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/esreport:	$(OBJDIR)/esreport.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/esreport $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/esreport:	$(OBJDIR)/esreport.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/esreport $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/esreverse:	$(OBJDIR)/esreverse.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/esreverse $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/esreverse:	$(OBJDIR)/esreverse.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/esreverse $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/stream_type:	$(OBJDIR)/stream_type.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/stream_type $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/stream_type:	$(OBJDIR)/stream_type.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/stream_type $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/psreport:	$(OBJDIR)/psreport.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/psreport $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/psreport:	$(OBJDIR)/psreport.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/psreport $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/psdots:	$(OBJDIR)/psdots.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/psdots $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/psdots:	$(OBJDIR)/psdots.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/psdots $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/ps2ts:		$(OBJDIR)/ps2ts.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/ps2ts $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/ps2ts:		$(OBJDIR)/ps2ts.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/ps2ts $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/tsinfo:		$(OBJDIR)/tsinfo.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/tsinfo $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/tsinfo:		$(OBJDIR)/tsinfo.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/tsinfo $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/tsreport:	$(OBJDIR)/tsreport.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/tsreport $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/tsreport:	$(OBJDIR)/tsreport.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/tsreport $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/tsserve:	$(OBJDIR)/tsserve.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/tsserve $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/tsserve:	$(OBJDIR)/tsserve.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/tsserve $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/tsplay:	$(OBJDIR)/tsplay.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/tsplay $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/tsplay:		$(OBJDIR)/tsplay.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/tsplay $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/test_ps:	$(OBJDIR)/test_ps.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/test_ps $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/test_ps:	$(OBJDIR)/test_ps.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/test_ps $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/ts2ps:		$(OBJDIR)/ts2ps.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/ts2ps $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/ts2ps:		$(OBJDIR)/ts2ps.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/ts2ps $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/ts_packet_insert:	$(OBJDIR)/ts_packet_insert.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/ts_packet_insert $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/ts_packet_insert:	$(OBJDIR)/ts_packet_insert.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/ts_packet_insert $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/m2ts2ts:		$(OBJDIR)/m2ts2ts.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/m2ts2ts $(LIBOPTS) $(LDFLAGS)
+++$(BINDIR)/pcapreport:	$(OBJDIR)/pcapreport.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/pcapreport $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/m2ts2ts:		$(OBJDIR)/m2ts2ts.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/m2ts2ts $(LDFLAGS) $(LIBOPTS)
++-$(BINDIR)/pcapreport:	$(OBJDIR)/pcapreport.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/pcapreport $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/tsfilter:	$(OBJDIR)/tsfilter.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/tsfilter $(LIBOPTS) $(LDFLAGS)
+++$(BINDIR)/tsdvbsub:	$(OBJDIR)/tsdvbsub.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/tsdvbsub $(LIBOPTS) $(LDFLAGS)
++ 
++ 
++ 
++ 
++-$(BINDIR)/test_pes:	$(OBJDIR)/test_pes.o $(LIB)
++-		$(CC) $< -o $(BINDIR)/test_pes $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/test_pes:	$(OBJDIR)/test_pes.o $(STATIC_LIB)
+++		$(CC) $< -o $(BINDIR)/test_pes $(LIBOPTS) $(LDFLAGS)
++ 
++-$(BINDIR)/test_nal_unit_list: 	$(OBJDIR)/test_nal_unit_list.o $(LIB)
++-			$(CC) $< -o $(BINDIR)/test_nal_unit_list $(LDFLAGS) $(LIBOPTS)
++-$(BINDIR)/test_es_unit_list:  	$(OBJDIR)/test_es_unit_list.o $(LIB)
++-			$(CC) $< -o $(BINDIR)/test_es_unit_list $(LDFLAGS) $(LIBOPTS)
+++$(BINDIR)/test_nal_unit_list: 	$(OBJDIR)/test_nal_unit_list.o $(STATIC_LIB)
+++			$(CC) $< -o $(BINDIR)/test_nal_unit_list $(LIBOPTS) $(LDFLAGS)
+++$(BINDIR)/test_es_unit_list:  	$(OBJDIR)/test_es_unit_list.o $(STATIC_LIB)
+++			$(CC) $< -o $(BINDIR)/test_es_unit_list $(LIBOPTS) $(LDFLAGS)
++ 
++ # Some header files depend upon others, so including one requires
++ # the others as well
++@@ -299,14 +301,19 @@ REVERSE_H = reverse_fns.h reverse_defns.h
++ FILTER_H = filter_fns.h filter_defns.h $(REVERSE_H)
++ AUDIO_H = adts_fns.h l2audio_fns.h ac3_fns.h audio_fns.h audio_defns.h adts_defns.h
++ 
++-# Everyone depends upon the basic configuration file
++-$(LIB)($(OBJS)) $(TEST_OBJS) $(PROG_OBJS): compat.h
+++# Everyone depends upon the basic configuration file, and I assert they all
+++# want (or may want) printing...
+++$(OBJS) $(TEST_OBJS) $(PROG_OBJS): compat.h
++ 
++ # Which library modules depend on which header files is complex, so
++ # lets just be simple
++-$(LIB)($(OBJS)): $(ACCESSUNIT_H) $(NALUNIT_H) $(TS_H) $(ES_H) $(PES_H) \
++-                 misc_fns.h $(PS_H) $(H262_H) $(TSWRITE_H) $(AVS_H) \
++-                 $(REVERSE_H) $(FILTER_H) $(AUDIO_H)
+++$(OBJS): \
+++                 $(ACCESSUNIT_H) $(NALUNIT_H) $(TS_H) $(ES_H) $(PES_H) \
+++                 misc_fns.h $(PS_H) $(H262_H) \
+++                 $(TSWRITE_H) $(AVS_H) $(REVERSE_H) $(FILTER_H) $(AUDIO_H)
+++
+++$(OBJDIR)/%.o: %.c
+++	$(CC) -c $< -o $@ $(CFLAGS)
++ 
++ $(OBJDIR)/es2ts.o:        es2ts.c $(ES_H) $(TS_H) misc_fns.h version.h
++ 	$(CC) -c $< -o $@ $(CFLAGS)
++@@ -389,7 +396,8 @@ objclean:
++ .PHONY: clean
++ clean: objclean
++ 	-rm -f $(PROGS)
++-	-rm -f $(LIB)
+++	-rm -f $(STATIC_LIB)
+++	-rm -f $(SHARED_LIB)
++ 	-rm -f $(PROG_OBJS)
++ 
++ .PHONY: distclean
++-- 
++1.8.3.2
++
+diff --git a/package/tstools/tstools-build-get-along-with-buildroot.patch b/package/tstools/tstools-build-get-along-with-buildroot.patch
+deleted file mode 100644
+index 1e7a748..0000000
+--- a/package/tstools/tstools-build-get-along-with-buildroot.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 44f80bce0914d4d9c5e7486c7cdb521ba637b324 Mon Sep 17 00:00:00 2001
+-From: Tzu-Jung Lee <tjlee@ambarella.com>
+-Date: Fri, 19 Jul 2013 22:45:18 +0800
+-Subject: [PATCH] build: get along with buildroot
+-
+-Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+----
+- Makefile | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 2c3568e..98bb994 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -34,12 +34,6 @@ SHELL = /bin/sh
+- .SUFFIXES:
+- .SUFFIXES: .c .o
+- 
+--ifdef CROSS_COMPILE
+--CC = $(CROSS_COMPILE)gcc
+--else
+--CC = gcc
+--endif
+--
+- # Use WARN=1 periodically to get too many warnings...
+- ifdef WARN
+- WARNING_FLAGS = -Wall -W -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-qual -Wconversion -Wmissing-prototypes -Wmissing-declarations -Wunreachable-code -Winline
+-@@ -452,3 +446,9 @@ test_lists:	$(BINDIR)/test_nal_unit_list  $(BINDIR)/test_es_unit_list
+- 	@echo +++ Testing ES unit lists
+- 	$(BINDIR)/test_es_unit_list
+- 	@echo +++ Test succeeded
+-+
+-+.PHONY: install
+-+install:
+-+	@for i in $(PROGS); do \
+-+		cp -f $$i $(DESTDIR)/usr/bin/; \
+-+	done
+--- 
+-1.8.3.2
+-
+-- 
+1.8.3.2
