@@ -1,62 +1,31 @@
-From: Tzu-Jung Lee <roylee17@gmail.com>
-Date: Sun, 28 Jul 2013 16:54:52 +0800
-Subject: [Buildroot] [PATCH v2] buildroot: Add POST_RSYNC_HOOKS support
-In-Reply-To: <CAAXf6LVM7yoWaVdKp90oYOyLbVS=OvNFMzQv2nvcXp-vUmTDww@mail.gmail.com>
-References: <CAAXf6LVM7yoWaVdKp90oYOyLbVS=OvNFMzQv2nvcXp-vUmTDww@mail.gmail.com>
-Message-ID: <1375001692-12024-1-git-send-email-tjlee@ambarella.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Sun, 28 Jul 2013 12:22:42 +0200
+Subject: [Buildroot] target mkfs.ubifs support
+In-Reply-To: <20130728010555.GM7098@bender.unx.csupomona.edu>
+References: <20130728010555.GM7098@bender.unx.csupomona.edu>
+Message-ID: <CAAXf6LUDC-OxT1L5kK6_E_tqEEYGF+eX9ObU7veHcTK+zG5yrA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-One of the use cases is for the 'local packages' to restore
-the SCM info.  Some packages use this information to generate
-version info during build time.  In this case, the local package
-can have this hook to restore it by symbolic link for example.
+Hi Paul,
 
-Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
----
-Include the comments aginst v1 from Thomas De Schampheleire:
+On Sun, Jul 28, 2013 at 3:05 AM, Paul B. Henson <henson@acm.org> wrote:
+> I was looking at trying out buildroot for an embedded project I'm
+> working on. It doesn't look like buildroot currently supports building
+> mkfs.ubifs for the target? I see that it can build it for the host to be
+> used to create a ubi rootfs image, but I need to build it for the target
+> and have it actually be in the rootfs.
+>
+> There's an option in package/mtd/Config.in for mkfs.jffs2, is there any
+> reason other than nobody's needed it yet there isn't an analogous option
+> for mkfs.ubifs? If not, would a patch adding the ability to compile
+> mkfs.ubifs for the target and have it included in the rootfs image be
+> welcome?
 
-  Updte manual for the new hook.
-  Set the default hook to empty
+This is probably the only reason. Patches are certainly most welcome!
 
- docs/manual/adding-packages-generic.txt | 1 +
- package/pkg-generic.mk                  | 2 ++
- 2 files changed, 3 insertions(+)
-
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index faf70b1..2889add 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -441,6 +441,7 @@ The following hook points are available:
- 
- * +LIBFOO_POST_DOWNLOAD_HOOKS+
- * +LIBFOO_POST_EXTRACT_HOOKS+
-+* +LIBFOO_POST_RSYNC_HOOKS+
- * +LIBFOO_PRE_PATCH_HOOKS+
- * +LIBFOO_POST_PATCH_HOOKS+
- * +LIBFOO_PRE_CONFIGURE_HOOKS+
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index d9a12f2..3d3adc9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -63,6 +63,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
- 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
- 	rsync -au --cvs-exclude --include core $(SRCDIR)/ $(@D)
-+	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
- 
- # Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
-@@ -337,6 +338,7 @@ $(2)_EXTRACT_CMDS ?= \
- # post-steps hooks
- $(2)_POST_DOWNLOAD_HOOKS        ?=
- $(2)_POST_EXTRACT_HOOKS         ?=
-+$(2)_POST_RSYNC_HOOKS           ?=
- $(2)_PRE_PATCH_HOOKS            ?=
- $(2)_POST_PATCH_HOOKS           ?=
- $(2)_PRE_CONFIGURE_HOOKS        ?=
--- 
-1.8.3.2
+Best regards,
+Thomas
