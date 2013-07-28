@@ -1,35 +1,63 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Sun, 28 Jul 2013 14:32:56 +0800
-Subject: [Buildroot] Build error for nptl with no-mmu (arm7tdmi)
-Message-ID: <1374993176.3762.1.camel@phoenix>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 28 Jul 2013 09:00:35 +0200
+Subject: [Buildroot] [PATCH] ser2net: bump to 2.9
+In-Reply-To: <20130728062615.GG5161@tarshish>
+References: <1374992536-7801-1-git-send-email-yegorslists@googlemail.com>
+ <20130728062615.GG5161@tarshish>
+Message-ID: <CAGm1_ktcdOp2HhmYk09B0uhax=qo_pqqQ68fiPiggGZN9ipMyA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi list,
+On Sun, Jul 28, 2013 at 8:26 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Yegor,
+>
+> On Sun, Jul 28, 2013 at 08:22:16AM +0200, Yegor Yefremov wrote:
+>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> ---
+>>  package/ser2net/ser2net.mk | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
+>> index 588571c..cc728a6 100644
+>> --- a/package/ser2net/ser2net.mk
+>> +++ b/package/ser2net/ser2net.mk
+>> @@ -4,8 +4,9 @@
+>>  #
+>>  ################################################################################
+>>
+>> -SER2NET_VERSION = 2.8
+>> +SER2NET_VERSION = 2.9
+>>  SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+>> +SER2NET_AUTORECONF = YES
+>
+> Please add a comment explaining why this is needed.
+>
+> baruch
+>
+>>  SER2NET_LICENSE = GPLv2+
+>>  SER2NET_LICENSE_FILES = COPYING
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
 
-In my config, I have
-# ARCH_HAS_MMU is not set.
+That's why:
 
-I got below build error (I got the same error on both buildroot-2013.05 and current git tree):
+/bin/bash ./libtool --tag=CC   --mode=link gcc -Wall -g -O2   -o
+ser2net controller.o dataxfer.o devcfg.o readconfig.o selector.o
+ser2net.o utils.o telnet.o buffer.o  -lnsl
+libtool: Version mismatch error.  This is libtool 2.4.2
+Debian-2.4.2-1ubuntu1, but the
+libtool: definition of this LT_INIT comes from libtool 2.2.6b.
+libtool: You should recreate aclocal.m4 with macros from libtool 2.4.2
+Debian-2.4.2-1ubuntu1
+libtool: and run autoconf again.
+make: *** [ser2net] Error 63
 
-  AS libpthread/nptl/sysdeps/unix/sysv/linux/arm/clone.os
-  AS libpthread/nptl/sysdeps/unix/sysv/linux/arm/vfork.os
-  CC libpthread/nptl/sysdeps/unix/sysv/linux/arm/fork.os
-In file included from libpthread/nptl/sysdeps/unix/sysv/linux/arm/fork.c:31:0:
-libpthread/nptl/sysdeps/unix/sysv/linux/arm/../fork.c:61:17: error: 'fork' undeclared here (not in a function)
-libpthread/nptl/sysdeps/unix/sysv/linux/arm/../fork.c:63:1: error: '__libc_fork' redeclared as different kind of symbol
-libpthread/nptl/sysdeps/unix/sysv/linux/arm/../fork.c:61:23: note: previous declaration of '__libc_fork' was here
-libpthread/nptl/sysdeps/unix/sysv/linux/arm/../fork.c:228:1: error: 'fork' redeclared as different kind of symbol
-libpthread/nptl/sysdeps/unix/sysv/linux/arm/../fork.c:227:1: note: previous declaration of 'fork' was here
-libpthread/nptl/sysdeps/unix/sysv/linux/arm/../fork.c:229:1: error: '__EI_fork' aliased to undefined symbol '__GI_fork'
-make[1]: *** [libpthread/nptl/sysdeps/unix/sysv/linux/arm/fork.os] Error 1
-make[1]: Leaving directory `/opt/test/buildroot/buildroot-2013.05/output/toolchain/uClibc-0.9.33.2'
-make: *** [/opt/test/buildroot/buildroot-2013.05/output/toolchain/uClibc-0.9.33.2/lib/libc.a] Error 2
+Should I write something like: broken configure script?
 
-Any idea how to fix this?
-
-Regards,
-Axel
+Yegor
