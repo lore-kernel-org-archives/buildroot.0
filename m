@@ -1,46 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Jul 2013 15:14:18 +0200
-Subject: [Buildroot] [PATCH] busybox: register mdev as hotplug helper
-In-Reply-To: <51F50077.2060204@zacarias.com.ar>
-References: <1373574654-32427-1-git-send-email-gustavo@zacarias.com.ar>
- <CAAXf6LVSOCLS54uAwJHH6DwenrexRY=17v_PoOe_KTnmWWTvWg@mail.gmail.com>
- <51DFDA1F.60904@zacarias.com.ar>
- <CAAXf6LWVWj-Z2Od9Zc=QjWELd3_R+5MQ+gTBo=dO-VgFiDoxGg@mail.gmail.com>
- <51F50077.2060204@zacarias.com.ar>
-Message-ID: <20130728151418.70891325@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Sun, 28 Jul 2013 15:15:07 +0200
+Subject: [Buildroot] [PATCH v2] <pkg>-rsync: support user custom cmds
+In-Reply-To: <20130728150334.6a8a862c@skate>
+References: <CAAXf6LXQWBEF2uM4e5MQg-QooTMwHmgZ99HT6PDH1DHNDDM-Gw@mail.gmail.com>
+ <1375007963-15935-1-git-send-email-tjlee@ambarella.com>
+ <20130728150334.6a8a862c@skate>
+Message-ID: <CAAXf6LXvJjA_Wxm=OMCBKYZKudveUj=J-fpU7SeXgCxoH3MQhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On Sun, Jul 28, 2013 at 3:03 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Tzu-Jung Lee,
+>
+> On Sun, 28 Jul 2013 18:39:23 +0800, Tzu-Jung Lee wrote:
+>> This patch allows users to override the options or entire command
+>> line of rsync.  The default options filters out object or libraries
+>> during rsync.  For local packages which come with pre-built binaries,
+>> the copy in build/ directory will not have complete files as src/
+>
+> Hum, I am not sure this is the right way to fix this. When it was
+> introduced, I thought the --cvs-exclude option was only ignoring things
+> like CVS/ directories, .svn/ directories or .git/ directories. But now
+> that I read the rsync man page, I see that it excludes a huge number of
+> other file name patterns, which I think isn't desirable.
+>
+> So rather than providing a way for the user to override the rsync
+> command, I'd prefer the rsync command to behave appropriately. I
+> believe it should simply copy /everything/, including version control
+> directories. Yes that's longer, but there's no reasonable generic way
+> to determine which files should be copied and which files should not.
 
-On Sun, 28 Jul 2013 08:28:55 -0300, Gustavo Zacarias wrote:
-> On 07/28/2013 05:33 AM, Thomas De Schampheleire wrote:
-> 
-> > So what do we do with this patch?
-> > I ask it because it's still marked as 'New' in patchwork:
-> > http://patchwork.ozlabs.org/patch/258619/
-> > If we agree that it shouldn't be needed, I suggest to mark it as such.
-> > If someone can come up with a proven failure scenario, we can still reopen it.
-> > 
-> > What do you think?
-> 
-> Proven failure: not building a kernel with buildroot.
+In my version of 'man rsync', here is the list of excluded patterns
+when using cvs-exclude:
 
-Not really an argument: if you select 'devtmpfs' as the /dev management
-method and you build your kernel outside of Buildroot, you have to
-enable CONFIG_DEVTMPFS + CONFIG_DEVTMPFS_MOUNT, otherwise things won't
-work. I don't see what it shouldn't be the same for the hotplug helper
-selection: if you're building the kernel with Buildroot, then things are
-taken care of automatically, otherwise you're on your own.
+RCS SCCS CVS CVS.adm RCSLOG cvslog.* tags TAGS .make.state
+.nse_depinfo *~ #* .#* ,* _$* *$ *.old *.bak *.BAK *.orig *.rej .del-*
+*.a *.olb *.o *.obj *.so *.exe *.Z *.elc *.ln core .svn/ .git/ .hg/
+.bzr/
+
+
+I can see how excluding *.a *.o *.obj *.so *.exe can be debatable.
+I would certainly like to keep excluding .svn, .git, .hg, and .bzr.
+These directories can become very big, and in the general use case,
+aren't needed.
+Frankly, I don't care a lot about the other patterns.
+
+Here are three suggestions:
+- follow the proposed patch, keeping the default as it is and
+providing a way to overrule it per package.
+- simplifying the default exclusion list to .svn, .git, .hg and .bzr
+(but this wouldn't cover the use case of Tzu-Jung Lee)
+- make the exclusion list a global config option, defaulting to e.g.
+.svn, .git, .hg, .bzr and maybe others, but changeable by the user.
 
 Best regards,
-
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
