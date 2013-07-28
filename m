@@ -1,56 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Jul 2013 16:19:53 +0200
-Subject: [Buildroot] [git commit] tcl: use make conditions
-Message-ID: <20130728142001.1134A9ACCC@busybox.osuosl.org>
+Date: Sun, 28 Jul 2013 16:20:08 +0200
+Subject: [Buildroot] [git commit] tcl: add a tclsh symlink
+Message-ID: <20130728142001.2D3B89AB40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=224187cc7c03edc0018d250e7ac5dbb694f4bd89
+commit: http://git.buildroot.net/buildroot/commit/?id=8d0413fd370f47014287976f195dc745b95e49d3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As suggested by Thomas Petazzoni, make conditions should be used rather
-than shell condition in Makefiles.
+tclsh is installed with its version number (tclshx.y) but scripts (like
+usb_modeswitch_dispatcher) are calling tclsh, not tclshx.y.
 
 Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tcl/tcl.mk |   21 ++++++++++++++-------
- 1 files changed, 14 insertions(+), 7 deletions(-)
+ package/tcl/tcl.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
 diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index 4528d54..7c08ee6 100644
+index cc0565c..c145f57 100644
 --- a/package/tcl/tcl.mk
 +++ b/package/tcl/tcl.mk
-@@ -24,15 +24,22 @@ HOST_TCL_CONF_OPT = \
- 
- define TCL_POST_INSTALL_CLEANUP
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtcl8.4.so
--	-if [ "$(BR2_PACKAGE_TCL_DEL_ENCODINGS)" = "y" ]; then \
--	rm -Rf $(TARGET_DIR)/usr/lib/tcl$(TCL_VERSION_MAJOR)/encoding/*; \
--	fi
--	-if [ "$(BR2_PACKAGE_TCL_SHLIB_ONLY)" = "y" ]; then \
--	rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR); \
--	fi
+@@ -35,6 +35,11 @@ define TCL_REMOVE_TCLSH
+ 	rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR)
  endef
--
- TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_CLEANUP
+ TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_TCLSH
++else
++define TCL_SYMLINK_TCLSH
++	ln -s tclsh$(TCL_VERSION_MAJOR) $(TARGET_DIR)/usr/bin/tclsh
++endef
++TCL_POST_INSTALL_TARGET_HOOKS += TCL_SYMLINK_TCLSH
+ endif
  
-+ifeq ($(BR2_PACKAGE_TCL_DEL_ENCODINGS),y)
-+define TCL_REMOVE_ENCODINGS
-+	rm -rf $(TARGET_DIR)/usr/lib/tcl$(TCL_VERSION_MAJOR)/encoding/*
-+endef
-+TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_ENCODINGS
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TCL_SHLIB_ONLY),y)
-+define TCL_REMOVE_TCLSH
-+	rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR)
-+endef
-+TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_TCLSH
-+endif
-+
  $(eval $(autotools-package))
- $(eval $(host-autotools-package))
