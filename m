@@ -1,41 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 28 Jul 2013 11:18:10 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump 3.10.x stable version
-In-Reply-To: <1375021090-31759-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1375021090-31759-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1375021090-31759-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 Jul 2013 16:19:58 +0200
+Subject: [Buildroot] [git commit] tcl: remove strip command
+Message-ID: <20130728142001.1C2C29AB40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=06bbffb5f2f6fb66007306282890621d9ed94677
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 87a764d..dee91e7 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+Stripping is done at the end of the buildroot process, for all files at
+once.
+There's no need to do it here.
+(Suggested by Thomas Petazzoni)
+
+Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tcl/tcl.mk |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
+
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index 7c08ee6..564d5bc 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -22,11 +22,6 @@ HOST_TCL_CONF_OPT = \
+ 		--disable-langinfo \
+ 		--disable-framework
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.10.2"
-+	bool "3.10.3"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.10.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.10.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
--- 
-1.8.1.5
+-define TCL_POST_INSTALL_CLEANUP
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtcl8.4.so
+-endef
+-TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_CLEANUP
+-
+ ifeq ($(BR2_PACKAGE_TCL_DEL_ENCODINGS),y)
+ define TCL_REMOVE_ENCODINGS
+ 	rm -rf $(TARGET_DIR)/usr/lib/tcl$(TCL_VERSION_MAJOR)/encoding/*
