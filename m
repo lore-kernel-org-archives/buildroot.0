@@ -1,44 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jul 2013 00:01:55 +0200
-Subject: [Buildroot] [PATCH 4/4] sunxi-cedar: add cedar hardware video
- decoding library
-In-Reply-To: <1374277074-14455-5-git-send-email-spenser@gillilanding.com>
-References: <1374277074-14455-1-git-send-email-spenser@gillilanding.com>
- <1374277074-14455-5-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130730000155.1be43710@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 30 Jul 2013 00:09:11 +0200
+Subject: [Buildroot] [PATCH v2] package/libedit: switch to alternate URL
+ for proper packaging
+In-Reply-To: <20130729202611.3b68bd14@skate>
+References: <1375116257-27967-1-git-send-email-yann.morin.1998@free.fr>
+ <20130729202611.3b68bd14@skate>
+Message-ID: <20130729220911.GA3420@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Thomas, All,
 
-On Fri, 19 Jul 2013 18:37:54 -0500, Spenser Gilliland wrote:
+On 2013-07-29 20:26 +0200, Thomas Petazzoni spake thusly:
+> On Mon, 29 Jul 2013 18:44:17 +0200, Yann E. MORIN wrote:
+> 
+> > -LIBEDIT_DEPENDENCIES    = host-pmake libbsd ncurses
+> 
+> Does this implies we can get rid of the pmake and libbsd packages?
 
-> +ifeq ($(BR2_ARM_EABIHF),y)
-> +SUNXI_CEDAR_BIN_DIR = $(@D)/libcedarv/linux-armhf
-> +else
-> +SUNXI_CEDAR_BIN_DIR = $(@D)/libcedarv/linux-armel
-> +endif
+I think we can indeed get rid of pmake, yes. I'll submit a patch.
 
-The package fails to build in the linux-armel case, because avheap.c
-doesn't exist in this case:
+But I see no reason to remove libbsd. The package is clean, simple and
+autotools-based, and it would not be the only library which is not a
+dependency of an internal package.
 
-  http://autobuild.buildroot.org/results/739/7395780dafedb6126dad7f9405609c2fe02104ec/build-end.log
+Regards,
+Yann E. MORIN.
 
-Also for some reason, in another build it uses the host compiler
-instead of the cross compiler:
-
-  http://autobuild.buildroot.org/results/5b0/5b0e52f2fd59916e46572b0f34403972e77e8283/build-end.log
-
-Could you have a look into these issues?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
