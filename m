@@ -1,27 +1,34 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Mon, 29 Jul 2013 09:23:55 +0200 (CEST)
-Subject: [Buildroot] Patches to merge before -rc1 ?
-In-Reply-To: <CAAXf6LUN0m33FR4v2P8zJBOz3BaZ4bHcn09Ddu1h2mFNZa8jbA@mail.gmail.com>
-Message-ID: <996995772.4123207.1375082635367.JavaMail.root@openwide.fr>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Mon, 29 Jul 2013 17:27:27 +0800
+Subject: [Buildroot] [noMMU] How to generate FLAT executable for busybox?
+In-Reply-To: <1375076435.4630.2.camel@phoenix>
+References: <1375076435.4630.2.camel@phoenix>
+Message-ID: <CAFRkauAXEpeZu6PNDvR2TiU9D=EidiaREJCFTjCP1BqrX0Y8zA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+2013/7/29 Axel Lin <axel.lin@ingics.com>:
+> Hi,
+> I have BR2_BINFMT_FLAT=y in my setting.
+> However, the build system still generates ELF executable for busybox.
+>
+> $ file output/target/bin/busybox
+> output/target/bin/busybox: setuid ELF 32-bit LSB executable, ARM, version 1 (SYSV), statically linked, stripped
 
-There is the patch adding libcppcms that would be nice to have...
+Hi,
+In output/build/busybox-1.21.1/busybox_unstripped.out, I found below messages:
 
-This patch from Nicolas Menegale has been through sevral rounds of review 
-but hasn't been included yet.
+/opt/test/buildroot/buildroot/output/host/usr/lib/gcc/arm-buildroot-uclinux-uclibcgnueabi/4.7.3/../../../../arm-buildroot-uclinux-uclibcgnueabi/bin/ld:
+warning: cannot find entry symbol lf2flt; defaulting to
+00000000000080ac
 
-As far as I know, there are no pending comments and it should be good to go
+This looks like the linker does not understand -elf2flt and treat is
+as -e lf2flt.
 
-http://patchwork.ozlabs.org/patch/258413/
+Any idea how to fix this?
 
-    Thanks a log
-
-    J?r?my Rosen
-
-fight key loggers : write some perl using vim
+Thanks,
+Axel
