@@ -1,29 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Jul 2013 16:34:59 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{2,
- 10}.x stable versions
-In-Reply-To: <1375021090-31759-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1375021090-31759-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130728163459.71a7625c@skate>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Mon, 29 Jul 2013 09:23:55 +0200 (CEST)
+Subject: [Buildroot] Patches to merge before -rc1 ?
+In-Reply-To: <CAAXf6LUN0m33FR4v2P8zJBOz3BaZ4bHcn09Ddu1h2mFNZa8jbA@mail.gmail.com>
+Message-ID: <996995772.4123207.1375082635367.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hi Thomas
 
-On Sun, 28 Jul 2013 11:18:09 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/linux-headers/Config.in.host | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+There is the patch adding libcppcms that would be nice to have...
 
-Both applied, thanks.
+This patch from Nicolas Menegale has been through sevral rounds of review 
+but hasn't been included yet.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+As far as I know, there are no pending comments and it should be good to go
+
+http://patchwork.ozlabs.org/patch/258413/
+
+    Thanks a log
+
+    J?r?my Rosen
+
+fight key loggers : write some perl using vim
