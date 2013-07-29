@@ -1,51 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Jul 2013 14:41:04 +0200
-Subject: [Buildroot] [PATCH] package/libedit: switch to alternate URL
-	for proper packaging
-In-Reply-To: <CAAXf6LVP6zfazXkZx-=CcVsbmR0h7OZd+e0_jimB0tyWQ-XpxQ@mail.gmail.com>
-References: <1375051794-19671-1-git-send-email-yann.morin.1998@free.fr>
- <CAAXf6LVP6zfazXkZx-=CcVsbmR0h7OZd+e0_jimB0tyWQ-XpxQ@mail.gmail.com>
-Message-ID: <201307291441.04346.yann.morin.1998@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 29 Jul 2013 14:47:34 +0200
+Subject: [Buildroot] [PATCH] mtd: add option to build mkfs.ubifs for
+	target
+In-Reply-To: <20130729021746.EF4355C127@zaphod.pbhware.com>
+References: <20130729021746.EF4355C127@zaphod.pbhware.com>
+Message-ID: <CAAXf6LU_GeZ+MNTiJMKuKVTmLROhj-BtUuinirFF6jS2kTVXVA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi Paul,
 
-On Monday 29 July 2013 14:30:53 Thomas De Schampheleire wrote:
-> On Mon, Jul 29, 2013 at 12:49 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> > diff --git a/package/libedit/Config.in b/package/libedit/Config.in
-> > index 7a515db..7345cc9 100644
-> > --- a/package/libedit/Config.in
-> > +++ b/package/libedit/Config.in
-> > @@ -1,15 +1,19 @@
-> >  config BR2_PACKAGE_LIBEDIT
-> >         bool "libedit"
-> >         depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 )  # libbsd
-> This architecture dependency is only needed if you have libbsd.
-> You can build libedit for powerpc without problems, so I think the
-> current dependency is not correct.
+Thanks for contributing! See below for a small comment.
 
-Doh! Right.
+On Mon, Jul 29, 2013 at 4:11 AM, Paul B. Henson <henson@acm.org> wrote:
+> Signed-off-by: Paul B. Henson <henson@acm.org>
+> ---
+>  package/mtd/Config.in |    6 ++++++
+>  package/mtd/mtd.mk    |    7 +++++++
+>  2 files changed, 13 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+> index ddc3737..2e13157 100644
+> --- a/package/mtd/Config.in
+> +++ b/package/mtd/Config.in
+> @@ -54,6 +54,12 @@ config BR2_PACKAGE_MTD_MKFSJFFS2
+>         select BR2_PACKAGE_ZLIB
+>         select BR2_PACKAGE_LZO
+>
+> +config BR2_PACKAGE_MTD_MKFSUBIFS
+> +       bool "mkfs.ubifs"
+> +       select BR2_PACKAGE_ZLIB
+> +       select BR2_PACKAGE_LZO
+> +       select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+> +
+>  config BR2_PACKAGE_MTD_MTD_DEBUG
+>         bool "mtd_debug"
+>         default y
+> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+> index 994a73a..55fa727 100644
+> --- a/package/mtd/mtd.mk
+> +++ b/package/mtd/mtd.mk
+> @@ -14,6 +14,10 @@ ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
+>  MTD_DEPENDENCIES = zlib lzo
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_MTD_MKFSUBIFS),y)
+> +MTD_DEPENDENCIES += util-linux zlib lzo
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+>  MTD_DEPENDENCIES += busybox
+>  endif
+> @@ -71,7 +75,10 @@ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRMVOL)  += ubirmvol
+>  MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRSVOL)    += ubirsvol
+>  MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIUPDATEVOL)        += ubiupdatevol
+>
+> +MTD_TARGETS_UBIFS_$(BR2_PACKAGE_MTD_MKFSUBIFS) += mkfs.ubifs
+> +
+>  MTD_TARGETS_y += $(addprefix ubi-utils/,$(MTD_TARGETS_UBI_y))
+> +MTD_TARGETS_y += $(addprefix mkfs.ubifs/,$(MTD_TARGETS_UBIFS_y))
 
-> > -       depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
-> You removed this, but not in the Config.in comment below. Is this correct?
-> Also here, I think it only matters when you are using libbsd, right?
+I find it a bit overkill to use $(addprefix) for just one binary. My
+suggestion would be to simply:
+MTD_TARGETS_$(BR2_PACKAGE_MTD_MKFSUBIFS)          += mkfs.ubifs/mkfs.ubifs
 
-Right-o-right, too.
+Otherwise, the patch looks good.
 
-Thanks for spotting those. I'll fix and resubmit tonight.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Best regards,
+Thomas
