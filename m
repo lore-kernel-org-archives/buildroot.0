@@ -1,142 +1,96 @@
-From: Paul B. Henson <henson@acm.org>
-Date: Sun, 28 Jul 2013 20:14:14 -0700
-Subject: [Buildroot] [PATCH] kobs-ng: new package
-Message-ID: <20130729031743.9E00A5C125@zaphod.pbhware.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Mon, 29 Jul 2013 13:40:35 +0800
+Subject: [Buildroot] [noMMU] How to generate FLAT executable for busybox?
+Message-ID: <1375076435.4630.2.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Paul B. Henson <henson@acm.org>
----
- package/Config.in             |    1 +
- package/kobs-ng/Config.in     |    4 ++
- package/kobs-ng/kobs-ng.mk    |   18 +++++++++++
- package/kobs-ng/kobs-ng.patch |   67 +++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 90 insertions(+), 0 deletions(-)
- create mode 100644 package/kobs-ng/Config.in
- create mode 100644 package/kobs-ng/kobs-ng.mk
- create mode 100644 package/kobs-ng/kobs-ng.patch
+Hi,
+I have BR2_BINFMT_FLAT=y in my setting.
+However, the build system still generates ELF executable for busybox.
 
-diff --git a/package/Config.in b/package/Config.in
-index ed373de..c16b306 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -207,6 +207,7 @@ source "package/f2fs-tools/Config.in"
- source "package/flashbench/Config.in"
- source "package/genext2fs/Config.in"
- source "package/genromfs/Config.in"
-+source "package/kobs-ng/Config.in"
- source "package/makedevs/Config.in"
- source "package/mtd/Config.in"
- source "package/nfs-utils/Config.in"
-diff --git a/package/kobs-ng/Config.in b/package/kobs-ng/Config.in
-new file mode 100644
-index 0000000..6204af4
---- /dev/null
-+++ b/package/kobs-ng/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_KOBS_NG
-+	bool "kobs-ng"
-+	help
-+	  Build freescale kobs-ng utility for burning bootstreams to NAND
-diff --git a/package/kobs-ng/kobs-ng.mk b/package/kobs-ng/kobs-ng.mk
-new file mode 100644
-index 0000000..8f877ca
---- /dev/null
-+++ b/package/kobs-ng/kobs-ng.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# kobs-ng
-+#
-+################################################################################
-+
-+# kobs-ng versions have never made much sense :(
-+KOBS_NG_VERSION = 3.0.35-4.0.0
-+KOBS_NG_SOURCE = kobs-ng-$(KOBS_NG_VERSION).tar.gz
-+KOBS_NG_SITE = http://repository.timesys.com/buildsources/k/kobs-ng/kobs-ng-$(KOBS_NG_VERSION)/
-+KOBS_NG_LICENSE = GPLv2
-+KOBS_NG_LICENSE_FILES = COPYING
-+
-+define KOBS_NG_INSTALL_TARGET_CMDS
-+  install -D -m 0755 $(@D)/src/kobs-ng $(TARGET_DIR)/usr/sbin
-+endef
-+
-+$(eval $(autotools-package))
-diff --git a/package/kobs-ng/kobs-ng.patch b/package/kobs-ng/kobs-ng.patch
-new file mode 100644
-index 0000000..7e7ccb3
---- /dev/null
-+++ b/package/kobs-ng/kobs-ng.patch
-@@ -0,0 +1,67 @@
-+diff -u -r kobs-ng-3.0.35-4.0.0-orig/src/mtd.c kobs-ng-3.0.35-4.0.0/src/mtd.c
-+--- kobs-ng-3.0.35-4.0.0-orig/src/mtd.c	2012-12-17 22:37:40.000000000 -0800
-++++ kobs-ng-3.0.35-4.0.0/src/mtd.c	2013-07-28 19:39:59.000000000 -0700
-+@@ -852,8 +852,11 @@
-+ 		mp = &md->part[i];
-+ 
-+ 		if (mp->fd != -1) {
-++/* Newer kernels dropped MEMSETOOBSEL */
-++#ifdef MEMSETOOBSEL
-+ 			(void)ioctl(mp->fd, MEMSETOOBSEL,
-+ 					&mp->old_oobinfo);
-++#endif
-+ 			close(mp->fd);
-+ 		}
-+ 
-+@@ -896,6 +899,8 @@
-+ 				continue;
-+ 			}
-+ 
-++/* Newer kernels dropped MEMSETOOBSEL */
-++#ifdef MEMSETOOBSEL
-+ 			if (r == -ENOTTY) {
-+ 				r = ioctl(mp->fd, MEMSETOOBSEL, &mp->old_oobinfo);
-+ 				if (r != 0) {
-+@@ -904,6 +909,7 @@
-+ 				}
-+ 				mp->oobinfochanged = 0;
-+ 			}
-++#endif
-+ 		} else {
-+ 			r = ioctl(mp->fd, MTDFILEMODE, (void *)MTD_MODE_RAW);
-+ 			if (r != 0 && r != -ENOTTY) {
-+@@ -911,6 +917,8 @@
-+ 				continue;
-+ 			}
-+ 
-++/* Newer kernels dropped MEMSETOOBSEL */
-++#ifdef MEMSETOOBSEL
-+ 			if (r == -ENOTTY) {
-+ 				r = ioctl(mp->fd, MEMSETOOBSEL, &none_oobinfo);
-+ 				if (r != 0) {
-+@@ -920,6 +928,7 @@
-+ 				mp->oobinfochanged = 1;
-+ 			} else
-+ 				mp->oobinfochanged = 2;
-++#endif
-+ 		}
-+ 
-+ 		mp->ecc = ecc;
-+diff -u -r kobs-ng-3.0.35-4.0.0-orig/src/mtd.h kobs-ng-3.0.35-4.0.0/src/mtd.h
-+--- kobs-ng-3.0.35-4.0.0-orig/src/mtd.h	2012-12-17 22:37:40.000000000 -0800
-++++ kobs-ng-3.0.35-4.0.0/src/mtd.h	2013-07-28 19:33:57.000000000 -0700
-+@@ -31,6 +31,14 @@
-+ #include "BootControlBlocks.h"
-+ #include "rom_nand_hamming_code_ecc.h"
-+ 
-++// Newer kernel headers renamed define
-++#ifndef MTD_MODE_NORMAL
-++#define MTD_MODE_NORMAL MTD_FILE_MODE_NORMAL
-++#endif
-++#ifndef MTD_MODE_RAW
-++#define MTD_MODE_RAW MTD_FILE_MODE_RAW
-++#endif
-++
-+ //------------------------------------------------------------------------------
-+ // Re-definitions of true and false, because the standard ones aren't good
-+ // enough?
--- 
-1.7.8.6
+$ file output/target/bin/busybox
+output/target/bin/busybox: setuid ELF 32-bit LSB executable, ARM, version 1 (SYSV), statically linked, stripped
+
+I have below customization in my configs to build noMMU for arm7tdmi:
+And then I did:
+$ make CFLAGS_busybox="-elf2flt"
+
+diff --git a/arch/Config.in b/arch/Config.in
+index 0b5b218..a894e17 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -216,7 +216,6 @@ config BR2_GCC_TARGET_MODE
+ # Set up target binary format
+ choice
+ 	prompt "Target Binary Format"
+-	depends on BR2_bfin || BR2_m68k
+ 	default BR2_BINFMT_FDPIC
+ 
+ config BR2_BINFMT_ELF
+@@ -229,7 +228,6 @@ config BR2_BINFMT_ELF
+ 
+ config BR2_BINFMT_FDPIC
+ 	bool "FDPIC"
+-	depends on BR2_bfin || BR2_m68k
+ 	help
+ 	  ELF FDPIC binaries are based on ELF, but allow the individual load
+ 	  segments of a binary to be located in memory independently of each
+@@ -238,7 +236,6 @@ config BR2_BINFMT_FDPIC
+ 
+ config BR2_BINFMT_FLAT
+ 	bool "FLAT"
+-	depends on BR2_bfin || BR2_m68k
+ 	select BR2_PREFER_STATIC_LIB
+ 	help
+ 	  FLAT binary is a relatively simple and lightweight executable format
+diff --git a/package/Makefile.in b/package/Makefile.in
+index aed28d5..5b89e18 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -24,7 +24,7 @@ MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
+ GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
+ 
+ # Blackfin FLAT needs uclinux
+-ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
++ifeq ($(BR2_BINFMT_FLAT),y)
+ TARGET_OS=uclinux
+ else
+ TARGET_OS=linux
+diff --git a/package/busybox/busybox-1.21.x.config b/package/busybox/busybox-1.21.x.config
+index e46b528..4e692fc 100644
+--- a/package/busybox/busybox-1.21.x.config
++++ b/package/busybox/busybox-1.21.x.config
+@@ -55,9 +55,9 @@ CONFIG_FEATURE_SYSLOG=y
+ #
+ # Build Options
+ #
+-# CONFIG_STATIC is not set
++CONFIG_STATIC=y
+ # CONFIG_PIE is not set
+-# CONFIG_NOMMU is not set
++CONFIG_NOMMU=y
+ # CONFIG_BUILD_LIBBUSYBOX is not set
+ # CONFIG_FEATURE_INDIVIDUAL is not set
+ # CONFIG_FEATURE_SHARED_BUSYBOX is not set
+diff --git a/package/uclibc/uClibc-0.9.33.config b/package/uclibc/uClibc-0.9.33.config
+index eb39df6..d0a9c0c 100644
+--- a/package/uclibc/uClibc-0.9.33.config
++++ b/package/uclibc/uClibc-0.9.33.config
+@@ -65,10 +65,10 @@ FORCE_OPTIONS_FOR_ARCH=y
+ # ARCH_BIG_ENDIAN is not set
+ # ARCH_WANTS_LITTLE_ENDIAN is not set
+ # ARCH_WANTS_BIG_ENDIAN is not set
+-ARCH_HAS_MMU=y
+-ARCH_USE_MMU=y
++# ARCH_HAS_MMU is not set
++# ARCH_USE_MMU is not set
+ UCLIBC_HAS_FLOATS=y
+-UCLIBC_HAS_FPU=y
++# UCLIBC_HAS_FPU is not set
+ DO_C99_MATH=y
+ # DO_XSI_MATH is not set
+ # UCLIBC_HAS_FENV is not set
