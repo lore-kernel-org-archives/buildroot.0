@@ -1,71 +1,37 @@
-From: Tzu-Jung Lee <roylee17@gmail.com>
-Date: Mon, 29 Jul 2013 14:48:10 +0800
-Subject: [Buildroot] [PATCH v3] <pkg>-rsync: support user custom cmds
-In-Reply-To: <CAEvN+1iY-77EV8Ao9zNhm94H0JKbOQNv10iQRqMLMnot28PJAQ@mail.gmail.com>
-References: <CAEvN+1iY-77EV8Ao9zNhm94H0JKbOQNv10iQRqMLMnot28PJAQ@mail.gmail.com>
-Message-ID: <1375080490-6569-1-git-send-email-tjlee@ambarella.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Jul 2013 09:15:08 +0200
+Subject: [Buildroot] [PATCH] uclibc/arm: don't install ldd.host and
+ ldconfig.host if !HAVE_SHARED
+In-Reply-To: <CAFRkauBsnARbkfB8hYj=dBYD2mXTmYoSZyTgx11yHaJUrAgeuQ@mail.gmail.com>
+References: <1375030117.13990.1.camel@phoenix> <20130728185932.5142e4b2@skate>
+ <CAFRkauAQFyQCn1S=yUuzhCmCNdjMn1jTU-zzgG=eLAL-P7Hy3A@mail.gmail.com>
+ <20130728192227.708e6c2c@skate>
+ <CAFRkauBsnARbkfB8hYj=dBYD2mXTmYoSZyTgx11yHaJUrAgeuQ@mail.gmail.com>
+Message-ID: <20130729091508.16128793@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch allows users to override the options or entire command
-line of rsync.  The default options filters out object or libraries
-during rsync.  For local packages which come with pre-built binaries,
-the copy in build/ directory will not have complete files as src/
+Dear Axel Lin,
 
-Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
----
-Fix the rsync default command line.
+On Mon, 29 Jul 2013 01:30:16 +0800, Axel Lin wrote:
 
- docs/manual/adding-packages-generic.txt | 9 +++++++++
- package/pkg-generic.mk                  | 6 +++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+> > BR2_BINFMT_FLAT should be set when ARM noMMU is used, because I don't
+> > think ELF binaries are supported on ARM noMMU.
+> May I ask why config BR2_BINFMT_FLAT depends on BR2_bfin || BR2_m68k
+> I ask this becuase I'm going to build for arm7tdmi which is noMMU.
+> And config BR2_BINFMT_FLAT is invisible now due to the dependency.
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 2889add..681b2e3 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -358,6 +358,15 @@ LIBFOO_VERSION = 2.32
- Now, the variables that define what should be performed at the
- different steps of the build process.
- 
-+* +LIBFOO_RSYNC_CMDS+ lists the actions to be performed at the
-+  fetch step for a package to be built from local source. By default,
-+  the local source directory is copied to the build directory by rsync
-+  with default options '-au --cvs-exclude --include core'. This works
-+  fine and is efficient for general cases since it doesn't copy SCM
-+  metadata as well as object files, and libraries. For packages that
-+  come with pre-built binaries, user can override the default options
-+  or entire command line to copy them at this fetch step.
-+
- * +LIBFOO_CONFIGURE_CMDS+ lists the actions to be performed to
-   configure the package before its compilation.
- 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6d49a29..ea6fba9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -62,7 +62,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
- $(BUILD_DIR)/%/.stamp_rsynced:
- 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
--	rsync -au --cvs-exclude --include core $(SRCDIR)/ $(@D)
-+	$($(PKG)_RSYNC_CMDS)
- 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
- 
-@@ -310,6 +310,10 @@ $(2)_INSTALL_IMAGES		?= NO
- $(2)_INSTALL_TARGET		?= YES
- $(2)_DIR_PREFIX			= $(if $(4),$(4),$(TOP_SRCDIR)/package)
- 
-+# default rsync command
-+$(2)_RSYNC_CMDS ?= \
-+	rsync -au --cvs-exclude --include core $$($(2)_OVERRIDE_SRCDIR)/ $$($(2)_DIR)
-+
- # define sub-target stamps
- $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
- $(2)_TARGET_INSTALL_STAGING =	$$($(2)_DIR)/.stamp_staging_installed
+That's because nobody ever worked on ARM noMMU support in Buildroot, so
+things need to be fixed.
+
+Best regards,
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
