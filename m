@@ -1,58 +1,39 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Tue, 30 Jul 2013 17:00:40 +0800
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 Jul 2013 11:19:15 +0200
 Subject: [Buildroot] Libraries built with buildroot can only be used by
  buildroot itself.
-In-Reply-To: <CAAHaz6EPsOZRKAFp_Y7M77WVH+pgR1XzMtMumRBDQ-hreM7fGQ@mail.gmail.com>
+In-Reply-To: <20130730085749.GA12392@zuhnb712.ap.bm.net>
 References: <20130730044000.GA24161@zuhnb712.ap.bm.net>
- <CAAHaz6EPsOZRKAFp_Y7M77WVH+pgR1XzMtMumRBDQ-hreM7fGQ@mail.gmail.com>
-Message-ID: <20130730090040.GB12392@zuhnb712.ap.bm.net>
+ <CAAXf6LUnzaaHCE+9DiybobpZqUgCmHFEt12a3c=5B5NTP5zsNg@mail.gmail.com>
+ <20130730085749.GA12392@zuhnb712.ap.bm.net>
+Message-ID: <20130730111915.2d2f00d9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 30, 2013 at 07:54:51AM +0300, Alexander Lukichev wrote:
-> Hello, Woody!
-> 
-> 2013/7/30 Woody Wu <narkewoody@gmail.com>In case one, I set my path to use
-> the gcc from my own Codesourcery
-> 
-> > installation, which is the same version as that buildroot is using.
-> > Actually, this Codesourcery installation is a direct uncompress from the
-> > tarball that buildroot downloaded from net to its download directory.
-> >
-> > In case two, I set my path to use the gcc directly in buildroot, i.e,
-> > under /home/woody/buildroot-2013.05/host/usr/bin
-> >
-> > In case two, it built with success. But case one, it did not:
-> >
-> > /home/woody/arm-2012.03/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.3/../../../../arm-none-linux-gnueabi/bin/ld:
-> > skipping incompatible /lib/libc.so.6 when searching for /lib/libc.so.6
-> > /home/woody/arm-2012.03/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.3/../../../../arm-none-linux-gnueabi/bin/ld:
-> > cannot find /lib/libc.so.6
-> > /home/woody/arm-2012.03/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.3/../../../../arm-none-linux-gnueabi/bin/ld:
-> > skipping incompatible /usr/lib/libc_nonshared.a when searching for
-> > /usr/lib/libc_nonshared.a
-> > /home/woody/arm-2012.03/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.3/../../../../arm-none-linux-gnueabi/bin/ld:
-> > cannot find /usr/lib/libc_nonshared.a
-> > /home/woody/arm-2012.03/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.3/../../../../arm-none-linux-gnueabi/bin/ld:
-> > cannot find /lib/ld-linux.so.3
-> > collect2: ld returned 1 exit status
-> >
-> 
->   It looks like in case one ld installed to /home/woody/arm-2012.03 is used
-> to reading binaries for another architecture. Are you absolutely sure that
-> this is a _cross_ toolchain?
+Dear Woody Wu,
 
-not sure i am sure ... but the toolchains is exactly the tarball that
-buildroot downloaded for me:
-arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+On Tue, 30 Jul 2013 16:57:49 +0800, Woody Wu wrote:
 
+> > So the behavior you are seeing is expected. You should always use the
+> > toolchain through output/host/usr/bin/.
 > 
-> --
-> Best regards,
->   Alexander Lukichev
+> Okay, Thomas.  But I found fully copy of output/host/usr/bin (just in
+> another directory) also does not work.  Is this also expected behavior?
 
+Copying output/host/usr/bin alone doesn't make any sense because
+you're moving the compiler and other tools but not the sysroot. Copying
+the entire output/host directory elsewhere would make more sense, but
+unfortunately, Buildroot doesn't support a relocatable sysroot for now.
+So you should *not* move this directory.
+
+Best regards,
+
+Thomas
 -- 
-I can't go back to yesterday - because I was a different person then
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
