@@ -1,52 +1,49 @@
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Tue, 30 Jul 2013 11:37:13 +0200
-Subject: [Buildroot] [PATCH] gdb: Add support for ARC-specific gdb
-Message-ID: <1375177033-17273-1-git-send-email-mjonker@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 Jul 2013 12:01:57 +0200
+Subject: [Buildroot] [PATCH v2 0/3] Fix for top-level parallel make part
+ 1
+In-Reply-To: <CAHkwnC-yTeGXQnh64-Ra_TJg4ysYqAPNsNaWhA=_sgiUm5R5bw@mail.gmail.com>
+References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
+ <20130718113809.663c6b58@skate>
+ <CAHkwnC8imHc+yWdkUeR6VdehBhpuux_xmKProHu7uFmmR50N8g@mail.gmail.com>
+ <20130727131828.0442e227@skate>
+ <CAHkwnC-yTeGXQnh64-Ra_TJg4ysYqAPNsNaWhA=_sgiUm5R5bw@mail.gmail.com>
+Message-ID: <20130730120157.0d32a58b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
----
- package/gdb/Config.in.host |    2 ++
- package/gdb/gdb.mk         |    4 ++++
- 2 files changed, 6 insertions(+)
+Dear Fabio Porcedda,
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index a791f09..128aed9 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -15,6 +15,7 @@ if BR2_PACKAGE_HOST_GDB
- 
- choice
- 	prompt "GDB debugger Version"
-+	depends on !BR2_arc
- 	default BR2_GDB_VERSION_6_6 if BR2_bfin
- 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
- 	default BR2_GDB_VERSION_7_5
-@@ -57,5 +58,6 @@ config BR2_GDB_VERSION
- 	default "7.3.1"    if BR2_GDB_VERSION_7_3
- 	default "7.4.1"    if BR2_GDB_VERSION_7_4
- 	default "7.5.1"    if BR2_GDB_VERSION_7_5
-+	default "7.5.1-arc" if BR2_arc
- 
- endif
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index fbb2fae..9cf90e3 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -21,6 +21,10 @@ GDB_VERSION = 7.5.1
- endif
- endif
- 
-+ifeq ($(BR2_arc),y)
-+GDB_SITE = $(BR2_ARC_SITE)
-+endif
-+
- ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
- GDB_SITE = ftp://www.at91.com/pub/buildroot/
- endif
+On Tue, 30 Jul 2013 11:34:08 +0200, Fabio Porcedda wrote:
+
+> > As per OpenEmbedded/Bitbake, I was told a few years ago that they were
+> > not doing per-package sysroot, even though they are doing top-level
+> > parallel builds, and that this was sometimes causing some spurious
+> > failures or not completely reproducible builds. However, I haven't
+> > verified this myself, and this statement was made some years ago, so it
+> > may or may not longer be true.
+> 
+> Unfortunately right now i've not enough time to work on the
+> per-package sysroot feature, maybe in the feature, i don't know.
+> 
+> So are you going to accept this patch set even without per-package
+> sysroot feature?
+> IMHO top-level parallel make it's still a useful feature even without
+> per-package sysroot.
+> The per-package sysroot feature can be still added later.
+
+As we discussed in this thread, the problem is that the top-level
+parallel make feature is broken if you don't have per-package sysroot:
+builds become non-reproducible.
+
+Best regards,
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
