@@ -1,41 +1,59 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 30 Jul 2013 16:02:58 +0200
-Subject: [Buildroot] How to login as root without password
-In-Reply-To: <CAHbR41WGQDmkVy4TguM7KEO9hf6NpND=wQ1CiUWMgUwhWQRkiQ@mail.gmail.com>
-References: <CAHbR41VH17_qSe3T92b=n61_f1a_64jVXy5rNCKaexajmWzt9g@mail.gmail.com>
- <CAAXf6LXRYRvhWwE-TnM2fnGPMp+s+eEa3oUQtwdatMPxP=vAyA@mail.gmail.com>
- <CAHbR41WGQDmkVy4TguM7KEO9hf6NpND=wQ1CiUWMgUwhWQRkiQ@mail.gmail.com>
-Message-ID: <CAAXf6LVa_tJZG8CQw2zUUdyOvMd7TAs5yfdtUtjKG5bcGqhdZw@mail.gmail.com>
+Date: Tue, 30 Jul 2013 18:32:30 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: don't create gdb symlink
+ when building host-gdb
+Message-ID: <f0fae6a2b5b0500a20ab.1375201950@BEANTN0L019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 30, 2013 at 3:40 PM, zhou qiang <zhouqiang.search@gmail.com> wrote:
-> Hi , Thomas
->
-> Thank you for your reply .
->
-> Yes , I am using busybox .
->
-> And if using "sudo" instead of "fakeroot"  to extract root filesystem .
-> then burn to the board , It login as root ,even execute "chown -R user:user
-> rootfs" .
-> before burning .
->
-> But I can not give sudo permission to other users on ther server.
+The external-toolchain infrastructure creates symbolic links for all
+tools in the host directory. However, when buildroot builds its own
+version of a cross debugger (BR2_PACKAGE_HOST_GDB), and the toolchain
+also provides a cross debugger, there would be two symbolic links for
+gdb in the host directory, which is confusing.
+An example use case is where the external toolchain only provides a
+64-bit gdbserver (e.g. Cavium Networks SDK) but the target is completely
+32-bit (e.g. n32 ABI). In this case, using gdbserver on target requires
+copying a bunch of 64-bit libraries to the target as well, just for gdb.
+In this case, one can let buildroot build both gdbserver as cross-gdb
+(both in 32-bit).
 
-What exactly does the burning step imply? How exactly are you putting
-the rootfs on target?
-You should normally not extract the rootfs and make modifications to
-it after it has been packaged. Any change you want to make to the
-rootfs, for example to change /etc/inittab, should be done before the
-image is created.
-The following section in the manual describes different ways to
-accomplish that:
-http://buildroot.uclibc.org/downloads/manual/manual.html#rootfs-custom
-A post-build script is a convenient solution for this type of change.
+This patch modifies the symlink creation so that no gdb (or gdbtui)
+symlink is created if buildroot is going to build a cross-gdb.
 
-Best regards,
-Thomas
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+---
+ toolchain/toolchain-external/ext-tool.mk |  10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -531,8 +531,9 @@ ifeq ($(BR2_BFIN_INSTALL_FLAT_SHARED),y)
+ TOOLCHAIN_EXTERNAL_INSTALL += $(STAMP_DIR)/ext-toolchain-bfin-shared-flat-installed
+ endif
+ 
+-# Build toolchain wrapper for preprocessor, C and C++ compiler, and setup
+-# symlinks for everything else
++# Build toolchain wrapper for preprocessor, C and C++ compiler and setup
++# symlinks for everything else. Skip gdb symlink when we are building our
++# own gdb to prevent two gdb's in output/host/usr/bin.
+ $(HOST_DIR)/usr/bin/ext-toolchain-wrapper: $(TOOLCHAIN_EXTERNAL_INSTALL)
+ 	$(Q)$(call MESSAGE,"Building ext-toolchain wrapper")
+ 	mkdir -p $(HOST_DIR)/usr/bin; cd $(HOST_DIR)/usr/bin; \
+@@ -542,6 +543,11 @@ endif
+ 		*cc|*cc-*|*++|*++-*|*cpp) \
+ 			ln -sf $(@F) $$base; \
+ 			;; \
++		*gdb|*gdbtui) \
++			if test "$(BR2_PACKAGE_HOST_GDB)" != "y"; then \
++				ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
++			fi \
++			;; \
+ 		*) \
+ 			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
+ 			;; \
