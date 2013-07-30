@@ -1,14 +1,15 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 30 Jul 2013 19:24:59 +0200
-Subject: [Buildroot] [PATCH] package/pmake: remove
-Message-ID: <1375205099-7724-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 Jul 2013 23:26:30 +0200
+Subject: [Buildroot] [git commit] package/pmake: remove
+Message-ID: <20130730212952.96BA09A8C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+commit: http://git.buildroot.net/buildroot/commit/?id=ccb9d44e02708689a690ed91fb520bac36079bfb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Packaging pmake was required when we used the upstream libedit.
 Since we have switched to using the autotools-based libedit,
@@ -17,13 +18,10 @@ pmake is no longer needed.
 Because pmake is quite ugly, let's just drop it.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Note: this requires the libedit change be applied first, of course.
-
----
- package/pmake/pmake.mk | 47 -----------------------------------------------
- 1 file changed, 47 deletions(-)
- delete mode 100644 package/pmake/pmake.mk
+ package/pmake/pmake.mk |   47 -----------------------------------------------
+ 1 files changed, 0 insertions(+), 47 deletions(-)
 
 diff --git a/package/pmake/pmake.mk b/package/pmake/pmake.mk
 deleted file mode 100644
@@ -78,5 +76,3 @@ index 83ee12e..0000000
 -endef
 -
 -$(eval $(host-generic-package))
--- 
-1.8.1.2
