@@ -1,87 +1,52 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 30 Jul 2013 11:34:08 +0200
-Subject: [Buildroot] [PATCH v2 0/3] Fix for top-level parallel make part
-	1
-In-Reply-To: <20130727131828.0442e227@skate>
-References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
- <20130718113809.663c6b58@skate>
- <CAHkwnC8imHc+yWdkUeR6VdehBhpuux_xmKProHu7uFmmR50N8g@mail.gmail.com>
- <20130727131828.0442e227@skate>
-Message-ID: <CAHkwnC-yTeGXQnh64-Ra_TJg4ysYqAPNsNaWhA=_sgiUm5R5bw@mail.gmail.com>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Tue, 30 Jul 2013 11:37:13 +0200
+Subject: [Buildroot] [PATCH] gdb: Add support for ARC-specific gdb
+Message-ID: <1375177033-17273-1-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jul 27, 2013 at 1:18 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Fri, 19 Jul 2013 17:41:42 +0200, Fabio Porcedda wrote:
->
->> > I don't remember if we had this discussion in the past, but before
->> > going down the road of supporting top-level parallel make in Buildroot,
->> > I'd like to understand what is your plan to solve the most important
->> > problem that top-level parallel make creates: the need to create
->> > per-package sysroot, instead of the global single sysroot we have
->> > today. Have you thought about this problem already? What solution do
->> > you have for it?
->>
->> I hadn't thought about that, thanks for pointing it out.
->
-> You're welcome. I believe that top-level parallel build is a bit like
-> the creation of binary packages: people initially believe that it's
-> fairly trivial to implement, but in reality, if you want to implement
-> it properly it's much more complex and maybe too complex for the KISS
-> principle of Buildroot.
->
->> So before to add top-level parallel make support we must add
->> per-package sysroot...
->> That's a bad news for me, i was already wokring on the second part :-(
->>
->> I can try to work to add per-package sysroot, but i've some doubts about that:
->>  - Is per-package sysroot a desiderable feature regardless the
->> top-level parallel makefile support?
->>  - Is per-package an appropriate or overkill feature for buildroot?
->
-> Beyond top-level parallel support, per-package support is useful as it
-> ensures only the dependencies that are explicitly expressed in the
-> package .mk file are actually seen when building a given package. So
-> from a build correctness point of view, it's certainly a nice feature.
->
-> Now, whether it's overkill or not for Buildroot is hard to say. It
-> clearly would increase a bit the complexity of the package
-> infrastructure, but it's hard to guess whether this additional
-> complexity will be reasonable or not before doing some prototypes.
->
-> There is, however, another drawback than just complexity: build time.
-> With per-package sysroot, it means that for each package, you have to
-> create a completely new sysroot, which takes time.
->
->> Do you know if the other build system use per-package sysroot solution
->> to solve the same issue? like bitbake/os, debian, fedora, ...?
->
-> I know that Debian builds all its packages inside a chroot, in which
-> only the explicit Build-depends of that package are installed. So in
-> effect, it has per-package sysroot.
->
-> As per OpenEmbedded/Bitbake, I was told a few years ago that they were
-> not doing per-package sysroot, even though they are doing top-level
-> parallel builds, and that this was sometimes causing some spurious
-> failures or not completely reproducible builds. However, I haven't
-> verified this myself, and this statement was made some years ago, so it
-> may or may not longer be true.
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+---
+ package/gdb/Config.in.host |    2 ++
+ package/gdb/gdb.mk         |    4 ++++
+ 2 files changed, 6 insertions(+)
 
-Unfortunately right now i've not enough time to work on the
-per-package sysroot feature, maybe in the feature, i don't know.
-
-So are you going to accept this patch set even without per-package
-sysroot feature?
-IMHO top-level parallel make it's still a useful feature even without
-per-package sysroot.
-The per-package sysroot feature can be still added later.
-
-Best regards
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index a791f09..128aed9 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -15,6 +15,7 @@ if BR2_PACKAGE_HOST_GDB
+ 
+ choice
+ 	prompt "GDB debugger Version"
++	depends on !BR2_arc
+ 	default BR2_GDB_VERSION_6_6 if BR2_bfin
+ 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
+ 	default BR2_GDB_VERSION_7_5
+@@ -57,5 +58,6 @@ config BR2_GDB_VERSION
+ 	default "7.3.1"    if BR2_GDB_VERSION_7_3
+ 	default "7.4.1"    if BR2_GDB_VERSION_7_4
+ 	default "7.5.1"    if BR2_GDB_VERSION_7_5
++	default "7.5.1-arc" if BR2_arc
+ 
+ endif
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index fbb2fae..9cf90e3 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -21,6 +21,10 @@ GDB_VERSION = 7.5.1
+ endif
+ endif
+ 
++ifeq ($(BR2_arc),y)
++GDB_SITE = $(BR2_ARC_SITE)
++endif
++
+ ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
+ GDB_SITE = ftp://www.at91.com/pub/buildroot/
+ endif
 -- 
-Fabio Porcedda
+1.7.9.5
