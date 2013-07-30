@@ -1,52 +1,42 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 30 Jul 2013 14:28:05 +0200
-Subject: [Buildroot] Removing/solving gettext dependencies in libuio
-Message-ID: <CAAXf6LWskVXQjvLYeEBx_JJxuTujMZEq2JzqLMftXXUSaPTQHg@mail.gmail.com>
+Date: Tue, 30 Jul 2013 14:39:46 +0200
+Subject: [Buildroot] How to login as root without password
+In-Reply-To: <CAHbR41VH17_qSe3T92b=n61_f1a_64jVXy5rNCKaexajmWzt9g@mail.gmail.com>
+References: <CAHbR41VH17_qSe3T92b=n61_f1a_64jVXy5rNCKaexajmWzt9g@mail.gmail.com>
+Message-ID: <CAAXf6LXRYRvhWwE-TnM2fnGPMp+s+eEa3oUQtwdatMPxP=vAyA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Zhou Qiang,
 
-I'm adding the library libuio to buildroot
-(https://github.com/Linutronix/libuio/).
-This library expects gettext to be present, but I want to avoid adding
-this dependency to buildroot because it really isn't needed.
+On Tue, Jul 30, 2013 at 12:43 PM, zhou qiang <zhouqiang.search@gmail.com> wrote:
+> Hi , guys
+>
+> I am working on a server (no root permision)  , my intention is to create a
+> root filesystem  for arm board ,and
+> login as root ,directly to /bin/sh(no login window ).
+> From the document , I know that it is not possible to use target/ , then I
+> create a rootfs.tar in images/  , and
+> extract it .what  I did  is as following :
+>
+> (1)  "fakeroot tar -xvf images/rootfs.tar -C work/rootfs " to extract it to
+> rootfs directory ,
+> since no root permision , fakeroot does a great job.
+>
+> (2) Adding  "ttyS0:respawn:~/bin/sh " to avoid requiring login .
+>
+>
+> After burning the filesystem to development board.
+> The problem is coming , current login is a ordinary user , what I expected
+> is root user .
 
-What is the best way to solve this?
-The first alternative is to patch the package and remove the
-problematic code. These changes are in configure.ac, Makefile.am, the
-patch is fairly short. This change is not acceptable upstream (I
-guess).
+Are you using busybox or not?
+By default, on a busybox system, you login as the root user. If this
+is not the case, then something about your configuration will be
+different.
 
-A second alternative is to change libuio to recognize --disable-nls.
-However, I'm not sure how to do that.
-The configure.ac file contains:
-
-  AM_GNU_GETTEXT([external])
-  AM_GNU_GETTEXT_VERSION([0.17])
-
-This macro is provided by gettext itself, so without gettext this doesn't work.
-I tried something like:
-
-AC_ARG_ENABLE([nls], AC_HELP_STRING([--disable-nls], [Do not use
-Native Language Support]),
-              USE_NLS=$enableval, USE_NLS=yes)
-
-AC_SUBST(USE_NLS)
-
-AS_IF([test "x$enable_nls" == xyes],
-  AM_GNU_GETTEXT([external])
-  AM_GNU_GETTEXT_VERSION([0.17])
-)
-
-but I still get complaints about AM_GNU_GETTEXT not recognized.
-I have tried finding good examples of implementing --disable-nls
-without requiring gettext, but I can't find any.
-
-
-Any input welcome,
-
+Best regards,
 Thomas
