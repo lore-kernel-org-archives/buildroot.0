@@ -1,12 +1,16 @@
-From: pierre <p.floury@gmail.com>
-Date: Tue, 30 Jul 2013 16:01:42 +0200
+From: p.floury at gmail.com <p.floury@gmail.com>
+Date: Tue, 30 Jul 2013 16:03:03 +0200
 Subject: [Buildroot] [PATCH] pacakge : add trace-cmd package
-Message-ID: <1375192902-29236-1-git-send-email-pierre.floury@gmail.com>
+In-Reply-To: <p.floury@gmail.com>
+References: <p.floury@gmail.com>
+Message-ID: <1375192983-29277-1-git-send-email-p.floury@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+From: pierre <pierre.floury@gmail.com>
 
 ---
  package/Config.in            |    1 +
