@@ -1,118 +1,82 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 30 Jul 2013 18:59:38 +0200
-Subject: [Buildroot] [PATCH] pacakge : add trace-cmd package
-In-Reply-To: <1375192983-29277-1-git-send-email-p.floury@gmail.com>
-References: <p.floury@gmail.com>
- <1375192983-29277-1-git-send-email-p.floury@gmail.com>
-Message-ID: <CAAXf6LW95FOYZ69myDTfhQz7hHPXhix7aZTMsg77YAA25yi5AQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 30 Jul 2013 19:24:59 +0200
+Subject: [Buildroot] [PATCH] package/pmake: remove
+Message-ID: <1375205099-7724-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Pierre,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thanks for your contribution! Below are some comments...
+Packaging pmake was required when we used the upstream libedit.
+Since we have switched to using the autotools-based libedit,
+pmake is no longer needed.
 
-On Tue, Jul 30, 2013 at 4:03 PM,  <p.floury@gmail.com> wrote:
-> From: pierre <pierre.floury@gmail.com>
->
-> ---
->  package/Config.in            |    1 +
->  package/tracecmd/Config.in   |    9 +++++++++
->  package/tracecmd/tracecmd.mk |   24 ++++++++++++++++++++++++
->  3 files changed, 34 insertions(+)
->  create mode 100644 package/tracecmd/Config.in
->  create mode 100644 package/tracecmd/tracecmd.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index d980871..4a7bc5d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -39,6 +39,7 @@ source "package/memstat/Config.in"
->  source "package/netperf/Config.in"
->  source "package/oprofile/Config.in"
->  source "package/perf/Config.in"
-> +source "package/tracecmd/Config.in"
->  source "package/ramspeed/Config.in"
->  source "package/rt-tests/Config.in"
->  source "package/strace/Config.in"
-> diff --git a/package/tracecmd/Config.in b/package/tracecmd/Config.in
-> new file mode 100644
-> index 0000000..cb24816
-> --- /dev/null
-> +++ b/package/tracecmd/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_TRACECMD
-> +       bool "trace-cmd"
-> +       help
-> +         trace-cmd - command line reader for ftrace
-> +         need to have ftrace enable into your kernel:
-> +
-> +         http://git.kernel.org/cgit/linux/kernel/git/rostedt/trace-cmd.git
+Because pmake is quite ugly, let's just drop it.
 
-The help text should not repeat the name of the command.
-Also, please remove the colon (:) and make the second line a real
-sentence, for example:
-"To do anything useful with this, you should enable ftrace in your
-kernel configuration"
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+Note: this requires the libedit change be applied first, of course.
 
-> +
-> +comment "trace-cmd - command line reader for ftrace"
+---
+ package/pmake/pmake.mk | 47 -----------------------------------------------
+ 1 file changed, 47 deletions(-)
+ delete mode 100644 package/pmake/pmake.mk
 
-This comment should not be there. We only put comments when packages
-are hidden due to missing dependencies.
-
-> diff --git a/package/tracecmd/tracecmd.mk b/package/tracecmd/tracecmd.mk
-> new file mode 100644
-> index 0000000..3ddff28
-> --- /dev/null
-> +++ b/package/tracecmd/tracecmd.mk
-> @@ -0,0 +1,24 @@
-> +#############################################################
-> +#
-> +# tracecmd
-> +#
-> +#############################################################
-> +
-> +TRACECMD_VERSION = 8c10a774f1f8586cd8b0e
-> +TRACECMD_SITE = http://git.kernel.org/cgit/linux/kernel/git/rostedt/trace-cmd.git
-
-This version is tagged, so you'd preferable use that for the version:
-trace-cmd-v2.2.1
-
-> +TRACECMD_SITE_METHOD = git
-> +TRACECMD_INSTALL_STAGING = YES
-> +TRACECMD_LICENSE = GPL
-> +# No license file, the license is in the installed header
-> +TRACECMD_LICENSE_FILES = COPYING
-
-What do you mean with this comment 'No license file'? There is a
-COPYING file, so I don't see the point.
-
-Also, the license should be as specific as possible, so GPLv2, GPLv2+
-etc. See http://buildroot.uclibc.org/downloads/manual/manual.html#legal-info-list-licenses
-for the list of known abbreviations.
-
-In the case of tracecmd, there both are GPLv2 as LGPLv2.1 files, so
-both licenses should be specified, as well as the license files
-COPYING and COPYING.LIB.
-
-> +define TRACECMD_BUILD_CMDS
-> +     $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-> +endef
-> +
-> +define TRACECMD_INSTALL_TARGET_CMDS
-> +       $(INSTALL) -D -m 0755 $(@D)/trace-cmd $(TARGET_DIR)/usr/bin
-> +       $(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/trace-cmd/plugins
-> +       $(INSTALL) -D -m 0755 $(@D)/plugin_*.so $(TARGET_DIR)/usr/lib/trace-cmd/plugins
-> +endef
-> +
-> +$(eval $(generic-package))
-
-If you send an updated version, please also fix the typo in the title:
-pacakge -> package.
-
-Best regards,
-Thomas
+diff --git a/package/pmake/pmake.mk b/package/pmake/pmake.mk
+deleted file mode 100644
+index 83ee12e..0000000
+--- a/package/pmake/pmake.mk
++++ /dev/null
+@@ -1,47 +0,0 @@
+-################################################################################
+-#
+-# pmake
+-#
+-################################################################################
+-
+-PMAKE_VERSION       = 1.111
+-PMAKE_SOURCE        = pmake_$(PMAKE_VERSION).orig.tar.gz
+-PMAKE_SITE          = http://snapshot.debian.org/archive/debian/20120601T033558Z/pool/main/p/pmake
+-PMAKE_LICENSE       = BSD-3c BSD-4c
+-# No license file. License texts are spread in the boilerplates
+-# of each individual source files; some are BSD-3c, some BSD-4c.
+-
+-# Vampirise patches from Debian
+-PMAKE_PATCH = pmake_1.111-3.2.debian.tar.gz
+-
+-# CFLAGS vampirised from Debian's rules, adapted to buildroot variables
+-HOST_PMAKE_CFLAGS = -O2 -g -Wall -D__COPYRIGHT\(x\)= -D__RCSID\(x\)= -I.    \
+-                -DMACHINE=\\\"buildroot\\\"                                 \
+-                -DMACHINE_ARCH=\\\"$(ARCH)\\\" -DMACHINE_MULTIARCH=\\\"\\\" \
+-                -DHAVE_SETENV -DHAVE_STRERROR -DHAVE_STRDUP -DHAVE_STRFTIME \
+-                -DHAVE_VSNPRINTF -D_GNU_SOURCE -Wno-unused
+-
+-define HOST_PMAKE_BUILD_CMDS
+-	$(MAKE) -C $(@D) -f Makefile.boot CFLAGS="$(HOST_PMAKE_CFLAGS)"
+-endef
+-
+-# The generated file is named bmake, but we want pmake; but:
+-#  - pmake uses support files (in  mk/)
+-#  - it's not possible to tell pmake, at build-time, where to expect
+-#    these support files, and pmake expects them in /usr/share/mk/
+-#  - but pmake has an option to override that search path at runtime
+-#  - so we install bmake as bmake
+-#  - and we install a wrapper named pmake that calls pmake with the
+-#    appropriate search path
+-define HOST_PMAKE_INSTALL_CMDS
+-	$(INSTALL) -m 0755 $(@D)/bmake $(HOST_DIR)/usr/bin/bmake
+-	$(INSTALL) -d -m 0755 $(HOST_DIR)/usr/share/pmake/mk
+-	for mk in $(@D)/mk/*; do                                        \
+-	    $(INSTALL) -m 0644 $${mk} $(HOST_DIR)/usr/share/pmake/mk;   \
+-	done
+-	printf '#!/bin/bash\nexec -a "$${0}" $${0%%/*}/bmake -m $${0%%/*}/../../usr/share/pmake/mk "$$@"\n'  \
+-	       >$(HOST_DIR)/usr/bin/pmake
+-	chmod 0755 $(HOST_DIR)/usr/bin/pmake
+-endef
+-
+-$(eval $(host-generic-package))
+-- 
+1.8.1.2
