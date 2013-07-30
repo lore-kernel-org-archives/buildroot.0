@@ -1,78 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jul 2013 23:26:30 +0200
-Subject: [Buildroot] [git commit] package/pmake: remove
-Message-ID: <20130730212952.96BA09A8C7@busybox.osuosl.org>
+Date: Tue, 30 Jul 2013 23:25:05 +0200
+Subject: [Buildroot] [git commit] gdb: Add support for ARC-specific gdb
+Message-ID: <20130730212952.6EA9A9AEBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ccb9d44e02708689a690ed91fb520bac36079bfb
+commit: http://git.buildroot.net/buildroot/commit/?id=2b0b5859b782e7a17fe1d86d77e33783156d70f0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Packaging pmake was required when we used the upstream libedit.
-Since we have switched to using the autotools-based libedit,
-pmake is no longer needed.
-
-Because pmake is quite ugly, let's just drop it.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pmake/pmake.mk |   47 -----------------------------------------------
- 1 files changed, 0 insertions(+), 47 deletions(-)
+ package/gdb/Config.in.host |    2 ++
+ package/gdb/gdb.mk         |    4 ++++
+ 2 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/pmake/pmake.mk b/package/pmake/pmake.mk
-deleted file mode 100644
-index 83ee12e..0000000
---- a/package/pmake/pmake.mk
-+++ /dev/null
-@@ -1,47 +0,0 @@
--################################################################################
--#
--# pmake
--#
--################################################################################
--
--PMAKE_VERSION       = 1.111
--PMAKE_SOURCE        = pmake_$(PMAKE_VERSION).orig.tar.gz
--PMAKE_SITE          = http://snapshot.debian.org/archive/debian/20120601T033558Z/pool/main/p/pmake
--PMAKE_LICENSE       = BSD-3c BSD-4c
--# No license file. License texts are spread in the boilerplates
--# of each individual source files; some are BSD-3c, some BSD-4c.
--
--# Vampirise patches from Debian
--PMAKE_PATCH = pmake_1.111-3.2.debian.tar.gz
--
--# CFLAGS vampirised from Debian's rules, adapted to buildroot variables
--HOST_PMAKE_CFLAGS = -O2 -g -Wall -D__COPYRIGHT\(x\)= -D__RCSID\(x\)= -I.    \
--                -DMACHINE=\\\"buildroot\\\"                                 \
--                -DMACHINE_ARCH=\\\"$(ARCH)\\\" -DMACHINE_MULTIARCH=\\\"\\\" \
--                -DHAVE_SETENV -DHAVE_STRERROR -DHAVE_STRDUP -DHAVE_STRFTIME \
--                -DHAVE_VSNPRINTF -D_GNU_SOURCE -Wno-unused
--
--define HOST_PMAKE_BUILD_CMDS
--	$(MAKE) -C $(@D) -f Makefile.boot CFLAGS="$(HOST_PMAKE_CFLAGS)"
--endef
--
--# The generated file is named bmake, but we want pmake; but:
--#  - pmake uses support files (in  mk/)
--#  - it's not possible to tell pmake, at build-time, where to expect
--#    these support files, and pmake expects them in /usr/share/mk/
--#  - but pmake has an option to override that search path at runtime
--#  - so we install bmake as bmake
--#  - and we install a wrapper named pmake that calls pmake with the
--#    appropriate search path
--define HOST_PMAKE_INSTALL_CMDS
--	$(INSTALL) -m 0755 $(@D)/bmake $(HOST_DIR)/usr/bin/bmake
--	$(INSTALL) -d -m 0755 $(HOST_DIR)/usr/share/pmake/mk
--	for mk in $(@D)/mk/*; do                                        \
--	    $(INSTALL) -m 0644 $${mk} $(HOST_DIR)/usr/share/pmake/mk;   \
--	done
--	printf '#!/bin/bash\nexec -a "$${0}" $${0%%/*}/bmake -m $${0%%/*}/../../usr/share/pmake/mk "$$@"\n'  \
--	       >$(HOST_DIR)/usr/bin/pmake
--	chmod 0755 $(HOST_DIR)/usr/bin/pmake
--endef
--
--$(eval $(host-generic-package))
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index a791f09..128aed9 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -15,6 +15,7 @@ if BR2_PACKAGE_HOST_GDB
+ 
+ choice
+ 	prompt "GDB debugger Version"
++	depends on !BR2_arc
+ 	default BR2_GDB_VERSION_6_6 if BR2_bfin
+ 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
+ 	default BR2_GDB_VERSION_7_5
+@@ -57,5 +58,6 @@ config BR2_GDB_VERSION
+ 	default "7.3.1"    if BR2_GDB_VERSION_7_3
+ 	default "7.4.1"    if BR2_GDB_VERSION_7_4
+ 	default "7.5.1"    if BR2_GDB_VERSION_7_5
++	default "7.5.1-arc" if BR2_arc
+ 
+ endif
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index fbb2fae..9cf90e3 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -21,6 +21,10 @@ GDB_VERSION = 7.5.1
+ endif
+ endif
+ 
++ifeq ($(BR2_arc),y)
++GDB_SITE = $(BR2_ARC_SITE)
++endif
++
+ ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
+ GDB_SITE = ftp://www.at91.com/pub/buildroot/
+ endif
